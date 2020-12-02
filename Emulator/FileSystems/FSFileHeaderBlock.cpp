@@ -150,7 +150,7 @@ FSFileHeaderBlock::writeData(FILE *file)
     // Start here and iterate through all connected file list blocks
     FSBlock *block = this;
 
-    while (block && blocksTotal < volume.capacity) {
+    while (block && blocksTotal < volume.numBlocks) {
 
         blocksTotal++;
 

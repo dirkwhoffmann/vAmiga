@@ -61,88 +61,6 @@ FSDevice::makeWithFormat(DiskType type, DiskDensity density)
     return new FSDevice(layout);
 }
 
-/*
-FSDevice *
-FSDevice::make(FSVolumeType type, u32 cyls, u32 heads, u32 sectors, u32 bsize)
-{
-    FSDevice *dev = new FSDevice();
-        
-    dev->type = type;
-    dev->cylinders = cyls;
-    dev->heads = heads;
-    dev->sectors = sectors;
-    dev->bsize = bsize;
-    dev->capacity = cyls * heads * sectors;
-    
-    // Create the block storage
-    dev->blocks = new BlockPtr[dev->capacity]();
-    dev->dsize = dev->isOFS() ? bsize - 24 : bsize; // TODO: MOVE TO PARTITION
-
-    // Create the first partition
-    dev->part.push_back(FSPartitionDescriptor(0, cyls - 1, sectors * heads, 880));
-
-    // Determine the block locations
-    u32 root             = 880; // rootBlockNr();
-    u32 firstBitmapBlock = root + 1;
-    u32 lastBitmapBlock  = firstBitmapBlock + dev->requiredBitmapBlocks() - 1;
-    u32 firstExtBlock    = lastBitmapBlock + 1;
-    u32 lastExtBlock     = firstExtBlock + dev->requiredBitmapExtensionBlocks() - 1;
-    assert(root < dev->capacity);
-
-    // Add boot blocks
-    dev->blocks[0] = new FSBootBlock(*dev, 0);
-    dev->blocks[1] = new FSBootBlock(*dev, 1);
-    
-    // Add the root block
-    FSRootBlock *rb = new FSRootBlock(*dev, root);
-    dev->blocks[root] = rb;
-        
-    // Add bitmap blocks
-    for (u32 ref = firstBitmapBlock; ref <= lastBitmapBlock; ref++) {
-        dev->blocks[ref] = new FSBitmapBlock(*dev, ref);
-        dev->part[0].bmBlocks.push_back(ref);
-    }
-
-    // Add bitmap extension blocks
-    FSBlock *pred = rb;
-    for (u32 ref = firstExtBlock; ref <= lastExtBlock; ref++) {
-        dev->blocks[ref] = new FSBitmapExtBlock(*dev, ref);
-        dev->part[0].bmExtBlocks.push_back(ref);
-        pred->setNextBmExtBlockRef(ref);
-        pred = dev->blocks[ref];
-    }
-
-    // Add all bitmap block references
-    rb->addBitmapBlockRefs(dev->part[0].bmBlocks);
-        
-    // Add free blocks
-    for (u32 i = 2; i < root; i++) {
-        assert(dev->blocks[i] == nullptr);
-        dev->blocks[i] = new FSEmptyBlock(*dev, i);
-        dev->markAsFree(i);
-    }
-    for (u32 i = lastExtBlock + 1; i < dev->capacity; i++) {
-        assert(dev->blocks[i] == nullptr);
-        dev->blocks[i] = new FSEmptyBlock(*dev, i);
-        dev->markAsFree(i);
-    }
-
-    // Compute checksums for all blocks
-    dev->updateChecksums();
-    
-    // Set the current directory to '/'
-    dev->cd = dev->part[0].rootBlock;
-
-    if (FS_DEBUG) {
-        printf("cd = %d\n", dev->cd);
-        dev->info();
-        dev->dump();
-    }
-    
-    return dev; 
-}
-*/
-
 FSDevice *
 FSDevice::make(DiskType type, DiskDensity density, const char *path)
 {
@@ -163,22 +81,6 @@ FSDevice::make(DiskType type, DiskDensity density, const char *path)
     return device;
 }
 
-/*
-FSDevice *
-FSDevice::make(FSVolumeType type, const char *name, const char *path, u32 cylinders, u32 heads, u32 sectors)
-{
-    FSDevice *volume = FSDevice::make(type, cylinders, heads, sectors);
-    volume->setName(FSName(name));
-
-    // Try to import directory
-    if (!volume->importDirectory(path)) { delete volume; return nullptr; }
-    
-    // Change to root directory and return
-    volume->changeDir("/");
-    return volume;
-}
-*/
-
 FSDevice *
 FSDevice::make(FSVolumeType type, const char *path)
 {
@@ -194,101 +96,21 @@ FSDevice::make(FSVolumeType type, const char *path)
 
     return nullptr;
 }
-
-// FSDevice::FSDevice(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(s)
-/*
-FSDevice::FSDevice(FSVolumeType type, u32 c, u32 h, u32 s, u32 bsize)
-{
-    debug(FS_DEBUG, "Creating FSDevice (%d x %d x %d x %d)\n", c, h, s, bsize);
-    
-    this->type = type;
-    this->cylinders = c;
-    this->heads = h;
-    this->sectors = s;
-    this->bsize = bsize;
-    capacity = c * h * s;
-    
-    // Create the block storage
-    blocks = new BlockPtr[capacity]();
-    dsize = isOFS() ? bsize - 24 : bsize; // TODO: MOVE TO PARTITION
-
-    // Create the first partition
-    part.push_back(FSPartitionDescriptor(0, c-1, 880));
-
-    // Determine the block locations
-    u32 root             = 880; // rootBlockNr();
-    u32 firstBitmapBlock = root + 1;
-    u32 lastBitmapBlock  = firstBitmapBlock + requiredBitmapBlocks() - 1;
-    u32 firstExtBlock    = lastBitmapBlock + 1;
-    u32 lastExtBlock     = firstExtBlock + requiredBitmapExtensionBlocks() - 1;
-    assert(root < capacity);
-
-    // Add boot blocks
-    blocks[0] = new FSBootBlock(*this, 0);
-    blocks[1] = new FSBootBlock(*this, 1);
-    
-    // Add the root block
-    FSRootBlock *rb = new FSRootBlock(*this, root);
-    blocks[root] = rb;
-        
-    // Add bitmap blocks
-    for (u32 ref = firstBitmapBlock; ref <= lastBitmapBlock; ref++) {
-        blocks[ref] = new FSBitmapBlock(*this, ref);
-        part[0].bmBlocks.push_back(ref);
-    }
-
-    // Add bitmap extension blocks
-    FSBlock *pred = rb;
-    for (u32 ref = firstExtBlock; ref <= lastExtBlock; ref++) {
-        blocks[ref] = new FSBitmapExtBlock(*this, ref);
-        part[0].bmExtBlocks.push_back(ref);
-        pred->setNextBmExtBlockRef(ref);
-        pred = blocks[ref];
-    }
-
-    // Add all bitmap block references
-    rb->addBitmapBlockRefs(part[0].bmBlocks);
-        
-    // Add free blocks
-    for (u32 i = 2; i < root; i++) {
-        assert(blocks[i] == nullptr);
-        blocks[i] = new FSEmptyBlock(*this, i);
-        markAsFree(i);
-    }
-    for (u32 i = lastExtBlock + 1; i < capacity; i++) {
-        assert(blocks[i] == nullptr);
-        blocks[i] = new FSEmptyBlock(*this, i);
-        markAsFree(i);
-    }
-
-    // Compute checksums for all blocks
-    updateChecksums();
-    
-    // Set the current directory to '/'
-    cd = part[0].rootBlock;
-
-    if (FS_DEBUG) {
-        debug("cd = %d\n", cd);
-        info();
-        dump();
-    }
-}
-*/
  
-FSDevice::FSDevice(FSDeviceDescriptor &l)
+FSDevice::FSDevice(FSDeviceDescriptor &layout)
 {
     if (FS_DEBUG) {
         debug("Creating FSDevice with layout:\n");
-        l.dump();
+        layout.dump();
     }
     
-    this->layout = l;
+    this->layout = layout;
     
-    cylinders = layout.numCyls;
-    heads = layout.numHeads;
-    sectors = layout.numSectors;
+    numCyls = layout.numCyls;
+    numHeads = layout.numHeads;
+    numSectors = layout.numSectors;
     bsize = layout.bsize;
-    capacity = layout.blocks;
+    numBlocks = layout.blocks;
     
     // Initialize the block storage
     // blocks = new BlockPtr[layout.blocks]();
@@ -352,7 +174,7 @@ FSDevice::FSDevice(FSDeviceDescriptor &l)
 
 FSDevice::~FSDevice()
 {
-    for (u32 i = 0; i < capacity; i++) {
+    for (u32 i = 0; i < numBlocks; i++) {
         delete blocks[i];
     }
 }
@@ -363,10 +185,10 @@ FSDevice::info()
     msg("Type   Size          Used   Free   Full   Name\n");
     for (auto& p : layout.part) {
         msg("DOS%ld  ",     fileSystem(p));
-        msg("%5d (x %3d) ", numBlocks(p), bsize);
+        msg("%5d (x %3d) ", numBlocks, bsize);
         msg("%5d  ",        usedBlocks(p));
         msg("%5d   ",       freeBlocks(p));
-        msg("%3d%%   ",     (int)(100.0 * usedBlocks(p) / numBlocks(p)));
+        msg("%3d%%   ",     (int)(100.0 * usedBlocks(p) / numBlocks));
         msg("%s\n",         getName(p).c_str());
         msg("\n");
     }
@@ -393,7 +215,7 @@ FSDevice::dump()
     layout.dump();
     msg("\n");
 
-    for (size_t i = 0; i < capacity; i++)  {
+    for (size_t i = 0; i < numBlocks; i++)  {
         
         if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
         
@@ -410,7 +232,7 @@ FSDevice::check(bool strict)
     long total = 0, min = LONG_MAX, max = 0;
     
     // Analyze all blocks
-    for (u32 i = 0; i < capacity; i++) {
+    for (u32 i = 0; i < numBlocks; i++) {
 
         if (blocks[i]->type() == FS_EMPTY_BLOCK && !isFree(i)) {
             debug(FS_DEBUG, "Empty block %d is marked as allocated\n", i);
@@ -490,7 +312,7 @@ FSDevice::getCorrupted(u32 blockNr)
 bool
 FSDevice::isCorrupted(u32 blockNr, u32 n)
 {
-    for (u32 i = 0, cnt = 0; i < capacity; i++) {
+    for (u32 i = 0, cnt = 0; i < numBlocks; i++) {
         
         if (isCorrupted(i)) {
             cnt++;
@@ -504,7 +326,7 @@ u32
 FSDevice::nextCorrupted(u32 blockNr)
 {
     long i = (long)blockNr;
-    while (++i < capacity) { if (isCorrupted(i)) return i; }
+    while (++i < numBlocks) { if (isCorrupted(i)) return i; }
     return blockNr;
 }
 
@@ -519,7 +341,7 @@ FSDevice::prevCorrupted(u32 blockNr)
 u32
 FSDevice::seekCorruptedBlock(u32 n)
 {
-    for (u32 i = 0, cnt = 0; i < capacity; i++) {
+    for (u32 i = 0, cnt = 0; i < numBlocks; i++) {
 
         if (isCorrupted(i)) {
             cnt++;
@@ -613,11 +435,13 @@ FSDevice::numAllocBitsInBitmapBlock()
     return (bsize - 4) * 8;
 }
 
+/*
 u32
 FSDevice::numBlocks(FSPartitionDescriptor &p)
 {
     return p.lastBlock - p.firstBlock + 1;
 }
+*/
 
 u32
 FSDevice::freeBlocks(FSPartitionDescriptor &p)
@@ -639,13 +463,13 @@ FSDevice::freeBlocks(FSPartitionDescriptor &p)
 u32
 FSDevice::usedBlocks(FSPartitionDescriptor &p)
 {
-    return numBlocks(p) - freeBlocks(p);
+    return p.highCyl - p.lowCyl + 1 - freeBlocks(p);
 }
 
 u32
 FSDevice::totalBytes(FSPartitionDescriptor &p)
 {
-    return numBlocks(p) * bsize;
+    return (p.highCyl - p.lowCyl + 1) * bsize;
 }
 
 u32
@@ -809,7 +633,7 @@ FSDevice::itemType(u32 nr, u32 pos)
 FSBlock *
 FSDevice::block(u32 nr)
 {
-    if (nr < capacity) {
+    if (nr < numBlocks) {
         return blocks[nr];
     } else {
         return nullptr;
@@ -819,7 +643,7 @@ FSDevice::block(u32 nr)
 FSBootBlock *
 FSDevice::bootBlock(u32 nr)
 {
-    if (nr < capacity && blocks[nr]->type() != FS_BOOT_BLOCK)
+    if (nr < numBlocks && blocks[nr]->type() != FS_BOOT_BLOCK)
     {
         return (FSBootBlock *)blocks[nr];
     } else {
@@ -830,7 +654,7 @@ FSDevice::bootBlock(u32 nr)
 FSRootBlock *
 FSDevice::rootBlock(u32 nr)
 {
-    if (nr < capacity && blocks[nr]->type() == FS_ROOT_BLOCK) {
+    if (nr < numBlocks && blocks[nr]->type() == FS_ROOT_BLOCK) {
         return (FSRootBlock *)blocks[nr];
     } else {
         return nullptr;
@@ -840,7 +664,7 @@ FSDevice::rootBlock(u32 nr)
 FSBitmapBlock *
 FSDevice::bitmapBlock(u32 nr)
 {
-    if (nr < capacity && blocks[nr]->type() == FS_BITMAP_BLOCK) {
+    if (nr < numBlocks && blocks[nr]->type() == FS_BITMAP_BLOCK) {
         return (FSBitmapBlock *)blocks[nr];
     } else {
         return nullptr;
@@ -850,7 +674,7 @@ FSDevice::bitmapBlock(u32 nr)
 FSBitmapExtBlock *
 FSDevice::bitmapExtBlock(u32 nr)
 {
-    if (nr < capacity && blocks[nr]->type() == FS_BITMAP_EXT_BLOCK) {
+    if (nr < numBlocks && blocks[nr]->type() == FS_BITMAP_EXT_BLOCK) {
         return (FSBitmapExtBlock *)blocks[nr];
     } else {
         return nullptr;
@@ -860,7 +684,7 @@ FSDevice::bitmapExtBlock(u32 nr)
 FSUserDirBlock *
 FSDevice::userDirBlock(u32 nr)
 {
-    if (nr < capacity && blocks[nr]->type() == FS_USERDIR_BLOCK) {
+    if (nr < numBlocks && blocks[nr]->type() == FS_USERDIR_BLOCK) {
         return (FSUserDirBlock *)blocks[nr];
     } else {
         return nullptr;
@@ -870,7 +694,7 @@ FSDevice::userDirBlock(u32 nr)
 FSFileHeaderBlock *
 FSDevice::fileHeaderBlock(u32 nr)
 {
-    if (nr < capacity && blocks[nr]->type() == FS_FILEHEADER_BLOCK) {
+    if (nr < numBlocks && blocks[nr]->type() == FS_FILEHEADER_BLOCK) {
         return (FSFileHeaderBlock *)blocks[nr];
     } else {
         return nullptr;
@@ -880,7 +704,7 @@ FSDevice::fileHeaderBlock(u32 nr)
 FSFileListBlock *
 FSDevice::fileListBlock(u32 nr)
 {
-    if (nr < capacity && blocks[nr]->type() == FS_FILELIST_BLOCK) {
+    if (nr < numBlocks && blocks[nr]->type() == FS_FILELIST_BLOCK) {
         return (FSFileListBlock *)blocks[nr];
     } else {
         return nullptr;
@@ -891,7 +715,7 @@ FSDataBlock *
 FSDevice::dataBlock(u32 nr)
 {
     FSBlockType t = blocks[nr]->type();
-    if (nr < capacity && (t == FS_DATA_BLOCK_OFS || t == FS_DATA_BLOCK_FFS)) {
+    if (nr < numBlocks && (t == FS_DATA_BLOCK_OFS || t == FS_DATA_BLOCK_FFS)) {
         return (FSDataBlock *)blocks[nr];
     } else {
         return nullptr;
@@ -901,7 +725,7 @@ FSDevice::dataBlock(u32 nr)
 FSBlock *
 FSDevice::hashableBlock(u32 nr)
 {
-    FSBlockType type = nr < capacity ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
+    FSBlockType type = nr < numBlocks ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
     
     if (type == FS_USERDIR_BLOCK || type == FS_FILEHEADER_BLOCK) {
         return blocks[nr];
@@ -1033,7 +857,7 @@ FSDevice::makeBootable(FSPartitionDescriptor &part, FSBootCode bootCode)
 void
 FSDevice::updateChecksums()
 {
-    for (u32 i = 0; i < capacity; i++) {
+    for (u32 i = 0; i < numBlocks; i++) {
         blocks[i]->updateChecksum();
     }
 }
@@ -1383,7 +1207,7 @@ FSDevice::readByte(u32 block, u32 offset)
 {
     assert(offset < bsize);
 
-    if (block < capacity) {
+    if (block < numBlocks) {
         return blocks[block]->data ? blocks[block]->data[offset] : 0;
     }
     
@@ -1412,7 +1236,7 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
         *error = FS_WRONG_BSIZE; return false;
     }
     // Only proceed if the source buffer contains the right amount of data
-    if (capacity * bsize != size) {
+    if (numBlocks * bsize != size) {
         *error = FS_WRONG_CAPACITY; return false;
     }
     // Only proceed if the buffer contains a file system
@@ -1434,7 +1258,7 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
     assert(false);
     
     // Import all blocks
-    for (u32 i = 0; i < capacity; i++) {
+    for (u32 i = 0; i < numBlocks; i++) {
         
         // Determine the type of the new block
         FSBlockType type = predictBlockType(i, src + i * bsize);
@@ -1464,13 +1288,13 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
 bool
 FSDevice::exportVolume(u8 *dst, size_t size)
 {
-    return exportBlocks(0, capacity - 1, dst, size);
+    return exportBlocks(0, numBlocks - 1, dst, size);
 }
 
 bool
 FSDevice::exportVolume(u8 *dst, size_t size, FSError *error)
 {
-    return exportBlocks(0, capacity - 1, dst, size, error);
+    return exportBlocks(0, numBlocks - 1, dst, size, error);
 }
 
 bool
@@ -1497,8 +1321,8 @@ FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size)
 
 bool FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *error)
 {
-    assert(first < capacity);
-    assert(last < capacity);
+    assert(first < numBlocks);
+    assert(last < numBlocks);
     assert(first <= last);
     assert(dst != nullptr);
     

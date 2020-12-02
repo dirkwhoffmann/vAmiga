@@ -1267,7 +1267,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (NSInteger) numBlocks
 {
-    return wrapper->volume->numBlocks();
+    return wrapper->volume->getCapacity();
 }
 
 - (FSBlockType) blockType:(NSInteger)blockNr

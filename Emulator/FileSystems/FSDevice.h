@@ -45,41 +45,30 @@ protected:
     // The layout of this device
     FSDeviceDescriptor layout;
     
-    
-    //
-    // Physical device properties
-    //
-        
     // Number of physical cylinders
-    u32 cylinders = 80;
+    u32 numCyls = 0;
 
     // Number of physical heads
-    u32 heads = 2;
-    
-    
-    //
-    // Logical device properties
-    //
+    u32 numHeads = 0;
     
     // Number of blocks per track
-    u32 sectors = 11;
+    u32 numSectors = 0;
     
-    // Total capacity of this device in blocks
-    u32 capacity;
+    // The total number of blocks
+    u32 numBlocks = 0;
 
     // Number of reserved blocks
-    u32 reserved = 2;
+    u32 numReserved = 0;
     
     // Size of a single block in bytes
-    u32 bsize;
+    u32 bsize = 0;
             
-    // The block storage
-    std::vector<BlockPtr> blocks;
-    // BlockPtr *blocks;
-    
     // The partition table
     std::vector<FSPartitionDescriptor> part;
-        
+
+    // The block storage
+    std::vector<BlockPtr> blocks;
+            
     // The currently selected partition
     u32 cp = 0;
 
@@ -138,10 +127,10 @@ public:
 public:
             
     // Returns the device capacity in blocks
-    u32 getCapacity() { return capacity; }
+    u32 getCapacity() { return numBlocks; }
 
     // Returns the number of reserved blocks
-    u32 getReserved() { return reserved; }
+    u32 getReserved() { return numReserved; }
 
     // Returns the block size in bytes
     u32 getBlockSize() { return bsize; }
@@ -150,13 +139,13 @@ public:
     u32 numAllocBitsInBitmapBlock();
     
     // Reports usage information
-    u32 numBlocks(FSPartitionDescriptor &p);
+    // u32 numBlocks(FSPartitionDescriptor &p);
     u32 freeBlocks(FSPartitionDescriptor &p);
     u32 usedBlocks(FSPartitionDescriptor &p);
     u32 totalBytes(FSPartitionDescriptor &p);
     u32 freeBytes(FSPartitionDescriptor &p);
     u32 usedBytes(FSPartitionDescriptor &p);
-    u32 numBlocks() { return numBlocks(layout.part[cp]); }
+    // u32 numBlocks() { return numBlocks(layout.part[cp]); }
     u32 freeBlocks() { return freeBlocks(layout.part[cp]); }
     u32 usedBlocks() { return usedBlocks(layout.part[cp]); }
     u32 totalBytes() { return totalBytes(layout.part[cp]); }
@@ -177,7 +166,7 @@ public:
     FSError check(u32 blockNr, u32 pos, u8 *expected, bool strict);
 
     // Checks if the block with the given number is part of the volume
-    bool isBlockNumber(u32 nr) { return nr < capacity; }
+    bool isBlockNumber(u32 nr) { return nr < numBlocks; }
 
     // Checks if the type of a block matches one of the provides types
     FSError checkBlockType(u32, FSBlockType type);
