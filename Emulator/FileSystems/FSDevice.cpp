@@ -293,7 +293,6 @@ FSDevice::FSDevice(FSLayout &l)
     
     // Create the block storage
     blocks = new BlockPtr[layout.blocks]();
-    dsize = isOFS() ? bsize - 24 : bsize; // TODO: REMOVE: THIS IS A PARTITION PROPERTY
         
     // Iterate through all partitions
     for (auto& it : layout.part) {
@@ -383,8 +382,6 @@ FSDevice::dump()
     msg(" Bits per bitmap block : %d\n", getAllocBitsInBitmapBlock());
     msg("     Bitmap block refs : %d (in root block)\n", bitmapRefsInRootBlock());
     msg("                         %d (in ext block)\n", bitmapRefsInBitmapExtensionBlock());
-    msg("Required bitmap blocks : %d\n", requiredBitmapBlocks());
-    msg(" Required bmExt blocks : %d\n", requiredBitmapExtensionBlocks());
     msg("\n");
     
     for (size_t i = 0; i < part.size(); i++) {
@@ -658,26 +655,6 @@ u32
 FSDevice::bitmapRefsInBitmapExtensionBlock()
 {
     return (bsize / 4) - 1;
-}
-
-u32
-FSDevice::requiredBitmapBlocks()
-{
-    u32 allocationBitsPerBlock = (bsize - 4) * 8;
-    return (capacity + allocationBitsPerBlock - 1) / allocationBitsPerBlock;
-}
-
-u32
-FSDevice::requiredBitmapExtensionBlocks()
-{
-    u32 numBlocks = requiredBitmapBlocks();
-    
-    // The first 25 blocks fit into the root block
-    if (numBlocks <= bitmapRefsInRootBlock()) return 0;
-    
-    numBlocks -= 25;
-    u32 refsPerBlock = bitmapRefsInBitmapExtensionBlock();
-    return (numBlocks + refsPerBlock - 1) / refsPerBlock;
 }
 
 u32

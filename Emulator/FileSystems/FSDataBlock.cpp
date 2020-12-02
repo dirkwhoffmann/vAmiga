@@ -80,7 +80,7 @@ OFSDataBlock::check(u32 byte, u8 *expected, bool strict)
             case 0: EXPECT_LONGWORD(8);                 break;
             case 1: if (strict) EXPECT_FILEHEADER_REF;  break;
             case 2: EXPECT_DATABLOCK_NUMBER;            break;
-            case 3: EXPECT_LESS_OR_EQUAL(volume.dsize); break;
+            case 3: EXPECT_LESS_OR_EQUAL(dsize());      break;
             case 4: EXPECT_OPTIONAL_DATABLOCK_REF;      break;
             case 5: EXPECT_CHECKSUM;                    break;
         }
@@ -94,7 +94,7 @@ OFSDataBlock::writeData(FILE *file, size_t size)
 {
     assert(file != nullptr);
     
-    size_t count = MIN(volume.dsize, size);
+    size_t count = MIN(dsize(), size);
     for (size_t i = 0; i < count; i++) fputc(data[i + headerSize()], file);
     return count;
 }
@@ -108,6 +108,12 @@ OFSDataBlock::addData(const u8 *buffer, size_t size)
     setDataBytesInBlock(count);
     
     return count;
+}
+
+size_t
+OFSDataBlock::dsize()
+{
+    return volume.bsize - headerSize();
 }
 
 
@@ -133,7 +139,7 @@ FFSDataBlock::writeData(FILE *file, size_t size)
 {
     assert(file != nullptr);
     
-    size_t count = MIN(volume.dsize, size);
+    size_t count = MIN(dsize(), size);
     for (size_t i = 0; i < count; i++) fputc(data[i + headerSize()], file);
     return count;
 }
@@ -144,4 +150,10 @@ FFSDataBlock::addData(const u8 *buffer, size_t size)
     size_t count = MIN(volume.bsize, size);
     memcpy(data, buffer, count);
     return count;
+}
+
+size_t
+FFSDataBlock::dsize()
+{
+    return volume.bsize - headerSize();
 }

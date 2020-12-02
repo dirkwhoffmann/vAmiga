@@ -73,10 +73,7 @@ protected:
     
     // Size of a single block in bytes (TODO: MOVE TO PARTITION TABLE) 
     u32 bsize;
-        
-    // Number of data bytes in a single data block
-    u32 dsize;
-    
+            
     // The block storage
     BlockPtr *blocks;
     
@@ -161,8 +158,6 @@ public:
 
     // Returns certain bitmap block parameters
     u32 getAllocBitsInBitmapBlock();
-    u32 requiredBitmapBlocks();
-    u32 requiredBitmapExtensionBlocks();
     
     // Reports usage information
     u32 numBlocks(FSPartition &p);
