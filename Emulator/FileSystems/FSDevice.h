@@ -139,8 +139,8 @@ public:
         
     // Returns the type of this volume
     FSVolumeType getType() { return type; } // DEPRECATED. MAKE PART OF PARTITION
-    bool isOFS(); // DEPRECATED. MAKE PART OF PARTITION
-    bool isFFS(); // DEPRECATED. MAKE PART OF PARTITION
+    // bool isOFS(); // DEPRECATED. MAKE PART OF PARTITION
+    // bool isFFS(); // DEPRECATED. MAKE PART OF PARTITION
     
     // Returns the device capacity in blocks
     u32 getCapacity() { return capacity; }
@@ -152,7 +152,6 @@ public:
     u32 getBlockSize() { return bsize; }
 
     // Returns storage capacity information about certain blocks
-    u32 getDataBlockCapacity();
     u32 bitmapRefsInRootBlock();
     u32 bitmapRefsInBitmapExtensionBlock();
 

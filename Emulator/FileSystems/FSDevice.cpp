@@ -378,7 +378,6 @@ FSDevice::dump()
     msg("                  Name : %s\n", getName().c_str());
     msg("           File system : DOS%ld (%s)\n", getType(), sFSVolumeType(getType()));
     msg("\n");
-    msg("  Bytes per data block : %d\n", getDataBlockCapacity());
     msg(" Bits per bitmap block : %d\n", getAllocBitsInBitmapBlock());
     msg("     Bitmap block refs : %d (in root block)\n", bitmapRefsInRootBlock());
     msg("                         %d (in ext block)\n", bitmapRefsInBitmapExtensionBlock());
@@ -609,40 +608,10 @@ FSDevice::predictBlockType(u32 nr, const u8 *buffer)
     return FS_EMPTY_BLOCK;
 }
 
-bool
-FSDevice::isOFS()
-{
-    return
-    type == FS_OFS ||
-    type == FS_OFS_INTL ||
-    type == FS_OFS_DC ||
-    type == FS_OFS_LNFS;
-}
-
-bool
-FSDevice::isFFS()
-{
-    return
-    type == FS_FFS ||
-    type == FS_FFS_INTL ||
-    type == FS_FFS_DC ||
-    type == FS_FFS_LNFS;
-}
-
 u32
 FSDevice::getAllocBitsInBitmapBlock()
 {
     return (bsize - 4) * 8;
-}
-
-u32
-FSDevice::getDataBlockCapacity()
-{
-    if (isOFS()) {
-        return bsize - OFSDataBlock::headerSize();
-    } else {
-        return bsize - FFSDataBlock::headerSize();
-    }
 }
 
 u32
@@ -1039,6 +1008,8 @@ FSDevice::addFileListBlock(u32 head, u32 prev)
 u32
 FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
 {
+    FSPartition &p = layout.part[partitionForBlock(head)];
+
     FSBlock *prevBlock = block(prev);
     if (!prevBlock) return 0;
 
@@ -1046,7 +1017,7 @@ FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
     if (!ref) return 0;
 
     FSDataBlock *newBlock;
-    if (isOFS()) {
+    if (isOFS(p)) {
         newBlock = new OFSDataBlock(*this, ref);
     } else {
         newBlock = new FFSDataBlock(*this, ref);
