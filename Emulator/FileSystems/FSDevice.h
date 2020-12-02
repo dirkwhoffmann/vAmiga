@@ -11,7 +11,7 @@
 #define _FSVOLUME_H
 
 #include "AmigaObject.h"
-#include "FSLayout.h"
+#include "FSDescriptors.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 
