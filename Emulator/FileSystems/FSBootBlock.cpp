@@ -13,9 +13,7 @@ FSBootBlock::FSBootBlock(FSPartition &p, u32 nr, FSVolumeType type) : FSBlock(p,
 {
     data = new u8[bsize()]();
     
-    // TODO: THIS CHECK ONLY WORKS CORRECTLY FOR THE FIRST PARTITION
-    // SOLUTION: Add a new block of type FS_FIRST_BOOT_BLOCK 
-    if (nr == 0) {
+    if (type != FS_NONE) {
         data[0] = 'D';
         data[1] = 'O';
         data[2] = 'S';

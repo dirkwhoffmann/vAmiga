@@ -20,6 +20,45 @@ FSPartition::FSPartition(FSDevice &ref, FSPartitionDescriptor layout) : dev(ref)
     
     bmBlocks    = layout.bmBlocks;
     bmExtBlocks = layout.bmExtBlocks;
+    
+    // Do some consistency checking
+    for (u32 i = firstBlock; i <= lastBlock; i++) assert(dev.blocks[i] == nullptr);
+    
+    // Create boot blocks
+    dev.blocks[firstBlock]     = new FSBootBlock(*this, firstBlock, layout.dos);
+    dev.blocks[firstBlock + 1] = new FSBootBlock(*this, firstBlock + 1, FS_NONE);
+
+    // Create the root block
+    FSRootBlock *rb = new FSRootBlock(*this, layout.rootBlock);
+    dev.blocks[layout.rootBlock] = rb;
+    
+    // Create the bitmap blocks
+    for (auto& ref : layout.bmBlocks) {
+        
+        debug("Creating bitmap block %d\n", ref);
+        dev.blocks[ref] = new FSBitmapBlock(*this, ref);
+    }
+    
+    // Add bitmap extension blocks
+    FSBlock *pred = rb;
+    for (auto& ref : layout.bmExtBlocks) {
+        
+        dev.blocks[ref] = new FSBitmapExtBlock(*this, ref);
+        pred->setNextBmExtBlockRef(ref);
+        pred = dev.blocks[ref];
+    }
+    
+    // Add all bitmap block references
+    rb->addBitmapBlockRefs(layout.bmBlocks);
+    
+    // Add free blocks
+    for (u32 i = firstBlock; i <= lastBlock; i++) {
+        
+        if (dev.blocks[i] == nullptr) {
+            dev.blocks[i] = new FSEmptyBlock(*this, i);
+            dev.markAsFree(i); // TODO: MUST BE PARTITION SPECIFIC
+        }
+    }
 }
 
 void

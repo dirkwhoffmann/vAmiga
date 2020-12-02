@@ -120,58 +120,15 @@ FSDevice::FSDevice(FSDeviceDescriptor &layout)
     for (auto& descriptor : layout.part) {
         partitions.push_back(new FSPartition(*this, descriptor));
     }
-    
-    // OLD:
-    // Iterate through all partitions
-    int i = 0;
-    for (auto& it : layout.part) {
-    
-        u32 first = it.firstBlock;
-        
-        // Create boot blocks
-        blocks[first] = new FSBootBlock(*partitions[i], first, it.dos);
-        blocks[first + 1] = new FSBootBlock(*partitions[i], first + 1, it.dos);
-
-        // Create the root block
-        FSRootBlock *rb = new FSRootBlock(*partitions[i], it.rootBlock);
-        blocks[it.rootBlock] = rb;
-        
-        // Create the bitmap blocks
-        for (auto& bmb : it.bmBlocks) {
-            
-            debug("Creating bitmap block at %d\n", bmb);
-            blocks[bmb] = new FSBitmapBlock(*partitions[i], bmb);
-        }
-        
-        // Add bitmap extension blocks
-        FSBlock *pred = rb;
-        for (auto& ext : it.bmExtBlocks) {
-            
-            blocks[ext] = new FSBitmapExtBlock(*partitions[i], ext);
-            pred->setNextBmExtBlockRef(ext);
-            pred = blocks[ext];
-        }
-        
-        // Add all bitmap block references
-        rb->addBitmapBlockRefs(it.bmBlocks);
-        
-        i++;
-    }
-
-    // Add free blocks
-    for (u32 i = 0; i < layout.blocks; i++) {
-        
-        if (blocks[i] == nullptr) {
-            blocks[i] = new FSEmptyBlock(*partitions[0], i);
-            markAsFree(i); // TODO: MUST BE PARTITION SPECIFIC
-        }
-    }
 
     // Compute checksums for all blocks
     updateChecksums();
     
     // Set the current directory to '/'
-    cd = layout.part[0].rootBlock;
+    cd = partitions[0]->rootBlock;
+    
+    // Do some consistency checking
+    for (u32 i = 0; i < numBlocks; i++) assert(blocks[i] != nullptr);
     
     if (FS_DEBUG) {
         printf("cd = %d\n", cd);
