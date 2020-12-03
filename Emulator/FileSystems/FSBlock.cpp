@@ -11,12 +11,12 @@
 #include "FSDevice.h"
 
 FSBlock *
-FSBlock::makeWithType(FSPartition &p, u32 nr, FSBlockType type, FSVolumeType dos)
+FSBlock::makeWithType(FSPartition &p, u32 nr, FSBlockType type)
 {
     switch (type) {
 
         case FS_EMPTY_BLOCK:      return new FSEmptyBlock(p, nr);
-        case FS_BOOT_BLOCK:       return new FSBootBlock(p, nr, dos);
+        case FS_BOOT_BLOCK:       return new FSBootBlock(p, nr);
         case FS_ROOT_BLOCK:       return new FSRootBlock(p, nr);
         case FS_BITMAP_BLOCK:     return new FSBitmapBlock(p, nr);
         case FS_BITMAP_EXT_BLOCK: return new FSBitmapExtBlock(p, nr);

@@ -12,6 +12,7 @@
 
 FSPartition::FSPartition(FSDevice &ref, FSPartitionDescriptor layout) : dev(ref)
 {
+    dos         = layout.dos;
     lowCyl      = layout.lowCyl;
     highCyl     = layout.highCyl;
     rootBlock   = layout.rootBlock;    
@@ -25,8 +26,8 @@ FSPartition::FSPartition(FSDevice &ref, FSPartitionDescriptor layout) : dev(ref)
     for (u32 i = firstBlock; i <= lastBlock; i++) assert(dev.blocks[i] == nullptr);
     
     // Create boot blocks
-    dev.blocks[firstBlock]     = new FSBootBlock(*this, firstBlock, layout.dos);
-    dev.blocks[firstBlock + 1] = new FSBootBlock(*this, firstBlock + 1, FS_NODOS);
+    dev.blocks[firstBlock]     = new FSBootBlock(*this, firstBlock);
+    dev.blocks[firstBlock + 1] = new FSBootBlock(*this, firstBlock + 1);
 
     // Create the root block
     FSRootBlock *rb = new FSRootBlock(*this, layout.rootBlock);
@@ -64,7 +65,7 @@ FSPartition::FSPartition(FSDevice &ref, FSPartitionDescriptor layout) : dev(ref)
 void
 FSPartition::info()
 {
-    msg("DOS%ld  ",     dos());
+    msg("DOS%ld  ",     dos);
     msg("%5d (x %3d) ", numBlocks(), bsize());
     msg("%5d  ",        usedBlocks());
     msg("%5d   ",       freeBlocks());
@@ -144,13 +145,6 @@ FSPartition::setName(FSName name)
     assert(rb != nullptr);
 
     rb->setName(name);
-}
-
-FSVolumeType
-FSPartition::dos()
-{
-    FSBlock *b = dev.blockPtr(firstBlock);
-    return b ? b->dos() : FS_NODOS;
 }
 
 u32
@@ -474,6 +468,7 @@ FSPartition::check(bool strict, FSErrorReport &report)
     return report.bitmapErrors == 0;
 }
 
+/*
 bool
 FSPartition::predictBlock(u32 nr, const u8 *buffer,
                           FSPartition **p, FSVolumeType *d, FSBlockType *type)
@@ -517,3 +512,4 @@ FSPartition::predictBlock(u32 nr, const u8 *buffer,
     return FS_EMPTY_BLOCK;
     return true;
 }
+*/

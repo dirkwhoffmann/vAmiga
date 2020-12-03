@@ -759,6 +759,7 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
     if (numBlocks * bsize != size) {
         *error = FS_WRONG_CAPACITY; return false;
     }
+    /*
     // Only proceed if the buffer contains a file system
     if (src[0] != 'D' || src[1] != 'O' || src[2] != 'S') {
         *error = FS_UNKNOWN; return false;
@@ -769,28 +770,25 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
     }
 
     FSVolumeType dos = (FSVolumeType)src[3];
-
-    // Set the version number
-    // type = (FSVolumeType)src[3];
-    
-    // Scan the buffer for bitmap blocks and bitmap extension blocks
-    // locateBitmapBlocks(src);
-    assert(false);
-    
+    */
+        
     // Import all blocks
     for (u32 i = 0; i < numBlocks; i++) {
         
-        // Determine the type of the new block
-        FSBlockType type = predictBlockType(i, src + i * bsize);
+        const u8 *data = src + i * bsize;
         
-        // Create the new block
-        u32 part = partitionForBlock(i);
-        FSBlock *newBlock = FSBlock::makeWithType(*partitions[part], i, type, dos);
+        // Get the partition this block belongs to
+        FSPartition &part = blocks[i]->partition;
+        
+        // Determine the type of the new block
+        FSBlockType type = part.predictBlockType(i, data);
+        
+        // Create new block
+        FSBlock *newBlock = FSBlock::makeWithType(part, i, type);
         if (newBlock == nullptr) return false;
 
-        // Import the block data
-        const u8 *p = src + i * bsize;
-        newBlock->importBlock(p, bsize);
+        // Import block data
+        newBlock->importBlock(data, bsize);
 
         // Replace the existing block
         assert(blocks[i] != nullptr);
@@ -962,6 +960,7 @@ FSDevice::exportDirectory(const char *path)
     return FS_OK;
 }
 
+/*
 bool
 FSDevice::predictBlock(u32 nr, const u8 *buffer,
                        FSPartition **p, FSVolumeType *dos, FSBlockType *type)
@@ -974,3 +973,4 @@ FSDevice::predictBlock(u32 nr, const u8 *buffer,
     }
     return false;
 }
+*/

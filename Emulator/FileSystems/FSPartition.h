@@ -17,7 +17,10 @@ struct FSPartition : AmigaObject {
     
     // The device this partition is part of
     class FSDevice &dev;
-        
+    
+    // File system format
+    FSVolumeType dos = FS_NODOS;
+    
     // Cylinder boundaries
     u32 lowCyl = 0;
     u32 highCyl = 0;
@@ -60,10 +63,9 @@ struct FSPartition : AmigaObject {
     // Querying partition properties
     //
     
-    // Returns the DOS version of this partition (OFS, FFS, etc.)
-    FSVolumeType dos();
-    bool isOFS() { return isOFSVolumeType(dos()); }
-    bool isFFS() { return isFFSVolumeType(dos()); }
+    // Returns the file system category
+    bool isOFS() { return isOFSVolumeType(dos); }
+    bool isFFS() { return isFFSVolumeType(dos); }
 
     // Returns the size of a single block in bytes (usually 512)
     u32 bsize();
@@ -160,8 +162,10 @@ public:
 public:
     
     // Provides block information that is needed during the import process
+    /*
     bool predictBlock(u32 nr, const u8 *buffer,
                       FSPartition **p, FSVolumeType *dos, FSBlockType *type);
+    */
 };
 
 typedef FSPartition* FSPartitionPtr;

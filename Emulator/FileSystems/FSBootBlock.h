@@ -14,7 +14,7 @@
 
 struct FSBootBlock : FSBlock {
         
-    FSBootBlock(FSPartition &p, u32 nr, FSVolumeType type);
+    FSBootBlock(FSPartition &p, u32 nr);
     ~FSBootBlock();
     
     const char *getDescription() override { return "FSBootBlock"; }

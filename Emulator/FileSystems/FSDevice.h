@@ -126,7 +126,7 @@ public:
     //
     
     // Returns the DOS version of the current partition (OFS, FFS, etc.)
-    FSVolumeType dos() { return partitions[cp]->dos(); }
+    FSVolumeType dos() { return partitions[cp]->dos; }
     bool isOFS() { return partitions[cp]->isOFS(); }
     bool isFFS() { return partitions[cp]->isFFS(); }
     
@@ -331,8 +331,10 @@ public:
 private:
     
     // Provides block information that is needed during the import process
+    /*
     bool predictBlock(u32 nr, const u8 *buffer,
                       FSPartition **p, FSVolumeType *dos, FSBlockType *type);
+    */
 };
 
 #endif

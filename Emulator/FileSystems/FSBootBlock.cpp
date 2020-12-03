@@ -9,15 +9,15 @@
 
 #include "FSDevice.h"
 
-FSBootBlock::FSBootBlock(FSPartition &p, u32 nr, FSVolumeType type) : FSBlock(p, nr)
+FSBootBlock::FSBootBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
     data = new u8[bsize()]();
     
-    if (type != FS_NODOS) {
+    if (nr == p.firstBlock && p.dos != FS_NODOS) {
         data[0] = 'D';
         data[1] = 'O';
         data[2] = 'S';
-        data[3] = (u8)type;
+        data[3] = (u8)p.dos;
     }
 }
 
