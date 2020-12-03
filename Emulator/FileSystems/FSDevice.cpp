@@ -178,17 +178,15 @@ FSDevice::dump()
 FSErrorReport
 FSDevice::check(bool strict)
 {
+    FSErrorReport result;
+
     long total = 0, min = LONG_MAX, max = 0;
     
+    // Analyze all partions
+    for (auto &p : partitions) p->check(strict, result);
+
     // Analyze all blocks
     for (u32 i = 0; i < numBlocks; i++) {
-
-        if (blocks[i]->type() == FS_EMPTY_BLOCK && !isFree(i)) {
-            debug(FS_DEBUG, "Empty block %d is marked as allocated\n", i);
-        }
-        if (blocks[i]->type() != FS_EMPTY_BLOCK && isFree(i)) {
-            debug(FS_DEBUG, "Non-empty block %d is marked as free\n", i);
-        }
 
         if (blocks[i]->check(strict) > 0) {
             min = MIN(min, i);
@@ -200,7 +198,6 @@ FSDevice::check(bool strict)
     }
 
     // Record findings
-    FSErrorReport result;
     if (total) {
         result.corruptedBlocks = total;
         result.firstErrorBlock = min;
@@ -303,12 +300,16 @@ FSDevice::seekCorruptedBlock(u32 n)
 u32
 FSDevice::partitionForBlock(u32 ref)
 {
+    for (u32 i = 0; i < partitions.size(); i++) {
+        if (ref >= partitions[i]->firstBlock && ref <= partitions[i]->lastBlock) return i;
+    }
+    /*
     for (u32 i = 0; i < layout.part.size(); i++) {
 
         FSPartitionDescriptor &part = layout.part[i];
         if (ref >= part.firstBlock && ref <= part.lastBlock) return i;
     }
-    
+    */
     assert(false);
     return 0;
 }
@@ -327,16 +328,12 @@ FSDevice::predictBlockType(u32 nr, const u8 *buffer)
     return FS_UNKNOWN_BLOCK;
 }
 
+/*
 u32
 FSDevice::freeBlocks(FSPartitionDescriptor &p)
 {
     u32 result = 0;
     
-    /*
-    for (size_t i = p.firstBlock; i <= p.lastBlock; i++) {
-        if (blocks[i]->type() == FS_EMPTY_BLOCK) result++;
-    }
-    */
     for (size_t i = p.firstBlock; i <= p.lastBlock; i++) {
         if (isFree(i)) result++;
     }
@@ -367,6 +364,7 @@ FSDevice::usedBytes(FSPartitionDescriptor &p)
 {
     return usedBlocks(p) * bsize;
 }
+*/
 
 /*
 u32
@@ -382,6 +380,7 @@ FSDevice::freeBlocks()
 }
 */
 
+/*
 bool
 FSDevice::isFree(u32 ref)
 {
@@ -457,6 +456,7 @@ FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
 
     return true;
 }
+*/
 
 FSBlockType
 FSDevice::blockType(u32 nr)
@@ -574,6 +574,7 @@ FSDevice::hashableBlockPtr(u32 nr)
     }
 }
 
+/*
 u32
 FSDevice::allocateBlock(FSPartitionDescriptor &part)
 {
@@ -619,7 +620,9 @@ FSDevice::deallocateBlock(u32 ref)
         markAsFree(ref);
     }
 }
+*/
 
+/*
 FSUserDirBlock *
 FSDevice::newUserDirBlock(FSPartitionDescriptor &p, const char *name)
 {
@@ -641,7 +644,8 @@ FSDevice::newFileHeaderBlock(FSPartitionDescriptor &p, const char *name)
     blocks[ref] = new FSFileHeaderBlock(*partitions[part], ref, name);
     return (FSFileHeaderBlock *)blocks[ref];
 }
-
+*/
+/*
 u32
 FSDevice::addFileListBlock(u32 head, u32 prev)
 {
@@ -683,6 +687,7 @@ FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
     
     return ref;
 }
+*/
 
 void
 FSDevice::updateChecksums()
@@ -769,7 +774,7 @@ FSBlock *
 FSDevice::makeDir(const char *name)
 {
     FSBlock *cdb = currentDirBlock();
-    FSUserDirBlock *block = newUserDirBlock(name);
+    FSUserDirBlock *block = cdb->partition.newUserDirBlock(name);
     if (block == nullptr) return nullptr;
     
     block->setParentDirRef(cdb->nr);
@@ -784,7 +789,7 @@ FSDevice::makeFile(const char *name)
     assert(name != nullptr);
  
     FSBlock *cdb = currentDirBlock();
-    FSFileHeaderBlock *block = newFileHeaderBlock(name);
+    FSFileHeaderBlock *block = cdb->partition.newFileHeaderBlock(name);
     if (block == nullptr) return nullptr;
     
     block->setParentDirRef(cdb->nr);
@@ -816,6 +821,7 @@ FSDevice::makeFile(const char *name, const char *str)
     return makeFile(name, (const u8 *)str, strlen(str));
 }
 
+/*
 u32
 FSDevice::requiredDataBlocks(FSPartitionDescriptor &p, size_t fileSize)
 {
@@ -857,6 +863,7 @@ FSDevice::requiredBlocks(FSPartitionDescriptor &p, size_t fileSize)
     
     return 1 + numDataBlocks + numFileListBlocks;
 }
+*/
 
 u32
 FSDevice::seekRef(FSName name)

@@ -13,13 +13,13 @@
 FSPartitionDescriptor::FSPartitionDescriptor(FSDeviceDescriptor &layout,
                          FSVolumeType dos, u32 firstCyl, u32 lastCyl, u32 root)
 {
-    u32 blocksPerCyl = layout.numSectors * layout.numHeads;
+    // u32 blocksPerCyl = layout.numSectors * layout.numHeads;
     
     this->dos = dos;
     this->lowCyl = firstCyl;
     this->highCyl = lastCyl;
-    this->firstBlock = firstCyl * blocksPerCyl;
-    this->lastBlock = (lastCyl + 1) * blocksPerCyl - 1;
+    // this->firstBlock = firstCyl * blocksPerCyl;
+    // this->lastBlock = (lastCyl + 1) * blocksPerCyl - 1;
     this->rootBlock = root;
 
     assert(bmBlocks.size() == 0);
@@ -29,7 +29,7 @@ FSPartitionDescriptor::FSPartitionDescriptor(FSDeviceDescriptor &layout,
 void
 FSPartitionDescriptor::dump()
 {
-    msg("       Partition : %d - %d (%d - %d)\n", lowCyl, highCyl, firstBlock, lastBlock);
+    msg("       Partition : %d - %d\n", lowCyl, highCyl);
     msg("      Root block : %d\n", rootBlock);
     msg("   Bitmap blocks : ");
     for (auto& it : bmBlocks) { msg("%d ", it); }

@@ -250,6 +250,7 @@ inline const char *sFSError(FSError value)
 
 typedef struct
 {
+    long bitmapErrors;
     long corruptedBlocks;
     long firstErrorBlock;
     long lastErrorBlock;

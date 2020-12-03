@@ -14,12 +14,12 @@ FSPartition::FSPartition(FSDevice &ref, FSPartitionDescriptor layout) : dev(ref)
 {
     lowCyl      = layout.lowCyl;
     highCyl     = layout.highCyl;
-    firstBlock  = layout.firstBlock;
-    lastBlock   = layout.lastBlock;
-    rootBlock   = layout.rootBlock;
-    
+    rootBlock   = layout.rootBlock;    
     bmBlocks    = layout.bmBlocks;
     bmExtBlocks = layout.bmExtBlocks;
+    
+    firstBlock  = lowCyl * dev.numHeads * dev.numSectors;
+    lastBlock   = (highCyl + 1) * dev.numHeads * dev.numSectors - 1;
     
     // Do some consistency checking
     for (u32 i = firstBlock; i <= lastBlock; i++) assert(dev.blocks[i] == nullptr);
@@ -56,7 +56,7 @@ FSPartition::FSPartition(FSDevice &ref, FSPartitionDescriptor layout) : dev(ref)
         
         if (dev.blocks[i] == nullptr) {
             dev.blocks[i] = new FSEmptyBlock(*this, i);
-            dev.markAsFree(i); // TODO: MUST BE PARTITION SPECIFIC
+            markAsFree(i);
         }
     }
 }
@@ -202,6 +202,48 @@ FSPartition::usedBytes()
 }
 
 u32
+FSPartition::requiredDataBlocks(size_t fileSize)
+{
+    // Compute the capacity of a single data block
+    u32 numBytes = bsize() - (isOFS() ? OFSDataBlock::headerSize() : 0);
+
+    // Compute the required number of data blocks
+    return (fileSize + numBytes - 1) / numBytes;
+}
+
+u32
+FSPartition::requiredFileListBlocks(size_t fileSize)
+{
+    // Compute the required number of data blocks
+    u32 numBlocks = requiredDataBlocks(fileSize);
+    
+    // Compute the number of data block references in a single block
+    u32 numRefs = (bsize() / 4) - 56;
+
+    // Small files do not require any file list block
+    if (numBlocks <= numRefs) return 0;
+
+    // Compute the required number of additional file list blocks
+    return (numBlocks - 1) / numRefs;
+}
+
+u32
+FSPartition::requiredBlocks(size_t fileSize)
+{
+    u32 numDataBlocks = requiredDataBlocks(fileSize);
+    u32 numFileListBlocks = requiredFileListBlocks(fileSize);
+    
+    if (FS_DEBUG) {
+        debug("Required file header blocks : %d\n", 1);
+        debug("       Required data blocks : %d\n", numDataBlocks);
+        debug("  Required file list blocks : %d\n", numFileListBlocks);
+        debug("                Free blocks : %d\n", freeBlocks());
+    }
+    
+    return 1 + numDataBlocks + numFileListBlocks;
+}
+ 
+u32
 FSPartition::allocateBlock()
 {
     if (u32 ref = allocateBlockAbove(rootBlock)) return ref;
@@ -248,6 +290,47 @@ FSPartition::deallocateBlock(u32 ref)
     dev.blocks[ref] = new FSEmptyBlock(*this, ref);
     markAsFree(ref);
 }
+
+u32
+FSPartition::addFileListBlock(u32 head, u32 prev)
+{
+    FSBlock *prevBlock = dev.blockPtr(prev);
+    if (!prevBlock) return 0;
+    
+    u32 ref = allocateBlock();
+    if (!ref) return 0;
+    
+    dev.blocks[ref] = new FSFileListBlock(*this, ref);
+    dev.blocks[ref]->setFileHeaderRef(head);
+    prevBlock->setNextListBlockRef(ref);
+    
+    return ref;
+}
+
+u32
+FSPartition::addDataBlock(u32 count, u32 head, u32 prev)
+{
+    FSBlock *prevBlock = dev.blockPtr(prev);
+    if (!prevBlock) return 0;
+
+    u32 ref = allocateBlock();
+    if (!ref) return 0;
+
+    FSDataBlock *newBlock;
+    if (isOFS()) {
+        newBlock = new OFSDataBlock(*this, ref);
+    } else {
+        newBlock = new FFSDataBlock(*this, ref);
+    }
+    
+    dev.blocks[ref] = newBlock;
+    newBlock->setDataBlockNr(count);
+    newBlock->setFileHeaderRef(head);
+    prevBlock->setNextDataBlockRef(ref);
+    
+    return ref;
+}
+
 
 FSUserDirBlock *
 FSPartition::newUserDirBlock(const char *name)
@@ -368,4 +451,25 @@ FSPartition::makeBootable(FSBootCode bootCode)
 
     ((FSBootBlock *)dev.blocks[firstBlock + 0])->writeBootCode(bootCode, 0);
     ((FSBootBlock *)dev.blocks[firstBlock + 1])->writeBootCode(bootCode, 1);
+}
+
+bool
+FSPartition::check(bool strict, FSErrorReport &report)
+{
+    report.bitmapErrors = 0;
+    
+    for (u32 i = firstBlock; i <= lastBlock; i++) {
+
+        FSBlock *block = dev.blocks[i];
+        if (block->type() == FS_EMPTY_BLOCK && !isFree(i)) {
+            report.bitmapErrors++;
+            debug(FS_DEBUG, "Empty block %d is marked as allocated\n", i);
+        }
+        if (block->type() != FS_EMPTY_BLOCK && isFree(i)) {
+            report.bitmapErrors++;
+            debug(FS_DEBUG, "Non-empty block %d is marked as free\n", i);
+        }
+    }
+ 
+    return report.bitmapErrors == 0;
 }

@@ -84,8 +84,8 @@ struct FSPartitionDescriptor : AmigaObject {
     u32 highCyl = 0;
     
     // Block boundaries
-    u32 firstBlock = 0;
-    u32 lastBlock = 0;
+    // u32 firstBlock = 0;
+    // u32 lastBlock = 0;
     
     // Location of the root block
     u32 rootBlock = 0;

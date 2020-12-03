@@ -88,6 +88,11 @@ struct FSPartition : AmigaObject {
     
 public:
     
+    // Returns the number of required blocks to store a file of certain size
+    u32 requiredDataBlocks(size_t fileSize);
+    u32 requiredFileListBlocks(size_t fileSize);
+    u32 requiredBlocks(size_t fileSize);
+
     // Seeks a free block and marks it as allocated
     u32 allocateBlock();
     u32 allocateBlockAbove(u32 ref);
@@ -97,8 +102,8 @@ public:
     void deallocateBlock(u32 ref);
 
     // Adds a new block of a certain kind
-    // u32 addFileListBlock(u32 head, u32 prev);
-    // u32 addDataBlock(u32 count, u32 head, u32 prev);
+    u32 addFileListBlock(u32 head, u32 prev);
+    u32 addDataBlock(u32 count, u32 head, u32 prev);
     
     // Creates a new block of a certain kind
     FSUserDirBlock *newUserDirBlock(const char *name);
@@ -135,6 +140,19 @@ public:
     
     // Installs a boot block
     void makeBootable(FSBootCode bootCode);
+
+    
+    //
+    // Integrity checking
+    //
+
+public:
+    
+    // Performs several partition checks
+    bool check(bool strict, FSErrorReport &report);
+
+    // Checks if the block with the given number is part of this partition
+    bool inRange(u32 nr) { return nr >= firstBlock && nr <= lastBlock; }
 
 };
 

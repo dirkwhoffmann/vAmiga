@@ -186,19 +186,16 @@ size_t
 FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 {
     assert(getFileSize() == 0);
-    
-    u32 pNr = partition.dev.partitionForBlock(nr);
-    FSPartitionDescriptor &p = partition.dev.layout.part[pNr];
-    
+        
     // Compute the required number of blocks
-    u32 numDataBlocks = partition.dev.requiredDataBlocks(p, size);
-    u32 numListBlocks = partition.dev.requiredFileListBlocks(p, size);
+    u32 numDataBlocks = partition.requiredDataBlocks(size);
+    u32 numListBlocks = partition.requiredFileListBlocks(size);
     
     debug(FS_DEBUG, "Required data blocks : %d\n", numDataBlocks);
     debug(FS_DEBUG, "Required list blocks : %d\n", numListBlocks);
-    debug(FS_DEBUG, "         Free blocks : %d\n", partition.dev.freeBlocks());
+    debug(FS_DEBUG, "         Free blocks : %d\n", partition.freeBlocks());
     
-    if (partition.dev.freeBlocks() < numDataBlocks + numListBlocks) {
+    if (partition.freeBlocks() < numDataBlocks + numListBlocks) {
         warn("Not enough free blocks\n");
         return 0;
     }
@@ -206,13 +203,13 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
     for (u32 ref = nr, i = 0; i < numListBlocks; i++) {
 
         // Add a new file list block
-        ref = partition.dev.addFileListBlock(nr, ref);
+        ref = partition.addFileListBlock(nr, ref);
     }
     
     for (u32 ref = nr, i = 1; i <= numDataBlocks; i++) {
 
         // Add a new data block
-        ref = partition.dev.addDataBlock(i, nr, ref);
+        ref = partition.addDataBlock(i, nr, ref);
 
         // Add references to the new data block
         addDataBlockRef(ref);
