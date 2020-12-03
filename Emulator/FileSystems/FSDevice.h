@@ -35,7 +35,6 @@
 
 class FSDevice : AmigaObject {
     
-    friend class FSPartitionDescriptor; // REMOVE ASAP
     friend class FSPartition;
     friend class FSBlock;
     friend class FSEmptyBlock;
@@ -54,7 +53,7 @@ class FSDevice : AmigaObject {
 protected:
         
     // The layout of this device
-    FSDeviceDescriptor layout;
+    // FSDeviceDescriptor layout;
     
     // Physical device properies
     u32 numCyls = 0;
@@ -128,20 +127,6 @@ public:
     // Returns the number of reserved blocks
     u32 getReserved() { return numReserved; }
     
-    // Reports usage information
-    /*
-    u32 freeBlocks(FSPartitionDescriptor &p);
-    u32 usedBlocks(FSPartitionDescriptor &p);
-    u32 totalBytes(FSPartitionDescriptor &p);
-    u32 freeBytes(FSPartitionDescriptor &p);
-    u32 usedBytes(FSPartitionDescriptor &p);
-    
-    u32 freeBlocks() { return freeBlocks(layout.part[cp]); }
-    u32 usedBlocks() { return usedBlocks(layout.part[cp]); }
-    u32 totalBytes() { return totalBytes(layout.part[cp]); }
-    u32 freeBytes() { return freeBytes(layout.part[cp]); }
-    u32 usedBytes() { return usedBytes(layout.part[cp]); }
-    */
     
     //
     // Querying properties of the current partition
@@ -194,7 +179,7 @@ public:
     //
     
     // Returns the number of partitions
-    u32 numPartitions() { return layout.part.size(); }
+    u32 numPartitions() { return partitions.size(); }
     
     // Returns the partition a certain block belongs to
     u32 partitionForBlock(u32 ref);
@@ -203,39 +188,8 @@ public:
     FSName getName() { return partitions[cp]->getName(); }
     void setName(FSName name) { partitions[cp]->setName(name); }
     
-    // Returns the file system type of the current partition
-    /*
-    FSVolumeType fileSystem(FSPartitionDescriptor &p);
-    bool isOFS(FSPartitionDescriptor &p) { return isOFSVolumeType(fileSystem(p)); }
-    bool isFFS(FSPartitionDescriptor &p) { return isFFSVolumeType(fileSystem(p)); }
-    FSVolumeType fileSystem() { return fileSystem(layout.part[cp]); }
-    */
-    
     // Installs a boot block
     void makeBootable(FSBootCode bootCode) { partitions[cp]->makeBootable(bootCode); }
-
-    
-    //
-    // Allocating blocks
-    //
-    
-public:
- 
-    /*
-    // Checks if a certain block is marked as allocated or free
-    bool isAllocated(u32 ref) { return !isFree(ref); }
-    bool isFree(u32 ref);
-    
-    // Marks a block as allocated or free
-    void markAsAllocated(u32 ref) { mark(ref, true); }
-    void markAsFree(u32 ref) { mark(ref, false); }
-    void mark(u32 ref, bool alloc);
-    */
-    
-private:
-        
-    // Computes the position of a certain block allocation bit
-    // bool locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit);
 
     
     //
@@ -251,8 +205,8 @@ public:
     FSItemType itemType(u32 nr, u32 pos);
     
     // Returns the location of the root block in the current partition
-    u32 currentRootBlockRef() { return layout.part[cp].rootBlock; }
-    FSBlock *currentRootBlockPtr() { return blockPtr(currentRootBlockRef()); }
+    // u32 currentRootBlockRef() { return layout.part[cp].rootBlock; }
+    // FSBlock *currentRootBlockPtr() { return blockPtr(currentRootBlockRef()); }
 
     // Queries a pointer to a block of a certain type (may return nullptr)
     FSBlock *blockPtr(u32 nr);
@@ -273,34 +227,6 @@ public:
     
 public:
     
-    // Seeks a free block in the current partition and marks it as allocated
-    // u32 allocateBlock() { return allocateBlock(layout.part[cp]); }
-
-    // Seeks a free block in a specific partition and marks it as allocated
-    /*
-    u32 allocateBlock(FSPartitionDescriptor &p);
-    u32 allocateBlockAbove(FSPartitionDescriptor &p, u32 ref);
-    u32 allocateBlockBelow(FSPartitionDescriptor &p, u32 ref);
-    */
-    
-    // Deallocates a block
-    // void deallocateBlock(u32 ref);
-
-    // Adds a new block of a certain kind
-    // u32 addFileListBlock(u32 head, u32 prev);
-    // u32 addDataBlock(u32 count, u32 head, u32 prev);
-    
-    // Creates a new block of a certain kind
-    // FSUserDirBlock *newUserDirBlock(FSPartitionDescriptor &p, const char *name);
-    // FSFileHeaderBlock *newFileHeaderBlock(FSPartitionDescriptor &p, const char *name);
-    /*
-    FSUserDirBlock *newUserDirBlock(const char *name) {
-        return newUserDirBlock(layout.part[cp], name);
-    }
-    FSFileHeaderBlock *newFileHeaderBlock(const char *name) {
-        return newFileHeaderBlock(layout.part[cp], name);
-    }
-    */
     // Updates the checksums in all blocks
     void updateChecksums();
     
@@ -344,12 +270,6 @@ public:
     FSBlock *makeFile(const char *name, const u8 *buffer, size_t size);
     FSBlock *makeFile(const char *name, const char *str);
         
-    // Returns the number of blocks needed by a file of a specific size
-    /*
-    u32 requiredDataBlocks(FSPartitionDescriptor &p, size_t fileSize);
-    u32 requiredFileListBlocks(FSPartitionDescriptor &p, size_t fileSize);
-    u32 requiredBlocks(FSPartitionDescriptor &p, size_t fileSize);
-    */
     
     //
     // Traversing linked lists

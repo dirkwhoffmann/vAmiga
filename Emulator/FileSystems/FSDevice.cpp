@@ -83,14 +83,10 @@ FSDevice::make(DiskType type, DiskDensity density, const char *path)
 FSDevice *
 FSDevice::make(FSVolumeType type, const char *path)
 {
-    //     FSDevice *volume;
-    
     // Try to fit the directory into files system with DD disk capacity
-    // if ((volume = make(type, name, path, 80, 2, 11))) return volume;
     if (FSDevice *device = make(DISK_35, DISK_DD, path)) return device;
 
     // Try to fit the directory into files system with HD disk capacity
-    // if ((volume = make(type, name, path, 80, 2, 22))) return volume;
     if (FSDevice *device = make(DISK_35, DISK_HD, path)) return device;
 
     return nullptr;
@@ -103,7 +99,7 @@ FSDevice::FSDevice(FSDeviceDescriptor &layout)
         layout.dump();
     }
     
-    this->layout = layout;
+    // this->layout = layout;
     
     // Copy layout parameters from descriptor
     numCyls    = layout.numCyls;
@@ -153,17 +149,13 @@ FSDevice::info()
 void
 FSDevice::dump()
 {
-    msg("                  Name : %s\n", getName().c_str());
-    msg("\n");
-    
+    // Dump all partitions
     for (auto &p : partitions) {
         p->dump();
     }
     msg("\n");
 
-    layout.dump();
-    msg("\n");
-
+    // Dump all blocks
     for (size_t i = 0; i < numBlocks; i++)  {
         
         if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
@@ -303,13 +295,7 @@ FSDevice::partitionForBlock(u32 ref)
     for (u32 i = 0; i < partitions.size(); i++) {
         if (ref >= partitions[i]->firstBlock && ref <= partitions[i]->lastBlock) return i;
     }
-    /*
-    for (u32 i = 0; i < layout.part.size(); i++) {
 
-        FSPartitionDescriptor &part = layout.part[i];
-        if (ref >= part.firstBlock && ref <= part.lastBlock) return i;
-    }
-    */
     assert(false);
     return 0;
 }
@@ -327,136 +313,6 @@ FSDevice::predictBlockType(u32 nr, const u8 *buffer)
     
     return FS_UNKNOWN_BLOCK;
 }
-
-/*
-u32
-FSDevice::freeBlocks(FSPartitionDescriptor &p)
-{
-    u32 result = 0;
-    
-    for (size_t i = p.firstBlock; i <= p.lastBlock; i++) {
-        if (isFree(i)) result++;
-    }
-
-    return result;
-}
-
-u32
-FSDevice::usedBlocks(FSPartitionDescriptor &p)
-{
-    return p.highCyl - p.lowCyl + 1 - freeBlocks(p);
-}
-
-u32
-FSDevice::totalBytes(FSPartitionDescriptor &p)
-{
-    return (p.highCyl - p.lowCyl + 1) * bsize;
-}
-
-u32
-FSDevice::freeBytes(FSPartitionDescriptor &p)
-{
-    return freeBlocks(p) * bsize;
-}
-
-u32
-FSDevice::usedBytes(FSPartitionDescriptor &p)
-{
-    return usedBlocks(p) * bsize;
-}
-*/
-
-/*
-u32
-FSDevice::freeBlocks()
-{
-    u32 result = 0;
-    
-    for (size_t i = 0; i < capacity; i++)  {
-        if (blocks[i]->type() == FS_EMPTY_BLOCK) result++;
-    }
-    
-    return result;
-}
-*/
-
-/*
-bool
-FSDevice::isFree(u32 ref)
-{
-    u32 block, byte, bit;
-    
-    if (locateAllocationBit(ref, &block, &byte, &bit)) {
-        if (FSBitmapBlock *bm = bitmapBlockPtr(block)) {
-            return GET_BIT(bm->data[byte], bit);
-        }
-    }
-    return false;
-}
-
-void
-FSDevice::mark(u32 ref, bool alloc)
-{
-    u32 block, byte, bit;
-    
-    if (locateAllocationBit(ref, &block, &byte, &bit)) {
-        if (FSBitmapBlock *bm = bitmapBlockPtr(block)) {
-            
-            // 0 = allocated, 1 = free
-            alloc ? CLR_BIT(bm->data[byte], bit) : SET_BIT(bm->data[byte], bit);
-        }
-    }
-}
-
-bool
-FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
-{
-    assert(ref < layout.blocks);
-    
-    // Select the correct partition
-    FSPartitionDescriptor &p = layout.part[partitionForBlock(ref)];
-    auto &bmBlocks = p.bmBlocks;
-    
-    // Make 'rel' relative to the partition start
-    ref -= p.firstBlock;
-
-    // The first two blocks are not part the map (they are always allocated)
-    if (ref < 2) return false;
-    
-    // Locate the bitmap block
-    u32 nr = ref / ((bsize - 4) * 8); 
-    if (nr >= bmBlocks.size()) {
-        warn("Allocation bit is located in a non-existent bitmap block %d\n", nr);
-        return false;
-    }
-    u32 rBlock = bmBlocks[nr];
-    assert(bitmapBlockPtr(rBlock));
-
-    // Locate the byte position (the long word ordering will be inversed)
-    u32 rByte = (ref / 8);
-    
-    // Rectifiy the ordering
-    switch (rByte % 4) {
-        case 0: rByte += 3; break;
-        case 1: rByte += 1; break;
-        case 2: rByte -= 1; break;
-        case 3: rByte -= 3; break;
-    }
-
-    // Skip the checksum which is located in the first four bytes
-    rByte += 4;
-    assert(rByte >= 4 && rByte < bsize);
-        
-    *block = rBlock;
-    *byte  = rByte;
-    *bit   = ref % 8;
-    
-    // debug(FS_DEBUG, "Alloc bit for %d: block: %d byte: %d bit: %d\n",
-    //       ref, *block, *byte, *bit);
-
-    return true;
-}
-*/
 
 FSBlockType
 FSDevice::blockType(u32 nr)
@@ -574,121 +430,6 @@ FSDevice::hashableBlockPtr(u32 nr)
     }
 }
 
-/*
-u32
-FSDevice::allocateBlock(FSPartitionDescriptor &part)
-{
-    if (u32 ref = allocateBlockAbove(part, part.rootBlock)) return ref;
-    if (u32 ref = allocateBlockBelow(part, part.rootBlock)) return ref;
-
-    return 0;
-}
-
-u32
-FSDevice::allocateBlockAbove(FSPartitionDescriptor &part, u32 ref)
-{
-    for (u32 i = ref + 1; i <= part.lastBlock; i++) {
-        if (blocks[i]->type() == FS_EMPTY_BLOCK) {
-            markAsAllocated(i);
-            return i;
-        }
-    }
-    return 0;
-}
-
-u32
-FSDevice::allocateBlockBelow(FSPartitionDescriptor &part, u32 ref)
-{
-    for (long i = (long)ref - 1; i >= part.firstBlock; i--) {
-        if (blocks[i]->type() == FS_EMPTY_BLOCK) {
-            markAsAllocated(i);
-            return i;
-        }
-    }
-    return 0;
-}
-
-void
-FSDevice::deallocateBlock(u32 ref)
-{
-    FSBlock *b = blockPtr(ref);
-    if (b == nullptr) return;
-    
-    if (b->type() != FS_EMPTY_BLOCK) {
-        delete b;
-        blocks[ref] = new FSEmptyBlock(blocks[ref]->partition, ref);
-        markAsFree(ref);
-    }
-}
-*/
-
-/*
-FSUserDirBlock *
-FSDevice::newUserDirBlock(FSPartitionDescriptor &p, const char *name)
-{
-    u32 ref = allocateBlock(p);
-    if (!ref) return nullptr;
-    
-    u32 part = partitionForBlock(ref);
-    blocks[ref] = new FSUserDirBlock(*partitions[part], ref, name);
-    return (FSUserDirBlock *)blocks[ref];
-}
-
-FSFileHeaderBlock *
-FSDevice::newFileHeaderBlock(FSPartitionDescriptor &p, const char *name)
-{
-    u32 ref = allocateBlock(p);
-    if (!ref) return nullptr;
-    
-    u32 part = partitionForBlock(ref);
-    blocks[ref] = new FSFileHeaderBlock(*partitions[part], ref, name);
-    return (FSFileHeaderBlock *)blocks[ref];
-}
-*/
-/*
-u32
-FSDevice::addFileListBlock(u32 head, u32 prev)
-{
-    FSBlock *prevBlock = blockPtr(prev);
-    if (!prevBlock) return 0;
-    
-    u32 ref = allocateBlock();
-    if (!ref) return 0;
-    
-    u32 part = partitionForBlock(ref);
-    blocks[ref] = new FSFileListBlock(*partitions[part], ref);
-    blocks[ref]->setFileHeaderRef(head);
-    prevBlock->setNextListBlockRef(ref);
-    
-    return ref;
-}
-
-u32
-FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
-{
-    FSBlock *prevBlock = blockPtr(prev);
-    if (!prevBlock) return 0;
-
-    u32 ref = allocateBlock();
-    if (!ref) return 0;
-
-    u32 part = partitionForBlock(ref);
-    FSDataBlock *newBlock;
-    if (partitions[part]->isOFS()) {
-        newBlock = new OFSDataBlock(*partitions[part], ref);
-    } else {
-        newBlock = new FFSDataBlock(*partitions[part], ref);
-    }
-    
-    blocks[ref] = newBlock;
-    newBlock->setDataBlockNr(count);
-    newBlock->setFileHeaderRef(head);
-    prevBlock->setNextDataBlockRef(ref);
-    
-    return ref;
-}
-*/
-
 void
 FSDevice::updateChecksums()
 {
@@ -723,7 +464,7 @@ FSDevice::changeDir(const char *name)
     if (strcmp(name, "/") == 0) {
                 
         // Move to top level
-        cd = layout.part[cp].rootBlock;
+        cd = partitions[cp]->rootBlock;
         return currentDirBlock();
     }
 
@@ -820,50 +561,6 @@ FSDevice::makeFile(const char *name, const char *str)
     
     return makeFile(name, (const u8 *)str, strlen(str));
 }
-
-/*
-u32
-FSDevice::requiredDataBlocks(FSPartitionDescriptor &p, size_t fileSize)
-{
-    // Compute the capacity of a single data block
-    u32 numBytes = bsize - (partitions[0]->isOFS() ? OFSDataBlock::headerSize() : 0);
-
-    // Compute the required number of data blocks
-    return (fileSize + numBytes - 1) / numBytes;
-}
-
-u32
-FSDevice::requiredFileListBlocks(FSPartitionDescriptor &p, size_t fileSize)
-{
-    // Compute the required number of data blocks
-    u32 numBlocks = requiredDataBlocks(p, fileSize);
-    
-    // Compute the number of data block references in a single block
-    u32 numRefs = (bsize / 4) - 56;
-
-    // Small files do not require any file list block
-    if (numBlocks <= numRefs) return 0;
-
-    // Compute the required number of additional file list blocks
-    return (numBlocks - 1) / numRefs;
-}
-
-u32
-FSDevice::requiredBlocks(FSPartitionDescriptor &p, size_t fileSize)
-{
-    u32 numDataBlocks = requiredDataBlocks(p, fileSize);
-    u32 numFileListBlocks = requiredFileListBlocks(p, fileSize);
-    
-    if (FS_DEBUG) {
-        debug("Required file header blocks : %d\n", 1);
-        debug("       Required data blocks : %d\n", numDataBlocks);
-        debug("  Required file list blocks : %d\n", numFileListBlocks);
-        debug("                Free blocks : %d\n", freeBlocks());
-    }
-    
-    return 1 + numDataBlocks + numFileListBlocks;
-}
-*/
 
 u32
 FSDevice::seekRef(FSName name)
