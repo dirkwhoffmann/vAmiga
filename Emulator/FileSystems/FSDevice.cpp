@@ -329,105 +329,92 @@ FSDevice::itemType(u32 nr, u32 pos)
 FSBlock *
 FSDevice::blockPtr(u32 nr)
 {
-    if (nr < numBlocks) {
-        return blocks[nr];
-    } else {
-        return nullptr;
-    }
+    return nr < blocks.size() ? blocks[nr] : nullptr;
 }
 
 FSBootBlock *
 FSDevice::bootBlockPtr(u32 nr)
 {
-    if (nr < numBlocks && blocks[nr]->type() != FS_BOOT_BLOCK)
-    {
+    if (nr < blocks.size() && blocks[nr]->type() == FS_BOOT_BLOCK) {
         return (FSBootBlock *)blocks[nr];
-    } else {
-        return nullptr;
     }
+    return nullptr;
 }
 
 FSRootBlock *
 FSDevice::rootBlockPtr(u32 nr)
 {
-    if (nr < numBlocks && blocks[nr]->type() == FS_ROOT_BLOCK) {
+    if (nr < blocks.size() && blocks[nr]->type() == FS_ROOT_BLOCK) {
         return (FSRootBlock *)blocks[nr];
-    } else {
-        return nullptr;
     }
+    return nullptr;
 }
 
 FSBitmapBlock *
 FSDevice::bitmapBlockPtr(u32 nr)
 {
-    if (nr < numBlocks && blocks[nr]->type() == FS_BITMAP_BLOCK) {
+    if (nr < blocks.size() && blocks[nr]->type() == FS_BITMAP_BLOCK) {
         return (FSBitmapBlock *)blocks[nr];
-    } else {
-        return nullptr;
     }
+    return nullptr;
 }
 
 FSBitmapExtBlock *
 FSDevice::bitmapExtBlockPtr(u32 nr)
 {
-    if (nr < numBlocks && blocks[nr]->type() == FS_BITMAP_EXT_BLOCK) {
+    if (nr < blocks.size() && blocks[nr]->type() == FS_BITMAP_EXT_BLOCK) {
         return (FSBitmapExtBlock *)blocks[nr];
-    } else {
-        return nullptr;
     }
+    return nullptr;
 }
 
 FSUserDirBlock *
 FSDevice::userDirBlockPtr(u32 nr)
 {
-    if (nr < numBlocks && blocks[nr]->type() == FS_USERDIR_BLOCK) {
+    if (nr < blocks.size() && blocks[nr]->type() == FS_USERDIR_BLOCK) {
         return (FSUserDirBlock *)blocks[nr];
-    } else {
-        return nullptr;
     }
+    return nullptr;
 }
 
 FSFileHeaderBlock *
 FSDevice::fileHeaderBlockPtr(u32 nr)
 {
-    if (nr < numBlocks && blocks[nr]->type() == FS_FILEHEADER_BLOCK) {
+    if (nr < blocks.size() && blocks[nr]->type() == FS_FILEHEADER_BLOCK) {
         return (FSFileHeaderBlock *)blocks[nr];
-    } else {
-        return nullptr;
     }
+    return nullptr;
 }
 
 FSFileListBlock *
 FSDevice::fileListBlockPtr(u32 nr)
 {
-    if (nr < numBlocks && blocks[nr]->type() == FS_FILELIST_BLOCK) {
+    if (nr < blocks.size() && blocks[nr]->type() == FS_FILELIST_BLOCK) {
         return (FSFileListBlock *)blocks[nr];
-    } else {
-        return nullptr;
     }
+    return nullptr;
 }
 
 FSDataBlock *
 FSDevice::dataBlockPtr(u32 nr)
 {
-    FSBlockType t = blocks[nr]->type();
-    if (nr < numBlocks && (t == FS_DATA_BLOCK_OFS || t == FS_DATA_BLOCK_FFS)) {
+    FSBlockType t = nr < blocks.size() ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
+
+    if (t == FS_DATA_BLOCK_OFS || t == FS_DATA_BLOCK_FFS) {
         return (FSDataBlock *)blocks[nr];
-    } else {
-        return nullptr;
     }
+    return nullptr;
 }
 
 FSBlock *
 FSDevice::hashableBlockPtr(u32 nr)
 {
-    FSBlockType type = nr < numBlocks ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
+    FSBlockType t = nr < blocks.size() ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
     
-    if (type == FS_USERDIR_BLOCK || type == FS_FILEHEADER_BLOCK) {
+    if (t == FS_USERDIR_BLOCK || t == FS_FILEHEADER_BLOCK) {
         return blocks[nr];
-    } else {
-        return nullptr;
     }
+    return nullptr;
 }
 
 void

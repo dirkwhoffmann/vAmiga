@@ -201,12 +201,10 @@ public:
     // Returns the usage type of a certain byte in a certain block
     FSItemType itemType(u32 nr, u32 pos);
     
-    // Returns the location of the root block in the current partition
-    // u32 currentRootBlockRef() { return layout.part[cp].rootBlock; }
-    // FSBlock *currentRootBlockPtr() { return blockPtr(currentRootBlockRef()); }
+    // Queries a pointer from the block storage (may return nullptr)
+    FSBlock *blockPtr(u32 nr);
 
     // Queries a pointer to a block of a certain type (may return nullptr)
-    FSBlock *blockPtr(u32 nr);
     FSBootBlock *bootBlockPtr(u32 nr);
     FSRootBlock *rootBlockPtr(u32 nr);
     FSBitmapBlock *bitmapBlockPtr(u32 nr);
