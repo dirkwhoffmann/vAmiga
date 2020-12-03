@@ -13,7 +13,7 @@
 #include "FSObjects.h"
 
 struct FSBlock : AmigaObject {
-    
+        
     // The partition this block belongs to
     struct FSPartition &partition;
     

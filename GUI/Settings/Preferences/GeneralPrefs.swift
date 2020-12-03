@@ -11,10 +11,15 @@ extension PreferencesController {
     
     func refreshGeneralTab() {
         
+        let contaminated =
+            pref.bootCode == .BB_BYTE_BANDIT_VIRUS ||
+            pref.bootCode == .BB_SCA_VIRUS
+                
         // Drive
         genDriveBlankDiskFormat.selectItem(withTag: pref.blankDiskFormatIntValue)
         genBootCode.selectItem(withTag: pref.bootCodeIntValue)
         genBootCode.isEnabled = pref.blankDiskFormat != .NODOS
+        genBootCodeVirus.isHidden = !contaminated
         genEjectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
         genDriveSounds.state = pref.driveSounds ? .on : .off
         genDriveSoundPan.selectItem(withTag: Int(pref.driveSoundPan))

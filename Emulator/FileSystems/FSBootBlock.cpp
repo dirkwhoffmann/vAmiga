@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "FSDevice.h"
+#include "BootBlocks.h"
 
 FSBootBlock::FSBootBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
@@ -86,42 +87,36 @@ FSBootBlock::writeBootCode(FSBootCode bootCode, int page)
 {
     assert(page == 0 || page == 1);
     
-    u8 kick13[] = {
-        
-        0xc0, 0x20, 0x0f, 0x19, 0x00, 0x00, 0x03, 0x70, 0x43, 0xfa, 0x00, 0x18,
-        0x4e, 0xae, 0xff, 0xa0, 0x4a, 0x80, 0x67, 0x0a, 0x20, 0x40, 0x20, 0x68,
-        0x00, 0x16, 0x70, 0x00, 0x4e, 0x75, 0x70, 0xff, 0x60, 0xfa, 0x64, 0x6f,
-        0x73, 0x2e, 0x6c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79
-    };
+    const u8 *code;
+    size_t size;
     
-    u8 kick20[] = {
-        
-        0xE3, 0x3D, 0x0E, 0x72, 0x00, 0x00, 0x03, 0x70, 0x43, 0xFA, 0x00, 0x3E,
-        0x70, 0x25, 0x4E, 0xAE, 0xFD, 0xD8, 0x4A, 0x80, 0x67, 0x0C, 0x22, 0x40,
-        0x08, 0xE9, 0x00, 0x06, 0x00, 0x22, 0x4E, 0xAE, 0xFE, 0x62, 0x43, 0xFA,
-        0x00, 0x18, 0x4E, 0xAE, 0xFF, 0xA0, 0x4A, 0x80, 0x67, 0x0A, 0x20, 0x40,
-        0x20, 0x68, 0x00, 0x16, 0x70, 0x00, 0x4E, 0x75, 0x70, 0xFF, 0x4E, 0x75,
-        0x64, 0x6F, 0x73, 0x2E, 0x6C, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79, 0x00,
-        0x65, 0x78, 0x70, 0x61, 0x6E, 0x73, 0x69, 0x6F, 0x6E, 0x2E, 0x6C, 0x69,
-        0x62, 0x72, 0x61, 0x72, 0x79
-    };
-    
-    memset(data + 4, 0, bsize() - 4);
+    switch (bootCode) {
+            
+        case FS_BB_KICK_1_3:
+            code = os13_bb; size = sizeof(os13_bb); break;
+            
+        case FS_BB_KICK_2_0:
+            code = os20_bb; size = sizeof(os20_bb); break;
+            
+        case FS_BB_SCA_VIRUS:
+            code = sca_virus_bb; size = sizeof(sca_virus_bb); break;
+
+        case FS_BB_BYTE_BANDIT_VIRUS:
+            code = bbandit_virus_bb; size = sizeof(bbandit_virus_bb); break;
+
+        default:
+            warn("Invalid boot block ID %d\n", bootCode);
+            return;
+    }
     
     if (page == 0) {
         
-        switch (bootCode) {
-                
-            case FS_BOOTBLOCK_KICK_1_3:
-                memcpy(data + 4, kick13, sizeof(kick13));
-                break;
-                
-            case FS_BOOTBLOCK_KICK_2_0:
-                memcpy(data + 4, kick20, sizeof(kick20));
-                break;
-                
-            default:
-                assert(false);
-        }
+        memset(data + 4, 0, bsize() - 4);
+        memcpy(data + 4, code + 4, MIN(bsize() - 4, size));
+        
+    } else {
+        
+        memset(data, 0, bsize());
+        if (size > bsize()) memcpy(data, code + bsize(), size - bsize());
     }
 }

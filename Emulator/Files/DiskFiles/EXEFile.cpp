@@ -83,7 +83,7 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     volume->setName(FSName("Disk"));
     
     // Make the volume bootable
-    volume->makeBootable(FS_BOOTBLOCK_KICK_1_3);
+    volume->makeBootable(FS_BB_KICK_1_3);
     
     // Add the executable
     FSBlock *file = volume->makeFile("file", buffer, length);

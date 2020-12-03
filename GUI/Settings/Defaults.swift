@@ -181,7 +181,7 @@ struct GeneralDefaults {
     static let std = GeneralDefaults.init(
         
         blankDiskFormat: .OFS,
-        bootCode: .BOOTBLOCK_KICK_1_3,
+        bootCode: .BB_KICK_1_3,
         ejectWithoutAsking: false,
         driveSounds: true,
         driveSoundPan: 1.0,

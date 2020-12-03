@@ -70,9 +70,15 @@ inline const char *sFSVolumeType(FSVolumeType value)
 
 VAMIGA_ENUM(long, FSBootCode)
 {
-    FS_BOOTBLOCK_NONE,
-    FS_BOOTBLOCK_KICK_1_3,  // Standard Kickstart 1.3 boot code
-    FS_BOOTBLOCK_KICK_2_0   // Standard Kickstart 2.0 boot code
+    FS_BB_NONE,
+    
+    // Standard boot blocks
+    FS_BB_KICK_1_3,
+    FS_BB_KICK_2_0,
+    
+    // Viruses (handle with care)
+    FS_BB_SCA_VIRUS,
+    FS_BB_BYTE_BANDIT_VIRUS
 };
 
 VAMIGA_ENUM(long, FSBlockType)
