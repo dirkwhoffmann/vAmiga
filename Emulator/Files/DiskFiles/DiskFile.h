@@ -41,7 +41,7 @@ public:
     virtual long numSectors() = 0;
     virtual long numTracks() { return numSides() * numCylinders(); }
     virtual long numBlocks() { return numTracks() * numSectors(); }
-
+    
     
     //
     // Reading data

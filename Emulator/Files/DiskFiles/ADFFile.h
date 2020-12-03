@@ -84,6 +84,7 @@ public:
     long numSides() override;
     long numCylinders() override;
     long numSectors() override;
+    
     bool encodeDisk(class Disk *disk) override;
     bool decodeDisk(class Disk *disk) override;
 
@@ -101,14 +102,17 @@ private:
     //
     
 public:
-    
-    // Returns the location of the root block
+
+    // Returns the location of the root block (DEPRECATED)
     u32 rootBlock();
     
-    // Returns the location of the bitmap block
+    // Returns the location of the bitmap block DEPRECATED)
     u32 bitmapBlock();
 
-    
+    // Returns the layout of this disk in form of a device descriptor
+    struct FSDeviceDescriptor layout();
+
+        
     //
     // Formatting
     //

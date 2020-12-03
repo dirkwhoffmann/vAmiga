@@ -55,9 +55,8 @@ struct FSDeviceDescriptor : AmigaObject {
     // Initializing
     //
     
+    FSDeviceDescriptor() { }
     FSDeviceDescriptor(DiskType type, DiskDensity density, FSVolumeType dos = FS_OFS);
-    FSDeviceDescriptor(class ADFFile *adf);
-    FSDeviceDescriptor(class HDFFile *adf);
 
     const char *getDescription() override { return "FSLayout"; }
     void dump();
@@ -84,8 +83,7 @@ struct FSPartitionDescriptor : AmigaObject {
     // Initializing
     //
     
-    FSPartitionDescriptor(struct FSDeviceDescriptor &layout,
-                FSVolumeType dos, u32 firstCyl, u32 lastCyl, u32 root);
+    FSPartitionDescriptor(FSVolumeType dos, u32 firstCyl, u32 lastCyl, u32 root);
 
     const char *getDescription() override { return "FSPartition"; }
     

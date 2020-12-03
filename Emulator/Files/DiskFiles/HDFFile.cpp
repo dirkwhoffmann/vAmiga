@@ -131,14 +131,60 @@ HDFFile::bsize()
     return 512;
 }
 
+FSDeviceDescriptor
+HDFFile::layout()
+{
+    FSDeviceDescriptor result;
+    
+    result.numCyls     = numCyls();
+    result.numHeads    = numSides();
+    result.numSectors  = numSectors();
+    result.numReserved = numReserved();
+    result.bsize       = bsize();
+    result.numBlocks   = result.numCyls * result.numHeads * result.numSectors;
+
+    // Determine the location of the root block
+    u32 highKey = result.numBlocks - 1;
+    u32 rootKey = (result.numReserved + highKey) / 2;
+    
+    // Add partition
+    result.partitions.push_back(FSPartitionDescriptor(dos(0), 0, result.numCyls - 1, rootKey));
+
+    // Seek bitmap blocks
+    u32 ref = rootKey;
+    u32 cnt = 25;
+    u32 offset = bsize() - 49 * 4;
+    
+    while (ref && ref < result.numBlocks) {
+
+        const u8 *p = data + (ref * bsize()) + offset;
+    
+        // Collect all references to bitmap blocks stored in this block
+        for (u32 i = 0; i < cnt; i++, p += 4) {
+            if (u32 bmb = FFSDataBlock::read32(p)) {
+                if (bmb < result.numBlocks) result.partitions[0].bmBlocks.push_back(bmb);
+            }
+        }
+        
+        // Continue collecting in the next extension bitmap block
+        if ((ref = FFSDataBlock::read32(p))) {
+            if (ref < result.numBlocks) result.partitions[0].bmExtBlocks.push_back(ref);
+            cnt = (bsize() / 4) - 1;
+            offset = 0;
+        }
+    }
+    
+    return result;
+}
+
 FSVolumeType
 HDFFile::dos(int i)
 {
-    assert(i == 0);
+    const char *p = (const char *)data + i * 512;
     
-    if (strncmp((const char *)data, "DOS", 3) || data[3] > 7) {
+    if (strncmp(p, "DOS", 3) || data[3] > 7) {
         return FS_NODOS;
     }
 
-    return (FSVolumeType)data[3];
+    return (FSVolumeType)p[3];
 }

@@ -235,10 +235,29 @@ ADFFile::numSectors()
     }
 }
 
-// TODO: Replace by makeWith(EmptyDiskFormat ...)
-//       Add DiskFile::numBlocks()
-//
-//
+FSDeviceDescriptor
+ADFFile::layout()
+{
+    FSDeviceDescriptor result;
+    
+    result.numCyls     = numCylinders();
+    result.numHeads    = numSides();
+    result.numSectors  = numSectors();
+    result.numReserved = 2;
+    result.bsize       = 512;
+    result.numBlocks   = result.numCyls * result.numHeads * result.numSectors;
+
+    // Determine the location of the root block and the bitmap block
+    u32 root = rootBlock();
+    u32 bitmap = bitmapBlock();
+    
+    // Add partition
+    result.partitions.push_back(FSPartitionDescriptor(dos(), 0, result.numCyls - 1, root));
+    result.partitions[0].bmBlocks.push_back(bitmap);
+    
+    return result;
+}
+
 bool
 ADFFile::formatDisk(FSVolumeType fs, FSBootCode bootCode)
 {
@@ -251,11 +270,11 @@ ADFFile::formatDisk(FSVolumeType fs, FSBootCode bootCode)
     // Only proceed if a file system is given
     if (fs == FS_NODOS) return false;
     
-    // Determine the disk layout of this ADF
-    FSDeviceDescriptor layout = FSDeviceDescriptor(this);
+    // Get a device descriptor for this ADF
+    FSDeviceDescriptor descriptor = layout();
     
     // Create an empty file system
-    FSDevice volume = FSDevice(layout);
+    FSDevice volume = FSDevice(descriptor);
     volume.setName(FSName("Disk"));
     
     // Write boot code

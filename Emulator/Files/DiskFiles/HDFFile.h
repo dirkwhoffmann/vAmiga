@@ -76,13 +76,16 @@ public:
     long numReserved();
     long numBlocks();
     long bsize();
+    struct FSDeviceDescriptor layout();
 
     
     //
     // Querying partition information
     //
 
-    // Returns the file system type for a certain partition
+private:
+    
+    // Extract the DOS revision number from a certain block
     FSVolumeType dos(int i);    
 };
 

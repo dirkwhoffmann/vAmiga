@@ -14,11 +14,11 @@ FSDevice::makeWithADF(ADFFile *adf, FSError *error)
 {
     assert(adf != nullptr);
 
-    // Create a suitable device descriptor for this ADF
-    FSDeviceDescriptor layout = FSDeviceDescriptor(adf);
-    
+    // Get a device descriptor for the ADF
+    FSDeviceDescriptor descriptor = adf->layout();
+        
     // Create the device
-    FSDevice *volume = new FSDevice(layout);
+    FSDevice *volume = new FSDevice(descriptor);
 
     // Import file system from ADF
     if (!volume->importVolume(adf->getData(), adf->getSize(), error)) {
@@ -34,11 +34,11 @@ FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
 {
     assert(hdf != nullptr);
 
-    // Create a suitable device descriptor for this HDF
-    FSDeviceDescriptor layout = FSDeviceDescriptor(hdf);
+    // Get a device descriptor for the ADF
+    FSDeviceDescriptor descriptor = hdf->layout();
 
     // Create the device
-    FSDevice *volume = new FSDevice(layout);
+    FSDevice *volume = new FSDevice(descriptor);
 
     volume->info();
     
