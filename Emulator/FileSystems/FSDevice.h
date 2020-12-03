@@ -56,38 +56,24 @@ protected:
     // The layout of this device
     FSDeviceDescriptor layout;
     
-    // Number of physical cylinders
+    // Physical device properies
     u32 numCyls = 0;
-
-    // Number of physical heads
     u32 numHeads = 0;
     
-    // Number of blocks per track
+    // Logical device properties
     u32 numSectors = 0;
-    
-    // The total number of blocks
     u32 numBlocks = 0;
-
-    // Number of reserved blocks
     u32 numReserved = 0;
-    
-    // Size of a single block in bytes
     u32 bsize = 0;
             
-    // The partition table (DEPRECATED)
-    // std::vector<FSPartitionDescriptor> part;
-
     // The partition table
-    typedef FSPartition* FSPartitionPtr;
     std::vector<FSPartitionPtr> partitions;
     
     // The block storage
     std::vector<BlockPtr> blocks;
             
-    // The currently selected partition
+    // The currently selected partition and directory
     u32 cp = 0;
-
-    // The currently selected directly
     u32 cd = 0;
     
 
@@ -157,6 +143,16 @@ public:
     
     
     //
+    // Querying properties of the current partition
+    //
+    
+    // Returns the DOS version (OFS, FFS, etc.)
+    FSVolumeType dos() { return partitions[cp]->dos(); }
+    bool isOFS() { return partitions[cp]->isOFS(); }
+    bool isFFS() { return partitions[cp]->isFFS(); }
+    
+    
+    //
     // Integrity checking
     //
 
@@ -202,18 +198,18 @@ public:
     // Returns the partition a certain block belongs to
     u32 partitionForBlock(u32 ref);
 
-    // Gets or sets the name of a certain partition (or the current partition)
-    FSName getName(FSPartitionDescriptor &part);
-    FSName getName() { return getName(layout.part[cp]); }
-    void setName(FSPartitionDescriptor &part, FSName name);
-    void setName(FSName name) { setName(layout.part[cp], name); }
-
-    // Returns the file system type of a partition (or the current partition)
+    // Gets or sets the name of the current partition
+    FSName getName() { return partitions[cp]->getName(); }
+    void setName(FSName name) { partitions[cp]->setName(name); }
+    
+    // Returns the file system type of the current partition
+    /*
     FSVolumeType fileSystem(FSPartitionDescriptor &p);
     bool isOFS(FSPartitionDescriptor &p) { return isOFSVolumeType(fileSystem(p)); }
     bool isFFS(FSPartitionDescriptor &p) { return isFFSVolumeType(fileSystem(p)); }
     FSVolumeType fileSystem() { return fileSystem(layout.part[cp]); }
-
+    */
+    
     // Installs a boot block
     void makeBootable(FSBootCode bootCode) { partitions[cp]->makeBootable(bootCode); }
 

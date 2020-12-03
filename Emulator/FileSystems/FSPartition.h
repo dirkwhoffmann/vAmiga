@@ -138,4 +138,6 @@ public:
 
 };
 
+typedef FSPartition* FSPartitionPtr;
+
 #endif

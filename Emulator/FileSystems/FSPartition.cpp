@@ -186,7 +186,7 @@ FSPartition::freeBlocks()
 u32
 FSPartition::usedBlocks()
 {
-    return highCyl - lowCyl + 1 - freeBlocks();
+    return numBlocks() - freeBlocks();
 }
 
 u32
@@ -297,7 +297,7 @@ FSPartition::bmBlockForBlock(u32 relRef)
 bool
 FSPartition::isFree(u32 ref)
 {
-    assert(ref >= lowCyl && ref <= highCyl);
+    assert(ref >= firstBlock && ref <= lastBlock);
     
     // Translate rel to a relative block index
     ref -= lowCyl;

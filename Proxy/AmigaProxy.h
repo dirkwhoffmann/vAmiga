@@ -650,7 +650,7 @@ struct SerialPortWrapper;
 + (instancetype)makeWithADF:(ADFFileProxy *)adf;
 + (instancetype)makeWithHDF:(HDFFileProxy *)hdf;
 
-@property (readonly) FSVolumeType type;
+@property (readonly) FSVolumeType dos;
 @property (readonly) NSInteger numBlocks;
 
 - (FSBlockType) blockType:(NSInteger)blockNr;

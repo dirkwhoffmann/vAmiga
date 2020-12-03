@@ -34,20 +34,6 @@ struct FSBitmapBlock : FSBlock {
     //
     // Block specific methods
     //
-
-    // Computes location of the allocation bit for a certain block
-    void locateBlockBit(u32 nr, u32 *byte, u32 *bit);
-    
-    // Checks whether a block is allocated
-    // bool isAllocated(u32 block);
-
-    // Allocates or deallocates a single block
-    /*
-    void alloc(u32 block, bool allocate);
-    void alloc(u32 block) { alloc(block, true); }
-    void dealloc(u32 block) { alloc(block, false); }
-    void dealloc();
-    */
 };
 
 #endif

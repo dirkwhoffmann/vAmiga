@@ -1260,9 +1260,9 @@ struct SerialPortWrapper { SerialPort *port; };
     return [self make:volume];
 }
 
-- (FSVolumeType) type
+- (FSVolumeType) dos
 {
-    return wrapper->volume->fileSystem();
+    return wrapper->volume->dos();
 }
 
 - (NSInteger) numBlocks

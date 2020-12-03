@@ -443,15 +443,15 @@ class ExporterDialog: DialogController {
         
         if volume != nil {
             
-            switch volume!.type {
+            switch volume!.dos {
             case .OFS:      text = "Original File System (OFS)"
             case .OFS_INTL: text = "Original File System (OFS-INTL)"
             case .OFS_DC:   text = "Original File System (OFS-DC)"
             case .OFS_LNFS: text = "Original File System (OFS-LNFS)"
-            case .FFS:      text = "Original File System (FFS)"
-            case .FFS_INTL: text = "Original File System (FFS-INTL)"
-            case .FFS_DC:   text = "Original File System (FFS-DC)"
-            case .FFS_LNFS: text = "Original File System (FFS-LNFS)"
+            case .FFS:      text = "Fast File System (FFS)"
+            case .FFS_INTL: text = "Fast File System (FFS-INTL)"
+            case .FFS_DC:   text = "Fast File System (FFS-DC)"
+            case .FFS_LNFS: text = "Fast File System (FFS-LNFS)"
             default:        text = "Unknown file system"
             }
             

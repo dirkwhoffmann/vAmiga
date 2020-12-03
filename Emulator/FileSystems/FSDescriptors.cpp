@@ -29,58 +29,15 @@ FSPartitionDescriptor::FSPartitionDescriptor(FSDeviceDescriptor &layout,
 void
 FSPartitionDescriptor::dump()
 {
-    msg("      First cylinder : %d\n", lowCyl);
-    msg("       Last cylinder : %d\n", highCyl);
-    msg("         First block : %d\n", firstBlock);
-    msg("          Last block : %d\n", lastBlock);
-    msg("          Root block : %d\n", rootBlock);
-    msg("       Bitmap blocks : ");
+    msg("       Partition : %d - %d (%d - %d)\n", lowCyl, highCyl, firstBlock, lastBlock);
+    msg("      Root block : %d\n", rootBlock);
+    msg("   Bitmap blocks : ");
     for (auto& it : bmBlocks) { msg("%d ", it); }
     msg("\n");
     msg("Extension blocks : ");
     for (auto& it : bmExtBlocks) { msg("%d ", it); }
     msg("\n\n");
 }
-
-/*
-u32
-FSPartitionDescriptor::rootBlockRef()
-{
-    u32 highKey = numCyls() * dev.heads * dev.sectors - 1;
-    u32 rootKey = (dev.reserved + highKey) / 2;
-    
-    return rootKey;
-}
-
-FSRootBlock *
-FSPartitionDescriptor::rootBlockPtr()
-{
-    return dev.rootBlock(rootBlockRef());
-}
-*/
-
-/*
-FSDeviceDescriptor::FSDeviceDescriptor(u32 c, u32 h, u32 s, u32 r, u32 b)
-: cyls(c), heads(h), sectors(s), bsize(b)
-{
-    reserved = 2;
-    blocks = cyls * heads * sectors;
-    
-    // Compute the root key if none is provided
-    if (r == 0) {
-        
-        // Ignore extra cyclinders if a diskette layout is specified
-        u32 cc = c < 44 ? 40 : c < 84 ? 80 : c;
-        
-        // Compute the location of the root block
-        u32 highKey = cc * h * s - 1;
-        r = (reserved + highKey) / 2;
-    }
-    
-    // Create the partition
-    part.push_back(FSPartitionDescriptor(0, c - 1, r));
-}
-*/
 
 FSDeviceDescriptor::FSDeviceDescriptor(DiskType type, DiskDensity density, FSVolumeType dos)
 {
@@ -183,7 +140,6 @@ FSDeviceDescriptor::dump()
     msg("           bsize : %d\n", bsize);
     
     for (size_t i = 0; i < part.size(); i++) {
-        msg("Partition %d:\n");
         part[i].dump();
     }
 }

@@ -139,24 +139,15 @@ FSDevice::FSDevice(FSDeviceDescriptor &layout)
 
 FSDevice::~FSDevice()
 {
-    for (u32 i = 0; i < numBlocks; i++) {
-        delete blocks[i];
-    }
+    for (auto &p : partitions) delete p;
+    for (auto &b : blocks) delete b;
 }
 
 void
 FSDevice::info()
 {
     msg("Type   Size          Used   Free   Full   Name\n");
-    for (auto& p : layout.part) {
-        msg("DOS%ld  ",     fileSystem(p));
-        msg("%5d (x %3d) ", numBlocks, bsize);
-        msg("%5d  ",        usedBlocks(p));
-        msg("%5d   ",       freeBlocks(p));
-        msg("%3d%%   ",     (int)(100.0 * usedBlocks(p) / numBlocks));
-        msg("%s\n",         getName(p).c_str());
-        msg("\n");
-    }
+    for (auto& p : partitions) p->info();
 }
 
 void
@@ -320,32 +311,6 @@ FSDevice::partitionForBlock(u32 ref)
     
     assert(false);
     return 0;
-}
-
-FSName
-FSDevice::getName(FSPartitionDescriptor &part)
-{
-    FSRootBlock *rb = rootBlockPtr(part.rootBlock);
-    assert(rb != nullptr);
-    
-    return rb->getName();
-}
-
-void
-FSDevice::setName(FSPartitionDescriptor &part, FSName name)
-{
-    FSRootBlock *rb = rootBlockPtr(part.rootBlock);
-    assert(rb != nullptr);
-
-    rb->setName(name);
-}
-
-FSVolumeType
-FSDevice::fileSystem(FSPartitionDescriptor &part)
-{
-    FSBlock *b = blockPtr(part.firstBlock);
-
-    return b ? b->dos() : FS_NONE;
 }
 
 FSBlockType
@@ -697,8 +662,6 @@ FSDevice::addFileListBlock(u32 head, u32 prev)
 u32
 FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
 {
-    FSPartitionDescriptor &p = layout.part[partitionForBlock(head)];
-
     FSBlock *prevBlock = blockPtr(prev);
     if (!prevBlock) return 0;
 
@@ -707,7 +670,7 @@ FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
 
     u32 part = partitionForBlock(ref);
     FSDataBlock *newBlock;
-    if (isOFS(p)) {
+    if (partitions[part]->isOFS()) {
         newBlock = new OFSDataBlock(*partitions[part], ref);
     } else {
         newBlock = new FFSDataBlock(*partitions[part], ref);
@@ -857,7 +820,7 @@ u32
 FSDevice::requiredDataBlocks(FSPartitionDescriptor &p, size_t fileSize)
 {
     // Compute the capacity of a single data block
-    u32 numBytes = bsize - (isOFS(p) ? OFSDataBlock::headerSize() : 0);
+    u32 numBytes = bsize - (partitions[0]->isOFS() ? OFSDataBlock::headerSize() : 0);
 
     // Compute the required number of data blocks
     return (fileSize + numBytes - 1) / numBytes;
