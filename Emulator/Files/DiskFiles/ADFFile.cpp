@@ -274,23 +274,22 @@ ADFFile::formatDisk(FSVolumeType fs, FSBootCode bootCode)
     FSDeviceDescriptor descriptor = layout();
     
     // Create an empty file system
-    FSDevice volume = FSDevice(descriptor);
-    volume.setName(FSName("Disk"));
+    FSDevice *volume = FSDevice::makeWithFormat(descriptor);
+    volume->setName(FSName("Disk"));
     
     // Write boot code
-    volume.makeBootable(bootCode);
+    volume->makeBootable(bootCode);
     
     // Export the file system to the ADF
-    volume.exportVolume(data, size, &error);
-    if (error != FS_OK) {
+    volume->exportVolume(data, size, &error);
+    delete(volume);
+
+    if (error == FS_OK) {
+        return true;
+    } else {
         warn("Failed to export file system  file system from ADF\n", sFSError(error));
         return false;
     }
-
-    // REMOVE ASAP
-    // dumpSector(0);
-    
-    return true;
 }
 
 bool

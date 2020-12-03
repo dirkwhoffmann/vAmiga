@@ -10,6 +10,48 @@
 #include "FSDevice.h"
 
 FSDevice *
+FSDevice::makeWithFormat(FSDeviceDescriptor &layout)
+{
+    FSDevice *dev = new FSDevice(layout.numBlocks);
+    
+    // Copy layout parameters from descriptor
+    dev->numCyls    = layout.numCyls;
+    dev->numHeads   = layout.numHeads;
+    dev->numSectors = layout.numSectors;
+    dev->bsize      = layout.bsize;
+    dev->numBlocks  = layout.numBlocks;
+        
+    // Create all partitions
+    for (auto& descriptor : layout.partitions) {
+        dev->partitions.push_back(new FSPartition(*dev, descriptor));
+    }
+
+    // Compute checksums for all blocks
+    dev->updateChecksums();
+    
+    // Set the current directory to '/'
+    dev->cd = dev->partitions[0]->rootBlock;
+    
+    // Do some consistency checking
+    for (u32 i = 0; i < dev->numBlocks; i++) assert(dev->blocks[i] != nullptr);
+    
+    if (FS_DEBUG) {
+        printf("cd = %d\n", dev->cd);
+        dev->info();
+        dev->dump();
+    }
+    
+    return dev;
+}
+
+FSDevice *
+FSDevice::makeWithFormat(DiskType type, DiskDensity density)
+{
+    FSDeviceDescriptor layout = FSDeviceDescriptor(type, density);
+    return makeWithFormat(layout);
+}
+
+FSDevice *
 FSDevice::makeWithADF(ADFFile *adf, FSError *error)
 {
     assert(adf != nullptr);
@@ -18,7 +60,7 @@ FSDevice::makeWithADF(ADFFile *adf, FSError *error)
     FSDeviceDescriptor descriptor = adf->layout();
         
     // Create the device
-    FSDevice *volume = new FSDevice(descriptor);
+    FSDevice *volume = makeWithFormat(descriptor);
 
     // Import file system from ADF
     if (!volume->importVolume(adf->getData(), adf->getSize(), error)) {
@@ -38,7 +80,7 @@ FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
     FSDeviceDescriptor descriptor = hdf->layout();
 
     // Create the device
-    FSDevice *volume = new FSDevice(descriptor);
+    FSDevice *volume = makeWithFormat(descriptor);
 
     volume->info();
     
@@ -51,13 +93,6 @@ FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
     */
     
     return volume;
-}
-
-FSDevice *
-FSDevice::makeWithFormat(DiskType type, DiskDensity density)
-{
-    FSDeviceDescriptor layout = FSDeviceDescriptor(type, density);
-    return new FSDevice(layout);
 }
 
 FSDevice *
@@ -92,15 +127,21 @@ FSDevice::make(FSVolumeType type, const char *path)
     return nullptr;
 }
  
+FSDevice::FSDevice(u32 capacity)
+{
+    // Initialize the block storage
+    blocks.reserve(capacity);
+    blocks.assign(capacity, 0);
+}
+
+/*
 FSDevice::FSDevice(FSDeviceDescriptor &layout)
 {
     if (FS_DEBUG) {
         debug("Creating FSDevice...\n");
         layout.dump();
     }
-    
-    // this->layout = layout;
-    
+        
     // Copy layout parameters from descriptor
     numCyls    = layout.numCyls;
     numHeads   = layout.numHeads;
@@ -132,6 +173,7 @@ FSDevice::FSDevice(FSDeviceDescriptor &layout)
         dump();
     }
 }
+*/
 
 FSDevice::~FSDevice()
 {
@@ -759,18 +801,10 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
     if (numBlocks * bsize != size) {
         *error = FS_WRONG_CAPACITY; return false;
     }
-    /*
-    // Only proceed if the buffer contains a file system
-    if (src[0] != 'D' || src[1] != 'O' || src[2] != 'S') {
-        *error = FS_UNKNOWN; return false;
+    // Only proceed if all partitions contain a valid file system
+    for (auto &it : partitions) {
+        if (it->dos == FS_NODOS) { *error = FS_UNSUPPORTED; return false; }
     }
-    // Only proceed if the provided file system is supported
-    if (src[3] > 7) {
-        *error = FS_UNSUPPORTED; return false;
-    }
-
-    FSVolumeType dos = (FSVolumeType)src[3];
-    */
         
     // Import all blocks
     for (u32 i = 0; i < numBlocks; i++) {
@@ -778,13 +812,13 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
         const u8 *data = src + i * bsize;
         
         // Get the partition this block belongs to
-        FSPartition &part = blocks[i]->partition;
+        FSPartition &p = blocks[i]->partition;
         
         // Determine the type of the new block
-        FSBlockType type = part.predictBlockType(i, data);
+        FSBlockType type = p.predictBlockType(i, data);
         
         // Create new block
-        FSBlock *newBlock = FSBlock::makeWithType(part, i, type);
+        FSBlock *newBlock = FSBlock::makeWithType(p, i, type);
         if (newBlock == nullptr) return false;
 
         // Import block data

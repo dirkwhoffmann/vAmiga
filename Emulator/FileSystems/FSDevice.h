@@ -81,13 +81,16 @@ protected:
     
 public:
 
+    // Creates a file system with a custom device descriptor
+    static FSDevice *makeWithFormat(FSDeviceDescriptor &layout);
+
+    // Creates a file system for a standard floppy disk
+    static FSDevice *makeWithFormat(DiskType type, DiskDensity density);
+
     // Creates a file system from an ADF or HDF
     static FSDevice *makeWithADF(class ADFFile *adf, FSError *error);
     static FSDevice *makeWithHDF(class HDFFile *hdf, FSError *error);
-
-    // Creates a file system from a format description
-    static FSDevice *makeWithFormat(DiskType type, DiskDensity density);
-
+    
     // Creates a file system with the contents of a host file system directory
     static FSDevice *make(DiskType type, DiskDensity density, const char *path);
     static FSDevice *make(FSVolumeType type, const char *path);
@@ -99,7 +102,8 @@ public:
     
 public:
 
-    FSDevice(FSDeviceDescriptor &layout);
+    FSDevice(u32 capacity);
+    // FSDevice(FSDeviceDescriptor &layout);
     ~FSDevice();
     
     const char *getDescription() override { return "FSVolume"; }
