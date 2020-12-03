@@ -167,128 +167,6 @@ FSDevice::dump()
     }
 }
 
-FSErrorReport
-FSDevice::check(bool strict)
-{
-    FSErrorReport result;
-
-    long total = 0, min = LONG_MAX, max = 0;
-    
-    // Analyze all partions
-    for (auto &p : partitions) p->check(strict, result);
-
-    // Analyze all blocks
-    for (u32 i = 0; i < numBlocks; i++) {
-
-        if (blocks[i]->check(strict) > 0) {
-            min = MIN(min, i);
-            max = MAX(max, i);
-            blocks[i]->corrupted = ++total;
-        } else {
-            blocks[i]->corrupted = 0;
-        }
-    }
-
-    // Record findings
-    if (total) {
-        result.corruptedBlocks = total;
-        result.firstErrorBlock = min;
-        result.lastErrorBlock = max;
-    } else {
-        result.corruptedBlocks = 0;
-        result.firstErrorBlock = min;
-        result.lastErrorBlock = max;
-    }
-    
-    return result;
-}
-
-FSError
-FSDevice::check(u32 blockNr, u32 pos, u8 *expected, bool strict)
-{
-    return blocks[blockNr]->check(pos, expected, strict);
-}
-
-FSError
-FSDevice::checkBlockType(u32 nr, FSBlockType type)
-{
-    return checkBlockType(nr, type, type);
-}
-
-FSError
-FSDevice::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
-{
-    FSBlockType t = blockType(nr);
-    
-    if (t != type && t != altType) {
-        
-        switch (t) {
-                
-            case FS_EMPTY_BLOCK:      return FS_PTR_TO_EMPTY_BLOCK;
-            case FS_BOOT_BLOCK:       return FS_PTR_TO_BOOT_BLOCK;
-            case FS_ROOT_BLOCK:       return FS_PTR_TO_ROOT_BLOCK;
-            case FS_BITMAP_BLOCK:     return FS_PTR_TO_BITMAP_BLOCK;
-            case FS_BITMAP_EXT_BLOCK: return FS_PTR_TO_BITMAP_EXT_BLOCK;
-            case FS_USERDIR_BLOCK:    return FS_PTR_TO_USERDIR_BLOCK;
-            case FS_FILEHEADER_BLOCK: return FS_PTR_TO_FILEHEADER_BLOCK;
-            case FS_FILELIST_BLOCK:   return FS_PTR_TO_FILELIST_BLOCK;
-            case FS_DATA_BLOCK_OFS:   return FS_PTR_TO_DATA_BLOCK;
-            case FS_DATA_BLOCK_FFS:   return FS_PTR_TO_DATA_BLOCK;
-            default:                  return FS_PTR_TO_UNKNOWN_BLOCK;
-        }
-    }
-
-    return FS_OK;
-}
-
-u32
-FSDevice::getCorrupted(u32 blockNr)
-{
-    return blockPtr(blockNr) ? blocks[blockNr]->corrupted : 0;
-}
-
-bool
-FSDevice::isCorrupted(u32 blockNr, u32 n)
-{
-    for (u32 i = 0, cnt = 0; i < numBlocks; i++) {
-        
-        if (isCorrupted(i)) {
-            cnt++;
-            if (blockNr == i) return cnt == n;
-        }
-    }
-    return false;
-}
-
-u32
-FSDevice::nextCorrupted(u32 blockNr)
-{
-    long i = (long)blockNr;
-    while (++i < numBlocks) { if (isCorrupted(i)) return i; }
-    return blockNr;
-}
-
-u32
-FSDevice::prevCorrupted(u32 blockNr)
-{
-    long i = (long)blockNr - 1;
-    while (i-- >= 0) { if (isCorrupted(i)) return i; }
-    return blockNr;
-}
-
-u32
-FSDevice::seekCorruptedBlock(u32 n)
-{
-    for (u32 i = 0, cnt = 0; i < numBlocks; i++) {
-
-        if (isCorrupted(i)) {
-            cnt++;
-            if (cnt == n) return i;
-        }
-    }
-    return (u32)-1;
-}
-
 u32
 FSDevice::partitionForBlock(u32 ref)
 {
@@ -298,20 +176,6 @@ FSDevice::partitionForBlock(u32 ref)
 
     assert(false);
     return 0;
-}
-
-FSBlockType
-FSDevice::predictBlockType(u32 nr, const u8 *buffer)
-{
-    assert(buffer != nullptr);
-    
-    for (auto &p : partitions) {
-        if (FSBlockType t = p->predictBlockType(nr, buffer); t != FS_UNKNOWN_BLOCK) {
-            return t;
-        }
-    }
-    
-    return FS_UNKNOWN_BLOCK;
 }
 
 FSBlockType
@@ -723,6 +587,128 @@ FSDevice::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result, std::se
     return FS_OK;
 }
 
+FSErrorReport
+FSDevice::check(bool strict)
+{
+    FSErrorReport result;
+
+    long total = 0, min = LONG_MAX, max = 0;
+    
+    // Analyze all partions
+    for (auto &p : partitions) p->check(strict, result);
+
+    // Analyze all blocks
+    for (u32 i = 0; i < numBlocks; i++) {
+
+        if (blocks[i]->check(strict) > 0) {
+            min = MIN(min, i);
+            max = MAX(max, i);
+            blocks[i]->corrupted = ++total;
+        } else {
+            blocks[i]->corrupted = 0;
+        }
+    }
+
+    // Record findings
+    if (total) {
+        result.corruptedBlocks = total;
+        result.firstErrorBlock = min;
+        result.lastErrorBlock = max;
+    } else {
+        result.corruptedBlocks = 0;
+        result.firstErrorBlock = min;
+        result.lastErrorBlock = max;
+    }
+    
+    return result;
+}
+
+FSError
+FSDevice::check(u32 blockNr, u32 pos, u8 *expected, bool strict)
+{
+    return blocks[blockNr]->check(pos, expected, strict);
+}
+
+FSError
+FSDevice::checkBlockType(u32 nr, FSBlockType type)
+{
+    return checkBlockType(nr, type, type);
+}
+
+FSError
+FSDevice::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
+{
+    FSBlockType t = blockType(nr);
+    
+    if (t != type && t != altType) {
+        
+        switch (t) {
+                
+            case FS_EMPTY_BLOCK:      return FS_PTR_TO_EMPTY_BLOCK;
+            case FS_BOOT_BLOCK:       return FS_PTR_TO_BOOT_BLOCK;
+            case FS_ROOT_BLOCK:       return FS_PTR_TO_ROOT_BLOCK;
+            case FS_BITMAP_BLOCK:     return FS_PTR_TO_BITMAP_BLOCK;
+            case FS_BITMAP_EXT_BLOCK: return FS_PTR_TO_BITMAP_EXT_BLOCK;
+            case FS_USERDIR_BLOCK:    return FS_PTR_TO_USERDIR_BLOCK;
+            case FS_FILEHEADER_BLOCK: return FS_PTR_TO_FILEHEADER_BLOCK;
+            case FS_FILELIST_BLOCK:   return FS_PTR_TO_FILELIST_BLOCK;
+            case FS_DATA_BLOCK_OFS:   return FS_PTR_TO_DATA_BLOCK;
+            case FS_DATA_BLOCK_FFS:   return FS_PTR_TO_DATA_BLOCK;
+            default:                  return FS_PTR_TO_UNKNOWN_BLOCK;
+        }
+    }
+
+    return FS_OK;
+}
+
+u32
+FSDevice::getCorrupted(u32 blockNr)
+{
+    return blockPtr(blockNr) ? blocks[blockNr]->corrupted : 0;
+}
+
+bool
+FSDevice::isCorrupted(u32 blockNr, u32 n)
+{
+    for (u32 i = 0, cnt = 0; i < numBlocks; i++) {
+        
+        if (isCorrupted(i)) {
+            cnt++;
+            if (blockNr == i) return cnt == n;
+        }
+    }
+    return false;
+}
+
+u32
+FSDevice::nextCorrupted(u32 blockNr)
+{
+    long i = (long)blockNr;
+    while (++i < numBlocks) { if (isCorrupted(i)) return i; }
+    return blockNr;
+}
+
+u32
+FSDevice::prevCorrupted(u32 blockNr)
+{
+    long i = (long)blockNr - 1;
+    while (i-- >= 0) { if (isCorrupted(i)) return i; }
+    return blockNr;
+}
+
+u32
+FSDevice::seekCorruptedBlock(u32 n)
+{
+    for (u32 i = 0, cnt = 0; i < numBlocks; i++) {
+
+        if (isCorrupted(i)) {
+            cnt++;
+            if (cnt == n) return i;
+        }
+    }
+    return (u32)-1;
+}
+
 u8
 FSDevice::readByte(u32 block, u32 offset)
 {
@@ -733,6 +719,19 @@ FSDevice::readByte(u32 block, u32 offset)
     }
     
     return 0;
+}
+
+FSBlockType
+FSDevice::predictBlockType(u32 nr, const u8 *buffer)
+{
+    assert(buffer != nullptr);
+    
+    for (auto &p : partitions) {
+        if (FSBlockType t = p->predictBlockType(nr, buffer); t != FS_UNKNOWN_BLOCK) {
+            return t;
+        }
+    }
+    return FS_UNKNOWN_BLOCK;
 }
 
 bool
@@ -961,4 +960,17 @@ FSDevice::exportDirectory(const char *path)
     
     msg("Exported %d items", items.size());
     return FS_OK;
+}
+
+bool
+FSDevice::predictBlock(u32 nr, const u8 *buffer,
+                       FSPartition **p, FSVolumeType *dos, FSBlockType *type)
+{
+    assert(buffer != nullptr);
+    
+    for (auto &it : partitions) {
+        
+        if (it->predictBlock(nr, buffer, p, dos, type)) return true;
+    }
+    return false;
 }

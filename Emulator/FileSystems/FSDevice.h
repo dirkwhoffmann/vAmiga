@@ -68,8 +68,10 @@ protected:
     // The block storage
     std::vector<BlockPtr> blocks;
             
-    // The currently selected partition and directory
+    // The currently selected partition
     u32 cp = 0;
+    
+    // The currently selected directory
     u32 cd = 0;
     
 
@@ -79,7 +81,7 @@ protected:
     
 public:
 
-    // Creates a file system from an ADF or HDF file
+    // Creates a file system from an ADF or HDF
     static FSDevice *makeWithADF(class ADFFile *adf, FSError *error);
     static FSDevice *makeWithHDF(class HDFFile *hdf, FSError *error);
 
@@ -108,9 +110,6 @@ public:
     // Prints debug information about this volume
     virtual void dump();
         
-    // Predicts the type of a block by analyzing its number and data
-    FSBlockType predictBlockType(u32 nr, const u8 *buffer);
-
     
     //
     // Querying file system properties
@@ -120,60 +119,23 @@ public:
             
     // Returns the device capacity in blocks
     u32 getCapacity() { return numBlocks; }
-
-    // Returns the number of reserved blocks
-    u32 getReserved() { return numReserved; }
     
     
     //
     // Querying properties of the current partition
     //
     
-    // Returns the DOS version (OFS, FFS, etc.)
+    // Returns the DOS version of the current partition (OFS, FFS, etc.)
     FSVolumeType dos() { return partitions[cp]->dos(); }
     bool isOFS() { return partitions[cp]->isOFS(); }
     bool isFFS() { return partitions[cp]->isFFS(); }
     
-    
-    //
-    // Integrity checking
-    //
 
-public:
-    
-    // Checks all blocks in this volume
-    FSErrorReport check(bool strict);
-
-    // Checks a single byte in a certain block
-    FSError check(u32 blockNr, u32 pos, u8 *expected, bool strict);
-
-    // Checks if the block with the given number is part of the volume
-    bool isBlockNumber(u32 nr) { return nr < numBlocks; }
-
-    // Checks if the type of a block matches one of the provides types
-    FSError checkBlockType(u32, FSBlockType type);
-    FSError checkBlockType(u32, FSBlockType type, FSBlockType altType);
-
-    // Checks if a certain block is corrupted
-    bool isCorrupted(u32 blockNr) { return getCorrupted(blockNr) != 0; }
-
-    // Returns the position in the corrupted block list (0 = OK)
-    u32 getCorrupted(u32 blockNr);
-
-    // Returns the number of the next or previous corrupted block
-    u32 nextCorrupted(u32 blockNr);
-    u32 prevCorrupted(u32 blockNr);
-
-    // Checks if a certain block is the n-th corrupted block
-    bool isCorrupted(u32 blockNr, u32 n);
-
-    // Returns the number of the the n-th corrupted block
-    u32 seekCorruptedBlock(u32 n);
-    
-    
     //
     // Working with partitions
     //
+    
+public:
     
     // Returns the number of partitions
     u32 numPartitions() { return partitions.size(); }
@@ -298,13 +260,52 @@ private:
 
  
     //
+    // Integrity checking
+    //
+
+public:
+    
+    // Checks all blocks in this volume
+    FSErrorReport check(bool strict);
+
+    // Checks a single byte in a certain block
+    FSError check(u32 blockNr, u32 pos, u8 *expected, bool strict);
+
+    // Checks if the block with the given number is part of the volume
+    bool isBlockNumber(u32 nr) { return nr < numBlocks; }
+
+    // Checks if the type of a block matches one of the provides types
+    FSError checkBlockType(u32, FSBlockType type);
+    FSError checkBlockType(u32, FSBlockType type, FSBlockType altType);
+
+    // Checks if a certain block is corrupted
+    bool isCorrupted(u32 blockNr) { return getCorrupted(blockNr) != 0; }
+
+    // Returns the position in the corrupted block list (0 = OK)
+    u32 getCorrupted(u32 blockNr);
+
+    // Returns the number of the next or previous corrupted block
+    u32 nextCorrupted(u32 blockNr);
+    u32 prevCorrupted(u32 blockNr);
+
+    // Checks if a certain block is the n-th corrupted block
+    bool isCorrupted(u32 blockNr, u32 n);
+
+    // Returns the number of the the n-th corrupted block
+    u32 seekCorruptedBlock(u32 n);
+    
+    
+    //
     // Importing and exporting
     //
     
 public:
-    
+        
     // Reads a single byte from a block
     u8 readByte(u32 block, u32 offset);
+
+    // Predicts the type of a block by analyzing its number and data (DEPRECATED)
+    FSBlockType predictBlockType(u32 nr, const u8 *buffer);
 
     // Imports the volume from a buffer compatible with the ADF format
     bool importVolume(const u8 *src, size_t size);
@@ -326,6 +327,12 @@ public:
 
     // Exports the volume to a directory of the host file system
     FSError exportDirectory(const char *path);
+    
+private:
+    
+    // Provides block information that is needed during the import process
+    bool predictBlock(u32 nr, const u8 *buffer,
+                      FSPartition **p, FSVolumeType *dos, FSBlockType *type);
 };
 
 #endif

@@ -473,3 +473,47 @@ FSPartition::check(bool strict, FSErrorReport &report)
  
     return report.bitmapErrors == 0;
 }
+
+bool
+FSPartition::predictBlock(u32 nr, const u8 *buffer,
+                          FSPartition **p, FSVolumeType *d, FSBlockType *type)
+{
+    // Only proceed if the block belongs to this partition
+    if (nr < firstBlock || nr > lastBlock) return false;
+    
+    *p = this;
+    *d = dos();
+    
+    // Is it a boot block?
+    if (nr == firstBlock + 0) return FS_BOOT_BLOCK;
+    if (nr == firstBlock + 1) return FS_BOOT_BLOCK;
+    
+    // Is it a bitmap block?
+    if (std::find(bmBlocks.begin(), bmBlocks.end(), nr) != bmBlocks.end())
+        return FS_BITMAP_BLOCK;
+    
+    // is it a bitmap extension block?
+    if (std::find(bmExtBlocks.begin(), bmExtBlocks.end(), nr) != bmExtBlocks.end())
+        return FS_BITMAP_EXT_BLOCK;
+
+    // For all other blocks, check the type and subtype fields
+    u32 key = FSBlock::read32(buffer);
+    u32 subKey = FSBlock::read32(buffer + bsize() - 4);
+
+    if (key == 2  && subKey == 1)       { *type = FS_ROOT_BLOCK; return true; }
+    if (key == 2  && subKey == 2)       { *type = FS_USERDIR_BLOCK; return true; }
+    if (key == 2  && subKey == (u32)-3) { *type = FS_FILEHEADER_BLOCK; return true; }
+    if (key == 16 && subKey == (u32)-3) { *type = FS_FILELIST_BLOCK; return true; }
+
+    // Check if this block is a data block
+    if (isOFS()) {
+        if (key == 8) { *type = FS_DATA_BLOCK_OFS; return true; }
+    } else {
+        for (u32 i = 0; i < bsize(); i++) {
+            if (buffer[i]) { *type = FS_DATA_BLOCK_FFS; return true; }
+        }
+    }
+    
+    return FS_EMPTY_BLOCK;
+    return true;
+}

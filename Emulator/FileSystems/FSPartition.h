@@ -15,7 +15,7 @@
 
 struct FSPartition : AmigaObject {
     
-    // The volume this partition belongs to
+    // The device this partition is part of
     class FSDevice &dev;
         
     // Cylinder boundaries
@@ -33,6 +33,7 @@ struct FSPartition : AmigaObject {
     vector<u32> bmBlocks;
     vector<u32> bmExtBlocks;
 
+    
     //
     // Initializing
     //
@@ -59,7 +60,7 @@ struct FSPartition : AmigaObject {
     // Querying partition properties
     //
     
-    // Returns the DOS version (OFS, FFS, etc.)
+    // Returns the DOS version of this partition (OFS, FFS, etc.)
     FSVolumeType dos();
     bool isOFS() { return isOFSVolumeType(dos()); }
     bool isFFS() { return isFFSVolumeType(dos()); }
@@ -150,7 +151,17 @@ public:
 
     // Checks if the block with the given number is part of this partition
     bool inRange(u32 nr) { return nr >= firstBlock && nr <= lastBlock; }
-
+    
+    
+    //
+    // Importing and exporting
+    //
+    
+public:
+    
+    // Provides block information that is needed during the import process
+    bool predictBlock(u32 nr, const u8 *buffer,
+                      FSPartition **p, FSVolumeType *dos, FSBlockType *type);
 };
 
 typedef FSPartition* FSPartitionPtr;
