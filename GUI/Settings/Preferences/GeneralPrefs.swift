@@ -14,7 +14,7 @@ extension PreferencesController {
         // Drive
         genDriveBlankDiskFormat.selectItem(withTag: pref.blankDiskFormatIntValue)
         genBootCode.selectItem(withTag: pref.bootCodeIntValue)
-        genBootCode.isEnabled = pref.blankDiskFormat != .NONE
+        genBootCode.isEnabled = pref.blankDiskFormat != .NODOS
         genEjectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
         genDriveSounds.state = pref.driveSounds ? .on : .off
         genDriveSoundPan.selectItem(withTag: Int(pref.driveSoundPan))

@@ -51,15 +51,12 @@ class FSDevice : AmigaObject {
     friend class FSHashTable;
 
 protected:
-        
-    // The layout of this device
-    // FSDeviceDescriptor layout;
-    
-    // Physical device properies
+            
+    // Physical device parameters
     u32 numCyls = 0;
     u32 numHeads = 0;
     
-    // Logical device properties
+    // Logical device parameters
     u32 numSectors = 0;
     u32 numBlocks = 0;
     u32 numReserved = 0;

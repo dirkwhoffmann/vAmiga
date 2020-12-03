@@ -13,7 +13,7 @@ FSBootBlock::FSBootBlock(FSPartition &p, u32 nr, FSVolumeType type) : FSBlock(p,
 {
     data = new u8[bsize()]();
     
-    if (type != FS_NONE) {
+    if (type != FS_NODOS) {
         data[0] = 'D';
         data[1] = 'O';
         data[2] = 'S';
@@ -31,10 +31,10 @@ FSVolumeType
 FSBootBlock::dos()
 {
     // Only proceed if the header begins with 'DOS'
-    if (strncmp((const char *)data, "DOS", 3)) return FS_NONE;
+    if (strncmp((const char *)data, "DOS", 3)) return FS_NODOS;
         
     // Only proceed if the DOS version number is valid
-    if (data[3] > 7) return FS_NONE;
+    if (data[3] > 7) return FS_NODOS;
     
     return (FSVolumeType)data[3];
 }

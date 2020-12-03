@@ -76,9 +76,14 @@ public:
     long numReserved();
     long numBlocks();
     long bsize();
+
     
-    // Extracts the partition table from the image data
-    // std::vector<FSPartitionDescriptor> pTable();
+    //
+    // Querying partition information
+    //
+
+    // Returns the file system type for a certain partition
+    FSVolumeType dos(int i);    
 };
 
 #endif

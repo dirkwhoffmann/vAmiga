@@ -106,14 +106,14 @@ FSDevice::FSDevice(FSDeviceDescriptor &layout)
     numHeads   = layout.numHeads;
     numSectors = layout.numSectors;
     bsize      = layout.bsize;
-    numBlocks  = layout.blocks;
+    numBlocks  = layout.numBlocks;
     
     // Initialize the block storage
-    blocks.reserve(layout.blocks);
-    blocks.assign(layout.blocks, 0);
+    blocks.reserve(layout.numBlocks);
+    blocks.assign(layout.numBlocks, 0);
     
     // Create all partitions
-    for (auto& descriptor : layout.part) {
+    for (auto& descriptor : layout.partitions) {
         partitions.push_back(new FSPartition(*this, descriptor));
     }
 

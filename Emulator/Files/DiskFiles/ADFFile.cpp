@@ -176,10 +176,10 @@ ADFFile::readFromBuffer(const u8 *buffer, size_t length)
 }
 
 FSVolumeType
-ADFFile::fileSystem()
+ADFFile::dos()
 {
     if (strncmp((const char *)data, "DOS", 3) || data[3] > 7) {
-        return FS_NONE;
+        return FS_NODOS;
     }
 
     return (FSVolumeType)data[3];
@@ -249,7 +249,7 @@ ADFFile::formatDisk(FSVolumeType fs, FSBootCode bootCode)
     msg("Formatting disk with %d blocks (%s)\n", numBlocks(), sFSVolumeType(fs));
 
     // Only proceed if a file system is given
-    if (fs == FS_NONE) return false;
+    if (fs == FS_NODOS) return false;
     
     // Determine the disk layout of this ADF
     FSDeviceDescriptor layout = FSDeviceDescriptor(this);

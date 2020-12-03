@@ -78,7 +78,7 @@ public:
     
 public:
     
-    FSVolumeType fileSystem() override; 
+    FSVolumeType dos() override; 
     DiskType getDiskType() override;
     DiskDensity getDiskDensity() override;
     long numSides() override;

@@ -26,7 +26,7 @@ FSPartition::FSPartition(FSDevice &ref, FSPartitionDescriptor layout) : dev(ref)
     
     // Create boot blocks
     dev.blocks[firstBlock]     = new FSBootBlock(*this, firstBlock, layout.dos);
-    dev.blocks[firstBlock + 1] = new FSBootBlock(*this, firstBlock + 1, FS_NONE);
+    dev.blocks[firstBlock + 1] = new FSBootBlock(*this, firstBlock + 1, FS_NODOS);
 
     // Create the root block
     FSRootBlock *rb = new FSRootBlock(*this, layout.rootBlock);
@@ -150,7 +150,7 @@ FSVolumeType
 FSPartition::dos()
 {
     FSBlock *b = dev.blockPtr(firstBlock);
-    return b ? b->dos() : FS_NONE;
+    return b ? b->dos() : FS_NODOS;
 }
 
 u32

@@ -131,49 +131,14 @@ HDFFile::bsize()
     return 512;
 }
 
-/*
-std::vector<FSPartitionDescriptor>
-HDFFile::pTable()
+FSVolumeType
+HDFFile::dos(int i)
 {
-    std::vector<FSPartitionDescriptor> result;
+    assert(i == 0);
     
-    if (hasRDB()) {
-        
-        // TODO: Extract the partition information from the disk image
-        warn("HDF RDB images are not supported");
-        
-    } else {
-        
-        // Locate the root block
-        u32 highKey = numCyls() * numSides() *  numSectors() - 1;
-        u32 ref = (numReserved() + highKey) / 2;
-                
-        // Create a single partition
-        result.push_back(FSPartitionDescriptor(0, numCyls(), ref));
-        
-        // Locate the bitmap blocks
-        u32 cnt = 25;
-        u32 offset = bsize() - 49 * 4;
-
-        while (ref && ref < numBlocks()) {
-
-            const u8 *p = data + (ref * bsize()) + offset;
-        
-            // Collect all references stored in this block
-            for (u32 i = 0; i < cnt; i++, p += 4) {
-                if (u32 bmb = FFSDataBlock::read32(p)) {
-                    if (bmb < numBlocks()) result[0].bmBlocks.push_back(bmb);
-                }
-            }
-            
-            // Continue collecting in the next extension bitmap block
-            if ((ref = FFSDataBlock::read32(p))) {
-                if (ref < numBlocks()) result[0].bmExtBlocks.push_back(ref);
-                cnt = (bsize() / 4) - 1;
-                offset = 0;
-            }
-        }
+    if (strncmp((const char *)data, "DOS", 3) || data[3] > 7) {
+        return FS_NODOS;
     }
-    return result;
+
+    return (FSVolumeType)data[3];
 }
-*/

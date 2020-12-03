@@ -17,10 +17,7 @@ struct FSPartition : AmigaObject {
     
     // The volume this partition belongs to
     class FSDevice &dev;
-    
-    // File system type
-    // FSVolumeType dos;
-    
+        
     // Cylinder boundaries
     u32 lowCyl = 0;
     u32 highCyl = 0;

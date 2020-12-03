@@ -31,7 +31,7 @@ public:
 public:
 
     // Returns the file system this disk is formatted with
-    virtual FSVolumeType fileSystem() = 0; 
+    virtual FSVolumeType dos() = 0; 
     
     // Returns the layout parameters for this disk
     virtual DiskType getDiskType() = 0;

@@ -14,7 +14,7 @@
 
 VAMIGA_ENUM(long, FSVolumeType)
 {
-    FS_NONE = -1,
+    FS_NODOS = -1,
     FS_OFS = 0,         // Original File System
     FS_FFS = 1,         // Fast File System
     FS_OFS_INTL = 2,    // "International" (not supported)
@@ -27,7 +27,7 @@ VAMIGA_ENUM(long, FSVolumeType)
 
 inline bool isFSVolumeType(long value)
 {
-    return value >= FS_NONE && value <= FS_FFS_LNFS;
+    return value >= FS_NODOS && value <= FS_FFS_LNFS;
 }
 
 inline bool isOFSVolumeType(long value)
@@ -55,7 +55,7 @@ inline bool isFFSVolumeType(long value)
 inline const char *sFSVolumeType(FSVolumeType value)
 {
     switch (value) {
-        case FS_NONE:     return "None";
+        case FS_NODOS:    return "No DOS";
         case FS_OFS:      return "OFS";
         case FS_FFS:      return "FFS";
         case FS_OFS_INTL: return "OFS_INTL";
