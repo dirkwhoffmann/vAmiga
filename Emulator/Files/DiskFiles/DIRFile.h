@@ -67,6 +67,7 @@ public:
     BootBlockIdentifier bootBlockID() override { return adf->bootBlockID(); }
     BootBlockType bootBlockType() override { return adf->bootBlockType(); }
     const char *bootBlockName() override { return adf->bootBlockName(); }
+    void eliminateVirus() override { adf->eliminateVirus(); }
     void readSector(u8 *target, long s) override { return adf->readSector(target, s); }
     void readSector(u8 *target, long t, long s) override { return adf->readSector(target, t, s); }
     bool encodeDisk(class Disk *disk) override { return adf->encodeDisk(disk); }

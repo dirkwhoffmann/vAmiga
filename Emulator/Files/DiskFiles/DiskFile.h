@@ -69,6 +69,13 @@ public:
 
     
     //
+    // Repairing
+    //
+
+    virtual void eliminateVirus() { };
+
+    
+    //
     // Encoding
     //
  

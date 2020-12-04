@@ -89,6 +89,8 @@ public:
     BootBlockType bootBlockType() override;
     const char *bootBlockName() override;
     
+    void eliminateVirus() override;
+
     bool encodeDisk(class Disk *disk) override;
     bool decodeDisk(class Disk *disk) override;
 

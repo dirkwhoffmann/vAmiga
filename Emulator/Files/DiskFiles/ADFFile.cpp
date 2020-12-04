@@ -287,6 +287,30 @@ ADFFile::bootBlockName()
     return BootBlockImage(data).name;
 }
 
+void
+ADFFile::eliminateVirus()
+{
+    msg("Overwriting boot block virus with ");
+    
+    if (isOFSVolumeType(getDos())) {
+
+        msg("a standard OFS bootblock\n");
+        BootBlockImage bb = BootBlockImage(BB_KICK_1_3);
+        bb.write(data + 4, 4, 1023);
+
+    } else if (isFFSVolumeType(getDos())) {
+
+        msg("a standard FFS bootblock\n");
+        BootBlockImage bb = BootBlockImage(BB_KICK_2_0);
+        bb.write(data + 4, 4, 1023);
+
+    } else {
+
+        msg("zeroes\n");
+        memset(data + 4, 0, 1020);
+    }
+}
+
 bool
 ADFFile::formatDisk(FSVolumeType fs, FSBootCode bootCode)
 {

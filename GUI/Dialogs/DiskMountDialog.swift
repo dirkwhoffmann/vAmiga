@@ -11,10 +11,12 @@ class DiskMountDialog: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
     @IBOutlet weak var title: NSTextField!
-    @IBOutlet weak var subtitle: NSTextField!
-    @IBOutlet weak var subsubtitle: NSTextField!
+    @IBOutlet weak var subtitle1: NSTextField!
+    @IBOutlet weak var subtitle2: NSTextField!
+    @IBOutlet weak var subtitle3: NSTextField!
     @IBOutlet weak var warning: NSTextField!
-    @IBOutlet weak var virusIcon: NSButton!
+    @IBOutlet weak var biohazardIcon: NSImageView!
+    @IBOutlet weak var virusButton: NSButton!
     @IBOutlet weak var df0Button: NSButton!
     @IBOutlet weak var df1Button: NSButton!
     @IBOutlet weak var df2Button: NSButton!
@@ -70,7 +72,7 @@ class DiskMountDialog: DialogController {
         }
     }
 
-    var subtitleText: String {
+    func updateSubTitle1() {
                 
         let t = disk?.numTracks ?? 0
         let s = disk?.numSectors ?? 0
@@ -79,19 +81,26 @@ class DiskMountDialog: DialogController {
         let den = disk?.diskDensity
         let d = den == .DISK_SD ? "single" : den == .DISK_DD ? "double" : "high"
 
-        return "\(n) sided, \(d) density disk, \(t) tracks with \(s) sectors each"
+        subtitle1.stringValue = "\(n) sided, \(d) density disk, \(t) tracks with \(s) sectors each"
     }
 
-    var subsubtitleText: String {
+    func updateSubTitle2() {
         
-        if disk == nil { return "???" }
+        let dos = disk!.dos
         
+        subtitle2.stringValue = dos.description
+
+    }
+
+    func updateSubTitle3() {
+
         let virus = disk!.bootBlockType == .BB_VIRUS
         let name = disk!.bootBlockName!
-        
-        return virus ? "This disk is contaminated (Payload: \(name))" : name
-    }
 
+        subtitle3.stringValue = virus ? "Contaminated boot block found (\(name))" : name
+        subtitle3.textColor = virus ? .systemRed : .secondaryLabelColor
+    }
+    
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
         track()
@@ -166,13 +175,12 @@ class DiskMountDialog: DialogController {
     func update() {
                     
         // Update icon and text fields
-        let hasVirus = disk?.bootBlockType == .BB_VIRUS
         diskIcon.image = diskIconImage
         title.stringValue = titleText
-        subtitle.stringValue = subtitleText
-        subsubtitle.stringValue = subsubtitleText
-        subsubtitle.textColor = hasVirus ? .systemRed : .secondaryLabelColor
-        virusIcon.isHidden = !hasVirus
+        updateSubTitle1()
+        updateSubTitle2()
+        updateSubTitle3()
+        biohazardIcon.isHidden = disk?.bootBlockType != .BB_VIRUS
 
         // Determine enabled drives
         let t = disk!.diskType
@@ -213,6 +221,11 @@ class DiskMountDialog: DialogController {
     @IBAction func insertDiskAction(_ sender: NSButton!) {
         
         track("insertDiskAction df\(sender.tag)")
+        
+        // If requested, wipe out any virus from the boot block
+        if !virusButton.isHidden && virusButton.state == .on {
+            disk!.eliminateVirus()
+        }
         
         switch disk {
         

@@ -1514,6 +1514,11 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation DiskFileProxy
 
+- (FSVolumeType)dos
+{
+    return ((DiskFile *)wrapper->file)->getDos();
+}
+
 - (DiskType)diskType
 {
     return ((DiskFile *)wrapper->file)->getDiskType();
@@ -1563,6 +1568,11 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     const char *str = ((ADFFile *)wrapper->file)->bootBlockName();
     return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+
+- (void)eliminateVirus
+{
+    ((ADFFile *)wrapper->file)->eliminateVirus();
 }
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset

@@ -731,6 +731,7 @@ struct SerialPortWrapper;
 @interface DiskFileProxy : AmigaFileProxy {
 }
 
+@property (readonly) FSVolumeType dos;
 @property (readonly) DiskType diskType;
 @property (readonly) DiskDensity diskDensity;
 @property (readonly) NSInteger numCylinders;
@@ -742,6 +743,8 @@ struct SerialPortWrapper;
 @property (readonly) BootBlockIdentifier bootBlockID;
 @property (readonly) BootBlockType bootBlockType;
 @property (readonly) NSString *bootBlockName;
+
+- (void)eliminateVirus;
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (void)readSector:(unsigned char *)dst block:(NSInteger)block;
