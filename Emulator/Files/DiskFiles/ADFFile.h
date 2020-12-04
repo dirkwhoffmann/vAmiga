@@ -78,7 +78,8 @@ public:
     
 public:
     
-    FSVolumeType dos() override; 
+    FSVolumeType getDos() override; 
+    void setDos(FSVolumeType dos) override;
     DiskType getDiskType() override;
     DiskDensity getDiskDensity() override;
     long numSides() override;

@@ -41,13 +41,13 @@ FSDeviceDescriptor::FSDeviceDescriptor(DiskType type, DiskDensity density, FSVol
 void
 FSDeviceDescriptor::dump()
 {
-    msg("            cyls : %d\n", numCyls);
-    msg("           heads : %d\n", numHeads);
-    msg("         sectors : %d\n", numSectors);
-    msg("          blocks : %d\n", numBlocks);
-    msg("        reserved : %d\n", numReserved);
-    msg("           bsize : %d\n", bsize);
-    
+    msg("       Cylinders : %d\n", numCyls);
+    msg("           Heads : %d\n", numHeads);
+    msg("         Sectors : %d\n", numSectors);
+    msg("          Blocks : %d\n", numBlocks);
+    msg("        Reserved : %d\n", numReserved);
+    msg("           BSize : %d\n", bsize);
+    msg("\n");
     for (size_t i = 0; i < partitions.size(); i++) {
         partitions[i].dump();
     }
@@ -70,6 +70,7 @@ void
 FSPartitionDescriptor::dump()
 {
     msg("       Partition : %d - %d\n", lowCyl, highCyl);
+    msg("     File system : %s\n", sFSVolumeType(dos));
     msg("      Root block : %d\n", rootBlock);
     msg("   Bitmap blocks : ");
     for (auto& it : bmBlocks) { msg("%d ", it); }

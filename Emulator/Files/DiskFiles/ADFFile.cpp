@@ -176,13 +176,24 @@ ADFFile::readFromBuffer(const u8 *buffer, size_t length)
 }
 
 FSVolumeType
-ADFFile::dos()
+ADFFile::getDos()
 {
     if (strncmp((const char *)data, "DOS", 3) || data[3] > 7) {
         return FS_NODOS;
     }
 
     return (FSVolumeType)data[3];
+}
+
+void
+ADFFile::setDos(FSVolumeType dos)
+{
+    if (dos == FS_NODOS) {
+        memset(data, 0, 4);
+    } else {
+        memcpy(data, "DOS", 3);
+        data[3] = (u8)dos;
+    }
 }
 
 DiskType
@@ -252,7 +263,7 @@ ADFFile::layout()
     u32 bitmap = bitmapBlock();
     
     // Add partition
-    result.partitions.push_back(FSPartitionDescriptor(dos(), 0, result.numCyls - 1, root));
+    result.partitions.push_back(FSPartitionDescriptor(getDos(), 0, result.numCyls - 1, root));
     result.partitions[0].bmBlocks.push_back(bitmap);
     
     return result;
@@ -272,6 +283,7 @@ ADFFile::formatDisk(FSVolumeType fs, FSBootCode bootCode)
     
     // Get a device descriptor for this ADF
     FSDeviceDescriptor descriptor = layout();
+    descriptor.partitions[0].dos = fs;
     
     // Create an empty file system
     FSDevice *volume = FSDevice::makeWithFormat(descriptor);

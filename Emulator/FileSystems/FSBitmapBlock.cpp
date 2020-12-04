@@ -42,10 +42,10 @@ FSBitmapBlock::dump()
     u32 count = 0;
     for (u32 i = 1; i < bsize() / 4; i++) {
         if (u32 value = get32(i)) {
-            for (int j = 0; j < 8; j++) {
+            for (int j = 0; j < 32; j++) {
                 if (GET_BIT(value, j)) count++;
             }
         }
     }
-    printf("   Allocated: %d blocks\n", count);
+    printf("         Free : %d blocks\n", count);
 }

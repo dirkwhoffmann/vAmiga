@@ -77,7 +77,7 @@ FSBootBlock::check(u32 byte, u8 *expected, bool strict)
 void
 FSBootBlock::dump()
 {
-    msg("     Header : ");
+    msg("       Header : ");
     for (int i = 0; i < 8; i++) msg("%02X ", data[i]);
     msg("\n");
 }
@@ -86,6 +86,8 @@ void
 FSBootBlock::writeBootCode(FSBootCode bootCode, int page)
 {
     assert(page == 0 || page == 1);
+    
+    debug(FS_DEBUG, "writeBootCode(bootCode: %d, page: %d)\n", bootCode, page);
     
     const u8 *code;
     size_t size;
@@ -109,6 +111,8 @@ FSBootBlock::writeBootCode(FSBootCode bootCode, int page)
             return;
     }
     
+    debug(FS_DEBUG, "data = %p size = %zu\n", code, size);
+
     if (page == 0) {
         
         memset(data + 4, 0, bsize() - 4);

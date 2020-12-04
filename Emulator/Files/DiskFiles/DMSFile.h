@@ -59,7 +59,8 @@ public:
     // Methods from DiskFile
     //
     
-    FSVolumeType dos() override { return adf->dos(); }
+    FSVolumeType getDos() override { return adf->getDos(); }
+    void setDos(FSVolumeType dos) override { adf->setDos(dos); }
     DiskType getDiskType() override { return adf->getDiskType(); }
     DiskDensity getDiskDensity() override { return adf->getDiskDensity(); }
     long numSides() override { return adf->numSides(); }

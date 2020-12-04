@@ -64,7 +64,8 @@ public:
     // Methods from DiskFile
     //
       
-    FSVolumeType dos() override { return FS_NODOS; }
+    FSVolumeType getDos() override { return FS_NODOS; }
+    void setDos(FSVolumeType dos) override { };
     DiskType getDiskType() override { return DISK_35; }
     DiskDensity getDiskDensity() override { return DISK_DD; }
     long numSides() override;

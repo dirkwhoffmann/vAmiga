@@ -23,16 +23,17 @@ public:
 
     static DiskFile *makeWithFile(const char *path);
     
+    // Gets or sets the file system for this disk
+    virtual FSVolumeType getDos() = 0;
+    virtual void setDos(FSVolumeType dos) = 0;
+    
     
     //
     // Querying disk properties
     //
     
 public:
-
-    // Returns the file system this disk is formatted with
-    virtual FSVolumeType dos() = 0; 
-    
+        
     // Returns the layout parameters for this disk
     virtual DiskType getDiskType() = 0;
     virtual DiskDensity getDiskDensity() = 0;

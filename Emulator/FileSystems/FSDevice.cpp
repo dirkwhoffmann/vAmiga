@@ -14,6 +14,8 @@ FSDevice::makeWithFormat(FSDeviceDescriptor &layout)
 {
     FSDevice *dev = new FSDevice(layout.numBlocks);
     
+    if (FS_DEBUG) { layout.dump(); }
+    
     // Copy layout parameters from descriptor
     dev->numCyls    = layout.numCyls;
     dev->numHeads   = layout.numHeads;
