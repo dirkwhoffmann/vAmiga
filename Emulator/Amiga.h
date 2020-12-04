@@ -48,6 +48,7 @@
 #include "DMSFile.h"
 #include "EXEFile.h"
 #include "DIRFile.h"
+#include "BootBlockImage.h"
 #include "FSDevice.h"
 
 void threadTerminated(void *thisAmiga);

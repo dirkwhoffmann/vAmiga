@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "Amiga.h"
-#include "Database.h"
 
 ADFFile::ADFFile()
 {
@@ -273,19 +272,19 @@ ADFFile::layout()
 BootBlockIdentifier
 ADFFile::bootBlockID()
 {
-    return bbID(data);
+    return BootBlockImage((const u8 *)data).id;
 }
 
 BootBlockType
 ADFFile::bootBlockType()
 {
-    return bbType(data);
+    return BootBlockImage(data).type;
 }
 
 const char *
 ADFFile::bootBlockName()
 {
-    return bbName(data);
+    return BootBlockImage(data).name;
 }
 
 bool
