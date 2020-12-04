@@ -16,7 +16,7 @@ class DiskMountDialog: DialogController {
     @IBOutlet weak var subtitle3: NSTextField!
     @IBOutlet weak var warning: NSTextField!
     @IBOutlet weak var biohazardIcon: NSImageView!
-    @IBOutlet weak var virusButton: NSButton!
+    @IBOutlet weak var decontaminate: NSButton!
     @IBOutlet weak var df0Button: NSButton!
     @IBOutlet weak var df1Button: NSButton!
     @IBOutlet weak var df2Button: NSButton!
@@ -97,7 +97,7 @@ class DiskMountDialog: DialogController {
         let virus = disk!.bootBlockType == .BB_VIRUS
         let name = disk!.bootBlockName!
 
-        subtitle3.stringValue = virus ? "Contaminated boot block found (\(name))" : name
+        subtitle3.stringValue = virus ? "Contagious boot block detected (\(name))" : name
         subtitle3.textColor = virus ? .systemRed : .secondaryLabelColor
     }
     
@@ -181,6 +181,7 @@ class DiskMountDialog: DialogController {
         updateSubTitle2()
         updateSubTitle3()
         biohazardIcon.isHidden = disk?.bootBlockType != .BB_VIRUS
+        decontaminate.isHidden = disk?.bootBlockType != .BB_VIRUS
 
         // Determine enabled drives
         let t = disk!.diskType
@@ -218,14 +219,22 @@ class DiskMountDialog: DialogController {
         update()
     }
 
+    @IBAction func decontaminateAction(_ sender: NSButton!) {
+        
+        disk!.eliminateVirus()
+        update()
+    }
+
     @IBAction func insertDiskAction(_ sender: NSButton!) {
         
         track("insertDiskAction df\(sender.tag)")
         
         // If requested, wipe out any virus from the boot block
+        /*
         if !virusButton.isHidden && virusButton.state == .on {
             disk!.eliminateVirus()
         }
+        */
         
         switch disk {
         

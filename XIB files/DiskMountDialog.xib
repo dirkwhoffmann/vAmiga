@@ -10,6 +10,7 @@
             <connections>
                 <outlet property="biohazardIcon" destination="3Sm-XE-aZg" id="Q6f-p6-Osq"/>
                 <outlet property="carousel" destination="RBx-ga-ubq" id="DRT-Xb-reu"/>
+                <outlet property="decontaminate" destination="CO4-fT-4Oq" id="BFV-G1-yst"/>
                 <outlet property="df0Button" destination="f8k-FI-c5U" id="Ia7-cB-vyd"/>
                 <outlet property="df1Button" destination="lq1-wH-n8V" id="dsL-Pl-gq7"/>
                 <outlet property="df2Button" destination="rcN-WL-VLh" id="6YD-Xv-5Wt"/>
@@ -19,7 +20,6 @@
                 <outlet property="subtitle2" destination="aSG-zE-FlC" id="Djc-6s-yK7"/>
                 <outlet property="subtitle3" destination="ow1-dH-aQ9" id="38O-Qs-GNK"/>
                 <outlet property="title" destination="l19-lb-oYh" id="HXg-eI-fMW"/>
-                <outlet property="virusButton" destination="Xzz-Kb-ewt" id="wzA-uh-7Px"/>
                 <outlet property="warning" destination="nyT-rh-hux" id="g8y-1l-ogq"/>
                 <outlet property="window" destination="WVX-DH-I0u" id="CxT-wS-1TR"/>
             </connections>
@@ -36,12 +36,12 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yxi-Ar-LgQ" userLabel="Icon">
-                        <rect key="frame" x="20" y="318" width="108" height="108"/>
+                        <rect key="frame" x="20" y="326" width="100" height="100"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="dd_adf" id="bqS-ql-Ov6"/>
                     </imageView>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l19-lb-oYh">
-                        <rect key="frame" x="139" y="403" width="449" height="19"/>
+                        <rect key="frame" x="127" y="404" width="449" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Amiga Disk File (ADF)" id="gHB-Zc-Fgf">
                             <font key="font" metaFont="system"/>
@@ -50,11 +50,11 @@
                         </textFieldCell>
                     </textField>
                     <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="iAg-Xw-L2a">
-                        <rect key="frame" x="141" y="400" width="445" height="5"/>
+                        <rect key="frame" x="128" y="400" width="458" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JMf-QF-9dD">
-                        <rect key="frame" x="140" y="380" width="392" height="14"/>
+                        <rect key="frame" x="127" y="380" width="360" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Lorem ipsum dolor sit amet, consectetur" id="CrX-XA-ycH">
                             <font key="font" metaFont="label" size="11"/>
@@ -63,7 +63,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aSG-zE-FlC">
-                        <rect key="frame" x="140" y="365" width="392" height="14"/>
+                        <rect key="frame" x="127" y="365" width="360" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Lorem ipsum dolor sit amet, consectetur" id="2ed-dy-Tiu">
                             <font key="font" metaFont="label" size="11"/>
@@ -72,7 +72,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ow1-dH-aQ9">
-                        <rect key="frame" x="140" y="350" width="392" height="14"/>
+                        <rect key="frame" x="127" y="350" width="360" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Lorem ipsum dolor sit amet, consectetur" id="rU8-O7-hzv">
                             <font key="font" metaFont="label" size="11"/>
@@ -128,8 +128,8 @@ DQ
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T2c-1K-zxI">
-                        <rect key="frame" x="139" y="324" width="102" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <rect key="frame" x="126" y="22" width="102" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Write protect" bezelStyle="regularSquare" imagePosition="left" inset="2" id="MEb-f8-pJW">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -161,7 +161,7 @@ Gw
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nyT-rh-hux">
-                        <rect key="frame" x="269" y="49" width="319" height="14"/>
+                        <rect key="frame" x="268" y="49" width="319" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="None of the connected drives supports this disk format" id="0rY-31-tK2">
                             <font key="font" metaFont="label" size="11"/>
@@ -169,19 +169,22 @@ Gw
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xzz-Kb-ewt">
-                        <rect key="frame" x="169" y="21" width="112" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Eliminate Virus" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="eL4-vm-YAS">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Sm-XE-aZg">
-                        <rect key="frame" x="538" y="351" width="44" height="44"/>
+                        <rect key="frame" x="566" y="406" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="biohazardTemplate" id="74q-gp-Dxj"/>
                     </imageView>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CO4-fT-4Oq">
+                        <rect key="frame" x="466.5" y="406" width="92" height="19"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="roundTextured" title="Decontaminate" bezelStyle="texturedRounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F46-ds-Zx5">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="decontaminateAction:" target="-2" id="gM4-bv-7cp"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <connections>
