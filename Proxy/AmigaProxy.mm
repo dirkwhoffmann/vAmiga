@@ -1635,9 +1635,9 @@ struct SerialPortWrapper { SerialPort *port; };
     return archive ? [self make: archive] : nil;
 }
 
-- (void)formatDisk:(FSVolumeType)fs bootCode:(FSBootCode)bootCode
+- (void)formatDisk:(FSVolumeType)fs bootBlock:(BootBlockIdentifier)id
 {
-    ((ADFFile *)wrapper->file)->formatDisk(fs, bootCode);
+    ((ADFFile *)wrapper->file)->formatDisk(fs, id);
 }
 
 @end

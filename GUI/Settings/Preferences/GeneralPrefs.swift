@@ -12,12 +12,12 @@ extension PreferencesController {
     func refreshGeneralTab() {
         
         let contaminated =
-            pref.bootCode == .BB_BYTE_BANDIT_VIRUS ||
-            pref.bootCode == .BB_SCA_VIRUS
+            pref.bootBlock == .BB_BYTE_BANDIT_VIRUS ||
+            pref.bootBlock == .BB_SCA_VIRUS
                 
         // Drive
         genDriveBlankDiskFormat.selectItem(withTag: pref.blankDiskFormatIntValue)
-        genBootCode.selectItem(withTag: pref.bootCodeIntValue)
+        genBootCode.selectItem(withTag: pref.bootBlockIntValue)
         genBootCode.isEnabled = pref.blankDiskFormat != .NODOS
         genBootCodeVirus.isHidden = !contaminated
         genEjectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
@@ -95,8 +95,10 @@ extension PreferencesController {
 
     @IBAction func genBootCodeAction(_ sender: NSPopUpButton!) {
         
+        track("Tag = \(sender.selectedTag())")
+        
         let tag = sender.selectedTag()
-        pref.bootCodeIntValue = tag
+        pref.bootBlockIntValue = tag
         refresh()
     }
 

@@ -31,7 +31,7 @@ public:
     // Result of the data inspection
     BootBlockIdentifier id = BB_UNKNOWN;
     BootBlockType type = BB_STANDARD;
-    const char *name = "";
+    const char *name = "Unknown boot block";
     
     // Constructors
     BootBlockImage(const unsigned char *buf);

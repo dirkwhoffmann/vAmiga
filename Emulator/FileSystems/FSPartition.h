@@ -149,7 +149,7 @@ private:
 public:
     
     // Installs a boot block
-    void makeBootable(FSBootCode bootCode);
+    void makeBootable(BootBlockIdentifier id);
 
     
     //

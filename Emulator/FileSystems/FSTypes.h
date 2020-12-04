@@ -68,6 +68,7 @@ inline const char *sFSVolumeType(FSVolumeType value)
     }
 }
 
+/*
 VAMIGA_ENUM(long, FSBootCode) // DEPRECATED: REPLACE BY BootBlockIdentifier
 {
     FS_BB_NONE,
@@ -80,6 +81,7 @@ VAMIGA_ENUM(long, FSBootCode) // DEPRECATED: REPLACE BY BootBlockIdentifier
     FS_BB_SCA_VIRUS,
     FS_BB_BYTE_BANDIT_VIRUS
 };
+*/
 
 VAMIGA_ENUM(long, FSBlockType)
 {

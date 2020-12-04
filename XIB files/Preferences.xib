@@ -413,19 +413,7 @@
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem isSeparatorItem="YES" tag="-1" id="3n5-ao-Y8C"/>
-                                                        <menuItem title="OS 1.3" tag="1" id="Px6-36-Rg3">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="OS 2.0" tag="2" id="OmN-iW-kGh">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem isSeparatorItem="YES" tag="-2" id="RgX-yw-7p0"/>
-                                                        <menuItem title="SCA Virus" tag="3" id="WlL-md-wcM">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Byte Bandit Virus" tag="4" id="nVu-dz-UyD">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
+                                                        <menuItem isSeparatorItem="YES" tag="-1" id="pXl-Ut-n66"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>

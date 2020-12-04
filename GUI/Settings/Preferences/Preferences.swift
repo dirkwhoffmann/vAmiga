@@ -30,10 +30,10 @@ class Preferences {
         get { return Int(blankDiskFormat.rawValue) }
         set { blankDiskFormat = FSVolumeType.init(rawValue: newValue)! }
     }
-    var bootCode = GeneralDefaults.std.bootCode
-    var bootCodeIntValue: Int {
-        get { return Int(bootCode.rawValue) }
-        set { bootCode = FSBootCode.init(rawValue: newValue)! }
+    var bootBlock = GeneralDefaults.std.bootBlock
+    var bootBlockIntValue: Int {
+        get { return Int(bootBlock.rawValue) }
+        set { bootBlock = BootBlockIdentifier.init(rawValue: newValue)! }
     }
     var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
     var driveSounds = GeneralDefaults.std.driveSounds
@@ -156,7 +156,7 @@ class Preferences {
                 
         // Floppy
         blankDiskFormat = defaults.blankDiskFormat
-        bootCode = defaults.bootCode
+        bootBlock = defaults.bootBlock
         ejectWithoutAsking = defaults.ejectWithoutAsking
         driveSounds = defaults.driveSounds
         driveSoundPan = defaults.driveSoundPan
@@ -183,7 +183,7 @@ class Preferences {
            
         // Floppy
         blankDiskFormatIntValue = defaults.integer(forKey: Keys.Gen.blankDiskFormat)
-        bootCodeIntValue = defaults.integer(forKey: Keys.Gen.bootCode)
+        bootBlockIntValue = defaults.integer(forKey: Keys.Gen.bootBlock)
         ejectWithoutAsking = defaults.bool(forKey: Keys.Gen.ejectWithoutAsking)
         driveSounds = defaults.bool(forKey: Keys.Gen.driveSounds)
         driveSoundPan = defaults.double(forKey: Keys.Gen.driveSoundPan)
@@ -210,7 +210,7 @@ class Preferences {
         
         // Floppy
         defaults.set(blankDiskFormatIntValue, forKey: Keys.Gen.blankDiskFormat)
-        defaults.set(bootCodeIntValue, forKey: Keys.Gen.bootCode)
+        defaults.set(bootBlockIntValue, forKey: Keys.Gen.bootBlock)
         defaults.set(ejectWithoutAsking, forKey: Keys.Gen.ejectWithoutAsking)
         defaults.set(driveSounds, forKey: Keys.Gen.driveSounds)
         defaults.set(driveSoundPan, forKey: Keys.Gen.driveSoundPan)

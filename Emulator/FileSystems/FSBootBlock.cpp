@@ -9,6 +9,7 @@
 
 #include "FSDevice.h"
 #include "FSDatabase.h"
+#include "BootBlockImage.h"
 
 FSBootBlock::FSBootBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
@@ -83,47 +84,18 @@ FSBootBlock::dump()
 }
 
 void
-FSBootBlock::writeBootCode(FSBootCode bootCode, int page)
+FSBootBlock::writeBootCode(BootBlockIdentifier id, int page)
 {
     assert(page == 0 || page == 1);
     
-    debug(FS_DEBUG, "writeBootCode(bootCode: %d, page: %d)\n", bootCode, page);
+    debug(FS_DEBUG, "writeBootCode(id: %d, page: %d)\n", id, page);
     
-    const u8 *code;
-    size_t size;
-    
-    switch (bootCode) {
-            
-        case FS_BB_KICK_1_3:
-            code = os13_bb; size = sizeof(os13_bb); break;
-            
-        case FS_BB_KICK_2_0:
-            code = os20_bb; size = sizeof(os20_bb); break;
-            
-        case FS_BB_SCA_VIRUS:
-            code = sca_virus_bb; size = sizeof(sca_virus_bb); break;
-
-        case FS_BB_BYTE_BANDIT_VIRUS:
-            code = bbandit_virus_bb; size = sizeof(bbandit_virus_bb); break;
-
-        default:
-            warn("Invalid boot block ID %d\n", bootCode);
-            return;
-    }
-    
-    debug(FS_DEBUG, "data = %p size = %zu\n", code, size);
-
-    debug("%d %d %d %d\n", sca_virus_bb[800], sca_virus_bb[822],
-          sca_virus_bb[900], sca_virus_bb[841]);
+    // Read boot block image from the database
+    BootBlockImage image = BootBlockImage(id);
     
     if (page == 0) {
-        
-        memset(data + 4, 0, bsize() - 4);
-        memcpy(data + 4, code + 4, MIN(bsize() - 4, size));
-        
+        image.write(data + 4, 4, 511); // Write 508 bytes (skip header)
     } else {
-        
-        memset(data, 0, bsize());
-        if (size > bsize()) memcpy(data, code + bsize(), size - bsize());
+        image.write(data, 512, 1023);  // Write 512 bytes
     }
 }

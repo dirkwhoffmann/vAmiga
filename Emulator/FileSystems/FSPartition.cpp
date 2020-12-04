@@ -447,13 +447,13 @@ FSPartition::locateAllocationBit(u32 ref, u32 *byte, u32 *bit)
 }
 
 void
-FSPartition::makeBootable(FSBootCode bootCode)
+FSPartition::makeBootable(BootBlockIdentifier id)
 {
     assert(dev.blocks[firstBlock + 0]->type() == FS_BOOT_BLOCK);
     assert(dev.blocks[firstBlock + 1]->type() == FS_BOOT_BLOCK);
 
-    ((FSBootBlock *)dev.blocks[firstBlock + 0])->writeBootCode(bootCode, 0);
-    ((FSBootBlock *)dev.blocks[firstBlock + 1])->writeBootCode(bootCode, 1);
+    ((FSBootBlock *)dev.blocks[firstBlock + 0])->writeBootCode(id, 0);
+    ((FSBootBlock *)dev.blocks[firstBlock + 1])->writeBootCode(id, 1);
 }
 
 bool

@@ -135,6 +135,18 @@ class PreferencesController: DialogController {
         super.awakeFromNib()
         
         if let id = firstTab { tabView?.selectTabViewItem(withIdentifier: id) }
+
+        // Configure the boot block popup button
+        genBootCode.insertItem(withTitle: "Kick 1.3 (OFS)", at: 2)
+        genBootCode.item(at: 2)?.tag = BootBlockIdentifier.BB_OFS.rawValue
+        genBootCode.insertItem(withTitle: "Kick 2.0 (FFS)", at: 3)
+        genBootCode.item(at: 3)?.tag = BootBlockIdentifier.BB_FFS.rawValue
+
+        genBootCode.insertItem(withTitle: "SCA Virus", at: 4)
+        genBootCode.item(at: 4)?.tag = BootBlockIdentifier.BB_SCA_VIRUS.rawValue
+        genBootCode.insertItem(withTitle: "Byte Bandit Virus", at: 5)
+        genBootCode.item(at: 5)?.tag = BootBlockIdentifier.BB_BYTE_BANDIT_VIRUS.rawValue
+
         refresh()
     }
 
