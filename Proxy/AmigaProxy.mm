@@ -1518,38 +1518,63 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return ((DiskFile *)wrapper->file)->getDiskType();
 }
+
 - (DiskDensity)diskDensity
 {
     return ((DiskFile *)wrapper->file)->getDiskDensity();
 }
+
 - (NSInteger)numCylinders
 {
     return ((DiskFile *)wrapper->file)->numCylinders();
 }
+
 - (NSInteger)numSides
 {
     return ((DiskFile *)wrapper->file)->numSides();
 }
+
 - (NSInteger)numTracks
 {
     return ((DiskFile *)wrapper->file)->numTracks();
 }
+
 - (NSInteger)numSectors
 {
     return ((DiskFile *)wrapper->file)->numSectors();
 }
+
 - (NSInteger)numBlocks
 {
     return ((DiskFile *)wrapper->file)->numBlocks();
 }
+
+- (BootBlockIdentifier)bootBlockID
+{
+    return ((ADFFile *)wrapper->file)->bootBlockID();
+}
+
+- (BootBlockType)bootBlockType
+{
+    return ((ADFFile *)wrapper->file)->bootBlockType();
+}
+
+- (NSString *)bootBlockName
+{
+    const char *str = ((ADFFile *)wrapper->file)->bootBlockName();
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
 {
     return ((DiskFile *)wrapper->file)->readByte(block, offset);
 }
+
 - (void)readSector:(unsigned char *)dst block:(NSInteger)nr
 {
     ((DiskFile *)wrapper->file)->readSector(dst, nr);
 }
+
 - (void)readSectorHex:(char *)dst block:(NSInteger)block count:(NSInteger)count
 {
     ((DiskFile *)wrapper->file)->readSectorHex(dst, block, count);
@@ -1568,47 +1593,36 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return ADFFile::isADFFile([path fileSystemRepresentation]);
 }
+
 + (instancetype)make:(ADFFile *)archive
 {
     if (archive == NULL) return nil;
     return [[self alloc] initWithFile:archive];
 }
+
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
     ADFFile *archive = ADFFile::makeWithBuffer((const u8 *)buffer, length);
     return [self make: archive];
 }
+
 + (instancetype)makeWithFile:(NSString *)path
 {
     ADFFile *archive = ADFFile::makeWithFile([path fileSystemRepresentation]);
     return [self make: archive];
 }
+
 + (instancetype)makeWithDiskType:(DiskType)type density:(DiskDensity)density
 {
     ADFFile *archive = ADFFile::makeWithDiskType(type, density);
     return [self make: archive];
 }
+
 + (instancetype)makeWithDrive:(DriveProxy *)drive
 {
     Drive *d = [drive wrapper]->drive;
     ADFFile *archive = ADFFile::makeWithDisk(d->disk);
     return archive ? [self make: archive] : nil;
-}
-
-- (BootBlockIdentifier)bootBlockID
-{
-    return ((ADFFile *)wrapper->file)->bootBlockID();
-}
-
-- (BootBlockType)bootBlockType
-{
-    return ((ADFFile *)wrapper->file)->bootBlockType();
-}
-
-- (NSString *)bootBlockName
-{
-    const char *str = ((ADFFile *)wrapper->file)->bootBlockName();
-    return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 
 - (void)formatDisk:(FSVolumeType)fs bootCode:(FSBootCode)bootCode

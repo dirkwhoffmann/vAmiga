@@ -12,7 +12,9 @@ class DiskMountDialog: DialogController {
     @IBOutlet weak var diskIcon: NSImageView!
     @IBOutlet weak var title: NSTextField!
     @IBOutlet weak var subtitle: NSTextField!
+    @IBOutlet weak var subsubtitle: NSTextField!
     @IBOutlet weak var warning: NSTextField!
+    @IBOutlet weak var virusIcon: NSButton!
     @IBOutlet weak var df0Button: NSButton!
     @IBOutlet weak var df1Button: NSButton!
     @IBOutlet weak var df2Button: NSButton!
@@ -78,6 +80,16 @@ class DiskMountDialog: DialogController {
         let d = den == .DISK_SD ? "single" : den == .DISK_DD ? "double" : "high"
 
         return "\(n) sided, \(d) density disk, \(t) tracks with \(s) sectors each"
+    }
+
+    var subsubtitleText: String {
+        
+        if disk == nil { return "???" }
+        
+        let virus = disk!.bootBlockType == .BB_VIRUS
+        let name = disk!.bootBlockName!
+        
+        return virus ? "This disk is contaminated (Payload: \(name))" : name
     }
 
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
@@ -152,12 +164,16 @@ class DiskMountDialog: DialogController {
     }
 
     func update() {
-        
+                    
         // Update icon and text fields
+        let hasVirus = disk?.bootBlockType == .BB_VIRUS
         diskIcon.image = diskIconImage
         title.stringValue = titleText
         subtitle.stringValue = subtitleText
-        
+        subsubtitle.stringValue = subsubtitleText
+        subsubtitle.textColor = hasVirus ? .systemRed : .secondaryLabelColor
+        virusIcon.isHidden = !hasVirus
+
         // Determine enabled drives
         let t = disk!.diskType
         let d = disk!.diskDensity

@@ -85,6 +85,9 @@ public:
     long numSides() override;
     long numCylinders() override;
     long numSectors() override;
+    BootBlockIdentifier bootBlockID() override;
+    BootBlockType bootBlockType() override;
+    const char *bootBlockName() override;
     
     bool encodeDisk(class Disk *disk) override;
     bool decodeDisk(class Disk *disk) override;
@@ -112,11 +115,6 @@ public:
 
     // Returns the layout of this disk in form of a device descriptor
     struct FSDeviceDescriptor layout();
-
-    // Analyzes the boot block
-    BootBlockIdentifier bootBlockID();
-    BootBlockType bootBlockType();
-    const char *bootBlockName();
     
     
     //

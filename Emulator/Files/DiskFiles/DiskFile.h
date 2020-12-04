@@ -40,9 +40,14 @@ public:
     virtual long numSides() = 0;
     virtual long numCylinders() = 0;
     virtual long numSectors() = 0;
-    virtual long numTracks() { return numSides() * numCylinders(); }
-    virtual long numBlocks() { return numTracks() * numSectors(); }
-    
+    long numTracks() { return numSides() * numCylinders(); }
+    long numBlocks() { return numTracks() * numSectors(); }
+
+    // Analyzes the boot block
+    virtual BootBlockIdentifier bootBlockID() { return BB_UNKNOWN; }
+    virtual BootBlockType bootBlockType() { return BB_STANDARD; }
+    virtual const char *bootBlockName() { return ""; }
+
     
     //
     // Reading data

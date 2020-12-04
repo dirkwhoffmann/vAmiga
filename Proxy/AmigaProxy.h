@@ -739,6 +739,10 @@ struct SerialPortWrapper;
 @property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numBlocks;
 
+@property (readonly) BootBlockIdentifier bootBlockID;
+@property (readonly) BootBlockType bootBlockType;
+@property (readonly) NSString *bootBlockName;
+
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (void)readSector:(unsigned char *)dst block:(NSInteger)block;
 - (void)readSectorHex:(char *)dst block:(NSInteger)block count:(NSInteger)count;
@@ -758,10 +762,6 @@ struct SerialPortWrapper;
 + (instancetype)makeWithFile:(NSString *)path;
 + (instancetype)makeWithDiskType:(DiskType)type density:(DiskDensity)density;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
-
-@property (readonly) BootBlockIdentifier bootBlockID;
-@property (readonly) BootBlockType bootBlockType;
-@property (readonly) NSString *bootBlockName;
 
 - (void)formatDisk:(FSVolumeType)fs bootCode:(FSBootCode)bootCode;
 
