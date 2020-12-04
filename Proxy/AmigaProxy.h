@@ -759,6 +759,10 @@ struct SerialPortWrapper;
 + (instancetype)makeWithDiskType:(DiskType)type density:(DiskDensity)density;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
 
+@property (readonly) BootBlockIdentifier bootBlockID;
+@property (readonly) BootBlockType bootBlockType;
+@property (readonly) NSString *bootBlockName;
+
 - (void)formatDisk:(FSVolumeType)fs bootCode:(FSBootCode)bootCode;
 
 @end

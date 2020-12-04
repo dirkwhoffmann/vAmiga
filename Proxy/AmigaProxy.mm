@@ -1568,32 +1568,49 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return ADFFile::isADFFile([path fileSystemRepresentation]);
 }
-+ (instancetype) make:(ADFFile *)archive
++ (instancetype)make:(ADFFile *)archive
 {
     if (archive == NULL) return nil;
     return [[self alloc] initWithFile:archive];
 }
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
     ADFFile *archive = ADFFile::makeWithBuffer((const u8 *)buffer, length);
     return [self make: archive];
 }
-+ (instancetype) makeWithFile:(NSString *)path
++ (instancetype)makeWithFile:(NSString *)path
 {
     ADFFile *archive = ADFFile::makeWithFile([path fileSystemRepresentation]);
     return [self make: archive];
 }
-+ (instancetype) makeWithDiskType:(DiskType)type density:(DiskDensity)density
++ (instancetype)makeWithDiskType:(DiskType)type density:(DiskDensity)density
 {
     ADFFile *archive = ADFFile::makeWithDiskType(type, density);
     return [self make: archive];
 }
-+ (instancetype) makeWithDrive:(DriveProxy *)drive
++ (instancetype)makeWithDrive:(DriveProxy *)drive
 {
     Drive *d = [drive wrapper]->drive;
     ADFFile *archive = ADFFile::makeWithDisk(d->disk);
     return archive ? [self make: archive] : nil;
 }
+
+- (BootBlockIdentifier)bootBlockID
+{
+    return ((ADFFile *)wrapper->file)->bootBlockID();
+}
+
+- (BootBlockType)bootBlockType
+{
+    return ((ADFFile *)wrapper->file)->bootBlockType();
+}
+
+- (NSString *)bootBlockName
+{
+    const char *str = ((ADFFile *)wrapper->file)->bootBlockName();
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+
 - (void)formatDisk:(FSVolumeType)fs bootCode:(FSBootCode)bootCode
 {
     ((ADFFile *)wrapper->file)->formatDisk(fs, bootCode);

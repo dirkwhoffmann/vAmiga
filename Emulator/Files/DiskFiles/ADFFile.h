@@ -107,13 +107,18 @@ public:
     // Returns the location of the root block (DEPRECATED)
     u32 rootBlock();
     
-    // Returns the location of the bitmap block DEPRECATED)
+    // Returns the location of the bitmap block (DEPRECATED)
     u32 bitmapBlock();
 
     // Returns the layout of this disk in form of a device descriptor
     struct FSDeviceDescriptor layout();
 
-        
+    // Analyzes the boot block
+    BootBlockIdentifier bootBlockID();
+    BootBlockType bootBlockType();
+    const char *bootBlockName();
+    
+    
     //
     // Formatting
     //

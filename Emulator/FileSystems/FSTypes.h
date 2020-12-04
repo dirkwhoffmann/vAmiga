@@ -68,15 +68,15 @@ inline const char *sFSVolumeType(FSVolumeType value)
     }
 }
 
-VAMIGA_ENUM(long, FSBootCode)
+VAMIGA_ENUM(long, FSBootCode) // DEPRECATED: REPLACE BY BootBlockIdentifier
 {
     FS_BB_NONE,
     
-    // Standard boot blocks
+    // Standard
     FS_BB_KICK_1_3,
     FS_BB_KICK_2_0,
     
-    // Viruses (handle with care)
+    // Viruses
     FS_BB_SCA_VIRUS,
     FS_BB_BYTE_BANDIT_VIRUS
 };

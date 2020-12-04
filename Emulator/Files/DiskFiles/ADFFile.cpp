@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "Amiga.h"
+#include "Database.h"
 
 ADFFile::ADFFile()
 {
@@ -267,6 +268,24 @@ ADFFile::layout()
     result.partitions[0].bmBlocks.push_back(bitmap);
     
     return result;
+}
+
+BootBlockIdentifier
+ADFFile::bootBlockID()
+{
+    return bbID(data);
+}
+
+BootBlockType
+ADFFile::bootBlockType()
+{
+    return bbType(data);
+}
+
+const char *
+ADFFile::bootBlockName()
+{
+    return bbName(data);
 }
 
 bool

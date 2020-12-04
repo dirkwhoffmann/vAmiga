@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "FSDevice.h"
-#include "BootBlocks.h"
+#include "FSDatabase.h"
 
 FSBootBlock::FSBootBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
@@ -113,6 +113,9 @@ FSBootBlock::writeBootCode(FSBootCode bootCode, int page)
     
     debug(FS_DEBUG, "data = %p size = %zu\n", code, size);
 
+    debug("%d %d %d %d\n", sca_virus_bb[800], sca_virus_bb[822],
+          sca_virus_bb[900], sca_virus_bb[841]);
+    
     if (page == 0) {
         
         memset(data + 4, 0, bsize() - 4);

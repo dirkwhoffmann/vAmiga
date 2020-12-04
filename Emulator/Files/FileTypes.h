@@ -90,4 +90,26 @@ VAMIGA_ENUM(long, DecryptionError)
     DECRYPT_INVALID_ROM_KEY_FILE
 };
 
+VAMIGA_ENUM(long, BootBlockIdentifier)
+{
+    BB_NONE,
+    BB_UNKNOWN,
+    
+    // Standard
+    BB_KICK_1_3,
+    BB_KICK_2_0,
+    
+    // Viruses
+    BB_SCA_VIRUS,
+    BB_BYTE_BANDIT_VIRUS
+};
+
+VAMIGA_ENUM(long, BootBlockType)
+{
+    BB_STANDARD,
+    BB_VIRUS,
+    BB_UTILITY,
+    BB_GAME
+};
+
 #endif

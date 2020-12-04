@@ -7,8 +7,14 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _BOOT_BLOCKS_H
-#define _BOOT_BLOCKS_H
+#ifndef _FS_DATABASE__H
+#define _FS_DATABASE__H
+
+#include "FSTypes.h"
+
+//
+// Bootblock images
+//
 
 const u8 os13_bb[] = {
     
