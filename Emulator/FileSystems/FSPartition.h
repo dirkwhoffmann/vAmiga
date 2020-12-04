@@ -38,11 +38,21 @@ struct FSPartition : AmigaObject {
 
     
     //
+    // Factory methods
+    //
+    
+public:
+
+    // Creates a file system with a custom device descriptor
+    static FSPartition *makeWithFormat(FSDevice &ref, FSPartitionDescriptor &layout);
+
+    
+    //
     // Initializing
     //
     
-    FSPartition(FSDevice &ref, FSPartitionDescriptor layout);
-
+    FSPartition(FSDevice &ref);
+    
     const char *getDescription() override { return "FSPartition"; }
 
     // Prints a summary about this partition (called by FSDevice::info)

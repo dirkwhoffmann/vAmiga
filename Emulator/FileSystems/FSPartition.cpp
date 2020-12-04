@@ -10,41 +10,43 @@
 
 #include "FSDevice.h"
 
-FSPartition::FSPartition(FSDevice &ref, FSPartitionDescriptor layout) : dev(ref)
+FSPartition *
+FSPartition::makeWithFormat(FSDevice &dev, FSPartitionDescriptor &layout)
 {
-    dos         = layout.dos;
-    lowCyl      = layout.lowCyl;
-    highCyl     = layout.highCyl;
-    rootBlock   = layout.rootBlock;    
-    bmBlocks    = layout.bmBlocks;
-    bmExtBlocks = layout.bmExtBlocks;
+    FSPartition *p = new FSPartition(dev);
+
+    p->dos         = layout.dos;
+    p->lowCyl      = layout.lowCyl;
+    p->highCyl     = layout.highCyl;
+    p->rootBlock   = layout.rootBlock;
+    p->bmBlocks    = layout.bmBlocks;
+    p->bmExtBlocks = layout.bmExtBlocks;
     
-    firstBlock  = lowCyl * dev.numHeads * dev.numSectors;
-    lastBlock   = (highCyl + 1) * dev.numHeads * dev.numSectors - 1;
+    p->firstBlock  = p->lowCyl * dev.numHeads * dev.numSectors;
+    p->lastBlock   = (p->highCyl + 1) * dev.numHeads * dev.numSectors - 1;
     
     // Do some consistency checking
-    for (u32 i = firstBlock; i <= lastBlock; i++) assert(dev.blocks[i] == nullptr);
+    for (u32 i = p->firstBlock; i <= p->lastBlock; i++) assert(dev.blocks[i] == nullptr);
     
     // Create boot blocks
-    dev.blocks[firstBlock]     = new FSBootBlock(*this, firstBlock);
-    dev.blocks[firstBlock + 1] = new FSBootBlock(*this, firstBlock + 1);
+    dev.blocks[p->firstBlock]     = new FSBootBlock(*p, p->firstBlock);
+    dev.blocks[p->firstBlock + 1] = new FSBootBlock(*p, p->firstBlock + 1);
 
     // Create the root block
-    FSRootBlock *rb = new FSRootBlock(*this, layout.rootBlock);
+    FSRootBlock *rb = new FSRootBlock(*p, p->rootBlock);
     dev.blocks[layout.rootBlock] = rb;
     
     // Create the bitmap blocks
     for (auto& ref : layout.bmBlocks) {
         
-        debug("Creating bitmap block %d\n", ref);
-        dev.blocks[ref] = new FSBitmapBlock(*this, ref);
+        dev.blocks[ref] = new FSBitmapBlock(*p, ref);
     }
     
     // Add bitmap extension blocks
     FSBlock *pred = rb;
     for (auto& ref : layout.bmExtBlocks) {
         
-        dev.blocks[ref] = new FSBitmapExtBlock(*this, ref);
+        dev.blocks[ref] = new FSBitmapExtBlock(*p, ref);
         pred->setNextBmExtBlockRef(ref);
         pred = dev.blocks[ref];
     }
@@ -53,13 +55,20 @@ FSPartition::FSPartition(FSDevice &ref, FSPartitionDescriptor layout) : dev(ref)
     rb->addBitmapBlockRefs(layout.bmBlocks);
     
     // Add free blocks
-    for (u32 i = firstBlock; i <= lastBlock; i++) {
+    for (u32 i = p->firstBlock; i <= p->lastBlock; i++) {
         
         if (dev.blocks[i] == nullptr) {
-            dev.blocks[i] = new FSEmptyBlock(*this, i);
-            markAsFree(i);
+            dev.blocks[i] = new FSEmptyBlock(*p, i);
+            p->markAsFree(i);
         }
     }
+    
+    return p;
+}
+
+FSPartition::FSPartition(FSDevice &ref) : dev(ref)
+{
+    
 }
 
 void

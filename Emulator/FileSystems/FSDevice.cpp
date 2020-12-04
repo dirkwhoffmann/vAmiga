@@ -23,7 +23,9 @@ FSDevice::makeWithFormat(FSDeviceDescriptor &layout)
         
     // Create all partitions
     for (auto& descriptor : layout.partitions) {
-        dev->partitions.push_back(new FSPartition(*dev, descriptor));
+        
+        FSPartition *p = FSPartition::makeWithFormat(*dev, descriptor);
+        dev->partitions.push_back(p);
     }
 
     // Compute checksums for all blocks
