@@ -16,6 +16,7 @@
                 <outlet property="cylinderField" destination="gsN-a1-AKx" id="eZB-JP-LWr"/>
                 <outlet property="cylinderStepper" destination="DXv-Bl-lGI" id="5T4-aw-ra5"/>
                 <outlet property="cylinderText" destination="5Re-Zr-hdG" id="HdR-lw-HQp"/>
+                <outlet property="decontaminationButton" destination="9RQ-0r-XYW" id="jle-q8-bb1"/>
                 <outlet property="disclosureButton" destination="PmB-G5-Smv" id="Tor-wo-ONk"/>
                 <outlet property="diskIcon" destination="RFN-KV-keR" id="1Sj-nw-dxP"/>
                 <outlet property="errorStepper" destination="C6j-0G-lEV" id="wsw-Yg-lcW"/>
@@ -37,6 +38,7 @@
                 <outlet property="trackInfo" destination="FGU-ht-eVm" id="fYg-LP-VdC"/>
                 <outlet property="trackStepper" destination="JCB-vD-1ff" id="UgQ-pP-NEg"/>
                 <outlet property="trackText" destination="RFN-QD-W4P" id="uBN-e3-BY8"/>
+                <outlet property="virusIcon" destination="PlY-1q-QiH" id="Ous-rl-evW"/>
                 <outlet property="volumeInfo" destination="Hg0-1l-VFJ" id="Tl1-TK-NcC"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="88U-4F-aC0"/>
             </connections>
@@ -52,6 +54,11 @@
                 <rect key="frame" x="0.0" y="0.0" width="606" height="476"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RFN-KV-keR" userLabel="Icon">
+                        <rect key="frame" x="20" y="344" width="112" height="112"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="dd_adf" id="lFm-of-ZaD"/>
+                    </imageView>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tXt-ZO-VKK">
                         <rect key="frame" x="143" y="433" width="445" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -596,10 +603,21 @@ Gw
                             <action selector="strictAction:" target="-2" id="8o7-Db-5In"/>
                         </connections>
                     </button>
-                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RFN-KV-keR" userLabel="Icon">
-                        <rect key="frame" x="20" y="344" width="112" height="112"/>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9RQ-0r-XYW">
+                        <rect key="frame" x="494.5" y="436" width="92" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="dd_adf" id="lFm-of-ZaD"/>
+                        <buttonCell key="cell" type="roundTextured" title="Decontaminate" bezelStyle="texturedRounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="g6D-sI-5vT">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="decontaminationAction:" target="-2" id="81u-wv-zgc"/>
+                        </connections>
+                    </button>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PlY-1q-QiH">
+                        <rect key="frame" x="85" y="343" width="52" height="52"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="biohazard" id="G7M-ha-ITO"/>
                     </imageView>
                 </subviews>
             </view>
@@ -610,6 +628,7 @@ Gw
         </window>
     </objects>
     <resources>
+        <image name="biohazard" width="276" height="277"/>
         <image name="dd_adf" width="257" height="257"/>
     </resources>
 </document>

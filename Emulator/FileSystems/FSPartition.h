@@ -151,6 +151,9 @@ public:
     // Installs a boot block
     void makeBootable(long id);
 
+    // Eliminates boot block virus (if any)
+    void killVirus();
+    
     
     //
     // Integrity checking

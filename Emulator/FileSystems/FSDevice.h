@@ -150,9 +150,18 @@ public:
     FSName getName() { return partitions[cp]->getName(); }
     void setName(FSName name) { partitions[cp]->setName(name); }
     
+    
+    //
+    // Working with boot blocks
+    //
+    
+public:
     // Installs a boot block
     void makeBootable(long bootBlockID) { partitions[cp]->makeBootable(bootBlockID); }
 
+    // Removes a boot block virus from the current partition (if any)
+    void killVirus() { partitions[cp]->killVirus(); }
+    
     
     //
     // Accessing blocks

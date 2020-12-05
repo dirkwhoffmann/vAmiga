@@ -282,7 +282,7 @@ ADFFile::bootBlockName()
 }
 
 void
-ADFFile::eliminateVirus()
+ADFFile::killVirus()
 {
     msg("Overwriting boot block virus with ");
     

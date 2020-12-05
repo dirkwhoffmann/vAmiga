@@ -1270,6 +1270,11 @@ struct SerialPortWrapper { SerialPort *port; };
     return wrapper->volume->getCapacity();
 }
 
+- (void)killVirus
+{
+    wrapper->volume->killVirus();
+}
+
 - (FSBlockType) blockType:(NSInteger)blockNr
 {
     return wrapper->volume->blockType(blockNr);
@@ -1556,18 +1561,23 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (BootBlockType)bootBlockType
 {
-    return ((ADFFile *)wrapper->file)->bootBlockType();
+    return ((DiskFile *)wrapper->file)->bootBlockType();
 }
 
 - (NSString *)bootBlockName
 {
-    const char *str = ((ADFFile *)wrapper->file)->bootBlockName();
+    const char *str = ((DiskFile *)wrapper->file)->bootBlockName();
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 
-- (void)eliminateVirus
+- (BOOL)hasVirus
 {
-    ((ADFFile *)wrapper->file)->eliminateVirus();
+    return ((DiskFile *)wrapper->file)->hasVirus();
+}
+
+- (void)killVirus
+{
+    ((DiskFile *)wrapper->file)->killVirus();
 }
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset

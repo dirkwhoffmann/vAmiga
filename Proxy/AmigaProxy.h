@@ -653,21 +653,22 @@ struct SerialPortWrapper;
 @property (readonly) FSVolumeType dos;
 @property (readonly) NSInteger numBlocks;
 
-- (FSBlockType) blockType:(NSInteger)blockNr;
-- (FSItemType) itemType:(NSInteger)blockNr pos:(NSInteger)pos;
-- (FSErrorReport) check:(BOOL)strict;
-- (FSError) check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
-- (BOOL) isCorrupted:(NSInteger)blockNr;
-- (NSInteger) getCorrupted:(NSInteger)blockNr;
-- (NSInteger) nextCorrupted:(NSInteger)blockNr;
-- (NSInteger) prevCorrupted:(NSInteger)blockNr;
-- (void) printDirectory:(BOOL) recursive;
+- (void)killVirus;
+- (FSBlockType)blockType:(NSInteger)blockNr;
+- (FSItemType)itemType:(NSInteger)blockNr pos:(NSInteger)pos;
+- (FSErrorReport)check:(BOOL)strict;
+- (FSError)check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
+- (BOOL)isCorrupted:(NSInteger)blockNr;
+- (NSInteger)getCorrupted:(NSInteger)blockNr;
+- (NSInteger)nextCorrupted:(NSInteger)blockNr;
+- (NSInteger)prevCorrupted:(NSInteger)blockNr;
+- (void)printDirectory:(BOOL) recursive;
 
-- (NSInteger) readByte:(NSInteger)block offset:(NSInteger)offset;
-- (FSError) export:(NSString *)path;
-- (BOOL) exportBlock:(NSInteger)block buffer:(unsigned char *)buffer;
+- (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
+- (FSError)export:(NSString *)path;
+- (BOOL)exportBlock:(NSInteger)block buffer:(unsigned char *)buffer;
 
-- (void) dump;
+- (void)dump;
 
 @end
 
@@ -742,8 +743,9 @@ struct SerialPortWrapper;
 
 @property (readonly) BootBlockType bootBlockType;
 @property (readonly) NSString *bootBlockName;
+@property (readonly) BOOL hasVirus;
 
-- (void)eliminateVirus;
+- (void)killVirus;
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (void)readSector:(unsigned char *)dst block:(NSInteger)block;

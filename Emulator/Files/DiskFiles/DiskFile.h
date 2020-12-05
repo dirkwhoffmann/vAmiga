@@ -46,6 +46,7 @@ public:
     // Analyzes the boot block
     virtual BootBlockType bootBlockType() { return BB_STANDARD; }
     virtual const char *bootBlockName() { return ""; }
+    bool hasVirus() { return bootBlockType() == BB_VIRUS; }
 
     
     //
@@ -71,7 +72,7 @@ public:
     // Repairing
     //
 
-    virtual void eliminateVirus() { };
+    virtual void killVirus() { };
 
     
     //

@@ -10,9 +10,12 @@
 class ExporterDialog: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
+    @IBOutlet weak var virusIcon: NSImageView!
     @IBOutlet weak var title: NSTextField!
     @IBOutlet weak var trackInfo: NSTextField!
     @IBOutlet weak var volumeInfo: NSTextField!
+    @IBOutlet weak var bootInfo: NSTextField!
+    @IBOutlet weak var decontaminationButton: NSButton!
 
     @IBOutlet weak var disclosureButton: NSButton!
     @IBOutlet weak var previewScrollView: NSScrollView!
@@ -312,6 +315,9 @@ class ExporterDialog: DialogController {
         // Update the disclosure button state
         disclosureButton.state = shrinked ? .off : .on
         
+        // Hide the decontamination button for healthy disks
+        decontaminationButton.isHidden = disk?.hasVirus == false
+        
         // Hide some elements if the window is shrinked
         let items: [NSView] = [
             previewScrollView,
@@ -391,11 +397,7 @@ class ExporterDialog: DialogController {
         }
         
         diskIcon.image = NSImage.init(named: name)
-        
-        let frontimg = NSImage(named: "biohazard")
-        let frontimgview = NSImageView(image: frontimg!)
-        frontimgview.frame = CGRect(x: 112 - 32, y: 0, width: 32, height: 32)
-        diskIcon.addSubview(frontimgview)
+        virusIcon.isHidden = disk?.hasVirus == false
     }
 
     func updateTitleText() {
@@ -726,6 +728,14 @@ class ExporterDialog: DialogController {
     // Action methods
     //
 
+    @IBAction func decontaminationAction(_ sender: NSButton!) {
+        
+        track()
+        disk?.killVirus()
+        volume?.killVirus()
+        update()
+    }
+
     @IBAction func disclosureAction(_ sender: NSButton!) {
         
         shrinked ? expand() : shrink()
@@ -853,57 +863,7 @@ extension ExporterDialog: NSTableViewDataSource {
         
         return column == nil ? nil : Int(column!.identifier.rawValue)
     }
-    
-    /*
-    func buildHex(p: UnsafeMutablePointer<UInt8>, count: Int) -> String {
         
-        let hexDigits = Array(("0123456789ABCDEF ").utf16)
-        var chars: [unichar] = []
-        chars.reserveCapacity(3 * count)
-        
-        for i in 1 ... count {
-            
-            let byte = p[i]
-            chars.append(hexDigits[Int(byte / 16)])
-            chars.append(hexDigits[Int(byte % 16)])
-            chars.append(hexDigits[16])
-        }
-        
-        return String(utf16CodeUnits: chars, count: chars.count)
-    }
-    */
-    /*
-    func buildStrings() {
-        
-        track("Building strings for block \(blockNr)")
-        
-        let dst = UnsafeMutablePointer<UInt8>.allocate(capacity: 512)
-
-        if volume != nil {
-
-            // If a file system has been detected, read the block from there
-            volume!.exportBlock(blockNr, buffer: dst)
-
-        } else if disk != nil {
-
-            // If no file system is present, read the block from the disk file
-            disk?.readSector(dst, block: blockNr)
-            
-        } else {
-
-            sectorData[blockNr] = ""
-            return
-        }
-        
-        // Convert raw sector data to a string
-        for i in 0 ..< numberOfRows(in: previewTable) {
-            
-            let str = buildHex(p: dst + i * bytesPerRow, count: bytesPerRow)
-            sectorData[i] = str
-        }
-    }
-    */
-    
     func numberOfRows(in tableView: NSTableView) -> Int {
         
         return 512 / bytesPerRow

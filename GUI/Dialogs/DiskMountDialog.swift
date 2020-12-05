@@ -221,21 +221,14 @@ class DiskMountDialog: DialogController {
 
     @IBAction func decontaminateAction(_ sender: NSButton!) {
         
-        disk!.eliminateVirus()
+        disk!.killVirus()
         update()
     }
 
     @IBAction func insertDiskAction(_ sender: NSButton!) {
         
         track("insertDiskAction df\(sender.tag)")
-        
-        // If requested, wipe out any virus from the boot block
-        /*
-        if !virusButton.isHidden && virusButton.state == .on {
-            disk!.eliminateVirus()
-        }
-        */
-        
+                
         switch disk {
         
         case _ as ADFFileProxy:
