@@ -45,8 +45,8 @@ class ExporterDialog: DialogController {
     var savePanel: NSSavePanel!  // Used to export to files
     var openPanel: NSOpenPanel!  // Used to export to directories
 
-    let shrinkedHeight = CGFloat(176)
-    let expandedHeight = CGFloat(450)
+    let shrinkedHeight = CGFloat(196)
+    let expandedHeight = CGFloat(476)
 
     var driveNr: Int?
     var drive: DriveProxy? { return driveNr == nil ? nil : amiga.df(driveNr!) }
@@ -191,7 +191,7 @@ class ExporterDialog: DialogController {
         // Try to decode the disk with the ADF decoder
         disk = ADFFileProxy.make(withDrive: drive)
         
-        // It it is an ADF, try to extract the file system
+        // If it is an ADF, try to extract the file system
         if disk != nil { volume = FSDeviceProxy.make(withADF: disk as? ADFFileProxy) }
         
         // REMOVE ASAP
@@ -289,7 +289,7 @@ class ExporterDialog: DialogController {
         
         // Force the preview table to appear at the correct vertical position
         var r = previewScrollView.frame
-        r.origin.y = 91
+        r.origin.y = 82
         previewScrollView.frame = r
 
         exportButton.keyEquivalent = shrinked ? "\r" : ""
@@ -320,7 +320,8 @@ class ExporterDialog: DialogController {
             trackText, trackField, trackStepper,
             sectorText, sectorField, sectorStepper,
             blockText, blockField, blockStepper,
-            corruptionText, corruptionStepper
+            corruptionText, corruptionStepper,
+            info1, info2
         ]
         for item in items { item.isHidden = shrinked }
         
@@ -390,6 +391,11 @@ class ExporterDialog: DialogController {
         }
         
         diskIcon.image = NSImage.init(named: name)
+        
+        let frontimg = NSImage(named: "biohazard")
+        let frontimgview = NSImageView(image: frontimg!)
+        frontimgview.frame = CGRect(x: 112 - 32, y: 0, width: 32, height: 32)
+        diskIcon.addSubview(frontimgview)
     }
 
     func updateTitleText() {
@@ -444,19 +450,6 @@ class ExporterDialog: DialogController {
         if volume != nil {
             
             text = volume!.dos.description
-            /*
-            switch volume!.dos {
-            case .OFS:      text = "Original File System (OFS)"
-            case .OFS_INTL: text = "Original File System (OFS-INTL)"
-            case .OFS_DC:   text = "Original File System (OFS-DC)"
-            case .OFS_LNFS: text = "Original File System (OFS-LNFS)"
-            case .FFS:      text = "Fast File System (FFS)"
-            case .FFS_INTL: text = "Fast File System (FFS-INTL)"
-            case .FFS_DC:   text = "Fast File System (FFS-DC)"
-            case .FFS_LNFS: text = "Fast File System (FFS-LNFS)"
-            default:        text = "Unknown file system"
-            }
-            */
             
             if let errors = errorReport?.corruptedBlocks, errors > 0 {
                 
