@@ -246,7 +246,7 @@ class MyDocument: NSDocument {
             if let df = parent.dragAndDropDrive?.nr {
                 amiga.diskController.insert(df, adf: amigaAttachment as? ADFFileProxy)
             } else {
-                runDiskMountDialog()
+                runImporterDialog()
             }
             
         case _ as HDFFileProxy:
@@ -279,7 +279,7 @@ class MyDocument: NSDocument {
             if let df = parent.dragAndDropDrive?.nr {
                 amiga.diskController.insert(df, img: amigaAttachment as? IMGFileProxy)
             } else {
-                runDiskMountDialog()
+                runImporterDialog()
             }
 
         case _ as DMSFileProxy:
@@ -287,7 +287,7 @@ class MyDocument: NSDocument {
             if let df = parent.dragAndDropDrive?.nr {
                 amiga.diskController.insert(df, dms: amigaAttachment as? DMSFileProxy)
             } else {
-                runDiskMountDialog()
+                runImporterDialog()
             }
 
         case _ as EXEFileProxy:
@@ -295,7 +295,7 @@ class MyDocument: NSDocument {
             if let df = parent.dragAndDropDrive?.nr {
                 amiga.diskController.insert(df, exe: amigaAttachment as? EXEFileProxy)
             } else {
-                runDiskMountDialog()
+                runImporterDialog()
             }
 
         case _ as DIRFileProxy:
@@ -303,7 +303,7 @@ class MyDocument: NSDocument {
             if let df = parent.dragAndDropDrive?.nr {
                 amiga.diskController.insert(df, dir: amigaAttachment as? DIRFileProxy)
             } else {
-                runDiskMountDialog()
+                runImporterDialog()
             }
 
         default:
@@ -313,9 +313,9 @@ class MyDocument: NSDocument {
         return true
     }
     
-    func runDiskMountDialog() {
-        let name = NSNib.Name("DiskMountDialog")
-        let controller = DiskMountDialog.make(parent: parent, nibName: name)
+    func runImporterDialog() {
+        let name = NSNib.Name("ImporterDialog")
+        let controller = ImporterDialog.make(parent: parent, nibName: name)
         controller?.showSheet()
     }
 

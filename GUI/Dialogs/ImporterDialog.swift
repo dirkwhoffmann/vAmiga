@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class DiskMountDialog: DialogController {
+class ImporterDialog: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
     @IBOutlet weak var title: NSTextField!
@@ -263,7 +263,7 @@ class DiskMountDialog: DialogController {
      }
 }
 
-extension DiskMountDialog: NSWindowDelegate {
+extension ImporterDialog: NSWindowDelegate {
     
     func windowDidResize(_ notification: Notification) {
         
@@ -285,7 +285,7 @@ extension DiskMountDialog: NSWindowDelegate {
 // iCarousel data source and delegate
 //
 
-extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
+extension ImporterDialog: iCarouselDataSource, iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
         

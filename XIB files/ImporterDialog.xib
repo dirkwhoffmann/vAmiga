@@ -6,7 +6,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="DiskMountDialog" customModule="vAmiga" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="ImporterDialog" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="biohazardIcon" destination="3Sm-XE-aZg" id="Q6f-p6-Osq"/>
                 <outlet property="carousel" destination="RBx-ga-ubq" id="DRT-Xb-reu"/>
