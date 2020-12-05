@@ -220,10 +220,9 @@ const u8 bbandit_virus_bb[] = {
 const BBRecord bbRecord[] = {
 
     {
-        BB_NONE,
         "No Boot Block",
-        { 6,0,7,0,8,0,9,0,10,0,11,0,12,0 }, nullptr,
-        BB_STANDARD
+        { 6,0,7,0,8,0,9,0,10,0,11,0,12,0 },
+        nullptr, 0, BB_STANDARD
     },
 
     //
@@ -231,16 +230,14 @@ const BBRecord bbRecord[] = {
     //
     
     {
-        BB_OFS,
         "AmigaDOS Standard Bootblock 1.3",
-        { 4,0xc0, 5,0x20, 6,0x0f, 7,0x19, 8,0x00, 9,0x00, 10,0x03}, os13_bb,
-        BB_STANDARD
+        { 4,0xc0, 5,0x20, 6,0x0f, 7,0x19, 8,0x00, 9,0x00, 10,0x03},
+        os13_bb, sizeof(os13_bb), BB_STANDARD
     },
     {
-        BB_FFS,
         "AmigaDOS Standard Bootblock 2.0",
-        { 4,0xe3, 5,0x3d, 6,0x0e, 7,0x72, 8,0x00, 9,0x00, 10,0x03 }, os20_bb,
-        BB_STANDARD
+        { 4,0xe3, 5,0x3d, 6,0x0e, 7,0x72, 8,0x00, 9,0x00, 10,0x03 },
+        os20_bb, sizeof(os20_bb), BB_STANDARD
     },
     
     //
@@ -248,16 +245,14 @@ const BBRecord bbRecord[] = {
     //
 
     {
-        BB_SCA_VIRUS,
         "SCA Virus",
-        { 800,101,822,97,900,115,841,71,217,231,9,72,435,7 }, sca_virus_bb,
-        BB_VIRUS
+        { 800,101,822,97,900,115,841,71,217,231,9,72,435,7 },
+        sca_virus_bb, sizeof(sca_virus_bb), BB_VIRUS
     },
     {
-        BB_BYTE_BANDIT_VIRUS,
         "Byte Bandit 1 Virus",
-        { 18,114,25,66,32,66,35,100,335,252,513,196,639,188 }, bbandit_virus_bb,
-        BB_VIRUS
+        { 18,114,25,66,32,66,35,100,335,252,513,196,639,188 },
+        bbandit_virus_bb, sizeof(bbandit_virus_bb), BB_VIRUS
     }
 };
 
@@ -278,7 +273,6 @@ BootBlockImage::BootBlockImage(const u8 *buffer)
         
         if (j == 7) {
             
-            this->id   = bbRecord[i].id;
             this->type = bbRecord[i].type;
             this->name = bbRecord[i].name;
             return;
@@ -293,7 +287,7 @@ BootBlockImage::BootBlockImage(const char *name)
     for (size_t i = 0; i < sizeof(bbRecord) / sizeof(BBRecord); i++) {
         
         if (strcmp(bbRecord[i].name, name) == 0) {
-            this->id   = bbRecord[i].id;
+            memcpy(this->data, bbRecord[i].image, bbRecord[i].size);
             this->type = bbRecord[i].type;
             this->name = bbRecord[i].name;
             return;
@@ -319,39 +313,6 @@ BootBlockImage::BootBlockImage(long bootBlockID)
     *this = bb;
 }
 
-
-/*
-BootBlockImage::BootBlockImage(BootBlockIdentifier id)
-{
-    memset(data, 0, 1024);
-
-    switch (id) {
-            
-        case BB_OFS:
-            memcpy(data, os13_bb, sizeof(os13_bb));
-            break;
-            
-        case BB_FFS:
-            memcpy(data, os20_bb, sizeof(os20_bb));
-            break;
-            
-        case BB_SCA_VIRUS:
-            memcpy(data, sca_virus_bb, sizeof(sca_virus_bb));
-            break;
-
-        case BB_BYTE_BANDIT_VIRUS:
-            memcpy(data, bbandit_virus_bb, sizeof(bbandit_virus_bb));
-            break;
-            
-        default:
-            assert(false);
-            return;
-    }
-    
-    detect();
-}
-*/
-
 void
 BootBlockImage::write(u8 *buffer, size_t first, size_t last)
 {
@@ -359,32 +320,5 @@ BootBlockImage::write(u8 *buffer, size_t first, size_t last)
     
     for (size_t i = 0; i < last - first; i++) {
         buffer[i] = data[first + i];
-    }
-}
-
-void
-BootBlockImage::detect()
-{
-    size_t i,j;
-    
-    for (i = 0; i < sizeof(bbRecord) / sizeof(BBRecord); i++) {
-        
-        printf("i = %zu\n",i);
-        
-        for (j = 0; j < 7; j++) {
-            
-            u16 pos = bbRecord[i].signature[2*j];
-            u16 val = bbRecord[i].signature[2*j + 1];
-            printf("Expected: %d at %d. Found: %d\n", val, pos, data[pos]);
-            if (pos && data[pos] != val) break;
-        }
-        
-        if (j == 7) {
-            
-            id = bbRecord[i].id;
-            type = bbRecord[i].type;
-            name = bbRecord[i].name;
-            return;
-        }
     }
 }

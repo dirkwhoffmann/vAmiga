@@ -44,7 +44,6 @@ public:
     long numBlocks() { return numTracks() * numSectors(); }
 
     // Analyzes the boot block
-    virtual BootBlockIdentifier bootBlockID() { return BB_UNKNOWN; }
     virtual BootBlockType bootBlockType() { return BB_STANDARD; }
     virtual const char *bootBlockName() { return ""; }
 

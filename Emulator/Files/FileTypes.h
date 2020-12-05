@@ -90,43 +90,6 @@ VAMIGA_ENUM(long, DecryptionError)
     DECRYPT_INVALID_ROM_KEY_FILE
 };
 
-VAMIGA_ENUM(long, BootBlockIdentifier)
-{
-    BB_NONE,
-    BB_UNKNOWN,
-    
-    // Standard (DEPRECATED)
-    // BB_KICK_1_3,
-    // BB_KICK_2_0,
-    
-    // Standard boot blocks
-    BB_OFS,
-    BB_FFS,
-    BB_OFS_INTL,
-    BB_FFS_INTL,
-    BB_OFS_DC,
-    BB_FFS_DC,
-    BB_OFS_LNFS,
-    BB_FFS_LNFS,
-
-    // REMOVE ASAP
-    BB_BEERMON1,
-    BB_BEERMON2,
-    BB_20_FFS,
-    BB_20_FFS_INTL,
-    BB_20_OFS,
-    BB_20_OFS_INTL,
-    BB_30_FFS_DIRCACHE,
-    BB_30_FFS_INTL_DIRCACHE,
-    BB_30_FFS_INTL,
-    BB_FILLED,
-    BB_1x,
-    
-    // Viruses
-    BB_SCA_VIRUS,
-    BB_BYTE_BANDIT_VIRUS
-};
-
 VAMIGA_ENUM(long, BootBlockType)
 {
     BB_STANDARD,

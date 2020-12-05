@@ -443,6 +443,8 @@ class ExporterDialog: DialogController {
         
         if volume != nil {
             
+            text = volume!.dos.description
+            /*
             switch volume!.dos {
             case .OFS:      text = "Original File System (OFS)"
             case .OFS_INTL: text = "Original File System (OFS-INTL)"
@@ -454,6 +456,7 @@ class ExporterDialog: DialogController {
             case .FFS_LNFS: text = "Fast File System (FFS-LNFS)"
             default:        text = "Unknown file system"
             }
+            */
             
             if let errors = errorReport?.corruptedBlocks, errors > 0 {
                 

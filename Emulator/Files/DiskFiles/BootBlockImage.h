@@ -14,10 +14,10 @@
 
 typedef struct
 {
-    BootBlockIdentifier id;
     const char *name;
     u16 signature[14];
     const u8 *image;
+    size_t size;
     BootBlockType type;
 }
 BBRecord;
@@ -30,7 +30,6 @@ class BootBlockImage {
 public:
     
     // Result of the data inspection
-    BootBlockIdentifier id = BB_UNKNOWN;
     BootBlockType type = BB_STANDARD;
     const char *name = "Unknown boot block";
     
@@ -38,18 +37,9 @@ public:
     BootBlockImage(const u8 *buffer);
     BootBlockImage(const char *name);
     BootBlockImage(long id);
-
-    // BootBlockImage(const unsigned char *buffer);
-
-    // BootBlockImage(BootBlockIdentifier id);
     
     // Exports the image
     void write(u8 *buffer, size_t first = 0, size_t last = 0);
-
-private:
-    
-    // Searches the data base
-    void detect();
 };
 
 #endif

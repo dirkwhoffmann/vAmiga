@@ -740,7 +740,6 @@ struct SerialPortWrapper;
 @property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numBlocks;
 
-@property (readonly) BootBlockIdentifier bootBlockID;
 @property (readonly) BootBlockType bootBlockType;
 @property (readonly) NSString *bootBlockName;
 

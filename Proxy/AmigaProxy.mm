@@ -1554,11 +1554,6 @@ struct SerialPortWrapper { SerialPort *port; };
     return ((DiskFile *)wrapper->file)->numBlocks();
 }
 
-- (BootBlockIdentifier)bootBlockID
-{
-    return ((ADFFile *)wrapper->file)->bootBlockID();
-}
-
 - (BootBlockType)bootBlockType
 {
     return ((ADFFile *)wrapper->file)->bootBlockType();

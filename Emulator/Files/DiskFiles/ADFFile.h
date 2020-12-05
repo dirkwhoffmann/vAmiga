@@ -85,7 +85,6 @@ public:
     long numSides() override;
     long numCylinders() override;
     long numSectors() override;
-    BootBlockIdentifier bootBlockID() override;
     BootBlockType bootBlockType() override;
     const char *bootBlockName() override;
     

@@ -66,7 +66,6 @@ public:
     long numSides() override { return adf->numSides(); }
     long numCylinders() override { return adf->numCylinders(); }
     long numSectors() override { return adf->numSectors(); }
-    BootBlockIdentifier bootBlockID() override { return adf->bootBlockID(); }
     BootBlockType bootBlockType() override { return adf->bootBlockType(); }
     const char *bootBlockName() override { return adf->bootBlockName(); }
     void eliminateVirus() override { adf->eliminateVirus(); }

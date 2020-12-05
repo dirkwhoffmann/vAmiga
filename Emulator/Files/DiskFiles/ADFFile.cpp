@@ -269,12 +269,6 @@ ADFFile::layout()
     return result;
 }
 
-BootBlockIdentifier
-ADFFile::bootBlockID()
-{
-    return BootBlockImage((const u8 *)data).id;
-}
-
 BootBlockType
 ADFFile::bootBlockType()
 {
