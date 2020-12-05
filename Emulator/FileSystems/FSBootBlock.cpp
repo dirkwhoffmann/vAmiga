@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "FSDevice.h"
-#include "FSDatabase.h"
 #include "BootBlockImage.h"
 
 FSBootBlock::FSBootBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)

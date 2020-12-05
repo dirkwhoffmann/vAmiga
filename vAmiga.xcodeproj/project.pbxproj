@@ -533,7 +533,6 @@
 		50E5753F24C01AFA00309084 /* EncryptedRomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EncryptedRomFile.h; sourceTree = "<group>"; };
 		50E79BE7232D123000D296FB /* AmigaComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaComponent.cpp; sourceTree = "<group>"; };
 		50E79BE8232D123000D296FB /* AmigaComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaComponent.h; sourceTree = "<group>"; };
-		50EAAC1C257954B80060F298 /* FSDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDatabase.h; sourceTree = "<group>"; };
 		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
 		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
 		50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportVideoDialog.xib; sourceTree = "<group>"; };
@@ -715,7 +714,6 @@
 				507DF0B22549A6220079BB98 /* FSFileListBlock.cpp */,
 				507DF0B72549A63C0079BB98 /* FSDataBlock.h */,
 				507DF0B62549A63C0079BB98 /* FSDataBlock.cpp */,
-				50EAAC1C257954B80060F298 /* FSDatabase.h */,
 			);
 			path = FileSystems;
 			sourceTree = "<group>";
