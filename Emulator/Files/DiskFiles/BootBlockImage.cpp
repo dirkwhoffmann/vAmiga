@@ -218,7 +218,7 @@ const u8 bbandit_virus_bb[] = {
 //
 
 #define VIRUS(n,x1,v1,x2,v2,x3,v3,x4,v4,x5,v5,x6,v6,x7,v7) \
-{ n, { x1,v1 } , nullptr, 0, BB_VIRUS }
+{ n, { x1,v1,x2,v2,x3,v3,x4,v4,x5,v5,x6,v6,x7,v7 } , nullptr, 0, BB_VIRUS }
 
 const BBRecord bbRecord[] = {
 
@@ -319,6 +319,7 @@ const BBRecord bbRecord[] = {
           1017,65,1000,116,889,114,466,156,437,24,232,254,317,60),
     VIRUS("Avirex Timebomb v1.0 Virus",
           833,84,834,73,843,86,844,49,846,48,873,65,410,83),
+
     VIRUS("Bad Bytes 1 Virus",
           4,247,6,232,922,72,949,83,957,76,990,83,1002,83),
     VIRUS("Bad Bytes 2 Virus",
@@ -432,7 +433,38 @@ const BBRecord bbRecord[] = {
     VIRUS("Byte Warrior Virus [MAD 3a]",
           198,73,193,65,195,0,4,76,283,60,545,252,801,114),
     VIRUS("Byte Warrior  Virus [Mad 3b]",
-          192,77,196,73,21,223,39,64,5,73,48,112,56,108)
+          192,77,196,73,21,223,39,64,5,73,48,112,56,108),
+    
+    VIRUS("Cascade Virus",
+          997,99,1003,50,1005,49,302,65,15,68,171,250,254,76),
+    VIRUS("CCCP Virus",
+          122,78,84,67,87,80,90,73,93,83,561,244,859,200),
+    VIRUS("CCCP.Delta Virus",
+          84,68,89,86,93,83,12,72,268,116,617,134,792,81),
+    VIRUS("Claas Abraham Virus",
+          24,0,26,112,28,12,33,0,36,102,38,97,44,115),
+    VIRUS("Claas Abraham Virus [Decoded]",
+          790,67,798,114,807,117,823,107,429,255,119,252,520,1),
+    VIRUS("CLI-Manager Virus",
+          864,42,825,75,879,99,936,114,911,252,777,105,697,249),
+    VIRUS("CList Virus",
+          50,97,53,56,872,97,876,34,880,252,885,238,890,177),
+    VIRUS("Clonk! Antivirus Virus",
+          842,84,851,65,861,67,874,73,882,69,917,79,974,79),
+    VIRUS("Cobra Virus",
+          775,67,781,72,787,87,742,107,249,234,47,121,127,213),
+    VIRUS("Coder's Nightmare Virus",
+          16,67,71,99,90,67,94,82,103,85,115,117,287,154),
+    VIRUS("CopyLock Virus",
+          46,76,39,169,27,0,17,124,1022,250,1023,237,5,111),
+    VIRUS("Corona Covid-19 Virus",
+          471,111,211,233,100,0,244,209,328,0,390,12,439,68),
+    VIRUS("Cracker Exterminator Virus",
+          611,187,629,171,754,173,725,182,766,177,510,78,29,120),
+    VIRUS("Cracker Exterminator Virus [Decoded]",
+          16,84,21,82,31,101,38,111,686,67,635,99,731,97),
+    VIRUS("Crackright Virus (KS1.3)",
+          111,58,141,142,238,82,329,255,492,7,587,255,615,42),
 };
 
 
@@ -444,14 +476,20 @@ BootBlockImage::BootBlockImage(const u8 *buffer)
     for (i = 0; i < sizeof(bbRecord) / sizeof(BBRecord); i++) {
                 
         for (j = 0; j < 7; j++) {
-            
+
+            printf("%d %d %d\n", bbRecord[i].signature[2*j], bbRecord[i].signature[2*j + 1], data[bbRecord[i].signature[2*j]]);
+
             u16 pos = bbRecord[i].signature[2*j];
             u16 val = bbRecord[i].signature[2*j + 1];
             if (pos && data[pos] != val) break;
+            
+            printf("%s: %zu Matches %d\n", bbRecord[i].name, j, val);
         }
         
         if (j == 7) {
-            
+
+            printf("%s: Match found!!!\n", bbRecord[i].name);
+
             this->type = bbRecord[i].type;
             this->name = bbRecord[i].name;
             return;
