@@ -35,7 +35,7 @@ struct FSBootBlock : FSBlock {
     // Block specific methods
     //
 
-    void writeBootCode(BootBlockIdentifier id, int page);
+    void writeBootBlock(long id, int page);
 };
 
 #endif

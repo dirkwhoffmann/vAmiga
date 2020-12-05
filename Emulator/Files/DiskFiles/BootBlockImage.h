@@ -15,9 +15,10 @@
 typedef struct
 {
     BootBlockIdentifier id;
-    BootBlockType type;
     const char *name;
     u16 signature[14];
+    const u8 *image;
+    BootBlockType type;
 }
 BBRecord;
 
@@ -34,8 +35,13 @@ public:
     const char *name = "Unknown boot block";
     
     // Constructors
-    BootBlockImage(const unsigned char *buf);
-    BootBlockImage(BootBlockIdentifier id);
+    BootBlockImage(const u8 *buffer);
+    BootBlockImage(const char *name);
+    BootBlockImage(long id);
+
+    // BootBlockImage(const unsigned char *buffer);
+
+    // BootBlockImage(BootBlockIdentifier id);
     
     // Exports the image
     void write(u8 *buffer, size_t first = 0, size_t last = 0);

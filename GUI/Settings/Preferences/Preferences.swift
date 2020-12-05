@@ -31,10 +31,6 @@ class Preferences {
         set { blankDiskFormat = FSVolumeType.init(rawValue: newValue)! }
     }
     var bootBlock = GeneralDefaults.std.bootBlock
-    var bootBlockIntValue: Int {
-        get { return Int(bootBlock.rawValue) }
-        set { bootBlock = BootBlockIdentifier.init(rawValue: newValue)! }
-    }
     var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
     var driveSounds = GeneralDefaults.std.driveSounds
     var driveSoundPan = GeneralDefaults.std.driveSoundPan
@@ -183,7 +179,7 @@ class Preferences {
            
         // Floppy
         blankDiskFormatIntValue = defaults.integer(forKey: Keys.Gen.blankDiskFormat)
-        bootBlockIntValue = defaults.integer(forKey: Keys.Gen.bootBlock)
+        bootBlock = defaults.integer(forKey: Keys.Gen.bootBlock)
         ejectWithoutAsking = defaults.bool(forKey: Keys.Gen.ejectWithoutAsking)
         driveSounds = defaults.bool(forKey: Keys.Gen.driveSounds)
         driveSoundPan = defaults.double(forKey: Keys.Gen.driveSoundPan)
@@ -210,7 +206,7 @@ class Preferences {
         
         // Floppy
         defaults.set(blankDiskFormatIntValue, forKey: Keys.Gen.blankDiskFormat)
-        defaults.set(bootBlockIntValue, forKey: Keys.Gen.bootBlock)
+        defaults.set(bootBlock, forKey: Keys.Gen.bootBlock)
         defaults.set(ejectWithoutAsking, forKey: Keys.Gen.ejectWithoutAsking)
         defaults.set(driveSounds, forKey: Keys.Gen.driveSounds)
         defaults.set(driveSoundPan, forKey: Keys.Gen.driveSoundPan)

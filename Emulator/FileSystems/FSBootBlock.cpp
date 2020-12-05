@@ -84,14 +84,14 @@ FSBootBlock::dump()
 }
 
 void
-FSBootBlock::writeBootCode(BootBlockIdentifier id, int page)
+FSBootBlock::writeBootBlock(long bootBlockID, int page)
 {
     assert(page == 0 || page == 1);
     
-    debug(FS_DEBUG, "writeBootCode(id: %d, page: %d)\n", id, page);
+    debug(FS_DEBUG, "writeBootCode(id: %d, page: %d)\n", bootBlockID, page);
     
     // Read boot block image from the database
-    BootBlockImage image = BootBlockImage(id);
+    BootBlockImage image = BootBlockImage(bootBlockID);
     
     if (page == 0) {
         image.write(data + 4, 4, 511); // Write 508 bytes (skip header)

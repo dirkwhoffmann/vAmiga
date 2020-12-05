@@ -11,129 +11,6 @@
 #include <string.h>
 #include <stdio.h>
 
-//
-// Bootblock signatures
-//
-
-const BBRecord bbRecord[] = {
-
-    {
-        BB_NONE, BB_STANDARD,
-        "No Boot Block",
-        { 6,0,7,0,8,0,9,0,10,0,11,0,12,0 }
-    },
-
-    //
-    // Standard boot blocks
-    //
-    
-    {
-        BB_OFS, BB_STANDARD,
-        "AmigaDOS Standard Bootblock (OFS)",
-        { 3,0,6,36,22,103,40,100,48,97,17,174,1,79 }
-    },
-    {
-        BB_FFS, BB_STANDARD,
-        "AmigaDOS Standard Bootblock (FFS)",
-        { 3,1,4,227,29,233,68,108,506,0,760,0,44,255 }
-    },
-    {
-        BB_OFS_INTL, BB_STANDARD,
-        "AmigaDOS Standard Bootblock (OFS-INTL)",
-        { 3,2,6,36,22,103,40,100,48,97,17,174,1,79 }
-    },
-    {
-        BB_FFS_INTL, BB_STANDARD,
-        "AmigaDOS Standard Bootblock (FFS-INTL)",
-        { 3,3,4,227,29,233,68,108,506,0,760,0,44,255 }
-    },
-    {
-        BB_OFS_DC, BB_STANDARD,
-        "AmigaDOS Standard Bootblock (OFS-DC)",
-        { 3,4,6,36,22,103,40,100,48,97,17,174,1,79 }
-    },
-    {
-        BB_FFS_DC, BB_STANDARD,
-        "AmigaDOS Standard Bootblock (FFS-DC)",
-        { 3,5,4,227,29,233,68,108,506,0,760,0,44,255 }
-    },
-    {
-        BB_OFS_LNFS, BB_STANDARD,
-        "AmigaDOS Standard Bootblock (OFS-LNFS)",
-        { 3,6,6,36,22,103,40,100,48,97,17,174,1,79 }
-    },
-    {
-        BB_FFS_LNFS, BB_STANDARD,
-        "AmigaDOS Standard Bootblock (FFS-LNFS)",
-        { 3,7,4,227,29,233,68,108,506,0,760,0,44,255 }
-    },
-    {
-        BB_BEERMON1, BB_STANDARD,
-        "AmigaDOS Standard - 1.x OFS",
-        { 4,66,7,82,13,250,21,216,35,174,43,174,48,103 }
-    },
-    {
-        BB_BEERMON2, BB_STANDARD,
-        "AmigaDOS Standard - 1.x OFS",
-        { 5,69,7,82,37,250,47,114,27,104,32,78,47,114 }
-    },
-    {
-        BB_20_FFS, BB_STANDARD,
-        "AmigaDOS Standard - 2.0 FFS",
-        { 3,1,4,227,29,233,68,108,506,0,760,0,44,255 }
-    },
-    {
-        BB_20_FFS_INTL, BB_STANDARD,
-        "AmigaDOS Standard - 2.0 FFS International",
-        { 7,112,4,227,3,3,5,61,6,14,38,67,64,100 }
-    },
-    {
-        BB_20_OFS, BB_STANDARD,
-        "AmigaDOS Standard - 2.0 OFS",
-        { 7,115,4,227,5,61,35,174,73,114,42,78,28,8 }
-    },
-    {
-        BB_20_OFS_INTL, BB_STANDARD,
-        "AmigaDOS Standard - 2.0 OFS International",
-        { 7,113,4,227,5,61,37,98,251,0,64,100,44,255 }
-    },
-    {
-        BB_30_FFS_DIRCACHE, BB_STANDARD,
-        "AmigaDOS Standard - 3.0 FFS Dircache",
-        { 3,4,4,227,5,61,6,14,7,111,17,37,827,0 }
-    },
-    {
-        BB_30_FFS_INTL_DIRCACHE, BB_STANDARD,
-        "AmigaDOS Standard - 3.0 FFS International DirCache",
-        { 3,5,4,227,5,61,6,14,42,78,79,97,60,112 }
-    },
-    {
-        BB_FILLED, BB_STANDARD,
-        "AmigaDOS Standard - Filled Bootblock (FFS)",
-        { 3,1,4,251,5,89,7,177,281,79,371,92,546,83 }
-    },
-    {
-        BB_1x, BB_STANDARD,
-        "AmigaDOS Standard 1.x Bootblock",
-        { 4,170,6,36,22,103,40,100,48,97,17,174,1,79 }
-    },
-
-    
-    //
-    // Viruses
-    //
-
-    {
-        BB_SCA_VIRUS, BB_VIRUS,
-        "SCA Virus",
-        { 800,101,822,97,900,115,841,71,217,231,9,72,435,7 }
-    },
-    {
-        BB_BYTE_BANDIT_VIRUS, BB_VIRUS,
-        "Byte Bandit 1 Virus",
-        { 18,114,25,66,32,66,35,100,335,252,513,196,639,188 }
-    }
-};
 
 //
 // Bootblock images
@@ -335,12 +212,115 @@ const u8 bbandit_virus_bb[] = {
   0x00, 0x64, 0x6f, 0x73, 0x2e, 0x6c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79
 };
 
-BootBlockImage::BootBlockImage(const u8 *buf)
+
+//
+// Bootblock signatures
+//
+
+const BBRecord bbRecord[] = {
+
+    {
+        BB_NONE,
+        "No Boot Block",
+        { 6,0,7,0,8,0,9,0,10,0,11,0,12,0 }, nullptr,
+        BB_STANDARD
+    },
+
+    //
+    // Standard boot blocks
+    //
+    
+    {
+        BB_OFS,
+        "AmigaDOS Standard Bootblock 1.3",
+        { 4,0xc0, 5,0x20, 6,0x0f, 7,0x19, 8,0x00, 9,0x00, 10,0x03}, os13_bb,
+        BB_STANDARD
+    },
+    {
+        BB_FFS,
+        "AmigaDOS Standard Bootblock 2.0",
+        { 4,0xe3, 5,0x3d, 6,0x0e, 7,0x72, 8,0x00, 9,0x00, 10,0x03 }, os20_bb,
+        BB_STANDARD
+    },
+    
+    //
+    // Viruses
+    //
+
+    {
+        BB_SCA_VIRUS,
+        "SCA Virus",
+        { 800,101,822,97,900,115,841,71,217,231,9,72,435,7 }, sca_virus_bb,
+        BB_VIRUS
+    },
+    {
+        BB_BYTE_BANDIT_VIRUS,
+        "Byte Bandit 1 Virus",
+        { 18,114,25,66,32,66,35,100,335,252,513,196,639,188 }, bbandit_virus_bb,
+        BB_VIRUS
+    }
+};
+
+
+BootBlockImage::BootBlockImage(const u8 *buffer)
 {
-    memcpy(data, buf, 1024);
-    detect();
+    memcpy(data, buffer, 1024);
+    size_t i,j;
+    
+    for (i = 0; i < sizeof(bbRecord) / sizeof(BBRecord); i++) {
+                
+        for (j = 0; j < 7; j++) {
+            
+            u16 pos = bbRecord[i].signature[2*j];
+            u16 val = bbRecord[i].signature[2*j + 1];
+            if (pos && data[pos] != val) break;
+        }
+        
+        if (j == 7) {
+            
+            this->id   = bbRecord[i].id;
+            this->type = bbRecord[i].type;
+            this->name = bbRecord[i].name;
+            return;
+        }
+    }
 }
 
+BootBlockImage::BootBlockImage(const char *name)
+{
+    memset(data, 0, 1024);
+    
+    for (size_t i = 0; i < sizeof(bbRecord) / sizeof(BBRecord); i++) {
+        
+        if (strcmp(bbRecord[i].name, name) == 0) {
+            this->id   = bbRecord[i].id;
+            this->type = bbRecord[i].type;
+            this->name = bbRecord[i].name;
+            return;
+        }
+    }
+}
+
+BootBlockImage::BootBlockImage(long bootBlockID)
+{
+    memset(data, 0, 1024);
+    const char *name;
+    
+    switch (bootBlockID) {
+            
+        case 0:  name = "AmigaDOS Standard Bootblock 1.3"; break;
+        case 1:  name = "AmigaDOS Standard Bootblock 2.0"; break;
+        case 10: name = "SCA Virus";                       break;
+        case 11: name = "Byte Bandit 1 Virus";             break;
+        default: name = "";                                break;
+    }
+    
+    BootBlockImage bb = BootBlockImage(name);
+    *this = bb;
+}
+
+
+/*
 BootBlockImage::BootBlockImage(BootBlockIdentifier id)
 {
     memset(data, 0, 1024);
@@ -370,6 +350,7 @@ BootBlockImage::BootBlockImage(BootBlockIdentifier id)
     
     detect();
 }
+*/
 
 void
 BootBlockImage::write(u8 *buffer, size_t first, size_t last)

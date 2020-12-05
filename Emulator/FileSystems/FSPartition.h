@@ -149,7 +149,7 @@ private:
 public:
     
     // Installs a boot block
-    void makeBootable(BootBlockIdentifier id);
+    void makeBootable(long id);
 
     
     //

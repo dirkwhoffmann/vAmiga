@@ -151,7 +151,7 @@ public:
     void setName(FSName name) { partitions[cp]->setName(name); }
     
     // Installs a boot block
-    void makeBootable(BootBlockIdentifier id) { partitions[cp]->makeBootable(id); }
+    void makeBootable(long bootBlockID) { partitions[cp]->makeBootable(bootBlockID); }
 
     
     //

@@ -76,19 +76,16 @@ extension FSVolumeType {
 
     var description: String {
         
-        /*
-        switch dos {
-        case .OFS:      text = "Original File System (OFS)"
-        case .OFS_INTL: text = "Original File System (OFS-INTL)"
-        case .OFS_DC:   text = "Original File System (OFS-DC)"
-        case .OFS_LNFS: text = "Original File System (OFS-LNFS)"
-        case .FFS:      text = "Fast File System (FFS)"
-        case .FFS_INTL: text = "Fast File System (FFS-INTL)"
-        case .FFS_DC:   text = "Fast File System (FFS-DC)"
-        case .FFS_LNFS: text = "Fast File System (FFS-LNFS)"
-        default:        text = "Unknown file system"
-        }
-        */
-        return "???"
+        switch self {
+        case .OFS:      return "Original File System (OFS)"
+        case .OFS_INTL: return "Original File System (OFS-INTL)"
+        case .OFS_DC:   return "Original File System (OFS-DC)"
+        case .OFS_LNFS: return "Original File System (OFS-LNFS)"
+        case .FFS:      return "Fast File System (FFS)"
+        case .FFS_INTL: return "Fast File System (FFS-INTL)"
+        case .FFS_DC:   return "Fast File System (FFS-DC)"
+        case .FFS_LNFS: return "Fast File System (FFS-LNFS)"
+        default:        return "Unknown file system"
+        }        
     }
 }

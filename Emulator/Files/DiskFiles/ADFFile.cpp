@@ -295,13 +295,13 @@ ADFFile::eliminateVirus()
     if (isOFSVolumeType(getDos())) {
 
         msg("a standard OFS bootblock\n");
-        BootBlockImage bb = BootBlockImage(BB_OFS);
+        BootBlockImage bb = BootBlockImage((long)0);
         bb.write(data + 4, 4, 1023);
 
     } else if (isFFSVolumeType(getDos())) {
 
         msg("a standard FFS bootblock\n");
-        BootBlockImage bb = BootBlockImage(BB_FFS);
+        BootBlockImage bb = BootBlockImage((long)1);
         bb.write(data + 4, 4, 1023);
 
     } else {
@@ -312,7 +312,7 @@ ADFFile::eliminateVirus()
 }
 
 bool
-ADFFile::formatDisk(FSVolumeType fs, BootBlockIdentifier id)
+ADFFile::formatDisk(FSVolumeType fs, long bootBlockID)
 {
     assert(isFSVolumeType(fs));
 
@@ -332,7 +332,7 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockIdentifier id)
     volume->setName(FSName("Disk"));
     
     // Write boot code
-    volume->makeBootable(id);
+    volume->makeBootable(bootBlockID);
     
     // Export the file system to the ADF
     volume->exportVolume(data, size, &error);

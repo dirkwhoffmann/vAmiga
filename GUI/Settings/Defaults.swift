@@ -154,7 +154,7 @@ struct GeneralDefaults {
     
     // Drives
     let blankDiskFormat: FSVolumeType
-    let bootBlock: BootBlockIdentifier
+    let bootBlock: Int
     let ejectWithoutAsking: Bool
     let driveSounds: Bool
     let driveSoundPan: Double
@@ -181,7 +181,7 @@ struct GeneralDefaults {
     static let std = GeneralDefaults.init(
         
         blankDiskFormat: .OFS,
-        bootBlock: .BB_OFS,
+        bootBlock: 0,
         ejectWithoutAsking: false,
         driveSounds: true,
         driveSoundPan: 1.0,
@@ -208,7 +208,7 @@ extension UserDefaults {
         let dictionary: [String: Any] = [
             
             Keys.Gen.blankDiskFormat: Int(defaults.blankDiskFormat.rawValue),
-            Keys.Gen.bootBlock: Int(defaults.bootBlock.rawValue),
+            Keys.Gen.bootBlock: defaults.bootBlock,
             Keys.Gen.ejectWithoutAsking: defaults.ejectWithoutAsking,
             Keys.Gen.driveSounds: defaults.driveSounds,
             Keys.Gen.driveSoundPan: defaults.driveSoundPan,
