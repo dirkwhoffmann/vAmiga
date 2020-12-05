@@ -203,11 +203,11 @@ extension InstrTableView: NSTableViewDelegate {
         let cell = cell as? NSTextFieldCell
 
         if bpInRow[row] == .enabled {
-            cell?.textColor = NSColor.systemRed
+            cell?.textColor = .warningColor
         } else if bpInRow[row] == .disabled {
-            cell?.textColor = NSColor.disabledControlTextColor
+            cell?.textColor = .disabledControlTextColor
         } else {
-            cell?.textColor = NSColor.labelColor
+            cell?.textColor = .labelColor
         }
     }
 }

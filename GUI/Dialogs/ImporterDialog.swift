@@ -10,13 +10,13 @@
 class ImporterDialog: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
+    @IBOutlet weak var virusIcon: NSImageView!
     @IBOutlet weak var title: NSTextField!
-    @IBOutlet weak var subtitle1: NSTextField!
-    @IBOutlet weak var subtitle2: NSTextField!
-    @IBOutlet weak var subtitle3: NSTextField!
+    @IBOutlet weak var layoutInfo: NSTextField!
+    @IBOutlet weak var volumeInfo: NSTextField!
+    @IBOutlet weak var bootInfo: NSTextField!
     @IBOutlet weak var warning: NSTextField!
-    @IBOutlet weak var biohazardIcon: NSImageView!
-    @IBOutlet weak var decontaminate: NSButton!
+    @IBOutlet weak var decontaminationButton: NSButton!
     @IBOutlet weak var df0Button: NSButton!
     @IBOutlet weak var df1Button: NSButton!
     @IBOutlet weak var df2Button: NSButton!
@@ -34,25 +34,7 @@ class ImporterDialog: DialogController {
     var centerItem: Int { return numItems / 2 }
     var lastItem: Int { return numItems - 1 }
     var empty: Bool { return numItems == 0 }
-    
-    var diskIconImage: NSImage? {
         
-        let density = disk?.diskDensity
-                
-        var name: String
-        switch type {
-        case .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_EXE, .FILETYPE_DIR:
-            name = density == .DISK_HD ? "hd_adf" : "dd_adf"
-        case .FILETYPE_IMG:
-            name = "dd_dos"
-        default:
-            name = ""
-        }
-        
-        if writeProtect { name += "_protected" }
-        return NSImage.init(named: name)
-    }
-
     var titleText: String {
         
         switch type {
@@ -70,35 +52,6 @@ class ImporterDialog: DialogController {
         default:
             return "???"
         }
-    }
-
-    func updateSubTitle1() {
-                
-        let t = disk?.numTracks ?? 0
-        let s = disk?.numSectors ?? 0
-        let n = disk?.numSides == 1 ? "Single" : "Double"
-
-        let den = disk?.diskDensity
-        let d = den == .DISK_SD ? "single" : den == .DISK_DD ? "double" : "high"
-
-        subtitle1.stringValue = "\(n) sided, \(d) density disk, \(t) tracks with \(s) sectors each"
-    }
-
-    func updateSubTitle2() {
-        
-        let dos = disk!.dos
-        
-        subtitle2.stringValue = dos.description
-
-    }
-
-    func updateSubTitle3() {
-
-        let virus = disk!.bootBlockType == .BB_VIRUS
-        let name = disk!.bootBlockName!
-
-        subtitle3.stringValue = virus ? "Contagious boot block detected (\(name))" : name
-        subtitle3.textColor = virus ? .systemRed : .secondaryLabelColor
     }
     
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
@@ -150,7 +103,7 @@ class ImporterDialog: DialogController {
         
         if empty {
 
-            setHeight(196)
+            setHeight(212)
             
         } else {
             
@@ -174,15 +127,18 @@ class ImporterDialog: DialogController {
 
     func update() {
                     
-        // Update icon and text fields
-        diskIcon.image = diskIconImage
-        title.stringValue = titleText
-        updateSubTitle1()
-        updateSubTitle2()
-        updateSubTitle3()
-        biohazardIcon.isHidden = disk?.bootBlockType != .BB_VIRUS
-        decontaminate.isHidden = disk?.bootBlockType != .BB_VIRUS
+        // Update icons
+        diskIcon.image = disk!.icon(protected: writeProtect)
+        virusIcon.isHidden = disk!.hasVirus == false
+        decontaminationButton.isHidden = disk?.hasVirus == false
 
+        // Update disk description
+        title.stringValue = titleText
+        layoutInfo.stringValue = disk!.layoutInfo
+        volumeInfo.stringValue = disk!.dos.description
+        bootInfo.stringValue = disk!.bootInfo
+        bootInfo.textColor = disk!.hasVirus ? .warningColor : .secondaryLabelColor
+        
         // Determine enabled drives
         let t = disk!.diskType
         let d = disk!.diskDensity

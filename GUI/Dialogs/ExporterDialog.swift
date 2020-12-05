@@ -12,7 +12,7 @@ class ExporterDialog: DialogController {
     @IBOutlet weak var diskIcon: NSImageView!
     @IBOutlet weak var virusIcon: NSImageView!
     @IBOutlet weak var title: NSTextField!
-    @IBOutlet weak var trackInfo: NSTextField!
+    @IBOutlet weak var layoutInfo: NSTextField!
     @IBOutlet weak var volumeInfo: NSTextField!
     @IBOutlet weak var bootInfo: NSTextField!
     @IBOutlet weak var decontaminationButton: NSButton!
@@ -376,27 +376,8 @@ class ExporterDialog: DialogController {
     
     func updateDiskIcon() {
         
-        var name = ""
-
-        if driveNr  == nil {
-                
-            name = "hdf"
-
-        } else {
-            
-            if drive?.hasDDDisk == true { name = "dd" }
-            if drive?.hasHDDisk == true { name = "hd" }
-            
-            switch disk?.type {
-            case .FILETYPE_ADF: name += "_adf"
-            case .FILETYPE_IMG: name += "_dos"
-            default: name += "_other"
-            }
-            
-            if drive?.hasWriteProtectedDisk() == true { name += "_protected" }
-        }
-        
-        diskIcon.image = NSImage.init(named: name)
+        let protected = drive!.hasWriteProtectedDisk()
+        diskIcon.image = disk!.icon(protected: protected)
         virusIcon.isHidden = disk?.hasVirus == false
     }
 
@@ -438,11 +419,11 @@ class ExporterDialog: DialogController {
                 text += "\(d) density disk, "
                 text += "\(numTracks) tracks with \(numSectors) sectors each"
             } else {
-                trackInfo.textColor = .systemRed
+                layoutInfo.textColor = .warningColor
             }
         }
 
-        trackInfo.stringValue = text
+        layoutInfo.stringValue = text
     }
     
     func updateVolumeInfo() {
@@ -458,7 +439,7 @@ class ExporterDialog: DialogController {
                 let blocks = errors == 1 ? "block" : "blocks"
                 let text2 = " with \(errors) corrupted \(blocks)"
                 volumeInfo.stringValue = text + text2
-                volumeInfo.textColor = .systemRed
+                volumeInfo.textColor = .warningColor
                 return
             }
         }
@@ -904,11 +885,11 @@ extension ExporterDialog: NSTableViewDelegate {
                 cell?.textColor = .white
                 cell?.backgroundColor = error == .OK ? .selectedContentBackgroundColor : .red
             } else {
-                cell?.textColor = error == .OK ? .textColor : .systemRed
+                cell?.textColor = error == .OK ? .textColor : .warningColor
                 cell?.backgroundColor = NSColor.alternatingContentBackgroundColors[row % 2]
             }
         } else {
-            cell?.backgroundColor = NSColor.windowBackgroundColor
+            cell?.backgroundColor = .windowBackgroundColor
         }
     }
     

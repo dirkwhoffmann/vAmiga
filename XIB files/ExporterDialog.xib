@@ -27,6 +27,7 @@
                 <outlet property="headText" destination="Iu6-pw-Luw" id="PXV-AM-k25"/>
                 <outlet property="info1" destination="G7d-0d-Bi5" id="DJN-A1-q7h"/>
                 <outlet property="info2" destination="6mo-sI-0VL" id="a6e-Nd-0fV"/>
+                <outlet property="layoutInfo" destination="FGU-ht-eVm" id="fYg-LP-VdC"/>
                 <outlet property="previewScrollView" destination="mPU-ST-UZK" id="iWY-ED-HYc"/>
                 <outlet property="previewTable" destination="X99-rT-f2a" id="dkD-KZ-3XP"/>
                 <outlet property="sectorField" destination="O0X-QE-8Xw" id="5rK-bo-5h6"/>
@@ -35,7 +36,6 @@
                 <outlet property="strictButton" destination="K8I-Vh-3VH" id="tyX-Rt-etG"/>
                 <outlet property="title" destination="tXt-ZO-VKK" id="yKw-Bc-jdJ"/>
                 <outlet property="trackField" destination="5mA-IW-Lcv" id="G8K-4W-vHE"/>
-                <outlet property="trackInfo" destination="FGU-ht-eVm" id="fYg-LP-VdC"/>
                 <outlet property="trackStepper" destination="JCB-vD-1ff" id="UgQ-pP-NEg"/>
                 <outlet property="trackText" destination="RFN-QD-W4P" id="uBN-e3-BY8"/>
                 <outlet property="virusIcon" destination="PlY-1q-QiH" id="Ous-rl-evW"/>
@@ -60,7 +60,7 @@
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="dd_adf" id="lFm-of-ZaD"/>
                     </imageView>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tXt-ZO-VKK">
-                        <rect key="frame" x="143" y="433" width="445" height="19"/>
+                        <rect key="frame" x="143" y="433" width="346" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Amiga Disk" id="QIX-Z1-wFH">
                             <font key="font" metaFont="system"/>
