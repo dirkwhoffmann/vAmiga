@@ -9,6 +9,7 @@
 // -----------------------------------------------------------------------------
 
 #include "FSDevice.h"
+#include <algorithm>
 
 FSPartition *
 FSPartition::makeWithFormat(FSDevice &dev, FSPartitionDescriptor &layout)
