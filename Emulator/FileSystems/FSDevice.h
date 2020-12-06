@@ -120,20 +120,27 @@ public:
     
 public:
             
-    // Returns the device capacity in blocks
+    // Returns the total device capacity in blocks
     u32 getCapacity() { return numBlocks; }
     
+    // Reports layout information
+    u32 getNumCyls() { return numCyls; }
+    u32 getNumHeads() { return numHeads; }
+    u32 getNumTracks() { return getNumCyls() * getNumHeads(); }
+    u32 getNumSectors() { return numSectors; }
+    u32 getNumBlocks() { return numBlocks; }
+
     
     //
     // Querying properties of the current partition
     //
     
-    // Returns the DOS version of the current partition (OFS, FFS, etc.)
+    // Returns the DOS version of the current partition
     FSVolumeType dos() { return partitions[cp]->dos; }
     bool isOFS() { return partitions[cp]->isOFS(); }
     bool isFFS() { return partitions[cp]->isFFS(); }
     
-
+    
     //
     // Working with partitions
     //

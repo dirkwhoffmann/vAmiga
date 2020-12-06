@@ -116,6 +116,25 @@ extension DiskFileProxy {
     }
 }
 
+extension HDFFileProxy {
+    
+    func icon() -> NSImage {
+        
+        return NSImage.init(named: "hdf")!
+    }
+    
+    var layoutInfo: String {
+        
+        let capacity = numBlocks / 2000
+        return "\(capacity) MB (\(numBlocks) sectors)"
+    }
+    
+    var bootInfo: String {
+
+        return ""
+    }
+}
+
 extension FSVolumeType {
 
     var description: String {

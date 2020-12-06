@@ -67,11 +67,11 @@ class ExporterDialog: DialogController {
     var size: CGSize { return window!.frame.size }
     var shrinked: Bool { return size.height < 300 }
         
-    var numCylinders: Int { return disk?.numCylinders ?? (volume != nil ? 1 : 0) }
-    var numSides: Int { return disk?.numSides ?? (volume != nil ? 1 : 0) }
-    var numTracks: Int { return disk?.numTracks ?? (volume != nil ? 1 : 0) }
-    var numSectors: Int { return disk?.numSectors ?? (volume?.numBlocks ?? 0) }
-    var numBlocks: Int { return disk?.numBlocks ?? (volume?.numBlocks ?? 0) }
+    var numCyls: Int { return disk?.numCyls ?? volume?.numCyls ?? 0 }
+    var numSides: Int { return disk?.numSides ?? volume?.numHeads ?? 0 }
+    var numTracks: Int { return disk?.numTracks ?? volume?.numTracks ?? 0 }
+    var numSectors: Int { return disk?.numSectors ?? volume?.numSectors ?? 0 }
+    var numBlocks: Int { return disk?.numBlocks ?? volume?.numBlocks ?? 0 }
     var isDD: Bool { return disk?.diskDensity == .DISK_DD }
     var isHD: Bool { return disk?.diskDensity == .DISK_HD }
     
@@ -93,7 +93,7 @@ class ExporterDialog: DialogController {
         
         if newValue != cylinderNr {
 
-            let value = newValue.clamped(0, numCylinders - 1)
+            let value = newValue.clamped(0, numCyls - 1)
 
             cylinderNr = value
             trackNr    = cylinderNr * 2 + headNr
@@ -307,17 +307,13 @@ class ExporterDialog: DialogController {
     func update() {
           
         // Update icons
-        diskIcon.image = disk!.icon(protected: drive!.hasWriteProtectedDisk())
-        virusIcon.isHidden = disk?.hasVirus == false
-        decontaminationButton.isHidden = disk?.hasVirus == false
+        updateDiskIcon()
 
         // Update disk description
         updateTitleText()
         updateTrackAndSectorInfo()
         updateVolumeInfo()
-        if volume == nil { volumeInfo.textColor = .red }
-        bootInfo.stringValue = disk!.bootInfo
-        bootInfo.textColor = disk!.hasVirus ? .warningColor : .secondaryLabelColor
+        updateBootInfo()
 
         // Update the disclosure button state
         disclosureButton.state = shrinked ? .off : .on
@@ -374,34 +370,41 @@ class ExporterDialog: DialogController {
         }
         
         updateBlockInfo()
-        // buildStrings()
         previewTable.reloadData()
     }
     
-    /*
     func updateDiskIcon() {
-        
-        let protected = drive!.hasWriteProtectedDisk()
-        diskIcon.image = disk!.icon(protected: protected)
-        virusIcon.isHidden = disk?.hasVirus == false
-    }
-    */
-    
-    func updateTitleText() {
-        
-        var name = "This disk contains an unrecognized MFM stream"
         
         if driveNr == nil {
             
-            name = "Amiga Hard Drive"
+            diskIcon.image = NSImage.init(named: "hdf")!
+            virusIcon.isHidden = true
+            decontaminationButton.isHidden = true
             
         } else {
             
-            if disk?.type == .FILETYPE_ADF { name = "Amiga Disk" }
-            if disk?.type == .FILETYPE_IMG { name = "PC Disk" }
+            let wp = drive!.hasWriteProtectedDisk()
+            diskIcon.image = disk!.icon(protected: wp)
+            virusIcon.isHidden = disk!.hasVirus
+            decontaminationButton.isHidden = disk!.hasVirus
+        }
+    }
+    
+    func updateTitleText() {
+        
+        var text = "This disk contains an unrecognized MFM stream"
+        
+        if driveNr == nil {
+            
+            text = "Amiga Hard Drive"
+            
+        } else {
+            
+            if disk?.type == .FILETYPE_ADF { text = "Amiga Disk" }
+            if disk?.type == .FILETYPE_IMG { text = "PC Disk" }
         }
         
-        title.stringValue = name
+        title.stringValue = text
     }
 
     func updateTrackAndSectorInfo() {
@@ -418,14 +421,6 @@ class ExporterDialog: DialogController {
             
             if disk != nil {
                 text = disk!.layoutInfo
-                /*
-                let n = numSides == 1 ? "Single" : "Double"
-                let d = isHD ? "high" : isDD ? "double" : "single"
-                
-                text = "\(n) sided, "
-                text += "\(d) density disk, "
-                text += "\(numTracks) tracks with \(numSectors) sectors each"
-                */
             } else {
                 layoutInfo.textColor = .warningColor
             }
@@ -450,9 +445,24 @@ class ExporterDialog: DialogController {
                 volumeInfo.textColor = .warningColor
                 return
             }
+            
+        } else {
+            
+            volumeInfo.textColor = .warningColor
         }
         
         volumeInfo.stringValue = text
+    }
+    
+    func updateBootInfo() {
+                
+        if driveNr == nil {
+            bootInfo.stringValue = ""
+            return
+        }
+                    
+        bootInfo.stringValue = disk!.bootInfo
+        bootInfo.textColor = disk!.hasVirus ? .warningColor : .secondaryLabelColor
     }
     
     func updateBlockInfo() {
@@ -483,6 +493,7 @@ class ExporterDialog: DialogController {
         case .BOOT_BLOCK:       text = "Boot Block"
         case .ROOT_BLOCK:       text = "Root Block"
         case .BITMAP_BLOCK:     text = "Bitmap Block"
+        case .BITMAP_EXT_BLOCK: text = "Bitmap Extension Block"
         case .USERDIR_BLOCK:    text = "User Directory Block"
         case .FILEHEADER_BLOCK: text = "File Header Block"
         case .FILELIST_BLOCK:   text = "File List Block"

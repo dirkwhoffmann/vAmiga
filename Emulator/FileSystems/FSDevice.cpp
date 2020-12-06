@@ -188,7 +188,7 @@ FSDevice::~FSDevice()
 void
 FSDevice::info()
 {
-    msg("Type   Size          Used   Free   Full   Name\n");
+    msg("Type    Size           Used    Free   Full   Name\n");
     for (auto& p : partitions) p->info();
 }
 

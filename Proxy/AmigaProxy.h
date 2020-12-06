@@ -651,6 +651,10 @@ struct SerialPortWrapper;
 + (instancetype)makeWithHDF:(HDFFileProxy *)hdf;
 
 @property (readonly) FSVolumeType dos;
+@property (readonly) NSInteger numCyls;
+@property (readonly) NSInteger numHeads;
+@property (readonly) NSInteger numTracks;
+@property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numBlocks;
 
 - (void)killVirus;
@@ -735,7 +739,7 @@ struct SerialPortWrapper;
 @property (readonly) FSVolumeType dos;
 @property (readonly) DiskType diskType;
 @property (readonly) DiskDensity diskDensity;
-@property (readonly) NSInteger numCylinders;
+@property (readonly) NSInteger numCyls;
 @property (readonly) NSInteger numSides;
 @property (readonly) NSInteger numTracks;
 @property (readonly) NSInteger numSectors;
@@ -776,12 +780,14 @@ struct SerialPortWrapper;
 // HDFFileProxy
 //
 
-@interface HDFFileProxy : DiskFileProxy {
+@interface HDFFileProxy : AmigaFileProxy {
 }
 
 + (BOOL)isHDFFile:(NSString *)path;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype)makeWithFile:(NSString *)path;
+
+@property (readonly) NSInteger numBlocks;
 
 @end
 

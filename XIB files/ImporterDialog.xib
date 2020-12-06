@@ -45,7 +45,7 @@
                         </textFieldCell>
                     </textField>
                     <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="iAg-Xw-L2a">
-                        <rect key="frame" x="145" y="400" width="441" height="5"/>
+                        <rect key="frame" x="140" y="400" width="446" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JMf-QF-9dD">
@@ -122,17 +122,6 @@ DQ
                             <action selector="insertDiskAction:" target="-2" id="MFH-gP-oy0"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T2c-1K-zxI">
-                        <rect key="frame" x="143" y="22" width="102" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Write protect" bezelStyle="regularSquare" imagePosition="left" inset="2" id="MEb-f8-pJW">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="writeProtectAction:" target="-2" id="lRi-H6-sKg"/>
-                        </connections>
-                    </button>
                     <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RBx-ga-ubq" customClass="iCarousel">
                         <rect key="frame" x="20" y="80" width="566" height="205"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
@@ -185,6 +174,17 @@ Gw
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="biohazard" id="jSk-iG-l3u"/>
                     </imageView>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T2c-1K-zxI">
+                        <rect key="frame" x="138" y="22" width="102" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="check" title="Write protect" bezelStyle="regularSquare" imagePosition="left" inset="2" id="MEb-f8-pJW">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="writeProtectAction:" target="-2" id="lRi-H6-sKg"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <connections>

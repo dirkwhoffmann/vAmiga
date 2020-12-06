@@ -75,9 +75,9 @@ void
 FSPartition::info()
 {
     msg("DOS%ld  ",     dos);
-    msg("%5d (x %3d) ", numBlocks(), bsize());
-    msg("%5d  ",        usedBlocks());
-    msg("%5d   ",       freeBlocks());
+    msg("%6d (x %3d) ", numBlocks(), bsize());
+    msg("%6d  ",        usedBlocks());
+    msg("%6d   ",       freeBlocks());
     msg("%3d%%   ",     (int)(100.0 * usedBlocks() / numBlocks()));
     msg("%s\n",         getName().c_str());
     msg("\n");
@@ -412,18 +412,30 @@ FSPartition::setAllocationBit(u32 ref, bool value)
 FSBitmapBlock *
 FSPartition::locateAllocationBit(u32 ref, u32 *byte, u32 *bit)
 {
-    FSBitmapBlock *bm;
-    
     assert(ref >= firstBlock && ref <= lastBlock);
-    
-    // The first two blocks are not part the map
+
+    // Make ref a relative offset
+    ref -= firstBlock;
+
+    // The first two blocks are always allocated and not part of the map
     if (ref < 2) return nullptr;
+    ref -= 2;
     
-    // Locate the bitmap block
-    if (!(bm = bmBlockForBlock(ref))) return nullptr;
+    // Locate the bitmap block which stores the allocation bit
+    u32 bitsPerBlock = (bsize() - 4) * 8;
+    u32 nr = ref / bitsPerBlock;
+    ref = ref % bitsPerBlock;
+
+    // Get the bitmap block
+    FSBitmapBlock *bm;
+    bm = (nr < bmBlocks.size()) ? dev.bitmapBlockPtr(bmBlocks[nr]) : nullptr;
+    if (bm == nullptr) {
+        warn("Allocation bit is located in non-existent bitmap block %d\n", nr);
+        return nullptr;
+    }
     
     // Locate the byte position (note: the long word ordering will be reversed)
-    u32 rByte = ((ref - 2) / 8);
+    u32 rByte = ref / 8;
     
     // Rectifiy the ordering
     switch (rByte % 4) {

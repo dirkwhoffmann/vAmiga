@@ -1265,9 +1265,29 @@ struct SerialPortWrapper { SerialPort *port; };
     return wrapper->volume->dos();
 }
 
+- (NSInteger) numCyls
+{
+    return wrapper->volume->getNumCyls();
+}
+
+- (NSInteger) numHeads
+{
+    return wrapper->volume->getNumHeads();
+}
+
+- (NSInteger) numTracks
+{
+    return wrapper->volume->getNumTracks();
+}
+
+- (NSInteger) numSectors
+{
+    return wrapper->volume->getNumSectors();
+}
+
 - (NSInteger) numBlocks
 {
-    return wrapper->volume->getCapacity();
+    return wrapper->volume->getNumBlocks();
 }
 
 - (void)killVirus
@@ -1534,7 +1554,7 @@ struct SerialPortWrapper { SerialPort *port; };
     return ((DiskFile *)wrapper->file)->getDiskDensity();
 }
 
-- (NSInteger)numCylinders
+- (NSInteger)numCyls
 {
     return ((DiskFile *)wrapper->file)->numCylinders();
 }
@@ -1658,20 +1678,28 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return HDFFile::isHDFFile([path fileSystemRepresentation]);
 }
+
 + (instancetype) make:(HDFFile *)archive
 {
     if (archive == NULL) return nil;
     return [[self alloc] initWithFile:archive];
 }
+
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
     HDFFile *archive = HDFFile::makeWithBuffer((const u8 *)buffer, length);
     return [self make: archive];
 }
+
 + (instancetype) makeWithFile:(NSString *)path
 {
     HDFFile *archive = HDFFile::makeWithFile([path fileSystemRepresentation]);
     return [self make: archive];
+}
+
+- (NSInteger) numBlocks
+{
+    return ((HDFFile *)wrapper->file)->numBlocks();
 }
 
 @end
