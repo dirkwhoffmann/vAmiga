@@ -28,6 +28,8 @@ struct FSBootBlock : FSBlock {
     FSVolumeType dos() override;
     FSItemType itemType(u32 byte) override;
     FSError check(u32 pos, u8 *expected, bool strict) override;
+    u32 checksumLocation() override;
+    u32 checksum() override;
     void dump() override;
     
     

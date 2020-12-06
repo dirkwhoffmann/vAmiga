@@ -43,14 +43,11 @@ FSBootBlock::dos()
 FSItemType
 FSBootBlock::itemType(u32 byte)
 {
-    if (byte <= 3 && nr == 0) {
+    if (nr == partition.firstBlock) {
         
-        switch(byte) {
-            case 0:
-            case 1:
-            case 2: return FSI_DOS_HEADER;
-            case 3: return FSI_DOS_VERSION;
-        }
+        if (byte <= 2) return FSI_DOS_HEADER;
+        if (byte == 3) return FSI_DOS_VERSION;
+        if (byte <= 7) return FSI_CHECKSUM;
     }
     
     return FSI_BOOTCODE;
@@ -59,19 +56,55 @@ FSBootBlock::itemType(u32 byte)
 FSError
 FSBootBlock::check(u32 byte, u8 *expected, bool strict)
 {
-    if (byte <= 3 && nr == 0) {
+    if (nr == partition.firstBlock) {
+ 
+        u32 word = byte / 4;
+        u32 value = data[byte];
         
-        u8 value = data[byte];
-        
-        switch(byte) {
-            case 0: EXPECT_BYTE('D'); break;
-            case 1: EXPECT_BYTE('O'); break;
-            case 2: EXPECT_BYTE('S'); break;
-            case 3: EXPECT_DOS_REVISION; break;
-        }
+        if (byte == 0) EXPECT_BYTE('D');
+        if (byte == 1) EXPECT_BYTE('O');
+        if (byte == 2) EXPECT_BYTE('S');
+        if (byte == 3) EXPECT_DOS_REVISION;
+        if (word == 1) { value = get32(1); EXPECT_CHECKSUM; }
     }
     
     return FS_OK;
+}
+
+u32
+FSBootBlock::checksumLocation()
+{
+    return (nr == partition.firstBlock) ? 1 : (u32)-1;
+}
+
+u32
+FSBootBlock::checksum() {
+    
+    // Only call this function for the first boot block in a partition
+    assert(nr == partition.firstBlock);
+        
+    u32 result = get32(0), prec;
+
+    // First boot block
+    for (u32 i = 2; i < bsize() / 4; i++) {
+        
+        prec = result;
+        if ( (result += get32(i)) < prec) result++;
+    }
+
+    // Second boot block
+    u8 *p = partition.dev.blocks[1]->data;
+    
+    for (u32 i = 0; i < bsize() / 4; i++) {
+        
+        prec = result;
+        if ( (result += FSBlock::read32(p + 4*i)) < prec) result++;
+    }
+
+    result = ~result;
+        
+    printf("BOOT BLOCK CHECKSUM: %x\n", result);
+    return result;
 }
 
 void

@@ -164,14 +164,14 @@ Gw
                         </connections>
                     </button>
                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mPU-ST-UZK">
-                        <rect key="frame" x="20" y="82" width="564" height="203"/>
+                        <rect key="frame" x="20" y="82" width="566" height="203"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" id="yIT-Il-x5N">
-                            <rect key="frame" x="1" y="0.0" width="562" height="202"/>
+                            <rect key="frame" x="1" y="0.0" width="564" height="202"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="15" headerView="b0D-KA-s0P" id="X99-rT-f2a">
-                                    <rect key="frame" x="0.0" y="-22" width="562" height="177"/>
+                                    <rect key="frame" x="0.0" y="-22" width="564" height="177"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="1" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -369,7 +369,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="15" width="33" minWidth="10" maxWidth="3.4028234663852886e+38" id="07V-pF-0AU">
+                                        <tableColumn identifier="15" width="35" minWidth="10" maxWidth="3.4028234663852886e+38" id="07V-pF-0AU">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="F">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -390,7 +390,7 @@ Gw
                             </subviews>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="xXA-U7-eqZ">
-                            <rect key="frame" x="1" y="175" width="562" height="16"/>
+                            <rect key="frame" x="1" y="186" width="564" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="3B5-MB-CRZ">
@@ -398,7 +398,7 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="b0D-KA-s0P">
-                            <rect key="frame" x="0.0" y="0.0" width="562" height="25"/>
+                            <rect key="frame" x="0.0" y="0.0" width="564" height="25"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>

@@ -1124,18 +1124,12 @@ BootBlockImage::BootBlockImage(const u8 *buffer)
                 
         for (j = 0; j < 7; j++) {
 
-            printf("%d %d %d\n", bbRecord[i].signature[2*j], bbRecord[i].signature[2*j + 1], data[bbRecord[i].signature[2*j]]);
-
             u16 pos = bbRecord[i].signature[2*j];
             u16 val = bbRecord[i].signature[2*j + 1];
             if (pos && data[pos] != val) break;
-            
-            printf("%s: %zu Matches %d\n", bbRecord[i].name, j, val);
         }
         
         if (j == 7) {
-
-            printf("%s: Match found!!!\n", bbRecord[i].name);
 
             this->type = bbRecord[i].type;
             this->name = bbRecord[i].name;

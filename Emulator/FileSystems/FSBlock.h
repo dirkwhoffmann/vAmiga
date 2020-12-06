@@ -92,7 +92,7 @@ struct FSBlock : AmigaObject {
     virtual u32 checksumLocation() { return (u32)-1; }
     
     // Computes a checksum for this block
-    u32 checksum();
+    virtual u32 checksum();
     
     // Updates the checksum in this block
     void updateChecksum();
