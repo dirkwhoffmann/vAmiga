@@ -64,7 +64,7 @@ public:
     DiskType getDiskType() override { return adf->getDiskType(); }
     DiskDensity getDiskDensity() override { return adf->getDiskDensity(); }
     long numSides() override { return adf->numSides(); }
-    long numCylinders() override { return adf->numCylinders(); }
+    long numCyls() override { return adf->numCyls(); }
     long numSectors() override { return adf->numSectors(); }
     BootBlockType bootBlockType() override { return adf->bootBlockType(); }
     const char *bootBlockName() override { return adf->bootBlockName(); }

@@ -221,8 +221,6 @@ class ExporterDialog: DialogController {
         track()
         super.awakeFromNib()
         
-        // sectorData = Array(repeating: "", count: 512 / bytesPerRow)
-
         // Register to receive mouse click events
         previewTable.action = #selector(clickAction(_:))
         
@@ -385,8 +383,8 @@ class ExporterDialog: DialogController {
             
             let wp = drive!.hasWriteProtectedDisk()
             diskIcon.image = disk!.icon(protected: wp)
-            virusIcon.isHidden = disk!.hasVirus
-            decontaminationButton.isHidden = disk!.hasVirus
+            virusIcon.isHidden = !disk!.hasVirus
+            decontaminationButton.isHidden = !disk!.hasVirus
         }
     }
     

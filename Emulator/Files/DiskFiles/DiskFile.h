@@ -38,9 +38,9 @@ public:
     virtual DiskType getDiskType() = 0;
     virtual DiskDensity getDiskDensity() = 0;
     virtual long numSides() = 0;
-    virtual long numCylinders() = 0;
+    virtual long numCyls() = 0;
     virtual long numSectors() = 0;
-    long numTracks() { return numSides() * numCylinders(); }
+    long numTracks() { return numSides() * numCyls(); }
     long numBlocks() { return numTracks() * numSectors(); }
 
     // Analyzes the boot block

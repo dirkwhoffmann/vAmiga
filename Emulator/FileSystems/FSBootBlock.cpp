@@ -101,10 +101,7 @@ FSBootBlock::checksum() {
         if ( (result += FSBlock::read32(p + 4*i)) < prec) result++;
     }
 
-    result = ~result;
-        
-    printf("BOOT BLOCK CHECKSUM: %x\n", result);
-    return result;
+    return ~result;
 }
 
 void

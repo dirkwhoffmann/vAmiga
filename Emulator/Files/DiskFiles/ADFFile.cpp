@@ -215,7 +215,7 @@ ADFFile::numSides()
 }
 
 long
-ADFFile::numCylinders()
+ADFFile::numCyls()
 {
     switch(size & ~1) {
             
@@ -251,7 +251,7 @@ ADFFile::layout()
 {
     FSDeviceDescriptor result;
     
-    result.numCyls     = numCylinders();
+    result.numCyls     = numCyls();
     result.numHeads    = numSides();
     result.numSectors  = numSectors();
     result.numReserved = 2;

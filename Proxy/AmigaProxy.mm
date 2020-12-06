@@ -1556,7 +1556,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (NSInteger)numCyls
 {
-    return ((DiskFile *)wrapper->file)->numCylinders();
+    return ((DiskFile *)wrapper->file)->numCyls();
 }
 
 - (NSInteger)numSides

@@ -83,7 +83,7 @@ public:
     DiskType getDiskType() override;
     DiskDensity getDiskDensity() override;
     long numSides() override;
-    long numCylinders() override;
+    long numCyls() override;
     long numSectors() override;
     BootBlockType bootBlockType() override;
     const char *bootBlockName() override;
