@@ -11,6 +11,7 @@
 #define _AUDIO_STREAM_H
 
 #include "HardwareComponent.h"
+#include "Concurrency.h"
 
 typedef struct
 {
@@ -31,12 +32,15 @@ SamplePair;
 
 class AudioStream : public RingBuffer <SamplePair, 16384> {
 
+    // Mutex for synchronizing read / write accesses 
+    Mutex mutex;
+
 public:
     
-    //
-    // Initializing
-    //
-    
+    // Locks or unlocks the synchronization mutex
+    void lock() { mutex.lock(); }
+    void unlock() { mutex.unlock(); }
+
     /* Aligns the write pointer. This function puts the write pointer somewhat
      * ahead of the read pointer. With a standard sample rate of 44100 Hz,
      * 735 samples is 1/60 sec.

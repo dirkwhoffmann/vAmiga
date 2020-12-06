@@ -352,27 +352,21 @@ template <SamplingMethod method> void
 Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
 {
     assert(count > 0);
-    
-    bool filter = ciaa.powerLED() || config.filterAlwaysOn;
 
+    stream.lock();
+    
     // Check for a buffer overflow
     if (stream.count() + count >= stream.cap()) handleBufferOverflow();
 
     double cycle = clock;
+    bool filter = ciaa.powerLED() || config.filterAlwaysOn;
+
     for (long i = 0; i < count; i++) {
 
         double ch0 = sampler[0]->interpolate<method>((Cycle)cycle) * config.vol[0];
         double ch1 = sampler[1]->interpolate<method>((Cycle)cycle) * config.vol[1];
         double ch2 = sampler[2]->interpolate<method>((Cycle)cycle) * config.vol[2];
         double ch3 = sampler[3]->interpolate<method>((Cycle)cycle) * config.vol[3];
-
-        /*
-        if (this == &denise.screenRecorder.muxer)
-        {
-            dumpConfig();
-            debug("ch0: %f ch1: %f ch2: %f ch3: %f\n", ch0, ch1, ch2, ch3);
-        }
-        */
         
         // Compute left channel output
         float l =
@@ -392,6 +386,8 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         
         cycle += cyclesPerSample;
     }
+    
+    stream.unlock();
 }
 
 void
@@ -465,29 +461,41 @@ Muxer::ignoreNextUnderOrOverflow()
 void
 Muxer::copyMono(float *buffer, size_t n)
 {
+    stream.lock();
+    
     // Check for a buffer underflow
     if (stream.count() < n) handleBufferUnderflow();
     
     // Read sound samples
     stream.copyMono(buffer, n, volume.current, volume.target, volume.delta);
+    
+    stream.unlock();
 }
 
 void
 Muxer::copyStereo(float *left, float *right, size_t n)
 {
+    stream.lock();
+    
     // Check for a buffer underflow
     if (stream.count() < n) handleBufferUnderflow();
     
     // Read sound samples
     stream.copy(left, right, n, volume.current, volume.target, volume.delta);
+    
+    stream.unlock();
 }
 
 void
 Muxer::copyInterleaved(float *buffer, size_t n)
 {
+    stream.lock();
+    
     // Check for a buffer underflow
     if (stream.count() < n) handleBufferUnderflow();
     
     // Read sound samples
     stream.copyInterleaved(buffer, n, volume.current, volume.target, volume.delta);
+    
+    stream.unlock();
 }
