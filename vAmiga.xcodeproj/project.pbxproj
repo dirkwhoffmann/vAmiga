@@ -612,8 +612,6 @@
 				50E5753E24C01AFA00309084 /* EncryptedRomFile.cpp */,
 				50ECF98522B153FB007B3DE7 /* ExtendedRomFile.h */,
 				50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */,
-				50EAD99B256E76820053F9AC /* HDFFile.h */,
-				50EAD99F256E76A40053F9AC /* HDFFile.cpp */,
 			);
 			path = RomFiles;
 			sourceTree = "<group>";
@@ -943,6 +941,8 @@
 				508FE06321EA318D0043D0E9 /* AmigaFile.cpp */,
 				50384C8521FC6B66006E7748 /* Snapshot.h */,
 				50384C8421FC6B66006E7748 /* Snapshot.cpp */,
+				50EAD99B256E76820053F9AC /* HDFFile.h */,
+				50EAD99F256E76A40053F9AC /* HDFFile.cpp */,
 				5009B7F5255702C00037288E /* RomFiles */,
 				5009B7F7255702D40037288E /* DiskFiles */,
 			);
