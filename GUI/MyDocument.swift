@@ -253,18 +253,16 @@ class MyDocument: NSDocument {
             
             track()
             
-            /*
             parent.warning("This file is a hard drive image (HDF)",
                            "Hard drive emulation is not supported yet.",
                            icon: "hdf")
-            */
         
         // Experimental code: The current version of vAmiga does not
         // support hard drives. If a HDF file is dragged in, we open the
         // disk export dialog for debugging purposes. It enables us to
         // examine the contents of the HDF and to check for file system
         // errors.
-        
+        /*
             if let vol = FSDeviceProxy.make(withHDF: amigaAttachment as? HDFFileProxy) {
 
                 vol.dump()
@@ -273,6 +271,7 @@ class MyDocument: NSDocument {
                 let exportPanel = ExporterDialog.make(parent: parent, nibName: nibName)
                 exportPanel?.showSheet(forVolume: vol)
             }
+        */
         
         case _ as IMGFileProxy:
             
