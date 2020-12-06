@@ -139,11 +139,11 @@ ADFFile::makeWithDisk(Disk *disk)
 }
 
 ADFFile *
-ADFFile::makeWithVolume(FSVolume &volume, FSError *error)
+ADFFile::makeWithVolume(FSDevice &volume, FSError *error)
 {
     ADFFile *adf = nullptr;
-    assert(volume.getBlockSize() == 512);
     
+    printf("Capacity = %d\n", volume.getCapacity()); 
     switch (volume.getCapacity()) {
             
         case 2 * 880:
@@ -175,6 +175,27 @@ ADFFile::readFromBuffer(const u8 *buffer, size_t length)
     return isADFBuffer(buffer, length);
 }
 
+FSVolumeType
+ADFFile::getDos()
+{
+    if (strncmp((const char *)data, "DOS", 3) || data[3] > 7) {
+        return FS_NODOS;
+    }
+
+    return (FSVolumeType)data[3];
+}
+
+void
+ADFFile::setDos(FSVolumeType dos)
+{
+    if (dos == FS_NODOS) {
+        memset(data, 0, 4);
+    } else {
+        memcpy(data, "DOS", 3);
+        data[3] = (u8)dos;
+    }
+}
+
 DiskType
 ADFFile::getDiskType()
 {
@@ -194,7 +215,7 @@ ADFFile::numSides()
 }
 
 long
-ADFFile::numCyclinders()
+ADFFile::numCyls()
 {
     switch(size & ~1) {
             
@@ -225,31 +246,98 @@ ADFFile::numSectors()
     }
 }
 
-// TODO: Replace by makeWith(EmptyDiskFormat ...)
-//       Add DiskFile::numBlocks()
-//
-//
+FSDeviceDescriptor
+ADFFile::layout()
+{
+    FSDeviceDescriptor result;
+    
+    result.numCyls     = numCyls();
+    result.numHeads    = numSides();
+    result.numSectors  = numSectors();
+    result.numReserved = 2;
+    result.bsize       = 512;
+    result.numBlocks   = result.numCyls * result.numHeads * result.numSectors;
+
+    // Determine the location of the root block and the bitmap block
+    u32 root = rootBlock();
+    u32 bitmap = bitmapBlock();
+    
+    // Add partition
+    result.partitions.push_back(FSPartitionDescriptor(getDos(), 0, result.numCyls - 1, root));
+    result.partitions[0].bmBlocks.push_back(bitmap);
+    
+    return result;
+}
+
+BootBlockType
+ADFFile::bootBlockType()
+{
+    return BootBlockImage(data).type;
+}
+
+const char *
+ADFFile::bootBlockName()
+{
+    return BootBlockImage(data).name;
+}
+
+void
+ADFFile::killVirus()
+{
+    msg("Overwriting boot block virus with ");
+    
+    if (isOFSVolumeType(getDos())) {
+
+        msg("a standard OFS bootblock\n");
+        BootBlockImage bb = BootBlockImage((long)0);
+        bb.write(data + 4, 4, 1023);
+
+    } else if (isFFSVolumeType(getDos())) {
+
+        msg("a standard FFS bootblock\n");
+        BootBlockImage bb = BootBlockImage((long)1);
+        bb.write(data + 4, 4, 1023);
+
+    } else {
+
+        msg("zeroes\n");
+        memset(data + 4, 0, 1020);
+    }
+}
+
 bool
-ADFFile::formatDisk(FSVolumeType fs)
+ADFFile::formatDisk(FSVolumeType fs, long bootBlockID)
 {
     assert(isFSVolumeType(fs));
+
+    FSError error;
 
     msg("Formatting disk with %d blocks (%s)\n", numBlocks(), sFSVolumeType(fs));
 
     // Only proceed if a file system is given
-    if (fs == FS_NONE) return false;
+    if (fs == FS_NODOS) return false;
+    
+    // Get a device descriptor for this ADF
+    FSDeviceDescriptor descriptor = layout();
+    descriptor.partitions[0].dos = fs;
     
     // Create an empty file system
-    FSVolume vol = FSVolume(fs, "MyDisk", numBlocks());
+    FSDevice *volume = FSDevice::makeWithFormat(descriptor);
+    volume->setName(FSName("Disk"));
     
-    // Export the volume to the ADF
-    FSError error;
-    vol.exportVolume(data, size, &error);
+    // Write boot code
+    volume->makeBootable(bootBlockID);
+    
+    // Export the file system to the ADF
+    volume->exportVolume(data, size, &error);
+    delete(volume);
 
-    // REMOVE ASAP
-    // dumpSector(0);
-    
-    return error == FS_OK;
+    if (error == FS_OK) {
+        return true;
+    } else {
+        warn("Failed to export file system  file system from ADF\n", sFSError(error));
+        return false;
+    }
 }
 
 bool
@@ -491,4 +579,21 @@ ADFFile::decodeSector(u8 *dst, u8 *src)
     // Decode sector data
     Disk::decodeOddEven(dst + sector * 512, src, 512);
     return true;
+}
+
+u32
+ADFFile::rootBlock()
+{
+    return size < ADFSIZE_35_HD ? 880 : 1760;
+}
+
+u32
+ADFFile::bitmapBlock()
+{
+    u32 bmb = FSBlock::read32(data + rootBlock() * 512 + 316);
+    
+    // Assign a default location if the ADF is empty
+    if (bmb == 0) bmb = rootBlock() + 1;
+    
+    return bmb;
 }

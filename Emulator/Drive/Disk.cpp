@@ -59,7 +59,7 @@ Disk::dump()
     msg("\nDisk:\n");
     msg("            type : %s\n", sDiskType(type));
     msg("         density : %s\n", sDiskDensity(density));
-    msg("  numCylinders() : %ld\n", numCylinders());
+    msg("       numCyls() : %ld\n", numCyls());
     msg("      numSides() : %ld\n", numSides());
     msg("     numTracks() : %ld\n", numTracks());
     msg("  track 0 length : %ld\n", length.track[0]);
@@ -80,7 +80,7 @@ Disk::readByte(Track t, u16 offset)
 u8
 Disk::readByte(Cylinder c, Side s, u16 offset)
 {
-    assert(c < numCylinders());
+    assert(c < numCyls());
     assert(s < numSides());
     assert(offset < length.cylinder[c][s]);
 
@@ -99,7 +99,7 @@ Disk::writeByte(u8 value, Track t, u16 offset)
 void
 Disk::writeByte(u8 value, Cylinder c, Side s, u16 offset)
 {
-    assert(c < numCylinders());
+    assert(c < numCyls());
     assert(s < numSides());
     assert(offset < length.cylinder[c][s]);
 

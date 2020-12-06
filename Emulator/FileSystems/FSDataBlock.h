@@ -14,17 +14,14 @@
 
 struct FSDataBlock : FSBlock {
       
-    FSDataBlock(FSVolume &ref, u32 nr);
+    FSDataBlock(FSPartition &p, u32 nr);
     ~FSDataBlock();
     
-    const char *getDescription() override { return "FSDataBlock"; }
-
     
     //
     // Methods from Block class
     //
 
-    FSBlockType type() override { return FS_DATA_BLOCK; }
     virtual u32 getDataBlockNr() = 0;
     virtual void setDataBlockNr(u32 val) = 0;
 
@@ -32,19 +29,24 @@ struct FSDataBlock : FSBlock {
     virtual void setDataBytesInBlock(u32 val) = 0;
     
     virtual size_t writeData(FILE *file, size_t size) = 0;
+    
+    
+    //
+    // Block specific methods
+    //
+
+    // Returns the number of data bytes stored in this block
+    virtual size_t dsize() = 0;
 };
 
 struct OFSDataBlock : FSDataBlock {
 
     static u32 headerSize() { return 24; }
 
-    OFSDataBlock(FSVolume &ref, u32 nr);
+    OFSDataBlock(FSPartition &p, u32 nr);
 
-    
-    //
-    // Methods from Block class
-    //
-
+    const char *getDescription() override { return "OFSDataBlock"; }    
+    FSBlockType type() override { return FS_DATA_BLOCK_OFS; }
     FSItemType itemType(u32 byte) override;
     void dump() override;
     FSError check(u32 pos, u8 *expected, bool strict) override;
@@ -64,13 +66,18 @@ struct OFSDataBlock : FSDataBlock {
 
     size_t writeData(FILE *file, size_t size) override;
     size_t addData(const u8 *buffer, size_t size) override;
+    
+    size_t dsize() override;
 };
 
 struct FFSDataBlock : FSDataBlock {
       
     static u32 headerSize() { return 0; }
 
-    FFSDataBlock(FSVolume &ref, u32 nr);
+    FFSDataBlock(FSPartition &p, u32 nr);
+
+    const char *getDescription() override { return "FFSDataBlock"; }
+    FSBlockType type() override { return FS_DATA_BLOCK_FFS; }
     FSItemType itemType(u32 byte) override;
     void dump() override;
 
@@ -82,6 +89,8 @@ struct FFSDataBlock : FSDataBlock {
 
     size_t writeData(FILE *file, size_t size) override;
     size_t addData(const u8 *buffer, size_t size) override;
+    
+    size_t dsize() override;
 };
 
 #endif

@@ -42,12 +42,14 @@
 #include "ExtendedRomFile.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
+#include "HDFFile.h"
 #include "EXTFile.h"
 #include "IMGFile.h"
 #include "DMSFile.h"
 #include "EXEFile.h"
 #include "DIRFile.h"
-#include "FSVolume.h"
+#include "BootBlockImage.h"
+#include "FSDevice.h"
 
 void threadTerminated(void *thisAmiga);
 void *threadMain(void *thisAmiga);

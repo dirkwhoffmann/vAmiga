@@ -65,10 +65,12 @@ public:
     // Methods from DiskFile
     //
     
+    FSVolumeType getDos() override { return FS_NODOS; }
+    void setDos(FSVolumeType dos) override { };
     DiskType getDiskType() override { return DISK_35; }
     DiskDensity getDiskDensity() override { return DISK_DD; }
     long numSides() override { return 2; }
-    long numCyclinders() override { return 80; }
+    long numCyls() override { return 80; }
     long numSectors() override { return 11; }
     void readSector(u8 *target, long s) override { assert(false); }
     void readSector(u8 *target, long t, long s) override { assert(false); }

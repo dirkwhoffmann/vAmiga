@@ -82,7 +82,7 @@ class Muxer : public AmigaComponent {
 
     // Volume control
     Volume volume;
-        
+            
     
     //
     // Sub components
@@ -115,9 +115,6 @@ public:
     
     // Resets the output buffer and the two audio filters
     void clear();
-
-    // Replaces the audio stream by a stream from a different muxer
-    // void cloneStream(AudioStream &other) { stream = other; }
     
     
     //

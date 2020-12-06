@@ -30,6 +30,7 @@ class Preferences {
         get { return Int(blankDiskFormat.rawValue) }
         set { blankDiskFormat = FSVolumeType.init(rawValue: newValue)! }
     }
+    var bootBlock = GeneralDefaults.std.bootBlock
     var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
     var driveSounds = GeneralDefaults.std.driveSounds
     var driveSoundPan = GeneralDefaults.std.driveSoundPan
@@ -148,9 +149,10 @@ class Preferences {
     //
     
     func loadGeneralDefaults(_ defaults: GeneralDefaults) {
-        
+                
         // Floppy
         blankDiskFormat = defaults.blankDiskFormat
+        bootBlock = defaults.bootBlock
         ejectWithoutAsking = defaults.ejectWithoutAsking
         driveSounds = defaults.driveSounds
         driveSoundPan = defaults.driveSoundPan
@@ -177,6 +179,7 @@ class Preferences {
            
         // Floppy
         blankDiskFormatIntValue = defaults.integer(forKey: Keys.Gen.blankDiskFormat)
+        bootBlock = defaults.integer(forKey: Keys.Gen.bootBlock)
         ejectWithoutAsking = defaults.bool(forKey: Keys.Gen.ejectWithoutAsking)
         driveSounds = defaults.bool(forKey: Keys.Gen.driveSounds)
         driveSoundPan = defaults.double(forKey: Keys.Gen.driveSoundPan)
@@ -202,6 +205,8 @@ class Preferences {
         let defaults = UserDefaults.standard
         
         // Floppy
+        defaults.set(blankDiskFormatIntValue, forKey: Keys.Gen.blankDiskFormat)
+        defaults.set(bootBlock, forKey: Keys.Gen.bootBlock)
         defaults.set(ejectWithoutAsking, forKey: Keys.Gen.ejectWithoutAsking)
         defaults.set(driveSounds, forKey: Keys.Gen.driveSounds)
         defaults.set(driveSoundPan, forKey: Keys.Gen.driveSoundPan)
@@ -209,7 +214,6 @@ class Preferences {
         defaults.set(driveEjectSound, forKey: Keys.Gen.driveEjectSound)
         defaults.set(driveHeadSound, forKey: Keys.Gen.driveHeadSound)
         defaults.set(drivePollSound, forKey: Keys.Gen.drivePollSound)
-        defaults.set(blankDiskFormatIntValue, forKey: Keys.Gen.blankDiskFormat)
         
         // Fullscreen
         defaults.set(keepAspectRatio, forKey: Keys.Gen.keepAspectRatio)

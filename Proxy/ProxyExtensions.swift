@@ -71,3 +71,84 @@ public extension DriveProxy {
         return NSImage.init(named: name)!
     }
 }
+
+extension DiskFileProxy {
+    
+    func icon(protected: Bool) -> NSImage {
+        
+        let density = diskDensity
+        
+        var name: String
+        switch type {
+        case .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_EXE, .FILETYPE_DIR:
+            name = density == .DISK_HD ? "hd_adf" : "dd_adf"
+        case .FILETYPE_IMG:
+            name = "dd_dos"
+        default:
+            name = ""
+        }
+        
+        if protected { name += "_protected" }
+        return NSImage.init(named: name)!
+    }
+    
+    var layoutInfo: String {
+        
+        var result = numSides == 1 ? "Single sided" : "Double sided"
+
+        if diskDensity == .DISK_SD { result += ", single density" }
+        if diskDensity == .DISK_DD { result += ", double density" }
+        if diskDensity == .DISK_HD { result += ", high density" }
+
+        result += " disk, \(numTracks) tracks with \(numSectors) sectors each"
+        return result
+    }
+    
+    var bootInfo: String {
+        
+        let name = bootBlockName!
+        
+        if bootBlockType == .BB_VIRUS {
+            return "Contagious boot block (\(name))"
+        } else {
+            return name
+        }
+    }
+}
+
+extension HDFFileProxy {
+    
+    func icon() -> NSImage {
+        
+        return NSImage.init(named: "hdf")!
+    }
+    
+    var layoutInfo: String {
+        
+        let capacity = numBlocks / 2000
+        return "\(capacity) MB (\(numBlocks) sectors)"
+    }
+    
+    var bootInfo: String {
+
+        return ""
+    }
+}
+
+extension FSVolumeType {
+
+    var description: String {
+        
+        switch self {
+        case .OFS:      return "Original File System (OFS)"
+        case .OFS_INTL: return "Original File System (OFS-INTL)"
+        case .OFS_DC:   return "Original File System (OFS-DC)"
+        case .OFS_LNFS: return "Original File System (OFS-LNFS)"
+        case .FFS:      return "Fast File System (FFS)"
+        case .FFS_INTL: return "Fast File System (FFS-INTL)"
+        case .FFS_DC:   return "Fast File System (FFS-DC)"
+        case .FFS_LNFS: return "Fast File System (FFS-LNFS)"
+        default:        return "Unknown file system"
+        }
+    }
+}

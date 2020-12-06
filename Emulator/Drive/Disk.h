@@ -133,7 +133,7 @@ public:
     DiskType getType() { return type; }
     DiskDensity getDensity() { return density; }
 
-    long numCylinders() { return type == DISK_525 ? 42 : 84; }
+    long numCyls() { return type == DISK_525 ? 42 : 84; }
     long numSides() { return 2; }
     long numTracks() { return type == DISK_525 ? 84 : 168; }
 

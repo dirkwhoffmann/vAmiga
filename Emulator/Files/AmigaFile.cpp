@@ -26,7 +26,7 @@ AmigaFile::alloc(size_t capacity)
 {
     dealloc();
     
-    if ((data = new u8[capacity]) == NULL)
+    if ((data = new u8[capacity]()) == nullptr)
         return false;
     
     size = eof = capacity;

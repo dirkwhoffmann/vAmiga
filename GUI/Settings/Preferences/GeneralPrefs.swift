@@ -11,8 +11,13 @@ extension PreferencesController {
     
     func refreshGeneralTab() {
         
+        let contaminated = pref.bootBlock >= 10
+                
         // Drive
         genDriveBlankDiskFormat.selectItem(withTag: pref.blankDiskFormatIntValue)
+        genBootCode.selectItem(withTag: pref.bootBlock)
+        genBootCode.isEnabled = pref.blankDiskFormat != .NODOS
+        genBootCodeVirus.isHidden = !contaminated
         genEjectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
         genDriveSounds.state = pref.driveSounds ? .on : .off
         genDriveSoundPan.selectItem(withTag: Int(pref.driveSoundPan))
@@ -82,7 +87,16 @@ extension PreferencesController {
     @IBAction func genBlankDiskFormatAction(_ sender: NSPopUpButton!) {
         
         let tag = sender.selectedTag()
-        pref.blankDiskFormat = FSVolumeType(rawValue: tag)!
+        pref.blankDiskFormatIntValue = tag
+        refresh()
+    }
+
+    @IBAction func genBootCodeAction(_ sender: NSPopUpButton!) {
+        
+        track("Tag = \(sender.selectedTag())")
+        
+        let tag = sender.selectedTag()
+        pref.bootBlock = tag
         refresh()
     }
 

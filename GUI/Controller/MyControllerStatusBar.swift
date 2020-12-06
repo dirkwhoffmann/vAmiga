@@ -46,10 +46,10 @@ extension MyController {
         let warp = amiga.warp
 
         // Cylinders
-        refreshStatusBar(drive: 0, cyclinder: amiga.df0.cylinder)
-        refreshStatusBar(drive: 1, cyclinder: amiga.df1.cylinder)
-        refreshStatusBar(drive: 2, cyclinder: amiga.df2.cylinder)
-        refreshStatusBar(drive: 3, cyclinder: amiga.df3.cylinder)
+        refreshStatusBar(drive: 0, cylinder: amiga.df0.cylinder)
+        refreshStatusBar(drive: 1, cylinder: amiga.df1.cylinder)
+        refreshStatusBar(drive: 2, cylinder: amiga.df2.cylinder)
+        refreshStatusBar(drive: 3, cylinder: amiga.df3.cylinder)
         refreshStatusBar(writing: nil)
         
         // Animation
@@ -117,13 +117,13 @@ extension MyController {
         }
     }
     
-    public func refreshStatusBar(drive: Int, cyclinder: Int) {
+    public func refreshStatusBar(drive: Int, cylinder: Int) {
         
         switch drive {
-        case 0: df0Cylinder.integerValue = cyclinder
-        case 1: df1Cylinder.integerValue = cyclinder
-        case 2: df2Cylinder.integerValue = cyclinder
-        case 3: df3Cylinder.integerValue = cyclinder
+        case 0: df0Cylinder.integerValue = cylinder
+        case 1: df1Cylinder.integerValue = cylinder
+        case 2: df2Cylinder.integerValue = cylinder
+        case 3: df3Cylinder.integerValue = cylinder
         default: fatalError()
         }
     }

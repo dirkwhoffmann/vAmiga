@@ -128,6 +128,7 @@ struct Keys {
         
         // Drives
         static let blankDiskFormat        = "VAMIGA_GEN_BlankDiskFormat"
+        static let bootBlock              = "VAMIGA_GEN_BootBlock"
         static let ejectWithoutAsking     = "VAMIGA_GEN_EjectWithoutAsking"
         static let driveSounds            = "VAMIGA_GEN_DriveSounds"
         static let driveSoundPan          = "VAMIGA_GEN_DriveSoundPan"
@@ -153,6 +154,7 @@ struct GeneralDefaults {
     
     // Drives
     let blankDiskFormat: FSVolumeType
+    let bootBlock: Int
     let ejectWithoutAsking: Bool
     let driveSounds: Bool
     let driveSoundPan: Double
@@ -179,6 +181,7 @@ struct GeneralDefaults {
     static let std = GeneralDefaults.init(
         
         blankDiskFormat: .OFS,
+        bootBlock: 0,
         ejectWithoutAsking: false,
         driveSounds: true,
         driveSoundPan: 1.0,
@@ -205,6 +208,7 @@ extension UserDefaults {
         let dictionary: [String: Any] = [
             
             Keys.Gen.blankDiskFormat: Int(defaults.blankDiskFormat.rawValue),
+            Keys.Gen.bootBlock: defaults.bootBlock,
             Keys.Gen.ejectWithoutAsking: defaults.ejectWithoutAsking,
             Keys.Gen.driveSounds: defaults.driveSounds,
             Keys.Gen.driveSoundPan: defaults.driveSoundPan,
@@ -232,6 +236,7 @@ extension UserDefaults {
         let defaults = UserDefaults.standard
         
         let keys = [ Keys.Gen.blankDiskFormat,
+                     Keys.Gen.bootBlock,
                      Keys.Gen.ejectWithoutAsking,
                      Keys.Gen.driveSounds,
                      Keys.Gen.driveSoundPan,

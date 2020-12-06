@@ -148,6 +148,10 @@ extension NSColor {
         
         return (r << 8) | (g << 4) | b
     }
+    
+    static var warningColor: NSColor {
+        return NSColor(named: NSColor.Name("warningColor"))!
+    }
 }
 
 //

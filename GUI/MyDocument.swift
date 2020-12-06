@@ -91,6 +91,7 @@ class MyDocument: NSDocument {
         
         case "VAMIGA": return .FILETYPE_SNAPSHOT
         case "ADF":    return .FILETYPE_ADF
+        case "HDF":    return .FILETYPE_HDF
         case "IMG":    return .FILETYPE_IMG
         case "IMA":    return .FILETYPE_IMG
         case "DMS":    return .FILETYPE_DMS
@@ -158,6 +159,9 @@ class MyDocument: NSDocument {
                 }
             }
 
+        case .FILETYPE_HDF:
+            result = HDFFileProxy.make(withBuffer: buffer, length: length)
+            
         case .FILETYPE_DMS:
             result = DMSFileProxy.make(withBuffer: buffer, length: length)
 
@@ -184,6 +188,7 @@ class MyDocument: NSDocument {
         track("Trying to create ADF proxy from URL \(url.lastPathComponent).")
                 
         let types = [ AmigaFileType.FILETYPE_ADF,
+                      AmigaFileType.FILETYPE_HDF,
                       AmigaFileType.FILETYPE_DMS,
                       AmigaFileType.FILETYPE_EXE,
                       AmigaFileType.FILETYPE_DIR ]
@@ -208,6 +213,7 @@ class MyDocument: NSDocument {
         let types: [AmigaFileType] = [
             .FILETYPE_SNAPSHOT,
             .FILETYPE_ADF,
+            .FILETYPE_HDF,
             .FILETYPE_EXT,
             .FILETYPE_IMG,
             .FILETYPE_DMS,
@@ -240,15 +246,39 @@ class MyDocument: NSDocument {
             if let df = parent.dragAndDropDrive?.nr {
                 amiga.diskController.insert(df, adf: amigaAttachment as? ADFFileProxy)
             } else {
-                runDiskMountDialog()
+                runImporterDialog()
             }
             
+        case _ as HDFFileProxy:
+            
+            track()
+            
+            parent.warning("This file is a hard drive image (HDF)",
+                           "Hard drive emulation is not supported yet.",
+                           icon: "hdf")
+        
+        // Experimental code: The current version of vAmiga does not
+        // support hard drives. If a HDF file is dragged in, we open the
+        // disk export dialog for debugging purposes. It enables us to
+        // examine the contents of the HDF and to check for file system
+        // errors.
+        /*
+            if let vol = FSDeviceProxy.make(withHDF: amigaAttachment as? HDFFileProxy) {
+
+                vol.dump()
+            
+                let nibName = NSNib.Name("ExporterDialog")
+                let exportPanel = ExporterDialog.make(parent: parent, nibName: nibName)
+                exportPanel?.showSheet(forVolume: vol)
+            }
+        */
+        
         case _ as IMGFileProxy:
             
             if let df = parent.dragAndDropDrive?.nr {
                 amiga.diskController.insert(df, img: amigaAttachment as? IMGFileProxy)
             } else {
-                runDiskMountDialog()
+                runImporterDialog()
             }
 
         case _ as DMSFileProxy:
@@ -256,7 +286,7 @@ class MyDocument: NSDocument {
             if let df = parent.dragAndDropDrive?.nr {
                 amiga.diskController.insert(df, dms: amigaAttachment as? DMSFileProxy)
             } else {
-                runDiskMountDialog()
+                runImporterDialog()
             }
 
         case _ as EXEFileProxy:
@@ -264,7 +294,7 @@ class MyDocument: NSDocument {
             if let df = parent.dragAndDropDrive?.nr {
                 amiga.diskController.insert(df, exe: amigaAttachment as? EXEFileProxy)
             } else {
-                runDiskMountDialog()
+                runImporterDialog()
             }
 
         case _ as DIRFileProxy:
@@ -272,7 +302,7 @@ class MyDocument: NSDocument {
             if let df = parent.dragAndDropDrive?.nr {
                 amiga.diskController.insert(df, dir: amigaAttachment as? DIRFileProxy)
             } else {
-                runDiskMountDialog()
+                runImporterDialog()
             }
 
         default:
@@ -282,9 +312,9 @@ class MyDocument: NSDocument {
         return true
     }
     
-    func runDiskMountDialog() {
-        let name = NSNib.Name("DiskMountDialog")
-        let controller = DiskMountDialog.make(parent: parent, nibName: name)
+    func runImporterDialog() {
+        let name = NSNib.Name("ImporterDialog")
+        let controller = ImporterDialog.make(parent: parent, nibName: name)
         controller?.showSheet()
     }
 

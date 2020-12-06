@@ -14,7 +14,7 @@
 
 VAMIGA_ENUM(long, FSVolumeType)
 {
-    FS_NONE = -1,
+    FS_NODOS = -1,
     FS_OFS = 0,         // Original File System
     FS_FFS = 1,         // Fast File System
     FS_OFS_INTL = 2,    // "International" (not supported)
@@ -27,13 +27,35 @@ VAMIGA_ENUM(long, FSVolumeType)
 
 inline bool isFSVolumeType(long value)
 {
-    return value >= FS_NONE && value <= FS_FFS_LNFS;
+    return value >= FS_NODOS && value <= FS_FFS_LNFS;
+}
+
+inline bool isOFSVolumeType(long value)
+{
+    switch (value) {
+        case FS_OFS:
+        case FS_OFS_INTL:
+        case FS_OFS_DC:
+        case FS_OFS_LNFS: return true;
+        default:          return false;
+    }
+}
+
+inline bool isFFSVolumeType(long value)
+{
+    switch (value) {
+        case FS_FFS:
+        case FS_FFS_INTL:
+        case FS_FFS_DC:
+        case FS_FFS_LNFS: return true;
+        default:          return false;
+    }
 }
 
 inline const char *sFSVolumeType(FSVolumeType value)
 {
     switch (value) {
-        case FS_NONE:     return "None";
+        case FS_NODOS:    return "No DOS";
         case FS_OFS:      return "OFS";
         case FS_FFS:      return "FFS";
         case FS_OFS_INTL: return "OFS_INTL";
@@ -53,16 +75,18 @@ VAMIGA_ENUM(long, FSBlockType)
     FS_BOOT_BLOCK,
     FS_ROOT_BLOCK,
     FS_BITMAP_BLOCK,
+    FS_BITMAP_EXT_BLOCK,
     FS_USERDIR_BLOCK,
     FS_FILEHEADER_BLOCK,
     FS_FILELIST_BLOCK,
-    FS_DATA_BLOCK
+    FS_DATA_BLOCK_OFS,
+    FS_DATA_BLOCK_FFS
 };
 
 inline bool
 isFSBlockType(long value)
 {
-    return value >= FS_UNKNOWN_BLOCK && value <= FS_DATA_BLOCK;
+    return value >= FS_UNKNOWN_BLOCK && value <= FS_DATA_BLOCK_FFS;
 }
 
 inline const char *
@@ -75,10 +99,12 @@ sFSBlockType(FSBlockType type)
         case FS_BOOT_BLOCK:       return "FS_BOOT_BLOCK";
         case FS_ROOT_BLOCK:       return "FS_ROOT_BLOCK";
         case FS_BITMAP_BLOCK:     return "FS_BITMAP_BLOCK";
+        case FS_BITMAP_EXT_BLOCK: return "FS_BITMAP_EXT_BLOCK";
         case FS_USERDIR_BLOCK:    return "FS_USERDIR_BLOCK";
         case FS_FILEHEADER_BLOCK: return "FS_FILEHEADER_BLOCK";
         case FS_FILELIST_BLOCK:   return "FS_FILELIST_BLOCK";
-        case FS_DATA_BLOCK:       return "FS_DATA_BLOCK";
+        case FS_DATA_BLOCK_OFS:   return "FS_DATA_BLOCK_OFS";
+        case FS_DATA_BLOCK_FFS:   return "FS_DATA_BLOCK_FFS";
         default:                  return "???";
     }
 }
@@ -113,6 +139,7 @@ VAMIGA_ENUM(long, FSItemType)
     FSI_FILEHEADER_REF,
     FSI_EXT_BLOCK_REF,
     FSI_BITMAP_BLOCK_REF,
+    FSI_BITMAP_EXT_BLOCK_REF,
     FSI_BITMAP_VALIDITY,
     FSI_FILESIZE,
     FSI_DATA_BLOCK_NUMBER,
@@ -160,6 +187,7 @@ VAMIGA_ENUM(long, FSError)
     FS_PTR_TO_BOOT_BLOCK,
     FS_PTR_TO_ROOT_BLOCK,
     FS_PTR_TO_BITMAP_BLOCK,
+    FS_PTR_TO_BITMAP_EXT_BLOCK,
     FS_PTR_TO_USERDIR_BLOCK,
     FS_PTR_TO_FILEHEADER_BLOCK,
     FS_PTR_TO_FILELIST_BLOCK,
@@ -200,6 +228,7 @@ inline const char *sFSError(FSError value)
         case FS_PTR_TO_BOOT_BLOCK:       return "FS_PTR_TO_BOOT_BLOCK";
         case FS_PTR_TO_ROOT_BLOCK:       return "FS_PTR_TO_ROOT_BLOCK";
         case FS_PTR_TO_BITMAP_BLOCK:     return "FS_PTR_TO_BITMAP_BLOCK";
+        case FS_PTR_TO_BITMAP_EXT_BLOCK: return "FS_PTR_TO_BITMAP_EXT_BLOCK";
         case FS_PTR_TO_USERDIR_BLOCK:    return "FS_PTR_TO_USERDIR_BLOCK";
         case FS_PTR_TO_FILEHEADER_BLOCK: return "FS_PTR_TO_FILEHEADER_BLOCK";
         case FS_PTR_TO_FILELIST_BLOCK:   return "FS_PTR_TO_FILELIST_BLOCK";
@@ -214,6 +243,7 @@ inline const char *sFSError(FSError value)
 
 typedef struct
 {
+    long bitmapErrors;
     long corruptedBlocks;
     long firstErrorBlock;
     long lastErrorBlock;

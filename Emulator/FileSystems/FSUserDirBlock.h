@@ -14,8 +14,8 @@
 
 struct FSUserDirBlock : FSBlock {
                 
-    FSUserDirBlock(FSVolume &ref, u32 nr);
-    FSUserDirBlock(FSVolume &ref, u32 nr, const char *name);
+    FSUserDirBlock(FSPartition &p, u32 nr);
+    FSUserDirBlock(FSPartition &p, u32 nr, const char *name);
     ~FSUserDirBlock();
     
     const char *getDescription() override { return "FSUserDirBlock"; }
@@ -33,24 +33,24 @@ struct FSUserDirBlock : FSBlock {
 
     FSError exportBlock(const char *path) override;
 
-    u32 getProtectionBits() override           { return get32(-48     );     }
-    void setProtectionBits(u32 val) override   {        set32(-48, val);     }
+    u32 getProtectionBits() override           { return get32(-48     );      }
+    void setProtectionBits(u32 val) override   {        set32(-48, val);      }
 
-    FSComment getComment() override            { return FSComment(addr(-46)); }
-    void setComment(FSComment name) override   { name.write(addr(-46));       }
+    FSComment getComment() override            { return FSComment(addr32(-46)); }
+    void setComment(FSComment name) override   { name.write(addr32(-46));       }
 
-    FSTime getCreationDate() override          { return FSTime(addr(-23));    }
-    void setCreationDate(FSTime t) override    { t.write(addr(-23));          }
+    FSTime getCreationDate() override          { return FSTime(addr32(-23));    }
+    void setCreationDate(FSTime t) override    { t.write(addr32(-23));          }
 
-    FSName getName() override                  { return FSName(addr(-20));    }
-    void setName(FSName name) override         { name.write(addr(-20));       }
+    FSName getName() override                  { return FSName(addr32(-20));    }
+    void setName(FSName name) override         { name.write(addr32(-20));       }
     bool isNamed(FSName &other) override       { return getName() == other;   }
 
-    u32 getNextHashRef() override              { return get32(-4     );      }
-    void setNextHashRef(u32 ref) override      {        set32(-4, ref);      }
+    u32 getNextHashRef() override              { return get32(-4     );       }
+    void setNextHashRef(u32 ref) override      {        set32(-4, ref);       }
 
-    u32 getParentDirRef() override             { return get32(-3      );     }
-    void setParentDirRef(u32 ref) override     {        set32(-3,  ref);     }
+    u32 getParentDirRef() override             { return get32(-3      );      }
+    void setParentDirRef(u32 ref) override     {        set32(-3,  ref);      }
 
     u32 hashTableSize() override { return 72; }
     u32 hashValue() override { return getName().hashValue(); }

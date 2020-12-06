@@ -25,7 +25,7 @@ struct DiskControllerWrapper { DiskController *controller; };
 struct DriveWrapper { Drive *drive; };
 struct DmaDebuggerWrapper { DmaDebugger *dmaDebugger; };
 struct DeniseWrapper { Denise *denise; };
-struct FSVolumeWrapper { FSVolume *volume; };
+struct FSVolumeWrapper { FSDevice *volume; };
 struct GuardsWrapper { Guards *guards; };
 struct JoystickWrapper { Joystick *joystick; };
 struct KeyboardWrapper { Keyboard *keyboard; };
@@ -1220,12 +1220,12 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// FSVolume
+// FSDevice
 //
 
-@implementation FSVolumeProxy
+@implementation FSDeviceProxy
 
-- (instancetype) initWithVolume:(FSVolume *)volume
+- (instancetype) initWithVolume:(FSDevice *)volume
 {
     if (self = [super init]) {
         wrapper = new FSVolumeWrapper();
@@ -1234,11 +1234,11 @@ struct SerialPortWrapper { SerialPort *port; };
     return self;
 }
 
-+ (instancetype) make:(FSVolume *)volume
++ (instancetype) make:(FSDevice *)volume
 {
     if (volume == NULL) { return nil; }
     
-    FSVolumeProxy *proxy = [[self alloc] initWithVolume: volume];
+    FSDeviceProxy *proxy = [[self alloc] initWithVolume: volume];
     return proxy;
 }
 
@@ -1247,13 +1247,52 @@ struct SerialPortWrapper { SerialPort *port; };
     FSError error;
     AmigaFileWrapper *adf = [fileProxy wrapper];
 
-    FSVolume *volume = FSVolume::makeWithADF((ADFFile *)(adf->file), &error);
+    FSDevice *volume = FSDevice::makeWithADF((ADFFile *)(adf->file), &error);
     return [self make:volume];
 }
 
-- (FSVolumeType) type
++ (instancetype) makeWithHDF:(HDFFileProxy *)fileProxy
 {
-    return wrapper->volume->getType();
+    FSError error;
+    AmigaFileWrapper *hdf = [fileProxy wrapper];
+
+    FSDevice *volume = FSDevice::makeWithHDF((HDFFile *)(hdf->file), &error);
+    return [self make:volume];
+}
+
+- (FSVolumeType) dos
+{
+    return wrapper->volume->dos();
+}
+
+- (NSInteger) numCyls
+{
+    return wrapper->volume->getNumCyls();
+}
+
+- (NSInteger) numHeads
+{
+    return wrapper->volume->getNumHeads();
+}
+
+- (NSInteger) numTracks
+{
+    return wrapper->volume->getNumTracks();
+}
+
+- (NSInteger) numSectors
+{
+    return wrapper->volume->getNumSectors();
+}
+
+- (NSInteger) numBlocks
+{
+    return wrapper->volume->getNumBlocks();
+}
+
+- (void)killVirus
+{
+    wrapper->volume->killVirus();
 }
 
 - (FSBlockType) blockType:(NSInteger)blockNr
@@ -1304,9 +1343,19 @@ struct SerialPortWrapper { SerialPort *port; };
     return wrapper->volume->printDirectory(recursive);
 }
 
+- (NSInteger) readByte:(NSInteger)block offset:(NSInteger)offset
+{
+    return wrapper->volume->readByte(block, offset);
+}
+
 - (FSError) export:(NSString *)path
 {
     return wrapper->volume->exportDirectory([path fileSystemRepresentation]);
+}
+
+- (BOOL) exportBlock:(NSInteger)block buffer:(unsigned char *)buffer
+{
+    return wrapper->volume->exportBlock(block, buffer, 512);
 }
 
 - (void) dump
@@ -1490,42 +1539,77 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation DiskFileProxy
 
+- (FSVolumeType)dos
+{
+    return ((DiskFile *)wrapper->file)->getDos();
+}
+
 - (DiskType)diskType
 {
     return ((DiskFile *)wrapper->file)->getDiskType();
 }
+
 - (DiskDensity)diskDensity
 {
     return ((DiskFile *)wrapper->file)->getDiskDensity();
 }
-- (NSInteger)numCylinders
+
+- (NSInteger)numCyls
 {
-    return ((DiskFile *)wrapper->file)->numCyclinders();
+    return ((DiskFile *)wrapper->file)->numCyls();
 }
+
 - (NSInteger)numSides
 {
     return ((DiskFile *)wrapper->file)->numSides();
 }
+
 - (NSInteger)numTracks
 {
     return ((DiskFile *)wrapper->file)->numTracks();
 }
+
 - (NSInteger)numSectors
 {
     return ((DiskFile *)wrapper->file)->numSectors();
 }
+
 - (NSInteger)numBlocks
 {
     return ((DiskFile *)wrapper->file)->numBlocks();
 }
+
+- (BootBlockType)bootBlockType
+{
+    return ((DiskFile *)wrapper->file)->bootBlockType();
+}
+
+- (NSString *)bootBlockName
+{
+    const char *str = ((DiskFile *)wrapper->file)->bootBlockName();
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+
+- (BOOL)hasVirus
+{
+    return ((DiskFile *)wrapper->file)->hasVirus();
+}
+
+- (void)killVirus
+{
+    ((DiskFile *)wrapper->file)->killVirus();
+}
+
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
 {
     return ((DiskFile *)wrapper->file)->readByte(block, offset);
 }
+
 - (void)readSector:(unsigned char *)dst block:(NSInteger)nr
 {
     ((DiskFile *)wrapper->file)->readSector(dst, nr);
 }
+
 - (void)readSectorHex:(char *)dst block:(NSInteger)block count:(NSInteger)count
 {
     ((DiskFile *)wrapper->file)->readSectorHex(dst, block, count);
@@ -1544,35 +1628,78 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return ADFFile::isADFFile([path fileSystemRepresentation]);
 }
-+ (instancetype) make:(ADFFile *)archive
+
++ (instancetype)make:(ADFFile *)archive
 {
     if (archive == NULL) return nil;
     return [[self alloc] initWithFile:archive];
 }
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
+
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
     ADFFile *archive = ADFFile::makeWithBuffer((const u8 *)buffer, length);
     return [self make: archive];
 }
-+ (instancetype) makeWithFile:(NSString *)path
+
++ (instancetype)makeWithFile:(NSString *)path
 {
     ADFFile *archive = ADFFile::makeWithFile([path fileSystemRepresentation]);
     return [self make: archive];
 }
-+ (instancetype) makeWithDiskType:(DiskType)type density:(DiskDensity)density
+
++ (instancetype)makeWithDiskType:(DiskType)type density:(DiskDensity)density
 {
     ADFFile *archive = ADFFile::makeWithDiskType(type, density);
     return [self make: archive];
 }
-+ (instancetype) makeWithDrive:(DriveProxy *)drive
+
++ (instancetype)makeWithDrive:(DriveProxy *)drive
 {
     Drive *d = [drive wrapper]->drive;
     ADFFile *archive = ADFFile::makeWithDisk(d->disk);
     return archive ? [self make: archive] : nil;
 }
-- (void)formatDisk:(FSVolumeType)fs
+
+- (void)formatDisk:(FSVolumeType)fs bootBlock:(NSInteger)bootBlockID
 {
-    ((ADFFile *)wrapper->file)->formatDisk(fs);
+    ((ADFFile *)wrapper->file)->formatDisk(fs, bootBlockID);
+}
+
+@end
+
+
+//
+// HDFFileProxy
+//
+
+@implementation HDFFileProxy
+
++ (BOOL)isHDFFile:(NSString *)path
+{
+    return HDFFile::isHDFFile([path fileSystemRepresentation]);
+}
+
++ (instancetype) make:(HDFFile *)archive
+{
+    if (archive == NULL) return nil;
+    return [[self alloc] initWithFile:archive];
+}
+
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
+{
+    HDFFile *archive = HDFFile::makeWithBuffer((const u8 *)buffer, length);
+    return [self make: archive];
+}
+
++ (instancetype) makeWithFile:(NSString *)path
+{
+    HDFFile *archive = HDFFile::makeWithFile([path fileSystemRepresentation]);
+    return [self make: archive];
+}
+
+- (NSInteger) numBlocks
+{
+    return ((HDFFile *)wrapper->file)->numBlocks();
 }
 
 @end

@@ -7,12 +7,16 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class DiskMountDialog: DialogController {
+class ImporterDialog: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
+    @IBOutlet weak var virusIcon: NSImageView!
     @IBOutlet weak var title: NSTextField!
-    @IBOutlet weak var subtitle: NSTextField!
+    @IBOutlet weak var layoutInfo: NSTextField!
+    @IBOutlet weak var volumeInfo: NSTextField!
+    @IBOutlet weak var bootInfo: NSTextField!
     @IBOutlet weak var warning: NSTextField!
+    @IBOutlet weak var decontaminationButton: NSButton!
     @IBOutlet weak var df0Button: NSButton!
     @IBOutlet weak var df1Button: NSButton!
     @IBOutlet weak var df2Button: NSButton!
@@ -30,25 +34,7 @@ class DiskMountDialog: DialogController {
     var centerItem: Int { return numItems / 2 }
     var lastItem: Int { return numItems - 1 }
     var empty: Bool { return numItems == 0 }
-    
-    var diskIconImage: NSImage? {
         
-        let density = disk?.diskDensity
-                
-        var name: String
-        switch type {
-        case .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_EXE, .FILETYPE_DIR:
-            name = density == .DISK_HD ? "hd_adf" : "dd_adf"
-        case .FILETYPE_IMG:
-            name = "dd_dos"
-        default:
-            name = ""
-        }
-        
-        if writeProtect { name += "_protected" }
-        return NSImage.init(named: name)
-    }
-
     var titleText: String {
         
         switch type {
@@ -67,19 +53,7 @@ class DiskMountDialog: DialogController {
             return "???"
         }
     }
-
-    var subtitleText: String {
-                
-        let t = disk?.numTracks ?? 0
-        let s = disk?.numSectors ?? 0
-        let n = disk?.numSides == 1 ? "Single" : "Double"
-
-        let den = disk?.diskDensity
-        let d = den == .DISK_SD ? "single" : den == .DISK_DD ? "double" : "high"
-
-        return "\(n) sided, \(d) density disk, \(t) tracks with \(s) sectors each"
-    }
-
+    
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
         track()
@@ -129,7 +103,7 @@ class DiskMountDialog: DialogController {
         
         if empty {
 
-            setHeight(196)
+            setHeight(212)
             
         } else {
             
@@ -152,11 +126,18 @@ class DiskMountDialog: DialogController {
     }
 
     func update() {
-        
-        // Update icon and text fields
-        diskIcon.image = diskIconImage
+                    
+        // Update icons
+        diskIcon.image = disk!.icon(protected: writeProtect)
+        virusIcon.isHidden = disk!.hasVirus == false
+        decontaminationButton.isHidden = disk?.hasVirus == false
+
+        // Update disk description
         title.stringValue = titleText
-        subtitle.stringValue = subtitleText
+        layoutInfo.stringValue = disk!.layoutInfo
+        volumeInfo.stringValue = disk!.dos.description
+        bootInfo.stringValue = disk!.bootInfo
+        bootInfo.textColor = disk!.hasVirus ? .warningColor : .secondaryLabelColor
         
         // Determine enabled drives
         let t = disk!.diskType
@@ -194,10 +175,16 @@ class DiskMountDialog: DialogController {
         update()
     }
 
+    @IBAction func decontaminateAction(_ sender: NSButton!) {
+        
+        disk!.killVirus()
+        update()
+    }
+
     @IBAction func insertDiskAction(_ sender: NSButton!) {
         
         track("insertDiskAction df\(sender.tag)")
-        
+                
         switch disk {
         
         case _ as ADFFileProxy:
@@ -232,7 +219,7 @@ class DiskMountDialog: DialogController {
      }
 }
 
-extension DiskMountDialog: NSWindowDelegate {
+extension ImporterDialog: NSWindowDelegate {
     
     func windowDidResize(_ notification: Notification) {
         
@@ -254,7 +241,7 @@ extension DiskMountDialog: NSWindowDelegate {
 // iCarousel data source and delegate
 //
 
-extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
+extension ImporterDialog: iCarouselDataSource, iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
         

@@ -463,13 +463,13 @@ extension MyController: NSMenuItemValidation {
         var adf: ADFFileProxy
         switch type {
         case .DRIVE_35_DD:  adf = ADFFileProxy.make(with: .DISK_35, density: .DISK_DD)
-        case .DRIVE_35_HD:  adf = ADFFileProxy.make(with: .DISK_35, density: .DISK_DD)
+        case .DRIVE_35_HD:  adf = ADFFileProxy.make(with: .DISK_35, density: .DISK_HD)
         case .DRIVE_525_DD: adf = ADFFileProxy.make(with: .DISK_525, density: .DISK_DD)
         default: fatalError()
         }
         
         // Write file system
-        adf.formatDisk(pref.blankDiskFormat)
+        adf.formatDisk(pref.blankDiskFormat, bootBlock: pref.bootBlock)
         
         // Insert disk into drive
         amiga.diskController.insert(sender.tag, adf: adf)

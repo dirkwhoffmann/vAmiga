@@ -16,7 +16,7 @@
 void
 threadTerminated(void *thisAmiga)
 {
-    assert(thisAmiga != NULL);
+    assert(thisAmiga != nullptr);
     
     // Inform the Amiga that the thread has been canceled
     Amiga *amiga = (Amiga *)thisAmiga;
@@ -26,7 +26,7 @@ threadTerminated(void *thisAmiga)
 void
 *threadMain(void *thisAmiga) {
     
-    assert(thisAmiga != NULL);
+    assert(thisAmiga != nullptr);
     
     // Inform the Amiga that the thread is about to start
     Amiga *amiga = (Amiga *)thisAmiga;
@@ -42,7 +42,7 @@ void
     
     // Clean up and exit
     pthread_cleanup_pop(1);
-    pthread_exit(NULL);
+    pthread_exit(nullptr);
 }
 
 
@@ -699,7 +699,7 @@ Amiga::threadDidTerminate()
     trace(RUN_DEBUG, "Emulator thread terminated\n");
 
     // Trash the thread pointer
-    p = 0;
+    p = (pthread_t)0;
     
     // Pause all components
     HardwareComponent::pause();

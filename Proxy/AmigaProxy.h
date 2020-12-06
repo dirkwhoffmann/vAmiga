@@ -31,6 +31,7 @@
 @class DriveProxy;
 @class EXEFileProxy;
 @class GuardsProxy;
+@class HDFFileProxy;
 @class IMGFileProxy;
 @class JoystickProxy;
 @class KeyboardProxy;
@@ -638,31 +639,40 @@ struct SerialPortWrapper;
 
 
 //
-// FSVolume
+// FSDevice
 //
 
-@interface FSVolumeProxy : NSObject {
+@interface FSDeviceProxy : NSObject {
     
     struct FSVolumeWrapper *wrapper;
 }
 
 + (instancetype)makeWithADF:(ADFFileProxy *)adf;
++ (instancetype)makeWithHDF:(HDFFileProxy *)hdf;
 
-@property (readonly) FSVolumeType type;
+@property (readonly) FSVolumeType dos;
+@property (readonly) NSInteger numCyls;
+@property (readonly) NSInteger numHeads;
+@property (readonly) NSInteger numTracks;
+@property (readonly) NSInteger numSectors;
+@property (readonly) NSInteger numBlocks;
 
-- (FSBlockType) blockType:(NSInteger)blockNr;
-- (FSItemType) itemType:(NSInteger)blockNr pos:(NSInteger)pos;
-- (FSErrorReport) check:(BOOL)strict;
-- (FSError) check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
-- (BOOL) isCorrupted:(NSInteger)blockNr;
-- (NSInteger) getCorrupted:(NSInteger)blockNr;
-- (NSInteger) nextCorrupted:(NSInteger)blockNr;
-- (NSInteger) prevCorrupted:(NSInteger)blockNr;
-- (void) printDirectory:(BOOL) recursive;
+- (void)killVirus;
+- (FSBlockType)blockType:(NSInteger)blockNr;
+- (FSItemType)itemType:(NSInteger)blockNr pos:(NSInteger)pos;
+- (FSErrorReport)check:(BOOL)strict;
+- (FSError)check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
+- (BOOL)isCorrupted:(NSInteger)blockNr;
+- (NSInteger)getCorrupted:(NSInteger)blockNr;
+- (NSInteger)nextCorrupted:(NSInteger)blockNr;
+- (NSInteger)prevCorrupted:(NSInteger)blockNr;
+- (void)printDirectory:(BOOL) recursive;
 
-- (FSError) export:(NSString *)path;
+- (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
+- (FSError)export:(NSString *)path;
+- (BOOL)exportBlock:(NSInteger)block buffer:(unsigned char *)buffer;
 
-- (void) dump;
+- (void)dump;
 
 @end
 
@@ -726,13 +736,20 @@ struct SerialPortWrapper;
 @interface DiskFileProxy : AmigaFileProxy {
 }
 
+@property (readonly) FSVolumeType dos;
 @property (readonly) DiskType diskType;
 @property (readonly) DiskDensity diskDensity;
-@property (readonly) NSInteger numCylinders;
+@property (readonly) NSInteger numCyls;
 @property (readonly) NSInteger numSides;
 @property (readonly) NSInteger numTracks;
 @property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numBlocks;
+
+@property (readonly) BootBlockType bootBlockType;
+@property (readonly) NSString *bootBlockName;
+@property (readonly) BOOL hasVirus;
+
+- (void)killVirus;
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (void)readSector:(unsigned char *)dst block:(NSInteger)block;
@@ -754,7 +771,23 @@ struct SerialPortWrapper;
 + (instancetype)makeWithDiskType:(DiskType)type density:(DiskDensity)density;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
 
-- (void)formatDisk:(FSVolumeType)fs;
+- (void)formatDisk:(FSVolumeType)fs bootBlock:(NSInteger)bootBlockID;
+
+@end
+
+
+//
+// HDFFileProxy
+//
+
+@interface HDFFileProxy : AmigaFileProxy {
+}
+
++ (BOOL)isHDFFile:(NSString *)path;
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
++ (instancetype)makeWithFile:(NSString *)path;
+
+@property (readonly) NSInteger numBlocks;
 
 @end
 

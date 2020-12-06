@@ -23,21 +23,30 @@ public:
 
     static DiskFile *makeWithFile(const char *path);
     
+    // Gets or sets the file system for this disk
+    virtual FSVolumeType getDos() = 0;
+    virtual void setDos(FSVolumeType dos) = 0;
+    
     
     //
     // Querying disk properties
     //
     
 public:
-
+        
     // Returns the layout parameters for this disk
     virtual DiskType getDiskType() = 0;
     virtual DiskDensity getDiskDensity() = 0;
     virtual long numSides() = 0;
-    virtual long numCyclinders() = 0;
+    virtual long numCyls() = 0;
     virtual long numSectors() = 0;
-    virtual long numTracks() { return numSides() * numCyclinders(); }
-    virtual long numBlocks() { return numTracks() * numSectors(); }
+    long numTracks() { return numSides() * numCyls(); }
+    long numBlocks() { return numTracks() * numSectors(); }
+
+    // Analyzes the boot block
+    virtual BootBlockType bootBlockType() { return BB_STANDARD; }
+    virtual const char *bootBlockName() { return ""; }
+    bool hasVirus() { return bootBlockType() == BB_VIRUS; }
 
     
     //
@@ -57,6 +66,13 @@ public:
     // Writes a string representation into the provided buffer
     virtual void readSectorHex(char *dst, long b, size_t count);
     virtual void readSectorHex(char *dst, long t, long s, size_t count);
+
+    
+    //
+    // Repairing
+    //
+
+    virtual void killVirus() { };
 
     
     //

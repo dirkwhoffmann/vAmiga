@@ -7,26 +7,20 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSVolume.h"
+#include "FSDevice.h"
 
-FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
+FSRootBlock::FSRootBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
-    data = new u8[ref.bsize]();
+    data = new u8[bsize()]();
     
     assert(hashTableSize() == 72);
     
     set32(0, 2);                         // Type
     set32(3, hashTableSize());           // Hash table size
-    set32(-49, volume.bitmapBlockNr());  // Location of the bitmap block
     set32(-50, 0xFFFFFFFF);              // Bitmap validity
     setCreationDate(time(NULL));         // Creation date
     setModificationDate(time(NULL));     // Modification date
     set32(-1, 1);                        // Sub type    
-}
-
-FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr, const char *name) : FSRootBlock(ref, nr)
-{
-    setName(FSName(name));
 }
 
 FSRootBlock::~FSRootBlock()
@@ -41,7 +35,7 @@ FSRootBlock::itemType(u32 byte)
     if (byte == 432) return FSI_BCPL_STRING_LENGTH;
 
     // Translate the byte index to a (signed) long word index
-    i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
+    i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;
     
     switch (word) {
         case 0:   return FSI_TYPE_ID;
@@ -51,7 +45,7 @@ FSRootBlock::itemType(u32 byte)
         case 4:   return FSI_UNUSED;
         case 5:   return FSI_CHECKSUM;
         case -50: return FSI_BITMAP_VALIDITY;
-        case -49: return FSI_BITMAP_BLOCK_REF;
+        case -24: return FSI_BITMAP_EXT_BLOCK_REF;
         case -23: return FSI_MODIFIED_DAY;
         case -22: return FSI_MODIFIED_MIN;
         case -21: return FSI_MODIFIED_TICKS;
@@ -62,12 +56,14 @@ FSRootBlock::itemType(u32 byte)
         case -3:
         case -2:  return FSI_UNUSED;
         case -1:  return FSI_SUBTYPE_ID;
+            
+        default:
+            
+            if (word <= -51)                return FSI_HASH_REF;
+            if (word <= -25)                return FSI_BITMAP_BLOCK_REF;
+            if (word >= -20 && word <= -8)  return FSI_BCPL_DISK_NAME;
     }
     
-    if (word <= -51)                return FSI_HASH_REF;
-    if (word >= -49 && word <= -24) return FSI_BITMAP_BLOCK_REF;
-    if (word >= -20 && word <= -8)  return FSI_BCPL_DISK_NAME;
-
     assert(false);
     return FSI_UNKNOWN;
 }
@@ -76,22 +72,33 @@ FSError
 FSRootBlock::check(u32 byte, u8 *expected, bool strict)
 {
     // Translate the byte index to a (signed) long word index
-    i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
+    i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;
     u32 value = get32(word);
     
     switch (word) {
-        case 0:  EXPECT_LONGWORD(2);     break;
+            
+        case 0:   EXPECT_LONGWORD(2);              break;
         case 1:
-        case 2:  EXPECT_BYTE(0);         break;
-        case 3:  EXPECT_HASHTABLE_SIZE;  break;
-        case 4:  EXPECT_BYTE(0);         break;
-        case 5:  EXPECT_CHECKSUM;        break;
+        case 2:   EXPECT_BYTE(0);                  break;
+        case 3:   EXPECT_HASHTABLE_SIZE;           break;
+        case 4:   EXPECT_BYTE(0);                  break;
+        case 5:   EXPECT_CHECKSUM;                 break;
+        case -50:                                  break;
+        case -49: EXPECT_BITMAP_REF;               break;
+        case -24: EXPECT_OPTIONAL_BITMAP_EXT_REF;  break;
         case -4:
         case -3:
-        case -2: EXPECT_BYTE(0);         break;
-        case -1: EXPECT_LONGWORD(1);     break;
+        case -2:  EXPECT_BYTE(0);                  break;
+        case -1:  EXPECT_LONGWORD(1);              break;
+
+        default:
+            
+            // Hash table area
+            if (word <= -51) { EXPECT_OPTIONAL_HASH_REF; break; }
+            
+            // Bitmap block area
+            if (word <= -25) { EXPECT_OPTIONAL_BITMAP_REF; break; }
     }
-    if (word <= -51) EXPECT_OPTIONAL_HASH_REF;
     
     return FS_OK;
 }
@@ -99,8 +106,35 @@ FSRootBlock::check(u32 byte, u8 *expected, bool strict)
 void
 FSRootBlock::dump()
 {
-    msg("        Name : %s\n", getName().c_str());
-    msg("     Created : %s\n", getCreationDate().str().c_str());
-    msg("    Modified : %s\n", getModificationDate().str().c_str());
-    msg("  Hash table : "); dumpHashTable(); printf("\n");
+    msg("         Name : %s\n", getName().c_str());
+    msg("      Created : %s\n", getCreationDate().str().c_str());
+    msg("     Modified : %s\n", getModificationDate().str().c_str());
+    msg("   Hash table : "); dumpHashTable(); printf("\n");
+    msg("Bitmap blocks : ");
+    for (int i = 0; i < 25; i++) {
+        if (u32 ref = getBmBlockRef(i)) msg("%d ", ref);
+    }
+    msg("\n");
+    msg("   Next BmExt : %d\n", getNextBmExtBlockRef());
+}
+
+bool
+FSRootBlock::addBitmapBlockRefs(std::vector<u32> &refs)
+{
+    auto it = refs.begin();
+     
+    // Record the first 25 references in the root block
+    for (int i = 0; i < 25; i++, it++) {
+        if (it == refs.end()) return true;
+        setBmBlockRef(i, *it);
+    }
+            
+    // Record the remaining references in bitmap extension blocks
+    FSBitmapExtBlock *ext = getNextBmExtBlock();
+    while (ext && it != refs.end()) {
+        ext->addBitmapBlockRefs(refs, it);
+        ext = getNextBmExtBlock();
+    }
+    
+    return it == refs.end();
 }

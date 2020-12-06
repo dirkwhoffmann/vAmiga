@@ -59,11 +59,15 @@ public:
     // Methods from DiskFile
     //
     
+    FSVolumeType getDos() override { return adf->getDos(); }
+    void setDos(FSVolumeType dos) override { adf->setDos(dos); }
     DiskType getDiskType() override { return adf->getDiskType(); }
     DiskDensity getDiskDensity() override { return adf->getDiskDensity(); }
     long numSides() override { return adf->numSides(); }
-    long numCyclinders() override { return adf->numCyclinders(); }
+    long numCyls() override { return adf->numCyls(); }
     long numSectors() override { return adf->numSectors(); }
+    BootBlockType bootBlockType() override { return adf->bootBlockType(); }
+    const char *bootBlockName() override { return adf->bootBlockName(); }
     void readSector(u8 *target, long s) override { return adf->readSector(target, s); }
     void readSector(u8 *target, long t, long s) override { return adf->readSector(target, t, s); }
     bool encodeDisk(class Disk *disk) override { return adf->encodeDisk(disk); }

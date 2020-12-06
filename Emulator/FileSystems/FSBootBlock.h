@@ -13,8 +13,8 @@
 #include "FSBlock.h"
 
 struct FSBootBlock : FSBlock {
-      
-    FSBootBlock(FSVolume &ref, u32 nr);
+        
+    FSBootBlock(FSPartition &p, u32 nr);
     ~FSBootBlock();
     
     const char *getDescription() override { return "FSBootBlock"; }
@@ -25,8 +25,11 @@ struct FSBootBlock : FSBlock {
     //
 
     FSBlockType type() override { return FS_BOOT_BLOCK; }
+    FSVolumeType dos() override;
     FSItemType itemType(u32 byte) override;
     FSError check(u32 pos, u8 *expected, bool strict) override;
+    u32 checksumLocation() override;
+    u32 checksum() override;
     void dump() override;
     
     
@@ -34,7 +37,7 @@ struct FSBootBlock : FSBlock {
     // Block specific methods
     //
 
-    void writeBootCode();
+    void writeBootBlock(long id, int page);
 };
 
 #endif

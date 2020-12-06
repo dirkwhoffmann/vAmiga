@@ -7,11 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSVolume.h"
+#include "FSDevice.h"
 
-FSDataBlock::FSDataBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
+FSDataBlock::FSDataBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
-    data = new u8[ref.bsize]();    
+    data = new u8[p.dev.bsize]();
 }
 
 FSDataBlock::~FSDataBlock()
@@ -24,9 +24,9 @@ FSDataBlock::~FSDataBlock()
 // Original File System (OFS)
 //
 
-OFSDataBlock::OFSDataBlock(FSVolume &ref, u32 nr) : FSDataBlock(ref, nr)
+OFSDataBlock::OFSDataBlock(FSPartition &p, u32 nr) : FSDataBlock(p, nr)
 {
-    data = new u8[ref.bsize]();
+    data = new u8[bsize()]();
     
     set32(0, 8); // Block type
 }
@@ -80,7 +80,7 @@ OFSDataBlock::check(u32 byte, u8 *expected, bool strict)
             case 0: EXPECT_LONGWORD(8);                 break;
             case 1: if (strict) EXPECT_FILEHEADER_REF;  break;
             case 2: EXPECT_DATABLOCK_NUMBER;            break;
-            case 3: EXPECT_LESS_OR_EQUAL(volume.dsize); break;
+            case 3: EXPECT_LESS_OR_EQUAL(dsize());      break;
             case 4: EXPECT_OPTIONAL_DATABLOCK_REF;      break;
             case 5: EXPECT_CHECKSUM;                    break;
         }
@@ -94,7 +94,7 @@ OFSDataBlock::writeData(FILE *file, size_t size)
 {
     assert(file != nullptr);
     
-    size_t count = MIN(volume.dsize, size);
+    size_t count = MIN(dsize(), size);
     for (size_t i = 0; i < count; i++) fputc(data[i + headerSize()], file);
     return count;
 }
@@ -102,7 +102,7 @@ OFSDataBlock::writeData(FILE *file, size_t size)
 size_t
 OFSDataBlock::addData(const u8 *buffer, size_t size)
 {
-    size_t count = MIN(volume.bsize - headerSize(), size);
+    size_t count = MIN(bsize() - headerSize(), size);
 
     memcpy(data + headerSize(), buffer, count);
     setDataBytesInBlock(count);
@@ -110,12 +110,18 @@ OFSDataBlock::addData(const u8 *buffer, size_t size)
     return count;
 }
 
+size_t
+OFSDataBlock::dsize()
+{
+    return bsize() - headerSize();
+}
+
 
 //
 // Fast File System (FFS)
 //
 
-FFSDataBlock::FFSDataBlock(FSVolume &ref, u32 nr) : FSDataBlock(ref, nr) { }
+FFSDataBlock::FFSDataBlock(FSPartition &p, u32 nr) : FSDataBlock(p, nr) { }
 
 void
 FFSDataBlock::dump()
@@ -133,7 +139,7 @@ FFSDataBlock::writeData(FILE *file, size_t size)
 {
     assert(file != nullptr);
     
-    size_t count = MIN(volume.dsize, size);
+    size_t count = MIN(dsize(), size);
     for (size_t i = 0; i < count; i++) fputc(data[i + headerSize()], file);
     return count;
 }
@@ -141,7 +147,13 @@ FFSDataBlock::writeData(FILE *file, size_t size)
 size_t
 FFSDataBlock::addData(const u8 *buffer, size_t size)
 {
-    size_t count = MIN(volume.bsize, size);
+    size_t count = MIN(bsize(), size);
     memcpy(data, buffer, count);
     return count;
+}
+
+size_t
+FFSDataBlock::dsize()
+{
+    return bsize() - headerSize();
 }

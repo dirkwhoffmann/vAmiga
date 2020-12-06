@@ -49,6 +49,10 @@ AudioStream::copy(float *left, float *right, size_t n,
                   i32 &volume, i32 targetVolume, i32 volumeDelta)
 {
     // The caller has to ensure that no buffer underflows occurs
+    if (count() < n) {
+        printf("count() = \(count()) n = \(n)");
+        assert(false);
+    }
     assert(count() >= n);
 
     if (volume == targetVolume) {
