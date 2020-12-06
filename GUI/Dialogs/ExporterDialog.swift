@@ -305,18 +305,22 @@ class ExporterDialog: DialogController {
     //
     
     func update() {
-                
-        updateDiskIcon()
+          
+        // Update icons
+        diskIcon.image = disk!.icon(protected: drive!.hasWriteProtectedDisk())
+        virusIcon.isHidden = disk?.hasVirus == false
+        decontaminationButton.isHidden = disk?.hasVirus == false
+
+        // Update disk description
         updateTitleText()
         updateTrackAndSectorInfo()
         updateVolumeInfo()
         if volume == nil { volumeInfo.textColor = .red }
+        bootInfo.stringValue = disk!.bootInfo
+        bootInfo.textColor = disk!.hasVirus ? .warningColor : .secondaryLabelColor
 
         // Update the disclosure button state
         disclosureButton.state = shrinked ? .off : .on
-        
-        // Hide the decontamination button for healthy disks
-        decontaminationButton.isHidden = disk?.hasVirus == false
         
         // Hide some elements if the window is shrinked
         let items: [NSView] = [
@@ -374,13 +378,15 @@ class ExporterDialog: DialogController {
         previewTable.reloadData()
     }
     
+    /*
     func updateDiskIcon() {
         
         let protected = drive!.hasWriteProtectedDisk()
         diskIcon.image = disk!.icon(protected: protected)
         virusIcon.isHidden = disk?.hasVirus == false
     }
-
+    */
+    
     func updateTitleText() {
         
         var name = "This disk contains an unrecognized MFM stream"
@@ -411,13 +417,15 @@ class ExporterDialog: DialogController {
         } else {
             
             if disk != nil {
-                
+                text = disk!.layoutInfo
+                /*
                 let n = numSides == 1 ? "Single" : "Double"
                 let d = isHD ? "high" : isDD ? "double" : "single"
                 
                 text = "\(n) sided, "
                 text += "\(d) density disk, "
                 text += "\(numTracks) tracks with \(numSectors) sectors each"
+                */
             } else {
                 layoutInfo.textColor = .warningColor
             }

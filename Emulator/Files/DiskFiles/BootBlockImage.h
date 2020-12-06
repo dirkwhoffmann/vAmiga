@@ -30,8 +30,8 @@ class BootBlockImage {
 public:
     
     // Result of the data inspection
-    BootBlockType type = BB_STANDARD;
-    const char *name = "Unknown boot block";
+    BootBlockType type = BB_CUSTOM;
+    const char *name = "Custom boot block";
     
     // Constructors
     BootBlockImage(const u8 *buffer);

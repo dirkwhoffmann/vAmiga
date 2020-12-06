@@ -94,8 +94,7 @@ VAMIGA_ENUM(long, BootBlockType)
 {
     BB_STANDARD,
     BB_VIRUS,
-    BB_UTILITY,
-    BB_GAME
+    BB_CUSTOM
 };
 
 #endif

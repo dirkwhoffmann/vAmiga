@@ -234,15 +234,15 @@ const BBRecord bbRecord[] = {
     
     {
         "AmigaDOS Standard Bootblock 1.3",
-        { 4,0xc0, 5,0x20, 6,0x0f, 7,0x19, 8,0x00, 9,0x00, 10,0x03},
+        { 12,0x43, 13,0xfa, 14,0x00, 15,0x18, 16,0x4e, 17,0xae, 18,0xff },
         os13_bb, sizeof(os13_bb), BB_STANDARD
     },
     {
         "AmigaDOS Standard Bootblock 2.0",
-        { 4,0xe3, 5,0x3d, 6,0x0e, 7,0x72, 8,0x00, 9,0x00, 10,0x03 },
+        { 12,0x43, 13,0xfa, 14,0x00, 15,0x3e, 16,0x70, 17,0x25, 18,0x4e },
         os20_bb, sizeof(os20_bb), BB_STANDARD
     },
-    
+          
     //
     // Viruses (detectable and installable)
     //

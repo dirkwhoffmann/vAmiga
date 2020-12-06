@@ -11,6 +11,7 @@
                 <outlet property="blockField" destination="mIP-Nx-JCb" id="pS7-aN-w4b"/>
                 <outlet property="blockStepper" destination="v9x-P3-ijJ" id="ts4-8B-oPY"/>
                 <outlet property="blockText" destination="igt-RI-i5o" id="rOh-RH-jc1"/>
+                <outlet property="bootInfo" destination="eNo-GE-yjO" id="mmT-1q-RKL"/>
                 <outlet property="corruptionStepper" destination="C6j-0G-lEV" id="yJc-nn-CnS"/>
                 <outlet property="corruptionText" destination="wTa-j7-Ngp" id="BHP-TJ-1k7"/>
                 <outlet property="cylinderField" destination="gsN-a1-AKx" id="eZB-JP-LWr"/>
