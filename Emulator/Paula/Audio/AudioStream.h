@@ -18,6 +18,7 @@ typedef struct
     float left;
     float right;
     
+    /*
     template <class T>
     void applyToItems(T& worker)
     {
@@ -26,6 +27,7 @@ typedef struct
         & left
         & right;
     }
+    */
 
 }
 SamplePair;

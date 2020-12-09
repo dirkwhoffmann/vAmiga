@@ -614,7 +614,7 @@ extension Keys {
         static let deniseRev          = "VAMIGA_HW_DeniseRev"
         static let borderBlank        = "VAMIGA_HW_BorderBlank"
         static let ciaRev             = "VAMIGA_HW_CiaRev"
-        static let todBug             = "VAMIGA_COM_TodBug"
+        static let todBug             = "VAMIGA_HW_TodBug"
         static let realTimeClock      = "VAMIGA_HW_RealTimeClock"
         
         // Memory
@@ -1062,6 +1062,7 @@ struct AudioDefaults {
     // Out
     let volL: Int
     let volR: Int
+    
     let samplingMethod: SamplingMethod
     let filterType: FilterType
     let filterAlwaysOn: Bool

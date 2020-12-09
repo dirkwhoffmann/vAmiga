@@ -377,9 +377,13 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         float r =
         ch0 * (1 - config.pan[0]) + ch1 * (1 - config.pan[1]) +
         ch2 * (1 - config.pan[2]) + ch3 * (1 - config.pan[3]);
-        
+                
         // Apply audio filter
         if (filter) { l = filterL.apply(l); r = filterR.apply(r); }
+        
+        // Apply master volume
+        l *= config.volL;
+        r *= config.volR;
         
         // Write sample into ringbuffer
         stream.write( SamplePair { l, r } );
