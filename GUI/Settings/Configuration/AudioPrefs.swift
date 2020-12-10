@@ -14,18 +14,18 @@ extension ConfigurationController {
         let config = amiga.config.audio
         
         // In
-        audVol0.doubleValue = config.vol.0
-        audVol1.doubleValue = config.vol.1
-        audVol2.doubleValue = config.vol.2
-        audVol3.doubleValue = config.vol.3
-        audPan0.doubleValue = config.pan.0
-        audPan1.doubleValue = config.pan.1
-        audPan2.doubleValue = config.pan.2
-        audPan3.doubleValue = config.pan.3
+        audVol0.integerValue = config.vol.0
+        audVol1.integerValue = config.vol.1
+        audVol2.integerValue = config.vol.2
+        audVol3.integerValue = config.vol.3
+        audPan0.integerValue = config.pan.0
+        audPan1.integerValue = config.pan.1
+        audPan2.integerValue = config.pan.2
+        audPan3.integerValue = config.pan.3
 
         // Out
-        audVolL.doubleValue = config.volL
-        audVolR.doubleValue = config.volR
+        audVolL.integerValue = config.volL
+        audVolR.integerValue = config.volR
         audSamplingMethod.selectItem(withTag: config.samplingMethod.rawValue)
         audFilterType.selectItem(withTag: config.filterType.rawValue)
         audFilterAlwaysOn.state = config.filterAlwaysOn ? .on : .off
@@ -37,63 +37,54 @@ extension ConfigurationController {
 
     @IBAction func audVol0Action(_ sender: NSSlider!) {
 
-        track()
         config.vol0 = sender.integerValue
         refresh()
     }
     
     @IBAction func audVol1Action(_ sender: NSSlider!) {
 
-        track()
         config.vol1 = sender.integerValue
         refresh()
     }
     
     @IBAction func audVol2Action(_ sender: NSSlider!) {
 
-        track()
         config.vol2 = sender.integerValue
         refresh()
     }
     
     @IBAction func audVol3Action(_ sender: NSSlider!) {
 
-        track()
         config.vol3 = sender.integerValue
         refresh()
     }
     
     @IBAction func audPan0Action(_ sender: NSSlider!) {
         
-        track()
         config.pan0 = sender.integerValue
         refresh()
     }
     
     @IBAction func audPan1Action(_ sender: NSSlider!) {
         
-        track()
         config.pan1 = sender.integerValue
         refresh()
     }
     
     @IBAction func audPan2Action(_ sender: NSSlider!) {
         
-        track()
         config.pan2 = sender.integerValue
         refresh()
     }
     
     @IBAction func audPan3Action(_ sender: NSSlider!) {
         
-        track()
         config.pan3 = sender.integerValue
         refresh()
     }
 
     @IBAction func audVolLAction(_ sender: NSSlider!) {
         
-        track()
         config.volL = sender.integerValue
         refresh()
     }

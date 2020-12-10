@@ -1073,17 +1073,17 @@ struct AudioDefaults {
     
     static let std = AudioDefaults.init(
         
-        vol0: 400,
-        vol1: 400,
-        vol2: 400,
-        vol3: 400,
+        vol0: 100,
+        vol1: 100,
+        vol2: 100,
+        vol3: 100,
         pan0: 170,
         pan1: 30,
         pan2: 30,
         pan3: 170,
         
-        volL: 250,
-        volR: 250,
+        volL: 50,
+        volR: 50,
         samplingMethod: .SMP_NONE,
         filterType: .FILT_BUTTERWORTH,
         filterAlwaysOn: false
@@ -1091,17 +1091,17 @@ struct AudioDefaults {
     
     static let stereo = AudioDefaults.init(
         
-        vol0: 400,
-        vol1: 400,
-        vol2: 400,
-        vol3: 400,
+        vol0: 100,
+        vol1: 100,
+        vol2: 100,
+        vol3: 100,
         pan0: 150,
         pan1: 50,
         pan2: 50,
         pan3: 150,
         
-        volL: 250,
-        volR: 250,
+        volL: 50,
+        volR: 50,
         samplingMethod: .SMP_NONE,
         filterType: .FILT_BUTTERWORTH,
         filterAlwaysOn: false
@@ -1109,17 +1109,17 @@ struct AudioDefaults {
 
     static let mono = AudioDefaults.init(
         
-        vol0: 400,
-        vol1: 400,
-        vol2: 400,
-        vol3: 400,
+        vol0: 100,
+        vol1: 100,
+        vol2: 100,
+        vol3: 100,
         pan0: 0,
         pan1: 0,
         pan2: 0,
         pan3: 0,
         
-        volL: 250,
-        volR: 250,
+        volL: 50,
+        volR: 50,
         samplingMethod: .SMP_NONE,
         filterType: .FILT_BUTTERWORTH,
         filterAlwaysOn: false

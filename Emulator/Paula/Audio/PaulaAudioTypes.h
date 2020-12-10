@@ -97,12 +97,12 @@ typedef struct
     bool filterAlwaysOn;
 
     // Input channel volumes and pan settings
-    double vol[4];
-    double pan[4];
+    long vol[4];
+    long pan[4];
     
     // Output channel volumes
-    double volL;
-    double volR;
+    long volL;
+    long volR;
 }
 MuxerConfig;
 

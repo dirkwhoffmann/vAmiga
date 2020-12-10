@@ -76,10 +76,10 @@ Muxer::getConfigItem(ConfigOption option)
             return config.filterAlwaysOn;
 
         case OPT_AUDVOLL:
-            return (long)config.volL; //  (long)(exp2(config.volL) * 100.0);
+            return config.volL;
 
         case OPT_AUDVOLR:
-            return (long)config.volR; // (long)(exp2(config.volR) * 100.0);
+            return config.volR;
 
         default: assert(false);
     }
@@ -91,10 +91,10 @@ Muxer::getConfigItem(ConfigOption option, long id)
     switch (option) {
             
         case OPT_AUDVOL:
-            return (long)config.vol[id]; // (long)(exp2(config.vol[id] / 0.0000025) * 100.0);
+            return config.vol[id];
 
         case OPT_AUDPAN:
-            return (long)config.pan[id];
+            return config.pan[id];
             
         default: assert(false);
     }
@@ -113,35 +113,7 @@ Muxer::setConfigItem(ConfigOption option, long value)
                 warn("Invalid sampling method: %d\n", value);
                 return false;
             }
-            break;
-            
-        case OPT_FILTER_TYPE:
-            
-            if (!isFilterType(value)) {
-                warn("Invalid filter type: %d\n", value);
-                warn("       Valid values: 0 ... %d\n", FILT_COUNT - 1);
-                return false;
-            }
-            break;
-            
-        case OPT_AUDVOLL:
-        case OPT_AUDVOLR:
-            
-            if (value < 100 || value > 400) {
-                warn("Invalid volumne: %d\n", value);
-                warn("       Valid values: 100 ... 400\n");
-                return false;
-            }
-            break;
-                        
-        default:
-            break;
-    }
 
-    switch (option) {
-            
-        case OPT_SAMPLING_METHOD:
-            
             if (config.samplingMethod == value) {
                 return false;
             }
@@ -151,6 +123,12 @@ Muxer::setConfigItem(ConfigOption option, long value)
             
         case OPT_FILTER_TYPE:
             
+            if (!isFilterType(value)) {
+                warn("Invalid filter type: %d\n", value);
+                warn("       Valid values: 0 ... %d\n", FILT_COUNT - 1);
+                return false;
+            }
+
             if (config.filterType == value) {
                 return false;
             }
@@ -171,16 +149,24 @@ Muxer::setConfigItem(ConfigOption option, long value)
 
         case OPT_AUDVOLL:
             
-            config.volL = value; //  log2((double)value / 100.0);
-            volL = log2((double)value / 100.0);
+            if (value < 0) value = 0;
+            if (value > 100) value = 100;
+
+            config.volL = value;
+            volL = pow((double)value / 50, 1.4);
+                        
             if (wasMuted != isMuted())
                 messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
             return true;
             
         case OPT_AUDVOLR:
 
-            config.volR = value; // log2((double)value / 100.0);
-            volR = log2((double)value / 100.0);
+            if (value < 0) value = 0;
+            if (value > 100) value = 100;
+
+            config.volR = value;
+            volR = pow((double)value / 50, 1.4);
+
             if (wasMuted != isMuted())
                 messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
             return true;
@@ -198,14 +184,12 @@ Muxer::setConfigItem(ConfigOption option, long id, long value)
         case OPT_AUDVOL:
     
             assert(id >= 0 && id <= 3);
-            if (value < 100 || value > 400) {
-                warn("Invalid volumne: %d\n", value);
-                warn("   Valid values: 100 ... 400\n");
-                return false;
-            }
-
+            if (value < 0) value = 0;
+            if (value > 100) value = 100;
+            
             config.vol[id] = value;
-            vol[id] = log2((double)value / 100.0) * 0.0000025;
+            vol[id] = pow((double)value / 100, 1.4) * 0.0000025;
+            
             return true;
             
         case OPT_AUDPAN:
@@ -219,7 +203,7 @@ Muxer::setConfigItem(ConfigOption option, long id, long value)
                 return false;
             }
 
-            config.pan[id] = value; //  MAX(0.0, MIN(value / 100.0, 1.0));
+            config.pan[id] = value;
             
             if (value <= 50) pan[id] = (50 + value) / 100.0;
             else if (value <= 150) pan[id] = (150 - value) / 100.0;
