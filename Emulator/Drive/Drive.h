@@ -98,7 +98,7 @@ public:
     DriveConfig getConfig() { return config; }
     
     long getConfigItem(ConfigOption option);
-    bool setConfigItem(unsigned dfn, ConfigOption option, long value) override;
+    bool setConfigItem(ConfigOption option, long id, long value) override;
     
 private:
     

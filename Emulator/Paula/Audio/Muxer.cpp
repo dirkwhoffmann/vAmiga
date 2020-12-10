@@ -81,30 +81,22 @@ Muxer::getConfigItem(ConfigOption option)
         case OPT_AUDVOLR:
             return (long)(exp2(config.volR) * 100.0);
 
-        case OPT_AUDVOL0:
-            return (long)(exp2(config.vol[0] / 0.0000025) * 100.0);
+        default: assert(false);
+    }
+}
 
-        case OPT_AUDVOL1:
-            return (long)(exp2(config.vol[1] / 0.0000025) * 100.0);
+long
+Muxer::getConfigItem(ConfigOption option, long id)
+{
+    switch (option) {
             
-        case OPT_AUDVOL2:
-            return (long)(exp2(config.vol[2] / 0.0000025) * 100.0);
-            
-        case OPT_AUDVOL3:
-            return (long)(exp2(config.vol[3] / 0.0000025) * 100.0);
+        case OPT_AUDVOL:
+            return (long)(exp2(config.vol[id] / 0.0000025) * 100.0);
 
-        case OPT_AUDPAN0:
-            return (long)(config.pan[0] * 100.0);
+        case OPT_AUDPAN:
+            debug("read pan = %f\n", config.pan[id]);
+            return (long)config.pan[id];
             
-        case OPT_AUDPAN1:
-            return (long)(config.pan[1] * 100.0);
-            
-        case OPT_AUDPAN2:
-            return (long)(config.pan[2] * 100.0);
-            
-        case OPT_AUDPAN3:
-            return (long)(config.pan[3] * 100.0);
-
         default: assert(false);
     }
 }
@@ -135,10 +127,6 @@ Muxer::setConfigItem(ConfigOption option, long value)
             
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
-        case OPT_AUDVOL0:
-        case OPT_AUDVOL1:
-        case OPT_AUDVOL2:
-        case OPT_AUDVOL3:
             
             if (value < 100 || value > 400) {
                 warn("Invalid volumne: %d\n", value);
@@ -146,19 +134,7 @@ Muxer::setConfigItem(ConfigOption option, long value)
                 return false;
             }
             break;
-            
-        case OPT_AUDPAN0:
-        case OPT_AUDPAN1:
-        case OPT_AUDPAN2:
-        case OPT_AUDPAN3:
-            
-            if (value < 0 || value > 100) {
-                warn("Invalid pan: %d\n", value);
-                warn("       Valid values: 0 ... 100\n");
-                return false;
-            }
-            break;
-            
+                        
         default:
             break;
     }
@@ -208,43 +184,44 @@ Muxer::setConfigItem(ConfigOption option, long value)
                 messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
             return true;
             
-        case OPT_AUDVOL0:
-            
-            config.vol[0] = log2((double)value / 100.0) * 0.0000025;
-            return true;
-            
-        case OPT_AUDVOL1:
-            
-            config.vol[1] = log2((double)value / 100.0) * 0.0000025;
-            return true;
+        default:
+            return false;
+    }
+}
 
-        case OPT_AUDVOL2:
-            
-            config.vol[2] = log2((double)value / 100.0) * 0.0000025;
-            return true;
+bool
+Muxer::setConfigItem(ConfigOption option, long id, long value)
+{    
+    switch (option) {
+                        
+        case OPT_AUDVOL:
+    
+            assert(id >= 0 && id <= 3);
+            if (value < 100 || value > 400) {
+                warn("Invalid volumne: %d\n", value);
+                warn("   Valid values: 100 ... 400\n");
+                return false;
+            }
 
-        case OPT_AUDVOL3:
-            
-            config.vol[3] = log2((double)value / 100.0) * 0.0000025;
+            config.vol[id] = log2((double)value / 100.0) * 0.0000025;
             return true;
-
-        case OPT_AUDPAN0:
             
-            config.pan[0] = MAX(0.0, MIN(value / 100.0, 1.0));
-            return true;
-
-        case OPT_AUDPAN1:
-            config.pan[1] = MAX(0.0, MIN(value / 100.0, 1.0));
-            return true;
-
-        case OPT_AUDPAN2:
+        case OPT_AUDPAN:
             
-            config.pan[2] = MAX(0.0, MIN(value / 100.0, 1.0));
-            return true;
-
-        case OPT_AUDPAN3:
+            debug("Pan = %d\n", value);
             
-            config.pan[3] = MAX(0.0, MIN(value / 100.0, 1.0));
+            assert(id >= 0 && id <= 3);
+            if (value < 0 || value > 200) {
+                warn(" Invalid pan: %d\n", value);
+                warn("Valid values: 0 ... 200\n");
+                return false;
+            }
+
+            config.pan[id] = value; //  MAX(0.0, MIN(value / 100.0, 1.0));
+            
+            if (value <= 50) pan[id] = (50 + value) / 100.0;
+            else if (value <= 150) pan[id] = (150 - value) / 100.0;
+            else if (value <= 200) pan[id] = (value - 150) / 100.0;
             return true;
 
         default:
@@ -370,14 +347,14 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         
         // Compute left channel output
         float l =
-        ch0 * config.pan[0] + ch1 * config.pan[1] +
-        ch2 * config.pan[2] + ch3 * config.pan[3];
+        ch0 * (1 - pan[0]) + ch1 * (1 - pan[1]) +
+        ch2 * (1 - pan[2]) + ch3 * (1 - pan[3]);
 
         // Compute right channel output
         float r =
-        ch0 * (1 - config.pan[0]) + ch1 * (1 - config.pan[1]) +
-        ch2 * (1 - config.pan[2]) + ch3 * (1 - config.pan[3]);
-                
+        ch0 * pan[0] + ch1 * pan[1] +
+        ch2 * pan[2] + ch3 * pan[3];
+
         // Apply audio filter
         if (filter) { l = filterL.apply(l); r = filterR.apply(r); }
         
@@ -470,7 +447,7 @@ Muxer::copyMono(float *buffer, size_t n)
     // Check for a buffer underflow
     if (stream.count() < n) handleBufferUnderflow();
     
-    // Read sound samples
+    // Copy sound samples
     stream.copyMono(buffer, n, volume.current, volume.target, volume.delta);
     
     stream.unlock();
@@ -484,7 +461,7 @@ Muxer::copyStereo(float *left, float *right, size_t n)
     // Check for a buffer underflow
     if (stream.count() < n) handleBufferUnderflow();
     
-    // Read sound samples
+    // Copy sound samples
     stream.copy(left, right, n, volume.current, volume.target, volume.delta);
     
     stream.unlock();
@@ -498,7 +475,7 @@ Muxer::copyInterleaved(float *buffer, size_t n)
     // Check for a buffer underflow
     if (stream.count() < n) handleBufferUnderflow();
     
-    // Read sound samples
+    // Copy sound samples
     stream.copyInterleaved(buffer, n, volume.current, volume.target, volume.delta);
     
     stream.unlock();

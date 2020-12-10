@@ -49,11 +49,11 @@ DiskController::getConfigItem(ConfigOption option)
 }
 
 long
-DiskController::getConfigItem(unsigned dfn, ConfigOption option)
+DiskController::getConfigItem(ConfigOption option, long id)
 {
     switch (option) {
             
-        case OPT_DRIVE_CONNECT:  return config.connected[dfn];
+        case OPT_DRIVE_CONNECT:  return config.connected[id];
         
         default: assert(false);
     }
@@ -108,20 +108,22 @@ DiskController::setConfigItem(ConfigOption option, long value)
 }
 
 bool
-DiskController::setConfigItem(unsigned dfn, ConfigOption option, long value)
+DiskController::setConfigItem(ConfigOption option, long id, long value)
 {
     switch (option) {
             
         case OPT_DRIVE_CONNECT:
             
+            assert(id >= 0 && id <= 3);
+            
             // We don't allow the internal drive (Df0) to be disconnected
-            if (dfn == 0 && value == false) return false;
+            if (id == 0 && value == false) return false;
             
             // Connect or disconnect the drive
-            config.connected[dfn] = value;
+            config.connected[id] = value;
             
             // Inform the GUI
-            messageQueue.put(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, dfn);
+            messageQueue.put(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, id);
             messageQueue.put(MSG_CONFIG);
             return true;
             

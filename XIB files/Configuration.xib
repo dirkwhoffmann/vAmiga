@@ -1960,7 +1960,7 @@ DQ
                                                     <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ysl-BF-7tF">
                                                         <rect key="frame" x="100" y="22" width="28" height="30"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" continuous="YES" alignment="left" minValue="-5" maxValue="105" sliderType="circular" id="vTS-VZ-CWd"/>
+                                                        <sliderCell key="cell" continuous="YES" alignment="left" maxValue="200" sliderType="circular" id="vTS-VZ-CWd"/>
                                                         <connections>
                                                             <action selector="audPan1Action:" target="-2" id="1D7-r0-U9U"/>
                                                         </connections>
@@ -1986,7 +1986,7 @@ DQ
                                                     <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9EQ-fL-r94">
                                                         <rect key="frame" x="176" y="22" width="28" height="30"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" continuous="YES" alignment="left" minValue="-5" maxValue="105" sliderType="circular" id="fyz-rS-rbK"/>
+                                                        <sliderCell key="cell" continuous="YES" alignment="left" maxValue="200" sliderType="circular" id="fyz-rS-rbK"/>
                                                         <connections>
                                                             <action selector="audPan2Action:" target="-2" id="cxg-nK-9dJ"/>
                                                         </connections>
@@ -2012,7 +2012,7 @@ DQ
                                                     <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aRP-0C-dri">
                                                         <rect key="frame" x="252" y="22" width="28" height="30"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" continuous="YES" alignment="left" minValue="-5" maxValue="105" sliderType="circular" id="gpm-0Y-KGA"/>
+                                                        <sliderCell key="cell" continuous="YES" alignment="left" maxValue="200" sliderType="circular" id="gpm-0Y-KGA"/>
                                                         <connections>
                                                             <action selector="audPan3Action:" target="-2" id="hcZ-B1-e3s"/>
                                                         </connections>
@@ -2074,7 +2074,7 @@ DQ
                                                     <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Fk-fj-DxW">
                                                         <rect key="frame" x="21" y="22" width="28" height="30"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" continuous="YES" alignment="left" minValue="-5" maxValue="105" sliderType="circular" id="Ul7-AA-rSQ"/>
+                                                        <sliderCell key="cell" continuous="YES" alignment="left" maxValue="200" sliderType="circular" id="Ul7-AA-rSQ"/>
                                                         <connections>
                                                             <action selector="audPan0Action:" target="-2" id="n1T-vz-dzG"/>
                                                         </connections>

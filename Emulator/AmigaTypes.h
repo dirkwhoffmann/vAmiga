@@ -92,16 +92,10 @@ VAMIGA_ENUM(long, ConfigOption)
     OPT_SAMPLING_METHOD,
     OPT_FILTER_TYPE,
     OPT_FILTER_ALWAYS_ON,
+    OPT_AUDPAN,
+    OPT_AUDVOL,
     OPT_AUDVOLL,
-    OPT_AUDVOLR,
-    OPT_AUDVOL0,
-    OPT_AUDVOL1,
-    OPT_AUDVOL2,
-    OPT_AUDVOL3,
-    OPT_AUDPAN0,
-    OPT_AUDPAN1,
-    OPT_AUDPAN2,
-    OPT_AUDPAN3,
+    OPT_AUDVOLR
 };
 
 inline bool isConfigOption(long value)

@@ -110,10 +110,10 @@ public:
     bool turboMode() { return config.speed == -1; }
 
     long getConfigItem(ConfigOption option);
-    long getConfigItem(unsigned dfn, ConfigOption option);
+    long getConfigItem(ConfigOption option, long id);
     
     bool setConfigItem(ConfigOption option, long value) override;
-    bool setConfigItem(unsigned dfn, ConfigOption option, long value) override;
+    bool setConfigItem(ConfigOption option, long id, long value) override;
 
 private:
     

@@ -197,11 +197,11 @@ public:
     
     // Gets a single configuration item
     long getConfigItem(ConfigOption option);
-    long getConfigItem(unsigned dfn, ConfigOption option);
+    long getConfigItem(ConfigOption option, long id);
     
     // Sets a single configuration item
     bool configure(ConfigOption option, long value);
-    bool configure(unsigned dfn, ConfigOption option, long value);
+    bool configure(ConfigOption option, long id, long value);
     
     
     //

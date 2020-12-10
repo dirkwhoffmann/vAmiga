@@ -46,9 +46,11 @@ Drive::getConfigItem(ConfigOption option)
 }
 
 bool
-Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
+Drive::setConfigItem(ConfigOption option, long id, long value)
 {
-    if (dfn != nr) return false;
+    assert(id >= 0 && id <= 3);
+
+    if (id != nr) return false;
  
     switch (option) {
                             

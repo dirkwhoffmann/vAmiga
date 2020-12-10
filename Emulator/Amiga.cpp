@@ -248,14 +248,6 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_FILTER_ALWAYS_ON:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
-        case OPT_AUDVOL0:
-        case OPT_AUDVOL1:
-        case OPT_AUDVOL2:
-        case OPT_AUDVOL3:
-        case OPT_AUDPAN0:
-        case OPT_AUDPAN1:
-        case OPT_AUDPAN2:
-        case OPT_AUDPAN3:
             return paula.muxer.getConfigItem(option);
 
         case OPT_BLITTER_ACCURACY:
@@ -282,18 +274,20 @@ Amiga::getConfigItem(ConfigOption option)
 }
 
 long
-Amiga::getConfigItem(unsigned dfn, ConfigOption option)
+Amiga::getConfigItem(ConfigOption option, long id)
 {
-    assert(dfn < 4);
-            
     switch (option) {
             
+        case OPT_AUDPAN:
+        case OPT_AUDVOL:
+            return paula.muxer.getConfigItem(option, id);
+
         case OPT_DRIVE_CONNECT:
-            return paula.diskController.getConfigItem(dfn, option);
+            return paula.diskController.getConfigItem(option, id);
             
         case OPT_DRIVE_TYPE:
         case OPT_EMULATE_MECHANICS:
-            return df[dfn]->getConfigItem(option);
+            return df[id]->getConfigItem(option);
             
         default: assert(false);
     }
@@ -317,12 +311,10 @@ Amiga::configure(ConfigOption option, long value)
 }
 
 bool
-Amiga::configure(unsigned drive, ConfigOption option, long value)
+Amiga::configure(ConfigOption option, long id, long value)
 {
-    assert(drive <= 3);
-    
     // Propagate configuration request to all components
-    bool changed = HardwareComponent::configure(drive, option, value);
+    bool changed = HardwareComponent::configure(option, id, value);
     
     // Inform the GUI if the configuration has changed
     if (changed) messageQueue.put(MSG_CONFIG);

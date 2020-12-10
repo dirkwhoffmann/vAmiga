@@ -83,6 +83,12 @@ class Muxer : public AmigaComponent {
     // Volume control
     Volume volume;
             
+    // Volume scaling factors
+    float vol[4];
+    
+    // Panning factors
+    float pan[4];
+    
     
     //
     // Sub components
@@ -126,7 +132,9 @@ public:
     MuxerConfig getConfig() { return config; }
 
     long getConfigItem(ConfigOption option);
+    long getConfigItem(ConfigOption option, long id);
     bool setConfigItem(ConfigOption option, long value) override;
+    bool setConfigItem(ConfigOption option, long id, long value) override;
 
     bool isMuted() { return config.volL == 0 && config.volR == 0; }
 

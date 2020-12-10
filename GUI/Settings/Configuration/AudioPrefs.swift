@@ -18,10 +18,10 @@ extension ConfigurationController {
         audVol1.doubleValue = exp2(config.vol.1 / 0.0000025) * 100
         audVol2.doubleValue = exp2(config.vol.2 / 0.0000025) * 100
         audVol3.doubleValue = exp2(config.vol.3 / 0.0000025) * 100
-        audPan0.doubleValue = config.pan.0 * 100
-        audPan1.doubleValue = config.pan.1 * 100
-        audPan2.doubleValue = config.pan.2 * 100
-        audPan3.doubleValue = config.pan.3 * 100
+        audPan0.doubleValue = config.pan.0
+        audPan1.doubleValue = config.pan.1
+        audPan2.doubleValue = config.pan.2
+        audPan3.doubleValue = config.pan.3
 
         // Out
         audVolL.doubleValue = exp2(config.volL) * 100
