@@ -76,10 +76,10 @@ Muxer::getConfigItem(ConfigOption option)
             return config.filterAlwaysOn;
 
         case OPT_AUDVOLL:
-            return (long)(exp2(config.volL) * 100.0);
+            return (long)config.volL; //  (long)(exp2(config.volL) * 100.0);
 
         case OPT_AUDVOLR:
-            return (long)(exp2(config.volR) * 100.0);
+            return (long)config.volR; // (long)(exp2(config.volR) * 100.0);
 
         default: assert(false);
     }
@@ -91,10 +91,9 @@ Muxer::getConfigItem(ConfigOption option, long id)
     switch (option) {
             
         case OPT_AUDVOL:
-            return (long)(exp2(config.vol[id] / 0.0000025) * 100.0);
+            return (long)config.vol[id]; // (long)(exp2(config.vol[id] / 0.0000025) * 100.0);
 
         case OPT_AUDPAN:
-            debug("read pan = %f\n", config.pan[id]);
             return (long)config.pan[id];
             
         default: assert(false);
@@ -172,14 +171,16 @@ Muxer::setConfigItem(ConfigOption option, long value)
 
         case OPT_AUDVOLL:
             
-            config.volL = log2((double)value / 100.0);
+            config.volL = value; //  log2((double)value / 100.0);
+            volL = log2((double)value / 100.0);
             if (wasMuted != isMuted())
                 messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
             return true;
             
         case OPT_AUDVOLR:
 
-            config.volR = log2((double)value / 100.0);
+            config.volR = value; // log2((double)value / 100.0);
+            volR = log2((double)value / 100.0);
             if (wasMuted != isMuted())
                 messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
             return true;
@@ -203,7 +204,8 @@ Muxer::setConfigItem(ConfigOption option, long id, long value)
                 return false;
             }
 
-            config.vol[id] = log2((double)value / 100.0) * 0.0000025;
+            config.vol[id] = value;
+            vol[id] = log2((double)value / 100.0) * 0.0000025;
             return true;
             
         case OPT_AUDPAN:
@@ -340,10 +342,10 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
 
     for (long i = 0; i < count; i++) {
 
-        double ch0 = sampler[0]->interpolate<method>((Cycle)cycle) * config.vol[0];
-        double ch1 = sampler[1]->interpolate<method>((Cycle)cycle) * config.vol[1];
-        double ch2 = sampler[2]->interpolate<method>((Cycle)cycle) * config.vol[2];
-        double ch3 = sampler[3]->interpolate<method>((Cycle)cycle) * config.vol[3];
+        double ch0 = sampler[0]->interpolate<method>((Cycle)cycle) * vol[0];
+        double ch1 = sampler[1]->interpolate<method>((Cycle)cycle) * vol[1];
+        double ch2 = sampler[2]->interpolate<method>((Cycle)cycle) * vol[2];
+        double ch3 = sampler[3]->interpolate<method>((Cycle)cycle) * vol[3];
         
         // Compute left channel output
         float l =
@@ -359,8 +361,8 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         if (filter) { l = filterL.apply(l); r = filterR.apply(r); }
         
         // Apply master volume
-        l *= config.volL;
-        r *= config.volR;
+        l *= volL;
+        r *= volR;
         
         // Write sample into ringbuffer
         stream.write( SamplePair { l, r } );

@@ -85,7 +85,9 @@ class Muxer : public AmigaComponent {
             
     // Volume scaling factors
     float vol[4];
-    
+    float volL;
+    float volR;
+
     // Panning factors
     float pan[4];
     
@@ -170,10 +172,14 @@ private:
         & config.samplingMethod
         & config.filterType
         & config.filterAlwaysOn
-        & config.vol
         & config.pan
+        & config.vol
         & config.volL
-        & config.volR;
+        & config.volR
+        & vol
+        & volL
+        & volR
+        & pan;
     }
     
     template <class T>

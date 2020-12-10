@@ -14,18 +14,18 @@ extension ConfigurationController {
         let config = amiga.config.audio
         
         // In
-        audVol0.doubleValue = exp2(config.vol.0 / 0.0000025) * 100
-        audVol1.doubleValue = exp2(config.vol.1 / 0.0000025) * 100
-        audVol2.doubleValue = exp2(config.vol.2 / 0.0000025) * 100
-        audVol3.doubleValue = exp2(config.vol.3 / 0.0000025) * 100
+        audVol0.doubleValue = config.vol.0
+        audVol1.doubleValue = config.vol.1
+        audVol2.doubleValue = config.vol.2
+        audVol3.doubleValue = config.vol.3
         audPan0.doubleValue = config.pan.0
         audPan1.doubleValue = config.pan.1
         audPan2.doubleValue = config.pan.2
         audPan3.doubleValue = config.pan.3
 
         // Out
-        audVolL.doubleValue = exp2(config.volL) * 100
-        audVolR.doubleValue = exp2(config.volR) * 100
+        audVolL.doubleValue = config.volL
+        audVolR.doubleValue = config.volR
         audSamplingMethod.selectItem(withTag: config.samplingMethod.rawValue)
         audFilterType.selectItem(withTag: config.filterType.rawValue)
         audFilterAlwaysOn.state = config.filterAlwaysOn ? .on : .off
