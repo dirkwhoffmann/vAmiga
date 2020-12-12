@@ -8,6 +8,21 @@
 // -----------------------------------------------------------------------------
 
 #include "AmigaFile.h"
+#include "ADFFile.h"
+#include "EXTFile.h"
+
+template <class T> T *
+AmigaFile::make(const u8 *buffer, size_t length)
+{
+    T *obj = new T();
+    
+    if (!obj->readFromBuffer(buffer, length)) {
+        delete obj;
+        return nullptr;
+    }
+        
+    return obj;
+}
 
 AmigaFile::AmigaFile()
 {
@@ -262,3 +277,10 @@ exit:
     
     return success;
 }
+
+//
+// Instantiate template functions
+//
+
+template ADFFile* AmigaFile::make <ADFFile> (const u8 *buffer, size_t length);
+template EXTFile* AmigaFile::make <EXTFile> (const u8 *buffer, size_t length);

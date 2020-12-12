@@ -51,6 +51,7 @@ EXTFile::isEXTFile(const char *path)
     return false;
 }
 
+/*
 EXTFile *
 EXTFile::makeWithBuffer(const u8 *buffer, size_t length)
 {
@@ -63,6 +64,7 @@ EXTFile::makeWithBuffer(const u8 *buffer, size_t length)
     
     return result;
 }
+*/
 
 EXTFile *
 EXTFile::makeWithFile(const char *path)

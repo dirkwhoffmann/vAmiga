@@ -36,11 +36,20 @@ protected:
     
     
     //
-    // Initializing
+    // Creating
     //
     
 public:
     
+    template <class T> static T *make(const u8 *buffer, size_t length);
+
+    
+    //
+    // Initializing
+    //
+    
+public:
+
     AmigaFile();
     virtual ~AmigaFile();
     

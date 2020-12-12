@@ -1637,7 +1637,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
-    ADFFile *archive = ADFFile::makeWithBuffer((const u8 *)buffer, length);
+    ADFFile *archive = AmigaFile::make <ADFFile> ((const u8 *)buffer, length);
     return [self make: archive];
 }
 
@@ -1722,7 +1722,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
-    EXTFile *archive = EXTFile::makeWithBuffer((const u8 *)buffer, length);
+    EXTFile *archive = AmigaFile::make <EXTFile> ((const u8 *)buffer, length);
     return [self make: archive];
 }
 + (instancetype) makeWithFile:(NSString *)path
