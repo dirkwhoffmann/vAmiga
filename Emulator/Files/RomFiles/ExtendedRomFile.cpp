@@ -36,18 +36,3 @@ ExtendedRomFile::isExtendedRomFile(const char *path)
     matchingFileHeader(path, magicBytes1, sizeof(magicBytes1)) ||
     matchingFileHeader(path, magicBytes2, sizeof(magicBytes2));
 }
-
-/*
-ExtendedRomFile *
-ExtendedRomFile::makeWithFile(const char *path)
-{
-    ExtendedRomFile *rom = new ExtendedRomFile();
-
-    if (!rom->readFromFile(path)) {
-        delete rom;
-        return NULL;
-    }
-
-    return rom;
-}
-*/

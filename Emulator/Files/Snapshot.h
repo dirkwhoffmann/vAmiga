@@ -92,7 +92,6 @@ public:
     
     bool setCapacity(size_t size);
     
-    // static Snapshot *makeWithFile(const char *filename);
     static Snapshot *makeWithAmiga(Amiga *amiga);
     
     

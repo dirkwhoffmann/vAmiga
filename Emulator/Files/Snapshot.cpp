@@ -126,21 +126,6 @@ Snapshot::Snapshot(size_t capacity)
     header->subminor = V_SUBMINOR;
 }
 
-/*
-Snapshot *
-Snapshot::makeWithFile(const char *path)
-{
-    Snapshot *snapshot = new Snapshot();
-    
-    if (!snapshot->readFromFile(path)) {
-        delete snapshot;
-        return nullptr;
-    }
-        
-    return snapshot;
-}
-*/
-
 Snapshot *
 Snapshot::makeWithAmiga(Amiga *amiga)
 {

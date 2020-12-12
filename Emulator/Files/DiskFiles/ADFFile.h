@@ -51,7 +51,6 @@ public:
     const char *getDescription() override { return "ADF"; }
 
     static ADFFile *makeWithDiskType(DiskType t, DiskDensity d);
-    // static ADFFile *makeWithFile(const char *path);
     static ADFFile *makeWithFile(FILE *file);
     static ADFFile *makeWithDisk(Disk *disk);
     static ADFFile *makeWithVolume(FSDevice &volume, FSError *error);

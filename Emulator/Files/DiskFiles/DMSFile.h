@@ -37,9 +37,7 @@ public:
     DMSFile();
     
     const char *getDescription() override { return "DMS"; }
-    
-    // static DMSFile *makeWithFile(const char *path);
-    
+        
     
     //
     // Methods from AmigaFile

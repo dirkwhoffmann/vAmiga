@@ -347,18 +347,3 @@ RomFile::isRomFile(const char *path)
 
     return false;
 }
-
-/*
-RomFile *
-RomFile::makeWithFile(const char *path)
-{
-    RomFile *rom = new RomFile();
-    
-    if (!rom->readFromFile(path)) {
-        delete rom;
-        return NULL;
-    }
-    
-    return rom;
-}
-*/

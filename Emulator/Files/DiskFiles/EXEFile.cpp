@@ -37,21 +37,6 @@ EXEFile::isEXEFile(const char *path)
     return matchingFileHeader(path, signature, sizeof(signature));
 }
 
-/*
-EXEFile *
-EXEFile::makeWithFile(const char *path)
-{
-    EXEFile *exe = new EXEFile();
-    
-    if (!exe->readFromFile(path)) {
-        delete exe;
-        return NULL;
-    }
-    
-    return exe;
-}
-*/
-
 bool
 EXEFile::readFromBuffer(const u8 *buffer, size_t length)
 {

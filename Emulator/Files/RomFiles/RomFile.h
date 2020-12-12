@@ -53,10 +53,7 @@ public:
     RomFile();
     
     const char *getDescription() override { return "ROM"; }
-    
-    // Factory methods
-    // static RomFile *makeWithFile(const char *path);
-    
+        
     
     //
     // Methods from AmigaFile

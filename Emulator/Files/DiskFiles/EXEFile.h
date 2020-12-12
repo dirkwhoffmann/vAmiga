@@ -37,9 +37,7 @@ public:
     EXEFile();
     
     const char *getDescription() override { return "EXE"; }
-    
-    // static EXEFile *makeWithFile(const char *path);
-    
+        
     
     //
     // Methods from AmigaFile

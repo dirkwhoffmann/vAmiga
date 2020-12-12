@@ -32,21 +32,6 @@ HDFFile::isHDFFile(const char *path)
     return getSizeOfFile(path) % 512 == 0;
 }
 
-/*
-HDFFile *
-HDFFile::makeWithFile(const char *path)
-{
-    HDFFile *hdf = new HDFFile();
-    
-    if (!hdf->readFromFile(path)) {
-        delete hdf;
-        return nullptr;
-    }
-        
-    return hdf;
-}
-*/
-
 bool
 HDFFile::hasRDB()
 {

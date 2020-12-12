@@ -37,9 +37,7 @@ public:
     EncryptedRomFile();
     
     const char *getDescription() override { return "EncryptedRom"; }
-    
-    // static EncryptedRomFile *makeWithFile(const char *path);
-    
+        
     
     //
     // Methods from AmigaFile

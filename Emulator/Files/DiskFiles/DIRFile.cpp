@@ -28,21 +28,6 @@ DIRFile::bufferHasSameType(const u8 *buffer, size_t length)
     return false;
 }
 
-/*
-DIRFile *
-DIRFile::makeWithFile(const char *path)
-{
-    DIRFile *dir = new DIRFile();
-    
-    if (!dir->readFromFile(path)) {
-        delete dir;
-        return nullptr;
-    }
-    
-    return dir;
-}
-*/
-
 bool
 DIRFile::readFromBuffer(const u8 *buffer, size_t length)
 {

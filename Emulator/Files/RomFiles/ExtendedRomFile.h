@@ -41,8 +41,6 @@ public:
 
     const char *getDescription() override { return "ExtendedRom"; }
 
-    // static ExtendedRomFile *makeWithFile(const char *path);
-
 
     //
     // Methods from AmigaFile
