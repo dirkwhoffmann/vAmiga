@@ -43,7 +43,7 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
     bool success = false;
     
     if (!isEXEBuffer(buffer, length)) {
-        if (error) *error = ERR_INVALID_FILE_TYPE;
+        if (error) *error = ERR_INVALID_TYPE;
         return false;
     }
 

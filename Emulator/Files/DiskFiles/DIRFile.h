@@ -42,10 +42,10 @@ public:
     
     AmigaFileType fileType() override { return FILETYPE_DIR; }
     u64 fnv() override { return adf->fnv(); }
-    bool bufferHasSameType(const u8 *buffer, size_t length) override;
-    bool fileHasSameType(const char *path) override { return isDIRFile(path); }
-    bool readFromBuffer(const u8 *buffer, size_t length, FileError *error) override;
-    bool readFromFile(const char *filename, FileError *error) override;
+    bool matchingBuffer(const u8 *buffer, size_t length) override;
+    bool matchingFile(const char *path) override { return isDIRFile(path); }
+    bool readFromBuffer(const u8 *buffer, size_t length, FileError *error = nullptr) override;
+    bool readFromFile(const char *filename, FileError *error = nullptr) override;
     
     
     //

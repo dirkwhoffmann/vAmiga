@@ -50,9 +50,9 @@ public:
 public:
     
     AmigaFileType fileType() override { return FILETYPE_IMG; }
-    bool bufferHasSameType(const u8 *buffer, size_t length) override {
+    bool matchingBuffer(const u8 *buffer, size_t length) override {
         return isIMGBuffer(buffer, length); }
-    bool fileHasSameType(const char *path) override { return isIMGFile(path); }
+    bool matchingFile(const char *path) override { return isIMGFile(path); }
     
     
     //

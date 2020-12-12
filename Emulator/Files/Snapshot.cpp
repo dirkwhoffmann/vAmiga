@@ -138,13 +138,13 @@ Snapshot::makeWithAmiga(Amiga *amiga)
 }
 
 bool
-Snapshot::bufferHasSameType(const u8* buffer, size_t length)
+Snapshot::matchingBuffer(const u8* buffer, size_t length)
 {
     return Snapshot::isSnapshot(buffer, length);
 }
 
 bool
-Snapshot::fileHasSameType(const char *path)
+Snapshot::matchingFile(const char *path)
 {
     return Snapshot::isSnapshotFile(path, V_MAJOR, V_MINOR, V_SUBMINOR);
 }

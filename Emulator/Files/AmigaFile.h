@@ -19,7 +19,7 @@ class AmigaFile : public AmigaObject {
     
 protected:
     
-    // Physical location of this file on disk
+    // Physical location of this file on disk (if known)
     char *path = nullptr;
     
     // The raw data of this file
@@ -27,12 +27,6 @@ protected:
     
     // The size of this file in bytes
     size_t size = 0;
-    
-    // File pointer (offset into the data array with -1 indicating EOF)
-    long fp = -1;
-    
-    // End of file position (equals the last valid offset plus 1)
-    long eof = -1;
     
     
     //
@@ -68,10 +62,7 @@ public:
     
     // Returns the type of this file
     virtual AmigaFileType fileType() { return FILETYPE_UKNOWN; }
-    
-    // Returns a string representation of the file type, e.g., "ADF"
-    // virtual const char *typeAsString() { return ""; }
-    
+        
     // Returns the physical name of this file
     const char *getPath() { return path ? path : ""; }
     
@@ -101,35 +92,35 @@ public:
     //
     
     // Returns the required buffer size for this file
-    size_t sizeOnDisk() { return writeToBuffer(NULL); }
+    size_t sizeOnDisk() { return writeToBuffer(nullptr); }
 
     /* Returns true iff this specified buffer is compatible with this object.
      * This function is used in readFromBuffer().
      */
-    virtual bool bufferHasSameType(const u8 *buffer, size_t length) { return false; }
+    virtual bool matchingBuffer(const u8 *buffer, size_t length) { return false; }
 
     /* Returns true iff this specified file is compatible with this object.
      * This function is used in readFromFile().
      */
-    virtual bool fileHasSameType(const char *path) { return false; }
+    virtual bool matchingFile(const char *path) { return false; }
     
     /* Deserializes this object from a memory buffer. This function uses
-     * bufferHasSameType() to verify that the buffer contains a compatible
+     * matchingBuffer() to verify that the buffer contains a compatible
      * binary representation.
      */
-    virtual bool readFromBuffer(const u8 *buffer, size_t length, FileError *error);
+    virtual bool readFromBuffer(const u8 *buffer, size_t length, FileError *error = nullptr);
 
     /* Deserializes this object from a file. This function uses
-     * fileHasSameType() to verify that the file contains a compatible binary
+     * matchingFile() to verify that the file contains a compatible binary
      * representation. This function requires no custom implementation. It
      * first reads in the file contents in memory and invokes readFromBuffer
      * afterwards.
      */
-    virtual bool readFromFile(const char *filename, FileError *error);
+    virtual bool readFromFile(const char *filename, FileError *error = nullptr);
 
     /* Deserializes this object from a file that is already open.
      */
-    virtual bool readFromFile(FILE *file, FileError *error);
+    virtual bool readFromFile(FILE *file, FileError *error = nullptr);
 
     /* Writes the file contents into a memory buffer. If a NULL pointer is
      * passed in, a test run is performed. Test runs can be performed to
@@ -141,7 +132,7 @@ public:
      * implementation. It invokes writeToBuffer first and writes the data to
      * disk afterwards.
      */
-    virtual bool writeToFile(const char *filename);
+    bool writeToFile(const char *filename, FileError *error = nullptr);
 };
 
 #endif

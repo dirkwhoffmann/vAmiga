@@ -45,10 +45,10 @@ public:
     
     AmigaFileType fileType() override { return FILETYPE_DMS; }
     u64 fnv() override { return adf->fnv(); }
-    bool bufferHasSameType(const u8 *buffer, size_t length) override {
+    bool matchingBuffer(const u8 *buffer, size_t length) override {
         return isDMSBuffer(buffer, length); }
-    bool fileHasSameType(const char *path) override { return isDMSFile(path); }
-    bool readFromBuffer(const u8 *buffer, size_t length, FileError *error) override;
+    bool matchingFile(const char *path) override { return isDMSFile(path); }
+    bool readFromBuffer(const u8 *buffer, size_t length, FileError *error = nullptr) override;
     
     
     //

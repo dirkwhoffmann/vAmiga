@@ -22,7 +22,7 @@ DIRFile::isDIRFile(const char *path)
 }
 
 bool
-DIRFile::bufferHasSameType(const u8 *buffer, size_t length)
+DIRFile::matchingBuffer(const u8 *buffer, size_t length)
 {
     assert(false);
     return false;
@@ -43,7 +43,7 @@ DIRFile::readFromFile(const char *filename, FileError *error)
     // Only proceed if the provided filename points to a directory
     if (!isDIRFile(filename)) {
         warn("%s is not a directory\n", filename);
-        if (error) *error = ERR_INVALID_FILE_TYPE;
+        if (error) *error = ERR_INVALID_TYPE;
         return false;
     }
     
