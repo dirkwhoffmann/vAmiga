@@ -162,9 +162,8 @@ AmigaFile::readFromFile(const char *filename, FileError *error)
     }
     
     // Read
-    if ((success = readFromFile(file, error))) {
-        setPath(filename);
-    }
+    setPath(filename);
+    success = readFromFile(file, error);
     
     fclose(file);
     return success;

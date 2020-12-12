@@ -43,6 +43,16 @@ const u8 RomFile::kickRomHeaders[6][7] = {
     { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xF8, 0x04 }
 };
 
+//
+// Encrypted Kickstart Roms
+//
+
+const u8 RomFile::encrRomHeaders[1][11] = {
+
+    // Cloanto Rom Header Signature
+    { 'A', 'M', 'I', 'R', 'O', 'M', 'T', 'Y', 'P', 'E', '1' }
+};
+
 RomIdentifier
 RomFile::identifier(u32 fingerprint)
 {
@@ -297,9 +307,9 @@ RomFile::isRomBuffer(const u8 *buffer, size_t length)
         int len = sizeof(bootRomHeaders[0]);
         int cnt = sizeof(bootRomHeaders) / len;
 
-        for (int i = 0; i < cnt; i++)
+        for (int i = 0; i < cnt; i++) {
             if (matchingBufferHeader(buffer, bootRomHeaders[i], len)) return true;
-
+        }
         return false;
     }
 
@@ -309,12 +319,23 @@ RomFile::isRomBuffer(const u8 *buffer, size_t length)
         int len = sizeof(kickRomHeaders[0]);
         int cnt = sizeof(kickRomHeaders) / len;
 
-        for (int i = 0; i < cnt; i++)
+        for (int i = 0; i < cnt; i++) {
             if (matchingBufferHeader(buffer, kickRomHeaders[i], len)) return true;
-
+        }
         return false;
     }
 
+    // Encrypted Kickstart Roms
+    if (length == KB(256) + 11 || length == KB(512) + 11) {
+        
+        int len = sizeof(encrRomHeaders[0]);
+        int cnt = sizeof(encrRomHeaders) / len;
+        
+        for (int i = 0; i < cnt; i++) {
+            if (matchingBufferHeader(buffer, encrRomHeaders[i], len)) return true;
+        }
+    }
+    
     return false;
 }
 
@@ -345,5 +366,82 @@ RomFile::isRomFile(const char *path)
          return false;
      }
 
+    // Encrypted Kickstart Roms
+    if (checkFileSize(path, KB(256) + 11) || checkFileSize(path, KB(512) + 11)) {
+        
+        int len = sizeof(encrRomHeaders[0]);
+        int cnt = sizeof(encrRomHeaders) / len;
+        
+        for (int i = 0; i < cnt; i++) {
+            if (matchingFileHeader(path, encrRomHeaders[i], len)) return true;
+        }
+    }
+    
     return false;
+}
+
+bool
+RomFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
+{
+    FileError err;
+    
+    // Read from buffer
+    if (AmigaFile::readFromBuffer(buffer, length, &err)) {
+    
+        // If the buffer contains an encrypted Rom, try to decrypt it
+        encrypted = matchingBufferHeader(data, encrRomHeaders[0], sizeof(encrRomHeaders[0]));
+        if (encrypted) { decrypt(&err); }
+    }
+    
+    if (error) *error = err;
+    return err == ERR_FILE_OK;
+}
+
+bool
+RomFile::decrypt(FileError *error)
+{
+    const size_t headerSize = 11;
+    FileError err = ERR_FILE_OK;
+    u8 *encryptedData = nullptr;
+    u8 *decryptedData = nullptr;
+    u8 *romKeyData = nullptr;
+    long romKeySize = 0;
+    
+    printf("Decrypting Rom\n");
+    
+    //  Locate the rom.key file
+    assert(path != nullptr);
+    char *romKeyPath = replaceFilename(path, "rom.key");
+    if (romKeyPath == nullptr) {
+        err = ERR_MISSING_ROM_KEY;
+        goto exit;
+    }
+    
+    // Load the rom.key file
+    if (!loadFile(romKeyPath, &romKeyData, &romKeySize)) {
+        err = ERR_MISSING_ROM_KEY;
+        goto exit;
+    }
+    
+    // Create a buffer for the decrypted data
+    encryptedData = data + headerSize;
+    decryptedData = new u8[size - headerSize];
+        
+    // Decrypt
+    for (size_t i = 0; i < size - headerSize; i++) {
+        decryptedData[i] = encryptedData[i] ^ romKeyData[i % romKeySize];
+    }
+    
+    // Replace the old data by the decrypted data
+    delete [] data;
+    data = decryptedData;
+    size -= headerSize;
+    
+exit:
+    
+    if (romKeyPath) free(romKeyPath);
+    if (romKeyData) delete [] romKeyData;
+    
+    *error = err;
+    return err == ERR_FILE_OK;
 }

@@ -60,9 +60,11 @@ class DropView: NSImageView {
         if amiga.mem.loadRom(fromFile: url) { return true }
 
         // Check for an encrypted ROM
+        /*
         var error = DecryptionError.DECRYPT_NOT_AN_ENCRYPTED_ROM
         if amiga.mem.loadEncryptedRom(fromFile: url, error: &error) { return true }
         parent.parent.mydocument.showDecryptionAlert(error: error)
+        */
         
         parent.refresh()
         return false

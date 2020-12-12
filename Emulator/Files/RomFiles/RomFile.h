@@ -17,7 +17,11 @@ class RomFile : public AmigaFile {
     // Accepted header signatures
     static const u8 bootRomHeaders[1][8];
     static const u8 kickRomHeaders[6][7];
+    static const u8 encrRomHeaders[1][11];
 
+    // Indicates if the Rom was encrypted when it was read from disk
+    bool encrypted = false;
+    
 public:
     
     //
@@ -60,10 +64,24 @@ public:
     //
     
     AmigaFileType fileType() override { return FILETYPE_ROM; }
-    // const char *typeAsString() override { return "Rom"; }
     bool matchingBuffer(const u8 *buffer, size_t length) override {
         return isRomBuffer(buffer, length); }
     bool matchingFile(const char *path) override { return isRomFile(path); }
+    bool readFromBuffer(const u8 *buffer, size_t length, FileError *error = nullptr) override;
+
+    
+    //
+    // Decrypting
+    //
+    
+    // Returns the encryption flag
+    bool isEncrypted() { return encrypted; }
+    
+    /* Tries to decrypt the Rom. If this method is applied to an encrypted Rom,
+     * a rom.key file is seeked in the directory the encrypted Rom was loaded
+     * from and applies to the encrypted data.
+     */
+    bool decrypt(FileError *error = nullptr);
 };
 
 #endif
