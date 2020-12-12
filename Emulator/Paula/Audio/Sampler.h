@@ -45,6 +45,9 @@ struct Sampler : RingBuffer <TaggedSample, VPOS_CNT * HPOS_CNT> {
      */
     void reset();
 
+    // Clones another Sampler
+    void clone(Sampler &other);
+     
     /* Interpolates a sound sample for the specified target cycle. Two major
      * steps are involved. In the first step, the function computes index
      * position r1 with the following property:

@@ -193,7 +193,7 @@ struct GeneralDefaults {
         keepAspectRatio: false,
         exitOnEsc: true,
         
-        warpMode: .auto,
+        warpMode: .off,
 
         pauseInBackground: false,
         closeWithoutAsking: false

@@ -17,6 +17,12 @@ Sampler::reset()
     write( TaggedSample { 0, 0 } );
 }
 
+void
+Sampler::clone(Sampler &other)
+{
+    *this = other;
+}
+
 template <SamplingMethod method> i16
 Sampler::interpolate(Cycle clock)
 {
@@ -45,9 +51,9 @@ Sampler::interpolate(Cycle clock)
     
     /*
     if (!(clock >= c1 && clock < c2)) {
-        msg("WARNING: clock: %lld count: %d r: %d w: %d r1: %d r2: %d c1: %lld c2: %lld\n", clock, count(), r, w, r1, r2, c1, c2);
-        return 0;
-        
+        printf("WARNING: clock: %lld count: %zu ", clock, count());
+        printf("r: %d w: %d\n", r, w);
+        printf("r1: %d r2: %d c1: %lld c2: %lld\n", r1, r2, c1, c2);
     }
     */
     assert(clock >= c1 && clock < c2);

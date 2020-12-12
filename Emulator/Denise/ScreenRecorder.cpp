@@ -273,10 +273,10 @@ ScreenRecorder::vsyncHandler(Cycle target)
         //
         
         // Clone Paula's muxer contents
-        muxer.sampler[0] = paula.muxer.sampler[0];
-        muxer.sampler[1] = paula.muxer.sampler[1];
-        muxer.sampler[2] = paula.muxer.sampler[2];
-        muxer.sampler[3] = paula.muxer.sampler[3];
+        muxer.sampler[0]->clone(*paula.muxer.sampler[0]);
+        muxer.sampler[1]->clone(*paula.muxer.sampler[1]);
+        muxer.sampler[2]->clone(*paula.muxer.sampler[2]);
+        muxer.sampler[3]->clone(*paula.muxer.sampler[3]);
         assert(muxer.sampler[0]->r == paula.muxer.sampler[0]->r);
         assert(muxer.sampler[0]->w == paula.muxer.sampler[0]->w);
         
