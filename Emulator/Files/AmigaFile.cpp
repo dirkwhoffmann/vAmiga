@@ -8,8 +8,16 @@
 // -----------------------------------------------------------------------------
 
 #include "AmigaFile.h"
+#include "Snapshot.h"
 #include "ADFFile.h"
 #include "EXTFile.h"
+#include "IMGFile.h"
+#include "DMSFile.h"
+#include "EXEFile.h"
+#include "HDFFile.h"
+#include "RomFile.h"
+#include "EncryptedRomFile.h"
+#include "ExtendedRomFile.h"
 
 template <class T> T *
 AmigaFile::make(const u8 *buffer, size_t length)
@@ -282,5 +290,13 @@ exit:
 // Instantiate template functions
 //
 
+template Snapshot* AmigaFile::make <Snapshot> (const u8 *buffer, size_t length);
 template ADFFile* AmigaFile::make <ADFFile> (const u8 *buffer, size_t length);
 template EXTFile* AmigaFile::make <EXTFile> (const u8 *buffer, size_t length);
+template IMGFile* AmigaFile::make <IMGFile> (const u8 *buffer, size_t length);
+template DMSFile* AmigaFile::make <DMSFile> (const u8 *buffer, size_t length);
+template EXEFile* AmigaFile::make <EXEFile> (const u8 *buffer, size_t length);
+template HDFFile* AmigaFile::make <HDFFile> (const u8 *buffer, size_t length);
+template RomFile* AmigaFile::make <RomFile> (const u8 *buffer, size_t length);
+template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const u8 *buffer, size_t length);
+template EncryptedRomFile* AmigaFile::make <EncryptedRomFile> (const u8 *buffer, size_t length);

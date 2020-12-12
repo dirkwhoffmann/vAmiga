@@ -41,7 +41,7 @@ public:
     const char *getDescription() override { return "HDF"; }
 
     static HDFFile *makeWithFile(const char *path);
-    static HDFFile *makeWithBuffer(const u8 *buffer, size_t length);
+    // static HDFFile *makeWithBuffer(const u8 *buffer, size_t length);
     // static HDFFile *makeWithFile(FILE *file);
     // static HDFFile *makeWithVolume(FSDevice &volume, FSError *error);
 

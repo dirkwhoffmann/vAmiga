@@ -57,6 +57,7 @@ EncryptedRomFile::isEncryptedRomFile(const char *path)
     return false;
 }
 
+/*
 EncryptedRomFile *
 EncryptedRomFile::makeWithBuffer(const u8 *buffer, size_t length)
 {
@@ -69,6 +70,7 @@ EncryptedRomFile::makeWithBuffer(const u8 *buffer, size_t length)
     
     return rom;
 }
+*/
 
 EncryptedRomFile *
 EncryptedRomFile::makeWithFile(const char *path)
@@ -125,7 +127,7 @@ EncryptedRomFile::decrypt(DecryptionError *error)
     }
     
     // Convert decrypted data into a Rom
-    rom = RomFile::makeWithBuffer(decryptedData, size - headerSize);
+    rom = AmigaFile::make <RomFile> (decryptedData, size - headerSize);
     if (rom == NULL) {
         if (error) *error = DECRYPT_INVALID_ROM_KEY_FILE;
     }

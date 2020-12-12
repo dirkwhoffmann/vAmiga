@@ -38,7 +38,7 @@ public:
     
     const char *getDescription() override { return "EXE"; }
     
-    static EXEFile *makeWithBuffer(const u8 *buffer, size_t length);
+    // static EXEFile *makeWithBuffer(const u8 *buffer, size_t length);
     static EXEFile *makeWithFile(const char *path);
     
     

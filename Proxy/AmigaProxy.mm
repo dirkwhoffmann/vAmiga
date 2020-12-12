@@ -1470,7 +1470,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
-    Snapshot *snapshot = Snapshot::makeWithBuffer((u8 *)buffer, length);
+    Snapshot *snapshot = AmigaFile::make <Snapshot> ((u8 *)buffer, length);
     return [self make:snapshot];
 }
 + (instancetype) makeWithFile:(NSString *)path
@@ -1687,7 +1687,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
-    HDFFile *archive = HDFFile::makeWithBuffer((const u8 *)buffer, length);
+    HDFFile *archive = AmigaFile::make <HDFFile> ((const u8 *)buffer, length);
     return [self make: archive];
 }
 
@@ -1751,7 +1751,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
-    IMGFile *archive = IMGFile::makeWithBuffer((const u8 *)buffer, length);
+    IMGFile *archive = AmigaFile::make <IMGFile> ((const u8 *)buffer, length);
     return [self make: archive];
 }
 + (instancetype) makeWithFile:(NSString *)path
@@ -1786,7 +1786,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
-    DMSFile *archive = DMSFile::makeWithBuffer((const u8 *)buffer, length);
+    DMSFile *archive = AmigaFile::make <DMSFile> ((const u8 *)buffer, length);
     return [self make: archive];
 }
 + (instancetype) makeWithFile:(NSString *)path
@@ -1821,7 +1821,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
-    EXEFile *archive = EXEFile::makeWithBuffer((const u8 *)buffer, length);
+    EXEFile *archive = AmigaFile::make <EXEFile> ((const u8 *)buffer, length);
     return [self make: archive];
 }
 + (instancetype) makeWithFile:(NSString *)path

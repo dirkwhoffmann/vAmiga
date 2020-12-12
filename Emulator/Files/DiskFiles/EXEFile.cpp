@@ -37,6 +37,7 @@ EXEFile::isEXEFile(const char *path)
     return matchingFileHeader(path, signature, sizeof(signature));
 }
 
+/*
 EXEFile *
 EXEFile::makeWithBuffer(const u8 *buffer, size_t length)
 {
@@ -49,6 +50,7 @@ EXEFile::makeWithBuffer(const u8 *buffer, size_t length)
     
     return exe;
 }
+*/
 
 EXEFile *
 EXEFile::makeWithFile(const char *path)

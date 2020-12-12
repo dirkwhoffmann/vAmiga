@@ -126,6 +126,7 @@ Snapshot::Snapshot(size_t capacity)
     header->subminor = V_SUBMINOR;
 }
 
+/*
 Snapshot *
 Snapshot::makeWithBuffer(const u8 *buffer, size_t length)
 {
@@ -138,6 +139,7 @@ Snapshot::makeWithBuffer(const u8 *buffer, size_t length)
     
     return snapshot;
 }
+*/
 
 Snapshot *
 Snapshot::makeWithFile(const char *path)

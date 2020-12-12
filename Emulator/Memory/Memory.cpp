@@ -491,7 +491,7 @@ Memory::loadRomFromBuffer(const u8 *buffer, size_t length)
 {
     assert(buffer != NULL);
     
-    RomFile *file = RomFile::makeWithBuffer(buffer, length);
+    RomFile *file = AmigaFile::make <RomFile> (buffer, length);
     
     if (!file) {
         msg("Failed to read Kick Rom from buffer at %p\n", buffer);
@@ -547,7 +547,7 @@ Memory::loadExtFromBuffer(const u8 *buffer, size_t length)
 {
     assert(buffer != NULL);
 
-    ExtendedRomFile *file = ExtendedRomFile::makeWithBuffer(buffer, length);
+    ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (buffer, length);
 
     if (!file) {
         msg("Failed to read Extended Rom from buffer at %p\n", buffer);
@@ -595,7 +595,7 @@ Memory::saveRom(const char *path)
 {
     if (rom == NULL) return false;
 
-    RomFile *file = RomFile::makeWithBuffer(rom, config.romSize);
+    RomFile *file = AmigaFile::make <RomFile> (rom, config.romSize);
     return file && file->writeToFile(path);
 }
 
@@ -604,7 +604,7 @@ Memory::saveWom(const char *path)
 {
     if (wom == NULL) return false;
     
-    RomFile *file = RomFile::makeWithBuffer(wom, config.womSize);
+    RomFile *file = AmigaFile::make <RomFile> (wom, config.womSize);
     return file && file->writeToFile(path);
 }
 
@@ -613,7 +613,7 @@ Memory::saveExt(const char *path)
 {
     if (ext == NULL) return false;
 
-    RomFile *file = RomFile::makeWithBuffer(ext, config.extSize);
+    RomFile *file = AmigaFile::make <RomFile> (ext, config.extSize);
     return file && file->writeToFile(path);
 }
 

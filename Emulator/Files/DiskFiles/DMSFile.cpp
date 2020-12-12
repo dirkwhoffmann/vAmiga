@@ -35,6 +35,7 @@ DMSFile::isDMSFile(const char *path)
     return matchingFileHeader(path, signature, sizeof(signature));
 }
 
+/*
 DMSFile *
 DMSFile::makeWithBuffer(const u8 *buffer, size_t length)
 {
@@ -47,6 +48,7 @@ DMSFile::makeWithBuffer(const u8 *buffer, size_t length)
     
     return dms;
 }
+*/
 
 DMSFile *
 DMSFile::makeWithFile(const char *path)

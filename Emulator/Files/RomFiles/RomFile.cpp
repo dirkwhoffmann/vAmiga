@@ -348,6 +348,7 @@ RomFile::isRomFile(const char *path)
     return false;
 }
 
+/*
 RomFile *
 RomFile::makeWithBuffer(const u8 *buffer, size_t length)
 {
@@ -360,6 +361,7 @@ RomFile::makeWithBuffer(const u8 *buffer, size_t length)
     
     return rom;
 }
+*/
 
 RomFile *
 RomFile::makeWithFile(const char *path)

@@ -45,6 +45,7 @@ HDFFile::makeWithFile(const char *path)
     return hdf;
 }
 
+/*
 HDFFile *
 HDFFile::makeWithBuffer(const u8 *buffer, size_t length)
 {
@@ -57,6 +58,7 @@ HDFFile::makeWithBuffer(const u8 *buffer, size_t length)
     
     return hdf;
 }
+*/
 
 bool
 HDFFile::hasRDB()
