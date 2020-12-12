@@ -126,18 +126,21 @@ extension URL {
         }
     }
     
-    // Returns the URL of a subdirectory inside the application support folder
-    static func appSupportFolder(_ name: String) throws -> URL {
-        
+    // Returns the URL of a sub directory inside the application support folder
+    static func appSupportFolder(_ name: String, create: Bool = false) throws -> URL {
+
         let support = try URL.appSupportFolder()
         
         let fm = FileManager.default
         let folder = support.appendingPathComponent("\(name)")
+        
+        // Check if the folder already exists
         var isDirectory: ObjCBool = false
         let folderExists = fm.fileExists(atPath: folder.path,
                                          isDirectory: &isDirectory)
         
-        if !folderExists || !isDirectory.boolValue {
+        // If not, create the folder (if requested)
+        if create && (!folderExists || !isDirectory.boolValue) {
             
             try fm.createDirectory(at: folder,
                                    withIntermediateDirectories: true,
@@ -146,11 +149,11 @@ extension URL {
         
         return folder
     }
-    
+        
     // Return the URL to an empty temporary folder
     static func tmpFolder() throws -> URL {
         
-        let tmp = try appSupportFolder("tmp")
+        let tmp = try appSupportFolder("tmp", create: true)
         try tmp.delete()
         return tmp
     }

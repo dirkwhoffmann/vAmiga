@@ -99,11 +99,11 @@ class Screenshot {
         try data?.write(to: url, options: .atomic)
     }
     
-    static func folder(forDisk diskID: UInt64) -> URL? {
+    static func folder(forDisk diskID: UInt64, create: Bool = false) -> URL? {
         
         let subdir = String(format: "%8X", diskID)
         do {
-            return try URL.appSupportFolder("Screenshots/\(subdir)")
+            return try URL.appSupportFolder("Screenshots/\(subdir)", create: create)
         } catch {
             return nil
         }
@@ -150,7 +150,7 @@ class Screenshot {
     static func newUrl(diskID: UInt64,
                        using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
 
-        let folder = Screenshot.folder(forDisk: diskID)
+        let folder = Screenshot.folder(forDisk: diskID, create: true)
         return Screenshot.newUrl(in: folder, using: format)
     }
     
