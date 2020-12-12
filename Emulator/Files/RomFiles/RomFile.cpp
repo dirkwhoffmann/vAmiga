@@ -348,6 +348,7 @@ RomFile::isRomFile(const char *path)
     return false;
 }
 
+/*
 RomFile *
 RomFile::makeWithFile(const char *path)
 {
@@ -360,3 +361,4 @@ RomFile::makeWithFile(const char *path)
     
     return rom;
 }
+*/

@@ -76,6 +76,7 @@ ADFFile::makeWithDiskType(DiskType t, DiskDensity d)
     return adf;
 }
 
+/*
 ADFFile *
 ADFFile::makeWithFile(const char *path)
 {
@@ -88,6 +89,7 @@ ADFFile::makeWithFile(const char *path)
     
     return adf;
 }
+*/
 
 ADFFile *
 ADFFile::makeWithFile(FILE *file)

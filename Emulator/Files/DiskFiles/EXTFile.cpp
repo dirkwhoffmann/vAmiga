@@ -51,6 +51,7 @@ EXTFile::isEXTFile(const char *path)
     return false;
 }
 
+/*
 EXTFile *
 EXTFile::makeWithFile(const char *path)
 {
@@ -63,6 +64,7 @@ EXTFile::makeWithFile(const char *path)
     
     return result;
 }
+*/
 
 EXTFile *
 EXTFile::makeWithFile(FILE *file)

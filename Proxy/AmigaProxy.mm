@@ -1475,7 +1475,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) makeWithFile:(NSString *)path
 {
-    Snapshot *snapshot = Snapshot::makeWithFile([path UTF8String]);
+    Snapshot *snapshot = AmigaFile::make <Snapshot> ([path UTF8String]);
     return [self make:snapshot];
 }
 + (instancetype) makeWithAmiga:(AmigaProxy *)proxy
@@ -1643,7 +1643,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype)makeWithFile:(NSString *)path
 {
-    ADFFile *archive = ADFFile::makeWithFile([path fileSystemRepresentation]);
+    ADFFile *archive = AmigaFile::make <ADFFile> ([path fileSystemRepresentation]);
     return [self make: archive];
 }
 
@@ -1693,7 +1693,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype) makeWithFile:(NSString *)path
 {
-    HDFFile *archive = HDFFile::makeWithFile([path fileSystemRepresentation]);
+    HDFFile *archive = AmigaFile::make <HDFFile> ([path fileSystemRepresentation]);
     return [self make: archive];
 }
 
@@ -1727,7 +1727,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) makeWithFile:(NSString *)path
 {
-    EXTFile *archive = EXTFile::makeWithFile([path fileSystemRepresentation]);
+    EXTFile *archive = AmigaFile::make <EXTFile> ([path fileSystemRepresentation]);
     return [self make: archive];
 }
 
@@ -1756,7 +1756,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) makeWithFile:(NSString *)path
 {
-    IMGFile *archive = IMGFile::makeWithFile([path fileSystemRepresentation]);
+    IMGFile *archive = AmigaFile::make <IMGFile> ([path fileSystemRepresentation]);
     return [self make: archive];
 }
 + (instancetype) makeWithDrive:(DriveProxy *)drive
@@ -1791,7 +1791,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) makeWithFile:(NSString *)path
 {
-    DMSFile *archive = DMSFile::makeWithFile([path fileSystemRepresentation]);
+    DMSFile *archive = AmigaFile::make <DMSFile> ([path fileSystemRepresentation]);
     return [self make: archive];
 }
 
@@ -1826,7 +1826,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) makeWithFile:(NSString *)path
 {
-    EXEFile *archive = EXEFile::makeWithFile([path fileSystemRepresentation]);
+    EXEFile *archive = AmigaFile::make <EXEFile> ([path fileSystemRepresentation]);
     return [self make: archive];
 }
 
@@ -1849,21 +1849,16 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return DIRFile::isDIRFile([path fileSystemRepresentation]);
 }
+
 + (instancetype) make:(DIRFile *)archive
 {
     if (archive == NULL) return nil;
     return [[self alloc] initWithFile:archive];
 }
-/*
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
-{
-    DIRFile *archive = DIRFile::makeWithBuffer((const u8 *)buffer, length);
-    return [self make: archive];
-}
-*/
+
 + (instancetype) makeWithFile:(NSString *)path
 {
-    DIRFile *archive = DIRFile::makeWithFile([path fileSystemRepresentation]);
+    DIRFile *archive = AmigaFile::make <DIRFile> ([path fileSystemRepresentation]);
     return [self make: archive];
 }
 

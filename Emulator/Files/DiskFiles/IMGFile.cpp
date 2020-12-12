@@ -46,6 +46,7 @@ IMGFile::makeWithDiskType(DiskType t, DiskDensity d)
     return img;
 }
 
+/*
 IMGFile *
 IMGFile::makeWithFile(const char *path)
 {
@@ -58,6 +59,7 @@ IMGFile::makeWithFile(const char *path)
     
     return img;
 }
+*/
 
 IMGFile *
 IMGFile::makeWithFile(FILE *file)

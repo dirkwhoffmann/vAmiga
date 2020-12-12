@@ -57,6 +57,7 @@ EncryptedRomFile::isEncryptedRomFile(const char *path)
     return false;
 }
 
+/*
 EncryptedRomFile *
 EncryptedRomFile::makeWithFile(const char *path)
 {
@@ -69,6 +70,7 @@ EncryptedRomFile::makeWithFile(const char *path)
     
     return rom;
 }
+*/
 
 bool
 EncryptedRomFile::readFromBuffer(const u8 *buffer, size_t length)

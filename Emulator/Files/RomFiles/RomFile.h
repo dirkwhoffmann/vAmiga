@@ -55,7 +55,7 @@ public:
     const char *getDescription() override { return "ROM"; }
     
     // Factory methods
-    static RomFile *makeWithFile(const char *path);
+    // static RomFile *makeWithFile(const char *path);
     
     
     //

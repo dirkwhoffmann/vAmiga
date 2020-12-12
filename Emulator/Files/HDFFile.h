@@ -40,7 +40,7 @@ public:
     
     const char *getDescription() override { return "HDF"; }
 
-    static HDFFile *makeWithFile(const char *path);
+    // static HDFFile *makeWithFile(const char *path);
 
     
     //

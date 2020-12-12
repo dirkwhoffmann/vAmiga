@@ -12,19 +12,19 @@
 DiskFile *
 DiskFile::makeWithFile(const char *path)
 {
-    ADFFile *adf = ADFFile::makeWithFile(path);
+    ADFFile *adf = AmigaFile::make <ADFFile> (path);
     if (adf) return adf;
     
-    IMGFile *img = IMGFile::makeWithFile(path);
+    IMGFile *img = AmigaFile::make <IMGFile> (path);
     if (img) return img;
 
-    DMSFile *dms = DMSFile::makeWithFile(path);
+    DMSFile *dms = AmigaFile::make <DMSFile> (path);
     if (dms) return dms;
 
-    EXEFile *exe = EXEFile::makeWithFile(path);
+    EXEFile *exe = AmigaFile::make <EXEFile> (path);
     if (exe) return exe;
     
-    DIRFile *dir = DIRFile::makeWithFile(path);
+    DIRFile *dir = AmigaFile::make <DIRFile> (path);
     if (dir) return dir;
 
     return NULL;

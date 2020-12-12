@@ -28,6 +28,7 @@ DIRFile::bufferHasSameType(const u8 *buffer, size_t length)
     return false;
 }
 
+/*
 DIRFile *
 DIRFile::makeWithFile(const char *path)
 {
@@ -40,6 +41,7 @@ DIRFile::makeWithFile(const char *path)
     
     return dir;
 }
+*/
 
 bool
 DIRFile::readFromBuffer(const u8 *buffer, size_t length)

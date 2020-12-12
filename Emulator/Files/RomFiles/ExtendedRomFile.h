@@ -41,7 +41,7 @@ public:
 
     const char *getDescription() override { return "ExtendedRom"; }
 
-    static ExtendedRomFile *makeWithFile(const char *path);
+    // static ExtendedRomFile *makeWithFile(const char *path);
 
 
     //

@@ -506,7 +506,7 @@ Memory::loadRomFromFile(const char *path)
 {
     assert(path != NULL);
     
-    RomFile *rom = RomFile::makeWithFile(path);
+    RomFile *rom = AmigaFile::make <RomFile> (path);
     if (rom == NULL) return false;
     
     bool success = loadRom(rom);
@@ -519,7 +519,7 @@ Memory::loadEncryptedRomFromFile(const char *path, DecryptionError *error)
 {
     assert(path != NULL);
     
-    EncryptedRomFile *encryptedRom = EncryptedRomFile::makeWithFile(path);
+    EncryptedRomFile *encryptedRom = AmigaFile::make <EncryptedRomFile> (path);
     if (encryptedRom == NULL) return false;
         
     RomFile *rom = encryptedRom->decrypt(error);
@@ -562,7 +562,7 @@ Memory::loadExtFromFile(const char *path)
 {
     assert(path != NULL);
 
-    ExtendedRomFile *file = ExtendedRomFile::makeWithFile(path);
+    ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (path);
 
     if (!file) {
         msg("Failed to read Extended Rom from file %s\n", path);

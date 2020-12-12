@@ -38,7 +38,7 @@ public:
     
     const char *getDescription() override { return "EncryptedRom"; }
     
-    static EncryptedRomFile *makeWithFile(const char *path);
+    // static EncryptedRomFile *makeWithFile(const char *path);
     
     
     //

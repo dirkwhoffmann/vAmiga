@@ -35,7 +35,7 @@ public:
     
     const char *getDescription() override { return "DIR"; }
     
-    static DIRFile *makeWithFile(const char *path);
+    // static DIRFile *makeWithFile(const char *path);
     
     
     //

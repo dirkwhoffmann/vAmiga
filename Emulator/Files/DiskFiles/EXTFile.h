@@ -44,7 +44,7 @@ public:
     
     const char *getDescription() override { return "EXT"; }
     
-    static EXTFile *makeWithFile(const char *path);
+    // static EXTFile *makeWithFile(const char *path);
     static EXTFile *makeWithFile(FILE *file);
 
     

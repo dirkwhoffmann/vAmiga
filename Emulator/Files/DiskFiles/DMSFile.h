@@ -38,7 +38,7 @@ public:
     
     const char *getDescription() override { return "DMS"; }
     
-    static DMSFile *makeWithFile(const char *path);
+    // static DMSFile *makeWithFile(const char *path);
     
     
     //

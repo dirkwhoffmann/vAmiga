@@ -37,6 +37,7 @@ ExtendedRomFile::isExtendedRomFile(const char *path)
     matchingFileHeader(path, magicBytes2, sizeof(magicBytes2));
 }
 
+/*
 ExtendedRomFile *
 ExtendedRomFile::makeWithFile(const char *path)
 {
@@ -49,3 +50,4 @@ ExtendedRomFile::makeWithFile(const char *path)
 
     return rom;
 }
+*/

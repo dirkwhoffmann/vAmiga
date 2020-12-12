@@ -32,6 +32,7 @@ HDFFile::isHDFFile(const char *path)
     return getSizeOfFile(path) % 512 == 0;
 }
 
+/*
 HDFFile *
 HDFFile::makeWithFile(const char *path)
 {
@@ -44,6 +45,7 @@ HDFFile::makeWithFile(const char *path)
         
     return hdf;
 }
+*/
 
 bool
 HDFFile::hasRDB()

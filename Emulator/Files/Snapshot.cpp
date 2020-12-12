@@ -126,6 +126,7 @@ Snapshot::Snapshot(size_t capacity)
     header->subminor = V_SUBMINOR;
 }
 
+/*
 Snapshot *
 Snapshot::makeWithFile(const char *path)
 {
@@ -138,6 +139,7 @@ Snapshot::makeWithFile(const char *path)
         
     return snapshot;
 }
+*/
 
 Snapshot *
 Snapshot::makeWithAmiga(Amiga *amiga)
