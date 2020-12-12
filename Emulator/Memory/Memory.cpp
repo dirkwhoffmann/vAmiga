@@ -502,29 +502,13 @@ Memory::loadRomFromBuffer(const u8 *buffer, size_t length)
 }
 
 bool
-Memory::loadRomFromFile(const char *path)
+Memory::loadRomFromFile(const char *path, FileError *error)
 {
     assert(path != NULL);
     
-    RomFile *rom = AmigaFile::make <RomFile> (path);
+    RomFile *rom = AmigaFile::make <RomFile> (path, error);
     if (rom == NULL) return false;
     
-    bool success = loadRom(rom);
-    delete rom;
-    return success;
-}
-
-bool
-Memory::loadEncryptedRomFromFile(const char *path, DecryptionError *error)
-{
-    assert(path != NULL);
-    
-    EncryptedRomFile *encryptedRom = AmigaFile::make <EncryptedRomFile> (path);
-    if (encryptedRom == NULL) return false;
-        
-    RomFile *rom = encryptedRom->decrypt(error);
-    if (rom == NULL) { delete encryptedRom; return false; }
-
     bool success = loadRom(rom);
     delete rom;
     return success;

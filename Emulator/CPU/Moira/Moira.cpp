@@ -64,11 +64,11 @@ Moira::reset()
     sync(2);
     reg.sp = read16OnReset(0);
     sync(4);
-    reg.ssp = reg.sp = read16OnReset(2) | reg.sp << 16;
+    reg.ssp = reg.sp = (read16OnReset(2) & ~0x1) | reg.sp << 16;
     sync(4);
     reg.pc = read16OnReset(4);
     sync(4);
-    reg.pc = read16OnReset(6) | reg.pc << 16;
+    reg.pc = (read16OnReset(6) & ~0x1) | reg.pc << 16;
 
     // Fill the prefetch queue
     sync(4);

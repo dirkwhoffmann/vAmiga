@@ -389,18 +389,19 @@ class Configuration {
     func loadRomUserDefaults() {
 
         let defaults = UserDefaults.standard
-        
+        var error: FileError = .ERR_FILE_OK
+
         amiga.suspend()
 
         extStart = defaults.integer(forKey: Keys.Rom.extStart)
         
         if let url = UserDefaults.womUrl {
             track("Seeking Wom")
-            amiga.mem.loadRom(fromFile: url)
+            amiga.mem.loadRom(fromFile: url, error: &error)
         }
         if let url = UserDefaults.romUrl {
             track("Seeking Rom")
-            amiga.mem.loadRom(fromFile: url)
+            amiga.mem.loadRom(fromFile: url, error: &error)
         }
         if let url = UserDefaults.extUrl {
             track("Seeking Ext")

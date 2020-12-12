@@ -56,9 +56,13 @@ class DropView: NSImageView {
 
         guard let url = sender.url?.unpacked else { return false }
         
-        // Check for a standard ROM
-        if amiga.mem.loadRom(fromFile: url) { return true }
+        // Check for a ROM image
+        var error: FileError = .ERR_FILE_OK
+        if amiga.mem.loadRom(fromFile: url, error: &error) { return true }
 
+        if error != .ERR_INVALID_TYPE {
+            parent.parent.mydocument.showDecryptionAlert(error: error)
+        }
         // Check for an encrypted ROM
         /*
         var error = DecryptionError.DECRYPT_NOT_AN_ENCRYPTED_ROM
@@ -84,8 +88,7 @@ class RomDropView: DropView {
             
             return url.pathExtension == "zip" ||
                 url.pathExtension == "gz" ||
-                amiga.mem.isRom(url) ||
-                amiga.mem.isEncryptedRom(url)
+                amiga.mem.isRom(url)
         }
         
         return false

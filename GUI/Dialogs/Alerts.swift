@@ -154,7 +154,7 @@ extension MyDocument {
     }
     
     @discardableResult
-    func showDecryptionAlert(error: DecryptionError) -> NSApplication.ModalResponse {
+    func showDecryptionAlert(error: FileError) -> NSApplication.ModalResponse {
        
         let alert = NSAlert()
         alert.alertStyle = .warning
@@ -163,11 +163,11 @@ extension MyDocument {
         alert.addButton(withTitle: "OK")
         
         switch error {
-        case .DECRYPT_MISSING_ROM_KEY_FILE:
+        case .ERR_MISSING_ROM_KEY:
             alert.informativeText = "A rom.key file is required to decrypt the image."
             return alert.runModal()
             
-        case .DECRYPT_INVALID_ROM_KEY_FILE:
+        case .ERR_INVALID_ROM_KEY:
             alert.informativeText = "Decryption didn't produce a valid ROM."
             return alert.runModal()
             

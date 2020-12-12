@@ -195,7 +195,6 @@
 		50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E204E82295A3F20082B63D /* DmaDebugger.cpp */; };
 		50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */; };
 		50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE37240D41EE00155AE4 /* Moira.cpp */; };
-		50E5754024C01AFA00309084 /* EncryptedRomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E5753E24C01AFA00309084 /* EncryptedRomFile.cpp */; };
 		50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* AmigaComponent.cpp */; };
 		50EAD99C256E76820053F9AC /* HDFFile.h in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99B256E76820053F9AC /* HDFFile.h */; };
 		50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
@@ -529,8 +528,6 @@
 		50E2BE36240D41EE00155AE4 /* MoiraALU_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraALU_cpp.h; sourceTree = "<group>"; };
 		50E2BE37240D41EE00155AE4 /* Moira.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Moira.cpp; sourceTree = "<group>"; };
 		50E2BE38240D41EE00155AE4 /* MoiraALU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraALU.h; sourceTree = "<group>"; };
-		50E5753E24C01AFA00309084 /* EncryptedRomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EncryptedRomFile.cpp; sourceTree = "<group>"; };
-		50E5753F24C01AFA00309084 /* EncryptedRomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EncryptedRomFile.h; sourceTree = "<group>"; };
 		50E79BE7232D123000D296FB /* AmigaComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaComponent.cpp; sourceTree = "<group>"; };
 		50E79BE8232D123000D296FB /* AmigaComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaComponent.h; sourceTree = "<group>"; };
 		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
@@ -608,8 +605,6 @@
 			children = (
 				509F7F1C21EDEA0200A530E4 /* RomFile.h */,
 				509F7F1B21EDEA0200A530E4 /* RomFile.cpp */,
-				50E5753F24C01AFA00309084 /* EncryptedRomFile.h */,
-				50E5753E24C01AFA00309084 /* EncryptedRomFile.cpp */,
 				50ECF98522B153FB007B3DE7 /* ExtendedRomFile.h */,
 				50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */,
 			);
@@ -1455,7 +1450,6 @@
 				50AEBED324D3D6D10037082D /* StateMachineEvents.cpp in Sources */,
 				508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */,
 				50F31C292409322F008A54D8 /* CopperBlitterPanel.swift in Sources */,
-				50E5754024C01AFA00309084 /* EncryptedRomFile.cpp in Sources */,
 				50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */,
 				5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */,
 				50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */,

@@ -406,9 +406,7 @@ RomFile::decrypt(FileError *error)
     u8 *decryptedData = nullptr;
     u8 *romKeyData = nullptr;
     long romKeySize = 0;
-    
-    printf("Decrypting Rom\n");
-    
+        
     //  Locate the rom.key file
     assert(path != nullptr);
     char *romKeyPath = replaceFilename(path, "rom.key");
@@ -431,7 +429,13 @@ RomFile::decrypt(FileError *error)
     for (size_t i = 0; i < size - headerSize; i++) {
         decryptedData[i] = encryptedData[i] ^ romKeyData[i % romKeySize];
     }
-    
+
+    // Check if we've got a valid ROM
+    if (!isRomBuffer(decryptedData, size - headerSize)) {
+        err = ERR_INVALID_ROM_KEY;
+        goto exit;
+    }
+
     // Replace the old data by the decrypted data
     delete [] data;
     data = decryptedData;

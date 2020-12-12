@@ -17,7 +17,6 @@
 #include "DIRFile.h"
 #include "HDFFile.h"
 #include "RomFile.h"
-#include "EncryptedRomFile.h"
 #include "ExtendedRomFile.h"
 
 template <class T> T *
@@ -271,7 +270,6 @@ template DIRFile* AmigaFile::make <DIRFile> (const u8 *, size_t, FileError *);
 template HDFFile* AmigaFile::make <HDFFile> (const u8 *, size_t, FileError *);
 template RomFile* AmigaFile::make <RomFile> (const u8 *, size_t, FileError *);
 template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const u8 *, size_t, FileError *);
-template EncryptedRomFile* AmigaFile::make <EncryptedRomFile> (const u8 *, size_t, FileError *);
 
 template Snapshot* AmigaFile::make <Snapshot> (const char *, FileError *);
 template ADFFile* AmigaFile::make <ADFFile> (const char *, FileError *);
@@ -283,6 +281,4 @@ template DIRFile* AmigaFile::make <DIRFile> (const char *, FileError *);
 template HDFFile* AmigaFile::make <HDFFile> (const char *, FileError *);
 template RomFile* AmigaFile::make <RomFile> (const char *, FileError *);
 template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const char *, FileError *);
-template EncryptedRomFile* AmigaFile::make <EncryptedRomFile> (const char *, FileError *);
-
 template ADFFile* AmigaFile::make <ADFFile> (FILE *, FileError *);

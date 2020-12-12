@@ -290,23 +290,21 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return RomFile::isRomFile([url fileSystemRepresentation]);
 }
+/*
 - (BOOL) isEncryptedRom:(NSURL *)url
 {
     return EncryptedRomFile::isEncryptedRomFile([url fileSystemRepresentation]);
 }
+*/
 - (BOOL) loadRomFromBuffer:(NSData *)data
 {
     if (data == NULL) return NO;
     const u8 *bytes = (const u8 *)[data bytes];
     return wrapper->mem->loadRomFromBuffer(bytes, [data length]);
 }
-- (BOOL) loadRomFromFile:(NSURL *)url
+- (BOOL) loadRomFromFile:(NSURL *)url error:(FileError *)err
 {
-    return wrapper->mem->loadRomFromFile([url fileSystemRepresentation]);
-}
-- (BOOL) loadEncryptedRomFromFile:(NSURL *)url error:(DecryptionError *)error
-{
-    return wrapper->mem->loadEncryptedRomFromFile([url fileSystemRepresentation], error);
+    return wrapper->mem->loadRomFromFile([url fileSystemRepresentation], err);
 }
 - (u64) romFingerprint
 {
