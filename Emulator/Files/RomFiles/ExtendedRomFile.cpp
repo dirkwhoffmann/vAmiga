@@ -62,12 +62,3 @@ ExtendedRomFile::makeWithFile(const char *path)
 
     return rom;
 }
-
-bool
-ExtendedRomFile::readFromBuffer(const u8 *buffer, size_t length)
-{
-    if (!AmigaFile::readFromBuffer(buffer, length))
-        return false;
-
-    return isExtendedRomBuffer(buffer, length);
-}

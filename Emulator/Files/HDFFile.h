@@ -57,7 +57,6 @@ public:
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isHDFBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isHDFFile(path); }
-    bool readFromBuffer(const u8 *buffer, size_t length) override;
 
 
     //

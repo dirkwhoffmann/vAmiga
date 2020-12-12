@@ -182,3 +182,4 @@ Snapshot::fileHasSameType(const char *path)
 {
     return Snapshot::isSnapshotFile(path, V_MAJOR, V_MINOR, V_SUBMINOR);
 }
+

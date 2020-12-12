@@ -55,25 +55,7 @@ HDFFile::makeWithBuffer(const u8 *buffer, size_t length)
         return nullptr;
     }
     
-    /*
-    printf("HDF loaded\n");
-    u8 *p = hdf->getData();
-    for (int i = 0; i < 32; i++) {
-        printf("Block %d: %c%c%c%c\n", i, p[0], p[1], p[2], p[3]);
-        p += 256;
-    }
-    */
-    
     return hdf;
-}
-
-bool
-HDFFile::readFromBuffer(const u8 *buffer, size_t length)
-{
-    if (!AmigaFile::readFromBuffer(buffer, length))
-        return false;
-    
-    return isHDFBuffer(buffer, length);
 }
 
 bool

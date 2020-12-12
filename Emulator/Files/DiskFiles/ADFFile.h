@@ -69,7 +69,6 @@ public:
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isADFBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isADFFile(path); }
-    bool readFromBuffer(const u8 *buffer, size_t length) override;
     
     
     //

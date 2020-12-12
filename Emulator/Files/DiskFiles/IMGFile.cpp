@@ -105,15 +105,6 @@ IMGFile::makeWithDisk(Disk *disk)
     return img;
 }
 
-bool
-IMGFile::readFromBuffer(const u8 *buffer, size_t length)
-{
-    if (!AmigaFile::readFromBuffer(buffer, length))
-        return false;
-    
-    return isIMGBuffer(buffer, length);
-}
-
 long
 IMGFile::numSides()
 {

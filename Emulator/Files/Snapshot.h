@@ -105,7 +105,7 @@ public:
     const char *typeAsString() override { return "VAMIGA"; }
     bool bufferHasSameType(const u8 *buffer, size_t length) override;
     bool fileHasSameType(const char *filename) override;
-    
+
     
     //
     // Accessing snapshot properties

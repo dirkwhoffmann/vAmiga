@@ -54,8 +54,6 @@ public:
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isExtendedRomBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isExtendedRomFile(path); }
-    bool readFromBuffer(const u8 *buffer, size_t length) override;
-
 };
 
 #endif

@@ -373,12 +373,3 @@ RomFile::makeWithFile(const char *path)
     
     return rom;
 }
-
-bool
-RomFile::readFromBuffer(const u8 *buffer, size_t length)
-{
-    if (!AmigaFile::readFromBuffer(buffer, length))
-        return false;
-    
-    return isRomBuffer(buffer, length);
-}

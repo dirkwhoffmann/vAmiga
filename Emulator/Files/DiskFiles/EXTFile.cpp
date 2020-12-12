@@ -89,13 +89,3 @@ EXTFile::makeWithFile(FILE *file)
     
     return result;
 }
-
-bool
-EXTFile::readFromBuffer(const u8 *buffer, size_t length)
-{
-    if (!AmigaFile::readFromBuffer(buffer, length))
-        return false;
-        
-    return isEXTBuffer(buffer, length);
-}
-

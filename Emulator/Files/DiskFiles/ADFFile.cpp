@@ -166,15 +166,6 @@ ADFFile::makeWithVolume(FSDevice &volume, FSError *error)
     return adf;
 }
 
-bool
-ADFFile::readFromBuffer(const u8 *buffer, size_t length)
-{
-    if (!AmigaFile::readFromBuffer(buffer, length))
-        return false;
-    
-    return isADFBuffer(buffer, length);
-}
-
 FSVolumeType
 ADFFile::getDos()
 {
