@@ -129,17 +129,13 @@ Snapshot::Snapshot(size_t capacity)
 Snapshot *
 Snapshot::makeWithBuffer(const u8 *buffer, size_t length)
 {
-    Snapshot *snapshot = NULL;
+    Snapshot *snapshot = new Snapshot();
     
-    if (isSnapshot(buffer, length)) {
-        
-        snapshot = new Snapshot();
-        
-        if (!snapshot->readFromBuffer(buffer, length)) {
-            delete snapshot;
-            return NULL;
-        }
+    if (!snapshot->readFromBuffer(buffer, length)) {
+        delete snapshot;
+        return nullptr;
     }
+    
     return snapshot;
 }
 
