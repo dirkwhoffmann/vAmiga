@@ -76,21 +76,6 @@ ADFFile::makeWithDiskType(DiskType t, DiskDensity d)
     return adf;
 }
 
-/*
-ADFFile *
-ADFFile::makeWithBuffer(const u8 *buffer, size_t length)
-{
-    ADFFile *adf = new ADFFile();
-    
-    if (!adf->readFromBuffer(buffer, length)) {
-        delete adf;
-        return NULL;
-    }
-        
-    return adf;
-}
-*/
-
 ADFFile *
 ADFFile::makeWithFile(const char *path)
 {

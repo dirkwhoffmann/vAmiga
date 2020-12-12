@@ -15,11 +15,17 @@ DiskFile::makeWithFile(const char *path)
     ADFFile *adf = ADFFile::makeWithFile(path);
     if (adf) return adf;
     
+    IMGFile *img = IMGFile::makeWithFile(path);
+    if (img) return img;
+
     DMSFile *dms = DMSFile::makeWithFile(path);
     if (dms) return dms;
 
-    IMGFile *img = IMGFile::makeWithFile(path);
-    if (img) return img;
+    EXEFile *exe = EXEFile::makeWithFile(path);
+    if (exe) return exe;
+    
+    DIRFile *dir = DIRFile::makeWithFile(path);
+    if (dir) return dir;
 
     return NULL;
 }

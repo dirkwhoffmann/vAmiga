@@ -348,21 +348,6 @@ RomFile::isRomFile(const char *path)
     return false;
 }
 
-/*
-RomFile *
-RomFile::makeWithBuffer(const u8 *buffer, size_t length)
-{
-    RomFile *rom = new RomFile();
-    
-    if (!rom->readFromBuffer(buffer, length)) {
-        delete rom;
-        return NULL;
-    }
-    
-    return rom;
-}
-*/
-
 RomFile *
 RomFile::makeWithFile(const char *path)
 {

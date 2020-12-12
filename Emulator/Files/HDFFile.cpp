@@ -45,21 +45,6 @@ HDFFile::makeWithFile(const char *path)
     return hdf;
 }
 
-/*
-HDFFile *
-HDFFile::makeWithBuffer(const u8 *buffer, size_t length)
-{
-    HDFFile *hdf = new HDFFile();
-    
-    if (!hdf->readFromBuffer(buffer, length)) {
-        delete hdf;
-        return nullptr;
-    }
-    
-    return hdf;
-}
-*/
-
 bool
 HDFFile::hasRDB()
 {

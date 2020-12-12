@@ -51,21 +51,6 @@ EXTFile::isEXTFile(const char *path)
     return false;
 }
 
-/*
-EXTFile *
-EXTFile::makeWithBuffer(const u8 *buffer, size_t length)
-{
-    EXTFile *result = new EXTFile();
-    
-    if (!result->readFromBuffer(buffer, length)) {
-        delete result;
-        return NULL;
-    }
-    
-    return result;
-}
-*/
-
 EXTFile *
 EXTFile::makeWithFile(const char *path)
 {

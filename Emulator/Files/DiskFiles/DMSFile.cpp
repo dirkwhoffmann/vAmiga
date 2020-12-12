@@ -35,21 +35,6 @@ DMSFile::isDMSFile(const char *path)
     return matchingFileHeader(path, signature, sizeof(signature));
 }
 
-/*
-DMSFile *
-DMSFile::makeWithBuffer(const u8 *buffer, size_t length)
-{
-    DMSFile *dms = new DMSFile();
-    
-    if (!dms->readFromBuffer(buffer, length)) {
-        delete dms;
-        return nullptr;
-    }
-    
-    return dms;
-}
-*/
-
 DMSFile *
 DMSFile::makeWithFile(const char *path)
 {

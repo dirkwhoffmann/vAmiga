@@ -57,21 +57,6 @@ EncryptedRomFile::isEncryptedRomFile(const char *path)
     return false;
 }
 
-/*
-EncryptedRomFile *
-EncryptedRomFile::makeWithBuffer(const u8 *buffer, size_t length)
-{
-    EncryptedRomFile *rom = new EncryptedRomFile();
-    
-    if (!rom->readFromBuffer(buffer, length)) {
-        delete rom;
-        return NULL;
-    }
-    
-    return rom;
-}
-*/
-
 EncryptedRomFile *
 EncryptedRomFile::makeWithFile(const char *path)
 {

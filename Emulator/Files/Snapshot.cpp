@@ -126,35 +126,16 @@ Snapshot::Snapshot(size_t capacity)
     header->subminor = V_SUBMINOR;
 }
 
-/*
-Snapshot *
-Snapshot::makeWithBuffer(const u8 *buffer, size_t length)
-{
-    Snapshot *snapshot = new Snapshot();
-    
-    if (!snapshot->readFromBuffer(buffer, length)) {
-        delete snapshot;
-        return nullptr;
-    }
-    
-    return snapshot;
-}
-*/
-
 Snapshot *
 Snapshot::makeWithFile(const char *path)
 {
-    Snapshot *snapshot = NULL;
+    Snapshot *snapshot = new Snapshot();
     
-    if (isSnapshotFile(path)) {
-        
-        snapshot = new Snapshot();
-        
-        if (!snapshot->readFromFile(path)) {
-            delete snapshot;
-            return NULL;
-        }
+    if (!snapshot->readFromFile(path)) {
+        delete snapshot;
+        return nullptr;
     }
+        
     return snapshot;
 }
 

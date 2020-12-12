@@ -46,21 +46,6 @@ IMGFile::makeWithDiskType(DiskType t, DiskDensity d)
     return img;
 }
 
-/*
-IMGFile *
-IMGFile::makeWithBuffer(const u8 *buffer, size_t length)
-{
-    IMGFile *img = new IMGFile();
-    
-    if (!img->readFromBuffer(buffer, length)) {
-        delete img;
-        return NULL;
-    }
-    
-    return img;
-}
-*/
-
 IMGFile *
 IMGFile::makeWithFile(const char *path)
 {

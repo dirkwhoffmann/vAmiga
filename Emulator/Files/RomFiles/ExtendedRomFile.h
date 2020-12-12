@@ -41,7 +41,6 @@ public:
 
     const char *getDescription() override { return "ExtendedRom"; }
 
-    // static ExtendedRomFile *makeWithBuffer(const u8 *buffer, size_t length);
     static ExtendedRomFile *makeWithFile(const char *path);
 
 
