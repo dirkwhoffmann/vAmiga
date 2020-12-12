@@ -39,7 +39,7 @@ class MyDocument: NSDocument {
     private var bootDiskID = UInt64(0)
         
     //
-    // Initialization
+    // Initializing
     //
     
     override init() {
@@ -78,9 +78,21 @@ class MyDocument: NSDocument {
     }
 
     //
+    // Opening files
+    //
+    
+    /* WILL EVENTUALLY REPLACE OLD CODE
+    func openFile(url: URL, allowedTypes: [AmigaFileType]) -> AmigaFileProxy? {
+    
+        return nil
+    }
+    */
+    
+    //
     // Creating attachments
     //
     
+    // DEPRECATED
     func fileType(url: URL) -> AmigaFileType {
                 
         // Check if the URL points to a directory

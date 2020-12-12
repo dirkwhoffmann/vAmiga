@@ -28,14 +28,10 @@ protected:
     // The size of this file in bytes
     size_t size = 0;
     
-    /* File pointer
-     * An offset into the data array with -1 indicating EOF
-     */
+    // File pointer (offset into the data array with -1 indicating EOF)
     long fp = -1;
     
-    /* End of file position
-     * This value equals the last valid offset plus 1
-     */
+    // End of file position (equals the last valid offset plus 1)
     long eof = -1;
     
     
@@ -107,7 +103,6 @@ public:
      */
     virtual bool bufferHasSameType(const u8 *buffer, size_t length) { return false; }
 
-
     /* Returns true iff this specified file is compatible with this object.
      * This function is used in readFromFile().
      */
@@ -126,10 +121,12 @@ public:
      * afterwards.
      */
     virtual bool readFromFile(const char *filename);
+    virtual bool readFromFile(const char *filename, FileError *error);
 
     /* Deserializes this object from a file that is already open.
      */
     virtual bool readFromFile(FILE *file);
+    virtual bool readFromFile(FILE *file, FileError *error);
 
     /* Writes the file contents into a memory buffer. If a NULL pointer is
      * passed in, a test run is performed. Test runs can be performed to

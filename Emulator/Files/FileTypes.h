@@ -83,6 +83,24 @@ VAMIGA_ENUM(long, RomIdentifier)
 
 static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_CNT; }
 
+VAMIGA_ENUM(long, FileError)
+{
+    ERR_FILE_OK,
+    
+    // General
+    ERR_NO_SUCH_FILE,
+    ERR_INVALID_FILE_TYPE,
+    ERR_CANT_OPEN_FOR_READ,
+    ERR_CANT_OPEN_FOR_WRITE,
+    ERR_OUT_OF_MEMORY,
+    ERR_UNKNOWN,
+    
+    // Encrypted Roms
+    ERR_MISSING_ROM_KEY,
+    ERR_INVALID_ROM_KEY
+};
+
+// DEPRECATED
 VAMIGA_ENUM(long, DecryptionError)
 {
     DECRYPT_NOT_AN_ENCRYPTED_ROM,

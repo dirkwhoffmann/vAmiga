@@ -38,13 +38,13 @@ AmigaFile::alloc(size_t capacity)
 void
 AmigaFile::dealloc()
 {
-    if (data == NULL) {
+    if (data == nullptr) {
         assert(size == 0);
         return;
     }
     
     delete[] data;
-    data = NULL;
+    data = nullptr;
     
     size = 0;
     fp = -1;
@@ -54,7 +54,7 @@ AmigaFile::dealloc()
 void
 AmigaFile::setPath(const char *str)
 {
-    assert(str != NULL);
+    assert(str != nullptr);
     
     // Set path
     if (path) free(path);
@@ -92,7 +92,7 @@ void
 AmigaFile::flash(u8 *buffer, size_t offset)
 {
     int byte;
-    assert(buffer != NULL);
+    assert(buffer != nullptr);
     
     seek(0);
     
@@ -104,7 +104,7 @@ AmigaFile::flash(u8 *buffer, size_t offset)
 bool
 AmigaFile::readFromBuffer(const u8 *buffer, size_t length)
 {
-    assert (buffer != NULL);
+    assert (buffer != nullptr);
     
     // Check file type
     if (!bufferHasSameType(buffer, length)) {
@@ -125,67 +125,59 @@ AmigaFile::readFromBuffer(const u8 *buffer, size_t length)
 bool
 AmigaFile::readFromFile(const char *filename)
 {
+    FileError error;
+    return readFromFile(filename, &error);
+}
+
+bool
+AmigaFile::readFromFile(const char *filename, FileError *error)
+{
     assert (filename != NULL);
     
-    bool success = false;
-    u8 *buffer = NULL;
+    bool success;
     FILE *file = NULL;
     struct stat fileProperties;
     
-    // Check file type
-    if (!fileHasSameType(filename)) {
-        goto exit;
-    }
-    
     // Get file properties
     if (stat(filename, &fileProperties) != 0) {
-        goto exit;
+        *error = ERR_NO_SUCH_FILE;
+        return false;
     }
-    
+
+    // Check file type
+    if (!fileHasSameType(filename)) {
+        *error = ERR_INVALID_FILE_TYPE;
+        return false;
+    }
+        
     // Open file
     if (!(file = fopen(filename, "r"))) {
-        goto exit;
+        *error = ERR_CANT_OPEN_FOR_READ;
+        return false;
     }
     
-    // Allocate memory
-    if (!(buffer = new u8[fileProperties.st_size])) {
-        goto exit;
+    // Read file
+    if ((success = readFromFile(file, error))) {
+        setPath(filename);
     }
     
-    // Read from file
-    int c;
-    for (unsigned i = 0; i < fileProperties.st_size; i++) {
-        c = fgetc(file);
-        if (c == EOF)
-            break;
-        buffer[i] = (u8)c;
-    }
-    
-    // Read from buffer
-    dealloc();
-    if (!readFromBuffer(buffer, (unsigned)fileProperties.st_size)) {
-        goto exit;
-    }
-    
-    setPath(filename);
-    success = true;
-        
-exit:
-    
-    if (file)
-        fclose(file);
-    if (buffer)
-        delete[] buffer;
-    
+    fclose(file);
     return success;
 }
 
 bool
 AmigaFile::readFromFile(FILE *file)
 {
-    assert (file != NULL);
+    FileError error;
+    return readFromFile(file, &error);
+}
+
+bool
+AmigaFile::readFromFile(FILE *file, FileError *error)
+{
+    assert (file != nullptr);
     
-    u8 *buffer = NULL;
+    u8 *buffer = nullptr;
 
     // Get file size
     fseek(file, 0, SEEK_END);
@@ -194,6 +186,7 @@ AmigaFile::readFromFile(FILE *file)
     
     // Allocate memory
     if (!(buffer = new u8[size])) {
+        *error = ERR_OUT_OF_MEMORY;
         return false;
     }
 
@@ -206,6 +199,7 @@ AmigaFile::readFromFile(FILE *file)
 
     // Check type
     if (!bufferHasSameType(buffer, size)) {
+        *error = ERR_INVALID_FILE_TYPE;
         delete[] buffer;
         return false;
     }
@@ -213,6 +207,7 @@ AmigaFile::readFromFile(FILE *file)
     // Read from buffer
     dealloc();
     if (!readFromBuffer(buffer, size)) {
+        *error = ERR_INVALID_FILE_TYPE;
         delete[] buffer;
         return false;
     }
@@ -224,7 +219,7 @@ AmigaFile::readFromFile(FILE *file)
 size_t
 AmigaFile::writeToBuffer(u8 *buffer)
 {
-    assert(data != NULL);
+    assert(data != nullptr);
     
     if (buffer) {
         memcpy(buffer, data, size);
@@ -235,15 +230,15 @@ AmigaFile::writeToBuffer(u8 *buffer)
 bool
 AmigaFile::writeToFile(const char *filename)
 {
-    assert (filename != NULL);
+    assert (filename != nullptr);
 
     bool success = false;
-    u8 *data = NULL;
+    u8 *data = nullptr;
     FILE *file;
     size_t filesize;
     
     // Determine the size of the file in bytes
-    if (!(filesize = writeToBuffer(NULL))) return false;
+    if (!(filesize = writeToBuffer(nullptr))) return false;
     
     // Open file
     if (!(file = fopen(filename, "w"))) goto exit;
