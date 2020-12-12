@@ -176,10 +176,10 @@ private:
         & config.vol
         & config.volL
         & config.volR
+        & pan
         & vol
         & volL
-        & volR
-        & pan;
+        & volR;
     }
     
     template <class T>

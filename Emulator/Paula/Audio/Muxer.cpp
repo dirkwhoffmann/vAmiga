@@ -193,9 +193,7 @@ Muxer::setConfigItem(ConfigOption option, long id, long value)
             return true;
             
         case OPT_AUDPAN:
-            
-            debug("Pan = %d\n", value);
-            
+                        
             assert(id >= 0 && id <= 3);
             if (value < 0 || value > 200) {
                 warn(" Invalid pan: %d\n", value);

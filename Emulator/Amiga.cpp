@@ -305,7 +305,7 @@ Amiga::configure(ConfigOption option, long value)
     if (changed) messageQueue.put(MSG_CONFIG);
     
     // Dump the current configuration in debugging mode
-    if (changed && OPT_DEBUG) dumpConfig();
+    if (changed && CNF_DEBUG) dumpConfig();
 
     return changed;
 }
@@ -320,7 +320,7 @@ Amiga::configure(ConfigOption option, long id, long value)
     if (changed) messageQueue.put(MSG_CONFIG);
     
     // Dump the current configuration in debugging mode
-    if (changed && OPT_DEBUG) dumpConfig();
+    if (changed && CNF_DEBUG) dumpConfig();
         
     return changed;
 }

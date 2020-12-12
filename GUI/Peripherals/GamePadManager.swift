@@ -336,6 +336,8 @@ class GamePadManager {
                 print("Placeholder device", terminator: "")
             }
             print(dev.isMouse ? " (Mouse)" : "")
+            
+            dev.device?.listProperties()
         }
     }
     
