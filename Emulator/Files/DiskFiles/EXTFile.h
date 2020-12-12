@@ -50,7 +50,6 @@ public:
     //
     
     AmigaFileType fileType() override { return FILETYPE_EXT; }
-    const char *typeAsString() override { return "EXT"; }
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isEXTBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isEXTFile(path); }

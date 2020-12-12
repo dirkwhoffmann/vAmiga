@@ -44,7 +44,7 @@ public:
     //
     
     AmigaFileType fileType() override { return FILETYPE_ENCRYPTED_ROM; }
-    const char *typeAsString() override { return "Encrypted Kickstart Rom"; }
+    // const char *typeAsString() override { return "Encrypted Kickstart Rom"; }
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isEncryptedRomBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isEncryptedRomFile(path); }

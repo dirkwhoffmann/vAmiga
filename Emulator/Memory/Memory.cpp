@@ -580,6 +580,13 @@ Memory::loadRom(AmigaFile *file, u8 *target, size_t length)
         assert(target != NULL);
         memset(target, 0, length);
 
+        if (file->getSize() < length) {
+            warn("ROM is smaller than buffer\n");
+        }
+        
+        memcpy(target, file->getData(), MIN(file->getSize(), length));
+        
+        /*
         file->seek(0);
 
         int c;
@@ -587,6 +594,7 @@ Memory::loadRom(AmigaFile *file, u8 *target, size_t length)
             if ((c = file->read()) == EOF) break;
             *(target++) = c;
         }
+        */
     }
 }
 

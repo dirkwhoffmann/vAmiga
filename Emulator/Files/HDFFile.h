@@ -48,7 +48,7 @@ public:
 public:
     
     AmigaFileType fileType() override { return FILETYPE_HDF; }
-    const char *typeAsString() override { return "HDF"; }
+    // const char *typeAsString() override { return "HDF"; }
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isHDFBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isHDFFile(path); }

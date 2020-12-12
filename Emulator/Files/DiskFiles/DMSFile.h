@@ -44,7 +44,6 @@ public:
     //
     
     AmigaFileType fileType() override { return FILETYPE_DMS; }
-    const char *typeAsString() override { return "DMS"; }
     u64 fnv() override { return adf->fnv(); }
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isDMSBuffer(buffer, length); }

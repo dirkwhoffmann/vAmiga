@@ -1416,16 +1416,6 @@ struct SerialPortWrapper { SerialPort *port; };
     return wrapper->file->fnv();
 }
 
-- (void) seek:(NSInteger)offset
-{
-    wrapper->file->seek(offset);
-}
-
-- (NSInteger)read
-{
-    return wrapper->file->read();
-}
-
 - (void) readFromBuffer:(const void *)buffer length:(NSInteger)length
 {
     FileError error;

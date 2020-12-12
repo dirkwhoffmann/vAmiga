@@ -20,10 +20,10 @@ class AmigaFile : public AmigaObject {
 protected:
     
     // Physical location of this file on disk
-    char *path = NULL;
+    char *path = nullptr;
     
     // The raw data of this file
-    u8 *data = NULL;
+    u8 *data = nullptr;
     
     // The size of this file in bytes
     size_t size = 0;
@@ -70,7 +70,7 @@ public:
     virtual AmigaFileType fileType() { return FILETYPE_UKNOWN; }
     
     // Returns a string representation of the file type, e.g., "ADF"
-    virtual const char *typeAsString() { return ""; }
+    // virtual const char *typeAsString() { return ""; }
     
     // Returns the physical name of this file
     const char *getPath() { return path ? path : ""; }
@@ -91,13 +91,7 @@ public:
 
     // Returns the number of bytes in this file
     virtual size_t getSize() { return size; }
-    
-    // Moves the file pointer to the specified offset
-    virtual void seek(long offset);
-    
-    //  Reads a byte (returns -1 (EOF) if the end of file has been reached)
-    virtual int read();
-        
+            
     // Copies the whole file data into a buffer
     virtual void flash(u8 *buffer, size_t offset = 0);
     

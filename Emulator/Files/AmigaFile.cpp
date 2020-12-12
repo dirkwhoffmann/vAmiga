@@ -112,43 +112,10 @@ AmigaFile::setPath(const char *str)
 }
 
 void
-AmigaFile::seek(long offset)
-{
-    eof = size;
-    fp = (offset < eof) ? offset : -1;
-}
-
-int
-AmigaFile::read()
-{
-    int result;
-    
-    assert(eof <= (long)size);
-    
-    if (fp < 0)
-        return -1;
-    
-    // Get byte
-    result = data[fp++];
-    
-    // Check for end of file
-    if (fp == eof)
-        fp = -1;
-    
-    return result;
-}
-
-void
 AmigaFile::flash(u8 *buffer, size_t offset)
 {
-    int byte;
     assert(buffer != nullptr);
-    
-    seek(0);
-    
-    while ((byte = read()) != EOF) {
-        buffer[offset++] = (u8)byte;
-    }
+    memcpy(buffer + offset, data, size);
 }
 
 bool

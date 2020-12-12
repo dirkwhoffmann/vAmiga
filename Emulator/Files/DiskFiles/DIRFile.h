@@ -41,7 +41,6 @@ public:
     //
     
     AmigaFileType fileType() override { return FILETYPE_DIR; }
-    const char *typeAsString() override { return "DIR"; }
     u64 fnv() override { return adf->fnv(); }
     bool bufferHasSameType(const u8 *buffer, size_t length) override;
     bool fileHasSameType(const char *path) override { return isDIRFile(path); }

@@ -60,7 +60,7 @@ public:
     //
     
     AmigaFileType fileType() override { return FILETYPE_ROM; }
-    const char *typeAsString() override { return "Rom"; }
+    // const char *typeAsString() override { return "Rom"; }
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isRomBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isRomFile(path); }

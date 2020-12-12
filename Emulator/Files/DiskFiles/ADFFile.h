@@ -62,7 +62,6 @@ public:
 public:
     
     AmigaFileType fileType() override { return FILETYPE_ADF; }
-    const char *typeAsString() override { return "ADF"; }
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isADFBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isADFFile(path); }

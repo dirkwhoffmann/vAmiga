@@ -700,9 +700,6 @@ struct SerialPortWrapper;
 @property (readonly) NSInteger sizeOnDisk;
 @property (readonly) u64 fnv;
 
-- (void)seek:(NSInteger)offset;
-- (NSInteger)read;
-
 - (void)readFromBuffer:(const void *)buffer length:(NSInteger)length;
 - (NSInteger)writeToBuffer:(void *)buffer;
 
