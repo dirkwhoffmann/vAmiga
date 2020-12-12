@@ -41,9 +41,9 @@ protected:
     
 public:
     
-    template <class T> static T *make(const u8 *buffer, size_t length);
-    template <class T> static T *make(const char *path);
-    template <class T> static T *make(FILE *file);
+    template <class T> static T *make(const u8 *buffer, size_t length, FileError *err = nullptr);
+    template <class T> static T *make(const char *path, FileError *err = nullptr);
+    template <class T> static T *make(FILE *file, FileError *err = nullptr);
 
     
     //
@@ -124,7 +124,8 @@ public:
      * binary representation.
      */
     virtual bool readFromBuffer(const u8 *buffer, size_t length);
-    
+    virtual bool readFromBuffer(const u8 *buffer, size_t length, FileError *error);
+
     /* Deserializes this object from a file. This function uses
      * fileHasSameType() to verify that the file contains a compatible binary
      * representation. This function requires no custom implementation. It

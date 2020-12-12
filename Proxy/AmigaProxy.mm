@@ -1447,18 +1447,22 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return Snapshot::isSupportedSnapshot((u8 *)buffer, length);
 }
+
 + (BOOL) isUnsupportedSnapshot:(const void *)buffer length:(NSInteger)length
 {
     return Snapshot::isUnsupportedSnapshot((u8 *)buffer, length);
 }
+
 + (BOOL) isSupportedSnapshotFile:(NSString *)path
 {
     return Snapshot::isSupportedSnapshotFile([path fileSystemRepresentation]);
 }
+
 + (BOOL) isUnsupportedSnapshotFile:(NSString *)path
 {
     return Snapshot::isUnsupportedSnapshotFile([path fileSystemRepresentation]);
 }
+
 + (instancetype) make:(Snapshot *)snapshot
 {
     if (snapshot == NULL) { return nil; }
@@ -1468,16 +1472,31 @@ struct SerialPortWrapper { SerialPort *port; };
     
     return proxy;
 }
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
+
++ (instancetype) makeWithBuffer:(const void *)buf length:(NSInteger)len
 {
-    Snapshot *snapshot = AmigaFile::make <Snapshot> ((u8 *)buffer, length);
+    Snapshot *snapshot = AmigaFile::make <Snapshot> ((u8 *)buf, len);
     return [self make:snapshot];
 }
+
++ (instancetype) makeWithBuffer:(const void *)buf length:(NSInteger)len error:(FileError *)err
+{
+    Snapshot *snapshot = AmigaFile::make <Snapshot> ((u8 *)buf, len, err);
+    return [self make:snapshot];
+}
+
 + (instancetype) makeWithFile:(NSString *)path
 {
     Snapshot *snapshot = AmigaFile::make <Snapshot> ([path UTF8String]);
     return [self make:snapshot];
 }
+
++ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
+{
+    Snapshot *snapshot = AmigaFile::make <Snapshot> ([path UTF8String], err);
+    return [self make:snapshot];
+}
+
 + (instancetype) makeWithAmiga:(AmigaProxy *)proxy
 {
     Amiga *amiga = [proxy wrapper]->amiga;
@@ -1488,6 +1507,7 @@ struct SerialPortWrapper { SerialPort *port; };
     
     return [self make:snapshot];
 }
+
 - (NSImage *)previewImage
 {
     if (preview != NULL) { return preview; }

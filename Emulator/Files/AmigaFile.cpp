@@ -21,7 +21,7 @@
 #include "ExtendedRomFile.h"
 
 template <class T> T *
-AmigaFile::make(const u8 *buffer, size_t length)
+AmigaFile::make(const u8 *buffer, size_t length, FileError *err)
 {
     T *obj = new T();
     
@@ -34,7 +34,7 @@ AmigaFile::make(const u8 *buffer, size_t length)
 }
 
 template <class T> T *
-AmigaFile::make(const char *path)
+AmigaFile::make(const char *path, FileError *err)
 {
     T *obj = new T();
     
@@ -47,7 +47,7 @@ AmigaFile::make(const char *path)
 }
 
 template <class T> T *
-AmigaFile::make(FILE *file)
+AmigaFile::make(FILE *file, FileError *err)
 {
     T *obj = new T();
     
@@ -154,21 +154,31 @@ AmigaFile::flash(u8 *buffer, size_t offset)
 bool
 AmigaFile::readFromBuffer(const u8 *buffer, size_t length)
 {
+    FileError error;
+    return readFromBuffer(buffer, length, &error);
+}
+
+bool
+AmigaFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
+{
     assert (buffer != nullptr);
     
     // Check file type
     if (!bufferHasSameType(buffer, length)) {
+        *error = ERR_INVALID_FILE_TYPE;
         return false;
     }
     
     // Allocate memory
     if (!alloc(length)) {
+        *error = ERR_OUT_OF_MEMORY;
         return false;
     }
     
     // Read from buffer
     memcpy(data, buffer, length);
  
+    *error = ERR_FILE_OK;
     return true;
 }
 
@@ -317,28 +327,28 @@ exit:
 // Instantiate template functions
 //
 
-template Snapshot* AmigaFile::make <Snapshot> (const u8 *buffer, size_t length);
-template ADFFile* AmigaFile::make <ADFFile> (const u8 *buffer, size_t length);
-template EXTFile* AmigaFile::make <EXTFile> (const u8 *buffer, size_t length);
-template IMGFile* AmigaFile::make <IMGFile> (const u8 *buffer, size_t length);
-template DMSFile* AmigaFile::make <DMSFile> (const u8 *buffer, size_t length);
-template EXEFile* AmigaFile::make <EXEFile> (const u8 *buffer, size_t length);
-template DIRFile* AmigaFile::make <DIRFile> (const u8 *buffer, size_t length);
-template HDFFile* AmigaFile::make <HDFFile> (const u8 *buffer, size_t length);
-template RomFile* AmigaFile::make <RomFile> (const u8 *buffer, size_t length);
-template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const u8 *buffer, size_t length);
-template EncryptedRomFile* AmigaFile::make <EncryptedRomFile> (const u8 *buffer, size_t length);
+template Snapshot* AmigaFile::make <Snapshot> (const u8 *, size_t, FileError *);
+template ADFFile* AmigaFile::make <ADFFile> (const u8 *, size_t, FileError *);
+template EXTFile* AmigaFile::make <EXTFile> (const u8 *, size_t, FileError *);
+template IMGFile* AmigaFile::make <IMGFile> (const u8 *, size_t, FileError *);
+template DMSFile* AmigaFile::make <DMSFile> (const u8 *, size_t, FileError *);
+template EXEFile* AmigaFile::make <EXEFile> (const u8 *, size_t, FileError *);
+template DIRFile* AmigaFile::make <DIRFile> (const u8 *, size_t, FileError *);
+template HDFFile* AmigaFile::make <HDFFile> (const u8 *, size_t, FileError *);
+template RomFile* AmigaFile::make <RomFile> (const u8 *, size_t, FileError *);
+template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const u8 *, size_t, FileError *);
+template EncryptedRomFile* AmigaFile::make <EncryptedRomFile> (const u8 *, size_t, FileError *);
 
-template Snapshot* AmigaFile::make <Snapshot> (const char *path);
-template ADFFile* AmigaFile::make <ADFFile> (const char *path);
-template EXTFile* AmigaFile::make <EXTFile> (const char *path);
-template IMGFile* AmigaFile::make <IMGFile> (const char *path);
-template DMSFile* AmigaFile::make <DMSFile> (const char *path);
-template EXEFile* AmigaFile::make <EXEFile> (const char *path);
-template DIRFile* AmigaFile::make <DIRFile> (const char *path);
-template HDFFile* AmigaFile::make <HDFFile> (const char *path);
-template RomFile* AmigaFile::make <RomFile> (const char *path);
-template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const char *path);
-template EncryptedRomFile* AmigaFile::make <EncryptedRomFile> (const char *path);
+template Snapshot* AmigaFile::make <Snapshot> (const char *, FileError *);
+template ADFFile* AmigaFile::make <ADFFile> (const char *, FileError *);
+template EXTFile* AmigaFile::make <EXTFile> (const char *, FileError *);
+template IMGFile* AmigaFile::make <IMGFile> (const char *, FileError *);
+template DMSFile* AmigaFile::make <DMSFile> (const char *, FileError *);
+template EXEFile* AmigaFile::make <EXEFile> (const char *, FileError *);
+template DIRFile* AmigaFile::make <DIRFile> (const char *, FileError *);
+template HDFFile* AmigaFile::make <HDFFile> (const char *, FileError *);
+template RomFile* AmigaFile::make <RomFile> (const char *, FileError *);
+template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const char *, FileError *);
+template EncryptedRomFile* AmigaFile::make <EncryptedRomFile> (const char *, FileError *);
 
-template ADFFile* AmigaFile::make <ADFFile> (FILE *file);
+template ADFFile* AmigaFile::make <ADFFile> (FILE *, FileError *);
