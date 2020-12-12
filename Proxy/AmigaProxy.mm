@@ -1381,6 +1381,7 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 + (AmigaFileProxy *) makeWithFile:(AmigaFile *)file
 {
     if (file == nil) {
@@ -1388,39 +1389,49 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return [[self alloc] initWithFile:file];
 }
+
 - (void)setPath:(NSString *)path
 {
     AmigaFile *file = (AmigaFile *)([self wrapper]->file);
     file->setPath([path fileSystemRepresentation]);
 }
+
 - (AmigaFileWrapper *)wrapper
 {
     return wrapper;
 }
+
 - (AmigaFileType)type
 {
     return wrapper->file->fileType();
 }
+
 - (NSInteger) sizeOnDisk
 {
     return wrapper->file->sizeOnDisk();
 }
+
 - (u64) fnv
 {
     return wrapper->file->fnv();
 }
+
 - (void) seek:(NSInteger)offset
 {
     wrapper->file->seek(offset);
 }
+
 - (NSInteger)read
 {
     return wrapper->file->read();
 }
+
 - (void) readFromBuffer:(const void *)buffer length:(NSInteger)length
 {
-    wrapper->file->readFromBuffer((const u8 *)buffer, length);
+    FileError error;
+    wrapper->file->readFromBuffer((const u8 *)buffer, length, &error);
 }
+
 - (NSInteger) writeToBuffer:(void *)buffer
 {
     return wrapper->file->writeToBuffer((u8 *)buffer);

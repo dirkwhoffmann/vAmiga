@@ -29,20 +29,21 @@ DIRFile::bufferHasSameType(const u8 *buffer, size_t length)
 }
 
 bool
-DIRFile::readFromBuffer(const u8 *buffer, size_t length)
+DIRFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
 {
     assert(false);
     return false;
 }
 
 bool
-DIRFile::readFromFile(const char *filename)
+DIRFile::readFromFile(const char *filename, FileError *error)
 {
     debug(FS_DEBUG, "DIRFile::readFromFile(%s)\n", filename);
               
     // Only proceed if the provided filename points to a directory
     if (!isDIRFile(filename)) {
         warn("%s is not a directory\n", filename);
+        if (error) *error = ERR_INVALID_FILE_TYPE;
         return false;
     }
     
@@ -50,6 +51,7 @@ DIRFile::readFromFile(const char *filename)
     FSDevice *volume = FSDevice::make(FS_OFS, filename);
     if (!volume) {
         warn("Contents of %s does not fit on a disk\n", filename);
+        if (error) *error = ERR_UNKNOWN;
         return false;
     }
     
@@ -65,11 +67,12 @@ DIRFile::readFromFile(const char *filename)
     // volume->dump();
     
     // Convert the file system into an ADF
-    FSError error;
+    FSError fsError;
     assert(adf == nullptr);
-    adf = ADFFile::makeWithVolume(*volume, &error);
-    debug(FS_DEBUG, "makeWithVolume: %s\n", sFSError(error));
-
+    adf = ADFFile::makeWithVolume(*volume, &fsError);
+    debug(FS_DEBUG, "makeWithVolume: %s\n", sFSError(fsError));
     delete volume;
+    
+    if (error) *error = adf != nullptr ? ERR_UNKNOWN : ERR_FILE_OK;
     return adf != nullptr;
 }

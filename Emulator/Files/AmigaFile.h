@@ -123,7 +123,6 @@ public:
      * bufferHasSameType() to verify that the buffer contains a compatible
      * binary representation.
      */
-    virtual bool readFromBuffer(const u8 *buffer, size_t length);
     virtual bool readFromBuffer(const u8 *buffer, size_t length, FileError *error);
 
     /* Deserializes this object from a file. This function uses
@@ -132,12 +131,10 @@ public:
      * first reads in the file contents in memory and invokes readFromBuffer
      * afterwards.
      */
-    virtual bool readFromFile(const char *filename);
     virtual bool readFromFile(const char *filename, FileError *error);
 
     /* Deserializes this object from a file that is already open.
      */
-    virtual bool readFromFile(FILE *file);
     virtual bool readFromFile(FILE *file, FileError *error);
 
     /* Writes the file contents into a memory buffer. If a NULL pointer is

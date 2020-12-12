@@ -799,15 +799,20 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
 
     // Only proceed if the (predicted) block size matches
     if (size % bsize != 0) {
-        *error = FS_WRONG_BSIZE; return false;
+        if (error) *error = FS_WRONG_BSIZE;
+        return false;
     }
     // Only proceed if the source buffer contains the right amount of data
     if (numBlocks * bsize != size) {
-        *error = FS_WRONG_CAPACITY; return false;
+        if (error) *error = FS_WRONG_CAPACITY;
+        return false;
     }
     // Only proceed if all partitions contain a valid file system
     for (auto &it : partitions) {
-        if (it->dos == FS_NODOS) { *error = FS_UNSUPPORTED; return false; }
+        if (it->dos == FS_NODOS) {
+            if (error) *error = FS_UNSUPPORTED;
+            return false;
+        }
     }
         
     // Import all blocks
@@ -834,7 +839,7 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
         blocks[i] = newBlock;
     }
     
-    *error = FS_OK;
+    if (error) *error = FS_OK;
     debug(FS_DEBUG, "Success\n");
     info();
     dump();
@@ -889,10 +894,16 @@ bool FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *
     debug(FS_DEBUG, "Exporting %d blocks (%d - %d)\n", count, first, last);
 
     // Only proceed if the (predicted) block size matches
-    if (size % bsize != 0) { *error = FS_WRONG_BSIZE; return false; }
+    if (size % bsize != 0) {
+        if (error) *error = FS_WRONG_BSIZE;
+        return false;
+    }
 
     // Only proceed if the source buffer contains the right amount of data
-    if (count * bsize != size) { *error = FS_WRONG_CAPACITY; return false; }
+    if (count * bsize != size) {
+        if (error) *error = FS_WRONG_CAPACITY;
+        return false;
+    }
         
     // Wipe out the target buffer
     memset(dst, 0, size);
@@ -903,8 +914,9 @@ bool FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *
         blocks[first + i]->exportBlock(dst + i * bsize, bsize);
     }
 
-    *error = FS_OK;
     debug(FS_DEBUG, "Success\n");
+
+    if (error) *error = FS_OK;
     return true;
 }
 

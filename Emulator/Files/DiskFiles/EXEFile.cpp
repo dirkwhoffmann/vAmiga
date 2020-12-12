@@ -38,16 +38,19 @@ EXEFile::isEXEFile(const char *path)
 }
 
 bool
-EXEFile::readFromBuffer(const u8 *buffer, size_t length)
+EXEFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
 {
     bool success = false;
     
-    if (!isEXEBuffer(buffer, length))
+    if (!isEXEBuffer(buffer, length)) {
+        if (error) *error = ERR_INVALID_FILE_TYPE;
         return false;
+    }
+
+    if (!AmigaFile::readFromBuffer(buffer, length, error)) {
+        return false;
+    }
     
-    if (!AmigaFile::readFromBuffer(buffer, length))
-        return false;
-        
     // Check if this file requires an HD disk
     bool hd = length > 853000;
         
@@ -88,11 +91,11 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     
     // Convert the volume into an ADF
     if (success) {
-        FSError error;
+        FSError fsError;
         assert(adf == nullptr);
-        adf = ADFFile::makeWithVolume(*volume, &error);
-        if (error != FS_OK) {
-            warn("readFromBuffer: Cannot export volume (%s)\n", sFSError(error));
+        adf = ADFFile::makeWithVolume(*volume, &fsError);
+        if (fsError != FS_OK) {
+            warn("readFromBuffer: Cannot export volume (%s)\n", sFSError(fsError));
         }
     }
     
@@ -102,5 +105,6 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     
     volume->exportDirectory(path);
     
+    if (error) *error = adf ? ERR_FILE_OK : ERR_UNKNOWN;
     return adf != nullptr;
 }

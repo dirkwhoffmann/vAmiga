@@ -49,7 +49,7 @@ public:
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isEXEBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isEXEFile(path); }
-    bool readFromBuffer(const u8 *buffer, size_t length) override;
+    bool readFromBuffer(const u8 *buffer, size_t length, FileError *error) override;
     
     
     //

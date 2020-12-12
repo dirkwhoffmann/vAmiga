@@ -21,11 +21,11 @@
 #include "ExtendedRomFile.h"
 
 template <class T> T *
-AmigaFile::make(const u8 *buffer, size_t length, FileError *err)
+AmigaFile::make(const u8 *buffer, size_t length, FileError *error)
 {
     T *obj = new T();
     
-    if (!obj->readFromBuffer(buffer, length)) {
+    if (!obj->readFromBuffer(buffer, length, error)) {
         delete obj;
         return nullptr;
     }
@@ -34,11 +34,11 @@ AmigaFile::make(const u8 *buffer, size_t length, FileError *err)
 }
 
 template <class T> T *
-AmigaFile::make(const char *path, FileError *err)
+AmigaFile::make(const char *path, FileError *error)
 {
     T *obj = new T();
     
-    if (!obj->readFromFile(path)) {
+    if (!obj->readFromFile(path, error)) {
         delete obj;
         return nullptr;
     }
@@ -47,11 +47,11 @@ AmigaFile::make(const char *path, FileError *err)
 }
 
 template <class T> T *
-AmigaFile::make(FILE *file, FileError *err)
+AmigaFile::make(FILE *file, FileError *error)
 {
     T *obj = new T();
     
-    if (!obj->readFromFile(file)) {
+    if (!obj->readFromFile(file, error)) {
         delete obj;
         return nullptr;
     }
@@ -152,41 +152,27 @@ AmigaFile::flash(u8 *buffer, size_t offset)
 }
 
 bool
-AmigaFile::readFromBuffer(const u8 *buffer, size_t length)
-{
-    FileError error;
-    return readFromBuffer(buffer, length, &error);
-}
-
-bool
 AmigaFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
 {
     assert (buffer != nullptr);
     
     // Check file type
     if (!bufferHasSameType(buffer, length)) {
-        *error = ERR_INVALID_FILE_TYPE;
+        if (error) *error = ERR_INVALID_FILE_TYPE;
         return false;
     }
     
     // Allocate memory
     if (!alloc(length)) {
-        *error = ERR_OUT_OF_MEMORY;
+        if (error) *error = ERR_OUT_OF_MEMORY;
         return false;
     }
     
     // Read from buffer
     memcpy(data, buffer, length);
  
-    *error = ERR_FILE_OK;
+    if (error) *error = ERR_FILE_OK;
     return true;
-}
-
-bool
-AmigaFile::readFromFile(const char *filename)
-{
-    FileError error;
-    return readFromFile(filename, &error);
 }
 
 bool
@@ -200,19 +186,19 @@ AmigaFile::readFromFile(const char *filename, FileError *error)
     
     // Get file properties
     if (stat(filename, &fileProperties) != 0) {
-        *error = ERR_NO_SUCH_FILE;
+        if (error) *error = ERR_NO_SUCH_FILE;
         return false;
     }
 
     // Check file type
     if (!fileHasSameType(filename)) {
-        *error = ERR_INVALID_FILE_TYPE;
+        if (error) *error = ERR_INVALID_FILE_TYPE;
         return false;
     }
         
     // Open file
     if (!(file = fopen(filename, "r"))) {
-        *error = ERR_CANT_OPEN_FOR_READ;
+        if (error) *error = ERR_CANT_OPEN_FOR_READ;
         return false;
     }
     
@@ -223,13 +209,6 @@ AmigaFile::readFromFile(const char *filename, FileError *error)
     
     fclose(file);
     return success;
-}
-
-bool
-AmigaFile::readFromFile(FILE *file)
-{
-    FileError error;
-    return readFromFile(file, &error);
 }
 
 bool
@@ -246,7 +225,7 @@ AmigaFile::readFromFile(FILE *file, FileError *error)
     
     // Allocate memory
     if (!(buffer = new u8[size])) {
-        *error = ERR_OUT_OF_MEMORY;
+        if (error) *error = ERR_OUT_OF_MEMORY;
         return false;
     }
 
@@ -256,23 +235,16 @@ AmigaFile::readFromFile(FILE *file, FileError *error)
         if ((c = fgetc(file)) == EOF) break;
         buffer[i] = (u8)c;
     }
-
-    // Check type
-    if (!bufferHasSameType(buffer, size)) {
-        *error = ERR_INVALID_FILE_TYPE;
-        delete[] buffer;
-        return false;
-    }
     
     // Read from buffer
     dealloc();
-    if (!readFromBuffer(buffer, size)) {
-        *error = ERR_INVALID_FILE_TYPE;
+    if (!readFromBuffer(buffer, size, error)) {
         delete[] buffer;
         return false;
     }
     
     delete[] buffer;
+    if (error) *error = ERR_FILE_OK;
     return true;
 }
 

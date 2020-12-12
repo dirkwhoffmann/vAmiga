@@ -36,16 +36,18 @@ DMSFile::isDMSFile(const char *path)
 }
 
 bool
-DMSFile::readFromBuffer(const u8 *buffer, size_t length)
+DMSFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
 {
     FILE *fpi, *fpo;
     char *pi, *po;
     size_t si, so;
     
-    if (!isDMSBuffer(buffer, length))
+    if (!isDMSBuffer(buffer, length)) {
+        if (error) *error = ERR_INVALID_FILE_TYPE;
         return false;
-        
-    if (!AmigaFile::readFromBuffer(buffer, length))
+    }
+
+    if (!AmigaFile::readFromBuffer(buffer, length, error))
         return false;
     
     // We use a third-party tool called xdms to convert the DMS file into an
@@ -70,6 +72,7 @@ DMSFile::readFromBuffer(const u8 *buffer, size_t length)
     adf = AmigaFile::make <ADFFile> (fpo);
     fclose(fpo);
     
+    if (error) *error = adf ? ERR_FILE_OK : ERR_UNKNOWN;
     return adf != nullptr;
 }
 

@@ -48,7 +48,7 @@ public:
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isEncryptedRomBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isEncryptedRomFile(path); }
-    bool readFromBuffer(const u8 *buffer, size_t length) override;
+
     
     //
     // Decrypting
