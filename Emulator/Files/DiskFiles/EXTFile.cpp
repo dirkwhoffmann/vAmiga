@@ -50,16 +50,3 @@ EXTFile::isEXTFile(const char *path)
     }
     return false;
 }
-
-EXTFile *
-EXTFile::makeWithFile(FILE *file)
-{
-    EXTFile *result = new EXTFile();
-    
-    if (!result->readFromFile(file)) {
-        delete result;
-        return NULL;
-    }
-    
-    return result;
-}

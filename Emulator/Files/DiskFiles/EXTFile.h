@@ -44,8 +44,6 @@ public:
     
     const char *getDescription() override { return "EXT"; }
     
-    static EXTFile *makeWithFile(FILE *file);
-
     
     //
     // Methods from AmigaFile

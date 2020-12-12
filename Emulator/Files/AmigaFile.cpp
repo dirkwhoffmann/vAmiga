@@ -46,6 +46,19 @@ AmigaFile::make(const char *path)
     return obj;
 }
 
+template <class T> T *
+AmigaFile::make(FILE *file)
+{
+    T *obj = new T();
+    
+    if (!obj->readFromFile(file)) {
+        delete obj;
+        return nullptr;
+    }
+    
+    return obj;
+}
+
 AmigaFile::AmigaFile()
 {
 }
@@ -327,3 +340,5 @@ template HDFFile* AmigaFile::make <HDFFile> (const char *path);
 template RomFile* AmigaFile::make <RomFile> (const char *path);
 template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const char *path);
 template EncryptedRomFile* AmigaFile::make <EncryptedRomFile> (const char *path);
+
+template ADFFile* AmigaFile::make <ADFFile> (FILE *file);

@@ -43,6 +43,7 @@ public:
     
     template <class T> static T *make(const u8 *buffer, size_t length);
     template <class T> static T *make(const char *path);
+    template <class T> static T *make(FILE *file);
 
     
     //

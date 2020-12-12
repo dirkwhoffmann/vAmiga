@@ -67,7 +67,7 @@ DMSFile::readFromBuffer(const u8 *buffer, size_t length)
     
     // Create ADF
     fpo = fmemopen(po, so, "r");
-    adf = ADFFile::makeWithFile(fpo);
+    adf = AmigaFile::make <ADFFile> (fpo);
     fclose(fpo);
     
     return adf != nullptr;
