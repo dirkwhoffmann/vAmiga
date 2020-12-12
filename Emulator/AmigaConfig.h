@@ -17,7 +17,7 @@
 // Snapshot version number
 #define V_MAJOR 0
 #define V_MINOR 9
-#define V_SUBMINOR 14
+#define V_SUBMINOR 15
 
 // Uncomment these settings in a release build
 // #define RELEASEBUILD
@@ -135,7 +135,7 @@ static const int DSK_CHECKSUM    = 0; // Compute disk checksums
 static const int DSKREG_DEBUG    = 0; // Disk controller registers
 static const int DSK_DEBUG       = 0; // Disk controller execution
 static const int MFM_DEBUG       = 0; // Disk encoder / decoder
-static const int FS_DEBUG        = 1; // File System Classes (OFS / FFS)
+static const int FS_DEBUG        = 0; // File System Classes (OFS / FFS)
 // Audio
 static const int AUDREG_DEBUG    = 0; // Audio registers
 static const int AUD_DEBUG       = 0; // Audio execution
