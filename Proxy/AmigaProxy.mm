@@ -1436,6 +1436,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation SnapshotProxy
 
+/*
 + (BOOL) isSupportedSnapshot:(const void *)buffer length:(NSInteger)length
 {
     return Snapshot::isSupportedSnapshot((u8 *)buffer, length);
@@ -1455,6 +1456,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return Snapshot::isUnsupportedSnapshotFile([path fileSystemRepresentation]);
 }
+*/
 
 + (instancetype) make:(Snapshot *)snapshot
 {

@@ -9,12 +9,14 @@
 
 extension NSError {
 
+    /*
     static func snapshotVersionError(filename: String) -> NSError {
         return NSError(domain: "vAmiga", code: 0, userInfo:
             [NSLocalizedDescriptionKey: "The document \"\(filename)\" could not be opened.",
                 NSLocalizedRecoverySuggestionErrorKey: "The snapshot was created with a different version of vAmiga."])
     }
-
+    */
+    
     static func unsupportedFormatError(filename: String) -> NSError {
         return NSError(domain: "vAmiga", code: 0, userInfo:
             [NSLocalizedDescriptionKey: "The document \"\(filename)\" could not be opened.",

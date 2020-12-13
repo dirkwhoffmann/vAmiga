@@ -712,10 +712,12 @@ struct SerialPortWrapper;
     NSImage *preview;
 }
 
+/*
 + (BOOL)isSupportedSnapshot:(const void *)buf length:(NSInteger)len;
 + (BOOL)isUnsupportedSnapshot:(const void *)buf length:(NSInteger)len;
 + (BOOL)isSupportedSnapshotFile:(NSString *)path;
 + (BOOL)isUnsupportedSnapshotFile:(NSString *)path;
+*/
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(FileError *)err;
 + (instancetype)makeWithFile:(NSString *)path;

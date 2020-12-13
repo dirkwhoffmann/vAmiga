@@ -209,6 +209,7 @@ class MyDocument: NSDocument {
         return try createFileProxy(wrapper: wrapper, type: type)
     }
     
+    // DEPRECATED
     fileprivate
     func createFileProxy(wrapper: FileWrapper, type: AmigaFileType) throws -> AmigaFileProxy? {
                 
@@ -230,9 +231,11 @@ class MyDocument: NSDocument {
         switch type {
             
         case .FILETYPE_SNAPSHOT:
+            /*
             if SnapshotProxy.isUnsupportedSnapshot(buffer, length: length) {
                 throw NSError.snapshotVersionError(filename: name)
             }
+            */
             result = SnapshotProxy.make(withBuffer: buffer, length: length)
             
         case .FILETYPE_ADF:

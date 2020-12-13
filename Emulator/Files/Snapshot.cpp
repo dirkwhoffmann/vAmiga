@@ -40,28 +40,32 @@ Thumbnail::take(Amiga *amiga, int dx, int dy)
         target += width;
     }
     
-    timestamp = time(NULL);
+    timestamp = time(nullptr);
 }
 
 bool
-Snapshot::isSnapshot(const u8 *buffer, size_t length)
+Snapshot::isSnapshot(const u8 *buf, size_t len)
 {
+    assert(buf != nullptr);
+
     u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
-    
-    assert(buffer != NULL);
-    
-    if (length < sizeof(SnapshotHeader)) return false;
-    return matchingBufferHeader(buffer, signature, sizeof(signature));
+        
+    if (len < sizeof(SnapshotHeader)) return false;
+    return matchingBufferHeader(buf, signature, sizeof(signature));
 }
 
 bool
-Snapshot::isSnapshot(const u8 *buffer, size_t length,
-                          u8 major, u8 minor, u8 subminor)
+Snapshot::isSnapshot(const u8 *buf, size_t len, u8 major, u8 minor, u8 subminor)
 {
-    if (!isSnapshot(buffer, length)) return false;
-    return buffer[6] == major && buffer[7] == minor && buffer[8] == subminor;
+    assert(buf != nullptr);
+
+    u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P', major, minor, subminor };
+    
+    if (len < sizeof(SnapshotHeader)) return false;
+    return matchingBufferHeader(buf, signature, sizeof(signature));
 }
 
+/*
 bool
 Snapshot::isSupportedSnapshot(const u8 *buffer, size_t length)
 {
@@ -73,13 +77,14 @@ Snapshot::isUnsupportedSnapshot(const u8 *buffer, size_t length)
 {
     return isSnapshot(buffer, length) && !isSupportedSnapshot(buffer, length);
 }
+*/
 
 bool
 Snapshot::isSnapshotFile(const char *path)
 {
-     u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
-    
-    assert(path != NULL);
+    assert(path != nullptr);
+
+    u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     
     return matchingFileHeader(path, signature, sizeof(signature));
 }
@@ -87,13 +92,14 @@ Snapshot::isSnapshotFile(const char *path)
 bool
 Snapshot::isSnapshotFile(const char *path, u8 major, u8 minor, u8 subminor)
 {
+    assert(path != nullptr);
+
     u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P', major, minor, subminor };
-    
-    assert(path != NULL);
-    
+        
     return matchingFileHeader(path, signature, sizeof(signature));
 }
 
+/*
 bool
 Snapshot::isSupportedSnapshotFile(const char *path)
 {
@@ -105,6 +111,7 @@ Snapshot::isUnsupportedSnapshotFile(const char *path)
 {
     return isSnapshotFile(path) && !isSupportedSnapshotFile(path);
 }
+*/
 
 Snapshot::Snapshot()
 {
@@ -146,6 +153,20 @@ Snapshot::matchingBuffer(const u8* buffer, size_t length)
 bool
 Snapshot::matchingFile(const char *path)
 {
-    return Snapshot::isSnapshotFile(path, V_MAJOR, V_MINOR, V_SUBMINOR);
+    return Snapshot::isSnapshotFile(path);
 }
 
+bool
+Snapshot::readFromBuffer(const u8 *buf, size_t len, FileError *err)
+{
+    // Read from buffer
+    if (AmigaFile::readFromBuffer(buf, len, err)) {
+
+        // Check the version number of this snapshot
+        if (!isSnapshot(buf, len, V_MAJOR, V_MINOR, V_SUBMINOR)) {
+            *err = ERR_UNSUPPORTED_SNAPSHOT;
+        }
+    }
+    
+    return *err == ERR_FILE_OK;
+}

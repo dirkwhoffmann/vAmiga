@@ -187,25 +187,29 @@ extension FileError {
             return
             
         case .ERR_FILE_NOT_FOUND:
-            NSAlert.warning("File " + str! + " cannot be opened.",
+            NSAlert.warning("File " + str! + " could not be opened.",
                             "The file does not exists")
             
         case .ERR_INVALID_TYPE:
-            NSAlert.warning("File " + str! + " cannot be opened.",
+            NSAlert.warning("File " + str! + " could not be opened.",
                             "The file format does not match")
             
         case .ERR_CANT_READ:
-            NSAlert.warning("Can't read from file " + str!,
+            NSAlert.warning("Can't read from file " + str! + ".",
                             "The file cannot be opened.")
             
         case .ERR_CANT_WRITE:
-            NSAlert.warning("Can't write to file " + str!,
+            NSAlert.warning("Can't write to file " + str! + ".",
                             "The file cannot be opened.")
             
         case .ERR_OUT_OF_MEMORY:
             NSAlert.warning("The file operation cannot be performed.",
                             "Not enough memory.")
             
+        case .ERR_UNSUPPORTED_SNAPSHOT:
+            NSAlert.warning("Snapshot " + str! + " could not be opened.",
+                            "The file was created with a different version of vAmiga.")
+
         case .ERR_MISSING_ROM_KEY:
             NSAlert.warning("Failed to decrypt the selected Rom image.",
                             "A rom.key file is required to process this file.")

@@ -94,6 +94,9 @@ VAMIGA_ENUM(long, FileError)
     ERR_OUT_OF_MEMORY,
     ERR_UNKNOWN,
     
+    // Snapshots
+    ERR_UNSUPPORTED_SNAPSHOT,
+    
     // Encrypted Roms
     ERR_MISSING_ROM_KEY,
     ERR_INVALID_ROM_KEY
