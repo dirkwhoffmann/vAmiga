@@ -174,6 +174,7 @@ ScreenRecorder::stopRecording()
     synchronized {
         recording = false;
         recordCounter++;
+        audioClock = 0;
     }
 
     // Close pipes
@@ -187,7 +188,7 @@ ScreenRecorder::stopRecording()
     pclose(audioFFmpeg);
     videoFFmpeg = NULL;
     audioFFmpeg = NULL;
-
+    
     debug(REC_DEBUG, "Recording has stopped\n");
     messageQueue.put(MSG_RECORDING_STOPPED);
 }
@@ -280,8 +281,10 @@ ScreenRecorder::vsyncHandler(Cycle target)
         assert(muxer.sampler[0]->r == paula.muxer.sampler[0]->r);
         assert(muxer.sampler[0]->w == paula.muxer.sampler[0]->w);
         
-        // Synthesize audio samples for this frame
+        // If this is the first frame to record, adjust the audio clock
         if (audioClock == 0) audioClock = target-1;
+
+        // Synthesize audio samples
         muxer.synthesize(audioClock, target, samplesPerFrame);
         audioClock = target;
         

@@ -141,9 +141,6 @@ extension MyAppDelegate {
     var proxies: [AmigaProxy] {
         return documents.map({ $0.amiga })
     }
-    var proxy: AmigaProxy? {
-        return (NSDocumentController.shared.currentDocument as? MyDocument)?.amiga
-    }
     
     func windowDidBecomeMain(_ window: NSWindow) {
         
