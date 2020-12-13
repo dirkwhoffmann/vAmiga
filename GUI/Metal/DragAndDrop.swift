@@ -119,7 +119,7 @@ public extension MetalView {
                     .FILETYPE_DIR
                 ]
 
-                let err = document.createAttachmentNew(url: url, allowedTypes: types)
+                let err = document.createAttachment(url: url, allowedTypes: types)
 
                 if err == .ERR_FILE_OK {
                     return document.mountAttachment()

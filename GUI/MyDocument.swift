@@ -147,7 +147,11 @@ class MyDocument: NSDocument {
         return (nil, .ERR_INVALID_TYPE)
     }
     
-    func createAttachmentNew(url: URL, allowedTypes: [AmigaFileType]) -> FileError {
+    //
+    // Working with attachments
+    //
+        
+    func createAttachment(url: URL, allowedTypes: [AmigaFileType]) -> FileError {
         
         track("Creating attachment from URL: \(url.lastPathComponent)")
         
@@ -164,168 +168,6 @@ class MyDocument: NSDocument {
         
         return err
     }
-    
-    //
-    // Creating attachments
-    //
-    
-    // DEPRECATED
-    func fileType(url: URL) -> AmigaFileType {
-                
-        // Check if the URL points to a directory
-        if url.hasDirectoryPath { return .FILETYPE_DIR }
-        
-        // If not, check the file extension
-        switch url.pathExtension.uppercased() {
-        
-        case "VAMIGA": return .FILETYPE_SNAPSHOT
-        case "ADF":    return .FILETYPE_ADF
-        case "HDF":    return .FILETYPE_HDF
-        case "IMG":    return .FILETYPE_IMG
-        case "IMA":    return .FILETYPE_IMG
-        case "DMS":    return .FILETYPE_DMS
-        case "EXE":    return .FILETYPE_EXE
-        default:       return .FILETYPE_UKNOWN
-        }
-    }
-    
-    // DEPRECATED
-    /*
-    fileprivate
-    func createFileProxy(url: URL, allowedTypes: [AmigaFileType]) throws -> AmigaFileProxy? {
-        
-        track("Creating proxy object from URL: \(url.lastPathComponent)")
-        
-        // If the provided URL points to compressed file, decompress it first
-        let newUrl = url.unpacked
-        
-        // Only proceed if the file type is an allowed type
-        let type = fileType(url: newUrl)
-        if !allowedTypes.contains(type) { return nil }
-        
-        // Intercept if the provided URL points to a directory
-        var error: FileError = .ERR_FILE_OK
-        if type == .FILETYPE_DIR {
-            let result = DIRFileProxy.make(withFile: url.path, error: &error)
-            return result
-        }
-        
-        // Get the file wrapper and create the proxy with it
-        let wrapper = try FileWrapper.init(url: newUrl)
-        return try createFileProxy(wrapper: wrapper, type: type)
-    }
-    */
-    
-    // DEPRECATED
-    /*
-    fileprivate
-    func createFileProxy(wrapper: FileWrapper, type: AmigaFileType) throws -> AmigaFileProxy? {
-                
-        track("type = \(type.rawValue)")
-        
-        guard let name = wrapper.filename else {
-            throw NSError.fileAccessError()
-        }
-        guard let data = wrapper.regularFileContents else {
-            throw NSError.fileAccessError(filename: name)
-        }
-        
-        var result: AmigaFileProxy?
-        let buffer = (data as NSData).bytes
-        let length = data.count
-        
-        track("Read \(length) bytes from file \(name) [\(type.rawValue)].")
-        
-        switch type {
-            
-        case .FILETYPE_SNAPSHOT:
-            result = SnapshotProxy.make(withBuffer: buffer, length: length)
-            
-        case .FILETYPE_ADF:
-            result = ADFFileProxy.make(withBuffer: buffer, length: length)
-            
-            // Check if this file is in extended ADF format
-            if result == nil {
-                if EXTFileProxy.make(withBuffer: buffer, length: length) != nil {
-                    throw NSError.extendedAdfError()
-                }
-            }
-
-        case .FILETYPE_HDF:
-            result = HDFFileProxy.make(withBuffer: buffer, length: length)
-            
-        case .FILETYPE_DMS:
-            result = DMSFileProxy.make(withBuffer: buffer, length: length)
-
-        case .FILETYPE_EXE:
-            result = EXEFileProxy.make(withBuffer: buffer, length: length)
-
-        case .FILETYPE_IMG:
-            result = IMGFileProxy.make(withBuffer: buffer, length: length)
-
-        default:
-            fatalError()
-        }
-        
-        if result == nil {
-            throw NSError.corruptedFileError(filename: name)
-        }
-        result!.setPath(name)
-        track("Attachment created successfully")
-        return result
-    }
-    */
-    /*
-    func createADFProxy(from url: URL) throws -> ADFFileProxy? {
-        
-        track("Trying to create ADF proxy from URL \(url.lastPathComponent).")
-                
-        let types = [ AmigaFileType.FILETYPE_ADF,
-                      AmigaFileType.FILETYPE_HDF,
-                      AmigaFileType.FILETYPE_DMS,
-                      AmigaFileType.FILETYPE_EXE,
-                      AmigaFileType.FILETYPE_DIR ]
-        
-        let proxy = try createFileProxy(url: url, allowedTypes: types)
-        
-        switch proxy {
-            
-        case _ as ADFFileProxy: return (proxy as! ADFFileProxy)
-        case _ as DMSFileProxy: return (proxy as! DMSFileProxy).adf()
-        case _ as EXEFileProxy: return (proxy as! EXEFileProxy).adf()
-        case _ as DIRFileProxy: return (proxy as! DIRFileProxy).adf()
-        default: fatalError()
-        }
-    }
-    */
-    
-    // DEPRECATED
-    /*
-    func createAttachment(from url: URL) throws {
-                
-        track("Creating attachment from URL: \(url.lastPathComponent)")
-        
-        // Create file proxy
-        let types: [AmigaFileType] = [
-            .FILETYPE_SNAPSHOT,
-            .FILETYPE_ADF,
-            .FILETYPE_HDF,
-            .FILETYPE_EXT,
-            .FILETYPE_IMG,
-            .FILETYPE_DMS,
-            .FILETYPE_EXE,
-            .FILETYPE_DIR ]
-        
-        amigaAttachment = try createFileProxy(url: url, allowedTypes: types)
-        
-        // Remember the URL
-        myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
-    }
-    */
-    
-    //
-    // Processing attachments
-    //
     
     @discardableResult
     func mountAttachment() -> Bool {
@@ -389,7 +231,7 @@ class MyDocument: NSDocument {
     
     override open func read(from url: URL, ofType typeName: String) throws {
         
-        let err = createAttachmentNew(url: url, allowedTypes: [.FILETYPE_SNAPSHOT])
+        let err = createAttachment(url: url, allowedTypes: [.FILETYPE_SNAPSHOT])
 
         if err != .ERR_FILE_OK {
             throw NSError.fileError(err, url: url)
