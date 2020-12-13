@@ -534,7 +534,7 @@ extension MyController: NSMenuItemValidation {
             amiga.diskController.insert(drive, file: diskFile)
             
             // Remember the URL
-            myAppDelegate.noteNewRecentlyUsedURL(url)
+            myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
 
         } else {
 

@@ -179,8 +179,11 @@ class MyDocument: NSDocument {
         
         if file != nil {
             amigaAttachment = file
+
             // Remember the URL
-            myAppDelegate.noteNewRecentlyUsedURL(url)
+            if (file as? DiskFileProxy) != nil {
+                myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
+            }
         }
         
         return err
@@ -339,7 +342,7 @@ class MyDocument: NSDocument {
         amigaAttachment = try createFileProxy(url: url, allowedTypes: types)
         
         // Remember the URL
-        myAppDelegate.noteNewRecentlyUsedURL(url)
+        myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
     }
 
     //

@@ -122,6 +122,7 @@ import Cocoa
         }
     }
     
+    /*
     func noteNewRecentlyUsedURL(_ url: URL) {
                 
         switch url.pathExtension.uppercased() {
@@ -133,6 +134,7 @@ import Cocoa
             break
         }
     }
+    */
 }
 
 //
