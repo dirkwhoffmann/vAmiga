@@ -83,6 +83,8 @@ class MyDocument: NSDocument {
     
     func openFile(url: URL, allowedTypes: [AmigaFileType]) -> (AmigaFileProxy?, FileError) {
         
+        track("Opening URL \(url.lastPathComponent)")
+        
         var err: FileError = .ERR_FILE_OK
         
         // If the provided URL points to compressed file, decompress it
@@ -144,6 +146,30 @@ class MyDocument: NSDocument {
         // None of the allowed typed matched the file
         return (nil, .ERR_INVALID_TYPE)
     }
+    
+    /*
+    func openADF(from url: URL) -> (ADFFileProxy?, FileError) {
+        
+        track("Opening ADF URL \(url.lastPathComponent)")
+                
+        let types = [ AmigaFileType.FILETYPE_ADF,
+                      AmigaFileType.FILETYPE_HDF,
+                      AmigaFileType.FILETYPE_DMS,
+                      AmigaFileType.FILETYPE_EXE,
+                      AmigaFileType.FILETYPE_DIR ]
+        
+        let (file, err) = openFile(url: url, allowedTypes: types)
+        
+        switch proxy {
+            
+        case _ as ADFFileProxy: return (proxy as! ADFFileProxy)
+        case _ as DMSFileProxy: return (proxy as! DMSFileProxy).adf()
+        case _ as EXEFileProxy: return (proxy as! EXEFileProxy).adf()
+        case _ as DIRFileProxy: return (proxy as! DIRFileProxy).adf()
+        default: fatalError()
+        }
+    }
+    */
     
     func createAttachmentNew(url: URL, allowedTypes: [AmigaFileType]) -> FileError {
         
@@ -331,14 +357,6 @@ class MyDocument: NSDocument {
             parent.load(snapshot: proxy)
             userSnapshots.append(proxy)
             
-        case _ as ADFFileProxy:
-            
-            if let df = parent.dragAndDropDrive?.nr {
-                amiga.diskController.insert(df, adf: amigaAttachment as? ADFFileProxy)
-            } else {
-                runImporterDialog()
-            }
-            
         case _ as HDFFileProxy:
             
             track()
@@ -362,39 +380,15 @@ class MyDocument: NSDocument {
                 exportPanel?.showSheet(forVolume: vol)
             }
         */
-        
-        case _ as IMGFileProxy:
-            
+
+        case _ as DiskFileProxy:
+
             if let df = parent.dragAndDropDrive?.nr {
-                amiga.diskController.insert(df, img: amigaAttachment as? IMGFileProxy)
+                amiga.diskController.insert(df, file: amigaAttachment as? DiskFileProxy)
             } else {
                 runImporterDialog()
             }
-
-        case _ as DMSFileProxy:
-            
-            if let df = parent.dragAndDropDrive?.nr {
-                amiga.diskController.insert(df, dms: amigaAttachment as? DMSFileProxy)
-            } else {
-                runImporterDialog()
-            }
-
-        case _ as EXEFileProxy:
-            
-            if let df = parent.dragAndDropDrive?.nr {
-                amiga.diskController.insert(df, exe: amigaAttachment as? EXEFileProxy)
-            } else {
-                runImporterDialog()
-            }
-
-        case _ as DIRFileProxy:
-            
-            if let df = parent.dragAndDropDrive?.nr {
-                amiga.diskController.insert(df, dir: amigaAttachment as? DIRFileProxy)
-            } else {
-                runImporterDialog()
-            }
-
+                    
         default:
             break
         }

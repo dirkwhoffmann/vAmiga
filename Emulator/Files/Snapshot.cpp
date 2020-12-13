@@ -65,20 +65,6 @@ Snapshot::isSnapshot(const u8 *buf, size_t len, u8 major, u8 minor, u8 subminor)
     return matchingBufferHeader(buf, signature, sizeof(signature));
 }
 
-/*
-bool
-Snapshot::isSupportedSnapshot(const u8 *buffer, size_t length)
-{
-    return isSnapshot(buffer, length, V_MAJOR, V_MINOR, V_SUBMINOR);
-}
-
-bool
-Snapshot::isUnsupportedSnapshot(const u8 *buffer, size_t length)
-{
-    return isSnapshot(buffer, length) && !isSupportedSnapshot(buffer, length);
-}
-*/
-
 bool
 Snapshot::isSnapshotFile(const char *path)
 {
@@ -98,20 +84,6 @@ Snapshot::isSnapshotFile(const char *path, u8 major, u8 minor, u8 subminor)
         
     return matchingFileHeader(path, signature, sizeof(signature));
 }
-
-/*
-bool
-Snapshot::isSupportedSnapshotFile(const char *path)
-{
-    return isSnapshotFile(path, V_MAJOR, V_MINOR, V_SUBMINOR);
-}
-
-bool
-Snapshot::isUnsupportedSnapshotFile(const char *path)
-{
-    return isSnapshotFile(path) && !isSupportedSnapshotFile(path);
-}
-*/
 
 Snapshot::Snapshot()
 {

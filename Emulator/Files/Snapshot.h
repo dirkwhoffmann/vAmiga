@@ -57,23 +57,11 @@ public:
     // Returns true iff buffer contains a snapshot (of a specific version)
     static bool isSnapshot(const u8 *buf, size_t len);
     static bool isSnapshot(const u8 *buf, size_t len, u8 major, u8 minor, u8 subminor);
-    
-    // Returns true iff buffer contains a snapshot with a supported version number.
-    // static bool isSupportedSnapshot(const u8 *buffer, size_t length);
-    
-    // Returns true iff buffer contains a snapshot with an outdated version number.
-    // static bool isUnsupportedSnapshot(const u8 *buffer, size_t length);
-    
+        
     // Returns true if path points to a snapshot file (of a specific version)
     static bool isSnapshotFile(const char *path);
     static bool isSnapshotFile(const char *path, u8 major, u8 minor, u8 subminor);
-    
-    // Returns true if file is a snapshot with a supported version number.
-    // static bool isSupportedSnapshotFile(const char *path);
-    
-    // Returns true if file is a snapshot with an outdated version number.
-    // static bool isUnsupportedSnapshotFile(const char *path);
-    
+        
     
     //
     // Initializing

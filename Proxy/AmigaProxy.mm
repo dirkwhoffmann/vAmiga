@@ -1067,34 +1067,49 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (void) dump
 {
     wrapper->controller->dump();
 }
+
 - (DiskControllerConfig) getConfig
 {
     return wrapper->controller->getConfig();
 }
+
 - (DiskControllerInfo) getInfo
 {
     return wrapper->controller->getInfo();
 }
+
 - (NSInteger) selectedDrive
 {
     return wrapper->controller->getSelected();
 }
+
 - (DriveState) state
 {
     return wrapper->controller->getState();
 }
+
 - (BOOL) isSpinning
 {
     return wrapper->controller->spinning();
 }
+
 - (void) eject:(NSInteger)nr
 {
     wrapper->controller->ejectDisk(nr);
 }
+
+- (void) insert:(NSInteger)nr file:(DiskFileProxy *)fileProxy
+{
+    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
+    wrapper->controller->insertDisk((DiskFile *)(fileWrapper->file), nr);
+}
+
+/*
 - (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy
 {
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
@@ -1120,6 +1135,8 @@ struct SerialPortWrapper { SerialPort *port; };
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
     wrapper->controller->insertDisk((DIRFile *)(fileWrapper->file), nr);
 }
+*/
+
 - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value
 {
     wrapper->controller->setWriteProtection(nr, value);
@@ -1435,28 +1452,6 @@ struct SerialPortWrapper { SerialPort *port; };
 //
 
 @implementation SnapshotProxy
-
-/*
-+ (BOOL) isSupportedSnapshot:(const void *)buffer length:(NSInteger)length
-{
-    return Snapshot::isSupportedSnapshot((u8 *)buffer, length);
-}
-
-+ (BOOL) isUnsupportedSnapshot:(const void *)buffer length:(NSInteger)length
-{
-    return Snapshot::isUnsupportedSnapshot((u8 *)buffer, length);
-}
-
-+ (BOOL) isSupportedSnapshotFile:(NSString *)path
-{
-    return Snapshot::isSupportedSnapshotFile([path fileSystemRepresentation]);
-}
-
-+ (BOOL) isUnsupportedSnapshotFile:(NSString *)path
-{
-    return Snapshot::isUnsupportedSnapshotFile([path fileSystemRepresentation]);
-}
-*/
 
 + (instancetype) make:(Snapshot *)snapshot
 {

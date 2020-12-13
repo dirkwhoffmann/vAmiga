@@ -185,6 +185,9 @@ class ImporterDialog: DialogController {
         
         track("insertDiskAction df\(sender.tag)")
                 
+        amiga.diskController.insert(sender.tag, file: disk)
+        
+        /*
         switch disk {
         
         case _ as ADFFileProxy:
@@ -205,7 +208,8 @@ class ImporterDialog: DialogController {
         default:
             break
         }
-
+        */
+        
         amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)     
         hideSheet()
     }

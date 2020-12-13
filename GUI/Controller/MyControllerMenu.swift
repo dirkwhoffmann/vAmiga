@@ -472,7 +472,7 @@ extension MyController: NSMenuItemValidation {
         adf.formatDisk(pref.blankDiskFormat, bootBlock: pref.bootBlock)
         
         // Insert disk into drive
-        amiga.diskController.insert(sender.tag, adf: adf)
+        amiga.diskController.insert(sender.tag, file: adf)
 
         myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
@@ -517,21 +517,28 @@ extension MyController: NSMenuItemValidation {
         
         track("insertDiskAction \(url) drive \(drive)")
         
-        do {
-            // Try to create the ADF proxy object
-            let proxy = try mydocument.createADFProxy(from: url)
-            
+        let types = [ AmigaFileType.FILETYPE_ADF,
+                      AmigaFileType.FILETYPE_HDF,
+                      AmigaFileType.FILETYPE_DMS,
+                      AmigaFileType.FILETYPE_EXE,
+                      AmigaFileType.FILETYPE_DIR ]
+        
+        let (file, err) = mydocument.openFile(url: url, allowedTypes: types)
+        
+        if let diskFile = file as? DiskFileProxy {
+
             // Ask the user if an unsafed disk should be replaced
             if !proceedWithUnexportedDisk(drive: drive) { return }
             
             // Insert the disk
-            amiga.diskController.insert(drive, adf: proxy)
+            amiga.diskController.insert(drive, file: diskFile)
             
             // Remember the URL
             myAppDelegate.noteNewRecentlyUsedURL(url)
-            
-        } catch {
-            NSApp.presentError(error)
+
+        } else {
+
+            err.showAlert()
         }
     }
     

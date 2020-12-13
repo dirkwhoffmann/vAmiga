@@ -597,12 +597,15 @@ struct SerialPortWrapper;
 @property (readonly) DriveState state;
 @property (readonly, getter=isSpinning) BOOL spinning;
 - (void) eject:(NSInteger)nr;
-- (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy;
+- (void) insert:(NSInteger)nr file:(DiskFileProxy *)fileProxy;
+/*
+ - (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy;
 - (void) insert:(NSInteger)nr dms:(DMSFileProxy *)fileProxy;
 - (void) insert:(NSInteger)nr exe:(EXEFileProxy *)fileProxy;
 - (void) insert:(NSInteger)nr dir:(DIRFileProxy *)fileProxy;
 - (void) insert:(NSInteger)nr img:(IMGFileProxy *)fileProxy;
-- (void) setWriteProtection:(NSInteger)nr value:(BOOL)value;
+*/
+ - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value;
 
 @end
 
@@ -712,12 +715,6 @@ struct SerialPortWrapper;
     NSImage *preview;
 }
 
-/*
-+ (BOOL)isSupportedSnapshot:(const void *)buf length:(NSInteger)len;
-+ (BOOL)isUnsupportedSnapshot:(const void *)buf length:(NSInteger)len;
-+ (BOOL)isSupportedSnapshotFile:(NSString *)path;
-+ (BOOL)isUnsupportedSnapshotFile:(NSString *)path;
-*/
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(FileError *)err;
 + (instancetype)makeWithFile:(NSString *)path;
