@@ -17,10 +17,10 @@ import Cocoa
     @IBOutlet weak var df2Menu: NSMenuItem!
     @IBOutlet weak var df3Menu: NSMenuItem!
     
-    /* An event tap for interception CGEvents
-     * CGEvents are intercepted to establish a direct mapping of the Command keys
-     * to the Amiga keys. To make such a mapping work, we have to disable all
-     * keyboard shortcuts, even the system-wide ones.
+    /* An event tap for interception CGEvents. CGEvents are intercepted to
+     * establish a direct mapping of the Command keys to the Amiga keys. To
+     * make such a mapping work, we have to disable all keyboard shortcuts,
+     * even the system-wide ones.
      */
     var eventTap: CFMachPort?
 
@@ -121,20 +121,6 @@ import Cocoa
         default: fatalError()
         }
     }
-    
-    /*
-    func noteNewRecentlyUsedURL(_ url: URL) {
-                
-        switch url.pathExtension.uppercased() {
-            
-        case "ADF", "ADZ", "DMS", "IMG", "IMA", "ZIP", "GZ":
-            noteNewRecentlyInsertedDiskURL(url)
-            
-        default:
-            break
-        }
-    }
-    */
 }
 
 //

@@ -538,7 +538,7 @@ extension MyController: NSMenuItemValidation {
 
         } else {
 
-            err.showAlert()
+            err.showAlert(url: url)
         }
     }
     

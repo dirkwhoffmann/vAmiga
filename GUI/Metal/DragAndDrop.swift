@@ -124,22 +124,8 @@ public extension MetalView {
                 if err == .ERR_FILE_OK {
                     return document.mountAttachment()
                 } else {
-                    err.showAlert(url.lastPathComponent)
+                    err.showAlert(url: url)
                 }
-
-                /*
-                do {                    
-                    try document.createAttachment(from: url)
-                    return document.mountAttachment()
-                    
-                } catch {
-                    let dragAndDropError = error
-                    let deadline = DispatchTime.now() + .milliseconds(200)
-                    DispatchQueue.main.asyncAfter(deadline: deadline) {
-                        NSApp.presentError(dragAndDropError)
-                    }
-                }
-                */
             }
             return false
             

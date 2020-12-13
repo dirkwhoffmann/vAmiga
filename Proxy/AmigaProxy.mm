@@ -1109,34 +1109,6 @@ struct SerialPortWrapper { SerialPort *port; };
     wrapper->controller->insertDisk((DiskFile *)(fileWrapper->file), nr);
 }
 
-/*
-- (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy
-{
-    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
-    wrapper->controller->insertDisk((ADFFile *)(fileWrapper->file), nr);
-}
-- (void) insert:(NSInteger)nr img:(IMGFileProxy *)fileProxy
-{
-    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
-    wrapper->controller->insertDisk((IMGFile *)(fileWrapper->file), nr);
-}
-- (void) insert:(NSInteger)nr dms:(DMSFileProxy *)fileProxy
-{
-    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
-    wrapper->controller->insertDisk((DMSFile *)(fileWrapper->file), nr);
-}
-- (void) insert:(NSInteger)nr exe:(EXEFileProxy *)fileProxy
-{
-    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
-    wrapper->controller->insertDisk((EXEFile *)(fileWrapper->file), nr);
-}
-- (void) insert:(NSInteger)nr dir:(DIRFileProxy *)fileProxy
-{
-    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
-    wrapper->controller->insertDisk((DIRFile *)(fileWrapper->file), nr);
-}
-*/
-
 - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value
 {
     wrapper->controller->setWriteProtection(nr, value);

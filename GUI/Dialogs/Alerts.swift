@@ -155,6 +155,7 @@ extension MyDocument {
         alert.runModal()
     }
     
+    /*
     @discardableResult
     func showDecryptionAlert(error: FileError) -> NSApplication.ModalResponse {
        
@@ -179,6 +180,7 @@ extension MyDocument {
         
         return NSApplication.ModalResponse.OK
     }
+    */
 }
 
 extension MyController {

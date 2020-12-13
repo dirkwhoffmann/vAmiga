@@ -147,30 +147,6 @@ class MyDocument: NSDocument {
         return (nil, .ERR_INVALID_TYPE)
     }
     
-    /*
-    func openADF(from url: URL) -> (ADFFileProxy?, FileError) {
-        
-        track("Opening ADF URL \(url.lastPathComponent)")
-                
-        let types = [ AmigaFileType.FILETYPE_ADF,
-                      AmigaFileType.FILETYPE_HDF,
-                      AmigaFileType.FILETYPE_DMS,
-                      AmigaFileType.FILETYPE_EXE,
-                      AmigaFileType.FILETYPE_DIR ]
-        
-        let (file, err) = openFile(url: url, allowedTypes: types)
-        
-        switch proxy {
-            
-        case _ as ADFFileProxy: return (proxy as! ADFFileProxy)
-        case _ as DMSFileProxy: return (proxy as! DMSFileProxy).adf()
-        case _ as EXEFileProxy: return (proxy as! EXEFileProxy).adf()
-        case _ as DIRFileProxy: return (proxy as! DIRFileProxy).adf()
-        default: fatalError()
-        }
-    }
-    */
-    
     func createAttachmentNew(url: URL, allowedTypes: [AmigaFileType]) -> FileError {
         
         track("Creating attachment from URL: \(url.lastPathComponent)")
@@ -214,6 +190,7 @@ class MyDocument: NSDocument {
     }
     
     // DEPRECATED
+    /*
     fileprivate
     func createFileProxy(url: URL, allowedTypes: [AmigaFileType]) throws -> AmigaFileProxy? {
         
@@ -237,8 +214,10 @@ class MyDocument: NSDocument {
         let wrapper = try FileWrapper.init(url: newUrl)
         return try createFileProxy(wrapper: wrapper, type: type)
     }
+    */
     
     // DEPRECATED
+    /*
     fileprivate
     func createFileProxy(wrapper: FileWrapper, type: AmigaFileType) throws -> AmigaFileProxy? {
                 
@@ -260,11 +239,6 @@ class MyDocument: NSDocument {
         switch type {
             
         case .FILETYPE_SNAPSHOT:
-            /*
-            if SnapshotProxy.isUnsupportedSnapshot(buffer, length: length) {
-                throw NSError.snapshotVersionError(filename: name)
-            }
-            */
             result = SnapshotProxy.make(withBuffer: buffer, length: length)
             
         case .FILETYPE_ADF:
@@ -300,7 +274,8 @@ class MyDocument: NSDocument {
         track("Attachment created successfully")
         return result
     }
-    
+    */
+    /*
     func createADFProxy(from url: URL) throws -> ADFFileProxy? {
         
         track("Trying to create ADF proxy from URL \(url.lastPathComponent).")
@@ -322,8 +297,10 @@ class MyDocument: NSDocument {
         default: fatalError()
         }
     }
+    */
     
     // DEPRECATED
+    /*
     func createAttachment(from url: URL) throws {
                 
         track("Creating attachment from URL: \(url.lastPathComponent)")
@@ -344,7 +321,8 @@ class MyDocument: NSDocument {
         // Remember the URL
         myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
     }
-
+    */
+    
     //
     // Processing attachments
     //
@@ -411,9 +389,13 @@ class MyDocument: NSDocument {
     
     override open func read(from url: URL, ofType typeName: String) throws {
         
-        try createAttachment(from: url)
-    }
+        let err = createAttachmentNew(url: url, allowedTypes: [.FILETYPE_SNAPSHOT])
 
+        if err != .ERR_FILE_OK {
+            throw NSError.fileError(err, url: url)
+        }
+    }
+    
     //
     // Saving
     //
@@ -446,10 +428,10 @@ class MyDocument: NSDocument {
     func export(drive nr: Int, to url: URL) -> Bool {
                 
         var df: DiskFileProxy?
-        switch url.pathExtension {
-        case "adf", "ADF":
+        switch url.pathExtension.uppercased() {
+        case "ADF":
             df = ADFFileProxy.make(withDrive: amiga.df(nr)!)
-        case "img", "IMG", "ima", "IMA":
+        case "IMG", "IMA":
             df = IMGFileProxy.make(withDrive: amiga.df(nr)!)
         default:
             break

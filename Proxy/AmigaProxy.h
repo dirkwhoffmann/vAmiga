@@ -598,13 +598,6 @@ struct SerialPortWrapper;
 @property (readonly, getter=isSpinning) BOOL spinning;
 - (void) eject:(NSInteger)nr;
 - (void) insert:(NSInteger)nr file:(DiskFileProxy *)fileProxy;
-/*
- - (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy;
-- (void) insert:(NSInteger)nr dms:(DMSFileProxy *)fileProxy;
-- (void) insert:(NSInteger)nr exe:(EXEFileProxy *)fileProxy;
-- (void) insert:(NSInteger)nr dir:(DIRFileProxy *)fileProxy;
-- (void) insert:(NSInteger)nr img:(IMGFileProxy *)fileProxy;
-*/
  - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value;
 
 @end

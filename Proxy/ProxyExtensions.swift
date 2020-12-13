@@ -153,18 +153,91 @@ extension FSVolumeType {
     }
 }
 
+extension NSError {
+    
+    static func fileError(_ err: FileError, url: URL) -> NSError {
+        
+        let str = "\"" + url.lastPathComponent + "\""
+        var info1, info2: String
+
+        switch err {
+                    
+        case .ERR_FILE_OK:
+            fatalError()
+            
+        case .ERR_FILE_NOT_FOUND:
+            info1 = "File " + str + " could not be opened."
+            info2 = "The file does not exist."
+            
+        case .ERR_INVALID_TYPE:
+            info1 = "File " + str + " could not be opened."
+            info2 = "The file format does not match."
+            
+        case .ERR_CANT_READ:
+            info1 = "Can't read from file " + str + "."
+            info2 = "The file cannot be opened."
+            
+        case .ERR_CANT_WRITE:
+            info1 = "Can't write to file " + str + "."
+            info2 = "The file cannot be opened."
+            
+        case .ERR_OUT_OF_MEMORY:
+            info1 = "The file operation cannot be performed."
+            info2 = "Not enough memory."
+            
+        case .ERR_UNSUPPORTED_SNAPSHOT:
+            info1 = "Snapshot " + str + " could not be opened."
+            info2 = "The file was created with a different version of vAmiga."
+            
+        case .ERR_MISSING_ROM_KEY:
+            info1 = "Failed to decrypt the selected Rom image."
+            info2 = "A rom.key file is required to process this file."
+            
+        case .ERR_INVALID_ROM_KEY:
+            info1 = "Failed to decrypt the selected Rom image."
+            info2 = "Decrypting the Rom with the provided rom.key file did not produce a valid Rom image."
+            
+        default:
+            info1 = "The operation cannot be performed."
+            info2 = "An uncategorized error exception has been thrown."
+        }
+        
+        return NSError(domain: "vAmiga", code: err.rawValue,
+                       userInfo: [NSLocalizedDescriptionKey: info1,
+                                  NSLocalizedRecoverySuggestionErrorKey: info2])
+    }
+}
+
 extension NSAlert {
 
+    convenience init(fileError err: FileError, url: URL) {
+        
+        self.init()
+     
+        let err = NSError.fileError(err, url: url)
+        
+        let msg1 = err.userInfo[NSLocalizedDescriptionKey] as! String
+        let msg2 = err.userInfo[NSLocalizedRecoverySuggestionErrorKey] as! String
+
+        alertStyle = .warning
+        messageText = msg1
+        informativeText = msg2
+        addButton(withTitle: "OK")
+    }
+            
+    // DEPRECATED
     static func warning(_ msg1: String, _ msg2: String, icon: String? = nil) {
 
         alert(msg1, msg2, style: .warning, icon: icon)
     }
 
+    // DEPRECATED
     static func critical(_ msg1: String, _ msg2: String, icon: String? = nil) {
         
         alert(msg1, msg2, style: .critical, icon: icon)
     }
     
+    // DEPRECATED
     static func alert(_ msg1: String, _ msg2: String, style: NSAlert.Style, icon: String?) {
         
         let alert = NSAlert()
@@ -179,49 +252,9 @@ extension NSAlert {
 
 extension FileError {
     
-    func showAlert(_ str: String? = nil) {
+    func showAlert(url: URL) {
         
-        switch self {
-        
-        case .ERR_FILE_OK:
-            return
-            
-        case .ERR_FILE_NOT_FOUND:
-            NSAlert.warning("File " + str! + " could not be opened.",
-                            "The file does not exists")
-            
-        case .ERR_INVALID_TYPE:
-            NSAlert.warning("File " + str! + " could not be opened.",
-                            "The file format does not match")
-            
-        case .ERR_CANT_READ:
-            NSAlert.warning("Can't read from file " + str! + ".",
-                            "The file cannot be opened.")
-            
-        case .ERR_CANT_WRITE:
-            NSAlert.warning("Can't write to file " + str! + ".",
-                            "The file cannot be opened.")
-            
-        case .ERR_OUT_OF_MEMORY:
-            NSAlert.warning("The file operation cannot be performed.",
-                            "Not enough memory.")
-            
-        case .ERR_UNSUPPORTED_SNAPSHOT:
-            NSAlert.warning("Snapshot " + str! + " could not be opened.",
-                            "The file was created with a different version of vAmiga.")
-
-        case .ERR_MISSING_ROM_KEY:
-            NSAlert.warning("Failed to decrypt the selected Rom image.",
-                            "A rom.key file is required to process this file.")
-            
-        case .ERR_INVALID_ROM_KEY:
-            NSAlert.warning("Failed to decrypt the selected Rom image.",
-                            "Decrypting the Rom with the provided rom.key " +
-                                "file did not produce a valid Rom image.")
-            
-        default:
-            NSAlert.warning("The operation cannot be performed.",
-                            "An uncategorized error exception has been thrown.")
-        }
+        let alert = NSAlert.init(fileError: self, url: url)
+        alert.runModal()
     }
 }
