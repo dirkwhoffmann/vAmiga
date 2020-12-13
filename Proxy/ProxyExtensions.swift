@@ -152,3 +152,72 @@ extension FSVolumeType {
         }
     }
 }
+
+extension NSAlert {
+
+    static func warning(_ msg1: String, _ msg2: String, icon: String? = nil) {
+
+        alert(msg1, msg2, style: .warning, icon: icon)
+    }
+
+    static func critical(_ msg1: String, _ msg2: String, icon: String? = nil) {
+        
+        alert(msg1, msg2, style: .critical, icon: icon)
+    }
+    
+    static func alert(_ msg1: String, _ msg2: String, style: NSAlert.Style, icon: String?) {
+        
+        let alert = NSAlert()
+        alert.alertStyle = style
+        if icon != nil { alert.icon = NSImage.init(named: icon!) }
+        alert.messageText = msg1
+        alert.informativeText = msg2
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+}
+
+extension FileError {
+    
+    func showAlert(_ str: String? = nil) {
+        
+        switch self {
+        
+        case .ERR_FILE_OK:
+            return
+            
+        case .ERR_FILE_NOT_FOUND:
+            NSAlert.warning("File " + str! + " cannot be opened.",
+                            "The file does not exists")
+            
+        case .ERR_INVALID_TYPE:
+            NSAlert.warning("File " + str! + " cannot be opened.",
+                            "The file format does not match")
+            
+        case .ERR_CANT_READ:
+            NSAlert.warning("Can't read from file " + str!,
+                            "The file cannot be opened.")
+            
+        case .ERR_CANT_WRITE:
+            NSAlert.warning("Can't write to file " + str!,
+                            "The file cannot be opened.")
+            
+        case .ERR_OUT_OF_MEMORY:
+            NSAlert.warning("The file operation cannot be performed.",
+                            "Not enough memory.")
+            
+        case .ERR_MISSING_ROM_KEY:
+            NSAlert.warning("Failed to decrypt the selected Rom image.",
+                            "A rom.key file is required to process this file.")
+            
+        case .ERR_INVALID_ROM_KEY:
+            NSAlert.warning("Failed to decrypt the selected Rom image.",
+                            "Decrypting the Rom with the provided rom.key " +
+                                "file did not produce a valid Rom image.")
+            
+        default:
+            NSAlert.warning("The operation cannot be performed.",
+                            "An uncategorized error exception has been thrown.")
+        }
+    }
+}

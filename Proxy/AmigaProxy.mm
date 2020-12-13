@@ -290,12 +290,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return RomFile::isRomFile([url fileSystemRepresentation]);
 }
-/*
-- (BOOL) isEncryptedRom:(NSURL *)url
-{
-    return EncryptedRomFile::isEncryptedRomFile([url fileSystemRepresentation]);
-}
-*/
 - (BOOL) loadRomFromBuffer:(NSData *)data
 {
     if (data == NULL) return NO;
@@ -1660,9 +1654,9 @@ struct SerialPortWrapper { SerialPort *port; };
     return [self make: archive];
 }
 
-+ (instancetype)makeWithFile:(NSString *)path
++ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err
 {
-    ADFFile *archive = AmigaFile::make <ADFFile> ([path fileSystemRepresentation]);
+    ADFFile *archive = AmigaFile::make <ADFFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
 }
 
@@ -1704,15 +1698,15 @@ struct SerialPortWrapper { SerialPort *port; };
     return [[self alloc] initWithFile:archive];
 }
 
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
 {
-    HDFFile *archive = AmigaFile::make <HDFFile> ((const u8 *)buffer, length);
+    HDFFile *archive = AmigaFile::make <HDFFile> ((const u8 *)buffer, len);
     return [self make: archive];
 }
 
-+ (instancetype) makeWithFile:(NSString *)path
++ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
 {
-    HDFFile *archive = AmigaFile::make <HDFFile> ([path fileSystemRepresentation]);
+    HDFFile *archive = AmigaFile::make <HDFFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
 }
 
@@ -1739,14 +1733,14 @@ struct SerialPortWrapper { SerialPort *port; };
     if (archive == NULL) return nil;
     return [[self alloc] initWithFile:archive];
 }
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
 {
-    EXTFile *archive = AmigaFile::make <EXTFile> ((const u8 *)buffer, length);
+    EXTFile *archive = AmigaFile::make <EXTFile> ((const u8 *)buffer, len);
     return [self make: archive];
 }
-+ (instancetype) makeWithFile:(NSString *)path
++ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
 {
-    EXTFile *archive = AmigaFile::make <EXTFile> ([path fileSystemRepresentation]);
+    EXTFile *archive = AmigaFile::make <EXTFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
 }
 
@@ -1768,14 +1762,14 @@ struct SerialPortWrapper { SerialPort *port; };
     if (archive == NULL) return nil;
     return [[self alloc] initWithFile:archive];
 }
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
 {
-    IMGFile *archive = AmigaFile::make <IMGFile> ((const u8 *)buffer, length);
+    IMGFile *archive = AmigaFile::make <IMGFile> ((const u8 *)buffer, len);
     return [self make: archive];
 }
-+ (instancetype) makeWithFile:(NSString *)path
++ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
 {
-    IMGFile *archive = AmigaFile::make <IMGFile> ([path fileSystemRepresentation]);
+    IMGFile *archive = AmigaFile::make <IMGFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
 }
 + (instancetype) makeWithDrive:(DriveProxy *)drive
@@ -1803,14 +1797,14 @@ struct SerialPortWrapper { SerialPort *port; };
     if (archive == NULL) return nil;
     return [[self alloc] initWithFile:archive];
 }
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
 {
-    DMSFile *archive = AmigaFile::make <DMSFile> ((const u8 *)buffer, length);
+    DMSFile *archive = AmigaFile::make <DMSFile> ((const u8 *)buffer, len);
     return [self make: archive];
 }
-+ (instancetype) makeWithFile:(NSString *)path
++ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
 {
-    DMSFile *archive = AmigaFile::make <DMSFile> ([path fileSystemRepresentation]);
+    DMSFile *archive = AmigaFile::make <DMSFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
 }
 
@@ -1838,14 +1832,14 @@ struct SerialPortWrapper { SerialPort *port; };
     if (archive == NULL) return nil;
     return [[self alloc] initWithFile:archive];
 }
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
 {
-    EXEFile *archive = AmigaFile::make <EXEFile> ((const u8 *)buffer, length);
+    EXEFile *archive = AmigaFile::make <EXEFile> ((const u8 *)buffer, len);
     return [self make: archive];
 }
-+ (instancetype) makeWithFile:(NSString *)path
++ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
 {
-    EXEFile *archive = AmigaFile::make <EXEFile> ([path fileSystemRepresentation]);
+    EXEFile *archive = AmigaFile::make <EXEFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
 }
 
@@ -1875,9 +1869,9 @@ struct SerialPortWrapper { SerialPort *port; };
     return [[self alloc] initWithFile:archive];
 }
 
-+ (instancetype) makeWithFile:(NSString *)path
++ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
 {
-    DIRFile *archive = AmigaFile::make <DIRFile> ([path fileSystemRepresentation]);
+    DIRFile *archive = AmigaFile::make <DIRFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
 }
 

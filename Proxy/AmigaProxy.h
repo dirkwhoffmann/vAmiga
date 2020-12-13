@@ -767,7 +767,7 @@ struct SerialPortWrapper;
 
 + (BOOL)isADFFile:(NSString *)path;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)path;
++ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
 + (instancetype)makeWithDiskType:(DiskType)type density:(DiskDensity)density;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
 
@@ -784,8 +784,8 @@ struct SerialPortWrapper;
 }
 
 + (BOOL)isHDFFile:(NSString *)path;
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)path;
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
++ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
 
 @property (readonly) NSInteger numBlocks;
 
@@ -800,8 +800,8 @@ struct SerialPortWrapper;
 }
 
 + (BOOL)isEXTFile:(NSString *)path;
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)path;
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
++ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
 
 @end
 
@@ -814,8 +814,8 @@ struct SerialPortWrapper;
 }
 
 + (BOOL)isIMGFile:(NSString *)path;
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)path;
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
++ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
 
 @end
@@ -829,8 +829,8 @@ struct SerialPortWrapper;
 }
 
 + (BOOL)isDMSFile:(NSString *)path;
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)path;
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
++ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
 
 - (ADFFileProxy *)adf;
 
@@ -845,8 +845,8 @@ struct SerialPortWrapper;
 }
 
 + (BOOL)isEXEFile:(NSString *)path;
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)path;
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
++ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
 
 - (ADFFileProxy *)adf;
 
@@ -861,8 +861,7 @@ struct SerialPortWrapper;
 }
 
 + (BOOL)isDIRFile:(NSString *)path;
-// + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)path;
++ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
 
 - (ADFFileProxy *)adf;
 

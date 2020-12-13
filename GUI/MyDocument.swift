@@ -81,12 +81,84 @@ class MyDocument: NSDocument {
     // Opening files
     //
     
-    /* WILL EVENTUALLY REPLACE OLD CODE
-    func openFile(url: URL, allowedTypes: [AmigaFileType]) -> AmigaFileProxy? {
-    
-        return nil
+    func openFile(url: URL, allowedTypes: [AmigaFileType]) -> (AmigaFileProxy?, FileError) {
+        
+        var err: FileError = .ERR_FILE_OK
+        
+        // If the provided URL points to compressed file, decompress it
+        let path = url.unpacked.path
+        
+        // Iterate through all allowed file types
+        for type in allowedTypes {
+            
+            switch type {
+            
+            case .FILETYPE_SNAPSHOT:
+                if let file = SnapshotProxy.make(withFile: path, error: &err) {
+                    return (file, .ERR_FILE_OK)
+                }
+                
+            case .FILETYPE_ADF:
+                if let file = ADFFileProxy.make(withFile: path, error: &err) {
+                    return (file, .ERR_FILE_OK)
+                }
+                
+            case .FILETYPE_EXT:
+                if let file = EXTFileProxy.make(withFile: path, error: &err) {
+                    return (file, .ERR_FILE_OK)
+                }
+                
+            case .FILETYPE_IMG:
+                if let file = IMGFileProxy.make(withFile: path, error: &err) {
+                    return (file, .ERR_FILE_OK)
+                }
+                
+            case .FILETYPE_DMS:
+                if let file = DMSFileProxy.make(withFile: path, error: &err) {
+                    return (file, .ERR_FILE_OK)
+                }
+                
+            case .FILETYPE_EXE:
+                if let file = EXEFileProxy.make(withFile: path, error: &err) {
+                    return (file, .ERR_FILE_OK)
+                }
+                
+            case .FILETYPE_DIR:
+                if let file = DIRFileProxy.make(withFile: path, error: &err) {
+                    return (file, .ERR_FILE_OK)
+                }
+                
+            case .FILETYPE_HDF:
+                if let file = HDFFileProxy.make(withFile: path, error: &err) {
+                    return (file, .ERR_FILE_OK)
+                }
+                
+            default:
+                fatalError()
+            }
+            
+            // Analyze the error code
+            if err != .ERR_INVALID_TYPE { return (nil, err) }
+        }
+        
+        // None of the allowed typed matched the file
+        return (nil, .ERR_INVALID_TYPE)
     }
-    */
+    
+    func createAttachmentNew(url: URL, allowedTypes: [AmigaFileType]) -> FileError {
+        
+        track("Creating attachment from URL: \(url.lastPathComponent)")
+        
+        let (file, err) = openFile(url: url, allowedTypes: allowedTypes)
+        
+        if file != nil {
+            amigaAttachment = file
+            // Remember the URL
+            myAppDelegate.noteNewRecentlyUsedURL(url)
+        }
+        
+        return err
+    }
     
     //
     // Creating attachments
@@ -112,6 +184,7 @@ class MyDocument: NSDocument {
         }
     }
     
+    // DEPRECATED
     fileprivate
     func createFileProxy(url: URL, allowedTypes: [AmigaFileType]) throws -> AmigaFileProxy? {
         
@@ -125,8 +198,9 @@ class MyDocument: NSDocument {
         if !allowedTypes.contains(type) { return nil }
         
         // Intercept if the provided URL points to a directory
+        var error: FileError = .ERR_FILE_OK
         if type == .FILETYPE_DIR {
-            let result = DIRFileProxy.make(withFile: url.path)
+            let result = DIRFileProxy.make(withFile: url.path, error: &error)
             return result
         }
         
@@ -217,6 +291,7 @@ class MyDocument: NSDocument {
         }
     }
     
+    // DEPRECATED
     func createAttachment(from url: URL) throws {
                 
         track("Creating attachment from URL: \(url.lastPathComponent)")

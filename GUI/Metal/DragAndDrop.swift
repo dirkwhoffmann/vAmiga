@@ -36,17 +36,14 @@ public extension MetalView {
         switch type {
             
         case .string:
-            
             track("Dragged in string")
             return NSDragOperation.copy
         
         case .fileContents:
-            
             track("Dragged in file contents")
             return NSDragOperation.copy
             
         case .compatibleFileURL:
-            
             track("Dragged in filename")
             return NSDragOperation.copy
             
@@ -111,6 +108,26 @@ public extension MetalView {
             
             if let url = NSURL.init(from: pasteBoard) as URL? {
                 
+                let types: [AmigaFileType] = [
+                    
+                    .FILETYPE_SNAPSHOT,
+                    .FILETYPE_ADF,
+                    .FILETYPE_EXT,
+                    .FILETYPE_IMG,
+                    .FILETYPE_DMS,
+                    .FILETYPE_EXE,
+                    .FILETYPE_DIR
+                ]
+
+                let err = document.createAttachmentNew(url: url, allowedTypes: types)
+
+                if err == .ERR_FILE_OK {
+                    return document.mountAttachment()
+                } else {
+                    err.showAlert(url.lastPathComponent)
+                }
+
+                /*
                 do {                    
                     try document.createAttachment(from: url)
                     return document.mountAttachment()
@@ -122,6 +139,7 @@ public extension MetalView {
                         NSApp.presentError(dragAndDropError)
                     }
                 }
+                */
             }
             return false
             

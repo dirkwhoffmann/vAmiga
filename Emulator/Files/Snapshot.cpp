@@ -87,7 +87,7 @@ Snapshot::isSnapshotFile(const char *path)
 bool
 Snapshot::isSnapshotFile(const char *path, u8 major, u8 minor, u8 subminor)
 {
-    u8 signature[] = { 'V', 'C', '6', '4', major, minor, subminor };
+    u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P', major, minor, subminor };
     
     assert(path != NULL);
     
