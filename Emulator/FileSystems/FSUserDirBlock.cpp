@@ -15,7 +15,7 @@ FSUserDirBlock::FSUserDirBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
         
     set32(0, 2);                         // Type
     set32(1, nr);                        // Block pointer to itself
-    setCreationDate(time(NULL));         // Creation date
+    setCreationDate(time(nullptr));      // Creation date
     set32(-1, 2);                        // Sub type
 }
 

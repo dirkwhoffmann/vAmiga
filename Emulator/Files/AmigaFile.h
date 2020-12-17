@@ -122,7 +122,7 @@ public:
      */
     virtual bool readFromFile(FILE *file, FileError *error = nullptr);
 
-    /* Writes the file contents into a memory buffer. If a NULL pointer is
+    /* Writes the file contents into a memory buffer. If nullptr is
      * passed in, a test run is performed. Test runs can be performed to
      * determine the size of the file on disk.
      */

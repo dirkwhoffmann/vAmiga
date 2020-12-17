@@ -25,7 +25,7 @@ template <class T, int delay> class TimeDelayed : AmigaObject {
     i64 timeStamp = 0;
         
     // Pointer to reference clock
-    i64 *clock = NULL;
+    i64 *clock = nullptr;
 
     
     //
@@ -41,7 +41,7 @@ public:
         clear();
     }
     
-    TimeDelayed() : TimeDelayed(NULL) { };
+    TimeDelayed() : TimeDelayed(nullptr) { };
           
     const char *getDescription() { return "TimeDelayed"; }
     

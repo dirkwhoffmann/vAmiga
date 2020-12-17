@@ -32,12 +32,12 @@ Memory::~Memory()
 void
 Memory::dealloc()
 {
-    if (rom) { delete[] rom; rom = NULL; }
-    if (wom) { delete[] wom; wom = NULL; }
-    if (ext) { delete[] ext; ext = NULL; }
-    if (chip) { delete[] chip; chip = NULL; }
-    if (slow) { delete[] slow; slow = NULL; }
-    if (fast) { delete[] fast; fast = NULL; }
+    if (rom) { delete[] rom; rom = nullptr; }
+    if (wom) { delete[] wom; wom = nullptr; }
+    if (ext) { delete[] ext; ext = nullptr; }
+    if (chip) { delete[] chip; chip = nullptr; }
+    if (slow) { delete[] slow; slow = nullptr; }
+    if (fast) { delete[] fast; fast = nullptr; }
 }
 
 void
@@ -381,15 +381,15 @@ bool
 Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
 {
     // Check the invariants
-    assert((ptr == NULL) == (size == 0));
-    assert((ptr == NULL) == (mask == 0));
-    assert((ptr != NULL) == (mask == size - 1));
+    assert((ptr == nullptr) == (size == 0));
+    assert((ptr == nullptr) == (mask == 0));
+    assert((ptr != nullptr) == (mask == size - 1));
 
     // Only proceed if memory layout changes
     if (bytes == size) return true;
     
     // Delete previous allocation
-    if (ptr) { delete[] ptr; ptr = NULL; size = 0; mask = 0; }
+    if (ptr) { delete[] ptr; ptr = nullptr; size = 0; mask = 0; }
     
     // Allocate memory
     if (bytes) {
@@ -471,7 +471,7 @@ Memory::extVersion()
 bool
 Memory::loadRom(RomFile *file)
 {
-    assert(file != NULL);
+    assert(file != nullptr);
 
     // Allocate memory and load file
     if (!allocRom(file->getSize())) return false;
@@ -489,7 +489,7 @@ Memory::loadRom(RomFile *file)
 bool
 Memory::loadRomFromBuffer(const u8 *buffer, size_t length)
 {
-    assert(buffer != NULL);
+    assert(buffer != nullptr);
     
     RomFile *file = AmigaFile::make <RomFile> (buffer, length);
     
@@ -504,10 +504,10 @@ Memory::loadRomFromBuffer(const u8 *buffer, size_t length)
 bool
 Memory::loadRomFromFile(const char *path, FileError *error)
 {
-    assert(path != NULL);
+    assert(path != nullptr);
     
     RomFile *rom = AmigaFile::make <RomFile> (path, error);
-    if (rom == NULL) return false;
+    if (rom == nullptr) return false;
     
     bool success = loadRom(rom);
     delete rom;
@@ -517,7 +517,7 @@ Memory::loadRomFromFile(const char *path, FileError *error)
 bool
 Memory::loadExt(ExtendedRomFile *file)
 {
-    assert(file != NULL);
+    assert(file != nullptr);
 
     // Allocate memory and load file
     if (!allocExt(file->getSize())) return false;
@@ -529,7 +529,7 @@ Memory::loadExt(ExtendedRomFile *file)
 bool
 Memory::loadExtFromBuffer(const u8 *buffer, size_t length)
 {
-    assert(buffer != NULL);
+    assert(buffer != nullptr);
 
     ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (buffer, length);
 
@@ -544,7 +544,7 @@ Memory::loadExtFromBuffer(const u8 *buffer, size_t length)
 bool
 Memory::loadExtFromFile(const char *path)
 {
-    assert(path != NULL);
+    assert(path != nullptr);
 
     ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (path);
 
@@ -561,7 +561,7 @@ Memory::loadRom(AmigaFile *file, u8 *target, size_t length)
 {
     if (file) {
 
-        assert(target != NULL);
+        assert(target != nullptr);
         memset(target, 0, length);
 
         if (file->getSize() < length) {
@@ -569,23 +569,13 @@ Memory::loadRom(AmigaFile *file, u8 *target, size_t length)
         }
         
         memcpy(target, file->getData(), MIN(file->getSize(), length));
-        
-        /*
-        file->seek(0);
-
-        int c;
-        for (size_t i = 0; i < length; i++) {
-            if ((c = file->read()) == EOF) break;
-            *(target++) = c;
-        }
-        */
     }
 }
 
 bool
 Memory::saveRom(const char *path)
 {
-    if (rom == NULL) return false;
+    if (rom == nullptr) return false;
 
     RomFile *file = AmigaFile::make <RomFile> (rom, config.romSize);
     return file && file->writeToFile(path);
@@ -594,7 +584,7 @@ Memory::saveRom(const char *path)
 bool
 Memory::saveWom(const char *path)
 {
-    if (wom == NULL) return false;
+    if (wom == nullptr) return false;
     
     RomFile *file = AmigaFile::make <RomFile> (wom, config.womSize);
     return file && file->writeToFile(path);
@@ -603,7 +593,7 @@ Memory::saveWom(const char *path)
 bool
 Memory::saveExt(const char *path)
 {
-    if (ext == NULL) return false;
+    if (ext == nullptr) return false;
 
     RomFile *file = AmigaFile::make <RomFile> (ext, config.extSize);
     return file && file->writeToFile(path);
@@ -2334,7 +2324,7 @@ Memory::pokeCustom16(u32 addr, u16 value)
             denise.pokeCOLORxx<s,30>(value); return;
         case 0x1BE >> 1: // COLOR31
             denise.pokeCOLORxx<s,31>(value); return;
-        case 0x1FE >> 1: // NO-OP (NULL)
+        case 0x1FE >> 1: // NO-OP
             copper.pokeNOOP(value); return;
     }
     

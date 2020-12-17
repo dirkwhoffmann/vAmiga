@@ -292,7 +292,7 @@ public:
     /* Returns true if a call to powerOn() will be successful. It returns false,
      * e.g., if no Kickstart Rom or Boot Rom is installed.
      */
-    bool isReady(ErrorCode *error = NULL);
+    bool isReady(ErrorCode *error = nullptr);
     
     /* Pauses the emulation thread temporarily. Because the emulator is running
      * in a separate thread, the GUI has to pause the emulator before changing
@@ -377,7 +377,7 @@ public:
     void requestAutoSnapshot();
     void requestUserSnapshot();
      
-    // Returns the most recent snapshot or NULL if none was taken
+    // Returns the most recent snapshot or nullptr if none was taken
     Snapshot *latestAutoSnapshot();
     Snapshot *latestUserSnapshot();
 

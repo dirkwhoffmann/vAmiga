@@ -19,17 +19,17 @@ const u32 FAST_RAM_STRT = 0x200000;
 
 // Verifies address ranges
 #define ASSERT_CHIP_ADDR(x) \
-assert(chip != NULL); assert(((x) % config.chipSize) == ((x) & chipMask));
+assert(((x) % config.chipSize) == ((x) & chipMask));
 #define ASSERT_FAST_ADDR(x) \
-assert(fast != NULL); assert(((x) - FAST_RAM_STRT) < config.fastSize);
+assert(((x) - FAST_RAM_STRT) < config.fastSize);
 #define ASSERT_SLOW_ADDR(x) \
-assert(slow != NULL); assert(((x) % config.slowSize) == ((x) & slowMask));
+assert(((x) % config.slowSize) == ((x) & slowMask));
 #define ASSERT_ROM_ADDR(x) \
-assert(rom != NULL); assert(((x) % config.romSize) == ((x) & romMask));
+assert(((x) % config.romSize) == ((x) & romMask));
 #define ASSERT_WOM_ADDR(x) \
-assert(wom != NULL); assert(((x) % config.womSize) == ((x) & womMask));
+assert(((x) % config.womSize) == ((x) & womMask));
 #define ASSERT_EXT_ADDR(x)  \
-assert(ext != NULL); assert(((x) % config.extSize) == ((x) & extMask));
+assert(((x) % config.extSize) == ((x) & extMask));
 #define ASSERT_CIA_ADDR(x) \
 assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
 #define ASSERT_RTC_ADDR(x) \
@@ -38,7 +38,6 @@ assert((x) >= 0xD80000 && (x) <= 0xDCFFFF);
 assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
 #define ASSERT_AUTO_ADDR(x) \
 assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
-//assert((x) >= 0xE80000 && (x) <= 0xEFFFFF);
 
 // Reads a value from memory in big endian format
 #define READ_8(x)  (*(u8 *)(x))
@@ -144,16 +143,16 @@ public:
      *
      * The following invariants hold:
      *
-     *    pointer == NULL <=> config.size == 0 <=> mask == 0
-     *    pointer != NULL <=> mask == config.size - 1
+     *    pointer == nullptr <=> config.size == 0 <=> mask == 0
+     *    pointer != nullptr <=> mask == config.size - 1
      *
      */
-    u8 *rom = NULL;
-    u8 *wom = NULL;
-    u8 *ext = NULL;
-    u8 *chip = NULL;
-    u8 *slow = NULL;
-    u8 *fast = NULL;
+    u8 *rom = nullptr;
+    u8 *wom = nullptr;
+    u8 *ext = nullptr;
+    u8 *chip = nullptr;
+    u8 *slow = nullptr;
+    u8 *fast = nullptr;
 
     u32 romMask = 0;
     u32 womMask = 0;
@@ -322,9 +321,9 @@ public:
 public:
 
     // Check if a certain Ram is present
-    bool hasChipRam() { return chip != NULL; }
-    bool hasSlowRam() { return slow != NULL; }
-    bool hasFastRam() { return fast != NULL; }
+    bool hasChipRam() { return chip != nullptr; }
+    bool hasSlowRam() { return slow != nullptr; }
+    bool hasFastRam() { return fast != nullptr; }
 
     // Returns the size of a certain Ram in bytes
     size_t chipRamSize() { return config.chipSize; }
@@ -360,12 +359,12 @@ public:
     const char *extReleased()  { return RomFile::released(extIdentifier()); }
 
     // Checks if a certain Rom is present
-    bool hasRom() { return rom != NULL; }
+    bool hasRom() { return rom != nullptr; }
     bool hasBootRom() { return hasRom() && config.romSize <= KB(16); }
     bool hasKickRom() { return hasRom() && config.romSize >= KB(256); }
     bool hasArosRom() { return RomFile::isArosRom(romIdentifier()); }
-    bool hasWom() { return wom != NULL; }
-    bool hasExt() { return ext != NULL; }
+    bool hasWom() { return wom != nullptr; }
+    bool hasExt() { return ext != nullptr; }
 
     // Erases an installed Rom
     void eraseRom() { assert(rom); memset(rom, 0, config.romSize); }

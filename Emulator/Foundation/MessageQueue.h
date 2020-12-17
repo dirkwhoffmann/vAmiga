@@ -70,7 +70,7 @@ public:
     // Unregisters a listener
     void removeListener(const void *listener);
     
-    // Returns the next pending message, or NULL if the queue is empty
+    // Returns the next pending message, or nullptr if the queue is empty
     Message get();
     
     // Writes a message into the queue and propagates it to all listeners

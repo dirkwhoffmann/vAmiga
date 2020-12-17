@@ -924,10 +924,8 @@ bool
 FSDevice::importDirectory(const char *path, bool recursive)
 {
     assert(path != nullptr);
-
-    DIR *dir;
     
-    if ((dir = opendir(path))) {
+    if (DIR *dir = opendir(path)) {
         
         bool result = importDirectory(path, dir, recursive);
         closedir(dir);
@@ -941,7 +939,7 @@ FSDevice::importDirectory(const char *path, bool recursive)
 bool
 FSDevice::importDirectory(const char *path, DIR *dir, bool recursive)
 {
-    assert(dir != nullptr);
+    assert(dir);
     
     struct dirent *item;
     bool result = true;
@@ -1010,18 +1008,3 @@ FSDevice::exportDirectory(const char *path)
     msg("Exported %d items", items.size());
     return FS_OK;
 }
-
-/*
-bool
-FSDevice::predictBlock(u32 nr, const u8 *buffer,
-                       FSPartition **p, FSVolumeType *dos, FSBlockType *type)
-{
-    assert(buffer != nullptr);
-    
-    for (auto &it : partitions) {
-        
-        if (it->predictBlock(nr, buffer, p, dos, type)) return true;
-    }
-    return false;
-}
-*/

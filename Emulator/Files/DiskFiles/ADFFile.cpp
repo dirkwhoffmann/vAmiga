@@ -69,7 +69,7 @@ ADFFile::makeWithDiskType(DiskType t, DiskDensity d)
     
     if (!adf->alloc(fileSize(t, d))) {
         delete adf;
-        return NULL;
+        return nullptr;
     }
     
     memset(adf->data, 0, adf->size);
@@ -79,7 +79,7 @@ ADFFile::makeWithDiskType(DiskType t, DiskDensity d)
 ADFFile *
 ADFFile::makeWithDisk(Disk *disk)
 {
-    assert(disk != NULL);
+    assert(disk != nullptr);
 
     DiskType type = disk->getType();
     DiskDensity density = disk->getDensity();
@@ -295,7 +295,7 @@ ADFFile::formatDisk(FSVolumeType fs, long bootBlockID)
 bool
 ADFFile::encodeDisk(Disk *disk)
 {
-    assert(disk != NULL);
+    assert(disk != nullptr);
     
     if (disk->getType() != getDiskType()) {
         warn("Incompatible disk types: %s %s\n",
@@ -514,8 +514,8 @@ ADFFile::decodeTrack(Disk *disk, Track t)
 bool
 ADFFile::decodeSector(u8 *dst, u8 *src)
 {
-    assert(dst != NULL);
-    assert(src != NULL);
+    assert(dst != nullptr);
+    assert(src != nullptr);
     
     // Decode sector info
     u8 info[4];

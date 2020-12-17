@@ -18,8 +18,8 @@ FSRootBlock::FSRootBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
     set32(0, 2);                         // Type
     set32(3, hashTableSize());           // Hash table size
     set32(-50, 0xFFFFFFFF);              // Bitmap validity
-    setCreationDate(time(NULL));         // Creation date
-    setModificationDate(time(NULL));     // Modification date
+    setCreationDate(time(nullptr));      // Creation date
+    setModificationDate(time(nullptr));  // Modification date
     set32(-1, 1);                        // Sub type    
 }
 

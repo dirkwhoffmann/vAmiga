@@ -103,7 +103,7 @@ RTC::getTime()
          * of the host machine's current time and variable timeDiff.
          */
         lastMeasure = master;
-        lastMeasuredValue = time(NULL);
+        lastMeasuredValue = time(nullptr);
         result = lastMeasuredValue + timeDiff;
 
     } else {
@@ -128,7 +128,7 @@ RTC::getTime()
 void
 RTC::setTime(time_t t)
 {
-    timeDiff = t - time(NULL);
+    timeDiff = t - time(nullptr);
 }
 
 u8

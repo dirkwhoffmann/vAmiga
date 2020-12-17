@@ -33,8 +33,8 @@ void
     amiga->threadWillStart();
     
     // Configure the thread
-    pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
-    pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
+    pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, nullptr);
+    pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, nullptr);
     pthread_cleanup_push(threadTerminated, thisAmiga);
     
     // Enter the run loop
@@ -96,8 +96,8 @@ Amiga::Amiga()
     // mach_timebase_info(&tb);
     
     // Initialize mutex
-    pthread_mutex_init(&threadLock, NULL);
-    pthread_mutex_init(&stateChangeLock, NULL);
+    pthread_mutex_init(&threadLock, nullptr);
+    pthread_mutex_init(&stateChangeLock, nullptr);
     
     // Print some debug information
     if (SNP_DEBUG) {
@@ -486,7 +486,7 @@ Amiga::_run()
     trace(RUN_DEBUG, "_run()\n");
     
     // Start the emulator thread
-    pthread_create(&p, NULL, threadMain, (void *)this);
+    pthread_create(&p, nullptr, threadMain, (void *)this);
     
     // Inform the GUI
     messageQueue.put(MSG_RUN);

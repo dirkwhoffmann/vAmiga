@@ -69,8 +69,8 @@ class Drive : public AmigaComponent {
 
 public:
     
-    // The currently inserted disk (NULL if the drive is empty)
-    Disk *disk = NULL;
+    // The currently inserted disk (nullptr if the drive is empty)
+    Disk *disk = nullptr;
 
     
     //

@@ -23,7 +23,7 @@ class DiskController : public AmigaComponent {
     DiskControllerInfo info;
 
     // Temorary storage for a disk waiting to be inserted
-    class Disk *diskToInsert = NULL;
+    class Disk *diskToInsert = nullptr;
 
     // The currently selected drive (-1 if no drive is selected)
     i8 selected = -1;
@@ -188,7 +188,7 @@ public:
     // Returns the number of the currently selected drive
     i8 getSelected() { return selected; }
 
-    // Returns the currently selected (NULL if none is selected)
+    // Returns the currently selected (nullptr if none is selected)
     class Drive *getSelectedDrive();
 
     // Indicates if the motor of the specified drive is switched on

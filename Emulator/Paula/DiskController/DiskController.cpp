@@ -31,7 +31,7 @@ DiskController::_reset(bool hard)
     dsksync = 0x4489;
     
     if (hard) {
-        assert(diskToInsert == NULL);
+        assert(diskToInsert == nullptr);
     }
 }
 
@@ -183,7 +183,7 @@ Drive *
 DiskController::getSelectedDrive()
 {
     assert(selected < 4);
-    return selected < 0 ? NULL : df[selected];
+    return selected < 0 ? nullptr : df[selected];
 }
 
 bool
@@ -244,7 +244,7 @@ DiskController::ejectDisk(int nr, Cycle delay)
 void
 DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
 {
-    assert(disk != NULL);
+    assert(disk != nullptr);
     assert(nr >= 0 && nr <= 3);
 
     trace(DSK_DEBUG, "insertDisk(%p, %d, %d)\n", disk, nr, delay);

@@ -25,7 +25,7 @@ struct DiskControllerWrapper { DiskController *controller; };
 struct DriveWrapper { Drive *drive; };
 struct DmaDebuggerWrapper { DmaDebugger *dmaDebugger; };
 struct DeniseWrapper { Denise *denise; };
-struct FSVolumeWrapper { FSDevice *volume; };
+struct FSDeviceWrapper { FSDevice *device; };
 struct GuardsWrapper { Guards *guards; };
 struct JoystickWrapper { Joystick *joystick; };
 struct KeyboardWrapper { Keyboard *keyboard; };
@@ -158,37 +158,37 @@ struct SerialPortWrapper { SerialPort *port; };
 - (NSString *) disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len
 {
     const char *str = wrapper->cpu->disassembleRecordedInstr((int)i, len);
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (NSString *) disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len
 {
     const char *str = wrapper->cpu->disassembleRecordedWords((int)i, len);
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (NSString *) disassembleRecordedFlags:(NSInteger)i
 {
     const char *str = wrapper->cpu->disassembleRecordedFlags((int)i);
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (NSString *) disassembleRecordedPC:(NSInteger)i
 {
     const char *str = wrapper->cpu->disassembleRecordedPC((int)i);
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (NSString *) disassembleInstr:(NSInteger)addr length:(NSInteger *)len
 {
     const char *str = wrapper->cpu->disassembleInstr(addr, len);
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (NSString *) disassembleWords:(NSInteger)addr length:(NSInteger)len
 {
     const char *str = wrapper->cpu->disassembleWords(addr, len);
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (NSString *) disassembleAddr:(NSInteger)addr
 {
     const char *str = wrapper->cpu->disassembleAddr(addr);
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 @end
@@ -292,7 +292,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (BOOL) loadRomFromBuffer:(NSData *)data
 {
-    if (data == NULL) return NO;
+    if (data == nullptr) return NO;
     const u8 *bytes = (const u8 *)[data bytes];
     return wrapper->mem->loadRomFromBuffer(bytes, [data length]);
 }
@@ -311,17 +311,17 @@ struct SerialPortWrapper { SerialPort *port; };
 - (NSString *) romTitle
 {
     const char *str = wrapper->mem->romTitle();
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (NSString *) romVersion
 {
     const char *str = wrapper->mem->romVersion();
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (NSString *) romReleased
 {
     const char *str = wrapper->mem->romReleased();
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (BOOL) hasExt
 {
@@ -337,7 +337,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (BOOL) loadExtFromBuffer:(NSData *)data
 {
-    if (data == NULL) return NO;
+    if (data == nullptr) return NO;
     const u8 *bytes = (const u8 *)[data bytes];
     return wrapper->mem->loadExtFromBuffer(bytes, [data length]);
 }
@@ -356,17 +356,17 @@ struct SerialPortWrapper { SerialPort *port; };
 - (NSString *) extTitle
 {
     const char *str = wrapper->mem->extTitle();
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (NSString *) extVersion
 {
     const char *str = wrapper->mem->extVersion();
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (NSString *) extReleased
 {
     const char *str = wrapper->mem->extReleased();
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (NSInteger) extStart
 {
@@ -415,7 +415,7 @@ struct SerialPortWrapper { SerialPort *port; };
         str = wrapper->mem->ascii <AGNUS_ACCESS> ((u32)addr);
     }
     
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (NSString *) hex:(Accessor)accessor addr: (NSInteger)addr bytes:(NSInteger)bytes
 {
@@ -428,7 +428,7 @@ struct SerialPortWrapper { SerialPort *port; };
         str = wrapper->mem->hex <AGNUS_ACCESS> ((u32)addr, bytes);
     }
     
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 @end
@@ -513,12 +513,12 @@ struct SerialPortWrapper { SerialPort *port; };
 - (NSString *) disassemble:(NSInteger)addr
 {
     const char *str = wrapper->copper->disassemble(addr);
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 - (NSString *) disassemble:(NSInteger)list instr:(NSInteger)offset
 {
     const char *str = wrapper->copper->disassemble(list, offset);
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 @end
@@ -1195,7 +1195,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (ADFFileProxy *)convertDisk
 {
-    return NULL;
+    return nullptr;
 }
 @end
 
@@ -1206,20 +1206,20 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation FSDeviceProxy
 
-- (instancetype) initWithVolume:(FSDevice *)volume
+- (instancetype) initWithDevice:(FSDevice *)volume
 {
     if (self = [super init]) {
-        wrapper = new FSVolumeWrapper();
-        wrapper->volume = volume;
+        wrapper = new FSDeviceWrapper();
+        wrapper->device = volume;
     }
     return self;
 }
 
 + (instancetype) make:(FSDevice *)volume
 {
-    if (volume == NULL) { return nil; }
+    if (volume == nullptr) { return nil; }
     
-    FSDeviceProxy *proxy = [[self alloc] initWithVolume: volume];
+    FSDeviceProxy *proxy = [[self alloc] initWithDevice: volume];
     return proxy;
 }
 
@@ -1243,52 +1243,52 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (FSVolumeType) dos
 {
-    return wrapper->volume->dos();
+    return wrapper->device->dos();
 }
 
 - (NSInteger) numCyls
 {
-    return wrapper->volume->getNumCyls();
+    return wrapper->device->getNumCyls();
 }
 
 - (NSInteger) numHeads
 {
-    return wrapper->volume->getNumHeads();
+    return wrapper->device->getNumHeads();
 }
 
 - (NSInteger) numTracks
 {
-    return wrapper->volume->getNumTracks();
+    return wrapper->device->getNumTracks();
 }
 
 - (NSInteger) numSectors
 {
-    return wrapper->volume->getNumSectors();
+    return wrapper->device->getNumSectors();
 }
 
 - (NSInteger) numBlocks
 {
-    return wrapper->volume->getNumBlocks();
+    return wrapper->device->getNumBlocks();
 }
 
 - (void)killVirus
 {
-    wrapper->volume->killVirus();
+    wrapper->device->killVirus();
 }
 
 - (FSBlockType) blockType:(NSInteger)blockNr
 {
-    return wrapper->volume->blockType(blockNr);
+    return wrapper->device->blockType(blockNr);
 }
 
 - (FSItemType) itemType:(NSInteger)blockNr pos:(NSInteger)pos
 {
-    return wrapper->volume->itemType(blockNr, pos);
+    return wrapper->device->itemType(blockNr, pos);
 }
 
 - (FSErrorReport) check:(BOOL)strict
 {
-    return wrapper->volume->check(strict);
+    return wrapper->device->check(strict);
 }
 
 - (FSError) check:(NSInteger)nr
@@ -1296,52 +1296,54 @@ struct SerialPortWrapper { SerialPort *port; };
          expected:(unsigned char *)exp
            strict:(BOOL)strict
 {
-    return wrapper->volume->check(nr, pos, exp, strict);
+    return wrapper->device->check(nr, pos, exp, strict);
 }
 
 - (BOOL) isCorrupted:(NSInteger)blockNr
 {
-    return wrapper->volume->isCorrupted(blockNr);
+    return wrapper->device->isCorrupted((u32)blockNr);
 }
 
 - (NSInteger) getCorrupted:(NSInteger)blockNr
 {
-    return wrapper->volume->getCorrupted(blockNr);
+    return wrapper->device->getCorrupted((u32)blockNr);
 }
 
 - (NSInteger) nextCorrupted:(NSInteger)blockNr
 {
-    return wrapper->volume->nextCorrupted(blockNr);
+    return wrapper->device->nextCorrupted((u32)blockNr);
 }
 
 - (NSInteger) prevCorrupted:(NSInteger)blockNr
 {
-    return wrapper->volume->prevCorrupted(blockNr);
+    return wrapper->device->prevCorrupted((u32)blockNr);
 }
 
 - (void) printDirectory:(BOOL) recursive
 {
-    return wrapper->volume->printDirectory(recursive);
+    return wrapper->device->printDirectory(recursive);
 }
 
 - (NSInteger) readByte:(NSInteger)block offset:(NSInteger)offset
 {
-    return wrapper->volume->readByte(block, offset);
+    return wrapper->device->readByte(block, (u32)offset);
 }
 
 - (FSError) export:(NSString *)path
 {
-    return wrapper->volume->exportDirectory([path fileSystemRepresentation]);
+    return wrapper->device->exportDirectory([path fileSystemRepresentation]);
 }
 
+/*
 - (BOOL) exportBlock:(NSInteger)block buffer:(unsigned char *)buffer
 {
-    return wrapper->volume->exportBlock(block, buffer, 512);
+    return wrapper->device->exportBlock(block, buffer, 512);
 }
+*/
 
 - (void) dump
 {
-    wrapper->volume->dump();
+    wrapper->device->dump();
 }
 @end
 
@@ -1427,10 +1429,10 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype) make:(Snapshot *)snapshot
 {
-    if (snapshot == NULL) { return nil; }
+    if (snapshot == nullptr) { return nil; }
     
     SnapshotProxy *proxy = [[self alloc] initWithFile:snapshot];
-    proxy->preview = NULL;
+    proxy->preview = nullptr;
     
     return proxy;
 }
@@ -1472,7 +1474,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (NSImage *)previewImage
 {
-    if (preview != NULL) { return preview; }
+    if (preview != nullptr) { return preview; }
     
     // Create preview image
     Snapshot *snapshot = (Snapshot *)wrapper->file;
@@ -1569,7 +1571,7 @@ struct SerialPortWrapper { SerialPort *port; };
 - (NSString *)bootBlockName
 {
     const char *str = ((DiskFile *)wrapper->file)->bootBlockName();
-    return str ? [NSString stringWithUTF8String:str] : NULL;
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (BOOL)hasVirus
@@ -1613,7 +1615,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype)make:(ADFFile *)archive
 {
-    if (archive == NULL) return nil;
+    if (archive == nullptr) return nil;
     return [[self alloc] initWithFile:archive];
 }
 
@@ -1663,7 +1665,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype) make:(HDFFile *)archive
 {
-    if (archive == NULL) return nil;
+    if (archive == nullptr) return nil;
     return [[self alloc] initWithFile:archive];
 }
 
@@ -1699,7 +1701,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) make:(EXTFile *)archive
 {
-    if (archive == NULL) return nil;
+    if (archive == nullptr) return nil;
     return [[self alloc] initWithFile:archive];
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
@@ -1728,7 +1730,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) make:(IMGFile *)archive
 {
-    if (archive == NULL) return nil;
+    if (archive == nullptr) return nil;
     return [[self alloc] initWithFile:archive];
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
@@ -1763,7 +1765,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) make:(DMSFile *)archive
 {
-    if (archive == NULL) return nil;
+    if (archive == nullptr) return nil;
     return [[self alloc] initWithFile:archive];
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
@@ -1798,7 +1800,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) make:(EXEFile *)archive
 {
-    if (archive == NULL) return nil;
+    if (archive == nullptr) return nil;
     return [[self alloc] initWithFile:archive];
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
@@ -1834,7 +1836,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype) make:(DIRFile *)archive
 {
-    if (archive == NULL) return nil;
+    if (archive == nullptr) return nil;
     return [[self alloc] initWithFile:archive];
 }
 
@@ -1923,12 +1925,12 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (void) kill
 {
-    assert(wrapper->amiga != NULL);
+    assert(wrapper->amiga != nullptr);
     NSLog(@"AmigaProxy::kill");
     
     // Kill the emulator
     delete wrapper->amiga;
-    wrapper->amiga = NULL;
+    wrapper->amiga = nullptr;
 }
 
 - (BOOL) isReleaseBuild

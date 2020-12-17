@@ -29,13 +29,6 @@ inline bool isDiskType(DiskType value)
     return value >= 0 && value <= DISK_525;
 }
 
-/*
-inline bool isAmigaDiskType(DiskType value)
-{
-    return value == DISK_35_DD || value == DISK_35_HD || value == DISK_525_DD;
-}
-*/
-
 inline const char *sDiskType(DiskType value)
 {
     assert(isDiskType(value));

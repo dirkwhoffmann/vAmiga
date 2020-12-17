@@ -52,8 +52,8 @@ class ScreenRecorder : public AmigaComponent {
     //
     
     // File handles to access FFmpeg
-    FILE *videoFFmpeg = NULL;
-    FILE *audioFFmpeg = NULL;
+    FILE *videoFFmpeg = nullptr;
+    FILE *audioFFmpeg = nullptr;
 
     // Video and audio pipe
     int videoPipe = -1;

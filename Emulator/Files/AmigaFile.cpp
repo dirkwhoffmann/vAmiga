@@ -136,10 +136,10 @@ AmigaFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
 bool
 AmigaFile::readFromFile(const char *filename, FileError *error)
 {
-    assert (filename != NULL);
+    assert (filename != nullptr);
     
     bool success;
-    FILE *file = NULL;
+    FILE *file = nullptr;
     struct stat fileProperties;
     
     // Get properties

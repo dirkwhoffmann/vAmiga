@@ -198,15 +198,7 @@ public:
     virtual void setNextDataBlockRef(u32 ref) { }
     struct FSDataBlock *getNextDataBlock();
 
-    
-    //
-    // Working with bitmap blocks
-    //
-    
-    // Tries to add a reference to a bitmap block
-    // virtual bool addBitmapBlockRef(u32 ref) { return false; }
-    
-    
+        
     //
     // Working with hash tables
     //
@@ -220,9 +212,6 @@ public:
     // Looks up an item in the hash table
     u32 getHashRef(u32 nr);
     void setHashRef(u32 nr, u32 ref);
-
-    // Adds a reference to the hash table
-    // void addToHashTable(u32 ref);
 
     // Dumps the contents of the hash table for debugging
     void dumpHashTable();

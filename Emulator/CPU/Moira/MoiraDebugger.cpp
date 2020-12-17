@@ -37,7 +37,7 @@ Guard::eval(u32 addr, Size S)
 Guard *
 Guards::guardWithNr(long nr)
 {
-    return nr < count ? &guards[nr] : NULL;
+    return nr < count ? &guards[nr] : nullptr;
 }
 
 Guard *
@@ -47,7 +47,7 @@ Guards::guardAtAddr(u32 addr)
         if (guards[i].addr == addr) return &guards[i];
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool
@@ -55,7 +55,7 @@ Guards::isSetAt(u32 addr)
 {
     Guard *guard = guardAtAddr(addr);
 
-    return guard != NULL;
+    return guard != nullptr;
 }
 
 bool
@@ -63,7 +63,7 @@ Guards::isSetAndEnabledAt(u32 addr)
 {
     Guard *guard = guardAtAddr(addr);
 
-    return guard != NULL && guard->enabled;
+    return guard != nullptr && guard->enabled;
 }
 
 bool
@@ -71,7 +71,7 @@ Guards::isSetAndDisabledAt(u32 addr)
 {
     Guard *guard = guardAtAddr(addr);
 
-    return guard != NULL && !guard->enabled;
+    return guard != nullptr && !guard->enabled;
 }
 
 bool
@@ -79,7 +79,7 @@ Guards::isSetAndConditionalAt(u32 addr)
 {
     Guard *guard = guardAtAddr(addr);
 
-    return guard != NULL && guard->skip != 0;
+    return guard != nullptr && guard->skip != 0;
 }
 
 void

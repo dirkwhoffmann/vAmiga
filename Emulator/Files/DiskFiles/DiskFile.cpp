@@ -27,7 +27,7 @@ DiskFile::makeWithFile(const char *path)
     DIRFile *dir = AmigaFile::make <DIRFile> (path);
     if (dir) return dir;
 
-    return NULL;
+    return nullptr;
 }
 
 u8

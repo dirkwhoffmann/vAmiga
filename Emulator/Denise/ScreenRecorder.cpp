@@ -138,8 +138,8 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         // Launch FFmpeg instances
         //
         
-        assert(videoFFmpeg == NULL);
-        assert(audioFFmpeg == NULL);
+        assert(videoFFmpeg == nullptr);
+        assert(audioFFmpeg == nullptr);
         
         msg("\nStarting video encoder with options:\n%s\n", cmd1);
         videoFFmpeg = popen(cmd1, "w");
@@ -186,8 +186,8 @@ ScreenRecorder::stopRecording()
     // Shut down encoders
     pclose(videoFFmpeg);
     pclose(audioFFmpeg);
-    videoFFmpeg = NULL;
-    audioFFmpeg = NULL;
+    videoFFmpeg = nullptr;
+    audioFFmpeg = nullptr;
     
     debug(REC_DEBUG, "Recording has stopped\n");
     messageQueue.put(MSG_RECORDING_STOPPED);
@@ -244,8 +244,8 @@ ScreenRecorder::vsyncHandler(Cycle target)
     if (!isRecording()) return;
     
     // debug("vsyncHandler\n");
-    assert(videoFFmpeg != NULL);
-    assert(audioFFmpeg != NULL);
+    assert(videoFFmpeg != nullptr);
+    assert(audioFFmpeg != nullptr);
     
     synchronized {
         

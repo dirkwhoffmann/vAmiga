@@ -168,7 +168,7 @@ Drive::_load(u8 *buffer)
     // Delete the current disk
     if (disk) {
         delete disk;
-        disk = NULL;
+        disk = nullptr;
     }
 
     // Check if the snapshot includes a disk
@@ -586,7 +586,7 @@ Drive::ejectDisk()
         
         // Get rid of the disk
         delete disk;
-        disk = NULL;
+        disk = nullptr;
         
         // Notify the GUI
         messageQueue.put(MSG_DISK_EJECT, nr);

@@ -193,12 +193,12 @@ VAMIGA_ENUM(long, FSError)
     FS_PTR_TO_FILELIST_BLOCK,
     FS_PTR_TO_DATA_BLOCK,
     FS_EXPECTED_DATABLOCK_NR,
-    FS_INVALID_HASHTABLE_SIZE,
+    FS_INVALID_HASHTABLE_SIZE
 };
 
 inline bool isFSError(FSError value)
 {
-    return value >= FS_OK && value <= FS_CORRUPTED;
+    return value >= 0 && value <= FS_INVALID_HASHTABLE_SIZE;
 }
 
 inline const char *sFSError(FSError value)

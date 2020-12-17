@@ -36,7 +36,7 @@ Disk::makeWithFile(DiskFile *file)
     
     if (!disk->encodeDisk(file)) {
         delete disk;
-        return NULL;
+        return nullptr;
     }
     
     disk->fnv = file->fnv();
@@ -163,7 +163,7 @@ Disk::clearTrack(Track t, u8 value1, u8 value2)
 bool
 Disk::encodeDisk(DiskFile *df)
 {
-    assert(df != NULL);
+    assert(df != nullptr);
     assert(df->getDiskType() == getType());
 
     // Start with an unformatted disk

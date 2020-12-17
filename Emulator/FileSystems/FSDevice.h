@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FSVOLUME_H
-#define _FSVOLUME_H
+#ifndef _FSDEVICE_H
+#define _FSDEVICE_H
 
 #include "FSObjects.h"
 #include "FSPartition.h"
@@ -111,7 +111,7 @@ public:
     void info();
     
     // Prints debug information about this volume
-    virtual void dump();
+    void dump();
         
     
     //
@@ -346,14 +346,6 @@ public:
 
     // Exports the volume to a directory of the host file system
     FSError exportDirectory(const char *path);
-    
-private:
-    
-    // Provides block information that is needed during the import process
-    /*
-    bool predictBlock(u32 nr, const u8 *buffer,
-                      FSPartition **p, FSVolumeType *dos, FSBlockType *type);
-    */
 };
 
 #endif

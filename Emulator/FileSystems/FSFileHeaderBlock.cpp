@@ -15,10 +15,10 @@ FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
    
     // Setup constant values
     
-    set32(0, 2);                   // Type
-    set32(1, nr);                  // Block pointer to itself
-    setCreationDate(time(NULL));   // Creation date
-    set32(-1, (u32)-3);            // Sub type
+    set32(0, 2);                     // Type
+    set32(1, nr);                    // Block pointer to itself
+    setCreationDate(time(nullptr));  // Creation date
+    set32(-1, (u32)-3);              // Sub type
 }
 
 FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, u32 nr, const char *name) :

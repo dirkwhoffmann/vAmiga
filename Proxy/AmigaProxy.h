@@ -641,7 +641,7 @@ struct SerialPortWrapper;
 
 @interface FSDeviceProxy : NSObject {
     
-    struct FSVolumeWrapper *wrapper;
+    struct FSDeviceWrapper *wrapper;
 }
 
 + (instancetype)makeWithADF:(ADFFileProxy *)adf;
@@ -667,7 +667,7 @@ struct SerialPortWrapper;
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (FSError)export:(NSString *)path;
-- (BOOL)exportBlock:(NSInteger)block buffer:(unsigned char *)buffer;
+// - (BOOL)exportBlock:(NSInteger)block buffer:(unsigned char *)buffer;
 
 - (void)dump;
 

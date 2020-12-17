@@ -39,7 +39,7 @@ IMGFile::makeWithDiskType(DiskType t, DiskDensity d)
     
     if (!img->alloc(9 * 160 * 512)) {
         delete img;
-        return NULL;
+        return nullptr;
     }
     
     memset(img->data, 0, img->size);
@@ -49,17 +49,17 @@ IMGFile::makeWithDiskType(DiskType t, DiskDensity d)
 IMGFile *
 IMGFile::makeWithDisk(Disk *disk)
 {
-    assert(disk != NULL);
+    assert(disk != nullptr);
         
     // We only support 3.5"DD disks at the moment
-    if (disk->getType() != DISK_35 || disk->getDensity() != DISK_DD) { return NULL; }
+    if (disk->getType() != DISK_35 || disk->getDensity() != DISK_DD) { return nullptr; }
     
     IMGFile *img = makeWithDiskType(DISK_35, DISK_DD);
     
     if (img) {
         if (!img->decodeDisk(disk)) {
             delete img;
-            return NULL;
+            return nullptr;
         }
     }
     
