@@ -36,6 +36,7 @@
 		502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD0B2248ECAA00F0E118 /* EventTableView.swift */; };
 		502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502F7DCD2221706000AEEC65 /* Copper.cpp */; };
 		502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502F7DD22221E52200AEEC65 /* PixelEngine.cpp */; };
+		50300AF0258CF1F700D261E3 /* TypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50300AEF258CF1F700D261E3 /* TypeExtensions.swift */; };
 		5030891121EFA74600FEAD12 /* Paula.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5030890F21EFA74600FEAD12 /* Paula.cpp */; };
 		5030C2E0252A2E8400107E00 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5030C2DE252A2E8400107E00 /* AudioStream.cpp */; };
 		50357BB6239123B2007E7563 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB5239123B2007E7563 /* Renderer.swift */; };
@@ -274,6 +275,7 @@
 		502F7DD1222172CA00AEEC65 /* Copper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Copper.h; sourceTree = "<group>"; };
 		502F7DD22221E52200AEEC65 /* PixelEngine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PixelEngine.cpp; sourceTree = "<group>"; };
 		502F7DD32221E52200AEEC65 /* PixelEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PixelEngine.h; sourceTree = "<group>"; };
+		50300AEF258CF1F700D261E3 /* TypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeExtensions.swift; sourceTree = "<group>"; };
 		5030890F21EFA74600FEAD12 /* Paula.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Paula.cpp; sourceTree = "<group>"; };
 		5030891021EFA74600FEAD12 /* Paula.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Paula.h; sourceTree = "<group>"; };
 		5030C2DE252A2E8400107E00 /* AudioStream.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioStream.cpp; sourceTree = "<group>"; };
@@ -1185,6 +1187,7 @@
 				508FDFFA21EA22790043D0E9 /* Bridging-Header.h */,
 				50B14C2921EB9806002E32A6 /* AmigaProxy.h */,
 				50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */,
+				50300AEF258CF1F700D261E3 /* TypeExtensions.swift */,
 				5085FE5821FB6856009753EF /* ProxyExtensions.swift */,
 			);
 			path = Proxy;
@@ -1471,6 +1474,7 @@
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
+				50300AF0258CF1F700D261E3 /* TypeExtensions.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
 				50F54B2924B5D31D0078FDC9 /* xdms.c in Sources */,
 				5009B7FC2557051A0037288E /* EXTFile.cpp in Sources */,

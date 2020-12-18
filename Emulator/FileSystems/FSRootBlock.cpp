@@ -77,19 +77,19 @@ FSRootBlock::check(u32 byte, u8 *expected, bool strict)
     
     switch (word) {
             
-        case 0:   EXPECT_LONGWORD(2);              break;
+        case 0:   EXPECT_LONGWORD(2);                break;
         case 1:
-        case 2:   EXPECT_BYTE(0);                  break;
-        case 3:   EXPECT_HASHTABLE_SIZE;           break;
-        case 4:   EXPECT_BYTE(0);                  break;
-        case 5:   EXPECT_CHECKSUM;                 break;
-        case -50:                                  break;
-        case -49: EXPECT_BITMAP_REF;               break;
-        case -24: EXPECT_OPTIONAL_BITMAP_EXT_REF;  break;
+        case 2:   if (strict) EXPECT_LONGWORD(0);    break;
+        case 3:   if (strict) EXPECT_HASHTABLE_SIZE; break;
+        case 4:   EXPECT_LONGWORD(0);                break;
+        case 5:   EXPECT_CHECKSUM;                   break;
+        case -50:                                    break;
+        case -49: EXPECT_BITMAP_REF;                 break;
+        case -24: EXPECT_OPTIONAL_BITMAP_EXT_REF;    break;
         case -4:
         case -3:
-        case -2:  EXPECT_BYTE(0);                  break;
-        case -1:  EXPECT_LONGWORD(1);              break;
+        case -2:  if (strict) EXPECT_LONGWORD(0);    break;
+        case -1:  EXPECT_LONGWORD(1);                break;
 
         default:
             

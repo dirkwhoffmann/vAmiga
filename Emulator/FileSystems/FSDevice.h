@@ -335,7 +335,7 @@ public:
     bool importDirectory(const char *path, DIR *dir, bool recursive = true);
 
     // Exports the volume to a buffer compatible with the ADF format
-    bool exportVolume(u8 *dst, size_t size);
+    bool exportVolume(u8 *dst, size_t size); 
     bool exportVolume(u8 *dst, size_t size, FSError *error);
 
     // Exports a single block or a range of blocks

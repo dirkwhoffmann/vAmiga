@@ -135,24 +135,6 @@ extension HDFFileProxy {
     }
 }
 
-extension FSVolumeType {
-
-    var description: String {
-        
-        switch self {
-        case .OFS:      return "Original File System (OFS)"
-        case .OFS_INTL: return "Original File System (OFS-INTL)"
-        case .OFS_DC:   return "Original File System (OFS-DC)"
-        case .OFS_LNFS: return "Original File System (OFS-LNFS)"
-        case .FFS:      return "Fast File System (FFS)"
-        case .FFS_INTL: return "Fast File System (FFS-INTL)"
-        case .FFS_DC:   return "Fast File System (FFS-DC)"
-        case .FFS_LNFS: return "Fast File System (FFS-LNFS)"
-        default:        return "Unknown file system"
-        }
-    }
-}
-
 extension NSError {
     
     static func fileError(_ err: FileError, url: URL) -> NSError {

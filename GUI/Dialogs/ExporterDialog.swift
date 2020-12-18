@@ -336,11 +336,13 @@ class ExporterDialog: DialogController {
         if shrinked { return }
         
         // Hide more elements if no errors are present
+        /*
         if volume == nil || errorReport?.corruptedBlocks == 0 {
             corruptionText.isHidden = true
             corruptionStepper.isHidden = true
         }
-
+        */
+        
         // Update all elements
         cylinderField.stringValue      = String.init(format: "%d", cylinderNr)
         cylinderStepper.integerValue   = cylinderNr
@@ -353,18 +355,26 @@ class ExporterDialog: DialogController {
         blockField.stringValue         = String.init(format: "%d", blockNr)
         blockStepper.integerValue      = blockNr
         corruptionStepper.integerValue = blockNr
-
-        if let corr = volume?.getCorrupted(blockNr) {
-            
-            let total = errorReport!.corruptedBlocks
-
-            if corr > 0 {
+        
+        if let total = errorReport?.corruptedBlocks, total > 0 {
+                     
+            if let corr = volume?.getCorrupted(blockNr), corr > 0 {
+                track("total = \(total) corr = \(corr)")
                 corruptionText.stringValue = "Corrupted block \(corr) out of \(total)"
-                corruptionText.textColor = .labelColor
             } else {
-                corruptionText.stringValue = ""
-                corruptionText.textColor = .secondaryLabelColor
+                let blocks = total == 1 ? "block" : "blocks"
+                corruptionText.stringValue = "\(total) corrupted \(blocks)"
             }
+            
+            corruptionText.textColor = .labelColor
+            corruptionText.textColor = .warningColor
+            corruptionStepper.isHidden = false
+        
+        } else {
+            corruptionText.stringValue = ""
+            // corruptionText.textColor = .textColor
+            // corruptionText.textColor = .secondaryLabelColor
+            corruptionStepper.isHidden = true
         }
         
         updateBlockInfo()
@@ -430,26 +440,23 @@ class ExporterDialog: DialogController {
     func updateVolumeInfo() {
         
         var text = "No compatible file system"
+        var color = NSColor.warningColor
         
         if volume != nil {
             
             text = volume!.dos.description
+            color = .secondaryLabelColor
             
             if let errors = errorReport?.corruptedBlocks, errors > 0 {
                 
                 let blocks = errors == 1 ? "block" : "blocks"
-                let text2 = " with \(errors) corrupted \(blocks)"
-                volumeInfo.stringValue = text + text2
-                volumeInfo.textColor = .warningColor
-                return
+                text += " with \(errors) corrupted \(blocks)"
+                color = .warningColor
             }
-            
-        } else {
-            
-            volumeInfo.textColor = .warningColor
         }
         
         volumeInfo.stringValue = text
+        volumeInfo.textColor = color
     }
     
     func updateBootInfo() {
@@ -483,115 +490,13 @@ class ExporterDialog: DialogController {
     func updateBlockInfoUnselected() {
         
         let type = volume!.blockType(blockNr)
-        var text: String
-        
-        switch type {
-        case .UNKNOWN_BLOCK:    text = "Unknown block type"
-        case .EMPTY_BLOCK:      text = "Empty Block"
-        case .BOOT_BLOCK:       text = "Boot Block"
-        case .ROOT_BLOCK:       text = "Root Block"
-        case .BITMAP_BLOCK:     text = "Bitmap Block"
-        case .BITMAP_EXT_BLOCK: text = "Bitmap Extension Block"
-        case .USERDIR_BLOCK:    text = "User Directory Block"
-        case .FILEHEADER_BLOCK: text = "File Header Block"
-        case .FILELIST_BLOCK:   text = "File List Block"
-        case .DATA_BLOCK_OFS:   text = "Data Block (OFS)"
-        case .DATA_BLOCK_FFS:   text = "Data Block (FFS)"
-        default: fatalError()
-        }
-        
-        info1.stringValue = text
+        info1.stringValue = type.description
     }
     
     func updateBlockInfoSelected() {
         
         let usage = volume!.itemType(blockNr, pos: selection!)
-        var text: String
-        
-        switch usage {
-        case .FSI_UNKNOWN:
-            text = "Unknown"
-        case .FSI_UNUSED:
-            text = "Unused"
-        case .FSI_DOS_HEADER:
-            text = "AmigaDOS header signature"
-        case .FSI_DOS_VERSION:
-            text = "AmigaDOS version number"
-        case .FSI_BOOTCODE:
-            text = "Boot code instruction"
-        case .FSI_TYPE_ID:
-            text = "Type identifier"
-        case .FSI_SUBTYPE_ID:
-            text = "Subtype identifier"
-        case .FSI_SELF_REF:
-            text = "Block reference to itself"
-        case .FSI_CHECKSUM:
-            text = "Checksum"
-        case .FSI_HASHTABLE_SIZE:
-            text = "Hashtable size"
-        case .FSI_HASH_REF:
-            text = "Hashtable entry"
-        case .FSI_PROT_BITS:
-            text = "Protection status bits"
-        case .FSI_BCPL_STRING_LENGTH:
-            text = "BCPL string Length"
-        case .FSI_BCPL_DISK_NAME:
-            text = "Disk name (BCPL character)"
-        case .FSI_BCPL_DIR_NAME:
-            text = "Directory name (BCPL character)"
-        case .FSI_BCPL_FILE_NAME:
-            text = "File name (BCPL character)"
-        case .FSI_BCPL_COMMENT:
-            text = "Comment (BCPL character)"
-        case .FSI_CREATED_DAY:
-            text = "Creation date (days)"
-        case .FSI_CREATED_MIN:
-            text = "Creation date (minutes)"
-        case .FSI_CREATED_TICKS:
-            text = "Creation date (ticks)"
-        case .FSI_MODIFIED_DAY:
-            text = "Modification date (day)"
-        case .FSI_MODIFIED_MIN:
-            text = "Modification date (minutes)"
-        case .FSI_MODIFIED_TICKS:
-            text = "Modification date (ticks)"
-        case .FSI_NEXT_HASH_REF:
-            text = "Reference to the next hash block"
-        case .FSI_PARENT_DIR_REF:
-            text = "Parent directory block reference"
-        case .FSI_FILEHEADER_REF:
-            text = "File header block reference"
-        case .FSI_EXT_BLOCK_REF:
-            text = "Next extension block reference"
-        case .FSI_BITMAP_BLOCK_REF:
-            text = "Bitmap block reference"
-        case .FSI_BITMAP_EXT_BLOCK_REF:
-            text = "Extension bitmap block reference"
-        case .FSI_BITMAP_VALIDITY:
-            text = "Bitmap validity bits"
-        case .FSI_DATA_BLOCK_REF_COUNT:
-            text = "Number of data block references"
-        case .FSI_FILESIZE:
-            text = "File size"
-        case .FSI_DATA_BLOCK_NUMBER:
-            text = "Position in the data block chain"
-        case .FSI_DATA_BLOCK_REF:
-            text = "Data block reference"
-        case .FSI_FIRST_DATA_BLOCK_REF:
-            text = "Reference to the first data block"
-        case .FSI_NEXT_DATA_BLOCK_REF:
-            text = "Reference to next data block"
-        case .FSI_DATA_COUNT:
-            text = "Number of stored data bytes"
-        case .FSI_DATA:
-            text = "Data byte"
-        case .FSI_BITMAP:
-            text = "Block allocation table"
-        default:
-            fatalError()
-        }
-        
-        info1.stringValue = text
+        info1.stringValue = usage.description
     }
 
     func updateErrorInfoUnselected() {

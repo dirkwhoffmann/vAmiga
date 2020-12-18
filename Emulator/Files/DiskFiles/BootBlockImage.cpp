@@ -242,7 +242,7 @@ const BBRecord bbRecord[] = {
         { 12,0x43, 13,0xfa, 14,0x00, 15,0x3e, 16,0x70, 17,0x25, 18,0x4e },
         os20_bb, sizeof(os20_bb), BB_STANDARD
     },
-          
+    
     //
     // Viruses (detectable and installable)
     //
@@ -1120,20 +1120,35 @@ BootBlockImage::BootBlockImage(const u8 *buffer)
     memcpy(data, buffer, 1024);
     size_t i,j;
     
+    // Try to find a match in the data base
     for (i = 0; i < sizeof(bbRecord) / sizeof(BBRecord); i++) {
-                
-        for (j = 0; j < 7; j++) {
-
-            u16 pos = bbRecord[i].signature[2*j];
-            u16 val = bbRecord[i].signature[2*j + 1];
-            if (pos && data[pos] != val) break;
-        }
         
-        if (j == 7) {
-
-            this->type = bbRecord[i].type;
-            this->name = bbRecord[i].name;
-            return;
+        if (bbRecord[i].type == BB_STANDARD && bbRecord[i].image) {
+            
+            // For standard boot blocks, we require a perfect match
+            if (memcmp(buffer, bbRecord[i].image, bbRecord[i].size) == 0) {
+                
+                type = bbRecord[i].type;
+                name = bbRecord[i].name;
+                return;
+            }
+            
+        } else {
+            
+            // For all other blocks, we check specific byte locations
+            for (j = 0; j < 7; j++) {
+                
+                u16 pos = bbRecord[i].signature[2*j];
+                u16 val = bbRecord[i].signature[2*j + 1];
+                if (pos && data[pos] != val) break;
+            }
+            
+            if (j == 7) {
+                
+                type = bbRecord[i].type;
+                name = bbRecord[i].name;
+                return;
+            }
         }
     }
 }

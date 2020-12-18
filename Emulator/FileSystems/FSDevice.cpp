@@ -882,12 +882,12 @@ FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size)
     return result;
 }
 
-bool FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *error)
+bool
+FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *error)
 {
-    assert(first < numBlocks);
     assert(last < numBlocks);
     assert(first <= last);
-    assert(dst != nullptr);
+    assert(dst);
     
     u32 count = last - first + 1;
     
