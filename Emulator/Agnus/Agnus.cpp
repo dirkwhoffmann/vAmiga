@@ -86,11 +86,11 @@ Agnus::setConfigItem(ConfigOption option, long value)
             
             #ifdef FORCE_AGNUS_REVISION
             value = FORCE_AGNUS_REVISION;
-            warn("Overriding Agnus revision: %d\n", value);
+            warn("Overriding Agnus revision: %ld\n", value);
             #endif
             
             if (!isAgnusRevision(value)) {
-                warn("Invalid Agnus revision: %d\n", value);
+                warn("Invalid Agnus revision: %ld\n", value);
                 return false;
             }
             

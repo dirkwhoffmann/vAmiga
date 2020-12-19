@@ -17,22 +17,6 @@ va_start(ap, fmt); \
 vsnprintf(buf, sizeof(buf), fmt, ap); \
 va_end(ap);
 
-/*
-void
-AmigaObject::msg(const char *fmt, ...)
-{
-    VAOBJ_PARSE
-    fprintf(stderr, "%s", buf);
-}
-*/
-
-void
-AmigaObject::warn(const char *fmt, ...)
-{
-    VAOBJ_PARSE;
-    fprintf(stderr, "WARNING: %s", buf);
-}
-
 void
 AmigaObject::debug(int verbose, const char *fmt, ...)
 {

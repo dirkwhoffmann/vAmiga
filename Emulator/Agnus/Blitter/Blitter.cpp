@@ -71,11 +71,11 @@ Blitter::setConfigItem(ConfigOption option, long value)
             
             #ifdef FORCE_BLT_LEVEL
             value = FORCE_BLT_LEVEL;
-            warn("Overriding Blitter accuracy level: %d\n", value);
+            warn("Overriding Blitter accuracy level: %ld\n", value);
             #endif
             
             if (value < 0 || value > 2) {
-                warn("Invalid Blitter accuracy level: %d\n", value);
+                warn("Invalid Blitter accuracy level: %ld\n", value);
                 return false;
             }
             if (config.accuracy == value) {

@@ -294,7 +294,7 @@ ADFFile::formatDisk(FSVolumeType fs, long bootBlockID)
     if (error == FS_OK) {
         return true;
     } else {
-        warn("Failed to export file system  file system from ADF\n", sFSError(error));
+        warn("Failed to export file system from ADF: %s\n", sFSError(error));
         return false;
     }
 }
@@ -503,7 +503,7 @@ ADFFile::decodeTrack(Disk *disk, Track t)
     trace(MFM_DEBUG, "Found %d sectors (expected %d)\n", nr, sectors);
 
     if (nr != sectors) {
-        warn("Found %d sectors, expected %d. Aborting.\n", nr, sectors);
+        warn("Found %d sectors, expected %ld. Aborting.\n", nr, sectors);
         return false;
     }
     

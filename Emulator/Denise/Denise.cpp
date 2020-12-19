@@ -63,7 +63,7 @@ Denise::setConfigItem(ConfigOption option, long value)
         case OPT_DENISE_REVISION:
             
             if (!isDeniseRevision(value)) {
-                warn("Invalid Denise revision: %d\n", value);
+                warn("Invalid Denise revision: %ld\n", value);
                 return false;
             }
             if (config.revision == value) {

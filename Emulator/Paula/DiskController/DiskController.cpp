@@ -68,11 +68,11 @@ DiskController::setConfigItem(ConfigOption option, long value)
             
             #ifdef FORCE_DRIVE_SPEED
             value = FORCE_DRIVE_SPEED;
-            warn("Overriding drive speed: %d\n", value);
+            warn("Overriding drive speed: %ld\n", value);
             #endif
             
             if (!isValidDriveSpeed(value)) {
-                warn("Invalid drive speed: %d\n", value);
+                warn("Invalid drive speed: %ld\n", value);
                 return false;
             }
             if (config.speed == value) {

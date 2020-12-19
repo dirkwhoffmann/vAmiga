@@ -110,7 +110,7 @@ Muxer::setConfigItem(ConfigOption option, long value)
         case OPT_SAMPLING_METHOD:
             
             if (!isSamplingMethod(value)) {
-                warn("Invalid sampling method: %d\n", value);
+                warn("Invalid sampling method: %ld\n", value);
                 return false;
             }
 
@@ -124,8 +124,8 @@ Muxer::setConfigItem(ConfigOption option, long value)
         case OPT_FILTER_TYPE:
             
             if (!isFilterType(value)) {
-                warn("Invalid filter type: %d\n", value);
-                warn("       Valid values: 0 ... %d\n", FILT_COUNT - 1);
+                warn("Invalid filter type: %ld\n", value);
+                warn("       Valid values: 0 ... %ld\n", FILT_COUNT - 1);
                 return false;
             }
 
@@ -196,7 +196,7 @@ Muxer::setConfigItem(ConfigOption option, long id, long value)
                         
             assert(id >= 0 && id <= 3);
             if (value < 0 || value > 200) {
-                warn(" Invalid pan: %d\n", value);
+                warn(" Invalid pan: %ld\n", value);
                 warn("Valid values: 0 ... 200\n");
                 return false;
             }

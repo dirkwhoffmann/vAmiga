@@ -33,11 +33,11 @@ RTC::setConfigItem(ConfigOption option, long value)
             
             #ifdef FORCE_RTC
             value = FORCE_RTC;
-            warn("Overriding RTC revision: %d KB\n", value);
+            warn("Overriding RTC revision: %ld KB\n", value);
             #endif
             
             if (!isRTCRevision(value)) {
-                warn("Invalid RTC revision: %d\n", value);
+                warn("Invalid RTC revision: %ld\n", value);
                 return false;
             }
             if (config.model == value) {

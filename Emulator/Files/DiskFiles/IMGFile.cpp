@@ -311,7 +311,7 @@ IMGFile::decodeTrack(Disk *disk, Track t)
     }
 
     if (cnt != numSectors) {
-        warn("Found %d sectors, expected %d. Aborting", cnt, numSectors);
+        warn("Found %d sectors, expected %ld. Aborting", cnt, numSectors);
         return false;
     }
         

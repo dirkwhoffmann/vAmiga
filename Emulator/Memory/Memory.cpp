@@ -79,11 +79,11 @@ Memory::setConfigItem(ConfigOption option, long value)
             
             #ifdef FORCE_CHIP_RAM
             value = FORCE_CHIP_RAM;
-            warn("Overriding Chip Ram size: %d KB\n", value);
+            warn("Overriding Chip Ram size: %ld KB\n", value);
             #endif
             
             if (value != 256 && value != 512 && value != 1024 && value != 2048) {
-                warn("Invalid Chip Ram size: %d\n", value);
+                warn("Invalid Chip Ram size: %ld\n", value);
                 warn("         Valid values: 256KB, 512KB, 1024KB, 2048KB\n");
                 return false;
             }
@@ -95,11 +95,11 @@ Memory::setConfigItem(ConfigOption option, long value)
             
             #ifdef FORCE_SLOW_RAM
             value = FORCE_SLOW_RAM;
-            warn("Overriding Slow Ram size: %d KB\n", value);
+            warn("Overriding Slow Ram size: %ld KB\n", value);
             #endif
             
             if ((value % 256) != 0 || value > 512) {
-                warn("Invalid Slow Ram size: %d\n", value);
+                warn("Invalid Slow Ram size: %ld\n", value);
                 warn("         Valid values: 0KB, 256KB, 512KB\n");
                 return false;
             }
@@ -111,11 +111,11 @@ Memory::setConfigItem(ConfigOption option, long value)
             
             #ifdef FORCE_FAST_RAM
             value = FORCE_FAST_RAM;
-            warn("Overriding Fast Ram size: %d KB\n", value);
+            warn("Overriding Fast Ram size: %ld KB\n", value);
             #endif
             
             if ((value % 64) != 0 || value > 8192) {
-                warn("Invalid Fast Ram size: %d\n", value);
+                warn("Invalid Fast Ram size: %ld\n", value);
                 warn("Valid values: 0KB, 64KB, 128KB, ..., 8192KB (8MB)\n");
                 return false;
             }
@@ -126,7 +126,7 @@ Memory::setConfigItem(ConfigOption option, long value)
         case OPT_EXT_START:
             
             if (value != 0xE0 && value != 0xF0) {
-                warn("Invalid Extended ROM start page: %x\n", value);
+                warn("Invalid Extended ROM start page: %lx\n", value);
                 warn("Valid values: 0xE0, 0xF0\n");
                 return false;
             }
@@ -149,7 +149,7 @@ Memory::setConfigItem(ConfigOption option, long value)
         case OPT_BANKMAP:
             
             if (!isBankMap(value)) {
-                warn("Invalid bank map: %d\n", value);
+                warn("Invalid bank map: %ld\n", value);
                 return false;
             }
             if (config.bankMap == value) {
@@ -165,7 +165,7 @@ Memory::setConfigItem(ConfigOption option, long value)
         case OPT_UNMAPPING_TYPE:
             
             if (!isUnmappingType(value)) {
-                warn("Invalid unmapping type: %d\n", value);
+                warn("Invalid unmapping type: %ld\n", value);
                 return false;
             }
             if (config.unmappingType == value) {
@@ -180,7 +180,7 @@ Memory::setConfigItem(ConfigOption option, long value)
         case OPT_RAM_INIT_PATTERN:
             
             if (!isRamInitPattern(value)) {
-                warn("Invalid RAM init pattern: %d\n", value);
+                warn("Invalid RAM init pattern: %ld\n", value);
                 return false;
             }
             if (config.ramInitPattern == value) {
@@ -397,7 +397,7 @@ Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
         size_t allocSize = bytes;
         
         if (!(ptr = new (std::nothrow) u8[allocSize])) {
-            warn("Cannot allocate %d KB of memory\n", bytes);
+            warn("Cannot allocate %zu KB of memory\n", bytes);
             return false;
         }
         size = bytes;

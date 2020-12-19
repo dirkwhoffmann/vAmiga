@@ -57,7 +57,7 @@ Drive::setConfigItem(ConfigOption option, long id, long value)
         case OPT_DRIVE_TYPE:
             
             if (!isDriveType(value)) {
-                warn("Invalid drive type: %d\n", value);
+                warn("Invalid drive type: %ld\n", value);
                 return false;
             }
             if (value != DRIVE_35_DD && value != DRIVE_35_HD) {
