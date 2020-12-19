@@ -106,8 +106,8 @@ RTC::getTime()
          * of the host machine's current time and variable timeDiff.
          */
         lastMeasure = master;
-        lastMeasuredValue = time(nullptr);
-        result = lastMeasuredValue + timeDiff;
+        lastMeasuredValue = (i64)time(nullptr);
+        result = (time_t)lastMeasuredValue + (time_t)timeDiff;
 
     } else {
 
@@ -120,8 +120,8 @@ RTC::getTime()
          * we simply query the host machine's time, the time difference would
          * be less than 1 second in warp mode.
          */
-        long elapsedTime = AS_SEC(master - lastMeasure);
-        result = lastMeasuredValue + elapsedTime;
+        i64 elapsedTime = AS_SEC(master - lastMeasure);
+        result = (time_t)lastMeasuredValue + (time_t)elapsedTime;
     }
     
     lastCall = master;
@@ -131,7 +131,7 @@ RTC::getTime()
 void
 RTC::setTime(time_t t)
 {
-    timeDiff = t - time(nullptr);
+    timeDiff = (i64)(t - time(nullptr));
 }
 
 u8

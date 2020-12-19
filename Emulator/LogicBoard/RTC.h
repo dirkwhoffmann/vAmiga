@@ -25,7 +25,7 @@ class RTC : public AmigaComponent {
      * By default, this variable is 0 which means that the Amiga's real-time
      * clock is identical to the one in the host machine.
      */
-    time_t timeDiff;
+    i64 timeDiff;
     
     // The RTC registers
     u8 reg[4][16];
@@ -37,7 +37,7 @@ class RTC : public AmigaComponent {
     Cycle lastMeasure;
 
     // The result of the most recent query
-    time_t lastMeasuredValue;
+    i64 lastMeasuredValue;
     
     
     //

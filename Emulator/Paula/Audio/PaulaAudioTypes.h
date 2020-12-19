@@ -96,13 +96,13 @@ typedef struct
     // If set to true, the Amiga can't deactivate the filter
     bool filterAlwaysOn;
 
-    // Input channel volumes and pan settings
-    long vol[4];
-    long pan[4];
-    
-    // Output channel volumes
-    long volL;
-    long volR;
+    // Master volume (left and right channel)
+    i64 volL;
+    i64 volR;
+
+    // Channel volumes and pan factors
+    i64 vol[4];
+    i64 pan[4];
 }
 MuxerConfig;
 

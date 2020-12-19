@@ -201,12 +201,12 @@ Memory::setConfigItem(ConfigOption option, long value)
 void
 Memory::_dumpConfig()
 {
-    msg("       chipSize : %zu\n", config.chipSize);
-    msg("       slowSize : %zu\n", config.slowSize);
-    msg("       fastSize : %zu\n", config.fastSize);
-    msg("        romSize : %zu\n", config.romSize);
-    msg("        womSize : %zu\n", config.womSize);
-    msg("        extSize : %zu\n", config.extSize);
+    msg("       chipSize : %llu\n", config.chipSize);
+    msg("       slowSize : %llu\n", config.slowSize);
+    msg("       fastSize : %llu\n", config.fastSize);
+    msg("        romSize : %llu\n", config.romSize);
+    msg("        womSize : %llu\n", config.womSize);
+    msg("        extSize : %llu\n", config.extSize);
     msg("   slowRamDelay : %s\n", config.slowRamDelay ? "yes" : "no");
     msg("        bankMap : %s\n", sBankMap(config.bankMap));
     msg(" ramInitPattern : %s\n", sRamInitPattern(config.ramInitPattern));
@@ -378,7 +378,7 @@ Memory::updateStats()
 }
 
 bool
-Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
+Memory::alloc(u64 bytes, u8 *&ptr, u64 &size, u32 &mask)
 {
     // Check the invariants
     assert((ptr == nullptr) == (size == 0));
@@ -397,7 +397,7 @@ Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
         size_t allocSize = bytes;
         
         if (!(ptr = new (std::nothrow) u8[allocSize])) {
-            warn("Cannot allocate %zu KB of memory\n", bytes);
+            warn("Cannot allocate %llu KB of memory\n", bytes);
             return false;
         }
         size = bytes;

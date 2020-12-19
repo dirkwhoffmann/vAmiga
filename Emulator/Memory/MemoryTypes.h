@@ -137,14 +137,14 @@ static inline const char *sUnmappingType(UnmappingType value)
 typedef struct
 {
     // RAM size in bytes
-    size_t chipSize;
-    size_t slowSize;
-    size_t fastSize;
+    u64 chipSize;
+    u64 slowSize;
+    u64 fastSize;
 
     // ROM size in bytes
-    size_t romSize;
-    size_t womSize;
-    size_t extSize;
+    u64 romSize;
+    u64 womSize;
+    u64 extSize;
 
     // Indicates if slow Ram accesses need a free bus
     bool slowRamDelay;

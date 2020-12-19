@@ -11,25 +11,26 @@ extension ConfigurationController {
     
     func refreshAudioTab() {
         
-        let config = amiga.config.audio
+        // let config = amiga.config.audio
         
         // In
-        audVol0.integerValue = config.vol.0
-        audVol1.integerValue = config.vol.1
-        audVol2.integerValue = config.vol.2
-        audVol3.integerValue = config.vol.3
-        audPan0.integerValue = config.pan.0
-        audPan1.integerValue = config.pan.1
-        audPan2.integerValue = config.pan.2
-        audPan3.integerValue = config.pan.3
+        audVol0.integerValue = config.vol0
+        audVol1.integerValue = config.vol1
+        audVol2.integerValue = config.vol2
+        audVol3.integerValue = config.vol3
+        audPan0.integerValue = config.pan0
+        audPan1.integerValue = config.pan1
+        audPan2.integerValue = config.pan2
+        audPan3.integerValue = config.pan3
 
         // Out
         audVolL.integerValue = config.volL
         audVolR.integerValue = config.volR
-        audSamplingMethod.selectItem(withTag: config.samplingMethod.rawValue)
-        audFilterType.selectItem(withTag: config.filterType.rawValue)
+        
+        audSamplingMethod.selectItem(withTag: config.samplingMethod)
+        audFilterType.selectItem(withTag: config.filterType)
         audFilterAlwaysOn.state = config.filterAlwaysOn ? .on : .off
-        audFilterAlwaysOn.isEnabled = config.filterType != .FILT_NONE
+        audFilterAlwaysOn.isEnabled = config.filterType != FilterType.FILT_NONE.rawValue
 
         // Buttons
         audPowerButton.isHidden = !bootable

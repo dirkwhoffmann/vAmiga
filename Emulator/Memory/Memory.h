@@ -293,13 +293,13 @@ private:
     /* Dynamically allocates Ram or Rom. As side effects, the memory table is
      * updated and the GUI is informed about the changed memory layout.
      */
-    bool alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask);
+    bool alloc(u64 bytes, u8 *&ptr, u64 &size, u32 &mask);
 
 public:
 
-    bool allocChip(size_t bytes) { return alloc(bytes, chip, config.chipSize, chipMask); }
-    bool allocSlow(size_t bytes) { return alloc(bytes, slow, config.slowSize, slowMask); }
-    bool allocFast(size_t bytes) { return alloc(bytes, fast, config.fastSize, fastMask); }
+    bool allocChip(u64 bytes) { return alloc(bytes, chip, config.chipSize, chipMask); }
+    bool allocSlow(u64 bytes) { return alloc(bytes, slow, config.slowSize, slowMask); }
+    bool allocFast(u64 bytes) { return alloc(bytes, fast, config.fastSize, fastMask); }
 
     void deleteChip() { allocChip(0); }
     void deleteSlow() { allocSlow(0); }
