@@ -146,7 +146,7 @@ Mouse::trigger(GamePadAction event)
 {
     assert(isGamePadAction(event));
 
-    trace(PORT_DEBUG, "trigger(%ld)\n", event);
+    trace(PORT_DEBUG, "trigger(%lld)\n", event);
 
     switch (event) {
 

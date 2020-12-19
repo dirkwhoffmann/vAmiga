@@ -1000,7 +1000,7 @@ FSDevice::exportDirectory(const char *path)
     // Export all items
     for (auto const& i : items) {
         if (FSError error = blockPtr(i)->exportBlock(path); error != FS_OK) {
-            msg("Export error: %ld\n", error);
+            msg("Export error: %lld\n", error);
             return error; 
         }
     }

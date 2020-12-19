@@ -18,7 +18,7 @@
 // Enumerations
 //
 
-VAMIGA_ENUM(long, DiskType)
+enum_long( DiskType)
 {
     DISK_35,
     DISK_525
@@ -40,7 +40,7 @@ inline const char *sDiskType(DiskType value)
     }
 }
 
-VAMIGA_ENUM(long, DiskDensity)
+enum_long( DiskDensity)
 {
     DISK_SD,
     DISK_DD,
@@ -63,7 +63,7 @@ inline const char *sDiskDensity(DiskDensity value)
 }
 
 /*
-VAMIGA_ENUM(long, EmptyDiskFormat)
+enum_long( EmptyDiskFormat)
 {
     FS_EMPTY,
     FS_EMPTY_OFS,

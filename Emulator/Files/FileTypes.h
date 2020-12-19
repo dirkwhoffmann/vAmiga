@@ -14,7 +14,7 @@
 
 #include "Aliases.h"
 
-VAMIGA_ENUM(long, AmigaFileType)
+enum_long( AmigaFileType)
 {
     FILETYPE_UKNOWN = 0,
     FILETYPE_SNAPSHOT,
@@ -35,7 +35,7 @@ inline bool isAmigaFileType(long value)
     return value >= 0 && value < FILETYPE_COUNT;
 }
 
-VAMIGA_ENUM(long, RomIdentifier)
+enum_long( RomIdentifier)
 {
     ROM_MISSING,
     ROM_UNKNOWN,
@@ -82,7 +82,7 @@ VAMIGA_ENUM(long, RomIdentifier)
 
 static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_CNT; }
 
-VAMIGA_ENUM(long, FileError)
+enum_long( FileError)
 {
     ERR_FILE_OK,
     
@@ -102,7 +102,7 @@ VAMIGA_ENUM(long, FileError)
     ERR_INVALID_ROM_KEY
 };
 
-VAMIGA_ENUM(long, BootBlockType)
+enum_long( BootBlockType)
 {
     BB_STANDARD,
     BB_VIRUS,

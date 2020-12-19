@@ -18,7 +18,7 @@
 // Enumerations
 //
 
-VAMIGA_ENUM(long, RTCRevision)
+enum_long(RTCRevision)
 {
     RTC_NONE,
     RTC_OKI,

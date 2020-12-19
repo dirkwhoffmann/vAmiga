@@ -125,7 +125,7 @@ Muxer::setConfigItem(ConfigOption option, long value)
             
             if (!isFilterType(value)) {
                 warn("Invalid filter type: %ld\n", value);
-                warn("       Valid values: 0 ... %ld\n", FILT_COUNT - 1);
+                warn("       Valid values: 0 ... %lld\n", FILT_COUNT - 1);
                 return false;
             }
 

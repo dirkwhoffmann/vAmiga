@@ -75,7 +75,7 @@ FSPartition::FSPartition(FSDevice &ref) : dev(ref)
 void
 FSPartition::info()
 {
-    msg("DOS%ld  ",     dos);
+    msg("DOS%lld  ",     dos);
     msg("%6d (x %3d) ", numBlocks(), bsize());
     msg("%6d  ",        usedBlocks());
     msg("%6d   ",       freeBlocks());

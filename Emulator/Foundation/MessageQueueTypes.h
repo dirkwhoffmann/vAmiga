@@ -14,7 +14,7 @@
 
 #include "Aliases.h"
 
-VAMIGA_ENUM(long, MessageType)
+enum_long(MessageType)
 {
     MSG_NONE = 0,
     

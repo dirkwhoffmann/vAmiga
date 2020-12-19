@@ -208,13 +208,10 @@ Blitter::setBLTSIZE(u16 value)
     // Overwrite with default values if zero
     if (!bltsizeV) bltsizeV = 0x0400;
     if (!bltsizeH) bltsizeH = 0x0040;
-
+    
     // Warn if the previous Blitter operation is overwritten
-    if (agnus.hasEvent<BLT_SLOT>()) {
-        trace(XFILES, "XFILES: Overwriting Blitter event %ld\n", agnus.slot[BLT_SLOT].id);
-        // EXPERIMENTAL
-        // endBlit();
-    }
+    trace(XFILES && agnus.hasEvent<BLT_SLOT>(),
+          "XFILES: Overwriting Blitter event %lld\n", agnus.slot[BLT_SLOT].id);
     
     agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_STRT1);
 }

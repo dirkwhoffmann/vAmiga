@@ -21,7 +21,7 @@
 // Enumerations
 //
 
-VAMIGA_ENUM(long, EventSlot)
+enum_long(EventSlot)
 {
     // Primary slots
     REG_SLOT = 0,                   // Register changes
@@ -91,7 +91,7 @@ inline const char *slotName(EventSlot nr)
     }
 }
 
-VAMIGA_ENUM(long, EventID)
+enum_long(EventID)
 {
     EVENT_NONE = 0,
     

@@ -19,7 +19,7 @@
  *   CIA_8520_DIP  mimics option "[ ] 391078-01" in UAE (default)
  *   CIA_8520_PLCC mimics option "[X] 391078-01" in UAE (A600)
  */
-VAMIGA_ENUM(long, CIARevision)
+enum_long(CIARevision)
 {
     CIA_8520_DIP,
     CIA_8520_PLCC,

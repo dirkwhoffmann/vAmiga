@@ -92,25 +92,40 @@ typedef i16 Cylinder;
 typedef i16 Track;
 typedef i16 Sector;
 
-/* All enumeration types are declared via VAMIGA_ENUM. We don't use the
- * standard C enum style to make enumerations easily accessible in Swift.
+
+//
+// Enumerations
+//
+
+/* All enumeration types are declared via special 'enum_<type>' macros to make
+ * them easily accessible in Swift. All macros have two definitions, one for
+ * the Swift side and one for the C side. Please note that the type mapping for
+ * enum_long differs on both sides. On the Swift side, enums of this type are
+ * mapped to type 'long' to make them accessible via the Swift standard type
+ * 'Int'. On the C side all enums are mapped to long long. This ensures the
+ * same size for all enums, both on 32-bit and 64-bit architectures.
  */
 
-// Definition for Swift
-#ifdef VA_ENUM
-#define VAMIGA_ENUM(_type, _name) \
-typedef VA_ENUM(_type, _name)
+#if defined(__VAMIGA_GUI__)
 
-// Definition for clang
-#elif defined(__clang__)
-#define VAMIGA_ENUM(_type, _name) \
+// Definition for Swift
+#define enum_open(_name, _type) \
 typedef enum __attribute__((enum_extensibility(open))) _name : _type _name; \
 enum _name : _type
 
-// Definition for gcc
+#define enum_long(_name) enum_open(_name, long)
+#define enum_int(_name) enum_open(_name, int)
+#define enum_u32(_name) enum_open(_name, u32)
+#define enum_i8(_name) enum_open(_name, i8)
+
 #else
-#define VAMIGA_ENUM(_type, _name) \
-enum _name : _type
+
+// Definition for C
+#define enum_long(_name) enum _name : long long
+#define enum_int(_name) enum _name : int
+#define enum_u32(_name) enum _name : u32
+#define enum_i8(_name) enum _name : i8
+
 #endif
 
 #endif

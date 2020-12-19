@@ -12,7 +12,7 @@
 
 #include "Aliases.h"
 
-VAMIGA_ENUM(long, FSVolumeType)
+enum_long( FSVolumeType)
 {
     FS_NODOS = -1,
     FS_OFS = 0,         // Original File System
@@ -68,7 +68,7 @@ inline const char *sFSVolumeType(FSVolumeType value)
     }
 }
 
-VAMIGA_ENUM(long, FSBlockType)
+enum_long( FSBlockType)
 {
     FS_UNKNOWN_BLOCK,
     FS_EMPTY_BLOCK,
@@ -109,7 +109,7 @@ sFSBlockType(FSBlockType type)
     }
 }
 
-VAMIGA_ENUM(long, FSItemType)
+enum_long( FSItemType)
 {
     FSI_UNKNOWN,
     FSI_UNUSED,
@@ -158,7 +158,7 @@ isFSBlockItem(long value)
     return value >= 0 && value <= FSI_BITMAP;
 }
 
-VAMIGA_ENUM(long, FSError)
+enum_long( FSError)
 {
     FS_OK,
     

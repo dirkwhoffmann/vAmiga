@@ -16,7 +16,8 @@
 // Enumerations
 //
 
-VAMIGA_ENUM(int, DriveState)
+// TODO: Change to enum_long
+enum_int(DriveState)
 {
     DRIVE_DMA_OFF,     // Drive is idle
 

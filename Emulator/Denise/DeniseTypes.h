@@ -18,10 +18,9 @@
 // Enumerations
 //
 
-VAMIGA_ENUM(long, DeniseRevision)
+enum_long(DeniseRevision)
 {
     DENISE_OCS,          // Revision 8362R8
-    // DENISE_OCS_BRDRBLNK, // Revision 8362R8 + Border Blank feature
     DENISE_ECS,          // Revision 8373 (not supported yet)
     DENISE_COUNT
     
@@ -41,7 +40,7 @@ inline const char *sDeniseRevision(DeniseRevision value)
     }
 }
 
-VAMIGA_ENUM(long, Palette)
+enum_long(Palette)
 {
     PALETTE_COLOR = 0,
     PALETTE_BLACK_WHITE,

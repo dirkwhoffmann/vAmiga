@@ -16,7 +16,7 @@
 // Enumerations
 //
 
-VAMIGA_ENUM(long, SamplingMethod)
+enum_long(SamplingMethod)
 {
     SMP_NONE,
     SMP_NEAREST,
@@ -39,7 +39,7 @@ static inline const char *sSamplingMethod(SamplingMethod value)
     }
 }
 
-VAMIGA_ENUM(long, FilterType)
+enum_long(FilterType)
 {
     FILT_NONE,
     FILT_BUTTERWORTH,

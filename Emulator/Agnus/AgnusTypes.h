@@ -15,7 +15,7 @@
 #include "BlitterTypes.h"
 #include "CopperTypes.h"
 
-VAMIGA_ENUM(long, AgnusRevision)
+enum_long(AgnusRevision)
 {
     AGNUS_OCS,              // Revision 8367
     AGNUS_ECS_1MB,          // Revision 8372
@@ -45,7 +45,7 @@ typedef struct
 }
 AgnusConfig;
 
-VAMIGA_ENUM(i8, BusOwner)
+enum_i8(BusOwner)
 {
     BUS_NONE,
     BUS_CPU,
@@ -76,14 +76,14 @@ static inline bool isBusOwner(long value)
     return value >= 0 && value < BUS_COUNT;
 }
 
-VAMIGA_ENUM(long, DDFState)
+enum_long(DDFState)
 {
     DDF_OFF,
     DDF_READY,
     DDF_ON
 };
 
-VAMIGA_ENUM(long, SprDMAState)
+enum_long(SprDMAState)
 {
     SPR_DMA_IDLE,
     SPR_DMA_ACTIVE

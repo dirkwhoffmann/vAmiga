@@ -18,7 +18,7 @@
 // Enumerations
 //
 
-VAMIGA_ENUM(long, DriveType)
+enum_long( DriveType)
 {
     DRIVE_35_DD,
     DRIVE_35_HD,

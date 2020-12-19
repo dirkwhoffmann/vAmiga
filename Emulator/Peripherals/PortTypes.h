@@ -18,7 +18,7 @@
 // Enumerations
 //
 
-VAMIGA_ENUM(long, SerialPortDevice)
+enum_long( SerialPortDevice)
 {
     SPD_NONE,
     SPD_LOOPBACK
@@ -28,7 +28,7 @@ inline bool isSerialPortDevice(long value) {
     return value >= 0 && value <= SPD_LOOPBACK;
 }
 
-VAMIGA_ENUM(long, PortNr)
+enum_long( PortNr)
 {
     PORT_1 = 1,
     PORT_2 = 2
@@ -38,7 +38,7 @@ inline bool isPortNr(long value) {
     return value == PORT_1 || value == PORT_2;
 }
 
-VAMIGA_ENUM(long, ControlPortDevice)
+enum_long( ControlPortDevice)
 {
     CPD_NONE,
     CPD_MOUSE,
@@ -49,7 +49,7 @@ inline bool isControlPortDevice(long value) {
     return value >= 0 && value <= CPD_JOYSTICK;
 }
 
-VAMIGA_ENUM(long, GamePadAction)
+enum_long( GamePadAction)
 {
     PULL_UP = 0,   // Pull the joystick up
     PULL_DOWN,     // Pull the joystick down
