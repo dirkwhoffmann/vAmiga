@@ -206,7 +206,7 @@ FSDevice::dump()
         
         if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
         
-        msg("\nBlock %d (%d):", i, blocks[i]->nr);
+        msg("\nBlock %zu (%d):", i, blocks[i]->nr);
         msg(" %s\n", sFSBlockType(blocks[i]->type()));
                 
         blocks[i]->dump(); 
@@ -523,7 +523,7 @@ FSDevice::printDirectory(bool recursive)
     for (auto const& i : items) {
         msg("%s\n", getPath(i).c_str());
     }
-    msg("%d items\n", items.size());
+    msg("%lu items\n", items.size());
 }
 
 
@@ -1000,11 +1000,11 @@ FSDevice::exportDirectory(const char *path)
     // Export all items
     for (auto const& i : items) {
         if (FSError error = blockPtr(i)->exportBlock(path); error != FS_OK) {
-            msg("Export error: %d\n", error);
+            msg("Export error: %ld\n", error);
             return error; 
         }
     }
     
-    msg("Exported %d items", items.size());
+    msg("Exported %lu items", items.size());
     return FS_OK;
 }

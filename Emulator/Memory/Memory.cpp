@@ -201,12 +201,12 @@ Memory::setConfigItem(ConfigOption option, long value)
 void
 Memory::_dumpConfig()
 {
-    msg("       chipSize : %d\n", config.chipSize);
-    msg("       slowSize : %d\n", config.slowSize);
-    msg("       fastSize : %d\n", config.fastSize);
-    msg("        romSize : %d\n", config.romSize);
-    msg("        womSize : %d\n", config.womSize);
-    msg("        extSize : %d\n", config.extSize);
+    msg("       chipSize : %zu\n", config.chipSize);
+    msg("       slowSize : %zu\n", config.slowSize);
+    msg("       fastSize : %zu\n", config.fastSize);
+    msg("        romSize : %zu\n", config.romSize);
+    msg("        womSize : %zu\n", config.womSize);
+    msg("        extSize : %zu\n", config.extSize);
     msg("   slowRamDelay : %s\n", config.slowRamDelay ? "yes" : "no");
     msg("        bankMap : %s\n", sBankMap(config.bankMap));
     msg(" ramInitPattern : %s\n", sRamInitPattern(config.ramInitPattern));
@@ -327,7 +327,7 @@ Memory::_dump()
             assert(addr != 0);
             assert(size % KB(1) == 0);
             u32 check = fnv_1a_32(addr, size);
-            msg("%3d KB at: %p Checksum: %x\n", size >> 10, addr, check);
+            msg("%zu KB at: %p Checksum: %x\n", size >> 10, addr, check);
         }
     }
 }

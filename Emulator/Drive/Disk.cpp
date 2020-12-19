@@ -62,10 +62,10 @@ Disk::dump()
     msg("       numCyls() : %ld\n", numCyls());
     msg("      numSides() : %ld\n", numSides());
     msg("     numTracks() : %ld\n", numTracks());
-    msg("  track 0 length : %ld\n", length.track[0]);
+    msg("  track 0 length : %u\n", length.track[0]);
     msg("  writeProtected : %s\n", writeProtected ? "yes" : "no");
     msg("        modified : %s\n", modified ? "yes" : "no");
-    msg("             fnv : %ld\n", fnv);
+    msg("             fnv : %llu\n", fnv);
 }
 
 u8

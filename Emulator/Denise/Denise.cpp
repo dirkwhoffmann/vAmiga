@@ -977,6 +977,7 @@ Denise::checkS2SCollisions(int start, int end)
         if ((z & comp01) && (z & comp23)) SET_BIT(clxdat, 9);
         
         if (CLX_DEBUG) {
+            
             trace((z & comp45) && (z & comp67), "Collision: 45 and 67\n");
             trace((z & comp45) && (z & comp67), "Collision: 45 and 67\n");
             trace((z & comp23) && (z & comp67), "Collision: 23 and 67\n");

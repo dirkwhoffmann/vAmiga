@@ -206,7 +206,7 @@ Agnus::_inspect()
 void
 Agnus::_dump()
 {
-    msg(" actions : %X\n", hsyncActions);
+    msg(" actions : %llX\n", hsyncActions);
 
     msg("   dskpt : %X\n", dskpt);
     for (unsigned i = 0; i < 4; i++) msg("audpt[%d] : %X\n", i, audpt[i]);

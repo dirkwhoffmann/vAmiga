@@ -219,11 +219,11 @@ Muxer::_dumpConfig()
     msg("samplingMethod : %s\n", sSamplingMethod(config.samplingMethod));
     msg("    filtertype : %s\n", sFilterType(config.filterType));
     msg("filterAlwaysOn : %d\n", config.filterAlwaysOn);
-    msg("    vol0, pan0 : %f, %f\n", config.vol[0], config.pan[0]);
-    msg("    vol1, pan1 : %f, %f\n", config.vol[1], config.pan[1]);
-    msg("    vol2, pan2 : %f, %f\n", config.vol[2], config.pan[2]);
-    msg("    vol3, pan3 : %f, %f\n", config.vol[3], config.pan[3]);
-    msg("    volL, volR : %f, %f\n", config.volL, config.volR);
+    msg("    vol0, pan0 : %ld, %ld\n", config.vol[0], config.pan[0]);
+    msg("    vol1, pan1 : %ld, %ld\n", config.vol[1], config.pan[1]);
+    msg("    vol2, pan2 : %ld, %ld\n", config.vol[2], config.pan[2]);
+    msg("    vol3, pan3 : %ld, %ld\n", config.vol[3], config.pan[3]);
+    msg("    volL, volR : %ld, %ld\n", config.volL, config.volR);
 }
 
 void

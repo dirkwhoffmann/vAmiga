@@ -31,10 +31,10 @@
  * This check can't be performed when using variadic functions are utilized.
  */
 
-/*
 #define msg(format, ...) \
 fprintf(stderr, format, ##__VA_ARGS__);
 
+/*
 #define warn(format, ...) \
 fprintf(stderr, "Warning: "); \
 fprintf(stderr, format, ##__VA_ARGS__);

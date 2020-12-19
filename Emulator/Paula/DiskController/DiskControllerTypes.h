@@ -60,7 +60,7 @@ typedef struct
      * twice as fast. A value of -1 indicates a turbo drive. In this case,
      * the exact value of the acceleration factor has no meaning.
      */
-    long speed;
+    i32 speed;
 
     bool lockDskSync;
     bool autoDskSync;

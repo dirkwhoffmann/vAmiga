@@ -101,9 +101,9 @@ Drive::_dumpConfig()
 {
     msg("              Type : %s\n", driveTypeName(config.type));
     msg(" Emulate mechanics : %s\n", config.mechanicalDelays ? "yes" : "no");
-    msg("       Start delay : %d\n", config.startDelay);
-    msg("        Stop delay : %d\n", config.stopDelay);
-    msg("        Step delay : %d\n", config.stepDelay);
+    msg("       Start delay : %lld\n", config.startDelay);
+    msg("        Stop delay : %lld\n", config.stopDelay);
+    msg("        Step delay : %lld\n", config.stepDelay);
 }
 
 void
@@ -124,7 +124,7 @@ Drive::_dump()
     msg("              Side: %d\n", head.side);
     msg("          Cylinder: %d\n", head.cylinder);
     msg("            Offset: %d\n", head.offset);
-    msg("   cylinderHistory: %X\n", cylinderHistory);
+    msg("   cylinderHistory: %llX\n", cylinderHistory);
     msg("              Disk: %s\n", disk ? "yes" : "no");
     
     if (disk) disk->dump();

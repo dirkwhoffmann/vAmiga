@@ -43,7 +43,7 @@ Copper::_dump()
     bool active = agnus.isPending<COP_SLOT>();
     msg("    cdang: %d\n", cdang);
     msg("   active: %s\n", active ? "yes" : "no");
-    if (active) msg("    state: %d\n", agnus.slot[COP_SLOT].id);
+    if (active) msg("    state: %ld\n", (long)agnus.slot[COP_SLOT].id);
     msg("    coppc: %X\n", coppc);
     msg("  copins1: %X\n", cop1ins);
     msg("  copins2: %X\n", cop2ins);
