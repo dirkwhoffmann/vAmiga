@@ -16,8 +16,7 @@
 // Enumerations
 //
 
-// TODO: Change to enum_long
-enum_int(DriveState)
+enum_long(DriveState)
 {
     DRIVE_DMA_OFF,     // Drive is idle
 

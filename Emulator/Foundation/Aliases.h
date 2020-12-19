@@ -114,7 +114,6 @@ typedef enum __attribute__((enum_extensibility(open))) _name : _type _name; \
 enum _name : _type
 
 #define enum_long(_name) enum_open(_name, long)
-#define enum_int(_name) enum_open(_name, int)
 #define enum_u32(_name) enum_open(_name, u32)
 #define enum_i8(_name) enum_open(_name, i8)
 
@@ -122,7 +121,6 @@ enum _name : _type
 
 // Definition for C
 #define enum_long(_name) enum _name : long long
-#define enum_int(_name) enum _name : int
 #define enum_u32(_name) enum _name : u32
 #define enum_i8(_name) enum _name : i8
 

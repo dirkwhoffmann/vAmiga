@@ -55,7 +55,7 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
     if (oldValue & newValue & 0x8000) {
         
         trace(XFILES && state != DRIVE_DMA_OFF,
-              "XFILES (DSKLEN): Written in DMA state %d\n", state);
+              "XFILES (DSKLEN): Written in DMA state %lld\n", state);
 
         // Only proceed if there are bytes to process
         if ((dsklen & 0x3FFF) == 0) { paula.raiseIrq(INT_DSKBLK); return; }
