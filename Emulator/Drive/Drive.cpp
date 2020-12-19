@@ -69,7 +69,6 @@ Drive::setConfigItem(ConfigOption option, long id, long value)
             }
             
             config.type = (DriveType)value;
-            trace("Setting type to %s\n", driveTypeName(config.type));
             return true;
 
         case OPT_EMULATE_MECHANICS:
@@ -79,7 +78,6 @@ Drive::setConfigItem(ConfigOption option, long id, long value)
             }
                         
             config.mechanicalDelays = value;
-            trace("Setting emulateMechanics to %d\n", config.mechanicalDelays);
             return true;
 
         default:
@@ -354,8 +352,6 @@ void
 Drive::selectSide(int side)
 {
     assert(side < 2);
-    if (head.side != side) trace("*** Select side %d\n", side);
-
     head.side = side;
 }
 

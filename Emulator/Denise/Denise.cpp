@@ -975,14 +975,15 @@ Denise::checkS2SCollisions(int start, int end)
         if ((z & comp01) && (z & comp67)) SET_BIT(clxdat, 11);
         if ((z & comp01) && (z & comp45)) SET_BIT(clxdat, 10);
         if ((z & comp01) && (z & comp23)) SET_BIT(clxdat, 9);
-
+        
         if (CLX_DEBUG) {
-            if ((z & comp45) && (z & comp67)) trace("Collision between 45 and 67\n");
-            if ((z & comp23) && (z & comp67)) trace("Collision between 23 and 67\n");
-            if ((z & comp23) && (z & comp45)) trace("Collision between 23 and 45\n");
-            if ((z & comp01) && (z & comp67)) trace("Collision between 01 and 67\n");
-            if ((z & comp01) && (z & comp45)) trace("Collision between 01 and 45\n");
-            if ((z & comp01) && (z & comp23)) trace("Collision between 01 and 23\n");
+            trace((z & comp45) && (z & comp67), "Collision: 45 and 67\n");
+            trace((z & comp45) && (z & comp67), "Collision: 45 and 67\n");
+            trace((z & comp23) && (z & comp67), "Collision: 23 and 67\n");
+            trace((z & comp23) && (z & comp45), "Collision: 23 and 45\n");
+            trace((z & comp01) && (z & comp67), "Collision: 01 and 67\n");
+            trace((z & comp01) && (z & comp45), "Collision: 01 and 45\n");
+            trace((z & comp01) && (z & comp23), "Collision: 01 and 23\n");
         }
     }
 }

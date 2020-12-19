@@ -80,7 +80,6 @@ DiskController::setConfigItem(ConfigOption option, long value)
             }
             
             config.speed = value;
-            trace("Setting acceleration factor to %d\n", config.speed);
             scheduleFirstDiskEvent();
             return true;
                         
@@ -234,8 +233,6 @@ DiskController::ejectDisk(int nr, Cycle delay)
 {
     assert(nr >= 0 && nr <= 3);
 
-    trace("ejectDisk(%d, %d)\n", nr, delay);
-
     amiga.suspend();
     agnus.scheduleRel<DCH_SLOT>(delay, DCH_EJECT, nr);
     amiga.resume();
@@ -247,7 +244,7 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
     assert(disk != nullptr);
     assert(nr >= 0 && nr <= 3);
 
-    trace(DSK_DEBUG, "insertDisk(%p, %d, %d)\n", disk, nr, delay);
+    debug(DSK_DEBUG, "insertDisk(%p, %d, %d)\n", disk, nr, delay);
 
     // The easy case: The emulator is not running
     if (!amiga.isRunning()) {

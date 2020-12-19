@@ -72,15 +72,15 @@ protected:
     virtual void prefix() { };
     
     void msg(const char *fmt, ...);
-    void msg(int verbose, const char *fmt, ...);
+    // void msg(int verbose, const char *fmt, ...);
 
     void warn(const char *fmt, ...);
-    void warn(int verbose, const char *fmt, ...);
+    // void warn(int verbose, const char *fmt, ...);
 
     // void debug(const char *fmt, ...);
     void debug(int verbose, const char *fmt, ...);
 
-    void trace(const char *fmt, ...);
+    // void trace(const char *fmt, ...);
     void trace(int verbose, const char *fmt, ...);
 };
 

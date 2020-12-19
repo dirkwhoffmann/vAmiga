@@ -11,7 +11,7 @@
 
 HardwareComponent::~HardwareComponent()
 {
-    trace(RUN_DEBUG, "Terminated\n");
+    debug(RUN_DEBUG, "Terminated\n");
 }
 
 void
@@ -35,7 +35,7 @@ HardwareComponent::reset(bool hard)
     }
     
     // Reset this component
-    trace(RUN_DEBUG, "Reset [%p]\n", this);
+    debug(RUN_DEBUG, "Reset [%p]\n", this);
     _reset(hard);
 }
 
@@ -184,7 +184,7 @@ HardwareComponent::powerOn()
         _reset(true);
 
         // Power this component on
-        trace(RUN_DEBUG, "Powering on\n");
+        debug(RUN_DEBUG, "Powering on\n");
         state = STATE_PAUSED;
         _powerOn();
     }
@@ -199,7 +199,7 @@ HardwareComponent::powerOff()
         pause();
         
         // Power off this component
-        trace(RUN_DEBUG, "Powering off\n");
+        debug(RUN_DEBUG, "Powering off\n");
         state = STATE_OFF;
         _powerOff();
 
@@ -224,7 +224,7 @@ HardwareComponent::run()
         }
         
         // Start this component
-        trace(RUN_DEBUG, "Run\n");
+        debug(RUN_DEBUG, "Run\n");
         state = STATE_RUNNING;
         _run();
     }
@@ -236,7 +236,7 @@ HardwareComponent::pause()
     if (isRunning()) {
         
         // Pause this component
-        trace(RUN_DEBUG, "Pause\n");
+        debug(RUN_DEBUG, "Pause\n");
         state = STATE_PAUSED;
         _pause();
 

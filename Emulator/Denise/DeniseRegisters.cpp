@@ -103,9 +103,8 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     }
     
     // Report a suspicious BPU value
-    if (XFILES && newBpuBits > (hires(bplcon0) ? 4 : 6)) {
-        trace("XFILES (BPLCON0): BPU = %d\n", newBpuBits);
-    }
+    trace(XFILES && newBpuBits > (hires(bplcon0) ? 4 : 6),
+          "XFILES (BPLCON0): BPU = %d\n", newBpuBits);
 }
 
 void

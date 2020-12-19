@@ -184,7 +184,7 @@ StateMachine<nr>::penhi()
     if (!sampler->isFull()) {
         sampler->write( TaggedSample { agnus.clock, scaled } );
     } else {
-        trace("penhi: Sample buffer is full\n");
+        warn("penhi: Sample buffer is full\n");
     }
     
     enablePenhi = false;
@@ -205,7 +205,7 @@ StateMachine<nr>::penlo()
     if (!sampler->isFull()) {
         sampler->write( TaggedSample { agnus.clock, scaled } );
     } else {
-        trace("penlo: Sample buffer is full\n");
+        warn("penlo: Sample buffer is full\n");
     }
     
     enablePenlo = false;

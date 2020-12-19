@@ -132,7 +132,7 @@ Amiga::Amiga()
 
 Amiga::~Amiga()
 {
-    trace("Destroying Amiga[%p]\n", this);
+    debug(RUN_DEBUG, "Destroying Amiga[%p]\n", this);
     powerOff();
     
     pthread_mutex_destroy(&threadLock);
@@ -385,7 +385,7 @@ Amiga::_dump()
 void
 Amiga::powerOn()
 {
-    trace(RUN_DEBUG, "powerOn()\n");
+    debug(RUN_DEBUG, "powerOn()\n");
     
     #ifdef DF0_DISK
         DiskFile *df0file = DiskFile::makeWithFile(DF0_DISK);
@@ -426,7 +426,7 @@ Amiga::powerOn()
 void
 Amiga::_powerOn()
 {
-    trace(RUN_DEBUG, "_powerOn()\n");
+    debug(RUN_DEBUG, "_powerOn()\n");
 
     // Clear all runloop flags
     runLoopCtrl = 0;
@@ -440,7 +440,7 @@ Amiga::_powerOn()
 void
 Amiga::powerOff()
 {
-    trace(RUN_DEBUG, "powerOff()\n");
+    debug(RUN_DEBUG, "powerOff()\n");
     
     pthread_mutex_lock(&stateChangeLock);
     
@@ -456,7 +456,7 @@ Amiga::powerOff()
 void
 Amiga::_powerOff()
 {
-    trace("_powerOff()\n");
+    debug(RUN_DEBUG, "_powerOff()\n");
     
     // Update the recorded debug information
     inspect();
@@ -467,7 +467,7 @@ Amiga::_powerOff()
 void
 Amiga::run()
 {
-    trace(RUN_DEBUG, "run()\n");
+    debug(RUN_DEBUG, "run()\n");
         
     pthread_mutex_lock(&stateChangeLock);
     
@@ -483,7 +483,7 @@ Amiga::run()
 void
 Amiga::_run()
 {
-    trace(RUN_DEBUG, "_run()\n");
+    debug(RUN_DEBUG, "_run()\n");
     
     // Start the emulator thread
     pthread_create(&p, nullptr, threadMain, (void *)this);
@@ -495,7 +495,7 @@ Amiga::_run()
 void
 Amiga::pause()
 {
-    trace(RUN_DEBUG, "pause()\n");
+    debug(RUN_DEBUG, "pause()\n");
 
     pthread_mutex_lock(&stateChangeLock);
     
@@ -511,7 +511,7 @@ Amiga::pause()
 void
 Amiga::_pause()
 {
-    trace(RUN_DEBUG, "_pause()\n");
+    debug(RUN_DEBUG, "_pause()\n");
     
     // When we reach this line, the emulator thread is already gone
     assert(p == (pthread_t)0);
@@ -614,7 +614,7 @@ Amiga::suspend()
 {
     pthread_mutex_lock(&stateChangeLock);
     
-    trace(RUN_DEBUG, "Suspending (%d)...\n", suspendCounter);
+    debug(RUN_DEBUG, "Suspending (%d)...\n", suspendCounter);
     
     if (suspendCounter || isRunning()) {
         
@@ -632,7 +632,7 @@ Amiga::resume()
 {
     pthread_mutex_lock(&stateChangeLock);
     
-    trace(RUN_DEBUG, "Resuming (%d)...\n", suspendCounter);
+    debug(RUN_DEBUG, "Resuming (%d)...\n", suspendCounter);
     
     if (suspendCounter && --suspendCounter == 0) {
         
@@ -682,13 +682,13 @@ Amiga::stepOver()
 void
 Amiga::threadWillStart()
 {
-    trace(RUN_DEBUG, "Emulator thread started\n");
+    debug(RUN_DEBUG, "Emulator thread started\n");
 }
 
 void
 Amiga::threadDidTerminate()
 {
-    trace(RUN_DEBUG, "Emulator thread terminated\n");
+    debug(RUN_DEBUG, "Emulator thread terminated\n");
 
     // Trash the thread pointer
     p = (pthread_t)0;
@@ -703,7 +703,7 @@ Amiga::threadDidTerminate()
 void
 Amiga::runLoop()
 {
-    trace(RUN_DEBUG, "runLoop()\n");
+    debug(RUN_DEBUG, "runLoop()\n");
 
     // Prepare to run
     oscillator.restart();
@@ -728,13 +728,13 @@ Amiga::runLoop()
             
             // Are we requested to take a snapshot?
             if (runLoopCtrl & RL_AUTO_SNAPSHOT) {
-                trace(RUN_DEBUG, "RL_AUTO_SNAPSHOT\n");
+                debug(RUN_DEBUG, "RL_AUTO_SNAPSHOT\n");
                 autoSnapshot = Snapshot::makeWithAmiga(this);
                 messageQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
                 clearControlFlags(RL_AUTO_SNAPSHOT);
             }
             if (runLoopCtrl & RL_USER_SNAPSHOT) {
-                trace(RUN_DEBUG, "RL_USER_SNAPSHOT\n");
+                debug(RUN_DEBUG, "RL_USER_SNAPSHOT\n");
                 userSnapshot = Snapshot::makeWithAmiga(this);
                 messageQueue.put(MSG_USER_SNAPSHOT_TAKEN);
                 clearControlFlags(RL_USER_SNAPSHOT);
@@ -742,7 +742,7 @@ Amiga::runLoop()
 
             // Are we requested to update the debugger info structs?
             if (runLoopCtrl & RL_INSPECT) {
-                trace(RUN_DEBUG, "RL_INSPECT\n");
+                debug(RUN_DEBUG, "RL_INSPECT\n");
                 inspect();
                 clearControlFlags(RL_INSPECT);
             }
@@ -751,7 +751,7 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_BREAKPOINT_REACHED) {
                 inspect();
                 messageQueue.put(MSG_BREAKPOINT_REACHED);
-                trace(RUN_DEBUG, "BREAKPOINT_REACHED pc: %x\n", cpu.getPC());
+                debug(RUN_DEBUG, "BREAKPOINT_REACHED pc: %x\n", cpu.getPC());
                 clearControlFlags(RL_BREAKPOINT_REACHED);
                 break;
             }
@@ -760,7 +760,7 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_WATCHPOINT_REACHED) {
                 inspect();
                 messageQueue.put(MSG_WATCHPOINT_REACHED);
-                trace(RUN_DEBUG, "WATCHPOINT_REACHED pc: %x\n", cpu.getPC());
+                debug(RUN_DEBUG, "WATCHPOINT_REACHED pc: %x\n", cpu.getPC());
                 clearControlFlags(RL_WATCHPOINT_REACHED);
                 break;
             }
@@ -768,7 +768,7 @@ Amiga::runLoop()
             // Are we requested to terminate the run loop?
             if (runLoopCtrl & RL_STOP) {
                 clearControlFlags(RL_STOP);
-                trace(RUN_DEBUG, "RL_STOP\n");
+                debug(RUN_DEBUG, "RL_STOP\n");
                 break;
             }
         }

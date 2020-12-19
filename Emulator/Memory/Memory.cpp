@@ -1265,9 +1265,8 @@ Memory::poke8 <CPU_ACCESS, MEM_CHIP> (u32 addr, u8 value)
 {
     ASSERT_CHIP_ADDR(addr);
     
-    if (BLT_GUARD && blitter.memguard[addr & mem.chipMask]) {
-        trace("CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
-    }
+    trace(BLT_GUARD && blitter.memguard[addr & mem.chipMask],
+          "CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
 
     agnus.executeUntilBusIsFree();
     
@@ -1281,9 +1280,8 @@ Memory::poke16 <CPU_ACCESS, MEM_CHIP> (u32 addr, u16 value)
 {
     ASSERT_CHIP_ADDR(addr);
     
-    if (BLT_GUARD && blitter.memguard[addr & mem.chipMask]) {
-        trace("CPU OVERWRITES BLITTER AT ADDR %x\n", addr);
-    }
+    trace(BLT_GUARD && blitter.memguard[addr & mem.chipMask],
+          "CPU OVERWRITES BLITTER AT ADDR %x\n", addr);
     
     agnus.executeUntilBusIsFree();
     
@@ -1297,9 +1295,8 @@ Memory::poke16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr, u16 value)
 {
     assert((addr & agnus.ptrMask) == addr);
 
-    if (BLT_GUARD && blitter.memguard[addr & mem.chipMask]) {
-        trace("AGNUS OVERWRITES BLITTER AT ADDR %x\n", addr);
-    }
+    trace(BLT_GUARD && blitter.memguard[addr & mem.chipMask],
+          "AGNUS OVERWRITES BLITTER AT ADDR %x\n", addr);
 
     dataBus = value;
     WRITE_CHIP_16(addr, value);
@@ -1457,14 +1454,14 @@ Memory::poke8 <CPU_ACCESS, MEM_ROM> (u32 addr, u8 value)
     
     // On Amigas with a WOM, writing into ROM space locks the WOM
     if (hasWom() && !womIsLocked) {
-        trace("Locking WOM\n");
+        debug(MEM_DEBUG, "Locking WOM\n");
         womIsLocked = true;
         updateMemSrcTables();
     }
         
     if (!releaseBuild()) {
         if (addr == 0xFFFFFF && value == 42) {
-            trace("DEBUG STOP\n");
+            msg("DEBUG STOP\n");
             amiga.signalStop();
         }
     }
@@ -1844,17 +1841,7 @@ Memory::peekCustomFaulty16(u32 addr)
      *   - DMA cycle data (if DMA happened on the bus).
      *   - 0xFFFF or some some ANDed old data otherwise.
      */
-    
-    if (INVREG_DEBUG) {
-        if (cpu.getPC0() != 0xFCB312 && cpu.getPC0() != 0xFCB316 &&
-            cpu.getPC0() != 0xFCABC0 && cpu.getPC0() != 0xFE2FE2 &&
-            cpu.getPC0() != 0xC07CF2 && cpu.getPC0() != 0xC07CF8 &&
-            cpu.getPC0() != 0xC07E30 && cpu.getPC0() != 0xC07E36) {
-            trace("Reading from write-only register %x (%s) Writing: %x\n",
-                  addr, regName(addr), dataBus);
-        }
-    }
-        
+            
     pokeCustom16<CPU_ACCESS>(addr, dataBus);
     
     return dataBus;

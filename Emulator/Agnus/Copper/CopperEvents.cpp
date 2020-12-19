@@ -21,7 +21,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_REQ_DMA:
 
-            if (verbose) trace("COP_REQ_DMA\n");
+            trace(COP_DEBUG && verbose, "COP_REQ_DMA\n");
             
             // Wait for the next possible DMA cycle
             if (!amiga.agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
@@ -35,7 +35,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_WAKEUP:
             
-            if (verbose) trace("COP_WAKEUP\n");
+            trace(COP_DEBUG && verbose, "COP_WAKEUP\n");
             
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
@@ -49,7 +49,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_WAKEUP_BLIT:
             
-            if (verbose) trace("COP_WAKEUP_BLIT\n");
+            trace(COP_DEBUG && verbose, "COP_WAKEUP_BLIT\n");
             
             // Check if the Blitter is busy, keep on waiting
             if (agnus.blitter.isRunning()) {
@@ -69,7 +69,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_FETCH:
 
-            if (verbose) trace("COP_FETCH\n");
+            trace(COP_DEBUG && verbose, "COP_FETCH\n");
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
@@ -96,7 +96,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_MOVE:
 
-            if (verbose) trace("COP_MOVE\n");
+            trace(COP_DEBUG && verbose, "COP_MOVE\n");
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
@@ -155,7 +155,7 @@ Copper::serviceEvent(EventID id)
             
             trace(COP_DEBUG, "COP_WAIT1: %X wait %x (%d)\n", coppc, cop1ins, cop1ins);
 
-            if (verbose) trace("COP_WAIT1\n");
+            trace(COP_DEBUG && verbose, "COP_WAIT1\n");
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
@@ -168,7 +168,7 @@ Copper::serviceEvent(EventID id)
 
             // debug(COP_DEBUG, "COP_WAIT2: %X wait %x (%d)\n", coppc, cop1ins, cop1ins);
 
-            if (verbose) trace("COP_WAIT2\n");
+            trace(COP_DEBUG && verbose, "COP_WAIT2\n");
 
             // Clear the skip flag
             skip = false;
@@ -193,7 +193,7 @@ Copper::serviceEvent(EventID id)
             
             trace(COP_DEBUG, "COP_WAIT_BLIT: %X wait %x (%d)\n", coppc, cop1ins, cop1ins);
 
-            if (verbose) trace("COP_WAIT_BLIT\n");
+            trace(COP_DEBUG && verbose, "COP_WAIT_BLIT\n");
             
             // Wait for the next free cycle
             if (agnus.busOwner[agnus.pos.h] != BUS_NONE &&
@@ -208,7 +208,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_SKIP1:
 
-            if (verbose) trace("COP_SKIP1\n");
+            trace(COP_DEBUG && verbose, "COP_SKIP1\n");
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
@@ -219,7 +219,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_SKIP2:
 
-            if (verbose) trace("COP_SKIP2\n");
+            trace(COP_DEBUG && verbose, "COP_SKIP2\n");
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
@@ -231,7 +231,7 @@ Copper::serviceEvent(EventID id)
             beam = agnus.addToBeam(agnus.pos, 2);
 
             // Run the comparator to see if the next command is skipped
-            if (verbose) trace("Running comparator with (%d,%d)\n", beam.v, beam.h);
+            trace(COP_DEBUG && verbose, "Calling comparator(%d,%d)\n", beam.v, beam.h);
             skip = comparator(beam);
 
             // If the BFD flag is cleared, we also need to check the Blitter

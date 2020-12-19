@@ -633,11 +633,11 @@ Blitter::endBlit()
     agnus.cancel<BLT_SLOT>();
     
     // Dump checksums if requested
-    msg(BLT_CHECKSUM,
-        "check1: %x check2: %x ABCD: %x %x %x %x\n",
-        check1, check2,
-        bltapt & agnus.ptrMask, bltbpt & agnus.ptrMask,
-        bltcpt & agnus.ptrMask, bltdpt & agnus.ptrMask);
+    debug(BLT_CHECKSUM,
+          "check1: %x check2: %x ABCD: %x %x %x %x\n",
+          check1, check2,
+          bltapt & agnus.ptrMask, bltbpt & agnus.ptrMask,
+          bltcpt & agnus.ptrMask, bltdpt & agnus.ptrMask);
     
     // Let the Copper know about the termination
     copper.blitterDidTerminate();

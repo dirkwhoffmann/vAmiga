@@ -84,7 +84,7 @@ static const int CPU_DEBUG       = 0; // CPU
 static const int OCSREG_DEBUG    = 0; // General OCS register debugging
 static const int ECSREG_DEBUG    = 0; // Special ECS register debugging
 static const int INVREG_DEBUG    = 0; // Invalid register accesses
-static const int MEM_DEBUG       = 0; // Memory oddities
+static const int MEM_DEBUG       = 0; // Memory 
 static const int FAS_DEBUG       = 0; // Fast RAM
 
 // Agnus

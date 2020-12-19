@@ -24,6 +24,7 @@ AmigaObject::msg(const char *fmt, ...)
     fprintf(stderr, "%s", buf);
 }
 
+/*
 void
 AmigaObject::msg(int verbose, const char *fmt, ...)
 {
@@ -32,6 +33,7 @@ AmigaObject::msg(int verbose, const char *fmt, ...)
     VAOBJ_PARSE
     fprintf(stderr, "%s", buf);
 }
+*/
 
 void
 AmigaObject::warn(const char *fmt, ...)
@@ -40,6 +42,7 @@ AmigaObject::warn(const char *fmt, ...)
     fprintf(stderr, "WARNING: %s", buf);
 }
 
+/*
 void
 AmigaObject::warn(int verbose, const char *fmt, ...)
 {
@@ -48,6 +51,7 @@ AmigaObject::warn(int verbose, const char *fmt, ...)
     VAOBJ_PARSE;
     fprintf(stderr, "WARNING: %s", buf);
 }
+*/
 
 /*
 void
@@ -75,6 +79,7 @@ AmigaObject::debug(int verbose, const char *fmt, ...)
 #endif
 }
 
+/*
 void
 AmigaObject::trace(const char *fmt, ...)
 {
@@ -86,6 +91,7 @@ AmigaObject::trace(const char *fmt, ...)
     
 #endif
 }
+*/
 
 void
 AmigaObject::trace(int verbose, const char *fmt, ...)
