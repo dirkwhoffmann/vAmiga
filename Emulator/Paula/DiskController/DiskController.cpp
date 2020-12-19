@@ -244,7 +244,7 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
     assert(disk != nullptr);
     assert(nr >= 0 && nr <= 3);
 
-    debug(DSK_DEBUG, "insertDisk(%p, %d, %d)\n", disk, nr, delay);
+    debug(DSK_DEBUG, "insertDisk(%p, %d, %lld)\n", disk, nr, delay);
 
     // The easy case: The emulator is not running
     if (!amiga.isRunning()) {
@@ -451,7 +451,7 @@ DiskController::performDMARead(Drive *drive, u32 remaining)
             setState(DRIVE_DMA_OFF);
 
             debug(DSK_CHECKSUM,
-                  "read: cnt = %d check1 = %x check2 = %x\n", checkcnt, check1, check2);
+                  "read: cnt = %llu check1 = %x check2 = %x\n", checkcnt, check1, check2);
 
             return;
         }
@@ -512,7 +512,7 @@ DiskController::performDMAWrite(Drive *drive, u32 remaining)
             setState(DRIVE_DMA_OFF);
             
             debug(DSK_CHECKSUM,
-                  "write: cnt = %d check1 = %x check2 = %x\n", checkcnt, check1, check2);
+                  "write: cnt = %llu check1 = %x check2 = %x\n", checkcnt, check1, check2);
 
             return;
         }
@@ -587,7 +587,7 @@ DiskController::performTurboRead(Drive *drive)
           drive->head.side,
           drive->head.offset);
     
-    debug(DSK_CHECKSUM, "checkcnt = %d check1 = %x check2 = %x\n",
+    debug(DSK_CHECKSUM, "checkcnt = %llu check1 = %x check2 = %x\n",
           checkcnt, check1, check2);
 }
 
@@ -612,7 +612,7 @@ DiskController::performTurboWrite(Drive *drive)
     }
     
     debug(DSK_CHECKSUM,
-          "Turbo write %s: checkcnt = %d check1 = %x check2 = %x\n",
+          "Turbo write %s: checkcnt = %llu check1 = %x check2 = %x\n",
           drive->getDescription(), checkcnt, check1, check2);
 }
 

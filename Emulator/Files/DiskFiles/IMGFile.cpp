@@ -89,7 +89,7 @@ IMGFile::encodeDisk(Disk *disk)
 {
     long tracks = numTracks();
     
-    debug(MFM_DEBUG, "Encoding DOS disk with %d tracks\n", tracks);
+    debug(MFM_DEBUG, "Encoding DOS disk with %ld tracks\n", tracks);
 
     if (disk->getType() != getDiskType()) {
         warn("Incompatible disk types: %s %s\n",
@@ -126,7 +126,7 @@ IMGFile::encodeTrack(Disk *disk, Track t)
 {
     long sectors = numSectors();
 
-    debug(MFM_DEBUG, "Encoding DOS track %d with %d sectors\n", t, sectors);
+    debug(MFM_DEBUG, "Encoding DOS track %d with %ld sectors\n", t, sectors);
 
     u8 *p = disk->data.track[t];
 

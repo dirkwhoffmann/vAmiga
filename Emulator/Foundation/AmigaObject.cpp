@@ -18,19 +18,6 @@ vsnprintf(buf, sizeof(buf), fmt, ap); \
 va_end(ap);
 
 void
-AmigaObject::debug(int verbose, const char *fmt, ...)
-{
-#ifndef NDEBUG
-    
-    if (verbose == 0) return;
-    
-    VAOBJ_PARSE
-    fprintf(stderr, "%s: %s", getDescription(), buf);
-    
-#endif
-}
-
-void
 AmigaObject::trace(int verbose, const char *fmt, ...)
 {
 #ifndef NDEBUG

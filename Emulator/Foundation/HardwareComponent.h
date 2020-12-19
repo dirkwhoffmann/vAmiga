@@ -292,7 +292,7 @@ SerReader reader(buffer); \
 applyToPersistentItems(reader); \
 applyToHardResetItems(reader); \
 applyToResetItems(reader); \
-debug(SNP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer); \
+debug(SNP_DEBUG, "Recreated from %zu bytes\n", reader.ptr - buffer); \
 return reader.ptr - buffer; \
 }
 
@@ -302,7 +302,7 @@ SerWriter writer(buffer); \
 applyToPersistentItems(writer); \
 applyToHardResetItems(writer); \
 applyToResetItems(writer); \
-debug(SNP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer); \
+debug(SNP_DEBUG, "Serialized to %zu bytes\n", writer.ptr - buffer); \
 return writer.ptr - buffer; \
 }
 

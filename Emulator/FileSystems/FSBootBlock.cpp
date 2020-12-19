@@ -117,7 +117,7 @@ FSBootBlock::writeBootBlock(long bootBlockID, int page)
 {
     assert(page == 0 || page == 1);
     
-    debug(FS_DEBUG, "writeBootBlock(id: %d, page: %d)\n", bootBlockID, page);
+    debug(FS_DEBUG, "writeBootBlock(id: %ld, page: %d)\n", bootBlockID, page);
     
     // Read boot block image from the database
     BootBlockImage image = BootBlockImage(bootBlockID);

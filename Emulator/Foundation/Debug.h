@@ -38,23 +38,25 @@ fprintf(stderr, format, ##__VA_ARGS__);
 fprintf(stderr, "Warning: "); \
 fprintf(stderr, format, ##__VA_ARGS__);
 
-/*
 #ifndef NDEBUG
 
 #define debug(verbose, format, ...) \
 if (verbose) { \
 fprintf(stderr, format, ##__VA_ARGS__); }
 
+/*
 #define trace(verbose, format, ...) \
 if (verbose) { \
 prefix(); fprintf(stderr, "%s: " format, getDescription(), ##__VA_ARGS__); }
+*/
 
 #else
 
 #define debug(verbose, format, ...)
+/*
 #define trace(verbose, format, ...)
+ */
 
 #endif
-*/
 
 #endif

@@ -316,7 +316,7 @@ ADFFile::encodeDisk(Disk *disk)
     }
 
     long tracks = numTracks();
-    debug(MFM_DEBUG, "Encoding %d tracks\n", tracks);
+    debug(MFM_DEBUG, "Encoding %ld tracks\n", tracks);
 
     // Start with an unformatted disk
     disk->clearDisk();
@@ -451,7 +451,7 @@ ADFFile::decodeDisk(Disk *disk)
 {
     long tracks = numTracks();
     
-    debug(MFM_DEBUG, "Decoding Amiga disk with %d tracks\n", tracks);
+    debug(MFM_DEBUG, "Decoding Amiga disk with %ld tracks\n", tracks);
     
     if (disk->getType() != getDiskType()) {
         warn("Incompatible disk types: %s %s\n",
