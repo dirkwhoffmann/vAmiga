@@ -209,10 +209,6 @@ class ExporterDialog: DialogController {
     func showSheet(forVolume vol: FSDeviceProxy) {
         
         volume = vol
-        
-        // REMOVE ASAP
-        // volume?.printDirectory(true)
-        
         super.showSheet()
     }
         
@@ -401,40 +397,52 @@ class ExporterDialog: DialogController {
     func updateTitleText() {
         
         var text = "This disk contains an unrecognized MFM stream"
+        var color = NSColor.warningColor
         
         if driveNr == nil {
             
             text = "Amiga Hard Drive"
+            color = .textColor
             
         } else {
             
-            if disk?.type == .FILETYPE_ADF { text = "Amiga Disk" }
-            if disk?.type == .FILETYPE_IMG { text = "PC Disk" }
+            if disk?.type == .FILETYPE_ADF {
+                
+                text = "Amiga Disk"
+                color = .textColor
+                
+            }
+            if disk?.type == .FILETYPE_IMG {
+                
+                text = "PC Disk"
+                color = .textColor
+            }
         }
         
         title.stringValue = text
+        title.textColor = color
     }
 
     func updateTrackAndSectorInfo() {
         
         var text = "This disk contains un unknown track and sector format."
+        var color = NSColor.warningColor
         
         if driveNr == nil {
             
             let blocks = volume!.numBlocks
             let capacity = blocks / 2000
             text = "\(capacity) MB (\(blocks) sectors)"
-        
-        } else {
+            color = NSColor.secondaryLabelColor
             
-            if disk != nil {
-                text = disk!.layoutInfo
-            } else {
-                layoutInfo.textColor = .warningColor
-            }
+        } else if disk != nil {
+            
+            text = disk!.layoutInfo
+            color = NSColor.secondaryLabelColor
         }
 
         layoutInfo.stringValue = text
+        layoutInfo.textColor = color
     }
     
     func updateVolumeInfo() {
@@ -506,55 +514,9 @@ class ExporterDialog: DialogController {
 
     func updateErrorInfoSelected() {
         
-        var text: String
         var exp = UInt8(0)
-
         let error = volume!.check(blockNr, pos: selection!, expected: &exp, strict: strict)
-
-        switch error {
-        case .OK:
-            text = ""
-        case .EXPECTED_VALUE:
-            text = String.init(format: "Expected $%02X", exp)
-        case .EXPECTED_SMALLER_VALUE:
-            text = String.init(format: "Expected a value less or equal $%02X", exp)
-        case .EXPECTED_DOS_REVISION:
-            text = "Expected a value between 0 and 7"
-        case .EXPECTED_NO_REF:
-            text = "Did not expect a block reference here"
-        case .EXPECTED_REF:
-            text = "Expected a block reference"
-        case .EXPECTED_SELFREF:
-            text = "Expected a self-reference"
-    
-        case .PTR_TO_UNKNOWN_BLOCK:
-            text = "This reference points to a block of unknown type"
-        case .PTR_TO_EMPTY_BLOCK:
-            text = "This reference points to an empty block"
-        case .PTR_TO_BOOT_BLOCK:
-            text = "This reference points to a boot block"
-        case .PTR_TO_ROOT_BLOCK:
-            text = "This reference points to the root block"
-        case .PTR_TO_BITMAP_BLOCK:
-            text = "This reference points to a bitmap block"
-        case .PTR_TO_USERDIR_BLOCK:
-            text = "This reference points to a user directory block"
-        case .PTR_TO_FILEHEADER_BLOCK:
-            text = "This reference points to a file header block"
-        case .PTR_TO_FILELIST_BLOCK:
-            text = "This reference points to a file header block"
-        case .PTR_TO_DATA_BLOCK:
-            text = "This reference points to a data block"
-        case .EXPECTED_DATABLOCK_NR:
-            text = "Invalid data block position number"
-        case .INVALID_HASHTABLE_SIZE:
-            text = "Expected $48 (72 hash table entries)"
-        default:
-            track("error = \(error)")
-            fatalError()
-        }
-        
-        info2.stringValue = text
+        info2.stringValue = error.description(expected: Int(exp))
     }
         
     //

@@ -536,17 +536,18 @@ Blitter::beginBlit()
     if (bltconLINE()) {
 
         if (BLT_CHECKSUM) {
+            
             linecount++;
             check1 = check2 = fnv_1a_init32();
-            debug("Line %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
-                       linecount, bltsizeH, bltsizeV,
-                       bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
-                       bltcon0,
-                       bltamod, bltbmod, bltcmod, bltdmod,
-                       bltapt & agnus.ptrMask,
-                       bltbpt & agnus.ptrMask,
-                       bltcpt & agnus.ptrMask,
-                       bltdpt & agnus.ptrMask);
+            msg("Line %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
+                linecount, bltsizeH, bltsizeV,
+                bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                bltcon0,
+                bltamod, bltbmod, bltcmod, bltdmod,
+                bltapt & agnus.ptrMask,
+                bltbpt & agnus.ptrMask,
+                bltcpt & agnus.ptrMask,
+                bltdpt & agnus.ptrMask);
         }
 
         beginLineBlit(level);
@@ -554,20 +555,20 @@ Blitter::beginBlit()
     } else {
 
         if (BLT_CHECKSUM) { // && (bltsizeH != 1 || bltsizeV != 4)
+            
             copycount++;
             check1 = check2 = fnv_1a_init32();
-            
-            debug("Blit %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
-                       copycount,
-                       bltsizeH, bltsizeV,
-                       bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
-                       bltcon0,
-                       bltamod, bltbmod, bltcmod, bltdmod,
-                       bltapt & agnus.ptrMask,
-                       bltbpt & agnus.ptrMask,
-                       bltcpt & agnus.ptrMask,
-                       bltdpt & agnus.ptrMask,
-                       bltconDESC() ? "D" : "", bltconFE() ? "F" : "");
+            msg("Blit %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
+                copycount,
+                bltsizeH, bltsizeV,
+                bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                bltcon0,
+                bltamod, bltbmod, bltcmod, bltdmod,
+                bltapt & agnus.ptrMask,
+                bltbpt & agnus.ptrMask,
+                bltcpt & agnus.ptrMask,
+                bltdpt & agnus.ptrMask,
+                bltconDESC() ? "D" : "", bltconFE() ? "F" : "");
         }
 
         beginCopyBlit(level);
@@ -630,21 +631,13 @@ Blitter::endBlit()
     
     // Clear the Blitter slot
     agnus.cancel<BLT_SLOT>();
-
+    
     // Dump checksums if requested
-    if (BLT_CHECKSUM) {
-        debug("check1: %x check2: %x ABCD: %x %x %x %x\n",
-                   check1, check2,
-                   bltapt & agnus.ptrMask,
-                   bltbpt & agnus.ptrMask,
-                   bltcpt & agnus.ptrMask,
-                   bltdpt & agnus.ptrMask);
-        /*
-        debug("Memory: %x (%x)\n",
-                   fnv_1a_32(mem.chip, mem.chipRamSize()),
-                   fnv_1a_32(mem.slow, mem.slowRamSize()));
-        */
-    }
+    msg(BLT_CHECKSUM,
+        "check1: %x check2: %x ABCD: %x %x %x %x\n",
+        check1, check2,
+        bltapt & agnus.ptrMask, bltbpt & agnus.ptrMask,
+        bltcpt & agnus.ptrMask, bltdpt & agnus.ptrMask);
     
     // Let the Copper know about the termination
     copper.blitterDidTerminate();

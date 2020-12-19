@@ -49,6 +49,7 @@ AmigaObject::warn(int verbose, const char *fmt, ...)
     fprintf(stderr, "WARNING: %s", buf);
 }
 
+/*
 void
 AmigaObject::debug(const char *fmt, ...)
 {
@@ -59,6 +60,7 @@ AmigaObject::debug(const char *fmt, ...)
     
 #endif
 }
+*/
 
 void
 AmigaObject::debug(int verbose, const char *fmt, ...)

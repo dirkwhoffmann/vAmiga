@@ -25,7 +25,7 @@
 
 #include "AmigaConfig.h"
 #include "AmigaConstants.h"
-
+#include "Debug.h"
 
 //
 // Optimizing code

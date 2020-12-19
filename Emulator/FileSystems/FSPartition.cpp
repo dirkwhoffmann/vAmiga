@@ -238,10 +238,11 @@ FSPartition::requiredBlocks(size_t fileSize)
     u32 numFileListBlocks = requiredFileListBlocks(fileSize);
     
     if (FS_DEBUG) {
-        debug("Required file header blocks : %d\n", 1);
-        debug("       Required data blocks : %d\n", numDataBlocks);
-        debug("  Required file list blocks : %d\n", numFileListBlocks);
-        debug("                Free blocks : %d\n", freeBlocks());
+        
+        msg("Required file header blocks : %d\n", 1);
+        msg("       Required data blocks : %d\n", numDataBlocks);
+        msg("  Required file list blocks : %d\n", numFileListBlocks);
+        msg("                Free blocks : %d\n", freeBlocks());
     }
     
     return 1 + numDataBlocks + numFileListBlocks;

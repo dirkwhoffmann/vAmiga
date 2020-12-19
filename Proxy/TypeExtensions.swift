@@ -95,3 +95,51 @@ extension FSItemType {
         }
     }
 }
+
+extension FSError {
+    
+    func description(expected exp: Int = 0) -> String {
+        
+        switch self {
+        case .OK:
+            return ""
+        case .EXPECTED_VALUE:
+            return String.init(format: "Expected $%02X", exp)
+        case .EXPECTED_SMALLER_VALUE:
+            return String.init(format: "Expected a value less or equal $%02X", exp)
+        case .EXPECTED_DOS_REVISION:
+            return "Expected a value between 0 and 7"
+        case .EXPECTED_NO_REF:
+            return "Did not expect a block reference here"
+        case .EXPECTED_REF:
+            return "Expected a block reference"
+        case .EXPECTED_SELFREF:
+            return "Expected a self-reference"
+        case .PTR_TO_UNKNOWN_BLOCK:
+            return "This reference points to a block of unknown type"
+        case .PTR_TO_EMPTY_BLOCK:
+            return "This reference points to an empty block"
+        case .PTR_TO_BOOT_BLOCK:
+            return "This reference points to a boot block"
+        case .PTR_TO_ROOT_BLOCK:
+            return "This reference points to the root block"
+        case .PTR_TO_BITMAP_BLOCK:
+            return "This reference points to a bitmap block"
+        case .PTR_TO_USERDIR_BLOCK:
+            return "This reference points to a user directory block"
+        case .PTR_TO_FILEHEADER_BLOCK:
+            return "This reference points to a file header block"
+        case .PTR_TO_FILELIST_BLOCK:
+            return "This reference points to a file header block"
+        case .PTR_TO_DATA_BLOCK:
+            return "This reference points to a data block"
+        case .EXPECTED_DATABLOCK_NR:
+            return "Invalid data block position number"
+        case .INVALID_HASHTABLE_SIZE:
+            return "Expected $48 (72 hash table entries)"
+        default:
+            track("\(self)")
+            fatalError()
+        }
+    }
+}

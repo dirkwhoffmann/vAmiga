@@ -1633,14 +1633,14 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype)makeWithDiskType:(DiskType)type density:(DiskDensity)density
 {
-    ADFFile *archive = ADFFile::makeWithDiskType(type, density);
+    ADFFile *archive = ADFFile::makeWithType(type, density);
     return [self make: archive];
 }
 
-+ (instancetype)makeWithDrive:(DriveProxy *)drive
++ (instancetype)makeWithDrive:(DriveProxy *)proxy
 {
-    Drive *d = [drive wrapper]->drive;
-    ADFFile *archive = ADFFile::makeWithDisk(d->disk);
+    Drive *drive = [proxy wrapper]->drive;
+    ADFFile *archive = ADFFile::makeWithDrive(drive);
     return archive ? [self make: archive] : nil;
 }
 

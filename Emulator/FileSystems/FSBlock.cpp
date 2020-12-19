@@ -56,13 +56,13 @@ FSBlock::check(bool strict)
     u8 expected;
     
     for (u32 i = 0; i < bsize(); i++) {
-
+        
         if ((error = check(i, &expected, strict)) != FS_OK) {
             count++;
-             debug(FS_DEBUG, "Block %d [%d.%d]: %s\n", nr, i / 4, i % 4, sFSError(error));
+            debug(FS_DEBUG, "Block %d [%d.%d]: %s\n", nr, i / 4, i % 4, sFSError(error));
         }
     }
-
+    
     return count;
 }
 

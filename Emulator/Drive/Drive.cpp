@@ -471,8 +471,7 @@ Drive::step(int dir)
             head.cylinder--;
             recordCylinder(head.cylinder);
         }
-        if (DSK_CHECKSUM)
-            debug("Stepping down to cylinder %d\n", head.cylinder);
+        debug(DSK_CHECKSUM, "Stepping down to cylinder %d\n", head.cylinder);
 
     } else {
         
@@ -481,8 +480,7 @@ Drive::step(int dir)
             head.cylinder++;
             recordCylinder(head.cylinder);
         }
-        if (DSK_CHECKSUM)
-            debug("Stepping up to cylinder %d\n", head.cylinder);
+        debug(DSK_CHECKSUM, "Stepping up to cylinder %d\n", head.cylinder);
     }
     
     // Push drive head forward

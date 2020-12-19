@@ -61,7 +61,7 @@ ADFFile::fileSize(DiskType t, DiskDensity d)
 }
 
 ADFFile *
-ADFFile::makeWithDiskType(DiskType t, DiskDensity d)
+ADFFile::makeWithType(DiskType t, DiskDensity d)
 {
     assert(isDiskType(t));
     
@@ -79,13 +79,13 @@ ADFFile::makeWithDiskType(DiskType t, DiskDensity d)
 ADFFile *
 ADFFile::makeWithDisk(Disk *disk)
 {
-    assert(disk != nullptr);
+    assert(disk);
 
     DiskType type = disk->getType();
     DiskDensity density = disk->getDensity();
 
     // Create empty ADF
-    ADFFile *adf = makeWithDiskType(type, density);
+    ADFFile *adf = makeWithType(type, density);
     if (!adf) return nullptr;
     
     // Export disk
@@ -100,6 +100,13 @@ ADFFile::makeWithDisk(Disk *disk)
 }
 
 ADFFile *
+ADFFile::makeWithDrive(Drive *drive)
+{
+    assert(drive);
+    return drive->disk ? makeWithDisk(drive->disk) : nullptr;
+}
+
+ADFFile *
 ADFFile::makeWithVolume(FSDevice &volume, FSError *error)
 {
     ADFFile *adf = nullptr;
@@ -108,11 +115,11 @@ ADFFile::makeWithVolume(FSDevice &volume, FSError *error)
     switch (volume.getCapacity()) {
             
         case 2 * 880:
-            adf = makeWithDiskType(DISK_35, DISK_DD);
+            adf = makeWithType(DISK_35, DISK_DD);
             break;
             
         case 4 * 880:
-            adf = makeWithDiskType(DISK_35, DISK_HD);
+            adf = makeWithType(DISK_35, DISK_HD);
             break;
             
         default:
@@ -320,7 +327,7 @@ ADFFile::encodeDisk(Disk *disk)
 
     // In debug mode, also run the decoder
     if (MFM_DEBUG) {
-        debug("Amiga disk fully encoded (success = %d)\n", result);
+        msg("Amiga disk fully encoded (success = %d)\n", result);
         ADFFile *tmp = ADFFile::makeWithDisk(disk);
         if (tmp) {
             msg("Decoded image written to /tmp/debug.adf\n");
@@ -350,12 +357,10 @@ ADFFile::encodeTrack(Disk *disk, Track t)
     if (disk->data.track[t][disk->length.track[t] - 1] & 1) {
         disk->data.track[t][0] &= 0x7F;
     }
-
+    
     // Compute a debug checksum
-    if (MFM_DEBUG) {
-        u64 check = fnv_1a_32(disk->data.track[t], disk->length.track[t]);
-        debug("Track %d checksum = %x\n", t, check);
-    }
+    debug(MFM_DEBUG, "Track %d checksum = %x\n",
+          t, fnv_1a_32(disk->data.track[t], disk->length.track[t]));
 
     return result;
 }

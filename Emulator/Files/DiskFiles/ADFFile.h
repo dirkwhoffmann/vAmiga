@@ -20,8 +20,6 @@
 #define ADFSIZE_35_DD_84  946176  //  924 KB (4 extra cylinders)
 #define ADFSIZE_35_HD    1802240  // 1760 KB
 
-class Disk;
-
 class ADFFile : public DiskFile {
     
 public:
@@ -50,8 +48,9 @@ public:
     
     const char *getDescription() override { return "ADF"; }
 
-    static ADFFile *makeWithDiskType(DiskType t, DiskDensity d);
-    static ADFFile *makeWithDisk(Disk *disk);
+    static ADFFile *makeWithType(DiskType t, DiskDensity d);
+    static ADFFile *makeWithDisk(class Disk *disk);
+    static ADFFile *makeWithDrive(class Drive *drive);
     static ADFFile *makeWithVolume(FSDevice &volume, FSError *error);
 
     

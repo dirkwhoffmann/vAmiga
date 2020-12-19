@@ -66,7 +66,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         cutout.x2 = x2;
         cutout.y1 = y1;
         cutout.y2 = y2;
-        debug("Recorded area: (%d,%d) - (%d,%d)\n", x1, y1, x2, y2);
+        debug(REC_DEBUG, "Recorded area: (%d,%d) - (%d,%d)\n", x1, y1, x2, y2);
         
         //
         // Assemble the command line arguments for the video encoder

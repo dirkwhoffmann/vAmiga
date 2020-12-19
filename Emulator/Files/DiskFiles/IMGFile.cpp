@@ -110,7 +110,7 @@ IMGFile::encodeDisk(Disk *disk)
     
     // In debug mode, also run the decoder
     if (MFM_DEBUG) {
-        debug("DOS disk fully encoded (success = %d)\n", result);
+        msg("DOS disk fully encoded (success = %d)\n", result);
         IMGFile *tmp = IMGFile::makeWithDisk(disk);
         if (tmp) {
             msg("Decoded image written to /tmp/debug.img\n");
@@ -149,10 +149,9 @@ IMGFile::encodeTrack(Disk *disk, Track t)
     for (Sector s = 0; s < sectors; s++) result &= encodeSector(disk, t, s);
     
     // Compute a checksum for debugging
-    if (MFM_DEBUG) {
-        u64 check = fnv_1a_32(disk->data.track[t], disk->length.track[t]);
-        debug("Track %d checksum = %x\n", t, check);
-    }
+    debug(MFM_DEBUG,
+          "Track %d checksum = %x\n",
+          t, fnv_1a_32(disk->data.track[t], disk->length.track[t]));
 
     return result;
 }

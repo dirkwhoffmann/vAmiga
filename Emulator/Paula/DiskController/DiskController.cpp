@@ -453,9 +453,8 @@ DiskController::performDMARead(Drive *drive, u32 remaining)
             paula.raiseIrq(INT_DSKBLK);
             setState(DRIVE_DMA_OFF);
 
-            if (DSK_CHECKSUM)
-                debug("read: cnt = %d check1 = %x check2 = %x\n",
-                           checkcnt, check1, check2);
+            debug(DSK_CHECKSUM,
+                  "read: cnt = %d check1 = %x check2 = %x\n", checkcnt, check1, check2);
 
             return;
         }
@@ -514,10 +513,9 @@ DiskController::performDMAWrite(Drive *drive, u32 remaining)
                 if (drive) drive->writeByteAndRotate(value);
             }
             setState(DRIVE_DMA_OFF);
-
-            if (DSK_CHECKSUM)
-                debug("write: cnt = %d check1 = %x check2 = %x\n",
-                           checkcnt, check1, check2);
+            
+            debug(DSK_CHECKSUM,
+                  "write: cnt = %d check1 = %x check2 = %x\n", checkcnt, check1, check2);
 
             return;
         }
@@ -585,10 +583,15 @@ DiskController::performTurboRead(Drive *drive)
         mem.poke16 <AGNUS_ACCESS> (agnus.dskpt, word);
         agnus.dskpt += 2;
     }
-
-    if (DSK_CHECKSUM) {
-        debug("Turbo read %s: cyl: %d side: %d offset: %d checkcnt = %d check1 = %x check2 = %x\n", drive->getDescription(), drive->head.cylinder, drive->head.side, drive->head.offset, checkcnt, check1, check2);
-    }
+    
+    debug(DSK_CHECKSUM, "Turbo read %s: cyl: %d side: %d offset: %d ",
+          drive->getDescription(),
+          drive->head.cylinder,
+          drive->head.side,
+          drive->head.offset);
+    
+    debug(DSK_CHECKSUM, "checkcnt = %d check1 = %x check2 = %x\n",
+          checkcnt, check1, check2);
 }
 
 void
@@ -610,10 +613,9 @@ DiskController::performTurboWrite(Drive *drive)
         // Write word to disk
         drive->writeWordAndRotate(word);
     }
-
-    if (DSK_CHECKSUM) {
-        debug("Turbo write %s: checkcnt = %d check1 = %x check2 = %x\n",
-                   drive->getDescription(), checkcnt, check1, check2);
-    }
+    
+    debug(DSK_CHECKSUM,
+          "Turbo write %s: checkcnt = %d check1 = %x check2 = %x\n",
+          drive->getDescription(), checkcnt, check1, check2);
 }
 
