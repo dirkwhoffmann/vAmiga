@@ -158,7 +158,7 @@ RTC::peek(unsigned nr)
     result = FORCE_RTC_REGISTER;
     #endif
     
-    trace(RTC_DEBUG, "peek(%d) = $%X [bank %d]\n", result, bank());
+    trace(RTC_DEBUG, "peek(%d) = $%X [bank %d]\n", nr, result, bank());
     return result;
 }
 

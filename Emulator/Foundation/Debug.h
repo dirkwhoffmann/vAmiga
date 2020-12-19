@@ -44,18 +44,14 @@ fprintf(stderr, format, ##__VA_ARGS__);
 if (verbose) { \
 fprintf(stderr, format, ##__VA_ARGS__); }
 
-/*
 #define trace(verbose, format, ...) \
 if (verbose) { \
 prefix(); fprintf(stderr, "%s: " format, getDescription(), ##__VA_ARGS__); }
-*/
 
 #else
 
 #define debug(verbose, format, ...)
-/*
 #define trace(verbose, format, ...)
- */
 
 #endif
 

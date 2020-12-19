@@ -80,8 +80,6 @@ public:
 
     AmigaComponent(Amiga& ref);
 
-private:
-
     void prefix() override;
 };
 

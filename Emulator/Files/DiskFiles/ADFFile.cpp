@@ -344,7 +344,7 @@ ADFFile::encodeTrack(Disk *disk, Track t)
     long sectors = numSectors();
     // assert(disk->geometry.sectors == sectors);
     
-    trace(MFM_DEBUG, "Encoding Amiga track %d (%d sectors)\n", t, sectors);
+    trace(MFM_DEBUG, "Encoding Amiga track %d (%ld sectors)\n", t, sectors);
 
     // Format track
     disk->clearTrack(t, 0xAA);
@@ -500,7 +500,7 @@ ADFFile::decodeTrack(Disk *disk, Track t)
         sectorStart[nr++] = index;
     }
     
-    trace(MFM_DEBUG, "Found %d sectors (expected %d)\n", nr, sectors);
+    trace(MFM_DEBUG, "Found %d sectors (expected %ld)\n", nr, sectors);
 
     if (nr != sectors) {
         warn("Found %d sectors, expected %ld. Aborting.\n", nr, sectors);

@@ -84,7 +84,7 @@ Keyboard::pressKey(long keycode)
 
     if (!keyDown[keycode] && !bufferIsFull()) {
 
-        trace(KBD_DEBUG, "Pressing Amiga key %02X\n", keycode);
+        trace(KBD_DEBUG, "Pressing Amiga key %02lX\n", keycode);
 
         keyDown[keycode] = true;
         writeToBuffer(keycode);
@@ -103,7 +103,7 @@ Keyboard::releaseKey(long keycode)
 
     if (keyDown[keycode] && !bufferIsFull()) {
 
-        trace(KBD_DEBUG, "Releasing Amiga key %02X\n", keycode);
+        trace(KBD_DEBUG, "Releasing Amiga key %02lX\n", keycode);
 
         keyDown[keycode] = false;
         writeToBuffer(keycode | 0x80);

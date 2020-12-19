@@ -118,7 +118,7 @@ Paula::scheduleIrqAbs(IrqSource src, Cycle trigger)
     assert(trigger != 0);
     assert(agnus.slot[IRQ_SLOT].id == IRQ_CHECK);
 
-    trace(INT_DEBUG, "scheduleIrq(%d, %d)\n", src, trigger);
+    trace(INT_DEBUG, "scheduleIrq(%ld, %lld)\n", src, trigger);
 
     // Record the interrupt request
     if (trigger < setIntreq[src])
@@ -147,7 +147,7 @@ Paula::checkInterrupt()
         ipl.write((u8)level);
         iplPipe = (iplPipe & ~0xFF) | level;
                 
-        trace(CPU_DEBUG, "iplPipe: %016x\n", iplPipe);
+        trace(CPU_DEBUG, "iplPipe: %016llx\n", iplPipe);
         
         u8 iplValue = ipl.delayed();
         assert(iplValue == ((iplPipe >> 32) & 0xFF));

@@ -182,7 +182,7 @@ Drive::_load(u8 *buffer)
         disk = Disk::makeWithReader(reader, type, density);
     }
 
-    trace(SNP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer);
+    trace(SNP_DEBUG, "Recreated from %ld bytes\n", reader.ptr - buffer);
     return reader.ptr - buffer;
 }
 
@@ -209,7 +209,7 @@ Drive::_save(u8 *buffer)
         // writer.copy(disk->oldData, disk->geometry.diskSize);
     }
 
-    trace(SNP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
+    trace(SNP_DEBUG, "Serialized to %ld bytes\n", writer.ptr - buffer);
     return writer.ptr - buffer;
 }
 

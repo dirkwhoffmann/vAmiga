@@ -46,36 +46,8 @@ public:
     // Returns the name for this component (e.g., "Agnus" or "Denise")
     virtual const char *getDescription() = 0; 
     
-
-    //
-    // Debugging the component
-    //
-    
-protected:
-    
-    /* There a four types of messages:
-     *
-     *   - msg    Information messages  (Show up in all builds)
-     *   - warn   Warning messages      (Show up in all builds)
-     *   - debug  Debug messages        (Show up in debug builds, only)
-     *   - trace  Detailed debug output (Show up in debug builds, only)
-     *
-     * Debug messages are prefixed by the name of the component producing it.
-     * Trace messages are prefixed by the string description produced by the
-     * prefix() function. Some objects overwrite prefix() to output additional
-     * debug information.
-     *
-     * All functions can be called with an optional 'verbose' parameter. If a
-     * 0 is passed in, no output will be created. This parameter is mainly used
-     * in combination with debug and trace messages.
-     */
+    // Called by debug() and trace() to produce a detailed debug output
     virtual void prefix() { };
-    
-    // void debug(const char *fmt, ...);
-    // void debug(int verbose, const char *fmt, ...);
-
-    // void trace(const char *fmt, ...);
-    void trace(int verbose, const char *fmt, ...);
 };
 
 #endif

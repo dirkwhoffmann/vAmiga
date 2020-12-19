@@ -231,7 +231,7 @@ IMGFile::decodeDisk(Disk *disk)
 {
     long tracks = numTracks();
     
-    trace(MFM_DEBUG, "Decoding DOS disk (%d tracks)\n", tracks);
+    trace(MFM_DEBUG, "Decoding DOS disk (%ld tracks)\n", tracks);
     
     if (disk->getType() != getDiskType()) {
         warn("Incompatible disk types: %s %s\n",

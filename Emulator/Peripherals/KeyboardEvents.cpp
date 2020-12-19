@@ -27,7 +27,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
             
         case KBD_DAT:
             
-            trace(KBD_DEBUG, "KBD_DAT [%d]\n", nr);
+            trace(KBD_DEBUG, "KBD_DAT [%llu]\n", nr);
             
             if (nr < 8) {
                 
@@ -45,7 +45,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
             
         case KBD_CLK0:
 
-            trace(KBD_DEBUG, "KBD_CLK0 [%d]\n", nr);
+            trace(KBD_DEBUG, "KBD_CLK0 [%llu]\n", nr);
 
             // Pull the clock line low
             ciaa.emulateFallingEdgeOnCntPin();
@@ -54,7 +54,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
             
         case KBD_CLK1:
 
-            trace(KBD_DEBUG, "KBD_CLK1 [%d]\n", nr);
+            trace(KBD_DEBUG, "KBD_CLK1 [%llu]\n", nr);
 
             // Pull the clock line high
             ciaa.emulateRisingEdgeOnCntPin();
