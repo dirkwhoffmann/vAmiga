@@ -182,7 +182,7 @@ Drive *
 DiskController::getSelectedDrive()
 {
     assert(selected < 4);
-    return selected < 0 ? nullptr : df[selected];
+    return selected < 0 ? nullptr : df[(int)selected];
 }
 
 bool
