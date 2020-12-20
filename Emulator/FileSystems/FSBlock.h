@@ -242,11 +242,12 @@ public:
     virtual size_t addData(const u8 *buffer, size_t size) { return 0; }
 };
 
+typedef FSBlock* BlockPtr;
+
+
 //
 // Convenience macros used inside the check() methods
 //
-
-typedef FSBlock* BlockPtr;
 
 #define EXPECT_BYTE(exp) { \
 if (value != (exp)) { *expected = (exp); return FS_EXPECTED_VALUE; } }
