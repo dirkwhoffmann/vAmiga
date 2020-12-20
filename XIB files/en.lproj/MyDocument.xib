@@ -456,7 +456,7 @@
                         <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
                             <rect key="frame" x="0.0" y="14" width="63" height="25"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
@@ -593,10 +593,10 @@
         </window>
     </objects>
     <resources>
-        <image name="clickTemplate" width="36" height="37"/>
+        <image name="clickTemplate" width="36" height="36"/>
         <image name="cmdLockTemplate" width="228" height="156"/>
-        <image name="confTemplate" width="36" height="36"/>
-        <image name="debug3Template" width="19" height="19"/>
+        <image name="confTemplate" width="45" height="39"/>
+        <image name="debug3Template" width="38" height="37"/>
         <image name="debugTemplate" width="240" height="241"/>
         <image name="devGamepad1Template" width="24" height="24"/>
         <image name="devGamepad2Template" width="24" height="24"/>
@@ -606,19 +606,19 @@
         <image name="devNoneTemplate" width="24" height="24"/>
         <image name="diskTemplate" width="217" height="217"/>
         <image name="driveLedOff" width="100" height="50"/>
-        <image name="folderTemplate" width="37" height="37"/>
+        <image name="folderTemplate" width="36" height="36"/>
         <image name="haltTemplate" width="240" height="241"/>
         <image name="hourglass1Template" width="240" height="241"/>
-        <image name="keyboardTemplate" width="24" height="24"/>
-        <image name="monitorTemplate" width="241" height="240"/>
+        <image name="keyboardTemplate" width="36" height="36"/>
+        <image name="monitorTemplate" width="36" height="36"/>
         <image name="muteTemplate" width="240" height="241"/>
-        <image name="pauseTemplate" width="240" height="241"/>
-        <image name="popTemplate" width="37" height="37"/>
+        <image name="pauseTemplate" width="36" height="36"/>
+        <image name="popTemplate" width="36" height="36"/>
         <image name="powerLedOff" width="100" height="50"/>
-        <image name="powerTemplate" width="241" height="240"/>
-        <image name="prefTemplate" width="241" height="240"/>
-        <image name="pushTemplate" width="37" height="37"/>
-        <image name="resetTemplate" width="241" height="240"/>
-        <image name="timeMachineTemplate" width="37" height="37"/>
+        <image name="powerTemplate" width="36" height="36"/>
+        <image name="prefTemplate" width="36" height="36"/>
+        <image name="pushTemplate" width="36" height="36"/>
+        <image name="resetTemplate" width="36" height="36"/>
+        <image name="timeMachineTemplate" width="36" height="36"/>
     </resources>
 </document>
