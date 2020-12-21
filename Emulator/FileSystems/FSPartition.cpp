@@ -143,9 +143,7 @@ FSName
 FSPartition::getName()
 {
     FSRootBlock *rb = dev.rootBlockPtr(rootBlock);
-    assert(rb != nullptr);
-    
-    return rb->getName();
+    return rb ? rb->getName() : FSName("");
 }
 
 void
