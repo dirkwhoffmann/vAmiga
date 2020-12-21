@@ -1057,7 +1057,7 @@
                                                             <button toolTip="Step Into" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i48-Od-rYl">
                                                                 <rect key="frame" x="38" y="331" width="32" height="32"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepIntoTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="axesIndependently" inset="2" id="aC4-Zj-CQR">
+                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepIntoTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="aC4-Zj-CQR">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
@@ -1068,7 +1068,7 @@
                                                             <button toolTip="Step Over" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RyZ-E9-b7L">
                                                                 <rect key="frame" x="70" y="331" width="32" height="32"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepOverTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="axesIndependently" inset="2" id="IKI-GE-3tJ">
+                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepOverTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="IKI-GE-3tJ">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
@@ -1079,7 +1079,7 @@
                                                             <button toolTip="Run / Pause" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rfh-1e-vf2">
                                                                 <rect key="frame" x="6" y="331" width="32" height="32"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="pauseTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="axesIndependently" inset="2" id="jSz-xO-JMV">
+                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="pauseTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="jSz-xO-JMV">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
@@ -1169,7 +1169,7 @@
                                                             <button toolTip="Step Into" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D4j-Y8-ayb">
                                                                 <rect key="frame" x="39" y="330" width="32" height="32"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepIntoTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="axesIndependently" inset="2" id="d0S-Pm-aqR">
+                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepIntoTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="d0S-Pm-aqR">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
@@ -1180,7 +1180,7 @@
                                                             <button toolTip="Step Over" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mgB-ce-57G">
                                                                 <rect key="frame" x="71" y="330" width="32" height="32"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepOverTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="axesIndependently" inset="2" id="L3E-Lc-mzz">
+                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepOverTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="L3E-Lc-mzz">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
@@ -1191,7 +1191,7 @@
                                                             <button toolTip="Run / Pause" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6rP-tx-mMX">
                                                                 <rect key="frame" x="7" y="330" width="32" height="32"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="pauseTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="axesIndependently" inset="2" id="i42-E7-tu3">
+                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="pauseTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="i42-E7-tu3">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
@@ -7245,7 +7245,7 @@
         <image name="NSRemoveTemplate" width="14" height="4"/>
         <image name="pauseTemplate" width="36" height="36"/>
         <image name="state0Template" width="228" height="204"/>
-        <image name="stepIntoTemplate" width="240" height="241"/>
-        <image name="stepOverTemplate" width="241" height="241"/>
+        <image name="stepIntoTemplate" width="177" height="177"/>
+        <image name="stepOverTemplate" width="177" height="176"/>
     </resources>
 </document>

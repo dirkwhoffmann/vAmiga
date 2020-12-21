@@ -89,7 +89,7 @@
                             <constraint firstAttribute="height" constant="18" id="NEg-m8-jTX"/>
                             <constraint firstAttribute="width" constant="18" id="heH-2p-hd6"/>
                         </constraints>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="hourglass1Template" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="1707">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="hourglass1Template" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="1707">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>

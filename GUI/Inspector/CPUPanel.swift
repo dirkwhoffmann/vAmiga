@@ -41,10 +41,10 @@ extension Inspector {
                 cpuTraceStepIntoButton.isEnabled = false
                 cpuTraceStepOverButton.isEnabled = false
             } else {
-                cpuStopAndGoButton.image = NSImage.init(named: "continueTemplate")
+                cpuStopAndGoButton.image = NSImage.init(named: "runTemplate")
                 cpuStepIntoButton.isEnabled = true
                 cpuStepOverButton.isEnabled = true
-                cpuTraceStopAndGoButton.image = NSImage.init(named: "continueTemplate")
+                cpuTraceStopAndGoButton.image = NSImage.init(named: "runTemplate")
                 cpuTraceStepIntoButton.isEnabled = true
                 cpuTraceStepOverButton.isEnabled = true
             }
