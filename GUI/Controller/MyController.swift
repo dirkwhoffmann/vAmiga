@@ -609,7 +609,7 @@ extension MyController {
             
         case .MSG_RECORDING_STARTED:
             
-            window?.backgroundColor = .red
+            window?.backgroundColor = .warningColor
             refreshStatusBar()
                 
         case .MSG_RECORDING_STOPPED:

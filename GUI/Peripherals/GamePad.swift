@@ -59,9 +59,12 @@ class GamePad {
     // Cotroller specific usage IDs for left and right gamepad joysticks
     var lThumbXUsageID = kHIDUsage_GD_X
     var lThumbYUsageID = kHIDUsage_GD_Y
-    var rThumbXUsageID = kHIDUsage_GD_Rz
-    var rThumbYUsageID = kHIDUsage_GD_Z
+    var rThumbXUsageID = kHIDUsage_GD_Z
+    var rThumbYUsageID = kHIDUsage_GD_Rz
 
+    // Controller specific headswitch value (value of "UP")
+    var headSwitchStart = 0
+    
     /* Rescued information from the latest invocation of the action function.
      * It is needed to determine whether a joystick event has to be triggered.
      */
@@ -96,45 +99,48 @@ class GamePad {
         // Check for known devices
         switch vendorID {
             
-        case 0x40B where productID == 0x6533:
+        case 0x0004 where productID == 0x0001:
+            name = "aJoy Retro Adapter"
+
+        case 0x0079 where productID == 0x0011:
+            name = "iNNEXT Retro (SNES)"
+
+        case 0x040B where productID == 0x6533:
             name = "Competition Pro SL-6602"
             icon = NSImage.init(named: joystick)
 
-        case 0x46D where type == .CPD_MOUSE:
+        case 0x045E where productID == 0xB13:
+            name = "XBox Carbon Black"
+            headSwitchStart = 1
+            
+        case 0x046D where type == .CPD_MOUSE:
             name = "Logitech Mouse"
             icon = NSImage.init(named: mouse)
 
-        case 0x738 where productID == 0x2217:
+        case 0x0483 where productID == 0x9005:
+            name = "RetroFun! Joystick Adapter"
+
+        case 0x054C where productID == 0x0268:
+            name = "Sony DualShock 3"
+
+        case 0x054C where productID == 0x05C4:
+            name = "Sony DualShock 4"
+            
+        case 0x054C where productID == 0x09CC:
+            name = "Sony Dualshock 4 (2nd Gen)"
+                        
+        case 0x0738 where productID == 0x2217:
             name = "Competition Pro SL-650212"
             icon = NSImage.init(named: joystick)
 
-        case 0x1C59 where productID == 0x24:
+        case 0x0F0D where productID == 0x00C1:
+            name = "HORIPAD for Nintendo Switch"
+            rThumbXUsageID = kHIDUsage_GD_Z
+            rThumbYUsageID = kHIDUsage_GD_Rz
+
+        case 0x1C59 where productID == 0x0024:
             name = "The C64 Joystick"
             icon = NSImage.init(named: joystick)
-
-        case 0x79 where productID == 0x11:
-            name = "iNNEXT Retro (SNES)"
-
-        case 0x54C where productID == 0x268:
-            name = "Sony DualShock 3"
-            rThumbXUsageID = kHIDUsage_GD_Z
-            rThumbYUsageID = kHIDUsage_GD_Rz
-
-        case 0x54C where productID == 0x5C4:
-            name = "Sony DualShock 4"
-            rThumbXUsageID = kHIDUsage_GD_Z
-            rThumbYUsageID = kHIDUsage_GD_Rz
-            
-        case 0x54C where productID == 0x9CC:
-            name = "Sony Dualshock 4 (2nd Gen)"
-            rThumbXUsageID = kHIDUsage_GD_Z
-            rThumbYUsageID = kHIDUsage_GD_Rz
-            
-        case 0x483 where productID == 0x9005:
-            name = "RetroFun! Joystick Adapter"
-            
-        case 0x004 where productID == 0x0001:
-            name = "aJoy Retro Adapter"
 
         default:
             break  // name = "Generic Gamepad"
@@ -314,26 +320,41 @@ extension GamePad {
             
             var events: [GamePadAction]?
             
+            /*
+            switch usage {
+            case lThumbXUsageID: track("lThumbXUsageID \(value)")
+            case rThumbXUsageID: track("rThumbXUsageID \(value)")
+            case lThumbYUsageID: track("lThumbYUsageID \(value)")
+            case rThumbYUsageID: track("rThumbYUsageID \(value)")
+            case kHIDUsage_GD_Hatswitch: track("kHIDUsage_GD_Hatswitch \(value)")
+            default: break
+            }
+            */
+            
             switch usage {
                 
             case lThumbXUsageID, rThumbXUsageID:
                 
                 // track("lThumbXUsageID, rThumbXUsageID: \(intValue)")
                 if let v = mapAnalogAxis(value: value, element: element) {
-                    events = (v == 2) ? [.PULL_RIGHT] : (v == -2) ? [.PULL_LEFT] : [.RELEASE_X]
+                    events =
+                        (v == 2) ? [.PULL_RIGHT] :
+                        (v == -2) ? [.PULL_LEFT] : [.RELEASE_X]
                 }
                 
             case lThumbYUsageID, rThumbYUsageID:
                 
                 // track("lThumbYUsageID, rThumbYUsageID: \(intValue)")
                 if let v = mapAnalogAxis(value: value, element: element) {
-                    events = (v == 2) ? [.PULL_DOWN] : (v == -2) ? [.PULL_UP] : [.RELEASE_Y]
+                    events =
+                        (v == 2) ? [.PULL_DOWN] :
+                        (v == -2) ? [.PULL_UP] : [.RELEASE_Y]
                 }
                 
             case kHIDUsage_GD_Hatswitch:
                 
-                // track("kHIDUsage_GD_Hatswitch \(intValue)")
-                switch intValue {
+                track("kHIDUsage_GD_Hatswitch \(intValue)")
+                switch intValue - headSwitchStart {
                 case 0: events = [.PULL_UP, .RELEASE_X]
                 case 1: events = [.PULL_UP, .PULL_RIGHT]
                 case 2: events = [.PULL_RIGHT, .RELEASE_Y]

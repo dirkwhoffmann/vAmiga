@@ -152,6 +152,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         // Open pipes
         videoPipe = open(videoPipePath(), O_WRONLY);
         audioPipe = open(audioPipePath(), O_WRONLY);
+        debug(REC_DEBUG, "Pipes are open");
         
         recording = videoFFmpeg && audioFFmpeg && videoPipe != -1 && audioPipe != -1;
     }
@@ -225,6 +226,7 @@ ScreenRecorder::exportAs(const char *path)
     //
     
     msg("\nMerging video and audio stream with options:\n%s\n", cmd);
+    /*
     FILE *ffmpeg = popen(cmd, "w");
 
     if (!ffmpeg) {
@@ -234,7 +236,10 @@ ScreenRecorder::exportAs(const char *path)
     
     // Wait for FFmpeg to finish
     fclose(ffmpeg);
+    */
+    system(cmd); 
     
+    msg("Done\n");
     return true;
 }
 
