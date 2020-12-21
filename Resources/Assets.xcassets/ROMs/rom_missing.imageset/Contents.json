@@ -1,32 +1,12 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "filename" : "rom_drag-1.pdf"
-    },
-    {
-      "idiom" : "universal",
-      "filename" : "rom_drag.pdf",
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "light"
-        }
-      ]
-    },
-    {
-      "idiom" : "universal",
-      "filename" : "rom_drag_dark.pdf",
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ]
+      "filename" : "romEmpty.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   }
 }
