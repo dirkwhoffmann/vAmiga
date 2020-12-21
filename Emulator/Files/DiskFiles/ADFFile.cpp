@@ -548,9 +548,12 @@ u32
 ADFFile::bitmapBlock()
 {
     u32 bmb = FSBlock::read32(data + rootBlock() * 512 + 316);
-    
+
+    // Make sure bmb is a valid block number
+    if (bmb >= numBlocks()) bmb = 0;
+
     // Assign a default location if the ADF is empty
     if (bmb == 0) bmb = rootBlock() + 1;
-    
+
     return bmb;
 }

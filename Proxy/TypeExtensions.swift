@@ -12,6 +12,7 @@ extension FSVolumeType {
     var description: String {
         
         switch self {
+        case .NODOS:    return "Unknown File System"
         case .OFS:      return "Original File System (OFS)"
         case .OFS_INTL: return "Original File System (OFS-INTL)"
         case .OFS_DC:   return "Original File System (OFS-DC)"

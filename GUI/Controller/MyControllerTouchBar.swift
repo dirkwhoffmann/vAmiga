@@ -85,7 +85,7 @@ extension MyController: NSTouchBarDelegate {
             
         case NSTouchBarItem.Identifier.gallery:
             let item = NSCustomTouchBarItem(identifier: identifier)
-            let icon = NSImage(named: NSImage.Name("folderTemplate"))!
+            let icon = NSImage(named: NSImage.Name("galleryTemplate"))!
             item.customizationLabel = "Gallery"
             item.view = NSButton(image: icon,
                                  target: self,

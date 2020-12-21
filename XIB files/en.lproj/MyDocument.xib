@@ -395,7 +395,7 @@
                                 <font key="font" metaFont="system"/>
                                 <segments>
                                     <segment toolTip="Take Screenshot" image="clickTemplate" width="40"/>
-                                    <segment toolTip="Open Screenshot Browser" image="folderTemplate" width="40" tag="1"/>
+                                    <segment toolTip="Open Screenshot Browser" image="galleryTemplate" width="40" tag="1"/>
                                 </segments>
                             </segmentedCell>
                             <connections>
@@ -604,7 +604,7 @@
         <image name="devNoneTemplate" width="20" height="20"/>
         <image name="diskTemplate" width="217" height="217"/>
         <image name="driveLedOff" width="100" height="50"/>
-        <image name="folderTemplate" width="36" height="36"/>
+        <image name="galleryTemplate" width="36" height="36"/>
         <image name="haltTemplate" width="240" height="241"/>
         <image name="hourglass1Template" width="240" height="241"/>
         <image name="inspectTemplate" width="36" height="36"/>

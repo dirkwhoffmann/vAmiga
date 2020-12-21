@@ -103,7 +103,7 @@ class ImporterDialog: DialogController {
         
         if empty {
 
-            setHeight(212)
+            setHeight(222)
             
         } else {
             

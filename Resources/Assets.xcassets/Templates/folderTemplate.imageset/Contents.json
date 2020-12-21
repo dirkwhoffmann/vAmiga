@@ -1,8 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "browseTemplate.pdf",
-      "idiom" : "universal"
+      "filename" : "folderTemplate.pdf",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {
