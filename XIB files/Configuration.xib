@@ -2837,15 +2837,6 @@ DQ
             </connections>
             <point key="canvasLocation" x="139" y="147"/>
         </window>
-        <menuItem title="Joystick (Keyset 1)" tag="1" id="xxB-Gw-yMw">
-            <modifierMask key="keyEquivalentModifierMask"/>
-        </menuItem>
-        <menuItem title="TFT Monitor Defaults" id="TsP-Kr-5Vo">
-            <attributedString key="attributedTitle"/>
-        </menuItem>
-        <menuItem title="Standard Settings" id="zuL-Zv-IWH">
-            <attributedString key="attributedTitle"/>
-        </menuItem>
     </objects>
     <resources>
         <image name="Lock" width="120" height="170"/>
