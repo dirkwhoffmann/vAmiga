@@ -133,10 +133,10 @@ extension MyController {
         let sel = amiga.diskController.selectedDrive
         let w = writing ?? (amiga.diskController.state == .DRIVE_DMA_WRITE)
         
-        df0Cylinder.textColor = w && (sel == 0) ? .red : .secondaryLabelColor
-        df1Cylinder.textColor = w && (sel == 1) ? .red : .secondaryLabelColor
-        df2Cylinder.textColor = w && (sel == 2) ? .red : .secondaryLabelColor
-        df3Cylinder.textColor = w && (sel == 3) ? .red : .secondaryLabelColor
+        df0Cylinder.textColor = w && (sel == 0) ? .warningColor : .secondaryLabelColor
+        df1Cylinder.textColor = w && (sel == 1) ? .warningColor : .secondaryLabelColor
+        df2Cylinder.textColor = w && (sel == 2) ? .warningColor : .secondaryLabelColor
+        df3Cylinder.textColor = w && (sel == 3) ? .warningColor : .secondaryLabelColor
     }
         
     public func refreshStatusBar(drive: Int, motor: Bool) {

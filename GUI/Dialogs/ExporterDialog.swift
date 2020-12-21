@@ -767,7 +767,7 @@ extension ExporterDialog: NSTableViewDelegate {
             
             if row == selectedRow && col == selectedCol {
                 cell?.textColor = .white
-                cell?.backgroundColor = error == .OK ? .selectedContentBackgroundColor : .red
+                cell?.backgroundColor = error == .OK ? .selectedContentBackgroundColor : .warningColor
             } else {
                 cell?.textColor = error == .OK ? .textColor : .warningColor
                 cell?.backgroundColor = NSColor.alternatingContentBackgroundColors[row % 2]

@@ -46,9 +46,9 @@ class ImporterDialog: DialogController {
         case .FILETYPE_DMS:
             return "Disk Masher System (DMS)"
         case .FILETYPE_EXE:
-            return "ADF containing a single Amiga executable"
+            return "ADF (Converted Amiga executable)"
         case .FILETYPE_DIR:
-            return "ADF (converted host directory)"
+            return "ADF (Converted Host Directory)"
         default:
             return "???"
         }
