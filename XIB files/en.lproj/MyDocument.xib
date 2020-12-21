@@ -296,7 +296,7 @@
                             <constraint firstAttribute="width" constant="16" id="TCL-QT-RDO"/>
                             <constraint firstAttribute="height" constant="16" id="yXI-39-IXv"/>
                         </constraints>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="debug3Template" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="ePm-pT-sH6">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="inspectTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="ePm-pT-sH6">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -377,7 +377,7 @@
                             <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="3Uk-v8-yDJ">
                                 <font key="font" metaFont="system"/>
                                 <segments>
-                                    <segment toolTip="Open Inspector" image="debugTemplate" width="40"/>
+                                    <segment toolTip="Open Inspector" image="inspectTemplate" width="40"/>
                                     <segment toolTip="Open Monitor" image="monitorTemplate" width="40" tag="1"/>
                                 </segments>
                             </segmentedCell>
@@ -428,7 +428,7 @@
                         <popUpButton key="view" tag="10" id="L2b-nG-yBo" userLabel="Port 1">
                             <rect key="frame" x="0.0" y="14" width="45" height="24"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="zHf-yH-YTM">
@@ -456,7 +456,7 @@
                         <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
                             <rect key="frame" x="0.0" y="14" width="45" height="24"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
@@ -595,9 +595,7 @@
     <resources>
         <image name="clickTemplate" width="36" height="36"/>
         <image name="cmdLockTemplate" width="228" height="156"/>
-        <image name="confTemplate" width="45" height="39"/>
-        <image name="debug3Template" width="38" height="37"/>
-        <image name="debugTemplate" width="38" height="37"/>
+        <image name="confTemplate" width="37" height="36"/>
         <image name="devGamepad1Template" width="24" height="24"/>
         <image name="devGamepad2Template" width="24" height="24"/>
         <image name="devKeys1Template" width="24" height="24"/>
@@ -609,6 +607,7 @@
         <image name="folderTemplate" width="36" height="36"/>
         <image name="haltTemplate" width="240" height="241"/>
         <image name="hourglass1Template" width="240" height="241"/>
+        <image name="inspectTemplate" width="37" height="37"/>
         <image name="keyboardTemplate" width="36" height="36"/>
         <image name="monitorTemplate" width="36" height="36"/>
         <image name="muteTemplate" width="240" height="241"/>
