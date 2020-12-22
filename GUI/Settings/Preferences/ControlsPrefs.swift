@@ -129,19 +129,19 @@ extension PreferencesController {
     // Action methods
     //
     
-    @IBAction func devRecordKeyAction(_ sender: NSButton!) {
+    @IBAction func conRecordKeyAction(_ sender: NSButton!) {
 
         conRecordedKey = sender.tag
         refresh()
     }
     
-    @IBAction func devDisconnectKeysAction(_ sender: NSButton!) {
+    @IBAction func conDisconnectKeysAction(_ sender: NSButton!) {
         
         pref.disconnectJoyKeys = (sender.state == .on)
         refresh()
     }
 
-    @IBAction func devDeleteKeysetAction(_ sender: NSButton!) {
+    @IBAction func conDeleteKeysetAction(_ sender: NSButton!) {
 
         assert(sender.tag >= 0 && sender.tag <= 2)
         
@@ -149,13 +149,13 @@ extension PreferencesController {
         refresh()
     }
 
-    @IBAction func devAutofireAction(_ sender: NSButton!) {
+    @IBAction func conAutofireAction(_ sender: NSButton!) {
         
         pref.autofire = (sender.state == .on)
         refresh()
     }
     
-    @IBAction func devAutofireCeaseAction(_ sender: NSButton!) {
+    @IBAction func conAutofireCeaseAction(_ sender: NSButton!) {
         
         let sign = sender.state == .on ? 1 : -1
         let bullets = pref.autofireBullets.magnitude
@@ -163,25 +163,25 @@ extension PreferencesController {
         refresh()
     }
     
-    @IBAction func devAutofireBulletsAction(_ sender: NSTextField!) {
+    @IBAction func conAutofireBulletsAction(_ sender: NSTextField!) {
         
         pref.autofireBullets = sender.integerValue
         refresh()
     }
     
-    @IBAction func devAutofireFrequencyAction(_ sender: NSSlider!) {
+    @IBAction func conAutofireFrequencyAction(_ sender: NSSlider!) {
         
         pref.autofireFrequency = sender.floatValue
         refresh()
     }
         
-    @IBAction func devRetainMouseKeyCombAction(_ sender: NSPopUpButton!) {
+    @IBAction func conRetainMouseKeyCombAction(_ sender: NSPopUpButton!) {
         
         pref.retainMouseKeyComb = sender.selectedTag()
         refresh()
     }
     
-    @IBAction func devRetainMouseAction(_ sender: NSButton!) {
+    @IBAction func conRetainMouseAction(_ sender: NSButton!) {
         
         switch sender.tag {
             
@@ -194,13 +194,13 @@ extension PreferencesController {
         refresh()
     }
     
-    @IBAction func devReleaseMouseKeyCombAction(_ sender: NSPopUpButton!) {
+    @IBAction func conReleaseMouseKeyCombAction(_ sender: NSPopUpButton!) {
         
         pref.releaseMouseKeyComb = sender.selectedTag()
         refresh()
     }
     
-    @IBAction func devReleaseMouseAction(_ sender: NSButton!) {
+    @IBAction func conReleaseMouseAction(_ sender: NSButton!) {
         
         switch sender.tag {
             

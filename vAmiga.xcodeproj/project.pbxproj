@@ -18,6 +18,7 @@
 		500A4EAE2447364E002A4DE1 /* insert.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4EAC2447364E002A4DE1 /* insert.aiff */; };
 		500C0A562259402D000121CD /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		500C7170255EE2AC00DDEEB2 /* Concurrency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */; };
+		500CE876259252ED00462836 /* DevicesPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500CE875259252ED00462836 /* DevicesPrefs.swift */; };
 		5010A78222B50B690041388B /* PortPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5010A78122B50B690041388B /* PortPanel.swift */; };
 		501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501429D82445F12B00FBDC90 /* TextureToolbox.swift */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
@@ -245,6 +246,7 @@
 		500C0A552259402D000121CD /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
 		500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Concurrency.cpp; sourceTree = "<group>"; };
 		500C716F255EE2AC00DDEEB2 /* Concurrency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Concurrency.h; sourceTree = "<group>"; };
+		500CE875259252ED00462836 /* DevicesPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesPrefs.swift; sourceTree = "<group>"; };
 		5010A78122B50B690041388B /* PortPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortPanel.swift; sourceTree = "<group>"; };
 		501429D82445F12B00FBDC90 /* TextureToolbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToolbox.swift; sourceTree = "<group>"; };
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
@@ -956,6 +958,7 @@
 				508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */,
 				508FE04121EA22CC0043D0E9 /* ControlsPrefs.swift */,
 				50912FF62525A1190049805B /* CapturePrefs.swift */,
+				500CE875259252ED00462836 /* DevicesPrefs.swift */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -1402,6 +1405,7 @@
 				50AE6EE324D9B08C000AA367 /* PaulaRegisters.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				50565072254573E100A79D27 /* FSBlock.cpp in Sources */,
+				500CE876259252ED00462836 /* DevicesPrefs.swift in Sources */,
 				5063F22A255A8EBD007182DC /* FSEmptyBlock.cpp in Sources */,
 				5083CF6A2546C0D700A28EF8 /* FSUserDirBlock.cpp in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,

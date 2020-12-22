@@ -58,6 +58,7 @@ extension UserDefaults {
         
         registerGeneralUserDefaults()
         registerControlsUserDefaults()
+        registerDevicesUserDefaults()
         registerCaptureUserDefaults()
         
         registerRomUserDefaults()
@@ -79,6 +80,7 @@ extension MyController {
         
         pref.loadGeneralUserDefaults()
         pref.loadControlsUserDefaults()
+        pref.loadDevicesUserDefaults()
         pref.loadCaptureUserDefaults()
 
         config.loadRomUserDefaults()
@@ -404,6 +406,85 @@ extension UserDefaults {
                      Keys.Con.releaseMouseKeyComb,
                      Keys.Con.releaseMouseWithKeys,
                      Keys.Con.releaseMouseByShaking ]
+
+        for key in keys { defaults.removeObject(forKey: key) }
+    }
+}
+
+//
+// User defaults (Devices)
+//
+
+extension Keys {
+    
+    struct Dev {
+        
+        // Mapping schemes
+        static let leftStickScheme1   = "VAMIGA_DEV_LeftStickScheme1"
+        static let rightStickScheme1  = "VAMIGA_DEV_RightStickScheme1"
+        static let hatSwitchScheme1   = "VAMIGA_DEV_HatSwitchScheme1"
+
+        static let leftStickScheme2   = "VAMIGA_DEV_LeftStickScheme2"
+        static let rightStickScheme2  = "VAMIGA_DEV_RightStickScheme2"
+        static let hatSwitchScheme2   = "VAMIGA_DEV_HatSwitchScheme2"
+    }
+}
+
+struct DevicesDefaults {
+    
+    // Mapping schemes
+    let leftStickScheme1: Int
+    let rightStickScheme1: Int
+    let hatSwitchScheme1: Int
+
+    let leftStickScheme2: Int
+    let rightStickScheme2: Int
+    let hatSwitchScheme2: Int
+
+    static let std = DevicesDefaults.init(
+        
+        leftStickScheme1: 0,
+        rightStickScheme1: 0,
+        hatSwitchScheme1: 0,
+        
+        leftStickScheme2: 0,
+        rightStickScheme2: 0,
+        hatSwitchScheme2: 0
+    )
+}
+
+extension UserDefaults {
+    
+    static func registerDevicesUserDefaults() {
+        
+        let defaults = DevicesDefaults.std
+        let dictionary: [String: Any] = [
+
+            // Mapping schemes
+            Keys.Dev.leftStickScheme1: defaults.leftStickScheme1,
+            Keys.Dev.rightStickScheme1: defaults.rightStickScheme1,
+            Keys.Dev.hatSwitchScheme1: defaults.hatSwitchScheme1,
+
+            Keys.Dev.leftStickScheme2: defaults.leftStickScheme2,
+            Keys.Dev.rightStickScheme2: defaults.rightStickScheme2,
+            Keys.Dev.hatSwitchScheme2: defaults.hatSwitchScheme2
+        ]
+        
+        let userDefaults = UserDefaults.standard
+        userDefaults.register(defaults: dictionary)
+    }
+    
+    static func resetDevicesUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+
+        let keys = [ Keys.Dev.leftStickScheme1,
+                     Keys.Dev.rightStickScheme1,
+                     Keys.Dev.hatSwitchScheme1,
+                     
+                     Keys.Dev.leftStickScheme2,
+                     Keys.Dev.rightStickScheme2,
+                     Keys.Dev.hatSwitchScheme2 ]
 
         for key in keys { defaults.removeObject(forKey: key) }
     }

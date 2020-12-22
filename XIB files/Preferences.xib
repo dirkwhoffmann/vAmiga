@@ -510,7 +510,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRetainMouseAction:" target="-2" id="h99-2b-cvc"/>
+                                                <action selector="conRetainMouseAction:" target="-2" id="h99-2b-cvc"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="wL6-3f-P6C">
@@ -521,7 +521,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRetainMouseAction:" target="-2" id="ZXK-90-3Bd"/>
+                                                <action selector="conRetainMouseAction:" target="-2" id="ZXK-90-3Bd"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kUU-a1-09S">
@@ -532,7 +532,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devReleaseMouseAction:" target="-2" id="g6M-Fe-nRI"/>
+                                                <action selector="conReleaseMouseAction:" target="-2" id="g6M-Fe-nRI"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="R6V-pd-pgY">
@@ -543,7 +543,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devReleaseMouseAction:" target="-2" id="qdR-3G-p9P"/>
+                                                <action selector="conReleaseMouseAction:" target="-2" id="qdR-3G-p9P"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="tX8-nx-t2o">
@@ -554,7 +554,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRetainMouseAction:" target="-2" id="rDz-YZ-ykJ"/>
+                                                <action selector="conRetainMouseAction:" target="-2" id="rDz-YZ-ykJ"/>
                                             </connections>
                                         </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PUO-FG-ksK">
@@ -573,7 +573,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devAutofireAction:" target="-2" id="Xrg-TO-vqk"/>
+                                                <action selector="conAutofireAction:" target="-2" id="Xrg-TO-vqk"/>
                                             </connections>
                                         </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F3x-bV-Yda">
@@ -584,7 +584,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devAutofireCeaseAction:" target="-2" id="0vc-Vp-iDB"/>
+                                                <action selector="conAutofireCeaseAction:" target="-2" id="0vc-Vp-iDB"/>
                                             </connections>
                                         </button>
                                         <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wxF-bh-WS4">
@@ -592,7 +592,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <sliderCell key="cell" state="on" alignment="left" minValue="1" maxValue="4" doubleValue="1" tickMarkPosition="above" numberOfTickMarks="7" sliderType="linear" id="SP0-dj-uJG"/>
                                             <connections>
-                                                <action selector="devAutofireFrequencyAction:" target="-2" id="7te-Ir-la3"/>
+                                                <action selector="conAutofireFrequencyAction:" target="-2" id="7te-Ir-la3"/>
                                             </connections>
                                         </slider>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gCb-dd-HU3">
@@ -641,7 +641,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <action selector="devAutofireBulletsAction:" target="-2" id="E7w-MV-z17"/>
+                                                <action selector="conAutofireBulletsAction:" target="-2" id="E7w-MV-z17"/>
                                             </connections>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9o8-Ys-AUX">
@@ -662,7 +662,7 @@
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="devRetainMouseKeyCombAction:" target="-2" id="FRK-h2-gkb"/>
+                                                <action selector="conRetainMouseKeyCombAction:" target="-2" id="FRK-h2-gkb"/>
                                             </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rBJ-WC-hXZ">
@@ -683,7 +683,7 @@
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="devReleaseMouseKeyCombAction:" target="-2" id="mXX-4f-f4m"/>
+                                                <action selector="conReleaseMouseKeyCombAction:" target="-2" id="mXX-4f-f4m"/>
                                             </connections>
                                         </popUpButton>
                                         <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="n2t-aY-dvw">
@@ -725,7 +725,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devDeleteKeysetAction:" target="-2" id="tKl-wz-UlJ"/>
+                                                <action selector="conDeleteKeysetAction:" target="-2" id="tKl-wz-UlJ"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="HXz-VN-lav">
@@ -736,7 +736,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devDeleteKeysetAction:" target="-2" id="NHh-eY-YQb"/>
+                                                <action selector="conDeleteKeysetAction:" target="-2" id="NHh-eY-YQb"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g51-Ax-Tce">
@@ -747,7 +747,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devDeleteKeysetAction:" target="-2" id="mOk-Ge-fXW"/>
+                                                <action selector="conDeleteKeysetAction:" target="-2" id="mOk-Ge-fXW"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="wFF-Aw-MG2">
@@ -758,7 +758,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRecordKeyAction:" target="-2" id="cjd-VX-Xk5"/>
+                                                <action selector="conRecordKeyAction:" target="-2" id="cjd-VX-Xk5"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="hXN-1f-18m">
@@ -769,7 +769,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRecordKeyAction:" target="-2" id="upD-K4-xMs"/>
+                                                <action selector="conRecordKeyAction:" target="-2" id="upD-K4-xMs"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sPP-Ll-WyN">
@@ -789,7 +789,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRecordKeyAction:" target="-2" id="LH9-DX-uEO"/>
+                                                <action selector="conRecordKeyAction:" target="-2" id="LH9-DX-uEO"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qbp-uq-9db">
@@ -809,7 +809,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRecordKeyAction:" target="-2" id="e0e-GV-sdm"/>
+                                                <action selector="conRecordKeyAction:" target="-2" id="e0e-GV-sdm"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="miM-YL-Ani">
@@ -829,7 +829,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRecordKeyAction:" target="-2" id="gBA-Qy-Som"/>
+                                                <action selector="conRecordKeyAction:" target="-2" id="gBA-Qy-Som"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aaz-J2-EAm">
@@ -872,7 +872,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRecordKeyAction:" target="-2" id="mvP-9a-DhK"/>
+                                                <action selector="conRecordKeyAction:" target="-2" id="mvP-9a-DhK"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="Vsm-ce-Vny">
@@ -883,7 +883,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRecordKeyAction:" target="-2" id="JTf-EO-h95"/>
+                                                <action selector="conRecordKeyAction:" target="-2" id="JTf-EO-h95"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="11q-iY-uTE">
@@ -903,7 +903,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRecordKeyAction:" target="-2" id="cHQ-57-GMr"/>
+                                                <action selector="conRecordKeyAction:" target="-2" id="cHQ-57-GMr"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nHI-yh-DVC">
@@ -932,7 +932,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRecordKeyAction:" target="-2" id="LWJ-3Q-xlh"/>
+                                                <action selector="conRecordKeyAction:" target="-2" id="LWJ-3Q-xlh"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S5q-g5-DkO">
@@ -966,7 +966,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRecordKeyAction:" target="-2" id="wag-ZN-Gm2"/>
+                                                <action selector="conRecordKeyAction:" target="-2" id="wag-ZN-Gm2"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HGy-wp-N7l">
@@ -991,7 +991,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRecordKeyAction:" target="-2" id="P9N-0A-9a4"/>
+                                                <action selector="conRecordKeyAction:" target="-2" id="P9N-0A-9a4"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ahV-0K-IDB">
@@ -1020,7 +1020,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="devRecordKeyAction:" target="-2" id="P3a-wH-T9D"/>
+                                                <action selector="conRecordKeyAction:" target="-2" id="P3a-wH-T9D"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Qh-Sl-CZI">
@@ -1111,7 +1111,7 @@
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b4Q-RA-0Vo">
-                                            <rect key="frame" x="14" y="331" width="92" height="16"/>
+                                            <rect key="frame" x="14" y="333" width="92" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Manufacturer:" id="dcM-LV-5eO">
                                                 <font key="font" metaFont="system"/>
@@ -1120,7 +1120,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NtP-SR-6p7">
-                                            <rect key="frame" x="15" y="307" width="92" height="16"/>
+                                            <rect key="frame" x="15" y="309" width="92" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Product:" id="uRi-qC-pAM">
                                                 <font key="font" metaFont="system"/>
@@ -1129,7 +1129,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2L7-ke-nfD">
-                                            <rect key="frame" x="16" y="283" width="92" height="16"/>
+                                            <rect key="frame" x="16" y="285" width="92" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Version:" id="fEj-J4-llM">
                                                 <font key="font" metaFont="system"/>
@@ -1138,7 +1138,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dQa-4R-7Rj">
-                                            <rect key="frame" x="15" y="259" width="93" height="16"/>
+                                            <rect key="frame" x="15" y="261" width="93" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Vendor ID:" id="X1z-hH-Zd1">
                                                 <font key="font" metaFont="system"/>
@@ -1147,7 +1147,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zcL-0X-t1Q">
-                                            <rect key="frame" x="16" y="235" width="92" height="16"/>
+                                            <rect key="frame" x="16" y="237" width="92" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Product ID:" id="Naf-pT-Z60">
                                                 <font key="font" metaFont="system"/>
@@ -1156,7 +1156,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rc7-zK-Xze">
-                                            <rect key="frame" x="15" y="140" width="92" height="16"/>
+                                            <rect key="frame" x="15" y="144" width="92" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Left Stick:" id="BjR-dj-z7S">
                                                 <font key="font" metaFont="system"/>
@@ -1165,7 +1165,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v98-Sr-gLY">
-                                            <rect key="frame" x="14" y="355" width="93" height="16"/>
+                                            <rect key="frame" x="14" y="357" width="93" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Transport:" id="9hi-vX-nKy">
                                                 <font key="font" metaFont="system"/>
@@ -1174,7 +1174,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l7I-bw-gcL">
-                                            <rect key="frame" x="116" y="355" width="169" height="16"/>
+                                            <rect key="frame" x="116" y="357" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="cg3-Ea-Utr">
                                                 <font key="font" metaFont="system"/>
@@ -1183,7 +1183,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HTm-K8-Pet">
-                                            <rect key="frame" x="116" y="331" width="169" height="16"/>
+                                            <rect key="frame" x="116" y="333" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="VUQ-2a-zue">
                                                 <font key="font" metaFont="system"/>
@@ -1192,7 +1192,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vzi-XU-xbz">
-                                            <rect key="frame" x="116" y="307" width="169" height="16"/>
+                                            <rect key="frame" x="116" y="309" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="DiU-jv-dq9">
                                                 <font key="font" metaFont="system"/>
@@ -1201,7 +1201,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cI3-UU-fuc">
-                                            <rect key="frame" x="116" y="259" width="169" height="16"/>
+                                            <rect key="frame" x="116" y="261" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="7Zb-Uq-RLK">
                                                 <font key="font" metaFont="system"/>
@@ -1210,7 +1210,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="06g-GF-iFf">
-                                            <rect key="frame" x="116" y="235" width="169" height="16"/>
+                                            <rect key="frame" x="116" y="237" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="WGl-ij-Lz6">
                                                 <font key="font" metaFont="system"/>
@@ -1219,7 +1219,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c4l-b5-4MS">
-                                            <rect key="frame" x="15" y="382" width="208" height="17"/>
+                                            <rect key="frame" x="15" y="384" width="208" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Device 1" id="GzQ-W0-h6Q">
                                                 <font key="font" metaFont="systemBold"/>
@@ -1228,7 +1228,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Db-TQ-ock">
-                                            <rect key="frame" x="15" y="169" width="208" height="17"/>
+                                            <rect key="frame" x="15" y="173" width="208" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Mapping schemes" id="f1h-eF-u4e">
                                                 <font key="font" metaFont="systemBold"/>
@@ -1236,32 +1236,8 @@
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cg6-0b-TX2">
-                                            <rect key="frame" x="118" y="137" width="105" height="19"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="roundRect" title="Auto detect" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="3Wm-E4-5fD" id="jYb-IY-rx1">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="label" size="11"/>
-                                                <menu key="menu" id="ATx-on-KlS">
-                                                    <items>
-                                                        <menuItem title="Auto detect" state="on" id="3Wm-E4-5fD">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Standard" tag="1" id="WIv-Wz-sue">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Reversed" tag="1" id="rek-3Z-hxw">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="devRetainMouseKeyCombAction:" target="-2" id="PAN-Pe-5pO"/>
-                                            </connections>
-                                        </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1ek-cA-Oma">
-                                            <rect key="frame" x="15" y="113" width="93" height="16"/>
+                                            <rect key="frame" x="15" y="117" width="93" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Right Stick:" id="Aa9-T9-IFg">
                                                 <font key="font" metaFont="system"/>
@@ -1269,32 +1245,8 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y7F-lk-NQw">
-                                            <rect key="frame" x="118" y="110" width="105" height="19"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="roundRect" title="Auto detect" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="D2x-uo-k5N" id="2wD-g1-nPz">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="label" size="11"/>
-                                                <menu key="menu" id="fGD-Lm-146">
-                                                    <items>
-                                                        <menuItem title="Auto detect" state="on" id="D2x-uo-k5N">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Standard" tag="1" id="LWr-Hd-BH2">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Reversed" tag="1" id="VLc-wL-Ltt">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="devRetainMouseKeyCombAction:" target="-2" id="Wxa-SP-DJC"/>
-                                            </connections>
-                                        </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G3e-Ea-Xvj">
-                                            <rect key="frame" x="15" y="86" width="91" height="16"/>
+                                            <rect key="frame" x="15" y="90" width="91" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Hat switch:" id="3f7-fr-3yk">
                                                 <font key="font" metaFont="system"/>
@@ -1302,36 +1254,12 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eft-M1-pgc">
-                                            <rect key="frame" x="118" y="83" width="105" height="19"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="roundRect" title="Auto detect" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="Tfz-wz-gUk" id="oGo-Hs-6NU">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="label" size="11"/>
-                                                <menu key="menu" id="psF-5G-yew">
-                                                    <items>
-                                                        <menuItem title="Auto detect" state="on" id="Tfz-wz-gUk">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Standard" tag="1" id="m6O-nC-QNu">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Reversed" tag="1" id="FzP-37-Bxi">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="devRetainMouseKeyCombAction:" target="-2" id="yqV-ji-iAB"/>
-                                            </connections>
-                                        </popUpButton>
                                         <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="cQI-JB-0TO">
                                             <rect key="frame" x="293" y="76" width="5" height="335"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </box>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="atJ-M9-95c">
-                                            <rect key="frame" x="18" y="211" width="90" height="16"/>
+                                            <rect key="frame" x="18" y="213" width="90" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Location ID:" id="ahK-Ax-Avo">
                                                 <font key="font" metaFont="system"/>
@@ -1340,7 +1268,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ysT-wi-pkz">
-                                            <rect key="frame" x="116" y="211" width="169" height="16"/>
+                                            <rect key="frame" x="116" y="213" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="YPy-XK-bbf">
                                                 <font key="font" metaFont="system"/>
@@ -1349,7 +1277,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uaV-AU-6mY">
-                                            <rect key="frame" x="116" y="283" width="169" height="16"/>
+                                            <rect key="frame" x="116" y="285" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="REf-9Q-pSU">
                                                 <font key="font" metaFont="system"/>
@@ -1357,6 +1285,51 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qgf-dV-BzV">
+                                            <rect key="frame" x="118" y="140" width="150" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Auto detect" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="PuZ-1k-ea3" id="zCl-GY-jod">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" id="uck-KD-2Vi">
+                                                    <items>
+                                                        <menuItem title="Auto detect" state="on" id="PuZ-1k-ea3"/>
+                                                        <menuItem title="Standard" tag="1" id="AfN-u2-kUP"/>
+                                                        <menuItem title="Reversed" tag="2" id="b1w-76-Ghd"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                        </popUpButton>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0sa-cN-ImA">
+                                            <rect key="frame" x="118" y="111" width="150" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Auto detect" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ee6-YK-fTJ" id="Q46-Ka-huZ">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" id="7Ea-we-l9b">
+                                                    <items>
+                                                        <menuItem title="Auto detect" state="on" id="ee6-YK-fTJ"/>
+                                                        <menuItem title="Standard" tag="1" id="icV-cr-TYz"/>
+                                                        <menuItem title="Reversed" tag="2" id="2dY-yD-rmk"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                        </popUpButton>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cx8-Ww-EiR">
+                                            <rect key="frame" x="118" y="82" width="150" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Auto detect" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="MHg-f8-TJ6" id="nGl-Eu-Cwo">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" id="Ban-7g-8gH">
+                                                    <items>
+                                                        <menuItem title="Auto detect" state="on" id="MHg-f8-TJ6"/>
+                                                        <menuItem title="Scheme 1" tag="1" id="sv4-dI-KQh"/>
+                                                        <menuItem title="Scheme 2" tag="2" id="8bD-wh-ttJ"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                        </popUpButton>
                                     </subviews>
                                 </view>
                             </tabViewItem>
@@ -1564,7 +1537,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" id="Ulq-sF-edr">
-                                            <rect key="frame" x="531" y="5" width="59" height="32"/>
+                                            <rect key="frame" x="530" y="5" width="59" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="g8Q-rl-lxD">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

@@ -150,7 +150,7 @@ class PreferencesController: DialogController {
             switch id {
             case "General": refreshGeneralTab()
             case "Controls": refreshControlsTab()
-            case "Devices": break // refreshDevicesTab()
+            case "Devices": refreshDevicesTab()
             case "Captures": refreshCaptureTab()
             default: fatalError()
             }
@@ -189,6 +189,7 @@ class PreferencesController: DialogController {
                         
         pref.saveGeneralUserDefaults()
         pref.saveControlsUserDefaults()
+        pref.saveDevicesUserDefaults()
         pref.saveCaptureUserDefaults()
         
         hideSheet()
@@ -224,7 +225,7 @@ extension PreferencesController: NSTextFieldDelegate {
             case conAutofireBullets:
                 
                 if formatter?.number(from: view.stringValue) != nil {
-                    devAutofireBulletsAction(view)
+                    conAutofireBulletsAction(view)
                 }
                 
             default:

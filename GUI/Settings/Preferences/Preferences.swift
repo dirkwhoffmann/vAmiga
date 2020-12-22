@@ -303,6 +303,29 @@ class Preferences {
         defaults.set(releaseMouseWithKeys, forKey: Keys.Con.releaseMouseWithKeys)
         defaults.set(releaseMouseByShaking, forKey: Keys.Con.releaseMouseByShaking)
     }
+
+    //
+    // Devices
+    //
+    
+    func loadDevicesDefaults(_ defaults: DevicesDefaults) {
+        
+        // Mapping schemes
+    }
+    
+    func loadDevicesUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        // Mapping schemes
+    }
+    
+    func saveDevicesUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        // Mapping schemes
+    }
     
     //
     // Captures
