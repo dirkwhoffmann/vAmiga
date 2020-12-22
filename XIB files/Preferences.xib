@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -21,46 +21,46 @@
                 <outlet property="capScreenshotTargetPopup" destination="eSV-Ac-tae" id="Weq-Mr-SS4"/>
                 <outlet property="capSnapshotInterval" destination="ZIO-LY-Hg3" id="pnJ-Ye-hK9"/>
                 <outlet property="capSource" destination="p5F-Ib-hmf" id="tH3-9A-SQv"/>
-                <outlet property="devAutofire" destination="PrF-0m-yw8" id="gWu-tx-Agr"/>
-                <outlet property="devAutofireBullets" destination="gxL-Rd-MKK" id="T5W-qd-VSF"/>
-                <outlet property="devAutofireCease" destination="F3x-bV-Yda" id="Cds-tc-oKN"/>
-                <outlet property="devAutofireCeaseText" destination="Ck5-CA-acr" id="d77-c2-W9X"/>
-                <outlet property="devAutofireFrequency" destination="wxF-bh-WS4" id="geg-ar-O5p"/>
-                <outlet property="devDisconnectKeys" destination="PUO-FG-ksK" id="3us-QZ-ASN"/>
-                <outlet property="devDown1" destination="nHI-yh-DVC" id="1gA-kc-x3f"/>
-                <outlet property="devDown1button" destination="Vsm-ce-Vny" id="eLG-dQ-KUr"/>
-                <outlet property="devDown2" destination="Qbp-uq-9db" id="yVz-EP-guB"/>
-                <outlet property="devDown2button" destination="hXN-1f-18m" id="yQ4-Ci-hca"/>
-                <outlet property="devFire1" destination="xLK-kI-gLy" id="NCc-7n-b7W"/>
-                <outlet property="devFire1button" destination="CiA-Ih-QDo" id="Djf-Uf-Jwi"/>
-                <outlet property="devFire2" destination="6Om-vG-1oa" id="9cv-RH-h9a"/>
-                <outlet property="devFire2button" destination="djn-TO-cmE" id="oMr-sf-93b"/>
-                <outlet property="devJoy1KeysDelButton" destination="HiD-6D-klX" id="obh-w0-ZXe"/>
-                <outlet property="devJoy2KeysDelButton" destination="HXz-VN-lav" id="h9O-mM-MZD"/>
-                <outlet property="devLeft1" destination="uV2-JW-f79" id="AlV-3u-zeI"/>
-                <outlet property="devLeft1button" destination="5mS-Ar-Jsd" id="TGK-uv-Upv"/>
-                <outlet property="devLeft2" destination="miM-YL-Ani" id="73D-0j-3bZ"/>
-                <outlet property="devLeft2button" destination="F4n-ks-cTv" id="Ctx-q9-aY8"/>
-                <outlet property="devMouseKeysDelButton" destination="g51-Ax-Tce" id="OEi-dC-Fez"/>
-                <outlet property="devMouseLeft" destination="ahV-0K-IDB" id="vRk-1F-tCa"/>
-                <outlet property="devMouseLeftButton" destination="VUi-BM-ADA" id="DBj-2l-jLp"/>
-                <outlet property="devMouseRight" destination="2Qh-Sl-CZI" id="eKS-Nd-aGY"/>
-                <outlet property="devMouseRightButton" destination="0IS-nV-efg" id="DIj-Th-ago"/>
-                <outlet property="devReleaseMouseByShaking" destination="R6V-pd-pgY" id="esz-cv-U5T"/>
-                <outlet property="devReleaseMouseKeyComb" destination="rBJ-WC-hXZ" id="Kqq-hy-N6R"/>
-                <outlet property="devReleaseMouseWithKeys" destination="kUU-a1-09S" id="uLs-FL-XQL"/>
-                <outlet property="devRetainMouseByClick" destination="wL6-3f-P6C" id="3b9-6v-nK7"/>
-                <outlet property="devRetainMouseByEntering" destination="tX8-nx-t2o" id="5jr-jP-DVG"/>
-                <outlet property="devRetainMouseKeyComb" destination="9o8-Ys-AUX" id="h4m-wE-ZmR"/>
-                <outlet property="devRetainMouseWithKeys" destination="XoH-uI-mQ8" id="2qD-D0-XGr"/>
-                <outlet property="devRight1" destination="S5q-g5-DkO" id="jCZ-zD-v3I"/>
-                <outlet property="devRight1button" destination="ZQF-tn-Mk1" id="wzT-5K-nW9"/>
-                <outlet property="devRight2" destination="aaz-J2-EAm" id="zVN-4N-k5t"/>
-                <outlet property="devRight2button" destination="Tcd-X1-Yhr" id="1jL-6Y-ZbJ"/>
-                <outlet property="devUp1" destination="11q-iY-uTE" id="hbE-rE-ihJ"/>
-                <outlet property="devUp1button" destination="diW-dw-7Yh" id="dtJ-WE-6Yi"/>
-                <outlet property="devUp2" destination="sPP-Ll-WyN" id="Lzp-Nb-rec"/>
-                <outlet property="devUp2button" destination="wFF-Aw-MG2" id="LME-22-Ebz"/>
+                <outlet property="conAutofire" destination="PrF-0m-yw8" id="gWu-tx-Agr"/>
+                <outlet property="conAutofireBullets" destination="gxL-Rd-MKK" id="T5W-qd-VSF"/>
+                <outlet property="conAutofireCease" destination="F3x-bV-Yda" id="Cds-tc-oKN"/>
+                <outlet property="conAutofireCeaseText" destination="Ck5-CA-acr" id="d77-c2-W9X"/>
+                <outlet property="conAutofireFrequency" destination="wxF-bh-WS4" id="geg-ar-O5p"/>
+                <outlet property="conDisconnectKeys" destination="PUO-FG-ksK" id="3us-QZ-ASN"/>
+                <outlet property="conDown1" destination="nHI-yh-DVC" id="1gA-kc-x3f"/>
+                <outlet property="conDown1button" destination="Vsm-ce-Vny" id="eLG-dQ-KUr"/>
+                <outlet property="conDown2" destination="Qbp-uq-9db" id="yVz-EP-guB"/>
+                <outlet property="conDown2button" destination="hXN-1f-18m" id="yQ4-Ci-hca"/>
+                <outlet property="conFire1" destination="xLK-kI-gLy" id="NCc-7n-b7W"/>
+                <outlet property="conFire1button" destination="CiA-Ih-QDo" id="Djf-Uf-Jwi"/>
+                <outlet property="conFire2" destination="6Om-vG-1oa" id="9cv-RH-h9a"/>
+                <outlet property="conFire2button" destination="djn-TO-cmE" id="oMr-sf-93b"/>
+                <outlet property="conJoy1KeysDelButton" destination="HiD-6D-klX" id="obh-w0-ZXe"/>
+                <outlet property="conJoy2KeysDelButton" destination="HXz-VN-lav" id="h9O-mM-MZD"/>
+                <outlet property="conLeft1" destination="uV2-JW-f79" id="AlV-3u-zeI"/>
+                <outlet property="conLeft1button" destination="5mS-Ar-Jsd" id="TGK-uv-Upv"/>
+                <outlet property="conLeft2" destination="miM-YL-Ani" id="73D-0j-3bZ"/>
+                <outlet property="conLeft2button" destination="F4n-ks-cTv" id="Ctx-q9-aY8"/>
+                <outlet property="conMouseKeysDelButton" destination="g51-Ax-Tce" id="OEi-dC-Fez"/>
+                <outlet property="conMouseLeft" destination="ahV-0K-IDB" id="vRk-1F-tCa"/>
+                <outlet property="conMouseLeftButton" destination="VUi-BM-ADA" id="DBj-2l-jLp"/>
+                <outlet property="conMouseRight" destination="2Qh-Sl-CZI" id="eKS-Nd-aGY"/>
+                <outlet property="conMouseRightButton" destination="0IS-nV-efg" id="DIj-Th-ago"/>
+                <outlet property="conReleaseMouseByShaking" destination="R6V-pd-pgY" id="esz-cv-U5T"/>
+                <outlet property="conReleaseMouseKeyComb" destination="rBJ-WC-hXZ" id="Kqq-hy-N6R"/>
+                <outlet property="conReleaseMouseWithKeys" destination="kUU-a1-09S" id="uLs-FL-XQL"/>
+                <outlet property="conRetainMouseByClick" destination="wL6-3f-P6C" id="3b9-6v-nK7"/>
+                <outlet property="conRetainMouseByEntering" destination="tX8-nx-t2o" id="5jr-jP-DVG"/>
+                <outlet property="conRetainMouseKeyComb" destination="9o8-Ys-AUX" id="h4m-wE-ZmR"/>
+                <outlet property="conRetainMouseWithKeys" destination="XoH-uI-mQ8" id="2qD-D0-XGr"/>
+                <outlet property="conRight1" destination="S5q-g5-DkO" id="jCZ-zD-v3I"/>
+                <outlet property="conRight1button" destination="ZQF-tn-Mk1" id="wzT-5K-nW9"/>
+                <outlet property="conRight2" destination="aaz-J2-EAm" id="zVN-4N-k5t"/>
+                <outlet property="conRight2button" destination="Tcd-X1-Yhr" id="1jL-6Y-ZbJ"/>
+                <outlet property="conUp1" destination="11q-iY-uTE" id="hbE-rE-ihJ"/>
+                <outlet property="conUp1button" destination="diW-dw-7Yh" id="dtJ-WE-6Yi"/>
+                <outlet property="conUp2" destination="sPP-Ll-WyN" id="Lzp-Nb-rec"/>
+                <outlet property="conUp2button" destination="wFF-Aw-MG2" id="LME-22-Ebz"/>
                 <outlet property="genAspectRatioButton" destination="Imp-jh-I6A" id="nyM-aE-Zzn"/>
                 <outlet property="genBootCode" destination="15d-An-mmx" id="xkR-Hy-gaG"/>
                 <outlet property="genBootCodeVirus" destination="eB2-Y6-EqS" id="vUZ-SV-1fq"/>
@@ -86,7 +86,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="646" height="486"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="937"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="646" height="486"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -441,7 +441,7 @@
                                     </subviews>
                                 </view>
                             </tabViewItem>
-                            <tabViewItem label="Devices" identifier="Devices" id="djv-ir-ecd">
+                            <tabViewItem label="Controls" identifier="Controls" id="djv-ir-ecd">
                                 <view key="view" id="OuO-CD-Pa0">
                                     <rect key="frame" x="10" y="33" width="596" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1066,6 +1066,297 @@
                                                 <action selector="devPresetAction:" target="-2" id="Ay9-Gt-5fx"/>
                                             </connections>
                                         </popUpButton>
+                                    </subviews>
+                                </view>
+                            </tabViewItem>
+                            <tabViewItem label="Devices" identifier="Devices" id="nSb-jP-Pea">
+                                <view key="view" id="X8n-O5-u4G">
+                                    <rect key="frame" x="10" y="33" width="596" height="424"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <button verticalHuggingPriority="750" id="Wmt-KA-dLs">
+                                            <rect key="frame" x="527" y="10" width="59" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="fiW-x3-79i">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="okAction:" target="-2" id="rny-v1-c5A"/>
+                                            </connections>
+                                        </button>
+                                        <box verticalHuggingPriority="750" boxType="separator" id="vQF-Af-cYM">
+                                            <rect key="frame" x="17" y="55" width="557" height="5"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        </box>
+                                        <popUpButton id="aQA-bJ-P9F" userLabel="System">
+                                            <rect key="frame" x="14" y="13" width="128" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="peY-Oq-nfP" id="6J4-6V-T2c" userLabel="System">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="Restore" id="dV1-7v-hgP">
+                                                    <items>
+                                                        <menuItem title="Revert to..." hidden="YES" id="peY-Oq-nfP">
+                                                            <attributedString key="attributedTitle"/>
+                                                        </menuItem>
+                                                        <menuItem title="Standard Settings" id="yAh-UC-FR1">
+                                                            <attributedString key="attributedTitle"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="devPresetAction:" target="-2" id="hpF-Zp-mjs"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b4Q-RA-0Vo">
+                                            <rect key="frame" x="14" y="331" width="92" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Manufacturer:" id="dcM-LV-5eO">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NtP-SR-6p7">
+                                            <rect key="frame" x="15" y="307" width="92" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Product:" id="uRi-qC-pAM">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2L7-ke-nfD">
+                                            <rect key="frame" x="16" y="283" width="92" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Version:" id="fEj-J4-llM">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dQa-4R-7Rj">
+                                            <rect key="frame" x="15" y="259" width="93" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Vendor ID:" id="X1z-hH-Zd1">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zcL-0X-t1Q">
+                                            <rect key="frame" x="16" y="235" width="92" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Product ID:" id="Naf-pT-Z60">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rc7-zK-Xze">
+                                            <rect key="frame" x="15" y="140" width="92" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Left Stick:" id="BjR-dj-z7S">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v98-Sr-gLY">
+                                            <rect key="frame" x="14" y="355" width="93" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Transport:" id="9hi-vX-nKy">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l7I-bw-gcL">
+                                            <rect key="frame" x="116" y="355" width="169" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="cg3-Ea-Utr">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HTm-K8-Pet">
+                                            <rect key="frame" x="116" y="331" width="169" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="VUQ-2a-zue">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vzi-XU-xbz">
+                                            <rect key="frame" x="116" y="307" width="169" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="DiU-jv-dq9">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cI3-UU-fuc">
+                                            <rect key="frame" x="116" y="259" width="169" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="7Zb-Uq-RLK">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="06g-GF-iFf">
+                                            <rect key="frame" x="116" y="235" width="169" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="WGl-ij-Lz6">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c4l-b5-4MS">
+                                            <rect key="frame" x="15" y="382" width="208" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Device 1" id="GzQ-W0-h6Q">
+                                                <font key="font" metaFont="systemBold"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Db-TQ-ock">
+                                            <rect key="frame" x="15" y="169" width="208" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Mapping schemes" id="f1h-eF-u4e">
+                                                <font key="font" metaFont="systemBold"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cg6-0b-TX2">
+                                            <rect key="frame" x="118" y="137" width="105" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="roundRect" title="Auto detect" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="3Wm-E4-5fD" id="jYb-IY-rx1">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="label" size="11"/>
+                                                <menu key="menu" id="ATx-on-KlS">
+                                                    <items>
+                                                        <menuItem title="Auto detect" state="on" id="3Wm-E4-5fD">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Standard" tag="1" id="WIv-Wz-sue">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Reversed" tag="1" id="rek-3Z-hxw">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="devRetainMouseKeyCombAction:" target="-2" id="PAN-Pe-5pO"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1ek-cA-Oma">
+                                            <rect key="frame" x="15" y="113" width="93" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Right Stick:" id="Aa9-T9-IFg">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y7F-lk-NQw">
+                                            <rect key="frame" x="118" y="110" width="105" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="roundRect" title="Auto detect" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="D2x-uo-k5N" id="2wD-g1-nPz">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="label" size="11"/>
+                                                <menu key="menu" id="fGD-Lm-146">
+                                                    <items>
+                                                        <menuItem title="Auto detect" state="on" id="D2x-uo-k5N">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Standard" tag="1" id="LWr-Hd-BH2">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Reversed" tag="1" id="VLc-wL-Ltt">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="devRetainMouseKeyCombAction:" target="-2" id="Wxa-SP-DJC"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G3e-Ea-Xvj">
+                                            <rect key="frame" x="15" y="86" width="91" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Hat switch:" id="3f7-fr-3yk">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eft-M1-pgc">
+                                            <rect key="frame" x="118" y="83" width="105" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="roundRect" title="Auto detect" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="Tfz-wz-gUk" id="oGo-Hs-6NU">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="label" size="11"/>
+                                                <menu key="menu" id="psF-5G-yew">
+                                                    <items>
+                                                        <menuItem title="Auto detect" state="on" id="Tfz-wz-gUk">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Standard" tag="1" id="m6O-nC-QNu">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Reversed" tag="1" id="FzP-37-Bxi">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="devRetainMouseKeyCombAction:" target="-2" id="yqV-ji-iAB"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="cQI-JB-0TO">
+                                            <rect key="frame" x="293" y="76" width="5" height="335"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </box>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="atJ-M9-95c">
+                                            <rect key="frame" x="18" y="211" width="90" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Location ID:" id="ahK-Ax-Avo">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ysT-wi-pkz">
+                                            <rect key="frame" x="116" y="211" width="169" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="YPy-XK-bbf">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uaV-AU-6mY">
+                                            <rect key="frame" x="116" y="283" width="169" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="REf-9Q-pSU">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>

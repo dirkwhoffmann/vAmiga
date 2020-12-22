@@ -9,7 +9,7 @@
 
 extension PreferencesController {
     
-    func refreshDevicesTab() {
+    func refreshControlsTab() {
 
         let joystick1 = amiga.controlPort1.joystick!
         let joystick2 = amiga.controlPort2.joystick!
@@ -29,7 +29,7 @@ extension PreferencesController {
             }
 
             // Update text and button image
-            if button.tag == devRecordedKey {
+            if button.tag == conRecordedKey {
                 button.title = ""
                 button.image = NSImage(named: "key_red")
                 button.imageScaling = .scaleAxesIndependently
@@ -42,24 +42,24 @@ extension PreferencesController {
         }
 
         // Mouse button keyset
-        refreshKey(map: 0, dir: .PRESS_LEFT, button: devMouseLeftButton, txt: devMouseLeft)
-        refreshKey(map: 0, dir: .PRESS_RIGHT, button: devMouseRightButton, txt: devMouseRight)
+        refreshKey(map: 0, dir: .PRESS_LEFT, button: conMouseLeftButton, txt: conMouseLeft)
+        refreshKey(map: 0, dir: .PRESS_RIGHT, button: conMouseRightButton, txt: conMouseRight)
 
         // First joystick keyset
-        refreshKey(map: 1, dir: .PULL_UP, button: devUp1button, txt: devUp1)
-        refreshKey(map: 1, dir: .PULL_DOWN, button: devDown1button, txt: devDown1)
-        refreshKey(map: 1, dir: .PULL_LEFT, button: devLeft1button, txt: devLeft1)
-        refreshKey(map: 1, dir: .PULL_RIGHT, button: devRight1button, txt: devRight1)
-        refreshKey(map: 1, dir: .PRESS_FIRE, button: devFire1button, txt: devFire1)
+        refreshKey(map: 1, dir: .PULL_UP, button: conUp1button, txt: conUp1)
+        refreshKey(map: 1, dir: .PULL_DOWN, button: conDown1button, txt: conDown1)
+        refreshKey(map: 1, dir: .PULL_LEFT, button: conLeft1button, txt: conLeft1)
+        refreshKey(map: 1, dir: .PULL_RIGHT, button: conRight1button, txt: conRight1)
+        refreshKey(map: 1, dir: .PRESS_FIRE, button: conFire1button, txt: conFire1)
 
         // Second joystick keyset
-        refreshKey(map: 2, dir: .PULL_UP, button: devUp2button, txt: devUp2)
-        refreshKey(map: 2, dir: .PULL_DOWN, button: devDown2button, txt: devDown2)
-        refreshKey(map: 2, dir: .PULL_LEFT, button: devLeft2button, txt: devLeft2)
-        refreshKey(map: 2, dir: .PULL_RIGHT, button: devRight2button, txt: devRight2)
-        refreshKey(map: 2, dir: .PRESS_FIRE, button: devFire2button, txt: devFire2)
+        refreshKey(map: 2, dir: .PULL_UP, button: conUp2button, txt: conUp2)
+        refreshKey(map: 2, dir: .PULL_DOWN, button: conDown2button, txt: conDown2)
+        refreshKey(map: 2, dir: .PULL_LEFT, button: conLeft2button, txt: conLeft2)
+        refreshKey(map: 2, dir: .PULL_RIGHT, button: conRight2button, txt: conRight2)
+        refreshKey(map: 2, dir: .PRESS_FIRE, button: conFire2button, txt: conFire2)
 
-        devDisconnectKeys.state = pref.disconnectJoyKeys ? .on : .off
+        conDisconnectKeys.state = pref.disconnectJoyKeys ? .on : .off
 
         // Joystick buttons
         assert(pref.autofire == joystick2.autofire)
@@ -68,25 +68,25 @@ extension PreferencesController {
         assert(joystick1.autofire == joystick2.autofire)
         assert(joystick1.autofireBullets == joystick2.autofireBullets)
         assert(joystick1.autofireFrequency == joystick2.autofireFrequency)
-        devAutofire.state = pref.autofire ? .on : .off
-        devAutofireCease.state = pref.autofireBullets > 0 ? .on : .off
-        devAutofireBullets.integerValue = Int(pref.autofireBullets.magnitude)
-        devAutofireFrequency.floatValue = pref.autofireFrequency
-        devAutofireCease.isEnabled = devAutofire.state == .on
-        devAutofireCeaseText.textColor = devAutofire.state == .on ? .controlTextColor : .disabledControlTextColor
-        devAutofireBullets.isEnabled = devAutofire.state == .on
-        devAutofireFrequency.isEnabled = devAutofire.state == .on
+        conAutofire.state = pref.autofire ? .on : .off
+        conAutofireCease.state = pref.autofireBullets > 0 ? .on : .off
+        conAutofireBullets.integerValue = Int(pref.autofireBullets.magnitude)
+        conAutofireFrequency.floatValue = pref.autofireFrequency
+        conAutofireCease.isEnabled = conAutofire.state == .on
+        conAutofireCeaseText.textColor = conAutofire.state == .on ? .controlTextColor : .disabledControlTextColor
+        conAutofireBullets.isEnabled = conAutofire.state == .on
+        conAutofireFrequency.isEnabled = conAutofire.state == .on
         
         // Mouse
-        devRetainMouseKeyComb.selectItem(withTag: pref.retainMouseKeyComb)
-        devRetainMouseKeyComb.isEnabled = pref.retainMouseWithKeys
-        devRetainMouseWithKeys.state = pref.retainMouseWithKeys ? .on : .off
-        devRetainMouseByClick.state = pref.retainMouseByClick ? .on : .off
-        devRetainMouseByEntering.state = pref.retainMouseByEntering ? .on : .off
-        devReleaseMouseKeyComb.selectItem(withTag: pref.releaseMouseKeyComb)
-        devReleaseMouseKeyComb.isEnabled = pref.releaseMouseWithKeys
-        devReleaseMouseWithKeys.state = pref.releaseMouseWithKeys ? .on : .off
-        devReleaseMouseByShaking.state = pref.releaseMouseByShaking ? .on : .off
+        conRetainMouseKeyComb.selectItem(withTag: pref.retainMouseKeyComb)
+        conRetainMouseKeyComb.isEnabled = pref.retainMouseWithKeys
+        conRetainMouseWithKeys.state = pref.retainMouseWithKeys ? .on : .off
+        conRetainMouseByClick.state = pref.retainMouseByClick ? .on : .off
+        conRetainMouseByEntering.state = pref.retainMouseByEntering ? .on : .off
+        conReleaseMouseKeyComb.selectItem(withTag: pref.releaseMouseKeyComb)
+        conReleaseMouseKeyComb.isEnabled = pref.releaseMouseWithKeys
+        conReleaseMouseWithKeys.state = pref.releaseMouseWithKeys ? .on : .off
+        conReleaseMouseByShaking.state = pref.releaseMouseByShaking ? .on : .off
     }
 
     // Translates a button tag back to the related slot and gamepad action
@@ -110,17 +110,17 @@ extension PreferencesController {
     func devKeyDown(with macKey: MacKey) -> Bool {
 
         // Only proceed if a recording sessing is in progress
-        if devRecordedKey == nil { return false }
+        if conRecordedKey == nil { return false }
         
         track()
         
         // Record the key if it is not the ESC key
         if macKey != MacKey.escape {
-            let (slot, action) = gamePadAction(for: devRecordedKey!)
+            let (slot, action) = gamePadAction(for: conRecordedKey!)
             gamePadManager.gamePads[slot]?.bind(key: macKey, action: action)
         }
 
-        devRecordedKey = nil
+        conRecordedKey = nil
         refresh()
         return true
     }
@@ -131,7 +131,7 @@ extension PreferencesController {
     
     @IBAction func devRecordKeyAction(_ sender: NSButton!) {
 
-        devRecordedKey = sender.tag
+        conRecordedKey = sender.tag
         refresh()
     }
     
@@ -221,8 +221,8 @@ extension PreferencesController {
         track()
         assert(sender.selectedTag() == 0)
         
-        UserDefaults.resetDevicesUserDefaults()
-        pref.loadDevicesUserDefaults()
+        UserDefaults.resetControlsUserDefaults()
+        pref.loadControlsUserDefaults()
         refresh()
     }
 }

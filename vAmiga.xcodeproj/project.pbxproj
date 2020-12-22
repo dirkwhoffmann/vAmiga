@@ -125,7 +125,7 @@
 		508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */; };
 		508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03F21EA22CC0043D0E9 /* RomDropView.swift */; };
 		508FE05321EA22CC0043D0E9 /* VideoPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */; };
-		508FE05421EA22CC0043D0E9 /* DevicesPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04121EA22CC0043D0E9 /* DevicesPrefs.swift */; };
+		508FE05421EA22CC0043D0E9 /* ControlsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04121EA22CC0043D0E9 /* ControlsPrefs.swift */; };
 		508FE05521EA22CC0043D0E9 /* PreferencesWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */; };
 		508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04321EA22CC0043D0E9 /* PreferencesController.swift */; };
 		508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */; };
@@ -415,7 +415,7 @@
 		508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HardwarePrefs.swift; sourceTree = "<group>"; };
 		508FE03F21EA22CC0043D0E9 /* RomDropView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RomDropView.swift; sourceTree = "<group>"; };
 		508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPrefs.swift; sourceTree = "<group>"; };
-		508FE04121EA22CC0043D0E9 /* DevicesPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevicesPrefs.swift; sourceTree = "<group>"; };
+		508FE04121EA22CC0043D0E9 /* ControlsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlsPrefs.swift; sourceTree = "<group>"; };
 		508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindow.swift; sourceTree = "<group>"; };
 		508FE04321EA22CC0043D0E9 /* PreferencesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesController.swift; sourceTree = "<group>"; };
 		508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualKeyboardController.swift; sourceTree = "<group>"; };
@@ -954,7 +954,7 @@
 				508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */,
 				508FE04321EA22CC0043D0E9 /* PreferencesController.swift */,
 				508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */,
-				508FE04121EA22CC0043D0E9 /* DevicesPrefs.swift */,
+				508FE04121EA22CC0043D0E9 /* ControlsPrefs.swift */,
 				50912FF62525A1190049805B /* CapturePrefs.swift */,
 			);
 			path = Preferences;
@@ -1553,7 +1553,7 @@
 				50AEBEDE24D3D8700037082D /* AgnusEvents.cpp in Sources */,
 				50FAC77525160BBF00E47421 /* DiskFile.cpp in Sources */,
 				508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */,
-				508FE05421EA22CC0043D0E9 /* DevicesPrefs.swift in Sources */,
+				508FE05421EA22CC0043D0E9 /* ControlsPrefs.swift in Sources */,
 				50F924FD2428B8CD00DD91AB /* DDF.cpp in Sources */,
 				50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */,
 				50AEBEDC24D3D8170037082D /* UARTEvents.cpp in Sources */,

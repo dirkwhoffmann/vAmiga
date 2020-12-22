@@ -43,60 +43,60 @@ class PreferencesController: DialogController {
     @IBOutlet weak var genCloseWithoutAskingButton: NSButton!
 
     //
-    // Devices preferences
+    // Controls preferences
     //
 
     // Tag of the button that is currently being recorded
-    var devRecordedKey: Int?
+    var conRecordedKey: Int?
 
     // Joystick emulation keys
-    @IBOutlet weak var devLeft1: NSTextField!
-    @IBOutlet weak var devLeft1button: NSButton!
-    @IBOutlet weak var devRight1: NSTextField!
-    @IBOutlet weak var devRight1button: NSButton!
-    @IBOutlet weak var devUp1: NSTextField!
-    @IBOutlet weak var devUp1button: NSButton!
-    @IBOutlet weak var devDown1: NSTextField!
-    @IBOutlet weak var devDown1button: NSButton!
-    @IBOutlet weak var devFire1: NSTextField!
-    @IBOutlet weak var devFire1button: NSButton!
-    @IBOutlet weak var devLeft2: NSTextField!
-    @IBOutlet weak var devLeft2button: NSButton!
-    @IBOutlet weak var devRight2: NSTextField!
-    @IBOutlet weak var devRight2button: NSButton!
-    @IBOutlet weak var devUp2: NSTextField!
-    @IBOutlet weak var devUp2button: NSButton!
-    @IBOutlet weak var devDown2: NSTextField!
-    @IBOutlet weak var devDown2button: NSButton!
-    @IBOutlet weak var devFire2: NSTextField!
-    @IBOutlet weak var devFire2button: NSButton!
+    @IBOutlet weak var conLeft1: NSTextField!
+    @IBOutlet weak var conLeft1button: NSButton!
+    @IBOutlet weak var conRight1: NSTextField!
+    @IBOutlet weak var conRight1button: NSButton!
+    @IBOutlet weak var conUp1: NSTextField!
+    @IBOutlet weak var conUp1button: NSButton!
+    @IBOutlet weak var conDown1: NSTextField!
+    @IBOutlet weak var conDown1button: NSButton!
+    @IBOutlet weak var conFire1: NSTextField!
+    @IBOutlet weak var conFire1button: NSButton!
+    @IBOutlet weak var conLeft2: NSTextField!
+    @IBOutlet weak var conLeft2button: NSButton!
+    @IBOutlet weak var conRight2: NSTextField!
+    @IBOutlet weak var conRight2button: NSButton!
+    @IBOutlet weak var conUp2: NSTextField!
+    @IBOutlet weak var conUp2button: NSButton!
+    @IBOutlet weak var conDown2: NSTextField!
+    @IBOutlet weak var conDown2button: NSButton!
+    @IBOutlet weak var conFire2: NSTextField!
+    @IBOutlet weak var conFire2button: NSButton!
 
     // Mouse emulation keys
-    @IBOutlet weak var devMouseLeft: NSTextField!
-    @IBOutlet weak var devMouseLeftButton: NSButton!
-    @IBOutlet weak var devMouseRight: NSTextField!
-    @IBOutlet weak var devMouseRightButton: NSButton!
-    @IBOutlet weak var devDisconnectKeys: NSButton!
+    @IBOutlet weak var conMouseLeft: NSTextField!
+    @IBOutlet weak var conMouseLeftButton: NSButton!
+    @IBOutlet weak var conMouseRight: NSTextField!
+    @IBOutlet weak var conMouseRightButton: NSButton!
+    @IBOutlet weak var conDisconnectKeys: NSButton!
 
-    @IBOutlet weak var devJoy1KeysDelButton: NSButton!
-    @IBOutlet weak var devJoy2KeysDelButton: NSButton!
-    @IBOutlet weak var devMouseKeysDelButton: NSButton!
+    @IBOutlet weak var conJoy1KeysDelButton: NSButton!
+    @IBOutlet weak var conJoy2KeysDelButton: NSButton!
+    @IBOutlet weak var conMouseKeysDelButton: NSButton!
 
     // Mouse control
-    @IBOutlet weak var devRetainMouseKeyComb: NSPopUpButton!
-    @IBOutlet weak var devRetainMouseWithKeys: NSButton!
-    @IBOutlet weak var devRetainMouseByClick: NSButton!
-    @IBOutlet weak var devRetainMouseByEntering: NSButton!
-    @IBOutlet weak var devReleaseMouseKeyComb: NSPopUpButton!
-    @IBOutlet weak var devReleaseMouseWithKeys: NSButton!
-    @IBOutlet weak var devReleaseMouseByShaking: NSButton!
+    @IBOutlet weak var conRetainMouseKeyComb: NSPopUpButton!
+    @IBOutlet weak var conRetainMouseWithKeys: NSButton!
+    @IBOutlet weak var conRetainMouseByClick: NSButton!
+    @IBOutlet weak var conRetainMouseByEntering: NSButton!
+    @IBOutlet weak var conReleaseMouseKeyComb: NSPopUpButton!
+    @IBOutlet weak var conReleaseMouseWithKeys: NSButton!
+    @IBOutlet weak var conReleaseMouseByShaking: NSButton!
 
     // Joystick buttons
-    @IBOutlet weak var devAutofire: NSButton!
-    @IBOutlet weak var devAutofireCease: NSButton!
-    @IBOutlet weak var devAutofireCeaseText: NSTextField!
-    @IBOutlet weak var devAutofireBullets: NSTextField!
-    @IBOutlet weak var devAutofireFrequency: NSSlider!
+    @IBOutlet weak var conAutofire: NSButton!
+    @IBOutlet weak var conAutofireCease: NSButton!
+    @IBOutlet weak var conAutofireCeaseText: NSTextField!
+    @IBOutlet weak var conAutofireBullets: NSTextField!
+    @IBOutlet weak var conAutofireFrequency: NSSlider!
     
     //
     // Capture preferences
@@ -149,7 +149,8 @@ class PreferencesController: DialogController {
             
             switch id {
             case "General": refreshGeneralTab()
-            case "Devices": refreshDevicesTab()
+            case "Controls": refreshControlsTab()
+            case "Devices": break // refreshDevicesTab()
             case "Captures": refreshCaptureTab()
             default: fatalError()
             }
@@ -162,8 +163,9 @@ class PreferencesController: DialogController {
         
         switch id {
         case "General": tabView.selectTabViewItem(at: 0)
-        case "Devices": tabView.selectTabViewItem(at: 1)
-        case "Captures": tabView.selectTabViewItem(at: 2)
+        case "Controls": tabView.selectTabViewItem(at: 1)
+        case "Devices": tabView.selectTabViewItem(at: 2)
+        case "Captures": tabView.selectTabViewItem(at: 3)
         default: fatalError()
         }
     }
@@ -176,7 +178,7 @@ class PreferencesController: DialogController {
         if let id = tabView.selectedTabViewItem?.identifier as? String {
             
             switch id {
-            case "Devices": return devKeyDown(with: key)
+            case "Controls": return devKeyDown(with: key)
             default: break
             }
         }
@@ -186,7 +188,7 @@ class PreferencesController: DialogController {
     @IBAction override func okAction(_ sender: Any!) {
                         
         pref.saveGeneralUserDefaults()
-        pref.saveDevicesUserDefaults()
+        pref.saveControlsUserDefaults()
         pref.saveCaptureUserDefaults()
         
         hideSheet()
@@ -219,7 +221,7 @@ extension PreferencesController: NSTextFieldDelegate {
                     capSnapshotIntervalAction(view)
                 }
                 
-            case devAutofireBullets:
+            case conAutofireBullets:
                 
                 if formatter?.number(from: view.stringValue) != nil {
                     devAutofireBulletsAction(view)

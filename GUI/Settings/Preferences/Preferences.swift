@@ -57,17 +57,17 @@ class Preferences {
     var pauseInBackground = GeneralDefaults.std.pauseInBackground
 
     //
-    // Devices
+    // Controls
     //
     
     // Emulation keys
-    var keyMaps = [ DevicesDefaults.std.mouseKeyMap,
-                    DevicesDefaults.std.joyKeyMap1,
-                    DevicesDefaults.std.joyKeyMap2 ]
+    var keyMaps = [ ControlsDefaults.std.mouseKeyMap,
+                    ControlsDefaults.std.joyKeyMap1,
+                    ControlsDefaults.std.joyKeyMap2 ]
     
     // Joystick
-    var disconnectJoyKeys = DevicesDefaults.std.disconnectJoyKeys
-    var autofire = DevicesDefaults.std.autofire {
+    var disconnectJoyKeys = ControlsDefaults.std.disconnectJoyKeys
+    var autofire = ControlsDefaults.std.autofire {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.controlPort1.joystick.autofire = autofire
@@ -75,7 +75,7 @@ class Preferences {
             }
         }
     }
-    var autofireBullets = DevicesDefaults.std.autofireBullets {
+    var autofireBullets = ControlsDefaults.std.autofireBullets {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.controlPort1.joystick.autofireBullets = autofireBullets
@@ -83,7 +83,7 @@ class Preferences {
             }
         }
     }
-    var autofireFrequency = DevicesDefaults.std.autofireFrequency {
+    var autofireFrequency = ControlsDefaults.std.autofireFrequency {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.controlPort1.joystick.autofireFrequency = autofireFrequency
@@ -93,13 +93,13 @@ class Preferences {
     }
     
     // Mouse
-    var retainMouseKeyComb = DevicesDefaults.std.retainMouseKeyComb
-    var retainMouseWithKeys = DevicesDefaults.std.retainMouseWithKeys
-    var retainMouseByClick = DevicesDefaults.std.retainMouseByClick
-    var retainMouseByEntering = DevicesDefaults.std.retainMouseByEntering
-    var releaseMouseKeyComb = DevicesDefaults.std.retainMouseKeyComb
-    var releaseMouseWithKeys = DevicesDefaults.std.releaseMouseWithKeys
-    var releaseMouseByShaking = DevicesDefaults.std.releaseMouseByShaking
+    var retainMouseKeyComb = ControlsDefaults.std.retainMouseKeyComb
+    var retainMouseWithKeys = ControlsDefaults.std.retainMouseWithKeys
+    var retainMouseByClick = ControlsDefaults.std.retainMouseByClick
+    var retainMouseByEntering = ControlsDefaults.std.retainMouseByEntering
+    var releaseMouseKeyComb = ControlsDefaults.std.retainMouseKeyComb
+    var releaseMouseWithKeys = ControlsDefaults.std.releaseMouseWithKeys
+    var releaseMouseByShaking = ControlsDefaults.std.releaseMouseByShaking
      
     //
     // Captures
@@ -228,10 +228,10 @@ class Preferences {
     }
     
     //
-    // Devices
+    // Controls
     //
     
-    func loadDevicesDefaults(_ defaults: DevicesDefaults) {
+    func loadControlsDefaults(_ defaults: ControlsDefaults) {
         
         // Emulation keys
         keyMaps[0] = defaults.mouseKeyMap
@@ -254,54 +254,54 @@ class Preferences {
         releaseMouseByShaking = defaults.releaseMouseByShaking
     }
     
-    func loadDevicesUserDefaults() {
+    func loadControlsUserDefaults() {
         
         let defaults = UserDefaults.standard
         
         // Emulation keys
-        defaults.decode(&keyMaps[0], forKey: Keys.Dev.mouseKeyMap)
-        defaults.decode(&keyMaps[1], forKey: Keys.Dev.joyKeyMap1)
-        defaults.decode(&keyMaps[2], forKey: Keys.Dev.joyKeyMap2)
-        disconnectJoyKeys = defaults.bool(forKey: Keys.Dev.disconnectJoyKeys)
+        defaults.decode(&keyMaps[0], forKey: Keys.Con.mouseKeyMap)
+        defaults.decode(&keyMaps[1], forKey: Keys.Con.joyKeyMap1)
+        defaults.decode(&keyMaps[2], forKey: Keys.Con.joyKeyMap2)
+        disconnectJoyKeys = defaults.bool(forKey: Keys.Con.disconnectJoyKeys)
         
         // Joysticks
-        autofire = defaults.bool(forKey: Keys.Dev.autofire)
-        autofireBullets = defaults.integer(forKey: Keys.Dev.autofireBullets)
-        autofireFrequency = defaults.float(forKey: Keys.Dev.autofireFrequency)
+        autofire = defaults.bool(forKey: Keys.Con.autofire)
+        autofireBullets = defaults.integer(forKey: Keys.Con.autofireBullets)
+        autofireFrequency = defaults.float(forKey: Keys.Con.autofireFrequency)
         
         // Mouse
-        retainMouseKeyComb = defaults.integer(forKey: Keys.Dev.retainMouseKeyComb)
-        retainMouseWithKeys = defaults.bool(forKey: Keys.Dev.retainMouseWithKeys)
-        retainMouseByClick = defaults.bool(forKey: Keys.Dev.retainMouseByClick)
-        retainMouseByEntering = defaults.bool(forKey: Keys.Dev.retainMouseByEntering)
-        releaseMouseKeyComb = defaults.integer(forKey: Keys.Dev.releaseMouseKeyComb)
-        releaseMouseWithKeys = defaults.bool(forKey: Keys.Dev.releaseMouseWithKeys)
-        releaseMouseByShaking = defaults.bool(forKey: Keys.Dev.releaseMouseByShaking)
+        retainMouseKeyComb = defaults.integer(forKey: Keys.Con.retainMouseKeyComb)
+        retainMouseWithKeys = defaults.bool(forKey: Keys.Con.retainMouseWithKeys)
+        retainMouseByClick = defaults.bool(forKey: Keys.Con.retainMouseByClick)
+        retainMouseByEntering = defaults.bool(forKey: Keys.Con.retainMouseByEntering)
+        releaseMouseKeyComb = defaults.integer(forKey: Keys.Con.releaseMouseKeyComb)
+        releaseMouseWithKeys = defaults.bool(forKey: Keys.Con.releaseMouseWithKeys)
+        releaseMouseByShaking = defaults.bool(forKey: Keys.Con.releaseMouseByShaking)
     }
     
-    func saveDevicesUserDefaults() {
+    func saveControlsUserDefaults() {
         
         let defaults = UserDefaults.standard
         
         // Emulation keys
-        defaults.encode(keyMaps[0], forKey: Keys.Dev.mouseKeyMap)
-        defaults.encode(keyMaps[1], forKey: Keys.Dev.joyKeyMap1)
-        defaults.encode(keyMaps[2], forKey: Keys.Dev.joyKeyMap2)
-        defaults.set(disconnectJoyKeys, forKey: Keys.Dev.disconnectJoyKeys)
+        defaults.encode(keyMaps[0], forKey: Keys.Con.mouseKeyMap)
+        defaults.encode(keyMaps[1], forKey: Keys.Con.joyKeyMap1)
+        defaults.encode(keyMaps[2], forKey: Keys.Con.joyKeyMap2)
+        defaults.set(disconnectJoyKeys, forKey: Keys.Con.disconnectJoyKeys)
         
         // Joysticks
-        defaults.set(autofire, forKey: Keys.Dev.autofire)
-        defaults.set(autofireBullets, forKey: Keys.Dev.autofireBullets)
-        defaults.set(autofireFrequency, forKey: Keys.Dev.autofireFrequency)
+        defaults.set(autofire, forKey: Keys.Con.autofire)
+        defaults.set(autofireBullets, forKey: Keys.Con.autofireBullets)
+        defaults.set(autofireFrequency, forKey: Keys.Con.autofireFrequency)
         
         // Mouse
-        defaults.set(retainMouseKeyComb, forKey: Keys.Dev.retainMouseKeyComb)
-        defaults.set(retainMouseWithKeys, forKey: Keys.Dev.retainMouseWithKeys)
-        defaults.set(retainMouseByClick, forKey: Keys.Dev.retainMouseByClick)
-        defaults.set(retainMouseByEntering, forKey: Keys.Dev.retainMouseByEntering)
-        defaults.set(releaseMouseKeyComb, forKey: Keys.Dev.releaseMouseKeyComb)
-        defaults.set(releaseMouseWithKeys, forKey: Keys.Dev.releaseMouseWithKeys)
-        defaults.set(releaseMouseByShaking, forKey: Keys.Dev.releaseMouseByShaking)
+        defaults.set(retainMouseKeyComb, forKey: Keys.Con.retainMouseKeyComb)
+        defaults.set(retainMouseWithKeys, forKey: Keys.Con.retainMouseWithKeys)
+        defaults.set(retainMouseByClick, forKey: Keys.Con.retainMouseByClick)
+        defaults.set(retainMouseByEntering, forKey: Keys.Con.retainMouseByEntering)
+        defaults.set(releaseMouseKeyComb, forKey: Keys.Con.releaseMouseKeyComb)
+        defaults.set(releaseMouseWithKeys, forKey: Keys.Con.releaseMouseWithKeys)
+        defaults.set(releaseMouseByShaking, forKey: Keys.Con.releaseMouseByShaking)
     }
     
     //

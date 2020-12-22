@@ -57,7 +57,7 @@ extension UserDefaults {
         track()
         
         registerGeneralUserDefaults()
-        registerDevicesUserDefaults()
+        registerControlsUserDefaults()
         registerCaptureUserDefaults()
         
         registerRomUserDefaults()
@@ -78,7 +78,7 @@ extension MyController {
         amiga.suspend()
         
         pref.loadGeneralUserDefaults()
-        pref.loadDevicesUserDefaults()
+        pref.loadControlsUserDefaults()
         pref.loadCaptureUserDefaults()
 
         config.loadRomUserDefaults()
@@ -259,36 +259,36 @@ extension UserDefaults {
 }
 
 //
-// User defaults (Devices)
+// User defaults (Controls)
 //
 
 extension Keys {
     
-    struct Dev {
+    struct Con {
         
         // Emulation keys
-        static let joyKeyMap1            = "VAMIGA_DEV_JoyKeyMap1"
-        static let joyKeyMap2            = "VAMIGA_DEV_JoyKeyMap2"
-        static let mouseKeyMap           = "VAMIGA_DEV_MouseKeyMap"
-        static let disconnectJoyKeys     = "VAMIGA_DEV_DisconnectKeys"
+        static let joyKeyMap1            = "VAMIGA_CON_JoyKeyMap1"
+        static let joyKeyMap2            = "VAMIGA_CON_JoyKeyMap2"
+        static let mouseKeyMap           = "VAMIGA_CON_MouseKeyMap"
+        static let disconnectJoyKeys     = "VAMIGA_CON_DisconnectKeys"
         
         // Joysticks
-        static let autofire              = "VAMIGA_DEV_Autofire"
-        static let autofireBullets       = "VAMIGA_DEV_AutofireBullets"
-        static let autofireFrequency     = "VAMIGA_DEV_AutofireFrequency"
+        static let autofire              = "VAMIGA_CON_Autofire"
+        static let autofireBullets       = "VAMIGA_CON_AutofireBullets"
+        static let autofireFrequency     = "VAMIGA_CON_AutofireFrequency"
         
         // Mouse
-        static let retainMouseKeyComb    = "VAMIGA_DEV_RetainMouseKeyComb"
-        static let retainMouseWithKeys   = "VAMIGA_DEV_RetainMouseWithKeys"
-        static let retainMouseByClick    = "VAMIGA_DEV_RetainMouseByClick"
-        static let retainMouseByEntering = "VAMIGA_DEV_RetainMouseByEntering"
-        static let releaseMouseKeyComb   = "VAMIGA_DEV_ReleaseMouseKeyComb"
-        static let releaseMouseWithKeys  = "VAMIGA_DEV_ReleaseMouseWithKeys"
-        static let releaseMouseByShaking = "VAMIGA_DEV_ReleaseMouseByShaking"
+        static let retainMouseKeyComb    = "VAMIGA_CON_RetainMouseKeyComb"
+        static let retainMouseWithKeys   = "VAMIGA_CON_RetainMouseWithKeys"
+        static let retainMouseByClick    = "VAMIGA_CON_RetainMouseByClick"
+        static let retainMouseByEntering = "VAMIGA_CON_RetainMouseByEntering"
+        static let releaseMouseKeyComb   = "VAMIGA_CON_ReleaseMouseKeyComb"
+        static let releaseMouseWithKeys  = "VAMIGA_CON_ReleaseMouseWithKeys"
+        static let releaseMouseByShaking = "VAMIGA_CON_ReleaseMouseByShaking"
     }
 }
 
-struct DevicesDefaults {
+struct ControlsDefaults {
     
     // Emulation keys
     let joyKeyMap1: [MacKey: Int]
@@ -331,7 +331,7 @@ struct DevicesDefaults {
         MacKey.init(keyCode: kVK_ANSI_C): GamePadAction.PRESS_FIRE.rawValue
     ]
     
-    static let std = DevicesDefaults.init(
+    static let std = ControlsDefaults.init(
         
         joyKeyMap1: stdKeyMap1,
         joyKeyMap2: stdKeyMap2,
@@ -354,56 +354,56 @@ struct DevicesDefaults {
 
 extension UserDefaults {
     
-    static func registerDevicesUserDefaults() {
+    static func registerControlsUserDefaults() {
         
-        let defaults = DevicesDefaults.std
+        let defaults = ControlsDefaults.std
         let dictionary: [String: Any] = [
 
             // Emulation keys
-            Keys.Dev.disconnectJoyKeys: defaults.disconnectJoyKeys,
+            Keys.Con.disconnectJoyKeys: defaults.disconnectJoyKeys,
 
             // Joysticks
-            Keys.Dev.autofire: defaults.autofire,
-            Keys.Dev.autofireBullets: defaults.autofireBullets,
-            Keys.Dev.autofireFrequency: defaults.autofireFrequency,
+            Keys.Con.autofire: defaults.autofire,
+            Keys.Con.autofireBullets: defaults.autofireBullets,
+            Keys.Con.autofireFrequency: defaults.autofireFrequency,
             
             // Mouse
-            Keys.Dev.retainMouseKeyComb: defaults.retainMouseKeyComb,
-            Keys.Dev.retainMouseWithKeys: defaults.retainMouseWithKeys,
-            Keys.Dev.retainMouseByClick: defaults.retainMouseByClick,
-            Keys.Dev.retainMouseByEntering: defaults.retainMouseByEntering,
-            Keys.Dev.releaseMouseKeyComb: defaults.releaseMouseKeyComb,
-            Keys.Dev.releaseMouseWithKeys: defaults.releaseMouseWithKeys,
-            Keys.Dev.releaseMouseByShaking: defaults.releaseMouseByShaking
+            Keys.Con.retainMouseKeyComb: defaults.retainMouseKeyComb,
+            Keys.Con.retainMouseWithKeys: defaults.retainMouseWithKeys,
+            Keys.Con.retainMouseByClick: defaults.retainMouseByClick,
+            Keys.Con.retainMouseByEntering: defaults.retainMouseByEntering,
+            Keys.Con.releaseMouseKeyComb: defaults.releaseMouseKeyComb,
+            Keys.Con.releaseMouseWithKeys: defaults.releaseMouseWithKeys,
+            Keys.Con.releaseMouseByShaking: defaults.releaseMouseByShaking
         ]
         
         let userDefaults = UserDefaults.standard
         userDefaults.register(defaults: dictionary)
-        userDefaults.register(encodableItem: defaults.joyKeyMap1, forKey: Keys.Dev.joyKeyMap1)
-        userDefaults.register(encodableItem: defaults.joyKeyMap2, forKey: Keys.Dev.joyKeyMap2)
-        userDefaults.register(encodableItem: defaults.mouseKeyMap, forKey: Keys.Dev.mouseKeyMap)
+        userDefaults.register(encodableItem: defaults.joyKeyMap1, forKey: Keys.Con.joyKeyMap1)
+        userDefaults.register(encodableItem: defaults.joyKeyMap2, forKey: Keys.Con.joyKeyMap2)
+        userDefaults.register(encodableItem: defaults.mouseKeyMap, forKey: Keys.Con.mouseKeyMap)
     }
     
-    static func resetDevicesUserDefaults() {
+    static func resetControlsUserDefaults() {
         
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.Dev.joyKeyMap1,
-                     Keys.Dev.joyKeyMap2,
-                     Keys.Dev.mouseKeyMap,
-                     Keys.Dev.disconnectJoyKeys,
+        let keys = [ Keys.Con.joyKeyMap1,
+                     Keys.Con.joyKeyMap2,
+                     Keys.Con.mouseKeyMap,
+                     Keys.Con.disconnectJoyKeys,
                      
-                     Keys.Dev.autofire,
-                     Keys.Dev.autofireBullets,
-                     Keys.Dev.autofireFrequency,
+                     Keys.Con.autofire,
+                     Keys.Con.autofireBullets,
+                     Keys.Con.autofireFrequency,
                      
-                     Keys.Dev.retainMouseKeyComb,
-                     Keys.Dev.retainMouseWithKeys,
-                     Keys.Dev.retainMouseByClick,
-                     Keys.Dev.retainMouseByEntering,
-                     Keys.Dev.releaseMouseKeyComb,
-                     Keys.Dev.releaseMouseWithKeys,
-                     Keys.Dev.releaseMouseByShaking ]
+                     Keys.Con.retainMouseKeyComb,
+                     Keys.Con.retainMouseWithKeys,
+                     Keys.Con.retainMouseByClick,
+                     Keys.Con.retainMouseByEntering,
+                     Keys.Con.releaseMouseKeyComb,
+                     Keys.Con.releaseMouseWithKeys,
+                     Keys.Con.releaseMouseByShaking ]
 
         for key in keys { defaults.removeObject(forKey: key) }
     }
