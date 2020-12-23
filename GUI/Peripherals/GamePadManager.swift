@@ -305,19 +305,12 @@ class GamePadManager {
                           device: IOHIDDevice) {
         
         track()
-    
-        let locationIDKey = kIOHIDLocationIDKey as CFString
-        var locationID = 0
-        if let value = IOHIDDeviceGetProperty(device, locationIDKey) as? Int {
-            locationID = value
-        }
-                
+            
         // Search for a matching locationID and remove device
-        for (slotNr, device) in gamePads where device.locationID == locationID {
-            gamePads[slotNr] = nil
-            track("Clearing slot \(slotNr)")
+        for (slot, pad) in gamePads where pad.locationID == device.locationID {
+            gamePads[slot] = nil
         }
-                
+
         // Inform about the changed configuration
         parent.toolbar.validateVisibleItems()
         parent.myAppDelegate.deviceAdded()

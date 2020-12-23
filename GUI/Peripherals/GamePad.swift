@@ -9,37 +9,35 @@
 
 import IOKit.hid
 
-// An object representing an input device connected to the Game Port. The object
-// can either represent a connected HID device or a keyboard emulated device.
-// In the first case, the object serves as a callback handler for HID events.
-// In the latter case, it translates keyboard events to GamePadAction events by
-// utilizing a key map.
-
+/* Each object of this class represents an input device connected to the Game
+ * Port. The object can either represent a connected HID device or a keyboard
+ * emulated device. In the first case, the object serves as a callback handler
+ * for HID events. In the latter case, it translates keyboard events to
+ * GamePadAction events by utilizing a key map.
+ */
 class GamePad {
 
-    // Reference to the game pad manager
+    // References to other objects
     var manager: GamePadManager
     var prefs: Preferences { return manager.parent.pref }
     var db: DeviceDatabase { return manager.parent.myAppDelegate.database }
     
     // The Amiga port this device is connected to (0 = unconnected)
+    // TODO: Use nil for "unconnected"
     var port = 0
 
     // Reference to the device object
     var device: IOHIDDevice?
     
-    // Vendor ID of the managed device (only set for HID devices)
-    // DEPRECATED: Use property() with appropriate key
-    var vendorID: Int
+    // Vendor ID of the managed device (HID devices, only)
+    var vendorID: String { return property(key: kIOHIDVendorIDKey) ?? "0" }
+    
+    // Product ID of the managed device (HID devices, only)
+    var productID: String { return property(key: kIOHIDProductIDKey) ?? "0" }
 
-    // Product ID of the managed device (only set for HID devices)
-    // DEPRECATED: Use property() with appropriate key
-    var productID: Int
-
-    // Location ID of the managed device (only set for HID devices)
-    // DEPRECATED: Use property() with appropriate key
-    var locationID: Int
-
+    // Location ID of the managed device (HID devices, only)
+    var locationID: String { return property(key: kIOHIDLocationIDKey) ?? "0" }
+    
     // Type of the managed device (joystick or mouse)
     var type: ControlPortDevice
     var isMouse: Bool { return type == .CPD_MOUSE }
@@ -96,9 +94,6 @@ class GamePad {
         self.manager = manager
         self.device = device
         self.type = type
-        self.vendorID = vendorID
-        self.productID = productID
-        self.locationID = locationID
         
         name = db.name(vendorID: vendorID, productID: productID)
         icon = db.icon(vendorID: vendorID, productID: productID)
