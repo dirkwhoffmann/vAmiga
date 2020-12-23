@@ -111,28 +111,28 @@ class DeviceDatabase {
         return nil
     }
 
-    func left(vendorID: String, productID: String) -> String? {
+    func left(vendorID: String, productID: String) -> Int {
     
         if let value = query(vendorID, productID, "Left") {
-            return value
+            return Int.init(value) ?? 0
         }
-        return nil
+        return 0
     }
     
-    func right(vendorID: String, productID: String) -> String? {
+    func right(vendorID: String, productID: String) -> Int {
     
         if let value = query(vendorID, productID, "Right") {
-            return value
+            return Int.init(value) ?? 0
         }
-        return nil
+        return 0
     }
 
-    func hatSwitch(vendorID: String, productID: String) -> String? {
+    func hatSwitch(vendorID: String, productID: String) -> Int {
     
         if let value = query(vendorID, productID, "HatSwitch") {
-            return value
+            return Int.init(value) ?? 0
         }
-        return nil
+        return 0
     }
 
     //
@@ -147,28 +147,34 @@ class DeviceDatabase {
     func replace(_ v: String, _ p: String, _ key: String, _ value: String?) {
         
         // Replace key / value pair if it already exists
-        if let _ = custom[v]?[p] { custom[v]![p]![key] = value; return }
+        if custom[v]?[p] != nil { custom[v]![p]![key] = value; return }
         
         // Only proceed if there is something to set
         if value == nil { return }
         
         // Add a new key / value pair
-        if let _ = custom[v] { custom[v]![p] = [key: value!] }
-        else { custom[v] = [p : [key: value!]] }
+        if custom[v] != nil {
+            custom[v]![p] = [key: value!]
+        } else {
+            custom[v] = [p: [key: value!]]
+        }
     }
 
     func setLeft(vendorID: Int, productID: Int, _ value: String?) {
         
         replace(vendorID, productID, "Left", value)
+        track("\(custom)")
     }
 
     func setRight(vendorID: Int, productID: Int, _ value: String?) {
         
         replace(vendorID, productID, "Right", value)
+        track("\(custom)")
     }
 
     func setHatSwitch(vendorID: Int, productID: Int, _ value: String?) {
         
         replace(vendorID, productID, "HatSwitch", value)
+        track("\(custom)")
     }
 }

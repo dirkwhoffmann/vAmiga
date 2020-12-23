@@ -9,6 +9,14 @@
 
 extension PreferencesController {
     
+    var selectedDev: GamePad? {
+        if devSelector.indexOfSelectedItem == 0 {
+            return parent.gamePadManager.gamePads[3]
+        } else {
+            return parent.gamePadManager.gamePads[4]
+        }
+    }
+
     func refreshDevicesTab() {
                 
         func property(_ pad: GamePad?, _ key: String) -> String {
@@ -17,65 +25,110 @@ extension PreferencesController {
 
         track()
 
-        let pad1 = parent.gamePadManager.gamePads[3]
-        let pad2 = parent.gamePadManager.gamePads[4]
+        let pad = selectedDev
+
         let db = myAppDelegate.database
-        let v1 = property(pad1, kIOHIDVendorIDKey)
-        let p1 = property(pad1, kIOHIDProductIDKey)
-        // let v2 = property(pad2, kIOHIDVendorIDKey)
-        // let p2 = property(pad2, kIOHIDProductIDKey)
+        let vend = property(pad, kIOHIDVendorIDKey)
+        let prod = property(pad, kIOHIDProductIDKey)
 
-        devTransport1.stringValue = property(pad1, kIOHIDTransportKey)
-        devManufacturer1.stringValue = property(pad1, kIOHIDManufacturerKey)
-        devProduct1.stringValue = property(pad1, kIOHIDProductKey)
-        devVersion1.stringValue = property(pad1, kIOHIDVersionNumberKey)
-        devProductID1.stringValue = p1
-        devVendorID1.stringValue = v1
-        devLocationID1.stringValue = property(pad1, kIOHIDLocationIDKey)
+        devManufacturer.stringValue = property(pad, kIOHIDManufacturerKey)
+        devProduct.stringValue = property(pad, kIOHIDProductKey)
+        devVersion.stringValue = property(pad, kIOHIDVersionNumberKey)
+        devVendorID.stringValue = vend
+        devProductID.stringValue = prod
+        devTransport.stringValue = property(pad, kIOHIDTransportKey)
+        devUsage.stringValue = property(pad, kIOHIDPrimaryUsageKey)
+        devUsagePage.stringValue = property(pad, kIOHIDPrimaryUsagePageKey)
+        devLocationID.stringValue = property(pad, kIOHIDLocationIDKey)
+        devUniqueID.stringValue = property(pad, kIOHIDUniqueIDKey)
 
-        devName1.stringValue = db.name(vendorID: v1, productID: p1) ?? "Device 1"
-        devImage1.image = db.image(vendorID: v1, productID: p1)
-        if pad1 == nil {
-            //
-        }
-        if pad2 == nil {
-            //
+        devLeftStickScheme.selectItem(withTag: db.left(vendorID: vend, productID: prod))
+        devRightStickScheme.selectItem(withTag: db.right(vendorID: vend, productID: prod))
+        devHatSwitchScheme.selectItem(withTag: db.hatSwitch(vendorID: vend, productID: prod))
+
+        if pad != nil {
+            
+            devName.stringValue = db.name(vendorID: vend, productID: prod)!
+            devLeftStickScheme.isEnabled = true
+            devRightStickScheme.isEnabled = true
+            devHatSwitchScheme.isEnabled = true
+
+        } else {
+
+            devName.stringValue = "Unrecognized Device"
+            devLeftStickScheme.isEnabled = false
+            devRightStickScheme.isEnabled = false
+            devHatSwitchScheme.isEnabled = false
         }
     }
 
     //
     // Action methods (Misc)
     //
+      
+    @IBAction func selectDeviceAction(_ sender: Any!) {
+
+        refresh()
+    }
     
+    @IBAction func devLeftAction(_ sender: NSPopUpButton!) {
+        
+        let selectedTag = "\(sender.selectedTag())"
+        
+        track("tag = \(sender.tag)")
+        track("selectedTag = \(selectedTag)")
+        
+        if let device = selectedDev {
+            myAppDelegate.database.setLeft(vendorID: device.vendorID,
+                                           productID: device.productID,
+                                           selectedTag)
+        }
+        refresh()
+    }
+
+    @IBAction func devRightAction(_ sender: NSPopUpButton!) {
+        
+        let selectedTag = "\(sender.selectedTag())"
+        
+        track("tag = \(sender.tag)")
+        track("selectedTag = \(selectedTag)")
+        
+        if let device = selectedDev {
+            myAppDelegate.database.setRight(vendorID: device.vendorID,
+                                            productID: device.productID,
+                                            selectedTag)
+        }
+        refresh()
+    }
+
+    @IBAction func devHatSwitchAction(_ sender: NSPopUpButton!) {
+        
+        let selectedTag = "\(sender.selectedTag())"
+
+        track("tag = \(sender.tag)")
+        track("selectedTag = \(selectedTag)")
+        
+        if let device = selectedDev {
+            myAppDelegate.database.setHatSwitch(vendorID: device.vendorID,
+                                                productID: device.productID,
+                                                selectedTag)
+        }
+        refresh()
+    }
+        
     @IBAction func devPresetAction(_ sender: NSPopUpButton!) {
         
         track()
         assert(sender.selectedTag() == 0)
         
-        refresh()
-    }
-    
-    @IBAction func capLeftStickAction(_ sender: NSPopUpButton!) {
+        if let device = selectedDev {
+            
+            let db = myAppDelegate.database
+            db.setLeft(vendorID: device.vendorID, productID: device.productID, nil)
+            db.setRight(vendorID: device.vendorID, productID: device.productID, nil)
+            db.setHatSwitch(vendorID: device.vendorID, productID: device.productID, nil)
+        }
         
-        track("tag = \(sender.tag)")
-        track("selectedTag = \(sender.selectedTag())")
-
-        refresh()
-    }
-
-    @IBAction func capRightStickAction(_ sender: NSPopUpButton!) {
-        
-        track("tag = \(sender.tag)")
-        track("selectedTag = \(sender.selectedTag())")
-
-        refresh()
-    }
-
-    @IBAction func capHeadSwitchAction(_ sender: NSPopUpButton!) {
-        
-        track("tag = \(sender.tag)")
-        track("selectedTag = \(sender.selectedTag())")
-
         refresh()
     }
 }

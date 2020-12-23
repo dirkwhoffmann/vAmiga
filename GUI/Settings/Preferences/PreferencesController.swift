@@ -102,31 +102,21 @@ class PreferencesController: DialogController {
     // Devices
     //
     
-    @IBOutlet weak var devName1: NSTextField!
-    @IBOutlet weak var devImage1: NSImageView!
-    @IBOutlet weak var devTransport1: NSTextField!
-    @IBOutlet weak var devManufacturer1: NSTextField!
-    @IBOutlet weak var devProduct1: NSTextField!
-    @IBOutlet weak var devVersion1: NSTextField!
-    @IBOutlet weak var devVendorID1: NSTextField!
-    @IBOutlet weak var devProductID1: NSTextField!
-    @IBOutlet weak var devLocationID1: NSTextField!
-    @IBOutlet weak var devLeftStickScheme1: NSPopUpButton!
-    @IBOutlet weak var devRightStickScheme1: NSPopUpButton!
-    @IBOutlet weak var devHatSwitchScheme1: NSPopUpButton!
-
-    @IBOutlet weak var devName2: NSTextField!
-    @IBOutlet weak var devImage2: NSImageView!
-    @IBOutlet weak var devTransport2: NSTextField!
-    @IBOutlet weak var devManufacturer2: NSTextField!
-    @IBOutlet weak var devProduct2: NSTextField!
-    @IBOutlet weak var devVersion2: NSTextField!
-    @IBOutlet weak var devVendorID2: NSTextField!
-    @IBOutlet weak var devProductID2: NSTextField!
-    @IBOutlet weak var devLocationID2: NSTextField!
-    @IBOutlet weak var devLeftStickScheme2: NSPopUpButton!
-    @IBOutlet weak var devRightStickScheme2: NSPopUpButton!
-    @IBOutlet weak var devHatSwitchScheme2: NSPopUpButton!
+    @IBOutlet weak var devSelector: NSSegmentedControl!
+    @IBOutlet weak var devName: NSTextField!
+    @IBOutlet weak var devManufacturer: NSTextField!
+    @IBOutlet weak var devProduct: NSTextField!
+    @IBOutlet weak var devVersion: NSTextField!
+    @IBOutlet weak var devVendorID: NSTextField!
+    @IBOutlet weak var devProductID: NSTextField!
+    @IBOutlet weak var devTransport: NSTextField!
+    @IBOutlet weak var devUsage: NSTextField!
+    @IBOutlet weak var devUsagePage: NSTextField!
+    @IBOutlet weak var devLocationID: NSTextField!
+    @IBOutlet weak var devUniqueID: NSTextField!
+    @IBOutlet weak var devLeftStickScheme: NSPopUpButton!
+    @IBOutlet weak var devRightStickScheme: NSPopUpButton!
+    @IBOutlet weak var devHatSwitchScheme: NSPopUpButton!
     
     //
     // Captures
