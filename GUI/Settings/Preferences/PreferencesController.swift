@@ -114,6 +114,8 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devUsagePage: NSTextField!
     @IBOutlet weak var devLocationID: NSTextField!
     @IBOutlet weak var devUniqueID: NSTextField!
+    @IBOutlet weak var devActivity1: NSTextField!
+    @IBOutlet weak var devActivity2: NSTextField!
     @IBOutlet weak var devLeftStickScheme: NSPopUpButton!
     @IBOutlet weak var devRightStickScheme: NSPopUpButton!
     @IBOutlet weak var devHatSwitchScheme: NSPopUpButton!
@@ -163,6 +165,13 @@ class PreferencesController: DialogController {
         if let id = firstTab { tabView?.selectTabViewItem(withIdentifier: id) }
     }
 
+    override func cleanup() {
+     
+        track()
+        parent.gamePadManager.gamePads[3]?.notify = false
+        parent.gamePadManager.gamePads[4]?.notify = false
+    }
+        
     func refresh() {
         
         track()

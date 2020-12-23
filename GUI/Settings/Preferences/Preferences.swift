@@ -314,7 +314,6 @@ class Preferences {
     
     func loadDevicesDefaults(_ defaults: DevicesDefaults) {
         
-        // Mapping schemes
     }
     
     func loadDevicesUserDefaults() {

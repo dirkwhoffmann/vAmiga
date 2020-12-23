@@ -28,12 +28,15 @@ class GamePad {
     var device: IOHIDDevice?
     
     // Vendor ID of the managed device (only set for HID devices)
+    // DEPRECATED: Use property() with appropriate key
     var vendorID: Int
 
     // Product ID of the managed device (only set for HID devices)
+    // DEPRECATED: Use property() with appropriate key
     var productID: Int
 
     // Location ID of the managed device (only set for HID devices)
+    // DEPRECATED: Use property() with appropriate key
     var locationID: Int
 
     // Type of the managed device (joystick or mouse)
@@ -42,9 +45,11 @@ class GamePad {
     var isJoystick: Bool { return type == .CPD_JOYSTICK }
 
     // Name of the managed device
+    // DEPRECATED: Query DeviceDatabase
     var name: String?
 
     // Icon of this device
+    // DEPRECATED: Query DeviceDatabase
     var icon: NSImage?
             
     // Keymap of the managed device (only set for keyboard emulated devices)
@@ -52,6 +57,9 @@ class GamePad {
     
     // Indicates if a joystick emulation key is currently pressed
     var keyUp = false, keyDown = false, keyLeft = false, keyRight = false
+    
+    // Indicates if other components should be notified when the device is used
+    var notify = false
     
     // Minimum and maximum value of analog axis event
     var min: Int?, max: Int?
@@ -69,6 +77,7 @@ class GamePad {
      * It is needed to determine whether a joystick event has to be triggered.
      */
     var oldEvents: [Int: [GamePadAction]] = [:]
+    var latestEvents: [GamePadAction] = []
     
     // Receivers for HID events
     let inputValueCallback: IOHIDValueCallback = {
@@ -386,7 +395,6 @@ extension GamePad {
             oldEvents[usage] = events!
             
             // Trigger events
-            // manager.parent.emulateEventsOnGamePort(slot: nr, events: events!)
             processJoystickEvents(events: events!)
         }
     }    
@@ -406,6 +414,13 @@ extension GamePad {
         if port == 1 { for e in events { amiga.controlPort1.joystick.trigger(e) } }
         if port == 2 { for e in events { amiga.controlPort2.joystick.trigger(e) } }
         
+        // Notify other components (if requested)
+        if notify {
+            latestEvents = events
+            track("Events = \(latestEvents)")
+            manager.parent.myAppDelegate.devicePulled()
+        }
+
         return events != []
     }
     

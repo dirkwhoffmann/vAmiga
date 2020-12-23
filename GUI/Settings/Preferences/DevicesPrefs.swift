@@ -26,7 +26,10 @@ extension PreferencesController {
         track()
 
         let pad = selectedDev
-
+        
+        // Let us notify when the device is pulled
+        pad?.notify = true
+        
         let db = myAppDelegate.database
         let vend = property(pad, kIOHIDVendorIDKey)
         let prod = property(pad, kIOHIDProductIDKey)
@@ -52,6 +55,20 @@ extension PreferencesController {
             devLeftStickScheme.isEnabled = true
             devRightStickScheme.isEnabled = true
             devHatSwitchScheme.isEnabled = true
+            
+            let events = pad!.latestEvents
+            var activity1 = "", activity2 = ""
+            if events.contains(.PULL_UP) { activity1 += " Pull Up " }
+            if events.contains(.PULL_DOWN) { activity1 += " Pull Down " }
+            if events.contains(.PULL_RIGHT) { activity1 += " Pull Right " }
+            if events.contains(.PULL_LEFT) { activity1 += " Pull Left " }
+            if events.contains(.PRESS_FIRE) { activity1 += " Press Fire " }
+            if events.contains(.RELEASE_X) { activity1 += " Release X Axis " }
+            if events.contains(.RELEASE_Y) { activity1 += " Release Y Axis " }
+            if events.contains(.RELEASE_XY) { activity1 += " Release Axis " }
+            if events.contains(.RELEASE_FIRE) { activity1 += " Release Fire " }
+            devActivity1.stringValue = activity1
+            devActivity2.stringValue = activity2
 
         } else {
 
@@ -59,6 +76,7 @@ extension PreferencesController {
             devLeftStickScheme.isEnabled = false
             devRightStickScheme.isEnabled = false
             devHatSwitchScheme.isEnabled = false
+            devActivity1.stringValue = ""
         }
     }
 
