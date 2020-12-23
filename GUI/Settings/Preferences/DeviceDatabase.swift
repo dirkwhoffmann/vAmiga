@@ -95,12 +95,22 @@ class DeviceDatabase {
         return nil
     }
 
-    func name(vendorID: String, productID: String) -> String? {
+    func name(vendorID: Int, productID: Int) -> String? {
+
+        return name(vendorID: "\(vendorID)", productID: "\(productID)")
+    }
     
+    func name(vendorID: String, productID: String) -> String? {
+        
         if let value = query(vendorID, productID, "Name") {
             return value
         }
         return nil
+    }
+
+    func icon(vendorID: Int, productID: Int) -> NSImage? {
+        
+        return image(vendorID: "\(vendorID)", productID: "\(productID)")
     }
 
     func image(vendorID: String, productID: String) -> NSImage? {
@@ -111,12 +121,22 @@ class DeviceDatabase {
         return nil
     }
 
+    func left(vendorID: Int, productID: Int) -> Int {
+
+        return left(vendorID: "\(vendorID)", productID: "\(productID)")
+    }
+        
     func left(vendorID: String, productID: String) -> Int {
     
         if let value = query(vendorID, productID, "Left") {
             return Int.init(value) ?? 0
         }
         return 0
+    }
+    
+    func right(vendorID: Int, productID: Int) -> Int {
+
+        return right(vendorID: "\(vendorID)", productID: "\(productID)")
     }
     
     func right(vendorID: String, productID: String) -> Int {
@@ -127,6 +147,11 @@ class DeviceDatabase {
         return 0
     }
 
+    func hatSwitch(vendorID: Int, productID: Int) -> Int {
+
+        return hatSwitch(vendorID: "\(vendorID)", productID: "\(productID)")
+    }
+    
     func hatSwitch(vendorID: String, productID: String) -> Int {
     
         if let value = query(vendorID, productID, "HatSwitch") {

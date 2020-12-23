@@ -100,6 +100,7 @@ extension PreferencesController {
             myAppDelegate.database.setLeft(vendorID: device.vendorID,
                                            productID: device.productID,
                                            selectedTag)
+            device.updateMappingScheme()
         }
         refresh()
     }
@@ -115,6 +116,7 @@ extension PreferencesController {
             myAppDelegate.database.setRight(vendorID: device.vendorID,
                                             productID: device.productID,
                                             selectedTag)
+            device.updateMappingScheme()
         }
         refresh()
     }
@@ -130,6 +132,7 @@ extension PreferencesController {
             myAppDelegate.database.setHatSwitch(vendorID: device.vendorID,
                                                 productID: device.productID,
                                                 selectedTag)
+            device.updateMappingScheme()
         }
         refresh()
     }
@@ -145,6 +148,7 @@ extension PreferencesController {
             db.setLeft(vendorID: device.vendorID, productID: device.productID, nil)
             db.setRight(vendorID: device.vendorID, productID: device.productID, nil)
             db.setHatSwitch(vendorID: device.vendorID, productID: device.productID, nil)
+            device.updateMappingScheme()
         }
         
         refresh()

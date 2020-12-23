@@ -20,7 +20,8 @@ class GamePad {
     // Reference to the game pad manager
     var manager: GamePadManager
     var prefs: Preferences { return manager.parent.pref }
-
+    var db: DeviceDatabase { return manager.parent.myAppDelegate.database }
+    
     // The Amiga port this device is connected to (0 = unconnected)
     var port = 0
 
@@ -45,7 +46,6 @@ class GamePad {
     var isJoystick: Bool { return type == .CPD_JOYSTICK }
 
     // Name of the managed device
-    // DEPRECATED: Query DeviceDatabase
     var name: String?
 
     // Icon of this device
@@ -92,9 +92,7 @@ class GamePad {
     init(manager: GamePadManager,
          device: IOHIDDevice? = nil, type: ControlPortDevice,
          vendorID: Int = 0, productID: Int = 0, locationID: Int = 0) {
-        
-        // track("\(nr): \(vendorID) \(productID) \(locationID)")
-        
+                
         self.manager = manager
         self.device = device
         self.type = type
@@ -102,57 +100,42 @@ class GamePad {
         self.productID = productID
         self.locationID = locationID
         
-        let joystick = "devJoystickTemplate"
-        let mouse = "devMouseTemplate"
+        name = db.name(vendorID: vendorID, productID: productID)
+        icon = db.icon(vendorID: vendorID, productID: productID)
+
+        updateMappingScheme()
+    }
+    
+    func updateMappingScheme() {
         
-        // Check for known devices
-        switch vendorID {
-            
-        case 0x0004 where productID == 0x0001:
-            name = "aJoy Retro Adapter"
-
-        case 0x0079 where productID == 0x0011:
-            name = "iNNEXT Retro (SNES)"
-
-        case 0x040B where productID == 0x6533:
-            name = "Competition Pro SL-6602"
-            icon = NSImage.init(named: joystick)
-
-        case 0x045E where productID == 0xB13:
-            name = "XBox Carbon Black"
-            headSwitchStart = 1
-            
-        case 0x046D where type == .CPD_MOUSE:
-            name = "Logitech Mouse"
-            icon = NSImage.init(named: mouse)
-
-        case 0x0483 where productID == 0x9005:
-            name = "RetroFun! Joystick Adapter"
-
-        case 0x054C where productID == 0x0268:
-            name = "Sony DualShock 3"
-
-        case 0x054C where productID == 0x05C4:
-            name = "Sony DualShock 4"
-            
-        case 0x054C where productID == 0x09CC:
-            name = "Sony Dualshock 4 (2nd Gen)"
-                        
-        case 0x0738 where productID == 0x2217:
-            name = "Competition Pro SL-650212"
-            icon = NSImage.init(named: joystick)
-
-        case 0x0F0D where productID == 0x00C1:
-            name = "HORIPAD for Nintendo Switch"
+        // Left stick
+        switch (db.left(vendorID: vendorID, productID: productID)) {
+        default:
+            track("Using default mapping scheme for left stick")
+            lThumbXUsageID = kHIDUsage_GD_X
+            lThumbYUsageID = kHIDUsage_GD_Y
+        }
+        
+        // Right stick
+        switch (db.right(vendorID: vendorID, productID: productID)) {
+        case 1:
+            track("Using scheme 1 for right stick")
             rThumbXUsageID = kHIDUsage_GD_Z
             rThumbYUsageID = kHIDUsage_GD_Rz
-
-        case 0x1C59 where productID == 0x0024:
-            name = "The C64 Joystick"
-            icon = NSImage.init(named: joystick)
-
         default:
-            break  // name = "Generic Gamepad"
+            track("Using default mapping scheme for right stick")
+            rThumbXUsageID = kHIDUsage_GD_Rz
+            rThumbYUsageID = kHIDUsage_GD_Z
+        }
+
+        // Hatswitch
+        switch (db.hatSwitch(vendorID: vendorID, productID: productID)) {
+        case 1:
+            track("Using scheme 1 for hat switch")
+            headSwitchStart = 1
+        default:
+            track("Using default scheme for hat switch")
+            headSwitchStart = 0
         }
     }
     
@@ -325,6 +308,8 @@ extension GamePad {
         let intValue  = Int(IOHIDValueGetIntegerValue(value))
         let usagePage = Int(IOHIDElementGetUsagePage(element))
         let usage     = Int(IOHIDElementGetUsage(element))
+        
+        track()
         
         // Buttons
         if usagePage == kHIDPage_Button {
