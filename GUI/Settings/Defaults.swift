@@ -418,8 +418,10 @@ extension UserDefaults {
 extension Keys {
     
     struct Dev {
-        
-        // Mapping schemes
+
+        static let schemes            = "VAMIGA_DEV_Schemes"
+
+        // Mapping schemes (DEPRECATED)
         static let leftStickScheme1   = "VAMIGA_DEV_LeftStickScheme1"
         static let rightStickScheme1  = "VAMIGA_DEV_RightStickScheme1"
         static let hatSwitchScheme1   = "VAMIGA_DEV_HatSwitchScheme1"

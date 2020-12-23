@@ -102,6 +102,10 @@ class Preferences {
     var releaseMouseByShaking = ControlsDefaults.std.releaseMouseByShaking
      
     //
+    // Devices
+    //
+        
+    //
     // Captures
     //
     
@@ -315,16 +319,10 @@ class Preferences {
     
     func loadDevicesUserDefaults() {
         
-        let defaults = UserDefaults.standard
-        
-        // Mapping schemes
     }
     
     func saveDevicesUserDefaults() {
         
-        let defaults = UserDefaults.standard
-        
-        // Mapping schemes
     }
     
     //

@@ -62,9 +62,11 @@
                 <outlet property="conUp2" destination="sPP-Ll-WyN" id="Lzp-Nb-rec"/>
                 <outlet property="conUp2button" destination="wFF-Aw-MG2" id="LME-22-Ebz"/>
                 <outlet property="devHatSwitchScheme1" destination="Cx8-Ww-EiR" id="4wT-VR-Dra"/>
+                <outlet property="devImage1" destination="FZy-X6-bG7" id="6x8-YO-mi1"/>
                 <outlet property="devLeftStickScheme1" destination="Qgf-dV-BzV" id="Fvw-48-8qJ"/>
                 <outlet property="devLocationID1" destination="ysT-wi-pkz" id="ekO-Ez-fbk"/>
                 <outlet property="devManufacturer1" destination="HTm-K8-Pet" id="ht1-7F-Ua1"/>
+                <outlet property="devName1" destination="c4l-b5-4MS" id="nLt-iL-Ov9"/>
                 <outlet property="devProduct1" destination="Vzi-XU-xbz" id="Mua-hH-ek3"/>
                 <outlet property="devProductID1" destination="06g-GF-iFf" id="acA-cn-2kw"/>
                 <outlet property="devRightStickScheme1" destination="0sa-cN-ImA" id="ag0-C8-GsB"/>
@@ -1186,7 +1188,7 @@
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l7I-bw-gcL">
                                             <rect key="frame" x="116" y="357" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="cg3-Ea-Utr">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="cg3-Ea-Utr">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1195,7 +1197,7 @@
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HTm-K8-Pet">
                                             <rect key="frame" x="116" y="333" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="VUQ-2a-zue">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="VUQ-2a-zue">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1204,7 +1206,7 @@
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vzi-XU-xbz">
                                             <rect key="frame" x="116" y="309" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="DiU-jv-dq9">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="DiU-jv-dq9">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1213,7 +1215,7 @@
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cI3-UU-fuc">
                                             <rect key="frame" x="116" y="261" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="7Zb-Uq-RLK">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="7Zb-Uq-RLK">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1222,7 +1224,7 @@
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="06g-GF-iFf">
                                             <rect key="frame" x="116" y="237" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="WGl-ij-Lz6">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="WGl-ij-Lz6">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1280,7 +1282,7 @@
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ysT-wi-pkz">
                                             <rect key="frame" x="116" y="213" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="YPy-XK-bbf">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="YPy-XK-bbf">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1289,7 +1291,7 @@
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uaV-AU-6mY">
                                             <rect key="frame" x="116" y="285" width="169" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Lorem ipsum dolor sit amet" id="REf-9Q-pSU">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="REf-9Q-pSU">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1340,6 +1342,11 @@
                                                 </menu>
                                             </popUpButtonCell>
                                         </popUpButton>
+                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FZy-X6-bG7">
+                                            <rect key="frame" x="259" y="380" width="24" height="24"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="devGamepad1Template" id="n5g-fg-hTU"/>
+                                        </imageView>
                                     </subviews>
                                 </view>
                             </tabViewItem>
@@ -1703,6 +1710,7 @@
     <resources>
         <image name="FFmpegIcon" width="480" height="480"/>
         <image name="biohazardTemplate" width="492" height="464"/>
+        <image name="devGamepad1Template" width="20" height="21"/>
         <image name="ffmpegLogoTemplate" width="1829" height="595"/>
         <image name="joystick2" width="261" height="300"/>
         <image name="key" width="198" height="187"/>

@@ -101,7 +101,9 @@ class PreferencesController: DialogController {
     //
     // Devices
     //
-
+    
+    @IBOutlet weak var devName1: NSTextField!
+    @IBOutlet weak var devImage1: NSImageView!
     @IBOutlet weak var devTransport1: NSTextField!
     @IBOutlet weak var devManufacturer1: NSTextField!
     @IBOutlet weak var devProduct1: NSTextField!
@@ -113,6 +115,8 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devRightStickScheme1: NSPopUpButton!
     @IBOutlet weak var devHatSwitchScheme1: NSPopUpButton!
 
+    @IBOutlet weak var devName2: NSTextField!
+    @IBOutlet weak var devImage2: NSImageView!
     @IBOutlet weak var devTransport2: NSTextField!
     @IBOutlet weak var devManufacturer2: NSTextField!
     @IBOutlet weak var devProduct2: NSTextField!
@@ -218,6 +222,7 @@ class PreferencesController: DialogController {
         pref.saveControlsUserDefaults()
         pref.saveDevicesUserDefaults()
         pref.saveCaptureUserDefaults()
+        myAppDelegate.database.save()
         
         hideSheet()
     }

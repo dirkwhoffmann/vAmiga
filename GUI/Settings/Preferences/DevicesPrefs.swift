@@ -10,29 +10,36 @@
 extension PreferencesController {
     
     func refreshDevicesTab() {
-        
-        track()
-        
+                
         func property(_ pad: GamePad?, _ key: String) -> String {
             return pad?.property(key: key) ?? "-"
         }
-        
+
+        track()
+
         let pad1 = parent.gamePadManager.gamePads[3]
+        let pad2 = parent.gamePadManager.gamePads[4]
+        let db = myAppDelegate.database
+        let v1 = property(pad1, kIOHIDVendorIDKey)
+        let p1 = property(pad1, kIOHIDProductIDKey)
+        // let v2 = property(pad2, kIOHIDVendorIDKey)
+        // let p2 = property(pad2, kIOHIDProductIDKey)
+
         devTransport1.stringValue = property(pad1, kIOHIDTransportKey)
         devManufacturer1.stringValue = property(pad1, kIOHIDManufacturerKey)
         devProduct1.stringValue = property(pad1, kIOHIDProductKey)
         devVersion1.stringValue = property(pad1, kIOHIDVersionNumberKey)
-        devProductID1.stringValue = property(pad1, kIOHIDProductIDKey)
-        devVendorID1.stringValue = property(pad1, kIOHIDVendorIDKey)
+        devProductID1.stringValue = p1
+        devVendorID1.stringValue = v1
         devLocationID1.stringValue = property(pad1, kIOHIDLocationIDKey)
 
-        let pad2 = parent.gamePadManager.gamePads[4]
-        
+        devName1.stringValue = db.name(vendorID: v1, productID: p1) ?? "Device 1"
+        devImage1.image = db.image(vendorID: v1, productID: p1)
         if pad1 == nil {
-            devTransport1.stringValue = "Not connected"
+            //
         }
         if pad2 == nil {
-            // devTransport2 = "Not connected"
+            //
         }
     }
 
