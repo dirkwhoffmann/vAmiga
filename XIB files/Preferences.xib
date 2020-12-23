@@ -61,6 +61,16 @@
                 <outlet property="conUp1button" destination="diW-dw-7Yh" id="dtJ-WE-6Yi"/>
                 <outlet property="conUp2" destination="sPP-Ll-WyN" id="Lzp-Nb-rec"/>
                 <outlet property="conUp2button" destination="wFF-Aw-MG2" id="LME-22-Ebz"/>
+                <outlet property="devHatSwitchScheme1" destination="Cx8-Ww-EiR" id="4wT-VR-Dra"/>
+                <outlet property="devLeftStickScheme1" destination="Qgf-dV-BzV" id="Fvw-48-8qJ"/>
+                <outlet property="devLocationID1" destination="ysT-wi-pkz" id="ekO-Ez-fbk"/>
+                <outlet property="devManufacturer1" destination="HTm-K8-Pet" id="ht1-7F-Ua1"/>
+                <outlet property="devProduct1" destination="Vzi-XU-xbz" id="Mua-hH-ek3"/>
+                <outlet property="devProductID1" destination="06g-GF-iFf" id="acA-cn-2kw"/>
+                <outlet property="devRightStickScheme1" destination="0sa-cN-ImA" id="ag0-C8-GsB"/>
+                <outlet property="devTransport1" destination="l7I-bw-gcL" id="MVn-Q1-huM"/>
+                <outlet property="devVendorID1" destination="cI3-UU-fuc" id="BjS-aj-088"/>
+                <outlet property="devVersion1" destination="uaV-AU-6mY" id="Pbu-Ps-wal"/>
                 <outlet property="genAspectRatioButton" destination="Imp-jh-I6A" id="nyM-aE-Zzn"/>
                 <outlet property="genBootCode" destination="15d-An-mmx" id="xkR-Hy-gaG"/>
                 <outlet property="genBootCodeVirus" destination="eB2-Y6-EqS" id="vUZ-SV-1fq"/>
@@ -1063,7 +1073,7 @@
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="devPresetAction:" target="-2" id="Ay9-Gt-5fx"/>
+                                                <action selector="conPresetAction:" target="-2" id="Ay9-Gt-5fx"/>
                                             </connections>
                                         </popUpButton>
                                     </subviews>
@@ -1107,7 +1117,7 @@
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="devPresetAction:" target="-2" id="hpF-Zp-mjs"/>
+                                                <action selector="conPresetAction:" target="-2" id="hpF-Zp-mjs"/>
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b4Q-RA-0Vo">

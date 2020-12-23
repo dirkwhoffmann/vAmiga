@@ -16,7 +16,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var tabView: NSTabView!
         
     //
-    // General preferences
+    // General
     //
     
     // Drive
@@ -43,7 +43,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var genCloseWithoutAskingButton: NSButton!
 
     //
-    // Controls preferences
+    // Controls
     //
 
     // Tag of the button that is currently being recorded
@@ -97,9 +97,35 @@ class PreferencesController: DialogController {
     @IBOutlet weak var conAutofireCeaseText: NSTextField!
     @IBOutlet weak var conAutofireBullets: NSTextField!
     @IBOutlet weak var conAutofireFrequency: NSSlider!
+
+    //
+    // Devices
+    //
+
+    @IBOutlet weak var devTransport1: NSTextField!
+    @IBOutlet weak var devManufacturer1: NSTextField!
+    @IBOutlet weak var devProduct1: NSTextField!
+    @IBOutlet weak var devVersion1: NSTextField!
+    @IBOutlet weak var devVendorID1: NSTextField!
+    @IBOutlet weak var devProductID1: NSTextField!
+    @IBOutlet weak var devLocationID1: NSTextField!
+    @IBOutlet weak var devLeftStickScheme1: NSPopUpButton!
+    @IBOutlet weak var devRightStickScheme1: NSPopUpButton!
+    @IBOutlet weak var devHatSwitchScheme1: NSPopUpButton!
+
+    @IBOutlet weak var devTransport2: NSTextField!
+    @IBOutlet weak var devManufacturer2: NSTextField!
+    @IBOutlet weak var devProduct2: NSTextField!
+    @IBOutlet weak var devVersion2: NSTextField!
+    @IBOutlet weak var devVendorID2: NSTextField!
+    @IBOutlet weak var devProductID2: NSTextField!
+    @IBOutlet weak var devLocationID2: NSTextField!
+    @IBOutlet weak var devLeftStickScheme2: NSPopUpButton!
+    @IBOutlet weak var devRightStickScheme2: NSPopUpButton!
+    @IBOutlet weak var devHatSwitchScheme2: NSPopUpButton!
     
     //
-    // Capture preferences
+    // Captures
     //
     
     // Screenshots
@@ -145,6 +171,7 @@ class PreferencesController: DialogController {
 
     func refresh() {
         
+        track()
         if let id = tabView?.selectedTabViewItem?.identifier as? String {
             
             switch id {

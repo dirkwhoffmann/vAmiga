@@ -245,8 +245,10 @@ class GamePadManager {
         parent.config.gameDevice1 = parent.config.gameDevice1
         parent.config.gameDevice2 = parent.config.gameDevice2
         
-        // Update to toolbar
+        // Inform about the changed configuration
         parent.toolbar.validateVisibleItems()
+        parent.myAppDelegate.deviceAdded()
+        
         listDevices()
     }
     
@@ -316,9 +318,10 @@ class GamePadManager {
             track("Clearing slot \(slotNr)")
         }
                 
-        // Inform the controller about the new device
+        // Inform about the changed configuration
         parent.toolbar.validateVisibleItems()
-        
+        parent.myAppDelegate.deviceAdded()
+
         listDevices()
     }
     

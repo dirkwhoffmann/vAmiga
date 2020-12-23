@@ -163,6 +163,16 @@ class GamePad {
         
         icon = NSImage.init(named: name)
     }
+    
+    func property(key: String) -> String? {
+            
+        if device != nil {
+            if let prop = IOHIDDeviceGetProperty(device!, key as CFString) {
+                return "\(prop)"
+            }
+        }
+        return nil
+    }
 }
 
 //

@@ -168,6 +168,17 @@ extension MyAppDelegate {
         }
     }
     
+    // Callen when a HID device has been added
+    func deviceAdded() {
+        track()
+        prefController?.refresh()
+    }
+    
+    // Callen when a HID device has been removed
+    func deviceRemoved() {
+        prefController?.refresh()
+    }
+    
     // Use this variable to switch direct mapping of the Command keys on or off
     var mapCommandKeys: Bool {
         

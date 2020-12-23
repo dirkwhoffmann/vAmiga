@@ -216,7 +216,7 @@ extension PreferencesController {
     // Action methods (Misc)
     //
     
-    @IBAction func devPresetAction(_ sender: NSPopUpButton!) {
+    @IBAction func conPresetAction(_ sender: NSPopUpButton!) {
         
         track()
         assert(sender.selectedTag() == 0)
