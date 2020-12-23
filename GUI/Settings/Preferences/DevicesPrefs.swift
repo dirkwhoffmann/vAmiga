@@ -48,14 +48,14 @@ extension PreferencesController {
 
         if pad != nil {
             
-            devName.stringValue = db.name(vendorID: vend, productID: prod)!
+            devInfoBox.title = db.name(vendorID: vend, productID: prod)!
             devLeftStickScheme.isEnabled = true
             devRightStickScheme.isEnabled = true
             devHatSwitchScheme.isEnabled = true
 
         } else {
 
-            devName.stringValue = "Unrecognized Device"
+            devInfoBox.title = "Unrecognized Device"
             devLeftStickScheme.isEnabled = false
             devRightStickScheme.isEnabled = false
             devHatSwitchScheme.isEnabled = false

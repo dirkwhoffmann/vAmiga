@@ -103,7 +103,7 @@ class PreferencesController: DialogController {
     //
     
     @IBOutlet weak var devSelector: NSSegmentedControl!
-    @IBOutlet weak var devName: NSTextField!
+    @IBOutlet weak var devInfoBox: NSBox!
     @IBOutlet weak var devManufacturer: NSTextField!
     @IBOutlet weak var devProduct: NSTextField!
     @IBOutlet weak var devVersion: NSTextField!
