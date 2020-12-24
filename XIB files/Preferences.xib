@@ -62,14 +62,19 @@
                 <outlet property="conUp2" destination="sPP-Ll-WyN" id="Lzp-Nb-rec"/>
                 <outlet property="conUp2button" destination="wFF-Aw-MG2" id="LME-22-Ebz"/>
                 <outlet property="devActivity" destination="nWG-QZ-bo4" id="Zgf-zu-X8d"/>
-                <outlet property="devHatSwitchScheme" destination="Cx8-Ww-EiR" id="4wT-VR-Dra"/>
+                <outlet property="devActivity2" destination="VZ1-e1-hp3" id="Egv-Y2-NKP"/>
+                <outlet property="devHatScheme" destination="Cx8-Ww-EiR" id="4wT-VR-Dra"/>
+                <outlet property="devHatText" destination="G3e-Ea-Xvj" id="CeN-Vl-h9L"/>
+                <outlet property="devImage" destination="Ljn-nh-euA" id="Wnb-BN-uD3"/>
                 <outlet property="devInfoBox" destination="Dto-Ac-z5q" id="jr1-T2-yMV"/>
-                <outlet property="devLeftStickScheme" destination="8B9-QV-Z6T" id="B3x-YN-ecN"/>
+                <outlet property="devLeftScheme" destination="8B9-QV-Z6T" id="B3x-YN-ecN"/>
+                <outlet property="devLeftText" destination="Rc7-zK-Xze" id="coL-kp-7nG"/>
                 <outlet property="devLocationID" destination="89G-Zo-zi4" id="OA7-NJ-ins"/>
                 <outlet property="devManufacturer" destination="11v-Tj-lGr" id="sx2-LM-UBn"/>
                 <outlet property="devProduct" destination="ydf-e9-8Kf" id="yy7-9n-1i4"/>
                 <outlet property="devProductID" destination="BtT-aK-Ch9" id="f6C-Mt-ANy"/>
-                <outlet property="devRightStickScheme" destination="0sa-cN-ImA" id="oAZ-UN-ffs"/>
+                <outlet property="devRightScheme" destination="0sa-cN-ImA" id="oAZ-UN-ffs"/>
+                <outlet property="devRightText" destination="1ek-cA-Oma" id="sbJ-je-ulo"/>
                 <outlet property="devSelector" destination="V9X-FA-6vA" id="67f-of-2Hk"/>
                 <outlet property="devTransport" destination="86Q-HP-rT8" id="V0T-yB-P6i"/>
                 <outlet property="devUniqueID" destination="VBn-jK-C6j" id="OxX-e9-tEh"/>
@@ -1153,7 +1158,7 @@
                                                 <menu key="menu" id="7Ea-we-l9b">
                                                     <items>
                                                         <menuItem title="Standard" state="on" id="icV-cr-TYz"/>
-                                                        <menuItem title="Reversed" tag="1" id="2dY-yD-rmk"/>
+                                                        <menuItem title="Switched" tag="1" id="2dY-yD-rmk"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -1170,7 +1175,7 @@
                                                 <menu key="menu" id="loR-Rr-9hA">
                                                     <items>
                                                         <menuItem title="Standard" state="on" id="Vpv-pS-lNG"/>
-                                                        <menuItem title="Reversed" tag="1" id="GFv-Y6-wHb"/>
+                                                        <menuItem title="Switched" tag="1" id="GFv-Y6-wHb"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -1417,6 +1422,15 @@
                                             <rect key="frame" x="241" y="90" width="116" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="Zzh-hG-xh6">
+                                                <font key="font" usesAppearanceFont="YES"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VZ1-e1-hp3">
+                                            <rect key="frame" x="229" y="71" width="141" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="A62-Fs-myd">
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

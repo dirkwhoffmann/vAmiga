@@ -10,6 +10,34 @@
 import Foundation
 
 extension IOHIDDevice {
+        
+    @discardableResult
+    func open() -> Bool {
+        
+        let optionBits = IOOptionBits(kIOHIDOptionsTypeNone)
+        if IOHIDDeviceOpen(self, optionBits) != kIOReturnSuccess {
+            
+            track("WARNING: Cannot open HID device")
+            return false
+        }
+
+        track("HID device opened")
+        return true
+    }
+    
+    @discardableResult
+    func close() -> Bool {
+                
+        let optionBits = IOOptionBits(kIOHIDOptionsTypeNone)
+        if IOHIDDeviceClose(self, optionBits) != kIOReturnSuccess {
+
+            track("WARNING: Cannot close HID device")
+            return false
+        }
+        
+        track("HID device closed")
+        return true
+    }
     
     func property(key: String) -> String? {
             
@@ -19,23 +47,20 @@ extension IOHIDDevice {
         return nil
     }
     
+    var name: String { return property(key: kIOHIDProductKey) ?? "" }
+    
     var vendorID: String { return property(key: kIOHIDVendorIDKey) ?? "" }
     
     var productID: String { return property(key: kIOHIDProductIDKey) ?? "" }
 
     var locationID: String { return property(key: kIOHIDLocationIDKey) ?? "" }
 
-    func isMouse() -> Bool {
-        
-        let key = kIOHIDPrimaryUsageKey as CFString
-        
-        if let value = IOHIDDeviceGetProperty(self, key) as? Int {
-            return value == kHIDUsage_GD_Mouse
-        } else {
-            return false
-        }
-    }
+    var primaryUsage: String { return property(key: kIOHIDPrimaryUsageKey) ?? "" }
     
+    var isBuiltIn: Bool { return property(key: kIOHIDBuiltInKey) == "1" }
+
+    var isMouse: Bool { return primaryUsage == "\(kHIDUsage_GD_Mouse)" }
+            
     func listProperties() {
         
         let keys = [

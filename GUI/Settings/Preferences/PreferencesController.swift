@@ -103,6 +103,8 @@ class PreferencesController: DialogController {
     //
     
     @IBOutlet weak var devSelector: NSSegmentedControl!
+    
+    // Property Box
     @IBOutlet weak var devInfoBox: NSBox!
     @IBOutlet weak var devManufacturer: NSTextField!
     @IBOutlet weak var devProduct: NSTextField!
@@ -115,9 +117,16 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devLocationID: NSTextField!
     @IBOutlet weak var devUniqueID: NSTextField!
     @IBOutlet weak var devActivity: NSTextField!
-    @IBOutlet weak var devLeftStickScheme: NSPopUpButton!
-    @IBOutlet weak var devRightStickScheme: NSPopUpButton!
-    @IBOutlet weak var devHatSwitchScheme: NSPopUpButton!
+    @IBOutlet weak var devActivity2: NSTextField!
+
+    // Controller
+    @IBOutlet weak var devImage: NSImageView!
+    @IBOutlet weak var devLeftText: NSTextField!
+    @IBOutlet weak var devRightText: NSTextField!
+    @IBOutlet weak var devHatText: NSTextField!
+    @IBOutlet weak var devLeftScheme: NSPopUpButton!
+    @IBOutlet weak var devRightScheme: NSPopUpButton!
+    @IBOutlet weak var devHatScheme: NSPopUpButton!
     
     //
     // Captures
@@ -230,7 +239,17 @@ extension PreferencesController: NSTabViewDelegate {
 
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
 
-        refresh()
+        track()
+        if let id = tabViewItem?.identifier as? String {
+            
+            switch id {
+            case "General": refreshGeneralTab()
+            case "Controls": refreshControlsTab()
+            case "Devices": selectDevicesTab(); refreshDevicesTab()
+            case "Captures": refreshCaptureTab()
+            default: fatalError()
+            }
+        }
     }
 }
 

@@ -42,6 +42,9 @@ class GamePad {
     // Icon of this device
     var icon: NSImage?
             
+    // Indicates if this device is officially supported
+    var isKnown: Bool { return db.isKnown(vendorID: vendorID, productID: productID) }
+    
     // Keymap of the managed device (only set for keyboard emulated devices)
     var keyMap: Int?
     
@@ -77,65 +80,52 @@ class GamePad {
                                  value: value)
     }
     
-    init(manager: GamePadManager,
-         device: IOHIDDevice? = nil, type: ControlPortDevice,
-         vendorID: Int = 0, productID: Int = 0, locationID: Int = 0) {
+    init(manager: GamePadManager, device: IOHIDDevice? = nil, type: ControlPortDevice) {
                 
         self.manager = manager
         self.device = device
         self.type = type
         
-        name = db.name(vendorID: vendorID, productID: productID) ?? ""
         icon = db.icon(vendorID: vendorID, productID: productID)
+        name = db.name(vendorID: vendorID, productID: productID) ?? device?.name ?? ""
 
         updateMappingScheme()
     }
     
     func updateMappingScheme() {
         
-        // Left stick
-        switch (db.left(vendorID: vendorID, productID: productID)) {
+        let lScheme = db.left(vendorID: vendorID, productID: productID)
+        let rScheme = db.right(vendorID: vendorID, productID: productID)
+        let hScheme = db.hatSwitch(vendorID: vendorID, productID: productID)
+        
+        track("Schemes: l: \(lScheme) r: \(rScheme) h: \(hScheme)")
+        
+        switch lScheme { // Left stick
+        case 1:
+            lxAxis = kHIDUsage_GD_Y
+            lyAxis = kHIDUsage_GD_X
         default:
-            track("Using default mapping scheme for left stick")
             lxAxis = kHIDUsage_GD_X
             lyAxis = kHIDUsage_GD_Y
         }
         
-        // Right stick
-        switch (db.right(vendorID: vendorID, productID: productID)) {
+        switch rScheme { // Right stick
         case 1:
-            track("Using scheme 1 for right stick")
             rxAxis = kHIDUsage_GD_Z
             ryAxis = kHIDUsage_GD_Rz
         default:
-            track("Using default mapping scheme for right stick")
             rxAxis = kHIDUsage_GD_Rz
             ryAxis = kHIDUsage_GD_Z
         }
 
-        // Hatswitch
-        switch (db.hatSwitch(vendorID: vendorID, productID: productID)) {
+        switch hScheme { // Hat switch
         case 1:
-            track("Using scheme 1 for hat switch")
             hShift = 1
         default:
-            track("Using default scheme for hat switch")
             hShift = 0
         }
     }
-    
-    func close() {
         
-        if device == nil { return }
-        
-        let optionBits = IOOptionBits(kIOHIDOptionsTypeNone)
-        if IOHIDDeviceClose(device!, optionBits) == kIOReturnSuccess {
-            track("Closed HID device")
-        } else {
-            track("WARNING: Cannot close HID device")
-        }
-    }
-    
     func setIcon(name: String) {
         
         icon = NSImage.init(named: name)
@@ -156,20 +146,19 @@ class GamePad {
         print(name != "" ? "\(name) " : "Placeholder device ", terminator: "")
         print(isMouse ? "(Mouse) " : "", terminator: "")
         print(port != nil ? "[\(port!)] " : "[-] ", terminator: "")
-        print("(\(vendorID), \(productID), \(locationID)): ", terminator: "")
+        if vendorID != "" { print("v: \(vendorID) ", terminator: "") }
+        if productID != "" { print("p: \(productID) ", terminator: "") }
+        if locationID != "" { print("l: \(locationID) ", terminator: "") }
         print("\(lxAxis) \(lyAxis) ", terminator: "")
         print("\(rxAxis) \(ryAxis) ", terminator: "")
         print("\(hShift)")
         
         // device?.listProperties()
     }
-}
-
-//
-// Responding to keyboard events
-//
-
-extension GamePad {
+    
+    //
+    // Responding to keyboard events
+    //
 
     // Binds a key to a gamepad action
     func bind(key: MacKey, action: GamePadAction) {
@@ -265,13 +254,10 @@ extension GamePad {
             fatalError()
         }
     }
-}
-
-//
-// Responding to HID events
-//
-
-extension GamePad {
+    
+    //
+    // Responding to HID events
+    //
 
     // Based on
     // http://docs.ros.org/hydro/api/oculus_sdk/html/OSX__Gamepad_8cpp_source.html#l00170
@@ -306,9 +292,7 @@ extension GamePad {
         let intValue  = Int(IOHIDValueGetIntegerValue(value))
         let usagePage = Int(IOHIDElementGetUsagePage(element))
         let usage     = Int(IOHIDElementGetUsage(element))
-        
-        track()
-        
+                
         // Buttons
         if usagePage == kHIDPage_Button {
 
@@ -379,14 +363,11 @@ extension GamePad {
             // Trigger events
             processJoystickEvents(events: events!)
         }
-    }    
-}
-
-//
-// Emulate events on the Amiga side
-//
-
-extension GamePad {
+    }
+    
+    //
+    // Emulate events on the Amiga side
+    //
     
     @discardableResult
     func processJoystickEvents(events: [GamePadAction]) -> Bool {

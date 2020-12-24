@@ -19,66 +19,81 @@ extension PreferencesController {
 
     func refreshDevicesTab() {
                 
-        func property(_ pad: GamePad?, _ key: String) -> String {
+        let pad = selectedDev
+
+        func property(_ key: String) -> String {
             return pad?.property(key: key) ?? "-"
         }
 
         track()
-
-        let pad = selectedDev
         
         // Let us notify when the device is pulled
         pad?.notify = true
         
         let db = myAppDelegate.database
-        let vend = property(pad, kIOHIDVendorIDKey)
-        let prod = property(pad, kIOHIDProductIDKey)
+        let vend = property(kIOHIDVendorIDKey)
+        let prod = property(kIOHIDProductIDKey)
 
-        devManufacturer.stringValue = property(pad, kIOHIDManufacturerKey)
-        devProduct.stringValue = property(pad, kIOHIDProductKey)
-        devVersion.stringValue = property(pad, kIOHIDVersionNumberKey)
+        devManufacturer.stringValue = property(kIOHIDManufacturerKey)
+        devProduct.stringValue = property(kIOHIDProductKey)
+        devVersion.stringValue = property(kIOHIDVersionNumberKey)
         devVendorID.stringValue = vend
         devProductID.stringValue = prod
-        devTransport.stringValue = property(pad, kIOHIDTransportKey)
-        devUsage.stringValue = property(pad, kIOHIDPrimaryUsageKey)
-        devUsagePage.stringValue = property(pad, kIOHIDPrimaryUsagePageKey)
-        devLocationID.stringValue = property(pad, kIOHIDLocationIDKey)
-        devUniqueID.stringValue = property(pad, kIOHIDUniqueIDKey)
+        devTransport.stringValue = property(kIOHIDTransportKey)
+        devUsage.stringValue = property(kIOHIDPrimaryUsageKey)
+        devUsagePage.stringValue = property(kIOHIDPrimaryUsagePageKey)
+        devLocationID.stringValue = property(kIOHIDLocationIDKey)
+        devUniqueID.stringValue = property(kIOHIDUniqueIDKey)
 
-        devLeftStickScheme.selectItem(withTag: db.left(vendorID: vend, productID: prod))
-        devRightStickScheme.selectItem(withTag: db.right(vendorID: vend, productID: prod))
-        devHatSwitchScheme.selectItem(withTag: db.hatSwitch(vendorID: vend, productID: prod))
-
-        if pad != nil {
-            
-            devInfoBox.title = db.name(vendorID: vend, productID: prod)!
-            devLeftStickScheme.isEnabled = true
-            devRightStickScheme.isEnabled = true
-            devHatSwitchScheme.isEnabled = true
-            
+        devLeftScheme.selectItem(withTag: db.left(vendorID: vend, productID: prod))
+        devRightScheme.selectItem(withTag: db.right(vendorID: vend, productID: prod))
+        devHatScheme.selectItem(withTag: db.hatSwitch(vendorID: vend, productID: prod))
+        
+        if pad?.isKnown == true {
+            devInfoBox.title = "Supported gaming device"
+        } else if pad?.isKnown == false {
+            devInfoBox.title = "Unrecognized device"
         } else {
-
-            devInfoBox.title = "Unrecognized Device"
-            devLeftStickScheme.isEnabled = false
-            devRightStickScheme.isEnabled = false
-            devHatSwitchScheme.isEnabled = false
-            devActivity.stringValue = ""
+            devInfoBox.title = "Not connected"
         }
+        
+        devImage.isHidden = pad == nil
+        devLeftText.isHidden = pad == nil
+        devRightText.isHidden = pad == nil
+        devHatText.isHidden = pad == nil
+        devLeftScheme.isHidden = pad == nil
+        devRightScheme.isHidden = pad == nil
+        devHatScheme.isHidden = pad == nil
     }
 
     func refreshDeviceEvents(events: [GamePadAction]) {
     
-        var activity = ""
-        if events.contains(.PULL_UP) { activity += " Pull Up " }
-        if events.contains(.PULL_DOWN) { activity += " Pull Down " }
-        if events.contains(.PULL_RIGHT) { activity += " Pull Right " }
-        if events.contains(.PULL_LEFT) { activity += " Pull Left " }
-        if events.contains(.PRESS_FIRE) { activity += " Press Fire " }
-        if events.contains(.RELEASE_X) { activity += " Release X Axis " }
-        if events.contains(.RELEASE_Y) { activity += " Release Y Axis " }
-        if events.contains(.RELEASE_XY) { activity += " Release Axis " }
-        if events.contains(.RELEASE_FIRE) { activity += " Release Fire " }
+        track()
+        
+        var activity = "", activity2 = ""
+        
+        func add(_ str: String) {
+            if activity == "" { activity += str } else { activity2 += str }
+        }
+        
+        if events.contains(.PULL_UP) { add(" Pull Up ") }
+        if events.contains(.PULL_DOWN) { add(" Pull Down ") }
+        if events.contains(.PULL_RIGHT) { add(" Pull Right ") }
+        if events.contains(.PULL_LEFT) { add(" Pull Left ") }
+        if events.contains(.PRESS_FIRE) { add(" Press Fire ") }
+        if events.contains(.RELEASE_X) { add(" Release X Axis ") }
+        if events.contains(.RELEASE_Y) { add(" Release Y Axis ") }
+        if events.contains(.RELEASE_XY) { add(" Release Axis ") }
+        if events.contains(.RELEASE_FIRE) { add(" Release Fire ") }
+     
         devActivity.stringValue = activity
+        devActivity2.stringValue = activity2
+    }
+    
+    func selectDevicesTab() {
+        
+        devActivity.stringValue = ""
+        devActivity2.stringValue = ""
     }
     
     //

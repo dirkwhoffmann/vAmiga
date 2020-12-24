@@ -7,55 +7,52 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-/* This class represents a small data bases storing information about external
- * devices such as Game pads or Joysticks (in general: every device that can
- * be connected via USB or Blutooth).
+/* This class implements a data provider for external devices such as GamePads
+ * or Joysticks that can be connected via USB or Blutooth.
  *
  * An object of this class is used inside the PreferencesController
  */
 
 class DeviceDatabase {
  
-    // Mapping scheme for database entries
+    // Mapping scheme ( VendorID -> (ProductID -> Dictionary) )
     typealias DeviceDescription = [ String: [ String: [ String: String ] ] ]
     
-    // Known devices ( VendorID -> (ProductID -> Dictionary) )
+    // Known devices
     var known: DeviceDescription = [:]
     
-    // Devices configured by the user ( VendorID -> (ProductID -> Dictionary) )
+    // Devices configured by the user
     var custom: DeviceDescription = [:]
         
     init() {
     
-        track()
-        
-        // Register known devices
+        // Setup the lookup table for all known devices
         known =
             ["4":
-                ["1": ["Name": "aJoy Retro Adapter"]],
+                ["1": [:]],                   // aJoy Retro Adapter
              "121":
-                ["17": ["Name": "iNNEXT Retro (SNES)"]],
+                ["17": [:]],                  // iNNEXT Retro (SNES)
              "1035":
-                ["25907": ["Name": "Competition Pro SL-6602"]],
+                ["25907": [:]],               // Competition Pro SL-6602
              "1118":
-                ["2835": ["Name": "XBox Carbon Black", "HatSwitch": "1"]],
+                ["2835": ["HatSwitch": "1"]], // XBox Carbon Black
              "1133":
-                ["0": ["Name": "Logitech Mouse"]],
+                ["0": [:]],                   // Logitech Mouse
              "1155":
-                ["36869": ["Name": "RetroFun! Joystick Adapter"]],
+                ["36869": [:]],               // RetroFun! Joystick Adapter
              "1356":
-                ["616": ["Name": "Sony DualShock 3"],
-                 "1476": ["Name": "Sony DualShock 4"],
-                 "2508": ["Name": "Sony Dualshock 4 (2nd Gen)"]],
+                ["616": [:],                  // Sony DualShock 3
+                 "1476": [:],                 // Sony DualShock 4
+                 "2508": [:]],                // Sony Dualshock 4 (2nd Gen)
              "1848":
-                ["8727": ["Name": "Competition Pro SL-650212"]],
+                ["8727": [:]],                // Competition Pro SL-650212
              "3853":
-                ["193": ["Name": "HORIPAD for Nintendo Switch"]],
+                ["193": [:]],                 // HORIPAD for Nintendo Switch
              "7257":
-                ["36": ["Name": "The C64 Joystick"]]
+                ["36": [:]]                   // The C64 Joystick
             ]
         
-        // Load custom device information
+        // Load the lookup table for all custom devices
         let defaults = UserDefaults.standard
         if let obj = defaults.object(forKey: Keys.Dev.schemes) as? DeviceDescription {
             custom = obj
@@ -68,7 +65,6 @@ class DeviceDatabase {
         
         track()
         
-        // Save mapping schemes
         let defaults = UserDefaults.standard
         defaults.set(custom, forKey: Keys.Dev.schemes)
         
@@ -79,9 +75,9 @@ class DeviceDatabase {
     // Querying the database
     //
     
-    func query(_ vendorID: Int, _ productID: Int, _ key: String) -> String? {
+    func isKnown(vendorID: String, productID: String) -> Bool {
         
-        return query("\(vendorID)", "\(productID)", key)
+        return known[vendorID]?[productID] != nil
     }
 
     func query(_ v: String, _ p: String, _ key: String) -> String? {
@@ -95,11 +91,6 @@ class DeviceDatabase {
         return nil
     }
 
-    func name(vendorID: Int, productID: Int) -> String? {
-
-        return name(vendorID: "\(vendorID)", productID: "\(productID)")
-    }
-    
     func name(vendorID: String, productID: String) -> String? {
         
         if let value = query(vendorID, productID, "Name") {
@@ -108,12 +99,7 @@ class DeviceDatabase {
         return nil
     }
 
-    func icon(vendorID: Int, productID: Int) -> NSImage? {
-        
-        return image(vendorID: "\(vendorID)", productID: "\(productID)")
-    }
-
-    func image(vendorID: String, productID: String) -> NSImage? {
+    func icon(vendorID: String, productID: String) -> NSImage? {
     
         if let value = query(vendorID, productID, "Image") {
             return NSImage(named: value)
@@ -121,11 +107,6 @@ class DeviceDatabase {
         return nil
     }
 
-    func left(vendorID: Int, productID: Int) -> Int {
-
-        return left(vendorID: "\(vendorID)", productID: "\(productID)")
-    }
-        
     func left(vendorID: String, productID: String) -> Int {
     
         if let value = query(vendorID, productID, "Left") {
@@ -133,12 +114,7 @@ class DeviceDatabase {
         }
         return 0
     }
-    
-    func right(vendorID: Int, productID: Int) -> Int {
-
-        return right(vendorID: "\(vendorID)", productID: "\(productID)")
-    }
-    
+        
     func right(vendorID: String, productID: String) -> Int {
     
         if let value = query(vendorID, productID, "Right") {
@@ -147,11 +123,6 @@ class DeviceDatabase {
         return 0
     }
 
-    func hatSwitch(vendorID: Int, productID: Int) -> Int {
-
-        return hatSwitch(vendorID: "\(vendorID)", productID: "\(productID)")
-    }
-    
     func hatSwitch(vendorID: String, productID: String) -> Int {
     
         if let value = query(vendorID, productID, "HatSwitch") {
@@ -164,11 +135,6 @@ class DeviceDatabase {
     // Updating the database
     //
     
-    func replace(_ vendorID: Int, _ productID: Int, _ key: String, _ value: String?) {
-
-        replace("\(vendorID)", "\(productID)", key, value)
-    }
-
     func replace(_ v: String, _ p: String, _ key: String, _ value: String?) {
         
         // Replace key / value pair if it already exists
