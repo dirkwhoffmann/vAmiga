@@ -183,8 +183,8 @@ extension MyAppDelegate {
     }
 
     // Callen when a HID device has been pulled
-    func devicePulled() {
-        prefController?.refresh()
+    func devicePulled(events: [GamePadAction]) {
+        prefController?.refreshDeviceEvents(events: events)
     }
 
     // Use this variable to switch direct mapping of the Command keys on or off

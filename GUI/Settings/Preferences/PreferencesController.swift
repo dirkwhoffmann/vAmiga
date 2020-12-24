@@ -114,8 +114,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devUsagePage: NSTextField!
     @IBOutlet weak var devLocationID: NSTextField!
     @IBOutlet weak var devUniqueID: NSTextField!
-    @IBOutlet weak var devActivity1: NSTextField!
-    @IBOutlet weak var devActivity2: NSTextField!
+    @IBOutlet weak var devActivity: NSTextField!
     @IBOutlet weak var devLeftStickScheme: NSPopUpButton!
     @IBOutlet weak var devRightStickScheme: NSPopUpButton!
     @IBOutlet weak var devHatSwitchScheme: NSPopUpButton!

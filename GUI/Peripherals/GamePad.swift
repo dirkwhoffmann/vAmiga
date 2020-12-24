@@ -9,7 +9,7 @@
 
 import IOKit.hid
 
-/* Each object of this class represents an input device connected to the Game
+/* An object of this class represents an input device connected to the Game
  * Port. The object can either represent a connected HID device or a keyboard
  * emulated device. In the first case, the object serves as a callback handler
  * for HID events. In the latter case, it translates keyboard events to
@@ -25,7 +25,7 @@ class GamePad {
     // The Amiga port this device is connected to (1, 2, or nil)
     var port: Int?
 
-    // Reference to the device object
+    // Reference to the HID device
     var device: IOHIDDevice?
     var vendorID: String { return device?.vendorID ?? "" }
     var productID: String { return device?.productID ?? "" }
@@ -40,7 +40,6 @@ class GamePad {
     var name = ""
 
     // Icon of this device
-    // DEPRECATED: Query DeviceDatabase
     var icon: NSImage?
             
     // Keymap of the managed device (only set for keyboard emulated devices)
@@ -55,20 +54,18 @@ class GamePad {
     // Minimum and maximum value of analog axis event
     var min: Int?, max: Int?
     
-    // Cotroller specific usage IDs for left and right gamepad joysticks
-    var lThumbXUsageID = kHIDUsage_GD_X
-    var lThumbYUsageID = kHIDUsage_GD_Y
-    var rThumbXUsageID = kHIDUsage_GD_Z
-    var rThumbYUsageID = kHIDUsage_GD_Rz
-
-    // Controller specific headswitch value (value of "UP")
-    var headSwitchStart = 0
+    // Cotroller specific usage IDs (set in updateMappingScheme())
+    var lxAxis = kHIDUsage_GD_X
+    var lyAxis = kHIDUsage_GD_Y
+    var rxAxis = kHIDUsage_GD_Z
+    var ryAxis = kHIDUsage_GD_Rz
+    var hShift = 0
     
     /* Rescued information from the latest invocation of the action function.
-     * It is needed to determine whether a joystick event has to be triggered.
+     * This information is utilized to determine whether a joystick event has
+     * to be triggered.
      */
     var oldEvents: [Int: [GamePadAction]] = [:]
-    var latestEvents: [GamePadAction] = []
     
     // Receivers for HID events
     let inputValueCallback: IOHIDValueCallback = {
@@ -100,30 +97,30 @@ class GamePad {
         switch (db.left(vendorID: vendorID, productID: productID)) {
         default:
             track("Using default mapping scheme for left stick")
-            lThumbXUsageID = kHIDUsage_GD_X
-            lThumbYUsageID = kHIDUsage_GD_Y
+            lxAxis = kHIDUsage_GD_X
+            lyAxis = kHIDUsage_GD_Y
         }
         
         // Right stick
         switch (db.right(vendorID: vendorID, productID: productID)) {
         case 1:
             track("Using scheme 1 for right stick")
-            rThumbXUsageID = kHIDUsage_GD_Z
-            rThumbYUsageID = kHIDUsage_GD_Rz
+            rxAxis = kHIDUsage_GD_Z
+            ryAxis = kHIDUsage_GD_Rz
         default:
             track("Using default mapping scheme for right stick")
-            rThumbXUsageID = kHIDUsage_GD_Rz
-            rThumbYUsageID = kHIDUsage_GD_Z
+            rxAxis = kHIDUsage_GD_Rz
+            ryAxis = kHIDUsage_GD_Z
         }
 
         // Hatswitch
         switch (db.hatSwitch(vendorID: vendorID, productID: productID)) {
         case 1:
             track("Using scheme 1 for hat switch")
-            headSwitchStart = 1
+            hShift = 1
         default:
             track("Using default scheme for hat switch")
-            headSwitchStart = 0
+            hShift = 0
         }
     }
     
@@ -160,9 +157,9 @@ class GamePad {
         print(isMouse ? "(Mouse) " : "", terminator: "")
         print(port != nil ? "[\(port!)] " : "[-] ", terminator: "")
         print("(\(vendorID), \(productID), \(locationID)): ", terminator: "")
-        print("\(lThumbXUsageID) \(lThumbYUsageID) ", terminator: "")
-        print("\(rThumbXUsageID) \(rThumbYUsageID) ", terminator: "")
-        print("\(headSwitchStart)")
+        print("\(lxAxis) \(lyAxis) ", terminator: "")
+        print("\(rxAxis) \(ryAxis) ", terminator: "")
+        print("\(hShift)")
         
         // device?.listProperties()
     }
@@ -338,7 +335,7 @@ extension GamePad {
             
             switch usage {
                 
-            case lThumbXUsageID, rThumbXUsageID:
+            case lxAxis, rxAxis:
                 
                 // track("lThumbXUsageID, rThumbXUsageID: \(intValue)")
                 if let v = mapAnalogAxis(value: value, element: element) {
@@ -347,7 +344,7 @@ extension GamePad {
                         (v == -2) ? [.PULL_LEFT] : [.RELEASE_X]
                 }
                 
-            case lThumbYUsageID, rThumbYUsageID:
+            case lyAxis, ryAxis:
                 
                 // track("lThumbYUsageID, rThumbYUsageID: \(intValue)")
                 if let v = mapAnalogAxis(value: value, element: element) {
@@ -358,8 +355,7 @@ extension GamePad {
                 
             case kHIDUsage_GD_Hatswitch:
                 
-                track("kHIDUsage_GD_Hatswitch \(intValue)")
-                switch intValue - headSwitchStart {
+                switch intValue - hShift {
                 case 0: events = [.PULL_UP, .RELEASE_X]
                 case 1: events = [.PULL_UP, .PULL_RIGHT]
                 case 2: events = [.PULL_RIGHT, .RELEASE_Y]
@@ -401,11 +397,7 @@ extension GamePad {
         if port == 2 { for e in events { amiga.controlPort2.joystick.trigger(e) } }
         
         // Notify other components (if requested)
-        if notify {
-            latestEvents = events
-            track("Events = \(latestEvents)")
-            manager.parent.myAppDelegate.devicePulled()
-        }
+        if notify { manager.parent.myAppDelegate.devicePulled(events: events) }
 
         return events != []
     }

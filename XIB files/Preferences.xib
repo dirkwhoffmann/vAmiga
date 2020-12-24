@@ -61,8 +61,7 @@
                 <outlet property="conUp1button" destination="diW-dw-7Yh" id="dtJ-WE-6Yi"/>
                 <outlet property="conUp2" destination="sPP-Ll-WyN" id="Lzp-Nb-rec"/>
                 <outlet property="conUp2button" destination="wFF-Aw-MG2" id="LME-22-Ebz"/>
-                <outlet property="devActivity1" destination="nWG-QZ-bo4" id="Zgf-zu-X8d"/>
-                <outlet property="devActivity2" destination="Kvy-sb-Znt" id="eok-7o-pu8"/>
+                <outlet property="devActivity" destination="nWG-QZ-bo4" id="Zgf-zu-X8d"/>
                 <outlet property="devHatSwitchScheme" destination="Cx8-Ww-EiR" id="4wT-VR-Dra"/>
                 <outlet property="devInfoBox" destination="Dto-Ac-z5q" id="jr1-T2-yMV"/>
                 <outlet property="devLeftStickScheme" destination="8B9-QV-Z6T" id="B3x-YN-ecN"/>
@@ -1148,12 +1147,12 @@
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0sa-cN-ImA">
                                             <rect key="frame" x="455" y="107" width="128" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Standard" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="icV-cr-TYz" id="Q46-Ka-huZ">
+                                            <popUpButtonCell key="cell" type="push" title="Standard" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="icV-cr-TYz" id="Q46-Ka-huZ">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="7Ea-we-l9b">
                                                     <items>
-                                                        <menuItem title="Standard" id="icV-cr-TYz"/>
+                                                        <menuItem title="Standard" state="on" id="icV-cr-TYz"/>
                                                         <menuItem title="Reversed" tag="1" id="2dY-yD-rmk"/>
                                                     </items>
                                                 </menu>
@@ -1182,12 +1181,12 @@
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cx8-Ww-EiR">
                                             <rect key="frame" x="17" y="170" width="128" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Scheme 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="sv4-dI-KQh" id="nGl-Eu-Cwo">
+                                            <popUpButtonCell key="cell" type="push" title="Scheme 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="sv4-dI-KQh" id="nGl-Eu-Cwo">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="Ban-7g-8gH">
                                                     <items>
-                                                        <menuItem title="Scheme 1" id="sv4-dI-KQh"/>
+                                                        <menuItem title="Scheme 1" state="on" id="sv4-dI-KQh"/>
                                                         <menuItem title="Scheme 2" tag="1" id="8bD-wh-ttJ"/>
                                                     </items>
                                                 </menu>
@@ -1418,15 +1417,6 @@
                                             <rect key="frame" x="241" y="90" width="116" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="Zzh-hG-xh6">
-                                                <font key="font" usesAppearanceFont="YES"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kvy-sb-Znt">
-                                            <rect key="frame" x="240" y="71" width="116" height="16"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="1Pu-7A-acF">
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
