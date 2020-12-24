@@ -22,21 +22,14 @@ class GamePad {
     var prefs: Preferences { return manager.parent.pref }
     var db: DeviceDatabase { return manager.parent.myAppDelegate.database }
     
-    // The Amiga port this device is connected to (0 = unconnected)
-    // TODO: Use nil for "unconnected"
-    var port = 0
+    // The Amiga port this device is connected to (1, 2, or nil)
+    var port: Int?
 
     // Reference to the device object
     var device: IOHIDDevice?
-    
-    // Vendor ID of the managed device (HID devices, only)
-    var vendorID: String { return property(key: kIOHIDVendorIDKey) ?? "0" }
-    
-    // Product ID of the managed device (HID devices, only)
-    var productID: String { return property(key: kIOHIDProductIDKey) ?? "0" }
-
-    // Location ID of the managed device (HID devices, only)
-    var locationID: String { return property(key: kIOHIDLocationIDKey) ?? "0" }
+    var vendorID: String { return device?.vendorID ?? "" }
+    var productID: String { return device?.productID ?? "" }
+    var locationID: String { return device?.locationID ?? "" }
     
     // Type of the managed device (joystick or mouse)
     var type: ControlPortDevice
@@ -44,7 +37,7 @@ class GamePad {
     var isJoystick: Bool { return type == .CPD_JOYSTICK }
 
     // Name of the managed device
-    var name: String?
+    var name = ""
 
     // Icon of this device
     // DEPRECATED: Query DeviceDatabase
@@ -95,7 +88,7 @@ class GamePad {
         self.device = device
         self.type = type
         
-        name = db.name(vendorID: vendorID, productID: productID)
+        name = db.name(vendorID: vendorID, productID: productID) ?? ""
         icon = db.icon(vendorID: vendorID, productID: productID)
 
         updateMappingScheme()
@@ -160,10 +153,23 @@ class GamePad {
         }
         return nil
     }
+    
+    func dump() {
+        
+        print(name != "" ? "\(name) " : "Placeholder device ", terminator: "")
+        print(isMouse ? "(Mouse) " : "", terminator: "")
+        print(port != nil ? "[\(port!)] " : "[-] ", terminator: "")
+        print("(\(vendorID), \(productID), \(locationID)): ", terminator: "")
+        print("\(lThumbXUsageID) \(lThumbYUsageID) ", terminator: "")
+        print("\(rThumbXUsageID) \(rThumbYUsageID) ", terminator: "")
+        print("\(headSwitchStart)")
+        
+        // device?.listProperties()
+    }
 }
 
 //
-// Keyboard emulation
+// Responding to keyboard events
 //
 
 extension GamePad {
@@ -265,7 +271,7 @@ extension GamePad {
 }
 
 //
-// Event handling
+// Responding to HID events
 //
 
 extension GamePad {

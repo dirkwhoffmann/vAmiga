@@ -324,16 +324,7 @@ class GamePadManager {
         for i in 0 ... Int.max {
             
             guard let dev = gamePads[i] else { break }
-            
-            print("Slot \(i) [\(dev.port)]: ", terminator: "")
-            if let name = dev.name {
-                print("\(name) (\(dev.vendorID), \(dev.productID), \(dev.locationID))", terminator: "")
-            } else {
-                print("Placeholder device", terminator: "")
-            }
-            print(dev.isMouse ? " (Mouse)" : "")
-            
-            dev.device?.listProperties()
+            dev.dump()
         }
     }
     
@@ -353,31 +344,6 @@ class GamePadManager {
                 item.image = getIcon(slot: s)
                 item.isEnabled = isUsed(slot: s)
                 item.isHidden = isEmpty(slot: s) && hide
-            }
-        }
-    }
-}
-
-extension IOHIDDevice {
-    
-    func isMouse() -> Bool {
-        
-        let key = kIOHIDPrimaryUsageKey as CFString
-        
-        if let value = IOHIDDeviceGetProperty(self, key) as? Int {
-            return value == kHIDUsage_GD_Mouse
-        } else {
-            return false
-        }
-    }
-    
-    func listProperties() {
-        
-        let keys = [kIOHIDTransportKey, kIOHIDVendorIDKey, kIOHIDVendorIDSourceKey, kIOHIDProductIDKey, kIOHIDVersionNumberKey, kIOHIDManufacturerKey, kIOHIDProductKey, kIOHIDSerialNumberKey, kIOHIDCountryCodeKey, kIOHIDStandardTypeKey, kIOHIDLocationIDKey, kIOHIDDeviceUsageKey, kIOHIDDeviceUsagePageKey, kIOHIDDeviceUsagePairsKey, kIOHIDPrimaryUsageKey, kIOHIDPrimaryUsagePageKey, kIOHIDMaxInputReportSizeKey, kIOHIDMaxOutputReportSizeKey, kIOHIDMaxFeatureReportSizeKey, kIOHIDReportIntervalKey, kIOHIDSampleIntervalKey, kIOHIDBatchIntervalKey, kIOHIDRequestTimeoutKey, kIOHIDReportDescriptorKey, kIOHIDResetKey, kIOHIDKeyboardLanguageKey, kIOHIDAltHandlerIdKey, kIOHIDBuiltInKey, kIOHIDDisplayIntegratedKey, kIOHIDProductIDMaskKey, kIOHIDProductIDArrayKey, kIOHIDPowerOnDelayNSKey, kIOHIDCategoryKey, kIOHIDMaxResponseLatencyKey, kIOHIDUniqueIDKey, kIOHIDPhysicalDeviceUniqueIDKey]
-        
-        for key in keys {
-            if let prop = IOHIDDeviceGetProperty(self, key as CFString) {
-                print("\t" + key + ": \(prop)")
             }
         }
     }
