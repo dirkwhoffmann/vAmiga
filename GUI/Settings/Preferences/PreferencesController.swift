@@ -106,6 +106,7 @@ class PreferencesController: DialogController {
     
     // Property Box
     @IBOutlet weak var devInfoBox: NSBox!
+    @IBOutlet weak var devInfoBoxTitle: NSTextField!
     @IBOutlet weak var devManufacturer: NSTextField!
     @IBOutlet weak var devProduct: NSTextField!
     @IBOutlet weak var devVersion: NSTextField!
@@ -230,8 +231,7 @@ class PreferencesController: DialogController {
         pref.saveDevicesUserDefaults()
         pref.saveCaptureUserDefaults()
         myAppDelegate.database.save()
-        
-        hideSheet()
+        close()
     }
 }
 
@@ -253,6 +253,14 @@ extension PreferencesController: NSTabViewDelegate {
     }
 }
 
+extension PreferencesController: NSWindowDelegate {
+    
+    func windowWillClose(_ notification: Notification) {
+         
+        cleanup()
+    }
+}
+    
 extension PreferencesController: NSTextFieldDelegate {
     
     func controlTextDidChange(_ obj: Notification) {

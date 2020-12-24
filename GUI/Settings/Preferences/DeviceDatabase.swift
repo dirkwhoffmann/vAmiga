@@ -29,27 +29,27 @@ class DeviceDatabase {
         // Setup the lookup table for all known devices
         known =
             ["4":
-                ["1": [:]],                   // aJoy Retro Adapter
+                ["1": [:]],                     // aJoy Retro Adapter
              "121":
-                ["17": [:]],                  // iNNEXT Retro (SNES)
+                ["17": [:]],                    // iNNEXT Retro (SNES)
              "1035":
-                ["25907": [:]],               // Competition Pro SL-6602
+                ["25907": [:]],                 // Competition Pro SL-6602
              "1118":
-                ["2835": ["HatSwitch": "1"]], // XBox Carbon Black
+                ["2835": ["H": "1", "R": "1"]], // XBox Carbon Black
              "1133":
-                ["0": [:]],                   // Logitech Mouse
+                ["0": [:]],                     // Logitech Mouse
              "1155":
-                ["36869": [:]],               // RetroFun! Joystick Adapter
+                ["36869": [:]],                 // RetroFun! Joystick Adapter
              "1356":
-                ["616": [:],                  // Sony DualShock 3
-                 "1476": [:],                 // Sony DualShock 4
-                 "2508": [:]],                // Sony Dualshock 4 (2nd Gen)
+                ["616": ["R": "1"],             // Sony DualShock 3
+                 "1476": ["R": "1"],            // Sony DualShock 4
+                 "2508": ["R": "1"]],           // Sony Dualshock 4 (2nd Gen)
              "1848":
-                ["8727": [:]],                // Competition Pro SL-650212
+                ["8727": [:]],                  // Competition Pro SL-650212
              "3853":
-                ["193": [:]],                 // HORIPAD for Nintendo Switch
+                ["193": [:]],                   // HORIPAD for Nintendo Switch
              "7257":
-                ["36": [:]]                   // The C64 Joystick
+                ["36": [:]]                     // The C64 Joystick
             ]
         
         // Load the lookup table for all custom devices
@@ -109,7 +109,7 @@ class DeviceDatabase {
 
     func left(vendorID: String, productID: String) -> Int {
     
-        if let value = query(vendorID, productID, "Left") {
+        if let value = query(vendorID, productID, "L") {
             return Int.init(value) ?? 0
         }
         return 0
@@ -117,7 +117,7 @@ class DeviceDatabase {
         
     func right(vendorID: String, productID: String) -> Int {
     
-        if let value = query(vendorID, productID, "Right") {
+        if let value = query(vendorID, productID, "R") {
             return Int.init(value) ?? 0
         }
         return 0
@@ -125,7 +125,7 @@ class DeviceDatabase {
 
     func hatSwitch(vendorID: String, productID: String) -> Int {
     
-        if let value = query(vendorID, productID, "HatSwitch") {
+        if let value = query(vendorID, productID, "H") {
             return Int.init(value) ?? 0
         }
         return 0

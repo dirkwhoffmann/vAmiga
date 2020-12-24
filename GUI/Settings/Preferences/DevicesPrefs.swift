@@ -50,11 +50,14 @@ extension PreferencesController {
         devHatScheme.selectItem(withTag: db.hatSwitch(vendorID: vend, productID: prod))
         
         if pad?.isKnown == true {
-            devInfoBox.title = "Supported gaming device"
+            devInfoBoxTitle.stringValue = ""
+            devInfoBoxTitle.textColor = .secondaryLabelColor
         } else if pad?.isKnown == false {
-            devInfoBox.title = "Unrecognized device"
+            devInfoBoxTitle.stringValue = "This device is not known to the emulator. It may or may not work."
+            devInfoBoxTitle.textColor = .warningColor
         } else {
-            devInfoBox.title = "Not connected"
+            devInfoBoxTitle.stringValue = "Not connected"
+            devInfoBoxTitle.textColor = .secondaryLabelColor
         }
         
         devImage.isHidden = pad == nil
@@ -64,6 +67,8 @@ extension PreferencesController {
         devLeftScheme.isHidden = pad == nil
         devRightScheme.isHidden = pad == nil
         devHatScheme.isHidden = pad == nil
+        devActivity.isHidden = pad == nil
+        devActivity2.isHidden = pad == nil
     }
 
     func refreshDeviceEvents(events: [GamePadAction]) {
