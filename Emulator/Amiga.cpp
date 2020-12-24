@@ -182,6 +182,15 @@ Amiga::reset(bool hard)
     if (hard) messageQueue.put(MSG_RESET);
 }
 
+void
+Amiga::_reset(bool hard)
+{
+    RESET_SNAPSHOT_ITEMS(hard)
+    
+    // Clear all runloop flags
+    runLoopCtrl = 0;
+}
+
 AmigaConfiguration
 Amiga::getConfig()
 {
@@ -429,7 +438,7 @@ Amiga::_powerOn()
     debug(RUN_DEBUG, "_powerOn()\n");
 
     // Clear all runloop flags
-    runLoopCtrl = 0;
+    // runLoopCtrl = 0;
 
     // Update the recorded debug information
     inspect();
@@ -707,7 +716,6 @@ Amiga::runLoop()
 
     // Prepare to run
     oscillator.restart();
-    // restartTimer();
     
     // Enable or disable debugging features
     if (debugMode) {

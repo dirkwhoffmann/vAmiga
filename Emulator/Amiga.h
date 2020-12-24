@@ -182,7 +182,7 @@ public:
 
 private:
     
-    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
+    void _reset(bool hard) override;
 
     
     //
@@ -234,7 +234,6 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
-        // worker & clockBase;
     }
 
     template <class T>
