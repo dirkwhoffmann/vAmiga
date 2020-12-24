@@ -434,10 +434,13 @@ class Renderer: NSObject, MTKViewDelegate {
             flickerCnt += 1
             mergeUniforms.longFrameScale = (flickerCnt % 4 >= 2) ? 1.0 : weight
             mergeUniforms.shortFrameScale = (flickerCnt % 4 >= 2) ? weight : 1.0
-
+            
             mergeFilter.apply(commandBuffer: commandBuffer,
-                              textures: [longFrameTexture, shortFrameTexture, mergeTexture],
-                              options: &mergeUniforms)
+                              textures: [longFrameTexture,
+                                         shortFrameTexture,
+                                         mergeTexture],
+                              options: &mergeUniforms,
+                              length: MemoryLayout<MergeUniforms>.stride)
             
         } else if currLOF {
             
@@ -460,8 +463,12 @@ class Renderer: NSObject, MTKViewDelegate {
         if shaderOptions.bloom != 0 {
             let bloomFilter = currentBloomFilter()
             bloomFilter.apply(commandBuffer: commandBuffer,
-                              textures: [mergeTexture, bloomTextureR, bloomTextureG, bloomTextureB],
-                              options: &shaderOptions)
+                              textures: [mergeTexture,
+                                         bloomTextureR,
+                                         bloomTextureG,
+                                         bloomTextureB],
+                              options: &shaderOptions,
+                              length: MemoryLayout<ShaderOptions>.stride)
 
             func applyGauss(_ texture: inout MTLTexture, radius: Float) {
 
@@ -495,7 +502,8 @@ class Renderer: NSObject, MTKViewDelegate {
         scanlineFilter.apply(commandBuffer: commandBuffer,
                              source: upscaledTexture,
                              target: scanlineTexture,
-                             options: &shaderOptions)
+                             options: &shaderOptions,
+                             length: MemoryLayout<ShaderOptions>.stride)
 
         // Create a render pass descriptor
         let descriptor = MTLRenderPassDescriptor.init()

@@ -112,35 +112,40 @@ class ComputeKernel: NSObject {
         }
     }
     
-    func apply(commandBuffer: MTLCommandBuffer, source: MTLTexture, target: MTLTexture,
-               options: UnsafeRawPointer? = nil) {
+    func apply(commandBuffer: MTLCommandBuffer,
+               source: MTLTexture, target: MTLTexture,
+               options: UnsafeRawPointer? = nil, length: Int = 0) {
         
-        apply(commandBuffer: commandBuffer, textures: [source, target], options: options)
-    }
+        if let encoder = commandBuffer.makeComputeCommandEncoder() {
+            
+            encoder.setTexture(source, index: 0)
+            encoder.setTexture(target, index: 1)
 
-    func apply(commandBuffer: MTLCommandBuffer, textures: [MTLTexture],
-               options: UnsafeRawPointer? = nil) {
+            apply(encoder: encoder, options: options, length: length)
+        }
+    }
+    
+    func apply(commandBuffer: MTLCommandBuffer,
+               textures: [MTLTexture],
+               options: UnsafeRawPointer? = nil, length: Int = 0) {
         
         if let encoder = commandBuffer.makeComputeCommandEncoder() {
             
             for (index, texture) in textures.enumerated() {
                 encoder.setTexture(texture, index: index)
             }
-            apply(encoder: encoder, options: options)
+            apply(encoder: encoder, options: options, length: length)
         }
     }
 
-    func apply(encoder: MTLComputeCommandEncoder, options: UnsafeRawPointer? = nil) {
+    private func apply(encoder: MTLComputeCommandEncoder,
+                       options: UnsafeRawPointer?, length: Int) {
         
         // Bind pipeline
         encoder.setComputePipelineState(kernel)
         
         // Pass in shader options
-        if options != nil {
-            encoder.setBytes(options!,
-                             length: MemoryLayout<ShaderOptions>.stride,
-                             index: 0)
-        }
+        if let opt = options { encoder.setBytes(opt, length: length, index: 0) }
         
         // Determine thread group size and number of groups
         let groupW = kernel.threadExecutionWidth
