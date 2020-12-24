@@ -97,9 +97,7 @@ class GamePad {
         let lScheme = db.left(vendorID: vendorID, productID: productID)
         let rScheme = db.right(vendorID: vendorID, productID: productID)
         let hScheme = db.hatSwitch(vendorID: vendorID, productID: productID)
-        
-        track("Schemes: l: \(lScheme) r: \(rScheme) h: \(hScheme)")
-        
+                
         switch lScheme { // Left stick
         case 1:
             lxAxis = kHIDUsage_GD_Y

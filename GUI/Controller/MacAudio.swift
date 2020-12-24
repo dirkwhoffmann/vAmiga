@@ -97,8 +97,6 @@ public class MacAudio: NSObject {
             track("Failed to allocate RenderResources")
             return nil
         }
-        
-        track("Success")
     }
 
     func shutDown() {

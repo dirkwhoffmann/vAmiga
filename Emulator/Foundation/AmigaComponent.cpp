@@ -12,7 +12,6 @@
 AmigaComponent::AmigaComponent(Amiga& ref) :
 agnus(ref.agnus),
 amiga(ref),
-audioUnit(ref.paula.audioUnit),
 blitter(ref.agnus.blitter),
 ciaa(ref.ciaA),
 ciab(ref.ciaB),

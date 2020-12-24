@@ -33,7 +33,6 @@ class Mouse;
 class Oscillator;
 class PixelEngine;
 class Paula;
-class PaulaAudio;
 class RTC;
 class SerialPort;
 class UART;
@@ -48,7 +47,6 @@ protected:
 
     Agnus &agnus;
     Amiga &amiga;
-    PaulaAudio &audioUnit;
     Blitter &blitter;
     CIAA &ciaa;
     CIAB &ciab;
