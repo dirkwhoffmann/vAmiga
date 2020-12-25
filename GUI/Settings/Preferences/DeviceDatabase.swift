@@ -37,7 +37,7 @@ class DeviceDatabase {
              "1118":
                 ["2835": ["H": "1", "R": "1"]], // XBox Carbon Black
              "1133":
-                ["0": [:]],                     // Logitech Mouse
+                ["49250": [:]],                 // Logitech Mouse
              "1155":
                 ["36869": [:]],                 // RetroFun! Joystick Adapter
              "1356":

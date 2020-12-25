@@ -1096,17 +1096,6 @@
                                     <rect key="frame" x="10" y="33" width="600" height="433"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <button verticalHuggingPriority="750" id="Wmt-KA-dLs">
-                                            <rect key="frame" x="527" y="19" width="59" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="fiW-x3-79i">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="okAction:" target="-2" id="rny-v1-c5A"/>
-                                            </connections>
-                                        </button>
                                         <box verticalHuggingPriority="750" boxType="separator" id="vQF-Af-cYM">
                                             <rect key="frame" x="17" y="55" width="561" height="5"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -1446,6 +1435,17 @@
                                                 <action selector="devPresetAction:" target="-2" id="dZ4-Ae-iBN"/>
                                             </connections>
                                         </popUpButton>
+                                        <button verticalHuggingPriority="750" id="Wmt-KA-dLs">
+                                            <rect key="frame" x="527" y="10" width="59" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="fiW-x3-79i">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="okAction:" target="-2" id="rny-v1-c5A"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                 </view>
                             </tabViewItem>
