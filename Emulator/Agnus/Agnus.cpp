@@ -22,6 +22,9 @@ Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
     ptrMask = 0x0FFFFF;
     
     initLookupTables();
+    
+    // Wipe out the event slots
+    memset(slot, 0, sizeof(slot));
 }
 
 void Agnus::_reset(bool hard)

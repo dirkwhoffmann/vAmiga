@@ -108,11 +108,11 @@ Moira::computeEA(u32 n) {
 
             if (CHECK_SANITIZER_FIXES) {
                 u32 old = d + an;
-                u32 fix = ADD_U32(an, d);
+                u32 fix = U32_ADD(an, d);
                 assert(old == fix);
             }
             
-            result = ADD_U32(an, d);
+            result = U32_ADD(an, d);
             if ((F & SKIP_LAST_READ) == 0) readExt();
             break;
         }
@@ -124,10 +124,10 @@ Moira::computeEA(u32 n) {
 
             if (CHECK_SANITIZER_FIXES) {
                 u32 old = d + an + ((queue.irc & 0x800) ? xi : SEXT<Word>(xi));
-                u32 fix = ADD_U32_3(an, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
+                u32 fix = U32_ADD3(an, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
                 assert(old == fix);
             }
-            result = ADD_U32_3(an, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
+            result = U32_ADD3(an, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
 
             sync(2);
             if ((F & SKIP_LAST_READ) == 0) readExt();
@@ -151,7 +151,7 @@ Moira::computeEA(u32 n) {
         {
             i16  d = (i16)queue.irc;
 
-            result = ADD_U32(reg.pc, d);
+            result = U32_ADD(reg.pc, d);
 
             if (CHECK_SANITIZER_FIXES) {
                 u32 old_result = reg.pc + d;
@@ -169,11 +169,11 @@ Moira::computeEA(u32 n) {
 
             if (CHECK_SANITIZER_FIXES) {
                 u32 old = d + reg.pc + ((queue.irc & 0x800) ? xi : SEXT<Word>(xi));
-                u32 fix = ADD_U32_3(reg.pc, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
+                u32 fix = U32_ADD3(reg.pc, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
                 assert(old == fix);
             }
             
-            result = ADD_U32_3(reg.pc, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
+            result = U32_ADD3(reg.pc, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
             sync(2);
             if ((F & SKIP_LAST_READ) == 0) readExt();
             break;

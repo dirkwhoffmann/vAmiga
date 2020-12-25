@@ -982,10 +982,14 @@ Blitter::exec()
                 check2 = fnv_1a_it32(check2, bltdpt);
             }
             trace(BLT_DEBUG, "D: poke(%X), %X (check: %X %X)\n", bltdpt, dhold, check1, check2);
-                
-            bltdpt += desc ? -2 : 2;
+            if (CHECK_SANITIZER_FIXES) {
+                u32 old = bltdpt + (desc ? -2 : 2);
+                u32 fix = U32_ADD(bltdpt, desc ? -2 : 2);
+                assert(old == fix);
+            }
+            bltdpt = U32_ADD(bltdpt, desc ? -2 : 2);
             if (--cntD == 0) {
-                bltdpt += desc ? -bltdmod : bltdmod;
+                bltdpt = U32_ADD(bltdpt, desc ? -bltdmod : bltdmod);
                 cntD = bltsizeH;
                 fillCarry = !!bltconFCI();
             }
@@ -999,9 +1003,14 @@ Blitter::exec()
         anew = agnus.doBlitterDMA(bltapt);
         trace(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
         trace(BLT_DEBUG, "    After fetch: A = %X\n", anew);
-        bltapt += desc ? -2 : 2;
+        if (CHECK_SANITIZER_FIXES) {
+            u32 old = bltapt + (desc ? -2 : 2);
+            u32 fix = U32_ADD(bltapt, desc ? -2 : 2);
+            assert(old == fix);
+        }
+        bltapt = U32_ADD(bltapt, desc ? -2 : 2);
         if (--cntA == 0) {
-            bltapt += desc ? -bltamod : bltamod;
+            bltapt = U32_ADD(bltapt, desc ? -bltamod : bltamod);
             cntA = bltsizeH;
         }
     }
@@ -1013,9 +1022,14 @@ Blitter::exec()
         bnew = agnus.doBlitterDMA(bltbpt);
         trace(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
         trace(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
-        bltbpt += desc ? -2 : 2;
+        if (CHECK_SANITIZER_FIXES) {
+            u32 old = bltbpt + (desc ? -2 : 2);
+            u32 fix = U32_ADD(bltbpt, desc ? -2 : 2);
+            assert(old == fix);
+        }
+        bltbpt = U32_ADD(bltbpt, desc ? -2 : 2);
         if (--cntB == 0) {
-            bltbpt += desc ? -bltbmod : bltbmod;
+            bltbpt = U32_ADD(bltbpt, desc ? -bltbmod : bltbmod);
             cntB = bltsizeH;
         }
     }
@@ -1027,9 +1041,14 @@ Blitter::exec()
         chold = agnus.doBlitterDMA(bltcpt);
         trace(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
         trace(BLT_DEBUG, "    After fetch: C = %X\n", chold);
-        bltcpt += desc ? -2 : 2;
+        if (CHECK_SANITIZER_FIXES) {
+            u32 old = bltcpt + (desc ? -2 : 2);
+            u32 fix = U32_ADD(bltcpt, desc ? -2 : 2);
+            assert(old == fix);
+        }
+        bltcpt = U32_ADD(bltcpt, desc ? -2 : 2);
         if (--cntC == 0) {
-            bltcpt += desc ? -bltcmod : bltcmod;
+            bltcpt = U32_ADD(bltcpt, desc ? -bltcmod : bltcmod);
             cntC = bltsizeH;
         }
     }

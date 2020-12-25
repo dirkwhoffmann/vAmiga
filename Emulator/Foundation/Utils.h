@@ -52,6 +52,23 @@ bool releaseBuild();
 
 
 //
+// Performing overflow-prone arithmetic
+//
+
+// Sanitizer friendly macros for adding signed offsets to u32 values
+#define U32_ADD(x,y) (u32)((i64)(x) + (i64)(y))
+#define U32_SUB(x,y) (u32)((i64)(x) - (i64)(y))
+#define U32_ADD3(x,y,z) (u32)((i64)(x) + (i64)(y) + (i64)(z))
+#define U32_SUB3(x,y,z) (u32)((i64)(x) - (i64)(y) - (i64)(z))
+
+// Sanitizer friendly macros for adding signed offsets to u64 values
+#define U64_ADD(x,y) (u64)((i64)(x) + (i64)(y))
+#define U64_SUB(x,y) (u64)((i64)(x) - (i64)(y))
+#define U64_ADD3(x,y,z) (u64)((i64)(x) + (i64)(y) + (i64)(z))
+#define U64_SUB3(x,y,z) (u64)((i64)(x) - (i64)(y) - (i64)(z))
+
+
+//
 // Accessing bits and bytes
 //
 
@@ -199,8 +216,8 @@ inline u32 fnv_1a_init32() { return 0x811c9dc5; }
 inline u64 fnv_1a_init64() { return 0xcbf29ce484222325; }
 
 // Performs a single iteration of the FNV-1a hash algorithm
-inline u32 fnv_1a_it32(u32 prv, u32 val) { return (prv ^ val) * 0x1000193; }
-inline u64 fnv_1a_it64(u64 prv, u64 val) { return (prv ^ val) * 0x100000001b3; }
+u32 fnv_1a_it32(u32 prv, u32 val);
+u64 fnv_1a_it64(u64 prv, u64 val);
 
 // Computes a FNV-1a checksum for a given buffer
 u32 fnv_1a_32(const u8 *addr, size_t size);

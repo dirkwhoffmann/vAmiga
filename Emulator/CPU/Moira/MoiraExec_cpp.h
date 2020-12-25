@@ -151,11 +151,11 @@ Moira::execAdda(u16 opcode)
 
     if (CHECK_SANITIZER_FIXES) {
         u32 old = (I == ADDA) ? readA(dst) + data : readA(dst) - data;
-        u32 fix = (I == ADDA) ? ADD_U32(readA(dst), data) : SUB_U32(readA(dst), data);
+        u32 fix = (I == ADDA) ? U32_ADD(readA(dst), data) : U32_SUB(readA(dst), data);
         assert(old == fix);
     }
     
-    result = (I == ADDA) ? ADD_U32(readA(dst), data) : SUB_U32(readA(dst), data);
+    result = (I == ADDA) ? U32_ADD(readA(dst), data) : U32_SUB(readA(dst), data);
     prefetch<POLLIPL>();
 
     sync(2);
@@ -386,7 +386,7 @@ Moira::execBcc(u16 opcode)
     sync(2);
     if (cond<I>()) {
 
-        u32 newpc = ADD_U32(reg.pc, S == Word ? (i16)queue.irc : (i8)opcode);
+        u32 newpc = U32_ADD(reg.pc, S == Word ? (i16)queue.irc : (i8)opcode);
 
         if (CHECK_SANITIZER_FIXES) {
             u32 newpc_deprecated = reg.pc + (S == Word ? (i16)queue.irc : (i8)opcode);
@@ -496,15 +496,15 @@ Moira::execBsr(u16 opcode)
  
     if (CHECK_SANITIZER_FIXES) {
         u32 old = reg.pc + offset;
-        u32 fix = ADD_U32(reg.pc, offset);
+        u32 fix = U32_ADD(reg.pc, offset);
         u32 old2 = reg.pc + (S == Word ? 2 : 0);
-        u32 fix2 = ADD_U32(reg.pc, S == Word ? 2 : 0);
+        u32 fix2 = U32_ADD(reg.pc, S == Word ? 2 : 0);
         assert(old == fix);
         assert(old2 == fix2);
     }
     
-    u32 newpc = ADD_U32(reg.pc, offset);
-    u32 retpc = ADD_U32(reg.pc, S == Word ? 2 : 0);
+    u32 newpc = U32_ADD(reg.pc, offset);
+    u32 retpc = U32_ADD(reg.pc, S == Word ? 2 : 0);
 
     // Check for address error
     if (misaligned<Word>(newpc)) {
@@ -658,7 +658,7 @@ Moira::execDbcc(u16 opcode)
     if (!cond<I>()) {
 
         int dn = _____________xxx(opcode);
-        u32 newpc = ADD_U32(reg.pc, (i16)queue.irc);
+        u32 newpc = U32_ADD(reg.pc, (i16)queue.irc);
 
         if (CHECK_SANITIZER_FIXES) {
             u32 newpc_deprecated = reg.pc + (i16)queue.irc;
@@ -676,10 +676,10 @@ Moira::execDbcc(u16 opcode)
         // Decrement loop counter
         if (CHECK_SANITIZER_FIXES) {
             u32 old = readD<Word>(dn) - 1;
-            u32 fix = SUB_U32(readD<Word>(dn), 1);
+            u32 fix = U32_SUB(readD<Word>(dn), 1);
             assert(old == fix);
         }
-        writeD<Word>(dn, SUB_U32(readD<Word>(dn), 1));
+        writeD<Word>(dn, U32_SUB(readD<Word>(dn), 1));
 
         // Branch
         if (takeBranch) {
@@ -846,10 +846,10 @@ Moira::execLink(u16 opcode)
     writeA(ax, sp);
     if (CHECK_SANITIZER_FIXES) {
         u32 old = reg.sp + (i32)disp;
-        u32 fix = ADD_U32(reg.sp, disp);
+        u32 fix = U32_ADD(reg.sp, disp);
         assert(old == fix);
     }
-    reg.sp = ADD_U32(reg.sp, disp);
+    reg.sp = U32_ADD(reg.sp, disp);
 
     prefetch<POLLIPL>();
 }

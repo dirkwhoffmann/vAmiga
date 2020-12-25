@@ -250,9 +250,9 @@ Disk::addClockBits(u8 value, u8 previous)
     value &= 0x55;
 
     // Compute clock bits (clock bit values are inverted)
-    u8 lShifted = (value << 1);
-    u8 rShifted = (value >> 1) | (previous << 7);
-    u8 cBitsInv = lShifted | rShifted;
+    u8 lShifted = (u8)(value << 1);
+    u8 rShifted = (u8)(value >> 1 | previous << 7);
+    u8 cBitsInv = (u8)(lShifted | rShifted);
 
     // Reverse the computed clock bits
     u64 cBits = cBitsInv ^ 0xAA;
