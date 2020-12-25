@@ -403,6 +403,11 @@ Memory::alloc(u64 bytes, u8 *&ptr, u64 &size, u32 &mask)
         size = bytes;
         mask = bytes - 1;
         fillRamWithInitPattern();
+        
+        if ((uintptr_t)ptr & 1) {
+            warn("Memory at %p (%llu bytes) is not aligned\n", ptr, bytes);
+            assert(false);
+        }
     }
     updateMemSrcTables();
     return true;
