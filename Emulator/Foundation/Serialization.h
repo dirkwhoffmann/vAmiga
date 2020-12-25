@@ -29,21 +29,24 @@
 
 inline u8 read8(u8 *& buffer)
 {
-    u8 result = *buffer;
+    // u8 result = *buffer;
+    u8 result = R8BE(buffer);
     buffer += 1;
     return result;
 }
 
 inline u16 read16(u8 *& buffer)
 {
-    u16 result = ntohs(*((u16 *)buffer));
+    // u16 result = ntohs(*((u16 *)buffer));
+    u16 result = R16BE(buffer);
     buffer += 2;
     return result;
 }
 
 inline u32 read32(u8 *& buffer)
 {
-    u32 result = ntohl(*((u32 *)buffer));
+    // u32 result = ntohl(*((u32 *)buffer));
+    u32 result = R32BE(buffer);
     buffer += 4;
     return result;
 }
@@ -71,19 +74,22 @@ inline double readDouble(u8 *& buffer)
  
 inline void write8(u8 *& buffer, u8 value)
 {
-    *buffer = value;
+    // *buffer = value;
+    W8BE(buffer, value);
     buffer += 1;
 }
 
 inline void write16(u8 *& buffer, u16 value)
 {
-    *((u16 *)buffer) = htons(value);
+    // *((u16 *)buffer) = htons(value);
+    W16BE(buffer, value);
     buffer += 2;
 }
 
 inline void write32(u8 *& buffer, u32 value)
 {
-    *((u32 *)buffer) = htonl(value);
+    // *((u32 *)buffer) = htonl(value);
+    W32BE(buffer, value);
     buffer += 4;
 }
 
