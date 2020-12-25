@@ -1043,9 +1043,19 @@ Blitter::exec()
         // Run the barrel shifters on data path A
         trace(BLT_DEBUG, "    ash = %d mask = %X\n", bltconASH(), mask);
         if (desc) {
-            ahold = HI_W_LO_W(anew & mask, aold) >> (16 - bltconASH());
+            if (CHECK_SANITIZER_FIXES) {
+                u16 old = HI_W_LO_W(anew & mask, aold) >> (16 - bltconASH());
+                u16 fix = (u16)(HI_W_LO_W(anew & mask, aold) >> (16 - bltconASH()));
+                assert(old == fix);
+            }
+            ahold = (u16)(HI_W_LO_W(anew & mask, aold) >> (16 - bltconASH()));
         } else {
-            ahold = HI_W_LO_W(aold, anew & mask) >> bltconASH();
+            if (CHECK_SANITIZER_FIXES) {
+                u16 old = HI_W_LO_W(aold, anew & mask) >> bltconASH();
+                u16 fix = (u16)(HI_W_LO_W(aold, anew & mask) >> bltconASH());
+                assert(old == fix);
+            }
+            ahold = (u16)(HI_W_LO_W(aold, anew & mask) >> bltconASH());
         }
         aold = anew & mask;
         trace(BLT_DEBUG, "    After shifting A (%d) A = %x\n", bltconASH(), ahold);
@@ -1058,9 +1068,19 @@ Blitter::exec()
         // Run the barrel shifters on data path B
         trace(BLT_DEBUG, "    bsh = %d\n", bltconBSH());
         if (desc) {
-            bhold = HI_W_LO_W(bnew, bold) >> (16 - bltconBSH());
+            if (CHECK_SANITIZER_FIXES) {
+                u16 old = HI_W_LO_W(bnew, bold) >> (16 - bltconBSH());
+                u16 fix = (u16)(HI_W_LO_W(bnew, bold) >> (16 - bltconBSH()));
+                assert(old == fix);
+            }
+            bhold = (u16)(HI_W_LO_W(bnew, bold) >> (16 - bltconBSH()));
         } else {
-            bhold = HI_W_LO_W(bold, bnew) >> bltconBSH();
+            if (CHECK_SANITIZER_FIXES) {
+                u16 old = HI_W_LO_W(bold, bnew) >> bltconBSH();
+                u16 fix = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
+                assert(old == fix);
+            }
+            bhold = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
         }
         bold = bnew;
         trace(BLT_DEBUG, "    After shifting B (%d) B = %x\n", bltconBSH(), bhold);

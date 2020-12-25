@@ -232,7 +232,7 @@ CIA::emulateRisingEdgeOnCntPin()
         trace(CIASER_DEBUG, "Clocking in bit %d [%d]\n", SP, serCounter);
         
         // Shift in a bit from the SP line
-        ssr = ssr << 1 | SP;
+        ssr = (u8)(ssr << 1) | (u8)SP;
         
         // Perform special action if a byte is complete
         if (--serCounter == 0) {

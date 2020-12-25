@@ -242,7 +242,12 @@ Blitter::doFastLineBlit()
     u16 bltcdat_local = chold;
     u16 bltddat_local = 0;
     
-    u16 mask = (bnew >> bltconBSH()) | (bnew << (16 - bltconBSH()));
+    if (CHECK_SANITIZER_FIXES) {
+        u16 old = (bnew >> bltconBSH()) | (bnew << (16 - bltconBSH()));
+        u16 fix = (u16)((bnew >> bltconBSH()) | (bnew << (16 - bltconBSH())));
+        assert(old == fix);
+    }
+    u16 mask = (u16)((bnew >> bltconBSH()) | (bnew << (16 - bltconBSH())));
     bool a_enabled = bltcon & 0x08000000;
     bool c_enabled = bltcon & 0x02000000;
     
@@ -306,7 +311,12 @@ Blitter::doFastLineBlit()
         bzero_local = bzero_local | bltddat_local;
         
         // Rotate mask
-        mask = (mask << 1) | (mask >> 15);
+        if (CHECK_SANITIZER_FIXES) {
+            u16 old = (mask << 1) | (mask >> 15);
+            u16 fix = (u16)(mask << 1 | mask >> 15);
+            assert(old == fix);
+        }
+        mask = (u16)(mask << 1 | mask >> 15);
         
         // Test movement in the X direction
         // When the decision variable gets positive,
@@ -316,11 +326,23 @@ Blitter::doFastLineBlit()
         if (decision_is_signed) {
             // Do not yet increase, D has sign
             // D = D + (2*sdelta = bltbmod)
-            decision_variable += decision_inc_signed;
+            if (CHECK_SANITIZER_FIXES) {
+                u32 old = decision_variable + decision_inc_signed;
+                u32 fix = (u32)((i64)decision_variable + decision_inc_signed);
+                assert(old == fix);
+            }
+            decision_variable = (u32)((i64)decision_variable + decision_inc_signed);
+            // decision_variable += decision_inc_signed;
         } else {
             // increase, D reached a positive value
             // D = D + (2*sdelta - 2*ldelta = bltamod)
-            decision_variable += decision_inc_unsigned;
+            if (CHECK_SANITIZER_FIXES) {
+                u32 old = decision_variable + decision_inc_unsigned;
+                u32 fix = (u32)((i64)decision_variable + decision_inc_unsigned);
+                assert(old == fix);
+            }
+            decision_variable = (u32)((i64)decision_variable + decision_inc_unsigned);
+            // decision_variable += decision_inc_unsigned;
             
             if (!x_independent) {
                 if (x_inc) {

@@ -106,7 +106,13 @@ Moira::computeEA(u32 n) {
             u32 an = readA(n);
             i16  d = (i16)queue.irc;
 
-            result = d + an;
+            if (CHECK_SANITIZER_FIXES) {
+                u32 old = d + an;
+                u32 fix = ADD_U32(an, d);
+                assert(old == fix);
+            }
+            
+            result = ADD_U32(an, d);
             if ((F & SKIP_LAST_READ) == 0) readExt();
             break;
         }
@@ -116,7 +122,12 @@ Moira::computeEA(u32 n) {
             u32 an = readA(n);
             u32 xi = readR((queue.irc >> 12) & 0b1111);
 
-            result = d + an + ((queue.irc & 0x800) ? xi : SEXT<Word>(xi));
+            if (CHECK_SANITIZER_FIXES) {
+                u32 old = d + an + ((queue.irc & 0x800) ? xi : SEXT<Word>(xi));
+                u32 fix = ADD_U32_3(an, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
+                assert(old == fix);
+            }
+            result = ADD_U32_3(an, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
 
             sync(2);
             if ((F & SKIP_LAST_READ) == 0) readExt();
@@ -140,7 +151,14 @@ Moira::computeEA(u32 n) {
         {
             i16  d = (i16)queue.irc;
 
-            result = reg.pc + d;
+            result = ADD_U32(reg.pc, d);
+
+            if (CHECK_SANITIZER_FIXES) {
+                u32 old_result = reg.pc + d;
+                assert(old_result == result);
+            }
+            
+            
             if ((F & SKIP_LAST_READ) == 0) readExt();
             break;
         }
@@ -149,7 +167,13 @@ Moira::computeEA(u32 n) {
             i8   d = (i8)queue.irc;
             u32 xi = readR((queue.irc >> 12) & 0b1111);
 
-            result = d + reg.pc + ((queue.irc & 0x800) ? xi : SEXT<Word>(xi));
+            if (CHECK_SANITIZER_FIXES) {
+                u32 old = d + reg.pc + ((queue.irc & 0x800) ? xi : SEXT<Word>(xi));
+                u32 fix = ADD_U32_3(reg.pc, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
+                assert(old == fix);
+            }
+            
+            result = ADD_U32_3(reg.pc, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
             sync(2);
             if ((F & SKIP_LAST_READ) == 0) readExt();
             break;

@@ -149,7 +149,13 @@ Moira::execAdda(u16 opcode)
     if (!readOp<M,S, STD_AE_FRAME>(src, ea, data)) return;
     data = SEXT<S>(data);
 
-    result = (I == ADDA) ? readA(dst) + data : readA(dst) - data;
+    if (CHECK_SANITIZER_FIXES) {
+        u32 old = (I == ADDA) ? readA(dst) + data : readA(dst) - data;
+        u32 fix = (I == ADDA) ? ADD_U32(readA(dst), data) : SUB_U32(readA(dst), data);
+        assert(old == fix);
+    }
+    
+    result = (I == ADDA) ? ADD_U32(readA(dst), data) : SUB_U32(readA(dst), data);
     prefetch<POLLIPL>();
 
     sync(2);
@@ -380,7 +386,12 @@ Moira::execBcc(u16 opcode)
     sync(2);
     if (cond<I>()) {
 
-        u32 newpc = reg.pc + (S == Word ? (i16)queue.irc : (i8)opcode);
+        u32 newpc = ADD_U32(reg.pc, S == Word ? (i16)queue.irc : (i8)opcode);
+
+        if (CHECK_SANITIZER_FIXES) {
+            u32 newpc_deprecated = reg.pc + (S == Word ? (i16)queue.irc : (i8)opcode);
+            assert(newpc == newpc_deprecated);
+        }
         
         // Check for address error
         if (misaligned<Word>(newpc)) {
@@ -482,8 +493,18 @@ template<Instr I, Mode M, Size S> void
 Moira::execBsr(u16 opcode)
 {
     i16 offset = S == Word ? (i16)queue.irc : (i8)opcode;
-    u32 newpc = reg.pc + offset;
-    u32 retpc = reg.pc + (S == Word ? 2 : 0);
+ 
+    if (CHECK_SANITIZER_FIXES) {
+        u32 old = reg.pc + offset;
+        u32 fix = ADD_U32(reg.pc, offset);
+        u32 old2 = reg.pc + (S == Word ? 2 : 0);
+        u32 fix2 = ADD_U32(reg.pc, S == Word ? 2 : 0);
+        assert(old == fix);
+        assert(old2 == fix2);
+    }
+    
+    u32 newpc = ADD_U32(reg.pc, offset);
+    u32 retpc = ADD_U32(reg.pc, S == Word ? 2 : 0);
 
     // Check for address error
     if (misaligned<Word>(newpc)) {
@@ -637,8 +658,13 @@ Moira::execDbcc(u16 opcode)
     if (!cond<I>()) {
 
         int dn = _____________xxx(opcode);
-        u32 newpc = reg.pc + (i16)queue.irc;
+        u32 newpc = ADD_U32(reg.pc, (i16)queue.irc);
 
+        if (CHECK_SANITIZER_FIXES) {
+            u32 newpc_deprecated = reg.pc + (i16)queue.irc;
+            assert(newpc == newpc_deprecated);
+        }
+        
         bool takeBranch = readD<Word>(dn) != 0;
         
         // Check for address error
@@ -648,7 +674,12 @@ Moira::execDbcc(u16 opcode)
         }
         
         // Decrement loop counter
-        writeD<Word>(dn, readD<Word>(dn) - 1);
+        if (CHECK_SANITIZER_FIXES) {
+            u32 old = readD<Word>(dn) - 1;
+            u32 fix = SUB_U32(readD<Word>(dn), 1);
+            assert(old == fix);
+        }
+        writeD<Word>(dn, SUB_U32(readD<Word>(dn), 1));
 
         // Branch
         if (takeBranch) {
@@ -813,7 +844,12 @@ Moira::execLink(u16 opcode)
 
     // Modify address register and stack pointer
     writeA(ax, sp);
-    reg.sp += (i32)disp;
+    if (CHECK_SANITIZER_FIXES) {
+        u32 old = reg.sp + (i32)disp;
+        u32 fix = ADD_U32(reg.sp, disp);
+        assert(old == fix);
+    }
+    reg.sp = ADD_U32(reg.sp, disp);
 
     prefetch<POLLIPL>();
 }

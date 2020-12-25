@@ -7,6 +7,19 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+// Sanitizer friendly macros for adding signed offsets to u32 values
+#define ADD_U32(x,y) (u32)((i64)(x) + (i64)(y))
+#define SUB_U32(x,y) (u32)((i64)(x) - (i64)(y))
+#define ADD_U32_3(x,y,z) (u32)((i64)(x) + (i64)(y) + (i64)(z))
+#define SUB_U32_3(x,y,z) (u32)((i64)(x) - (i64)(y) - (i64)(z))
+
+// Sanitizer friendly macros for adding signed offsets to u64 values
+#define ADD_U64(x,y) (u64)((i64)(x) + (i64)(y))
+#define SUB_U64(x,y) (u64)((i64)(x) - (i64)(y))
+#define ADD_U64_3(x,y,z) (u64)((i64)(x) + (i64)(y) + (i64)(z))
+#define SUB_U64_3(x,y,z) (u64)((i64)(x) - (i64)(y) - (i64)(z))
+
+
 template<Size S> u32 MSBIT() {
     if (S == Byte) return 0x00000080;
     if (S == Word) return 0x00008000;
@@ -67,7 +80,13 @@ Moira::shift(int cnt, u64 data) {
             for (int i = 0; i < cnt; i++) {
                 carry = NBIT<S>(data);
                 u64 shifted = data << 1;
-                changed |= data ^ shifted;
+                if (CHECK_SANITIZER_FIXES) {
+                    u32 old = changed | (data ^ shifted);
+                    u32 fix = changed;
+                    fix |= (u32)(data ^ shifted);
+                    assert(old == fix);
+                }
+                changed |= (u32)(data ^ shifted);
                 data = shifted;
             }
             if (cnt) reg.sr.x = carry;
@@ -82,7 +101,13 @@ Moira::shift(int cnt, u64 data) {
             for (int i = 0; i < cnt; i++) {
                 carry = data & 1;
                 u64 shifted = SEXT<S>(data) >> 1;
-                changed |= data ^ shifted;
+                if (CHECK_SANITIZER_FIXES) {
+                    u32 old = changed | (data ^ shifted);
+                    u32 fix = changed;
+                    fix |= (u32)(data ^ shifted);
+                    assert(old == fix);
+                }
+                changed |= (u32)(data ^ shifted);
                 data = shifted;
             }
             if (cnt) reg.sr.x = carry;
@@ -187,7 +212,13 @@ Moira::addsub(u32 op1, u32 op2)
         case ADDI:
         case ADDQ:
         {
-            result = (u64)op1 + (u64)op2;
+            if (CHECK_SANITIZER_FIXES) {
+                u64 old = (u64)op1 + (u64)op2;
+                u64 fix = ADD_U64(op1, op2);
+                assert(old == fix);
+            }
+            
+            result = ADD_U64(op1, op2);
 
             reg.sr.x = reg.sr.c = CARRY<S>(result);
             reg.sr.v = NBIT<S>((op1 ^ result) & (op2 ^ result));
@@ -196,7 +227,13 @@ Moira::addsub(u32 op1, u32 op2)
         }
         case ADDX:
         {
-            result = (u64)op1 + (u64)op2 + (u64)reg.sr.x;
+            if (CHECK_SANITIZER_FIXES) {
+                u64 old = (u64)op1 + (u64)op2 + (u64)reg.sr.x;
+                u64 fix = ADD_U64_3(op1, op2, reg.sr.x);
+                assert(old == fix);
+            }
+
+            result = ADD_U64_3(op1, op2, reg.sr.x);
 
             reg.sr.x = reg.sr.c = CARRY<S>(result);
             reg.sr.v = NBIT<S>((op1 ^ result) & (op2 ^ result));
@@ -207,7 +244,13 @@ Moira::addsub(u32 op1, u32 op2)
         case SUBI:
         case SUBQ:
         {
-            result = (u64)op2 - (u64)op1;
+            if (CHECK_SANITIZER_FIXES) {
+                u64 old = (u64)op2 - (u64)op1;
+                u64 fix = SUB_U64(op2, op1);
+                assert(old == fix);
+            }
+            
+            result = SUB_U64(op2, op1);
 
             reg.sr.x = reg.sr.c = CARRY<S>(result);
             reg.sr.v = NBIT<S>((op1 ^ op2) & (op2 ^ result));
@@ -216,7 +259,13 @@ Moira::addsub(u32 op1, u32 op2)
         }
         case SUBX:
         {
-            result = (u64)op2 - (u64)op1 - (u64)reg.sr.x;
+            if (CHECK_SANITIZER_FIXES) {
+                u64 old = (u64)op2 - (u64)op1 - (u64)reg.sr.x;
+                u64 fix = SUB_U64_3(op2, op1, reg.sr.x);
+                assert(old == fix);
+            }
+
+            result = SUB_U64_3(op2, op1, reg.sr.x);
 
             reg.sr.x = reg.sr.c = CARRY<S>(result);
             reg.sr.v = NBIT<S>((op1 ^ op2) & (op2 ^ result));
@@ -362,8 +411,13 @@ Moira::bcd(u32 op1, u32 op2)
 template <Size S> void
 Moira::cmp(u32 op1, u32 op2)
 {
-    u64 result = (u64)op2 - (u64)op1;
+    u64 result = SUB_U64(op2, op1);
 
+    if (CHECK_SANITIZER_FIXES) {
+        u64 old_result = (u64)op2 - (u64)op1;
+        assert(result == old_result);
+    }
+    
     reg.sr.c = NBIT<S>(result >> 1);
     reg.sr.v = NBIT<S>((op2 ^ op1) & (op2 ^ result));
     reg.sr.z = ZERO<S>(result);

@@ -814,10 +814,10 @@ Denise::drawSpritePair(int hstrt, int hstop, int strt1, int strt2, bool armed1, 
                 }
             }
             
-            ssra[sprite1] <<= 1;
-            ssrb[sprite1] <<= 1;
-            ssra[sprite2] <<= 1;
-            ssrb[sprite2] <<= 1;
+            ssra[sprite1] = (u16)(ssra[sprite1] << 1);
+            ssrb[sprite1] = (u16)(ssrb[sprite1] << 1);
+            ssra[sprite2] = (u16)(ssra[sprite2] << 1);
+            ssrb[sprite2] = (u16)(ssrb[sprite2] << 1);
         }
     }
 
