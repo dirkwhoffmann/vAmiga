@@ -316,7 +316,12 @@ Moira::execAndRgEa(u16 opcode)
     isMemMode(M) ? prefetch() : prefetch<POLLIPL>();
 
     if (S == Long && isRegMode(M)) sync(4);
-    writeOp <M,S, POLLIPL | REVERSE> (dst, ea, result);
+    
+    if (MIMIC_MUSASHI) {
+        writeOp <M,S, POLLIPL> (dst, ea, result);
+    } else {
+        writeOp <M,S, POLLIPL | REVERSE> (dst, ea, result);
+    }
 }
 
 template<Instr I, Mode M, Size S> void
@@ -345,7 +350,11 @@ Moira::execAndiEa(u16 opcode)
     result = logic<I,S>(src, data);
     prefetch();
 
-    writeOp <M,S, POLLIPL | REVERSE> (dst, ea, result);
+    if (MIMIC_MUSASHI) {
+        writeOp <M,S, POLLIPL> (dst, ea, result);
+    } else {
+        writeOp <M,S, POLLIPL | REVERSE> (dst, ea, result);
+    }
 }
 
 template<Instr I, Mode M, Size S> void
@@ -572,7 +581,12 @@ Moira::execClr(u16 opcode)
     isMemMode(M) ? prefetch() : prefetch<POLLIPL>();
 
     if (S == Long && isRegMode(M)) sync(2);
-    writeOp <M,S, REVERSE | POLLIPL> (dst, ea, 0);
+    
+    if (MIMIC_MUSASHI) {
+        writeOp <M,S, POLLIPL> (dst, ea, 0);
+    } else {
+        writeOp <M,S, POLLIPL | REVERSE> (dst, ea, 0);
+    }
 
     reg.sr.n = 0;
     reg.sr.z = 1;
@@ -1685,7 +1699,8 @@ Moira::execStop(u16 opcode)
     flags |= CPU_IS_STOPPED;
 
     prefetch<POLLIPL>();
-    
+
+    if (MIMIC_MUSASHI) sync(-4);
     signalStop(src);
 }
 
@@ -1762,6 +1777,8 @@ template<Instr I, Mode M, Size S> void
 Moira::execTrapv(u16 opcode)
 {
     if (reg.sr.v) {
+        
+        if (MIMIC_MUSASHI) sync(4);
         execTrapException(7);
         return;
     }

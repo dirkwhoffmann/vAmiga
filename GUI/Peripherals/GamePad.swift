@@ -86,9 +86,13 @@ class GamePad {
         self.device = device
         self.type = type
         
-        icon = db.icon(vendorID: vendorID, productID: productID)
         name = db.name(vendorID: vendorID, productID: productID) ?? device?.name ?? ""
+        icon = db.icon(vendorID: vendorID, productID: productID)
 
+        if icon == nil && isMouse {
+            icon = NSImage.init(named: "devMouseTemplate")
+        }
+        
         updateMappingScheme()
     }
     

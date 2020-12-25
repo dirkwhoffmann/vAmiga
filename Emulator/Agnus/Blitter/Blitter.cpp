@@ -203,7 +203,7 @@ Blitter::doBarrelAdesc(u16 aNew, u16 *aOld, u16 *aHold)
         u16 fix = (u16)(HI_W_LO_W(aNew, *aOld) >> (16 - bltconASH()));
         assert(old == fix);
     }
-    *aHold = HI_W_LO_W(aNew, *aOld) >> (16 - bltconASH());
+    *aHold = (u16)(HI_W_LO_W(aNew, *aOld) >> (16 - bltconASH()));
     *aOld  = aNew;
 }
 

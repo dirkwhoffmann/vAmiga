@@ -105,21 +105,39 @@ void Blitter::doFastCopyBlit()
             if (useA) {
                 anew = mem.peek16 <AGNUS_ACCESS> (apt);
                 trace(BLT_DEBUG, "    A = peek(%X) = %X\n", apt, anew);
-                apt += incr;
+                
+                if (CHECK_SANITIZER_FIXES) {
+                    u32 old = apt + incr;
+                    u32 fix = U32_ADD(apt, incr);
+                    assert(old == fix);
+                }
+                apt = U32_ADD(apt, incr);
             }
 
             // Fetch B
             if (useB) {
                 bnew = mem.peek16 <AGNUS_ACCESS> (bpt);
                 trace(BLT_DEBUG, "    B = peek(%X) = %X\n", bpt, bnew);
-                bpt += incr;
+                
+                if (CHECK_SANITIZER_FIXES) {
+                    u32 old = bpt + incr;
+                    u32 fix = U32_ADD(bpt, incr);
+                    assert(old == fix);
+                }
+                bpt = U32_ADD(bpt, incr);
             }
 
             // Fetch C
             if (useC) {
                 chold = mem.peek16 <AGNUS_ACCESS> (cpt);
                 trace(BLT_DEBUG, "    C = peek(%X) = %X\n", cpt, chold);
-                cpt += incr;
+
+                if (CHECK_SANITIZER_FIXES) {
+                    u32 old = cpt + incr;
+                    u32 fix = U32_ADD(cpt, incr);
+                    assert(old == fix);
+                }
+                cpt = U32_ADD(cpt, incr);
             }
             
             trace(BLT_DEBUG, "    After fetch: A = %x B = %x C = %x\n",
@@ -146,18 +164,6 @@ void Blitter::doFastCopyBlit()
             }
 
             trace(BLT_DEBUG, "    After shifting (%d,%d) A = %x B = %x\n", ash, bsh, ahold, bhold);
-
-            /*
-            if (desc) {
-                ahold = HI_W_LO_W(anew & mask, aold) >> ash;
-                bhold = HI_W_LO_W(bnew, bold) >> bsh;
-            } else {
-                ahold = HI_W_LO_W(aold, anew & mask) >> ash;
-                bhold = HI_W_LO_W(bold, bnew) >> bsh;
-            }
-            aold = anew & mask;
-            bold = bnew;
-            */
             
             // Run the minterm logic circuit
             trace(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
@@ -180,7 +186,12 @@ void Blitter::doFastCopyBlit()
                 }
                 trace(BLT_DEBUG, "D: poke(%X), %X  (check: %X %X)\n", dpt, dhold, check1, check2);
 
-                dpt += incr;
+                if (CHECK_SANITIZER_FIXES) {
+                    u32 old = dpt + incr;
+                    u32 fix = U32_ADD(dpt, incr);
+                    assert(old == fix);
+                }
+                dpt = U32_ADD(dpt, incr);
             }
 
             // Clear the word mask
@@ -188,10 +199,10 @@ void Blitter::doFastCopyBlit()
         }
 
         // Add modulo values
-        if (useA) apt += amod;
-        if (useB) bpt += bmod;
-        if (useC) cpt += cmod;
-        if (useD) dpt += dmod;
+        if (useA) apt = U32_ADD(apt, amod);
+        if (useB) bpt = U32_ADD(bpt, bmod);
+        if (useC) cpt = U32_ADD(cpt, cmod);
+        if (useD) dpt = U32_ADD(dpt, dmod);
     }
 
     // Write back pointer registers

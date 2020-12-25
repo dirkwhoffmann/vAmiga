@@ -15,7 +15,7 @@
 #include "StrWriter.h"
 
 // REMOVE ASAP
-static const int CHECK_SANITIZER_FIXES = 1;
+static const int CHECK_SANITIZER_FIXES = 0;
 
 namespace moira {
 
