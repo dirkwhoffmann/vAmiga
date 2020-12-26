@@ -7,13 +7,30 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+class PaddedButton: NSButton {
+    
+    @IBInspectable var verticalPadding: CGFloat = 4.5
+    @IBInspectable var horizontalPadding: CGFloat = 0
+    
+    override func draw(_ dirtyRect: NSRect) {
+        let origBounds = self.bounds
+        defer { self.bounds = origBounds }
+        
+        self.bounds = origBounds.insetBy(
+            dx: horizontalPadding,
+            dy: verticalPadding
+        )
+        super.draw(dirtyRect)
+    }
+}
+
 @available(OSX 10.12.2, *)
 extension NSTouchBarItem.Identifier {
     
     static let save = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.save")
     static let load = NSTouchBarItem.Identifier("com.vAMiga.TouchBarItem.load")
     static let restore = NSTouchBarItem.Identifier("com.vAMiga.TouchBarItem.restore")
-
+    
     static let click = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.click")
     static let gallery = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.gallery")
     
@@ -25,12 +42,12 @@ extension NSTouchBarItem.Identifier {
 extension MyController: NSTouchBarDelegate {
     
     override open func makeTouchBar() -> NSTouchBar? {
- 
+        
         track()
-
+        
         let touchBar = NSTouchBar()
         touchBar.delegate = self
-
+        
         // Configure items
         touchBar.defaultItemIdentifiers =
             [ .save, .load, .restore, . click, .gallery ]
@@ -46,68 +63,69 @@ extension MyController: NSTouchBarDelegate {
     public func touchBar(_ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem? {
         
         switch identifier {
-                        
+        
         case NSTouchBarItem.Identifier.save:
             let item = NSCustomTouchBarItem(identifier: identifier)
             let icon = NSImage(named: NSImage.Name("pushTemplate"))!
             item.customizationLabel = "Save"
-            item.view = NSButton(image: icon,
-                                 target: self,
-                                 action: #selector(takeSnapshotAction(_:)))
+            item.view = PaddedButton(image: icon,
+                                     target: self,
+                                     action: #selector(takeSnapshotAction(_:)))
             return item
-        
+            
         case NSTouchBarItem.Identifier.load:
             let item = NSCustomTouchBarItem(identifier: identifier)
             let icon = NSImage(named: NSImage.Name("popTemplate"))!
             item.customizationLabel = "Load"
-            item.view = NSButton(image: icon,
-                                 target: self,
-                                 action: #selector(restoreSnapshotAction(_:)))
+            item.view = PaddedButton(image: icon,
+                                     target: self,
+                                     action: #selector(restoreSnapshotAction(_:)))
             return item
             
         case NSTouchBarItem.Identifier.restore:
             let item = NSCustomTouchBarItem(identifier: identifier)
             let icon = NSImage(named: NSImage.Name("timeMachineTemplate"))!
             item.customizationLabel = "Restore"
-            item.view = NSButton(image: icon,
-                                 target: self,
-                                 action: #selector(browseSnapshotsAction(_:)))
+            let button = PaddedButton(image: icon,
+                                      target: self,
+                                      action: #selector(browseSnapshotsAction(_:)))
+            item.view = button
             return item
-
+            
         case NSTouchBarItem.Identifier.click:
             let item = NSCustomTouchBarItem(identifier: identifier)
             let icon = NSImage(named: NSImage.Name("clickTemplate"))!
             item.customizationLabel = "Click"
-            item.view = NSButton(image: icon,
-                                 target: self,
-                                 action: #selector(takeScreenshotAction(_:)))
+            item.view = PaddedButton(image: icon,
+                                     target: self,
+                                     action: #selector(takeScreenshotAction(_:)))
             return item
             
         case NSTouchBarItem.Identifier.gallery:
             let item = NSCustomTouchBarItem(identifier: identifier)
             let icon = NSImage(named: NSImage.Name("galleryTemplate"))!
             item.customizationLabel = "Gallery"
-            item.view = NSButton(image: icon,
-                                 target: self,
-                                 action: #selector(browseScreenshotsAction(_:)))
+            item.view = PaddedButton(image: icon,
+                                     target: self,
+                                     action: #selector(browseScreenshotsAction(_:)))
             return item
-
+            
         case NSTouchBarItem.Identifier.del:
             let item = NSCustomTouchBarItem(identifier: identifier)
             item.customizationLabel = "Delete Key"
-            item.view = NSButton(title: "Del",
-                                 target: self,
-                                 action: #selector(delKeyAction(_:)))
+            item.view = PaddedButton(title: "Del",
+                                     target: self,
+                                     action: #selector(delKeyAction(_:)))
             return item
-
+            
         case NSTouchBarItem.Identifier.help:
             let item = NSCustomTouchBarItem(identifier: identifier)
             item.customizationLabel = "Help Key"
-            item.view = NSButton(title: "Help",
-                                 target: self,
-                                 action: #selector(helpKeyAction(_:)))
+            item.view = PaddedButton(title: "Help",
+                                     target: self,
+                                     action: #selector(helpKeyAction(_:)))
             return item
-
+            
         default:
             return nil
         }

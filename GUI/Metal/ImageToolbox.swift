@@ -321,6 +321,28 @@ public extension NSImage {
         return img
     }
     
+    func padImage(dx: CGFloat, dy: CGFloat,
+                  interpolation: NSImageInterpolation = .high) -> NSImage {
+        
+        let cw = self.size.width
+        let ch = self.size.height
+        let nw = cw + 2 * dx
+        let nh = ch + 2 * dy
+
+        let img = NSImage(size: CGSize(width: nw, height: nh))
+        
+        img.lockFocus()
+        let ctx = NSGraphicsContext.current
+        ctx?.imageInterpolation = interpolation
+        self.draw(in: NSRect.init(x: dx, y: dy, width: cw, height: ch),
+                  from: NSRect.init(x: 0, y: 0, width: cw, height: ch),
+                  operation: .sourceOver,
+                  fraction: 1)
+        img.unlockFocus()
+        
+        return img
+    }
+    
     func resize(width: CGFloat, height: CGFloat) -> NSImage {
         
         let cutout = NSRect.init(x: 0, y: 0, width: width, height: height)

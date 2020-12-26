@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
+
 @available(OSX 10.12.2, *)
 extension NSTouchBarItem.Identifier {
     
@@ -58,3 +60,5 @@ extension TimeTravelTouchBar: NSTouchBarDelegate {
         }
     }
 }
+
+ */
