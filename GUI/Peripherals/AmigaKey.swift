@@ -281,27 +281,28 @@ extension AmigaKey: Equatable, Hashable {
 
 extension NSImage {
     
-    func imprint(text: String, x: CGFloat, y: CGFloat, fontSize: CGFloat) {
+    func imprint(text: String,
+                 x: CGFloat, y: CGFloat, fontSize: CGFloat, tint: String) {
         
         let font = NSFont.systemFont(ofSize: fontSize)
-        
+        let color: NSColor = tint == "dark" ? .keyCapColor2 : .keyCapColor
         let w = size.width
         let h = size.height
         
         let textRect = CGRect(x: x, y: -y, width: w - x, height: h - y)
-        // let paragraphStyle = NSMutableParagraphStyle()
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,
-            .foregroundColor: NSColor.secondaryLabelColor
+            .foregroundColor: color
             ]
         lockFocus()
         text.draw(in: textRect, withAttributes: attributes)
         unlockFocus()
     }
     
-    func imprint(character c: Character, x: CGFloat, y: CGFloat, fontSize: CGFloat) {
+    func imprint(character c: Character,
+                 x: CGFloat, y: CGFloat, fontSize: CGFloat, tint: String) {
 
-        return imprint(text: String(c), x: x, y: y, fontSize: fontSize)
+        return imprint(text: String(c), x: x, y: y, fontSize: fontSize, tint: tint)
     }
 }
             
@@ -336,8 +337,8 @@ extension AmigaKey {
         AmigaKeycode.rightShift:     ("200x100", "white"),
         AmigaKeycode.leftAlt:        ("125x100", "white"),
         AmigaKeycode.rightAlt:       ("125x100", "white"),
-        AmigaKeycode.leftAmiga:      ("125x100A", "white"),
-        AmigaKeycode.rightAmiga:     ("125x100A", "white")
+        AmigaKeycode.leftAmiga:      ("150x100A", "white"),
+        AmigaKeycode.rightAmiga:     ("150x100A", "white")
     ]
     
     // Special keys (A1000 ANSI like)
@@ -374,8 +375,8 @@ extension AmigaKey {
         AmigaKeycode.control:        ("125x100", "dark"),
         AmigaKeycode.leftAlt:        ("125x100", "dark"),
         AmigaKeycode.rightAlt:       ("125x100", "dark"),
-        AmigaKeycode.leftAmiga:      ("125x100A", "dark"),
-        AmigaKeycode.rightAmiga:     ("125x100A", "dark")
+        AmigaKeycode.leftAmiga:      ("150x100A", "dark"),
+        AmigaKeycode.rightAmiga:     ("150x100A", "dark")
     ]
     
     // Special keys (A500 ANSI like)
@@ -393,7 +394,7 @@ extension AmigaKey {
     ]
     
     // Returns an unlabeled background image of the right shape
-    private func bgImage(style: KBStyle, layout: KBLayout) -> NSImage? {
+    private func bgImage(style: KBStyle, layout: KBLayout) -> (NSImage?, String) {
         
         var (shape, tint) = ("100x100", "white")
         
@@ -430,7 +431,7 @@ extension AmigaKey {
         
         if tint == "dark" { image?.darken() }
         
-        return image
+        return (image, tint)
     }
     
     func image(style: KBStyle, layout: KBLayout) -> NSImage? {
@@ -441,9 +442,8 @@ extension AmigaKey {
         let tiny  = CGFloat(9) 
 
         // Get a background image
-        guard let image = bgImage(style: style, layout: layout) else {
-            return nil
-        }
+        let (image, tint) = bgImage(style: style, layout: layout)
+        if image == nil { return nil }
         
         // Get the keycap label
         let label = self.label[layout] ?? self.label[.generic]!
@@ -453,14 +453,14 @@ extension AmigaKey {
 
             // Generate a standard label
             let size = (parts[0].count == 1) ? large : small
-            image.imprint(text: String(parts[0]), x: 8, y: 2, fontSize: size)
+            image!.imprint(text: String(parts[0]), x: 8, y: 2, fontSize: size, tint: tint)
         }
         if parts.count == 2 {
             
             // Generate a stacked label
             let size = (parts[0].count == 1) ? small : tiny
-            image.imprint(text: String(parts[0]), x: 6, y: 2, fontSize: size)
-            image.imprint(text: String(parts[1]), x: 6, y: 9, fontSize: size)
+            image!.imprint(text: String(parts[0]), x: 6, y: 2, fontSize: size, tint: tint)
+            image!.imprint(text: String(parts[1]), x: 6, y: 9, fontSize: size, tint: tint)
         }
         
         return image
