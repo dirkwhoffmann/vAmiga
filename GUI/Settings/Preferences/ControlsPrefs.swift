@@ -16,14 +16,16 @@ extension PreferencesController {
 
         func refreshKey(map: Int, dir: GamePadAction, button: NSButton, txt: NSTextField) {
 
-            var macKeyCode: NSAttributedString = NSAttributedString.init()
-            var macKeyDesc: String = ""
-
+            // var macKeyCode: NSAttributedString = NSAttributedString.init()
+            var macKeyDesc = ""
+            var keyCap = ""
+            
             // Which MacKey is assigned to this joystick action?
             for (key, direction) in pref.keyMaps[map] where direction == dir.rawValue {
-                let attr = [NSAttributedString.Key.foregroundColor: NSColor.black]
-                let myStr = NSString(format: "%02X", key.keyCode) as String
-                macKeyCode = NSAttributedString(string: myStr, attributes: attr)
+                //let attr = [NSAttributedString.Key.foregroundColor: NSColor.black]
+                //let myStr = NSString(format: "%02X", key.keyCode) as String
+                //macKeyCode = NSAttributedString(string: myStr, attributes: attr)
+                keyCap = NSString(format: "%02X", key.keyCode) as String
                 macKeyDesc = key.stringValue
                 break
             }
@@ -31,33 +33,34 @@ extension PreferencesController {
             // Update text and button image
             if button.tag == conRecordedKey {
                 button.title = ""
-                button.image = NSImage(named: "key_red")
+                button.image = NSImage(named: "recordKeyRed")
                 button.imageScaling = .scaleAxesIndependently
             } else {
-                button.image = NSImage(named: "key")
+                button.image = NSImage(named: "recordKey")
                 button.imageScaling = .scaleAxesIndependently
             }
-            button.attributedTitle = macKeyCode
+            // button.attributedTitle = macKeyCode
+            button.title = keyCap
             txt.stringValue = macKeyDesc
         }
 
-        // Mouse button keyset
-        refreshKey(map: 0, dir: .PRESS_LEFT, button: conMouseLeftButton, txt: conMouseLeft)
-        refreshKey(map: 0, dir: .PRESS_RIGHT, button: conMouseRightButton, txt: conMouseRight)
-
         // First joystick keyset
-        refreshKey(map: 1, dir: .PULL_UP, button: conUp1button, txt: conUp1)
-        refreshKey(map: 1, dir: .PULL_DOWN, button: conDown1button, txt: conDown1)
-        refreshKey(map: 1, dir: .PULL_LEFT, button: conLeft1button, txt: conLeft1)
-        refreshKey(map: 1, dir: .PULL_RIGHT, button: conRight1button, txt: conRight1)
-        refreshKey(map: 1, dir: .PRESS_FIRE, button: conFire1button, txt: conFire1)
+        refreshKey(map: 0, dir: .PULL_UP, button: conUp1button, txt: conUp1)
+        refreshKey(map: 0, dir: .PULL_DOWN, button: conDown1button, txt: conDown1)
+        refreshKey(map: 0, dir: .PULL_LEFT, button: conLeft1button, txt: conLeft1)
+        refreshKey(map: 0, dir: .PULL_RIGHT, button: conRight1button, txt: conRight1)
+        refreshKey(map: 0, dir: .PRESS_FIRE, button: conFire1button, txt: conFire1)
 
         // Second joystick keyset
-        refreshKey(map: 2, dir: .PULL_UP, button: conUp2button, txt: conUp2)
-        refreshKey(map: 2, dir: .PULL_DOWN, button: conDown2button, txt: conDown2)
-        refreshKey(map: 2, dir: .PULL_LEFT, button: conLeft2button, txt: conLeft2)
-        refreshKey(map: 2, dir: .PULL_RIGHT, button: conRight2button, txt: conRight2)
-        refreshKey(map: 2, dir: .PRESS_FIRE, button: conFire2button, txt: conFire2)
+        refreshKey(map: 1, dir: .PULL_UP, button: conUp2button, txt: conUp2)
+        refreshKey(map: 1, dir: .PULL_DOWN, button: conDown2button, txt: conDown2)
+        refreshKey(map: 1, dir: .PULL_LEFT, button: conLeft2button, txt: conLeft2)
+        refreshKey(map: 1, dir: .PULL_RIGHT, button: conRight2button, txt: conRight2)
+        refreshKey(map: 1, dir: .PRESS_FIRE, button: conFire2button, txt: conFire2)
+
+        // Mouse button keyset
+        refreshKey(map: 2, dir: .PRESS_LEFT, button: conMouseLeftButton, txt: conMouseLeft)
+        refreshKey(map: 2, dir: .PRESS_RIGHT, button: conMouseRightButton, txt: conMouseRight)
 
         conDisconnectKeys.state = pref.disconnectJoyKeys ? .on : .off
 

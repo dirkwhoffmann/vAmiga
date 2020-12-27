@@ -143,7 +143,7 @@ bool releaseBuild();
 #define R16BE_ALIGNED(a) (htons(*(u16 *)(a)))
 #define R32BE_ALIGNED(a) (htonl(*(u32 *)(a)))
 
-// Writes a value into memory in big-endian format
+// Writes a value in big-endian format
 #define W8BE(a,v)  { *(u8 *)(a) = (v); }
 #define W16BE(a,v) { *(u8 *)(a) = HI_BYTE(v); *(u8 *)((a)+1) = LO_BYTE(v); }
 #define W32BE(a,v) { W16BE(a,HI_WORD(v)); W16BE((a)+2,LO_WORD(v)); }

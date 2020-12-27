@@ -730,7 +730,7 @@
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="HiD-6D-klX">
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HiD-6D-klX">
                                             <rect key="frame" x="567" y="340" width="16" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="WBu-KV-33I">
@@ -741,7 +741,7 @@
                                                 <action selector="conDeleteKeysetAction:" target="-2" id="tKl-wz-UlJ"/>
                                             </connections>
                                         </button>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="HXz-VN-lav">
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="HXz-VN-lav">
                                             <rect key="frame" x="567" y="223" width="16" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="tlA-sg-j9U">
@@ -752,7 +752,7 @@
                                                 <action selector="conDeleteKeysetAction:" target="-2" id="NHh-eY-YQb"/>
                                             </connections>
                                         </button>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g51-Ax-Tce">
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="g51-Ax-Tce">
                                             <rect key="frame" x="567" y="126" width="16" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="Rdu-Mo-Epb">
@@ -766,7 +766,7 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="wFF-Aw-MG2">
                                             <rect key="frame" x="433" y="251" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="Kci-62-prA">
+                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="Kci-62-prA">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -777,7 +777,7 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="hXN-1f-18m">
                                             <rect key="frame" x="433" y="183" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="fUS-VF-0qH">
+                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="fUS-VF-0qH">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -797,7 +797,7 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="12" translatesAutoresizingMaskIntoConstraints="NO" id="F4n-ks-cTv">
                                             <rect key="frame" x="397" y="217" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="big-oq-JC7">
+                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="big-oq-JC7">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -817,7 +817,7 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="Tcd-X1-Yhr">
                                             <rect key="frame" x="469" y="217" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="tzV-g6-Lbw">
+                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="tzV-g6-Lbw">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -837,7 +837,7 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="14" translatesAutoresizingMaskIntoConstraints="NO" id="djn-TO-cmE">
                                             <rect key="frame" x="528" y="217" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="mOH-MC-l37">
+                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="mOH-MC-l37">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -880,7 +880,7 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="diW-dw-7Yh">
                                             <rect key="frame" x="433" y="368" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="Osc-2F-V4H">
+                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="Osc-2F-V4H">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -891,7 +891,7 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="Vsm-ce-Vny">
                                             <rect key="frame" x="433" y="300" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hEa-kN-1fv">
+                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hEa-kN-1fv">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -911,7 +911,7 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="5mS-Ar-Jsd">
                                             <rect key="frame" x="397" y="334" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="0lt-h0-yH4">
+                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="0lt-h0-yH4">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -940,7 +940,7 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="CiA-Ih-QDo">
                                             <rect key="frame" x="528" y="334" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="D31-5a-oCb">
+                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="D31-5a-oCb">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -974,7 +974,7 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="ZQF-tn-Mk1">
                                             <rect key="frame" x="469" y="334" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="7us-SY-b05">
+                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="7us-SY-b05">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -999,7 +999,7 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="VUi-BM-ADA">
                                             <rect key="frame" x="397" y="120" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="xxB-jK-ERm">
+                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="xxB-jK-ERm">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -1028,7 +1028,7 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="0IS-nV-efg">
                                             <rect key="frame" x="470" y="120" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="3gX-LZ-ZB6">
+                                            <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="3gX-LZ-ZB6">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -1190,7 +1190,7 @@
                                                 <font key="font" metaFont="system"/>
                                                 <segments>
                                                     <segment label="External Device 1" selected="YES"/>
-                                                    <segment label="Externel Device 2" tag="1"/>
+                                                    <segment label="External Device 2" tag="1"/>
                                                 </segments>
                                             </segmentedCell>
                                             <connections>
@@ -1812,8 +1812,8 @@
         <image name="ffmpegLogoTemplate" width="1829" height="595"/>
         <image name="gamepad" width="316" height="151"/>
         <image name="joystick2" width="261" height="300"/>
-        <image name="key" width="198" height="187"/>
         <image name="mouse" width="128" height="128"/>
+        <image name="recordKey" width="36" height="36"/>
         <image name="trashTemplate" width="174" height="214"/>
     </resources>
 </document>
