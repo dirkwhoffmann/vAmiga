@@ -16,17 +16,13 @@ extension PreferencesController {
 
         func refreshKey(map: Int, dir: GamePadAction, button: NSButton, txt: NSTextField) {
 
-            // var macKeyCode: NSAttributedString = NSAttributedString.init()
-            var macKeyDesc = ""
-            var keyCap = ""
+            var keyDesc = ""
+            var keyCode = ""
             
             // Which MacKey is assigned to this joystick action?
             for (key, direction) in pref.keyMaps[map] where direction == dir.rawValue {
-                //let attr = [NSAttributedString.Key.foregroundColor: NSColor.black]
-                //let myStr = NSString(format: "%02X", key.keyCode) as String
-                //macKeyCode = NSAttributedString(string: myStr, attributes: attr)
-                keyCap = NSString(format: "%02X", key.keyCode) as String
-                macKeyDesc = key.stringValue
+                keyCode = NSString(format: "%02X", key.keyCode) as String
+                keyDesc = key.stringValue
                 break
             }
 
@@ -40,27 +36,27 @@ extension PreferencesController {
                 button.imageScaling = .scaleAxesIndependently
             }
             // button.attributedTitle = macKeyCode
-            button.title = keyCap
-            txt.stringValue = macKeyDesc
+            button.title = keyCode
+            txt.stringValue = keyDesc
         }
 
+        // Mouse button keyset
+        refreshKey(map: 0, dir: .PRESS_LEFT, button: conMouseLeftButton, txt: conMouseLeft)
+        refreshKey(map: 0, dir: .PRESS_RIGHT, button: conMouseRightButton, txt: conMouseRight)
+
         // First joystick keyset
-        refreshKey(map: 0, dir: .PULL_UP, button: conUp1button, txt: conUp1)
-        refreshKey(map: 0, dir: .PULL_DOWN, button: conDown1button, txt: conDown1)
-        refreshKey(map: 0, dir: .PULL_LEFT, button: conLeft1button, txt: conLeft1)
-        refreshKey(map: 0, dir: .PULL_RIGHT, button: conRight1button, txt: conRight1)
-        refreshKey(map: 0, dir: .PRESS_FIRE, button: conFire1button, txt: conFire1)
+        refreshKey(map: 1, dir: .PULL_UP, button: conUp1button, txt: conUp1)
+        refreshKey(map: 1, dir: .PULL_DOWN, button: conDown1button, txt: conDown1)
+        refreshKey(map: 1, dir: .PULL_LEFT, button: conLeft1button, txt: conLeft1)
+        refreshKey(map: 1, dir: .PULL_RIGHT, button: conRight1button, txt: conRight1)
+        refreshKey(map: 1, dir: .PRESS_FIRE, button: conFire1button, txt: conFire1)
 
         // Second joystick keyset
-        refreshKey(map: 1, dir: .PULL_UP, button: conUp2button, txt: conUp2)
-        refreshKey(map: 1, dir: .PULL_DOWN, button: conDown2button, txt: conDown2)
-        refreshKey(map: 1, dir: .PULL_LEFT, button: conLeft2button, txt: conLeft2)
-        refreshKey(map: 1, dir: .PULL_RIGHT, button: conRight2button, txt: conRight2)
-        refreshKey(map: 1, dir: .PRESS_FIRE, button: conFire2button, txt: conFire2)
-
-        // Mouse button keyset
-        refreshKey(map: 2, dir: .PRESS_LEFT, button: conMouseLeftButton, txt: conMouseLeft)
-        refreshKey(map: 2, dir: .PRESS_RIGHT, button: conMouseRightButton, txt: conMouseRight)
+        refreshKey(map: 2, dir: .PULL_UP, button: conUp2button, txt: conUp2)
+        refreshKey(map: 2, dir: .PULL_DOWN, button: conDown2button, txt: conDown2)
+        refreshKey(map: 2, dir: .PULL_LEFT, button: conLeft2button, txt: conLeft2)
+        refreshKey(map: 2, dir: .PULL_RIGHT, button: conRight2button, txt: conRight2)
+        refreshKey(map: 2, dir: .PRESS_FIRE, button: conFire2button, txt: conFire2)
 
         conDisconnectKeys.state = pref.disconnectJoyKeys ? .on : .off
 
@@ -96,9 +92,9 @@ extension PreferencesController {
     func gamePadAction(for tag: Int) -> (Int, GamePadAction) {
 
         switch tag {
+        case 5...6:   return (0, GamePadAction(rawValue: tag)!)      // Mouse
         case 0...4:   return (1, GamePadAction(rawValue: tag)!)      // Joy 1
         case 10...14: return (2, GamePadAction(rawValue: tag - 10)!) // Joy 2
-        case 5...6:   return (0, GamePadAction(rawValue: tag)!)      // Mouse
         default:      fatalError()
         }
     }

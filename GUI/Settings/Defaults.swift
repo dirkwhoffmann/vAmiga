@@ -269,9 +269,9 @@ extension Keys {
     struct Con {
         
         // Emulation keys
+        static let mouseKeyMap           = "VAMIGA_CON_MouseKeyMap"
         static let joyKeyMap1            = "VAMIGA_CON_JoyKeyMap1"
         static let joyKeyMap2            = "VAMIGA_CON_JoyKeyMap2"
-        static let mouseKeyMap           = "VAMIGA_CON_MouseKeyMap"
         static let disconnectJoyKeys     = "VAMIGA_CON_DisconnectKeys"
         
         // Joysticks

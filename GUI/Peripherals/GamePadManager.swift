@@ -43,17 +43,17 @@ class GamePadManager {
         gamePads[0] = GamePad(manager: self, type: .CPD_MOUSE)
         gamePads[0]!.name = "Mouse"
         gamePads[0]!.setIcon(name: "devMouseTemplate")
-        gamePads[0]!.keyMap = 2
+        gamePads[0]!.keyMap = 0
         
         gamePads[1] = GamePad(manager: self, type: .CPD_JOYSTICK)
         gamePads[1]!.name = "Joystick Keyset 1"
         gamePads[1]!.setIcon(name: "devKeys1Template")
-        gamePads[1]!.keyMap = 0
+        gamePads[1]!.keyMap = 1
 
         gamePads[2] = GamePad(manager: self, type: .CPD_JOYSTICK)
         gamePads[2]!.name = "Joystick Keyset 2"
         gamePads[2]!.setIcon(name: "devKeys2Template")
-        gamePads[2]!.keyMap = 1
+        gamePads[2]!.keyMap = 2
 
         // Tell the mouse event receiver where the mouse resides
         parent.metal.mouse1 = gamePads[0]!

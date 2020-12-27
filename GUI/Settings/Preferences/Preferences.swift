@@ -61,9 +61,9 @@ class Preferences {
     //
     
     // Emulation keys
-    var keyMaps = [ ControlsDefaults.std.joyKeyMap1,
-                    ControlsDefaults.std.joyKeyMap2,
-                    ControlsDefaults.std.mouseKeyMap]
+    var keyMaps = [ ControlsDefaults.std.mouseKeyMap,
+                    ControlsDefaults.std.joyKeyMap1,
+                    ControlsDefaults.std.joyKeyMap2 ]
     
     // Joystick
     var disconnectJoyKeys = ControlsDefaults.std.disconnectJoyKeys
@@ -238,9 +238,9 @@ class Preferences {
     func loadControlsDefaults(_ defaults: ControlsDefaults) {
         
         // Emulation keys
-        keyMaps[0] = defaults.joyKeyMap1
-        keyMaps[1] = defaults.joyKeyMap2
-        keyMaps[2] = defaults.mouseKeyMap
+        keyMaps[0] = defaults.mouseKeyMap
+        keyMaps[1] = defaults.joyKeyMap1
+        keyMaps[2] = defaults.joyKeyMap2
         disconnectJoyKeys = defaults.disconnectJoyKeys
         
         // Joysticks
@@ -263,9 +263,9 @@ class Preferences {
         let defaults = UserDefaults.standard
         
         // Emulation keys
-        defaults.decode(&keyMaps[0], forKey: Keys.Con.joyKeyMap1)
-        defaults.decode(&keyMaps[1], forKey: Keys.Con.joyKeyMap2)
-        defaults.decode(&keyMaps[2], forKey: Keys.Con.mouseKeyMap)
+        defaults.decode(&keyMaps[0], forKey: Keys.Con.mouseKeyMap)
+        defaults.decode(&keyMaps[1], forKey: Keys.Con.joyKeyMap1)
+        defaults.decode(&keyMaps[2], forKey: Keys.Con.joyKeyMap2)
         disconnectJoyKeys = defaults.bool(forKey: Keys.Con.disconnectJoyKeys)
         
         // Joysticks
@@ -288,9 +288,9 @@ class Preferences {
         let defaults = UserDefaults.standard
         
         // Emulation keys
-        defaults.encode(keyMaps[0], forKey: Keys.Con.joyKeyMap1)
-        defaults.encode(keyMaps[1], forKey: Keys.Con.joyKeyMap2)
-        defaults.encode(keyMaps[2], forKey: Keys.Con.mouseKeyMap)
+        defaults.encode(keyMaps[0], forKey: Keys.Con.mouseKeyMap)
+        defaults.encode(keyMaps[1], forKey: Keys.Con.joyKeyMap1)
+        defaults.encode(keyMaps[2], forKey: Keys.Con.joyKeyMap2)
         defaults.set(disconnectJoyKeys, forKey: Keys.Con.disconnectJoyKeys)
         
         // Joysticks
