@@ -153,19 +153,19 @@ class DeviceDatabase {
 
     func setLeft(vendorID: String, productID: String, _ value: String?) {
         
-        replace(vendorID, productID, "Left", value)
-        track("\(custom)")
+        replace(vendorID, productID, "L", value)
+        // track("\(custom)")
     }
 
     func setRight(vendorID: String, productID: String, _ value: String?) {
         
-        replace(vendorID, productID, "Right", value)
-        track("\(custom)")
+        replace(vendorID, productID, "R", value)
+        // track("\(custom)")
     }
 
     func setHatSwitch(vendorID: String, productID: String, _ value: String?) {
         
-        replace(vendorID, productID, "HatSwitch", value)
-        track("\(custom)")
+        replace(vendorID, productID, "H", value)
+        // track("\(custom)")
     }
 }

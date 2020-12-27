@@ -26,7 +26,7 @@ extension PreferencesController {
         }
 
         track()
-        
+
         // Let us notify when the device is pulled
         pad?.notify = true
         
@@ -34,6 +34,8 @@ extension PreferencesController {
         let vend = property(kIOHIDVendorIDKey)
         let prod = property(kIOHIDProductIDKey)
 
+        // track("\(db.custom)")
+        
         devManufacturer.stringValue = property(kIOHIDManufacturerKey)
         devProduct.stringValue = property(kIOHIDProductKey)
         devVersion.stringValue = property(kIOHIDVersionNumberKey)

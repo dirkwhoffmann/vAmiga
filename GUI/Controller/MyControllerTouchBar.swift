@@ -9,17 +9,15 @@
 
 class PaddedButton: NSButton {
     
-    @IBInspectable var verticalPadding: CGFloat = 4.5
-    @IBInspectable var horizontalPadding: CGFloat = 0
+    @IBInspectable var vPad: CGFloat = 4.5
+    @IBInspectable var hPad: CGFloat = 0
     
     override func draw(_ dirtyRect: NSRect) {
+        
         let origBounds = self.bounds
         defer { self.bounds = origBounds }
         
-        self.bounds = origBounds.insetBy(
-            dx: horizontalPadding,
-            dy: verticalPadding
-        )
+        self.bounds = origBounds.insetBy(dx: hPad, dy: vPad)
         super.draw(dirtyRect)
     }
 }
@@ -27,15 +25,15 @@ class PaddedButton: NSButton {
 @available(OSX 10.12.2, *)
 extension NSTouchBarItem.Identifier {
     
-    static let save = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.save")
-    static let load = NSTouchBarItem.Identifier("com.vAMiga.TouchBarItem.load")
-    static let restore = NSTouchBarItem.Identifier("com.vAMiga.TouchBarItem.restore")
+    static let save    = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.save")
+    static let load    = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.load")
+    static let restore = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.restore")
     
-    static let click = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.click")
+    static let click   = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.click")
     static let gallery = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.gallery")
     
-    static let del = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.del")
-    static let help = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.help")
+    static let del     = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.del")
+    static let help    = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.help")
 }
 
 @available(OSX 10.12.2, *)
