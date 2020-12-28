@@ -180,7 +180,7 @@ Moira::execPrivilegeException()
 }
 
 void
-Moira::execIrqException(int level)
+Moira::execIrqException(u8 level)
 {
     assert(level < 8);
     signalInterrupt(level);

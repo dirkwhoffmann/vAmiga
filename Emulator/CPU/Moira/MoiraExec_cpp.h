@@ -360,7 +360,7 @@ Moira::execAndiccr(u16 opcode)
     sync(8);
 
     u32 result = logic<I,S>(src, dst);
-    setCCR(result);
+    setCCR((u8)result);
 
     (void)readM<MEM_DATA, Word>(reg.pc+2);
     prefetch<POLLIPL>();
@@ -377,7 +377,7 @@ Moira::execAndisr(u16 opcode)
     sync(8);
 
     u32 result = logic<I,S>(src, dst);
-    setSR(result);
+    setSR((u16)result);
 
     (void)readM<MEM_DATA, Word>(reg.pc+2);
     prefetch<POLLIPL>();
@@ -452,7 +452,7 @@ Moira::execBitDxEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execBitImEa(u16 opcode)
 {
-    u8  src = readI<S>();
+    u8  src = (u8)readI<S>();
     int dst = _____________xxx(opcode);
 
     switch (M)
@@ -567,7 +567,7 @@ Moira::execClr(u16 opcode)
     } else {
         writeOp <M,S, POLLIPL | REVERSE> (dst, ea, 0);
     }
-
+    
     reg.sr.n = 0;
     reg.sr.z = 1;
     reg.sr.v = 0;
@@ -791,7 +791,7 @@ Moira::execJsr(u16 opcode)
     // Jump to new address
     reg.pc = ea;
 
-    queue.irc = readM<MEM_PROG, Word>(ea);
+    queue.irc = (u16)readM<MEM_PROG, Word>(ea);
     prefetch<POLLIPL>();
 }
 
@@ -1110,7 +1110,7 @@ template<Instr I, Mode M, Size S> void
 Moira::execMovemEaRg(u16 opcode)
 {
     int src  = _____________xxx(opcode);
-    u16 mask = readI<Word>();
+    u16 mask = (u16)readI<Word>();
     u32 ea   = computeEA<M,S>(src);
     
     // Check for address error
@@ -1161,7 +1161,7 @@ template<Instr I, Mode M, Size S> void
 Moira::execMovemRgEa(u16 opcode)
 {
     int dst  = _____________xxx(opcode);
-    u16 mask = readI<Word>();
+    u16 mask = (u16)readI<Word>();
 
     switch (M) {
 
@@ -1250,7 +1250,7 @@ Moira::execMovepEaDx(u16 opcode)
         {
             dx |= readM <MEM_DATA, Byte> (ea) << 24; ea += 2;
             dx |= readM <MEM_DATA, Byte> (ea) << 16; ea += 2;
-            [[fallthrough]];
+            // fallthrough
         }
         case Word:
         {
@@ -1288,7 +1288,7 @@ Moira::execMoveToCcr(u16 opcode)
     if (!readOp <M,S, STD_AE_FRAME> (src, ea, data)) return;
 
     sync(4);
-    setCCR(data);
+    setCCR((u8)data);
 
     (void)readM <MEM_PROG, Word> (reg.pc + 2);
     prefetch<POLLIPL>();
@@ -1330,7 +1330,7 @@ Moira::execMoveToSr(u16 opcode)
     if (!readOp <M,S, STD_AE_FRAME> (src, ea, data)) return;
 
     sync(4);
-    setSR(data);
+    setSR((u16)data);
 
     (void)readM <MEM_PROG, Word> (reg.pc + 2);
     prefetch<POLLIPL>();
@@ -1564,7 +1564,7 @@ Moira::execRte(u16 opcode)
 {
     SUPERVISOR_MODE_ONLY
 
-    u16 newsr = readM<MEM_DATA, Word>(reg.sp);
+    u16 newsr = (u16)readM<MEM_DATA, Word>(reg.sp);
     reg.sp += 2;
 
     u32 newpc = readM<MEM_DATA, Long>(reg.sp);
@@ -1584,9 +1584,9 @@ Moira::execRte(u16 opcode)
 
 template<Instr I, Mode M, Size S> void
 Moira::execRtr(u16 opcode)
-{    
+{
     bool error;
-    u16 newccr = readM<M, Word>(reg.sp, error);
+    u16 newccr = (u16)readM<M, Word>(reg.sp, error);
     if (error) return;
     
     reg.sp += 2;
@@ -1658,14 +1658,14 @@ Moira::execStop(u16 opcode)
 {
     SUPERVISOR_MODE_ONLY
 
-    u16 src = readI<Word>();
+    u16 src = (u16)readI<Word>();
 
     setSR(src);
     flags |= CPU_IS_STOPPED;
 
-    prefetch<POLLIPL>();
-
     if (MIMIC_MUSASHI) sync(-4);
+    prefetch<POLLIPL>();
+    
     signalStop(src);
 }
 
@@ -1742,7 +1742,7 @@ template<Instr I, Mode M, Size S> void
 Moira::execTrapv(u16 opcode)
 {
     if (reg.sr.v) {
-        
+
         if (MIMIC_MUSASHI) sync(4);
         execTrapException(7);
         return;
@@ -1787,3 +1787,4 @@ Moira::execUnlk(u16 opcode)
     if (an != 7) reg.sp += 4;
     prefetch<POLLIPL>();
 }
+

@@ -122,7 +122,7 @@ private:
     u16 read16Dasm(u32 addr) override;
     void write8 (u32 addr, u8  val) override;
     void write16 (u32 addr, u16 val) override;
-    int readIrqUserVector(u8 level) override { return 0; }
+    u16 readIrqUserVector(u8 level) override { return 0; }
  
     void signalReset() override;
     void signalStop(u16 op) override;
@@ -137,7 +137,7 @@ private:
     void signalTraceException() override;
     void signalTrapException() override;
     void signalPrivilegeViolation() override;
-    void signalInterrupt(int level) override;
+    void signalInterrupt(u8 level) override;
     
     void signalJumpToVector(int nr, u32 addr) override;
     

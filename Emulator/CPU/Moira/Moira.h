@@ -213,7 +213,7 @@ protected:
     virtual void write16 (u32 addr, u16 val) = 0;
 
     // Provides the interrupt level in IRQ_USER mode
-    virtual int readIrqUserVector(u8 level) { return 0; }
+    virtual u16 readIrqUserVector(u8 level) { return 0; }
 
     // Instrution delegates
     virtual void signalReset() { };
@@ -231,7 +231,7 @@ protected:
     virtual void signalTraceException() { };
     virtual void signalTrapException() { };
     virtual void signalPrivilegeViolation() { };
-    virtual void signalInterrupt(int level) { };
+    virtual void signalInterrupt(u8 level) { };
     virtual void signalJumpToVector(int nr, u32 addr) { };
 
     // Exception delegates

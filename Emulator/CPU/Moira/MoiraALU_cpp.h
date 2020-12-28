@@ -270,7 +270,7 @@ Moira::mul(u32 op1, u32 op2)
     reg.sr.v = 0;
     reg.sr.c = 0;
 
-    sync(cyclesMul<I>(op1));
+    sync(cyclesMul<I>((u16)op1));
     return result;
 }
 

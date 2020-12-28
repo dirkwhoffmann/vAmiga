@@ -265,20 +265,4 @@ Debugger::logEntryAbs(int n)
     return logEntryRel(loggedInstructions() - n - 1);
 }
 
-/*
-u32
-Debugger::loggedPC0Rel(int n)
-{
-    assert(n < loggedInstructions());
-    return logBuffer[(logCnt - 1 - n) % logBufferCapacity].pc0;
-}
-
-u32
-Debugger::loggedPC0Abs(int n)
-{
-    assert(n < loggedInstructions());
-    return loggedPC0Rel(loggedInstructions() - n - 1);
-}
-*/
-
 }

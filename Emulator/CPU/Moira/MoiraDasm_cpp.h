@@ -578,7 +578,7 @@ Moira::dasmMovea(StrWriter &str, u32 &addr, u16 op)
 template<Instr I, Mode M, Size S> void
 Moira::dasmMovemEaRg(StrWriter &str, u32 &addr, u16 op)
 {
-    auto dst = RegRegList ( dasmRead<Word>(addr)       );
+    auto dst = RegRegList ( (u16)dasmRead<Word>(addr)  );
     auto src = Op <M,S>   ( _____________xxx(op), addr );
 
     str << Ins<I>{} << Sz<S>{} << tab << src << ", " << dst;
@@ -587,7 +587,7 @@ Moira::dasmMovemEaRg(StrWriter &str, u32 &addr, u16 op)
 template<Instr I, Mode M, Size S> void
 Moira::dasmMovemRgEa(StrWriter &str, u32 &addr, u16 op)
 {
-    auto src = RegRegList ( dasmRead<Word>(addr)       );
+    auto src = RegRegList ( (u16)dasmRead<Word>(addr)  );
     auto dst = Op <M,S>   ( _____________xxx(op), addr );
 
     if (M == 4) { src.raw = REVERSE_16(src.raw); }
