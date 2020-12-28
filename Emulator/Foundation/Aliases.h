@@ -38,13 +38,6 @@ static_assert(sizeof(u64) == 8, "u64 size mismatch");
 
 
 //
-// Syntactic sugar
-//
-
-#define fallthrough
-
-
-//
 // Cycles
 //
 

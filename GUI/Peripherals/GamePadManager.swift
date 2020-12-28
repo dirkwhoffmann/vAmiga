@@ -14,20 +14,18 @@
  */
 class GamePadManager {
 
-    // Reference to the the controller
+    // Reference to the main controller
     var parent: MyController!
     
     // Reference to the HID manager
     var hidManager: IOHIDManager
-
-    // private let inputLock = NSLock()
-    // Such a thing is used here: TODO: Check if we need this:
-    //     https://github.com/joekarl/swift_handmade_hero/blob/master/
-    //     Handmade%20Hero%20OSX/Handmade%20Hero%20OSX/InputManager.swift
-    
+        
     // Gamepad storage
     var gamePads: [Int: GamePad] = [:]
-    
+
+    // Lock for synchronizing asynchroneous calls
+    var lock = NSLock()
+
     //
     // Initialization
     //
@@ -166,6 +164,7 @@ class GamePadManager {
                         sender: UnsafeMutableRawPointer?,
                         device: IOHIDDevice) {
     
+        lock.lock(); defer { lock.unlock() }
         track()
         
         // Ignore internal devices
@@ -221,6 +220,7 @@ class GamePadManager {
                           sender: UnsafeMutableRawPointer?,
                           device: IOHIDDevice) {
         
+        lock.lock(); defer { lock.unlock() }
         track()
             
         // Search for a matching locationID and remove device

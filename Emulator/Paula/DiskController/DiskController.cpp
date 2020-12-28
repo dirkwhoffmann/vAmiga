@@ -539,7 +539,7 @@ DiskController::performTurboDMA(Drive *drive)
         case DRIVE_DMA_WAIT:
 
             drive->findSyncMark();
-            fallthrough;
+            [[fallthrough]];
 
         case DRIVE_DMA_READ:
             
