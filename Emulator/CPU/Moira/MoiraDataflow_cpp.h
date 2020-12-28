@@ -105,12 +105,6 @@ Moira::computeEA(u32 n) {
         {
             u32 an = readA(n);
             i16  d = (i16)queue.irc;
-
-            if (CHECK_SANITIZER_FIXES) {
-                u32 old = d + an;
-                u32 fix = U32_ADD(an, d);
-                assert(old == fix);
-            }
             
             result = U32_ADD(an, d);
             if ((F & SKIP_LAST_READ) == 0) readExt();
@@ -122,11 +116,6 @@ Moira::computeEA(u32 n) {
             u32 an = readA(n);
             u32 xi = readR((queue.irc >> 12) & 0b1111);
 
-            if (CHECK_SANITIZER_FIXES) {
-                u32 old = d + an + ((queue.irc & 0x800) ? xi : SEXT<Word>(xi));
-                u32 fix = U32_ADD3(an, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
-                assert(old == fix);
-            }
             result = U32_ADD3(an, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
 
             sync(2);
@@ -152,13 +141,6 @@ Moira::computeEA(u32 n) {
             i16  d = (i16)queue.irc;
 
             result = U32_ADD(reg.pc, d);
-
-            if (CHECK_SANITIZER_FIXES) {
-                u32 old_result = reg.pc + d;
-                assert(old_result == result);
-            }
-            
-            
             if ((F & SKIP_LAST_READ) == 0) readExt();
             break;
         }
@@ -166,12 +148,6 @@ Moira::computeEA(u32 n) {
         {
             i8   d = (i8)queue.irc;
             u32 xi = readR((queue.irc >> 12) & 0b1111);
-
-            if (CHECK_SANITIZER_FIXES) {
-                u32 old = d + reg.pc + ((queue.irc & 0x800) ? xi : SEXT<Word>(xi));
-                u32 fix = U32_ADD3(reg.pc, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
-                assert(old == fix);
-            }
             
             result = U32_ADD3(reg.pc, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
             sync(2);

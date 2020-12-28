@@ -186,11 +186,6 @@ Blitter::_dump()
 void
 Blitter::doBarrelA(u16 aNew, u16 *aOld, u16 *aHold)
 {
-    if (CHECK_SANITIZER_FIXES) {
-        u16 old = HI_W_LO_W(*aOld, aNew) >> bltconASH();
-        u16 fix = (u16)(HI_W_LO_W(*aOld, aNew) >> bltconASH());
-        assert(old == fix);
-    }
     *aHold = (u16)(HI_W_LO_W(*aOld, aNew) >> bltconASH());
     *aOld  = aNew;
 }
@@ -198,11 +193,6 @@ Blitter::doBarrelA(u16 aNew, u16 *aOld, u16 *aHold)
 void
 Blitter::doBarrelAdesc(u16 aNew, u16 *aOld, u16 *aHold)
 {
-    if (CHECK_SANITIZER_FIXES) {
-        u16 old = HI_W_LO_W(aNew, *aOld) >> (16 - bltconASH());
-        u16 fix = (u16)(HI_W_LO_W(aNew, *aOld) >> (16 - bltconASH()));
-        assert(old == fix);
-    }
     *aHold = (u16)(HI_W_LO_W(aNew, *aOld) >> (16 - bltconASH()));
     *aOld  = aNew;
 }
@@ -210,11 +200,6 @@ Blitter::doBarrelAdesc(u16 aNew, u16 *aOld, u16 *aHold)
 void
 Blitter::doBarrelB(u16 bNew, u16 *bOld, u16 *bHold)
 {
-    if (CHECK_SANITIZER_FIXES) {
-        u16 old = HI_W_LO_W(*bOld, bNew) >> bltconBSH();
-        u16 fix = (u16)(HI_W_LO_W(*bOld, bNew) >> bltconBSH());
-        assert(old == fix);
-    }
     *bHold = (u16)(HI_W_LO_W(*bOld, bNew) >> bltconBSH());
     *bOld  = bNew;
 }
@@ -222,11 +207,6 @@ Blitter::doBarrelB(u16 bNew, u16 *bOld, u16 *bHold)
 void
 Blitter::doBarrelBdesc(u16 bNew, u16 *bOld, u16 *bHold)
 {
-    if (CHECK_SANITIZER_FIXES) {
-        u16 old = HI_W_LO_W(bNew, *bOld) >> (16 - bltconBSH());
-        u16 fix = (u16)(HI_W_LO_W(bNew, *bOld) >> (16 - bltconBSH()));
-        assert(old == fix);
-    }
     *bHold = (u16)(HI_W_LO_W(bNew, *bOld) >> (16 - bltconBSH()));
     *bOld  = bNew;
 }

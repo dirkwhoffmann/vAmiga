@@ -80,12 +80,6 @@ Moira::shift(int cnt, u64 data) {
             for (int i = 0; i < cnt; i++) {
                 carry = NBIT<S>(data);
                 u64 shifted = data << 1;
-                if (CHECK_SANITIZER_FIXES) {
-                    u32 old = changed | (data ^ shifted);
-                    u32 fix = changed;
-                    fix |= (u32)(data ^ shifted);
-                    assert(old == fix);
-                }
                 changed |= (u32)(data ^ shifted);
                 data = shifted;
             }
@@ -101,12 +95,6 @@ Moira::shift(int cnt, u64 data) {
             for (int i = 0; i < cnt; i++) {
                 carry = data & 1;
                 u64 shifted = SEXT<S>(data) >> 1;
-                if (CHECK_SANITIZER_FIXES) {
-                    u32 old = changed | (data ^ shifted);
-                    u32 fix = changed;
-                    fix |= (u32)(data ^ shifted);
-                    assert(old == fix);
-                }
                 changed |= (u32)(data ^ shifted);
                 data = shifted;
             }
@@ -212,12 +200,6 @@ Moira::addsub(u32 op1, u32 op2)
         case ADDI:
         case ADDQ:
         {
-            if (CHECK_SANITIZER_FIXES) {
-                u64 old = (u64)op1 + (u64)op2;
-                u64 fix = U64_ADD(op1, op2);
-                assert(old == fix);
-            }
-            
             result = U64_ADD(op1, op2);
 
             reg.sr.x = reg.sr.c = CARRY<S>(result);
@@ -227,12 +209,6 @@ Moira::addsub(u32 op1, u32 op2)
         }
         case ADDX:
         {
-            if (CHECK_SANITIZER_FIXES) {
-                u64 old = (u64)op1 + (u64)op2 + (u64)reg.sr.x;
-                u64 fix = U64_ADD3(op1, op2, reg.sr.x);
-                assert(old == fix);
-            }
-
             result = U64_ADD3(op1, op2, reg.sr.x);
 
             reg.sr.x = reg.sr.c = CARRY<S>(result);
@@ -244,12 +220,6 @@ Moira::addsub(u32 op1, u32 op2)
         case SUBI:
         case SUBQ:
         {
-            if (CHECK_SANITIZER_FIXES) {
-                u64 old = (u64)op2 - (u64)op1;
-                u64 fix = U64_SUB(op2, op1);
-                assert(old == fix);
-            }
-            
             result = U64_SUB(op2, op1);
 
             reg.sr.x = reg.sr.c = CARRY<S>(result);
@@ -259,12 +229,6 @@ Moira::addsub(u32 op1, u32 op2)
         }
         case SUBX:
         {
-            if (CHECK_SANITIZER_FIXES) {
-                u64 old = (u64)op2 - (u64)op1 - (u64)reg.sr.x;
-                u64 fix = U64_SUB3(op2, op1, reg.sr.x);
-                assert(old == fix);
-            }
-
             result = U64_SUB3(op2, op1, reg.sr.x);
 
             reg.sr.x = reg.sr.c = CARRY<S>(result);
@@ -325,11 +289,6 @@ Moira::div(u32 op1, u32 op2)
             i64 quotient  = (i64)(i32)op1 / (i16)op2;
             i16 remainder = (i64)(i32)op1 % (i16)op2;
 
-            if (CHECK_SANITIZER_FIXES) {
-                u32 old = (quotient & 0xffff) | remainder << 16;
-                u32 fix = (u32)((quotient & 0xffff) | remainder << 16);
-                assert(old == fix);
-            }
             result = (u32)((quotient & 0xffff) | remainder << 16);
             overflow = ((quotient & 0xffff8000) != 0 &&
                         (quotient & 0xffff8000) != 0xffff8000);
@@ -341,11 +300,6 @@ Moira::div(u32 op1, u32 op2)
             i64 quotient  = op1 / op2;
             u16 remainder = (u16)(op1 % op2);
 
-            if (CHECK_SANITIZER_FIXES) {
-                u32 old = (quotient & 0xffff) | remainder << 16;
-                u32 fix = (u32)((quotient & 0xffff) | remainder << 16);
-                assert(old == fix);
-            }
             result = (u32)((quotient & 0xffff) | remainder << 16);
             overflow = quotient > 0xFFFF;
             break;
@@ -422,11 +376,6 @@ template <Size S> void
 Moira::cmp(u32 op1, u32 op2)
 {
     u64 result = U64_SUB(op2, op1);
-
-    if (CHECK_SANITIZER_FIXES) {
-        u64 old_result = (u64)op2 - (u64)op1;
-        assert(result == old_result);
-    }
     
     reg.sr.c = NBIT<S>(result >> 1);
     reg.sr.v = NBIT<S>((op2 ^ op1) & (op2 ^ result));
@@ -622,20 +571,10 @@ Moira::cyclesDiv(u32 op1, u16 op2)
             for (int i = 0; i < 15; i++) {
                 if ((i32)dividend < 0) {
                     dividend <<= 1;
-                    if (CHECK_SANITIZER_FIXES) {
-                        u32 old = dividend - hdivisor;
-                        u32 fix = U32_SUB(dividend, hdivisor);
-                        assert(old == fix);
-                    }
                     dividend = U32_SUB(dividend, hdivisor);
                 } else {
                     dividend <<= 1;
                     if (dividend >= hdivisor) {
-                        if (CHECK_SANITIZER_FIXES) {
-                            u32 old = dividend - hdivisor;
-                            u32 fix = U32_SUB(dividend, hdivisor);
-                            assert(old == fix);
-                        }
                         dividend = U32_SUB(dividend, hdivisor);
                         mcycles += 1;
                     } else {

@@ -982,11 +982,6 @@ Blitter::exec()
                 check2 = fnv_1a_it32(check2, bltdpt);
             }
             trace(BLT_DEBUG, "D: poke(%X), %X (check: %X %X)\n", bltdpt, dhold, check1, check2);
-            if (CHECK_SANITIZER_FIXES) {
-                u32 old = bltdpt + (desc ? -2 : 2);
-                u32 fix = U32_ADD(bltdpt, desc ? -2 : 2);
-                assert(old == fix);
-            }
             bltdpt = U32_ADD(bltdpt, desc ? -2 : 2);
             if (--cntD == 0) {
                 bltdpt = U32_ADD(bltdpt, desc ? -bltdmod : bltdmod);
@@ -1003,11 +998,6 @@ Blitter::exec()
         anew = agnus.doBlitterDMA(bltapt);
         trace(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
         trace(BLT_DEBUG, "    After fetch: A = %X\n", anew);
-        if (CHECK_SANITIZER_FIXES) {
-            u32 old = bltapt + (desc ? -2 : 2);
-            u32 fix = U32_ADD(bltapt, desc ? -2 : 2);
-            assert(old == fix);
-        }
         bltapt = U32_ADD(bltapt, desc ? -2 : 2);
         if (--cntA == 0) {
             bltapt = U32_ADD(bltapt, desc ? -bltamod : bltamod);
@@ -1022,11 +1012,6 @@ Blitter::exec()
         bnew = agnus.doBlitterDMA(bltbpt);
         trace(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
         trace(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
-        if (CHECK_SANITIZER_FIXES) {
-            u32 old = bltbpt + (desc ? -2 : 2);
-            u32 fix = U32_ADD(bltbpt, desc ? -2 : 2);
-            assert(old == fix);
-        }
         bltbpt = U32_ADD(bltbpt, desc ? -2 : 2);
         if (--cntB == 0) {
             bltbpt = U32_ADD(bltbpt, desc ? -bltbmod : bltbmod);
@@ -1041,11 +1026,6 @@ Blitter::exec()
         chold = agnus.doBlitterDMA(bltcpt);
         trace(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
         trace(BLT_DEBUG, "    After fetch: C = %X\n", chold);
-        if (CHECK_SANITIZER_FIXES) {
-            u32 old = bltcpt + (desc ? -2 : 2);
-            u32 fix = U32_ADD(bltcpt, desc ? -2 : 2);
-            assert(old == fix);
-        }
         bltcpt = U32_ADD(bltcpt, desc ? -2 : 2);
         if (--cntC == 0) {
             bltcpt = U32_ADD(bltcpt, desc ? -bltcmod : bltcmod);
@@ -1062,18 +1042,8 @@ Blitter::exec()
         // Run the barrel shifters on data path A
         trace(BLT_DEBUG, "    ash = %d mask = %X\n", bltconASH(), mask);
         if (desc) {
-            if (CHECK_SANITIZER_FIXES) {
-                u16 old = HI_W_LO_W(anew & mask, aold) >> (16 - bltconASH());
-                u16 fix = (u16)(HI_W_LO_W(anew & mask, aold) >> (16 - bltconASH()));
-                assert(old == fix);
-            }
             ahold = (u16)(HI_W_LO_W(anew & mask, aold) >> (16 - bltconASH()));
         } else {
-            if (CHECK_SANITIZER_FIXES) {
-                u16 old = HI_W_LO_W(aold, anew & mask) >> bltconASH();
-                u16 fix = (u16)(HI_W_LO_W(aold, anew & mask) >> bltconASH());
-                assert(old == fix);
-            }
             ahold = (u16)(HI_W_LO_W(aold, anew & mask) >> bltconASH());
         }
         aold = anew & mask;
@@ -1087,18 +1057,8 @@ Blitter::exec()
         // Run the barrel shifters on data path B
         trace(BLT_DEBUG, "    bsh = %d\n", bltconBSH());
         if (desc) {
-            if (CHECK_SANITIZER_FIXES) {
-                u16 old = HI_W_LO_W(bnew, bold) >> (16 - bltconBSH());
-                u16 fix = (u16)(HI_W_LO_W(bnew, bold) >> (16 - bltconBSH()));
-                assert(old == fix);
-            }
             bhold = (u16)(HI_W_LO_W(bnew, bold) >> (16 - bltconBSH()));
         } else {
-            if (CHECK_SANITIZER_FIXES) {
-                u16 old = HI_W_LO_W(bold, bnew) >> bltconBSH();
-                u16 fix = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
-                assert(old == fix);
-            }
             bhold = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
         }
         bold = bnew;

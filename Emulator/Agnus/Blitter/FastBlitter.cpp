@@ -105,12 +105,6 @@ void Blitter::doFastCopyBlit()
             if (useA) {
                 anew = mem.peek16 <AGNUS_ACCESS> (apt);
                 trace(BLT_DEBUG, "    A = peek(%X) = %X\n", apt, anew);
-                
-                if (CHECK_SANITIZER_FIXES) {
-                    u32 old = apt + incr;
-                    u32 fix = U32_ADD(apt, incr);
-                    assert(old == fix);
-                }
                 apt = U32_ADD(apt, incr);
             }
 
@@ -118,12 +112,6 @@ void Blitter::doFastCopyBlit()
             if (useB) {
                 bnew = mem.peek16 <AGNUS_ACCESS> (bpt);
                 trace(BLT_DEBUG, "    B = peek(%X) = %X\n", bpt, bnew);
-                
-                if (CHECK_SANITIZER_FIXES) {
-                    u32 old = bpt + incr;
-                    u32 fix = U32_ADD(bpt, incr);
-                    assert(old == fix);
-                }
                 bpt = U32_ADD(bpt, incr);
             }
 
@@ -131,12 +119,6 @@ void Blitter::doFastCopyBlit()
             if (useC) {
                 chold = mem.peek16 <AGNUS_ACCESS> (cpt);
                 trace(BLT_DEBUG, "    C = peek(%X) = %X\n", cpt, chold);
-
-                if (CHECK_SANITIZER_FIXES) {
-                    u32 old = cpt + incr;
-                    u32 fix = U32_ADD(cpt, incr);
-                    assert(old == fix);
-                }
                 cpt = U32_ADD(cpt, incr);
             }
             
@@ -185,12 +167,6 @@ void Blitter::doFastCopyBlit()
                     check2 = fnv_1a_it32(check2, dpt & agnus.ptrMask);
                 }
                 trace(BLT_DEBUG, "D: poke(%X), %X  (check: %X %X)\n", dpt, dhold, check1, check2);
-
-                if (CHECK_SANITIZER_FIXES) {
-                    u32 old = dpt + incr;
-                    u32 fix = U32_ADD(dpt, incr);
-                    assert(old == fix);
-                }
                 dpt = U32_ADD(dpt, incr);
             }
 
@@ -252,12 +228,6 @@ Blitter::doFastLineBlit()
     u16 bltbdat_local = 0;
     u16 bltcdat_local = chold;
     u16 bltddat_local = 0;
-    
-    if (CHECK_SANITIZER_FIXES) {
-        u16 old = (bnew >> bltconBSH()) | (bnew << (16 - bltconBSH()));
-        u16 fix = (u16)((bnew >> bltconBSH()) | (bnew << (16 - bltconBSH())));
-        assert(old == fix);
-    }
     u16 mask = (u16)((bnew >> bltconBSH()) | (bnew << (16 - bltconBSH())));
     bool a_enabled = bltcon & 0x08000000;
     bool c_enabled = bltcon & 0x02000000;
@@ -322,11 +292,6 @@ Blitter::doFastLineBlit()
         bzero_local = bzero_local | bltddat_local;
         
         // Rotate mask
-        if (CHECK_SANITIZER_FIXES) {
-            u16 old = (mask << 1) | (mask >> 15);
-            u16 fix = (u16)(mask << 1 | mask >> 15);
-            assert(old == fix);
-        }
         mask = (u16)(mask << 1 | mask >> 15);
         
         // Test movement in the X direction
@@ -337,21 +302,11 @@ Blitter::doFastLineBlit()
         if (decision_is_signed) {
             // Do not yet increase, D has sign
             // D = D + (2*sdelta = bltbmod)
-            if (CHECK_SANITIZER_FIXES) {
-                u32 old = decision_variable + decision_inc_signed;
-                u32 fix = (u32)((i64)decision_variable + decision_inc_signed);
-                assert(old == fix);
-            }
             decision_variable = (u32)((i64)decision_variable + decision_inc_signed);
             // decision_variable += decision_inc_signed;
         } else {
             // increase, D reached a positive value
             // D = D + (2*sdelta - 2*ldelta = bltamod)
-            if (CHECK_SANITIZER_FIXES) {
-                u32 old = decision_variable + decision_inc_unsigned;
-                u32 fix = (u32)((i64)decision_variable + decision_inc_unsigned);
-                assert(old == fix);
-            }
             decision_variable = (u32)((i64)decision_variable + decision_inc_unsigned);
             // decision_variable += decision_inc_unsigned;
             

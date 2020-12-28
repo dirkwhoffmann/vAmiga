@@ -14,9 +14,6 @@
 #include "MoiraDebugger.h"
 #include "StrWriter.h"
 
-// REMOVE ASAP
-static const int CHECK_SANITIZER_FIXES = 0;
-
 namespace moira {
 
 // Execution control flags

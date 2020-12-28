@@ -148,12 +148,6 @@ Moira::execAdda(u16 opcode)
 
     if (!readOp<M,S, STD_AE_FRAME>(src, ea, data)) return;
     data = SEXT<S>(data);
-
-    if (CHECK_SANITIZER_FIXES) {
-        u32 old = (I == ADDA) ? readA(dst) + data : readA(dst) - data;
-        u32 fix = (I == ADDA) ? U32_ADD(readA(dst), data) : U32_SUB(readA(dst), data);
-        assert(old == fix);
-    }
     
     result = (I == ADDA) ? U32_ADD(readA(dst), data) : U32_SUB(readA(dst), data);
     prefetch<POLLIPL>();
@@ -396,11 +390,6 @@ Moira::execBcc(u16 opcode)
     if (cond<I>()) {
 
         u32 newpc = U32_ADD(reg.pc, S == Word ? (i16)queue.irc : (i8)opcode);
-
-        if (CHECK_SANITIZER_FIXES) {
-            u32 newpc_deprecated = reg.pc + (S == Word ? (i16)queue.irc : (i8)opcode);
-            assert(newpc == newpc_deprecated);
-        }
         
         // Check for address error
         if (misaligned<Word>(newpc)) {
@@ -502,16 +491,7 @@ template<Instr I, Mode M, Size S> void
 Moira::execBsr(u16 opcode)
 {
     i16 offset = S == Word ? (i16)queue.irc : (i8)opcode;
- 
-    if (CHECK_SANITIZER_FIXES) {
-        u32 old = reg.pc + offset;
-        u32 fix = U32_ADD(reg.pc, offset);
-        u32 old2 = reg.pc + (S == Word ? 2 : 0);
-        u32 fix2 = U32_ADD(reg.pc, S == Word ? 2 : 0);
-        assert(old == fix);
-        assert(old2 == fix2);
-    }
-    
+     
     u32 newpc = U32_ADD(reg.pc, offset);
     u32 retpc = U32_ADD(reg.pc, S == Word ? 2 : 0);
 
@@ -673,11 +653,6 @@ Moira::execDbcc(u16 opcode)
 
         int dn = _____________xxx(opcode);
         u32 newpc = U32_ADD(reg.pc, (i16)queue.irc);
-
-        if (CHECK_SANITIZER_FIXES) {
-            u32 newpc_deprecated = reg.pc + (i16)queue.irc;
-            assert(newpc == newpc_deprecated);
-        }
         
         bool takeBranch = readD<Word>(dn) != 0;
         
@@ -688,11 +663,6 @@ Moira::execDbcc(u16 opcode)
         }
         
         // Decrement loop counter
-        if (CHECK_SANITIZER_FIXES) {
-            u32 old = readD<Word>(dn) - 1;
-            u32 fix = U32_SUB(readD<Word>(dn), 1);
-            assert(old == fix);
-        }
         writeD<Word>(dn, U32_SUB(readD<Word>(dn), 1));
 
         // Branch
@@ -858,11 +828,6 @@ Moira::execLink(u16 opcode)
 
     // Modify address register and stack pointer
     writeA(ax, sp);
-    if (CHECK_SANITIZER_FIXES) {
-        u32 old = reg.sp + (i32)disp;
-        u32 fix = U32_ADD(reg.sp, disp);
-        assert(old == fix);
-    }
     reg.sp = U32_ADD(reg.sp, disp);
 
     prefetch<POLLIPL>();
