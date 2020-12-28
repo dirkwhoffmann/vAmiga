@@ -347,7 +347,7 @@ u16 crc16(const u8 *addr, size_t size)
     while (size--){
         x = crc >> 8 ^ *addr++;
         x ^= x>>4;
-        crc = (crc << 8) ^ ((u16)(x << 12)) ^ ((u16)(x <<5)) ^ ((u16)x);
+        crc = (u16)((crc << 8) ^ ((u16)(x << 12)) ^ ((u16)(x <<5)) ^ ((u16)x));
     }
     return crc;
 }

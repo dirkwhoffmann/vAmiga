@@ -29,7 +29,7 @@ void transposeSSE(u16 *source, u8* target)
     
     union { u16 column[8]; __m128i sse; } result;
     for (unsigned i = 0; i < 8; i++) {
-        result.column[i] = _mm_movemask_epi8(shuffled);
+        result.column[i] = (u16)_mm_movemask_epi8(shuffled);
         shuffled = _mm_slli_epi64(shuffled, 1);
     }
     

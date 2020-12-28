@@ -83,11 +83,11 @@ Moira::Op(u16 reg, u32 &pc)
 
             if (result.ext1 & 0x100) {
 
-                int dw = baseDispWords(result.ext1);
+                int dw = baseDispWords((u16)result.ext1);
                 if (dw == 1) result.ext2 = dasmRead<Word>(pc);
                 if (dw == 2) result.ext2 = dasmRead<Long>(pc);
 
-                int ow = outerDispWords(result.ext1);
+                int ow = outerDispWords((u16)result.ext1);
                 if (ow == 1) result.ext3 = dasmRead<Word>(pc);
                 if (ow == 2) result.ext3 = dasmRead<Long>(pc);
             }

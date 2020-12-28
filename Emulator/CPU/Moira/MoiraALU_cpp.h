@@ -339,7 +339,7 @@ Moira::div(u32 op1, u32 op2)
         case DIVU: // Unsigned division
         {
             i64 quotient  = op1 / op2;
-            u16 remainder = op1 % op2;
+            u16 remainder = (u16)(op1 % op2);
 
             if (CHECK_SANITIZER_FIXES) {
                 u32 old = (quotient & 0xffff) | remainder << 16;
@@ -355,7 +355,7 @@ Moira::div(u32 op1, u32 op2)
     reg.sr.n = overflow ? 1        : NBIT<Word>(result);
     reg.sr.z = overflow ? reg.sr.z : ZERO<Word>(result);
 
-    sync(cyclesDiv<I>(op1, op2) - 4);
+    sync(cyclesDiv<I>(op1, (u16)op2) - 4);
     return overflow ? op1 : result;
 }
 
@@ -746,7 +746,7 @@ Moira::divMusashi(u32 op1, u32 op2)
             sync(136);
 
             i64 quotient  = op1 / op2;
-            u16 remainder = op1 % op2;
+            u16 remainder = (u16)(op1 % op2);
 
             if(quotient < 0x10000) {
 

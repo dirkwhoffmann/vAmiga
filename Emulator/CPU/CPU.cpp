@@ -159,7 +159,7 @@ CPU::signalPrivilegeViolation()
 }
 
 void
-CPU::signalInterrupt(u8 level)
+CPU::signalInterrupt(int level)
 {
     debug(INT_DEBUG, "Executing level %d IRQ\n", level);
 }

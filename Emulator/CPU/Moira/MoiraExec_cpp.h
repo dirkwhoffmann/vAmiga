@@ -9,23 +9,23 @@
 
 #define SUPERVISOR_MODE_ONLY if (!reg.sr.s) { execPrivilegeException(); return; }
 
-#define REVERSE_8(x) (((x) * 0x0202020202ULL & 0x010884422010ULL) % 1023)
-#define REVERSE_16(x) ((REVERSE_8((x) & 0xFF) << 8) | REVERSE_8(((x) >> 8) & 0xFF))
+#define REVERSE_8(x) (u8)(((x) * 0x0202020202ULL & 0x010884422010ULL) % 1023)
+#define REVERSE_16(x) (u16)((REVERSE_8((x) & 0xFF) << 8) | REVERSE_8(((x) >> 8) & 0xFF))
 
-#define ______________xx(opcode) (u16)((opcode >> 0)  & 0b11)
-#define _____________xxx(opcode) (u16)((opcode >> 0)  & 0b111)
-#define ____________xxxx(opcode) (u16)((opcode >> 0)  & 0b1111)
-#define ________xxxxxxxx(opcode) (u16)((opcode >> 0)  & 0b11111111)
-#define __________xxx___(opcode) (u16)((opcode >> 3)  & 0b111)
-#define __________xx____(opcode) (u16)((opcode >> 4)  & 0b11)
-#define _______xxx______(opcode) (u16)((opcode >> 6)  & 0b111)
-#define _________x______(opcode) (u16)((opcode >> 6)  & 0b1)
-#define ________x_______(opcode) (u16)((opcode >> 7)  & 0b1)
-#define _______x________(opcode) (u16)((opcode >> 8)  & 0b1)
-#define _____xx_________(opcode) (u16)((opcode >> 9)  & 0b11)
-#define ____xxx_________(opcode) (u16)((opcode >> 9)  & 0b111)
-#define ____x___________(opcode) (u16)((opcode >> 11) & 0b1)
-#define xxxx____________(opcode) (u16)((opcode >> 12) & 0b1111)
+#define ______________xx(opcode) (u8)((opcode >> 0)  & 0b11)
+#define _____________xxx(opcode) (u8)((opcode >> 0)  & 0b111)
+#define ____________xxxx(opcode) (u8)((opcode >> 0)  & 0b1111)
+#define ________xxxxxxxx(opcode) (u8)((opcode >> 0)  & 0b11111111)
+#define __________xxx___(opcode) (u8)((opcode >> 3)  & 0b111)
+#define __________xx____(opcode) (u8)((opcode >> 4)  & 0b11)
+#define _______xxx______(opcode) (u8)((opcode >> 6)  & 0b111)
+#define _________x______(opcode) (u8)((opcode >> 6)  & 0b1)
+#define ________x_______(opcode) (u8)((opcode >> 7)  & 0b1)
+#define _______x________(opcode) (u8)((opcode >> 8)  & 0b1)
+#define _____xx_________(opcode) (u8)((opcode >> 9)  & 0b11)
+#define ____xxx_________(opcode) (u8)((opcode >> 9)  & 0b111)
+#define ____x___________(opcode) (u8)((opcode >> 11) & 0b1)
+#define xxxx____________(opcode) (u8)((opcode >> 12) & 0b1111)
 
 #define STD_AE_FRAME \
 (M == MODE_PD && S != Long) ? AE_INC_PC : \

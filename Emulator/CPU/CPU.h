@@ -137,7 +137,7 @@ private:
     void signalTraceException() override;
     void signalTrapException() override;
     void signalPrivilegeViolation() override;
-    void signalInterrupt(u8 level) override;
+    void signalInterrupt(int level) override;
     
     void signalJumpToVector(int nr, u32 addr) override;
     

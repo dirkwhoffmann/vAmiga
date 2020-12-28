@@ -266,7 +266,7 @@ if ((byte % 4) == 3 && BYTE0(value) != BYTE0((u32)exp)) \
 
 #define EXPECT_LESS_OR_EQUAL(exp) { \
 if (value > exp) \
-{ *expected = (exp); return FS_EXPECTED_SMALLER_VALUE; } }
+{ *expected = (u8)(exp); return FS_EXPECTED_SMALLER_VALUE; } }
 
 #define EXPECT_DOS_REVISION { \
 if (!isFSVolumeType(value)) return FS_EXPECTED_DOS_REVISION; }

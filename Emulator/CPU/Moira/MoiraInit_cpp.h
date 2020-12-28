@@ -106,13 +106,13 @@ if ((s) & 0b001) ____XXX___MMMXXX((op) | 1 << 12, I, m, Byte, f); }
 
 
 static u16
-parse(const char *s, u16 sum = 0)
+parse(const char *s, int sum = 0)
 {
     return
     *s == ' ' ? parse(s + 1, sum) :
     *s == '-' ? parse(s + 1, sum << 1) :
     *s == '0' ? parse(s + 1, sum << 1) :
-    *s == '1' ? parse(s + 1, (sum << 1) + 1) : sum;
+    *s == '1' ? parse(s + 1, (sum << 1) + 1) : (u16)sum;
 }
 
 void

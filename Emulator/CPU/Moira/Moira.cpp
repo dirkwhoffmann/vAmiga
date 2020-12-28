@@ -243,12 +243,7 @@ Moira::writeR(int n, u32 v)
 u8
 Moira::getCCR(const StatusRegister &sr)
 {
-    return
-    sr.c << 0 |
-    sr.v << 1 |
-    sr.z << 2 |
-    sr.n << 3 |
-    sr.x << 4;
+    return (u8)(sr.c << 0 | sr.v << 1 | sr.z << 2 | sr.n << 3 | sr.x << 4);
 }
 
 void
@@ -264,8 +259,7 @@ Moira::setCCR(u8 val)
 u16
 Moira::getSR(const StatusRegister &sr)
 {
-    return
-    sr.t << 15 | sr.s << 13 | sr.ipl << 8 | getCCR();
+    return (u16)(sr.t << 15 | sr.s << 13 | sr.ipl << 8 | getCCR());
 }
 
 void
@@ -322,8 +316,8 @@ Moira::setIPL(u8 val)
     }
 }
 
-int
-Moira::getIrqVector(int level) {
+u16
+Moira::getIrqVector(u8 level) {
 
     assert(level < 8);
 
