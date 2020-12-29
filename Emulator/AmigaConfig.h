@@ -23,7 +23,6 @@
 #define RELEASEBUILD
 // #define NDEBUG
 
-
 //
 // Configuration overrides
 //

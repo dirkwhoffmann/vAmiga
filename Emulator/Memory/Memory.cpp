@@ -66,7 +66,9 @@ Memory::getConfigItem(ConfigOption option)
         case OPT_UNMAPPING_TYPE:    return config.unmappingType;
         case OPT_RAM_INIT_PATTERN:  return config.ramInitPattern;
 
-        default: assert(false);
+        default:
+            assert(false);
+            return 0;
     }
 }
 

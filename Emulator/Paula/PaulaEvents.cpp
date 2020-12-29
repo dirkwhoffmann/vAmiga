@@ -36,10 +36,8 @@ Paula::serviceIrqEvent()
 void
 Paula::serviceIplEvent()
 {
-    assert(agnus.slot[IPL_SLOT].id == IPL_CHANGE);
-    
-    u8 iplValue = ipl.delayed();
-    assert(iplValue == ((iplPipe >> 32) & 0xFF));
+    assert(agnus.slot[IPL_SLOT].id == IPL_CHANGE);    
+    assert(ipl.delayed() == ((iplPipe >> 32) & 0xFF));
 
     cpu.setIPL((iplPipe >> 24) & 0xFF);
     // cpu.setIPL((iplPipe >> 32) & 0xFF);

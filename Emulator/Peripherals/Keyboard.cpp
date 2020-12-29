@@ -31,7 +31,9 @@ Keyboard::getConfigItem(ConfigOption option)
             
         case OPT_ACCURATE_KEYBOARD:  return config.accurate;
         
-        default: assert(false);
+        default:
+            assert(false);
+            return 0;
     }
 }
 

@@ -57,7 +57,9 @@ CIA::getConfigItem(ConfigOption option)
         case OPT_TODBUG:         return config.todBug;
         case OPT_ECLOCK_SYNCING: return config.eClockSyncing;
         
-        default: assert(false);
+        default:
+            assert(false);
+            return 0;
     }
 }
 

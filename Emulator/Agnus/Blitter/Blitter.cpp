@@ -58,7 +58,10 @@ Blitter::getConfigItem(ConfigOption option)
     switch (option) {
             
         case OPT_BLITTER_ACCURACY: return config.accuracy;
-        default: assert(false);
+        
+        default:
+            assert(false);
+            return 0;
     }
 }
 

@@ -42,7 +42,7 @@ ZorroManager::peekFastRamDevice(u32 addr)
      *              111 = 4 megabytes
      */
     u8 erTypeHi = 0b1110; // Zorro II, Free pool, Don't boot
-    u8 erTypeLo;
+    u8 erTypeLo = 0b0000;
     
     switch (mem.fastRamSize()) {
         case KB(64):  erTypeLo = 0b001; break;

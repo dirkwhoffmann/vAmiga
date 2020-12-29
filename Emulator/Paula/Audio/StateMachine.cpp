@@ -404,6 +404,11 @@ template void StateMachine<1>::move_000_010();
 template void StateMachine<2>::move_000_010();
 template void StateMachine<3>::move_000_010();
 
+template void StateMachine<0>::move_000_001();
+template void StateMachine<1>::move_000_001();
+template void StateMachine<2>::move_000_001();
+template void StateMachine<3>::move_000_001();
+
 template void StateMachine<0>::move_001_101();
 template void StateMachine<1>::move_001_101();
 template void StateMachine<2>::move_001_101();

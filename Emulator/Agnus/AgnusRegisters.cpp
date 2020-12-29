@@ -427,8 +427,8 @@ Agnus::pokeVHPOS(u16 value)
 {
     trace(POSREG_DEBUG, "pokeVHPOS(%X)\n", value);
     
-    int v7v0 = HI_BYTE(value);
-    int h8h1 = LO_BYTE(value);
+    [[maybe_unused]] int v7v0 = HI_BYTE(value);
+    [[maybe_unused]] int h8h1 = LO_BYTE(value);
     
     trace(XFILES, "XFILES (VHPOS): %x (%d,%d)\n", value, v7v0, h8h1);
 

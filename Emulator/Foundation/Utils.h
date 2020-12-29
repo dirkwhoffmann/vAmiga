@@ -10,7 +10,6 @@
 #ifndef _AMIGA_UTILS_H
 #define _AMIGA_UTILS_H
 
-#include <assert.h>
 #include <limits.h>
 #include <pthread.h>
 #include <stdarg.h>

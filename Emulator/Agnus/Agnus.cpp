@@ -76,7 +76,9 @@ Agnus::getConfigItem(ConfigOption option)
         case OPT_AGNUS_REVISION: return config.revision;
         case OPT_SLOW_RAM_MIRROR: return config.slowRamMirror;
             
-        default: assert(false);
+        default:
+            assert(false);
+            return 0;
     }
 }
 
@@ -664,7 +666,7 @@ Agnus::syncWithEClock()
     
     // We want to sync to position (2).
     // If we are already too close, we seek (2) in the next E clock cycle.
-    Cycle delay;
+    Cycle delay = 0;
     switch (eClk) {
         case 0: delay = 4 * (2 + 10); break;
         case 1: delay = 4 * (1 + 10); break;

@@ -81,7 +81,9 @@ Muxer::getConfigItem(ConfigOption option)
         case OPT_AUDVOLR:
             return config.volR;
 
-        default: assert(false);
+        default:
+            assert(false);
+            return 0;
     }
 }
 
@@ -96,7 +98,9 @@ Muxer::getConfigItem(ConfigOption option, long id)
         case OPT_AUDPAN:
             return config.pan[id];
             
-        default: assert(false);
+        default:
+            assert(false);
+            return 0;
     }
 }
 

@@ -78,8 +78,8 @@ void Blitter::doFastCopyBlit()
     bool fillCarry;
 
     int incr = desc ? -2 : 2;
-    int ash  = desc ? 16 - bltconASH() : bltconASH();
-    int bsh  = desc ? 16 - bltconBSH() : bltconBSH();
+    [[maybe_unused]] int ash  = desc ? 16 - bltconASH() : bltconASH();
+    [[maybe_unused]] int bsh  = desc ? 16 - bltconBSH() : bltconBSH();
     i32 amod = desc ? -bltamod : bltamod;
     i32 bmod = desc ? -bltbmod : bltbmod;
     i32 cmod = desc ? -bltcmod : bltcmod;

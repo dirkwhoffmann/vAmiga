@@ -51,7 +51,9 @@ Denise::getConfigItem(ConfigOption option)
         case OPT_CLX_SPR_PLF:         return config.clxSprPlf;
         case OPT_CLX_PLF_PLF:         return config.clxPlfPlf;
             
-        default: assert(false);
+        default:
+            assert(false);
+            return 0;
     }
 }
 

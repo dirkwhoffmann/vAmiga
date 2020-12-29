@@ -21,7 +21,9 @@ SerialPort::getConfigItem(ConfigOption option)
             
         case OPT_SERIAL_DEVICE: return (long)config.device;
         
-        default: assert(false);
+        default:
+            assert(false);
+            return 0;
     }
 }
 

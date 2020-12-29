@@ -20,7 +20,9 @@ RTC::getConfigItem(ConfigOption option)
             
         case OPT_RTC_MODEL:  return (long)config.model;
         
-        default: assert(false);
+        default:
+            assert(false);
+            return 0;
     }
 }
 

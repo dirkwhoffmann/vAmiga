@@ -41,7 +41,9 @@ Drive::getConfigItem(ConfigOption option)
         case OPT_DRIVE_TYPE:        return (long)config.type;
         case OPT_EMULATE_MECHANICS: return (long)config.mechanicalDelays;
             
-        default: assert(false);
+        default:
+            assert(false);
+            return 0;
     }
 }
 

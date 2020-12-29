@@ -44,7 +44,9 @@ DiskController::getConfigItem(ConfigOption option)
         case OPT_AUTO_DSKSYNC:  return config.autoDskSync;
         case OPT_LOCK_DSKSYNC:  return config.lockDskSync;
         
-        default: assert(false);
+        default:
+            assert(false);
+            return 0;
     }
 }
 
@@ -54,8 +56,10 @@ DiskController::getConfigItem(ConfigOption option, long id)
     switch (option) {
             
         case OPT_DRIVE_CONNECT:  return config.connected[id];
-        
-        default: assert(false);
+            
+        default:
+            assert(false);
+            return 0;
     }
 }
 

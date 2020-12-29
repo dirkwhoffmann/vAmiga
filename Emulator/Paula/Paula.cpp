@@ -147,10 +147,8 @@ Paula::checkInterrupt()
         ipl.write((u8)level);
         iplPipe = (iplPipe & ~0xFF) | level;
                 
-        trace(CPU_DEBUG, "iplPipe: %016llx\n", iplPipe);
-        
-        u8 iplValue = ipl.delayed();
-        assert(iplValue == ((iplPipe >> 32) & 0xFF));
+        trace(CPU_DEBUG, "iplPipe: %016llx\n", iplPipe);        
+        assert(ipl.delayed() == ((iplPipe >> 32) & 0xFF));
             
         agnus.scheduleRel<IPL_SLOT>(0, IPL_CHANGE, 5);
     }

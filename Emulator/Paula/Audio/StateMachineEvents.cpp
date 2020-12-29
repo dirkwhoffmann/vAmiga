@@ -12,10 +12,8 @@
 template <int nr> void
 StateMachine<nr>::serviceEvent()
 {
-    const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
-
     trace(AUD_DEBUG, "CHX_PERFIN state = %d\n", state);
-    assert(agnus.slot[slot].id == CHX_PERFIN);
+    assert(agnus.slot[CH0_SLOT+nr].id == CHX_PERFIN);
 
     switch (state) {
 

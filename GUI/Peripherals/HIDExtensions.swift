@@ -57,7 +57,7 @@ extension IOHIDDevice {
 
     var primaryUsage: String { return property(key: kIOHIDPrimaryUsageKey) ?? "" }
     
-    var isBuiltIn: Bool { return property(key: kIOHIDBuiltInKey) == "1" }
+    // var isBuiltIn: Bool { return property(key: kIOHIDBuiltInKey) == "1" }
 
     var isMouse: Bool { return primaryUsage == "\(kHIDUsage_GD_Mouse)" }
             
@@ -87,5 +87,20 @@ extension IOHIDDevice {
                 print("\t" + key + ": \(prop)")
             }
         }
+    }
+    
+    var isBuiltIn: Bool {
+        
+        /* The purpose of this function is to distinguish internal from
+         * external HID devices. Note: The old implementation only checked the
+         * BuiltIn key of the device, which turned out to be insufficient. At
+         * least once, we saw a wireless Sony DualShock 4 in the wild with the
+         * BuildIn key set to 1. To get a more accurate result, the new
+         * implementation first evaluates the Transport property and classifies
+         * each wireless device as external.
+         */
+        if property(key: kIOHIDTransportKey) == "Bluetooth" { return false }
+        
+        return property(key: kIOHIDBuiltInKey) == "1"
     }
 }

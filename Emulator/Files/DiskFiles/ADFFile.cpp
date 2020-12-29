@@ -58,6 +58,7 @@ ADFFile::fileSize(DiskType t, DiskDensity d)
     if (t == DISK_35 && d == DISK_HD) return ADFSIZE_35_HD;
 
     assert(false);
+    return 0;
 }
 
 ADFFile *

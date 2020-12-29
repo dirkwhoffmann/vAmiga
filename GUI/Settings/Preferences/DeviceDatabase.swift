@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 /* This class implements a data provider for external devices such as GamePads
- * or Joysticks that can be connected via USB or Blutooth.
+ * or Joysticks that can be connected via USB or Bluetooth.
  *
  * An object of this class is used inside the PreferencesController
  */
