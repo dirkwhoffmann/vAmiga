@@ -86,7 +86,7 @@ inline const char *slotName(EventSlot nr)
         case INS_SLOT:  return "Inspector";
 
         default:
-            assert(false);
+            // assert(false);
             return "*** INVALID ***";
     }
 }
@@ -270,8 +270,6 @@ static inline bool isBltEvent(EventID id) { return id < BLT_EVENT_COUNT; }
 
 static inline bool isBplxEvent(EventID id, int x)
 {
-    assert(1 <= x && x <= 6);
-
     switch(id & ~0b11) {
 
         case BPL_L1: case BPL_H1: return x == 1;

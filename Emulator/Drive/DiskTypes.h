@@ -31,9 +31,8 @@ inline bool isDiskType(DiskType value)
 
 inline const char *sDiskType(DiskType value)
 {
-    assert(isDiskType(value));
-    
     switch (value) {
+            
         case DISK_35:   return "3.5\"";
         case DISK_525:  return "5.25\"";
         default:        return "???";
@@ -55,39 +54,12 @@ inline bool isDiskDensity(DiskDensity value)
 inline const char *sDiskDensity(DiskDensity value)
 {
     switch (value) {
+            
         case DISK_SD:  return "SD";
         case DISK_DD:  return "DD";
         case DISK_HD:  return "HD";
         default:       return "???";
     }
 }
-
-/*
-enum_long( EmptyDiskFormat)
-{
-    FS_EMPTY,
-    FS_EMPTY_OFS,
-    FS_EMPTY_OFS_BOOTABLE,
-    FS_EMPTY_FFS,
-    FS_EMPTY_FFS_BOOTABLE
-};
-
-inline bool isEmptyDiskFormat(EmptyDiskFormat type)
-{
-    return type >= FS_EMPTY && type <= FS_EMPTY_FFS_BOOTABLE;
-}
-
-inline const char *sEmptyDiskFormat(EmptyDiskFormat type)
-{
-    switch (type) {
-        case FS_EMPTY:              return "None";
-        case FS_EMPTY_OFS:          return "OFS";
-        case FS_EMPTY_OFS_BOOTABLE: return "OFS (bootable)";
-        case FS_EMPTY_FFS:          return "FFS";
-        case FS_EMPTY_FFS_BOOTABLE: return "FFS (bootable)";
-        default:                    return "???";
-    }
-}
-*/
 
 #endif

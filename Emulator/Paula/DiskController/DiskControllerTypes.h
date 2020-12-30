@@ -34,14 +34,14 @@ inline bool isDriveState(long value)
 
 inline const char *driveStateName(DriveState state)
 {
-    assert(isDriveState(state));
-
     switch (state) {
+            
         case DRIVE_DMA_OFF:   return "DRIVE_DMA_OFF";
         case DRIVE_DMA_WAIT:  return "DRIVE_DMA_WAIT";
         case DRIVE_DMA_READ:  return "DRIVE_DMA_READ";
         case DRIVE_DMA_WRITE: return "DRIVE_DMA_WRITE";
         case DRIVE_DMA_FLUSH: return "DRIVE_DMA_FLUSH";
+            
         default:              return "???";
     }
 }

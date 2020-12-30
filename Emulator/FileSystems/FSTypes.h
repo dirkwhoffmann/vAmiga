@@ -92,9 +92,8 @@ isFSBlockType(long value)
 inline const char *
 sFSBlockType(FSBlockType type)
 {
-    assert(isFSBlockType(type));
-
     switch (type) {
+            
         case FS_EMPTY_BLOCK:      return "FS_EMPTY_BLOCK";
         case FS_BOOT_BLOCK:       return "FS_BOOT_BLOCK";
         case FS_ROOT_BLOCK:       return "FS_ROOT_BLOCK";
@@ -105,6 +104,7 @@ sFSBlockType(FSBlockType type)
         case FS_FILELIST_BLOCK:   return "FS_FILELIST_BLOCK";
         case FS_DATA_BLOCK_OFS:   return "FS_DATA_BLOCK_OFS";
         case FS_DATA_BLOCK_FFS:   return "FS_DATA_BLOCK_FFS";
+            
         default:                  return "???";
     }
 }

@@ -11,6 +11,7 @@
 #define _BOOT_BLOCK_IMAGE_H
 
 #include "FileTypes.h"
+#include <stddef.h>
 
 typedef struct
 {

@@ -32,9 +32,8 @@ inline bool isDriveType(long value)
 
 inline const char *driveTypeName(DriveType type)
 {
-    assert(isDriveType(type));
-    
     switch (type) {
+            
         case DRIVE_35_DD:    return "Drive 3.5\" DD";
         case DRIVE_35_HD:    return "Drive 3.5\" HD";
         case DRIVE_525_DD:   return "Drive 5.25\" DD";

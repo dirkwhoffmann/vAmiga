@@ -93,8 +93,6 @@ inline bool isMessageType(long value)
 
 inline const char *sMessageType(MessageType type)
 {
-    assert(isMessageType(type));
-
     switch (type) {
             
         case MSG_NONE:                return "MSG_NONE";
@@ -154,6 +152,7 @@ inline const char *sMessageType(MessageType type)
             
         case MSG_DMA_DEBUG_ON:        return "MSG_DMA_DEBUG_ON";
         case MSG_DMA_DEBUG_OFF:       return "MSG_DMA_DEBUG_OFF";
+            
         default:                      return "???";
     }
 }
