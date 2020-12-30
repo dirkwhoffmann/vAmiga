@@ -8,11 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "Moira.h"
-#include "MoiraConfig.h"
 
 #include <stdio.h>
 #include <algorithm>
-#include <assert.h>
 
 namespace moira {
 

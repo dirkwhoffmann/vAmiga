@@ -91,15 +91,17 @@ extension IOHIDDevice {
     
     var isBuiltIn: Bool {
         
-        /* The purpose of this function is to distinguish internal from
-         * external HID devices. Note: The old implementation only checked the
-         * BuiltIn key of the device, which turned out to be insufficient. At
-         * least once, we saw a wireless Sony DualShock 4 in the wild with the
-         * BuildIn key set to 1. To get a more accurate result, the new
-         * implementation first evaluates the Transport property and classifies
-         * each wireless device as external.
+        /* The purpose of this function is to distinguish internal from external
+         * HID devices. Note: The old implementation only checked the BuiltIn
+         * key of the device, which turned out to be insufficient. Some external
+         * devices such as the Sony DualShock 4 controller set the BuildIn key
+         * to 1. To get a more accurate result, the new implementation first
+         * evaluates the Transport property and classifies each wireless device
+         * as external.
          */
-        if property(key: kIOHIDTransportKey) == "Bluetooth" { return false }
+        if property(key: kIOHIDTransportKey)?.hasPrefix("Bluetooth") == true {
+            return false
+        }
         
         return property(key: kIOHIDBuiltInKey) == "1"
     }

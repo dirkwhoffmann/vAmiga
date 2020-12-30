@@ -10,9 +10,7 @@
 #ifndef MOIRA_CONFIG_H
 #define MOIRA_CONFIG_H
 
-/* Comment the following statement out to enable assertion checking.
- */
-#define NDEBUG
+#include "AmigaConfig.h"
 
 /* Set to true to enable address error checking.
  *
