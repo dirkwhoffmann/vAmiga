@@ -1169,7 +1169,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->drive->toggleWriteProtection();
 }
-- (BOOL) isInsertable:(DiskType)type density:(DiskDensity)density
+- (BOOL) isInsertable:(DiskDiameter)type density:(DiskDensity)density
 {
     return wrapper->drive->isInsertable(type, density);
 }
@@ -1528,9 +1528,9 @@ struct SerialPortWrapper { SerialPort *port; };
     return ((DiskFile *)wrapper->file)->getDos();
 }
 
-- (DiskType)diskType
+- (DiskDiameter)diskType
 {
-    return ((DiskFile *)wrapper->file)->getDiskType();
+    return ((DiskFile *)wrapper->file)->getDiskDiameter();
 }
 
 - (DiskDensity)diskDensity
@@ -1631,7 +1631,7 @@ struct SerialPortWrapper { SerialPort *port; };
     return [self make: archive];
 }
 
-+ (instancetype)makeWithDiskType:(DiskType)type density:(DiskDensity)density
++ (instancetype)makeWithDiameter:(DiskDiameter)type density:(DiskDensity)density
 {
     ADFFile *archive = ADFFile::makeWithType(type, density);
     return [self make: archive];

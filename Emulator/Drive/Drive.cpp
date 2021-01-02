@@ -13,7 +13,7 @@ Drive::Drive(Amiga& ref, unsigned n) : AmigaComponent(ref), nr(n)
 {
     assert(nr < 4);
     
-    config.type = DRIVE_35_DD;
+    config.type = DRIVE_DD_35;
     config.mechanicalDelays = true;
     config.startDelay = MSEC(380);
     config.stopDelay = MSEC(80);
@@ -62,7 +62,7 @@ Drive::setConfigItem(Option option, long id, long value)
                 warn("Invalid drive type: %ld\n", value);
                 return false;
             }
-            if (value != DRIVE_35_DD && value != DRIVE_35_HD) {
+            if (value != DRIVE_DD_35 && value != DRIVE_HD_35) {
                 warn("Unsupported type: %s\n", driveTypeName((DriveType)value));
                 return false;
             }
@@ -147,7 +147,7 @@ Drive::_size()
     if (hasDisk()) {
 
         // Add the disk type and disk state
-        counter & disk->getType() & disk->getDensity();
+        counter & disk->getDiameter() & disk->getDensity();
         disk->applyToPersistentItems(counter);
         // counter.count += disk->geometry.diskSize;
     }
@@ -177,7 +177,7 @@ Drive::_load(u8 *buffer)
 
     // If yes, create recreate the disk
     if (diskInSnapshot) {
-        DiskType type;
+        DiskDiameter type;
         DiskDensity density;
         reader & type & density;
         
@@ -204,7 +204,7 @@ Drive::_save(u8 *buffer)
     if (hasDisk()) {
 
         // Write the disk type
-        writer & disk->getType() & disk->getDensity();
+        writer & disk->getDiameter() & disk->getDensity();
 
         // Write the disk's state
         disk->applyToPersistentItems(writer);
@@ -235,14 +235,14 @@ Drive::getDriveId()
         
         switch(config.type) {
                 
-            case DRIVE_35_DD:
+            case DRIVE_DD_35:
                 return 0xFFFFFFFF;
                 
-            case DRIVE_35_HD:
+            case DRIVE_HD_35:
                 if (disk && disk->getDensity() == DISK_HD) return 0xAAAAAAAA;
                 return 0xFFFFFFFF;
                 
-            case DRIVE_525_DD:
+            case DRIVE_DD_525:
                 return 0x55555555;
         }
     }
@@ -590,20 +590,20 @@ Drive::ejectDisk()
 }
 
 bool
-Drive::isInsertable(DiskType t, DiskDensity d)
+Drive::isInsertable(DiskDiameter t, DiskDensity d)
 {
-    debug(DSK_DEBUG, "isInsertable(%s, %s)\n", sDiskType(t), sDiskDensity(d));
+    debug(DSK_DEBUG, "isInsertable(%s, %s)\n", DiskDiameterName(t), DiskDensityName(d));
     
     switch (config.type) {
             
-        case DRIVE_35_DD:
-            return t == DISK_35 && d == DISK_DD;
+        case DRIVE_DD_35:
+            return t == INCH_35 && d == DISK_DD;
             
-        case DRIVE_35_HD:
-            return t == DISK_35;
+        case DRIVE_HD_35:
+            return t == INCH_35;
             
-        case DRIVE_525_DD:
-            return t == DISK_525 && d == DISK_DD;
+        case DRIVE_DD_525:
+            return t == INCH_525 && d == DISK_DD;
                         
         default:
             assert(false);
@@ -618,7 +618,7 @@ Drive::isInsertable(DiskFile *file)
    
     if (!file) return false;
     
-    return isInsertable(file->getDiskType(), file->getDiskDensity());
+    return isInsertable(file->getDiskDiameter(), file->getDiskDensity());
 }
 
 bool
@@ -628,7 +628,7 @@ Drive::isInsertable(Disk *disk)
     
     if (!disk) return false;
 
-    return isInsertable(disk->type, disk->density);
+    return isInsertable(disk->diameter, disk->density);
 }
 
 bool

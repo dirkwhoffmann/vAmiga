@@ -9,15 +9,15 @@
 
 #include "Amiga.h"
 
-Disk::Disk(DiskType type, DiskDensity density)
+Disk::Disk(DiskDiameter type, DiskDensity density)
 {    
-    this->type = type;
+    this->diameter = type;
     this->density = density;
     
     u32 trackLength = 0;
-    if (type == DISK_35  && density == DISK_DD) trackLength = 12668;
-    if (type == DISK_35  && density == DISK_HD) trackLength = 24636;
-    if (type == DISK_525 && density == DISK_DD) trackLength = 12668;
+    if (type == INCH_35  && density == DISK_DD) trackLength = 12668;
+    if (type == INCH_35  && density == DISK_HD) trackLength = 24636;
+    if (type == INCH_525 && density == DISK_DD) trackLength = 12668;
 
     assert(trackLength != 0);
     for (int i = 0; i < 168; i++) length.track[i] = trackLength;
@@ -32,7 +32,7 @@ Disk::~Disk()
 Disk *
 Disk::makeWithFile(DiskFile *file)
 {
-    Disk *disk = new Disk(file->getDiskType(), file->getDiskDensity());
+    Disk *disk = new Disk(file->getDiskDiameter(), file->getDiskDensity());
     
     if (!disk->encodeDisk(file)) {
         delete disk;
@@ -45,7 +45,7 @@ Disk::makeWithFile(DiskFile *file)
 }
 
 Disk *
-Disk::makeWithReader(SerReader &reader, DiskType type, DiskDensity density)
+Disk::makeWithReader(SerReader &reader, DiskDiameter type, DiskDensity density)
 {
     Disk *disk = new Disk(type, density);
     disk->applyToPersistentItems(reader);
@@ -57,8 +57,8 @@ void
 Disk::dump()
 {
     msg("\nDisk:\n");
-    msg("            type : %s\n", sDiskType(type));
-    msg("         density : %s\n", sDiskDensity(density));
+    msg("            type : %s\n", DiskDiameterName(diameter));
+    msg("         density : %s\n", DiskDensityName(density));
     msg("       numCyls() : %ld\n", numCyls());
     msg("      numSides() : %ld\n", numSides());
     msg("     numTracks() : %ld\n", numTracks());
@@ -120,7 +120,7 @@ Disk::clearDisk()
     /* In order to make some copy protected game titles work, we smuggle in
      * some magic values. E.g., Crunch factory expects 0x44A2 on cylinder 80.
      */
-    if (type == DISK_35 && density == DISK_DD) {
+    if (diameter == INCH_35 && density == DISK_DD) {
         
         for (int t = 0; t < numTracks(); t++) {
             data.track[t][0] = 0x44;
@@ -164,7 +164,7 @@ bool
 Disk::encodeDisk(DiskFile *df)
 {
     assert(df != nullptr);
-    assert(df->getDiskType() == getType());
+    assert(df->getDiskDiameter() == getDiameter());
 
     // Start with an unformatted disk
     clearDisk();

@@ -14,7 +14,7 @@
 
 #include "Aliases.h"
 
-enum_long(MessageType)
+enum_long(MSG_TYPE)
 {
     MSG_NONE = 0,
     
@@ -85,76 +85,76 @@ enum_long(MessageType)
     MSG_DMA_DEBUG_ON,
     MSG_DMA_DEBUG_OFF
 };
+typedef MSG_TYPE MessageType;
 
 inline bool isMessageType(long value)
 {
-    return value >= 0 && value <= MSG_DMA_DEBUG_OFF;
+    return (unsigned long)value <= MSG_DMA_DEBUG_OFF;
 }
 
-inline const char *sMessageType(MessageType type)
+inline const char *MessageTypeName(MessageType type)
 {
     switch (type) {
             
-        case MSG_NONE:                return "MSG_NONE";
-        case MSG_REGISTER:            return "MSG_REGISTER";
-        case MSG_UNREGISTER:          return "MSG_UNREGISTER";
+        case MSG_NONE:                return "NONE";
+        case MSG_REGISTER:            return "REGISTER";
+        case MSG_UNREGISTER:          return "UNREGISTER";
             
-        case MSG_CONFIG:              return "MSG_CONFIG";
-        case MSG_POWER_ON:            return "MSG_POWER_ON";
-        case MSG_POWER_OFF:           return "MSG_POWER_OFF";
-        case MSG_RUN:                 return "MSG_RUN";
-        case MSG_PAUSE:               return "MSG_PAUSE";
-        case MSG_RESET:               return "MSG_RESET";
-        case MSG_WARP_ON:             return "MSG_WARP_ON";
-        case MSG_WARP_OFF:            return "MSG_WARP_OFF";
-        case MSG_MUTE_ON:             return "MSG_MUTE_ON";
-        case MSG_MUTE_OFF:            return "MSG_MUTE_OFF";
-        case MSG_POWER_LED_ON:        return "MSG_POWER_LED_ON";
-        case MSG_POWER_LED_DIM:       return "MSG_POWER_LED_DIM";
-        case MSG_POWER_LED_OFF:       return "MSG_POWER_LED_OFF";
+        case MSG_CONFIG:              return "CONFIG";
+        case MSG_POWER_ON:            return "POWER_ON";
+        case MSG_POWER_OFF:           return "POWER_OFF";
+        case MSG_RUN:                 return "RUN";
+        case MSG_PAUSE:               return "PAUSE";
+        case MSG_RESET:               return "RESET";
+        case MSG_WARP_ON:             return "WARP_ON";
+        case MSG_WARP_OFF:            return "WARP_OFF";
+        case MSG_MUTE_ON:             return "MUTE_ON";
+        case MSG_MUTE_OFF:            return "MUTE_OFF";
+        case MSG_POWER_LED_ON:        return "POWER_LED_ON";
+        case MSG_POWER_LED_DIM:       return "POWER_LED_DIM";
+        case MSG_POWER_LED_OFF:       return "POWER_LED_OFF";
                 
-        case MSG_BREAKPOINT_CONFIG:   return "MSG_BREAKPOINT_CONFIG";
-        case MSG_BREAKPOINT_REACHED:  return "MSG_BREAKPOINT_REACHED";
-        case MSG_WATCHPOINT_REACHED:  return "MSG_WATCHPOINT_REACHED";
-        case MSG_CPU_HALT:            return "MSG_CPU_HALT";
+        case MSG_BREAKPOINT_CONFIG:   return "BREAKPOINT_CONFIG";
+        case MSG_BREAKPOINT_REACHED:  return "BREAKPOINT_REACHED";
+        case MSG_WATCHPOINT_REACHED:  return "WATCHPOINT_REACHED";
+        case MSG_CPU_HALT:            return "CPU_HALT";
 
-        case MSG_MEM_LAYOUT:          return "MSG_MEM_LAYOUT";
+        case MSG_MEM_LAYOUT:          return "LAYOUT";
                 
-        case MSG_DRIVE_CONNECT:       return "MSG_DRIVE_CONNECT";
-        case MSG_DRIVE_DISCONNECT:    return "MSG_DRIVE_DISCONNECT";
-        case MSG_DRIVE_SELECT:        return "MSG_DRIVE_SELECT";
-        case MSG_DRIVE_READ:          return "MSG_DRIVE_READ";
-        case MSG_DRIVE_WRITE:         return "MSG_DRIVE_WRITE";
-        case MSG_DRIVE_LED_ON:        return "MSG_DRIVE_LED_ON";
-        case MSG_DRIVE_LED_OFF:       return "MSG_DRIVE_LED_OFF";
-        case MSG_DRIVE_MOTOR_ON:      return "MSG_DRIVE_MOTOR_ON";
-        case MSG_DRIVE_MOTOR_OFF:     return "MSG_DRIVE_MOTOR_OFF";
-        case MSG_DRIVE_HEAD:          return "MSG_DRIVE_HEAD";
-        case MSG_DRIVE_HEAD_POLL:     return "MSG_DRIVE_HEAD_POLL";
-        case MSG_DISK_INSERT:         return "MSG_DISK_INSERT";
-        case MSG_DISK_EJECT:          return "MSG_DISK_EJECT";
-        case MSG_DISK_SAVED:          return "MSG_DISK_SAVED";
-        case MSG_DISK_UNSAVED:        return "MSG_DISK_UNSAVED";
-        case MSG_DISK_PROTECT:        return "MSG_DISK_PROTECT";
-        case MSG_DISK_UNPROTECT:      return "MSG_DISK_UNPROTECT";
+        case MSG_DRIVE_CONNECT:       return "DRIVE_CONNECT";
+        case MSG_DRIVE_DISCONNECT:    return "DRIVE_DISCONNECT";
+        case MSG_DRIVE_SELECT:        return "DRIVE_SELECT";
+        case MSG_DRIVE_READ:          return "DRIVE_READ";
+        case MSG_DRIVE_WRITE:         return "DRIVE_WRITE";
+        case MSG_DRIVE_LED_ON:        return "DRIVE_LED_ON";
+        case MSG_DRIVE_LED_OFF:       return "DRIVE_LED_OFF";
+        case MSG_DRIVE_MOTOR_ON:      return "DRIVE_MOTOR_ON";
+        case MSG_DRIVE_MOTOR_OFF:     return "DRIVE_MOTOR_OFF";
+        case MSG_DRIVE_HEAD:          return "DRIVE_HEAD";
+        case MSG_DRIVE_HEAD_POLL:     return "DRIVE_HEAD_POLL";
+        case MSG_DISK_INSERT:         return "DISK_INSERT";
+        case MSG_DISK_EJECT:          return "DISK_EJECT";
+        case MSG_DISK_SAVED:          return "DISK_SAVED";
+        case MSG_DISK_UNSAVED:        return "DISK_UNSAVED";
+        case MSG_DISK_PROTECT:        return "DISK_PROTECT";
+        case MSG_DISK_UNPROTECT:      return "DISK_UNPROTECT";
 
-        case MSG_CTRL_AMIGA_AMIGA:    return "MSG_CTRL_AMIGA_AMIGA";
+        case MSG_CTRL_AMIGA_AMIGA:    return "CTRL_AMIGA_AMIGA";
             
-        case MSG_SER_IN:              return "MSG_SER_IN";
-        case MSG_SER_OUT:             return "MSG_SER_OUT";
+        case MSG_SER_IN:              return "SER_IN";
+        case MSG_SER_OUT:             return "SER_OUT";
 
-        case MSG_AUTO_SNAPSHOT_TAKEN: return "MSG_AUTO_SNAPSHOT_TAKEN";
-        case MSG_USER_SNAPSHOT_TAKEN: return "MSG_USER_SNAPSHOT_TAKEN";
-        case MSG_SNAPSHOT_RESTORED:   return "MSG_SNAPSHOT_RESTORED";
+        case MSG_AUTO_SNAPSHOT_TAKEN: return "AUTO_SNAPSHOT_TAKEN";
+        case MSG_USER_SNAPSHOT_TAKEN: return "USER_SNAPSHOT_TAKEN";
+        case MSG_SNAPSHOT_RESTORED:   return "SNAPSHOT_RESTORED";
 
-        case MSG_RECORDING_STARTED:   return "MSG_RECORDING_STARTED";
-        case MSG_RECORDING_STOPPED:   return "MSG_RECORDING_STOPPED";
+        case MSG_RECORDING_STARTED:   return "RECORDING_STARTED";
+        case MSG_RECORDING_STOPPED:   return "RECORDING_STOPPED";
             
-        case MSG_DMA_DEBUG_ON:        return "MSG_DMA_DEBUG_ON";
-        case MSG_DMA_DEBUG_OFF:       return "MSG_DMA_DEBUG_OFF";
-            
-        default:                      return "???";
+        case MSG_DMA_DEBUG_ON:        return "DMA_DEBUG_ON";
+        case MSG_DMA_DEBUG_OFF:       return "DMA_DEBUG_OFF";            
     }
+    return "???";
 }
 
 typedef struct

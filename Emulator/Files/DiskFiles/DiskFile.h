@@ -35,7 +35,7 @@ public:
 public:
         
     // Returns the layout parameters for this disk
-    virtual DiskType getDiskType() = 0;
+    virtual DiskDiameter getDiskDiameter() = 0;
     virtual DiskDensity getDiskDensity() = 0;
     virtual long numSides() = 0;
     virtual long numCyls() = 0;

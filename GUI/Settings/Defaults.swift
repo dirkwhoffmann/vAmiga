@@ -885,7 +885,7 @@ struct PeripheralsDefaults {
     static let std = PeripheralsDefaults.init(
         
         driveConnect: [true, false, false, false],
-        driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
+        driveType: [.DD_35, .DD_35, .DD_35, .DD_35],
         
         gameDevice1: 0,
         gameDevice2: -1,

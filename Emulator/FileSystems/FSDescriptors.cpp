@@ -10,15 +10,15 @@
 #include "Utils.h"
 #include "FSDevice.h"
 
-FSDeviceDescriptor::FSDeviceDescriptor(DiskType type, DiskDensity density, FSVolumeType dos)
+FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, FSVolumeType dos)
 {
-    if (type == DISK_525 && density == DISK_DD) {
+    if (type == INCH_525 && density == DISK_DD) {
         numCyls = 40; numSectors = 11;
 
-    } else if (type == DISK_35 && density == DISK_DD) {
+    } else if (type == INCH_35 && density == DISK_DD) {
         numCyls = 80; numSectors = 11;
     
-    } else if (type == DISK_35 && density == DISK_HD) {
+    } else if (type == INCH_35 && density == DISK_HD) {
         numCyls = 80; numSectors = 22;
 
     } else {

@@ -56,7 +56,7 @@ class Disk : public AmigaObject {
 public:
     
     // The form factor of this disk
-    DiskType type;
+    DiskDiameter diameter;
     
     // The density of this disk
     DiskDensity density;
@@ -93,13 +93,13 @@ private:
     
 public:
     
-    Disk(DiskType type, DiskDensity density);
+    Disk(DiskDiameter type, DiskDensity density);
     ~Disk();
 
     const char *getDescription() override { return "Disk"; }
 
     static Disk *makeWithFile(class DiskFile *file);
-    static Disk *makeWithReader(SerReader &reader, DiskType type, DiskDensity density);
+    static Disk *makeWithReader(SerReader &reader, DiskDiameter type, DiskDensity density);
         
     void dump();
     
@@ -115,7 +115,7 @@ private:
     {
         worker
 
-        & type
+        & diameter
         & density
         & data.raw
         & writeProtected
@@ -130,12 +130,12 @@ private:
 
 public:
 
-    DiskType getType() { return type; }
+    DiskDiameter getDiameter() { return diameter; }
     DiskDensity getDensity() { return density; }
 
-    long numCyls() { return type == DISK_525 ? 42 : 84; }
+    long numCyls() { return diameter == INCH_525 ? 42 : 84; }
     long numSides() { return 2; }
-    long numTracks() { return type == DISK_525 ? 84 : 168; }
+    long numTracks() { return diameter == INCH_525 ? 84 : 168; }
 
     bool isWriteProtected() { return writeProtected; }
     void setWriteProtection(bool value) { writeProtected = value; }

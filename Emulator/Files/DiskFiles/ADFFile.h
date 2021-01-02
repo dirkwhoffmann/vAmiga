@@ -35,7 +35,7 @@ public:
     static bool isADFFile(const char *path);
     
     // Returns the size of an ADF file of a given disk type in bytes
-    static size_t fileSize(DiskType t, DiskDensity d);
+    static size_t fileSize(DiskDiameter t, DiskDensity d);
 
     
     //
@@ -48,7 +48,7 @@ public:
     
     const char *getDescription() override { return "ADF"; }
 
-    static ADFFile *makeWithType(DiskType t, DiskDensity d);
+    static ADFFile *makeWithType(DiskDiameter t, DiskDensity d);
     static ADFFile *makeWithDisk(class Disk *disk);
     static ADFFile *makeWithDrive(class Drive *drive);
     static ADFFile *makeWithVolume(FSDevice &volume, FSError *error);
@@ -74,7 +74,7 @@ public:
     
     FSVolumeType getDos() override; 
     void setDos(FSVolumeType dos) override;
-    DiskType getDiskType() override;
+    DiskDiameter getDiskDiameter() override;
     DiskDensity getDiskDensity() override;
     long numSides() override;
     long numCyls() override;

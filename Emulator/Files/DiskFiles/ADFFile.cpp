@@ -50,25 +50,25 @@ ADFFile::isADFFile(const char *path)
 }
 
 size_t
-ADFFile::fileSize(DiskType t, DiskDensity d)
+ADFFile::fileSize(DiskDiameter diameter, DiskDensity density)
 {
-    assert(isDiskType(t));
+    assert(DiskDiameterName(diameter));
     
-    if (t == DISK_35 && d == DISK_DD) return ADFSIZE_35_DD;
-    if (t == DISK_35 && d == DISK_HD) return ADFSIZE_35_HD;
+    if (diameter == INCH_35 && density == DISK_DD) return ADFSIZE_35_DD;
+    if (diameter == INCH_35 && density == DISK_HD) return ADFSIZE_35_HD;
 
     assert(false);
     return 0;
 }
 
 ADFFile *
-ADFFile::makeWithType(DiskType t, DiskDensity d)
+ADFFile::makeWithType(DiskDiameter diameter, DiskDensity density)
 {
-    assert(isDiskType(t));
+    assert(DiskDiameterName(diameter));
     
     ADFFile *adf = new ADFFile();
     
-    if (!adf->alloc(fileSize(t, d))) {
+    if (!adf->alloc(fileSize(diameter, density))) {
         delete adf;
         return nullptr;
     }
@@ -82,7 +82,7 @@ ADFFile::makeWithDisk(Disk *disk)
 {
     assert(disk);
 
-    DiskType type = disk->getType();
+    DiskDiameter type = disk->getDiameter();
     DiskDensity density = disk->getDensity();
 
     // Create empty ADF
@@ -116,11 +116,11 @@ ADFFile::makeWithVolume(FSDevice &volume, FSError *error)
     switch (volume.getCapacity()) {
             
         case 2 * 880:
-            adf = makeWithType(DISK_35, DISK_DD);
+            adf = makeWithType(INCH_35, DISK_DD);
             break;
             
         case 4 * 880:
-            adf = makeWithType(DISK_35, DISK_HD);
+            adf = makeWithType(INCH_35, DISK_HD);
             break;
             
         default:
@@ -156,10 +156,10 @@ ADFFile::setDos(FSVolumeType dos)
     }
 }
 
-DiskType
-ADFFile::getDiskType()
+DiskDiameter
+ADFFile::getDiskDiameter()
 {
-    return DISK_35;
+    return INCH_35;
 }
 
 DiskDensity
@@ -305,14 +305,14 @@ ADFFile::encodeDisk(Disk *disk)
 {
     assert(disk != nullptr);
     
-    if (disk->getType() != getDiskType()) {
+    if (disk->getDiameter() != getDiskDiameter()) {
         warn("Incompatible disk types: %s %s\n",
-             sDiskType(disk->getType()), sDiskType(getDiskType()));
+             DiskDiameterName(disk->getDiameter()), DiskDiameterName(getDiskDiameter()));
         return false;
     }
     if (disk->getDensity() != getDiskDensity()) {
         warn("Incompatible disk densities: %s %s\n",
-             sDiskDensity(disk->getDensity()), sDiskDensity(getDiskDensity()));
+             DiskDensityName(disk->getDensity()), DiskDensityName(getDiskDensity()));
         return false;
     }
 
@@ -454,14 +454,14 @@ ADFFile::decodeDisk(Disk *disk)
     
     debug(MFM_DEBUG, "Decoding Amiga disk with %ld tracks\n", tracks);
     
-    if (disk->getType() != getDiskType()) {
+    if (disk->getDiameter() != getDiskDiameter()) {
         warn("Incompatible disk types: %s %s\n",
-             sDiskType(disk->getType()), sDiskType(getDiskType()));
+             DiskDiameterName(disk->getDiameter()), DiskDiameterName(getDiskDiameter()));
         return false;
     }
     if (disk->getDensity() != getDiskDensity()) {
         warn("Incompatible disk densities: %s %s\n",
-             sDiskDensity(disk->getDensity()), sDiskDensity(getDiskDensity()));
+             DiskDensityName(disk->getDensity()), DiskDensityName(getDiskDensity()));
         return false;
     }
         

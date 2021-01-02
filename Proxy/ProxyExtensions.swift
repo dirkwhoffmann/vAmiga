@@ -81,7 +81,7 @@ extension DiskFileProxy {
         var name: String
         switch type {
         case .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_EXE, .FILETYPE_DIR:
-            name = density == .DISK_HD ? "hd_adf" : "dd_adf"
+            name = density == .HD ? "hd_adf" : "dd_adf"
         case .FILETYPE_IMG:
             name = "dd_dos"
         default:
@@ -96,9 +96,9 @@ extension DiskFileProxy {
         
         var result = numSides == 1 ? "Single sided" : "Double sided"
 
-        if diskDensity == .DISK_SD { result += ", single density" }
-        if diskDensity == .DISK_DD { result += ", double density" }
-        if diskDensity == .DISK_HD { result += ", high density" }
+        if diskDensity == .SD { result += ", single density" }
+        if diskDensity == .DD { result += ", double density" }
+        if diskDensity == .HD { result += ", high density" }
 
         result += " disk, \(numTracks) tracks with \(numSectors) sectors each"
         return result

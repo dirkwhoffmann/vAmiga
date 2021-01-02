@@ -72,8 +72,8 @@ class ExporterDialog: DialogController {
     var numTracks: Int { return disk?.numTracks ?? volume?.numTracks ?? 0 }
     var numSectors: Int { return disk?.numSectors ?? volume?.numSectors ?? 0 }
     var numBlocks: Int { return disk?.numBlocks ?? volume?.numBlocks ?? 0 }
-    var isDD: Bool { return disk?.diskDensity == .DISK_DD }
-    var isHD: Bool { return disk?.diskDensity == .DISK_HD }
+    var isDD: Bool { return disk?.diskDensity == .DD }
+    var isHD: Bool { return disk?.diskDensity == .HD }
     
     // Block preview
     var cylinderNr = 0

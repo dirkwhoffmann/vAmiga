@@ -56,7 +56,7 @@ struct FSDeviceDescriptor : AmigaObject {
     //
     
     FSDeviceDescriptor() { }
-    FSDeviceDescriptor(DiskType type, DiskDensity density, FSVolumeType dos = FS_OFS);
+    FSDeviceDescriptor(DiskDiameter type, DiskDensity density, FSVolumeType dos = FS_OFS);
 
     const char *getDescription() override { return "FSLayout"; }
     void dump();

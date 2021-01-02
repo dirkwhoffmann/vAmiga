@@ -18,48 +18,50 @@
 // Enumerations
 //
 
-enum_long( DiskType)
+enum_long(DISK_DIAMETER)
 {
-    DISK_35,
-    DISK_525
+    INCH_35,
+    INCH_525
 };
+typedef DISK_DIAMETER DiskDiameter;
 
-inline bool isDiskType(DiskType value)
+inline bool isDiskDiameter(DiskDiameter value)
 {
-    return value >= 0 && value <= DISK_525;
+    return (unsigned long)value <= INCH_525;
 }
 
-inline const char *sDiskType(DiskType value)
+inline const char *DiskDiameterName(DiskDiameter value)
 {
     switch (value) {
             
-        case DISK_35:   return "3.5\"";
-        case DISK_525:  return "5.25\"";
-        default:        return "???";
+        case INCH_35:   return "INCH_35";
+        case INCH_525:  return "INCH_525";
     }
+    return "???";
 }
 
-enum_long( DiskDensity)
+enum_long(DISK_DENSITY)
 {
     DISK_SD,
     DISK_DD,
     DISK_HD
 };
+typedef DISK_DENSITY DiskDensity;
 
 inline bool isDiskDensity(DiskDensity value)
 {
-    return value >= 0 && value <= DISK_HD;
+    return (unsigned long)value <= DISK_HD;
 }
 
-inline const char *sDiskDensity(DiskDensity value)
+inline const char *DiskDensityName(DiskDensity value)
 {
     switch (value) {
             
         case DISK_SD:  return "SD";
         case DISK_DD:  return "DD";
         case DISK_HD:  return "HD";
-        default:       return "???";
     }
+    return "???";
 }
 
 #endif

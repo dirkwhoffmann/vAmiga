@@ -18,27 +18,28 @@
 // Enumerations
 //
 
-enum_long( DriveType)
+enum_long(DRIVE_TYPE)
 {
-    DRIVE_35_DD,
-    DRIVE_35_HD,
-    DRIVE_525_DD
+    DRIVE_DD_35,
+    DRIVE_HD_35,
+    DRIVE_DD_525
 };
+typedef DRIVE_TYPE DriveType;
 
 inline bool isDriveType(long value)
 {
-    return value >= DRIVE_35_DD && value <= DRIVE_525_DD;
+    return value >= DRIVE_DD_35 && value <= DRIVE_DD_525;
 }
 
 inline const char *driveTypeName(DriveType type)
 {
     switch (type) {
             
-        case DRIVE_35_DD:    return "Drive 3.5\" DD";
-        case DRIVE_35_HD:    return "Drive 3.5\" HD";
-        case DRIVE_525_DD:   return "Drive 5.25\" DD";
-        default:             return "???";
+        case DRIVE_DD_35:    return "DD_35";
+        case DRIVE_HD_35:    return "HD_35";
+        case DRIVE_DD_525:   return "DD_525";
     }
+    return "???";
 }
 
 //

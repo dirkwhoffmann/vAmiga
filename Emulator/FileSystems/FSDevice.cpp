@@ -49,7 +49,7 @@ FSDevice::makeWithFormat(FSDeviceDescriptor &layout)
 }
 
 FSDevice *
-FSDevice::makeWithFormat(DiskType type, DiskDensity density)
+FSDevice::makeWithFormat(DiskDiameter type, DiskDensity density)
 {
     FSDeviceDescriptor layout = FSDeviceDescriptor(type, density);
     return makeWithFormat(layout);
@@ -100,7 +100,7 @@ FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
 }
 
 FSDevice *
-FSDevice::make(DiskType type, DiskDensity density, const char *path)
+FSDevice::make(DiskDiameter type, DiskDensity density, const char *path)
 {
     FSDevice *device = makeWithFormat(type, density);
     
@@ -123,10 +123,10 @@ FSDevice *
 FSDevice::make(FSVolumeType type, const char *path)
 {
     // Try to fit the directory into files system with DD disk capacity
-    if (FSDevice *device = make(DISK_35, DISK_DD, path)) return device;
+    if (FSDevice *device = make(INCH_35, DISK_DD, path)) return device;
 
     // Try to fit the directory into files system with HD disk capacity
-    if (FSDevice *device = make(DISK_35, DISK_HD, path)) return device;
+    if (FSDevice *device = make(INCH_35, DISK_HD, path)) return device;
 
     return nullptr;
 }

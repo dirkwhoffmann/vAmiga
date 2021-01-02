@@ -61,7 +61,7 @@ public:
     
     FSVolumeType getDos() override { return FS_NODOS; }
     void setDos(FSVolumeType dos) override { };
-    DiskType getDiskType() override { return DISK_35; }
+    DiskDiameter getDiskDiameter() override { return INCH_35; }
     DiskDensity getDiskDensity() override { return DISK_DD; }
     long numSides() override { return 2; }
     long numCyls() override { return 80; }

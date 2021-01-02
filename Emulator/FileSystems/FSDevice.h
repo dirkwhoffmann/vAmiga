@@ -85,14 +85,14 @@ public:
     static FSDevice *makeWithFormat(FSDeviceDescriptor &layout);
 
     // Creates a file system for a standard floppy disk
-    static FSDevice *makeWithFormat(DiskType type, DiskDensity density);
+    static FSDevice *makeWithFormat(DiskDiameter type, DiskDensity density);
 
     // Creates a file system from an ADF or HDF
     static FSDevice *makeWithADF(class ADFFile *adf, FSError *error);
     static FSDevice *makeWithHDF(class HDFFile *hdf, FSError *error);
     
     // Creates a file system with the contents of a host file system directory
-    static FSDevice *make(DiskType type, DiskDensity density, const char *path);
+    static FSDevice *make(DiskDiameter type, DiskDensity density, const char *path);
     static FSDevice *make(FSVolumeType type, const char *path);
     
     

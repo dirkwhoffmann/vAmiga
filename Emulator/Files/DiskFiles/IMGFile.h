@@ -39,7 +39,7 @@ public:
     
     const char *getDescription() override { return "IMG"; }
     
-    static IMGFile *makeWithDiskType(DiskType t, DiskDensity d);
+    static IMGFile *makeWithDiskType(DiskDiameter t, DiskDensity d);
     static IMGFile *makeWithDisk(Disk *disk);
   
     
@@ -61,7 +61,7 @@ public:
       
     FSVolumeType getDos() override { return FS_NODOS; }
     void setDos(FSVolumeType dos) override { };
-    DiskType getDiskType() override { return DISK_35; }
+    DiskDiameter getDiskDiameter() override { return INCH_35; }
     DiskDensity getDiskDensity() override { return DISK_DD; }
     long numSides() override;
     long numCyls() override;

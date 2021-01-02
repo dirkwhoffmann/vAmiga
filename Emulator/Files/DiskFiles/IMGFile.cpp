@@ -30,9 +30,9 @@ IMGFile::isIMGFile(const char *path)
 }
 
 IMGFile *
-IMGFile::makeWithDiskType(DiskType t, DiskDensity d)
+IMGFile::makeWithDiskType(DiskDiameter t, DiskDensity d)
 {
-    assert(t == DISK_35);
+    assert(t == INCH_35);
     assert(d == DISK_DD);
     
     IMGFile *img = new IMGFile();
@@ -52,9 +52,9 @@ IMGFile::makeWithDisk(Disk *disk)
     assert(disk != nullptr);
         
     // We only support 3.5"DD disks at the moment
-    if (disk->getType() != DISK_35 || disk->getDensity() != DISK_DD) { return nullptr; }
+    if (disk->getDiameter() != INCH_35 || disk->getDensity() != DISK_DD) { return nullptr; }
     
-    IMGFile *img = makeWithDiskType(DISK_35, DISK_DD);
+    IMGFile *img = makeWithDiskType(INCH_35, DISK_DD);
     
     if (img) {
         if (!img->decodeDisk(disk)) {
@@ -91,14 +91,14 @@ IMGFile::encodeDisk(Disk *disk)
     
     debug(MFM_DEBUG, "Encoding DOS disk with %ld tracks\n", tracks);
 
-    if (disk->getType() != getDiskType()) {
+    if (disk->getDiameter() != getDiskDiameter()) {
         warn("Incompatible disk types: %s %s\n",
-             sDiskType(disk->getType()), sDiskType(getDiskType()));
+             DiskDiameterName(disk->getDiameter()), DiskDiameterName(getDiskDiameter()));
         return false;
     }
     if (disk->getDensity() != getDiskDensity()) {
         warn("Incompatible disk densities: %s %s\n",
-             sDiskDensity(disk->getDensity()), sDiskDensity(getDiskDensity()));
+             DiskDensityName(disk->getDensity()), DiskDensityName(getDiskDensity()));
         return false;
     }
     
@@ -233,14 +233,14 @@ IMGFile::decodeDisk(Disk *disk)
     
     trace(MFM_DEBUG, "Decoding DOS disk (%ld tracks)\n", tracks);
     
-    if (disk->getType() != getDiskType()) {
-        warn("Incompatible disk types: %s %s\n",
-             sDiskType(disk->getType()), sDiskType(getDiskType()));
+    if (disk->getDiameter() != getDiskDiameter()) {
+        warn("Incompatible disk diameters: %s %s\n",
+             DiskDiameterName(disk->getDiameter()), DiskDiameterName(getDiskDiameter()));
         return false;
     }
     if (disk->getDensity() != getDiskDensity()) {
         warn("Incompatible disk densities: %s %s\n",
-             sDiskDensity(disk->getDensity()), sDiskDensity(getDiskDensity()));
+             DiskDensityName(disk->getDensity()), DiskDensityName(getDiskDensity()));
         return false;
     }
     

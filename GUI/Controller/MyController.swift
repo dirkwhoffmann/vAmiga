@@ -442,19 +442,19 @@ extension MyController {
         
         switch msg.type {
     
-        case .MSG_REGISTER:
+        case .REGISTER:
             track("Registered to message queue")
             
-        case .MSG_UNREGISTER:
+        case .UNREGISTER:
             track("Unregistered from message queue")
             // From now on, it's save to delete the document.
             // To trigger deletion, we remove any reference to it.
             mydocument = nil
             
-        case .MSG_CONFIG:
+        case .CONFIG:
             inspector?.fullRefresh()
 
-        case .MSG_POWER_ON:
+        case .POWER_ON:
             serialIn = ""
             serialOut = ""
             virtualKeyboard = nil
@@ -462,72 +462,72 @@ extension MyController {
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()
 
-        case .MSG_POWER_OFF:
+        case .POWER_OFF:
             renderer.zoomOut(steps: 20) // blendOut()
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()
 
-        case .MSG_RUN:
+        case .RUN:
             needsSaving = true
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()
             refreshStatusBar()
 
-        case .MSG_PAUSE:
+        case .PAUSE:
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()
             refreshStatusBar()
 
-        case .MSG_RESET:
+        case .RESET:
             mydocument.deleteBootDiskID()
             mydocument.setBootDiskID(amiga.df0.fnv)
             inspector?.fullRefresh()
             updateWarp()
             
-        case .MSG_MUTE_ON:
+        case .MUTE_ON:
             muted = true
             refreshStatusBar()
             
-        case .MSG_MUTE_OFF:
+        case .MUTE_OFF:
             muted = false
             refreshStatusBar()
 
-        case .MSG_WARP_ON,
-             .MSG_WARP_OFF:
+        case .WARP_ON,
+             .WARP_OFF:
             refreshStatusBar()
 
-        case .MSG_POWER_LED_ON:
+        case .POWER_LED_ON:
             powerLED.image = NSImage.init(named: "powerLedOn")
 
-        case .MSG_POWER_LED_DIM:
+        case .POWER_LED_DIM:
             powerLED.image = NSImage.init(named: "powerLedDim")
 
-        case .MSG_POWER_LED_OFF:
+        case .POWER_LED_OFF:
             powerLED.image = NSImage.init(named: "powerLedOff")
 
-        case .MSG_DMA_DEBUG_ON:
+        case .DMA_DEBUG_ON:
             renderer.zoomTextureOut()
 
-        case .MSG_DMA_DEBUG_OFF:
+        case .DMA_DEBUG_OFF:
             renderer.zoomTextureIn()
 
-        case .MSG_BREAKPOINT_CONFIG,
-             .MSG_BREAKPOINT_REACHED,
-             .MSG_WATCHPOINT_REACHED:
+        case .BREAKPOINT_CONFIG,
+             .BREAKPOINT_REACHED,
+             .WATCHPOINT_REACHED:
             inspector?.fullRefresh()
             inspector?.scrollToPC()
 
-        case .MSG_CPU_HALT:
+        case .CPU_HALT:
             refreshStatusBar()
             
-        case .MSG_MEM_LAYOUT:
+        case .MEM_LAYOUT:
             inspector?.fullRefresh()
 
-        case .MSG_DRIVE_CONNECT:
+        case .DRIVE_CONNECT:
             hideOrShowDriveMenus()
             refreshStatusBar()
             
-        case .MSG_DRIVE_DISCONNECT:
+        case .DRIVE_DISCONNECT:
             hideOrShowDriveMenus()
             refreshStatusBar()
 
@@ -536,83 +536,83 @@ extension MyController {
                 dragAndDropDrive = nil
             }
 
-        case .MSG_DRIVE_SELECT:
+        case .DRIVE_SELECT:
             refreshStatusBar(writing: nil)
 
-        case .MSG_DRIVE_READ:
+        case .DRIVE_READ:
             refreshStatusBar(writing: false)
             
-        case .MSG_DRIVE_WRITE:
+        case .DRIVE_WRITE:
             refreshStatusBar(writing: true)
 
-        case .MSG_DRIVE_LED_ON,
-             .MSG_DRIVE_LED_OFF:
+        case .DRIVE_LED_ON,
+             .DRIVE_LED_OFF:
             refreshStatusBar()
             
-        case .MSG_DRIVE_MOTOR_ON,
-             .MSG_DRIVE_MOTOR_OFF:
+        case .DRIVE_MOTOR_ON,
+             .DRIVE_MOTOR_OFF:
             refreshStatusBar()
             updateWarp()
 
-        case .MSG_DRIVE_HEAD:
+        case .DRIVE_HEAD:
             if pref.driveSounds && pref.driveHeadSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
             refreshStatusBar(drive: msg.data >> 8, cylinder: msg.data % 0xFF)
   
-        case .MSG_DRIVE_HEAD_POLL:
+        case .DRIVE_HEAD_POLL:
             if pref.driveSounds && pref.drivePollSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
             refreshStatusBar(drive: msg.data >> 8, cylinder: msg.data % 0xFF)
 
-        case .MSG_DISK_INSERT:
+        case .DISK_INSERT:
             if pref.driveSounds && pref.driveInsertSound {
                 macAudio.playSound(name: "insert", volume: 0.3)
             }
             if msg.data == 0 { mydocument.setBootDiskID(amiga.df0.fnv) }
             refreshStatusBar()
             
-        case .MSG_DISK_EJECT:
+        case .DISK_EJECT:
             if pref.driveSounds && pref.driveEjectSound {
                 macAudio.playSound(name: "eject", volume: 0.3)
             }
             refreshStatusBar()
             
-        case .MSG_DISK_UNSAVED,
-             .MSG_DISK_SAVED,
-             .MSG_DISK_PROTECT,
-             .MSG_DISK_UNPROTECT:
+        case .DISK_UNSAVED,
+             .DISK_SAVED,
+             .DISK_PROTECT,
+             .DISK_UNPROTECT:
             refreshStatusBar()
 
-        case .MSG_CTRL_AMIGA_AMIGA:
+        case .CTRL_AMIGA_AMIGA:
             resetAction(self)
             
-        case .MSG_SER_IN:
+        case .SER_IN:
             serialIn += String(UnicodeScalar(msg.data & 0xFF)!)
 
-        case .MSG_SER_OUT:
+        case .SER_OUT:
             serialOut += String(UnicodeScalar.init(msg.data & 0xFF)!)
 
-        case .MSG_AUTO_SNAPSHOT_TAKEN:
+        case .AUTO_SNAPSHOT_TAKEN:
             track("MSG_AUTO_SNAPSHOT_TAKEN")
             mydocument.autoSnapshots.append(amiga.latestAutoSnapshot)
 
-        case .MSG_USER_SNAPSHOT_TAKEN:
+        case .USER_SNAPSHOT_TAKEN:
             track("MSG_USER_SNAPSHOT_TAKEN")
             mydocument.userSnapshots.append(amiga.latestUserSnapshot)
             renderer.blendIn(steps: 20)
             
-        case .MSG_SNAPSHOT_RESTORED:
+        case .SNAPSHOT_RESTORED:
             renderer.blendIn(steps: 20)
             hideOrShowDriveMenus()
             
-        case .MSG_RECORDING_STARTED:
+        case .RECORDING_STARTED:
             
             window?.backgroundColor = .warningColor
             refreshStatusBar()
                 
-        case .MSG_RECORDING_STOPPED:
+        case .RECORDING_STOPPED:
 
             window?.backgroundColor = .windowBackgroundColor
             refreshStatusBar()
