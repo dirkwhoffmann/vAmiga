@@ -35,7 +35,7 @@
 // Enumerations
 //
 
-enum_long(ConfigOption)
+enum_long(OPT)
 {
     // Agnus
     OPT_AGNUS_REVISION,
@@ -97,6 +97,7 @@ enum_long(ConfigOption)
     OPT_AUDVOLL,
     OPT_AUDVOLR
 };
+typedef OPT ConfigOption;
 
 inline bool isConfigOption(long value)
 {

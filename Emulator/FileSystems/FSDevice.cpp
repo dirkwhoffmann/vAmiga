@@ -202,7 +202,7 @@ FSDevice::dump()
     msg("\n");
 
     // Dump all blocks
-    for (size_t i = 0; i < numBlocks; i++)  {
+    for (usize i = 0; i < numBlocks; i++)  {
         
         if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
         
@@ -437,15 +437,15 @@ FSDevice::makeFile(const char *name)
 }
 
 FSBlock *
-FSDevice::makeFile(const char *name, const u8 *buffer, size_t size)
+FSDevice::makeFile(const char *name, const u8 *buf, usize size)
 {
-    assert(buffer != nullptr);
+    assert(buf);
 
     FSBlock *block = makeFile(name);
     
     if (block) {
         assert(block->type() == FS_FILEHEADER_BLOCK);
-        ((FSFileHeaderBlock *)block)->addData(buffer, size);
+        ((FSFileHeaderBlock *)block)->addData(buf, size);
     }
     
     return block;
@@ -781,7 +781,7 @@ FSDevice::predictBlockType(u32 nr, const u8 *buffer)
 }
 
 bool
-FSDevice::importVolume(const u8 *src, size_t size)
+FSDevice::importVolume(const u8 *src, usize size)
 {
     FSError error;
     bool result = importVolume(src, size, &error);
@@ -791,7 +791,7 @@ FSDevice::importVolume(const u8 *src, size_t size)
 }
 
 bool
-FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
+FSDevice::importVolume(const u8 *src, usize size, FSError *err)
 {
     assert(src != nullptr);
 
@@ -799,18 +799,18 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
 
     // Only proceed if the (predicted) block size matches
     if (size % bsize != 0) {
-        if (error) *error = FS_WRONG_BSIZE;
+        if (err) *err = FS_WRONG_BSIZE;
         return false;
     }
     // Only proceed if the source buffer contains the right amount of data
     if (numBlocks * bsize != size) {
-        if (error) *error = FS_WRONG_CAPACITY;
+        if (err) *err = FS_WRONG_CAPACITY;
         return false;
     }
     // Only proceed if all partitions contain a valid file system
     for (auto &it : partitions) {
         if (it->dos == FS_NODOS) {
-            if (error) *error = FS_UNSUPPORTED;
+            if (err) *err = FS_UNSUPPORTED;
             return false;
         }
     }
@@ -839,7 +839,7 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
         blocks[i] = newBlock;
     }
     
-    if (error) *error = FS_OK;
+    if (err) *err = FS_OK;
     debug(FS_DEBUG, "Success\n");
     info();
     dump();
@@ -849,31 +849,31 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
 }
 
 bool
-FSDevice::exportVolume(u8 *dst, size_t size)
+FSDevice::exportVolume(u8 *dst, usize size)
 {
     return exportBlocks(0, numBlocks - 1, dst, size);
 }
 
 bool
-FSDevice::exportVolume(u8 *dst, size_t size, FSError *error)
+FSDevice::exportVolume(u8 *dst, usize size, FSError *err)
 {
-    return exportBlocks(0, numBlocks - 1, dst, size, error);
+    return exportBlocks(0, numBlocks - 1, dst, size, err);
 }
 
 bool
-FSDevice::exportBlock(u32 nr, u8 *dst, size_t size)
+FSDevice::exportBlock(u32 nr, u8 *dst, usize size)
 {
     return exportBlocks(nr, nr, dst, size);
 }
 
 bool
-FSDevice::exportBlock(u32 nr, u8 *dst, size_t size, FSError *error)
+FSDevice::exportBlock(u32 nr, u8 *dst, usize size, FSError *error)
 {
     return exportBlocks(nr, nr, dst, size, error);
 }
 
 bool
-FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size)
+FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, usize size)
 {
     FSError error;
     bool result = exportBlocks(first, last, dst, size, &error);
@@ -883,7 +883,7 @@ FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size)
 }
 
 bool
-FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *error)
+FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, usize size, FSError *err)
 {
     assert(last < numBlocks);
     assert(first <= last);
@@ -895,13 +895,13 @@ FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *error
 
     // Only proceed if the (predicted) block size matches
     if (size % bsize != 0) {
-        if (error) *error = FS_WRONG_BSIZE;
+        if (err) *err = FS_WRONG_BSIZE;
         return false;
     }
 
     // Only proceed if the source buffer contains the right amount of data
     if (count * bsize != size) {
-        if (error) *error = FS_WRONG_CAPACITY;
+        if (err) *err = FS_WRONG_CAPACITY;
         return false;
     }
         
@@ -916,14 +916,14 @@ FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *error
 
     debug(FS_DEBUG, "Success\n");
 
-    if (error) *error = FS_OK;
+    if (err) *err = FS_OK;
     return true;
 }
 
 bool
 FSDevice::importDirectory(const char *path, bool recursive)
 {
-    assert(path != nullptr);
+    assert(path);
     
     if (DIR *dir = opendir(path)) {
         

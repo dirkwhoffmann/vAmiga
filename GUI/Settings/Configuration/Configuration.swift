@@ -28,8 +28,8 @@ class Configuration {
     //
         
     var extStart: Int {
-        get { return amiga.getConfig(.OPT_EXT_START) }
-        set { amiga.configure(.OPT_EXT_START, value: newValue) }
+        get { return amiga.getConfig(.EXT_START) }
+        set { amiga.configure(.EXT_START, value: newValue) }
     }
 
     //
@@ -37,56 +37,56 @@ class Configuration {
     //
     
     var agnusRev: Int {
-        get { return amiga.getConfig(.OPT_AGNUS_REVISION) }
-        set { amiga.configure(.OPT_AGNUS_REVISION, value: newValue) }
+        get { return amiga.getConfig(.AGNUS_REVISION) }
+        set { amiga.configure(.AGNUS_REVISION, value: newValue) }
     }
     var slowRamMirror: Bool {
-        get { return amiga.getConfig(.OPT_SLOW_RAM_MIRROR) != 0 }
-        set { amiga.configure(.OPT_SLOW_RAM_MIRROR, enable: newValue) }
+        get { return amiga.getConfig(.SLOW_RAM_MIRROR) != 0 }
+        set { amiga.configure(.SLOW_RAM_MIRROR, enable: newValue) }
     }
     var deniseRev: Int {
-        get { return amiga.getConfig(.OPT_DENISE_REVISION) }
-        set { amiga.configure(.OPT_DENISE_REVISION, value: newValue) }
+        get { return amiga.getConfig(.DENISE_REVISION) }
+        set { amiga.configure(.DENISE_REVISION, value: newValue) }
     }
     var borderBlank: Bool {
-        get { return amiga.getConfig(.OPT_BRDRBLNK) != 0 }
-        set { amiga.configure(.OPT_BRDRBLNK, enable: newValue) }
+        get { return amiga.getConfig(.BRDRBLNK) != 0 }
+        set { amiga.configure(.BRDRBLNK, enable: newValue) }
     }
     var ciaRev: Int {
-        get { return amiga.getConfig(.OPT_CIA_REVISION) }
-        set { amiga.configure(.OPT_CIA_REVISION, value: newValue) }
+        get { return amiga.getConfig(.CIA_REVISION) }
+        set { amiga.configure(.CIA_REVISION, value: newValue) }
     }
     var todBug: Bool {
-        get { return amiga.getConfig(.OPT_TODBUG) != 0 }
-        set { amiga.configure(.OPT_TODBUG, enable: newValue) }
+        get { return amiga.getConfig(.TODBUG) != 0 }
+        set { amiga.configure(.TODBUG, enable: newValue) }
     }
     var rtClock: Int {
-        get { return amiga.getConfig(.OPT_RTC_MODEL) }
-        set { amiga.configure(.OPT_RTC_MODEL, value: newValue) }
+        get { return amiga.getConfig(.RTC_MODEL) }
+        set { amiga.configure(.RTC_MODEL, value: newValue) }
     }
     var chipRam: Int {
-        get { return amiga.getConfig(.OPT_CHIP_RAM) }
-        set { amiga.configure(.OPT_CHIP_RAM, value: newValue) }
+        get { return amiga.getConfig(.CHIP_RAM) }
+        set { amiga.configure(.CHIP_RAM, value: newValue) }
     }
     var slowRam: Int {
-        get { return amiga.getConfig(.OPT_SLOW_RAM) }
-        set { amiga.configure(.OPT_SLOW_RAM, value: newValue) }
+        get { return amiga.getConfig(.SLOW_RAM) }
+        set { amiga.configure(.SLOW_RAM, value: newValue) }
     }
     var fastRam: Int {
-        get { return amiga.getConfig(.OPT_FAST_RAM) }
-        set { amiga.configure(.OPT_FAST_RAM, value: newValue) }
+        get { return amiga.getConfig(.FAST_RAM) }
+        set { amiga.configure(.FAST_RAM, value: newValue) }
     }
     var bankMap: Int {
-        get { return amiga.getConfig(.OPT_BANKMAP) }
-        set { amiga.configure(.OPT_BANKMAP, value: newValue) }
+        get { return amiga.getConfig(.BANKMAP) }
+        set { amiga.configure(.BANKMAP, value: newValue) }
     }
     var ramInitPattern: Int {
-        get { return amiga.getConfig(.OPT_RAM_INIT_PATTERN) }
-        set { amiga.configure(.OPT_RAM_INIT_PATTERN, value: newValue) }
+        get { return amiga.getConfig(.RAM_INIT_PATTERN) }
+        set { amiga.configure(.RAM_INIT_PATTERN, value: newValue) }
     }
     var unmappingType: Int {
-        get { return amiga.getConfig(.OPT_UNMAPPING_TYPE) }
-        set { amiga.configure(.OPT_UNMAPPING_TYPE, value: newValue) }
+        get { return amiga.getConfig(.UNMAPPING_TYPE) }
+        set { amiga.configure(.UNMAPPING_TYPE, value: newValue) }
     }
 
     //
@@ -95,19 +95,19 @@ class Configuration {
 
     func dfnConnected(_ n: Int) -> Bool {
         precondition(0 <= n && n <= 3)
-        return amiga.getConfig(.OPT_DRIVE_CONNECT, drive: n) != 0
+        return amiga.getConfig(.DRIVE_CONNECT, drive: n) != 0
     }
     func setDfnConnected(_ n: Int, connect: Bool) {
         precondition(0 <= n && n <= 3)
-        amiga.configure(.OPT_DRIVE_CONNECT, drive: n, enable: connect)
+        amiga.configure(.DRIVE_CONNECT, drive: n, enable: connect)
     }
     func dfnType(_ n: Int) -> Int {
         precondition(0 <= n && n <= 3)
-        return amiga.getConfig(.OPT_DRIVE_TYPE, drive: n)
+        return amiga.getConfig(.DRIVE_TYPE, drive: n)
     }
     func setDfnType(_ n: Int, type: Int) {
         precondition(0 <= n && n <= 3)
-        amiga.configure(.OPT_DRIVE_TYPE, drive: n, value: type)
+        amiga.configure(.DRIVE_TYPE, drive: n, value: type)
     }
     var df0Connected: Bool {
         get { return dfnConnected(0) }
@@ -172,8 +172,8 @@ class Configuration {
         }
     }
     var serialDevice: Int {
-        get { return amiga.getConfig(.OPT_SERIAL_DEVICE) }
-        set { amiga.configure(.OPT_SERIAL_DEVICE, value: newValue) }
+        get { return amiga.getConfig(.SERIAL_DEVICE) }
+        set { amiga.configure(.SERIAL_DEVICE, value: newValue) }
     }
 
     //
@@ -181,53 +181,53 @@ class Configuration {
     //
 
     var blitterAccuracy: Int {
-        get { return amiga.getConfig(.OPT_BLITTER_ACCURACY) }
-        set { amiga.configure(.OPT_BLITTER_ACCURACY, value: newValue) }
+        get { return amiga.getConfig(.BLITTER_ACCURACY) }
+        set { amiga.configure(.BLITTER_ACCURACY, value: newValue) }
     }
     var eClockSyncing: Bool {
-        get { return amiga.getConfig(.OPT_ECLOCK_SYNCING) != 0 }
-        set { amiga.configure(.OPT_ECLOCK_SYNCING, enable: newValue) }
+        get { return amiga.getConfig(.ECLOCK_SYNCING) != 0 }
+        set { amiga.configure(.ECLOCK_SYNCING, enable: newValue) }
     }
     var slowRamDelay: Bool {
-        get { return amiga.getConfig(.OPT_SLOW_RAM_DELAY) != 0 }
-        set { amiga.configure(.OPT_SLOW_RAM_DELAY, enable: newValue) }
+        get { return amiga.getConfig(.SLOW_RAM_DELAY) != 0 }
+        set { amiga.configure(.SLOW_RAM_DELAY, enable: newValue) }
     }
     var clxSprSpr: Bool {
-        get { return amiga.getConfig(.OPT_CLX_SPR_SPR) != 0 }
-        set { amiga.configure(.OPT_CLX_SPR_SPR, enable: newValue) }
+        get { return amiga.getConfig(.CLX_SPR_SPR) != 0 }
+        set { amiga.configure(.CLX_SPR_SPR, enable: newValue) }
     }
     var clxSprPlf: Bool {
-        get { return amiga.getConfig(.OPT_CLX_SPR_PLF) != 0 }
-        set { amiga.configure(.OPT_CLX_SPR_PLF, enable: newValue) }
+        get { return amiga.getConfig(.CLX_SPR_PLF) != 0 }
+        set { amiga.configure(.CLX_SPR_PLF, enable: newValue) }
     }
     var clxPlfPlf: Bool {
-        get { return amiga.getConfig(.OPT_CLX_PLF_PLF) != 0 }
-        set { amiga.configure(.OPT_CLX_PLF_PLF, enable: newValue) }
+        get { return amiga.getConfig(.CLX_PLF_PLF) != 0 }
+        set { amiga.configure(.CLX_PLF_PLF, enable: newValue) }
     }
     var driveSpeed: Int {
-        get { return amiga.getConfig(.OPT_DRIVE_SPEED) }
-        set { amiga.configure(.OPT_DRIVE_SPEED, value: newValue) }
+        get { return amiga.getConfig(.DRIVE_SPEED) }
+        set { amiga.configure(.DRIVE_SPEED, value: newValue) }
     }
     var mechanicalDelays: Bool {
-        get { return amiga.getConfig(.OPT_EMULATE_MECHANICS, drive: 0) != 0 }
+        get { return amiga.getConfig(.EMULATE_MECHANICS, drive: 0) != 0 }
         set {
-            amiga.configure(.OPT_EMULATE_MECHANICS, drive: 0, enable: newValue)
-            amiga.configure(.OPT_EMULATE_MECHANICS, drive: 1, enable: newValue)
-            amiga.configure(.OPT_EMULATE_MECHANICS, drive: 2, enable: newValue)
-            amiga.configure(.OPT_EMULATE_MECHANICS, drive: 3, enable: newValue)
+            amiga.configure(.EMULATE_MECHANICS, drive: 0, enable: newValue)
+            amiga.configure(.EMULATE_MECHANICS, drive: 1, enable: newValue)
+            amiga.configure(.EMULATE_MECHANICS, drive: 2, enable: newValue)
+            amiga.configure(.EMULATE_MECHANICS, drive: 3, enable: newValue)
         }
     }
     var lockDskSync: Bool {
-        get { return amiga.getConfig(.OPT_LOCK_DSKSYNC) != 0 }
-        set { amiga.configure(.OPT_LOCK_DSKSYNC, enable: newValue) }
+        get { return amiga.getConfig(.LOCK_DSKSYNC) != 0 }
+        set { amiga.configure(.LOCK_DSKSYNC, enable: newValue) }
     }
     var autoDskSync: Bool {
-        get { return amiga.getConfig(.OPT_AUTO_DSKSYNC) != 0 }
-        set { amiga.configure(.OPT_AUTO_DSKSYNC, enable: newValue) }
+        get { return amiga.getConfig(.AUTO_DSKSYNC) != 0 }
+        set { amiga.configure(.AUTO_DSKSYNC, enable: newValue) }
     }
     var accurateKeyboard: Bool {
-        get { return amiga.getConfig(.OPT_ACCURATE_KEYBOARD) != 0 }
-        set { amiga.configure(.OPT_ACCURATE_KEYBOARD, enable: newValue) }
+        get { return amiga.getConfig(.ACCURATE_KEYBOARD) != 0 }
+        set { amiga.configure(.ACCURATE_KEYBOARD, enable: newValue) }
     }
     
     //
@@ -235,56 +235,56 @@ class Configuration {
     //
 
     var vol0: Int {
-        get { return amiga.getConfig(.OPT_AUDVOL, id: 0) }
-        set { amiga.configure(.OPT_AUDVOL, id: 0, value: newValue) }
+        get { return amiga.getConfig(.AUDVOL, id: 0) }
+        set { amiga.configure(.AUDVOL, id: 0, value: newValue) }
     }
     var vol1: Int {
-        get { return amiga.getConfig(.OPT_AUDVOL, id: 1) }
-        set { amiga.configure(.OPT_AUDVOL, id: 1, value: newValue) }
+        get { return amiga.getConfig(.AUDVOL, id: 1) }
+        set { amiga.configure(.AUDVOL, id: 1, value: newValue) }
     }
     var vol2: Int {
-        get { return amiga.getConfig(.OPT_AUDVOL, id: 2) }
-        set { amiga.configure(.OPT_AUDVOL, id: 2, value: newValue) }
+        get { return amiga.getConfig(.AUDVOL, id: 2) }
+        set { amiga.configure(.AUDVOL, id: 2, value: newValue) }
     }
     var vol3: Int {
-        get { return amiga.getConfig(.OPT_AUDVOL, id: 3) }
-        set { amiga.configure(.OPT_AUDVOL, id: 3, value: newValue) }
+        get { return amiga.getConfig(.AUDVOL, id: 3) }
+        set { amiga.configure(.AUDVOL, id: 3, value: newValue) }
     }
     var pan0: Int {
-        get { return amiga.getConfig(.OPT_AUDPAN, id: 0) }
-        set { amiga.configure(.OPT_AUDPAN, id: 0, value: newValue) }
+        get { return amiga.getConfig(.AUDPAN, id: 0) }
+        set { amiga.configure(.AUDPAN, id: 0, value: newValue) }
     }
     var pan1: Int {
-        get { return amiga.getConfig(.OPT_AUDPAN, id: 1) }
-        set { amiga.configure(.OPT_AUDPAN, id: 1, value: newValue) }
+        get { return amiga.getConfig(.AUDPAN, id: 1) }
+        set { amiga.configure(.AUDPAN, id: 1, value: newValue) }
     }
     var pan2: Int {
-        get { return amiga.getConfig(.OPT_AUDPAN, id: 2) }
-        set { amiga.configure(.OPT_AUDPAN, id: 2, value: newValue) }
+        get { return amiga.getConfig(.AUDPAN, id: 2) }
+        set { amiga.configure(.AUDPAN, id: 2, value: newValue) }
     }
     var pan3: Int {
-        get { return amiga.getConfig(.OPT_AUDPAN, id: 3) }
-        set { amiga.configure(.OPT_AUDPAN, id: 3, value: newValue) }
+        get { return amiga.getConfig(.AUDPAN, id: 3) }
+        set { amiga.configure(.AUDPAN, id: 3, value: newValue) }
     }
     var volL: Int {
-        get { return amiga.getConfig(.OPT_AUDVOLL) }
-        set { amiga.configure(.OPT_AUDVOLL, value: newValue) }
+        get { return amiga.getConfig(.AUDVOLL) }
+        set { amiga.configure(.AUDVOLL, value: newValue) }
     }
     var volR: Int {
-        get { return amiga.getConfig(.OPT_AUDVOLR) }
-        set { amiga.configure(.OPT_AUDVOLR, value: newValue) }
+        get { return amiga.getConfig(.AUDVOLR) }
+        set { amiga.configure(.AUDVOLR, value: newValue) }
     }
     var samplingMethod: Int {
-        get { return amiga.getConfig(.OPT_SAMPLING_METHOD) }
-        set { amiga.configure(.OPT_SAMPLING_METHOD, value: newValue) }
+        get { return amiga.getConfig(.SAMPLING_METHOD) }
+        set { amiga.configure(.SAMPLING_METHOD, value: newValue) }
     }
     var filterType: Int {
-        get { return amiga.getConfig(.OPT_FILTER_TYPE) }
-        set { amiga.configure(.OPT_FILTER_TYPE, value: newValue) }
+        get { return amiga.getConfig(.FILTER_TYPE) }
+        set { amiga.configure(.FILTER_TYPE, value: newValue) }
     }
     var filterAlwaysOn: Bool {
-        get { return amiga.getConfig(.OPT_FILTER_ALWAYS_ON) != 0}
-        set { amiga.configure(.OPT_FILTER_ALWAYS_ON, enable: newValue) }
+        get { return amiga.getConfig(.FILTER_ALWAYS_ON) != 0}
+        set { amiga.configure(.FILTER_ALWAYS_ON, enable: newValue) }
     }
     
     //

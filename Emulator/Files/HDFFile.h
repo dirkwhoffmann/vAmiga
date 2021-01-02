@@ -48,7 +48,6 @@ public:
 public:
     
     AmigaFileType fileType() override { return FILETYPE_HDF; }
-    // const char *typeAsString() override { return "HDF"; }
     bool matchingBuffer(const u8 *buffer, size_t length) override {
         return isHDFBuffer(buffer, length); }
     bool matchingFile(const char *path) override { return isHDFFile(path); }

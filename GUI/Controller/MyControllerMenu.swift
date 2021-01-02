@@ -554,17 +554,6 @@ extension MyController: NSMenuItemValidation {
     @IBAction func exportRecentDiskDummyAction2(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentDiskDummyAction3(_ sender: NSMenuItem!) {}
     
-    func exportRecentDiskAction(drive: Int, slot: Int) {
-        
-        track("drive: \(drive) slot: \(slot)")
-        
-        if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: drive) {
-            do {
-                mydocument.export(drive: drive, to: url)
-            }
-        }
-    }
-
     @IBAction func exportRecentDiskAction(_ sender: NSMenuItem!) {
         
         track()
@@ -575,6 +564,15 @@ extension MyController: NSMenuItemValidation {
         exportRecentDiskAction(drive: drive, slot: slot)
     }
     
+    func exportRecentDiskAction(drive: Int, slot: Int) {
+        
+        track("drive: \(drive) slot: \(slot)")
+        
+        if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: drive) {
+            mydocument.export(drive: drive, to: url)
+        }
+    }
+
     @IBAction func clearRecentlyInsertedDisksAction(_ sender: NSMenuItem!) {
         
         myAppDelegate.recentlyInsertedDiskURLs = []
@@ -612,7 +610,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func hideSpriteAction(_ sender: NSMenuItem!) {
 
-        var mask = amiga.getConfig(.OPT_HIDDEN_SPRITES)
+        var mask = amiga.getConfig(.HIDDEN_SPRITES)
         
         sender.state = (sender.state == .off) ? .on : .off
         if sender.state == .on {
@@ -622,7 +620,7 @@ extension MyController: NSMenuItemValidation {
         }
         
         amiga.suspend()
-        amiga.configure(.OPT_HIDDEN_SPRITES, value: mask)
+        amiga.configure(.HIDDEN_SPRITES, value: mask)
         amiga.resume()
         
         track()

@@ -10,6 +10,7 @@
 #ifndef _ALIASES_H
 #define _ALIASES_H
 
+#include <sys/types.h>
 
 //
 // Basic types
@@ -19,10 +20,12 @@ typedef char               i8;
 typedef short              i16;
 typedef int                i32;
 typedef long long          i64;
+typedef ssize_t            isize;
 typedef unsigned char      u8;
 typedef unsigned short     u16;
 typedef unsigned int       u32;
 typedef unsigned long long u64;
+typedef size_t             usize;
 
 static_assert(sizeof(i8) == 1,  "i8 size mismatch");
 static_assert(sizeof(i16) == 2, "i16 size mismatch");
