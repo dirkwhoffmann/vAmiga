@@ -18,7 +18,7 @@
  * table to specify the source and target of a peek or poke operation,
  * respectively.
  */
-enum_long(MemorySource)
+enum_long(MEM_SOURCE)
 {
     MEM_NONE,
     MEM_CHIP,
@@ -37,10 +37,35 @@ enum_long(MemorySource)
     MEM_WOM,
     MEM_EXT
 };
+typedef MEM_SOURCE MemorySource;
 
 static inline bool isMemorySource(long value)
 {
-    return value >= 0 && value <= MEM_EXT;
+    return (unsigned long)value <= MEM_EXT;
+}
+
+inline const char *MemorySourceName(MemorySource value)
+{
+    switch (value) {
+            
+        case MEM_NONE:           return "NONE";
+        case MEM_CHIP:           return "CHIP";
+        case MEM_CHIP_MIRROR:    return "CHIP_MIRROR";
+        case MEM_SLOW:           return "SLOW";
+        case MEM_SLOW_MIRROR:    return "SLOW_MIRROR";
+        case MEM_FAST:           return "FAST";
+        case MEM_CIA:            return "CIA";
+        case MEM_CIA_MIRROR:     return "CIA_MIRROR";
+        case MEM_RTC:            return "RTC";
+        case MEM_CUSTOM:         return "CUSTOM";
+        case MEM_CUSTOM_MIRROR:  return "CUSTOM_MIRROR";
+        case MEM_AUTOCONF:       return "AUTOCONF";
+        case MEM_ROM:            return "ROM";
+        case MEM_ROM_MIRROR:     return "ROM_MIRROR";
+        case MEM_WOM:            return "WOM";
+        case MEM_EXT:            return "EXT";
+    }
+    return "???";
 }
 
 // Access identifiers. Some memory methods need to know who called them.
@@ -52,87 +77,98 @@ enum_long(Accessor)
 
 static inline bool isAccessor(long value)
 {
-    return value >= 0 && value <= AGNUS_ACCESS;
+    return (unsigned long)value <= AGNUS_ACCESS;
 }
 
 static inline const char *sAccessor(Accessor value)
 {
     switch (value) {
+            
         case CPU_ACCESS:    return "CPU_ACCESS";
         case AGNUS_ACCESS:  return "AGNUS_ACCESS";
-        default:            return "???";
     }
+    return "???";
 }
 
-enum_long(BankMap)
+enum_long(BANK_MAP)
 {
-    BMAP_A500,
-    BMAP_A1000,
-    BMAP_A2000A,
-    BMAP_A2000B
+    BANK_MAP_A500,
+    BANK_MAP_A1000,
+    BANK_MAP_A2000A,
+    BANK_MAP_A2000B
 };
+typedef BANK_MAP BankMap;
 
 static inline bool isBankMap(long value)
 {
-    return value >= 0 && value <= BMAP_A2000B;
+    return (unsigned long)value <= BANK_MAP_A2000B;
 }
 
 static inline const char *sBankMap(BankMap value)
 {
     switch (value) {
-        case BMAP_A500:    return "BMAP_A500";
-        case BMAP_A1000:   return "BMAP_A1000";
-        case BMAP_A2000A:  return "BMAP_A2000A";
-        case BMAP_A2000B:  return "BMAP_A2000B";
-        default:           return "???";
+            
+        case BANK_MAP_A500:    return "A500";
+        case BANK_MAP_A1000:   return "A1000";
+        case BANK_MAP_A2000A:  return "A2000A";
+        case BANK_MAP_A2000B:  return "A2000B";
     }
+    return "???";
 }
 
 // Configuration options for the initial RAM pattern
-enum_long(RamInitPattern)
+enum_long(RAM_INIT_PATTERN)
 {
-    INIT_RANDOMIZED,
-    INIT_ALL_ZEROES,
-    INIT_ALL_ONES
+    RAM_INIT_RANDOMIZED,
+    RAM_INIT_ALL_ZEROES,
+    RAM_INIT_ALL_ONES
 };
+typedef RAM_INIT_PATTERN RamInitPattern;
 
 static inline bool isRamInitPattern(long value)
 {
-    return value >= 0 && value <= INIT_ALL_ONES;
+    return (unsigned long)value <= RAM_INIT_ALL_ONES;
 }
 
 static inline const char *sRamInitPattern(RamInitPattern value)
 {
     switch (value) {
-        case INIT_RANDOMIZED:  return "INIT_RANDOMIZED";
-        case INIT_ALL_ZEROES:  return "INIT_ALL_ZEROES";
-        case INIT_ALL_ONES:    return "INIT_ALL_ONES";
-        default:               return "???";
+            
+        case RAM_INIT_RANDOMIZED:  return "RANDOMIZED";
+        case RAM_INIT_ALL_ZEROES:  return "ALL_ZEROES";
+        case RAM_INIT_ALL_ONES:    return "ALL_ONES";
     }
+    return "???";
 }
 
 // Configuration options for dealing with unmapped RAM
-enum_long(UnmappingType)
+enum_long(UNMAPPED_MEMORY)
 {
     UNMAPPED_FLOATING,
     UNMAPPED_ALL_ZEROES,
     UNMAPPED_ALL_ONES
 };
+typedef UNMAPPED_MEMORY UnmappedMemory;
 
-static inline bool isUnmappingType(long value)
+static inline bool isUnmappedMemory(long value)
 {
-    return value >= 0 && value <= UNMAPPED_ALL_ONES;
+    return (unsigned long)value <= UNMAPPED_ALL_ONES;
 }
 
-static inline const char *sUnmappingType(UnmappingType value)
+static inline const char *UnmappedMemoryName(UnmappedMemory value)
 {
     switch (value) {
-        case UNMAPPED_FLOATING:    return "UNMAPPED_FLOATING";
-        case UNMAPPED_ALL_ZEROES:  return "UNMAPPED_ALL_ZEROES";
-        case UNMAPPED_ALL_ONES:    return "UNMAPPED_ALL_ONES";
-        default:                   return "???";
+            
+        case UNMAPPED_FLOATING:    return "FLOATING";
+        case UNMAPPED_ALL_ZEROES:  return "ALL_ZEROES";
+        case UNMAPPED_ALL_ONES:    return "ALL_ONES";
     }
+    return "???";
 }
+
+//
+// Structures
+//
 
 typedef struct
 {
@@ -156,7 +192,7 @@ typedef struct
     RamInitPattern ramInitPattern;
     
     // Specifies how to deal with unmapped memory
-    UnmappingType unmappingType;
+    UnmappedMemory unmappingType;
     
     // First memory page where the extended ROM is blended it
     u32 extStart;

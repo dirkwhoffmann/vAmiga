@@ -52,23 +52,23 @@ extension Inspector {
             var mirror = false
             
             switch memSrc(bank: bank) {
-            case .MEM_NONE:          color = MemColors.unmapped
-            case .MEM_CHIP:          color = MemColors.chip
-            case .MEM_CHIP_MIRROR:   color = MemColors.chip;     mirror = true
-            case .MEM_FAST:          color = MemColors.fast
-            case .MEM_SLOW:          color = MemColors.slow
-            case .MEM_SLOW_MIRROR:   color = MemColors.slow;     mirror = true
-            case .MEM_ROM:           color = MemColors.rom
-            case .MEM_ROM_MIRROR:    color = MemColors.rom;      mirror = true
-            case .MEM_WOM:           color = MemColors.wom
-            case .MEM_EXT:           color = MemColors.ext
-            case .MEM_CIA:           color = MemColors.cia
-            case .MEM_CIA_MIRROR:    color = MemColors.cia;      mirror = true
-            case .MEM_RTC:           color = MemColors.rtc
-            case .MEM_CUSTOM:        color = MemColors.cust
-            case .MEM_CUSTOM_MIRROR: color = MemColors.cust;     mirror = true
-            case .MEM_AUTOCONF:      color = MemColors.auto
-            default:                 fatalError()
+            case .NONE:          color = MemColors.unmapped
+            case .CHIP:          color = MemColors.chip
+            case .CHIP_MIRROR:   color = MemColors.chip;     mirror = true
+            case .FAST:          color = MemColors.fast
+            case .SLOW:          color = MemColors.slow
+            case .SLOW_MIRROR:   color = MemColors.slow;     mirror = true
+            case .ROM:           color = MemColors.rom
+            case .ROM_MIRROR:    color = MemColors.rom;      mirror = true
+            case .WOM:           color = MemColors.wom
+            case .EXT:           color = MemColors.ext
+            case .CIA:           color = MemColors.cia
+            case .CIA_MIRROR:    color = MemColors.cia;      mirror = true
+            case .RTC:           color = MemColors.rtc
+            case .CUSTOM:        color = MemColors.cust
+            case .CUSTOM_MIRROR: color = MemColors.cust;     mirror = true
+            case .AUTOCONF:      color = MemColors.auto
+            default:             fatalError()
             }
             let ciBgColor = CIColor(color: MemColors.unmapped)!
             let ciColor = CIColor(color: color)!
@@ -187,52 +187,52 @@ extension Inspector {
 
     @IBAction func memChipAction(_ sender: NSButton!) {
 
-        jumpTo(source: .MEM_CHIP)
+        jumpTo(source: .CHIP)
     }
 
     @IBAction func memFastRamAction(_ sender: NSButton!) {
 
-        jumpTo(source: .MEM_FAST)
+        jumpTo(source: .FAST)
     }
     
     @IBAction func memSlowRamAction(_ sender: NSButton!) {
 
-        jumpTo(source: .MEM_SLOW)
+        jumpTo(source: .SLOW)
     }
 
     @IBAction func memRomAction(_ sender: NSButton!) {
 
-        jumpTo(source: .MEM_ROM)
+        jumpTo(source: .ROM)
     }
 
     @IBAction func memWomAction(_ sender: NSButton!) {
 
-        jumpTo(source: .MEM_WOM)
+        jumpTo(source: .WOM)
     }
 
     @IBAction func memExtAction(_ sender: NSButton!) {
 
-        jumpTo(source: .MEM_EXT)
+        jumpTo(source: .EXT)
     }
 
     @IBAction func memCIAAction(_ sender: NSButton!) {
 
-        jumpTo(source: .MEM_CIA)
+        jumpTo(source: .CIA)
     }
  
     @IBAction func memRTCAction(_ sender: NSButton!) {
 
-        jumpTo(source: .MEM_RTC)
+        jumpTo(source: .RTC)
     }
 
     @IBAction func memOCSAction(_ sender: NSButton!) {
 
-        jumpTo(source: .MEM_CUSTOM)
+        jumpTo(source: .CUSTOM)
     }
 
     @IBAction func memAutoConfAction(_ sender: NSButton!) {
 
-        jumpTo(source: .MEM_AUTOCONF)
+        jumpTo(source: .AUTOCONF)
     }
 
     @IBAction func memBankMapAction(_ sender: NSPopUpButton!) {

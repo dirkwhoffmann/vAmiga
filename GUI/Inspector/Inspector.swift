@@ -88,7 +88,7 @@ class Inspector: DialogController {
     @IBOutlet weak var memAutoConfButton: NSButton!
 
     var displayedBank = 0
-    var displayedBankType = MemorySource.MEM_CHIP
+    var displayedBankType = MemorySource.CHIP
     var searchAddress = -1
 
     // CIA panel

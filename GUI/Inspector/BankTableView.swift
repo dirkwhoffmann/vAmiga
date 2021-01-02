@@ -60,23 +60,23 @@ extension BankTableView: NSTableViewDataSource {
 
             switch bankCache[row] {
                 
-            case .MEM_NONE:          return "Unmapped"
-            case .MEM_CHIP:          return "Chip Ram"
-            case .MEM_CHIP_MIRROR:   return "Chip Ram Mirror"
-            case .MEM_FAST:          return "Fast Ram"
-            case .MEM_SLOW:          return "Slow Ram"
-            case .MEM_SLOW_MIRROR:   return "Slow Ram Mirror"
-            case .MEM_CIA:           return "CIA"
-            case .MEM_CIA_MIRROR:    return "CIA Mirror"
-            case .MEM_RTC:           return "Real-time Clock"
-            case .MEM_CUSTOM:        return "Chipset"
-            case .MEM_CUSTOM_MIRROR: return "Chipset Mirror"
-            case .MEM_AUTOCONF:      return "Autoconf"
-            case .MEM_ROM:           return "Rom"
-            case .MEM_ROM_MIRROR:    return "Rom Mirror"
-            case .MEM_WOM:           return "Wom"
-            case .MEM_EXT:           return "Extended Rom"
-            default:                 fatalError()
+            case .NONE:          return "Unmapped"
+            case .CHIP:          return "Chip Ram"
+            case .CHIP_MIRROR:   return "Chip Ram Mirror"
+            case .FAST:          return "Fast Ram"
+            case .SLOW:          return "Slow Ram"
+            case .SLOW_MIRROR:   return "Slow Ram Mirror"
+            case .CIA:           return "CIA"
+            case .CIA_MIRROR:    return "CIA Mirror"
+            case .RTC:           return "Real-time Clock"
+            case .CUSTOM:        return "Chipset"
+            case .CUSTOM_MIRROR: return "Chipset Mirror"
+            case .AUTOCONF:      return "Autoconf"
+            case .ROM:           return "Rom"
+            case .ROM_MIRROR:    return "Rom Mirror"
+            case .WOM:           return "Wom"
+            case .EXT:           return "Extended Rom"
+            default:             fatalError()
             }
 
         default:
@@ -91,7 +91,7 @@ extension BankTableView: NSTableViewDelegate {
         
         if let cell = cell as? NSTextFieldCell {
 
-            if bankCache[row] == .MEM_NONE {
+            if bankCache[row] == .NONE {
                 cell.textColor = .gray
             } else {
                 cell.textColor = .textColor

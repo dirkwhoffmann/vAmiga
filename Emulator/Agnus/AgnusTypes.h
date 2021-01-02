@@ -46,7 +46,7 @@ typedef struct
 }
 AgnusConfig;
 
-enum_i8(BusOwner)
+enum_i8(BUS_OWNER)
 {
     BUS_NONE,
     BUS_CPU,
@@ -71,24 +71,42 @@ enum_i8(BusOwner)
     BUS_BLITTER,
     BUS_COUNT
 };
+typedef BUS_OWNER BusOwner;
 
 static inline bool isBusOwner(long value)
 {
-    return value >= 0 && value < BUS_COUNT;
+    return (unsigned long)value < BUS_COUNT;
 }
 
-enum_long(DDFState)
+inline const char *BusOwnerName(BusOwner value)
 {
-    DDF_OFF,
-    DDF_READY,
-    DDF_ON
-};
-
-enum_long(SprDMAState)
-{
-    SPR_DMA_IDLE,
-    SPR_DMA_ACTIVE
-};
+    switch (value) {
+            
+        case BUS_NONE:     return "NONE";
+        case BUS_CPU:      return "CPU";
+        case BUS_REFRESH:  return "REFRESH";
+        case BUS_DISK:     return "DISK";
+        case BUS_AUDIO:    return "AUDIO";
+        case BUS_BPL1:     return "BPL1";
+        case BUS_BPL2:     return "BPL2";
+        case BUS_BPL3:     return "BPL3";
+        case BUS_BPL4:     return "BPL4";
+        case BUS_BPL5:     return "BPL5";
+        case BUS_BPL6:     return "BPL6";
+        case BUS_SPRITE0:  return "SPRITE0";
+        case BUS_SPRITE1:  return "SPRITE1";
+        case BUS_SPRITE2:  return "SPRITE2";
+        case BUS_SPRITE3:  return "SPRITE3";
+        case BUS_SPRITE4:  return "SPRITE4";
+        case BUS_SPRITE5:  return "SPRITE5";
+        case BUS_SPRITE6:  return "SPRITE6";
+        case BUS_SPRITE7:  return "SPRITE7";
+        case BUS_COPPER:   return "COPPER";
+        case BUS_BLITTER:  return "BLITTER";
+        case BUS_COUNT:    return "???";
+    }
+    return "???";
+}
 
 
 //

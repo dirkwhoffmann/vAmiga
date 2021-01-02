@@ -10,9 +10,32 @@
 #ifndef _AGNUS_PRIVATE_TYPES_H
 #define _AGNUS_PRIVATE_TYPES_H
 
+enum_long(DDFState)
+{
+    DDF_OFF,
+    DDF_READY,
+    DDF_ON
+};
+
+static inline bool isDDFState(long value)
+{
+    return (unsigned long)value <= DDF_ON;
+}
+
+enum_long(SprDMAState)
+{
+    SPR_DMA_IDLE,
+    SPR_DMA_ACTIVE
+};
+
+static inline bool isSprDMAState(long value)
+{
+    return (unsigned long)value <= SPR_DMA_ACTIVE;
+}
+
 enum RegChangeID : i32
 {
-    SET_NONE = 0,
+    SET_NONE,
     
     SET_BLTSIZE,
     SET_BLTSIZV,
@@ -110,7 +133,7 @@ enum RegChangeID : i32
 
 static inline bool isRegChangeID(long value)
 {
-    return value >= 0 && value < REG_COUNT;
+    return (unsigned long)value < REG_COUNT;
 }
 
 #endif

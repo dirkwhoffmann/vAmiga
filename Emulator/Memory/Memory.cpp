@@ -18,8 +18,8 @@ Memory::Memory(Amiga& ref) : AmigaComponent(ref)
     memset(&config, 0, sizeof(config));
 
     config.slowRamDelay   = true;
-    config.bankMap        = BMAP_A500;
-    config.ramInitPattern = INIT_ALL_ZEROES;
+    config.bankMap        = BANK_MAP_A500;
+    config.ramInitPattern = RAM_INIT_ALL_ZEROES;
     config.unmappingType  = UNMAPPED_FLOATING;
     config.extStart       = 0xE0;
 }
@@ -166,7 +166,7 @@ Memory::setConfigItem(Option option, long value)
 
         case OPT_UNMAPPING_TYPE:
             
-            if (!isUnmappingType(value)) {
+            if (!isUnmappedMemory(value)) {
                 warn("Invalid unmapping type: %ld\n", value);
                 return false;
             }
@@ -175,7 +175,7 @@ Memory::setConfigItem(Option option, long value)
             }
             
             amiga.suspend();
-            config.unmappingType = (UnmappingType)value;
+            config.unmappingType = (UnmappedMemory)value;
             amiga.resume();
             return true;
             
@@ -212,7 +212,7 @@ Memory::_dumpConfig()
     msg("   slowRamDelay : %s\n", config.slowRamDelay ? "yes" : "no");
     msg("        bankMap : %s\n", sBankMap(config.bankMap));
     msg(" ramInitPattern : %s\n", sRamInitPattern(config.ramInitPattern));
-    msg("  unmappingType : %s\n", sUnmappingType(config.unmappingType));
+    msg("  unmappingType : %s\n", UnmappedMemoryName(config.unmappingType));
     msg("       extStart : %02x\n", config.extStart);
 }
 
@@ -422,7 +422,7 @@ Memory::fillRamWithInitPattern()
     
     switch (config.ramInitPattern) {
             
-        case INIT_RANDOMIZED:
+        case RAM_INIT_RANDOMIZED:
 
             srand(0);
             if (chip) for (size_t i = 0; i < config.chipSize; i++) chip[i] = rand();
@@ -430,14 +430,14 @@ Memory::fillRamWithInitPattern()
             if (fast) for (size_t i = 0; i < config.fastSize; i++) fast[i] = rand();
             break;
             
-        case INIT_ALL_ZEROES:
+        case RAM_INIT_ALL_ZEROES:
 
             if (chip) memset(chip, 0x00, config.chipSize);
             if (slow) memset(slow, 0x00, config.slowSize);
             if (fast) memset(fast, 0x00, config.fastSize);
             break;
             
-        case INIT_ALL_ONES:
+        case RAM_INIT_ALL_ONES:
             
             if (chip) memset(chip, 0xFF, config.chipSize);
             if (slow) memset(slow, 0xFF, config.slowSize);
@@ -641,7 +641,7 @@ Memory::updateCpuMemSrcTable()
     assert(config.fastSize % 0x10000 == 0);
 
     bool ovl = ciaa.getPA() & 1;
-    bool old = config.bankMap == BMAP_A1000 || config.bankMap == BMAP_A2000A;
+    bool old = config.bankMap == BANK_MAP_A1000 || config.bankMap == BANK_MAP_A2000A;
 
     // Start from scratch
     for (unsigned i = 0x00; i <= 0xFF; i++) {
@@ -692,7 +692,7 @@ Memory::updateCpuMemSrcTable()
     }
     
     // Kickstart mirror, unmapped, or Extended Rom
-    if (config.bankMap != BMAP_A1000) {
+    if (config.bankMap != BANK_MAP_A1000) {
         for (unsigned i = 0xE0; i <= 0xE7; i++) {
             cpuMemSrc[i] = mem_rom_mirror;
         }

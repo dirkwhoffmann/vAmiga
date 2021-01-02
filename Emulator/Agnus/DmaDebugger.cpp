@@ -273,19 +273,19 @@ DmaDebugger::computeOverlay()
 
     switch (displayMode) {
 
-        case MODULATE_FG_LAYER:
+        case DMA_DISPLAY_MODE_FG_LAYER:
 
             bgWeight = 0.0;
             fgWeight = 1.0 - opacity;
             break;
 
-        case MODULATE_BG_LAYER:
+        case DMA_DISPLAY_MODE_BG_LAYER:
 
             bgWeight = 1.0 - opacity;
             fgWeight = 0.0;
             break;
 
-        case MODULATE_ODD_EVEN_LAYERS:
+        case DMA_DISPLAY_MODE_ODD_EVEN_LAYERS:
 
             bgWeight = opacity;
             fgWeight = 1.0 - opacity;

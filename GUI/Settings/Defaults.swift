@@ -727,7 +727,7 @@ struct HardwareDefaults {
     var ramInitPattern: RamInitPattern
 
     var bankMap: BankMap
-    var unmappingType: UnmappingType
+    var unmappingType: UnmappedMemory
     
     //
     // Schemes
@@ -746,10 +746,10 @@ struct HardwareDefaults {
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
-        ramInitPattern: .INIT_ALL_ZEROES,
+        ramInitPattern: .ALL_ZEROES,
 
-        bankMap: .BMAP_A500,
-        unmappingType: .UNMAPPED_FLOATING
+        bankMap: .A500,
+        unmappingType: .FLOATING
     )
     
     static let A1000 = HardwareDefaults.init(
@@ -765,10 +765,10 @@ struct HardwareDefaults {
         chipRam: 256,
         slowRam: 0,
         fastRam: 0,
-        ramInitPattern: .INIT_ALL_ZEROES,
+        ramInitPattern: .ALL_ZEROES,
 
-        bankMap: .BMAP_A1000,
-        unmappingType: .UNMAPPED_FLOATING
+        bankMap: .A1000,
+        unmappingType: .FLOATING
     )
     
     static let A2000 = HardwareDefaults.init(
@@ -784,10 +784,10 @@ struct HardwareDefaults {
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
-        ramInitPattern: .INIT_ALL_ZEROES,
+        ramInitPattern: .ALL_ZEROES,
 
-        bankMap: .BMAP_A2000B,
-        unmappingType: .UNMAPPED_FLOATING
+        bankMap: .A2000B,
+        unmappingType: .FLOATING
     )
 }
 

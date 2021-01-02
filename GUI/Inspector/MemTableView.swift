@@ -125,7 +125,7 @@ extension MemTableView: NSTableViewDelegate {
         var addr = inspector.displayedBank * 65536 + row * 16
         let cell = cell as? NSTextFieldCell
         
-        if inspector.displayedBankType == .MEM_NONE {
+        if inspector.displayedBankType == .NONE {
             cell?.textColor = NSColor.gray
         } else {
             cell?.textColor = NSColor.textColor

@@ -30,7 +30,7 @@ private:
     double opacity = 0.5;
 
     // Currently selected display mode
-    DmaDisplayMode displayMode = MODULATE_FG_LAYER;
+    DmaDisplayMode displayMode = DMA_DISPLAY_MODE_FG_LAYER;
 
 
     //
