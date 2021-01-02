@@ -18,27 +18,28 @@
 // Enumerations
 //
 
-enum_long(RTCRevision)
+enum_long(RTC_REVISION)
 {
     RTC_NONE,
     RTC_OKI,
-    RTC_RICOH,
-    RTC_COUNT
+    RTC_RICOH
 };
+typedef RTC_REVISION RTCRevision;
 
 inline bool isRTCRevision(long value)
 {
-    return value >= RTC_NONE && value <= RTC_COUNT;
+    return (unsigned long)value <= RTC_RICOH;
 }
 
-inline const char *sRTCRevision(RTCRevision model)
+inline const char *RTCRevisionName(RTCRevision value)
 {
-    switch (model) {
+    switch (value) {
+            
         case RTC_NONE:   return "RTC_NONE";
         case RTC_OKI:    return "RTC_OKI";
         case RTC_RICOH:  return "RTC_RICOH";
-        default:         return "???";
     }
+    return "???";
 }
 
 typedef struct

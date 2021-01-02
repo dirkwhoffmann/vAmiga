@@ -2048,39 +2048,39 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->amiga->getConfig();
 }
-- (NSInteger) getConfig:(ConfigOption)opt
+- (NSInteger) getConfig:(Option)opt
 {
     return wrapper->amiga->getConfigItem(opt);
 }
-- (NSInteger) getConfig:(ConfigOption)opt id:(NSInteger)id
+- (NSInteger) getConfig:(Option)opt id:(NSInteger)id
 {
     return wrapper->amiga->getConfigItem(opt, id);
 }
-- (NSInteger) getConfig:(ConfigOption)opt drive:(NSInteger)id
+- (NSInteger) getConfig:(Option)opt drive:(NSInteger)id
 {
     return wrapper->amiga->getConfigItem(opt, (long)id);
 }
-- (BOOL) configure:(ConfigOption)opt value:(NSInteger)val
+- (BOOL) configure:(Option)opt value:(NSInteger)val
 {
     return wrapper->amiga->configure(opt, val);
 }
-- (BOOL) configure:(ConfigOption)opt enable:(BOOL)val
+- (BOOL) configure:(Option)opt enable:(BOOL)val
 {
     return wrapper->amiga->configure(opt, val ? 1 : 0);
 }
-- (BOOL) configure:(ConfigOption)opt id:(NSInteger)id value:(NSInteger)val
+- (BOOL) configure:(Option)opt id:(NSInteger)id value:(NSInteger)val
 {
     return wrapper->amiga->configure(opt, id, val);
 }
-- (BOOL) configure:(ConfigOption)opt id:(NSInteger)id enable:(BOOL)val
+- (BOOL) configure:(Option)opt id:(NSInteger)id enable:(BOOL)val
 {
     return wrapper->amiga->configure(opt, id, val ? 1 : 0);
 }
-- (BOOL) configure:(ConfigOption)opt drive:(NSInteger)id value:(NSInteger)val
+- (BOOL) configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val
 {
     return wrapper->amiga->configure(opt, (long)id, val);
 }
-- (BOOL) configure:(ConfigOption)opt drive:(NSInteger)id enable:(BOOL)val
+- (BOOL) configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val
 {
     return wrapper->amiga->configure(opt, (long)id, val ? 1 : 0);
 }

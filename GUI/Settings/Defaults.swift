@@ -735,7 +735,7 @@ struct HardwareDefaults {
     
     static let A500 = HardwareDefaults.init(
         
-        agnusRev: .AGNUS_ECS_1MB,
+        agnusRev: .ECS_1MB,
         slowRamMirror: true,
         deniseRev: .DENISE_OCS,
         borderBlank: false,
@@ -754,7 +754,7 @@ struct HardwareDefaults {
     
     static let A1000 = HardwareDefaults.init(
         
-        agnusRev: .AGNUS_OCS,
+        agnusRev: .OCS,
         slowRamMirror: true,
         deniseRev: .DENISE_OCS,
         borderBlank: false,
@@ -773,7 +773,7 @@ struct HardwareDefaults {
     
     static let A2000 = HardwareDefaults.init(
         
-        agnusRev: .AGNUS_ECS_2MB,
+        agnusRev: .ECS_2MB,
         slowRamMirror: true,
         deniseRev: .DENISE_OCS,
         borderBlank: false,

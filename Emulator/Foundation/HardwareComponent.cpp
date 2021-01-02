@@ -40,7 +40,7 @@ HardwareComponent::reset(bool hard)
 }
 
 bool
-HardwareComponent::configure(ConfigOption option, long value)
+HardwareComponent::configure(Option option, long value)
 {
     bool result = false;
     
@@ -56,7 +56,7 @@ HardwareComponent::configure(ConfigOption option, long value)
 }
 
 bool
-HardwareComponent::configure(ConfigOption option, long id, long value)
+HardwareComponent::configure(Option option, long id, long value)
 {
     bool result = false;
     
@@ -185,7 +185,7 @@ HardwareComponent::powerOn()
 
         // Power this component on
         debug(RUN_DEBUG, "Powering on\n");
-        state = STATE_PAUSED;
+        state = EMULATOR_STATE_PAUSED;
         _powerOn();
     }
 }
@@ -200,7 +200,7 @@ HardwareComponent::powerOff()
         
         // Power off this component
         debug(RUN_DEBUG, "Powering off\n");
-        state = STATE_OFF;
+        state = EMULATOR_STATE_OFF;
         _powerOff();
 
         // Power all subcomponents off
@@ -225,7 +225,7 @@ HardwareComponent::run()
         
         // Start this component
         debug(RUN_DEBUG, "Run\n");
-        state = STATE_RUNNING;
+        state = EMULATOR_STATE_RUNNING;
         _run();
     }
 }
@@ -237,7 +237,7 @@ HardwareComponent::pause()
         
         // Pause this component
         debug(RUN_DEBUG, "Pause\n");
-        state = STATE_PAUSED;
+        state = EMULATOR_STATE_PAUSED;
         _pause();
 
         // Pause all subcomponents

@@ -15,7 +15,7 @@ SerialPort::SerialPort(Amiga& ref) : AmigaComponent(ref)
 }
 
 long
-SerialPort::getConfigItem(ConfigOption option)
+SerialPort::getConfigItem(Option option)
 {
     switch (option) {
             
@@ -28,7 +28,7 @@ SerialPort::getConfigItem(ConfigOption option)
 }
 
 bool
-SerialPort::setConfigItem(ConfigOption option, long value)
+SerialPort::setConfigItem(Option option, long value)
 {
     switch (option) {
             

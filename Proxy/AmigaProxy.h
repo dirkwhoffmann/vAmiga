@@ -155,15 +155,15 @@ struct SerialPortWrapper;
 - (void) loadFromSnapshot:(SnapshotProxy *)proxy;
 
 @property (readonly) AmigaConfiguration config;
-- (NSInteger) getConfig:(ConfigOption)opt;
-- (NSInteger) getConfig:(ConfigOption)opt id:(NSInteger)id;
-- (NSInteger) getConfig:(ConfigOption)opt drive:(NSInteger)id;
-- (BOOL) configure:(ConfigOption)opt value:(NSInteger)val;
-- (BOOL) configure:(ConfigOption)opt enable:(BOOL)val;
-- (BOOL) configure:(ConfigOption)opt id:(NSInteger)id value:(NSInteger)val;
-- (BOOL) configure:(ConfigOption)opt id:(NSInteger)id enable:(BOOL)val;
-- (BOOL) configure:(ConfigOption)opt drive:(NSInteger)id value:(NSInteger)val;
-- (BOOL) configure:(ConfigOption)opt drive:(NSInteger)id enable:(BOOL)val;
+- (NSInteger) getConfig:(Option)opt;
+- (NSInteger) getConfig:(Option)opt id:(NSInteger)id;
+- (NSInteger) getConfig:(Option)opt drive:(NSInteger)id;
+- (BOOL) configure:(Option)opt value:(NSInteger)val;
+- (BOOL) configure:(Option)opt enable:(BOOL)val;
+- (BOOL) configure:(Option)opt id:(NSInteger)id value:(NSInteger)val;
+- (BOOL) configure:(Option)opt id:(NSInteger)id enable:(BOOL)val;
+- (BOOL) configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val;
+- (BOOL) configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
 
 // Message queue
 - (void) addListener:(const void *)sender function:(Callback *)func;

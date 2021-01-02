@@ -36,7 +36,7 @@ DiskController::_reset(bool hard)
 }
 
 long
-DiskController::getConfigItem(ConfigOption option)
+DiskController::getConfigItem(Option option)
 {
     switch (option) {
             
@@ -51,7 +51,7 @@ DiskController::getConfigItem(ConfigOption option)
 }
 
 long
-DiskController::getConfigItem(ConfigOption option, long id)
+DiskController::getConfigItem(Option option, long id)
 {
     switch (option) {
             
@@ -64,7 +64,7 @@ DiskController::getConfigItem(ConfigOption option, long id)
 }
 
 bool
-DiskController::setConfigItem(ConfigOption option, long value)
+DiskController::setConfigItem(Option option, long value)
 {
     switch (option) {
             
@@ -111,7 +111,7 @@ DiskController::setConfigItem(ConfigOption option, long value)
 }
 
 bool
-DiskController::setConfigItem(ConfigOption option, long id, long value)
+DiskController::setConfigItem(Option option, long id, long value)
 {
     switch (option) {
             
@@ -170,7 +170,7 @@ void
 DiskController::_dump()
 {
     msg("     selected : %d\n", selected);
-    msg("        state : %s\n", driveStateName(state));
+    msg("        state : %s\n", DriveDmaStateName(state));
     msg("    syncCycle : %lld\n", syncCycle);
     msg("     incoming : %02X\n", incoming);
     msg("         fifo : %llX (count = %d)\n", fifo, fifoCount);
@@ -212,7 +212,7 @@ void
 DiskController::setState(DriveState oldState, DriveState newState)
 {
     trace(DSK_DEBUG, "%s -> %s\n",
-          driveStateName(oldState), driveStateName(newState));
+          DriveDmaStateName(oldState), DriveDmaStateName(newState));
     
     state = newState;
     

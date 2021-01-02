@@ -49,7 +49,7 @@ CIA::_reset(bool hard)
 }
 
 long
-CIA::getConfigItem(ConfigOption option)
+CIA::getConfigItem(Option option)
 {
     switch (option) {
             
@@ -64,7 +64,7 @@ CIA::getConfigItem(ConfigOption option)
 }
 
 bool
-CIA::setConfigItem(ConfigOption option, long value)
+CIA::setConfigItem(Option option, long value)
 {
     switch (option) {
             

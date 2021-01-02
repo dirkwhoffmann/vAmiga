@@ -25,7 +25,7 @@ Keyboard::_reset(bool hard)
 }
 
 long
-Keyboard::getConfigItem(ConfigOption option)
+Keyboard::getConfigItem(Option option)
 {
     switch (option) {
             
@@ -38,7 +38,7 @@ Keyboard::getConfigItem(ConfigOption option)
 }
 
 bool
-Keyboard::setConfigItem(ConfigOption option, long value)
+Keyboard::setConfigItem(Option option, long value)
 {
     switch (option) {
             

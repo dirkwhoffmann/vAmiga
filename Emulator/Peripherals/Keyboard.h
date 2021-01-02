@@ -63,8 +63,8 @@ public:
     
     KeyboardConfig getConfig() { return config; }
 
-    long getConfigItem(ConfigOption option);
-    bool setConfigItem(ConfigOption option, long value) override;
+    long getConfigItem(Option option);
+    bool setConfigItem(Option option, long value) override;
 
 private:
 

@@ -16,7 +16,7 @@
 // Enumerations
 //
 
-enum_long(DriveState)
+enum_long(DRIVE_DMA_STATE)
 {
     DRIVE_DMA_OFF,     // Drive is idle
 
@@ -26,24 +26,24 @@ enum_long(DriveState)
     DRIVE_DMA_WRITE,   // Drive is writing
     DRIVE_DMA_FLUSH,   // Drive is finishing up the write process
 };
+typedef DRIVE_DMA_STATE DriveState;
 
 inline bool isDriveState(long value)
 {
-    return value >= DRIVE_DMA_OFF && value <= DRIVE_DMA_FLUSH;
+    return (unsigned long)value <= DRIVE_DMA_FLUSH;
 }
 
-inline const char *driveStateName(DriveState state)
+inline const char *DriveDmaStateName(DriveState state)
 {
     switch (state) {
             
-        case DRIVE_DMA_OFF:   return "DRIVE_DMA_OFF";
-        case DRIVE_DMA_WAIT:  return "DRIVE_DMA_WAIT";
-        case DRIVE_DMA_READ:  return "DRIVE_DMA_READ";
-        case DRIVE_DMA_WRITE: return "DRIVE_DMA_WRITE";
-        case DRIVE_DMA_FLUSH: return "DRIVE_DMA_FLUSH";
-            
-        default:              return "???";
+        case DRIVE_DMA_OFF:   return "OFF";
+        case DRIVE_DMA_WAIT:  return "WAIT";
+        case DRIVE_DMA_READ:  return "READ";
+        case DRIVE_DMA_WRITE: return "WRITE";
+        case DRIVE_DMA_FLUSH: return "FLUSH";
     }
+    return "???";
 }
 
 //

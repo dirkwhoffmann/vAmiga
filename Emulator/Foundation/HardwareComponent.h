@@ -40,7 +40,7 @@ protected:
      *     Paused: The Amiga is turned on, but there is no emulator thread
      *    Running: The Amiga is turned on and the emulator thread running
      */
-    EmulatorState state = STATE_OFF;
+    EmulatorState state = EMULATOR_STATE_OFF;
     
     /* Indicates if the emulator should be executed in warp mode. To speed up
      * emulation (e.g., during disk accesses), the virtual hardware may be put
@@ -103,16 +103,16 @@ public:
      * setConfigItem(). The function returns true iff the current configuration
      * has changed.
      */
-    bool configure(ConfigOption option, long value);
-    bool configure(ConfigOption option, long id, long value);
+    bool configure(Option option, long value);
+    bool configure(Option option, long id, long value);
     
     /* Requests the change of a single configuration item. Each sub-component
      * checks if it is responsible for the requested configuration item. If
      * yes, it changes the internal state. If no, it ignores the request.
      * The function returns true iff the current configuration has changed.
      */
-    virtual bool setConfigItem(ConfigOption option, long value) { return false; }
-    virtual bool setConfigItem(ConfigOption option, long id, long value) { return false; }
+    virtual bool setConfigItem(Option option, long value) { return false; }
+    virtual bool setConfigItem(Option option, long id, long value) { return false; }
     
     // Dumps debug information about the current configuration to the console
     void dumpConfig();
@@ -207,10 +207,10 @@ public:
      * Additional component flags: warp (on / off), debug (on / off)
      */
     
-    bool isPoweredOff() { return state == STATE_OFF; }
-    bool isPoweredOn() { return state != STATE_OFF; }
-    bool isPaused() { return state == STATE_PAUSED; }
-    bool isRunning() { return state == STATE_RUNNING; }
+    bool isPoweredOff() { return state == EMULATOR_STATE_OFF; }
+    bool isPoweredOn() { return state != EMULATOR_STATE_OFF; }
+    bool isPaused() { return state == EMULATOR_STATE_PAUSED; }
+    bool isRunning() { return state == EMULATOR_STATE_RUNNING; }
     
 protected:
     

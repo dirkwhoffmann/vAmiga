@@ -15,27 +15,28 @@
 #include "BlitterTypes.h"
 #include "CopperTypes.h"
 
-enum_long(AgnusRevision)
+enum_long(AGNUS_REVISION)
 {
     AGNUS_OCS,              // Revision 8367
     AGNUS_ECS_1MB,          // Revision 8372
-    AGNUS_ECS_2MB,          // Revision 8375
-    AGNUS_CNT
+    AGNUS_ECS_2MB           // Revision 8375
 };
+typedef AGNUS_REVISION AgnusRevision;
 
 inline bool isAgnusRevision(long value)
 {
-    return value >= 0 && value < AGNUS_CNT;
+    return (unsigned long)value <= AGNUS_ECS_2MB;
 }
 
-inline const char *sAgnusRevision(AgnusRevision value)
+inline const char *AgnusRevisionName(AgnusRevision value)
 {
     switch (value) {
-        case AGNUS_OCS:     return "AGNUS_OCS";
-        case AGNUS_ECS_1MB: return "AGNUS_ECS_1MB";
-        case AGNUS_ECS_2MB: return "AGNUS_ECS_2MB";
-        default:            return "???";
+
+        case AGNUS_OCS:     return "OCS";
+        case AGNUS_ECS_1MB: return "ECS_1MB";
+        case AGNUS_ECS_2MB: return "ECS_2MB";
     }
+    return "???";
 }
 
 typedef struct

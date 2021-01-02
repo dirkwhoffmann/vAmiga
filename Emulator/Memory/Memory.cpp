@@ -53,7 +53,7 @@ Memory::_reset(bool hard)
 }
 
 long
-Memory::getConfigItem(ConfigOption option)
+Memory::getConfigItem(Option option)
 {
     switch (option) {
             
@@ -73,7 +73,7 @@ Memory::getConfigItem(ConfigOption option)
 }
 
 bool
-Memory::setConfigItem(ConfigOption option, long value)
+Memory::setConfigItem(Option option, long value)
 {    
     switch (option) {
             

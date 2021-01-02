@@ -38,7 +38,7 @@ Denise::_reset(bool hard)
 }
 
 long
-Denise::getConfigItem(ConfigOption option)
+Denise::getConfigItem(Option option)
 {
     switch (option) {
             
@@ -58,7 +58,7 @@ Denise::getConfigItem(ConfigOption option)
 }
 
 bool
-Denise::setConfigItem(ConfigOption option, long value)
+Denise::setConfigItem(Option option, long value)
 {
     switch (option) {
             

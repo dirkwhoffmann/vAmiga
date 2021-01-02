@@ -34,7 +34,7 @@ Drive::_reset(bool hard)
 }
 
 long
-Drive::getConfigItem(ConfigOption option)
+Drive::getConfigItem(Option option)
 {
     switch (option) {
             
@@ -48,7 +48,7 @@ Drive::getConfigItem(ConfigOption option)
 }
 
 bool
-Drive::setConfigItem(ConfigOption option, long id, long value)
+Drive::setConfigItem(Option option, long id, long value)
 {
     assert(id >= 0 && id <= 3);
 

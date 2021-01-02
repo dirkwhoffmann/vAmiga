@@ -95,13 +95,13 @@ extension Inspector {
 
         // Disk controller
         switch diskInfo.state {
-        case .DRIVE_DMA_OFF:
+        case .OFF:
             dskStateText.stringValue = "Idle"
-        case .DRIVE_DMA_WAIT:
+        case .WAIT:
             dskStateText.stringValue = "Waiting for sync signal"
-        case .DRIVE_DMA_READ:
+        case .READ:
             dskStateText.stringValue = "Reading"
-        case .DRIVE_DMA_WRITE:
+        case .WRITE:
             dskStateText.stringValue = "Writing"
         default:
             dskStateText.stringValue = "UNKNOWN"

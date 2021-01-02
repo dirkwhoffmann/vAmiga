@@ -14,4 +14,14 @@
 #include "PaulaPrivateTypes.h"
 #include "KeyboardPrivateTypes.h"
 
+enum_u32(RunLoopControlFlag)
+{
+    RL_STOP               = 0b000001,
+    RL_INSPECT            = 0b000010,
+    RL_BREAKPOINT_REACHED = 0b000100,
+    RL_WATCHPOINT_REACHED = 0b001000,
+    RL_AUTO_SNAPSHOT      = 0b010000,
+    RL_USER_SNAPSHOT      = 0b100000
+};
+
 #endif

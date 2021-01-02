@@ -12,7 +12,7 @@ extension ConfigurationController {
     func refreshHardwareTab() {
 
         let poweredOff = amiga.isPoweredOff
-        let ocsAgnus = config.agnusRev == AgnusRevision.AGNUS_OCS.rawValue
+        let ocsAgnus = config.agnusRev == AgnusRevision.OCS.rawValue
         
         // Chipset
         hwAgnusRevisionPopup.selectItem(withTag: config.agnusRev)

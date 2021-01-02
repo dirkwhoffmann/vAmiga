@@ -53,7 +53,7 @@ Blitter::_reset(bool hard)
 }
 
 long
-Blitter::getConfigItem(ConfigOption option)
+Blitter::getConfigItem(Option option)
 {
     switch (option) {
             
@@ -66,7 +66,7 @@ Blitter::getConfigItem(ConfigOption option)
 }
 
 bool
-Blitter::setConfigItem(ConfigOption option, long value)
+Blitter::setConfigItem(Option option, long value)
 {
     switch (option) {
             

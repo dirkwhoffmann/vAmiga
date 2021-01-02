@@ -221,7 +221,7 @@ Amiga::getConfig()
 }
 
 long
-Amiga::getConfigItem(ConfigOption option)
+Amiga::getConfigItem(Option option)
 {
     switch (option) {
 
@@ -283,7 +283,7 @@ Amiga::getConfigItem(ConfigOption option)
 }
 
 long
-Amiga::getConfigItem(ConfigOption option, long id)
+Amiga::getConfigItem(Option option, long id)
 {
     switch (option) {
             
@@ -305,7 +305,7 @@ Amiga::getConfigItem(ConfigOption option, long id)
 }
 
 bool
-Amiga::configure(ConfigOption option, long value)
+Amiga::configure(Option option, long value)
 {
     // Propagate configuration request to all components
     bool changed = HardwareComponent::configure(option, value);
@@ -320,7 +320,7 @@ Amiga::configure(ConfigOption option, long value)
 }
 
 bool
-Amiga::configure(ConfigOption option, long id, long value)
+Amiga::configure(Option option, long id, long value)
 {
     // Propagate configuration request to all components
     bool changed = HardwareComponent::configure(option, id, value);
@@ -558,7 +558,7 @@ Amiga::_setWarp(bool enable)
 void
 Amiga::acquireThreadLock()
 {
-    if (state == STATE_RUNNING) {
+    if (state == EMULATOR_STATE_RUNNING) {
         
         // Assure the emulator thread exists
         assert(p != (pthread_t)0);

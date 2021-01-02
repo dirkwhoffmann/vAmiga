@@ -69,7 +69,7 @@ void Agnus::_reset(bool hard)
 }
 
 long
-Agnus::getConfigItem(ConfigOption option)
+Agnus::getConfigItem(Option option)
 {
     switch (option) {
             
@@ -83,7 +83,7 @@ Agnus::getConfigItem(ConfigOption option)
 }
 
 bool
-Agnus::setConfigItem(ConfigOption option, long value)
+Agnus::setConfigItem(Option option, long value)
 {
     switch (option) {
             
@@ -133,7 +133,7 @@ Agnus::setConfigItem(ConfigOption option, long value)
 void
 Agnus::_dumpConfig()
 {
-    msg("      revision : %s\n", sAgnusRevision(config.revision));
+    msg("      revision : %s\n", AgnusRevisionName(config.revision));
     msg(" slowRamMirror : %s\n", config.slowRamMirror ? "yes" : "no");
 }
 

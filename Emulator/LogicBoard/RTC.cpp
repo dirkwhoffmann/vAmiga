@@ -14,7 +14,7 @@ RTC::RTC(Amiga& ref) : AmigaComponent(ref)
 }
 
 long
-RTC::getConfigItem(ConfigOption option)
+RTC::getConfigItem(Option option)
 {
     switch (option) {
             
@@ -27,7 +27,7 @@ RTC::getConfigItem(ConfigOption option)
 }
 
 bool
-RTC::setConfigItem(ConfigOption option, long value)
+RTC::setConfigItem(Option option, long value)
 {
     switch (option) {
             
@@ -59,7 +59,7 @@ RTC::setConfigItem(ConfigOption option, long value)
 void
 RTC::_dumpConfig()
 {
-    msg("  Revision : %s\n", sRTCRevision(config.model));
+    msg("  Revision : %s\n", RTCRevisionName(config.model));
 }
 
 void

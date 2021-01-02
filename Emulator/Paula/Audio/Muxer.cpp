@@ -60,7 +60,7 @@ Muxer::clear()
 }
 
 long
-Muxer::getConfigItem(ConfigOption option)
+Muxer::getConfigItem(Option option)
 {
     switch (option) {
             
@@ -88,7 +88,7 @@ Muxer::getConfigItem(ConfigOption option)
 }
 
 long
-Muxer::getConfigItem(ConfigOption option, long id)
+Muxer::getConfigItem(Option option, long id)
 {
     switch (option) {
             
@@ -105,7 +105,7 @@ Muxer::getConfigItem(ConfigOption option, long id)
 }
 
 bool
-Muxer::setConfigItem(ConfigOption option, long value)
+Muxer::setConfigItem(Option option, long value)
 {
     bool wasMuted = isMuted();
     
@@ -181,7 +181,7 @@ Muxer::setConfigItem(ConfigOption option, long value)
 }
 
 bool
-Muxer::setConfigItem(ConfigOption option, long id, long value)
+Muxer::setConfigItem(Option option, long id, long value)
 {    
     switch (option) {
                         
