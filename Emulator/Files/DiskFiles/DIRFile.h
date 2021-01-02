@@ -40,7 +40,7 @@ public:
     // Methods from AmigaFile
     //
     
-    AmigaFileType fileType() override { return FILETYPE_DIR; }
+    FileType fileType() override { return FILETYPE_DIR; }
     u64 fnv() override { return adf->fnv(); }
     bool matchingBuffer(const u8 *buffer, size_t length) override;
     bool matchingFile(const char *path) override { return isDIRFile(path); }

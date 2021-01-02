@@ -1384,7 +1384,7 @@ struct SerialPortWrapper { SerialPort *port; };
     return wrapper;
 }
 
-- (AmigaFileType)type
+- (FileType)type
 {
     return wrapper->file->fileType();
 }

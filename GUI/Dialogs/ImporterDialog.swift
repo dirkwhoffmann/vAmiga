@@ -24,7 +24,7 @@ class ImporterDialog: DialogController {
     @IBOutlet weak var carousel: iCarousel!
     
     var disk: DiskFileProxy?
-    var type: AmigaFileType?
+    var type: FileType?
     var writeProtect = false
     var screenshots: [Screenshot] = []
     
@@ -39,15 +39,15 @@ class ImporterDialog: DialogController {
         
         switch type {
         
-        case .FILETYPE_ADF:
+        case .ADF:
             return "Amiga Disk File (ADF)"
-        case .FILETYPE_IMG:
+        case .IMG:
             return "PC Disk Image"
-        case .FILETYPE_DMS:
+        case .DMS:
             return "Disk Masher System (DMS)"
-        case .FILETYPE_EXE:
+        case .EXE:
             return "ADF (Converted Amiga executable)"
-        case .FILETYPE_DIR:
+        case .DIR:
             return "ADF (Converted Host Directory)"
         default:
             return "???"

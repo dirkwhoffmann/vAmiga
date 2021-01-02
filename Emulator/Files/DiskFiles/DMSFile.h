@@ -43,7 +43,7 @@ public:
     // Methods from AmigaFile
     //
     
-    AmigaFileType fileType() override { return FILETYPE_DMS; }
+    FileType fileType() override { return FILETYPE_DMS; }
     u64 fnv() override { return adf->fnv(); }
     bool matchingBuffer(const u8 *buffer, size_t length) override {
         return isDMSBuffer(buffer, length); }

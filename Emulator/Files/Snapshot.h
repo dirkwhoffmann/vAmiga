@@ -81,7 +81,7 @@ public:
     // Methods from AmigaFile
     //
     
-    AmigaFileType fileType() override { return FILETYPE_SNAPSHOT; }
+    FileType fileType() override { return FILETYPE_SNAPSHOT; }
     bool matchingBuffer(const u8 *buffer, size_t length) override;
     bool matchingFile(const char *filename) override;
     bool readFromBuffer(const u8 *buffer, size_t length, FileError *error = nullptr) override;

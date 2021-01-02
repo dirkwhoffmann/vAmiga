@@ -81,7 +81,7 @@ class MyDocument: NSDocument {
     // Opening files
     //
     
-    func openFile(url: URL, allowedTypes: [AmigaFileType]) -> (AmigaFileProxy?, FileError) {
+    func openFile(url: URL, allowedTypes: [FileType]) -> (AmigaFileProxy?, FileError) {
         
         track("Opening URL \(url.lastPathComponent)")
         
@@ -95,42 +95,42 @@ class MyDocument: NSDocument {
             
             switch type {
             
-            case .FILETYPE_SNAPSHOT:
+            case .SNAPSHOT:
                 if let file = SnapshotProxy.make(withFile: path, error: &err) {
                     return (file, .ERR_FILE_OK)
                 }
                 
-            case .FILETYPE_ADF:
+            case .ADF:
                 if let file = ADFFileProxy.make(withFile: path, error: &err) {
                     return (file, .ERR_FILE_OK)
                 }
                 
-            case .FILETYPE_EXT:
+            case .EXT:
                 if let file = EXTFileProxy.make(withFile: path, error: &err) {
                     return (file, .ERR_FILE_OK)
                 }
                 
-            case .FILETYPE_IMG:
+            case .IMG:
                 if let file = IMGFileProxy.make(withFile: path, error: &err) {
                     return (file, .ERR_FILE_OK)
                 }
                 
-            case .FILETYPE_DMS:
+            case .DMS:
                 if let file = DMSFileProxy.make(withFile: path, error: &err) {
                     return (file, .ERR_FILE_OK)
                 }
                 
-            case .FILETYPE_EXE:
+            case .EXE:
                 if let file = EXEFileProxy.make(withFile: path, error: &err) {
                     return (file, .ERR_FILE_OK)
                 }
                 
-            case .FILETYPE_DIR:
+            case .DIR:
                 if let file = DIRFileProxy.make(withFile: path, error: &err) {
                     return (file, .ERR_FILE_OK)
                 }
                 
-            case .FILETYPE_HDF:
+            case .HDF:
                 if let file = HDFFileProxy.make(withFile: path, error: &err) {
                     return (file, .ERR_FILE_OK)
                 }
@@ -151,7 +151,7 @@ class MyDocument: NSDocument {
     // Working with attachments
     //
         
-    func createAttachment(url: URL, allowedTypes: [AmigaFileType]) -> FileError {
+    func createAttachment(url: URL, allowedTypes: [FileType]) -> FileError {
         
         track("Creating attachment from URL: \(url.lastPathComponent)")
         
@@ -231,7 +231,7 @@ class MyDocument: NSDocument {
     
     override open func read(from url: URL, ofType typeName: String) throws {
         
-        let err = createAttachment(url: url, allowedTypes: [.FILETYPE_SNAPSHOT])
+        let err = createAttachment(url: url, allowedTypes: [.SNAPSHOT])
 
         if err != .ERR_FILE_OK {
             throw NSError.fileError(err, url: url)

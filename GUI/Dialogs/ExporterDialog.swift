@@ -238,8 +238,8 @@ class ExporterDialog: DialogController {
     
     override func windowDidLoad() {
         
-        let adf = disk?.type == .FILETYPE_ADF
-        let dos = disk?.type == .FILETYPE_IMG
+        let adf = disk?.type == .ADF
+        let dos = disk?.type == .IMG
             
         // Enable compatible file formats in the format selector popup
         formatPopup.autoenablesItems = false
@@ -406,13 +406,13 @@ class ExporterDialog: DialogController {
             
         } else {
             
-            if disk?.type == .FILETYPE_ADF {
+            if disk?.type == .ADF {
                 
                 text = "Amiga Disk"
                 color = .textColor
                 
             }
-            if disk?.type == .FILETYPE_IMG {
+            if disk?.type == .IMG {
                 
                 text = "PC Disk"
                 color = .textColor

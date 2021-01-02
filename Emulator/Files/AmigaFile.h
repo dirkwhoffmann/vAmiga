@@ -59,7 +59,7 @@ public:
     //
     
     // Returns the type of this file
-    virtual AmigaFileType fileType() { return FILETYPE_UKNOWN; }
+    virtual FileType fileType() { return FILETYPE_UKNOWN; }
         
     // Returns the physical name of this file
     const char *getPath() { return path ? path : ""; }

@@ -688,7 +688,7 @@ struct SerialPortWrapper;
 
 - (struct AmigaFileWrapper *)wrapper;
 
-@property (readonly) AmigaFileType type;
+@property (readonly) FileType type;
 - (void)setPath:(NSString *)path;
 @property (readonly) NSInteger sizeOnDisk;
 @property (readonly) u64 fnv;

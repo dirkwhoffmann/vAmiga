@@ -80,9 +80,9 @@ extension DiskFileProxy {
         
         var name: String
         switch type {
-        case .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_EXE, .FILETYPE_DIR:
+        case .ADF, .DMS, .EXE, .DIR:
             name = density == .HD ? "hd_adf" : "dd_adf"
-        case .FILETYPE_IMG:
+        case .IMG:
             name = "dd_dos"
         default:
             name = ""

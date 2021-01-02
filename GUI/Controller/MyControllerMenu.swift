@@ -517,11 +517,7 @@ extension MyController: NSMenuItemValidation {
         
         track("insertDiskAction \(url) drive \(drive)")
         
-        let types = [ AmigaFileType.FILETYPE_ADF,
-                      AmigaFileType.FILETYPE_HDF,
-                      AmigaFileType.FILETYPE_DMS,
-                      AmigaFileType.FILETYPE_EXE,
-                      AmigaFileType.FILETYPE_DIR ]
+        let types: [FileType] = [ .ADF, .HDF, .DMS, .EXE, .DIR ]
         
         let (file, err) = mydocument.openFile(url: url, allowedTypes: types)
         

@@ -14,9 +14,9 @@
 
 #include "Aliases.h"
 
-enum_long( AmigaFileType)
+enum_long(FILETYPE)
 {
-    FILETYPE_UKNOWN = 0,
+    FILETYPE_UKNOWN,
     FILETYPE_SNAPSHOT,
     FILETYPE_ADF,
     FILETYPE_HDF,
@@ -26,13 +26,33 @@ enum_long( AmigaFileType)
     FILETYPE_EXE,
     FILETYPE_DIR,
     FILETYPE_ROM,
-    FILETYPE_EXTENDED_ROM,
-    FILETYPE_COUNT
+    FILETYPE_EXTENDED_ROM
+    // FILETYPE_COUNT
 };
+typedef FILETYPE FileType;
 
-inline bool isAmigaFileType(long value)
+inline bool isFileType(long value)
 {
-    return value >= 0 && value < FILETYPE_COUNT;
+    return (unsigned long)value < FILETYPE_EXTENDED_ROM;
+}
+
+inline const char *FileTypeName(FileType value)
+{
+    switch (value) {
+            
+        case FILETYPE_UKNOWN:        return "UNKNOWN";
+        case FILETYPE_SNAPSHOT:      return "SNAPSHOT";
+        case FILETYPE_ADF:           return "ADF";
+        case FILETYPE_HDF:           return "HDF";
+        case FILETYPE_EXT:           return "EXT";
+        case FILETYPE_IMG:           return "IMG";
+        case FILETYPE_DMS:           return "DMS";
+        case FILETYPE_EXE:           return "EXE";
+        case FILETYPE_DIR:           return "DIR";
+        case FILETYPE_ROM:           return "ROM";
+        case FILETYPE_EXTENDED_ROM:  return "EXTENDED_ROM";
+    }
+    return "???";
 }
 
 enum_long( RomIdentifier)

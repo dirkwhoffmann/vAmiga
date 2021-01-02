@@ -108,16 +108,8 @@ public extension MetalView {
             
             if let url = NSURL.init(from: pasteBoard) as URL? {
                 
-                let types: [AmigaFileType] = [
-                    
-                    .FILETYPE_SNAPSHOT,
-                    .FILETYPE_ADF,
-                    .FILETYPE_EXT,
-                    .FILETYPE_IMG,
-                    .FILETYPE_DMS,
-                    .FILETYPE_EXE,
-                    .FILETYPE_DIR
-                ]
+                let types: [FileType] =
+                    [ .SNAPSHOT, .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
 
                 let err = document.createAttachment(url: url, allowedTypes: types)
 
