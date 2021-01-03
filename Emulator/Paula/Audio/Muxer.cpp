@@ -129,7 +129,6 @@ Muxer::setConfigItem(Option option, long value)
             
             if (!isFilterType(value)) {
                 warn("Invalid filter type: %ld\n", value);
-                warn("       Valid values: 0 ... %lld\n", FILT_COUNT - 1);
                 return false;
             }
 
@@ -221,7 +220,7 @@ void
 Muxer::_dumpConfig()
 {
     msg("samplingMethod : %s\n", sSamplingMethod(config.samplingMethod));
-    msg("    filtertype : %s\n", sFilterType(config.filterType));
+    msg("    filtertype : %s\n", FilterTypeName(config.filterType));
     msg("filterAlwaysOn : %d\n", config.filterAlwaysOn);
     msg("    vol0, pan0 : %lld, %lld\n", config.vol[0], config.pan[0]);
     msg("    vol1, pan1 : %lld, %lld\n", config.vol[1], config.pan[1]);

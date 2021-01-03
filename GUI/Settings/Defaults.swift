@@ -737,7 +737,7 @@ struct HardwareDefaults {
         
         agnusRev: .ECS_1MB,
         slowRamMirror: true,
-        deniseRev: .DENISE_OCS,
+        deniseRev: .OCS,
         borderBlank: false,
         ciaRev: ._8520_DIP,
         todBug: true,
@@ -756,7 +756,7 @@ struct HardwareDefaults {
         
         agnusRev: .OCS,
         slowRamMirror: true,
-        deniseRev: .DENISE_OCS,
+        deniseRev: .OCS,
         borderBlank: false,
         ciaRev: ._8520_DIP,
         todBug: true,
@@ -775,7 +775,7 @@ struct HardwareDefaults {
         
         agnusRev: .ECS_2MB,
         slowRamMirror: true,
-        deniseRev: .DENISE_OCS,
+        deniseRev: .OCS,
         borderBlank: false,
         ciaRev: ._8520_DIP,
         todBug: true,
@@ -1167,8 +1167,8 @@ struct AudioDefaults {
         
         volL: 50,
         volR: 50,
-        samplingMethod: .SMP_NONE,
-        filterType: .FILT_BUTTERWORTH,
+        samplingMethod: .NONE,
+        filterType: .BUTTERWORTH,
         filterAlwaysOn: false
     )
     
@@ -1185,8 +1185,8 @@ struct AudioDefaults {
         
         volL: 50,
         volR: 50,
-        samplingMethod: .SMP_NONE,
-        filterType: .FILT_BUTTERWORTH,
+        samplingMethod: .NONE,
+        filterType: .BUTTERWORTH,
         filterAlwaysOn: false
     )
 
@@ -1203,8 +1203,8 @@ struct AudioDefaults {
         
         volL: 50,
         volR: 50,
-        samplingMethod: .SMP_NONE,
-        filterType: .FILT_BUTTERWORTH,
+        samplingMethod: .NONE,
+        filterType: .BUTTERWORTH,
         filterAlwaysOn: false
     )
 }
@@ -1346,7 +1346,7 @@ struct VideoDefaults {
     // TFT monitor appearance with a texture cutout similar to UAE
     static let tft = VideoDefaults.init(
         
-        palette: Palette.PALETTE_COLOR,
+        palette: Palette.COLOR,
         brightness: 50.0,
         contrast: 100.0,
         saturation: 50.0,
@@ -1380,7 +1380,7 @@ struct VideoDefaults {
     // CRT monitor appearance with a texture-cutout closer to the center
     static let crt = VideoDefaults.init(
         
-        palette: Palette.PALETTE_COLOR,
+        palette: Palette.COLOR,
         brightness: 50.0,
         contrast: 100.0,
         saturation: 50.0,

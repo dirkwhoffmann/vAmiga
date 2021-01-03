@@ -15,7 +15,7 @@
 class AudioFilter : public AmigaComponent {
     
     // The currently set filter type
-    FilterType type = FILT_BUTTERWORTH;
+    FilterType type = FILTER_BUTTERWORTH;
     
     // Coefficients of the butterworth filter
     double a1, a2, b0, b1, b2;

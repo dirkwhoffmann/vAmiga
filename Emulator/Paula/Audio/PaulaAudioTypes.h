@@ -16,48 +16,49 @@
 // Enumerations
 //
 
-enum_long(SamplingMethod)
+enum_long(SMP_METHOD)
 {
     SMP_NONE,
     SMP_NEAREST,
-    SMP_LINEAR,
-    SMP_COUNT
+    SMP_LINEAR
 };
+typedef SMP_METHOD SamplingMethod;
 
 static inline bool isSamplingMethod(long value)
 {
-    return value >= 0 && value < SMP_COUNT;
+    return (unsigned long)value <= SMP_LINEAR;
 }
 
 static inline const char *sSamplingMethod(SamplingMethod value)
 {
     switch (value) {
-        case SMP_NONE:     return "SMP_NONE";
-        case SMP_NEAREST:  return "SMP_NEAREST";
-        case SMP_LINEAR:   return "SMP_LINEAR";
-        default:           return "???";
+            
+        case SMP_NONE:     return "NONE";
+        case SMP_NEAREST:  return "NEAREST";
+        case SMP_LINEAR:   return "LINEAR";
     }
+    return "???";
 }
 
-enum_long(FilterType)
+enum_long(FILTER_TYPE)
 {
-    FILT_NONE,
-    FILT_BUTTERWORTH,
-    FILT_COUNT
+    FILTER_NONE,
+    FILTER_BUTTERWORTH
 };
+typedef FILTER_TYPE FilterType;
 
 static inline bool isFilterType(long value)
 {
-    return value >= 0 && value < FILT_COUNT;
+    return (unsigned long)value <= FILTER_BUTTERWORTH;
 }
 
-static inline const char *sFilterType(FilterType value)
+static inline const char *FilterTypeName(FilterType value)
 {
     switch (value) {
-        case FILT_NONE:         return "FILT_NONE";
-        case FILT_BUTTERWORTH:  return "FILT_BUTTERWORTH";
-        default:                return "???";
+        case FILTER_NONE:         return "NONE";
+        case FILTER_BUTTERWORTH:  return "BUTTERWORTH";
     }
+    return "???";
 }
 
 

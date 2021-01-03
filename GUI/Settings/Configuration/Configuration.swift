@@ -794,7 +794,7 @@ class Configuration {
         amiga.suspend()
         
         let paletteKey = defaults.integer(forKey: Keys.Vid.palette)
-        palette = Palette(rawValue: paletteKey) ?? .PALETTE_COLOR
+        palette = Palette(rawValue: paletteKey) ?? .COLOR
         brightness = defaults.double(forKey: Keys.Vid.brightness)
         contrast = defaults.double(forKey: Keys.Vid.contrast)
         saturation = defaults.double(forKey: Keys.Vid.saturation)

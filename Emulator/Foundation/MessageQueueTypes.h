@@ -85,14 +85,14 @@ enum_long(MSG_TYPE)
     MSG_DMA_DEBUG_ON,
     MSG_DMA_DEBUG_OFF
 };
-typedef MSG_TYPE MessageType;
+typedef MSG_TYPE MsgType;
 
-inline bool isMessageType(long value)
+inline bool isMsgType(long value)
 {
     return (unsigned long)value <= MSG_DMA_DEBUG_OFF;
 }
 
-inline const char *MessageTypeName(MessageType type)
+inline const char *MsgTypeName(MsgType type)
 {
     switch (type) {
             
@@ -159,7 +159,7 @@ inline const char *MessageTypeName(MessageType type)
 
 typedef struct
 {
-    MessageType type;
+    MsgType type;
     long data;
 }
 Message;

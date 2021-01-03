@@ -18,17 +18,16 @@
 // Enumerations
 //
 
-enum_long(DeniseRevision)
+enum_long(DENISE_REV)
 {
     DENISE_OCS,          // Revision 8362R8
-    DENISE_ECS,          // Revision 8373 (not supported yet)
-    DENISE_COUNT
-    
+    DENISE_ECS           // Revision 8373 (not supported yet)
 };
+typedef DENISE_REV DeniseRevision;
 
 inline bool isDeniseRevision(long value)
 {
-    return value >= 0 && value < DENISE_COUNT;
+    return (unsigned long)value <= DENISE_ECS;
 }
 
 inline const char *sDeniseRevision(DeniseRevision value)
@@ -40,20 +39,20 @@ inline const char *sDeniseRevision(DeniseRevision value)
     }
 }
 
-enum_long(Palette)
+enum_long(PALETTE)
 {
-    PALETTE_COLOR = 0,
+    PALETTE_COLOR,
     PALETTE_BLACK_WHITE,
     PALETTE_PAPER_WHITE,
     PALETTE_GREEN,
     PALETTE_AMBER,
-    PALETTE_SEPIA,
-    PALETTE_COUNT
+    PALETTE_SEPIA
 };
+typedef PALETTE Palette;
 
 inline bool isPalette(long value)
 {
-    return value >= PALETTE_COLOR && value < PALETTE_COUNT;
+    return (unsigned long)value <= PALETTE_SEPIA;
 }
 
 
