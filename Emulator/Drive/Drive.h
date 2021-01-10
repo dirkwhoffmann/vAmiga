@@ -173,7 +173,7 @@ private:
 public:
 
     // Identification mode
-    bool idMode();
+    bool idMode() const;
     u32 getDriveId();
 
     // Operation
@@ -185,9 +185,9 @@ public:
     //
     
     // Returns true if this drive is currently selected
-    inline bool isSelected() { return (prb & (0b1000 << nr)) == 0; }
+    inline bool isSelected() const { return (prb & (0b1000 << nr)) == 0; }
     
-    u8 driveStatusFlags();
+    u8 driveStatusFlags() const;
     
 
     //
@@ -195,19 +195,19 @@ public:
     //
         
     // Returns the current motor speed in percent
-    double motorSpeed();
+    double motorSpeed() const;
 
     // Turns the drive motor on or off
-    bool getMotor() { return motor; }
+    bool getMotor() const { return motor; }
     void setMotor(bool value);
     void switchMotorOn() { setMotor(true); }
     void switchMotorOff() { setMotor(false); }
 
     // Informs about the current drive motor state
-    bool motorSpeedingUp();
-    bool motorAtFullSpeed();
-    bool motorSlowingDown();
-    bool motorStopped();
+    bool motorSpeedingUp() const;
+    bool motorAtFullSpeed() const;
+    bool motorSlowingDown() const;
+    bool motorStopped() const;
 
     // Selects the active drive head (0 = lower, 1 = upper)
     void selectSide(int side);
@@ -252,14 +252,14 @@ public:
     // Handling disks
     //
 
-    bool hasDisk() { return disk != nullptr; }
-    bool hasDDDisk() { return disk ? disk->density == DISK_DD : false; }
-    bool hasHDDisk() { return disk ? disk->density == DISK_HD : false; }
-    bool hasModifiedDisk() { return disk ? disk->isModified() : false; }
+    bool hasDisk() const { return disk != nullptr; }
+    bool hasDDDisk() const { return disk ? disk->density == DISK_DD : false; }
+    bool hasHDDisk() const { return disk ? disk->density == DISK_HD : false; }
+    bool hasModifiedDisk() const { return disk ? disk->isModified() : false; }
     void setModifiedDisk(bool value) { if (disk) disk->setModified(value); }
     
-    bool hasWriteEnabledDisk();
-    bool hasWriteProtectedDisk();
+    bool hasWriteEnabledDisk() const;
+    bool hasWriteProtectedDisk() const;
     void setWriteProtection(bool value); 
     void toggleWriteProtection();
     

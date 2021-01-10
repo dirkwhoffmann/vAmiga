@@ -206,10 +206,10 @@ public:
     void pbufld2();
 
     // Returns true in attach volume mode
-    bool AUDxAV();
+    bool AUDxAV() const;
 
     // Returns true in attach period mode
-    bool AUDxAP();
+    bool AUDxAP() const;
 
     // Condition for normal DMA and interrupt requests
     bool napnav() { return !AUDxAP() || AUDxAV(); }

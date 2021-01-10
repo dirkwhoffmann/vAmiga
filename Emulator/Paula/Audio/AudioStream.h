@@ -47,7 +47,7 @@ public:
      * ahead of the read pointer. With a standard sample rate of 44100 Hz,
      * 735 samples is 1/60 sec.
      */
-    static u32 samplesAhead() { return 8 * 735; }
+    static constexpr u32 samplesAhead() { return 8 * 735; }
     void alignWritePtr() { align(samplesAhead()); }
     
     

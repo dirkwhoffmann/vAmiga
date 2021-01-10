@@ -138,9 +138,9 @@ public:
     bool setConfigItem(Option option, long value) override;
     bool setConfigItem(Option option, long id, long value) override;
 
-    bool isMuted() { return config.volL == 0 && config.volR == 0; }
+    bool isMuted() const { return config.volL == 0 && config.volR == 0; }
 
-    double getSampleRate() { return sampleRate; }
+    double getSampleRate() const { return sampleRate; }
     void setSampleRate(double hz);
 
 private:
@@ -155,7 +155,7 @@ private:
 public:
     
     // Returns information about the gathered statistical information
-    MuxerStats getStats() { return stats; }
+    MuxerStats getStats() const { return stats; }
     
     
     //

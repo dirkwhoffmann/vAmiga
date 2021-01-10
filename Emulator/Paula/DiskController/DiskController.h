@@ -107,7 +107,7 @@ public:
 public:
     
     DiskControllerConfig getConfig() { return config; }
-    bool turboMode() { return config.speed == -1; }
+    bool turboMode() const { return config.speed == -1; }
 
     long getConfigItem(Option option);
     long getConfigItem(Option option, long id);
@@ -186,19 +186,20 @@ private:
 public:
     
     // Returns the number of the currently selected drive
-    i8 getSelected() { return selected; }
+    i8 getSelected() const { return selected; }
 
     // Returns the currently selected (nullptr if none is selected)
+    // TODO: Return reference
     class Drive *getSelectedDrive();
 
     // Indicates if the motor of the specified drive is switched on
-    bool spinning(unsigned driveNr);
+    bool spinning(unsigned driveNr) const;
 
     // Indicates if the motor of at least one drive is switched on
-    bool spinning();
+    bool spinning() const;
     
     // Returns the current drive state
-    DriveState getState() { return state; }
+    DriveState getState() const { return state; }
     
 private:
     
@@ -214,7 +215,7 @@ private:
 public:
     
     // OCR register 0x008 (r)
-    u16 peekDSKDATR();
+    u16 peekDSKDATR() const;
     
     // OCR register 0x024 (w)
     void pokeDSKLEN(u16 value);
@@ -231,7 +232,7 @@ public:
     void pokeDSKSYNC(u16 value);
     
     // Read handler for the PRA register of CIA A
-    u8 driveStatusFlags();
+    u8 driveStatusFlags() const;
     
     // Write handler for the PRB register of CIA B
     void PRBdidChange(u8 oldValue, u8 newValue);

@@ -44,7 +44,7 @@ public:
 public:
     
     // Filter type
-    FilterType getFilterType() { return type; }
+    FilterType getFilterType() const { return type; }
     void setFilterType(FilterType type);
     
     // Sample rate

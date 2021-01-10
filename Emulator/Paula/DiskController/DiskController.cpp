@@ -190,14 +190,14 @@ DiskController::getSelectedDrive()
 }
 
 bool
-DiskController::spinning(unsigned driveNr)
+DiskController::spinning(unsigned driveNr) const
 {
     assert(driveNr < 4);
     return df[driveNr]->getMotor();
 }
 
 bool
-DiskController::spinning()
+DiskController::spinning() const
 {
     return df0.getMotor() || df1.getMotor() ||df2.getMotor() || df3.getMotor();
 }

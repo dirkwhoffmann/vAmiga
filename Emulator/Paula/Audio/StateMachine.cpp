@@ -158,13 +158,13 @@ StateMachine<nr>::pbufld2()
 }
 
 template <int nr> bool
-StateMachine<nr>::AUDxAV()
+StateMachine<nr>::AUDxAV() const
 {
     return (paula.adkcon >> nr) & 0x01;
 }
 
 template <int nr> bool
-StateMachine<nr>::AUDxAP()
+StateMachine<nr>::AUDxAP() const
 {
     return (paula.adkcon >> nr) & 0x10;
 }

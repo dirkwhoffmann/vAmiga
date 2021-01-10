@@ -216,7 +216,7 @@ Drive::_save(u8 *buffer)
 }
 
 bool
-Drive::idMode()
+Drive::idMode() const
 {
     return motorStopped() || motorSpeedingUp();
 }
@@ -252,7 +252,7 @@ Drive::getDriveId()
 }
 
 u8
-Drive::driveStatusFlags()
+Drive::driveStatusFlags() const
 {
     // if (nr == 0) debug("driveStatusFlags() %d %d %d %d\n", isSelected(), idMode(), motorAtFullSpeed(), motorSlowingDown());
 
@@ -286,7 +286,7 @@ Drive::driveStatusFlags()
 }
 
 double
-Drive::motorSpeed()
+Drive::motorSpeed()const
 {
     // Quick exit if mechanics is not emulated
     if (!config.mechanicalDelays) return motor ? 100.0 : 0.0;
@@ -327,25 +327,25 @@ Drive::setMotor(bool value)
 }
 
 bool
-Drive::motorSpeedingUp()
+Drive::motorSpeedingUp() const
 {
     return motor && motorSpeed() < 100.0;
 }
 
 bool
-Drive::motorAtFullSpeed()
+Drive::motorAtFullSpeed() const
 {
     return motorSpeed() == 100.0;
 }
 
 bool
-Drive::motorSlowingDown()
+Drive::motorSlowingDown() const
 {
     return !motor && motorSpeed() > 0.0;
 }
 
 bool
-Drive::motorStopped()
+Drive::motorStopped() const
 {
     return motorSpeed() == 0.0;
 }
@@ -533,13 +533,13 @@ Drive::pollsForDisk()
 }
 
 bool
-Drive::hasWriteEnabledDisk()
+Drive::hasWriteEnabledDisk() const
 {
     return hasDisk() ? !disk->isWriteProtected() : false;
 }
 
 bool
-Drive::hasWriteProtectedDisk()
+Drive::hasWriteProtectedDisk() const
 {
     return hasDisk() ? disk->isWriteProtected() : false;
 }
