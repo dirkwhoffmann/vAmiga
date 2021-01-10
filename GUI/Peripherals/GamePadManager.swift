@@ -134,7 +134,6 @@ class GamePadManager {
         
         track("Maximum number of devices reached.")
         return nil
-        
     }
     
     func connect(slot: Int, port: Int) {

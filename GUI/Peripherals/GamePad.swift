@@ -154,8 +154,6 @@ class GamePad {
         print("\(lxAxis) \(lyAxis) ", terminator: "")
         print("\(rxAxis) \(ryAxis) ", terminator: "")
         print("\(hShift)")
-        
-        // device?.listProperties()
     }
     
     //
@@ -323,7 +321,6 @@ class GamePad {
                 
             case lxAxis, rxAxis:
                 
-                // track("lThumbXUsageID, rThumbXUsageID: \(intValue)")
                 if let v = mapAnalogAxis(value: value, element: element) {
                     events =
                         (v == 2) ? [.PULL_RIGHT] :
@@ -332,7 +329,6 @@ class GamePad {
                 
             case lyAxis, ryAxis:
                 
-                // track("lThumbYUsageID, rThumbYUsageID: \(intValue)")
                 if let v = mapAnalogAxis(value: value, element: element) {
                     events =
                         (v == 2) ? [.PULL_DOWN] :

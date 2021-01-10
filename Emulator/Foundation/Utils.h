@@ -153,7 +153,6 @@ bool releaseBuild();
 #define W32BE_ALIGNED(a,v) { *(u32 *)(a) = ntohl((u32)v); }
 
 
-
 //
 // Pretty printing
 //

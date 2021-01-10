@@ -553,7 +553,7 @@ class Inspector: DialogController {
         track()
 
         super.showWindow(self)
-        amiga.enableDebugging()
+        amiga.setDebug(true)
         updateInspectionTarget()
     }
 
@@ -622,7 +622,7 @@ extension Inspector: NSWindowDelegate {
         track("Closing inspector")
 
         // Leave debug mode
-        amiga?.disableDebugging()
+        amiga?.setDebug(false)
         amiga?.clearInspectionTarget()
     }
 }

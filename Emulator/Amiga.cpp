@@ -550,9 +550,14 @@ Amiga::_setWarp(bool enable)
     } else {
         
         oscillator.restart();
-        // restartTimer();
         messageQueue.put(MSG_WARP_OFF);
     }
+}
+
+void
+Amiga::setDebug(bool enable)
+{
+    HardwareComponent::setDebug(enable);
 }
 
 void

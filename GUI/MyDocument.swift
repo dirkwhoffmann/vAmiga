@@ -83,7 +83,7 @@ class MyDocument: NSDocument {
     
     func openFile(url: URL, allowedTypes: [FileType]) -> (AmigaFileProxy?, FileError) {
         
-        track("Opening URL \(url.lastPathComponent)")
+        track("Opening URL \(url.lastPathComponent) (\(allowedTypes.count) types)")
         
         var err: FileError = .ERR_FILE_OK
         
@@ -151,6 +151,14 @@ class MyDocument: NSDocument {
     // Working with attachments
     //
         
+    func createAttachment(url: URL) -> FileError {
+        
+        let types: [FileType] =
+            [ .SNAPSHOT, .ADF, .HDF, .EXT, .IMG, .DMS, .EXE, .DIR ]
+        
+        return createAttachment(url: url, allowedTypes: types)
+    }
+    
     func createAttachment(url: URL, allowedTypes: [FileType]) -> FileError {
         
         track("Creating attachment from URL: \(url.lastPathComponent)")
@@ -231,7 +239,8 @@ class MyDocument: NSDocument {
     
     override open func read(from url: URL, ofType typeName: String) throws {
         
-        let err = createAttachment(url: url, allowedTypes: [.SNAPSHOT])
+        // let err = createAttachment(url: url, allowedTypes: [.SNAPSHOT])
+        let err = createAttachment(url: url)
 
         if err != .ERR_FILE_OK {
             throw NSError.fileError(err, url: url)

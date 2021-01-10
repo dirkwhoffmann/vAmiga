@@ -121,9 +121,10 @@ struct SerialPortWrapper;
 
 - (void) kill;
 
-@property (readonly, getter=isReleaseBuild) BOOL releaseBuild;
-- (void) enableDebugging;
-- (void) disableDebugging;
+@property (readonly) BOOL isReleaseBuild;
+- (void) setDebug:(BOOL)enable;
+- (void) enableDebugging __attribute__ ((deprecated));
+- (void) disableDebugging __attribute__ ((deprecated));
 - (void) setInspectionTarget:(EventID)id;
 - (void) clearInspectionTarget;
 @property (readonly) BOOL debugMode;

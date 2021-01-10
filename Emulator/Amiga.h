@@ -262,9 +262,10 @@ public:
     void enableWarpMode() { setWarp(true); }
     void disableWarpMode() { setWarp(false); }
 
+    void setDebug(bool enable);
+    bool inDebugMode() { return debugMode; }
     void enableDebugMode() { setDebug(true); }
     void disableDebugMode() { setDebug(false); }
-    bool inDebugMode() { return debugMode; }
 
 private:
     

@@ -1941,6 +1941,10 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->amiga->inDebugMode();
 }
+- (void) setDebug:(BOOL)enable
+{
+    wrapper->amiga->setDebug(enable);
+}
 - (void) enableDebugging
 {
     wrapper->amiga->enableDebugMode();
