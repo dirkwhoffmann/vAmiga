@@ -196,36 +196,36 @@ private:
 public:
         
     // ADKCONR and ADKCON
-    u16 peekADKCONR();
+    u16 peekADKCONR() const;
     void pokeADKCON(u16 value);
 
-    bool UARTBRK() { return GET_BIT(adkcon, 11); }
+    bool UARTBRK() const { return GET_BIT(adkcon, 11); }
 
     // INTREQR and INTREQ
-    u16 peekINTREQR();
+    u16 peekINTREQR() const;
     template <Accessor s> void pokeINTREQ(u16 value);
     void setINTREQ(bool setclr, u16 value);
     void setINTREQ(u16 value) { setINTREQ(value & 0x8000, value & 0x7FFF); }
 
     // INTENAR and INTENA
-    u16 peekINTENAR() { return intena; }
+    u16 peekINTENAR() const { return intena; }
     template <Accessor s> void pokeINTENA(u16 value);
     void setINTENA(bool setclr, u16 value);
     void setINTENA(u16 value) { setINTENA(value & 0x8000, value & 0x7FFF); }
 
     // POTxDAT
-    template <int x> u16 peekPOTxDAT();
+    template <int x> u16 peekPOTxDAT() const;
 
     // POTGOR and POTGO
-    u16 peekPOTGOR();
-    bool OUTRY() { return potgo & 0x8000; }
-    bool DATRY() { return potgo & 0x4000; }
-    bool OUTRX() { return potgo & 0x2000; }
-    bool DATRX() { return potgo & 0x1000; }
-    bool OUTLY() { return potgo & 0x0800; }
-    bool DATLY() { return potgo & 0x0400; }
-    bool OUTLX() { return potgo & 0x0200; }
-    bool DATLX() { return potgo & 0x0100; }
+    u16 peekPOTGOR() const;
+    bool OUTRY() const { return potgo & 0x8000; }
+    bool DATRY() const { return potgo & 0x4000; }
+    bool OUTRX() const { return potgo & 0x2000; }
+    bool DATRX() const { return potgo & 0x1000; }
+    bool OUTLY() const { return potgo & 0x0800; }
+    bool DATLY() const { return potgo & 0x0400; }
+    bool OUTLX() const { return potgo & 0x0200; }
+    bool DATLX() const { return potgo & 0x0100; }
     void pokePOTGO(u16 value);
 
 

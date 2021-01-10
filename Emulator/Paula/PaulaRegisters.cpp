@@ -10,7 +10,7 @@
 #include "Amiga.h"
 
 u16
-Paula::peekADKCONR()
+Paula::peekADKCONR() const
 {
     debug(AUDREG_DEBUG, "peekADKCON() = %x\n", adkcon);
     debug(DSKREG_DEBUG, "peekADKCON() = %x\n", adkcon);
@@ -50,7 +50,7 @@ Paula::pokeADKCON(u16 value)
 }
 
 u16
-Paula::peekINTREQR()
+Paula::peekINTREQR() const
 {
     u16 result = intreq;
 
@@ -116,7 +116,7 @@ Paula::setINTENA(bool setclr, u16 value)
 }
 
 template <int x> u16
-Paula::peekPOTxDAT()
+Paula::peekPOTxDAT() const
 {
     assert(x == 0 || x == 1);
 
@@ -127,7 +127,7 @@ Paula::peekPOTxDAT()
 }
 
 u16
-Paula::peekPOTGOR()
+Paula::peekPOTGOR() const
 {
     u16 result = 0;
 
@@ -179,5 +179,5 @@ template void Paula::pokeINTREQ<CPU_ACCESS>(u16 value);
 template void Paula::pokeINTREQ<AGNUS_ACCESS>(u16 value);
 template void Paula::pokeINTENA<CPU_ACCESS>(u16 value);
 template void Paula::pokeINTENA<AGNUS_ACCESS>(u16 value);
-template u16 Paula::peekPOTxDAT<0>();
-template u16 Paula::peekPOTxDAT<1>();
+template u16 Paula::peekPOTxDAT<0>() const;
+template u16 Paula::peekPOTxDAT<1>() const;
