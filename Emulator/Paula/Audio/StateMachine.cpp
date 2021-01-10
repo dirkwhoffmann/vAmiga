@@ -91,13 +91,13 @@ StateMachine<nr>::disableDMA()
 }
 
 template <int nr> bool
-StateMachine<nr>::AUDxON()
+StateMachine<nr>::AUDxON() const
 {
     return agnus.auddma<nr>();
 }
 
 template <int nr> bool
-StateMachine<nr>::AUDxIP()
+StateMachine<nr>::AUDxIP() const 
 {
     return GET_BIT(paula.intreq, 7 + nr);
 }
@@ -389,15 +389,15 @@ template void StateMachine<1>::disableDMA();
 template void StateMachine<2>::disableDMA();
 template void StateMachine<3>::disableDMA();
 
-template bool StateMachine<0>::AUDxIP();
-template bool StateMachine<1>::AUDxIP();
-template bool StateMachine<2>::AUDxIP();
-template bool StateMachine<3>::AUDxIP();
+template bool StateMachine<0>::AUDxIP() const;
+template bool StateMachine<1>::AUDxIP() const;
+template bool StateMachine<2>::AUDxIP() const;
+template bool StateMachine<3>::AUDxIP() const;
 
-template bool StateMachine<0>::AUDxON();
-template bool StateMachine<1>::AUDxON();
-template bool StateMachine<2>::AUDxON();
-template bool StateMachine<3>::AUDxON();
+template bool StateMachine<0>::AUDxON() const;
+template bool StateMachine<1>::AUDxON() const;
+template bool StateMachine<2>::AUDxON() const;
+template bool StateMachine<3>::AUDxON() const;
 
 template void StateMachine<0>::move_000_010();
 template void StateMachine<1>::move_000_010();

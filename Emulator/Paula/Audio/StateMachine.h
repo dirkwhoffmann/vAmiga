@@ -170,10 +170,10 @@ public:
 public:
 
     // Returns true if the state machine is running in DMA mode
-    bool AUDxON();
+    bool AUDxON() const;
 
     // Returns true if the audio interrupt is pending
-    bool AUDxIP();
+    bool AUDxIP() const;
 
     // Asks Paula to trigger the audio interrupt
     void AUDxIR();
@@ -182,7 +182,7 @@ public:
     void AUDxDR() { audDR = true; }
 
     // Tells Agnus to reset the DMA pointer to the block start
-    void AUDxDSR()  { agnus.reloadAUDxPT<nr>(); }
+    void AUDxDSR() { agnus.reloadAUDxPT<nr>(); }
 
     // Reloads the period counter from its backup latch
     void percntrld();

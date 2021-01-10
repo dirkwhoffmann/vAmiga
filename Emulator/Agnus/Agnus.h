@@ -652,27 +652,21 @@ public:
 
     // Returns true if the Blitter has priority over the CPU
     static bool bltpri(u16 v) { return GET_BIT(v, 10); }
-    bool bltpri() { return bltpri(dmacon); }
+    bool bltpri() const { return bltpri(dmacon); }
 
     // Returns true if a certain DMA channel is enabled
     template <int x> static bool auddma(u16 v);
-    /*
-    template <> bool auddma<0>(u16 v) { return (v & DMAEN) && (v & AUD0EN); }
-    template <> bool auddma<1>(u16 v) { return (v & DMAEN) && (v & AUD1EN); }
-    template <> bool auddma<2>(u16 v) { return (v & DMAEN) && (v & AUD2EN); }
-    template <> bool auddma<3>(u16 v) { return (v & DMAEN) && (v & AUD3EN); }
-    */
     static bool bpldma(u16 v) { return (v & DMAEN) && (v & BPLEN); }
     static bool copdma(u16 v) { return (v & DMAEN) && (v & COPEN); }
     static bool bltdma(u16 v) { return (v & DMAEN) && (v & BLTEN); }
     static bool sprdma(u16 v) { return (v & DMAEN) && (v & SPREN); }
     static bool dskdma(u16 v) { return (v & DMAEN) && (v & DSKEN); }
-    template <int x> bool auddma() { return auddma<x>(dmacon); }
-    bool bpldma() { return bpldma(dmacon); }
-    bool copdma() { return copdma(dmacon); }
-    bool bltdma() { return bltdma(dmacon); }
-    bool sprdma() { return sprdma(dmacon); }
-    bool dskdma() { return dskdma(dmacon); }
+    template <int x> bool auddma() const { return auddma<x>(dmacon); }
+    bool bpldma() const { return bpldma(dmacon); }
+    bool copdma() const { return copdma(dmacon); }
+    bool bltdma() const { return bltdma(dmacon); }
+    bool sprdma() const { return sprdma(dmacon); }
+    bool dskdma() const { return dskdma(dmacon); }
     
     void enableBplDmaOCS();
     void disableBplDmaOCS();
