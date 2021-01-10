@@ -277,10 +277,10 @@ public:
 private:
     
     // Informs about the current FIFO fill state
-    bool fifoIsEmpty() { return fifoCount == 0; }
-    bool fifoIsFull() { return fifoCount == 6; }
-    bool fifoHasWord() { return fifoCount >= 2; }
-    bool fifoCanStoreWord() { return fifoCount <= 4; }
+    bool fifoIsEmpty() const { return fifoCount == 0; }
+    bool fifoIsFull() const { return fifoCount == 6; }
+    bool fifoHasWord() const { return fifoCount >= 2; }
+    bool fifoCanStoreWord() const { return fifoCount <= 4; }
 
     // Clears the FIFO buffer
     void clearFifo();
@@ -294,7 +294,7 @@ private:
 
     
     // Returns true if the next word to read matches the specified value
-    bool compareFifo(u16 word);
+    bool compareFifo(u16 word) const;
 
     /* Emulates a data transfert between the selected drive and the FIFO
      * buffer. This function is executed periodically in serviceDiskEvent().

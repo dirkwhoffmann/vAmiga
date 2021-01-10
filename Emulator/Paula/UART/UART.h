@@ -121,15 +121,15 @@ public:
     void pokeSERPER(u16 value);
 
     // Returns the baud rate (converted to DMA cycles)
-    int rate() { return DMA_CYCLES((serper & 0x7FFF) + 1); }
+    int rate() const { return DMA_CYCLES((serper & 0x7FFF) + 1); }
 
 private:
 
     // Returns the length of a received packet (8 or 9 bits)
-    int packetLength() { return GET_BIT(serper, 15) ? 9 : 8; }
+    int packetLength() const { return GET_BIT(serper, 15) ? 9 : 8; }
 
     // Returns true if the shift register is empty
-    bool shiftRegEmpty() { return transmitShiftReg == 0; }
+    bool shiftRegEmpty() const { return transmitShiftReg == 0; }
 
     // Copies the contents of the transmit buffer to the transmit shift register
     void copyToTransmitShiftRegister();

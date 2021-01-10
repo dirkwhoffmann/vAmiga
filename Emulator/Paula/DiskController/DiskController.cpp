@@ -333,7 +333,7 @@ DiskController::writeFifo(u8 byte)
 }
 
 bool
-DiskController::compareFifo(u16 word)
+DiskController::compareFifo(u16 word) const
 {
     return fifoHasWord() && (fifo & 0xFFFF) == word;
 }

@@ -231,7 +231,7 @@ Denise::zPF(u16 prioBits)
 }
 
 bool
-Denise::spritePixelIsVisible(int hpos)
+Denise::spritePixelIsVisible(int hpos) const
 {
     u16 z = zBuffer[hpos];
     return (z & Z_SP01234567) > (z & ~Z_SP01234567);
@@ -1198,7 +1198,7 @@ Denise::recordSpriteData(unsigned nr)
 }
 
 void
-Denise::dumpBuffer(u8 *buffer, size_t length)
+Denise::dumpBuffer(const u8 *buffer, size_t length) const
 {
     const size_t cols = 16;
 
