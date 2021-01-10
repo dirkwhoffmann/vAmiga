@@ -140,7 +140,7 @@ Amiga::~Amiga()
 }
 
 void
-Amiga::prefix()
+Amiga::prefix() const
 {
     fprintf(stderr, "[%lld] (%3d,%3d) ",
             agnus.frame.nr, agnus.pos.v, agnus.pos.h);

@@ -47,7 +47,7 @@ public:
     virtual const char *getDescription() const = 0; 
     
     // Called by debug() and trace() to produce a detailed debug output
-    virtual void prefix() { };
+    virtual void prefix() const { };
 };
 
 #endif

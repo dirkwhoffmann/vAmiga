@@ -216,7 +216,7 @@ protected:
     virtual void write16 (u32 addr, u16 val) = 0;
 
     // Provides the interrupt level in IRQ_USER mode
-    virtual u16 readIrqUserVector(u8 level) { return 0; }
+    virtual u16 readIrqUserVector(u8 level) const { return 0; }
 
     // Instrution delegates
     virtual void signalReset() { };
@@ -268,43 +268,43 @@ protected:
 
 public:
 
-    u32 getD(int n) { return readD(n); }
+    u32 getD(int n) const { return readD(n); }
     void setD(int n, u32 v) { writeD(n,v); }
 
-    u32 getA(int n) { return readA(n); }
+    u32 getA(int n) const { return readA(n); }
     void setA(int n, u32 v) { writeA(n,v); }
 
-    u32 getPC() { return reg.pc; }
+    u32 getPC() const { return reg.pc; }
     void setPC(u32 val) { reg.pc = val; }
 
-    u32 getPC0() { return reg.pc0; }
+    u32 getPC0() const { return reg.pc0; }
     void setPC0(u32 val) { reg.pc0 = val; }
 
-    u16 getIRC() { return queue.irc; }
+    u16 getIRC() const { return queue.irc; }
     void setIRC(u16 val) { queue.irc = val; }
 
-    u16 getIRD() { return queue.ird; }
+    u16 getIRD() const { return queue.ird; }
     void setIRD(u16 val) { queue.ird = val; }
 
-    u8 getCCR() { return getCCR(reg.sr); }
+    u8 getCCR() const { return getCCR(reg.sr); }
     void setCCR(u8 val);
 
-    u16 getSR() { return getSR(reg.sr); }
+    u16 getSR() const { return getSR(reg.sr); }
     void setSR(u16 val);
 
-    u32 getSP() { return reg.sp; }
+    u32 getSP() const { return reg.sp; }
     void setSP(u32 val) { reg.sp = val; }
 
-    u32 getSSP() { return reg.sr.s ? reg.sp : reg.ssp; }
+    u32 getSSP() const { return reg.sr.s ? reg.sp : reg.ssp; }
     void setSSP(u32 val) { if (reg.sr.s) reg.sp = val; else reg.ssp = val; }
 
-    u32 getUSP() { return reg.sr.s ? reg.usp : reg.sp; }
+    u32 getUSP() const { return reg.sr.s ? reg.usp : reg.sp; }
     void setUSP(u32 val) { if (reg.sr.s) reg.usp = val; else reg.sp = val; }
 
     void setSupervisorMode(bool enable);
 
-    u8 getCCR(const StatusRegister &sr);
-    u16 getSR(const StatusRegister &sr);
+    u8 getCCR(const StatusRegister &sr) const;
+    u16 getSR(const StatusRegister &sr) const;
 
 private:
 
@@ -313,9 +313,9 @@ private:
 
 protected:
 
-    template<Size S = Long> u32 readD(int n);
-    template<Size S = Long> u32 readA(int n);
-    template<Size S = Long> u32 readR(int n);
+    template<Size S = Long> u32 readD(int n) const;
+    template<Size S = Long> u32 readA(int n) const;
+    template<Size S = Long> u32 readR(int n) const;
     template<Size S = Long> void writeD(int n, u32 v);
     template<Size S = Long> void writeA(int n, u32 v);
     template<Size S = Long> void writeR(int n, u32 v);
@@ -344,7 +344,7 @@ public:
 
 public:
 
-    u8 getIPL() { return ipl; }
+    u8 getIPL() const { return ipl; }
     void setIPL(u8 val);
     
 private:
@@ -353,7 +353,7 @@ private:
     void pollIrq() { reg.ipl = ipl; }
     
     // Selects the IRQ vector to branch to
-    u16 getIrqVector(u8 level);
+    u16 getIrqVector(u8 level) const;
     
 #include "MoiraInit.h"
 #include "MoiraALU.h"

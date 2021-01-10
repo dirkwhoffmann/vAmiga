@@ -208,6 +208,7 @@ Moira::execIrqException(u8 level)
     reg.sp -= 6;
     writeM <MEM_DATA, Word> (reg.sp + 4, reg.pc & 0xFFFF);
 
+    sync(4);
     queue.ird = getIrqVector(level);
     
     sync(4);

@@ -78,7 +78,7 @@ public:
 
     AmigaComponent(Amiga& ref);
 
-    void prefix() override;
+    void prefix() const override;
 };
 
 #endif

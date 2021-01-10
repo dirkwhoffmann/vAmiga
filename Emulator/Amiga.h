@@ -174,7 +174,7 @@ public:
 
     const char *getDescription() const override { return "Amiga"; }
 
-    void prefix() override;
+    void prefix() const override;
 
     void reset(bool hard);
     void hardReset() { reset(true); }
