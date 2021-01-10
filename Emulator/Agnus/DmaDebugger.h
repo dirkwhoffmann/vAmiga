@@ -41,7 +41,7 @@ public:
 
     DmaDebugger(Amiga &ref);
 
-    const char *getDescription() override { return "DmaDebugger"; }
+    const char *getDescription() const override { return "DmaDebugger"; }
 
     void _reset(bool hard) override { }
 

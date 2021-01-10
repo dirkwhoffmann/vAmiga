@@ -17,7 +17,7 @@ struct FSFileListBlock : FSBlock {
     FSFileListBlock(FSPartition &p, u32 nr);
     ~FSFileListBlock();
 
-    const char *getDescription() override { return "FSFileListBlock"; }
+    const char *getDescription() const override { return "FSFileListBlock"; }
 
     
     //

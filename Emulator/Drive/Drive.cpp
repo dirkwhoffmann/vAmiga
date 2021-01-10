@@ -21,7 +21,7 @@ Drive::Drive(Amiga& ref, unsigned n) : AmigaComponent(ref), nr(n)
 }
 
 const char *
-Drive::getDescription()
+Drive::getDescription() const
 {
     assert(nr <= 3);
     return nr == 0 ? "Df0" : nr == 1 ? "Df1" : nr == 2 ? "Df2" : "Df3";

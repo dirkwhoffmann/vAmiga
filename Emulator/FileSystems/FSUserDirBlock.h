@@ -18,7 +18,7 @@ struct FSUserDirBlock : FSBlock {
     FSUserDirBlock(FSPartition &p, u32 nr, const char *name);
     ~FSUserDirBlock();
     
-    const char *getDescription() override { return "FSUserDirBlock"; }
+    const char *getDescription() const override { return "FSUserDirBlock"; }
 
     
     //

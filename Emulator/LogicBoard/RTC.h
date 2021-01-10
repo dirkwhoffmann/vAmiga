@@ -48,7 +48,7 @@ public:
     
     RTC(Amiga& ref);
 
-    const char *getDescription() override { return "RTC"; }
+    const char *getDescription() const override { return "RTC"; }
 
 private:
     

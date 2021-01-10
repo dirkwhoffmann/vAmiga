@@ -190,7 +190,7 @@ public:
     Memory(Amiga& ref);
     ~Memory();
 
-    const char *getDescription() override { return "Memory"; }
+    const char *getDescription() const override { return "Memory"; }
     
 private:
     

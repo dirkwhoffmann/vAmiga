@@ -86,7 +86,7 @@ public:
     
     Copper(Amiga& ref);
 
-    const char *getDescription() override { return "Copper"; }
+    const char *getDescription() const override { return "Copper"; }
     
     void _reset(bool hard) override;
 

@@ -38,7 +38,7 @@ public:
 
     HDFFile();
     
-    const char *getDescription() override { return "HDF"; }
+    const char *getDescription() const override { return "HDF"; }
 
     
     //

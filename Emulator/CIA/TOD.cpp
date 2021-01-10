@@ -15,7 +15,7 @@ TOD::TOD(CIA *cia, Amiga& ref) : AmigaComponent(ref)
 }
 
 const char *
-TOD::getDescription()
+TOD::getDescription() const
 {
     return cia->isCIAA() ? "TODA" : "TODB";
 }

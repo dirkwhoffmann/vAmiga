@@ -14,7 +14,7 @@ Joystick::Joystick(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pr
 }
 
 const char *
-Joystick::getDescription()
+Joystick::getDescription() const
 {
     return port.nr == PORT_1 ? "Joystick1" : "Joystick2";
 }

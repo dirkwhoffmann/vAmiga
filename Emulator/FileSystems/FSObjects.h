@@ -38,7 +38,7 @@ struct FSName : FSString {
     FSName(const char *cString) : FSString(cString, 30) {rectify(); }
     FSName(const u8 *bcplString) : FSString(bcplString, 30) { rectify(); }
 
-    const char *getDescription() override { return "FSName"; }
+    const char *getDescription() const override { return "FSName"; }
 
     // Scans the given name and replaces invalid characters by dummy symbols
     void rectify();
@@ -49,7 +49,7 @@ struct FSComment : FSString {
     FSComment(const char *cString) : FSString(cString, 91) { }
     FSComment(const u8 *bcplString) : FSString(bcplString, 91) { }
 
-    const char *getDescription() override { return "FSComment"; }
+    const char *getDescription() const override { return "FSComment"; }
 };
 
 struct FSTime : AmigaObject {
@@ -61,7 +61,7 @@ struct FSTime : AmigaObject {
     FSTime(time_t t);
     FSTime(const u8 *p);
 
-    const char *getDescription() override { return "FSTime"; }
+    const char *getDescription() const override { return "FSTime"; }
 
     time_t time();
     void write(u8 *p);

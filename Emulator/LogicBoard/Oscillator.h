@@ -53,7 +53,7 @@ public:
     
     Oscillator(Amiga& ref);
 
-    const char *getDescription() override;
+    const char *getDescription() const override;
 
 private:
     

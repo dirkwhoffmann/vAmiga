@@ -39,7 +39,7 @@ public:
 
     ExtendedRomFile();
 
-    const char *getDescription() override { return "ExtendedRom"; }
+    const char *getDescription() const override { return "ExtendedRom"; }
 
 
     //

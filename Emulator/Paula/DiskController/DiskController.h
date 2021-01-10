@@ -95,7 +95,7 @@ public:
     
     DiskController(Amiga& ref);
 
-    const char *getDescription() override { return "DiskController"; }
+    const char *getDescription() const override { return "DiskController"; }
     
     void _reset(bool hard) override;
     

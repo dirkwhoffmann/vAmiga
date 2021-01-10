@@ -52,7 +52,7 @@ template <class T, size_t capacity> struct RingBuffer
     // Querying the fill status
     //
 
-    size_t cap() { return capacity; }
+    size_t cap() const { return capacity; }
     size_t count() const { return (capacity + w - r) % capacity; }
     double fillLevel() const { return (double)count() / capacity; }
     bool isEmpty() const { return r == w; }
@@ -73,12 +73,12 @@ template <class T, size_t capacity> struct RingBuffer
     // Reading and writing elements
     //
 
-    T& current()
+    const T& current() const
     {
         return elements[r];
     }
 
-    T& current(int offset)
+    const T& current(int offset) const
     {
         return elements[(r + offset) % capacity];
     }

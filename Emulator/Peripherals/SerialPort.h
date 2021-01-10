@@ -41,7 +41,7 @@ public:
 
     SerialPort(Amiga& ref);
 
-    const char *getDescription() override { return "SerialPort"; }
+    const char *getDescription() const override { return "SerialPort"; }
     
 private:
     

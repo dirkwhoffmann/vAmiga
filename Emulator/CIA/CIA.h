@@ -535,7 +535,7 @@ public:
     
     CIAA(Amiga& ref);
     
-    const char *getDescription() override { return "CIAA"; }
+    const char *getDescription() const override { return "CIAA"; }
 
 private:
     
@@ -572,7 +572,7 @@ public:
     
     CIAB(Amiga& ref);
     
-    const char *getDescription() override { return "CIAB"; }
+    const char *getDescription() const override { return "CIAB"; }
 
 private:
         

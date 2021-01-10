@@ -15,6 +15,12 @@ ControlPort::ControlPort(Amiga& ref, PortNr portNr) : AmigaComponent(ref), nr(po
     subComponents = vector<HardwareComponent *> { &mouse, &joystick };
 }
 
+const char *
+ControlPort::getDescription() const
+{
+    return nr == PORT_1 ? "Port1" : "Port2";
+}
+    
 void
 ControlPort::_inspect()
 {

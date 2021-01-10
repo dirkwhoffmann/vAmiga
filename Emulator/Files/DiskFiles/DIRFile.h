@@ -33,7 +33,7 @@ public:
     
     DIRFile();
     
-    const char *getDescription() override { return "DIR"; }
+    const char *getDescription() const override { return "DIR"; }
         
     
     //

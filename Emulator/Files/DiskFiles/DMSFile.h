@@ -36,7 +36,7 @@ public:
     
     DMSFile();
     
-    const char *getDescription() override { return "DMS"; }
+    const char *getDescription() const override { return "DMS"; }
         
     
     //

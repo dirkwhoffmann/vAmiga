@@ -56,7 +56,7 @@ public:
     
     RomFile();
     
-    const char *getDescription() override { return "ROM"; }
+    const char *getDescription() const override { return "ROM"; }
         
     
     //

@@ -388,7 +388,7 @@ public:
     
     Agnus(Amiga& ref);
 
-    const char *getDescription() override { return "Agnus"; }
+    const char *getDescription() const override { return "Agnus"; }
 
 private:
     

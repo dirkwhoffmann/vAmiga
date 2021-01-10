@@ -17,7 +17,7 @@ struct FSBitmapBlock : FSBlock {
     FSBitmapBlock(FSPartition &p, u32 nr);
     ~FSBitmapBlock();
      
-    const char *getDescription() override { return "FSBitmapBlock"; }
+    const char *getDescription() const override { return "FSBitmapBlock"; }
 
     
     //

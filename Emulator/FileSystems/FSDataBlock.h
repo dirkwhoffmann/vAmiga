@@ -45,7 +45,7 @@ struct OFSDataBlock : FSDataBlock {
 
     OFSDataBlock(FSPartition &p, u32 nr);
 
-    const char *getDescription() override { return "OFSDataBlock"; }    
+    const char *getDescription() const override { return "OFSDataBlock"; }
     FSBlockType type() override { return FS_DATA_BLOCK_OFS; }
     FSItemType itemType(u32 byte) override;
     void dump() override;
@@ -76,7 +76,7 @@ struct FFSDataBlock : FSDataBlock {
 
     FFSDataBlock(FSPartition &p, u32 nr);
 
-    const char *getDescription() override { return "FFSDataBlock"; }
+    const char *getDescription() const override { return "FFSDataBlock"; }
     FSBlockType type() override { return FS_DATA_BLOCK_FFS; }
     FSItemType itemType(u32 byte) override;
     void dump() override;

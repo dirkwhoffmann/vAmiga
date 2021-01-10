@@ -50,7 +50,7 @@ public:
     
     Joystick(Amiga& ref, ControlPort& pref);
 
-    const char *getDescription() override;
+    const char *getDescription() const override;
     
 private:
     

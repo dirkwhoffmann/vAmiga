@@ -36,7 +36,7 @@ public:
     
     MessageQueue();
     
-    const char *getDescription() override { return "MessageQueue"; }
+    const char *getDescription() const override { return "MessageQueue"; }
 
 private:
     

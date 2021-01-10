@@ -15,7 +15,7 @@ Mouse::Mouse(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
 }
 
 const char *
-Mouse::getDescription()
+Mouse::getDescription() const
 {
     return port.nr == PORT_1 ? "Mouse1" : "Mouse2";
 }

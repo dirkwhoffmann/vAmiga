@@ -81,7 +81,7 @@ public:
 
     Drive(Amiga& ref, unsigned nr);
     
-    const char *getDescription() override;
+    const char *getDescription() const override;
     long getNr() { return nr; }
 
 private:

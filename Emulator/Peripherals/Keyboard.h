@@ -48,7 +48,7 @@ public:
     
     Keyboard(Amiga& ref);
     
-    const char *getDescription() override { return "Keyboard"; }
+    const char *getDescription() const override { return "Keyboard"; }
 
 private:
     

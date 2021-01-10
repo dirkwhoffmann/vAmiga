@@ -15,7 +15,7 @@ StateMachine<nr>::StateMachine(Amiga& ref) : AmigaComponent(ref)
 }
 
 template <int nr> const char *
-StateMachine<nr>::getDescription()
+StateMachine<nr>::getDescription() const
 {
     switch (nr) {
         case 0: return "StateMachine 0";

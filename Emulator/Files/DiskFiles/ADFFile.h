@@ -46,7 +46,7 @@ public:
 
     ADFFile();
     
-    const char *getDescription() override { return "ADF"; }
+    const char *getDescription() const override { return "ADF"; }
 
     static ADFFile *makeWithType(DiskDiameter t, DiskDensity d);
     static ADFFile *makeWithDisk(class Disk *disk);

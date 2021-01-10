@@ -53,7 +53,7 @@ public:
     
     FSPartition(FSDevice &ref);
     
-    const char *getDescription() override { return "FSPartition"; }
+    const char *getDescription() const override { return "FSPartition"; }
 
     // Prints a summary about this partition (called by FSDevice::info)
     void info();

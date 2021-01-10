@@ -54,7 +54,7 @@ public:
     
     ControlPort(Amiga& ref, PortNr nr);
 
-    const char *getDescription() override { return nr == PORT_1 ? "Port1" : "Port2"; }
+    const char *getDescription() const override;
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
 

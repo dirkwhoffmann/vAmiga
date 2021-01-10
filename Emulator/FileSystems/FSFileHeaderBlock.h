@@ -17,7 +17,7 @@ struct FSFileHeaderBlock : FSBlock {
     FSFileHeaderBlock(FSPartition &p, u32 nr);
     FSFileHeaderBlock(FSPartition &p, u32 nr, const char *name);
 
-    const char *getDescription() override { return "FSFileHeaderBlock"; }
+    const char *getDescription() const override { return "FSFileHeaderBlock"; }
 
     
     //

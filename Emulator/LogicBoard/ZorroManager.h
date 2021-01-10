@@ -39,7 +39,7 @@ public:
     
     ZorroManager(Amiga& ref);
 
-    const char *getDescription() override { return "Zorro"; }
+    const char *getDescription() const override { return "Zorro"; }
 
 private:
     

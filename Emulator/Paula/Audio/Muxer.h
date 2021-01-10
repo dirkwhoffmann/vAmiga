@@ -118,7 +118,7 @@ public:
     Muxer(Amiga& ref);
     ~Muxer();
 
-    const char *getDescription() override { return "Muxer"; }
+    const char *getDescription() const override { return "Muxer"; }
     void _reset(bool hard) override;
     
     // Resets the output buffer and the two audio filters

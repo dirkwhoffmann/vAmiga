@@ -42,7 +42,7 @@ public:
     
     EXTFile();
     
-    const char *getDescription() override { return "EXT"; }
+    const char *getDescription() const override { return "EXT"; }
     
     
     //

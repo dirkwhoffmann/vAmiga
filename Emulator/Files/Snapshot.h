@@ -70,7 +70,7 @@ public:
     Snapshot();
     Snapshot(size_t capacity);
     
-    const char *getDescription() override { return "Snapshot"; }
+    const char *getDescription() const override { return "Snapshot"; }
     
     bool setCapacity(size_t size);
     

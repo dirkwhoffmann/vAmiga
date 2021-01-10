@@ -92,7 +92,7 @@ public:
     PixelEngine(Amiga& ref);
     ~PixelEngine();
 
-    const char *getDescription() override { return "PixelEngine"; }
+    const char *getDescription() const override { return "PixelEngine"; }
 
     
     //

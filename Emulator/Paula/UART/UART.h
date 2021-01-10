@@ -48,7 +48,7 @@ public:
     
     UART(Amiga& ref);
     
-    const char *getDescription() override { return "UART"; }
+    const char *getDescription() const override { return "UART"; }
 
 private:
     

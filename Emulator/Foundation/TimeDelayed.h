@@ -43,7 +43,7 @@ public:
     
     TimeDelayed() : TimeDelayed(nullptr) { };
           
-    const char *getDescription() { return "TimeDelayed"; }
+    const char *getDescription() const { return "TimeDelayed"; }
     
     // Sets the reference clock
     void setClock(i64 *clock) { this->clock = clock; }

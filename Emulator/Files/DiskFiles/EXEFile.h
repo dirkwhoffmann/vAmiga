@@ -36,7 +36,7 @@ public:
     
     EXEFile();
     
-    const char *getDescription() override { return "EXE"; }
+    const char *getDescription() const override { return "EXE"; }
         
     
     //
