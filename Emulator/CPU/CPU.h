@@ -152,10 +152,10 @@ private:
 public:
 
     // Returns the clock in CPU cycles
-    CPUCycle getCpuClock() { return getClock(); }
+    CPUCycle getCpuClock() const { return getClock(); }
 
     // Returns the clock in master cycles
-    Cycle getMasterClock() { return CPU_CYCLES(getClock()); }
+    Cycle getMasterClock() const { return CPU_CYCLES(getClock()); }
 
     // Delays the CPU by a certain amout of master cycles
     void addWaitStates(Cycle cycles) { clock += AS_CPU_CYCLES(cycles); }

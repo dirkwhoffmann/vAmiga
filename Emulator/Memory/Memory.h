@@ -319,15 +319,15 @@ public:
 public:
 
     // Check if a certain Ram is present
-    bool hasChipRam() { return chip != nullptr; }
-    bool hasSlowRam() { return slow != nullptr; }
-    bool hasFastRam() { return fast != nullptr; }
+    bool hasChipRam() const { return chip != nullptr; }
+    bool hasSlowRam() const { return slow != nullptr; }
+    bool hasFastRam() const { return fast != nullptr; }
 
     // Returns the size of a certain Ram in bytes
-    size_t chipRamSize() { return config.chipSize; }
-    size_t slowRamSize() { return config.slowSize; }
-    size_t fastRamSize() { return config.fastSize; }
-    size_t ramSize() { return config.chipSize + config.slowSize + config.fastSize; }
+    size_t chipRamSize() const { return config.chipSize; }
+    size_t slowRamSize() const { return config.slowSize; }
+    size_t fastRamSize() const { return config.fastSize; }
+    size_t ramSize() const { return config.chipSize + config.slowSize + config.fastSize; }
 
 private:
     

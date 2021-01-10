@@ -253,7 +253,7 @@ protected:
 
 public:
 
-    i64 getClock() { return clock; }
+    i64 getClock() const { return clock; }
     void setClock(i64 val) { clock = val; }
 
 protected:
