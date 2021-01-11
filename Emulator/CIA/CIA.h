@@ -259,8 +259,8 @@ public:
     
     CIA(int n, Amiga& ref);
 
-    bool isCIAA() { return nr == 0; }
-    bool isCIAB() { return nr == 1; }
+    bool isCIAA() const { return nr == 0; }
+    bool isCIAB() const { return nr == 1; }
 
     void _reset(bool hard) override;
     
@@ -276,7 +276,7 @@ public:
     long getConfigItem(Option option);
     bool setConfigItem(Option option, long value) override;
     
-    bool getEClockSyncing() { return config.eClockSyncing; }
+    bool getEClockSyncing() const { return config.eClockSyncing; }
 
 private:
     
@@ -375,7 +375,8 @@ public:
     
     // Reads a value from a CIA register without causing side effects
     u8 spypeek(u16 addr);
-    
+    u8 spypeek(u16 addr) const;
+
     // Writes a value into a CIA register
     void poke(u16 addr, u8 value);
     
@@ -400,19 +401,19 @@ private:
     virtual void updatePA() = 0;
     
     // Returns the value driving port A from inside the chip
-    virtual u8 portAinternal() = 0;
+    virtual u8 portAinternal() const = 0;
     
     // Returns the value driving port A from outside the chip
-    virtual u8 portAexternal() = 0;
+    virtual u8 portAexternal() const = 0;
     
     // Computes the value we currently see at port B
     virtual void updatePB() = 0;
     
     // Values driving port B from inside the chip
-    virtual u8 portBinternal() = 0;
+    virtual u8 portBinternal() const = 0;
     
     // Values driving port B from outside the chip
-    virtual u8 portBexternal() = 0;
+    virtual u8 portBexternal() const = 0;
     
 protected:
     
@@ -512,16 +513,16 @@ public:
     void wakeUp(Cycle targetCycle);
     
     // Returns true if the CIA is in idle state
-    bool isSleeping() { return sleeping; }
+    bool isSleeping() const { return sleeping; }
     
     // Returns true if the CIA is awake
-    bool isAwake() { return !sleeping; }
+    bool isAwake() const { return !sleeping; }
         
     // The CIA is idle since this number of cycles
-    CIACycle idleSince();
+    CIACycle idleSince() const;
     
     // Total number of cycles the CIA was idle
-    CIACycle idleTotal() { return idleCycles; }
+    CIACycle idleTotal() const { return idleCycles; }
 };
 
 
@@ -545,11 +546,11 @@ private:
     void pullDownInterruptLine() override;
     void releaseInterruptLine() override;
     
-    u8 portAinternal() override;
-    u8 portAexternal() override;
+    u8 portAinternal() const override;
+    u8 portAexternal() const override;
     void updatePA() override;
-    u8 portBinternal() override;
-    u8 portBexternal() override;
+    u8 portBinternal() const override;
+    u8 portBexternal() const override;
     void updatePB() override;
     
 public:
@@ -579,11 +580,11 @@ private:
     void pullDownInterruptLine() override;
     void releaseInterruptLine() override;
     
-    u8 portAinternal() override;
-    u8 portAexternal() override;
+    u8 portAinternal() const override;
+    u8 portAexternal() const override;
     void updatePA() override;
-    u8 portBinternal() override;
-    u8 portBexternal() override;
+    u8 portBinternal() const override;
+    u8 portBexternal() const override;
     void updatePB() override;
 };
 

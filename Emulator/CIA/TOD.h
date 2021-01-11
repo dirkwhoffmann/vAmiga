@@ -63,7 +63,7 @@ class TOD : public AmigaComponent {
     bool stopped;
     
     /* Indicates if tod time matches the alarm value. This value is read in
-     * checkForInterrupt() for edge detection.
+     * checkIrq() for edge detection.
      */
     bool matching;
     
@@ -129,22 +129,22 @@ public:
     //
     
     // Returns the counter's high byte (bits 16 - 23).
-    u8 getCounterHi(Cycle timeStamp = INT64_MAX);
+    u8 getCounterHi(Cycle timeStamp = INT64_MAX) const;
 
     // Returns the counter's intermediate byte (bits 8 - 15).
-    u8 getCounterMid(Cycle timeStamp = INT64_MAX);
+    u8 getCounterMid(Cycle timeStamp = INT64_MAX) const;
     
     // Returns the counter's low byte (bits 0 - 7).
-    u8 getCounterLo(Cycle timeStamp = INT64_MAX);
+    u8 getCounterLo(Cycle timeStamp = INT64_MAX) const;
 
     // Returns the alarm value's high byte (bits 16 - 23).
-    u8 getAlarmHi();
+    u8 getAlarmHi() const;
 
     // Returns the alarm value's intermediate byte (bits 8 - 15).
-    u8 getAlarmMid();
+    u8 getAlarmMid() const;
 
     // Returns the alarm value's low byte (bits 0 - 7).
-    u8 getAlarmLo();
+    u8 getAlarmLo() const;
 
     // Sets the counter's high byte (bits 16 - 23).
     void setCounterHi(u8 value);
@@ -179,10 +179,8 @@ private:
     bool incLoNibble(u8 &counter);
     bool incHiNibble(u8 &counter);
 
-    /* Updates variable 'matching'. If a positive edge occurs, the connected
-     * CIA is requested to trigger an interrupt.
-     */
-    void checkForInterrupt();
+    // Updates variable 'matching'. A positive edge triggers an interrupt.
+    void checkIrq();
 
     // Freezes the counter
     void freeze() { if (!frozen) { latch.value = tod.value; frozen = true; } }

@@ -709,7 +709,7 @@ CIA::wakeUp(Cycle targetCycle)
 }
 
 CIACycle
-CIA::idleSince()
+CIA::idleSince() const
 {
     return isAwake() ? 0 : AS_CIA_CYCLES(agnus.clock - sleepCycle);
 }
@@ -797,13 +797,13 @@ CIAA::updatePA()
 }
 
 u8
-CIAA::portAinternal()
+CIAA::portAinternal() const
 {
     return PRA;
 }
 
 u8
-CIAA::portAexternal()
+CIAA::portAexternal() const
 {
     u8 result;
     
@@ -849,13 +849,13 @@ CIAA::updatePB()
 }
 
 u8
-CIAA::portBinternal()
+CIAA::portBinternal() const
 {
     return PRB;
 }
 
 u8
-CIAA::portBexternal()
+CIAA::portBexternal() const
 {
     return 0xFF;
 }
@@ -908,13 +908,13 @@ CIAB::releaseInterruptLine()
 //                                 -------
 
 u8
-CIAB::portAinternal()
+CIAB::portAinternal() const
 {
     return PRA;
 }
 
 u8
-CIAB::portAexternal()
+CIAB::portAexternal() const
 {
     u8 result = 0xFF;
 
@@ -978,7 +978,7 @@ CIAB::updatePA()
 //            -------
 
 u8
-CIAB::portBinternal()
+CIAB::portBinternal() const
 {
     u8 result = PRB;
     
@@ -994,7 +994,7 @@ CIAB::portBinternal()
 }
 
 u8
-CIAB::portBexternal()
+CIAB::portBexternal() const
 {
     return 0xFF;
 }

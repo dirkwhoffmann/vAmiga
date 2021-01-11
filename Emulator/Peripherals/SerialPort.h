@@ -113,20 +113,20 @@ private:
 public:
 
     // Reads the current value of a certain port pin
-    bool getPin(int nr);
+    bool getPin(int nr) const;
 
     // Modifies the value of a certain port pin
     void setPin(int nr, bool value);
 
     // Convenience wrappers
-    bool getTXD() { return getPin(2); }
-    bool getRXD() { return getPin(3); }
-    bool getRTS() { return getPin(4); }
-    bool getCTS() { return getPin(5); }
-    bool getDSR() { return getPin(6); }
-    bool getCD() { return getPin(8); }
-    bool getDTR() { return getPin(20); }
-    bool getRI() { return getPin(22); }
+    bool getTXD() const { return getPin(2); }
+    bool getRXD() const { return getPin(3); }
+    bool getRTS() const { return getPin(4); }
+    bool getCTS() const { return getPin(5); }
+    bool getDSR() const { return getPin(6); }
+    bool getCD() const { return getPin(8); }
+    bool getDTR() const { return getPin(20); }
+    bool getRI() const { return getPin(22); }
 
     void setTXD(bool value) { setPin(2, value); }
     void setRXD(bool value) { setPin(3, value); }
