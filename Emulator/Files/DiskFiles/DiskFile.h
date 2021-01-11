@@ -56,16 +56,16 @@ public:
 public:
 
     // Reads a single data byte
-    virtual u8 readByte(long b, long offset);
-    virtual u8 readByte(long t, long s, long offset);
+    virtual u8 readByte(long b, long offset) const;
+    virtual u8 readByte(long t, long s, long offset) const;
 
     // Fills a buffer with the data of a single sector
-    virtual void readSector(u8 *dst, long b);
-    virtual void readSector(u8 *dst, long t, long s);
+    virtual void readSector(u8 *dst, long b) const;
+    virtual void readSector(u8 *dst, long t, long s) const;
 
     // Writes a string representation into the provided buffer
-    virtual void readSectorHex(char *dst, long b, size_t count);
-    virtual void readSectorHex(char *dst, long t, long s, size_t count);
+    virtual void readSectorHex(char *dst, long b, size_t count) const;
+    virtual void readSectorHex(char *dst, long t, long s, size_t count) const;
 
     
     //

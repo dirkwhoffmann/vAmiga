@@ -321,7 +321,7 @@ public:
 public:
         
     // Reads a single byte from a block
-    u8 readByte(u32 block, u32 offset);
+    u8 readByte(u32 block, u32 offset) const;
 
     // Predicts the type of a block by analyzing its number and data (DEPRECATED)
     FSBlockType predictBlockType(u32 nr, const u8 *buffer);

@@ -756,7 +756,7 @@ FSDevice::seekCorruptedBlock(u32 n)
 }
 
 u8
-FSDevice::readByte(u32 block, u32 offset)
+FSDevice::readByte(u32 block, u32 offset) const
 {
     assert(offset < bsize);
 

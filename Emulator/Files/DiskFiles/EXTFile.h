@@ -66,8 +66,8 @@ public:
     long numSides() const override { return 2; }
     long numCyls() const override { return 80; }
     long numSectors() const override { return 11; }
-    void readSector(u8 *target, long s) override { assert(false); }
-    void readSector(u8 *target, long t, long s) override { assert(false); }
+    void readSector(u8 *target, long s) const override { assert(false); }
+    void readSector(u8 *target, long t, long s) const override { assert(false); }
 };
 
 #endif

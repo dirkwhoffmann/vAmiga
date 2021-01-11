@@ -64,8 +64,8 @@ public:
     long numSectors() const override { return adf->numSectors(); }
     BootBlockType bootBlockType() const override { return adf->bootBlockType(); }
     const char *bootBlockName() const override { return adf->bootBlockName(); }
-    void readSector(u8 *target, long s) override { return adf->readSector(target, s); }
-    void readSector(u8 *target, long t, long s) override { return adf->readSector(target, t, s); }
+    void readSector(u8 *target, long s) const override { return adf->readSector(target, s); }
+    void readSector(u8 *target, long t, long s) const override { return adf->readSector(target, t, s); }
     bool encodeDisk(class Disk *disk) override { return adf->encodeDisk(disk); }
 };
 
