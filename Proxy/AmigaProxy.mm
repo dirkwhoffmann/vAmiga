@@ -1937,189 +1937,230 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return releaseBuild();
 }
+
 - (BOOL) debugMode
 {
     return wrapper->amiga->inDebugMode();
 }
+
 - (void) setDebug:(BOOL)enable
 {
     wrapper->amiga->setDebug(enable);
 }
+
 - (void) enableDebugging
 {
     wrapper->amiga->enableDebugMode();
 }
+
 - (void) disableDebugging
 {
     wrapper->amiga->disableDebugMode();
 }
+
 - (void) setInspectionTarget:(EventID)id
 {
     wrapper->amiga->setInspectionTarget(id);
 }
+
 - (void) clearInspectionTarget
 {
     wrapper->amiga->clearInspectionTarget();
 }
+
 - (BOOL) isReady:(ErrorCode *)error
 {
     return wrapper->amiga->isReady(error);
 }
+
 - (BOOL) isReady
 {
     return wrapper->amiga->isReady();
 }
+
 - (void) powerOn
 {
     wrapper->amiga->powerOn();
 }
+
 - (void) powerOff
 {
     wrapper->amiga->powerOff();
 }
+
 - (void) hardReset
 {
     wrapper->amiga->reset(true);
 }
+
 - (void) softReset
 {
     wrapper->amiga->reset(false);
 }
+
 - (void) dump
 {
     wrapper->amiga->dump();
 }
+
 - (AmigaInfo) getInfo
 {
     return wrapper->amiga->getInfo();
 }
+
 - (BOOL) isPoweredOn
 {
     return wrapper->amiga->isPoweredOn();
 }
+
 - (BOOL) isPoweredOff
 {
     return wrapper->amiga->isPoweredOff();
 }
+
 - (BOOL) isRunning
 {
     return wrapper->amiga->isRunning();
 }
+
 - (BOOL) isPaused
 {
     return wrapper->amiga->isPaused();
 }
+
 - (void) run
 {
     wrapper->amiga->run();
 }
+
 - (void) pause
 {
     wrapper->amiga->pause();
 }
+
 - (void) suspend
 {
     return wrapper->amiga->suspend();
 }
+
 - (void) resume
 {
     return wrapper->amiga->resume();
 }
+
 - (void) requestAutoSnapshot
 {
     wrapper->amiga->requestAutoSnapshot();
 }
+
 - (void) requestUserSnapshot
 {
     wrapper->amiga->requestUserSnapshot();
 }
+
 - (SnapshotProxy *) latestAutoSnapshot
 {
     Snapshot *snapshot = wrapper->amiga->latestAutoSnapshot();
     return [SnapshotProxy make:snapshot];
 }
+
 - (SnapshotProxy *) latestUserSnapshot
 {
     Snapshot *snapshot = wrapper->amiga->latestUserSnapshot();
     return [SnapshotProxy make:snapshot];
 }
+
 - (void) loadFromSnapshot:(SnapshotProxy *)proxy
 {
     Snapshot *snapshot = (Snapshot *)([proxy wrapper]->file);
     wrapper->amiga->loadFromSnapshotSafe(snapshot);
 }
-- (AmigaConfiguration) config
-{
-    return wrapper->amiga->getConfig();
-}
+
 - (NSInteger) getConfig:(Option)opt
 {
     return wrapper->amiga->getConfigItem(opt);
 }
+
 - (NSInteger) getConfig:(Option)opt id:(NSInteger)id
 {
     return wrapper->amiga->getConfigItem(opt, id);
 }
+
 - (NSInteger) getConfig:(Option)opt drive:(NSInteger)id
 {
     return wrapper->amiga->getConfigItem(opt, (long)id);
 }
+
 - (BOOL) configure:(Option)opt value:(NSInteger)val
 {
     return wrapper->amiga->configure(opt, val);
 }
+
 - (BOOL) configure:(Option)opt enable:(BOOL)val
 {
     return wrapper->amiga->configure(opt, val ? 1 : 0);
 }
+
 - (BOOL) configure:(Option)opt id:(NSInteger)id value:(NSInteger)val
 {
     return wrapper->amiga->configure(opt, id, val);
 }
+
 - (BOOL) configure:(Option)opt id:(NSInteger)id enable:(BOOL)val
 {
     return wrapper->amiga->configure(opt, id, val ? 1 : 0);
 }
+
 - (BOOL) configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val
 {
     return wrapper->amiga->configure(opt, (long)id, val);
 }
+
 - (BOOL) configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val
 {
     return wrapper->amiga->configure(opt, (long)id, val ? 1 : 0);
 }
+
 - (void) addListener:(const void *)sender function:(Callback *)func
 {
     wrapper->amiga->messageQueue.addListener(sender, func);
 }
+
 - (void) removeListener:(const void *)sender
 {
     wrapper->amiga->messageQueue.removeListener(sender);
 }
+
 - (Message)message
 {
     return wrapper->amiga->messageQueue.get();
 }
+
 - (void) stopAndGo
 {
     wrapper->amiga->stopAndGo();
 }
+
 - (void) stepInto
 {
     wrapper->amiga->stepInto();
 }
+
 - (void) stepOver
 {
     wrapper->amiga->stepOver();
 }
+
 - (BOOL) warp
 {
     return wrapper->amiga->inWarpMode();
 }
+
 - (void) warpOn
 {
     wrapper->amiga->setWarp(true);
 }
+
 - (void) warpOff
 {
     wrapper->amiga->setWarp(false);

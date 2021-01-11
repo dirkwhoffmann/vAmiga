@@ -191,35 +191,6 @@ Amiga::_reset(bool hard)
     runLoopCtrl = 0;
 }
 
-AmigaConfiguration
-Amiga::getConfig() const
-{
-    AmigaConfiguration config;
-
-    config.ciaA = ciaA.getConfig();
-    config.ciaB = ciaB.getConfig();
-    config.rtc = rtc.getConfig();
-    config.audio = paula.muxer.getConfig();
-    config.mem = mem.getConfig();
-    config.agnus = agnus.getConfig();
-    config.denise = denise.getConfig();
-    config.serialPort = serialPort.getConfig();
-    config.keyboard = keyboard.getConfig();
-    config.blitter = agnus.blitter.getConfig();
-    config.diskController = paula.diskController.getConfig();
-    config.df0 = df0.getConfig();
-    config.df1 = df1.getConfig();
-    config.df2 = df2.getConfig();
-    config.df3 = df3.getConfig();
-
-    // Assure both CIAs are configured equally
-    assert(config.ciaA.revision == config.ciaB.revision);
-    assert(config.ciaA.todBug == config.ciaB.todBug);
-    assert(config.ciaA.eClockSyncing == config.ciaB.eClockSyncing);
-
-    return config;
-}
-
 long
 Amiga::getConfigItem(Option option) const
 {
@@ -368,26 +339,11 @@ Amiga::_inspect()
 void
 Amiga::_dump()
 {
-    AmigaConfiguration config = getConfig();
-    DiskControllerConfig dc = config.diskController;
-
     msg("    poweredOn: %s\n", isPoweredOn() ? "yes" : "no");
     msg("   poweredOff: %s\n", isPoweredOff() ? "yes" : "no");
     msg("       paused: %s\n", isPaused() ? "yes" : "no");
     msg("      running: %s\n", isRunning() ? "yes" : "no");
-    msg("\n");
-    msg("Current configuration:\n\n");
-    msg("          df0: %s %s\n",
-             dc.connected[0] ? "yes" : "no", driveTypeName(config.df0.type));
-    msg("          df1: %s %s\n",
-             dc.connected[1] ? "yes" : "no", driveTypeName(config.df1.type));
-    msg("          df2: %s %s\n",
-             dc.connected[2] ? "yes" : "no", driveTypeName(config.df2.type));
-    msg("          df3: %s %s\n",
-             dc.connected[3] ? "yes" : "no", driveTypeName(config.df3.type));
-
-    msg("\n");
-    msg("         warp: %d", warpMode);
+    msg("         warp: %s\n", warpMode ? "on" : "off");
     msg("\n");
 }
 

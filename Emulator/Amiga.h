@@ -190,10 +190,7 @@ private:
     //
     
 public:
-    
-    // Returns the current configuration
-    AmigaConfiguration getConfig() const;
-    
+        
     // Gets a single configuration item
     long getConfigItem(Option option) const;
     long getConfigItem(Option option, long id) const;

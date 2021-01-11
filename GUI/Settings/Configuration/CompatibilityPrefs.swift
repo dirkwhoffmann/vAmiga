@@ -11,32 +11,32 @@ extension ConfigurationController {
 
     func refreshCompatibilityTab() {
 
-        let config = amiga.config
+        // let config = amiga.config
 
         // Graphics
-        compClxSprSpr.state = config.denise.clxSprSpr ? .on : .off
-        compClxSprPlf.state = config.denise.clxSprPlf ? .on : .off
-        compClxPlfPlf.state = config.denise.clxPlfPlf ? .on : .off
+        compClxSprSpr.state = config.clxSprSpr ? .on : .off
+        compClxSprPlf.state = config.clxSprPlf ? .on : .off
+        compClxPlfPlf.state = config.clxPlfPlf ? .on : .off
 
         // Blitter
-        let a = config.blitter.accuracy
-        compBltAccuracy.intValue = a
+        let a = config.blitterAccuracy
+        compBltAccuracy.integerValue = a
         compBltLevel1.textColor = (a >= 1) ? .labelColor : .tertiaryLabelColor
         compBltLevel2.textColor = (a >= 2) ? .labelColor : .tertiaryLabelColor
         
         // Floppy drives
-        let speed = config.diskController.speed
+        let speed = config.driveSpeed
         compDriveSpeed.selectItem(withTag: Int(speed))
-        compMechanicalDelays.state = config.df0.mechanicalDelays ? .on : .off
-        compLockDskSync.state = config.diskController.lockDskSync ? .on : .off
-        compAutoDskSync.state = config.diskController.autoDskSync ? .on : .off
+        compMechanicalDelays.state = config.mechanicalDelays ? .on : .off
+        compLockDskSync.state = config.lockDskSync ? .on : .off
+        compAutoDskSync.state = config.autoDskSync ? .on : .off
 
         // Timing
-        compEClockSyncing.state = config.ciaA.eClockSyncing ? .on : .off
-        compSlowRamDelay.state = config.mem.slowRamDelay ? .on : .off
+        compEClockSyncing.state = config.eClockSyncing ? .on : .off
+        compSlowRamDelay.state = config.slowRamDelay ? .on : .off
 
         // Keyboard
-        compAccurateKeyboard.state = config.keyboard.accurate ? .on : .off
+        compAccurateKeyboard.state = config.accurateKeyboard ? .on : .off
 
         // Buttons
         compPowerButton.isHidden = !bootable

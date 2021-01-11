@@ -198,27 +198,6 @@ enum_long(ErrorCode)
 
 typedef struct
 {
-    int cpuSpeed;
-    CIAConfig ciaA;
-    CIAConfig ciaB;
-    RTCConfig rtc;
-    MuxerConfig audio;
-    MemoryConfig mem;
-    AgnusConfig agnus;
-    DeniseConfig denise;
-    BlitterConfig blitter;
-    SerialPortConfig serialPort;
-    KeyboardConfig keyboard;
-    DiskControllerConfig diskController;
-    DriveConfig df0;
-    DriveConfig df1;
-    DriveConfig df2;
-    DriveConfig df3;
-}
-AmigaConfiguration;
-
-typedef struct
-{
     Cycle cpuClock;
     Cycle dmaClock;
     Cycle ciaAClock;

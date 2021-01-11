@@ -106,7 +106,7 @@ extension Inspector {
 
     private func refreshMemoryLayout() {
 
-        let config = amiga.config
+        let config = amiga.mem.config
         let size = NSSize(width: 16, height: 16)
 
         memLayoutButton.image   = memLayoutImage
@@ -121,12 +121,12 @@ extension Inspector {
         memOCSButton.image      = NSImage.init(color: MemColors.cust, size: size)
         memAutoConfButton.image = NSImage.init(color: MemColors.auto, size: size)
 
-        let chipKB = config.mem.chipSize / 1024
-        let fastKB = config.mem.fastSize / 1024
-        let slowKB = config.mem.slowSize / 1024
-        let romKB = config.mem.romSize / 1024
-        let womKB = config.mem.womSize / 1024
-        let extKB = config.mem.extSize / 1024
+        let chipKB = config.chipSize / 1024
+        let fastKB = config.fastSize / 1024
+        let slowKB = config.slowSize / 1024
+        let romKB = config.romSize / 1024
+        let womKB = config.womSize / 1024
+        let extKB = config.extSize / 1024
         memChipRamText.stringValue = String.init(format: "%d KB", chipKB)
         memFastRamText.stringValue = String.init(format: "%d KB", fastKB)
         memSlowRamText.stringValue = String.init(format: "%d KB", slowKB)

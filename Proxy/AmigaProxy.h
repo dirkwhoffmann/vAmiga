@@ -155,7 +155,6 @@ struct SerialPortWrapper;
 @property (readonly) SnapshotProxy *latestUserSnapshot;
 - (void) loadFromSnapshot:(SnapshotProxy *)proxy;
 
-@property (readonly) AmigaConfiguration config;
 - (NSInteger) getConfig:(Option)opt;
 - (NSInteger) getConfig:(Option)opt id:(NSInteger)id;
 - (NSInteger) getConfig:(Option)opt drive:(NSInteger)id;
@@ -267,7 +266,7 @@ struct SerialPortWrapper;
     struct MemWrapper *wrapper;
 }
 
-- (MemoryConfig) getConfig;
+@property (readonly) MemoryConfig config;
 - (MemoryStats) getStats;
 - (void) dump;
 

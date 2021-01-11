@@ -61,7 +61,7 @@ private:
     
 public:
     
-    KeyboardConfig getConfig() const { return config; }
+    const KeyboardConfig &getConfig() const { return config; }
 
     long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;

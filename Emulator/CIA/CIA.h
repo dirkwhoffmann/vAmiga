@@ -271,7 +271,7 @@ public:
     
 public:
     
-    CIAConfig getConfig() const { return config; }
+    const CIAConfig &getConfig() const { return config; }
     
     long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;
