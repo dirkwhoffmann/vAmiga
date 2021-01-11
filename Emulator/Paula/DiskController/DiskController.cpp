@@ -36,7 +36,7 @@ DiskController::_reset(bool hard)
 }
 
 long
-DiskController::getConfigItem(Option option)
+DiskController::getConfigItem(Option option) const
 {
     switch (option) {
             
@@ -51,7 +51,7 @@ DiskController::getConfigItem(Option option)
 }
 
 long
-DiskController::getConfigItem(Option option, long id)
+DiskController::getConfigItem(Option option, long id) const
 {
     switch (option) {
             

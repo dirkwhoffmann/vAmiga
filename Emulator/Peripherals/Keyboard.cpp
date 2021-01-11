@@ -25,7 +25,7 @@ Keyboard::_reset(bool hard)
 }
 
 long
-Keyboard::getConfigItem(Option option)
+Keyboard::getConfigItem(Option option) const
 {
     switch (option) {
             

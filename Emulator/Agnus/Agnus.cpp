@@ -69,7 +69,7 @@ void Agnus::_reset(bool hard)
 }
 
 long
-Agnus::getConfigItem(Option option)
+Agnus::getConfigItem(Option option) const
 {
     switch (option) {
             

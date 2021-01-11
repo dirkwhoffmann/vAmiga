@@ -408,7 +408,7 @@ public:
     
     AgnusConfig getConfig() { return config; }
     
-    long getConfigItem(Option option);
+    long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;
     
     bool isOCS() { return config.revision == AGNUS_OCS; }

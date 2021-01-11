@@ -38,7 +38,7 @@ Denise::_reset(bool hard)
 }
 
 long
-Denise::getConfigItem(Option option)
+Denise::getConfigItem(Option option) const
 {
     switch (option) {
             

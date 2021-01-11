@@ -221,7 +221,7 @@ Amiga::getConfig()
 }
 
 long
-Amiga::getConfigItem(Option option)
+Amiga::getConfigItem(Option option) const
 {
     switch (option) {
 
@@ -283,7 +283,7 @@ Amiga::getConfigItem(Option option)
 }
 
 long
-Amiga::getConfigItem(Option option, long id)
+Amiga::getConfigItem(Option option, long id) const
 {
     switch (option) {
             

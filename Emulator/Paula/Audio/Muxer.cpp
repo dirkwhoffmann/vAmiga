@@ -60,7 +60,7 @@ Muxer::clear()
 }
 
 long
-Muxer::getConfigItem(Option option)
+Muxer::getConfigItem(Option option) const
 {
     switch (option) {
             
@@ -88,7 +88,7 @@ Muxer::getConfigItem(Option option)
 }
 
 long
-Muxer::getConfigItem(Option option, long id)
+Muxer::getConfigItem(Option option, long id) const
 {
     switch (option) {
             

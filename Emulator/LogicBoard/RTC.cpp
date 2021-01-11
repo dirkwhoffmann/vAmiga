@@ -14,7 +14,7 @@ RTC::RTC(Amiga& ref) : AmigaComponent(ref)
 }
 
 long
-RTC::getConfigItem(Option option)
+RTC::getConfigItem(Option option) const
 {
     switch (option) {
             

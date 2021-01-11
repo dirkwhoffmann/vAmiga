@@ -53,7 +53,7 @@ Memory::_reset(bool hard)
 }
 
 long
-Memory::getConfigItem(Option option)
+Memory::getConfigItem(Option option) const
 {
     switch (option) {
             

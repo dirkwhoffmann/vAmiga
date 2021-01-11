@@ -206,7 +206,7 @@ public:
     
     MemoryConfig getConfig() { return config; }
     
-    long getConfigItem(Option option);
+    long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;
 
 private:
