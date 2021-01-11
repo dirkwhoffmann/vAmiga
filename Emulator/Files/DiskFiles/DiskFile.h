@@ -44,9 +44,9 @@ public:
     long numBlocks() const { return numTracks() * numSectors(); }
 
     // Analyzes the boot block
-    virtual BootBlockType bootBlockType() { return BB_STANDARD; }
-    virtual const char *bootBlockName() { return ""; }
-    bool hasVirus() { return bootBlockType() == BB_VIRUS; }
+    virtual BootBlockType bootBlockType() const { return BB_STANDARD; }
+    virtual const char *bootBlockName() const { return ""; }
+    bool hasVirus() const { return bootBlockType() == BB_VIRUS; }
 
     
     //

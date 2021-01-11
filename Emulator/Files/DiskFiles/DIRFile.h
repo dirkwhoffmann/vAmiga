@@ -61,8 +61,8 @@ public:
     long numSides() const override { return adf->numSides(); }
     long numCyls() const override { return adf->numCyls(); }
     long numSectors() const override { return adf->numSectors(); }
-    BootBlockType bootBlockType() override { return adf->bootBlockType(); }
-    const char *bootBlockName() override { return adf->bootBlockName(); }
+    BootBlockType bootBlockType() const override { return adf->bootBlockType(); }
+    const char *bootBlockName() const override { return adf->bootBlockName(); }
     void killVirus() override { adf->killVirus(); }
     void readSector(u8 *target, long s) override { return adf->readSector(target, s); }
     void readSector(u8 *target, long t, long s) override { return adf->readSector(target, t, s); }

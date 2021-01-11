@@ -230,13 +230,13 @@ ADFFile::layout()
 }
 
 BootBlockType
-ADFFile::bootBlockType()
+ADFFile::bootBlockType() const
 {
     return BootBlockImage(data).type;
 }
 
 const char *
-ADFFile::bootBlockName()
+ADFFile::bootBlockName() const
 {
     return BootBlockImage(data).name;
 }

@@ -79,8 +79,8 @@ public:
     long numSides() const override;
     long numCyls() const override;
     long numSectors() const override;
-    BootBlockType bootBlockType() override;
-    const char *bootBlockName() override;
+    BootBlockType bootBlockType() const override;
+    const char *bootBlockName() const override;
     
     void killVirus() override;
 
