@@ -57,11 +57,11 @@ public:
     
     FSVolumeType getDos() const override { return adf->getDos(); }
     void setDos(FSVolumeType dos) override { adf->setDos(dos); }
-    DiskDiameter getDiskDiameter() override { return adf->getDiskDiameter(); }
-    DiskDensity getDiskDensity() override { return adf->getDiskDensity(); }
-    long numSides() override { return adf->numSides(); }
-    long numCyls() override { return adf->numCyls(); }
-    long numSectors() override { return adf->numSectors(); }
+    DiskDiameter getDiskDiameter() const override { return adf->getDiskDiameter(); }
+    DiskDensity getDiskDensity() const override { return adf->getDiskDensity(); }
+    long numSides() const override { return adf->numSides(); }
+    long numCyls() const override { return adf->numCyls(); }
+    long numSectors() const override { return adf->numSectors(); }
     BootBlockType bootBlockType() override { return adf->bootBlockType(); }
     const char *bootBlockName() override { return adf->bootBlockName(); }
     void killVirus() override { adf->killVirus(); }

@@ -61,11 +61,11 @@ public:
       
     FSVolumeType getDos() const override { return FS_NODOS; }
     void setDos(FSVolumeType dos) override { };
-    DiskDiameter getDiskDiameter() override { return INCH_35; }
-    DiskDensity getDiskDensity() override { return DISK_DD; }
-    long numSides() override;
-    long numCyls() override;
-    long numSectors() override;
+    DiskDiameter getDiskDiameter() const override { return INCH_35; }
+    DiskDensity getDiskDensity() const override { return DISK_DD; }
+    long numSides() const override;
+    long numCyls() const override;
+    long numSectors() const override;
     bool encodeDisk(class Disk *disk) override;
     bool decodeDisk(class Disk *disk) override;
 

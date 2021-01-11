@@ -157,25 +157,25 @@ ADFFile::setDos(FSVolumeType dos)
 }
 
 DiskDiameter
-ADFFile::getDiskDiameter()
+ADFFile::getDiskDiameter() const
 {
     return INCH_35;
 }
 
 DiskDensity
-ADFFile::getDiskDensity()
+ADFFile::getDiskDensity() const
 {
     return (size & ~1) == ADFSIZE_35_HD ? DISK_HD : DISK_DD;
 }
 
 long
-ADFFile::numSides()
+ADFFile::numSides() const
 {
     return 2;
 }
 
 long
-ADFFile::numCyls()
+ADFFile::numCyls() const
 {
     switch(size & ~1) {
             
@@ -193,7 +193,7 @@ ADFFile::numCyls()
 }
 
 long
-ADFFile::numSectors()
+ADFFile::numSectors() const
 {
     switch (getDiskDensity()) {
             

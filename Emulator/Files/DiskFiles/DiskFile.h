@@ -35,13 +35,13 @@ public:
 public:
         
     // Returns the layout parameters for this disk
-    virtual DiskDiameter getDiskDiameter() = 0;
-    virtual DiskDensity getDiskDensity() = 0;
-    virtual long numSides() = 0;
-    virtual long numCyls() = 0;
-    virtual long numSectors() = 0;
-    long numTracks() { return numSides() * numCyls(); }
-    long numBlocks() { return numTracks() * numSectors(); }
+    virtual DiskDiameter getDiskDiameter() const = 0;
+    virtual DiskDensity getDiskDensity() const = 0;
+    virtual long numSides() const = 0;
+    virtual long numCyls() const = 0;
+    virtual long numSectors() const = 0;
+    long numTracks() const { return numSides() * numCyls(); }
+    long numBlocks() const { return numTracks() * numSectors(); }
 
     // Analyzes the boot block
     virtual BootBlockType bootBlockType() { return BB_STANDARD; }

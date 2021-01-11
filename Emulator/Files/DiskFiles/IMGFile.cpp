@@ -67,19 +67,19 @@ IMGFile::makeWithDisk(Disk *disk)
 }
 
 long
-IMGFile::numSides()
+IMGFile::numSides() const
 {
     return 2;
 }
 
 long
-IMGFile::numCyls()
+IMGFile::numCyls() const
 {
     return 80;
 }
 
 long
-IMGFile::numSectors()
+IMGFile::numSectors() const
 {
     return 9;
 }

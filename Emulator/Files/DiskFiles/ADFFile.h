@@ -74,11 +74,11 @@ public:
     
     FSVolumeType getDos() const override; 
     void setDos(FSVolumeType dos) override;
-    DiskDiameter getDiskDiameter() override;
-    DiskDensity getDiskDensity() override;
-    long numSides() override;
-    long numCyls() override;
-    long numSectors() override;
+    DiskDiameter getDiskDiameter() const override;
+    DiskDensity getDiskDensity() const override;
+    long numSides() const override;
+    long numCyls() const override;
+    long numSectors() const override;
     BootBlockType bootBlockType() override;
     const char *bootBlockName() override;
     
