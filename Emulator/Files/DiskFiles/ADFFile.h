@@ -72,7 +72,7 @@ public:
     
 public:
     
-    FSVolumeType getDos() override; 
+    FSVolumeType getDos() const override; 
     void setDos(FSVolumeType dos) override;
     DiskDiameter getDiskDiameter() override;
     DiskDensity getDiskDensity() override;

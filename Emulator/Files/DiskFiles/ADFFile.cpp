@@ -136,7 +136,7 @@ ADFFile::makeWithVolume(FSDevice &volume, FSError *error)
 }
 
 FSVolumeType
-ADFFile::getDos()
+ADFFile::getDos() const
 {
     if (strncmp((const char *)data, "DOS", 3) || data[3] > 7) {
         return FS_NODOS;

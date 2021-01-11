@@ -222,7 +222,7 @@ Drive::idMode() const
 }
 
 u32
-Drive::getDriveId()
+Drive::getDriveId() const
 {
     if (nr > 0) {
         
@@ -358,7 +358,7 @@ Drive::selectSide(int side)
 }
 
 u8
-Drive::readByte()
+Drive::readByte() const
 {
     // Case 1: No disk is inserted
     if (!disk) {
@@ -444,7 +444,7 @@ Drive::findSyncMark()
 }
 
 bool
-Drive::readyToStep()
+Drive::readyToStep() const
 {
     if (config.mechanicalDelays) {
         return agnus.clock - stepCycle > 1060;
@@ -503,7 +503,7 @@ Drive::recordCylinder(u8 cylinder)
 }
 
 bool
-Drive::pollsForDisk()
+Drive::pollsForDisk() const
 {
     // Disk polling is only performed if no disk is inserted
     if (hasDisk()) return false;
@@ -590,7 +590,7 @@ Drive::ejectDisk()
 }
 
 bool
-Drive::isInsertable(DiskDiameter t, DiskDensity d)
+Drive::isInsertable(DiskDiameter t, DiskDensity d) const
 {
     debug(DSK_DEBUG, "isInsertable(%s, %s)\n", DiskDiameterName(t), DiskDensityName(d));
     
@@ -612,7 +612,7 @@ Drive::isInsertable(DiskDiameter t, DiskDensity d)
 }
 
 bool
-Drive::isInsertable(DiskFile *file)
+Drive::isInsertable(DiskFile *file) const
 {
     debug(DSK_DEBUG, "isInsertable(DiskFile %p)\n", file);
    
@@ -622,7 +622,7 @@ Drive::isInsertable(DiskFile *file)
 }
 
 bool
-Drive::isInsertable(Disk *disk)
+Drive::isInsertable(Disk *disk) const
 {
     debug(DSK_DEBUG, "isInsertable(Disk %p)\n", disk);
     
@@ -653,7 +653,7 @@ Drive::insertDisk(Disk *disk)
 }
 
 u64
-Drive::fnv()
+Drive::fnv() const
 {
     return disk ? disk->getFnv() : 0;
 }

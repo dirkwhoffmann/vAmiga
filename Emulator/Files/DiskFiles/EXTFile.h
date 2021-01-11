@@ -59,7 +59,7 @@ public:
     // Methods from DiskFile
     //
     
-    FSVolumeType getDos() override { return FS_NODOS; }
+    FSVolumeType getDos() const override { return FS_NODOS; }
     void setDos(FSVolumeType dos) override { };
     DiskDiameter getDiskDiameter() override { return INCH_35; }
     DiskDensity getDiskDensity() override { return DISK_DD; }

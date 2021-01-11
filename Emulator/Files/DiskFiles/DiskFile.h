@@ -24,7 +24,7 @@ public:
     static DiskFile *makeWithFile(const char *path);
     
     // Gets or sets the file system for this disk
-    virtual FSVolumeType getDos() = 0;
+    virtual FSVolumeType getDos() const = 0;
     virtual void setDos(FSVolumeType dos) = 0;
     
     

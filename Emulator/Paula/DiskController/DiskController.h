@@ -106,7 +106,7 @@ public:
     
 public:
     
-    DiskControllerConfig getConfig() { return config; }
+    DiskControllerConfig getConfig() const { return config; }
     bool turboMode() const { return config.speed == -1; }
 
     long getConfigItem(Option option) const;

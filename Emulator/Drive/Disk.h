@@ -130,20 +130,20 @@ private:
 
 public:
 
-    DiskDiameter getDiameter() { return diameter; }
-    DiskDensity getDensity() { return density; }
+    DiskDiameter getDiameter() const { return diameter; }
+    DiskDensity getDensity() const { return density; }
 
-    long numCyls() { return diameter == INCH_525 ? 42 : 84; }
-    long numSides() { return 2; }
-    long numTracks() { return diameter == INCH_525 ? 84 : 168; }
+    long numCyls() const { return diameter == INCH_525 ? 42 : 84; }
+    long numSides() const { return 2; }
+    long numTracks() const { return diameter == INCH_525 ? 84 : 168; }
 
-    bool isWriteProtected() { return writeProtected; }
+    bool isWriteProtected() const { return writeProtected; }
     void setWriteProtection(bool value) { writeProtected = value; }
     
-    bool isModified() { return modified; }
+    bool isModified() const { return modified; }
     void setModified(bool value) { modified = value; }
     
-    u64 getFnv() { return fnv; }
+    u64 getFnv() const { return fnv; }
     
 
     //
@@ -151,8 +151,8 @@ public:
     //
     
     // Reads a byte from disk
-    u8 readByte(Track track, u16 offset);
-    u8 readByte(Cylinder cylinder, Side side, u16 offset);
+    u8 readByte(Track track, u16 offset) const;
+    u8 readByte(Cylinder cylinder, Side side, u16 offset) const;
 
     // Writes a byte to disk
     void writeByte(u8 value, Track track, u16 offset);

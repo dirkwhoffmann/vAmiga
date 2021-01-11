@@ -55,7 +55,7 @@ public:
     // Methods from DiskFile
     //
     
-    FSVolumeType getDos() override { return adf->getDos(); }
+    FSVolumeType getDos() const override { return adf->getDos(); }
     void setDos(FSVolumeType dos) override { adf->setDos(dos); }
     DiskDiameter getDiskDiameter() override { return adf->getDiskDiameter(); }
     DiskDensity getDiskDensity() override { return adf->getDiskDensity(); }

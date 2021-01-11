@@ -131,7 +131,7 @@ public:
     
 public:
     
-    MuxerConfig getConfig() { return config; }
+    MuxerConfig getConfig() const { return config; }
 
     long getConfigItem(Option option) const;
     long getConfigItem(Option option, long id) const;

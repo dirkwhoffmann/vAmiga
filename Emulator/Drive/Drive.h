@@ -95,7 +95,7 @@ private:
     
 public:
     
-    DriveConfig getConfig() { return config; }
+    DriveConfig getConfig() const { return config; }
     
     long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long id, long value) override;
@@ -174,10 +174,10 @@ public:
 
     // Identification mode
     bool idMode() const;
-    u32 getDriveId();
+    u32 getDriveId() const;
 
     // Operation
-    u8 getCylinder() { return head.cylinder; }
+    u8 getCylinder() const { return head.cylinder; }
     
     
     //
@@ -213,7 +213,7 @@ public:
     void selectSide(int side);
 
     // Reads a value from the drive head and optionally rotates the disk
-    u8 readByte();
+    u8 readByte() const;
     u8 readByteAndRotate();
     u16 readWordAndRotate();
 
@@ -233,7 +233,7 @@ public:
     //
 
     // Returns wheather the drive is ready to accept a stepping pulse
-    bool readyToStep();
+    bool readyToStep() const;
     
     // Moves the drive head (0 = inwards, 1 = outwards).
     void step(int dir);
@@ -245,7 +245,7 @@ public:
      * Disk polling mode is detected by analyzing the movement history that
      * has been recorded by recordCylinder()
      */
-    bool pollsForDisk();
+    bool pollsForDisk() const;
 
     
     //
@@ -263,14 +263,14 @@ public:
     void setWriteProtection(bool value); 
     void toggleWriteProtection();
     
-    bool isInsertable(DiskDiameter t, DiskDensity d);
-    bool isInsertable(DiskFile *file);
-    bool isInsertable(Disk *disk);
+    bool isInsertable(DiskDiameter t, DiskDensity d) const;
+    bool isInsertable(DiskFile *file) const;
+    bool isInsertable(Disk *disk) const;
 
     void ejectDisk();
     bool insertDisk(Disk *disk);
     
-    u64 fnv();
+    u64 fnv() const;
     
     //
     // Delegation methods

@@ -204,7 +204,7 @@ private:
     
 public:
     
-    MemoryConfig getConfig() { return config; }
+    MemoryConfig getConfig() const { return config; }
     
     long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;

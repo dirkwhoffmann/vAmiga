@@ -277,7 +277,7 @@ public:
 
 public:
     
-    DeniseConfig getConfig() { return config; }
+    DeniseConfig getConfig() const { return config; }
 
     long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;

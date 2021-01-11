@@ -406,7 +406,7 @@ private:
     
 public:
     
-    AgnusConfig getConfig() { return config; }
+    AgnusConfig getConfig() const { return config; }
     
     long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;

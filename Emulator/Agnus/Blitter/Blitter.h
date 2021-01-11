@@ -273,7 +273,7 @@ private:
 
 public:
     
-    BlitterConfig getConfig() { return config; }
+    BlitterConfig getConfig() const { return config; }
     
     long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;

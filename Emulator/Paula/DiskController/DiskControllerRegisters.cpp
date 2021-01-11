@@ -173,8 +173,6 @@ DiskController::driveStatusFlags() const
 void
 DiskController::PRBdidChange(u8 oldValue, u8 newValue)
 {
-    // debug("PRBdidChange: %X -> %X\n", oldValue, newValue);
-
     // Store a copy of the new value for reference
     prb = newValue;
     

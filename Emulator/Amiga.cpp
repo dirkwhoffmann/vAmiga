@@ -192,7 +192,7 @@ Amiga::_reset(bool hard)
 }
 
 AmigaConfiguration
-Amiga::getConfig()
+Amiga::getConfig() const
 {
     AmigaConfiguration config;
 

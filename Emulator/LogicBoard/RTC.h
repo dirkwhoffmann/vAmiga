@@ -61,7 +61,7 @@ private:
     
 public:
     
-    RTCConfig getConfig() { return config; }
+    RTCConfig getConfig() const { return config; }
     
     long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;
