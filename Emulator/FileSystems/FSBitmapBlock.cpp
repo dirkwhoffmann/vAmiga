@@ -26,7 +26,7 @@ FSBitmapBlock::itemType(u32 pos)
 }
 
 FSError
-FSBitmapBlock::check(u32 byte, u8 *expected, bool strict)
+FSBitmapBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     i32 word = byte / 4;
     u32 value = get32(word);

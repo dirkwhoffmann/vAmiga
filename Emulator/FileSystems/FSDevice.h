@@ -285,10 +285,10 @@ private:
 public:
     
     // Checks all blocks in this volume
-    FSErrorReport check(bool strict);
+    FSErrorReport check(bool strict) const;
 
     // Checks a single byte in a certain block
-    FSError check(u32 blockNr, u32 pos, u8 *expected, bool strict);
+    FSError check(u32 blockNr, u32 pos, u8 *expected, bool strict) const;
 
     // Checks if the block with the given number is part of the volume
     bool isBlockNumber(u32 nr) { return nr < numBlocks; }

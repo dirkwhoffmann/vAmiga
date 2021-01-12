@@ -63,10 +63,10 @@ struct FSBlock : AmigaObject {
     //
 
     // Scans all long words in this block and returns the number of errors
-    unsigned check(bool strict);
+    unsigned check(bool strict) const;
 
     // Checks the integrity of a certain byte in this block
-    virtual FSError check(u32 pos, u8 *expected, bool strict) { return FS_OK; }
+    virtual FSError check(u32 pos, u8 *expected, bool strict) const { return FS_OK; }
         
     
     //
@@ -80,19 +80,19 @@ struct FSBlock : AmigaObject {
     static void dec32(u8 *p) { write32(p, read32(p) - 1); }
 
     // Computes the address of a long word inside the block
-    u8 *addr32(int nr); 
+    u8 *addr32(int nr) const; 
     
     // Reads, writes, or modifies the n-th long word
-    u32 get32(i32 n) { return read32(addr32(n)); }
-    void set32(i32 n, u32 val) { write32(addr32(n), val); }
-    void inc32(i32 n) { inc32(addr32(n)); }
-    void dec32(i32 n) { dec32(addr32(n)); }
+    u32 get32(i32 n) const { return read32(addr32(n)); }
+    void set32(i32 n, u32 val) const { write32(addr32(n), val); }
+    void inc32(i32 n) const { inc32(addr32(n)); }
+    void dec32(i32 n) const { dec32(addr32(n)); }
 
     // Returns the location of the checksum inside this block
-    virtual u32 checksumLocation() { return (u32)-1; }
+    virtual u32 checksumLocation() const { return (u32)-1; }
     
     // Computes a checksum for this block
-    virtual u32 checksum();
+    virtual u32 checksum() const;
     
     // Updates the checksum in this block
     void updateChecksum();
@@ -231,7 +231,7 @@ public:
     u32 getMaxDataBlockRefs();
 
     // Gets or sets the number of data block references in this block
-    virtual u32 getNumDataBlockRefs() { return 0; }
+    virtual u32 getNumDataBlockRefs() const { return 0; }
     virtual void setNumDataBlockRefs(u32 val) { }
     virtual void incNumDataBlockRefs() { }
 

@@ -63,7 +63,7 @@ OFSDataBlock::itemType(u32 pos)
 }
 
 FSError
-OFSDataBlock::check(u32 byte, u8 *expected, bool strict)
+OFSDataBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     /* Note: At location 1, many disks store a reference to the bitmap block
      * instead of a reference to the file header block. We ignore to report

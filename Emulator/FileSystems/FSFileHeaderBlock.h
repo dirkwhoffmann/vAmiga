@@ -26,13 +26,13 @@ struct FSFileHeaderBlock : FSBlock {
 
     FSBlockType type() const override { return FS_FILEHEADER_BLOCK; }
     FSItemType itemType(u32 byte) override;
-    FSError check(u32 pos, u8 *expected, bool strict) override;
+    FSError check(u32 pos, u8 *expected, bool strict) const override;
     void dump() override;
-    u32 checksumLocation() override { return 5; }
+    u32 checksumLocation() const override { return 5; }
 
     FSError exportBlock(const char *path) override;
 
-    u32 getNumDataBlockRefs() override          { return get32(2);            }
+    u32 getNumDataBlockRefs() const override    { return get32(2);            }
     void setNumDataBlockRefs(u32 val) override  {        set32(2, val);       }
     void incNumDataBlockRefs() override         {        inc32(2);            }
 

@@ -49,7 +49,7 @@ FSBlock::subtypeID()
 }
 
 unsigned
-FSBlock::check(bool strict)
+FSBlock::check(bool strict) const
 {
     FSError error;
     unsigned count = 0;
@@ -67,7 +67,7 @@ FSBlock::check(bool strict)
 }
 
 u8 *
-FSBlock::addr32(int nr)
+FSBlock::addr32(int nr) const
 {
     return (data + 4 * nr) + (nr < 0 ? bsize() : 0);
 }
@@ -94,7 +94,7 @@ FSBlock::dumpData()
 }
 
 u32
-FSBlock::checksum()
+FSBlock::checksum() const
 {
     u32 loc = checksumLocation();
     assert(loc <= 5);

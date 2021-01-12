@@ -54,7 +54,7 @@ FSBootBlock::itemType(u32 byte)
 }
 
 FSError
-FSBootBlock::check(u32 byte, u8 *expected, bool strict)
+FSBootBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     if (nr == partition.firstBlock) {
  
@@ -72,13 +72,13 @@ FSBootBlock::check(u32 byte, u8 *expected, bool strict)
 }
 
 u32
-FSBootBlock::checksumLocation()
+FSBootBlock::checksumLocation() const
 {
     return (nr == partition.firstBlock) ? 1 : (u32)-1;
 }
 
 u32
-FSBootBlock::checksum() {
+FSBootBlock::checksum() const {
     
     // Only call this function for the first boot block in a partition
     assert(nr == partition.firstBlock);

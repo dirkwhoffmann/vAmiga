@@ -634,7 +634,7 @@ FSDevice::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result, std::se
 }
 
 FSErrorReport
-FSDevice::check(bool strict)
+FSDevice::check(bool strict) const
 {
     FSErrorReport result;
 
@@ -670,7 +670,7 @@ FSDevice::check(bool strict)
 }
 
 FSError
-FSDevice::check(u32 blockNr, u32 pos, u8 *expected, bool strict)
+FSDevice::check(u32 blockNr, u32 pos, u8 *expected, bool strict) const
 {
     return blocks[blockNr]->check(pos, expected, strict);
 }

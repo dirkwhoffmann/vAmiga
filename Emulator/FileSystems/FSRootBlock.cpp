@@ -69,7 +69,7 @@ FSRootBlock::itemType(u32 byte)
 }
 
 FSError
-FSRootBlock::check(u32 byte, u8 *expected, bool strict)
+FSRootBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     // Translate the byte index to a (signed) long word index
     i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;

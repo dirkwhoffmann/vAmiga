@@ -66,7 +66,7 @@ FSFileHeaderBlock::itemType(u32 byte)
 }
 
 FSError
-FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict)
+FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     /* Note: At locations -4 and -3, many disks reference the bitmap block
      * which is wrong. We ignore to report this common inconsistency if
