@@ -128,7 +128,7 @@ private:
     
 public:
 
-    bool keyIsPressed(long keycode);
+    bool keyIsPressed(long keycode) const;
     void pressKey(long keycode);
     void releaseKey(long keycode);
     void releaseAllKeys();
@@ -140,8 +140,8 @@ public:
 
 private:
 
-    bool bufferIsEmpty() { return bufferIndex == 0; }
-    bool bufferIsFull() { return bufferIndex == bufferSize; }
+    bool bufferIsEmpty() const { return bufferIndex == 0; }
+    bool bufferIsFull() const { return bufferIndex == bufferSize; }
 
     // Reads a keycode from the type-ahead buffer
     u8 readFromBuffer();

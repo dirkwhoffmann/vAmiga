@@ -73,7 +73,7 @@ Keyboard::_dump()
 }
 
 bool
-Keyboard::keyIsPressed(long keycode)
+Keyboard::keyIsPressed(long keycode) const
 {
     assert(keycode < 0x80);
     return keyDown[keycode];

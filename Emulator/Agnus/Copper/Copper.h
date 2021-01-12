@@ -314,7 +314,7 @@ public:
 public:
 
     // Returns the number of instructions in Copper list 1 or 2
-    int instrCount(int nr);
+    int instrCount(int nr) const;
 
     // Manually lengthens or shortens the value returned by instrCount()
     void adjustInstrCount(int nr, int offset);

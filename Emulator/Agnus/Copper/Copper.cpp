@@ -517,7 +517,7 @@ Copper::blitterDidTerminate()
 }
 
 int
-Copper::instrCount(int nr)
+Copper::instrCount(int nr) const
 {
     assert(nr == 1 || nr == 2);
 
