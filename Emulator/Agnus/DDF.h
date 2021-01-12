@@ -52,9 +52,9 @@ struct DDF
         return !(*this == ddf);
     }
     
-    bool inRangeOdd(i16 pos) { return pos > strtOdd && pos < stopOdd; }
-    bool inRangeEven(i16 pos) { return pos > strtEven && pos < stopEven; }
-    bool oddAndEvenDiffer() { return strtOdd != strtEven || stopOdd != stopEven; }
+    bool inRangeOdd(i16 pos) const { return pos > strtOdd && pos < stopOdd; }
+    bool inRangeEven(i16 pos) const { return pos > strtEven && pos < stopEven; }
+    bool oddAndEvenDiffer() const { return strtOdd != strtEven || stopOdd != stopEven; }
     
     /* Computes a DDF window
      *

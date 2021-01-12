@@ -49,19 +49,19 @@
 public:
 
 // Returns true iff the specified slot contains any event
-template<EventSlot s> bool hasEvent() {
+template<EventSlot s> bool hasEvent() const {
     assert(s < SLOT_COUNT); return slot[s].id != (EventID)0; }
 
 // Returns true iff the specified slot contains a specific event
-template<EventSlot s> bool hasEvent(EventID id) {
+template<EventSlot s> bool hasEvent(EventID id) const {
     assert(s < SLOT_COUNT); return slot[s].id == id; }
 
 // Returns true iff the specified slot contains a pending event
-template<EventSlot s> bool isPending() {
+template<EventSlot s> bool isPending() const {
     assert(s < SLOT_COUNT); return slot[s].triggerCycle != NEVER; }
 
 // Returns true iff the specified slot contains a due event
-template<EventSlot s> bool isDue(Cycle cycle) {
+template<EventSlot s> bool isDue(Cycle cycle) const {
     assert(s < SLOT_COUNT); return cycle >= slot[s].triggerCycle; }
 
 

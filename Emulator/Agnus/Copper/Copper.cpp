@@ -71,7 +71,7 @@ Copper::switchToCopperList(int nr)
 }
 
 bool
-Copper::findMatch(Beam &result)
+Copper::findMatch(Beam &result) const
 {
     i16 vMatch, hMatch;
 
@@ -120,7 +120,7 @@ Copper::findMatch(Beam &result)
 }
 
 bool
-Copper::findVerticalMatch(i16 vStrt, i16 vComp, i16 vMask, i16 &result)
+Copper::findVerticalMatch(i16 vStrt, i16 vComp, i16 vMask, i16 &result) const
 {
     i16 vStop = agnus.frame.numLines();
 
@@ -137,7 +137,7 @@ Copper::findVerticalMatch(i16 vStrt, i16 vComp, i16 vMask, i16 &result)
 }
 
 bool
-Copper::findHorizontalMatch(i16 hStrt, i16 hComp, i16 hMask, i16 &result)
+Copper::findHorizontalMatch(i16 hStrt, i16 hComp, i16 hMask, i16 &result) const
 {
     i16 hStop = HPOS_CNT;
 
@@ -154,7 +154,7 @@ Copper::findHorizontalMatch(i16 hStrt, i16 hComp, i16 hMask, i16 &result)
 }
 
 bool
-Copper::findMatchNew(Beam &match)
+Copper::findMatchNew(Beam &match) const
 {
     // Start searching at the current beam position
     u32 beam = (agnus.pos.v << 8) | agnus.pos.h;
@@ -199,7 +199,7 @@ Copper::findMatchNew(Beam &match)
 }
 
 bool
-Copper::findHorizontalMatchNew(u32 &match, u32 comp, u32 mask)
+Copper::findHorizontalMatchNew(u32 &match, u32 comp, u32 mask) const
 {
     // Iterate through all horizontal positions
     for (u32 beam = match; (beam & 0xFF) < HPOS_CNT; beam++) {
@@ -281,7 +281,7 @@ Copper::comparator(u32 beam, u32 waitpos, u32 mask)
 #endif
 
 bool
-Copper::comparator(Beam beam, u16 waitpos, u16 mask)
+Copper::comparator(Beam beam, u16 waitpos, u16 mask) const
 {
     // Get comparison bits for the vertical beam position
     u8 vBeam = beam.v & 0xFF;
@@ -317,13 +317,13 @@ Copper::comparator(Beam beam, u16 waitpos, u16 mask)
 }
 
 bool
-Copper::comparator(Beam beam)
+Copper::comparator(Beam beam) const
 {
     return comparator(beam, getVPHP(), getVMHM());
 }
 
 bool
-Copper::comparator()
+Copper::comparator() const
 {
     return comparator(agnus.pos);
 }
@@ -400,7 +400,7 @@ bool Copper::isWaitCmd(u32 addr)
 }
 
 u16
-Copper::getRA()
+Copper::getRA() const
 {
     return cop1ins & 0x1FE;
 }
@@ -413,7 +413,7 @@ Copper::getRA(u32 addr)
 }
 
 u16
-Copper::getDW()
+Copper::getDW() const
 {
     return cop1ins;
 }
@@ -426,7 +426,7 @@ Copper::getDW(u32 addr)
 }
 
 bool
-Copper::getBFD()
+Copper::getBFD() const
 {
     return (cop2ins & 0x8000) != 0;
 }
@@ -439,7 +439,7 @@ Copper::getBFD(u32 addr)
 }
 
 u16
-Copper::getVPHP()
+Copper::getVPHP() const
 {
     return cop1ins & 0xFFFE;
 }
@@ -452,13 +452,13 @@ Copper::getVPHP(u32 addr)
 }
 
 u16
-Copper::getVMHM()
+Copper::getVMHM() const
 {
     return (cop2ins & 0x7FFE) | 0x8001;
 }
 
 u16
-Copper::getVMHM(u32 addr)
+Copper::getVMHM(u32 addr) 
 {
     u16 instr = mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
     return (instr & 0x7FFE) | 0x8001;

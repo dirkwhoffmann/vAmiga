@@ -29,11 +29,6 @@ struct FSBitmapBlock : FSBlock {
     FSError check(u32 pos, u8 *expected, bool strict) const override;
     void dump() const override;
     u32 checksumLocation() const override { return 0; }
-
-    
-    //
-    // Block specific methods
-    //
 };
 
 #endif
