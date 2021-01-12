@@ -206,9 +206,9 @@ AmigaFile::readFromFile(FILE *file, FileError *error)
 }
 
 size_t
-AmigaFile::writeToBuffer(u8 *buffer)
+AmigaFile::writeToBuffer(u8 *buffer) const
 {
-    assert(data != nullptr);
+    assert(data);
     
     if (buffer) {
         memcpy(buffer, data, size);
@@ -217,9 +217,9 @@ AmigaFile::writeToBuffer(u8 *buffer)
 }
 
 bool
-AmigaFile::writeToFile(const char *filename, FileError *error)
+AmigaFile::writeToFile(const char *filename, FileError *error) const
 {
-    assert (filename != nullptr);
+    assert (filename);
 
     bool success = false;
     u8 *data = nullptr;

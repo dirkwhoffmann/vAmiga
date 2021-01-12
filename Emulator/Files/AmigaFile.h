@@ -90,7 +90,7 @@ public:
     //
     
     // Returns the required buffer size for this file
-    usize sizeOnDisk() { return writeToBuffer(nullptr); }
+    usize sizeOnDisk() const { return writeToBuffer(nullptr); }
 
     /* Returns true iff this specified buffer is compatible with this object.
      * This function is used in readFromBuffer().
@@ -124,13 +124,12 @@ public:
      * passed in, a test run is performed. Test runs can be performed to
      * determine the size of the file on disk.
      */
-    virtual usize writeToBuffer(u8 *buf);
+    usize writeToBuffer(u8 *buf) const;
     
-    /* Writes the file contents to a file. This function requires no custom
-     * implementation. It invokes writeToBuffer first and writes the data to
-     * disk afterwards.
+    /* Writes the file contents to a file. It invokes writeToBuffer first and
+     * writes the data to disk afterwards.
      */
-    bool writeToFile(const char *path, FileError *err = nullptr);
+    bool writeToFile(const char *path, FileError *err = nullptr) const;
 };
 
 #endif
