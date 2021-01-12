@@ -105,7 +105,7 @@ RTC::getTime()
     if (timeBetweenCalls > 2) {
 
         /* If the time between two read accesses is long, we compute the result
-         * of the host machine's current time and variable timeDiff.
+         * out of the host machine's current time and variable timeDiff.
          */
         lastMeasure = master;
         lastMeasuredValue = (i64)time(nullptr);
@@ -115,12 +115,12 @@ RTC::getTime()
 
         /* If the time between two read accesses is short, we compute the result
          * out of the master-clock cycles that have elapsed since the host
-         * machine's time was queried the last time.
-         * This ensures that the real-time clock behaves properly in warp mode.
-         * E.g., when the Amiga boots, Kickstart tests the real-time clock by
-         * peeking the time twice with a time delay of more than 1 second. If
-         * we simply query the host machine's time, the time difference would
-         * be less than 1 second in warp mode.
+         * machine's time was queried the last time. This ensures that the
+         * real-time clock behaves properly in warp mode. E.g., when the Amiga
+         * boots, Kickstart tests the real-time clock by peeking the time twice
+         * with a time delay of more than 1 second. If we simply query the host
+         * machine's time, the time difference would be less than 1 second in
+         * warp mode.
          */
         i64 elapsedTime = AS_SEC(master - lastMeasure);
         result = (time_t)lastMeasuredValue + (time_t)elapsedTime;
@@ -182,6 +182,7 @@ RTC::poke(unsigned nr, u8 value)
             
         default: // Time or date register
             
+            time2registers();
             reg[bank()][nr] = value & 0xF;
             registers2time();
     }

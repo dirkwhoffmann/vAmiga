@@ -1766,7 +1766,7 @@ Memory::peekCIA16(u32 addr)
 }
 
 u8
-Memory::spypeekCIA8(u32 addr)
+Memory::spypeekCIA8(u32 addr) const
 {
     u32 reg = (addr >> 8)  & 0b1111;
     u32 sel = (addr >> 12) & 0b11;
@@ -1791,7 +1791,7 @@ Memory::spypeekCIA8(u32 addr)
 }
 
 u16
-Memory::spypeekCIA16(u32 addr)
+Memory::spypeekCIA16(u32 addr) const
 {
     u32 reg = (addr >> 8) & 0b1111;
     u32 sel = (addr >> 12) & 0b11;

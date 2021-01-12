@@ -66,7 +66,7 @@ public:
     long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;
     
-    bool isPresent() { return config.model != RTC_NONE; }
+    bool isPresent() const { return config.model != RTC_NONE; }
 
 private:
     

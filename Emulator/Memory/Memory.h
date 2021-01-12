@@ -439,8 +439,8 @@ public:
     u8 peekCIA8(u32 addr);
     u16 peekCIA16(u32 addr);
     
-    u8 spypeekCIA8(u32 addr);
-    u16 spypeekCIA16(u32 addr);
+    u8 spypeekCIA8(u32 addr) const;
+    u16 spypeekCIA16(u32 addr) const;
     
     void pokeCIA8(u32 addr, u8 value);
     void pokeCIA16(u32 addr, u16 value);
