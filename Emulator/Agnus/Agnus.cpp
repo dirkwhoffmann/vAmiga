@@ -285,44 +285,44 @@ Agnus::updateStats()
 }
 
 Cycle
-Agnus::cyclesInFrame()
+Agnus::cyclesInFrame() const
 {
     return DMA_CYCLES(frame.numLines() * HPOS_CNT);
 }
 
 Cycle
-Agnus::startOfFrame()
+Agnus::startOfFrame() const
 {
     return clock - DMA_CYCLES(pos.v * HPOS_CNT + pos.h);
 }
 
 Cycle
-Agnus::startOfNextFrame()
+Agnus::startOfNextFrame() const
 {
     return startOfFrame() + cyclesInFrame();
 }
 
 bool
-Agnus::belongsToPreviousFrame(Cycle cycle)
+Agnus::belongsToPreviousFrame(Cycle cycle) const
 {
     return cycle < startOfFrame();
 }
 
 bool
-Agnus::belongsToCurrentFrame(Cycle cycle)
+Agnus::belongsToCurrentFrame(Cycle cycle) const
 {
     return !belongsToPreviousFrame(cycle) && !belongsToNextFrame(cycle);
 }
 
 bool
-Agnus::belongsToNextFrame(Cycle cycle)
+Agnus::belongsToNextFrame(Cycle cycle) const
 {
     return cycle >= startOfNextFrame();
 }
 
 bool
-Agnus::inBplDmaLine(u16 dmacon, u16 bplcon0) {
-
+Agnus::inBplDmaLine(u16 dmacon, u16 bplcon0) const
+{
     return
     ddfVFlop                 // Outside VBLANK, inside DIW
     && bpu(bplcon0)          // At least one bitplane enabled
@@ -330,13 +330,13 @@ Agnus::inBplDmaLine(u16 dmacon, u16 bplcon0) {
 }
 
 Cycle
-Agnus::beamToCycle(Beam beam)
+Agnus::beamToCycle(Beam beam) const
 {
     return startOfFrame() + DMA_CYCLES(beam.v * HPOS_CNT + beam.h);
 }
 
 Beam
-Agnus::cycleToBeam(Cycle cycle)
+Agnus::cycleToBeam(Cycle cycle) const
 {
     Beam result;
 
@@ -349,7 +349,7 @@ Agnus::cycleToBeam(Cycle cycle)
 }
 
 Beam
-Agnus::addToBeam(Beam beam, Cycle cycles)
+Agnus::addToBeam(Beam beam, Cycle cycles) const
 {
     Beam result;
 

@@ -256,7 +256,7 @@ Agnus::disableBplDmaECS()
 }
 
 template <BusOwner owner> bool
-Agnus::busIsFree()
+Agnus::busIsFree() const
 {
     // Deny if the bus is already in use
     if (busOwner[pos.h] != BUS_NONE) return false;
@@ -727,5 +727,5 @@ template u16 Agnus::doSpriteDMA<7>();
 template bool Agnus::allocateBus<BUS_COPPER>();
 template bool Agnus::allocateBus<BUS_BLITTER>();
 
-template bool Agnus::busIsFree<BUS_COPPER>();
-template bool Agnus::busIsFree<BUS_BLITTER>();
+template bool Agnus::busIsFree<BUS_COPPER>() const;
+template bool Agnus::busIsFree<BUS_BLITTER>() const;

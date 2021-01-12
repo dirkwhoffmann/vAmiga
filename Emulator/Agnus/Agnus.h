@@ -578,19 +578,19 @@ public:
      * depends on the number of lines that are drawn. This values varies
      * between long and short frames.
      */
-    Cycle cyclesInFrame();
+    Cycle cyclesInFrame() const;
 
     /* Returns the master cycle belonging to beam position (0,0). The first
      * function treats (0,0) as the upper left position of the current frame.
      * The second function referes to the next frame.
      */
-    Cycle startOfFrame();
-    Cycle startOfNextFrame();
+    Cycle startOfFrame() const;
+    Cycle startOfNextFrame() const;
 
     // Indicates if the provided master cycle belongs to a specific frame.
-    bool belongsToPreviousFrame(Cycle cycle);
-    bool belongsToCurrentFrame(Cycle cycle);
-    bool belongsToNextFrame(Cycle cycle);
+    bool belongsToPreviousFrame(Cycle cycle) const;
+    bool belongsToCurrentFrame(Cycle cycle) const;
+    bool belongsToNextFrame(Cycle cycle) const;
 
 
     //
@@ -600,28 +600,28 @@ public:
 public:
 
     // Indicates if the electron beam is inside the VBLANK area
-    bool inVBlank() { return pos.v < 26; }
+    bool inVBlank() const { return pos.v < 26; }
 
     // Indicates if the current rasterline is the last line in this frame
-    bool inLastRasterline() { return pos.v == frame.lastLine(); }
+    bool inLastRasterline() const { return pos.v == frame.lastLine(); }
 
     // Indicates if bitplane DMA is enabled in the current rasterline
-    bool inBplDmaLine() { return inBplDmaLine(dmacon, bplcon0); }
-    bool inBplDmaLine(u16 dmacon, u16 bplcon0);
+    bool inBplDmaLine() const { return inBplDmaLine(dmacon, bplcon0); }
+    bool inBplDmaLine(u16 dmacon, u16 bplcon0) const;
 
     // Indicates if the electron beam is inside a certain DMA area
-    bool inLoresDmaAreaEven(i16 pos) {
+    bool inLoresDmaAreaEven(i16 pos) const {
         return !(pos & 4) && pos >= ddfLores.strtEven && pos < ddfLores.stopEven; }
-    bool inLoresDmaAreaOdd(i16 pos) {
+    bool inLoresDmaAreaOdd(i16 pos) const {
         return (pos & 4) && pos >= ddfLores.strtOdd && pos < ddfLores.stopOdd; }
-    bool inHiresDmaAreaEven(i16 pos) {
+    bool inHiresDmaAreaEven(i16 pos) const {
         return !(pos & 2) && pos >= ddfHires.strtEven && pos < ddfHires.stopEven; }
-    bool inHiresDmaAreaOdd(i16 pos) {
+    bool inHiresDmaAreaOdd(i16 pos) const {
         return (pos & 2) && pos >= ddfHires.strtOdd && pos < ddfHires.stopOdd; }
     
     // Returns the pixel position for the current horizontal position
-    i16 ppos(i16 posh) { return (posh * 4) + 2; }
-    i16 ppos() { return ppos(pos.h); }
+    i16 ppos(i16 posh) const { return (posh * 4) + 2; }
+    i16 ppos() const { return ppos(pos.h); }
 
 
     //
@@ -633,17 +633,17 @@ public:
     /* Translates a beam position to a master cycle. The beam position must be
      * a position inside the current frame.
      */
-    Cycle beamToCycle(Beam beam);
+    Cycle beamToCycle(Beam beam) const;
 
     /* Translates a master cycle to a beam position. The beam position must
      * belong to the current frame.
      */
-    Beam cycleToBeam(Cycle cycle);
+    Beam cycleToBeam(Cycle cycle) const;
 
     /* Advances a beam position by a given number of cycles. Note that only
      * the horizontal component is wrapped over.
      */
-    Beam addToBeam(Beam beam, Cycle cycles);
+    Beam addToBeam(Beam beam, Cycle cycles) const;
 
 
     //
@@ -724,7 +724,7 @@ public:
         
     /* Checks if the bus is currently available for the specified resource.
      */
-    template <BusOwner owner> bool busIsFree();
+    template <BusOwner owner> bool busIsFree() const;
 
     /* Attempts to allocate the bus for the specified resource.
      * Returns true if the bus was successfully allocated.
