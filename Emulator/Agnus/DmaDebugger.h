@@ -53,11 +53,11 @@ public:
 public:
 
     // Turns DMA debugging on or off
-    bool isEnabled() { return enabled; }
+    bool isEnabled() const { return enabled; }
     void setEnabled(bool value);
 
     // Enables or disables the visual effects for a certain DMA source
-    bool isVisualized(BusOwner owner);
+    bool isVisualized(BusOwner owner) const;
     void setVisualized(BusOwner owner, bool value);
     void visualizeCopper(bool value);
     void visualizeBlitter(bool value);
@@ -69,7 +69,7 @@ public:
     void visualizeRefresh(bool value);
 
     // Gets or sets the opacity of the superimposed visual effect
-    double getOpacity();
+    double getOpacity() const { return opacity; }
     void setOpacity(double value);
 
     // Gets or sets the display mode
@@ -77,7 +77,7 @@ public:
     void setDisplayMode(DmaDisplayMode mode) { displayMode = mode; }
 
     // Gets or sets a debug color
-    RgbColor getColor(BusOwner owner);
+    RgbColor getColor(BusOwner owner) const;
     void getColor(BusOwner owner, double *rgb);
     void setColor(BusOwner owner, RgbColor color);
     void setColor(BusOwner owner, double r, double g, double b);

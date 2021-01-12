@@ -75,7 +75,7 @@ DmaDebugger::setEnabled(bool value)
 }
 
 bool
-DmaDebugger::isVisualized(BusOwner owner)
+DmaDebugger::isVisualized(BusOwner owner) const
 {
     assert(isBusOwner(owner));
     return visualize[owner];
@@ -149,7 +149,7 @@ DmaDebugger::visualizeRefresh(bool value)
 }
 
 RgbColor
-DmaDebugger::getColor(BusOwner owner)
+DmaDebugger::getColor(BusOwner owner) const
 {
     assert(isBusOwner(owner));
     return debugColor[owner][4];
@@ -244,12 +244,6 @@ void
 DmaDebugger::setRefreshColor(double r, double g, double b)
 {
     setColor(BUS_REFRESH, r, g, b);
-}
-
-double
-DmaDebugger::getOpacity()
-{
-    return opacity;
 }
 
 void
