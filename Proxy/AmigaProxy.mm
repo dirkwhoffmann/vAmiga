@@ -1648,23 +1648,23 @@ struct SerialPortWrapper { SerialPort *port; };
     if (preview != nullptr) { return preview; }
     
     // Create preview image
-    Snapshot *snapshot = (Snapshot *)wrapper->file;
+    const Thumbnail &thumbnail = ((Snapshot *)wrapper->file)->getThumbnail();
     
-    NSInteger width = snapshot->getImageWidth();
-    NSInteger height = snapshot->getImageHeight();
-    unsigned char *data = snapshot->getImageData();
+    // NSInteger width = thumbnail.width;
+    // NSInteger height = thumbnail.height;
+    unsigned char *data = (unsigned char *)thumbnail.screen;
     
     
     NSBitmapImageRep *rep = [[NSBitmapImageRep alloc]
                              initWithBitmapDataPlanes:&data
-                             pixelsWide:width
-                             pixelsHigh:height
+                             pixelsWide:thumbnail.width
+                             pixelsHigh:thumbnail.height
                              bitsPerSample:8
                              samplesPerPixel:4
                              hasAlpha:true
                              isPlanar:false
                              colorSpaceName:NSCalibratedRGBColorSpace
-                             bytesPerRow:4*width
+                             bytesPerRow:4*thumbnail.width
                              bitsPerPixel:32];
     
     preview = [[NSImage alloc] initWithSize:[rep size]];
@@ -1675,9 +1675,9 @@ struct SerialPortWrapper { SerialPort *port; };
     return preview;
 }
 
-- (time_t)timeStamp
+- (time_t)timeStamp __attribute__ ((deprecated))
 {
-    return ((Snapshot *)wrapper->file)->getTimestamp();
+    return ((Snapshot *)wrapper->file)->getThumbnail().timestamp;
 }
 
 - (NSData *)data

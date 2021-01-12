@@ -94,29 +94,16 @@ public:
 public:
     
     // Returns pointer to header data
-    const SnapshotHeader *getHeader() { return (SnapshotHeader *)data; }
+    const SnapshotHeader *getHeader() const { return (SnapshotHeader *)data; }
+    
+    // Returns a pointer to the thumbnail image
+    const Thumbnail &getThumbnail() const { return getHeader()->screenshot; }
     
     // Returns pointer to core data
     u8 *getData() override { return data + sizeof(SnapshotHeader); }
     
     // Takes a screenshot
     void takeScreenshot(Amiga &amiga);
-    
-    // Returns the timestamp
-    // GET DIRECTLY FROM SCREENSHOT
-    time_t getTimestamp() { return getHeader()->screenshot.timestamp; }
-    
-    // Returns a pointer to the screenshot data
-    // DEPRECATED
-    unsigned char *getImageData() { return (unsigned char *)(getHeader()->screenshot.screen); }
-    
-    // Returns the screenshot image width
-    // DEPRECATED
-    unsigned getImageWidth() { return getHeader()->screenshot.width; }
-    
-    // Returns the screenshot image height
-    // DEPRECATED
-    unsigned getImageHeight() { return getHeader()->screenshot.height; }
 };
 
 #endif
