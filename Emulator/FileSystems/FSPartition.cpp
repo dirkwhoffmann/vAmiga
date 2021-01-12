@@ -73,7 +73,7 @@ FSPartition::FSPartition(FSDevice &ref) : dev(ref)
 }
 
 void
-FSPartition::info()
+FSPartition::info() const
 {
     msg("DOS%lld  ",     dos);
     msg("%6d (x %3d) ", numBlocks(), bsize());
@@ -85,7 +85,7 @@ FSPartition::info()
 }
 
 void
-FSPartition::dump()
+FSPartition::dump() const
 {
     msg("      First cylinder : %d\n", lowCyl);
     msg("       Last cylinder : %d\n", highCyl);
@@ -101,7 +101,7 @@ FSPartition::dump()
 }
 
 FSBlockType
-FSPartition::predictBlockType(u32 nr, const u8 *buffer)
+FSPartition::predictBlockType(u32 nr, const u8 *buffer) const
 {
     assert(buffer != nullptr);
 
@@ -140,7 +140,7 @@ FSPartition::predictBlockType(u32 nr, const u8 *buffer)
 }
 
 FSName
-FSPartition::getName()
+FSPartition::getName() const
 {
     FSRootBlock *rb = dev.rootBlockPtr(rootBlock);
     return rb ? rb->getName() : FSName("");
@@ -486,7 +486,7 @@ FSPartition::killVirus()
 }
 
 bool
-FSPartition::check(bool strict, FSErrorReport &report)
+FSPartition::check(bool strict, FSErrorReport &report) const
 {
     report.bitmapErrors = 0;
     

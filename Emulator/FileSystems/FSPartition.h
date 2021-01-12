@@ -56,16 +56,16 @@ public:
     const char *getDescription() const override { return "FSPartition"; }
 
     // Prints a summary about this partition (called by FSDevice::info)
-    void info();
+    void info() const;
 
     // Prints debug information about this partition
-    void dump();
+    void dump() const;
 
     // Predicts the type of a block by analyzing its number and data
-    FSBlockType predictBlockType(u32 nr, const u8 *buffer);
+    FSBlockType predictBlockType(u32 nr, const u8 *buffer) const;
     
     // Gets or sets the name of this partition
-    FSName getName();
+    FSName getName() const;
     void setName(FSName name);
 
     
@@ -162,23 +162,10 @@ public:
 public:
     
     // Performs several partition checks
-    bool check(bool strict, FSErrorReport &report);
+    bool check(bool strict, FSErrorReport &report) const;
 
     // Checks if the block with the given number is part of this partition
-    bool inRange(u32 nr) { return nr >= firstBlock && nr <= lastBlock; }
-    
-    
-    //
-    // Importing and exporting
-    //
-    
-public:
-    
-    // Provides block information that is needed during the import process
-    /*
-    bool predictBlock(u32 nr, const u8 *buffer,
-                      FSPartition **p, FSVolumeType *dos, FSBlockType *type);
-    */
+    bool inRange(u32 nr) const { return nr >= firstBlock && nr <= lastBlock; }
 };
 
 typedef FSPartition* FSPartitionPtr;

@@ -63,12 +63,12 @@ struct FSTime : AmigaObject {
 
     const char *getDescription() const override { return "FSTime"; }
 
-    time_t time();
+    time_t time() const;
     void write(u8 *p);
 
-    string dateStr();
-    string timeStr();    
-    string str();
+    string dateStr() const;
+    string timeStr() const;
+    string str() const;
 };
 
 #endif
