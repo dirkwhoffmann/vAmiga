@@ -230,14 +230,14 @@ PixelEngine::getStableBuffer()
 }
 
 u32 *
-PixelEngine::getNoise()
+PixelEngine::getNoise() const
 {
     int offset = rand() % (512 * 512);
     return noise + offset;
 }
 
 u32 *
-PixelEngine::pixelAddr(int pixel)
+PixelEngine::pixelAddr(int pixel) const
 {
     u32 offset = pixel + agnus.pos.v * HPIXELS;
 

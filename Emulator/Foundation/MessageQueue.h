@@ -79,7 +79,7 @@ public:
 private:
     
     // Used by 'put' to propagates a single message to all registered listeners
-    void propagate(Message *msg);
+    void propagate(Message *msg) const;
 };
 
 #endif

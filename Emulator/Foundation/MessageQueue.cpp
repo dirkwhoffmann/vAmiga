@@ -81,11 +81,9 @@ MessageQueue::put(MsgType type, u64 data)
 }
 
 void
-MessageQueue::propagate(Message *msg)
+MessageQueue::propagate(Message *msg) const
 {
-    map <const void *, Callback *> :: iterator i;
-    
-    for (i = listeners.begin(); i != listeners.end(); i++) {
+    for (auto i = listeners.begin(); i != listeners.end(); i++) {
         i->second(i->first, msg->type, msg->data);
     }
 }
