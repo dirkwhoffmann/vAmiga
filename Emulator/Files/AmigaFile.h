@@ -79,7 +79,7 @@ public:
     virtual u8 *getData() { return data; }
 
     // Returns the number of bytes in this file
-    virtual usize getSize() { return size; }
+    virtual usize getSize() const { return size; }
             
     // Copies the whole file data into a buffer
     virtual void flash(u8 *buf, usize offset = 0);

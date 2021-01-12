@@ -112,8 +112,8 @@ private:
 public:
 
     // Getter for the delta charges
-    i16 getChargeDX() { return (i16)chargeDX; }
-    i16 getChargeDY() { return (i16)chargeDY; }
+    i16 getChargeDX() const { return (i16)chargeDX; }
+    i16 getChargeDY() const { return (i16)chargeDY; }
     
     // Returns the control port bits showing up in the JOYxDAT register
     u16 joydat();
@@ -122,10 +122,10 @@ public:
     void pokeJOYTEST(u16 value);
 
     // Modifies the POTGOR bits according to the connected device
-    void changePotgo(u16 &potgo);
+    void changePotgo(u16 &potgo) const;
 
     // Modifies the PRA bits of CIA A according to the connected device
-    void changePra(u8 &pra);    
+    void changePra(u8 &pra) const;
 };
 
 #endif

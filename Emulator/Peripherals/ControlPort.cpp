@@ -92,7 +92,7 @@ ControlPort::pokeJOYTEST(u16 value)
 }
 
 void
-ControlPort::changePotgo(u16 &potgo)
+ControlPort::changePotgo(u16 &potgo) const
 {
     if (device == CPD_MOUSE) {
         mouse.changePotgo(potgo);
@@ -100,7 +100,7 @@ ControlPort::changePotgo(u16 &potgo)
 }
 
 void
-ControlPort::changePra(u8 &pra)
+ControlPort::changePra(u8 &pra) const
 {
     if (device == CPD_MOUSE) {
         mouse.changePra(pra);

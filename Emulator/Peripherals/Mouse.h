@@ -112,10 +112,10 @@ private:
 public:
 
     // Modifies the POTGOR bits according to the current button state
-    void changePotgo(u16 &potgo);
+    void changePotgo(u16 &potgo) const;
 
     // Modifies the PRA bits of CIA A according to the current button state
-    void changePra(u8 &pra);
+    void changePra(u8 &pra) const;
 
     
     //

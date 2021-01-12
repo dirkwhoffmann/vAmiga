@@ -73,7 +73,7 @@ Joystick::scheduleNextShot()
 }
 
 void
-Joystick::changePra(u8 &pra)
+Joystick::changePra(u8 &pra) const
 {
     u16 mask = (port.nr == 1) ? 0x40 : 0x80;
 
@@ -81,7 +81,7 @@ Joystick::changePra(u8 &pra)
 }
 
 u16
-Joystick::joydat()
+Joystick::joydat() const
 {
     // debug("joydat\n");
     
@@ -106,7 +106,7 @@ Joystick::joydat()
 }
 
 u8
-Joystick::ciapa()
+Joystick::ciapa() const
 {
     return button ? (port.nr == 1 ? 0xBF : 0x7F) : 0xFF;
 }

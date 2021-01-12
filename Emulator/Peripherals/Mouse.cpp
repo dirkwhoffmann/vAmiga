@@ -52,7 +52,7 @@ Mouse::_dump()
 }
 
 void
-Mouse::changePotgo(u16 &potgo)
+Mouse::changePotgo(u16 &potgo) const
 {
     u16 mask = port.nr == 1 ? 0x0400 : 0x4000;
 
@@ -64,7 +64,7 @@ Mouse::changePotgo(u16 &potgo)
 }
 
 void
-Mouse::changePra(u8 &pra)
+Mouse::changePra(u8 &pra) const
 {
     u16 mask = port.nr == 1 ? 0x0040 : 0x0080;
 

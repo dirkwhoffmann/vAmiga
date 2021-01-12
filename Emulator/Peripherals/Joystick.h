@@ -100,15 +100,15 @@ private:
 public:
     
     // Configures autofire mode
-    bool getAutofire() { return autofire; }
+    bool getAutofire() const { return autofire; }
     void setAutofire(bool value);
     
     // Configures the bullets per gun volley (negative value = infinite)
-    int getAutofireBullets() { return autofireBullets; }
+    int getAutofireBullets() const { return autofireBullets; }
     void setAutofireBullets(int value);
     
     // Configures the autofire frequency
-    float getAutofireFrequency() { return autofireFrequency; }
+    float getAutofireFrequency() const { return autofireFrequency; }
     void setAutofireFrequency(float value) { autofireFrequency = value; }
 
 private:
@@ -119,7 +119,7 @@ private:
 public:
 
     // Modifies the PRA bits of CIA A according to the current button state
-    void changePra(u8 &pra);
+    void changePra(u8 &pra) const;
 
 
     //
@@ -129,10 +129,10 @@ public:
 public:
 
     // Callback handler for function ControlPort::joydat()
-    u16 joydat();
+    u16 joydat() const;
 
     // Callback handler for function ControlPort::ciapa()
-    u8 ciapa();
+    u8 ciapa() const;
     
     // Triggers a gamepad event
     void trigger(GamePadAction event);
