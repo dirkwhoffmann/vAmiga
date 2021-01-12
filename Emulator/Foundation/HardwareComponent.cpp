@@ -117,9 +117,9 @@ HardwareComponent::size()
 }
 
 size_t
-HardwareComponent::load(u8 *buffer)
+HardwareComponent::load(const u8 *buffer)
 {
-    u8 *ptr = buffer;
+    const u8 *ptr = buffer;
 
     // Call delegation method
     ptr += willLoadFromBuffer(ptr);

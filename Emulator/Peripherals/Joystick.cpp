@@ -36,7 +36,7 @@ Joystick::_dump()
 }
 
 size_t
-Joystick::didLoadFromBuffer(u8 *buffer)
+Joystick::didLoadFromBuffer(const u8 *buffer)
 {
     // Discard any active joystick movements
     button = false;

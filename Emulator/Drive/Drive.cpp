@@ -156,7 +156,7 @@ Drive::_size()
 }
 
 size_t
-Drive::_load(u8 *buffer)
+Drive::_load(const u8 *buffer) 
 {
     SerReader reader(buffer);
 

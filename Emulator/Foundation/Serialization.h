@@ -27,42 +27,42 @@
 // Basic memory buffer I/O
 //
 
-inline u8 read8(u8 *& buf)
+inline u8 read8(const u8 *& buf)
 {
     u8 result = R8BE(buf);
     buf += 1;
     return result;
 }
 
-inline u16 read16(u8 *& buf)
+inline u16 read16(const u8 *& buf)
 {
     u16 result = R16BE(buf);
     buf += 2;
     return result;
 }
 
-inline u32 read32(u8 *& buf)
+inline u32 read32(const u8 *& buf)
 {
     u32 result = R32BE(buf);
     buf += 4;
     return result;
 }
 
-inline u64 read64(u8 *& buf)
+inline u64 read64(const u8 *& buf)
 {
     u32 hi = read32(buf);
     u32 lo = read32(buf);
     return ((u64)hi << 32) | lo;
 }
 
-inline float readFloat(u8 *& buf)
+inline float readFloat(const u8 *& buf)
 {
     float result;
     *((u32 *)(&result)) = read32(buf);
     return result;
 }
 
-inline double readDouble(u8 *& buf)
+inline double readDouble(const u8 *& buf)
 {
     double result;
     *((u64 *)(&result)) = read64(buf);
@@ -208,9 +208,9 @@ class SerReader
 {
 public:
 
-    u8 *ptr;
+    const u8 *ptr;
 
-    SerReader(u8 *p) : ptr(p)
+    SerReader(const u8 *p) : ptr(p)
     {
     }
 

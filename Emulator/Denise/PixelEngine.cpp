@@ -44,7 +44,7 @@ PixelEngine::~PixelEngine()
 }
 
 size_t
-PixelEngine::didLoadFromBuffer(u8 *buffer)
+PixelEngine::didLoadFromBuffer(const u8 *buffer)
 {
     updateRGBA();
     return 0;

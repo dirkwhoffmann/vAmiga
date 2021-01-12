@@ -242,7 +242,7 @@ Muxer::setSampleRate(double hz)
 }
 
 size_t
-Muxer::didLoadFromBuffer(u8 *buffer)
+Muxer::didLoadFromBuffer(const u8 *buffer)
 {
     for (int i = 0; i < 4; i++) sampler[i]->reset();
     return 0;

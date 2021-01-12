@@ -236,7 +236,7 @@ Memory::_size()
 }
 
 size_t
-Memory::didLoadFromBuffer(u8 *buffer)
+Memory::didLoadFromBuffer(const u8 *buffer)
 {
     SerReader reader(buffer);
 
@@ -280,7 +280,7 @@ Memory::didLoadFromBuffer(u8 *buffer)
 }
 
 size_t
-Memory::didSaveToBuffer(u8 *buffer)
+Memory::didSaveToBuffer(u8 *buffer) const
 {
     // Save memory size information
     SerWriter writer(buffer);

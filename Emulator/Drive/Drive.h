@@ -162,7 +162,7 @@ private:
     }
 
     size_t _size() override;
-    size_t _load(u8 *buffer) override;
+    size_t _load(const u8 *buffer) override;
     size_t _save(u8 *buffer) override;
 
 

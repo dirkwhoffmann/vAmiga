@@ -277,7 +277,7 @@ CPU::_setDebug(bool enable)
 }
 
 size_t
-CPU::didLoadFromBuffer(u8 *buffer)
+CPU::didLoadFromBuffer(const u8 *buffer)
 {
     /* Because we don't save breakpoints and watchpoints in a snapshot, the
      * CPU flags for checking breakpoints and watchpoints can be in a corrupt
