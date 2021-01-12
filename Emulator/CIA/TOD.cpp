@@ -42,7 +42,7 @@ TOD::_inspect()
 }
 
 void 
-TOD::_dump()
+TOD::_dump() const
 {
     msg("           Counter : %02X:%02X:%02X\n", tod.hi, tod.mid, tod.lo);
     msg("             Alarm : %02X:%02X:%02X\n", alarm.hi, alarm.mid, alarm.lo);

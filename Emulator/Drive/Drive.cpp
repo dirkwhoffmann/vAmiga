@@ -109,7 +109,7 @@ Drive::_dumpConfig() const
 }
 
 void
-Drive::_dump()
+Drive::_dump() const
 {
     msg("                Nr: %d\n", nr);
     msg("          Id count: %d\n", idCount);

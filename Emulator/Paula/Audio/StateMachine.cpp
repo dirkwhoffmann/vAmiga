@@ -50,7 +50,7 @@ StateMachine<nr>::_inspect()
 }
 
 template <int nr> void
-StateMachine<nr>::_dump()
+StateMachine<nr>::_dump() const
 {
     msg("   State : %d\n", state);
     msg("  AUDxIP : %d\n", AUDxIP());

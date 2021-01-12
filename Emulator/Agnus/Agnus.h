@@ -452,7 +452,7 @@ private:
     private:
         
         void _inspect() override;
-        void _dump() override;
+        void _dump() const override;
 
         void inspectEvents();
         void inspectEventSlot(EventSlot nr);
@@ -784,15 +784,15 @@ private:
     void updateDasJumpTable(i16 end = HPOS_MAX);
 
     // Dumps an event table for debugging
-    void dumpEventTable(EventID *table, char str[256][3], int from, int to);
+    void dumpEventTable(const EventID *table, char str[256][3], int from, int to) const;
 
 public:
     
     // Dumps the BPL or DAS event table for debugging
-    void dumpBplEventTable(int from, int to);
-    void dumpBplEventTable();
-    void dumpDasEventTable(int from, int to);
-    void dumpDasEventTable();
+    void dumpBplEventTable(int from, int to) const;
+    void dumpBplEventTable() const;
+    void dumpDasEventTable(int from, int to) const;
+    void dumpDasEventTable() const;
 
     
     //

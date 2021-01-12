@@ -227,7 +227,7 @@ public:
 
 private:
     
-    void _dump() override;
+    void _dump() const override;
 
     
     //

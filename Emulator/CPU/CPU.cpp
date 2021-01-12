@@ -240,25 +240,23 @@ CPU::_inspect(u32 dasmStart)
 }
 
 void
-CPU::_dump()
+CPU::_dump() const
 {
-    _inspect();
-    
-    msg("     PC0: %8X\n", info.pc0);
+    msg("     PC0: %8X\n", reg.pc0);
     msg(" D0 - D3: ");
-    for (unsigned i = 0; i < 4; i++) msg("%8X ", info.d[i]);
+    for (unsigned i = 0; i < 4; i++) msg("%8X ", reg.d[i]);
     msg("\n");
     msg(" D4 - D7: ");
-    for (unsigned i = 4; i < 8; i++) msg("%8X ", info.d[i]);
+    for (unsigned i = 4; i < 8; i++) msg("%8X ", reg.d[i]);
     msg("\n");
     msg(" A0 - A3: ");
-    for (unsigned i = 0; i < 4; i++) msg("%8X ", info.a[i]);
+    for (unsigned i = 0; i < 4; i++) msg("%8X ", reg.a[i]);
     msg("\n");
     msg(" A4 - A7: ");
-    for (unsigned i = 4; i < 8; i++) msg("%8X ", info.a[i]);
+    for (unsigned i = 4; i < 8; i++) msg("%8X ", reg.a[i]);
     msg("\n");
-    msg("     SSP: %X\n", info.ssp);
-    msg("   Flags: %X\n", info.sr);
+    msg("     SSP: %X\n", reg.ssp);
+    msg("   Flags: %X\n", getSR());
 }
 
 void

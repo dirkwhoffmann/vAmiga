@@ -33,7 +33,7 @@ UART::_inspect()
 }
 
 void
-UART::_dump()
+UART::_dump() const
 {
     msg("   serper: %X\n", serper);
 }

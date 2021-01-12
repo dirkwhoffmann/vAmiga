@@ -56,7 +56,7 @@ Paula::_inspect()
 }
 
 void
-Paula::_dump()
+Paula::_dump() const
 {
     
 }

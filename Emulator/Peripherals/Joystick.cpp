@@ -30,7 +30,7 @@ Joystick::_reset(bool hard)
 }
 
 void
-Joystick::_dump()
+Joystick::_dump() const
 {
     msg("Button:  %s AxisX: %d AxisY: %d\n", button ? "YES" : "NO", axisX, axisY);
 }

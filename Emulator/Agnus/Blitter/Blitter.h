@@ -295,7 +295,7 @@ private:
     
     // Methods from HardwareComponent
     void _inspect() override;
-    void _dump() override;
+    void _dump() const override;
 
 
     //

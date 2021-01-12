@@ -188,7 +188,7 @@ Denise::_inspect()
 }
 
 void
-Denise::_dump()
+Denise::_dump() const
 {
 }
 

@@ -337,7 +337,7 @@ Amiga::_inspect()
 }
 
 void
-Amiga::_dump()
+Amiga::_dump() const
 {
     msg("    poweredOn: %s\n", isPoweredOn() ? "yes" : "no");
     msg("   poweredOff: %s\n", isPoweredOff() ? "yes" : "no");

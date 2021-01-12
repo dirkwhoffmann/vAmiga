@@ -45,7 +45,7 @@ ControlPort::_inspect()
 }
 
 void
-ControlPort::_dump()
+ControlPort::_dump() const
 {
     msg("         device: %ld (%s)\n",
         (long)device,

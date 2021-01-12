@@ -38,7 +38,7 @@ Copper::_inspect()
 }
 
 void
-Copper::_dump()
+Copper::_dump() const
 {
     bool active = agnus.isPending<COP_SLOT>();
     msg("    cdang: %d\n", cdang);

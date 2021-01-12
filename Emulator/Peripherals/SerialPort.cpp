@@ -67,7 +67,7 @@ SerialPort::_inspect()
 }
 
 void
-SerialPort::_dump()
+SerialPort::_dump() const
 {
     msg("    device: %ld\n", (long)config.device);
     msg("      port: %X\n", port);

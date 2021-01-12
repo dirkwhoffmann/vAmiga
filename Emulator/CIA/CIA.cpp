@@ -157,41 +157,37 @@ CIA::_inspect()
 }
 
 void
-CIA::_dump()
-{
-    _inspect();
-
+CIA::_dump() const
+{    
     msg("                   Clock : %lld\n", clock);
     msg("                Sleeping : %s\n", sleeping ? "yes" : "no");
     msg("               Tiredness : %d\n", tiredness);
     msg(" Most recent sleep cycle : %lld\n", sleepCycle);
     msg("Most recent wakeup cycle : %lld\n", wakeUpCycle);
     msg("\n");
-    msg("               Counter A : %04X\n", info.timerA.count);
-    msg("                 Latch A : %04X\n", info.timerA.latch);
-    msg("         Data register A : %02X\n", info.portA.reg);
-    msg("   Data port direction A : %02X\n", info.portA.dir);
-    msg("             Data port A : %02X\n", info.portA.port);
+    msg("               Counter A : %04X\n", counterA);
+    msg("                 Latch A : %04X\n", latchA);
+    msg("         Data register A : %02X\n", PRA);
+    msg("   Data port direction A : %02X\n", DDRA);
+    msg("             Data port A : %02X\n", PA);
     msg("      Control register A : %02X\n", CRA);
     msg("\n");
-    msg("               Counter B : %04X\n", info.timerB.count);
-    msg("                 Latch B : %04X\n", info.timerB.latch);
-    msg("         Data register B : %02X\n", info.portB.reg);
-    msg("   Data port direction B : %02X\n", info.portB.dir);
-    msg("             Data port B : %02X\n", info.portB.port);
+    msg("               Counter B : %04X\n", counterB);
+    msg("                 Latch B : %04X\n", latchB);
+    msg("         Data register B : %02X\n", PRB);
+    msg("   Data port direction B : %02X\n", DDRB);
+    msg("             Data port B : %02X\n", PB);
     msg("      Control register B : %02X\n", CRB);
     msg("\n");
-    msg("   Interrupt control reg : %02X\n", info.icr);
-    msg("      Interrupt mask reg : %02X\n", info.imr);
+    msg("   Interrupt control reg : %02X\n", icr);
+    msg("      Interrupt mask reg : %02X\n", imr);
     msg("\n");
-    msg("                     SDR : %02X %02X\n", info.sdr, sdr);
+    msg("                 SDR/SSR : %02X/%02X\n", sdr, ssr);
     msg("              serCounter : %02X\n", serCounter);
     msg("\n");
     msg("                     CNT : %d\n", CNT);
     msg("                     INT : %d\n", INT);
     msg("\n");
-
-    tod.dump();
 }
 
 void

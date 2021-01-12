@@ -63,7 +63,7 @@ Keyboard::_dumpConfig() const
 }
 
 void
-Keyboard::_dump()
+Keyboard::_dump() const
 {
     msg("Type ahead buffer: ");
     for (unsigned i = 0; i < bufferIndex; i++) {

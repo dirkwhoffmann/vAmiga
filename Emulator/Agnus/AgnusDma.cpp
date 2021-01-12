@@ -569,7 +569,7 @@ Agnus::updateDasJumpTable(i16 end)
 }
 
 void
-Agnus::dumpEventTable(EventID *table, char str[256][3], int from, int to)
+Agnus::dumpEventTable(const EventID *table, char str[256][3], int from, int to) const
 {
     char r1[256], r2[256], r3[256], r4[256], r5[256];
     int i;
@@ -595,7 +595,7 @@ Agnus::dumpEventTable(EventID *table, char str[256][3], int from, int to)
 }
 
 void
-Agnus::dumpBplEventTable(int from, int to)
+Agnus::dumpBplEventTable(int from, int to) const
 {
     char str[256][3];
 
@@ -627,7 +627,7 @@ Agnus::dumpBplEventTable(int from, int to)
 }
 
 void
-Agnus::dumpBplEventTable()
+Agnus::dumpBplEventTable() const
 {
     // Dump the event table
     msg("Event table:\n\n");
@@ -655,7 +655,7 @@ Agnus::dumpBplEventTable()
 }
 
 void
-Agnus::dumpDasEventTable(int from, int to)
+Agnus::dumpDasEventTable(int from, int to) const
 {
     char str[256][3];
 
@@ -695,7 +695,7 @@ Agnus::dumpDasEventTable(int from, int to)
 }
 
 void
-Agnus::dumpDasEventTable()
+Agnus::dumpDasEventTable() const
 {
     // Dump the event table
     dumpDasEventTable(0x00, 0x4F);

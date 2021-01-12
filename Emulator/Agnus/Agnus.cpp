@@ -209,7 +209,7 @@ Agnus::_inspect()
 }
 
 void
-Agnus::_dump()
+Agnus::_dump() const
 {
     msg(" actions : %llX\n", hsyncActions);
 
@@ -222,9 +222,6 @@ Agnus::_dump()
     msg("   hstop : %d\n", diwHstop);
     msg("   vstrt : %d\n", diwVstrt);
     msg("   vstop : %d\n", diwVstop);
-
-    msg("\nEvents:\n\n");
-    dumpEvents();
 
     msg("\nBPL DMA table:\n\n");
     dumpBplEventTable();

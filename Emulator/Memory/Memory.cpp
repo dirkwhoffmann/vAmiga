@@ -304,7 +304,7 @@ Memory::didSaveToBuffer(u8 *buffer) const
 }
 
 void
-Memory::_dump()
+Memory::_dump() const
 {
     struct { u8 *addr; size_t size; const char *desc; } mem[7] = {
         { rom, config.romSize, "Rom" },

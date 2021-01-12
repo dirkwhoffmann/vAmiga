@@ -99,7 +99,7 @@ public:
     
     const char *getDescription() const override { return "ScreenRecorder"; }
 
-    bool hasFFmpeg();
+    bool hasFFmpeg() const;
     
     void _reset(bool hard) override;
 
@@ -110,7 +110,7 @@ public:
 
 private:
     
-    void _dump() override;
+    void _dump() const override;
     
     
     //

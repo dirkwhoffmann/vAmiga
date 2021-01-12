@@ -142,7 +142,7 @@ Blitter::_inspect()
 }
 
 void
-Blitter::_dump()
+Blitter::_dump() const
 {
     msg("  Accuracy: %d\n", config.accuracy);
     msg("\n");

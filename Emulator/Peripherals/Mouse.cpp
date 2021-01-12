@@ -35,7 +35,7 @@ void Mouse::_reset(bool hard)
 }
 
 void
-Mouse::_dump()
+Mouse::_dump() const
 {
     msg(" leftButton = %d\n", leftButton);
     msg("rightButton = %d\n", rightButton);

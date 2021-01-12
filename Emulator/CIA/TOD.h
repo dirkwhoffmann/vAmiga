@@ -87,7 +87,7 @@ public:
     CounterInfo getInfo() { return HardwareComponent::getInfo(info); }
 
     void _inspect() override;
-    void _dump() override;
+    void _dump() const override;
 
     
     //

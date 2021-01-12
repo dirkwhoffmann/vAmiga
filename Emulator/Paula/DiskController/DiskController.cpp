@@ -167,7 +167,7 @@ DiskController::_inspect()
 }
 
 void
-DiskController::_dump()
+DiskController::_dump() const
 {
     msg("     selected : %d\n", selected);
     msg("        state : %s\n", DriveDmaStateName(state));

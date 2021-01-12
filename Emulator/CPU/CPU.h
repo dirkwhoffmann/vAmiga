@@ -44,7 +44,7 @@ private:
     
     void _inspect() override;
     void _inspect(u32 dasmStart);
-    void _dump() override;
+    void _dump() const override;
 
     
     //
