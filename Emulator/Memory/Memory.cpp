@@ -796,11 +796,25 @@ Memory::spypeek16 <CPU_ACCESS, MEM_NONE> (u32 addr)
 }
 
 template<> u16
+Memory::spypeek16 <CPU_ACCESS, MEM_NONE> (u32 addr) const
+{
+    assert(false);
+    return 0;
+}
+
+template<> u16
 Memory::spypeek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr)
 {
     assert((addr & agnus.ptrMask) == addr);
     
     return peek16 <CPU_ACCESS, MEM_NONE> (addr);
+}
+
+template<> u16
+Memory::spypeek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr) const
+{
+    assert(false);
+    return 0;
 }
 
 template<> u8
@@ -841,11 +855,25 @@ Memory::spypeek16 <CPU_ACCESS, MEM_CHIP> (u32 addr)
 }
 
 template<> u16
+Memory::spypeek16 <CPU_ACCESS, MEM_CHIP> (u32 addr) const
+{
+    assert(false);
+    return 0;
+}
+
+template<> u16
 Memory::spypeek16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr)
 {
     assert((addr & agnus.ptrMask) == addr);
     
     return READ_CHIP_16(addr);
+}
+
+template<> u16
+Memory::spypeek16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr) const
+{
+    assert(false);
+    return 0;
 }
 
 template<> u8
@@ -887,11 +915,25 @@ Memory::spypeek16 <CPU_ACCESS, MEM_SLOW> (u32 addr)
 }
 
 template<> u16
+Memory::spypeek16 <CPU_ACCESS, MEM_SLOW> (u32 addr) const
+{
+    assert(false);
+    return 0;
+}
+
+template<> u16
 Memory::spypeek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr)
 {
     assert((addr & agnus.ptrMask) == addr);
     
     return READ_SLOW_16(addr);
+}
+
+template<> u16
+Memory::spypeek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr) const
+{
+    assert(false);
+    return 0;
 }
 
 template<> u8
@@ -916,6 +958,13 @@ template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_FAST> (u32 addr)
 {
     return READ_FAST_16(addr);
+}
+
+template<> u16
+Memory::spypeek16 <CPU_ACCESS, MEM_FAST> (u32 addr) const
+{
+    assert(false);
+    return 0;
 }
 
 template<> u8
@@ -947,6 +996,13 @@ Memory::spypeek16 <CPU_ACCESS, MEM_CIA> (u32 addr)
     return spypeekCIA16(addr);
 }
 
+template<> u16
+Memory::spypeek16 <CPU_ACCESS, MEM_CIA> (u32 addr) const
+{
+    assert(false);
+    return 0;
+}
+
 template<> u8
 Memory::peek8 <CPU_ACCESS, MEM_RTC> (u32 addr)
 {
@@ -973,6 +1029,13 @@ template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_RTC> (u32 addr)
 {
     return spypeekRTC16(addr);
+}
+
+template<> u16
+Memory::spypeek16 <CPU_ACCESS, MEM_RTC> (u32 addr) const
+{
+    assert(false);
+    return 0;
 }
 
 template<> u8
@@ -1005,6 +1068,13 @@ template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_CUSTOM> (u32 addr)
 {
     return spypeekCustom16(addr);
+}
+
+template<> u16
+Memory::spypeek16 <CPU_ACCESS, MEM_CUSTOM> (u32 addr) const
+{
+    assert(false);
+    return 0;
 }
 
 template<> u8
@@ -1047,6 +1117,13 @@ Memory::spypeek16 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr)
     return HI_LO(hi,lo);
 }
 
+template<> u16
+Memory::spypeek16 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr) const
+{
+    assert(false);
+    return 0;
+}
+
 template<> u8
 Memory::peek8 <CPU_ACCESS, MEM_ROM> (u32 addr)
 {
@@ -1069,6 +1146,13 @@ template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_ROM> (u32 addr)
 {
     return READ_ROM_16(addr);
+}
+
+template<> u16
+Memory::spypeek16 <CPU_ACCESS, MEM_ROM> (u32 addr) const
+{
+    assert(false);
+    return 0;
 }
 
 template<> u8
@@ -1095,6 +1179,13 @@ Memory::spypeek16 <CPU_ACCESS, MEM_WOM> (u32 addr)
     return READ_WOM_16(addr);
 }
 
+template<> u16
+Memory::spypeek16 <CPU_ACCESS, MEM_WOM> (u32 addr) const
+{
+    assert(false);
+    return 0;
+}
+
 template<> u8
 Memory::peek8 <CPU_ACCESS, MEM_EXT> (u32 addr)
 {
@@ -1117,6 +1208,13 @@ template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_EXT> (u32 addr)
 {
     return READ_EXT_16(addr);
+}
+
+template<> u16
+Memory::spypeek16 <CPU_ACCESS, MEM_EXT> (u32 addr) const
+{
+    assert(false);
+    return 0;
 }
 
 template<> u8
@@ -1230,6 +1328,13 @@ Memory::spypeek16 <CPU_ACCESS> (u32 addr)
 }
 
 template<> u16
+Memory::spypeek16 <CPU_ACCESS> (u32 addr) const
+{
+    assert(false);
+    return 0;
+}
+
+template<> u16
 Memory::spypeek16 <AGNUS_ACCESS> (u32 addr)
 {
     assert(IS_EVEN(addr));
@@ -1243,6 +1348,13 @@ Memory::spypeek16 <AGNUS_ACCESS> (u32 addr)
             
         default: assert(false); return 0;
     }
+}
+
+template<> u16
+Memory::spypeek16 <AGNUS_ACCESS> (u32 addr) const
+{
+    assert(false);
+    return 0;
 }
 
 template <> void
