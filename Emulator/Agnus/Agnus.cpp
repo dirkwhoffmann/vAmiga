@@ -131,7 +131,7 @@ Agnus::setConfigItem(Option option, long value)
 }
 
 void
-Agnus::_dumpConfig()
+Agnus::_dumpConfig() const
 {
     msg("      revision : %s\n", AgnusRevisionName(config.revision));
     msg(" slowRamMirror : %s\n", config.slowRamMirror ? "yes" : "no");

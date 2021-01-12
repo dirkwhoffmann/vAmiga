@@ -136,7 +136,7 @@ DiskController::setConfigItem(Option option, long id, long value)
 }
 
 void
-DiskController::_dumpConfig()
+DiskController::_dumpConfig() const
 {
     msg("          df0 : %s\n", config.connected[0] ? "connected" : "disconnected");
     msg("          df1 : %s\n", config.connected[1] ? "connected" : "disconnected");

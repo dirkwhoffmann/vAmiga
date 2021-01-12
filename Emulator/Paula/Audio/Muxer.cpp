@@ -217,7 +217,7 @@ Muxer::setConfigItem(Option option, long id, long value)
 }
 
 void
-Muxer::_dumpConfig()
+Muxer::_dumpConfig() const
 {
     msg("samplingMethod : %s\n", sSamplingMethod(config.samplingMethod));
     msg("    filtertype : %s\n", FilterTypeName(config.filterType));

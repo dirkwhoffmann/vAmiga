@@ -57,7 +57,7 @@ RTC::setConfigItem(Option option, long value)
 }
 
 void
-RTC::_dumpConfig()
+RTC::_dumpConfig() const
 {
     msg("  Revision : %s\n", RTCRevisionName(config.model));
 }

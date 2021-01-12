@@ -97,7 +97,7 @@ Blitter::setConfigItem(Option option, long value)
 }
 
 void
-Blitter::_dumpConfig()
+Blitter::_dumpConfig() const
 {
     msg("      accuracy : %d\n", config.accuracy);
 }

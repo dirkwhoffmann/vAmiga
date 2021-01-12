@@ -144,7 +144,7 @@ Denise::setConfigItem(Option option, long value)
 }
 
 void
-Denise::_dumpConfig()
+Denise::_dumpConfig() const
 {
     msg("          revision : %s\n", sDeniseRevision(config.revision));
     msg("       borderblank : %s\n", config.borderblank ? "yes" : "no");

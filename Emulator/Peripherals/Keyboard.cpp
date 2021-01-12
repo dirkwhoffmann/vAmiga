@@ -57,7 +57,7 @@ Keyboard::setConfigItem(Option option, long value)
 }
 
 void
-Keyboard::_dumpConfig()
+Keyboard::_dumpConfig() const
 {
     msg("      accurate : %d\n", config.accurate);
 }

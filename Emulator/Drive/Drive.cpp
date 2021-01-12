@@ -99,7 +99,7 @@ Drive::_inspect()
 }
 
 void
-Drive::_dumpConfig()
+Drive::_dumpConfig() const
 {
     msg("              Type : %s\n", driveTypeName(config.type));
     msg(" Emulate mechanics : %s\n", config.mechanicalDelays ? "yes" : "no");

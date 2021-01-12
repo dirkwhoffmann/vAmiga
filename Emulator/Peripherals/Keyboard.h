@@ -68,7 +68,7 @@ public:
 
 private:
 
-    void _dumpConfig() override;
+    void _dumpConfig() const override;
     
     
     //

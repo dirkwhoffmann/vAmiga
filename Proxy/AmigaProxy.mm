@@ -50,62 +50,77 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (NSInteger) count
 {
     return wrapper->guards->elements();
 }
+
 - (NSInteger) addr:(NSInteger)nr
 {
     return wrapper->guards->guardAddr(nr);
 }
+
 - (BOOL) isEnabled:(NSInteger)nr
 {
     return wrapper->guards->isEnabled(nr);
 }
+
 - (BOOL) isDisabled:(NSInteger)nr
 {
     return wrapper->guards->isDisabled(nr);
 }
+
 - (void) enable:(NSInteger)nr
 {
     wrapper->guards->enable(nr);
 }
+
 - (void) disable:(NSInteger)nr
 {
     wrapper->guards->disable(nr);
 }
+
 - (void) remove:(NSInteger)nr
 {
     return wrapper->guards->remove(nr);
 }
+
 - (void) replace:(NSInteger)nr addr:(NSInteger)addr
 {
     wrapper->guards->replace(nr, (u32)addr);
 }
+
 - (BOOL) isSetAt:(NSInteger)addr
 {
     return wrapper->guards->isSetAt((u32)addr);
 }
+
 - (BOOL) isSetAndEnabledAt:(NSInteger)addr
 {
     return wrapper->guards->isSetAndEnabledAt((u32)addr);
 }
+
 - (BOOL) isSetAndDisabledAt:(NSInteger)addr
 {
     return wrapper->guards->isSetAndDisabledAt((u32)addr);
 }
+
 - (void) enableAt:(NSInteger)addr
 {
     wrapper->guards->enableAt((u32)addr);
 }
+
 - (void) disableAt:(NSInteger)addr
 {
     wrapper->guards->disableAt((u32)addr);
 }
+
 - (void) addAt:(NSInteger)addr
 {
     wrapper->guards->addAt((u32)addr);
 }
+
 - (void) removeAt:(NSInteger)addr
 {
     wrapper->guards->removeAt((u32)addr);
@@ -127,64 +142,78 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (void) dump
 {
     wrapper->cpu->dump();
 }
+
 - (CPUInfo) getInfo
 {
     return wrapper->cpu->getInfo();
 }
+
 - (i64) clock
 {
     return wrapper->cpu->getMasterClock(); 
 }
+
 - (i64) cycles
 {
     return wrapper->cpu->getCpuClock();
 }
+
 - (bool) isHalted
 {
     return wrapper->cpu->isHalted();
 }
+
 - (NSInteger) loggedInstructions
 {
     return wrapper->cpu->debugger.loggedInstructions();
 }
+
 - (void) clearLog
 {
     return wrapper->cpu->debugger.clearLog();
 }
+
 - (NSString *) disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len
 {
     const char *str = wrapper->cpu->disassembleRecordedInstr((int)i, len);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (NSString *) disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len
 {
     const char *str = wrapper->cpu->disassembleRecordedWords((int)i, len);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (NSString *) disassembleRecordedFlags:(NSInteger)i
 {
     const char *str = wrapper->cpu->disassembleRecordedFlags((int)i);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (NSString *) disassembleRecordedPC:(NSInteger)i
 {
     const char *str = wrapper->cpu->disassembleRecordedPC((int)i);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (NSString *) disassembleInstr:(NSInteger)addr length:(NSInteger *)len
 {
     const char *str = wrapper->cpu->disassembleInstr(addr, len);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (NSString *) disassembleWords:(NSInteger)addr length:(NSInteger)len
 {
     const char *str = wrapper->cpu->disassembleWords(addr, len);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (NSString *) disassembleAddr:(NSInteger)addr
 {
     const char *str = wrapper->cpu->disassembleAddr(addr);
@@ -208,14 +237,17 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (CIAInfo) getInfo
 {
     return wrapper->cia->getInfo();
 }
+
 - (void) dumpConfig
 {
     wrapper->cia->dumpConfig();
 }
+
 - (void) dump
 {
     wrapper->cia->dump();
@@ -238,152 +270,187 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (MemoryConfig) getConfig
 {
     return wrapper->mem->getConfig();
 }
+
 - (MemoryStats) getStats
 {
     return wrapper->mem->getStats();
 }
+
 - (void) dump
 {
     wrapper->mem->dump();
 }
+
 - (BOOL) isBootRom:(RomIdentifier)rev
 {
     return RomFile::isBootRom(rev);
 }
+
 - (BOOL) isArosRom:(RomIdentifier)rev
 {
     return RomFile::isArosRom(rev);
 }
+
 - (BOOL) isDiagRom:(RomIdentifier)rev
 {
     return RomFile::isDiagRom(rev);
 }
+
 - (BOOL) isCommodoreRom:(RomIdentifier)rev
 {
     return RomFile::isCommodoreRom(rev);
 }
+
 - (BOOL) isHyperionRom:(RomIdentifier)rev
 {
     return RomFile::isHyperionRom(rev);
 }
+
 - (BOOL) hasRom
 {
     return wrapper->mem->hasKickRom();
 }
+
 - (BOOL) hasBootRom
 {
     return wrapper->mem->hasBootRom();
 }
+
 - (BOOL) hasKickRom
 {
     return wrapper->mem->hasKickRom();
 }
+
 - (void) deleteRom
 {
     wrapper->mem->deleteRom();
 }
+
 - (BOOL) isRom:(NSURL *)url
 {
     return RomFile::isRomFile([url fileSystemRepresentation]);
 }
+
 - (BOOL) loadRomFromBuffer:(NSData *)data
 {
     if (data == nullptr) return NO;
     const u8 *bytes = (const u8 *)[data bytes];
     return wrapper->mem->loadRomFromBuffer(bytes, [data length]);
 }
+
 - (BOOL) loadRomFromFile:(NSURL *)url error:(FileError *)err
 {
     return wrapper->mem->loadRomFromFile([url fileSystemRepresentation], err);
 }
+
 - (u64) romFingerprint
 {
     return wrapper->mem->romFingerprint();
 }
+
 - (RomIdentifier) romIdentifier
 {
     return wrapper->mem->romIdentifier();
 }
+
 - (NSString *) romTitle
 {
     const char *str = wrapper->mem->romTitle();
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (NSString *) romVersion
 {
     const char *str = wrapper->mem->romVersion();
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (NSString *) romReleased
 {
     const char *str = wrapper->mem->romReleased();
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (BOOL) hasExt
 {
     return wrapper->mem->hasExt();
 }
+
 - (void) deleteExt
 {
     wrapper->mem->deleteExt();
 }
+
 - (BOOL) isExt:(NSURL *)url
 {
     return ExtendedRomFile::isExtendedRomFile([url fileSystemRepresentation]);
 }
+
 - (BOOL) loadExtFromBuffer:(NSData *)data
 {
     if (data == nullptr) return NO;
     const u8 *bytes = (const u8 *)[data bytes];
     return wrapper->mem->loadExtFromBuffer(bytes, [data length]);
 }
+
 - (BOOL) loadExtFromFile:(NSURL *)url
 {
     return wrapper->mem->loadExtFromFile([url fileSystemRepresentation]);
 }
+
 - (u64) extFingerprint
 {
     return wrapper->mem->extFingerprint();
 }
+
 - (RomIdentifier) extIdentifier
 {
     return wrapper->mem->extIdentifier();
 }
+
 - (NSString *) extTitle
 {
     const char *str = wrapper->mem->extTitle();
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (NSString *) extVersion
 {
     const char *str = wrapper->mem->extVersion();
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (NSString *) extReleased
 {
     const char *str = wrapper->mem->extReleased();
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (NSInteger) extStart
 {
     return wrapper->mem->getConfigItem(OPT_EXT_START);
 }
+
 - (BOOL) saveWom:(NSURL *)url
 {
     return wrapper->mem->saveWom([url fileSystemRepresentation]);
 }
+
 - (BOOL) saveRom:(NSURL *)url
 {
     return wrapper->mem->saveRom([url fileSystemRepresentation]);
 }
+
 - (BOOL) saveExt:(NSURL *)url
 {
     return wrapper->mem->saveExt([url fileSystemRepresentation]);
 }
+
 - (MemorySource) memSrc:(Accessor)accessor addr:(NSInteger)addr
 {
     assert(accessor == CPU_ACCESS || accessor == AGNUS_ACCESS);
@@ -394,6 +461,7 @@ struct SerialPortWrapper { SerialPort *port; };
         return wrapper->mem->getMemSrc <AGNUS_ACCESS> ((u32)addr);
     }
 }
+
 - (NSInteger) spypeek16:(Accessor)accessor addr:(NSInteger)addr
 {
     assert(accessor == CPU_ACCESS || accessor == AGNUS_ACCESS);
@@ -404,6 +472,7 @@ struct SerialPortWrapper { SerialPort *port; };
         return wrapper->mem->spypeek16 <AGNUS_ACCESS> ((u32)addr);
     }
 }
+
 - (NSString *) ascii:(Accessor)accessor addr:(NSInteger)addr
 {
     assert(accessor == CPU_ACCESS || accessor == AGNUS_ACCESS);
@@ -417,6 +486,7 @@ struct SerialPortWrapper { SerialPort *port; };
     
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (NSString *) hex:(Accessor)accessor addr: (NSInteger)addr bytes:(NSInteger)bytes
 {
     assert(accessor == CPU_ACCESS || accessor == AGNUS_ACCESS);
@@ -448,26 +518,32 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (NSInteger) chipRamLimit
 {
     return wrapper->agnus->chipRamLimit();
 }
+
 - (void) dump
 {
     wrapper->agnus->dump();
 }
+
 - (AgnusInfo) getInfo
 {
     return wrapper->agnus->getInfo();
 }
+
 - (EventSlotInfo) getEventSlotInfo:(NSInteger)slot
 {
     return wrapper->agnus->getEventSlotInfo(slot);
 }
+
 - (EventInfo) getEventInfo
 {
     return wrapper->agnus->getEventInfo();
 }
+
 - (AgnusStats) getStats
 {
     return wrapper->agnus->getStats();
@@ -490,31 +566,38 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (void) dump
 {
     wrapper->copper->dump();
 }
+
 - (CopperInfo) getInfo
 {
     return wrapper->copper->getInfo();
 }
+
 - (NSInteger) instrCount:(NSInteger)list
 {
     return wrapper->copper->instrCount(list);
 }
+
 - (void) adjustInstrCount:(NSInteger)list offset:(NSInteger)offset
 {
     wrapper->copper->adjustInstrCount(list, offset);
 }
+
 - (BOOL) isIllegalInstr:(NSInteger)addr
 {
     return wrapper->copper->isIllegalInstr(addr);
 }
+
 - (NSString *) disassemble:(NSInteger)addr
 {
     const char *str = wrapper->copper->disassemble(addr);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
+
 - (NSString *) disassemble:(NSInteger)list instr:(NSInteger)offset
 {
     const char *str = wrapper->copper->disassemble(list, offset);
@@ -538,10 +621,12 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (void) dump
 {
     wrapper->blitter->dump();
 }
+
 - (BlitterInfo) getInfo
 {
     return wrapper->blitter->getInfo();
@@ -564,82 +649,102 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (DMADebuggerInfo) getInfo
 {
     return wrapper->dmaDebugger->getInfo();
 }
+
 - (void) setEnable:(BOOL)value
 {
     wrapper->dmaDebugger->setEnabled(value);
 }
+
 - (void) visualizeCopper:(BOOL)value
 {
     wrapper->dmaDebugger->visualizeCopper(value);
 }
+
 - (void) visualizeBlitter:(BOOL)value
 {
     wrapper->dmaDebugger->visualizeBlitter(value);
 }
+
 - (void) visualizeDisk:(BOOL)value
 {
     wrapper->dmaDebugger->visualizeDisk(value);
 }
+
 - (void) visualizeAudio:(BOOL)value
 {
     wrapper->dmaDebugger->visualizeAudio(value);
 }
+
 - (void) visualizeSprite:(BOOL)value
 {
     wrapper->dmaDebugger->visualizeSprite(value);
 }
+
 - (void) visualizeBitplane:(BOOL)value
 {
     wrapper->dmaDebugger->visualizeBitplane(value);
 }
+
 - (void) visualizeCpu:(BOOL)value
 {
     wrapper->dmaDebugger->visualizeCpu(value);
 }
+
 - (void) visualizeRefresh:(BOOL)value
 {
     wrapper->dmaDebugger->visualizeRefresh(value);
 }
+
 - (void) setOpacity:(double)value
 {
     wrapper->dmaDebugger->setOpacity(value);
 }
+
 - (void) setDisplayMode:(NSInteger)mode
 {
     wrapper->dmaDebugger->setDisplayMode((DmaDisplayMode)mode);
 }
+
 - (void) setCopperColor:(double)r g:(double)g b:(double)b
 {
     wrapper->dmaDebugger->setCopperColor(r, g, b);
 }
+
 - (void) setBlitterColor:(double)r g:(double)g b:(double)b
 {
     wrapper->dmaDebugger->setBlitterColor(r, g, b);
 }
+
 - (void) setDiskColor:(double)r g:(double)g b:(double)b
 {
     wrapper->dmaDebugger->setDiskColor(r, g, b);
 }
+
 - (void) setAudioColor:(double)r g:(double)g b:(double)b
 {
     wrapper->dmaDebugger->setAudioColor(r, g, b);
 }
+
 - (void) setSpriteColor:(double)r g:(double)g b:(double)b
 {
     wrapper->dmaDebugger->setSpriteColor(r, g, b);
 }
+
 - (void) setBitplaneColor:(double)r g:(double)g b:(double)b
 {
     wrapper->dmaDebugger->setBitplaneColor(r, g, b);
 }
+
 - (void) setCpuColor:(double)r g:(double)g b:(double)b
 {
     wrapper->dmaDebugger->setCpuColor(r, g, b);
 }
+
 - (void) setRefreshColor:(double)r g:(double)g b:(double)b
 {
     wrapper->dmaDebugger->setRefreshColor(r, g, b);
@@ -661,66 +766,82 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (void) dump
 {
     wrapper->denise->dump();
 }
+
 - (DeniseInfo) getInfo
 {
     return wrapper->denise->getInfo();
 }
+
 - (SpriteInfo) getSpriteInfo:(NSInteger)nr
 {
     return wrapper->denise->getSpriteInfo(nr);
 }
+
 - (NSInteger) sprDataLines:(NSInteger)nr
 {
     return wrapper->denise->getSpriteHeight(nr);
 }
+
 - (u64) sprData:(NSInteger)nr line:(NSInteger)line
 {
     return wrapper->denise->getSpriteData(nr, line);
 }
+
 - (u16) sprColor:(NSInteger)nr reg:(NSInteger)reg
 {
     return wrapper->denise->getSpriteColor(nr, reg);
 }
+
 - (Palette) palette
 {
    return wrapper->denise->pixelEngine.getPalette();
 }
+
 - (void) setPalette:(Palette)p
 {
     wrapper->denise->pixelEngine.setPalette(p);
 }
+
 - (double) brightness
 {
     return wrapper->denise->pixelEngine.getBrightness();
 }
+
 - (void) setBrightness:(double)value
 {
     wrapper->denise->pixelEngine.setBrightness(value);
 }
+
 - (double) saturation
 {
     return wrapper->denise->pixelEngine.getSaturation();
 }
+
 - (void) setSaturation:(double)value
 {
     wrapper->denise->pixelEngine.setSaturation(value);
 }
+
 - (double) contrast
 {
     return wrapper->denise->pixelEngine.getContrast();
 }
+
 - (void) setContrast:(double)value
 {
     wrapper->denise->pixelEngine.setContrast(value);
 }
+
 - (ScreenBuffer) stableBuffer
 {
     return wrapper->denise->pixelEngine.getStableBuffer();
 }
+
 - (u32 *) noise
 {
     return wrapper->denise->pixelEngine.getNoise(); 
@@ -743,18 +864,22 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (BOOL) hasFFmpeg
 {
     return wrapper->screenRecorder->hasFFmpeg();
 }
+
 - (BOOL) recording
 {
     return wrapper->screenRecorder->isRecording();
 }
+
 - (NSInteger) recordCounter
 {
     return wrapper->screenRecorder->getRecordCounter();
 }
+
 - (BOOL) startRecording:(NSRect)rect
                 bitRate:(NSInteger)rate
                 aspectX:(NSInteger)aspectX
@@ -770,10 +895,12 @@ struct SerialPortWrapper { SerialPort *port; };
                                                    aspectX,
                                                    aspectY);
 }
+
 - (void) stopRecording
 {
     wrapper->screenRecorder->stopRecording();
 }
+
 - (BOOL) exportAs:(NSString *)path
 {
     return wrapper->screenRecorder->exportAs([path fileSystemRepresentation]);
@@ -796,58 +923,72 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (PaulaInfo) getInfo
 {
     return wrapper->paula->getInfo();
 }
+
 - (AudioInfo) getAudioInfo
 {
     return wrapper->paula->getAudioInfo();
 }
+
 - (MuxerStats) getMuxerStats
 {
     return wrapper->paula->muxer.getStats();
 }
+
 - (UARTInfo) getUARTInfo
 {
     return wrapper->paula->uart.getInfo();
 }
+
 - (void) dump
 {
     wrapper->paula->muxer.dump();
 }
+
 - (u32) sampleRate
 {
     return (u32)wrapper->paula->muxer.getSampleRate();
 }
+
 - (void) setSampleRate:(double)rate
 {
     wrapper->paula->muxer.setSampleRate(rate);
 }
+
 - (void) readMonoSamples:(float *)target size:(NSInteger)n
 {
     wrapper->paula->muxer.copyMono(target, n);
 }
+
 - (void) readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
 {
     wrapper->paula->muxer.copyStereo(target1, target2, n);
 }
+
 - (void) rampUp
 {
     wrapper->paula->muxer.rampUp();
 }
+
 - (void) rampUpFromZero
 {
     wrapper->paula->muxer.rampUpFromZero();
 }
+
 - (void) rampDown
 {
     wrapper->paula->muxer.rampDown();
 }
+
 - (float) drawWaveformL:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
 {
     return wrapper->paula->muxer.stream.draw(buffer, w, h, true, s, c);
 }
+
 - (float) drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
 {
     return [self drawWaveformL:buffer
@@ -856,10 +997,12 @@ struct SerialPortWrapper { SerialPort *port; };
                          scale:s
                          color:c];
 }
+
 - (float) drawWaveformR:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
 {
     return wrapper->paula->muxer.stream.draw(buffer, w, h, false, s, c);
 }
+
 - (float) drawWaveformR:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
 {
     return [self drawWaveformR:buffer
@@ -886,18 +1029,22 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (void) dump
 {
     wrapper->mouse->dump();
 }
+
 - (void) setXY:(NSPoint)pos
 {
     wrapper->mouse->setXY((double)pos.x, (double)pos.y);
 }
+
 - (void) setDeltaXY:(NSPoint)pos
 {
     wrapper->mouse->setDeltaXY((double)pos.x, (double)pos.y);
 }
+
 - (void) trigger:(GamePadAction)event
 {
     wrapper->mouse->trigger(event);
@@ -920,34 +1067,42 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (void) dump
 {
     wrapper->joystick->dump();
 }
+
 - (void) trigger:(GamePadAction)event
 {
     wrapper->joystick->trigger(event);
 }
+
 - (BOOL) autofire
 {
     return wrapper->joystick->getAutofire();
 }
+
 - (void) setAutofire:(BOOL)value
 {
     return wrapper->joystick->setAutofire(value);
 }
+
 - (NSInteger) autofireBullets
 {
     return (NSInteger)wrapper->joystick->getAutofireBullets();
 }
+
 - (void) setAutofireBullets:(NSInteger)value
 {
     wrapper->joystick->setAutofireBullets((int)value);
 }
+
 - (float) autofireFrequency
 {
     return wrapper->joystick->getAutofireFrequency();
 }
+
 - (void) setAutofireFrequency:(float)value
 {
     wrapper->joystick->setAutofireFrequency(value);
@@ -980,6 +1135,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->port->dump();
 }
+
 - (ControlPortInfo) getInfo
 {
     return wrapper->port->getInfo();
@@ -1007,6 +1163,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->port->dump();
 }
+
 - (SerialPortInfo) getInfo
 {
     return wrapper->port->getInfo();
@@ -1029,22 +1186,27 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (void) dump
 {
     wrapper->keyboard->dump();
 }
+
 - (BOOL) keyIsPressed:(NSInteger)keycode
 {
     return wrapper->keyboard->keyIsPressed(keycode);
 }
+
 - (void) pressKey:(NSInteger)keycode
 {
     wrapper->keyboard->pressKey(keycode);
 }
+
 - (void) releaseKey:(NSInteger)keycode
 {
     wrapper->keyboard->releaseKey(keycode);
 }
+
 - (void) releaseAllKeys
 {
     wrapper->keyboard->releaseAllKeys();
@@ -1133,66 +1295,82 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 - (DriveInfo) getInfo
 {
     return wrapper->drive->getInfo();
 }
+
 - (NSInteger) nr
 {
     return wrapper->drive->getNr();
 }
+
 - (void) dump
 {
     wrapper->drive->dump();
 }
+
 - (BOOL) hasDisk
 {
     return wrapper->drive->hasDisk();
 }
+
 - (BOOL) hasDDDisk
 {
     return wrapper->drive->hasDDDisk();
 }
+
 - (BOOL) hasHDDisk
 {
     return wrapper->drive->hasHDDisk();
 }
+
 - (BOOL) hasWriteProtectedDisk
 {
     return wrapper->drive->hasWriteProtectedDisk();
 }
+
 - (void) setWriteProtection:(BOOL)value
 {
     wrapper->drive->setWriteProtection(value);
 }
+
 - (void) toggleWriteProtection
 {
     wrapper->drive->toggleWriteProtection();
 }
+
 - (BOOL) isInsertable:(DiskDiameter)type density:(DiskDensity)density
 {
     return wrapper->drive->isInsertable(type, density);
 }
+
 - (BOOL) isModifiedDisk
 {
     return wrapper->drive->hasModifiedDisk();
 }
+
 - (void) setModifiedDisk:(BOOL)value
 {
     wrapper->drive->setModifiedDisk(value);
 }
+
 - (BOOL) motor
 {
     return wrapper->drive->getMotor();
 }
+
 - (NSInteger) cylinder
 {
     return wrapper->drive->getCylinder();
 }
+
 - (u64) fnv
 {
     return wrapper->drive->fnv();
 }
+
 - (ADFFileProxy *)convertDisk
 {
     return nullptr;
@@ -1333,13 +1511,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->device->exportDirectory([path fileSystemRepresentation]);
 }
-
-/*
-- (BOOL) exportBlock:(NSInteger)block buffer:(unsigned char *)buffer
-{
-    return wrapper->device->exportBlock(block, buffer, 512);
-}
-*/
 
 - (void) dump
 {
@@ -1503,10 +1674,12 @@ struct SerialPortWrapper { SerialPort *port; };
 
     return preview;
 }
+
 - (time_t)timeStamp
 {
     return ((Snapshot *)wrapper->file)->getTimestamp();
 }
+
 - (NSData *)data
 {
     Snapshot *snapshot = (Snapshot *)wrapper->file;
@@ -1699,16 +1872,19 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return EXTFile::isEXTFile([path fileSystemRepresentation]);
 }
+
 + (instancetype) make:(EXTFile *)archive
 {
     if (archive == nullptr) return nil;
     return [[self alloc] initWithFile:archive];
 }
+
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
 {
     EXTFile *archive = AmigaFile::make <EXTFile> ((const u8 *)buffer, len);
     return [self make: archive];
 }
+
 + (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
 {
     EXTFile *archive = AmigaFile::make <EXTFile> ([path fileSystemRepresentation], err);
@@ -1728,21 +1904,25 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return IMGFile::isIMGFile([path fileSystemRepresentation]);
 }
+
 + (instancetype) make:(IMGFile *)archive
 {
     if (archive == nullptr) return nil;
     return [[self alloc] initWithFile:archive];
 }
+
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
 {
     IMGFile *archive = AmigaFile::make <IMGFile> ((const u8 *)buffer, len);
     return [self make: archive];
 }
+
 + (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
 {
     IMGFile *archive = AmigaFile::make <IMGFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
 }
+
 + (instancetype) makeWithDrive:(DriveProxy *)drive
 {
     Drive *d = [drive wrapper]->drive;
@@ -1763,16 +1943,19 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return DMSFile::isDMSFile([path fileSystemRepresentation]);
 }
+
 + (instancetype) make:(DMSFile *)archive
 {
     if (archive == nullptr) return nil;
     return [[self alloc] initWithFile:archive];
 }
+
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
 {
     DMSFile *archive = AmigaFile::make <DMSFile> ((const u8 *)buffer, len);
     return [self make: archive];
 }
+
 + (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
 {
     DMSFile *archive = AmigaFile::make <DMSFile> ([path fileSystemRepresentation], err);

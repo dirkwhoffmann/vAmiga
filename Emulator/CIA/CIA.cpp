@@ -105,7 +105,7 @@ CIA::setConfigItem(Option option, long value)
 }
 
 void
-CIA::_dumpConfig()
+CIA::_dumpConfig() const
 {
     msg("      revision : %s\n", sCIARevision(config.revision));
     msg("        todBug : %s\n", config.todBug ? "yes" : "no");

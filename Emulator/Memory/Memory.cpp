@@ -201,7 +201,7 @@ Memory::setConfigItem(Option option, long value)
 }
 
 void
-Memory::_dumpConfig()
+Memory::_dumpConfig() const
 {
     msg("       chipSize : %llu\n", config.chipSize);
     msg("       slowSize : %llu\n", config.slowSize);
