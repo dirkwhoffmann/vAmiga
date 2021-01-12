@@ -136,8 +136,21 @@ RTC::setTime(time_t t)
     timeDiff = (i64)(t - time(nullptr));
 }
 
+void
+RTC::update()
+{
+    time2registers();
+}
+
 u8
 RTC::peek(usize nr)
+{
+    update();
+    return spypeek(nr);
+}
+
+u8
+RTC::spypeek(usize nr) const
 {
     assert(nr < 16);
     assert(config.model != RTC_NONE);
@@ -152,7 +165,6 @@ RTC::peek(usize nr)
             
         default: // Time or date register
             
-            time2registers();
             result = reg[bank()][nr];
     }
     
@@ -162,12 +174,6 @@ RTC::peek(usize nr)
     
     trace(RTC_DEBUG, "peek(%zu) = $%X [bank %zu]\n", nr, result, bank());
     return result;
-}
-
-u8
-RTC::spypeek(usize nr) const
-{
-    return reg[bank()][nr];
 }
 
 void

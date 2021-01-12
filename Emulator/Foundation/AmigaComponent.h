@@ -43,7 +43,8 @@ class ZorroManager;
  */
 class AmigaComponent : public HardwareComponent {
 
-protected:
+// TODO: Change to protected once RTC has it's own proxy class
+public:
 
     Agnus &agnus;
     Amiga &amiga;

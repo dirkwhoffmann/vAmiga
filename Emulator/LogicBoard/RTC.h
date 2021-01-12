@@ -135,7 +135,10 @@ private:
     
 public:
     
-    // Reads one of the 16 RTC registers
+    // Updates all 16 RTC registers
+    void update();
+    
+    // Reads one of the 16 RTC registers (call update() first)
     u8 peek(usize nr);
 
     // Returns the current value in the register cache

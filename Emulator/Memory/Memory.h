@@ -422,7 +422,7 @@ public:
     template <Accessor acc, MemorySource src> u16 spypeek16(u32 addr) const;
     template <Accessor acc> u8 peek8(u32 addr);
     template <Accessor acc> u16 peek16(u32 addr);
-    template <Accessor acc> u16 spypeek16(u32 addr);
+    template <Accessor acc> u16 spypeek16(u32 addr) const;
 
     template <Accessor acc, MemorySource src> void poke8(u32 addr, u8 value);
     template <Accessor acc, MemorySource src> void poke16(u32 addr, u16 value);
@@ -448,8 +448,8 @@ public:
     // Accessing the RTC space
     //
     
-    u8 peekRTC8(u32 addr);
-    u16 peekRTC16(u32 addr);
+    u8 peekRTC8(u32 addr) const;
+    u16 peekRTC16(u32 addr) const;
     
     // u8 spypeekRTC8(u32 addr) { return peekRTC8(addr); }
     // u16 spypeekRTC16(u32 addr) { return peekRTC16(addr); }

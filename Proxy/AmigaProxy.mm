@@ -451,6 +451,11 @@ struct SerialPortWrapper { SerialPort *port; };
     return wrapper->mem->saveExt([url fileSystemRepresentation]);
 }
 
+- (void) updateRTC
+{
+    wrapper->mem->rtc.update();
+}
+
 - (MemorySource) memSrc:(Accessor)accessor addr:(NSInteger)addr
 {
     assert(accessor == CPU_ACCESS || accessor == AGNUS_ACCESS);

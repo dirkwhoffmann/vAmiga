@@ -922,8 +922,8 @@ Memory::peek16 <CPU_ACCESS, MEM_RTC> (u32 addr)
 template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_RTC> (u32 addr) const
 {
-    assert(false);
-    return 0;
+    ASSERT_RTC_ADDR(addr);
+    return peekRTC16(addr);
 }
 
 template<> u8
@@ -1133,14 +1133,11 @@ Memory::peek16 <CPU_ACCESS> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <CPU_ACCESS> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS> (u32 addr) const
 {
     assert(IS_EVEN(addr));
 
     auto src = cpuMemSrc[(addr & 0xFFFFFF) >> 16];
-
-    // Call native peek for the RTC space to see live register updates
-    if (src == MEM_RTC) return peek16 <CPU_ACCESS, MEM_RTC> (addr);
         
     switch (src) {
             
@@ -1236,7 +1233,7 @@ Memory::peek16 <AGNUS_ACCESS> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <AGNUS_ACCESS> (u32 addr)
+Memory::spypeek16 <AGNUS_ACCESS> (u32 addr) const
 {
     assert(IS_EVEN(addr));
     addr &= agnus.ptrMask;
@@ -1747,7 +1744,7 @@ Memory::pokeCIA16(u32 addr, u16 value)
 }
 
 u8
-Memory::peekRTC8(u32 addr)
+Memory::peekRTC8(u32 addr) const
 {
     /* Addr: 0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011
      * Reg:   --        --        --        --        --        --
@@ -1765,7 +1762,7 @@ Memory::peekRTC8(u32 addr)
 }
 
 u16
-Memory::peekRTC16(u32 addr)
+Memory::peekRTC16(u32 addr) const
 {
     return HI_LO(peekRTC8(addr), peekRTC8(addr + 1));
 }

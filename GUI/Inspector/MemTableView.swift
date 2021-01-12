@@ -36,9 +36,15 @@ class MemTableView: NSTableView {
         asciiInRow = [:]
         dataInAddr = [:]
 
-        var addr = inspector.displayedBank * 65536
+        let bank = inspector.displayedBank
+        var addr = bank * 65536
         let rows = numberOfRows(in: self)
 
+        // Continously update the RTC to get live register updates
+        if amiga.mem.memSrc(inspector.accessor, addr: addr) == .RTC {
+            amiga.mem.updateRTC()
+        }
+        
         for i in 0 ..< rows {
 
             addrInRow[i] = addr
