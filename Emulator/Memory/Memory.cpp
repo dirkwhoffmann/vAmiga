@@ -759,8 +759,12 @@ Memory::updateAgnusMemSrcTable()
     }
 }
 
+//
+// Peek (CPU)
+//
+
 template<> u16
-Memory::peek16 <CPU_ACCESS, MEM_NONE> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS, MEM_NONE> (u32 addr) const
 {
     switch (config.unmappingType) {
             
@@ -772,49 +776,16 @@ Memory::peek16 <CPU_ACCESS, MEM_NONE> (u32 addr)
     }
 }
 
-template<> u16
-Memory::peek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr)
-{
-    assert((addr & agnus.ptrMask) == addr);
-    trace(XFILES, "XFILES (AGNUS): Reading from unmapped RAM\n");
-    
-    return peek16 <CPU_ACCESS, MEM_NONE> (addr);
-}
-
 template<> u8
 Memory::peek8 <CPU_ACCESS, MEM_NONE> (u32 addr)
 {
-    return (u8)peek16 <CPU_ACCESS, MEM_NONE> (addr);
+    return (u8)const_cast<Memory *>(this)->spypeek16 <CPU_ACCESS, MEM_NONE> (addr);
 }
 
 template<> u16
-Memory::spypeek16 <CPU_ACCESS, MEM_NONE> (u32 addr)
+Memory::peek16 <CPU_ACCESS, MEM_NONE> (u32 addr)
 {
-    assert((addr & agnus.ptrMask) == addr);
-    
-    return peek16 <CPU_ACCESS, MEM_NONE> (addr);
-}
-
-template<> u16
-Memory::spypeek16 <CPU_ACCESS, MEM_NONE> (u32 addr) const
-{
-    assert(false);
-    return 0;
-}
-
-template<> u16
-Memory::spypeek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr)
-{
-    assert((addr & agnus.ptrMask) == addr);
-    
-    return peek16 <CPU_ACCESS, MEM_NONE> (addr);
-}
-
-template<> u16
-Memory::spypeek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr) const
-{
-    assert(false);
-    return 0;
+    return const_cast<Memory *>(this)->spypeek16 <CPU_ACCESS, MEM_NONE> (addr);
 }
 
 template<> u8
@@ -840,40 +811,9 @@ Memory::peek16 <CPU_ACCESS, MEM_CHIP> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr)
-{
-    assert((addr & agnus.ptrMask) == addr);
-    
-    dataBus = READ_CHIP_16(addr);
-    return dataBus;
-}
-
-template<> u16
-Memory::spypeek16 <CPU_ACCESS, MEM_CHIP> (u32 addr)
-{
-    return READ_CHIP_16(addr);
-}
-
-template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_CHIP> (u32 addr) const
 {
-    assert(false);
-    return 0;
-}
-
-template<> u16
-Memory::spypeek16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr)
-{
-    assert((addr & agnus.ptrMask) == addr);
-    
     return READ_CHIP_16(addr);
-}
-
-template<> u16
-Memory::spypeek16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr) const
-{
-    assert(false);
-    return 0;
 }
 
 template<> u8
@@ -899,41 +839,9 @@ Memory::peek16 <CPU_ACCESS, MEM_SLOW> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr)
-{
-    assert((addr & agnus.ptrMask) == addr);
-    trace(XFILES, "XFILES (AGNUS): Reading from Slow RAM mirror\n");
-    
-    dataBus = READ_SLOW_16(addr & 0x7FFFF);
-    return dataBus;
-}
-
-template<> u16
-Memory::spypeek16 <CPU_ACCESS, MEM_SLOW> (u32 addr)
-{
-    return READ_SLOW_16(addr);
-}
-
-template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_SLOW> (u32 addr) const
 {
-    assert(false);
-    return 0;
-}
-
-template<> u16
-Memory::spypeek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr)
-{
-    assert((addr & agnus.ptrMask) == addr);
-    
     return READ_SLOW_16(addr);
-}
-
-template<> u16
-Memory::spypeek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr) const
-{
-    assert(false);
-    return 0;
 }
 
 template<> u8
@@ -955,16 +863,9 @@ Memory::peek16 <CPU_ACCESS, MEM_FAST> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <CPU_ACCESS, MEM_FAST> (u32 addr)
-{
-    return READ_FAST_16(addr);
-}
-
-template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_FAST> (u32 addr) const
 {
-    assert(false);
-    return 0;
+    return READ_FAST_16(addr);
 }
 
 template<> u8
@@ -991,16 +892,9 @@ Memory::peek16 <CPU_ACCESS, MEM_CIA> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <CPU_ACCESS, MEM_CIA> (u32 addr)
-{
-    return spypeekCIA16(addr);
-}
-
-template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_CIA> (u32 addr) const
 {
-    assert(false);
-    return 0;
+    return spypeekCIA16(addr);
 }
 
 template<> u8
@@ -1023,12 +917,6 @@ Memory::peek16 <CPU_ACCESS, MEM_RTC> (u32 addr)
 
     dataBus = peekRTC16(addr);
     return dataBus;
-}
-
-template<> u16
-Memory::spypeek16 <CPU_ACCESS, MEM_RTC> (u32 addr)
-{
-    return spypeekRTC16(addr);
 }
 
 template<> u16
@@ -1065,16 +953,9 @@ Memory::peek16 <CPU_ACCESS, MEM_CUSTOM> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <CPU_ACCESS, MEM_CUSTOM> (u32 addr)
-{
-    return spypeekCustom16(addr);
-}
-
-template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_CUSTOM> (u32 addr) const
 {
-    assert(false);
-    return 0;
+    return spypeekCustom16(addr);
 }
 
 template<> u8
@@ -1109,19 +990,12 @@ Memory::peek16 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr) const
 {
     u8 hi = zorro.spypeekFastRamDevice(addr) << 4;
     u8 lo = zorro.spypeekFastRamDevice(addr + 1) << 4;
     
     return HI_LO(hi,lo);
-}
-
-template<> u16
-Memory::spypeek16 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr) const
-{
-    assert(false);
-    return 0;
 }
 
 template<> u8
@@ -1143,16 +1017,9 @@ Memory::peek16 <CPU_ACCESS, MEM_ROM> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <CPU_ACCESS, MEM_ROM> (u32 addr)
-{
-    return READ_ROM_16(addr);
-}
-
-template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_ROM> (u32 addr) const
 {
-    assert(false);
-    return 0;
+    return READ_ROM_16(addr);
 }
 
 template<> u8
@@ -1174,16 +1041,9 @@ Memory::peek16 <CPU_ACCESS, MEM_WOM> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <CPU_ACCESS, MEM_WOM> (u32 addr)
-{
-    return READ_WOM_16(addr);
-}
-
-template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_WOM> (u32 addr) const
 {
-    assert(false);
-    return 0;
+    return READ_WOM_16(addr);
 }
 
 template<> u8
@@ -1205,16 +1065,9 @@ Memory::peek16 <CPU_ACCESS, MEM_EXT> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <CPU_ACCESS, MEM_EXT> (u32 addr)
-{
-    return READ_EXT_16(addr);
-}
-
-template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_EXT> (u32 addr) const
 {
-    assert(false);
-    return 0;
+    return READ_EXT_16(addr);
 }
 
 template<> u8
@@ -1280,31 +1133,16 @@ Memory::peek16 <CPU_ACCESS> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <AGNUS_ACCESS> (u32 addr)
-{
-    u16 result;
-    
-    assert(IS_EVEN(addr));
-    addr &= agnus.ptrMask;
-
-    switch (agnusMemSrc[addr >> 16]) {
-            
-        case MEM_NONE:        result = peek16 <AGNUS_ACCESS, MEM_NONE> (addr); break;
-        case MEM_CHIP:        result = peek16 <AGNUS_ACCESS, MEM_CHIP> (addr); break;
-        case MEM_SLOW_MIRROR: result = peek16 <AGNUS_ACCESS, MEM_SLOW> (addr); break;
-            
-        default: assert(false); return 0;
-    }
-        
-    return result;
-}
-
-template<> u16
 Memory::spypeek16 <CPU_ACCESS> (u32 addr)
 {
     assert(IS_EVEN(addr));
-    
-    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
+
+    auto src = cpuMemSrc[(addr & 0xFFFFFF) >> 16];
+
+    // Call native peek for the RTC space to see live register updates
+    if (src == MEM_RTC) return peek16 <CPU_ACCESS, MEM_RTC> (addr);
+        
+    switch (src) {
             
         case MEM_NONE:          return spypeek16 <CPU_ACCESS, MEM_NONE>     (addr);
         case MEM_CHIP:          return spypeek16 <CPU_ACCESS, MEM_CHIP>     (addr);
@@ -1327,11 +1165,74 @@ Memory::spypeek16 <CPU_ACCESS> (u32 addr)
     }
 }
 
+
+//
+// Peek (Agnus)
+//
+
 template<> u16
-Memory::spypeek16 <CPU_ACCESS> (u32 addr) const
+Memory::peek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr)
 {
-    assert(false);
-    return 0;
+    assert((addr & agnus.ptrMask) == addr);
+    trace(XFILES, "XFILES (AGNUS): Reading from unmapped RAM\n");
+    return peek16 <CPU_ACCESS, MEM_NONE> (addr);
+}
+
+template<> u16
+Memory::spypeek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr) const
+{
+    return spypeek16 <CPU_ACCESS, MEM_NONE> (addr);
+}
+
+template<> u16
+Memory::peek16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr)
+{
+    assert((addr & agnus.ptrMask) == addr);
+    dataBus = READ_CHIP_16(addr);
+    return dataBus;
+}
+
+template<> u16
+Memory::spypeek16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr) const
+{
+    assert((addr & agnus.ptrMask) == addr);
+    return READ_CHIP_16(addr);
+}
+
+template<> u16
+Memory::peek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr)
+{
+    assert((addr & agnus.ptrMask) == addr);
+    trace(XFILES, "XFILES (AGNUS): Reading from Slow RAM mirror\n");
+    dataBus = READ_SLOW_16(addr & 0x7FFFF);
+    return dataBus;
+}
+
+template<> u16
+Memory::spypeek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr) const
+{
+    assert((addr & agnus.ptrMask) == addr);
+    return READ_SLOW_16(addr);
+}
+
+template<> u16
+Memory::peek16 <AGNUS_ACCESS> (u32 addr)
+{
+    u16 result;
+    
+    assert(IS_EVEN(addr));
+    addr &= agnus.ptrMask;
+
+    switch (agnusMemSrc[addr >> 16]) {
+            
+        case MEM_NONE:        result = peek16 <AGNUS_ACCESS, MEM_NONE> (addr); break;
+        case MEM_CHIP:        result = peek16 <AGNUS_ACCESS, MEM_CHIP> (addr); break;
+        case MEM_SLOW_MIRROR: result = peek16 <AGNUS_ACCESS, MEM_SLOW> (addr); break;
+            
+        default: assert(false); return 0;
+    }
+        
+    return result;
 }
 
 template<> u16
@@ -1350,12 +1251,10 @@ Memory::spypeek16 <AGNUS_ACCESS> (u32 addr)
     }
 }
 
-template<> u16
-Memory::spypeek16 <AGNUS_ACCESS> (u32 addr) const
-{
-    assert(false);
-    return 0;
-}
+
+//
+// Poke (CPU)
+//
 
 template <> void
 Memory::poke8 <CPU_ACCESS, MEM_NONE> (u32 addr, u8 value)
@@ -1368,14 +1267,6 @@ template <> void
 Memory::poke16 <CPU_ACCESS, MEM_NONE> (u32 addr, u16 value)
 {
     trace(MEM_DEBUG, "poke16 <CPU> (%x [NONE], %x)\n", addr, value);
-    dataBus = value;
-}
-
-template <> void
-Memory::poke16 <AGNUS_ACCESS, MEM_NONE> (u32 addr, u16 value)
-{
-    trace(MEM_DEBUG, "poke16 <AGNUS> (%x [NONE], %x)\n", addr, value);
-    trace(XFILES, "XFILES (AGNUS): Writing to unmapped RAM\n");
     dataBus = value;
 }
 
@@ -1410,18 +1301,6 @@ Memory::poke16 <CPU_ACCESS, MEM_CHIP> (u32 addr, u16 value)
 }
     
 template <> void
-Memory::poke16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr, u16 value)
-{
-    assert((addr & agnus.ptrMask) == addr);
-
-    trace(BLT_GUARD && blitter.memguard[addr & mem.chipMask],
-          "AGNUS OVERWRITES BLITTER AT ADDR %x\n", addr);
-
-    dataBus = value;
-    WRITE_CHIP_16(addr, value);
-}
-
-template <> void
 Memory::poke8 <CPU_ACCESS, MEM_SLOW> (u32 addr, u8 value)
 {
     ASSERT_SLOW_ADDR(addr);
@@ -1441,16 +1320,6 @@ Memory::poke16 <CPU_ACCESS, MEM_SLOW> (u32 addr, u16 value)
     agnus.executeUntilBusIsFree();
     
     stats.slowWrites.raw++;
-    dataBus = value;
-    WRITE_SLOW_16(addr, value);
-}
-
-template <> void
-Memory::poke16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr, u16 value)
-{
-    assert((addr & agnus.ptrMask) == addr);
-    trace(XFILES, "XFILES (AGNUS): Writing to Slow RAM mirror\n");
-
     dataBus = value;
     WRITE_SLOW_16(addr, value);
 }
@@ -1693,6 +1562,40 @@ Memory::poke16 <CPU_ACCESS> (u32 addr, u16 value)
             
         default: assert(false);
     }
+}
+
+//
+// Poke (Agnus)
+//
+
+template <> void
+Memory::poke16 <AGNUS_ACCESS, MEM_NONE> (u32 addr, u16 value)
+{
+    trace(MEM_DEBUG, "poke16 <AGNUS> (%x [NONE], %x)\n", addr, value);
+    trace(XFILES, "XFILES (AGNUS): Writing to unmapped RAM\n");
+    dataBus = value;
+}
+
+template <> void
+Memory::poke16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr, u16 value)
+{
+    assert((addr & agnus.ptrMask) == addr);
+
+    trace(BLT_GUARD && blitter.memguard[addr & mem.chipMask],
+          "AGNUS OVERWRITES BLITTER AT ADDR %x\n", addr);
+
+    dataBus = value;
+    WRITE_CHIP_16(addr, value);
+}
+
+template <> void
+Memory::poke16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr, u16 value)
+{
+    assert((addr & agnus.ptrMask) == addr);
+    trace(XFILES, "XFILES (AGNUS): Writing to Slow RAM mirror\n");
+
+    dataBus = value;
+    WRITE_SLOW_16(addr, value);
 }
 
 template<> void
@@ -1967,7 +1870,7 @@ Memory::peekCustomFaulty16(u32 addr)
 }
 
 u16
-Memory::spypeekCustom16(u32 addr)
+Memory::spypeekCustom16(u32 addr) const
 {
     assert(IS_EVEN(addr));
     

@@ -136,10 +136,13 @@ private:
 public:
     
     // Reads one of the 16 RTC registers
-    u8 peek(unsigned nr);
+    u8 peek(usize nr);
 
+    // Returns the current value in the register cache
+    u8 spypeek(usize nr) const;
+    
     // Writes one of the 16 RTC registers
-    void poke(unsigned nr, u8 value);
+    void poke(usize nr, u8 value);
 
 private:
 

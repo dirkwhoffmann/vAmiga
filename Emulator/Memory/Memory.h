@@ -419,12 +419,10 @@ public:
 
     template <Accessor acc, MemorySource src> u8 peek8(u32 addr);
     template <Accessor acc, MemorySource src> u16 peek16(u32 addr);
-    template <Accessor acc, MemorySource src> u16 spypeek16(u32 addr);
     template <Accessor acc, MemorySource src> u16 spypeek16(u32 addr) const;
     template <Accessor acc> u8 peek8(u32 addr);
     template <Accessor acc> u16 peek16(u32 addr);
     template <Accessor acc> u16 spypeek16(u32 addr);
-    template <Accessor acc> u16 spypeek16(u32 addr) const;
 
     template <Accessor acc, MemorySource src> void poke8(u32 addr, u8 value);
     template <Accessor acc, MemorySource src> void poke16(u32 addr, u16 value);
@@ -453,8 +451,8 @@ public:
     u8 peekRTC8(u32 addr);
     u16 peekRTC16(u32 addr);
     
-    u8 spypeekRTC8(u32 addr) { return peekRTC8(addr); }
-    u16 spypeekRTC16(u32 addr) { return peekRTC16(addr); }
+    // u8 spypeekRTC8(u32 addr) { return peekRTC8(addr); }
+    // u16 spypeekRTC16(u32 addr) { return peekRTC16(addr); }
 
     void pokeRTC8(u32 addr, u8 value);
     void pokeRTC16(u32 addr, u16 value);
@@ -467,7 +465,7 @@ public:
     u16 peekCustom16(u32 addr);
     u16 peekCustomFaulty16(u32 addr);
     
-    u16 spypeekCustom16(u32 addr);
+    u16 spypeekCustom16(u32 addr) const;
  
     template <Accessor s> void pokeCustom16(u32 addr, u16 value);
     

@@ -137,7 +137,7 @@ RTC::setTime(time_t t)
 }
 
 u8
-RTC::peek(unsigned nr)
+RTC::peek(usize nr)
 {
     assert(nr < 16);
     assert(config.model != RTC_NONE);
@@ -160,16 +160,22 @@ RTC::peek(unsigned nr)
     result = FORCE_RTC_REGISTER;
     #endif
     
-    trace(RTC_DEBUG, "peek(%d) = $%X [bank %zu]\n", nr, result, bank());
+    trace(RTC_DEBUG, "peek(%zu) = $%X [bank %zu]\n", nr, result, bank());
     return result;
 }
 
+u8
+RTC::spypeek(usize nr) const
+{
+    return reg[bank()][nr];
+}
+
 void
-RTC::poke(unsigned nr, u8 value)
+RTC::poke(usize nr, u8 value)
 {
     assert(nr < 16);
 
-    trace(RTC_DEBUG, "poke(%d, $%02X) [bank %zu]\n", nr, value, bank());
+    trace(RTC_DEBUG, "poke(%zu, $%02X) [bank %zu]\n", nr, value, bank());
 
     // Ony proceed if a real-time clock is installed
     if (rtc.isPresent()) return;
