@@ -46,8 +46,7 @@ public:
     // Methods from AmigaFile
     //
 
-    FileType fileType() override { return FILETYPE_EXTENDED_ROM; }
-    // const char *typeAsString() override { return "Extended Rom"; }
+    FileType fileType() const override { return FILETYPE_EXTENDED_ROM; }
     bool matchingBuffer(const u8 *buffer, size_t length) override {
         return isExtendedRomBuffer(buffer, length); }
     bool matchingFile(const char *path) override { return isExtendedRomFile(path); }

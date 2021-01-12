@@ -59,16 +59,16 @@ public:
     //
     
     // Returns the type of this file
-    virtual FileType fileType() { return FILETYPE_UKNOWN; }
+    virtual FileType fileType() const { return FILETYPE_UKNOWN; }
         
     // Returns the physical name of this file
-    const char *getPath() { return path ? path : ""; }
+    const char *getPath() const { return path ? path : ""; }
     
     // Sets the physical name of this file
     void setPath(const char *path);
     
     // Returns a fingerprint (hash value) for this file
-    virtual u64 fnv() { return fnv_1a_64(data, size); }
+    virtual u64 fnv() const { return fnv_1a_64(data, size); }
     
     
     //

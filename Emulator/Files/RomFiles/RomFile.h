@@ -63,7 +63,7 @@ public:
     // Methods from AmigaFile
     //
     
-    FileType fileType() override { return FILETYPE_ROM; }
+    FileType fileType() const override { return FILETYPE_ROM; }
     bool matchingBuffer(const u8 *buffer, size_t length) override {
         return isRomBuffer(buffer, length); }
     bool matchingFile(const char *path) override { return isRomFile(path); }

@@ -49,7 +49,7 @@ public:
     // Methods from AmigaFile
     //
     
-    FileType fileType() override { return FILETYPE_EXT; }
+    FileType fileType() const override { return FILETYPE_EXT; }
     bool matchingBuffer(const u8 *buffer, size_t length) override {
         return isEXTBuffer(buffer, length); }
     bool matchingFile(const char *path) override { return isEXTFile(path); }

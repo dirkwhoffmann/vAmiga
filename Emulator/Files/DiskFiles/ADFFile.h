@@ -60,7 +60,7 @@ public:
     
 public:
     
-    FileType fileType() override { return FILETYPE_ADF; }
+    FileType fileType() const override { return FILETYPE_ADF; }
     bool matchingBuffer(const u8 *buffer, size_t length) override {
         return isADFBuffer(buffer, length); }
     bool matchingFile(const char *path) override { return isADFFile(path); }
