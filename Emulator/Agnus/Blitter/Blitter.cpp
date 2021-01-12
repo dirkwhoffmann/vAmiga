@@ -187,35 +187,35 @@ Blitter::_dump()
 }
 
 void
-Blitter::doBarrelA(u16 aNew, u16 *aOld, u16 *aHold)
+Blitter::doBarrelA(u16 aNew, u16 *aOld, u16 *aHold) const
 {
     *aHold = (u16)(HI_W_LO_W(*aOld, aNew) >> bltconASH());
     *aOld  = aNew;
 }
 
 void
-Blitter::doBarrelAdesc(u16 aNew, u16 *aOld, u16 *aHold)
+Blitter::doBarrelAdesc(u16 aNew, u16 *aOld, u16 *aHold) const
 {
     *aHold = (u16)(HI_W_LO_W(aNew, *aOld) >> (16 - bltconASH()));
     *aOld  = aNew;
 }
 
 void
-Blitter::doBarrelB(u16 bNew, u16 *bOld, u16 *bHold)
+Blitter::doBarrelB(u16 bNew, u16 *bOld, u16 *bHold) const
 {
     *bHold = (u16)(HI_W_LO_W(*bOld, bNew) >> bltconBSH());
     *bOld  = bNew;
 }
 
 void
-Blitter::doBarrelBdesc(u16 bNew, u16 *bOld, u16 *bHold)
+Blitter::doBarrelBdesc(u16 bNew, u16 *bOld, u16 *bHold) const
 {
     *bHold = (u16)(HI_W_LO_W(bNew, *bOld) >> (16 - bltconBSH()));
     *bOld  = bNew;
 }
 
 u16
-Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm)
+Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm) const
 {
     u16 result = 0;
 
@@ -232,7 +232,7 @@ Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm)
 }
 
 u16
-Blitter::doMintermLogicQuick(u16 a, u16 b, u16 c, u8 minterm)
+Blitter::doMintermLogicQuick(u16 a, u16 b, u16 c, u8 minterm) const
 {
     switch (minterm) {
         case 0: return 0;

@@ -305,13 +305,13 @@ private:
 public:
     
     // Returns true if the Blitter is processing a blit
-    bool isRunning() { return running; }
+    bool isRunning() const { return running; }
 
     // Returns the value of the Blitter Busy Flag
-    bool isBusy() { return bbusy; }
+    bool isBusy() const { return bbusy; }
 
     // Returns the value of the zero flag
-    bool isZero() { return bzero; }
+    bool isZero() const { return bzero; }
 
     // BLTCON0
     void pokeBLTCON0(u16 value);
@@ -320,26 +320,26 @@ public:
     void setBLTCON0L(u16 value);
     void setBLTCON0ASH(u16 ash);
 
-    u16 bltconASH()   { return bltcon0 >> 12; }
-    u16 bltconLF()    { return bltcon0 & 0xF; }
-    u16 bltconUSE()   { return (bltcon0 >> 8) & 0xF; }
-    bool bltconUSEA() { return bltcon0 & (1 << 11); }
-    bool bltconUSEB() { return bltcon0 & (1 << 10); }
-    bool bltconUSEC() { return bltcon0 & (1 << 9); }
-    bool bltconUSED() { return bltcon0 & (1 << 8); }
+    u16 bltconASH()   const { return bltcon0 >> 12; }
+    u16 bltconLF()    const { return bltcon0 & 0xF; }
+    u16 bltconUSE()   const { return (bltcon0 >> 8) & 0xF; }
+    bool bltconUSEA() const { return bltcon0 & (1 << 11); }
+    bool bltconUSEB() const { return bltcon0 & (1 << 10); }
+    bool bltconUSEC() const { return bltcon0 & (1 << 9); }
+    bool bltconUSED() const { return bltcon0 & (1 << 8); }
 
     // BLTCON1
     void pokeBLTCON1(u16 value);
     void setBLTCON1(u16 value);
     void setBLTCON1BSH(u16 bsh);
 
-    u16 bltconBSH()   { return bltcon1 >> 12; }
-    bool bltconEFE()  { return bltcon1 & (1 << 4); }
-    bool bltconIFE()  { return bltcon1 & (1 << 3); }
-    bool bltconFE()   { return bltconEFE() || bltconIFE(); }
-    bool bltconFCI()  { return bltcon1 & (1 << 2); }
-    bool bltconDESC() { return bltcon1 & (1 << 1); }
-    bool bltconLINE() { return bltcon1 & (1 << 0); }
+    u16 bltconBSH()   const { return bltcon1 >> 12; }
+    bool bltconEFE()  const { return bltcon1 & (1 << 4); }
+    bool bltconIFE()  const { return bltcon1 & (1 << 3); }
+    bool bltconFE()   const { return bltconEFE() || bltconIFE(); }
+    bool bltconFCI()  const { return bltcon1 & (1 << 2); }
+    bool bltconDESC() const { return bltcon1 & (1 << 1); }
+    bool bltconLINE() const { return bltcon1 & (1 << 0); }
 
     // BLTAxWM
     void pokeBLTAFWM(u16 value);
@@ -402,14 +402,14 @@ public:
 private:
     
     // Runs the barrel shifters on data paths A and B
-    void doBarrelA    (u16 aNew, u16 *aOld, u16 *aHold);
-    void doBarrelAdesc(u16 aNew, u16 *aOld, u16 *aHold);
-    void doBarrelB    (u16 bNew, u16 *bOld, u16 *bHold);
-    void doBarrelBdesc(u16 bNew, u16 *bOld, u16 *bHold);
+    void doBarrelA    (u16 aNew, u16 *aOld, u16 *aHold) const;
+    void doBarrelAdesc(u16 aNew, u16 *aOld, u16 *aHold) const;
+    void doBarrelB    (u16 bNew, u16 *bOld, u16 *bHold) const;
+    void doBarrelBdesc(u16 bNew, u16 *bOld, u16 *bHold) const;
 
     // Emulates the minterm logic circuit
-    u16 doMintermLogic     (u16 a, u16 b, u16 c, u8 minterm);
-    u16 doMintermLogicQuick(u16 a, u16 b, u16 c, u8 minterm);
+    u16 doMintermLogic     (u16 a, u16 b, u16 c, u8 minterm) const;
+    u16 doMintermLogicQuick(u16 a, u16 b, u16 c, u8 minterm) const;
 
     // Emulates the fill logic circuit
     void doFill(u16 &data, bool &carry);
@@ -473,8 +473,8 @@ private:
     template <u16 instr> void fakeExec();
 
     // Checks iterations
-    bool isFirstWord() { return xCounter == bltsizeH; }
-    bool isLastWord() { return xCounter == 1; }
+    bool isFirstWord() const { return xCounter == bltsizeH; }
+    bool isLastWord() const { return xCounter == 1; }
 
     // Sets the x or y counter to a new value
     void setXCounter(u16 value);
