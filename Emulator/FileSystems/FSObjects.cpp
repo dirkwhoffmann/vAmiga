@@ -37,7 +37,7 @@ FSString::capital(char c)
 }
 
 bool
-FSString::operator== (FSString &rhs)
+FSString::operator== (FSString &rhs) const
 {
     int n = 0;
     
@@ -49,7 +49,7 @@ FSString::operator== (FSString &rhs)
 }
 
 u32
-FSString::hashValue()
+FSString::hashValue() const
 {
     size_t length = strlen(str);
     u32 result = (u32)length;

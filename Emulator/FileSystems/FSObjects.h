@@ -27,8 +27,8 @@ struct FSString : AmigaObject {
 
     const char *c_str() { return str; }
 
-    bool operator== (FSString &rhs);
-    u32 hashValue();
+    bool operator== (FSString &rhs) const;
+    u32 hashValue() const;
     
     void write(u8 *p);
 };

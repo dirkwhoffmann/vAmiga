@@ -24,7 +24,7 @@ struct FSBitmapBlock : FSBlock {
     // Methods from Block class
     //
 
-    FSBlockType type() override { return FS_BITMAP_BLOCK; }
+    FSBlockType type() const override { return FS_BITMAP_BLOCK; }
     FSItemType itemType(u32 byte) override;
     FSError check(u32 pos, u8 *expected, bool strict) override;
     void dump() override;

@@ -60,15 +60,15 @@ public:
 public:
     
     // Returns true if this image contains a rigid disk block
-    bool hasRDB();
+    bool hasRDB() const;
     
     // Returns the layout parameters of the hard drive
-    long numCyls();
-    long numSides();
-    long numSectors();
-    long numReserved();
-    long numBlocks();
-    long bsize();
+    long numCyls() const;
+    long numSides() const;
+    long numSectors() const;
+    long numReserved() const;
+    long numBlocks() const;
+    long bsize() const;
     struct FSDeviceDescriptor layout();
 
     

@@ -31,7 +31,7 @@ FSBlock::makeWithType(FSPartition &p, u32 nr, FSBlockType type)
 }
 
 u32
-FSBlock::bsize()
+FSBlock::bsize() const
 {
     return partition.dev.bsize;
 }

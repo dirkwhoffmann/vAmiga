@@ -111,7 +111,7 @@ OFSDataBlock::addData(const u8 *buffer, size_t size)
 }
 
 size_t
-OFSDataBlock::dsize()
+OFSDataBlock::dsize() const
 {
     return bsize() - headerSize();
 }
@@ -153,7 +153,7 @@ FFSDataBlock::addData(const u8 *buffer, size_t size)
 }
 
 size_t
-FFSDataBlock::dsize()
+FFSDataBlock::dsize() const
 {
     return bsize() - headerSize();
 }

@@ -36,7 +36,7 @@ struct FSDataBlock : FSBlock {
     //
 
     // Returns the number of data bytes stored in this block
-    virtual size_t dsize() = 0;
+    virtual size_t dsize() const = 0;
 };
 
 struct OFSDataBlock : FSDataBlock {
@@ -46,7 +46,7 @@ struct OFSDataBlock : FSDataBlock {
     OFSDataBlock(FSPartition &p, u32 nr);
 
     const char *getDescription() const override { return "OFSDataBlock"; }
-    FSBlockType type() override { return FS_DATA_BLOCK_OFS; }
+    FSBlockType type() const override { return FS_DATA_BLOCK_OFS; }
     FSItemType itemType(u32 byte) override;
     void dump() override;
     FSError check(u32 pos, u8 *expected, bool strict) override;
@@ -67,7 +67,7 @@ struct OFSDataBlock : FSDataBlock {
     size_t writeData(FILE *file, size_t size) override;
     size_t addData(const u8 *buffer, size_t size) override;
     
-    size_t dsize() override;
+    size_t dsize() const override;
 };
 
 struct FFSDataBlock : FSDataBlock {
@@ -77,7 +77,7 @@ struct FFSDataBlock : FSDataBlock {
     FFSDataBlock(FSPartition &p, u32 nr);
 
     const char *getDescription() const override { return "FFSDataBlock"; }
-    FSBlockType type() override { return FS_DATA_BLOCK_FFS; }
+    FSBlockType type() const override { return FS_DATA_BLOCK_FFS; }
     FSItemType itemType(u32 byte) override;
     void dump() override;
 
@@ -90,7 +90,7 @@ struct FFSDataBlock : FSDataBlock {
     size_t writeData(FILE *file, size_t size) override;
     size_t addData(const u8 *buffer, size_t size) override;
     
-    size_t dsize() override;
+    size_t dsize() const override;
 };
 
 #endif

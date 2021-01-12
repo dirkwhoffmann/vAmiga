@@ -42,10 +42,10 @@ struct FSBlock : AmigaObject {
     //
 
     // Returns the type of this block
-    virtual FSBlockType type() = 0; 
+    virtual FSBlockType type() const = 0; 
 
     // Returns the size of this block in bytes (usually 512)
-    u32 bsize();
+    u32 bsize() const;
 
     // Extract the file system type from the block header
     virtual FSVolumeType dos() { return FS_NODOS; }
