@@ -239,30 +239,30 @@ private:
      * second variant analyzes the instruction at a certain location in memory.
      */
  
-    bool isMoveCmd();
-    bool isMoveCmd(u32 addr);
+    bool isMoveCmd() const;
+    bool isMoveCmd(u32 addr) const;
     
-    bool isWaitCmd();
-    bool isWaitCmd(u32 addr);
+    bool isWaitCmd() const;
+    bool isWaitCmd(u32 addr) const;
     
     u16 getRA() const;
-    u16 getRA(u32 addr);
+    u16 getRA(u32 addr) const;
 
     u16 getDW() const;
-    u16 getDW(u32 addr);
+    u16 getDW(u32 addr) const;
 
     bool getBFD() const;
-    bool getBFD(u32 addr);
+    bool getBFD(u32 addr) const;
 
     u16 getVPHP() const;
-    u16 getVPHP(u32 addr);
+    u16 getVPHP(u32 addr) const;
     u16 getVP() const { return HI_BYTE(getVPHP()); }
     u16 getVP(u32 addr) { return HI_BYTE(getVPHP(addr)); }
     u16 getHP() const { return LO_BYTE(getVPHP()); }
     u16 getHP(u32 addr) { return LO_BYTE(getVPHP(addr)); }
     
     u16 getVMHM() const;
-    u16 getVMHM(u32 addr);
+    u16 getVMHM(u32 addr) const;
     u16 getVM() const { return HI_BYTE(getVMHM()); }
     u16 getVM(u32 addr) { return HI_BYTE(getVMHM(addr)); }
     u16 getHM() const { return LO_BYTE(getVMHM()); }
@@ -274,7 +274,7 @@ public:
     bool isIllegalAddress(u32 addr) const;
     
     // Returns true if the Copper instruction at addr is illegal
-    bool isIllegalInstr(u32 addr);
+    bool isIllegalInstr(u32 addr) const;
     
  
     //
