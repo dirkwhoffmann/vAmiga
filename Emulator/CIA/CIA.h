@@ -388,14 +388,14 @@ public:
 public:
     
     // Returns the data registers (call updatePA() or updatePB() first)
-    u8 getPA() { return PA; }
-    u8 getPB() { return PB; }
+    u8 getPA() const { return PA; }
+    u8 getPB() const { return PB; }
 
 private:
 
     // Returns the data direction register
-    u8 getDDRA() { return DDRA; }
-    u8 getDDRB() { return DDRB; }
+    u8 getDDRA() const { return DDRA; }
+    u8 getDDRB() const { return DDRB; }
     
     // Computes the values we currently see at port A
     virtual void updatePA() = 0;
@@ -431,7 +431,7 @@ protected:
 public:
     
     // Getter for the interrupt line
-    bool irqPin() { return INT; }
+    bool irqPin() const { return INT; }
 
     // Simulates an edge edge on the flag pin
     void emulateRisingEdgeOnFlagPin();
@@ -556,7 +556,7 @@ private:
 public:
 
     // Indicates if the power LED is currently on or off
-    bool powerLED() { return (PA & 0x2) == 0; }
+    bool powerLED() const { return (PA & 0x2) == 0; }
 
     // Emulates the reception of a keycode from the keyboard
     void setKeyCode(u8 keyCode);

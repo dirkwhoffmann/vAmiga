@@ -20,9 +20,6 @@
 
 // Manager for plugged in Zorro II devices
 class ZorroManager : public AmigaComponent {
-
-    // Value returned when peeking into the auto-config space
-    u8 autoConfData;
     
     // Current configuration state (0 = unconfigured)
     u8 fastRamConf;
@@ -67,7 +64,6 @@ public:
     {
         worker
 
-        & autoConfData
         & fastRamConf
         & fastRamBaseAddr;
     }
@@ -83,8 +79,8 @@ public:
     
 public:
     
-    u8 peekFastRamDevice(u32 addr);
-    u8 spypeekFastRamDevice(u32 addr);
+    u8 peekFastRamDevice(u32 addr) const;
+    u8 spypeekFastRamDevice(u32 addr) const;
     void pokeFastRamDevice(u32 addr, u8 value);
 };
 

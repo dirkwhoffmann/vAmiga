@@ -159,7 +159,7 @@ public:
     void execute();
     
     // Returns true if the CPU is in HALT state
-    bool isHalted() { return flags & CPU_IS_HALTED; }
+    bool isHalted() const { return flags & CPU_IS_HALTED; }
     
 private:
 
