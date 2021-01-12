@@ -30,7 +30,7 @@ FSUserDirBlock::~FSUserDirBlock()
 }
 
 FSItemType
-FSUserDirBlock::itemType(u32 byte)
+FSUserDirBlock::itemType(u32 byte) const
 {
     // Intercept some special locations
     if (byte == 328) return FSI_BCPL_STRING_LENGTH;
@@ -92,7 +92,7 @@ FSUserDirBlock::check(u32 byte, u8 *expected, bool strict) const
 }
 
 void
-FSUserDirBlock::dump()
+FSUserDirBlock::dump() const
 {
     printf("        Name: %s\n", getName().c_str());
     printf("     Comment: %s\n", getComment().c_str());

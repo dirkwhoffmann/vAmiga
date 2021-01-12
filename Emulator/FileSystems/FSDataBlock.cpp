@@ -32,7 +32,7 @@ OFSDataBlock::OFSDataBlock(FSPartition &p, u32 nr) : FSDataBlock(p, nr)
 }
 
 void
-OFSDataBlock::dump()
+OFSDataBlock::dump() const
 {
     msg("File header block : %d\n", getFileHeaderRef());
     msg("     Chain number : %d\n", getDataBlockNr());
@@ -42,7 +42,7 @@ OFSDataBlock::dump()
 }
 
 FSItemType
-OFSDataBlock::itemType(u32 pos)
+OFSDataBlock::itemType(u32 pos) const
 {
     if (pos < 24) {
         
@@ -124,12 +124,12 @@ OFSDataBlock::dsize() const
 FFSDataBlock::FFSDataBlock(FSPartition &p, u32 nr) : FSDataBlock(p, nr) { }
 
 void
-FFSDataBlock::dump()
+FFSDataBlock::dump() const
 {
 }
 
 FSItemType
-FFSDataBlock::itemType(u32 pos)
+FFSDataBlock::itemType(u32 pos) const
 {
     return FSI_DATA;
 }

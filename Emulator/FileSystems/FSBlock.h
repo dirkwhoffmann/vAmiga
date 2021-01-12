@@ -48,14 +48,14 @@ struct FSBlock : AmigaObject {
     u32 bsize() const;
 
     // Extract the file system type from the block header
-    virtual FSVolumeType dos() { return FS_NODOS; }
+    virtual FSVolumeType dos() const { return FS_NODOS; }
     
     // Returns the role of a certain byte in this block
-    virtual FSItemType itemType(u32 byte) { return FSI_UNKNOWN; }
+    virtual FSItemType itemType(u32 byte) const { return FSI_UNKNOWN; }
     
     // Returns the type and subtype identifiers of this block
-    virtual u32 typeID();
-    virtual u32 subtypeID();
+    virtual u32 typeID() const;
+    virtual u32 subtypeID() const;
     
     
     //
@@ -103,8 +103,8 @@ struct FSBlock : AmigaObject {
     //
     
     // Prints some debug information for this block
-    virtual void dump() { };
-    virtual void dumpData();
+    virtual void dump() const { };
+    virtual void dumpData() const;
 
     
     //
@@ -129,11 +129,11 @@ public:
     
 public:
     
-    virtual FSName getName() { return FSName(""); }
+    virtual FSName getName() const { return FSName(""); }
     virtual void setName(FSName name) { }
-    virtual bool isNamed(FSName &other) { return false; }
+    virtual bool isNamed(FSName &other) const { return false; }
 
-    virtual FSComment getComment() { return FSComment(""); }
+    virtual FSComment getComment() const { return FSComment(""); }
     virtual void setComment(FSComment name) { }
 
     
@@ -141,10 +141,10 @@ public:
     // Getting and settting date and time
     //
     
-    virtual FSTime getCreationDate() { return FSTime((time_t)0); }
+    virtual FSTime getCreationDate() const { return FSTime((time_t)0); }
     virtual void setCreationDate(FSTime t) { }
 
-    virtual FSTime getModificationDate() { return FSTime((time_t)0); }
+    virtual FSTime getModificationDate() const { return FSTime((time_t)0); }
     virtual void setModificationDate(FSTime t) { }
     
     
@@ -152,10 +152,10 @@ public:
     // Getting and setting file properties
     //
     
-    virtual u32 getProtectionBits() { return 0; }
+    virtual u32 getProtectionBits() const { return 0; }
     virtual void setProtectionBits(u32 val) { }
 
-    virtual u32 getFileSize() { return 0; }
+    virtual u32 getFileSize() const { return 0; }
     virtual void setFileSize(u32 val) { }
 
     
@@ -164,37 +164,37 @@ public:
     //
 
     // Link to the parent directory block
-    virtual u32 getParentDirRef() { return 0; }
+    virtual u32 getParentDirRef() const { return 0; }
     virtual void setParentDirRef(u32 ref) { }
     struct FSBlock *getParentDirBlock();
     
     // Link to the file header block
-    virtual u32 getFileHeaderRef() { return 0; }
+    virtual u32 getFileHeaderRef() const { return 0; }
     virtual void setFileHeaderRef(u32 ref) { }
     struct FSFileHeaderBlock *getFileHeaderBlock();
 
     // Link to the next block with the same hash
-    virtual u32 getNextHashRef() { return 0; }
+    virtual u32 getNextHashRef() const { return 0; }
     virtual void setNextHashRef(u32 ref) { }
     struct FSBlock *getNextHashBlock();
 
     // Link to the next extension block
-    virtual u32 getNextListBlockRef() { return 0; }
+    virtual u32 getNextListBlockRef() const { return 0; }
     virtual void setNextListBlockRef(u32 ref) { }
     struct FSFileListBlock *getNextListBlock();
 
     // Link to the next bitmap extension block
-    virtual u32 getNextBmExtBlockRef() { return 0; }
+    virtual u32 getNextBmExtBlockRef() const { return 0; }
     virtual void setNextBmExtBlockRef(u32 ref) { }
     struct FSBitmapExtBlock *getNextBmExtBlock();
     
     // Link to the first data block
-    virtual u32 getFirstDataBlockRef() { return 0; }
+    virtual u32 getFirstDataBlockRef() const { return 0; }
     virtual void setFirstDataBlockRef(u32 ref) { }
     struct FSDataBlock *getFirstDataBlock();
 
     // Link to the next data block
-    virtual u32 getNextDataBlockRef() { return 0; }
+    virtual u32 getNextDataBlockRef() const { return 0; }
     virtual void setNextDataBlockRef(u32 ref) { }
     struct FSDataBlock *getNextDataBlock();
 
@@ -204,17 +204,17 @@ public:
     //
     
     // Returns the hash table size
-    virtual u32 hashTableSize() { return 0; }
+    virtual u32 hashTableSize() const { return 0; }
 
     // Returns a hash value for this block
-    virtual u32 hashValue() { return 0; }
+    virtual u32 hashValue() const { return 0; }
 
     // Looks up an item in the hash table
-    u32 getHashRef(u32 nr);
+    u32 getHashRef(u32 nr) const;
     void setHashRef(u32 nr, u32 ref);
 
     // Dumps the contents of the hash table for debugging
-    void dumpHashTable();
+    void dumpHashTable() const;
 
 
     //
@@ -228,7 +228,7 @@ public:
     //
     
     // Returns the maximum number of storable data block references
-    u32 getMaxDataBlockRefs();
+    u32 getMaxDataBlockRefs() const;
 
     // Gets or sets the number of data block references in this block
     virtual u32 getNumDataBlockRefs() const { return 0; }

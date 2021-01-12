@@ -37,13 +37,13 @@ FSBlock::bsize() const
 }
 
 u32
-FSBlock::typeID()
+FSBlock::typeID() const
 {
     return get32(0);
 }
 
 u32
-FSBlock::subtypeID()
+FSBlock::subtypeID() const
 {
     return get32((bsize() / 4) - 1);
 }
@@ -88,7 +88,7 @@ FSBlock::write32(u8 *p, u32 value)
 }
 
 void
-FSBlock::dumpData()
+FSBlock::dumpData() const
 {
     hexdumpLongwords(data, 512);
 }
@@ -196,7 +196,7 @@ FSBlock::getNextDataBlock()
 }
 
 u32
-FSBlock::getHashRef(u32 nr)
+FSBlock::getHashRef(u32 nr) const
 {
     return (nr < hashTableSize()) ? get32(6 + nr) : 0;
 }
@@ -208,7 +208,7 @@ FSBlock::setHashRef(u32 nr, u32 ref)
 }
 
 void
-FSBlock::dumpHashTable()
+FSBlock::dumpHashTable() const
 {
     for (u32 i = 0; i < hashTableSize(); i++) {
         
@@ -220,7 +220,7 @@ FSBlock::dumpHashTable()
 }
 
 u32
-FSBlock::getMaxDataBlockRefs()
+FSBlock::getMaxDataBlockRefs() const
 {
     return bsize() / 4 - 56;
 }

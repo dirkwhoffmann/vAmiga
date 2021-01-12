@@ -24,7 +24,7 @@ FSFileListBlock::~FSFileListBlock()
 }
 
 void
-FSFileListBlock::dump()
+FSFileListBlock::dump() const
 {
     msg(" Block count : %d / %d\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
     msg("       First : %d\n", getFirstDataBlockRef());
@@ -36,7 +36,7 @@ FSFileListBlock::dump()
 }
 
 FSItemType
-FSFileListBlock::itemType(u32 byte)
+FSFileListBlock::itemType(u32 byte) const
 {
     // Intercept some special locations
     if (byte == 328) return FSI_BCPL_STRING_LENGTH;

@@ -20,7 +20,7 @@ FSBitmapExtBlock::~FSBitmapExtBlock()
 }
 
 FSItemType
-FSBitmapExtBlock::itemType(u32 pos)
+FSBitmapExtBlock::itemType(u32 pos) const
 {
     return pos < (bsize() - 4) ? FSI_BITMAP : FSI_BITMAP_EXT_BLOCK_REF;
 }
@@ -37,7 +37,7 @@ FSBitmapExtBlock::check(u32 byte, u8 *expected, bool strict) const
 }
 
 void
-FSBitmapExtBlock::dump()
+FSBitmapExtBlock::dump() const
 {
     msg("Bitmap blocks : ");
     for (u32 i = 0; i < (bsize() / 4) - 1; i++) {

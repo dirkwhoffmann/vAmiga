@@ -22,31 +22,32 @@ struct FSRootBlock : FSBlock {
     // Methods from Block class
     //
 
-    void dump() override;
+    void dump() const override;
 
     // Methods from Block class
     FSBlockType type() const override { return FS_ROOT_BLOCK; }
-    FSItemType itemType(u32 byte) override;
+    FSItemType itemType(u32 byte) const override;
     FSError check(u32 pos, u8 *expected, bool strict) const override;
     u32 checksumLocation() const override { return 5; }
  
-    u32 getBmBlockRef(int nr)                    { return get32(nr-49);      }
-    void setBmBlockRef(int nr, u32 ref)          {        set32(nr-49, ref); }
+    u32 getBmBlockRef(int nr) const              { return get32(nr-49);        }
+    void setBmBlockRef(int nr, u32 ref)          {        set32(nr-49, ref);   }
 
-    u32 getNextBmExtBlockRef() override          { return get32(-24);        }
-    void setNextBmExtBlockRef(u32 ref) override  {        set32(-24, ref);   }
+    u32 getNextBmExtBlockRef() const override    { return get32(-24);          }
+    void setNextBmExtBlockRef(u32 ref) override  {        set32(-24, ref);     }
     
-    FSTime getModificationDate() override        { return FSTime(addr32(-23)); }
+    FSTime getModificationDate() const override  { return FSTime(addr32(-23)); }
     void setModificationDate(FSTime t) override  { t.write(addr32(-23));       }
 
-    FSName getName() override                    { return FSName(addr32(-20)); }
+    FSName getName() const override              { return FSName(addr32(-20)); }
     void setName(FSName name) override           { name.write(addr32(-20));    }
 
-    FSTime getCreationDate() override            { return FSTime(addr32(-7));  }
+    FSTime getCreationDate() const override      { return FSTime(addr32(-7));  }
     void setCreationDate(FSTime t) override      { t.write(addr32(-7));        }
 
+    u32 hashTableSize() const override           { return 72;                  }
+
     bool addBitmapBlockRefs(std::vector<u32> &refs);
-    u32 hashTableSize() override { return 72; }
 };
 
 #endif

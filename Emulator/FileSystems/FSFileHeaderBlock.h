@@ -25,9 +25,9 @@ struct FSFileHeaderBlock : FSBlock {
     //
 
     FSBlockType type() const override { return FS_FILEHEADER_BLOCK; }
-    FSItemType itemType(u32 byte) override;
+    FSItemType itemType(u32 byte) const override;
     FSError check(u32 pos, u8 *expected, bool strict) const override;
-    void dump() override;
+    void dump() const override;
     u32 checksumLocation() const override { return 5; }
 
     FSError exportBlock(const char *path) override;
@@ -36,35 +36,35 @@ struct FSFileHeaderBlock : FSBlock {
     void setNumDataBlockRefs(u32 val) override  {        set32(2, val);       }
     void incNumDataBlockRefs() override         {        inc32(2);            }
 
-    u32 getFirstDataBlockRef() override         { return get32(4     );       }
+    u32 getFirstDataBlockRef() const override   { return get32(4     );       }
     void setFirstDataBlockRef(u32 ref) override {        set32(4, ref);       }
     
-    u32 getDataBlockRef(int nr)                 { return get32(-51-nr     );  }
+    u32 getDataBlockRef(int nr) const           { return get32(-51-nr     );  }
     void setDataBlockRef(int nr, u32 ref)       {        set32(-51-nr, ref);  }
 
-    u32 getProtectionBits() override            { return get32(-48     );     }
+    u32 getProtectionBits() const override      { return get32(-48     );     }
     void setProtectionBits(u32 val) override    {        set32(-48, val);     }
 
-    u32 getFileSize() override                  { return get32(-47     );     }
+    u32 getFileSize() const override            { return get32(-47     );     }
     void setFileSize(u32 val) override          {        set32(-47, val);     }
 
-    FSComment getComment() override             { return FSComment(addr32(-46));}
+    FSComment getComment() const override       { return FSComment(addr32(-46));}
     void setComment(FSComment name) override    { name.write(addr32(-46));      }
 
-    FSTime getCreationDate() override           { return FSTime(addr32(-23));   }
+    FSTime getCreationDate() const override     { return FSTime(addr32(-23));   }
     void setCreationDate(FSTime t) override     { t.write(addr32(-23));         }
 
-    FSName getName() override                   { return FSName(addr32(-20));   }
+    FSName getName() const override             { return FSName(addr32(-20));   }
     void setName(FSName name) override          { name.write(addr32(-20));      }
-    bool isNamed(FSName &other) override        { return getName() == other;  }
+    bool isNamed(FSName &other) const override  { return getName() == other;  }
 
-    u32 getNextHashRef() override               { return get32(-4     );      }
+    u32 getNextHashRef() const override         { return get32(-4     );      }
     void setNextHashRef(u32 ref) override       {        set32(-4, ref);      }
 
-    u32 getParentDirRef() override              { return get32(-3     );      }
+    u32 getParentDirRef() const override        { return get32(-3     );      }
     void setParentDirRef(u32 ref) override      {        set32(-3, ref);      }
 
-    u32 getNextListBlockRef() override          { return get32(-2     );      }
+    u32 getNextListBlockRef() const override    { return get32(-2     );      }
     void setNextListBlockRef(u32 ref) override  {        set32(-2, ref);      }
 
     
@@ -78,7 +78,7 @@ struct FSFileHeaderBlock : FSBlock {
     bool addDataBlockRef(u32 ref);
     bool addDataBlockRef(u32 first, u32 ref) override;
     
-    u32 hashValue() override { return getName().hashValue(); }
+    u32 hashValue() const override { return getName().hashValue(); }
 };
 
 #endif

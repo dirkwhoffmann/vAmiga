@@ -28,7 +28,7 @@ FSFileHeaderBlock(p, nr)
 }
 
 FSItemType
-FSFileHeaderBlock::itemType(u32 byte)
+FSFileHeaderBlock::itemType(u32 byte) const
 {
     // Intercept some special locations
     if (byte == 328) return FSI_BCPL_STRING_LENGTH;
@@ -105,7 +105,7 @@ FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict) const
 }
 
 void
-FSFileHeaderBlock::dump()
+FSFileHeaderBlock::dump() const
 {
     msg("           Name : %s\n", getName().c_str());
     msg("        Comment : %s\n", getComment().c_str());
@@ -119,7 +119,7 @@ FSFileHeaderBlock::dump()
     msg(" FileList block : %d\n", getNextListBlockRef());
     
     msg("    Data blocks : ");
-    for (u32 i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
+    for (unsigned i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
     msg("\n");
 }
 

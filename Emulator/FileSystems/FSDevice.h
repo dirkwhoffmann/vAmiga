@@ -136,9 +136,9 @@ public:
     //
     
     // Returns the DOS version of the current partition
-    FSVolumeType dos() { return partitions[cp]->dos; }
-    bool isOFS() { return partitions[cp]->isOFS(); }
-    bool isFFS() { return partitions[cp]->isFFS(); }
+    FSVolumeType dos() const { return partitions[cp]->dos; }
+    bool isOFS() const { return partitions[cp]->isOFS(); }
+    bool isFFS() const { return partitions[cp]->isFFS(); }
     
     
     //
@@ -180,10 +180,10 @@ public:
     FSBlockType blockType(u32 nr);
 
     // Returns the usage type of a certain byte in a certain block
-    FSItemType itemType(u32 nr, u32 pos);
+    FSItemType itemType(u32 nr, u32 pos) const;
     
     // Queries a pointer from the block storage (may return nullptr)
-    FSBlock *blockPtr(u32 nr);
+    FSBlock *blockPtr(u32 nr) const;
 
     // Queries a pointer to a block of a certain type (may return nullptr)
     FSBootBlock *bootBlockPtr(u32 nr);

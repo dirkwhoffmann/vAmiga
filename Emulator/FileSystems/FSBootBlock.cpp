@@ -29,7 +29,7 @@ FSBootBlock::~FSBootBlock()
 
 
 FSVolumeType
-FSBootBlock::dos()
+FSBootBlock::dos() const
 {
     // Only proceed if the header begins with 'DOS'
     if (strncmp((const char *)data, "DOS", 3)) return FS_NODOS;
@@ -41,7 +41,7 @@ FSBootBlock::dos()
 }
 
 FSItemType
-FSBootBlock::itemType(u32 byte)
+FSBootBlock::itemType(u32 byte) const
 {
     if (nr == partition.firstBlock) {
         
@@ -105,7 +105,7 @@ FSBootBlock::checksum() const {
 }
 
 void
-FSBootBlock::dump()
+FSBootBlock::dump() const
 {
     msg("       Header : ");
     for (int i = 0; i < 8; i++) msg("%02X ", data[i]);

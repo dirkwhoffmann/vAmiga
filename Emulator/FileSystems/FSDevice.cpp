@@ -231,13 +231,13 @@ FSDevice::blockType(u32 nr)
 }
 
 FSItemType
-FSDevice::itemType(u32 nr, u32 pos)
+FSDevice::itemType(u32 nr, u32 pos) const
 {
     return blockPtr(nr) ? blocks[nr]->itemType(pos) : FSI_UNUSED;
 }
 
 FSBlock *
-FSDevice::blockPtr(u32 nr)
+FSDevice::blockPtr(u32 nr) const 
 {
     return nr < blocks.size() ? blocks[nr] : nullptr;
 }

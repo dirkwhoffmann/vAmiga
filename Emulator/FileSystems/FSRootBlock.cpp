@@ -29,7 +29,7 @@ FSRootBlock::~FSRootBlock()
 }
 
 FSItemType
-FSRootBlock::itemType(u32 byte)
+FSRootBlock::itemType(u32 byte) const
 {
     // Intercept some special locations
     if (byte == 432) return FSI_BCPL_STRING_LENGTH;
@@ -104,7 +104,7 @@ FSRootBlock::check(u32 byte, u8 *expected, bool strict) const
 }
 
 void
-FSRootBlock::dump()
+FSRootBlock::dump() const
 {
     msg("         Name : %s\n", getName().c_str());
     msg("      Created : %s\n", getCreationDate().str().c_str());
