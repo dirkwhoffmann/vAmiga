@@ -411,8 +411,8 @@ public:
     long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;
     
-    bool isOCS() { return config.revision == AGNUS_OCS; }
-    bool isECS() { return config.revision != AGNUS_OCS; }
+    bool isOCS() const { return config.revision == AGNUS_OCS; }
+    bool isECS() const { return config.revision != AGNUS_OCS; }
     
     // Returns the chip identification bits of this Agnus (shows up in VPOSR)
     i16 idBits();

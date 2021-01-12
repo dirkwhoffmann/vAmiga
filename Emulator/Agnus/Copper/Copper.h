@@ -271,7 +271,7 @@ private:
 public:
     
     // Returns true if the Copper has no access to this custom register
-    bool isIllegalAddress(u32 addr);
+    bool isIllegalAddress(u32 addr) const;
     
     // Returns true if the Copper instruction at addr is illegal
     bool isIllegalInstr(u32 addr);

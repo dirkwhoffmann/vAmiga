@@ -465,7 +465,7 @@ Copper::getVMHM(u32 addr)
 }
 
 bool
-Copper::isIllegalAddress(u32 addr)
+Copper::isIllegalAddress(u32 addr) const
 {
     if (cdang) {
         return agnus.isOCS() ? addr < 0x40 : false;
