@@ -94,10 +94,13 @@ public:
 public:
     
     // Returns pointer to header data
-    SnapshotHeader *getHeader() { return (SnapshotHeader *)data; }
+    const SnapshotHeader *getHeader() { return (SnapshotHeader *)data; }
     
     // Returns pointer to core data
     u8 *getData() override { return data + sizeof(SnapshotHeader); }
+    
+    // Takes a screenshot
+    void takeScreenshot(Amiga &amiga);
     
     // Returns the timestamp
     // GET DIRECTLY FROM SCREENSHOT

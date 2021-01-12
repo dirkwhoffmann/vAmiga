@@ -110,7 +110,7 @@ Snapshot::makeWithAmiga(Amiga *amiga)
 {
     Snapshot *snapshot = new Snapshot(amiga->size());
 
-    snapshot->getHeader()->screenshot.take(amiga);
+    snapshot->takeScreenshot(*amiga);
     amiga->save(snapshot->getData());
 
     return snapshot;
@@ -141,4 +141,10 @@ Snapshot::readFromBuffer(const u8 *buf, size_t len, FileError *err)
     }
     
     return *err == ERR_FILE_OK;
+}
+
+void
+Snapshot::takeScreenshot(Amiga &amiga)
+{
+    ((SnapshotHeader *)data)->screenshot.take(&amiga);
 }
