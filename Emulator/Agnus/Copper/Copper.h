@@ -244,9 +244,6 @@ private:
     
     bool isWaitCmd();
     bool isWaitCmd(u32 addr);
-
-    bool isSkipCmd();
-    bool isSkipCmd(u32 addr);
     
     u16 getRA();
     u16 getRA(u32 addr);
