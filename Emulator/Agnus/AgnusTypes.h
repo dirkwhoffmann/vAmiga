@@ -9,6 +9,13 @@
 
 #pragma once
 
+#include "AgnusPublicTypes.h"
+#include "Reflection.h"
+
+//
+// Private types
+//
+
 enum_long(DDFState)
 {
     DDF_OFF,

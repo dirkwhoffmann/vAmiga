@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "AmigaPublicTypes.h"
-#include "AmigaPrivateTypes.h"
+#include "AmigaTypes.h"
 #include "Beam.h"
 #include "Buffers.h"
 #include "DDF.h"

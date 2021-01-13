@@ -9,15 +9,5 @@
 
 #pragma once
 
-enum KeyboardState : long
-{
-    KB_SELFTEST,
-    KB_SYNC,
-    KB_STRM_ON,
-    KB_STRM_OFF,
-    KB_SEND
-};
-
-inline bool isKeyboardState(long value) {
-    return value >= 0 && value <= KB_SEND;
-}
+#include "DiskPublicTypes.h"
+#include "Reflection.h"
