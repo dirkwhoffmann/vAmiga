@@ -171,19 +171,22 @@ class BreakTableView: GuardTableView {
 
     override func edit(row: Int, addr: Int) {
 
+        // Breakpoint addresses must be even
+        let bpAddr = addr & ~1
+        
         // Abort if a breakpoint is already set
-        if breakpoints.isSet(at: addr) { NSSound.beep(); return }
+        if breakpoints.isSet(at: bpAddr) { NSSound.beep(); return }
         
         amiga.suspend()
         
         if row == numRows {
-            breakpoints.add(at: addr)
+            breakpoints.add(at: bpAddr)
         } else {
             assert(row < numRows)
-            breakpoints.replace(row, addr: addr)
+            breakpoints.replace(row, addr: bpAddr)
         }
         
-        inspector.cpuInstrView.jumpTo(addr: addr)
+        inspector.cpuInstrView.jumpTo(addr: bpAddr)
         
         amiga.resume()
     }

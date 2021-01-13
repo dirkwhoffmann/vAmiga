@@ -24,6 +24,9 @@ Denise::Denise(Amiga& ref) : AmigaComponent(ref)
     config.clxSprSpr = true;
     config.clxSprPlf = true;
     config.clxPlfPlf = true;
+    
+    memset(spriteInfo, 0, sizeof(spriteInfo));
+    memset(latchedSpriteInfo, 0, sizeof(latchedSpriteInfo));
 }
 
 void
