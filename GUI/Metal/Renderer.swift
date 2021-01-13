@@ -266,8 +266,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
         setupMetal()
 
-        mtkView.delegate = self
         mtkView.device = device
+        mtkView.delegate = self
     }
 
     //
@@ -290,21 +290,6 @@ class Renderer: NSObject, MTKViewDelegate {
 
         bgTexture.replace(w: 512, h: 512, buffer: bytes)
     }
-    
-    /*
-    func updateTexture(bytes: UnsafeMutablePointer<UInt32>, longFrame: Bool) {
-
-        let w = Int(HPIXELS)
-        let h = longFrameTexture.height
-        let offset = Int(HBLANK_MIN) * 4
-        
-        if longFrame {
-            longFrameTexture.replace(w: w, h: h, buffer: bytes + offset)
-        } else {
-            shortFrameTexture.replace(w: w, h: h, buffer: bytes + offset)
-        }
-    }
-    */
     
     func updateTexture() {
                 

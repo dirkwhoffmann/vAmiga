@@ -187,29 +187,6 @@ class ImporterDialog: DialogController {
                 
         amiga.diskController.insert(sender.tag, file: disk)
         
-        /*
-        switch disk {
-        
-        case _ as ADFFileProxy:
-            amiga.diskController.insert(sender.tag, adf: disk as? ADFFileProxy)
-
-        case _ as IMGFileProxy:
-            amiga.diskController.insert(sender.tag, img: disk as? IMGFileProxy)
-
-        case _ as DMSFileProxy:
-            amiga.diskController.insert(sender.tag, dms: disk as? DMSFileProxy)
-
-        case _ as EXEFileProxy:
-            amiga.diskController.insert(sender.tag, exe: disk as? EXEFileProxy)
-
-        case _ as DIRFileProxy:
-            amiga.diskController.insert(sender.tag, dir: disk as? DIRFileProxy)
-
-        default:
-            break
-        }
-        */
-        
         amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)     
         hideSheet()
     }
