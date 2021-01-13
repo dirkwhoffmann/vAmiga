@@ -11,3 +11,24 @@
 
 #include "RTCPublicTypes.h"
 #include "Reflection.h"
+
+struct RTCRevisionEnum : Reflection<RTCRevisionEnum, RTCRevision> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < RTC_COUNT;
+    }
+
+    static const char *prefix() { return "RTC"; }
+    static const char *key(RTCRevision value)
+    {
+        switch (value) {
+                
+            case RTC_NONE:   return "NONR";
+            case RTC_OKI:    return "OKI";
+            case RTC_RICOH:  return "RICOH";
+            case RTC_COUNT:  return "???";
+        }
+        return "???";
+    }
+};

@@ -21,10 +21,13 @@ enum_long(RTC_REVISION)
 {
     RTC_NONE,
     RTC_OKI,
-    RTC_RICOH
+    RTC_RICOH,
+    
+    RTC_COUNT
 };
 typedef RTC_REVISION RTCRevision;
 
+/*
 inline bool isRTCRevision(long value)
 {
     return (unsigned long)value <= RTC_RICOH;
@@ -40,6 +43,7 @@ inline const char *RTCRevisionName(RTCRevision value)
     }
     return "???";
 }
+*/
 
 typedef struct
 {

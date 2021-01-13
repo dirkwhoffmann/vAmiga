@@ -38,13 +38,8 @@ RTC::setConfigItem(Option option, long value)
             warn("Overriding RTC revision: %ld KB\n", value);
             #endif
             
-            if (!isRTCRevision(value)) {
-                warn("Invalid RTC revision: %ld\n", value);
-                return false;
-            }
-            if (config.model == value) {
-                return false;
-            }
+            if (!RTCRevisionEnum::verify(value)) return false;
+            if (config.model == value) return false;
             
             config.model = (RTCRevision)value;
             mem.updateMemSrcTables();
@@ -59,7 +54,7 @@ RTC::setConfigItem(Option option, long value)
 void
 RTC::_dumpConfig() const
 {
-    msg("  Revision : %s\n", RTCRevisionName(config.model));
+    msg("  Revision : %s\n", RTCRevisionEnum::key(config.model));
 }
 
 void
