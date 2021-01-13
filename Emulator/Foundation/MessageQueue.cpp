@@ -60,7 +60,7 @@ MessageQueue::put(MsgType type, i64 data)
 {
     synchronized {
                         
-        debug (QUEUE_DEBUG, "%s [%lld]\n", MsgTypeName(type), data);
+        debug (QUEUE_DEBUG, "%s [%lld]\n", MsgTypeEnum::key(type), data);
         
         // Delete the oldest message if the queue overflows
         if (queue.isFull()) (void)queue.read();
@@ -85,7 +85,7 @@ MessageQueue::dump()
 void
 MessageQueue::dump(const Message &msg)
 {
-    msg("%s [%ld]\n", MsgTypeName(msg.type), msg.data);
+    msg("%s [%ld]\n", MsgTypeEnum::key(msg.type), msg.data);
 }
 
 void
