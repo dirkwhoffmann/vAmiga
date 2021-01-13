@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_FILEHEADER_BLOCK_H
-#define _FS_FILEHEADER_BLOCK_H
+#pragma once
 
 #include "FSBlock.h"
 
@@ -80,5 +79,3 @@ struct FSFileHeaderBlock : FSBlock {
     
     u32 hashValue() const override { return getName().hashValue(); }
 };
-
-#endif

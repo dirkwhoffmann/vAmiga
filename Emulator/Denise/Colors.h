@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _COLORS_H
-#define _COLORS_H
+#pragma once
 
 struct RgbColor {
 
@@ -115,5 +114,3 @@ struct GpuColor {
     GpuColor tint(double weight) const { return mix(RgbColor::white, weight); }
     GpuColor shade(double weight) const { return mix(RgbColor::black, weight); }
 };
-
-#endif

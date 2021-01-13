@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _MOUSE_H
-#define _MOUSE_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -145,6 +144,3 @@ public:
     // Performs periodic actions for this device
     void execute();
 };
-
-#endif
-

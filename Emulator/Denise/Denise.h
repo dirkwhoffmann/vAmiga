@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DENISE_H
-#define _DENISE_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "Colors.h"
@@ -599,5 +598,3 @@ public:
     void dumpBuffer(const u8 *buffer, size_t length) const;
 
 };
-
-#endif

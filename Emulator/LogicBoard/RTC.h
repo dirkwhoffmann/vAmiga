@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _RTC_H
-#define _RTC_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -179,5 +178,3 @@ private:
     void registers2timeOki(tm *t);
     void registers2timeRicoh(tm *t);
 };
-
-#endif

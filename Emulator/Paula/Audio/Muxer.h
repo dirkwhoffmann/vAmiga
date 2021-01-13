@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _MUXER_H
-#define _MUXER_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "AudioStream.h"
@@ -256,5 +255,3 @@ public:
     void copyStereo(float *left, float *right, size_t n);
     void copyInterleaved(float *buffer, size_t n);
 };
-
-#endif

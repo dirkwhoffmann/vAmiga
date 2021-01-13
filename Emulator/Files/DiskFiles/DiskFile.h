@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DISK_FILE_H
-#define _DISK_FILE_H
+#pragma once
 
 #include "AmigaFile.h"
 
@@ -84,5 +83,3 @@ public:
     virtual bool encodeDisk(class Disk *disk);
     virtual bool decodeDisk(class Disk *disk);
 };
-
-#endif

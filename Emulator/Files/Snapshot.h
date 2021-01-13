@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _SNAPSHOT_H
-#define _SNAPSHOT_H
+#pragma once
 
 #include "AmigaFile.h"
 
@@ -105,5 +104,3 @@ public:
     // Takes a screenshot
     void takeScreenshot(Amiga &amiga);
 };
-
-#endif

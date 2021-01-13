@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DISK_CONTROLLER_H
-#define _DISK_CONTROLLER_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -360,5 +359,3 @@ public:
     void performTurboRead(Drive *drive);
     void performTurboWrite(Drive *drive);
 };
-
-#endif

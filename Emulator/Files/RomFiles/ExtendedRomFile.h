@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _EXTENDED_ROM_H
-#define _EXTENDED_ROM_H
+#pragma once
 
 #include "AmigaFile.h"
 
@@ -51,5 +50,3 @@ public:
         return isExtendedRomBuffer(buffer, length); }
     bool matchingFile(const char *path) override { return isExtendedRomFile(path); }
 };
-
-#endif

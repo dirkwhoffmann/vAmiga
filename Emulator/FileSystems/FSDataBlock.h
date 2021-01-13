@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_DATA_BLOCK_H
-#define _FS_DATA_BLOCK_H
+#pragma once
 
 #include "FSBlock.h"
 
@@ -92,5 +91,3 @@ struct FFSDataBlock : FSDataBlock {
     
     size_t dsize() const override;
 };
-
-#endif

@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_BITMAP_EXT_BLOCK_H
-#define _FS_BITMAP_EXT_BLOCK_H
+#pragma once
 
 #include "FSBlock.h"
 
@@ -36,11 +35,4 @@ struct FSBitmapExtBlock : FSBlock {
     void setBmBlockRef(int nr, u32 ref)          {        set32(nr, ref);    }
 
     void addBitmapBlockRefs(vector<u32> &refs, std::vector<u32>::iterator &it);
-
-    
-    //
-    // Block specific methods
-    //
 };
-
-#endif

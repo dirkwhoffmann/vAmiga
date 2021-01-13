@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _SCREEN_RECORDER_H
-#define _SCREEN_RECORDER_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "Muxer.h"
@@ -186,5 +185,3 @@ public:
     // Records a single frame
     void vsyncHandler(Cycle target);
 };
-
-#endif

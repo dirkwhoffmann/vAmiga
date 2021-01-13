@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_PRIVATE_TYPES_H
-#define _AMIGA_PRIVATE_TYPES_H
+#pragma once
 
 #include "AgnusPrivateTypes.h"
 #include "PaulaPrivateTypes.h"
@@ -23,5 +22,3 @@ enum_u32(RunLoopControlFlag)
     RL_AUTO_SNAPSHOT      = 0b010000,
     RL_USER_SNAPSHOT      = 0b100000
 };
-
-#endif

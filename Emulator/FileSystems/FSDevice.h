@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FSDEVICE_H
-#define _FSDEVICE_H
+#pragma once
 
 #include "FSObjects.h"
 #include "FSPartition.h"
@@ -347,5 +346,3 @@ public:
     // Exports the volume to a directory of the host file system
     FSError exportDirectory(const char *path);
 };
-
-#endif

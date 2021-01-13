@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _PAULA_PRIVATE_TYPES_H
-#define _PAULA_PRIVATE_TYPES_H
+#pragma once
 
 enum IrqSource : long
 {
@@ -33,5 +32,3 @@ static inline bool isIrqSource(long value)
 {
     return value >= 0 && value < INT_COUNT;
 }
-
-#endif

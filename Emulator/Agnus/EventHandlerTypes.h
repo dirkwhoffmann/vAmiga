@@ -6,11 +6,10 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
-// This file must conform to standard ANSI-C to be compatible with Swift.
-
-#ifndef _EVENT_TYPES_H
-#define _EVENT_TYPES_H
+#pragma once
 
 #include "Aliases.h"
 
@@ -326,5 +325,3 @@ typedef struct
     EventSlotInfo slotInfo[SLOT_COUNT];
 }
 EventInfo;
-
-#endif

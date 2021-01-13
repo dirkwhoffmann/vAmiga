@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_OBJECTS_H
-#define _FS_OBJECTS_H
+#pragma once
 
 #include "AmigaObject.h"
 
@@ -70,5 +69,3 @@ struct FSTime : AmigaObject {
     string timeStr() const;
     string str() const;
 };
-
-#endif

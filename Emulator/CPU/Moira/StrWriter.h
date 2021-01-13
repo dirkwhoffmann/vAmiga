@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef STRING_WRITER_H
-#define STRING_WRITER_H
+#pragma once
 
 #include <math.h>
 
@@ -88,4 +87,3 @@ private:
 };
 
 }
-#endif

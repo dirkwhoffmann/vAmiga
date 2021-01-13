@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _COPPER_H
-#define _COPPER_H
+#pragma once
 
 #include "Beam.h"
 
@@ -326,5 +325,3 @@ public:
     // Dumps a Copper list
     void dumpCopperList(unsigned list, unsigned length); 
 };
-
-#endif 

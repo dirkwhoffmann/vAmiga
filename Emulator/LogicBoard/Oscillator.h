@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _OSCILLATOR_H
-#define _OSCILLATOR_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -112,5 +111,3 @@ private:
     // Puts the thread to rest until the target time has been reached
     void waitUntil(u64 deadline);
 };
-
-#endif

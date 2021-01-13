@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _ZORRO_MANAGER_H
-#define _ZORRO_MANAGER_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -83,5 +82,3 @@ public:
     u8 spypeekFastRamDevice(u32 addr) const;
     void pokeFastRamDevice(u32 addr, u8 value);
 };
-
-#endif

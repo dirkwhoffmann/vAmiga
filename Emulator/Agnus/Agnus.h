@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AGNUS_H
-#define _AGNUS_H
+#pragma once
 
 #include "AmigaConstants.h"
 #include "Beam.h"
@@ -930,5 +929,3 @@ public:
 #include "EventHandler.h"
 
 };
-
-#endif

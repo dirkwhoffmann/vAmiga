@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _CPU_H
-#define _CPU_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "Moira.h"
@@ -180,5 +179,3 @@ public:
     const char *disassembleInstr(long *len);
     const char *disassembleWords(int len);
 };
-
-#endif

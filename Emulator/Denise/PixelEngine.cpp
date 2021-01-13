@@ -226,6 +226,7 @@ PixelEngine::getStableBuffer()
         result = (frameBuffer == &emuTexture[0]) ? emuTexture[1] : emuTexture[0];
     }
     
+    assert(result.data);
     return result;
 }
 

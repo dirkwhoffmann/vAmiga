@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _BOOT_BLOCK_IMAGE_H
-#define _BOOT_BLOCK_IMAGE_H
+#pragma once
 
 #include "FileTypes.h"
 #include <stddef.h>
@@ -42,5 +41,3 @@ public:
     // Exports the image
     void write(u8 *buffer, size_t first = 0, size_t last = 0);
 };
-
-#endif

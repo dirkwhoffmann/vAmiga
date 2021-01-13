@@ -6,11 +6,10 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
-// This file must conform to standard ANSI-C to be compatible with Swift.
-
-#ifndef _DISK_CONTROLLER_T_H
-#define _DISK_CONTROLLER_T_H
+#pragma once
 
 //
 // Enumerations
@@ -88,5 +87,3 @@ typedef struct
     u8 prb;
 }
 DiskControllerInfo;
-
-#endif

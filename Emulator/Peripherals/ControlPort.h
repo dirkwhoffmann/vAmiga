@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _CONTROL_PORT_H
-#define _CONTROL_PORT_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "Mouse.h"
@@ -127,6 +126,3 @@ public:
     // Modifies the PRA bits of CIA A according to the connected device
     void changePra(u8 &pra) const;
 };
-
-#endif
-

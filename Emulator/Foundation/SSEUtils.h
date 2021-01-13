@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _SEE_UTILS_H
-#define _SEE_UTILS_H
+#pragma once
 
 #include "Utils.h"
 
@@ -33,5 +32,3 @@
  *              Output: 31, 7, 11, 3, 13, 5, 9, 17, 30, 6, 10, 2, 12, 4, 8, 16
  */
 void transposeSSE(u16 *source, u8* target);
-
-#endif

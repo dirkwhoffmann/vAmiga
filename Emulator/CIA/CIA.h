@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _CIA_H
-#define _CIA_H
+#pragma once
 
 #include "TOD.h"
 
@@ -587,5 +586,3 @@ private:
     u8 portBexternal() const override;
     void updatePB() override;
 };
-
-#endif

@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_PARTITION_H
-#define _FS_PARTITION_H
+#pragma once
 
 #include "FSTypes.h"
 #include "FSDescriptors.h"
@@ -169,5 +168,3 @@ public:
 };
 
 typedef FSPartition* FSPartitionPtr;
-
-#endif

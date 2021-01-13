@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _EXT_FILE_H
-#define _EXT_FILE_H
+#pragma once
 
 #include "ADFFile.h"
 
@@ -69,5 +68,3 @@ public:
     void readSector(u8 *target, long s) const override { assert(false); }
     void readSector(u8 *target, long t, long s) const override { assert(false); }
 };
-
-#endif

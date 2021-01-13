@@ -6,11 +6,10 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
-// This file must conform to standard ANSI-C to be compatible with Swift.
-
-#ifndef _AGNUS_TYPES_H
-#define _AGNUS_TYPES_H
+#pragma once
 
 #include "BlitterTypes.h"
 #include "CopperTypes.h"
@@ -158,5 +157,3 @@ typedef struct
     double bitplaneActivity;
 }
 AgnusStats;
-
-#endif

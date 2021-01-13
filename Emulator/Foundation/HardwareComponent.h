@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _HARDWARE_COMPONENT_H
-#define _HARDWARE_COMPONENT_H
+#pragma once
 
 #include "AmigaObject.h"
 #include "Serialization.h"
@@ -305,5 +304,3 @@ applyToResetItems(writer); \
 debug(SNP_DEBUG, "Serialized to %zu bytes\n", writer.ptr - buffer); \
 return writer.ptr - buffer; \
 }
-
-#endif

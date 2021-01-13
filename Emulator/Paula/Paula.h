@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _PAULA_H
-#define _PAULA_H
+#pragma once
 
 #include "StateMachine.h"
 #include "AudioFilter.h"
@@ -271,5 +270,3 @@ private:
     // Computes the interrupt level of a pending interrupt.
     unsigned interruptLevel();
 };
-
-#endif

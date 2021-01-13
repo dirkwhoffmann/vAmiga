@@ -6,11 +6,10 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
-// This file must conform to standard ANSI-C to be compatible with Swift.
-
-#ifndef _DISK_TYPES_H
-#define _DISK_TYPES_H
+#pragma once
 
 #include "Aliases.h"
 
@@ -63,5 +62,3 @@ inline const char *DiskDensityName(DiskDensity value)
     }
     return "???";
 }
-
-#endif

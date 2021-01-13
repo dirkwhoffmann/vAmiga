@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _TAGGED_SAMPLE_BUFFER_H
-#define _TAGGED_SAMPLE_BUFFER_H
+#pragma once
 
 #include "Utils.h"
 #include "Buffers.h"
@@ -59,6 +58,3 @@ struct Sampler : RingBuffer <TaggedSample, VPOS_CNT * HPOS_CNT> {
      */
     template <SamplingMethod method> i16 interpolate(Cycle clock);
 };
-
-#endif
-

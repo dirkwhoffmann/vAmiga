@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_DESCRIPTORS_H
-#define _FS_DESCRIPTORS_H
+#pragma once
 
 #include "FSObjects.h"
 #include "FSBlock.h"
@@ -97,5 +96,3 @@ struct FSPartitionDescriptor : AmigaObject {
     // Returns the number of cylinders in this partition
     u32 numCyls() { return highCyl - lowCyl + 1; }
 };
-
-#endif

@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AUDIO_STREAM_H
-#define _AUDIO_STREAM_H
+#pragma once
 
 #include "HardwareComponent.h"
 #include "Concurrency.h"
@@ -82,5 +81,3 @@ public:
     float draw(unsigned *buffer, int width, int height,
                bool left, float highestAmplitude, unsigned color);
 };
-
-#endif

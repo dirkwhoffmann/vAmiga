@@ -6,11 +6,10 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
-// This file must conform to standard ANSI-C to be compatible with Swift.
-
-#ifndef _PAULA_AUDIO_TYPES_H
-#define _PAULA_AUDIO_TYPES_H
+#pragma once
 
 //
 // Enumerations
@@ -113,5 +112,3 @@ typedef struct
     long bufferOverflows;
 }
 MuxerStats;
-
-#endif

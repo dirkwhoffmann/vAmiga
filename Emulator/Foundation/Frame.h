@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FRAME_H
-#define _FRAME_H
+#pragma once
 
 struct Frame
 {
@@ -53,5 +52,3 @@ struct Frame
         if (laceBit) { lof = !lof; }
     }
 };
-
-#endif

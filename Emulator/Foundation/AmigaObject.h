@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_OBJECT_H
-#define _AMIGA_OBJECT_H
+#pragma once
 
 #include "AmigaTypes.h"
 #include "Utils.h"
@@ -49,5 +48,3 @@ public:
     // Called by debug() and trace() to produce a detailed debug output
     virtual void prefix() const { };
 };
-
-#endif

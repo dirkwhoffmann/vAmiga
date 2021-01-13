@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _MESSAGE_QUEUE_H
-#define _MESSAGE_QUEUE_H
+#pragma once
 
 #include "HardwareComponent.h"
 
@@ -65,5 +64,3 @@ private:
     // Used by 'put' to propagates a single message to all registered listeners
     void propagate(const Message &msg) const;
 };
-
-#endif

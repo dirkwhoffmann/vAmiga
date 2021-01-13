@@ -5,8 +5,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_ROOT_BLOCK_H
-#define _FS_ROOT_BLOCK_H
+#pragma once
 
 #include "FSBlock.h"
 
@@ -49,5 +48,3 @@ struct FSRootBlock : FSBlock {
 
     bool addBitmapBlockRefs(std::vector<u32> &refs);
 };
-
-#endif

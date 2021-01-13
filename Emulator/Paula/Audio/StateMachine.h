@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _STATE_MACHINE_H
-#define _STATE_MACHINE_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "Sampler.h"
@@ -249,5 +248,3 @@ public:
 
     void serviceEvent();
 };
-
-#endif

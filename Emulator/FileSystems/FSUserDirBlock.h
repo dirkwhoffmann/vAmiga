@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_USERDIR_BLOCK_H
-#define _FS_USERDIR_BLOCK_H
+#pragma once
 
 #include "FSBlock.h"
 
@@ -55,5 +54,3 @@ struct FSUserDirBlock : FSBlock {
     u32 hashTableSize() const override         { return 72; }
     u32 hashValue() const override             { return getName().hashValue(); }
 };
-
-#endif

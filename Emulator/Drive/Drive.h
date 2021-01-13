@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_DRIVE_H
-#define _AMIGA_DRIVE_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "Disk.h"
@@ -279,5 +278,3 @@ public:
     // Write handler for the PRB register of CIA B
     void PRBdidChange(u8 oldValue, u8 newValue);
 };
-
-#endif

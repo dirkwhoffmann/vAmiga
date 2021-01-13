@@ -6,11 +6,10 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
-// This file must conform to standard ANSI-C to be compatible with Swift.
-
-#ifndef _PAULA_T_H
-#define _PAULA_T_H
+#pragma once
 
 #include "PaulaAudioTypes.h"
 #include "DiskControllerTypes.h"
@@ -31,5 +30,3 @@ typedef struct
     u16 transmitShiftReg;
 }
 UARTInfo;
-
-#endif

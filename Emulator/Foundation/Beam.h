@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _BEAM_H
-#define _BEAM_H
+#pragma once
 
 struct Beam
 {
@@ -95,5 +94,3 @@ struct Beam
         return *this;
     }
 };
-
-#endif

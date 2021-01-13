@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AGNUS_PRIVATE_TYPES_H
-#define _AGNUS_PRIVATE_TYPES_H
+#pragma once
 
 enum_long(DDFState)
 {
@@ -135,5 +134,3 @@ static inline bool isRegChangeID(long value)
 {
     return (unsigned long)value < REG_COUNT;
 }
-
-#endif

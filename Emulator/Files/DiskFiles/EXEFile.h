@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _EXE_FILE_H
-#define _EXE_FILE_H
+#pragma once
 
 #include "ADFFile.h"
 
@@ -69,5 +68,3 @@ public:
     void readSector(u8 *target, long t, long s) const override { return adf->readSector(target, t, s); }
     bool encodeDisk(class Disk *disk) override { return adf->encodeDisk(disk); }
 };
-
-#endif

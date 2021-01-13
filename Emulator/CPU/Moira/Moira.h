@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef MOIRA_H
-#define MOIRA_H
+#pragma once
 
 #include "MoiraConfig.h"
 #include "MoiraTypes.h"
@@ -363,4 +362,3 @@ private:
 };
 
 }
-#endif

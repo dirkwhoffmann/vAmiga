@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _COLORIZER_H
-#define _COLORIZER_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -249,5 +248,3 @@ public:
     
     void hide(int line, u16 layer, u8 alpha);
 };
-
-#endif

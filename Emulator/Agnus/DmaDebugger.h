@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DMA_DEBUGGER_H
-#define _DMA_DEBUGGER_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "Colors.h"
@@ -124,5 +123,3 @@ public:
     // Cleans up some texture data at the end of each frame
     void vSyncHandler();
 };
-
-#endif

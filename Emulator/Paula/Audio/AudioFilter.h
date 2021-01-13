@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AUDIO_FILTER_H
-#define _AUDIO_FILTER_H
+#pragma once
 
 #include "HardwareComponent.h"
 
@@ -93,4 +92,3 @@ public:
     float apply(float sample);
 };
     
-#endif

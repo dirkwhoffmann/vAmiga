@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _MEMORY_H
-#define _MEMORY_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "RomFile.h"
@@ -482,5 +481,3 @@ public:
     // Returns a certain amount of bytes as a string containing hex words
     template <Accessor A> const char *hex(u32 addr, size_t bytes);
 };
-
-#endif

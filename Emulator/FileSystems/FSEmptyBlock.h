@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_EMPTY_BLOCK_H
-#define _FS_EMPTY_BLOCK_H
+#pragma once
 
 #include "FSBlock.h"
 
@@ -32,5 +31,3 @@ struct FSEmptyBlock : FSBlock {
     void importBlock(const u8 *src, size_t bsize) override;
     void exportBlock(u8 *dst, size_t bsize) override;
 };
-
-#endif

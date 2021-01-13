@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef MOIRA_TYPES_H
-#define MOIRA_TYPES_H
+#pragma once
 
 #include <stdint.h>
 
@@ -316,4 +315,3 @@ static const u64 AE_DEC_ADDR    (1 << 9);  // Decrement ADDR by 2 in stack frame
 static const u64 AE_SET_CB3     (1 << 10); // Set bit 3 in CODE segment
 
 }
-#endif

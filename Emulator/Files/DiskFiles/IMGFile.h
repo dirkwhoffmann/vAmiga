@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _IMG_H
-#define _IMG_H
+#pragma once
 
 #include "DiskFile.h"
 
@@ -77,5 +76,3 @@ private:
     bool decodeTrack(class Disk *disk, Track t);
     bool decodeSector(u8 *dst, u8 *src);
 };
-
-#endif

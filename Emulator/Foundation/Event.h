@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _EVENT_H
-#define _EVENT_H
+#pragma once
 
 struct Event
 {
@@ -31,5 +30,3 @@ struct Event
         & data;
     }
 };
-
-#endif

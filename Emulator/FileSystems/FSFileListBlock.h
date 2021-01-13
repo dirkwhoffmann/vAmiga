@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_FILELIST_BLOCK_H
-#define _FS_FILELIST_BLOCK_H
+#pragma once
 
 #include "FSBlock.h"
 
@@ -48,5 +47,3 @@ struct FSFileListBlock : FSBlock {
     
     bool addDataBlockRef(u32 first, u32 ref) override;
 };
-
-#endif

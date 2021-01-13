@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _BLITTER_H
-#define _BLITTER_H
+#pragma once
 
 /* The Blitter supports three accuracy levels:
  *
@@ -488,5 +487,3 @@ private:
     void doBarrelShifterA();
     void doBarrelShifterB();
 };
-
-#endif

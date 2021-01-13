@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_H
-#define _AMIGA_H
+#pragma once
 
 // General
 #include "AmigaComponent.h"
@@ -386,5 +385,3 @@ public:
     void loadFromSnapshotUnsafe(Snapshot *snapshot);
     void loadFromSnapshotSafe(Snapshot *snapshot);
 };
-
-#endif

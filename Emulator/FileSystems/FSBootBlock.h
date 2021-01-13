@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_BOOT_BLOCK_H
-#define _FS_BOOT_BLOCK_H
+#pragma once
 
 #include "FSBlock.h"
 
@@ -39,5 +38,3 @@ struct FSBootBlock : FSBlock {
 
     void writeBootBlock(long id, int page);
 };
-
-#endif

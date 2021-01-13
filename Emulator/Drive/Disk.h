@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_DISK_H
-#define _AMIGA_DISK_H
+#pragma once
 
 #include "HardwareComponent.h"
 
@@ -202,5 +201,3 @@ public:
     // Repeats the MFM data inside the track buffer to ease decoding
     void repeatTracks(); 
 };
-
-#endif

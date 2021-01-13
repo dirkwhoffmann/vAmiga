@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_BITMAP_BLOCK_H
-#define _FS_BITMAP_BLOCK_H
+#pragma once
 
 #include "FSBlock.h"
 
@@ -30,5 +29,3 @@ struct FSBitmapBlock : FSBlock {
     void dump() const override;
     u32 checksumLocation() const override { return 0; }
 };
-
-#endif

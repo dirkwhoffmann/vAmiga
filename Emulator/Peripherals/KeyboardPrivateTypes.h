@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _KEYBOARD_PRIVATE_TYPES_H
-#define _KEYBOARD_PRIVATE_TYPES_H
+#pragma once
 
 enum KeyboardState : long
 {
@@ -22,5 +21,3 @@ enum KeyboardState : long
 inline bool isKeyboardState(long value) {
     return value >= 0 && value <= KB_SEND;
 }
-
-#endif

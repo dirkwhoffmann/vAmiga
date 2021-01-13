@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_UTILS_H
-#define _AMIGA_UTILS_H
+#pragma once
 
 #include "AmigaConfig.h"
 #include "AmigaConstants.h"
@@ -253,5 +252,3 @@ u32 crc32forByte(u32 r);
 
 // Computes a SHA-1 checksum for a given buffer
 int sha_1(u8 *digest, char *hexdigest, const u8 *addr, size_t size);
-
-#endif

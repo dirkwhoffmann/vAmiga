@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _HDF_H
-#define _HDF_H
+#pragma once
 
 #include "DiskFile.h"
 #include "FSDevice.h"
@@ -81,5 +80,3 @@ private:
     // Extract the DOS revision number from a certain block
     FSVolumeType dos(int i);    
 };
-
-#endif

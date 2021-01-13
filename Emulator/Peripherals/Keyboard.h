@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _KEYBOARD_H
-#define _KEYBOARD_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -184,5 +183,3 @@ private:
     // Sends a sync pulse to the Amiga
     void sendSyncPulse();
 };
-
-#endif

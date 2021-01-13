@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _SERIAL_PORT_H
-#define _SERIAL_PORT_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -141,6 +140,3 @@ private:
 
     void setPort(u32 mask, bool value);
 };
-
-#endif
-

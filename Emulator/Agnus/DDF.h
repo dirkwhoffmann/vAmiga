@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DDF_H
-#define _DDF_H
+#pragma once
 
 #include <sys/param.h>
 #include "Aliases.h"
@@ -68,5 +67,3 @@ struct DDF
     void compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1);
     void compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll);
 };
-
-#endif

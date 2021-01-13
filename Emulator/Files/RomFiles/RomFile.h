@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _ROM_H
-#define _ROM_H
+#pragma once
 
 #include "AmigaFile.h"
 
@@ -83,5 +82,3 @@ public:
      */
     bool decrypt(FileError *error = nullptr);
 };
-
-#endif

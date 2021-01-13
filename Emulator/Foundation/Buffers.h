@@ -7,17 +7,16 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#pragma once
+
+#include "AmigaTypes.h"
+
 /* The emulator uses buffers at various places. Most of them are derived from
  * one of the following two classes:
  *
  *           RingBuffer : A standard ringbuffer data structure
  *     SortedRingBuffer : A ringbuffer that keeps the entries sorted
  */
-
-#ifndef _BUFFERS_H
-#define _BUFFERS_H
-
-#include "AmigaTypes.h"
 
 template <class T, usize capacity> struct RingBuffer
 {
@@ -177,5 +176,3 @@ struct RegChangeRecorder : public SortedRingBuffer<RegChange, capacity>
         return this->isEmpty() ? NEVER : this->keys[this->r];
     }
 };
-
-#endif

@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _TOD_H
-#define _TOD_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -194,7 +193,3 @@ private:
     // Starts the counter
     void cont() { stopped = false; }
 };
-
-#endif
-
-

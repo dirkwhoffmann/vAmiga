@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _ALIASES_H
-#define _ALIASES_H
+#pragma once
 
 #include <sys/types.h>
 
@@ -116,7 +115,5 @@ enum _name : _type
 #define enum_long(_name) enum _name : long long
 #define enum_u32(_name) enum _name : u32
 #define enum_i8(_name) enum _name : i8
-
-#endif
 
 #endif

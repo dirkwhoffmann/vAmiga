@@ -6,11 +6,10 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
-// This file must conform to standard ANSI-C to be compatible with Swift.
-
-#ifndef _BLITTER_TYPES_H
-#define _BLITTER_TYPES_H
+#pragma once
 
 typedef struct
 {
@@ -54,5 +53,3 @@ typedef struct
     bool storeToDest;
 }
 BlitterInfo;
-
-#endif

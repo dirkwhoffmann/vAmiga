@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _ADF_H
-#define _ADF_H
+#pragma once
 
 #include "DiskFile.h"
 #include "FSDevice.h"
@@ -129,5 +128,3 @@ public:
     
     void dumpSector(int num);
 };
-
-#endif

@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _UART_H
-#define _UART_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -164,5 +163,3 @@ public:
     void serviceRxdEvent(EventID id);
 
 };
-
-#endif

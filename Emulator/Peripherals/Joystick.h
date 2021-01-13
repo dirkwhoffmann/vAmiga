@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _JOYSTICK_H
-#define _JOYSTICK_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -142,5 +141,3 @@ public:
      */
     void execute();
 };
-
-#endif

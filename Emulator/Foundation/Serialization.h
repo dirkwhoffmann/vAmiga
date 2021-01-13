@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _SERIALIZATION_H
-#define _SERIALIZATION_H
+#pragma once
 
 #include "AmigaTypes.h"
 #include "AmigaPrivateTypes.h"
@@ -431,5 +430,3 @@ public:
         return *this;
     }
 };
-
-#endif

@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_BLOCKS_H
-#define _FS_BLOCKS_H
+#pragma once
 
 #include "FSObjects.h"
 
@@ -318,5 +317,3 @@ if (value == 0) return FS_EXPECTED_DATABLOCK_NR; }
 
 #define EXPECT_HASHTABLE_SIZE { \
 if (value != 72) return FS_INVALID_HASHTABLE_SIZE; }
-
-#endif

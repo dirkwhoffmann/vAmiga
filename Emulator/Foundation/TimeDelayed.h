@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _TIME_DELAYED_H
-#define _TIME_DELAYED_H
+#pragma once
 
 #include "AmigaObject.h"
 
@@ -116,5 +115,3 @@ public:
         return pipeline[MAX(0, timeStamp - AS_DMA_CYCLES(*clock) + customDelay)];
     }
 };
-
-#endif

@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_FILE_H
-#define _AMIGA_FILE_H
+#pragma once
 
 #include "AmigaObject.h"
 
@@ -131,5 +130,3 @@ public:
      */
     bool writeToFile(const char *path, FileError *err = nullptr) const;
 };
-
-#endif

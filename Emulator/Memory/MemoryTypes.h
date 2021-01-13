@@ -6,11 +6,10 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
-// This file must conform to standard ANSI-C to be compatible with Swift.
-
-#ifndef _MEMORY_TYPES_H
-#define _MEMORY_TYPES_H
+#pragma once
 
 #include "Aliases.h"
 
@@ -211,5 +210,3 @@ typedef struct
     struct { long raw; double accumulated; } kickWrites;
 }
 MemoryStats;
-
-#endif
