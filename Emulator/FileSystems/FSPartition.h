@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "FSTypes.h"
+#include "FSPublicTypes.h"
 #include "FSDescriptors.h"
 
 struct FSPartition : AmigaObject {

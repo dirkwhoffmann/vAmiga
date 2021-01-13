@@ -6,12 +6,14 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
 #pragma once
 
 #include "Aliases.h"
 
-enum_long( FSVolumeType)
+enum_long(FSVolumeType)
 {
     FS_NODOS = -1,
     FS_OFS = 0,         // Original File System

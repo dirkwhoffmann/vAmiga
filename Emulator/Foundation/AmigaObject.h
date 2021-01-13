@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaTypes.h"
+#include "AmigaPublicTypes.h"
 #include "Utils.h"
 
 #include <vector>

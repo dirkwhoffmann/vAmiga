@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include "PaulaAudioTypes.h"
-#include "DiskControllerTypes.h"
+#include "AudioPublicTypes.h"
+#include "DiskControllerPublicTypes.h"
 
 typedef struct
 {

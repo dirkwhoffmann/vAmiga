@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "FileTypes.h"
+#include "FilePublicTypes.h"
 #include <stddef.h>
 
 typedef struct

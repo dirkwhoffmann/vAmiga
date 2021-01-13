@@ -11,7 +11,7 @@
 #import <MetalKit/MetalKit.h>
 
 #include "AmigaConstants.h"
-#include "AmigaTypes.h"
+#include "AmigaPublicTypes.h"
 
 // Forward declarations
 @class ADFFileProxy;
