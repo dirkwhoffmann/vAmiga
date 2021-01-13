@@ -9,21 +9,17 @@
 
 #include "MessageQueue.h"
 
-MessageQueue::MessageQueue()
-{
-}
-
 void
 MessageQueue::addListener(const void *listener, Callback *func)
 {
     synchronized {
-        listeners.insert(pair <const void *, Callback *> (listener, func));
+        listeners.push_back(std::pair <const void *, Callback *> (listener, func));
     }
     
     // Distribute all pending messages
     Message msg;
     while ((msg = get()).type != MSG_NONE) {
-        propagate(&msg);
+        propagate(msg);
     }
 
     put(MSG_REGISTER);
@@ -33,8 +29,13 @@ void
 MessageQueue::removeListener(const void *listener)
 {
     put(MSG_UNREGISTER);
-
-    synchronized { listeners.erase(listener); }
+    
+    synchronized {
+        
+        for (auto it = listeners.begin(); it != listeners.end(); it++) {
+            if (it->first == listener) { listeners.erase(it);  break; }
+        }
+    }
 }
 
 Message
@@ -44,46 +45,53 @@ MessageQueue::get()
     
     synchronized {
         
-        if (r == w) {
-            result.type = MSG_NONE; // Queue is empty
-            result.data = 0;
+        if (queue.isEmpty()) {
+            result = { MSG_NONE, 0 };
         } else {
-            result = queue[r];
-            r = (r + 1) % capacity;
+            result = queue.read();
         }
     }
     
-	return result; 
+    return result;
 }
-
+ 
 void
-MessageQueue::put(MsgType type, u64 data)
+MessageQueue::put(MsgType type, i64 data)
 {
     synchronized {
+                        
+        debug (QUEUE_DEBUG, "%s [%lld]\n", MsgTypeName(type), data);
         
+        // Delete the oldest message if the queue overflows
+        if (queue.isFull()) (void)queue.read();
+    
         // Write data
-        Message msg;
-        msg.type = type;
-        msg.data = data;
-        queue[w] = msg;
-        
-        // Move write pointer to next location
-        w = (w + 1) % capacity;
-        
-        if (w == r) {
-            // warn("Queue overflow. Oldest message is lost.\n");
-            r = (r + 1) % capacity;
-        }
+        Message msg = { type, data };
+        queue.write(msg);
         
         // Serve registered callbacks
-        propagate(&msg);
+        propagate(msg);
     }
 }
 
 void
-MessageQueue::propagate(Message *msg) const
+MessageQueue::dump()
+{
+    for (int i = queue.begin(); i != queue.end(); i = queue.next(i)) {
+        msg("%02d", i); dump(queue.elements[i]);
+    }
+}
+
+void
+MessageQueue::dump(const Message &msg)
+{
+    msg("%s [%ld]\n", MsgTypeName(msg.type), msg.data);
+}
+
+void
+MessageQueue::propagate(const Message &msg) const
 {
     for (auto i = listeners.begin(); i != listeners.end(); i++) {
-        i->second(i->first, msg->type, msg->data);
+        i->second(i->first, msg.type, msg.data);
     }
 }

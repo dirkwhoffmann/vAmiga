@@ -14,45 +14,25 @@
 
 class MessageQueue : public HardwareComponent {
         
-    // Maximum number of queued messages
-    const static size_t capacity = 64;
-    
     // Ring buffer storing all pending messages
-    Message queue[capacity];
-    
-    // The ring buffer's read and write pointers
-    int r = 0;
-    int w = 0;
-        
-    // List of all registered listeners
-    map <const void *, Callback *> listeners;
-    
+    RingBuffer<Message, 64> queue;
+            
+    // List of registered listeners
+    std::vector<std::pair <const void *, Callback *> > listeners;
+
     
     //
-    // Constructing
+    // Methods from HardwareComponent
     //
     
 public:
-    
-    MessageQueue();
-    
+        
     const char *getDescription() const override { return "MessageQueue"; }
 
 private:
     
     void _reset(bool hard) override { };
-
     
-    //
-    // Serializing
-    //
-    
-private:
-    
-    // template <class T> void applyToPersistentItems(T& worker) { }
-    // template <class T> void applyToHardResetItems(T& worker) { }
-    // template <class T> void applyToResetItems(T& worker) { }
-
     size_t _size() override { return 0; }
     size_t _load(const u8 *buffer) override { return 0; }
     size_t _save(u8 *buffer) override { return 0; }
@@ -74,12 +54,16 @@ public:
     Message get();
     
     // Writes a message into the queue and propagates it to all listeners
-    void put(MsgType type, u64 data = 0);
+    void put(MsgType type, i64 data = 0);
     
+    // Dumps the current contents of the message queue to the console
+    void dump();
+    void dump(const Message &msg);
+
 private:
     
     // Used by 'put' to propagates a single message to all registered listeners
-    void propagate(Message *msg) const;
+    void propagate(const Message &msg) const;
 };
 
 #endif
