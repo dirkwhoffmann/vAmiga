@@ -57,8 +57,6 @@ extension IOHIDDevice {
 
     var primaryUsage: String { return property(key: kIOHIDPrimaryUsageKey) ?? "" }
     
-    // var isBuiltIn: Bool { return property(key: kIOHIDBuiltInKey) == "1" }
-
     var isMouse: Bool { return primaryUsage == "\(kHIDUsage_GD_Mouse)" }
             
     func listProperties() {
@@ -95,14 +93,19 @@ extension IOHIDDevice {
          * HID devices. Note: The old implementation only checked the BuiltIn
          * key of the device, which turned out to be insufficient. Some external
          * devices such as the Sony DualShock 4 controller set the BuildIn key
-         * to 1. To get a more accurate result, the new implementation first
-         * evaluates the Transport property and classifies each wireless device
-         * as external.
+         * to 1.
          */
-        if property(key: kIOHIDTransportKey)?.hasPrefix("Bluetooth") == true {
-            return false
-        }
         
-        return property(key: kIOHIDBuiltInKey) == "1"
+        let bluetooth = property(key: kIOHIDTransportKey)?.hasPrefix("Bluetooth") == true
+        let builtIn = property(key: kIOHIDBuiltInKey) == "1"
+        
+        // For mice, evaluate the BuiltIn key
+        if isMouse { return builtIn }
+        
+        // For other device types, consider each Bluetooth device as external
+        if bluetooth { return false }
+        
+        // If it was no Bluetooth device, evaluate the BuitIn key
+        return builtIn
     }
 }

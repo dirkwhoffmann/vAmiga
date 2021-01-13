@@ -169,6 +169,8 @@ class GamePadManager {
         // Ignore internal devices
         if device.isBuiltIn { return }
         
+        device.listProperties()
+        
         // Find a free slot for the new device
         guard let slot = findFreeSlot() else { return }
         
