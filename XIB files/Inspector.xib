@@ -6277,9 +6277,9 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GWo-68-bpT">
-                                                        <rect key="frame" x="29" y="9" width="76" height="68"/>
+                                                        <rect key="frame" x="28" y="9" width="76" height="68"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="state0Template" imagePosition="only" alignment="center" transparent="YES" imageScaling="axesIndependently" inset="2" id="HpR-mr-xgU">
+                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="state0Template" imagePosition="only" alignment="center" imageScaling="axesIndependently" inset="2" id="HpR-mr-xgU">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
@@ -6297,7 +6297,7 @@
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V9M-gS-ahd">
                                                         <rect key="frame" x="29" y="9" width="76" height="68"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="state0Template" imagePosition="only" alignment="center" transparent="YES" imageScaling="axesIndependently" inset="2" id="Ix8-iW-VJB">
+                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="state0Template" imagePosition="only" alignment="center" imageScaling="axesIndependently" inset="2" id="Ix8-iW-VJB">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
@@ -6315,7 +6315,7 @@
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gnH-6K-2ec">
                                                         <rect key="frame" x="29" y="9" width="76" height="68"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="state0Template" imagePosition="only" alignment="center" transparent="YES" imageScaling="axesIndependently" inset="2" id="9Vq-oP-UcD">
+                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="state0Template" imagePosition="only" alignment="center" imageScaling="axesIndependently" inset="2" id="9Vq-oP-UcD">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
@@ -6333,7 +6333,7 @@
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YPU-yz-2Ti">
                                                         <rect key="frame" x="29" y="9" width="76" height="68"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="state0Template" imagePosition="only" alignment="center" transparent="YES" imageScaling="axesIndependently" inset="2" id="j1X-wb-O5J">
+                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="state0Template" imagePosition="only" alignment="center" imageScaling="axesIndependently" inset="2" id="j1X-wb-O5J">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
