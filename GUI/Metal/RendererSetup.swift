@@ -181,7 +181,7 @@ extension Renderer {
         }
     }
     
-    internal func buildTextures() {
+    func buildTextures() {
 
         track()
                 
@@ -197,20 +197,21 @@ extension Renderer {
         // Background texture used in fullscreen mode
         let c1 = (0x00, 0x00, 0x00, 0xFF)
         let c2 = (0x44, 0x44, 0x44, 0xFF)
-        bgFullscreenTexture = device.makeTexture(size: TextureSize.background, gradient: [c1, c2], usage: r)
+        bgFullscreenTexture = device.makeTexture(size: TextureSize.background,
+                                                 gradient: [c1, c2], usage: r)
         assert(bgFullscreenTexture != nil, "Failed to create bgFullscreenTexture")
 
         // Emulator texture (long frames)
         longFrameTexture = device.makeTexture(size: TextureSize.original, usage: r)
-        assert(bgFullscreenTexture != nil, "Failed to create longFrameTexture")
+        assert(longFrameTexture != nil, "Failed to create longFrameTexture")
 
         // Emulator texture (short frames)
         shortFrameTexture = device.makeTexture(size: TextureSize.original, usage: r)
-        assert(bgFullscreenTexture != nil, "Failed to create shortFrameTexture")
+        assert(shortFrameTexture != nil, "Failed to create shortFrameTexture")
 
         // Merged emulator texture (long frame + short frame)
         mergeTexture = device.makeTexture(size: TextureSize.merged, usage: rwt)
-        assert(bgFullscreenTexture != nil, "Failed to create mergeTexture")
+        assert(mergeTexture != nil, "Failed to create mergeTexture")
 
         // Bloom textures
         bloomTextureR = device.makeTexture(size: TextureSize.merged, usage: rwt)
@@ -222,13 +223,13 @@ extension Renderer {
 
         // Target for in-texture upscaling
         lowresEnhancedTexture = device.makeTexture(size: TextureSize.merged, usage: rwt)
-        assert(bgFullscreenTexture != nil, "Failed to create lowresEnhancedTexture")
+        assert(lowresEnhancedTexture != nil, "Failed to create lowresEnhancedTexture")
 
         // Upscaled merge texture
         upscaledTexture = device.makeTexture(size: TextureSize.upscaled, usage: rwtp)
         scanlineTexture = device.makeTexture(size: TextureSize.upscaled, usage: rwtp)
-        assert(bgFullscreenTexture != nil, "Failed to create upscaledTexture")
-        assert(bgFullscreenTexture != nil, "Failed to create scanlineTexture")
+        assert(upscaledTexture != nil, "Failed to create upscaledTexture")
+        assert(scanlineTexture != nil, "Failed to create scanlineTexture")
     }
 
     internal func buildSamplers() {

@@ -246,16 +246,13 @@ extension MyController: NSMenuItemValidation {
     @IBAction func takeSnapshotAction(_ sender: Any!) {
         
         takeUserSnapshot()
-        // renderer.blendIn(steps: 20)
     }
     
     @IBAction func restoreSnapshotAction(_ sender: Any!) {
         
         if !restoreLatestUserSnapshot() {
             NSSound.beep()
-            // return
         }
-        // renderer.blendIn(steps: 20)
     }
     
     @IBAction func browseSnapshotsAction(_ sender: Any!) {

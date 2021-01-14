@@ -605,6 +605,7 @@ extension MyController {
             
         case .SNAPSHOT_RESTORED:
             renderer.blendIn(steps: 20)
+            refreshStatusBar()
             hideOrShowDriveMenus()
             
         case .RECORDING_STARTED:

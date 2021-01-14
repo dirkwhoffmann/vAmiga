@@ -27,24 +27,6 @@ enum_long(RTC_REVISION)
 };
 typedef RTC_REVISION RTCRevision;
 
-/*
-inline bool isRTCRevision(long value)
-{
-    return (unsigned long)value <= RTC_RICOH;
-}
-
-inline const char *RTCRevisionName(RTCRevision value)
-{
-    switch (value) {
-            
-        case RTC_NONE:   return "RTC_NONE";
-        case RTC_OKI:    return "RTC_OKI";
-        case RTC_RICOH:  return "RTC_RICOH";
-    }
-    return "???";
-}
-*/
-
 typedef struct
 {
     RTCRevision model;
