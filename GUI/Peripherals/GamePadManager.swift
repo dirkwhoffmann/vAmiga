@@ -167,7 +167,7 @@ class GamePadManager {
         track()
         
         // Ignore internal devices
-        if device.isBuiltIn { return }
+        if device.isInternalDevice { return }
         
         device.listProperties()
         
