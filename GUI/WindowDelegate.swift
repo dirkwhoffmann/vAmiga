@@ -73,9 +73,8 @@ extension MyController: NSWindowDelegate {
     public func windowWillEnterFullScreen(_ notification: Notification) {
 
         track()
-
         renderer.fullscreen = true
-        renderer.clearBgTexture()
+        // renderer.clearBgTexture()
         showStatusBar(false)
     }
     
@@ -89,7 +88,6 @@ extension MyController: NSWindowDelegate {
 
         track()
         renderer.fullscreen = false
-        // for m in renderer.monitors { m.isHidden = true }
         showStatusBar(true)
     }
     
@@ -159,21 +157,23 @@ extension MyController: NSWindowDelegate {
 
 extension MyController {
     
-    /// Adjusts the windows vertical size programatically
     func adjustWindowSize() {
         
-        // track()
-        if var frame = window?.frame {
-            
-            // Compute size correction
-            let newsize = windowWillResize(window!, to: frame.size)
-            let correction = newsize.height - frame.size.height
-            
-            // Adjust frame
-            frame.origin.y -= correction
-            frame.size = newsize
-            
-            window!.setFrame(frame, display: true)
-        }
+        track()
+        
+        // Only proceed in window mode
+        if renderer.fullscreen { return }
+        
+        // Get window frame
+        guard var frame = window?.frame else { return }
+        
+        // Compute size correction
+        let newsize = windowWillResize(window!, to: frame.size)
+        let correction = newsize.height - frame.size.height
+        
+        // Adjust frame
+        frame.origin.y -= correction
+        frame.size = newsize
+        window!.setFrame(frame, display: true)
     }
 }

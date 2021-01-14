@@ -274,6 +274,7 @@ class Renderer: NSObject, MTKViewDelegate {
     // Managing textures
     //
 
+    /*
     func clearBgTexture() {
         
         let w = 512
@@ -285,6 +286,7 @@ class Renderer: NSObject, MTKViewDelegate {
         updateBgTexture(bytes: bytes)
         bytes.deallocate()
     }
+    */
     
     func updateBgTexture(bytes: UnsafeMutablePointer<UInt32>) {
 

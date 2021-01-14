@@ -65,8 +65,8 @@ public class MetalView: MTKView {
     }
     
     // Shrinks view vertically by the height of the status bar
-    public func shrink() { adjustHeight(-24.0) }
+    public func shrink() { adjustHeight(-26.0) }
     
     // Expand view vertically by the height of the status bar
-    public func expand() { adjustHeight(24.0) }
+    public func expand() { adjustHeight(26.0) }
 }

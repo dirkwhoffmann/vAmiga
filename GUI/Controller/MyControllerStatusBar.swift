@@ -159,7 +159,7 @@ extension MyController {
             if value {
                 
                 metal.shrink()
-                window?.setContentBorderThickness(24, for: .minY)
+                window?.setContentBorderThickness(26, for: .minY)
                 adjustWindowSize()
                 
             } else {
