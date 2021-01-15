@@ -633,7 +633,7 @@ Blitter::endBlit()
     if (BLT_GUARD) memset(memguard, 0, sizeof(memguard));
     
     // Clear the Blitter slot
-    agnus.cancel<BLT_SLOT>();
+    agnus.cancel<SLOT_BLT>();
     
     // Dump checksums if requested
     debug(BLT_CHECKSUM,

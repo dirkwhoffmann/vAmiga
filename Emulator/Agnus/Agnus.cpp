@@ -51,12 +51,12 @@ void Agnus::_reset(bool hard)
     }
     
     // Schedule initial events
-    scheduleRel<RAS_SLOT>(DMA_CYCLES(HPOS_CNT), RAS_HSYNC);
-    scheduleRel<CIAA_SLOT>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
-    scheduleRel<CIAB_SLOT>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
-    scheduleRel<SEC_SLOT>(NEVER, SEC_TRIGGER);
-    scheduleRel<VBL_SLOT>(DMA_CYCLES(HPOS_CNT * vStrobeLine()), VBL_STROBE0);
-    scheduleRel<IRQ_SLOT>(NEVER, IRQ_CHECK);
+    scheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT), RAS_HSYNC);
+    scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
+    scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
+    scheduleRel<SLOT_SEC>(NEVER, SEC_TRIGGER);
+    scheduleRel<SLOT_VBL>(DMA_CYCLES(HPOS_CNT * vStrobeLine()), VBL_STROBE0);
+    scheduleRel<SLOT_IRQ>(NEVER, IRQ_CHECK);
     diskController.scheduleFirstDiskEvent();
     scheduleNextBplEvent();
     scheduleNextDasEvent();

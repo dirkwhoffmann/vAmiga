@@ -31,12 +31,13 @@ Agnus::inspectEvents()
 void
 Agnus::inspectEventSlot(EventSlot nr)
 {
-    assert(isEventSlot(nr));
+    assert_enum(EventSlot, nr);
     
     EventSlotInfo *i = &eventInfo.slotInfo[nr];
     Cycle trigger = slot[nr].triggerCycle;
 
-    i->slotName = slotName((EventSlot)nr);
+    i->slotName = EventSlotEnum::key(nr);
+    i->slot = nr;
     i->eventId = slot[nr].id;
     i->trigger = trigger;
     i->triggerRel = trigger - clock;
@@ -59,7 +60,7 @@ Agnus::inspectEventSlot(EventSlot nr)
 
     switch ((EventSlot)nr) {
 
-        case REG_SLOT:
+        case SLOT_REG:
             switch (slot[nr].id) {
 
                 case 0:             i->eventName = "none"; break;
@@ -68,7 +69,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case RAS_SLOT:
+        case SLOT_RAS:
 
             switch (slot[nr].id) {
 
@@ -78,8 +79,8 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case CIAA_SLOT:
-        case CIAB_SLOT:
+        case SLOT_CIAA:
+        case SLOT_CIAB:
 
             switch (slot[nr].id) {
                 case 0:             i->eventName = "none"; break;
@@ -89,7 +90,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case BPL_SLOT:
+        case SLOT_BPL:
 
             switch ((int)slot[nr].id) {
                 case 0:                              i->eventName = "none"; break;
@@ -144,7 +145,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case DAS_SLOT:
+        case SLOT_DAS:
 
             switch (slot[nr].id) {
                 case 0:             i->eventName = "none"; break;
@@ -178,7 +179,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case COP_SLOT:
+        case SLOT_COP:
 
             switch (slot[nr].id) {
 
@@ -201,7 +202,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case BLT_SLOT:
+        case SLOT_BLT:
 
             switch (slot[nr].id) {
 
@@ -215,7 +216,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case SEC_SLOT:
+        case SLOT_SEC:
 
             switch (slot[nr].id) {
 
@@ -225,10 +226,10 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case CH0_SLOT:
-        case CH1_SLOT:
-        case CH2_SLOT:
-        case CH3_SLOT:
+        case SLOT_CH0:
+        case SLOT_CH1:
+        case SLOT_CH2:
+        case SLOT_CH3:
 
             switch (slot[nr].id) {
 
@@ -238,7 +239,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case DSK_SLOT:
+        case SLOT_DSK:
 
             switch (slot[nr].id) {
 
@@ -248,7 +249,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case DCH_SLOT:
+        case SLOT_DCH:
 
             switch (slot[nr].id) {
 
@@ -259,7 +260,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case VBL_SLOT:
+        case SLOT_VBL:
 
             switch (slot[nr].id) {
 
@@ -271,7 +272,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case IRQ_SLOT:
+        case SLOT_IRQ:
 
             switch (slot[nr].id) {
 
@@ -281,7 +282,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case IPL_SLOT:
+        case SLOT_IPL:
 
             switch (slot[nr].id) {
 
@@ -291,7 +292,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case KBD_SLOT:
+        case SLOT_KBD:
 
             switch (slot[nr].id) {
 
@@ -308,7 +309,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case TXD_SLOT:
+        case SLOT_TXD:
 
             switch (slot[nr].id) {
 
@@ -318,7 +319,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case RXD_SLOT:
+        case SLOT_RXD:
 
             switch (slot[nr].id) {
 
@@ -328,7 +329,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case POT_SLOT:
+        case SLOT_POT:
 
             switch (slot[nr].id) {
 
@@ -339,7 +340,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
             
-        case INS_SLOT:
+        case SLOT_INS:
 
             switch (slot[nr].id) {
 
@@ -393,9 +394,9 @@ Agnus::getEventInfo()
 }
 
 EventSlotInfo
-Agnus::getEventSlotInfo(int nr)
+Agnus::getEventSlotInfo(usize nr)
 {
-    assert(isEventSlot(nr));
+    assert_enum(EventSlot, nr);
 
     EventSlotInfo result;
     synchronized { result = eventInfo.slotInfo[nr]; }
@@ -408,9 +409,9 @@ Agnus::scheduleNextBplEvent(i16 hpos)
     assert(isHPos(hpos));
 
     if (u8 next = nextBplEvent[hpos]) {
-        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), bplEvent[next]);
+        scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), bplEvent[next]);
     }
-    assert(hasEvent<BPL_SLOT>());
+    assert(hasEvent<SLOT_BPL>());
 }
 
 void
@@ -420,12 +421,12 @@ Agnus::scheduleBplEventForCycle(i16 hpos)
     assert(hpos >= pos.h);
 
     if (bplEvent[hpos] != EVENT_NONE) {
-        scheduleRel<BPL_SLOT>(DMA_CYCLES(hpos - pos.h), bplEvent[hpos]);
+        scheduleRel<SLOT_BPL>(DMA_CYCLES(hpos - pos.h), bplEvent[hpos]);
     } else {
         scheduleNextBplEvent(hpos);
     }
 
-    assert(hasEvent<BPL_SLOT>());
+    assert(hasEvent<SLOT_BPL>());
 }
 
 void
@@ -434,10 +435,10 @@ Agnus::scheduleNextDasEvent(i16 hpos)
     assert(isHPos(hpos));
 
     if (u8 next = nextDasEvent[hpos]) {
-        scheduleRel<DAS_SLOT>(DMA_CYCLES(next - pos.h), dasEvent[next]);
-        assert(hasEvent<DAS_SLOT>());
+        scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), dasEvent[next]);
+        assert(hasEvent<SLOT_DAS>());
     } else {
-        cancel<DAS_SLOT>();
+        cancel<SLOT_DAS>();
     }
 }
 
@@ -448,7 +449,7 @@ Agnus::scheduleDasEventForCycle(i16 hpos)
     assert(hpos >= pos.h);
 
     if (dasEvent[hpos] != EVENT_NONE) {
-        scheduleRel<DAS_SLOT>(DMA_CYCLES(hpos - pos.h), dasEvent[hpos]);
+        scheduleRel<SLOT_DAS>(DMA_CYCLES(hpos - pos.h), dasEvent[hpos]);
     } else {
         scheduleNextDasEvent(hpos);
     }
@@ -461,7 +462,7 @@ Agnus::scheduleNextREGEvent()
     Cycle nextTrigger = changeRecorder.trigger();
 
     // Schedule a register change event for that cycle
-    scheduleAbs<REG_SLOT>(nextTrigger, REG_CHANGE);
+    scheduleAbs<SLOT_REG>(nextTrigger, REG_CHANGE);
 }
 
 void
@@ -471,93 +472,93 @@ Agnus::executeEventsUntil(Cycle cycle) {
     // Check primary slots
     //
 
-    if (isDue<RAS_SLOT>(cycle)) {
+    if (isDue<SLOT_RAS>(cycle)) {
         serviceRASEvent();
     }
-    if (isDue<REG_SLOT>(cycle)) {
+    if (isDue<SLOT_REG>(cycle)) {
         serviceREGEvent(cycle);
     }
-    if (isDue<CIAA_SLOT>(cycle)) {
+    if (isDue<SLOT_CIAA>(cycle)) {
         serviceCIAEvent<0>();
     }
-    if (isDue<CIAB_SLOT>(cycle)) {
+    if (isDue<SLOT_CIAB>(cycle)) {
         serviceCIAEvent<1>();
     }
-    if (isDue<BPL_SLOT>(cycle)) {
+    if (isDue<SLOT_BPL>(cycle)) {
         serviceBPLEvent();
     }
-    if (isDue<DAS_SLOT>(cycle)) {
+    if (isDue<SLOT_DAS>(cycle)) {
         serviceDASEvent();
     }
-    if (isDue<COP_SLOT>(cycle)) {
-        copper.serviceEvent(slot[COP_SLOT].id);
+    if (isDue<SLOT_COP>(cycle)) {
+        copper.serviceEvent(slot[SLOT_COP].id);
     }
-    if (isDue<BLT_SLOT>(cycle)) {
-        blitter.serviceEvent(slot[BLT_SLOT].id);
+    if (isDue<SLOT_BLT>(cycle)) {
+        blitter.serviceEvent(slot[SLOT_BLT].id);
     }
 
-    if (isDue<SEC_SLOT>(cycle)) {
+    if (isDue<SLOT_SEC>(cycle)) {
 
         //
         // Check secondary slots
         //
 
-        if (isDue<CH0_SLOT>(cycle)) {
+        if (isDue<SLOT_CH0>(cycle)) {
             paula.channel0.serviceEvent();
         }
-        if (isDue<CH1_SLOT>(cycle)) {
+        if (isDue<SLOT_CH1>(cycle)) {
             paula.channel1.serviceEvent();
         }
-        if (isDue<CH2_SLOT>(cycle)) {
+        if (isDue<SLOT_CH2>(cycle)) {
             paula.channel2.serviceEvent();
         }
-        if (isDue<CH3_SLOT>(cycle)) {
+        if (isDue<SLOT_CH3>(cycle)) {
             paula.channel3.serviceEvent();
         }
-        if (isDue<DSK_SLOT>(cycle)) {
+        if (isDue<SLOT_DSK>(cycle)) {
             paula.diskController.serviceDiskEvent();
         }
-        if (isDue<DCH_SLOT>(cycle)) {
+        if (isDue<SLOT_DCH>(cycle)) {
             paula.diskController.serviceDiskChangeEvent();
         }
-        if (isDue<VBL_SLOT>(cycle)) {
+        if (isDue<SLOT_VBL>(cycle)) {
             serviceVblEvent();
         }
-        if (isDue<IRQ_SLOT>(cycle)) {
+        if (isDue<SLOT_IRQ>(cycle)) {
             paula.serviceIrqEvent();
         }
-        if (isDue<IPL_SLOT>(cycle)) {
+        if (isDue<SLOT_IPL>(cycle)) {
             paula.serviceIplEvent();
         }
-        if (isDue<KBD_SLOT>(cycle)) {
-            amiga.keyboard.serviceKeyboardEvent(slot[KBD_SLOT].id);
+        if (isDue<SLOT_KBD>(cycle)) {
+            amiga.keyboard.serviceKeyboardEvent(slot[SLOT_KBD].id);
         }
-        if (isDue<TXD_SLOT>(cycle)) {
-            uart.serviceTxdEvent(slot[TXD_SLOT].id);
+        if (isDue<SLOT_TXD>(cycle)) {
+            uart.serviceTxdEvent(slot[SLOT_TXD].id);
         }
-        if (isDue<RXD_SLOT>(cycle)) {
-            uart.serviceRxdEvent(slot[RXD_SLOT].id);
+        if (isDue<SLOT_RXD>(cycle)) {
+            uart.serviceRxdEvent(slot[SLOT_RXD].id);
         }
-        if (isDue<POT_SLOT>(cycle)) {
-            paula.servicePotEvent(slot[POT_SLOT].id);
+        if (isDue<SLOT_POT>(cycle)) {
+            paula.servicePotEvent(slot[SLOT_POT].id);
         }
-        if (isDue<INS_SLOT>(cycle)) {
+        if (isDue<SLOT_INS>(cycle)) {
             serviceINSEvent();
         }
 
         // Determine the next trigger cycle for all secondary slots
-        Cycle nextSecTrigger = slot[SEC_SLOT + 1].triggerCycle;
-        for (unsigned i = SEC_SLOT + 2; i < SLOT_COUNT; i++)
+        Cycle nextSecTrigger = slot[SLOT_SEC + 1].triggerCycle;
+        for (unsigned i = SLOT_SEC + 2; i < SLOT_COUNT; i++)
             if (slot[i].triggerCycle < nextSecTrigger)
                 nextSecTrigger = slot[i].triggerCycle;
 
         // Update the secondary table trigger in the primary table
-        rescheduleAbs<SEC_SLOT>(nextSecTrigger);
+        rescheduleAbs<SLOT_SEC>(nextSecTrigger);
     }
 
     // Determine the next trigger cycle for all primary slots
     nextTrigger = slot[0].triggerCycle;
-    for (unsigned i = 1; i <= SEC_SLOT; i++)
+    for (unsigned i = 1; i <= SLOT_SEC; i++)
         if (slot[i].triggerCycle < nextTrigger)
             nextTrigger = slot[i].triggerCycle;
 }

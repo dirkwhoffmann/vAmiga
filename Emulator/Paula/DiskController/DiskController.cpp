@@ -238,7 +238,7 @@ DiskController::ejectDisk(int nr, Cycle delay)
     assert(nr >= 0 && nr <= 3);
 
     amiga.suspend();
-    agnus.scheduleRel<DCH_SLOT>(delay, DCH_EJECT, nr);
+    agnus.scheduleRel<SLOT_DCH>(delay, DCH_EJECT, nr);
     amiga.resume();
 }
 
@@ -272,7 +272,7 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
     }
 
     diskToInsert = disk;
-    agnus.scheduleRel<DCH_SLOT>(delay, DCH_INSERT, nr);
+    agnus.scheduleRel<SLOT_DCH>(delay, DCH_INSERT, nr);
     
     amiga.resume();
 }

@@ -144,7 +144,7 @@ Keyboard::writeToBuffer(u8 keycode)
     bufferIndex++;
 
     // Wake up the keyboard if it has gone idle
-    if (!agnus.hasEvent<KBD_SLOT>()) {
+    if (!agnus.hasEvent<SLOT_KBD>()) {
         trace(KBD_DEBUG, "Wake up\n");
         state = KB_SEND;
         execute();
@@ -214,7 +214,7 @@ Keyboard::execute()
             trace(KBD_DEBUG, "KB_SELFTEST\n");
             
             // Await a handshake within the next second
-            agnus.scheduleRel<KBD_SLOT>(SEC(1), KBD_TIMEOUT);
+            agnus.scheduleRel<SLOT_KBD>(SEC(1), KBD_TIMEOUT);
             break;
             
         case KB_SYNC:
@@ -247,7 +247,7 @@ Keyboard::execute()
             if (!bufferIsEmpty()) {
                 sendKeyCode(readFromBuffer());
             } else {
-                agnus.cancel<KBD_SLOT>();
+                agnus.cancel<SLOT_KBD>();
             }
             break;
     }
@@ -276,13 +276,13 @@ Keyboard::sendKeyCode(u8 code)
     if (config.accurate) {
         
         // Start with the transmission of the first shift register bit
-        agnus.scheduleImm<KBD_SLOT>(KBD_DAT, 0);
+        agnus.scheduleImm<SLOT_KBD>(KBD_DAT, 0);
         
     } else {
 
         // In simple keyboard mode, send the keycode over in one chunk
         ciaa.setKeyCode(shiftReg);
-        agnus.scheduleRel<KBD_SLOT>(8*USEC(60) + MSEC(143), KBD_TIMEOUT);
+        agnus.scheduleRel<SLOT_KBD>(8*USEC(60) + MSEC(143), KBD_TIMEOUT);
     }
 }
 
@@ -299,7 +299,7 @@ Keyboard::sendSyncPulse()
     
     if (config.accurate) {
          
-         agnus.scheduleImm<KBD_SLOT>(KBD_SYNC_DAT0);
+         agnus.scheduleImm<SLOT_KBD>(KBD_SYNC_DAT0);
          
      } else {
 

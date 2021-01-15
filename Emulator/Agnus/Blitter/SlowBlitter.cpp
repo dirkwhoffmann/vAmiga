@@ -856,7 +856,7 @@ Blitter::beginFakeLineBlit()
     resetYCounter();
 
     // Schedule the first slow Blitter execution event
-    agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_LINE_FAKE);
+    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_LINE_FAKE);
 }
 
 void
@@ -888,7 +888,7 @@ Blitter::beginFakeCopyBlit()
     lockD = true;
 
     // Schedule the first slow Blitter execution event
-    agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_COPY_FAKE);
+    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_COPY_FAKE);
 }
 
 void
@@ -918,7 +918,7 @@ Blitter::beginSlowCopyBlit()
     lockD = true;
 
     // Schedule the first slow Blitter execution event
-    agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_COPY_SLOW);
+    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_COPY_SLOW);
 
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the fast Blitter.
@@ -927,9 +927,9 @@ Blitter::beginSlowCopyBlit()
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
         
-        while (agnus.hasEvent<BLT_SLOT>()) {
+        while (agnus.hasEvent<SLOT_BLT>()) {
             agnus.busOwner[agnus.pos.h] = BUS_NONE;
-            serviceEvent(agnus.slot[BLT_SLOT].id);
+            serviceEvent(agnus.slot[SLOT_BLT].id);
         }
         
         agnus.busOwner[agnus.pos.h] = owner;

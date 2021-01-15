@@ -25,7 +25,7 @@ Copper::_inspect()
     synchronized {
         
         info.copList = copList;
-        info.active  = agnus.isPending<COP_SLOT>();
+        info.active  = agnus.isPending<SLOT_COP>();
         info.cdang   = cdang;
         info.coppc   = coppc & agnus.ptrMask;
         info.cop1lc  = cop1lc & agnus.ptrMask;
@@ -40,10 +40,10 @@ Copper::_inspect()
 void
 Copper::_dump() const
 {
-    bool active = agnus.isPending<COP_SLOT>();
+    bool active = agnus.isPending<SLOT_COP>();
     msg("    cdang: %d\n", cdang);
     msg("   active: %s\n", active ? "yes" : "no");
-    if (active) msg("    state: %ld\n", (long)agnus.slot[COP_SLOT].id);
+    if (active) msg("    state: %ld\n", (long)agnus.slot[SLOT_COP].id);
     msg("    coppc: %X\n", coppc);
     msg("  copins1: %X\n", cop1ins);
     msg("  copins2: %X\n", cop2ins);
@@ -67,7 +67,7 @@ Copper::switchToCopperList(int nr)
     // debug("switchToCopperList(%d) coppc: %x -> %x\n", nr, coppc, (nr == 1) ? cop1lc : cop2lc);
     coppc = (nr == 1) ? cop1lc : cop2lc;
     copList = nr;
-    agnus.scheduleRel<COP_SLOT>(0, COP_REQ_DMA);
+    agnus.scheduleRel<SLOT_COP>(0, COP_REQ_DMA);
 }
 
 bool
@@ -344,28 +344,28 @@ Copper::scheduleWaitWakeup(bool bfd)
         if (delay == 0) {
 
             // Copper does not stop
-            agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(2), COP_FETCH);
+            agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(2), COP_FETCH);
 
         } else if (delay == 2) {
 
             // Copper does not stop
-            agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(2), COP_FETCH);
+            agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(2), COP_FETCH);
 
         } else {
 
             // Wake up 2 cycles earlier with a WAKEUP event
             delay -= 2;
             if (bfd) {
-                agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(delay), COP_WAKEUP);
+                agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(delay), COP_WAKEUP);
             } else {
-                agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(delay), COP_WAKEUP_BLIT);
+                agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(delay), COP_WAKEUP_BLIT);
             }
         }
 
     } else {
 
         // msg("(%d,%d) does not match in this frame\n", trigger.v, trigger.h);
-        agnus.scheduleAbs<COP_SLOT>(NEVER, COP_REQ_DMA);
+        agnus.scheduleAbs<SLOT_COP>(NEVER, COP_REQ_DMA);
     }
 }
 
@@ -489,7 +489,7 @@ Copper::vsyncHandler()
      *  automatically forced to restart its operations at the address contained
      *  in COP1LC." [HRM]
      */
-    agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_VBLANK);
+    agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(0), COP_VBLANK);
     
     if (COP_CHECKSUM) {
         
@@ -505,13 +505,13 @@ Copper::vsyncHandler()
 void
 Copper::blitterDidTerminate()
 {
-    if (agnus.hasEvent<COP_SLOT>(COP_WAIT_BLIT)) {
+    if (agnus.hasEvent<SLOT_COP>(COP_WAIT_BLIT)) {
 
         // Wake up the Copper in the next even cycle
         if (IS_EVEN(agnus.pos.h)) {
             serviceEvent(COP_WAIT_BLIT);
         } else {
-            agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(1), COP_WAIT_BLIT);
+            agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(1), COP_WAIT_BLIT);
         }
     }
 }

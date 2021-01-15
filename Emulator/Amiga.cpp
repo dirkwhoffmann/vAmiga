@@ -310,7 +310,7 @@ Amiga::setInspectionTarget(EventID id)
 {
     suspend();
     inspectionTarget = id;
-    agnus.scheduleRel<INS_SLOT>(0, inspectionTarget);
+    agnus.scheduleRel<SLOT_INS>(0, inspectionTarget);
     agnus.serviceINSEvent();
     resume();
 }
@@ -684,7 +684,7 @@ Amiga::runLoop()
     } else {
         cpu.debugger.disableLogging();
     }
-    agnus.scheduleRel<INS_SLOT>(0, inspectionTarget);
+    agnus.scheduleRel<SLOT_INS>(0, inspectionTarget);
     
     // Enter the loop
     while(1) {

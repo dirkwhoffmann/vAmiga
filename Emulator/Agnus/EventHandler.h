@@ -105,8 +105,8 @@ template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id)
     slot[s].id = id;
     if (cycle < nextTrigger) nextTrigger = cycle;
 
-    if (isSecondarySlot(s) && cycle < slot[SEC_SLOT].triggerCycle)
-        slot[SEC_SLOT].triggerCycle = cycle;
+    if (isSecondarySlot(s) && cycle < slot[SLOT_SEC].triggerCycle)
+        slot[SLOT_SEC].triggerCycle = cycle;
 }
 
 template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id, i64 data)
@@ -163,8 +163,8 @@ template<EventSlot s> void rescheduleAbs(Cycle cycle)
     slot[s].triggerCycle = cycle;
     if (cycle < nextTrigger) nextTrigger = cycle;
     
-     if (isSecondarySlot(s) && cycle < slot[SEC_SLOT].triggerCycle)
-         slot[SEC_SLOT].triggerCycle = cycle;
+     if (isSecondarySlot(s) && cycle < slot[SLOT_SEC].triggerCycle)
+         slot[SLOT_SEC].triggerCycle = cycle;
 }
 
 template<EventSlot s> void rescheduleInc(Cycle cycle)

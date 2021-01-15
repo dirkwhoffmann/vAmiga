@@ -20,76 +20,78 @@
 // Enumerations
 //
 
-enum_long(EventSlot)
+enum_long(SLOT)
 {
     // Primary slots
-    REG_SLOT,                       // Register changes
-    RAS_SLOT,                       // Rasterline
-    CIAA_SLOT,                      // CIA A execution
-    CIAB_SLOT,                      // CIA B execution
-    BPL_SLOT,                       // Bitplane DMA
-    DAS_SLOT,                       // Disk, Audio, and Sprite DMA
-    COP_SLOT,                       // Copper
-    BLT_SLOT,                       // Blitter
-    SEC_SLOT,                       // Enables secondary slots
+    SLOT_REG,                       // Register changes
+    SLOT_RAS,                       // Rasterline
+    SLOT_CIAA,                      // CIA A execution
+    SLOT_CIAB,                      // CIA B execution
+    SLOT_BPL,                       // Bitplane DMA
+    SLOT_DAS,                       // Disk, Audio, and Sprite DMA
+    SLOT_COP,                       // Copper
+    SLOT_BLT,                       // Blitter
+    SLOT_SEC,                       // Enables secondary slots
 
     // Secondary slots
-    CH0_SLOT,                       // Audio channel 0
-    CH1_SLOT,                       // Audio channel 1
-    CH2_SLOT,                       // Audio channel 2
-    CH3_SLOT,                       // Audio channel 3
-    DSK_SLOT,                       // Disk controller
-    DCH_SLOT,                       // Disk changes (insert, eject)
-    VBL_SLOT,                       // Vertical blank
-    IRQ_SLOT,                       // Interrupts
-    IPL_SLOT,                       // CPU Interrupt Priority Lines
-    KBD_SLOT,                       // Keyboard
-    TXD_SLOT,                       // Serial data out (UART)
-    RXD_SLOT,                       // Serial data in (UART)
-    POT_SLOT,                       // Potentiometer
-    INS_SLOT,                       // Handles periodic calls to inspect()
+    SLOT_CH0,                       // Audio channel 0
+    SLOT_CH1,                       // Audio channel 1
+    SLOT_CH2,                       // Audio channel 2
+    SLOT_CH3,                       // Audio channel 3
+    SLOT_DSK,                       // Disk controller
+    SLOT_DCH,                       // Disk changes (insert, eject)
+    SLOT_VBL,                       // Vertical blank
+    SLOT_IRQ,                       // Interrupts
+    SLOT_IPL,                       // CPU Interrupt Priority Lines
+    SLOT_KBD,                       // Keyboard
+    SLOT_TXD,                       // Serial data out (UART)
+    SLOT_RXD,                       // Serial data in (UART)
+    SLOT_POT,                       // Potentiometer
+    SLOT_INS,                       // Handles periodic calls to inspect()
     
     SLOT_COUNT
-
 };
+typedef SLOT EventSlot;
 
+/*
 static inline bool isEventSlot(long s) { return s < SLOT_COUNT; }
-static inline bool isPrimarySlot(long s) { return s <= SEC_SLOT; }
-static inline bool isSecondarySlot(long s) { return s > SEC_SLOT && s < SLOT_COUNT; }
+static inline bool isPrimarySlot(long s) { return s <= SLOT_SEC; }
+static inline bool isSecondarySlot(long s) { return s > SLOT_SEC && s < SLOT_COUNT; }
 
 inline const char *slotName(EventSlot nr)
 {
     switch (nr) {
-        case REG_SLOT:  return "Registers";
-        case RAS_SLOT:  return "Rasterline";
-        case CIAA_SLOT: return "CIA A";
-        case CIAB_SLOT: return "CIA B";
-        case BPL_SLOT:  return "Bitplane DMA";
-        case DAS_SLOT:  return "Other DMA";
-        case COP_SLOT:  return "Copper";
-        case BLT_SLOT:  return "Blitter";
-        case SEC_SLOT:  return "Secondary";
+        case SLOT_REG:  return "Registers";
+        case SLOT_RAS:  return "Rasterline";
+        case SLOT_CIAA: return "CIA A";
+        case SLOT_CIAB: return "CIA B";
+        case SLOT_BPL:  return "Bitplane DMA";
+        case SLOT_DAS:  return "Other DMA";
+        case SLOT_COP:  return "Copper";
+        case SLOT_BLT:  return "Blitter";
+        case SLOT_SEC:  return "Secondary";
 
-        case CH0_SLOT:  return "Audio channel 0";
-        case CH1_SLOT:  return "Audio channel 1";
-        case CH2_SLOT:  return "Audio channel 2";
-        case CH3_SLOT:  return "Audio channel 3";
-        case DSK_SLOT:  return "Disk Controller";
-        case DCH_SLOT:  return "Disk Change";
-        case VBL_SLOT:  return "Vertical blank";
-        case IRQ_SLOT:  return "Interrupts";
-        case IPL_SLOT:  return "IPL";
-        case KBD_SLOT:  return "Keyboard";
-        case TXD_SLOT:  return "UART out";
-        case RXD_SLOT:  return "UART in";
-        case POT_SLOT:  return "Potentiometer";
-        case INS_SLOT:  return "Inspector";
+        case SLOT_CH0:  return "Audio channel 0";
+        case SLOT_CH1:  return "Audio channel 1";
+        case SLOT_CH2:  return "Audio channel 2";
+        case SLOT_CH3:  return "Audio channel 3";
+        case SLOT_DSK:  return "Disk Controller";
+        case SLOT_DCH:  return "Disk Change";
+        case SLOT_VBL:  return "Vertical blank";
+        case SLOT_IRQ:  return "Interrupts";
+        case SLOT_IPL:  return "IPL";
+        case SLOT_KBD:  return "Keyboard";
+        case SLOT_TXD:  return "UART out";
+        case SLOT_RXD:  return "UART in";
+        case SLOT_POT:  return "Potentiometer";
+        case SLOT_INS:  return "Inspector";
 
         default:
             // assert(false);
             return "*** INVALID ***";
     }
 }
+*/
 
 enum_long(EventID)
 {
@@ -294,9 +296,10 @@ static const double inspectionInterval = 0.1;
 
 typedef struct
 {
+    EventSlot slot;
+    EventID eventId;
     const char *slotName;
     const char *eventName;
-    long eventId;
 
     // Trigger cycle of the event
     Cycle trigger;

@@ -53,7 +53,7 @@ Copper::serviceEvent(EventID id)
             
             // Check if the Blitter is busy, keep on waiting
             if (agnus.blitter.isRunning()) {
-                agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
+                agnus.scheduleAbs<SLOT_COP>(NEVER, COP_WAIT_BLIT);
                 break;
             }
             
@@ -111,7 +111,7 @@ Copper::serviceEvent(EventID id)
             reg = (cop1ins & 0x1FE);
 
             // Stop the Copper if address is illegal
-            if (isIllegalAddress(reg)) { agnus.cancel<COP_SLOT>(); break; }
+            if (isIllegalAddress(reg)) { agnus.cancel<SLOT_COP>(); break; }
 
             // Continue with fetching the new command
             schedule(COP_FETCH);
@@ -123,11 +123,11 @@ Copper::serviceEvent(EventID id)
             switch (reg) {
                 case 0x88:
                     schedule(COP_JMP1);
-                    agnus.slot[COP_SLOT].data = 1;
+                    agnus.slot[SLOT_COP].data = 1;
                     break;
                 case 0x8A:
                     schedule(COP_JMP1);
-                    agnus.slot[COP_SLOT].data = 2;
+                    agnus.slot[SLOT_COP].data = 2;
                     break;
                 default:
                     move(reg, cop2ins);
@@ -175,7 +175,7 @@ Copper::serviceEvent(EventID id)
             
             // Check if we need to wait for the Blitter
             if (!getBFD() && agnus.blitter.isRunning()) {
-                agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
+                agnus.scheduleAbs<SLOT_COP>(NEVER, COP_WAIT_BLIT);
                 break;
             }
             
@@ -264,7 +264,7 @@ Copper::serviceEvent(EventID id)
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
-            switchToCopperList(agnus.slot[COP_SLOT].data);
+            switchToCopperList(agnus.slot[SLOT_COP].data);
             schedule(COP_FETCH);
             break;
 
@@ -295,11 +295,11 @@ Copper::serviceEvent(EventID id)
 void
 Copper::schedule(EventID next, int delay)
 {
-    agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(delay), next);
+    agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(delay), next);
 }
 
 void
 Copper::reschedule(int delay)
 {
-    agnus.rescheduleRel<COP_SLOT>(DMA_CYCLES(delay));
+    agnus.rescheduleRel<SLOT_COP>(DMA_CYCLES(delay));
 }

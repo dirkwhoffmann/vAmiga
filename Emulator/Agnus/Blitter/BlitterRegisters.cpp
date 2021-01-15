@@ -210,10 +210,10 @@ Blitter::setBLTSIZE(u16 value)
     if (!bltsizeH) bltsizeH = 0x0040;
     
     // Warn if the previous Blitter operation is overwritten
-    trace(XFILES && agnus.hasEvent<BLT_SLOT>(),
-          "XFILES: Overwriting Blitter event %lld\n", agnus.slot[BLT_SLOT].id);
+    trace(XFILES && agnus.hasEvent<SLOT_BLT>(),
+          "XFILES: Overwriting Blitter event %lld\n", agnus.slot[SLOT_BLT].id);
     
-    agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_STRT1);
+    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_STRT1);
 }
 
 void
@@ -255,7 +255,7 @@ Blitter::pokeBLTSIZH(u16 value)
     if (!bltsizeV) bltsizeV = 0x8000;
     if (!bltsizeH) bltsizeH = 0x0800;
 
-    agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_STRT1);
+    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_STRT1);
 }
 
 void
@@ -337,8 +337,8 @@ Blitter::pokeDMACON(u16 oldValue, u16 newValue)
     if (!oldBltDma && newBltDma) {
 
         // Perform pending blit operation (if any)
-        if (agnus.hasEvent<BLT_SLOT>(BLT_STRT1)) {
-            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_STRT1);
+        if (agnus.hasEvent<SLOT_BLT>(BLT_STRT1)) {
+            agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(0), BLT_STRT1);
         }
     }
     

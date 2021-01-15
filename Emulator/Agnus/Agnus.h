@@ -446,7 +446,7 @@ private:
         
         AgnusInfo getInfo() { return HardwareComponent::getInfo(info); }
         EventInfo getEventInfo();
-        EventSlotInfo getEventSlotInfo(int nr);
+        EventSlotInfo getEventSlotInfo(usize nr);
         
     private:
         

@@ -116,7 +116,7 @@ StateMachine<nr>::AUDxIR()
 template <int nr> void
 StateMachine<nr>::percntrld()
 {
-    const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
+    const EventSlot slot = (EventSlot)(SLOT_CH0+nr);
 
     
     u64 delay = (audperLatch == 0) ? 0x10000 : audperLatch;
@@ -332,7 +332,7 @@ StateMachine<nr>::move_011_000() {
 
     trace(AUD_DEBUG, "move_011_000\n");
 
-    const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
+    const EventSlot slot = (EventSlot)(SLOT_CH0+nr);
     agnus.cancel<slot>();
 
     intreq2 = false;

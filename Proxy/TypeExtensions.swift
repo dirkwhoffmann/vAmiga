@@ -7,6 +7,42 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+extension EventSlot {
+
+    var description: String {
+        
+        switch self {
+        
+        case .REG:   return "Registers"
+        case .RAS:   return "Rasterline"
+        case .CIAA:  return "CIA A"
+        case .CIAB:  return "CIA B"
+        case .BPL:   return "Bitplane DMA"
+        case .DAS:   return "Other DMA"
+        case .COP:   return "Copper"
+        case .BLT:   return "Blitter"
+        case .SEC:   return "Secondary"
+
+        case .CH0:   return "Audio channel 0"
+        case .CH1:   return "Audio channel 1"
+        case .CH2:   return "Audio channel 2"
+        case .CH3:   return "Audio channel 3"
+        case .DSK:   return "Disk Controller"
+        case .DCH:   return "Disk Change"
+        case .VBL:   return "Vertical blank"
+        case .IRQ:   return "Interrupts"
+        case .IPL:   return "IPL"
+        case .KBD:   return "Keyboard"
+        case .TXD:   return "UART out"
+        case .RXD:   return "UART in"
+        case .POT:   return "Potentiometer"
+        case .INS:   return "Inspector"
+        case .COUNT: return "???"
+        default:     fatalError()
+        }
+    }
+}
+
 extension FSVolumeType {
 
     var description: String {
