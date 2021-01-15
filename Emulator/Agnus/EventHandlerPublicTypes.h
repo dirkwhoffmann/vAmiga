@@ -298,7 +298,6 @@ typedef struct
 {
     EventSlot slot;
     EventID eventId;
-    const char *slotName;
     const char *eventName;
 
     // Trigger cycle of the event
