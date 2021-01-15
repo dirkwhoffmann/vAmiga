@@ -67,10 +67,7 @@ Denise::setConfigItem(Option option, long value)
             
         case OPT_DENISE_REVISION:
             
-            if (!isDeniseRevision(value)) {
-                warn("Invalid Denise revision: %ld\n", value);
-                return false;
-            }
+            if (!DeniseRevisionEnum::verify(value)) return false;
             if (config.revision == value) {
                 return false;
             }
@@ -149,7 +146,7 @@ Denise::setConfigItem(Option option, long value)
 void
 Denise::_dumpConfig() const
 {
-    msg("          revision : %s\n", sDeniseRevision(config.revision));
+    msg("          revision : %s\n", DeniseRevisionEnum::key(config.revision));
     msg("       borderblank : %s\n", config.borderblank ? "yes" : "no");
     msg("     hiddenSprites : %02X\n", config.hiddenSprites);
     msg("      hiddenLayers : %04X\n", config.hiddenLayers);

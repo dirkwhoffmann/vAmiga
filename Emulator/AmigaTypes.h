@@ -12,6 +12,7 @@
 #include "AmigaPublicTypes.h"
 
 #include "AgnusTypes.h"
+#include "AudioTypes.h"
 #include "CPUTypes.h"
 #include "CIATypes.h"
 #include "DeniseTypes.h"
@@ -120,6 +121,32 @@ struct EmulatorStateEnum : Reflection<EmulatorStateEnum, EmulatorState> {
     }
 };
 
+struct ErrorCodeEnum : Reflection<ErrorCodeEnum, ErrorCode> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < ERROR_COUNT;
+    }
+    
+    static const char *prefix() { return "ERROR"; }
+    static const char *key(ErrorCode value)
+    {
+        switch (value) {
+                
+            case ERROR_OK:                  return "OK";
+                
+            case ERROR_OUT_OF_MEMORY:       return "OUT_OF_MEMORY";
+            case ERROR_CHIP_RAM_LIMIT:      return "CHIP_RAM_LIMIT";
+            case ERROR_AROS_RAM_LIMIT:      return "AROS_RAM_LIMIT";
+
+            case ERROR_ROM_MISSING:         return "ROM_MISSING";
+            case ERROR_AROS_NO_EXTROM:      return "AROS_NO_EXTROM";
+
+            case ERROR_COUNT:               return "???";
+        }
+        return "???";
+    }
+};
 
 //
 // Private types

@@ -27,7 +27,7 @@ class Drive;
 class Joystick;
 class Keyboard;
 class Memory;
-class MessageQueue;
+class MsgQueue;
 class Mouse;
 class Oscillator;
 class PixelEngine;
@@ -63,7 +63,7 @@ public:
     Drive &df3;
     Keyboard &keyboard;
     Memory &mem;
-    MessageQueue &messageQueue;
+    MsgQueue &messageQueue;
     Oscillator &oscillator;
     Paula &paula;
     PixelEngine &pixelEngine;

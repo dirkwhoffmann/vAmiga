@@ -100,7 +100,7 @@ extension ConfigurationController {
         let chipRamLimit = amiga.agnus.chipRamLimit()
 
         if chipRamWanted > chipRamLimit {
-            parent.mydocument.showConfigurationAltert(.ERR_CHIP_RAM_LIMIT)
+            parent.mydocument.showConfigurationAltert(.CHIP_RAM_LIMIT)
         } else {
             config.chipRam = sender.selectedTag()
         }

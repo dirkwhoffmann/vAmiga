@@ -17,7 +17,7 @@ AudioFilter::AudioFilter(Amiga& ref) : AmigaComponent(ref)
 void
 AudioFilter::setFilterType(FilterType type)
 {
-    assert(isFilterType(type));
+    assert_enum(FilterType, type);
     this->type = type;
 }
 

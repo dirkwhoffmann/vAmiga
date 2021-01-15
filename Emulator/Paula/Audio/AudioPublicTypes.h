@@ -19,46 +19,20 @@ enum_long(SMP_METHOD)
 {
     SMP_NONE,
     SMP_NEAREST,
-    SMP_LINEAR
+    SMP_LINEAR,
+
+    SMP_COUNT
 };
 typedef SMP_METHOD SamplingMethod;
-
-static inline bool isSamplingMethod(long value)
-{
-    return (unsigned long)value <= SMP_LINEAR;
-}
-
-static inline const char *sSamplingMethod(SamplingMethod value)
-{
-    switch (value) {
-            
-        case SMP_NONE:     return "NONE";
-        case SMP_NEAREST:  return "NEAREST";
-        case SMP_LINEAR:   return "LINEAR";
-    }
-    return "???";
-}
 
 enum_long(FILTER_TYPE)
 {
     FILTER_NONE,
-    FILTER_BUTTERWORTH
+    FILTER_BUTTERWORTH,
+    
+    FILTER_COUNT
 };
 typedef FILTER_TYPE FilterType;
-
-static inline bool isFilterType(long value)
-{
-    return (unsigned long)value <= FILTER_BUTTERWORTH;
-}
-
-static inline const char *FilterTypeName(FilterType value)
-{
-    switch (value) {
-        case FILTER_NONE:         return "NONE";
-        case FILTER_BUTTERWORTH:  return "BUTTERWORTH";
-    }
-    return "???";
-}
 
 
 //

@@ -108,6 +108,7 @@ enum_long(OPT)
 };
 typedef OPT Option;
 
+
 enum_long(EMULATOR_STATE)
 {
     EMULATOR_STATE_OFF,
@@ -118,14 +119,24 @@ enum_long(EMULATOR_STATE)
 };
 typedef EMULATOR_STATE EmulatorState;
 
-enum_long(ErrorCode)
+
+enum_long(ERROR_CODE)
 {
-    ERR_OK,
-    ERR_ROM_MISSING,
-    ERR_AROS_NO_EXTROM,
-    ERR_AROS_RAM_LIMIT,
-    ERR_CHIP_RAM_LIMIT
+    ERROR_OK,
+
+    // Memory
+    ERROR_OUT_OF_MEMORY,
+    ERROR_CHIP_RAM_LIMIT,
+    ERROR_AROS_RAM_LIMIT,
+
+    // Roms
+    ERROR_ROM_MISSING,
+    ERROR_AROS_NO_EXTROM,
+
+    ERROR_COUNT
 };
+typedef ERROR_CODE ErrorCode;
+
 
 //
 // Structures

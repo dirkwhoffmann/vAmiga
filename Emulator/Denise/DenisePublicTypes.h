@@ -20,23 +20,11 @@
 enum_long(DENISE_REV)
 {
     DENISE_OCS,          // Revision 8362R8
-    DENISE_ECS           // Revision 8373 (not supported yet)
+    DENISE_ECS,          // Revision 8373 (not supported yet)
+
+    DENISE_COUNT
 };
 typedef DENISE_REV DeniseRevision;
-
-inline bool isDeniseRevision(long value)
-{
-    return (unsigned long)value <= DENISE_ECS;
-}
-
-inline const char *sDeniseRevision(DeniseRevision value)
-{
-    switch (value) {
-        case DENISE_OCS:  return "DENISE_OCS";
-        case DENISE_ECS:  return "DENISE_ECS";
-        default:          return "???";
-    }
-}
 
 enum_long(PALETTE)
 {
@@ -45,14 +33,11 @@ enum_long(PALETTE)
     PALETTE_PAPER_WHITE,
     PALETTE_GREEN,
     PALETTE_AMBER,
-    PALETTE_SEPIA
+    PALETTE_SEPIA,
+    
+    PALETTE_COUNT
 };
 typedef PALETTE Palette;
-
-inline bool isPalette(long value)
-{
-    return (unsigned long)value <= PALETTE_SEPIA;
-}
 
 
 //

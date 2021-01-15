@@ -113,10 +113,7 @@ Muxer::setConfigItem(Option option, long value)
             
         case OPT_SAMPLING_METHOD:
             
-            if (!isSamplingMethod(value)) {
-                warn("Invalid sampling method: %ld\n", value);
-                return false;
-            }
+            if (!SamplingMethodEnum::verify(value)) return false;
 
             if (config.samplingMethod == value) {
                 return false;
@@ -127,10 +124,7 @@ Muxer::setConfigItem(Option option, long value)
             
         case OPT_FILTER_TYPE:
             
-            if (!isFilterType(value)) {
-                warn("Invalid filter type: %ld\n", value);
-                return false;
-            }
+            if (!FilterTypeEnum::verify(value)) return false;
 
             if (config.filterType == value) {
                 return false;
@@ -219,8 +213,8 @@ Muxer::setConfigItem(Option option, long id, long value)
 void
 Muxer::_dumpConfig() const
 {
-    msg("samplingMethod : %s\n", sSamplingMethod(config.samplingMethod));
-    msg("    filtertype : %s\n", FilterTypeName(config.filterType));
+    msg("samplingMethod : %s\n", SamplingMethodEnum::key(config.samplingMethod));
+    msg("    filtertype : %s\n", FilterTypeEnum::key(config.filterType));
     msg("filterAlwaysOn : %d\n", config.filterAlwaysOn);
     msg("    vol0, pan0 : %lld, %lld\n", config.vol[0], config.pan[0]);
     msg("    vol1, pan1 : %lld, %lld\n", config.vol[1], config.pan[1]);

@@ -7,10 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "MessageQueue.h"
+#include "MsgQueue.h"
 
 void
-MessageQueue::addListener(const void *listener, Callback *func)
+MsgQueue::addListener(const void *listener, Callback *func)
 {
     synchronized {
         listeners.push_back(std::pair <const void *, Callback *> (listener, func));
@@ -26,7 +26,7 @@ MessageQueue::addListener(const void *listener, Callback *func)
 }
 
 void
-MessageQueue::removeListener(const void *listener)
+MsgQueue::removeListener(const void *listener)
 {
     put(MSG_UNREGISTER);
     
@@ -39,7 +39,7 @@ MessageQueue::removeListener(const void *listener)
 }
 
 Message
-MessageQueue::get()
+MsgQueue::get()
 { 
 	Message result;
     
@@ -56,15 +56,18 @@ MessageQueue::get()
 }
  
 void
-MessageQueue::put(MsgType type, i64 data)
+MsgQueue::put(MsgType type, long data)
 {
     synchronized {
                         
-        debug (QUEUE_DEBUG, "%s [%lld]\n", MsgTypeEnum::key(type), data);
+        debug (QUEUE_DEBUG, "%s [%ld]\n", MsgTypeEnum::key(type), data);
         
         // Delete the oldest message if the queue overflows
-        if (queue.isFull()) (void)queue.read();
-    
+        if (queue.isFull()) {
+            auto msg = queue.read();
+            debug(QUEUE_DEBUG, "Lost %s\n", MsgTypeEnum::key(msg.type));
+        }
+        
         // Write data
         Message msg = { type, data };
         queue.write(msg);
@@ -75,7 +78,7 @@ MessageQueue::put(MsgType type, i64 data)
 }
 
 void
-MessageQueue::dump()
+MsgQueue::dump()
 {
     for (int i = queue.begin(); i != queue.end(); i = queue.next(i)) {
         msg("%02d", i); dump(queue.elements[i]);
@@ -83,13 +86,13 @@ MessageQueue::dump()
 }
 
 void
-MessageQueue::dump(const Message &msg)
+MsgQueue::dump(const Message &msg)
 {
     msg("%s [%ld]\n", MsgTypeEnum::key(msg.type), msg.data);
 }
 
 void
-MessageQueue::propagate(const Message &msg) const
+MsgQueue::propagate(const Message &msg) const
 {
     for (auto i = listeners.begin(); i != listeners.end(); i++) {
         i->second(i->first, msg.type, msg.data);

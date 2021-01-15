@@ -44,6 +44,7 @@
 		50357BB6239123B2007E7563 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB5239123B2007E7563 /* Renderer.swift */; };
 		50357BB823912929007E7563 /* RendererSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB723912929007E7563 /* RendererSetup.swift */; };
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
+		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
 		503DECAE255E6180005FFA0B /* Oscillator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503DECAC255E6180005FFA0B /* Oscillator.cpp */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
 		504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504C48B324143AB4008ADAB3 /* AgnusDma.cpp */; };
@@ -82,7 +83,7 @@
 		50894D822593CF4400C0499D /* HIDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50894D812593CF4400C0499D /* HIDExtensions.swift */; };
 		508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
-		508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */; };
+		508FDF8721EA1FBC0043D0E9 /* MsgQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */; };
 		508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
 		508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */; };
 		508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */; };
@@ -290,12 +291,15 @@
 		50384C8421FC6B66006E7748 /* Snapshot.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Snapshot.cpp; sourceTree = "<group>"; };
 		50384C8521FC6B66006E7748 /* Snapshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Snapshot.h; sourceTree = "<group>"; };
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
+		5039924225B2164E0084B808 /* MyDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentController.swift; sourceTree = "<group>"; };
+		5039924625B219FC0084B808 /* VAError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAError.h; sourceTree = "<group>"; };
 		503DECAC255E6180005FFA0B /* Oscillator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Oscillator.cpp; sourceTree = "<group>"; };
 		503DECAD255E6180005FFA0B /* Oscillator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Oscillator.h; sourceTree = "<group>"; };
 		5042FD7D23FFF08500B315B2 /* DiskControllerPublicTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskControllerPublicTypes.h; sourceTree = "<group>"; };
 		5042FD7E23FFF0D200B315B2 /* AudioPublicTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioPublicTypes.h; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
+		504D078625B2376E00E577DD /* AudioTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioTypes.h; sourceTree = "<group>"; };
 		504F4D63252624BD00CF8815 /* RendererRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererRect.swift; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* GuardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardTableView.swift; sourceTree = "<group>"; };
 		504FFC2524F0F15700B19DF6 /* AgnusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusTypes.h; sourceTree = "<group>"; };
@@ -373,8 +377,8 @@
 		508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		508FDE7221EA1FA50043D0E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		508FDE7321EA1FA50043D0E9 /* vAmiga.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = vAmiga.entitlements; sourceTree = "<group>"; };
-		508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageQueue.cpp; sourceTree = "<group>"; };
-		508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageQueue.h; sourceTree = "<group>"; };
+		508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MsgQueue.cpp; sourceTree = "<group>"; };
+		508FDEF821EA1FBC0043D0E9 /* MsgQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MsgQueue.h; sourceTree = "<group>"; };
 		508FDF5721EA1FBC0043D0E9 /* CIA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CIA.h; sourceTree = "<group>"; };
 		508FDF5821EA1FBC0043D0E9 /* TOD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOD.h; sourceTree = "<group>"; };
 		508FDF5921EA1FBC0043D0E9 /* TOD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TOD.cpp; sourceTree = "<group>"; };
@@ -1012,6 +1016,7 @@
 		509F7F1421ED13F300A530E4 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				5039924225B2164E0084B808 /* MyDocumentController.swift */,
 				508FDFF421EA22790043D0E9 /* MyController.swift */,
 				508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */,
 				508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */,
@@ -1136,6 +1141,7 @@
 			isa = PBXGroup;
 			children = (
 				5042FD7E23FFF0D200B315B2 /* AudioPublicTypes.h */,
+				504D078625B2376E00E577DD /* AudioTypes.h */,
 				507D7768228BE3EF001E97A9 /* StateMachine.h */,
 				507D7767228BE3EF001E97A9 /* StateMachine.cpp */,
 				50AE6EE624D9B2C7000AA367 /* StateMachineRegisters.cpp */,
@@ -1180,10 +1186,11 @@
 				5082D83A21EF891200CF7692 /* AmigaConstants.h */,
 				50B5C07D241107F200F124DC /* AmigaConstants.cpp */,
 				505A584C23040921002F99D1 /* Aliases.h */,
-				50B14C0821EB2248002E32A6 /* Utils.h */,
-				50B14C1121EB4314002E32A6 /* Utils.cpp */,
 				50EA34F0258E38880010DC63 /* Debug.h */,
 				50B5F87825AF9E07008B79F1 /* Reflection.h */,
+				5039924625B219FC0084B808 /* VAError.h */,
+				50B14C0821EB2248002E32A6 /* Utils.h */,
+				50B14C1121EB4314002E32A6 /* Utils.cpp */,
 				505A3A3921F4996400132020 /* SSEUtils.h */,
 				505A3A3821F4996400132020 /* SSEUtils.cpp */,
 				500C716F255EE2AC00DDEEB2 /* Concurrency.h */,
@@ -1202,8 +1209,8 @@
 				50E79BE7232D123000D296FB /* AmigaComponent.cpp */,
 				50D5244322787D3C00F8959D /* MsgQueuePublicTypes.h */,
 				50B5F88725AFA3B4008B79F1 /* MsgQueueTypes.h */,
-				508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */,
-				508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */,
+				508FDEF821EA1FBC0043D0E9 /* MsgQueue.h */,
+				508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1592,6 +1599,7 @@
 				50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */,
 				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,
 				50F54B2824B5D31D0078FDC9 /* u_medium.c in Sources */,
+				5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,
 				50EAD99C256E76820053F9AC /* HDFFile.h in Sources */,
 				50AEBEDE24D3D8700037082D /* AgnusEvents.cpp in Sources */,
@@ -1603,7 +1611,7 @@
 				50AEBEDC24D3D8170037082D /* UARTEvents.cpp in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
 				5083CF602546BCB200A28EF8 /* FSRootBlock.cpp in Sources */,
-				508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */,
+				508FDF8721EA1FBC0043D0E9 /* MsgQueue.cpp in Sources */,
 				50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */,
 				50B81E0824E6BCCA004384C9 /* DiskControllerRegisters.cpp in Sources */,
 				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,

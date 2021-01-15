@@ -12,7 +12,7 @@
 // General
 #include "AmigaComponent.h"
 #include "Serialization.h"
-#include "MessageQueue.h"
+#include "MsgQueue.h"
 
 // Sub components
 #include "Agnus.h"
@@ -118,7 +118,7 @@ public:
     /* Communication channel to the GUI. The GUI registers a listener and a
      * callback function to retrieve messages.
      */
-    MessageQueue messageQueue;
+    MsgQueue messageQueue;
 
     
     //

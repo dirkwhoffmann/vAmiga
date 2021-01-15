@@ -371,7 +371,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func powerAction(_ sender: Any!) {
         
-        var error: ErrorCode = .ERR_OK
+        var error: ErrorCode = .OK
 
         if amiga.isPoweredOn {
             amiga.powerOff()

@@ -23,7 +23,7 @@
 enum_long(EventSlot)
 {
     // Primary slots
-    REG_SLOT = 0,                   // Register changes
+    REG_SLOT,                       // Register changes
     RAS_SLOT,                       // Rasterline
     CIAA_SLOT,                      // CIA A execution
     CIAB_SLOT,                      // CIA B execution
@@ -48,6 +48,7 @@ enum_long(EventSlot)
     RXD_SLOT,                       // Serial data in (UART)
     POT_SLOT,                       // Potentiometer
     INS_SLOT,                       // Handles periodic calls to inspect()
+    
     SLOT_COUNT
 
 };
