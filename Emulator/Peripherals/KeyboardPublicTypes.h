@@ -13,6 +13,10 @@
 
 #include "Aliases.h"
 
+//
+// Structures
+//
+
 typedef struct
 {
     bool accurate;

@@ -193,11 +193,15 @@ Keyboard::processHandshake()
 {
     // Switch to the next state
     switch(state) {
+            
         case KB_SELFTEST:  state = KB_STRM_ON;  break;
         case KB_SYNC:      state = KB_STRM_ON;  break;
         case KB_STRM_ON:   state = KB_STRM_OFF; break;
         case KB_STRM_OFF:  state = KB_SEND;     break;
         case KB_SEND:                           break;
+       
+        default:
+            assert(false);
     }
     
     // Perform all state specific actions
@@ -250,6 +254,9 @@ Keyboard::execute()
                 agnus.cancel<SLOT_KBD>();
             }
             break;
+            
+        default:
+            assert(false);
     }
 }
 
