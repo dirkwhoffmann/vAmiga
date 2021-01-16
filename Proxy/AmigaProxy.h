@@ -52,7 +52,6 @@ struct BlitterWrapper;
 struct CIAWrapper;
 struct ControlPortWrapper;
 struct CopperWrapper;
-struct CPUWrapper;
 struct DeniseWrapper;
 struct DiskControllerWrapper;
 struct DmaDebuggerWrapper;
@@ -228,12 +227,8 @@ struct SerialPortWrapper;
 // CPU
 //
 
-@interface CPUProxy : HardwareComponentProxy {
+@interface CPUProxy : HardwareComponentProxy { }
     
-    struct CPUWrapper *wrapper;
-}
-
-- (void) dump;
 - (CPUInfo) getInfo;
 
 @property (readonly) i64 clock;

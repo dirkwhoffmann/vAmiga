@@ -157,94 +157,90 @@ struct SerialPortWrapper { SerialPort *port; };
 @end
 
 //
-// CPU
+// CPU proxy
 //
 
 @implementation CPUProxy
 
-- (instancetype) initWithCPU:(CPU *)cpu
+- (CPU *)cpu
 {
-    if (self = [super init]) {
-        wrapper = new CPUWrapper();
-        wrapper->cpu = cpu;
-    }
-    return self;
+    return (CPU *)obj;
 }
 
 - (void) dump
 {
-    wrapper->cpu->dump();
+    [self cpu]->dump();
 }
 
 - (CPUInfo) getInfo
 {
-    return wrapper->cpu->getInfo();
+    return [self cpu]->getInfo();
 }
 
 - (i64) clock
 {
-    return wrapper->cpu->getMasterClock(); 
+    return [self cpu]->getMasterClock();
 }
 
 - (i64) cycles
 {
-    return wrapper->cpu->getCpuClock();
+    return [self cpu]->getCpuClock();
 }
 
 - (bool) isHalted
 {
-    return wrapper->cpu->isHalted();
+    return [self cpu]->isHalted();
 }
 
 - (NSInteger) loggedInstructions
 {
-    return wrapper->cpu->debugger.loggedInstructions();
+    return [self cpu]->debugger.loggedInstructions();
 }
 
 - (void) clearLog
 {
-    return wrapper->cpu->debugger.clearLog();
+    return [self cpu]->debugger.clearLog();
 }
 
 - (NSString *) disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len
 {
-    const char *str = wrapper->cpu->disassembleRecordedInstr((int)i, len);
+    const char *str = [self cpu]->disassembleRecordedInstr((int)i, len);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSString *) disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len
 {
-    const char *str = wrapper->cpu->disassembleRecordedWords((int)i, len);
+    const char *str = [self cpu]->disassembleRecordedWords((int)i, len);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSString *) disassembleRecordedFlags:(NSInteger)i
 {
-    const char *str = wrapper->cpu->disassembleRecordedFlags((int)i);
+    const char *str = [self cpu]->disassembleRecordedFlags((int)i);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSString *) disassembleRecordedPC:(NSInteger)i
 {
-    const char *str = wrapper->cpu->disassembleRecordedPC((int)i);
+    const char *str = [self cpu]->disassembleRecordedPC((int)i);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSString *) disassembleInstr:(NSInteger)addr length:(NSInteger *)len
 {
-    const char *str = wrapper->cpu->disassembleInstr(addr, len);
+    const char *str = [self cpu]->disassembleInstr(addr, len);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSString *) disassembleWords:(NSInteger)addr length:(NSInteger)len
 {
-    const char *str = wrapper->cpu->disassembleWords(addr, len);
+    const char *str = [self cpu]->disassembleWords(addr, len);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSString *) disassembleAddr:(NSInteger)addr
 {
-    const char *str = wrapper->cpu->disassembleAddr(addr);
+    const char *str = [self cpu]->disassembleAddr(addr);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
@@ -2121,7 +2117,7 @@ struct SerialPortWrapper { SerialPort *port; };
     controlPort1 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
     controlPort2 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort2];
     copper = [[CopperProxy alloc] initWithCopper:&amiga->agnus.copper];
-    cpu = [[CPUProxy alloc] initWithCPU:&amiga->cpu];
+    cpu = [[CPUProxy alloc] initWith:&amiga->cpu];
     denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];
     df0 = [[DriveProxy alloc] initWithDrive:&amiga->df0];
     df1 = [[DriveProxy alloc] initWithDrive:&amiga->df1];
