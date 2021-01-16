@@ -25,7 +25,7 @@ FSBitmapExtBlock::itemType(u32 pos) const
     return pos < (bsize() - 4) ? FSI_BITMAP : FSI_BITMAP_EXT_BLOCK_REF;
 }
 
-FSError
+ErrorCode
 FSBitmapExtBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     i32 word = byte / 4;
@@ -33,7 +33,7 @@ FSBitmapExtBlock::check(u32 byte, u8 *expected, bool strict) const
     
     if (word == (i32)(bsize() - 4)) EXPECT_OPTIONAL_BITMAP_EXT_REF;
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
 void

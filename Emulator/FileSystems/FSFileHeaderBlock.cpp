@@ -65,7 +65,7 @@ FSFileHeaderBlock::itemType(u32 byte) const
     return FSI_UNKNOWN;
 }
 
-FSError
+ErrorCode
 FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     /* Note: At locations -4 and -3, many disks reference the bitmap block
@@ -94,14 +94,14 @@ FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict) const
     if (word <= -51 && value) EXPECT_DATABLOCK_REF;
     if (word == -51) {
         if (value == 0 && getNumDataBlockRefs() > 0) {
-            return FS_EXPECTED_REF;
+            return ERROR_FS_EXPECTED_REF;
         }
         if (value != 0 && getNumDataBlockRefs() == 0) {
-            return FS_EXPECTED_NO_REF;
+            return ERROR_FS_EXPECTED_NO_REF;
         }
     }
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
 void
@@ -123,7 +123,7 @@ FSFileHeaderBlock::dump() const
     msg("\n");
 }
 
-FSError
+ErrorCode
 FSFileHeaderBlock::exportBlock(const char *exportDir)
 {
     string path = exportDir;
@@ -132,12 +132,12 @@ FSFileHeaderBlock::exportBlock(const char *exportDir)
     printf("Creating file %s\n", path.c_str());
     
     FILE *file = fopen(path.c_str(), "w");
-    if (file == nullptr) return FS_CANNOT_CREATE_FILE;
+    if (file == nullptr) return ERROR_FS_CANNOT_CREATE_FILE;
     
     writeData(file);
     fclose(file);
         
-    return FS_OK;
+    return ERROR_OK;
 }
 
 size_t

@@ -577,7 +577,7 @@ class ExporterDialog: DialogController {
 
         switch error {
 
-        case .DIRECTORY_NOT_EMPTY:
+        case .FS_DIRECTORY_NOT_EMPTY:
             
             parent.critical("The destination directory is not empty.",
                             "To prevent accidental exports, the disk exporter " +

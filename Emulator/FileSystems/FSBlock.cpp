@@ -51,15 +51,16 @@ FSBlock::subtypeID() const
 unsigned
 FSBlock::check(bool strict) const
 {
-    FSError error;
+    ErrorCode error;
     unsigned count = 0;
     u8 expected;
     
     for (u32 i = 0; i < bsize(); i++) {
         
-        if ((error = check(i, &expected, strict)) != FS_OK) {
+        if ((error = check(i, &expected, strict)) != ERROR_OK) {
             count++;
-            debug(FS_DEBUG, "Block %d [%d.%d]: %s\n", nr, i / 4, i % 4, sFSError(error));
+            debug(FS_DEBUG, "Block %d [%d.%d]: %s\n", nr, i / 4, i % 4,
+                  ErrorCodeEnum::key(error));
         }
     }
     

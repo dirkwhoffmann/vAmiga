@@ -50,7 +50,7 @@ public:
     static ADFFile *makeWithType(DiskDiameter t, DiskDensity d);
     static ADFFile *makeWithDisk(class Disk *disk);
     static ADFFile *makeWithDrive(class Drive *drive);
-    static ADFFile *makeWithVolume(FSDevice &volume, FSError *error);
+    static ADFFile *makeWithVolume(FSDevice &volume, ErrorCode *error);
 
     
     //

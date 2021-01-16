@@ -62,7 +62,7 @@ OFSDataBlock::itemType(u32 pos) const
     return FSI_DATA;
 }
 
-FSError
+ErrorCode
 OFSDataBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     /* Note: At location 1, many disks store a reference to the bitmap block
@@ -86,7 +86,7 @@ OFSDataBlock::check(u32 byte, u8 *expected, bool strict) const
         }
     }
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
 size_t

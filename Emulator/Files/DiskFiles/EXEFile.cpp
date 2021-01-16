@@ -91,11 +91,12 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
     
     // Convert the volume into an ADF
     if (success) {
-        FSError fsError;
+        ErrorCode fsError;
         assert(adf == nullptr);
         adf = ADFFile::makeWithVolume(*volume, &fsError);
-        if (fsError != FS_OK) {
-            warn("readFromBuffer: Cannot export volume (%s)\n", sFSError(fsError));
+        if (fsError != ERROR_OK) {
+            warn("readFromBuffer: Cannot export volume (%s)\n",
+                 ErrorCodeEnum::key(fsError));
         }
     }
     

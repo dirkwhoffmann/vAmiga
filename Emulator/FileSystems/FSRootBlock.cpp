@@ -68,7 +68,7 @@ FSRootBlock::itemType(u32 byte) const
     return FSI_UNKNOWN;
 }
 
-FSError
+ErrorCode
 FSRootBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     // Translate the byte index to a (signed) long word index
@@ -100,7 +100,7 @@ FSRootBlock::check(u32 byte, u8 *expected, bool strict) const
             if (word <= -25) { EXPECT_OPTIONAL_BITMAP_REF; break; }
     }
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
 void

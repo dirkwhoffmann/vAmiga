@@ -25,11 +25,11 @@ struct FSFileHeaderBlock : FSBlock {
 
     FSBlockType type() const override { return FS_FILEHEADER_BLOCK; }
     FSItemType itemType(u32 byte) const override;
-    FSError check(u32 pos, u8 *expected, bool strict) const override;
+    ErrorCode check(u32 pos, u8 *expected, bool strict) const override;
     void dump() const override;
     u32 checksumLocation() const override { return 5; }
 
-    FSError exportBlock(const char *path) override;
+    ErrorCode exportBlock(const char *path) override;
 
     u32 getNumDataBlockRefs() const override    { return get32(2);            }
     void setNumDataBlockRefs(u32 val) override  {        set32(2, val);       }

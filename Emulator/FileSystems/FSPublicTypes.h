@@ -159,7 +159,8 @@ isFSBlockItem(long value)
     return value >= 0 && value <= FSI_BITMAP;
 }
 
-enum_long( FSError)
+/*
+enum_long(FSError)
 {
     FS_OK,
     
@@ -241,6 +242,11 @@ inline const char *sFSError(FSError value)
             return isFSError(value) ? "<other>" : "???";
     }
 }
+*/
+
+//
+// Structures
+//
 
 typedef struct
 {

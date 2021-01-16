@@ -108,7 +108,7 @@ ADFFile::makeWithDrive(Drive *drive)
 }
 
 ADFFile *
-ADFFile::makeWithVolume(FSDevice &volume, FSError *error)
+ADFFile::makeWithVolume(FSDevice &volume, ErrorCode *error)
 {
     ADFFile *adf = nullptr;
     
@@ -270,7 +270,7 @@ ADFFile::formatDisk(FSVolumeType fs, long bootBlockID)
 {
     assert(isFSVolumeType(fs));
 
-    FSError error;
+    ErrorCode error;
 
     msg("Formatting disk with %ld blocks (%s)\n", numBlocks(), sFSVolumeType(fs));
 
@@ -292,10 +292,10 @@ ADFFile::formatDisk(FSVolumeType fs, long bootBlockID)
     volume->exportVolume(data, size, &error);
     delete(volume);
 
-    if (error == FS_OK) {
+    if (error == ERROR_OK) {
         return true;
     } else {
-        warn("Failed to export file system from ADF: %s\n", sFSError(error));
+        warn("Failed to export file system from ADF: %s\n", ErrorCodeEnum::key(error));
         return false;
     }
 }

@@ -659,7 +659,7 @@ struct SerialPortWrapper;
 - (FSBlockType)blockType:(NSInteger)blockNr;
 - (FSItemType)itemType:(NSInteger)blockNr pos:(NSInteger)pos;
 - (FSErrorReport)check:(BOOL)strict;
-- (FSError)check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
+- (ErrorCode)check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
 - (BOOL)isCorrupted:(NSInteger)blockNr;
 - (NSInteger)getCorrupted:(NSInteger)blockNr;
 - (NSInteger)nextCorrupted:(NSInteger)blockNr;
@@ -667,7 +667,7 @@ struct SerialPortWrapper;
 - (void)printDirectory:(BOOL) recursive;
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
-- (FSError)export:(NSString *)path;
+- (ErrorCode)export:(NSString *)path;
 
 - (void)dump;
 

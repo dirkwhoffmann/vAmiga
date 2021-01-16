@@ -67,10 +67,10 @@ DIRFile::readFromFile(const char *filename, FileError *error)
     // volume->dump();
     
     // Convert the file system into an ADF
-    FSError fsError;
+    ErrorCode fsError;
     assert(adf == nullptr);
     adf = ADFFile::makeWithVolume(*volume, &fsError);
-    debug(FS_DEBUG, "makeWithVolume: %s\n", sFSError(fsError));
+    debug(FS_DEBUG, "makeWithVolume: %s\n", ErrorCodeEnum::key(fsError));
     delete volume;
     
     if (error) *error = adf != nullptr ? ERR_UNKNOWN : ERR_FILE_OK;

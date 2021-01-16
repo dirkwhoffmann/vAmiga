@@ -48,7 +48,7 @@ struct OFSDataBlock : FSDataBlock {
     FSBlockType type() const override { return FS_DATA_BLOCK_OFS; }
     FSItemType itemType(u32 byte) const override;
     void dump() const override;
-    FSError check(u32 pos, u8 *expected, bool strict) const override;
+    ErrorCode check(u32 pos, u8 *expected, bool strict) const override;
     u32 checksumLocation() const override { return 5; }
 
     u32  getFileHeaderRef() const override          { return get32(1);        }

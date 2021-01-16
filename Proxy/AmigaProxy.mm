@@ -1408,7 +1408,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype) makeWithADF:(ADFFileProxy *)fileProxy
 {
-    FSError error;
+    ErrorCode error;
     AmigaFileWrapper *adf = [fileProxy wrapper];
 
     FSDevice *volume = FSDevice::makeWithADF((ADFFile *)(adf->file), &error);
@@ -1417,7 +1417,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype) makeWithHDF:(HDFFileProxy *)fileProxy
 {
-    FSError error;
+    ErrorCode error;
     AmigaFileWrapper *hdf = [fileProxy wrapper];
 
     FSDevice *volume = FSDevice::makeWithHDF((HDFFile *)(hdf->file), &error);
@@ -1474,10 +1474,10 @@ struct SerialPortWrapper { SerialPort *port; };
     return wrapper->device->check(strict);
 }
 
-- (FSError) check:(NSInteger)nr
-              pos:(NSInteger)pos
-         expected:(unsigned char *)exp
-           strict:(BOOL)strict
+- (ErrorCode) check:(NSInteger)nr
+                pos:(NSInteger)pos
+           expected:(unsigned char *)exp
+             strict:(BOOL)strict
 {
     return wrapper->device->check(nr, pos, exp, strict);
 }
@@ -1512,7 +1512,7 @@ struct SerialPortWrapper { SerialPort *port; };
     return wrapper->device->readByte(block, (u32)offset);
 }
 
-- (FSError) export:(NSString *)path
+- (ErrorCode) export:(NSString *)path
 {
     return wrapper->device->exportDirectory([path fileSystemRepresentation]);
 }

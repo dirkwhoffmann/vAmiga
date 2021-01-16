@@ -56,7 +56,7 @@ FSDevice::makeWithFormat(DiskDiameter type, DiskDensity density)
 }
 
 FSDevice *
-FSDevice::makeWithADF(ADFFile *adf, FSError *error)
+FSDevice::makeWithADF(ADFFile *adf, ErrorCode *error)
 {
     assert(adf != nullptr);
 
@@ -76,7 +76,7 @@ FSDevice::makeWithADF(ADFFile *adf, FSError *error)
 }
 
 FSDevice *
-FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
+FSDevice::makeWithHDF(HDFFile *hdf, ErrorCode *error)
 {
     assert(hdf != nullptr);
 
@@ -573,7 +573,7 @@ FSDevice::lastFileListBlockInChain(FSBlock *block)
     return nullptr;
 }
 
-FSError
+ErrorCode
 FSDevice::collect(u32 ref, std::vector<u32> &result, bool recursive)
 {
     std::stack<u32> remainingItems;
@@ -595,10 +595,10 @@ FSDevice::collect(u32 ref, std::vector<u32> &result, bool recursive)
         }
     }
 
-    return FS_OK;
+    return ERROR_OK;
 }
 
-FSError
+ErrorCode
 FSDevice::collectHashedRefs(u32 ref, std::stack<u32> &result, std::set<u32> &visited)
 {
     if (FSBlock *b = blockPtr(ref)) {
@@ -609,10 +609,10 @@ FSDevice::collectHashedRefs(u32 ref, std::stack<u32> &result, std::set<u32> &vis
         }
     }
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
-FSError
+ErrorCode
 FSDevice::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result, std::set<u32> &visited)
 {
     std::stack<u32> refs;
@@ -621,7 +621,7 @@ FSDevice::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result, std::se
     for (FSBlock *b = hashableBlockPtr(ref); b; b = b->getNextHashBlock()) {
 
         // Break the loop if we've already seen this block
-        if (visited.find(b->nr) != visited.end()) return FS_HAS_CYCLES;
+        if (visited.find(b->nr) != visited.end()) return ERROR_FS_HAS_CYCLES;
         visited.insert(b->nr);
 
         refs.push(b->nr);
@@ -630,7 +630,7 @@ FSDevice::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result, std::se
     // Push the collected elements onto the result stack
     while (refs.size() > 0) { result.push(refs.top()); refs.pop(); }
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
 FSErrorReport
@@ -669,19 +669,19 @@ FSDevice::check(bool strict) const
     return result;
 }
 
-FSError
+ErrorCode
 FSDevice::check(u32 blockNr, u32 pos, u8 *expected, bool strict) const
 {
     return blocks[blockNr]->check(pos, expected, strict);
 }
 
-FSError
+ErrorCode
 FSDevice::checkBlockType(u32 nr, FSBlockType type)
 {
     return checkBlockType(nr, type, type);
 }
 
-FSError
+ErrorCode
 FSDevice::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
 {
     FSBlockType t = blockType(nr);
@@ -690,21 +690,21 @@ FSDevice::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
         
         switch (t) {
                 
-            case FS_EMPTY_BLOCK:      return FS_PTR_TO_EMPTY_BLOCK;
-            case FS_BOOT_BLOCK:       return FS_PTR_TO_BOOT_BLOCK;
-            case FS_ROOT_BLOCK:       return FS_PTR_TO_ROOT_BLOCK;
-            case FS_BITMAP_BLOCK:     return FS_PTR_TO_BITMAP_BLOCK;
-            case FS_BITMAP_EXT_BLOCK: return FS_PTR_TO_BITMAP_EXT_BLOCK;
-            case FS_USERDIR_BLOCK:    return FS_PTR_TO_USERDIR_BLOCK;
-            case FS_FILEHEADER_BLOCK: return FS_PTR_TO_FILEHEADER_BLOCK;
-            case FS_FILELIST_BLOCK:   return FS_PTR_TO_FILELIST_BLOCK;
-            case FS_DATA_BLOCK_OFS:   return FS_PTR_TO_DATA_BLOCK;
-            case FS_DATA_BLOCK_FFS:   return FS_PTR_TO_DATA_BLOCK;
-            default:                  return FS_PTR_TO_UNKNOWN_BLOCK;
+            case FS_EMPTY_BLOCK:      return ERROR_FS_PTR_TO_EMPTY_BLOCK;
+            case FS_BOOT_BLOCK:       return ERROR_FS_PTR_TO_BOOT_BLOCK;
+            case FS_ROOT_BLOCK:       return ERROR_FS_PTR_TO_ROOT_BLOCK;
+            case FS_BITMAP_BLOCK:     return ERROR_FS_PTR_TO_BITMAP_BLOCK;
+            case FS_BITMAP_EXT_BLOCK: return ERROR_FS_PTR_TO_BITMAP_EXT_BLOCK;
+            case FS_USERDIR_BLOCK:    return ERROR_FS_PTR_TO_USERDIR_BLOCK;
+            case FS_FILEHEADER_BLOCK: return ERROR_FS_PTR_TO_FILEHEADER_BLOCK;
+            case FS_FILELIST_BLOCK:   return ERROR_FS_PTR_TO_FILELIST_BLOCK;
+            case FS_DATA_BLOCK_OFS:   return ERROR_FS_PTR_TO_DATA_BLOCK;
+            case FS_DATA_BLOCK_FFS:   return ERROR_FS_PTR_TO_DATA_BLOCK;
+            default:                  return ERROR_FS_PTR_TO_UNKNOWN_BLOCK;
         }
     }
 
-    return FS_OK;
+    return ERROR_OK;
 }
 
 u32
@@ -783,15 +783,15 @@ FSDevice::predictBlockType(u32 nr, const u8 *buffer)
 bool
 FSDevice::importVolume(const u8 *src, usize size)
 {
-    FSError error;
+    ErrorCode error;
     bool result = importVolume(src, size, &error);
     
-    assert(result == (error == FS_OK));
+    assert(result == (error == ERROR_OK));
     return result;
 }
 
 bool
-FSDevice::importVolume(const u8 *src, usize size, FSError *err)
+FSDevice::importVolume(const u8 *src, usize size, ErrorCode *err)
 {
     assert(src != nullptr);
 
@@ -799,18 +799,18 @@ FSDevice::importVolume(const u8 *src, usize size, FSError *err)
 
     // Only proceed if the (predicted) block size matches
     if (size % bsize != 0) {
-        if (err) *err = FS_WRONG_BSIZE;
+        if (err) *err = ERROR_FS_WRONG_BSIZE;
         return false;
     }
     // Only proceed if the source buffer contains the right amount of data
     if (numBlocks * bsize != size) {
-        if (err) *err = FS_WRONG_CAPACITY;
+        if (err) *err = ERROR_FS_WRONG_CAPACITY;
         return false;
     }
     // Only proceed if all partitions contain a valid file system
     for (auto &it : partitions) {
         if (it->dos == FS_NODOS) {
-            if (err) *err = FS_UNSUPPORTED;
+            if (err) *err = ERROR_FS_UNSUPPORTED;
             return false;
         }
     }
@@ -839,7 +839,7 @@ FSDevice::importVolume(const u8 *src, usize size, FSError *err)
         blocks[i] = newBlock;
     }
     
-    if (err) *err = FS_OK;
+    if (err) *err = ERROR_OK;
     debug(FS_DEBUG, "Success\n");
     info();
     dump();
@@ -855,7 +855,7 @@ FSDevice::exportVolume(u8 *dst, usize size)
 }
 
 bool
-FSDevice::exportVolume(u8 *dst, usize size, FSError *err)
+FSDevice::exportVolume(u8 *dst, usize size, ErrorCode *err)
 {
     return exportBlocks(0, numBlocks - 1, dst, size, err);
 }
@@ -867,7 +867,7 @@ FSDevice::exportBlock(u32 nr, u8 *dst, usize size)
 }
 
 bool
-FSDevice::exportBlock(u32 nr, u8 *dst, usize size, FSError *error)
+FSDevice::exportBlock(u32 nr, u8 *dst, usize size, ErrorCode *error)
 {
     return exportBlocks(nr, nr, dst, size, error);
 }
@@ -875,15 +875,15 @@ FSDevice::exportBlock(u32 nr, u8 *dst, usize size, FSError *error)
 bool
 FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, usize size)
 {
-    FSError error;
+    ErrorCode error;
     bool result = exportBlocks(first, last, dst, size, &error);
     
-    assert(result == (error == FS_OK));
+    assert(result == (error == ERROR_OK));
     return result;
 }
 
 bool
-FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, usize size, FSError *err)
+FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, usize size, ErrorCode *err)
 {
     assert(last < numBlocks);
     assert(first <= last);
@@ -895,13 +895,13 @@ FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, usize size, FSError *err)
 
     // Only proceed if the (predicted) block size matches
     if (size % bsize != 0) {
-        if (err) *err = FS_WRONG_BSIZE;
+        if (err) *err = ERROR_FS_WRONG_BSIZE;
         return false;
     }
 
     // Only proceed if the source buffer contains the right amount of data
     if (count * bsize != size) {
-        if (err) *err = FS_WRONG_CAPACITY;
+        if (err) *err = ERROR_FS_WRONG_CAPACITY;
         return false;
     }
         
@@ -916,7 +916,7 @@ FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, usize size, FSError *err)
 
     debug(FS_DEBUG, "Success\n");
 
-    if (err) *err = FS_OK;
+    if (err) *err = ERROR_OK;
     return true;
 }
 
@@ -984,14 +984,14 @@ FSDevice::importDirectory(const char *path, DIR *dir, bool recursive)
     return result;
 }
 
-FSError
+ErrorCode
 FSDevice::exportDirectory(const char *path)
 {
     assert(path != nullptr);
         
     // Only proceed if path points to an empty directory
     long numItems = numDirectoryItems(path);
-    if (numItems != 0) return FS_DIRECTORY_NOT_EMPTY;
+    if (numItems != 0) return ERROR_FS_DIRECTORY_NOT_EMPTY;
     
     // Collect files and directories
     std::vector<u32> items;
@@ -999,12 +999,12 @@ FSDevice::exportDirectory(const char *path)
     
     // Export all items
     for (auto const& i : items) {
-        if (FSError error = blockPtr(i)->exportBlock(path); error != FS_OK) {
+        if (ErrorCode error = blockPtr(i)->exportBlock(path); error != ERROR_OK) {
             msg("Export error: %lld\n", error);
             return error; 
         }
     }
     
     msg("Exported %lu items", items.size());
-    return FS_OK;
+    return ERROR_OK;
 }

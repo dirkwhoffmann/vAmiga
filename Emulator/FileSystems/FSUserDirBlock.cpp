@@ -67,7 +67,7 @@ FSUserDirBlock::itemType(u32 byte) const
     return FSI_UNKNOWN;
 }
 
-FSError
+ErrorCode
 FSUserDirBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     // Translate the byte index to a (signed) long word index
@@ -88,7 +88,7 @@ FSUserDirBlock::check(u32 byte, u8 *expected, bool strict) const
     }
     if (word <= -51) EXPECT_OPTIONAL_HASH_REF;
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
 void
@@ -101,7 +101,7 @@ FSUserDirBlock::dump() const
     printf("        Next: %d\n", getNextHashRef());
 }
 
-FSError
+ErrorCode
 FSUserDirBlock::exportBlock(const char *exportDir)
 {
     string path = exportDir;
@@ -110,7 +110,7 @@ FSUserDirBlock::exportBlock(const char *exportDir)
     printf("Creating directory %s\n", path.c_str());
     
     // Try to create a directory on the host file system
-    if (mkdir(path.c_str(), 0777) != 0) return FS_CANNOT_CREATE_DIR;
+    if (mkdir(path.c_str(), 0777) != 0) return ERROR_FS_CANNOT_CREATE_DIR;
     
-    return FS_OK;
+    return ERROR_OK;
 }

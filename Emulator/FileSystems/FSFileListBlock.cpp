@@ -64,7 +64,7 @@ FSFileListBlock::itemType(u32 byte) const
     return word <= -51 ? FSI_DATA_BLOCK_REF : FSI_UNUSED;
 }
 
-FSError
+ErrorCode
 FSFileListBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     /* Note: At location -3, many disks reference the bitmap block instead of
@@ -94,14 +94,14 @@ FSFileListBlock::check(u32 byte, u8 *expected, bool strict) const
     if (word <= -51 && value) EXPECT_DATABLOCK_REF;
     if (word == -51) {
         if (value == 0 && getNumDataBlockRefs() > 0) {
-            return FS_EXPECTED_REF;
+            return ERROR_FS_EXPECTED_REF;
         }
         if (value != 0 && getNumDataBlockRefs() == 0) {
-            return FS_EXPECTED_NO_REF;
+            return ERROR_FS_EXPECTED_NO_REF;
         }
     }
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
 bool

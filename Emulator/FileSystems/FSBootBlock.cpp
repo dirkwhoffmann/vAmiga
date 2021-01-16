@@ -53,7 +53,7 @@ FSBootBlock::itemType(u32 byte) const
     return FSI_BOOTCODE;
 }
 
-FSError
+ErrorCode
 FSBootBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     if (nr == partition.firstBlock) {
@@ -68,7 +68,7 @@ FSBootBlock::check(u32 byte, u8 *expected, bool strict) const
         if (word == 1) { value = get32(1); EXPECT_CHECKSUM; }
     }
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
 u32
