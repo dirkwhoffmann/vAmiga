@@ -33,8 +33,8 @@ class GamePad {
     
     // Type of the managed device (joystick or mouse)
     var type: ControlPortDevice
-    var isMouse: Bool { return type == .CPD_MOUSE }
-    var isJoystick: Bool { return type == .CPD_JOYSTICK }
+    var isMouse: Bool { return type == .MOUSE }
+    var isJoystick: Bool { return type == .JOYSTICK }
 
     // Name of the managed device
     var name = ""

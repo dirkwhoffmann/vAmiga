@@ -114,9 +114,9 @@ Joystick::ciapa() const
 void
 Joystick::trigger(GamePadAction event)
 {
-    assert(isGamePadAction(event));
+    assert_enum(GamePadAction, event);
 
-    trace(PORT_DEBUG, "trigger(%lld)\n", event);
+    debug(PORT_DEBUG, "trigger(%lld)\n", event);
      
     switch (event) {
             

@@ -57,8 +57,8 @@ void
 Disk::dump()
 {
     msg("\nDisk:\n");
-    msg("            type : %s\n", DiskDiameterName(diameter));
-    msg("         density : %s\n", DiskDensityName(density));
+    msg("            type : %s\n", DiskDiameterEnum::key(diameter));
+    msg("         density : %s\n", DiskDensityEnum::key(density));
     msg("       numCyls() : %ld\n", numCyls());
     msg("      numSides() : %ld\n", numSides());
     msg("     numTracks() : %ld\n", numTracks());

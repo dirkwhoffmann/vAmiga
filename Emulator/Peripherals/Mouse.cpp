@@ -144,7 +144,7 @@ Mouse::setRightButton(bool value)
 void
 Mouse::trigger(GamePadAction event)
 {
-    assert(isGamePadAction(event));
+    assert_enum(GamePadAction, event);
 
     trace(PORT_DEBUG, "trigger(%lld)\n", event);
 

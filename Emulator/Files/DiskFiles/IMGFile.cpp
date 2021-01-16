@@ -93,12 +93,14 @@ IMGFile::encodeDisk(Disk *disk)
 
     if (disk->getDiameter() != getDiskDiameter()) {
         warn("Incompatible disk types: %s %s\n",
-             DiskDiameterName(disk->getDiameter()), DiskDiameterName(getDiskDiameter()));
+             DiskDiameterEnum::key(disk->getDiameter()),
+             DiskDiameterEnum::key(getDiskDiameter()));
         return false;
     }
     if (disk->getDensity() != getDiskDensity()) {
         warn("Incompatible disk densities: %s %s\n",
-             DiskDensityName(disk->getDensity()), DiskDensityName(getDiskDensity()));
+             DiskDensityEnum::key(disk->getDensity()),
+             DiskDensityEnum::key(getDiskDensity()));
         return false;
     }
     
@@ -235,12 +237,14 @@ IMGFile::decodeDisk(Disk *disk)
     
     if (disk->getDiameter() != getDiskDiameter()) {
         warn("Incompatible disk diameters: %s %s\n",
-             DiskDiameterName(disk->getDiameter()), DiskDiameterName(getDiskDiameter()));
+             DiskDiameterEnum::key(disk->getDiameter()),
+             DiskDiameterEnum::key(getDiskDiameter()));
         return false;
     }
     if (disk->getDensity() != getDiskDensity()) {
         warn("Incompatible disk densities: %s %s\n",
-             DiskDensityName(disk->getDensity()), DiskDensityName(getDiskDensity()));
+             DiskDensityEnum::key(disk->getDensity()),
+             DiskDensityEnum::key(getDiskDensity()));
         return false;
     }
     

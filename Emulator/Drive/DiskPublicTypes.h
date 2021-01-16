@@ -20,10 +20,13 @@
 enum_long(DISK_DIAMETER)
 {
     INCH_35,
-    INCH_525
+    INCH_525,
+    
+    INCH_COUNT
 };
 typedef DISK_DIAMETER DiskDiameter;
 
+/*
 inline bool isDiskDiameter(DiskDiameter value)
 {
     return (unsigned long)value <= INCH_525;
@@ -38,15 +41,19 @@ inline const char *DiskDiameterName(DiskDiameter value)
     }
     return "???";
 }
+*/
 
 enum_long(DISK_DENSITY)
 {
     DISK_SD,
     DISK_DD,
-    DISK_HD
+    DISK_HD,
+    
+    DISK_COUNT
 };
 typedef DISK_DENSITY DiskDensity;
 
+/*
 inline bool isDiskDensity(DiskDensity value)
 {
     return (unsigned long)value <= DISK_HD;
@@ -62,3 +69,4 @@ inline const char *DiskDensityName(DiskDensity value)
     }
     return "???";
 }
+*/

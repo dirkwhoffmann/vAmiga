@@ -59,9 +59,6 @@ ControlPort::_dump() const
 u16
 ControlPort::joydat()
 {
-    assert(nr == 1 || nr == 2);
-    assert(isControlPortDevice(device));
-
     // Update the mouse counters first if a mouse is connected
     if (device == CPD_MOUSE) {
         mouseCounterX += mouse.getDeltaX();

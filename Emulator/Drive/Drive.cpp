@@ -592,7 +592,8 @@ Drive::ejectDisk()
 bool
 Drive::isInsertable(DiskDiameter t, DiskDensity d) const
 {
-    debug(DSK_DEBUG, "isInsertable(%s, %s)\n", DiskDiameterName(t), DiskDensityName(d));
+    debug(DSK_DEBUG,
+          "isInsertable(%s, %s)\n", DiskDiameterEnum::key(t), DiskDensityEnum::key(d));
     
     switch (config.type) {
             

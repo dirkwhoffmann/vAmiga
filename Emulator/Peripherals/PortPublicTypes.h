@@ -36,24 +36,17 @@ enum_long(PortNr)
     PORT_2 = 2    
 };
 
-/*
-inline bool isPortNr(long value) {
-    return value == PORT_1 || value == PORT_2;
-}
-*/
-
-enum_long( ControlPortDevice)
+enum_long(CPD)
 {
     CPD_NONE,
     CPD_MOUSE,
-    CPD_JOYSTICK
+    CPD_JOYSTICK,
+    
+    CPD_COUNT
 };
+typedef CPD ControlPortDevice;
 
-inline bool isControlPortDevice(long value) {
-    return value >= 0 && value <= CPD_JOYSTICK;
-}
-
-enum_long( GamePadAction)
+enum_long(GAME_PAD_ACTION)
 {
     PULL_UP = 0,   // Pull the joystick up
     PULL_DOWN,     // Pull the joystick down
@@ -69,10 +62,8 @@ enum_long( GamePadAction)
     RELEASE_LEFT,  // Release the left mouse button
     RELEASE_RIGHT  // Release the right mouse button
 };
+typedef GAME_PAD_ACTION GamePadAction;
 
-inline bool isGamePadAction(long value) {
-    return value >= 0 && value <= RELEASE_RIGHT;
-}
 
 //
 // Structures
