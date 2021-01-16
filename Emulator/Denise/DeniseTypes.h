@@ -12,6 +12,10 @@
 #include "DenisePublicTypes.h"
 #include "Reflection.h"
 
+//
+// Reflection APIs
+//
+
 struct DeniseRevisionEnum : Reflection<DeniseRevisionEnum, DeniseRevision> {
     
     static bool isValid(long value)

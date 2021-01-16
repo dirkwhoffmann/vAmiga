@@ -13,6 +13,31 @@
 #include "Reflection.h"
 
 //
+// Reflection APIs
+//
+
+struct AgnusRevisionEnum : Reflection<AgnusRevisionEnum, AgnusRevision> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < AGNUS_COUNT;
+    }
+
+    static const char *prefix() { return "AGNUS"; }
+    static const char *key(AgnusRevision value)
+    {
+        switch (value) {
+                
+            case AGNUS_OCS:     return "OCS";
+            case AGNUS_ECS_1MB: return "ECS_1MB";
+            case AGNUS_ECS_2MB: return "ECS_2MB";
+            case AGNUS_COUNT:   return "???";
+        }
+        return "???";
+    }
+};
+
+//
 // Private types
 //
 

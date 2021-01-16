@@ -14,6 +14,10 @@
 #include "AudioPublicTypes.h"
 #include "DiskControllerPublicTypes.h"
 
+//
+// Structures
+//
+
 typedef struct
 {
     u16 intreq;

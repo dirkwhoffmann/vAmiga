@@ -27,6 +27,11 @@ enum_long(RTC_REVISION)
 };
 typedef RTC_REVISION RTCRevision;
 
+
+//
+// Structures
+//
+
 typedef struct
 {
     RTCRevision model;

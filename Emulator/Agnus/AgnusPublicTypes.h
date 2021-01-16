@@ -18,10 +18,13 @@ enum_long(AGNUS_REVISION)
 {
     AGNUS_OCS,              // Revision 8367
     AGNUS_ECS_1MB,          // Revision 8372
-    AGNUS_ECS_2MB           // Revision 8375
+    AGNUS_ECS_2MB,          // Revision 8375
+    
+    AGNUS_COUNT
 };
 typedef AGNUS_REVISION AgnusRevision;
 
+/*
 inline bool isAgnusRevision(long value)
 {
     return (unsigned long)value <= AGNUS_ECS_2MB;
@@ -37,6 +40,11 @@ inline const char *AgnusRevisionName(AgnusRevision value)
     }
     return "???";
 }
+*/
+
+//
+// Structures
+//
 
 typedef struct
 {

@@ -94,10 +94,7 @@ Agnus::setConfigItem(Option option, long value)
             warn("Overriding Agnus revision: %ld\n", value);
             #endif
             
-            if (!isAgnusRevision(value)) {
-                warn("Invalid Agnus revision: %ld\n", value);
-                return false;
-            }
+            if (!AgnusRevisionEnum::verify(value)) return false; 
             
             if (config.revision == value) {
                 return false;
@@ -133,7 +130,7 @@ Agnus::setConfigItem(Option option, long value)
 void
 Agnus::_dumpConfig() const
 {
-    msg("      revision : %s\n", AgnusRevisionName(config.revision));
+    msg("      revision : %s\n", AgnusRevisionEnum::key(config.revision));
     msg(" slowRamMirror : %s\n", config.slowRamMirror ? "yes" : "no");
 }
 

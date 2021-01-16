@@ -12,6 +12,10 @@
 #include "AudioPublicTypes.h"
 #include "Reflection.h"
 
+//
+// Reflection APIs
+//
+
 struct SamplingMethodEnum : Reflection<SamplingMethodEnum, SamplingMethod> {
     
     static bool isValid(long value)

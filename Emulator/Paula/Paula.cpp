@@ -118,7 +118,7 @@ Paula::scheduleIrqAbs(IrqSource src, Cycle trigger)
     assert(trigger != 0);
     assert(agnus.slot[SLOT_IRQ].id == IRQ_CHECK);
 
-    trace(INT_DEBUG, "scheduleIrq(%ld, %lld)\n", src, trigger);
+    trace(INT_DEBUG, "scheduleIrq(%lld, %lld)\n", src, trigger);
 
     // Record the interrupt request
     if (trigger < setIntreq[src])
