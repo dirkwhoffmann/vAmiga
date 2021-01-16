@@ -26,7 +26,6 @@ struct DriveWrapper { Drive *drive; };
 struct DmaDebuggerWrapper { DmaDebugger *dmaDebugger; };
 struct DeniseWrapper { Denise *denise; };
 struct FSDeviceWrapper { FSDevice *device; };
-struct GuardsWrapper { Guards *guards; };
 struct JoystickWrapper { Joystick *joystick; };
 struct KeyboardWrapper { Keyboard *keyboard; };
 struct MemWrapper { Memory *mem; };
@@ -35,6 +34,39 @@ struct PaulaWrapper { Paula *paula; };
 struct ScreenRecorderWrapper { ScreenRecorder *screenRecorder; };
 struct SerialPortWrapper { SerialPort *port; };
 
+//
+// Base Proxy
+//
+
+@implementation Proxy
+
+- (instancetype) initWith:(void *)ref
+{
+    if (self = [super init]) {
+        obj = ref;
+    }
+    return self;
+}
+
+@end
+
+//
+// HardwareComponent proxy
+//
+
+@implementation HardwareComponentProxy
+
+-(HardwareComponent *)hwc
+{
+    return (HardwareComponent *)obj;
+}
+
+-(void)dump
+{
+    [self hwc]->dump();
+}
+
+@end
 
 //
 // Guards (Breakpoints, Watchpoints)
@@ -42,88 +74,84 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation GuardsProxy
 
-- (instancetype) initWithGuards:(Guards *)guards
+- (Guards *)guards
 {
-    if (self = [super init]) {
-        wrapper = new GuardsWrapper();
-        wrapper->guards = guards;
-    }
-    return self;
+    return (Guards *)obj;
 }
 
 - (NSInteger) count
 {
-    return wrapper->guards->elements();
+    return [self guards]->elements();
 }
 
 - (NSInteger) addr:(NSInteger)nr
 {
-    return wrapper->guards->guardAddr(nr);
+    return [self guards]->guardAddr(nr);
 }
 
 - (BOOL) isEnabled:(NSInteger)nr
 {
-    return wrapper->guards->isEnabled(nr);
+    return [self guards]->isEnabled(nr);
 }
 
 - (BOOL) isDisabled:(NSInteger)nr
 {
-    return wrapper->guards->isDisabled(nr);
+    return [self guards]->isDisabled(nr);
 }
 
 - (void) enable:(NSInteger)nr
 {
-    wrapper->guards->enable(nr);
+    [self guards]->enable(nr);
 }
 
 - (void) disable:(NSInteger)nr
 {
-    wrapper->guards->disable(nr);
+    [self guards]->disable(nr);
 }
 
 - (void) remove:(NSInteger)nr
 {
-    return wrapper->guards->remove(nr);
+    return [self guards]->remove(nr);
 }
 
 - (void) replace:(NSInteger)nr addr:(NSInteger)addr
 {
-    wrapper->guards->replace(nr, (u32)addr);
+    [self guards]->replace(nr, (u32)addr);
 }
 
 - (BOOL) isSetAt:(NSInteger)addr
 {
-    return wrapper->guards->isSetAt((u32)addr);
+    return [self guards]->isSetAt((u32)addr);
 }
 
 - (BOOL) isSetAndEnabledAt:(NSInteger)addr
 {
-    return wrapper->guards->isSetAndEnabledAt((u32)addr);
+    return [self guards]->isSetAndEnabledAt((u32)addr);
 }
 
 - (BOOL) isSetAndDisabledAt:(NSInteger)addr
 {
-    return wrapper->guards->isSetAndDisabledAt((u32)addr);
+    return [self guards]->isSetAndDisabledAt((u32)addr);
 }
 
 - (void) enableAt:(NSInteger)addr
 {
-    wrapper->guards->enableAt((u32)addr);
+    [self guards]->enableAt((u32)addr);
 }
 
 - (void) disableAt:(NSInteger)addr
 {
-    wrapper->guards->disableAt((u32)addr);
+    [self guards]->disableAt((u32)addr);
 }
 
 - (void) addAt:(NSInteger)addr
 {
-    wrapper->guards->addAt((u32)addr);
+    [self guards]->addAt((u32)addr);
 }
 
 - (void) removeAt:(NSInteger)addr
 {
-    wrapper->guards->removeAt((u32)addr);
+    [self guards]->removeAt((u32)addr);
 }
 
 @end
@@ -2087,7 +2115,7 @@ struct SerialPortWrapper { SerialPort *port; };
     // Create sub proxys
     agnus = [[AgnusProxy alloc] initWithAgnus:&amiga->agnus];
     blitter = [[BlitterProxy alloc] initWithBlitter:&amiga->agnus.blitter];
-    breakpoints = [[GuardsProxy alloc] initWithGuards:&amiga->cpu.debugger.breakpoints];
+    breakpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.breakpoints];
     ciaA = [[CIAProxy alloc] initWithCIA:&amiga->ciaA];
     ciaB = [[CIAProxy alloc] initWithCIA:&amiga->ciaB];
     controlPort1 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
@@ -2106,7 +2134,7 @@ struct SerialPortWrapper { SerialPort *port; };
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
     screenRecorder = [[ScreenRecorderProxy alloc] initWithScreenRecorder:&amiga->denise.screenRecorder];
     serialPort = [[SerialPortProxy alloc] initWithSerialPort:&amiga->serialPort];
-    watchpoints = [[GuardsProxy alloc] initWithGuards:&amiga->cpu.debugger.watchpoints];
+    watchpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.watchpoints];
 
     return self;
 }

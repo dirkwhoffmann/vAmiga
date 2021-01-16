@@ -57,7 +57,6 @@ struct DeniseWrapper;
 struct DiskControllerWrapper;
 struct DmaDebuggerWrapper;
 struct DriveWrapper;
-struct GuardsWrapper;
 struct KeyboardWrapper;
 struct MemWrapper;
 struct PaulaWrapper;
@@ -65,10 +64,28 @@ struct ScreenRecorderWrapper;
 struct SerialPortWrapper;
 
 //
+// Base proxies
+//
+
+@interface Proxy : NSObject {
+    
+    // Reference to the wrapped C++ object
+    @public void *obj;
+}
+
+@end
+
+@interface HardwareComponentProxy : Proxy { }
+
+- (void)dump;
+
+@end
+
+//
 // Amiga
 //
 
-@interface AmigaProxy : NSObject {
+@interface AmigaProxy : HardwareComponentProxy {
     
     struct AmigaWrapper *wrapper;
     
@@ -185,11 +202,8 @@ struct SerialPortWrapper;
 // Guards (Breakpoints, Watchpoints)
 //
 
-@interface GuardsProxy : NSObject {
+@interface GuardsProxy : Proxy { }
     
-    struct GuardsWrapper *wrapper;
-}
-
 @property (readonly) NSInteger count;
 - (NSInteger) addr:(NSInteger)nr;
 - (BOOL) isEnabled:(NSInteger)nr;
@@ -214,7 +228,7 @@ struct SerialPortWrapper;
 // CPU
 //
 
-@interface CPUProxy : NSObject {
+@interface CPUProxy : HardwareComponentProxy {
     
     struct CPUWrapper *wrapper;
 }
@@ -245,13 +259,13 @@ struct SerialPortWrapper;
 // CIA
 //
 
-@interface CIAProxy : NSObject {
+@interface CIAProxy : HardwareComponentProxy {
     
     struct CIAWrapper *wrapper;
 }
 
 - (void) dumpConfig;
-- (void) dump;
+// - (void) dump;
 - (CIAInfo) getInfo;
 
 @end
@@ -261,7 +275,7 @@ struct SerialPortWrapper;
 // Memory
 //
 
-@interface MemProxy : NSObject {
+@interface MemProxy : HardwareComponentProxy {
     
     struct MemWrapper *wrapper;
 }
@@ -319,7 +333,7 @@ struct SerialPortWrapper;
 // Agnus
 //
 
-@interface AgnusProxy : NSObject {
+@interface AgnusProxy : HardwareComponentProxy {
     
     struct AgnusWrapper *wrapper;
 }
@@ -340,7 +354,7 @@ struct SerialPortWrapper;
 // Copper
 //
 
-@interface CopperProxy : NSObject {
+@interface CopperProxy : HardwareComponentProxy {
     
     struct CopperWrapper *wrapper;
 }
@@ -361,7 +375,7 @@ struct SerialPortWrapper;
 // Blitter
 //
 
-@interface BlitterProxy : NSObject {
+@interface BlitterProxy : HardwareComponentProxy {
     
     struct BlitterWrapper *wrapper;
 }
@@ -376,7 +390,7 @@ struct SerialPortWrapper;
 // DMA Debugger
 //
 
-@interface DmaDebuggerProxy : NSObject {
+@interface DmaDebuggerProxy : Proxy {
     
     struct DmaDebuggerWrapper *wrapper;
 }
@@ -410,7 +424,7 @@ struct SerialPortWrapper;
 // Denise
 //
 
-@interface DeniseProxy : NSObject {
+@interface DeniseProxy : HardwareComponentProxy {
     
     struct DeniseWrapper *wrapper;
 }
@@ -438,7 +452,7 @@ struct SerialPortWrapper;
 // ScreenRecorder
 //
 
-@interface ScreenRecorderProxy : NSObject {
+@interface ScreenRecorderProxy : Proxy {
     
     struct ScreenRecorderWrapper *wrapper;
 }
@@ -461,7 +475,7 @@ struct SerialPortWrapper;
 // Paula
 //
 
-@interface PaulaProxy : NSObject {
+@interface PaulaProxy : HardwareComponentProxy {
     
     struct PaulaWrapper *wrapper;
 }
@@ -494,7 +508,7 @@ struct SerialPortWrapper;
 // ControlPort
 //
 
-@interface ControlPortProxy : NSObject {
+@interface ControlPortProxy : HardwareComponentProxy {
     
     struct ControlPortWrapper *wrapper;
     
@@ -515,7 +529,7 @@ struct SerialPortWrapper;
 // SerialPort
 //
 
-@interface SerialPortProxy : NSObject {
+@interface SerialPortProxy : HardwareComponentProxy {
 
     struct SerialPortWrapper *wrapper;
 }
@@ -530,7 +544,7 @@ struct SerialPortWrapper;
 // Mouse
 //
 
-@interface MouseProxy : NSObject {
+@interface MouseProxy : HardwareComponentProxy {
     
     struct MouseWrapper *wrapper;
 }
@@ -548,7 +562,7 @@ struct SerialPortWrapper;
 // Joystick
 //
 
-@interface JoystickProxy : NSObject {
+@interface JoystickProxy : HardwareComponentProxy {
     
     struct JoystickWrapper *wrapper;
 }
@@ -567,7 +581,7 @@ struct SerialPortWrapper;
 // Keyboard
 //
 
-@interface KeyboardProxy : NSObject {
+@interface KeyboardProxy : HardwareComponentProxy {
     
     struct KeyboardWrapper *wrapper;
 }
@@ -586,7 +600,7 @@ struct SerialPortWrapper;
 // DiskController
 //
 
-@interface DiskControllerProxy : NSObject {
+@interface DiskControllerProxy : HardwareComponentProxy {
     
     struct DiskControllerWrapper *wrapper;
 }
@@ -608,7 +622,7 @@ struct SerialPortWrapper;
 // Drive
 //
 
-@interface DriveProxy : NSObject {
+@interface DriveProxy : HardwareComponentProxy {
     
     struct DriveWrapper *wrapper;
 }
@@ -640,7 +654,7 @@ struct SerialPortWrapper;
 // FSDevice
 //
 
-@interface FSDeviceProxy : NSObject {
+@interface FSDeviceProxy : Proxy {
     
     struct FSDeviceWrapper *wrapper;
 }
@@ -682,7 +696,7 @@ struct SerialPortWrapper;
 // AmigaFile
 //
 
-@interface AmigaFileProxy : NSObject {
+@interface AmigaFileProxy : Proxy {
     
     struct AmigaFileWrapper *wrapper;
 }
