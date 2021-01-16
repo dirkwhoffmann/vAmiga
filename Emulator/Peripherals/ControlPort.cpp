@@ -11,7 +11,7 @@
 
 ControlPort::ControlPort(Amiga& ref, PortNr portNr) : AmigaComponent(ref), nr(portNr)
 {
-    assert(isPortNr(nr));
+    assert_enum(PortNr, portNr);
     subComponents = vector<HardwareComponent *> { &mouse, &joystick };
 }
 

@@ -889,7 +889,7 @@ struct PeripheralsDefaults {
         
         gameDevice1: 0,
         gameDevice2: -1,
-        serialDevice: .SPD_NONE
+        serialDevice: .NONE
     )
 }
 

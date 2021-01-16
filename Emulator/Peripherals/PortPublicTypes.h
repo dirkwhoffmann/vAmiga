@@ -17,25 +17,30 @@
 // Enumerations
 //
 
-enum_long( SerialPortDevice)
+enum_long(SPD)
 {
     SPD_NONE,
-    SPD_LOOPBACK
+    SPD_LOOPBACK,
+    
+    SPD_COUNT
 };
+typedef SPD SerialPortDevice;
 
 inline bool isSerialPortDevice(long value) {
     return value >= 0 && value <= SPD_LOOPBACK;
 }
 
-enum_long( PortNr)
+enum_long(PortNr)
 {
     PORT_1 = 1,
-    PORT_2 = 2
+    PORT_2 = 2    
 };
 
+/*
 inline bool isPortNr(long value) {
     return value == PORT_1 || value == PORT_2;
 }
+*/
 
 enum_long( ControlPortDevice)
 {
