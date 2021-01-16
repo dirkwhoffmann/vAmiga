@@ -65,7 +65,7 @@ Paula::pokeINTREQ(u16 value)
     trace(INTREG_DEBUG, "pokeINTREQ(%x) (INTENA = %x INTREQ = %x)\n", value, intena, intreq);
 
     // Add a one cycle delay if Copper writes
-    if (s == CPU_ACCESS) {
+    if (s == ACCESSOR_CPU) {
         paula.setINTREQ(value);
     } else {
         agnus.recordRegisterChange(DMA_CYCLES(1), SET_INTREQ, value);
@@ -97,7 +97,7 @@ Paula::pokeINTENA(u16 value)
     trace(INTREG_DEBUG, "pokeINTENA(%x)\n", value);
 
     // Add a one cycle delay if Copper writes
-    if (s == CPU_ACCESS) {
+    if (s == ACCESSOR_CPU) {
         paula.setINTENA(value);
     } else {
         agnus.recordRegisterChange(DMA_CYCLES(1), SET_INTENA, value);
@@ -175,9 +175,9 @@ Paula::pokePOTGO(u16 value)
     }
 }
 
-template void Paula::pokeINTREQ<CPU_ACCESS>(u16 value);
-template void Paula::pokeINTREQ<AGNUS_ACCESS>(u16 value);
-template void Paula::pokeINTENA<CPU_ACCESS>(u16 value);
-template void Paula::pokeINTENA<AGNUS_ACCESS>(u16 value);
+template void Paula::pokeINTREQ<ACCESSOR_CPU>(u16 value);
+template void Paula::pokeINTREQ<ACCESSOR_AGNUS>(u16 value);
+template void Paula::pokeINTENA<ACCESSOR_CPU>(u16 value);
+template void Paula::pokeINTENA<ACCESSOR_AGNUS>(u16 value);
 template u16 Paula::peekPOTxDAT<0>() const;
 template u16 Paula::peekPOTxDAT<1>() const;

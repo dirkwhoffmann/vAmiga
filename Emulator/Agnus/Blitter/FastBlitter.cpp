@@ -103,21 +103,21 @@ void Blitter::doFastCopyBlit()
 
             // Fetch A
             if (useA) {
-                anew = mem.peek16 <AGNUS_ACCESS> (apt);
+                anew = mem.peek16 <ACCESSOR_AGNUS> (apt);
                 trace(BLT_DEBUG, "    A = peek(%X) = %X\n", apt, anew);
                 apt = U32_ADD(apt, incr);
             }
 
             // Fetch B
             if (useB) {
-                bnew = mem.peek16 <AGNUS_ACCESS> (bpt);
+                bnew = mem.peek16 <ACCESSOR_AGNUS> (bpt);
                 trace(BLT_DEBUG, "    B = peek(%X) = %X\n", bpt, bnew);
                 bpt = U32_ADD(bpt, incr);
             }
 
             // Fetch C
             if (useC) {
-                chold = mem.peek16 <AGNUS_ACCESS> (cpt);
+                chold = mem.peek16 <ACCESSOR_AGNUS> (cpt);
                 trace(BLT_DEBUG, "    C = peek(%X) = %X\n", cpt, chold);
                 cpt = U32_ADD(cpt, incr);
             }
@@ -160,7 +160,7 @@ void Blitter::doFastCopyBlit()
 
             // Write D
             if (useD) {
-                mem.poke16 <AGNUS_ACCESS> (dpt, dhold);
+                mem.poke16 <ACCESSOR_AGNUS> (dpt, dhold);
 
                 if (BLT_CHECKSUM) {
                     check1 = fnv_1a_it32(check1, dhold);
@@ -255,7 +255,7 @@ Blitter::doFastLineBlit()
     {
         // Read C-data from memory if the C-channel is enabled
         if (c_enabled) {
-            bltcdat_local = mem.peek16 <AGNUS_ACCESS> (bltcpt_local);
+            bltcdat_local = mem.peek16 <ACCESSOR_AGNUS> (bltcpt_local);
         }
         
         // Calculate data for the A-channel
@@ -280,7 +280,7 @@ Blitter::doFastLineBlit()
         
         // Save result to D-channel, same as the C ptr after first pixel.
         if (c_enabled) { // C-channel must be enabled
-            mem.poke16 <AGNUS_ACCESS> (bltdpt_local, bltddat_local);
+            mem.poke16 <ACCESSOR_AGNUS> (bltdpt_local, bltddat_local);
 
             if (BLT_CHECKSUM) {
                 check1 = fnv_1a_it32(check1, bltddat_local);

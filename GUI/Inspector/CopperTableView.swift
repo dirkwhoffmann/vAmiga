@@ -48,8 +48,8 @@ class CopperTableView: NSTableView {
         for i in 0 ..< count {
 
             addrInRow[i] = addr
-            data1InRow[i] = amiga.mem.spypeek16(.AGNUS_ACCESS, addr: addr)
-            data2InRow[i] = amiga.mem.spypeek16(.AGNUS_ACCESS, addr: addr + 2)
+            data1InRow[i] = amiga.mem.spypeek16(.AGNUS, addr: addr)
+            data2InRow[i] = amiga.mem.spypeek16(.AGNUS, addr: addr + 2)
             instrInRow[i] = amiga.copper.disassemble(addr)
             illegalInRow[i] = amiga.copper.isIllegalInstr(addr)
 

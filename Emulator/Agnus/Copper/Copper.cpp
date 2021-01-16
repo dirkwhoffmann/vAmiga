@@ -379,7 +379,7 @@ bool Copper::isMoveCmd(u32 addr) const
 {
     assert(IS_EVEN(addr));
 
-    u16 hiword = mem.spypeek16 <AGNUS_ACCESS> (addr);
+    u16 hiword = mem.spypeek16 <ACCESSOR_AGNUS> (addr);
 
     return IS_EVEN(hiword);
 }
@@ -393,8 +393,8 @@ bool Copper::isWaitCmd(u32 addr) const
 {
     assert(IS_EVEN(addr));
 
-    u16 hiword = mem.spypeek16 <AGNUS_ACCESS> (addr);
-    u16 loword = mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
+    u16 hiword = mem.spypeek16 <ACCESSOR_AGNUS> (addr);
+    u16 loword = mem.spypeek16 <ACCESSOR_AGNUS> (addr + 2);
 
     return IS_ODD(hiword) && IS_EVEN(loword);
 }
@@ -408,7 +408,7 @@ Copper::getRA() const
 u16
 Copper::getRA(u32 addr) const
 {
-    u16 hiword = mem.spypeek16 <AGNUS_ACCESS> (addr);
+    u16 hiword = mem.spypeek16 <ACCESSOR_AGNUS> (addr);
     return hiword & 0x1FE;
 }
 
@@ -421,7 +421,7 @@ Copper::getDW() const
 u16
 Copper::getDW(u32 addr) const
 {
-    u16 loword = mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
+    u16 loword = mem.spypeek16 <ACCESSOR_AGNUS> (addr + 2);
     return loword;
 }
 
@@ -434,7 +434,7 @@ Copper::getBFD() const
 bool
 Copper::getBFD(u32 addr) const
 {
-    u16 instr = mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
+    u16 instr = mem.spypeek16 <ACCESSOR_AGNUS> (addr + 2);
     return (instr & 0x8000) != 0;
 }
 
@@ -447,7 +447,7 @@ Copper::getVPHP() const
 u16
 Copper::getVPHP(u32 addr) const
 {
-    u16 instr = mem.spypeek16 <AGNUS_ACCESS> (addr);
+    u16 instr = mem.spypeek16 <ACCESSOR_AGNUS> (addr);
     return instr & 0xFFFE;
 }
 
@@ -460,7 +460,7 @@ Copper::getVMHM() const
 u16
 Copper::getVMHM(u32 addr) const
 {
-    u16 instr = mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
+    u16 instr = mem.spypeek16 <ACCESSOR_AGNUS> (addr + 2);
     return (instr & 0x7FFE) | 0x8001;
 }
 

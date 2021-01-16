@@ -458,35 +458,35 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (MemorySource) memSrc:(Accessor)accessor addr:(NSInteger)addr
 {
-    assert(accessor == CPU_ACCESS || accessor == AGNUS_ACCESS);
+    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
     
-    if (accessor == CPU_ACCESS) {
-        return wrapper->mem->getMemSrc <CPU_ACCESS> ((u32)addr);
+    if (accessor == ACCESSOR_CPU) {
+        return wrapper->mem->getMemSrc <ACCESSOR_CPU> ((u32)addr);
     } else {
-        return wrapper->mem->getMemSrc <AGNUS_ACCESS> ((u32)addr);
+        return wrapper->mem->getMemSrc <ACCESSOR_AGNUS> ((u32)addr);
     }
 }
 
 - (NSInteger) spypeek16:(Accessor)accessor addr:(NSInteger)addr
 {
-    assert(accessor == CPU_ACCESS || accessor == AGNUS_ACCESS);
+    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
     
-    if (accessor == CPU_ACCESS) {
-        return wrapper->mem->spypeek16 <CPU_ACCESS> ((u32)addr);
+    if (accessor == ACCESSOR_CPU) {
+        return wrapper->mem->spypeek16 <ACCESSOR_CPU> ((u32)addr);
     } else {
-        return wrapper->mem->spypeek16 <AGNUS_ACCESS> ((u32)addr);
+        return wrapper->mem->spypeek16 <ACCESSOR_AGNUS> ((u32)addr);
     }
 }
 
 - (NSString *) ascii:(Accessor)accessor addr:(NSInteger)addr
 {
-    assert(accessor == CPU_ACCESS || accessor == AGNUS_ACCESS);
+    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
     const char *str;
 
-    if (accessor == CPU_ACCESS) {
-        str = wrapper->mem->ascii <CPU_ACCESS> ((u32)addr);
+    if (accessor == ACCESSOR_CPU) {
+        str = wrapper->mem->ascii <ACCESSOR_CPU> ((u32)addr);
     } else {
-        str = wrapper->mem->ascii <AGNUS_ACCESS> ((u32)addr);
+        str = wrapper->mem->ascii <ACCESSOR_AGNUS> ((u32)addr);
     }
     
     return str ? [NSString stringWithUTF8String:str] : nullptr;
@@ -494,13 +494,13 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (NSString *) hex:(Accessor)accessor addr: (NSInteger)addr bytes:(NSInteger)bytes
 {
-    assert(accessor == CPU_ACCESS || accessor == AGNUS_ACCESS);
+    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
     const char *str;
 
-    if (accessor == CPU_ACCESS) {
-        str = wrapper->mem->hex <CPU_ACCESS> ((u32)addr, bytes);
+    if (accessor == ACCESSOR_CPU) {
+        str = wrapper->mem->hex <ACCESSOR_CPU> ((u32)addr, bytes);
     } else {
-        str = wrapper->mem->hex <AGNUS_ACCESS> ((u32)addr, bytes);
+        str = wrapper->mem->hex <ACCESSOR_AGNUS> ((u32)addr, bytes);
     }
     
     return str ? [NSString stringWithUTF8String:str] : nullptr;

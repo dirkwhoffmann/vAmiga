@@ -881,7 +881,7 @@ template void Agnus::pokeSPRxCTL<5>(u16 value);
 template void Agnus::pokeSPRxCTL<6>(u16 value);
 template void Agnus::pokeSPRxCTL<7>(u16 value);
 
-template void Agnus::pokeDIWSTRT<CPU_ACCESS>(u16 value);
-template void Agnus::pokeDIWSTRT<AGNUS_ACCESS>(u16 value);
-template void Agnus::pokeDIWSTOP<CPU_ACCESS>(u16 value);
-template void Agnus::pokeDIWSTOP<AGNUS_ACCESS>(u16 value);
+template void Agnus::pokeDIWSTRT<ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeDIWSTRT<ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeDIWSTOP<ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeDIWSTOP<ACCESSOR_AGNUS>(u16 value);

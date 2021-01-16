@@ -22,13 +22,13 @@ CPU::sync(int cycles)
 u8
 CPU::read8(u32 addr)
 {
-    return mem.peek8 <CPU_ACCESS> (addr);
+    return mem.peek8 <ACCESSOR_CPU> (addr);
 }
 
 u16
 CPU::read16(u32 addr)
 {
-    u16 result = mem.peek16 <CPU_ACCESS> (addr);
+    u16 result = mem.peek16 <ACCESSOR_CPU> (addr);
  
     /*
     static int counter = 0;
@@ -64,7 +64,7 @@ CPU::read16(u32 addr)
 u16
 CPU::read16Dasm(u32 addr)
 {
-    return mem.spypeek16 <CPU_ACCESS> (addr);
+    return mem.spypeek16 <ACCESSOR_CPU> (addr);
 }
 
 u16
@@ -78,7 +78,7 @@ CPU::write8(u32 addr, u8 val)
 {
     trace(XFILES && addr - reg.pc < 5, "XFILES: write8 close to PC %x\n", reg.pc);
 
-    mem.poke8 <CPU_ACCESS> (addr, val);
+    mem.poke8 <ACCESSOR_CPU> (addr, val);
 }
 
 void
@@ -86,7 +86,7 @@ CPU::write16 (u32 addr, u16 val)
 {
     trace(XFILES && addr - reg.pc < 5, "XFILES: write16 close to PC %x\n", reg.pc);
 
-    mem.poke16 <CPU_ACCESS> (addr, val);
+    mem.poke16 <ACCESSOR_CPU> (addr, val);
 }
 
 void

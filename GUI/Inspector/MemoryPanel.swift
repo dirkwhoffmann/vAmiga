@@ -28,7 +28,7 @@ struct MemColors {
 extension Inspector {
 
     var accessor: Accessor {
-        return memBankMap.selectedTag() == 0 ? .CPU_ACCESS : .AGNUS_ACCESS
+        return memBankMap.selectedTag() == 0 ? .CPU : .AGNUS
     }
     
     func memSrc(bank: Int) -> MemorySource {        

@@ -187,7 +187,7 @@ Blitter::pokeBLTSIZE(u16 value)
     debug(BLTTIM_DEBUG, "(%d,%d) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
 
-    if (s == AGNUS_ACCESS) {
+    if (s == ACCESSOR_AGNUS) {
         agnus.recordRegisterChange(DMA_CYCLES(1), SET_BLTSIZE, value);
     } else {
         blitter.setBLTSIZE(value);
@@ -350,5 +350,5 @@ Blitter::pokeDMACON(u16 oldValue, u16 newValue)
     }
 }
 
-template void Blitter::pokeBLTSIZE<CPU_ACCESS>(u16 value);
-template void Blitter::pokeBLTSIZE<AGNUS_ACCESS>(u16 value);
+template void Blitter::pokeBLTSIZE<ACCESSOR_CPU>(u16 value);
+template void Blitter::pokeBLTSIZE<ACCESSOR_AGNUS>(u16 value);

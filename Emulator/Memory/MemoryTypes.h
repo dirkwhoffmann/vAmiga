@@ -54,17 +54,17 @@ struct AccessorEnum : Reflection<AccessorEnum, Accessor> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < ACCESS_COUNT;
+        return (unsigned long)value < ACCESSOR_COUNT;
     }
 
-    static const char *prefix() { return "ACCESS"; }
+    static const char *prefix() { return "ACCESSOR"; }
     static const char *key(Accessor value)
     {
         switch (value) {
                 
-            case CPU_ACCESS:    return "CPU_ACCESS";
-            case AGNUS_ACCESS:  return "AGNUS_ACCESS";
-            case ACCESS_COUNT:  return "???";
+            case ACCESSOR_CPU:    return "CPU";
+            case ACCESSOR_AGNUS:  return "AGNUS";
+            case ACCESSOR_COUNT:  return "???";
         }
         return "???";
     }
