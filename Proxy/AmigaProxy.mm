@@ -167,11 +167,6 @@ struct SerialPortWrapper { SerialPort *port; };
     return (CPU *)obj;
 }
 
-- (void) dump
-{
-    [self cpu]->dump();
-}
-
 - (CPUInfo) getInfo
 {
     return [self cpu]->getInfo();
@@ -248,66 +243,48 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// CIA
+// CIA proxy
 //
 
 @implementation CIAProxy
 
-- (instancetype) initWithCIA:(CIA *)cia
+- (CIA *)cia
 {
-    if (self = [super init]) {
-        wrapper = new CIAWrapper();
-        wrapper->cia = cia;
-    }
-    return self;
+    return (CIA *)obj;
 }
 
 - (CIAInfo) getInfo
 {
-    return wrapper->cia->getInfo();
+    return [self cia]->getInfo();
 }
 
 - (void) dumpConfig
 {
-    wrapper->cia->dumpConfig();
-}
-
-- (void) dump
-{
-    wrapper->cia->dump();
+    [self cia]->dumpConfig();
 }
 
 @end
 
 
 //
-// Memory
+// Memory proxy
 //
 
 @implementation MemProxy
 
-- (instancetype) initWithMemory:(Memory *)mem
+- (Memory *)mem
 {
-    if (self = [super init]) {
-        wrapper = new MemWrapper();
-        wrapper->mem = mem;
-    }
-    return self;
+    return (Memory *)obj;
 }
 
 - (MemoryConfig) getConfig
 {
-    return wrapper->mem->getConfig();
+    return [self mem]->getConfig();
 }
 
 - (MemoryStats) getStats
 {
-    return wrapper->mem->getStats();
-}
-
-- (void) dump
-{
-    wrapper->mem->dump();
+    return [self mem]->getStats();
 }
 
 - (BOOL) isBootRom:(RomIdentifier)rev
@@ -337,22 +314,22 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (BOOL) hasRom
 {
-    return wrapper->mem->hasKickRom();
+    return [self mem]->hasKickRom();
 }
 
 - (BOOL) hasBootRom
 {
-    return wrapper->mem->hasBootRom();
+    return [self mem]->hasBootRom();
 }
 
 - (BOOL) hasKickRom
 {
-    return wrapper->mem->hasKickRom();
+    return [self mem]->hasKickRom();
 }
 
 - (void) deleteRom
 {
-    wrapper->mem->deleteRom();
+    [self mem]->deleteRom();
 }
 
 - (BOOL) isRom:(NSURL *)url
@@ -364,50 +341,50 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     if (data == nullptr) return NO;
     const u8 *bytes = (const u8 *)[data bytes];
-    return wrapper->mem->loadRomFromBuffer(bytes, [data length]);
+    return [self mem]->loadRomFromBuffer(bytes, [data length]);
 }
 
 - (BOOL) loadRomFromFile:(NSURL *)url error:(ErrorCode *)err
 {
-    return wrapper->mem->loadRomFromFile([url fileSystemRepresentation], err);
+    return [self mem]->loadRomFromFile([url fileSystemRepresentation], err);
 }
 
 - (u64) romFingerprint
 {
-    return wrapper->mem->romFingerprint();
+    return [self mem]->romFingerprint();
 }
 
 - (RomIdentifier) romIdentifier
 {
-    return wrapper->mem->romIdentifier();
+    return [self mem]->romIdentifier();
 }
 
 - (NSString *) romTitle
 {
-    const char *str = wrapper->mem->romTitle();
+    const char *str = [self mem]->romTitle();
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSString *) romVersion
 {
-    const char *str = wrapper->mem->romVersion();
+    const char *str = [self mem]->romVersion();
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSString *) romReleased
 {
-    const char *str = wrapper->mem->romReleased();
+    const char *str = [self mem]->romReleased();
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (BOOL) hasExt
 {
-    return wrapper->mem->hasExt();
+    return [self mem]->hasExt();
 }
 
 - (void) deleteExt
 {
-    wrapper->mem->deleteExt();
+    [self mem]->deleteExt();
 }
 
 - (BOOL) isExt:(NSURL *)url
@@ -419,65 +396,65 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     if (data == nullptr) return NO;
     const u8 *bytes = (const u8 *)[data bytes];
-    return wrapper->mem->loadExtFromBuffer(bytes, [data length]);
+    return [self mem]->loadExtFromBuffer(bytes, [data length]);
 }
 
 - (BOOL) loadExtFromFile:(NSURL *)url
 {
-    return wrapper->mem->loadExtFromFile([url fileSystemRepresentation]);
+    return [self mem]->loadExtFromFile([url fileSystemRepresentation]);
 }
 
 - (u64) extFingerprint
 {
-    return wrapper->mem->extFingerprint();
+    return [self mem]->extFingerprint();
 }
 
 - (RomIdentifier) extIdentifier
 {
-    return wrapper->mem->extIdentifier();
+    return [self mem]->extIdentifier();
 }
 
 - (NSString *) extTitle
 {
-    const char *str = wrapper->mem->extTitle();
+    const char *str = [self mem]->extTitle();
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSString *) extVersion
 {
-    const char *str = wrapper->mem->extVersion();
+    const char *str = [self mem]->extVersion();
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSString *) extReleased
 {
-    const char *str = wrapper->mem->extReleased();
+    const char *str = [self mem]->extReleased();
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSInteger) extStart
 {
-    return wrapper->mem->getConfigItem(OPT_EXT_START);
+    return [self mem]->getConfigItem(OPT_EXT_START);
 }
 
 - (BOOL) saveWom:(NSURL *)url
 {
-    return wrapper->mem->saveWom([url fileSystemRepresentation]);
+    return [self mem]->saveWom([url fileSystemRepresentation]);
 }
 
 - (BOOL) saveRom:(NSURL *)url
 {
-    return wrapper->mem->saveRom([url fileSystemRepresentation]);
+    return [self mem]->saveRom([url fileSystemRepresentation]);
 }
 
 - (BOOL) saveExt:(NSURL *)url
 {
-    return wrapper->mem->saveExt([url fileSystemRepresentation]);
+    return [self mem]->saveExt([url fileSystemRepresentation]);
 }
 
 - (void) updateRTC
 {
-    wrapper->mem->rtc.update();
+    [self mem]->rtc.update();
 }
 
 - (MemorySource) memSrc:(Accessor)accessor addr:(NSInteger)addr
@@ -485,9 +462,9 @@ struct SerialPortWrapper { SerialPort *port; };
     assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
     
     if (accessor == ACCESSOR_CPU) {
-        return wrapper->mem->getMemSrc <ACCESSOR_CPU> ((u32)addr);
+        return [self mem]->getMemSrc <ACCESSOR_CPU> ((u32)addr);
     } else {
-        return wrapper->mem->getMemSrc <ACCESSOR_AGNUS> ((u32)addr);
+        return [self mem]->getMemSrc <ACCESSOR_AGNUS> ((u32)addr);
     }
 }
 
@@ -496,9 +473,9 @@ struct SerialPortWrapper { SerialPort *port; };
     assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
     
     if (accessor == ACCESSOR_CPU) {
-        return wrapper->mem->spypeek16 <ACCESSOR_CPU> ((u32)addr);
+        return [self mem]->spypeek16 <ACCESSOR_CPU> ((u32)addr);
     } else {
-        return wrapper->mem->spypeek16 <ACCESSOR_AGNUS> ((u32)addr);
+        return [self mem]->spypeek16 <ACCESSOR_AGNUS> ((u32)addr);
     }
 }
 
@@ -508,9 +485,9 @@ struct SerialPortWrapper { SerialPort *port; };
     const char *str;
 
     if (accessor == ACCESSOR_CPU) {
-        str = wrapper->mem->ascii <ACCESSOR_CPU> ((u32)addr);
+        str = [self mem]->ascii <ACCESSOR_CPU> ((u32)addr);
     } else {
-        str = wrapper->mem->ascii <ACCESSOR_AGNUS> ((u32)addr);
+        str = [self mem]->ascii <ACCESSOR_AGNUS> ((u32)addr);
     }
     
     return str ? [NSString stringWithUTF8String:str] : nullptr;
@@ -522,9 +499,9 @@ struct SerialPortWrapper { SerialPort *port; };
     const char *str;
 
     if (accessor == ACCESSOR_CPU) {
-        str = wrapper->mem->hex <ACCESSOR_CPU> ((u32)addr, bytes);
+        str = [self mem]->hex <ACCESSOR_CPU> ((u32)addr, bytes);
     } else {
-        str = wrapper->mem->hex <ACCESSOR_AGNUS> ((u32)addr, bytes);
+        str = [self mem]->hex <ACCESSOR_AGNUS> ((u32)addr, bytes);
     }
     
     return str ? [NSString stringWithUTF8String:str] : nullptr;
@@ -534,102 +511,94 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// Agnus
+// Agnus proxy
 //
 
 @implementation AgnusProxy
 
-- (instancetype) initWithAgnus:(Agnus *)agnus
+- (Agnus *)agnus
 {
-    if (self = [super init]) {
-        wrapper = new AgnusWrapper();
-        wrapper->agnus = agnus;
-    }
-    return self;
+    return (Agnus *)obj;
 }
 
 - (NSInteger) chipRamLimit
 {
-    return wrapper->agnus->chipRamLimit();
+    return [self agnus]->chipRamLimit();
 }
 
 - (void) dump
 {
-    wrapper->agnus->dump();
+    [self agnus]->dump();
 }
 
 - (AgnusInfo) getInfo
 {
-    return wrapper->agnus->getInfo();
+    return [self agnus]->getInfo();
 }
 
 - (EventSlotInfo) getEventSlotInfo:(NSInteger)slot
 {
-    return wrapper->agnus->getEventSlotInfo(slot);
+    return [self agnus]->getEventSlotInfo(slot);
 }
 
 - (EventInfo) getEventInfo
 {
-    return wrapper->agnus->getEventInfo();
+    return [self agnus]->getEventInfo();
 }
 
 - (AgnusStats) getStats
 {
-    return wrapper->agnus->getStats();
+    return [self agnus]->getStats();
 }
 
 @end
 
 
 //
-// Copper
+// Copper proxy
 //
 
 @implementation CopperProxy
 
-- (instancetype) initWithCopper:(Copper *)copper
+- (Copper *)copper
 {
-    if (self = [super init]) {
-        wrapper = new CopperWrapper();
-        wrapper->copper = copper;
-    }
-    return self;
+    return (Copper *)obj;
 }
 
 - (void) dump
 {
-    wrapper->copper->dump();
+    [self copper]->dump();
 }
 
 - (CopperInfo) getInfo
 {
-    return wrapper->copper->getInfo();
+    return [self copper]->getInfo();
 }
 
 - (NSInteger) instrCount:(NSInteger)list
 {
-    return wrapper->copper->instrCount(list);
+    return [self copper]->instrCount(list);
 }
 
 - (void) adjustInstrCount:(NSInteger)list offset:(NSInteger)offset
 {
-    wrapper->copper->adjustInstrCount(list, offset);
+    [self copper]->adjustInstrCount(list, offset);
 }
 
 - (BOOL) isIllegalInstr:(NSInteger)addr
 {
-    return wrapper->copper->isIllegalInstr(addr);
+    return [self copper]->isIllegalInstr(addr);
 }
 
 - (NSString *) disassemble:(NSInteger)addr
 {
-    const char *str = wrapper->copper->disassemble(addr);
+    const char *str = [self copper]->disassemble(addr);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSString *) disassemble:(NSInteger)list instr:(NSInteger)offset
 {
-    const char *str = wrapper->copper->disassemble(list, offset);
+    const char *str = [self copper]->disassemble(list, offset);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
@@ -642,23 +611,19 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation BlitterProxy
 
-- (instancetype) initWithBlitter:(Blitter *)blitter
+- (Blitter *)blitter
 {
-    if (self = [super init]) {
-        wrapper = new BlitterWrapper();
-        wrapper->blitter = blitter;
-    }
-    return self;
+    return (Blitter *)obj;
 }
 
 - (void) dump
 {
-    wrapper->blitter->dump();
+    [self blitter]->dump();
 }
 
 - (BlitterInfo) getInfo
 {
-    return wrapper->blitter->getInfo();
+    return [self blitter]->getInfo();
 }
 
 @end
@@ -670,210 +635,197 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation DmaDebuggerProxy
 
-- (instancetype) initWithDmaDebugger:(DmaDebugger *)dmaDebugger
+- (DmaDebugger *)debugger
 {
-    if (self = [super init]) {
-        wrapper = new DmaDebuggerWrapper();
-        wrapper->dmaDebugger = dmaDebugger;
-    }
-    return self;
+    return (DmaDebugger *)obj;
 }
 
 - (DMADebuggerInfo) getInfo
 {
-    return wrapper->dmaDebugger->getInfo();
+    return [self debugger]->getInfo();
 }
 
 - (void) setEnable:(BOOL)value
 {
-    wrapper->dmaDebugger->setEnabled(value);
+    [self debugger]->setEnabled(value);
 }
 
 - (void) visualizeCopper:(BOOL)value
 {
-    wrapper->dmaDebugger->visualizeCopper(value);
+    [self debugger]->visualizeCopper(value);
 }
 
 - (void) visualizeBlitter:(BOOL)value
 {
-    wrapper->dmaDebugger->visualizeBlitter(value);
+    [self debugger]->visualizeBlitter(value);
 }
 
 - (void) visualizeDisk:(BOOL)value
 {
-    wrapper->dmaDebugger->visualizeDisk(value);
+    [self debugger]->visualizeDisk(value);
 }
 
 - (void) visualizeAudio:(BOOL)value
 {
-    wrapper->dmaDebugger->visualizeAudio(value);
+    [self debugger]->visualizeAudio(value);
 }
 
 - (void) visualizeSprite:(BOOL)value
 {
-    wrapper->dmaDebugger->visualizeSprite(value);
+    [self debugger]->visualizeSprite(value);
 }
 
 - (void) visualizeBitplane:(BOOL)value
 {
-    wrapper->dmaDebugger->visualizeBitplane(value);
+    [self debugger]->visualizeBitplane(value);
 }
 
 - (void) visualizeCpu:(BOOL)value
 {
-    wrapper->dmaDebugger->visualizeCpu(value);
+    [self debugger]->visualizeCpu(value);
 }
 
 - (void) visualizeRefresh:(BOOL)value
 {
-    wrapper->dmaDebugger->visualizeRefresh(value);
+    [self debugger]->visualizeRefresh(value);
 }
 
 - (void) setOpacity:(double)value
 {
-    wrapper->dmaDebugger->setOpacity(value);
+    [self debugger]->setOpacity(value);
 }
 
 - (void) setDisplayMode:(NSInteger)mode
 {
-    wrapper->dmaDebugger->setDisplayMode((DmaDisplayMode)mode);
+    [self debugger]->setDisplayMode((DmaDisplayMode)mode);
 }
 
 - (void) setCopperColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->dmaDebugger->setCopperColor(r, g, b);
+    [self debugger]->setCopperColor(r, g, b);
 }
 
 - (void) setBlitterColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->dmaDebugger->setBlitterColor(r, g, b);
+    [self debugger]->setBlitterColor(r, g, b);
 }
 
 - (void) setDiskColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->dmaDebugger->setDiskColor(r, g, b);
+    [self debugger]->setDiskColor(r, g, b);
 }
 
 - (void) setAudioColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->dmaDebugger->setAudioColor(r, g, b);
+    [self debugger]->setAudioColor(r, g, b);
 }
 
 - (void) setSpriteColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->dmaDebugger->setSpriteColor(r, g, b);
+    [self debugger]->setSpriteColor(r, g, b);
 }
 
 - (void) setBitplaneColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->dmaDebugger->setBitplaneColor(r, g, b);
+    [self debugger]->setBitplaneColor(r, g, b);
 }
 
 - (void) setCpuColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->dmaDebugger->setCpuColor(r, g, b);
+    [self debugger]->setCpuColor(r, g, b);
 }
 
 - (void) setRefreshColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->dmaDebugger->setRefreshColor(r, g, b);
+    [self debugger]->setRefreshColor(r, g, b);
 }
 @end
 
 
 //
-// Denise
+// Denise proxy
 //
 
 @implementation DeniseProxy
 
-- (instancetype) initWithDenise:(Denise *)denise
+- (Denise *)denise
 {
-    if (self = [super init]) {
-        wrapper = new DeniseWrapper();
-        wrapper->denise = denise;
-    }
-    return self;
-}
-
-- (void) dump
-{
-    wrapper->denise->dump();
+    return (Denise *)obj;
 }
 
 - (DeniseInfo) getInfo
 {
-    return wrapper->denise->getInfo();
+    return [self denise]->getInfo();
 }
 
 - (SpriteInfo) getSpriteInfo:(NSInteger)nr
 {
-    return wrapper->denise->getSpriteInfo(nr);
+    return [self denise]->getSpriteInfo(nr);
 }
 
 - (NSInteger) sprDataLines:(NSInteger)nr
 {
-    return wrapper->denise->getSpriteHeight(nr);
+    return [self denise]->getSpriteHeight(nr);
 }
 
 - (u64) sprData:(NSInteger)nr line:(NSInteger)line
 {
-    return wrapper->denise->getSpriteData(nr, line);
+    return [self denise]->getSpriteData(nr, line);
 }
 
 - (u16) sprColor:(NSInteger)nr reg:(NSInteger)reg
 {
-    return wrapper->denise->getSpriteColor(nr, reg);
+    return [self denise]->getSpriteColor(nr, reg);
 }
 
 - (Palette) palette
 {
-   return wrapper->denise->pixelEngine.getPalette();
+   return [self denise]->pixelEngine.getPalette();
 }
 
 - (void) setPalette:(Palette)p
 {
-    wrapper->denise->pixelEngine.setPalette(p);
+    [self denise]->pixelEngine.setPalette(p);
 }
 
 - (double) brightness
 {
-    return wrapper->denise->pixelEngine.getBrightness();
+    return [self denise]->pixelEngine.getBrightness();
 }
 
 - (void) setBrightness:(double)value
 {
-    wrapper->denise->pixelEngine.setBrightness(value);
+    [self denise]->pixelEngine.setBrightness(value);
 }
 
 - (double) saturation
 {
-    return wrapper->denise->pixelEngine.getSaturation();
+    return [self denise]->pixelEngine.getSaturation();
 }
 
 - (void) setSaturation:(double)value
 {
-    wrapper->denise->pixelEngine.setSaturation(value);
+    [self denise]->pixelEngine.setSaturation(value);
 }
 
 - (double) contrast
 {
-    return wrapper->denise->pixelEngine.getContrast();
+    return [self denise]->pixelEngine.getContrast();
 }
 
 - (void) setContrast:(double)value
 {
-    wrapper->denise->pixelEngine.setContrast(value);
+    [self denise]->pixelEngine.setContrast(value);
 }
 
 - (ScreenBuffer) stableBuffer
 {
-    return wrapper->denise->pixelEngine.getStableBuffer();
+    return [self denise]->pixelEngine.getStableBuffer();
 }
 
 - (u32 *) noise
 {
-    return wrapper->denise->pixelEngine.getNoise(); 
+    return [self denise]->pixelEngine.getNoise();
 }
 
 @end
@@ -885,28 +837,24 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation ScreenRecorderProxy
 
-- (instancetype) initWithScreenRecorder:(ScreenRecorder *)screenRecorder
+- (ScreenRecorder *)recorder
 {
-    if (self = [super init]) {
-        wrapper = new ScreenRecorderWrapper();
-        wrapper->screenRecorder = screenRecorder;
-    }
-    return self;
+    return (ScreenRecorder *)obj;
 }
 
 - (BOOL) hasFFmpeg
 {
-    return wrapper->screenRecorder->hasFFmpeg();
+    return [self recorder]->hasFFmpeg();
 }
 
 - (BOOL) recording
 {
-    return wrapper->screenRecorder->isRecording();
+    return [self recorder]->isRecording();
 }
 
 - (NSInteger) recordCounter
 {
-    return wrapper->screenRecorder->getRecordCounter();
+    return [self recorder]->getRecordCounter();
 }
 
 - (BOOL) startRecording:(NSRect)rect
@@ -918,21 +866,21 @@ struct SerialPortWrapper { SerialPort *port; };
     int y1 = (int)rect.origin.y;
     int x2 = x1 + (int)rect.size.width;
     int y2 = y1 + (int)rect.size.height;
-
-    return wrapper->screenRecorder->startRecording(x1, y1, x2, y2,
-                                                   rate,
-                                                   aspectX,
-                                                   aspectY);
+    
+    return [self recorder]->startRecording(x1, y1, x2, y2,
+                                           rate,
+                                           aspectX,
+                                           aspectY);
 }
 
 - (void) stopRecording
 {
-    wrapper->screenRecorder->stopRecording();
+    [self recorder]->stopRecording();
 }
 
 - (BOOL) exportAs:(NSString *)path
 {
-    return wrapper->screenRecorder->exportAs([path fileSystemRepresentation]);
+    return [self recorder]->exportAs([path fileSystemRepresentation]);
 }
 
 @end
@@ -944,78 +892,74 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation PaulaProxy
 
-- (instancetype) initWithPaula:(Paula *)paula
+- (Paula *)paula
 {
-    if (self = [super init]) {
-        wrapper = new PaulaWrapper();
-        wrapper->paula = paula;
-    }
-    return self;
+    return (Paula *)obj;
 }
 
 - (PaulaInfo) getInfo
 {
-    return wrapper->paula->getInfo();
+    return [self paula]->getInfo();
 }
 
 - (AudioInfo) getAudioInfo
 {
-    return wrapper->paula->getAudioInfo();
+    return [self paula]->getAudioInfo();
 }
 
 - (MuxerStats) getMuxerStats
 {
-    return wrapper->paula->muxer.getStats();
+    return [self paula]->muxer.getStats();
 }
 
 - (UARTInfo) getUARTInfo
 {
-    return wrapper->paula->uart.getInfo();
+    return [self paula]->uart.getInfo();
 }
 
 - (void) dump
 {
-    wrapper->paula->muxer.dump();
+    [self paula]->muxer.dump();
 }
 
 - (u32) sampleRate
 {
-    return (u32)wrapper->paula->muxer.getSampleRate();
+    return (u32)[self paula]->muxer.getSampleRate();
 }
 
 - (void) setSampleRate:(double)rate
 {
-    wrapper->paula->muxer.setSampleRate(rate);
+    [self paula]->muxer.setSampleRate(rate);
 }
 
 - (void) readMonoSamples:(float *)target size:(NSInteger)n
 {
-    wrapper->paula->muxer.copyMono(target, n);
+    [self paula]->muxer.copyMono(target, n);
 }
 
 - (void) readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
 {
-    wrapper->paula->muxer.copyStereo(target1, target2, n);
+    [self paula]->muxer.copyStereo(target1, target2, n);
 }
 
 - (void) rampUp
 {
-    wrapper->paula->muxer.rampUp();
+    [self paula]->muxer.rampUp();
 }
 
 - (void) rampUpFromZero
 {
-    wrapper->paula->muxer.rampUpFromZero();
+    [self paula]->muxer.rampUpFromZero();
 }
 
 - (void) rampDown
 {
-    wrapper->paula->muxer.rampDown();
+    [self paula]->muxer.rampDown();
 }
 
 - (float) drawWaveformL:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
 {
-    return wrapper->paula->muxer.stream.draw(buffer, w, h, true, s, c);
+    return [self paula]->muxer.stream.draw(buffer, w, h, true, s, c);
 }
 
 - (float) drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
@@ -1029,7 +973,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (float) drawWaveformR:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
 {
-    return wrapper->paula->muxer.stream.draw(buffer, w, h, false, s, c);
+    return [self paula]->muxer.stream.draw(buffer, w, h, false, s, c);
 }
 
 - (float) drawWaveformR:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
@@ -2109,26 +2053,26 @@ struct SerialPortWrapper { SerialPort *port; };
     wrapper->amiga = amiga;
     
     // Create sub proxys
-    agnus = [[AgnusProxy alloc] initWithAgnus:&amiga->agnus];
-    blitter = [[BlitterProxy alloc] initWithBlitter:&amiga->agnus.blitter];
+    agnus = [[AgnusProxy alloc] initWith:&amiga->agnus];
+    blitter = [[BlitterProxy alloc] initWith:&amiga->agnus.blitter];
     breakpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.breakpoints];
-    ciaA = [[CIAProxy alloc] initWithCIA:&amiga->ciaA];
-    ciaB = [[CIAProxy alloc] initWithCIA:&amiga->ciaB];
+    ciaA = [[CIAProxy alloc] initWith:&amiga->ciaA];
+    ciaB = [[CIAProxy alloc] initWith:&amiga->ciaB];
     controlPort1 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
     controlPort2 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort2];
-    copper = [[CopperProxy alloc] initWithCopper:&amiga->agnus.copper];
+    copper = [[CopperProxy alloc] initWith:&amiga->agnus.copper];
     cpu = [[CPUProxy alloc] initWith:&amiga->cpu];
-    denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];
+    denise = [[DeniseProxy alloc] initWith:&amiga->denise];
     df0 = [[DriveProxy alloc] initWithDrive:&amiga->df0];
     df1 = [[DriveProxy alloc] initWithDrive:&amiga->df1];
     df2 = [[DriveProxy alloc] initWithDrive:&amiga->df2];
     df3 = [[DriveProxy alloc] initWithDrive:&amiga->df3];
     diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->paula.diskController];
-    dmaDebugger = [[DmaDebuggerProxy alloc] initWithDmaDebugger:&amiga->agnus.dmaDebugger];
+    dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
     keyboard = [[KeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
-    mem = [[MemProxy alloc] initWithMemory:&amiga->mem];
-    paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
-    screenRecorder = [[ScreenRecorderProxy alloc] initWithScreenRecorder:&amiga->denise.screenRecorder];
+    mem = [[MemProxy alloc] initWith:&amiga->mem];
+    paula = [[PaulaProxy alloc] initWith:&amiga->paula];
+    screenRecorder = [[ScreenRecorderProxy alloc] initWith:&amiga->denise.screenRecorder];
     serialPort = [[SerialPortProxy alloc] initWithSerialPort:&amiga->serialPort];
     watchpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.watchpoints];
 

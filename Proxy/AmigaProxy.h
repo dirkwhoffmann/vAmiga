@@ -251,33 +251,25 @@ struct SerialPortWrapper;
 
 
 //
-// CIA
+// CIA proxy
 //
 
-@interface CIAProxy : HardwareComponentProxy {
+@interface CIAProxy : HardwareComponentProxy { }
     
-    struct CIAWrapper *wrapper;
-}
-
 - (void) dumpConfig;
-// - (void) dump;
 - (CIAInfo) getInfo;
 
 @end
 
 
 //
-// Memory
+// Memory proxy
 //
 
-@interface MemProxy : HardwareComponentProxy {
-    
-    struct MemWrapper *wrapper;
-}
+@interface MemProxy : HardwareComponentProxy { }
 
 @property (readonly) MemoryConfig config;
 - (MemoryStats) getStats;
-- (void) dump;
 
 - (BOOL) isBootRom:(RomIdentifier)rev;
 - (BOOL) isArosRom:(RomIdentifier)rev;
@@ -328,10 +320,7 @@ struct SerialPortWrapper;
 // Agnus
 //
 
-@interface AgnusProxy : HardwareComponentProxy {
-    
-    struct AgnusWrapper *wrapper;
-}
+@interface AgnusProxy : HardwareComponentProxy { }
 
 - (NSInteger) chipRamLimit;
 
@@ -349,12 +338,8 @@ struct SerialPortWrapper;
 // Copper
 //
 
-@interface CopperProxy : HardwareComponentProxy {
-    
-    struct CopperWrapper *wrapper;
-}
+@interface CopperProxy : HardwareComponentProxy { }
 
-- (void) dump;
 - (CopperInfo) getInfo;
 
 - (BOOL) isIllegalInstr:(NSInteger)addr;
@@ -370,12 +355,8 @@ struct SerialPortWrapper;
 // Blitter
 //
 
-@interface BlitterProxy : HardwareComponentProxy {
-    
-    struct BlitterWrapper *wrapper;
-}
+@interface BlitterProxy : HardwareComponentProxy { }
 
-- (void) dump;
 - (BlitterInfo) getInfo;
 
 @end
@@ -385,10 +366,7 @@ struct SerialPortWrapper;
 // DMA Debugger
 //
 
-@interface DmaDebuggerProxy : Proxy {
-    
-    struct DmaDebuggerWrapper *wrapper;
-}
+@interface DmaDebuggerProxy : Proxy { }
 
 - (DMADebuggerInfo) getInfo;
 
@@ -419,12 +397,8 @@ struct SerialPortWrapper;
 // Denise
 //
 
-@interface DeniseProxy : HardwareComponentProxy {
-    
-    struct DeniseWrapper *wrapper;
-}
+@interface DeniseProxy : HardwareComponentProxy { }
 
-- (void) dump;
 - (DeniseInfo) getInfo;
 - (SpriteInfo) getSpriteInfo:(NSInteger)nr;
 
@@ -447,10 +421,7 @@ struct SerialPortWrapper;
 // ScreenRecorder
 //
 
-@interface ScreenRecorderProxy : Proxy {
-    
-    struct ScreenRecorderWrapper *wrapper;
-}
+@interface ScreenRecorderProxy : Proxy { }
 
 @property (readonly) BOOL hasFFmpeg;
 @property (readonly) BOOL recording;
@@ -470,10 +441,7 @@ struct SerialPortWrapper;
 // Paula
 //
 
-@interface PaulaProxy : HardwareComponentProxy {
-    
-    struct PaulaWrapper *wrapper;
-}
+@interface PaulaProxy : HardwareComponentProxy { }
 
 - (void) dump;
 - (PaulaInfo) getInfo;
