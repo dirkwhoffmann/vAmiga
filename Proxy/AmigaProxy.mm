@@ -1189,12 +1189,10 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// Drive
+// Drive proxy
 //
 
 @implementation DriveProxy
-
-// @synthesize wrapper;
 
 - (Drive *)drive
 {
@@ -1275,25 +1273,21 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// FSDevice
+// FSDevice proxy
 //
 
 @implementation FSDeviceProxy
 
-- (instancetype) initWithDevice:(FSDevice *)volume
+- (FSDevice *)fs
 {
-    if (self = [super init]) {
-        wrapper = new FSDeviceWrapper();
-        wrapper->device = volume;
-    }
-    return self;
+    return (FSDevice *)obj;
 }
 
 + (instancetype) make:(FSDevice *)volume
 {
     if (volume == nullptr) { return nil; }
     
-    FSDeviceProxy *proxy = [[self alloc] initWithDevice: volume];
+    FSDeviceProxy *proxy = [[self alloc] initWith: volume];
     return proxy;
 }
 
@@ -1317,52 +1311,52 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (FSVolumeType) dos
 {
-    return wrapper->device->dos();
+    return [self fs]->dos();
 }
 
 - (NSInteger) numCyls
 {
-    return wrapper->device->getNumCyls();
+    return [self fs]->getNumCyls();
 }
 
 - (NSInteger) numHeads
 {
-    return wrapper->device->getNumHeads();
+    return [self fs]->getNumHeads();
 }
 
 - (NSInteger) numTracks
 {
-    return wrapper->device->getNumTracks();
+    return [self fs]->getNumTracks();
 }
 
 - (NSInteger) numSectors
 {
-    return wrapper->device->getNumSectors();
+    return [self fs]->getNumSectors();
 }
 
 - (NSInteger) numBlocks
 {
-    return wrapper->device->getNumBlocks();
+    return [self fs]->getNumBlocks();
 }
 
 - (void)killVirus
 {
-    wrapper->device->killVirus();
+    [self fs]->killVirus();
 }
 
 - (FSBlockType) blockType:(NSInteger)blockNr
 {
-    return wrapper->device->blockType(blockNr);
+    return [self fs]->blockType(blockNr);
 }
 
 - (FSItemType) itemType:(NSInteger)blockNr pos:(NSInteger)pos
 {
-    return wrapper->device->itemType(blockNr, pos);
+    return [self fs]->itemType(blockNr, pos);
 }
 
 - (FSErrorReport) check:(BOOL)strict
 {
-    return wrapper->device->check(strict);
+    return [self fs]->check(strict);
 }
 
 - (ErrorCode) check:(NSInteger)nr
@@ -1370,42 +1364,42 @@ struct SerialPortWrapper { SerialPort *port; };
            expected:(unsigned char *)exp
              strict:(BOOL)strict
 {
-    return wrapper->device->check(nr, pos, exp, strict);
+    return [self fs]->check(nr, pos, exp, strict);
 }
 
 - (BOOL) isCorrupted:(NSInteger)blockNr
 {
-    return wrapper->device->isCorrupted((u32)blockNr);
+    return [self fs]->isCorrupted((u32)blockNr);
 }
 
 - (NSInteger) getCorrupted:(NSInteger)blockNr
 {
-    return wrapper->device->getCorrupted((u32)blockNr);
+    return [self fs]->getCorrupted((u32)blockNr);
 }
 
 - (NSInteger) nextCorrupted:(NSInteger)blockNr
 {
-    return wrapper->device->nextCorrupted((u32)blockNr);
+    return [self fs]->nextCorrupted((u32)blockNr);
 }
 
 - (NSInteger) prevCorrupted:(NSInteger)blockNr
 {
-    return wrapper->device->prevCorrupted((u32)blockNr);
+    return [self fs]->prevCorrupted((u32)blockNr);
 }
 
 - (void) printDirectory:(BOOL) recursive
 {
-    return wrapper->device->printDirectory(recursive);
+    return [self fs]->printDirectory(recursive);
 }
 
 - (NSInteger) readByte:(NSInteger)block offset:(NSInteger)offset
 {
-    return wrapper->device->readByte(block, (u32)offset);
+    return [self fs]->readByte(block, (u32)offset);
 }
 
 - (ErrorCode) export:(NSString *)path
 {
-    return wrapper->device->exportDirectory([path fileSystemRepresentation]);
+    return [self fs]->exportDirectory([path fileSystemRepresentation]);
 }
 
 @end
@@ -1704,7 +1698,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype)makeWithDrive:(DriveProxy *)proxy
 {
-    Drive *drive = [proxy wrapper]->drive;
+    Drive *drive = [proxy drive];
     ADFFile *archive = ADFFile::makeWithDrive(drive);
     return archive ? [self make: archive] : nil;
 }
@@ -1817,8 +1811,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype) makeWithDrive:(DriveProxy *)drive
 {
-    Drive *d = [drive wrapper]->drive;
-    IMGFile *archive = IMGFile::makeWithDisk(d->disk);
+    IMGFile *archive = IMGFile::makeWithDisk([drive drive]->disk);
     return archive ? [self make: archive] : nil;
 }
 

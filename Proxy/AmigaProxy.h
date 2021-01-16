@@ -557,8 +557,6 @@ struct SerialPortWrapper;
 
 @interface DriveProxy : HardwareComponentProxy { }
 
-@property (readonly) struct DriveWrapper *wrapper;
-
 - (DriveInfo) getInfo;
 
 @property (readonly) NSInteger nr;
@@ -581,10 +579,7 @@ struct SerialPortWrapper;
 // FSDevice
 //
 
-@interface FSDeviceProxy : Proxy {
-    
-    struct FSDeviceWrapper *wrapper;
-}
+@interface FSDeviceProxy : Proxy { }
 
 + (instancetype)makeWithADF:(ADFFileProxy *)adf;
 + (instancetype)makeWithHDF:(HDFFileProxy *)hdf;
