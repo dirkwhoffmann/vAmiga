@@ -526,11 +526,6 @@ struct SerialPortWrapper { SerialPort *port; };
     return [self agnus]->chipRamLimit();
 }
 
-- (void) dump
-{
-    [self agnus]->dump();
-}
-
 - (AgnusInfo) getInfo
 {
     return [self agnus]->getInfo();
@@ -563,11 +558,6 @@ struct SerialPortWrapper { SerialPort *port; };
 - (Copper *)copper
 {
     return (Copper *)obj;
-}
-
-- (void) dump
-{
-    [self copper]->dump();
 }
 
 - (CopperInfo) getInfo
@@ -614,11 +604,6 @@ struct SerialPortWrapper { SerialPort *port; };
 - (Blitter *)blitter
 {
     return (Blitter *)obj;
-}
-
-- (void) dump
-{
-    [self blitter]->dump();
 }
 
 - (BlitterInfo) getInfo
@@ -887,7 +872,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// Paula
+// Paula proxy
 //
 
 @implementation PaulaProxy
@@ -915,11 +900,6 @@ struct SerialPortWrapper { SerialPort *port; };
 - (UARTInfo) getUARTInfo
 {
     return [self paula]->uart.getInfo();
-}
-
-- (void) dump
-{
-    [self paula]->muxer.dump();
 }
 
 - (u32) sampleRate
@@ -989,38 +969,29 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// Mouse
+// Mouse proxy
 //
 
 @implementation MouseProxy
 
-- (instancetype) initWithMouse:(Mouse *)mouse
+- (Mouse *)mouse
 {
-    if (self = [super init]) {
-        wrapper = new MouseWrapper();
-        wrapper->mouse = mouse;
-    }
-    return self;
-}
-
-- (void) dump
-{
-    wrapper->mouse->dump();
+    return (Mouse *)obj;
 }
 
 - (void) setXY:(NSPoint)pos
 {
-    wrapper->mouse->setXY((double)pos.x, (double)pos.y);
+    [self mouse]->setXY((double)pos.x, (double)pos.y);
 }
 
 - (void) setDeltaXY:(NSPoint)pos
 {
-    wrapper->mouse->setDeltaXY((double)pos.x, (double)pos.y);
+    [self mouse]->setDeltaXY((double)pos.x, (double)pos.y);
 }
 
 - (void) trigger:(GamePadAction)event
 {
-    wrapper->mouse->trigger(event);
+    [self mouse]->trigger(event);
 }
 
 @end
@@ -1032,60 +1003,51 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation JoystickProxy
 
-- (instancetype) initWithJoystick:(Joystick *)joystick
+- (Joystick *)joystick
 {
-    if (self = [super init]) {
-        wrapper = new JoystickWrapper();
-        wrapper->joystick = joystick;
-    }
-    return self;
-}
-
-- (void) dump
-{
-    wrapper->joystick->dump();
+    return (Joystick *)obj;
 }
 
 - (void) trigger:(GamePadAction)event
 {
-    wrapper->joystick->trigger(event);
+    [self joystick]->trigger(event);
 }
 
 - (BOOL) autofire
 {
-    return wrapper->joystick->getAutofire();
+    return [self joystick]->getAutofire();
 }
 
 - (void) setAutofire:(BOOL)value
 {
-    return wrapper->joystick->setAutofire(value);
+    return [self joystick]->setAutofire(value);
 }
 
 - (NSInteger) autofireBullets
 {
-    return (NSInteger)wrapper->joystick->getAutofireBullets();
+    return (NSInteger)[self joystick]->getAutofireBullets();
 }
 
 - (void) setAutofireBullets:(NSInteger)value
 {
-    wrapper->joystick->setAutofireBullets((int)value);
+    [self joystick]->setAutofireBullets((int)value);
 }
 
 - (float) autofireFrequency
 {
-    return wrapper->joystick->getAutofireFrequency();
+    return [self joystick]->getAutofireFrequency();
 }
 
 - (void) setAutofireFrequency:(float)value
 {
-    wrapper->joystick->setAutofireFrequency(value);
+    [self joystick]->setAutofireFrequency(value);
 }
 
 @end
 
 
 //
-// Control port
+// ControlPort proxy
 //
 
 @implementation ControlPortProxy
@@ -1093,32 +1055,33 @@ struct SerialPortWrapper { SerialPort *port; };
 @synthesize mouse;
 @synthesize joystick;
 
-- (instancetype) initWithControlPort:(ControlPort *)port
+- (instancetype) initWith:(void *)ref
 {
     if (self = [super init]) {
-        wrapper = new ControlPortWrapper();
-        wrapper->port = port;
-        joystick = [[JoystickProxy alloc] initWithJoystick:&port->joystick];
-        mouse = [[MouseProxy alloc] initWithMouse:&port->mouse];
+        
+        ControlPort *port = (ControlPort *)ref;
+        obj = ref;
+        joystick = [[JoystickProxy alloc] initWith:&port->joystick];
+        mouse = [[MouseProxy alloc] initWith:&port->mouse];
     }
     return self;
 }
 
-- (void) dump
+- (ControlPort *)cp
 {
-    wrapper->port->dump();
+    return (ControlPort *)obj;
 }
 
 - (ControlPortInfo) getInfo
 {
-    return wrapper->port->getInfo();
+    return [self cp]->getInfo();
 }
 
 @end
 
 
 //
-// Serial port
+// SerialPort proxy
 //
 
 @implementation SerialPortProxy
@@ -1130,11 +1093,6 @@ struct SerialPortWrapper { SerialPort *port; };
         wrapper->port = port;
     }
     return self;
-}
-
-- (void) dump
-{
-    wrapper->port->dump();
 }
 
 - (SerialPortInfo) getInfo
@@ -1158,11 +1116,6 @@ struct SerialPortWrapper { SerialPort *port; };
         wrapper->keyboard = keyboard;
     }
     return self;
-}
-
-- (void) dump
-{
-    wrapper->keyboard->dump();
 }
 
 - (BOOL) keyIsPressed:(NSInteger)keycode
@@ -1201,11 +1154,6 @@ struct SerialPortWrapper { SerialPort *port; };
         wrapper->controller = controller;
     }
     return self;
-}
-
-- (void) dump
-{
-    wrapper->controller->dump();
 }
 
 - (DiskControllerConfig) getConfig
@@ -1277,11 +1225,6 @@ struct SerialPortWrapper { SerialPort *port; };
 - (NSInteger) nr
 {
     return wrapper->drive->getNr();
-}
-
-- (void) dump
-{
-    wrapper->drive->dump();
 }
 
 - (BOOL) hasDisk
@@ -1485,14 +1428,10 @@ struct SerialPortWrapper { SerialPort *port; };
     return wrapper->device->exportDirectory([path fileSystemRepresentation]);
 }
 
-- (void) dump
-{
-    wrapper->device->dump();
-}
 @end
 
 //
-// AmigaFile
+// AmigaFile proxy
 //
 
 @implementation AmigaFileProxy
@@ -2058,8 +1997,8 @@ struct SerialPortWrapper { SerialPort *port; };
     breakpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.breakpoints];
     ciaA = [[CIAProxy alloc] initWith:&amiga->ciaA];
     ciaB = [[CIAProxy alloc] initWith:&amiga->ciaB];
-    controlPort1 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
-    controlPort2 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort2];
+    controlPort1 = [[ControlPortProxy alloc] initWith:&amiga->controlPort1];
+    controlPort2 = [[ControlPortProxy alloc] initWith:&amiga->controlPort2];
     copper = [[CopperProxy alloc] initWith:&amiga->agnus.copper];
     cpu = [[CPUProxy alloc] initWith:&amiga->cpu];
     denise = [[DeniseProxy alloc] initWith:&amiga->denise];
@@ -2152,11 +2091,6 @@ struct SerialPortWrapper { SerialPort *port; };
 - (void) softReset
 {
     wrapper->amiga->reset(false);
-}
-
-- (void) dump
-{
-    wrapper->amiga->dump();
 }
 
 - (AmigaInfo) getInfo

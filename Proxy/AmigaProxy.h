@@ -151,7 +151,6 @@ struct SerialPortWrapper;
 - (void) powerOff;
 - (void) hardReset;
 - (void) softReset;
-- (void) dump;
 
 - (AmigaInfo) getInfo;
 
@@ -324,8 +323,6 @@ struct SerialPortWrapper;
 
 - (NSInteger) chipRamLimit;
 
-- (void) dump;
-
 - (AgnusInfo) getInfo;
 - (EventSlotInfo) getEventSlotInfo:(NSInteger)slot;
 - (EventInfo) getEventInfo;
@@ -438,12 +435,11 @@ struct SerialPortWrapper;
 
 
 //
-// Paula
+// Paula proxy
 //
 
 @interface PaulaProxy : HardwareComponentProxy { }
 
-- (void) dump;
 - (PaulaInfo) getInfo;
 - (AudioInfo) getAudioInfo;
 - (MuxerStats) getMuxerStats;
@@ -468,13 +464,11 @@ struct SerialPortWrapper;
 
 
 //
-// ControlPort
+// ControlPort proxy
 //
 
 @interface ControlPortProxy : HardwareComponentProxy {
-    
-    struct ControlPortWrapper *wrapper;
-    
+        
     MouseProxy *mouse;
     JoystickProxy *joystick;
 }
@@ -482,7 +476,6 @@ struct SerialPortWrapper;
 @property (readonly, strong) MouseProxy *mouse;
 @property (readonly, strong) JoystickProxy *joystick;
 
-- (void) dump;
 - (ControlPortInfo) getInfo;
 
 @end
@@ -497,22 +490,16 @@ struct SerialPortWrapper;
     struct SerialPortWrapper *wrapper;
 }
 
-- (void) dump;
 - (SerialPortInfo) getInfo;
 
 @end
 
 
 //
-// Mouse
+// Mouse proxy
 //
 
-@interface MouseProxy : HardwareComponentProxy {
-    
-    struct MouseWrapper *wrapper;
-}
-
-- (void) dump;
+@interface MouseProxy : HardwareComponentProxy { }
 
 - (void) setXY:(NSPoint)pos;
 - (void) setDeltaXY:(NSPoint)pos;
@@ -522,15 +509,13 @@ struct SerialPortWrapper;
 
 
 //
-// Joystick
+// Joystick proxy
 //
 
 @interface JoystickProxy : HardwareComponentProxy {
     
     struct JoystickWrapper *wrapper;
 }
-
-- (void) dump;
 
 - (void) trigger:(GamePadAction)event;
 @property BOOL autofire;
@@ -549,8 +534,6 @@ struct SerialPortWrapper;
     struct KeyboardWrapper *wrapper;
 }
 
-- (void) dump;
-
 - (BOOL) keyIsPressed:(NSInteger)keycode;
 - (void) pressKey:(NSInteger)keycode;
 - (void) releaseKey:(NSInteger)keycode;
@@ -568,7 +551,6 @@ struct SerialPortWrapper;
     struct DiskControllerWrapper *wrapper;
 }
 
-- (void) dump;
 - (DiskControllerConfig) getConfig;
 - (DiskControllerInfo) getInfo;
 @property (readonly) NSInteger selectedDrive;
@@ -592,7 +574,6 @@ struct SerialPortWrapper;
 
 @property (readonly) struct DriveWrapper *wrapper;
 
-- (void) dump;
 - (DriveInfo) getInfo;
 
 @property (readonly) NSInteger nr;
@@ -645,8 +626,6 @@ struct SerialPortWrapper;
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (ErrorCode)export:(NSString *)path;
-
-- (void)dump;
 
 @end
 
@@ -746,7 +725,7 @@ struct SerialPortWrapper;
 
 
 //
-// HDFFileProxy
+// HDFFile proxy
 //
 
 @interface HDFFileProxy : AmigaFileProxy {
