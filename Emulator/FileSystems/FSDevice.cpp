@@ -207,7 +207,7 @@ FSDevice::dump()
         if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
         
         msg("\nBlock %zu (%d):", i, blocks[i]->nr);
-        msg(" %s\n", sFSBlockType(blocks[i]->type()));
+        msg(" %s\n", FSBlockTypeEnum::key(blocks[i]->type()));
                 
         blocks[i]->dump(); 
     }

@@ -268,7 +268,7 @@ if (value > exp) \
 { *expected = (u8)(exp); return ERROR_FS_EXPECTED_SMALLER_VALUE; } }
 
 #define EXPECT_DOS_REVISION { \
-if (!isFSVolumeType(value)) return ERROR_FS_EXPECTED_DOS_REVISION; }
+if (!FSVolumeTypeEnum::isValid(value)) return ERROR_FS_EXPECTED_DOS_REVISION; }
 
 #define EXPECT_REF { \
 if (!partition.dev.block(value)) return ERROR_FS_EXPECTED_REF; }

@@ -268,11 +268,11 @@ ADFFile::killVirus()
 bool
 ADFFile::formatDisk(FSVolumeType fs, long bootBlockID)
 {
-    assert(isFSVolumeType(fs));
+    assert_enum(FSVolumeType, fs);
 
     ErrorCode error;
 
-    msg("Formatting disk with %ld blocks (%s)\n", numBlocks(), sFSVolumeType(fs));
+    msg("Formatting disk with %ld blocks (%s)\n", numBlocks(), FSVolumeTypeEnum::key(fs));
 
     // Only proceed if a file system is given
     if (fs == FS_NODOS) return false;

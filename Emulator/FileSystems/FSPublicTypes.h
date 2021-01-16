@@ -13,7 +13,7 @@
 
 #include "Aliases.h"
 
-enum_long(FSVolumeType)
+enum_long(FS_VOLUME_TYPE)
 {
     FS_NODOS = -1,
     FS_OFS = 0,         // Original File System
@@ -25,11 +25,7 @@ enum_long(FSVolumeType)
     FS_OFS_LNFS = 6,    // "Long Filenames" (not supported)
     FS_FFS_LNFS = 7     // "Long Filenames" (not supported)
 };
-
-inline bool isFSVolumeType(long value)
-{
-    return value >= FS_NODOS && value <= FS_FFS_LNFS;
-}
+typedef FS_VOLUME_TYPE FSVolumeType;
 
 inline bool isOFSVolumeType(long value)
 {
@@ -53,23 +49,7 @@ inline bool isFFSVolumeType(long value)
     }
 }
 
-inline const char *sFSVolumeType(FSVolumeType value)
-{
-    switch (value) {
-        case FS_NODOS:    return "No DOS";
-        case FS_OFS:      return "OFS";
-        case FS_FFS:      return "FFS";
-        case FS_OFS_INTL: return "OFS_INTL";
-        case FS_FFS_INTL: return "FFS_INTL";
-        case FS_OFS_DC:   return "OFS_DC";
-        case FS_FFS_DC:   return "FFS_DC";
-        case FS_OFS_LNFS: return "OFS_LNFS";
-        case FS_FFS_LNFS: return "FFS_LNFS";
-        default:          return "???";
-    }
-}
-
-enum_long( FSBlockType)
+enum_long(FS_BLOCK_TYPE)
 {
     FS_UNKNOWN_BLOCK,
     FS_EMPTY_BLOCK,
@@ -81,9 +61,13 @@ enum_long( FSBlockType)
     FS_FILEHEADER_BLOCK,
     FS_FILELIST_BLOCK,
     FS_DATA_BLOCK_OFS,
-    FS_DATA_BLOCK_FFS
+    FS_DATA_BLOCK_FFS,
+    
+    FS_BLOCK_TYPE_COUNT
 };
+typedef FS_BLOCK_TYPE FSBlockType;
 
+/*
 inline bool
 isFSBlockType(long value)
 {
@@ -109,8 +93,9 @@ sFSBlockType(FSBlockType type)
         default:                  return "???";
     }
 }
+*/
 
-enum_long( FSItemType)
+enum_long(FSI_TYPE)
 {
     FSI_UNKNOWN,
     FSI_UNUSED,
@@ -151,14 +136,18 @@ enum_long( FSItemType)
     FSI_DATA_COUNT,
     FSI_DATA,
     FSI_BITMAP,
+    
+    FSI_COUNT
 };
+typedef FSI_TYPE FSItemType;
 
+/*
 inline bool
 isFSBlockItem(long value)
 {
     return value >= 0 && value <= FSI_BITMAP;
 }
-
+*/
 
 //
 // Structures
