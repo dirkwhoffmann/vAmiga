@@ -1086,18 +1086,14 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation SerialPortProxy
 
-- (instancetype) initWithSerialPort:(SerialPort *)port
+- (SerialPort *)serial
 {
-    if (self = [super init]) {
-        wrapper = new SerialPortWrapper();
-        wrapper->port = port;
-    }
-    return self;
+    return (SerialPort *)obj;
 }
 
 - (SerialPortInfo) getInfo
 {
-    return wrapper->port->getInfo();
+    return [self serial]->getInfo();
 }
 
 @end
@@ -1109,33 +1105,29 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation KeyboardProxy
 
-- (instancetype) initWithKeyboard:(Keyboard *)keyboard
+- (Keyboard *)kb
 {
-    if (self = [super init]) {
-        wrapper = new KeyboardWrapper();
-        wrapper->keyboard = keyboard;
-    }
-    return self;
+    return (Keyboard *)obj;
 }
 
 - (BOOL) keyIsPressed:(NSInteger)keycode
 {
-    return wrapper->keyboard->keyIsPressed(keycode);
+    return [self kb]->keyIsPressed(keycode);
 }
 
 - (void) pressKey:(NSInteger)keycode
 {
-    wrapper->keyboard->pressKey(keycode);
+    [self kb]->pressKey(keycode);
 }
 
 - (void) releaseKey:(NSInteger)keycode
 {
-    wrapper->keyboard->releaseKey(keycode);
+    [self kb]->releaseKey(keycode);
 }
 
 - (void) releaseAllKeys
 {
-    wrapper->keyboard->releaseAllKeys();
+    [self kb]->releaseAllKeys();
 }
 
 @end
@@ -1147,54 +1139,50 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation DiskControllerProxy
 
-- (instancetype) initWithDiskController:(DiskController *)controller
+- (DiskController *)dc
 {
-    if (self = [super init]) {
-        wrapper = new DiskControllerWrapper();
-        wrapper->controller = controller;
-    }
-    return self;
+    return (DiskController *)obj;
 }
 
 - (DiskControllerConfig) getConfig
 {
-    return wrapper->controller->getConfig();
+    return [self dc]->getConfig();
 }
 
 - (DiskControllerInfo) getInfo
 {
-    return wrapper->controller->getInfo();
+    return [self dc]->getInfo();
 }
 
 - (NSInteger) selectedDrive
 {
-    return wrapper->controller->getSelected();
+    return [self dc]->getSelected();
 }
 
 - (DriveState) state
 {
-    return wrapper->controller->getState();
+    return [self dc]->getState();
 }
 
 - (BOOL) isSpinning
 {
-    return wrapper->controller->spinning();
+    return [self dc]->spinning();
 }
 
 - (void) eject:(NSInteger)nr
 {
-    wrapper->controller->ejectDisk(nr);
+    [self dc]->ejectDisk(nr);
 }
 
 - (void) insert:(NSInteger)nr file:(DiskFileProxy *)fileProxy
 {
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
-    wrapper->controller->insertDisk((DiskFile *)(fileWrapper->file), nr);
+    [self dc]->insertDisk((DiskFile *)(fileWrapper->file), nr);
 }
 
 - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value
 {
-    wrapper->controller->setWriteProtection(nr, value);
+    [self dc]->setWriteProtection(nr, value);
 }
 
 @end
@@ -1206,91 +1194,83 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation DriveProxy
 
-@synthesize wrapper;
+// @synthesize wrapper;
 
-- (instancetype) initWithDrive:(Drive *)drive
+- (Drive *)drive
 {
-    if (self = [super init]) {
-        wrapper = new DriveWrapper();
-        wrapper->drive = drive;
-    }
-    return self;
+    return (Drive *)obj;
 }
 
 - (DriveInfo) getInfo
 {
-    return wrapper->drive->getInfo();
+    return [self drive]->getInfo();
 }
 
 - (NSInteger) nr
 {
-    return wrapper->drive->getNr();
+    return [self drive]->getNr();
 }
 
 - (BOOL) hasDisk
 {
-    return wrapper->drive->hasDisk();
+    return [self drive]->hasDisk();
 }
 
 - (BOOL) hasDDDisk
 {
-    return wrapper->drive->hasDDDisk();
+    return [self drive]->hasDDDisk();
 }
 
 - (BOOL) hasHDDisk
 {
-    return wrapper->drive->hasHDDisk();
+    return [self drive]->hasHDDisk();
 }
 
 - (BOOL) hasWriteProtectedDisk
 {
-    return wrapper->drive->hasWriteProtectedDisk();
+    return [self drive]->hasWriteProtectedDisk();
 }
 
 - (void) setWriteProtection:(BOOL)value
 {
-    wrapper->drive->setWriteProtection(value);
+    [self drive]->setWriteProtection(value);
 }
 
 - (void) toggleWriteProtection
 {
-    wrapper->drive->toggleWriteProtection();
+    [self drive]->toggleWriteProtection();
 }
 
 - (BOOL) isInsertable:(DiskDiameter)type density:(DiskDensity)density
 {
-    return wrapper->drive->isInsertable(type, density);
+    return [self drive]->isInsertable(type, density);
 }
 
 - (BOOL) isModifiedDisk
 {
-    return wrapper->drive->hasModifiedDisk();
+    return [self drive]->hasModifiedDisk();
 }
 
 - (void) setModifiedDisk:(BOOL)value
 {
-    wrapper->drive->setModifiedDisk(value);
+    [self drive]->setModifiedDisk(value);
 }
 
 - (BOOL) motor
 {
-    return wrapper->drive->getMotor();
+    return [self drive]->getMotor();
 }
 
 - (NSInteger) cylinder
 {
-    return wrapper->drive->getCylinder();
+    return [self drive]->getCylinder();
 }
 
 - (u64) fnv
 {
-    return wrapper->drive->fnv();
+    return [self drive]->fnv();
 }
 
-- (ADFFileProxy *)convertDisk
-{
-    return nullptr;
-}
 @end
 
 
@@ -2002,17 +1982,17 @@ struct SerialPortWrapper { SerialPort *port; };
     copper = [[CopperProxy alloc] initWith:&amiga->agnus.copper];
     cpu = [[CPUProxy alloc] initWith:&amiga->cpu];
     denise = [[DeniseProxy alloc] initWith:&amiga->denise];
-    df0 = [[DriveProxy alloc] initWithDrive:&amiga->df0];
-    df1 = [[DriveProxy alloc] initWithDrive:&amiga->df1];
-    df2 = [[DriveProxy alloc] initWithDrive:&amiga->df2];
-    df3 = [[DriveProxy alloc] initWithDrive:&amiga->df3];
-    diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->paula.diskController];
+    df0 = [[DriveProxy alloc] initWith:&amiga->df0];
+    df1 = [[DriveProxy alloc] initWith:&amiga->df1];
+    df2 = [[DriveProxy alloc] initWith:&amiga->df2];
+    df3 = [[DriveProxy alloc] initWith:&amiga->df3];
+    diskController = [[DiskControllerProxy alloc] initWith:&amiga->paula.diskController];
     dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
-    keyboard = [[KeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
+    keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
     screenRecorder = [[ScreenRecorderProxy alloc] initWith:&amiga->denise.screenRecorder];
-    serialPort = [[SerialPortProxy alloc] initWithSerialPort:&amiga->serialPort];
+    serialPort = [[SerialPortProxy alloc] initWith:&amiga->serialPort];
     watchpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.watchpoints];
 
     return self;

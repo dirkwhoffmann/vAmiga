@@ -485,10 +485,7 @@ struct SerialPortWrapper;
 // SerialPort
 //
 
-@interface SerialPortProxy : HardwareComponentProxy {
-
-    struct SerialPortWrapper *wrapper;
-}
+@interface SerialPortProxy : HardwareComponentProxy { }
 
 - (SerialPortInfo) getInfo;
 
@@ -512,10 +509,7 @@ struct SerialPortWrapper;
 // Joystick proxy
 //
 
-@interface JoystickProxy : HardwareComponentProxy {
-    
-    struct JoystickWrapper *wrapper;
-}
+@interface JoystickProxy : HardwareComponentProxy { }
 
 - (void) trigger:(GamePadAction)event;
 @property BOOL autofire;
@@ -526,13 +520,10 @@ struct SerialPortWrapper;
 
 
 //
-// Keyboard
+// Keyboard proxy
 //
 
-@interface KeyboardProxy : HardwareComponentProxy {
-    
-    struct KeyboardWrapper *wrapper;
-}
+@interface KeyboardProxy : HardwareComponentProxy { }
 
 - (BOOL) keyIsPressed:(NSInteger)keycode;
 - (void) pressKey:(NSInteger)keycode;
@@ -546,10 +537,7 @@ struct SerialPortWrapper;
 // DiskController
 //
 
-@interface DiskControllerProxy : HardwareComponentProxy {
-    
-    struct DiskControllerWrapper *wrapper;
-}
+@interface DiskControllerProxy : HardwareComponentProxy { }
 
 - (DiskControllerConfig) getConfig;
 - (DiskControllerInfo) getInfo;
@@ -567,10 +555,7 @@ struct SerialPortWrapper;
 // Drive
 //
 
-@interface DriveProxy : HardwareComponentProxy {
-    
-    struct DriveWrapper *wrapper;
-}
+@interface DriveProxy : HardwareComponentProxy { }
 
 @property (readonly) struct DriveWrapper *wrapper;
 
@@ -588,8 +573,6 @@ struct SerialPortWrapper;
 @property (readonly) BOOL motor;
 @property (readonly) NSInteger cylinder;
 @property (readonly) u64 fnv;
-
-- (ADFFileProxy *)convertDisk;
 
 @end
 
