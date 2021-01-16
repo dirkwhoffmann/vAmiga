@@ -494,7 +494,7 @@ Memory::loadRomFromBuffer(const u8 *buffer, size_t length)
 }
 
 bool
-Memory::loadRomFromFile(const char *path, FileError *error)
+Memory::loadRomFromFile(const char *path, ErrorCode *error)
 {
     assert(path != nullptr);
     
@@ -511,7 +511,6 @@ Memory::loadExt(ExtendedRomFile *file)
 {
     assert(file != nullptr);
 
-    // Allocate memory and load file
     if (!allocExt(file->getSize())) return false;
     loadRom(file, ext, config.extSize);
 

@@ -282,7 +282,7 @@ struct SerialPortWrapper;
 - (void) deleteRom;
 - (BOOL) isRom:(NSURL *)url;
 - (BOOL) loadRomFromBuffer:(NSData *)buffer;
-- (BOOL) loadRomFromFile:(NSURL *)url error:(FileError *)err;
+- (BOOL) loadRomFromFile:(NSURL *)url error:(ErrorCode *)err;
 - (u64) romFingerprint;
 - (RomIdentifier) romIdentifier;
 @property (readonly, copy) NSString *romTitle;
@@ -709,9 +709,9 @@ struct SerialPortWrapper;
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len;
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(FileError *)err;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err;
 + (instancetype)makeWithFile:(NSString *)path;
-+ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 + (instancetype)makeWithAmiga:(AmigaProxy *)amiga;
 
 @property (readonly, strong) NSImage *previewImage;
@@ -759,7 +759,7 @@ struct SerialPortWrapper;
 
 + (BOOL)isADFFile:(NSString *)path;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 + (instancetype)makeWithDiameter:(DiskDiameter)type density:(DiskDensity)density;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
 
@@ -777,7 +777,7 @@ struct SerialPortWrapper;
 
 + (BOOL)isHDFFile:(NSString *)path;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
-+ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 
 @property (readonly) NSInteger numBlocks;
 
@@ -793,7 +793,7 @@ struct SerialPortWrapper;
 
 + (BOOL)isEXTFile:(NSString *)path;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
-+ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 
 @end
 
@@ -807,7 +807,7 @@ struct SerialPortWrapper;
 
 + (BOOL)isIMGFile:(NSString *)path;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
-+ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
 
 @end
@@ -822,7 +822,7 @@ struct SerialPortWrapper;
 
 + (BOOL)isDMSFile:(NSString *)path;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
-+ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 
 - (ADFFileProxy *)adf;
 
@@ -838,7 +838,7 @@ struct SerialPortWrapper;
 
 + (BOOL)isEXEFile:(NSString *)path;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
-+ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 
 - (ADFFileProxy *)adf;
 
@@ -853,7 +853,7 @@ struct SerialPortWrapper;
 }
 
 + (BOOL)isDIRFile:(NSString *)path;
-+ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 
 - (ADFFileProxy *)adf;
 

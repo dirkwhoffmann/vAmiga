@@ -31,32 +31,6 @@ enum_long(FILETYPE)
 };
 typedef FILETYPE FileType;
 
-/*
-inline bool isFileType(long value)
-{
-    return (unsigned long)value < FILETYPE_EXTENDED_ROM;
-}
-
-inline const char *FileTypeName(FileType value)
-{
-    switch (value) {
-            
-        case FILETYPE_UKNOWN:        return "UNKNOWN";
-        case FILETYPE_SNAPSHOT:      return "SNAPSHOT";
-        case FILETYPE_ADF:           return "ADF";
-        case FILETYPE_HDF:           return "HDF";
-        case FILETYPE_EXT:           return "EXT";
-        case FILETYPE_IMG:           return "IMG";
-        case FILETYPE_DMS:           return "DMS";
-        case FILETYPE_EXE:           return "EXE";
-        case FILETYPE_DIR:           return "DIR";
-        case FILETYPE_ROM:           return "ROM";
-        case FILETYPE_EXTENDED_ROM:  return "EXTENDED_ROM";
-    }
-    return "???";
-}
-*/
-
 enum_long(ROM_IDENTIFIER)
 {
     ROM_MISSING,
@@ -102,28 +76,6 @@ enum_long(ROM_IDENTIFIER)
     ROM_COUNT
 };
 typedef ROM_IDENTIFIER RomIdentifier;
-
-// static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_CNT; }
-
-enum_long(FileError)
-{
-    ERR_FILE_OK,
-    
-    // General
-    ERR_FILE_NOT_FOUND,
-    ERR_INVALID_TYPE,
-    ERR_CANT_READ,
-    ERR_CANT_WRITE,
-    ERR_OUT_OF_MEMORY,
-    ERR_UNKNOWN,
-    
-    // Snapshots
-    ERR_UNSUPPORTED_SNAPSHOT,
-    
-    // Encrypted Roms
-    ERR_MISSING_ROM_KEY,
-    ERR_INVALID_ROM_KEY
-};
 
 enum_long(BB_TYPE)
 {

@@ -343,7 +343,7 @@ struct SerialPortWrapper { SerialPort *port; };
     return wrapper->mem->loadRomFromBuffer(bytes, [data length]);
 }
 
-- (BOOL) loadRomFromFile:(NSURL *)url error:(FileError *)err
+- (BOOL) loadRomFromFile:(NSURL *)url error:(ErrorCode *)err
 {
     return wrapper->mem->loadRomFromFile([url fileSystemRepresentation], err);
 }
@@ -1577,7 +1577,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (void) readFromBuffer:(const void *)buffer length:(NSInteger)length
 {
-    FileError error;
+    ErrorCode error;
     wrapper->file->readFromBuffer((const u8 *)buffer, length, &error);
 }
 
@@ -1619,7 +1619,7 @@ struct SerialPortWrapper { SerialPort *port; };
     return [self make:snapshot];
 }
 
-+ (instancetype) makeWithBuffer:(const void *)buf length:(NSInteger)len error:(FileError *)err
++ (instancetype) makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
 {
     Snapshot *snapshot = AmigaFile::make <Snapshot> ((u8 *)buf, len, err);
     return [self make:snapshot];
@@ -1631,7 +1631,7 @@ struct SerialPortWrapper { SerialPort *port; };
     return [self make:snapshot];
 }
 
-+ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
++ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
 {
     Snapshot *snapshot = AmigaFile::make <Snapshot> ([path UTF8String], err);
     return [self make:snapshot];
@@ -1803,7 +1803,7 @@ struct SerialPortWrapper { SerialPort *port; };
     return [self make: archive];
 }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(FileError *)err
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
 {
     ADFFile *archive = AmigaFile::make <ADFFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
@@ -1853,7 +1853,7 @@ struct SerialPortWrapper { SerialPort *port; };
     return [self make: archive];
 }
 
-+ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
++ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
 {
     HDFFile *archive = AmigaFile::make <HDFFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
@@ -1890,7 +1890,7 @@ struct SerialPortWrapper { SerialPort *port; };
     return [self make: archive];
 }
 
-+ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
++ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
 {
     EXTFile *archive = AmigaFile::make <EXTFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
@@ -1922,7 +1922,7 @@ struct SerialPortWrapper { SerialPort *port; };
     return [self make: archive];
 }
 
-+ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
++ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
 {
     IMGFile *archive = AmigaFile::make <IMGFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
@@ -1961,7 +1961,7 @@ struct SerialPortWrapper { SerialPort *port; };
     return [self make: archive];
 }
 
-+ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
++ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
 {
     DMSFile *archive = AmigaFile::make <DMSFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
@@ -1996,7 +1996,7 @@ struct SerialPortWrapper { SerialPort *port; };
     EXEFile *archive = AmigaFile::make <EXEFile> ((const u8 *)buffer, len);
     return [self make: archive];
 }
-+ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
++ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
 {
     EXEFile *archive = AmigaFile::make <EXEFile> ([path fileSystemRepresentation], err);
     return [self make: archive];
@@ -2028,7 +2028,7 @@ struct SerialPortWrapper { SerialPort *port; };
     return [[self alloc] initWithFile:archive];
 }
 
-+ (instancetype) makeWithFile:(NSString *)path error:(FileError *)err
++ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
 {
     DIRFile *archive = AmigaFile::make <DIRFile> ([path fileSystemRepresentation], err);
     return [self make: archive];

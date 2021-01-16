@@ -38,12 +38,12 @@ EXEFile::isEXEFile(const char *path)
 }
 
 bool
-EXEFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
+EXEFile::readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error)
 {
     bool success = false;
     
     if (!isEXEBuffer(buffer, length)) {
-        if (error) *error = ERR_INVALID_TYPE;
+        if (error) *error = ERROR_INVALID_TYPE;
         return false;
     }
 
@@ -106,6 +106,6 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
     
     volume->exportDirectory(path);
     
-    if (error) *error = adf ? ERR_FILE_OK : ERR_UNKNOWN;
+    if (error) *error = adf ? ERROR_OK : ERROR_UNKNOWN;
     return adf != nullptr;
 }

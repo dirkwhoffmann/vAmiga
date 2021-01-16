@@ -137,45 +137,45 @@ extension HDFFileProxy {
 
 extension NSError {
     
-    static func fileError(_ err: FileError, url: URL) -> NSError {
+    static func fileError(_ err: ErrorCode, url: URL) -> NSError {
         
         let str = "\"" + url.lastPathComponent + "\""
         var info1, info2: String
 
         switch err {
                     
-        case .ERR_FILE_OK:
+        case .OK:
             fatalError()
-            
-        case .ERR_FILE_NOT_FOUND:
+        
+        case .FILE_NOT_FOUND:
             info1 = "File " + str + " could not be opened."
             info2 = "The file does not exist."
             
-        case .ERR_INVALID_TYPE:
+        case .INVALID_TYPE:
             info1 = "File " + str + " could not be opened."
             info2 = "The file format does not match."
             
-        case .ERR_CANT_READ:
+        case .CANT_READ:
             info1 = "Can't read from file " + str + "."
             info2 = "The file cannot be opened."
             
-        case .ERR_CANT_WRITE:
+        case .CANT_WRITE:
             info1 = "Can't write to file " + str + "."
             info2 = "The file cannot be opened."
             
-        case .ERR_OUT_OF_MEMORY:
+        case .OUT_OF_MEMORY:
             info1 = "The file operation cannot be performed."
             info2 = "Not enough memory."
             
-        case .ERR_UNSUPPORTED_SNAPSHOT:
+        case .UNSUPPORTED_SNAPSHOT:
             info1 = "Snapshot " + str + " could not be opened."
             info2 = "The file was created with a different version of vAmiga."
             
-        case .ERR_MISSING_ROM_KEY:
+        case .MISSING_ROM_KEY:
             info1 = "Failed to decrypt the selected Rom image."
             info2 = "A rom.key file is required to process this file."
             
-        case .ERR_INVALID_ROM_KEY:
+        case .INVALID_ROM_KEY:
             info1 = "Failed to decrypt the selected Rom image."
             info2 = "Decrypting the Rom with the provided rom.key file did not produce a valid Rom image."
             
@@ -192,7 +192,7 @@ extension NSError {
 
 extension NSAlert {
 
-    convenience init(fileError err: FileError, url: URL) {
+    convenience init(fileError err: ErrorCode, url: URL) {
         
         self.init()
      
@@ -232,7 +232,7 @@ extension NSAlert {
     }
 }
 
-extension FileError {
+extension ErrorCode {
     
     func showAlert(url: URL) {
         

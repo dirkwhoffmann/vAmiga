@@ -29,21 +29,21 @@ DIRFile::matchingBuffer(const u8 *buffer, size_t length)
 }
 
 bool
-DIRFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
+DIRFile::readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error)
 {
     assert(false);
     return false;
 }
 
 bool
-DIRFile::readFromFile(const char *filename, FileError *error)
+DIRFile::readFromFile(const char *filename, ErrorCode *error)
 {
     debug(FS_DEBUG, "DIRFile::readFromFile(%s)\n", filename);
               
     // Only proceed if the provided filename points to a directory
     if (!isDIRFile(filename)) {
         warn("%s is not a directory\n", filename);
-        if (error) *error = ERR_INVALID_TYPE;
+        if (error) *error = ERROR_INVALID_TYPE;
         return false;
     }
     
@@ -51,7 +51,7 @@ DIRFile::readFromFile(const char *filename, FileError *error)
     FSDevice *volume = FSDevice::make(FS_OFS, filename);
     if (!volume) {
         warn("Contents of %s does not fit on a disk\n", filename);
-        if (error) *error = ERR_UNKNOWN;
+        if (error) *error = ERROR_UNKNOWN;
         return false;
     }
     
@@ -73,6 +73,6 @@ DIRFile::readFromFile(const char *filename, FileError *error)
     debug(FS_DEBUG, "makeWithVolume: %s\n", ErrorCodeEnum::key(fsError));
     delete volume;
     
-    if (error) *error = adf != nullptr ? ERR_UNKNOWN : ERR_FILE_OK;
+    if (error) *error = adf != nullptr ? ERROR_UNKNOWN : ERROR_OK;
     return adf != nullptr;
 }

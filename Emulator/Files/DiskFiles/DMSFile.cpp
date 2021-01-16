@@ -36,14 +36,14 @@ DMSFile::isDMSFile(const char *path)
 }
 
 bool
-DMSFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
+DMSFile::readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error)
 {
     FILE *fpi, *fpo;
     char *pi, *po;
     size_t si, so;
     
     if (!isDMSBuffer(buffer, length)) {
-        if (error) *error = ERR_INVALID_TYPE;
+        if (error) *error = ERROR_INVALID_TYPE;
         return false;
     }
 
@@ -72,7 +72,7 @@ DMSFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
     adf = AmigaFile::make <ADFFile> (fpo);
     fclose(fpo);
     
-    if (error) *error = adf ? ERR_FILE_OK : ERR_UNKNOWN;
+    if (error) *error = adf ? ERROR_OK : ERROR_UNKNOWN;
     return adf != nullptr;
 }
 

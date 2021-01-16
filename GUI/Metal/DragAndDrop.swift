@@ -113,7 +113,7 @@ public extension MetalView {
 
                 let err = document.createAttachment(url: url, allowedTypes: types)
 
-                if err == .ERR_FILE_OK {
+                if err == .OK {
                     return document.mountAttachment()
                 } else {
                     err.showAlert(url: url)

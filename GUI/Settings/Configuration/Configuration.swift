@@ -389,7 +389,7 @@ class Configuration {
     func loadRomUserDefaults() {
 
         let defaults = UserDefaults.standard
-        var error: FileError = .ERR_FILE_OK
+        var error: ErrorCode = .OK
 
         amiga.suspend()
 

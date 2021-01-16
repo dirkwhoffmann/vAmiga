@@ -381,9 +381,9 @@ RomFile::isRomFile(const char *path)
 }
 
 bool
-RomFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
+RomFile::readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error)
 {
-    FileError err;
+    ErrorCode err;
     
     // Read from buffer
     if (AmigaFile::readFromBuffer(buffer, length, &err)) {
@@ -394,14 +394,14 @@ RomFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
     }
     
     if (error) *error = err;
-    return err == ERR_FILE_OK;
+    return err == ERROR_OK;
 }
 
 bool
-RomFile::decrypt(FileError *error)
+RomFile::decrypt(ErrorCode *error)
 {
     const size_t headerSize = 11;
-    FileError err = ERR_FILE_OK;
+    ErrorCode err = ERROR_OK;
     u8 *encryptedData = nullptr;
     u8 *decryptedData = nullptr;
     u8 *romKeyData = nullptr;
@@ -411,13 +411,13 @@ RomFile::decrypt(FileError *error)
     assert(path != nullptr);
     char *romKeyPath = replaceFilename(path, "rom.key");
     if (romKeyPath == nullptr) {
-        err = ERR_MISSING_ROM_KEY;
+        err = ERROR_MISSING_ROM_KEY;
         goto exit;
     }
     
     // Load the rom.key file
     if (!loadFile(romKeyPath, &romKeyData, &romKeySize)) {
-        err = ERR_MISSING_ROM_KEY;
+        err = ERROR_MISSING_ROM_KEY;
         goto exit;
     }
     
@@ -432,7 +432,7 @@ RomFile::decrypt(FileError *error)
 
     // Check if we've got a valid ROM
     if (!isRomBuffer(decryptedData, size - headerSize)) {
-        err = ERR_INVALID_ROM_KEY;
+        err = ERROR_INVALID_ROM_KEY;
         goto exit;
     }
 
@@ -447,5 +447,5 @@ exit:
     if (romKeyData) delete [] romKeyData;
     
     *error = err;
-    return err == ERR_FILE_OK;
+    return err == ERROR_OK;
 }

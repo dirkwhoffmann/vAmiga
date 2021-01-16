@@ -134,6 +134,12 @@ struct ErrorCodeEnum : Reflection<ErrorCodeEnum, ErrorCode> {
         switch (value) {
                 
             case ERROR_OK:                          return "OK";
+            case ERROR_UNKNOWN:                     return "UNKNOWN";
+                
+            case ERROR_FILE_NOT_FOUND:              return "FILE_NOT_FOUND";
+            case ERROR_INVALID_TYPE:                return "INVALID_TYPE";
+            case ERROR_CANT_READ:                   return "CANT_READ";
+            case ERROR_CANT_WRITE:                  return "CANT_WRITE";
                 
             case ERROR_OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
             case ERROR_CHIP_RAM_LIMIT:              return "CHIP_RAM_LIMIT";
@@ -142,6 +148,11 @@ struct ErrorCodeEnum : Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_ROM_MISSING:                 return "ROM_MISSING";
             case ERROR_AROS_NO_EXTROM:              return "AROS_NO_EXTROM";
 
+            case ERROR_UNSUPPORTED_SNAPSHOT:        return "UNSUPPORTED_SNAPSHOT";
+                
+            case ERROR_MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
+            case ERROR_INVALID_ROM_KEY:             return "INVALID_ROM_KEY";
+                
             case ERROR_FS_UNKNOWN:                  return "FS_UNKNOWN";
             case ERROR_FS_UNSUPPORTED:              return "FS_UNSUPPORTED";
             case ERROR_FS_WRONG_BSIZE:              return "FS_WRONG_BSIZE";

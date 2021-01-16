@@ -32,9 +32,9 @@ protected:
     
 public:
     
-    template <class T> static T *make(const u8 *buf, usize len, FileError *err = nullptr);
-    template <class T> static T *make(const char *path, FileError *err = nullptr);
-    template <class T> static T *make(FILE *file, FileError *err = nullptr);
+    template <class T> static T *make(const u8 *buf, usize len, ErrorCode *err = nullptr);
+    template <class T> static T *make(const char *path, ErrorCode *err = nullptr);
+    template <class T> static T *make(FILE *file, ErrorCode *err = nullptr);
 
     
     //
@@ -105,7 +105,7 @@ public:
      * matchingBuffer() to verify that the buffer contains a compatible
      * binary representation.
      */
-    virtual bool readFromBuffer(const u8 *buf, usize len, FileError *error = nullptr);
+    virtual bool readFromBuffer(const u8 *buf, usize len, ErrorCode *error = nullptr);
 
     /* Deserializes this object from a file. This function uses
      * matchingFile() to verify that the file contains a compatible binary
@@ -113,11 +113,11 @@ public:
      * first reads in the file contents in memory and invokes readFromBuffer
      * afterwards.
      */
-    virtual bool readFromFile(const char *filename, FileError *err = nullptr);
+    virtual bool readFromFile(const char *filename, ErrorCode *err = nullptr);
 
     /* Deserializes this object from a file that is already open.
      */
-    virtual bool readFromFile(FILE *file, FileError *err = nullptr);
+    virtual bool readFromFile(FILE *file, ErrorCode *err = nullptr);
 
     /* Writes the file contents into a memory buffer. If nullptr is
      * passed in, a test run is performed. Test runs can be performed to
@@ -128,5 +128,5 @@ public:
     /* Writes the file contents to a file. It invokes writeToBuffer first and
      * writes the data to disk afterwards.
      */
-    bool writeToFile(const char *path, FileError *err = nullptr) const;
+    bool writeToFile(const char *path, ErrorCode *err = nullptr) const;
 };

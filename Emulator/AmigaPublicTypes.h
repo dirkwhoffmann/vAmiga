@@ -123,6 +123,13 @@ typedef EMULATOR_STATE EmulatorState;
 enum_long(ERROR_CODE)
 {
     ERROR_OK,
+    ERROR_UNKNOWN,
+    
+    // General
+    ERROR_FILE_NOT_FOUND,
+    ERROR_INVALID_TYPE,
+    ERROR_CANT_READ,
+    ERROR_CANT_WRITE,
 
     // Memory
     ERROR_OUT_OF_MEMORY,
@@ -132,8 +139,15 @@ enum_long(ERROR_CODE)
     // Roms
     ERROR_ROM_MISSING,
     ERROR_AROS_NO_EXTROM,
-
-    // File system errors
+    
+    // Snapshots
+    ERROR_UNSUPPORTED_SNAPSHOT,
+    
+    // Encrypted Roms
+    ERROR_MISSING_ROM_KEY,
+    ERROR_INVALID_ROM_KEY,
+    
+    // File system
     ERROR_FS_UNKNOWN,
     ERROR_FS_UNSUPPORTED,
     ERROR_FS_WRONG_BSIZE,
@@ -141,12 +155,12 @@ enum_long(ERROR_CODE)
     ERROR_FS_HAS_CYCLES,
     ERROR_FS_CORRUPTED,
 
-    // Export errors
+    // File system (export errors)
     ERROR_FS_DIRECTORY_NOT_EMPTY,
     ERROR_FS_CANNOT_CREATE_DIR,
     ERROR_FS_CANNOT_CREATE_FILE,
 
-    // Block errros
+    // File system (block errors)
     ERROR_FS_EXPECTED_VALUE,
     ERROR_FS_EXPECTED_SMALLER_VALUE,
     ERROR_FS_EXPECTED_DOS_REVISION,

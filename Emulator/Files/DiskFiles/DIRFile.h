@@ -43,8 +43,8 @@ public:
     u64 fnv() const override { return adf->fnv(); }
     bool matchingBuffer(const u8 *buffer, size_t length) override;
     bool matchingFile(const char *path) override { return isDIRFile(path); }
-    bool readFromBuffer(const u8 *buffer, size_t length, FileError *error = nullptr) override;
-    bool readFromFile(const char *filename, FileError *error = nullptr) override;
+    bool readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error = nullptr) override;
+    bool readFromFile(const char *filename, ErrorCode *error = nullptr) override;
     
     
     //

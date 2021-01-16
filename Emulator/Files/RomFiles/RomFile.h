@@ -66,7 +66,7 @@ public:
     bool matchingBuffer(const u8 *buffer, size_t length) override {
         return isRomBuffer(buffer, length); }
     bool matchingFile(const char *path) override { return isRomFile(path); }
-    bool readFromBuffer(const u8 *buffer, size_t length, FileError *error = nullptr) override;
+    bool readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error = nullptr) override;
 
     
     //
@@ -80,5 +80,5 @@ public:
      * a rom.key file is seeked in the directory the encrypted Rom was loaded
      * from and applies to the encrypted data.
      */
-    bool decrypt(FileError *error = nullptr);
+    bool decrypt(ErrorCode *error = nullptr);
 };

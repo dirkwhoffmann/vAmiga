@@ -129,18 +129,18 @@ Snapshot::matchingFile(const char *path)
 }
 
 bool
-Snapshot::readFromBuffer(const u8 *buf, size_t len, FileError *err)
+Snapshot::readFromBuffer(const u8 *buf, size_t len, ErrorCode *err)
 {
     // Read from buffer
     if (AmigaFile::readFromBuffer(buf, len, err)) {
 
         // Check the version number of this snapshot
         if (!isSnapshot(buf, len, V_MAJOR, V_MINOR, V_SUBMINOR)) {
-            *err = ERR_UNSUPPORTED_SNAPSHOT;
+            *err = ERROR_UNSUPPORTED_SNAPSHOT;
         }
     }
     
-    return *err == ERR_FILE_OK;
+    return *err == ERROR_OK;
 }
 
 void
