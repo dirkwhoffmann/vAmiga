@@ -11,6 +11,10 @@
 
 #pragma once
 
+//
+// Structures
+//
+
 typedef struct
 {
     u8   copList;

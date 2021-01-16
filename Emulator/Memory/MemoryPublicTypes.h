@@ -34,10 +34,13 @@ enum_long(MEM_SOURCE)
     MEM_ROM,
     MEM_ROM_MIRROR,
     MEM_WOM,
-    MEM_EXT
+    MEM_EXT,
+    
+    MEM_COUNT
 };
 typedef MEM_SOURCE MemorySource;
 
+/*
 static inline bool isMemorySource(long value)
 {
     return (unsigned long)value <= MEM_EXT;
@@ -66,14 +69,19 @@ inline const char *MemorySourceName(MemorySource value)
     }
     return "???";
 }
+*/
 
 // Access identifiers. Some memory methods need to know who called them.
-enum_long(Accessor)
+enum_long(ACCESS_TYPE)
 {
     CPU_ACCESS,
-    AGNUS_ACCESS
+    AGNUS_ACCESS,
+    
+    ACCESS_COUNT
 };
+typedef ACCESS_TYPE Accessor;
 
+/*
 static inline bool isAccessor(long value)
 {
     return (unsigned long)value <= AGNUS_ACCESS;
@@ -88,16 +96,20 @@ static inline const char *sAccessor(Accessor value)
     }
     return "???";
 }
+*/
 
 enum_long(BANK_MAP)
 {
     BANK_MAP_A500,
     BANK_MAP_A1000,
     BANK_MAP_A2000A,
-    BANK_MAP_A2000B
+    BANK_MAP_A2000B,
+    
+    BANK_MAP_COUNT
 };
 typedef BANK_MAP BankMap;
 
+/*
 static inline bool isBankMap(long value)
 {
     return (unsigned long)value <= BANK_MAP_A2000B;
@@ -114,16 +126,20 @@ static inline const char *sBankMap(BankMap value)
     }
     return "???";
 }
+*/
 
 // Configuration options for the initial RAM pattern
 enum_long(RAM_INIT_PATTERN)
 {
     RAM_INIT_RANDOMIZED,
     RAM_INIT_ALL_ZEROES,
-    RAM_INIT_ALL_ONES
+    RAM_INIT_ALL_ONES,
+    
+    RAM_INIT_COUNT
 };
 typedef RAM_INIT_PATTERN RamInitPattern;
 
+/*
 static inline bool isRamInitPattern(long value)
 {
     return (unsigned long)value <= RAM_INIT_ALL_ONES;
@@ -139,16 +155,20 @@ static inline const char *sRamInitPattern(RamInitPattern value)
     }
     return "???";
 }
+*/
 
 // Configuration options for dealing with unmapped RAM
 enum_long(UNMAPPED_MEMORY)
 {
     UNMAPPED_FLOATING,
     UNMAPPED_ALL_ZEROES,
-    UNMAPPED_ALL_ONES
+    UNMAPPED_ALL_ONES,
+
+    UNMAPPED_COUNT
 };
 typedef UNMAPPED_MEMORY UnmappedMemory;
 
+/*
 static inline bool isUnmappedMemory(long value)
 {
     return (unsigned long)value <= UNMAPPED_ALL_ONES;
@@ -164,6 +184,8 @@ static inline const char *UnmappedMemoryName(UnmappedMemory value)
     }
     return "???";
 }
+*/
+
 
 //
 // Structures

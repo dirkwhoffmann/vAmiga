@@ -22,22 +22,14 @@ enum_long(CIARevision)
 {
     CIA_8520_DIP,
     CIA_8520_PLCC,
+    
     CIA_COUNT
 };
 
-static inline bool isCIARevision(long value)
-{
-    return value >= 0 && value < CIA_COUNT;
-}
 
-static inline const char *sCIARevision(CIARevision value)
-{
-    switch (value) {
-        case CIA_8520_DIP:   return "CIA_8520_DIP";
-        case CIA_8520_PLCC:  return "CIA_8520_PLCC";
-        default:             return "???";
-    }
-}
+//
+// Structures
+//
 
 typedef struct
 {

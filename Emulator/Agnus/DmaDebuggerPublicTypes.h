@@ -17,26 +17,16 @@ enum_long(DMA_DISPLAY_MODE)
 {
     DMA_DISPLAY_MODE_FG_LAYER,
     DMA_DISPLAY_MODE_BG_LAYER,
-    DMA_DISPLAY_MODE_ODD_EVEN_LAYERS
+    DMA_DISPLAY_MODE_ODD_EVEN_LAYERS,
+    
+    DMA_DISPLAY_MODE_COUNT
 };
-
 typedef DMA_DISPLAY_MODE DmaDisplayMode;
 
-static inline bool isDmaDisplayMode(long value)
-{
-    return (unsigned long)value <= DMA_DISPLAY_MODE_ODD_EVEN_LAYERS;
-}
 
-inline const char *DmaDisplayModeName(DmaDisplayMode value)
-{
-    switch (value) {
-            
-        case DMA_DISPLAY_MODE_FG_LAYER:         return "FG_LAYER";
-        case DMA_DISPLAY_MODE_BG_LAYER:         return "BG_LAYER";
-        case DMA_DISPLAY_MODE_ODD_EVEN_LAYERS:  return "ODD_EVEN_LAYERS";
-    }
-    return "???";
-}
+//
+// Structures
+//
 
 typedef struct
 {

@@ -11,4 +11,3 @@
 
 #include "BlitterPublicTypes.h"
 #include "Reflection.h"
-

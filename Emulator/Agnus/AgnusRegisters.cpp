@@ -488,14 +488,14 @@ Agnus::pokeVPOS(u16 value)
 template <Accessor s> void
 Agnus::pokeDIWSTRT(u16 value)
 {
-    trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", sAccessor(s), value);
+    trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", AccessorEnum::key(s), value);
     recordRegisterChange(DMA_CYCLES(2), SET_DIWSTRT, value);
 }
 
 template <Accessor s> void
 Agnus::pokeDIWSTOP(u16 value)
 {
-    trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", sAccessor(s), value);
+    trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", AccessorEnum::key(s), value);
     recordRegisterChange(DMA_CYCLES(2), SET_DIWSTOP, value);
 }
 

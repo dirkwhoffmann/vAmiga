@@ -150,13 +150,8 @@ Memory::setConfigItem(Option option, long value)
             
         case OPT_BANKMAP:
             
-            if (!isBankMap(value)) {
-                warn("Invalid bank map: %ld\n", value);
-                return false;
-            }
-            if (config.bankMap == value) {
-                return false;
-            }
+            if (!BankMapEnum::verify(value)) return false;
+            if (config.bankMap == value) return false;
             
             amiga.suspend();
             config.bankMap = (BankMap)value;
@@ -166,13 +161,8 @@ Memory::setConfigItem(Option option, long value)
 
         case OPT_UNMAPPING_TYPE:
             
-            if (!isUnmappedMemory(value)) {
-                warn("Invalid unmapping type: %ld\n", value);
-                return false;
-            }
-            if (config.unmappingType == value) {
-                return false;
-            }
+            if (!UnmappedMemoryEnum::verify(value)) return false;
+            if (config.unmappingType == value) return false;
             
             amiga.suspend();
             config.unmappingType = (UnmappedMemory)value;
@@ -181,13 +171,8 @@ Memory::setConfigItem(Option option, long value)
             
         case OPT_RAM_INIT_PATTERN:
             
-            if (!isRamInitPattern(value)) {
-                warn("Invalid RAM init pattern: %ld\n", value);
-                return false;
-            }
-            if (config.ramInitPattern == value) {
-                return false;
-            }
+            if (!RamInitPatternEnum::verify(value)) return false;
+            if (config.ramInitPattern == value) return false;
 
             amiga.suspend();
             config.ramInitPattern = (RamInitPattern)value;
@@ -210,9 +195,9 @@ Memory::_dumpConfig() const
     msg("        womSize : %llu\n", config.womSize);
     msg("        extSize : %llu\n", config.extSize);
     msg("   slowRamDelay : %s\n", config.slowRamDelay ? "yes" : "no");
-    msg("        bankMap : %s\n", sBankMap(config.bankMap));
-    msg(" ramInitPattern : %s\n", sRamInitPattern(config.ramInitPattern));
-    msg("  unmappingType : %s\n", UnmappedMemoryName(config.unmappingType));
+    msg("        bankMap : %s\n", BankMapEnum::key(config.bankMap));
+    msg(" ramInitPattern : %s\n", RamInitPatternEnum::key(config.ramInitPattern));
+    msg("  unmappingType : %s\n", UnmappedMemoryEnum::key(config.unmappingType));
     msg("       extStart : %02x\n", config.extStart);
 }
 

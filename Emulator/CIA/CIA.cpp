@@ -70,10 +70,8 @@ CIA::setConfigItem(Option option, long value)
             
         case OPT_CIA_REVISION:
             
-            if (!isCIARevision(value)) {
-                warn("Invalid CIA revision: %ld\n", value);
-                return false;
-            }
+            if (!CIARevisionEnum::verify(value)) return false;
+            
             if (config.revision == value) {
                 return false;
             }
@@ -107,7 +105,7 @@ CIA::setConfigItem(Option option, long value)
 void
 CIA::_dumpConfig() const
 {
-    msg("      revision : %s\n", sCIARevision(config.revision));
+    msg("      revision : %s\n", CIARevisionEnum::key(config.revision));
     msg("        todBug : %s\n", config.todBug ? "yes" : "no");
     msg(" eClockSyncing : %s\n", config.eClockSyncing ? "yes" : "no");
 }
