@@ -59,7 +59,7 @@ class DropView: NSImageView {
         // Check for a ROM image
         var err: ErrorCode = .OK
         if amiga.mem.loadRom(fromFile: url, error: &err) { return true }
-        if err != .INVALID_TYPE { err.showAlert(url: url) }
+        if err != .FILE_TYPE_MISMATCH { err.showAlert(url: url) }
         
         parent.refresh()
         return false

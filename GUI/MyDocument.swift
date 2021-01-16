@@ -140,11 +140,11 @@ class MyDocument: NSDocument {
             }
             
             // Analyze the error code
-            if err != .INVALID_TYPE { return (nil, err) }
+            if err != .FILE_TYPE_MISMATCH { return (nil, err) }
         }
         
         // None of the allowed typed matched the file
-        return (nil, .INVALID_TYPE)
+        return (nil, .FILE_TYPE_MISMATCH)
     }
     
     //

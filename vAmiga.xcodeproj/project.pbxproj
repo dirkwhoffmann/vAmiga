@@ -201,6 +201,7 @@
 		50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */; };
 		50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE37240D41EE00155AE4 /* Moira.cpp */; };
 		50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* AmigaComponent.cpp */; };
+		50E8199325B350DA00D2E3A5 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E8199225B350DA00D2E3A5 /* Errors.swift */; };
 		50EAD99C256E76820053F9AC /* HDFFile.h in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99B256E76820053F9AC /* HDFFile.h */; };
 		50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
 		50EB8CCA25306E8E0053988A /* ExportVideoDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */; };
@@ -292,7 +293,7 @@
 		50384C8521FC6B66006E7748 /* Snapshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Snapshot.h; sourceTree = "<group>"; };
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
 		5039924225B2164E0084B808 /* MyDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentController.swift; sourceTree = "<group>"; };
-		5039924625B219FC0084B808 /* VAError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAError.h; sourceTree = "<group>"; };
+		5039924625B219FC0084B808 /* Errors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Errors.h; sourceTree = "<group>"; };
 		503DECAC255E6180005FFA0B /* Oscillator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Oscillator.cpp; sourceTree = "<group>"; };
 		503DECAD255E6180005FFA0B /* Oscillator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Oscillator.h; sourceTree = "<group>"; };
 		5042FD7D23FFF08500B315B2 /* DiskControllerPublicTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskControllerPublicTypes.h; sourceTree = "<group>"; };
@@ -558,6 +559,7 @@
 		50E2BE38240D41EE00155AE4 /* MoiraALU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraALU.h; sourceTree = "<group>"; };
 		50E79BE7232D123000D296FB /* AmigaComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaComponent.cpp; sourceTree = "<group>"; };
 		50E79BE8232D123000D296FB /* AmigaComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaComponent.h; sourceTree = "<group>"; };
+		50E8199225B350DA00D2E3A5 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		50EA34F0258E38880010DC63 /* Debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Debug.h; sourceTree = "<group>"; };
 		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
 		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
@@ -776,6 +778,7 @@
 				508FE00521EA227A0043D0E9 /* Utils.swift */,
 				50F580652431D1A000E7D84D /* Screenshot.swift */,
 				501A9936243A07A100D269B2 /* Storage.swift */,
+				50E8199225B350DA00D2E3A5 /* Errors.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1188,7 +1191,7 @@
 				505A584C23040921002F99D1 /* Aliases.h */,
 				50EA34F0258E38880010DC63 /* Debug.h */,
 				50B5F87825AF9E07008B79F1 /* Reflection.h */,
-				5039924625B219FC0084B808 /* VAError.h */,
+				5039924625B219FC0084B808 /* Errors.h */,
 				50B14C0821EB2248002E32A6 /* Utils.h */,
 				50B14C1121EB4314002E32A6 /* Utils.cpp */,
 				505A3A3921F4996400132020 /* SSEUtils.h */,
@@ -1584,6 +1587,7 @@
 				50ECF98622B153FB007B3DE7 /* ExtendedRomFile.cpp in Sources */,
 				508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */,
 				505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */,
+				50E8199325B350DA00D2E3A5 /* Errors.swift in Sources */,
 				50F54B2C24B5D31D0078FDC9 /* crc_csum.c in Sources */,
 				5083CF652546BEAA00A28EF8 /* FSBitmapBlock.cpp in Sources */,
 				508FE05321EA22CC0043D0E9 /* VideoPrefs.swift in Sources */,

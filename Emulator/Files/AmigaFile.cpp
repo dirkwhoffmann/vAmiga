@@ -116,7 +116,7 @@ AmigaFile::readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error)
     
     // Check file type
     if (!matchingBuffer(buffer, length)) {
-        if (error) *error = ERROR_INVALID_TYPE;
+        if (error) *error = ERROR_FILE_TYPE_MISMATCH;
         return false;
     }
     
@@ -150,13 +150,13 @@ AmigaFile::readFromFile(const char *filename, ErrorCode *error)
 
     // Check type
     if (!matchingFile(filename)) {
-        if (error) *error = ERROR_INVALID_TYPE;
+        if (error) *error = ERROR_FILE_TYPE_MISMATCH;
         return false;
     }
         
     // Open
     if (!(file = fopen(filename, "r"))) {
-        if (error) *error = ERROR_CANT_READ;
+        if (error) *error = ERROR_FILE_CANT_READ;
         return false;
     }
     
@@ -230,7 +230,7 @@ AmigaFile::writeToFile(const char *filename, ErrorCode *error) const
     
     // Open file
     if (!(file = fopen(filename, "w"))) {
-        if (error) *error = ERROR_CANT_WRITE;
+        if (error) *error = ERROR_FILE_CANT_WRITE;
         goto exit;
     }
     // Allocate a buffer

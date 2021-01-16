@@ -43,7 +43,7 @@ DIRFile::readFromFile(const char *filename, ErrorCode *error)
     // Only proceed if the provided filename points to a directory
     if (!isDIRFile(filename)) {
         warn("%s is not a directory\n", filename);
-        if (error) *error = ERROR_INVALID_TYPE;
+        if (error) *error = ERROR_FILE_TYPE_MISMATCH;
         return false;
     }
     

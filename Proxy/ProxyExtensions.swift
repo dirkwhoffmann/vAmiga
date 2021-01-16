@@ -151,15 +151,15 @@ extension NSError {
             info1 = "File " + str + " could not be opened."
             info2 = "The file does not exist."
             
-        case .INVALID_TYPE:
+        case .FILE_TYPE_MISMATCH:
             info1 = "File " + str + " could not be opened."
             info2 = "The file format does not match."
             
-        case .CANT_READ:
+        case .FILE_CANT_READ:
             info1 = "Can't read from file " + str + "."
             info2 = "The file cannot be opened."
             
-        case .CANT_WRITE:
+        case .FILE_CANT_WRITE:
             info1 = "Can't write to file " + str + "."
             info2 = "The file cannot be opened."
             

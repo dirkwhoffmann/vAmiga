@@ -137,10 +137,11 @@ struct ErrorCodeEnum : Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_UNKNOWN:                     return "UNKNOWN";
                 
             case ERROR_FILE_NOT_FOUND:              return "FILE_NOT_FOUND";
-            case ERROR_INVALID_TYPE:                return "INVALID_TYPE";
-            case ERROR_CANT_READ:                   return "CANT_READ";
-            case ERROR_CANT_WRITE:                  return "CANT_WRITE";
-                
+            case ERROR_FILE_TYPE_MISMATCH:          return "INVALID_TYPE";
+            case ERROR_FILE_CANT_READ:              return "CANT_READ";
+            case ERROR_FILE_CANT_WRITE:             return "CANT_WRITE";
+            case ERROR_FILE_CANT_CREATE:            return "CANT_CREATE";
+
             case ERROR_OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
             case ERROR_CHIP_RAM_LIMIT:              return "CHIP_RAM_LIMIT";
             case ERROR_AROS_RAM_LIMIT:              return "AROS_RAM_LIMIT";
