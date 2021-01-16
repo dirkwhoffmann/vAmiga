@@ -25,11 +25,13 @@ enum_long(FILETYPE)
     FILETYPE_EXE,
     FILETYPE_DIR,
     FILETYPE_ROM,
-    FILETYPE_EXTENDED_ROM
-    // FILETYPE_COUNT
+    FILETYPE_EXTENDED_ROM,
+    
+    FILETYPE_COUNT
 };
 typedef FILETYPE FileType;
 
+/*
 inline bool isFileType(long value)
 {
     return (unsigned long)value < FILETYPE_EXTENDED_ROM;
@@ -53,8 +55,9 @@ inline const char *FileTypeName(FileType value)
     }
     return "???";
 }
+*/
 
-enum_long( RomIdentifier)
+enum_long(ROM_IDENTIFIER)
 {
     ROM_MISSING,
     ROM_UNKNOWN,
@@ -96,12 +99,13 @@ enum_long( RomIdentifier)
     ROM_DIAG121,
     ROM_LOGICA20,
 
-    ROM_CNT
+    ROM_COUNT
 };
+typedef ROM_IDENTIFIER RomIdentifier;
 
-static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_CNT; }
+// static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_CNT; }
 
-enum_long( FileError)
+enum_long(FileError)
 {
     ERR_FILE_OK,
     
@@ -121,9 +125,12 @@ enum_long( FileError)
     ERR_INVALID_ROM_KEY
 };
 
-enum_long( BootBlockType)
+enum_long(BB_TYPE)
 {
     BB_STANDARD,
     BB_VIRUS,
-    BB_CUSTOM
+    BB_CUSTOM,
+    
+    BB_COUNT
 };
+typedef BB_TYPE BootBlockType;

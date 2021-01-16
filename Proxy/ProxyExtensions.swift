@@ -108,7 +108,7 @@ extension DiskFileProxy {
         
         let name = bootBlockName!
         
-        if bootBlockType == .BB_VIRUS {
+        if bootBlockType == .VIRUS {
             return "Contagious boot block (\(name))"
         } else {
             return name

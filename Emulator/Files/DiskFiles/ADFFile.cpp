@@ -52,7 +52,7 @@ ADFFile::isADFFile(const char *path)
 size_t
 ADFFile::fileSize(DiskDiameter diameter, DiskDensity density)
 {
-    assert(DiskDiameterName(diameter));
+    assert_enum(DiskDiameter, density);
     
     if (diameter == INCH_35 && density == DISK_DD) return ADFSIZE_35_DD;
     if (diameter == INCH_35 && density == DISK_HD) return ADFSIZE_35_HD;
@@ -64,7 +64,7 @@ ADFFile::fileSize(DiskDiameter diameter, DiskDensity density)
 ADFFile *
 ADFFile::makeWithType(DiskDiameter diameter, DiskDensity density)
 {
-    assert(DiskDiameterName(diameter));
+    assert_enum(DiskDiameter, diameter);
     
     ADFFile *adf = new ADFFile();
     
@@ -307,12 +307,14 @@ ADFFile::encodeDisk(Disk *disk)
     
     if (disk->getDiameter() != getDiskDiameter()) {
         warn("Incompatible disk types: %s %s\n",
-             DiskDiameterName(disk->getDiameter()), DiskDiameterName(getDiskDiameter()));
+             DiskDiameterEnum::key(disk->getDiameter()),
+             DiskDiameterEnum::key(getDiskDiameter()));
         return false;
     }
     if (disk->getDensity() != getDiskDensity()) {
         warn("Incompatible disk densities: %s %s\n",
-             DiskDensityName(disk->getDensity()), DiskDensityName(getDiskDensity()));
+             DiskDensityEnum::key(disk->getDensity()),
+             DiskDensityEnum::key(getDiskDensity()));
         return false;
     }
 
@@ -456,12 +458,14 @@ ADFFile::decodeDisk(Disk *disk)
     
     if (disk->getDiameter() != getDiskDiameter()) {
         warn("Incompatible disk types: %s %s\n",
-             DiskDiameterName(disk->getDiameter()), DiskDiameterName(getDiskDiameter()));
+             DiskDiameterEnum::key(disk->getDiameter()),
+             DiskDiameterEnum::key(getDiskDiameter()));
         return false;
     }
     if (disk->getDensity() != getDiskDensity()) {
         warn("Incompatible disk densities: %s %s\n",
-             DiskDensityName(disk->getDensity()), DiskDensityName(getDiskDensity()));
+             DiskDensityEnum::key(disk->getDensity()),
+             DiskDensityEnum::key(getDiskDensity()));
         return false;
     }
         

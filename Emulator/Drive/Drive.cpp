@@ -58,15 +58,11 @@ Drive::setConfigItem(Option option, long id, long value)
                             
         case OPT_DRIVE_TYPE:
             
-            if (!isDriveType(value)) {
-                warn("Invalid drive type: %ld\n", value);
-                return false;
-            }
+            if (!DriveTypeEnum::verify(value)) return false;
+            if (config.type == value) return false;
+
             if (value != DRIVE_DD_35 && value != DRIVE_HD_35) {
-                warn("Unsupported type: %s\n", driveTypeName((DriveType)value));
-                return false;
-            }
-            if (config.type == value) {
+                warn("Unsupported type: %s\n", DriveTypeEnum::key((DriveType)value));
                 return false;
             }
             
@@ -101,7 +97,7 @@ Drive::_inspect()
 void
 Drive::_dumpConfig() const
 {
-    msg("              Type : %s\n", driveTypeName(config.type));
+    msg("              Type : %s\n", DriveTypeEnum::key(config.type));
     msg(" Emulate mechanics : %s\n", config.mechanicalDelays ? "yes" : "no");
     msg("       Start delay : %lld\n", config.startDelay);
     msg("        Stop delay : %lld\n", config.stopDelay);
@@ -244,6 +240,9 @@ Drive::getDriveId() const
                 
             case DRIVE_DD_525:
                 return 0x55555555;
+                
+            default:
+                assert(false);
         }
     }
     

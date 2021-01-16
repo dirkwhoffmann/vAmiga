@@ -14,14 +14,14 @@ extension ConfigurationController {
         let poweredOff      = amiga.isPoweredOff
 
         let romIdentifier   = amiga.mem.romIdentifier()
-        let hasRom          = romIdentifier != .ROM_MISSING
+        let hasRom          = romIdentifier != .MISSING
         let hasArosRom      = amiga.mem.isArosRom(romIdentifier)
         let hasDiagRom      = amiga.mem.isDiagRom(romIdentifier)
         let hasCommodoreRom = amiga.mem.isCommodoreRom(romIdentifier)
         let hasHyperionRom  = amiga.mem.isHyperionRom(romIdentifier)
 
         let extIdentifier   = amiga.mem.extIdentifier
-        let hasExt          = extIdentifier != .ROM_MISSING
+        let hasExt          = extIdentifier != .MISSING
         let hasArosExt      = amiga.mem.isArosRom(extIdentifier)
         let hasDiagExt      = amiga.mem.isDiagRom(extIdentifier)
         let hasCommodoreExt = amiga.mem.isCommodoreRom(extIdentifier)

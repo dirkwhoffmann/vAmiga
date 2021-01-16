@@ -21,10 +21,13 @@ enum_long(DRIVE_TYPE)
 {
     DRIVE_DD_35,
     DRIVE_HD_35,
-    DRIVE_DD_525
+    DRIVE_DD_525,
+    
+    DRIVE_COUNT
 };
 typedef DRIVE_TYPE DriveType;
 
+/*
 inline bool isDriveType(long value)
 {
     return value >= DRIVE_DD_35 && value <= DRIVE_DD_525;
@@ -40,6 +43,7 @@ inline const char *driveTypeName(DriveType type)
     }
     return "???";
 }
+*/
 
 //
 // Structures
