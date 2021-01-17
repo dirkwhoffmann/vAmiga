@@ -898,9 +898,9 @@ Denise::updateBorderColor()
         borderColor = 0;  // Background color
     }
     
-#ifdef BORDER_DEBUG
-    borderColor = 65;    // Debug color
-#endif
+    if (BORDER_DEBUG) {
+        borderColor = 65; // Debug color
+    }
 }
 
 void
@@ -912,28 +912,26 @@ Denise::drawBorder()
     // Check if the whole line is blank (drawn in background color)
     bool lineIsBlank = !agnus.diwVFlop || !hFlopWasSet;
 
-    // Draw the border
     if (lineIsBlank) {
 
+        // Draw blank line
         for (int i = 0; i <= LAST_PIXEL; i++) {
-            iBuffer[i] = mBuffer[i] = borderColor;
+            bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
         }
 
     } else {
 
         // Draw left border
         if (!agnus.diwHFlop && agnus.diwHFlopOn != -1) {
-            for (int i = 0; i < 2 * agnus.diwHFlopOn; i++) {
-                assert((size_t)i < sizeof(iBuffer));
-                iBuffer[i] = mBuffer[i] = borderColor;
+            for (isize i = 0; i < 2 * agnus.diwHFlopOn; i++) {
+                bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
 
         // Draw right border
         if (agnus.diwHFlopOff != -1) {
-            for (int i = 2 * agnus.diwHFlopOff; i <= LAST_PIXEL; i++) {
-                assert((size_t)i < sizeof(iBuffer));
-                iBuffer[i] = mBuffer[i] = borderColor;
+            for (isize i = 2 * agnus.diwHFlopOff; i <= LAST_PIXEL; i++) {
+                bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
     }
@@ -1065,11 +1063,9 @@ Denise::checkP2PCollisions()
     u8 compare2 = getMVBP2() & enabled2;
 
     // Check all pixels one by one
-    for (int pos = 0; pos < HPIXELS; pos++) {
+    for (usize pos = 0; pos < HPIXELS; pos++) {
 
         u16 b = bBuffer[pos];
-        // debug(CLX_DEBUG, "b[%d] = %X e1 = %X e2 = %X c1 = %X c2 = %X\n",
-        //       pos, b, enabled1, enabled2, compare1, compare2);
 
         // Check if there is a hit with playfield 1
         if ((b & enabled1) != compare1) continue;
@@ -1140,12 +1136,12 @@ Denise::endOfLine(int vpos)
         // Draw sprites
         drawSprites();
 
+        // Perform playfield-playfield collision check (if enabled)
+        if (config.clxPlfPlf) checkP2PCollisions();
+
         // Draw border pixels
         drawBorder();
 
-        // Perform playfield-playfield collision check (if enabled)
-        if (config.clxPlfPlf) checkP2PCollisions();
-        
         // Synthesize RGBA values and write the result into the frame buffer
         pixelEngine.colorize(vpos);
 
