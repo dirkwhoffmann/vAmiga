@@ -45,7 +45,7 @@
 #include "IMGFile.h"
 #include "DMSFile.h"
 #include "EXEFile.h"
-#include "DIRFile.h"
+#include "Folder.h"
 #include "BootBlockImage.h"
 #include "FSDevice.h"
 

@@ -14,7 +14,7 @@
 #include "IMGFile.h"
 #include "DMSFile.h"
 #include "EXEFile.h"
-#include "DIRFile.h"
+#include "Folder.h"
 #include "HDFFile.h"
 #include "RomFile.h"
 #include "ExtendedRomFile.h"
@@ -266,7 +266,7 @@ template EXTFile* AmigaFile::make <EXTFile> (const u8 *, size_t, ErrorCode *);
 template IMGFile* AmigaFile::make <IMGFile> (const u8 *, size_t, ErrorCode *);
 template DMSFile* AmigaFile::make <DMSFile> (const u8 *, size_t, ErrorCode *);
 template EXEFile* AmigaFile::make <EXEFile> (const u8 *, size_t, ErrorCode *);
-template DIRFile* AmigaFile::make <DIRFile> (const u8 *, size_t, ErrorCode *);
+template Folder* AmigaFile::make <Folder> (const u8 *, size_t, ErrorCode *);
 template HDFFile* AmigaFile::make <HDFFile> (const u8 *, size_t, ErrorCode *);
 template RomFile* AmigaFile::make <RomFile> (const u8 *, size_t, ErrorCode *);
 template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const u8 *, size_t, ErrorCode *);
@@ -277,7 +277,7 @@ template EXTFile* AmigaFile::make <EXTFile> (const char *, ErrorCode *);
 template IMGFile* AmigaFile::make <IMGFile> (const char *, ErrorCode *);
 template DMSFile* AmigaFile::make <DMSFile> (const char *, ErrorCode *);
 template EXEFile* AmigaFile::make <EXEFile> (const char *, ErrorCode *);
-template DIRFile* AmigaFile::make <DIRFile> (const char *, ErrorCode *);
+template Folder* AmigaFile::make <Folder> (const char *, ErrorCode *);
 template HDFFile* AmigaFile::make <HDFFile> (const char *, ErrorCode *);
 template RomFile* AmigaFile::make <RomFile> (const char *, ErrorCode *);
 template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const char *, ErrorCode *);

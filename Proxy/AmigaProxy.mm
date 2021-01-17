@@ -1890,24 +1890,24 @@ using namespace moira;
 
 @implementation DIRFileProxy
 
-- (DIRFile *)dir
+- (Folder *)dir
 {
-    return (DIRFile *)obj;
+    return (Folder *)obj;
 }
 
-+ (instancetype)make:(DIRFile *)file
++ (instancetype)make:(Folder *)file
 {
     return file ? [[self alloc] initWith:file] : nil;
 }
 
 + (BOOL)isDIRFile:(NSString *)path
 {
-    return DIRFile::isDIRFile([path fileSystemRepresentation]);
+    return Folder::isDIRFile([path fileSystemRepresentation]);
 }
 
 + (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
 {
-    DIRFile *archive = AmigaFile::make <DIRFile> ([path fileSystemRepresentation], err);
+    Folder *archive = AmigaFile::make <Folder> ([path fileSystemRepresentation], err);
     return [self make: archive];
 }
 

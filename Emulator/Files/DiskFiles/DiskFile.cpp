@@ -24,7 +24,7 @@ DiskFile::makeWithFile(const char *path)
     EXEFile *exe = AmigaFile::make <EXEFile> (path);
     if (exe) return exe;
     
-    DIRFile *dir = AmigaFile::make <DIRFile> (path);
+    Folder *dir = AmigaFile::make <Folder> (path);
     if (dir) return dir;
 
     return nullptr;

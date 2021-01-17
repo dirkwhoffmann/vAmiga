@@ -11,7 +11,7 @@
 
 #include "ADFFile.h"
 
-class DIRFile : public DiskFile {
+class Folder : public DiskFile {
     
 public:
     
@@ -30,7 +30,7 @@ public:
     // Initializing
     //
     
-    DIRFile();
+    Folder();
     
     const char *getDescription() const override { return "DIR"; }
         

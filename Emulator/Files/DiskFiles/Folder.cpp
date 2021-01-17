@@ -7,36 +7,36 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "DIRFile.h"
+#include "Folder.h"
 #include "FSDevice.h"
 
-DIRFile::DIRFile()
+Folder::Folder()
 {
 }
 
 bool
-DIRFile::isDIRFile(const char *path)
+Folder::isDIRFile(const char *path)
 {
     assert(path != nullptr);
     return isDirectory(path);
 }
 
 bool
-DIRFile::matchingBuffer(const u8 *buffer, size_t length)
+Folder::matchingBuffer(const u8 *buffer, size_t length)
 {
     assert(false);
     return false;
 }
 
 bool
-DIRFile::readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error)
+Folder::readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error)
 {
     assert(false);
     return false;
 }
 
 bool
-DIRFile::readFromFile(const char *filename, ErrorCode *error)
+Folder::readFromFile(const char *filename, ErrorCode *error)
 {
     debug(FS_DEBUG, "DIRFile::readFromFile(%s)\n", filename);
               
