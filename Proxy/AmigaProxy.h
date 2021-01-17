@@ -616,12 +616,7 @@ struct SerialPortWrapper;
 // AmigaFile
 //
 
-@interface AmigaFileProxy : Proxy {
-    
-    struct AmigaFileWrapper *wrapper;
-}
-
-- (struct AmigaFileWrapper *)wrapper;
+@interface AmigaFileProxy : Proxy { }
 
 @property (readonly) FileType type;
 - (void)setPath:(NSString *)path;

@@ -42,6 +42,9 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (instancetype) initWith:(void *)ref
 {
+    if (ref == nil) {
+        return nil;
+    }
     if (self = [super init]) {
         obj = ref;
     }
@@ -1176,8 +1179,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (void) insert:(NSInteger)nr file:(DiskFileProxy *)fileProxy
 {
-    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
-    [self dc]->insertDisk((DiskFile *)(fileWrapper->file), nr);
+    [self dc]->insertDisk((DiskFile *)fileProxy->obj, nr);
 }
 
 - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value
@@ -1291,21 +1293,17 @@ struct SerialPortWrapper { SerialPort *port; };
     return proxy;
 }
 
-+ (instancetype) makeWithADF:(ADFFileProxy *)fileProxy
++ (instancetype) makeWithADF:(ADFFileProxy *)proxy
 {
     ErrorCode error;
-    AmigaFileWrapper *adf = [fileProxy wrapper];
-
-    FSDevice *volume = FSDevice::makeWithADF((ADFFile *)(adf->file), &error);
+    FSDevice *volume = FSDevice::makeWithADF((ADFFile *)(proxy->obj), &error);
     return [self make:volume];
 }
 
-+ (instancetype) makeWithHDF:(HDFFileProxy *)fileProxy
++ (instancetype) makeWithHDF:(HDFFileProxy *)proxy
 {
     ErrorCode error;
-    AmigaFileWrapper *hdf = [fileProxy wrapper];
-
-    FSDevice *volume = FSDevice::makeWithHDF((HDFFile *)(hdf->file), &error);
+    FSDevice *volume = FSDevice::makeWithHDF((HDFFile *)(proxy->obj), &error);
     return [self make:volume];
 }
 
@@ -1410,69 +1408,50 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation AmigaFileProxy
 
-- (instancetype) initWithFile:(AmigaFile *)file
+- (AmigaFile *)file
 {
-    if (file == nil) {
-        return nil;
-    }
-    if (self = [super init]) {
-        wrapper = new AmigaFileWrapper();
-        wrapper->file = file;
-    }
-    return self;
+    return (AmigaFile *)obj;
 }
 
-+ (AmigaFileProxy *) makeWithFile:(AmigaFile *)file
++ (instancetype)make:(AmigaFile *)file
 {
-    if (file == nil) {
-        return nil;
-    }
-    return [[self alloc] initWithFile:file];
+    return file ? [[self alloc] initWith:file] : nil;
 }
 
 - (void)setPath:(NSString *)path
 {
-    AmigaFile *file = (AmigaFile *)([self wrapper]->file);
-    file->setPath([path fileSystemRepresentation]);
-}
-
-- (AmigaFileWrapper *)wrapper
-{
-    return wrapper;
+    [self file]->setPath([path fileSystemRepresentation]);
 }
 
 - (FileType)type
 {
-    return wrapper->file->fileType();
+    return [self file]->fileType();
 }
 
 - (NSInteger) sizeOnDisk
 {
-    return wrapper->file->sizeOnDisk();
+    return [self file]->sizeOnDisk();
 }
 
 - (u64) fnv
 {
-    return wrapper->file->fnv();
+    return [self file]->fnv();
 }
 
 - (void) readFromBuffer:(const void *)buffer length:(NSInteger)length
 {
     ErrorCode error;
-    wrapper->file->readFromBuffer((const u8 *)buffer, length, &error);
+    [self file]->readFromBuffer((const u8 *)buffer, length, &error);
 }
 
 - (NSInteger) writeToBuffer:(void *)buffer
 {
-    return wrapper->file->writeToBuffer((u8 *)buffer);
+    return [self file]->writeToBuffer((u8 *)buffer);
 }
 
 - (void) dealloc
 {
-    if (wrapper) {
-        if (wrapper->file) delete wrapper->file;
-        delete wrapper;
-    }
+    delete (AmigaFile *)obj;
 }
 
 @end
@@ -1484,13 +1463,15 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation SnapshotProxy
 
-+ (instancetype) make:(Snapshot *)snapshot
+- (Snapshot *)snapshot
 {
-    if (snapshot == nullptr) { return nil; }
-    
-    SnapshotProxy *proxy = [[self alloc] initWithFile:snapshot];
-    proxy->preview = nullptr;
-    
+    return (Snapshot *)obj;
+}
+
++ (instancetype)make:(Snapshot *)snapshot
+{
+    SnapshotProxy *proxy = [[self alloc] initWith:snapshot];
+    if (proxy) { proxy->preview = nullptr; }
     return proxy;
 }
 
@@ -1534,10 +1515,7 @@ struct SerialPortWrapper { SerialPort *port; };
     if (preview != nullptr) { return preview; }
     
     // Create preview image
-    const Thumbnail &thumbnail = ((Snapshot *)wrapper->file)->getThumbnail();
-    
-    // NSInteger width = thumbnail.width;
-    // NSInteger height = thumbnail.height;
+    const Thumbnail &thumbnail = [self snapshot]->getThumbnail();
     unsigned char *data = (unsigned char *)thumbnail.screen;
     
     
@@ -1561,16 +1539,17 @@ struct SerialPortWrapper { SerialPort *port; };
     return preview;
 }
 
+/*
 - (time_t)timeStamp __attribute__ ((deprecated))
 {
     return ((Snapshot *)wrapper->file)->getThumbnail().timestamp;
 }
+*/
 
 - (NSData *)data
 {
-    Snapshot *snapshot = (Snapshot *)wrapper->file;
-    return [NSData dataWithBytes: (void *)snapshot->getHeader()
-                          length: snapshot->sizeOnDisk()];
+    return [NSData dataWithBytes: (void *)[self snapshot]->getHeader()
+                          length: [self snapshot]->sizeOnDisk()];
 }
     
 @end
@@ -1582,80 +1561,90 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation DiskFileProxy
 
+- (DiskFile *)file
+{
+    return (DiskFile *)obj;
+}
+
++ (instancetype)make:(DiskFile *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
 - (FSVolumeType)dos
 {
-    return ((DiskFile *)wrapper->file)->getDos();
+    return [self file]->getDos();
 }
 
 - (DiskDiameter)diskType
 {
-    return ((DiskFile *)wrapper->file)->getDiskDiameter();
+    return [self file]->getDiskDiameter();
 }
 
 - (DiskDensity)diskDensity
 {
-    return ((DiskFile *)wrapper->file)->getDiskDensity();
+    return [self file]->getDiskDensity();
 }
 
 - (NSInteger)numCyls
 {
-    return ((DiskFile *)wrapper->file)->numCyls();
+    return [self file]->numCyls();
 }
 
 - (NSInteger)numSides
 {
-    return ((DiskFile *)wrapper->file)->numSides();
+    return [self file]->numSides();
 }
 
 - (NSInteger)numTracks
 {
-    return ((DiskFile *)wrapper->file)->numTracks();
+    return [self file]->numTracks();
 }
 
 - (NSInteger)numSectors
 {
-    return ((DiskFile *)wrapper->file)->numSectors();
+    return [self file]->numSectors();
 }
 
 - (NSInteger)numBlocks
 {
-    return ((DiskFile *)wrapper->file)->numBlocks();
+    return [self file]->numBlocks();
 }
 
 - (BootBlockType)bootBlockType
 {
-    return ((DiskFile *)wrapper->file)->bootBlockType();
+    return [self file]->bootBlockType();
 }
 
 - (NSString *)bootBlockName
 {
-    const char *str = ((DiskFile *)wrapper->file)->bootBlockName();
+    const char *str = [self file]->bootBlockName();
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (BOOL)hasVirus
 {
-    return ((DiskFile *)wrapper->file)->hasVirus();
+    return [self file]->hasVirus();
 }
 
 - (void)killVirus
 {
-    ((DiskFile *)wrapper->file)->killVirus();
+    [self file]->killVirus();
 }
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
 {
-    return ((DiskFile *)wrapper->file)->readByte(block, offset);
+    return [self file]->readByte(block, offset);
 }
 
 - (void)readSector:(unsigned char *)dst block:(NSInteger)nr
 {
-    ((DiskFile *)wrapper->file)->readSector(dst, nr);
+    [self file]->readSector(dst, nr);
 }
 
 - (void)readSectorHex:(char *)dst block:(NSInteger)block count:(NSInteger)count
 {
-    ((DiskFile *)wrapper->file)->readSectorHex(dst, block, count);
+    [self file]->readSectorHex(dst, block, count);
 }
 
 @end
@@ -1667,15 +1656,19 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation ADFFileProxy
 
+- (ADFFile *)adf
+{
+    return (ADFFile *)obj;
+}
+
++ (instancetype)make:(ADFFile *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
 + (BOOL)isADFFile:(NSString *)path
 {
     return ADFFile::isADFFile([path fileSystemRepresentation]);
-}
-
-+ (instancetype)make:(ADFFile *)archive
-{
-    if (archive == nullptr) return nil;
-    return [[self alloc] initWithFile:archive];
 }
 
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length
@@ -1705,7 +1698,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (void)formatDisk:(FSVolumeType)fs bootBlock:(NSInteger)bootBlockID
 {
-    ((ADFFile *)wrapper->file)->formatDisk(fs, bootBlockID);
+    [self adf]->formatDisk(fs, bootBlockID);
 }
 
 @end
@@ -1717,15 +1710,19 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation HDFFileProxy
 
+- (HDFFile *)hdf
+{
+    return (HDFFile *)obj;
+}
+
++ (instancetype)make:(HDFFile *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
 + (BOOL)isHDFFile:(NSString *)path
 {
     return HDFFile::isHDFFile([path fileSystemRepresentation]);
-}
-
-+ (instancetype) make:(HDFFile *)archive
-{
-    if (archive == nullptr) return nil;
-    return [[self alloc] initWithFile:archive];
 }
 
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
@@ -1742,7 +1739,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (NSInteger) numBlocks
 {
-    return ((HDFFile *)wrapper->file)->numBlocks();
+    return [self hdf]->numBlocks();
 }
 
 @end
@@ -1754,15 +1751,19 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation EXTFileProxy
 
+- (EXTFile *)ext
+{
+    return (EXTFile *)obj;
+}
+
++ (instancetype)make:(EXTFile *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
 + (BOOL)isEXTFile:(NSString *)path
 {
     return EXTFile::isEXTFile([path fileSystemRepresentation]);
-}
-
-+ (instancetype) make:(EXTFile *)archive
-{
-    if (archive == nullptr) return nil;
-    return [[self alloc] initWithFile:archive];
 }
 
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
@@ -1786,15 +1787,19 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation IMGFileProxy
 
+- (IMGFile *)img
+{
+    return (IMGFile *)obj;
+}
+
++ (instancetype)make:(IMGFile *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
 + (BOOL)isIMGFile:(NSString *)path
 {
     return IMGFile::isIMGFile([path fileSystemRepresentation]);
-}
-
-+ (instancetype) make:(IMGFile *)archive
-{
-    if (archive == nullptr) return nil;
-    return [[self alloc] initWithFile:archive];
 }
 
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
@@ -1824,15 +1829,19 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation DMSFileProxy
 
+- (DMSFile *)dms
+{
+    return (DMSFile *)obj;
+}
+
++ (instancetype)make:(DMSFile *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
 + (BOOL)isDMSFile:(NSString *)path
 {
     return DMSFile::isDMSFile([path fileSystemRepresentation]);
-}
-
-+ (instancetype) make:(DMSFile *)archive
-{
-    if (archive == nullptr) return nil;
-    return [[self alloc] initWithFile:archive];
 }
 
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
@@ -1849,8 +1858,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (ADFFileProxy *)adf
 {
-    DMSFile *archive = (DMSFile *)wrapper->file;
-    return [ADFFileProxy make:archive->adf];
+    return [ADFFileProxy make:[self dms]->adf];
 }
 
 @end
@@ -1862,20 +1870,27 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation EXEFileProxy
 
+- (EXEFile *)exe
+{
+    return (EXEFile *)obj;
+}
+
++ (instancetype)make:(EXEFile *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
 + (BOOL)isEXEFile:(NSString *)path
 {
     return EXEFile::isEXEFile([path fileSystemRepresentation]);
 }
-+ (instancetype) make:(EXEFile *)archive
-{
-    if (archive == nullptr) return nil;
-    return [[self alloc] initWithFile:archive];
-}
+
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
 {
     EXEFile *archive = AmigaFile::make <EXEFile> ((const u8 *)buffer, len);
     return [self make: archive];
 }
+
 + (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
 {
     EXEFile *archive = AmigaFile::make <EXEFile> ([path fileSystemRepresentation], err);
@@ -1884,8 +1899,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (ADFFileProxy *)adf
 {
-    EXEFile *archive = (EXEFile *)wrapper->file;
-    return [ADFFileProxy make:archive->adf];
+    return [ADFFileProxy make:[self exe]->adf];
 }
 
 @end
@@ -1897,15 +1911,19 @@ struct SerialPortWrapper { SerialPort *port; };
 
 @implementation DIRFileProxy
 
+- (DIRFile *)dir
+{
+    return (DIRFile *)obj;
+}
+
++ (instancetype)make:(DIRFile *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
 + (BOOL)isDIRFile:(NSString *)path
 {
     return DIRFile::isDIRFile([path fileSystemRepresentation]);
-}
-
-+ (instancetype) make:(DIRFile *)archive
-{
-    if (archive == nullptr) return nil;
-    return [[self alloc] initWithFile:archive];
 }
 
 + (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
@@ -1916,8 +1934,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (ADFFileProxy *)adf
 {
-    DIRFile *archive = (DIRFile *)wrapper->file;
-    return [ADFFileProxy make:archive->adf];
+    return [ADFFileProxy make:[self dir]->adf];
 }
 
 @end
@@ -2135,8 +2152,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (void) loadFromSnapshot:(SnapshotProxy *)proxy
 {
-    Snapshot *snapshot = (Snapshot *)([proxy wrapper]->file);
-    wrapper->amiga->loadFromSnapshotSafe(snapshot);
+    wrapper->amiga->loadFromSnapshotSafe([proxy snapshot]);
 }
 
 - (NSInteger) getConfig:(Option)opt
