@@ -13,7 +13,10 @@
 #include "AmigaConstants.h"
 #include "AmigaPublicTypes.h"
 
+//
 // Forward declarations
+//
+
 @class ADFFileProxy;
 @class AgnusProxy;
 @class AmigaFileProxy;
@@ -45,6 +48,7 @@
 /* Forward declarations of C++ class wrappers.
  * We wrap classes into normal C structs to avoid any reference to C++.
  */
+/*
 struct AgnusWrapper;
 struct AmigaFileWrapper;
 struct AmigaWrapper;
@@ -61,6 +65,7 @@ struct MemWrapper;
 struct PaulaWrapper;
 struct ScreenRecorderWrapper;
 struct SerialPortWrapper;
+*/
 
 //
 // Base proxies

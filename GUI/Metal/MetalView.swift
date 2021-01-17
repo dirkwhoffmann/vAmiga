@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+import MetalKit
+
 public class MetalView: MTKView {
     
     @IBOutlet weak var parent: MyController!

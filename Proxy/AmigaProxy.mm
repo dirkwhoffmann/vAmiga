@@ -13,27 +13,6 @@
 
 using namespace moira;
 
-struct AgnusWrapper { Agnus *agnus; };
-struct AmigaFileWrapper { AmigaFile *file; };
-struct AmigaWrapper { Amiga *amiga; };
-struct BlitterWrapper { Blitter *blitter; };
-struct CIAWrapper { CIA *cia; };
-struct ControlPortWrapper { ControlPort *port; };
-struct CopperWrapper { Copper *copper; };
-struct CPUWrapper { CPU *cpu; };
-struct DiskControllerWrapper { DiskController *controller; };
-struct DriveWrapper { Drive *drive; };
-struct DmaDebuggerWrapper { DmaDebugger *dmaDebugger; };
-struct DeniseWrapper { Denise *denise; };
-struct FSDeviceWrapper { FSDevice *device; };
-struct JoystickWrapper { Joystick *joystick; };
-struct KeyboardWrapper { Keyboard *keyboard; };
-struct MemWrapper { Memory *mem; };
-struct MouseWrapper { Mouse *mouse; };
-struct PaulaWrapper { Paula *paula; };
-struct ScreenRecorderWrapper { ScreenRecorder *screenRecorder; };
-struct SerialPortWrapper { SerialPort *port; };
-
 //
 // Base Proxy
 //
@@ -1501,7 +1480,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (instancetype) makeWithAmiga:(AmigaProxy *)proxy
 {
-    Amiga *amiga = [proxy wrapper]->amiga;
+    Amiga *amiga = (Amiga *)proxy->obj;
     
     amiga->suspend();
     Snapshot *snapshot = Snapshot::makeWithAmiga(amiga);
@@ -1978,8 +1957,7 @@ struct SerialPortWrapper { SerialPort *port; };
         return self;
     
     Amiga *amiga = new Amiga();
-    wrapper = new AmigaWrapper();
-    wrapper->amiga = amiga;
+    obj = amiga;
     
     // Create sub proxys
     agnus = [[AgnusProxy alloc] initWith:&amiga->agnus];
@@ -2008,14 +1986,17 @@ struct SerialPortWrapper { SerialPort *port; };
     return self;
 }
 
+- (Amiga *)amiga
+{
+    return (Amiga *)obj;
+}
+
 - (void) kill
 {
-    assert(wrapper->amiga != nullptr);
     NSLog(@"AmigaProxy::kill");
-    
-    // Kill the emulator
-    delete wrapper->amiga;
-    wrapper->amiga = nullptr;
+    assert(obj);
+
+    delete [self amiga];
 }
 
 - (BOOL) isReleaseBuild
@@ -2025,224 +2006,224 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (BOOL) debugMode
 {
-    return wrapper->amiga->inDebugMode();
+    return [self amiga]->inDebugMode();
 }
 
 - (void) setDebug:(BOOL)enable
 {
-    wrapper->amiga->setDebug(enable);
+    [self amiga]->setDebug(enable);
 }
 
 - (void) enableDebugging
 {
-    wrapper->amiga->enableDebugMode();
+    [self amiga]->enableDebugMode();
 }
 
 - (void) disableDebugging
 {
-    wrapper->amiga->disableDebugMode();
+    [self amiga]->disableDebugMode();
 }
 
 - (void) setInspectionTarget:(EventID)id
 {
-    wrapper->amiga->setInspectionTarget(id);
+    [self amiga]->setInspectionTarget(id);
 }
 
 - (void) clearInspectionTarget
 {
-    wrapper->amiga->clearInspectionTarget();
+    [self amiga]->clearInspectionTarget();
 }
 
 - (BOOL) isReady:(ErrorCode *)error
 {
-    return wrapper->amiga->isReady(error);
+    return [self amiga]->isReady(error);
 }
 
 - (BOOL) isReady
 {
-    return wrapper->amiga->isReady();
+    return [self amiga]->isReady();
 }
 
 - (void) powerOn
 {
-    wrapper->amiga->powerOn();
+    [self amiga]->powerOn();
 }
 
 - (void) powerOff
 {
-    wrapper->amiga->powerOff();
+    [self amiga]->powerOff();
 }
 
 - (void) hardReset
 {
-    wrapper->amiga->reset(true);
+    [self amiga]->reset(true);
 }
 
 - (void) softReset
 {
-    wrapper->amiga->reset(false);
+    [self amiga]->reset(false);
 }
 
 - (AmigaInfo) getInfo
 {
-    return wrapper->amiga->getInfo();
+    return [self amiga]->getInfo();
 }
 
 - (BOOL) isPoweredOn
 {
-    return wrapper->amiga->isPoweredOn();
+    return [self amiga]->isPoweredOn();
 }
 
 - (BOOL) isPoweredOff
 {
-    return wrapper->amiga->isPoweredOff();
+    return [self amiga]->isPoweredOff();
 }
 
 - (BOOL) isRunning
 {
-    return wrapper->amiga->isRunning();
+    return [self amiga]->isRunning();
 }
 
 - (BOOL) isPaused
 {
-    return wrapper->amiga->isPaused();
+    return [self amiga]->isPaused();
 }
 
 - (void) run
 {
-    wrapper->amiga->run();
+    [self amiga]->run();
 }
 
 - (void) pause
 {
-    wrapper->amiga->pause();
+    [self amiga]->pause();
 }
 
 - (void) suspend
 {
-    return wrapper->amiga->suspend();
+    return [self amiga]->suspend();
 }
 
 - (void) resume
 {
-    return wrapper->amiga->resume();
+    return [self amiga]->resume();
 }
 
 - (void) requestAutoSnapshot
 {
-    wrapper->amiga->requestAutoSnapshot();
+    [self amiga]->requestAutoSnapshot();
 }
 
 - (void) requestUserSnapshot
 {
-    wrapper->amiga->requestUserSnapshot();
+    [self amiga]->requestUserSnapshot();
 }
 
 - (SnapshotProxy *) latestAutoSnapshot
 {
-    Snapshot *snapshot = wrapper->amiga->latestAutoSnapshot();
+    Snapshot *snapshot = [self amiga]->latestAutoSnapshot();
     return [SnapshotProxy make:snapshot];
 }
 
 - (SnapshotProxy *) latestUserSnapshot
 {
-    Snapshot *snapshot = wrapper->amiga->latestUserSnapshot();
+    Snapshot *snapshot = [self amiga]->latestUserSnapshot();
     return [SnapshotProxy make:snapshot];
 }
 
 - (void) loadFromSnapshot:(SnapshotProxy *)proxy
 {
-    wrapper->amiga->loadFromSnapshotSafe([proxy snapshot]);
+    [self amiga]->loadFromSnapshotSafe([proxy snapshot]);
 }
 
 - (NSInteger) getConfig:(Option)opt
 {
-    return wrapper->amiga->getConfigItem(opt);
+    return [self amiga]->getConfigItem(opt);
 }
 
 - (NSInteger) getConfig:(Option)opt id:(NSInteger)id
 {
-    return wrapper->amiga->getConfigItem(opt, id);
+    return [self amiga]->getConfigItem(opt, id);
 }
 
 - (NSInteger) getConfig:(Option)opt drive:(NSInteger)id
 {
-    return wrapper->amiga->getConfigItem(opt, (long)id);
+    return [self amiga]->getConfigItem(opt, (long)id);
 }
 
 - (BOOL) configure:(Option)opt value:(NSInteger)val
 {
-    return wrapper->amiga->configure(opt, val);
+    return [self amiga]->configure(opt, val);
 }
 
 - (BOOL) configure:(Option)opt enable:(BOOL)val
 {
-    return wrapper->amiga->configure(opt, val ? 1 : 0);
+    return [self amiga]->configure(opt, val ? 1 : 0);
 }
 
 - (BOOL) configure:(Option)opt id:(NSInteger)id value:(NSInteger)val
 {
-    return wrapper->amiga->configure(opt, id, val);
+    return [self amiga]->configure(opt, id, val);
 }
 
 - (BOOL) configure:(Option)opt id:(NSInteger)id enable:(BOOL)val
 {
-    return wrapper->amiga->configure(opt, id, val ? 1 : 0);
+    return [self amiga]->configure(opt, id, val ? 1 : 0);
 }
 
 - (BOOL) configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val
 {
-    return wrapper->amiga->configure(opt, (long)id, val);
+    return [self amiga]->configure(opt, (long)id, val);
 }
 
 - (BOOL) configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val
 {
-    return wrapper->amiga->configure(opt, (long)id, val ? 1 : 0);
+    return [self amiga]->configure(opt, (long)id, val ? 1 : 0);
 }
 
 - (void) addListener:(const void *)sender function:(Callback *)func
 {
-    wrapper->amiga->messageQueue.addListener(sender, func);
+    [self amiga]->messageQueue.addListener(sender, func);
 }
 
 - (void) removeListener:(const void *)sender
 {
-    wrapper->amiga->messageQueue.removeListener(sender);
+    [self amiga]->messageQueue.removeListener(sender);
 }
 
 - (Message)message
 {
-    return wrapper->amiga->messageQueue.get();
+    return [self amiga]->messageQueue.get();
 }
 
 - (void) stopAndGo
 {
-    wrapper->amiga->stopAndGo();
+    [self amiga]->stopAndGo();
 }
 
 - (void) stepInto
 {
-    wrapper->amiga->stepInto();
+    [self amiga]->stepInto();
 }
 
 - (void) stepOver
 {
-    wrapper->amiga->stepOver();
+    [self amiga]->stepOver();
 }
 
 - (BOOL) warp
 {
-    return wrapper->amiga->inWarpMode();
+    return [self amiga]->inWarpMode();
 }
 
 - (void) warpOn
 {
-    wrapper->amiga->setWarp(true);
+    [self amiga]->setWarp(true);
 }
 
 - (void) warpOff
 {
-    wrapper->amiga->setWarp(false);
+    [self amiga]->setWarp(false);
 }
 
 @end
