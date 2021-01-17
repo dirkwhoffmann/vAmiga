@@ -335,7 +335,13 @@ DiskController::writeFifo(u8 byte)
 bool
 DiskController::compareFifo(u16 word) const
 {
-    return fifoHasWord() && (fifo & 0xFFFF) == word;
+    if (fifoHasWord()) {
+        for (usize i = 0; i < 8; i++) {
+            if ((fifo >> i & 0xFFFF) == word) return true;
+        }
+    }
+    return false;
+    // return fifoHasWord() && (fifo & 0xFFFF) == word;
 }
 
 void
