@@ -111,7 +111,7 @@ extension CopperTableView: NSTableViewDelegate {
         
         if let cell = cell as? NSTextFieldCell {
             if tableColumn?.identifier.rawValue == "instr" {
-                if illegalInRow[row] == true { cell.textColor = .red; return }
+                if illegalInRow[row] == true { cell.textColor = .warningColor; return }
             }
             cell.textColor = .textColor
         }
