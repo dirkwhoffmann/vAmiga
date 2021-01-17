@@ -12,6 +12,8 @@
 #include "AmigaConfig.h"
 #include "AmigaConstants.h"
 #include "Debug.h"
+#include "Errors.h"
+#include "AmigaTypes.h"
 
 #include <assert.h>
 #include <limits.h>
@@ -25,6 +27,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <string>
+#include <set>
+#include <sstream>
+#include <fstream>
 
 //
 // Optimizing code
@@ -207,12 +213,6 @@ char *extractFilenameWithoutSuffix(const char *path);
  */
 bool checkFileSuffix(const char *path, const char *suffix);
 
-// Checks if a path points to a directory
-bool isDirectory(const char *path);
-
-// Returns the number of files in a directory
-long numDirectoryItems(const char *path);
-
 // Returns the size of a file in bytes
 long getSizeOfFile(const char *path);
 
@@ -224,9 +224,27 @@ bool checkFileSizeRange(const char *path, long min, long max);
 bool matchingFileHeader(const char *path, const u8 *header, size_t length);
 bool matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length);
 
+// Checks if a path points to a directory
+bool isDirectory(const std::string &path);
+bool isDirectory(const char *path);
+
+// Returns the number of files in a directory
+usize numDirectoryItems(const std::string &path);
+usize numDirectoryItems(const char *path);
+
+// Checks the header signature (magic bytes) of a file or buffer
+bool matchingStreamHeader(std::istream &stream, const u8 *header, usize length);
+
 // Loads a file from disk
 bool loadFile(const char *path, u8 **buffer, long *size);
 bool loadFile(const char *path, const char *name, u8 **buffer, long *size);
+
+
+//
+// Handling streams
+//
+
+usize streamLength(std::istream &stream);
 
 
 //

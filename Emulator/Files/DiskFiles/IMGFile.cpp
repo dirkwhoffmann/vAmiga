@@ -14,6 +14,22 @@ IMGFile::IMGFile()
 }
 
 bool
+IMGFile::isCompatibleName(const std::string &name)
+{
+    return true;
+}
+
+bool
+IMGFile::isCompatibleStream(std::istream &stream)
+{
+    usize length = streamLength(stream);
+    
+    // There are no magic bytes. We can only check the buffer size
+    return
+    length == IMGSIZE_35_DD;
+}
+
+bool
 IMGFile::isIMGBuffer(const u8 *buffer, size_t length)
 {
     // There are no magic bytes. We can only check the buffer size

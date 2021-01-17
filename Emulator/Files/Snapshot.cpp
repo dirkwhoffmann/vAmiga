@@ -44,6 +44,21 @@ Thumbnail::take(Amiga *amiga, int dx, int dy)
 }
 
 bool
+Snapshot::isCompatibleName(const std::string &name)
+{
+    return true;
+}
+
+bool
+Snapshot::isCompatibleStream(std::istream &stream)
+{
+    const u8 magicBytes[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
+    
+    if (streamLength(stream) < 0x15) return false;
+    return matchingStreamHeader(stream, magicBytes, sizeof(magicBytes));
+}
+
+bool
 Snapshot::isSnapshot(const u8 *buf, size_t len)
 {
     assert(buf != nullptr);

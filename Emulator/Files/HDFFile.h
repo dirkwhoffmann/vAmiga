@@ -21,7 +21,10 @@ public:
     //
     // Class methods
     //
-    
+
+    static bool isCompatibleName(const std::string &name);
+    static bool isCompatibleStream(std::istream &stream);
+
     // Returns true iff the provided buffer contains an HDF file
     static bool isHDFBuffer(const u8 *buffer, size_t length);
     

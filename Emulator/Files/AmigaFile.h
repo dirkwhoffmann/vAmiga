@@ -10,6 +10,7 @@
 #pragma once
 
 #include "AmigaObject.h"
+#include "FileTypes.h"
 
 // Base class for all supported file types
 class AmigaFile : public AmigaObject {
@@ -31,6 +32,27 @@ protected:
     //
     
 public:
+    
+    template <class T> static T *make(std::istream &stream) throws
+    {
+        if (!T::isCompatibleStream(stream)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
+        
+        T *obj = new T();
+        
+        try { obj->readFromStream(stream); } catch (VAError &err) {
+            delete obj;
+            throw err;
+        }
+        return obj;
+    }
+
+    template <class T> static T *make(std::istream &stream, ErrorCode *err)
+    {
+        *err = ERROR_OK;
+        try { return make <T> (stream); }
+        catch (VAError &exception) { *err = exception.errorCode; }
+        return nullptr;
+    }
     
     template <class T> static T *make(const u8 *buf, usize len, ErrorCode *err = nullptr);
     template <class T> static T *make(const char *path, ErrorCode *err = nullptr);

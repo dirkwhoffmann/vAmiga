@@ -20,6 +20,28 @@ EXTFile::EXTFile()
 }
 
 bool
+EXTFile::isCompatibleName(const std::string &name)
+{
+    return true;
+}
+
+bool
+EXTFile::isCompatibleStream(std::istream &stream)
+{
+    usize length = streamLength(stream);
+    
+    size_t len = sizeof(extAdfHeaders[0]);
+    size_t cnt = sizeof(extAdfHeaders) / len;
+
+    if (length < len) return false;
+    
+    for (size_t i = 0; i < cnt; i++) {
+        if (matchingStreamHeader(stream, extAdfHeaders[i], len)) return true;
+    }
+    return false;
+}
+
+bool
 EXTFile::isEXTBuffer(const u8 *buffer, size_t length)
 {
     assert(buffer != nullptr);

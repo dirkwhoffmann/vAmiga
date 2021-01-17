@@ -53,6 +53,9 @@ class Snapshot : public AmigaFile {
     
 public:
     
+    static bool isCompatibleName(const std::string &name);
+    static bool isCompatibleStream(std::istream &stream);
+
     // Returns true iff buffer contains a snapshot (of a specific version)
     static bool isSnapshot(const u8 *buf, size_t len);
     static bool isSnapshot(const u8 *buf, size_t len, u8 major, u8 minor, u8 subminor);

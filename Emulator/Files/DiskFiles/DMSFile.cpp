@@ -18,6 +18,20 @@ DMSFile::DMSFile()
 }
 
 bool
+DMSFile::isCompatibleName(const std::string &name)
+{
+    return name == "dms" || name == "DMS";
+}
+
+bool
+DMSFile::isCompatibleStream(std::istream &stream)
+{
+    u8 signature[] = { 'D', 'M', 'S', '!' };
+                                                                                            
+    return matchingStreamHeader(stream, signature, sizeof(signature));
+}
+
+bool
 DMSFile::isDMSBuffer(const u8 *buffer, size_t length)
 {
     u8 signature[] = { 'D', 'M', 'S', '!' };

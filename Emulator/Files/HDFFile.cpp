@@ -15,6 +15,18 @@ HDFFile::HDFFile()
 }
 
 bool
+HDFFile::isCompatibleName(const std::string &name)
+{
+    return name == "hdf" || name == "HDF";
+}
+
+bool
+HDFFile::isCompatibleStream(std::istream &stream)
+{
+    return streamLength(stream) % 512 == 0;
+}
+
+bool
 HDFFile::isHDFBuffer(const u8 *buffer, size_t length)
 {
     // HDFs contain no magic bytes. We can only check the buffer size

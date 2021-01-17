@@ -15,6 +15,23 @@ EXEFile::EXEFile()
 }
 
 bool
+EXEFile::isCompatibleName(const std::string &name)
+{
+    return name == "exe" || name == "EXE";
+}
+
+bool
+EXEFile::isCompatibleStream(std::istream &stream)
+{
+    u8 signature[] = { 0x00, 0x00, 0x03, 0xF3 };
+                                                                                            
+    // Only accept the file if it fits onto a HD disk
+    if (streamLength(stream) > 1710000) return false;
+
+    return matchingStreamHeader(stream, signature, sizeof(signature));
+}
+
+bool
 EXEFile::isEXEBuffer(const u8 *buffer, size_t length)
 {
     u8 signature[] = { 0x00, 0x00, 0x03, 0xF3 };

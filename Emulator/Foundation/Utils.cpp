@@ -9,6 +9,8 @@
 
 #include "Utils.h"
 
+#include <ctype.h>
+
 bool
 releaseBuild()
 {
@@ -147,48 +149,6 @@ checkFileSuffix(const char *path, const char *suffix)
         return false;
 }
 
-bool isDirectory(const char *path)
-{
-    struct stat fileProperties;
-    
-    if (path == nullptr)
-        return -1;
-        
-    if (stat(path, &fileProperties) != 0)
-        return -1;
-    
-    return S_ISDIR(fileProperties.st_mode);
-}
-
-long numDirectoryItems(const char *path)
-{
-    long count = 0;
-    
-    if (DIR *dir = opendir(path)) {
-        
-        struct dirent *dp;
-        while ((dp = readdir(dir))) {
-            if (dp->d_name[0] != '.') count++;
-        }
-    }
-    
-    return count;
-}
-
-long
-getSizeOfFile(const char *path)
-{
-    struct stat fileProperties;
-    
-    if (path == nullptr)
-        return -1;
-    
-    if (stat(path, &fileProperties) != 0)
-        return -1;
-    
-    return fileProperties.st_size;
-}
-
 bool
 checkFileSize(const char *path, long size)
 {
@@ -247,6 +207,73 @@ matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length)
             return false;
     }
 
+    return true;
+}
+
+bool isDirectory(const std::string &path)
+{
+    return isDirectory(path.c_str());
+}
+
+bool isDirectory(const char *path)
+{
+    struct stat fileProperties;
+    
+    if (path == nullptr)
+        return -1;
+        
+    if (stat(path, &fileProperties) != 0)
+        return -1;
+    
+    return S_ISDIR(fileProperties.st_mode);
+}
+
+usize numDirectoryItems(const std::string &path)
+{
+    return numDirectoryItems(path.c_str());
+}
+
+usize numDirectoryItems(const char *path)
+{
+    usize count = 0;
+    
+    if (DIR *dir = opendir(path)) {
+        
+        struct dirent *dp;
+        while ((dp = readdir(dir))) {
+            if (dp->d_name[0] != '.') count++;
+        }
+    }
+    
+    return count;
+}
+
+long
+getSizeOfFile(const char *filename)
+{
+    struct stat fileProperties;
+    
+    if (filename == nullptr)
+        return -1;
+    
+    if (stat(filename, &fileProperties) != 0)
+        return -1;
+    
+    return fileProperties.st_size;
+}
+
+bool matchingStreamHeader(std::istream &stream, const u8 *header, usize length)
+{
+    stream.seekg(0, std::ios::beg);
+    
+    for (usize i = 0; i < length; i++) {
+        int c = stream.get();
+        if (c != (int)header[i]) {
+            stream.seekg(0, std::ios::beg);
+            return false;
+        }
+    }
+    stream.seekg(0, std::ios::beg);
     return true;
 }
 
@@ -311,14 +338,27 @@ fnv_1a_it64(u64 prv, u64 val)
     return (prv ^ val) * 0x100000001b3;
 }
 
+usize
+streamLength(std::istream &stream)
+{
+    auto cur = stream.tellg();
+    stream.seekg(0, std::ios::beg);
+    auto beg = stream.tellg();
+    stream.seekg(0, std::ios::end);
+    auto end = stream.tellg();
+    stream.seekg(cur, std::ios::beg);
+    
+    return (usize)(end - beg);
+}
+
 u32
-fnv_1a_32(const u8 *addr, size_t size)
+fnv_1a_32(const u8 *addr, usize size)
 {
     if (addr == nullptr || size == 0) return 0;
 
     u32 hash = fnv_1a_init32();
 
-    for (size_t i = 0; i < size; i++) {
+    for (usize i = 0; i < size; i++) {
         hash = fnv_1a_it32(hash, (u32)addr[i]);
     }
 
@@ -326,7 +366,7 @@ fnv_1a_32(const u8 *addr, size_t size)
 }
 
 u64
-fnv_1a_64(const u8 *addr, size_t size)
+fnv_1a_64(const u8 *addr, usize size)
 {
     if (addr == nullptr || size == 0) return 0;
     
@@ -339,7 +379,7 @@ fnv_1a_64(const u8 *addr, size_t size)
     return hash;
 }
 
-u16 crc16(const u8 *addr, size_t size)
+u16 crc16(const u8 *addr, usize size)
 {
     u8 x;
     u16 crc = 0xFFFF;
@@ -353,7 +393,7 @@ u16 crc16(const u8 *addr, size_t size)
 }
 
 u32
-crc32(const u8 *addr, size_t size)
+crc32(const u8 *addr, usize size)
 {
     if (addr == nullptr || size == 0) return 0;
 

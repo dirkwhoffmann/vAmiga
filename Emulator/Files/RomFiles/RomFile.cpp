@@ -96,6 +96,12 @@ RomFile::identifier(u32 fingerprint)
 }
 
 bool
+RomFile::isCompatibleName(const std::string &name)
+{
+    return true;
+}
+
+bool
 RomFile::isBootRom(RomIdentifier rev)
 {
     switch (rev) {
@@ -212,7 +218,7 @@ RomFile::title(RomIdentifier rev)
         case ROM_DIAG121:          return "Amiga DiagROM";
         case ROM_LOGICA20:         return "Logica Diagnostic";
 
-        default:                 return "";
+        default:                   return "";
     }
 }
 
@@ -296,6 +302,49 @@ RomFile::released(RomIdentifier rev)
 
 RomFile::RomFile()
 {
+}
+
+bool
+RomFile::isCompatibleStream(std::istream &stream)
+{
+    usize length = streamLength(stream);
+    
+    // Boot Roms
+    if (length == KB(8) || length == KB(16)) {
+
+        int len = sizeof(bootRomHeaders[0]);
+        int cnt = sizeof(bootRomHeaders) / len;
+
+        for (int i = 0; i < cnt; i++) {
+            if (matchingStreamHeader(stream, bootRomHeaders[i], len)) return true;
+        }
+        return false;
+    }
+
+    // Kickstart Roms
+    if (length == KB(256) || length == KB(512)) {
+
+        int len = sizeof(kickRomHeaders[0]);
+        int cnt = sizeof(kickRomHeaders) / len;
+
+        for (int i = 0; i < cnt; i++) {
+            if (matchingStreamHeader(stream, kickRomHeaders[i], len)) return true;
+        }
+        return false;
+    }
+
+    // Encrypted Kickstart Roms
+    if (length == KB(256) + 11 || length == KB(512) + 11) {
+        
+        int len = sizeof(encrRomHeaders[0]);
+        int cnt = sizeof(encrRomHeaders) / len;
+        
+        for (int i = 0; i < cnt; i++) {
+            if (matchingStreamHeader(stream, encrRomHeaders[i], len)) return true;
+        }
+    }
+    
+    return false;
 }
 
 bool

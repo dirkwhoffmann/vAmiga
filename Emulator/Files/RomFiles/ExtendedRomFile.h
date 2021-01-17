@@ -25,6 +25,9 @@ public:
     // Class methods
     //
 
+    static bool isCompatibleName(const std::string &name);
+    static bool isCompatibleStream(std::istream &stream);
+
     // Returns true iff buffer contains an Extended Rom image
     static bool isExtendedRomBuffer(const u8 *buffer, size_t length);
 

@@ -27,6 +27,9 @@ public:
     // Class methods
     //
     
+    static bool isCompatibleName(const std::string &name);
+    static bool isCompatibleStream(std::istream &stream);
+    
     // Returns true if buffer contains a Boot Rom or an Kickstart Rom image
     static bool isRomBuffer(const u8 *buffer, size_t length);
     

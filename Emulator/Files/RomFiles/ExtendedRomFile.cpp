@@ -18,6 +18,22 @@ ExtendedRomFile::ExtendedRomFile()
 }
 
 bool
+ExtendedRomFile::isCompatibleName(const std::string &name)
+{
+    return true;
+}
+
+bool
+ExtendedRomFile::isCompatibleStream(std::istream &stream)
+{
+    if (streamLength(stream) != KB(512)) return false;
+    
+    return
+    matchingStreamHeader(stream, magicBytes1, sizeof(magicBytes1)) ||
+    matchingStreamHeader(stream, magicBytes2, sizeof(magicBytes2));
+}
+
+bool
 ExtendedRomFile::isExtendedRomBuffer(const u8 *buffer, size_t length)
 {
     if (length != KB(512)) return false;
