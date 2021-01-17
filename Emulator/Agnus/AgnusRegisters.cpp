@@ -460,28 +460,33 @@ Agnus::pokeVPOS(u16 value)
 {
     trace(POSREG_DEBUG, "pokeVPOS(%x) (%d,%d)\n", value, pos.v, frame.lof);
     
-    // I don't really know what exactly we are supposed to do here.
-    // For the time being, I only take care of the LOF bit.
+    /* I don't really know what exactly we are supposed to do here.
+     * For the time being, I only take care of the LOF bit.
+     */
     bool newlof = value & 0x8000;
     if (frame.lof == newlof) return;
     
     trace(XFILES, "XFILES (VPOS): %x (%d,%d)\n", value, pos.v, frame.lof);
 
-    // If a long frame gets changed to a short frame, we only proceed if
-    // Agnus is not in the last rasterline. Otherwise, we would corrupt the
-    // emulators internal state (we would be in a line that is unreachable).
+    /* If a long frame gets changed to a short frame, we only proceed if
+     * Agnus is not in the last rasterline. Otherwise, we would corrupt the
+     * emulators internal state (we would be in a line that is unreachable).
+     */
     if (!newlof && inLastRasterline()) return;
 
     trace(XFILES, "XFILES (VPOS): Making a %s frame\n", newlof ? "long" : "short");
     frame.lof = newlof;
     
-    // Reschedule a pending VBL_STROBE event with a trigger cycle that is
-    // consistent with new LOF bit value.
-    if (slot[SLOT_VBL].id == VBL_STROBE0) {
-        reschedulePos<SLOT_VBL>(frame.numLines() + vStrobeLine(), 0);
-    }
-    if (slot[SLOT_VBL].id == VBL_STROBE1) {
-        reschedulePos<SLOT_VBL>(frame.numLines() + vStrobeLine(), 1);
+    /* Reschedule a pending VBL event with a trigger cycle that is consistent
+     * with the new value of the LOF bit.
+     */
+    switch (slot[SLOT_VBL].id) {
+
+        case VBL_STROBE0: scheduleStrobe0Event(); break;
+        case VBL_STROBE1: scheduleStrobe1Event(); break;
+        case VBL_STROBE2: scheduleStrobe2Event(); break;
+            
+        default: break;
     }
 }
 

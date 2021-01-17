@@ -913,7 +913,7 @@ private:
 
 
     //
-    // Servicing events
+    // Handling events
     //
 
 public:
@@ -921,6 +921,12 @@ public:
     // Triggers the vertical blank interrupt
     void serviceVblEvent();
 
+private:
+    
+    // Schedule the next VBL event
+    void scheduleStrobe0Event();
+    void scheduleStrobe1Event();
+    void scheduleStrobe2Event();
 
     //
     // Class extensions

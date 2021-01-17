@@ -45,28 +45,6 @@
 @class SerialPortProxy;
 @class SnapshotProxy;
 
-/* Forward declarations of C++ class wrappers.
- * We wrap classes into normal C structs to avoid any reference to C++.
- */
-/*
-struct AgnusWrapper;
-struct AmigaFileWrapper;
-struct AmigaWrapper;
-struct BlitterWrapper;
-struct CIAWrapper;
-struct ControlPortWrapper;
-struct CopperWrapper;
-struct DeniseWrapper;
-struct DiskControllerWrapper;
-struct DmaDebuggerWrapper;
-struct DriveWrapper;
-struct KeyboardWrapper;
-struct MemWrapper;
-struct PaulaWrapper;
-struct ScreenRecorderWrapper;
-struct SerialPortWrapper;
-*/
-
 //
 // Base proxies
 //
@@ -143,12 +121,11 @@ struct SerialPortWrapper;
 - (void) kill;
 
 @property (readonly) BOOL isReleaseBuild;
-- (void) setDebug:(BOOL)enable;
+@property BOOL debugMode;
 - (void) enableDebugging __attribute__ ((deprecated));
 - (void) disableDebugging __attribute__ ((deprecated));
 - (void) setInspectionTarget:(EventID)id;
 - (void) clearInspectionTarget;
-@property (readonly) BOOL debugMode;
 
 - (BOOL) isReady:(ErrorCode *)error;
 - (BOOL) isReady;

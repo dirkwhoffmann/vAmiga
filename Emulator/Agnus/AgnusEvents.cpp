@@ -23,7 +23,7 @@ Agnus::serviceVblEvent()
             paula.raiseIrq(INT_VERTB);
             
             // Schedule next event
-            schedulePos<SLOT_VBL>(5, 84, VBL_STROBE1);
+            scheduleStrobe1Event();
             break;
 
         case VBL_STROBE1:
@@ -35,24 +35,41 @@ Agnus::serviceVblEvent()
             amiga.ciaA.tod.increment();
             
             // Schedule next event
-            schedulePos<SLOT_VBL>(5, 178, VBL_END);
+            scheduleStrobe2Event();
             break;
             
-        case VBL_END:
+        case VBL_STROBE2:
             
             assert(pos.v == 5);
             assert(pos.h == 178);
             
-            // Make the incremented value visible
-            // amiga.ciaA.tod.finishIncrement();
+            // Nothing is done here at the moment
             
-            // Schedule the next VBL_STROBE event
-            schedulePos<SLOT_VBL>(frame.numLines() + vStrobeLine(), 0, VBL_STROBE0);
+            // Schedule next event
+            scheduleStrobe0Event();
             break;
             
         default:
             assert(false);
     }
+}
+
+void
+Agnus::scheduleStrobe0Event()
+{
+    schedulePos<SLOT_VBL>(frame.numLines() + vStrobeLine(), 0, VBL_STROBE0);
+}
+
+void
+Agnus::scheduleStrobe1Event()
+{
+    schedulePos<SLOT_VBL>(5, 84, VBL_STROBE1);
+}
+
+void
+Agnus::scheduleStrobe2Event()
+{
+    schedulePos<SLOT_VBL>(5, 178, VBL_STROBE2);
 }
 
 template <int nr> void

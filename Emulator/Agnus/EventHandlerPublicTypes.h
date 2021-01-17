@@ -205,7 +205,7 @@ enum_long(EventID)
     // Strobe slot
     VBL_STROBE0 = 1,
     VBL_STROBE1,
-    VBL_END,
+    VBL_STROBE2,
     VBL_EVENT_COUNT,
     
     // IRQ slot

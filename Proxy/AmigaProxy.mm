@@ -2009,7 +2009,7 @@ using namespace moira;
     return [self amiga]->inDebugMode();
 }
 
-- (void) setDebug:(BOOL)enable
+- (void) setDebugMode:(BOOL)enable
 {
     [self amiga]->setDebug(enable);
 }

@@ -266,7 +266,7 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case 0:             i.eventName = "none"; break;
                 case VBL_STROBE0:   i.eventName = "VBL_STROBE0"; break;
                 case VBL_STROBE1:   i.eventName = "VBL_STROBE1"; break;
-                case VBL_END:       i.eventName = "VBL_END"; break;
+                case VBL_STROBE2:   i.eventName = "VBL_STROBE2"; break;
                 default:            i.eventName = "*** INVALID ***"; break;
             }
             break;
