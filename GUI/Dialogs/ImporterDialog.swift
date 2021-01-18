@@ -72,7 +72,7 @@ class ImporterDialog: DialogController {
         if let attachment = myDocument.amigaAttachment as? EXEFileProxy {
             disk = attachment
         }
-        if let attachment = myDocument.amigaAttachment as? DIRFileProxy {
+        if let attachment = myDocument.amigaAttachment as? FolderProxy {
             disk = attachment
         }
 

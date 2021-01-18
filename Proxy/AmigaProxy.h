@@ -29,7 +29,7 @@
 @class DiskControllerProxy;
 @class DiskFileProxy;
 @class DmaDebuggerProxy;
-@class DIRFileProxy;
+@class FolderProxy;
 @class DMSFileProxy;
 @class DriveProxy;
 @class EXEFileProxy;
@@ -602,11 +602,13 @@
 
 @property (readonly) FileType type;
 - (void)setPath:(NSString *)path;
-@property (readonly) NSInteger sizeOnDisk;
+- (NSInteger)writeToFile:(NSString *)path error:(ErrorCode *)err;
 @property (readonly) u64 fnv;
 
-- (void)readFromBuffer:(const void *)buffer length:(NSInteger)length;
+/*
+- (void)readFromBuffer:(const void *)buffer length:(NSInteger)length __attribute__ ((deprecated));
 - (NSInteger)writeToBuffer:(void *)buffer;
+*/
 
 @end
 
@@ -627,7 +629,7 @@
 
 @property (readonly, strong) NSImage *previewImage;
 @property (readonly) time_t timeStamp;
-@property (readonly, copy) NSData *data;
+// @property (readonly, copy) NSData *data;
 
 @end
 
@@ -757,13 +759,13 @@
 
 
 //
-// DIRFileProxy
+// Folder proxy
 //
 
-@interface DIRFileProxy : DiskFileProxy {
+@interface FolderProxy : DiskFileProxy {
 }
 
-+ (BOOL)isDIRFile:(NSString *)path;
++ (BOOL)isFolder:(NSString *)path;
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 
 - (ADFFileProxy *)adf;

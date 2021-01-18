@@ -143,6 +143,7 @@ Snapshot::matchingFile(const char *path)
     return Snapshot::isSnapshotFile(path);
 }
 
+/*
 bool
 Snapshot::readFromBuffer(const u8 *buf, size_t len, ErrorCode *err)
 {
@@ -157,6 +158,7 @@ Snapshot::readFromBuffer(const u8 *buf, size_t len, ErrorCode *err)
     
     return *err == ERROR_OK;
 }
+*/
 
 void
 Snapshot::takeScreenshot(Amiga &amiga)

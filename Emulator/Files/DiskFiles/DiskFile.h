@@ -21,7 +21,8 @@ class DiskFile : public AmigaFile {
 public:
 
     static DiskFile *makeWithFile(const char *path);
-    
+    static DiskFile *makeWithFile(const string &path);
+
     // Gets or sets the file system for this disk
     virtual FSVolumeType getDos() const = 0;
     virtual void setDos(FSVolumeType dos) = 0;

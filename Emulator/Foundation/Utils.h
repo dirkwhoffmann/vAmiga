@@ -32,6 +32,8 @@
 #include <sstream>
 #include <fstream>
 
+using std::string;
+
 //
 // Optimizing code
 //
@@ -172,6 +174,16 @@ void hexdumpLongwords(u8 *p, size_t size, size_t cols = 32);
 //
 // Handling files
 //
+
+// Extracts a certain component from a path
+string extractPath(const string &s);
+string extractName(const string &s);
+string extractSuffix(const string &s);
+
+// Strips a certain component from a path
+string stripPath(const string &s);
+string stripName(const string &s);
+string stripSuffix(const string &s);
 
 /* Extracts the first path component.
  * Returns a newly created string. You need to delete it manually.

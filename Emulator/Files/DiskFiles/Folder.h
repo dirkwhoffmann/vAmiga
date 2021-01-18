@@ -17,14 +17,21 @@ public:
     
     ADFFile *adf = nullptr;
     
-    
     //
     // Class methods
     //
         
     // Returns true iff if the provided path points to a suitable directory
-    static bool isDIRFile(const char *path);
+    static bool isFolder(const char *path);
     
+    
+    //
+    // Constructing
+    //
+    
+    static Folder *makeWithFolder(const std::string &path) throws;
+    static Folder *makeWithFolder(const std::string &path, ErrorCode *err);
+
     
     //
     // Initializing
@@ -39,12 +46,12 @@ public:
     // Methods from AmigaFile
     //
     
-    FileType fileType() const override { return FILETYPE_DIR; }
+    FileType type() const override { return FILETYPE_DIR; }
     u64 fnv() const override { return adf->fnv(); }
     bool matchingBuffer(const u8 *buffer, size_t length) override;
-    bool matchingFile(const char *path) override { return isDIRFile(path); }
-    bool readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error = nullptr) override;
-    bool readFromFile(const char *filename, ErrorCode *error = nullptr) override;
+    bool matchingFile(const char *path) override { return isFolder(path); }
+    // bool readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error = nullptr) override;
+    // bool readFromFile(const char *filename, ErrorCode *error = nullptr) override;
     
     
     //

@@ -126,7 +126,7 @@ class MyDocument: NSDocument {
                 }
                 
             case .DIR:
-                if let file = DIRFileProxy.make(withFile: path, error: &err) {
+                if let file = FolderProxy.make(withFile: path, error: &err) {
                     return (file, .OK)
                 }
                 
@@ -251,6 +251,26 @@ class MyDocument: NSDocument {
     // Saving
     //
     
+    override func write(to url: URL, ofType typeName: String) throws {
+            
+        track()
+        
+        if typeName == "vAmiga" {
+            
+            // Take snapshot
+            if let snapshot = SnapshotProxy.make(withAmiga: amiga) {
+
+                // Write to data buffer
+                do {
+                    _ = try snapshot.writeToFile(url: url)
+                } catch {
+                    throw NSError(domain: NSOSStatusErrorDomain, code: unimpErr, userInfo: nil)
+                }
+            }
+        }
+    }
+
+    /*
     override open func data(ofType typeName: String) throws -> Data {
         
         track("\(typeName)")
@@ -270,6 +290,7 @@ class MyDocument: NSDocument {
         
         throw NSError(domain: NSOSStatusErrorDomain, code: unimpErr, userInfo: nil)
     }
+    */
     
     //
     // Exporting disks
@@ -301,16 +322,27 @@ class MyDocument: NSDocument {
                         
         track("Exporting disk to \(url)")
         
+        do {
+            try df.writeToFile(url: url)
+            
+        } catch {
+            
+            showExportAlert(url: url)
+            return false
+        }
+            
         // Serialize data
-        let data = NSMutableData.init(length: df.sizeOnDisk)!
-        df.write(toBuffer: data.mutableBytes)
+        // let data = NSMutableData.init(length: df.sizeOnDisk)!
+        // df.write(toBuffer: data.mutableBytes)
         
         // Write to file
+        /*
         if !data.write(to: url, atomically: true) {
             showExportAlert(url: url)
             return false
         }
-
+        */
+        
         // Mark disk as "not modified"
         amiga.df(nr)!.isModifiedDisk = false
         

@@ -429,21 +429,20 @@ RomFile::isRomFile(const char *path)
     return false;
 }
 
-bool
-RomFile::readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error)
+usize
+RomFile::readFromStream(std::istream &stream)
 {
-    ErrorCode err;
+    usize result = AmigaFile::readFromStream(stream);
     
-    // Read from buffer
-    if (AmigaFile::readFromBuffer(buffer, length, &err)) {
-    
-        // If the buffer contains an encrypted Rom, try to decrypt it
-        encrypted = matchingBufferHeader(data, encrRomHeaders[0], sizeof(encrRomHeaders[0]));
-        if (encrypted) { decrypt(&err); }
+    // If the buffer contains an encrypted Rom, try to decrypt it
+    encrypted = matchingBufferHeader(data, encrRomHeaders[0], sizeof(encrRomHeaders[0]));
+    if (encrypted) {
+        ErrorCode err;
+        decrypt(&err);
+        if (err != ERROR_OK) throw VAError(err);
     }
-    
-    if (error) *error = err;
-    return err == ERROR_OK;
+        
+    return result;
 }
 
 bool
@@ -457,15 +456,10 @@ RomFile::decrypt(ErrorCode *error)
     long romKeySize = 0;
         
     //  Locate the rom.key file
-    assert(path != nullptr);
-    char *romKeyPath = replaceFilename(path, "rom.key");
-    if (romKeyPath == nullptr) {
-        err = ERROR_MISSING_ROM_KEY;
-        goto exit;
-    }
+    string romKeyPath = extractPath(path) + "rom.key";
     
     // Load the rom.key file
-    if (!loadFile(romKeyPath, &romKeyData, &romKeySize)) {
+    if (!loadFile(romKeyPath.c_str(), &romKeyData, &romKeySize)) {
         err = ERROR_MISSING_ROM_KEY;
         goto exit;
     }
@@ -492,7 +486,6 @@ RomFile::decrypt(ErrorCode *error)
     
 exit:
     
-    if (romKeyPath) free(romKeyPath);
     if (romKeyData) delete [] romKeyData;
     
     *error = err;

@@ -53,6 +53,54 @@ void hexdumpLongwords(u8 *p, size_t size, size_t cols)
     hexdump(p, size, cols, 4);
 }
 
+string extractPath(const string &s)
+{
+    auto idx = s.rfind('/');
+    auto pos = 0;
+    auto len = idx != string::npos ? idx + 1 : 0;
+    return s.substr(pos, len);
+}
+
+string extractName(const string &s)
+{
+    auto idx = s.rfind('/');
+    auto pos = idx != string::npos ? idx + 1 : 0;
+    auto len = string::npos;
+    return s.substr(pos, len);
+}
+
+string extractSuffix(const string &s)
+{
+    auto idx = s.rfind('.');
+    auto pos = idx != std::string::npos ? idx + 1 : 0;
+    auto len = std::string::npos;
+    return s.substr(pos, len);
+}
+
+string stripPath(const string &s)
+{
+    auto idx = s.rfind('/');
+    auto pos = idx != string::npos ? idx + 1 : 0;
+    auto len = string::npos;
+    return s.substr(pos, len);
+}
+
+string stripName(const string &s)
+{
+    auto idx = s.rfind('/');
+    auto pos = 0;
+    auto len = idx != string::npos ? idx : 0;
+    return s.substr(pos, len);
+}
+
+string stripSuffix(const string &s)
+{
+    auto idx = s.rfind('.');
+    auto pos = 0;
+    auto len = idx != string::npos ? idx : string::npos;
+    return s.substr(pos, len);
+}
+
 char *
 extractFirstPathComponent(const char *path)
 {

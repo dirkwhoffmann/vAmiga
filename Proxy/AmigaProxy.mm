@@ -1399,24 +1399,32 @@ using namespace moira;
 
 - (void)setPath:(NSString *)path
 {
-    [self file]->setPath([path fileSystemRepresentation]);
+    [self file]->path = [path fileSystemRepresentation];
+}
+
+- (NSInteger)writeToFile:(NSString *)path error:(ErrorCode *)err
+{
+    return [self file]->writeToFile([path fileSystemRepresentation], err);
 }
 
 - (FileType)type
 {
-    return [self file]->fileType();
+    return [self file]->type();
 }
 
+/*
 - (NSInteger) sizeOnDisk
 {
     return [self file]->sizeOnDisk();
 }
+*/
 
 - (u64) fnv
 {
     return [self file]->fnv();
 }
 
+/*
 - (void) readFromBuffer:(const void *)buffer length:(NSInteger)length
 {
     ErrorCode error;
@@ -1427,6 +1435,7 @@ using namespace moira;
 {
     return [self file]->writeToBuffer((u8 *)buffer);
 }
+*/
 
 - (void) dealloc
 {
@@ -1497,7 +1506,6 @@ using namespace moira;
     const Thumbnail &thumbnail = [self snapshot]->getThumbnail();
     unsigned char *data = (unsigned char *)thumbnail.screen;
     
-    
     NSBitmapImageRep *rep = [[NSBitmapImageRep alloc]
                              initWithBitmapDataPlanes:&data
                              pixelsWide:thumbnail.width
@@ -1518,19 +1526,19 @@ using namespace moira;
     return preview;
 }
 
-/*
-- (time_t)timeStamp __attribute__ ((deprecated))
+- (time_t)timeStamp
 {
-    return ((Snapshot *)wrapper->file)->getThumbnail().timestamp;
+    return [self snapshot]->getThumbnail().timestamp;
 }
-*/
 
+/*
 - (NSData *)data
 {
     return [NSData dataWithBytes: (void *)[self snapshot]->getHeader()
                           length: [self snapshot]->sizeOnDisk()];
 }
-    
+*/
+
 @end
 
 
@@ -1885,10 +1893,10 @@ using namespace moira;
 
 
 //
-// DIRFileProxy
+// Folder Proxy
 //
 
-@implementation DIRFileProxy
+@implementation FolderProxy
 
 - (Folder *)dir
 {
@@ -1900,15 +1908,15 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (BOOL)isDIRFile:(NSString *)path
++ (BOOL)isFolder:(NSString *)path
 {
-    return Folder::isDIRFile([path fileSystemRepresentation]);
+    return Folder::isFolder([path fileSystemRepresentation]);
 }
 
 + (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
 {
-    Folder *archive = AmigaFile::make <Folder> ([path fileSystemRepresentation], err);
-    return [self make: archive];
+    std::string str = string([path fileSystemRepresentation]);
+    return [self make: Folder::makeWithFolder(str, err)];
 }
 
 - (ADFFileProxy *)adf

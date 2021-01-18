@@ -83,10 +83,11 @@ public:
     // Methods from AmigaFile
     //
     
-    FileType fileType() const override { return FILETYPE_SNAPSHOT; }
+    FileType type() const override { return FILETYPE_SNAPSHOT; }
     bool matchingBuffer(const u8 *buffer, size_t length) override;
     bool matchingFile(const char *filename) override;
-    bool readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error = nullptr) override;
+    
+    // bool readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error = nullptr) override;
 
     
     //
@@ -102,7 +103,7 @@ public:
     const Thumbnail &getThumbnail() const { return getHeader()->screenshot; }
     
     // Returns pointer to core data
-    u8 *getData() override { return data + sizeof(SnapshotHeader); }
+    u8 *getData() { return data + sizeof(SnapshotHeader); }
     
     // Takes a screenshot
     void takeScreenshot(Amiga &amiga);

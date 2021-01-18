@@ -45,13 +45,14 @@ public:
     // Methods from AmigaFile
     //
     
-    FileType fileType() const override { return FILETYPE_DMS; }
+    FileType type() const override { return FILETYPE_DMS; }
     u64 fnv() const override { return adf->fnv(); }
     bool matchingBuffer(const u8 *buffer, size_t length) override {
         return isDMSBuffer(buffer, length); }
     bool matchingFile(const char *path) override { return isDMSFile(path); }
-    bool readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error = nullptr) override;
-    
+    // bool readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error = nullptr) override;
+    usize readFromStream(std::istream &stream) override;
+
     
     //
     // Methods from DiskFile

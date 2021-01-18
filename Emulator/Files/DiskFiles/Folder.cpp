@@ -15,10 +15,70 @@ Folder::Folder()
 }
 
 bool
-Folder::isDIRFile(const char *path)
+Folder::isFolder(const char *path)
 {
-    assert(path != nullptr);
-    return isDirectory(path);
+    DIR *dir;
+    
+    // We accept all directories
+    if ((dir = opendir(path)) == nullptr) return false;
+    
+    closedir(dir);
+    return true;
+}
+
+Folder *
+Folder::makeWithFolder(const std::string &path)
+{
+    Folder *folder = new Folder();
+    
+    debug(FS_DEBUG, "makeWithFolder(%s)\n", path.c_str());
+              
+    // Only proceed if the provided filename points to a directory
+    if (!isFolder(path.c_str())) {
+        warn("%s is not a directory\n", path.c_str());
+        throw VAError(ERROR_FILE_TYPE_MISMATCH);
+    }
+    
+    // Create a file system and import the directory
+    FSDevice *volume = FSDevice::make(FS_OFS, path.c_str());
+    if (!volume) {
+        warn("Contents of %s does not fit on a disk\n", path.c_str());
+        throw VAError(ERROR_UNKNOWN);
+    }
+    
+    // Check the file system for errors
+    volume->info();
+    volume->printDirectory(true);
+
+    // Check the file system for consistency
+    FSErrorReport report = volume->check(true);
+    if (report.corruptedBlocks > 0) {
+        warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
+    }
+    // volume->dump();
+    
+    // Convert the file system into an ADF
+    ErrorCode fsError;
+    folder->adf = ADFFile::makeWithVolume(*volume, &fsError);
+    debug(FS_DEBUG, "makeWithVolume: %s\n", ErrorCodeEnum::key(fsError));
+    delete volume;
+    
+    if (!folder->adf) {
+        warn("Failed to create file system from folder %s\n", path.c_str());
+        throw VAError(ERROR_UNKNOWN);
+    }
+    
+    return folder;
+}
+
+Folder *
+Folder::makeWithFolder(const std::string &path, ErrorCode *err)
+{
+    *err = ERROR_OK;
+    
+    try { return makeWithFolder(path); }
+    catch (VAError &exception) { *err = exception.errorCode; }
+    return nullptr;
 }
 
 bool
@@ -27,30 +87,23 @@ Folder::matchingBuffer(const u8 *buffer, size_t length)
     assert(false);
     return false;
 }
-
+/*
 bool
-Folder::readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error)
+Folder::readFromFile(const char *path, ErrorCode *error)
 {
-    assert(false);
-    return false;
-}
-
-bool
-Folder::readFromFile(const char *filename, ErrorCode *error)
-{
-    debug(FS_DEBUG, "DIRFile::readFromFile(%s)\n", filename);
+    debug(FS_DEBUG, "DIRFile::readFromFile(%s)\n", path);
               
     // Only proceed if the provided filename points to a directory
-    if (!isDIRFile(filename)) {
-        warn("%s is not a directory\n", filename);
+    if (!isFolder(path)) {
+        warn("%s is not a directory\n", path);
         if (error) *error = ERROR_FILE_TYPE_MISMATCH;
         return false;
     }
     
     // Create a file system and import the directory
-    FSDevice *volume = FSDevice::make(FS_OFS, filename);
+    FSDevice *volume = FSDevice::make(FS_OFS, path);
     if (!volume) {
-        warn("Contents of %s does not fit on a disk\n", filename);
+        warn("Contents of %s does not fit on a disk\n", path);
         if (error) *error = ERROR_UNKNOWN;
         return false;
     }
@@ -76,3 +129,4 @@ Folder::readFromFile(const char *filename, ErrorCode *error)
     if (error) *error = adf != nullptr ? ERROR_UNKNOWN : ERROR_OK;
     return adf != nullptr;
 }
+*/

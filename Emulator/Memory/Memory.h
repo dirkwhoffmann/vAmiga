@@ -370,13 +370,17 @@ public:
 
     // Installs a Boot Rom or Kickstart Rom
     bool loadRom(RomFile *rom);
-    bool loadRomFromBuffer(const u8 *buffer, size_t length);
-    bool loadRomFromFile(const char *path, ErrorCode *error);
+    bool loadRomFromFile(const char *path) throws;
+    bool loadRomFromFile(const char *path, ErrorCode *ec);
+    bool loadRomFromBuffer(const u8 *buf, size_t len) throws;
+    bool loadRomFromBuffer(const u8 *buf, size_t len, ErrorCode *ec);
 
     bool loadExt(ExtendedRomFile *rom);
-    bool loadExtFromBuffer(const u8 *buffer, size_t length);
-    bool loadExtFromFile(const char *path);
-    
+    bool loadExtFromFile(const char *path) throws;
+    bool loadExtFromFile(const char *path, ErrorCode *ec);
+    bool loadExtFromBuffer(const u8 *buf, size_t len) throws;
+    bool loadExtFromBuffer(const u8 *buf, size_t len, ErrorCode *ec);
+
 private:
 
     // Loads Rom data from a file

@@ -67,7 +67,7 @@ FSDevice::makeWithADF(ADFFile *adf, ErrorCode *error)
     FSDevice *volume = makeWithFormat(descriptor);
 
     // Import file system from ADF
-    if (!volume->importVolume(adf->getData(), adf->getSize(), error)) {
+    if (!volume->importVolume(adf->data, adf->size, error)) {
         delete volume;
         return nullptr;
     }

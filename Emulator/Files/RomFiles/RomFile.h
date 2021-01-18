@@ -65,11 +65,12 @@ public:
     // Methods from AmigaFile
     //
     
-    FileType fileType() const override { return FILETYPE_ROM; }
+    FileType type() const override { return FILETYPE_ROM; }
     bool matchingBuffer(const u8 *buffer, size_t length) override {
         return isRomBuffer(buffer, length); }
     bool matchingFile(const char *path) override { return isRomFile(path); }
-    bool readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error = nullptr) override;
+    // bool readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error = nullptr) override;
+    usize readFromStream(std::istream &stream) override;
 
     
     //

@@ -7,6 +7,40 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+//
+// Exception passing
+//
+
+extension AmigaFileProxy {
+    
+    @discardableResult
+    func writeToFile(url: URL) throws -> Int {
+        
+        var err = ErrorCode.OK
+        let result = write(toFile: url.path, error: &err)
+        if err != .OK { throw VC64Error(err) }
+        
+        return result
+    }
+}
+
+extension FSDeviceProxy {
+        
+    /*
+    func exportDirectory(url: URL) throws {
+            
+        var err = ErrorCode.OK
+        if exportDirectory(url.path, error: &err) == false {
+            throw VC64Error(err)
+        }
+    }
+    */
+}
+
+//
+//
+//
+
 public extension AmigaProxy {
     
     func df(_ nr: Int) -> DriveProxy? {

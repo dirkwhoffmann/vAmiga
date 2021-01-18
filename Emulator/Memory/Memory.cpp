@@ -463,10 +463,10 @@ Memory::extVersion()
 bool
 Memory::loadRom(RomFile *file)
 {
-    assert(file != nullptr);
+    assert(file);
 
     // Allocate memory and load file
-    if (!allocRom(file->getSize())) return false;
+    if (!allocRom(file->size)) return false;
     loadRom(file, rom, config.romSize);
 
     // Add a Wom if a Boot Rom is installed instead of a Kickstart Rom
@@ -479,74 +479,108 @@ Memory::loadRom(RomFile *file)
 }
 
 bool
-Memory::loadRomFromBuffer(const u8 *buffer, size_t length)
+Memory::loadRomFromFile(const char *path)
 {
-    assert(buffer != nullptr);
+    assert(path);
     
-    RomFile *file = AmigaFile::make <RomFile> (buffer, length);
-    
-    if (!file) {
-        msg("Failed to read Kick Rom from buffer at %p\n", buffer);
-        return false;
-    }
-    
+    RomFile *file = AmigaFile::make <RomFile> (path);
     return loadRom(file);
 }
 
 bool
-Memory::loadRomFromFile(const char *path, ErrorCode *error)
+Memory::loadRomFromFile(const char *path, ErrorCode *ec)
 {
-    assert(path != nullptr);
+    try {
+        return loadRomFromFile(path);
+    } catch (VAError &exception) {
+        msg("Failed to read Kick Rom from file %s\n", path);
+        *ec = exception.errorCode;
+        return false;
+    }
+}
+
+bool
+Memory::loadRomFromBuffer(const u8 *buf, size_t len)
+{
+    assert(buf);
     
-    RomFile *rom = AmigaFile::make <RomFile> (path, error);
-    if (rom == nullptr) return false;
-    
-    bool success = loadRom(rom);
-    delete rom;
-    return success;
+    RomFile *file = AmigaFile::make <RomFile> (buf, len);
+    return loadRom(file);
+}
+
+bool
+Memory::loadRomFromBuffer(const u8 *buf, size_t len, ErrorCode *ec)
+{
+    try {
+        return loadRomFromBuffer(buf, len);
+    } catch (VAError &exception) {
+        msg("Failed to read Kick Rom from buffer at %p\n", buf);
+        *ec = exception.errorCode;
+        return false;
+    }
 }
 
 bool
 Memory::loadExt(ExtendedRomFile *file)
 {
-    assert(file != nullptr);
+    assert(file);
 
-    if (!allocExt(file->getSize())) return false;
+    if (!allocExt(file->size)) return false;
     loadRom(file, ext, config.extSize);
-
     return true;
-}
-
-bool
-Memory::loadExtFromBuffer(const u8 *buffer, size_t length)
-{
-    assert(buffer != nullptr);
-
-    ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (buffer, length);
-
-    if (!file) {
-        msg("Failed to read Extended Rom from buffer at %p\n", buffer);
-        return false;
-    }
-
-    return loadExt(file);
 }
 
 bool
 Memory::loadExtFromFile(const char *path)
 {
-    assert(path != nullptr);
+    assert(path);
 
-    ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (path);
-
-    if (!file) {
+    try {
+        ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (path);
+        return loadExt(file);
+        
+    } catch (VAError &exception) {
+        
         msg("Failed to read Extended Rom from file %s\n", path);
         return false;
     }
+}
 
+bool
+Memory::loadExtFromFile(const char *path, ErrorCode *ec)
+{
+    try {
+        return loadExtFromFile(path);
+        
+    } catch (VAError &exception) {
+        
+        msg("Failed to read Extended Rom from file %s\n", path);
+        return false;
+    }
+}
+
+bool
+Memory::loadExtFromBuffer(const u8 *buf, size_t len)
+{
+    assert(buf);
+
+    ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (buf, len);
     return loadExt(file);
 }
 
+bool
+Memory::loadExtFromBuffer(const u8 *buf, size_t len, ErrorCode *ec)
+{
+    try {
+        return loadExtFromBuffer(buf, len);
+        
+    } catch (VAError &exception) {
+        msg("Failed to read Extended Rom from buffer at %p\n", buf);
+        *ec = exception.errorCode;
+        return false;
+    }
+}
+ 
 void
 Memory::loadRom(AmigaFile *file, u8 *target, size_t length)
 {
@@ -555,11 +589,11 @@ Memory::loadRom(AmigaFile *file, u8 *target, size_t length)
         assert(target != nullptr);
         memset(target, 0, length);
 
-        if (file->getSize() < length) {
+        if (file->size < length) {
             warn("ROM is smaller than buffer\n");
         }
         
-        memcpy(target, file->getData(), MIN(file->getSize(), length));
+        memcpy(target, file->data, MIN(file->size, length));
     }
 }
 

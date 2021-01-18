@@ -19,67 +19,28 @@
 #include "RomFile.h"
 #include "ExtendedRomFile.h"
 
-template <class T> T *
-AmigaFile::make(const u8 *buffer, size_t length, ErrorCode *error)
-{
-    T *obj = new T();
-    
-    if (!obj->readFromBuffer(buffer, length, error)) {
-        delete obj;
-        return nullptr;
-    }
-        
-    return obj;
-}
 
-template <class T> T *
-AmigaFile::make(const char *path, ErrorCode *error)
+AmigaFile::AmigaFile(usize capacity)
 {
-    T *obj = new T();
-    
-    if (!obj->readFromFile(path, error)) {
-        delete obj;
-        return nullptr;
-    }
-    
-    return obj;
-}
-
-template <class T> T *
-AmigaFile::make(FILE *file, ErrorCode *error)
-{
-    T *obj = new T();
-    
-    if (!obj->readFromFile(file, error)) {
-        delete obj;
-        return nullptr;
-    }
-    
-    return obj;
-}
-
-AmigaFile::AmigaFile()
-{
+    data = new u8[capacity]();
+    size = capacity;
 }
 
 AmigaFile::~AmigaFile()
 {
-    dealloc();
-    
-    if (path)
-        free(path);
+    if (data) delete[] data;
 }
 
 bool
 AmigaFile::alloc(size_t capacity)
 {
-    dealloc();
     if ((data = new u8[capacity]()) == nullptr) return false;
     size = capacity;
     
     return true;
 }
 
+/*
 void
 AmigaFile::dealloc()
 {
@@ -92,15 +53,7 @@ AmigaFile::dealloc()
     data = nullptr;
     size = 0;
 }
-
-void
-AmigaFile::setPath(const char *str)
-{
-    assert(str != nullptr);
-    
-    if (path) free(path);
-    path = strdup(str);
-}
+*/
 
 void
 AmigaFile::flash(u8 *buffer, size_t offset)
@@ -108,6 +61,126 @@ AmigaFile::flash(u8 *buffer, size_t offset)
     assert(buffer != nullptr);
     memcpy(buffer + offset, data, size);
 }
+
+usize
+AmigaFile::readFromStream(std::istream &stream)
+{
+    // Get stream size
+    auto fsize = stream.tellg();
+    stream.seekg(0, std::ios::end);
+    fsize = stream.tellg() - fsize;
+    stream.seekg(0, std::ios::beg);
+
+    // Allocate memory
+    assert(data == nullptr);
+    data = new u8[fsize]();
+    size = fsize;
+
+    // Fix known inconsistencies
+    stream.read((char *)data, size);
+    
+    // Repair the file (if applicable)
+    repair();
+    
+    return size;
+}
+
+usize
+AmigaFile::readFromFile(const char *path)
+{
+    assert(path);
+        
+    std::ifstream stream(path);
+
+    if (!stream.is_open()) {
+        throw VAError(ERROR_FILE_CANT_READ);
+    }
+    
+    usize result = readFromStream(stream);
+    assert(result == size);
+    
+    this->path = string(path);
+    return size;
+}
+
+usize
+AmigaFile::readFromBuffer(const u8 *buf, usize len)
+{
+    assert(buf);
+
+    std::istringstream stream(std::string((const char *)buf, len));
+    
+    usize result = readFromStream(stream);
+    assert(result == size);
+    return size;
+}
+
+usize
+AmigaFile::writeToStream(std::ostream &stream)
+{
+    stream.write((char *)data, size);
+    return size;
+}
+
+usize
+AmigaFile::writeToStream(std::ostream &stream, ErrorCode *err)
+{
+    *err = ERROR_OK;
+    try { return writeToStream(stream); }
+    catch (VAError &exception) { *err = exception.errorCode; }
+    return 0;
+}
+
+usize
+AmigaFile::writeToFile(const char *path)
+{
+    assert(path);
+        
+    std::ofstream stream(path);
+
+    if (!stream.is_open()) {
+        throw VAError(ERROR_FILE_CANT_WRITE);
+    }
+    
+    usize result = writeToStream(stream);
+    assert(result == size);
+    
+    return size;
+}
+
+usize
+AmigaFile::writeToFile(const char *path, ErrorCode *err)
+{
+    *err = ERROR_OK;
+    try { return writeToFile(path); }
+    catch (VAError &exception) { *err = exception.errorCode; }
+    return 0;
+}
+
+usize
+AmigaFile::writeToBuffer(u8 *buf)
+{
+    assert(buf);
+
+    std::ostringstream stream;
+    usize len = writeToStream(stream);
+    stream.write((char *)buf, len);
+    
+    return len;
+}
+
+usize
+AmigaFile::writeToBuffer(u8 *buf, ErrorCode *err)
+{
+    *err = ERROR_OK;
+    try { return writeToBuffer(buf); }
+    catch (VAError &exception) { *err = exception.errorCode; }
+    return 0;
+}
+
+
+
+/*
 
 bool
 AmigaFile::readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error)
@@ -255,7 +328,8 @@ exit:
     
     return success;
 }
-
+*/
+ 
 //
 // Instantiate template functions
 //
@@ -266,7 +340,7 @@ template EXTFile* AmigaFile::make <EXTFile> (const u8 *, size_t, ErrorCode *);
 template IMGFile* AmigaFile::make <IMGFile> (const u8 *, size_t, ErrorCode *);
 template DMSFile* AmigaFile::make <DMSFile> (const u8 *, size_t, ErrorCode *);
 template EXEFile* AmigaFile::make <EXEFile> (const u8 *, size_t, ErrorCode *);
-template Folder* AmigaFile::make <Folder> (const u8 *, size_t, ErrorCode *);
+// template Folder* AmigaFile::make <Folder> (const u8 *, size_t, ErrorCode *);
 template HDFFile* AmigaFile::make <HDFFile> (const u8 *, size_t, ErrorCode *);
 template RomFile* AmigaFile::make <RomFile> (const u8 *, size_t, ErrorCode *);
 template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const u8 *, size_t, ErrorCode *);
@@ -277,7 +351,7 @@ template EXTFile* AmigaFile::make <EXTFile> (const char *, ErrorCode *);
 template IMGFile* AmigaFile::make <IMGFile> (const char *, ErrorCode *);
 template DMSFile* AmigaFile::make <DMSFile> (const char *, ErrorCode *);
 template EXEFile* AmigaFile::make <EXEFile> (const char *, ErrorCode *);
-template Folder* AmigaFile::make <Folder> (const char *, ErrorCode *);
+// template Folder* AmigaFile::make <Folder> (const char *, ErrorCode *);
 template HDFFile* AmigaFile::make <HDFFile> (const char *, ErrorCode *);
 template RomFile* AmigaFile::make <RomFile> (const char *, ErrorCode *);
 template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const char *, ErrorCode *);
