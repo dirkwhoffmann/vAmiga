@@ -31,30 +31,6 @@ AmigaFile::~AmigaFile()
     if (data) delete[] data;
 }
 
-bool
-AmigaFile::alloc(size_t capacity)
-{
-    if ((data = new u8[capacity]()) == nullptr) return false;
-    size = capacity;
-    
-    return true;
-}
-
-/*
-void
-AmigaFile::dealloc()
-{
-    if (data == nullptr) {
-        assert(size == 0);
-        return;
-    }
-    
-    delete[] data;
-    data = nullptr;
-    size = 0;
-}
-*/
-
 void
 AmigaFile::flash(u8 *buffer, size_t offset)
 {

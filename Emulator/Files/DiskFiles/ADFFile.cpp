@@ -92,12 +92,9 @@ ADFFile::makeWithType(DiskDiameter diameter, DiskDensity density)
     
     ADFFile *adf = new ADFFile();
     
-    if (!adf->alloc(fileSize(diameter, density))) {
-        delete adf;
-        return nullptr;
-    }
-    
-    memset(adf->data, 0, adf->size);
+    adf->size = fileSize(diameter, density);
+    adf->data = new u8[adf->size]();
+
     return adf;
 }
 

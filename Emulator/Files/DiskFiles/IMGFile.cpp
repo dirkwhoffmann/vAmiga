@@ -53,12 +53,9 @@ IMGFile::makeWithDiskType(DiskDiameter t, DiskDensity d)
     
     IMGFile *img = new IMGFile();
     
-    if (!img->alloc(9 * 160 * 512)) {
-        delete img;
-        return nullptr;
-    }
+    img->size = 9 * 160 * 512;
+    img->data = new u8[img->size]();
     
-    memset(img->data, 0, img->size);
     return img;
 }
 

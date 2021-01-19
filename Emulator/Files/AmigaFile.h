@@ -12,7 +12,33 @@
 #include "AmigaObject.h"
 #include "FileTypes.h"
 
-// Base class for all supported file types
+/* All media files are organized in the class hierarchy displayed below. Two
+ * abstract classes are involed: AmigaFile and DiskFile. AmigaFile provides
+ * basic functionality for reading and writing files, streams, and buffers.
+ * DiskFile provides an abstract interface for accessing media files that will
+ * be mounted as a virtual floppy disk.
+ *
+ *  ------------
+ * | AmigaFile  |
+ *  ------------
+ *       |
+ *       |---------------------------------------------------
+ *       |           |           |            |              |
+ *       |      ----------   ---------   ---------   -----------------
+ *       |     | Snapshot | | HDFFile | | RomFile | | ExtendedRomFile |
+ *       |      ----------   ---------   ---------   -----------------
+ *       |
+ *  ------------
+ * |  DiskFile  |
+ *  ------------
+ *       |
+ *       |------------------------------------------------------------
+ *       |           |           |           |            |           |
+ *   ---------   ---------   ---------   ---------    ---------   ---------
+ *  | ADFFile | | EXTFile | | IMGFile | | DMSFile | | EXEFile | | Folder  |
+ *   ---------   ---------   ---------   ---------    ---------   ---------
+ */
+
 class AmigaFile : public AmigaObject {
     
 public:
@@ -112,13 +138,7 @@ public:
     AmigaFile() { };
     AmigaFile(usize capacity);
     virtual ~AmigaFile();
-    
-    // Allocates memory for storing the object data
-    virtual bool alloc(usize capacity);
-    
-    // Frees the allocated memory
-    // virtual void dealloc();
-    
+        
     
     //
     // Accessing file attributes
