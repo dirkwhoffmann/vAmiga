@@ -32,23 +32,16 @@ extension MyController: NSWindowDelegate {
     public func windowDidResignMain(_ notification: Notification) {
         
         // Stop emulator if it is configured to pause in background
-        pauseInBackgroundSavedState = amiga.isRunning
-        if pref.pauseInBackground { amiga.pause() }
+        if amiga != nil {
+            pauseInBackgroundSavedState = amiga.isRunning
+            if pref.pauseInBackground { amiga.pause() }
+        }
     }
     
     public func windowWillClose(_ notification: Notification) {
         
         track()
-
-        // Write back screenshot cache
-        try? mydocument!.persistScreenshots()
         
-        // Disconnect and close auxiliary windows
-        inspector?.amiga = nil
-        inspector?.close()
-        monitor?.amiga = nil
-        monitor?.close()
-
         // Stop timers
         timerLock.lock()
         timer?.invalidate()
@@ -58,6 +51,15 @@ extension MyController: NSWindowDelegate {
         snapshotTimer = nil
         screenshotTimer?.invalidate()
         screenshotTimer = nil
+
+        // Write back screenshot cache
+        try? mydocument!.persistScreenshots()
+
+        // Disconnect and close auxiliary windows
+        inspector?.amiga = nil
+        inspector?.close()
+        monitor?.amiga = nil
+        monitor?.close()
         
         // Disconnect the audio engine
         macAudio.shutDown()
@@ -68,6 +70,10 @@ extension MyController: NSWindowDelegate {
         // Unregister from the message queue
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
         amiga.removeListener(myself)
+        
+        // Kill the emulator
+        amiga.kill()
+        amiga = nil
     }
     
     public func windowWillEnterFullScreen(_ notification: Notification) {

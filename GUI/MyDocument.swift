@@ -61,12 +61,6 @@ class MyDocument: NSDocument {
         amiga = AmigaProxy()
     }
  
-    deinit {
-        
-        track()
-        amiga.kill()
-    }
-    
     override open func makeWindowControllers() {
         
         track()
