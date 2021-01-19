@@ -66,9 +66,6 @@ public:
     //
     
     FileType type() const override { return FILETYPE_ROM; }
-    [[deprecated]] bool matchingBuffer(const u8 *buffer, size_t length) override {
-        return isRomBuffer(buffer, length); }
-    [[deprecated]] bool matchingFile(const char *path) override { return isRomFile(path); }
     usize readFromStream(std::istream &stream) override;
 
     

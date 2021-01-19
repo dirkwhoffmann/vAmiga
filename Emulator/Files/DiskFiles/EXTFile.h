@@ -52,9 +52,6 @@ public:
     //
     
     FileType type() const override { return FILETYPE_EXT; }
-    [[deprecated]] bool matchingBuffer(const u8 *buffer, size_t length) override {
-        return isEXTBuffer(buffer, length); }
-    [[deprecated]] bool matchingFile(const char *path) override { return isEXTFile(path); }
     
     
     //

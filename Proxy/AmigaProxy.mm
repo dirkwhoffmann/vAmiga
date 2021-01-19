@@ -1420,30 +1420,10 @@ using namespace moira;
     return [self file]->type();
 }
 
-/*
-- (NSInteger) sizeOnDisk
-{
-    return [self file]->sizeOnDisk();
-}
-*/
-
 - (u64) fnv
 {
     return [self file]->fnv();
 }
-
-/*
-- (void) readFromBuffer:(const void *)buffer length:(NSInteger)length
-{
-    ErrorCode error;
-    [self file]->readFromBuffer((const u8 *)buffer, length, &error);
-}
-
-- (NSInteger) writeToBuffer:(void *)buffer
-{
-    return [self file]->writeToBuffer((u8 *)buffer);
-}
-*/
 
 - (void) dealloc
 {
@@ -1538,14 +1518,6 @@ using namespace moira;
 {
     return [self snapshot]->getThumbnail().timestamp;
 }
-
-/*
-- (NSData *)data
-{
-    return [NSData dataWithBytes: (void *)[self snapshot]->getHeader()
-                          length: [self snapshot]->sizeOnDisk()];
-}
-*/
 
 @end
 
@@ -1834,11 +1806,6 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (BOOL)isDMSFile:(NSString *)path
-{
-    return DMSFile::isDMSFile([path fileSystemRepresentation]);
-}
-
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
 {
     DMSFile *archive = AmigaFile::make <DMSFile> ((const u8 *)buffer, len);
@@ -1873,11 +1840,6 @@ using namespace moira;
 + (instancetype)make:(EXEFile *)file
 {
     return file ? [[self alloc] initWith:file] : nil;
-}
-
-+ (BOOL)isEXEFile:(NSString *)path
-{
-    return EXEFile::isEXEFile([path fileSystemRepresentation]);
 }
 
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
@@ -2028,16 +1990,6 @@ using namespace moira;
 - (void) setDebugMode:(BOOL)enable
 {
     [self amiga]->setDebug(enable);
-}
-
-- (void) enableDebugging
-{
-    [self amiga]->enableDebugMode();
-}
-
-- (void) disableDebugging
-{
-    [self amiga]->disableDebugMode();
 }
 
 - (void) setInspectionTarget:(EventID)id

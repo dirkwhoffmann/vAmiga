@@ -52,9 +52,6 @@ public:
 public:
     
     FileType type() const override { return FILETYPE_IMG; }
-    [[deprecated]] bool matchingBuffer(const u8 *buffer, size_t length) override {
-        return isIMGBuffer(buffer, length); }
-    [[deprecated]] bool matchingFile(const char *path) override { return isIMGFile(path); }
     
     
     //

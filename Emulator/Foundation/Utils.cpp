@@ -221,30 +221,6 @@ checkFileSizeRange(const char *path, long min, long max)
 }
 
 bool
-matchingFileHeader(const char *path, const u8 *header, size_t length)
-{
-    assert(path != nullptr);
-    assert(header != nullptr);
-    
-    bool result = true;
-    FILE *file;
-    
-    if ((file = fopen(path, "r")) == nullptr)
-        return false;
-    
-    for (unsigned i = 0; i < length; i++) {
-        int c = fgetc(file);
-        if (c != (int)header[i]) {
-            result = false;
-            break;
-        }
-    }
-    
-    fclose(file);
-    return result;
-}
-
-bool
 matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length)
 {
     assert(buffer != nullptr);

@@ -157,20 +157,5 @@ public:
     usize writeToFile(const char *path, ErrorCode *err);
     
     usize writeToBuffer(u8 *buf) throws;
-    usize writeToBuffer(u8 *buf, ErrorCode *err);
-    
-    
-    
-    // Returns the required buffer size for this file
-    // [[deprecated]] usize sizeOnDisk() const { return writeToBuffer(nullptr); }
-    
-    /* Returns true iff this specified buffer is compatible with this object.
-     * This function is used in readFromBuffer().
-     */
-    [[deprecated]] virtual bool matchingBuffer(const u8 *buf, usize len) { return false; }
-
-    /* Returns true iff this specified file is compatible with this object.
-     * This function is used in readFromFile().
-     */
-    [[deprecated]] virtual bool matchingFile(const char *path) { return false; }
+    usize writeToBuffer(u8 *buf, ErrorCode *err);    
 };

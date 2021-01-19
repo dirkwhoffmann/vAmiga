@@ -25,13 +25,7 @@ public:
     static bool isCompatibleName(const std::string &name);
     static bool isCompatibleStream(std::istream &stream);
 
-    // Returns true iff the provided buffer contains an Amiga executable
-    [[deprecated]] static bool isEXEBuffer(const u8 *buffer, size_t length);
-    
-    // Returns true iff if the provided path points to an Amiga executable
-    [[deprecated]] static bool isEXEFile(const char *path);
-    
-    
+        
     //
     // Initializing
     //
@@ -47,9 +41,6 @@ public:
     
     FileType type() const override { return FILETYPE_EXE; }
     u64 fnv() const override { return adf->fnv(); }
-    [[deprecated]] bool matchingBuffer(const u8 *buffer, size_t length) override {
-        return isEXEBuffer(buffer, length); }
-    [[deprecated]] bool matchingFile(const char *path) override { return isEXEFile(path); }
     usize readFromStream(std::istream &stream) override;
     
     //

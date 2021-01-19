@@ -233,7 +233,6 @@ bool checkFileSize(const char *path, long size);
 bool checkFileSizeRange(const char *path, long min, long max);
 
 // Checks the header signature (magic bytes) of a file or buffer
-[[deprecated]] bool matchingFileHeader(const char *path, const u8 *header, size_t length);
 bool matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length);
 
 // Checks if a path points to a directory

@@ -50,9 +50,6 @@ public:
 public:
     
     FileType type() const override { return FILETYPE_HDF; }
-    [[deprecated]] bool matchingBuffer(const u8 *buffer, size_t length) override {
-        return isHDFBuffer(buffer, length); }
-    [[deprecated]] bool matchingFile(const char *path) override { return isHDFFile(path); }
 
 
     //

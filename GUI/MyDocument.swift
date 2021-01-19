@@ -264,28 +264,6 @@ class MyDocument: NSDocument {
         }
     }
 
-    /*
-    override open func data(ofType typeName: String) throws -> Data {
-        
-        track("\(typeName)")
-        
-        if typeName == "vAmiga" {
-            
-            // Take snapshot
-            if let snapshot = SnapshotProxy.make(withAmiga: amiga) {
-
-                // Write to data buffer
-                if let data = NSMutableData.init(length: snapshot.sizeOnDisk) {
-                    snapshot.write(toBuffer: data.mutableBytes)
-                    return data as Data
-                }
-            }
-        }
-        
-        throw NSError(domain: NSOSStatusErrorDomain, code: unimpErr, userInfo: nil)
-    }
-    */
-    
     //
     // Exporting disks
     //
@@ -324,19 +302,7 @@ class MyDocument: NSDocument {
             showExportAlert(url: url)
             return false
         }
-            
-        // Serialize data
-        // let data = NSMutableData.init(length: df.sizeOnDisk)!
-        // df.write(toBuffer: data.mutableBytes)
-        
-        // Write to file
-        /*
-        if !data.write(to: url, atomically: true) {
-            showExportAlert(url: url)
-            return false
-        }
-        */
-        
+                    
         // Mark disk as "not modified"
         amiga.df(nr)!.isModifiedDisk = false
         

@@ -24,12 +24,6 @@ public:
     
     static bool isCompatibleName(const std::string &name);
     static bool isCompatibleStream(std::istream &stream);
-
-    // Returns true iff the provided buffer contains a DMS file
-    [[deprecated]] static bool isDMSBuffer(const u8 *buffer, size_t length);
-    
-    // Returns true iff if the provided path points to a DMS file
-    [[deprecated]] static bool isDMSFile(const char *path);
     
     
     //
@@ -47,9 +41,6 @@ public:
     
     FileType type() const override { return FILETYPE_DMS; }
     u64 fnv() const override { return adf->fnv(); }
-    [[deprecated]] bool matchingBuffer(const u8 *buffer, size_t length) override {
-        return isDMSBuffer(buffer, length); }
-    [[deprecated]] bool matchingFile(const char *path) override { return isDMSFile(path); }
     usize readFromStream(std::istream &stream) override;
 
     

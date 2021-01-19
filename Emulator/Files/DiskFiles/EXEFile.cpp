@@ -31,29 +31,6 @@ EXEFile::isCompatibleStream(std::istream &stream)
     return matchingStreamHeader(stream, signature, sizeof(signature));
 }
 
-bool
-EXEFile::isEXEBuffer(const u8 *buffer, size_t length)
-{
-    u8 signature[] = { 0x00, 0x00, 0x03, 0xF3 };
-                                                                                            
-    assert(buffer != nullptr);
-    
-    // Only accept the file if it fits onto a HD disk
-    if (length > 1710000) return false;
-
-    return matchingBufferHeader(buffer, signature, sizeof(signature));
-}
-
-bool
-EXEFile::isEXEFile(const char *path)
-{
-    u8 signature[] = { 0x00, 0x00, 0x03, 0xF3 };
-    
-    assert(path != nullptr);
-    
-    return matchingFileHeader(path, signature, sizeof(signature));
-}
-
 usize
 EXEFile::readFromStream(std::istream &stream)
 {

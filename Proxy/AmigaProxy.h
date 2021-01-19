@@ -122,8 +122,6 @@
 
 @property (readonly) BOOL isReleaseBuild;
 @property BOOL debugMode;
-- (void) enableDebugging __attribute__ ((deprecated));
-- (void) disableDebugging __attribute__ ((deprecated));
 - (void) setInspectionTarget:(EventID)id;
 - (void) clearInspectionTarget;
 
@@ -733,7 +731,6 @@
 @interface DMSFileProxy : DiskFileProxy {
 }
 
-+ (BOOL)isDMSFile:(NSString *)path __attribute__ ((deprecated));
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 
@@ -749,7 +746,6 @@
 @interface EXEFileProxy : DiskFileProxy {
 }
 
-+ (BOOL)isEXEFile:(NSString *)path __attribute__ ((deprecated));
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 

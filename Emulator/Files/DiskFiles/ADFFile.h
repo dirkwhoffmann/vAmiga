@@ -63,9 +63,6 @@ public:
 public:
     
     FileType type() const override { return FILETYPE_ADF; }
-    [[deprecated]] bool matchingBuffer(const u8 *buffer, size_t length) override {
-        return isADFBuffer(buffer, length); }
-    [[deprecated]] bool matchingFile(const char *path) override { return isADFFile(path); }
     
     
     //

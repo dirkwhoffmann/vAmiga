@@ -80,26 +80,6 @@ Snapshot::isSnapshot(const u8 *buf, size_t len, u8 major, u8 minor, u8 subminor)
     return matchingBufferHeader(buf, signature, sizeof(signature));
 }
 
-bool
-Snapshot::isSnapshotFile(const char *path)
-{
-    assert(path != nullptr);
-
-    u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
-    
-    return matchingFileHeader(path, signature, sizeof(signature));
-}
-
-bool
-Snapshot::isSnapshotFile(const char *path, u8 major, u8 minor, u8 subminor)
-{
-    assert(path != nullptr);
-
-    u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P', major, minor, subminor };
-        
-    return matchingFileHeader(path, signature, sizeof(signature));
-}
-
 Snapshot::Snapshot()
 {
 }
@@ -130,35 +110,6 @@ Snapshot::makeWithAmiga(Amiga *amiga)
 
     return snapshot;
 }
-
-bool
-Snapshot::matchingBuffer(const u8* buffer, size_t length)
-{
-    return Snapshot::isSnapshot(buffer, length);
-}
-
-bool
-Snapshot::matchingFile(const char *path)
-{
-    return Snapshot::isSnapshotFile(path);
-}
-
-/*
-bool
-Snapshot::readFromBuffer(const u8 *buf, size_t len, ErrorCode *err)
-{
-    // Read from buffer
-    if (AmigaFile::readFromBuffer(buf, len, err)) {
-
-        // Check the version number of this snapshot
-        if (!isSnapshot(buf, len, V_MAJOR, V_MINOR, V_SUBMINOR)) {
-            *err = ERROR_UNSUPPORTED_SNAPSHOT;
-        }
-    }
-    
-    return *err == ERROR_OK;
-}
-*/
 
 void
 Snapshot::takeScreenshot(Amiga &amiga)
