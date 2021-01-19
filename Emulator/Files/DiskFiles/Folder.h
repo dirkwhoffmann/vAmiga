@@ -48,10 +48,8 @@ public:
     
     FileType type() const override { return FILETYPE_DIR; }
     u64 fnv() const override { return adf->fnv(); }
-    bool matchingBuffer(const u8 *buffer, size_t length) override;
-    bool matchingFile(const char *path) override { return isFolder(path); }
-    // bool readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error = nullptr) override;
-    // bool readFromFile(const char *filename, ErrorCode *error = nullptr) override;
+    [[deprecated]] bool matchingBuffer(const u8 *buffer, size_t length) override;
+    [[deprecated]] bool matchingFile(const char *path) override { return isFolder(path); }
     
     
     //

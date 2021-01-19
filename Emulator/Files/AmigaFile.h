@@ -173,17 +173,4 @@ public:
      * This function is used in readFromFile().
      */
     [[deprecated]] virtual bool matchingFile(const char *path) { return false; }
-
-
-    //
-    // Repairing
-    //
-    
-public:
-    
-    /* This function is called in the default implementation of readFromStream.
-     * It can be overwritten to fix known inconsistencies in certain media
-     * files.
-     */
-    virtual void repair() { };
 };

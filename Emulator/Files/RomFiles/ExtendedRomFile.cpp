@@ -46,9 +46,14 @@ ExtendedRomFile::isExtendedRomBuffer(const u8 *buffer, size_t length)
 bool
 ExtendedRomFile::isExtendedRomFile(const char *path)
 {
+    std::ifstream stream(path);
+    return stream.is_open() ? isCompatibleStream(stream) : false;
+
+    /*
     if (!checkFileSize(path, KB(512))) return false;
 
     return
     matchingFileHeader(path, magicBytes1, sizeof(magicBytes1)) ||
     matchingFileHeader(path, magicBytes2, sizeof(magicBytes2));
+    */
 }

@@ -32,7 +32,7 @@ public:
     static bool isCompatibleStream(std::istream &stream);
 
     // Returns true iff buffer contains an extended ADF
-    static bool isEXTBuffer(const u8 *buffer, size_t length);
+    [[deprecated]] static bool isEXTBuffer(const u8 *buffer, size_t length);
     
     // Returns true iff if path points to an extended ADF
     static bool isEXTFile(const char *path);
@@ -52,9 +52,9 @@ public:
     //
     
     FileType type() const override { return FILETYPE_EXT; }
-    bool matchingBuffer(const u8 *buffer, size_t length) override {
+    [[deprecated]] bool matchingBuffer(const u8 *buffer, size_t length) override {
         return isEXTBuffer(buffer, length); }
-    bool matchingFile(const char *path) override { return isEXTFile(path); }
+    [[deprecated]] bool matchingFile(const char *path) override { return isEXTFile(path); }
     
     
     //

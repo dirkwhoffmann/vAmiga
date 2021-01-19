@@ -60,15 +60,6 @@ EXTFile::isEXTBuffer(const u8 *buffer, size_t length)
 bool
 EXTFile::isEXTFile(const char *path)
 {
-    assert(path != nullptr);
-
-    int len = sizeof(extAdfHeaders[0]);
-    int cnt = sizeof(extAdfHeaders) / len;
-
-    if (!checkFileSizeRange(path, len, -1)) return false;
-    
-    for (int i = 0; i < cnt; i++) {
-        if (matchingFileHeader(path, extAdfHeaders[i], len)) return true;
-    }
-    return false;
+    std::ifstream stream(path);
+    return stream.is_open() ? isCompatibleStream(stream) : false;
 }

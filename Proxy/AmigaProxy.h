@@ -733,7 +733,7 @@
 @interface DMSFileProxy : DiskFileProxy {
 }
 
-+ (BOOL)isDMSFile:(NSString *)path;
++ (BOOL)isDMSFile:(NSString *)path __attribute__ ((deprecated));
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 
@@ -749,7 +749,7 @@
 @interface EXEFileProxy : DiskFileProxy {
 }
 
-+ (BOOL)isEXEFile:(NSString *)path;
++ (BOOL)isEXEFile:(NSString *)path __attribute__ ((deprecated));
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 

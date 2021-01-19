@@ -391,6 +391,11 @@ RomFile::isRomBuffer(const u8 *buffer, size_t length)
 bool
 RomFile::isRomFile(const char *path)
 {
+    std::ifstream stream(path);
+    return stream.is_open() ? isCompatibleStream(stream) : false;
+}
+/*
+    
     // Boot Roms
     if (checkFileSize(path, KB(8)) || checkFileSize(path, KB(16))) {
 
@@ -428,6 +433,7 @@ RomFile::isRomFile(const char *path)
     
     return false;
 }
+*/
 
 usize
 RomFile::readFromStream(std::istream &stream)

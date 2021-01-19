@@ -78,10 +78,7 @@ AmigaFile::readFromStream(std::istream &stream)
 
     // Fix known inconsistencies
     stream.read((char *)data, size);
-    
-    // Repair the file (if applicable)
-    repair();
-    
+        
     return size;
 }
 

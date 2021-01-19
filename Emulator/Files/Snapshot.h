@@ -61,8 +61,8 @@ public:
     static bool isSnapshot(const u8 *buf, size_t len, u8 major, u8 minor, u8 subminor);
         
     // Returns true if path points to a snapshot file (of a specific version)
-    static bool isSnapshotFile(const char *path);
-    static bool isSnapshotFile(const char *path, u8 major, u8 minor, u8 subminor);
+    [[deprecated]] static bool isSnapshotFile(const char *path);
+    [[deprecated]] static bool isSnapshotFile(const char *path, u8 major, u8 minor, u8 subminor);
         
     
     //
@@ -84,8 +84,8 @@ public:
     //
     
     FileType type() const override { return FILETYPE_SNAPSHOT; }
-    bool matchingBuffer(const u8 *buffer, size_t length) override;
-    bool matchingFile(const char *filename) override;
+    [[deprecated]] bool matchingBuffer(const u8 *buffer, size_t length) override;
+    [[deprecated]] bool matchingFile(const char *filename) override;
     
     // bool readFromBuffer(const u8 *buffer, size_t length, ErrorCode *error = nullptr) override;
 
