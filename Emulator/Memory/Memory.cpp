@@ -460,13 +460,18 @@ Memory::extVersion()
     return RomFile::version(extIdentifier());
 }
 
-bool
+void
 Memory::loadRom(RomFile *file)
 {
     assert(file);
 
-    // Allocate memory and load file
-    if (!allocRom(file->size)) return false;
+    // Decrypt Rom
+    file->decrypt();
+
+    // Allocate memory
+    if (!allocRom(file->size)) throw VAError(ERROR_OUT_OF_MEMORY);
+    
+    // Load Rom
     loadRom(file, rom, config.romSize);
 
     // Add a Wom if a Boot Rom is installed instead of a Kickstart Rom
@@ -474,107 +479,114 @@ Memory::loadRom(RomFile *file)
 
     // Remove extended Rom (if any)
     deleteExt();
-    
-    return true;
 }
 
-bool
+void
 Memory::loadRomFromFile(const char *path)
 {
     assert(path);
     
     RomFile *file = AmigaFile::make <RomFile> (path);
-    return loadRom(file);
+    loadRom(file);
 }
 
 bool
 Memory::loadRomFromFile(const char *path, ErrorCode *ec)
 {
-    try {
-        return loadRomFromFile(path);
-    } catch (VAError &exception) {
+    try
+    {
+        loadRomFromFile(path);
+        return true;
+    }
+    catch (VAError &exception)
+    {
         msg("Failed to read Kick Rom from file %s\n", path);
         *ec = exception.errorCode;
         return false;
     }
 }
 
-bool
+void
 Memory::loadRomFromBuffer(const u8 *buf, size_t len)
 {
     assert(buf);
     
     RomFile *file = AmigaFile::make <RomFile> (buf, len);
-    return loadRom(file);
+    loadRom(file);
 }
 
 bool
 Memory::loadRomFromBuffer(const u8 *buf, size_t len, ErrorCode *ec)
 {
-    try {
-        return loadRomFromBuffer(buf, len);
-    } catch (VAError &exception) {
+    try
+    {
+        loadRomFromBuffer(buf, len);
+        return true;
+    }
+    catch (VAError &exception)
+    {
         msg("Failed to read Kick Rom from buffer at %p\n", buf);
         *ec = exception.errorCode;
         return false;
     }
 }
 
-bool
+void
 Memory::loadExt(ExtendedRomFile *file)
 {
     assert(file);
 
-    if (!allocExt(file->size)) return false;
+    // Allocate memory
+    if (!allocExt(file->size)) throw VAError(ERROR_OUT_OF_MEMORY);
+    
+    // Load Rom
     loadRom(file, ext, config.extSize);
-    return true;
 }
 
-bool
+void
 Memory::loadExtFromFile(const char *path)
 {
     assert(path);
-
-    try {
-        ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (path);
-        return loadExt(file);
-        
-    } catch (VAError &exception) {
-        
-        msg("Failed to read Extended Rom from file %s\n", path);
-        return false;
-    }
+    
+    ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (path);
+    loadExt(file);
 }
 
 bool
 Memory::loadExtFromFile(const char *path, ErrorCode *ec)
 {
-    try {
-        return loadExtFromFile(path);
-        
-    } catch (VAError &exception) {
-        
+    try
+    {
+        loadExtFromFile(path);
+        return true;
+    }
+    catch (VAError &exception)
+    {
         msg("Failed to read Extended Rom from file %s\n", path);
+        *ec = exception.errorCode;
         return false;
     }
 }
 
-bool
+void
 Memory::loadExtFromBuffer(const u8 *buf, size_t len)
 {
     assert(buf);
 
     ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (buf, len);
-    return loadExt(file);
+    loadExt(file);
 }
 
 bool
 Memory::loadExtFromBuffer(const u8 *buf, size_t len, ErrorCode *ec)
 {
-    try {
-        return loadExtFromBuffer(buf, len);
-        
-    } catch (VAError &exception) {
+    try
+    {
+        loadExtFromBuffer(buf, len);
+        return true;
+    }
+    catch (VAError &exception)
+    {
         msg("Failed to read Extended Rom from buffer at %p\n", buf);
         *ec = exception.errorCode;
         return false;

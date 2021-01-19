@@ -18,8 +18,8 @@ class RomFile : public AmigaFile {
     static const u8 kickRomHeaders[6][7];
     static const u8 encrRomHeaders[1][11];
 
-    // Indicates if the Rom was encrypted when it was read from disk
-    bool encrypted = false;
+    // Indicates if a rom.key file is required to use this Rom
+    bool needsRomKey = false;
     
 public:
     
@@ -77,12 +77,15 @@ public:
     // Decrypting
     //
     
-    // Returns the encryption flag
-    bool isEncrypted() { return encrypted; }
+    // Returns true iff the Rom was encrypted at the time it was loaded
+    bool wasEncrypted() { return needsRomKey; }
+    
+    // Returns true iff the Rom is currently encrypted
+    bool isEncrypted();
     
     /* Tries to decrypt the Rom. If this method is applied to an encrypted Rom,
      * a rom.key file is seeked in the directory the encrypted Rom was loaded
      * from and applies to the encrypted data.
      */
-    bool decrypt(ErrorCode *error = nullptr);
+    void decrypt() throws;
 };

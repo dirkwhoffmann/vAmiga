@@ -369,16 +369,16 @@ public:
     void eraseExt() { assert(ext); memset(ext, 0, config.extSize); }
 
     // Installs a Boot Rom or Kickstart Rom
-    bool loadRom(RomFile *rom);
-    bool loadRomFromFile(const char *path) throws;
+    void loadRom(RomFile *rom) throws;
+    void loadRomFromFile(const char *path) throws;
     bool loadRomFromFile(const char *path, ErrorCode *ec);
-    bool loadRomFromBuffer(const u8 *buf, size_t len) throws;
+    void loadRomFromBuffer(const u8 *buf, size_t len) throws;
     bool loadRomFromBuffer(const u8 *buf, size_t len, ErrorCode *ec);
 
-    bool loadExt(ExtendedRomFile *rom);
-    bool loadExtFromFile(const char *path) throws;
+    void loadExt(ExtendedRomFile *rom) throws;
+    void loadExtFromFile(const char *path) throws;
     bool loadExtFromFile(const char *path, ErrorCode *ec);
-    bool loadExtFromBuffer(const u8 *buf, size_t len) throws;
+    void loadExtFromBuffer(const u8 *buf, size_t len) throws;
     bool loadExtFromBuffer(const u8 *buf, size_t len, ErrorCode *ec);
 
 private:

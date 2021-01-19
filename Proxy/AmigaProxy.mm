@@ -321,14 +321,18 @@ using namespace moira;
 
 - (BOOL) loadRomFromBuffer:(NSData *)data
 {
+    ErrorCode ec;
+    
     if (data == nullptr) return NO;
     const u8 *bytes = (const u8 *)[data bytes];
-    return [self mem]->loadRomFromBuffer(bytes, [data length]);
+    
+    [self mem]->loadRomFromBuffer(bytes, [data length], &ec);
+    return ec == ERROR_OK;
 }
 
-- (BOOL) loadRomFromFile:(NSURL *)url error:(ErrorCode *)err
+- (BOOL) loadRomFromFile:(NSURL *)url error:(ErrorCode *)ec
 {
-    return [self mem]->loadRomFromFile([url fileSystemRepresentation], err);
+    return [self mem]->loadRomFromFile([url fileSystemRepresentation], ec);
 }
 
 - (u64) romFingerprint
@@ -376,14 +380,18 @@ using namespace moira;
 
 - (BOOL) loadExtFromBuffer:(NSData *)data
 {
+    ErrorCode ec;
+    
     if (data == nullptr) return NO;
     const u8 *bytes = (const u8 *)[data bytes];
-    return [self mem]->loadExtFromBuffer(bytes, [data length]);
+    
+    [self mem]->loadExtFromBuffer(bytes, [data length], &ec);
+    return ec == ERROR_OK;
 }
 
-- (BOOL) loadExtFromFile:(NSURL *)url
+- (BOOL) loadExtFromFile:(NSURL *)url error:(ErrorCode *)ec
 {
-    return [self mem]->loadExtFromFile([url fileSystemRepresentation]);
+    return [self mem]->loadExtFromFile([url fileSystemRepresentation], ec);
 }
 
 - (u64) extFingerprint

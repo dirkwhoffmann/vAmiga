@@ -42,6 +42,11 @@ class DropView: NSImageView {
         return NSDragOperation()
     }
     
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        
+        return false
+    }
+
     override func draggingExited(_ sender: NSDraggingInfo?) {
 
         parent.refresh()
@@ -51,20 +56,7 @@ class DropView: NSImageView {
 
         return true
     }
-    
-    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-
-        guard let url = sender.url?.unpacked else { return false }
         
-        // Check for a ROM image
-        var err: ErrorCode = .OK
-        if amiga.mem.loadRom(fromFile: url, error: &err) { return true }
-        if err != .FILE_TYPE_MISMATCH { err.showAlert(url: url) }
-        
-        parent.refresh()
-        return false
-    }
-    
     override func concludeDragOperation(_ sender: NSDraggingInfo?) {
 
         parent.refresh()
@@ -84,6 +76,19 @@ class RomDropView: DropView {
         
         return false
     }
+    
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+
+        guard let url = sender.url?.unpacked else { return false }
+        
+        // Check for a ROM image
+        var err: ErrorCode = .OK
+        if amiga.mem.loadRom(fromFile: url, error: &err) { return true }
+        if err != .FILE_TYPE_MISMATCH { err.showAlert(url: url) }
+        
+        parent.refresh()
+        return false
+    }
 }
 
 class ExtRomDropView: DropView {
@@ -92,5 +97,17 @@ class ExtRomDropView: DropView {
 
         if !amiga.isPoweredOff { return false }
         return amiga.mem.isExt(url)
+    }
+    
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+
+        guard let url = sender.url?.unpacked else { return false }
+        
+        var ec: ErrorCode = .OK
+        if amiga.mem.loadExt(fromFile: url, error: &ec) { return true }
+        if ec != .FILE_TYPE_MISMATCH { ec.showAlert(url: url) }
+        
+        parent.refresh()
+        return false
     }
 }

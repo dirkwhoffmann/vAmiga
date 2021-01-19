@@ -264,7 +264,7 @@
 - (void) deleteRom;
 - (BOOL) isRom:(NSURL *)url;
 - (BOOL) loadRomFromBuffer:(NSData *)buffer;
-- (BOOL) loadRomFromFile:(NSURL *)url error:(ErrorCode *)err;
+- (BOOL) loadRomFromFile:(NSURL *)url error:(ErrorCode *)ec;
 - (u64) romFingerprint;
 - (RomIdentifier) romIdentifier;
 @property (readonly, copy) NSString *romTitle;
@@ -275,7 +275,7 @@
 - (void) deleteExt;
 - (BOOL) isExt:(NSURL *)url;
 - (BOOL) loadExtFromBuffer:(NSData *)buffer;
-- (BOOL) loadExtFromFile:(NSURL *)url;
+- (BOOL) loadExtFromFile:(NSURL *)url error:(ErrorCode *)ec;
 - (u64) extFingerprint;
 @property (readonly) RomIdentifier extIdentifier;
 - (NSString *) extTitle;

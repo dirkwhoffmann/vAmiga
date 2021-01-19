@@ -174,34 +174,6 @@ public:
      */
     [[deprecated]] virtual bool matchingFile(const char *path) { return false; }
 
-    /* Deserializes this object from a memory buffer. This function uses
-     * matchingBuffer() to verify that the buffer contains a compatible
-     * binary representation.
-     */
-    // virtual bool readFromBuffer(const u8 *buf, usize len, ErrorCode *error = nullptr);
-
-    /* Deserializes this object from a file. This function uses
-     * matchingFile() to verify that the file contains a compatible binary
-     * representation. This function requires no custom implementation. It
-     * first reads in the file contents in memory and invokes readFromBuffer
-     * afterwards.
-     */
-    // virtual bool readFromFile(const char *filename, ErrorCode *err = nullptr);
-
-    /* Deserializes this object from a file that is already open.
-     */
-    // virtual bool readFromFile(FILE *file, ErrorCode *err = nullptr);
-
-    /* Writes the file contents into a memory buffer. If nullptr is
-     * passed in, a test run is performed. Test runs can be performed to
-     * determine the size of the file on disk.
-     */
-    // usize writeToBuffer(u8 *buf) const;
-    
-    /* Writes the file contents to a file. It invokes writeToBuffer first and
-     * writes the data to disk afterwards.
-     */
-    // bool writeToFile(const char *path, ErrorCode *err = nullptr) const;
 
     //
     // Repairing

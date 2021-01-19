@@ -405,7 +405,7 @@ class Configuration {
         }
         if let url = UserDefaults.extUrl {
             track("Seeking Ext")
-            amiga.mem.loadExt(fromFile: url)
+            amiga.mem.loadExt(fromFile: url, error: &error)
         }
         
         amiga.resume()

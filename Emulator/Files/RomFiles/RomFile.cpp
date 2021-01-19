@@ -434,34 +434,36 @@ RomFile::readFromStream(std::istream &stream)
 {
     usize result = AmigaFile::readFromStream(stream);
     
-    // If the buffer contains an encrypted Rom, try to decrypt it
-    encrypted = matchingBufferHeader(data, encrRomHeaders[0], sizeof(encrRomHeaders[0]));
-    if (encrypted) {
-        ErrorCode err;
-        decrypt(&err);
-        if (err != ERROR_OK) throw VAError(err);
-    }
+    // Check whether this Rom needs to be decrypted
+    needsRomKey = isEncrypted();
         
     return result;
 }
 
 bool
-RomFile::decrypt(ErrorCode *error)
+RomFile::isEncrypted()
+{
+    return matchingBufferHeader(data, encrRomHeaders[0], sizeof(encrRomHeaders[0]));
+}
+
+void
+RomFile::decrypt()
 {
     const size_t headerSize = 11;
-    ErrorCode err = ERROR_OK;
     u8 *encryptedData = nullptr;
     u8 *decryptedData = nullptr;
     u8 *romKeyData = nullptr;
     long romKeySize = 0;
         
-    //  Locate the rom.key file
+    // Only proceed if the file is encrypted
+    if (!isEncrypted()) return;
+    
+    // Locate the rom.key file
     string romKeyPath = extractPath(path) + "rom.key";
     
     // Load the rom.key file
     if (!loadFile(romKeyPath.c_str(), &romKeyData, &romKeySize)) {
-        err = ERROR_MISSING_ROM_KEY;
-        goto exit;
+        throw VAError(ERROR_MISSING_ROM_KEY);
     }
     
     // Create a buffer for the decrypted data
@@ -472,22 +474,15 @@ RomFile::decrypt(ErrorCode *error)
     for (size_t i = 0; i < size - headerSize; i++) {
         decryptedData[i] = encryptedData[i] ^ romKeyData[i % romKeySize];
     }
-
-    // Check if we've got a valid ROM
-    if (!isRomBuffer(decryptedData, size - headerSize)) {
-        err = ERROR_INVALID_ROM_KEY;
-        goto exit;
-    }
+    delete [] romKeyData;
 
     // Replace the old data by the decrypted data
     delete [] data;
     data = decryptedData;
     size -= headerSize;
     
-exit:
-    
-    if (romKeyData) delete [] romKeyData;
-    
-    *error = err;
-    return err == ERROR_OK;
+    // Check if we've got a valid ROM
+    if (!isRomBuffer(data, size)) {
+        throw VAError(ERROR_INVALID_ROM_KEY);
+    }
 }
