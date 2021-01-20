@@ -33,42 +33,6 @@ ADFFile::isCompatibleStream(std::istream &stream)
     length == ADFSIZE_35_HD;
 }
 
-bool
-ADFFile::isADFBuffer(const u8 *buffer, size_t length)
-{
-    // Some ADFs contain an additional byte at the end. Ignore it
-    length &= ~1;
-    
-    // There are no magic bytes. Hence, we only check the file size
-    return
-    length == ADFSIZE_35_DD ||
-    length == ADFSIZE_35_DD_81 ||
-    length == ADFSIZE_35_DD_82 ||
-    length == ADFSIZE_35_DD_83 ||
-    length == ADFSIZE_35_DD_84 ||
-    length == ADFSIZE_35_HD;
-}
-
-bool
-ADFFile::isADFFile(const char *path)
-{
-    // There are no magic bytes. Hence, we only check the file size
-    return
-    checkFileSize(path, ADFSIZE_35_DD) ||
-    checkFileSize(path, ADFSIZE_35_DD_81) ||
-    checkFileSize(path, ADFSIZE_35_DD_82) ||
-    checkFileSize(path, ADFSIZE_35_DD_83) ||
-    checkFileSize(path, ADFSIZE_35_DD_84) ||
-    checkFileSize(path, ADFSIZE_35_HD) ||
-    
-    checkFileSize(path, ADFSIZE_35_DD+1) ||
-    checkFileSize(path, ADFSIZE_35_DD_81+1) ||
-    checkFileSize(path, ADFSIZE_35_DD_82+1) ||
-    checkFileSize(path, ADFSIZE_35_DD_83+1) ||
-    checkFileSize(path, ADFSIZE_35_DD_84+1) ||
-    checkFileSize(path, ADFSIZE_35_HD+1);
-}
-
 size_t
 ADFFile::fileSize(DiskDiameter diameter, DiskDensity density)
 {

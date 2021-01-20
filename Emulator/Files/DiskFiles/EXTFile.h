@@ -31,13 +31,7 @@ public:
     static bool isCompatibleName(const std::string &name);
     static bool isCompatibleStream(std::istream &stream);
 
-    // Returns true iff buffer contains an extended ADF
-    [[deprecated]] static bool isEXTBuffer(const u8 *buffer, size_t length);
-    
-    // Returns true iff if path points to an extended ADF
-    [[deprecated]] static bool isEXTFile(const char *path);
-    
-    
+ 
     //
     // Methods from AmigaObject
     //

@@ -36,26 +36,3 @@ EXTFile::isCompatibleStream(std::istream &stream)
     }
     return false;
 }
-
-bool
-EXTFile::isEXTBuffer(const u8 *buffer, size_t length)
-{
-    assert(buffer != nullptr);
-    
-    size_t len = sizeof(extAdfHeaders[0]);
-    size_t cnt = sizeof(extAdfHeaders) / len;
-
-    if (length < len) return false;
-    
-    for (size_t i = 0; i < cnt; i++) {
-        if (matchingBufferHeader(buffer, extAdfHeaders[i], len)) return true;
-    }
-    return false;
-}
-
-bool
-EXTFile::isEXTFile(const char *path)
-{
-    std::ifstream stream(path);
-    return stream.is_open() ? isCompatibleStream(stream) : false;
-}

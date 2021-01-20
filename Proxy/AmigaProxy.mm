@@ -1633,10 +1633,12 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
+/*
 + (BOOL)isADFFile:(NSString *)path
 {
     return ADFFile::isADFFile([path fileSystemRepresentation]);
 }
+*/
 
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
@@ -1728,11 +1730,6 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (BOOL)isEXTFile:(NSString *)path
-{
-    return EXTFile::isEXTFile([path fileSystemRepresentation]);
-}
-
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
 {
     EXTFile *archive = AmigaFile::make <EXTFile> ((const u8 *)buffer, len);
@@ -1762,11 +1759,6 @@ using namespace moira;
 + (instancetype)make:(IMGFile *)file
 {
     return file ? [[self alloc] initWith:file] : nil;
-}
-
-+ (BOOL)isIMGFile:(NSString *)path
-{
-    return IMGFile::isIMGFile([path fileSystemRepresentation]);
 }
 
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len

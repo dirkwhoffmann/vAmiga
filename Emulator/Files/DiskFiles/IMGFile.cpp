@@ -29,22 +29,6 @@ IMGFile::isCompatibleStream(std::istream &stream)
     length == IMGSIZE_35_DD;
 }
 
-bool
-IMGFile::isIMGBuffer(const u8 *buffer, size_t length)
-{
-    // There are no magic bytes. We can only check the buffer size
-    return
-    length == IMGSIZE_35_DD;
-}
-
-bool
-IMGFile::isIMGFile(const char *path)
-{
-    // There are no magic bytes. We can only check the file size
-    return
-    checkFileSize(path, IMGSIZE_35_DD);
-}
-
 IMGFile *
 IMGFile::makeWithDiskType(DiskDiameter t, DiskDensity d)
 {

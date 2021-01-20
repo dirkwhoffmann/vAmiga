@@ -24,12 +24,6 @@ public:
     static bool isCompatibleName(const std::string &name);
     static bool isCompatibleStream(std::istream &stream);
 
-    // Returns true iff the provided buffer contains an IMG file
-    [[deprecated]] static bool isIMGBuffer(const u8 *buffer, size_t length);
-    
-    // Returns true iff if the provided path points to an IMG file
-    [[deprecated]] static bool isIMGFile(const char *path);
-    
     
     //
     // Initializing
