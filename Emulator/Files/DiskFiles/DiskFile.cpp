@@ -9,33 +9,6 @@
 
 #include "Amiga.h"
 
-DiskFile *
-DiskFile::makeWithFile(const char *path)
-{
-    return makeWithFile(string(path));
-}
-
-DiskFile *
-DiskFile::makeWithFile(const string &path)
-{
-    ADFFile *adf = AmigaFile::make <ADFFile> (path.c_str());
-    if (adf) return adf;
-    
-    IMGFile *img = AmigaFile::make <IMGFile> (path.c_str());
-    if (img) return img;
-
-    DMSFile *dms = AmigaFile::make <DMSFile> (path.c_str());
-    if (dms) return dms;
-
-    EXEFile *exe = AmigaFile::make <EXEFile> (path.c_str());
-    if (exe) return exe;
-    
-    Folder *dir = Folder::makeWithFolder(path);
-    if (dir) return dir;
-
-    return nullptr;
-}
-
 u8
 DiskFile::readByte(long t, long s, long offset) const
 {
