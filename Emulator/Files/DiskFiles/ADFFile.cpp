@@ -9,10 +9,6 @@
 
 #include "Amiga.h"
 
-ADFFile::ADFFile()
-{
-}
-
 bool
 ADFFile::isCompatibleName(const std::string &name)
 {

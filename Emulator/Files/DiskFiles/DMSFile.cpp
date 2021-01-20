@@ -13,10 +13,6 @@ extern "C" {
 unsigned short extractDMS(FILE *fi, FILE *fo);
 }
 
-DMSFile::DMSFile()
-{
-}
-
 bool
 DMSFile::isCompatibleName(const std::string &name)
 {

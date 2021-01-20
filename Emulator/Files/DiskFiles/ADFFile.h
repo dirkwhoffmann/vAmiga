@@ -31,29 +31,27 @@ public:
     static bool isCompatibleStream(std::istream &stream);
 
     // Returns true iff the provided buffer contains an ADF file
-    static bool isADFBuffer(const u8 *buffer, size_t length);
+    [[deprecated]] static bool isADFBuffer(const u8 *buffer, size_t length);
     
     // Returns true iff if the provided path points to an ADF file
-    static bool isADFFile(const char *path);
+    [[deprecated]] static bool isADFFile(const char *path);
     
     // Returns the size of an ADF file of a given disk type in bytes
     static size_t fileSize(DiskDiameter t, DiskDensity d);
-
-    
-    //
-    // Initializing
-    //
-
-public:
-
-    ADFFile();
-    
-    const char *getDescription() const override { return "ADF"; }
 
     static ADFFile *makeWithType(DiskDiameter t, DiskDensity d);
     static ADFFile *makeWithDisk(class Disk *disk);
     static ADFFile *makeWithDrive(class Drive *drive);
     static ADFFile *makeWithVolume(FSDevice &volume, ErrorCode *error);
+
+    
+    //
+    // Methods from AmigaObject
+    //
+
+public:
+    
+    const char *getDescription() const override { return "ADF"; }
 
     
     //

@@ -35,15 +35,13 @@ public:
     [[deprecated]] static bool isEXTBuffer(const u8 *buffer, size_t length);
     
     // Returns true iff if path points to an extended ADF
-    static bool isEXTFile(const char *path);
+    [[deprecated]] static bool isEXTFile(const char *path);
     
     
     //
-    // Initializing
+    // Methods from AmigaObject
     //
-    
-    EXTFile();
-    
+
     const char *getDescription() const override { return "EXT"; }
     
     

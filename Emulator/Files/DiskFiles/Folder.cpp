@@ -10,10 +10,6 @@
 #include "Folder.h"
 #include "FSDevice.h"
 
-Folder::Folder()
-{
-}
-
 bool
 Folder::isFolder(const char *path)
 {

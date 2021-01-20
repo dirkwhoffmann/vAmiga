@@ -10,10 +10,6 @@
 #include "EXEFile.h"
 #include "FSDevice.h"
 
-EXEFile::EXEFile()
-{
-}
-
 bool
 EXEFile::isCompatibleName(const std::string &name)
 {

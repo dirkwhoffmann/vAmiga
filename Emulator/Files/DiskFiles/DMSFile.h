@@ -27,11 +27,9 @@ public:
     
     
     //
-    // Initializing
+    //  Methods from AmigaObject
     //
-    
-    DMSFile();
-    
+        
     const char *getDescription() const override { return "DMS"; }
         
     

@@ -668,7 +668,7 @@
 @interface ADFFileProxy : DiskFileProxy {
 }
 
-+ (BOOL)isADFFile:(NSString *)path;
++ (BOOL)isADFFile:(NSString *)path __attribute__ ((deprecated));
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 + (instancetype)makeWithDiameter:(DiskDiameter)type density:(DiskDensity)density;
@@ -686,7 +686,7 @@
 @interface HDFFileProxy : AmigaFileProxy {
 }
 
-+ (BOOL)isHDFFile:(NSString *)path;
++ (BOOL)isHDFFile:(NSString *)path __attribute__ ((deprecated));
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 
@@ -702,7 +702,7 @@
 @interface EXTFileProxy : DiskFileProxy {
 }
 
-+ (BOOL)isEXTFile:(NSString *)path;
++ (BOOL)isEXTFile:(NSString *)path __attribute__ ((deprecated));
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 
@@ -716,7 +716,7 @@
 @interface IMGFileProxy : DiskFileProxy {
 }
 
-+ (BOOL)isIMGFile:(NSString *)path;
++ (BOOL)isIMGFile:(NSString *)path __attribute__ ((deprecated));
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
@@ -761,7 +761,7 @@
 @interface FolderProxy : DiskFileProxy {
 }
 
-+ (BOOL)isFolder:(NSString *)path;
++ (BOOL)isFolder:(NSString *)path __attribute__ ((deprecated));
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 
 - (ADFFileProxy *)adf;

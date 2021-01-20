@@ -15,10 +15,6 @@ const u8 EXTFile::extAdfHeaders[2][8] = {
     { 'U', 'A', 'E', '-', '1', 'A', 'D', 'F' }
 };
     
-EXTFile::EXTFile()
-{
-}
-
 bool
 EXTFile::isCompatibleName(const std::string &name)
 {

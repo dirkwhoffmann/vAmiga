@@ -27,11 +27,9 @@ public:
 
         
     //
-    // Initializing
+    // Methods from AmigaObject
     //
-    
-    EXEFile();
-    
+        
     const char *getDescription() const override { return "EXE"; }
         
     

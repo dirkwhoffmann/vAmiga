@@ -21,7 +21,7 @@ public:
     // Class methods
     //
         
-    // Returns true iff if the provided path points to a suitable directory
+    // Returns true iff the specified path points to a folder
     static bool isFolder(const char *path);
     
     
@@ -34,12 +34,10 @@ public:
 
     
     //
-    // Initializing
+    // Methods from AmigaObject
     //
     
-    Folder();
-    
-    const char *getDescription() const override { return "DIR"; }
+    const char *getDescription() const override { return "Folder"; }
         
     
     //

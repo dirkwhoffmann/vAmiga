@@ -25,10 +25,10 @@ public:
     static bool isCompatibleStream(std::istream &stream);
 
     // Returns true iff the provided buffer contains an IMG file
-    static bool isIMGBuffer(const u8 *buffer, size_t length);
+    [[deprecated]] static bool isIMGBuffer(const u8 *buffer, size_t length);
     
     // Returns true iff if the provided path points to an IMG file
-    static bool isIMGFile(const char *path);
+    [[deprecated]] static bool isIMGFile(const char *path);
     
     
     //
