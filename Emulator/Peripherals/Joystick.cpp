@@ -9,10 +9,6 @@
 
 #include "Amiga.h"
 
-Joystick::Joystick(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
-{
-}
-
 const char *
 Joystick::getDescription() const
 {

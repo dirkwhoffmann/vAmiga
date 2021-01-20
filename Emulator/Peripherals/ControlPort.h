@@ -10,21 +10,21 @@
 #pragma once
 
 #include "AmigaComponent.h"
-#include "Mouse.h"
 #include "Joystick.h"
+#include "Mouse.h"
 
 class ControlPort : public AmigaComponent {
 
     friend class Mouse;
     friend class Joystick;
     
-    // Represented control port
+    // The represented control port
     PortNr nr;
 
-    // Result of the latest inspection
+    // The result of the latest inspection
     ControlPortInfo info;
     
-    // Connected device
+    // The connected device
     ControlPortDevice device = CPD_NONE;
     
     // The two mouse position counters
@@ -34,11 +34,12 @@ class ControlPort : public AmigaComponent {
     // Resistances on the potentiometer lines (specified as a delta charge)
     double chargeDX;
     double chargeDY;
-
-    //
-    // Input sources
-    //
     
+    
+    //
+    // Sub components
+    //
+
 public:
     
     Mouse mouse = Mouse(amiga, *this);
@@ -54,6 +55,8 @@ public:
     ControlPort(Amiga& ref, PortNr nr);
 
     const char *getDescription() const override;
+    
+private:
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
 

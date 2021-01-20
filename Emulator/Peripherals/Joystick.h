@@ -47,7 +47,7 @@ class Joystick : public AmigaComponent {
     
 public:
     
-    Joystick(Amiga& ref, ControlPort& pref);
+    Joystick(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref) { };
 
     const char *getDescription() const override;
     
@@ -57,7 +57,7 @@ private:
 
     
     //
-    // Configuring
+    // Analyzing
     //
     
 private:

@@ -13,7 +13,7 @@
 
 class Mouse : public AmigaComponent {
 
-    // Reference to control port this device belongs to
+    // Reference to the control port this device belongs to
     ControlPort &port;
     
     // Current configuration
