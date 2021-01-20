@@ -162,6 +162,7 @@ public:
     //
     // Serializing
     //
+    
 protected:
     
     virtual usize readFromStream(std::istream &stream) throws;

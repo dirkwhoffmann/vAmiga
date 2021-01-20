@@ -348,44 +348,12 @@ RomFile::isCompatibleStream(std::istream &stream)
 }
 
 bool
-RomFile::isRomBuffer(const u8 *buffer, size_t length)
+RomFile::isRomBuffer(const u8 *buf, size_t len)
 {
-    // Boot Roms
-    if (length == KB(8) || length == KB(16)) {
-
-        int len = sizeof(bootRomHeaders[0]);
-        int cnt = sizeof(bootRomHeaders) / len;
-
-        for (int i = 0; i < cnt; i++) {
-            if (matchingBufferHeader(buffer, bootRomHeaders[i], len)) return true;
-        }
-        return false;
-    }
-
-    // Kickstart Roms
-    if (length == KB(256) || length == KB(512)) {
-
-        int len = sizeof(kickRomHeaders[0]);
-        int cnt = sizeof(kickRomHeaders) / len;
-
-        for (int i = 0; i < cnt; i++) {
-            if (matchingBufferHeader(buffer, kickRomHeaders[i], len)) return true;
-        }
-        return false;
-    }
-
-    // Encrypted Kickstart Roms
-    if (length == KB(256) + 11 || length == KB(512) + 11) {
-        
-        int len = sizeof(encrRomHeaders[0]);
-        int cnt = sizeof(encrRomHeaders) / len;
-        
-        for (int i = 0; i < cnt; i++) {
-            if (matchingBufferHeader(buffer, encrRomHeaders[i], len)) return true;
-        }
-    }
+    std::stringstream stream;
+    stream.write((const char *)buf, len);
     
-    return false;
+    return isCompatibleStream(stream);
 }
 
 bool
@@ -393,57 +361,6 @@ RomFile::isRomFile(const char *path)
 {
     std::ifstream stream(path);
     return stream.is_open() ? isCompatibleStream(stream) : false;
-}
-/*
-    
-    // Boot Roms
-    if (checkFileSize(path, KB(8)) || checkFileSize(path, KB(16))) {
-
-        int len = sizeof(bootRomHeaders[0]);
-        int cnt = sizeof(bootRomHeaders) / len;
-
-        for (int i = 0; i < cnt; i++)
-            if (matchingFileHeader(path, bootRomHeaders[i], len)) return true;
-
-        return false;
-    }
-
-    // Kickstart Roms
-     if (checkFileSize(path, KB(256)) || checkFileSize(path, KB(512))) {
-
-         int len = sizeof(kickRomHeaders[0]);
-         int cnt = sizeof(kickRomHeaders) / len;
-
-         for (int i = 0; i < cnt; i++)
-             if (matchingFileHeader(path, kickRomHeaders[i], len)) return true;
-
-         return false;
-     }
-
-    // Encrypted Kickstart Roms
-    if (checkFileSize(path, KB(256) + 11) || checkFileSize(path, KB(512) + 11)) {
-        
-        int len = sizeof(encrRomHeaders[0]);
-        int cnt = sizeof(encrRomHeaders) / len;
-        
-        for (int i = 0; i < cnt; i++) {
-            if (matchingFileHeader(path, encrRomHeaders[i], len)) return true;
-        }
-    }
-    
-    return false;
-}
-*/
-
-usize
-RomFile::readFromStream(std::istream &stream)
-{
-    usize result = AmigaFile::readFromStream(stream);
-    
-    // Check whether this Rom needs to be decrypted
-    needsRomKey = isEncrypted();
-        
-    return result;
 }
 
 bool
@@ -465,7 +382,7 @@ RomFile::decrypt()
     if (!isEncrypted()) return;
     
     // Locate the rom.key file
-    string romKeyPath = extractPath(path) + "rom.key";
+    romKeyPath = extractPath(path) + "rom.key";
     
     // Load the rom.key file
     if (!loadFile(romKeyPath.c_str(), &romKeyData, &romKeySize)) {

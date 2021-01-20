@@ -18,9 +18,9 @@ class RomFile : public AmigaFile {
     static const u8 kickRomHeaders[6][7];
     static const u8 encrRomHeaders[1][11];
 
-    // Indicates if a rom.key file is required to use this Rom
-    bool needsRomKey = false;
-    
+    // Path to the rom.key file (if needed)
+    string romKeyPath = "";
+        
 public:
     
     //
@@ -30,10 +30,7 @@ public:
     static bool isCompatibleName(const std::string &name);
     static bool isCompatibleStream(std::istream &stream);
     
-    // Returns true if buffer contains a Boot Rom or an Kickstart Rom image
-    static bool isRomBuffer(const u8 *buffer, size_t length);
-    
-    // Returns true if path points to a Boot Rom file or a Kickstart Rom file
+    static bool isRomBuffer(const u8 *buf, size_t len);
     static bool isRomFile(const char *path);
     
     // Translates a CRC-32 checksum into a ROM identifier
@@ -66,7 +63,6 @@ public:
     //
     
     FileType type() const override { return FILETYPE_ROM; }
-    usize readFromStream(std::istream &stream) override;
 
     
     //
@@ -74,14 +70,14 @@ public:
     //
     
     // Returns true iff the Rom was encrypted at the time it was loaded
-    bool wasEncrypted() { return needsRomKey; }
+    bool wasEncrypted() { return romKeyPath != ""; }
     
     // Returns true iff the Rom is currently encrypted
     bool isEncrypted();
     
     /* Tries to decrypt the Rom. If this method is applied to an encrypted Rom,
      * a rom.key file is seeked in the directory the encrypted Rom was loaded
-     * from and applies to the encrypted data.
+     * from and applied to the encrypted data.
      */
     void decrypt() throws;
 };
