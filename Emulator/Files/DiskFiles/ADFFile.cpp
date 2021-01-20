@@ -235,9 +235,14 @@ ADFFile::layout()
     result.bsize       = 512;
     result.numBlocks   = result.numCyls * result.numHeads * result.numSectors;
 
-    // Determine the location of the root block and the bitmap block
-    u32 root = rootBlock();
-    u32 bitmap = bitmapBlock();
+    // Determine the root block location
+    u32 root = size < ADFSIZE_35_HD ? 880 : 1760;
+
+    // Determine the bitmap block location
+    u32 bitmap = FSBlock::read32(data + root * 512 + 316);
+    
+    // Assign a default location if the bitmap block reference is invalid
+    if (bitmap == 0 || bitmap >= numBlocks()) bitmap = root + 1;
     
     // Add partition
     result.partitions.push_back(FSPartitionDescriptor(getDos(), 0, result.numCyls - 1, root));
@@ -558,24 +563,4 @@ ADFFile::decodeSector(u8 *dst, u8 *src)
     // Decode sector data
     Disk::decodeOddEven(dst + sector * 512, src, 512);
     return true;
-}
-
-u32
-ADFFile::rootBlock()
-{
-    return size < ADFSIZE_35_HD ? 880 : 1760;
-}
-
-u32
-ADFFile::bitmapBlock()
-{
-    u32 bmb = FSBlock::read32(data + rootBlock() * 512 + 316);
-
-    // Make sure bmb is a valid block number
-    if (bmb >= numBlocks()) bmb = 0;
-
-    // Assign a default location if the ADF is empty
-    if (bmb == 0) bmb = rootBlock() + 1;
-
-    return bmb;
 }

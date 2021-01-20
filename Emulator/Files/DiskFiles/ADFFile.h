@@ -99,12 +99,6 @@ private:
     
 public:
 
-    // Returns the location of the root block (DEPRECATED)
-    u32 rootBlock();
-    
-    // Returns the location of the bitmap block (DEPRECATED)
-    u32 bitmapBlock();
-
     // Returns the layout of this disk in form of a device descriptor
     struct FSDeviceDescriptor layout();
     
