@@ -557,12 +557,20 @@ extension MyController: NSMenuItemValidation {
         exportRecentDiskAction(drive: drive, slot: slot)
     }
     
-    func exportRecentDiskAction(drive: Int, slot: Int) {
+    func exportRecentDiskAction(drive nr: Int, slot: Int) {
         
-        track("drive: \(drive) slot: \(slot)")
+        track("drive: \(nr) slot: \(slot)")
         
-        if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: drive) {
-            mydocument.export(drive: drive, to: url)
+        if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: nr) {
+            
+            do {
+                try mydocument.export(drive: nr, to: url)
+                
+            } catch let error as VAError {
+                error.warning("Cannot export disk to file \"\(url.path)\"")
+            } catch {
+                fatalError()
+            }
         }
     }
 

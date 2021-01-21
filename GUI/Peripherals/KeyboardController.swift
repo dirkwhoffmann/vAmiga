@@ -12,7 +12,7 @@ import Carbon.HIToolbox
 // Keyboard event handler
 class KeyboardController: NSObject {
 
-    var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
+    // var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     var parent: MyController!
 
     var keyboard: KeyboardProxy { return parent.amiga.keyboard }

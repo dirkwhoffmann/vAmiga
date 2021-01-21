@@ -17,26 +17,34 @@ extension Proxy {
         
         track()
         
-        var err = ErrorCode.OK
-        let obj = T.make(withBuffer: buffer, length: length, error: &err)
-        if err != ErrorCode.OK { throw VC64Error(err) }
+        var ec = ErrorCode.OK
+        let obj = T.make(withBuffer: buffer, length: length, error: &ec)
+        if ec != ErrorCode.OK { throw VAError(ec) }
         if obj == nil { fatalError() }
         return obj!
     }
     
     static func make<T: MakeWithFile>(url: URL) throws -> T {
         
-        var err = ErrorCode.OK
-        let obj = T.make(withFile: url.path, error: &err)
-        if err != ErrorCode.OK { throw VC64Error(err) }
+        var ec = ErrorCode.OK
+        let obj = T.make(withFile: url.path, error: &ec)
+        if ec != ErrorCode.OK { throw VAError(ec) }
         return obj!
     }
+
+    static func make<T: MakeWithDrive>(drive: DriveProxy) throws -> T {
         
+        var ec = ErrorCode.OK
+        let obj = T.make(withDrive: drive, error: &ec)
+        if ec != ErrorCode.OK { throw VAError(ec) }
+        return obj!
+    }
+
     static func make<T: MakeWithFileSystem>(fs: FSDeviceProxy) throws -> T {
         
-        var err = ErrorCode.OK
-        let obj = T.make(withFileSystem: fs, error: &err)
-        if err != ErrorCode.OK { throw VC64Error(err) }
+        var ec = ErrorCode.OK
+        let obj = T.make(withFileSystem: fs, error: &ec)
+        if ec != ErrorCode.OK { throw VAError(ec) }
         return obj!
     }
 }
@@ -52,7 +60,7 @@ extension AmigaFileProxy {
         
         var err = ErrorCode.OK
         let result = write(toFile: url.path, error: &err)
-        if err != .OK { throw VC64Error(err) }
+        if err != .OK { throw VAError(err) }
         
         return result
     }
@@ -65,7 +73,7 @@ extension FSDeviceProxy {
             
         var err = ErrorCode.OK
         if exportDirectory(url.path, error: &err) == false {
-            throw VC64Error(err)
+            throw VAError(err)
         }
     }
     */

@@ -183,7 +183,7 @@ class GamePadManager {
         
         // Inform about the changed configuration
         parent.toolbar.validateVisibleItems()
-        parent.myAppDelegate.deviceAdded()
+        myAppDelegate.deviceAdded()
         
         listDevices()
     }
@@ -231,7 +231,7 @@ class GamePadManager {
 
         // Inform about the changed configuration
         parent.toolbar.validateVisibleItems()
-        parent.myAppDelegate.deviceAdded()
+        myAppDelegate.deviceAdded()
 
         listDevices()
     }

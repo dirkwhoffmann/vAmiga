@@ -13,7 +13,7 @@ class MyDocument: NSDocument {
     var parent: MyController { return windowControllers.first as! MyController }
 
     // The application delegate
-    var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
+    // var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     
     /* Emulator proxy. This object is an Objective-C bridge between the Swift
      * GUI an the core emulator which is written in C++.
@@ -268,51 +268,36 @@ class MyDocument: NSDocument {
     // Exporting disks
     //
     
-    @discardableResult
-    func export(drive nr: Int, to url: URL) -> Bool {
-                
-        var ec = ErrorCode.OK
-        
+    func export(drive nr: Int, to url: URL) throws {
+                        
         var df: DiskFileProxy?
         switch url.pathExtension.uppercased() {
         case "ADF":
-            df = ADFFileProxy.make(withDrive: amiga.df(nr)!, error: &ec)
+            df = try Proxy.make(drive: amiga.df(nr)!) as ADFFileProxy
         case "IMG", "IMA":
-            df = IMGFileProxy.make(withDrive: amiga.df(nr)!, error: &ec)
+            df = try Proxy.make(drive: amiga.df(nr)!) as IMGFileProxy
         default:
             break
         }
         
-        if df != nil {
-            return export(drive: nr, to: url, diskFileProxy: df!)
-        } else {
-            showExportDecodingAlert(driveNr: nr)
-            return false
-        }
-    }
-    
-    @discardableResult
-    func export(drive nr: Int, to url: URL, diskFileProxy df: DiskFileProxy) -> Bool {
-                        
-        track("Exporting disk to \(url)")
+        try export(diskFileProxy: df!, to: url)
         
-        do {
-            try df.writeToFile(url: url)
-            
-        } catch {
-            
-            showExportAlert(url: url)
-            return false
-        }
-                    
         // Mark disk as "not modified"
         amiga.df(nr)!.isModifiedDisk = false
         
         // Remember export URL
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)
 
-        track("Export complete")
-        return true
+        // showExportDecodingAlert(driveNr: nr)
+    }
+    
+    func export(diskFileProxy df: DiskFileProxy, to url: URL) throws {
+        
+        track("Exporting disk to \(url)")
+        
+        try df.writeToFile(url: url)
+        
+        // showExportAlert(url: url)
     }
     
     //

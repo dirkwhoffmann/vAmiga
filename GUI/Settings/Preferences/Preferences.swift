@@ -18,7 +18,7 @@
 
 class Preferences {
     
-    var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
+    // var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
 
     //
     // General

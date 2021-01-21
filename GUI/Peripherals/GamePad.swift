@@ -20,7 +20,7 @@ class GamePad {
     // References to other objects
     var manager: GamePadManager
     var prefs: Preferences { return manager.parent.pref }
-    var db: DeviceDatabase { return manager.parent.myAppDelegate.database }
+    var db: DeviceDatabase { return myAppDelegate.database }
     
     // The Amiga port this device is connected to (1, 2, or nil)
     var port: Int?
@@ -376,7 +376,7 @@ class GamePad {
         if port == 2 { for e in events { amiga.controlPort2.joystick.trigger(e) } }
         
         // Notify other components (if requested)
-        if notify { manager.parent.myAppDelegate.devicePulled(events: events) }
+        if notify { myAppDelegate.devicePulled(events: events) }
 
         return events != []
     }

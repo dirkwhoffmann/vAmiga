@@ -545,8 +545,23 @@ class ExporterDialog: DialogController {
     func exportToFile(url: URL) {
 
         track("url = \(url)")
-        parent.mydocument.export(drive: driveNr!, to: url, diskFileProxy: disk!)
-        hideSheet()
+
+        do {
+            try parent.mydocument.export(diskFileProxy: disk!, to: url)
+
+            // Mark disk as "not modified"
+            drive?.isModifiedDisk = false
+            
+            // Remember export URL
+            myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: driveNr!)
+
+            hideSheet()
+
+        } catch let error as VAError {
+            error.warning("Cannot export disk")
+        } catch {
+            fatalError()
+        }
     }
 
     func exportToDirectory() {
