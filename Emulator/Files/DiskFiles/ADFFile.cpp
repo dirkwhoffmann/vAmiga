@@ -68,17 +68,27 @@ ADFFile::makeWithDisk(Disk *disk)
 
     // Create empty ADF
     ADFFile *adf = makeWithType(type, density);
-    if (!adf) return nullptr;
+    if (!adf) throw VAError(ERROR_UNKNOWN);
     
     // Export disk
     assert(adf->numTracks() == 160);
     assert(adf->numSectors() == 11 || adf->numSectors() == 22);
     if (!adf->decodeDisk(disk)) {
         delete adf;
-        return nullptr;
+        throw VAError(ERROR_UNKNOWN);
     }
     
     return adf;
+}
+
+ADFFile *
+ADFFile::makeWithDisk(Disk *disk, ErrorCode *ec)
+{
+    *ec = ERROR_OK;
+    
+    try { return makeWithDisk(disk); }
+    catch (VAError &exception) { *ec = exception.errorCode; }
+    return nullptr;
 }
 
 ADFFile *
@@ -89,11 +99,20 @@ ADFFile::makeWithDrive(Drive *drive)
 }
 
 ADFFile *
-ADFFile::makeWithVolume(FSDevice &volume, ErrorCode *error)
+ADFFile::makeWithDrive(Drive *drive, ErrorCode *ec)
+{
+    *ec = ERROR_OK;
+    
+    try { return makeWithDrive(drive); }
+    catch (VAError &exception) { *ec = exception.errorCode; }
+    return nullptr;
+}
+
+ADFFile *
+ADFFile::makeWithVolume(FSDevice &volume)
 {
     ADFFile *adf = nullptr;
     
-    printf("Capacity = %d\n", volume.getCapacity()); 
     switch (volume.getCapacity()) {
             
         case 2 * 880:
@@ -108,12 +127,24 @@ ADFFile::makeWithVolume(FSDevice &volume, ErrorCode *error)
             assert(false);
     }
 
-    volume.exportVolume(adf->data, adf->size, error);
+    ErrorCode ec;
+    volume.exportVolume(adf->data, adf->size, &ec);
+    if (ec != ERROR_OK) throw VAError(ec);
     
     // REMOVE ASAP
     // adf->dumpSector(0);
 
     return adf;
+}
+
+ADFFile *
+ADFFile::makeWithVolume(FSDevice &volume, ErrorCode *ec)
+{
+    *ec = ERROR_OK;
+    
+    try { return makeWithVolume(volume); }
+    catch (VAError &exception) { *ec = exception.errorCode; }
+    return nullptr;
 }
 
 FSVolumeType

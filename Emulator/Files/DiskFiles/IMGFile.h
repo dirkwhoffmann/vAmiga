@@ -16,35 +16,26 @@
 class IMGFile : public DiskFile {
     
 public:
-    
-    //
-    // Class methods
-    //
-    
+        
     static bool isCompatibleName(const std::string &name);
     static bool isCompatibleStream(std::istream &stream);
 
+    static IMGFile *makeWithDiskType(DiskDiameter t, DiskDensity d);
+    static IMGFile *makeWithDisk(class Disk *disk) throws;
+    static IMGFile *makeWithDisk(class Disk *disk, ErrorCode *ec);
+
     
     //
-    // Initializing
+    // Methods from AmigaObject
     //
-
-public:
-
-    IMGFile();
     
     const char *getDescription() const override { return "IMG"; }
     
-    static IMGFile *makeWithDiskType(DiskDiameter t, DiskDensity d);
-    static IMGFile *makeWithDisk(Disk *disk);
-  
     
     //
     // Methods from AmigaFile
     //
-    
-public:
-    
+        
     FileType type() const override { return FILETYPE_IMG; }
     
     

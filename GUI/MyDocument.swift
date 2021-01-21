@@ -271,12 +271,14 @@ class MyDocument: NSDocument {
     @discardableResult
     func export(drive nr: Int, to url: URL) -> Bool {
                 
+        var ec = ErrorCode.OK
+        
         var df: DiskFileProxy?
         switch url.pathExtension.uppercased() {
         case "ADF":
-            df = ADFFileProxy.make(withDrive: amiga.df(nr)!)
+            df = ADFFileProxy.make(withDrive: amiga.df(nr)!, error: &ec)
         case "IMG", "IMA":
-            df = IMGFileProxy.make(withDrive: amiga.df(nr)!)
+            df = IMGFileProxy.make(withDrive: amiga.df(nr)!, error: &ec)
         default:
             break
         }

@@ -12,16 +12,11 @@
 #include "ADFFile.h"
 
 class Folder : public DiskFile {
-    
+        
 public:
-    
+
     ADFFile *adf = nullptr;
     
-    //
-    // Class methods
-    //
-        
-    // Returns true iff the specified path points to a folder
     static bool isFolder(const char *path);
     
     

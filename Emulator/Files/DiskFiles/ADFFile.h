@@ -33,10 +33,13 @@ public:
     // Returns the size of an ADF file of a given disk type in bytes
     static size_t fileSize(DiskDiameter t, DiskDensity d);
 
-    static ADFFile *makeWithType(DiskDiameter t, DiskDensity d);
-    static ADFFile *makeWithDisk(class Disk *disk);
-    static ADFFile *makeWithDrive(class Drive *drive);
-    static ADFFile *makeWithVolume(FSDevice &volume, ErrorCode *error);
+    static ADFFile *makeWithType(DiskDiameter t, DiskDensity d);    
+    static ADFFile *makeWithDisk(class Disk *disk) throws;
+    static ADFFile *makeWithDisk(class Disk *disk, ErrorCode *ec);
+    static ADFFile *makeWithDrive(class Drive *drive) throws;
+    static ADFFile *makeWithDrive(class Drive *drive, ErrorCode *ec);
+    static ADFFile *makeWithVolume(FSDevice &volume) throws;
+    static ADFFile *makeWithVolume(FSDevice &volume, ErrorCode *ec);
 
     
     //

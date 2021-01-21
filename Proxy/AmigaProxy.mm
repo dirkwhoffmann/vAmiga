@@ -1606,7 +1606,7 @@ using namespace moira;
 
 
 //
-// ADFFileProxy
+// ADFFile proxy
 //
 
 @implementation ADFFileProxy
@@ -1621,36 +1621,29 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-/*
-+ (BOOL)isADFFile:(NSString *)path
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
 {
-    return ADFFile::isADFFile([path fileSystemRepresentation]);
-}
-*/
-
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length
-{
-    ADFFile *archive = AmigaFile::make <ADFFile> ((const u8 *)buffer, length);
+    ADFFile *archive = AmigaFile::make <ADFFile> ((const u8 *)buf, len, ec);
     return [self make: archive];
 }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec
 {
-    ADFFile *archive = AmigaFile::make <ADFFile> ([path fileSystemRepresentation], err);
+    ADFFile *archive = AmigaFile::make <ADFFile> ([path fileSystemRepresentation], ec);
     return [self make: archive];
+}
+
++ (instancetype)makeWithDrive:(DriveProxy *)proxy error:(ErrorCode *)ec
+{
+    Drive *drive = [proxy drive];
+    ADFFile *archive = ADFFile::makeWithDrive(drive);
+    return archive ? [self make: archive] : nil;
 }
 
 + (instancetype)makeWithDiameter:(DiskDiameter)type density:(DiskDensity)density
 {
     ADFFile *archive = ADFFile::makeWithType(type, density);
     return [self make: archive];
-}
-
-+ (instancetype)makeWithDrive:(DriveProxy *)proxy
-{
-    Drive *drive = [proxy drive];
-    ADFFile *archive = ADFFile::makeWithDrive(drive);
-    return archive ? [self make: archive] : nil;
 }
 
 - (void)formatDisk:(FSVolumeType)fs bootBlock:(NSInteger)bootBlockID
@@ -1677,20 +1670,15 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (BOOL)isHDFFile:(NSString *)path
++ (instancetype) makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
 {
-    return HDFFile::isHDFFile([path fileSystemRepresentation]);
-}
-
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
-{
-    HDFFile *archive = AmigaFile::make <HDFFile> ((const u8 *)buffer, len);
+    HDFFile *archive = AmigaFile::make <HDFFile> ((const u8 *)buf, len, ec);
     return [self make: archive];
 }
 
-+ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
++ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)ec
 {
-    HDFFile *archive = AmigaFile::make <HDFFile> ([path fileSystemRepresentation], err);
+    HDFFile *archive = AmigaFile::make <HDFFile> ([path fileSystemRepresentation], ec);
     return [self make: archive];
 }
 
@@ -1718,15 +1706,15 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
++ (instancetype) makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
 {
-    EXTFile *archive = AmigaFile::make <EXTFile> ((const u8 *)buffer, len);
+    EXTFile *archive = AmigaFile::make <EXTFile> ((const u8 *)buf, len, ec);
     return [self make: archive];
 }
 
-+ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
++ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)ec
 {
-    EXTFile *archive = AmigaFile::make <EXTFile> ([path fileSystemRepresentation], err);
+    EXTFile *archive = AmigaFile::make <EXTFile> ([path fileSystemRepresentation], ec);
     return [self make: archive];
 }
 
@@ -1749,21 +1737,21 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
++ (instancetype) makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
 {
-    IMGFile *archive = AmigaFile::make <IMGFile> ((const u8 *)buffer, len);
+    IMGFile *archive = AmigaFile::make <IMGFile> ((const u8 *)buf, len, ec);
     return [self make: archive];
 }
 
-+ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
++ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)ec
 {
-    IMGFile *archive = AmigaFile::make <IMGFile> ([path fileSystemRepresentation], err);
+    IMGFile *archive = AmigaFile::make <IMGFile> ([path fileSystemRepresentation], ec);
     return [self make: archive];
 }
 
-+ (instancetype) makeWithDrive:(DriveProxy *)drive
++ (instancetype) makeWithDrive:(DriveProxy *)proxy error:(ErrorCode *)ec
 {
-    IMGFile *archive = IMGFile::makeWithDisk([drive drive]->disk);
+    IMGFile *archive = IMGFile::makeWithDisk([proxy drive]->disk, ec);
     return archive ? [self make: archive] : nil;
 }
 
@@ -1786,9 +1774,9 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
++ (instancetype) makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
 {
-    DMSFile *archive = AmigaFile::make <DMSFile> ((const u8 *)buffer, len);
+    DMSFile *archive = AmigaFile::make <DMSFile> ((const u8 *)buf, len, ec);
     return [self make: archive];
 }
 
@@ -1822,15 +1810,15 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)len
++ (instancetype) makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
 {
-    EXEFile *archive = AmigaFile::make <EXEFile> ((const u8 *)buffer, len);
+    EXEFile *archive = AmigaFile::make <EXEFile> ((const u8 *)buf, len);
     return [self make: archive];
 }
 
-+ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
++ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)ec
 {
-    EXEFile *archive = AmigaFile::make <EXEFile> ([path fileSystemRepresentation], err);
+    EXEFile *archive = AmigaFile::make <EXEFile> ([path fileSystemRepresentation], ec);
     return [self make: archive];
 }
 
@@ -1858,15 +1846,10 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (BOOL)isFolder:(NSString *)path
-{
-    return Folder::isFolder([path fileSystemRepresentation]);
-}
-
-+ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
++ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)ec
 {
     std::string str = string([path fileSystemRepresentation]);
-    return [self make: Folder::makeWithFolder(str, err)];
+    return [self make: Folder::makeWithFolder(str, ec)];
 }
 
 - (ADFFileProxy *)adf

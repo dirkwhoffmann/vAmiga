@@ -9,10 +9,6 @@
 
 #include "Amiga.h"
 
-IMGFile::IMGFile()
-{
-}
-
 bool
 IMGFile::isCompatibleName(const std::string &name)
 {
@@ -49,18 +45,30 @@ IMGFile::makeWithDisk(Disk *disk)
     assert(disk != nullptr);
         
     // We only support 3.5"DD disks at the moment
-    if (disk->getDiameter() != INCH_35 || disk->getDensity() != DISK_DD) { return nullptr; }
+    if (disk->getDiameter() != INCH_35 || disk->getDensity() != DISK_DD) {
+        throw VAError(ERROR_UNKNOWN);
+    }
     
     IMGFile *img = makeWithDiskType(INCH_35, DISK_DD);
     
     if (img) {
         if (!img->decodeDisk(disk)) {
             delete img;
-            return nullptr;
+            throw VAError(ERROR_UNKNOWN);
         }
     }
     
     return img;
+}
+
+IMGFile *
+IMGFile::makeWithDisk(Disk *disk, ErrorCode *ec)
+{
+    *ec = ERROR_OK;
+    
+    try { return makeWithDisk(disk); }
+    catch (VAError &exception) { *ec = exception.errorCode; }
+    return nullptr;
 }
 
 long

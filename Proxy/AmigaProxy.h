@@ -600,14 +600,12 @@
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec;
 @end
 
-/*
-@protocol MakeWithDisk
-+ (instancetype)makeWithDisk:(DiskProxy *)disk error:(ErrorCode *)ec;
+@protocol MakeWithDrive
++ (instancetype)makeWithDrive:(DriveProxy *)proxy error:(ErrorCode *)ec;
 @end
-*/
 
 @protocol MakeWithFileSystem
-+ (instancetype)makeWithFileSystem:(FSDeviceProxy *)fs error:(ErrorCode *)ec;
++ (instancetype)makeWithFileSystem:(FSDeviceProxy *)proxy error:(ErrorCode *)ec;
 @end
 
 //
@@ -624,7 +622,7 @@
 @end
 
 //
-// Snapshot
+// Snapshot proxy
 //
 
 @interface SnapshotProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> {
@@ -675,14 +673,13 @@
 // ADFFileProxy
 //
 
-@interface ADFFileProxy : DiskFileProxy {
+@interface ADFFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
 }
 
-// + (BOOL)isADFFile:(NSString *)path __attribute__ ((deprecated));
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec;
 + (instancetype)makeWithDiameter:(DiskDiameter)type density:(DiskDensity)density;
-+ (instancetype)makeWithDrive:(DriveProxy *)drive;
++ (instancetype)makeWithDrive:(DriveProxy *)drive error:(ErrorCode *)ec;
 
 - (void)formatDisk:(FSVolumeType)fs bootBlock:(NSInteger)bootBlockID;
 
@@ -693,11 +690,10 @@
 // HDFFile proxy
 //
 
-@interface HDFFileProxy : AmigaFileProxy {
+@interface HDFFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> {
 }
 
-+ (BOOL)isHDFFile:(NSString *)path __attribute__ ((deprecated));
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec;
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 
 @property (readonly) NSInteger numBlocks;
@@ -709,11 +705,11 @@
 // EXTFileProxy
 //
 
-@interface EXTFileProxy : DiskFileProxy {
+@interface EXTFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer> {
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec;
 
 @end
 
@@ -722,12 +718,12 @@
 // IMGFileProxy
 //
 
-@interface IMGFileProxy : DiskFileProxy {
+@interface IMGFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
-+ (instancetype)makeWithDrive:(DriveProxy *)drive;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec;
++ (instancetype)makeWithDrive:(DriveProxy *)proxy error:(ErrorCode *)ec;
 
 @end
 
@@ -736,11 +732,11 @@
 // DMSFileProxy
 //
 
-@interface DMSFileProxy : DiskFileProxy {
+@interface DMSFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer> {
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec;
 
 - (ADFFileProxy *)adf;
 
@@ -751,11 +747,11 @@
 // EXEFileProxy
 //
 
-@interface EXEFileProxy : DiskFileProxy {
+@interface EXEFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer> {
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)len;
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec;
 
 - (ADFFileProxy *)adf;
 
@@ -766,11 +762,10 @@
 // Folder proxy
 //
 
-@interface FolderProxy : DiskFileProxy {
+@interface FolderProxy : DiskFileProxy <MakeWithFile> {
 }
 
-+ (BOOL)isFolder:(NSString *)path __attribute__ ((deprecated));
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec;
 
 - (ADFFileProxy *)adf;
 
