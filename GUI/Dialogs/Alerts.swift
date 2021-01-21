@@ -105,30 +105,7 @@ extension MyDocument {
                                                    amiga.df2,
                                                    amiga.df3 ])
     }
-
-    func showExportDecodingAlert(driveNr: Int) {
-        
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.icon = NSImage.init(named: "adf")
-        alert.messageText = "The disk in df\(driveNr) cannot be exported."
-        alert.informativeText = "The MFM data stream appears to be corrupt."
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
-    }
     
-    func showExportAlert(url: URL) {
-        
-        let path = url.path
-        let alert = NSAlert()
-        alert.alertStyle = .critical
-        alert.icon = NSImage.init(named: "adf")
-        alert.messageText = "Failed to export disk."
-        alert.informativeText = "\(path)."
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
-    }
-        
     func showConfigurationAltert(_ error: ErrorCode) {
 
         var msg: String

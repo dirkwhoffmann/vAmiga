@@ -287,17 +287,13 @@ class MyDocument: NSDocument {
         
         // Remember export URL
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)
-
-        // showExportDecodingAlert(driveNr: nr)
     }
     
     func export(diskFileProxy df: DiskFileProxy, to url: URL) throws {
         
         track("Exporting disk to \(url)")
         
-        try df.writeToFile(url: url)
-        
-        // showExportAlert(url: url)
+        try df.writeToFile(url: url)        
     }
     
     //
