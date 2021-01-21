@@ -1434,7 +1434,7 @@ using namespace moira;
 
 
 //
-// Snapshot
+// Snapshot proxy
 //
 
 @implementation SnapshotProxy
@@ -1451,27 +1451,15 @@ using namespace moira;
     return proxy;
 }
 
-+ (instancetype) makeWithBuffer:(const void *)buf length:(NSInteger)len
++ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
 {
-    Snapshot *snapshot = AmigaFile::make <Snapshot> ((u8 *)buf, len);
+    Snapshot *snapshot = AmigaFile::make <Snapshot> ([path UTF8String], err);
     return [self make:snapshot];
 }
 
 + (instancetype) makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
 {
     Snapshot *snapshot = AmigaFile::make <Snapshot> ((u8 *)buf, len, err);
-    return [self make:snapshot];
-}
-
-+ (instancetype) makeWithFile:(NSString *)path
-{
-    Snapshot *snapshot = AmigaFile::make <Snapshot> ([path UTF8String]);
-    return [self make:snapshot];
-}
-
-+ (instancetype) makeWithFile:(NSString *)path error:(ErrorCode *)err
-{
-    Snapshot *snapshot = AmigaFile::make <Snapshot> ([path UTF8String], err);
     return [self make:snapshot];
 }
 

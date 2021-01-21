@@ -589,8 +589,26 @@
 
 
 //
-// F I L E   T Y P E S
+// F I L E   T Y P E   P R O X I E S
 //
+
+@protocol MakeWithFile
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec;
+@end
+
+@protocol MakeWithBuffer
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec;
+@end
+
+/*
+@protocol MakeWithDisk
++ (instancetype)makeWithDisk:(DiskProxy *)disk error:(ErrorCode *)ec;
+@end
+*/
+
+@protocol MakeWithFileSystem
++ (instancetype)makeWithFileSystem:(FSDeviceProxy *)fs error:(ErrorCode *)ec;
+@end
 
 //
 // AmigaFile
@@ -603,31 +621,23 @@
 - (NSInteger)writeToFile:(NSString *)path error:(ErrorCode *)err;
 @property (readonly) u64 fnv;
 
-/*
-- (void)readFromBuffer:(const void *)buffer length:(NSInteger)length __attribute__ ((deprecated));
-- (NSInteger)writeToBuffer:(void *)buffer;
-*/
-
 @end
 
 //
 // Snapshot
 //
 
-@interface SnapshotProxy : AmigaFileProxy {
+@interface SnapshotProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> {
     
     NSImage *preview;
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len;
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err;
-+ (instancetype)makeWithFile:(NSString *)path;
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
-+ (instancetype)makeWithAmiga:(AmigaProxy *)amiga;
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec;
++ (instancetype)makeWithAmiga:(AmigaProxy *)proxy;
 
 @property (readonly, strong) NSImage *previewImage;
 @property (readonly) time_t timeStamp;
-// @property (readonly, copy) NSData *data;
 
 @end
 

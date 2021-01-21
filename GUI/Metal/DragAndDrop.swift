@@ -91,18 +91,18 @@ public extension MetalView {
             let nsData = fileData! as NSData
             let rawPtr = nsData.bytes
             
-            guard let snapshot = SnapshotProxy.make(withBuffer: rawPtr, length: length) else {
-                return false
-            }
-            if document.proceedWithUnexportedDisk() {
-                DispatchQueue.main.async {
-                    let snap = snapshot
-                    self.parent.load(snapshot: snap)
+            do {
+                let snapshot = try Proxy.make(buffer: rawPtr, length: length) as SnapshotProxy
+
+                if document.proceedWithUnexportedDisk() {
+                    DispatchQueue.main.async {
+                        let snap = snapshot
+                        self.parent.load(snapshot: snap)
+                    }
+                    return true
                 }
-                return true
-            } else {
-                return false
-            }
+            } catch { return false }
+            return true
             
         case .compatibleFileURL:
             

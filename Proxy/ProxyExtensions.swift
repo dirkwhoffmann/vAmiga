@@ -8,6 +8,40 @@
 // -----------------------------------------------------------------------------
 
 //
+// Factory extensions
+//
+
+extension Proxy {
+    
+    static func make<T: MakeWithBuffer>(buffer: UnsafeRawPointer, length: Int) throws -> T {
+        
+        track()
+        
+        var err = ErrorCode.OK
+        let obj = T.make(withBuffer: buffer, length: length, error: &err)
+        if err != ErrorCode.OK { throw VC64Error(err) }
+        if obj == nil { fatalError() }
+        return obj!
+    }
+    
+    static func make<T: MakeWithFile>(url: URL) throws -> T {
+        
+        var err = ErrorCode.OK
+        let obj = T.make(withFile: url.path, error: &err)
+        if err != ErrorCode.OK { throw VC64Error(err) }
+        return obj!
+    }
+        
+    static func make<T: MakeWithFileSystem>(fs: FSDeviceProxy) throws -> T {
+        
+        var err = ErrorCode.OK
+        let obj = T.make(withFileSystem: fs, error: &err)
+        if err != ErrorCode.OK { throw VC64Error(err) }
+        return obj!
+    }
+}
+
+//
 // Exception passing
 //
 
