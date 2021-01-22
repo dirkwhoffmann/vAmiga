@@ -955,8 +955,8 @@
                                                                     <rect key="frame" x="1" y="1" width="368" height="315"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="GgW-ee-CoV" id="vBZ-nM-TQD" customClass="InstrTableView" customModule="vAmiga" customModuleProvider="target">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="368" height="290"/>
+                                                                        <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="GgW-ee-CoV" id="vBZ-nM-TQD" customClass="InstrTableView" customModule="vAmiga" customModuleProvider="target">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="411" height="290"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <size key="intercellSpacing" width="0.0" height="2"/>
                                                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -998,7 +998,7 @@
                                                                                     </textFieldCell>
                                                                                     <tableColumnResizingMask key="resizingMask" userResizable="YES"/>
                                                                                 </tableColumn>
-                                                                                <tableColumn identifier="instr" editable="NO" width="137.5" minWidth="48" maxWidth="1000" id="DUe-oo-gwG">
+                                                                                <tableColumn identifier="instr" editable="NO" width="212.5" minWidth="48" maxWidth="65536" id="DUe-oo-gwG">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Instruction">
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1008,7 +1008,7 @@
                                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                     </textFieldCell>
-                                                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
+                                                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 </tableColumn>
                                                                             </tableColumns>
                                                                             <connections>
@@ -1018,7 +1018,7 @@
                                                                     </subviews>
                                                                     <nil key="backgroundColor"/>
                                                                 </clipView>
-                                                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="2Zd-eC-FHh">
+                                                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="2Zd-eC-FHh">
                                                                     <rect key="frame" x="1" y="300" width="368" height="16"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
@@ -1027,7 +1027,7 @@
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <tableHeaderView key="headerView" wantsLayer="YES" id="GgW-ee-CoV">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="368" height="25"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="411" height="25"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </tableHeaderView>
                                                             </scrollView>
@@ -3693,7 +3693,7 @@
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="e4D-rb-dVX" id="rUL-h6-KIi" customClass="CopperTableView" customModule="vAmiga" customModuleProvider="target">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="361" height="254"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="360" height="254"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -3735,7 +3735,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="instr" width="161.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="Ey1-1u-uti">
+                                                                        <tableColumn identifier="instr" width="160.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="Ey1-1u-uti">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Instruction">
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3755,8 +3755,8 @@
                                                             </subviews>
                                                             <nil key="backgroundColor"/>
                                                         </clipView>
-                                                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="XAF-fk-pHB">
-                                                            <rect key="frame" x="1" y="264" width="360" height="16"/>
+                                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="XAF-fk-pHB">
+                                                            <rect key="frame" x="1" y="259" width="350" height="16"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="dpA-Bj-vaz">
@@ -3764,7 +3764,7 @@
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <tableHeaderView key="headerView" wantsLayer="YES" id="e4D-rb-dVX">
-                                                            <rect key="frame" x="0.0" y="0.0" width="361" height="25"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="360" height="25"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </tableHeaderView>
                                                     </scrollView>
