@@ -100,14 +100,17 @@ class ExtRomDropView: DropView {
     }
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-
+        
         guard let url = sender.url?.unpacked else { return false }
         
-        var ec: ErrorCode = .OK
-        if amiga.mem.loadExt(fromFile: url, error: &ec) { return true }
-        if ec != .FILE_TYPE_MISMATCH { ec.showAlert(url: url) }
-        
-        parent.refresh()
-        return false
+        do {
+            let ext = try Proxy.make(url: url) as ExtendedRomFileProxy
+            amiga.mem.loadExt(ext)
+            return true
+        } catch {
+            let name = url.lastPathComponent
+            (error as? VAError)?.warning("Cannot open ExtendedRom file \"\(name)\"")
+        }
+        return false        
     }
 }

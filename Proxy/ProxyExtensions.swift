@@ -213,12 +213,12 @@ extension HDFFileProxy {
 
 extension NSError {
     
-    static func fileError(_ err: ErrorCode, url: URL) -> NSError {
+    static func fileError(_ ec: ErrorCode, url: URL) -> NSError {
         
         let str = "\"" + url.lastPathComponent + "\""
         var info1, info2: String
 
-        switch err {
+        switch ec {
                     
         case .OK:
             fatalError()
@@ -260,7 +260,7 @@ extension NSError {
             info2 = "An uncategorized error exception has been thrown."
         }
         
-        return NSError(domain: "vAmiga", code: err.rawValue,
+        return NSError(domain: "vAmiga", code: ec.rawValue,
                        userInfo: [NSLocalizedDescriptionKey: info1,
                                   NSLocalizedRecoverySuggestionErrorKey: info2])
     }
@@ -268,11 +268,11 @@ extension NSError {
 
 extension NSAlert {
 
-    convenience init(fileError err: ErrorCode, url: URL) {
+    convenience init(fileError ec: ErrorCode, url: URL) {
         
         self.init()
      
-        let err = NSError.fileError(err, url: url)
+        let err = NSError.fileError(ec, url: url)
         
         let msg1 = err.userInfo[NSLocalizedDescriptionKey] as! String
         let msg2 = err.userInfo[NSLocalizedRecoverySuggestionErrorKey] as! String
