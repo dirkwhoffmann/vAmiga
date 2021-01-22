@@ -17,7 +17,7 @@ Drive::Drive(Amiga& ref, unsigned n) : AmigaComponent(ref), nr(n)
     config.mechanicalDelays = true;
     config.startDelay = MSEC(380);
     config.stopDelay = MSEC(80);
-    config.stepDelay = USEC(2000);
+    config.stepDelay = USEC(8000);
 }
 
 const char *
@@ -366,7 +366,7 @@ Drive::readByte() const
 
     // Case 2: A step operation is in progress
     if (config.mechanicalDelays && (agnus.clock - stepCycle) < config.stepDelay) {
-      return 0xFF;
+        return (u8)rand(); // 0xFF;
     }
     
     // Case 3: Normal operation
@@ -481,7 +481,6 @@ Drive::step(int dir)
     }
     
     // Push drive head forward
-    // head.offset = ALIGN_HEAD ? 0 : ((head.offset + 117) % Disk::trackSize);
     if (ALIGN_HEAD) head.offset = 0;
 
     // Inform the GUI
