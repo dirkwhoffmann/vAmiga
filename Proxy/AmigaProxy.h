@@ -28,11 +28,12 @@
 @class DeniseProxy;
 @class DiskControllerProxy;
 @class DiskFileProxy;
-@class DmaDebuggerProxy;
-@class FolderProxy;
 @class DMSFileProxy;
+@class DmaDebuggerProxy;
 @class DriveProxy;
 @class EXEFileProxy;
+@class ExtendedRomFileProxy;
+@class FolderProxy;
 @class GuardsProxy;
 @class HDFFileProxy;
 @class IMGFileProxy;
@@ -41,6 +42,7 @@
 @class MemProxy;
 @class MouseProxy;
 @class PaulaProxy;
+@class RomFileProxy;
 @class ScreenRecorderProxy;
 @class SerialPortProxy;
 @class SnapshotProxy;
@@ -261,6 +263,7 @@
 @property (readonly) BOOL hasKickRom;
 - (void) deleteRom;
 - (BOOL) isRom:(NSURL *)url;
+- (void) loadRom:(RomFileProxy *)proxy;
 - (BOOL) loadRomFromBuffer:(NSData *)buffer;
 - (BOOL) loadRomFromFile:(NSURL *)url error:(ErrorCode *)ec;
 - (u64) romFingerprint;
@@ -272,6 +275,7 @@
 - (BOOL) hasExt;
 - (void) deleteExt;
 - (BOOL) isExt:(NSURL *)url;
+- (void) loadExt:(ExtendedRomFileProxy *)proxy;
 - (BOOL) loadExtFromBuffer:(NSData *)buffer;
 - (BOOL) loadExtFromFile:(NSURL *)url error:(ErrorCode *)ec;
 - (u64) extFingerprint;
@@ -637,6 +641,31 @@
 @property (readonly, strong) NSImage *previewImage;
 @property (readonly) time_t timeStamp;
 
+@end
+
+
+//
+// RomFile proxy
+//
+
+@interface RomFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> { }
+
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err;
+ 
+// @property (readonly) RomType romType;
+
+@end
+
+//
+// ExtendedRomFile proxy
+//
+
+@interface ExtendedRomFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> { }
+
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err;
+ 
 @end
 
 

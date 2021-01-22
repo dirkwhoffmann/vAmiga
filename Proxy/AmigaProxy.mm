@@ -319,6 +319,11 @@ using namespace moira;
     return RomFile::isRomFile([url fileSystemRepresentation]);
 }
 
+- (void) loadRom:(RomFileProxy *)proxy
+{
+    [self mem]->loadRom((RomFile *)proxy->obj);
+}
+
 - (BOOL) loadRomFromBuffer:(NSData *)data
 {
     ErrorCode ec;
@@ -376,6 +381,11 @@ using namespace moira;
 - (BOOL) isExt:(NSURL *)url
 {
     return ExtendedRomFile::isExtendedRomFile([url fileSystemRepresentation]);
+}
+
+- (void) loadExt:(ExtendedRomFileProxy *)proxy
+{
+    [self mem]->loadExt((ExtendedRomFile *)proxy->obj);
 }
 
 - (BOOL) loadExtFromBuffer:(NSData *)data
@@ -1505,6 +1515,54 @@ using namespace moira;
 - (time_t)timeStamp
 {
     return [self snapshot]->getThumbnail().timestamp;
+}
+
+@end
+
+
+//
+// RomFile proxy
+//
+
+@implementation RomFileProxy
+
++ (instancetype)make:(RomFile *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
+{
+    return [self make: AmigaFile::make <RomFile> ([path fileSystemRepresentation], err)];
+}
+
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
+{
+    return [self make: AmigaFile::make <RomFile> ((const u8 *)buf, len, err)];
+}
+
+@end
+
+
+//
+// ExtendedRomFile proxy
+//
+
+@implementation ExtendedRomFileProxy
+
++ (instancetype)make:(RomFile *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
+{
+    return [self make: AmigaFile::make <RomFile> ([path fileSystemRepresentation], err)];
+}
+
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
+{
+    return [self make: AmigaFile::make <RomFile> ((const u8 *)buf, len, err)];
 }
 
 @end

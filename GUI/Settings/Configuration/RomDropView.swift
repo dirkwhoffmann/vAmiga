@@ -77,12 +77,14 @@ class RomDropView: DropView {
 
         guard let url = sender.url?.unpacked else { return false }
         
-        // Check for a ROM image
-        var err: ErrorCode = .OK
-        if amiga.mem.loadRom(fromFile: url, error: &err) { return true }
-        if err != .FILE_TYPE_MISMATCH { err.showAlert(url: url) }
-        
-        parent.refresh()
+        do {
+            let rom = try Proxy.make(url: url) as RomFileProxy
+            amiga.mem.loadRom(rom)
+            return true
+        } catch {
+            let name = url.lastPathComponent
+            (error as? VAError)?.warning("Cannot open Rom file \"\(name)\"")
+        }
         return false
     }
 }
