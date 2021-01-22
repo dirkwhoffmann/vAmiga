@@ -516,22 +516,25 @@ extension MyController: NSMenuItemValidation {
         
         let types: [FileType] = [ .ADF, .HDF, .DMS, .EXE, .DIR ]
         
-        let (file, err) = mydocument.openFile(url: url, allowedTypes: types)
-        
-        if let diskFile = file as? DiskFileProxy {
+        do {
+            // Try to create a file proxy
+            try mydocument.createAttachment(from: url, allowedTypes: types)
 
             // Ask the user if an unsafed disk should be replaced
             if !proceedWithUnexportedDisk(drive: drive) { return }
             
-            // Insert the disk
-            amiga.diskController.insert(drive, file: diskFile)
+            if let file = mydocument.amigaAttachment as? DiskFileProxy {
+                
+                // Insert the disk
+                amiga.diskController.insert(drive, file: file)
+                        
+                // Remember the URL
+                myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
+            }
             
-            // Remember the URL
-            myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
-
-        } else {
-
-            err.showAlert(url: url)
+        } catch {
+            
+            (error as? VAError)?.cantOpen(url: url)
         }
     }
     

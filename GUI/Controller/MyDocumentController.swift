@@ -17,7 +17,7 @@ class MyDocumentController: NSDocumentController {
 
             let doc = try super.makeUntitledDocument(ofType: typeName)
             if let mydoc = doc as? MyDocument {
-                _ = mydoc.createAttachment(url: url)
+                try? mydoc.createAttachment(from: url)
                 return mydoc
             }
         }

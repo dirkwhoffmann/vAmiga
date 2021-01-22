@@ -11,9 +11,6 @@ class MyDocument: NSDocument {
 
     // The window controller for this document
     var parent: MyController { return windowControllers.first as! MyController }
-
-    // The application delegate
-    // var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     
     /* Emulator proxy. This object is an Objective-C bridge between the Swift
      * GUI an the core emulator which is written in C++.
@@ -70,18 +67,19 @@ class MyDocument: NSDocument {
         controller.amiga = amiga
         self.addWindowController(controller)
     }
-
+  
     //
     // Opening files
     //
     
+    /*
     func openFile(url: URL, allowedTypes: [FileType]) -> (AmigaFileProxy?, ErrorCode) {
         
         track("Opening URL \(url.lastPathComponent) (\(allowedTypes.count) types)")
         
         var err: ErrorCode = .OK
         
-        // If the provided URL points to compressed file, decompress it
+        // If the provided URL points to a compressed file, decompress it
         let path = url.unpacked.path
         
         // Iterate through all allowed file types
@@ -140,23 +138,30 @@ class MyDocument: NSDocument {
         // None of the allowed typed matched the file
         return (nil, .FILE_TYPE_MISMATCH)
     }
+    */
     
     //
-    // Working with attachments
+    // Creating attachments
     //
         
-    func createAttachment(url: URL) -> ErrorCode {
+    func createAttachment(from url: URL) throws {
         
         let types: [FileType] =
             [ .SNAPSHOT, .ADF, .HDF, .EXT, .IMG, .DMS, .EXE, .DIR ]
         
-        return createAttachment(url: url, allowedTypes: types)
+        try createAttachment(from: url, allowedTypes: types)
     }
     
-    func createAttachment(url: URL, allowedTypes: [FileType]) -> ErrorCode {
+    func createAttachment(from url: URL, allowedTypes: [FileType]) throws {
         
         track("Creating attachment from URL: \(url.lastPathComponent)")
         
+        try amigaAttachment = createFileProxy(from: url, allowedTypes: allowedTypes)
+        myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
+        
+        track("Attachment created successfully")
+        
+        /*
         let (file, err) = openFile(url: url, allowedTypes: allowedTypes)
         
         if file != nil {
@@ -169,8 +174,59 @@ class MyDocument: NSDocument {
         }
         
         return err
+        */
     }
     
+    fileprivate
+    func createFileProxy(from url: URL, allowedTypes: [FileType]) throws -> AmigaFileProxy? {
+        
+        var result: AmigaFileProxy?
+        
+        track("Creating proxy object from URL: \(url.lastPathComponent)")
+        
+        // If the provided URL points to compressed file, decompress it first
+        let newUrl = url.unpacked
+
+        // Iterate through all allowed file types
+        for type in allowedTypes {
+            
+            switch type {
+            
+            case .SNAPSHOT:
+                try? result = Proxy.make(url: newUrl) as SnapshotProxy
+                
+            case .ADF:
+                try? result = Proxy.make(url: newUrl) as ADFFileProxy
+                                
+            case .EXT:
+                try? result = Proxy.make(url: newUrl) as EXTFileProxy
+                
+            case .IMG:
+                try? result = Proxy.make(url: newUrl) as IMGFileProxy
+                
+            case .DMS:
+                try? result = Proxy.make(url: newUrl) as DMSFileProxy
+                
+            case .EXE:
+                try? result = Proxy.make(url: newUrl) as EXEFileProxy
+                
+            case .DIR:
+                try? result = Proxy.make(url: newUrl) as FolderProxy
+                
+            case .HDF:
+                try? result = Proxy.make(url: newUrl) as HDFFileProxy
+                
+            default:
+                fatalError()
+            }
+            
+            if result != nil { return result }
+        }
+        
+        // None of the allowed typed matched the file
+        throw VAError(.FILE_TYPE_MISMATCH)
+    }
+
     @discardableResult
     func mountAttachment() -> Bool {
         
@@ -233,11 +289,31 @@ class MyDocument: NSDocument {
     
     override open func read(from url: URL, ofType typeName: String) throws {
         
+        do {
+            try createAttachment(from: url)
+        } catch let error as VAError {
+            error.cantOpen(url: url)
+        }
+        
+        /*
         // let err = createAttachment(url: url, allowedTypes: [.SNAPSHOT])
         let err = createAttachment(url: url)
 
         if err != .OK {
             throw NSError.fileError(err, url: url)
+        }
+        */
+    }
+    
+    override open func revert(toContentsOf url: URL, ofType typeName: String) throws {
+        
+        track()
+        
+        do {
+            try createAttachment(from: url)
+            mountAttachment()
+        } catch let error as VAError {
+            error.cantOpen(url: url)
         }
     }
     

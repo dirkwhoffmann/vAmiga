@@ -107,20 +107,15 @@ public extension MetalView {
         case .compatibleFileURL:
             
             if let url = NSURL.init(from: pasteBoard) as URL? {
-                
-                let types: [FileType] =
-                    [ .SNAPSHOT, .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
-
-                let err = document.createAttachment(url: url, allowedTypes: types)
-
-                if err == .OK {
+                do {
+                    try document.createAttachment(from: url)
                     return document.mountAttachment()
-                } else {
-                    err.showAlert(url: url)
+                } catch {
+                    (error as? VAError)?.cantOpen(url: url)
                 }
             }
             return false
-            
+                        
         default:
             return false
         }
