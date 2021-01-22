@@ -353,13 +353,13 @@ Amiga::powerOn()
     debug(RUN_DEBUG, "powerOn()\n");
     
     #ifdef DF0_DISK
-        DiskFile *df0file = DiskFile::makeWithFile(DF0_DISK);
-        if (df0file) {
-            Disk *disk = Disk::makeWithFile(df0file);
-            df0.ejectDisk();
-            df0.insertDisk(disk);
-            df0.setWriteProtection(false);
-        }
+    DiskFile *df0file = AmigaFile::make <ADFFile> (DF0_DISK);
+    if (df0file) {
+        Disk *disk = Disk::makeWithFile(df0file);
+        df0.ejectDisk();
+        df0.insertDisk(disk);
+        df0.setWriteProtection(false);
+    }
     #endif
 
     #ifdef DF1_DISK
