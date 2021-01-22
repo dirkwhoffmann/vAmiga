@@ -50,13 +50,8 @@ IMGFile::makeWithDisk(Disk *disk)
     }
     
     IMGFile *img = makeWithDiskType(INCH_35, DISK_DD);
-    
-    if (img) {
-        if (!img->decodeDisk(disk)) {
-            delete img;
-            throw VAError(ERROR_UNKNOWN);
-        }
-    }
+    try { img->decodeDisk(disk); }
+    catch (VAError &exception) { delete img; throw exception; }
     
     return img;
 }
@@ -233,7 +228,7 @@ IMGFile::encodeSector(Disk *disk, Track t, Sector s)
     return true;
 }
 
-bool
+void
 IMGFile::decodeDisk(Disk *disk)
 {
     long tracks = numTracks();
@@ -241,26 +236,18 @@ IMGFile::decodeDisk(Disk *disk)
     trace(MFM_DEBUG, "Decoding DOS disk (%ld tracks)\n", tracks);
     
     if (disk->getDiameter() != getDiskDiameter()) {
-        warn("Incompatible disk diameters: %s %s\n",
-             DiskDiameterEnum::key(disk->getDiameter()),
-             DiskDiameterEnum::key(getDiskDiameter()));
-        return false;
+        throw VAError(ERROR_DISK_INVALID_DIAMETER);
     }
     if (disk->getDensity() != getDiskDensity()) {
-        warn("Incompatible disk densities: %s %s\n",
-             DiskDensityEnum::key(disk->getDensity()),
-             DiskDensityEnum::key(getDiskDensity()));
-        return false;
+        throw VAError(ERROR_DISK_INVALID_DENSITY);
     }
     
     // Make the MFM stream scannable beyond the track end
     disk->repeatTracks();
 
     for (Track t = 0; t < tracks; t++) {
-        if (!decodeTrack(disk, t)) return false;
+        if (!decodeTrack(disk, t)) throw VAError(ERROR_DISK_CANT_DECODE);
     }
-    
-    return true;
 }
 
 bool

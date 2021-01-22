@@ -51,7 +51,7 @@ public:
     long numCyls() const override;
     long numSectors() const override;
     bool encodeDisk(class Disk *disk) override;
-    bool decodeDisk(class Disk *disk) override;
+    void decodeDisk(class Disk *disk) throws override;
 
 private:
     

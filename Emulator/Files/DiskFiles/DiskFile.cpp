@@ -65,12 +65,10 @@ bool
 DiskFile::encodeDisk(class Disk *disk)
 {
     assert(false);
-    return false;
 }
 
-bool
+void
 DiskFile::decodeDisk(class Disk *disk)
 {
     assert(false);
-    return false;
 }

@@ -41,6 +41,18 @@ class VAError: Error {
             return "Missing Rom."
         case .AROS_NO_EXTROM:
             return "Missing Extension Rom."
+        case .DISK_CANT_DECODE:
+            return "Unable to decode the MFM bit stream."
+        case .DISK_INVALID_DIAMETER:
+            return "Invalid disk diameter."
+        case .DISK_INVALID_DENSITY:
+            return "Invalid disk density."
+        case .SNP_TOO_OLD:
+            return "The snapshot was created with an older version of " +
+                "vAmiga and is incompatible with this release."
+        case .SNP_TOO_NEW:
+            return "The snapshot was created with a newer version of " +
+                "vAmiga and is incompatible with this release."
         case .UNSUPPORTED_SNAPSHOT:
             return "Unsupported Snapshot Revision."
         case .MISSING_ROM_KEY:

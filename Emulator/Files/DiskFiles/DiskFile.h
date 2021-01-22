@@ -79,5 +79,5 @@ public:
 public:
     
     virtual bool encodeDisk(class Disk *disk);
-    virtual bool decodeDisk(class Disk *disk);
+    virtual void decodeDisk(class Disk *disk) throws;
 };

@@ -149,6 +149,12 @@ struct ErrorCodeEnum : Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_ROM_MISSING:                 return "ROM_MISSING";
             case ERROR_AROS_NO_EXTROM:              return "AROS_NO_EXTROM";
 
+            case ERROR_DISK_CANT_DECODE:            return "DISK_CANT_DECODE";
+            case ERROR_DISK_INVALID_DIAMETER:       return "DISK_INVALID_DIAMETER";
+            case ERROR_DISK_INVALID_DENSITY:        return "DISK_INVALID_DENSITY";
+                
+            case ERROR_SNP_TOO_OLD:                 return "SNP_TOO_OLD";
+            case ERROR_SNP_TOO_NEW:                 return "SNP_TOO_NEW";
             case ERROR_UNSUPPORTED_SNAPSHOT:        return "UNSUPPORTED_SNAPSHOT";
                 
             case ERROR_MISSING_ROM_KEY:             return "MISSING_ROM_KEY";

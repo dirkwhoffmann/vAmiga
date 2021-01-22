@@ -66,17 +66,14 @@ ADFFile::makeWithDisk(Disk *disk)
     DiskDiameter type = disk->getDiameter();
     DiskDensity density = disk->getDensity();
 
-    // Create empty ADF
+    // Create an empty ADF
     ADFFile *adf = makeWithType(type, density);
-    if (!adf) throw VAError(ERROR_UNKNOWN);
     
     // Export disk
     assert(adf->numTracks() == 160);
     assert(adf->numSectors() == 11 || adf->numSectors() == 22);
-    if (!adf->decodeDisk(disk)) {
-        delete adf;
-        throw VAError(ERROR_UNKNOWN);
-    }
+    try { adf->decodeDisk(disk); }
+    catch (VAError &exception) { delete adf; throw exception; }
     
     return adf;
 }
@@ -466,7 +463,7 @@ ADFFile::dumpSector(int num)
     hexdump(data + 512 * num, 512);
 }
 
-bool
+void
 ADFFile::decodeDisk(Disk *disk)
 {
     long tracks = numTracks();
@@ -474,26 +471,18 @@ ADFFile::decodeDisk(Disk *disk)
     debug(MFM_DEBUG, "Decoding Amiga disk with %ld tracks\n", tracks);
     
     if (disk->getDiameter() != getDiskDiameter()) {
-        warn("Incompatible disk types: %s %s\n",
-             DiskDiameterEnum::key(disk->getDiameter()),
-             DiskDiameterEnum::key(getDiskDiameter()));
-        return false;
+        throw VAError(ERROR_DISK_INVALID_DIAMETER);
     }
     if (disk->getDensity() != getDiskDensity()) {
-        warn("Incompatible disk densities: %s %s\n",
-             DiskDensityEnum::key(disk->getDensity()),
-             DiskDensityEnum::key(getDiskDensity()));
-        return false;
+        throw VAError(ERROR_DISK_INVALID_DENSITY);
     }
         
     // Make the MFM stream scannable beyond the track end
     disk->repeatTracks();
 
     for (Track t = 0; t < tracks; t++) {
-        if (!decodeTrack(disk, t)) return false;
+        if (!decodeTrack(disk, t)) throw VAError(ERROR_DISK_CANT_DECODE);
     }
-    
-    return true;
 }
 
 bool

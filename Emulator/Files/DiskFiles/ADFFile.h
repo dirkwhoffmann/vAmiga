@@ -79,7 +79,7 @@ public:
     void killVirus() override;
 
     bool encodeDisk(class Disk *disk) override;
-    bool decodeDisk(class Disk *disk) override;
+    void decodeDisk(class Disk *disk) throws override;
 
 private:
     
