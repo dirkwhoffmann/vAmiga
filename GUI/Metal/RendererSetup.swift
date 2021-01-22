@@ -22,26 +22,32 @@ extension Renderer {
     func setupMetal() {
 
         track()
-
-        buildMetal()
-        buildMonitors()
-        buildTextures()
-        buildSamplers()
-        buildKernels()
-        buildDotMasks()
-        buildPipeline()
-        buildVertexBuffer()
-
-        reshape()
+        
+        do {
+            try buildMetal()
+            buildMonitors()
+            buildTextures()
+            buildSamplers()
+            buildKernels()
+            buildDotMasks()
+            buildPipeline()
+            buildVertexBuffer()
+            reshape()
+            
+        } catch {
+            
+            error.critical("Cannot initialize Metal")
+            exit(0)
+        }
     }
 
-    internal func buildMetal() {
+    internal func buildMetal() throws {
 
         track()
 
         // Metal layer
         metalLayer = mtkView.layer as? CAMetalLayer
-        assert(metalLayer != nil, "Metal layer must not be nil")
+        if metalLayer == nil { throw MetalError.METAL_CANT_GET_LAYER }
 
         metalLayer.device = device
         metalLayer.pixelFormat = MTLPixelFormat.bgra8Unorm
@@ -50,11 +56,11 @@ extension Renderer {
 
         // Command queue
         queue = device.makeCommandQueue()
-        assert(queue != nil, "Metal command queue must not be nil")
+        if queue == nil { throw MetalError.METAL_CANT_CREATE_COMMAND_QUEUE }
 
         // Shader library
         library = device.makeDefaultLibrary()
-        assert(library != nil, "Metal library must not be nil")
+        if library == nil { throw MetalError.METAL_CANT_CREATE_SHADER_LIBARY }
     }
     
     func buildMonitors() {

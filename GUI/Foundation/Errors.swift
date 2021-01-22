@@ -7,15 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class VAError: Error {
-    
-    var errorCode: ErrorCode
-    
-    init(_ errorCode: ErrorCode) { self.errorCode = errorCode }
-    
+extension ErrorCode {
+
     var description: String {
         
-        switch errorCode {
+        switch self {
         
         case .OK:
             fatalError()
@@ -101,46 +97,107 @@ class VAError: Error {
             return ""
         }
     }
+}
+
+class VAError: Error {
     
-    static func alert(_ msg1: String, _ msg2: String, style: NSAlert.Style,
-                      async: Bool = false, icon: String?) {
+    var errorCode: ErrorCode
+    
+    init(_ errorCode: ErrorCode) { self.errorCode = errorCode }
+}
+
+enum MetalError: Error {
+
+    case METAL_NOT_SUPPORTED
+    case METAL_CANT_GET_DEVICE
+    case METAL_CANT_GET_LAYER
+    case METAL_CANT_CREATE_COMMAND_QUEUE
+    case METAL_CANT_CREATE_SHADER_LIBARY
+    case METAL_CANT_CREATE_TEXTURE
+    
+    var description: String {
         
-        if async == true {
-            DispatchQueue.main.async {
-                alert(msg1, msg2, style: style, async: false, icon: icon)
-            }
-        } else {
-            let alert = NSAlert()
-            alert.alertStyle = style
-            if icon != nil { alert.icon = NSImage.init(named: icon!) }
-            alert.messageText = msg1
-            alert.informativeText = msg2
-            alert.addButton(withTitle: "OK")
-            alert.runModal()
+        switch self {
+        
+        case .METAL_NOT_SUPPORTED:
+            return "No suitable Metal hardware found."
+        case .METAL_CANT_GET_DEVICE:
+            return "Failed to obtain Metal device."
+        case .METAL_CANT_GET_LAYER:
+            return "Failed to obtain Core Animation layer."
+        case .METAL_CANT_CREATE_COMMAND_QUEUE:
+            return "Failed to create the command queue."
+        case .METAL_CANT_CREATE_SHADER_LIBARY:
+            return "Failed to create the shader library."
+        case .METAL_CANT_CREATE_TEXTURE:
+            return "Failed to create GPU texture."
         }
     }
+}
 
-    static func informational(_ msg1: String, _ msg2: String,
-                              async: Bool = false, icon: String? = nil) {
-        alert(msg1, msg2, style: .informational, async: async, icon: icon)
+extension Error {
+
+    func alert(_ msg1: String, _ msg2: String, style: NSAlert.Style,
+               async: Bool = false, icon: String?) {
+    
+        if async == true {
+            DispatchQueue.main.async {
+                self.alert(msg1, msg2, style: style, async: false, icon: icon)
+            }
+        }
+    
+        var image: NSImage?
+        if icon != nil {
+            image = NSImage.init(named: icon!)
+        } else {
+            if self is MetalError { image = NSImage.init(named: "metal") }
+        }
+        
+        let alert = NSAlert()
+        alert.alertStyle = style
+        alert.icon = image
+        alert.messageText = msg1
+        alert.informativeText = msg2
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
-
-    static func warning(_ msg1: String, _ msg2: String,
-                        async: Bool = false, icon: String? = nil) {
+    
+    func informational(_ msg1: String, _ msg2: String,
+                       async: Bool = false, icon: String? = nil) {
+        
+        alert(msg1, msg2, style: .informational, async: async, icon: nil)
+    }
+    
+    func warning(_ msg1: String, _ msg2: String,
+                 async: Bool = false, icon: String? = nil) {
+        
         alert(msg1, msg2, style: .warning, async: async, icon: icon)
     }
     
-    static func critical(_ msg1: String, _ msg2: String,
-                         async: Bool = false, icon: String? = nil) {
+    func critical(_ msg1: String, _ msg2: String,
+                  async: Bool = false, icon: String? = nil) {
+        
         alert(msg1, msg2, style: .critical, async: async, icon: icon)
     }
 
     func warning(_ msg: String, async: Bool = false, icon: String? = nil) {
-        VAError.warning(msg, description, async: async, icon: icon)
+
+        if let error = self as? VAError {
+            warning(msg, error.errorCode.description, async: async, icon: icon)
+        }
+        if let error = self as? MetalError {
+            warning(msg, error.description, async: async, icon: icon)
+        }
     }
 
     func critical(_ msg: String, async: Bool = false, icon: String? = nil) {
-        VAError.warning(msg, description, async: async, icon: icon)
+
+        if let error = self as? VAError {
+            warning(msg, error.errorCode.description, async: async, icon: icon)
+        }
+        if let error = self as? MetalError {
+            warning(msg, error.description, async: async, icon: icon)
+        }
     }
     
     //
@@ -148,6 +205,7 @@ class VAError: Error {
     //
     
     func cantOpen(url: URL, async: Bool = false) {
+        
         warning("\"\(url.lastPathComponent)\" can't be opened.", async: async)
     }
 }

@@ -273,20 +273,6 @@ class Renderer: NSObject, MTKViewDelegate {
     //
     // Managing textures
     //
-
-    /*
-    func clearBgTexture() {
-        
-        let w = 512
-        let h = 512
-        
-        let bytes = UnsafeMutablePointer<UInt32>.allocate(capacity: w * h)
-        bytes.initialize(repeating: 0xFFFF0000, count: w * h)
-        
-        updateBgTexture(bytes: bytes)
-        bytes.deallocate()
-    }
-    */
     
     func updateBgTexture(bytes: UnsafeMutablePointer<UInt32>) {
 
