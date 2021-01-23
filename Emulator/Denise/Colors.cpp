@@ -31,7 +31,7 @@ RgbColor::RgbColor(const YuvColor &c)
 }
 
 RgbColor
-RgbColor::mix(RgbColor additive, double weight)
+RgbColor::mix(RgbColor additive, double weight) const
 {
     assert(additive.r <= 1.0);
     assert(additive.g <= 1.0);
@@ -144,7 +144,7 @@ const GpuColor GpuColor::magenta(RgbColor::magenta);
 const GpuColor GpuColor::cyan(RgbColor::cyan);
 
 GpuColor
-GpuColor::mix(const RgbColor &color, double weight)
+GpuColor::mix(const RgbColor &color, double weight) const
 {
     RgbColor mixedColor = RgbColor(*this).mix(color, weight);
     return GpuColor(mixedColor);

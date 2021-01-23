@@ -460,42 +460,47 @@ Agnus::pokeVPOS(u16 value)
 {
     trace(POSREG_DEBUG, "pokeVPOS(%x) (%d,%d)\n", value, pos.v, frame.lof);
     
-    // I don't really know what exactly we are supposed to do here.
-    // For the time being, I only take care of the LOF bit.
+    /* I don't really know what exactly we are supposed to do here.
+     * For the time being, I only take care of the LOF bit.
+     */
     bool newlof = value & 0x8000;
     if (frame.lof == newlof) return;
     
     trace(XFILES, "XFILES (VPOS): %x (%d,%d)\n", value, pos.v, frame.lof);
 
-    // If a long frame gets changed to a short frame, we only proceed if
-    // Agnus is not in the last rasterline. Otherwise, we would corrupt the
-    // emulators internal state (we would be in a line that is unreachable).
+    /* If a long frame gets changed to a short frame, we only proceed if
+     * Agnus is not in the last rasterline. Otherwise, we would corrupt the
+     * emulators internal state (we would be in a line that is unreachable).
+     */
     if (!newlof && inLastRasterline()) return;
 
     trace(XFILES, "XFILES (VPOS): Making a %s frame\n", newlof ? "long" : "short");
     frame.lof = newlof;
     
-    // Reschedule a pending VBL_STROBE event with a trigger cycle that is
-    // consistent with new LOF bit value.
-    if (slot[VBL_SLOT].id == VBL_STROBE0) {
-        reschedulePos<VBL_SLOT>(frame.numLines() + vStrobeLine(), 0);
-    }
-    if (slot[VBL_SLOT].id == VBL_STROBE1) {
-        reschedulePos<VBL_SLOT>(frame.numLines() + vStrobeLine(), 1);
+    /* Reschedule a pending VBL event with a trigger cycle that is consistent
+     * with the new value of the LOF bit.
+     */
+    switch (slot[SLOT_VBL].id) {
+
+        case VBL_STROBE0: scheduleStrobe0Event(); break;
+        case VBL_STROBE1: scheduleStrobe1Event(); break;
+        case VBL_STROBE2: scheduleStrobe2Event(); break;
+            
+        default: break;
     }
 }
 
 template <Accessor s> void
 Agnus::pokeDIWSTRT(u16 value)
 {
-    trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", sAccessor(s), value);
+    trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", AccessorEnum::key(s), value);
     recordRegisterChange(DMA_CYCLES(2), SET_DIWSTRT, value);
 }
 
 template <Accessor s> void
 Agnus::pokeDIWSTOP(u16 value)
 {
-    trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", sAccessor(s), value);
+    trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", AccessorEnum::key(s), value);
     recordRegisterChange(DMA_CYCLES(2), SET_DIWSTOP, value);
 }
 
@@ -881,7 +886,7 @@ template void Agnus::pokeSPRxCTL<5>(u16 value);
 template void Agnus::pokeSPRxCTL<6>(u16 value);
 template void Agnus::pokeSPRxCTL<7>(u16 value);
 
-template void Agnus::pokeDIWSTRT<CPU_ACCESS>(u16 value);
-template void Agnus::pokeDIWSTRT<AGNUS_ACCESS>(u16 value);
-template void Agnus::pokeDIWSTOP<CPU_ACCESS>(u16 value);
-template void Agnus::pokeDIWSTOP<AGNUS_ACCESS>(u16 value);
+template void Agnus::pokeDIWSTRT<ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeDIWSTRT<ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeDIWSTOP<ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeDIWSTOP<ACCESSOR_AGNUS>(u16 value);

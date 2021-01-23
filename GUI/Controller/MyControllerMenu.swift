@@ -246,16 +246,13 @@ extension MyController: NSMenuItemValidation {
     @IBAction func takeSnapshotAction(_ sender: Any!) {
         
         takeUserSnapshot()
-        // renderer.blendIn(steps: 20)
     }
     
     @IBAction func restoreSnapshotAction(_ sender: Any!) {
         
         if !restoreLatestUserSnapshot() {
             NSSound.beep()
-            // return
         }
-        // renderer.blendIn(steps: 20)
     }
     
     @IBAction func browseSnapshotsAction(_ sender: Any!) {
@@ -374,7 +371,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func powerAction(_ sender: Any!) {
         
-        var error: ErrorCode = .ERR_OK
+        var error: ErrorCode = .OK
 
         if amiga.isPoweredOn {
             amiga.powerOff()
@@ -462,9 +459,9 @@ extension MyController: NSMenuItemValidation {
         // Create a blank disk
         var adf: ADFFileProxy
         switch type {
-        case .DRIVE_35_DD:  adf = ADFFileProxy.make(with: .DISK_35, density: .DISK_DD)
-        case .DRIVE_35_HD:  adf = ADFFileProxy.make(with: .DISK_35, density: .DISK_HD)
-        case .DRIVE_525_DD: adf = ADFFileProxy.make(with: .DISK_525, density: .DISK_DD)
+        case .DD_35: adf = ADFFileProxy.make(with: .INCH_35, density: .DD)
+        case .HD_35: adf = ADFFileProxy.make(with: .INCH_35, density: .HD)
+        case .DD_525: adf = ADFFileProxy.make(with: .INCH_525, density: .DD)
         default: fatalError()
         }
         
@@ -517,28 +514,27 @@ extension MyController: NSMenuItemValidation {
         
         track("insertDiskAction \(url) drive \(drive)")
         
-        let types = [ AmigaFileType.FILETYPE_ADF,
-                      AmigaFileType.FILETYPE_HDF,
-                      AmigaFileType.FILETYPE_DMS,
-                      AmigaFileType.FILETYPE_EXE,
-                      AmigaFileType.FILETYPE_DIR ]
+        let types: [FileType] = [ .ADF, .HDF, .DMS, .EXE, .DIR ]
         
-        let (file, err) = mydocument.openFile(url: url, allowedTypes: types)
-        
-        if let diskFile = file as? DiskFileProxy {
+        do {
+            // Try to create a file proxy
+            try mydocument.createAttachment(from: url, allowedTypes: types)
 
             // Ask the user if an unsafed disk should be replaced
             if !proceedWithUnexportedDisk(drive: drive) { return }
             
-            // Insert the disk
-            amiga.diskController.insert(drive, file: diskFile)
+            if let file = mydocument.amigaAttachment as? DiskFileProxy {
+                
+                // Insert the disk
+                amiga.diskController.insert(drive, file: file)
+                        
+                // Remember the URL
+                myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
+            }
             
-            // Remember the URL
-            myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
-
-        } else {
-
-            err.showAlert(url: url)
+        } catch {
+            
+            (error as? VAError)?.cantOpen(url: url)
         }
     }
     
@@ -554,17 +550,6 @@ extension MyController: NSMenuItemValidation {
     @IBAction func exportRecentDiskDummyAction2(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentDiskDummyAction3(_ sender: NSMenuItem!) {}
     
-    func exportRecentDiskAction(drive: Int, slot: Int) {
-        
-        track("drive: \(drive) slot: \(slot)")
-        
-        if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: drive) {
-            do {
-                mydocument.export(drive: drive, to: url)
-            }
-        }
-    }
-
     @IBAction func exportRecentDiskAction(_ sender: NSMenuItem!) {
         
         track()
@@ -575,6 +560,23 @@ extension MyController: NSMenuItemValidation {
         exportRecentDiskAction(drive: drive, slot: slot)
     }
     
+    func exportRecentDiskAction(drive nr: Int, slot: Int) {
+        
+        track("drive: \(nr) slot: \(slot)")
+        
+        if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: nr) {
+            
+            do {
+                try mydocument.export(drive: nr, to: url)
+                
+            } catch let error as VAError {
+                error.warning("Cannot export disk to file \"\(url.path)\"")
+            } catch {
+                fatalError()
+            }
+        }
+    }
+
     @IBAction func clearRecentlyInsertedDisksAction(_ sender: NSMenuItem!) {
         
         myAppDelegate.recentlyInsertedDiskURLs = []
@@ -612,7 +614,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func hideSpriteAction(_ sender: NSMenuItem!) {
 
-        var mask = amiga.getConfig(.OPT_HIDDEN_SPRITES)
+        var mask = amiga.getConfig(.HIDDEN_SPRITES)
         
         sender.state = (sender.state == .off) ? .on : .off
         if sender.state == .on {
@@ -622,7 +624,7 @@ extension MyController: NSMenuItemValidation {
         }
         
         amiga.suspend()
-        amiga.configure(.OPT_HIDDEN_SPRITES, value: mask)
+        amiga.configure(.HIDDEN_SPRITES, value: mask)
         amiga.resume()
         
         track()

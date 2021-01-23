@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _SNAPSHOT_H
-#define _SNAPSHOT_H
+#pragma once
 
 #include "AmigaFile.h"
 
@@ -54,15 +53,14 @@ class Snapshot : public AmigaFile {
     
 public:
     
+    static bool isCompatibleName(const std::string &name);
+    static bool isCompatibleStream(std::istream &stream);
+
     // Returns true iff buffer contains a snapshot (of a specific version)
     static bool isSnapshot(const u8 *buf, size_t len);
     static bool isSnapshot(const u8 *buf, size_t len, u8 major, u8 minor, u8 subminor);
         
-    // Returns true if path points to a snapshot file (of a specific version)
-    static bool isSnapshotFile(const char *path);
-    static bool isSnapshotFile(const char *path, u8 major, u8 minor, u8 subminor);
-        
-    
+            
     //
     // Initializing
     //
@@ -70,7 +68,7 @@ public:
     Snapshot();
     Snapshot(size_t capacity);
     
-    const char *getDescription() override { return "Snapshot"; }
+    const char *getDescription() const override { return "Snapshot"; }
     
     bool setCapacity(size_t size);
     
@@ -81,11 +79,8 @@ public:
     // Methods from AmigaFile
     //
     
-    AmigaFileType fileType() override { return FILETYPE_SNAPSHOT; }
-    bool matchingBuffer(const u8 *buffer, size_t length) override;
-    bool matchingFile(const char *filename) override;
-    bool readFromBuffer(const u8 *buffer, size_t length, FileError *error = nullptr) override;
-
+    FileType type() const override { return FILETYPE_SNAPSHOT; }
+    
     
     //
     // Accessing snapshot properties
@@ -94,26 +89,14 @@ public:
 public:
     
     // Returns pointer to header data
-    SnapshotHeader *getHeader() { return (SnapshotHeader *)data; }
+    const SnapshotHeader *getHeader() const { return (SnapshotHeader *)data; }
+    
+    // Returns a pointer to the thumbnail image
+    const Thumbnail &getThumbnail() const { return getHeader()->screenshot; }
     
     // Returns pointer to core data
-    u8 *getData() override { return data + sizeof(SnapshotHeader); }
+    u8 *getData() { return data + sizeof(SnapshotHeader); }
     
-    // Returns the timestamp
-    // GET DIRECTLY FROM SCREENSHOT
-    time_t getTimestamp() { return getHeader()->screenshot.timestamp; }
-    
-    // Returns a pointer to the screenshot data
-    // DEPRECATED
-    unsigned char *getImageData() { return (unsigned char *)(getHeader()->screenshot.screen); }
-    
-    // Returns the screenshot image width
-    // DEPRECATED
-    unsigned getImageWidth() { return getHeader()->screenshot.width; }
-    
-    // Returns the screenshot image height
-    // DEPRECATED
-    unsigned getImageHeight() { return getHeader()->screenshot.height; }
+    // Takes a screenshot
+    void takeScreenshot(Amiga &amiga);
 };
-
-#endif

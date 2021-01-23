@@ -256,7 +256,7 @@ Agnus::disableBplDmaECS()
 }
 
 template <BusOwner owner> bool
-Agnus::busIsFree()
+Agnus::busIsFree() const
 {
     // Deny if the bus is already in use
     if (busOwner[pos.h] != BUS_NONE) return false;
@@ -323,7 +323,7 @@ Agnus::allocateBus()
 u16
 Agnus::doDiskDMA()
 {
-    u16 result = mem.peek16 <AGNUS_ACCESS> (dskpt);
+    u16 result = mem.peek16 <ACCESSOR_AGNUS> (dskpt);
     dskpt += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -337,7 +337,7 @@ Agnus::doDiskDMA()
 template <int channel> u16
 Agnus::doAudioDMA()
 {
-    u16 result = mem.peek16 <AGNUS_ACCESS> (audpt[channel]);
+    u16 result = mem.peek16 <ACCESSOR_AGNUS> (audpt[channel]);
     audpt[channel] += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -354,7 +354,7 @@ Agnus::doBitplaneDMA()
     assert(bitplane >= 0 && bitplane <= 5);
     const BusOwner owner = BusOwner(BUS_BPL1 + bitplane);
     
-    u16 result = mem.peek16 <AGNUS_ACCESS> (bplpt[bitplane]);
+    u16 result = mem.peek16 <ACCESSOR_AGNUS> (bplpt[bitplane]);
     bplpt[bitplane] += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -371,7 +371,7 @@ Agnus::doSpriteDMA()
     assert(channel >= 0 && channel <= 7);
     const BusOwner owner = BusOwner(BUS_SPRITE0 + channel);
 
-    u16 result = mem.peek16 <AGNUS_ACCESS> (sprpt[channel]);
+    u16 result = mem.peek16 <ACCESSOR_AGNUS> (sprpt[channel]);
     sprpt[channel] += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -385,7 +385,7 @@ Agnus::doSpriteDMA()
 u16
 Agnus::doCopperDMA(u32 addr)
 {
-    u16 result = mem.peek16 <AGNUS_ACCESS> (addr);
+    u16 result = mem.peek16 <ACCESSOR_AGNUS> (addr);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
@@ -401,7 +401,7 @@ Agnus::doBlitterDMA(u32 addr)
     // Assure that the Blitter owns the bus when this function is called
     assert(busOwner[pos.h] == BUS_BLITTER);
 
-    u16 result = mem.peek16 <AGNUS_ACCESS> (addr);
+    u16 result = mem.peek16 <ACCESSOR_AGNUS> (addr);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_BLITTER;
@@ -414,7 +414,7 @@ Agnus::doBlitterDMA(u32 addr)
 void
 Agnus::doDiskDMA(u16 value)
 {
-    mem.poke16 <AGNUS_ACCESS> (dskpt, value);
+    mem.poke16 <ACCESSOR_AGNUS> (dskpt, value);
     dskpt += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -426,7 +426,7 @@ Agnus::doDiskDMA(u16 value)
 void
 Agnus::doCopperDMA(u32 addr, u16 value)
 {
-    mem.pokeCustom16<AGNUS_ACCESS>(addr, value);
+    mem.pokeCustom16<ACCESSOR_AGNUS>(addr, value);
     
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
@@ -437,7 +437,7 @@ Agnus::doCopperDMA(u32 addr, u16 value)
 void
 Agnus::doBlitterDMA(u32 addr, u16 value)
 {
-    mem.poke16 <AGNUS_ACCESS> (addr, value);
+    mem.poke16 <ACCESSOR_AGNUS> (addr, value);
     
     assert(pos.h < HPOS_CNT);
     assert(busOwner[pos.h] == BUS_BLITTER); // Bus is already allocated
@@ -569,7 +569,7 @@ Agnus::updateDasJumpTable(i16 end)
 }
 
 void
-Agnus::dumpEventTable(EventID *table, char str[256][3], int from, int to)
+Agnus::dumpEventTable(const EventID *table, char str[256][3], int from, int to) const
 {
     char r1[256], r2[256], r3[256], r4[256], r5[256];
     int i;
@@ -595,7 +595,7 @@ Agnus::dumpEventTable(EventID *table, char str[256][3], int from, int to)
 }
 
 void
-Agnus::dumpBplEventTable(int from, int to)
+Agnus::dumpBplEventTable(int from, int to) const
 {
     char str[256][3];
 
@@ -627,7 +627,7 @@ Agnus::dumpBplEventTable(int from, int to)
 }
 
 void
-Agnus::dumpBplEventTable()
+Agnus::dumpBplEventTable() const
 {
     // Dump the event table
     msg("Event table:\n\n");
@@ -655,7 +655,7 @@ Agnus::dumpBplEventTable()
 }
 
 void
-Agnus::dumpDasEventTable(int from, int to)
+Agnus::dumpDasEventTable(int from, int to) const
 {
     char str[256][3];
 
@@ -695,7 +695,7 @@ Agnus::dumpDasEventTable(int from, int to)
 }
 
 void
-Agnus::dumpDasEventTable()
+Agnus::dumpDasEventTable() const
 {
     // Dump the event table
     dumpDasEventTable(0x00, 0x4F);
@@ -727,5 +727,5 @@ template u16 Agnus::doSpriteDMA<7>();
 template bool Agnus::allocateBus<BUS_COPPER>();
 template bool Agnus::allocateBus<BUS_BLITTER>();
 
-template bool Agnus::busIsFree<BUS_COPPER>();
-template bool Agnus::busIsFree<BUS_BLITTER>();
+template bool Agnus::busIsFree<BUS_COPPER>() const;
+template bool Agnus::busIsFree<BUS_BLITTER>() const;

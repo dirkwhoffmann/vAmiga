@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DMA_DEBUGGER_H
-#define _DMA_DEBUGGER_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "Colors.h"
@@ -30,7 +29,7 @@ private:
     double opacity = 0.5;
 
     // Currently selected display mode
-    DmaDisplayMode displayMode = MODULATE_FG_LAYER;
+    DmaDisplayMode displayMode = DMA_DISPLAY_MODE_FG_LAYER;
 
 
     //
@@ -41,7 +40,7 @@ public:
 
     DmaDebugger(Amiga &ref);
 
-    const char *getDescription() override { return "DmaDebugger"; }
+    const char *getDescription() const override { return "DmaDebugger"; }
 
     void _reset(bool hard) override { }
 
@@ -53,11 +52,11 @@ public:
 public:
 
     // Turns DMA debugging on or off
-    bool isEnabled() { return enabled; }
+    bool isEnabled() const { return enabled; }
     void setEnabled(bool value);
 
     // Enables or disables the visual effects for a certain DMA source
-    bool isVisualized(BusOwner owner);
+    bool isVisualized(BusOwner owner) const;
     void setVisualized(BusOwner owner, bool value);
     void visualizeCopper(bool value);
     void visualizeBlitter(bool value);
@@ -69,7 +68,7 @@ public:
     void visualizeRefresh(bool value);
 
     // Gets or sets the opacity of the superimposed visual effect
-    double getOpacity();
+    double getOpacity() const { return opacity; }
     void setOpacity(double value);
 
     // Gets or sets the display mode
@@ -77,7 +76,7 @@ public:
     void setDisplayMode(DmaDisplayMode mode) { displayMode = mode; }
 
     // Gets or sets a debug color
-    RgbColor getColor(BusOwner owner);
+    RgbColor getColor(BusOwner owner) const;
     void getColor(BusOwner owner, double *rgb);
     void setColor(BusOwner owner, RgbColor color);
     void setColor(BusOwner owner, double r, double g, double b);
@@ -108,7 +107,7 @@ public:
 private:
 
     size_t _size() override { return 0; }
-    size_t _load(u8 *buffer) override {return 0; }
+    size_t _load(const u8 *buffer) override {return 0; }
     size_t _save(u8 *buffer) override { return 0; }
     
 
@@ -124,5 +123,3 @@ public:
     // Cleans up some texture data at the end of each frame
     void vSyncHandler();
 };
-
-#endif

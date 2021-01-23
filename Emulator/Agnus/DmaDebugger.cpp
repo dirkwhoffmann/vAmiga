@@ -75,7 +75,7 @@ DmaDebugger::setEnabled(bool value)
 }
 
 bool
-DmaDebugger::isVisualized(BusOwner owner)
+DmaDebugger::isVisualized(BusOwner owner) const
 {
     assert(isBusOwner(owner));
     return visualize[owner];
@@ -149,7 +149,7 @@ DmaDebugger::visualizeRefresh(bool value)
 }
 
 RgbColor
-DmaDebugger::getColor(BusOwner owner)
+DmaDebugger::getColor(BusOwner owner) const
 {
     assert(isBusOwner(owner));
     return debugColor[owner][4];
@@ -246,12 +246,6 @@ DmaDebugger::setRefreshColor(double r, double g, double b)
     setColor(BUS_REFRESH, r, g, b);
 }
 
-double
-DmaDebugger::getOpacity()
-{
-    return opacity;
-}
-
 void
 DmaDebugger::setOpacity(double value)
 {
@@ -273,19 +267,19 @@ DmaDebugger::computeOverlay()
 
     switch (displayMode) {
 
-        case MODULATE_FG_LAYER:
+        case DMA_DISPLAY_MODE_FG_LAYER:
 
             bgWeight = 0.0;
             fgWeight = 1.0 - opacity;
             break;
 
-        case MODULATE_BG_LAYER:
+        case DMA_DISPLAY_MODE_BG_LAYER:
 
             bgWeight = 1.0 - opacity;
             fgWeight = 0.0;
             break;
 
-        case MODULATE_ODD_EVEN_LAYERS:
+        case DMA_DISPLAY_MODE_ODD_EVEN_LAYERS:
 
             bgWeight = opacity;
             fgWeight = 1.0 - opacity;

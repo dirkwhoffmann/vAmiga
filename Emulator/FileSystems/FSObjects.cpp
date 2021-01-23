@@ -37,7 +37,7 @@ FSString::capital(char c)
 }
 
 bool
-FSString::operator== (FSString &rhs)
+FSString::operator== (FSString &rhs) const
 {
     int n = 0;
     
@@ -49,7 +49,7 @@ FSString::operator== (FSString &rhs)
 }
 
 u32
-FSString::hashValue()
+FSString::hashValue() const
 {
     size_t length = strlen(str);
     u32 result = (u32)length;
@@ -103,7 +103,7 @@ FSTime::FSTime(const u8 *p)
 }
 
 time_t
-FSTime::time()
+FSTime::time() const
 {
     const u32 secPerDay = 24 * 60 * 60;
     time_t t = days * secPerDay + mins * 60 + ticks / 50;
@@ -125,7 +125,7 @@ FSTime::write(u8 *p)
 }
 
 string
-FSTime::dateStr()
+FSTime::dateStr() const
 {
     char tmp[11];
     
@@ -139,7 +139,7 @@ FSTime::dateStr()
 }
 
 string
-FSTime::timeStr()
+FSTime::timeStr() const
 {
     char tmp[9];
     
@@ -153,20 +153,8 @@ FSTime::timeStr()
 }
 
 string
-FSTime::str()
+FSTime::str() const
 {
     string result = dateStr() + "  " + timeStr();
     return result;
 }
-
-/*
-void
-FSTime::print()
-{
-    time_t tt = time();
-    tm *t = localtime(&tt);
-    
-    msg("%04d-%02d-%02d  ", 1900 + t->tm_year, 1 + t->tm_mon, t->tm_mday);
-    msg("%02d:%02d:%02d  ", t->tm_hour, t->tm_min, t->tm_sec);
-}
-*/

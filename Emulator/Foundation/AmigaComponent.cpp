@@ -41,7 +41,7 @@ zorro(ref.zorro)
 };
 
 void
-AmigaComponent::prefix()
+AmigaComponent::prefix() const
 {
     amiga.prefix();
 }

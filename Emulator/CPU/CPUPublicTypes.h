@@ -6,21 +6,20 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
-#ifndef _KEYBOARD_PRIVATE_TYPES_H
-#define _KEYBOARD_PRIVATE_TYPES_H
+#pragma once
 
-enum KeyboardState : long
+#define CPUINFO_INSTR_COUNT 256
+
+typedef struct
 {
-    KB_SELFTEST,
-    KB_SYNC,
-    KB_STRM_ON,
-    KB_STRM_OFF,
-    KB_SEND
-};
-
-inline bool isKeyboardState(long value) {
-    return value >= 0 && value <= KB_SEND;
+    u32 pc0;
+    u32 d[8];
+    u32 a[8];
+    u32 usp;
+    u32 ssp;
+    u16 sr;
 }
-
-#endif
+CPUInfo;

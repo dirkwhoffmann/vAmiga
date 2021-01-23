@@ -14,14 +14,14 @@ extension ConfigurationController {
         let poweredOff      = amiga.isPoweredOff
 
         let romIdentifier   = amiga.mem.romIdentifier()
-        let hasRom          = romIdentifier != .ROM_MISSING
+        let hasRom          = romIdentifier != .MISSING
         let hasArosRom      = amiga.mem.isArosRom(romIdentifier)
         let hasDiagRom      = amiga.mem.isDiagRom(romIdentifier)
         let hasCommodoreRom = amiga.mem.isCommodoreRom(romIdentifier)
         let hasHyperionRom  = amiga.mem.isHyperionRom(romIdentifier)
 
         let extIdentifier   = amiga.mem.extIdentifier
-        let hasExt          = extIdentifier != .ROM_MISSING
+        let hasExt          = extIdentifier != .MISSING
         let hasArosExt      = amiga.mem.isArosRom(extIdentifier)
         let hasDiagExt      = amiga.mem.isDiagRom(extIdentifier)
         let hasCommodoreExt = amiga.mem.isCommodoreRom(extIdentifier)
@@ -120,9 +120,9 @@ extension ConfigurationController {
         config.extStart = 0xE0
 
         // Make sure the machine has enough Ram to run Aros
-        let chip = amiga.getConfig(.OPT_CHIP_RAM)
-        let slow = amiga.getConfig(.OPT_SLOW_RAM)
-        let fast = amiga.getConfig(.OPT_FAST_RAM)
+        let chip = amiga.getConfig(.CHIP_RAM)
+        let slow = amiga.getConfig(.SLOW_RAM)
+        let fast = amiga.getConfig(.FAST_RAM)
         if chip + slow + fast < 1024*1024 { config.slowRam = 512 }
         
         refresh()

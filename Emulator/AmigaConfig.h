@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef VACONFIG_H
-#define VACONFIG_H
+#pragma once
 
 //
 // Release settings
@@ -17,10 +16,10 @@
 // Snapshot version number
 #define V_MAJOR 0
 #define V_MINOR 9
-#define V_SUBMINOR 16
+#define V_SUBMINOR 17
 
 // Uncomment these settings in a release build
-#define RELEASEBUILD
+// #define RELEASEBUILD
 // #define NDEBUG
 
 //
@@ -74,6 +73,7 @@ static const int NO_SSE          = 0; // Don't use SSE extensions
 
 // Runloop
 static const int RUN_DEBUG       = 0; // Run loop, component states
+static const int QUEUE_DEBUG     = 0; // Message queue
 static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 
 // CPU
@@ -156,5 +156,3 @@ static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 static const int RTC_DEBUG       = 0; // Real-time clock
 static const int KBD_DEBUG       = 0; // Keyboard
 static const int REC_DEBUG       = 0; // Screen recorder
-
-#endif

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
@@ -165,8 +165,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="bDU-dO-xxe"/>
-                            <menuItem title="Take Snapshot" id="BX4-y5-PoI" userLabel="Take Snapshot">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Take Snapshot" keyEquivalent="t" id="BX4-y5-PoI" userLabel="Take Snapshot">
                                 <connections>
                                     <action selector="takeSnapshotAction:" target="-1" id="eOH-IU-76n"/>
                                 </connections>

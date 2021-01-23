@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _CPU_H
-#define _CPU_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "Moira.h"
@@ -27,7 +26,7 @@ public:
 
     CPU(Amiga& ref);
 
-    const char *getDescription() override { return "CPU"; }
+    const char *getDescription() const override { return "CPU"; }
     
     void _reset(bool hard) override;
     
@@ -44,7 +43,7 @@ private:
     
     void _inspect() override;
     void _inspect(u32 dasmStart);
-    void _dump() override;
+    void _dump() const override;
 
     
     //
@@ -95,9 +94,9 @@ private:
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    size_t didLoadFromBuffer(u8 *buffer) override;
+    size_t didLoadFromBuffer(const u8 *buffer) override;
 
 
     //
@@ -122,7 +121,7 @@ private:
     u16 read16Dasm(u32 addr) override;
     void write8 (u32 addr, u8  val) override;
     void write16 (u32 addr, u16 val) override;
-    u16 readIrqUserVector(u8 level) override { return 0; }
+    u16 readIrqUserVector(u8 level) const override { return 0; }
  
     void signalReset() override;
     void signalStop(u16 op) override;
@@ -152,10 +151,10 @@ private:
 public:
 
     // Returns the clock in CPU cycles
-    CPUCycle getCpuClock() { return getClock(); }
+    CPUCycle getCpuClock() const { return getClock(); }
 
     // Returns the clock in master cycles
-    Cycle getMasterClock() { return CPU_CYCLES(getClock()); }
+    Cycle getMasterClock() const { return CPU_CYCLES(getClock()); }
 
     // Delays the CPU by a certain amout of master cycles
     void addWaitStates(Cycle cycles) { clock += AS_CPU_CYCLES(cycles); }
@@ -180,5 +179,3 @@ public:
     const char *disassembleInstr(long *len);
     const char *disassembleWords(int len);
 };
-
-#endif

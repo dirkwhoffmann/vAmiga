@@ -105,42 +105,19 @@ extension MyDocument {
                                                    amiga.df2,
                                                    amiga.df3 ])
     }
-
-    func showExportDecodingAlert(driveNr: Int) {
-        
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.icon = NSImage.init(named: "adf")
-        alert.messageText = "The disk in df\(driveNr) cannot be exported."
-        alert.informativeText = "The MFM data stream appears to be corrupt."
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
-    }
     
-    func showExportAlert(url: URL) {
-        
-        let path = url.path
-        let alert = NSAlert()
-        alert.alertStyle = .critical
-        alert.icon = NSImage.init(named: "adf")
-        alert.messageText = "Failed to export disk."
-        alert.informativeText = "\(path)."
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
-    }
-        
     func showConfigurationAltert(_ error: ErrorCode) {
 
         var msg: String
 
         switch error {
-        case .ERR_ROM_MISSING:
+        case .ROM_MISSING:
             msg = "A Kickstart Rom or Boot Rom is required to power up."
-        case .ERR_CHIP_RAM_LIMIT:
+        case .CHIP_RAM_LIMIT:
             msg = "The selected Agnus revision does not support the selected amout of Chip Ram."
-        case .ERR_AROS_RAM_LIMIT:
+        case .AROS_RAM_LIMIT:
             msg = "The Aros Kickstart replacement requires at least 1 MB of memory to boot."
-        case .ERR_AROS_NO_EXTROM:
+        case .AROS_NO_EXTROM:
             msg = "The Aros Kickstart replacement requires an extension Rom."
         default:
             msg = ""

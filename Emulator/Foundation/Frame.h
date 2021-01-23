@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FRAME_H
-#define _FRAME_H
+#pragma once
 
 struct Frame
 {
@@ -33,15 +32,15 @@ struct Frame
 
     Frame() : nr(0), lof(false) { }
     
-    bool isLongFrame() { return lof; }
-    bool isShortFrame() { return !lof; }
-    int numLines() { return lof ? 313 : 312; }
-    int lastLine() { return lof ? 312 : 311; }
+    bool isLongFrame() const { return lof; }
+    bool isShortFrame() const { return !lof; }
+    int numLines() const { return lof ? 313 : 312; }
+    int lastLine() const { return lof ? 312 : 311; }
     
-    bool wasLongFrame() { return prevlof; }
-    bool wasShortFrame() { return !prevlof; }
-    int prevNumLines() { return prevlof ? 313 : 312; }
-    int prevLastLine() { return prevlof ? 312 : 311; }
+    bool wasLongFrame() const { return prevlof; }
+    bool wasShortFrame() const { return !prevlof; }
+    int prevNumLines() const { return prevlof ? 313 : 312; }
+    int prevLastLine() const { return prevlof ? 312 : 311; }
 
     // Advances one frame
     void next(bool laceBit)
@@ -53,5 +52,3 @@ struct Frame
         if (laceBit) { lof = !lof; }
     }
 };
-
-#endif

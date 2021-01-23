@@ -266,45 +266,18 @@ class Renderer: NSObject, MTKViewDelegate {
 
         setupMetal()
 
-        mtkView.delegate = self
         mtkView.device = device
+        mtkView.delegate = self
     }
 
     //
     // Managing textures
     //
-
-    func clearBgTexture() {
-        
-        let w = 512
-        let h = 512
-        
-        let bytes = UnsafeMutablePointer<UInt32>.allocate(capacity: w * h)
-        bytes.initialize(repeating: 0xFFFF0000, count: w * h)
-        
-        updateBgTexture(bytes: bytes)
-        bytes.deallocate()
-    }
     
     func updateBgTexture(bytes: UnsafeMutablePointer<UInt32>) {
 
         bgTexture.replace(w: 512, h: 512, buffer: bytes)
     }
-    
-    /*
-    func updateTexture(bytes: UnsafeMutablePointer<UInt32>, longFrame: Bool) {
-
-        let w = Int(HPIXELS)
-        let h = longFrameTexture.height
-        let offset = Int(HBLANK_MIN) * 4
-        
-        if longFrame {
-            longFrameTexture.replace(w: w, h: h, buffer: bytes + offset)
-        } else {
-            shortFrameTexture.replace(w: w, h: h, buffer: bytes + offset)
-        }
-    }
-    */
     
     func updateTexture() {
                 

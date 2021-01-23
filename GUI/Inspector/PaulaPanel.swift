@@ -7,11 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-let image0 = NSImage.init(named: "state0Template")
-let image1 = NSImage.init(named: "state1Template")
-let image2 = NSImage.init(named: "state2Template")
-let image3 = NSImage.init(named: "state3Template")
-let image5 = NSImage.init(named: "state5Template")
+let image0 = NSImage.init(named: "state0Template")!
+let image1 = NSImage.init(named: "state1Template")!
+let image2 = NSImage.init(named: "state2Template")!
+let image3 = NSImage.init(named: "state3Template")!
+let image5 = NSImage.init(named: "state5Template")!
 
 extension Inspector {
 
@@ -95,13 +95,13 @@ extension Inspector {
 
         // Disk controller
         switch diskInfo.state {
-        case .DRIVE_DMA_OFF:
+        case .OFF:
             dskStateText.stringValue = "Idle"
-        case .DRIVE_DMA_WAIT:
+        case .WAIT:
             dskStateText.stringValue = "Waiting for sync signal"
-        case .DRIVE_DMA_READ:
+        case .READ:
             dskStateText.stringValue = "Reading"
-        case .DRIVE_DMA_WRITE:
+        case .WRITE:
             dskStateText.stringValue = "Writing"
         default:
             dskStateText.stringValue = "UNKNOWN"

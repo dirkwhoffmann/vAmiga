@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DISK_CONTROLLER_H
-#define _DISK_CONTROLLER_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -95,7 +94,7 @@ public:
     
     DiskController(Amiga& ref);
 
-    const char *getDescription() override { return "DiskController"; }
+    const char *getDescription() const override { return "DiskController"; }
     
     void _reset(bool hard) override;
     
@@ -106,18 +105,18 @@ public:
     
 public:
     
-    DiskControllerConfig getConfig() { return config; }
-    bool turboMode() { return config.speed == -1; }
+    const DiskControllerConfig &getConfig() const { return config; }
+    bool turboMode() const { return config.speed == -1; }
 
-    long getConfigItem(ConfigOption option);
-    long getConfigItem(ConfigOption option, long id);
+    long getConfigItem(Option option) const;
+    long getConfigItem(Option option, long id) const;
     
-    bool setConfigItem(ConfigOption option, long value) override;
-    bool setConfigItem(ConfigOption option, long id, long value) override;
+    bool setConfigItem(Option option, long value) override;
+    bool setConfigItem(Option option, long id, long value) override;
 
 private:
     
-    void _dumpConfig() override;
+    void _dumpConfig() const override;
 
         
     //
@@ -131,7 +130,7 @@ public:
 private:
     
     void _inspect() override;
-    void _dump() override;
+    void _dump() const override;
 
     
     //
@@ -175,7 +174,7 @@ private:
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
@@ -186,19 +185,20 @@ private:
 public:
     
     // Returns the number of the currently selected drive
-    i8 getSelected() { return selected; }
+    i8 getSelected() const { return selected; }
 
     // Returns the currently selected (nullptr if none is selected)
+    // TODO: Return reference
     class Drive *getSelectedDrive();
 
     // Indicates if the motor of the specified drive is switched on
-    bool spinning(unsigned driveNr);
+    bool spinning(unsigned driveNr) const;
 
     // Indicates if the motor of at least one drive is switched on
-    bool spinning();
+    bool spinning() const;
     
     // Returns the current drive state
-    DriveState getState() { return state; }
+    DriveState getState() const { return state; }
     
 private:
     
@@ -214,7 +214,7 @@ private:
 public:
     
     // OCR register 0x008 (r)
-    u16 peekDSKDATR();
+    u16 peekDSKDATR() const;
     
     // OCR register 0x024 (w)
     void pokeDSKLEN(u16 value);
@@ -231,7 +231,7 @@ public:
     void pokeDSKSYNC(u16 value);
     
     // Read handler for the PRA register of CIA A
-    u8 driveStatusFlags();
+    u8 driveStatusFlags() const;
     
     // Write handler for the PRB register of CIA B
     void PRBdidChange(u8 oldValue, u8 newValue);
@@ -276,10 +276,10 @@ public:
 private:
     
     // Informs about the current FIFO fill state
-    bool fifoIsEmpty() { return fifoCount == 0; }
-    bool fifoIsFull() { return fifoCount == 6; }
-    bool fifoHasWord() { return fifoCount >= 2; }
-    bool fifoCanStoreWord() { return fifoCount <= 4; }
+    bool fifoIsEmpty() const { return fifoCount == 0; }
+    bool fifoIsFull() const { return fifoCount == 6; }
+    bool fifoHasWord() const { return fifoCount >= 2; }
+    bool fifoCanStoreWord() const { return fifoCount <= 4; }
 
     // Clears the FIFO buffer
     void clearFifo();
@@ -293,7 +293,7 @@ private:
 
     
     // Returns true if the next word to read matches the specified value
-    bool compareFifo(u16 word);
+    bool compareFifo(u16 word) const;
 
     /* Emulates a data transfert between the selected drive and the FIFO
      * buffer. This function is executed periodically in serviceDiskEvent().
@@ -359,5 +359,3 @@ public:
     void performTurboRead(Drive *drive);
     void performTurboWrite(Drive *drive);
 };
-
-#endif

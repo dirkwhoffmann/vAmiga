@@ -100,7 +100,8 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     func hideSheet() {
     
         if let win = window {
-            win.orderOut(self)
+            
+            // win.orderOut(self)
             parent.window?.endSheet(win, returnCode: .cancel)
         }
     }

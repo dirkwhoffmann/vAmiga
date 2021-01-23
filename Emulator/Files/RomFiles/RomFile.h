@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _ROM_H
-#define _ROM_H
+#pragma once
 
 #include "AmigaFile.h"
 
@@ -19,19 +18,19 @@ class RomFile : public AmigaFile {
     static const u8 kickRomHeaders[6][7];
     static const u8 encrRomHeaders[1][11];
 
-    // Indicates if the Rom was encrypted when it was read from disk
-    bool encrypted = false;
-    
+    // Path to the rom.key file (if needed)
+    string romKeyPath = "";
+        
 public:
     
     //
     // Class methods
     //
     
-    // Returns true if buffer contains a Boot Rom or an Kickstart Rom image
-    static bool isRomBuffer(const u8 *buffer, size_t length);
+    static bool isCompatibleName(const std::string &name);
+    static bool isCompatibleStream(std::istream &stream);
     
-    // Returns true if path points to a Boot Rom file or a Kickstart Rom file
+    static bool isRomBuffer(const u8 *buf, size_t len);
     static bool isRomFile(const char *path);
     
     // Translates a CRC-32 checksum into a ROM identifier
@@ -56,32 +55,29 @@ public:
     
     RomFile();
     
-    const char *getDescription() override { return "ROM"; }
+    const char *getDescription() const override { return "ROM"; }
         
     
     //
     // Methods from AmigaFile
     //
     
-    AmigaFileType fileType() override { return FILETYPE_ROM; }
-    bool matchingBuffer(const u8 *buffer, size_t length) override {
-        return isRomBuffer(buffer, length); }
-    bool matchingFile(const char *path) override { return isRomFile(path); }
-    bool readFromBuffer(const u8 *buffer, size_t length, FileError *error = nullptr) override;
+    FileType type() const override { return FILETYPE_ROM; }
 
     
     //
     // Decrypting
     //
     
-    // Returns the encryption flag
-    bool isEncrypted() { return encrypted; }
+    // Returns true iff the Rom was encrypted at the time it was loaded
+    bool wasEncrypted() { return romKeyPath != ""; }
+    
+    // Returns true iff the Rom is currently encrypted
+    bool isEncrypted();
     
     /* Tries to decrypt the Rom. If this method is applied to an encrypted Rom,
      * a rom.key file is seeked in the directory the encrypted Rom was loaded
-     * from and applies to the encrypted data.
+     * from and applied to the encrypted data.
      */
-    bool decrypt(FileError *error = nullptr);
+    void decrypt() throws;
 };
-
-#endif

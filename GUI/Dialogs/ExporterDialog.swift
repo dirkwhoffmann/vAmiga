@@ -72,8 +72,8 @@ class ExporterDialog: DialogController {
     var numTracks: Int { return disk?.numTracks ?? volume?.numTracks ?? 0 }
     var numSectors: Int { return disk?.numSectors ?? volume?.numSectors ?? 0 }
     var numBlocks: Int { return disk?.numBlocks ?? volume?.numBlocks ?? 0 }
-    var isDD: Bool { return disk?.diskDensity == .DISK_DD }
-    var isHD: Bool { return disk?.diskDensity == .DISK_HD }
+    var isDD: Bool { return disk?.diskDensity == .DD }
+    var isHD: Bool { return disk?.diskDensity == .HD }
     
     // Block preview
     var cylinderNr = 0
@@ -190,9 +190,10 @@ class ExporterDialog: DialogController {
         track()
         
         driveNr = nr
+        var ec = ErrorCode.OK
         
         // Try to decode the disk with the ADF decoder
-        disk = ADFFileProxy.make(withDrive: drive)
+        disk = ADFFileProxy.make(withDrive: drive, error: &ec)
         
         // If it is an ADF, try to extract the file system
         if disk != nil { volume = FSDeviceProxy.make(withADF: disk as? ADFFileProxy) }
@@ -201,7 +202,7 @@ class ExporterDialog: DialogController {
         // volume?.printDirectory(true)
         
         // If it is not an ADF, try the DOS decoder
-        if disk == nil { disk = IMGFileProxy.make(withDrive: drive) }
+        if disk == nil { disk = IMGFileProxy.make(withDrive: drive, error: &ec) }
                 
         super.showSheet()
     }
@@ -238,8 +239,8 @@ class ExporterDialog: DialogController {
     
     override func windowDidLoad() {
         
-        let adf = disk?.type == .FILETYPE_ADF
-        let dos = disk?.type == .FILETYPE_IMG
+        let adf = disk?.type == .ADF
+        let dos = disk?.type == .IMG
             
         // Enable compatible file formats in the format selector popup
         formatPopup.autoenablesItems = false
@@ -406,13 +407,13 @@ class ExporterDialog: DialogController {
             
         } else {
             
-            if disk?.type == .FILETYPE_ADF {
+            if disk?.type == .ADF {
                 
                 text = "Amiga Disk"
                 color = .textColor
                 
             }
-            if disk?.type == .FILETYPE_IMG {
+            if disk?.type == .IMG {
                 
                 text = "PC Disk"
                 color = .textColor
@@ -544,8 +545,23 @@ class ExporterDialog: DialogController {
     func exportToFile(url: URL) {
 
         track("url = \(url)")
-        parent.mydocument.export(drive: driveNr!, to: url, diskFileProxy: disk!)
-        hideSheet()
+
+        do {
+            try parent.mydocument.export(diskFileProxy: disk!, to: url)
+
+            // Mark disk as "not modified"
+            drive?.isModifiedDisk = false
+            
+            // Remember export URL
+            myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: driveNr!)
+
+            hideSheet()
+
+        } catch let error as VAError {
+            error.warning("Cannot export disk")
+        } catch {
+            fatalError()
+        }
     }
 
     func exportToDirectory() {
@@ -577,7 +593,7 @@ class ExporterDialog: DialogController {
 
         switch error {
 
-        case .DIRECTORY_NOT_EMPTY:
+        case .FS_DIRECTORY_NOT_EMPTY:
             
             parent.critical("The destination directory is not empty.",
                             "To prevent accidental exports, the disk exporter " +

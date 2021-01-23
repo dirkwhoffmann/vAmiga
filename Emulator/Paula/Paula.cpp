@@ -56,13 +56,13 @@ Paula::_inspect()
 }
 
 void
-Paula::_dump()
+Paula::_dump() const
 {
     
 }
 
 size_t
-Paula::didLoadFromBuffer(u8 *buffer)
+Paula::didLoadFromBuffer(const u8 *buffer)
 {
     muxer.clear();
     return 0;
@@ -116,17 +116,17 @@ Paula::scheduleIrqAbs(IrqSource src, Cycle trigger)
 {
     assert(isIrqSource(src));
     assert(trigger != 0);
-    assert(agnus.slot[IRQ_SLOT].id == IRQ_CHECK);
+    assert(agnus.slot[SLOT_IRQ].id == IRQ_CHECK);
 
-    trace(INT_DEBUG, "scheduleIrq(%ld, %lld)\n", src, trigger);
+    trace(INT_DEBUG, "scheduleIrq(%lld, %lld)\n", src, trigger);
 
     // Record the interrupt request
     if (trigger < setIntreq[src])
         setIntreq[src] = trigger;
 
     // Schedule the interrupt to be triggered with the proper delay
-    if (trigger < agnus.slot[IRQ_SLOT].triggerCycle) {
-        agnus.scheduleAbs<IRQ_SLOT>(trigger, IRQ_CHECK);
+    if (trigger < agnus.slot[SLOT_IRQ].triggerCycle) {
+        agnus.scheduleAbs<SLOT_IRQ>(trigger, IRQ_CHECK);
     }
 }
 
@@ -150,7 +150,7 @@ Paula::checkInterrupt()
         trace(CPU_DEBUG, "iplPipe: %016llx\n", iplPipe);        
         assert(ipl.delayed() == ((iplPipe >> 32) & 0xFF));
             
-        agnus.scheduleRel<IPL_SLOT>(0, IPL_CHANGE, 5);
+        agnus.scheduleRel<SLOT_IPL>(0, IPL_CHANGE, 5);
     }
 }
 

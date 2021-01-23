@@ -7,9 +7,15 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_UTILS_H
-#define _AMIGA_UTILS_H
+#pragma once
 
+#include "AmigaConfig.h"
+#include "AmigaConstants.h"
+#include "Debug.h"
+#include "Errors.h"
+#include "AmigaTypes.h"
+
+#include <assert.h>
 #include <limits.h>
 #include <pthread.h>
 #include <stdarg.h>
@@ -21,10 +27,12 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <string>
+#include <set>
+#include <sstream>
+#include <fstream>
 
-#include "AmigaConfig.h"
-#include "AmigaConstants.h"
-#include "Debug.h"
+using std::string;
 
 //
 // Optimizing code
@@ -152,7 +160,6 @@ bool releaseBuild();
 #define W32BE_ALIGNED(a,v) { *(u32 *)(a) = ntohl((u32)v); }
 
 
-
 //
 // Pretty printing
 //
@@ -167,6 +174,16 @@ void hexdumpLongwords(u8 *p, size_t size, size_t cols = 32);
 //
 // Handling files
 //
+
+// Extracts a certain component from a path
+string extractPath(const string &s);
+string extractName(const string &s);
+string extractSuffix(const string &s);
+
+// Strips a certain component from a path
+string stripPath(const string &s);
+string stripName(const string &s);
+string stripSuffix(const string &s);
 
 /* Extracts the first path component.
  * Returns a newly created string. You need to delete it manually.
@@ -208,12 +225,6 @@ char *extractFilenameWithoutSuffix(const char *path);
  */
 bool checkFileSuffix(const char *path, const char *suffix);
 
-// Checks if a path points to a directory
-bool isDirectory(const char *path);
-
-// Returns the number of files in a directory
-long numDirectoryItems(const char *path);
-
 // Returns the size of a file in bytes
 long getSizeOfFile(const char *path);
 
@@ -222,12 +233,29 @@ bool checkFileSize(const char *path, long size);
 bool checkFileSizeRange(const char *path, long min, long max);
 
 // Checks the header signature (magic bytes) of a file or buffer
-bool matchingFileHeader(const char *path, const u8 *header, size_t length);
 bool matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length);
+
+// Checks if a path points to a directory
+bool isDirectory(const std::string &path);
+bool isDirectory(const char *path);
+
+// Returns the number of files in a directory
+usize numDirectoryItems(const std::string &path);
+usize numDirectoryItems(const char *path);
+
+// Checks the header signature (magic bytes) of a file or buffer
+bool matchingStreamHeader(std::istream &stream, const u8 *header, usize length);
 
 // Loads a file from disk
 bool loadFile(const char *path, u8 **buffer, long *size);
 bool loadFile(const char *path, const char *name, u8 **buffer, long *size);
+
+
+//
+// Handling streams
+//
+
+usize streamLength(std::istream &stream);
 
 
 //
@@ -253,5 +281,3 @@ u32 crc32forByte(u32 r);
 
 // Computes a SHA-1 checksum for a given buffer
 int sha_1(u8 *digest, char *hexdigest, const u8 *addr, size_t size);
-
-#endif

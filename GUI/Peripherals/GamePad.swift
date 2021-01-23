@@ -20,7 +20,7 @@ class GamePad {
     // References to other objects
     var manager: GamePadManager
     var prefs: Preferences { return manager.parent.pref }
-    var db: DeviceDatabase { return manager.parent.myAppDelegate.database }
+    var db: DeviceDatabase { return myAppDelegate.database }
     
     // The Amiga port this device is connected to (1, 2, or nil)
     var port: Int?
@@ -33,8 +33,8 @@ class GamePad {
     
     // Type of the managed device (joystick or mouse)
     var type: ControlPortDevice
-    var isMouse: Bool { return type == .CPD_MOUSE }
-    var isJoystick: Bool { return type == .CPD_JOYSTICK }
+    var isMouse: Bool { return type == .MOUSE }
+    var isJoystick: Bool { return type == .JOYSTICK }
 
     // Name of the managed device
     var name = ""
@@ -154,8 +154,6 @@ class GamePad {
         print("\(lxAxis) \(lyAxis) ", terminator: "")
         print("\(rxAxis) \(ryAxis) ", terminator: "")
         print("\(hShift)")
-        
-        // device?.listProperties()
     }
     
     //
@@ -323,7 +321,6 @@ class GamePad {
                 
             case lxAxis, rxAxis:
                 
-                // track("lThumbXUsageID, rThumbXUsageID: \(intValue)")
                 if let v = mapAnalogAxis(value: value, element: element) {
                     events =
                         (v == 2) ? [.PULL_RIGHT] :
@@ -332,7 +329,6 @@ class GamePad {
                 
             case lyAxis, ryAxis:
                 
-                // track("lThumbYUsageID, rThumbYUsageID: \(intValue)")
                 if let v = mapAnalogAxis(value: value, element: element) {
                     events =
                         (v == 2) ? [.PULL_DOWN] :
@@ -380,7 +376,7 @@ class GamePad {
         if port == 2 { for e in events { amiga.controlPort2.joystick.trigger(e) } }
         
         // Notify other components (if requested)
-        if notify { manager.parent.myAppDelegate.devicePulled(events: events) }
+        if notify { myAppDelegate.devicePulled(events: events) }
 
         return events != []
     }

@@ -7,13 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_H
-#define _AMIGA_H
+#pragma once
 
 // General
 #include "AmigaComponent.h"
 #include "Serialization.h"
-#include "MessageQueue.h"
+#include "MsgQueue.h"
 
 // Sub components
 #include "Agnus.h"
@@ -46,7 +45,7 @@
 #include "IMGFile.h"
 #include "DMSFile.h"
 #include "EXEFile.h"
-#include "DIRFile.h"
+#include "Folder.h"
 #include "BootBlockImage.h"
 #include "FSDevice.h"
 
@@ -119,7 +118,7 @@ public:
     /* Communication channel to the GUI. The GUI registers a listener and a
      * callback function to retrieve messages.
      */
-    MessageQueue messageQueue;
+    MsgQueue messageQueue;
 
     
     //
@@ -172,9 +171,9 @@ public:
     Amiga();
     ~Amiga();
 
-    const char *getDescription() override { return "Amiga"; }
+    const char *getDescription() const override { return "Amiga"; }
 
-    void prefix() override;
+    void prefix() const override;
 
     void reset(bool hard);
     void hardReset() { reset(true); }
@@ -190,17 +189,14 @@ private:
     //
     
 public:
-    
-    // Returns the current configuration
-    AmigaConfiguration getConfig();
-    
+        
     // Gets a single configuration item
-    long getConfigItem(ConfigOption option);
-    long getConfigItem(ConfigOption option, long id);
+    long getConfigItem(Option option) const;
+    long getConfigItem(Option option, long id) const;
     
     // Sets a single configuration item
-    bool configure(ConfigOption option, long value);
-    bool configure(ConfigOption option, long id, long value);
+    bool configure(Option option, long value);
+    bool configure(Option option, long id, long value);
     
     
     //
@@ -217,7 +213,7 @@ public:
 private:
     
     void _inspect() override;
-    void _dump() override;
+    void _dump() const override;
     
     
     //
@@ -242,7 +238,7 @@ private:
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
@@ -262,9 +258,10 @@ public:
     void enableWarpMode() { setWarp(true); }
     void disableWarpMode() { setWarp(false); }
 
+    void setDebug(bool enable);
+    bool inDebugMode() { return debugMode; }
     void enableDebugMode() { setDebug(true); }
     void disableDebugMode() { setDebug(false); }
-    bool inDebugMode() { return debugMode; }
 
 private:
     
@@ -388,5 +385,3 @@ public:
     void loadFromSnapshotUnsafe(Snapshot *snapshot);
     void loadFromSnapshotSafe(Snapshot *snapshot);
 };
-
-#endif

@@ -12,7 +12,7 @@ extension ConfigurationController {
     func refreshHardwareTab() {
 
         let poweredOff = amiga.isPoweredOff
-        let ocsAgnus = config.agnusRev == AgnusRevision.AGNUS_OCS.rawValue
+        let ocsAgnus = config.agnusRev == AgnusRevision.OCS.rawValue
         
         // Chipset
         hwAgnusRevisionPopup.selectItem(withTag: config.agnusRev)
@@ -100,7 +100,7 @@ extension ConfigurationController {
         let chipRamLimit = amiga.agnus.chipRamLimit()
 
         if chipRamWanted > chipRamLimit {
-            parent.mydocument.showConfigurationAltert(.ERR_CHIP_RAM_LIMIT)
+            parent.mydocument.showConfigurationAltert(.CHIP_RAM_LIMIT)
         } else {
             config.chipRam = sender.selectedTag()
         }

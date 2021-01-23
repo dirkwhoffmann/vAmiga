@@ -6,12 +6,19 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_PRIVATE_TYPES_H
-#define _AMIGA_PRIVATE_TYPES_H
+#pragma once
 
-#include "AgnusPrivateTypes.h"
-#include "PaulaPrivateTypes.h"
-#include "KeyboardPrivateTypes.h"
+#include "Aliases.h"
 
-#endif
+//
+// Structures
+//
+
+typedef struct
+{
+    bool accurate;
+}
+KeyboardConfig;

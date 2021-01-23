@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_DESCRIPTORS_H
-#define _FS_DESCRIPTORS_H
+#pragma once
 
 #include "FSObjects.h"
 #include "FSBlock.h"
@@ -56,9 +55,9 @@ struct FSDeviceDescriptor : AmigaObject {
     //
     
     FSDeviceDescriptor() { }
-    FSDeviceDescriptor(DiskType type, DiskDensity density, FSVolumeType dos = FS_OFS);
+    FSDeviceDescriptor(DiskDiameter type, DiskDensity density, FSVolumeType dos = FS_OFS);
 
-    const char *getDescription() override { return "FSLayout"; }
+    const char *getDescription() const override { return "FSLayout"; }
     void dump();
 };
 
@@ -85,7 +84,7 @@ struct FSPartitionDescriptor : AmigaObject {
     
     FSPartitionDescriptor(FSVolumeType dos, u32 firstCyl, u32 lastCyl, u32 root);
 
-    const char *getDescription() override { return "FSPartition"; }
+    const char *getDescription() const override { return "FSPartition"; }
     
     void dump();
 
@@ -97,5 +96,3 @@ struct FSPartitionDescriptor : AmigaObject {
     // Returns the number of cylinders in this partition
     u32 numCyls() { return highCyl - lowCyl + 1; }
 };
-
-#endif

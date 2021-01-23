@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _SERIAL_PORT_H
-#define _SERIAL_PORT_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -41,7 +40,7 @@ public:
 
     SerialPort(Amiga& ref);
 
-    const char *getDescription() override { return "SerialPort"; }
+    const char *getDescription() const override { return "SerialPort"; }
     
 private:
     
@@ -54,10 +53,10 @@ private:
     
 public:
 
-    SerialPortConfig getConfig() { return config; }
+    const SerialPortConfig &getConfig() const { return config; }
 
-    long getConfigItem(ConfigOption option);
-    bool setConfigItem(ConfigOption option, long value) override;
+    long getConfigItem(Option option) const;
+    bool setConfigItem(Option option, long value) override;
     
         
     //
@@ -71,7 +70,7 @@ public:
 private:
     
     void _inspect() override;
-    void _dump() override;
+    void _dump() const override;
 
     
     //
@@ -102,7 +101,7 @@ private:
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     
 
@@ -113,20 +112,20 @@ private:
 public:
 
     // Reads the current value of a certain port pin
-    bool getPin(int nr);
+    bool getPin(int nr) const;
 
     // Modifies the value of a certain port pin
     void setPin(int nr, bool value);
 
     // Convenience wrappers
-    bool getTXD() { return getPin(2); }
-    bool getRXD() { return getPin(3); }
-    bool getRTS() { return getPin(4); }
-    bool getCTS() { return getPin(5); }
-    bool getDSR() { return getPin(6); }
-    bool getCD() { return getPin(8); }
-    bool getDTR() { return getPin(20); }
-    bool getRI() { return getPin(22); }
+    bool getTXD() const { return getPin(2); }
+    bool getRXD() const { return getPin(3); }
+    bool getRTS() const { return getPin(4); }
+    bool getCTS() const { return getPin(5); }
+    bool getDSR() const { return getPin(6); }
+    bool getCD() const { return getPin(8); }
+    bool getDTR() const { return getPin(20); }
+    bool getRI() const { return getPin(22); }
 
     void setTXD(bool value) { setPin(2, value); }
     void setRXD(bool value) { setPin(3, value); }
@@ -141,6 +140,3 @@ private:
 
     void setPort(u32 mask, bool value);
 };
-
-#endif
-

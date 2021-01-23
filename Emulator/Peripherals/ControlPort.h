@@ -7,25 +7,24 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _CONTROL_PORT_H
-#define _CONTROL_PORT_H
+#pragma once
 
 #include "AmigaComponent.h"
-#include "Mouse.h"
 #include "Joystick.h"
+#include "Mouse.h"
 
 class ControlPort : public AmigaComponent {
 
     friend class Mouse;
     friend class Joystick;
     
-    // Represented control port
+    // The represented control port
     PortNr nr;
 
-    // Result of the latest inspection
+    // The result of the latest inspection
     ControlPortInfo info;
     
-    // Connected device
+    // The connected device
     ControlPortDevice device = CPD_NONE;
     
     // The two mouse position counters
@@ -35,11 +34,12 @@ class ControlPort : public AmigaComponent {
     // Resistances on the potentiometer lines (specified as a delta charge)
     double chargeDX;
     double chargeDY;
-
-    //
-    // Input sources
-    //
     
+    
+    //
+    // Sub components
+    //
+
 public:
     
     Mouse mouse = Mouse(amiga, *this);
@@ -54,7 +54,9 @@ public:
     
     ControlPort(Amiga& ref, PortNr nr);
 
-    const char *getDescription() override { return nr == PORT_1 ? "Port1" : "Port2"; }
+    const char *getDescription() const override;
+    
+private:
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
 
@@ -70,7 +72,7 @@ public:
 private:
     
     void _inspect() override;
-    void _dump() override;
+    void _dump() const override;
 
     
     //
@@ -101,7 +103,7 @@ private:
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
@@ -112,8 +114,8 @@ private:
 public:
 
     // Getter for the delta charges
-    i16 getChargeDX() { return (i16)chargeDX; }
-    i16 getChargeDY() { return (i16)chargeDY; }
+    i16 getChargeDX() const { return (i16)chargeDX; }
+    i16 getChargeDY() const { return (i16)chargeDY; }
     
     // Returns the control port bits showing up in the JOYxDAT register
     u16 joydat();
@@ -122,11 +124,8 @@ public:
     void pokeJOYTEST(u16 value);
 
     // Modifies the POTGOR bits according to the connected device
-    void changePotgo(u16 &potgo);
+    void changePotgo(u16 &potgo) const;
 
     // Modifies the PRA bits of CIA A according to the connected device
-    void changePra(u8 &pra);    
+    void changePra(u8 &pra) const;
 };
-
-#endif
-

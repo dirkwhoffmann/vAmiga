@@ -15,7 +15,7 @@ Mouse::Mouse(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
 }
 
 const char *
-Mouse::getDescription()
+Mouse::getDescription() const
 {
     return port.nr == PORT_1 ? "Mouse1" : "Mouse2";
 }
@@ -35,7 +35,7 @@ void Mouse::_reset(bool hard)
 }
 
 void
-Mouse::_dump()
+Mouse::_dump() const
 {
     msg(" leftButton = %d\n", leftButton);
     msg("rightButton = %d\n", rightButton);
@@ -52,7 +52,7 @@ Mouse::_dump()
 }
 
 void
-Mouse::changePotgo(u16 &potgo)
+Mouse::changePotgo(u16 &potgo) const
 {
     u16 mask = port.nr == 1 ? 0x0400 : 0x4000;
 
@@ -64,7 +64,7 @@ Mouse::changePotgo(u16 &potgo)
 }
 
 void
-Mouse::changePra(u8 &pra)
+Mouse::changePra(u8 &pra) const
 {
     u16 mask = port.nr == 1 ? 0x0040 : 0x0080;
 
@@ -144,7 +144,7 @@ Mouse::setRightButton(bool value)
 void
 Mouse::trigger(GamePadAction event)
 {
-    assert(isGamePadAction(event));
+    assert_enum(GamePadAction, event);
 
     trace(PORT_DEBUG, "trigger(%lld)\n", event);
 

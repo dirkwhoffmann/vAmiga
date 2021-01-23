@@ -6,59 +6,33 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
-// This file must conform to standard ANSI-C to be compatible with Swift.
-
-#ifndef _PAULA_AUDIO_TYPES_H
-#define _PAULA_AUDIO_TYPES_H
+#pragma once
 
 //
 // Enumerations
 //
 
-enum_long(SamplingMethod)
+enum_long(SMP_METHOD)
 {
     SMP_NONE,
     SMP_NEAREST,
     SMP_LINEAR,
+
     SMP_COUNT
 };
+typedef SMP_METHOD SamplingMethod;
 
-static inline bool isSamplingMethod(long value)
+enum_long(FILTER_TYPE)
 {
-    return value >= 0 && value < SMP_COUNT;
-}
-
-static inline const char *sSamplingMethod(SamplingMethod value)
-{
-    switch (value) {
-        case SMP_NONE:     return "SMP_NONE";
-        case SMP_NEAREST:  return "SMP_NEAREST";
-        case SMP_LINEAR:   return "SMP_LINEAR";
-        default:           return "???";
-    }
-}
-
-enum_long(FilterType)
-{
-    FILT_NONE,
-    FILT_BUTTERWORTH,
-    FILT_COUNT
+    FILTER_NONE,
+    FILTER_BUTTERWORTH,
+    
+    FILTER_COUNT
 };
-
-static inline bool isFilterType(long value)
-{
-    return value >= 0 && value < FILT_COUNT;
-}
-
-static inline const char *sFilterType(FilterType value)
-{
-    switch (value) {
-        case FILT_NONE:         return "FILT_NONE";
-        case FILT_BUTTERWORTH:  return "FILT_BUTTERWORTH";
-        default:                return "???";
-    }
-}
+typedef FILTER_TYPE FilterType;
 
 
 //
@@ -112,5 +86,3 @@ typedef struct
     long bufferOverflows;
 }
 MuxerStats;
-
-#endif

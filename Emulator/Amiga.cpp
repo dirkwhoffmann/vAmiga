@@ -140,7 +140,7 @@ Amiga::~Amiga()
 }
 
 void
-Amiga::prefix()
+Amiga::prefix() const
 {
     fprintf(stderr, "[%lld] (%3d,%3d) ",
             agnus.frame.nr, agnus.pos.v, agnus.pos.h);
@@ -191,37 +191,8 @@ Amiga::_reset(bool hard)
     runLoopCtrl = 0;
 }
 
-AmigaConfiguration
-Amiga::getConfig()
-{
-    AmigaConfiguration config;
-
-    config.ciaA = ciaA.getConfig();
-    config.ciaB = ciaB.getConfig();
-    config.rtc = rtc.getConfig();
-    config.audio = paula.muxer.getConfig();
-    config.mem = mem.getConfig();
-    config.agnus = agnus.getConfig();
-    config.denise = denise.getConfig();
-    config.serialPort = serialPort.getConfig();
-    config.keyboard = keyboard.getConfig();
-    config.blitter = agnus.blitter.getConfig();
-    config.diskController = paula.diskController.getConfig();
-    config.df0 = df0.getConfig();
-    config.df1 = df1.getConfig();
-    config.df2 = df2.getConfig();
-    config.df3 = df3.getConfig();
-
-    // Assure both CIAs are configured equally
-    assert(config.ciaA.revision == config.ciaB.revision);
-    assert(config.ciaA.todBug == config.ciaB.todBug);
-    assert(config.ciaA.eClockSyncing == config.ciaB.eClockSyncing);
-
-    return config;
-}
-
 long
-Amiga::getConfigItem(ConfigOption option)
+Amiga::getConfigItem(Option option) const
 {
     switch (option) {
 
@@ -283,7 +254,7 @@ Amiga::getConfigItem(ConfigOption option)
 }
 
 long
-Amiga::getConfigItem(ConfigOption option, long id)
+Amiga::getConfigItem(Option option, long id) const
 {
     switch (option) {
             
@@ -305,7 +276,7 @@ Amiga::getConfigItem(ConfigOption option, long id)
 }
 
 bool
-Amiga::configure(ConfigOption option, long value)
+Amiga::configure(Option option, long value)
 {
     // Propagate configuration request to all components
     bool changed = HardwareComponent::configure(option, value);
@@ -320,7 +291,7 @@ Amiga::configure(ConfigOption option, long value)
 }
 
 bool
-Amiga::configure(ConfigOption option, long id, long value)
+Amiga::configure(Option option, long id, long value)
 {
     // Propagate configuration request to all components
     bool changed = HardwareComponent::configure(option, id, value);
@@ -339,7 +310,7 @@ Amiga::setInspectionTarget(EventID id)
 {
     suspend();
     inspectionTarget = id;
-    agnus.scheduleRel<INS_SLOT>(0, inspectionTarget);
+    agnus.scheduleRel<SLOT_INS>(0, inspectionTarget);
     agnus.serviceINSEvent();
     resume();
 }
@@ -366,28 +337,13 @@ Amiga::_inspect()
 }
 
 void
-Amiga::_dump()
+Amiga::_dump() const
 {
-    AmigaConfiguration config = getConfig();
-    DiskControllerConfig dc = config.diskController;
-
     msg("    poweredOn: %s\n", isPoweredOn() ? "yes" : "no");
     msg("   poweredOff: %s\n", isPoweredOff() ? "yes" : "no");
     msg("       paused: %s\n", isPaused() ? "yes" : "no");
     msg("      running: %s\n", isRunning() ? "yes" : "no");
-    msg("\n");
-    msg("Current configuration:\n\n");
-    msg("          df0: %s %s\n",
-             dc.connected[0] ? "yes" : "no", driveTypeName(config.df0.type));
-    msg("          df1: %s %s\n",
-             dc.connected[1] ? "yes" : "no", driveTypeName(config.df1.type));
-    msg("          df2: %s %s\n",
-             dc.connected[2] ? "yes" : "no", driveTypeName(config.df2.type));
-    msg("          df3: %s %s\n",
-             dc.connected[3] ? "yes" : "no", driveTypeName(config.df3.type));
-
-    msg("\n");
-    msg("         warp: %d", warpMode);
+    msg("         warp: %s\n", warpMode ? "on" : "off");
     msg("\n");
 }
 
@@ -397,13 +353,13 @@ Amiga::powerOn()
     debug(RUN_DEBUG, "powerOn()\n");
     
     #ifdef DF0_DISK
-        DiskFile *df0file = DiskFile::makeWithFile(DF0_DISK);
-        if (df0file) {
-            Disk *disk = Disk::makeWithFile(df0file);
-            df0.ejectDisk();
-            df0.insertDisk(disk);
-            df0.setWriteProtection(false);
-        }
+    DiskFile *df0file = AmigaFile::make <ADFFile> (DF0_DISK);
+    if (df0file) {
+        Disk *disk = Disk::makeWithFile(df0file);
+        df0.ejectDisk();
+        df0.insertDisk(disk);
+        df0.setWriteProtection(false);
+    }
     #endif
 
     #ifdef DF1_DISK
@@ -550,15 +506,20 @@ Amiga::_setWarp(bool enable)
     } else {
         
         oscillator.restart();
-        // restartTimer();
         messageQueue.put(MSG_WARP_OFF);
     }
 }
 
 void
+Amiga::setDebug(bool enable)
+{
+    HardwareComponent::setDebug(enable);
+}
+
+void
 Amiga::acquireThreadLock()
 {
-    if (state == STATE_RUNNING) {
+    if (state == EMULATOR_STATE_RUNNING) {
         
         // Assure the emulator thread exists
         assert(p != (pthread_t)0);
@@ -584,13 +545,13 @@ Amiga::isReady(ErrorCode *error)
 {
     if (!mem.hasRom()) {
         msg("isReady: No Boot Rom or Kickstart Rom found\n");
-        if (error) *error = ERR_ROM_MISSING;
+        if (error) *error = ERROR_ROM_MISSING;
         return false;
     }
 
     if (!mem.hasChipRam()) {
         msg("isReady: No Chip Ram found\n");
-        if (error) *error = ERR_ROM_MISSING;
+        if (error) *error = ERROR_ROM_MISSING;
         return false;
     }
     
@@ -598,20 +559,20 @@ Amiga::isReady(ErrorCode *error)
 
         if (!mem.hasExt()) {
             msg("isReady: Aros requires an extension Rom\n");
-            if (error) *error = ERR_AROS_NO_EXTROM;
+            if (error) *error = ERROR_AROS_NO_EXTROM;
             return false;
         }
 
         if (mem.ramSize() < MB(1)) {
             msg("isReady: Aros requires at least 1 MB of memory\n");
-            if (error) *error = ERR_AROS_RAM_LIMIT;
+            if (error) *error = ERROR_AROS_RAM_LIMIT;
             return false;
         }
     }
 
     if (mem.chipRamSize() > KB(agnus.chipRamLimit())) {
         msg("isReady: Chip Ram exceeds Agnus limit\n");
-        if (error) *error = ERR_CHIP_RAM_LIMIT;
+        if (error) *error = ERROR_CHIP_RAM_LIMIT;
         return false;
     }
 
@@ -723,7 +684,7 @@ Amiga::runLoop()
     } else {
         cpu.debugger.disableLogging();
     }
-    agnus.scheduleRel<INS_SLOT>(0, inspectionTarget);
+    agnus.scheduleRel<SLOT_INS>(0, inspectionTarget);
     
     // Enter the loop
     while(1) {

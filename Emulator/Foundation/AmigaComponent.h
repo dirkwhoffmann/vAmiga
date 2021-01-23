@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_COMPONENT_H
-#define _AMIGA_COMPONENT_H
+#pragma once
 
 #include "HardwareComponent.h"
 
@@ -28,7 +27,7 @@ class Drive;
 class Joystick;
 class Keyboard;
 class Memory;
-class MessageQueue;
+class MsgQueue;
 class Mouse;
 class Oscillator;
 class PixelEngine;
@@ -43,7 +42,8 @@ class ZorroManager;
  */
 class AmigaComponent : public HardwareComponent {
 
-protected:
+// TODO: Change to protected once RTC has it's own proxy class
+public:
 
     Agnus &agnus;
     Amiga &amiga;
@@ -63,7 +63,7 @@ protected:
     Drive &df3;
     Keyboard &keyboard;
     Memory &mem;
-    MessageQueue &messageQueue;
+    MsgQueue &messageQueue;
     Oscillator &oscillator;
     Paula &paula;
     PixelEngine &pixelEngine;
@@ -78,7 +78,5 @@ public:
 
     AmigaComponent(Amiga& ref);
 
-    void prefix() override;
+    void prefix() const override;
 };
-
-#endif

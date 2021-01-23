@@ -24,7 +24,7 @@ FSFileListBlock::~FSFileListBlock()
 }
 
 void
-FSFileListBlock::dump()
+FSFileListBlock::dump() const
 {
     msg(" Block count : %d / %d\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
     msg("       First : %d\n", getFirstDataBlockRef());
@@ -36,7 +36,7 @@ FSFileListBlock::dump()
 }
 
 FSItemType
-FSFileListBlock::itemType(u32 byte)
+FSFileListBlock::itemType(u32 byte) const
 {
     // Intercept some special locations
     if (byte == 328) return FSI_BCPL_STRING_LENGTH;
@@ -64,8 +64,8 @@ FSFileListBlock::itemType(u32 byte)
     return word <= -51 ? FSI_DATA_BLOCK_REF : FSI_UNUSED;
 }
 
-FSError
-FSFileListBlock::check(u32 byte, u8 *expected, bool strict)
+ErrorCode
+FSFileListBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     /* Note: At location -3, many disks reference the bitmap block instead of
      * the file header block. We ignore to report this common inconsistency if
@@ -94,14 +94,14 @@ FSFileListBlock::check(u32 byte, u8 *expected, bool strict)
     if (word <= -51 && value) EXPECT_DATABLOCK_REF;
     if (word == -51) {
         if (value == 0 && getNumDataBlockRefs() > 0) {
-            return FS_EXPECTED_REF;
+            return ERROR_FS_EXPECTED_REF;
         }
         if (value != 0 && getNumDataBlockRefs() == 0) {
-            return FS_EXPECTED_NO_REF;
+            return ERROR_FS_EXPECTED_NO_REF;
         }
     }
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
 bool

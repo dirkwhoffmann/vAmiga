@@ -7,44 +7,28 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// This file must conform to standard ANSI-C to be compatible with Swift.
+#pragma once
 
-#ifndef _RTC_TYPES_H
-#define _RTC_TYPES_H
+#include "RTCPublicTypes.h"
+#include "Reflection.h"
 
-#include "Aliases.h"
-
-//
-// Enumerations
-//
-
-enum_long(RTCRevision)
-{
-    RTC_NONE,
-    RTC_OKI,
-    RTC_RICOH,
-    RTC_COUNT
-};
-
-inline bool isRTCRevision(long value)
-{
-    return value >= RTC_NONE && value <= RTC_COUNT;
-}
-
-inline const char *sRTCRevision(RTCRevision model)
-{
-    switch (model) {
-        case RTC_NONE:   return "RTC_NONE";
-        case RTC_OKI:    return "RTC_OKI";
-        case RTC_RICOH:  return "RTC_RICOH";
-        default:         return "???";
+struct RTCRevisionEnum : Reflection<RTCRevisionEnum, RTCRevision> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < RTC_COUNT;
     }
-}
 
-typedef struct
-{
-    RTCRevision model;
-}
-RTCConfig;
-
-#endif
+    static const char *prefix() { return "RTC"; }
+    static const char *key(RTCRevision value)
+    {
+        switch (value) {
+                
+            case RTC_NONE:   return "NONR";
+            case RTC_OKI:    return "OKI";
+            case RTC_RICOH:  return "RICOH";
+            case RTC_COUNT:  return "???";
+        }
+        return "???";
+    }
+};

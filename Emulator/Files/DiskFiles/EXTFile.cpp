@@ -15,14 +15,16 @@ const u8 EXTFile::extAdfHeaders[2][8] = {
     { 'U', 'A', 'E', '-', '1', 'A', 'D', 'F' }
 };
     
-EXTFile::EXTFile()
+bool
+EXTFile::isCompatibleName(const std::string &name)
 {
+    return true;
 }
 
 bool
-EXTFile::isEXTBuffer(const u8 *buffer, size_t length)
+EXTFile::isCompatibleStream(std::istream &stream)
 {
-    assert(buffer != nullptr);
+    usize length = streamLength(stream);
     
     size_t len = sizeof(extAdfHeaders[0]);
     size_t cnt = sizeof(extAdfHeaders) / len;
@@ -30,23 +32,7 @@ EXTFile::isEXTBuffer(const u8 *buffer, size_t length)
     if (length < len) return false;
     
     for (size_t i = 0; i < cnt; i++) {
-        if (matchingBufferHeader(buffer, extAdfHeaders[i], len)) return true;
-    }
-    return false;
-}
-
-bool
-EXTFile::isEXTFile(const char *path)
-{
-    assert(path != nullptr);
-
-    int len = sizeof(extAdfHeaders[0]);
-    int cnt = sizeof(extAdfHeaders) / len;
-
-    if (!checkFileSizeRange(path, len, -1)) return false;
-    
-    for (int i = 0; i < cnt; i++) {
-        if (matchingFileHeader(path, extAdfHeaders[i], len)) return true;
+        if (matchingStreamHeader(stream, extAdfHeaders[i], len)) return true;
     }
     return false;
 }

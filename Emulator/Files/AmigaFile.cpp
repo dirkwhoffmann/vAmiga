@@ -14,92 +14,21 @@
 #include "IMGFile.h"
 #include "DMSFile.h"
 #include "EXEFile.h"
-#include "DIRFile.h"
+#include "Folder.h"
 #include "HDFFile.h"
 #include "RomFile.h"
 #include "ExtendedRomFile.h"
 
-template <class T> T *
-AmigaFile::make(const u8 *buffer, size_t length, FileError *error)
-{
-    T *obj = new T();
-    
-    if (!obj->readFromBuffer(buffer, length, error)) {
-        delete obj;
-        return nullptr;
-    }
-        
-    return obj;
-}
 
-template <class T> T *
-AmigaFile::make(const char *path, FileError *error)
+AmigaFile::AmigaFile(usize capacity)
 {
-    T *obj = new T();
-    
-    if (!obj->readFromFile(path, error)) {
-        delete obj;
-        return nullptr;
-    }
-    
-    return obj;
-}
-
-template <class T> T *
-AmigaFile::make(FILE *file, FileError *error)
-{
-    T *obj = new T();
-    
-    if (!obj->readFromFile(file, error)) {
-        delete obj;
-        return nullptr;
-    }
-    
-    return obj;
-}
-
-AmigaFile::AmigaFile()
-{
+    data = new u8[capacity]();
+    size = capacity;
 }
 
 AmigaFile::~AmigaFile()
 {
-    dealloc();
-    
-    if (path)
-        free(path);
-}
-
-bool
-AmigaFile::alloc(size_t capacity)
-{
-    dealloc();
-    if ((data = new u8[capacity]()) == nullptr) return false;
-    size = capacity;
-    
-    return true;
-}
-
-void
-AmigaFile::dealloc()
-{
-    if (data == nullptr) {
-        assert(size == 0);
-        return;
-    }
-    
-    delete[] data;
-    data = nullptr;
-    size = 0;
-}
-
-void
-AmigaFile::setPath(const char *str)
-{
-    assert(str != nullptr);
-    
-    if (path) free(path);
-    path = strdup(str);
+    if (data) delete[] data;
 }
 
 void
@@ -109,176 +38,115 @@ AmigaFile::flash(u8 *buffer, size_t offset)
     memcpy(buffer + offset, data, size);
 }
 
-bool
-AmigaFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
+usize
+AmigaFile::readFromStream(std::istream &stream)
 {
-    assert (buffer != nullptr);
-    
-    // Check file type
-    if (!matchingBuffer(buffer, length)) {
-        if (error) *error = ERR_INVALID_TYPE;
-        return false;
-    }
-    
+    // Get stream size
+    auto fsize = stream.tellg();
+    stream.seekg(0, std::ios::end);
+    fsize = stream.tellg() - fsize;
+    stream.seekg(0, std::ios::beg);
+
     // Allocate memory
-    if (!alloc(length)) {
-        if (error) *error = ERR_OUT_OF_MEMORY;
-        return false;
-    }
-    
-    // Read from buffer
-    memcpy(data, buffer, length);
- 
-    if (error) *error = ERR_FILE_OK;
-    return true;
-}
+    assert(data == nullptr);
+    data = new u8[fsize]();
+    size = fsize;
 
-bool
-AmigaFile::readFromFile(const char *filename, FileError *error)
-{
-    assert (filename != nullptr);
-    
-    bool success;
-    FILE *file = nullptr;
-    struct stat fileProperties;
-    
-    // Get properties
-    if (stat(filename, &fileProperties) != 0) {
-        if (error) *error = ERR_FILE_NOT_FOUND;
-        return false;
-    }
-
-    // Check type
-    if (!matchingFile(filename)) {
-        if (error) *error = ERR_INVALID_TYPE;
-        return false;
-    }
+    // Fix known inconsistencies
+    stream.read((char *)data, size);
         
-    // Open
-    if (!(file = fopen(filename, "r"))) {
-        if (error) *error = ERR_CANT_READ;
-        return false;
-    }
-    
-    // Read
-    setPath(filename);
-    success = readFromFile(file, error);
-    
-    fclose(file);
-    return success;
-}
-
-bool
-AmigaFile::readFromFile(FILE *file, FileError *error)
-{
-    assert (file != nullptr);
-    
-    u8 *buffer = nullptr;
-
-    // Get size
-    fseek(file, 0, SEEK_END);
-    size_t size = (size_t)ftell(file);
-    rewind(file);
-    
-    // Allocate memory
-    if (!(buffer = new u8[size])) {
-        if (error) *error = ERR_OUT_OF_MEMORY;
-        return false;
-    }
-
-    // Read from file
-    int c;
-    for (unsigned i = 0; i < size; i++) {
-        if ((c = fgetc(file)) == EOF) break;
-        buffer[i] = (u8)c;
-    }
-    
-    // Read from buffer
-    dealloc();
-    if (!readFromBuffer(buffer, size, error)) {
-        delete[] buffer;
-        return false;
-    }
-    
-    delete[] buffer;
-    if (error) *error = ERR_FILE_OK;
-    return true;
-}
-
-size_t
-AmigaFile::writeToBuffer(u8 *buffer)
-{
-    assert(data != nullptr);
-    
-    if (buffer) {
-        memcpy(buffer, data, size);
-    }
     return size;
 }
 
-bool
-AmigaFile::writeToFile(const char *filename, FileError *error)
+usize
+AmigaFile::readFromFile(const char *path)
 {
-    assert (filename != nullptr);
+    assert(path);
+        
+    std::ifstream stream(path);
 
-    bool success = false;
-    u8 *data = nullptr;
-    FILE *file;
-    
-    // Determine the size of the file in bytes
-    size_t filesize = writeToBuffer(nullptr);
-    
-    // Open file
-    if (!(file = fopen(filename, "w"))) {
-        if (error) *error = ERR_CANT_WRITE;
-        goto exit;
+    if (!stream.is_open()) {
+        throw VAError(ERROR_FILE_CANT_READ);
     }
-    // Allocate a buffer
-    if (!(data = new u8[filesize])) {
-        if (error) *error = ERR_OUT_OF_MEMORY;
-        goto exit;
-    }
-    // Write contents to the created buffer
-    (void)writeToBuffer(data);
     
-    // Write the buffer to a file
-    for (unsigned i = 0; i < filesize; i++) fputc(data[i], file);
-    *error = ERR_FILE_OK;
-    success = true;
+    usize result = readFromStream(stream);
+    assert(result == size);
     
-exit:
-    
-    if (file)
-        fclose(file);
-    if (data)
-        delete[] data;
-    
-    return success;
+    this->path = string(path);
+    return size;
 }
 
-//
-// Instantiate template functions
-//
+usize
+AmigaFile::readFromBuffer(const u8 *buf, usize len)
+{
+    assert(buf);
 
-template Snapshot* AmigaFile::make <Snapshot> (const u8 *, size_t, FileError *);
-template ADFFile* AmigaFile::make <ADFFile> (const u8 *, size_t, FileError *);
-template EXTFile* AmigaFile::make <EXTFile> (const u8 *, size_t, FileError *);
-template IMGFile* AmigaFile::make <IMGFile> (const u8 *, size_t, FileError *);
-template DMSFile* AmigaFile::make <DMSFile> (const u8 *, size_t, FileError *);
-template EXEFile* AmigaFile::make <EXEFile> (const u8 *, size_t, FileError *);
-template DIRFile* AmigaFile::make <DIRFile> (const u8 *, size_t, FileError *);
-template HDFFile* AmigaFile::make <HDFFile> (const u8 *, size_t, FileError *);
-template RomFile* AmigaFile::make <RomFile> (const u8 *, size_t, FileError *);
-template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const u8 *, size_t, FileError *);
+    std::istringstream stream(std::string((const char *)buf, len));
+    
+    usize result = readFromStream(stream);
+    assert(result == size);
+    return size;
+}
 
-template Snapshot* AmigaFile::make <Snapshot> (const char *, FileError *);
-template ADFFile* AmigaFile::make <ADFFile> (const char *, FileError *);
-template EXTFile* AmigaFile::make <EXTFile> (const char *, FileError *);
-template IMGFile* AmigaFile::make <IMGFile> (const char *, FileError *);
-template DMSFile* AmigaFile::make <DMSFile> (const char *, FileError *);
-template EXEFile* AmigaFile::make <EXEFile> (const char *, FileError *);
-template DIRFile* AmigaFile::make <DIRFile> (const char *, FileError *);
-template HDFFile* AmigaFile::make <HDFFile> (const char *, FileError *);
-template RomFile* AmigaFile::make <RomFile> (const char *, FileError *);
-template ExtendedRomFile* AmigaFile::make <ExtendedRomFile> (const char *, FileError *);
-template ADFFile* AmigaFile::make <ADFFile> (FILE *, FileError *);
+usize
+AmigaFile::writeToStream(std::ostream &stream)
+{
+    stream.write((char *)data, size);
+    return size;
+}
+
+usize
+AmigaFile::writeToStream(std::ostream &stream, ErrorCode *err)
+{
+    *err = ERROR_OK;
+    try { return writeToStream(stream); }
+    catch (VAError &exception) { *err = exception.errorCode; }
+    return 0;
+}
+
+usize
+AmigaFile::writeToFile(const char *path)
+{
+    assert(path);
+        
+    std::ofstream stream(path);
+
+    if (!stream.is_open()) {
+        throw VAError(ERROR_FILE_CANT_WRITE);
+    }
+    
+    usize result = writeToStream(stream);
+    assert(result == size);
+    
+    return size;
+}
+
+usize
+AmigaFile::writeToFile(const char *path, ErrorCode *err)
+{
+    *err = ERROR_OK;
+    try { return writeToFile(path); }
+    catch (VAError &exception) { *err = exception.errorCode; }
+    return 0;
+}
+
+usize
+AmigaFile::writeToBuffer(u8 *buf)
+{
+    assert(buf);
+
+    std::ostringstream stream;
+    usize len = writeToStream(stream);
+    stream.write((char *)buf, len);
+    
+    return len;
+}
+
+usize
+AmigaFile::writeToBuffer(u8 *buf, ErrorCode *err)
+{
+    *err = ERROR_OK;
+    try { return writeToBuffer(buf); }
+    catch (VAError &exception) { *err = exception.errorCode; }
+    return 0;
+}

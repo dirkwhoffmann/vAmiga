@@ -7,10 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_PARTITION_H
-#define _FS_PARTITION_H
+#pragma once
 
-#include "FSTypes.h"
+#include "FSPublicTypes.h"
 #include "FSDescriptors.h"
 
 struct FSPartition : AmigaObject {
@@ -53,19 +52,19 @@ public:
     
     FSPartition(FSDevice &ref);
     
-    const char *getDescription() override { return "FSPartition"; }
+    const char *getDescription() const override { return "FSPartition"; }
 
     // Prints a summary about this partition (called by FSDevice::info)
-    void info();
+    void info() const;
 
     // Prints debug information about this partition
-    void dump();
+    void dump() const;
 
     // Predicts the type of a block by analyzing its number and data
-    FSBlockType predictBlockType(u32 nr, const u8 *buffer);
+    FSBlockType predictBlockType(u32 nr, const u8 *buffer) const;
     
     // Gets or sets the name of this partition
-    FSName getName();
+    FSName getName() const;
     void setName(FSName name);
 
     
@@ -74,22 +73,22 @@ public:
     //
     
     // Returns the file system category
-    bool isOFS() { return isOFSVolumeType(dos); }
-    bool isFFS() { return isFFSVolumeType(dos); }
+    bool isOFS() const { return isOFSVolumeType(dos); }
+    bool isFFS() const { return isFFSVolumeType(dos); }
 
     // Returns the size of a single block in bytes (usually 512)
-    u32 bsize();
+    u32 bsize() const;
 
     // Reports layout information about this partition
-    u32 numCyls() { return highCyl - lowCyl + 1; }
-    u32 numBlocks();
-    u32 numBytes();
+    u32 numCyls() const { return highCyl - lowCyl + 1; }
+    u32 numBlocks() const;
+    u32 numBytes() const;
     
     // Reports usage information about this partition
-    u32 freeBlocks();
-    u32 usedBlocks();
-    u32 freeBytes();
-    u32 usedBytes();
+    u32 freeBlocks() const;
+    u32 usedBlocks() const;
+    u32 freeBytes() const;
+    u32 usedBytes() const;
     
     
     //
@@ -99,9 +98,9 @@ public:
 public:
     
     // Returns the number of required blocks to store a file of certain size
-    u32 requiredDataBlocks(size_t fileSize);
-    u32 requiredFileListBlocks(size_t fileSize);
-    u32 requiredBlocks(size_t fileSize);
+    u32 requiredDataBlocks(size_t fileSize) const;
+    u32 requiredFileListBlocks(size_t fileSize) const;
+    u32 requiredBlocks(size_t fileSize) const;
 
     // Seeks a free block and marks it as allocated
     u32 allocateBlock();
@@ -128,7 +127,7 @@ public:
     FSBitmapBlock *bmBlockForBlock(u32 relRef);
 
     // Checks if a block is marked as free in the allocation bitmap
-    bool isFree(u32 ref);
+    bool isFree(u32 ref) const;
     
     // Marks a block as allocated or free
     void markAsAllocated(u32 ref) { setAllocationBit(ref, 0); }
@@ -139,7 +138,7 @@ public:
 private:
     
     // Locates the allocation bit for a certain block
-    FSBitmapBlock *locateAllocationBit(u32 ref, u32 *byte, u32 *bit);
+    FSBitmapBlock *locateAllocationBit(u32 ref, u32 *byte, u32 *bit) const;
     
     
     //
@@ -162,25 +161,10 @@ public:
 public:
     
     // Performs several partition checks
-    bool check(bool strict, FSErrorReport &report);
+    bool check(bool strict, FSErrorReport &report) const;
 
     // Checks if the block with the given number is part of this partition
-    bool inRange(u32 nr) { return nr >= firstBlock && nr <= lastBlock; }
-    
-    
-    //
-    // Importing and exporting
-    //
-    
-public:
-    
-    // Provides block information that is needed during the import process
-    /*
-    bool predictBlock(u32 nr, const u8 *buffer,
-                      FSPartition **p, FSVolumeType *dos, FSBlockType *type);
-    */
+    bool inRange(u32 nr) const { return nr >= firstBlock && nr <= lastBlock; }
 };
 
 typedef FSPartition* FSPartitionPtr;
-
-#endif

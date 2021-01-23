@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _KEYBOARD_H
-#define _KEYBOARD_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -48,7 +47,7 @@ public:
     
     Keyboard(Amiga& ref);
     
-    const char *getDescription() override { return "Keyboard"; }
+    const char *getDescription() const override { return "Keyboard"; }
 
 private:
     
@@ -61,14 +60,14 @@ private:
     
 public:
     
-    KeyboardConfig getConfig() { return config; }
+    const KeyboardConfig &getConfig() const { return config; }
 
-    long getConfigItem(ConfigOption option);
-    bool setConfigItem(ConfigOption option, long value) override;
+    long getConfigItem(Option option) const;
+    bool setConfigItem(Option option, long value) override;
 
 private:
 
-    void _dumpConfig() override;
+    void _dumpConfig() const override;
     
     
     //
@@ -77,7 +76,7 @@ private:
     
 private:
     
-    void _dump() override;
+    void _dump() const override;
 
     
     //
@@ -118,7 +117,7 @@ private:
 private:
     
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
@@ -128,7 +127,7 @@ private:
     
 public:
 
-    bool keyIsPressed(long keycode);
+    bool keyIsPressed(long keycode) const;
     void pressKey(long keycode);
     void releaseKey(long keycode);
     void releaseAllKeys();
@@ -140,8 +139,8 @@ public:
 
 private:
 
-    bool bufferIsEmpty() { return bufferIndex == 0; }
-    bool bufferIsFull() { return bufferIndex == bufferSize; }
+    bool bufferIsEmpty() const { return bufferIndex == 0; }
+    bool bufferIsFull() const { return bufferIndex == bufferSize; }
 
     // Reads a keycode from the type-ahead buffer
     u8 readFromBuffer();
@@ -184,5 +183,3 @@ private:
     // Sends a sync pulse to the Amiga
     void sendSyncPulse();
 };
-
-#endif

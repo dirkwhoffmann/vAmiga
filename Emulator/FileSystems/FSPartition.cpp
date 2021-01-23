@@ -73,7 +73,7 @@ FSPartition::FSPartition(FSDevice &ref) : dev(ref)
 }
 
 void
-FSPartition::info()
+FSPartition::info() const
 {
     msg("DOS%lld  ",     dos);
     msg("%6d (x %3d) ", numBlocks(), bsize());
@@ -85,7 +85,7 @@ FSPartition::info()
 }
 
 void
-FSPartition::dump()
+FSPartition::dump() const
 {
     msg("      First cylinder : %d\n", lowCyl);
     msg("       Last cylinder : %d\n", highCyl);
@@ -101,7 +101,7 @@ FSPartition::dump()
 }
 
 FSBlockType
-FSPartition::predictBlockType(u32 nr, const u8 *buffer)
+FSPartition::predictBlockType(u32 nr, const u8 *buffer) const
 {
     assert(buffer != nullptr);
 
@@ -140,7 +140,7 @@ FSPartition::predictBlockType(u32 nr, const u8 *buffer)
 }
 
 FSName
-FSPartition::getName()
+FSPartition::getName() const
 {
     FSRootBlock *rb = dev.rootBlockPtr(rootBlock);
     return rb ? rb->getName() : FSName("");
@@ -156,25 +156,25 @@ FSPartition::setName(FSName name)
 }
 
 u32
-FSPartition::bsize()
+FSPartition::bsize() const
 {
     return dev.bsize;
 }
 
 u32
-FSPartition::numBlocks()
+FSPartition::numBlocks() const
 {
     return numCyls() * dev.numHeads * dev.numSectors;
 }
 
 u32
-FSPartition::numBytes()
+FSPartition::numBytes() const
 {
     return numBlocks() * bsize();
 }
 
 u32
-FSPartition::freeBlocks()
+FSPartition::freeBlocks() const
 {
     u32 result = 0;
     
@@ -186,25 +186,25 @@ FSPartition::freeBlocks()
 }
 
 u32
-FSPartition::usedBlocks()
+FSPartition::usedBlocks() const
 {
     return numBlocks() - freeBlocks();
 }
 
 u32
-FSPartition::freeBytes()
+FSPartition::freeBytes() const
 {
     return freeBlocks() * bsize();
 }
 
 u32
-FSPartition::usedBytes()
+FSPartition::usedBytes() const
 {
     return usedBlocks() * bsize();
 }
 
 u32
-FSPartition::requiredDataBlocks(size_t fileSize)
+FSPartition::requiredDataBlocks(size_t fileSize) const
 {
     // Compute the capacity of a single data block
     u32 numBytes = bsize() - (isOFS() ? OFSDataBlock::headerSize() : 0);
@@ -214,7 +214,7 @@ FSPartition::requiredDataBlocks(size_t fileSize)
 }
 
 u32
-FSPartition::requiredFileListBlocks(size_t fileSize)
+FSPartition::requiredFileListBlocks(size_t fileSize) const
 {
     // Compute the required number of data blocks
     u32 numBlocks = requiredDataBlocks(fileSize);
@@ -230,7 +230,7 @@ FSPartition::requiredFileListBlocks(size_t fileSize)
 }
 
 u32
-FSPartition::requiredBlocks(size_t fileSize)
+FSPartition::requiredBlocks(size_t fileSize) const
 {
     u32 numDataBlocks = requiredDataBlocks(fileSize);
     u32 numFileListBlocks = requiredFileListBlocks(fileSize);
@@ -381,7 +381,7 @@ FSPartition::bmBlockForBlock(u32 relRef)
 }
 
 bool
-FSPartition::isFree(u32 ref)
+FSPartition::isFree(u32 ref) const
 {
     assert(ref >= firstBlock && ref <= lastBlock);
     
@@ -410,7 +410,7 @@ FSPartition::setAllocationBit(u32 ref, bool value)
 }
 
 FSBitmapBlock *
-FSPartition::locateAllocationBit(u32 ref, u32 *byte, u32 *bit)
+FSPartition::locateAllocationBit(u32 ref, u32 *byte, u32 *bit) const
 {
     assert(ref >= firstBlock && ref <= lastBlock);
 
@@ -486,7 +486,7 @@ FSPartition::killVirus()
 }
 
 bool
-FSPartition::check(bool strict, FSErrorReport &report)
+FSPartition::check(bool strict, FSErrorReport &report) const
 {
     report.bitmapErrors = 0;
     

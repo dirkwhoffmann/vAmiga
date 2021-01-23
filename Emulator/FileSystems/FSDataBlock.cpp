@@ -32,7 +32,7 @@ OFSDataBlock::OFSDataBlock(FSPartition &p, u32 nr) : FSDataBlock(p, nr)
 }
 
 void
-OFSDataBlock::dump()
+OFSDataBlock::dump() const
 {
     msg("File header block : %d\n", getFileHeaderRef());
     msg("     Chain number : %d\n", getDataBlockNr());
@@ -42,7 +42,7 @@ OFSDataBlock::dump()
 }
 
 FSItemType
-OFSDataBlock::itemType(u32 pos)
+OFSDataBlock::itemType(u32 pos) const
 {
     if (pos < 24) {
         
@@ -62,8 +62,8 @@ OFSDataBlock::itemType(u32 pos)
     return FSI_DATA;
 }
 
-FSError
-OFSDataBlock::check(u32 byte, u8 *expected, bool strict)
+ErrorCode
+OFSDataBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     /* Note: At location 1, many disks store a reference to the bitmap block
      * instead of a reference to the file header block. We ignore to report
@@ -86,7 +86,7 @@ OFSDataBlock::check(u32 byte, u8 *expected, bool strict)
         }
     }
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
 size_t
@@ -111,7 +111,7 @@ OFSDataBlock::addData(const u8 *buffer, size_t size)
 }
 
 size_t
-OFSDataBlock::dsize()
+OFSDataBlock::dsize() const
 {
     return bsize() - headerSize();
 }
@@ -124,12 +124,12 @@ OFSDataBlock::dsize()
 FFSDataBlock::FFSDataBlock(FSPartition &p, u32 nr) : FSDataBlock(p, nr) { }
 
 void
-FFSDataBlock::dump()
+FFSDataBlock::dump() const
 {
 }
 
 FSItemType
-FFSDataBlock::itemType(u32 pos)
+FFSDataBlock::itemType(u32 pos) const
 {
     return FSI_DATA;
 }
@@ -153,7 +153,7 @@ FFSDataBlock::addData(const u8 *buffer, size_t size)
 }
 
 size_t
-FFSDataBlock::dsize()
+FFSDataBlock::dsize() const
 {
     return bsize() - headerSize();
 }

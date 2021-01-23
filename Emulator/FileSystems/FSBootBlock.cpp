@@ -29,7 +29,7 @@ FSBootBlock::~FSBootBlock()
 
 
 FSVolumeType
-FSBootBlock::dos()
+FSBootBlock::dos() const
 {
     // Only proceed if the header begins with 'DOS'
     if (strncmp((const char *)data, "DOS", 3)) return FS_NODOS;
@@ -41,7 +41,7 @@ FSBootBlock::dos()
 }
 
 FSItemType
-FSBootBlock::itemType(u32 byte)
+FSBootBlock::itemType(u32 byte) const
 {
     if (nr == partition.firstBlock) {
         
@@ -53,8 +53,8 @@ FSBootBlock::itemType(u32 byte)
     return FSI_BOOTCODE;
 }
 
-FSError
-FSBootBlock::check(u32 byte, u8 *expected, bool strict)
+ErrorCode
+FSBootBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     if (nr == partition.firstBlock) {
  
@@ -68,17 +68,17 @@ FSBootBlock::check(u32 byte, u8 *expected, bool strict)
         if (word == 1) { value = get32(1); EXPECT_CHECKSUM; }
     }
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
 u32
-FSBootBlock::checksumLocation()
+FSBootBlock::checksumLocation() const
 {
     return (nr == partition.firstBlock) ? 1 : (u32)-1;
 }
 
 u32
-FSBootBlock::checksum() {
+FSBootBlock::checksum() const {
     
     // Only call this function for the first boot block in a partition
     assert(nr == partition.firstBlock);
@@ -105,7 +105,7 @@ FSBootBlock::checksum() {
 }
 
 void
-FSBootBlock::dump()
+FSBootBlock::dump() const
 {
     msg("       Header : ");
     for (int i = 0; i < 8; i++) msg("%02X ", data[i]);

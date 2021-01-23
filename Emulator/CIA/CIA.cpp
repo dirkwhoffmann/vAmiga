@@ -49,7 +49,7 @@ CIA::_reset(bool hard)
 }
 
 long
-CIA::getConfigItem(ConfigOption option)
+CIA::getConfigItem(Option option) const
 {
     switch (option) {
             
@@ -64,16 +64,14 @@ CIA::getConfigItem(ConfigOption option)
 }
 
 bool
-CIA::setConfigItem(ConfigOption option, long value)
+CIA::setConfigItem(Option option, long value)
 {
     switch (option) {
             
         case OPT_CIA_REVISION:
             
-            if (!isCIARevision(value)) {
-                warn("Invalid CIA revision: %ld\n", value);
-                return false;
-            }
+            if (!CIARevisionEnum::verify(value)) return false;
+            
             if (config.revision == value) {
                 return false;
             }
@@ -105,9 +103,9 @@ CIA::setConfigItem(ConfigOption option, long value)
 }
 
 void
-CIA::_dumpConfig()
+CIA::_dumpConfig() const
 {
-    msg("      revision : %s\n", sCIARevision(config.revision));
+    msg("      revision : %s\n", CIARevisionEnum::key(config.revision));
     msg("        todBug : %s\n", config.todBug ? "yes" : "no");
     msg(" eClockSyncing : %s\n", config.eClockSyncing ? "yes" : "no");
 }
@@ -157,41 +155,37 @@ CIA::_inspect()
 }
 
 void
-CIA::_dump()
-{
-    _inspect();
-
+CIA::_dump() const
+{    
     msg("                   Clock : %lld\n", clock);
     msg("                Sleeping : %s\n", sleeping ? "yes" : "no");
     msg("               Tiredness : %d\n", tiredness);
     msg(" Most recent sleep cycle : %lld\n", sleepCycle);
     msg("Most recent wakeup cycle : %lld\n", wakeUpCycle);
     msg("\n");
-    msg("               Counter A : %04X\n", info.timerA.count);
-    msg("                 Latch A : %04X\n", info.timerA.latch);
-    msg("         Data register A : %02X\n", info.portA.reg);
-    msg("   Data port direction A : %02X\n", info.portA.dir);
-    msg("             Data port A : %02X\n", info.portA.port);
+    msg("               Counter A : %04X\n", counterA);
+    msg("                 Latch A : %04X\n", latchA);
+    msg("         Data register A : %02X\n", PRA);
+    msg("   Data port direction A : %02X\n", DDRA);
+    msg("             Data port A : %02X\n", PA);
     msg("      Control register A : %02X\n", CRA);
     msg("\n");
-    msg("               Counter B : %04X\n", info.timerB.count);
-    msg("                 Latch B : %04X\n", info.timerB.latch);
-    msg("         Data register B : %02X\n", info.portB.reg);
-    msg("   Data port direction B : %02X\n", info.portB.dir);
-    msg("             Data port B : %02X\n", info.portB.port);
+    msg("               Counter B : %04X\n", counterB);
+    msg("                 Latch B : %04X\n", latchB);
+    msg("         Data register B : %02X\n", PRB);
+    msg("   Data port direction B : %02X\n", DDRB);
+    msg("             Data port B : %02X\n", PB);
     msg("      Control register B : %02X\n", CRB);
     msg("\n");
-    msg("   Interrupt control reg : %02X\n", info.icr);
-    msg("      Interrupt mask reg : %02X\n", info.imr);
+    msg("   Interrupt control reg : %02X\n", icr);
+    msg("      Interrupt mask reg : %02X\n", imr);
     msg("\n");
-    msg("                     SDR : %02X %02X\n", info.sdr, sdr);
+    msg("                 SDR/SSR : %02X/%02X\n", sdr, ssr);
     msg("              serCounter : %02X\n", serCounter);
     msg("\n");
     msg("                     CNT : %d\n", CNT);
     msg("                     INT : %d\n", INT);
     msg("\n");
-
-    tod.dump();
 }
 
 void
@@ -709,7 +703,7 @@ CIA::wakeUp(Cycle targetCycle)
 }
 
 CIACycle
-CIA::idleSince()
+CIA::idleSince() const
 {
     return isAwake() ? 0 : AS_CIA_CYCLES(agnus.clock - sleepCycle);
 }
@@ -797,13 +791,13 @@ CIAA::updatePA()
 }
 
 u8
-CIAA::portAinternal()
+CIAA::portAinternal() const
 {
     return PRA;
 }
 
 u8
-CIAA::portAexternal()
+CIAA::portAexternal() const
 {
     u8 result;
     
@@ -849,13 +843,13 @@ CIAA::updatePB()
 }
 
 u8
-CIAA::portBinternal()
+CIAA::portBinternal() const
 {
     return PRB;
 }
 
 u8
-CIAA::portBexternal()
+CIAA::portBexternal() const
 {
     return 0xFF;
 }
@@ -908,13 +902,13 @@ CIAB::releaseInterruptLine()
 //                                 -------
 
 u8
-CIAB::portAinternal()
+CIAB::portAinternal() const
 {
     return PRA;
 }
 
 u8
-CIAB::portAexternal()
+CIAB::portAexternal() const
 {
     u8 result = 0xFF;
 
@@ -978,7 +972,7 @@ CIAB::updatePA()
 //            -------
 
 u8
-CIAB::portBinternal()
+CIAB::portBinternal() const
 {
     u8 result = PRB;
     
@@ -994,7 +988,7 @@ CIAB::portBinternal()
 }
 
 u8
-CIAB::portBexternal()
+CIAB::portBexternal() const
 {
     return 0xFF;
 }

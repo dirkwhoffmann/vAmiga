@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef MOIRA_DEBUGGER_H
-#define MOIRA_DEBUGGER_H
+#pragma once
 
 namespace moira {
 
@@ -226,4 +225,3 @@ public:
 };
 
 }
-#endif

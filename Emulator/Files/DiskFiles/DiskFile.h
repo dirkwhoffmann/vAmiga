@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DISK_FILE_H
-#define _DISK_FILE_H
+#pragma once
 
 #include "AmigaFile.h"
 
@@ -21,10 +20,8 @@ class DiskFile : public AmigaFile {
 
 public:
 
-    static DiskFile *makeWithFile(const char *path);
-    
     // Gets or sets the file system for this disk
-    virtual FSVolumeType getDos() = 0;
+    virtual FSVolumeType getDos() const = 0;
     virtual void setDos(FSVolumeType dos) = 0;
     
     
@@ -35,18 +32,18 @@ public:
 public:
         
     // Returns the layout parameters for this disk
-    virtual DiskType getDiskType() = 0;
-    virtual DiskDensity getDiskDensity() = 0;
-    virtual long numSides() = 0;
-    virtual long numCyls() = 0;
-    virtual long numSectors() = 0;
-    long numTracks() { return numSides() * numCyls(); }
-    long numBlocks() { return numTracks() * numSectors(); }
+    virtual DiskDiameter getDiskDiameter() const = 0;
+    virtual DiskDensity getDiskDensity() const = 0;
+    virtual long numSides() const = 0;
+    virtual long numCyls() const = 0;
+    virtual long numSectors() const = 0;
+    long numTracks() const { return numSides() * numCyls(); }
+    long numBlocks() const { return numTracks() * numSectors(); }
 
     // Analyzes the boot block
-    virtual BootBlockType bootBlockType() { return BB_STANDARD; }
-    virtual const char *bootBlockName() { return ""; }
-    bool hasVirus() { return bootBlockType() == BB_VIRUS; }
+    virtual BootBlockType bootBlockType() const { return BB_STANDARD; }
+    virtual const char *bootBlockName() const { return ""; }
+    bool hasVirus() const { return bootBlockType() == BB_VIRUS; }
 
     
     //
@@ -56,16 +53,16 @@ public:
 public:
 
     // Reads a single data byte
-    virtual u8 readByte(long b, long offset);
-    virtual u8 readByte(long t, long s, long offset);
+    virtual u8 readByte(long b, long offset) const;
+    virtual u8 readByte(long t, long s, long offset) const;
 
     // Fills a buffer with the data of a single sector
-    virtual void readSector(u8 *dst, long b);
-    virtual void readSector(u8 *dst, long t, long s);
+    virtual void readSector(u8 *dst, long b) const;
+    virtual void readSector(u8 *dst, long t, long s) const;
 
     // Writes a string representation into the provided buffer
-    virtual void readSectorHex(char *dst, long b, size_t count);
-    virtual void readSectorHex(char *dst, long t, long s, size_t count);
+    virtual void readSectorHex(char *dst, long b, size_t count) const;
+    virtual void readSectorHex(char *dst, long t, long s, size_t count) const;
 
     
     //
@@ -82,7 +79,5 @@ public:
 public:
     
     virtual bool encodeDisk(class Disk *disk);
-    virtual bool decodeDisk(class Disk *disk);
+    virtual void decodeDisk(class Disk *disk) throws;
 };
-
-#endif

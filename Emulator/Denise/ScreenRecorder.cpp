@@ -19,7 +19,7 @@ ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 }
 
 bool
-ScreenRecorder::hasFFmpeg()
+ScreenRecorder::hasFFmpeg() const
 {
     return getSizeOfFile(ffmpegPath()) > 0;
 }
@@ -31,7 +31,7 @@ ScreenRecorder::_reset(bool hard)
 }
 
 void
-ScreenRecorder::_dump()
+ScreenRecorder::_dump() const
 {
     msg("%s:%s installed\n", ffmpegPath(), hasFFmpeg() ? "" : " not");
     msg("Video pipe:%s created\n", videoPipe != -1 ? "" : " not");

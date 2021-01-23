@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_BLOCKS_H
-#define _FS_BLOCKS_H
+#pragma once
 
 #include "FSObjects.h"
 
@@ -42,20 +41,20 @@ struct FSBlock : AmigaObject {
     //
 
     // Returns the type of this block
-    virtual FSBlockType type() = 0; 
+    virtual FSBlockType type() const = 0; 
 
     // Returns the size of this block in bytes (usually 512)
-    u32 bsize();
+    u32 bsize() const;
 
     // Extract the file system type from the block header
-    virtual FSVolumeType dos() { return FS_NODOS; }
+    virtual FSVolumeType dos() const { return FS_NODOS; }
     
     // Returns the role of a certain byte in this block
-    virtual FSItemType itemType(u32 byte) { return FSI_UNKNOWN; }
+    virtual FSItemType itemType(u32 byte) const { return FSI_UNKNOWN; }
     
     // Returns the type and subtype identifiers of this block
-    virtual u32 typeID();
-    virtual u32 subtypeID();
+    virtual u32 typeID() const;
+    virtual u32 subtypeID() const;
     
     
     //
@@ -63,10 +62,10 @@ struct FSBlock : AmigaObject {
     //
 
     // Scans all long words in this block and returns the number of errors
-    unsigned check(bool strict);
+    unsigned check(bool strict) const;
 
     // Checks the integrity of a certain byte in this block
-    virtual FSError check(u32 pos, u8 *expected, bool strict) { return FS_OK; }
+    virtual ErrorCode check(u32 pos, u8 *expected, bool strict) const { return ERROR_OK; }
         
     
     //
@@ -80,19 +79,19 @@ struct FSBlock : AmigaObject {
     static void dec32(u8 *p) { write32(p, read32(p) - 1); }
 
     // Computes the address of a long word inside the block
-    u8 *addr32(int nr); 
+    u8 *addr32(int nr) const; 
     
     // Reads, writes, or modifies the n-th long word
-    u32 get32(i32 n) { return read32(addr32(n)); }
-    void set32(i32 n, u32 val) { write32(addr32(n), val); }
-    void inc32(i32 n) { inc32(addr32(n)); }
-    void dec32(i32 n) { dec32(addr32(n)); }
+    u32 get32(i32 n) const { return read32(addr32(n)); }
+    void set32(i32 n, u32 val) const { write32(addr32(n), val); }
+    void inc32(i32 n) const { inc32(addr32(n)); }
+    void dec32(i32 n) const { dec32(addr32(n)); }
 
     // Returns the location of the checksum inside this block
-    virtual u32 checksumLocation() { return (u32)-1; }
+    virtual u32 checksumLocation() const { return (u32)-1; }
     
     // Computes a checksum for this block
-    virtual u32 checksum();
+    virtual u32 checksum() const;
     
     // Updates the checksum in this block
     void updateChecksum();
@@ -103,8 +102,8 @@ struct FSBlock : AmigaObject {
     //
     
     // Prints some debug information for this block
-    virtual void dump() { };
-    virtual void dumpData();
+    virtual void dump() const { };
+    virtual void dumpData() const;
 
     
     //
@@ -120,7 +119,7 @@ public:
     virtual void exportBlock(u8 *dst, size_t bsize);
     
     // Exports this block to the host file system
-    virtual FSError exportBlock(const char *path) { return FS_OK; }
+    virtual ErrorCode exportBlock(const char *path) { return ERROR_OK; }
         
                 
     //
@@ -129,11 +128,11 @@ public:
     
 public:
     
-    virtual FSName getName() { return FSName(""); }
+    virtual FSName getName() const { return FSName(""); }
     virtual void setName(FSName name) { }
-    virtual bool isNamed(FSName &other) { return false; }
+    virtual bool isNamed(FSName &other) const { return false; }
 
-    virtual FSComment getComment() { return FSComment(""); }
+    virtual FSComment getComment() const { return FSComment(""); }
     virtual void setComment(FSComment name) { }
 
     
@@ -141,10 +140,10 @@ public:
     // Getting and settting date and time
     //
     
-    virtual FSTime getCreationDate() { return FSTime((time_t)0); }
+    virtual FSTime getCreationDate() const { return FSTime((time_t)0); }
     virtual void setCreationDate(FSTime t) { }
 
-    virtual FSTime getModificationDate() { return FSTime((time_t)0); }
+    virtual FSTime getModificationDate() const { return FSTime((time_t)0); }
     virtual void setModificationDate(FSTime t) { }
     
     
@@ -152,10 +151,10 @@ public:
     // Getting and setting file properties
     //
     
-    virtual u32 getProtectionBits() { return 0; }
+    virtual u32 getProtectionBits() const { return 0; }
     virtual void setProtectionBits(u32 val) { }
 
-    virtual u32 getFileSize() { return 0; }
+    virtual u32 getFileSize() const { return 0; }
     virtual void setFileSize(u32 val) { }
 
     
@@ -164,37 +163,37 @@ public:
     //
 
     // Link to the parent directory block
-    virtual u32 getParentDirRef() { return 0; }
+    virtual u32 getParentDirRef() const { return 0; }
     virtual void setParentDirRef(u32 ref) { }
     struct FSBlock *getParentDirBlock();
     
     // Link to the file header block
-    virtual u32 getFileHeaderRef() { return 0; }
+    virtual u32 getFileHeaderRef() const { return 0; }
     virtual void setFileHeaderRef(u32 ref) { }
     struct FSFileHeaderBlock *getFileHeaderBlock();
 
     // Link to the next block with the same hash
-    virtual u32 getNextHashRef() { return 0; }
+    virtual u32 getNextHashRef() const { return 0; }
     virtual void setNextHashRef(u32 ref) { }
     struct FSBlock *getNextHashBlock();
 
     // Link to the next extension block
-    virtual u32 getNextListBlockRef() { return 0; }
+    virtual u32 getNextListBlockRef() const { return 0; }
     virtual void setNextListBlockRef(u32 ref) { }
     struct FSFileListBlock *getNextListBlock();
 
     // Link to the next bitmap extension block
-    virtual u32 getNextBmExtBlockRef() { return 0; }
+    virtual u32 getNextBmExtBlockRef() const { return 0; }
     virtual void setNextBmExtBlockRef(u32 ref) { }
     struct FSBitmapExtBlock *getNextBmExtBlock();
     
     // Link to the first data block
-    virtual u32 getFirstDataBlockRef() { return 0; }
+    virtual u32 getFirstDataBlockRef() const { return 0; }
     virtual void setFirstDataBlockRef(u32 ref) { }
     struct FSDataBlock *getFirstDataBlock();
 
     // Link to the next data block
-    virtual u32 getNextDataBlockRef() { return 0; }
+    virtual u32 getNextDataBlockRef() const { return 0; }
     virtual void setNextDataBlockRef(u32 ref) { }
     struct FSDataBlock *getNextDataBlock();
 
@@ -204,17 +203,17 @@ public:
     //
     
     // Returns the hash table size
-    virtual u32 hashTableSize() { return 0; }
+    virtual u32 hashTableSize() const { return 0; }
 
     // Returns a hash value for this block
-    virtual u32 hashValue() { return 0; }
+    virtual u32 hashValue() const { return 0; }
 
     // Looks up an item in the hash table
-    u32 getHashRef(u32 nr);
+    u32 getHashRef(u32 nr) const;
     void setHashRef(u32 nr, u32 ref);
 
     // Dumps the contents of the hash table for debugging
-    void dumpHashTable();
+    void dumpHashTable() const;
 
 
     //
@@ -228,10 +227,10 @@ public:
     //
     
     // Returns the maximum number of storable data block references
-    u32 getMaxDataBlockRefs();
+    u32 getMaxDataBlockRefs() const;
 
     // Gets or sets the number of data block references in this block
-    virtual u32 getNumDataBlockRefs() { return 0; }
+    virtual u32 getNumDataBlockRefs() const { return 0; }
     virtual void setNumDataBlockRefs(u32 val) { }
     virtual void incNumDataBlockRefs() { }
 
@@ -250,73 +249,71 @@ typedef FSBlock* BlockPtr;
 //
 
 #define EXPECT_BYTE(exp) { \
-if (value != (exp)) { *expected = (exp); return FS_EXPECTED_VALUE; } }
+if (value != (exp)) { *expected = (exp); return ERROR_FS_EXPECTED_VALUE; } }
 
 #define EXPECT_LONGWORD(exp) { \
 if ((byte % 4) == 0 && BYTE3(value) != BYTE3((u32)exp)) \
-    { *expected = (BYTE3((u32)exp)); return FS_EXPECTED_VALUE; } \
+    { *expected = (BYTE3((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } \
 if ((byte % 4) == 1 && BYTE2(value) != BYTE2((u32)exp)) \
-    { *expected = (BYTE2((u32)exp)); return FS_EXPECTED_VALUE; } \
+    { *expected = (BYTE2((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } \
 if ((byte % 4) == 2 && BYTE1(value) != BYTE1((u32)exp)) \
-    { *expected = (BYTE1((u32)exp)); return FS_EXPECTED_VALUE; } \
+    { *expected = (BYTE1((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } \
 if ((byte % 4) == 3 && BYTE0(value) != BYTE0((u32)exp)) \
-    { *expected = (BYTE0((u32)exp)); return FS_EXPECTED_VALUE; } }
+    { *expected = (BYTE0((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } }
 
 #define EXPECT_CHECKSUM EXPECT_LONGWORD(checksum())
 
 #define EXPECT_LESS_OR_EQUAL(exp) { \
 if (value > exp) \
-{ *expected = (u8)(exp); return FS_EXPECTED_SMALLER_VALUE; } }
+{ *expected = (u8)(exp); return ERROR_FS_EXPECTED_SMALLER_VALUE; } }
 
 #define EXPECT_DOS_REVISION { \
-if (!isFSVolumeType(value)) return FS_EXPECTED_DOS_REVISION; }
+if (!FSVolumeTypeEnum::isValid(value)) return ERROR_FS_EXPECTED_DOS_REVISION; }
 
 #define EXPECT_REF { \
-if (!partition.dev.block(value)) return FS_EXPECTED_REF; }
+if (!partition.dev.block(value)) return ERROR_FS_EXPECTED_REF; }
 
 #define EXPECT_SELFREF { \
-if (value != nr) return FS_EXPECTED_SELFREF; }
+if (value != nr) return ERROR_FS_EXPECTED_SELFREF; }
 
 #define EXPECT_FILEHEADER_REF { \
-if (FSError e = partition.dev.checkBlockType(value, FS_FILEHEADER_BLOCK); e != FS_OK) return e; }
+if (ErrorCode e = partition.dev.checkBlockType(value, FS_FILEHEADER_BLOCK); e != ERROR_OK) return e; }
 
 #define EXPECT_HASH_REF { \
-if (FSError e = partition.dev.checkBlockType(value, FS_FILEHEADER_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e; }
+if (ErrorCode e = partition.dev.checkBlockType(value, FS_FILEHEADER_BLOCK, FS_USERDIR_BLOCK); e != ERROR_OK) return e; }
 
 #define EXPECT_OPTIONAL_HASH_REF { \
 if (value) { EXPECT_HASH_REF } }
 
 #define EXPECT_PARENT_DIR_REF { \
-if (FSError e = partition.dev.checkBlockType(value, FS_ROOT_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e; }
+if (ErrorCode e = partition.dev.checkBlockType(value, FS_ROOT_BLOCK, FS_USERDIR_BLOCK); e != ERROR_OK) return e; }
 
 #define EXPECT_FILELIST_REF { \
-if (FSError e = partition.dev.checkBlockType(value, FS_FILELIST_BLOCK); e != FS_OK) return e; }
+if (ErrorCode e = partition.dev.checkBlockType(value, FS_FILELIST_BLOCK); e != ERROR_OK) return e; }
 
 #define EXPECT_OPTIONAL_FILELIST_REF { \
 if (value) { EXPECT_FILELIST_REF } }
 
 #define EXPECT_BITMAP_REF { \
-if (FSError e = partition.dev.checkBlockType(value, FS_BITMAP_BLOCK); e != FS_OK) return e; }
+if (ErrorCode e = partition.dev.checkBlockType(value, FS_BITMAP_BLOCK); e != ERROR_OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_REF { \
 if (value) { EXPECT_BITMAP_REF } }
 
 #define EXPECT_BITMAP_EXT_REF { \
-if (FSError e = partition.dev.checkBlockType(value, FS_BITMAP_EXT_BLOCK); e != FS_OK) return e; }
+if (ErrorCode e = partition.dev.checkBlockType(value, FS_BITMAP_EXT_BLOCK); e != ERROR_OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_EXT_REF { \
 if (value) { EXPECT_BITMAP_EXT_REF } }
 
 #define EXPECT_DATABLOCK_REF { \
-if (FSError e = partition.dev.checkBlockType(value, FS_DATA_BLOCK_OFS, FS_DATA_BLOCK_FFS); e != FS_OK) return e; }
+if (ErrorCode e = partition.dev.checkBlockType(value, FS_DATA_BLOCK_OFS, FS_DATA_BLOCK_FFS); e != ERROR_OK) return e; }
 
 #define EXPECT_OPTIONAL_DATABLOCK_REF { \
 if (value) { EXPECT_DATABLOCK_REF } }
 
 #define EXPECT_DATABLOCK_NUMBER { \
-if (value == 0) return FS_EXPECTED_DATABLOCK_NR; }
+if (value == 0) return ERROR_FS_EXPECTED_DATABLOCK_NR; }
 
 #define EXPECT_HASHTABLE_SIZE { \
-if (value != 72) return FS_INVALID_HASHTABLE_SIZE; }
-
-#endif
+if (value != 72) return ERROR_FS_INVALID_HASHTABLE_SIZE; }

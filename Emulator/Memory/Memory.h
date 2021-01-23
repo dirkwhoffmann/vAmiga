@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _MEMORY_H
-#define _MEMORY_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "RomFile.h"
@@ -190,7 +189,7 @@ public:
     Memory(Amiga& ref);
     ~Memory();
 
-    const char *getDescription() override { return "Memory"; }
+    const char *getDescription() const override { return "Memory"; }
     
 private:
     
@@ -204,14 +203,14 @@ private:
     
 public:
     
-    MemoryConfig getConfig() { return config; }
+    const MemoryConfig &getConfig() const { return config; }
     
-    long getConfigItem(ConfigOption option);
-    bool setConfigItem(ConfigOption option, long value) override;
+    long getConfigItem(Option option) const;
+    bool setConfigItem(Option option, long value) override;
 
 private:
     
-    void _dumpConfig() override;
+    void _dumpConfig() const override;
 
     
     //
@@ -227,7 +226,7 @@ public:
 
 private:
     
-    void _dump() override;
+    void _dump() const override;
 
     
     //
@@ -267,10 +266,10 @@ private:
     }
 
     size_t _size() override;
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    size_t didLoadFromBuffer(u8 *buffer) override;
-    size_t didSaveToBuffer(u8 *buffer) override;
+    size_t didLoadFromBuffer(const u8 *buffer) override;
+    size_t didSaveToBuffer(u8 *buffer) const override;
 
     
     //
@@ -319,15 +318,15 @@ public:
 public:
 
     // Check if a certain Ram is present
-    bool hasChipRam() { return chip != nullptr; }
-    bool hasSlowRam() { return slow != nullptr; }
-    bool hasFastRam() { return fast != nullptr; }
+    bool hasChipRam() const { return chip != nullptr; }
+    bool hasSlowRam() const { return slow != nullptr; }
+    bool hasFastRam() const { return fast != nullptr; }
 
     // Returns the size of a certain Ram in bytes
-    size_t chipRamSize() { return config.chipSize; }
-    size_t slowRamSize() { return config.slowSize; }
-    size_t fastRamSize() { return config.fastSize; }
-    size_t ramSize() { return config.chipSize + config.slowSize + config.fastSize; }
+    size_t chipRamSize() const { return config.chipSize; }
+    size_t slowRamSize() const { return config.slowSize; }
+    size_t fastRamSize() const { return config.fastSize; }
+    size_t ramSize() const { return config.chipSize + config.slowSize + config.fastSize; }
 
 private:
     
@@ -370,14 +369,18 @@ public:
     void eraseExt() { assert(ext); memset(ext, 0, config.extSize); }
 
     // Installs a Boot Rom or Kickstart Rom
-    bool loadRom(RomFile *rom);
-    bool loadRomFromBuffer(const u8 *buffer, size_t length);
-    bool loadRomFromFile(const char *path, FileError *error);
+    void loadRom(RomFile *rom) throws;
+    void loadRomFromFile(const char *path) throws;
+    bool loadRomFromFile(const char *path, ErrorCode *ec);
+    void loadRomFromBuffer(const u8 *buf, size_t len) throws;
+    bool loadRomFromBuffer(const u8 *buf, size_t len, ErrorCode *ec);
 
-    bool loadExt(ExtendedRomFile *rom);
-    bool loadExtFromBuffer(const u8 *buffer, size_t length);
-    bool loadExtFromFile(const char *path);
-    
+    void loadExt(ExtendedRomFile *rom) throws;
+    void loadExtFromFile(const char *path) throws;
+    bool loadExtFromFile(const char *path, ErrorCode *ec);
+    void loadExtFromBuffer(const u8 *buf, size_t len) throws;
+    bool loadExtFromBuffer(const u8 *buf, size_t len, ErrorCode *ec);
+
 private:
 
     // Loads Rom data from a file
@@ -419,10 +422,10 @@ public:
 
     template <Accessor acc, MemorySource src> u8 peek8(u32 addr);
     template <Accessor acc, MemorySource src> u16 peek16(u32 addr);
-    template <Accessor acc, MemorySource src> u16 spypeek16(u32 addr);
+    template <Accessor acc, MemorySource src> u16 spypeek16(u32 addr) const;
     template <Accessor acc> u8 peek8(u32 addr);
     template <Accessor acc> u16 peek16(u32 addr);
-    template <Accessor acc> u16 spypeek16(u32 addr);
+    template <Accessor acc> u16 spypeek16(u32 addr) const;
 
     template <Accessor acc, MemorySource src> void poke8(u32 addr, u8 value);
     template <Accessor acc, MemorySource src> void poke16(u32 addr, u16 value);
@@ -437,8 +440,8 @@ public:
     u8 peekCIA8(u32 addr);
     u16 peekCIA16(u32 addr);
     
-    u8 spypeekCIA8(u32 addr);
-    u16 spypeekCIA16(u32 addr);
+    u8 spypeekCIA8(u32 addr) const;
+    u16 spypeekCIA16(u32 addr) const;
     
     void pokeCIA8(u32 addr, u8 value);
     void pokeCIA16(u32 addr, u16 value);
@@ -448,11 +451,11 @@ public:
     // Accessing the RTC space
     //
     
-    u8 peekRTC8(u32 addr);
-    u16 peekRTC16(u32 addr);
+    u8 peekRTC8(u32 addr) const;
+    u16 peekRTC16(u32 addr) const;
     
-    u8 spypeekRTC8(u32 addr) { return peekRTC8(addr); }
-    u16 spypeekRTC16(u32 addr) { return peekRTC16(addr); }
+    // u8 spypeekRTC8(u32 addr) { return peekRTC8(addr); }
+    // u16 spypeekRTC16(u32 addr) { return peekRTC16(addr); }
 
     void pokeRTC8(u32 addr, u8 value);
     void pokeRTC16(u32 addr, u16 value);
@@ -465,7 +468,7 @@ public:
     u16 peekCustom16(u32 addr);
     u16 peekCustomFaulty16(u32 addr);
     
-    u16 spypeekCustom16(u32 addr);
+    u16 spypeekCustom16(u32 addr) const;
  
     template <Accessor s> void pokeCustom16(u32 addr, u16 value);
     
@@ -482,5 +485,3 @@ public:
     // Returns a certain amount of bytes as a string containing hex words
     template <Accessor A> const char *hex(u32 addr, size_t bytes);
 };
-
-#endif

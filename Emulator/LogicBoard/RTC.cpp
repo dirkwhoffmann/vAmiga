@@ -14,7 +14,7 @@ RTC::RTC(Amiga& ref) : AmigaComponent(ref)
 }
 
 long
-RTC::getConfigItem(ConfigOption option)
+RTC::getConfigItem(Option option) const
 {
     switch (option) {
             
@@ -27,7 +27,7 @@ RTC::getConfigItem(ConfigOption option)
 }
 
 bool
-RTC::setConfigItem(ConfigOption option, long value)
+RTC::setConfigItem(Option option, long value)
 {
     switch (option) {
             
@@ -38,13 +38,8 @@ RTC::setConfigItem(ConfigOption option, long value)
             warn("Overriding RTC revision: %ld KB\n", value);
             #endif
             
-            if (!isRTCRevision(value)) {
-                warn("Invalid RTC revision: %ld\n", value);
-                return false;
-            }
-            if (config.model == value) {
-                return false;
-            }
+            if (!RTCRevisionEnum::verify(value)) return false;
+            if (config.model == value) return false;
             
             config.model = (RTCRevision)value;
             mem.updateMemSrcTables();
@@ -57,9 +52,9 @@ RTC::setConfigItem(ConfigOption option, long value)
 }
 
 void
-RTC::_dumpConfig()
+RTC::_dumpConfig() const
 {
-    msg("  Revision : %s\n", sRTCRevision(config.model));
+    msg("  Revision : %s\n", RTCRevisionEnum::key(config.model));
 }
 
 void
@@ -85,7 +80,7 @@ RTC::_reset(bool hard)
 }
 
 void
-RTC::_dump()
+RTC::_dump() const
 {
     for (unsigned i = 0; i < 4; i++) {
         for (unsigned j = 0; j < 16; j++) msg("i: %X ", reg[i][j]);
@@ -105,7 +100,7 @@ RTC::getTime()
     if (timeBetweenCalls > 2) {
 
         /* If the time between two read accesses is long, we compute the result
-         * of the host machine's current time and variable timeDiff.
+         * out of the host machine's current time and variable timeDiff.
          */
         lastMeasure = master;
         lastMeasuredValue = (i64)time(nullptr);
@@ -115,12 +110,12 @@ RTC::getTime()
 
         /* If the time between two read accesses is short, we compute the result
          * out of the master-clock cycles that have elapsed since the host
-         * machine's time was queried the last time.
-         * This ensures that the real-time clock behaves properly in warp mode.
-         * E.g., when the Amiga boots, Kickstart tests the real-time clock by
-         * peeking the time twice with a time delay of more than 1 second. If
-         * we simply query the host machine's time, the time difference would
-         * be less than 1 second in warp mode.
+         * machine's time was queried the last time. This ensures that the
+         * real-time clock behaves properly in warp mode. E.g., when the Amiga
+         * boots, Kickstart tests the real-time clock by peeking the time twice
+         * with a time delay of more than 1 second. If we simply query the host
+         * machine's time, the time difference would be less than 1 second in
+         * warp mode.
          */
         i64 elapsedTime = AS_SEC(master - lastMeasure);
         result = (time_t)lastMeasuredValue + (time_t)elapsedTime;
@@ -136,8 +131,21 @@ RTC::setTime(time_t t)
     timeDiff = (i64)(t - time(nullptr));
 }
 
+void
+RTC::update()
+{
+    time2registers();
+}
+
 u8
-RTC::peek(unsigned nr)
+RTC::peek(usize nr)
+{
+    update();
+    return spypeek(nr);
+}
+
+u8
+RTC::spypeek(usize nr) const
 {
     assert(nr < 16);
     assert(config.model != RTC_NONE);
@@ -152,7 +160,6 @@ RTC::peek(unsigned nr)
             
         default: // Time or date register
             
-            time2registers();
             result = reg[bank()][nr];
     }
     
@@ -160,16 +167,16 @@ RTC::peek(unsigned nr)
     result = FORCE_RTC_REGISTER;
     #endif
     
-    trace(RTC_DEBUG, "peek(%d) = $%X [bank %d]\n", nr, result, bank());
+    trace(RTC_DEBUG, "peek(%zu) = $%X [bank %zu]\n", nr, result, bank());
     return result;
 }
 
 void
-RTC::poke(unsigned nr, u8 value)
+RTC::poke(usize nr, u8 value)
 {
     assert(nr < 16);
 
-    trace(RTC_DEBUG, "poke(%d, $%02X) [bank %d]\n", nr, value, bank());
+    trace(RTC_DEBUG, "poke(%zu, $%02X) [bank %zu]\n", nr, value, bank());
 
     // Ony proceed if a real-time clock is installed
     if (rtc.isPresent()) return;
@@ -182,6 +189,7 @@ RTC::poke(unsigned nr, u8 value)
             
         default: // Time or date register
             
+            time2registers();
             reg[bank()][nr] = value & 0xF;
             registers2time();
     }

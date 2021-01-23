@@ -44,7 +44,7 @@ PixelEngine::~PixelEngine()
 }
 
 size_t
-PixelEngine::didLoadFromBuffer(u8 *buffer)
+PixelEngine::didLoadFromBuffer(const u8 *buffer)
 {
     updateRGBA();
     return 0;
@@ -226,18 +226,19 @@ PixelEngine::getStableBuffer()
         result = (frameBuffer == &emuTexture[0]) ? emuTexture[1] : emuTexture[0];
     }
     
+    assert(result.data);
     return result;
 }
 
 u32 *
-PixelEngine::getNoise()
+PixelEngine::getNoise() const
 {
     int offset = rand() % (512 * 512);
     return noise + offset;
 }
 
 u32 *
-PixelEngine::pixelAddr(int pixel)
+PixelEngine::pixelAddr(int pixel) const
 {
     u32 offset = pixel + agnus.pos.v * HPIXELS;
 

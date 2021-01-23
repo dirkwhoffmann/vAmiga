@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _HDF_H
-#define _HDF_H
+#pragma once
 
 #include "DiskFile.h"
 #include "FSDevice.h"
@@ -22,7 +21,10 @@ public:
     //
     // Class methods
     //
-    
+
+    static bool isCompatibleName(const std::string &name);
+    static bool isCompatibleStream(std::istream &stream);
+
     // Returns true iff the provided buffer contains an HDF file
     static bool isHDFBuffer(const u8 *buffer, size_t length);
     
@@ -38,7 +40,7 @@ public:
 
     HDFFile();
     
-    const char *getDescription() override { return "HDF"; }
+    const char *getDescription() const override { return "HDF"; }
 
     
     //
@@ -47,11 +49,7 @@ public:
     
 public:
     
-    AmigaFileType fileType() override { return FILETYPE_HDF; }
-    // const char *typeAsString() override { return "HDF"; }
-    bool matchingBuffer(const u8 *buffer, size_t length) override {
-        return isHDFBuffer(buffer, length); }
-    bool matchingFile(const char *path) override { return isHDFFile(path); }
+    FileType type() const override { return FILETYPE_HDF; }
 
 
     //
@@ -61,15 +59,15 @@ public:
 public:
     
     // Returns true if this image contains a rigid disk block
-    bool hasRDB();
+    bool hasRDB() const;
     
     // Returns the layout parameters of the hard drive
-    long numCyls();
-    long numSides();
-    long numSectors();
-    long numReserved();
-    long numBlocks();
-    long bsize();
+    long numCyls() const;
+    long numSides() const;
+    long numSectors() const;
+    long numReserved() const;
+    long numBlocks() const;
+    long bsize() const;
     struct FSDeviceDescriptor layout();
 
     
@@ -82,5 +80,3 @@ private:
     // Extract the DOS revision number from a certain block
     FSVolumeType dos(int i);    
 };
-
-#endif

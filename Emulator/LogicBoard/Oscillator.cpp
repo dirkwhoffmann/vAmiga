@@ -17,7 +17,7 @@ Oscillator::Oscillator(Amiga& ref) : AmigaComponent(ref)
 }
 
 const char *
-Oscillator::getDescription()
+Oscillator::getDescription() const
 {
 #ifdef __MACH__
     return "Oscillator (Mac)";

@@ -9,17 +9,21 @@
 
 #include "Amiga.h"
 
-ADFFile::ADFFile()
+bool
+ADFFile::isCompatibleName(const std::string &name)
 {
+    return name == "adf" || name == "ADF";
 }
 
 bool
-ADFFile::isADFBuffer(const u8 *buffer, size_t length)
+ADFFile::isCompatibleStream(std::istream &stream)
 {
-    // Some ADFs contain an additional byte at the end. Ignore it
+    usize length = streamLength(stream);
+    
+    // Some ADFs contain an additional byte at the end. Ignore it.
     length &= ~1;
     
-    // There are no magic bytes. Hence, we only check the file size
+    // There are no magic bytes. Hence, we only check the file size.
     return
     length == ADFSIZE_35_DD ||
     length == ADFSIZE_35_DD_81 ||
@@ -29,51 +33,28 @@ ADFFile::isADFBuffer(const u8 *buffer, size_t length)
     length == ADFSIZE_35_HD;
 }
 
-bool
-ADFFile::isADFFile(const char *path)
-{
-    // There are no magic bytes. Hence, we only check the file size
-    return
-    checkFileSize(path, ADFSIZE_35_DD) ||
-    checkFileSize(path, ADFSIZE_35_DD_81) ||
-    checkFileSize(path, ADFSIZE_35_DD_82) ||
-    checkFileSize(path, ADFSIZE_35_DD_83) ||
-    checkFileSize(path, ADFSIZE_35_DD_84) ||
-    checkFileSize(path, ADFSIZE_35_HD) ||
-    
-    checkFileSize(path, ADFSIZE_35_DD+1) ||
-    checkFileSize(path, ADFSIZE_35_DD_81+1) ||
-    checkFileSize(path, ADFSIZE_35_DD_82+1) ||
-    checkFileSize(path, ADFSIZE_35_DD_83+1) ||
-    checkFileSize(path, ADFSIZE_35_DD_84+1) ||
-    checkFileSize(path, ADFSIZE_35_HD+1);
-}
-
 size_t
-ADFFile::fileSize(DiskType t, DiskDensity d)
+ADFFile::fileSize(DiskDiameter diameter, DiskDensity density)
 {
-    assert(isDiskType(t));
+    assert_enum(DiskDiameter, density);
     
-    if (t == DISK_35 && d == DISK_DD) return ADFSIZE_35_DD;
-    if (t == DISK_35 && d == DISK_HD) return ADFSIZE_35_HD;
+    if (diameter == INCH_35 && density == DISK_DD) return ADFSIZE_35_DD;
+    if (diameter == INCH_35 && density == DISK_HD) return ADFSIZE_35_HD;
 
     assert(false);
     return 0;
 }
 
 ADFFile *
-ADFFile::makeWithType(DiskType t, DiskDensity d)
+ADFFile::makeWithType(DiskDiameter diameter, DiskDensity density)
 {
-    assert(isDiskType(t));
+    assert_enum(DiskDiameter, diameter);
     
     ADFFile *adf = new ADFFile();
     
-    if (!adf->alloc(fileSize(t, d))) {
-        delete adf;
-        return nullptr;
-    }
-    
-    memset(adf->data, 0, adf->size);
+    adf->size = fileSize(diameter, density);
+    adf->data = new u8[adf->size]();
+
     return adf;
 }
 
@@ -82,22 +63,29 @@ ADFFile::makeWithDisk(Disk *disk)
 {
     assert(disk);
 
-    DiskType type = disk->getType();
+    DiskDiameter type = disk->getDiameter();
     DiskDensity density = disk->getDensity();
 
-    // Create empty ADF
+    // Create an empty ADF
     ADFFile *adf = makeWithType(type, density);
-    if (!adf) return nullptr;
     
     // Export disk
     assert(adf->numTracks() == 160);
     assert(adf->numSectors() == 11 || adf->numSectors() == 22);
-    if (!adf->decodeDisk(disk)) {
-        delete adf;
-        return nullptr;
-    }
+    try { adf->decodeDisk(disk); }
+    catch (VAError &exception) { delete adf; throw exception; }
     
     return adf;
+}
+
+ADFFile *
+ADFFile::makeWithDisk(Disk *disk, ErrorCode *ec)
+{
+    *ec = ERROR_OK;
+    
+    try { return makeWithDisk(disk); }
+    catch (VAError &exception) { *ec = exception.errorCode; }
+    return nullptr;
 }
 
 ADFFile *
@@ -108,26 +96,37 @@ ADFFile::makeWithDrive(Drive *drive)
 }
 
 ADFFile *
-ADFFile::makeWithVolume(FSDevice &volume, FSError *error)
+ADFFile::makeWithDrive(Drive *drive, ErrorCode *ec)
+{
+    *ec = ERROR_OK;
+    
+    try { return makeWithDrive(drive); }
+    catch (VAError &exception) { *ec = exception.errorCode; }
+    return nullptr;
+}
+
+ADFFile *
+ADFFile::makeWithVolume(FSDevice &volume)
 {
     ADFFile *adf = nullptr;
     
-    printf("Capacity = %d\n", volume.getCapacity()); 
     switch (volume.getCapacity()) {
             
         case 2 * 880:
-            adf = makeWithType(DISK_35, DISK_DD);
+            adf = makeWithType(INCH_35, DISK_DD);
             break;
             
         case 4 * 880:
-            adf = makeWithType(DISK_35, DISK_HD);
+            adf = makeWithType(INCH_35, DISK_HD);
             break;
             
         default:
             assert(false);
     }
 
-    volume.exportVolume(adf->data, adf->size, error);
+    ErrorCode ec;
+    volume.exportVolume(adf->data, adf->size, &ec);
+    if (ec != ERROR_OK) throw VAError(ec);
     
     // REMOVE ASAP
     // adf->dumpSector(0);
@@ -135,8 +134,18 @@ ADFFile::makeWithVolume(FSDevice &volume, FSError *error)
     return adf;
 }
 
+ADFFile *
+ADFFile::makeWithVolume(FSDevice &volume, ErrorCode *ec)
+{
+    *ec = ERROR_OK;
+    
+    try { return makeWithVolume(volume); }
+    catch (VAError &exception) { *ec = exception.errorCode; }
+    return nullptr;
+}
+
 FSVolumeType
-ADFFile::getDos()
+ADFFile::getDos() const
 {
     if (strncmp((const char *)data, "DOS", 3) || data[3] > 7) {
         return FS_NODOS;
@@ -156,26 +165,26 @@ ADFFile::setDos(FSVolumeType dos)
     }
 }
 
-DiskType
-ADFFile::getDiskType()
+DiskDiameter
+ADFFile::getDiskDiameter() const
 {
-    return DISK_35;
+    return INCH_35;
 }
 
 DiskDensity
-ADFFile::getDiskDensity()
+ADFFile::getDiskDensity() const
 {
     return (size & ~1) == ADFSIZE_35_HD ? DISK_HD : DISK_DD;
 }
 
 long
-ADFFile::numSides()
+ADFFile::numSides() const
 {
     return 2;
 }
 
 long
-ADFFile::numCyls()
+ADFFile::numCyls() const
 {
     switch(size & ~1) {
             
@@ -193,7 +202,7 @@ ADFFile::numCyls()
 }
 
 long
-ADFFile::numSectors()
+ADFFile::numSectors() const
 {
     switch (getDiskDensity()) {
             
@@ -218,9 +227,14 @@ ADFFile::layout()
     result.bsize       = 512;
     result.numBlocks   = result.numCyls * result.numHeads * result.numSectors;
 
-    // Determine the location of the root block and the bitmap block
-    u32 root = rootBlock();
-    u32 bitmap = bitmapBlock();
+    // Determine the root block location
+    u32 root = size < ADFSIZE_35_HD ? 880 : 1760;
+
+    // Determine the bitmap block location
+    u32 bitmap = FSBlock::read32(data + root * 512 + 316);
+    
+    // Assign a default location if the bitmap block reference is invalid
+    if (bitmap == 0 || bitmap >= numBlocks()) bitmap = root + 1;
     
     // Add partition
     result.partitions.push_back(FSPartitionDescriptor(getDos(), 0, result.numCyls - 1, root));
@@ -230,13 +244,13 @@ ADFFile::layout()
 }
 
 BootBlockType
-ADFFile::bootBlockType()
+ADFFile::bootBlockType() const
 {
     return BootBlockImage(data).type;
 }
 
 const char *
-ADFFile::bootBlockName()
+ADFFile::bootBlockName() const
 {
     return BootBlockImage(data).name;
 }
@@ -268,11 +282,11 @@ ADFFile::killVirus()
 bool
 ADFFile::formatDisk(FSVolumeType fs, long bootBlockID)
 {
-    assert(isFSVolumeType(fs));
+    assert_enum(FSVolumeType, fs);
 
-    FSError error;
+    ErrorCode error;
 
-    msg("Formatting disk with %ld blocks (%s)\n", numBlocks(), sFSVolumeType(fs));
+    msg("Formatting disk with %ld blocks (%s)\n", numBlocks(), FSVolumeTypeEnum::key(fs));
 
     // Only proceed if a file system is given
     if (fs == FS_NODOS) return false;
@@ -292,10 +306,10 @@ ADFFile::formatDisk(FSVolumeType fs, long bootBlockID)
     volume->exportVolume(data, size, &error);
     delete(volume);
 
-    if (error == FS_OK) {
+    if (error == ERROR_OK) {
         return true;
     } else {
-        warn("Failed to export file system from ADF: %s\n", sFSError(error));
+        warn("Failed to export file system from ADF: %s\n", ErrorCodeEnum::key(error));
         return false;
     }
 }
@@ -305,14 +319,16 @@ ADFFile::encodeDisk(Disk *disk)
 {
     assert(disk != nullptr);
     
-    if (disk->getType() != getDiskType()) {
+    if (disk->getDiameter() != getDiskDiameter()) {
         warn("Incompatible disk types: %s %s\n",
-             sDiskType(disk->getType()), sDiskType(getDiskType()));
+             DiskDiameterEnum::key(disk->getDiameter()),
+             DiskDiameterEnum::key(getDiskDiameter()));
         return false;
     }
     if (disk->getDensity() != getDiskDensity()) {
         warn("Incompatible disk densities: %s %s\n",
-             sDiskDensity(disk->getDensity()), sDiskDensity(getDiskDensity()));
+             DiskDensityEnum::key(disk->getDensity()),
+             DiskDensityEnum::key(getDiskDensity()));
         return false;
     }
 
@@ -447,32 +463,26 @@ ADFFile::dumpSector(int num)
     hexdump(data + 512 * num, 512);
 }
 
-bool
+void
 ADFFile::decodeDisk(Disk *disk)
 {
     long tracks = numTracks();
     
     debug(MFM_DEBUG, "Decoding Amiga disk with %ld tracks\n", tracks);
     
-    if (disk->getType() != getDiskType()) {
-        warn("Incompatible disk types: %s %s\n",
-             sDiskType(disk->getType()), sDiskType(getDiskType()));
-        return false;
+    if (disk->getDiameter() != getDiskDiameter()) {
+        throw VAError(ERROR_DISK_INVALID_DIAMETER);
     }
     if (disk->getDensity() != getDiskDensity()) {
-        warn("Incompatible disk densities: %s %s\n",
-             sDiskDensity(disk->getDensity()), sDiskDensity(getDiskDensity()));
-        return false;
+        throw VAError(ERROR_DISK_INVALID_DENSITY);
     }
         
     // Make the MFM stream scannable beyond the track end
     disk->repeatTracks();
 
     for (Track t = 0; t < tracks; t++) {
-        if (!decodeTrack(disk, t)) return false;
+        if (!decodeTrack(disk, t)) throw VAError(ERROR_DISK_CANT_DECODE);
     }
-    
-    return true;
 }
 
 bool
@@ -537,24 +547,4 @@ ADFFile::decodeSector(u8 *dst, u8 *src)
     // Decode sector data
     Disk::decodeOddEven(dst + sector * 512, src, 512);
     return true;
-}
-
-u32
-ADFFile::rootBlock()
-{
-    return size < ADFSIZE_35_HD ? 880 : 1760;
-}
-
-u32
-ADFFile::bitmapBlock()
-{
-    u32 bmb = FSBlock::read32(data + rootBlock() * 512 + 316);
-
-    // Make sure bmb is a valid block number
-    if (bmb >= numBlocks()) bmb = 0;
-
-    // Assign a default location if the ADF is empty
-    if (bmb == 0) bmb = rootBlock() + 1;
-
-    return bmb;
 }

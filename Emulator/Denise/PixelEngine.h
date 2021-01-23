@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _COLORIZER_H
-#define _COLORIZER_H
+#pragma once
 
 #include "AmigaComponent.h"
 
@@ -92,7 +91,7 @@ public:
     PixelEngine(Amiga& ref);
     ~PixelEngine();
 
-    const char *getDescription() override { return "PixelEngine"; }
+    const char *getDescription() const override { return "PixelEngine"; }
 
     
     //
@@ -141,9 +140,9 @@ private:
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    size_t didLoadFromBuffer(u8 *buffer) override;
+    size_t didLoadFromBuffer(const u8 *buffer) override;
 
     
     //
@@ -169,12 +168,12 @@ public:
     void setColor(int reg, u16 value);
 
     // Returns a color value in Amiga format or RGBA format
-    u16 getColor(int nr) { assert(nr < 32); return colreg[nr]; }
-    u32 getRGBA(int nr) { assert(nr < 32); return indexedRgba[nr]; }
+    u16 getColor(int nr) const { return colreg[nr]; }
+    u32 getRGBA(int nr) const { return indexedRgba[nr]; }
 
     // Returns sprite color in Amiga format or RGBA format
-    u16 getSpriteColor(int s, int nr) { assert(s < 8); return getColor(16 + nr + 2 * (s & 6)); }
-    u32 getSpriteRGBA(int s, int nr) { return rgba[getSpriteColor(s,nr)]; }
+    u16 getSpriteColor(int s, int nr) const { return getColor(16 + nr + 2 * (s & 6)); }
+    u32 getSpriteRGBA(int s, int nr) const { return rgba[getSpriteColor(s,nr)]; }
 
 
     //
@@ -200,10 +199,10 @@ public:
     ScreenBuffer getStableBuffer();
 
     // Returns a pointer to randon noise
-    u32 *getNoise();
+    u32 *getNoise() const;
     
     // Returns the frame buffer address of a certain pixel in the current line
-    u32 *pixelAddr(int pixel);
+    u32 *pixelAddr(int pixel) const;
 
     // Called after each line in the VBLANK area
     void endOfVBlankLine();
@@ -249,5 +248,3 @@ public:
     
     void hide(int line, u16 layer, u8 alpha);
 };
-
-#endif

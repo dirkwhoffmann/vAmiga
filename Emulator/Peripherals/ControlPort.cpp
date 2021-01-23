@@ -11,10 +11,16 @@
 
 ControlPort::ControlPort(Amiga& ref, PortNr portNr) : AmigaComponent(ref), nr(portNr)
 {
-    assert(isPortNr(nr));
+    assert_enum(PortNr, portNr);
     subComponents = vector<HardwareComponent *> { &mouse, &joystick };
 }
 
+const char *
+ControlPort::getDescription() const
+{
+    return nr == PORT_1 ? "Port1" : "Port2";
+}
+    
 void
 ControlPort::_inspect()
 {
@@ -39,7 +45,7 @@ ControlPort::_inspect()
 }
 
 void
-ControlPort::_dump()
+ControlPort::_dump() const
 {
     msg("         device: %ld (%s)\n",
         (long)device,
@@ -53,9 +59,6 @@ ControlPort::_dump()
 u16
 ControlPort::joydat()
 {
-    assert(nr == 1 || nr == 2);
-    assert(isControlPortDevice(device));
-
     // Update the mouse counters first if a mouse is connected
     if (device == CPD_MOUSE) {
         mouseCounterX += mouse.getDeltaX();
@@ -86,7 +89,7 @@ ControlPort::pokeJOYTEST(u16 value)
 }
 
 void
-ControlPort::changePotgo(u16 &potgo)
+ControlPort::changePotgo(u16 &potgo) const
 {
     if (device == CPD_MOUSE) {
         mouse.changePotgo(potgo);
@@ -94,7 +97,7 @@ ControlPort::changePotgo(u16 &potgo)
 }
 
 void
-ControlPort::changePra(u8 &pra)
+ControlPort::changePra(u8 &pra) const
 {
     if (device == CPD_MOUSE) {
         mouse.changePra(pra);

@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+import simd
+
 // Base class for all activity monitors
 
 enum Side {

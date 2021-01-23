@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_OBJECTS_H
-#define _FS_OBJECTS_H
+#pragma once
 
 #include "AmigaObject.h"
 
@@ -27,8 +26,8 @@ struct FSString : AmigaObject {
 
     const char *c_str() { return str; }
 
-    bool operator== (FSString &rhs);
-    u32 hashValue();
+    bool operator== (FSString &rhs) const;
+    u32 hashValue() const;
     
     void write(u8 *p);
 };
@@ -38,7 +37,7 @@ struct FSName : FSString {
     FSName(const char *cString) : FSString(cString, 30) {rectify(); }
     FSName(const u8 *bcplString) : FSString(bcplString, 30) { rectify(); }
 
-    const char *getDescription() override { return "FSName"; }
+    const char *getDescription() const override { return "FSName"; }
 
     // Scans the given name and replaces invalid characters by dummy symbols
     void rectify();
@@ -49,7 +48,7 @@ struct FSComment : FSString {
     FSComment(const char *cString) : FSString(cString, 91) { }
     FSComment(const u8 *bcplString) : FSString(bcplString, 91) { }
 
-    const char *getDescription() override { return "FSComment"; }
+    const char *getDescription() const override { return "FSComment"; }
 };
 
 struct FSTime : AmigaObject {
@@ -61,14 +60,12 @@ struct FSTime : AmigaObject {
     FSTime(time_t t);
     FSTime(const u8 *p);
 
-    const char *getDescription() override { return "FSTime"; }
+    const char *getDescription() const override { return "FSTime"; }
 
-    time_t time();
+    time_t time() const;
     void write(u8 *p);
 
-    string dateStr();
-    string timeStr();    
-    string str();
+    string dateStr() const;
+    string timeStr() const;
+    string str() const;
 };
-
-#endif

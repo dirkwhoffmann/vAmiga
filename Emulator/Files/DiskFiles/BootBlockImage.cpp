@@ -8,9 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "BootBlockImage.h"
-#include <string.h>
-#include <stdio.h>
-
+#include "Utils.h"
 
 //
 // Bootblock images

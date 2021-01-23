@@ -7,247 +7,119 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_TYPES_H
-#define _FS_TYPES_H
+#pragma once
 
-#include "Aliases.h"
+#include "FSPublicTypes.h"
+#include "Reflection.h"
 
-enum_long( FSVolumeType)
-{
-    FS_NODOS = -1,
-    FS_OFS = 0,         // Original File System
-    FS_FFS = 1,         // Fast File System
-    FS_OFS_INTL = 2,    // "International" (not supported)
-    FS_FFS_INTL = 3,    // "International" (not supported)
-    FS_OFS_DC = 4,      // "Directory Cache" (not supported)
-    FS_FFS_DC = 5,      // "Directory Cache" (not supported)
-    FS_OFS_LNFS = 6,    // "Long Filenames" (not supported)
-    FS_FFS_LNFS = 7     // "Long Filenames" (not supported)
-};
-
-inline bool isFSVolumeType(long value)
-{
-    return value >= FS_NODOS && value <= FS_FFS_LNFS;
-}
-
-inline bool isOFSVolumeType(long value)
-{
-    switch (value) {
-        case FS_OFS:
-        case FS_OFS_INTL:
-        case FS_OFS_DC:
-        case FS_OFS_LNFS: return true;
-        default:          return false;
-    }
-}
-
-inline bool isFFSVolumeType(long value)
-{
-    switch (value) {
-        case FS_FFS:
-        case FS_FFS_INTL:
-        case FS_FFS_DC:
-        case FS_FFS_LNFS: return true;
-        default:          return false;
-    }
-}
-
-inline const char *sFSVolumeType(FSVolumeType value)
-{
-    switch (value) {
-        case FS_NODOS:    return "No DOS";
-        case FS_OFS:      return "OFS";
-        case FS_FFS:      return "FFS";
-        case FS_OFS_INTL: return "OFS_INTL";
-        case FS_FFS_INTL: return "FFS_INTL";
-        case FS_OFS_DC:   return "OFS_DC";
-        case FS_FFS_DC:   return "FFS_DC";
-        case FS_OFS_LNFS: return "OFS_LNFS";
-        case FS_FFS_LNFS: return "FFS_LNFS";
-        default:          return "???";
-    }
-}
-
-enum_long( FSBlockType)
-{
-    FS_UNKNOWN_BLOCK,
-    FS_EMPTY_BLOCK,
-    FS_BOOT_BLOCK,
-    FS_ROOT_BLOCK,
-    FS_BITMAP_BLOCK,
-    FS_BITMAP_EXT_BLOCK,
-    FS_USERDIR_BLOCK,
-    FS_FILEHEADER_BLOCK,
-    FS_FILELIST_BLOCK,
-    FS_DATA_BLOCK_OFS,
-    FS_DATA_BLOCK_FFS
-};
-
-inline bool
-isFSBlockType(long value)
-{
-    return value >= FS_UNKNOWN_BLOCK && value <= FS_DATA_BLOCK_FFS;
-}
-
-inline const char *
-sFSBlockType(FSBlockType type)
-{
-    assert(isFSBlockType(type));
-
-    switch (type) {
-        case FS_EMPTY_BLOCK:      return "FS_EMPTY_BLOCK";
-        case FS_BOOT_BLOCK:       return "FS_BOOT_BLOCK";
-        case FS_ROOT_BLOCK:       return "FS_ROOT_BLOCK";
-        case FS_BITMAP_BLOCK:     return "FS_BITMAP_BLOCK";
-        case FS_BITMAP_EXT_BLOCK: return "FS_BITMAP_EXT_BLOCK";
-        case FS_USERDIR_BLOCK:    return "FS_USERDIR_BLOCK";
-        case FS_FILEHEADER_BLOCK: return "FS_FILEHEADER_BLOCK";
-        case FS_FILELIST_BLOCK:   return "FS_FILELIST_BLOCK";
-        case FS_DATA_BLOCK_OFS:   return "FS_DATA_BLOCK_OFS";
-        case FS_DATA_BLOCK_FFS:   return "FS_DATA_BLOCK_FFS";
-        default:                  return "???";
-    }
-}
-
-enum_long( FSItemType)
-{
-    FSI_UNKNOWN,
-    FSI_UNUSED,
-    FSI_DOS_HEADER,
-    FSI_DOS_VERSION,
-    FSI_BOOTCODE,
-    FSI_TYPE_ID,
-    FSI_SUBTYPE_ID,
-    FSI_SELF_REF,
-    FSI_CHECKSUM,
-    FSI_HASHTABLE_SIZE,
-    FSI_HASH_REF,
-    FSI_PROT_BITS,
-    FSI_BCPL_STRING_LENGTH,
-    FSI_BCPL_DISK_NAME,
-    FSI_BCPL_DIR_NAME,
-    FSI_BCPL_FILE_NAME,
-    FSI_BCPL_COMMENT,
-    FSI_CREATED_DAY,
-    FSI_CREATED_MIN,
-    FSI_CREATED_TICKS,
-    FSI_MODIFIED_DAY,
-    FSI_MODIFIED_MIN,
-    FSI_MODIFIED_TICKS,
-    FSI_NEXT_HASH_REF,
-    FSI_PARENT_DIR_REF,
-    FSI_FILEHEADER_REF,
-    FSI_EXT_BLOCK_REF,
-    FSI_BITMAP_BLOCK_REF,
-    FSI_BITMAP_EXT_BLOCK_REF,
-    FSI_BITMAP_VALIDITY,
-    FSI_FILESIZE,
-    FSI_DATA_BLOCK_NUMBER,
-    FSI_DATA_BLOCK_REF_COUNT,
-    FSI_FIRST_DATA_BLOCK_REF,
-    FSI_NEXT_DATA_BLOCK_REF,
-    FSI_DATA_BLOCK_REF,
-    FSI_DATA_COUNT,
-    FSI_DATA,
-    FSI_BITMAP,
-};
-
-inline bool
-isFSBlockItem(long value)
-{
-    return value >= 0 && value <= FSI_BITMAP;
-}
-
-enum_long( FSError)
-{
-    FS_OK,
+struct FSVolumeTypeEnum : Reflection<FSVolumeTypeEnum, FSVolumeType> {
     
-    // File system errors
-    FS_UNKNOWN,
-    FS_UNSUPPORTED,
-    FS_WRONG_BSIZE,
-    FS_WRONG_CAPACITY,
-    FS_HAS_CYCLES,
-    FS_CORRUPTED,
-
-    // Export errors
-    FS_DIRECTORY_NOT_EMPTY,
-    FS_CANNOT_CREATE_DIR,
-    FS_CANNOT_CREATE_FILE,
-
-    // Block errros
-    FS_EXPECTED_VALUE,
-    FS_EXPECTED_SMALLER_VALUE,
-    FS_EXPECTED_DOS_REVISION,
-    FS_EXPECTED_NO_REF,
-    FS_EXPECTED_REF,
-    FS_EXPECTED_SELFREF,
-    FS_PTR_TO_UNKNOWN_BLOCK,
-    FS_PTR_TO_EMPTY_BLOCK,
-    FS_PTR_TO_BOOT_BLOCK,
-    FS_PTR_TO_ROOT_BLOCK,
-    FS_PTR_TO_BITMAP_BLOCK,
-    FS_PTR_TO_BITMAP_EXT_BLOCK,
-    FS_PTR_TO_USERDIR_BLOCK,
-    FS_PTR_TO_FILEHEADER_BLOCK,
-    FS_PTR_TO_FILELIST_BLOCK,
-    FS_PTR_TO_DATA_BLOCK,
-    FS_EXPECTED_DATABLOCK_NR,
-    FS_INVALID_HASHTABLE_SIZE
+    static bool isValid(long value)
+    {
+        return value >= FS_NODOS && value <= FS_FFS_LNFS;
+    }
+    
+    static const char *prefix() { return "FS"; }
+    static const char *key(FSVolumeType value)
+    {
+        switch (value) {
+                
+            case FS_NODOS:     return "NODOS";
+            case FS_OFS:       return "OFS";
+            case FS_FFS:       return "FFS";
+            case FS_OFS_INTL:  return "OFS_INTL";
+            case FS_FFS_INTL:  return "FFS_INTL";
+            case FS_OFS_DC:    return "OFS_DC";
+            case FS_FFS_DC:    return "FFS_DC";
+            case FS_OFS_LNFS:  return "OFS_LNFS";
+            case FS_FFS_LNFS:  return "FFS_LNFS";
+        }
+        return "???";
+    }
 };
 
-inline bool isFSError(FSError value)
-{
-    return value >= 0 && value <= FS_INVALID_HASHTABLE_SIZE;
-}
-
-inline const char *sFSError(FSError value)
-{
-    switch (value) {
-            
-        case FS_OK:                      return "FS_OK";
-        case FS_UNKNOWN:                 return "FS_UNKNOWN";
-        case FS_UNSUPPORTED:             return "FS_UNSUPPORTED";
-        case FS_WRONG_BSIZE:             return "FS_WRONG_BSIZE";
-        case FS_WRONG_CAPACITY:          return "FS_WRONG_CAPACITY";
-        case FS_HAS_CYCLES:              return "FS_HAS_CYCLES";
-        case FS_CORRUPTED:               return "FS_CORRUPTED";
-            
-        case FS_DIRECTORY_NOT_EMPTY:     return "FS_DIRECTORY_NOT_EMPTY";
-        case FS_CANNOT_CREATE_DIR:       return "FS_CANNOT_CREATE_DIR";
-        case FS_CANNOT_CREATE_FILE:      return "FS_CANNOT_CREATE_FILE";
-
-        case FS_EXPECTED_VALUE:          return "FS_EXPECTED_VALUE";
-        case FS_EXPECTED_SMALLER_VALUE:  return "FS_EXPECTED_SMALLER_VALUE";
-        case FS_EXPECTED_DOS_REVISION:   return "FS_EXPECTED_DOS_REVISION";
-        case FS_EXPECTED_NO_REF:         return "FS_EXPECTED_NO_REF";
-        case FS_EXPECTED_REF:            return "FS_EXPECTED_REF";
-        case FS_EXPECTED_SELFREF:        return "FS_EXPECTED_SELFREF";
-        case FS_PTR_TO_UNKNOWN_BLOCK:    return "FS_PTR_TO_UNKNOWN_BLOCK";
-        case FS_PTR_TO_EMPTY_BLOCK:      return "FS_PTR_TO_EMPTY_BLOCK";
-        case FS_PTR_TO_BOOT_BLOCK:       return "FS_PTR_TO_BOOT_BLOCK";
-        case FS_PTR_TO_ROOT_BLOCK:       return "FS_PTR_TO_ROOT_BLOCK";
-        case FS_PTR_TO_BITMAP_BLOCK:     return "FS_PTR_TO_BITMAP_BLOCK";
-        case FS_PTR_TO_BITMAP_EXT_BLOCK: return "FS_PTR_TO_BITMAP_EXT_BLOCK";
-        case FS_PTR_TO_USERDIR_BLOCK:    return "FS_PTR_TO_USERDIR_BLOCK";
-        case FS_PTR_TO_FILEHEADER_BLOCK: return "FS_PTR_TO_FILEHEADER_BLOCK";
-        case FS_PTR_TO_FILELIST_BLOCK:   return "FS_PTR_TO_FILELIST_BLOCK";
-        case FS_PTR_TO_DATA_BLOCK:       return "FS_PTR_TO_DATA_BLOCK";
-        case FS_EXPECTED_DATABLOCK_NR:   return "FS_EXPECTED_DATABLOCK_NR";
-        case FS_INVALID_HASHTABLE_SIZE:  return "FS_INVALID_HASHTABLE_SIZE";
-        
-        default:
-            return isFSError(value) ? "<other>" : "???";
+struct FSBlockTypeEnum : Reflection<FSBlockTypeEnum, FSBlockType> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value <= FS_BLOCK_TYPE_COUNT;
     }
-}
+    
+    static const char *prefix() { return "FS"; }
+    static const char *key(FSBlockType value)
+    {
+        switch (value) {
+                
+            case FS_UNKNOWN_BLOCK:     return "UNKNOWN_BLOCK";
+            case FS_EMPTY_BLOCK:       return "EMPTY_BLOCK";
+            case FS_BOOT_BLOCK:        return "BOOT_BLOCK";
+            case FS_ROOT_BLOCK:        return "ROOT_BLOCK";
+            case FS_BITMAP_BLOCK:      return "BITMAP_BLOCK";
+            case FS_BITMAP_EXT_BLOCK:  return "BITMAP_EXT_BLOCK";
+            case FS_USERDIR_BLOCK:     return "USERDIR_BLOCK";
+            case FS_FILEHEADER_BLOCK:  return "FILEHEADER_BLOCK";
+            case FS_FILELIST_BLOCK:    return "FILELIST_BLOCK";
+            case FS_DATA_BLOCK_OFS:    return "DATA_BLOCK_OFS";
+            case FS_DATA_BLOCK_FFS:    return "DATA_BLOCK_FFS";
+            case FS_BLOCK_TYPE_COUNT:  return "???";
+        }
+        return "???";
+    }
+};
 
-typedef struct
-{
-    long bitmapErrors;
-    long corruptedBlocks;
-    long firstErrorBlock;
-    long lastErrorBlock;
-}
-FSErrorReport;
-
-#endif
+struct FSItemTypeEnum : Reflection<FSItemTypeEnum, FSItemType> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value <= FSI_COUNT;
+    }
+    
+    static const char *prefix() { return "FS"; }
+    static const char *key(FSItemType value)
+    {
+        switch (value) {
+                
+            case FSI_UNKNOWN:               return "UNKNOWN";
+            case FSI_UNUSED:                return "UNUSED";
+            case FSI_DOS_HEADER:            return "DOS_HEADER";
+            case FSI_DOS_VERSION:           return "DOS_VERSION";
+            case FSI_BOOTCODE:              return "BOOTCODE";
+            case FSI_TYPE_ID:               return "TYPE_ID";
+            case FSI_SUBTYPE_ID:            return "SUBTYPE_ID";
+            case FSI_SELF_REF:              return "SELF_REF";
+            case FSI_CHECKSUM:              return "CHECKSUM";
+            case FSI_HASHTABLE_SIZE:        return "HASHTABLE_SIZE";
+            case FSI_HASH_REF:              return "HASH_REF";
+            case FSI_PROT_BITS:             return "PROT_BITS";
+            case FSI_BCPL_STRING_LENGTH:    return "BCPL_STRING_LENGTH";
+            case FSI_BCPL_DISK_NAME:        return "BCPL_DISK_NAME";
+            case FSI_BCPL_DIR_NAME:         return "BCPL_DIR_NAME";
+            case FSI_BCPL_FILE_NAME:        return "BCPL_FILE_NAME";
+            case FSI_BCPL_COMMENT:          return "BCPL_COMMENT";
+            case FSI_CREATED_DAY:           return "CREATED_DAY";
+            case FSI_CREATED_MIN:           return "CREATED_MIN";
+            case FSI_CREATED_TICKS:         return "CREATED_TICKS";
+            case FSI_MODIFIED_DAY:          return "MODIFIED_DAY";
+            case FSI_MODIFIED_MIN:          return "MODIFIED_MIN";
+            case FSI_MODIFIED_TICKS:        return "MODIFIED_TICKS";
+            case FSI_NEXT_HASH_REF:         return "NEXT_HASH_REF";
+            case FSI_PARENT_DIR_REF:        return "PARENT_DIR_REF";
+            case FSI_FILEHEADER_REF:        return "FILEHEADER_REF";
+            case FSI_EXT_BLOCK_REF:         return "EXT_BLOCK_REF";
+            case FSI_BITMAP_BLOCK_REF:      return "BITMAP_BLOCK_REF";
+            case FSI_BITMAP_EXT_BLOCK_REF:  return "BITMAP_EXT_BLOCK_REF";
+            case FSI_BITMAP_VALIDITY:       return "BITMAP_VALIDITY";
+            case FSI_FILESIZE:              return "FILESIZE";
+            case FSI_DATA_BLOCK_NUMBER:     return "DATA_BLOCK_NUMBER";
+            case FSI_DATA_BLOCK_REF_COUNT:  return "DATA_BLOCK_REF_COUNT";
+            case FSI_FIRST_DATA_BLOCK_REF:  return "FIRST_DATA_BLOCK_REF";
+            case FSI_NEXT_DATA_BLOCK_REF:   return "NEXT_DATA_BLOCK_REF";
+            case FSI_DATA_BLOCK_REF:        return "DATA_BLOCK_REF";
+            case FSI_DATA_COUNT:            return "DATA_COUNT";
+            case FSI_DATA:                  return "DATA";
+            case FSI_BITMAP:                return "BITMAP";
+            case FSI_COUNT:                 return "???";
+        }
+        return "???";
+    }
+};

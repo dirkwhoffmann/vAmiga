@@ -29,7 +29,7 @@ FSRootBlock::~FSRootBlock()
 }
 
 FSItemType
-FSRootBlock::itemType(u32 byte)
+FSRootBlock::itemType(u32 byte) const
 {
     // Intercept some special locations
     if (byte == 432) return FSI_BCPL_STRING_LENGTH;
@@ -68,8 +68,8 @@ FSRootBlock::itemType(u32 byte)
     return FSI_UNKNOWN;
 }
 
-FSError
-FSRootBlock::check(u32 byte, u8 *expected, bool strict)
+ErrorCode
+FSRootBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     // Translate the byte index to a (signed) long word index
     i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;
@@ -100,11 +100,11 @@ FSRootBlock::check(u32 byte, u8 *expected, bool strict)
             if (word <= -25) { EXPECT_OPTIONAL_BITMAP_REF; break; }
     }
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
 void
-FSRootBlock::dump()
+FSRootBlock::dump() const
 {
     msg("         Name : %s\n", getName().c_str());
     msg("      Created : %s\n", getCreationDate().str().c_str());

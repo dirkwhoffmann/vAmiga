@@ -30,7 +30,7 @@ extension ConfigurationController {
         audSamplingMethod.selectItem(withTag: config.samplingMethod)
         audFilterType.selectItem(withTag: config.filterType)
         audFilterAlwaysOn.state = config.filterAlwaysOn ? .on : .off
-        audFilterAlwaysOn.isEnabled = config.filterType != FilterType.FILT_NONE.rawValue
+        audFilterAlwaysOn.isEnabled = config.filterType != FilterType.NONE.rawValue
 
         // Buttons
         audPowerButton.isHidden = !bootable

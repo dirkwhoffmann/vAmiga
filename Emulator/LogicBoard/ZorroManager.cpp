@@ -14,8 +14,8 @@ ZorroManager::ZorroManager(Amiga& ref) : AmigaComponent(ref)
 }
 
 u8
-ZorroManager::peekFastRamDevice(u32 addr)
-{    
+ZorroManager::peekFastRamDevice(u32 addr) const
+{
     trace(FAS_DEBUG, "peekFastRamDevice(%X)\n", addr & 0xFFFF);
     // debug(FAS_DEBUG, "fastRamSize = %d\n", mem.fastRamSize());
 
@@ -67,14 +67,16 @@ ZorroManager::peekFastRamDevice(u32 addr)
     u8 erFlagsHi = 0b0111;
     u8 erFlagsLo = 0b1111; // Logical and size match
     
+    u8 autoConfData;
+    
     switch (addr & 0xFFFF) {
             
         case 0x00: // er_Type (upper nibble)
-            if (fastRamConf == 0) autoConfData = erTypeHi;
+            autoConfData = erTypeHi;
             break;
             
         case 0x02: // er_Type (lower nibble)
-            if (fastRamConf == 0) autoConfData = erTypeLo;
+            autoConfData = erTypeLo;
             break;
             
         case 0x04: // er_Product (upper nibble)
@@ -82,7 +84,7 @@ ZorroManager::peekFastRamDevice(u32 addr)
             break;
             
         case 0x06: // er_Product (lower nibble)
-            if (fastRamConf == 0) autoConfData = 0x8;
+            autoConfData = 0x8;
             break;
             
         case 0x08: // er_Flags (upper nibble)
@@ -154,7 +156,7 @@ ZorroManager::peekFastRamDevice(u32 addr)
 }
 
 u8
-ZorroManager::spypeekFastRamDevice(u32 addr)
+ZorroManager::spypeekFastRamDevice(u32 addr) const
 {
     return peekFastRamDevice(addr);
 }

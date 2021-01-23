@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _TIME_DELAYED_H
-#define _TIME_DELAYED_H
+#pragma once
 
 #include "AmigaObject.h"
 
@@ -43,7 +42,7 @@ public:
     
     TimeDelayed() : TimeDelayed(nullptr) { };
           
-    const char *getDescription() { return "TimeDelayed"; }
+    const char *getDescription() const { return "TimeDelayed"; }
     
     // Sets the reference clock
     void setClock(i64 *clock) { this->clock = clock; }
@@ -116,5 +115,3 @@ public:
         return pipeline[MAX(0, timeStamp - AS_DMA_CYCLES(*clock) + customDelay)];
     }
 };
-
-#endif

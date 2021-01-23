@@ -44,6 +44,21 @@ Thumbnail::take(Amiga *amiga, int dx, int dy)
 }
 
 bool
+Snapshot::isCompatibleName(const std::string &name)
+{
+    return true;
+}
+
+bool
+Snapshot::isCompatibleStream(std::istream &stream)
+{
+    const u8 magicBytes[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
+    
+    if (streamLength(stream) < 0x15) return false;
+    return matchingStreamHeader(stream, magicBytes, sizeof(magicBytes));
+}
+
+bool
 Snapshot::isSnapshot(const u8 *buf, size_t len)
 {
     assert(buf != nullptr);
@@ -63,26 +78,6 @@ Snapshot::isSnapshot(const u8 *buf, size_t len, u8 major, u8 minor, u8 subminor)
     
     if (len < sizeof(SnapshotHeader)) return false;
     return matchingBufferHeader(buf, signature, sizeof(signature));
-}
-
-bool
-Snapshot::isSnapshotFile(const char *path)
-{
-    assert(path != nullptr);
-
-    u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
-    
-    return matchingFileHeader(path, signature, sizeof(signature));
-}
-
-bool
-Snapshot::isSnapshotFile(const char *path, u8 major, u8 minor, u8 subminor)
-{
-    assert(path != nullptr);
-
-    u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P', major, minor, subminor };
-        
-    return matchingFileHeader(path, signature, sizeof(signature));
 }
 
 Snapshot::Snapshot()
@@ -110,35 +105,14 @@ Snapshot::makeWithAmiga(Amiga *amiga)
 {
     Snapshot *snapshot = new Snapshot(amiga->size());
 
-    snapshot->getHeader()->screenshot.take(amiga);
+    snapshot->takeScreenshot(*amiga);
     amiga->save(snapshot->getData());
 
     return snapshot;
 }
 
-bool
-Snapshot::matchingBuffer(const u8* buffer, size_t length)
+void
+Snapshot::takeScreenshot(Amiga &amiga)
 {
-    return Snapshot::isSnapshot(buffer, length);
-}
-
-bool
-Snapshot::matchingFile(const char *path)
-{
-    return Snapshot::isSnapshotFile(path);
-}
-
-bool
-Snapshot::readFromBuffer(const u8 *buf, size_t len, FileError *err)
-{
-    // Read from buffer
-    if (AmigaFile::readFromBuffer(buf, len, err)) {
-
-        // Check the version number of this snapshot
-        if (!isSnapshot(buf, len, V_MAJOR, V_MINOR, V_SUBMINOR)) {
-            *err = ERR_UNSUPPORTED_SNAPSHOT;
-        }
-    }
-    
-    return *err == ERR_FILE_OK;
+    ((SnapshotHeader *)data)->screenshot.take(&amiga);
 }

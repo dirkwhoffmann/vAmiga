@@ -9,6 +9,11 @@
 
 import Cocoa
 
+var myAppDelegate: MyAppDelegate {
+    let delegate = NSApp.delegate as? MyAppDelegate
+    return delegate!
+}
+
 @NSApplicationMain
 @objc public class MyAppDelegate: NSObject, NSApplicationDelegate {
     
@@ -16,7 +21,10 @@ import Cocoa
     @IBOutlet weak var df1Menu: NSMenuItem!
     @IBOutlet weak var df2Menu: NSMenuItem!
     @IBOutlet weak var df3Menu: NSMenuItem!
-    
+        
+    // Replace the old document controller by instantiating a custom controller
+    let myDocumentController = MyDocumentController()
+
     /* An event tap for interception CGEvents. CGEvents are intercepted to
      * establish a direct mapping of the Command keys to the Amiga keys. To
      * make such a mapping work, we have to disable all keyboard shortcuts,
@@ -68,6 +76,7 @@ import Cocoa
     //
     
     func noteRecentlyUsedURL(_ url: URL, to list: inout [URL], size: Int) {
+        
         if !list.contains(url) {
             track()
             if list.count == size {

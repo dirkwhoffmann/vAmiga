@@ -231,6 +231,7 @@ class SnapshotDialog: DialogController {
         }
     }
     
+    /*
     @IBAction func saveAction(_ sender: NSButton!) {
         
         track()
@@ -240,6 +241,7 @@ class SnapshotDialog: DialogController {
             saveAs(snapshot: myDocument.autoSnapshots.element(at: currentItem))
         }
     }
+    */
     
     @IBAction override func cancelAction(_ sender: Any!) {
         
@@ -269,6 +271,7 @@ class SnapshotDialog: DialogController {
         try? myDocument.persistScreenshots()
     }
     
+    /*
     func saveAs(snapshot: SnapshotProxy?) {
         
         track()
@@ -286,6 +289,7 @@ class SnapshotDialog: DialogController {
             }
         })
     }
+    */
 }
 
 //

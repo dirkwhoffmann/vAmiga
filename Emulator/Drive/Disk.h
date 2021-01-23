@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_DISK_H
-#define _AMIGA_DISK_H
+#pragma once
 
 #include "HardwareComponent.h"
 
@@ -56,7 +55,7 @@ class Disk : public AmigaObject {
 public:
     
     // The form factor of this disk
-    DiskType type;
+    DiskDiameter diameter;
     
     // The density of this disk
     DiskDensity density;
@@ -93,13 +92,13 @@ private:
     
 public:
     
-    Disk(DiskType type, DiskDensity density);
+    Disk(DiskDiameter type, DiskDensity density);
     ~Disk();
 
-    const char *getDescription() override { return "Disk"; }
+    const char *getDescription() const override { return "Disk"; }
 
     static Disk *makeWithFile(class DiskFile *file);
-    static Disk *makeWithReader(SerReader &reader, DiskType type, DiskDensity density);
+    static Disk *makeWithReader(SerReader &reader, DiskDiameter type, DiskDensity density);
         
     void dump();
     
@@ -115,7 +114,7 @@ private:
     {
         worker
 
-        & type
+        & diameter
         & density
         & data.raw
         & writeProtected
@@ -130,20 +129,20 @@ private:
 
 public:
 
-    DiskType getType() { return type; }
-    DiskDensity getDensity() { return density; }
+    DiskDiameter getDiameter() const { return diameter; }
+    DiskDensity getDensity() const { return density; }
 
-    long numCyls() { return type == DISK_525 ? 42 : 84; }
-    long numSides() { return 2; }
-    long numTracks() { return type == DISK_525 ? 84 : 168; }
+    long numCyls() const { return diameter == INCH_525 ? 42 : 84; }
+    long numSides() const { return 2; }
+    long numTracks() const { return diameter == INCH_525 ? 84 : 168; }
 
-    bool isWriteProtected() { return writeProtected; }
+    bool isWriteProtected() const { return writeProtected; }
     void setWriteProtection(bool value) { writeProtected = value; }
     
-    bool isModified() { return modified; }
+    bool isModified() const { return modified; }
     void setModified(bool value) { modified = value; }
     
-    u64 getFnv() { return fnv; }
+    u64 getFnv() const { return fnv; }
     
 
     //
@@ -151,8 +150,8 @@ public:
     //
     
     // Reads a byte from disk
-    u8 readByte(Track track, u16 offset);
-    u8 readByte(Cylinder cylinder, Side side, u16 offset);
+    u8 readByte(Track track, u16 offset) const;
+    u8 readByte(Cylinder cylinder, Side side, u16 offset) const;
 
     // Writes a byte to disk
     void writeByte(u8 value, Track track, u16 offset);
@@ -202,5 +201,3 @@ public:
     // Repeats the MFM data inside the track buffer to ease decoding
     void repeatTracks(); 
 };
-
-#endif

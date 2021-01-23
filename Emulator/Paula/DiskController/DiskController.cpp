@@ -36,7 +36,7 @@ DiskController::_reset(bool hard)
 }
 
 long
-DiskController::getConfigItem(ConfigOption option)
+DiskController::getConfigItem(Option option) const
 {
     switch (option) {
             
@@ -51,7 +51,7 @@ DiskController::getConfigItem(ConfigOption option)
 }
 
 long
-DiskController::getConfigItem(ConfigOption option, long id)
+DiskController::getConfigItem(Option option, long id) const
 {
     switch (option) {
             
@@ -64,7 +64,7 @@ DiskController::getConfigItem(ConfigOption option, long id)
 }
 
 bool
-DiskController::setConfigItem(ConfigOption option, long value)
+DiskController::setConfigItem(Option option, long value)
 {
     switch (option) {
             
@@ -111,7 +111,7 @@ DiskController::setConfigItem(ConfigOption option, long value)
 }
 
 bool
-DiskController::setConfigItem(ConfigOption option, long id, long value)
+DiskController::setConfigItem(Option option, long id, long value)
 {
     switch (option) {
             
@@ -136,7 +136,7 @@ DiskController::setConfigItem(ConfigOption option, long id, long value)
 }
 
 void
-DiskController::_dumpConfig()
+DiskController::_dumpConfig() const
 {
     msg("          df0 : %s\n", config.connected[0] ? "connected" : "disconnected");
     msg("          df1 : %s\n", config.connected[1] ? "connected" : "disconnected");
@@ -167,10 +167,10 @@ DiskController::_inspect()
 }
 
 void
-DiskController::_dump()
+DiskController::_dump() const
 {
     msg("     selected : %d\n", selected);
-    msg("        state : %s\n", driveStateName(state));
+    msg("        state : %s\n", DriveDmaStateName(state));
     msg("    syncCycle : %lld\n", syncCycle);
     msg("     incoming : %02X\n", incoming);
     msg("         fifo : %llX (count = %d)\n", fifo, fifoCount);
@@ -190,14 +190,14 @@ DiskController::getSelectedDrive()
 }
 
 bool
-DiskController::spinning(unsigned driveNr)
+DiskController::spinning(unsigned driveNr) const
 {
     assert(driveNr < 4);
     return df[driveNr]->getMotor();
 }
 
 bool
-DiskController::spinning()
+DiskController::spinning() const
 {
     return df0.getMotor() || df1.getMotor() ||df2.getMotor() || df3.getMotor();
 }
@@ -212,7 +212,7 @@ void
 DiskController::setState(DriveState oldState, DriveState newState)
 {
     trace(DSK_DEBUG, "%s -> %s\n",
-          driveStateName(oldState), driveStateName(newState));
+          DriveDmaStateName(oldState), DriveDmaStateName(newState));
     
     state = newState;
     
@@ -238,7 +238,7 @@ DiskController::ejectDisk(int nr, Cycle delay)
     assert(nr >= 0 && nr <= 3);
 
     amiga.suspend();
-    agnus.scheduleRel<DCH_SLOT>(delay, DCH_EJECT, nr);
+    agnus.scheduleRel<SLOT_DCH>(delay, DCH_EJECT, nr);
     amiga.resume();
 }
 
@@ -272,7 +272,7 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
     }
 
     diskToInsert = disk;
-    agnus.scheduleRel<DCH_SLOT>(delay, DCH_INSERT, nr);
+    agnus.scheduleRel<SLOT_DCH>(delay, DCH_INSERT, nr);
     
     amiga.resume();
 }
@@ -333,9 +333,15 @@ DiskController::writeFifo(u8 byte)
 }
 
 bool
-DiskController::compareFifo(u16 word)
+DiskController::compareFifo(u16 word) const
 {
-    return fifoHasWord() && (fifo & 0xFFFF) == word;
+    if (fifoHasWord()) {
+        for (usize i = 0; i < 8; i++) {
+            if ((fifo >> i & 0xFFFF) == word) return true;
+        }
+    }
+    return false;
+    // return fifoHasWord() && (fifo & 0xFFFF) == word;
 }
 
 void
@@ -581,7 +587,7 @@ DiskController::performTurboRead(Drive *drive)
             check1 = fnv_1a_it32(check1, word);
             check2 = fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
         }
-        mem.poke16 <AGNUS_ACCESS> (agnus.dskpt, word);
+        mem.poke16 <ACCESSOR_AGNUS> (agnus.dskpt, word);
         agnus.dskpt += 2;
     }
     
@@ -601,7 +607,7 @@ DiskController::performTurboWrite(Drive *drive)
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from memory
-        u16 word = mem.peek16 <AGNUS_ACCESS> (agnus.dskpt);
+        u16 word = mem.peek16 <ACCESSOR_AGNUS> (agnus.dskpt);
         
         if (DSK_CHECKSUM) {
             checkcnt++;

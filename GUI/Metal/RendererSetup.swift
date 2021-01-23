@@ -41,7 +41,8 @@ extension Renderer {
 
         // Metal layer
         metalLayer = mtkView.layer as? CAMetalLayer
-        assert(metalLayer != nil, "Metal layer must not be nil")
+        metalAssert(metalLayer != nil,
+                    "The Core Animation layer could not be accessed.")
 
         metalLayer.device = device
         metalLayer.pixelFormat = MTLPixelFormat.bgra8Unorm
@@ -50,11 +51,13 @@ extension Renderer {
 
         // Command queue
         queue = device.makeCommandQueue()
-        assert(queue != nil, "Metal command queue must not be nil")
+        metalAssert(queue != nil,
+                    "The Command Queue could not be created.")
 
         // Shader library
         library = device.makeDefaultLibrary()
-        assert(library != nil, "Metal library must not be nil")
+        metalAssert(library != nil,
+                    "The Shader Library could not be built.")
     }
     
     func buildMonitors() {
@@ -78,10 +81,14 @@ extension Renderer {
         monitors[5].setColor(rgb: info.bitplaneColor)
 
         // Memory monitors
-        monitors.append(BarChart.init(device: device, name: "CPU (Chip Ram)", splitView: true))
-        monitors.append(BarChart.init(device: device, name: "CPU (Slow Ram)", splitView: true))
-        monitors.append(BarChart.init(device: device, name: "CPU (Fast Ram)", splitView: true))
-        monitors.append(BarChart.init(device: device, name: "CPU (Rom)", splitView: true))
+        monitors.append(BarChart.init(device: device, name: "CPU (Chip Ram)",
+                                      splitView: true))
+        monitors.append(BarChart.init(device: device, name: "CPU (Slow Ram)",
+                                      splitView: true))
+        monitors.append(BarChart.init(device: device, name: "CPU (Fast Ram)",
+                                      splitView: true))
+        monitors.append(BarChart.init(device: device, name: "CPU (Rom)",
+                                      splitView: true))
 
         // Waveform monitors
         monitors.append(WaveformMonitor.init(device: device,
@@ -181,10 +188,10 @@ extension Renderer {
         }
     }
     
-    internal func buildTextures() {
+    func buildTextures() {
 
         track()
-        
+                
         // Texture usages
         let r: MTLTextureUsage = [ .shaderRead ]
         let rwt: MTLTextureUsage = [ .shaderRead, .shaderWrite, .renderTarget ]
@@ -192,43 +199,55 @@ extension Renderer {
 
         // Background texture used in window mode
         bgTexture = device.makeTexture(size: TextureSize.background, usage: r)
-        assert(bgTexture != nil, "Failed to create bgTexture")
+        metalAssert(bgTexture != nil,
+                    "The background texture could not be allocated.")
         
         // Background texture used in fullscreen mode
         let c1 = (0x00, 0x00, 0x00, 0xFF)
         let c2 = (0x44, 0x44, 0x44, 0xFF)
-        bgFullscreenTexture = device.makeTexture(size: TextureSize.background, gradient: [c1, c2], usage: r)
-        assert(bgFullscreenTexture != nil, "Failed to create bgFullscreenTexture")
+        bgFullscreenTexture = device.makeTexture(size: TextureSize.background,
+                                                 gradient: [c1, c2], usage: r)
+        metalAssert(bgFullscreenTexture != nil,
+                    "The fullscreen texture could not be allocated.")
 
         // Emulator texture (long frames)
         longFrameTexture = device.makeTexture(size: TextureSize.original, usage: r)
-        assert(bgFullscreenTexture != nil, "Failed to create longFrameTexture")
+        metalAssert(longFrameTexture != nil,
+                    "The frame texture (long frames) could not be allocated.")
 
         // Emulator texture (short frames)
         shortFrameTexture = device.makeTexture(size: TextureSize.original, usage: r)
-        assert(bgFullscreenTexture != nil, "Failed to create shortFrameTexture")
+        metalAssert(shortFrameTexture != nil,
+                    "The frame texture (short frames) could not be allocated.")
 
         // Merged emulator texture (long frame + short frame)
         mergeTexture = device.makeTexture(size: TextureSize.merged, usage: rwt)
-        assert(bgFullscreenTexture != nil, "Failed to create mergeTexture")
+        metalAssert(mergeTexture != nil,
+                    "The merge texture could not be allocated.")
 
         // Bloom textures
         bloomTextureR = device.makeTexture(size: TextureSize.merged, usage: rwt)
         bloomTextureG = device.makeTexture(size: TextureSize.merged, usage: rwt)
         bloomTextureB = device.makeTexture(size: TextureSize.merged, usage: rwt)
-        assert(bloomTextureR != nil, "Failed to create bloomTextureR")
-        assert(bloomTextureG != nil, "Failed to create bloomTextureG")
-        assert(bloomTextureB != nil, "Failed to create bloomTextureB")
+        metalAssert(bloomTextureR != nil,
+                    "The bloom texture (R channel) could not be allocated.")
+        metalAssert(bloomTextureG != nil,
+                    "The bloom texture (G channel) could not be allocated.")
+        metalAssert(bloomTextureB != nil,
+                    "The bloom texture (B channel) could not be allocated.")
 
         // Target for in-texture upscaling
         lowresEnhancedTexture = device.makeTexture(size: TextureSize.merged, usage: rwt)
-        assert(bgFullscreenTexture != nil, "Failed to create lowresEnhancedTexture")
+        metalAssert(lowresEnhancedTexture != nil,
+                    "The lowres enhancer texture could not be allocated.")
 
         // Upscaled merge texture
         upscaledTexture = device.makeTexture(size: TextureSize.upscaled, usage: rwtp)
         scanlineTexture = device.makeTexture(size: TextureSize.upscaled, usage: rwtp)
-        assert(bgFullscreenTexture != nil, "Failed to create upscaledTexture")
-        assert(bgFullscreenTexture != nil, "Failed to create scanlineTexture")
+        metalAssert(upscaledTexture != nil,
+                    "The upscaling texture could not be allocated.")
+        metalAssert(scanlineTexture != nil,
+                    "The scanline texture could not be allocated.")
     }
 
     internal func buildSamplers() {
@@ -251,7 +270,7 @@ extension Renderer {
 
     internal func buildKernels() {
         
-        assert(library != nil)
+        precondition(library != nil)
         
         shaderOptions = ShaderOptions.init(
             blur: config.blur,
@@ -372,15 +391,14 @@ extension Renderer {
 
     func buildPipeline() {
 
-        track()
-        assert(library != nil)
+        precondition(library != nil)
 
         // Get vertex and fragment shader from library
         let vertexFunc = library.makeFunction(name: "vertex_main")
         let fragmentFunc = library.makeFunction(name: "fragment_main")
-        assert(vertexFunc != nil)
-        assert(fragmentFunc != nil)
-
+        metalAssert(vertexFunc != nil && fragmentFunc != nil,
+                    "Cannot create Render Pipeline function objects.")
+        
         // Create depth stencil state
         let stencilDescriptor = MTLDepthStencilDescriptor.init()
         stencilDescriptor.depthCompareFunction = MTLCompareFunction.less
@@ -425,7 +443,7 @@ extension Renderer {
         do {
             try pipeline = device.makeRenderPipelineState(descriptor: pipelineDescriptor)
         } catch {
-            fatalError("Cannot create Metal graphics pipeline")
+            metalAssert(false, "Cannot create the Metal GPU pipeline.")
         }
     }
 
@@ -520,7 +538,8 @@ extension Renderer {
         descriptor.usage = MTLTextureUsage.renderTarget
 
         depthTexture = device.makeTexture(descriptor: descriptor)
-        assert(depthTexture != nil, "Failed to create depth texture")
+        metalAssert(depthTexture != nil,
+                    "Could not create depth texture.")
     }
     
     //
@@ -601,5 +620,26 @@ extension Renderer {
                                    0.0,
                                    1.0)
         return m
+    }
+    
+    //
+    // Error handling
+    //
+    
+    func metalAssert(_ cond: Bool, _ msg: String) {
+        
+        if !cond {
+            
+            let alert = NSAlert()
+            
+            alert.alertStyle = .critical
+            alert.icon = NSImage.init(named: "metal")
+            alert.messageText = "Failed to initialize Metal Hardware"
+            alert.informativeText = msg
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
+            
+            exit(1)
+        }
     }
 }

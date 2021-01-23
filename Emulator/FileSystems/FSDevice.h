@@ -7,9 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FSDEVICE_H
-#define _FSDEVICE_H
+#pragma once
 
+#include "AmigaTypes.h"
 #include "FSObjects.h"
 #include "FSPartition.h"
 #include "FSBlock.h"
@@ -85,14 +85,14 @@ public:
     static FSDevice *makeWithFormat(FSDeviceDescriptor &layout);
 
     // Creates a file system for a standard floppy disk
-    static FSDevice *makeWithFormat(DiskType type, DiskDensity density);
+    static FSDevice *makeWithFormat(DiskDiameter type, DiskDensity density);
 
     // Creates a file system from an ADF or HDF
-    static FSDevice *makeWithADF(class ADFFile *adf, FSError *error);
-    static FSDevice *makeWithHDF(class HDFFile *hdf, FSError *error);
+    static FSDevice *makeWithADF(class ADFFile *adf, ErrorCode *error);
+    static FSDevice *makeWithHDF(class HDFFile *hdf, ErrorCode *error);
     
     // Creates a file system with the contents of a host file system directory
-    static FSDevice *make(DiskType type, DiskDensity density, const char *path);
+    static FSDevice *make(DiskDiameter type, DiskDensity density, const char *path);
     static FSDevice *make(FSVolumeType type, const char *path);
     
     
@@ -105,7 +105,7 @@ public:
     FSDevice(u32 capacity);
     ~FSDevice();
     
-    const char *getDescription() override { return "FSVolume"; }
+    const char *getDescription() const override { return "FSVolume"; }
         
     // Prints information about this volume
     void info();
@@ -136,9 +136,9 @@ public:
     //
     
     // Returns the DOS version of the current partition
-    FSVolumeType dos() { return partitions[cp]->dos; }
-    bool isOFS() { return partitions[cp]->isOFS(); }
-    bool isFFS() { return partitions[cp]->isFFS(); }
+    FSVolumeType dos() const { return partitions[cp]->dos; }
+    bool isOFS() const { return partitions[cp]->isOFS(); }
+    bool isFFS() const { return partitions[cp]->isFFS(); }
     
     
     //
@@ -180,10 +180,10 @@ public:
     FSBlockType blockType(u32 nr);
 
     // Returns the usage type of a certain byte in a certain block
-    FSItemType itemType(u32 nr, u32 pos);
+    FSItemType itemType(u32 nr, u32 pos) const;
     
     // Queries a pointer from the block storage (may return nullptr)
-    FSBlock *blockPtr(u32 nr);
+    FSBlock *blockPtr(u32 nr) const;
 
     // Queries a pointer to a block of a certain type (may return nullptr)
     FSBootBlock *bootBlockPtr(u32 nr);
@@ -267,15 +267,15 @@ public:
 public:
     
     // Returns a collections of nodes for all items in the current directory
-    FSError collect(u32 ref, std::vector<u32> &list, bool recursive = true);
+    ErrorCode collect(u32 ref, std::vector<u32> &list, bool recursive = true);
 
 private:
     
     // Collects all references stored in a hash table
-    FSError collectHashedRefs(u32 ref, std::stack<u32> &list, std::set<u32> &visited);
+    ErrorCode collectHashedRefs(u32 ref, std::stack<u32> &list, std::set<u32> &visited);
 
     // Collects all references with the same hash value
-    FSError collectRefsWithSameHashValue(u32 ref, std::stack<u32> &list, std::set<u32> &visited);
+    ErrorCode collectRefsWithSameHashValue(u32 ref, std::stack<u32> &list, std::set<u32> &visited);
 
  
     //
@@ -285,17 +285,17 @@ private:
 public:
     
     // Checks all blocks in this volume
-    FSErrorReport check(bool strict);
+    FSErrorReport check(bool strict) const;
 
     // Checks a single byte in a certain block
-    FSError check(u32 blockNr, u32 pos, u8 *expected, bool strict);
+    ErrorCode check(u32 blockNr, u32 pos, u8 *expected, bool strict) const;
 
     // Checks if the block with the given number is part of the volume
     bool isBlockNumber(u32 nr) { return nr < numBlocks; }
 
     // Checks if the type of a block matches one of the provides types
-    FSError checkBlockType(u32, FSBlockType type);
-    FSError checkBlockType(u32, FSBlockType type, FSBlockType altType);
+    ErrorCode checkBlockType(u32, FSBlockType type);
+    ErrorCode checkBlockType(u32, FSBlockType type, FSBlockType altType);
 
     // Checks if a certain block is corrupted
     bool isCorrupted(u32 blockNr) { return getCorrupted(blockNr) != 0; }
@@ -321,14 +321,14 @@ public:
 public:
         
     // Reads a single byte from a block
-    u8 readByte(u32 block, u32 offset);
+    u8 readByte(u32 block, u32 offset) const;
 
     // Predicts the type of a block by analyzing its number and data (DEPRECATED)
     FSBlockType predictBlockType(u32 nr, const u8 *buffer);
 
     // Imports the volume from a buffer compatible with the ADF format
     bool importVolume(const u8 *src, size_t size);
-    bool importVolume(const u8 *src, size_t size, FSError *error);
+    bool importVolume(const u8 *src, size_t size, ErrorCode *error);
 
     // Imports a directory from the host file system
     bool importDirectory(const char *path, bool recursive = true);
@@ -336,16 +336,14 @@ public:
 
     // Exports the volume to a buffer compatible with the ADF format
     bool exportVolume(u8 *dst, size_t size); 
-    bool exportVolume(u8 *dst, size_t size, FSError *error);
+    bool exportVolume(u8 *dst, size_t size, ErrorCode *error);
 
     // Exports a single block or a range of blocks
     bool exportBlock(u32 nr, u8 *dst, size_t size);
-    bool exportBlock(u32 nr, u8 *dst, size_t size, FSError *error);
+    bool exportBlock(u32 nr, u8 *dst, size_t size, ErrorCode *error);
     bool exportBlocks(u32 first, u32 last, u8 *dst, size_t size);
-    bool exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *error);
+    bool exportBlocks(u32 first, u32 last, u8 *dst, size_t size, ErrorCode *error);
 
     // Exports the volume to a directory of the host file system
-    FSError exportDirectory(const char *path);
+    ErrorCode exportDirectory(const char *path);
 };
-
-#endif

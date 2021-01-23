@@ -24,6 +24,9 @@ Denise::Denise(Amiga& ref) : AmigaComponent(ref)
     config.clxSprSpr = true;
     config.clxSprPlf = true;
     config.clxPlfPlf = true;
+    
+    memset(spriteInfo, 0, sizeof(spriteInfo));
+    memset(latchedSpriteInfo, 0, sizeof(latchedSpriteInfo));
 }
 
 void
@@ -38,7 +41,7 @@ Denise::_reset(bool hard)
 }
 
 long
-Denise::getConfigItem(ConfigOption option)
+Denise::getConfigItem(Option option) const
 {
     switch (option) {
             
@@ -58,16 +61,13 @@ Denise::getConfigItem(ConfigOption option)
 }
 
 bool
-Denise::setConfigItem(ConfigOption option, long value)
+Denise::setConfigItem(Option option, long value)
 {
     switch (option) {
             
         case OPT_DENISE_REVISION:
             
-            if (!isDeniseRevision(value)) {
-                warn("Invalid Denise revision: %ld\n", value);
-                return false;
-            }
+            if (!DeniseRevisionEnum::verify(value)) return false;
             if (config.revision == value) {
                 return false;
             }
@@ -144,9 +144,9 @@ Denise::setConfigItem(ConfigOption option, long value)
 }
 
 void
-Denise::_dumpConfig()
+Denise::_dumpConfig() const
 {
-    msg("          revision : %s\n", sDeniseRevision(config.revision));
+    msg("          revision : %s\n", DeniseRevisionEnum::key(config.revision));
     msg("       borderblank : %s\n", config.borderblank ? "yes" : "no");
     msg("     hiddenSprites : %02X\n", config.hiddenSprites);
     msg("      hiddenLayers : %04X\n", config.hiddenLayers);
@@ -188,7 +188,7 @@ Denise::_inspect()
 }
 
 void
-Denise::_dump()
+Denise::_dump() const
 {
 }
 
@@ -231,7 +231,7 @@ Denise::zPF(u16 prioBits)
 }
 
 bool
-Denise::spritePixelIsVisible(int hpos)
+Denise::spritePixelIsVisible(int hpos) const
 {
     u16 z = zBuffer[hpos];
     return (z & Z_SP01234567) > (z & ~Z_SP01234567);
@@ -898,9 +898,9 @@ Denise::updateBorderColor()
         borderColor = 0;  // Background color
     }
     
-#ifdef BORDER_DEBUG
-    borderColor = 65;    // Debug color
-#endif
+    if (BORDER_DEBUG) {
+        borderColor = 65; // Debug color
+    }
 }
 
 void
@@ -912,28 +912,26 @@ Denise::drawBorder()
     // Check if the whole line is blank (drawn in background color)
     bool lineIsBlank = !agnus.diwVFlop || !hFlopWasSet;
 
-    // Draw the border
     if (lineIsBlank) {
 
+        // Draw blank line
         for (int i = 0; i <= LAST_PIXEL; i++) {
-            iBuffer[i] = mBuffer[i] = borderColor;
+            bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
         }
 
     } else {
 
         // Draw left border
         if (!agnus.diwHFlop && agnus.diwHFlopOn != -1) {
-            for (int i = 0; i < 2 * agnus.diwHFlopOn; i++) {
-                assert((size_t)i < sizeof(iBuffer));
-                iBuffer[i] = mBuffer[i] = borderColor;
+            for (isize i = 0; i < 2 * agnus.diwHFlopOn; i++) {
+                bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
 
         // Draw right border
         if (agnus.diwHFlopOff != -1) {
-            for (int i = 2 * agnus.diwHFlopOff; i <= LAST_PIXEL; i++) {
-                assert((size_t)i < sizeof(iBuffer));
-                iBuffer[i] = mBuffer[i] = borderColor;
+            for (isize i = 2 * agnus.diwHFlopOff; i <= LAST_PIXEL; i++) {
+                bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
     }
@@ -1065,11 +1063,9 @@ Denise::checkP2PCollisions()
     u8 compare2 = getMVBP2() & enabled2;
 
     // Check all pixels one by one
-    for (int pos = 0; pos < HPIXELS; pos++) {
+    for (usize pos = 0; pos < HPIXELS; pos++) {
 
         u16 b = bBuffer[pos];
-        // debug(CLX_DEBUG, "b[%d] = %X e1 = %X e2 = %X c1 = %X c2 = %X\n",
-        //       pos, b, enabled1, enabled2, compare1, compare2);
 
         // Check if there is a hit with playfield 1
         if ((b & enabled1) != compare1) continue;
@@ -1140,12 +1136,12 @@ Denise::endOfLine(int vpos)
         // Draw sprites
         drawSprites();
 
+        // Perform playfield-playfield collision check (if enabled)
+        if (config.clxPlfPlf) checkP2PCollisions();
+
         // Draw border pixels
         drawBorder();
 
-        // Perform playfield-playfield collision check (if enabled)
-        if (config.clxPlfPlf) checkP2PCollisions();
-        
         // Synthesize RGBA values and write the result into the frame buffer
         pixelEngine.colorize(vpos);
 
@@ -1198,7 +1194,7 @@ Denise::recordSpriteData(unsigned nr)
 }
 
 void
-Denise::dumpBuffer(u8 *buffer, size_t length)
+Denise::dumpBuffer(const u8 *buffer, size_t length) const
 {
     const size_t cols = 16;
 

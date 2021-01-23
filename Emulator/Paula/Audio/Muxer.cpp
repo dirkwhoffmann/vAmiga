@@ -60,7 +60,7 @@ Muxer::clear()
 }
 
 long
-Muxer::getConfigItem(ConfigOption option)
+Muxer::getConfigItem(Option option) const
 {
     switch (option) {
             
@@ -88,7 +88,7 @@ Muxer::getConfigItem(ConfigOption option)
 }
 
 long
-Muxer::getConfigItem(ConfigOption option, long id)
+Muxer::getConfigItem(Option option, long id) const
 {
     switch (option) {
             
@@ -105,7 +105,7 @@ Muxer::getConfigItem(ConfigOption option, long id)
 }
 
 bool
-Muxer::setConfigItem(ConfigOption option, long value)
+Muxer::setConfigItem(Option option, long value)
 {
     bool wasMuted = isMuted();
     
@@ -113,10 +113,7 @@ Muxer::setConfigItem(ConfigOption option, long value)
             
         case OPT_SAMPLING_METHOD:
             
-            if (!isSamplingMethod(value)) {
-                warn("Invalid sampling method: %ld\n", value);
-                return false;
-            }
+            if (!SamplingMethodEnum::verify(value)) return false;
 
             if (config.samplingMethod == value) {
                 return false;
@@ -127,11 +124,7 @@ Muxer::setConfigItem(ConfigOption option, long value)
             
         case OPT_FILTER_TYPE:
             
-            if (!isFilterType(value)) {
-                warn("Invalid filter type: %ld\n", value);
-                warn("       Valid values: 0 ... %lld\n", FILT_COUNT - 1);
-                return false;
-            }
+            if (!FilterTypeEnum::verify(value)) return false;
 
             if (config.filterType == value) {
                 return false;
@@ -181,7 +174,7 @@ Muxer::setConfigItem(ConfigOption option, long value)
 }
 
 bool
-Muxer::setConfigItem(ConfigOption option, long id, long value)
+Muxer::setConfigItem(Option option, long id, long value)
 {    
     switch (option) {
                         
@@ -218,10 +211,10 @@ Muxer::setConfigItem(ConfigOption option, long id, long value)
 }
 
 void
-Muxer::_dumpConfig()
+Muxer::_dumpConfig() const
 {
-    msg("samplingMethod : %s\n", sSamplingMethod(config.samplingMethod));
-    msg("    filtertype : %s\n", sFilterType(config.filterType));
+    msg("samplingMethod : %s\n", SamplingMethodEnum::key(config.samplingMethod));
+    msg("    filtertype : %s\n", FilterTypeEnum::key(config.filterType));
     msg("filterAlwaysOn : %d\n", config.filterAlwaysOn);
     msg("    vol0, pan0 : %lld, %lld\n", config.vol[0], config.pan[0]);
     msg("    vol1, pan1 : %lld, %lld\n", config.vol[1], config.pan[1]);
@@ -243,7 +236,7 @@ Muxer::setSampleRate(double hz)
 }
 
 size_t
-Muxer::didLoadFromBuffer(u8 *buffer)
+Muxer::didLoadFromBuffer(const u8 *buffer)
 {
     for (int i = 0; i < 4; i++) sampler[i]->reset();
     return 0;

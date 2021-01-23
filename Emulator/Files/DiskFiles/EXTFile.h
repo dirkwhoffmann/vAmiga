@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _EXT_FILE_H
-#define _EXT_FILE_H
+#pragma once
 
 #include "ADFFile.h"
 
@@ -29,45 +28,35 @@ public:
     // Class methods
     //
     
-    // Returns true iff buffer contains an extended ADF
-    static bool isEXTBuffer(const u8 *buffer, size_t length);
-    
-    // Returns true iff if path points to an extended ADF
-    static bool isEXTFile(const char *path);
-    
-    
+    static bool isCompatibleName(const std::string &name);
+    static bool isCompatibleStream(std::istream &stream);
+
+ 
     //
-    // Initializing
+    // Methods from AmigaObject
     //
-    
-    EXTFile();
-    
-    const char *getDescription() override { return "EXT"; }
+
+    const char *getDescription() const override { return "EXT"; }
     
     
     //
     // Methods from AmigaFile
     //
     
-    AmigaFileType fileType() override { return FILETYPE_EXT; }
-    bool matchingBuffer(const u8 *buffer, size_t length) override {
-        return isEXTBuffer(buffer, length); }
-    bool matchingFile(const char *path) override { return isEXTFile(path); }
+    FileType type() const override { return FILETYPE_EXT; }
     
     
     //
     // Methods from DiskFile
     //
     
-    FSVolumeType getDos() override { return FS_NODOS; }
+    FSVolumeType getDos() const override { return FS_NODOS; }
     void setDos(FSVolumeType dos) override { };
-    DiskType getDiskType() override { return DISK_35; }
-    DiskDensity getDiskDensity() override { return DISK_DD; }
-    long numSides() override { return 2; }
-    long numCyls() override { return 80; }
-    long numSectors() override { return 11; }
-    void readSector(u8 *target, long s) override { assert(false); }
-    void readSector(u8 *target, long t, long s) override { assert(false); }
+    DiskDiameter getDiskDiameter() const override { return INCH_35; }
+    DiskDensity getDiskDensity() const override { return DISK_DD; }
+    long numSides() const override { return 2; }
+    long numCyls() const override { return 80; }
+    long numSectors() const override { return 11; }
+    void readSector(u8 *target, long s) const override { assert(false); }
+    void readSector(u8 *target, long t, long s) const override { assert(false); }
 };
-
-#endif

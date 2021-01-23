@@ -13,7 +13,7 @@ template <int nr> void
 StateMachine<nr>::serviceEvent()
 {
     trace(AUD_DEBUG, "CHX_PERFIN state = %d\n", state);
-    assert(agnus.slot[CH0_SLOT+nr].id == CHX_PERFIN);
+    assert(agnus.slot[SLOT_CH0+nr].id == CHX_PERFIN);
 
     switch (state) {
 

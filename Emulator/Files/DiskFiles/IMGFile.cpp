@@ -9,40 +9,33 @@
 
 #include "Amiga.h"
 
-IMGFile::IMGFile()
+bool
+IMGFile::isCompatibleName(const std::string &name)
 {
+    return true;
 }
 
 bool
-IMGFile::isIMGBuffer(const u8 *buffer, size_t length)
+IMGFile::isCompatibleStream(std::istream &stream)
 {
+    usize length = streamLength(stream);
+    
     // There are no magic bytes. We can only check the buffer size
     return
     length == IMGSIZE_35_DD;
 }
 
-bool
-IMGFile::isIMGFile(const char *path)
-{
-    // There are no magic bytes. We can only check the file size
-    return
-    checkFileSize(path, IMGSIZE_35_DD);
-}
-
 IMGFile *
-IMGFile::makeWithDiskType(DiskType t, DiskDensity d)
+IMGFile::makeWithDiskType(DiskDiameter t, DiskDensity d)
 {
-    assert(t == DISK_35);
+    assert(t == INCH_35);
     assert(d == DISK_DD);
     
     IMGFile *img = new IMGFile();
     
-    if (!img->alloc(9 * 160 * 512)) {
-        delete img;
-        return nullptr;
-    }
+    img->size = 9 * 160 * 512;
+    img->data = new u8[img->size]();
     
-    memset(img->data, 0, img->size);
     return img;
 }
 
@@ -52,34 +45,41 @@ IMGFile::makeWithDisk(Disk *disk)
     assert(disk != nullptr);
         
     // We only support 3.5"DD disks at the moment
-    if (disk->getType() != DISK_35 || disk->getDensity() != DISK_DD) { return nullptr; }
-    
-    IMGFile *img = makeWithDiskType(DISK_35, DISK_DD);
-    
-    if (img) {
-        if (!img->decodeDisk(disk)) {
-            delete img;
-            return nullptr;
-        }
+    if (disk->getDiameter() != INCH_35 || disk->getDensity() != DISK_DD) {
+        throw VAError(ERROR_UNKNOWN);
     }
+    
+    IMGFile *img = makeWithDiskType(INCH_35, DISK_DD);
+    try { img->decodeDisk(disk); }
+    catch (VAError &exception) { delete img; throw exception; }
     
     return img;
 }
 
+IMGFile *
+IMGFile::makeWithDisk(Disk *disk, ErrorCode *ec)
+{
+    *ec = ERROR_OK;
+    
+    try { return makeWithDisk(disk); }
+    catch (VAError &exception) { *ec = exception.errorCode; }
+    return nullptr;
+}
+
 long
-IMGFile::numSides()
+IMGFile::numSides() const
 {
     return 2;
 }
 
 long
-IMGFile::numCyls()
+IMGFile::numCyls() const
 {
     return 80;
 }
 
 long
-IMGFile::numSectors()
+IMGFile::numSectors() const
 {
     return 9;
 }
@@ -91,14 +91,16 @@ IMGFile::encodeDisk(Disk *disk)
     
     debug(MFM_DEBUG, "Encoding DOS disk with %ld tracks\n", tracks);
 
-    if (disk->getType() != getDiskType()) {
+    if (disk->getDiameter() != getDiskDiameter()) {
         warn("Incompatible disk types: %s %s\n",
-             sDiskType(disk->getType()), sDiskType(getDiskType()));
+             DiskDiameterEnum::key(disk->getDiameter()),
+             DiskDiameterEnum::key(getDiskDiameter()));
         return false;
     }
     if (disk->getDensity() != getDiskDensity()) {
         warn("Incompatible disk densities: %s %s\n",
-             sDiskDensity(disk->getDensity()), sDiskDensity(getDiskDensity()));
+             DiskDensityEnum::key(disk->getDensity()),
+             DiskDensityEnum::key(getDiskDensity()));
         return false;
     }
     
@@ -226,32 +228,26 @@ IMGFile::encodeSector(Disk *disk, Track t, Sector s)
     return true;
 }
 
-bool
+void
 IMGFile::decodeDisk(Disk *disk)
 {
     long tracks = numTracks();
     
     trace(MFM_DEBUG, "Decoding DOS disk (%ld tracks)\n", tracks);
     
-    if (disk->getType() != getDiskType()) {
-        warn("Incompatible disk types: %s %s\n",
-             sDiskType(disk->getType()), sDiskType(getDiskType()));
-        return false;
+    if (disk->getDiameter() != getDiskDiameter()) {
+        throw VAError(ERROR_DISK_INVALID_DIAMETER);
     }
     if (disk->getDensity() != getDiskDensity()) {
-        warn("Incompatible disk densities: %s %s\n",
-             sDiskDensity(disk->getDensity()), sDiskDensity(getDiskDensity()));
-        return false;
+        throw VAError(ERROR_DISK_INVALID_DENSITY);
     }
     
     // Make the MFM stream scannable beyond the track end
     disk->repeatTracks();
 
     for (Track t = 0; t < tracks; t++) {
-        if (!decodeTrack(disk, t)) return false;
+        if (!decodeTrack(disk, t)) throw VAError(ERROR_DISK_CANT_DECODE);
     }
-    
-    return true;
 }
 
 bool

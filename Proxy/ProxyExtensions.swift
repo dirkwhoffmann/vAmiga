@@ -7,6 +7,82 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+//
+// Factory extensions
+//
+
+extension Proxy {
+    
+    static func make<T: MakeWithBuffer>(buffer: UnsafeRawPointer, length: Int) throws -> T {
+        
+        track()
+        
+        var ec = ErrorCode.OK
+        let obj = T.make(withBuffer: buffer, length: length, error: &ec)
+        if ec != ErrorCode.OK { throw VAError(ec) }
+        if obj == nil { fatalError() }
+        return obj!
+    }
+    
+    static func make<T: MakeWithFile>(url: URL) throws -> T {
+        
+        var ec = ErrorCode.OK
+        let obj = T.make(withFile: url.path, error: &ec)
+        if ec != ErrorCode.OK { throw VAError(ec) }
+        return obj!
+    }
+
+    static func make<T: MakeWithDrive>(drive: DriveProxy) throws -> T {
+        
+        var ec = ErrorCode.OK
+        let obj = T.make(withDrive: drive, error: &ec)
+        if ec != ErrorCode.OK { throw VAError(ec) }
+        return obj!
+    }
+
+    static func make<T: MakeWithFileSystem>(fs: FSDeviceProxy) throws -> T {
+        
+        var ec = ErrorCode.OK
+        let obj = T.make(withFileSystem: fs, error: &ec)
+        if ec != ErrorCode.OK { throw VAError(ec) }
+        return obj!
+    }
+}
+
+//
+// Exception passing
+//
+
+extension AmigaFileProxy {
+    
+    @discardableResult
+    func writeToFile(url: URL) throws -> Int {
+        
+        var err = ErrorCode.OK
+        let result = write(toFile: url.path, error: &err)
+        if err != .OK { throw VAError(err) }
+        
+        return result
+    }
+}
+
+extension FSDeviceProxy {
+        
+    /*
+    func exportDirectory(url: URL) throws {
+            
+        var err = ErrorCode.OK
+        if exportDirectory(url.path, error: &err) == false {
+            throw VAError(err)
+        }
+    }
+    */
+}
+
+//
+//
+//
+
 public extension AmigaProxy {
     
     func df(_ nr: Int) -> DriveProxy? {
@@ -80,9 +156,9 @@ extension DiskFileProxy {
         
         var name: String
         switch type {
-        case .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_EXE, .FILETYPE_DIR:
-            name = density == .DISK_HD ? "hd_adf" : "dd_adf"
-        case .FILETYPE_IMG:
+        case .ADF, .DMS, .EXE, .DIR:
+            name = density == .HD ? "hd_adf" : "dd_adf"
+        case .IMG:
             name = "dd_dos"
         default:
             name = ""
@@ -96,9 +172,9 @@ extension DiskFileProxy {
         
         var result = numSides == 1 ? "Single sided" : "Double sided"
 
-        if diskDensity == .DISK_SD { result += ", single density" }
-        if diskDensity == .DISK_DD { result += ", double density" }
-        if diskDensity == .DISK_HD { result += ", high density" }
+        if diskDensity == .SD { result += ", single density" }
+        if diskDensity == .DD { result += ", double density" }
+        if diskDensity == .HD { result += ", high density" }
 
         result += " disk, \(numTracks) tracks with \(numSectors) sectors each"
         return result
@@ -108,7 +184,7 @@ extension DiskFileProxy {
         
         let name = bootBlockName!
         
-        if bootBlockType == .BB_VIRUS {
+        if bootBlockType == .VIRUS {
             return "Contagious boot block (\(name))"
         } else {
             return name
@@ -137,45 +213,45 @@ extension HDFFileProxy {
 
 extension NSError {
     
-    static func fileError(_ err: FileError, url: URL) -> NSError {
+    static func fileError(_ ec: ErrorCode, url: URL) -> NSError {
         
         let str = "\"" + url.lastPathComponent + "\""
         var info1, info2: String
 
-        switch err {
+        switch ec {
                     
-        case .ERR_FILE_OK:
+        case .OK:
             fatalError()
-            
-        case .ERR_FILE_NOT_FOUND:
+        
+        case .FILE_NOT_FOUND:
             info1 = "File " + str + " could not be opened."
             info2 = "The file does not exist."
             
-        case .ERR_INVALID_TYPE:
+        case .FILE_TYPE_MISMATCH:
             info1 = "File " + str + " could not be opened."
             info2 = "The file format does not match."
             
-        case .ERR_CANT_READ:
+        case .FILE_CANT_READ:
             info1 = "Can't read from file " + str + "."
             info2 = "The file cannot be opened."
             
-        case .ERR_CANT_WRITE:
+        case .FILE_CANT_WRITE:
             info1 = "Can't write to file " + str + "."
             info2 = "The file cannot be opened."
             
-        case .ERR_OUT_OF_MEMORY:
+        case .OUT_OF_MEMORY:
             info1 = "The file operation cannot be performed."
             info2 = "Not enough memory."
             
-        case .ERR_UNSUPPORTED_SNAPSHOT:
+        case .UNSUPPORTED_SNAPSHOT:
             info1 = "Snapshot " + str + " could not be opened."
             info2 = "The file was created with a different version of vAmiga."
             
-        case .ERR_MISSING_ROM_KEY:
+        case .MISSING_ROM_KEY:
             info1 = "Failed to decrypt the selected Rom image."
             info2 = "A rom.key file is required to process this file."
             
-        case .ERR_INVALID_ROM_KEY:
+        case .INVALID_ROM_KEY:
             info1 = "Failed to decrypt the selected Rom image."
             info2 = "Decrypting the Rom with the provided rom.key file did not produce a valid Rom image."
             
@@ -184,7 +260,7 @@ extension NSError {
             info2 = "An uncategorized error exception has been thrown."
         }
         
-        return NSError(domain: "vAmiga", code: err.rawValue,
+        return NSError(domain: "vAmiga", code: ec.rawValue,
                        userInfo: [NSLocalizedDescriptionKey: info1,
                                   NSLocalizedRecoverySuggestionErrorKey: info2])
     }
@@ -192,11 +268,11 @@ extension NSError {
 
 extension NSAlert {
 
-    convenience init(fileError err: FileError, url: URL) {
+    convenience init(fileError ec: ErrorCode, url: URL) {
         
         self.init()
      
-        let err = NSError.fileError(err, url: url)
+        let err = NSError.fileError(ec, url: url)
         
         let msg1 = err.userInfo[NSLocalizedDescriptionKey] as! String
         let msg2 = err.userInfo[NSLocalizedRecoverySuggestionErrorKey] as! String
@@ -232,7 +308,7 @@ extension NSAlert {
     }
 }
 
-extension FileError {
+extension ErrorCode {
     
     func showAlert(url: URL) {
         

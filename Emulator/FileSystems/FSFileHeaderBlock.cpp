@@ -28,7 +28,7 @@ FSFileHeaderBlock(p, nr)
 }
 
 FSItemType
-FSFileHeaderBlock::itemType(u32 byte)
+FSFileHeaderBlock::itemType(u32 byte) const
 {
     // Intercept some special locations
     if (byte == 328) return FSI_BCPL_STRING_LENGTH;
@@ -65,8 +65,8 @@ FSFileHeaderBlock::itemType(u32 byte)
     return FSI_UNKNOWN;
 }
 
-FSError
-FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict)
+ErrorCode
+FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict) const
 {
     /* Note: At locations -4 and -3, many disks reference the bitmap block
      * which is wrong. We ignore to report this common inconsistency if
@@ -94,18 +94,18 @@ FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict)
     if (word <= -51 && value) EXPECT_DATABLOCK_REF;
     if (word == -51) {
         if (value == 0 && getNumDataBlockRefs() > 0) {
-            return FS_EXPECTED_REF;
+            return ERROR_FS_EXPECTED_REF;
         }
         if (value != 0 && getNumDataBlockRefs() == 0) {
-            return FS_EXPECTED_NO_REF;
+            return ERROR_FS_EXPECTED_NO_REF;
         }
     }
     
-    return FS_OK;
+    return ERROR_OK;
 }
 
 void
-FSFileHeaderBlock::dump()
+FSFileHeaderBlock::dump() const
 {
     msg("           Name : %s\n", getName().c_str());
     msg("        Comment : %s\n", getComment().c_str());
@@ -119,11 +119,11 @@ FSFileHeaderBlock::dump()
     msg(" FileList block : %d\n", getNextListBlockRef());
     
     msg("    Data blocks : ");
-    for (u32 i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
+    for (unsigned i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
     msg("\n");
 }
 
-FSError
+ErrorCode
 FSFileHeaderBlock::exportBlock(const char *exportDir)
 {
     string path = exportDir;
@@ -132,12 +132,12 @@ FSFileHeaderBlock::exportBlock(const char *exportDir)
     printf("Creating file %s\n", path.c_str());
     
     FILE *file = fopen(path.c_str(), "w");
-    if (file == nullptr) return FS_CANNOT_CREATE_FILE;
+    if (file == nullptr) return ERROR_FS_CANNOT_CREATE_FILE;
     
     writeData(file);
     fclose(file);
         
-    return FS_OK;
+    return ERROR_OK;
 }
 
 size_t

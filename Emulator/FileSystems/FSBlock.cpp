@@ -31,35 +31,36 @@ FSBlock::makeWithType(FSPartition &p, u32 nr, FSBlockType type)
 }
 
 u32
-FSBlock::bsize()
+FSBlock::bsize() const
 {
     return partition.dev.bsize;
 }
 
 u32
-FSBlock::typeID()
+FSBlock::typeID() const
 {
     return get32(0);
 }
 
 u32
-FSBlock::subtypeID()
+FSBlock::subtypeID() const
 {
     return get32((bsize() / 4) - 1);
 }
 
 unsigned
-FSBlock::check(bool strict)
+FSBlock::check(bool strict) const
 {
-    FSError error;
+    ErrorCode error;
     unsigned count = 0;
     u8 expected;
     
     for (u32 i = 0; i < bsize(); i++) {
         
-        if ((error = check(i, &expected, strict)) != FS_OK) {
+        if ((error = check(i, &expected, strict)) != ERROR_OK) {
             count++;
-            debug(FS_DEBUG, "Block %d [%d.%d]: %s\n", nr, i / 4, i % 4, sFSError(error));
+            debug(FS_DEBUG, "Block %d [%d.%d]: %s\n", nr, i / 4, i % 4,
+                  ErrorCodeEnum::key(error));
         }
     }
     
@@ -67,7 +68,7 @@ FSBlock::check(bool strict)
 }
 
 u8 *
-FSBlock::addr32(int nr)
+FSBlock::addr32(int nr) const
 {
     return (data + 4 * nr) + (nr < 0 ? bsize() : 0);
 }
@@ -88,13 +89,13 @@ FSBlock::write32(u8 *p, u32 value)
 }
 
 void
-FSBlock::dumpData()
+FSBlock::dumpData() const
 {
     hexdumpLongwords(data, 512);
 }
 
 u32
-FSBlock::checksum()
+FSBlock::checksum() const
 {
     u32 loc = checksumLocation();
     assert(loc <= 5);
@@ -196,7 +197,7 @@ FSBlock::getNextDataBlock()
 }
 
 u32
-FSBlock::getHashRef(u32 nr)
+FSBlock::getHashRef(u32 nr) const
 {
     return (nr < hashTableSize()) ? get32(6 + nr) : 0;
 }
@@ -208,7 +209,7 @@ FSBlock::setHashRef(u32 nr, u32 ref)
 }
 
 void
-FSBlock::dumpHashTable()
+FSBlock::dumpHashTable() const
 {
     for (u32 i = 0; i < hashTableSize(); i++) {
         
@@ -220,7 +221,7 @@ FSBlock::dumpHashTable()
 }
 
 u32
-FSBlock::getMaxDataBlockRefs()
+FSBlock::getMaxDataBlockRefs() const
 {
     return bsize() / 4 - 56;
 }

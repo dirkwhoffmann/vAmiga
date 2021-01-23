@@ -727,7 +727,7 @@ struct HardwareDefaults {
     var ramInitPattern: RamInitPattern
 
     var bankMap: BankMap
-    var unmappingType: UnmappingType
+    var unmappingType: UnmappedMemory
     
     //
     // Schemes
@@ -735,9 +735,9 @@ struct HardwareDefaults {
     
     static let A500 = HardwareDefaults.init(
         
-        agnusRev: .AGNUS_ECS_1MB,
+        agnusRev: .ECS_1MB,
         slowRamMirror: true,
-        deniseRev: .DENISE_OCS,
+        deniseRev: .OCS,
         borderBlank: false,
         ciaRev: ._8520_DIP,
         todBug: true,
@@ -746,17 +746,17 @@ struct HardwareDefaults {
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
-        ramInitPattern: .INIT_ALL_ZEROES,
+        ramInitPattern: .ALL_ZEROES,
 
-        bankMap: .BMAP_A500,
-        unmappingType: .UNMAPPED_FLOATING
+        bankMap: .A500,
+        unmappingType: .FLOATING
     )
     
     static let A1000 = HardwareDefaults.init(
         
-        agnusRev: .AGNUS_OCS,
+        agnusRev: .OCS,
         slowRamMirror: true,
-        deniseRev: .DENISE_OCS,
+        deniseRev: .OCS,
         borderBlank: false,
         ciaRev: ._8520_DIP,
         todBug: true,
@@ -765,17 +765,17 @@ struct HardwareDefaults {
         chipRam: 256,
         slowRam: 0,
         fastRam: 0,
-        ramInitPattern: .INIT_ALL_ZEROES,
+        ramInitPattern: .ALL_ZEROES,
 
-        bankMap: .BMAP_A1000,
-        unmappingType: .UNMAPPED_FLOATING
+        bankMap: .A1000,
+        unmappingType: .FLOATING
     )
     
     static let A2000 = HardwareDefaults.init(
         
-        agnusRev: .AGNUS_ECS_2MB,
+        agnusRev: .ECS_2MB,
         slowRamMirror: true,
-        deniseRev: .DENISE_OCS,
+        deniseRev: .OCS,
         borderBlank: false,
         ciaRev: ._8520_DIP,
         todBug: true,
@@ -784,10 +784,10 @@ struct HardwareDefaults {
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
-        ramInitPattern: .INIT_ALL_ZEROES,
+        ramInitPattern: .ALL_ZEROES,
 
-        bankMap: .BMAP_A2000B,
-        unmappingType: .UNMAPPED_FLOATING
+        bankMap: .A2000B,
+        unmappingType: .FLOATING
     )
 }
 
@@ -885,11 +885,11 @@ struct PeripheralsDefaults {
     static let std = PeripheralsDefaults.init(
         
         driveConnect: [true, false, false, false],
-        driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
+        driveType: [.DD_35, .DD_35, .DD_35, .DD_35],
         
         gameDevice1: 0,
         gameDevice2: -1,
-        serialDevice: .SPD_NONE
+        serialDevice: .NONE
     )
 }
 
@@ -1167,8 +1167,8 @@ struct AudioDefaults {
         
         volL: 50,
         volR: 50,
-        samplingMethod: .SMP_NONE,
-        filterType: .FILT_BUTTERWORTH,
+        samplingMethod: .NONE,
+        filterType: .BUTTERWORTH,
         filterAlwaysOn: false
     )
     
@@ -1185,8 +1185,8 @@ struct AudioDefaults {
         
         volL: 50,
         volR: 50,
-        samplingMethod: .SMP_NONE,
-        filterType: .FILT_BUTTERWORTH,
+        samplingMethod: .NONE,
+        filterType: .BUTTERWORTH,
         filterAlwaysOn: false
     )
 
@@ -1203,8 +1203,8 @@ struct AudioDefaults {
         
         volL: 50,
         volR: 50,
-        samplingMethod: .SMP_NONE,
-        filterType: .FILT_BUTTERWORTH,
+        samplingMethod: .NONE,
+        filterType: .BUTTERWORTH,
         filterAlwaysOn: false
     )
 }
@@ -1346,7 +1346,7 @@ struct VideoDefaults {
     // TFT monitor appearance with a texture cutout similar to UAE
     static let tft = VideoDefaults.init(
         
-        palette: Palette.PALETTE_COLOR,
+        palette: Palette.COLOR,
         brightness: 50.0,
         contrast: 100.0,
         saturation: 50.0,
@@ -1380,7 +1380,7 @@ struct VideoDefaults {
     // CRT monitor appearance with a texture-cutout closer to the center
     static let crt = VideoDefaults.init(
         
-        palette: Palette.PALETTE_COLOR,
+        palette: Palette.COLOR,
         brightness: 50.0,
         contrast: 100.0,
         saturation: 50.0,

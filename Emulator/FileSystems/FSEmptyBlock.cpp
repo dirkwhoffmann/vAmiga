@@ -10,7 +10,7 @@
 #include "FSDevice.h"
 
 FSItemType
-FSEmptyBlock::itemType(u32 byte)
+FSEmptyBlock::itemType(u32 byte) const
 {
     return FSI_UNUSED;
 }

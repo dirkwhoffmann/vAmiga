@@ -15,7 +15,7 @@ StateMachine<nr>::StateMachine(Amiga& ref) : AmigaComponent(ref)
 }
 
 template <int nr> const char *
-StateMachine<nr>::getDescription()
+StateMachine<nr>::getDescription() const
 {
     switch (nr) {
         case 0: return "StateMachine 0";
@@ -50,7 +50,7 @@ StateMachine<nr>::_inspect()
 }
 
 template <int nr> void
-StateMachine<nr>::_dump()
+StateMachine<nr>::_dump() const
 {
     msg("   State : %d\n", state);
     msg("  AUDxIP : %d\n", AUDxIP());
@@ -91,13 +91,13 @@ StateMachine<nr>::disableDMA()
 }
 
 template <int nr> bool
-StateMachine<nr>::AUDxON()
+StateMachine<nr>::AUDxON() const
 {
     return agnus.auddma<nr>();
 }
 
 template <int nr> bool
-StateMachine<nr>::AUDxIP()
+StateMachine<nr>::AUDxIP() const 
 {
     return GET_BIT(paula.intreq, 7 + nr);
 }
@@ -116,7 +116,7 @@ StateMachine<nr>::AUDxIR()
 template <int nr> void
 StateMachine<nr>::percntrld()
 {
-    const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
+    const EventSlot slot = (EventSlot)(SLOT_CH0+nr);
 
     
     u64 delay = (audperLatch == 0) ? 0x10000 : audperLatch;
@@ -158,13 +158,13 @@ StateMachine<nr>::pbufld2()
 }
 
 template <int nr> bool
-StateMachine<nr>::AUDxAV()
+StateMachine<nr>::AUDxAV() const
 {
     return (paula.adkcon >> nr) & 0x01;
 }
 
 template <int nr> bool
-StateMachine<nr>::AUDxAP()
+StateMachine<nr>::AUDxAP() const
 {
     return (paula.adkcon >> nr) & 0x10;
 }
@@ -332,7 +332,7 @@ StateMachine<nr>::move_011_000() {
 
     trace(AUD_DEBUG, "move_011_000\n");
 
-    const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
+    const EventSlot slot = (EventSlot)(SLOT_CH0+nr);
     agnus.cancel<slot>();
 
     intreq2 = false;
@@ -389,15 +389,15 @@ template void StateMachine<1>::disableDMA();
 template void StateMachine<2>::disableDMA();
 template void StateMachine<3>::disableDMA();
 
-template bool StateMachine<0>::AUDxIP();
-template bool StateMachine<1>::AUDxIP();
-template bool StateMachine<2>::AUDxIP();
-template bool StateMachine<3>::AUDxIP();
+template bool StateMachine<0>::AUDxIP() const;
+template bool StateMachine<1>::AUDxIP() const;
+template bool StateMachine<2>::AUDxIP() const;
+template bool StateMachine<3>::AUDxIP() const;
 
-template bool StateMachine<0>::AUDxON();
-template bool StateMachine<1>::AUDxON();
-template bool StateMachine<2>::AUDxON();
-template bool StateMachine<3>::AUDxON();
+template bool StateMachine<0>::AUDxON() const;
+template bool StateMachine<1>::AUDxON() const;
+template bool StateMachine<2>::AUDxON() const;
+template bool StateMachine<3>::AUDxON() const;
 
 template void StateMachine<0>::move_000_010();
 template void StateMachine<1>::move_000_010();

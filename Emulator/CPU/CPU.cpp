@@ -22,13 +22,13 @@ CPU::sync(int cycles)
 u8
 CPU::read8(u32 addr)
 {
-    return mem.peek8 <CPU_ACCESS> (addr);
+    return mem.peek8 <ACCESSOR_CPU> (addr);
 }
 
 u16
 CPU::read16(u32 addr)
 {
-    u16 result = mem.peek16 <CPU_ACCESS> (addr);
+    u16 result = mem.peek16 <ACCESSOR_CPU> (addr);
  
     /*
     static int counter = 0;
@@ -64,7 +64,7 @@ CPU::read16(u32 addr)
 u16
 CPU::read16Dasm(u32 addr)
 {
-    return mem.spypeek16 <CPU_ACCESS> (addr);
+    return mem.spypeek16 <ACCESSOR_CPU> (addr);
 }
 
 u16
@@ -78,7 +78,7 @@ CPU::write8(u32 addr, u8 val)
 {
     trace(XFILES && addr - reg.pc < 5, "XFILES: write8 close to PC %x\n", reg.pc);
 
-    mem.poke8 <CPU_ACCESS> (addr, val);
+    mem.poke8 <ACCESSOR_CPU> (addr, val);
 }
 
 void
@@ -86,7 +86,7 @@ CPU::write16 (u32 addr, u16 val)
 {
     trace(XFILES && addr - reg.pc < 5, "XFILES: write16 close to PC %x\n", reg.pc);
 
-    mem.poke16 <CPU_ACCESS> (addr, val);
+    mem.poke16 <ACCESSOR_CPU> (addr, val);
 }
 
 void
@@ -240,25 +240,23 @@ CPU::_inspect(u32 dasmStart)
 }
 
 void
-CPU::_dump()
+CPU::_dump() const
 {
-    _inspect();
-    
-    msg("     PC0: %8X\n", info.pc0);
+    msg("     PC0: %8X\n", reg.pc0);
     msg(" D0 - D3: ");
-    for (unsigned i = 0; i < 4; i++) msg("%8X ", info.d[i]);
+    for (unsigned i = 0; i < 4; i++) msg("%8X ", reg.d[i]);
     msg("\n");
     msg(" D4 - D7: ");
-    for (unsigned i = 4; i < 8; i++) msg("%8X ", info.d[i]);
+    for (unsigned i = 4; i < 8; i++) msg("%8X ", reg.d[i]);
     msg("\n");
     msg(" A0 - A3: ");
-    for (unsigned i = 0; i < 4; i++) msg("%8X ", info.a[i]);
+    for (unsigned i = 0; i < 4; i++) msg("%8X ", reg.a[i]);
     msg("\n");
     msg(" A4 - A7: ");
-    for (unsigned i = 4; i < 8; i++) msg("%8X ", info.a[i]);
+    for (unsigned i = 4; i < 8; i++) msg("%8X ", reg.a[i]);
     msg("\n");
-    msg("     SSP: %X\n", info.ssp);
-    msg("   Flags: %X\n", info.sr);
+    msg("     SSP: %X\n", reg.ssp);
+    msg("   Flags: %X\n", getSR());
 }
 
 void
@@ -277,7 +275,7 @@ CPU::_setDebug(bool enable)
 }
 
 size_t
-CPU::didLoadFromBuffer(u8 *buffer)
+CPU::didLoadFromBuffer(const u8 *buffer)
 {
     /* Because we don't save breakpoints and watchpoints in a snapshot, the
      * CPU flags for checking breakpoints and watchpoints can be in a corrupt

@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef MOIRA_CONFIG_H
-#define MOIRA_CONFIG_H
+#pragma once
 
 #include "AmigaConfig.h"
 
@@ -56,5 +55,3 @@
  * Disable to improve emulation compatibility.
  */
 #define MIMIC_MUSASHI false
-
-#endif

@@ -131,7 +131,7 @@ extension MyController {
     public func refreshStatusBar(writing: Bool?) {
         
         let sel = amiga.diskController.selectedDrive
-        let w = writing ?? (amiga.diskController.state == .DRIVE_DMA_WRITE)
+        let w = writing ?? (amiga.diskController.state == .WRITE)
         
         df0Cylinder.textColor = w && (sel == 0) ? .warningColor : .secondaryLabelColor
         df1Cylinder.textColor = w && (sel == 1) ? .warningColor : .secondaryLabelColor
@@ -159,7 +159,7 @@ extension MyController {
             if value {
                 
                 metal.shrink()
-                window?.setContentBorderThickness(24, for: .minY)
+                window?.setContentBorderThickness(26, for: .minY)
                 adjustWindowSize()
                 
             } else {

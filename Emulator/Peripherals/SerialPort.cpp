@@ -15,7 +15,7 @@ SerialPort::SerialPort(Amiga& ref) : AmigaComponent(ref)
 }
 
 long
-SerialPort::getConfigItem(ConfigOption option)
+SerialPort::getConfigItem(Option option) const
 {
     switch (option) {
             
@@ -28,7 +28,7 @@ SerialPort::getConfigItem(ConfigOption option)
 }
 
 bool
-SerialPort::setConfigItem(ConfigOption option, long value)
+SerialPort::setConfigItem(Option option, long value)
 {
     switch (option) {
             
@@ -67,14 +67,14 @@ SerialPort::_inspect()
 }
 
 void
-SerialPort::_dump()
+SerialPort::_dump() const
 {
     msg("    device: %ld\n", (long)config.device);
     msg("      port: %X\n", port);
 }
 
 bool
-SerialPort::getPin(int nr)
+SerialPort::getPin(int nr) const
 {
     assert(nr >= 1 && nr <= 25);
 

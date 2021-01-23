@@ -88,7 +88,7 @@ class Inspector: DialogController {
     @IBOutlet weak var memAutoConfButton: NSButton!
 
     var displayedBank = 0
-    var displayedBankType = MemorySource.MEM_CHIP
+    var displayedBankType = MemorySource.CHIP
     var searchAddress = -1
 
     // CIA panel
@@ -553,7 +553,7 @@ class Inspector: DialogController {
         track()
 
         super.showWindow(self)
-        amiga.enableDebugging()
+        amiga.debugMode = true
         updateInspectionTarget()
     }
 
@@ -622,7 +622,7 @@ extension Inspector: NSWindowDelegate {
         track("Closing inspector")
 
         // Leave debug mode
-        amiga?.disableDebugging()
+        amiga?.debugMode = false
         amiga?.clearInspectionTarget()
     }
 }

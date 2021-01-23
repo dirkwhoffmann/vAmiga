@@ -7,14 +7,13 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _MOUSE_H
-#define _MOUSE_H
+#pragma once
 
 #include "AmigaComponent.h"
 
 class Mouse : public AmigaComponent {
 
-    // Reference to control port this device belongs to
+    // Reference to the control port this device belongs to
     ControlPort &port;
     
     // Current configuration
@@ -64,7 +63,7 @@ public:
     
     Mouse(Amiga& ref, ControlPort& pref);
     
-    const char *getDescription() override;
+    const char *getDescription() const override;
     
     void _reset(bool hard) override;
     
@@ -75,7 +74,7 @@ public:
     
 private:
     
-    void _dump() override;
+    void _dump() const override;
 
     
     //
@@ -101,7 +100,7 @@ private:
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
@@ -112,10 +111,10 @@ private:
 public:
 
     // Modifies the POTGOR bits according to the current button state
-    void changePotgo(u16 &potgo);
+    void changePotgo(u16 &potgo) const;
 
     // Modifies the PRA bits of CIA A according to the current button state
-    void changePra(u8 &pra);
+    void changePra(u8 &pra) const;
 
     
     //
@@ -145,6 +144,3 @@ public:
     // Performs periodic actions for this device
     void execute();
 };
-
-#endif
-

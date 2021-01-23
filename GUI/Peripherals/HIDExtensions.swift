@@ -48,18 +48,14 @@ extension IOHIDDevice {
     }
     
     var name: String { return property(key: kIOHIDProductKey) ?? "" }
-    
     var vendorID: String { return property(key: kIOHIDVendorIDKey) ?? "" }
-    
     var productID: String { return property(key: kIOHIDProductIDKey) ?? "" }
-
     var locationID: String { return property(key: kIOHIDLocationIDKey) ?? "" }
+    var usageKey: String { return property(key: kIOHIDPrimaryUsageKey) ?? "" }
+    var builtInKey: String { return property(key: kIOHIDBuiltInKey) ?? "" }
+    var transportKey: String { return property(key: kIOHIDTransportKey) ?? "" }
 
-    var primaryUsage: String { return property(key: kIOHIDPrimaryUsageKey) ?? "" }
-    
-    // var isBuiltIn: Bool { return property(key: kIOHIDBuiltInKey) == "1" }
-
-    var isMouse: Bool { return primaryUsage == "\(kHIDUsage_GD_Mouse)" }
+    var isMouse: Bool { return usageKey == "\(kHIDUsage_GD_Mouse)" }
             
     func listProperties() {
         
@@ -89,20 +85,44 @@ extension IOHIDDevice {
         }
     }
     
-    var isBuiltIn: Bool {
+    var isInternalDevice: Bool {
         
         /* The purpose of this function is to distinguish internal from external
          * HID devices. Note: The old implementation only checked the BuiltIn
          * key of the device, which turned out to be insufficient. Some external
          * devices such as the Sony DualShock 4 controller set the BuildIn key
-         * to 1. To get a more accurate result, the new implementation first
-         * evaluates the Transport property and classifies each wireless device
-         * as external.
+         * to 1.
          */
-        if property(key: kIOHIDTransportKey)?.hasPrefix("Bluetooth") == true {
-            return false
-        }
         
-        return property(key: kIOHIDBuiltInKey) == "1"
+        let bluetooth = transportKey.hasPrefix("Bluetooth")
+        let builtIn = builtInKey == "1"
+        
+        // For mice, evaluate the BuiltIn key
+        if isMouse { return builtIn }
+        
+        // For other device types, consider each Bluetooth device as external
+        if bluetooth { return false }
+        
+        // If it wasn't a Bluetooth device, evaluate the BuitIn key
+        return builtIn
+    }
+    
+    var usageDescription: String? {
+        
+        track("kHIDUsage_GD_Mouse = \(kHIDUsage_GD_Mouse)")
+        
+        if let usage = Int(usageKey) {
+            
+            switch usage {
+            case kHIDUsage_GD_Mouse:               return "Mouse"
+            case kHIDUsage_GD_Joystick:            return "Joystick"
+            case kHIDUsage_GD_GamePad:             return "GamePad"
+            case kHIDUsage_GD_Keyboard:            return "Keyboard"
+            case kHIDUsage_GD_Keypad:              return "Keypad"
+            case kHIDUsage_GD_MultiAxisController: return "Multi axis controller"
+            default: break
+            }
+        }
+        return nil
     }
 }

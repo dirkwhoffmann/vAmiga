@@ -7,13 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _ALIASES_H
-#define _ALIASES_H
+#pragma once
 
-#include "AmigaConfig.h"
-#include <assert.h>
-#include <stdint.h>
-#include <stddef.h>
+#include <sys/types.h>
 
 //
 // Basic types
@@ -23,10 +19,12 @@ typedef char               i8;
 typedef short              i16;
 typedef int                i32;
 typedef long long          i64;
+typedef ssize_t            isize;
 typedef unsigned char      u8;
 typedef unsigned short     u16;
 typedef unsigned int       u32;
 typedef unsigned long long u64;
+typedef size_t             usize;
 
 static_assert(sizeof(i8) == 1,  "i8 size mismatch");
 static_assert(sizeof(i16) == 2, "i16 size mismatch");
@@ -88,6 +86,19 @@ typedef i16 Sector;
 
 
 //
+// Syntactic sugar
+//
+
+/* The following keyword is used for documentary purposes only. It is used to
+ * mark all methods that use the exception mechanism to signal error conditions
+ * instead of returning error codes. It is used in favor of classic throw
+ * lists, since the latter cause the compiler to embed unwanted runtime checks
+ * in the code.
+ */
+#define throws
+
+
+//
 // Enumerations
 //
 
@@ -117,7 +128,5 @@ enum _name : _type
 #define enum_long(_name) enum _name : long long
 #define enum_u32(_name) enum _name : u32
 #define enum_i8(_name) enum _name : i8
-
-#endif
 
 #endif

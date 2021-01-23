@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_FILELIST_BLOCK_H
-#define _FS_FILELIST_BLOCK_H
+#pragma once
 
 #include "FSBlock.h"
 
@@ -17,36 +16,34 @@ struct FSFileListBlock : FSBlock {
     FSFileListBlock(FSPartition &p, u32 nr);
     ~FSFileListBlock();
 
-    const char *getDescription() override { return "FSFileListBlock"; }
+    const char *getDescription() const override { return "FSFileListBlock"; }
 
     
     //
     // Methods from Block class
     //
     
-    FSBlockType type() override { return FS_FILELIST_BLOCK;   }
-    FSItemType itemType(u32 byte) override;
-    FSError check(u32 pos, u8 *expected, bool strict) override;
-    void dump() override;
-    u32 checksumLocation() override { return 5; }
+    FSBlockType type() const override { return FS_FILELIST_BLOCK;   }
+    FSItemType itemType(u32 byte) const override;
+    ErrorCode check(u32 pos, u8 *expected, bool strict) const override;
+    void dump() const override;
+    u32 checksumLocation() const override { return 5; }
     
-    u32 getNumDataBlockRefs() override          { return get32(2);            }
+    u32 getNumDataBlockRefs() const override    { return get32(2);            }
     void setNumDataBlockRefs(u32 val) override  {           set32(2, val);    }
     void incNumDataBlockRefs() override         {        inc32(2);            }
 
-    u32 getFirstDataBlockRef() override         { return get32(4);            }
+    u32 getFirstDataBlockRef() const override   { return get32(4);            }
     void setFirstDataBlockRef(u32 ref) override {        set32(4, ref);       }
 
-    u32 getDataBlockRef(int nr)                 { return get32(-51-nr);       }
+    u32 getDataBlockRef(int nr) const           { return get32(-51-nr);       }
     void setDataBlockRef(int nr, u32 ref)       {        set32(-51-nr, ref);  }
 
-    u32 getFileHeaderRef() override             { return get32(-3);           }
+    u32 getFileHeaderRef() const override       { return get32(-3);           }
     void setFileHeaderRef(u32 ref) override     {        set32(-3, ref);      }
     
-    u32 getNextListBlockRef() override          { return get32(-2);           }
+    u32 getNextListBlockRef() const override    { return get32(-2);           }
     void setNextListBlockRef(u32 ref) override  {        set32(-2, ref);      }
     
     bool addDataBlockRef(u32 first, u32 ref) override;
 };
-
-#endif

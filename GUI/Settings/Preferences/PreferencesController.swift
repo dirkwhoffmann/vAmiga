@@ -11,7 +11,7 @@ class PreferencesController: DialogController {
 
     var pref: Preferences { return parent.pref }
     var gamePadManager: GamePadManager { return parent.gamePadManager! }
-    var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
+    // var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     
     @IBOutlet weak var tabView: NSTabView!
         

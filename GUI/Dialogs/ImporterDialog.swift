@@ -24,7 +24,7 @@ class ImporterDialog: DialogController {
     @IBOutlet weak var carousel: iCarousel!
     
     var disk: DiskFileProxy?
-    var type: AmigaFileType?
+    var type: FileType?
     var writeProtect = false
     var screenshots: [Screenshot] = []
     
@@ -39,15 +39,15 @@ class ImporterDialog: DialogController {
         
         switch type {
         
-        case .FILETYPE_ADF:
+        case .ADF:
             return "Amiga Disk File (ADF)"
-        case .FILETYPE_IMG:
+        case .IMG:
             return "PC Disk Image"
-        case .FILETYPE_DMS:
+        case .DMS:
             return "Disk Masher System (DMS)"
-        case .FILETYPE_EXE:
+        case .EXE:
             return "ADF (Converted Amiga executable)"
-        case .FILETYPE_DIR:
+        case .DIR:
             return "ADF (Converted Host Directory)"
         default:
             return "???"
@@ -72,7 +72,7 @@ class ImporterDialog: DialogController {
         if let attachment = myDocument.amigaAttachment as? EXEFileProxy {
             disk = attachment
         }
-        if let attachment = myDocument.amigaAttachment as? DIRFileProxy {
+        if let attachment = myDocument.amigaAttachment as? FolderProxy {
             disk = attachment
         }
 
@@ -186,29 +186,6 @@ class ImporterDialog: DialogController {
         track("insertDiskAction df\(sender.tag)")
                 
         amiga.diskController.insert(sender.tag, file: disk)
-        
-        /*
-        switch disk {
-        
-        case _ as ADFFileProxy:
-            amiga.diskController.insert(sender.tag, adf: disk as? ADFFileProxy)
-
-        case _ as IMGFileProxy:
-            amiga.diskController.insert(sender.tag, img: disk as? IMGFileProxy)
-
-        case _ as DMSFileProxy:
-            amiga.diskController.insert(sender.tag, dms: disk as? DMSFileProxy)
-
-        case _ as EXEFileProxy:
-            amiga.diskController.insert(sender.tag, exe: disk as? EXEFileProxy)
-
-        case _ as DIRFileProxy:
-            amiga.diskController.insert(sender.tag, dir: disk as? DIRFileProxy)
-
-        default:
-            break
-        }
-        */
         
         amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)     
         hideSheet()

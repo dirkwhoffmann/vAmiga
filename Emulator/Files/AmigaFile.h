@@ -7,26 +7,50 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_FILE_H
-#define _AMIGA_FILE_H
+#pragma once
 
 #include "AmigaObject.h"
+#include "FileTypes.h"
 
-/* Base class of all file readable types. It provides the basic functionality
- * for reading and writing files.
+/* All media files are organized in the class hierarchy displayed below. Two
+ * abstract classes are involed: AmigaFile and DiskFile. AmigaFile provides
+ * basic functionality for reading and writing files, streams, and buffers.
+ * DiskFile provides an abstract interface for accessing media files that will
+ * be mounted as a virtual floppy disk.
+ *
+ *  ------------
+ * | AmigaFile  |
+ *  ------------
+ *       |
+ *       |---------------------------------------------------
+ *       |           |           |            |              |
+ *       |      ----------   ---------   ---------   -----------------
+ *       |     | Snapshot | | HDFFile | | RomFile | | ExtendedRomFile |
+ *       |      ----------   ---------   ---------   -----------------
+ *       |
+ *  ------------
+ * |  DiskFile  |
+ *  ------------
+ *       |
+ *       |------------------------------------------------------------
+ *       |           |           |           |            |           |
+ *   ---------   ---------   ---------   ---------    ---------   ---------
+ *  | ADFFile | | EXTFile | | IMGFile | | DMSFile | | EXEFile | | Folder  |
+ *   ---------   ---------   ---------   ---------    ---------   ---------
  */
+
 class AmigaFile : public AmigaObject {
     
-protected:
+public:
     
-    // Physical location of this file on disk (if known)
-    char *path = nullptr;
+    // Physical location of this file
+    string path = "";
     
     // The raw data of this file
     u8 *data = nullptr;
     
     // The size of this file in bytes
-    size_t size = 0;
+    usize size = 0;
     
     
     //
@@ -35,10 +59,75 @@ protected:
     
 public:
     
-    template <class T> static T *make(const u8 *buffer, size_t length, FileError *err = nullptr);
-    template <class T> static T *make(const char *path, FileError *err = nullptr);
-    template <class T> static T *make(FILE *file, FileError *err = nullptr);
+    template <class T> static T *make(const string &path, std::istream &stream) throws
+    {
+        if (!T::isCompatibleStream(stream)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
+        
+        T *obj = new T();
+        obj->path = path;
+        
+        try { obj->readFromStream(stream); } catch (VAError &err) {
+            delete obj;
+            throw err;
+        }
+        return obj;
+    }
 
+    template <class T> static T *make(const string &path, std::istream &stream, ErrorCode *err)
+    {
+        *err = ERROR_OK;
+        try { return make <T> (stream); }
+        catch (VAError &exception) { *err = exception.errorCode; }
+        return nullptr;
+    }
+    
+    template <class T> static T *make(const u8 *buf, usize len) throws
+    {
+        std::stringstream stream;
+        stream.write((const char *)buf, len);
+        return make <T> ("", stream);
+    }
+    
+    template <class T> static T *make(const u8 *buf, usize len, ErrorCode *err)
+    {
+        *err = ERROR_OK;
+        try { return make <T> (buf, len); }
+        catch (VAError &exception) { *err = exception.errorCode; }
+        return nullptr;
+    }
+    
+    template <class T> static T *make(const char *path) throws
+    {
+        std::ifstream stream(path);
+        if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND);
+
+        T *file = make <T> (string(path), stream);
+        return file;
+    }
+
+    template <class T> static T *make(const char *path, ErrorCode *err)
+    {
+        *err = ERROR_OK;
+        try { return make <T> (path); }
+        catch (VAError &exception) { *err = exception.errorCode; }
+        return nullptr;
+    }
+
+    template <class T> static T *make(FILE *file) throws
+    {
+        std::stringstream stream;
+        int c; while ((c = fgetc(file)) != EOF) { stream.put(c); }
+        return make <T> ("", stream);
+    }
+    
+    template <class T> static T *make(FILE *file, ErrorCode *err)
+    {
+        *err = ERROR_OK;
+        try { return make <T> (file); }
+        catch (VAError &exception) { *err = exception.errorCode; }
+        return nullptr;
+    }
+    
     
     //
     // Initializing
@@ -46,93 +135,48 @@ public:
     
 public:
 
-    AmigaFile();
+    AmigaFile() { };
+    AmigaFile(usize capacity);
     virtual ~AmigaFile();
-    
-    // Allocates memory for storing the object data
-    virtual bool alloc(size_t capacity);
-    
-    // Frees the allocated memory
-    virtual void dealloc();
-    
+        
     
     //
     // Accessing file attributes
     //
     
     // Returns the type of this file
-    virtual AmigaFileType fileType() { return FILETYPE_UKNOWN; }
-        
-    // Returns the physical name of this file
-    const char *getPath() { return path ? path : ""; }
-    
-    // Sets the physical name of this file
-    void setPath(const char *path);
-    
-    // Returns a fingerprint (hash value) for this file
-    virtual u64 fnv() { return fnv_1a_64(data, size); }
-    
-    
-    //
-    // Reading data from the file
-    //
-    
-    // Returns a pointer to the raw data of this file
-    virtual u8 *getData() { return data; }
-
-    // Returns the number of bytes in this file
-    virtual size_t getSize() { return size; }
+    virtual FileType type() const { return FILETYPE_UKNOWN; }
             
-    // Copies the whole file data into a buffer
-    virtual void flash(u8 *buffer, size_t offset = 0);
+    // Returns a fingerprint (hash value) for this file
+    virtual u64 fnv() const { return fnv_1a_64(data, size); }
+        
+    
+    //
+    // Flashing data
+    //
+            
+    // Copies the file contents into a buffer starting at the provided offset
+    virtual void flash(u8 *buf, usize offset = 0);
     
     
     //
     // Serializing
     //
     
-    // Returns the required buffer size for this file
-    size_t sizeOnDisk() { return writeToBuffer(nullptr); }
-
-    /* Returns true iff this specified buffer is compatible with this object.
-     * This function is used in readFromBuffer().
-     */
-    virtual bool matchingBuffer(const u8 *buffer, size_t length) { return false; }
-
-    /* Returns true iff this specified file is compatible with this object.
-     * This function is used in readFromFile().
-     */
-    virtual bool matchingFile(const char *path) { return false; }
+protected:
     
-    /* Deserializes this object from a memory buffer. This function uses
-     * matchingBuffer() to verify that the buffer contains a compatible
-     * binary representation.
-     */
-    virtual bool readFromBuffer(const u8 *buffer, size_t length, FileError *error = nullptr);
+    virtual usize readFromStream(std::istream &stream) throws;
+    usize readFromFile(const char *path) throws;
+    usize readFromBuffer(const u8 *buf, usize len) throws;
 
-    /* Deserializes this object from a file. This function uses
-     * matchingFile() to verify that the file contains a compatible binary
-     * representation. This function requires no custom implementation. It
-     * first reads in the file contents in memory and invokes readFromBuffer
-     * afterwards.
-     */
-    virtual bool readFromFile(const char *filename, FileError *error = nullptr);
-
-    /* Deserializes this object from a file that is already open.
-     */
-    virtual bool readFromFile(FILE *file, FileError *error = nullptr);
-
-    /* Writes the file contents into a memory buffer. If nullptr is
-     * passed in, a test run is performed. Test runs can be performed to
-     * determine the size of the file on disk.
-     */
-    virtual size_t writeToBuffer(u8 *buffer);
+public:
     
-    /* Writes the file contents to a file. This function requires no custom
-     * implementation. It invokes writeToBuffer first and writes the data to
-     * disk afterwards.
-     */
-    bool writeToFile(const char *filename, FileError *error = nullptr);
+    virtual usize writeToStream(std::ostream &stream) throws;
+    usize writeToStream(std::ostream &stream, ErrorCode *err);
+
+    usize writeToFile(const char *path) throws;
+    usize writeToFile(const char *path, ErrorCode *err);
+    
+    usize writeToBuffer(u8 *buf) throws;
+    usize writeToBuffer(u8 *buf, ErrorCode *err);    
 };
-
-#endif

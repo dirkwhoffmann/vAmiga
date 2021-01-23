@@ -7,15 +7,14 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AUDIO_FILTER_H
-#define _AUDIO_FILTER_H
+#pragma once
 
 #include "HardwareComponent.h"
 
 class AudioFilter : public AmigaComponent {
     
     // The currently set filter type
-    FilterType type = FILT_BUTTERWORTH;
+    FilterType type = FILTER_BUTTERWORTH;
     
     // Coefficients of the butterworth filter
     double a1, a2, b0, b1, b2;
@@ -32,7 +31,7 @@ public:
     
     AudioFilter(Amiga& ref);
 
-    const char *getDescription() override { return "AudioFilter"; }
+    const char *getDescription() const override { return "AudioFilter"; }
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
     
@@ -44,7 +43,7 @@ public:
 public:
     
     // Filter type
-    FilterType getFilterType() { return type; }
+    FilterType getFilterType() const { return type; }
     void setFilterType(FilterType type);
     
     // Sample rate
@@ -76,7 +75,7 @@ private:
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
@@ -93,4 +92,3 @@ public:
     float apply(float sample);
 };
     
-#endif

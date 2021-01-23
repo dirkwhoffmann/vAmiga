@@ -96,6 +96,12 @@ RomFile::identifier(u32 fingerprint)
 }
 
 bool
+RomFile::isCompatibleName(const std::string &name)
+{
+    return true;
+}
+
+bool
 RomFile::isBootRom(RomIdentifier rev)
 {
     switch (rev) {
@@ -212,7 +218,7 @@ RomFile::title(RomIdentifier rev)
         case ROM_DIAG121:          return "Amiga DiagROM";
         case ROM_LOGICA20:         return "Logica Diagnostic";
 
-        default:                 return "";
+        default:                   return "";
     }
 }
 
@@ -299,8 +305,10 @@ RomFile::RomFile()
 }
 
 bool
-RomFile::isRomBuffer(const u8 *buffer, size_t length)
+RomFile::isCompatibleStream(std::istream &stream)
 {
+    usize length = streamLength(stream);
+    
     // Boot Roms
     if (length == KB(8) || length == KB(16)) {
 
@@ -308,7 +316,7 @@ RomFile::isRomBuffer(const u8 *buffer, size_t length)
         int cnt = sizeof(bootRomHeaders) / len;
 
         for (int i = 0; i < cnt; i++) {
-            if (matchingBufferHeader(buffer, bootRomHeaders[i], len)) return true;
+            if (matchingStreamHeader(stream, bootRomHeaders[i], len)) return true;
         }
         return false;
     }
@@ -320,7 +328,7 @@ RomFile::isRomBuffer(const u8 *buffer, size_t length)
         int cnt = sizeof(kickRomHeaders) / len;
 
         for (int i = 0; i < cnt; i++) {
-            if (matchingBufferHeader(buffer, kickRomHeaders[i], len)) return true;
+            if (matchingStreamHeader(stream, kickRomHeaders[i], len)) return true;
         }
         return false;
     }
@@ -332,93 +340,53 @@ RomFile::isRomBuffer(const u8 *buffer, size_t length)
         int cnt = sizeof(encrRomHeaders) / len;
         
         for (int i = 0; i < cnt; i++) {
-            if (matchingBufferHeader(buffer, encrRomHeaders[i], len)) return true;
+            if (matchingStreamHeader(stream, encrRomHeaders[i], len)) return true;
         }
     }
     
     return false;
+}
+
+bool
+RomFile::isRomBuffer(const u8 *buf, size_t len)
+{
+    std::stringstream stream;
+    stream.write((const char *)buf, len);
+    
+    return isCompatibleStream(stream);
 }
 
 bool
 RomFile::isRomFile(const char *path)
 {
-    // Boot Roms
-    if (checkFileSize(path, KB(8)) || checkFileSize(path, KB(16))) {
-
-        int len = sizeof(bootRomHeaders[0]);
-        int cnt = sizeof(bootRomHeaders) / len;
-
-        for (int i = 0; i < cnt; i++)
-            if (matchingFileHeader(path, bootRomHeaders[i], len)) return true;
-
-        return false;
-    }
-
-    // Kickstart Roms
-     if (checkFileSize(path, KB(256)) || checkFileSize(path, KB(512))) {
-
-         int len = sizeof(kickRomHeaders[0]);
-         int cnt = sizeof(kickRomHeaders) / len;
-
-         for (int i = 0; i < cnt; i++)
-             if (matchingFileHeader(path, kickRomHeaders[i], len)) return true;
-
-         return false;
-     }
-
-    // Encrypted Kickstart Roms
-    if (checkFileSize(path, KB(256) + 11) || checkFileSize(path, KB(512) + 11)) {
-        
-        int len = sizeof(encrRomHeaders[0]);
-        int cnt = sizeof(encrRomHeaders) / len;
-        
-        for (int i = 0; i < cnt; i++) {
-            if (matchingFileHeader(path, encrRomHeaders[i], len)) return true;
-        }
-    }
-    
-    return false;
+    std::ifstream stream(path);
+    return stream.is_open() ? isCompatibleStream(stream) : false;
 }
 
 bool
-RomFile::readFromBuffer(const u8 *buffer, size_t length, FileError *error)
+RomFile::isEncrypted()
 {
-    FileError err;
-    
-    // Read from buffer
-    if (AmigaFile::readFromBuffer(buffer, length, &err)) {
-    
-        // If the buffer contains an encrypted Rom, try to decrypt it
-        encrypted = matchingBufferHeader(data, encrRomHeaders[0], sizeof(encrRomHeaders[0]));
-        if (encrypted) { decrypt(&err); }
-    }
-    
-    if (error) *error = err;
-    return err == ERR_FILE_OK;
+    return matchingBufferHeader(data, encrRomHeaders[0], sizeof(encrRomHeaders[0]));
 }
 
-bool
-RomFile::decrypt(FileError *error)
+void
+RomFile::decrypt()
 {
     const size_t headerSize = 11;
-    FileError err = ERR_FILE_OK;
     u8 *encryptedData = nullptr;
     u8 *decryptedData = nullptr;
     u8 *romKeyData = nullptr;
     long romKeySize = 0;
         
-    //  Locate the rom.key file
-    assert(path != nullptr);
-    char *romKeyPath = replaceFilename(path, "rom.key");
-    if (romKeyPath == nullptr) {
-        err = ERR_MISSING_ROM_KEY;
-        goto exit;
-    }
+    // Only proceed if the file is encrypted
+    if (!isEncrypted()) return;
+    
+    // Locate the rom.key file
+    romKeyPath = extractPath(path) + "rom.key";
     
     // Load the rom.key file
-    if (!loadFile(romKeyPath, &romKeyData, &romKeySize)) {
-        err = ERR_MISSING_ROM_KEY;
-        goto exit;
+    if (!loadFile(romKeyPath.c_str(), &romKeyData, &romKeySize)) {
+        throw VAError(ERROR_MISSING_ROM_KEY);
     }
     
     // Create a buffer for the decrypted data
@@ -429,23 +397,15 @@ RomFile::decrypt(FileError *error)
     for (size_t i = 0; i < size - headerSize; i++) {
         decryptedData[i] = encryptedData[i] ^ romKeyData[i % romKeySize];
     }
-
-    // Check if we've got a valid ROM
-    if (!isRomBuffer(decryptedData, size - headerSize)) {
-        err = ERR_INVALID_ROM_KEY;
-        goto exit;
-    }
+    delete [] romKeyData;
 
     // Replace the old data by the decrypted data
     delete [] data;
     data = decryptedData;
     size -= headerSize;
     
-exit:
-    
-    if (romKeyPath) free(romKeyPath);
-    if (romKeyData) delete [] romKeyData;
-    
-    *error = err;
-    return err == ERR_FILE_OK;
+    // Check if we've got a valid ROM
+    if (!isRomBuffer(data, size)) {
+        throw VAError(ERROR_INVALID_ROM_KEY);
+    }
 }

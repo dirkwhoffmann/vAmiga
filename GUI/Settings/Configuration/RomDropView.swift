@@ -42,6 +42,11 @@ class DropView: NSImageView {
         return NSDragOperation()
     }
     
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        
+        return false
+    }
+
     override func draggingExited(_ sender: NSDraggingInfo?) {
 
         parent.refresh()
@@ -51,20 +56,7 @@ class DropView: NSImageView {
 
         return true
     }
-    
-    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-
-        guard let url = sender.url?.unpacked else { return false }
         
-        // Check for a ROM image
-        var err: FileError = .ERR_FILE_OK
-        if amiga.mem.loadRom(fromFile: url, error: &err) { return true }
-        if err != .ERR_INVALID_TYPE { err.showAlert(url: url) }
-        
-        parent.refresh()
-        return false
-    }
-    
     override func concludeDragOperation(_ sender: NSDraggingInfo?) {
 
         parent.refresh()
@@ -75,13 +67,24 @@ class RomDropView: DropView {
 
     override func acceptDragSource(url: URL) -> Bool {
         
-        if amiga.isPoweredOff {
+        if !amiga.isPoweredOff { return false }
             
-            return url.pathExtension == "zip" ||
-                url.pathExtension == "gz" ||
-                amiga.mem.isRom(url)
-        }
+        let suffix = url.pathExtension
+        return suffix == "zip" || suffix == "gz" || amiga.mem.isRom(url)
+    }
+    
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+
+        guard let url = sender.url?.unpacked else { return false }
         
+        do {
+            let rom = try Proxy.make(url: url) as RomFileProxy
+            amiga.mem.loadRom(rom)
+            return true
+        } catch {
+            let name = url.lastPathComponent
+            (error as? VAError)?.warning("Cannot open Rom file \"\(name)\"")
+        }
         return false
     }
 }
@@ -91,6 +94,23 @@ class ExtRomDropView: DropView {
     override func acceptDragSource(url: URL) -> Bool {
 
         if !amiga.isPoweredOff { return false }
-        return amiga.mem.isExt(url)
+
+        let suffix = url.pathExtension
+        return suffix == "zip" || suffix == "gz" || amiga.mem.isExt(url)
+    }
+    
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        
+        guard let url = sender.url?.unpacked else { return false }
+        
+        do {
+            let ext = try Proxy.make(url: url) as ExtendedRomFileProxy
+            amiga.mem.loadExt(ext)
+            return true
+        } catch {
+            let name = url.lastPathComponent
+            (error as? VAError)?.warning("Cannot open ExtendedRom file \"\(name)\"")
+        }
+        return false        
     }
 }

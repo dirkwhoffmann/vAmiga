@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _COPPER_H
-#define _COPPER_H
+#pragma once
 
 #include "Beam.h"
 
@@ -86,7 +85,7 @@ public:
     
     Copper(Amiga& ref);
 
-    const char *getDescription() override { return "Copper"; }
+    const char *getDescription() const override { return "Copper"; }
     
     void _reset(bool hard) override;
 
@@ -103,7 +102,7 @@ public:
 private:
 
     void _inspect() override;
-    void _dump() override;
+    void _dump() const override;
 
     
     //
@@ -141,7 +140,7 @@ private:
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
@@ -187,23 +186,23 @@ private:
      * false: The Copper does not wake up the current frame.
      *        Variable 'result' remains untouched.
      */
-    bool findMatch(Beam &result);
-    bool findMatchNew(Beam &result);
+    bool findMatch(Beam &result) const;
+    bool findMatchNew(Beam &result) const;
 
     // Called by findMatch() to determine the vertical trigger position
-    bool findVerticalMatch(i16 vStrt, i16 vComp, i16 vMask, i16 &result);
+    bool findVerticalMatch(i16 vStrt, i16 vComp, i16 vMask, i16 &result) const;
 
     // Called by findMatch() to determine the horizontal trigger position
-    bool findHorizontalMatch(i16 hStrt, i16 hComp, i16 hMask, i16 &result);
-    bool findHorizontalMatchNew(u32 &beam, u32 comp, u32 mask);
+    bool findHorizontalMatch(i16 hStrt, i16 hComp, i16 hMask, i16 &result) const;
+    bool findHorizontalMatchNew(u32 &beam, u32 comp, u32 mask) const;
 
     // Emulates the Copper writing a value into one of the custom registers
     void move(u32 addr, u16 value);
 
     // Runs the comparator circuit
-    bool comparator(Beam beam, u16 waitpos, u16 mask);
-    bool comparator(Beam beam);
-    bool comparator();
+    bool comparator(Beam beam, u16 waitpos, u16 mask) const;
+    bool comparator(Beam beam) const;
+    bool comparator() const;
 
     // Emulates a WAIT command
     void scheduleWaitWakeup(bool bfd);
@@ -239,45 +238,42 @@ private:
      * second variant analyzes the instruction at a certain location in memory.
      */
  
-    bool isMoveCmd();
-    bool isMoveCmd(u32 addr);
+    bool isMoveCmd() const;
+    bool isMoveCmd(u32 addr) const;
     
-    bool isWaitCmd();
-    bool isWaitCmd(u32 addr);
-
-    bool isSkipCmd();
-    bool isSkipCmd(u32 addr);
+    bool isWaitCmd() const;
+    bool isWaitCmd(u32 addr) const;
     
-    u16 getRA();
-    u16 getRA(u32 addr);
+    u16 getRA() const;
+    u16 getRA(u32 addr) const;
 
-    u16 getDW();
-    u16 getDW(u32 addr);
+    u16 getDW() const;
+    u16 getDW(u32 addr) const;
 
-    bool getBFD();
-    bool getBFD(u32 addr);
+    bool getBFD() const;
+    bool getBFD(u32 addr) const;
 
-    u16 getVPHP();
-    u16 getVPHP(u32 addr);
-    u16 getVP() { return HI_BYTE(getVPHP()); }
+    u16 getVPHP() const;
+    u16 getVPHP(u32 addr) const;
+    u16 getVP() const { return HI_BYTE(getVPHP()); }
     u16 getVP(u32 addr) { return HI_BYTE(getVPHP(addr)); }
-    u16 getHP() { return LO_BYTE(getVPHP()); }
+    u16 getHP() const { return LO_BYTE(getVPHP()); }
     u16 getHP(u32 addr) { return LO_BYTE(getVPHP(addr)); }
     
-    u16 getVMHM();
-    u16 getVMHM(u32 addr);
-    u16 getVM() { return HI_BYTE(getVMHM()); }
+    u16 getVMHM() const;
+    u16 getVMHM(u32 addr) const;
+    u16 getVM() const { return HI_BYTE(getVMHM()); }
     u16 getVM(u32 addr) { return HI_BYTE(getVMHM(addr)); }
-    u16 getHM() { return LO_BYTE(getVMHM()); }
+    u16 getHM() const { return LO_BYTE(getVMHM()); }
     u16 getHM(u32 addr) { return LO_BYTE(getVMHM(addr)); }
     
 public:
     
     // Returns true if the Copper has no access to this custom register
-    bool isIllegalAddress(u32 addr);
+    bool isIllegalAddress(u32 addr) const;
     
     // Returns true if the Copper instruction at addr is illegal
-    bool isIllegalInstr(u32 addr);
+    bool isIllegalInstr(u32 addr) const;
     
  
     //
@@ -317,7 +313,7 @@ public:
 public:
 
     // Returns the number of instructions in Copper list 1 or 2
-    int instrCount(int nr);
+    int instrCount(int nr) const;
 
     // Manually lengthens or shortens the value returned by instrCount()
     void adjustInstrCount(int nr, int offset);
@@ -329,5 +325,3 @@ public:
     // Dumps a Copper list
     void dumpCopperList(unsigned list, unsigned length); 
 };
-
-#endif 

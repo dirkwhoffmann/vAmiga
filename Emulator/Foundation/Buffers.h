@@ -7,6 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#pragma once
+
+#include "AmigaPublicTypes.h"
+
 /* The emulator uses buffers at various places. Most of them are derived from
  * one of the following two classes:
  *
@@ -14,12 +18,7 @@
  *     SortedRingBuffer : A ringbuffer that keeps the entries sorted
  */
 
-#ifndef _BUFFERS_H
-#define _BUFFERS_H
-
-#include "AmigaTypes.h"
-
-template <class T, size_t capacity> struct RingBuffer
+template <class T, usize capacity> struct RingBuffer
 {
     // Element storage
     T elements[capacity];
@@ -52,8 +51,8 @@ template <class T, size_t capacity> struct RingBuffer
     // Querying the fill status
     //
 
-    size_t cap() { return capacity; }
-    size_t count() const { return (capacity + w - r) % capacity; }
+    usize cap() const { return capacity; }
+    usize count() const { return (capacity + w - r) % capacity; }
     double fillLevel() const { return (double)count() / capacity; }
     bool isEmpty() const { return r == w; }
     bool isFull() const { return count() == capacity - 1; }
@@ -73,12 +72,12 @@ template <class T, size_t capacity> struct RingBuffer
     // Reading and writing elements
     //
 
-    T& current()
+    const T& current() const
     {
         return elements[r];
     }
 
-    T& current(int offset)
+    const T& current(int offset) const
     {
         return elements[(r + offset) % capacity];
     }
@@ -177,5 +176,3 @@ struct RegChangeRecorder : public SortedRingBuffer<RegChange, capacity>
         return this->isEmpty() ? NEVER : this->keys[this->r];
     }
 };
-
-#endif

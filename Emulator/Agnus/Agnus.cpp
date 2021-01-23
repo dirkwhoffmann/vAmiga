@@ -51,12 +51,13 @@ void Agnus::_reset(bool hard)
     }
     
     // Schedule initial events
-    scheduleRel<RAS_SLOT>(DMA_CYCLES(HPOS_CNT), RAS_HSYNC);
-    scheduleRel<CIAA_SLOT>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
-    scheduleRel<CIAB_SLOT>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
-    scheduleRel<SEC_SLOT>(NEVER, SEC_TRIGGER);
-    scheduleRel<VBL_SLOT>(DMA_CYCLES(HPOS_CNT * vStrobeLine()), VBL_STROBE0);
-    scheduleRel<IRQ_SLOT>(NEVER, IRQ_CHECK);
+    scheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT), RAS_HSYNC);
+    scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
+    scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
+    scheduleRel<SLOT_SEC>(NEVER, SEC_TRIGGER);
+    // scheduleRel<SLOT_VBL>(DMA_CYCLES(HPOS_CNT * vStrobeLine()), VBL_STROBE0);
+    scheduleStrobe0Event();
+    scheduleRel<SLOT_IRQ>(NEVER, IRQ_CHECK);
     diskController.scheduleFirstDiskEvent();
     scheduleNextBplEvent();
     scheduleNextDasEvent();
@@ -69,7 +70,7 @@ void Agnus::_reset(bool hard)
 }
 
 long
-Agnus::getConfigItem(ConfigOption option)
+Agnus::getConfigItem(Option option) const
 {
     switch (option) {
             
@@ -83,7 +84,7 @@ Agnus::getConfigItem(ConfigOption option)
 }
 
 bool
-Agnus::setConfigItem(ConfigOption option, long value)
+Agnus::setConfigItem(Option option, long value)
 {
     switch (option) {
             
@@ -94,10 +95,7 @@ Agnus::setConfigItem(ConfigOption option, long value)
             warn("Overriding Agnus revision: %ld\n", value);
             #endif
             
-            if (!isAgnusRevision(value)) {
-                warn("Invalid Agnus revision: %ld\n", value);
-                return false;
-            }
+            if (!AgnusRevisionEnum::verify(value)) return false; 
             
             if (config.revision == value) {
                 return false;
@@ -131,9 +129,9 @@ Agnus::setConfigItem(ConfigOption option, long value)
 }
 
 void
-Agnus::_dumpConfig()
+Agnus::_dumpConfig() const
 {
-    msg("      revision : %s\n", sAgnusRevision(config.revision));
+    msg("      revision : %s\n", AgnusRevisionEnum::key(config.revision));
     msg(" slowRamMirror : %s\n", config.slowRamMirror ? "yes" : "no");
 }
 
@@ -209,7 +207,7 @@ Agnus::_inspect()
 }
 
 void
-Agnus::_dump()
+Agnus::_dump() const
 {
     msg(" actions : %llX\n", hsyncActions);
 
@@ -222,9 +220,6 @@ Agnus::_dump()
     msg("   hstop : %d\n", diwHstop);
     msg("   vstrt : %d\n", diwVstrt);
     msg("   vstop : %d\n", diwVstop);
-
-    msg("\nEvents:\n\n");
-    dumpEvents();
 
     msg("\nBPL DMA table:\n\n");
     dumpBplEventTable();
@@ -285,44 +280,44 @@ Agnus::updateStats()
 }
 
 Cycle
-Agnus::cyclesInFrame()
+Agnus::cyclesInFrame() const
 {
     return DMA_CYCLES(frame.numLines() * HPOS_CNT);
 }
 
 Cycle
-Agnus::startOfFrame()
+Agnus::startOfFrame() const
 {
     return clock - DMA_CYCLES(pos.v * HPOS_CNT + pos.h);
 }
 
 Cycle
-Agnus::startOfNextFrame()
+Agnus::startOfNextFrame() const
 {
     return startOfFrame() + cyclesInFrame();
 }
 
 bool
-Agnus::belongsToPreviousFrame(Cycle cycle)
+Agnus::belongsToPreviousFrame(Cycle cycle) const
 {
     return cycle < startOfFrame();
 }
 
 bool
-Agnus::belongsToCurrentFrame(Cycle cycle)
+Agnus::belongsToCurrentFrame(Cycle cycle) const
 {
     return !belongsToPreviousFrame(cycle) && !belongsToNextFrame(cycle);
 }
 
 bool
-Agnus::belongsToNextFrame(Cycle cycle)
+Agnus::belongsToNextFrame(Cycle cycle) const
 {
     return cycle >= startOfNextFrame();
 }
 
 bool
-Agnus::inBplDmaLine(u16 dmacon, u16 bplcon0) {
-
+Agnus::inBplDmaLine(u16 dmacon, u16 bplcon0) const
+{
     return
     ddfVFlop                 // Outside VBLANK, inside DIW
     && bpu(bplcon0)          // At least one bitplane enabled
@@ -330,13 +325,13 @@ Agnus::inBplDmaLine(u16 dmacon, u16 bplcon0) {
 }
 
 Cycle
-Agnus::beamToCycle(Beam beam)
+Agnus::beamToCycle(Beam beam) const
 {
     return startOfFrame() + DMA_CYCLES(beam.v * HPOS_CNT + beam.h);
 }
 
 Beam
-Agnus::cycleToBeam(Cycle cycle)
+Agnus::cycleToBeam(Cycle cycle) const
 {
     Beam result;
 
@@ -349,7 +344,7 @@ Agnus::cycleToBeam(Cycle cycle)
 }
 
 Beam
-Agnus::addToBeam(Beam beam, Cycle cycles)
+Agnus::addToBeam(Beam beam, Cycle cycles) const
 {
     Beam result;
 

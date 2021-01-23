@@ -91,44 +91,31 @@ public extension MetalView {
             let nsData = fileData! as NSData
             let rawPtr = nsData.bytes
             
-            guard let snapshot = SnapshotProxy.make(withBuffer: rawPtr, length: length) else {
-                return false
-            }
-            if document.proceedWithUnexportedDisk() {
-                DispatchQueue.main.async {
-                    let snap = snapshot
-                    self.parent.load(snapshot: snap)
+            do {
+                let snapshot = try Proxy.make(buffer: rawPtr, length: length) as SnapshotProxy
+
+                if document.proceedWithUnexportedDisk() {
+                    DispatchQueue.main.async {
+                        let snap = snapshot
+                        self.parent.load(snapshot: snap)
+                    }
+                    return true
                 }
-                return true
-            } else {
-                return false
-            }
+            } catch { return false }
+            return true
             
         case .compatibleFileURL:
             
             if let url = NSURL.init(from: pasteBoard) as URL? {
-                
-                let types: [AmigaFileType] = [
-                    
-                    .FILETYPE_SNAPSHOT,
-                    .FILETYPE_ADF,
-                    .FILETYPE_EXT,
-                    .FILETYPE_IMG,
-                    .FILETYPE_DMS,
-                    .FILETYPE_EXE,
-                    .FILETYPE_DIR
-                ]
-
-                let err = document.createAttachment(url: url, allowedTypes: types)
-
-                if err == .ERR_FILE_OK {
+                do {
+                    try document.createAttachment(from: url)
                     return document.mountAttachment()
-                } else {
-                    err.showAlert(url: url)
+                } catch {
+                    (error as? VAError)?.cantOpen(url: url)
                 }
             }
             return false
-            
+                        
         default:
             return false
         }

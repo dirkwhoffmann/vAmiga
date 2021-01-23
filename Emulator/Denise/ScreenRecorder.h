@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _SCREEN_RECORDER_H
-#define _SCREEN_RECORDER_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "Muxer.h"
@@ -97,9 +96,9 @@ public:
     
     ScreenRecorder(Amiga& ref);
     
-    const char *getDescription() override { return "ScreenRecorder"; }
+    const char *getDescription() const override { return "ScreenRecorder"; }
 
-    bool hasFFmpeg();
+    bool hasFFmpeg() const;
     
     void _reset(bool hard) override;
 
@@ -110,7 +109,7 @@ public:
 
 private:
     
-    void _dump() override;
+    void _dump() const override;
     
     
     //
@@ -135,7 +134,7 @@ private:
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
@@ -186,5 +185,3 @@ public:
     // Records a single frame
     void vsyncHandler(Cycle target);
 };
-
-#endif

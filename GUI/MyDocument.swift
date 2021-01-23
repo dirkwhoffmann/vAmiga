@@ -11,9 +11,6 @@ class MyDocument: NSDocument {
 
     // The window controller for this document
     var parent: MyController { return windowControllers.first as! MyController }
-
-    // The application delegate
-    var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     
     /* Emulator proxy. This object is an Objective-C bridge between the Swift
      * GUI an the core emulator which is written in C++.
@@ -61,12 +58,6 @@ class MyDocument: NSDocument {
         amiga = AmigaProxy()
     }
  
-    deinit {
-        
-        track()
-        amiga.kill()
-    }
-    
     override open func makeWindowControllers() {
         
         track()
@@ -76,85 +67,29 @@ class MyDocument: NSDocument {
         controller.amiga = amiga
         self.addWindowController(controller)
     }
-
+  
     //
-    // Opening files
+    // Creating attachments
     //
-    
-    func openFile(url: URL, allowedTypes: [AmigaFileType]) -> (AmigaFileProxy?, FileError) {
         
-        track("Opening URL \(url.lastPathComponent)")
+    func createAttachment(from url: URL) throws {
         
-        var err: FileError = .ERR_FILE_OK
+        let types: [FileType] =
+            [ .SNAPSHOT, .ADF, .HDF, .EXT, .IMG, .DMS, .EXE, .DIR ]
         
-        // If the provided URL points to compressed file, decompress it
-        let path = url.unpacked.path
-        
-        // Iterate through all allowed file types
-        for type in allowedTypes {
-            
-            switch type {
-            
-            case .FILETYPE_SNAPSHOT:
-                if let file = SnapshotProxy.make(withFile: path, error: &err) {
-                    return (file, .ERR_FILE_OK)
-                }
-                
-            case .FILETYPE_ADF:
-                if let file = ADFFileProxy.make(withFile: path, error: &err) {
-                    return (file, .ERR_FILE_OK)
-                }
-                
-            case .FILETYPE_EXT:
-                if let file = EXTFileProxy.make(withFile: path, error: &err) {
-                    return (file, .ERR_FILE_OK)
-                }
-                
-            case .FILETYPE_IMG:
-                if let file = IMGFileProxy.make(withFile: path, error: &err) {
-                    return (file, .ERR_FILE_OK)
-                }
-                
-            case .FILETYPE_DMS:
-                if let file = DMSFileProxy.make(withFile: path, error: &err) {
-                    return (file, .ERR_FILE_OK)
-                }
-                
-            case .FILETYPE_EXE:
-                if let file = EXEFileProxy.make(withFile: path, error: &err) {
-                    return (file, .ERR_FILE_OK)
-                }
-                
-            case .FILETYPE_DIR:
-                if let file = DIRFileProxy.make(withFile: path, error: &err) {
-                    return (file, .ERR_FILE_OK)
-                }
-                
-            case .FILETYPE_HDF:
-                if let file = HDFFileProxy.make(withFile: path, error: &err) {
-                    return (file, .ERR_FILE_OK)
-                }
-                
-            default:
-                fatalError()
-            }
-            
-            // Analyze the error code
-            if err != .ERR_INVALID_TYPE { return (nil, err) }
-        }
-        
-        // None of the allowed typed matched the file
-        return (nil, .ERR_INVALID_TYPE)
+        try createAttachment(from: url, allowedTypes: types)
     }
     
-    //
-    // Working with attachments
-    //
-        
-    func createAttachment(url: URL, allowedTypes: [AmigaFileType]) -> FileError {
+    func createAttachment(from url: URL, allowedTypes: [FileType]) throws {
         
         track("Creating attachment from URL: \(url.lastPathComponent)")
         
+        try amigaAttachment = createFileProxy(from: url, allowedTypes: allowedTypes)
+        myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
+        
+        track("Attachment created successfully")
+        
+        /*
         let (file, err) = openFile(url: url, allowedTypes: allowedTypes)
         
         if file != nil {
@@ -167,8 +102,59 @@ class MyDocument: NSDocument {
         }
         
         return err
+        */
     }
     
+    fileprivate
+    func createFileProxy(from url: URL, allowedTypes: [FileType]) throws -> AmigaFileProxy? {
+        
+        var result: AmigaFileProxy?
+        
+        track("Creating proxy object from URL: \(url.lastPathComponent)")
+        
+        // If the provided URL points to compressed file, decompress it first
+        let newUrl = url.unpacked
+
+        // Iterate through all allowed file types
+        for type in allowedTypes {
+            
+            switch type {
+            
+            case .SNAPSHOT:
+                try? result = Proxy.make(url: newUrl) as SnapshotProxy
+                
+            case .ADF:
+                try? result = Proxy.make(url: newUrl) as ADFFileProxy
+                                
+            case .EXT:
+                try? result = Proxy.make(url: newUrl) as EXTFileProxy
+                
+            case .IMG:
+                try? result = Proxy.make(url: newUrl) as IMGFileProxy
+                
+            case .DMS:
+                try? result = Proxy.make(url: newUrl) as DMSFileProxy
+                
+            case .EXE:
+                try? result = Proxy.make(url: newUrl) as EXEFileProxy
+                
+            case .DIR:
+                try? result = Proxy.make(url: newUrl) as FolderProxy
+                
+            case .HDF:
+                try? result = Proxy.make(url: newUrl) as HDFFileProxy
+                
+            default:
+                fatalError()
+            }
+            
+            if result != nil { return result }
+        }
+        
+        // None of the allowed typed matched the file
+        throw VAError(.FILE_TYPE_MISMATCH)
+    }
+
     @discardableResult
     func mountAttachment() -> Bool {
         
@@ -231,10 +217,31 @@ class MyDocument: NSDocument {
     
     override open func read(from url: URL, ofType typeName: String) throws {
         
-        let err = createAttachment(url: url, allowedTypes: [.FILETYPE_SNAPSHOT])
+        do {
+            try createAttachment(from: url)
+        } catch let error as VAError {
+            error.cantOpen(url: url)
+        }
+        
+        /*
+        // let err = createAttachment(url: url, allowedTypes: [.SNAPSHOT])
+        let err = createAttachment(url: url)
 
-        if err != .ERR_FILE_OK {
+        if err != .OK {
             throw NSError.fileError(err, url: url)
+        }
+        */
+    }
+    
+    override open func revert(toContentsOf url: URL, ofType typeName: String) throws {
+        
+        track()
+        
+        do {
+            try createAttachment(from: url)
+            mountAttachment()
+        } catch let error as VAError {
+            error.cantOpen(url: url)
         }
     }
     
@@ -242,9 +249,9 @@ class MyDocument: NSDocument {
     // Saving
     //
     
-    override open func data(ofType typeName: String) throws -> Data {
-        
-        track("\(typeName)")
+    override func write(to url: URL, ofType typeName: String) throws {
+            
+        track()
         
         if typeName == "vAmiga" {
             
@@ -252,64 +259,45 @@ class MyDocument: NSDocument {
             if let snapshot = SnapshotProxy.make(withAmiga: amiga) {
 
                 // Write to data buffer
-                if let data = NSMutableData.init(length: snapshot.sizeOnDisk) {
-                    snapshot.write(toBuffer: data.mutableBytes)
-                    return data as Data
+                do {
+                    _ = try snapshot.writeToFile(url: url)
+                } catch {
+                    throw NSError(domain: NSOSStatusErrorDomain, code: unimpErr, userInfo: nil)
                 }
             }
         }
-        
-        throw NSError(domain: NSOSStatusErrorDomain, code: unimpErr, userInfo: nil)
     }
-    
+
     //
     // Exporting disks
     //
     
-    @discardableResult
-    func export(drive nr: Int, to url: URL) -> Bool {
-                
+    func export(drive nr: Int, to url: URL) throws {
+                        
         var df: DiskFileProxy?
         switch url.pathExtension.uppercased() {
         case "ADF":
-            df = ADFFileProxy.make(withDrive: amiga.df(nr)!)
+            df = try Proxy.make(drive: amiga.df(nr)!) as ADFFileProxy
         case "IMG", "IMA":
-            df = IMGFileProxy.make(withDrive: amiga.df(nr)!)
+            df = try Proxy.make(drive: amiga.df(nr)!) as IMGFileProxy
         default:
             break
         }
         
-        if df != nil {
-            return export(drive: nr, to: url, diskFileProxy: df!)
-        } else {
-            showExportDecodingAlert(driveNr: nr)
-            return false
-        }
-    }
-    
-    @discardableResult
-    func export(drive nr: Int, to url: URL, diskFileProxy df: DiskFileProxy) -> Bool {
-                        
-        track("Exporting disk to \(url)")
+        try export(diskFileProxy: df!, to: url)
         
-        // Serialize data
-        let data = NSMutableData.init(length: df.sizeOnDisk)!
-        df.write(toBuffer: data.mutableBytes)
-        
-        // Write to file
-        if !data.write(to: url, atomically: true) {
-            showExportAlert(url: url)
-            return false
-        }
-
         // Mark disk as "not modified"
         amiga.df(nr)!.isModifiedDisk = false
         
         // Remember export URL
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)
-
-        track("Export complete")
-        return true
+    }
+    
+    func export(diskFileProxy df: DiskFileProxy, to url: URL) throws {
+        
+        track("Exporting disk to \(url)")
+        
+        try df.writeToFile(url: url)        
     }
     
     //

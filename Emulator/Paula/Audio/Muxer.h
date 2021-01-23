@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _MUXER_H
-#define _MUXER_H
+#pragma once
 
 #include "AmigaComponent.h"
 #include "AudioStream.h"
@@ -118,7 +117,7 @@ public:
     Muxer(Amiga& ref);
     ~Muxer();
 
-    const char *getDescription() override { return "Muxer"; }
+    const char *getDescription() const override { return "Muxer"; }
     void _reset(bool hard) override;
     
     // Resets the output buffer and the two audio filters
@@ -131,21 +130,21 @@ public:
     
 public:
     
-    MuxerConfig getConfig() { return config; }
+    const MuxerConfig &getConfig() const { return config; }
 
-    long getConfigItem(ConfigOption option);
-    long getConfigItem(ConfigOption option, long id);
-    bool setConfigItem(ConfigOption option, long value) override;
-    bool setConfigItem(ConfigOption option, long id, long value) override;
+    long getConfigItem(Option option) const;
+    long getConfigItem(Option option, long id) const;
+    bool setConfigItem(Option option, long value) override;
+    bool setConfigItem(Option option, long id, long value) override;
 
-    bool isMuted() { return config.volL == 0 && config.volR == 0; }
+    bool isMuted() const { return config.volL == 0 && config.volR == 0; }
 
-    double getSampleRate() { return sampleRate; }
+    double getSampleRate() const { return sampleRate; }
     void setSampleRate(double hz);
 
 private:
     
-    void _dumpConfig() override;
+    void _dumpConfig() const override;
 
 
     //
@@ -155,7 +154,7 @@ private:
 public:
     
     // Returns information about the gathered statistical information
-    MuxerStats getStats() { return stats; }
+    MuxerStats getStats() const { return stats; }
     
     
     //
@@ -199,9 +198,9 @@ private:
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    size_t didLoadFromBuffer(u8 *buffer) override;
+    size_t didLoadFromBuffer(const u8 *buffer) override;
     
     
     //
@@ -256,5 +255,3 @@ public:
     void copyStereo(float *left, float *right, size_t n);
     void copyInterleaved(float *buffer, size_t n);
 };
-
-#endif

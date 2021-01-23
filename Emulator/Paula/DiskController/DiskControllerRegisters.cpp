@@ -10,7 +10,7 @@
 #include "Amiga.h"
 
 u16
-DiskController::peekDSKDATR()
+DiskController::peekDSKDATR() const
 {
     // TODO: Add Accessor as template parameter.
     // TODO: Use this method to read from the FIFO buffer if Accessor == AGNUS.
@@ -158,7 +158,7 @@ DiskController::pokeDSKSYNC(u16 value)
 }
 
 u8
-DiskController::driveStatusFlags()
+DiskController::driveStatusFlags() const
 {
     u8 result = 0xFF;
     
@@ -173,8 +173,6 @@ DiskController::driveStatusFlags()
 void
 DiskController::PRBdidChange(u8 oldValue, u8 newValue)
 {
-    // debug("PRBdidChange: %X -> %X\n", oldValue, newValue);
-
     // Store a copy of the new value for reference
     prb = newValue;
     

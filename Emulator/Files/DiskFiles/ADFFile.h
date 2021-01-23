@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _ADF_H
-#define _ADF_H
+#pragma once
 
 #include "DiskFile.h"
 #include "FSDevice.h"
@@ -27,31 +26,29 @@ public:
     //
     // Class methods
     //
-    
-    // Returns true iff the provided buffer contains an ADF file
-    static bool isADFBuffer(const u8 *buffer, size_t length);
-    
-    // Returns true iff if the provided path points to an ADF file
-    static bool isADFFile(const char *path);
+        
+    static bool isCompatibleName(const std::string &name);
+    static bool isCompatibleStream(std::istream &stream);
     
     // Returns the size of an ADF file of a given disk type in bytes
-    static size_t fileSize(DiskType t, DiskDensity d);
+    static size_t fileSize(DiskDiameter t, DiskDensity d);
+
+    static ADFFile *makeWithType(DiskDiameter t, DiskDensity d);    
+    static ADFFile *makeWithDisk(class Disk *disk) throws;
+    static ADFFile *makeWithDisk(class Disk *disk, ErrorCode *ec);
+    static ADFFile *makeWithDrive(class Drive *drive) throws;
+    static ADFFile *makeWithDrive(class Drive *drive, ErrorCode *ec);
+    static ADFFile *makeWithVolume(FSDevice &volume) throws;
+    static ADFFile *makeWithVolume(FSDevice &volume, ErrorCode *ec);
 
     
     //
-    // Initializing
+    // Methods from AmigaObject
     //
 
 public:
-
-    ADFFile();
     
-    const char *getDescription() override { return "ADF"; }
-
-    static ADFFile *makeWithType(DiskType t, DiskDensity d);
-    static ADFFile *makeWithDisk(class Disk *disk);
-    static ADFFile *makeWithDrive(class Drive *drive);
-    static ADFFile *makeWithVolume(FSDevice &volume, FSError *error);
+    const char *getDescription() const override { return "ADF"; }
 
     
     //
@@ -60,10 +57,7 @@ public:
     
 public:
     
-    AmigaFileType fileType() override { return FILETYPE_ADF; }
-    bool matchingBuffer(const u8 *buffer, size_t length) override {
-        return isADFBuffer(buffer, length); }
-    bool matchingFile(const char *path) override { return isADFFile(path); }
+    FileType type() const override { return FILETYPE_ADF; }
     
     
     //
@@ -72,20 +66,20 @@ public:
     
 public:
     
-    FSVolumeType getDos() override; 
+    FSVolumeType getDos() const override; 
     void setDos(FSVolumeType dos) override;
-    DiskType getDiskType() override;
-    DiskDensity getDiskDensity() override;
-    long numSides() override;
-    long numCyls() override;
-    long numSectors() override;
-    BootBlockType bootBlockType() override;
-    const char *bootBlockName() override;
+    DiskDiameter getDiskDiameter() const override;
+    DiskDensity getDiskDensity() const override;
+    long numSides() const override;
+    long numCyls() const override;
+    long numSectors() const override;
+    BootBlockType bootBlockType() const override;
+    const char *bootBlockName() const override;
     
     void killVirus() override;
 
     bool encodeDisk(class Disk *disk) override;
-    bool decodeDisk(class Disk *disk) override;
+    void decodeDisk(class Disk *disk) throws override;
 
 private:
     
@@ -101,12 +95,6 @@ private:
     //
     
 public:
-
-    // Returns the location of the root block (DEPRECATED)
-    u32 rootBlock();
-    
-    // Returns the location of the bitmap block (DEPRECATED)
-    u32 bitmapBlock();
 
     // Returns the layout of this disk in form of a device descriptor
     struct FSDeviceDescriptor layout();
@@ -129,5 +117,3 @@ public:
     
     void dumpSector(int num);
 };
-
-#endif

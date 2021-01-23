@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AUDIO_STREAM_H
-#define _AUDIO_STREAM_H
+#pragma once
 
 #include "HardwareComponent.h"
 #include "Concurrency.h"
@@ -47,7 +46,7 @@ public:
      * ahead of the read pointer. With a standard sample rate of 44100 Hz,
      * 735 samples is 1/60 sec.
      */
-    static u32 samplesAhead() { return 8 * 735; }
+    static constexpr u32 samplesAhead() { return 8 * 735; }
     void alignWritePtr() { align(samplesAhead()); }
     
     
@@ -82,5 +81,3 @@ public:
     float draw(unsigned *buffer, int width, int height,
                bool left, float highestAmplitude, unsigned color);
 };
-
-#endif
