@@ -1608,9 +1608,6 @@ Memory::poke16 <ACCESSOR_AGNUS, MEM_CHIP> (u32 addr, u16 value)
 {
     assert((addr & agnus.ptrMask) == addr);
 
-    trace(BLT_GUARD && blitter.memguard[addr & mem.chipMask],
-          "AGNUS OVERWRITES BLITTER AT ADDR %x\n", addr);
-
     dataBus = value;
     WRITE_CHIP_16(addr, value);
 }

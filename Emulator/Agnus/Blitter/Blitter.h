@@ -165,7 +165,7 @@ private:
 public:
     
     // Experimental
-    u8 memguard[KB(512)];
+    u8 memguard[KB(512)] = {};
     
  
     //
