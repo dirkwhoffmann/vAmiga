@@ -391,7 +391,7 @@ public:
 public:
     
     // Processes a Blitter event
-    void serviceEvent(EventID id);
+    void serviceEvent();
 
 
     //

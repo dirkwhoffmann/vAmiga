@@ -557,7 +557,7 @@ Blitter::beginBlit()
 
     } else {
 
-        if (BLT_CHECKSUM) { // && (bltsizeH != 1 || bltsizeV != 4)
+        if (BLT_CHECKSUM) {
             
             copycount++;
             check1 = check2 = fnv_1a_init32();

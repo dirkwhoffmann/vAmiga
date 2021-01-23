@@ -929,7 +929,7 @@ Blitter::beginSlowCopyBlit()
         
         while (agnus.hasEvent<SLOT_BLT>()) {
             agnus.busOwner[agnus.pos.h] = BUS_NONE;
-            serviceEvent(agnus.slot[SLOT_BLT].id);
+            serviceEvent();
         }
         
         agnus.busOwner[agnus.pos.h] = owner;

@@ -10,9 +10,9 @@
 #include "Amiga.h"
 
 void
-Blitter::serviceEvent(EventID id)
+Blitter::serviceEvent()
 {
-    switch (id) {
+    switch (agnus.slot[SLOT_BLT].id) {
 
         case BLT_STRT1:
 
