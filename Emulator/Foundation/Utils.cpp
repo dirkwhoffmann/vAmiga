@@ -21,12 +21,12 @@ releaseBuild()
 #endif
 }
 
-void hexdump(u8 *p, size_t size, size_t cols, size_t pad)
+void hexdump(u8 *p, usize size, usize cols, usize pad)
 {
     while (size) {
         
-        size_t cnt = MIN(size, cols);
-        for (size_t x = 0; x < cnt; x++) {
+        usize cnt = MIN(size, cols);
+        for (usize x = 0; x < cnt; x++) {
             fprintf(stderr, "%02X %s", p[x], ((x + 1) % pad) == 0 ? " " : "");
         }
         
@@ -38,17 +38,17 @@ void hexdump(u8 *p, size_t size, size_t cols, size_t pad)
     fprintf(stderr, "\n");
 }
 
-void hexdump(u8 *p, size_t size, size_t cols)
+void hexdump(u8 *p, usize size, usize cols)
 {
     hexdump(p, size, cols, cols);
 }
 
-void hexdumpWords(u8 *p, size_t size, size_t cols)
+void hexdumpWords(u8 *p, usize size, usize cols)
 {
     hexdump(p, size, cols, 2);
 }
 
-void hexdumpLongwords(u8 *p, size_t size, size_t cols)
+void hexdumpLongwords(u8 *p, usize size, usize cols)
 {
     hexdump(p, size, cols, 4);
 }
@@ -221,7 +221,7 @@ checkFileSizeRange(const char *path, long min, long max)
 }
 
 bool
-matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length)
+matchingBufferHeader(const u8 *buffer, const u8 *header, usize length)
 {
     assert(buffer != nullptr);
     assert(header != nullptr);
@@ -396,7 +396,7 @@ fnv_1a_64(const u8 *addr, usize size)
     
     u64 hash = fnv_1a_init64();
     
-    for (size_t i = 0; i < size; i++) {
+    for (usize i = 0; i < size; i++) {
         hash = fnv_1a_it64(hash, (u64)addr[i]);
     }
     
@@ -428,7 +428,7 @@ crc32(const u8 *addr, usize size)
     for(int i = 0; i < 256; i++) table[i] = crc32forByte(i);
 
     // Compute CRC-32 checksum
-     for(size_t i = 0; i < size; i++)
+     for(usize i = 0; i < size; i++)
        result = table[(u8)result ^ addr[i]] ^ result >> 8;
 
     return result;
@@ -443,7 +443,7 @@ crc32forByte(u32 r)
 }
 
 int
-sha_1(u8 *digest, char *hexdigest, const u8 *addr, size_t size)
+sha_1(u8 *digest, char *hexdigest, const u8 *addr, usize size)
 {
     // Slight modification of https://github.com/CTrabant/teeny-sha1
 

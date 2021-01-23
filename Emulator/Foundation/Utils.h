@@ -165,10 +165,10 @@ bool releaseBuild();
 //
 
 // Prints a hex dump of a buffer to the console (for debugging)
-void hexdump(u8 *p, size_t size, size_t cols, size_t pad);
-void hexdump(u8 *p, size_t size, size_t cols = 32);
-void hexdumpWords(u8 *p, size_t size, size_t cols = 32);
-void hexdumpLongwords(u8 *p, size_t size, size_t cols = 32);
+void hexdump(u8 *p, usize size, usize cols, usize pad);
+void hexdump(u8 *p, usize size, usize cols = 32);
+void hexdumpWords(u8 *p, usize size, usize cols = 32);
+void hexdumpLongwords(u8 *p, usize size, usize cols = 32);
 
 
 //
@@ -233,7 +233,7 @@ bool checkFileSize(const char *path, long size);
 bool checkFileSizeRange(const char *path, long min, long max);
 
 // Checks the header signature (magic bytes) of a file or buffer
-bool matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length);
+bool matchingBufferHeader(const u8 *buffer, const u8 *header, usize length);
 
 // Checks if a path points to a directory
 bool isDirectory(const std::string &path);
@@ -271,13 +271,13 @@ u32 fnv_1a_it32(u32 prv, u32 val);
 u64 fnv_1a_it64(u64 prv, u64 val);
 
 // Computes a FNV-1a checksum for a given buffer
-u32 fnv_1a_32(const u8 *addr, size_t size);
-u64 fnv_1a_64(const u8 *addr, size_t size);
+u32 fnv_1a_32(const u8 *addr, usize size);
+u64 fnv_1a_64(const u8 *addr, usize size);
 
 // Computes a CRC checksum for a given buffer
-u16 crc16(const u8 *addr, size_t size);
-u32 crc32(const u8 *addr, size_t size);
+u16 crc16(const u8 *addr, usize size);
+u32 crc32(const u8 *addr, usize size);
 u32 crc32forByte(u32 r);
 
 // Computes a SHA-1 checksum for a given buffer
-int sha_1(u8 *digest, char *hexdigest, const u8 *addr, size_t size);
+int sha_1(u8 *digest, char *hexdigest, const u8 *addr, usize size);

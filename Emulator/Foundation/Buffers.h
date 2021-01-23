@@ -33,7 +33,7 @@ template <class T, usize capacity> struct RingBuffer
     RingBuffer() { clear(); }
     
     void clear() { r = w = 0; }
-    void clear(T t) { for (size_t i = 0; i < capacity; i++) elements[i] = t; clear(); }
+    void clear(T t) { for (usize i = 0; i < capacity; i++) elements[i] = t; clear(); }
     void align(int offset) { w = (r + offset) % capacity; }
 
     //

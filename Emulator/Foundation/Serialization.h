@@ -125,7 +125,7 @@ class SerCounter
 {
 public:
 
-    size_t count;
+    usize count;
 
     SerCounter() { count = 0; }
 
@@ -169,14 +169,14 @@ public:
     // STRUCT(TaggedSample)
     // STRUCT(SamplePair)
     // STRUCT(Sampler)
-    template <class T, size_t capacity> STRUCT(RingBuffer<T __ capacity>)
-    template <class T, size_t capacity> STRUCT(SortedRingBuffer<T __ capacity>)
+    template <class T, usize capacity> STRUCT(RingBuffer<T __ capacity>)
+    template <class T, usize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
-    template <class T, size_t N>
+    template <class T, usize N>
     SerCounter& operator&(T (&v)[N])
     {
-        for(size_t i = 0; i < N; ++i) {
+        for(usize i = 0; i < N; ++i) {
             *this & v[i];
         }
         return *this;
@@ -251,20 +251,20 @@ public:
     // STRUCT(TaggedSample)
     // STRUCT(SamplePair)
     // STRUCT(Sampler)
-    template <class T, size_t capacity> STRUCT(RingBuffer<T __ capacity>)
-    template <class T, size_t capacity> STRUCT(SortedRingBuffer<T __ capacity>)
+    template <class T, usize capacity> STRUCT(RingBuffer<T __ capacity>)
+    template <class T, usize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
-    template <class T, size_t N>
+    template <class T, usize N>
     SerReader& operator&(T (&v)[N])
     {
-        for(size_t i = 0; i < N; ++i) {
+        for(usize i = 0; i < N; ++i) {
             *this & v[i];
         }
         return *this;
     }
 
-    void copy(void *dst, size_t n)
+    void copy(void *dst, usize n)
     {
         memcpy(dst, (void *)ptr, n);
         ptr += n;
@@ -339,20 +339,20 @@ public:
     // STRUCT(TaggedSample)
     // STRUCT(SamplePair)
     // STRUCT(Sampler)
-    template <class T, size_t capacity> STRUCT(RingBuffer<T __ capacity>)
-    template <class T, size_t capacity> STRUCT(SortedRingBuffer<T __ capacity>)
+    template <class T, usize capacity> STRUCT(RingBuffer<T __ capacity>)
+    template <class T, usize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
-    template <class T, size_t N>
+    template <class T, usize N>
     SerWriter& operator&(T (&v)[N])
     {
-        for(size_t i = 0; i < N; ++i) {
+        for(usize i = 0; i < N; ++i) {
             *this & v[i];
         }
         return *this;
     }
 
-    void copy(const void *src, size_t n)
+    void copy(const void *src, usize n)
     {
         memcpy((void *)ptr, src, n);
         ptr += n;
@@ -416,14 +416,14 @@ public:
     // STRUCT(TaggedSample)
     // STRUCT(SamplePair)
     // STRUCT(Sampler)
-    template <class T, size_t capacity> STRUCT(RingBuffer<T __ capacity>)
-    template <class T, size_t capacity> STRUCT(SortedRingBuffer<T __ capacity>)
+    template <class T, usize capacity> STRUCT(RingBuffer<T __ capacity>)
+    template <class T, usize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
-    template <class T, size_t N>
+    template <class T, usize N>
     SerResetter& operator&(T (&v)[N])
     {
-        for(size_t i = 0; i < N; ++i) {
+        for(usize i = 0; i < N; ++i) {
             *this & v[i];
         }
         return *this;
