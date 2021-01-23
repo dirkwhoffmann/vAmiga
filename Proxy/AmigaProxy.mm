@@ -2188,17 +2188,17 @@ using namespace moira;
 
 - (Message)message
 {
-    return [self amiga]->messageQueue.get();
+    return [self amiga]->queue.get();
 }
 
 - (void)addListener:(const void *)sender function:(Callback *)func
 {
-    [self amiga]->messageQueue.addListener(sender, func);
+    [self amiga]->queue.addListener(sender, func);
 }
 
 - (void)removeListener:(const void *)sender
 {
-    [self amiga]->messageQueue.removeListener(sender);
+    [self amiga]->queue.removeListener(sender);
 }
 
 - (void)stopAndGo

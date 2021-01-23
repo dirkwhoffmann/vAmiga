@@ -30,24 +30,24 @@
 #include "Moira.h"
 #include "Mouse.h"
 #include "Oscillator.h"
-#include "RTC.h"
 #include "Paula.h"
+#include "RTC.h"
 #include "SerialPort.h"
 #include "ZorroManager.h"
 
 // File types
-#include "RomFile.h"
-#include "ExtendedRomFile.h"
-#include "Snapshot.h"
 #include "ADFFile.h"
-#include "HDFFile.h"
-#include "EXTFile.h"
-#include "IMGFile.h"
+#include "BootBlockImage.h"
 #include "DMSFile.h"
 #include "EXEFile.h"
+#include "ExtendedRomFile.h"
+#include "EXTFile.h"
 #include "Folder.h"
-#include "BootBlockImage.h"
 #include "FSDevice.h"
+#include "HDFFile.h"
+#include "IMGFile.h"
+#include "RomFile.h"
+#include "Snapshot.h"
 
 void threadTerminated(void *thisAmiga);
 void *threadMain(void *thisAmiga);
@@ -118,7 +118,7 @@ public:
     /* Communication channel to the GUI. The GUI registers a listener and a
      * callback function to retrieve messages.
      */
-    MsgQueue messageQueue;
+    MsgQueue queue;
 
     
     //
@@ -136,7 +136,7 @@ private:
     u32 runLoopCtrl = 0;
     
     // The invocation counter for implementing suspend() / resume()
-    unsigned suspendCounter = 0;
+    usize suspendCounter = 0;
     
     // The emulator thread
     pthread_t p = (pthread_t)0;

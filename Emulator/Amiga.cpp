@@ -85,7 +85,7 @@ Amiga::Amiga()
         &ciaB,
         &mem,
         &cpu,
-        &messageQueue
+        &queue
     };
 
     // Set up the initial state
@@ -179,7 +179,7 @@ Amiga::reset(bool hard)
     if (hard) resume();
 
     // Inform the GUI
-    if (hard) messageQueue.put(MSG_RESET);
+    if (hard) queue.put(MSG_RESET);
 }
 
 void
@@ -282,7 +282,7 @@ Amiga::configure(Option option, long value)
     bool changed = HardwareComponent::configure(option, value);
     
     // Inform the GUI if the configuration has changed
-    if (changed) messageQueue.put(MSG_CONFIG);
+    if (changed) queue.put(MSG_CONFIG);
     
     // Dump the current configuration in debugging mode
     if (changed && CNF_DEBUG) dumpConfig();
@@ -297,7 +297,7 @@ Amiga::configure(Option option, long id, long value)
     bool changed = HardwareComponent::configure(option, id, value);
     
     // Inform the GUI if the configuration has changed
-    if (changed) messageQueue.put(MSG_CONFIG);
+    if (changed) queue.put(MSG_CONFIG);
     
     // Dump the current configuration in debugging mode
     if (changed && CNF_DEBUG) dumpConfig();
@@ -399,7 +399,7 @@ Amiga::_powerOn()
     // Update the recorded debug information
     inspect();
 
-    messageQueue.put(MSG_POWER_ON);
+    queue.put(MSG_POWER_ON);
 }
 
 void
@@ -426,7 +426,7 @@ Amiga::_powerOff()
     // Update the recorded debug information
     inspect();
     
-    messageQueue.put(MSG_POWER_OFF);
+    queue.put(MSG_POWER_OFF);
 }
 
 void
@@ -454,7 +454,7 @@ Amiga::_run()
     pthread_create(&p, nullptr, threadMain, (void *)this);
     
     // Inform the GUI
-    messageQueue.put(MSG_RUN);
+    queue.put(MSG_RUN);
 }
 
 void
@@ -485,7 +485,7 @@ Amiga::_pause()
     inspect();
 
     // Inform the GUI
-    messageQueue.put(MSG_PAUSE);
+    queue.put(MSG_PAUSE);
 }
 
 void
@@ -501,12 +501,12 @@ Amiga::_setWarp(bool enable)
 {
     if (enable) {
         
-        messageQueue.put(MSG_WARP_ON);
+        queue.put(MSG_WARP_ON);
         
     } else {
         
         oscillator.restart();
-        messageQueue.put(MSG_WARP_OFF);
+        queue.put(MSG_WARP_OFF);
     }
 }
 
@@ -584,7 +584,7 @@ Amiga::suspend()
 {
     pthread_mutex_lock(&stateChangeLock);
     
-    debug(RUN_DEBUG, "Suspending (%d)...\n", suspendCounter);
+    debug(RUN_DEBUG, "Suspending (%zu)...\n", suspendCounter);
     
     if (suspendCounter || isRunning()) {
         
@@ -602,7 +602,7 @@ Amiga::resume()
 {
     pthread_mutex_lock(&stateChangeLock);
     
-    debug(RUN_DEBUG, "Resuming (%d)...\n", suspendCounter);
+    debug(RUN_DEBUG, "Resuming (%zu)...\n", suspendCounter);
     
     if (suspendCounter && --suspendCounter == 0) {
         
@@ -699,13 +699,13 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_AUTO_SNAPSHOT) {
                 debug(RUN_DEBUG, "RL_AUTO_SNAPSHOT\n");
                 autoSnapshot = Snapshot::makeWithAmiga(this);
-                messageQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
+                queue.put(MSG_AUTO_SNAPSHOT_TAKEN);
                 clearControlFlags(RL_AUTO_SNAPSHOT);
             }
             if (runLoopCtrl & RL_USER_SNAPSHOT) {
                 debug(RUN_DEBUG, "RL_USER_SNAPSHOT\n");
                 userSnapshot = Snapshot::makeWithAmiga(this);
-                messageQueue.put(MSG_USER_SNAPSHOT_TAKEN);
+                queue.put(MSG_USER_SNAPSHOT_TAKEN);
                 clearControlFlags(RL_USER_SNAPSHOT);
             }
 
@@ -719,7 +719,7 @@ Amiga::runLoop()
             // Did we reach a breakpoint?
             if (runLoopCtrl & RL_BREAKPOINT_REACHED) {
                 inspect();
-                messageQueue.put(MSG_BREAKPOINT_REACHED);
+                queue.put(MSG_BREAKPOINT_REACHED);
                 debug(RUN_DEBUG, "BREAKPOINT_REACHED pc: %x\n", cpu.getPC());
                 clearControlFlags(RL_BREAKPOINT_REACHED);
                 break;
@@ -728,7 +728,7 @@ Amiga::runLoop()
             // Did we reach a watchpoint?
             if (runLoopCtrl & RL_WATCHPOINT_REACHED) {
                 inspect();
-                messageQueue.put(MSG_WATCHPOINT_REACHED);
+                queue.put(MSG_WATCHPOINT_REACHED);
                 debug(RUN_DEBUG, "WATCHPOINT_REACHED pc: %x\n", cpu.getPC());
                 clearControlFlags(RL_WATCHPOINT_REACHED);
                 break;
@@ -797,7 +797,7 @@ Amiga::requestAutoSnapshot()
 
         // Take snapshot immediately
         autoSnapshot = Snapshot::makeWithAmiga(this);
-        messageQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
+        queue.put(MSG_AUTO_SNAPSHOT_TAKEN);
         
     } else {
 
@@ -813,7 +813,7 @@ Amiga::requestUserSnapshot()
         
         // Take snapshot immediately
         userSnapshot = Snapshot::makeWithAmiga(this);
-        messageQueue.put(MSG_USER_SNAPSHOT_TAKEN);
+        queue.put(MSG_USER_SNAPSHOT_TAKEN);
         
     } else {
         
@@ -845,7 +845,7 @@ Amiga::loadFromSnapshotUnsafe(Snapshot *snapshot)
     
     if (snapshot && (ptr = snapshot->getData())) {
         load(ptr);
-        messageQueue.put(MSG_SNAPSHOT_RESTORED);
+        queue.put(MSG_SNAPSHOT_RESTORED);
     }
 }
 
