@@ -106,35 +106,6 @@ class VAError: Error {
     init(_ errorCode: ErrorCode) { self.errorCode = errorCode }
 }
 
-enum MetalError: Error {
-
-    case METAL_NOT_SUPPORTED
-    case METAL_CANT_GET_DEVICE
-    case METAL_CANT_GET_LAYER
-    case METAL_CANT_CREATE_COMMAND_QUEUE
-    case METAL_CANT_CREATE_SHADER_LIBARY
-    case METAL_CANT_CREATE_TEXTURE
-    
-    var description: String {
-        
-        switch self {
-        
-        case .METAL_NOT_SUPPORTED:
-            return "No suitable Metal hardware found."
-        case .METAL_CANT_GET_DEVICE:
-            return "Failed to obtain Metal device."
-        case .METAL_CANT_GET_LAYER:
-            return "Failed to obtain Core Animation layer."
-        case .METAL_CANT_CREATE_COMMAND_QUEUE:
-            return "Failed to create the command queue."
-        case .METAL_CANT_CREATE_SHADER_LIBARY:
-            return "Failed to create the shader library."
-        case .METAL_CANT_CREATE_TEXTURE:
-            return "Failed to create GPU texture."
-        }
-    }
-}
-
 extension Error {
 
     func alert(_ msg1: String, _ msg2: String, style: NSAlert.Style,
@@ -145,17 +116,10 @@ extension Error {
                 self.alert(msg1, msg2, style: style, async: false, icon: icon)
             }
         }
-    
-        var image: NSImage?
-        if icon != nil {
-            image = NSImage.init(named: icon!)
-        } else {
-            if self is MetalError { image = NSImage.init(named: "metal") }
-        }
-        
+            
         let alert = NSAlert()
         alert.alertStyle = style
-        alert.icon = image
+        alert.icon = icon != nil ? NSImage.init(named: icon!) : nil
         alert.messageText = msg1
         alert.informativeText = msg2
         alert.addButton(withTitle: "OK")
@@ -185,18 +149,12 @@ extension Error {
         if let error = self as? VAError {
             warning(msg, error.errorCode.description, async: async, icon: icon)
         }
-        if let error = self as? MetalError {
-            warning(msg, error.description, async: async, icon: icon)
-        }
     }
 
     func critical(_ msg: String, async: Bool = false, icon: String? = nil) {
 
         if let error = self as? VAError {
             warning(msg, error.errorCode.description, async: async, icon: icon)
-        }
-        if let error = self as? MetalError {
-            warning(msg, error.description, async: async, icon: icon)
         }
     }
     
