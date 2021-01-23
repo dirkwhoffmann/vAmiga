@@ -31,7 +31,7 @@ Joystick::_dump() const
     msg("Button:  %s AxisX: %d AxisY: %d\n", button ? "YES" : "NO", axisX, axisY);
 }
 
-size_t
+usize
 Joystick::didLoadFromBuffer(const u8 *buffer)
 {
     // Discard any active joystick movements

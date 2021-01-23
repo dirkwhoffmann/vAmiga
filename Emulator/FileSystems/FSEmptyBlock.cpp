@@ -16,13 +16,13 @@ FSEmptyBlock::itemType(u32 byte) const
 }
 
 void
-FSEmptyBlock::importBlock(const u8 *p, size_t size)
+FSEmptyBlock::importBlock(const u8 *p, usize size)
 {
     assert(size = bsize());
 }
 
 void
-FSEmptyBlock::exportBlock(u8 *p, size_t size)
+FSEmptyBlock::exportBlock(u8 *p, usize size)
 {
     assert(size == bsize());
     assert(p);

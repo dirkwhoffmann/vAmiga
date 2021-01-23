@@ -59,7 +59,7 @@ Snapshot::isCompatibleStream(std::istream &stream)
 }
 
 bool
-Snapshot::isSnapshot(const u8 *buf, size_t len)
+Snapshot::isSnapshot(const u8 *buf, usize len)
 {
     assert(buf != nullptr);
 
@@ -70,7 +70,7 @@ Snapshot::isSnapshot(const u8 *buf, size_t len)
 }
 
 bool
-Snapshot::isSnapshot(const u8 *buf, size_t len, u8 major, u8 minor, u8 subminor)
+Snapshot::isSnapshot(const u8 *buf, usize len, u8 major, u8 minor, u8 subminor)
 {
     assert(buf != nullptr);
 
@@ -84,7 +84,7 @@ Snapshot::Snapshot()
 {
 }
 
-Snapshot::Snapshot(size_t capacity)
+Snapshot::Snapshot(usize capacity)
 {
     u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     

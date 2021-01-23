@@ -27,7 +27,7 @@ HDFFile::isCompatibleStream(std::istream &stream)
 }
 
 bool
-HDFFile::isHDFBuffer(const u8 *buffer, size_t length)
+HDFFile::isHDFBuffer(const u8 *buffer, usize length)
 {
     // HDFs contain no magic bytes. We can only check the buffer size
     return length % 512 == 0;

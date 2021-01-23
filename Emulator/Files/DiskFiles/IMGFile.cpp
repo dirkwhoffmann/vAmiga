@@ -206,7 +206,7 @@ IMGFile::encodeSector(Disk *disk, Track t, Sector s)
     buf[573] = LO_BYTE(crc);
 
     // Write GAP
-    for (size_t i = 574; i < sizeof(buf); i++) { buf[i] = 0x4E; }
+    for (usize i = 574; i < sizeof(buf); i++) { buf[i] = 0x4E; }
 
     // Determine the start of this sector
     u8 *p = disk->data.track[t] + 194 + s * 1300;
@@ -274,7 +274,7 @@ IMGFile::decodeTrack(Disk *disk, Track t)
         sectorStart[i] = 0;
     }
     int cnt = 0;
-    for (size_t i = 0; i < sizeof(disk->data.track[t]) - 16;) {
+    for (usize i = 0; i < sizeof(disk->data.track[t]) - 16;) {
         
         // Seek IDAM block
         if (src[i++] != 0x44) continue;

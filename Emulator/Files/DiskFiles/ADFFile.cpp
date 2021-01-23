@@ -33,7 +33,7 @@ ADFFile::isCompatibleStream(std::istream &stream)
     length == ADFSIZE_35_HD;
 }
 
-size_t
+usize
 ADFFile::fileSize(DiskDiameter diameter, DiskDensity density)
 {
     assert_enum(DiskDiameter, density);
@@ -496,7 +496,7 @@ ADFFile::decodeTrack(Disk *disk, Track t)
     u8 *dst = data + t * sectors * 512;
     
     // Seek all sync marks
-    int sectorStart[sectors], nr = 0; size_t index = 0;
+    int sectorStart[sectors], nr = 0; usize index = 0;
     while (index < sizeof(disk->data.track[t]) && nr < sectors) {
 
         // Scan MFM stream for $4489 $4489

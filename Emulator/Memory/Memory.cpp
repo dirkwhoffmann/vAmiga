@@ -201,7 +201,7 @@ Memory::_dumpConfig() const
     msg("       extStart : %02x\n", config.extStart);
 }
 
-size_t
+usize
 Memory::_size()
 {
     SerCounter counter;
@@ -220,7 +220,7 @@ Memory::_size()
     return counter.count;
 }
 
-size_t
+usize
 Memory::didLoadFromBuffer(const u8 *buffer)
 {
     SerReader reader(buffer);
@@ -264,7 +264,7 @@ Memory::didLoadFromBuffer(const u8 *buffer)
     return reader.ptr - buffer;
 }
 
-size_t
+usize
 Memory::didSaveToBuffer(u8 *buffer) const
 {
     // Save memory size information
@@ -291,7 +291,7 @@ Memory::didSaveToBuffer(u8 *buffer) const
 void
 Memory::_dump() const
 {
-    struct { u8 *addr; size_t size; const char *desc; } mem[7] = {
+    struct { u8 *addr; usize size; const char *desc; } mem[7] = {
         { rom, config.romSize, "Rom" },
         { wom, config.womSize, "Wom" },
         { ext, config.extSize, "Ext" },
@@ -303,7 +303,7 @@ Memory::_dump() const
     // Print a summary of the installed memory
     for (int i = 0; i < 6; i++) {
 
-        size_t size = mem[i].size;
+        usize size = mem[i].size;
         u8 *addr = mem[i].addr;
 
         msg("     %s: ", mem[i].desc);
@@ -381,7 +381,7 @@ Memory::alloc(u64 bytes, u8 *&ptr, u64 &size, u32 &mask)
     // Allocate memory
     if (bytes) {
         
-        size_t allocSize = bytes;
+        usize allocSize = bytes;
         
         if (!(ptr = new (std::nothrow) u8[allocSize])) {
             warn("Cannot allocate %llu KB of memory\n", bytes);
@@ -410,9 +410,9 @@ Memory::fillRamWithInitPattern()
         case RAM_INIT_RANDOMIZED:
 
             srand(0);
-            if (chip) for (size_t i = 0; i < config.chipSize; i++) chip[i] = rand();
-            if (slow) for (size_t i = 0; i < config.slowSize; i++) slow[i] = rand();
-            if (fast) for (size_t i = 0; i < config.fastSize; i++) fast[i] = rand();
+            if (chip) for (usize i = 0; i < config.chipSize; i++) chip[i] = rand();
+            if (slow) for (usize i = 0; i < config.slowSize; i++) slow[i] = rand();
+            if (fast) for (usize i = 0; i < config.fastSize; i++) fast[i] = rand();
             break;
             
         case RAM_INIT_ALL_ZEROES:
@@ -507,7 +507,7 @@ Memory::loadRomFromFile(const char *path, ErrorCode *ec)
 }
 
 void
-Memory::loadRomFromBuffer(const u8 *buf, size_t len)
+Memory::loadRomFromBuffer(const u8 *buf, usize len)
 {
     assert(buf);
     
@@ -516,7 +516,7 @@ Memory::loadRomFromBuffer(const u8 *buf, size_t len)
 }
 
 bool
-Memory::loadRomFromBuffer(const u8 *buf, size_t len, ErrorCode *ec)
+Memory::loadRomFromBuffer(const u8 *buf, usize len, ErrorCode *ec)
 {
     try
     {
@@ -569,7 +569,7 @@ Memory::loadExtFromFile(const char *path, ErrorCode *ec)
 }
 
 void
-Memory::loadExtFromBuffer(const u8 *buf, size_t len)
+Memory::loadExtFromBuffer(const u8 *buf, usize len)
 {
     assert(buf);
 
@@ -578,7 +578,7 @@ Memory::loadExtFromBuffer(const u8 *buf, size_t len)
 }
 
 bool
-Memory::loadExtFromBuffer(const u8 *buf, size_t len, ErrorCode *ec)
+Memory::loadExtFromBuffer(const u8 *buf, usize len, ErrorCode *ec)
 {
     try
     {
@@ -594,7 +594,7 @@ Memory::loadExtFromBuffer(const u8 *buf, size_t len, ErrorCode *ec)
 }
  
 void
-Memory::loadRom(AmigaFile *file, u8 *target, size_t length)
+Memory::loadRom(AmigaFile *file, u8 *target, usize length)
 {
     if (file) {
 
@@ -2383,12 +2383,12 @@ Memory::ascii(u32 addr)
 }
 
 template <Accessor A> const char *
-Memory::hex(u32 addr, size_t bytes)
+Memory::hex(u32 addr, usize bytes)
 {
     assert(bytes % 2 == 0);
     char *p = str;
     
-    for (size_t i = 0; i < bytes / 2; i += 2, p += 5) {
+    for (usize i = 0; i < bytes / 2; i += 2, p += 5) {
 
         u16 word = spypeek16 <A> (addr + i);
         
@@ -2413,5 +2413,5 @@ template void Memory::pokeCustom16 <ACCESSOR_AGNUS> (u32 addr, u16 value);
 template const char *Memory::ascii <ACCESSOR_CPU> (u32 addr);
 template const char *Memory::ascii <ACCESSOR_AGNUS> (u32 addr);
 
-template const char *Memory::hex <ACCESSOR_CPU> (u32 addr, size_t bytes);
-template const char *Memory::hex <ACCESSOR_AGNUS> (u32 addr, size_t bytes);
+template const char *Memory::hex <ACCESSOR_CPU> (u32 addr, usize bytes);
+template const char *Memory::hex <ACCESSOR_AGNUS> (u32 addr, usize bytes);

@@ -265,11 +265,11 @@ private:
         & dataBus;
     }
 
-    size_t _size() override;
-    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    size_t didLoadFromBuffer(const u8 *buffer) override;
-    size_t didSaveToBuffer(u8 *buffer) const override;
+    usize _size() override;
+    usize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    usize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    usize didLoadFromBuffer(const u8 *buffer) override;
+    usize didSaveToBuffer(u8 *buffer) const override;
 
     
     //
@@ -302,9 +302,9 @@ public:
     void deleteSlow() { allocSlow(0); }
     void deleteFast() { allocFast(0); }
 
-    bool allocRom(size_t bytes) { return alloc(bytes, rom, config.romSize, romMask); }
-    bool allocWom(size_t bytes) { return alloc(bytes, wom, config.womSize, womMask); }
-    bool allocExt(size_t bytes) { return alloc(bytes, ext, config.extSize, extMask); }
+    bool allocRom(usize bytes) { return alloc(bytes, rom, config.romSize, romMask); }
+    bool allocWom(usize bytes) { return alloc(bytes, wom, config.womSize, womMask); }
+    bool allocExt(usize bytes) { return alloc(bytes, ext, config.extSize, extMask); }
 
     void deleteRom() { allocRom(0); }
     void deleteWom() { allocWom(0); }
@@ -323,10 +323,10 @@ public:
     bool hasFastRam() const { return fast != nullptr; }
 
     // Returns the size of a certain Ram in bytes
-    size_t chipRamSize() const { return config.chipSize; }
-    size_t slowRamSize() const { return config.slowSize; }
-    size_t fastRamSize() const { return config.fastSize; }
-    size_t ramSize() const { return config.chipSize + config.slowSize + config.fastSize; }
+    usize chipRamSize() const { return config.chipSize; }
+    usize slowRamSize() const { return config.slowSize; }
+    usize fastRamSize() const { return config.fastSize; }
+    usize ramSize() const { return config.chipSize + config.slowSize + config.fastSize; }
 
 private:
     
@@ -372,20 +372,20 @@ public:
     void loadRom(RomFile *rom) throws;
     void loadRomFromFile(const char *path) throws;
     bool loadRomFromFile(const char *path, ErrorCode *ec);
-    void loadRomFromBuffer(const u8 *buf, size_t len) throws;
-    bool loadRomFromBuffer(const u8 *buf, size_t len, ErrorCode *ec);
+    void loadRomFromBuffer(const u8 *buf, usize len) throws;
+    bool loadRomFromBuffer(const u8 *buf, usize len, ErrorCode *ec);
 
     void loadExt(ExtendedRomFile *rom) throws;
     void loadExtFromFile(const char *path) throws;
     bool loadExtFromFile(const char *path, ErrorCode *ec);
-    void loadExtFromBuffer(const u8 *buf, size_t len) throws;
-    bool loadExtFromBuffer(const u8 *buf, size_t len, ErrorCode *ec);
+    void loadExtFromBuffer(const u8 *buf, usize len) throws;
+    bool loadExtFromBuffer(const u8 *buf, usize len, ErrorCode *ec);
 
 private:
 
     // Loads Rom data from a file
     // DEPRECATED: USE AnyAmigaFile::flash(...) instead
-    void loadRom(AmigaFile *rom, u8 *target, size_t length);
+    void loadRom(AmigaFile *rom, u8 *target, usize length);
 
 public:
     
@@ -483,5 +483,5 @@ public:
     template <Accessor A> const char *ascii(u32 addr);
     
     // Returns a certain amount of bytes as a string containing hex words
-    template <Accessor A> const char *hex(u32 addr, size_t bytes);
+    template <Accessor A> const char *hex(u32 addr, usize bytes);
 };

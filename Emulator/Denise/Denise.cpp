@@ -304,14 +304,14 @@ Denise::drawOdd(int offset)
         if (hiresMode) {
             
             // Synthesize one hires pixel
-            assert((size_t)currentPixel < sizeof(bBuffer));
+            assert((usize)currentPixel < sizeof(bBuffer));
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
             currentPixel++;
             
         } else {
             
             // Synthesize two lores pixels
-            assert((size_t)(currentPixel + 1) < sizeof(bBuffer));
+            assert((usize)(currentPixel + 1) < sizeof(bBuffer));
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
             currentPixel++;
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
@@ -350,14 +350,14 @@ Denise::drawEven(int offset)
         if (hiresMode) {
             
             // Synthesize one hires pixel
-            assert((size_t)currentPixel < sizeof(bBuffer));
+            assert((usize)currentPixel < sizeof(bBuffer));
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
             currentPixel++;
 
         } else {
             
             // Synthesize two lores pixels
-            assert((size_t)(currentPixel + 1) < sizeof(bBuffer));
+            assert((usize)(currentPixel + 1) < sizeof(bBuffer));
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
             currentPixel++;
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
@@ -393,13 +393,13 @@ Denise::drawBoth(int offset)
         if (hiresMode) {
             
             // Synthesize one hires pixel
-            assert((size_t)currentPixel < sizeof(bBuffer));
+            assert((usize)currentPixel < sizeof(bBuffer));
             bBuffer[currentPixel++] = index;
             
         } else {
             
             // Synthesize two lores pixels
-            assert((size_t)(currentPixel + 1) < sizeof(bBuffer));
+            assert((usize)(currentPixel + 1) < sizeof(bBuffer));
             bBuffer[currentPixel++] = index;
             bBuffer[currentPixel++] = index;
         }
@@ -785,8 +785,8 @@ Denise::drawSpritePair(int hstrt, int hstop, int strt1, int strt2, bool armed1, 
     const unsigned sprite1 = 2 * pair;
     const unsigned sprite2 = 2 * pair + 1;
 
-    assert((size_t)hstrt <= sizeof(mBuffer));
-    assert((size_t)hstop <= sizeof(mBuffer));
+    assert((usize)hstrt <= sizeof(mBuffer));
+    assert((usize)hstop <= sizeof(mBuffer));
 
     assert(armed1 == !!GET_BIT(armed, sprite1));
     assert(armed2 == !!GET_BIT(armed, sprite2));
@@ -1194,12 +1194,12 @@ Denise::recordSpriteData(unsigned nr)
 }
 
 void
-Denise::dumpBuffer(const u8 *buffer, size_t length) const
+Denise::dumpBuffer(const u8 *buffer, usize length) const
 {
-    const size_t cols = 16;
+    const usize cols = 16;
 
-    for (size_t i = 0; i < (length + cols - 1) / cols; i++) {
-        for (size_t j = 0; j < cols; j++) msg("%2d ", buffer[i * cols + j]);
+    for (usize i = 0; i < (length + cols - 1) / cols; i++) {
+        for (usize j = 0; j < cols; j++) msg("%2d ", buffer[i * cols + j]);
         msg("\n");
     }
 }

@@ -106,9 +106,9 @@ public:
 
 private:
 
-    size_t _size() override { return 0; }
-    size_t _load(const u8 *buffer) override {return 0; }
-    size_t _save(u8 *buffer) override { return 0; }
+    usize _size() override { return 0; }
+    usize _load(const u8 *buffer) override {return 0; }
+    usize _save(u8 *buffer) override { return 0; }
     
 
     //

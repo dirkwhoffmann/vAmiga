@@ -417,7 +417,7 @@ public:
     i16 idBits();
     
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
-    size_t chipRamLimit();
+    usize chipRamLimit();
         
     // Returns the line in which the VERTB interrupt gets triggered
     int vStrobeLine() { return isECS() || MIMIC_UAE ? 0 : 1; }
@@ -562,9 +562,9 @@ private:
         & sprDmaState;
     }
 
-    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    usize _size() override { COMPUTE_SNAPSHOT_SIZE }
+    usize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    usize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
     //

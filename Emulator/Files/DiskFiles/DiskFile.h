@@ -61,8 +61,8 @@ public:
     virtual void readSector(u8 *dst, long t, long s) const;
 
     // Writes a string representation into the provided buffer
-    virtual void readSectorHex(char *dst, long b, size_t count) const;
-    virtual void readSectorHex(char *dst, long t, long s, size_t count) const;
+    virtual void readSectorHex(char *dst, long b, usize count) const;
+    virtual void readSectorHex(char *dst, long t, long s, usize count) const;
 
     
     //

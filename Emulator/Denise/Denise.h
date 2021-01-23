@@ -365,9 +365,9 @@ private:
         & spriteClipEnd;
     }
 
-    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    usize _size() override { COMPUTE_SNAPSHOT_SIZE }
+    usize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    usize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
     //
@@ -595,6 +595,6 @@ public:
     // Dumps the bBuffer or the iBuffer to the console
     void dumpIBuffer() const { dumpBuffer(iBuffer, sizeof(iBuffer)); }
     void dumpBBuffer() const { dumpBuffer(bBuffer, sizeof(bBuffer)); }
-    void dumpBuffer(const u8 *buffer, size_t length) const;
+    void dumpBuffer(const u8 *buffer, usize length) const;
 
 };

@@ -31,7 +31,7 @@ public:
     static bool isCompatibleStream(std::istream &stream);
     
     // Returns the size of an ADF file of a given disk type in bytes
-    static size_t fileSize(DiskDiameter t, DiskDensity d);
+    static usize fileSize(DiskDiameter t, DiskDensity d);
 
     static ADFFile *makeWithType(DiskDiameter t, DiskDensity d);    
     static ADFFile *makeWithDisk(class Disk *disk) throws;

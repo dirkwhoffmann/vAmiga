@@ -189,13 +189,13 @@ public:
     
 public:
     
-    static void encodeMFM(u8 *dst, u8 *src, size_t count);
-    static void decodeMFM(u8 *dst, u8 *src, size_t count);
+    static void encodeMFM(u8 *dst, u8 *src, usize count);
+    static void decodeMFM(u8 *dst, u8 *src, usize count);
 
-    static void encodeOddEven(u8 *dst, u8 *src, size_t count);
-    static void decodeOddEven(u8 *dst, u8 *src, size_t count);
+    static void encodeOddEven(u8 *dst, u8 *src, usize count);
+    static void decodeOddEven(u8 *dst, u8 *src, usize count);
 
-    static void addClockBits(u8 *dst, size_t count);
+    static void addClockBits(u8 *dst, usize count);
     static u8 addClockBits(u8 value, u8 previous);
 
     // Repeats the MFM data inside the track buffer to ease decoding

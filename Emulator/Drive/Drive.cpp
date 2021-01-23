@@ -128,7 +128,7 @@ Drive::_dump() const
     if (disk) disk->dump();
 }
 
-size_t
+usize
 Drive::_size()
 {
     SerCounter counter;
@@ -151,7 +151,7 @@ Drive::_size()
     return counter.count;
 }
 
-size_t
+usize
 Drive::_load(const u8 *buffer) 
 {
     SerReader reader(buffer);
@@ -184,7 +184,7 @@ Drive::_load(const u8 *buffer)
     return reader.ptr - buffer;
 }
 
-size_t
+usize
 Drive::_save(u8 *buffer)
 {
     SerWriter writer(buffer);

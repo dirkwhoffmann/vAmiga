@@ -48,7 +48,7 @@ FSDeviceDescriptor::dump()
     msg("        Reserved : %d\n", numReserved);
     msg("           BSize : %d\n", bsize);
     msg("\n");
-    for (size_t i = 0; i < partitions.size(); i++) {
+    for (usize i = 0; i < partitions.size(); i++) {
         partitions[i].dump();
     }
 }

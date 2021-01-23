@@ -348,7 +348,7 @@ RomFile::isCompatibleStream(std::istream &stream)
 }
 
 bool
-RomFile::isRomBuffer(const u8 *buf, size_t len)
+RomFile::isRomBuffer(const u8 *buf, usize len)
 {
     std::stringstream stream;
     stream.write((const char *)buf, len);
@@ -372,7 +372,7 @@ RomFile::isEncrypted()
 void
 RomFile::decrypt()
 {
-    const size_t headerSize = 11;
+    const usize headerSize = 11;
     u8 *encryptedData = nullptr;
     u8 *decryptedData = nullptr;
     u8 *romKeyData = nullptr;
@@ -394,7 +394,7 @@ RomFile::decrypt()
     decryptedData = new u8[size - headerSize];
         
     // Decrypt
-    for (size_t i = 0; i < size - headerSize; i++) {
+    for (usize i = 0; i < size - headerSize; i++) {
         decryptedData[i] = encryptedData[i] ^ romKeyData[i % romKeySize];
     }
     delete [] romKeyData;

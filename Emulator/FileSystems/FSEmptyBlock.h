@@ -28,6 +28,6 @@ struct FSEmptyBlock : FSBlock {
     u32 subtypeID() const override { return 0; }
     void dumpData() const override { };
 
-    void importBlock(const u8 *src, size_t bsize) override;
-    void exportBlock(u8 *dst, size_t bsize) override;
+    void importBlock(const u8 *src, usize bsize) override;
+    void exportBlock(u8 *dst, usize bsize) override;
 };

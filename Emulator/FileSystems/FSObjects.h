@@ -17,12 +17,12 @@ struct FSString : AmigaObject {
     char str[92];
     
     // Maximum number of permitted characters
-    size_t limit;
+    usize limit;
 
     static char capital(char c);
 
-    FSString(const char *cString, size_t limit);
-    FSString(const u8 *bcplString, size_t limit);
+    FSString(const char *cString, usize limit);
+    FSString(const u8 *bcplString, usize limit);
 
     const char *c_str() { return str; }
 

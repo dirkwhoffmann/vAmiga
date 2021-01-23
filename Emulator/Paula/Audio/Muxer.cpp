@@ -235,7 +235,7 @@ Muxer::setSampleRate(double hz)
     filterR.setSampleRate(hz);
 }
 
-size_t
+usize
 Muxer::didLoadFromBuffer(const u8 *buffer)
 {
     for (int i = 0; i < 4; i++) sampler[i]->reset();
@@ -421,7 +421,7 @@ Muxer::ignoreNextUnderOrOverflow()
 }
 
 void
-Muxer::copyMono(float *buffer, size_t n)
+Muxer::copyMono(float *buffer, usize n)
 {
     stream.lock();
     
@@ -435,7 +435,7 @@ Muxer::copyMono(float *buffer, size_t n)
 }
 
 void
-Muxer::copyStereo(float *left, float *right, size_t n)
+Muxer::copyStereo(float *left, float *right, usize n)
 {
     stream.lock();
     
@@ -449,7 +449,7 @@ Muxer::copyStereo(float *left, float *right, size_t n)
 }
 
 void
-Muxer::copyInterleaved(float *buffer, size_t n)
+Muxer::copyInterleaved(float *buffer, usize n)
 {
     stream.lock();
     

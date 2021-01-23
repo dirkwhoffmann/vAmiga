@@ -140,7 +140,7 @@ FSFileHeaderBlock::exportBlock(const char *exportDir)
     return ERROR_OK;
 }
 
-size_t
+usize
 FSFileHeaderBlock::writeData(FILE *file)
 {
     long bytesRemaining = getFileSize();
@@ -182,8 +182,8 @@ FSFileHeaderBlock::writeData(FILE *file)
     return bytesTotal;
 }
 
-size_t
-FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
+usize
+FSFileHeaderBlock::addData(const u8 *buffer, usize size)
 {
     assert(getFileSize() == 0);
         
@@ -217,7 +217,7 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
         // Add data
         FSBlock *block = partition.dev.blockPtr(ref);
         if (block) {
-            size_t written = block->addData(buffer, size);
+            usize written = block->addData(buffer, size);
             setFileSize(getFileSize() + written);
             buffer += written;
             size -= written;

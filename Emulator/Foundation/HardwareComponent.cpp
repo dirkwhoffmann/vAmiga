@@ -104,10 +104,10 @@ HardwareComponent::dump()
     _dump();
 }
 
-size_t
+usize
 HardwareComponent::size()
 {
-    size_t result = _size();
+    usize result = _size();
 
     for (HardwareComponent *c : subComponents) {
         result += c->size();
@@ -116,7 +116,7 @@ HardwareComponent::size()
     return result;
 }
 
-size_t
+usize
 HardwareComponent::load(const u8 *buffer)
 {
     const u8 *ptr = buffer;
@@ -137,12 +137,12 @@ HardwareComponent::load(const u8 *buffer)
 
     // Verify that the number of written bytes matches the snapshot size
     trace(SNP_DEBUG, "Loaded %ld bytes (expected %zu)\n", ptr - buffer, size());
-    assert((size_t)(ptr - buffer) == size());
+    assert((usize)(ptr - buffer) == size());
 
     return ptr - buffer;
 }
 
-size_t
+usize
 HardwareComponent::save(u8 *buffer)
 {
     u8 *ptr = buffer;
@@ -163,7 +163,7 @@ HardwareComponent::save(u8 *buffer)
 
     // Verify that the number of written bytes matches the snapshot size
     trace(SNP_DEBUG, "Saved %ld bytes (expected %zu)\n", ptr - buffer, size());
-    assert((size_t)(ptr - buffer) == size());
+    assert((usize)(ptr - buffer) == size());
 
     return ptr - buffer;
 }

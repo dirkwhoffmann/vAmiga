@@ -113,10 +113,10 @@ struct FSBlock : AmigaObject {
 public:
     
     // Imports this block from a buffer (bsize must match the volume block size)
-    virtual void importBlock(const u8 *src, size_t bsize);
+    virtual void importBlock(const u8 *src, usize bsize);
 
     // Exports this block to a buffer (bsize must match the volume block size)
-    virtual void exportBlock(u8 *dst, size_t bsize);
+    virtual void exportBlock(u8 *dst, usize bsize);
     
     // Exports this block to the host file system
     virtual ErrorCode exportBlock(const char *path) { return ERROR_OK; }
@@ -238,7 +238,7 @@ public:
     virtual bool addDataBlockRef(u32 first, u32 ref) { return false; }
 
     // Adds data bytes to this block
-    virtual size_t addData(const u8 *buffer, size_t size) { return 0; }
+    virtual usize addData(const u8 *buffer, usize size) { return 0; }
 };
 
 typedef FSBlock* BlockPtr;

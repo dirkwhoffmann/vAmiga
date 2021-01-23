@@ -28,7 +28,7 @@ public:
     static bool isCompatibleName(const std::string &name);
     static bool isCompatibleStream(std::istream &stream);
 
-    static bool isExtendedRomBuffer(const u8 *buffer, size_t length);
+    static bool isExtendedRomBuffer(const u8 *buffer, usize length);
     static bool isExtendedRomFile(const char *path);
 
 
