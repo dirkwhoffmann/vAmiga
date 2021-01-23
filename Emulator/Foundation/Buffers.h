@@ -24,7 +24,7 @@ template <class T, usize capacity> struct RingBuffer
     T elements[capacity];
 
     // Read and write pointers
-    int r, w;
+    i64 r, w;
 
     //
     // Initializing
@@ -34,7 +34,7 @@ template <class T, usize capacity> struct RingBuffer
     
     void clear() { r = w = 0; }
     void clear(T t) { for (usize i = 0; i < capacity; i++) elements[i] = t; clear(); }
-    void align(int offset) { w = (r + offset) % capacity; }
+    void align(i64 offset) { w = (r + offset) % capacity; }
 
     //
     // Serializing
@@ -62,10 +62,10 @@ template <class T, usize capacity> struct RingBuffer
     // Working with indices
     //
 
-    int begin() const { return r; }
-    int end() const { return w; }
-    static int next(int i) { return (capacity + i + 1) % capacity; }
-    static int prev(int i) { return (capacity + i - 1) % capacity; }
+    i64 begin() const { return r; }
+    i64 end() const { return w; }
+    static int next(i64 i) { return (capacity + i + 1) % capacity; }
+    static int prev(i64 i) { return (capacity + i - 1) % capacity; }
 
 
     //
@@ -77,7 +77,7 @@ template <class T, usize capacity> struct RingBuffer
         return elements[r];
     }
 
-    const T& current(int offset) const
+    const T& current(i64 offset) const
     {
         return elements[(r + offset) % capacity];
     }
@@ -86,7 +86,7 @@ template <class T, usize capacity> struct RingBuffer
     {
         assert(!isEmpty());
 
-        int oldr = r;
+        i64 oldr = r;
         r = next(r);
         return elements[oldr];
     }
@@ -95,7 +95,7 @@ template <class T, usize capacity> struct RingBuffer
     {
         assert(!isFull());
 
-        int oldw = w;
+        i64 oldw = w;
         w = next(w);
         elements[oldw] = element;
     }
@@ -124,7 +124,7 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
         assert(!this->isFull());
 
         // Add the new element
-        int oldw = this->w;
+        i64 oldw = this->w;
         this->write(element);
         keys[oldw] = key;
 
@@ -132,7 +132,7 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
         while (oldw != this->r) {
 
             // Get the index of the preceeding element
-            int p = this->prev(oldw);
+            i64 p = this->prev(oldw);
 
             // Exit the loop once we've found the correct position
             if (key >= keys[p]) break;

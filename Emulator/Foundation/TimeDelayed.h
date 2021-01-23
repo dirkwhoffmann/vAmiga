@@ -65,7 +65,7 @@ public:
     
     void dump() {
         msg("TimeStamp: %lld clock: %lld\n", timeStamp, AS_DMA_CYCLES(*clock));
-        for (int i = delay; i >= 0; i--) msg("[%d] ", readWithDelay(i));
+        for (isize i = delay; i >= 0; i--) msg("[%d] ", readWithDelay(i));
         msg("\n");
     }
 
@@ -93,7 +93,7 @@ public:
         i64 dmaClock = AS_DMA_CYCLES(*clock);
         // Shift pipeline
         i64 diff = dmaClock - timeStamp;
-        for (int i = delay; i >= 0; i--) {
+        for (isize i = delay; i >= 0; i--) {
             assert(i - diff < 0 || i - diff <= delay);
             pipeline[i] = (i - diff < 0) ? pipeline[0] : pipeline[i - diff];
         }
