@@ -78,6 +78,6 @@ public:
      * pass the returned value as parameter highestAmplitude in the next call
      * to this function.
      */
-    float draw(unsigned *buffer, int width, int height,
+    float draw(unsigned *buffer, usize width, usize height,
                bool left, float highestAmplitude, unsigned color);
 };

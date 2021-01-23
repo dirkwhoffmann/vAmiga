@@ -123,19 +123,19 @@ AudioStream::copyInterleaved(float *buffer, usize n,
 }
 
 float
-AudioStream::draw(unsigned *buffer, int width, int height,
-                          bool left, float highestAmplitude, unsigned color)
+AudioStream::draw(u32 *buffer, usize width, usize height,
+                  bool left, float highestAmplitude, u32 color)
 {
-    int dw = cap() / width;
+    usize dw = cap() / width;
     float newHighestAmplitude = 0.001;
     
     // Clear buffer
-    for (int i = 0; i < width * height; i++) {
+    for (usize i = 0; i < width * height; i++) {
         buffer[i] = color & 0xFFFFFF;
     }
     
     // Draw waveform
-    for (int w = 0; w < width; w++) {
+    for (usize w = 0; w < width; w++) {
         
         // Read samples from ringbuffer
         SamplePair pair = current(w * dw);
@@ -155,12 +155,12 @@ AudioStream::draw(unsigned *buffer, int width, int height,
             if (sample > newHighestAmplitude) newHighestAmplitude = sample;
             
             // Scale the sample
-            int scaled = int(sample * height / highestAmplitude);
+            usize scaled = usize(sample * height / highestAmplitude);
             if (scaled > height) scaled = height;
             
             // Draw vertical line
             unsigned *ptr = buffer + width * ((height - scaled) / 2) + w;
-            for (int j = 0; j < scaled; j++, ptr += width) *ptr = color;
+            for (usize j = 0; j < scaled; j++, ptr += width) *ptr = color;
         }
     }
     return newHighestAmplitude;

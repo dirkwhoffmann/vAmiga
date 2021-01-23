@@ -80,8 +80,8 @@ MsgQueue::put(MsgType type, long data)
 void
 MsgQueue::dump()
 {
-    for (int i = queue.begin(); i != queue.end(); i = queue.next(i)) {
-        msg("%02d", i); dump(queue.elements[i]);
+    for (isize i = queue.begin(); i != queue.end(); i = queue.next(i)) {
+        msg("%02zd", i); dump(queue.elements[i]);
     }
 }
 

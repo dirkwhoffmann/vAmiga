@@ -31,7 +31,7 @@ Paula::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
 
     // Interrupts
-    for (int i = 0; i < 16; i++) setIntreq[i] = NEVER;
+    for (usize i = 0; i < 16; i++) setIntreq[i] = NEVER;
     ipl.clear();
     cpu.setIPL(0);
     
