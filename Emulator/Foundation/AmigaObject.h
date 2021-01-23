@@ -43,7 +43,7 @@ public:
 public:
     
     // Returns the name for this component (e.g., "Agnus" or "Denise")
-    virtual const char *getDescription() const = 0; 
+    virtual const char *getDescription() const { return ""; }
     
     // Called by debug() and trace() to produce a detailed debug output
     virtual void prefix() const { };

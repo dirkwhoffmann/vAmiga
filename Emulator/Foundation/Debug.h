@@ -14,14 +14,15 @@
  *   - msg    Information messages  (Show up in all builds)
  *   - warn   Warning messages      (Show up in all builds)
  *   - debug  Debug messages        (Show up in debug builds, only)
+ *   - plain  Plain debug messages  (Show up in debug builds, only)
  *   - trace  Detailed debug output (Show up in debug builds, only)
  *
- * Trace messages are prefixed by a string description produced by the prefix()
- * function. By default, prefix() returns the component name. Some classes
- * overwrite this function to output additional debug information.
+ * Debug messages are prefixed by the component name and a line number. Trace
+ * messages are prefixed by a more detailed string description produced by the
+ * prefix() function.
  *
- * Debug and trace messages are accompanied by an optional 'verbose' parameter.
- * If 0 is passed in, no output will be generated.
+ * Debug, plain, and trace messages are accompanied by an optional 'verbose'
+ * parameter. If 0 is passed in, no output will be generated.
  *
  * Sidenote: In previous releases the printing macros were implemented in form
  * of variadic functions. Although this might seem to be a superior approach at
@@ -40,11 +41,16 @@ fprintf(stderr, "Warning: " format, ##__VA_ARGS__);
 
 #define debug(verbose, format, ...) \
 if (verbose) { \
+fprintf(stderr, "%s:%d " format, getDescription(), __LINE__, ##__VA_ARGS__); }
+
+#define plain(verbose, format, ...) \
+if (verbose) { \
 fprintf(stderr, format, ##__VA_ARGS__); }
 
 #define trace(verbose, format, ...) \
 if (verbose) { \
-prefix(); fprintf(stderr, "%s: " format, getDescription(), ##__VA_ARGS__); }
+prefix(); \
+fprintf(stderr, "%s:%d " format, getDescription(), __LINE__, ##__VA_ARGS__); }
 
 #else
 

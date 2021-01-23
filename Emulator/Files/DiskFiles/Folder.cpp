@@ -27,7 +27,7 @@ Folder::makeWithFolder(const std::string &path)
 {
     Folder *folder = new Folder();
     
-    debug(FS_DEBUG, "makeWithFolder(%s)\n", path.c_str());
+    if (FS_DEBUG) msg("makeWithFolder(%s)\n", path.c_str());
               
     // Only proceed if the provided filename points to a directory
     if (!isFolder(path.c_str())) {
@@ -56,7 +56,7 @@ Folder::makeWithFolder(const std::string &path)
     // Convert the file system into an ADF
     ErrorCode fsError;
     folder->adf = ADFFile::makeWithVolume(*volume, &fsError);
-    debug(FS_DEBUG, "makeWithVolume: %s\n", ErrorCodeEnum::key(fsError));
+    if (FS_DEBUG) msg("makeWithVolume: %s\n", ErrorCodeEnum::key(fsError));
     delete volume;
     
     if (!folder->adf) {
