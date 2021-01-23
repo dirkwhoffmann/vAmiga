@@ -281,7 +281,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func updateTexture() {
                 
-        let buffer = parent.amiga.denise.stableBuffer()
+        let buffer = parent.amiga.denise.stableBuffer
         
         // Only proceed if the emulator delivers a new texture
         if prevBuffer?.data == buffer.data { return }
@@ -556,7 +556,7 @@ class Renderer: NSObject, MTKViewDelegate {
             
             // Update background texture
             if !fullscreen {
-                let buffer = parent.amiga.denise.noise()
+                let buffer = parent.amiga.denise.noise
                 updateBgTexture(bytes: buffer!)
             }
 

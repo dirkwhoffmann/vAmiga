@@ -1931,7 +1931,7 @@ using namespace moira;
 
 @implementation AmigaProxy
 
-@synthesize wrapper;
+// @synthesize wrapper;
 @synthesize agnus;
 @synthesize blitter;
 @synthesize breakpoints;
@@ -1995,6 +1995,11 @@ using namespace moira;
 - (Amiga *)amiga
 {
     return (Amiga *)obj;
+}
+
+- (void)dealloc
+{
+    NSLog(@"dealloc");
 }
 
 - (void)kill

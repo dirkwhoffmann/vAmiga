@@ -67,12 +67,12 @@
 @end
 
 //
-// Amiga
+// Amiga proxy
 //
 
 @interface AmigaProxy : HardwareComponentProxy {
     
-    struct AmigaWrapper *wrapper;
+    // struct AmigaWrapper *wrapper;
     
     AgnusProxy *agnus;
     CIAProxy *ciaA;
@@ -97,7 +97,7 @@
     SerialPortProxy *serialPort;
 }
 
-@property (readonly) struct AmigaWrapper *wrapper;
+// @property (readonly) struct AmigaWrapper *wrapper;
 @property (readonly, strong) AgnusProxy *agnus;
 @property (readonly, strong) BlitterProxy *blitter;
 @property (readonly, strong) CIAProxy *ciaA;
@@ -121,6 +121,7 @@
 @property (readonly, strong) ScreenRecorderProxy *screenRecorder;
 @property (readonly, strong) SerialPortProxy *serialPort;
 
+- (void)dealloc;
 - (void) kill;
 
 @property (readonly) BOOL isReleaseBuild;
@@ -128,12 +129,12 @@
 @property BOOL debugMode;
 @property EventID inspectionTarget;
 
-- (BOOL) isReady:(ErrorCode *)error;
-- (BOOL) isReady;
-- (void) powerOn;
-- (void) powerOff;
-- (void) hardReset;
-- (void) softReset;
+- (BOOL)isReady:(ErrorCode *)ec;
+- (BOOL)isReady;
+- (void)powerOn;
+- (void)powerOff;
+- (void)hardReset;
+- (void)softReset;
 
 - (AmigaInfo) getInfo;
 
@@ -142,66 +143,66 @@
 @property (readonly) BOOL running;
 @property (readonly) BOOL paused;
 
-- (void) run;
-- (void) pause;
-- (void) suspend;
-- (void) resume;
+- (void)run;
+- (void)pause;
+- (void)suspend;
+- (void)resume;
 
-- (void) requestAutoSnapshot;
-- (void) requestUserSnapshot;
+- (void)requestAutoSnapshot;
+- (void)requestUserSnapshot;
 @property (readonly) SnapshotProxy *latestAutoSnapshot;
 @property (readonly) SnapshotProxy *latestUserSnapshot;
 - (void) loadFromSnapshot:(SnapshotProxy *)proxy;
 
-- (NSInteger) getConfig:(Option)opt;
-- (NSInteger) getConfig:(Option)opt id:(NSInteger)id;
-- (NSInteger) getConfig:(Option)opt drive:(NSInteger)id;
-- (BOOL) configure:(Option)opt value:(NSInteger)val;
-- (BOOL) configure:(Option)opt enable:(BOOL)val;
-- (BOOL) configure:(Option)opt id:(NSInteger)id value:(NSInteger)val;
-- (BOOL) configure:(Option)opt id:(NSInteger)id enable:(BOOL)val;
-- (BOOL) configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val;
-- (BOOL) configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
+- (NSInteger)getConfig:(Option)opt;
+- (NSInteger)getConfig:(Option)opt id:(NSInteger)id;
+- (NSInteger)getConfig:(Option)opt drive:(NSInteger)id;
+- (BOOL)configure:(Option)opt value:(NSInteger)val;
+- (BOOL)configure:(Option)opt enable:(BOOL)val;
+- (BOOL)configure:(Option)opt id:(NSInteger)id value:(NSInteger)val;
+- (BOOL)configure:(Option)opt id:(NSInteger)id enable:(BOOL)val;
+- (BOOL)configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val;
+- (BOOL)configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
 
 - (Message)message;
-- (void) addListener:(const void *)sender function:(Callback *)func;
-- (void) removeListener:(const void *)sender;
+- (void)addListener:(const void *)sender function:(Callback *)func;
+- (void)removeListener:(const void *)sender;
 
-- (void) stopAndGo;
-- (void) stepInto;
-- (void) stepOver;
+- (void)stopAndGo;
+- (void)stepInto;
+- (void)stepOver;
 
 @end
 
 
 //
-// Guards (Breakpoints, Watchpoints)
+// Guards proxy (Breakpoints, Watchpoints)
 //
 
 @interface GuardsProxy : Proxy { }
     
 @property (readonly) NSInteger count;
-- (NSInteger) addr:(NSInteger)nr;
-- (BOOL) isEnabled:(NSInteger)nr;
-- (BOOL) isDisabled:(NSInteger)nr;
-- (void) enable:(NSInteger)nr;
-- (void) disable:(NSInteger)nr;
-- (void) remove:(NSInteger)nr;
-- (void) replace:(NSInteger)nr addr:(NSInteger)addr;
+- (NSInteger)addr:(NSInteger)nr;
+- (BOOL)isEnabled:(NSInteger)nr;
+- (BOOL)isDisabled:(NSInteger)nr;
+- (void)enable:(NSInteger)nr;
+- (void)disable:(NSInteger)nr;
+- (void)remove:(NSInteger)nr;
+- (void)replace:(NSInteger)nr addr:(NSInteger)addr;
 
-- (BOOL) isSetAt:(NSInteger)addr;
-- (BOOL) isSetAndEnabledAt:(NSInteger)addr;
-- (BOOL) isSetAndDisabledAt:(NSInteger)addr;
-- (void) enableAt:(NSInteger)addr;
-- (void) disableAt:(NSInteger)addr;
-- (void) addAt:(NSInteger)addr;
-- (void) removeAt:(NSInteger)addr;
+- (BOOL)isSetAt:(NSInteger)addr;
+- (BOOL)isSetAndEnabledAt:(NSInteger)addr;
+- (BOOL)isSetAndDisabledAt:(NSInteger)addr;
+- (void)enableAt:(NSInteger)addr;
+- (void)disableAt:(NSInteger)addr;
+- (void)addAt:(NSInteger)addr;
+- (void)removeAt:(NSInteger)addr;
 
 @end
 
 
 //
-// CPU
+// CPU proxy
 //
 
 @interface CPUProxy : HardwareComponentProxy { }
@@ -213,16 +214,16 @@
 @property (readonly, getter=isHalted) bool halted;
 
 @property (readonly) NSInteger loggedInstructions;
-- (void) clearLog;
+- (void)clearLog;
 
-- (NSString *) disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len;
-- (NSString *) disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len;
-- (NSString *) disassembleRecordedFlags:(NSInteger)i;
-- (NSString *) disassembleRecordedPC:(NSInteger)i;
+- (NSString *)disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len;
+- (NSString *)disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len;
+- (NSString *)disassembleRecordedFlags:(NSInteger)i;
+- (NSString *)disassembleRecordedPC:(NSInteger)i;
 
-- (NSString *) disassembleInstr:(NSInteger)addr length:(NSInteger *)len;
-- (NSString *) disassembleWords:(NSInteger)addr length:(NSInteger)len;
-- (NSString *) disassembleAddr:(NSInteger)addr;
+- (NSString *)disassembleInstr:(NSInteger)addr length:(NSInteger *)len;
+- (NSString *)disassembleWords:(NSInteger)addr length:(NSInteger)len;
+- (NSString *)disassembleAddr:(NSInteger)addr;
 
 @end
 
@@ -256,40 +257,40 @@
 @property (readonly) BOOL hasRom;
 @property (readonly) BOOL hasBootRom;
 @property (readonly) BOOL hasKickRom;
-- (void) deleteRom;
-- (BOOL) isRom:(NSURL *)url;
-- (void) loadRom:(RomFileProxy *)proxy;
-- (BOOL) loadRomFromBuffer:(NSData *)buffer;
-- (BOOL) loadRomFromFile:(NSURL *)url error:(ErrorCode *)ec;
-- (u64) romFingerprint;
-- (RomIdentifier) romIdentifier;
+- (void)deleteRom;
+- (BOOL)isRom:(NSURL *)url;
+- (void)loadRom:(RomFileProxy *)proxy;
+- (BOOL)loadRomFromBuffer:(NSData *)buffer;
+- (BOOL)loadRomFromFile:(NSURL *)url error:(ErrorCode *)ec;
+@property (readonly) u64 romFingerprint;
+@property (readonly) RomIdentifier romIdentifier;
 @property (readonly, copy) NSString *romTitle;
 @property (readonly, copy) NSString *romVersion;
 @property (readonly, copy) NSString *romReleased;
 
-- (BOOL) hasExt;
-- (void) deleteExt;
-- (BOOL) isExt:(NSURL *)url;
-- (void) loadExt:(ExtendedRomFileProxy *)proxy;
-- (BOOL) loadExtFromBuffer:(NSData *)buffer;
-- (BOOL) loadExtFromFile:(NSURL *)url error:(ErrorCode *)ec;
-- (u64) extFingerprint;
+- (BOOL)hasExt;
+- (void)deleteExt;
+- (BOOL)isExt:(NSURL *)url;
+- (void)loadExt:(ExtendedRomFileProxy *)proxy;
+- (BOOL)loadExtFromBuffer:(NSData *)buffer;
+- (BOOL)loadExtFromFile:(NSURL *)url error:(ErrorCode *)ec;
+@property (readonly) u64 extFingerprint;
 @property (readonly) RomIdentifier extIdentifier;
-- (NSString *) extTitle;
-- (NSString *) extVersion;
-- (NSString *) extReleased;
-- (NSInteger) extStart;
+@property (readonly, copy) NSString *extTitle;
+@property (readonly, copy) NSString *extVersion;
+@property (readonly, copy) NSString *extReleased;
+@property (readonly) NSInteger extStart;
 
-- (BOOL) saveWom:(NSURL *)url;
-- (BOOL) saveRom:(NSURL *)url;
-- (BOOL) saveExt:(NSURL *)url;
+- (BOOL)saveWom:(NSURL *)url;
+- (BOOL)saveRom:(NSURL *)url;
+- (BOOL)saveExt:(NSURL *)url;
 
-- (void) updateRTC;
-- (MemorySource) memSrc:(Accessor)accessor addr:(NSInteger)addr;
-- (NSInteger) spypeek16:(Accessor)accessor addr:(NSInteger)addr;
+- (void)updateRTC;
+- (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr;
+- (NSInteger)spypeek16:(Accessor)accessor addr:(NSInteger)addr;
 
-- (NSString *) ascii:(Accessor)accessor addr:(NSInteger)addr;
-- (NSString *) hex:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes;
+- (NSString *)ascii:(Accessor)accessor addr:(NSInteger)addr;
+- (NSString *)hex:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes;
 
 @end
 
@@ -300,12 +301,12 @@
 
 @interface AgnusProxy : HardwareComponentProxy { }
 
-- (NSInteger) chipRamLimit;
+@property (readonly) NSInteger chipRamLimit;
 
-- (AgnusInfo) getInfo;
-- (EventSlotInfo) getEventSlotInfo:(NSInteger)slot;
-- (EventInfo) getEventInfo;
-- (AgnusStats) getStats;
+- (AgnusInfo)getInfo;
+- (EventSlotInfo)getEventSlotInfo:(NSInteger)slot;
+- (EventInfo)getEventInfo;
+- (AgnusStats)getStats;
 
 @end
 
@@ -316,13 +317,13 @@
 
 @interface CopperProxy : HardwareComponentProxy { }
 
-- (CopperInfo) getInfo;
+- (CopperInfo)getInfo;
 
-- (BOOL) isIllegalInstr:(NSInteger)addr;
-- (NSInteger) instrCount:(NSInteger)list;
+- (BOOL)isIllegalInstr:(NSInteger)addr;
+- (NSInteger)instrCount:(NSInteger)list;
 - (void) adjustInstrCount:(NSInteger)list offset:(NSInteger)offset;
-- (NSString *) disassemble:(NSInteger)addr;
-- (NSString *) disassemble:(NSInteger)list instr:(NSInteger)offset;
+- (NSString *)disassemble:(NSInteger)addr;
+- (NSString *)disassemble:(NSInteger)list instr:(NSInteger)offset;
 
 @end
 
@@ -333,7 +334,7 @@
 
 @interface BlitterProxy : HardwareComponentProxy { }
 
-- (BlitterInfo) getInfo;
+- (BlitterInfo)getInfo;
 
 @end
 
@@ -344,28 +345,28 @@
 
 @interface DmaDebuggerProxy : Proxy { }
 
-- (DMADebuggerInfo) getInfo;
+- (DMADebuggerInfo)getInfo;
 
-- (void) setEnable:(BOOL)value;
-- (void) visualizeCopper:(BOOL)value;
-- (void) visualizeBlitter:(BOOL)value;
-- (void) visualizeDisk:(BOOL)value;
-- (void) visualizeAudio:(BOOL)value;
-- (void) visualizeSprite:(BOOL)value;
-- (void) visualizeBitplane:(BOOL)value;
-- (void) visualizeCpu:(BOOL)value;
-- (void) visualizeRefresh:(BOOL)value;
+- (void)setEnable:(BOOL)value;
+- (void)visualizeCopper:(BOOL)value;
+- (void)visualizeBlitter:(BOOL)value;
+- (void)visualizeDisk:(BOOL)value;
+- (void)visualizeAudio:(BOOL)value;
+- (void)visualizeSprite:(BOOL)value;
+- (void)visualizeBitplane:(BOOL)value;
+- (void)visualizeCpu:(BOOL)value;
+- (void)visualizeRefresh:(BOOL)value;
 
-- (void) setOpacity:(double)value;
-- (void) setDisplayMode:(NSInteger)mode;
-- (void) setCopperColor:(double)r g:(double)g b:(double)b;
-- (void) setBlitterColor:(double)r g:(double)g b:(double)b;
-- (void) setDiskColor:(double)r g:(double)g b:(double)b;
-- (void) setAudioColor:(double)r g:(double)g b:(double)b;
-- (void) setSpriteColor:(double)r g:(double)g b:(double)b;
-- (void) setBitplaneColor:(double)r g:(double)g b:(double)b;
-- (void) setCpuColor:(double)r g:(double)g b:(double)b;
-- (void) setRefreshColor:(double)r g:(double)g b:(double)b;
+- (void)setOpacity:(double)value;
+- (void)setDisplayMode:(NSInteger)mode;
+- (void)setCopperColor:(double)r g:(double)g b:(double)b;
+- (void)setBlitterColor:(double)r g:(double)g b:(double)b;
+- (void)setDiskColor:(double)r g:(double)g b:(double)b;
+- (void)setAudioColor:(double)r g:(double)g b:(double)b;
+- (void)setSpriteColor:(double)r g:(double)g b:(double)b;
+- (void)setBitplaneColor:(double)r g:(double)g b:(double)b;
+- (void)setCpuColor:(double)r g:(double)g b:(double)b;
+- (void)setRefreshColor:(double)r g:(double)g b:(double)b;
 
 @end
 
@@ -375,20 +376,20 @@
 
 @interface DeniseProxy : HardwareComponentProxy { }
 
-- (DeniseInfo) getInfo;
-- (SpriteInfo) getSpriteInfo:(NSInteger)nr;
+- (DeniseInfo)getInfo;
+- (SpriteInfo)getSpriteInfo:(NSInteger)nr;
 
-- (NSInteger) sprDataLines:(NSInteger)nr;
-- (u64) sprData:(NSInteger)nr line:(NSInteger)line;
-- (u16) sprColor:(NSInteger)nr reg:(NSInteger)reg;
+- (NSInteger)sprDataLines:(NSInteger)nr;
+- (u64)sprData:(NSInteger)nr line:(NSInteger)line;
+- (u16)sprColor:(NSInteger)nr reg:(NSInteger)reg;
 
 @property Palette palette;
 @property double brightness;
 @property double saturation;
 @property double contrast;
 
-- (ScreenBuffer) stableBuffer;
-- (u32 *) noise;
+@property (readonly) ScreenBuffer stableBuffer;
+@property (readonly) u32 *noise;
 
 @end
 
@@ -403,12 +404,12 @@
 @property (readonly) BOOL recording;
 @property (readonly) NSInteger recordCounter;
 
-- (BOOL) startRecording:(NSRect)rect
-                bitRate:(NSInteger)rate
-                aspectX:(NSInteger)aspectX
-                aspectY:(NSInteger)aspectY;
-- (void) stopRecording;
-- (BOOL) exportAs:(NSString *)path;
+- (BOOL)startRecording:(NSRect)rect
+               bitRate:(NSInteger)rate
+               aspectX:(NSInteger)aspectX
+               aspectY:(NSInteger)aspectY;
+- (void)stopRecording;
+- (BOOL)exportAs:(NSString *)path;
 
 @end
 

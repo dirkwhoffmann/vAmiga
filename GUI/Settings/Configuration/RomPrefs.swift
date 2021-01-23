@@ -13,7 +13,7 @@ extension ConfigurationController {
 
         let poweredOff      = amiga.poweredOff
 
-        let romIdentifier   = amiga.mem.romIdentifier()
+        let romIdentifier   = amiga.mem.romIdentifier
         let hasRom          = romIdentifier != .MISSING
         let hasArosRom      = amiga.mem.isArosRom(romIdentifier)
         let hasDiagRom      = amiga.mem.isDiagRom(romIdentifier)
@@ -61,10 +61,10 @@ extension ConfigurationController {
         romSubtitle.stringValue = amiga.mem.romVersion
         romSubsubtitle.stringValue = amiga.mem.romReleased
 
-        extTitle.stringValue = amiga.mem.extTitle()
-        extSubtitle.stringValue = amiga.mem.extVersion()
-        extSubsubtitle.stringValue = amiga.mem.extReleased()
-        extMapAddr.selectItem(withTag: amiga.mem.extStart())
+        extTitle.stringValue = amiga.mem.extTitle
+        extSubtitle.stringValue = amiga.mem.extVersion
+        extSubsubtitle.stringValue = amiga.mem.extReleased
+        extMapAddr.selectItem(withTag: amiga.mem.extStart)
 
         // Hide some controls
         romDeleteButton.isHidden = !hasRom
