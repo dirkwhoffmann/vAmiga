@@ -515,11 +515,11 @@ private:
     void translate();
 
     // Called by translate() in single-playfield mode
-    void translateSPF(int from, int to, PFState &state);
+    void translateSPF(usize from, usize to, PFState &state);
 
     // Called by translate() in dual-playfield mode
-    void translateDPF(int from, int to, PFState &state);
-    template <bool pf2pri> void translateDPF(int from, int to, PFState &state);
+    void translateDPF(usize from, usize to, PFState &state);
+    template <bool pf2pri> void translateDPF(usize from, usize to, PFState &state);
 
 public:
 

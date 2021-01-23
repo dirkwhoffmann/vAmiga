@@ -266,7 +266,7 @@ Denise::fillShiftRegisters(bool odd, bool even)
     
     // On all other machines, fallback to the slower standard implementation
     u32 mask = 0x8000;
-    for (int i = 0; i < 16; i++, mask >>= 1) {
+    for (usize i = 0; i < 16; i++, mask >>= 1) {
         
         slice[i] =
         (!!(shiftReg[0] & mask) << 0) |
@@ -297,7 +297,7 @@ Denise::drawOdd(int offset)
     u16 mask = masks[bpu()];
     i16 currentPixel = agnus.ppos() + offset;
     
-    for (int i = 0; i < 16; i++) {
+    for (usize i = 0; i < 16; i++) {
         
         u8 index = slice[i] & mask;
         
@@ -343,7 +343,7 @@ Denise::drawEven(int offset)
     u16 mask = masks[bpu()];
     i16 currentPixel = agnus.ppos() + offset;
     
-    for (int i = 0; i < 16; i++) {
+    for (usize i = 0; i < 16; i++) {
 
         u8 index = slice[i] & mask;
 
@@ -386,7 +386,7 @@ Denise::drawBoth(int offset)
     u16 mask = masks[bpu()];
     i16 currentPixel = agnus.ppos() + offset;
     
-    for (int i = 0; i < 16; i++) {
+    for (usize i = 0; i < 16; i++) {
         
         u8 index = slice[i] & mask;
         
@@ -407,7 +407,7 @@ Denise::drawBoth(int offset)
     
     // Disarm and clear the shift registers
     armedEven = armedOdd = false;
-    for (int i = 0; i < 6; i++) shiftReg[i] = 0;
+    for (usize i = 0; i < 6; i++) shiftReg[i] = 0;
 }
 
 void
@@ -459,7 +459,7 @@ Denise::translate()
     conChanges.insert(sizeof(bBuffer), RegChange { SET_NONE, 0 });
 
     // Iterate over all recorded register changes
-    for (int i = conChanges.begin(); i != conChanges.end(); i = conChanges.next(i)) {
+    for (isize i = conChanges.begin(); i != conChanges.end(); i = conChanges.next(i)) {
 
         Cycle trigger = conChanges.keys[i];
         RegChange &change = conChanges.elements[i];
@@ -497,13 +497,13 @@ Denise::translate()
 }
 
 void
-Denise::translateSPF(int from, int to, PFState &state)
+Denise::translateSPF(usize from, usize to, PFState &state)
 {
-    /* Check for invalid bitplane modes.
-     * If the priority of the second bitplane is set to an invalid value (> 4),
-     * Denise ignores the data from the first four bitplanes whereever the fifth
-     * bitplane is set to 1. Some demos such as "Planet Rocklobster" (Oxyron)
-     * show that this kind of bitplane elimination does not happen in HAM mode.
+    /* Check for invalid bitplane modes. If the priority of the second bitplane
+     * is set to an invalid value (> 4), Denise ignores the data from the first
+     * four bitplanes whereever the fifth bitplane is set to 1. Some demos such
+     * as "Planet Rocklobster" (Oxyron) show that this kind of bitplane
+     * elimination does not happen in HAM mode.
      *
      * Relevant tests in the vAmigaTS test suite:
      * Denise/BPLCON0/invprio0 to Denise/BPLCON0/invprio3
@@ -511,7 +511,7 @@ Denise::translateSPF(int from, int to, PFState &state)
     
     if (unlikely(!state.prio2 && !state.ham)) {
         
-        for (int i = from; i < to; i++) {
+        for (usize i = from; i < to; i++) {
 
              u8 s = bBuffer[i];
 
@@ -523,7 +523,7 @@ Denise::translateSPF(int from, int to, PFState &state)
     }
     
     // Translate the normal way
-    for (int i = from; i < to; i++) {
+    for (usize i = from; i < to; i++) {
         
         u8 s = bBuffer[i];
         
@@ -534,7 +534,7 @@ Denise::translateSPF(int from, int to, PFState &state)
 }
 
 void
-Denise::translateDPF(int from, int to, PFState &state)
+Denise::translateDPF(usize from, usize to, PFState &state)
 {
     if (state.pf2pri) {
         translateDPF<true>(from, to, state);
@@ -544,7 +544,7 @@ Denise::translateDPF(int from, int to, PFState &state)
 }
 
 template <bool pf2pri> void
-Denise::translateDPF(int from, int to, PFState &state)
+Denise::translateDPF(usize from, usize to, PFState &state)
 {
     /* If the priority of a playfield is set to an illegal value (prio1 or
      * prio2 will be 0 in that case), all pixels are drawn transparent.
@@ -552,7 +552,7 @@ Denise::translateDPF(int from, int to, PFState &state)
     u8 mask1 = state.prio1 ? 0b1111 : 0b0000;
     u8 mask2 = state.prio2 ? 0b1111 : 0b0000;
 
-    for (int i = from; i < to; i++) {
+    for (usize i = from; i < to; i++) {
 
         u8 s = bBuffer[i];
 
@@ -1209,5 +1209,5 @@ template void Denise::drawOdd<true>(int offset);
 template void Denise::drawEven<false>(int offset);
 template void Denise::drawEven<true>(int offset);
 
-template void Denise::translateDPF<true>(int from, int to, PFState &state);
-template void Denise::translateDPF<false>(int from, int to, PFState &state);
+template void Denise::translateDPF<true>(usize from, usize to, PFState &state);
+template void Denise::translateDPF<false>(usize from, usize to, PFState &state);
