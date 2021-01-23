@@ -11,7 +11,7 @@ extension ConfigurationController {
     
     func refreshRomTab() {
 
-        let poweredOff      = amiga.isPoweredOff
+        let poweredOff      = amiga.poweredOff
 
         let romIdentifier   = amiga.mem.romIdentifier()
         let hasRom          = romIdentifier != .MISSING

@@ -148,9 +148,7 @@ class MyController: NSWindowController, MessageReceiver {
         case .on: warp = true
         }
         
-        if warp != amiga.warp {
-            warp ? amiga.warpOn() : amiga.warpOff()
-        }
+        if warp != amiga.warp { amiga.warp = warp }
     }
 
     //

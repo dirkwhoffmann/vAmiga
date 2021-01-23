@@ -40,7 +40,7 @@ extension MyController {
         let hasDisk2 = amiga.df2.hasDisk
         let hasDisk3 = amiga.df3.hasDisk
 
-        let running = amiga.isRunning
+        let running = amiga.running
         let debug = amiga.debugMode
         let halted = amiga.cpu.halted
         let warp = amiga.warp
@@ -141,7 +141,7 @@ extension MyController {
         
     public func refreshStatusBar(drive: Int, motor: Bool) {
         
-        let spin = amiga.isRunning && motor
+        let spin = amiga.running && motor
         
         switch drive {
         case 0: spin ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)

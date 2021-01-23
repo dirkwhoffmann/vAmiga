@@ -11,9 +11,9 @@ extension MyController: NSMenuItemValidation {
     
     open func validateMenuItem(_ item: NSMenuItem) -> Bool {
         
-        let powered = amiga.isPoweredOn
-        let running = amiga.isRunning
-        let paused = amiga.isPaused
+        let powered = amiga.poweredOn
+        let running = amiga.running
+        let paused = amiga.paused
         let recording = amiga.screenRecorder.recording
         let counter = amiga.screenRecorder.recordCounter
         
@@ -373,7 +373,7 @@ extension MyController: NSMenuItemValidation {
         
         var error: ErrorCode = .OK
 
-        if amiga.isPoweredOn {
+        if amiga.poweredOn {
             amiga.powerOff()
             return
         }

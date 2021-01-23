@@ -48,6 +48,11 @@ using namespace moira;
     [self hwc]->dump();
 }
 
+- (void) dumpConfig
+{
+    [self hwc]->dumpConfig();
+}
+
 @end
 
 //
@@ -240,10 +245,12 @@ using namespace moira;
     return [self cia]->getInfo();
 }
 
+/*
 - (void) dumpConfig
 {
     [self cia]->dumpConfig();
 }
+*/
 
 @end
 
@@ -1990,194 +1997,195 @@ using namespace moira;
     return (Amiga *)obj;
 }
 
-- (void) kill
+- (void)kill
 {
-    NSLog(@"AmigaProxy::kill");
-    assert(obj);
-
+    NSLog(@"kill");
+    
+    assert([self amiga] != NULL);
     delete [self amiga];
+    obj = NULL;
 }
 
-- (BOOL) isReleaseBuild
+- (BOOL)isReleaseBuild
 {
     return releaseBuild();
 }
 
-- (BOOL) debugMode
+- (BOOL)warp
+{
+    return [self amiga]->inWarpMode();
+}
+
+- (void)setWarp:(BOOL)value
+{
+    [self amiga]->setWarp(value);
+}
+
+- (BOOL)debugMode
 {
     return [self amiga]->inDebugMode();
 }
 
-- (void) setDebugMode:(BOOL)enable
+- (void)setDebugMode:(BOOL)enable
 {
     [self amiga]->setDebug(enable);
 }
 
-- (void) setInspectionTarget:(EventID)id
+- (EventID)inspectionTarget
+{
+    return [self amiga]->getInspectionTarget();
+}
+
+- (void)setInspectionTarget:(EventID)id
 {
     [self amiga]->setInspectionTarget(id);
 }
 
-- (void) clearInspectionTarget
-{
-    [self amiga]->clearInspectionTarget();
-}
-
-- (BOOL) isReady:(ErrorCode *)error
+- (BOOL)isReady:(ErrorCode *)error
 {
     return [self amiga]->isReady(error);
 }
 
-- (BOOL) isReady
+- (BOOL)isReady
 {
     return [self amiga]->isReady();
 }
 
-- (void) powerOn
+- (void)powerOn
 {
     [self amiga]->powerOn();
 }
 
-- (void) powerOff
+- (void)powerOff
 {
     [self amiga]->powerOff();
 }
 
-- (void) hardReset
+- (void)hardReset
 {
     [self amiga]->reset(true);
 }
 
-- (void) softReset
+- (void)softReset
 {
     [self amiga]->reset(false);
 }
 
-- (AmigaInfo) getInfo
+- (AmigaInfo)getInfo
 {
     return [self amiga]->getInfo();
 }
 
-- (BOOL) isPoweredOn
+- (BOOL)poweredOn
 {
     return [self amiga]->isPoweredOn();
 }
 
-- (BOOL) isPoweredOff
+- (BOOL)poweredOff
 {
     return [self amiga]->isPoweredOff();
 }
 
-- (BOOL) isRunning
+- (BOOL)running
 {
     return [self amiga]->isRunning();
 }
 
-- (BOOL) isPaused
+- (BOOL)paused
 {
     return [self amiga]->isPaused();
 }
 
-- (void) run
+- (void)run
 {
     [self amiga]->run();
 }
 
-- (void) pause
+- (void)pause
 {
     [self amiga]->pause();
 }
 
-- (void) suspend
+- (void)suspend
 {
     return [self amiga]->suspend();
 }
 
-- (void) resume
+- (void)resume
 {
     return [self amiga]->resume();
 }
 
-- (void) requestAutoSnapshot
+- (void)requestAutoSnapshot
 {
     [self amiga]->requestAutoSnapshot();
 }
 
-- (void) requestUserSnapshot
+- (void)requestUserSnapshot
 {
     [self amiga]->requestUserSnapshot();
 }
 
-- (SnapshotProxy *) latestAutoSnapshot
+- (SnapshotProxy *)latestAutoSnapshot
 {
     Snapshot *snapshot = [self amiga]->latestAutoSnapshot();
     return [SnapshotProxy make:snapshot];
 }
 
-- (SnapshotProxy *) latestUserSnapshot
+- (SnapshotProxy *)latestUserSnapshot
 {
     Snapshot *snapshot = [self amiga]->latestUserSnapshot();
     return [SnapshotProxy make:snapshot];
 }
 
-- (void) loadFromSnapshot:(SnapshotProxy *)proxy
+- (void)loadFromSnapshot:(SnapshotProxy *)proxy
 {
     [self amiga]->loadFromSnapshotSafe([proxy snapshot]);
 }
 
-- (NSInteger) getConfig:(Option)opt
+- (NSInteger)getConfig:(Option)opt
 {
     return [self amiga]->getConfigItem(opt);
 }
 
-- (NSInteger) getConfig:(Option)opt id:(NSInteger)id
+- (NSInteger)getConfig:(Option)opt id:(NSInteger)id
 {
     return [self amiga]->getConfigItem(opt, id);
 }
 
-- (NSInteger) getConfig:(Option)opt drive:(NSInteger)id
+- (NSInteger)getConfig:(Option)opt drive:(NSInteger)id
 {
     return [self amiga]->getConfigItem(opt, (long)id);
 }
 
-- (BOOL) configure:(Option)opt value:(NSInteger)val
+- (BOOL)configure:(Option)opt value:(NSInteger)val
 {
     return [self amiga]->configure(opt, val);
 }
 
-- (BOOL) configure:(Option)opt enable:(BOOL)val
+- (BOOL)configure:(Option)opt enable:(BOOL)val
 {
     return [self amiga]->configure(opt, val ? 1 : 0);
 }
 
-- (BOOL) configure:(Option)opt id:(NSInteger)id value:(NSInteger)val
+- (BOOL)configure:(Option)opt id:(NSInteger)id value:(NSInteger)val
 {
     return [self amiga]->configure(opt, id, val);
 }
 
-- (BOOL) configure:(Option)opt id:(NSInteger)id enable:(BOOL)val
+- (BOOL)configure:(Option)opt id:(NSInteger)id enable:(BOOL)val
 {
     return [self amiga]->configure(opt, id, val ? 1 : 0);
 }
 
-- (BOOL) configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val
+- (BOOL)configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val
 {
     return [self amiga]->configure(opt, (long)id, val);
 }
 
-- (BOOL) configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val
+- (BOOL)configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val
 {
     return [self amiga]->configure(opt, (long)id, val ? 1 : 0);
-}
-
-- (void) addListener:(const void *)sender function:(Callback *)func
-{
-    [self amiga]->messageQueue.addListener(sender, func);
-}
-
-- (void) removeListener:(const void *)sender
-{
-    [self amiga]->messageQueue.removeListener(sender);
 }
 
 - (Message)message
@@ -2185,34 +2193,29 @@ using namespace moira;
     return [self amiga]->messageQueue.get();
 }
 
-- (void) stopAndGo
+- (void)addListener:(const void *)sender function:(Callback *)func
+{
+    [self amiga]->messageQueue.addListener(sender, func);
+}
+
+- (void)removeListener:(const void *)sender
+{
+    [self amiga]->messageQueue.removeListener(sender);
+}
+
+- (void)stopAndGo
 {
     [self amiga]->stopAndGo();
 }
 
-- (void) stepInto
+- (void)stepInto
 {
     [self amiga]->stepInto();
 }
 
-- (void) stepOver
+- (void)stepOver
 {
     [self amiga]->stepOver();
-}
-
-- (BOOL) warp
-{
-    return [self amiga]->inWarpMode();
-}
-
-- (void) warpOn
-{
-    [self amiga]->setWarp(true);
-}
-
-- (void) warpOff
-{
-    [self amiga]->setWarp(false);
 }
 
 @end

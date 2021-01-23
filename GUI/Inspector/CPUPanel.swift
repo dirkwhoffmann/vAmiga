@@ -33,7 +33,7 @@ extension Inspector {
 
             for (c, f) in elements { assignFormatter(f, c!) }
 
-            if parent!.amiga.isRunning {
+            if parent!.amiga.running {
                 cpuStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
                 cpuStepIntoButton.isEnabled = false
                 cpuStepOverButton.isEnabled = false

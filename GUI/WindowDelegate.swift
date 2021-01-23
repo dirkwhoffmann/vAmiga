@@ -33,7 +33,7 @@ extension MyController: NSWindowDelegate {
         
         // Stop emulator if it is configured to pause in background
         if amiga != nil {
-            pauseInBackgroundSavedState = amiga.isRunning
+            pauseInBackgroundSavedState = amiga.running
             if pref.pauseInBackground { amiga.pause() }
         }
     }

@@ -207,8 +207,8 @@ public:
     
     AmigaInfo getInfo() { return HardwareComponent::getInfo(info); }
     
+    EventID getInspectionTarget() const;
     void setInspectionTarget(EventID id);
-    void clearInspectionTarget();
     
 private:
     

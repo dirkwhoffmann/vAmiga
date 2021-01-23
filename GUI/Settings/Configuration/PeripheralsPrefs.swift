@@ -11,7 +11,7 @@ extension ConfigurationController {
 
     func refreshPeripheralsTab() {
 
-        let poweredOff      = amiga.isPoweredOff
+        let poweredOff = amiga.poweredOff
 
         // Drive
         perDf1Connect.state = config.df1Connected ? .on : .off

@@ -577,7 +577,7 @@ class Inspector: DialogController {
     func continuousRefresh() {
         
         if isRunning { refresh(count: refreshCnt) }
-        isRunning = amiga.isRunning
+        isRunning = amiga.running
         refreshCnt += 1
     }
     
@@ -623,7 +623,7 @@ extension Inspector: NSWindowDelegate {
 
         // Leave debug mode
         amiga?.debugMode = false
-        amiga?.clearInspectionTarget()
+        amiga?.inspectionTarget = .INS_NONE
     }
 }
 
@@ -635,15 +635,15 @@ extension Inspector: NSTabViewDelegate {
 
             switch id {
 
-            case "CPU":     parent?.amiga.setInspectionTarget(.INS_CPU)
-            case "CIA":     parent?.amiga.setInspectionTarget(.INS_CIA)
-            case "Memory":  parent?.amiga.setInspectionTarget(.INS_MEM)
-            case "Agnus":   parent?.amiga.setInspectionTarget(.INS_AGNUS)
-            case "Copper and Blitter":  parent?.amiga.setInspectionTarget(.INS_AGNUS)
-            case "Denise":  parent?.amiga.setInspectionTarget(.INS_DENISE)
-            case "Paula":   parent?.amiga.setInspectionTarget(.INS_PAULA)
-            case "Ports":   parent?.amiga.setInspectionTarget(.INS_PORTS)
-            case "Events":  parent?.amiga.setInspectionTarget(.INS_EVENTS)
+            case "CPU":     parent?.amiga.inspectionTarget = .INS_CPU
+            case "CIA":     parent?.amiga.inspectionTarget = .INS_CIA
+            case "Memory":  parent?.amiga.inspectionTarget = .INS_MEM
+            case "Agnus":   parent?.amiga.inspectionTarget = .INS_AGNUS
+            case "Copper and Blitter":  parent?.amiga.inspectionTarget = .INS_AGNUS
+            case "Denise":  parent?.amiga.inspectionTarget = .INS_DENISE
+            case "Paula":   parent?.amiga.inspectionTarget = .INS_PAULA
+            case "Ports":   parent?.amiga.inspectionTarget = .INS_PORTS
+            case "Events":  parent?.amiga.inspectionTarget = .INS_EVENTS
             default:        break
             }
             

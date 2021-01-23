@@ -140,7 +140,7 @@ extension PreferencesController {
         
         pref.closeWithoutAsking = (sender.state == .on)
         for c in myAppDelegate.controllers {
-            c.needsSaving = c.amiga.isRunning
+            c.needsSaving = c.amiga.running
         }
         refresh()
     }

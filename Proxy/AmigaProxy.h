@@ -62,6 +62,7 @@
 @interface HardwareComponentProxy : Proxy { }
 
 - (void)dump;
+- (void) dumpConfig;
 
 @end
 
@@ -123,9 +124,9 @@
 - (void) kill;
 
 @property (readonly) BOOL isReleaseBuild;
+@property BOOL warp;
 @property BOOL debugMode;
-- (void) setInspectionTarget:(EventID)id;
-- (void) clearInspectionTarget;
+@property EventID inspectionTarget;
 
 - (BOOL) isReady:(ErrorCode *)error;
 - (BOOL) isReady;
@@ -136,10 +137,10 @@
 
 - (AmigaInfo) getInfo;
 
-@property (readonly, getter=isPoweredOn) BOOL poweredOn;
-@property (readonly, getter=isPoweredOff) BOOL poweredOff;
-@property (readonly, getter=isRunning) BOOL running;
-@property (readonly, getter=isPaused) BOOL paused;
+@property (readonly) BOOL poweredOn;
+@property (readonly) BOOL poweredOff;
+@property (readonly) BOOL running;
+@property (readonly) BOOL paused;
 
 - (void) run;
 - (void) pause;
@@ -162,18 +163,13 @@
 - (BOOL) configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val;
 - (BOOL) configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
 
-// Message queue
+- (Message)message;
 - (void) addListener:(const void *)sender function:(Callback *)func;
 - (void) removeListener:(const void *)sender;
-- (Message)message;
 
 - (void) stopAndGo;
 - (void) stepInto;
 - (void) stepOver;
-
-@property (readonly) BOOL warp;
-- (void) warpOn;
-- (void) warpOff;
 
 @end
 
@@ -237,7 +233,6 @@
 
 @interface CIAProxy : HardwareComponentProxy { }
     
-- (void) dumpConfig;
 - (CIAInfo) getInfo;
 
 @end

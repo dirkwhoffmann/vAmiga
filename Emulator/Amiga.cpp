@@ -305,6 +305,12 @@ Amiga::configure(Option option, long id, long value)
     return changed;
 }
 
+EventID
+Amiga::getInspectionTarget() const
+{
+    return agnus.slot[SLOT_INS].id;
+}
+
 void
 Amiga::setInspectionTarget(EventID id)
 {
@@ -313,12 +319,6 @@ Amiga::setInspectionTarget(EventID id)
     agnus.scheduleRel<SLOT_INS>(0, inspectionTarget);
     agnus.serviceINSEvent();
     resume();
-}
-
-void
-Amiga::clearInspectionTarget()
-{
-    setInspectionTarget(INS_NONE);
 }
 
 void
