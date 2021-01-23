@@ -420,25 +420,25 @@
 
 @interface PaulaProxy : HardwareComponentProxy { }
 
-- (PaulaInfo) getInfo;
-- (AudioInfo) getAudioInfo;
-- (MuxerStats) getMuxerStats;
-- (UARTInfo) getUARTInfo;
+- (PaulaInfo)getInfo;
+- (AudioInfo)getAudioInfo;
+- (MuxerStats)getMuxerStats;
+- (UARTInfo)getUARTInfo;
 
-- (u32) sampleRate;
-- (void) setSampleRate:(double)rate;
+- (double)sampleRate;
+- (void)setSampleRate:(double)rate;
 
-- (void) readMonoSamples:(float *)target size:(NSInteger)n;
-- (void) readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;
+- (void)readMonoSamples:(float *)target size:(NSInteger)n;
+- (void)readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;
 
-- (void) rampUp;
-- (void) rampUpFromZero;
-- (void) rampDown;
+- (void)rampUp;
+- (void)rampUpFromZero;
+- (void)rampDown;
 
-- (float) drawWaveformL:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c;
-- (float) drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c;
-- (float) drawWaveformR:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c;
-- (float) drawWaveformR:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c;
+- (float)drawWaveformL:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c;
+- (float)drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c;
+- (float)drawWaveformR:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c;
+- (float)drawWaveformR:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c;
 
 @end
 
@@ -456,7 +456,7 @@
 @property (readonly, strong) MouseProxy *mouse;
 @property (readonly, strong) JoystickProxy *joystick;
 
-- (ControlPortInfo) getInfo;
+- (ControlPortInfo)getInfo;
 
 @end
 
@@ -467,7 +467,7 @@
 
 @interface SerialPortProxy : HardwareComponentProxy { }
 
-- (SerialPortInfo) getInfo;
+- (SerialPortInfo)getInfo;
 
 @end
 
@@ -478,9 +478,9 @@
 
 @interface MouseProxy : HardwareComponentProxy { }
 
-- (void) setXY:(NSPoint)pos;
-- (void) setDeltaXY:(NSPoint)pos;
-- (void) trigger:(GamePadAction)event;
+- (void)setXY:(NSPoint)pos;
+- (void)setDeltaXY:(NSPoint)pos;
+- (void)trigger:(GamePadAction)event;
 
 @end
 
@@ -491,7 +491,7 @@
 
 @interface JoystickProxy : HardwareComponentProxy { }
 
-- (void) trigger:(GamePadAction)event;
+- (void)trigger:(GamePadAction)event;
 @property BOOL autofire;
 @property NSInteger autofireBullets;
 @property float autofireFrequency;
@@ -505,10 +505,10 @@
 
 @interface KeyboardProxy : HardwareComponentProxy { }
 
-- (BOOL) keyIsPressed:(NSInteger)keycode;
-- (void) pressKey:(NSInteger)keycode;
-- (void) releaseKey:(NSInteger)keycode;
-- (void) releaseAllKeys;
+- (BOOL)keyIsPressed:(NSInteger)keycode;
+- (void)pressKey:(NSInteger)keycode;
+- (void)releaseKey:(NSInteger)keycode;
+- (void)releaseAllKeys;
 
 @end
 
@@ -519,14 +519,14 @@
 
 @interface DiskControllerProxy : HardwareComponentProxy { }
 
-- (DiskControllerConfig) getConfig;
-- (DiskControllerInfo) getInfo;
+- (DiskControllerConfig)getConfig;
+- (DiskControllerInfo)getInfo;
 @property (readonly) NSInteger selectedDrive;
 @property (readonly) DriveState state;
 @property (readonly, getter=isSpinning) BOOL spinning;
-- (void) eject:(NSInteger)nr;
-- (void) insert:(NSInteger)nr file:(DiskFileProxy *)fileProxy;
- - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value;
+- (void)eject:(NSInteger)nr;
+- (void)insert:(NSInteger)nr file:(DiskFileProxy *)fileProxy;
+ - (void)setWriteProtection:(NSInteger)nr value:(BOOL)value;
 
 @end
 
@@ -543,10 +543,10 @@
 @property (readonly) BOOL hasDisk;
 @property (readonly) BOOL hasDDDisk;
 @property (readonly) BOOL hasHDDisk;
-- (BOOL) hasWriteProtectedDisk;
-- (void) setWriteProtection:(BOOL)value;
-- (void) toggleWriteProtection;
-- (BOOL) isInsertable:(DiskDiameter)type density:(DiskDensity)density;
+- (BOOL)hasWriteProtectedDisk;
+- (void)setWriteProtection:(BOOL)value;
+- (void)toggleWriteProtection;
+- (BOOL)isInsertable:(DiskDiameter)type density:(DiskDensity)density;
 @property (getter=isModifiedDisk) BOOL modifiedDisk;
 @property (readonly) BOOL motor;
 @property (readonly) NSInteger cylinder;
@@ -763,7 +763,7 @@
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec;
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec;
 
-- (ADFFileProxy *)adf;
+@property (readonly) ADFFileProxy *adf;
 
 @end
 
@@ -778,7 +778,7 @@
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec;
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec;
 
-- (ADFFileProxy *)adf;
+@property (readonly) ADFFileProxy *adf;
 
 @end
 
@@ -792,6 +792,6 @@
 
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec;
 
-- (ADFFileProxy *)adf;
+@property (readonly) ADFFileProxy *adf;
 
 @end
