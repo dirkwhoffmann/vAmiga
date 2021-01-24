@@ -10,7 +10,7 @@
 #include "Amiga.h"
 
 void
-AudioStream::copyMono(float *buffer, usize n,
+AudioStream::copyMono(float *buffer, isize n,
                       i32 &volume, i32 targetVolume, i32 volumeDelta)
 {
     // The caller has to ensure that no buffer underflows occurs
@@ -20,7 +20,7 @@ AudioStream::copyMono(float *buffer, usize n,
         
         float scale = volume / 10000.0f;
         
-        for (usize i = 0; i < n; i++) {
+        for (isize i = 0; i < n; i++) {
             
             SamplePair pair = read();
             *buffer++ = (pair.left + pair.right) * scale;
@@ -28,7 +28,7 @@ AudioStream::copyMono(float *buffer, usize n,
 
     } else {
         
-        for (usize i = 0; i < n; i++) {
+        for (isize i = 0; i < n; i++) {
                             
             if (volume < targetVolume) {
                 volume += MIN(volumeDelta, targetVolume - volume);
@@ -45,7 +45,7 @@ AudioStream::copyMono(float *buffer, usize n,
 }
 
 void
-AudioStream::copy(float *left, float *right, usize n,
+AudioStream::copy(float *left, float *right, isize n,
                   i32 &volume, i32 targetVolume, i32 volumeDelta)
 {
     // The caller has to ensure that no buffer underflows occurs
@@ -59,7 +59,7 @@ AudioStream::copy(float *left, float *right, usize n,
         
         float scale = volume / 10000.0f;
         
-        for (usize i = 0; i < n; i++) {
+        for (isize i = 0; i < n; i++) {
             
             SamplePair pair = read();
             *left++ = pair.left * scale;
@@ -68,7 +68,7 @@ AudioStream::copy(float *left, float *right, usize n,
 
     } else {
         
-        for (usize i = 0; i < n; i++) {
+        for (isize i = 0; i < n; i++) {
                             
             if (volume < targetVolume) {
                 volume += MIN(volumeDelta, targetVolume - volume);
@@ -86,7 +86,7 @@ AudioStream::copy(float *left, float *right, usize n,
 }
 
 void
-AudioStream::copyInterleaved(float *buffer, usize n,
+AudioStream::copyInterleaved(float *buffer, isize n,
                              i32 &volume, i32 targetVolume, i32 volumeDelta)
 {
     // The caller has to ensure that no buffer underflows occurs
@@ -96,7 +96,7 @@ AudioStream::copyInterleaved(float *buffer, usize n,
         
         float scale = volume / 10000.0f;
         
-        for (usize i = 0; i < n; i++) {
+        for (isize i = 0; i < n; i++) {
             
             SamplePair pair = read();
             *buffer++ = pair.left * scale;
@@ -105,7 +105,7 @@ AudioStream::copyInterleaved(float *buffer, usize n,
 
     } else {
         
-        for (usize i = 0; i < n; i++) {
+        for (isize i = 0; i < n; i++) {
                             
             if (volume < targetVolume) {
                 volume += MIN(volumeDelta, targetVolume - volume);

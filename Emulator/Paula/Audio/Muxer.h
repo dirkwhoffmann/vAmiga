@@ -251,7 +251,7 @@ public:
     
 public:
     
-    void copyMono(float *buffer, usize n);
-    void copyStereo(float *left, float *right, usize n);
-    void copyInterleaved(float *buffer, usize n);
+    void copyMono(float *buffer, isize n);
+    void copyStereo(float *left, float *right, isize n);
+    void copyInterleaved(float *buffer, isize n);
 };

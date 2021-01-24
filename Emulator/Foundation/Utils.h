@@ -233,7 +233,7 @@ bool checkFileSize(const char *path, long size);
 bool checkFileSizeRange(const char *path, long min, long max);
 
 // Checks the header signature (magic bytes) of a file or buffer
-bool matchingBufferHeader(const u8 *buffer, const u8 *header, usize length);
+bool matchingBufferHeader(const u8 *buffer, const u8 *header, isize length);
 
 // Checks if a path points to a directory
 bool isDirectory(const std::string &path);

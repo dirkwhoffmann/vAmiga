@@ -421,7 +421,7 @@ Muxer::ignoreNextUnderOrOverflow()
 }
 
 void
-Muxer::copyMono(float *buffer, usize n)
+Muxer::copyMono(float *buffer, isize n)
 {
     stream.lock();
     
@@ -435,7 +435,7 @@ Muxer::copyMono(float *buffer, usize n)
 }
 
 void
-Muxer::copyStereo(float *left, float *right, usize n)
+Muxer::copyStereo(float *left, float *right, isize n)
 {
     stream.lock();
     
@@ -449,7 +449,7 @@ Muxer::copyStereo(float *left, float *right, usize n)
 }
 
 void
-Muxer::copyInterleaved(float *buffer, usize n)
+Muxer::copyInterleaved(float *buffer, isize n)
 {
     stream.lock();
     

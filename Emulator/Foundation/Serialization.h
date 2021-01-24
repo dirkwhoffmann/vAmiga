@@ -166,11 +166,8 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
-    // STRUCT(TaggedSample)
-    // STRUCT(SamplePair)
-    // STRUCT(Sampler)
-    template <class T, usize capacity> STRUCT(RingBuffer<T __ capacity>)
-    template <class T, usize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
+    template <class T, isize capacity> STRUCT(RingBuffer<T __ capacity>)
+    template <class T, isize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
     template <class T, usize N>
@@ -248,11 +245,8 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
-    // STRUCT(TaggedSample)
-    // STRUCT(SamplePair)
-    // STRUCT(Sampler)
-    template <class T, usize capacity> STRUCT(RingBuffer<T __ capacity>)
-    template <class T, usize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
+    template <class T, isize capacity> STRUCT(RingBuffer<T __ capacity>)
+    template <class T, isize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
     template <class T, usize N>
@@ -336,11 +330,8 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
-    // STRUCT(TaggedSample)
-    // STRUCT(SamplePair)
-    // STRUCT(Sampler)
-    template <class T, usize capacity> STRUCT(RingBuffer<T __ capacity>)
-    template <class T, usize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
+    template <class T, isize capacity> STRUCT(RingBuffer<T __ capacity>)
+    template <class T, isize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
     template <class T, usize N>
@@ -413,11 +404,8 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
-    // STRUCT(TaggedSample)
-    // STRUCT(SamplePair)
-    // STRUCT(Sampler)
-    template <class T, usize capacity> STRUCT(RingBuffer<T __ capacity>)
-    template <class T, usize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
+    template <class T, isize capacity> STRUCT(RingBuffer<T __ capacity>)
+    template <class T, isize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
     template <class T, usize N>

@@ -221,7 +221,7 @@ checkFileSizeRange(const char *path, long min, long max)
 }
 
 bool
-matchingBufferHeader(const u8 *buffer, const u8 *header, usize length)
+matchingBufferHeader(const u8 *buffer, const u8 *header, isize length)
 {
     assert(buffer != nullptr);
     assert(header != nullptr);
@@ -372,7 +372,7 @@ streamLength(std::istream &stream)
     auto end = stream.tellg();
     stream.seekg(cur, std::ios::beg);
     
-    return (usize)(end - beg);
+    return (isize)(end - beg);
 }
 
 u32

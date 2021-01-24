@@ -18,7 +18,7 @@
  *     SortedRingBuffer : A ringbuffer that keeps the entries sorted
  */
 
-template <class T, usize capacity> struct RingBuffer
+template <class T, isize capacity> struct RingBuffer
 {
     // Element storage
     T elements[capacity];
@@ -33,7 +33,7 @@ template <class T, usize capacity> struct RingBuffer
     RingBuffer() { clear(); }
     
     void clear() { r = w = 0; }
-    void clear(T t) { for (usize i = 0; i < capacity; i++) elements[i] = t; clear(); }
+    void clear(T t) { for (isize i = 0; i < capacity; i++) elements[i] = t; clear(); }
     void align(i64 offset) { w = (r + offset) % capacity; }
 
     //
@@ -51,8 +51,8 @@ template <class T, usize capacity> struct RingBuffer
     // Querying the fill status
     //
 
-    usize cap() const { return capacity; }
-    usize count() const { return (capacity + w - r) % capacity; }
+    isize cap() const { return capacity; }
+    isize count() const { return (capacity + w - r) % capacity; }
     double fillLevel() const { return (double)count() / capacity; }
     bool isEmpty() const { return r == w; }
     bool isFull() const { return count() == capacity - 1; }
@@ -106,7 +106,7 @@ template <class T, usize capacity> struct RingBuffer
 
 };
 
-template <class T, usize capacity>
+template <class T, isize capacity>
 struct SortedRingBuffer : public RingBuffer<T, capacity>
 {
     // Key storage
@@ -168,7 +168,7 @@ struct RegChange
     RegChange(u32 a, u16 v) : addr(a), value(v) { }
 };
 
-template <usize capacity>
+template <isize capacity>
 struct RegChangeRecorder : public SortedRingBuffer<RegChange, capacity>
 {
     // Returns the closest trigger cycle
