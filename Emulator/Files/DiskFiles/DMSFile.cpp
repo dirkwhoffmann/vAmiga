@@ -43,7 +43,7 @@ DMSFile::readFromStream(std::istream &stream)
 
     // Setup input stream
     fpi = open_memstream(&pi, &si);
-    for (usize i = 0; i < size; i++) putc(data[i], fpi);
+    for (isize i = 0; i < size; i++) putc(data[i], fpi);
     fclose(fpi);
     
     // Setup output file

@@ -31,8 +31,8 @@ DiskFile::readSector(u8 *dst, long t, long s) const
 void
 DiskFile::readSector(u8 *dst, long s) const
 {
-    usize sectorSize = 512;
-    usize offset = s * sectorSize;
+    isize sectorSize = 512;
+    isize offset = s * sectorSize;
 
     assert(dst != nullptr);
     assert(offset + sectorSize <= size);

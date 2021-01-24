@@ -229,7 +229,7 @@ CPU::_inspect(u32 dasmStart)
         
         info.pc0 = getPC0() & 0xFFFFFF;
         
-        for (usize i = 0; i < 8; i++) {
+        for (isize i = 0; i < 8; i++) {
             info.d[i] = getD(i);
             info.a[i] = getA(i);
         }

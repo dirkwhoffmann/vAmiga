@@ -372,20 +372,20 @@ public:
     void loadRom(RomFile *rom) throws;
     void loadRomFromFile(const char *path) throws;
     bool loadRomFromFile(const char *path, ErrorCode *ec);
-    void loadRomFromBuffer(const u8 *buf, usize len) throws;
-    bool loadRomFromBuffer(const u8 *buf, usize len, ErrorCode *ec);
+    void loadRomFromBuffer(const u8 *buf, isize len) throws;
+    bool loadRomFromBuffer(const u8 *buf, isize len, ErrorCode *ec);
 
     void loadExt(ExtendedRomFile *rom) throws;
     void loadExtFromFile(const char *path) throws;
     bool loadExtFromFile(const char *path, ErrorCode *ec);
-    void loadExtFromBuffer(const u8 *buf, usize len) throws;
-    bool loadExtFromBuffer(const u8 *buf, usize len, ErrorCode *ec);
+    void loadExtFromBuffer(const u8 *buf, isize len) throws;
+    bool loadExtFromBuffer(const u8 *buf, isize len, ErrorCode *ec);
 
 private:
 
     // Loads Rom data from a file
     // DEPRECATED: USE AnyAmigaFile::flash(...) instead
-    void loadRom(AmigaFile *rom, u8 *target, usize length);
+    void loadRom(AmigaFile *rom, u8 *target, isize length);
 
 public:
     
@@ -483,5 +483,5 @@ public:
     template <Accessor A> const char *ascii(u32 addr);
     
     // Returns a certain amount of bytes as a string containing hex words
-    template <Accessor A> const char *hex(u32 addr, usize bytes);
+    template <Accessor A> const char *hex(u32 addr, isize bytes);
 };

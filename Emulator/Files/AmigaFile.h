@@ -50,7 +50,7 @@ public:
     u8 *data = nullptr;
     
     // The size of this file in bytes
-    usize size = 0;
+    isize size = 0;
     
     
     //

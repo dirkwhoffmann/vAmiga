@@ -69,7 +69,7 @@ AmigaFile::readFromFile(const char *path)
         throw VAError(ERROR_FILE_CANT_READ);
     }
     
-    usize result = readFromStream(stream);
+    isize result = readFromStream(stream);
     assert(result == size);
     
     this->path = string(path);
@@ -83,7 +83,7 @@ AmigaFile::readFromBuffer(const u8 *buf, usize len)
 
     std::istringstream stream(std::string((const char *)buf, len));
     
-    usize result = readFromStream(stream);
+    isize result = readFromStream(stream);
     assert(result == size);
     return size;
 }
@@ -115,7 +115,7 @@ AmigaFile::writeToFile(const char *path)
         throw VAError(ERROR_FILE_CANT_WRITE);
     }
     
-    usize result = writeToStream(stream);
+    isize result = writeToStream(stream);
     assert(result == size);
     
     return size;

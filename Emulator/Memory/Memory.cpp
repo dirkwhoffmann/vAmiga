@@ -185,12 +185,12 @@ Memory::setConfigItem(Option option, long value)
 void
 Memory::_dumpConfig() const
 {
-    msg("       chipSize : %llu\n", config.chipSize);
-    msg("       slowSize : %llu\n", config.slowSize);
-    msg("       fastSize : %llu\n", config.fastSize);
-    msg("        romSize : %llu\n", config.romSize);
-    msg("        womSize : %llu\n", config.womSize);
-    msg("        extSize : %llu\n", config.extSize);
+    msg("       chipSize : %u\n", config.chipSize);
+    msg("       slowSize : %u\n", config.slowSize);
+    msg("       fastSize : %u\n", config.fastSize);
+    msg("        romSize : %u\n", config.romSize);
+    msg("        womSize : %u\n", config.womSize);
+    msg("        extSize : %u\n", config.extSize);
     msg("   slowRamDelay : %s\n", config.slowRamDelay ? "yes" : "no");
     msg("        bankMap : %s\n", BankMapEnum::key(config.bankMap));
     msg(" ramInitPattern : %s\n", RamInitPatternEnum::key(config.ramInitPattern));
@@ -288,7 +288,7 @@ Memory::didSaveToBuffer(u8 *buffer) const
 void
 Memory::_dump() const
 {
-    struct { u8 *addr; usize size; const char *desc; } mem[7] = {
+    struct { u8 *addr; u32 size; const char *desc; } mem[7] = {
         { rom, config.romSize, "Rom" },
         { wom, config.womSize, "Wom" },
         { ext, config.extSize, "Ext" },
@@ -298,7 +298,7 @@ Memory::_dump() const
     };
 
     // Print a summary of the installed memory
-    for (usize i = 0; i < 6; i++) {
+    for (isize i = 0; i < 6; i++) {
 
         usize size = mem[i].size;
         u8 *addr = mem[i].addr;
@@ -504,7 +504,7 @@ Memory::loadRomFromFile(const char *path, ErrorCode *ec)
 }
 
 void
-Memory::loadRomFromBuffer(const u8 *buf, usize len)
+Memory::loadRomFromBuffer(const u8 *buf, isize len)
 {
     assert(buf);
     
@@ -513,7 +513,7 @@ Memory::loadRomFromBuffer(const u8 *buf, usize len)
 }
 
 bool
-Memory::loadRomFromBuffer(const u8 *buf, usize len, ErrorCode *ec)
+Memory::loadRomFromBuffer(const u8 *buf, isize len, ErrorCode *ec)
 {
     try
     {
@@ -566,7 +566,7 @@ Memory::loadExtFromFile(const char *path, ErrorCode *ec)
 }
 
 void
-Memory::loadExtFromBuffer(const u8 *buf, usize len)
+Memory::loadExtFromBuffer(const u8 *buf, isize len)
 {
     assert(buf);
 
@@ -575,7 +575,7 @@ Memory::loadExtFromBuffer(const u8 *buf, usize len)
 }
 
 bool
-Memory::loadExtFromBuffer(const u8 *buf, usize len, ErrorCode *ec)
+Memory::loadExtFromBuffer(const u8 *buf, isize len, ErrorCode *ec)
 {
     try
     {
@@ -591,7 +591,7 @@ Memory::loadExtFromBuffer(const u8 *buf, usize len, ErrorCode *ec)
 }
  
 void
-Memory::loadRom(AmigaFile *file, u8 *target, usize length)
+Memory::loadRom(AmigaFile *file, u8 *target, isize length)
 {
     if (file) {
 
@@ -602,7 +602,7 @@ Memory::loadRom(AmigaFile *file, u8 *target, usize length)
             warn("ROM is smaller than buffer\n");
         }
         
-        memcpy(target, file->data, MIN(file->size, length));
+        memcpy(target, file->data, (usize)MIN(file->size, length));
     }
 }
 
@@ -2380,12 +2380,12 @@ Memory::ascii(u32 addr)
 }
 
 template <Accessor A> const char *
-Memory::hex(u32 addr, usize bytes)
+Memory::hex(u32 addr, isize bytes)
 {
     assert(bytes % 2 == 0);
     char *p = str;
     
-    for (usize i = 0; i < bytes / 2; i += 2, p += 5) {
+    for (isize i = 0; i < bytes / 2; i += 2, p += 5) {
 
         u16 word = spypeek16 <A> (addr + i);
         
@@ -2410,5 +2410,5 @@ template void Memory::pokeCustom16 <ACCESSOR_AGNUS> (u32 addr, u16 value);
 template const char *Memory::ascii <ACCESSOR_CPU> (u32 addr);
 template const char *Memory::ascii <ACCESSOR_AGNUS> (u32 addr);
 
-template const char *Memory::hex <ACCESSOR_CPU> (u32 addr, usize bytes);
-template const char *Memory::hex <ACCESSOR_AGNUS> (u32 addr, usize bytes);
+template const char *Memory::hex <ACCESSOR_CPU> (u32 addr, isize bytes);
+template const char *Memory::hex <ACCESSOR_AGNUS> (u32 addr, isize bytes);
