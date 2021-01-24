@@ -527,19 +527,19 @@ public:
     void drawSprites();
     
     // Draws an sprite pair. Called by drawSprites()
-    template <unsigned pair> void drawSpritePair();
-    template <unsigned pair> void drawSpritePair(Pixel hstrt, Pixel hstop,
-                                                 Pixel strt1, Pixel strt2,
-                                                 bool armed1, bool armed2);
-
+    template <usize pair> void drawSpritePair();
+    template <usize pair> void drawSpritePair(Pixel hstrt, Pixel hstop,
+                                              Pixel strt1, Pixel strt2,
+                                              bool armed1, bool armed2);
+    
 private:
     
     // Replays all recorded sprite register changes
-    template <unsigned pair> void replaySpriteRegChanges();
+    template <usize pair> void replaySpriteRegChanges();
 
     // Draws a single sprite pixel
-    template <int x> void drawSpritePixel(int hpos);
-    template <int x> void drawAttachedSpritePixelPair(int hpos);
+    template <usize x> void drawSpritePixel(Pixel hpos);
+    template <usize x> void drawAttachedSpritePixelPair(Pixel hpos);
 
     // Determines the color register index for drawing the border
     void updateBorderColor();

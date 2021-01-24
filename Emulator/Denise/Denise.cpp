@@ -626,7 +626,7 @@ Denise::drawSprites()
     if (!sprChanges[0].isEmpty()) replaySpriteRegChanges<0>();
 }
 
-template <unsigned pair> void
+template <usize pair> void
 Denise::drawSpritePair()
 {
     assert(pair < 4);
@@ -716,7 +716,7 @@ Denise::drawSpritePair()
     sprChanges[pair].clear();
 }
 
-template <unsigned pair> void
+template <usize pair> void
 Denise::replaySpriteRegChanges()
 {
     assert(pair < 4);
@@ -774,7 +774,7 @@ Denise::replaySpriteRegChanges()
     sprChanges[pair].clear();
 }
 
-template <unsigned pair> void
+template <usize pair> void
 Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2,
                        bool armed1, bool armed2)
 {
@@ -835,11 +835,10 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2,
     }
 }
 
-template <int x> void
-Denise::drawSpritePixel(int hpos)
+template <usize x> void
+Denise::drawSpritePixel(Pixel hpos)
 {
-    assert(hpos >= spriteClipBegin);
-    assert(hpos < spriteClipEnd);
+    assert(hpos >= spriteClipBegin && hpos < spriteClipEnd);
 
     u8 a = (ssra[x] >> 15);
     u8 b = (ssrb[x] >> 14) & 2;
@@ -857,12 +856,11 @@ Denise::drawSpritePixel(int hpos)
     }
 }
 
-template <int x> void
-Denise::drawAttachedSpritePixelPair(int hpos)
+template <usize x> void
+Denise::drawAttachedSpritePixelPair(Pixel hpos)
 {
     assert(IS_ODD(x));
-    assert(hpos >= spriteClipBegin);
-    assert(hpos < spriteClipEnd);
+    assert(hpos >= spriteClipBegin && hpos < spriteClipEnd);
 
     u8 a1 = !!GET_BIT(ssra[x-1], 15);
     u8 b1 = !!GET_BIT(ssrb[x-1], 15) << 1;
