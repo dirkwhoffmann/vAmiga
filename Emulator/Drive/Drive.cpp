@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Drive::Drive(Amiga& ref, unsigned n) : AmigaComponent(ref), nr(n)
+Drive::Drive(Amiga& ref, isize n) : AmigaComponent(ref), nr(n)
 {
     assert(nr < 4);
     
@@ -107,7 +107,7 @@ Drive::_dumpConfig() const
 void
 Drive::_dump() const
 {
-    msg("                Nr: %d\n", nr);
+    msg("                Nr: %zd\n", nr);
     msg("          Id count: %d\n", idCount);
     msg("            Id bit: %d\n", idBit);
     msg("      motorSpeed(): %.2f\n", motorSpeed());

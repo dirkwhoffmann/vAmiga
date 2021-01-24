@@ -17,7 +17,7 @@ class Drive : public AmigaComponent {
     friend class DiskController;
         
     // Number of the emulated drive (0 = df0, 1 = df1, etc.)
-    const unsigned nr;
+    const isize nr;
 
     // Current configuration
     DriveConfig config;
@@ -78,7 +78,7 @@ public:
 
 public:
 
-    Drive(Amiga& ref, unsigned nr);
+    Drive(Amiga& ref, isize nr);
     
     const char *getDescription() const override;
     long getNr() { return nr; }

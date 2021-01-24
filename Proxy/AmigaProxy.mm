@@ -937,12 +937,12 @@ using namespace moira;
     [self paula]->muxer.rampDown();
 }
 
-- (float)drawWaveformL:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
+- (float)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c
 {
     return [self paula]->muxer.stream.draw(buffer, w, h, true, s, c);
 }
 
-- (float)drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
+- (float)drawWaveformL:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c
 {
     return [self drawWaveformL:buffer
                              w:(NSInteger)size.width
@@ -951,12 +951,12 @@ using namespace moira;
                          color:c];
 }
 
-- (float)drawWaveformR:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
+- (float)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c
 {
     return [self paula]->muxer.stream.draw(buffer, w, h, false, s, c);
 }
 
-- (float)drawWaveformR:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
+- (float)drawWaveformR:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c
 {
     return [self drawWaveformR:buffer
                              w:(NSInteger)size.width

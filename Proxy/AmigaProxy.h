@@ -435,10 +435,10 @@
 - (void)rampUpFromZero;
 - (void)rampDown;
 
-- (float)drawWaveformL:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c;
-- (float)drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c;
-- (float)drawWaveformR:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c;
-- (float)drawWaveformR:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c;
+- (float)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c;
+- (float)drawWaveformL:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c;
+- (float)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c;
+- (float)drawWaveformR:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c;
 
 @end
 

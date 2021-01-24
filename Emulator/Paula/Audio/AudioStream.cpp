@@ -159,7 +159,7 @@ AudioStream::draw(u32 *buffer, isize width, isize height,
             if (scaled > height) scaled = height;
             
             // Draw vertical line
-            unsigned *ptr = buffer + width * ((height - scaled) / 2) + w;
+            u32 *ptr = buffer + width * ((height - scaled) / 2) + w;
             for (isize j = 0; j < scaled; j++, ptr += width) *ptr = color;
         }
     }

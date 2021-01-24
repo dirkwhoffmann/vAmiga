@@ -62,7 +62,7 @@ struct FSBlock : AmigaObject {
     //
 
     // Scans all long words in this block and returns the number of errors
-    unsigned check(bool strict) const;
+    isize check(bool strict) const;
 
     // Checks the integrity of a certain byte in this block
     virtual ErrorCode check(u32 pos, u8 *expected, bool strict) const { return ERROR_OK; }

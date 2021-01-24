@@ -431,7 +431,7 @@ ADFFile::encodeSector(Disk *disk, Track t, Sector s)
     
     // Block checksum
     u8 bcheck[4] = { 0, 0, 0, 0 };
-    for(unsigned i = 8; i < 48; i += 4) {
+    for(isize i = 8; i < 48; i += 4) {
         bcheck[0] ^= p[i];
         bcheck[1] ^= p[i+1];
         bcheck[2] ^= p[i+2];
@@ -441,7 +441,7 @@ ADFFile::encodeSector(Disk *disk, Track t, Sector s)
     
     // Data checksum
     u8 dcheck[4] = { 0, 0, 0, 0 };
-    for(unsigned i = 64; i < 1088; i += 4) {
+    for(isize i = 64; i < 1088; i += 4) {
         dcheck[0] ^= p[i];
         dcheck[1] ^= p[i+1];
         dcheck[2] ^= p[i+2];
@@ -450,7 +450,7 @@ ADFFile::encodeSector(Disk *disk, Track t, Sector s)
     Disk::encodeOddEven(&p[56], dcheck, sizeof(bcheck));
     
     // Add clock bits
-    for(unsigned i = 8; i < 1088; i++) {
+    for(isize i = 8; i < 1088; i++) {
         p[i] = Disk::addClockBits(p[i], p[i-1]);
     }
     

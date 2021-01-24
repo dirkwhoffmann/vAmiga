@@ -48,11 +48,11 @@ FSBlock::subtypeID() const
     return get32((bsize() / 4) - 1);
 }
 
-unsigned
+isize
 FSBlock::check(bool strict) const
 {
     ErrorCode error;
-    unsigned count = 0;
+    isize count = 0;
     u8 expected;
     
     for (u32 i = 0; i < bsize(); i++) {
