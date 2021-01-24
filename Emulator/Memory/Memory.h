@@ -290,21 +290,21 @@ private:
     /* Dynamically allocates Ram or Rom. As side effects, the memory table is
      * updated and the GUI is informed about the changed memory layout.
      */
-    bool alloc(u64 bytes, u8 *&ptr, u64 &size, u32 &mask);
+    bool alloc(isize bytes, u8 *&ptr, u32 &size, u32 &mask);
 
 public:
 
-    bool allocChip(u64 bytes) { return alloc(bytes, chip, config.chipSize, chipMask); }
-    bool allocSlow(u64 bytes) { return alloc(bytes, slow, config.slowSize, slowMask); }
-    bool allocFast(u64 bytes) { return alloc(bytes, fast, config.fastSize, fastMask); }
+    bool allocChip(isize bytes) { return alloc(bytes, chip, config.chipSize, chipMask); }
+    bool allocSlow(isize bytes) { return alloc(bytes, slow, config.slowSize, slowMask); }
+    bool allocFast(isize bytes) { return alloc(bytes, fast, config.fastSize, fastMask); }
 
     void deleteChip() { allocChip(0); }
     void deleteSlow() { allocSlow(0); }
     void deleteFast() { allocFast(0); }
 
-    bool allocRom(usize bytes) { return alloc(bytes, rom, config.romSize, romMask); }
-    bool allocWom(usize bytes) { return alloc(bytes, wom, config.womSize, womMask); }
-    bool allocExt(usize bytes) { return alloc(bytes, ext, config.extSize, extMask); }
+    bool allocRom(isize bytes) { return alloc(bytes, rom, config.romSize, romMask); }
+    bool allocWom(isize bytes) { return alloc(bytes, wom, config.womSize, womMask); }
+    bool allocExt(isize bytes) { return alloc(bytes, ext, config.extSize, extMask); }
 
     void deleteRom() { allocRom(0); }
     void deleteWom() { allocWom(0); }

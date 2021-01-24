@@ -10,9 +10,6 @@
 #include "Amiga.h"
 #include <new>
 
-// int OCSREG_DEBUG = 0;
-// int CIAREG_DEBUG = 0;
-
 Memory::Memory(Amiga& ref) : AmigaComponent(ref)
 {
     memset(&config, 0, sizeof(config));
@@ -365,7 +362,7 @@ Memory::updateStats()
 }
 
 bool
-Memory::alloc(u64 bytes, u8 *&ptr, u64 &size, u32 &mask)
+Memory::alloc(isize bytes, u8 *&ptr, u32 &size, u32 &mask)
 {
     // Check the invariants
     assert((ptr == nullptr) == (size == 0));
@@ -384,7 +381,7 @@ Memory::alloc(u64 bytes, u8 *&ptr, u64 &size, u32 &mask)
         usize allocSize = bytes;
         
         if (!(ptr = new (std::nothrow) u8[allocSize])) {
-            warn("Cannot allocate %llu KB of memory\n", bytes);
+            warn("Cannot allocate %zd KB of memory\n", bytes);
             return false;
         }
         size = bytes;
@@ -392,7 +389,7 @@ Memory::alloc(u64 bytes, u8 *&ptr, u64 &size, u32 &mask)
         fillRamWithInitPattern();
         
         if ((uintptr_t)ptr & 1) {
-            warn("Memory at %p (%llu bytes) is not aligned\n", ptr, bytes);
+            warn("Memory at %p (%zd bytes) is not aligned\n", ptr, bytes);
             assert(false);
         }
     }

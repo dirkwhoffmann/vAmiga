@@ -88,14 +88,14 @@ typedef UNMAPPED_MEMORY UnmappedMemory;
 typedef struct
 {
     // RAM size in bytes
-    u64 chipSize;
-    u64 slowSize;
-    u64 fastSize;
+    u32 chipSize;
+    u32 slowSize;
+    u32 fastSize;
 
     // ROM size in bytes
-    u64 romSize;
-    u64 womSize;
-    u64 extSize;
+    u32 romSize;
+    u32 womSize;
+    u32 extSize;
 
     // Indicates if slow Ram accesses need a free bus
     bool slowRamDelay;
