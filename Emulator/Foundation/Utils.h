@@ -165,10 +165,10 @@ bool releaseBuild();
 //
 
 // Prints a hex dump of a buffer to the console (for debugging)
-void hexdump(u8 *p, usize size, usize cols, usize pad);
-void hexdump(u8 *p, usize size, usize cols = 32);
-void hexdumpWords(u8 *p, usize size, usize cols = 32);
-void hexdumpLongwords(u8 *p, usize size, usize cols = 32);
+void hexdump(u8 *p, isize size, isize cols, isize pad);
+void hexdump(u8 *p, isize size, isize cols = 32);
+void hexdumpWords(u8 *p, isize size, isize cols = 32);
+void hexdumpLongwords(u8 *p, isize size, isize cols = 32);
 
 
 //
@@ -240,22 +240,22 @@ bool isDirectory(const std::string &path);
 bool isDirectory(const char *path);
 
 // Returns the number of files in a directory
-usize numDirectoryItems(const std::string &path);
-usize numDirectoryItems(const char *path);
+isize numDirectoryItems(const std::string &path);
+isize numDirectoryItems(const char *path);
 
 // Checks the header signature (magic bytes) of a file or buffer
-bool matchingStreamHeader(std::istream &stream, const u8 *header, usize length);
+bool matchingStreamHeader(std::istream &stream, const u8 *header, isize length);
 
 // Loads a file from disk
-bool loadFile(const char *path, u8 **buffer, long *size);
-bool loadFile(const char *path, const char *name, u8 **buffer, long *size);
+bool loadFile(const char *path, u8 **buffer, isize *size);
+bool loadFile(const char *path, const char *name, u8 **buffer, isize *size);
 
 
 //
 // Handling streams
 //
 
-usize streamLength(std::istream &stream);
+isize streamLength(std::istream &stream);
 
 
 //
@@ -271,13 +271,13 @@ u32 fnv_1a_it32(u32 prv, u32 val);
 u64 fnv_1a_it64(u64 prv, u64 val);
 
 // Computes a FNV-1a checksum for a given buffer
-u32 fnv_1a_32(const u8 *addr, usize size);
-u64 fnv_1a_64(const u8 *addr, usize size);
+u32 fnv_1a_32(const u8 *addr, isize size);
+u64 fnv_1a_64(const u8 *addr, isize size);
 
 // Computes a CRC checksum for a given buffer
-u16 crc16(const u8 *addr, usize size);
-u32 crc32(const u8 *addr, usize size);
+u16 crc16(const u8 *addr, isize size);
+u32 crc32(const u8 *addr, isize size);
 u32 crc32forByte(u32 r);
 
 // Computes a SHA-1 checksum for a given buffer
-int sha_1(u8 *digest, char *hexdigest, const u8 *addr, usize size);
+// int sha_1(u8 *digest, char *hexdigest, const u8 *addr, isize size);

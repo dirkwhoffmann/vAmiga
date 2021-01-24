@@ -21,12 +21,12 @@ releaseBuild()
 #endif
 }
 
-void hexdump(u8 *p, usize size, usize cols, usize pad)
+void hexdump(u8 *p, isize size, isize cols, isize pad)
 {
     while (size) {
         
-        usize cnt = MIN(size, cols);
-        for (usize x = 0; x < cnt; x++) {
+        isize cnt = MIN(size, cols);
+        for (isize x = 0; x < cnt; x++) {
             fprintf(stderr, "%02X %s", p[x], ((x + 1) % pad) == 0 ? " " : "");
         }
         
@@ -38,17 +38,17 @@ void hexdump(u8 *p, usize size, usize cols, usize pad)
     fprintf(stderr, "\n");
 }
 
-void hexdump(u8 *p, usize size, usize cols)
+void hexdump(u8 *p, isize size, isize cols)
 {
     hexdump(p, size, cols, cols);
 }
 
-void hexdumpWords(u8 *p, usize size, usize cols)
+void hexdumpWords(u8 *p, isize size, isize cols)
 {
     hexdump(p, size, cols, 2);
 }
 
-void hexdumpLongwords(u8 *p, usize size, usize cols)
+void hexdumpLongwords(u8 *p, isize size, isize cols)
 {
     hexdump(p, size, cols, 4);
 }
@@ -252,14 +252,14 @@ bool isDirectory(const char *path)
     return S_ISDIR(fileProperties.st_mode);
 }
 
-usize numDirectoryItems(const std::string &path)
+isize numDirectoryItems(const std::string &path)
 {
     return numDirectoryItems(path.c_str());
 }
 
-usize numDirectoryItems(const char *path)
+isize numDirectoryItems(const char *path)
 {
-    usize count = 0;
+    isize count = 0;
     
     if (DIR *dir = opendir(path)) {
         
@@ -286,11 +286,11 @@ getSizeOfFile(const char *filename)
     return fileProperties.st_size;
 }
 
-bool matchingStreamHeader(std::istream &stream, const u8 *header, usize length)
+bool matchingStreamHeader(std::istream &stream, const u8 *header, isize length)
 {
     stream.seekg(0, std::ios::beg);
     
-    for (usize i = 0; i < length; i++) {
+    for (isize i = 0; i < length; i++) {
         int c = stream.get();
         if (c != (int)header[i]) {
             stream.seekg(0, std::ios::beg);
@@ -362,7 +362,7 @@ fnv_1a_it64(u64 prv, u64 val)
     return (prv ^ val) * 0x100000001b3;
 }
 
-usize
+isize
 streamLength(std::istream &stream)
 {
     auto cur = stream.tellg();
@@ -376,13 +376,13 @@ streamLength(std::istream &stream)
 }
 
 u32
-fnv_1a_32(const u8 *addr, usize size)
+fnv_1a_32(const u8 *addr, isize size)
 {
     if (addr == nullptr || size == 0) return 0;
 
     u32 hash = fnv_1a_init32();
 
-    for (usize i = 0; i < size; i++) {
+    for (isize i = 0; i < size; i++) {
         hash = fnv_1a_it32(hash, (u32)addr[i]);
     }
 
@@ -390,20 +390,20 @@ fnv_1a_32(const u8 *addr, usize size)
 }
 
 u64
-fnv_1a_64(const u8 *addr, usize size)
+fnv_1a_64(const u8 *addr, isize size)
 {
     if (addr == nullptr || size == 0) return 0;
     
     u64 hash = fnv_1a_init64();
     
-    for (usize i = 0; i < size; i++) {
+    for (isize i = 0; i < size; i++) {
         hash = fnv_1a_it64(hash, (u64)addr[i]);
     }
     
     return hash;
 }
 
-u16 crc16(const u8 *addr, usize size)
+u16 crc16(const u8 *addr, isize size)
 {
     u8 x;
     u16 crc = 0xFFFF;
@@ -417,7 +417,7 @@ u16 crc16(const u8 *addr, usize size)
 }
 
 u32
-crc32(const u8 *addr, usize size)
+crc32(const u8 *addr, isize size)
 {
     if (addr == nullptr || size == 0) return 0;
 
@@ -428,7 +428,7 @@ crc32(const u8 *addr, usize size)
     for(int i = 0; i < 256; i++) table[i] = crc32forByte(i);
 
     // Compute CRC-32 checksum
-     for(usize i = 0; i < size; i++)
+     for(isize i = 0; i < size; i++)
        result = table[(u8)result ^ addr[i]] ^ result >> 8;
 
     return result;
@@ -442,8 +442,9 @@ crc32forByte(u32 r)
     return r ^ (u32)0xFF000000L;
 }
 
+/*
 int
-sha_1(u8 *digest, char *hexdigest, const u8 *addr, usize size)
+sha_1(u8 *digest, char *hexdigest, const u8 *addr, isize size)
 {
     // Slight modification of https://github.com/CTrabant/teeny-sha1
 
@@ -585,3 +586,4 @@ sha_1(u8 *digest, char *hexdigest, const u8 *addr, usize size)
 
     return 0;
 }
+*/
