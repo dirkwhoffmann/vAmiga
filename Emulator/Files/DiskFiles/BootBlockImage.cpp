@@ -1116,10 +1116,10 @@ const BBRecord bbRecord[] = {
 BootBlockImage::BootBlockImage(const u8 *buffer)
 {
     memcpy(data, buffer, 1024);
-    usize i,j;
+    isize i,j;
     
     // Try to find a match in the data base
-    for (i = 0; i < sizeof(bbRecord) / sizeof(BBRecord); i++) {
+    for (i = 0; i < isizeof(bbRecord) / isizeof(BBRecord); i++) {
         
         if (bbRecord[i].type == BB_STANDARD && bbRecord[i].image) {
             
@@ -1155,7 +1155,7 @@ BootBlockImage::BootBlockImage(const char *name)
 {
     memset(data, 0, 1024);
     
-    for (usize i = 0; i < sizeof(bbRecord) / sizeof(BBRecord); i++) {
+    for (isize i = 0; i < isizeof(bbRecord) / isizeof(BBRecord); i++) {
         
         if (strcmp(bbRecord[i].name, name) == 0) {
             memcpy(this->data, bbRecord[i].image, bbRecord[i].size);
@@ -1185,11 +1185,11 @@ BootBlockImage::BootBlockImage(long bootBlockID)
 }
 
 void
-BootBlockImage::write(u8 *buffer, usize first, usize last)
+BootBlockImage::write(u8 *buffer, isize first, isize last)
 {
     assert(first < last && last < 1024);
     
-    for (usize i = 0; i < last - first; i++) {
+    for (isize i = 0; i < last - first; i++) {
         buffer[i] = data[first + i];
     }
 }

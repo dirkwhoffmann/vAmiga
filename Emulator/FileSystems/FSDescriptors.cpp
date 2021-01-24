@@ -48,9 +48,14 @@ FSDeviceDescriptor::dump()
     msg("        Reserved : %d\n", numReserved);
     msg("           BSize : %d\n", bsize);
     msg("\n");
-    for (usize i = 0; i < partitions.size(); i++) {
+    
+    for (auto& p : partitions) { p.dump(); }
+        
+    /*
+    for (isize i = 0; i < (isize)partitions.size(); i++) {
         partitions[i].dump();
     }
+    */
 }
 
 FSPartitionDescriptor::FSPartitionDescriptor(FSVolumeType dos,

@@ -17,7 +17,7 @@ typedef struct
     const char *name;
     u16 signature[14];
     const u8 *image;
-    usize size;
+    isize size;
     BootBlockType type;
 }
 BBRecord;
@@ -39,5 +39,5 @@ public:
     BootBlockImage(long id);
     
     // Exports the image
-    void write(u8 *buffer, usize first = 0, usize last = 0);
+    void write(u8 *buffer, isize first = 0, isize last = 0);
 };
