@@ -192,7 +192,7 @@ public:
     class Drive *getSelectedDrive();
 
     // Indicates if the motor of the specified drive is switched on
-    bool spinning(unsigned driveNr) const;
+    bool spinning(isize driveNr) const;
 
     // Indicates if the motor of at least one drive is switched on
     bool spinning() const;

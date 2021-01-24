@@ -268,5 +268,5 @@ public:
 private:
     
     // Computes the interrupt level of a pending interrupt.
-    unsigned interruptLevel();
+    u8 interruptLevel();
 };

@@ -320,8 +320,8 @@ public:
 
     // Disassembles a single Copper command
     char *disassemble(u32 addr);
-    char *disassemble(unsigned list, u32 offset);
+    char *disassemble(isize list, u32 offset);
 
     // Dumps a Copper list
-    void dumpCopperList(unsigned list, unsigned length); 
+    void dumpCopperList(isize list, isize length);
 };

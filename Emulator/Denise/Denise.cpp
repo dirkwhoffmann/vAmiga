@@ -631,8 +631,8 @@ Denise::drawSpritePair()
 {
     assert(pair < 4);
 
-    const unsigned sprite1 = 2 * pair;
-    const unsigned sprite2 = 2 * pair + 1;
+    const isize sprite1 = 2 * pair;
+    const isize sprite2 = 2 * pair + 1;
 
     int strt1 = sprhppos<sprite1>();
     int strt2 = sprhppos<sprite2>();
@@ -721,8 +721,8 @@ Denise::replaySpriteRegChanges()
 {
     assert(pair < 4);
     
-    const unsigned sprite1 = 2 * pair;
-    const unsigned sprite2 = 2 * pair + 1;
+    const isize sprite1 = 2 * pair;
+    const isize sprite2 = 2 * pair + 1;
     
     int begin = sprChanges[pair].begin();
     int end = sprChanges[pair].end();
@@ -783,8 +783,8 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2,
     // Only proceeed if we are outside the VBLANK area
     if (agnus.pos.v < 26) return;
     
-    const unsigned sprite1 = 2 * pair;
-    const unsigned sprite2 = 2 * pair + 1;
+    const isize sprite1 = 2 * pair;
+    const isize sprite2 = 2 * pair + 1;
 
     assert(hstrt <= isizeof(mBuffer));
     assert(hstop <= isizeof(mBuffer));

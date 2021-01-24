@@ -659,9 +659,9 @@ Memory::updateCpuMemSrcTable()
     MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
     MemorySource mem_rom_mirror = rom ? MEM_ROM_MIRROR : MEM_NONE;
 
-    unsigned chipRamPages = config.chipSize / 0x10000;
-    unsigned slowRamPages = config.slowSize / 0x10000;
-    unsigned fastRamPages = config.fastSize / 0x10000;
+    u32 chipRamPages = config.chipSize / 0x10000;
+    u32 slowRamPages = config.slowSize / 0x10000;
+    u32 fastRamPages = config.fastSize / 0x10000;
     
     assert(config.chipSize % 0x10000 == 0);
     assert(config.slowSize % 0x10000 == 0);
@@ -766,7 +766,7 @@ Memory::updateCpuMemSrcTable()
 void
 Memory::updateAgnusMemSrcTable()
 {
-    unsigned banks = config.chipSize / 0x10000;
+    u32 banks = config.chipSize / 0x10000;
     
     // Start from scratch
     for (isize i = 0x00; i <= 0xFF; i++) {

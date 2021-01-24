@@ -568,7 +568,7 @@ Copper::disassemble(u32 addr)
 }
 
 char *
-Copper::disassemble(unsigned list, u32 offset)
+Copper::disassemble(isize list, u32 offset)
 {
     assert(list == 1 || list == 2);
     
@@ -577,7 +577,7 @@ Copper::disassemble(unsigned list, u32 offset)
 }
 
 void
-Copper::dumpCopperList(unsigned list, unsigned length)
+Copper::dumpCopperList(isize list, isize length)
 {
     for (isize i = 0; i < length; i++) {
         msg("%s\n", disassemble(list, 2*i));

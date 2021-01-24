@@ -140,11 +140,11 @@ Paula::scheduleIrqRel(IrqSource src, Cycle trigger)
 void
 Paula::checkInterrupt()
 {
-    unsigned level = interruptLevel();
+    u8 level = interruptLevel();
         
     if ((iplPipe & 0xFF) != level) {
     
-        ipl.write((u8)level);
+        ipl.write(level);
         iplPipe = (iplPipe & ~0xFF) | level;
                 
         trace(CPU_DEBUG, "iplPipe: %016llx\n", iplPipe);        
@@ -154,7 +154,7 @@ Paula::checkInterrupt()
     }
 }
 
-unsigned
+u8
 Paula::interruptLevel()
 {
     if (intena & 0x4000) {
