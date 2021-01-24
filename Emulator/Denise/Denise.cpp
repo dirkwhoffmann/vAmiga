@@ -643,10 +643,10 @@ Denise::drawSpritePair()
     // Iterate over all recorded register changes
     if (!sprChanges[pair].isEmpty()) {
         
-        int begin = sprChanges[pair].begin();
-        int end = sprChanges[pair].end();
+        isize begin = sprChanges[pair].begin();
+        isize end = sprChanges[pair].end();
         
-        for (int i = begin; i != end; i = sprChanges[pair].next(i)) {
+        for (isize i = begin; i != end; i = sprChanges[pair].next(i)) {
             
             Cycle trigger = sprChanges[pair].keys[i];
             RegChange &change = sprChanges[pair].elements[i];
@@ -775,7 +775,8 @@ Denise::replaySpriteRegChanges()
 }
 
 template <unsigned pair> void
-Denise::drawSpritePair(int hstrt, int hstop, int strt1, int strt2, bool armed1, bool armed2)
+Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2,
+                       bool armed1, bool armed2)
 {
     assert(pair < 4);
     
@@ -793,7 +794,7 @@ Denise::drawSpritePair(int hstrt, int hstop, int strt1, int strt2, bool armed1, 
 
     bool attached = GET_BIT(sprctl[sprite2], 7);
 
-    for (int hpos = hstrt; hpos < hstop; hpos += 2) {
+    for (Pixel hpos = hstrt; hpos < hstop; hpos += 2) {
 
         if (hpos == strt1 && armed1) {
             ssra[sprite1] = sprdata[sprite1];
@@ -946,7 +947,7 @@ Denise::drawBorder()
 }
 
 template <int x> void
-Denise::checkS2SCollisions(int start, int end)
+Denise::checkS2SCollisions(Pixel start, Pixel end)
 {
     // For the odd sprites, only proceed if collision detection is enabled
     if (IS_ODD(x) && !GET_BIT(clxcon, 12 + (x/2))) return;
@@ -990,29 +991,12 @@ Denise::checkS2SCollisions(int start, int end)
 }
 
 template <int x> void
-Denise::checkS2PCollisions(int start, int end)
+Denise::checkS2PCollisions(Pixel start, Pixel end)
 {
     // debug(CLX_DEBUG, "checkS2PCollisions<%d>(%d, %d)\n", x, start, end);
     
     // For the odd sprites, only proceed if collision detection is enabled
     if (IS_ODD(x) && !getENSP<x>()) return;
-
-    // Set up the sprite comparison mask
-    /*
-    u16 sprMask;
-    switch(x) {
-        case 0:
-        case 1: sprMask = Z_SP0 | (getENSP<1>() ? Z_SP1 : 0); break;
-        case 2:
-        case 3: sprMask = Z_SP2 | (getENSP<3>() ? Z_SP3 : 0); break;
-        case 4:
-        case 5: sprMask = Z_SP4 | (getENSP<5>() ? Z_SP5 : 0); break;
-        case 6:
-        case 7: sprMask = Z_SP6 | (getENSP<7>() ? Z_SP7 : 0); break;
-
-        default: sprMask = 0; assert(false);
-    }
-    */
     
     u8 enabled1 = getENBP1();
     u8 enabled2 = getENBP2();

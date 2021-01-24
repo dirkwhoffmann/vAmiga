@@ -158,8 +158,8 @@ public:
      *    has been reached. If sprite drawing was enabled at that position,
      *    it can't be disabled in the same rasterline any more.
      */
-    PixelPos spriteClipBegin;
-    PixelPos spriteClipEnd;
+    Pixel spriteClipBegin;
+    Pixel spriteClipEnd;
 
  
     //
@@ -528,8 +528,8 @@ public:
     
     // Draws an sprite pair. Called by drawSprites()
     template <unsigned pair> void drawSpritePair();
-    template <unsigned pair> void drawSpritePair(int hstrt, int hstop,
-                                                 int strt1, int strt2,
+    template <unsigned pair> void drawSpritePair(Pixel hstrt, Pixel hstop,
+                                                 Pixel strt1, Pixel strt2,
                                                  bool armed1, bool armed2);
 
 private:
@@ -555,10 +555,10 @@ private:
 public:
 
     // Checks for sprite-sprite collisions in the current rasterline
-    template <int x> void checkS2SCollisions(int start, int end);
+    template <int x> void checkS2SCollisions(Pixel start, Pixel end);
 
     // Checks for sprite-playfield collisions in the current rasterline
-    template <int x> void checkS2PCollisions(int start, int end);
+    template <int x> void checkS2PCollisions(Pixel start, Pixel end);
 
     // Checks for playfield-playfield collisions in the current rasterline
     void checkP2PCollisions();

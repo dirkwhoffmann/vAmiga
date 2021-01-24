@@ -69,10 +69,10 @@ typedef i64 DMACycle;         // DMA cycle units
 
 
 //
-// Positions
+// Pixels
 //
 
-typedef i16 PixelPos;
+typedef i16 Pixel;
 
 
 //
