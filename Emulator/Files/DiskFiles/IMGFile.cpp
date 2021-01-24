@@ -18,11 +18,10 @@ IMGFile::isCompatibleName(const std::string &name)
 bool
 IMGFile::isCompatibleStream(std::istream &stream)
 {
-    usize length = streamLength(stream);
+    isize length = streamLength(stream);
     
     // There are no magic bytes. We can only check the buffer size
-    return
-    length == IMGSIZE_35_DD;
+    return length == IMGSIZE_35_DD;
 }
 
 IMGFile *
@@ -137,7 +136,7 @@ IMGFile::encodeTrack(Disk *disk, Track t)
 
     // Encode track header
     p += 82;                                        // GAP
-    for (usize i = 0; i < 24; i++) { p[i] = 0xAA; } // SYNC
+    for (isize i = 0; i < 24; i++) { p[i] = 0xAA; } // SYNC
     p += 24;
     p[0] = 0x52; p[1] = 0x24;                       // IAM
     p[2] = 0x52; p[3] = 0x24;
@@ -166,7 +165,7 @@ IMGFile::encodeSector(Disk *disk, Track t, Sector s)
     debug(MFM_DEBUG, "  Encoding DOS sector %d\n", s);
     
     // Write SYNC
-    for (usize i = 0; i < 12; i++) { buf[i] = 0x00; }
+    for (isize i = 0; i < 12; i++) { buf[i] = 0x00; }
     
     // Write IDAM
     buf[12] = 0xA1;
@@ -186,10 +185,10 @@ IMGFile::encodeSector(Disk *disk, Track t, Sector s)
     buf[21] = LO_BYTE(crc);
 
     // Write GAP
-    for (usize i = 22; i < 44; i++) { buf[i] = 0x4E; }
+    for (isize i = 22; i < 44; i++) { buf[i] = 0x4E; }
 
     // Write SYNC
-    for (usize i = 44; i < 56; i++) { buf[i] = 0x00; }
+    for (isize i = 44; i < 56; i++) { buf[i] = 0x00; }
 
     // Write DATA AM
     buf[56] = 0xA1;
@@ -206,7 +205,7 @@ IMGFile::encodeSector(Disk *disk, Track t, Sector s)
     buf[573] = LO_BYTE(crc);
 
     // Write GAP
-    for (usize i = 574; i < sizeof(buf); i++) { buf[i] = 0x4E; }
+    for (isize i = 574; i < isizeof(buf); i++) { buf[i] = 0x4E; }
 
     // Determine the start of this sector
     u8 *p = disk->data.track[t] + 194 + s * 1300;
@@ -260,21 +259,14 @@ IMGFile::decodeTrack(Disk *disk, Track t)
     u8 *dst = data + t * numSectors * 512;
     
     trace(MFM_DEBUG, "Decoding DOS track %d\n", t);
-    
-    // Create a local (double) copy of the track to simply the analysis
-    /*
-    u8 local[2 * disk->trackLength(t)];
-    memcpy(local, disk->data.track[t], disk->trackLength(t));
-    memcpy(local + disk->trackLength(t), disk->data.track[t], disk->trackLength(t));
-    */
-    
+
     // Determine the start of all sectors contained in this track
     int sectorStart[numSectors];
     for (isize i = 0; i < numSectors; i++) {
         sectorStart[i] = 0;
     }
     int cnt = 0;
-    for (usize i = 0; i < sizeof(disk->data.track[t]) - 16;) {
+    for (isize i = 0; i < isizeof(disk->data.track[t]) - 16;) {
         
         // Seek IDAM block
         if (src[i++] != 0x44) continue;

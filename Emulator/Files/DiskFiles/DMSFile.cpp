@@ -32,7 +32,7 @@ DMSFile::readFromStream(std::istream &stream)
 {
     FILE *fpi, *fpo;
     char *pi, *po;
-    usize si, so;
+    size_t si, so;
     
     isize result = AmigaFile::readFromStream(stream);
         

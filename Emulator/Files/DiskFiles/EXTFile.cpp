@@ -24,14 +24,14 @@ EXTFile::isCompatibleName(const std::string &name)
 bool
 EXTFile::isCompatibleStream(std::istream &stream)
 {
-    usize length = streamLength(stream);
+    isize length = streamLength(stream);
     
-    usize len = sizeof(extAdfHeaders[0]);
-    usize cnt = sizeof(extAdfHeaders) / len;
+    isize len = isizeof(extAdfHeaders[0]);
+    isize cnt = isizeof(extAdfHeaders) / len;
 
     if (length < len) return false;
     
-    for (usize i = 0; i < cnt; i++) {
+    for (isize i = 0; i < cnt; i++) {
         if (matchingStreamHeader(stream, extAdfHeaders[i], len)) return true;
     }
     return false;
