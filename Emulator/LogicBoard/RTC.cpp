@@ -138,14 +138,14 @@ RTC::update()
 }
 
 u8
-RTC::peek(usize nr)
+RTC::peek(isize nr)
 {
     update();
     return spypeek(nr);
 }
 
 u8
-RTC::spypeek(usize nr) const
+RTC::spypeek(isize nr) const
 {
     assert(nr < 16);
     assert(config.model != RTC_NONE);
@@ -172,7 +172,7 @@ RTC::spypeek(usize nr) const
 }
 
 void
-RTC::poke(usize nr, u8 value)
+RTC::poke(isize nr, u8 value)
 {
     assert(nr < 16);
 

@@ -138,13 +138,13 @@ public:
     void update();
     
     // Reads one of the 16 RTC registers (call update() first)
-    u8 peek(usize nr);
+    u8 peek(isize nr);
 
     // Returns the current value in the register cache
-    u8 spypeek(usize nr) const;
+    u8 spypeek(isize nr) const;
     
     // Writes one of the 16 RTC registers
-    void poke(usize nr, u8 value);
+    void poke(isize nr, u8 value);
 
 private:
 
@@ -162,7 +162,7 @@ private:
      * four register banks. A bank is selected by by bits 0 and 1 in control
      * register D. The OKI clock has a single bank, only.
      */
-    usize bank() const { return config.model == RTC_RICOH ? (reg[0][0xD] & 0b11) : 0; }
+    isize bank() const { return config.model == RTC_RICOH ? (reg[0][0xD] & 0b11) : 0; }
     
     /* Converts the register value to the internally stored time-stamp. This
      * function has to be called *before* a RTC register is *read*.

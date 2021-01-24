@@ -107,7 +107,7 @@ HardwareComponent::dump()
 isize
 HardwareComponent::size()
 {
-    usize result = _size();
+    isize result = _size();
 
     for (HardwareComponent *c : subComponents) {
         result += c->size();
