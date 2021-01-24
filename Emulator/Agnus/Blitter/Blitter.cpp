@@ -20,7 +20,7 @@ Blitter::Blitter(Amiga& ref) : AmigaComponent(ref)
             u8 inclPattern = byte;
             u8 exclPattern = byte;
             
-            for (usize bit = 0; bit < 8; bit++) {
+            for (isize bit = 0; bit < 8; bit++) {
                 
                 inclPattern |= carry << bit; // inclusive fill
                 exclPattern ^= carry << bit; // exclusive fill

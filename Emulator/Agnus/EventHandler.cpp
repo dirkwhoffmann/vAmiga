@@ -24,7 +24,7 @@ Agnus::inspectEvents()
         eventInfo.hpos = pos.h;
         
         // Inspect all slots
-        for (usize i = 0; i < SLOT_COUNT; i++) inspectEventSlot((EventSlot)i);
+        for (isize i = 0; i < SLOT_COUNT; i++) inspectEventSlot((EventSlot)i);
     }
 }
 
@@ -393,7 +393,7 @@ Agnus::getEventInfo()
 }
 
 EventSlotInfo
-Agnus::getEventSlotInfo(usize nr)
+Agnus::getEventSlotInfo(isize nr)
 {
     assert_enum(EventSlot, nr);
 

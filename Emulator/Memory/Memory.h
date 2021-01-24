@@ -323,10 +323,10 @@ public:
     bool hasFastRam() const { return fast != nullptr; }
 
     // Returns the size of a certain Ram in bytes
-    usize chipRamSize() const { return config.chipSize; }
-    usize slowRamSize() const { return config.slowSize; }
-    usize fastRamSize() const { return config.fastSize; }
-    usize ramSize() const { return config.chipSize + config.slowSize + config.fastSize; }
+    isize chipRamSize() const { return config.chipSize; }
+    isize slowRamSize() const { return config.slowSize; }
+    isize fastRamSize() const { return config.fastSize; }
+    isize ramSize() const { return config.chipSize + config.slowSize + config.fastSize; }
 
 private:
     

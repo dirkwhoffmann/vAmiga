@@ -417,7 +417,7 @@ public:
     i16 idBits();
     
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
-    usize chipRamLimit();
+    isize chipRamLimit();
         
     // Returns the line in which the VERTB interrupt gets triggered
     int vStrobeLine() { return isECS() || MIMIC_UAE ? 0 : 1; }
@@ -446,7 +446,7 @@ private:
         
         AgnusInfo getInfo() { return HardwareComponent::getInfo(info); }
         EventInfo getEventInfo();
-        EventSlotInfo getEventSlotInfo(usize nr);
+        EventSlotInfo getEventSlotInfo(isize nr);
         
     private:
         

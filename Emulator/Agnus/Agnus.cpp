@@ -146,7 +146,7 @@ Agnus::idBits()
     }
 }
 
-usize
+isize
 Agnus::chipRamLimit()
 {
     switch (config.revision) {
@@ -231,7 +231,7 @@ Agnus::_dump() const
 void
 Agnus::clearStats()
 {
-    for (usize i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
+    for (isize i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
     
     stats.copperActivity = 0;
     stats.blitterActivity = 0;
@@ -276,7 +276,7 @@ Agnus::updateStats()
     stats.spriteActivity = w * stats.spriteActivity + (1 - w) * sprite;
     stats.bitplaneActivity = w * stats.bitplaneActivity + (1 - w) * bitplane;
     
-    for (usize i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
+    for (isize i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
 }
 
 Cycle
@@ -845,18 +845,18 @@ Agnus::updateSpriteDMA()
 
     // Reset the vertical trigger coordinates in line 25
     if (v == 25 && sprdma()) {
-        for (usize i = 0; i < 8; i++) sprVStop[i] = 25;
+        for (isize i = 0; i < 8; i++) sprVStop[i] = 25;
         return;
      }
 
     // Disable DMA in the last rasterline
     if (v == frame.lastLine()) {
-        for (usize i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
+        for (isize i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
         return;
     }
 
     // Update the DMA status for all sprites
-    for (usize i = 0; i < 8; i++) {
+    for (isize i = 0; i < 8; i++) {
         if (v == sprVStrt[i]) sprDmaState[i] = SPR_DMA_ACTIVE;
         if (v == sprVStop[i]) sprDmaState[i] = SPR_DMA_IDLE;
     }
@@ -976,7 +976,7 @@ Agnus::hsyncHandler()
     }
 
     // Clear the bus usage table
-    for (usize i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
+    for (isize i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
 
     // Schedule the first BPL and DAS events
     scheduleNextBplEvent();

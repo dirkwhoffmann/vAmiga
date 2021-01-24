@@ -289,7 +289,7 @@ DmaDebugger::computeOverlay()
 
     }
 
-    for (usize i = 0; i < HPOS_CNT; i++, ptr += 4) {
+    for (isize i = 0; i < HPOS_CNT; i++, ptr += 4) {
 
         BusOwner owner = owners[i];
 
@@ -333,8 +333,8 @@ DmaDebugger::vSyncHandler()
 
     // Clear old data in the next frame's VBLANK area
     u32 *ptr = denise.pixelEngine.frameBuffer->data;
-    for (usize row = 0; row < VBLANK_CNT; row++) {
-        for (usize col = 0; col <= LAST_PIXEL; col++) {
+    for (isize row = 0; row < VBLANK_CNT; row++) {
+        for (isize col = 0; col <= LAST_PIXEL; col++) {
             ptr[row * HPIXELS + col] = PixelEngine::rgbaVBlank;
         }
     }

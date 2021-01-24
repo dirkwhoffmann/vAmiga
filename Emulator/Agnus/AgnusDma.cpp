@@ -96,12 +96,12 @@ Agnus::initBplEventTableLores()
 {
     memset(bplDMA[0], 0, sizeof(bplDMA[0]));
 
-    for (usize bpu = 0; bpu < 7; bpu++) {
+    for (isize bpu = 0; bpu < 7; bpu++) {
 
         EventID *p = &bplDMA[0][bpu][0];
 
         // Iterate through all 22 fetch units
-        for (usize i = 0; i <= 0xD8; i += 8, p += 8) {
+        for (isize i = 0; i <= 0xD8; i += 8, p += 8) {
 
             switch(bpu) {
                 case 6: p[2] = BPL_L6;
@@ -123,11 +123,11 @@ Agnus::initBplEventTableHires()
 {
     memset(bplDMA[1], 0, sizeof(bplDMA[1]));
 
-    for (usize bpu = 0; bpu < 7; bpu++) {
+    for (isize bpu = 0; bpu < 7; bpu++) {
 
         EventID *p = &bplDMA[1][bpu][0];
 
-        for (usize i = 0; i <= 0xD8; i += 8, p += 8) {
+        for (isize i = 0; i <= 0xD8; i += 8, p += 8) {
 
             switch(bpu) {
                 case 6:
@@ -149,7 +149,7 @@ Agnus::initDasEventTable()
 {
     memset(dasDMA, 0, sizeof(dasDMA));
 
-    for (usize dmacon = 0; dmacon < 64; dmacon++) {
+    for (isize dmacon = 0; dmacon < 64; dmacon++) {
 
         EventID *p = dasDMA[dmacon];
 
@@ -448,8 +448,8 @@ Agnus::doBlitterDMA(u32 addr, u16 value)
 void
 Agnus::clearBplEvents()
 {
-    for (usize i = 0; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
-    for (usize i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX;
+    for (isize i = 0; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
+    for (isize i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX;
 }
 
 void
@@ -540,7 +540,7 @@ Agnus::updateDasEvents(u16 dmacon)
     assert(dmacon < 64);
 
     // Allocate slots and renew the jump table
-    for (usize i = 0; i < 0x38; i++) dasEvent[i] = dasDMA[dmacon][i];
+    for (isize i = 0; i < 0x38; i++) dasEvent[i] = dasDMA[dmacon][i];
     updateDasJumpTable(0x38);
 }
 
@@ -602,7 +602,7 @@ Agnus::dumpBplEventTable(int from, int to) const
     memset(str, '?', sizeof(str));
     
     // Events
-    for (usize i = 0; i < 4; i++) {
+    for (isize i = 0; i < 4; i++) {
         str[i][0] = '.';                str[i][1] = '.';
         str[(int)BPL_L1 + i][0]  = 'L'; str[(int)BPL_L1 + i][1]  = '1';
         str[(int)BPL_L2 + i][0]  = 'L'; str[(int)BPL_L2 + i][1]  = '2';
@@ -618,10 +618,10 @@ Agnus::dumpBplEventTable(int from, int to) const
     }
 
     // Drawing flags
-    for (usize i = 0; i < 256; i += 4) str[i][2] = '.';
-    for (usize i = 1; i < 256; i += 4) str[i][2] = 'o';
-    for (usize i = 2; i < 256; i += 4) str[i][2] = 'e';
-    for (usize i = 3; i < 256; i += 4) str[i][2] = 'b';
+    for (isize i = 0; i < 256; i += 4) str[i][2] = '.';
+    for (isize i = 1; i < 256; i += 4) str[i][2] = 'o';
+    for (isize i = 2; i < 256; i += 4) str[i][2] = 'e';
+    for (isize i = 3; i < 256; i += 4) str[i][2] = 'b';
 
     dumpEventTable(bplEvent, str, from, to);
 }
@@ -689,7 +689,7 @@ Agnus::dumpDasEventTable(int from, int to) const
     str[(int)DAS_TICK][0]    = 'T'; str[(int)DAS_TICK][1]    = 'K';
     str[(int)DAS_TICK2][0]   = 'T'; str[(int)DAS_TICK2][1]   = '2';
 
-    for (usize i = 1; i < 256; i++) str[i][2] = ' ';
+    for (isize i = 1; i < 256; i++) str[i][2] = ' ';
     
     dumpEventTable(dasEvent, str, from, to);
 }
