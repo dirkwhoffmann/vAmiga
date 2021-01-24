@@ -186,7 +186,7 @@ Denise::pokeCLXCON(u16 value)
     clxcon = value;
 }
 
-template <usize x, Accessor s> void
+template <isize x, Accessor s> void
 Denise::pokeBPLxDAT(u16 value)
 {
     assert(x < 6);
@@ -201,7 +201,7 @@ Denise::pokeBPLxDAT(u16 value)
     setBPLxDAT<x>(value);
 }
 
-template <usize x> void
+template <isize x> void
 Denise::setBPLxDAT(u16 value)
 {
     assert(x < 6);
@@ -220,7 +220,7 @@ Denise::setBPLxDAT(u16 value)
     }
 }
 
-template <usize x> void
+template <isize x> void
 Denise::pokeSPRxPOS(u16 value)
 {
     assert(x < 8);
@@ -234,7 +234,7 @@ Denise::pokeSPRxPOS(u16 value)
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0POS + x, value } );
 }
 
-template <usize x> void
+template <isize x> void
 Denise::pokeSPRxCTL(u16 value)
 {
     assert(x < 8);
@@ -251,7 +251,7 @@ Denise::pokeSPRxCTL(u16 value)
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0CTL + x, value } );
 }
 
-template <usize x> void
+template <isize x> void
 Denise::pokeSPRxDATA(u16 value)
 {
     assert(x < 8);
@@ -268,7 +268,7 @@ Denise::pokeSPRxDATA(u16 value)
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0DATA + x, value } );
 }
 
-template <usize x> void
+template <isize x> void
 Denise::pokeSPRxDATB(u16 value)
 {
     assert(x < 8);
@@ -282,7 +282,7 @@ Denise::pokeSPRxDATB(u16 value)
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0DATB + x, value });
 }
 
-template <Accessor s, usize xx> void
+template <Accessor s, isize xx> void
 Denise::pokeCOLORxx(u16 value)
 {
     trace(COLREG_DEBUG, "pokeCOLOR%02lu(%X)\n", xx, value);

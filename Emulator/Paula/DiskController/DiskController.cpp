@@ -336,7 +336,7 @@ bool
 DiskController::compareFifo(u16 word) const
 {
     if (fifoHasWord()) {
-        for (usize i = 0; i < 8; i++) {
+        for (isize i = 0; i < 8; i++) {
             if ((fifo >> i & 0xFFFF) == word) return true;
         }
     }

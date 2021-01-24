@@ -449,19 +449,19 @@ public:
     u16 getMVBP2() const { return clxcon & 0b101010; }
     
     // BPLxDAT
-    template <usize x, Accessor s> void pokeBPLxDAT(u16 value);
-    template <usize x> void setBPLxDAT(u16 value);
+    template <isize x, Accessor s> void pokeBPLxDAT(u16 value);
+    template <isize x> void setBPLxDAT(u16 value);
 
     // SPRxPOS, SPRxCTL
-    template <usize x> void pokeSPRxPOS(u16 value);
-    template <usize x> void pokeSPRxCTL(u16 value);
+    template <isize x> void pokeSPRxPOS(u16 value);
+    template <isize x> void pokeSPRxCTL(u16 value);
 
     // SPRxDATA, SPRxDATB
-    template <usize x> void pokeSPRxDATA(u16 value);
-    template <usize x> void pokeSPRxDATB(u16 value);
+    template <isize x> void pokeSPRxDATA(u16 value);
+    template <isize x> void pokeSPRxDATB(u16 value);
 
     // COLORxx
-    template <Accessor s, usize xx> void pokeCOLORxx(u16 value);
+    template <Accessor s, isize xx> void pokeCOLORxx(u16 value);
 
     
     //
@@ -471,11 +471,11 @@ public:
 public:
     
     // Returns the horizontal position of a sprite in sprite coordinates
-    template <usize x> Pixel sprhpos() const {
+    template <isize x> Pixel sprhpos() const {
         return ((sprpos[x] & 0xFF) << 1) | (sprctl[x] & 0x01); }
 
     // Returns the horizontal position of a sprite in pixel coordinates
-    template <usize x> Pixel sprhppos() const {
+    template <isize x> Pixel sprhppos() const {
         return 2 * (sprhpos<x>() + 1); }
     
     // Checks the z buffer and returns true if a sprite pixel is visible
@@ -529,19 +529,19 @@ public:
     void drawSprites();
     
     // Draws an sprite pair. Called by drawSprites()
-    template <usize pair> void drawSpritePair();
-    template <usize pair> void drawSpritePair(Pixel hstrt, Pixel hstop,
+    template <isize pair> void drawSpritePair();
+    template <isize pair> void drawSpritePair(Pixel hstrt, Pixel hstop,
                                               Pixel strt1, Pixel strt2,
                                               bool armed1, bool armed2);
     
 private:
     
     // Replays all recorded sprite register changes
-    template <usize pair> void replaySpriteRegChanges();
+    template <isize pair> void replaySpriteRegChanges();
 
     // Draws a single sprite pixel
-    template <usize x> void drawSpritePixel(Pixel hpos);
-    template <usize x> void drawAttachedSpritePixelPair(Pixel hpos);
+    template <isize x> void drawSpritePixel(Pixel hpos);
+    template <isize x> void drawAttachedSpritePixelPair(Pixel hpos);
 
     // Determines the color register index for drawing the border
     void updateBorderColor();
@@ -592,11 +592,11 @@ public:
 public:
     
     // Gathers the sprite data for the displayed sprite
-    void recordSpriteData(usize x);
+    void recordSpriteData(isize x);
 
     // Dumps the bBuffer or the iBuffer to the console
     void dumpIBuffer() const { dumpBuffer(iBuffer, sizeof(iBuffer)); }
     void dumpBBuffer() const { dumpBuffer(bBuffer, sizeof(bBuffer)); }
-    void dumpBuffer(const u8 *buffer, usize length) const;
+    void dumpBuffer(const u8 *buffer, isize length) const;
 
 };

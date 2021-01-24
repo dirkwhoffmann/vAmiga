@@ -41,7 +41,7 @@ Muxer::_reset(bool hard)
     stats.bufferUnderflows = 0;
     stats.bufferOverflows = 0;
 
-    for (usize i = 0; i < 4; i++) sampler[i]->reset();
+    for (isize i = 0; i < 4; i++) sampler[i]->reset();
     stream.clear();
 }
 
@@ -238,7 +238,7 @@ Muxer::setSampleRate(double hz)
 isize
 Muxer::didLoadFromBuffer(const u8 *buffer)
 {
-    for (usize i = 0; i < 4; i++) sampler[i]->reset();
+    for (isize i = 0; i < 4; i++) sampler[i]->reset();
     return 0;
 }
 

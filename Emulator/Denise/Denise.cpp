@@ -266,7 +266,7 @@ Denise::fillShiftRegisters(bool odd, bool even)
     
     // On all other machines, fallback to the slower standard implementation
     u32 mask = 0x8000;
-    for (usize i = 0; i < 16; i++, mask >>= 1) {
+    for (isize i = 0; i < 16; i++, mask >>= 1) {
         
         slice[i] =
         (!!(shiftReg[0] & mask) << 0) |
@@ -297,21 +297,21 @@ Denise::drawOdd(Pixel offset)
     u16 mask = masks[bpu()];
     Pixel currentPixel = agnus.ppos() + offset;
     
-    for (usize i = 0; i < 16; i++) {
+    for (isize i = 0; i < 16; i++) {
         
         u8 index = slice[i] & mask;
         
         if (hiresMode) {
             
             // Synthesize one hires pixel
-            assert(currentPixel < (Pixel)sizeof(bBuffer));
+            assert(currentPixel < isizeof(bBuffer));
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
             currentPixel++;
             
         } else {
             
             // Synthesize two lores pixels
-            assert((usize)(currentPixel + 1) < sizeof(bBuffer));
+            assert(currentPixel + 1 < isizeof(bBuffer));
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
             currentPixel++;
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
@@ -343,21 +343,21 @@ Denise::drawEven(Pixel offset)
     u16 mask = masks[bpu()];
     i16 currentPixel = agnus.ppos() + offset;
     
-    for (usize i = 0; i < 16; i++) {
+    for (isize i = 0; i < 16; i++) {
 
         u8 index = slice[i] & mask;
 
         if (hiresMode) {
             
             // Synthesize one hires pixel
-            assert((usize)currentPixel < sizeof(bBuffer));
+            assert(currentPixel < isizeof(bBuffer));
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
             currentPixel++;
 
         } else {
             
             // Synthesize two lores pixels
-            assert((usize)(currentPixel + 1) < sizeof(bBuffer));
+            assert(currentPixel + 1 < isizeof(bBuffer));
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
             currentPixel++;
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
@@ -386,20 +386,20 @@ Denise::drawBoth(Pixel offset)
     u16 mask = masks[bpu()];
     i16 currentPixel = agnus.ppos() + offset;
     
-    for (usize i = 0; i < 16; i++) {
+    for (isize i = 0; i < 16; i++) {
         
         u8 index = slice[i] & mask;
         
         if (hiresMode) {
             
             // Synthesize one hires pixel
-            assert((usize)currentPixel < sizeof(bBuffer));
+            assert(currentPixel < isizeof(bBuffer));
             bBuffer[currentPixel++] = index;
             
         } else {
             
             // Synthesize two lores pixels
-            assert((usize)(currentPixel + 1) < sizeof(bBuffer));
+            assert(currentPixel + 1 < isizeof(bBuffer));
             bBuffer[currentPixel++] = index;
             bBuffer[currentPixel++] = index;
         }
@@ -407,7 +407,7 @@ Denise::drawBoth(Pixel offset)
     
     // Disarm and clear the shift registers
     armedEven = armedOdd = false;
-    for (usize i = 0; i < 6; i++) shiftReg[i] = 0;
+    for (isize i = 0; i < 6; i++) shiftReg[i] = 0;
 }
 
 void
@@ -608,7 +608,7 @@ Denise::drawSprites()
         
         // Record sprite data in debug mode
         if (amiga.inDebugMode()) {
-            for (usize i = 0; i < 8; i++) {
+            for (isize i = 0; i < 8; i++) {
                 if (GET_BIT(wasArmed, i)) recordSpriteData(i);
             }
         }
@@ -626,7 +626,7 @@ Denise::drawSprites()
     if (!sprChanges[0].isEmpty()) replaySpriteRegChanges<0>();
 }
 
-template <usize pair> void
+template <isize pair> void
 Denise::drawSpritePair()
 {
     assert(pair < 4);
@@ -716,7 +716,7 @@ Denise::drawSpritePair()
     sprChanges[pair].clear();
 }
 
-template <usize pair> void
+template <isize pair> void
 Denise::replaySpriteRegChanges()
 {
     assert(pair < 4);
@@ -774,7 +774,7 @@ Denise::replaySpriteRegChanges()
     sprChanges[pair].clear();
 }
 
-template <usize pair> void
+template <isize pair> void
 Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2,
                        bool armed1, bool armed2)
 {
@@ -835,7 +835,7 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2,
     }
 }
 
-template <usize x> void
+template <isize x> void
 Denise::drawSpritePixel(Pixel hpos)
 {
     assert(hpos >= spriteClipBegin && hpos < spriteClipEnd);
@@ -856,7 +856,7 @@ Denise::drawSpritePixel(Pixel hpos)
     }
 }
 
-template <usize x> void
+template <isize x> void
 Denise::drawAttachedSpritePixelPair(Pixel hpos)
 {
     assert(IS_ODD(x));
@@ -1148,7 +1148,7 @@ Denise::endOfLine(int vpos)
 }
 
 void
-Denise::recordSpriteData(usize nr)
+Denise::recordSpriteData(isize nr)
 {
     assert(nr < 8);
 
@@ -1174,7 +1174,7 @@ Denise::recordSpriteData(usize nr)
 }
 
 void
-Denise::dumpBuffer(const u8 *buffer, usize length) const
+Denise::dumpBuffer(const u8 *buffer, isize length) const
 {
     const usize cols = 16;
 
