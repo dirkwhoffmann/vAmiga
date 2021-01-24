@@ -10,7 +10,7 @@
 #include "Amiga.h"
 
 bool
-IMGFile::isCompatibleName(const std::string &name)
+IMGFile::isCompatibleName(const string &name)
 {
     return true;
 }

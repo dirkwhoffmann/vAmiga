@@ -96,7 +96,7 @@ RomFile::identifier(u32 fingerprint)
 }
 
 bool
-RomFile::isCompatibleName(const std::string &name)
+RomFile::isCompatibleName(const string &name)
 {
     return true;
 }

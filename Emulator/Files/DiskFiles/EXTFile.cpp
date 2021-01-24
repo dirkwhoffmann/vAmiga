@@ -16,7 +16,7 @@ const u8 EXTFile::extAdfHeaders[2][8] = {
 };
     
 bool
-EXTFile::isCompatibleName(const std::string &name)
+EXTFile::isCompatibleName(const string &name)
 {
     return true;
 }

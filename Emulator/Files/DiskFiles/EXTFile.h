@@ -28,7 +28,7 @@ public:
     // Class methods
     //
     
-    static bool isCompatibleName(const std::string &name);
+    static bool isCompatibleName(const string &name);
     static bool isCompatibleStream(std::istream &stream);
 
  

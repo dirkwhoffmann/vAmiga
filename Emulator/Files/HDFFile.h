@@ -22,14 +22,8 @@ public:
     // Class methods
     //
 
-    static bool isCompatibleName(const std::string &name);
+    static bool isCompatibleName(const string &name);
     static bool isCompatibleStream(std::istream &stream);
-
-    // Returns true iff the provided buffer contains an HDF file
-    static bool isHDFBuffer(const u8 *buffer, isize length);
-    
-    // Returns true iff if the provided path points to an HDF file
-    static bool isHDFFile(const char *path);
     
     
     //

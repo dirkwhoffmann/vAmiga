@@ -72,8 +72,8 @@ string extractName(const string &s)
 string extractSuffix(const string &s)
 {
     auto idx = s.rfind('.');
-    auto pos = idx != std::string::npos ? idx + 1 : 0;
-    auto len = std::string::npos;
+    auto pos = idx != string::npos ? idx + 1 : 0;
+    auto len = string::npos;
     return s.substr(pos, len);
 }
 
@@ -101,60 +101,7 @@ string stripSuffix(const string &s)
     return s.substr(pos, len);
 }
 
-bool
-checkFileSuffix(const char *path, const char *suffix)
-{
-    assert(path != nullptr);
-    assert(suffix != nullptr);
-    
-    if (strlen(suffix) > strlen(path))
-        return false;
-    
-    path += (strlen(path) - strlen(suffix));
-    if (strcmp(path, suffix) == 0)
-        return true;
-    else
-        return false;
-}
-
-bool
-checkFileSize(const char *path, long size)
-{
-    return checkFileSizeRange(path, size, size);
-}
-
-bool
-checkFileSizeRange(const char *path, long min, long max)
-{
-    long filesize = getSizeOfFile(path);
-    
-    if (filesize == -1)
-        return false;
-    
-    if (min > 0 && filesize < min)
-        return false;
-    
-    if (max > 0 && filesize > max)
-        return false;
-    
-    return true;
-}
-
-bool
-matchingBufferHeader(const u8 *buffer, const u8 *header, isize length)
-{
-    assert(buffer != nullptr);
-    assert(header != nullptr);
-    
-    for (isize i = 0; i < length; i++) {
-        if (header[i] != buffer[i])
-            return false;
-    }
-
-    return true;
-}
-
-bool isDirectory(const std::string &path)
+bool isDirectory(const string &path)
 {
     return isDirectory(path.c_str());
 }
@@ -172,7 +119,7 @@ bool isDirectory(const char *path)
     return S_ISDIR(fileProperties.st_mode);
 }
 
-isize numDirectoryItems(const std::string &path)
+isize numDirectoryItems(const string &path)
 {
     return numDirectoryItems(path.c_str());
 }
@@ -192,25 +139,28 @@ isize numDirectoryItems(const char *path)
     return count;
 }
 
-long
-getSizeOfFile(const char *filename)
+isize
+getSizeOfFile(const string &path)
+{
+    return getSizeOfFile(path.c_str());
+}
+
+isize
+getSizeOfFile(const char *path)
 {
     struct stat fileProperties;
-    
-    if (filename == nullptr)
-        return -1;
-    
-    if (stat(filename, &fileProperties) != 0)
+        
+    if (stat(path, &fileProperties) != 0)
         return -1;
     
     return fileProperties.st_size;
 }
 
-bool matchingStreamHeader(std::istream &stream, const u8 *header, isize length)
+bool matchingStreamHeader(std::istream &stream, const u8 *header, isize len)
 {
     stream.seekg(0, std::ios::beg);
     
-    for (isize i = 0; i < length; i++) {
+    for (isize i = 0; i < len; i++) {
         int c = stream.get();
         if (c != (int)header[i]) {
             stream.seekg(0, std::ios::beg);
@@ -218,6 +168,20 @@ bool matchingStreamHeader(std::istream &stream, const u8 *header, isize length)
         }
     }
     stream.seekg(0, std::ios::beg);
+    return true;
+}
+
+bool
+matchingBufferHeader(const u8 *buffer, const u8 *header, isize len)
+{
+    assert(buffer != nullptr);
+    assert(header != nullptr);
+    
+    for (isize i = 0; i < len; i++) {
+        if (header[i] != buffer[i])
+            return false;
+    }
+
     return true;
 }
 

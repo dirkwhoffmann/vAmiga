@@ -10,7 +10,7 @@
 #include "Amiga.h"
 
 bool
-ADFFile::isCompatibleName(const std::string &name)
+ADFFile::isCompatibleName(const string &name)
 {
     return name == "adf" || name == "ADF";
 }

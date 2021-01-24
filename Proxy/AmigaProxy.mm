@@ -1906,7 +1906,7 @@ using namespace moira;
 
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec
 {
-    std::string str = string([path fileSystemRepresentation]);
+    string str = string([path fileSystemRepresentation]);
     return [self make: Folder::makeWithFolder(str, ec)];
 }
 

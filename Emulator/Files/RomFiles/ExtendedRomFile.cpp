@@ -18,7 +18,7 @@ ExtendedRomFile::ExtendedRomFile()
 }
 
 bool
-ExtendedRomFile::isCompatibleName(const std::string &name)
+ExtendedRomFile::isCompatibleName(const string &name)
 {
     return true;
 }
@@ -34,26 +34,8 @@ ExtendedRomFile::isCompatibleStream(std::istream &stream)
 }
 
 bool
-ExtendedRomFile::isExtendedRomBuffer(const u8 *buffer, isize length)
-{
-    if (length != KB(512)) return false;
-
-    return
-    matchingBufferHeader(buffer, magicBytes1, sizeof(magicBytes1)) ||
-    matchingBufferHeader(buffer, magicBytes2, sizeof(magicBytes2));
-}
-
-bool
 ExtendedRomFile::isExtendedRomFile(const char *path)
 {
     std::ifstream stream(path);
     return stream.is_open() ? isCompatibleStream(stream) : false;
-
-    /*
-    if (!checkFileSize(path, KB(512))) return false;
-
-    return
-    matchingFileHeader(path, magicBytes1, sizeof(magicBytes1)) ||
-    matchingFileHeader(path, magicBytes2, sizeof(magicBytes2));
-    */
 }

@@ -81,7 +81,7 @@ AmigaFile::readFromBuffer(const u8 *buf, isize len)
 {
     assert(buf);
 
-    std::istringstream stream(std::string((const char *)buf, len));
+    std::istringstream stream(string((const char *)buf, len));
     
     isize result = readFromStream(stream);
     assert(result == size);

@@ -176,40 +176,30 @@ void hexdumpLongwords(u8 *p, isize size, isize cols = 32);
 //
 
 // Extracts a certain component from a path
-string extractPath(const string &s);
-string extractName(const string &s);
-string extractSuffix(const string &s);
+string extractPath(const string &path);
+string extractName(const string &path);
+string extractSuffix(const string &path);
 
 // Strips a certain component from a path
-string stripPath(const string &s);
-string stripName(const string &s);
-string stripSuffix(const string &s);
-
-/* Compares the file suffix with a given string.
- * The function is used for determining the type of a file.
- */
-bool checkFileSuffix(const char *path, const char *suffix);
+string stripPath(const string &path);
+string stripName(const string &path);
+string stripSuffix(const string &path);
 
 // Returns the size of a file in bytes
-long getSizeOfFile(const char *path);
-
-// Checks the size of a file
-bool checkFileSize(const char *path, long size);
-bool checkFileSizeRange(const char *path, long min, long max);
-
-// Checks the header signature (magic bytes) of a file or buffer
-bool matchingBufferHeader(const u8 *buffer, const u8 *header, isize length);
+isize getSizeOfFile(const string &path);
+isize getSizeOfFile(const char *path);
 
 // Checks if a path points to a directory
-bool isDirectory(const std::string &path);
+bool isDirectory(const string &path);
 bool isDirectory(const char *path);
 
 // Returns the number of files in a directory
-isize numDirectoryItems(const std::string &path);
+isize numDirectoryItems(const string &path);
 isize numDirectoryItems(const char *path);
 
-// Checks the header signature (magic bytes) of a file or buffer
-bool matchingStreamHeader(std::istream &stream, const u8 *header, isize length);
+// Checks the header signature (magic bytes) of a stream or buffer
+bool matchingStreamHeader(std::istream &stream, const u8 *header, isize len);
+bool matchingBufferHeader(const u8 *buffer, const u8 *header, isize len);
 
 // Loads a file from disk
 bool loadFile(const char *path, u8 **buffer, isize *size);

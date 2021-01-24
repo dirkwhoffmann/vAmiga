@@ -14,7 +14,7 @@ unsigned short extractDMS(FILE *fi, FILE *fo);
 }
 
 bool
-DMSFile::isCompatibleName(const std::string &name)
+DMSFile::isCompatibleName(const string &name)
 {
     return name == "dms" || name == "DMS";
 }

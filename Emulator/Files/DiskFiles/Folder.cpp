@@ -23,7 +23,7 @@ Folder::isFolder(const char *path)
 }
 
 Folder *
-Folder::makeWithFolder(const std::string &path)
+Folder::makeWithFolder(const string &path)
 {
     Folder *folder = new Folder();
     
@@ -68,7 +68,7 @@ Folder::makeWithFolder(const std::string &path)
 }
 
 Folder *
-Folder::makeWithFolder(const std::string &path, ErrorCode *err)
+Folder::makeWithFolder(const string &path, ErrorCode *err)
 {
     *err = ERROR_OK;
     

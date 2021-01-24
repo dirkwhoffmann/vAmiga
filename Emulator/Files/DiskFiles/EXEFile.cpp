@@ -11,7 +11,7 @@
 #include "FSDevice.h"
 
 bool
-EXEFile::isCompatibleName(const std::string &name)
+EXEFile::isCompatibleName(const string &name)
 {
     return name == "exe" || name == "EXE";
 }

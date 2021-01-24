@@ -44,7 +44,7 @@ Thumbnail::take(Amiga *amiga, int dx, int dy)
 }
 
 bool
-Snapshot::isCompatibleName(const std::string &name)
+Snapshot::isCompatibleName(const string &name)
 {
     return true;
 }
@@ -56,28 +56,6 @@ Snapshot::isCompatibleStream(std::istream &stream)
     
     if (streamLength(stream) < 0x15) return false;
     return matchingStreamHeader(stream, magicBytes, sizeof(magicBytes));
-}
-
-bool
-Snapshot::isSnapshot(const u8 *buf, isize len)
-{
-    assert(buf != nullptr);
-
-    u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
-        
-    if (len < isizeof(SnapshotHeader)) return false;
-    return matchingBufferHeader(buf, signature, sizeof(signature));
-}
-
-bool
-Snapshot::isSnapshot(const u8 *buf, isize len, u8 major, u8 minor, u8 subminor)
-{
-    assert(buf != nullptr);
-
-    u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P', major, minor, subminor };
-    
-    if (len < isizeof(SnapshotHeader)) return false;
-    return matchingBufferHeader(buf, signature, sizeof(signature));
 }
 
 Snapshot::Snapshot()
