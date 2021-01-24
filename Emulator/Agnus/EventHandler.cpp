@@ -24,7 +24,7 @@ Agnus::inspectEvents()
         eventInfo.hpos = pos.h;
         
         // Inspect all slots
-        for (int i = 0; i < SLOT_COUNT; i++) inspectEventSlot((EventSlot)i);
+        for (usize i = 0; i < SLOT_COUNT; i++) inspectEventSlot((EventSlot)i);
     }
 }
 

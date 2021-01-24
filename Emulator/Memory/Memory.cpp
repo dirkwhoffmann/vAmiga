@@ -301,7 +301,7 @@ Memory::_dump() const
     };
 
     // Print a summary of the installed memory
-    for (int i = 0; i < 6; i++) {
+    for (usize i = 0; i < 6; i++) {
 
         usize size = mem[i].size;
         u8 *addr = mem[i].addr;
@@ -2373,7 +2373,7 @@ Memory::pokeCustom16(u32 addr, u16 value)
 template <Accessor A> const char *
 Memory::ascii(u32 addr)
 {
-    for (int i = 0; i < 16; i += 2) {
+    for (usize i = 0; i < 16; i += 2) {
         u16 word = spypeek16 <A> (addr + i);
         str[i] = isprint(HI_BYTE(word)) ? HI_BYTE(word) : '.';
         str[i+1] = isprint(LO_BYTE(word)) ? LO_BYTE(word) : '.';

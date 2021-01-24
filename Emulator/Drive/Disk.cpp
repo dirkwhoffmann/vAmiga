@@ -20,7 +20,7 @@ Disk::Disk(DiskDiameter type, DiskDensity density)
     if (type == INCH_525 && density == DISK_DD) trackLength = 12668;
 
     assert(trackLength != 0);
-    for (int i = 0; i < 168; i++) length.track[i] = trackLength;
+    for (usize i = 0; i < 168; i++) length.track[i] = trackLength;
     
     clearDisk();
 }
@@ -122,7 +122,7 @@ Disk::clearDisk()
      */
     if (diameter == INCH_35 && density == DISK_DD) {
         
-        for (int t = 0; t < numTracks(); t++) {
+        for (isize t = 0; t < numTracks(); t++) {
             data.track[t][0] = 0x44;
             data.track[t][1] = 0xA2;
         }

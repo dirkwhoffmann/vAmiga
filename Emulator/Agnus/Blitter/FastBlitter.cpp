@@ -88,7 +88,7 @@ void Blitter::doFastCopyBlit()
     aold = 0;
     bold = 0;
 
-    for (int y = 0; y < bltsizeV; y++) {
+    for (usize y = 0; y < bltsizeV; y++) {
 
         // Reset the fill carry bit
         fillCarry = !!bltconFCI();
@@ -96,7 +96,7 @@ void Blitter::doFastCopyBlit()
         // Apply the "first word mask" in the first iteration
         u16 mask = bltafwm;
 
-        for (int x = 0; x < bltsizeH; x++) {
+        for (usize x = 0; x < bltsizeH; x++) {
 
             // Apply the "last word mask" in the last iteration
             if (x == bltsizeH - 1) mask &= bltalwm;
