@@ -236,15 +236,14 @@ public:
     
 private:
     
-    void colorize(u32 *dst, int from, int to);
-    void colorizeHAM(u32 *dst, int from, int to, u16& ham);
+    void colorize(u32 *dst, Pixel from, Pixel to);
+    void colorizeHAM(u32 *dst, Pixel from, Pixel to, u16& ham);
     
-    /* Hides some graphics layers.
-     * This function is an optional stage applied after colorize(). It can
-     * be used to hide some layers for debugging.
+    /* Hides some graphics layers. This function is an optional stage applied
+     * after colorize(). It can be used to hide some layers for debugging.
      */
     
 public:
     
-    void hide(int line, u16 layer, u8 alpha);
+    void hide(usize line, u16 layer, u8 alpha);
 };

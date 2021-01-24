@@ -608,7 +608,7 @@ Denise::drawSprites()
         
         // Record sprite data in debug mode
         if (amiga.inDebugMode()) {
-            for (int i = 0; i < 8; i++) {
+            for (usize i = 0; i < 8; i++) {
                 if (GET_BIT(wasArmed, i)) recordSpriteData(i);
             }
         }
@@ -727,7 +727,7 @@ Denise::replaySpriteRegChanges()
     int begin = sprChanges[pair].begin();
     int end = sprChanges[pair].end();
     
-    for (int i = begin; i != end; i = sprChanges[pair].next(i)) {
+    for (isize i = begin; i != end; i = sprChanges[pair].next(i)) {
         
         RegChange &change = sprChanges[pair].elements[i];
         
@@ -914,7 +914,7 @@ Denise::drawBorder()
     if (lineIsBlank) {
 
         // Draw blank line
-        for (int i = 0; i <= LAST_PIXEL; i++) {
+        for (Pixel i = 0; i <= LAST_PIXEL; i++) {
             bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
         }
 
@@ -937,7 +937,7 @@ Denise::drawBorder()
 
 #ifdef LINE_DEBUG
     if (LINE_DEBUG) {
-        for (int i = 0; i <= LAST_PIXEL / 2; i++) {
+        for (Pixel i = 0; i <= LAST_PIXEL / 2; i++) {
             iBuffer[i] = mBuffer[i] = 64;
         }
     }
@@ -957,7 +957,7 @@ Denise::checkS2SCollisions(Pixel start, Pixel end)
     u16 comp67 = Z_SP6 | (GET_BIT(clxcon, 15) ? Z_SP7 : 0);
 
     // Iterate over all sprite pixels
-    for (int pos = end; pos >= start; pos -= 2) {
+    for (Pixel pos = end; pos >= start; pos -= 2) {
 
         u16 z = zBuffer[pos];
         
@@ -991,8 +991,6 @@ Denise::checkS2SCollisions(Pixel start, Pixel end)
 template <int x> void
 Denise::checkS2PCollisions(Pixel start, Pixel end)
 {
-    // debug(CLX_DEBUG, "checkS2PCollisions<%d>(%d, %d)\n", x, start, end);
-    
     // For the odd sprites, only proceed if collision detection is enabled
     if (IS_ODD(x) && !getENSP<x>()) return;
     
@@ -1002,7 +1000,7 @@ Denise::checkS2PCollisions(Pixel start, Pixel end)
     u8 compare2 = getMVBP2() & enabled2;
 
     // Check for sprite-playfield collisions
-    for (int pos = end; pos >= start; pos -= 2) {
+    for (Pixel pos = end; pos >= start; pos -= 2) {
 
         u16 z = zBuffer[pos];
 
@@ -1068,7 +1066,7 @@ Denise::vsyncHandler()
     
     if (amiga.inDebugMode()) {
         
-        for (int i = 0; i < 8; i++) {
+        for (usize i = 0; i < 8; i++) {
             latchedSpriteInfo[i] = spriteInfo[i];
             spriteInfo[i].height = 0;
             spriteInfo[i].vstrt  = 0;
@@ -1094,7 +1092,7 @@ Denise::beginOfLine(int vpos)
     wasArmed = armed;
 
     // Prepare the bitplane shift registers
-    for (int i = 0; i < 6; i++) shiftReg[i] = 0;
+    for (usize i = 0; i < 6; i++) shiftReg[i] = 0;
 
     // Clear the bBuffer
     memset(bBuffer, 0, sizeof(bBuffer));
@@ -1167,7 +1165,7 @@ Denise::recordSpriteData(usize nr)
         spriteInfo[nr].vstop = agnus.sprVStop[nr];
         spriteInfo[nr].attach = IS_ODD(nr) ? GET_BIT(sprctl[nr], 7) : 0;
         
-        for (int i = 0; i < 16; i++) {
+        for (usize i = 0; i < 16; i++) {
             spriteInfo[nr].colors[i] = pixelEngine.getColor(i + 16);
         }
     }

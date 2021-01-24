@@ -137,7 +137,7 @@ PixelEngine::updateRGBA()
     }
 
     // Update all RGBA values that are cached in indexedRgba[]
-    for (int i = 0; i < 32; i++) setColor(i, colreg[i]);
+    for (usize i = 0; i < 32; i++) setColor(i, colreg[i]);
 }
 
 void
@@ -264,7 +264,7 @@ void
 PixelEngine::endOfVBlankLine()
 {
     // Apply all color register changes that happened in this line
-    for (int i = colChanges.begin(); i != colChanges.end(); i = colChanges.next(i)) {
+    for (isize i = colChanges.begin(); i != colChanges.end(); i = colChanges.next(i)) {
         applyRegisterChange(colChanges.elements[i]);
     }
 }
@@ -302,7 +302,7 @@ PixelEngine::colorize(int line)
     colChanges.insert(HPIXELS, RegChange { SET_NONE, 0 } );
 
     // Iterate over all recorded register changes
-    for (int i = colChanges.begin(); i != colChanges.end(); i = colChanges.next(i)) {
+    for (isize i = colChanges.begin(); i != colChanges.end(); i = colChanges.next(i)) {
 
         Cycle trigger = colChanges.keys[i];
         RegChange &change = colChanges.elements[i];
@@ -320,7 +320,7 @@ PixelEngine::colorize(int line)
     }
 
     // Wipe out the HBLANK area
-    for (int pixel = 4 * HBLANK_MIN; pixel <= 4 * HBLANK_MAX; pixel++) {
+    for (Pixel pixel = 4 * HBLANK_MIN; pixel <= 4 * HBLANK_MAX; pixel++) {
         dst[pixel] = rgbaHBlank;
     }
 
@@ -329,23 +329,23 @@ PixelEngine::colorize(int line)
 }
 
 void
-PixelEngine::colorize(u32 *dst, int from, int to)
+PixelEngine::colorize(u32 *dst, Pixel from, Pixel to)
 {
     u8 *mbuf = denise.mBuffer;
 
-    for (int i = from; i < to; i++) {
+    for (Pixel i = from; i < to; i++) {
         dst[i] = indexedRgba[mbuf[i]];
     }
 }
 
 void
-PixelEngine::colorizeHAM(u32 *dst, int from, int to, u16& ham)
+PixelEngine::colorizeHAM(u32 *dst, Pixel from, Pixel to, u16& ham)
 {
     u8 *bbuf = denise.bBuffer;
     u8 *ibuf = denise.iBuffer;
     u8 *mbuf = denise.mBuffer;
 
-    for (int i = from; i < to; i++) {
+    for (Pixel i = from; i < to; i++) {
 
         u8 index = ibuf[i];
         assert(isRgbaIndex(index));
@@ -390,7 +390,7 @@ PixelEngine::colorizeHAM(u32 *dst, int from, int to, u16& ham)
 }
 
 void
-PixelEngine::hide(int line, u16 layers, u8 alpha)
+PixelEngine::hide(usize line, u16 layers, u8 alpha)
 {
     u32 *p = frameBuffer->data + line * HPIXELS;
 
