@@ -115,7 +115,7 @@ Paula::setINTENA(bool setclr, u16 value)
     checkInterrupt();
 }
 
-template <usize x> u16
+template <isize x> u16
 Paula::peekPOTxDAT() const
 {
     assert(x == 0 || x == 1);

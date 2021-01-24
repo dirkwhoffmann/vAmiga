@@ -213,7 +213,7 @@ public:
     void setINTENA(u16 value) { setINTENA(value & 0x8000, value & 0x7FFF); }
 
     // POTxDAT
-    template <usize x> u16 peekPOTxDAT() const;
+    template <isize x> u16 peekPOTxDAT() const;
 
     // POTGOR and POTGO
     u16 peekPOTGOR() const;

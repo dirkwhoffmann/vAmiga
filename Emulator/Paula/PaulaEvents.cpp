@@ -18,7 +18,7 @@ Paula::serviceIrqEvent()
     Cycle next = NEVER;
 
     // Check all interrupt sources
-    for (usize src = 0; src < 16; src++) {
+    for (isize src = 0; src < 16; src++) {
 
         // Check if the interrupt source is due
         if (clock >= setIntreq[src]) {

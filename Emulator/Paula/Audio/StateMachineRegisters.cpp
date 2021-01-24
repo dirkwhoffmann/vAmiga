@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-template <usize nr> void
+template <isize nr> void
 StateMachine<nr>::pokeAUDxLEN(u16 value)
 {
     trace(AUDREG_DEBUG, "pokeAUD%luLEN(%X)\n", nr, value);
@@ -17,7 +17,7 @@ StateMachine<nr>::pokeAUDxLEN(u16 value)
     audlenLatch = value;
 }
 
-template <usize nr> void
+template <isize nr> void
 StateMachine<nr>::pokeAUDxPER(u16 value)
 {
     trace(AUDREG_DEBUG, "pokeAUD%luPER(%X)\n", nr, value);
@@ -25,7 +25,7 @@ StateMachine<nr>::pokeAUDxPER(u16 value)
     audperLatch = value;
 }
 
-template <usize nr> void
+template <isize nr> void
 StateMachine<nr>::pokeAUDxVOL(u16 value)
 {
     trace(AUDREG_DEBUG, "pokeAUD%luVOL(%X)\n", nr, value);
@@ -35,7 +35,7 @@ StateMachine<nr>::pokeAUDxVOL(u16 value)
     audvolLatch = MIN(value & 0x7F, 64);
 }
 
-template <usize nr> void
+template <isize nr> void
 StateMachine<nr>::pokeAUDxDAT(u16 value)
 {
     trace(AUDREG_DEBUG, "pokeAUD%luDAT(%X)\n", nr, value);
