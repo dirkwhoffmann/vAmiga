@@ -178,7 +178,7 @@ FSPartition::freeBlocks() const
 {
     u32 result = 0;
     
-    for (usize i = firstBlock; i <= lastBlock; i++) {
+    for (isize i = firstBlock; i <= lastBlock; i++) {
         if (isFree(i)) result++;
     }
 
@@ -204,7 +204,7 @@ FSPartition::usedBytes() const
 }
 
 u32
-FSPartition::requiredDataBlocks(usize fileSize) const
+FSPartition::requiredDataBlocks(isize fileSize) const
 {
     // Compute the capacity of a single data block
     u32 numBytes = bsize() - (isOFS() ? OFSDataBlock::headerSize() : 0);
@@ -214,7 +214,7 @@ FSPartition::requiredDataBlocks(usize fileSize) const
 }
 
 u32
-FSPartition::requiredFileListBlocks(usize fileSize) const
+FSPartition::requiredFileListBlocks(isize fileSize) const
 {
     // Compute the required number of data blocks
     u32 numBlocks = requiredDataBlocks(fileSize);
@@ -230,7 +230,7 @@ FSPartition::requiredFileListBlocks(usize fileSize) const
 }
 
 u32
-FSPartition::requiredBlocks(usize fileSize) const
+FSPartition::requiredBlocks(isize fileSize) const
 {
     u32 numDataBlocks = requiredDataBlocks(fileSize);
     u32 numFileListBlocks = requiredFileListBlocks(fileSize);

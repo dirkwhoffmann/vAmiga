@@ -9,7 +9,7 @@
 
 #include "FSBlock.h"
 
-FSString::FSString(const char *str, usize l) : limit(l)
+FSString::FSString(const char *str, isize l) : limit(l)
 {
     assert(str != nullptr);
     assert(limit <= 91);
@@ -18,7 +18,7 @@ FSString::FSString(const char *str, usize l) : limit(l)
     this->str[limit] = 0;
 }
 
-FSString::FSString(const u8 *bcplStr, usize l) : limit(l)
+FSString::FSString(const u8 *bcplStr, isize l) : limit(l)
 {
     assert(bcplStr != nullptr);
     assert(limit <= 91);
@@ -51,10 +51,10 @@ FSString::operator== (FSString &rhs) const
 u32
 FSString::hashValue() const
 {
-    usize length = strlen(str);
+    isize length = (isize)strlen(str);
     u32 result = (u32)length;
     
-    for (usize i = 0; i < length; i++) {
+    for (isize i = 0; i < length; i++) {
         char c = capital(str[i]);
         result = (result * 13 + (u32)c) & 0x7FF;
     }
@@ -76,7 +76,7 @@ void
 FSName::rectify()
 {
     // Replace all symbols that are not permitted in Amiga filenames
-    for (usize i = 0; i < sizeof(str); i++) {
+    for (isize i = 0; i < isizeof(str); i++) {
         if (str[i] == ':' || str[i] == '/') str[i] = '_';
     }
 }

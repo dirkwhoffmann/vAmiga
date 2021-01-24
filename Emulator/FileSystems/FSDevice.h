@@ -243,7 +243,7 @@ public:
 
     // Creates a new file
     FSBlock *makeFile(const char *name);
-    FSBlock *makeFile(const char *name, const u8 *buffer, usize size);
+    FSBlock *makeFile(const char *name, const u8 *buffer, isize size);
     FSBlock *makeFile(const char *name, const char *str);
         
     
@@ -327,22 +327,22 @@ public:
     FSBlockType predictBlockType(u32 nr, const u8 *buffer);
 
     // Imports the volume from a buffer compatible with the ADF format
-    bool importVolume(const u8 *src, usize size);
-    bool importVolume(const u8 *src, usize size, ErrorCode *error);
+    bool importVolume(const u8 *src, isize size);
+    bool importVolume(const u8 *src, isize size, ErrorCode *error);
 
     // Imports a directory from the host file system
     bool importDirectory(const char *path, bool recursive = true);
     bool importDirectory(const char *path, DIR *dir, bool recursive = true);
 
     // Exports the volume to a buffer compatible with the ADF format
-    bool exportVolume(u8 *dst, usize size);
-    bool exportVolume(u8 *dst, usize size, ErrorCode *error);
+    bool exportVolume(u8 *dst, isize size);
+    bool exportVolume(u8 *dst, isize size, ErrorCode *error);
 
     // Exports a single block or a range of blocks
-    bool exportBlock(u32 nr, u8 *dst, usize size);
-    bool exportBlock(u32 nr, u8 *dst, usize size, ErrorCode *error);
-    bool exportBlocks(u32 first, u32 last, u8 *dst, usize size);
-    bool exportBlocks(u32 first, u32 last, u8 *dst, usize size, ErrorCode *error);
+    bool exportBlock(u32 nr, u8 *dst, isize size);
+    bool exportBlock(u32 nr, u8 *dst, isize size, ErrorCode *error);
+    bool exportBlocks(u32 first, u32 last, u8 *dst, isize size);
+    bool exportBlocks(u32 first, u32 last, u8 *dst, isize size, ErrorCode *error);
 
     // Exports the volume to a directory of the host file system
     ErrorCode exportDirectory(const char *path);

@@ -27,7 +27,7 @@ struct FSDataBlock : FSBlock {
     virtual u32  getDataBytesInBlock() const = 0;
     virtual void setDataBytesInBlock(u32 val) = 0;
     
-    virtual usize writeData(FILE *file, usize size) = 0;
+    virtual isize writeData(FILE *file, isize size) = 0;
     
     
     //
@@ -35,7 +35,7 @@ struct FSDataBlock : FSBlock {
     //
 
     // Returns the number of data bytes stored in this block
-    virtual usize dsize() const = 0;
+    virtual isize dsize() const = 0;
 };
 
 struct OFSDataBlock : FSDataBlock {
@@ -63,10 +63,10 @@ struct OFSDataBlock : FSDataBlock {
     u32  getNextDataBlockRef() const override       { return get32(4);        }
     void setNextDataBlockRef(u32 ref) override      {        set32(4, ref);   }
 
-    usize writeData(FILE *file, usize size) override;
-    usize addData(const u8 *buffer, usize size) override;
+    isize writeData(FILE *file, isize size) override;
+    isize addData(const u8 *buffer, isize size) override;
     
-    usize dsize() const override;
+    isize dsize() const override;
 };
 
 struct FFSDataBlock : FSDataBlock {
@@ -86,8 +86,8 @@ struct FFSDataBlock : FSDataBlock {
     u32  getDataBytesInBlock() const override { return 0; }
     void setDataBytesInBlock(u32 val) override { };
 
-    usize writeData(FILE *file, usize size) override;
-    usize addData(const u8 *buffer, usize size) override;
+    isize writeData(FILE *file, isize size) override;
+    isize addData(const u8 *buffer, isize size) override;
     
-    usize dsize() const override;
+    isize dsize() const override;
 };

@@ -89,20 +89,20 @@ OFSDataBlock::check(u32 byte, u8 *expected, bool strict) const
     return ERROR_OK;
 }
 
-usize
-OFSDataBlock::writeData(FILE *file, usize size)
+isize
+OFSDataBlock::writeData(FILE *file, isize size)
 {
     assert(file != nullptr);
     
-    usize count = MIN(dsize(), size);
-    for (usize i = 0; i < count; i++) fputc(data[i + headerSize()], file);
+    isize count = MIN(dsize(), size);
+    for (isize i = 0; i < count; i++) fputc(data[i + headerSize()], file);
     return count;
 }
 
-usize
-OFSDataBlock::addData(const u8 *buffer, usize size)
+isize
+OFSDataBlock::addData(const u8 *buffer, isize size)
 {
-    usize count = MIN(bsize() - headerSize(), size);
+    isize count = MIN(bsize() - headerSize(), size);
 
     memcpy(data + headerSize(), buffer, count);
     setDataBytesInBlock(count);
@@ -110,7 +110,7 @@ OFSDataBlock::addData(const u8 *buffer, usize size)
     return count;
 }
 
-usize
+isize
 OFSDataBlock::dsize() const
 {
     return bsize() - headerSize();
@@ -134,25 +134,25 @@ FFSDataBlock::itemType(u32 pos) const
     return FSI_DATA;
 }
 
-usize
-FFSDataBlock::writeData(FILE *file, usize size)
+isize
+FFSDataBlock::writeData(FILE *file, isize size)
 {
     assert(file != nullptr);
     
-    usize count = MIN(dsize(), size);
-    for (usize i = 0; i < count; i++) fputc(data[i + headerSize()], file);
+    isize count = MIN(dsize(), size);
+    for (isize i = 0; i < count; i++) fputc(data[i + headerSize()], file);
     return count;
 }
 
-usize
-FFSDataBlock::addData(const u8 *buffer, usize size)
+isize
+FFSDataBlock::addData(const u8 *buffer, isize size)
 {
-    usize count = MIN(bsize(), size);
+    isize count = MIN(bsize(), size);
     memcpy(data, buffer, count);
     return count;
 }
 
-usize
+isize
 FFSDataBlock::dsize() const
 {
     return bsize() - headerSize();

@@ -98,9 +98,9 @@ public:
 public:
     
     // Returns the number of required blocks to store a file of certain size
-    u32 requiredDataBlocks(usize fileSize) const;
-    u32 requiredFileListBlocks(usize fileSize) const;
-    u32 requiredBlocks(usize fileSize) const;
+    u32 requiredDataBlocks(isize fileSize) const;
+    u32 requiredFileListBlocks(isize fileSize) const;
+    u32 requiredBlocks(isize fileSize) const;
 
     // Seeks a free block and marks it as allocated
     u32 allocateBlock();

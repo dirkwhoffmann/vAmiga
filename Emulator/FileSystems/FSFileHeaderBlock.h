@@ -71,8 +71,8 @@ struct FSFileHeaderBlock : FSBlock {
     // Block specific methods
     //
     
-    usize writeData(FILE *file);
-    usize addData(const u8 *buffer, usize size) override;
+    isize writeData(FILE *file);
+    isize addData(const u8 *buffer, isize size) override;
 
     bool addDataBlockRef(u32 ref);
     bool addDataBlockRef(u32 first, u32 ref) override;

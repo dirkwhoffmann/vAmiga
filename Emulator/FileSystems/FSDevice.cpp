@@ -202,7 +202,7 @@ FSDevice::dump()
     msg("\n");
 
     // Dump all blocks
-    for (usize i = 0; i < numBlocks; i++)  {
+    for (isize i = 0; i < numBlocks; i++)  {
         
         if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
         
@@ -437,7 +437,7 @@ FSDevice::makeFile(const char *name)
 }
 
 FSBlock *
-FSDevice::makeFile(const char *name, const u8 *buf, usize size)
+FSDevice::makeFile(const char *name, const u8 *buf, isize size)
 {
     assert(buf);
 
@@ -781,7 +781,7 @@ FSDevice::predictBlockType(u32 nr, const u8 *buffer)
 }
 
 bool
-FSDevice::importVolume(const u8 *src, usize size)
+FSDevice::importVolume(const u8 *src, isize size)
 {
     ErrorCode error;
     bool result = importVolume(src, size, &error);
@@ -791,7 +791,7 @@ FSDevice::importVolume(const u8 *src, usize size)
 }
 
 bool
-FSDevice::importVolume(const u8 *src, usize size, ErrorCode *err)
+FSDevice::importVolume(const u8 *src, isize size, ErrorCode *err)
 {
     assert(src != nullptr);
 
@@ -849,31 +849,31 @@ FSDevice::importVolume(const u8 *src, usize size, ErrorCode *err)
 }
 
 bool
-FSDevice::exportVolume(u8 *dst, usize size)
+FSDevice::exportVolume(u8 *dst, isize size)
 {
     return exportBlocks(0, numBlocks - 1, dst, size);
 }
 
 bool
-FSDevice::exportVolume(u8 *dst, usize size, ErrorCode *err)
+FSDevice::exportVolume(u8 *dst, isize size, ErrorCode *err)
 {
     return exportBlocks(0, numBlocks - 1, dst, size, err);
 }
 
 bool
-FSDevice::exportBlock(u32 nr, u8 *dst, usize size)
+FSDevice::exportBlock(u32 nr, u8 *dst, isize size)
 {
     return exportBlocks(nr, nr, dst, size);
 }
 
 bool
-FSDevice::exportBlock(u32 nr, u8 *dst, usize size, ErrorCode *error)
+FSDevice::exportBlock(u32 nr, u8 *dst, isize size, ErrorCode *error)
 {
     return exportBlocks(nr, nr, dst, size, error);
 }
 
 bool
-FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, usize size)
+FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, isize size)
 {
     ErrorCode error;
     bool result = exportBlocks(first, last, dst, size, &error);
@@ -883,7 +883,7 @@ FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, usize size)
 }
 
 bool
-FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, usize size, ErrorCode *err)
+FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, isize size, ErrorCode *err)
 {
     assert(last < numBlocks);
     assert(first <= last);

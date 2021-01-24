@@ -123,7 +123,7 @@ FSBlock::updateChecksum()
 }
 
 void
-FSBlock::importBlock(const u8 *src, usize size)
+FSBlock::importBlock(const u8 *src, isize size)
 {    
     assert(size == bsize());
     assert(src != nullptr);
@@ -133,7 +133,7 @@ FSBlock::importBlock(const u8 *src, usize size)
 }
 
 void
-FSBlock::exportBlock(u8 *dst, usize size)
+FSBlock::exportBlock(u8 *dst, isize size)
 {
     assert(size == bsize());
             
