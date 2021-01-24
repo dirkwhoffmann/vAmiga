@@ -496,9 +496,9 @@ public:
     
 public:
 
-    template <bool hiresMode> void drawOdd(int offset);
-    template <bool hiresMode> void drawEven(int offset);
-    template <bool hiresMode> void drawBoth(int offset);
+    template <bool hiresMode> void drawOdd(Pixel offset);
+    template <bool hiresMode> void drawEven(Pixel offset);
+    template <bool hiresMode> void drawBoth(Pixel offset);
     void drawHiresOdd()  { if (armedOdd)  drawOdd <true>  (pixelOffsetOdd);  }
     void drawHiresEven() { if (armedEven) drawEven<true>  (pixelOffsetEven); }
     void drawHiresBoth();
@@ -515,11 +515,11 @@ private:
     void translate();
 
     // Called by translate() in single-playfield mode
-    void translateSPF(usize from, usize to, PFState &state);
+    void translateSPF(Pixel from, Pixel to, PFState &state);
 
     // Called by translate() in dual-playfield mode
-    void translateDPF(usize from, usize to, PFState &state);
-    template <bool pf2pri> void translateDPF(usize from, usize to, PFState &state);
+    void translateDPF(Pixel from, Pixel to, PFState &state);
+    template <bool pf2pri> void translateDPF(Pixel from, Pixel to, PFState &state);
 
 public:
 

@@ -279,7 +279,7 @@ Denise::fillShiftRegisters(bool odd, bool even)
 }
 
 template <bool hiresMode> void
-Denise::drawOdd(int offset)
+Denise::drawOdd(Pixel offset)
 {
     assert(!hiresMode || (agnus.pos.h & 0x3) == agnus.scrollHiresOdd);
     assert( hiresMode || (agnus.pos.h & 0x7) == agnus.scrollLoresOdd);
@@ -295,7 +295,7 @@ Denise::drawOdd(int offset)
     };
     
     u16 mask = masks[bpu()];
-    i16 currentPixel = agnus.ppos() + offset;
+    Pixel currentPixel = agnus.ppos() + offset;
     
     for (usize i = 0; i < 16; i++) {
         
@@ -304,7 +304,7 @@ Denise::drawOdd(int offset)
         if (hiresMode) {
             
             // Synthesize one hires pixel
-            assert((usize)currentPixel < sizeof(bBuffer));
+            assert(currentPixel < (Pixel)sizeof(bBuffer));
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
             currentPixel++;
             
@@ -325,7 +325,7 @@ Denise::drawOdd(int offset)
 }
 
 template <bool hiresMode> void
-Denise::drawEven(int offset)
+Denise::drawEven(Pixel offset)
 {
     assert(!hiresMode || (agnus.pos.h & 0x3) == agnus.scrollHiresEven);
     assert( hiresMode || (agnus.pos.h & 0x7) == agnus.scrollLoresEven);
@@ -371,7 +371,7 @@ Denise::drawEven(int offset)
 }
 
 template <bool hiresMode> void
-Denise::drawBoth(int offset)
+Denise::drawBoth(Pixel offset)
 {
     static const u16 masks[7] = {
         0b000000,         // 0 bitplanes
@@ -445,7 +445,7 @@ Denise::drawLoresBoth()
 void
 Denise::translate()
 {
-    int pixel = 0;
+    Pixel pixel = 0;
 
     // Start with the playfield state as it was at the beginning of the line
     PFState state;
@@ -497,7 +497,7 @@ Denise::translate()
 }
 
 void
-Denise::translateSPF(usize from, usize to, PFState &state)
+Denise::translateSPF(Pixel from, Pixel to, PFState &state)
 {
     /* Check for invalid bitplane modes. If the priority of the second bitplane
      * is set to an invalid value (> 4), Denise ignores the data from the first
@@ -511,7 +511,7 @@ Denise::translateSPF(usize from, usize to, PFState &state)
     
     if (unlikely(!state.prio2 && !state.ham)) {
         
-        for (usize i = from; i < to; i++) {
+        for (Pixel i = from; i < to; i++) {
 
              u8 s = bBuffer[i];
 
@@ -522,8 +522,8 @@ Denise::translateSPF(usize from, usize to, PFState &state)
         return;
     }
     
-    // Translate the normal way
-    for (usize i = from; i < to; i++) {
+    // Translate the usual way
+    for (Pixel i = from; i < to; i++) {
         
         u8 s = bBuffer[i];
         
@@ -534,7 +534,7 @@ Denise::translateSPF(usize from, usize to, PFState &state)
 }
 
 void
-Denise::translateDPF(usize from, usize to, PFState &state)
+Denise::translateDPF(Pixel from, Pixel to, PFState &state)
 {
     if (state.pf2pri) {
         translateDPF<true>(from, to, state);
@@ -544,7 +544,7 @@ Denise::translateDPF(usize from, usize to, PFState &state)
 }
 
 template <bool pf2pri> void
-Denise::translateDPF(usize from, usize to, PFState &state)
+Denise::translateDPF(Pixel from, Pixel to, PFState &state)
 {
     /* If the priority of a playfield is set to an illegal value (prio1 or
      * prio2 will be 0 in that case), all pixels are drawn transparent.
@@ -552,7 +552,7 @@ Denise::translateDPF(usize from, usize to, PFState &state)
     u8 mask1 = state.prio1 ? 0b1111 : 0b0000;
     u8 mask2 = state.prio2 ? 0b1111 : 0b0000;
 
-    for (usize i = from; i < to; i++) {
+    for (Pixel i = from; i < to; i++) {
 
         u8 s = bBuffer[i];
 
@@ -1186,10 +1186,10 @@ Denise::dumpBuffer(const u8 *buffer, usize length) const
     }
 }
 
-template void Denise::drawOdd<false>(int offset);
-template void Denise::drawOdd<true>(int offset);
-template void Denise::drawEven<false>(int offset);
-template void Denise::drawEven<true>(int offset);
+template void Denise::drawOdd<false>(Pixel offset);
+template void Denise::drawOdd<true>(Pixel offset);
+template void Denise::drawEven<false>(Pixel offset);
+template void Denise::drawEven<true>(Pixel offset);
 
-template void Denise::translateDPF<true>(usize from, usize to, PFState &state);
-template void Denise::translateDPF<false>(usize from, usize to, PFState &state);
+template void Denise::translateDPF<true>(Pixel from, Pixel to, PFState &state);
+template void Denise::translateDPF<false>(Pixel from, Pixel to, PFState &state);
