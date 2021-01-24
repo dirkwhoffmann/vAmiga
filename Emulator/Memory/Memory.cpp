@@ -300,7 +300,7 @@ Memory::_dump() const
     // Print a summary of the installed memory
     for (isize i = 0; i < 6; i++) {
 
-        usize size = mem[i].size;
+        u32 size = mem[i].size;
         u8 *addr = mem[i].addr;
 
         msg("     %s: ", mem[i].desc);
@@ -311,7 +311,7 @@ Memory::_dump() const
             assert(addr != 0);
             assert(size % KB(1) == 0);
             u32 check = fnv_1a_32(addr, size);
-            msg("%zu KB at: %p Checksum: %x\n", size >> 10, addr, check);
+            msg("%u KB at: %p Checksum: %x\n", size >> 10, addr, check);
         }
     }
 }
@@ -407,9 +407,9 @@ Memory::fillRamWithInitPattern()
         case RAM_INIT_RANDOMIZED:
 
             srand(0);
-            if (chip) for (usize i = 0; i < config.chipSize; i++) chip[i] = rand();
-            if (slow) for (usize i = 0; i < config.slowSize; i++) slow[i] = rand();
-            if (fast) for (usize i = 0; i < config.fastSize; i++) fast[i] = rand();
+            if (chip) for (u32 i = 0; i < config.chipSize; i++) chip[i] = rand();
+            if (slow) for (u32 i = 0; i < config.slowSize; i++) slow[i] = rand();
+            if (fast) for (u32 i = 0; i < config.fastSize; i++) fast[i] = rand();
             break;
             
         case RAM_INIT_ALL_ZEROES:
@@ -2370,7 +2370,7 @@ Memory::pokeCustom16(u32 addr, u16 value)
 template <Accessor A> const char *
 Memory::ascii(u32 addr)
 {
-    for (usize i = 0; i < 16; i += 2) {
+    for (isize i = 0; i < 16; i += 2) {
         u16 word = spypeek16 <A> (addr + i);
         str[i] = isprint(HI_BYTE(word)) ? HI_BYTE(word) : '.';
         str[i+1] = isprint(LO_BYTE(word)) ? LO_BYTE(word) : '.';

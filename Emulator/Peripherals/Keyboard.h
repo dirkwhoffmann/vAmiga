@@ -29,7 +29,7 @@ class Keyboard : public AmigaComponent {
     Cycle spHigh;
 
     // The keycode type-ahead buffer. The Amiga can hold up to 10 keycodes.
-    static const usize bufferSize = 10;
+    static const isize bufferSize = 10;
     u8 typeAheadBuffer[bufferSize];
     
     // Next free position in the type ahead buffer

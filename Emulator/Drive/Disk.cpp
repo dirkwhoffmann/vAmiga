@@ -20,7 +20,7 @@ Disk::Disk(DiskDiameter type, DiskDensity density)
     if (type == INCH_525 && density == DISK_DD) trackLength = 12668;
 
     assert(trackLength != 0);
-    for (usize i = 0; i < 168; i++) length.track[i] = trackLength;
+    for (isize i = 0; i < 168; i++) length.track[i] = trackLength;
     
     clearDisk();
 }
@@ -113,7 +113,7 @@ Disk::clearDisk()
 
     // Initialize with random data
     srand(0);
-    for (usize i = 0; i < sizeof(data.raw); i++) {
+    for (isize i = 0; i < isizeof(data.raw); i++) {
         data.raw[i] = rand() & 0xFF;
     }
     
@@ -135,7 +135,7 @@ Disk::clearTrack(Track t)
     assert(t < numTracks());
 
     srand(0);
-    for (usize i = 0; i < length.track[t]; i++) {
+    for (isize i = 0; i < length.track[t]; i++) {
         data.track[t][i] = rand() & 0xFF;
     }
 }
@@ -145,7 +145,7 @@ Disk::clearTrack(Track t, u8 value)
 {
     assert(t < numTracks());
 
-    for (usize i = 0; i < sizeof(data.track[t]); i++) {
+    for (isize i = 0; i < isizeof(data.track[t]); i++) {
         data.track[t][i] = value;
     }
 }
@@ -155,7 +155,7 @@ Disk::clearTrack(Track t, u8 value1, u8 value2)
 {
     assert(t < numTracks());
 
-    for (usize i = 0; i < length.track[t]; i++) {
+    for (isize i = 0; i < length.track[t]; i++) {
         data.track[t][i] = (i % 2) ? value2 : value1;
     }
 }
@@ -174,9 +174,9 @@ Disk::encodeDisk(DiskFile *df)
 }
 
 void
-Disk::encodeMFM(u8 *dst, u8 *src, usize count)
+Disk::encodeMFM(u8 *dst, u8 *src, isize count)
 {
-    for(usize i = 0; i < count; i++) {
+    for(isize i = 0; i < count; i++) {
         
         u16 mfm =
         ((src[i] & 0b10000000) << 7) |
@@ -194,9 +194,9 @@ Disk::encodeMFM(u8 *dst, u8 *src, usize count)
 }
 
 void
-Disk::decodeMFM(u8 *dst, u8 *src, usize count)
+Disk::decodeMFM(u8 *dst, u8 *src, isize count)
 {
-    for(usize i = 0; i < count; i++) {
+    for(isize i = 0; i < count; i++) {
         
         u16 mfm = HI_LO(src[2*i], src[2*i+1]);
         dst[i] =
@@ -212,33 +212,33 @@ Disk::decodeMFM(u8 *dst, u8 *src, usize count)
 }
 
 void
-Disk::encodeOddEven(u8 *dst, u8 *src, usize count)
+Disk::encodeOddEven(u8 *dst, u8 *src, isize count)
 {
     // Encode odd bits
-    for(usize i = 0; i < count; i++)
+    for(isize i = 0; i < count; i++)
         dst[i] = (src[i] >> 1) & 0x55;
     
     // Encode even bits
-    for(usize i = 0; i < count; i++)
+    for(isize i = 0; i < count; i++)
         dst[i + count] = src[i] & 0x55;
 }
 
 void
-Disk::decodeOddEven(u8 *dst, u8 *src, usize count)
+Disk::decodeOddEven(u8 *dst, u8 *src, isize count)
 {
     // Decode odd bits
-    for(usize i = 0; i < count; i++)
+    for(isize i = 0; i < count; i++)
         dst[i] = (src[i] & 0x55) << 1;
     
     // Decode even bits
-    for(usize i = 0; i < count; i++)
+    for(isize i = 0; i < count; i++)
         dst[i] |= src[i + count] & 0x55;
 }
 
 void
-Disk::addClockBits(u8 *dst, usize count)
+Disk::addClockBits(u8 *dst, isize count)
 {
-    for (usize i = 0; i < count; i++) {
+    for (isize i = 0; i < count; i++) {
         dst[i] = addClockBits(dst[i], dst[i-1]);
     }
 }
