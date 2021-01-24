@@ -34,7 +34,7 @@ public:
     
     FileType type() const override { return FILETYPE_EXE; }
     u64 fnv() const override { return adf->fnv(); }
-    usize readFromStream(std::istream &stream) override;
+    isize readFromStream(std::istream &stream) override;
     
     //
     // Methods from DiskFile

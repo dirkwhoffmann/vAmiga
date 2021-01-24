@@ -27,14 +27,14 @@ DMSFile::isCompatibleStream(std::istream &stream)
     return matchingStreamHeader(stream, signature, sizeof(signature));
 }
 
-usize
+isize
 DMSFile::readFromStream(std::istream &stream)
 {
     FILE *fpi, *fpo;
     char *pi, *po;
     usize si, so;
     
-    usize result = AmigaFile::readFromStream(stream);
+    isize result = AmigaFile::readFromStream(stream);
         
     // We use a third-party tool called xdms to convert the DMS file into an
     // ADF file. Originally, xdms is a command line utility that is designed

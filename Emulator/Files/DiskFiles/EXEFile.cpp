@@ -27,12 +27,12 @@ EXEFile::isCompatibleStream(std::istream &stream)
     return matchingStreamHeader(stream, signature, sizeof(signature));
 }
 
-usize
+isize
 EXEFile::readFromStream(std::istream &stream)
 {
     bool success = false;
     
-    usize result = AmigaFile::readFromStream(stream);
+    isize result = AmigaFile::readFromStream(stream);
     
     // Check if this file requires an HD disk
     bool hd = size > 853000;

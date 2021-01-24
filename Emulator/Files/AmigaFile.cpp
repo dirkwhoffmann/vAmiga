@@ -20,7 +20,7 @@
 #include "ExtendedRomFile.h"
 
 
-AmigaFile::AmigaFile(usize capacity)
+AmigaFile::AmigaFile(isize capacity)
 {
     data = new u8[capacity]();
     size = capacity;
@@ -32,13 +32,13 @@ AmigaFile::~AmigaFile()
 }
 
 void
-AmigaFile::flash(u8 *buffer, usize offset)
+AmigaFile::flash(u8 *buffer, isize offset)
 {
     assert(buffer != nullptr);
     memcpy(buffer + offset, data, size);
 }
 
-usize
+isize
 AmigaFile::readFromStream(std::istream &stream)
 {
     // Get stream size
@@ -58,7 +58,7 @@ AmigaFile::readFromStream(std::istream &stream)
     return size;
 }
 
-usize
+isize
 AmigaFile::readFromFile(const char *path)
 {
     assert(path);
@@ -76,8 +76,8 @@ AmigaFile::readFromFile(const char *path)
     return size;
 }
 
-usize
-AmigaFile::readFromBuffer(const u8 *buf, usize len)
+isize
+AmigaFile::readFromBuffer(const u8 *buf, isize len)
 {
     assert(buf);
 
@@ -88,14 +88,14 @@ AmigaFile::readFromBuffer(const u8 *buf, usize len)
     return size;
 }
 
-usize
+isize
 AmigaFile::writeToStream(std::ostream &stream)
 {
     stream.write((char *)data, size);
     return size;
 }
 
-usize
+isize
 AmigaFile::writeToStream(std::ostream &stream, ErrorCode *err)
 {
     *err = ERROR_OK;
@@ -104,7 +104,7 @@ AmigaFile::writeToStream(std::ostream &stream, ErrorCode *err)
     return 0;
 }
 
-usize
+isize
 AmigaFile::writeToFile(const char *path)
 {
     assert(path);
@@ -121,7 +121,7 @@ AmigaFile::writeToFile(const char *path)
     return size;
 }
 
-usize
+isize
 AmigaFile::writeToFile(const char *path, ErrorCode *err)
 {
     *err = ERROR_OK;
@@ -130,7 +130,7 @@ AmigaFile::writeToFile(const char *path, ErrorCode *err)
     return 0;
 }
 
-usize
+isize
 AmigaFile::writeToBuffer(u8 *buf)
 {
     assert(buf);
@@ -142,7 +142,7 @@ AmigaFile::writeToBuffer(u8 *buf)
     return len;
 }
 
-usize
+isize
 AmigaFile::writeToBuffer(u8 *buf, ErrorCode *err)
 {
     *err = ERROR_OK;

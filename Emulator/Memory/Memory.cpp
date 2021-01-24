@@ -378,7 +378,7 @@ Memory::alloc(isize bytes, u8 *&ptr, u32 &size, u32 &mask)
     // Allocate memory
     if (bytes) {
         
-        usize allocSize = bytes;
+        isize allocSize = bytes;
         
         if (!(ptr = new (std::nothrow) u8[allocSize])) {
             warn("Cannot allocate %zd KB of memory\n", bytes);
@@ -602,7 +602,7 @@ Memory::loadRom(AmigaFile *file, u8 *target, isize length)
             warn("ROM is smaller than buffer\n");
         }
         
-        memcpy(target, file->data, (usize)MIN(file->size, length));
+        memcpy(target, file->data, MIN(file->size, length));
     }
 }
 

@@ -81,14 +81,14 @@ public:
         return nullptr;
     }
     
-    template <class T> static T *make(const u8 *buf, usize len) throws
+    template <class T> static T *make(const u8 *buf, isize len) throws
     {
         std::stringstream stream;
         stream.write((const char *)buf, len);
         return make <T> ("", stream);
     }
     
-    template <class T> static T *make(const u8 *buf, usize len, ErrorCode *err)
+    template <class T> static T *make(const u8 *buf, isize len, ErrorCode *err)
     {
         *err = ERROR_OK;
         try { return make <T> (buf, len); }
@@ -136,7 +136,7 @@ public:
 public:
 
     AmigaFile() { };
-    AmigaFile(usize capacity);
+    AmigaFile(isize capacity);
     virtual ~AmigaFile();
         
     
@@ -156,7 +156,7 @@ public:
     //
             
     // Copies the file contents into a buffer starting at the provided offset
-    virtual void flash(u8 *buf, usize offset = 0);
+    virtual void flash(u8 *buf, isize offset = 0);
     
     
     //
@@ -165,18 +165,18 @@ public:
     
 protected:
     
-    virtual usize readFromStream(std::istream &stream) throws;
-    usize readFromFile(const char *path) throws;
-    usize readFromBuffer(const u8 *buf, usize len) throws;
+    virtual isize readFromStream(std::istream &stream) throws;
+    isize readFromFile(const char *path) throws;
+    isize readFromBuffer(const u8 *buf, isize len) throws;
 
 public:
     
-    virtual usize writeToStream(std::ostream &stream) throws;
-    usize writeToStream(std::ostream &stream, ErrorCode *err);
+    virtual isize writeToStream(std::ostream &stream) throws;
+    isize writeToStream(std::ostream &stream, ErrorCode *err);
 
-    usize writeToFile(const char *path) throws;
-    usize writeToFile(const char *path, ErrorCode *err);
+    isize writeToFile(const char *path) throws;
+    isize writeToFile(const char *path, ErrorCode *err);
     
-    usize writeToBuffer(u8 *buf) throws;
-    usize writeToBuffer(u8 *buf, ErrorCode *err);    
+    isize writeToBuffer(u8 *buf) throws;
+    isize writeToBuffer(u8 *buf, ErrorCode *err);    
 };
