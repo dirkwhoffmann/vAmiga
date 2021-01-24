@@ -125,7 +125,7 @@ class SerCounter
 {
 public:
 
-    usize count;
+    isize count;
 
     SerCounter() { count = 0; }
 
@@ -170,10 +170,10 @@ public:
     template <class T, isize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
-    template <class T, usize N>
+    template <class T, isize N>
     SerCounter& operator&(T (&v)[N])
     {
-        for(usize i = 0; i < N; ++i) {
+        for(isize i = 0; i < N; ++i) {
             *this & v[i];
         }
         return *this;
@@ -249,16 +249,16 @@ public:
     template <class T, isize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
-    template <class T, usize N>
+    template <class T, isize N>
     SerReader& operator&(T (&v)[N])
     {
-        for(usize i = 0; i < N; ++i) {
+        for(isize i = 0; i < N; ++i) {
             *this & v[i];
         }
         return *this;
     }
 
-    void copy(void *dst, usize n)
+    void copy(void *dst, isize n)
     {
         memcpy(dst, (void *)ptr, n);
         ptr += n;
@@ -334,16 +334,16 @@ public:
     template <class T, isize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
-    template <class T, usize N>
+    template <class T, isize N>
     SerWriter& operator&(T (&v)[N])
     {
-        for(usize i = 0; i < N; ++i) {
+        for(isize i = 0; i < N; ++i) {
             *this & v[i];
         }
         return *this;
     }
 
-    void copy(const void *src, usize n)
+    void copy(const void *src, isize n)
     {
         memcpy((void *)ptr, src, n);
         ptr += n;
@@ -408,10 +408,10 @@ public:
     template <class T, isize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
-    template <class T, usize N>
+    template <class T, isize N>
     SerResetter& operator&(T (&v)[N])
     {
-        for(usize i = 0; i < N; ++i) {
+        for(isize i = 0; i < N; ++i) {
             *this & v[i];
         }
         return *this;
