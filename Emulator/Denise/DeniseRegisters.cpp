@@ -186,11 +186,11 @@ Denise::pokeCLXCON(u16 value)
     clxcon = value;
 }
 
-template <int x, Accessor s> void
+template <usize x, Accessor s> void
 Denise::pokeBPLxDAT(u16 value)
 {
     assert(x < 6);
-    trace(BPLREG_DEBUG, "pokeBPL%dDAT(%X)\n", x + 1, value);
+    trace(BPLREG_DEBUG, "pokeBPL%luDAT(%X)\n", x + 1, value);
 
     if (s == ACCESSOR_AGNUS) {
         /*
@@ -201,11 +201,11 @@ Denise::pokeBPLxDAT(u16 value)
     setBPLxDAT<x>(value);
 }
 
-template <int x> void
+template <usize x> void
 Denise::setBPLxDAT(u16 value)
 {
     assert(x < 6);
-    trace(BPLDAT_DEBUG, "setBPL%dDAT(%X)\n", x + 1, value);
+    trace(BPLDAT_DEBUG, "setBPL%luDAT(%X)\n", x + 1, value);
         
     bpldat[x] = value;
 
@@ -220,11 +220,11 @@ Denise::setBPLxDAT(u16 value)
     }
 }
 
-template <int x> void
+template <usize x> void
 Denise::pokeSPRxPOS(u16 value)
 {
     assert(x < 8);
-    trace(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%luPOS(%X)\n", x, value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Ex = VSTART)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
@@ -234,11 +234,11 @@ Denise::pokeSPRxPOS(u16 value)
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0POS + x, value } );
 }
 
-template <int x> void
+template <usize x> void
 Denise::pokeSPRxCTL(u16 value)
 {
     assert(x < 8);
-    trace(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%luCTL(%X)\n", x, value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
@@ -251,11 +251,11 @@ Denise::pokeSPRxCTL(u16 value)
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0CTL + x, value } );
 }
 
-template <int x> void
+template <usize x> void
 Denise::pokeSPRxDATA(u16 value)
 {
     assert(x < 8);
-    trace(SPRREG_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%luDATA(%X)\n", x, value);
     
     // If requested, let this sprite disappear by making it transparent
     if (GET_BIT(config.hiddenSprites, x)) value = 0;
@@ -268,11 +268,11 @@ Denise::pokeSPRxDATA(u16 value)
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0DATA + x, value } );
 }
 
-template <int x> void
+template <usize x> void
 Denise::pokeSPRxDATB(u16 value)
 {
     assert(x < 8);
-    trace(SPRREG_DEBUG, "pokeSPR%dDATB(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%luDATB(%X)\n", x, value);
     
     // If requested, let this sprite disappear by making it transparent
     if (GET_BIT(config.hiddenSprites, x)) value = 0;
@@ -282,10 +282,10 @@ Denise::pokeSPRxDATB(u16 value)
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0DATB + x, value });
 }
 
-template <Accessor s, int xx> void
+template <Accessor s, usize xx> void
 Denise::pokeCOLORxx(u16 value)
 {
-    trace(COLREG_DEBUG, "pokeCOLOR%02d(%X)\n", xx, value);
+    trace(COLREG_DEBUG, "pokeCOLOR%02lu(%X)\n", xx, value);
 
     u32 reg = 0x180 + 2*xx;
     i16 pos = agnus.pos.h;

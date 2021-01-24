@@ -619,10 +619,10 @@ public:
         return (pos & 2) && pos >= ddfHires.strtOdd && pos < ddfHires.stopOdd; }
     
     // Returns the pixel position for the current horizontal position
-    i16 ppos(i16 posh) const { return (posh * 4) + 2; }
-    i16 ppos() const { return ppos(pos.h); }
+    Pixel ppos(i16 posh) const { return (posh * 4) + 2; }
+    Pixel ppos() const { return ppos(pos.h); }
 
-
+    
     //
     // Working with the beam position
     //

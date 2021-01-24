@@ -231,7 +231,7 @@ Denise::zPF(u16 prioBits)
 }
 
 bool
-Denise::spritePixelIsVisible(int hpos) const
+Denise::spritePixelIsVisible(Pixel hpos) const
 {
     u16 z = zBuffer[hpos];
     return (z & Z_SP01234567) > (z & ~Z_SP01234567);
@@ -1150,7 +1150,7 @@ Denise::endOfLine(int vpos)
 }
 
 void
-Denise::recordSpriteData(unsigned nr)
+Denise::recordSpriteData(usize nr)
 {
     assert(nr < 8);
 

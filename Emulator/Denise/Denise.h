@@ -449,19 +449,19 @@ public:
     u16 getMVBP2() const { return clxcon & 0b101010; }
     
     // BPLxDAT
-    template <int x, Accessor s> void pokeBPLxDAT(u16 value);
-    template <int x> void setBPLxDAT(u16 value);
+    template <usize x, Accessor s> void pokeBPLxDAT(u16 value);
+    template <usize x> void setBPLxDAT(u16 value);
 
     // SPRxPOS, SPRxCTL
-    template <int x> void pokeSPRxPOS(u16 value);
-    template <int x> void pokeSPRxCTL(u16 value);
+    template <usize x> void pokeSPRxPOS(u16 value);
+    template <usize x> void pokeSPRxCTL(u16 value);
 
     // SPRxDATA, SPRxDATB
-    template <int x> void pokeSPRxDATA(u16 value);
-    template <int x> void pokeSPRxDATB(u16 value);
+    template <usize x> void pokeSPRxDATA(u16 value);
+    template <usize x> void pokeSPRxDATB(u16 value);
 
     // COLORxx
-    template <Accessor s, int xx> void pokeCOLORxx(u16 value);
+    template <Accessor s, usize xx> void pokeCOLORxx(u16 value);
 
     
     //
@@ -471,13 +471,15 @@ public:
 public:
     
     // Returns the horizontal position of a sprite in sprite coordinates
-    template <int x> i16 sprhpos() const { return ((sprpos[x] & 0xFF) << 1) | (sprctl[x] & 0x01); }
+    template <usize x> Pixel sprhpos() const {
+        return ((sprpos[x] & 0xFF) << 1) | (sprctl[x] & 0x01); }
 
     // Returns the horizontal position of a sprite in pixel coordinates
-    template <int x> i16 sprhppos() const { return 2 * (sprhpos<x>() + 1); }
+    template <usize x> Pixel sprhppos() const {
+        return 2 * (sprhpos<x>() + 1); }
     
     // Checks the z buffer and returns true if a sprite pixel is visible
-    bool spritePixelIsVisible(int hpos) const;
+    bool spritePixelIsVisible(Pixel hpos) const;
 
 
     //
@@ -590,7 +592,7 @@ public:
 public:
     
     // Gathers the sprite data for the displayed sprite
-    void recordSpriteData(unsigned x);
+    void recordSpriteData(usize x);
 
     // Dumps the bBuffer or the iBuffer to the console
     void dumpIBuffer() const { dumpBuffer(iBuffer, sizeof(iBuffer)); }
