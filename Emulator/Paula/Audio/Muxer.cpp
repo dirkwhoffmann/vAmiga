@@ -235,7 +235,7 @@ Muxer::setSampleRate(double hz)
     filterR.setSampleRate(hz);
 }
 
-usize
+isize
 Muxer::didLoadFromBuffer(const u8 *buffer)
 {
     for (usize i = 0; i < 4; i++) sampler[i]->reset();

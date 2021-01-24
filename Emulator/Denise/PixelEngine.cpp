@@ -43,7 +43,7 @@ PixelEngine::~PixelEngine()
     delete[] noise;
 }
 
-usize
+isize
 PixelEngine::didLoadFromBuffer(const u8 *buffer)
 {
     updateRGBA();

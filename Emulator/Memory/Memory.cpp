@@ -201,7 +201,7 @@ Memory::_dumpConfig() const
     msg("       extStart : %02x\n", config.extStart);
 }
 
-usize
+isize
 Memory::_size()
 {
     SerCounter counter;
@@ -220,7 +220,7 @@ Memory::_size()
     return counter.count;
 }
 
-usize
+isize
 Memory::didLoadFromBuffer(const u8 *buffer)
 {
     SerReader reader(buffer);
@@ -264,7 +264,7 @@ Memory::didLoadFromBuffer(const u8 *buffer)
     return reader.ptr - buffer;
 }
 
-usize
+isize
 Memory::didSaveToBuffer(u8 *buffer) const
 {
     // Save memory size information

@@ -61,7 +61,7 @@ Paula::_dump() const
     
 }
 
-usize
+isize
 Paula::didLoadFromBuffer(const u8 *buffer)
 {
     muxer.clear();

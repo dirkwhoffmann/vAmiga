@@ -274,7 +274,7 @@ CPU::_setDebug(bool enable)
      }
 }
 
-usize
+isize
 CPU::didLoadFromBuffer(const u8 *buffer)
 {
     /* Because we don't save breakpoints and watchpoints in a snapshot, the

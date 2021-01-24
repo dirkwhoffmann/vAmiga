@@ -136,7 +136,7 @@ private:
     u32 runLoopCtrl = 0;
     
     // The invocation counter for implementing suspend() / resume()
-    usize suspendCounter = 0;
+    isize suspendCounter = 0;
     
     // The emulator thread
     pthread_t p = (pthread_t)0;
@@ -237,9 +237,9 @@ private:
     {
     }
 
-    usize _size() override { COMPUTE_SNAPSHOT_SIZE }
-    usize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    usize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    isize _size() override { COMPUTE_SNAPSHOT_SIZE }
+    isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
     //

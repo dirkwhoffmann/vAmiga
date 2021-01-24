@@ -97,6 +97,9 @@ typedef i16 Sector;
  */
 #define throws
 
+/* Signed alternative for the sizeof keyword */
+#define isizeof(x) (isize)(sizeof(x))
+
 
 //
 // Enumerations
