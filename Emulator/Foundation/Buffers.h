@@ -106,7 +106,7 @@ template <class T, usize capacity> struct RingBuffer
 
 };
 
-template <class T, int capacity>
+template <class T, usize capacity>
 struct SortedRingBuffer : public RingBuffer<T, capacity>
 {
     // Key storage
@@ -168,7 +168,7 @@ struct RegChange
     RegChange(u32 a, u16 v) : addr(a), value(v) { }
 };
 
-template <int capacity>
+template <usize capacity>
 struct RegChangeRecorder : public SortedRingBuffer<RegChange, capacity>
 {
     // Returns the closest trigger cycle

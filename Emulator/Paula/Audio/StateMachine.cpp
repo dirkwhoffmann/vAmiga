@@ -9,12 +9,12 @@
 
 #include "Amiga.h"
 
-template <int nr>
+template <usize nr>
 StateMachine<nr>::StateMachine(Amiga& ref) : AmigaComponent(ref)
 {
 }
 
-template <int nr> const char *
+template <usize nr> const char *
 StateMachine<nr>::getDescription() const
 {
     switch (nr) {
@@ -26,13 +26,13 @@ StateMachine<nr>::getDescription() const
     }
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::_inspect()
 {
     synchronized {
@@ -49,7 +49,7 @@ StateMachine<nr>::_inspect()
     }
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::_dump() const
 {
     msg("   State : %d\n", state);
@@ -57,7 +57,7 @@ StateMachine<nr>::_dump() const
     msg("  AUDxON : %d\n", AUDxON());
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::enableDMA()
 {
     trace(AUD_DEBUG, "Enable DMA\n");
@@ -71,7 +71,7 @@ StateMachine<nr>::enableDMA()
      }
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::disableDMA()
 {
     trace(AUD_DEBUG, "Disable DMA\n");
@@ -90,19 +90,19 @@ StateMachine<nr>::disableDMA()
     }
 }
 
-template <int nr> bool
+template <usize nr> bool
 StateMachine<nr>::AUDxON() const
 {
     return agnus.auddma<nr>();
 }
 
-template <int nr> bool
+template <usize nr> bool
 StateMachine<nr>::AUDxIP() const 
 {
     return GET_BIT(paula.intreq, 7 + nr);
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::AUDxIR()
 {
     if (DISABLE_AUDIRQ) return;
@@ -113,7 +113,7 @@ StateMachine<nr>::AUDxIR()
     paula.scheduleIrqRel(source, DMA_CYCLES(1));
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::percntrld()
 {
     const EventSlot slot = (EventSlot)(SLOT_CH0+nr);
@@ -124,7 +124,7 @@ StateMachine<nr>::percntrld()
     agnus.scheduleRel<slot>(DMA_CYCLES(delay), CHX_PERFIN);
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::pbufld1()
 {
     if (!AUDxAV()) { buffer = auddat; return; }
@@ -138,7 +138,7 @@ StateMachine<nr>::pbufld1()
     }
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::pbufld2()
 {
     assert(AUDxAP());
@@ -149,27 +149,21 @@ StateMachine<nr>::pbufld2()
         case 2: paula.channel3.pokeAUDxPER(auddat); break;
         case 3: break;
     }
-    /*
-    if (nr < 3) {
-        // trace("Period modulation %d\n", auddat);
-        audioUnit.pokeAUDxPER(nr + 1, auddat);
-    }
-    */
 }
 
-template <int nr> bool
+template <usize nr> bool
 StateMachine<nr>::AUDxAV() const
 {
     return (paula.adkcon >> nr) & 0x01;
 }
 
-template <int nr> bool
+template <usize nr> bool
 StateMachine<nr>::AUDxAP() const
 {
     return (paula.adkcon >> nr) & 0x10;
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::penhi()
 {
     if (!enablePenhi) return;
@@ -190,7 +184,7 @@ StateMachine<nr>::penhi()
     enablePenhi = false;
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::penlo()
 {
     if (!enablePenlo) return;
@@ -211,7 +205,7 @@ StateMachine<nr>::penlo()
     enablePenlo = false;
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::move_000_010() {
 
     trace(AUD_DEBUG, "move_000_010\n");
@@ -229,7 +223,7 @@ StateMachine<nr>::move_000_010() {
     penhi();
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::move_000_001() {
 
     trace(AUD_DEBUG, "move_000_001\n");
@@ -243,7 +237,7 @@ StateMachine<nr>::move_000_001() {
     state = 0b001;
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::move_001_000() {
 
     trace(AUD_DEBUG, "move_001_000\n");
@@ -254,7 +248,7 @@ StateMachine<nr>::move_001_000() {
     state = 0b000;
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::move_001_101() {
 
     trace(AUD_DEBUG, "move_001_101\n");
@@ -270,7 +264,7 @@ StateMachine<nr>::move_001_101() {
     state = 0b101;
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::move_101_000() {
 
     trace(AUD_DEBUG, "move_101_000\n");
@@ -281,7 +275,7 @@ StateMachine<nr>::move_101_000() {
     state = 0b000;
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::move_101_010() {
 
     trace(AUD_DEBUG, "move_101_010\n");
@@ -298,7 +292,7 @@ StateMachine<nr>::move_101_010() {
     penhi();
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::move_010_011() {
 
     trace(AUD_DEBUG, "move_010_011\n");
@@ -327,7 +321,7 @@ StateMachine<nr>::move_010_011() {
     penlo();
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::move_011_000() {
 
     trace(AUD_DEBUG, "move_011_000\n");
@@ -339,7 +333,7 @@ StateMachine<nr>::move_011_000() {
     state = 0b000;
 }
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::move_011_010()
 {
     trace(AUD_DEBUG, "move_011_010\n");

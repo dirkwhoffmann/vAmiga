@@ -115,13 +115,13 @@ Paula::setINTENA(bool setclr, u16 value)
     checkInterrupt();
 }
 
-template <int x> u16
+template <usize x> u16
 Paula::peekPOTxDAT() const
 {
     assert(x == 0 || x == 1);
 
     u16 result = x ? HI_LO(potCntY1, potCntX1) : HI_LO(potCntY0, potCntX0);
-    trace(POTREG_DEBUG, "peekPOT%dDAT() = %x\n", x, result);
+    trace(POTREG_DEBUG, "peekPOT%luDAT() = %x\n", x, result);
 
     return result;
 }

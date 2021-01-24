@@ -12,7 +12,7 @@
 #include "AmigaComponent.h"
 #include "Sampler.h"
 
-template <int nr>
+template <usize nr>
 class StateMachine : public AmigaComponent {
 
     // Result of the latest inspection

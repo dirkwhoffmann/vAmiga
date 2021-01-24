@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-template <int nr> void
+template <usize nr> void
 StateMachine<nr>::serviceEvent()
 {
     trace(AUD_DEBUG, "CHX_PERFIN state = %d\n", state);
