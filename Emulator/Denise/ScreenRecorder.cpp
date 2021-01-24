@@ -272,7 +272,7 @@ ScreenRecorder::vsyncHandler(Cycle target)
         
         // Feed the video pipe
         assert(videoPipe != -1);
-        write(videoPipe, data, (usize)(width * height));
+        write(videoPipe, data, width * height);
         
         //
         // Audio
@@ -299,6 +299,6 @@ ScreenRecorder::vsyncHandler(Cycle target)
         
         // Feed the audio pipe
         assert(audioPipe != -1);
-        write(audioPipe, (u8 *)samples, (usize)(2 * sizeof(float) * samplesPerFrame));
+        write(audioPipe, (u8 *)samples, 2 * sizeof(float) * samplesPerFrame);
     }
 }

@@ -245,5 +245,5 @@ private:
     
 public:
     
-    void hide(usize line, u16 layer, u8 alpha);
+    void hide(isize line, u16 layer, u8 alpha);
 };

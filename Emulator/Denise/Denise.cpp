@@ -786,8 +786,8 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2,
     const unsigned sprite1 = 2 * pair;
     const unsigned sprite2 = 2 * pair + 1;
 
-    assert((usize)hstrt <= sizeof(mBuffer));
-    assert((usize)hstop <= sizeof(mBuffer));
+    assert(hstrt <= isizeof(mBuffer));
+    assert(hstop <= isizeof(mBuffer));
 
     assert(armed1 == !!GET_BIT(armed, sprite1));
     assert(armed2 == !!GET_BIT(armed, sprite2));
@@ -1043,7 +1043,7 @@ Denise::checkP2PCollisions()
     u8 compare2 = getMVBP2() & enabled2;
 
     // Check all pixels one by one
-    for (usize pos = 0; pos < HPIXELS; pos++) {
+    for (isize pos = 0; pos < HPIXELS; pos++) {
 
         u16 b = bBuffer[pos];
 
@@ -1066,7 +1066,7 @@ Denise::vsyncHandler()
     
     if (amiga.inDebugMode()) {
         
-        for (usize i = 0; i < 8; i++) {
+        for (isize i = 0; i < 8; i++) {
             latchedSpriteInfo[i] = spriteInfo[i];
             spriteInfo[i].height = 0;
             spriteInfo[i].vstrt  = 0;
@@ -1092,7 +1092,7 @@ Denise::beginOfLine(int vpos)
     wasArmed = armed;
 
     // Prepare the bitplane shift registers
-    for (usize i = 0; i < 6; i++) shiftReg[i] = 0;
+    for (isize i = 0; i < 6; i++) shiftReg[i] = 0;
 
     // Clear the bBuffer
     memset(bBuffer, 0, sizeof(bBuffer));
@@ -1165,7 +1165,7 @@ Denise::recordSpriteData(isize nr)
         spriteInfo[nr].vstop = agnus.sprVStop[nr];
         spriteInfo[nr].attach = IS_ODD(nr) ? GET_BIT(sprctl[nr], 7) : 0;
         
-        for (usize i = 0; i < 16; i++) {
+        for (isize i = 0; i < 16; i++) {
             spriteInfo[nr].colors[i] = pixelEngine.getColor(i + 16);
         }
     }
@@ -1176,10 +1176,10 @@ Denise::recordSpriteData(isize nr)
 void
 Denise::dumpBuffer(const u8 *buffer, isize length) const
 {
-    const usize cols = 16;
+    const isize cols = 16;
 
-    for (usize i = 0; i < (length + cols - 1) / cols; i++) {
-        for (usize j = 0; j < cols; j++) msg("%2d ", buffer[i * cols + j]);
+    for (isize i = 0; i < (length + cols - 1) / cols; i++) {
+        for (isize j = 0; j < cols; j++) msg("%2d ", buffer[i * cols + j]);
         msg("\n");
     }
 }
