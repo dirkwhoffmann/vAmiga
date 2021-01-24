@@ -356,7 +356,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         hsyncActions |= HSYNC_UPDATE_DAS_TABLE;
         
         // Make the effect visible in the current rasterline as well
-        for (int i = pos.h; i < HPOS_CNT; i++) {
+        for (isize i = pos.h; i < HPOS_CNT; i++) {
             dasEvent[i] = dasDMA[newDAS][i];
         }
         updateDasJumpTable();

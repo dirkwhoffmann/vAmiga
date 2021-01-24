@@ -38,8 +38,8 @@ void Agnus::_reset(bool hard)
     clearStats();
     
     // Initialize event tables
-    for (int i = pos.h; i < HPOS_CNT; i++) bplEvent[i] = bplDMA[0][0][i];
-    for (int i = pos.h; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
+    for (isize i = pos.h; i < HPOS_CNT; i++) bplEvent[i] = bplDMA[0][0][i];
+    for (isize i = pos.h; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
     updateBplJumpTable();
     updateDasJumpTable();
     
@@ -231,7 +231,7 @@ Agnus::_dump() const
 void
 Agnus::clearStats()
 {
-    for (int i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
+    for (usize i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
     
     stats.copperActivity = 0;
     stats.blitterActivity = 0;
@@ -276,7 +276,7 @@ Agnus::updateStats()
     stats.spriteActivity = w * stats.spriteActivity + (1 - w) * sprite;
     stats.bitplaneActivity = w * stats.bitplaneActivity + (1 - w) * bitplane;
     
-    for (int i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
+    for (usize i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
 }
 
 Cycle
@@ -845,18 +845,18 @@ Agnus::updateSpriteDMA()
 
     // Reset the vertical trigger coordinates in line 25
     if (v == 25 && sprdma()) {
-        for (int i = 0; i < 8; i++) sprVStop[i] = 25;
+        for (usize i = 0; i < 8; i++) sprVStop[i] = 25;
         return;
      }
 
     // Disable DMA in the last rasterline
     if (v == frame.lastLine()) {
-        for (int i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
+        for (usize i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
         return;
     }
 
     // Update the DMA status for all sprites
-    for (int i = 0; i < 8; i++) {
+    for (usize i = 0; i < 8; i++) {
         if (v == sprVStrt[i]) sprDmaState[i] = SPR_DMA_ACTIVE;
         if (v == sprVStop[i]) sprDmaState[i] = SPR_DMA_IDLE;
     }
@@ -976,7 +976,7 @@ Agnus::hsyncHandler()
     }
 
     // Clear the bus usage table
-    for (int i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
+    for (usize i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
 
     // Schedule the first BPL and DAS events
     scheduleNextBplEvent();

@@ -260,13 +260,13 @@ ScreenRecorder::vsyncHandler(Cycle target)
         
         ScreenBuffer buffer = denise.pixelEngine.getStableBuffer();
         
-        int width = sizeof(u32) * (cutout.x2 - cutout.x1);
-        int height = cutout.y2 - cutout.y1;
-        int offset = cutout.y1 * HPIXELS + cutout.x1 + HBLANK_MIN * 4;
+        isize width = sizeof(u32) * (cutout.x2 - cutout.x1);
+        isize height = cutout.y2 - cutout.y1;
+        isize offset = cutout.y1 * HPIXELS + cutout.x1 + HBLANK_MIN * 4;
         u8 *data = new u8[width * height];
         u8 *src = (u8 *)(buffer.data + offset);
         u8 *dst = data;
-        for (int y = 0; y < height; y++, src += 4 * HPIXELS, dst += width) {
+        for (isize y = 0; y < height; y++, src += 4 * HPIXELS, dst += width) {
             memcpy(dst, src, width);
         }
         

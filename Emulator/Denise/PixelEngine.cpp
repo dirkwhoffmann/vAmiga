@@ -394,7 +394,7 @@ PixelEngine::hide(usize line, u16 layers, u8 alpha)
 {
     u32 *p = frameBuffer->data + line * HPIXELS;
 
-    for (int i = 0; i < HPIXELS; i++) {
+    for (Pixel i = 0; i < HPIXELS; i++) {
 
         u16 z = denise.zBuffer[i];
 

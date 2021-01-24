@@ -96,12 +96,12 @@ Agnus::initBplEventTableLores()
 {
     memset(bplDMA[0], 0, sizeof(bplDMA[0]));
 
-    for (int bpu = 0; bpu < 7; bpu++) {
+    for (usize bpu = 0; bpu < 7; bpu++) {
 
         EventID *p = &bplDMA[0][bpu][0];
 
         // Iterate through all 22 fetch units
-        for (int i = 0; i <= 0xD8; i += 8, p += 8) {
+        for (usize i = 0; i <= 0xD8; i += 8, p += 8) {
 
             switch(bpu) {
                 case 6: p[2] = BPL_L6;
@@ -123,11 +123,11 @@ Agnus::initBplEventTableHires()
 {
     memset(bplDMA[1], 0, sizeof(bplDMA[1]));
 
-    for (int bpu = 0; bpu < 7; bpu++) {
+    for (usize bpu = 0; bpu < 7; bpu++) {
 
         EventID *p = &bplDMA[1][bpu][0];
 
-        for (int i = 0; i <= 0xD8; i += 8, p += 8) {
+        for (usize i = 0; i <= 0xD8; i += 8, p += 8) {
 
             switch(bpu) {
                 case 6:
@@ -149,7 +149,7 @@ Agnus::initDasEventTable()
 {
     memset(dasDMA, 0, sizeof(dasDMA));
 
-    for (int dmacon = 0; dmacon < 64; dmacon++) {
+    for (usize dmacon = 0; dmacon < 64; dmacon++) {
 
         EventID *p = dasDMA[dmacon];
 
@@ -448,8 +448,8 @@ Agnus::doBlitterDMA(u32 addr, u16 value)
 void
 Agnus::clearBplEvents()
 {
-    for (int i = 0; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
-    for (int i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX;
+    for (usize i = 0; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
+    for (usize i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX;
 }
 
 void
