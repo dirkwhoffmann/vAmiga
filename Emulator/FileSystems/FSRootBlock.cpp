@@ -111,7 +111,7 @@ FSRootBlock::dump() const
     msg("     Modified : %s\n", getModificationDate().str().c_str());
     msg("   Hash table : "); dumpHashTable(); printf("\n");
     msg("Bitmap blocks : ");
-    for (int i = 0; i < 25; i++) {
+    for (usize i = 0; i < 25; i++) {
         if (u32 ref = getBmBlockRef(i)) msg("%d ", ref);
     }
     msg("\n");
@@ -124,7 +124,7 @@ FSRootBlock::addBitmapBlockRefs(std::vector<u32> &refs)
     auto it = refs.begin();
      
     // Record the first 25 references in the root block
-    for (int i = 0; i < 25; i++, it++) {
+    for (usize i = 0; i < 25; i++, it++) {
         if (it == refs.end()) return true;
         setBmBlockRef(i, *it);
     }

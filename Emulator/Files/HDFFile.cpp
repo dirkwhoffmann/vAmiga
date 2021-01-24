@@ -49,7 +49,7 @@ HDFFile::hasRDB() const
 {
     // The rigid disk block must be among the first 16 blocks
     if (size >= 16 * 512) {
-        for (int i = 0; i < 16; i++) {
+        for (usize i = 0; i < 16; i++) {
             if (strcmp((const char *)data + i * 512, "RDSK") == 0) return true;
         }
     }

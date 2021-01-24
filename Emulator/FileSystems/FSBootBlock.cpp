@@ -108,7 +108,7 @@ void
 FSBootBlock::dump() const
 {
     msg("       Header : ");
-    for (int i = 0; i < 8; i++) msg("%02X ", data[i]);
+    for (usize i = 0; i < 8; i++) msg("%02X ", data[i]);
     msg("\n");
 }
 

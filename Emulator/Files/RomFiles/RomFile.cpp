@@ -312,10 +312,10 @@ RomFile::isCompatibleStream(std::istream &stream)
     // Boot Roms
     if (length == KB(8) || length == KB(16)) {
 
-        int len = sizeof(bootRomHeaders[0]);
-        int cnt = sizeof(bootRomHeaders) / len;
+        usize len = sizeof(bootRomHeaders[0]);
+        usize cnt = sizeof(bootRomHeaders) / len;
 
-        for (int i = 0; i < cnt; i++) {
+        for (usize i = 0; i < cnt; i++) {
             if (matchingStreamHeader(stream, bootRomHeaders[i], len)) return true;
         }
         return false;
@@ -324,10 +324,10 @@ RomFile::isCompatibleStream(std::istream &stream)
     // Kickstart Roms
     if (length == KB(256) || length == KB(512)) {
 
-        int len = sizeof(kickRomHeaders[0]);
-        int cnt = sizeof(kickRomHeaders) / len;
+        usize len = sizeof(kickRomHeaders[0]);
+        usize cnt = sizeof(kickRomHeaders) / len;
 
-        for (int i = 0; i < cnt; i++) {
+        for (usize i = 0; i < cnt; i++) {
             if (matchingStreamHeader(stream, kickRomHeaders[i], len)) return true;
         }
         return false;
@@ -336,10 +336,10 @@ RomFile::isCompatibleStream(std::istream &stream)
     // Encrypted Kickstart Roms
     if (length == KB(256) + 11 || length == KB(512) + 11) {
         
-        int len = sizeof(encrRomHeaders[0]);
-        int cnt = sizeof(encrRomHeaders) / len;
+        usize len = sizeof(encrRomHeaders[0]);
+        usize cnt = sizeof(encrRomHeaders) / len;
         
-        for (int i = 0; i < cnt; i++) {
+        for (usize i = 0; i < cnt; i++) {
             if (matchingStreamHeader(stream, encrRomHeaders[i], len)) return true;
         }
     }

@@ -50,9 +50,9 @@ FSBitmapExtBlock::dump() const
 void
 FSBitmapExtBlock::addBitmapBlockRefs(vector<u32> &refs, std::vector<u32>::iterator &it)
 {
-    int max = (bsize() / 4) - 1;
+    isize max = (bsize() / 4) - 1;
     
-    for (int i = 0; i < max; i++, it++) {
+    for (isize i = 0; i < max; i++, it++) {
         if (it == refs.end()) return;
         setBmBlockRef(i, *it);
     }
