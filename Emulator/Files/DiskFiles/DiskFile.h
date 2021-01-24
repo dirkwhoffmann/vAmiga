@@ -34,9 +34,9 @@ public:
     // Returns the layout parameters for this disk
     virtual DiskDiameter getDiskDiameter() const = 0;
     virtual DiskDensity getDiskDensity() const = 0;
-    virtual long numSides() const = 0;
-    virtual long numCyls() const = 0;
-    virtual long numSectors() const = 0;
+    virtual isize numSides() const = 0;
+    virtual isize numCyls() const = 0;
+    virtual isize numSectors() const = 0;
     long numTracks() const { return numSides() * numCyls(); }
     long numBlocks() const { return numTracks() * numSectors(); }
 
@@ -61,8 +61,8 @@ public:
     virtual void readSector(u8 *dst, long t, long s) const;
 
     // Writes a string representation into the provided buffer
-    virtual void readSectorHex(char *dst, long b, usize count) const;
-    virtual void readSectorHex(char *dst, long t, long s, usize count) const;
+    virtual void readSectorHex(char *dst, long b, isize count) const;
+    virtual void readSectorHex(char *dst, long t, long s, isize count) const;
 
     
     //

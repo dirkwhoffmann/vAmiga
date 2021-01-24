@@ -27,7 +27,7 @@ HDFFile::isCompatibleStream(std::istream &stream)
 }
 
 bool
-HDFFile::isHDFBuffer(const u8 *buffer, usize length)
+HDFFile::isHDFBuffer(const u8 *buffer, isize length)
 {
     // HDFs contain no magic bytes. We can only check the buffer size
     return length % 512 == 0;
@@ -49,14 +49,14 @@ HDFFile::hasRDB() const
 {
     // The rigid disk block must be among the first 16 blocks
     if (size >= 16 * 512) {
-        for (usize i = 0; i < 16; i++) {
+        for (isize i = 0; i < 16; i++) {
             if (strcmp((const char *)data + i * 512, "RDSK") == 0) return true;
         }
     }
     return false;
 }
 
-long
+isize
 HDFFile::numCyls() const
 {
     assert(size % bsize() == 0);
@@ -66,28 +66,28 @@ HDFFile::numCyls() const
     return size / bsize() / numSectors() / numSides();
 }
 
-long
+isize
 HDFFile::numSides() const
 {
     if (hasRDB()) warn("HDF RDB images are not supported");
     return 1;
 }
 
-long
+isize
 HDFFile::numSectors() const
 {
     if (hasRDB()) warn("HDF RDB images are not supported");
     return 32;
 }
 
-long
+isize
 HDFFile::numReserved() const
 {
     if (hasRDB()) warn("HDF RDB images are not supported");
     return 2;
 }
 
-long
+isize
 HDFFile::numBlocks() const
 {
     assert((long)size / bsize() == numCyls() * numSides() * numSectors());

@@ -57,8 +57,8 @@ public:
     static bool isCompatibleStream(std::istream &stream);
 
     // Returns true iff buffer contains a snapshot (of a specific version)
-    static bool isSnapshot(const u8 *buf, usize len);
-    static bool isSnapshot(const u8 *buf, usize len, u8 major, u8 minor, u8 subminor);
+    static bool isSnapshot(const u8 *buf, isize len);
+    static bool isSnapshot(const u8 *buf, isize len, u8 major, u8 minor, u8 subminor);
         
             
     //
@@ -66,11 +66,11 @@ public:
     //
     
     Snapshot();
-    Snapshot(usize capacity);
+    Snapshot(isize capacity);
     
     const char *getDescription() const override { return "Snapshot"; }
     
-    bool setCapacity(usize size);
+    bool setCapacity(isize size);
     
     static Snapshot *makeWithAmiga(Amiga *amiga);
     

@@ -30,7 +30,7 @@ public:
     static bool isCompatibleName(const std::string &name);
     static bool isCompatibleStream(std::istream &stream);
     
-    static bool isRomBuffer(const u8 *buf, usize len);
+    static bool isRomBuffer(const u8 *buf, isize len);
     static bool isRomFile(const char *path);
     
     // Translates a CRC-32 checksum into a ROM identifier

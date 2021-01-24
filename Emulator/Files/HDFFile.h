@@ -26,7 +26,7 @@ public:
     static bool isCompatibleStream(std::istream &stream);
 
     // Returns true iff the provided buffer contains an HDF file
-    static bool isHDFBuffer(const u8 *buffer, usize length);
+    static bool isHDFBuffer(const u8 *buffer, isize length);
     
     // Returns true iff if the provided path points to an HDF file
     static bool isHDFFile(const char *path);
@@ -62,11 +62,11 @@ public:
     bool hasRDB() const;
     
     // Returns the layout parameters of the hard drive
-    long numCyls() const;
-    long numSides() const;
-    long numSectors() const;
-    long numReserved() const;
-    long numBlocks() const;
+    isize numCyls() const;
+    isize numSides() const;
+    isize numSectors() const;
+    isize numReserved() const;
+    isize numBlocks() const;
     long bsize() const;
     struct FSDeviceDescriptor layout();
 

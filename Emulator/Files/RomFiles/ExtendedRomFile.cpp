@@ -34,7 +34,7 @@ ExtendedRomFile::isCompatibleStream(std::istream &stream)
 }
 
 bool
-ExtendedRomFile::isExtendedRomBuffer(const u8 *buffer, usize length)
+ExtendedRomFile::isExtendedRomBuffer(const u8 *buffer, isize length)
 {
     if (length != KB(512)) return false;
 

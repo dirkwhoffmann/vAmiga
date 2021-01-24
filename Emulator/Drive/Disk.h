@@ -132,9 +132,9 @@ public:
     DiskDiameter getDiameter() const { return diameter; }
     DiskDensity getDensity() const { return density; }
 
-    long numCyls() const { return diameter == INCH_525 ? 42 : 84; }
-    long numSides() const { return 2; }
-    long numTracks() const { return diameter == INCH_525 ? 84 : 168; }
+    isize numCyls() const { return diameter == INCH_525 ? 42 : 84; }
+    isize numSides() const { return 2; }
+    isize numTracks() const { return diameter == INCH_525 ? 84 : 168; }
 
     bool isWriteProtected() const { return writeProtected; }
     void setWriteProtection(bool value) { writeProtected = value; }

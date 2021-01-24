@@ -307,15 +307,15 @@ RomFile::RomFile()
 bool
 RomFile::isCompatibleStream(std::istream &stream)
 {
-    usize length = streamLength(stream);
+    isize length = streamLength(stream);
     
     // Boot Roms
     if (length == KB(8) || length == KB(16)) {
 
-        usize len = sizeof(bootRomHeaders[0]);
-        usize cnt = sizeof(bootRomHeaders) / len;
+        isize len = isizeof(bootRomHeaders[0]);
+        isize cnt = isizeof(bootRomHeaders) / len;
 
-        for (usize i = 0; i < cnt; i++) {
+        for (isize i = 0; i < cnt; i++) {
             if (matchingStreamHeader(stream, bootRomHeaders[i], len)) return true;
         }
         return false;
@@ -324,10 +324,10 @@ RomFile::isCompatibleStream(std::istream &stream)
     // Kickstart Roms
     if (length == KB(256) || length == KB(512)) {
 
-        usize len = sizeof(kickRomHeaders[0]);
-        usize cnt = sizeof(kickRomHeaders) / len;
+        isize len = isizeof(kickRomHeaders[0]);
+        isize cnt = isizeof(kickRomHeaders) / len;
 
-        for (usize i = 0; i < cnt; i++) {
+        for (isize i = 0; i < cnt; i++) {
             if (matchingStreamHeader(stream, kickRomHeaders[i], len)) return true;
         }
         return false;
@@ -336,10 +336,10 @@ RomFile::isCompatibleStream(std::istream &stream)
     // Encrypted Kickstart Roms
     if (length == KB(256) + 11 || length == KB(512) + 11) {
         
-        usize len = sizeof(encrRomHeaders[0]);
-        usize cnt = sizeof(encrRomHeaders) / len;
+        isize len = isizeof(encrRomHeaders[0]);
+        isize cnt = isizeof(encrRomHeaders) / len;
         
-        for (usize i = 0; i < cnt; i++) {
+        for (isize i = 0; i < cnt; i++) {
             if (matchingStreamHeader(stream, encrRomHeaders[i], len)) return true;
         }
     }
@@ -348,7 +348,7 @@ RomFile::isCompatibleStream(std::istream &stream)
 }
 
 bool
-RomFile::isRomBuffer(const u8 *buf, usize len)
+RomFile::isRomBuffer(const u8 *buf, isize len)
 {
     std::stringstream stream;
     stream.write((const char *)buf, len);
@@ -372,7 +372,7 @@ RomFile::isEncrypted()
 void
 RomFile::decrypt()
 {
-    const usize headerSize = 11;
+    const isize headerSize = 11;
     u8 *encryptedData = nullptr;
     u8 *decryptedData = nullptr;
     u8 *romKeyData = nullptr;
@@ -394,7 +394,7 @@ RomFile::decrypt()
     decryptedData = new u8[size - headerSize];
         
     // Decrypt
-    for (usize i = 0; i < size - headerSize; i++) {
+    for (isize i = 0; i < size - headerSize; i++) {
         decryptedData[i] = encryptedData[i] ^ romKeyData[i % romKeySize];
     }
     delete [] romKeyData;

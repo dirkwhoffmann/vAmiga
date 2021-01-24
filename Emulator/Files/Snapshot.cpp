@@ -59,24 +59,24 @@ Snapshot::isCompatibleStream(std::istream &stream)
 }
 
 bool
-Snapshot::isSnapshot(const u8 *buf, usize len)
+Snapshot::isSnapshot(const u8 *buf, isize len)
 {
     assert(buf != nullptr);
 
     u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
         
-    if (len < sizeof(SnapshotHeader)) return false;
+    if (len < isizeof(SnapshotHeader)) return false;
     return matchingBufferHeader(buf, signature, sizeof(signature));
 }
 
 bool
-Snapshot::isSnapshot(const u8 *buf, usize len, u8 major, u8 minor, u8 subminor)
+Snapshot::isSnapshot(const u8 *buf, isize len, u8 major, u8 minor, u8 subminor)
 {
     assert(buf != nullptr);
 
     u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P', major, minor, subminor };
     
-    if (len < sizeof(SnapshotHeader)) return false;
+    if (len < isizeof(SnapshotHeader)) return false;
     return matchingBufferHeader(buf, signature, sizeof(signature));
 }
 
@@ -84,7 +84,7 @@ Snapshot::Snapshot()
 {
 }
 
-Snapshot::Snapshot(usize capacity)
+Snapshot::Snapshot(isize capacity)
 {
     u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     
@@ -93,7 +93,7 @@ Snapshot::Snapshot(usize capacity)
     
     SnapshotHeader *header = (SnapshotHeader *)data;
     
-    for (unsigned i = 0; i < sizeof(signature); i++)
+    for (isize i = 0; i < isizeof(signature); i++)
         header->magic[i] = signature[i];
     header->major = V_MAJOR;
     header->minor = V_MINOR;

@@ -43,20 +43,20 @@ DiskFile::readSector(u8 *dst, long s) const
 }
 
 void
-DiskFile::readSectorHex(char *dst, long t, long s, usize count) const
+DiskFile::readSectorHex(char *dst, long t, long s, isize count) const
 {
     readSectorHex(dst, t * numSectors() + s, count);
 }
 
 void
-DiskFile::readSectorHex(char *dst, long s, usize count) const
+DiskFile::readSectorHex(char *dst, long s, isize count) const
 {
-    usize sectorSize = 512;
-    usize offset = s * sectorSize;
+    isize sectorSize = 512;
+    isize offset = s * sectorSize;
 
     assert(dst != nullptr);
 
-    for (unsigned i = 0; i < count; i++) {
+    for (isize i = 0; i < count; i++) {
         sprintf(dst + 3*i, "%02X ", data[offset + i]);
     }
 }

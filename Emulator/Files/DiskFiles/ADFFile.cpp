@@ -18,7 +18,7 @@ ADFFile::isCompatibleName(const std::string &name)
 bool
 ADFFile::isCompatibleStream(std::istream &stream)
 {
-    usize length = streamLength(stream);
+    isize length = streamLength(stream);
     
     // Some ADFs contain an additional byte at the end. Ignore it.
     length &= ~1;
@@ -33,7 +33,7 @@ ADFFile::isCompatibleStream(std::istream &stream)
     length == ADFSIZE_35_HD;
 }
 
-usize
+isize
 ADFFile::fileSize(DiskDiameter diameter, DiskDensity density)
 {
     assert_enum(DiskDiameter, density);
@@ -496,8 +496,8 @@ ADFFile::decodeTrack(Disk *disk, Track t)
     u8 *dst = data + t * sectors * 512;
     
     // Seek all sync marks
-    int sectorStart[sectors], nr = 0; usize index = 0;
-    while (index < sizeof(disk->data.track[t]) && nr < sectors) {
+    int sectorStart[sectors], nr = 0; isize index = 0;
+    while (index < isizeof(disk->data.track[t]) && nr < sectors) {
 
         // Scan MFM stream for $4489 $4489
         if (src[index++] != 0x44) continue;
