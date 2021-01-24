@@ -44,7 +44,7 @@ void Agnus::_reset(bool hard)
     updateDasJumpTable();
     
     // Initialize the event slots
-    for (unsigned i = 0; i < SLOT_COUNT; i++) {
+    for (isize i = 0; i < SLOT_COUNT; i++) {
         slot[i].triggerCycle = NEVER;
         slot[i].id = (EventID)0;
         slot[i].data = 0;
@@ -199,10 +199,10 @@ Agnus::_inspect()
         info.bltpt[1] = blitter.bltbpt & ptrMask;
         info.bltpt[2] = blitter.bltcpt & ptrMask;
         info.bltpt[3] = blitter.bltdpt & ptrMask;
-        for (unsigned i = 0; i < 6; i++) info.bplpt[i] = bplpt[i] & ptrMask;
-        for (unsigned i = 0; i < 4; i++) info.audpt[i] = audpt[i] & ptrMask;
-        for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i] & ptrMask;
-        for (unsigned i = 0; i < 8; i++) info.sprpt[i] = sprpt[i] & ptrMask;
+        for (isize i = 0; i < 6; i++) info.bplpt[i] = bplpt[i] & ptrMask;
+        for (isize i = 0; i < 4; i++) info.audpt[i] = audpt[i] & ptrMask;
+        for (isize i = 0; i < 4; i++) info.audlc[i] = audlc[i] & ptrMask;
+        for (isize i = 0; i < 8; i++) info.sprpt[i] = sprpt[i] & ptrMask;
     }
 }
 
@@ -212,9 +212,9 @@ Agnus::_dump() const
     msg(" actions : %llX\n", hsyncActions);
 
     msg("   dskpt : %X\n", dskpt);
-    for (unsigned i = 0; i < 4; i++) msg("audpt[%d] : %X\n", i, audpt[i]);
-    for (unsigned i = 0; i < 6; i++) msg("bplpt[%d] : %X\n", i, bplpt[i]);
-    for (unsigned i = 0; i < 8; i++) msg("bplpt[%d] : %X\n", i, sprpt[i]);
+    for (isize i = 0; i < 4; i++) msg("audpt[%zd] : %X\n", i, audpt[i]);
+    for (isize i = 0; i < 6; i++) msg("bplpt[%zd] : %X\n", i, bplpt[i]);
+    for (isize i = 0; i < 8; i++) msg("bplpt[%zd] : %X\n", i, sprpt[i]);
     
     msg("   hstrt : %d\n", diwHstrt);
     msg("   hstop : %d\n", diwHstop);

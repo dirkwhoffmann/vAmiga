@@ -32,8 +32,8 @@ Thumbnail::take(Amiga *amiga, int dx, int dy)
     
     source += xStart + yStart * HPIXELS;
     
-    for (unsigned y = 0; y < height; y++) {
-        for (unsigned x = 0; x < width; x++) {
+    for (isize y = 0; y < height; y++) {
+        for (isize x = 0; x < width; x++) {
             target[x] = source[x * dx];
         }
         source += dy * HPIXELS;

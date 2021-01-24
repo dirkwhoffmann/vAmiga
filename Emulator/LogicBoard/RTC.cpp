@@ -82,8 +82,8 @@ RTC::_reset(bool hard)
 void
 RTC::_dump() const
 {
-    for (unsigned i = 0; i < 4; i++) {
-        for (unsigned j = 0; j < 16; j++) msg("i: %X ", reg[i][j]);
+    for (isize i = 0; i < 4; i++) {
+        for (isize j = 0; j < 16; j++) msg("i: %X ", reg[i][j]);
         msg("\n");
     }
     msg("\n");

@@ -244,16 +244,16 @@ CPU::_dump() const
 {
     msg("     PC0: %8X\n", reg.pc0);
     msg(" D0 - D3: ");
-    for (unsigned i = 0; i < 4; i++) msg("%8X ", reg.d[i]);
+    for (isize i = 0; i < 4; i++) msg("%8X ", reg.d[i]);
     msg("\n");
     msg(" D4 - D7: ");
-    for (unsigned i = 4; i < 8; i++) msg("%8X ", reg.d[i]);
+    for (isize i = 4; i < 8; i++) msg("%8X ", reg.d[i]);
     msg("\n");
     msg(" A0 - A3: ");
-    for (unsigned i = 0; i < 4; i++) msg("%8X ", reg.a[i]);
+    for (isize i = 0; i < 4; i++) msg("%8X ", reg.a[i]);
     msg("\n");
     msg(" A4 - A7: ");
-    for (unsigned i = 4; i < 8; i++) msg("%8X ", reg.a[i]);
+    for (isize i = 4; i < 8; i++) msg("%8X ", reg.a[i]);
     msg("\n");
     msg("     SSP: %X\n", reg.ssp);
     msg("   Flags: %X\n", getSR());

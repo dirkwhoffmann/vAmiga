@@ -579,7 +579,7 @@ Copper::disassemble(unsigned list, u32 offset)
 void
 Copper::dumpCopperList(unsigned list, unsigned length)
 {
-    for (unsigned i = 0; i < length; i++) {
+    for (isize i = 0; i < length; i++) {
         msg("%s\n", disassemble(list, 2*i));
     }
 }

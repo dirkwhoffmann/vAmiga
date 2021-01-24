@@ -671,38 +671,38 @@ Memory::updateCpuMemSrcTable()
     bool old = config.bankMap == BANK_MAP_A1000 || config.bankMap == BANK_MAP_A2000A;
 
     // Start from scratch
-    for (unsigned i = 0x00; i <= 0xFF; i++) {
+    for (isize i = 0x00; i <= 0xFF; i++) {
         cpuMemSrc[i] = MEM_NONE;
     }
     
     // Chip Ram
     if (chipRamPages) {
-        for (unsigned i = 0x00; i < chipRamPages; i++) {
+        for (isize i = 0x00; i < chipRamPages; i++) {
             cpuMemSrc[i] = MEM_CHIP;
         }
-        for (unsigned i = chipRamPages; i <= 0x1F; i++) {
+        for (isize i = chipRamPages; i <= 0x1F; i++) {
             cpuMemSrc[i] = MEM_CHIP_MIRROR;
         }
     }
         
     // Fast Ram
-    for (unsigned i = 0x20; i < 0x20 + fastRamPages; i++) {
+    for (isize i = 0x20; i < 0x20 + fastRamPages; i++) {
         cpuMemSrc[i] = MEM_FAST;
     }
     
     // CIAs
-    for (unsigned i = 0xA0; i <= 0xBE; i++) {
+    for (isize i = 0xA0; i <= 0xBE; i++) {
         cpuMemSrc[i] = MEM_CIA_MIRROR;
     }
     cpuMemSrc[0xBF] = MEM_CIA;
     
     // Slow Ram
-    for (unsigned i = 0xC0; i <= 0xD7; i++) {
+    for (isize i = 0xC0; i <= 0xD7; i++) {
         cpuMemSrc[i] = (i - 0xC0) < slowRamPages ? MEM_SLOW : MEM_CUSTOM_MIRROR;
     }
     
     // Real-time clock (older Amigas)
-    for (unsigned i = 0xD8; i <= 0xDB; i++) {
+    for (isize i = 0xD8; i <= 0xDB; i++) {
         cpuMemSrc[i] = old ? MEM_RTC : MEM_CUSTOM;
     }
 
@@ -714,49 +714,49 @@ Memory::updateCpuMemSrcTable()
     cpuMemSrc[0xDD] = MEM_NONE;
 
     // Custom chip set
-    for (unsigned i = 0xDE; i <= 0xDF; i++) {
+    for (isize i = 0xDE; i <= 0xDF; i++) {
         cpuMemSrc[i] = MEM_CUSTOM;
     }
     
     // Kickstart mirror, unmapped, or Extended Rom
     if (config.bankMap != BANK_MAP_A1000) {
-        for (unsigned i = 0xE0; i <= 0xE7; i++) {
+        for (isize i = 0xE0; i <= 0xE7; i++) {
             cpuMemSrc[i] = mem_rom_mirror;
         }
     }
     if (ext && config.extStart == 0xE0) {
-        for (unsigned i = 0xE0; i <= 0xE7; i++) {
+        for (isize i = 0xE0; i <= 0xE7; i++) {
             cpuMemSrc[i] = MEM_EXT;
         }
     }
 
     // Auto-config (Zorro II)
     cpuMemSrc[0xE8] = MEM_AUTOCONF;
-    for (unsigned i = 0xE9; i <= 0xEF; i++) {
+    for (isize i = 0xE9; i <= 0xEF; i++) {
         assert(cpuMemSrc[i] == MEM_NONE);
     }
     
     // Unmapped or Extended Rom
     if (ext && config.extStart == 0xF0) {
-        for (unsigned i = 0xF0; i <= 0xF7; i++) {
+        for (isize i = 0xF0; i <= 0xF7; i++) {
             cpuMemSrc[i] = MEM_EXT;
         }
     }
 
     // Kickstart Wom or Kickstart Rom
-    for (unsigned i = 0xF8; i <= 0xFF; i++) {
+    for (isize i = 0xF8; i <= 0xFF; i++) {
         cpuMemSrc[i] = mem_wom;
     }
     
     // Blend in Boot Rom if a writeable Wom is present
     if (hasWom() && !womIsLocked) {
-        for (unsigned i = 0xF8; i <= 0xFB; i++)
+        for (isize i = 0xF8; i <= 0xFB; i++)
             cpuMemSrc[i] = mem_rom;
     }
 
     // Blend in Rom in lower memory area if the overlay line (OVL) is high
     if (ovl) {
-        for (unsigned i = 0; i < 8 && cpuMemSrc[0xF8 + i] != MEM_NONE; i++)
+        for (isize i = 0; i < 8 && cpuMemSrc[0xF8 + i] != MEM_NONE; i++)
             cpuMemSrc[i] = cpuMemSrc[0xF8 + i];
     }
 
@@ -769,18 +769,18 @@ Memory::updateAgnusMemSrcTable()
     unsigned banks = config.chipSize / 0x10000;
     
     // Start from scratch
-    for (unsigned i = 0x00; i <= 0xFF; i++) {
+    for (isize i = 0x00; i <= 0xFF; i++) {
         agnusMemSrc[i] = MEM_NONE;
     }
     
     // Chip Ram banks
-    for (unsigned i = 0x0; i < banks; i++) {
+    for (isize i = 0x0; i < banks; i++) {
         agnusMemSrc[i] = MEM_CHIP;
     }
     
     // Slow Ram mirror
     if (agnus.slowRamIsMirroredIn()) {
-        for (unsigned i = 0x8; i <= 0xF; i++) {
+        for (isize i = 0x8; i <= 0xF; i++) {
             agnusMemSrc[i] = MEM_SLOW_MIRROR;
         }
     }

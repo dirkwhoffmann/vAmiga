@@ -421,7 +421,7 @@ ADFFile::encodeSector(Disk *disk, Track t, Sector s)
     Disk::encodeOddEven(&p[8], info, sizeof(info));
     
     // Unused area
-    for (unsigned i = 16; i < 48; i++)
+    for (isize i = 16; i < 48; i++)
     p[i] = 0xAA;
     
     // Data

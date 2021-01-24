@@ -432,7 +432,7 @@ void
 Drive::findSyncMark()
 {
     long length = disk->length.cylinder[head.cylinder][head.side];
-    for (unsigned i = 0; i < length; i++) {
+    for (isize i = 0; i < length; i++) {
         
         if (readByteAndRotate() != 0x44) continue;
         if (readByteAndRotate() != 0x89) continue;
@@ -523,7 +523,7 @@ Drive::pollsForDisk() const
     };
 
     u64 mask = 0xFFFFFFFF;
-    for (unsigned i = 0; i < sizeof(signature) / 8; i++) {
+    for (isize i = 0; i < isizeof(signature) / 8; i++) {
         if ((cylinderHistory & mask) == (signature[i] & mask)) return true;
     }
 

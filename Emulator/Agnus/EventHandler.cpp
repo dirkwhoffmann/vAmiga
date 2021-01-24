@@ -368,7 +368,7 @@ Agnus::dumpEvents()
     inspectEvents();
         
     msg("Events:\n");
-    for (unsigned i = 0; i < SLOT_COUNT; i++) {
+    for (isize i = 0; i < SLOT_COUNT; i++) {
         
         msg("Slot: %-17s ", EventSlotEnum::key(eventInfo.slotInfo[i].slot));
         msg("Event: %-15s ", eventInfo.slotInfo[i].eventName);
@@ -547,7 +547,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
 
         // Determine the next trigger cycle for all secondary slots
         Cycle nextSecTrigger = slot[SLOT_SEC + 1].triggerCycle;
-        for (unsigned i = SLOT_SEC + 2; i < SLOT_COUNT; i++)
+        for (isize i = SLOT_SEC + 2; i < SLOT_COUNT; i++)
             if (slot[i].triggerCycle < nextSecTrigger)
                 nextSecTrigger = slot[i].triggerCycle;
 
@@ -557,7 +557,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
 
     // Determine the next trigger cycle for all primary slots
     nextTrigger = slot[0].triggerCycle;
-    for (unsigned i = 1; i <= SLOT_SEC; i++)
+    for (isize i = 1; i <= SLOT_SEC; i++)
         if (slot[i].triggerCycle < nextTrigger)
             nextTrigger = slot[i].triggerCycle;
 }

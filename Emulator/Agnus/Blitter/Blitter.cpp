@@ -12,9 +12,9 @@
 Blitter::Blitter(Amiga& ref) : AmigaComponent(ref)
 {
     // Initialize fill pattern tables    
-    for (unsigned carryIn = 0; carryIn < 2; carryIn++) {
+    for (isize carryIn = 0; carryIn < 2; carryIn++) {
         
-        for (unsigned byte = 0; byte < 256; byte++) {
+        for (isize byte = 0; byte < 256; byte++) {
             
             u8 carry = carryIn;
             u8 inclPattern = byte;

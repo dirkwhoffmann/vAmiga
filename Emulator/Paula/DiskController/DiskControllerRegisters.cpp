@@ -180,7 +180,7 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
     selected = -1;
     
     // Iterate over all connected drives
-    for (unsigned i = 0; i < 4; i++) {
+    for (isize i = 0; i < 4; i++) {
         if (!config.connected[i]) continue;
         
         // Inform the drive and determine the selected one

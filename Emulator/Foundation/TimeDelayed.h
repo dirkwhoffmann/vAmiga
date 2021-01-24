@@ -49,7 +49,7 @@ public:
 
     // Overwrites all pipeline entries with a reset value
     void reset(T value) {
-        for (unsigned i = 0; i <= delay; i++) pipeline[i] = value;
+        for (isize i = 0; i <= delay; i++) pipeline[i] = value;
         timeStamp = 0;
     }
     

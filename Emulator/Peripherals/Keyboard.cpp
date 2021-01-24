@@ -66,7 +66,7 @@ void
 Keyboard::_dump() const
 {
     msg("Type ahead buffer: ");
-    for (unsigned i = 0; i < bufferIndex; i++) {
+    for (isize i = 0; i < bufferIndex; i++) {
         msg("%02X ", typeAheadBuffer[i]);
     }
     msg("\n");
@@ -115,7 +115,7 @@ Keyboard::releaseKey(long keycode)
 void
 Keyboard::releaseAllKeys()
 {
-    for (unsigned i = 0; i < 0x80; i++) {
+    for (isize i = 0; i < 0x80; i++) {
         releaseKey(i);
     }
 }
@@ -128,7 +128,7 @@ Keyboard::readFromBuffer()
     u8 result = typeAheadBuffer[0];
 
     bufferIndex--;
-    for (unsigned i = 0; i < bufferIndex; i++) {
+    for (isize i = 0; i < bufferIndex; i++) {
         typeAheadBuffer[i] = typeAheadBuffer[i+1];
     }
 

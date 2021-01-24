@@ -160,7 +160,7 @@ DiskController::_inspect()
         info.dsksync = dsksync;
         info.prb = prb;
         
-        for (unsigned i = 0; i < 6; i++) {
+        for (isize i = 0; i < 6; i++) {
             info.fifo[i] = (fifo >> (8 * i)) & 0xFF;
         }
     }
@@ -576,7 +576,7 @@ DiskController::performTurboDMA(Drive *drive)
 void
 DiskController::performTurboRead(Drive *drive)
 {
-    for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
+    for (isize i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from disk
         u16 word = drive->readWordAndRotate();
@@ -604,7 +604,7 @@ DiskController::performTurboRead(Drive *drive)
 void
 DiskController::performTurboWrite(Drive *drive)
 {
-    for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
+    for (isize i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from memory
         u16 word = mem.peek16 <ACCESSOR_AGNUS> (agnus.dskpt);

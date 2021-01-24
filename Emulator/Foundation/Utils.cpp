@@ -226,7 +226,7 @@ matchingBufferHeader(const u8 *buffer, const u8 *header, isize length)
     assert(buffer != nullptr);
     assert(header != nullptr);
     
-    for (unsigned i = 0; i < length; i++) {
+    for (isize i = 0; i < length; i++) {
         if (header[i] != buffer[i])
             return false;
     }
@@ -324,7 +324,7 @@ loadFile(const char *path, u8 **buffer, long *size)
     if (data == nullptr) { fclose(file); return false; }
     
     // Read data
-    for (unsigned i = 0; i < bytes; i++) {
+    for (isize i = 0; i < bytes; i++) {
         int c = fgetc(file);
         if (c == EOF) break;
         data[i] = (u8)c;

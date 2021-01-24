@@ -37,7 +37,7 @@ DiskFile::readSector(u8 *dst, long s) const
     assert(dst != nullptr);
     assert(offset + sectorSize <= size);
 
-    for (unsigned i = 0; i < sectorSize; i++) {
+    for (isize i = 0; i < sectorSize; i++) {
         dst[i] = data[offset + i];
     }
 }

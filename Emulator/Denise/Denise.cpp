@@ -177,10 +177,10 @@ Denise::_inspect()
         info.joydat[1] = amiga.controlPort2.joydat();
         info.clxdat = 0;
         
-        for (unsigned i = 0; i < 6; i++) {
+        for (isize i = 0; i < 6; i++) {
             info.bpldat[i] = bpldat[i];
         }
-        for (unsigned i = 0; i < 32; i++) {
+        for (isize i = 0; i < 32; i++) {
             info.colorReg[i] = pixelEngine.getColor(i);
             info.color[i] = pixelEngine.getRGBA(i);
         }

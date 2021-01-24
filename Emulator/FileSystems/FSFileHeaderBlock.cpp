@@ -119,7 +119,7 @@ FSFileHeaderBlock::dump() const
     msg(" FileList block : %d\n", getNextListBlockRef());
     
     msg("    Data blocks : ");
-    for (unsigned i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
+    for (isize i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
     msg("\n");
 }
 
