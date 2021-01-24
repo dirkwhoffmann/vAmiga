@@ -185,41 +185,6 @@ string stripPath(const string &s);
 string stripName(const string &s);
 string stripSuffix(const string &s);
 
-/* Extracts the first path component.
- * Returns a newly created string. You need to delete it manually.
- */
-char *extractFirstPathComponent(const char *path);
-
-/* Extracts the n-th path component.
- * Returns a newly created string. You need to delete it manually.
- */
-char *extractPathComponent(const char *path, unsigned n);
-
-/* Strips the filename from a path.
- * Returns a newly created string. You need to delete it manually.
- */
-char *stripFilename(const char *path);
-
-/* Extracts the filename from a path.
- * Returns a newly created string. You need to delete it manually.
- */
-char *extractFilename(const char *path);
-
-/* Replaces a filename from a path.
- * Returns a newly created string. You need to delete it manually.
- */
-char *replaceFilename(const char *path, const char *name);
-
-/* Extracts file suffix from a path.
- * Returns a newly created string. You need to delete it manually.
- */
-char *extractSuffix(const char *path);
-
-/* Extracts filename from a path without its suffix.
- * Returns a newly created string. You need to delete it manually.
- */
-char *extractFilenameWithoutSuffix(const char *path);
-
 /* Compares the file suffix with a given string.
  * The function is used for determining the type of a file.
  */
@@ -278,6 +243,3 @@ u64 fnv_1a_64(const u8 *addr, isize size);
 u16 crc16(const u8 *addr, isize size);
 u32 crc32(const u8 *addr, isize size);
 u32 crc32forByte(u32 r);
-
-// Computes a SHA-1 checksum for a given buffer
-// int sha_1(u8 *digest, char *hexdigest, const u8 *addr, isize size);
