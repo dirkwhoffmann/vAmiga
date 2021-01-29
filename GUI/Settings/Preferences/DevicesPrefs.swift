@@ -67,15 +67,16 @@ extension PreferencesController {
             devInfoBoxTitle.textColor = .secondaryLabelColor
         }
         
-        devImage.isHidden = pad == nil
-        devLeftText.isHidden = pad == nil
-        devRightText.isHidden = pad == nil
-        devHatText.isHidden = pad == nil
-        devLeftScheme.isHidden = pad == nil
-        devRightScheme.isHidden = pad == nil
-        devHatScheme.isHidden = pad == nil
-        devActivity.isHidden = pad == nil
-        devActivity2.isHidden = pad == nil
+        let hide = pad == nil || pad?.isMouse == true
+        devImage.isHidden = hide
+        devLeftText.isHidden = hide
+        devRightText.isHidden = hide
+        devHatText.isHidden = hide
+        devLeftScheme.isHidden = hide
+        devRightScheme.isHidden = hide
+        devHatScheme.isHidden = hide
+        devActivity.isHidden = hide
+        devActivity2.isHidden = hide
     }
 
     func refreshDeviceEvents(events: [GamePadAction]) {

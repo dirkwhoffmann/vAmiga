@@ -91,8 +91,18 @@ extension IOHIDDevice {
          * HID devices. Note: The old implementation only checked the BuiltIn
          * key of the device, which turned out to be insufficient. Some external
          * devices such as the Sony DualShock 4 controller set the BuildIn key
-         * to 1.
+         * to 1. To get a more accurate result, the new implementation first
+         * evaluates the Transport property and classifies each wireless device
+         * as external.
          */
+        
+        /* VirtualC64
+        if transportKey.hasPrefix("Bluetooth") == true {
+            return false
+        }
+        
+        return builtInKey == "1"
+        */
         
         track()
         // listProperties()
