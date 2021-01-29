@@ -44,7 +44,7 @@ struct FSBlock : AmigaObject {
     virtual FSBlockType type() const = 0; 
 
     // Returns the size of this block in bytes (usually 512)
-    u32 bsize() const;
+    isize bsize() const;
 
     // Extract the file system type from the block header
     virtual FSVolumeType dos() const { return FS_NODOS; }
@@ -227,10 +227,10 @@ public:
     //
     
     // Returns the maximum number of storable data block references
-    u32 getMaxDataBlockRefs() const;
+    isize getMaxDataBlockRefs() const;
 
     // Gets or sets the number of data block references in this block
-    virtual u32 getNumDataBlockRefs() const { return 0; }
+    virtual isize getNumDataBlockRefs() const { return 0; }
     virtual void setNumDataBlockRefs(u32 val) { }
     virtual void incNumDataBlockRefs() { }
 

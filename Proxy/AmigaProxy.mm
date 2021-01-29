@@ -210,19 +210,19 @@ using namespace moira;
 
 - (NSString *)disassembleInstr:(NSInteger)addr length:(NSInteger *)len
 {
-    const char *str = [self cpu]->disassembleInstr(addr, len);
+    const char *str = [self cpu]->disassembleInstr((u32)addr, len);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSString *)disassembleWords:(NSInteger)addr length:(NSInteger)len
 {
-    const char *str = [self cpu]->disassembleWords(addr, len);
+    const char *str = [self cpu]->disassembleWords((u32)addr, len);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
 - (NSString *)disassembleAddr:(NSInteger)addr
 {
-    const char *str = [self cpu]->disassembleAddr(addr);
+    const char *str = [self cpu]->disassembleAddr((u32)addr);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 

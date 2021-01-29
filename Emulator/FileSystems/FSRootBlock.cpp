@@ -112,7 +112,7 @@ FSRootBlock::dump() const
     msg("   Hash table : "); dumpHashTable(); printf("\n");
     msg("Bitmap blocks : ");
     for (isize i = 0; i < 25; i++) {
-        if (u32 ref = getBmBlockRef(i)) msg("%d ", ref);
+        if (isize ref = getBmBlockRef(i)) msg("%zd ", ref);
     }
     msg("\n");
     msg("   Next BmExt : %d\n", getNextBmExtBlockRef());

@@ -31,15 +31,15 @@ struct FSFileHeaderBlock : FSBlock {
 
     ErrorCode exportBlock(const char *path) override;
 
-    u32 getNumDataBlockRefs() const override    { return get32(2);            }
+    isize getNumDataBlockRefs() const override  { return get32(2);            }
     void setNumDataBlockRefs(u32 val) override  {        set32(2, val);       }
     void incNumDataBlockRefs() override         {        inc32(2);            }
 
     u32 getFirstDataBlockRef() const override   { return get32(4     );       }
     void setFirstDataBlockRef(u32 ref) override {        set32(4, ref);       }
     
-    u32 getDataBlockRef(int nr) const           { return get32(-51-nr     );  }
-    void setDataBlockRef(int nr, u32 ref)       {        set32(-51-nr, ref);  }
+    u32 getDataBlockRef(isize nr) const         { return get32(-51-nr     );  }
+    void setDataBlockRef(isize nr, u32 ref)     {        set32(-51-nr, ref);  }
 
     u32 getProtectionBits() const override      { return get32(-48     );     }
     void setProtectionBits(u32 val) override    {        set32(-48, val);     }

@@ -53,14 +53,14 @@ class FSDevice : AmigaObject {
 protected:
             
     // Physical device parameters
-    u32 numCyls = 0;
-    u32 numHeads = 0;
+    isize numCyls = 0;
+    isize numHeads = 0;
     
     // Logical device parameters
-    u32 numSectors = 0;
-    u32 numBlocks = 0;
-    u32 numReserved = 0;
-    u32 bsize = 0;
+    isize numSectors = 0;
+    isize numBlocks = 0;
+    isize numReserved = 0;
+    isize bsize = 0;
             
     // The partition table
     std::vector<FSPartitionPtr> partitions;
@@ -69,10 +69,10 @@ protected:
     std::vector<BlockPtr> blocks;
             
     // The currently selected partition
-    u32 cp = 0;
+    isize cp = 0;
     
     // The currently selected directory
-    u32 cd = 0;
+    isize cd = 0;
     
 
     //
@@ -102,7 +102,7 @@ public:
     
 public:
 
-    FSDevice(u32 capacity);
+    FSDevice(isize capacity);
     ~FSDevice();
     
     const char *getDescription() const override { return "FSVolume"; }
@@ -121,14 +121,14 @@ public:
 public:
             
     // Returns the total device capacity in blocks
-    u32 getCapacity() { return numBlocks; }
+    isize getCapacity() { return numBlocks; }
     
     // Reports layout information
-    u32 getNumCyls() { return numCyls; }
-    u32 getNumHeads() { return numHeads; }
-    u32 getNumTracks() { return getNumCyls() * getNumHeads(); }
-    u32 getNumSectors() { return numSectors; }
-    u32 getNumBlocks() { return numBlocks; }
+    isize getNumCyls() { return numCyls; }
+    isize getNumHeads() { return numHeads; }
+    isize getNumTracks() { return getNumCyls() * getNumHeads(); }
+    isize getNumSectors() { return numSectors; }
+    isize getNumBlocks() { return numBlocks; }
 
     
     //

@@ -29,7 +29,7 @@ struct FSFileListBlock : FSBlock {
     void dump() const override;
     u32 checksumLocation() const override { return 5; }
     
-    u32 getNumDataBlockRefs() const override    { return get32(2);            }
+    isize getNumDataBlockRefs() const override  { return get32(2);            }
     void setNumDataBlockRefs(u32 val) override  {           set32(2, val);    }
     void incNumDataBlockRefs() override         {        inc32(2);            }
 

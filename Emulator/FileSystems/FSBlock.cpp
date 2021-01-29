@@ -30,7 +30,7 @@ FSBlock::makeWithType(FSPartition &p, u32 nr, FSBlockType type)
     }
 }
 
-u32
+isize
 FSBlock::bsize() const
 {
     return partition.dev.bsize;
@@ -220,7 +220,7 @@ FSBlock::dumpHashTable() const
     }
 }
 
-u32
+isize
 FSBlock::getMaxDataBlockRefs() const
 {
     return bsize() / 4 - 56;

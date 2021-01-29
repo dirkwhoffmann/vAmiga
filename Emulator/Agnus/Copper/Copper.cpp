@@ -516,8 +516,8 @@ Copper::blitterDidTerminate()
     }
 }
 
-int
-Copper::instrCount(int nr) const
+isize
+Copper::instrCount(isize nr) const
 {
     assert(nr == 1 || nr == 2);
 
@@ -528,7 +528,7 @@ Copper::instrCount(int nr) const
 }
 
 void
-Copper::adjustInstrCount(int nr, int offset)
+Copper::adjustInstrCount(isize nr, isize offset)
 {
     assert(nr == 1 || nr == 2);
 

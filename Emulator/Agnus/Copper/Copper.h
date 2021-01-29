@@ -313,10 +313,10 @@ public:
 public:
 
     // Returns the number of instructions in Copper list 1 or 2
-    int instrCount(int nr) const;
+    isize instrCount(isize nr) const;
 
     // Manually lengthens or shortens the value returned by instrCount()
-    void adjustInstrCount(int nr, int offset);
+    void adjustInstrCount(isize nr, isize offset);
 
     // Disassembles a single Copper command
     char *disassemble(u32 addr);

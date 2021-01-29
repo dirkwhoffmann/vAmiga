@@ -96,14 +96,14 @@ HDFFile::layout()
     result.numBlocks   = result.numCyls * result.numHeads * result.numSectors;
 
     // Determine the location of the root block
-    u32 highKey = result.numBlocks - 1;
-    u32 rootKey = (result.numReserved + highKey) / 2;
+    isize highKey = result.numBlocks - 1;
+    isize rootKey = (result.numReserved + highKey) / 2;
     
     // Add partition
     result.partitions.push_back(FSPartitionDescriptor(dos(0), 0, result.numCyls - 1, rootKey));
 
     // Seek bitmap blocks
-    u32 ref = rootKey;
+    u32 ref = (u32)rootKey;
     u32 cnt = 25;
     u32 offset = bsize() - 49 * 4;
     

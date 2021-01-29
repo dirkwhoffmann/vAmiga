@@ -113,7 +113,7 @@ FSFileHeaderBlock::dump() const
     msg("           Next : %d\n", getNextHashRef());
     msg("      File size : %d\n", getFileSize());
 
-    msg("    Block count : %d / %d\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
+    msg("    Block count : %zd / %zd\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
     msg("          First : %d\n", getFirstDataBlockRef());
     msg("     Parent dir : %d\n", getParentDirRef());
     msg(" FileList block : %d\n", getNextListBlockRef());
@@ -155,8 +155,8 @@ FSFileHeaderBlock::writeData(FILE *file)
         blocksTotal++;
 
         // Iterate through all data blocks references in this block
-        u32 num = MIN(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());        
-        for (u32 i = 0; i < num; i++) {
+        isize num = MIN(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
+        for (isize i = 0; i < num; i++) {
             
             u32 ref = getDataBlockRef(i);
             if (FSDataBlock *dataBlock = partition.dev.dataBlockPtr(getDataBlockRef(i))) {

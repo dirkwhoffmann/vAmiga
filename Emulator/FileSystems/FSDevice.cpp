@@ -40,7 +40,7 @@ FSDevice::makeWithFormat(FSDeviceDescriptor &layout)
     for (u32 i = 0; i < dev->numBlocks; i++) assert(dev->blocks[i] != nullptr);
     
     if (FS_DEBUG) {
-        printf("cd = %d\n", dev->cd);
+        printf("cd = %zd\n", dev->cd);
         dev->info();
         dev->dump();
     }
@@ -131,7 +131,7 @@ FSDevice::make(FSVolumeType type, const char *path)
     return nullptr;
 }
  
-FSDevice::FSDevice(u32 capacity)
+FSDevice::FSDevice(isize capacity)
 {
     // Initialize the block storage
     blocks.reserve(capacity);
