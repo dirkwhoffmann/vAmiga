@@ -23,8 +23,8 @@ FSPartition::makeWithFormat(FSDevice &dev, FSPartitionDescriptor &layout)
     p->bmBlocks    = layout.bmBlocks;
     p->bmExtBlocks = layout.bmExtBlocks;
     
-    p->firstBlock  = p->lowCyl * dev.numHeads * dev.numSectors;
-    p->lastBlock   = (p->highCyl + 1) * dev.numHeads * dev.numSectors - 1;
+    p->firstBlock  = (u32)(p->lowCyl * dev.numHeads * dev.numSectors);
+    p->lastBlock   = (u32)((p->highCyl + 1) * dev.numHeads * dev.numSectors - 1);
     
     // Do some consistency checking
     for (u32 i = p->firstBlock; i <= p->lastBlock; i++) assert(dev.blocks[i] == nullptr);
@@ -89,9 +89,9 @@ FSPartition::dump() const
 {
     msg("      First cylinder : %zd\n", lowCyl);
     msg("       Last cylinder : %zd\n", highCyl);
-    msg("         First block : %zd\n", firstBlock);
-    msg("          Last block : %zd\n", lastBlock);
-    msg("          Root block : %zd\n", rootBlock);
+    msg("         First block : %d\n", firstBlock);
+    msg("          Last block : %d\n", lastBlock);
+    msg("          Root block : %d\n", rootBlock);
     msg("       Bitmap blocks : ");
     for (auto& it : bmBlocks) { msg("%d ", it); }
     msg("\n");
@@ -373,7 +373,7 @@ FSPartition::bmBlockForBlock(u32 relRef)
     isize nr = (relRef - 2) / bitsPerBlock;
 
     if (nr >= (isize)bmBlocks.size()) {
-        warn("Allocation bit is located in non-existent bitmap block %d\n", nr);
+        warn("Allocation bit is located in non-existent bitmap block %zd\n", nr);
         return nullptr;
     }
 

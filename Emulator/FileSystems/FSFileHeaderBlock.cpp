@@ -188,12 +188,12 @@ FSFileHeaderBlock::addData(const u8 *buffer, isize size)
     assert(getFileSize() == 0);
         
     // Compute the required number of blocks
-    u32 numDataBlocks = partition.requiredDataBlocks(size);
-    u32 numListBlocks = partition.requiredFileListBlocks(size);
+    isize numDataBlocks = partition.requiredDataBlocks(size);
+    isize numListBlocks = partition.requiredFileListBlocks(size);
     
-    debug(FS_DEBUG, "Required data blocks : %d\n", numDataBlocks);
-    debug(FS_DEBUG, "Required list blocks : %d\n", numListBlocks);
-    debug(FS_DEBUG, "         Free blocks : %d\n", partition.freeBlocks());
+    debug(FS_DEBUG, "Required data blocks : %zd\n", numDataBlocks);
+    debug(FS_DEBUG, "Required list blocks : %zd\n", numListBlocks);
+    debug(FS_DEBUG, "         Free blocks : %zd\n", partition.freeBlocks());
     
     if (partition.freeBlocks() < numDataBlocks + numListBlocks) {
         warn("Not enough free blocks\n");
@@ -218,7 +218,7 @@ FSFileHeaderBlock::addData(const u8 *buffer, isize size)
         FSBlock *block = partition.dev.blockPtr(ref);
         if (block) {
             isize written = block->addData(buffer, size);
-            setFileSize(getFileSize() + written);
+            setFileSize((u32)(getFileSize() + written));
             buffer += written;
             size -= written;
         }

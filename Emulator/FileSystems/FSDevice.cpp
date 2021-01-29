@@ -40,7 +40,7 @@ FSDevice::makeWithFormat(FSDeviceDescriptor &layout)
     for (u32 i = 0; i < dev->numBlocks; i++) assert(dev->blocks[i] != nullptr);
     
     if (FS_DEBUG) {
-        printf("cd = %zd\n", dev->cd);
+        printf("cd = %d\n", dev->cd);
         dev->info();
         dev->dump();
     }

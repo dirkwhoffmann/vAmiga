@@ -25,11 +25,11 @@ struct FSPartition : AmigaObject {
     isize highCyl = 0;
     
     // Block boundaries
-    isize firstBlock = 0;
-    isize lastBlock = 0;
+    u32 firstBlock = 0;
+    u32 lastBlock = 0;
     
     // Location of the root block
-    isize rootBlock = 0;
+    u32 rootBlock = 0;
     
     // Location of the bitmap blocks and extended bitmap blocks
     vector<u32> bmBlocks;

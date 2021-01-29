@@ -193,7 +193,7 @@ Denise::_dump() const
 }
 
 SpriteInfo
-Denise::getSpriteInfo(int nr)
+Denise::getSpriteInfo(isize nr)
 {
     SpriteInfo result;
     synchronized { result = latchedSpriteInfo[nr]; }

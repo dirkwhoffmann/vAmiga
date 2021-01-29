@@ -293,10 +293,10 @@ private:
 public:
     
     DeniseInfo getInfo() { return HardwareComponent::getInfo(info); }
-    SpriteInfo getSpriteInfo(int nr);
-    u16 getSpriteHeight(int nr) const { return latchedSpriteInfo[nr].height; }
-    u16 getSpriteColor(int nr, int reg) const { return latchedSpriteInfo[nr].colors[reg]; }
-    u64 getSpriteData(int nr, int line) const { return latchedSpriteData[nr][line]; }
+    SpriteInfo getSpriteInfo(isize nr);
+    u16 getSpriteHeight(isize nr) const { return latchedSpriteInfo[nr].height; }
+    u16 getSpriteColor(isize nr, isize reg) const { return latchedSpriteInfo[nr].colors[reg]; }
+    u64 getSpriteData(isize nr, isize line) const { return latchedSpriteData[nr][line]; }
     
 private:
     

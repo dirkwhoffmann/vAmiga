@@ -233,7 +233,7 @@ DiskController::setState(DriveState oldState, DriveState newState)
 }
 
 void
-DiskController::ejectDisk(int nr, Cycle delay)
+DiskController::ejectDisk(isize nr, Cycle delay)
 {
     assert(nr >= 0 && nr <= 3);
 
@@ -243,12 +243,12 @@ DiskController::ejectDisk(int nr, Cycle delay)
 }
 
 void
-DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
+DiskController::insertDisk(class Disk *disk, isize nr, Cycle delay)
 {
     assert(disk != nullptr);
     assert(nr >= 0 && nr <= 3);
 
-    debug(DSK_DEBUG, "insertDisk(%p, %d, %lld)\n", disk, nr, delay);
+    debug(DSK_DEBUG, "insertDisk(%p, %zd, %lld)\n", disk, nr, delay);
 
     // The easy case: The emulator is not running
     if (!amiga.isRunning()) {
@@ -278,7 +278,7 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
 }
 
 void
-DiskController::insertDisk(class DiskFile *file, int nr, Cycle delay)
+DiskController::insertDisk(class DiskFile *file, isize nr, Cycle delay)
 {
     if (Disk *disk = Disk::makeWithFile(file)) {
         insertDisk(disk, nr, delay);
@@ -286,7 +286,7 @@ DiskController::insertDisk(class DiskFile *file, int nr, Cycle delay)
 }
 
 void
-DiskController::setWriteProtection(int nr, bool value)
+DiskController::setWriteProtection(isize nr, bool value)
 {
     assert(nr >= 0 && nr <= 3);
     df[nr]->setWriteProtection(value);

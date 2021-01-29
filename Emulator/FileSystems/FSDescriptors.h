@@ -71,7 +71,7 @@ struct FSPartitionDescriptor : AmigaObject {
     isize highCyl = 0;
         
     // Location of the root block
-    isize rootBlock = 0;
+    u32 rootBlock = 0;
     
     // References to all bitmap blocks and bitmap extension blocks
     vector<u32> bmBlocks;

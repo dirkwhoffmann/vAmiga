@@ -72,7 +72,7 @@ protected:
     isize cp = 0;
     
     // The currently selected directory
-    isize cd = 0;
+    u32 cd = 0;
     
 
     //

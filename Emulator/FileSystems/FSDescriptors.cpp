@@ -76,7 +76,7 @@ FSPartitionDescriptor::dump()
 {
     msg("       Partition : %zd - %zd\n", lowCyl, highCyl);
     msg("     File system : %s\n", FSVolumeTypeEnum::key(dos));
-    msg("      Root block : %zd\n", rootBlock);
+    msg("      Root block : %d\n", rootBlock);
     msg("   Bitmap blocks : ");
     for (auto& it : bmBlocks) { msg("%d ", it); }
     msg("\n");

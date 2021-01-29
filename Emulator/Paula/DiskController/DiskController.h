@@ -242,14 +242,14 @@ public:
     //
 
     // Ejects a disk from the specified drive
-    void ejectDisk(int nr, Cycle delay = 0);
+    void ejectDisk(isize nr, Cycle delay = 0);
 
     // Inserts a disk into the specified drive
-    void insertDisk(class Disk *disk, int nr, Cycle delay = 0);
-    void insertDisk(class DiskFile *file, int nr, Cycle delay = 0);
+    void insertDisk(class Disk *disk, isize nr, Cycle delay = 0);
+    void insertDisk(class DiskFile *file, isize nr, Cycle delay = 0);
     
     // Write protects or unprotects a disk
-    void setWriteProtection(int nr, bool value);
+    void setWriteProtection(isize nr, bool value);
 
         
     //
