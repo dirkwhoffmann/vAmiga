@@ -577,12 +577,12 @@ using namespace moira;
 
 - (BOOL)isIllegalInstr:(NSInteger)addr
 {
-    return [self copper]->isIllegalInstr(addr);
+    return [self copper]->isIllegalInstr((u32)addr);
 }
 
 - (NSString *)disassemble:(NSInteger)addr
 {
-    const char *str = [self copper]->disassemble(addr);
+    const char *str = [self copper]->disassemble((u32)addr);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 

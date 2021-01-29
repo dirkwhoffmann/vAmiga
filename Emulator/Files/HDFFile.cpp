@@ -104,15 +104,15 @@ HDFFile::layout()
 
     // Seek bitmap blocks
     u32 ref = (u32)rootKey;
-    u32 cnt = 25;
-    u32 offset = bsize() - 49 * 4;
+    isize cnt = 25;
+    isize offset = bsize() - 49 * 4;
     
     while (ref && ref < result.numBlocks) {
 
         const u8 *p = data + (ref * bsize()) + offset;
     
         // Collect all references to bitmap blocks stored in this block
-        for (u32 i = 0; i < cnt; i++, p += 4) {
+        for (isize i = 0; i < cnt; i++, p += 4) {
             if (u32 bmb = FFSDataBlock::read32(p)) {
                 if (bmb < result.numBlocks) result.partitions[0].bmBlocks.push_back(bmb);
             }

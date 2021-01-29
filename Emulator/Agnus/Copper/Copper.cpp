@@ -568,11 +568,11 @@ Copper::disassemble(u32 addr)
 }
 
 char *
-Copper::disassemble(isize list, u32 offset)
+Copper::disassemble(isize list, isize offset)
 {
     assert(list == 1 || list == 2);
     
-    u32 addr = (list == 1 ? cop1lc : cop2lc) + 2 * offset;
+    u32 addr = (u32)((list == 1 ? cop1lc : cop2lc) + 2 * offset);
     return disassemble(addr);
 }
 

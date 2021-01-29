@@ -75,23 +75,23 @@ FSPartition::FSPartition(FSDevice &ref) : dev(ref)
 void
 FSPartition::info() const
 {
-    msg("DOS%lld  ",     dos);
-    msg("%6d (x %3d) ", numBlocks(), bsize());
-    msg("%6d  ",        usedBlocks());
-    msg("%6d   ",       freeBlocks());
-    msg("%3d%%   ",     (int)(100.0 * usedBlocks() / numBlocks()));
-    msg("%s\n",         getName().c_str());
+    msg("DOS%lld  ",      dos);
+    msg("%6zd (x %3zd) ", numBlocks(), bsize());
+    msg("%6zd  ",         usedBlocks());
+    msg("%6zd   ",        freeBlocks());
+    msg("%3zd%%   ",      (isize)(100.0 * usedBlocks() / numBlocks()));
+    msg("%s\n",           getName().c_str());
     msg("\n");
 }
 
 void
 FSPartition::dump() const
 {
-    msg("      First cylinder : %d\n", lowCyl);
-    msg("       Last cylinder : %d\n", highCyl);
-    msg("         First block : %d\n", firstBlock);
-    msg("          Last block : %d\n", lastBlock);
-    msg("          Root block : %d\n", rootBlock);
+    msg("      First cylinder : %zd\n", lowCyl);
+    msg("       Last cylinder : %zd\n", highCyl);
+    msg("         First block : %zd\n", firstBlock);
+    msg("          Last block : %zd\n", lastBlock);
+    msg("          Root block : %zd\n", rootBlock);
     msg("       Bitmap blocks : ");
     for (auto& it : bmBlocks) { msg("%d ", it); }
     msg("\n");
@@ -142,85 +142,85 @@ FSPartition::predictBlockType(u32 nr, const u8 *buffer) const
 FSName
 FSPartition::getName() const
 {
-    FSRootBlock *rb = dev.rootBlockPtr(rootBlock);
+    FSRootBlock *rb = dev.rootBlockPtr((u32)rootBlock);
     return rb ? rb->getName() : FSName("");
 }
 
 void
 FSPartition::setName(FSName name)
 {
-    FSRootBlock *rb = dev.rootBlockPtr(rootBlock);
+    FSRootBlock *rb = dev.rootBlockPtr((u32)rootBlock);
     assert(rb != nullptr);
 
     rb->setName(name);
 }
 
-u32
+isize
 FSPartition::bsize() const
 {
     return dev.bsize;
 }
 
-u32
+isize
 FSPartition::numBlocks() const
 {
     return numCyls() * dev.numHeads * dev.numSectors;
 }
 
-u32
+isize
 FSPartition::numBytes() const
 {
     return numBlocks() * bsize();
 }
 
-u32
+isize
 FSPartition::freeBlocks() const
 {
     u32 result = 0;
     
     for (isize i = firstBlock; i <= lastBlock; i++) {
-        if (isFree(i)) result++;
+        if (isFree((u32)i)) result++;
     }
 
     return result;
 }
 
-u32
+isize
 FSPartition::usedBlocks() const
 {
     return numBlocks() - freeBlocks();
 }
 
-u32
+isize
 FSPartition::freeBytes() const
 {
     return freeBlocks() * bsize();
 }
 
-u32
+isize
 FSPartition::usedBytes() const
 {
     return usedBlocks() * bsize();
 }
 
-u32
+isize
 FSPartition::requiredDataBlocks(isize fileSize) const
 {
     // Compute the capacity of a single data block
-    u32 numBytes = bsize() - (isOFS() ? OFSDataBlock::headerSize() : 0);
+    isize numBytes = bsize() - (isOFS() ? OFSDataBlock::headerSize() : 0);
 
     // Compute the required number of data blocks
     return (fileSize + numBytes - 1) / numBytes;
 }
 
-u32
+isize
 FSPartition::requiredFileListBlocks(isize fileSize) const
 {
     // Compute the required number of data blocks
-    u32 numBlocks = requiredDataBlocks(fileSize);
+    isize numBlocks = requiredDataBlocks(fileSize);
     
     // Compute the number of data block references in a single block
-    u32 numRefs = (bsize() / 4) - 56;
+    isize numRefs = (bsize() / 4) - 56;
 
     // Small files do not require any file list block
     if (numBlocks <= numRefs) return 0;
@@ -229,18 +229,18 @@ FSPartition::requiredFileListBlocks(isize fileSize) const
     return (numBlocks - 1) / numRefs;
 }
 
-u32
+isize
 FSPartition::requiredBlocks(isize fileSize) const
 {
-    u32 numDataBlocks = requiredDataBlocks(fileSize);
-    u32 numFileListBlocks = requiredFileListBlocks(fileSize);
+    isize numDataBlocks = requiredDataBlocks(fileSize);
+    isize numFileListBlocks = requiredFileListBlocks(fileSize);
     
     if (FS_DEBUG) {
         
-        msg("Required file header blocks : %d\n", 1);
-        msg("       Required data blocks : %d\n", numDataBlocks);
-        msg("  Required file list blocks : %d\n", numFileListBlocks);
-        msg("                Free blocks : %d\n", freeBlocks());
+        msg("Required file header blocks : %d\n",  1);
+        msg("       Required data blocks : %zd\n", numDataBlocks);
+        msg("  Required file list blocks : %zd\n", numFileListBlocks);
+        msg("                Free blocks : %zd\n", freeBlocks());
     }
     
     return 1 + numDataBlocks + numFileListBlocks;
@@ -249,8 +249,8 @@ FSPartition::requiredBlocks(isize fileSize) const
 u32
 FSPartition::allocateBlock()
 {
-    if (u32 ref = allocateBlockAbove(rootBlock)) return ref;
-    if (u32 ref = allocateBlockBelow(rootBlock)) return ref;
+    if (u32 ref = allocateBlockAbove((u32)rootBlock)) return ref;
+    if (u32 ref = allocateBlockBelow((u32)rootBlock)) return ref;
 
     return 0;
 }
@@ -260,10 +260,10 @@ FSPartition::allocateBlockAbove(u32 ref)
 {
     assert(ref >= firstBlock && ref <= lastBlock);
     
-    for (u32 i = firstBlock + 1; i <= lastBlock; i++) {
+    for (isize i = firstBlock + 1; i <= lastBlock; i++) {
         if (dev.blocks[i]->type() == FS_EMPTY_BLOCK) {
-            markAsAllocated(i);
-            return i;
+            markAsAllocated((u32)i);
+            return (u32)i;
         }
     }
     return 0;
@@ -274,10 +274,10 @@ FSPartition::allocateBlockBelow(u32 ref)
 {
     assert(ref >= firstBlock && ref <= lastBlock);
     
-    for (long i = (long)ref - 1; i >= firstBlock; i--) {
+    for (isize i = (isize)ref - 1; i >= firstBlock; i--) {
         if (dev.blocks[i]->type() == FS_EMPTY_BLOCK) {
-            markAsAllocated(i);
-            return i;
+            markAsAllocated((u32)i);
+            return (u32)i;
         }
     }
     return 0;
@@ -369,10 +369,10 @@ FSPartition::bmBlockForBlock(u32 relRef)
     assert(relRef >= 2 && relRef < numBlocks());
         
     // Locate the bitmap block
-    u32 bitsPerBlock = (bsize() - 4) * 8;
-    u32 nr = (relRef - 2) / bitsPerBlock;
+    isize bitsPerBlock = (bsize() - 4) * 8;
+    isize nr = (relRef - 2) / bitsPerBlock;
 
-    if (nr >= bmBlocks.size()) {
+    if (nr >= (isize)bmBlocks.size()) {
         warn("Allocation bit is located in non-existent bitmap block %d\n", nr);
         return nullptr;
     }
@@ -422,15 +422,15 @@ FSPartition::locateAllocationBit(u32 ref, u32 *byte, u32 *bit) const
     ref -= 2;
     
     // Locate the bitmap block which stores the allocation bit
-    u32 bitsPerBlock = (bsize() - 4) * 8;
-    u32 nr = ref / bitsPerBlock;
+    isize bitsPerBlock = (bsize() - 4) * 8;
+    isize nr = ref / bitsPerBlock;
     ref = ref % bitsPerBlock;
 
     // Get the bitmap block
     FSBitmapBlock *bm;
-    bm = (nr < bmBlocks.size()) ? dev.bitmapBlockPtr(bmBlocks[nr]) : nullptr;
+    bm = (nr < (isize)bmBlocks.size()) ? dev.bitmapBlockPtr(bmBlocks[nr]) : nullptr;
     if (bm == nullptr) {
-        warn("Allocation bit is located in non-existent bitmap block %d\n", nr);
+        warn("Allocation bit is located in non-existent bitmap block %zd\n", nr);
         return nullptr;
     }
     
@@ -490,64 +490,18 @@ FSPartition::check(bool strict, FSErrorReport &report) const
 {
     report.bitmapErrors = 0;
     
-    for (u32 i = firstBlock; i <= lastBlock; i++) {
+    for (isize i = firstBlock; i <= lastBlock; i++) {
 
         FSBlock *block = dev.blocks[i];
-        if (block->type() == FS_EMPTY_BLOCK && !isFree(i)) {
+        if (block->type() == FS_EMPTY_BLOCK && !isFree((u32)i)) {
             report.bitmapErrors++;
-            debug(FS_DEBUG, "Empty block %d is marked as allocated\n", i);
+            debug(FS_DEBUG, "Empty block %zd is marked as allocated\n", i);
         }
-        if (block->type() != FS_EMPTY_BLOCK && isFree(i)) {
+        if (block->type() != FS_EMPTY_BLOCK && isFree((u32)i)) {
             report.bitmapErrors++;
-            debug(FS_DEBUG, "Non-empty block %d is marked as free\n", i);
+            debug(FS_DEBUG, "Non-empty block %zd is marked as free\n", i);
         }
     }
  
     return report.bitmapErrors == 0;
 }
-
-/*
-bool
-FSPartition::predictBlock(u32 nr, const u8 *buffer,
-                          FSPartition **p, FSVolumeType *d, FSBlockType *type)
-{
-    // Only proceed if the block belongs to this partition
-    if (nr < firstBlock || nr > lastBlock) return false;
-    
-    *p = this;
-    *d = dos();
-    
-    // Is it a boot block?
-    if (nr == firstBlock + 0) return FS_BOOT_BLOCK;
-    if (nr == firstBlock + 1) return FS_BOOT_BLOCK;
-    
-    // Is it a bitmap block?
-    if (std::find(bmBlocks.begin(), bmBlocks.end(), nr) != bmBlocks.end())
-        return FS_BITMAP_BLOCK;
-    
-    // is it a bitmap extension block?
-    if (std::find(bmExtBlocks.begin(), bmExtBlocks.end(), nr) != bmExtBlocks.end())
-        return FS_BITMAP_EXT_BLOCK;
-
-    // For all other blocks, check the type and subtype fields
-    u32 key = FSBlock::read32(buffer);
-    u32 subKey = FSBlock::read32(buffer + bsize() - 4);
-
-    if (key == 2  && subKey == 1)       { *type = FS_ROOT_BLOCK; return true; }
-    if (key == 2  && subKey == 2)       { *type = FS_USERDIR_BLOCK; return true; }
-    if (key == 2  && subKey == (u32)-3) { *type = FS_FILEHEADER_BLOCK; return true; }
-    if (key == 16 && subKey == (u32)-3) { *type = FS_FILELIST_BLOCK; return true; }
-
-    // Check if this block is a data block
-    if (isOFS()) {
-        if (key == 8) { *type = FS_DATA_BLOCK_OFS; return true; }
-    } else {
-        for (u32 i = 0; i < bsize(); i++) {
-            if (buffer[i]) { *type = FS_DATA_BLOCK_FFS; return true; }
-        }
-    }
-    
-    return FS_EMPTY_BLOCK;
-    return true;
-}
-*/

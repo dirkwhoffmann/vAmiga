@@ -21,15 +21,15 @@ struct FSPartition : AmigaObject {
     FSVolumeType dos = FS_NODOS;
     
     // Cylinder boundaries
-    u32 lowCyl = 0;
-    u32 highCyl = 0;
+    isize lowCyl = 0;
+    isize highCyl = 0;
     
     // Block boundaries
-    u32 firstBlock = 0;
-    u32 lastBlock = 0;
+    isize firstBlock = 0;
+    isize lastBlock = 0;
     
     // Location of the root block
-    u32 rootBlock = 0;
+    isize rootBlock = 0;
     
     // Location of the bitmap blocks and extended bitmap blocks
     vector<u32> bmBlocks;
@@ -77,18 +77,18 @@ public:
     bool isFFS() const { return isFFSVolumeType(dos); }
 
     // Returns the size of a single block in bytes (usually 512)
-    u32 bsize() const;
+    isize bsize() const;
 
     // Reports layout information about this partition
-    u32 numCyls() const { return highCyl - lowCyl + 1; }
-    u32 numBlocks() const;
-    u32 numBytes() const;
+    isize numCyls() const { return highCyl - lowCyl + 1; }
+    isize numBlocks() const;
+    isize numBytes() const;
     
     // Reports usage information about this partition
-    u32 freeBlocks() const;
-    u32 usedBlocks() const;
-    u32 freeBytes() const;
-    u32 usedBytes() const;
+    isize freeBlocks() const;
+    isize usedBlocks() const;
+    isize freeBytes() const;
+    isize usedBytes() const;
     
     
     //
@@ -98,9 +98,9 @@ public:
 public:
     
     // Returns the number of required blocks to store a file of certain size
-    u32 requiredDataBlocks(isize fileSize) const;
-    u32 requiredFileListBlocks(isize fileSize) const;
-    u32 requiredBlocks(isize fileSize) const;
+    isize requiredDataBlocks(isize fileSize) const;
+    isize requiredFileListBlocks(isize fileSize) const;
+    isize requiredBlocks(isize fileSize) const;
 
     // Seeks a free block and marks it as allocated
     u32 allocateBlock();

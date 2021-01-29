@@ -36,8 +36,8 @@ struct FSFileListBlock : FSBlock {
     u32 getFirstDataBlockRef() const override   { return get32(4);            }
     void setFirstDataBlockRef(u32 ref) override {        set32(4, ref);       }
 
-    u32 getDataBlockRef(int nr) const           { return get32(-51-nr);       }
-    void setDataBlockRef(int nr, u32 ref)       {        set32(-51-nr, ref);  }
+    u32 getDataBlockRef(isize nr) const         { return get32(-51-nr);       }
+    void setDataBlockRef(isize nr, u32 ref)     {        set32(-51-nr, ref);  }
 
     u32 getFileHeaderRef() const override       { return get32(-3);           }
     void setFileHeaderRef(u32 ref) override     {        set32(-3, ref);      }

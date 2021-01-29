@@ -26,7 +26,7 @@ FSFileListBlock::~FSFileListBlock()
 void
 FSFileListBlock::dump() const
 {
-    msg(" Block count : %d / %d\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
+    msg(" Block count : %zd / %zd\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
     msg("       First : %d\n", getFirstDataBlockRef());
     msg("Header block : %d\n", getFileHeaderRef());
     msg("   Extension : %d\n", getNextListBlockRef());

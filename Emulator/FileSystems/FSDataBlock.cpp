@@ -102,10 +102,10 @@ OFSDataBlock::writeData(FILE *file, isize size)
 isize
 OFSDataBlock::addData(const u8 *buffer, isize size)
 {
-    u32 count = MIN(bsize() - headerSize(), (u32)size);
+    isize count = MIN(bsize() - headerSize(), size);
 
     memcpy(data + headerSize(), buffer, count);
-    setDataBytesInBlock(count);
+    setDataBytesInBlock((u32)count);
     
     return count;
 }
