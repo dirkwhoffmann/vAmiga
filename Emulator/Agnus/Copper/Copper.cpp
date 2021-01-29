@@ -60,7 +60,7 @@ Copper::advancePC()
 }
 
 void
-Copper::switchToCopperList(int nr)
+Copper::switchToCopperList(isize nr)
 {
     assert(nr == 1 || nr == 2);
 

@@ -24,8 +24,8 @@ struct FSBitmapExtBlock : FSBlock {
     //
 
     FSBlockType type() const override { return FS_BITMAP_EXT_BLOCK; }
-    FSItemType itemType(u32 byte) const override;
-    ErrorCode check(u32 pos, u8 *expected, bool strict) const override;
+    FSItemType itemType(isize byte) const override;
+    ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     void dump() const override;
 
     u32 getNextBmExtBlockRef() const override    { return get32(-1);         }

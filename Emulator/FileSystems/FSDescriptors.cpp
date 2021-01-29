@@ -34,7 +34,7 @@ FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, F
     isize root   = numBlocks / 2;
     isize bitmap = root + 1;
 
-    partitions.push_back(FSPartitionDescriptor(dos, 0, numCyls - 1, root));
+    partitions.push_back(FSPartitionDescriptor(dos, 0, numCyls - 1, (u32)root));
     partitions[0].bmBlocks.push_back((u32)bitmap);
 }
 
@@ -60,7 +60,7 @@ FSDeviceDescriptor::dump()
 
 FSPartitionDescriptor::FSPartitionDescriptor(FSVolumeType dos,
                                              isize firstCyl, isize lastCyl,
-                                             isize root)
+                                             u32 root)
 {
     this->dos = dos;
     this->lowCyl = firstCyl;

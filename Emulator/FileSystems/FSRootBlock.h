@@ -25,8 +25,8 @@ struct FSRootBlock : FSBlock {
 
     // Methods from Block class
     FSBlockType type() const override { return FS_ROOT_BLOCK; }
-    FSItemType itemType(u32 byte) const override;
-    ErrorCode check(u32 pos, u8 *expected, bool strict) const override;
+    FSItemType itemType(isize byte) const override;
+    ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     u32 checksumLocation() const override { return 5; }
  
     u32 getBmBlockRef(isize nr) const            { return get32(nr-49);        }

@@ -180,7 +180,7 @@ public:
     FSBlockType blockType(u32 nr);
 
     // Returns the usage type of a certain byte in a certain block
-    FSItemType itemType(u32 nr, u32 pos) const;
+    FSItemType itemType(u32 nr, isize pos) const;
     
     // Queries a pointer from the block storage (may return nullptr)
     FSBlock *blockPtr(u32 nr) const;
@@ -288,7 +288,7 @@ public:
     FSErrorReport check(bool strict) const;
 
     // Checks a single byte in a certain block
-    ErrorCode check(u32 blockNr, u32 pos, u8 *expected, bool strict) const;
+    ErrorCode check(u32 blockNr, isize pos, u8 *expected, bool strict) const;
 
     // Checks if the block with the given number is part of the volume
     bool isBlockNumber(u32 nr) { return nr < numBlocks; }
@@ -301,17 +301,17 @@ public:
     bool isCorrupted(u32 blockNr) { return getCorrupted(blockNr) != 0; }
 
     // Returns the position in the corrupted block list (0 = OK)
-    u32 getCorrupted(u32 blockNr);
+    isize getCorrupted(u32 blockNr);
 
     // Returns the number of the next or previous corrupted block
-    u32 nextCorrupted(u32 blockNr);
-    u32 prevCorrupted(u32 blockNr);
+    isize nextCorrupted(u32 blockNr);
+    isize prevCorrupted(u32 blockNr);
 
     // Checks if a certain block is the n-th corrupted block
-    bool isCorrupted(u32 blockNr, u32 n);
+    bool isCorrupted(u32 blockNr, isize n);
 
     // Returns the number of the the n-th corrupted block
-    u32 seekCorruptedBlock(u32 n);
+    u32 seekCorruptedBlock(isize n);
     
     
     //
@@ -321,7 +321,7 @@ public:
 public:
         
     // Reads a single byte from a block
-    u8 readByte(u32 block, u32 offset) const;
+    u8 readByte(u32 block, isize offset) const;
 
     // Predicts the type of a block by analyzing its number and data (DEPRECATED)
     FSBlockType predictBlockType(u32 nr, const u8 *buffer);
@@ -339,10 +339,10 @@ public:
     bool exportVolume(u8 *dst, isize size, ErrorCode *error);
 
     // Exports a single block or a range of blocks
-    bool exportBlock(u32 nr, u8 *dst, isize size);
-    bool exportBlock(u32 nr, u8 *dst, isize size, ErrorCode *error);
-    bool exportBlocks(u32 first, u32 last, u8 *dst, isize size);
-    bool exportBlocks(u32 first, u32 last, u8 *dst, isize size, ErrorCode *error);
+    bool exportBlock(isize nr, u8 *dst, isize size);
+    bool exportBlock(isize nr, u8 *dst, isize size, ErrorCode *error);
+    bool exportBlocks(isize first, isize last, u8 *dst, isize size);
+    bool exportBlocks(isize first, isize last, u8 *dst, isize size, ErrorCode *error);
 
     // Exports the volume to a directory of the host file system
     ErrorCode exportDirectory(const char *path);

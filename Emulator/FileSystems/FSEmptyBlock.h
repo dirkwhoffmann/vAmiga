@@ -23,7 +23,7 @@ struct FSEmptyBlock : FSBlock {
     //
 
     FSBlockType type() const override { return FS_EMPTY_BLOCK; }
-    FSItemType itemType(u32 byte) const override; 
+    FSItemType itemType(isize byte) const override; 
     u32 typeID() const override { return 0; }
     u32 subtypeID() const override { return 0; }
     void dumpData() const override { };

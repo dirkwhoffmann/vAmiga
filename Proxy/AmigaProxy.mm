@@ -1341,12 +1341,12 @@ using namespace moira;
 
 - (FSBlockType)blockType:(NSInteger)blockNr
 {
-    return [self fs]->blockType(blockNr);
+    return [self fs]->blockType((u32)blockNr);
 }
 
 - (FSItemType)itemType:(NSInteger)blockNr pos:(NSInteger)pos
 {
-    return [self fs]->itemType(blockNr, pos);
+    return [self fs]->itemType((u32)blockNr, pos);
 }
 
 - (FSErrorReport)check:(BOOL)strict
@@ -1359,7 +1359,7 @@ using namespace moira;
           expected:(unsigned char *)exp
             strict:(BOOL)strict
 {
-    return [self fs]->check(nr, pos, exp, strict);
+    return [self fs]->check((u32)nr, pos, exp, strict);
 }
 
 - (BOOL)isCorrupted:(NSInteger)blockNr
@@ -1389,7 +1389,7 @@ using namespace moira;
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
 {
-    return [self fs]->readByte(block, (u32)offset);
+    return [self fs]->readByte((u32)block, offset);
 }
 
 - (ErrorCode)export:(NSString *)path

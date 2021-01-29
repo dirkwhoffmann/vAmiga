@@ -634,11 +634,11 @@ Denise::drawSpritePair()
     const isize sprite1 = 2 * pair;
     const isize sprite2 = 2 * pair + 1;
 
-    int strt1 = sprhppos<sprite1>();
-    int strt2 = sprhppos<sprite2>();
+    Pixel strt1 = sprhppos<sprite1>();
+    Pixel strt2 = sprhppos<sprite2>();
     bool armed1 = GET_BIT(armed, sprite1);
     bool armed2 = GET_BIT(armed, sprite2);
-    int strt = 0;
+    Pixel strt = 0;
     
     // Iterate over all recorded register changes
     if (!sprChanges[pair].isEmpty()) {
@@ -724,8 +724,8 @@ Denise::replaySpriteRegChanges()
     const isize sprite1 = 2 * pair;
     const isize sprite2 = 2 * pair + 1;
     
-    int begin = sprChanges[pair].begin();
-    int end = sprChanges[pair].end();
+    isize begin = sprChanges[pair].begin();
+    isize end = sprChanges[pair].end();
     
     for (isize i = begin; i != end; i = sprChanges[pair].next(i)) {
         

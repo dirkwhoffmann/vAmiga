@@ -100,7 +100,10 @@ HDFFile::layout()
     isize rootKey = (result.numReserved + highKey) / 2;
     
     // Add partition
-    result.partitions.push_back(FSPartitionDescriptor(dos(0), 0, result.numCyls - 1, rootKey));
+    result.partitions.push_back(FSPartitionDescriptor(dos(0),
+                                                      0,
+                                                      result.numCyls - 1,
+                                                      (u32)rootKey));
 
     // Seek bitmap blocks
     u32 ref = (u32)rootKey;

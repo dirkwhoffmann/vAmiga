@@ -130,7 +130,7 @@ Memory::setConfigItem(Option option, long value)
                 return false;
             }
             
-            config.extStart = value;
+            config.extStart = (u32)value;
             updateMemSrcTables();
             return true;
             
@@ -384,8 +384,8 @@ Memory::alloc(isize bytes, u8 *&ptr, u32 &size, u32 &mask)
             warn("Cannot allocate %zd KB of memory\n", bytes);
             return false;
         }
-        size = bytes;
-        mask = bytes - 1;
+        size = (u32)bytes;
+        mask = size - 1;
         fillRamWithInitPattern();
         
         if ((uintptr_t)ptr & 1) {
@@ -2371,7 +2371,7 @@ template <Accessor A> const char *
 Memory::ascii(u32 addr)
 {
     for (isize i = 0; i < 16; i += 2) {
-        u16 word = spypeek16 <A> (addr + i);
+        u16 word = spypeek16 <A> ((u32)(addr + i));
         str[i] = isprint(HI_BYTE(word)) ? HI_BYTE(word) : '.';
         str[i+1] = isprint(LO_BYTE(word)) ? LO_BYTE(word) : '.';
     }
@@ -2387,7 +2387,7 @@ Memory::hex(u32 addr, isize bytes)
     
     for (isize i = 0; i < bytes / 2; i += 2, p += 5) {
 
-        u16 word = spypeek16 <A> (addr + i);
+        u16 word = spypeek16 <A> ((u32)(addr + i));
         
         u8 digit1 = (word >> 12) & 0xF;
         u8 digit2 = (word >> 8) & 0xF;

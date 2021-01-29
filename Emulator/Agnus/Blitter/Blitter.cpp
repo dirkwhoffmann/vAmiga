@@ -86,7 +86,7 @@ Blitter::setConfigItem(Option option, long value)
             }
             
             amiga.suspend();
-            config.accuracy = value;
+            config.accuracy = (int)value;
             amiga.resume();
 
             return true;

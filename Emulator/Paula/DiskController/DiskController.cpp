@@ -83,7 +83,7 @@ DiskController::setConfigItem(Option option, long value)
                 return false;
             }
             
-            config.speed = value;
+            config.speed = (i32)value;
             scheduleFirstDiskEvent();
             return true;
                         

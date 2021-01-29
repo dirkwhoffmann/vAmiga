@@ -36,14 +36,14 @@ FSFileListBlock::dump() const
 }
 
 FSItemType
-FSFileListBlock::itemType(u32 byte) const
+FSFileListBlock::itemType(isize byte) const
 {
     // Intercept some special locations
     if (byte == 328) return FSI_BCPL_STRING_LENGTH;
     if (byte == 432) return FSI_BCPL_STRING_LENGTH;
 
     // Translate 'pos' to a (signed) long word index
-    i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;
+    isize word = byte / 4; if (word >= 6) word -= bsize() / 4;
 
     switch (word) {
             
@@ -65,7 +65,7 @@ FSFileListBlock::itemType(u32 byte) const
 }
 
 ErrorCode
-FSFileListBlock::check(u32 byte, u8 *expected, bool strict) const
+FSFileListBlock::check(isize byte, u8 *expected, bool strict) const
 {
     /* Note: At location -3, many disks reference the bitmap block instead of
      * the file header block. We ignore to report this common inconsistency if
@@ -73,7 +73,7 @@ FSFileListBlock::check(u32 byte, u8 *expected, bool strict) const
      */
 
     // Translate 'pos' to a (signed) long word index
-    i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;
+    isize word = byte / 4; if (word >= 6) word -= bsize() / 4;
     u32 value = get32(word);
 
     switch (word) {

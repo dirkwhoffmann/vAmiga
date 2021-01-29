@@ -20,7 +20,7 @@ struct FSBlock : AmigaObject {
     u32 nr;
     
     // Outcome of the last integrity check (0 = OK, n = n-th corrupted block)
-    u32 corrupted = 0;
+    isize corrupted = 0;
         
     // The actual block data
     u8 *data = nullptr;
@@ -50,7 +50,7 @@ struct FSBlock : AmigaObject {
     virtual FSVolumeType dos() const { return FS_NODOS; }
     
     // Returns the role of a certain byte in this block
-    virtual FSItemType itemType(u32 byte) const { return FSI_UNKNOWN; }
+    virtual FSItemType itemType(isize byte) const { return FSI_UNKNOWN; }
     
     // Returns the type and subtype identifiers of this block
     virtual u32 typeID() const;
@@ -65,7 +65,7 @@ struct FSBlock : AmigaObject {
     isize check(bool strict) const;
 
     // Checks the integrity of a certain byte in this block
-    virtual ErrorCode check(u32 pos, u8 *expected, bool strict) const { return ERROR_OK; }
+    virtual ErrorCode check(isize pos, u8 *expected, bool strict) const { return ERROR_OK; }
         
     
     //

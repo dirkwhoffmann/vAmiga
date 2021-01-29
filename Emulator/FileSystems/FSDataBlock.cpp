@@ -42,11 +42,11 @@ OFSDataBlock::dump() const
 }
 
 FSItemType
-OFSDataBlock::itemType(u32 pos) const
+OFSDataBlock::itemType(isize pos) const
 {
     if (pos < 24) {
         
-        i32 word = pos / 4;
+        isize word = pos / 4;
         
         switch (word) {
                 
@@ -63,7 +63,7 @@ OFSDataBlock::itemType(u32 pos) const
 }
 
 ErrorCode
-OFSDataBlock::check(u32 byte, u8 *expected, bool strict) const
+OFSDataBlock::check(isize byte, u8 *expected, bool strict) const
 {
     /* Note: At location 1, many disks store a reference to the bitmap block
      * instead of a reference to the file header block. We ignore to report
@@ -72,7 +72,7 @@ OFSDataBlock::check(u32 byte, u8 *expected, bool strict) const
 
     if (byte < 24) {
         
-        i32 word = byte / 4;
+        isize word = byte / 4;
         u32 value = get32(word);
                 
         switch (word) {
@@ -129,7 +129,7 @@ FFSDataBlock::dump() const
 }
 
 FSItemType
-FFSDataBlock::itemType(u32 pos) const
+FFSDataBlock::itemType(isize pos) const
 {
     return FSI_DATA;
 }

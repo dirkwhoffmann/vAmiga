@@ -332,7 +332,7 @@ CPU::disassembleWords(u32 addr, isize len)
 {
     static char result[64];
 
-    disassembleMemory(addr, len, result);
+    disassembleMemory(addr, (int)len, result);
     return result;
 }
 

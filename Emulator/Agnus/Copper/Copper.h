@@ -173,7 +173,7 @@ private:
     void advancePC();
 
     // Switches the Copper list
-    void switchToCopperList(int nr);
+    void switchToCopperList(isize nr);
 
     /* Searches for the next matching beam position. This function is called
      * when a WAIT statement is processed. It is uses to compute where the

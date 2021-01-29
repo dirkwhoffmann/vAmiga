@@ -30,14 +30,14 @@ FSUserDirBlock::~FSUserDirBlock()
 }
 
 FSItemType
-FSUserDirBlock::itemType(u32 byte) const
+FSUserDirBlock::itemType(isize byte) const
 {
     // Intercept some special locations
     if (byte == 328) return FSI_BCPL_STRING_LENGTH;
     if (byte == 432) return FSI_BCPL_STRING_LENGTH;
 
     // Translate the byte index to a (signed) long word index
-    i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;
+    isize word = byte / 4; if (word >= 6) word -= bsize() / 4;
 
     switch (word) {
         case 0:   return FSI_TYPE_ID;
@@ -68,10 +68,10 @@ FSUserDirBlock::itemType(u32 byte) const
 }
 
 ErrorCode
-FSUserDirBlock::check(u32 byte, u8 *expected, bool strict) const
+FSUserDirBlock::check(isize byte, u8 *expected, bool strict) const
 {
     // Translate the byte index to a (signed) long word index
-    i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;
+    isize word = byte / 4; if (word >= 6) word -= bsize() / 4;
     u32 value = get32(word);
     
     switch (word) {

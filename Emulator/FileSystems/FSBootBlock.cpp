@@ -41,7 +41,7 @@ FSBootBlock::dos() const
 }
 
 FSItemType
-FSBootBlock::itemType(u32 byte) const
+FSBootBlock::itemType(isize byte) const
 {
     if (nr == partition.firstBlock) {
         
@@ -54,11 +54,11 @@ FSBootBlock::itemType(u32 byte) const
 }
 
 ErrorCode
-FSBootBlock::check(u32 byte, u8 *expected, bool strict) const
+FSBootBlock::check(isize byte, u8 *expected, bool strict) const
 {
     if (nr == partition.firstBlock) {
  
-        u32 word = byte / 4;
+        isize word = byte / 4;
         u32 value = data[byte];
         
         if (byte == 0) EXPECT_BYTE('D');

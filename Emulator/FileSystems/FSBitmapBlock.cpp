@@ -20,15 +20,15 @@ FSBitmapBlock::~FSBitmapBlock()
 }
 
 FSItemType
-FSBitmapBlock::itemType(u32 pos) const
+FSBitmapBlock::itemType(isize pos) const
 {
     return pos < 4 ? FSI_CHECKSUM : FSI_BITMAP;
 }
 
 ErrorCode
-FSBitmapBlock::check(u32 byte, u8 *expected, bool strict) const
+FSBitmapBlock::check(isize byte, u8 *expected, bool strict) const
 {
-    i32 word = byte / 4;
+    isize word = byte / 4;
     u32 value = get32(word);
     
     if (word == 0) EXPECT_CHECKSUM;

@@ -231,7 +231,7 @@ FSDevice::blockType(u32 nr)
 }
 
 FSItemType
-FSDevice::itemType(u32 nr, u32 pos) const
+FSDevice::itemType(u32 nr, isize pos) const
 {
     return blockPtr(nr) ? blocks[nr]->itemType(pos) : FSI_UNUSED;
 }
@@ -604,8 +604,8 @@ FSDevice::collectHashedRefs(u32 ref, std::stack<u32> &result, std::set<u32> &vis
     if (FSBlock *b = blockPtr(ref)) {
         
         // Walk through the hash table in reverse order
-        for (long i = (long)b->hashTableSize(); i >= 0; i--) {
-            collectRefsWithSameHashValue(b->getHashRef(i), result, visited);
+        for (isize i = (isize)b->hashTableSize(); i >= 0; i--) {
+            collectRefsWithSameHashValue(b->getHashRef((u32)i), result, visited);
         }
     }
     
@@ -638,7 +638,7 @@ FSDevice::check(bool strict) const
 {
     FSErrorReport result;
 
-    long total = 0, min = LONG_MAX, max = 0;
+    isize total = 0, min = LONG_MAX, max = 0;
     
     // Analyze all partions
     for (auto &p : partitions) p->check(strict, result);
@@ -670,7 +670,7 @@ FSDevice::check(bool strict) const
 }
 
 ErrorCode
-FSDevice::check(u32 blockNr, u32 pos, u8 *expected, bool strict) const
+FSDevice::check(u32 blockNr, isize pos, u8 *expected, bool strict) const
 {
     return blocks[blockNr]->check(pos, expected, strict);
 }
@@ -707,14 +707,14 @@ FSDevice::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
     return ERROR_OK;
 }
 
-u32
+isize
 FSDevice::getCorrupted(u32 blockNr)
 {
     return blockPtr(blockNr) ? blocks[blockNr]->corrupted : 0;
 }
 
 bool
-FSDevice::isCorrupted(u32 blockNr, u32 n)
+FSDevice::isCorrupted(u32 blockNr, isize n)
 {
     for (u32 i = 0, cnt = 0; i < numBlocks; i++) {
         
@@ -726,24 +726,24 @@ FSDevice::isCorrupted(u32 blockNr, u32 n)
     return false;
 }
 
-u32
+isize
 FSDevice::nextCorrupted(u32 blockNr)
 {
-    long i = (long)blockNr;
-    while (++i < numBlocks) { if (isCorrupted(i)) return i; }
+    isize i = (isize)blockNr;
+    while (++i < numBlocks) { if (isCorrupted((u32)i)) return i; }
     return blockNr;
 }
 
-u32
+isize
 FSDevice::prevCorrupted(u32 blockNr)
 {
-    long i = (long)blockNr - 1;
-    while (i-- >= 0) { if (isCorrupted(i)) return i; }
+    isize i = (isize)blockNr - 1;
+    while (i-- >= 0) { if (isCorrupted((u32)i)) return i; }
     return blockNr;
 }
 
 u32
-FSDevice::seekCorruptedBlock(u32 n)
+FSDevice::seekCorruptedBlock(isize n)
 {
     for (u32 i = 0, cnt = 0; i < numBlocks; i++) {
 
@@ -756,7 +756,7 @@ FSDevice::seekCorruptedBlock(u32 n)
 }
 
 u8
-FSDevice::readByte(u32 block, u32 offset) const
+FSDevice::readByte(u32 block, isize offset) const
 {
     assert(offset < bsize);
 
@@ -861,19 +861,19 @@ FSDevice::exportVolume(u8 *dst, isize size, ErrorCode *err)
 }
 
 bool
-FSDevice::exportBlock(u32 nr, u8 *dst, isize size)
+FSDevice::exportBlock(isize nr, u8 *dst, isize size)
 {
     return exportBlocks(nr, nr, dst, size);
 }
 
 bool
-FSDevice::exportBlock(u32 nr, u8 *dst, isize size, ErrorCode *error)
+FSDevice::exportBlock(isize nr, u8 *dst, isize size, ErrorCode *error)
 {
     return exportBlocks(nr, nr, dst, size, error);
 }
 
 bool
-FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, isize size)
+FSDevice::exportBlocks(isize first, isize last, u8 *dst, isize size)
 {
     ErrorCode error;
     bool result = exportBlocks(first, last, dst, size, &error);
@@ -883,15 +883,15 @@ FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, isize size)
 }
 
 bool
-FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, isize size, ErrorCode *err)
+FSDevice::exportBlocks(isize first, isize last, u8 *dst, isize size, ErrorCode *err)
 {
     assert(last < numBlocks);
     assert(first <= last);
     assert(dst);
     
-    u32 count = last - first + 1;
+    isize count = last - first + 1;
     
-    debug(FS_DEBUG, "Exporting %d blocks (%d - %d)\n", count, first, last);
+    debug(FS_DEBUG, "Exporting %zd blocks (%zd - %zd)\n", count, first, last);
 
     // Only proceed if the (predicted) block size matches
     if (size % bsize != 0) {

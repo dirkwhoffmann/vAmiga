@@ -82,7 +82,7 @@ struct FSPartitionDescriptor : AmigaObject {
     // Initializing
     //
     
-    FSPartitionDescriptor(FSVolumeType dos, isize firstCyl, isize lastCyl, isize root);
+    FSPartitionDescriptor(FSVolumeType dos, isize firstCyl, isize lastCyl, u32 root);
 
     const char *getDescription() const override { return "FSPartition"; }
     

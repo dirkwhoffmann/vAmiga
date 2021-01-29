@@ -46,9 +46,9 @@ struct OFSDataBlock : FSDataBlock {
 
     const char *getDescription() const override { return "OFSDataBlock"; }
     FSBlockType type() const override { return FS_DATA_BLOCK_OFS; }
-    FSItemType itemType(u32 byte) const override;
+    FSItemType itemType(isize byte) const override;
     void dump() const override;
-    ErrorCode check(u32 pos, u8 *expected, bool strict) const override;
+    ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     u32 checksumLocation() const override { return 5; }
 
     u32  getFileHeaderRef() const override          { return get32(1);        }
@@ -77,7 +77,7 @@ struct FFSDataBlock : FSDataBlock {
 
     const char *getDescription() const override { return "FFSDataBlock"; }
     FSBlockType type() const override { return FS_DATA_BLOCK_FFS; }
-    FSItemType itemType(u32 byte) const override;
+    FSItemType itemType(isize byte) const override;
     void dump() const override;
 
     u32 getDataBlockNr() const override { return 0; }
