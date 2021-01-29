@@ -192,7 +192,7 @@ using namespace moira;
 
 - (NSString *)disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len
 {
-    const char *str = [self cpu]->disassembleRecordedWords((int)i, len);
+    const char *str = [self cpu]->disassembleRecordedWords(i, len);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 

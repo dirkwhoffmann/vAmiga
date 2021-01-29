@@ -230,8 +230,8 @@ CPU::_inspect(u32 dasmStart)
         info.pc0 = getPC0() & 0xFFFFFF;
         
         for (isize i = 0; i < 8; i++) {
-            info.d[i] = getD(i);
-            info.a[i] = getA(i);
+            info.d[i] = getD((int)i);
+            info.a[i] = getA((int)i);
         }
         info.usp = getUSP();
         info.ssp = getSSP();
@@ -288,47 +288,47 @@ CPU::didLoadFromBuffer(const u8 *buffer)
 }
 
 const char *
-CPU::disassembleRecordedInstr(int i, long *len)
+CPU::disassembleRecordedInstr(isize i, isize *len)
 {
-    return disassembleInstr(debugger.logEntryAbs(i).pc0, len);
+    return disassembleInstr(debugger.logEntryAbs((int)i).pc0, len);
 }
 const char *
-CPU::disassembleRecordedWords(int i, int len)
+CPU::disassembleRecordedWords(isize i, isize len)
 {
-    return disassembleWords(debugger.logEntryAbs(i).pc0, len);
+    return disassembleWords(debugger.logEntryAbs((int)i).pc0, len);
 }
 
 const char *
-CPU::disassembleRecordedFlags(int i)
+CPU::disassembleRecordedFlags(isize i)
 {
     static char result[18];
     
-    disassembleSR(debugger.logEntryAbs(i).sr, result);
+    disassembleSR(debugger.logEntryAbs((int)i).sr, result);
     return result;
 }
 
 const char *
-CPU::disassembleRecordedPC(int i)
+CPU::disassembleRecordedPC(isize i)
 {
     static char result[16];
     
-    Moira::disassemblePC(debugger.logEntryAbs(i).pc0, result);
+    Moira::disassemblePC(debugger.logEntryAbs((int)i).pc0, result);
     return result;
 }
 
 const char *
-CPU::disassembleInstr(u32 addr, long *len)
+CPU::disassembleInstr(u32 addr, isize *len)
 {
     static char result[128];
 
     int l = disassemble(addr, result);
 
-    if (len) *len = (long)l;
+    if (len) *len = (isize)l;
     return result;
 }
 
 const char *
-CPU::disassembleWords(u32 addr, int len)
+CPU::disassembleWords(u32 addr, isize len)
 {
     static char result[64];
 
@@ -346,12 +346,12 @@ CPU::disassembleAddr(u32 addr)
 }
 
 const char *
-CPU::disassembleInstr(long *len)
+CPU::disassembleInstr(isize *len)
 {
     return disassembleInstr(reg.pc0, len);
 }
 const char *
-CPU::disassembleWords(int len)
+CPU::disassembleWords(isize len)
 {
     return disassembleWords(reg.pc0, len);
     return "";

@@ -31,22 +31,22 @@ FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, F
     bsize       = 512;
     
     // Determine the location of the root block and the bitmap block
-    u32 root   = numBlocks / 2;
-    u32 bitmap = root + 1;
+    isize root   = numBlocks / 2;
+    isize bitmap = root + 1;
 
     partitions.push_back(FSPartitionDescriptor(dos, 0, numCyls - 1, root));
-    partitions[0].bmBlocks.push_back(bitmap);
+    partitions[0].bmBlocks.push_back((u32)bitmap);
 }
 
 void
 FSDeviceDescriptor::dump()
 {
-    msg("       Cylinders : %d\n", numCyls);
-    msg("           Heads : %d\n", numHeads);
-    msg("         Sectors : %d\n", numSectors);
-    msg("          Blocks : %d\n", numBlocks);
-    msg("        Reserved : %d\n", numReserved);
-    msg("           BSize : %d\n", bsize);
+    msg("       Cylinders : %zd\n", numCyls);
+    msg("           Heads : %zd\n", numHeads);
+    msg("         Sectors : %zd\n", numSectors);
+    msg("          Blocks : %zd\n", numBlocks);
+    msg("        Reserved : %zd\n", numReserved);
+    msg("           BSize : %zd\n", bsize);
     msg("\n");
     
     for (auto& p : partitions) { p.dump(); }
@@ -59,8 +59,8 @@ FSDeviceDescriptor::dump()
 }
 
 FSPartitionDescriptor::FSPartitionDescriptor(FSVolumeType dos,
-                                             u32 firstCyl, u32 lastCyl,
-                                             u32 root)
+                                             isize firstCyl, isize lastCyl,
+                                             isize root)
 {
     this->dos = dos;
     this->lowCyl = firstCyl;
@@ -74,9 +74,9 @@ FSPartitionDescriptor::FSPartitionDescriptor(FSVolumeType dos,
 void
 FSPartitionDescriptor::dump()
 {
-    msg("       Partition : %d - %d\n", lowCyl, highCyl);
+    msg("       Partition : %zd - %zd\n", lowCyl, highCyl);
     msg("     File system : %s\n", FSVolumeTypeEnum::key(dos));
-    msg("      Root block : %d\n", rootBlock);
+    msg("      Root block : %zd\n", rootBlock);
     msg("   Bitmap blocks : ");
     for (auto& it : bmBlocks) { msg("%d ", it); }
     msg("\n");

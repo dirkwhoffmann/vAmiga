@@ -37,14 +37,14 @@
 struct FSDeviceDescriptor : AmigaObject {
     
     // Physical device parameters
-    u32 numCyls = 0;
-    u32 numHeads = 0;
+    isize numCyls = 0;
+    isize numHeads = 0;
         
     // Logical device parameters
-    u32 numSectors = 0;
-    u32 numBlocks = 0;
-    u32 numReserved = 0;
-    u32 bsize = 0;
+    isize numSectors = 0;
+    isize numBlocks = 0;
+    isize numReserved = 0;
+    isize bsize = 0;
     
     // Partition parameters
     std::vector<struct FSPartitionDescriptor> partitions;
@@ -67,11 +67,11 @@ struct FSPartitionDescriptor : AmigaObject {
     FSVolumeType dos = FS_NODOS;
     
     // Cylinder boundaries
-    u32 lowCyl = 0;
-    u32 highCyl = 0;
+    isize lowCyl = 0;
+    isize highCyl = 0;
         
     // Location of the root block
-    u32 rootBlock = 0;
+    isize rootBlock = 0;
     
     // References to all bitmap blocks and bitmap extension blocks
     vector<u32> bmBlocks;
@@ -82,7 +82,7 @@ struct FSPartitionDescriptor : AmigaObject {
     // Initializing
     //
     
-    FSPartitionDescriptor(FSVolumeType dos, u32 firstCyl, u32 lastCyl, u32 root);
+    FSPartitionDescriptor(FSVolumeType dos, isize firstCyl, isize lastCyl, isize root);
 
     const char *getDescription() const override { return "FSPartition"; }
     
@@ -94,5 +94,5 @@ struct FSPartitionDescriptor : AmigaObject {
     //
     
     // Returns the number of cylinders in this partition
-    u32 numCyls() { return highCyl - lowCyl + 1; }
+    isize numCyls() { return highCyl - lowCyl + 1; }
 };

@@ -162,18 +162,18 @@ private:
 public:
 
     // Performs a consistency check for debugging.
-    static bool isRgbaIndex(int nr) { return nr < rgbaIndexCnt; }
+    static bool isRgbaIndex(isize nr) { return nr < rgbaIndexCnt; }
     
     // Changes one of the 32 Amiga color registers.
-    void setColor(int reg, u16 value);
+    void setColor(isize reg, u16 value);
 
     // Returns a color value in Amiga format or RGBA format
-    u16 getColor(int nr) const { return colreg[nr]; }
-    u32 getRGBA(int nr) const { return indexedRgba[nr]; }
+    u16 getColor(isize nr) const { return colreg[nr]; }
+    u32 getRGBA(isize nr) const { return indexedRgba[nr]; }
 
     // Returns sprite color in Amiga format or RGBA format
-    u16 getSpriteColor(int s, int nr) const { return getColor(16 + nr + 2 * (s & 6)); }
-    u32 getSpriteRGBA(int s, int nr) const { return rgba[getSpriteColor(s,nr)]; }
+    u16 getSpriteColor(isize s, isize nr) const { return getColor(16 + nr + 2 * (s & 6)); }
+    u32 getSpriteRGBA(isize s, isize nr) const { return rgba[getSpriteColor(s,nr)]; }
 
 
     //
@@ -202,7 +202,7 @@ public:
     u32 *getNoise() const;
     
     // Returns the frame buffer address of a certain pixel in the current line
-    u32 *pixelAddr(int pixel) const;
+    u32 *pixelAddr(isize pixel) const;
 
     // Called after each line in the VBLANK area
     void endOfVBlankLine();
@@ -232,7 +232,7 @@ public:
      * pipelile. It translates a line of color register indices into a line
      * of RGBA values in GPU format.
      */
-    void colorize(int line);
+    void colorize(isize line);
     
 private:
     

@@ -58,7 +58,7 @@ PixelEngine::_powerOn()
         for (isize i = 0; i < HPIXELS; i++) {
 
             isize pos = line * HPIXELS + i;
-            isize col = (line / 4) % 2 == (i / 8) % 2 ? 0xFF222222 : 0xFF444444;
+            u32 col = (line / 4) % 2 == (i / 8) % 2 ? 0xFF222222 : 0xFF444444;
             emuTexture[0].data[pos] = col;
             emuTexture[1].data[pos] = col;
         }
@@ -104,7 +104,7 @@ PixelEngine::setContrast(double value)
 }
 
 void
-PixelEngine::setColor(int reg, u16 value)
+PixelEngine::setColor(isize reg, u16 value)
 {
     assert(reg < 32);
 
@@ -238,9 +238,9 @@ PixelEngine::getNoise() const
 }
 
 u32 *
-PixelEngine::pixelAddr(int pixel) const
+PixelEngine::pixelAddr(isize pixel) const
 {
-    u32 offset = pixel + agnus.pos.v * HPIXELS;
+    isize offset = pixel + agnus.pos.v * HPIXELS;
 
     assert(pixel < HPIXELS);
     assert(offset < PIXELS);
@@ -289,11 +289,11 @@ PixelEngine::applyRegisterChange(const RegChange &change)
 }
 
 void
-PixelEngine::colorize(int line)
+PixelEngine::colorize(isize line)
 {
     // Jump to the first pixel in the specified line in the active frame buffer
     u32 *dst = frameBuffer->data + line * HPIXELS;
-    int pixel = 0;
+    Pixel pixel = 0;
 
     // Initialize the HAM mode hold register with the current background color
     u16 hold = colreg[0];
@@ -304,7 +304,7 @@ PixelEngine::colorize(int line)
     // Iterate over all recorded register changes
     for (isize i = colChanges.begin(); i != colChanges.end(); i = colChanges.next(i)) {
 
-        Cycle trigger = colChanges.keys[i];
+        Pixel trigger = (Pixel)colChanges.keys[i];
         RegChange &change = colChanges.elements[i];
 
         // Colorize a chunk of pixels
