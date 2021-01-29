@@ -10,7 +10,7 @@
 #include "Amiga.h"
 
 Thumbnail *
-Thumbnail::makeWithAmiga(Amiga *amiga, int dx, int dy)
+Thumbnail::makeWithAmiga(Amiga *amiga, isize dx, isize dy)
 {
     Thumbnail *screenshot = new Thumbnail();
     screenshot->take(amiga, dx, dy);
@@ -19,13 +19,13 @@ Thumbnail::makeWithAmiga(Amiga *amiga, int dx, int dy)
 }
 
 void
-Thumbnail::take(Amiga *amiga, int dx, int dy)
+Thumbnail::take(Amiga *amiga, isize dx, isize dy)
 {
     u32 *source = (u32 *)amiga->denise.pixelEngine.getStableBuffer().data;
     u32 *target = screen;
     
-    int xStart = 4 * HBLANK_MAX + 1, xEnd = HPIXELS + 4 * HBLANK_MIN;
-    int yStart = VBLANK_CNT, yEnd = VPIXELS - 2;
+    isize xStart = 4 * HBLANK_MAX + 1, xEnd = HPIXELS + 4 * HBLANK_MIN;
+    isize yStart = VBLANK_CNT, yEnd = VPIXELS - 2;
     
     width  = (xEnd - xStart) / dx;
     height = (yEnd - yStart) / dy;

@@ -130,9 +130,9 @@ HDFFile::layout()
 }
 
 FSVolumeType
-HDFFile::dos(int i)
+HDFFile::dos(isize blockNr)
 {
-    const char *p = (const char *)data + i * 512;
+    const char *p = (const char *)data + blockNr * 512;
     
     if (strncmp(p, "DOS", 3) || data[3] > 7) {
         return FS_NODOS;

@@ -65,19 +65,19 @@ IMGFile::makeWithDisk(Disk *disk, ErrorCode *ec)
     return nullptr;
 }
 
-long
+isize
 IMGFile::numSides() const
 {
     return 2;
 }
 
-long
+isize
 IMGFile::numCyls() const
 {
     return 80;
 }
 
-long
+isize
 IMGFile::numSectors() const
 {
     return 9;
@@ -261,11 +261,11 @@ IMGFile::decodeTrack(Disk *disk, Track t)
     trace(MFM_DEBUG, "Decoding DOS track %d\n", t);
 
     // Determine the start of all sectors contained in this track
-    int sectorStart[numSectors];
+    isize sectorStart[numSectors];
     for (isize i = 0; i < numSectors; i++) {
         sectorStart[i] = 0;
     }
-    int cnt = 0;
+    isize cnt = 0;
     for (isize i = 0; i < isizeof(disk->data.track[t]) - 16;) {
         
         // Seek IDAM block
@@ -299,7 +299,7 @@ IMGFile::decodeTrack(Disk *disk, Track t)
     }
 
     if (cnt != numSectors) {
-        warn("Found %d sectors, expected %ld. Aborting", cnt, numSectors);
+        warn("Found %zd sectors, expected %ld. Aborting", cnt, numSectors);
         return false;
     }
         

@@ -79,7 +79,7 @@ struct FSBlock : AmigaObject {
     static void dec32(u8 *p) { write32(p, read32(p) - 1); }
 
     // Computes the address of a long word inside the block
-    u8 *addr32(int nr) const; 
+    u8 *addr32(i32 nr) const;
     
     // Reads, writes, or modifies the n-th long word
     u32 get32(i32 n) const { return read32(addr32(n)); }

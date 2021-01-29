@@ -25,10 +25,10 @@ struct Thumbnail {
     time_t timestamp;
     
     // Factory methods
-    static Thumbnail *makeWithAmiga(Amiga *amiga, int dx = 2, int dy = 1);
+    static Thumbnail *makeWithAmiga(Amiga *amiga, isize dx = 2, isize dy = 1);
     
     // Takes a screenshot from a given Amiga
-    void take(Amiga *amiga, int dx = 2, int dy = 1);
+    void take(Amiga *amiga, isize dx = 2, isize dy = 1);
 };
 
 struct SnapshotHeader {

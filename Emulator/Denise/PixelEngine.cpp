@@ -57,8 +57,8 @@ PixelEngine::_powerOn()
     for (isize line = 0; line < VPIXELS; line++) {
         for (isize i = 0; i < HPIXELS; i++) {
 
-            int pos = line * HPIXELS + i;
-            int col = (line / 4) % 2 == (i / 8) % 2 ? 0xFF222222 : 0xFF444444;
+            isize pos = line * HPIXELS + i;
+            isize col = (line / 4) % 2 == (i / 8) % 2 ? 0xFF222222 : 0xFF444444;
             emuTexture[0].data[pos] = col;
             emuTexture[1].data[pos] = col;
         }

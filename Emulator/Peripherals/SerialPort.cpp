@@ -74,7 +74,7 @@ SerialPort::_dump() const
 }
 
 bool
-SerialPort::getPin(int nr) const
+SerialPort::getPin(isize nr) const
 {
     assert(nr >= 1 && nr <= 25);
 
@@ -85,7 +85,7 @@ SerialPort::getPin(int nr) const
 }
 
 void
-SerialPort::setPin(int nr, bool value)
+SerialPort::setPin(isize nr, bool value)
 {
     // debug(SER_DEBUG, "setPin(%d,%d)\n", nr, value);
     assert(nr >= 1 && nr <= 25);

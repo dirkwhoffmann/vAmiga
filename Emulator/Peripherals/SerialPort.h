@@ -112,10 +112,10 @@ private:
 public:
 
     // Reads the current value of a certain port pin
-    bool getPin(int nr) const;
+    bool getPin(isize nr) const;
 
     // Modifies the value of a certain port pin
-    void setPin(int nr, bool value);
+    void setPin(isize nr, bool value);
 
     // Convenience wrappers
     bool getTXD() const { return getPin(2); }

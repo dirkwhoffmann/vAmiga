@@ -29,8 +29,8 @@ struct FSRootBlock : FSBlock {
     ErrorCode check(u32 pos, u8 *expected, bool strict) const override;
     u32 checksumLocation() const override { return 5; }
  
-    u32 getBmBlockRef(int nr) const              { return get32(nr-49);        }
-    void setBmBlockRef(int nr, u32 ref)          {        set32(nr-49, ref);   }
+    u32 getBmBlockRef(i32 nr) const              { return get32(nr-49);        }
+    void setBmBlockRef(i32 nr, u32 ref)          {        set32(nr-49, ref);   }
 
     u32 getNextBmExtBlockRef() const override    { return get32(-24);          }
     void setNextBmExtBlockRef(u32 ref) override  {        set32(-24, ref);     }

@@ -31,8 +31,8 @@ struct FSBitmapExtBlock : FSBlock {
     u32 getNextBmExtBlockRef() const override    { return get32(-1);         }
     void setNextBmExtBlockRef(u32 ref) override  {        set32(-1, ref);    }
 
-    u32 getBmBlockRef(int nr) const              { return get32(nr     );    }
-    void setBmBlockRef(int nr, u32 ref)          {        set32(nr, ref);    }
+    u32 getBmBlockRef(i32 nr) const              { return get32(nr     );    }
+    void setBmBlockRef(i32 nr, u32 ref)          {        set32(nr, ref);    }
 
     void addBitmapBlockRefs(vector<u32> &refs, std::vector<u32>::iterator &it);
 };

@@ -350,7 +350,7 @@ Drive::motorStopped() const
 }
 
 void
-Drive::selectSide(int side)
+Drive::selectSide(isize side)
 {
     assert(side < 2);
     head.side = side;
@@ -453,7 +453,7 @@ Drive::readyToStep() const
 }
 
 void
-Drive::step(int dir)
+Drive::step(isize dir)
 {    
     // Update disk change signal
     if (hasDisk()) dskchange = true;

@@ -213,10 +213,10 @@ FSDevice::dump()
     }
 }
 
-u32
+isize
 FSDevice::partitionForBlock(u32 ref)
 {
-    for (u32 i = 0; i < partitions.size(); i++) {
+    for (isize i = 0; i < (isize)partitions.size(); i++) {
         if (ref >= partitions[i]->firstBlock && ref <= partitions[i]->lastBlock) return i;
     }
 

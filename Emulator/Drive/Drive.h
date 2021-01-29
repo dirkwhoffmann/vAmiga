@@ -209,7 +209,7 @@ public:
     bool motorStopped() const;
 
     // Selects the active drive head (0 = lower, 1 = upper)
-    void selectSide(int side);
+    void selectSide(isize side);
 
     // Reads a value from the drive head and optionally rotates the disk
     u8 readByte() const;
@@ -235,7 +235,7 @@ public:
     bool readyToStep() const;
     
     // Moves the drive head (0 = inwards, 1 = outwards).
-    void step(int dir);
+    void step(isize dir);
 
     // Records a cylinder change (needed for diskPollingMode() to work)
     void recordCylinder(u8 cylinder);

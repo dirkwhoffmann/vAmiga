@@ -177,13 +177,13 @@ ADFFile::getDiskDensity() const
     return (size & ~1) == ADFSIZE_35_HD ? DISK_HD : DISK_DD;
 }
 
-long
+isize
 ADFFile::numSides() const
 {
     return 2;
 }
 
-long
+isize
 ADFFile::numCyls() const
 {
     switch(size & ~1) {
@@ -201,7 +201,7 @@ ADFFile::numCyls() const
     }
 }
 
-long
+isize
 ADFFile::numSectors() const
 {
     switch (getDiskDensity()) {
@@ -458,9 +458,9 @@ ADFFile::encodeSector(Disk *disk, Track t, Sector s)
 }
 
 void
-ADFFile::dumpSector(int num)
+ADFFile::dumpSector(Sector s)
 {
-    hexdump(data + 512 * num, 512);
+    hexdump(data + 512 * s, 512);
 }
 
 void
@@ -496,7 +496,7 @@ ADFFile::decodeTrack(Disk *disk, Track t)
     u8 *dst = data + t * sectors * 512;
     
     // Seek all sync marks
-    int sectorStart[sectors], nr = 0; isize index = 0;
+    isize sectorStart[sectors], nr = 0; isize index = 0;
     while (index < isizeof(disk->data.track[t]) && nr < sectors) {
 
         // Scan MFM stream for $4489 $4489
@@ -511,10 +511,10 @@ ADFFile::decodeTrack(Disk *disk, Track t)
         sectorStart[nr++] = index;
     }
     
-    trace(MFM_DEBUG, "Found %d sectors (expected %ld)\n", nr, sectors);
+    trace(MFM_DEBUG, "Found %zd sectors (expected %ld)\n", nr, sectors);
 
     if (nr != sectors) {
-        warn("Found %d sectors, expected %ld. Aborting.\n", nr, sectors);
+        warn("Found %zd sectors, expected %ld. Aborting.\n", nr, sectors);
         return false;
     }
     

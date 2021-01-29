@@ -47,9 +47,9 @@ public:
     void setDos(FSVolumeType dos) override { };
     DiskDiameter getDiskDiameter() const override { return INCH_35; }
     DiskDensity getDiskDensity() const override { return DISK_DD; }
-    long numSides() const override;
-    long numCyls() const override;
-    long numSectors() const override;
+    isize numSides() const override;
+    isize numCyls() const override;
+    isize numSectors() const override;
     bool encodeDisk(class Disk *disk) override;
     void decodeDisk(class Disk *disk) throws override;
 

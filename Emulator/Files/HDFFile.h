@@ -72,5 +72,5 @@ public:
 private:
     
     // Extract the DOS revision number from a certain block
-    FSVolumeType dos(int i);    
+    FSVolumeType dos(isize blockNr);    
 };

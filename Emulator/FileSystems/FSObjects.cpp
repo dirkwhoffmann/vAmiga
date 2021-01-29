@@ -39,7 +39,7 @@ FSString::capital(char c)
 bool
 FSString::operator== (FSString &rhs) const
 {
-    int n = 0;
+    isize n = 0;
     
     while (str[n] != 0 || rhs.str[n] != 0) {
         if (capital(str[n]) != capital(rhs.str[n])) return false;
@@ -88,9 +88,9 @@ FSTime::FSTime(time_t t)
     // Shift reference point from Jan 1, 1970 (Unix) to Jan 1, 1978 (Amiga)
     t -= (8 * 365 + 2) * secPerDay - 60 * 60;
     
-    days = t / secPerDay;
-    mins = (t % secPerDay) / 60;
-    ticks = (t % secPerDay % 60) * 50;
+    days = (u32)(t / secPerDay);
+    mins = (u32)((t % secPerDay) / 60);
+    ticks = (u32)((t % secPerDay % 60) * 50);
 }
 
 FSTime::FSTime(const u8 *p)

@@ -68,7 +68,7 @@ FSBlock::check(bool strict) const
 }
 
 u8 *
-FSBlock::addr32(int nr) const
+FSBlock::addr32(i32 nr) const
 {
     return (data + 4 * nr) + (nr < 0 ? bsize() : 0);
 }

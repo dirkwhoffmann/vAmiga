@@ -148,10 +148,10 @@ public:
 public:
     
     // Returns the number of partitions
-    u32 numPartitions() { return partitions.size(); }
+    isize numPartitions() { return (isize)partitions.size(); }
     
     // Returns the partition a certain block belongs to
-    u32 partitionForBlock(u32 ref);
+    isize partitionForBlock(u32 ref);
 
     // Gets or sets the name of the current partition
     FSName getName() { return partitions[cp]->getName(); }

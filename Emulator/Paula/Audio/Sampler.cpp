@@ -28,8 +28,8 @@ Sampler::interpolate(Cycle clock)
 {
     assert(!isEmpty());
 
-    int r1 = r;
-    int r2 = next(r1);
+    i64 r1 = r;
+    i64 r2 = next(r1);
 
     // Remove all outdated entries
     while (r2 != w && elements[r2].tag <= clock) {

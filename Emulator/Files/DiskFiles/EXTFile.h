@@ -17,7 +17,7 @@
 
 class EXTFile : public DiskFile {
     
-    static const int HEADER_SIZE = 160 * 4 + 8;
+    static const isize HEADER_SIZE = 160 * 4 + 8;
     
     // Accepted header signatures
     static const u8 extAdfHeaders[2][8];
@@ -54,9 +54,9 @@ public:
     void setDos(FSVolumeType dos) override { };
     DiskDiameter getDiskDiameter() const override { return INCH_35; }
     DiskDensity getDiskDensity() const override { return DISK_DD; }
-    long numSides() const override { return 2; }
-    long numCyls() const override { return 80; }
-    long numSectors() const override { return 11; }
+    isize numSides() const override { return 2; }
+    isize numCyls() const override { return 80; }
+    isize numSectors() const override { return 11; }
     void readSector(u8 *target, long s) const override { assert(false); }
     void readSector(u8 *target, long t, long s) const override { assert(false); }
 };
