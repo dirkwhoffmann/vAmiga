@@ -121,6 +121,7 @@ CPU::signalAddressError(moira::AEStackFrame &frame)
 {
     trace(XFILES, "XFILES: Address error exception %x %x %x %x %x\n",
           frame.code, frame.addr, frame.ird, frame.sr, frame.pc);
+    // amiga.signalStop();
 }
 
 void

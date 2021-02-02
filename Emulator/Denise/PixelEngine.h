@@ -66,7 +66,7 @@ private:
     Palette palette = PALETTE_COLOR;
     double brightness = 50.0;
     double contrast = 100.0;
-    double saturation = 1.25;
+    double saturation = 50.0;
     
     // Indicates whether HAM mode is switched
     bool hamMode;
