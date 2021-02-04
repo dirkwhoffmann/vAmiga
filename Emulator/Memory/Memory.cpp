@@ -487,20 +487,12 @@ Memory::loadRomFromFile(const char *path)
     loadRom(file);
 }
 
-bool
+void
 Memory::loadRomFromFile(const char *path, ErrorCode *ec)
 {
-    try
-    {
-        loadRomFromFile(path);
-        return true;
-    }
-    catch (VAError &exception)
-    {
-        msg("Failed to read Kick Rom from file %s\n", path);
-        *ec = exception.errorCode;
-        return false;
-    }
+    *ec = ERROR_OK;
+    try { loadRomFromFile(path); }
+    catch (VAError &err) { *ec = err.errorCode; }
 }
 
 void
@@ -512,20 +504,12 @@ Memory::loadRomFromBuffer(const u8 *buf, isize len)
     loadRom(file);
 }
 
-bool
+void
 Memory::loadRomFromBuffer(const u8 *buf, isize len, ErrorCode *ec)
 {
-    try
-    {
-        loadRomFromBuffer(buf, len);
-        return true;
-    }
-    catch (VAError &exception)
-    {
-        msg("Failed to read Kick Rom from buffer at %p\n", buf);
-        *ec = exception.errorCode;
-        return false;
-    }
+    *ec = ERROR_OK;
+    try { loadRomFromBuffer(buf, len); }
+    catch (VAError &err) { *ec = err.errorCode; }
 }
 
 void
@@ -549,45 +533,29 @@ Memory::loadExtFromFile(const char *path)
     loadExt(file);
 }
 
-bool
+void
 Memory::loadExtFromFile(const char *path, ErrorCode *ec)
 {
-    try
-    {
-        loadExtFromFile(path);
-        return true;
-    }
-    catch (VAError &exception)
-    {
-        msg("Failed to read Extended Rom from file %s\n", path);
-        *ec = exception.errorCode;
-        return false;
-    }
+    *ec = ERROR_OK;
+    try { loadExtFromFile(path); }
+    catch (VAError &exception) { *ec = exception.errorCode; }
 }
 
 void
 Memory::loadExtFromBuffer(const u8 *buf, isize len)
 {
     assert(buf);
-
+    
     ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (buf, len);
     loadExt(file);
 }
 
-bool
+void
 Memory::loadExtFromBuffer(const u8 *buf, isize len, ErrorCode *ec)
 {
-    try
-    {
-        loadExtFromBuffer(buf, len);
-        return true;
-    }
-    catch (VAError &exception)
-    {
-        msg("Failed to read Extended Rom from buffer at %p\n", buf);
-        *ec = exception.errorCode;
-        return false;
-    }
+    *ec = ERROR_OK;
+    try { loadExtFromBuffer(buf, len); }
+    catch (VAError &exception) { *ec = exception.errorCode; }
 }
  
 void

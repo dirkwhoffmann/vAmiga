@@ -58,7 +58,7 @@ class DeviceDatabase {
             custom = obj
         }
         
-        track("\(custom)")
+        // track("\(custom)")
     }
     
     func save() {

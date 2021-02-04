@@ -261,7 +261,7 @@
 - (BOOL)isRom:(NSURL *)url;
 - (void)loadRom:(RomFileProxy *)proxy;
 - (BOOL)loadRomFromBuffer:(NSData *)buffer;
-- (BOOL)loadRomFromFile:(NSURL *)url error:(ErrorCode *)ec;
+- (void)loadRomFromFile:(NSURL *)url error:(ErrorCode *)ec;
 @property (readonly) u64 romFingerprint;
 @property (readonly) RomIdentifier romIdentifier;
 @property (readonly, copy) NSString *romTitle;
@@ -273,7 +273,7 @@
 - (BOOL)isExt:(NSURL *)url;
 - (void)loadExt:(ExtendedRomFileProxy *)proxy;
 - (BOOL)loadExtFromBuffer:(NSData *)buffer;
-- (BOOL)loadExtFromFile:(NSURL *)url error:(ErrorCode *)ec;
+- (void)loadExtFromFile:(NSURL *)url error:(ErrorCode *)ec;
 @property (readonly) u64 extFingerprint;
 @property (readonly) RomIdentifier extIdentifier;
 @property (readonly, copy) NSString *extTitle;

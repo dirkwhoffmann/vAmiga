@@ -456,7 +456,7 @@
                         <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
                             <rect key="frame" x="0.0" y="14" width="41" height="20"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
@@ -483,10 +483,8 @@
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSeparatorItem" id="1848"/>
-                    <toolbarItem implicitItemIdentifier="173C7588-F1F5-45F4-9A0F-C42BA4D023EB" label="Keyboard" paletteLabel="Keyboard" image="keyboardTemplate" id="Ckl-d3-vFW">
+                    <toolbarItem implicitItemIdentifier="173C7588-F1F5-45F4-9A0F-C42BA4D023EB" label="Keyboard" paletteLabel="Keyboard" image="keyboardTemplate" sizingBehavior="auto" id="Ckl-d3-vFW">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="40" height="23"/>
-                        <size key="maxSize" width="40" height="23"/>
                         <button key="view" verticalHuggingPriority="750" id="rao-xk-L5n">
                             <rect key="frame" x="14" y="14" width="30" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
@@ -516,10 +514,8 @@
                             </connections>
                         </segmentedControl>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="38C1F02C-6E2B-41A9-A7C0-22595E378CC9" label="Pause" paletteLabel="Pause" tag="30" image="pauseTemplate" id="BPW-KG-AkM" userLabel="Pause">
+                    <toolbarItem implicitItemIdentifier="38C1F02C-6E2B-41A9-A7C0-22595E378CC9" label="Pause" paletteLabel="Pause" tag="30" image="pauseTemplate" sizingBehavior="auto" id="BPW-KG-AkM" userLabel="Pause">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="40" height="23"/>
-                        <size key="maxSize" width="40" height="23"/>
                         <button key="view" verticalHuggingPriority="750" tag="30" id="Hi7-3E-CdD">
                             <rect key="frame" x="5" y="14" width="30" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
@@ -532,10 +528,8 @@
                             <action selector="stopAndGoAction:" target="-1" id="9Yy-Ej-fDB"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="A7703F1E-1ECE-4A69-B243-7B7358E0BFC2" label="Reset" paletteLabel="Reset" tag="1" image="resetTemplate" id="Yax-iM-1LE" userLabel="Reset">
+                    <toolbarItem implicitItemIdentifier="A7703F1E-1ECE-4A69-B243-7B7358E0BFC2" label="Reset" paletteLabel="Reset" tag="1" image="resetTemplate" sizingBehavior="auto" id="Yax-iM-1LE" userLabel="Reset">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="40" height="23"/>
-                        <size key="maxSize" width="40" height="23"/>
                         <button key="view" verticalHuggingPriority="750" tag="1" id="aeA-0b-sne">
                             <rect key="frame" x="4" y="14" width="30" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
@@ -548,10 +542,8 @@
                             <action selector="resetAction:" target="-2" id="MKH-2d-rUU"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="FDB7F361-51A6-49C0-8DA9-F7290508D826" label="Power" paletteLabel="Power" tag="30" image="powerTemplate" id="wVB-PW-axj">
+                    <toolbarItem implicitItemIdentifier="FDB7F361-51A6-49C0-8DA9-F7290508D826" label="Power" paletteLabel="Power" tag="30" image="powerTemplate" sizingBehavior="auto" id="wVB-PW-axj">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="40" height="23"/>
-                        <size key="maxSize" width="40" height="23"/>
                         <button key="view" verticalHuggingPriority="750" tag="30" id="tu0-4o-Osa">
                             <rect key="frame" x="5" y="14" width="30" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
