@@ -390,9 +390,12 @@ private:
 public:
     
     // Saves a Rom to disk
-    bool saveRom(const char *path);
-    bool saveWom(const char *path);
-    bool saveExt(const char *path);
+    void saveRom(const char *path) throws;
+    void saveRom(const char *path, ErrorCode *ec);
+    void saveWom(const char *path) throws;
+    void saveWom(const char *path, ErrorCode *ec);
+    void saveExt(const char *path) throws;
+    void saveExt(const char *path, ErrorCode *ec);
 
     
     //

@@ -606,31 +606,52 @@ Memory::loadRom(AmigaFile *file, u8 *target, isize length)
     }
 }
 
-bool
+void
 Memory::saveRom(const char *path)
 {
-    if (rom == nullptr) return false;
-
+    if (rom == nullptr) return;
+    
     RomFile *file = AmigaFile::make <RomFile> (rom, config.romSize);
-    return file && file->writeToFile(path);
+    file->writeToFile(path);
 }
 
-bool
+void
+Memory::saveRom(const char *path, ErrorCode *ec)
+{
+    *ec = ERROR_OK;
+    try { saveRom(path); } catch (VAError &err) { *ec = err.errorCode; }
+}
+
+void
 Memory::saveWom(const char *path)
 {
-    if (wom == nullptr) return false;
+    if (wom == nullptr) return;
     
     RomFile *file = AmigaFile::make <RomFile> (wom, config.womSize);
-    return file && file->writeToFile(path);
+    file->writeToFile(path);
 }
 
-bool
+void
+Memory::saveWom(const char *path, ErrorCode *ec)
+{
+    *ec = ERROR_OK;
+    try { saveWom(path); } catch (VAError &err) { *ec = err.errorCode; }
+}
+
+void
 Memory::saveExt(const char *path)
 {
-    if (ext == nullptr) return false;
+    if (ext == nullptr) return;
 
     RomFile *file = AmigaFile::make <RomFile> (ext, config.extSize);
-    return file && file->writeToFile(path);
+    file->writeToFile(path);
+}
+
+void
+Memory::saveExt(const char *path, ErrorCode *ec)
+{
+    *ec = ERROR_OK;
+    try { saveExt(path); } catch (VAError &err) { *ec = err.errorCode; }
 }
 
 template <> MemorySource

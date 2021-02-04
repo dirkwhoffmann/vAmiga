@@ -412,30 +412,45 @@ class Configuration {
     }
     
     func saveRomUserDefaults() {
-        
+                
         let fm = FileManager.default
         let defaults = UserDefaults.standard
+        var url: URL?
 
         amiga.suspend()
                 
         defaults.set(extStart, forKey: Keys.Rom.extStart)
         
-        if let url = UserDefaults.womUrl {
+        do {
             track("Saving Wom")
-            try? fm.removeItem(at: url)
-            amiga.mem.saveWom(url)
-        }
-        if let url = UserDefaults.romUrl {
+            url = UserDefaults.womUrl
+            if url == nil { throw VAError(.FILE_CANT_WRITE) }
+            try? fm.removeItem(at: url!)
+            try amiga.mem.saveWom(url!)
+            
             track("Saving Rom")
-            try? fm.removeItem(at: url)
-            amiga.mem.saveRom(url)
-        }
-        if let url = UserDefaults.extUrl {
+            url = UserDefaults.romUrl
+            if url == nil { throw VAError(.FILE_CANT_WRITE) }
+            try? fm.removeItem(at: url!)
+            try amiga.mem.saveRom(url!)
+
             track("Saving Ext")
-            try? fm.removeItem(at: url)
-            amiga.mem.saveExt(url)
+            url = UserDefaults.extUrl
+            if url == nil { throw VAError(.FILE_CANT_WRITE) }
+            try? fm.removeItem(at: url!)
+            try amiga.mem.saveExt(url!)
+            
+        } catch {
+            if error is VAError && url != nil {
+                VAError.warning("Failed to save Roms",
+                                "Can't write to file \(url!.path)")
+            }
+            if error is VAError && url == nil {
+                VAError.warning("Failed to save Roms",
+                                "Unable to access the application defaults folder")
+            }
         }
-                
+        
         amiga.resume()
     }
 

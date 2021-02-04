@@ -437,19 +437,19 @@ using namespace moira;
     return [self mem]->getConfigItem(OPT_EXT_START);
 }
 
-- (BOOL)saveWom:(NSURL *)url
+- (void)saveRom:(NSURL *)url error:(ErrorCode *)ec
 {
-    return [self mem]->saveWom([url fileSystemRepresentation]);
+    [self mem]->saveRom([url fileSystemRepresentation], ec);
 }
 
-- (BOOL)saveRom:(NSURL *)url
+- (void)saveWom:(NSURL *)url error:(ErrorCode *)ec
 {
-    return [self mem]->saveRom([url fileSystemRepresentation]);
+    [self mem]->saveWom([url fileSystemRepresentation], ec);
 }
 
-- (BOOL)saveExt:(NSURL *)url
+- (void)saveExt:(NSURL *)url error:(ErrorCode *)ec
 {
-    return [self mem]->saveExt([url fileSystemRepresentation]);
+    [self mem]->saveExt([url fileSystemRepresentation], ec);
 }
 
 - (void)updateRTC

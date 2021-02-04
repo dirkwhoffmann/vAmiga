@@ -7,11 +7,15 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-extension ErrorCode {
+class VAError: Error {
+    
+    var errorCode: ErrorCode
+    
+    init(_ errorCode: ErrorCode) { self.errorCode = errorCode }
 
     var description: String {
         
-        switch self {
+        switch errorCode {
         
         case .OK:
             fatalError()
@@ -97,20 +101,10 @@ extension ErrorCode {
             return ""
         }
     }
-}
-
-class VAError: Error {
     
-    var errorCode: ErrorCode
-    
-    init(_ errorCode: ErrorCode) { self.errorCode = errorCode }
-}
-
-extension Error {
-
-    func alert(_ msg1: String, _ msg2: String, style: NSAlert.Style,
-               async: Bool = false, icon: String?) {
-    
+    static func alert(_ msg1: String, _ msg2: String, style: NSAlert.Style,
+                      async: Bool = false, icon: String?) {
+        
         if async == true {
             DispatchQueue.main.async {
                 self.alert(msg1, msg2, style: style, async: false, icon: icon)
@@ -126,36 +120,30 @@ extension Error {
         alert.runModal()
     }
     
-    func informational(_ msg1: String, _ msg2: String,
-                       async: Bool = false, icon: String? = nil) {
+    static func informational(_ msg1: String, _ msg2: String,
+                              async: Bool = false, icon: String? = nil) {
         
         alert(msg1, msg2, style: .informational, async: async, icon: nil)
     }
     
-    func warning(_ msg1: String, _ msg2: String,
-                 async: Bool = false, icon: String? = nil) {
+    static func warning(_ msg1: String, _ msg2: String,
+                        async: Bool = false, icon: String? = nil) {
         
         alert(msg1, msg2, style: .warning, async: async, icon: icon)
     }
     
-    func critical(_ msg1: String, _ msg2: String,
-                  async: Bool = false, icon: String? = nil) {
+    static func critical(_ msg1: String, _ msg2: String,
+                         async: Bool = false, icon: String? = nil) {
         
         alert(msg1, msg2, style: .critical, async: async, icon: icon)
     }
 
     func warning(_ msg: String, async: Bool = false, icon: String? = nil) {
-
-        if let error = self as? VAError {
-            warning(msg, error.errorCode.description, async: async, icon: icon)
-        }
+        VAError.warning(msg, description, async: async, icon: icon)
     }
 
     func critical(_ msg: String, async: Bool = false, icon: String? = nil) {
-
-        if let error = self as? VAError {
-            warning(msg, error.errorCode.description, async: async, icon: icon)
-        }
+        VAError.warning(msg, description, async: async, icon: icon)
     }
     
     //

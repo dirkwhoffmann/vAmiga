@@ -53,6 +53,30 @@ extension Proxy {
 // Exception passing
 //
 
+extension MemProxy {
+ 
+    func saveRom(_ url: URL) throws {
+
+        var err = ErrorCode.OK
+        saveRom(url, error: &err)
+        if err != .OK { throw VAError(err) }
+    }
+
+    func saveWom(_ url: URL) throws {
+
+        var err = ErrorCode.OK
+        saveWom(url, error: &err)
+        if err != .OK { throw VAError(err) }
+    }
+
+    func saveExt(_ url: URL) throws {
+
+        var err = ErrorCode.OK
+        saveExt(url, error: &err)
+        if err != .OK { throw VAError(err) }
+    }
+}
+
 extension AmigaFileProxy {
     
     @discardableResult

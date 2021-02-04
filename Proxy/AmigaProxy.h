@@ -281,9 +281,9 @@
 @property (readonly, copy) NSString *extReleased;
 @property (readonly) NSInteger extStart;
 
-- (BOOL)saveWom:(NSURL *)url;
-- (BOOL)saveRom:(NSURL *)url;
-- (BOOL)saveExt:(NSURL *)url;
+- (void)saveRom:(NSURL *)url error:(ErrorCode *)ec;
+- (void)saveWom:(NSURL *)url error:(ErrorCode *)ec;
+- (void)saveExt:(NSURL *)url error:(ErrorCode *)ec;
 
 - (void)updateRTC;
 - (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr;
