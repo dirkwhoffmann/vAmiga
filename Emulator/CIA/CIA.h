@@ -277,10 +277,6 @@ public:
     
     bool getEClockSyncing() const { return config.eClockSyncing; }
 
-private:
-    
-    void _dumpConfig() const override;
-
     
     //
     // Serializing
@@ -360,7 +356,7 @@ public:
 protected:
     
     void _inspect() override;
-    void _dump() const override;
+    void _dump(Dump::Category category, std::ostream& os) const override;
 
     
     //

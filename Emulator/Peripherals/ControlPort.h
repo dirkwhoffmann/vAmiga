@@ -72,7 +72,7 @@ public:
 private:
     
     void _inspect() override;
-    void _dump() const override;
+    void _dump(Dump::Category category, std::ostream& os) const override;
 
     
     //

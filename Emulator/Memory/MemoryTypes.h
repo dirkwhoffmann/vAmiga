@@ -30,7 +30,7 @@ struct MemorySourceEnum : Reflection<MemorySourceEnum, MemorySource> {
                 
             case MEM_NONE:           return "NONE";
             case MEM_CHIP:           return "CHIP";
-            case MEM_CHIP_MIRROR:    return "CHIP_MIRROR:";
+            case MEM_CHIP_MIRROR:    return "CHIP_MIRROR";
             case MEM_SLOW:           return "SLOW";
             case MEM_SLOW_MIRROR:    return "SLOW_MIRROR";
             case MEM_FAST:           return "FAST";

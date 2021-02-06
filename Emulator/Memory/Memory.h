@@ -208,10 +208,6 @@ public:
     long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;
 
-private:
-    
-    void _dumpConfig() const override;
-
     
     //
     // Analyzing
@@ -226,7 +222,7 @@ public:
 
 private:
     
-    void _dump() const override;
+    void _dump(Dump::Category category, std::ostream& os) const override;
 
     
     //
@@ -367,26 +363,26 @@ public:
     void eraseRom() { assert(rom); memset(rom, 0, config.romSize); }
     void eraseWom() { assert(wom); memset(wom, 0, config.womSize); }
     void eraseExt() { assert(ext); memset(ext, 0, config.extSize); }
-
+    
     // Installs a Boot Rom or Kickstart Rom
     void loadRom(RomFile *rom) throws;
     void loadRomFromFile(const char *path) throws;
     void loadRomFromFile(const char *path, ErrorCode *ec);
     void loadRomFromBuffer(const u8 *buf, isize len) throws;
     void loadRomFromBuffer(const u8 *buf, isize len, ErrorCode *ec);
-
+    
     void loadExt(ExtendedRomFile *rom) throws;
     void loadExtFromFile(const char *path) throws;
     void loadExtFromFile(const char *path, ErrorCode *ec);
     void loadExtFromBuffer(const u8 *buf, isize len) throws;
     void loadExtFromBuffer(const u8 *buf, isize len, ErrorCode *ec);
-
+    
 private:
 
-    // Loads Rom data from a file
+     // Loads Rom data from a file
     // DEPRECATED: USE AnyAmigaFile::flash(...) instead
     void loadRom(AmigaFile *rom, u8 *target, isize length);
-
+    
 public:
     
     // Saves a Rom to disk

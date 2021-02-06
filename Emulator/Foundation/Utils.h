@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <string>
+#include <list>
 #include <set>
 #include <sstream>
 #include <fstream>
@@ -164,11 +165,34 @@ bool releaseBuild();
 // Pretty printing
 //
 
+// Shortcuts for being used in combination with the '<<' stream operator
+#define DEC std::dec
+#define HEX8 std::hex << "0x" << std::setw(2) << std::setfill('0')
+#define HEX16 std::hex << "0x" << std::setw(4) << std::setfill('0')
+#define HEX32 std::hex << "0x" << std::setw(8) << std::setfill('0')
+#define HEX64 std::hex << "0x" << std::setw(16) << std::setfill('0')
+#define TAB(x) std::left << std::setw(x)
+#define YESNO(x) ((x) ? "yes" : "no")
+#define ONOFF(x) ((x) ? "on" : "off")
+#define HILO(x) ((x) ? "high" : "low")
+#define ISENABLED(x) ((x) ? "enabled" : "disabled")
+#define ISSET(x) ((x) ? "set" : "not set")
+#define EMULATED(x) ((x) ? "emulated" : "not emulated")
+#define DUMP(x) std::setw(24) << std::right << std::setfill(' ') << (x) << " : "
+
 // Prints a hex dump of a buffer to the console (for debugging)
 void hexdump(u8 *p, isize size, isize cols, isize pad);
 void hexdump(u8 *p, isize size, isize cols = 32);
 void hexdumpWords(u8 *p, isize size, isize cols = 32);
 void hexdumpLongwords(u8 *p, isize size, isize cols = 32);
+
+
+//
+// Handling strings
+//
+
+string lowercased(const string& s);
+string uppercased(const string& s);
 
 
 //

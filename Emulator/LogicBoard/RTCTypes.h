@@ -24,7 +24,7 @@ struct RTCRevisionEnum : Reflection<RTCRevisionEnum, RTCRevision> {
     {
         switch (value) {
                 
-            case RTC_NONE:   return "NONR";
+            case RTC_NONE:   return "NONE";
             case RTC_OKI:    return "OKI";
             case RTC_RICOH:  return "RICOH";
             case RTC_COUNT:  return "???";

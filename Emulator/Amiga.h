@@ -195,8 +195,8 @@ public:
     long getConfigItem(Option option, long id) const;
     
     // Sets a single configuration item
-    bool configure(Option option, long value);
-    bool configure(Option option, long id, long value);
+    bool configure(Option option, long value) throws;
+    bool configure(Option option, long id, long value) throws;
     
     
     //
@@ -213,7 +213,7 @@ public:
 private:
     
     void _inspect() override;
-    void _dump() const override;
+    void _dump(Dump::Category category, std::ostream& os) const override;
     
     
     //

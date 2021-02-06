@@ -95,8 +95,9 @@ Agnus::setConfigItem(Option option, long value)
             warn("Overriding Agnus revision: %ld\n", value);
             #endif
             
-            if (!AgnusRevisionEnum::verify(value)) return false; 
-            
+            if (!AgnusRevisionEnum::isValid(value)) {
+                throw ConfigArgError(AgnusRevisionEnum::keyList());
+            }            
             if (config.revision == value) {
                 return false;
             }
@@ -126,13 +127,6 @@ Agnus::setConfigItem(Option option, long value)
         default:
             return false;
     }
-}
-
-void
-Agnus::_dumpConfig() const
-{
-    msg("      revision : %s\n", AgnusRevisionEnum::key(config.revision));
-    msg(" slowRamMirror : %s\n", config.slowRamMirror ? "yes" : "no");
 }
 
 i16
@@ -207,25 +201,65 @@ Agnus::_inspect()
 }
 
 void
-Agnus::_dump() const
+Agnus::_dump(Dump::Category category, std::ostream& os) const
 {
-    msg(" actions : %llX\n", hsyncActions);
-
-    msg("   dskpt : %X\n", dskpt);
-    for (isize i = 0; i < 4; i++) msg("audpt[%zd] : %X\n", i, audpt[i]);
-    for (isize i = 0; i < 6; i++) msg("bplpt[%zd] : %X\n", i, bplpt[i]);
-    for (isize i = 0; i < 8; i++) msg("bplpt[%zd] : %X\n", i, sprpt[i]);
+    if (category & Dump::Config) {
     
-    msg("   hstrt : %d\n", diwHstrt);
-    msg("   hstop : %d\n", diwHstop);
-    msg("   vstrt : %d\n", diwVstrt);
-    msg("   vstop : %d\n", diwVstop);
+        os << DUMP("Chip Revison");
+        os << AgnusRevisionEnum::key(config.revision) << endl;
+        os << DUMP("Slow Ram mirror");
+        os << EMULATED(config.slowRamMirror) << endl;
+    }
+    
+    if (category & Dump::Registers) {
+        
+        os << "SPR0PT: " << HEX32 << sprpt[0] << "  ";
+        os << "BPL0PT: " << HEX32 << bplpt[0] << "  ";
+        os << "AUD0PT: " << HEX32 << audpt[0] << "  ";
+        os << "DSKPT: "  << HEX32 << dskpt << std::endl;
+        
+        os << "SPR1PT: " << HEX32 << sprpt[1] << "  ";
+        os << "BPL1PT: " << HEX32 << bplpt[1] << "  ";
+        os << "AUD1PT: " << HEX32 << audpt[1] << std::endl;
+        
+        os << "SPR2PT: " << HEX32 << sprpt[2] << "  ";
+        os << "BPL2PT: " << HEX32 << bplpt[2] << "  ";
+        os << "AUD2PT: " << HEX32 << audpt[2] << std::endl;
+        
+        os << "SPR3PT: " << HEX32 << sprpt[3] << "  ";
+        os << "BPL3PT: " << HEX32 << bplpt[3] << "  ";
+        os << "AUD3PT: " << HEX32 << audpt[3] << std::endl;
+        
+        os << "SPR4PT: " << HEX32 << sprpt[4] << "  ";
+        os << "BPL4PT: " << HEX32 << bplpt[4] << std::endl;
+        
+        os << "SPR5PT: " << HEX32 << sprpt[5] << "  ";
+        os << "BPL5PT: " << HEX32 << bplpt[5] << std::endl;
+        
+        os << "SPR6PT: " << HEX32 << sprpt[6] << std::endl;
+        os << "SPR7PT: " << HEX32 << sprpt[6] << std::endl;
 
-    msg("\nBPL DMA table:\n\n");
+        os << "BPL1MOD: " << HEX16 << bpl1mod;
+        os << "BPL2MOD: " << HEX16 << bpl2mod;
+
+        os << "DDFSTRT: " << HEX16 << ddfstrt;
+        os << "DDFSTOP: " << HEX16 << ddfstop;
+
+        os << "DIWSTRT: " << HEX16 << diwstrt;
+        os << "DIWSTOP: " << HEX16 << diwstop << std::endl;
+
+        os << "DMACON: " << HEX16 << dmacon;
+        os << "BPLCON0:" << HEX16 << bplcon0;
+        os << "BPLCON1:" << HEX16 << bplcon1 << std::endl;
+    }
+    
+    /*
+    ss << "\nBPL DMA table:\n\n");
     dumpBplEventTable();
 
-    msg("\nDAS DMA table:\n\n");
+    ss << "\nDAS DMA table:\n\n");
     dumpDasEventTable();
+    */
 }
 
 void

@@ -93,6 +93,8 @@ enum_long(OPT)
     OPT_CIA_REVISION,
     OPT_TODBUG,
     OPT_ECLOCK_SYNCING,
+    
+    // Keyboard
     OPT_ACCURATE_KEYBOARD,
     
     // Paula audio

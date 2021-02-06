@@ -57,19 +57,31 @@ Keyboard::setConfigItem(Option option, long value)
 }
 
 void
-Keyboard::_dumpConfig() const
+Keyboard::_dump(Dump::Category category, std::ostream& os) const
 {
-    msg("      accurate : %d\n", config.accurate);
-}
-
-void
-Keyboard::_dump() const
-{
-    msg("Type ahead buffer: ");
-    for (isize i = 0; i < bufferIndex; i++) {
-        msg("%02X ", typeAheadBuffer[i]);
+    if (category & Dump::Config) {
+        
+        os << DUMP("Accurate emulation") << YESNO(config.accurate) << std::endl;
     }
-    msg("\n");
+    
+    if (category & Dump::State) {
+        
+        os << DUMP("State") << KeyboardStateEnum::key(state) << std::endl;
+        os << DUMP("Shift register") << HEX8 << (isize)shiftReg << std::endl;
+        os << DUMP("SP LO cycle") << DEC << (isize)spLow << std::endl;
+        os << DUMP("SP HI cycle") << DEC << (isize)spHigh << std::endl;
+
+        os << DUMP("Type ahead buffer");
+        os << "[ ";
+        for (isize i = 0; i < bufferIndex; i++) {
+            os << HEX8 << (int)typeAheadBuffer[i] << " ";
+        }
+        os << " ]" << std::endl;
+
+        isize count = 0;
+        for (isize i = 0; i < 128; i++) count += (isize)keyDown[i];
+        os << DUMP("Down") << DEC << (isize)count << " keys" << std::endl;
+    }
 }
 
 bool

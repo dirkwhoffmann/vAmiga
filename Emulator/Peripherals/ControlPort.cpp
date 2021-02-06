@@ -45,15 +45,11 @@ ControlPort::_inspect()
 }
 
 void
-ControlPort::_dump() const
+ControlPort::_dump(Dump::Category category, std::ostream& os) const
 {
-    msg("         device: %ld (%s)\n",
-        (long)device,
-        device == CPD_NONE ? "CPD_NONE" :
-        device == CPD_MOUSE ? "CPD_MOUSE" :
-        device == CPD_JOYSTICK ? "CPD_JOYSTICK" : "???");
-    msg("  mouseCounterX: %lld\n", mouseCounterX);
-    msg("  mouseCounterY: %lld\n", mouseCounterY);
+    os << "       device : " << ControlPortDeviceEnum::key(device) << std::endl;
+    os << "mouseCounterX : " << mouseCounterX << std::endl;
+    os << "mouseCounterY : " << mouseCounterY << std::endl;
 }
 
 u16

@@ -67,7 +67,9 @@ Denise::setConfigItem(Option option, long value)
             
         case OPT_DENISE_REVISION:
             
-            if (!DeniseRevisionEnum::verify(value)) return false;
+            if (!DeniseRevisionEnum::isValid(value)) {
+                throw ConfigArgError(DeniseRevisionEnum::keyList());
+            }
             if (config.revision == value) {
                 return false;
             }
@@ -144,19 +146,6 @@ Denise::setConfigItem(Option option, long value)
 }
 
 void
-Denise::_dumpConfig() const
-{
-    msg("          revision : %s\n", DeniseRevisionEnum::key(config.revision));
-    msg("       borderblank : %s\n", config.borderblank ? "yes" : "no");
-    msg("     hiddenSprites : %02X\n", config.hiddenSprites);
-    msg("      hiddenLayers : %04X\n", config.hiddenLayers);
-    msg("  hiddenLayerAlpha : %d\n", config.hiddenLayerAlpha);
-    msg("         clxSprSpr : %s\n", config.clxSprSpr ? "yes" : "no");
-    msg("         clxSprPlf : %s\n", config.clxSprPlf ? "yes" : "no");
-    msg("         clxPlfPlf : %s\n", config.clxPlfPlf ? "yes" : "no");
-}
-
-void
 Denise::_inspect()
 {
     synchronized {
@@ -188,8 +177,41 @@ Denise::_inspect()
 }
 
 void
-Denise::_dump() const
+Denise::_dump(Dump::Category category, std::ostream& os) const
 {
+    if (category & Dump::Config) {
+        
+        printf("_dump(Config)\n");
+        os << DUMP("Chip revision");
+        os << DeniseRevisionEnum::key(config.revision) << std::endl;
+        os << DUMP("Borderblank");
+        os << YESNO(config.borderblank) << std::endl;
+        os << DUMP("Hidden sprites");
+        os << HEX8 << (int)config.hiddenSprites << std::endl;
+        os << DUMP("Hidden layers");
+        os << HEX16 << (int)config.hiddenLayers << std::endl;
+        os << DUMP("Hidden layer alpha");
+        os << DEC << (int)config.hiddenLayerAlpha << std::endl;
+        os << DUMP("clxSprSpr") << YESNO(config.clxSprSpr) << std::endl;
+        os << DUMP("clxSprSpr") << YESNO(config.clxSprSpr) << std::endl;
+        os << DUMP("clxSprSpr") << YESNO(config.clxSprSpr) << std::endl;
+    }
+    
+    if (category & Dump::Registers) {
+        
+        os << "  BPLCON0: " << HEX16 << bplcon0;
+        os << "  BPLCON1: " << HEX16 << bplcon1;
+        os << "  BPLCON2: " << HEX16 << bplcon2;
+        os << "  BPLCON3: " << HEX16 << bplcon3 << std::endl;
+        
+        for (isize i = 0; i < 8; i++) {
+            os << " SPR"+std::to_string(i)+"DATA: " << HEX16 << sprdata[i];
+            os << " SPR"+std::to_string(i)+"DATB: " << HEX16 << sprdatb[i];
+            os << " SPR"+std::to_string(i)+"POS: "  << HEX16 << sprpos[i];
+            os << " SPR"+std::to_string(i)+"CTL: "  << HEX16 << sprctl[i];
+            os << std::endl;
+        }
+    }
 }
 
 SpriteInfo

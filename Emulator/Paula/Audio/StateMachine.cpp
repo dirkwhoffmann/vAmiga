@@ -50,11 +50,11 @@ StateMachine<nr>::_inspect()
 }
 
 template <isize nr> void
-StateMachine<nr>::_dump() const
+StateMachine<nr>::_dump(Dump::Category category, std::ostream& os) const
 {
-    msg("   State : %d\n", state);
-    msg("  AUDxIP : %d\n", AUDxIP());
-    msg("  AUDxON : %d\n", AUDxON());
+    os << "   State : " << (int)state;
+    os << "  AUDxIP : " << (int)AUDxIP();
+    os << "  AUDxON : " << (int)AUDxON();
 }
 
 template <isize nr> void

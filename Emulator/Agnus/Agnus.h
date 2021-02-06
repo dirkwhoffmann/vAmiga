@@ -432,39 +432,37 @@ public:
      * have this feature. It has access to Chip Ram, only.
      */
     bool slowRamIsMirroredIn();
-    
-private:
-    
-    void _dumpConfig() const override;
-
+        
     
     //
     // Analyzing
     //
+    
+public:
+    
+    AgnusInfo getInfo() { return HardwareComponent::getInfo(info); }
+    EventInfo getEventInfo();
+    EventSlotInfo getEventSlotInfo(isize nr);
+    
+private:
+    
+    void _inspect() override;
+    void _dump(Dump::Category category, std::ostream& os) const override;
+    
+    void inspectEvents();
+    void inspectEventSlot(EventSlot nr);
 
-    public:
+public:
+    
+    void dumpEvents();
+    void dumpEvents(std::ostream &os);
         
-        AgnusInfo getInfo() { return HardwareComponent::getInfo(info); }
-        EventInfo getEventInfo();
-        EventSlotInfo getEventSlotInfo(isize nr);
-        
-    private:
-        
-        void _inspect() override;
-        void _dump() const override;
-
-        void inspectEvents();
-        void inspectEventSlot(EventSlot nr);
-        void dumpEvents();
-
-    public:
-        
-        AgnusStats getStats() { return stats; }
-        
-    private:
-        
-        void clearStats();
-        void updateStats();
+    AgnusStats getStats() { return stats; }
+    
+private:
+    
+    void clearStats();
+    void updateStats();
     
     
     //

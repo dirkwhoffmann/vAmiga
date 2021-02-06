@@ -142,10 +142,6 @@ public:
     double getSampleRate() const { return sampleRate; }
     void setSampleRate(double hz);
 
-private:
-    
-    void _dumpConfig() const override;
-
 
     //
     // Analyzing
@@ -156,7 +152,11 @@ public:
     // Returns information about the gathered statistical information
     MuxerStats getStats() const { return stats; }
     
+private:
     
+    void _dump(Dump::Category category, std::ostream& os) const override;
+
+        
     //
     // Serializing
     //

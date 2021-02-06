@@ -58,8 +58,12 @@ Drive::setConfigItem(Option option, long id, long value)
                             
         case OPT_DRIVE_TYPE:
             
-            if (!DriveTypeEnum::verify(value)) return false;
-            if (config.type == value) return false;
+            if (!DriveTypeEnum::isValid(value)) {
+                throw ConfigArgError(DriveTypeEnum::keyList());
+            }
+            if (config.type == value) {
+                return false;
+            }
 
             if (value != DRIVE_DD_35 && value != DRIVE_HD_35) {
                 warn("Unsupported type: %s\n", DriveTypeEnum::key((DriveType)value));
@@ -95,37 +99,37 @@ Drive::_inspect()
 }
 
 void
-Drive::_dumpConfig() const
+Drive::_dump(Dump::Category category, std::ostream& os) const
 {
-    msg("              Type : %s\n", DriveTypeEnum::key(config.type));
-    msg(" Emulate mechanics : %s\n", config.mechanicalDelays ? "yes" : "no");
-    msg("       Start delay : %lld\n", config.startDelay);
-    msg("        Stop delay : %lld\n", config.stopDelay);
-    msg("        Step delay : %lld\n", config.stepDelay);
-}
-
-void
-Drive::_dump() const
-{
-    msg("                Nr: %zd\n", nr);
-    msg("          Id count: %d\n", idCount);
-    msg("            Id bit: %d\n", idBit);
-    msg("      motorSpeed(): %.2f\n", motorSpeed());
-    msg("        getMotor(): %s\n", getMotor() ? "on" : "off");
-    msg(" motorSpeedingUp(): %s\n", motorSpeedingUp() ? "yes" : "no");
-    msg("motorAtFullSpeed(): %s\n", motorAtFullSpeed() ? "yes" : "no");
-    msg("motorSlowingDown(): %s\n", motorSlowingDown() ? "yes" : "no");
-    msg("    motorStopped(): %s\n", motorStopped() ? "yes" : "no");
-    msg("         dskchange: %d\n", dskchange);
-    msg("            dsklen: %X\n", dsklen);
-    msg("               prb: %X\n", prb);
-    msg("              Side: %d\n", head.side);
-    msg("          Cylinder: %d\n", head.cylinder);
-    msg("            Offset: %d\n", head.offset);
-    msg("   cylinderHistory: %llX\n", cylinderHistory);
-    msg("              Disk: %s\n", disk ? "yes" : "no");
+    if (category & Dump::Config) {
+        
+        os << DUMP("Type") << DriveTypeEnum::key(config.type) << std::endl;
+        os << DUMP("Emulate mechanics") << YESNO(config.mechanicalDelays) << std::endl;
+        os << DUMP("Start delay") << DEC << config.startDelay << std::endl;
+        os << DUMP("Stop delay") << DEC << config.stopDelay << std::endl;
+        os << DUMP("Step delay") << DEC << config.stepDelay << std::endl;
+    }
     
-    if (disk) disk->dump();
+    if (category & Dump::State) {
+        
+        os << DUMP("Nr") << DEC << (isize)nr << std::endl;
+        os << DUMP("Id count") << DEC << (isize)idCount << std::endl;
+        os << DUMP("Id bit") << DEC << (isize)idBit << std::endl;
+        os << DUMP("motorSpeed()") << DEC << motorSpeed() << std::endl;
+        os << DUMP("getMotor()") << YESNO(getMotor()) << std::endl;
+        os << DUMP("motorSpeedingUp()") << YESNO(motorSpeedingUp()) << std::endl;
+        os << DUMP("motorAtFullSpeed()") << YESNO(motorAtFullSpeed()) << std::endl;
+        os << DUMP("motorSlowingDown()") << YESNO(motorSlowingDown()) << std::endl;
+        os << DUMP("motorStopped()") << YESNO(motorStopped()) << std::endl;
+        os << DUMP("dskchange") << DEC << (isize)dskchange << std::endl;
+        os << DUMP("dsklen") << DEC << (isize)dsklen << std::endl;
+        os << DUMP("prb") << HEX8 << (isize)prb << std::endl;
+        os << DUMP("Side") << DEC << (isize)head.side << std::endl;
+        os << DUMP("Cylinder") << DEC << (isize)head.cylinder << std::endl;
+        os << DUMP("Offset") << DEC << (isize)head.offset << std::endl;
+        os << DUMP("cylinderHistory") << HEX64 << cylinderHistory << std::endl;
+        os << DUMP("Disk") << YESNO(disk) << std::endl;
+    }
 }
 
 isize

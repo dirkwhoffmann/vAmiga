@@ -14,7 +14,7 @@
 class Keyboard : public AmigaComponent {
 
     // Current configuration
-     KeyboardConfig config;
+    KeyboardConfig config;
 
     // The current keyboard state
     KeyboardState state;
@@ -65,18 +65,14 @@ public:
     long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;
 
-private:
-
-    void _dumpConfig() const override;
-    
-    
+        
     //
     // Analyzing
     //
     
 private:
     
-    void _dump() const override;
+    void _dump(Dump::Category category, std::ostream& os) const override;
 
     
     //

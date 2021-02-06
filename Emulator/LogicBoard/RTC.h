@@ -67,10 +67,6 @@ public:
     
     bool isPresent() const { return config.model != RTC_NONE; }
 
-private:
-    
-    void _dumpConfig() const override;
-
     
     //
     // Analyzing
@@ -78,7 +74,7 @@ private:
     
 private:
     
-    void _dump() const override;
+    void _dump(Dump::Category category, std::ostream& os) const override;
 
     
     //

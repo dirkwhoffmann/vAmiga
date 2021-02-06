@@ -70,8 +70,9 @@ CIA::setConfigItem(Option option, long value)
             
         case OPT_CIA_REVISION:
             
-            if (!CIARevisionEnum::verify(value)) return false;
-            
+            if (!CIARevisionEnum::isValid(value)) {
+                throw ConfigArgError(CIARevisionEnum::keyList());
+            }
             if (config.revision == value) {
                 return false;
             }
@@ -100,14 +101,6 @@ CIA::setConfigItem(Option option, long value)
         default:
             return false;
     }
-}
-
-void
-CIA::_dumpConfig() const
-{
-    msg("      revision : %s\n", CIARevisionEnum::key(config.revision));
-    msg("        todBug : %s\n", config.todBug ? "yes" : "no");
-    msg(" eClockSyncing : %s\n", config.eClockSyncing ? "yes" : "no");
 }
 
 void
@@ -155,37 +148,53 @@ CIA::_inspect()
 }
 
 void
-CIA::_dump() const
-{    
-    msg("                   Clock : %lld\n", clock);
-    msg("                Sleeping : %s\n", sleeping ? "yes" : "no");
-    msg("               Tiredness : %d\n", tiredness);
-    msg(" Most recent sleep cycle : %lld\n", sleepCycle);
-    msg("Most recent wakeup cycle : %lld\n", wakeUpCycle);
-    msg("\n");
-    msg("               Counter A : %04X\n", counterA);
-    msg("                 Latch A : %04X\n", latchA);
-    msg("         Data register A : %02X\n", PRA);
-    msg("   Data port direction A : %02X\n", DDRA);
-    msg("             Data port A : %02X\n", PA);
-    msg("      Control register A : %02X\n", CRA);
-    msg("\n");
-    msg("               Counter B : %04X\n", counterB);
-    msg("                 Latch B : %04X\n", latchB);
-    msg("         Data register B : %02X\n", PRB);
-    msg("   Data port direction B : %02X\n", DDRB);
-    msg("             Data port B : %02X\n", PB);
-    msg("      Control register B : %02X\n", CRB);
-    msg("\n");
-    msg("   Interrupt control reg : %02X\n", icr);
-    msg("      Interrupt mask reg : %02X\n", imr);
-    msg("\n");
-    msg("                 SDR/SSR : %02X/%02X\n", sdr, ssr);
-    msg("              serCounter : %02X\n", serCounter);
-    msg("\n");
-    msg("                     CNT : %d\n", CNT);
-    msg("                     INT : %d\n", INT);
-    msg("\n");
+CIA::_dump(Dump::Category category, std::ostream& os) const
+{
+    if (category & Dump::Config) {
+        
+        os << DUMP("Revision") << CIARevisionEnum::key(config.revision) << std::endl;
+        os << DUMP("Emulate TOD bug") << YESNO(config.todBug) << std::endl;
+        os << DUMP("Sync with E-clock") << YESNO(config.eClockSyncing) << std::endl;
+    }
+    
+    if (category & Dump::State) {
+        
+        os << DUMP("Clock") << DEC << clock << std::endl;
+        os << DUMP("Sleeping") << YESNO(sleeping) << std::endl;
+        os << DUMP("Tiredness") << (int)tiredness << std::endl;
+        os << DUMP("Most recent sleep cycle") << sleepCycle << std::endl;
+        os << DUMP("Most recent wakeup cycle") << wakeUpCycle << std::endl;
+        os << std::endl;
+        os << DUMP("CNT") << CNT << std::endl;
+        os << DUMP("INT") << INT << std::endl;
+
+    }
+    
+    if (category & Dump::Registers) {
+        
+        os << std::endl;
+        os << DUMP("Counter A") << HEX16 << (int)counterA << std::endl;
+        os << DUMP("Latch A") << HEX16 << (int)latchA << std::endl;
+        os << DUMP("Data register A") << HEX8 << (int)PRA << std::endl;
+        os << DUMP("Data port direction A") << HEX8 << (int)DDRA << std::endl;
+        os << DUMP("Data port A") << HEX8 << (int)PA << std::endl;
+        os << DUMP("Control register A") << HEX8 << (int)CRA << std::endl;
+        os << std::endl;
+        os << DUMP("Counter B") << HEX16 << (int)counterB << std::endl;
+        os << DUMP("Latch B") << HEX16 << (int)latchB << std::endl;
+        os << DUMP("Data register B") << HEX8 << (int)PRB << std::endl;
+        os << DUMP("Data port direction B") << HEX8 << (int)DDRB << std::endl;
+        os << DUMP("Data port B") << HEX8 << (int)PB << std::endl;
+        os << DUMP("Control register B") << HEX8 << (int)CRB << std::endl;
+        os << std::endl;
+        os << DUMP("Interrupt control reg") << HEX8 << (int)icr << std::endl;
+        os << DUMP("Interrupt mask reg") << HEX8 << (int)imr << std::endl;
+        os << std::endl;
+        os << DUMP("SDR") << HEX8 << (int)sdr << std::endl;
+        os << DUMP("SSR") << HEX8 << (int)ssr << std::endl;
+        os << DUMP("serCounter") << HEX8 << (int)serCounter << std::endl;
+        os << std::endl;
+    }
 }
 
 void

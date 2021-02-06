@@ -56,7 +56,7 @@ Paula::_inspect()
 }
 
 void
-Paula::_dump() const
+Paula::_dump(Dump::Category category, std::ostream& os) const
 {
     
 }

@@ -42,14 +42,19 @@ TOD::_inspect()
 }
 
 void 
-TOD::_dump() const
+TOD::_dump(Dump::Category category, std::ostream& os) const
 {
-    msg("           Counter : %02X:%02X:%02X\n", tod.hi, tod.mid, tod.lo);
-    msg("             Alarm : %02X:%02X:%02X\n", alarm.hi, alarm.mid, alarm.lo);
-    msg("             Latch : %02X:%02X:%02X\n", latch.hi, latch.mid, latch.lo);
-    msg("            Frozen : %s\n", frozen ? "yes" : "no");
-    msg("           Stopped : %s\n", stopped ? "yes" : "no");
-    msg("\n");
+    os << DUMP("Counter");
+    os << HEX8 << tod.hi << ":" << HEX8 << tod.mid << ":" << HEX8 << tod.lo;
+    os << std::endl;
+    os << DUMP ("Alarm");
+    os << HEX8 << alarm.hi << ":" << HEX8 << alarm.mid << ":" << HEX8 << alarm.lo;
+    os << std::endl;
+    os << DUMP("Latch");
+    os << HEX8 << latch.hi << ":" << HEX8 << latch.mid << ":" << HEX8 << latch.lo;
+    os << std::endl;
+    os << DUMP("Frozen") << YESNO(frozen) << std::endl;
+    os << DUMP("Stopped") << YESNO(stopped) << std::endl;
 }
 
 u8

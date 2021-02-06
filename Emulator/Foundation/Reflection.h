@@ -10,34 +10,67 @@
 #pragma once
 
 #include "Aliases.h"
+
 #include <stdio.h>
+#include <map>
+#include <string>
 
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
+
+struct EnumParseError : public std::exception
+{
+    std::string description;
+    EnumParseError(const std::string &s) : description(s) { }
+    const char *what() const throw() override { return  description.c_str(); }
+};
 
 template <class T, typename E> struct Reflection {
 
     // Returns the shortened key as a C string
     static const char *key(long nr) { return T::key((E)nr); }
-    
-    // Verifies a key (used by the configuration methods)
-    static bool verify(long nr, long min = 1) {
+
+    // Collects all key / value pairs
+    static std::map <std::string,long> pairs(long min = 1) {
         
-        if (T::isValid(nr)) return true;
-        
-        printf("ERROR: %ld doesn't specify a valid key.\nValid keys: ", nr);
-        
-        for (long i = 0, j = 0 ;; i++) {
-            
-            if (T::isValid(i)) {
+        std::map <std::string,long> result;
                 
-                if (j++) printf(", ");
-                if (T::prefix()) printf("%s_", T::prefix());
-                printf("%s", key(i));
-           
-            } else if (i >= min) break;
+        for (isize i = 0;; i++) {
+            if (T::isValid(i)) {
+                result.insert(std::make_pair(key(i), i));
+            } else {
+                if (i >= min) break;
+            }
         }
         
-        printf("\n");
-        return false;
+        return result;
+    }
+
+    // Returns a list in form of a colon seperated string
+    static std::string keyList(bool prefix = false) {
+        
+        std::string result;
+        
+        auto p = pairs();
+        for(auto it = std::begin(p); it != std::end(p); ++it) {
+            if (it != std::begin(p)) result += ", ";
+            if (prefix && T::prefix()) result += T::prefix();
+            result += it->first;
+        }
+        
+        return result;
+    }
+    
+    // Parses a string
+    static E parse(const std::string& key) {
+          
+        std::string upperKey;
+        for (auto c : key) { upperKey += toupper(c); }
+        
+        auto p = pairs();
+        
+        auto it = p.find(upperKey);
+        if (it == p.end()) throw EnumParseError(keyList());
+        
+        return (E)it->second;
     }
 };

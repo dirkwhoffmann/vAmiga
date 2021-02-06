@@ -38,8 +38,12 @@ RTC::setConfigItem(Option option, long value)
             warn("Overriding RTC revision: %ld KB\n", value);
             #endif
             
-            if (!RTCRevisionEnum::verify(value)) return false;
-            if (config.model == value) return false;
+            if (!RTCRevisionEnum::isValid(value)) {
+                throw ConfigArgError(RTCRevisionEnum::keyList());
+            }
+            if (config.model == value) {
+                return false;
+            }
             
             config.model = (RTCRevision)value;
             mem.updateMemSrcTables();
@@ -49,12 +53,6 @@ RTC::setConfigItem(Option option, long value)
         default:
             return false;
     }
-}
-
-void
-RTC::_dumpConfig() const
-{
-    msg("  Revision : %s\n", RTCRevisionEnum::key(config.model));
 }
 
 void
@@ -80,13 +78,23 @@ RTC::_reset(bool hard)
 }
 
 void
-RTC::_dump() const
+RTC::_dump(Dump::Category category, std::ostream& os) const
 {
-    for (isize i = 0; i < 4; i++) {
-        for (isize j = 0; j < 16; j++) msg("i: %X ", reg[i][j]);
-        msg("\n");
+    if (category & Dump::Config) {
+        
+        os << "Chip Model: " << RTCRevisionEnum::key(config.model) << endl;
     }
-    msg("\n");
+    
+    if (category & Dump::State) {
+        
+        for (isize i = 0; i < 4; i++) {
+            for (isize j = 0; j < 16; j++) {
+                os << DEC << i << ": " << HEX8 << (int)reg[i][j];
+            }
+            os << std::endl;
+        }
+        os << std::endl;
+    }
 }
 
 time_t

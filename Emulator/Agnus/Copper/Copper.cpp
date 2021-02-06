@@ -38,19 +38,23 @@ Copper::_inspect()
 }
 
 void
-Copper::_dump() const
+Copper::_dump(Dump::Category category, std::ostream& os) const
 {
-    bool active = agnus.isPending<SLOT_COP>();
-    msg("    cdang: %d\n", cdang);
-    msg("   active: %s\n", active ? "yes" : "no");
-    if (active) msg("    state: %ld\n", (long)agnus.slot[SLOT_COP].id);
-    msg("    coppc: %X\n", coppc);
-    msg("  copins1: %X\n", cop1ins);
-    msg("  copins2: %X\n", cop2ins);
-    msg("   cop1lc: %X\n", cop1lc);
-    msg("   cop2lc: %X\n", cop2lc);
-    msg("  cop1end: %X\n", cop1end);
-    msg("  cop2end: %X\n", cop2end);
+    if (category & Dump::State) {
+        
+        os << DUMP("Active Copper list") << DEC << (isize)copList << std::endl;
+        os << DUMP("Skip flag") << ISSET(skip) << std::endl;
+    }
+    
+    if (category & Dump::Registers) {
+        
+        os << DUMP("COPPC") << HEX32 << (isize)coppc << std::endl;
+        os << DUMP("COP1LC") << HEX32 << (isize)cop1lc << std::endl;
+        os << DUMP("COP1LC") << HEX32 << (isize)cop2lc << std::endl;
+        os << DUMP("COPINS1") << HEX16 << (isize)cop1ins << std::endl;
+        os << DUMP("COPINS2") << HEX16 << (isize)cop2ins << std::endl;
+        os << DUMP("CDANG") << DEC << (isize)cdang << std::endl;
+    }
 }
 
 void

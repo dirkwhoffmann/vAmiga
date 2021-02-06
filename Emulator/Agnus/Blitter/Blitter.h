@@ -276,10 +276,6 @@ public:
     
     long getConfigItem(Option option) const;
     bool setConfigItem(Option option, long value) override;
-
-private:
-    
-    void _dumpConfig() const override;
     
     
     //
@@ -294,7 +290,7 @@ private:
     
     // Methods from HardwareComponent
     void _inspect() override;
-    void _dump() const override;
+    void _dump(Dump::Category category, std::ostream& os) const override;
 
 
     //

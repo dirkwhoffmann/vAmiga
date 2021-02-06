@@ -113,8 +113,9 @@ Muxer::setConfigItem(Option option, long value)
             
         case OPT_SAMPLING_METHOD:
             
-            if (!SamplingMethodEnum::verify(value)) return false;
-
+            if (!SamplingMethodEnum::isValid(value)) {
+                throw ConfigArgError(SamplingMethodEnum::keyList());
+            }
             if (config.samplingMethod == value) {
                 return false;
             }
@@ -124,8 +125,9 @@ Muxer::setConfigItem(Option option, long value)
             
         case OPT_FILTER_TYPE:
             
-            if (!FilterTypeEnum::verify(value)) return false;
-
+            if (!FilterTypeEnum::isValid(value)) {
+                throw ConfigArgError(FilterTypeEnum::keyList());
+            }
             if (config.filterType == value) {
                 return false;
             }
@@ -211,16 +213,30 @@ Muxer::setConfigItem(Option option, long id, long value)
 }
 
 void
-Muxer::_dumpConfig() const
+Muxer::_dump(Dump::Category category, std::ostream& os) const
 {
-    msg("samplingMethod : %s\n", SamplingMethodEnum::key(config.samplingMethod));
-    msg("    filtertype : %s\n", FilterTypeEnum::key(config.filterType));
-    msg("filterAlwaysOn : %d\n", config.filterAlwaysOn);
-    msg("    vol0, pan0 : %lld, %lld\n", config.vol[0], config.pan[0]);
-    msg("    vol1, pan1 : %lld, %lld\n", config.vol[1], config.pan[1]);
-    msg("    vol2, pan2 : %lld, %lld\n", config.vol[2], config.pan[2]);
-    msg("    vol3, pan3 : %lld, %lld\n", config.vol[3], config.pan[3]);
-    msg("    volL, volR : %lld, %lld\n", config.volL, config.volR);
+    if (category & Dump::Config) {
+        
+        os << " Sampling method : ";
+        os << SamplingMethodEnum::key(config.samplingMethod) << std::endl;
+        os << "     Filter type : ";
+        os << FilterTypeEnum::key(config.filterType) << std::endl;
+        os << "Filter always on : ";
+        os << (config.filterAlwaysOn ? "yes" : "no") << std::endl;
+        os << " Channel volumes : ";
+        os << TAB(10) << config.vol[0];
+        os << TAB(10) << config.vol[1];
+        os << TAB(10) << config.vol[2];
+        os << TAB(10) << config.vol[3] << std::endl;
+        os << "     Channel pan : ";
+        os << TAB(10) << config.vol[0];
+        os << TAB(10) << config.vol[1];
+        os << TAB(10) << config.vol[2];
+        os << TAB(10) << config.vol[3] << std::endl;
+        os << "  Master volumes : ";
+        os << TAB(10) << config.volL;
+        os << TAB(10) << config.volR;
+    }
 }
 
 void

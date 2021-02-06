@@ -72,20 +72,6 @@ HardwareComponent::configure(Option option, long id, long value)
 }
 
 void
-HardwareComponent::dumpConfig() const
-{
-    // Dump the configuration of all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        c->dumpConfig();
-    }
-
-    // Dump the configuration of this component
-    msg("%s (%p):\n", getDescription(), this);
-    _dumpConfig();
-    msg("\n");
-}
-
-void
 HardwareComponent::inspect()
 {
     // Inspect all subcomponents
@@ -97,11 +83,9 @@ HardwareComponent::inspect()
     _inspect();
 }
 
-void
-HardwareComponent::dump()
+void HardwareComponent::dump(Dump::Category category, std::ostream& ss) const
 {
-    msg("%s (memory location: %p)\n\n", getDescription(), this);
-    _dump();
+    _dump(category, ss);
 }
 
 isize
