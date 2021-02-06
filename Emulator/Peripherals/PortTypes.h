@@ -36,7 +36,7 @@ struct PortNrEnum : Reflection<PortNrEnum, PortNr> {
     
     static bool isValid(long value)
     {
-        return value == PORT_1 || PORT_2;
+        return value == PORT_1 || value == PORT_2;
     }
     
     static const char *prefix() { return ""; }
