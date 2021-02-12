@@ -269,6 +269,12 @@ Amiga::getConfigItem(Option option, long id) const
         case OPT_EMULATE_MECHANICS:
             return df[id]->getConfigItem(option);
             
+        case OPT_PULLUP_RESISTORS:
+         case OPT_MOUSE_VELOCITY:
+             if (id == PORT_1) return controlPort1.mouse.getConfigItem(option);
+             if (id == PORT_2) return controlPort2.mouse.getConfigItem(option);
+             assert(false);
+             
         default: assert(false);
     }
     

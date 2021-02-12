@@ -229,10 +229,10 @@ Muxer::_dump(Dump::Category category, std::ostream& os) const
         os << TAB(10) << config.vol[2];
         os << TAB(10) << config.vol[3] << std::endl;
         os << "     Channel pan : ";
-        os << TAB(10) << config.vol[0];
-        os << TAB(10) << config.vol[1];
-        os << TAB(10) << config.vol[2];
-        os << TAB(10) << config.vol[3] << std::endl;
+        os << TAB(10) << config.pan[0];
+        os << TAB(10) << config.pan[1];
+        os << TAB(10) << config.pan[2];
+        os << TAB(10) << config.pan[3] << std::endl;
         os << "  Master volumes : ";
         os << TAB(10) << config.volL;
         os << TAB(10) << config.volR;

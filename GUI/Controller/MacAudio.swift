@@ -119,6 +119,7 @@ public class MacAudio: NSObject {
     private func renderStereo(inputDataList: UnsafeMutablePointer<AudioBufferList>,
                               frameCount: UInt32) {
 
+        // track("\(frameCount)")
         let bufferList = UnsafeMutableAudioBufferListPointer(inputDataList)
         assert(bufferList.count > 1)
         

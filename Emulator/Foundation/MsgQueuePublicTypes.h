@@ -67,6 +67,9 @@ enum_long(MSG_TYPE)
     // Keyboard
     MSG_CTRL_AMIGA_AMIGA,
     
+    // Mouse
+    MSG_SHAKING,
+
     // Ports
     MSG_SER_IN,
     MSG_SER_OUT,

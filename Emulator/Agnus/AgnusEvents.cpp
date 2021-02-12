@@ -413,7 +413,7 @@ Agnus::serviceBPLEvent()
             return;
             
         default:
-            dumpEvents();
+            dump(Dump::Events);
             assert(false);
     }
 

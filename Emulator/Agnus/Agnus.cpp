@@ -210,47 +210,106 @@ Agnus::_dump(Dump::Category category, std::ostream& os) const
         os << DUMP("Slow Ram mirror");
         os << EMULATED(config.slowRamMirror) << endl;
     }
-    
+
+    if (category & Dump::State) {
+        
+        os << DUMP("Clock") << DEC << clock << std::endl;
+        os << DUMP("Frame") << DEC << (isize)frame.nr << std::endl;
+        os << DUMP("LOF") << DEC << (isize)frame.lof << std::endl;
+        os << DUMP("LOF in previous frame") << DEC << (isize)frame.prevlof << std::endl;
+        os << DUMP("Beam position");
+        os << DEC << "(" << (isize)pos.v << "," << (isize)pos.h << ")" << std::endl;
+        os << DUMP("Latched position");
+        os << DEC << "(" << (isize)pos.vLatched << "," << (isize)pos.hLatched << ")" << std::endl;
+        os << DUMP("scrollLoresOdd") << DEC << (isize)scrollLoresOdd << std::endl;
+        os << DUMP("scrollLoresEven") << DEC << (isize)scrollLoresEven << std::endl;
+        os << DUMP("scrollHiresOdd") << DEC << (isize)scrollHiresOdd << std::endl;
+        os << DUMP("scrollHiresEven") << DEC << (isize)scrollHiresEven << std::endl;
+        os << DUMP("Bitplane DMA line") << YESNO(bplDmaLine) << std::endl;
+        os << DUMP("BLS signal") << ISENABLED(bls) << std::endl;
+    }
+
     if (category & Dump::Registers) {
         
-        os << "SPR0PT: " << HEX32 << sprpt[0] << "  ";
-        os << "BPL0PT: " << HEX32 << bplpt[0] << "  ";
-        os << "AUD0PT: " << HEX32 << audpt[0] << "  ";
-        os << "DSKPT: "  << HEX32 << dskpt << std::endl;
+        os << DUMP("DMACON");
+        os << HEX32 << dmacon << std::endl;
         
-        os << "SPR1PT: " << HEX32 << sprpt[1] << "  ";
-        os << "BPL1PT: " << HEX32 << bplpt[1] << "  ";
-        os << "AUD1PT: " << HEX32 << audpt[1] << std::endl;
+        os << DUMP("DDFSTRT, DDFSTOP");
+        os << HEX32 << ddfstrt << ' ' << HEX32 << ddfstop << ' ' << std::endl;
         
-        os << "SPR2PT: " << HEX32 << sprpt[2] << "  ";
-        os << "BPL2PT: " << HEX32 << bplpt[2] << "  ";
-        os << "AUD2PT: " << HEX32 << audpt[2] << std::endl;
-        
-        os << "SPR3PT: " << HEX32 << sprpt[3] << "  ";
-        os << "BPL3PT: " << HEX32 << bplpt[3] << "  ";
-        os << "AUD3PT: " << HEX32 << audpt[3] << std::endl;
-        
-        os << "SPR4PT: " << HEX32 << sprpt[4] << "  ";
-        os << "BPL4PT: " << HEX32 << bplpt[4] << std::endl;
-        
-        os << "SPR5PT: " << HEX32 << sprpt[5] << "  ";
-        os << "BPL5PT: " << HEX32 << bplpt[5] << std::endl;
-        
-        os << "SPR6PT: " << HEX32 << sprpt[6] << std::endl;
-        os << "SPR7PT: " << HEX32 << sprpt[6] << std::endl;
+        os << DUMP("DIWSTRT, DIWSTOP");
+        os << HEX32 << diwstrt << ' ' << HEX32 << diwstop << ' ' << std::endl;
 
-        os << "BPL1MOD: " << HEX16 << bpl1mod;
-        os << "BPL2MOD: " << HEX16 << bpl2mod;
+        os << DUMP("BPLCON0, BPLCON1");
+        os << HEX32 << bplcon0 << ' ' << HEX32 << bplcon1 << ' ' << std::endl;
 
-        os << "DDFSTRT: " << HEX16 << ddfstrt;
-        os << "DDFSTOP: " << HEX16 << ddfstop;
+        os << DUMP("BPL1MOD, BPL2MOD");
+        os << HEX32 << bpl1mod << ' ' << HEX32 << bpl2mod << ' ' << std::endl;
+    
+        os << DUMP("BPL0PT - BPL2PT");
+        os << HEX32 << bplpt[0] << ' ' << HEX32 << bplpt[1] << ' ';
+        os << HEX32 << bplpt[2] << ' ' << ' ' << std::endl;
+        os << DUMP("BPL3PT - BPL5PT");
+        os << HEX32 << bplpt[3] << ' ' << HEX32 << bplpt[4] << ' ';
+        os << HEX32 << bplpt[5] << std::endl;
 
-        os << "DIWSTRT: " << HEX16 << diwstrt;
-        os << "DIWSTOP: " << HEX16 << diwstop << std::endl;
+        os << DUMP("SPR0PT - SPR3PT");
+        os << HEX32 << sprpt[0] << ' ' << HEX32 << sprpt[1] << ' ';
+        os << HEX32 << sprpt[2] << ' ' << HEX32 << sprpt[3] << ' ' << std::endl;
+        os << DUMP("SPR4PT - SPR7PT");
+        os << HEX32 << sprpt[4] << ' ' << HEX32 << sprpt[5] << ' ';
+        os << HEX32 << sprpt[5] << ' ' << HEX32 << sprpt[7] << ' ' << std::endl;
 
-        os << "DMACON: " << HEX16 << dmacon;
-        os << "BPLCON0:" << HEX16 << bplcon0;
-        os << "BPLCON1:" << HEX16 << bplcon1 << std::endl;
+        os << DUMP("AUD0PT - AUD3PT");
+        os << HEX32 << audpt[0] << ' ' << HEX32 << audpt[1] << ' ';
+        os << HEX32 << audpt[2] << ' ' << HEX32 << audpt[3] << ' ' << std::endl;
+
+        os << DUMP("DSKPT");
+        os << HEX32 << dskpt << std::endl;
+    }
+    
+    if (category & Dump::Events) {
+        
+        EventInfo eventInfo;
+        inspectEvents(eventInfo);
+            
+        os << TAB(10) << "Slot";
+        os << TAB(14) << "Event";
+        os << TAB(18) << "Trigger position";
+        os << TAB(16) << "Trigger cycle" << std::endl;
+        
+
+        for (isize i = 0; i < 15; i++) {
+        // for (isize i = 0; i < SLOT_COUNT; i++) {
+
+            EventSlotInfo &info = eventInfo.slotInfo[i];
+            bool willTrigger = info.trigger != NEVER;
+            
+            os << TAB(10) << EventSlotEnum::key(info.slot);
+            os << TAB(14) << info.eventName;
+            
+            if (willTrigger) {
+                
+                if (info.frameRel == -1) {
+                    os << TAB(18) << "previous frame";
+                } else if (info.frameRel > 0) {
+                    os << TAB(18) << "next frame";
+                } else {
+                    string vpos = std::to_string(info.vpos);
+                    string hpos = std::to_string(info.hpos);
+                    string pos = "(" + vpos + "," + hpos + ")";
+                    os << TAB(18) << pos;
+                }
+
+                if (info.triggerRel == 0) {
+                    os << TAB(16) << "due immediately";
+                } else {
+                    string cycle = std::to_string(info.triggerRel / 8);
+                    os << TAB(16) << "due in " + cycle + " DMA cycles";
+                }
+            }
+            os << std::endl;
+        }
     }
     
     /*

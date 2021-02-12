@@ -97,6 +97,10 @@ enum_long(OPT)
     // Keyboard
     OPT_ACCURATE_KEYBOARD,
     
+    // Mouse
+    OPT_PULLUP_RESISTORS,
+    OPT_MOUSE_VELOCITY,
+     
     // Paula audio
     OPT_SAMPLING_METHOD,
     OPT_FILTER_TYPE,

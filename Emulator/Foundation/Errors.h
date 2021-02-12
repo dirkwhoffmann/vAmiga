@@ -9,9 +9,15 @@
 
 #pragma once
 
-#include "AmigaTypes.h"
+#include "AmigaPublicTypes.h"
 #include <exception>
 #include <string>
+
+using std::string;
+
+//
+// VAError
+//
 
 struct VAError : public std::exception
 {
@@ -19,14 +25,35 @@ struct VAError : public std::exception
     
     VAError(ErrorCode code) : errorCode(code) { }
     
-    const char *what() const throw() override {
-        return  ErrorCodeEnum::key(errorCode);
-    }
+    const char *what() const throw() override;
 };
+
+
+//
+// ParseError
+//
+
+struct ParseError : public std::exception {
+
+    string token;
+    string expected;
+    
+    ParseError(const string &t) : token(t) { }
+    ParseError(const string &t, const string &e) : token(t), expected(e) { }
+
+    const char *what() const throw() override { return token.c_str(); }
+};
+
+struct ParseEnumError : public ParseError { using ParseError::ParseError; };
+    
+
+//
+// ConfigError
+//
 
 struct ConfigError : public std::exception
 {
-    std::string description;
+    string description;
     
     ConfigError(const std::string &s) : description(s) { }
     
@@ -36,9 +63,17 @@ struct ConfigError : public std::exception
 };
 
 struct ConfigArgError : ConfigError {
-    ConfigArgError(const std::string &s) : ConfigError(s) { }; 
+    ConfigArgError(const std::string &s) : ConfigError(s) { };
+};
+
+struct ConfigFileReadError : ConfigError {
+    ConfigFileReadError(const std::string &s) : ConfigError(s) { };
 };
 
 struct ConfigLockedError : ConfigError {
     ConfigLockedError() : ConfigError("") { };
+};
+
+struct ConfigUnsupportedError : ConfigError {
+    ConfigUnsupportedError() : ConfigError("") { };
 };

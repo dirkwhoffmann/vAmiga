@@ -157,6 +157,7 @@
 		50AE6EE324D9B08C000AA367 /* PaulaRegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE224D9B08C000AA367 /* PaulaRegisters.cpp */; };
 		50AE6EE524D9B210000AA367 /* DeniseRegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE424D9B210000AA367 /* DeniseRegisters.cpp */; };
 		50AE6EE724D9B2C7000AA367 /* StateMachineRegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE624D9B2C7000AA367 /* StateMachineRegisters.cpp */; };
+		50AE6F8525D71FBE0004AFBC /* Errors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6F8425D71FBE0004AFBC /* Errors.cpp */; };
 		50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */; };
 		50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBECB24D3D4540037082D /* CopperEvents.cpp */; };
 		50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED024D3D61A0037082D /* PaulaEvents.cpp */; };
@@ -463,6 +464,7 @@
 		50AE6EE224D9B08C000AA367 /* PaulaRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PaulaRegisters.cpp; sourceTree = "<group>"; };
 		50AE6EE424D9B210000AA367 /* DeniseRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeniseRegisters.cpp; sourceTree = "<group>"; };
 		50AE6EE624D9B2C7000AA367 /* StateMachineRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachineRegisters.cpp; sourceTree = "<group>"; };
+		50AE6F8425D71FBE0004AFBC /* Errors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Errors.cpp; sourceTree = "<group>"; };
 		50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterEvents.cpp; sourceTree = "<group>"; };
 		50AEBECA24D3D40C0037082D /* CopperPublicTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CopperPublicTypes.h; sourceTree = "<group>"; };
 		50AEBECB24D3D4540037082D /* CopperEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperEvents.cpp; sourceTree = "<group>"; };
@@ -1192,6 +1194,7 @@
 				50EA34F0258E38880010DC63 /* Debug.h */,
 				50B5F87825AF9E07008B79F1 /* Reflection.h */,
 				5039924625B219FC0084B808 /* Errors.h */,
+				50AE6F8425D71FBE0004AFBC /* Errors.cpp */,
 				50B14C0821EB2248002E32A6 /* Utils.h */,
 				50B14C1121EB4314002E32A6 /* Utils.cpp */,
 				505A3A3921F4996400132020 /* SSEUtils.h */,
@@ -1558,6 +1561,7 @@
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
+				50AE6F8525D71FBE0004AFBC /* Errors.cpp in Sources */,
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
 				50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */,

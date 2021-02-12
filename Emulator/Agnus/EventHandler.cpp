@@ -10,30 +10,27 @@
 #include "Amiga.h"
 
 void
-Agnus::inspectEvents()
+Agnus::inspectEvents(EventInfo &info) const
 {
-    synchronized {
-        
-        eventInfo.cpuClock = cpu.getMasterClock();
-        eventInfo.cpuCycles = cpu.getCpuClock();
-        eventInfo.dmaClock = clock;
-        eventInfo.ciaAClock = ciaa.clock;
-        eventInfo.ciaBClock  = ciab.clock;
-        eventInfo.frame = frame.nr;
-        eventInfo.vpos = pos.v;
-        eventInfo.hpos = pos.h;
-        
-        // Inspect all slots
-        for (isize i = 0; i < SLOT_COUNT; i++) inspectEventSlot((EventSlot)i);
-    }
+    info.cpuClock = cpu.getMasterClock();
+    info.cpuCycles = cpu.getCpuClock();
+    info.dmaClock = clock;
+    info.ciaAClock = ciaa.clock;
+    info.ciaBClock  = ciab.clock;
+    info.frame = frame.nr;
+    info.vpos = pos.v;
+    info.hpos = pos.h;
+    
+    // Inspect all slots
+    for (isize i = 0; i < SLOT_COUNT; i++) inspectEventSlot(info, (EventSlot)i);
 }
 
 void
-Agnus::inspectEventSlot(EventSlot nr)
+Agnus::inspectEventSlot(EventInfo &info, EventSlot nr) const
 {
     assert_enum(EventSlot, nr);
     
-    EventSlotInfo &i = eventInfo.slotInfo[nr];
+    EventSlotInfo &i = info.slotInfo[nr];
     Cycle trigger = slot[nr].triggerCycle;
 
     i.slot = nr;
@@ -359,56 +356,6 @@ Agnus::inspectEventSlot(EventSlot nr)
             break;
 
         default: assert(false);
-    }
-}
-
-void
-Agnus::dumpEvents()
-{
-    dumpEvents(std::cout);
-}
-
-void
-Agnus::dumpEvents(std::ostream &os)
-{
-    inspectEvents();
-        
-    os << TAB(10) << "Slot";
-    os << TAB(14) << "Event";
-    os << TAB(18) << "Trigger position";
-    os << TAB(16) << "Trigger cycle" << std::endl;
-    
-
-    for (isize i = 0; i < 15; i++) {
-    // for (isize i = 0; i < SLOT_COUNT; i++) {
-
-        EventSlotInfo &info = eventInfo.slotInfo[i];
-        bool willTrigger = info.trigger != NEVER;
-        
-        os << TAB(10) << EventSlotEnum::key(info.slot);
-        os << TAB(14) << info.eventName;
-        
-        if (willTrigger) {
-            
-            if (info.frameRel == -1) {
-                os << TAB(18) << "previous frame";
-            } else if (info.frameRel > 0) {
-                os << TAB(18) << "next frame";
-            } else {
-                string vpos = std::to_string(info.vpos);
-                string hpos = std::to_string(info.hpos);
-                string pos = "(" + vpos + "," + hpos + ")";
-                os << TAB(18) << pos;
-            }
-
-            if (info.triggerRel == 0) {
-                os << TAB(16) << "due immediately";
-            } else {
-                string cycle = std::to_string(info.triggerRel / 8);
-                os << TAB(16) << "due in " + cycle + " DMA cycles";
-            }
-        }
-        os << std::endl;
     }
 }
 

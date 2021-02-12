@@ -84,7 +84,11 @@ struct OptionEnum : Reflection<OptionEnum, Option> {
             case OPT_CIA_REVISION:        return "CIA_REVISION";
             case OPT_TODBUG:              return "TODBUG";
             case OPT_ECLOCK_SYNCING:      return "ECLOCK_SYNCING";
+                
             case OPT_ACCURATE_KEYBOARD:   return "ACCURATE_KEYBOARD";
+                
+            case OPT_PULLUP_RESISTORS:    return "PULLUP_RESISTORS";
+            case OPT_MOUSE_VELOCITY:      return "MOUSE_VELOCITY";
                 
             case OPT_SAMPLING_METHOD:     return "SAMPLING_METHOD";
             case OPT_FILTER_TYPE:         return "FILTER_TYPE";

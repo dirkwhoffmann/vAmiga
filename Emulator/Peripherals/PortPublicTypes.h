@@ -105,5 +105,6 @@ SerialPortInfo;
 typedef struct
 {
     bool pullUpResistors;
+    long velocity;
 }
 MouseConfig;

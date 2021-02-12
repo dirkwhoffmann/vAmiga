@@ -11,6 +11,7 @@
 
 RTC::RTC(Amiga& ref) : AmigaComponent(ref)
 {
+    config.model = RTC_OKI;
 }
 
 long
@@ -82,14 +83,15 @@ RTC::_dump(Dump::Category category, std::ostream& os) const
 {
     if (category & Dump::Config) {
         
-        os << "Chip Model: " << RTCRevisionEnum::key(config.model) << endl;
+        os << DUMP("Chip Model") << RTCRevisionEnum::key(config.model) << endl;
     }
     
-    if (category & Dump::State) {
+    if (category & Dump::Registers) {
         
-        for (isize i = 0; i < 4; i++) {
-            for (isize j = 0; j < 16; j++) {
-                os << DEC << i << ": " << HEX8 << (int)reg[i][j];
+        for (isize i = 0; i < 16; i++) {
+            os << "    " << std::hex << i << " : ";
+            for (isize j = 0; j < 4; j++) {
+                os << HEX8 << (isize)reg[j][i] << " ";
             }
             os << std::endl;
         }

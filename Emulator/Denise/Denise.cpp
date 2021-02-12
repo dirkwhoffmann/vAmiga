@@ -205,10 +205,11 @@ Denise::_dump(Dump::Category category, std::ostream& os) const
         os << "  BPLCON3: " << HEX16 << bplcon3 << std::endl;
         
         for (isize i = 0; i < 8; i++) {
+            
             os << " SPR"+std::to_string(i)+"DATA: " << HEX16 << sprdata[i];
             os << " SPR"+std::to_string(i)+"DATB: " << HEX16 << sprdatb[i];
-            os << " SPR"+std::to_string(i)+"POS: "  << HEX16 << sprpos[i];
-            os << " SPR"+std::to_string(i)+"CTL: "  << HEX16 << sprctl[i];
+            os << "  SPR"+std::to_string(i)+"POS: " << HEX16 << sprpos[i];
+            os << "  SPR"+std::to_string(i)+"CTL: " << HEX16 << sprctl[i];
             os << std::endl;
         }
     }

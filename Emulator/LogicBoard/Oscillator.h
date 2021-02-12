@@ -92,8 +92,11 @@ private:
     
 public:
 
-    // Returns the current kernel time the nano seconds
+    // Returns the current kernel time in nano seconds
     static u64 nanos();
+
+    // Returns the current kernel time in milli seconds
+    static u64 millis() { return nanos() / 1000000; }
     
     
     //

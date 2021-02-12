@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include "Errors.h"
 
 #include <stdio.h>
 #include <map>
@@ -17,12 +18,14 @@
 
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
 
+/*
 struct EnumParseError : public std::exception
 {
     std::string description;
     EnumParseError(const std::string &s) : description(s) { }
     const char *what() const throw() override { return  description.c_str(); }
 };
+*/
 
 template <class T, typename E> struct Reflection {
 
@@ -69,7 +72,7 @@ template <class T, typename E> struct Reflection {
         auto p = pairs();
         
         auto it = p.find(upperKey);
-        if (it == p.end()) throw EnumParseError(keyList());
+        if (it == p.end()) throw ParseEnumError(key, keyList());
         
         return (E)it->second;
     }

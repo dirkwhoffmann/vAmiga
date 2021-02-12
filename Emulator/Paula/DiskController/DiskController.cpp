@@ -76,8 +76,7 @@ DiskController::setConfigItem(Option option, long value)
             #endif
             
             if (!isValidDriveSpeed(value)) {
-                warn("Invalid drive speed: %ld\n", value);
-                return false;
+                throw ConfigArgError("-1, 1, 2, 4, 8");
             }
             if (config.speed == value) {
                 return false;

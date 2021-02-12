@@ -239,13 +239,6 @@ Agnus::enableBplDmaECS()
     updateBplEvents();
     updateBplEvent();
     updateDrawingFlags(false);
-    
-    /*
-    if (pos.v == 129) {
-        dumpBplEventTable();
-        dumpEvents();
-    }
-    */
 }
 
 void

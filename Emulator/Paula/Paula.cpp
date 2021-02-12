@@ -58,7 +58,25 @@ Paula::_inspect()
 void
 Paula::_dump(Dump::Category category, std::ostream& os) const
 {
+    if (category & Dump::State) {
     
+        os << DUMP("potCntX0") << (isize)potCntX0 << std::endl;
+        os << DUMP("potCntY0") << (isize)potCntY0 << std::endl;
+        os << DUMP("potCntX1") << (isize)potCntX1 << std::endl;
+        os << DUMP("potCntY1") << (isize)potCntY1 << std::endl;
+        os << DUMP("chargeX0") << chargeX0 << std::endl;
+        os << DUMP("chargeY0") << chargeX0 << std::endl;
+        os << DUMP("chargeX1") << chargeX1 << std::endl;
+        os << DUMP("chargeY1") << chargeY1 << std::endl;
+    }
+    
+    if (category & Dump::Registers) {
+        
+        os << DUMP("INTENA") << HEX16 << (isize)intena << std::endl;
+        os << DUMP("INTREQ") << HEX16 << (isize)intreq << std::endl;
+        os << DUMP("ADKCON") << HEX16 << (isize)adkcon << std::endl;
+        os << DUMP("POTGO") << HEX16 << (isize)potgo << std::endl;
+    }
 }
 
 isize

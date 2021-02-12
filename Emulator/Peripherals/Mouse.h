@@ -11,6 +11,29 @@
 
 #include "AmigaComponent.h"
 
+struct ShakeDetector {
+    
+    // Horizontal position
+    double x = 0.0;
+    
+    // Moved distance
+    double dxsum = 0.0;
+
+    // Direction (1 or -1)
+    double dxsign = 1.0;
+    
+    // Number of turns
+    isize dxturns = 0;
+    
+    // Time stamps
+    u64 lastTurn = 0;
+    u64 lastShake = 0;
+    
+    // Feed in new coordinates and checks for a shake
+    bool isShakingAbs(double x);
+    bool isShakingRel(double dx);
+};
+
 class Mouse : public AmigaComponent {
 
     // Reference to the control port this device belongs to
@@ -19,9 +42,9 @@ class Mouse : public AmigaComponent {
     // Current configuration
     MouseConfig config;
 
-    // The control port this device is connected to
-    // PortNr nr;
-
+    // Shake detector
+    class ShakeDetector shakeDetector;
+    
 public:
     
     // Mouse button states
@@ -46,9 +69,9 @@ private:
     double targetX;
     double targetY;
     
-    // Dividers applied to raw coordinates in setXY()
-    const double dividerX = 128;
-    const double dividerY = 128;
+    // Scaling factors applied to the raw mouse coordinates in setXY()
+    double scaleX = 1.0;
+    double scaleY = 1.0;
     
     // Mouse movement in pixels per execution step
     double shiftX = 31;
@@ -70,6 +93,22 @@ public:
     
     //
     // Configuring
+    //
+    
+public:
+    
+    const MouseConfig &getConfig() const { return config; }
+
+    long getConfigItem(Option option) const;
+    bool setConfigItem(Option option, long id, long value) override;
+    
+private:
+    
+    void updateScalingFactors();
+    
+    
+    //
+    // Analyzing
     //
     
 private:
