@@ -9,9 +9,28 @@
 
 #pragma once
 
-// #include "HardwareComponent.h"
 #include "Concurrency.h"
 #include "Buffers.h"
+
+/* About the AudioStream
+ *
+ * The audio stream is the last element in the audio pipeline. It is a temporary
+ * stores for the final audio samples, waiting to be handed over to the audio
+ * unit of the host machine.
+ *
+ * The audio stream is designes as a ring buffer, because samples are written
+ * and read asynchroneously. Since reading and writing is carried out in
+ * different threads, accesses to the audio stream need to a preceded by a call
+ * lock() and followed by a call to unlock().
+ *
+ * The audio stream is designed to hold elements of a generic type to make
+ * vAmiga compilable on different target platforms. E.g., the Mac version holds
+ * elements of type FloatStereo, because the audio backend in macOS expects
+ * sound samples in form of float values. In the SFML version, the audio stream
+ * is instantiated with elements of type U16Stereo, because the frameworks
+ * expects audio samples to be provided as an (interleaved) stream of short
+ * integers.
+ */
 
 //
 // Volume

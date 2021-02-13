@@ -26,6 +26,7 @@ template <class T, isize capacity> struct RingBuffer
     // Read and write pointers
     i64 r, w;
 
+    
     //
     // Initializing
     //
@@ -36,6 +37,7 @@ template <class T, isize capacity> struct RingBuffer
     void clear(T t) { for (isize i = 0; i < capacity; i++) elements[i] = t; clear(); }
     void align(i64 offset) { w = (r + offset) % capacity; }
 
+    
     //
     // Serializing
     //
