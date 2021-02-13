@@ -77,7 +77,7 @@ public:
     Sampler *sampler[4];
 
     // Output
-    AudioStream<SamplePair> stream;
+    AudioStream<FloatStereo> stream;
     
     // Audio filters
     AudioFilter filterL = AudioFilter(amiga);
@@ -227,7 +227,6 @@ public:
     
 public:
     
-    void copyMono(float *buffer, isize n);
-    void copyStereo(float *left, float *right, isize n);
-    void copyInterleaved(float *buffer, isize n);
+    void copy(float *buffer, isize n);
+    void copy(float *buffer1, float *buffer12, isize n);
 };

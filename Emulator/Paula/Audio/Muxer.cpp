@@ -51,7 +51,7 @@ Muxer::clear()
     trace(AUDBUF_DEBUG, "clear()\n");
     
     // Wipe out the ringbuffer
-    stream.clear(SamplePair {0, 0});
+    stream.wipeOut();
     stream.alignWritePtr();
     
     // Wipe out the filter buffers
@@ -360,7 +360,7 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         r *= volR;
         
         // Write sample into ringbuffer
-        stream.write( SamplePair { l, r } );
+        stream.add(l, r);
         
         cycle += cyclesPerSample;
     }
@@ -437,7 +437,7 @@ Muxer::ignoreNextUnderOrOverflow()
 }
 
 void
-Muxer::copyMono(float *buffer, isize n)
+Muxer::copy(float *buffer, isize n)
 {
     stream.lock();
     
@@ -445,13 +445,13 @@ Muxer::copyMono(float *buffer, isize n)
     if (stream.count() < n) handleBufferUnderflow();
     
     // Copy sound samples
-    stream.copyMono(buffer, n, volume);
+    stream.copy(buffer, n, volume);
     
     stream.unlock();
 }
 
 void
-Muxer::copyStereo(float *left, float *right, isize n)
+Muxer::copy(float *buffer1, float *buffer2, isize n)
 {
     stream.lock();
     
@@ -459,21 +459,7 @@ Muxer::copyStereo(float *left, float *right, isize n)
     if (stream.count() < n) handleBufferUnderflow();
     
     // Copy sound samples
-    stream.copy(left, right, n, volume);
-    
-    stream.unlock();
-}
-
-void
-Muxer::copyInterleaved(float *buffer, isize n)
-{
-    stream.lock();
-    
-    // Check for a buffer underflow
-    if (stream.count() < n) handleBufferUnderflow();
-    
-    // Copy sound samples
-    stream.copyInterleaved(buffer, n, volume);
+    stream.copy(buffer1, buffer2, n, volume);
     
     stream.unlock();
 }

@@ -10,7 +10,7 @@
 #include "Amiga.h"
 
 template <class T> void
-AudioStream<T>::copyMono(float *buffer, isize n, Volume &vol)
+AudioStream<T>::copy(void *buffer, isize n, Volume &vol)
 {
     // The caller has to ensure that no buffer underflows occurs
     assert(this->count() >= n);
@@ -21,15 +21,18 @@ AudioStream<T>::copyMono(float *buffer, isize n, Volume &vol)
         if (vol.current == 0) {
 
             for (isize i = 0; i < n; i++) {
-                buffer[i] = 0;
+                T zero;
+                for (isize i = 0; i < n; i++) {
+                    zero.copy(buffer, i);
+                }
             }
             return;
         }
         if (vol.current == 1.0) {
 
             for (isize i = 0; i < n; i++) {
-                SamplePair pair = this->read();
-                buffer[i] = pair.left + pair.right;
+                T sample = this->read();
+                sample.copy(buffer, i);
             }
             return;
         }
@@ -38,13 +41,14 @@ AudioStream<T>::copyMono(float *buffer, isize n, Volume &vol)
     // Generic path: Modulate the volume
     for (isize i = 0; i < n; i++) {
         vol.shift();
-        SamplePair pair = this->read();
-        *buffer++ = (pair.left + pair.right) * vol.current;
+        FloatStereo pair = this->read();
+        pair.modulate(vol.current);
+        pair.copy(buffer, i);
     }
 }
 
 template <class T> void
-AudioStream<T>::copy(float *left, float *right, isize n, Volume &vol)
+AudioStream<T>::copy(void *buffer1, void *buffer2, isize n, Volume &vol)
 {
     // The caller has to ensure that no buffer underflows occurs
     assert(this->count() >= n);
@@ -54,18 +58,17 @@ AudioStream<T>::copy(float *left, float *right, isize n, Volume &vol)
 
         if (vol.current == 0) {
 
+            T zero;
             for (isize i = 0; i < n; i++) {
-                left[i] = 0;
-                right[i] = 0;
+                zero.copy(buffer1, buffer2, i);
             }
             return;
         }
         if (vol.current == 1.0) {
 
             for (isize i = 0; i < n; i++) {
-                SamplePair pair = this->read();
-                left[i] = pair.left;
-                right[i] = pair.right;
+                FloatStereo pair = this->read();
+                pair.copy(buffer1, buffer2, i);
             }
             return;
         }
@@ -74,46 +77,9 @@ AudioStream<T>::copy(float *left, float *right, isize n, Volume &vol)
     // Generic path: Modulate the volume
     for (isize i = 0; i < n; i++) {
         vol.shift();
-        SamplePair pair = this->read();
-        left[i] = pair.left * vol.current;
-        right[i] = pair.right * vol.current;
-    }
-}
-
-template <class T> void
-AudioStream<T>::copyInterleaved(float *buffer, isize n, Volume &vol)
-{
-    // The caller has to ensure that no buffer underflows occurs
-    assert(this->count() >= n);
-
-    // Quick path: Volume is stable at 0 or 1
-    if (!vol.fading()) {
-
-        if (vol.current == 0) {
-
-            for (isize i = 0; i < n; i++) {
-                *buffer++ = 0;
-                *buffer++ = 0;
-            }
-            return;
-        }
-        if (vol.current == 1.0) {
-
-            SamplePair *p = (SamplePair *)buffer;
-            
-            for (isize i = 0; i < n; i++) {
-                p[i] = this->read();
-            }
-            return;
-        }
-    }
-    
-    // Generic path: Modulate the volume
-    for (isize i = 0; i < n; i++) {
-        vol.shift();
-        SamplePair pair = this->read();
-        *buffer++ = pair.left * vol.current;
-        *buffer++ = pair.right * vol.current;
+        FloatStereo pair = this->read();
+        pair.modulate(vol.current);
+        pair.copy(buffer1, buffer2, i);
     }
 }
 
@@ -133,8 +99,8 @@ AudioStream<T>::draw(u32 *buffer, isize width, isize height,
     for (isize w = 0; w < width; w++) {
         
         // Read samples from ringbuffer
-        SamplePair pair = this->current(w * dw);
-        float sample = left ? abs(pair.left) : abs(pair.right);
+        FloatStereo pair = this->current(w * dw);
+        float sample = left ? abs(pair.l) : abs(pair.r);
         
         if (sample == 0) {
             
@@ -165,7 +131,6 @@ AudioStream<T>::draw(u32 *buffer, isize width, isize height,
 // Instantiate template functions
 //
 
-template void AudioStream<SamplePair>::copyMono(float *, isize, Volume &);
-template void AudioStream<SamplePair>::copy(float *, float *, isize, Volume &);
-template void AudioStream<SamplePair>::copyInterleaved(float *, isize, Volume &vol);
-template float AudioStream<SamplePair>::draw(u32 *, isize, isize, bool, float, u32);
+template void AudioStream<FloatStereo>::copy(void *, isize, Volume &);
+template void AudioStream<FloatStereo>::copy(void *, void *, isize, Volume &);
+template float AudioStream<FloatStereo>::draw(u32 *, isize, isize, bool, float, u32);

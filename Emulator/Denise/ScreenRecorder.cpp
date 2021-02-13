@@ -296,7 +296,7 @@ ScreenRecorder::vsyncHandler(Cycle target)
         
         // Copy samples to buffer
         float *samples = new float[2 * samplesPerFrame];
-        muxer.copyInterleaved(samples, samplesPerFrame);
+        muxer.copy(samples, samplesPerFrame);
         
         // Feed the audio pipe
         assert(audioPipe != -1);

@@ -40,12 +40,29 @@ struct Volume {
     }
 };
 
-typedef struct
+struct FloatStereo
 {
-    float left;
-    float right;
-}
-SamplePair;
+    float l;
+    float r;
+    
+    FloatStereo() { l = 0; r = 0; }
+    FloatStereo(float l, float r) { this->l = l * 1.0; this->r = r * 1.0; }
+    
+    // Modulates the volume
+    void modulate(float vol) { l *= vol; r *= vol; }
+    
+    // Copies the sample to an interleaved stereo stream
+    void copy(void *buffer, isize offset) {
+        ((FloatStereo *)buffer)[offset] = *this;
+    }
+    
+    // Copies the sample to a channel-seperated stereo stream
+    void copy(void *left, void *right, isize offset)
+    {
+        ((float *)left)[offset] = l;
+        ((float *)right)[offset] = r;
+    }
+};
 
 template <class T> class AudioStream : public RingBuffer <T, 16384> {
 
@@ -58,6 +75,12 @@ public:
     void lock() { mutex.lock(); }
     void unlock() { mutex.unlock(); }
 
+    // Initializes the ring buffer with zeroes
+    void wipeOut() { this->clear(T(0,0)); }
+    
+    // Adds a sample to the ring buffer
+    void add(float l, float r) { this->write(T(l,r)); }
+        
     /* Aligns the write pointer. This function puts the write pointer somewhat
      * ahead of the read pointer. With a standard sample rate of 44100 Hz,
      * 735 samples is 1/60 sec.
@@ -73,11 +96,11 @@ public:
     /* Copies n audio samples into a memory buffer. These functions mark the
      * final step in the audio pipeline. They are used to copy the generated
      * sound samples into the buffers of the native sound device. In additon
-     * to copying, the volume is modulated and audio filters can be applied.
+     * to copying, the volume is modulated if the music is supposed to fade
+     * in or fade out.
      */
-    void copyMono(float *buffer, isize n, Volume &vol);
-    void copy(float *left, float *right, isize n, Volume &vol);
-    void copyInterleaved(float *buffer, isize n, Volume &vol);
+    void copy(void *buffer, isize n, Volume &vol);
+    void copy(void *buffer1, void *buffer2, isize n, Volume &vol);
     
     
     //

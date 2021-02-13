@@ -914,12 +914,12 @@ using namespace moira;
 
 - (void)readMonoSamples:(float *)target size:(NSInteger)n
 {
-    [self paula]->muxer.copyMono(target, n);
+    [self paula]->muxer.copy(target, n);
 }
 
 - (void)readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
 {
-    [self paula]->muxer.copyStereo(target1, target2, n);
+    [self paula]->muxer.copy(target1, target2, n);
 }
 
 - (void)rampUp
