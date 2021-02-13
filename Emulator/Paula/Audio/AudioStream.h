@@ -13,6 +13,10 @@
 #include "Concurrency.h"
 #include "Buffers.h"
 
+//
+// Volume
+//
+
 struct Volume {
 
     // Maximum volume
@@ -40,29 +44,57 @@ struct Volume {
     }
 };
 
+
+//
+// Sample types
+//
+
 struct FloatStereo
 {
     float l;
     float r;
     
     FloatStereo() { l = 0; r = 0; }
-    FloatStereo(float l, float r) { this->l = l * 1.0; this->r = r * 1.0; }
+    FloatStereo(float l, float r) { this->l = l * 0.0000025; this->r = r * 0.0000025; }
     
-    // Modulates the volume
     void modulate(float vol) { l *= vol; r *= vol; }
     
-    // Copies the sample to an interleaved stereo stream
     void copy(void *buffer, isize offset) {
         ((FloatStereo *)buffer)[offset] = *this;
     }
     
-    // Copies the sample to a channel-seperated stereo stream
     void copy(void *left, void *right, isize offset)
     {
         ((float *)left)[offset] = l;
         ((float *)right)[offset] = r;
     }
 };
+
+struct U16Stereo
+{
+    u16 l;
+    u16 r;
+    
+    U16Stereo() { l = 0; r = 0; }
+    U16Stereo(float l, float r) { this->l = (u16)l; this->r = (u16)r; }
+    
+    void modulate(float vol) { l = (u16)(l * vol); r = (u16)(r * vol); }
+    
+    void copy(void *buffer, isize offset) {
+        ((U16Stereo *)buffer)[offset] = *this;
+    }
+    
+    void copy(void *left, void *right, isize offset)
+    {
+        ((u16 *)left)[offset] = l;
+        ((u16 *)right)[offset] = r;
+    }
+};
+
+
+//
+// AudioStream
+//
 
 template <class T> class AudioStream : public RingBuffer <T, 16384> {
 

@@ -187,7 +187,7 @@ Muxer::setConfigItem(Option option, long id, long value)
             if (value > 100) value = 100;
             
             config.vol[id] = value;
-            vol[id] = pow((double)value / 100, 1.4) * 0.0000025;
+            vol[id] = pow((double)value / 100, 1.4);
             
             return true;
             

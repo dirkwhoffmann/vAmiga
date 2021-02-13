@@ -22,6 +22,14 @@
 // #define RELEASEBUILD
 // #define NDEBUG
 
+
+//
+// Build settings
+//
+
+// Defines the audio sample type of the host machine's audio backend
+#define AUDIO_SAMPLE_TYPE FloatStereo
+
 //
 // Configuration overrides
 //
@@ -53,12 +61,6 @@
 
 // Uncomment to colorize certain rasterlines
 // #define LINE_DEBUG (agnus.pos.v == 260 || agnus.pos.v == 300)
-
-
-//
-// Compatibility settings
-//
-
 
 
 //

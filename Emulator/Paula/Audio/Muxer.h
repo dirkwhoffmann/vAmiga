@@ -77,7 +77,7 @@ public:
     Sampler *sampler[4];
 
     // Output
-    AudioStream<FloatStereo> stream;
+    AudioStream<AUDIO_SAMPLE_TYPE> stream;
     
     // Audio filters
     AudioFilter filterL = AudioFilter(amiga);
