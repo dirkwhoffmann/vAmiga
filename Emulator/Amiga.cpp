@@ -104,7 +104,7 @@ Amiga::Amiga()
         
         msg("             Agnus : %lu bytes\n", sizeof(Agnus));
         msg("       AudioFilter : %lu bytes\n", sizeof(AudioFilter));
-        msg("       AudioStream : %lu bytes\n", sizeof(AudioStream));
+        // msg("       AudioStream : %lu bytes\n", sizeof(AudioStream));
         msg("               CIA : %lu bytes\n", sizeof(CIA));
         msg("       ControlPort : %lu bytes\n", sizeof(ControlPort));
         msg("               CPU : %lu bytes\n", sizeof(CPU));

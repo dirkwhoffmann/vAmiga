@@ -9,8 +9,9 @@
 
 #pragma once
 
-#include "HardwareComponent.h"
+// #include "HardwareComponent.h"
 #include "Concurrency.h"
+#include "Buffers.h"
 
 struct Volume {
 
@@ -46,7 +47,7 @@ typedef struct
 }
 SamplePair;
 
-class AudioStream : public RingBuffer <SamplePair, 16384> {
+template <class T> class AudioStream : public RingBuffer <T, 16384> {
 
     // Mutex for synchronizing read / write accesses 
     Mutex mutex;
@@ -61,8 +62,8 @@ public:
      * ahead of the read pointer. With a standard sample rate of 44100 Hz,
      * 735 samples is 1/60 sec.
      */
-    static constexpr u32 samplesAhead() { return 8 * 735; }
-    void alignWritePtr() { align(samplesAhead()); }
+    static constexpr i64 samplesAhead() { return 8 * 735; }
+    void alignWritePtr() { this->align(samplesAhead()); }
     
     
     //

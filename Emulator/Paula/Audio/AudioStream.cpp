@@ -9,11 +9,11 @@
 
 #include "Amiga.h"
 
-void
-AudioStream::copyMono(float *buffer, isize n, Volume &vol)
+template <class T> void
+AudioStream<T>::copyMono(float *buffer, isize n, Volume &vol)
 {
     // The caller has to ensure that no buffer underflows occurs
-    assert(count() >= n);
+    assert(this->count() >= n);
 
     // Quick path: Volume is stable at 0 or 1
     if (!vol.fading()) {
@@ -28,7 +28,7 @@ AudioStream::copyMono(float *buffer, isize n, Volume &vol)
         if (vol.current == 1.0) {
 
             for (isize i = 0; i < n; i++) {
-                SamplePair pair = read();
+                SamplePair pair = this->read();
                 buffer[i] = pair.left + pair.right;
             }
             return;
@@ -38,16 +38,16 @@ AudioStream::copyMono(float *buffer, isize n, Volume &vol)
     // Generic path: Modulate the volume
     for (isize i = 0; i < n; i++) {
         vol.shift();
-        SamplePair pair = read();
+        SamplePair pair = this->read();
         *buffer++ = (pair.left + pair.right) * vol.current;
     }
 }
 
-void
-AudioStream::copy(float *left, float *right, isize n, Volume &vol)
+template <class T> void
+AudioStream<T>::copy(float *left, float *right, isize n, Volume &vol)
 {
     // The caller has to ensure that no buffer underflows occurs
-    assert(count() >= n);
+    assert(this->count() >= n);
 
     // Quick path: Volume is stable at 0 or 1
     if (!vol.fading()) {
@@ -63,7 +63,7 @@ AudioStream::copy(float *left, float *right, isize n, Volume &vol)
         if (vol.current == 1.0) {
 
             for (isize i = 0; i < n; i++) {
-                SamplePair pair = read();
+                SamplePair pair = this->read();
                 left[i] = pair.left;
                 right[i] = pair.right;
             }
@@ -74,17 +74,17 @@ AudioStream::copy(float *left, float *right, isize n, Volume &vol)
     // Generic path: Modulate the volume
     for (isize i = 0; i < n; i++) {
         vol.shift();
-        SamplePair pair = read();
+        SamplePair pair = this->read();
         left[i] = pair.left * vol.current;
         right[i] = pair.right * vol.current;
     }
 }
 
-void
-AudioStream::copyInterleaved(float *buffer, isize n, Volume &vol)
+template <class T> void
+AudioStream<T>::copyInterleaved(float *buffer, isize n, Volume &vol)
 {
     // The caller has to ensure that no buffer underflows occurs
-    assert(count() >= n);
+    assert(this->count() >= n);
 
     // Quick path: Volume is stable at 0 or 1
     if (!vol.fading()) {
@@ -102,7 +102,7 @@ AudioStream::copyInterleaved(float *buffer, isize n, Volume &vol)
             SamplePair *p = (SamplePair *)buffer;
             
             for (isize i = 0; i < n; i++) {
-                p[i] = read();
+                p[i] = this->read();
             }
             return;
         }
@@ -111,17 +111,17 @@ AudioStream::copyInterleaved(float *buffer, isize n, Volume &vol)
     // Generic path: Modulate the volume
     for (isize i = 0; i < n; i++) {
         vol.shift();
-        SamplePair pair = read();
+        SamplePair pair = this->read();
         *buffer++ = pair.left * vol.current;
         *buffer++ = pair.right * vol.current;
     }
 }
 
-float
-AudioStream::draw(u32 *buffer, isize width, isize height,
-                  bool left, float highestAmplitude, u32 color)
+template <class T> float
+AudioStream<T>::draw(u32 *buffer, isize width, isize height,
+                     bool left, float highestAmplitude, u32 color)
 {
-    isize dw = cap() / width;
+    isize dw = this->cap() / width;
     float newHighestAmplitude = 0.001;
     
     // Clear buffer
@@ -133,7 +133,7 @@ AudioStream::draw(u32 *buffer, isize width, isize height,
     for (isize w = 0; w < width; w++) {
         
         // Read samples from ringbuffer
-        SamplePair pair = current(w * dw);
+        SamplePair pair = this->current(w * dw);
         float sample = left ? abs(pair.left) : abs(pair.right);
         
         if (sample == 0) {
@@ -160,3 +160,12 @@ AudioStream::draw(u32 *buffer, isize width, isize height,
     }
     return newHighestAmplitude;
 }
+
+//
+// Instantiate template functions
+//
+
+template void AudioStream<SamplePair>::copyMono(float *, isize, Volume &);
+template void AudioStream<SamplePair>::copy(float *, float *, isize, Volume &);
+template void AudioStream<SamplePair>::copyInterleaved(float *, isize, Volume &vol);
+template float AudioStream<SamplePair>::draw(u32 *, isize, isize, bool, float, u32);

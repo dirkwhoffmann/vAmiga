@@ -77,7 +77,7 @@ public:
     Sampler *sampler[4];
 
     // Output
-    AudioStream stream;
+    AudioStream<SamplePair> stream;
     
     // Audio filters
     AudioFilter filterL = AudioFilter(amiga);
