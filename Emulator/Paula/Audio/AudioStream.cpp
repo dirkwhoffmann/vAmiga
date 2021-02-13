@@ -99,10 +99,10 @@ AudioStream::copyInterleaved(float *buffer, isize n, Volume &vol)
         }
         if (vol.current == 1.0) {
 
+            SamplePair *p = (SamplePair *)buffer;
+            
             for (isize i = 0; i < n; i++) {
-                SamplePair pair = read();
-                *buffer++ = pair.left;
-                *buffer++ = pair.right;
+                p[i] = read();
             }
             return;
         }
