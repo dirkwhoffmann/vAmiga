@@ -10,115 +10,110 @@
 #include "Amiga.h"
 
 void
-AudioStream::copyMono(float *buffer, isize n,
-                      i32 &volume, i32 targetVolume, i32 volumeDelta)
+AudioStream::copyMono(float *buffer, isize n, Volume &vol)
 {
     // The caller has to ensure that no buffer underflows occurs
     assert(count() >= n);
 
-    if (volume == targetVolume) {
-        
-        float scale = volume / 10000.0f;
-        
-        for (isize i = 0; i < n; i++) {
-            
-            SamplePair pair = read();
-            *buffer++ = (pair.left + pair.right) * scale;
-        }
+    // Quick path: Volume is stable at 0 or 1
+    if (!vol.fading()) {
 
-    } else {
-        
-        for (isize i = 0; i < n; i++) {
-                            
-            if (volume < targetVolume) {
-                volume += MIN(volumeDelta, targetVolume - volume);
-            } else {
-                volume -= MIN(volumeDelta, volume - targetVolume);
+        if (vol.current == 0) {
+
+            for (isize i = 0; i < n; i++) {
+                buffer[i] = 0;
             }
-
-            float scale = volume / 10000.0f;
-
-            SamplePair pair = read();
-            *buffer++ = (pair.left + pair.right) * scale;
+            return;
         }
+        if (vol.current == 1.0) {
+
+            for (isize i = 0; i < n; i++) {
+                SamplePair pair = read();
+                buffer[i] = pair.left + pair.right;
+            }
+            return;
+        }
+    }
+    
+    // Generic path: Modulate the volume
+    for (isize i = 0; i < n; i++) {
+        vol.shift();
+        SamplePair pair = read();
+        *buffer++ = (pair.left + pair.right) * vol.current;
     }
 }
 
 void
-AudioStream::copy(float *left, float *right, isize n,
-                  i32 &volume, i32 targetVolume, i32 volumeDelta)
+AudioStream::copy(float *left, float *right, isize n, Volume &vol)
 {
     // The caller has to ensure that no buffer underflows occurs
-    if (count() < n) {
-        printf("count() = \(count()) n = \(n)");
-        assert(false);
-    }
     assert(count() >= n);
 
-    if (volume == targetVolume) {
-        
-        float scale = volume / 10000.0f;
-        
-        for (isize i = 0; i < n; i++) {
-            
-            SamplePair pair = read();
-            *left++ = pair.left * scale;
-            *right++ = pair.right * scale;
-        }
+    // Quick path: Volume is stable at 0 or 1
+    if (!vol.fading()) {
 
-    } else {
-        
-        for (isize i = 0; i < n; i++) {
-                            
-            if (volume < targetVolume) {
-                volume += MIN(volumeDelta, targetVolume - volume);
-            } else {
-                volume -= MIN(volumeDelta, volume - targetVolume);
+        if (vol.current == 0) {
+
+            for (isize i = 0; i < n; i++) {
+                left[i] = 0;
+                right[i] = 0;
             }
-
-            float scale = volume / 10000.0f;
-
-            SamplePair pair = read();
-            *left++ = pair.left * scale;
-            *right++ = pair.right * scale;
+            return;
         }
+        if (vol.current == 1.0) {
+
+            for (isize i = 0; i < n; i++) {
+                SamplePair pair = read();
+                left[i] = pair.left;
+                right[i] = pair.right;
+            }
+            return;
+        }
+    }
+    
+    // Generic path: Modulate the volume
+    for (isize i = 0; i < n; i++) {
+        vol.shift();
+        SamplePair pair = read();
+        left[i] = pair.left * vol.current;
+        right[i] = pair.right * vol.current;
     }
 }
 
 void
-AudioStream::copyInterleaved(float *buffer, isize n,
-                             i32 &volume, i32 targetVolume, i32 volumeDelta)
+AudioStream::copyInterleaved(float *buffer, isize n, Volume &vol)
 {
     // The caller has to ensure that no buffer underflows occurs
     assert(count() >= n);
 
-    if (volume == targetVolume) {
-        
-        float scale = volume / 10000.0f;
-        
-        for (isize i = 0; i < n; i++) {
-            
-            SamplePair pair = read();
-            *buffer++ = pair.left * scale;
-            *buffer++ = pair.right * scale;
-        }
+    // Quick path: Volume is stable at 0 or 1
+    if (!vol.fading()) {
 
-    } else {
-        
-        for (isize i = 0; i < n; i++) {
-                            
-            if (volume < targetVolume) {
-                volume += MIN(volumeDelta, targetVolume - volume);
-            } else {
-                volume -= MIN(volumeDelta, volume - targetVolume);
+        if (vol.current == 0) {
+
+            for (isize i = 0; i < n; i++) {
+                *buffer++ = 0;
+                *buffer++ = 0;
             }
-
-            float scale = volume / 10000.0f;
-
-            SamplePair pair = read();
-            *buffer++ = pair.left * scale;
-            *buffer++ = pair.right * scale;
+            return;
         }
+        if (vol.current == 1.0) {
+
+            for (isize i = 0; i < n; i++) {
+                SamplePair pair = read();
+                *buffer++ = pair.left;
+                *buffer++ = pair.right;
+            }
+            return;
+        }
+    }
+    
+    // Generic path: Modulate the volume
+    for (isize i = 0; i < n; i++) {
+        vol.shift();
+        SamplePair pair = read();
+        *buffer++ = pair.left * vol.current;
+        *buffer++ = pair.right * vol.current;
     }
 }
 

@@ -12,22 +12,37 @@
 #include "HardwareComponent.h"
 #include "Concurrency.h"
 
+struct Volume {
+
+    // Maximum volume
+    // constexpr const static float maxVolume = 1.0;
+
+    // Current volume (will eventually reach the target volume)
+    float current = 1.0;
+
+    // Target volume
+    float target = 1.0;
+
+    // Delta steps (added to volume until the target volume is reached)
+    float delta = 0;
+
+    bool fading() { return current != target; }
+    bool silent() { return current == 0.0; }
+    
+    // Shifts the current volume towards the target volume
+    void shift() {
+        if (current < target) {
+            current += MIN(delta, target - current);
+        } else {
+            current -= MIN(delta, current - target);
+        }
+    }
+};
+
 typedef struct
 {
     float left;
     float right;
-    
-    /*
-    template <class T>
-    void applyToItems(T& worker)
-    {
-        worker
-
-        & left
-        & right;
-    }
-    */
-
 }
 SamplePair;
 
@@ -59,14 +74,9 @@ public:
      * sound samples into the buffers of the native sound device. In additon
      * to copying, the volume is modulated and audio filters can be applied.
      */
-    void copyMono(float *buffer, isize n,
-                  i32 &volume, i32 targetVolume, i32 volumeDelta);
-    
-    void copy(float *left, float *right, isize n,
-                    i32 &volume, i32 targetVolume, i32 volumeDelta);
-    
-    void copyInterleaved(float *buffer, isize n,
-                         i32 &volume, i32 targetVolume, i32 volumeDelta);
+    void copyMono(float *buffer, isize n, Volume &vol);
+    void copy(float *left, float *right, isize n, Volume &vol);
+    void copyInterleaved(float *buffer, isize n, Volume &vol);
     
     
     //

@@ -35,30 +35,6 @@
  *           -----------------------------------------------------
  */
 
-struct Volume {
-
-    // Maximum volume
-    const static i32 maxVolume = 100000;
-
-    // Current volume (will eventually reach the target volume)
-    i32 current = maxVolume;
-
-    // Target volume
-    i32 target = maxVolume;
-
-    // Delta steps (added to volume until the target volume is reached)
-    i32 delta = 0;
-
-    // Shifts the current volume towards the target volume
-    void shift() {
-        if (current < target) {
-            current += MIN(delta, target - current);
-        } else {
-            current -= MIN(delta, current - target);
-        }
-    }
-};
-
 class Muxer : public AmigaComponent {
 
     // Current configuration

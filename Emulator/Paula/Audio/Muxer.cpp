@@ -264,7 +264,7 @@ Muxer::rampUp()
     // Only proceed if the emulator is not running in warp mode
     if (warpMode) return;
     
-    volume.target = Volume::maxVolume;
+    volume.target = 1.0;
     volume.delta = 3;
     ignoreNextUnderOrOverflow();
 }
@@ -272,14 +272,14 @@ Muxer::rampUp()
 void
 Muxer::rampUpFromZero()
 {
-    volume.current = 0;
+    volume.current = 0.0;
     rampUp();
 }
  
 void
 Muxer::rampDown()
 {
-    volume.target = 0;
+    volume.target = 0.0;
     volume.delta = 50;
     ignoreNextUnderOrOverflow();
 }
@@ -445,7 +445,7 @@ Muxer::copyMono(float *buffer, isize n)
     if (stream.count() < n) handleBufferUnderflow();
     
     // Copy sound samples
-    stream.copyMono(buffer, n, volume.current, volume.target, volume.delta);
+    stream.copyMono(buffer, n, volume);
     
     stream.unlock();
 }
@@ -459,7 +459,7 @@ Muxer::copyStereo(float *left, float *right, isize n)
     if (stream.count() < n) handleBufferUnderflow();
     
     // Copy sound samples
-    stream.copy(left, right, n, volume.current, volume.target, volume.delta);
+    stream.copy(left, right, n, volume);
     
     stream.unlock();
 }
@@ -473,7 +473,7 @@ Muxer::copyInterleaved(float *buffer, isize n)
     if (stream.count() < n) handleBufferUnderflow();
     
     // Copy sound samples
-    stream.copyInterleaved(buffer, n, volume.current, volume.target, volume.delta);
+    stream.copyInterleaved(buffer, n, volume);
     
     stream.unlock();
 }
