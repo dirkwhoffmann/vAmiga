@@ -399,7 +399,7 @@ Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask)
     // Check the invariants
     assert((ptr == nullptr) == (size == 0));
     assert((ptr == nullptr) == (mask == 0));
-    assert((ptr == nullptr) || (mask == size - 1));
+    assert((ptr == nullptr) || (mask == (u32)size - 1));
 
     // Only proceed if memory layout changes
     if (bytes == size) return true;

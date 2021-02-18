@@ -75,12 +75,12 @@ FSPartition::FSPartition(FSDevice &ref) : dev(ref)
 void
 FSPartition::info() const
 {
-    msg("DOS%lld  ",      dos);
-    msg("%6zd (x %3zd) ", numBlocks(), bsize());
-    msg("%6zd  ",         usedBlocks());
-    msg("%6zd   ",        freeBlocks());
-    msg("%3zd%%   ",      (isize)(100.0 * usedBlocks() / numBlocks()));
-    msg("%s\n",           getName().c_str());
+    msg("DOS%lld  ",       dos);
+    msg("%6lld (x %3zd) ", numBlocks(), bsize());
+    msg("%6zd  ",          usedBlocks());
+    msg("%6zd   ",         freeBlocks());
+    msg("%3zd%%   ",       (isize)(100.0 * usedBlocks() / numBlocks()));
+    msg("%s\n",            getName().c_str());
     msg("\n");
 }
 
@@ -161,7 +161,7 @@ FSPartition::bsize() const
     return dev.bsize;
 }
 
-isize
+i64
 FSPartition::numBlocks() const
 {
     return numCyls() * dev.numHeads * dev.numSectors;

@@ -20,7 +20,7 @@ const u32 FAST_RAM_STRT = 0x200000;
 #define ASSERT_CHIP_ADDR(x) \
 assert(((x) % config.chipSize) == ((x) & chipMask));
 #define ASSERT_FAST_ADDR(x) \
-assert(((x) - FAST_RAM_STRT) < config.fastSize);
+assert(((x) - FAST_RAM_STRT) < (u32)config.fastSize);
 #define ASSERT_SLOW_ADDR(x) \
 assert(((x) % config.slowSize) == ((x) & slowMask));
 #define ASSERT_ROM_ADDR(x) \

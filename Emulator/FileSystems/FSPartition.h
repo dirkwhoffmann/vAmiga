@@ -81,7 +81,7 @@ public:
 
     // Reports layout information about this partition
     isize numCyls() const { return highCyl - lowCyl + 1; }
-    isize numBlocks() const;
+    i64 numBlocks() const;
     isize numBytes() const;
     
     // Reports usage information about this partition

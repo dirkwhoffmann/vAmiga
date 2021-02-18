@@ -158,12 +158,8 @@ public:
     // Adds a sample to the ring buffer
     void add(float l, float r) { this->write(T(l,r)); }
         
-    /* Aligns the write pointer. This function puts the write pointer somewhat
-     * ahead of the read pointer. With a standard sample rate of 44100 Hz,
-     * 735 samples is 1/60 sec.
-     */
-    static constexpr i64 samplesAhead() { return 8 * 735; }
-    void alignWritePtr() { this->align(samplesAhead()); }
+    // Puts the write pointer somewhat ahead of the read pointer
+    void alignWritePtr();
     
     
     //

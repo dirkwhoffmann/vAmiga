@@ -59,10 +59,10 @@ Disk::dump()
     msg("\nDisk:\n");
     msg("            type : %s\n", DiskDiameterEnum::key(diameter));
     msg("         density : %s\n", DiskDensityEnum::key(density));
-    msg("       numCyls() : %ld\n", numCyls());
-    msg("      numSides() : %ld\n", numSides());
-    msg("     numTracks() : %ld\n", numTracks());
-    msg("  track 0 length : %u\n", length.track[0]);
+    msg("       numCyls() : %zd\n", numCyls());
+    msg("      numSides() : %zd\n", numSides());
+    msg("     numTracks() : %zd\n", numTracks());
+    msg("  track 0 length : %d\n", length.track[0]);
     msg("  writeProtected : %s\n", writeProtected ? "yes" : "no");
     msg("        modified : %s\n", modified ? "yes" : "no");
     msg("             fnv : %llu\n", fnv);

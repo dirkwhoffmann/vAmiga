@@ -69,7 +69,7 @@ FSString::write(u8 *p)
 
     // Write name as a BCPL string (first byte is string length)
     p[0] = strlen(str);
-    strncpy((char *)(p + 1), str, strlen(str));
+    strcpy((char *)(p + 1), str);
 }
 
 void
@@ -127,7 +127,7 @@ FSTime::write(u8 *p)
 string
 FSTime::dateStr() const
 {
-    char tmp[11];
+    char tmp[32];
     
     time_t t = time();
     tm *local = localtime(&t);
@@ -141,7 +141,7 @@ FSTime::dateStr() const
 string
 FSTime::timeStr() const
 {
-    char tmp[9];
+    char tmp[32];
     
     time_t t = time();
     tm *local = localtime(&t);

@@ -238,7 +238,9 @@ ScreenRecorder::exportAs(const char *path)
     // Wait for FFmpeg to finish
     fclose(ffmpeg);
     */
-    system(cmd); 
+    if (system(cmd) == -1) {
+        warn("Failed: %s\n", cmd);
+    }
     
     msg("Done\n");
     return true;
@@ -273,7 +275,7 @@ ScreenRecorder::vsyncHandler(Cycle target)
         
         // Feed the video pipe
         assert(videoPipe != -1);
-        write(videoPipe, data, width * height);
+        (void)write(videoPipe, data, width * height);
         
         //
         // Audio
@@ -300,6 +302,6 @@ ScreenRecorder::vsyncHandler(Cycle target)
         
         // Feed the audio pipe
         assert(audioPipe != -1);
-        write(audioPipe, (u8 *)samples, 2 * sizeof(float) * samplesPerFrame);
+        (void)write(audioPipe, (u8 *)samples, 2 * sizeof(float) * samplesPerFrame);
     }
 }

@@ -104,7 +104,8 @@ isize
 HardwareComponent::load(const u8 *buffer)
 {
     const u8 *ptr = buffer;
-
+    isize result;
+    
     // Call delegation method
     ptr += willLoadFromBuffer(ptr);
 
@@ -118,19 +119,21 @@ HardwareComponent::load(const u8 *buffer)
 
     // Call delegation method
     ptr += didLoadFromBuffer(ptr);
-
+    result = (isize)(ptr - buffer);
+    
     // Verify that the number of written bytes matches the snapshot size
-    trace(SNP_DEBUG, "Loaded %ld bytes (expected %zu)\n", ptr - buffer, size());
-    assert(ptr - buffer == size());
+    trace(SNP_DEBUG, "Loaded %zd bytes (expected %zd)\n", result, size());
+    assert(result == size());
 
-    return (isize)(ptr - buffer);
+    return result;
 }
 
 isize
 HardwareComponent::save(u8 *buffer)
 {
     u8 *ptr = buffer;
-
+    isize result;
+    
     // Call delegation method
     ptr += willSaveToBuffer(ptr);
 
@@ -144,12 +147,13 @@ HardwareComponent::save(u8 *buffer)
 
     // Call delegation method
     ptr += didSaveToBuffer(ptr);
-
+    result = (isize)(ptr - buffer);
+    
     // Verify that the number of written bytes matches the snapshot size
-    trace(SNP_DEBUG, "Saved %ld bytes (expected %zu)\n", ptr - buffer, size());
-    assert(ptr - buffer == size());
+    trace(SNP_DEBUG, "Saved %zd bytes (expected %zd)\n", result, size());
+    assert(result == size());
 
-    return (isize)(ptr - buffer);
+    return result;
 }
 
 void

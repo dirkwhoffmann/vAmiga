@@ -482,7 +482,7 @@ FSDevice::printDirectory(bool recursive)
     for (auto const& i : items) {
         msg("%s\n", getPath(i).c_str());
     }
-    msg("%lu items\n", items.size());
+    msg("%zu items\n", items.size());
 }
 
 
@@ -966,6 +966,6 @@ FSDevice::exportDirectory(const char *path)
         }
     }
     
-    msg("Exported %lu items", items.size());
+    msg("Exported %zu items", items.size());
     return ERROR_OK;
 }

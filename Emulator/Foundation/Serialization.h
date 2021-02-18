@@ -55,8 +55,8 @@ inline u64 read64(const u8 *& buf)
 
 inline double readDouble(const u8 *& buf)
 {
-    double result;
-    *((u64 *)(&result)) = read64(buf);
+    double result = 0;
+    for (isize i = 0; i < 8; i++) ((u8 *)&result)[i] = read8(buf);
     return result;
 }
  
@@ -86,7 +86,7 @@ inline void write64(u8 *& buf, u64 value)
 
 inline void writeDouble(u8 *& buf, double value)
 {
-    write64(buf, *((u64 *)(&value)));
+    for (isize i = 0; i < 8; i++) write8(buf, ((u8 *)&value)[i]);
 }
 
 

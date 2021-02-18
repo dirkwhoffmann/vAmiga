@@ -10,6 +10,19 @@
 #include "Amiga.h"
 
 template <class T> void
+AudioStream<T>::alignWritePtr()
+{
+    this->align(8192);
+    /*
+     #ifdef __MACH__
+     this->align(5880);
+     #else
+     this->align(8192);
+     #endif
+     */
+}
+
+template <class T> void
 AudioStream<T>::copy(void *buffer, isize n, Volume &vol)
 {
     // The caller has to ensure that no buffer underflows occurs
@@ -131,6 +144,7 @@ AudioStream<T>::draw(u32 *buffer, isize width, isize height,
 // Instantiate template functions
 //
 
+template void AudioStream<SampleType>::alignWritePtr();
 template void AudioStream<SampleType>::copy(void *, isize, Volume &);
 template void AudioStream<SampleType>::copy(void *, void *, isize, Volume &);
 template float AudioStream<SampleType>::draw(u32 *, isize, isize, bool, float, u32);

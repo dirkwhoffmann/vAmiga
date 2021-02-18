@@ -208,7 +208,8 @@ isize
 Drive::_load(const u8 *buffer) 
 {
     SerReader reader(buffer);
-
+    isize result;
+    
     // Read own state
     applyToPersistentItems(reader);
     applyToHardResetItems(reader);
@@ -233,15 +234,17 @@ Drive::_load(const u8 *buffer)
         disk = Disk::makeWithReader(reader, type, density);
     }
 
-    trace(SNP_DEBUG, "Recreated from %ld bytes\n", reader.ptr - buffer);
-    return (isize)(reader.ptr - buffer);
+    result = (isize)(reader.ptr - buffer);
+    trace(SNP_DEBUG, "Recreated from %zd bytes\n", result);
+    return result;
 }
 
 isize
 Drive::_save(u8 *buffer)
 {
     SerWriter writer(buffer);
-
+    isize result;
+    
     // Write own state
     applyToPersistentItems(writer);
     applyToHardResetItems(writer);
@@ -257,11 +260,11 @@ Drive::_save(u8 *buffer)
 
         // Write the disk's state
         disk->applyToPersistentItems(writer);
-        // writer.copy(disk->oldData, disk->geometry.diskSize);
     }
-
-    trace(SNP_DEBUG, "Serialized to %ld bytes\n", writer.ptr - buffer);
-    return (isize)(writer.ptr - buffer);
+    
+    result = (isize)(writer.ptr - buffer);
+    trace(SNP_DEBUG, "Serialized to %zd bytes\n", result);
+    return result;
 }
 
 bool
