@@ -63,7 +63,7 @@ struct ConfigError : public std::exception
 };
 
 struct ConfigArgError : ConfigError {
-    ConfigArgError(const std::string &s) : ConfigError(s) { };
+    ConfigArgError(const std::string &s) : ConfigError(s) { }; 
 };
 
 struct ConfigFileReadError : ConfigError {

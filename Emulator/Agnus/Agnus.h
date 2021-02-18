@@ -879,7 +879,7 @@ public:
     void syncWithEClock();
 
     // Returns true if the device is in sync with the E clock
-    bool inSyncWithEClock();
+    // bool inSyncWithEClock();
 
     // Executes the device until the CPU can acquire the bus
     void executeUntilBusIsFree();

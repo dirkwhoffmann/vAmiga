@@ -71,7 +71,7 @@ Memory::getConfigItem(Option option) const
 
 bool
 Memory::setConfigItem(Option option, long value)
-{    
+{
     switch (option) {
             
         case OPT_CHIP_RAM:
@@ -1009,7 +1009,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
         return dataBus;
     }
     
-    dataBus = zorro.peekFastRamDevice(addr) << 4;         
+    dataBus = zorro.peekFastRamDevice(addr) << 4;
     trace(FAS_DEBUG, "peek8<AUTOCONF>(%x) = %x\n", addr, dataBus);
     return dataBus;
 }
@@ -2425,3 +2425,4 @@ template const char *Memory::ascii <ACCESSOR_AGNUS> (u32 addr);
 
 template const char *Memory::hex <ACCESSOR_CPU> (u32 addr, isize bytes);
 template const char *Memory::hex <ACCESSOR_AGNUS> (u32 addr, isize bytes);
+

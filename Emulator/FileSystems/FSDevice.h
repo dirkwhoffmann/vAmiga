@@ -35,20 +35,20 @@
 
 class FSDevice : AmigaObject {
     
-    friend class FSPartition;
-    friend class FSBlock;
-    friend class FSEmptyBlock;
-    friend class FSBootBlock;
-    friend class FSRootBlock;
-    friend class FSBitmapBlock;
-    friend class FSBitmapExtBlock;
-    friend class FSUserDirBlock;
-    friend class FSFileHeaderBlock;
-    friend class FSFileListBlock;
-    friend class FSDataBlock;
-    friend class OFSDataBlock;
-    friend class FFSDataBlock;
-    friend class FSHashTable;
+    friend struct FSPartition;
+    friend struct FSBlock;
+    friend struct FSEmptyBlock;
+    friend struct FSBootBlock;
+    friend struct FSRootBlock;
+    friend struct FSBitmapBlock;
+    friend struct FSBitmapExtBlock;
+    friend struct FSUserDirBlock;
+    friend struct FSFileHeaderBlock;
+    friend struct FSFileListBlock;
+    friend struct FSDataBlock;
+    friend struct OFSDataBlock;
+    friend struct FFSDataBlock;
+    friend struct FSHashTable;
 
 protected:
             

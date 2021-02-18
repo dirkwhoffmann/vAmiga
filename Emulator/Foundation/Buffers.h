@@ -79,6 +79,11 @@ template <class T, isize capacity> struct RingBuffer
         return elements[r];
     }
 
+    T *currentAddr()
+    {
+        return &elements[r];
+    }
+
     const T& current(i64 offset) const
     {
         return elements[(r + offset) % capacity];
@@ -86,7 +91,7 @@ template <class T, isize capacity> struct RingBuffer
     
     T& read()
     {
-        assert(!isEmpty());
+         assert(!isEmpty());
 
         i64 oldr = r;
         r = next(r);
@@ -100,6 +105,11 @@ template <class T, isize capacity> struct RingBuffer
         i64 oldw = w;
         w = next(w);
         elements[oldw] = element;
+    }
+    
+    void skip(isize n)
+    {
+        r = (r + n) % capacity;
     }
     
     //
@@ -178,3 +188,4 @@ struct RegChangeRecorder : public SortedRingBuffer<RegChange, capacity>
         return this->isEmpty() ? NEVER : this->keys[this->r];
     }
 };
+

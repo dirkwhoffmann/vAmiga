@@ -77,7 +77,7 @@ public:
     Sampler *sampler[4];
 
     // Output
-    AudioStream<AUDIO_SAMPLE_TYPE> stream;
+    AudioStream<SampleType> stream;
     
     // Audio filters
     AudioFilter filterL = AudioFilter(amiga);
@@ -216,11 +216,21 @@ public:
 
 
     //
-    // Copying data
+    // Reading audio samples
     //
     
 public:
     
-    void copy(float *buffer, isize n);
-    void copy(float *buffer1, float *buffer12, isize n);
+    // Copies a certain amout of audio samples into a buffer
+    void copy(void *buffer, isize n);
+    void copy(void *buffer1, void *buffer2, isize n);
+    
+    /* Returns a pointer to a buffer holding a certain amount of audio samples
+     * without copying data. This function has been implemented for speedup.
+     * Instead of copying ring buffer data into the target buffer, it returns
+     * a pointer into the ringbuffer itself. The caller has to make sure that
+     * the ring buffer buffer read pointer is not closer than n elements to the
+     * buffer end.
+     */
+    SampleType *nocopy(isize n);
 };

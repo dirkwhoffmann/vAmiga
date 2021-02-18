@@ -56,6 +56,13 @@ typedef struct
     Cycle startDelay;
     Cycle stopDelay;
     Cycle stepDelay;
+    
+    // Noise settings
+    bool noiseEnable;
+    bool noiseEject;
+    bool noiseInsert;
+    bool noiseStep;
+    bool noisePoll;
 }
 DriveConfig;
 

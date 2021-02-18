@@ -248,13 +248,15 @@ loadFile(const char *path, const char *name, u8 **buffer, long *size)
     return loadFile(fullpath, buffer, size);
 }
 
-u32 __attribute__((no_sanitize("unsigned-integer-overflow")))
+u32
+NO_SANITIZE("unsigned-integer-overflow")
 fnv_1a_it32(u32 prv, u32 val)
 {
     return (prv ^ val) * 0x1000193;
 }
  
-u64 __attribute__((no_sanitize("unsigned-integer-overflow")))
+u64
+NO_SANITIZE("unsigned-integer-overflow")
 fnv_1a_it64(u64 prv, u64 val)
 {
     return (prv ^ val) * 0x100000001b3;

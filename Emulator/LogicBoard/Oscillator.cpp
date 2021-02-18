@@ -115,8 +115,9 @@ Oscillator::waitUntil(u64 deadline)
     
 #else
 
-    assert(false);
-    // TODO: MISSING IMPLEMENTATION
+    req.tv_sec = 0;
+    req.tv_nsec = (long)deadline - (long)nanos();
+    nanosleep(&req, &rem);
     
 #endif
 }

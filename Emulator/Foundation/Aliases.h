@@ -133,3 +133,20 @@ enum _name : _type
 #define enum_i8(_name) enum _name : i8
 
 #endif
+
+
+//
+// Compiler settings
+//
+
+#if defined(__clang__)
+
+// Definition for clang
+#define NO_SANITIZE(x) __attribute__((no_sanitize(x)))
+
+#else
+
+// Definition for gcc
+#define NO_SANITIZE(x)
+
+#endif

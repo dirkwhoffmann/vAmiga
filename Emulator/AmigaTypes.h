@@ -64,6 +64,12 @@ struct OptionEnum : Reflection<OptionEnum, Option> {
                 
             case OPT_DRIVE_CONNECT:       return "DRIVE_CONNECT";
             case OPT_DRIVE_SPEED:         return "DRIVE_SPEED";
+            case OPT_DRIVE_NOISE_ENABLE:  return "DRIVE_NOISE_ENABLE";
+            case OPT_DRIVE_INSERT_NOISE:  return "DRIVE_NOISE_INSERT";
+            case OPT_DRIVE_EJECT_NOISE:   return "DRIVE_NOISE_EJECT";
+            case OPT_DRIVE_STEP_NOISE:    return "DRIVE_NOISE_STEP";
+            case OPT_DRIVE_POLL_NOISE:    return "DRIVE_NOISE_POLL";
+
             case OPT_LOCK_DSKSYNC:        return "LOCK_DSKSYNC";
             case OPT_AUTO_DSKSYNC:        return "AUTO_DSKSYNC";
 
@@ -86,10 +92,10 @@ struct OptionEnum : Reflection<OptionEnum, Option> {
             case OPT_ECLOCK_SYNCING:      return "ECLOCK_SYNCING";
                 
             case OPT_ACCURATE_KEYBOARD:   return "ACCURATE_KEYBOARD";
-                
+
             case OPT_PULLUP_RESISTORS:    return "PULLUP_RESISTORS";
             case OPT_MOUSE_VELOCITY:      return "MOUSE_VELOCITY";
-                
+
             case OPT_SAMPLING_METHOD:     return "SAMPLING_METHOD";
             case OPT_FILTER_TYPE:         return "FILTER_TYPE";
             case OPT_FILTER_ALWAYS_ON:    return "FILTER_ALWAYS_ON";

@@ -27,8 +27,11 @@
 // Build settings
 //
 
-// Defines the audio sample type of the host machine's audio backend
-#define AUDIO_SAMPLE_TYPE FloatStereo
+// Type alias for the datatype used by the host machine's audio backend
+// struct U16Mono; typedef U16Mono SampleType;
+// struct U16Stereo; typedef U16Stereo SampleType;
+struct FloatStereo; typedef FloatStereo SampleType;
+
 
 //
 // Configuration overrides
@@ -85,7 +88,7 @@ static const int CPU_DEBUG       = 0; // CPU
 static const int OCSREG_DEBUG    = 0; // General OCS register debugging
 static const int ECSREG_DEBUG    = 0; // Special ECS register debugging
 static const int INVREG_DEBUG    = 0; // Invalid register accesses
-static const int MEM_DEBUG       = 0; // Memory 
+static const int MEM_DEBUG       = 0; // Memory
 static const int FAS_DEBUG       = 0; // Fast RAM
 
 // Agnus

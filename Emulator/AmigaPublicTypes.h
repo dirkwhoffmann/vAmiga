@@ -68,6 +68,11 @@ enum_long(OPT)
     // Disk controller
     OPT_DRIVE_CONNECT,
     OPT_DRIVE_SPEED,
+    OPT_DRIVE_NOISE_ENABLE,
+    OPT_DRIVE_EJECT_NOISE,
+    OPT_DRIVE_INSERT_NOISE,
+    OPT_DRIVE_STEP_NOISE,
+    OPT_DRIVE_POLL_NOISE,
     OPT_LOCK_DSKSYNC,
     OPT_AUTO_DSKSYNC,
 
@@ -100,7 +105,7 @@ enum_long(OPT)
     // Mouse
     OPT_PULLUP_RESISTORS,
     OPT_MOUSE_VELOCITY,
-     
+    
     // Paula audio
     OPT_SAMPLING_METHOD,
     OPT_FILTER_TYPE,

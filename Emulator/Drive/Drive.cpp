@@ -38,9 +38,14 @@ Drive::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_DRIVE_TYPE:        return (long)config.type;
-        case OPT_EMULATE_MECHANICS: return (long)config.mechanicalDelays;
-            
+        case OPT_DRIVE_TYPE:          return (long)config.type;
+        case OPT_EMULATE_MECHANICS:   return (long)config.mechanicalDelays;
+        case OPT_DRIVE_NOISE_ENABLE:  return (long)config.noiseEnable;
+        case OPT_DRIVE_EJECT_NOISE:   return (long)config.noiseEject;
+        case OPT_DRIVE_INSERT_NOISE:  return (long)config.noiseInsert;
+        case OPT_DRIVE_STEP_NOISE:    return (long)config.noiseStep;
+        case OPT_DRIVE_POLL_NOISE:    return (long)config.noisePoll;
+
         default:
             assert(false);
             return 0;
@@ -81,6 +86,46 @@ Drive::setConfigItem(Option option, long id, long value)
             config.mechanicalDelays = value;
             return true;
 
+        case OPT_DRIVE_NOISE_ENABLE:
+            
+            if (config.noiseEnable == value) {
+                return false;
+            }
+            config.noiseEnable = value;
+            return true;
+            
+        case OPT_DRIVE_EJECT_NOISE:
+
+            if (config.noiseEject == value) {
+                return false;
+            }
+            config.noiseEject = value;
+            return true;
+
+        case OPT_DRIVE_INSERT_NOISE:
+
+            if (config.noiseInsert == value) {
+                return false;
+            }
+            config.noiseInsert = value;
+            return true;
+
+        case OPT_DRIVE_STEP_NOISE:
+
+            if (config.noiseStep == value) {
+                return false;
+            }
+            config.noiseStep = value;
+            return true;
+
+        case OPT_DRIVE_POLL_NOISE:
+
+            if (config.noisePoll == value) {
+                return false;
+            }
+            config.noisePoll = value;
+            return true;
+
         default:
             return false;
     }
@@ -107,6 +152,11 @@ Drive::_dump(Dump::Category category, std::ostream& os) const
         os << DUMP("Start delay") << DEC << config.startDelay << std::endl;
         os << DUMP("Stop delay") << DEC << config.stopDelay << std::endl;
         os << DUMP("Step delay") << DEC << config.stepDelay << std::endl;
+        os << DUMP("Noise enable") << ISENABLED(config.noiseEnable) << std::endl;
+        os << DUMP("Insert noise") << ISENABLED(config.noiseInsert) << std::endl;
+        os << DUMP("Eject noise") << ISENABLED(config.noiseEject) << std::endl;
+        os << DUMP("Head step noise") << ISENABLED(config.noiseStep) << std::endl;
+        os << DUMP("head poll noise") << ISENABLED(config.noisePoll) << std::endl;
     }
     
     if (category & Dump::State) {
@@ -485,10 +535,10 @@ Drive::step(isize dir)
     
     // Push drive head forward
     if (ALIGN_HEAD) head.offset = 0;
-
-    // Inform the GUI
-    if (pollsForDisk()) {
-        messageQueue.put(MSG_DRIVE_HEAD_POLL, (nr << 8) | head.cylinder);
+    
+    // Notify the GUI
+    if (config.noiseEnable && (pollsForDisk() ? config.noisePoll : config.noiseStep)) {
+        messageQueue.put(MSG_DRIVE_HEAD_NOISE, (nr << 8) | head.cylinder);
     } else {
         messageQueue.put(MSG_DRIVE_HEAD, (nr << 8) | head.cylinder);
     }
@@ -586,7 +636,11 @@ Drive::ejectDisk()
         disk = nullptr;
         
         // Notify the GUI
-        messageQueue.put(MSG_DISK_EJECT, nr);
+        if (config.noiseEnable && config.noiseEject) {
+            messageQueue.put(MSG_DISK_EJECT_NOISE, nr);
+        } else {
+            messageQueue.put(MSG_DISK_EJECT, nr);
+        }
     }
 }
 
@@ -643,10 +697,16 @@ Drive::insertDisk(Disk *disk)
         // Don't insert a disk if there is already one
         assert(!hasDisk());
 
-        // Insert the disk and inform the GUI
+        // Insert disk
         this->disk = disk;
         head.offset = 0;
-        messageQueue.put(MSG_DISK_INSERT, nr);
+        
+        // Notify the GUI
+        if (config.noiseEnable && config.noiseInsert) {
+            messageQueue.put(MSG_DISK_INSERT_NOISE, nr);
+        } else {
+            messageQueue.put(MSG_DISK_INSERT, nr);
+        }
         
         return true;
     }

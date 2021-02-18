@@ -11,7 +11,7 @@
 
 #include "AmigaComponent.h"
 
-struct ShakeDetector {
+class ShakeDetector {
     
     // Horizontal position
     double x = 0.0;
@@ -28,6 +28,8 @@ struct ShakeDetector {
     // Time stamps
     u64 lastTurn = 0;
     u64 lastShake = 0;
+    
+public:
     
     // Feed in new coordinates and checks for a shake
     bool isShakingAbs(double x);

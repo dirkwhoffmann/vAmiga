@@ -10,7 +10,7 @@
 #include "Amiga.h"
 
 Muxer::Muxer(Amiga& ref) : AmigaComponent(ref)
-{    
+{
     subComponents = vector<HardwareComponent *> {
 
         &filterL,
@@ -177,7 +177,7 @@ Muxer::setConfigItem(Option option, long value)
 
 bool
 Muxer::setConfigItem(Option option, long id, long value)
-{    
+{
     switch (option) {
                         
         case OPT_AUDVOL:
@@ -437,7 +437,7 @@ Muxer::ignoreNextUnderOrOverflow()
 }
 
 void
-Muxer::copy(float *buffer, isize n)
+Muxer::copy(void *buffer, isize n)
 {
     stream.lock();
     
@@ -451,7 +451,7 @@ Muxer::copy(float *buffer, isize n)
 }
 
 void
-Muxer::copy(float *buffer1, float *buffer2, isize n)
+Muxer::copy(void *buffer1, void *buffer2, isize n)
 {
     stream.lock();
     
@@ -462,4 +462,18 @@ Muxer::copy(float *buffer1, float *buffer2, isize n)
     stream.copy(buffer1, buffer2, n, volume);
     
     stream.unlock();
+}
+
+SampleType *
+Muxer::nocopy(isize n)
+{
+    SampleType *addr;
+    stream.lock();
+    
+    if (stream.count() < n) handleBufferUnderflow();
+    addr = stream.currentAddr();
+    stream.skip(n);
+        
+    stream.unlock();
+    return addr;
 }

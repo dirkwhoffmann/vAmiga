@@ -59,16 +59,19 @@ struct MsgTypeEnum : Reflection<MsgTypeEnum, MsgType> {
             case MSG_DRIVE_MOTOR_ON:      return "DRIVE_MOTOR_ON";
             case MSG_DRIVE_MOTOR_OFF:     return "DRIVE_MOTOR_OFF";
             case MSG_DRIVE_HEAD:          return "DRIVE_HEAD";
+            case MSG_DRIVE_HEAD_NOISE:    return "DRIVE_HEAD_NOISE";
             case MSG_DRIVE_HEAD_POLL:     return "DRIVE_HEAD_POLL";
             case MSG_DISK_INSERT:         return "DISK_INSERT";
+            case MSG_DISK_INSERT_NOISE:   return "DISK_INSERT_SOUND";
             case MSG_DISK_EJECT:          return "DISK_EJECT";
+            case MSG_DISK_EJECT_NOISE:    return "DISK_EJECT_SOUND";
             case MSG_DISK_SAVED:          return "DISK_SAVED";
             case MSG_DISK_UNSAVED:        return "DISK_UNSAVED";
             case MSG_DISK_PROTECT:        return "DISK_PROTECT";
             case MSG_DISK_UNPROTECT:      return "DISK_UNPROTECT";
 
             case MSG_CTRL_AMIGA_AMIGA:    return "CTRL_AMIGA_AMIGA";
-                
+
             case MSG_SHAKING:             return "SHAKING";
 
             case MSG_SER_IN:              return "SER_IN";

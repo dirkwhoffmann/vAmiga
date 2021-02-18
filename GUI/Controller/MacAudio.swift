@@ -175,7 +175,7 @@ public class MacAudio: NSObject {
             }
         }
         
-        // Play sound if a free is available
+        // Play sound if a free player is available
         for player in audioPlayers[name]! where !player.isPlaying {
             
             player.volume = volume

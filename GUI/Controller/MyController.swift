@@ -552,7 +552,8 @@ extension MyController {
             refreshStatusBar()
             updateWarp()
 
-        case .DRIVE_HEAD:
+        case .DRIVE_HEAD_NOISE,
+             .DRIVE_HEAD:
             if pref.driveSounds && pref.driveHeadSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
@@ -564,14 +565,16 @@ extension MyController {
             }
             refreshStatusBar(drive: msg.data >> 8, cylinder: msg.data % 0xFF)
 
-        case .DISK_INSERT:
+        case .DISK_INSERT_NOISE,
+             .DISK_INSERT:
             if pref.driveSounds && pref.driveInsertSound {
                 macAudio.playSound(name: "insert", volume: 0.3)
             }
             if msg.data == 0 { mydocument.setBootDiskID(amiga.df0.fnv) }
             refreshStatusBar()
             
-        case .DISK_EJECT:
+        case .DISK_EJECT_NOISE,
+             .DISK_EJECT:
             if pref.driveSounds && pref.driveEjectSound {
                 macAudio.playSound(name: "eject", volume: 0.3)
             }

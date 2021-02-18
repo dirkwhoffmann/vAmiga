@@ -41,9 +41,9 @@ AudioStream<T>::copy(void *buffer, isize n, Volume &vol)
     // Generic path: Modulate the volume
     for (isize i = 0; i < n; i++) {
         vol.shift();
-        FloatStereo pair = this->read();
-        pair.modulate(vol.current);
-        pair.copy(buffer, i);
+        T sample = this->read();
+        sample.modulate(vol.current);
+        sample.copy(buffer, i);
     }
 }
 
@@ -67,8 +67,8 @@ AudioStream<T>::copy(void *buffer1, void *buffer2, isize n, Volume &vol)
         if (vol.current == 1.0) {
 
             for (isize i = 0; i < n; i++) {
-                FloatStereo pair = this->read();
-                pair.copy(buffer1, buffer2, i);
+                T sample = this->read();
+                sample.copy(buffer1, buffer2, i);
             }
             return;
         }
@@ -77,9 +77,9 @@ AudioStream<T>::copy(void *buffer1, void *buffer2, isize n, Volume &vol)
     // Generic path: Modulate the volume
     for (isize i = 0; i < n; i++) {
         vol.shift();
-        FloatStereo pair = this->read();
-        pair.modulate(vol.current);
-        pair.copy(buffer1, buffer2, i);
+        T sample = this->read();
+        sample.modulate(vol.current);
+        sample.copy(buffer1, buffer2, i);
     }
 }
 
@@ -99,8 +99,8 @@ AudioStream<T>::draw(u32 *buffer, isize width, isize height,
     for (isize w = 0; w < width; w++) {
         
         // Read samples from ringbuffer
-        FloatStereo pair = this->current(w * dw);
-        float sample = left ? abs(pair.l) : abs(pair.r);
+        T pair = this->current(w * dw);
+        float sample = pair.magnitude(left);
         
         if (sample == 0) {
             
@@ -131,6 +131,6 @@ AudioStream<T>::draw(u32 *buffer, isize width, isize height,
 // Instantiate template functions
 //
 
-template void AudioStream<FloatStereo>::copy(void *, isize, Volume &);
-template void AudioStream<FloatStereo>::copy(void *, void *, isize, Volume &);
-template float AudioStream<FloatStereo>::draw(u32 *, isize, isize, bool, float, u32);
+template void AudioStream<SampleType>::copy(void *, isize, Volume &);
+template void AudioStream<SampleType>::copy(void *, void *, isize, Volume &);
+template float AudioStream<SampleType>::draw(u32 *, isize, isize, bool, float, u32);

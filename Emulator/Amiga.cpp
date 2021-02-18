@@ -267,14 +267,20 @@ Amiga::getConfigItem(Option option, long id) const
             
         case OPT_DRIVE_TYPE:
         case OPT_EMULATE_MECHANICS:
+        case OPT_DRIVE_NOISE_ENABLE:
+        case OPT_DRIVE_EJECT_NOISE:
+        case OPT_DRIVE_INSERT_NOISE:
+        case OPT_DRIVE_STEP_NOISE:
+        case OPT_DRIVE_POLL_NOISE:
+
             return df[id]->getConfigItem(option);
             
         case OPT_PULLUP_RESISTORS:
-         case OPT_MOUSE_VELOCITY:
-             if (id == PORT_1) return controlPort1.mouse.getConfigItem(option);
-             if (id == PORT_2) return controlPort2.mouse.getConfigItem(option);
-             assert(false);
-             
+        case OPT_MOUSE_VELOCITY:
+            if (id == PORT_1) return controlPort1.mouse.getConfigItem(option);
+            if (id == PORT_2) return controlPort2.mouse.getConfigItem(option);
+            assert(false);
+            
         default: assert(false);
     }
     

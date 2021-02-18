@@ -158,15 +158,16 @@ CIA::_dump(Dump::Category category, std::ostream& os) const
     }
     
     if (category & Dump::State) {
-         
-         os << DUMP("Clock") << DEC << clock << std::endl;
-         os << DUMP("Sleeping") << YESNO(sleeping) << std::endl;
-         os << DUMP("Tiredness") << (isize)tiredness << std::endl;
-         os << DUMP("Sleep cycle") << DEC << sleepCycle << std::endl;
-         os << DUMP("Wakeup cycle") << DEC << wakeUpCycle << std::endl;
-         os << DUMP("CNT") << CNT << std::endl;
-         os << DUMP("INT") << INT << std::endl;
-     }
+        
+        os << DUMP("Clock") << DEC << clock << std::endl;
+        os << DUMP("Sleeping") << YESNO(sleeping) << std::endl;
+        os << DUMP("Tiredness") << (isize)tiredness << std::endl;
+        os << DUMP("Sleep cycle") << DEC << sleepCycle << std::endl;
+        os << DUMP("Wakeup cycle") << DEC << wakeUpCycle << std::endl;
+        os << DUMP("CNT") << CNT << std::endl;
+        os << DUMP("INT") << INT << std::endl;
+
+    }
     
     if (category & Dump::Registers) {
         

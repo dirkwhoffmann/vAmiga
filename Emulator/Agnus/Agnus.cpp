@@ -779,6 +779,7 @@ Agnus::syncWithEClock()
     cpu.addWaitStates(delay);
 }
 
+/*
 bool
 Agnus::inSyncWithEClock()
 {
@@ -789,8 +790,9 @@ Agnus::inSyncWithEClock()
     Cycle eClk = (clock >> 2) % 10;
     
     // Unsure if this condition is accurate
-    return eClk >= 2 || eClk <= 6;
+    return eClk >= 2 && eClk <= 6;
 }
+*/
 
 void
 Agnus::executeUntilBusIsFree()
@@ -845,7 +847,7 @@ Agnus::executeUntilBusIsFreeForCIA()
             execute();
             if (++delay == 2) bls = true;
             
-        } while (busOwner[posh] != BUS_NONE || !inSyncWithEClock());
+        } while (busOwner[posh] != BUS_NONE);
 
         // Clear the BLS line (Blitter slow down)
         bls = false;
