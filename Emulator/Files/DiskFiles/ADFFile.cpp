@@ -228,13 +228,13 @@ ADFFile::layout()
     result.numBlocks   = result.numCyls * result.numHeads * result.numSectors;
 
     // Determine the root block location
-    u32 root = size < ADFSIZE_35_HD ? 880 : 1760;
+    Block root = size < ADFSIZE_35_HD ? 880 : 1760;
 
     // Determine the bitmap block location
-    u32 bitmap = FSBlock::read32(data + root * 512 + 316);
+    Block bitmap = FSBlock::read32(data + root * 512 + 316);
     
     // Assign a default location if the bitmap block reference is invalid
-    if (bitmap == 0 || bitmap >= numBlocks()) bitmap = root + 1;
+    if (bitmap == 0 || bitmap >= (Block)numBlocks()) bitmap = root + 1;
     
     // Add partition
     result.partitions.push_back(FSPartitionDescriptor(getDos(), 0, result.numCyls - 1, root));
@@ -286,7 +286,7 @@ ADFFile::formatDisk(FSVolumeType fs, long bootBlockID)
 
     ErrorCode error;
 
-    msg("Formatting disk with %ld blocks (%s)\n", numBlocks(), FSVolumeTypeEnum::key(fs));
+    msg("Formatting disk with %lld blocks (%s)\n", numBlocks(), FSVolumeTypeEnum::key(fs));
 
     // Only proceed if a file system is given
     if (fs == FS_NODOS) return false;

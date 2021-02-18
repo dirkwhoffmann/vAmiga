@@ -42,7 +42,7 @@ struct FSDeviceDescriptor : AmigaObject {
         
     // Logical device parameters
     isize numSectors = 0;
-    isize numBlocks = 0;
+    i64 numBlocks = 0;
     isize numReserved = 0;
     isize bsize = 0;
     

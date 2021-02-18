@@ -13,8 +13,6 @@
 
 #include "Aliases.h"
 
-typedef u32 Block;
-
 enum_long(FS_VOLUME_TYPE)
 {
     FS_NODOS = -1,

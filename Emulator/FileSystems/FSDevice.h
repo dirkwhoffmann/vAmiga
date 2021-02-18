@@ -58,7 +58,7 @@ protected:
     
     // Logical device parameters
     isize numSectors = 0;
-    isize numBlocks = 0;
+    i64 numBlocks = 0;
     isize numReserved = 0;
     isize bsize = 0;
             
@@ -121,14 +121,14 @@ public:
 public:
             
     // Returns the total device capacity in blocks
-    isize getCapacity() { return numBlocks; }
+    i64 getCapacity() { return numBlocks; }
     
     // Reports layout information
     isize getNumCyls() { return numCyls; }
     isize getNumHeads() { return numHeads; }
     isize getNumTracks() { return getNumCyls() * getNumHeads(); }
     isize getNumSectors() { return numSectors; }
-    isize getNumBlocks() { return numBlocks; }
+    i64 getNumBlocks() { return numBlocks; }
 
     
     //

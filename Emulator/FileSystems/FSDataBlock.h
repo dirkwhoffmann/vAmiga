@@ -40,7 +40,7 @@ struct FSDataBlock : FSBlock {
 
 struct OFSDataBlock : FSDataBlock {
 
-    static u32 headerSize() { return 24; }
+    static isize headerSize() { return 24; }
 
     OFSDataBlock(FSPartition &p, u32 nr);
 
@@ -71,7 +71,7 @@ struct OFSDataBlock : FSDataBlock {
 
 struct FFSDataBlock : FSDataBlock {
       
-    static u32 headerSize() { return 0; }
+    static isize headerSize() { return 0; }
 
     FFSDataBlock(FSPartition &p, u32 nr);
 

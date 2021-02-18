@@ -50,9 +50,9 @@ AmigaFile::readFromStream(std::istream &stream)
     // Allocate memory
     assert(data == nullptr);
     data = new u8[fsize]();
-    size = fsize;
+    size = (isize)fsize;
 
-    // Fix known inconsistencies
+    // Read from stream
     stream.read((char *)data, size);
         
     return size;
@@ -73,7 +73,7 @@ AmigaFile::readFromFile(const char *path)
     assert(result == size);
     
     this->path = string(path);
-    return size;
+    return result;
 }
 
 isize
@@ -85,7 +85,8 @@ AmigaFile::readFromBuffer(const u8 *buf, isize len)
     
     isize result = readFromStream(stream);
     assert(result == size);
-    return size;
+    
+    return result;
 }
 
 isize
@@ -118,7 +119,7 @@ AmigaFile::writeToFile(const char *path)
     isize result = writeToStream(stream);
     assert(result == size);
     
-    return size;
+    return result;
 }
 
 isize

@@ -266,7 +266,7 @@ Disk::repeatTracks()
 {
     for (Track t = 0; t < 168; t++) {
         
-        long end = length.track[t];        
+        isize end = length.track[t];
         for (isize i = end, j = 0; i < isizeof(data.track[t]); i++, j++) {
             data.track[t][i] = data.track[t][j];
         }

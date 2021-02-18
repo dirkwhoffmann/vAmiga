@@ -264,7 +264,7 @@ Copper::serviceEvent(EventID id)
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
-            switchToCopperList(agnus.slot[SLOT_COP].data);
+            switchToCopperList((isize)agnus.slot[SLOT_COP].data);
             schedule(COP_FETCH);
             break;
 

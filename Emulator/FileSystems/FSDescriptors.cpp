@@ -44,7 +44,7 @@ FSDeviceDescriptor::dump()
     msg("       Cylinders : %zd\n", numCyls);
     msg("           Heads : %zd\n", numHeads);
     msg("         Sectors : %zd\n", numSectors);
-    msg("          Blocks : %zd\n", numBlocks);
+    msg("          Blocks : %lld\n", numBlocks);
     msg("        Reserved : %zd\n", numReserved);
     msg("           BSize : %zd\n", bsize);
     msg("\n");

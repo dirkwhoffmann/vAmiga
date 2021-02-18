@@ -65,6 +65,7 @@ bool
 DiskFile::encodeDisk(class Disk *disk)
 {
     assert(false);
+    return false;
 }
 
 void

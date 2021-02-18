@@ -59,17 +59,19 @@ void
 MsgQueue::put(MsgType type, long data)
 {
     synchronized {
-                        
+                 
+        Message msg;
+        
         debug (QUEUE_DEBUG, "%s [%ld]\n", MsgTypeEnum::key(type), data);
         
         // Delete the oldest message if the queue overflows
         if (queue.isFull()) {
-            auto msg = queue.read();
+            msg = queue.read();
             debug(QUEUE_DEBUG, "Lost %s\n", MsgTypeEnum::key(msg.type));
         }
         
         // Write data
-        Message msg = { type, data };
+        msg = { type, data };
         queue.write(msg);
         
         // Serve registered callbacks

@@ -234,7 +234,7 @@ Drive::_load(const u8 *buffer)
     }
 
     trace(SNP_DEBUG, "Recreated from %ld bytes\n", reader.ptr - buffer);
-    return reader.ptr - buffer;
+    return (isize)(reader.ptr - buffer);
 }
 
 isize
@@ -261,7 +261,7 @@ Drive::_save(u8 *buffer)
     }
 
     trace(SNP_DEBUG, "Serialized to %ld bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
+    return (isize)(writer.ptr - buffer);
 }
 
 bool

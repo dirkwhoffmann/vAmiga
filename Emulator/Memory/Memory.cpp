@@ -87,7 +87,7 @@ Memory::setConfigItem(Option option, long value)
                 throw ConfigArgError("256, 512, 1024, 2048");
             }
             
-            mem.allocChip(KB(value));
+            mem.allocChip((i32)KB(value));
             return true;
             
         case OPT_SLOW_RAM:
@@ -103,7 +103,7 @@ Memory::setConfigItem(Option option, long value)
                 throw ConfigArgError("0, 256, 512");
             }
                         
-            mem.allocSlow(KB(value));
+            mem.allocSlow((i32)KB(value));
             return true;
             
         case OPT_FAST_RAM:
@@ -119,7 +119,7 @@ Memory::setConfigItem(Option option, long value)
                 throw ConfigArgError("0, 64, 128, ..., 8192");
             }
                         
-            mem.allocFast(KB(value));
+            mem.allocFast((i32)KB(value));
             return true;
             
         case OPT_EXT_START:
@@ -262,7 +262,7 @@ Memory::didLoadFromBuffer(const u8 *buffer)
     reader.copy(slow, config.slowSize);
     reader.copy(fast, config.fastSize);
 
-    return reader.ptr - buffer;
+    return (isize)(reader.ptr - buffer);
 }
 
 isize
@@ -286,7 +286,7 @@ Memory::didSaveToBuffer(u8 *buffer) const
     writer.copy(slow, config.slowSize);
     writer.copy(fast, config.fastSize);
     
-    return writer.ptr - buffer;
+    return (isize)(writer.ptr - buffer);
 }
 
 void
@@ -394,7 +394,7 @@ Memory::updateStats()
 }
 
 bool
-Memory::alloc(isize bytes, u8 *&ptr, u32 &size, u32 &mask)
+Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask)
 {
     // Check the invariants
     assert((ptr == nullptr) == (size == 0));
@@ -413,7 +413,7 @@ Memory::alloc(isize bytes, u8 *&ptr, u32 &size, u32 &mask)
         isize allocSize = bytes;
         
         if (!(ptr = new (std::nothrow) u8[allocSize])) {
-            warn("Cannot allocate %zd KB of memory\n", bytes);
+            warn("Cannot allocate %d KB of memory\n", bytes);
             return false;
         }
         size = (u32)bytes;
@@ -421,7 +421,7 @@ Memory::alloc(isize bytes, u8 *&ptr, u32 &size, u32 &mask)
         fillRamWithInitPattern();
         
         if ((uintptr_t)ptr & 1) {
-            warn("Memory at %p (%zd bytes) is not aligned\n", ptr, bytes);
+            warn("Memory at %p (%d bytes) is not aligned\n", ptr, bytes);
             assert(false);
         }
     }
@@ -439,9 +439,9 @@ Memory::fillRamWithInitPattern()
         case RAM_INIT_RANDOMIZED:
 
             srand(0);
-            if (chip) for (u32 i = 0; i < config.chipSize; i++) chip[i] = rand();
-            if (slow) for (u32 i = 0; i < config.slowSize; i++) slow[i] = rand();
-            if (fast) for (u32 i = 0; i < config.fastSize; i++) fast[i] = rand();
+            if (chip) for (isize i = 0; i < config.chipSize; i++) chip[i] = rand();
+            if (slow) for (isize i = 0; i < config.slowSize; i++) slow[i] = rand();
+            if (fast) for (isize i = 0; i < config.fastSize; i++) fast[i] = rand();
             break;
             
         case RAM_INIT_ALL_ZEROES:
@@ -498,7 +498,7 @@ Memory::loadRom(RomFile *file)
     file->decrypt();
 
     // Allocate memory
-    if (!allocRom(file->size)) throw VAError(ERROR_OUT_OF_MEMORY);
+    if (!allocRom((i32)file->size)) throw VAError(ERROR_OUT_OF_MEMORY);
     
     // Load Rom
     loadRom(file, rom, config.romSize);
@@ -550,7 +550,7 @@ Memory::loadExt(ExtendedRomFile *file)
     assert(file);
 
     // Allocate memory
-    if (!allocExt(file->size)) throw VAError(ERROR_OUT_OF_MEMORY);
+    if (!allocExt((i32)file->size)) throw VAError(ERROR_OUT_OF_MEMORY);
     
     // Load Rom
     loadRom(file, ext, config.extSize);
@@ -680,9 +680,9 @@ Memory::updateCpuMemSrcTable()
     MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
     MemorySource mem_rom_mirror = rom ? MEM_ROM_MIRROR : MEM_NONE;
 
-    u32 chipRamPages = config.chipSize / 0x10000;
-    u32 slowRamPages = config.slowSize / 0x10000;
-    u32 fastRamPages = config.fastSize / 0x10000;
+    isize chipRamPages = config.chipSize / 0x10000;
+    isize slowRamPages = config.slowSize / 0x10000;
+    isize fastRamPages = config.fastSize / 0x10000;
     
     assert(config.chipSize % 0x10000 == 0);
     assert(config.slowSize % 0x10000 == 0);
@@ -787,7 +787,7 @@ Memory::updateCpuMemSrcTable()
 void
 Memory::updateAgnusMemSrcTable()
 {
-    u32 banks = config.chipSize / 0x10000;
+    isize banks = config.chipSize / 0x10000;
     
     // Start from scratch
     for (isize i = 0x00; i <= 0xFF; i++) {

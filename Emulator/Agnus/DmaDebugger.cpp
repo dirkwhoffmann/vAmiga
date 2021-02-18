@@ -263,7 +263,8 @@ DmaDebugger::computeOverlay()
     u16 *values = agnus.busValue;
     u32 *ptr = denise.pixelEngine.pixelAddr(0);
 
-    double bgWeight, fgWeight;
+    double bgWeight = 0;
+    double fgWeight = 0;
 
     switch (displayMode) {
 

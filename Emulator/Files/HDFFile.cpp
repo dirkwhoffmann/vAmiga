@@ -96,8 +96,8 @@ HDFFile::layout()
     result.numBlocks   = result.numCyls * result.numHeads * result.numSectors;
 
     // Determine the location of the root block
-    isize highKey = result.numBlocks - 1;
-    isize rootKey = (result.numReserved + highKey) / 2;
+    i64 highKey = result.numBlocks - 1;
+    i64 rootKey = (result.numReserved + highKey) / 2;
     
     // Add partition
     result.partitions.push_back(FSPartitionDescriptor(dos(0),
@@ -116,8 +116,10 @@ HDFFile::layout()
     
         // Collect all references to bitmap blocks stored in this block
         for (isize i = 0; i < cnt; i++, p += 4) {
-            if (u32 bmb = FFSDataBlock::read32(p)) {
-                if (bmb < result.numBlocks) result.partitions[0].bmBlocks.push_back(bmb);
+            if (Block bmb = FFSDataBlock::read32(p)) {
+                if (bmb < result.numBlocks) {
+                    result.partitions[0].bmBlocks.push_back(bmb);
+                }
             }
         }
         

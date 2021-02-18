@@ -681,7 +681,7 @@ FSDevice::isCorrupted(Block nr, isize n)
         
         if (isCorrupted((Block)i)) {
             cnt++;
-            if (nr == i) return cnt == n;
+            if ((i64)nr == i) return cnt == n;
         }
     }
     return false;
