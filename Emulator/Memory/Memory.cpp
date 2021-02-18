@@ -202,13 +202,21 @@ Memory::_size()
     applyToPersistentItems(counter);
     applyToHardResetItems(counter);
     applyToResetItems(counter);
-
-    counter.count += sizeof(config.romSize) + config.romSize;
-    counter.count += sizeof(config.womSize) + config.womSize;
-    counter.count += sizeof(config.extSize) + config.extSize;
-    counter.count += sizeof(config.chipSize) + config.chipSize;
-    counter.count += sizeof(config.slowSize) + config.slowSize;
-    counter.count += sizeof(config.fastSize) + config.fastSize;
+    
+    counter
+    & config.romSize
+    & config.womSize
+    & config.extSize
+    & config.chipSize
+    & config.slowSize
+    & config.fastSize;
+    
+    counter.count += config.romSize;
+    counter.count += config.womSize;
+    counter.count += config.extSize;
+    counter.count += config.chipSize;
+    counter.count += config.slowSize;
+    counter.count += config.fastSize;
 
     return counter.count;
 }
