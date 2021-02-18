@@ -260,7 +260,7 @@ FSPartition::allocateBlockAbove(Block nr)
 {
     assert(nr >= firstBlock && nr <= lastBlock);
     
-    for (isize i = firstBlock + 1; i <= lastBlock; i++) {
+    for (isize i = (isize)nr + 1; i <= lastBlock; i++) {
         if (dev.blocks[i]->type() == FS_EMPTY_BLOCK) {
             markAsAllocated((u32)i);
             return (u32)i;
@@ -269,12 +269,12 @@ FSPartition::allocateBlockAbove(Block nr)
     return 0;
 }
 
-u32
-FSPartition::allocateBlockBelow(u32 ref)
+Block
+FSPartition::allocateBlockBelow(Block nr)
 {
-    assert(ref >= firstBlock && ref <= lastBlock);
+    assert(nr >= firstBlock && nr <= lastBlock);
     
-    for (isize i = (isize)ref - 1; i >= firstBlock; i--) {
+    for (isize i = (isize)nr - 1; i >= firstBlock; i--) {
         if (dev.blocks[i]->type() == FS_EMPTY_BLOCK) {
             markAsAllocated((u32)i);
             return (u32)i;
