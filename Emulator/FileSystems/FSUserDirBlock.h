@@ -13,8 +13,8 @@
 
 struct FSUserDirBlock : FSBlock {
                 
-    FSUserDirBlock(FSPartition &p, u32 nr);
-    FSUserDirBlock(FSPartition &p, u32 nr, const char *name);
+    FSUserDirBlock(FSPartition &p, Block nr);
+    FSUserDirBlock(FSPartition &p, Block nr, const char *name);
     ~FSUserDirBlock();
     
     const char *getDescription() const override { return "FSUserDirBlock"; }
@@ -45,12 +45,12 @@ struct FSUserDirBlock : FSBlock {
     void setName(FSName name) override         { name.write(addr32(-20));      }
     bool isNamed(FSName &other) const override { return getName() == other;    }
 
-    u32 getNextHashRef() const override        { return get32(-4     );        }
-    void setNextHashRef(u32 ref) override      {        set32(-4, ref);        }
+    Block getNextHashRef() const override      { return get32(-4     );        }
+    void setNextHashRef(Block ref) override    {        set32(-4, ref);        }
 
-    u32 getParentDirRef() const override       { return get32(-3      );       }
-    void setParentDirRef(u32 ref) override     {        set32(-3,  ref);       }
+    Block getParentDirRef() const override     { return get32(-3      );       }
+    void setParentDirRef(Block ref) override   {        set32(-3,  ref);       }
 
-    u32 hashTableSize() const override         { return 72; }
+    isize hashTableSize() const override       { return 72; }
     u32 hashValue() const override             { return getName().hashValue(); }
 };

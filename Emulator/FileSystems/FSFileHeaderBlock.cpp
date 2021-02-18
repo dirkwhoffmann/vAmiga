@@ -9,7 +9,7 @@
 
 #include "FSDevice.h"
 
-FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
+FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
     data = new u8[p.dev.bsize]();
    
@@ -21,7 +21,7 @@ FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
     set32(-1, (u32)-3);              // Sub type
 }
 
-FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, u32 nr, const char *name) :
+FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, Block nr, const char *name) :
 FSFileHeaderBlock(p, nr)
 {
     setName(FSName(name));
@@ -158,7 +158,7 @@ FSFileHeaderBlock::writeData(FILE *file)
         isize num = MIN(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
         for (isize i = 0; i < num; i++) {
             
-            u32 ref = getDataBlockRef(i);
+            Block ref = getDataBlockRef(i);
             if (FSDataBlock *dataBlock = partition.dev.dataBlockPtr(getDataBlockRef(i))) {
 
                 isize bytesWritten = dataBlock->writeData(file, bytesRemaining);
@@ -229,15 +229,15 @@ FSFileHeaderBlock::addData(const u8 *buffer, isize size)
 
 
 bool
-FSFileHeaderBlock::addDataBlockRef(u32 ref)
+FSFileHeaderBlock::addDataBlockRef(Block ref)
 {
     return addDataBlockRef(ref, ref);
 }
 
 bool
-FSFileHeaderBlock::addDataBlockRef(u32 first, u32 ref)
+FSFileHeaderBlock::addDataBlockRef(Block first, Block ref)
 {
-    std::set<u32> visited;
+    std::set<Block> visited;
     
     // If this block has space for more references, add it here
     if (getNumDataBlockRefs() < getMaxDataBlockRefs()) {

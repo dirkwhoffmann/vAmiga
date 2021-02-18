@@ -163,38 +163,38 @@ public:
     //
 
     // Link to the parent directory block
-    virtual u32 getParentDirRef() const { return 0; }
-    virtual void setParentDirRef(u32 ref) { }
+    virtual Block getParentDirRef() const { return 0; }
+    virtual void setParentDirRef(Block ref) { }
     struct FSBlock *getParentDirBlock();
     
     // Link to the file header block
-    virtual u32 getFileHeaderRef() const { return 0; }
-    virtual void setFileHeaderRef(u32 ref) { }
+    virtual Block getFileHeaderRef() const { return 0; }
+    virtual void setFileHeaderRef(Block ref) { }
     struct FSFileHeaderBlock *getFileHeaderBlock();
 
     // Link to the next block with the same hash
-    virtual u32 getNextHashRef() const { return 0; }
-    virtual void setNextHashRef(u32 ref) { }
+    virtual Block getNextHashRef() const { return 0; }
+    virtual void setNextHashRef(Block ref) { }
     struct FSBlock *getNextHashBlock();
 
     // Link to the next extension block
-    virtual u32 getNextListBlockRef() const { return 0; }
-    virtual void setNextListBlockRef(u32 ref) { }
+    virtual Block getNextListBlockRef() const { return 0; }
+    virtual void setNextListBlockRef(Block ref) { }
     struct FSFileListBlock *getNextListBlock();
 
     // Link to the next bitmap extension block
-    virtual u32 getNextBmExtBlockRef() const { return 0; }
-    virtual void setNextBmExtBlockRef(u32 ref) { }
+    virtual Block getNextBmExtBlockRef() const { return 0; }
+    virtual void setNextBmExtBlockRef(Block ref) { }
     struct FSBitmapExtBlock *getNextBmExtBlock();
     
     // Link to the first data block
-    virtual u32 getFirstDataBlockRef() const { return 0; }
-    virtual void setFirstDataBlockRef(u32 ref) { }
+    virtual Block getFirstDataBlockRef() const { return 0; }
+    virtual void setFirstDataBlockRef(Block ref) { }
     struct FSDataBlock *getFirstDataBlock();
 
     // Link to the next data block
-    virtual u32 getNextDataBlockRef() const { return 0; }
-    virtual void setNextDataBlockRef(u32 ref) { }
+    virtual Block getNextDataBlockRef() const { return 0; }
+    virtual void setNextDataBlockRef(Block ref) { }
     struct FSDataBlock *getNextDataBlock();
 
         
@@ -203,7 +203,7 @@ public:
     //
     
     // Returns the hash table size
-    virtual u32 hashTableSize() const { return 0; }
+    virtual isize hashTableSize() const { return 0; }
 
     // Returns a hash value for this block
     virtual u32 hashValue() const { return 0; }

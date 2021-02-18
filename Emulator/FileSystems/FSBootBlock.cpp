@@ -10,7 +10,7 @@
 #include "FSDevice.h"
 #include "BootBlockImage.h"
 
-FSBootBlock::FSBootBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
+FSBootBlock::FSBootBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
     data = new u8[bsize()]();
     
@@ -86,7 +86,7 @@ FSBootBlock::checksum() const {
     u32 result = get32(0), prec;
 
     // First boot block
-    for (u32 i = 2; i < bsize() / 4; i++) {
+    for (isize i = 2; i < bsize() / 4; i++) {
         
         prec = result;
         if ( (result += get32(i)) < prec) result++;
@@ -95,7 +95,7 @@ FSBootBlock::checksum() const {
     // Second boot block
     u8 *p = partition.dev.blocks[1]->data;
     
-    for (u32 i = 0; i < bsize() / 4; i++) {
+    for (isize i = 0; i < bsize() / 4; i++) {
         
         prec = result;
         if ( (result += FSBlock::read32(p + 4*i)) < prec) result++;

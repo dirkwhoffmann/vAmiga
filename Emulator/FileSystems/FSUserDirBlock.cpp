@@ -9,7 +9,7 @@
 
 #include "FSDevice.h"
 
-FSUserDirBlock::FSUserDirBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
+FSUserDirBlock::FSUserDirBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
     data = new u8[bsize()]();
         
@@ -19,7 +19,8 @@ FSUserDirBlock::FSUserDirBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
     set32(-1, 2);                        // Sub type
 }
 
-FSUserDirBlock::FSUserDirBlock(FSPartition &p, u32 nr, const char *name) : FSUserDirBlock(p, nr)
+FSUserDirBlock::FSUserDirBlock(FSPartition &p, Block nr, const char *name) :
+FSUserDirBlock(p, nr)
 {
     setName(FSName(name));
 }

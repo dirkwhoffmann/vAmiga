@@ -9,7 +9,7 @@
 
 #include "FSDevice.h"
 
-FSBitmapExtBlock::FSBitmapExtBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
+FSBitmapExtBlock::FSBitmapExtBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
     data = new u8[p.dev.bsize]();
 }
@@ -40,15 +40,15 @@ void
 FSBitmapExtBlock::dump() const
 {
     msg("Bitmap blocks : ");
-    for (u32 i = 0; i < (bsize() / 4) - 1; i++) {
-        if (u32 ref = getBmBlockRef(i)) msg("%d ", ref);
+    for (isize i = 0; i < (bsize() / 4) - 1; i++) {
+        if (Block ref = getBmBlockRef(i)) msg("%d ", ref);
     }
     msg("\n");
     msg("         Next : %d\n", getNextBmExtBlockRef());
 }
 
 void
-FSBitmapExtBlock::addBitmapBlockRefs(vector<u32> &refs, std::vector<u32>::iterator &it)
+FSBitmapExtBlock::addBitmapBlockRefs(vector<Block> &refs, std::vector<Block>::iterator &it)
 {
     isize max = (bsize() / 4) - 1;
     

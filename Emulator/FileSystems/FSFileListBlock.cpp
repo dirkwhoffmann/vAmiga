@@ -9,7 +9,7 @@
 
 #include "FSDevice.h"
 
-FSFileListBlock::FSFileListBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
+FSFileListBlock::FSFileListBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
     data = new u8[bsize()]();
 
@@ -31,7 +31,7 @@ FSFileListBlock::dump() const
     msg("Header block : %d\n", getFileHeaderRef());
     msg("   Extension : %d\n", getNextListBlockRef());
     msg(" Data blocks : ");
-    for (u32 i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
+    for (isize i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
     msg("\n");
 }
 
@@ -105,7 +105,7 @@ FSFileListBlock::check(isize byte, u8 *expected, bool strict) const
 }
 
 bool
-FSFileListBlock::addDataBlockRef(u32 first, u32 ref)
+FSFileListBlock::addDataBlockRef(Block first, Block ref)
 {
     // The caller has to ensure that this block contains free slots
     if (getNumDataBlockRefs() < getMaxDataBlockRefs()) {

@@ -13,7 +13,7 @@
 
 struct FSDataBlock : FSBlock {
       
-    FSDataBlock(FSPartition &p, u32 nr);
+    FSDataBlock(FSPartition &p, Block nr);
     ~FSDataBlock();
     
     
@@ -51,8 +51,8 @@ struct OFSDataBlock : FSDataBlock {
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     isize checksumLocation() const override { return 5; }
 
-    u32  getFileHeaderRef() const override          { return get32(1);        }
-    void setFileHeaderRef(u32 ref) override         {        set32(1, ref);   }
+    Block  getFileHeaderRef() const override        { return get32(1);        }
+    void setFileHeaderRef(Block ref) override       {        set32(1, ref);   }
 
     u32  getDataBlockNr() const override            { return get32(2);        }
     void setDataBlockNr(u32 val) override           {        set32(2, val);   }
@@ -60,8 +60,8 @@ struct OFSDataBlock : FSDataBlock {
     u32  getDataBytesInBlock() const override       { return get32(3);        }
     void setDataBytesInBlock(u32 val) override      {        set32(3, val);   }
 
-    u32  getNextDataBlockRef() const override       { return get32(4);        }
-    void setNextDataBlockRef(u32 ref) override      {        set32(4, ref);   }
+    Block  getNextDataBlockRef() const override     { return get32(4);        }
+    void setNextDataBlockRef(Block ref) override    {        set32(4, ref);   }
 
     isize writeData(FILE *file, isize size) override;
     isize addData(const u8 *buffer, isize size) override;

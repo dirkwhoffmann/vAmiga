@@ -13,7 +13,7 @@
 
 struct FSEmptyBlock : FSBlock {
     
-    FSEmptyBlock(FSPartition &p, u32 nr) : FSBlock(p, nr) { }
+    FSEmptyBlock(FSPartition &p, Block nr) : FSBlock(p, nr) { }
      
     const char *getDescription() const override { return "FSEmptyBlock"; }
     

@@ -9,14 +9,14 @@
 
 #include "FSDevice.h"
 
-FSRootBlock::FSRootBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
+FSRootBlock::FSRootBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
     data = new u8[bsize()]();
     
     assert(hashTableSize() == 72);
     
     set32(0, 2);                         // Type
-    set32(3, hashTableSize());           // Hash table size
+    set32(3, (u32)hashTableSize());      // Hash table size
     set32(-50, 0xFFFFFFFF);              // Bitmap validity
     setCreationDate(time(nullptr));      // Creation date
     setModificationDate(time(nullptr));  // Modification date
@@ -119,7 +119,7 @@ FSRootBlock::dump() const
 }
 
 bool
-FSRootBlock::addBitmapBlockRefs(std::vector<u32> &refs)
+FSRootBlock::addBitmapBlockRefs(std::vector<Block> &refs)
 {
     auto it = refs.begin();
      

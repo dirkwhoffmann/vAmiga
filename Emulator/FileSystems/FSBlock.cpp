@@ -11,7 +11,7 @@
 #include "FSDevice.h"
 
 FSBlock *
-FSBlock::makeWithType(FSPartition &p, u32 nr, FSBlockType type)
+FSBlock::makeWithType(FSPartition &p, Block nr, FSBlockType type)
 {
     switch (type) {
 
@@ -55,11 +55,11 @@ FSBlock::check(bool strict) const
     isize count = 0;
     u8 expected;
     
-    for (u32 i = 0; i < bsize(); i++) {
+    for (isize i = 0; i < bsize(); i++) {
         
         if ((error = check(i, &expected, strict)) != ERROR_OK) {
             count++;
-            debug(FS_DEBUG, "Block %d [%d.%d]: %s\n", nr, i / 4, i % 4,
+            debug(FS_DEBUG, "Block %d [%zd.%zd]: %s\n", nr, i / 4, i % 4,
                   ErrorCodeEnum::key(error));
         }
     }
@@ -106,7 +106,7 @@ FSBlock::checksum() const
     
     // Compute the new checksum
     u32 result = 0;
-    for (u32 i = 0; i < bsize() / 4; i++) result += get32(i);
+    for (isize i = 0; i < bsize() / 4; i++) result += get32(i);
     result = ~result + 1;
     
     // Undo the modification
@@ -149,73 +149,73 @@ FSBlock::exportBlock(u8 *dst, isize size)
 FSBlock *
 FSBlock::getParentDirBlock()
 {
-    u32 ref = getParentDirRef();
-    return ref ? partition.dev.blockPtr(ref) : nullptr;
+    Block nr = getParentDirRef();
+    return nr ? partition.dev.blockPtr(nr) : nullptr;
 }
 
 FSFileHeaderBlock *
 FSBlock::getFileHeaderBlock()
 {
-    u32 ref = getFileHeaderRef();
-    return ref ? partition.dev.fileHeaderBlockPtr(ref) : nullptr;
+    Block nr = getFileHeaderRef();
+    return nr ? partition.dev.fileHeaderBlockPtr(nr) : nullptr;
 }
 
 FSBlock *
 FSBlock::getNextHashBlock()
 {
-    u32 ref = getNextHashRef();
-    return ref ? partition.dev.blockPtr(ref) : nullptr;
+    Block nr = getNextHashRef();
+    return nr ? partition.dev.blockPtr(nr) : nullptr;
 }
 
 FSFileListBlock *
 FSBlock::getNextListBlock()
 {
-    u32 ref = getNextListBlockRef();
-    return ref ? partition.dev.fileListBlockPtr(ref) : nullptr;
+    Block nr = getNextListBlockRef();
+    return nr ? partition.dev.fileListBlockPtr(nr) : nullptr;
 }
 
 FSBitmapExtBlock *
 FSBlock::getNextBmExtBlock()
 {
-    u32 ref = getNextBmExtBlockRef();
-    return ref ? partition.dev.bitmapExtBlockPtr(ref) : nullptr;
+    Block nr = getNextBmExtBlockRef();
+    return nr ? partition.dev.bitmapExtBlockPtr(nr) : nullptr;
 }
 
 
 FSDataBlock *
 FSBlock::getFirstDataBlock()
 {
-    u32 ref = getFirstDataBlockRef();
-    return ref ? partition.dev.dataBlockPtr(ref) : nullptr;
+    Block nr = getFirstDataBlockRef();
+    return nr ? partition.dev.dataBlockPtr(nr) : nullptr;
 }
 
 FSDataBlock *
 FSBlock::getNextDataBlock()
 {
-    u32 ref = getNextDataBlockRef();
-    return ref ? partition.dev.dataBlockPtr(ref) : nullptr;
+    Block nr = getNextDataBlockRef();
+    return nr ? partition.dev.dataBlockPtr(nr) : nullptr;
 }
 
 u32
-FSBlock::getHashRef(u32 nr) const
+FSBlock::getHashRef(Block nr) const
 {
-    return (nr < hashTableSize()) ? get32(6 + nr) : 0;
+    return (nr < (Block)hashTableSize()) ? get32(6 + nr) : 0;
 }
 
 void
-FSBlock::setHashRef(u32 nr, u32 ref)
+FSBlock::setHashRef(Block nr, u32 ref)
 {
-    if (nr < hashTableSize()) set32(6 + nr, ref);
+    if (nr < (Block)hashTableSize()) set32(6 + nr, ref);
 }
 
 void
 FSBlock::dumpHashTable() const
 {
-    for (u32 i = 0; i < hashTableSize(); i++) {
+    for (isize i = 0; i < hashTableSize(); i++) {
         
         u32 value = read32(data + 24 + 4 * i);
         if (value) {
-            msg("%d: %d ", i, value);
+            msg("%zd: %d ", i, value);
         }
     }
 }

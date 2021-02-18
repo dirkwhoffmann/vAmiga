@@ -13,7 +13,7 @@
 
 struct FSBootBlock : FSBlock {
         
-    FSBootBlock(FSPartition &p, u32 nr);
+    FSBootBlock(FSPartition &p, Block nr);
     ~FSBootBlock();
     
     const char *getDescription() const override { return "FSBootBlock"; }
