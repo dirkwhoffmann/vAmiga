@@ -484,3 +484,4 @@ public:
     // Returns a certain amount of bytes as a string containing hex words
     template <Accessor A> const char *hex(u32 addr, isize bytes);
 };
+

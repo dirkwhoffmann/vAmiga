@@ -28,6 +28,11 @@ class Oscillator : public AmigaComponent {
     // Converts nanoseconds to kernel time
     static u64 nanos_to_abs(u64 nanos) { return nanos * tb.denom / tb.numer; }
 
+#else
+
+    struct timespec req;
+    struct timespec rem;
+    
 #endif
     
     /* The heart of this class is method sychronize() which puts the thread to
@@ -97,7 +102,7 @@ public:
 
     // Returns the current kernel time in milli seconds
     static u64 millis() { return nanos() / 1000000; }
-    
+
     
     //
     // Managing emulation speed
