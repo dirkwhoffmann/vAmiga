@@ -61,7 +61,7 @@ public:
     isize numSectors() const;
     isize numReserved() const;
     isize numBlocks() const;
-    long bsize() const;
+    isize bsize() const;
     struct FSDeviceDescriptor layout();
 
     

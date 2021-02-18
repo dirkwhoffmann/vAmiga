@@ -123,7 +123,7 @@ HardwareComponent::load(const u8 *buffer)
     trace(SNP_DEBUG, "Loaded %ld bytes (expected %zu)\n", ptr - buffer, size());
     assert(ptr - buffer == size());
 
-    return ptr - buffer;
+    return (isize)(ptr - buffer);
 }
 
 isize
@@ -149,7 +149,7 @@ HardwareComponent::save(u8 *buffer)
     trace(SNP_DEBUG, "Saved %ld bytes (expected %zu)\n", ptr - buffer, size());
     assert(ptr - buffer == size());
 
-    return ptr - buffer;
+    return (isize)(ptr - buffer);
 }
 
 void

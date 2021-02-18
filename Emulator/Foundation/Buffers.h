@@ -136,7 +136,7 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
         assert(!this->isFull());
 
         // Add the new element
-        i64 oldw = this->w;
+        isize oldw = this->w;
         this->write(element);
         keys[oldw] = key;
 
@@ -144,7 +144,7 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
         while (oldw != this->r) {
 
             // Get the index of the preceeding element
-            i64 p = this->prev(oldw);
+            isize p = this->prev(oldw);
 
             // Exit the loop once we've found the correct position
             if (key >= keys[p]) break;

@@ -76,7 +76,7 @@ HDFFile::numBlocks() const
     return size / bsize();
 }
 
-long
+isize
 HDFFile::bsize() const
 {
     if (hasRDB()) warn("HDF RDB images are not supported");
@@ -103,14 +103,14 @@ HDFFile::layout()
     result.partitions.push_back(FSPartitionDescriptor(dos(0),
                                                       0,
                                                       result.numCyls - 1,
-                                                      (u32)rootKey));
+                                                      (Block)rootKey));
 
     // Seek bitmap blocks
-    u32 ref = (u32)rootKey;
+    Block ref = (Block)rootKey;
     isize cnt = 25;
     isize offset = bsize() - 49 * 4;
     
-    while (ref && ref < result.numBlocks) {
+    while (ref && ref < (Block)result.numBlocks) {
 
         const u8 *p = data + (ref * bsize()) + offset;
     

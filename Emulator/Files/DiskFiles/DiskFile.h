@@ -37,8 +37,8 @@ public:
     virtual isize numSides() const = 0;
     virtual isize numCyls() const = 0;
     virtual isize numSectors() const = 0;
-    long numTracks() const { return numSides() * numCyls(); }
-    long numBlocks() const { return numTracks() * numSectors(); }
+    isize numTracks() const { return numSides() * numCyls(); }
+    isize numBlocks() const { return numTracks() * numSectors(); }
 
     // Analyzes the boot block
     virtual BootBlockType bootBlockType() const { return BB_STANDARD; }
@@ -53,16 +53,16 @@ public:
 public:
 
     // Reads a single data byte
-    virtual u8 readByte(long b, long offset) const;
-    virtual u8 readByte(long t, long s, long offset) const;
+    virtual u8 readByte(isize b, isize offset) const;
+    virtual u8 readByte(isize t, isize s, isize offset) const;
 
     // Fills a buffer with the data of a single sector
-    virtual void readSector(u8 *dst, long b) const;
-    virtual void readSector(u8 *dst, long t, long s) const;
+    virtual void readSector(u8 *dst, isize b) const;
+    virtual void readSector(u8 *dst, isize t, isize s) const;
 
     // Writes a string representation into the provided buffer
-    virtual void readSectorHex(char *dst, long b, isize count) const;
-    virtual void readSectorHex(char *dst, long t, long s, isize count) const;
+    virtual void readSectorHex(char *dst, isize b, isize count) const;
+    virtual void readSectorHex(char *dst, isize t, isize s, isize count) const;
 
     
     //

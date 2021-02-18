@@ -264,7 +264,7 @@ if ((byte % 4) == 3 && BYTE0(value) != BYTE0((u32)exp)) \
 #define EXPECT_CHECKSUM EXPECT_LONGWORD(checksum())
 
 #define EXPECT_LESS_OR_EQUAL(exp) { \
-if (value > exp) \
+if (value > (u32)exp) \
 { *expected = (u8)(exp); return ERROR_FS_EXPECTED_SMALLER_VALUE; } }
 
 #define EXPECT_DOS_REVISION { \

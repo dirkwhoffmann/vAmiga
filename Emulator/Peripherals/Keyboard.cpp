@@ -184,7 +184,7 @@ Keyboard::setSPLine(bool value, Cycle cycle)
      *  the pulse must be at least 85 microseconds for operation with all
      *  models of Amiga keyboards." [HRM 3rd editon]
      */
-    isize diff = (spHigh - spLow) / 28;
+    isize diff = (isize)((spHigh - spLow) / 28);
     bool accept = diff >= 1;
     bool reject = diff > 0 && !accept;
 

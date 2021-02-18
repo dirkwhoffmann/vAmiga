@@ -178,7 +178,7 @@ FSPartition::freeBlocks() const
 {
     isize result = 0;
     
-    for (isize i = firstBlock; i <= lastBlock; i++) {
+    for (isize i = (isize)firstBlock; i <= (isize)lastBlock; i++) {
         if (isFree((Block)i)) result++;
     }
 
@@ -488,18 +488,20 @@ FSPartition::killVirus()
 bool
 FSPartition::check(bool strict, FSErrorReport &report) const
 {
+    assert(firstBlock <= lastBlock);
+    
     report.bitmapErrors = 0;
     
-    for (isize i = firstBlock; i <= lastBlock; i++) {
+    for (Block i = firstBlock; i <= lastBlock; i++) {
 
         FSBlock *block = dev.blocks[i];
         if (block->type() == FS_EMPTY_BLOCK && !isFree((Block)i)) {
             report.bitmapErrors++;
-            debug(FS_DEBUG, "Empty block %zd is marked as allocated\n", i);
+            debug(FS_DEBUG, "Empty block %d is marked as allocated\n", i);
         }
         if (block->type() != FS_EMPTY_BLOCK && isFree((Block)i)) {
             report.bitmapErrors++;
-            debug(FS_DEBUG, "Non-empty block %zd is marked as free\n", i);
+            debug(FS_DEBUG, "Non-empty block %d is marked as free\n", i);
         }
     }
  

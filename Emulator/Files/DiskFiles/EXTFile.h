@@ -57,6 +57,6 @@ public:
     isize numSides() const override { return 2; }
     isize numCyls() const override { return 80; }
     isize numSectors() const override { return 11; }
-    void readSector(u8 *target, long s) const override { assert(false); }
-    void readSector(u8 *target, long t, long s) const override { assert(false); }
+    void readSector(u8 *target, isize s) const override { assert(false); }
+    void readSector(u8 *target, isize t, isize s) const override { assert(false); }
 };

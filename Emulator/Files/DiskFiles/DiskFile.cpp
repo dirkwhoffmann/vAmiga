@@ -10,26 +10,26 @@
 #include "Amiga.h"
 
 u8
-DiskFile::readByte(long t, long s, long offset) const
+DiskFile::readByte(isize t, isize s, isize offset) const
 {
     return readByte(t * numSectors() + s, offset);
 }
 
 u8
-DiskFile::readByte(long b, long offset) const
+DiskFile::readByte(isize b, isize offset) const
 {
     assert(offset < 512);
     return data[b * 512 + offset];
 }
 
 void
-DiskFile::readSector(u8 *dst, long t, long s) const
+DiskFile::readSector(u8 *dst, isize t, isize s) const
 {
     readSector(dst, t * numSectors() + s);
 }
 
 void
-DiskFile::readSector(u8 *dst, long s) const
+DiskFile::readSector(u8 *dst, isize s) const
 {
     isize sectorSize = 512;
     isize offset = s * sectorSize;
@@ -43,13 +43,13 @@ DiskFile::readSector(u8 *dst, long s) const
 }
 
 void
-DiskFile::readSectorHex(char *dst, long t, long s, isize count) const
+DiskFile::readSectorHex(char *dst, isize t, isize s, isize count) const
 {
     readSectorHex(dst, t * numSectors() + s, count);
 }
 
 void
-DiskFile::readSectorHex(char *dst, long s, isize count) const
+DiskFile::readSectorHex(char *dst, isize s, isize count) const
 {
     isize sectorSize = 512;
     isize offset = s * sectorSize;

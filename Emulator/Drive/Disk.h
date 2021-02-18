@@ -71,8 +71,8 @@ private:
         
     // Length of each track in bytes
     union {
-        u32 cylinder[84][2];
-        u32 track[168];
+        i32 cylinder[84][2];
+        i32 track[168];
     } length;
 
     
