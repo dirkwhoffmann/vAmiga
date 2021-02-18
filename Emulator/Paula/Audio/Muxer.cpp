@@ -376,7 +376,7 @@ Muxer::handleBufferUnderflow()
     // (1) The consumer runs slightly faster than the producer
     // (2) The producer is halted or not startet yet
     
-    trace(AUDBUF_DEBUG, "UNDERFLOW (r: %lld w: %lld)\n", stream.r, stream.w);
+    trace(AUDBUF_DEBUG, "UNDERFLOW (r: %zd w: %zd)\n", stream.r, stream.w);
     
     // Reset the write pointer
     stream.alignWritePtr();
@@ -405,7 +405,7 @@ Muxer::handleBufferOverflow()
     // (1) The consumer runs slightly slower than the producer
     // (2) The consumer is halted or not startet yet
     
-    trace(AUDBUF_DEBUG, "OVERFLOW (r: %lld w: %lld)\n", stream.r, stream.w);
+    trace(AUDBUF_DEBUG, "OVERFLOW (r: %zd w: %zd)\n", stream.r, stream.w);
     
     // Reset the write pointer
     stream.alignWritePtr();

@@ -24,7 +24,7 @@ template <class T, isize capacity> struct RingBuffer
     T elements[capacity];
 
     // Read and write pointers
-    i64 r, w;
+    isize r, w;
 
     
     //
@@ -35,7 +35,7 @@ template <class T, isize capacity> struct RingBuffer
     
     void clear() { r = w = 0; }
     void clear(T t) { for (isize i = 0; i < capacity; i++) elements[i] = t; clear(); }
-    void align(i64 offset) { w = (r + offset) % capacity; }
+    void align(isize offset) { w = (r + offset) % capacity; }
 
     
     //
@@ -64,10 +64,10 @@ template <class T, isize capacity> struct RingBuffer
     // Working with indices
     //
 
-    i64 begin() const { return r; }
-    i64 end() const { return w; }
-    static int next(i64 i) { return (capacity + i + 1) % capacity; }
-    static int prev(i64 i) { return (capacity + i - 1) % capacity; }
+    isize begin() const { return r; }
+    isize end() const { return w; }
+    static int next(isize i) { return (capacity + i + 1) % capacity; }
+    static int prev(isize i) { return (capacity + i - 1) % capacity; }
 
 
     //
@@ -84,7 +84,7 @@ template <class T, isize capacity> struct RingBuffer
         return &elements[r];
     }
 
-    const T& current(i64 offset) const
+    const T& current(isize offset) const
     {
         return elements[(r + offset) % capacity];
     }
@@ -102,7 +102,7 @@ template <class T, isize capacity> struct RingBuffer
     {
         assert(!isFull());
 
-        i64 oldw = w;
+        isize oldw = w;
         w = next(w);
         elements[oldw] = element;
     }
