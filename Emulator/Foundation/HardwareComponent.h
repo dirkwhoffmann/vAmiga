@@ -308,7 +308,7 @@ applyToPersistentItems(reader); \
 applyToHardResetItems(reader); \
 applyToResetItems(reader); \
 debug(SNP_DEBUG, "Recreated from %zu bytes\n", reader.ptr - buffer); \
-return reader.ptr - buffer; \
+return (isize)(reader.ptr - buffer); \
 }
 
 #define SAVE_SNAPSHOT_ITEMS \
@@ -318,5 +318,5 @@ applyToPersistentItems(writer); \
 applyToHardResetItems(writer); \
 applyToResetItems(writer); \
 debug(SNP_DEBUG, "Serialized to %zu bytes\n", writer.ptr - buffer); \
-return writer.ptr - buffer; \
+return (isize)(writer.ptr - buffer); \
 }

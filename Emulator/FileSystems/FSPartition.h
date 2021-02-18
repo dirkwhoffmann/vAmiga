@@ -103,16 +103,16 @@ public:
     isize requiredBlocks(isize fileSize) const;
 
     // Seeks a free block and marks it as allocated
-    u32 allocateBlock();
-    u32 allocateBlockAbove(u32 ref);
-    u32 allocateBlockBelow(u32 ref);
+    Block allocateBlock();
+    Block allocateBlockAbove(Block nr);
+    Block allocateBlockBelow(Block nr);
 
     // Deallocates a block
-    void deallocateBlock(u32 ref);
+    void deallocateBlock(Block nr);
 
     // Adds a new block of a certain kind
-    u32 addFileListBlock(u32 head, u32 prev);
-    u32 addDataBlock(u32 count, u32 head, u32 prev);
+    Block addFileListBlock(Block head, Block prev);
+    Block addDataBlock(isize count, Block head, Block prev);
     
     // Creates a new block of a certain kind
     FSUserDirBlock *newUserDirBlock(const char *name);
@@ -124,21 +124,21 @@ public:
     //
 
     // Returns the bitmap block storing the allocation bit for a certain block
-    FSBitmapBlock *bmBlockForBlock(u32 relRef);
+    FSBitmapBlock *bmBlockForBlock(Block relRef);
 
     // Checks if a block is marked as free in the allocation bitmap
-    bool isFree(u32 ref) const;
+    bool isFree(Block nr) const;
     
     // Marks a block as allocated or free
-    void markAsAllocated(u32 ref) { setAllocationBit(ref, 0); }
-    void markAsFree(u32 ref) { setAllocationBit(ref, 1); }
-    void setAllocationBit(u32 ref, bool value);
+    void markAsAllocated(Block nr) { setAllocationBit(nr, 0); }
+    void markAsFree(Block nr) { setAllocationBit(nr, 1); }
+    void setAllocationBit(Block nr, bool value);
 
     
 private:
     
     // Locates the allocation bit for a certain block
-    FSBitmapBlock *locateAllocationBit(u32 ref, u32 *byte, u32 *bit) const;
+    FSBitmapBlock *locateAllocationBit(Block nr, u32 *byte, u32 *bit) const;
     
     
     //

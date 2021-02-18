@@ -31,11 +31,11 @@ FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, F
     bsize       = 512;
     
     // Determine the location of the root block and the bitmap block
-    isize root   = numBlocks / 2;
-    isize bitmap = root + 1;
+    Block root   = (Block)(numBlocks / 2);
+    Block bitmap = root + 1;
 
-    partitions.push_back(FSPartitionDescriptor(dos, 0, numCyls - 1, (u32)root));
-    partitions[0].bmBlocks.push_back((u32)bitmap);
+    partitions.push_back(FSPartitionDescriptor(dos, 0, numCyls - 1, root));
+    partitions[0].bmBlocks.push_back(bitmap);
 }
 
 void
@@ -60,7 +60,7 @@ FSDeviceDescriptor::dump()
 
 FSPartitionDescriptor::FSPartitionDescriptor(FSVolumeType dos,
                                              isize firstCyl, isize lastCyl,
-                                             u32 root)
+                                             Block root)
 {
     this->dos = dos;
     this->lowCyl = firstCyl;

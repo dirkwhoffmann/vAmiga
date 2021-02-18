@@ -186,7 +186,10 @@ using namespace moira;
 
 - (NSString *)disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len
 {
-    const char *str = [self cpu]->disassembleRecordedInstr((int)i, len);
+    isize result;
+    const char *str = [self cpu]->disassembleRecordedInstr((int)i, &result);
+    *len = (NSInteger)result;
+    
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 
@@ -210,7 +213,10 @@ using namespace moira;
 
 - (NSString *)disassembleInstr:(NSInteger)addr length:(NSInteger *)len
 {
-    const char *str = [self cpu]->disassembleInstr((u32)addr, len);
+    isize result;
+    const char *str = [self cpu]->disassembleInstr((u32)addr, &result);
+    *len = result;
+    
     return str ? [NSString stringWithUTF8String:str] : nullptr;
 }
 

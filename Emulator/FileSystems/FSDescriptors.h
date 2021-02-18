@@ -71,18 +71,18 @@ struct FSPartitionDescriptor : AmigaObject {
     isize highCyl = 0;
         
     // Location of the root block
-    u32 rootBlock = 0;
+    Block rootBlock = 0;
     
     // References to all bitmap blocks and bitmap extension blocks
-    vector<u32> bmBlocks;
-    vector<u32> bmExtBlocks;
+    vector<Block> bmBlocks;
+    vector<Block> bmExtBlocks;
 
     
     //
     // Initializing
     //
     
-    FSPartitionDescriptor(FSVolumeType dos, isize firstCyl, isize lastCyl, u32 root);
+    FSPartitionDescriptor(FSVolumeType dos, isize firstCyl, isize lastCyl, Block root);
 
     const char *getDescription() const override { return "FSPartition"; }
     

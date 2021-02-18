@@ -71,8 +71,8 @@ protected:
     // The currently selected partition
     isize cp = 0;
     
-    // The currently selected directory
-    u32 cd = 0;
+    // The currently selected directory (reference to FSDirBlock)
+    Block cd = 0;
     
 
     //
@@ -151,7 +151,7 @@ public:
     isize numPartitions() { return (isize)partitions.size(); }
     
     // Returns the partition a certain block belongs to
-    isize partitionForBlock(u32 ref);
+    isize partitionForBlock(Block nr);
 
     // Gets or sets the name of the current partition
     FSName getName() { return partitions[cp]->getName(); }
@@ -177,24 +177,24 @@ public:
 public:
     
     // Returns the type of a certain block
-    FSBlockType blockType(u32 nr);
+    FSBlockType blockType(Block nr);
 
     // Returns the usage type of a certain byte in a certain block
-    FSItemType itemType(u32 nr, isize pos) const;
+    FSItemType itemType(Block nr, isize pos) const;
     
     // Queries a pointer from the block storage (may return nullptr)
-    FSBlock *blockPtr(u32 nr) const;
+    FSBlock *blockPtr(Block nr) const;
 
     // Queries a pointer to a block of a certain type (may return nullptr)
-    FSBootBlock *bootBlockPtr(u32 nr);
-    FSRootBlock *rootBlockPtr(u32 nr);
-    FSBitmapBlock *bitmapBlockPtr(u32 nr);
-    FSBitmapExtBlock *bitmapExtBlockPtr(u32 nr);
-    FSUserDirBlock *userDirBlockPtr(u32 nr);
-    FSFileHeaderBlock *fileHeaderBlockPtr(u32 nr);
-    FSFileListBlock *fileListBlockPtr(u32 nr);
-    FSDataBlock *dataBlockPtr(u32 nr);
-    FSBlock *hashableBlockPtr(u32 nr);
+    FSBootBlock *bootBlockPtr(Block nr);
+    FSRootBlock *rootBlockPtr(Block nr);
+    FSBitmapBlock *bitmapBlockPtr(Block nr);
+    FSBitmapExtBlock *bitmapExtBlockPtr(Block nr);
+    FSUserDirBlock *userDirBlockPtr(Block nr);
+    FSFileHeaderBlock *fileHeaderBlockPtr(Block nr);
+    FSFileListBlock *fileListBlockPtr(Block nr);
+    FSDataBlock *dataBlockPtr(Block nr);
+    FSBlock *hashableBlockPtr(Block nr);
     
     
     //
@@ -224,18 +224,18 @@ public:
 
     // Returns the path of a file system item
     string getPath(FSBlock *block);
-    string getPath(u32 ref) { return getPath(blockPtr(ref)); }
+    string getPath(Block nr) { return getPath(blockPtr(nr)); }
     string getPath() { return getPath(currentDirBlock()); }
 
     // Seeks an item inside the current directory
-    u32 seekRef(FSName name);
-    u32 seekRef(const char *name) { return seekRef(FSName(name)); }
+    Block seekRef(FSName name);
+    Block seekRef(const char *name) { return seekRef(FSName(name)); }
     FSBlock *seek(const char *name) { return blockPtr(seekRef(name)); }
     FSBlock *seekDir(const char *name) { return userDirBlockPtr(seekRef(name)); }
     FSBlock *seekFile(const char *name) { return fileHeaderBlockPtr(seekRef(name)); }
 
     // Adds a reference to the current directory
-    void addHashRef(u32 ref);
+    void addHashRef(Block nr);
     void addHashRef(FSBlock *block);
     
     // Creates a new directory
@@ -252,11 +252,11 @@ public:
     //
     
     // Returns the last element in the list of extension blocks
-    FSBlock *lastFileListBlockInChain(u32 start);
+    FSBlock *lastFileListBlockInChain(Block start);
     FSBlock *lastFileListBlockInChain(FSBlock *block);
 
     // Returns the last element in the list of blocks with the same hash
-    FSBlock *lastHashBlockInChain(u32 start);
+    FSBlock *lastHashBlockInChain(Block start);
     FSBlock *lastHashBlockInChain(FSBlock *block);
 
     
@@ -267,15 +267,17 @@ public:
 public:
     
     // Returns a collections of nodes for all items in the current directory
-    ErrorCode collect(u32 ref, std::vector<u32> &list, bool recursive = true);
+    ErrorCode collect(Block nr, std::vector<Block> &list, bool recursive = true);
 
 private:
     
     // Collects all references stored in a hash table
-    ErrorCode collectHashedRefs(u32 ref, std::stack<u32> &list, std::set<u32> &visited);
+    ErrorCode collectHashedRefs(Block nr, std::stack<Block> &list,
+                                std::set<Block> &visited);
 
     // Collects all references with the same hash value
-    ErrorCode collectRefsWithSameHashValue(u32 ref, std::stack<u32> &list, std::set<u32> &visited);
+    ErrorCode collectRefsWithSameHashValue(Block nr, std::stack<Block> &list,
+                                           std::set<Block> &visited);
 
  
     //
@@ -288,30 +290,30 @@ public:
     FSErrorReport check(bool strict) const;
 
     // Checks a single byte in a certain block
-    ErrorCode check(u32 blockNr, isize pos, u8 *expected, bool strict) const;
+    ErrorCode check(Block nr, isize pos, u8 *expected, bool strict) const;
 
     // Checks if the block with the given number is part of the volume
     bool isBlockNumber(isize nr) { return nr < numBlocks; }
 
     // Checks if the type of a block matches one of the provides types
-    ErrorCode checkBlockType(u32, FSBlockType type);
-    ErrorCode checkBlockType(u32, FSBlockType type, FSBlockType altType);
+    ErrorCode checkBlockType(Block nr, FSBlockType type);
+    ErrorCode checkBlockType(Block nr, FSBlockType type, FSBlockType altType);
 
     // Checks if a certain block is corrupted
-    bool isCorrupted(u32 blockNr) { return getCorrupted(blockNr) != 0; }
+    bool isCorrupted(Block nr) { return getCorrupted(nr) != 0; }
 
     // Returns the position in the corrupted block list (0 = OK)
-    isize getCorrupted(u32 blockNr);
+    isize getCorrupted(Block nr);
 
-    // Returns the number of the next or previous corrupted block
-    isize nextCorrupted(u32 blockNr);
-    isize prevCorrupted(u32 blockNr);
+    // Returns a reference to the next or the previous corrupted block
+    Block nextCorrupted(Block nr);
+    Block prevCorrupted(Block nr);
 
     // Checks if a certain block is the n-th corrupted block
-    bool isCorrupted(u32 blockNr, isize n);
+    bool isCorrupted(Block nr, isize n);
 
-    // Returns the number of the the n-th corrupted block
-    u32 seekCorruptedBlock(isize n);
+    // Returns a reference to the n-th corrupted block
+    Block seekCorruptedBlock(isize n);
     
     
     //
@@ -321,10 +323,10 @@ public:
 public:
         
     // Reads a single byte from a block
-    u8 readByte(u32 block, isize offset) const;
+    u8 readByte(Block nr, isize offset) const;
 
     // Predicts the type of a block by analyzing its number and data (DEPRECATED)
-    FSBlockType predictBlockType(u32 nr, const u8 *buffer);
+    FSBlockType predictBlockType(Block nr, const u8 *buffer);
 
     // Imports the volume from a buffer compatible with the ADF format
     bool importVolume(const u8 *src, isize size);
@@ -339,10 +341,10 @@ public:
     bool exportVolume(u8 *dst, isize size, ErrorCode *error);
 
     // Exports a single block or a range of blocks
-    bool exportBlock(isize nr, u8 *dst, isize size);
-    bool exportBlock(isize nr, u8 *dst, isize size, ErrorCode *error);
-    bool exportBlocks(isize first, isize last, u8 *dst, isize size);
-    bool exportBlocks(isize first, isize last, u8 *dst, isize size, ErrorCode *error);
+    bool exportBlock(Block nr, u8 *dst, isize size);
+    bool exportBlock(Block nr, u8 *dst, isize size, ErrorCode *error);
+    bool exportBlocks(Block first, Block last, u8 *dst, isize size);
+    bool exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *error);
 
     // Exports the volume to a directory of the host file system
     ErrorCode exportDirectory(const char *path);

@@ -17,7 +17,7 @@ struct FSBlock : AmigaObject {
     struct FSPartition &partition;
     
     // The sector number of this block
-    u32 nr;
+    Block nr;
     
     // Outcome of the last integrity check (0 = OK, n = n-th corrupted block)
     isize corrupted = 0;

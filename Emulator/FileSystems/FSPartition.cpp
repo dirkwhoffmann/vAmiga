@@ -284,54 +284,54 @@ FSPartition::allocateBlockBelow(u32 ref)
 }
 
 void
-FSPartition::deallocateBlock(u32 ref)
+FSPartition::deallocateBlock(Block nr)
 {
-    assert(ref >= firstBlock && ref <= lastBlock);
-    assert(dev.blocks[ref]);
+    assert(nr >= firstBlock && nr <= lastBlock);
+    assert(dev.blocks[nr]);
     
-    delete dev.blocks[ref];
-    dev.blocks[ref] = new FSEmptyBlock(*this, ref);
-    markAsFree(ref);
+    delete dev.blocks[nr];
+    dev.blocks[nr] = new FSEmptyBlock(*this, nr);
+    markAsFree(nr);
 }
 
-u32
-FSPartition::addFileListBlock(u32 head, u32 prev)
+Block
+FSPartition::addFileListBlock(Block head, Block prev)
 {
     FSBlock *prevBlock = dev.blockPtr(prev);
     if (!prevBlock) return 0;
     
-    u32 ref = allocateBlock();
-    if (!ref) return 0;
+    Block nr = allocateBlock();
+    if (!nr) return 0;
     
-    dev.blocks[ref] = new FSFileListBlock(*this, ref);
-    dev.blocks[ref]->setFileHeaderRef(head);
-    prevBlock->setNextListBlockRef(ref);
+    dev.blocks[nr] = new FSFileListBlock(*this, nr);
+    dev.blocks[nr]->setFileHeaderRef(head);
+    prevBlock->setNextListBlockRef(nr);
     
-    return ref;
+    return nr;
 }
 
-u32
-FSPartition::addDataBlock(u32 count, u32 head, u32 prev)
+Block
+FSPartition::addDataBlock(isize count, Block head, Block prev)
 {
     FSBlock *prevBlock = dev.blockPtr(prev);
     if (!prevBlock) return 0;
 
-    u32 ref = allocateBlock();
-    if (!ref) return 0;
+    Block nr = allocateBlock();
+    if (!nr) return 0;
 
     FSDataBlock *newBlock;
     if (isOFS()) {
-        newBlock = new OFSDataBlock(*this, ref);
+        newBlock = new OFSDataBlock(*this, nr);
     } else {
-        newBlock = new FFSDataBlock(*this, ref);
+        newBlock = new FFSDataBlock(*this, nr);
     }
     
-    dev.blocks[ref] = newBlock;
-    newBlock->setDataBlockNr(count);
+    dev.blocks[nr] = newBlock;
+    newBlock->setDataBlockNr((Block)count);
     newBlock->setFileHeaderRef(head);
-    prevBlock->setNextDataBlockRef(ref);
+    prevBlock->setNextDataBlockRef(nr);
     
-    return ref;
+    return nr;
 }
 
 
@@ -364,7 +364,7 @@ FSPartition::newFileHeaderBlock(const char *name)
 }
 
 FSBitmapBlock *
-FSPartition::bmBlockForBlock(u32 relRef)
+FSPartition::bmBlockForBlock(Block relRef)
 {
     assert(relRef >= 2 && relRef < numBlocks());
         

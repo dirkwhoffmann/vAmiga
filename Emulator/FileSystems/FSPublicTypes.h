@@ -13,6 +13,8 @@
 
 #include "Aliases.h"
 
+typedef u32 Block;
+
 enum_long(FS_VOLUME_TYPE)
 {
     FS_NODOS = -1,
@@ -67,34 +69,6 @@ enum_long(FS_BLOCK_TYPE)
 };
 typedef FS_BLOCK_TYPE FSBlockType;
 
-/*
-inline bool
-isFSBlockType(long value)
-{
-    return value >= FS_UNKNOWN_BLOCK && value <= FS_DATA_BLOCK_FFS;
-}
-
-inline const char *
-sFSBlockType(FSBlockType type)
-{
-    switch (type) {
-            
-        case FS_EMPTY_BLOCK:      return "FS_EMPTY_BLOCK";
-        case FS_BOOT_BLOCK:       return "FS_BOOT_BLOCK";
-        case FS_ROOT_BLOCK:       return "FS_ROOT_BLOCK";
-        case FS_BITMAP_BLOCK:     return "FS_BITMAP_BLOCK";
-        case FS_BITMAP_EXT_BLOCK: return "FS_BITMAP_EXT_BLOCK";
-        case FS_USERDIR_BLOCK:    return "FS_USERDIR_BLOCK";
-        case FS_FILEHEADER_BLOCK: return "FS_FILEHEADER_BLOCK";
-        case FS_FILELIST_BLOCK:   return "FS_FILELIST_BLOCK";
-        case FS_DATA_BLOCK_OFS:   return "FS_DATA_BLOCK_OFS";
-        case FS_DATA_BLOCK_FFS:   return "FS_DATA_BLOCK_FFS";
-            
-        default:                  return "???";
-    }
-}
-*/
-
 enum_long(FSI_TYPE)
 {
     FSI_UNKNOWN,
@@ -141,13 +115,6 @@ enum_long(FSI_TYPE)
 };
 typedef FSI_TYPE FSItemType;
 
-/*
-inline bool
-isFSBlockItem(long value)
-{
-    return value >= 0 && value <= FSI_BITMAP;
-}
-*/
 
 //
 // Structures
