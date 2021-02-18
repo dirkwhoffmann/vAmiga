@@ -25,15 +25,15 @@ struct FSPartition : AmigaObject {
     isize highCyl = 0;
     
     // Block boundaries
-    u32 firstBlock = 0;
-    u32 lastBlock = 0;
+    Block firstBlock = 0;
+    Block lastBlock = 0;
     
     // Location of the root block
-    u32 rootBlock = 0;
+    Block rootBlock = 0;
     
     // Location of the bitmap blocks and extended bitmap blocks
-    vector<u32> bmBlocks;
-    vector<u32> bmExtBlocks;
+    vector<Block> bmBlocks;
+    vector<Block> bmExtBlocks;
 
     
     //
@@ -61,7 +61,7 @@ public:
     void dump() const;
 
     // Predicts the type of a block by analyzing its number and data
-    FSBlockType predictBlockType(u32 nr, const u8 *buffer) const;
+    FSBlockType predictBlockType(Block nr, const u8 *buffer) const;
     
     // Gets or sets the name of this partition
     FSName getName() const;
@@ -163,8 +163,8 @@ public:
     // Performs several partition checks
     bool check(bool strict, FSErrorReport &report) const;
 
-    // Checks if the block with the given number is part of this partition
-    bool inRange(u32 nr) const { return nr >= firstBlock && nr <= lastBlock; }
+    // Checks if a certain block belongs to his partition
+    bool inRange(Block nr) const { return nr >= firstBlock && nr <= lastBlock; }
 };
 
 typedef FSPartition* FSPartitionPtr;

@@ -717,19 +717,19 @@ FSDevice::seekCorruptedBlock(isize n)
 }
 
 u8
-FSDevice::readByte(u32 block, isize offset) const
+FSDevice::readByte(Block nr, isize offset) const
 {
     assert(offset < bsize);
 
-    if (block < numBlocks) {
-        return blocks[block]->data ? blocks[block]->data[offset] : 0;
+    if (nr < (Block)numBlocks) {
+        return blocks[nr]->data ? blocks[nr]->data[offset] : 0;
     }
     
     return 0;
 }
 
 FSBlockType
-FSDevice::predictBlockType(u32 nr, const u8 *buffer)
+FSDevice::predictBlockType(Block nr, const u8 *buffer)
 {
     assert(buffer != nullptr);
     
@@ -777,7 +777,7 @@ FSDevice::importVolume(const u8 *src, isize size, ErrorCode *err)
     }
         
     // Import all blocks
-    for (u32 i = 0; i < numBlocks; i++) {
+    for (isize i = 0; i < numBlocks; i++) {
         
         const u8 *data = src + i * bsize;
         
@@ -785,10 +785,10 @@ FSDevice::importVolume(const u8 *src, isize size, ErrorCode *err)
         FSPartition &p = blocks[i]->partition;
         
         // Determine the type of the new block
-        FSBlockType type = p.predictBlockType(i, data);
+        FSBlockType type = p.predictBlockType((Block)i, data);
         
         // Create new block
-        FSBlock *newBlock = FSBlock::makeWithType(p, i, type);
+        FSBlock *newBlock = FSBlock::makeWithType(p, (Block)i, type);
         if (newBlock == nullptr) return false;
 
         // Import block data
@@ -870,7 +870,7 @@ FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *
     memset(dst, 0, size);
     
     // Export all blocks
-    for (u32 i = 0; i < count; i++) {
+    for (isize i = 0; i < count; i++) {
         
         blocks[first + i]->exportBlock(dst + i * bsize, bsize);
     }

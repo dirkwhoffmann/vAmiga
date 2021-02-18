@@ -23,11 +23,11 @@ FSPartition::makeWithFormat(FSDevice &dev, FSPartitionDescriptor &layout)
     p->bmBlocks    = layout.bmBlocks;
     p->bmExtBlocks = layout.bmExtBlocks;
     
-    p->firstBlock  = (u32)(p->lowCyl * dev.numHeads * dev.numSectors);
-    p->lastBlock   = (u32)((p->highCyl + 1) * dev.numHeads * dev.numSectors - 1);
+    p->firstBlock  = (Block)(p->lowCyl * dev.numHeads * dev.numSectors);
+    p->lastBlock   = (Block)((p->highCyl + 1) * dev.numHeads * dev.numSectors - 1);
     
     // Do some consistency checking
-    for (u32 i = p->firstBlock; i <= p->lastBlock; i++) assert(dev.blocks[i] == nullptr);
+    for (Block i = p->firstBlock; i <= p->lastBlock; i++) assert(dev.blocks[i] == nullptr);
     
     // Create boot blocks
     dev.blocks[p->firstBlock]     = new FSBootBlock(*p, p->firstBlock);
@@ -56,7 +56,7 @@ FSPartition::makeWithFormat(FSDevice &dev, FSPartitionDescriptor &layout)
     rb->addBitmapBlockRefs(layout.bmBlocks);
     
     // Add free blocks
-    for (u32 i = p->firstBlock; i <= p->lastBlock; i++) {
+    for (Block i = p->firstBlock; i <= p->lastBlock; i++) {
         
         if (dev.blocks[i] == nullptr) {
             dev.blocks[i] = new FSEmptyBlock(*p, i);
@@ -101,7 +101,7 @@ FSPartition::dump() const
 }
 
 FSBlockType
-FSPartition::predictBlockType(u32 nr, const u8 *buffer) const
+FSPartition::predictBlockType(Block nr, const u8 *buffer) const
 {
     assert(buffer != nullptr);
 
@@ -133,7 +133,7 @@ FSPartition::predictBlockType(u32 nr, const u8 *buffer) const
     if (isOFS()) {
         if (type == 8) return FS_DATA_BLOCK_OFS;
     } else {
-        for (u32 i = 0; i < bsize(); i++) if (buffer[i]) return FS_DATA_BLOCK_FFS;
+        for (isize i = 0; i < bsize(); i++) if (buffer[i]) return FS_DATA_BLOCK_FFS;
     }
     
     return FS_EMPTY_BLOCK;
@@ -142,14 +142,14 @@ FSPartition::predictBlockType(u32 nr, const u8 *buffer) const
 FSName
 FSPartition::getName() const
 {
-    FSRootBlock *rb = dev.rootBlockPtr((u32)rootBlock);
+    FSRootBlock *rb = dev.rootBlockPtr(rootBlock);
     return rb ? rb->getName() : FSName("");
 }
 
 void
 FSPartition::setName(FSName name)
 {
-    FSRootBlock *rb = dev.rootBlockPtr((u32)rootBlock);
+    FSRootBlock *rb = dev.rootBlockPtr(rootBlock);
     assert(rb != nullptr);
 
     rb->setName(name);
@@ -176,10 +176,10 @@ FSPartition::numBytes() const
 isize
 FSPartition::freeBlocks() const
 {
-    u32 result = 0;
+    isize result = 0;
     
     for (isize i = firstBlock; i <= lastBlock; i++) {
-        if (isFree((u32)i)) result++;
+        if (isFree((Block)i)) result++;
     }
 
     return result;
@@ -246,19 +246,19 @@ FSPartition::requiredBlocks(isize fileSize) const
     return 1 + numDataBlocks + numFileListBlocks;
 }
  
-u32
+Block
 FSPartition::allocateBlock()
 {
-    if (u32 ref = allocateBlockAbove((u32)rootBlock)) return ref;
-    if (u32 ref = allocateBlockBelow((u32)rootBlock)) return ref;
+    if (Block nr = allocateBlockAbove(rootBlock)) return nr;
+    if (Block nr = allocateBlockBelow(rootBlock)) return nr;
 
     return 0;
 }
 
-u32
-FSPartition::allocateBlockAbove(u32 ref)
+Block
+FSPartition::allocateBlockAbove(Block nr)
 {
-    assert(ref >= firstBlock && ref <= lastBlock);
+    assert(nr >= firstBlock && nr <= lastBlock);
     
     for (isize i = firstBlock + 1; i <= lastBlock; i++) {
         if (dev.blocks[i]->type() == FS_EMPTY_BLOCK) {
@@ -381,19 +381,19 @@ FSPartition::bmBlockForBlock(Block relRef)
 }
 
 bool
-FSPartition::isFree(u32 ref) const
+FSPartition::isFree(Block nr) const
 {
-    assert(ref >= firstBlock && ref <= lastBlock);
+    assert(nr >= firstBlock && nr <= lastBlock);
     
     // Translate rel to a relative block index
-    ref -= lowCyl;
+    nr -= lowCyl;
     
     // The first two blocks are always allocated and not part of the bitmap
-    if (ref < 2) return false;
+    if (nr < 2) return false;
     
     // Locate the allocation bit in the bitmap block
     u32 byte, bit;
-    FSBitmapBlock *bm = locateAllocationBit(ref, &byte, &bit);
+    FSBitmapBlock *bm = locateAllocationBit(nr, &byte, &bit);
         
     // Read the bit
     return bm ? GET_BIT(bm->data[byte], bit) : false;
