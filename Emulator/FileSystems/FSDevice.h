@@ -291,7 +291,7 @@ public:
     ErrorCode check(u32 blockNr, isize pos, u8 *expected, bool strict) const;
 
     // Checks if the block with the given number is part of the volume
-    bool isBlockNumber(u32 nr) { return nr < numBlocks; }
+    bool isBlockNumber(isize nr) { return nr < numBlocks; }
 
     // Checks if the type of a block matches one of the provides types
     ErrorCode checkBlockType(u32, FSBlockType type);

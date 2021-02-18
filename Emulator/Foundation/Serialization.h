@@ -53,15 +53,6 @@ inline u64 read64(const u8 *& buf)
     return ((u64)hi << 32) | lo;
 }
 
-/*
-inline float readFloat(const u8 *& buf)
-{
-    float result;
-    *((u32 *)(&result)) = read32(buf);
-    return result;
-}
-*/
-
 inline double readDouble(const u8 *& buf)
 {
     double result;
@@ -93,17 +84,11 @@ inline void write64(u8 *& buf, u64 value)
     write32(buf, (u32)(value));
 }
 
-/*
-inline void writeFloat(u8 *& buf, float value)
-{
-    write32(buf, *((u32 *)(&value)));
-}
-*/
-
 inline void writeDouble(u8 *& buf, double value)
 {
     write64(buf, *((u64 *)(&value)));
 }
+
 
 //
 // Counter (determines the state size)
@@ -118,9 +103,7 @@ return *this; \
 
 #define COUNT8(type) static_assert(sizeof(type) == 1); COUNT(type,1)
 #define COUNT16(type) static_assert(sizeof(type) == 2); COUNT(type,2)
-// #define COUNT32(type) static_assert(sizeof(type) == 4); COUNT(type,4)
 #define COUNT64(type) static_assert(sizeof(type) <= 8); COUNT(type,8)
-// #define COUNTF(type) static_assert(sizeof(type) == 4); COUNT(type,4)
 #define COUNTD(type) static_assert(sizeof(type) <= 8); COUNT(type,8)
 
 #define STRUCT(type) \
@@ -207,9 +190,7 @@ return *this; \
 
 #define DESERIALIZE8(type)  static_assert(sizeof(type) == 1); DESERIALIZE(type,read8)
 #define DESERIALIZE16(type) static_assert(sizeof(type) == 2); DESERIALIZE(type,read16)
-// #define DESERIALIZE32(type) static_assert(sizeof(type) == 4); DESERIALIZE(type,read32)
 #define DESERIALIZE64(type) static_assert(sizeof(type) <= 8); DESERIALIZE(type,read64)
-// #define DESERIALIZEF(type) static_assert(sizeof(type) == 4); DESERIALIZE(type,readFloat)
 #define DESERIALIZED(type) static_assert(sizeof(type) <= 8); DESERIALIZE(type,readDouble)
 
 class SerReader
@@ -295,9 +276,7 @@ return *this; \
 
 #define SERIALIZE8(type)  static_assert(sizeof(type) == 1); SERIALIZE(type,write8,u8)
 #define SERIALIZE16(type) static_assert(sizeof(type) == 2); SERIALIZE(type,write16,u16)
-// #define SERIALIZE32(type) static_assert(sizeof(type) == 4); SERIALIZE(type,write32,u32)
 #define SERIALIZE64(type) static_assert(sizeof(type) <= 8); SERIALIZE(type,write64,u64)
-// #define SERIALIZEF(type) static_assert(sizeof(type) == 4); SERIALIZE(type,writeFloat,float)
 #define SERIALIZED(type) static_assert(sizeof(type) <= 8); SERIALIZE(type,writeDouble,double)
 
 class SerWriter

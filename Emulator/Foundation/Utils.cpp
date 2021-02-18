@@ -167,7 +167,7 @@ getSizeOfFile(const char *path)
     if (stat(path, &fileProperties) != 0)
         return -1;
     
-    return fileProperties.st_size;
+    return (isize)fileProperties.st_size;
 }
 
 bool matchingStreamHeader(std::istream &stream, const u8 *header, isize len)
@@ -200,7 +200,7 @@ matchingBufferHeader(const u8 *buffer, const u8 *header, isize len)
 }
 
 bool
-loadFile(const char *path, u8 **buffer, long *size)
+loadFile(const char *path, u8 **buffer, isize *size)
 {
     assert(path != nullptr);
     assert(buffer != nullptr);
@@ -210,7 +210,7 @@ loadFile(const char *path, u8 **buffer, long *size)
     *size = 0;
     
     // Get file size
-    long bytes = getSizeOfFile(path);
+    isize bytes = getSizeOfFile(path);
     if (bytes == -1) return false;
     
     // Open file
@@ -235,7 +235,7 @@ loadFile(const char *path, u8 **buffer, long *size)
 }
 
 bool
-loadFile(const char *path, const char *name, u8 **buffer, long *size)
+loadFile(const char *path, const char *name, u8 **buffer, isize *size)
 {
     assert(path != nullptr);
     assert(name != nullptr);

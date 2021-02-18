@@ -376,7 +376,7 @@ RomFile::decrypt()
     u8 *encryptedData = nullptr;
     u8 *decryptedData = nullptr;
     u8 *romKeyData = nullptr;
-    long romKeySize = 0;
+    isize romKeySize = 0;
         
     // Only proceed if the file is encrypted
     if (!isEncrypted()) return;
