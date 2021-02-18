@@ -49,7 +49,7 @@ struct OFSDataBlock : FSDataBlock {
     FSItemType itemType(isize byte) const override;
     void dump() const override;
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;
-    u32 checksumLocation() const override { return 5; }
+    isize checksumLocation() const override { return 5; }
 
     u32  getFileHeaderRef() const override          { return get32(1);        }
     void setFileHeaderRef(u32 ref) override         {        set32(1, ref);   }

@@ -27,5 +27,5 @@ struct FSBitmapBlock : FSBlock {
     FSItemType itemType(isize byte) const override;
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     void dump() const override;
-    u32 checksumLocation() const override { return 0; }
+    isize checksumLocation() const override { return 0; }
 };

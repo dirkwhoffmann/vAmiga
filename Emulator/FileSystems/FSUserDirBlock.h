@@ -28,7 +28,7 @@ struct FSUserDirBlock : FSBlock {
     FSItemType itemType(isize byte) const override;
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     void dump() const override;
-    u32 checksumLocation() const override { return 5; }
+    isize checksumLocation() const override { return 5; }
 
     ErrorCode exportBlock(const char *path) override;
 

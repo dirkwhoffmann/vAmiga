@@ -124,7 +124,7 @@ public:
     //
 
     // Returns the bitmap block storing the allocation bit for a certain block
-    FSBitmapBlock *bmBlockForBlock(Block relRef);
+    FSBitmapBlock *bmBlockForBlock(Block nr);
 
     // Checks if a block is marked as free in the allocation bitmap
     bool isFree(Block nr) const;
@@ -138,7 +138,7 @@ public:
 private:
     
     // Locates the allocation bit for a certain block
-    FSBitmapBlock *locateAllocationBit(Block nr, u32 *byte, u32 *bit) const;
+    FSBitmapBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) const;
     
     
     //

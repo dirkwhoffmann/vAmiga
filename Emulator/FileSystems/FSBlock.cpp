@@ -97,12 +97,12 @@ FSBlock::dumpData() const
 u32
 FSBlock::checksum() const
 {
-    u32 loc = checksumLocation();
-    assert(loc <= 5);
+    isize pos = checksumLocation();
+    assert(pos >= 0 && pos <= 5);
     
     // Wipe out the old checksum
-    u32 old = get32(loc);
-    set32(loc, 0);
+    u32 old = get32(pos);
+    set32(pos, 0);
     
     // Compute the new checksum
     u32 result = 0;
@@ -110,7 +110,7 @@ FSBlock::checksum() const
     result = ~result + 1;
     
     // Undo the modification
-    set32(loc, old);
+    set32(pos, old);
     
     return result;
 }
@@ -118,8 +118,8 @@ FSBlock::checksum() const
 void
 FSBlock::updateChecksum()
 {
-    u32 ref = checksumLocation();
-    if (ref < bsize() / 4) set32(ref, checksum());
+    isize pos = checksumLocation();
+    if (pos >= 0 && pos < bsize() / 4) set32(pos, checksum());
 }
 
 void

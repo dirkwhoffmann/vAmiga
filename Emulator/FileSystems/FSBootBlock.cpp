@@ -71,10 +71,10 @@ FSBootBlock::check(isize byte, u8 *expected, bool strict) const
     return ERROR_OK;
 }
 
-u32
+isize
 FSBootBlock::checksumLocation() const
 {
-    return (nr == partition.firstBlock) ? 1 : (u32)-1;
+    return (nr == partition.firstBlock) ? 1 : -1;
 }
 
 u32

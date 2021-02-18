@@ -27,7 +27,7 @@ struct FSFileListBlock : FSBlock {
     FSItemType itemType(isize byte) const override;
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     void dump() const override;
-    u32 checksumLocation() const override { return 5; }
+    isize checksumLocation() const override { return 5; }
     
     isize getNumDataBlockRefs() const override  { return get32(2);            }
     void setNumDataBlockRefs(u32 val) override  {           set32(2, val);    }

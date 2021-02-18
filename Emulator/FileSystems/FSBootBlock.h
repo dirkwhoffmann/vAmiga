@@ -27,7 +27,7 @@ struct FSBootBlock : FSBlock {
     FSVolumeType dos() const override;
     FSItemType itemType(isize byte) const override;
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;
-    u32 checksumLocation() const override;
+    isize checksumLocation() const override;
     u32 checksum() const override;
     void dump() const override;
     

@@ -30,10 +30,10 @@ struct FSBlock : AmigaObject {
     // Constructing
     //
     
-    FSBlock(FSPartition &p, u32 nr) : partition(p) { this->nr = nr; }
+    FSBlock(FSPartition &p, Block nr) : partition(p) { this->nr = nr; }
     virtual ~FSBlock() { }
 
-    static FSBlock *makeWithType(FSPartition &p, u32 nr, FSBlockType type);
+    static FSBlock *makeWithType(FSPartition &p, Block nr, FSBlockType type);
     
     
     //
@@ -88,7 +88,7 @@ struct FSBlock : AmigaObject {
     void dec32(isize n) const { dec32(addr32(n)); }
 
     // Returns the location of the checksum inside this block
-    virtual u32 checksumLocation() const { return (u32)-1; }
+    virtual isize checksumLocation() const { return -1; }
     
     // Computes a checksum for this block
     virtual u32 checksum() const;
