@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "EventHandlerTypes.h"
+
 struct Event
 {
     // Indicates when the event is due
