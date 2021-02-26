@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// swiftlint:disable closure_parameter_position
-
 import IOKit.hid
 
 /* An object of this class represents an input device connected to the Game

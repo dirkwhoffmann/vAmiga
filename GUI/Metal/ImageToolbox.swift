@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// swiftlint:disable closure_parameter_position unused_closure_parameter
-
 //
 // Extensions to CGImage
 //
