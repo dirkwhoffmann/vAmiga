@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "FSDevice.h"
 
 FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, Block nr) : FSBlock(p, nr)

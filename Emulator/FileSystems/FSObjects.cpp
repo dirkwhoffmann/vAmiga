@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "FSBlock.h"
 
 FSString::FSString(const char *str, isize l) : limit(l)

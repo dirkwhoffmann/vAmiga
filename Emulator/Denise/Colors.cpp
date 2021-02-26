@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "Amiga.h"
 
 RgbColor::RgbColor(const AmigaColor &c)

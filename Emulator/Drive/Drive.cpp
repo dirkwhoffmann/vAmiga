@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "Amiga.h"
 
 Drive::Drive(Amiga& ref, isize n) : AmigaComponent(ref), nr(n)

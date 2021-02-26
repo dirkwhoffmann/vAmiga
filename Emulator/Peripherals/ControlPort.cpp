@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "Amiga.h"
 
 ControlPort::ControlPort(Amiga& ref, PortNr portNr) : AmigaComponent(ref), nr(portNr)

@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "Amiga.h"
 
 /* A central element in the emulation of an Amiga is the accurate modeling of

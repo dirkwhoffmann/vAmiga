@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "FSDevice.h"
 
 FSDataBlock::FSDataBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)

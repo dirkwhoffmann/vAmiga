@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "Amiga.h"
 
 #define CIA_DEBUG (nr == 0 ? CIAA_DEBUG : CIAB_DEBUG)

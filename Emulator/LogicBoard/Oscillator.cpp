@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "Amiga.h"
 
 Oscillator::Oscillator(Amiga& ref) : AmigaComponent(ref)

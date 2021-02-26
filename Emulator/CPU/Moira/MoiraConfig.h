@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaConfig.h"
+#include "config.h"
 
 /* Set to true to enable address error checking.
  *

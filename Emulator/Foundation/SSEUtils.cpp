@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "SSEUtils.h"
 
 #if (defined(__i386__) || defined(__x86_64__)) && defined(__MACH__)

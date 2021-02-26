@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include "AmigaConfig.h"
+#include "config.h"
+
 #include "AmigaConstants.h"
 #include "Debug.h"
 #include "Errors.h"

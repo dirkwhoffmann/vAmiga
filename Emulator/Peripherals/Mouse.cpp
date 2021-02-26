@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "Amiga.h"
 
 Mouse::Mouse(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
