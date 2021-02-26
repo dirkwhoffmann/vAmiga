@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "AmigaComponent.h"
 
 class PixelEngine : public AmigaComponent {

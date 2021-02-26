@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "StateMachine.h"
 #include "AudioFilter.h"
 #include "Muxer.h"

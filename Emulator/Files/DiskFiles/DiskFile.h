@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "AmigaFile.h"
 
 // Base class of all file types encoding a disk

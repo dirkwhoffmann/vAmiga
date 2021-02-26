@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "AmigaComponent.h"
 #include "AudioStream.h"
 #include "AudioFilter.h"

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "Aliases.h"
 
 #include "AgnusPublicTypes.h"

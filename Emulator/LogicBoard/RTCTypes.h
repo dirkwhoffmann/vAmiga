@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "RTCPublicTypes.h"
 #include "Reflection.h"
 

@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "Aliases.h"
 
 /* Emulated CIA model

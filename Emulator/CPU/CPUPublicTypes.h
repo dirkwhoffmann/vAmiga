@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include "Commons.h"
+
 #define CPUINFO_INSTR_COUNT 256
 
 typedef struct

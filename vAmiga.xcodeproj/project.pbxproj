@@ -493,6 +493,8 @@
 		50B14C2921EB9806002E32A6 /* AmigaProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaProxy.h; sourceTree = "<group>"; };
 		50B35B6022B2382E001A9C17 /* SerialPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SerialPort.cpp; sourceTree = "<group>"; };
 		50B35B6122B2382E001A9C17 /* SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerialPort.h; sourceTree = "<group>"; };
+		50B37B6725E9A624006B328E /* Datatypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Datatypes.h; sourceTree = "<group>"; };
+		50B37B6825E9A6C7006B328E /* Commons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Commons.h; sourceTree = "<group>"; };
 		50B5C07D241107F200F124DC /* AmigaConstants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaConstants.cpp; sourceTree = "<group>"; };
 		50B5F87625AF9D4E008B79F1 /* RTCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCTypes.h; sourceTree = "<group>"; };
 		50B5F87725AF9D98008B79F1 /* DeniseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeniseTypes.h; sourceTree = "<group>"; };
@@ -801,6 +803,7 @@
 			isa = PBXGroup;
 			children = (
 				50B14C0921EB228E002E32A6 /* config.h */,
+				50B37B6A25E9A728006B328E /* Commons */,
 				508FE06021EA318D0043D0E9 /* Emulator */,
 				50B14C2421EB8F25002E32A6 /* Proxy */,
 				508FDFDC21EA20600043D0E9 /* GUI */,
@@ -1247,6 +1250,15 @@
 				5085FE5821FB6856009753EF /* ProxyExtensions.swift */,
 			);
 			path = Proxy;
+			sourceTree = "<group>";
+		};
+		50B37B6A25E9A728006B328E /* Commons */ = {
+			isa = PBXGroup;
+			children = (
+				50B37B6825E9A6C7006B328E /* Commons.h */,
+				50B37B6725E9A624006B328E /* Datatypes.h */,
+			);
+			path = Commons;
 			sourceTree = "<group>";
 		};
 		50E2BE25240D417200155AE4 /* Moira */ = {

@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "Commons.h"
+
 struct Frame
 {
     // Frame count

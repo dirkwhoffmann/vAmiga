@@ -9,5 +9,6 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "CopperPublicTypes.h"
 #include "Reflection.h"

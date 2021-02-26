@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "Beam.h"
 
 class Copper : public AmigaComponent

@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "AmigaObject.h"
 #include "Serialization.h"
 #include "Concurrency.h"

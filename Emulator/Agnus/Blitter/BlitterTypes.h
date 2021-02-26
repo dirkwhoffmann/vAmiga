@@ -9,5 +9,6 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "BlitterPublicTypes.h"
 #include "Reflection.h"

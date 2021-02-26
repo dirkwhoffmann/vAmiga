@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "ADFFile.h"
 
 class EXEFile : public DiskFile {

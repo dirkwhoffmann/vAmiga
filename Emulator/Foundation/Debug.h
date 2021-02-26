@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "Commons.h"
+
 /* This file provides several macros for printing messages:
  *
  *   - msg    Information messages  (Show up in all builds)

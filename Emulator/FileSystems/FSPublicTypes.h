@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "Aliases.h"
 
 enum_long(FS_VOLUME_TYPE)

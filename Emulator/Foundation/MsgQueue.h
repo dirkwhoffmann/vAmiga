@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "HardwareComponent.h"
 
 class MsgQueue : public HardwareComponent {

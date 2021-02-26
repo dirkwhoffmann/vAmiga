@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "DenisePublicTypes.h"
 #include "Reflection.h"
 

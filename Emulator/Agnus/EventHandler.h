@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "Commons.h"
+
 /* About the event handler.
  *
  * vAmiga is an event triggered emulator. If an action has to be performed at

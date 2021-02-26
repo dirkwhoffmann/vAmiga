@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "Commons.h"
+
 // General
 #include "AmigaComponent.h"
 #include "Serialization.h"

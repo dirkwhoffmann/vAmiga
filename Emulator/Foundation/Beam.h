@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "Commons.h"
+
 struct Beam
 {
     // Counters for the vertical and horizontal beam position

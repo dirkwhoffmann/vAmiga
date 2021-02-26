@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "AmigaPublicTypes.h"
 
 #include "AgnusTypes.h"

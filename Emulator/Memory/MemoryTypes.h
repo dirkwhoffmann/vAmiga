@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "MemoryPublicTypes.h"
 #include "Reflection.h"
 

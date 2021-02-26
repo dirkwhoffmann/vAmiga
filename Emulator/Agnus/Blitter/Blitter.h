@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "Commons.h"
+
 /* The Blitter supports three accuracy levels:
  *
  * Level 0: Moves data in a single chunk.

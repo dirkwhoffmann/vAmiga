@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "Aliases.h"
 
 /* Memory source identifiers. The identifiers are used in the mem source lookup

@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "AmigaTypes.h"
 #include "Beam.h"
 #include "Buffers.h"

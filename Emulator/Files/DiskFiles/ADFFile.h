@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "DiskFile.h"
 #include "FSDevice.h"
 

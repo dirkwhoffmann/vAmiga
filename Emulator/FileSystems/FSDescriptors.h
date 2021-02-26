@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "FSObjects.h"
 #include "FSBlock.h"
 #include "FSEmptyBlock.h"

@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "AmigaObject.h"
 
 template <class T, int delay> class TimeDelayed : AmigaObject {

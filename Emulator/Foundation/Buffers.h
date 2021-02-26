@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "AmigaPublicTypes.h"
 
 /* The emulator uses buffers at various places. Most of them are derived from

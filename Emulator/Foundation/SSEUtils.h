@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "Utils.h"
 
 /* Transposes a 8 x 16 bit matrix using SSE3 extensions.

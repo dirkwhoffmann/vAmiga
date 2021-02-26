@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "config.h"
+#include "Commons.h"
 
 #include "AmigaConstants.h"
 #include "Debug.h"

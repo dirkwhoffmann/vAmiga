@@ -9,27 +9,4 @@
 
 #pragma once
 
-#include "Commons.h"
-#include "EventHandlerTypes.h"
-
-struct Event
-{
-    // Indicates when the event is due
-    Cycle triggerCycle;
-
-    // The event identifier
-    EventID id;
-
-    // An optional data value
-    i64 data;
-
-    template <class T>
-    void applyToItems(T& worker)
-    {
-        worker
-
-        & triggerCycle
-        & id
-        & data;
-    }
-};
+#include "Datatypes.h"

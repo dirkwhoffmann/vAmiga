@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "AmigaFile.h"
 
 class RomFile : public AmigaFile {

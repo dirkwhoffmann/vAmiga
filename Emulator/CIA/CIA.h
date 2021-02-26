@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "TOD.h"
 
 #define CIACountA0     (1ULL << 0) // Decrements timer A

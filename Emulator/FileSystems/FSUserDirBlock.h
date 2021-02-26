@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "FSBlock.h"
 
 struct FSUserDirBlock : FSBlock {

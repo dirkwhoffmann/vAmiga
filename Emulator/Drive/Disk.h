@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "HardwareComponent.h"
 
 /* MFM encoded disk data of a standard 3.5" DD disk:

@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "Commons.h"
+
 //
 // Private types
 //

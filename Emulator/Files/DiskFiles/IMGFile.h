@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "DiskFile.h"
 
 #define IMGSIZE_35_DD     737280  //  720 KB PC formatted disk

@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include "Commons.h"
+
 //
 // Structures
 //

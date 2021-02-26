@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "BlitterPublicTypes.h"
 #include "CopperPublicTypes.h"
 

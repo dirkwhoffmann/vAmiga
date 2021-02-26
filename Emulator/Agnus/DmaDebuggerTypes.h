@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Commons.h"
 #include "DmaDebuggerPublicTypes.h"
 #include "Reflection.h"
 
