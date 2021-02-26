@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include <stdbool.h>
 
 //
 // Clock rates (TODO: MOVE TO Oscillator class)

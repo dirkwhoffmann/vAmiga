@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #import "AmigaProxy.h"
 #import "Amiga.h"
 #import "vAmiga-Swift.h"

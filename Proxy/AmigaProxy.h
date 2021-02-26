@@ -7,11 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "AmigaConstants.h"
+#include "AmigaPublicTypes.h"
+
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>
 
-#include "AmigaConstants.h"
-#include "AmigaPublicTypes.h"
 
 //
 // Forward declarations
