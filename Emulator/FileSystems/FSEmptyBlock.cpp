@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FSDevice.h"
+#include "FSEmptyBlock.h"
 
 FSItemType
 FSEmptyBlock::itemType(isize byte) const

@@ -8,7 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "ADFFile.h"
+
+#include "BootBlockImage.h"
+#include "Disk.h"
+#include "Drive.h"
 
 bool
 ADFFile::isCompatibleName(const string &name)

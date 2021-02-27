@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "FSBitmapBlock.h"
+
 #include "FSDevice.h"
+#include "FSPartition.h"
 
 FSBitmapBlock::FSBitmapBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {

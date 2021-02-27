@@ -10,6 +10,8 @@
 #include "config.h"
 #include "DMSFile.h"
 
+#include "AmigaFile.h"
+
 extern "C" {
 unsigned short extractDMS(FILE *fi, FILE *fo);
 }

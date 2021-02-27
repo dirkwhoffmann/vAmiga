@@ -8,8 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Utils.h"
-#include "FSDevice.h"
+#include "FSDescriptors.h"
 
 FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, FSVolumeType dos)
 {

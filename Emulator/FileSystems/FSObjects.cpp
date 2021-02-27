@@ -8,6 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "FSObjects.h"
+
 #include "FSBlock.h"
 
 FSString::FSString(const char *str, isize l) : limit(l)

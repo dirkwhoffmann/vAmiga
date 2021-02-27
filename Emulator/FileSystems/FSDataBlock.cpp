@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "FSDataBlock.h"
+
 #include "FSDevice.h"
+#include "FSPartition.h"
 
 FSDataBlock::FSDataBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {

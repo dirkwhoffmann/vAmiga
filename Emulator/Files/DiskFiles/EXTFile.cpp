@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "EXTFile.h"
 
 const u8 EXTFile::extAdfHeaders[2][8] = {
 

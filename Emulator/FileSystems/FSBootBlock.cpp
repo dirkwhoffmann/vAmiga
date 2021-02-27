@@ -8,8 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FSDevice.h"
+#include "FSBootBlock.h"
+
 #include "BootBlockImage.h"
+#include "FSDevice.h"
+#include "FSPartition.h"
 
 FSBootBlock::FSBootBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {

@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "FSUserDirBlock.h"
+
 #include "FSDevice.h"
+#include "FSPartition.h"
 
 FSUserDirBlock::FSUserDirBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {

@@ -8,7 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "IMGFile.h"
+
+#include "Disk.h"
 
 bool
 IMGFile::isCompatibleName(const string &name)

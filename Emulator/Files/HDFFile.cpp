@@ -8,8 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
-#include <string.h>
+#include "HDFFile.h"
 
 HDFFile::HDFFile()
 {

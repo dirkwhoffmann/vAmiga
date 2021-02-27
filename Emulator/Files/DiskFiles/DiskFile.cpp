@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "DiskFile.h"
 
 u8
 DiskFile::readByte(isize t, isize s, isize offset) const

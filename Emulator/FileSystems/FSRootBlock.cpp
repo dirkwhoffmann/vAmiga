@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "FSRootBlock.h"
+
 #include "FSDevice.h"
+#include "FSPartition.h"
 
 FSRootBlock::FSRootBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {

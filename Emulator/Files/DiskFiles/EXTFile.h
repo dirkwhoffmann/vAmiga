@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Commons.h"
-#include "ADFFile.h"
+#include "DiskFile.h"
 
 /* This class is a dummy class for detecting extended ADFs. Once the emulator
  * detects such a file, it tells the user that this format is not supported.

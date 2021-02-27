@@ -8,6 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "Snapshot.h"
+
 #include "Amiga.h"
 
 Thumbnail *

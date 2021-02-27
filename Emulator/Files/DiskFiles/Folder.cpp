@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Folder.h"
+
 #include "FSDevice.h"
 
 bool
