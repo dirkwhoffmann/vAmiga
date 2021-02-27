@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Commons.h"
+#include "AmigaConstants.h"
 
 struct Beam
 {

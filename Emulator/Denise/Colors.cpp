@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Colors.h"
 
 RgbColor::RgbColor(const AmigaColor &c)
 {

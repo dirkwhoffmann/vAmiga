@@ -10,6 +10,8 @@
 #include "config.h"
 #include "DDF.h"
 
+#include "Utils.h"
+
 template <bool hires> void
 DDF<hires>::compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1)
 {

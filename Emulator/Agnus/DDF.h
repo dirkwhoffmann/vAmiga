@@ -12,8 +12,6 @@
 #include "Commons.h"
 #include "Aliases.h"
 
-#include <sys/param.h>
-
 template <bool hires>
 struct DDF
 {

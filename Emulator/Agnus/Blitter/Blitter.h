@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Commons.h"
+#include "AmigaComponent.h"
 
 /* The Blitter supports three accuracy levels:
  *

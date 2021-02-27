@@ -8,6 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "Denise.h"
+
+#include "Agnus.h"
 #include "Amiga.h"
 #include "SSEUtils.h"
 

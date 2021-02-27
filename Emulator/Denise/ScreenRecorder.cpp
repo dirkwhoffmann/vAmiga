@@ -8,7 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "ScreenRecorder.h"
+
+#include "Denise.h"
+#include "MsgQueue.h"
+#include "Paula.h"
+
 #include <fcntl.h>
 
 ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)

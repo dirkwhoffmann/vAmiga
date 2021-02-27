@@ -8,7 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "PixelEngine.h"
+
+#include "Agnus.h"
+#include "Colors.h"
+#include "Denise.h"
+#include "DmaDebugger.h"
 
 PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
 {

@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Copper.h"
+
+#include "Agnus.h"
+#include "PixelEngine.h"
 
 Copper::Copper(Amiga& ref) : AmigaComponent(ref)
 {
