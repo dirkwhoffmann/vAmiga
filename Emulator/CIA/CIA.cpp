@@ -8,7 +8,17 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "CIA.h"
+
+#include "Agnus.h"
+#include "ControlPort.h"
+#include "DiskController.h"
+#include "Memory.h"
+#include "MsgQueue.h"
+#include "Paula.h"
+#include "SerialPort.h"
+
+#include <vector>
 
 #define CIA_DEBUG (nr == 0 ? CIAA_DEBUG : CIAB_DEBUG)
 
