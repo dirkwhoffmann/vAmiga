@@ -12,7 +12,7 @@
 
 Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
 {    
-    subComponents = vector<HardwareComponent *> {
+    subComponents = std::vector<HardwareComponent *> {
         
         &copper,
         &blitter,
@@ -207,9 +207,9 @@ Agnus::_dump(Dump::Category category, std::ostream& os) const
     if (category & Dump::Config) {
     
         os << DUMP("Chip Revison");
-        os << AgnusRevisionEnum::key(config.revision) << endl;
+        os << AgnusRevisionEnum::key(config.revision) << std::endl;
         os << DUMP("Slow Ram mirror");
-        os << EMULATED(config.slowRamMirror) << endl;
+        os << EMULATED(config.slowRamMirror) << std::endl;
     }
 
     if (category & Dump::State) {

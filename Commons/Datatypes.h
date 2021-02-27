@@ -10,24 +10,61 @@
 #pragma once
 
 #include <sys/types.h>
-#include <assert.h>
 
+// String types
+#ifdef __cplusplus
+#include <string>
+using std::string;
+#endif
+
+//
+// Integer types
+//
+
+// Signed
 typedef signed char        i8;
 typedef signed short       i16;
 typedef signed int         i32;
 typedef signed long long   i64;
 typedef ssize_t            isize;
+
+// Unsigned
 typedef unsigned char      u8;
 typedef unsigned short     u16;
 typedef unsigned int       u32;
 typedef unsigned long long u64;
 typedef size_t             usize;
 
-static_assert(sizeof(i8) == 1,  "i8 size mismatch");
-static_assert(sizeof(i16) == 2, "i16 size mismatch");
-static_assert(sizeof(i32) == 4, "i32 size mismatch");
-static_assert(sizeof(i64) == 8, "i64 size mismatch");
-static_assert(sizeof(u8) == 1,  "u8 size mismatch");
-static_assert(sizeof(u16) == 2, "u16 size mismatch");
-static_assert(sizeof(u32) == 4, "u32 size mismatch");
-static_assert(sizeof(u64) == 8, "u64 size mismatch");
+
+//
+// Enumerations
+//
+
+/* The following macros 'enum_<type>' provides a way to make enumerations
+ * easily accessible in Swift. All macros have two definitions, one for the
+ * Swift side and one for the C side. Please note that the type mapping for
+ * enum_long differs on both sides. On the Swift side, enums of this type are
+ * mapped to type 'long' to make them accessible via the Swift standard type
+ * 'Int'. On the C side all enums are mapped to long long. This ensures that
+ * all enums have the same size, both on 32-bit and 64-bit architectures.
+ */
+
+#if defined(__SWIFT__)
+
+// Definition for Swift
+#define enum_open(_name, _type) \
+typedef enum __attribute__((enum_extensibility(open))) _name : _type _name; \
+enum _name : _type
+
+#define enum_long(_name) enum_open(_name, long)
+#define enum_u32(_name) enum_open(_name, u32)
+#define enum_i8(_name) enum_open(_name, i8)
+
+#else
+
+// Definition for C
+#define enum_long(_name) enum _name : long long
+#define enum_u32(_name) enum _name : u32
+#define enum_i8(_name) enum _name : i8
+
+#endif

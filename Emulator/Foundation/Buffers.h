@@ -11,6 +11,7 @@
 
 #include "Commons.h"
 #include "AmigaPublicTypes.h"
+#include <utility>
 
 /* The emulator uses buffers at various places. Most of them are derived from
  * one of the following two classes:
@@ -151,8 +152,8 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
             if (key >= keys[p]) break;
 
             // Otherwise, swap elements
-            swap(this->elements[oldw], this->elements[p]);
-            swap(keys[oldw], keys[p]);
+            std::swap(this->elements[oldw], this->elements[p]);
+            std::swap(keys[oldw], keys[p]);
             oldw = p;
         }
     }

@@ -33,8 +33,8 @@ struct FSPartition : AmigaObject {
     Block rootBlock = 0;
     
     // Location of the bitmap blocks and extended bitmap blocks
-    vector<Block> bmBlocks;
-    vector<Block> bmExtBlocks;
+    std::vector<Block> bmBlocks;
+    std::vector<Block> bmExtBlocks;
 
     
     //

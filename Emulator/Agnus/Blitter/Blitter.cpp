@@ -165,8 +165,8 @@ Blitter::_dump(Dump::Category category, std::ostream& os) const
         os << DUMP("CHOLD") << HEX16 << chold << std::endl;
         os << DUMP("DHOLD") << HEX16 << dhold << std::endl;
         os << DUMP("SHIFT") << HEX32 << ashift << std::endl;
-        os << DUMP("BBUSY") << YESNO(bbusy) << endl;
-        os << DUMP("BZERO") << YESNO(bzero) << endl;
+        os << DUMP("BBUSY") << YESNO(bbusy) << std::endl;
+        os << DUMP("BZERO") << YESNO(bzero) << std::endl;
 
     }
     
@@ -178,7 +178,7 @@ Blitter::_dump(Dump::Category category, std::ostream& os) const
         os << DUMP("USEB") << YESNO(bltconUSEB()) << std::endl;
         os << DUMP("USEC") << YESNO(bltconUSEC()) << std::endl;
         os << DUMP("USED") << YESNO(bltconUSED()) << std::endl;
-        os << endl;
+        os << std::endl;
         os << DUMP("BLTCON1") << HEX16 << bltcon1 << std::endl;
         os << DUMP("BSH") << HEX16 << bltconBSH() << std::endl;
         os << DUMP("EFE") << YESNO(bltconEFE()) << std::endl;
@@ -186,10 +186,10 @@ Blitter::_dump(Dump::Category category, std::ostream& os) const
         os << DUMP("FCI") << YESNO(bltconFCI()) << std::endl;
         os << DUMP("DESC") << YESNO(bltconDESC()) << std::endl;
         os << DUMP("LINE") << YESNO(bltconLINE()) << std::endl;
-        os << endl;
+        os << std::endl;
         os << DUMP("BLTSIZEH") << HEX16 << bltsizeV << std::endl;
         os << DUMP("BLTSIZEW") << HEX16 << bltsizeH << std::endl;
-        os << endl;
+        os << std::endl;
         os << DUMP("BLTAPT") << HEX32 << bltapt << std::endl;
         os << DUMP("BLTBPT") << HEX32 << bltbpt << std::endl;
         os << DUMP("BLTCPT") << HEX32 << bltcpt << std::endl;

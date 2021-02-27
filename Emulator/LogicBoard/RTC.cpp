@@ -84,7 +84,7 @@ RTC::_dump(Dump::Category category, std::ostream& os) const
 {
     if (category & Dump::Config) {
         
-        os << DUMP("Chip Model") << RTCRevisionEnum::key(config.model) << endl;
+        os << DUMP("Chip Model") << RTCRevisionEnum::key(config.model) << std::endl;
     }
     
     if (category & Dump::Registers) {

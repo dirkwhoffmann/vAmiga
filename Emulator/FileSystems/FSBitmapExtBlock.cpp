@@ -49,7 +49,8 @@ FSBitmapExtBlock::dump() const
 }
 
 void
-FSBitmapExtBlock::addBitmapBlockRefs(vector<Block> &refs, std::vector<Block>::iterator &it)
+FSBitmapExtBlock::addBitmapBlockRefs(std::vector<Block> &refs,
+                                     std::vector<Block>::iterator &it)
 {
     isize max = (bsize() / 4) - 1;
     

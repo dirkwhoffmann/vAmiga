@@ -114,16 +114,17 @@ typedef u32 Block;
 // Enumerations
 //
 
-/* All enumeration types are declared via special 'enum_<type>' macros to make
- * them easily accessible in Swift. All macros have two definitions, one for
- * the Swift side and one for the C side. Please note that the type mapping for
+/* The following macros 'enum_<type>' provides a way to make enumerations
+ * easily accessible in Swift. All macros have two definitions, one for the
+ * Swift side and one for the C side. Please note that the type mapping for
  * enum_long differs on both sides. On the Swift side, enums of this type are
  * mapped to type 'long' to make them accessible via the Swift standard type
- * 'Int'. On the C side all enums are mapped to long long. This ensures the
- * same size for all enums, both on 32-bit and 64-bit architectures.
+ * 'Int'. On the C side all enums are mapped to long long. This ensures that
+ * all enums have the same size, both on 32-bit and 64-bit architectures.
  */
 
-#if defined(__VAMIGA_GUI__)
+/*
+#if defined(__SWIFT__)
 
 // Definition for Swift
 #define enum_open(_name, _type) \
@@ -142,7 +143,7 @@ enum _name : _type
 #define enum_i8(_name) enum _name : i8
 
 #endif
-
+*/
 
 //
 // Compiler settings

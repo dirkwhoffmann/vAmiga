@@ -159,28 +159,28 @@ DiskController::_dump(Dump::Category category, std::ostream& os) const
 {
     if (category & Dump::Config) {
         
-        os << "  Drive df0: " << (config.connected[0] ? "connected" : "disconnected") << endl;
-        os << "  Drive df1: " << (config.connected[1] ? "connected" : "disconnected") << endl;
-        os << "  Drive df2: " << (config.connected[2] ? "connected" : "disconnected") << endl;
-        os << "  Drive df3: " << (config.connected[3] ? "connected" : "disonnected") << endl;
-        os << "Drive speed: " << DEC << config.speed << endl;
-        os << "lockDskSync: " << YESNO(config.lockDskSync) << endl;
-        os << "autoDskSync: " << YESNO(config.autoDskSync) << endl;
+        os << "  Drive df0: " << (config.connected[0] ? "connected" : "disconnected") << std::endl;
+        os << "  Drive df1: " << (config.connected[1] ? "connected" : "disconnected") << std::endl;
+        os << "  Drive df2: " << (config.connected[2] ? "connected" : "disconnected") << std::endl;
+        os << "  Drive df3: " << (config.connected[3] ? "connected" : "disonnected") << std::endl;
+        os << "Drive speed: " << DEC << config.speed << std::endl;
+        os << "lockDskSync: " << YESNO(config.lockDskSync) << std::endl;
+        os << "autoDskSync: " << YESNO(config.autoDskSync) << std::endl;
     }
     
     if (category & Dump::State) {
         
-        os << "     selected: " << (int)selected << endl;
-        os << "        state: " << DriveDmaStateName(state) << endl;
-        os << "    syncCycle: " << syncCycle << endl;
-        os << "     incoming: " << incoming << endl;
-        os << "         fifo: " << std::hex << fifo << " (" << fifoCount << ")" << endl;
-        os << endl;
-        os << "       dsklen: " << dsklen << endl;
-        os << "      dsksync: " << dsksync << endl;
-        os << "          prb: " << prb << endl;
-        os << endl;
-        os << "     spinningv: " << YESNO(spinning()) << endl;
+        os << "     selected: " << (int)selected << std::endl;
+        os << "        state: " << DriveDmaStateName(state) << std::endl;
+        os << "    syncCycle: " << syncCycle << std::endl;
+        os << "     incoming: " << incoming << std::endl;
+        os << "         fifo: " << std::hex << fifo << " (" << fifoCount << ")" << std::endl;
+        os << std::endl;
+        os << "       dsklen: " << dsklen << std::endl;
+        os << "      dsksync: " << dsksync << std::endl;
+        os << "          prb: " << prb << std::endl;
+        os << std::endl;
+        os << "     spinningv: " << YESNO(spinning()) << std::endl;
     }
 }
 

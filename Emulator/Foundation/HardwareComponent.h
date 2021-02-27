@@ -42,7 +42,7 @@ class HardwareComponent : public AmigaObject {
 public:
     
     // Sub components
-    vector<HardwareComponent *> subComponents;
+    std::vector<HardwareComponent *> subComponents;
     
 protected:
     

@@ -14,7 +14,7 @@
 
 CIA::CIA(int n, Amiga& ref) : AmigaComponent(ref), nr(n)
 {    
-    subComponents = vector<HardwareComponent *> { &tod };
+    subComponents = std::vector<HardwareComponent *> { &tod };
     
     config.revision = CIA_8520_DIP;
     config.todBug = true;

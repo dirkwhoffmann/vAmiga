@@ -66,7 +66,7 @@ Amiga::Amiga()
      * - Memory mus preceed the CPU, because it contains the CPU reset vector.
      */
 
-    subComponents = vector<HardwareComponent *> {
+    subComponents = std::vector<HardwareComponent *> {
 
         &oscillator,
         &agnus,
@@ -358,9 +358,9 @@ Amiga::_dump(Dump::Category category, std::ostream& os) const
     
     if (category & Dump::State) {
         
-        os << DUMP("Power") << ONOFF(isPoweredOn()) << endl;
-        os << DUMP("Running") << YESNO(isRunning()) << endl;
-        os << DUMP("Warp") << ONOFF(warpMode) << endl;
+        os << DUMP("Power") << ONOFF(isPoweredOn()) << std::endl;
+        os << DUMP("Running") << YESNO(isRunning()) << std::endl;
+        os << DUMP("Warp") << ONOFF(warpMode) << std::endl;
     }
 }
 

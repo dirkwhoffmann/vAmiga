@@ -28,11 +28,11 @@ class Drive;
 class Joystick;
 class Keyboard;
 class Memory;
-class MsgQueue;
 class Mouse;
+class MsgQueue;
 class Oscillator;
-class PixelEngine;
 class Paula;
+class PixelEngine;
 class RTC;
 class SerialPort;
 class UART;
@@ -43,7 +43,6 @@ class ZorroManager;
  */
 class AmigaComponent : public HardwareComponent {
 
-// TODO: Change to protected once RTC has it's own proxy class
 protected:
 
     Agnus &agnus;
