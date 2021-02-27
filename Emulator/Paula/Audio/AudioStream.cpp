@@ -14,13 +14,6 @@ template <class T> void
 AudioStream<T>::alignWritePtr()
 {
     this->align(8192);
-    /*
-     #ifdef __MACH__
-     this->align(5880);
-     #else
-     this->align(8192);
-     #endif
-     */
 }
 
 template <class T> void

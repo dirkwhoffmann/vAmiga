@@ -459,11 +459,6 @@ using namespace moira;
     [self mem]->saveExt([url fileSystemRepresentation], ec);
 }
 
-- (void)updateRTC
-{
-    [self mem]->rtc.update();
-}
-
 - (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr
 {
     assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
@@ -970,6 +965,25 @@ using namespace moira;
                              h:(NSInteger)size.height
                          scale:s
                          color:c];
+}
+
+@end
+
+
+//
+// Rtc proxy
+//
+
+@implementation RtcProxy
+
+- (RTC *)rtc
+{
+    return (RTC *)obj;
+}
+
+- (void)update
+{
+    [self rtc]->update();
 }
 
 @end
@@ -1951,6 +1965,7 @@ using namespace moira;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
+@synthesize rtc;
 @synthesize serialPort;
 @synthesize screenRecorder;
 @synthesize watchpoints;
@@ -1985,6 +2000,7 @@ using namespace moira;
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
+    rtc = [[RtcProxy alloc] initWith:&amiga->rtc];
     screenRecorder = [[ScreenRecorderProxy alloc] initWith:&amiga->denise.screenRecorder];
     serialPort = [[SerialPortProxy alloc] initWith:&amiga->serialPort];
     watchpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.watchpoints];
