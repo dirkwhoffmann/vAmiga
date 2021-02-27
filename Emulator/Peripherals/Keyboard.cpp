@@ -8,7 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Keyboard.h"
+
+#include "Agnus.h"
+#include "CIA.h"
+#include "MsgQueue.h"
 
 Keyboard::Keyboard(Amiga& ref) : AmigaComponent(ref)
 {

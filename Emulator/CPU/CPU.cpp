@@ -8,7 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "CPU.h"
+
+#include "Agnus.h"
 #include "Amiga.h"
+#include "Memory.h"
 
 void
 CPU::sync(int cycles)

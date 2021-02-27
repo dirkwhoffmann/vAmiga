@@ -8,7 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Mouse.h"
+
+#include "ControlPort.h"
+#include "MsgQueue.h"
+#include "Oscillator.h"
 
 Mouse::Mouse(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
 {
@@ -177,7 +181,7 @@ void
 Mouse::setXY(double x, double y)
 {
     // Check for a shaking mouse
-    if (shakeDetector.isShakingAbs(x)) amiga.queue.put(MSG_SHAKING);
+    if (shakeDetector.isShakingAbs(x)) messageQueue.put(MSG_SHAKING);
 
     targetX = x * scaleX;
     targetY = y * scaleY;
@@ -189,7 +193,7 @@ void
 Mouse::setDeltaXY(double dx, double dy)
 {
     // Check for a shaking mouse
-    if (shakeDetector.isShakingRel(dx)) amiga.queue.put(MSG_SHAKING);
+    if (shakeDetector.isShakingRel(dx)) messageQueue.put(MSG_SHAKING);
 
     targetX += dx * scaleX;
     targetY += dy * scaleY;

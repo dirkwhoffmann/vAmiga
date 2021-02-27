@@ -8,7 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "SerialPort.h"
+
+#include "UART.h"
 
 SerialPort::SerialPort(Amiga& ref) : AmigaComponent(ref)
 {

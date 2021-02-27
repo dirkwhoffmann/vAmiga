@@ -8,6 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "Blitter.h"
+
+#include "Agnus.h"
 #include "Amiga.h"
 
 Blitter::Blitter(Amiga& ref) : AmigaComponent(ref)

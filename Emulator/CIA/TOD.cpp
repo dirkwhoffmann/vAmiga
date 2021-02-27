@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "TOD.h"
+
 #include "CIA.h"
 
 TOD::TOD(CIA *cia, Amiga& ref) : AmigaComponent(ref)

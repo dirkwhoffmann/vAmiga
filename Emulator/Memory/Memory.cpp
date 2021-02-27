@@ -8,8 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "Memory.h"
+
 #include "Amiga.h"
-#include <new>
+#include "CIA.h"
+#include "MsgQueue.h"
 
 Memory::Memory(Amiga& ref) : AmigaComponent(ref)
 {

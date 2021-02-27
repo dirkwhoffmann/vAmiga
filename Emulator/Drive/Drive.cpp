@@ -8,7 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Drive.h"
+
+#include "Agnus.h"
+#include "CIA.h"
+#include "DiskFile.h"
+#include "MsgQueue.h"
 
 Drive::Drive(Amiga& ref, isize n) : AmigaComponent(ref), nr(n)
 {

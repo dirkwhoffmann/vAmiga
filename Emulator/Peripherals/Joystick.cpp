@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Joystick.h"
+
+#include "Agnus.h"
+#include "ControlPort.h"
 
 const char *
 Joystick::getDescription() const

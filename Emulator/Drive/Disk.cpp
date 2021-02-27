@@ -8,7 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Disk.h"
+
+#include "DiskFile.h"
 
 Disk::Disk(DiskDiameter type, DiskDensity density)
 {    
