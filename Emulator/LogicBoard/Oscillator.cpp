@@ -15,11 +15,9 @@
 
 Oscillator::Oscillator(Amiga& ref) : AmigaComponent(ref)
 {
-#ifdef __MACH__
-    mach_timebase_info(&tb);
-#endif
-}
 
+}
+    
 const char *
 Oscillator::getDescription() const
 {
@@ -38,23 +36,6 @@ Oscillator::_reset(bool hard)
     if (hard) {
         
     }
-}
-
-u64
-Oscillator::nanos()
-{
-#ifdef __MACH__
-    
-    return abs_to_nanos(mach_absolute_time());
-    
-#else
-    
-    struct timespec ts;
-    
-    (void)clock_gettime(CLOCK_MONOTONIC, &ts);
-    return (u64)ts.tv_sec * 1000000000 + ts.tv_nsec;
-    
-#endif
 }
 
 void
@@ -99,26 +80,6 @@ Oscillator::synchronize()
         }
         
         // See you soon...
-        waitUntil(targetTime.asNanoseconds());
+        targetTime.sleepUntil();
     }
 }
-
-void
-Oscillator::waitUntil(u64 deadline)
-{
-#ifdef __MACH__
-    
-    mach_wait_until(nanos_to_abs(deadline));
-    
-#else
-
-    req.tv_sec = 0;
-    req.tv_nsec = (long)deadline - (long)nanos();
-    nanosleep(&req, &rem);
-    
-#endif
-}
-
-#ifdef __MACH__
-mach_timebase_info_data_t Oscillator::tb;
-#endif

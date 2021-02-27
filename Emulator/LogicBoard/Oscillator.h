@@ -18,25 +18,7 @@
 #endif
 
 class Oscillator : public AmigaComponent {
-    
-#ifdef __MACH__
 
-    // Information about the Mach system timer
-    static mach_timebase_info_data_t tb;
-
-    // Converts kernel time to nanoseconds
-    static u64 abs_to_nanos(u64 abs) { return abs * tb.numer / tb.denom; }
-    
-    // Converts nanoseconds to kernel time
-    static u64 nanos_to_abs(u64 nanos) { return nanos * tb.denom / tb.numer; }
-
-#else
-
-    struct timespec req;
-    struct timespec rem;
-    
-#endif
-    
     /* The heart of this class is method sychronize() which puts the thread to
      * sleep for a certain interval. In order to calculate the delay, the
      * function needs to know the values of the Amiga clock and the Kernel
@@ -94,30 +76,14 @@ private:
     
     
     //
-    // Reading the system clock
-    //
-    
-public:
-
-    // Returns the current kernel time in nano seconds
-    [[deprecated]] static u64 nanos();
-
-    // Returns the current kernel time in milli seconds
-    [[deprecated]] static u64 millis() { return nanos() / 1000000; }
-
-    
-    //
     // Managing emulation speed
     //
         
+public:
+    
     // Restarts the synchronization timer
     void restart();
 
     // Puts the emulator thread to rest
     void synchronize();
-    
-private:
-    
-    // Puts the thread to rest until the target time has been reached
-    void waitUntil(u64 deadline);
 };
