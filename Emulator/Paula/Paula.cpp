@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Paula.h"
+
+#include "Agnus.h"
+#include "CPU.h"
 
 Paula::Paula(Amiga& ref) : AmigaComponent(ref)
 {

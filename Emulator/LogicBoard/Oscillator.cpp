@@ -8,7 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Oscillator.h"
+
+#include "Agnus.h"
 
 Oscillator::Oscillator(Amiga& ref) : AmigaComponent(ref)
 {

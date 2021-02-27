@@ -13,7 +13,6 @@
 #include "AmigaObject.h"
 #include "Serialization.h"
 #include "Concurrency.h"
-#include <vector>
 
 /* This class defines the base functionality of all hardware components. It
  * comprises functions for initializing, configuring, and serializing the
@@ -166,9 +165,9 @@ public:
     void dump(Dump::Category category, std::ostream& ss) const;
     virtual void _dump(Dump::Category category, std::ostream& ss) const { };
 
-    void dump(Dump::Category category) const { dump(category, std::cout); }
-    void dump(std::ostream& ss) const { dump((Dump::Category)(-1), ss); }
-    void dump() const { dump((Dump::Category)(-1)); }
+    void dump(Dump::Category category) const;
+    void dump(std::ostream& ss) const;
+    void dump() const;
 
     
     //

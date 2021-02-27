@@ -12,6 +12,7 @@
 #include "Commons.h"
 #include "AmigaComponent.h"
 #include "Sampler.h"
+#include "Agnus.h"
 
 template <isize nr>
 class StateMachine : public AmigaComponent {

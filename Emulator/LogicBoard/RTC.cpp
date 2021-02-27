@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "RTC.h"
+
+#include "CPU.h"
+#include "Memory.h"
 
 RTC::RTC(Amiga& ref) : AmigaComponent(ref)
 {
@@ -104,7 +107,7 @@ time_t
 RTC::getTime()
 {
     Cycle result;
-    Cycle master = amiga.cpu.getMasterClock();
+    Cycle master = cpu.getMasterClock();
 
     long timeBetweenCalls = AS_SEC(master - lastCall);
            

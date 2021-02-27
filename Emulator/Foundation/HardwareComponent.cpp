@@ -8,7 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "HardwareComponent.h"
+
+// #include <iostream>
 
 HardwareComponent::~HardwareComponent()
 {
@@ -87,6 +89,24 @@ HardwareComponent::inspect()
 void HardwareComponent::dump(Dump::Category category, std::ostream& ss) const
 {
     _dump(category, ss);
+}
+
+void
+HardwareComponent::dump(Dump::Category category) const
+{
+    dump(category, std::cout);
+}
+
+void
+HardwareComponent::dump(std::ostream& ss) const
+{
+    dump((Dump::Category)(-1), ss);
+}
+
+void
+HardwareComponent::dump() const
+{
+    dump((Dump::Category)(-1));
 }
 
 isize
