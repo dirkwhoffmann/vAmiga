@@ -14,7 +14,6 @@
 #include <exception>
 #include <string>
 
-using std::string;
 
 //
 // VAError
@@ -56,7 +55,7 @@ struct ConfigError : public std::exception
 {
     string description;
     
-    ConfigError(const std::string &s) : description(s) { }
+    ConfigError(const string &s) : description(s) { }
     
     const char *what() const throw() override {
         return  description.c_str();
@@ -64,11 +63,11 @@ struct ConfigError : public std::exception
 };
 
 struct ConfigArgError : ConfigError {
-    ConfigArgError(const std::string &s) : ConfigError(s) { }; 
+    ConfigArgError(const string &s) : ConfigError(s) { };
 };
 
 struct ConfigFileReadError : ConfigError {
-    ConfigFileReadError(const std::string &s) : ConfigError(s) { };
+    ConfigFileReadError(const string &s) : ConfigError(s) { };
 };
 
 struct ConfigLockedError : ConfigError {

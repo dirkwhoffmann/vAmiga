@@ -34,7 +34,6 @@
 #include <sstream>
 #include <fstream>
 
-using std::string;
 
 //
 // Optimizing code

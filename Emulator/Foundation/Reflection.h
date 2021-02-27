@@ -19,24 +19,15 @@
 
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
 
-/*
-struct EnumParseError : public std::exception
-{
-    std::string description;
-    EnumParseError(const std::string &s) : description(s) { }
-    const char *what() const throw() override { return  description.c_str(); }
-};
-*/
-
 template <class T, typename E> struct Reflection {
 
     // Returns the shortened key as a C string
     static const char *key(long nr) { return T::key((E)nr); }
 
     // Collects all key / value pairs
-    static std::map <std::string,long> pairs(long min = 1) {
+    static std::map <string, long> pairs(long min = 1) {
         
-        std::map <std::string,long> result;
+        std::map <string,long> result;
                 
         for (isize i = 0;; i++) {
             if (T::isValid(i)) {
@@ -50,9 +41,9 @@ template <class T, typename E> struct Reflection {
     }
 
     // Returns a list in form of a colon seperated string
-    static std::string keyList(bool prefix = false) {
+    static string keyList(bool prefix = false) {
         
-        std::string result;
+        string result;
         
         auto p = pairs();
         for(auto it = std::begin(p); it != std::end(p); ++it) {
@@ -65,9 +56,9 @@ template <class T, typename E> struct Reflection {
     }
     
     // Parses a string
-    static E parse(const std::string& key) {
+    static E parse(const string& key) {
           
-        std::string upperKey;
+        string upperKey;
         for (auto c : key) { upperKey += toupper(c); }
         
         auto p = pairs();
