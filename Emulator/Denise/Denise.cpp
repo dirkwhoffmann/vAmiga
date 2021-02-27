@@ -286,7 +286,7 @@ Denise::fillShiftRegisters(bool odd, bool even)
     #if (defined(__i386__) || defined(__x86_64__)) && defined(__MACH__)
     
     if (!NO_SSE) {
-        transposeSSE(shiftReg, slice);
+        utl::transposeSSE(shiftReg, slice);
         return;
     }
     

@@ -1,14 +1,99 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
-//  Chrono.hpp
-//  vAmiga
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the GNU General Public License v3
 //
-//  Created by Dirk Hoffmann on 27.02.21.
-//  Copyright © 2021 Dirk Hoffmann. All rights reserved.
-//
+// See https://www.gnu.org for license information
+// -----------------------------------------------------------------------------
 
-#ifndef Chrono_hpp
-#define Chrono_hpp
+#pragma once
 
-#include <stdio.h>
+#include "Commons.h"
 
-#endif /* Chrono_hpp */
+#ifdef __MACH__
+#include <mach/mach_time.h>
+#endif
+
+namespace utl {
+
+class Time {
+    
+    i64 ticks;
+
+public:
+    
+    static Time now();
+    
+    Time() : ticks(0) { };
+    Time(i64 value) : ticks(value) { };
+    
+    i64 asNanoseconds()  const { return ticks; }
+    i64 asMicroseconds() const { return ticks / 1000; }
+    i64 asMilliseconds() const { return ticks / 1000000; }
+    float asSeconds()    const { return ticks / 1000000000.f; }
+    
+    bool operator==(const Time &rhs) const;
+    bool operator!=(const Time &rhs) const;
+    bool operator<=(const Time &rhs) const;
+    bool operator>=(const Time &rhs) const;
+    bool operator<(const Time &rhs) const;
+    bool operator>(const Time &rhs) const;
+    Time operator+(const Time &rhs) const;
+    Time operator-(const Time &rhs) const;
+    Time operator*(const int i) const;
+    Time& operator+=(const Time &rhs);
+    Time& operator-=(const Time &rhs);
+    Time& operator*=(const int i);
+    Time abs() const;
+    Time diff() const;
+    
+    void sleep();
+    void sleepUntil();
+};
+
+class Clock {
+        
+    Time start;
+    
+public:
+    
+    Clock();
+
+    Time getElapsedTime() const;
+    Time restart();
+};
+
+class SyncClock {
+
+    // Proposed frame delay
+    Time slice;
+    
+    // The next wakeup cycle for this thread
+    Time target;
+
+    // A stop watch for computing fps and load
+    Clock stopWatch;
+
+    // Frames per second
+    isize frames = 0;
+    float hardFps;
+    float softFps;
+    
+    // Cpu load
+    Time  load;
+    float hardLoad;
+    float softLoad;
+    
+public:
+    
+    SyncClock(float Hz);
+
+    float getFps(bool hard = true) { return hard ? hardFps : softFps; }
+    float getLoad(bool hard = true) { return hard ? hardLoad : softLoad; }
+
+    void wait();
+    void restart();
+};
+
+}

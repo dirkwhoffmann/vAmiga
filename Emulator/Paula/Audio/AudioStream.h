@@ -146,7 +146,7 @@ struct FloatStereo
 template <class T> class AudioStream : public utl::RingBuffer <T, 16384> {
 
     // Mutex for synchronizing read / write accesses
-    Mutex mutex;
+    utl::Mutex mutex;
 
 public:
     

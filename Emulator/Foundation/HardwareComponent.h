@@ -22,7 +22,7 @@
  */
 
 #define synchronized \
-for (AutoMutex _am(mutex); _am.active; _am.active = false)
+for (utl::AutoMutex _am(mutex); _am.active; _am.active = false)
 
 namespace Dump {
 enum Category : usize {
@@ -74,7 +74,7 @@ protected:
      * to prevent multiple threads to enter the same code block. It mimics the
      * behaviour of the well known Java construct 'synchronized(this) { }'.
      */
-    Mutex mutex;
+    utl::Mutex mutex;
 
         
     //

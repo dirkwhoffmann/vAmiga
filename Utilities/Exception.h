@@ -11,13 +11,18 @@
 
 #include <exception>
 
+namespace utl {
+
 struct Exception : public std::exception {
     
     string description;
-    i64 data = 0;
+    i64 data;
     
-    Exception(const string &s) : description(s) { }
     Exception(const string &s, i64 d) : description(s), data(d) { }
-    
+    Exception(const string &s) : description(s), data(0) { }
+    Exception(i64 d) : description(""), data(d) { }
+
     const char *what() const throw() override { return description.c_str(); }
 };
+
+}
