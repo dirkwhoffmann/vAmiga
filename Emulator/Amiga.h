@@ -12,44 +12,24 @@
 #include "Commons.h"
 
 // General
-#include "AmigaComponent.h"
+#include "HardwareComponent.h"
 #include "Serialization.h"
 #include "MsgQueue.h"
 
 // Sub components
 #include "Agnus.h"
-#include "Blitter.h"
 #include "ControlPort.h"
 #include "CIA.h"
-#include "Copper.h"
 #include "CPU.h"
 #include "Denise.h"
-#include "Disk.h"
 #include "Drive.h"
-#include "Joystick.h"
 #include "Keyboard.h"
 #include "Memory.h"
-#include "Moira.h"
-#include "Mouse.h"
 #include "Oscillator.h"
 #include "Paula.h"
 #include "RTC.h"
 #include "SerialPort.h"
 #include "ZorroManager.h"
-
-// File types
-#include "ADFFile.h"
-#include "BootBlockImage.h"
-#include "DMSFile.h"
-#include "EXEFile.h"
-#include "ExtendedRomFile.h"
-#include "EXTFile.h"
-#include "Folder.h"
-#include "FSDevice.h"
-#include "HDFFile.h"
-#include "IMGFile.h"
-#include "RomFile.h"
-#include "Snapshot.h"
 
 void threadTerminated(void *thisAmiga);
 void *threadMain(void *thisAmiga);
@@ -160,8 +140,8 @@ private:
     
 private:
     
-    Snapshot *autoSnapshot = nullptr;
-    Snapshot *userSnapshot = nullptr;
+    class Snapshot *autoSnapshot = nullptr;
+    class Snapshot *userSnapshot = nullptr;
 
     
     //

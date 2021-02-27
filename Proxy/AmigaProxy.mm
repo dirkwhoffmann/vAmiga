@@ -12,6 +12,14 @@
 #import "Amiga.h"
 #import "vAmiga-Swift.h"
 
+#include "DMSFile.h"
+#include "EXEFile.h"
+#include "EXTFile.h"
+#include "Folder.h"
+#include "FSDevice.h"
+#include "IMGFile.h"
+#include "Snapshot.h"
+
 using namespace moira;
 
 //

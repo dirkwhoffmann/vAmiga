@@ -10,6 +10,8 @@
 #include "config.h"
 #include "Amiga.h"
 
+#include "Snapshot.h"
+
 //
 // Emulator thread
 //
