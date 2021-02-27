@@ -763,52 +763,6 @@ Amiga::runLoop()
     }
 }
 
-/*
-void
-Amiga::restartTimer()
-{
-    timeBase = time_in_nanos();
-    clockBase = agnus.clock;
-}
-*/
-/*
-void
-Amiga::synchronizeTiming()
-{
-    u64 now          = time_in_nanos();
-    Cycle clockDelta = agnus.clock - clockBase;
-    u64 elapsedTime  = (u64)(clockDelta * 1000 / masterClockFrequency);
-    u64 targetTime   = timeBase + elapsedTime;
-        
-    // Check if we're running too slow ...
-    if (now > targetTime) {
-        
-        // Check if we're completely out of sync ...
-        if (now - targetTime > 200000000) {
-            
-            // warn("The emulator is way too slow (%lld).\n", now - targetTime);
-            restartTimer();
-            return;
-        }
-    }
-    
-    // Check if we're running too fast ...
-    if (now < targetTime) {
-        
-        // Check if we're completely out of sync ...
-        if (targetTime - now > 200000000) {
-            
-            warn("The emulator is way too fast (%lld).\n", targetTime - now);
-            restartTimer();
-            return;
-        }
-        
-        // See you soon...
-        mach_wait_until(targetTime);
-    }
-}
-*/
-
 void
 Amiga::requestAutoSnapshot()
 {

@@ -11,6 +11,7 @@
 
 #include "Commons.h"
 #include "AmigaComponent.h"
+#include "Chrono.h"
 
 #ifdef __MACH__
 #include <mach/mach_time.h>
@@ -46,8 +47,8 @@ class Oscillator : public AmigaComponent {
     // Agnus clock (Amiga master cycles)
     Cycle clockBase = 0;
 
-    // Kernel clock (Nanoseconds)
-    u64 timeBase = 0;
+    // Kernel clock
+    utl::Time timeBase;
 
     
     //
@@ -99,10 +100,10 @@ private:
 public:
 
     // Returns the current kernel time in nano seconds
-    static u64 nanos();
+    [[deprecated]] static u64 nanos();
 
     // Returns the current kernel time in milli seconds
-    static u64 millis() { return nanos() / 1000000; }
+    [[deprecated]] static u64 millis() { return nanos() / 1000000; }
 
     
     //

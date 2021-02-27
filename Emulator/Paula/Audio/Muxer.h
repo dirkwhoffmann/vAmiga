@@ -10,9 +10,11 @@
 #pragma once
 
 #include "Commons.h"
+
 #include "AmigaComponent.h"
 #include "AudioStream.h"
 #include "AudioFilter.h"
+#include "Chrono.h"
 
 /* Architecture of the audio pipeline
  *
@@ -54,7 +56,7 @@ class Muxer : public AmigaComponent {
     double fraction;
 
     // Time stamp of the last write pointer alignment
-    Cycle lastAlignment = 0;
+    utl::Time lastAlignment;
 
     // Volume control
     Volume volume;

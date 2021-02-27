@@ -63,6 +63,7 @@
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		506B47182562E06A009FEFC3 /* ExporterDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 506B47172562E06A009FEFC3 /* ExporterDialog.xib */; };
 		506B471D256396BC009FEFC3 /* ExporterDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506B471C256396BC009FEFC3 /* ExporterDialog.swift */; };
+		507215A925EAB4AC00787591 /* Chrono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5072159F25EA9AE600787591 /* Chrono.cpp */; };
 		5072CAFA2456D1C800C8F606 /* AudioPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5072CAF92456D1C800C8F606 /* AudioPrefs.swift */; };
 		507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CA2216F91E001D26E9 /* AgnusPanel.swift */; };
 		507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CC2216F938001D26E9 /* DenisePanel.swift */; };
@@ -696,6 +697,9 @@
 		502F7DD0222170AE00AEEC65 /* Agnus */ = {
 			isa = PBXGroup;
 			children = (
+				503990C522D8CCB600035783 /* Beam.h */,
+				5015FF3E242BA00F005175D9 /* Frame.h */,
+				5085830523265B3D004F942F /* Event.h */,
 				50F924FC2428B8CD00DD91AB /* DDF.h */,
 				50F924FB2428B8CD00DD91AB /* DDF.cpp */,
 				50DF2C9E2268CFC000795256 /* AgnusPublicTypes.h */,
@@ -1207,9 +1211,6 @@
 				50AE6F8425D71FBE0004AFBC /* Errors.cpp */,
 				50B14C0821EB2248002E32A6 /* Utils.h */,
 				50B14C1121EB4314002E32A6 /* Utils.cpp */,
-				503990C522D8CCB600035783 /* Beam.h */,
-				5015FF3E242BA00F005175D9 /* Frame.h */,
-				5085830523265B3D004F942F /* Event.h */,
 				508C6BCF23F7E77500D8938F /* ChangeRecorder.h */,
 				50EFC7DF22E840870036A3DF /* Serialization.h */,
 				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
@@ -1470,6 +1471,7 @@
 				508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */,
 				50B14C1221EB4314002E32A6 /* Utils.cpp in Sources */,
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
+				507215A925EAB4AC00787591 /* Chrono.cpp in Sources */,
 				50FFA7D02440CB0300BEBA6B /* ActivityMonitor.swift in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,

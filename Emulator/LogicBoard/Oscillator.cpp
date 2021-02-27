@@ -11,6 +11,7 @@
 #include "Oscillator.h"
 
 #include "Agnus.h"
+#include "Chrono.h"
 
 Oscillator::Oscillator(Amiga& ref) : AmigaComponent(ref)
 {
@@ -60,7 +61,7 @@ void
 Oscillator::restart()
 {
     clockBase = agnus.clock;
-    timeBase = nanos();
+    timeBase = utl::Time::now();
 }
 
 void
@@ -69,26 +70,18 @@ Oscillator::synchronize()
     // Only proceed if we are not running in warp mode
     if (warpMode) return;
     
-    u64 now          = nanos();
-    Cycle clockDelta = agnus.clock - clockBase;
-    u64 elapsedTime  = (u64)(clockDelta * 1000 / masterClockFrequency);
-    u64 targetTime   = timeBase + elapsedTime;
-    
-    /*
-     debug("now         = %lld\n", now);
-     debug("clockDelta  = %lld\n", clockDelta);
-     debug("elapsedTime = %lld\n", elapsedTime);
-     debug("targetTime  = %lld\n", targetTime);
-     debug("\n");
-     */
+    auto clockDelta  = agnus.clock - clockBase;
+    auto elapsedTime = utl::Time((i64)(clockDelta * 1000 / masterClockFrequency));
+    auto targetTime  = timeBase + elapsedTime;
+    auto now         = utl::Time::now();
     
     // Check if we're running too slow ...
     if (now > targetTime) {
         
-        // Check if we're completely out of sync ...
-        if (now - targetTime > 200000000) {
+        // Check if we're completely out of sync...
+        if ((now - targetTime).asMilliseconds() > 200) {
             
-            // warn("The emulator is way too slow (%lld).\n", now - targetTime);
+            // warn("The emulator is way too slow (%f).\n", (now - targetTime).asSeconds());
             restart();
             return;
         }
@@ -97,16 +90,16 @@ Oscillator::synchronize()
     // Check if we're running too fast ...
     if (now < targetTime) {
         
-        // Check if we're completely out of sync ...
-        if (targetTime - now > 200000000) {
+        // Check if we're completely out of sync...
+        if ((targetTime - now).asMilliseconds() > 200) {
             
-            warn("The emulator is way too fast (%lld).\n", targetTime - now);
+            warn("The emulator is way too fast (%f).\n", (targetTime - now).asSeconds());
             restart();
             return;
         }
         
         // See you soon...
-        waitUntil(targetTime);
+        waitUntil(targetTime.asNanoseconds());
     }
 }
 

@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Mouse.h"
 
+#include "Chrono.h"
 #include "ControlPort.h"
 #include "MsgQueue.h"
 #include "Oscillator.h"
@@ -259,7 +260,7 @@ ShakeDetector::isShakingRel(double dx) {
     // Check for a direction reversal
     if (dx * dxsign < 0) {
     
-        u64 dt = Oscillator::nanos() - lastTurn;
+        u64 dt = utl::Time::now().asNanoseconds() - lastTurn;
         dxsign = -dxsign;
 
         // A direction reversal is considered part of a shake, if the
@@ -277,7 +278,7 @@ ShakeDetector::isShakingRel(double dx) {
                 if (dxturns > 3) {
                     
                     // printf("Mouse shake detected\n");
-                    lastShake = Oscillator::nanos();
+                    lastShake = utl::Time::now().asNanoseconds();
                     dxturns = 0;
                     return true;
                 }
@@ -291,7 +292,7 @@ ShakeDetector::isShakingRel(double dx) {
             dxsum = 0;
         }
         
-        lastTurn = Oscillator::nanos();
+        lastTurn = utl::Time::now().asNanoseconds();
     }
     
     return false;
