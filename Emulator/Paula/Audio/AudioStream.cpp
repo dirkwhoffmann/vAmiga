@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "AudioStream.h"
 
 template <class T> void
 AudioStream<T>::alignWritePtr()

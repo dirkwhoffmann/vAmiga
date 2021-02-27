@@ -8,7 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "UART.h"
+
+#include "Agnus.h"
+#include "MsgQueue.h"
+#include "Paula.h"
+#include "SerialPort.h"
 
 UART::UART(Amiga& ref) : AmigaComponent(ref)
 {

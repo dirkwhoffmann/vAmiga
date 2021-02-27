@@ -8,7 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Muxer.h"
+
+#include "CIA.h"
+#include "MsgQueue.h"
+#include "Oscillator.h"
 
 Muxer::Muxer(Amiga& ref) : AmigaComponent(ref)
 {

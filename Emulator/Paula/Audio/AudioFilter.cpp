@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "AudioFilter.h"
 
 AudioFilter::AudioFilter(Amiga& ref) : AmigaComponent(ref)
 {

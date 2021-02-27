@@ -12,6 +12,7 @@
 #include "Commons.h"
 #include "Concurrency.h"
 #include "Buffers.h"
+#include "Utils.h"
 
 /* About the AudioStream
  *
