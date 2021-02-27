@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Datatypes.h"
 #include <exception>
 
 namespace utl {

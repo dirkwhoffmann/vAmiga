@@ -11,29 +11,28 @@
 
 #include <sys/types.h>
 
-// String types
+// Strings
 #ifdef __cplusplus
 #include <string>
 using std::string;
 #endif
 
-//
-// Integer types
-//
-
-// Signed
+// Signed integers
 typedef signed char        i8;
 typedef signed short       i16;
 typedef signed int         i32;
 typedef signed long long   i64;
 typedef ssize_t            isize;
 
-// Unsigned
+// Unsigned integers
 typedef unsigned char      u8;
 typedef unsigned short     u16;
 typedef unsigned int       u32;
 typedef unsigned long long u64;
 typedef size_t             usize;
+
+// Signed alternative for the sizeof keyword
+#define isizeof(x) (isize)(sizeof(x))
 
 
 //

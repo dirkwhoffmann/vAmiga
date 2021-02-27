@@ -323,7 +323,6 @@
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505A3A3821F4996400132020 /* SSEUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SSEUtils.cpp; sourceTree = "<group>"; };
 		505A3A3921F4996400132020 /* SSEUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSEUtils.h; sourceTree = "<group>"; };
-		505A584C23040921002F99D1 /* Aliases.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Aliases.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		505AD25A224A67CE0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
 		505C01082577A8C000F9E05C /* FSDescriptors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDescriptors.cpp; sourceTree = "<group>"; };
@@ -1201,11 +1200,10 @@
 		50B14C0421EB212E002E32A6 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				50EA34F0258E38880010DC63 /* Debug.h */,
 				50B37B6825E9A6C7006B328E /* Commons.h */,
+				50EA34F0258E38880010DC63 /* Debug.h */,
 				5082D83A21EF891200CF7692 /* AmigaConstants.h */,
 				50B5C07D241107F200F124DC /* AmigaConstants.cpp */,
-				505A584C23040921002F99D1 /* Aliases.h */,
 				50B5F87825AF9E07008B79F1 /* Reflection.h */,
 				5039924625B219FC0084B808 /* Errors.h */,
 				50AE6F8425D71FBE0004AFBC /* Errors.cpp */,

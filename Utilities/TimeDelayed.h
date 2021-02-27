@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "Datatypes.h"
 #include "AmigaObject.h"
 
 namespace utl {
