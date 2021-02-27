@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "AmigaComponent.h"
 #include "Amiga.h"  
 
 AmigaComponent::AmigaComponent(Amiga& ref) :

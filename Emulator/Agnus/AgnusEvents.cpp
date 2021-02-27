@@ -8,7 +8,15 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "Agnus.h"
+
 #include "Amiga.h"
+#include "CIA.h"
+#include "ControlPort.h"
+#include "CPU.h"
+#include "Denise.h"
+#include "Paula.h"
+#include "SerialPort.h"
 
 void
 Agnus::serviceVblEvent()
@@ -33,7 +41,7 @@ Agnus::serviceVblEvent()
             assert(pos.h == 84);
             
             // Increment the TOD counter of CIA A
-            amiga.ciaA.tod.increment();
+            ciaa.tod.increment();
             
             // Schedule next event
             scheduleStrobe2Event();
@@ -601,17 +609,17 @@ Agnus::serviceINSEvent()
 
         case INS_NONE:   break;
         case INS_AMIGA:  amiga.inspect(); break;
-        case INS_CPU:    amiga.cpu.inspect(); break;
+        case INS_CPU:    cpu.inspect(); break;
         case INS_MEM:    mem.inspect(); break;
         case INS_CIA:    ciaa.inspect(); ciab.inspect(); break;
         case INS_AGNUS:  inspect(); break;
         case INS_PAULA:  paula.inspect(); break;
         case INS_DENISE: denise.inspect(); break;
         case INS_PORTS:
-            amiga.serialPort.inspect();
-            amiga.paula.uart.inspect();
-            amiga.controlPort1.inspect();
-            amiga.controlPort2.inspect();
+            serialPort.inspect();
+            paula.uart.inspect();
+            controlPort1.inspect();
+            controlPort2.inspect();
             break;
         case INS_EVENTS: inspectEvents(); break;
         default:         assert(false);

@@ -8,7 +8,13 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Agnus.h"
+
+#include "CIA.h"
+#include "CPU.h"
+#include "Keyboard.h"
+#include "Paula.h"
+#include "UART.h"
 
 void
 Agnus::inspectEvents(EventInfo &info) const
@@ -506,7 +512,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
             paula.serviceIplEvent();
         }
         if (isDue<SLOT_KBD>(cycle)) {
-            amiga.keyboard.serviceKeyboardEvent(slot[SLOT_KBD].id);
+            keyboard.serviceKeyboardEvent(slot[SLOT_KBD].id);
         }
         if (isDue<SLOT_TXD>(cycle)) {
             uart.serviceTxdEvent(slot[SLOT_TXD].id);

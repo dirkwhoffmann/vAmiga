@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Agnus.h"
+
+#include "Denise.h"
+#include "Paula.h"
 
 void
 Agnus::pokeDSKPTH(u16 value)
