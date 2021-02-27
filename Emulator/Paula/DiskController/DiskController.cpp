@@ -10,9 +10,10 @@
 #include "config.h"
 #include "DiskController.h"
 
-#include "Amiga.h"
+#include "Agnus.h"
 #include "Drive.h"
 #include "MsgQueue.h"
+#include "Paula.h"
 
 DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
 {
@@ -243,9 +244,9 @@ DiskController::ejectDisk(isize nr, Cycle delay)
 {
     assert(nr >= 0 && nr <= 3);
 
-    amiga.suspend();
+    suspend();
     agnus.scheduleRel<SLOT_DCH>(delay, DCH_EJECT, nr);
-    amiga.resume();
+    resume();
 }
 
 void
@@ -257,7 +258,7 @@ DiskController::insertDisk(class Disk *disk, isize nr, Cycle delay)
     debug(DSK_DEBUG, "insertDisk(%p, %zd, %lld)\n", disk, nr, delay);
 
     // The easy case: The emulator is not running
-    if (!amiga.isRunning()) {
+    if (!isRunning()) {
 
         df[nr]->ejectDisk();
         df[nr]->insertDisk(disk);
@@ -265,7 +266,7 @@ DiskController::insertDisk(class Disk *disk, isize nr, Cycle delay)
     }
 
     // The not so easy case: The emulator is running
-    amiga.suspend();
+    suspend();
 
     if (df[nr]->hasDisk()) {
 
@@ -280,7 +281,7 @@ DiskController::insertDisk(class Disk *disk, isize nr, Cycle delay)
     diskToInsert = disk;
     agnus.scheduleRel<SLOT_DCH>(delay, DCH_INSERT, nr);
     
-    amiga.resume();
+    resume();
 }
 
 void

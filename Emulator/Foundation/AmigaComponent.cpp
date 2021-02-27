@@ -42,6 +42,18 @@ zorro(ref.zorro)
 };
 
 void
+AmigaComponent::suspend()
+{
+    amiga.suspend();
+}
+
+void
+AmigaComponent::resume()
+{
+    amiga.resume();
+}
+
+void
 AmigaComponent::prefix() const
 {
     amiga.prefix();

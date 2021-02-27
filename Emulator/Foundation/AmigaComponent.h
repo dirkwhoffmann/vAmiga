@@ -78,5 +78,8 @@ public:
 
     AmigaComponent(Amiga& ref);
 
+    void suspend();
+    void resume();
+    
     void prefix() const override;
 };
