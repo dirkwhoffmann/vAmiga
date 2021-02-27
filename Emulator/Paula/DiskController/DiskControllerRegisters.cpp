@@ -8,7 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "DiskController.h"
+
+#include "Agnus.h"
+#include "Drive.h"
+#include "MsgQueue.h"
+#include "Paula.h"
 
 u16
 DiskController::peekDSKDATR() const

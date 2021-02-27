@@ -8,7 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "CIA.h"
+
+#include "Keyboard.h"
 
 u8
 CIA::peek(u16 addr)

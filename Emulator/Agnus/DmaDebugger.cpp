@@ -8,7 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "DmaDebugger.h"
+
+#include "Agnus.h"
+#include "Denise.h"
+#include "MsgQueue.h"
+#include "PixelEngine.h"
 
 DmaDebugger::DmaDebugger(Amiga &ref) : AmigaComponent(ref)
 {

@@ -11,8 +11,14 @@
 #include "Memory.h"
 
 #include "Amiga.h"
+#include "Agnus.h"
 #include "CIA.h"
+#include "CPU.h"
+#include "Denise.h"
 #include "MsgQueue.h"
+#include "Paula.h"
+#include "RTC.h"
+#include "ZorroManager.h"
 
 Memory::Memory(Amiga& ref) : AmigaComponent(ref)
 {
@@ -144,9 +150,9 @@ Memory::setConfigItem(Option option, long value)
                 return false;
             }
             
-            amiga.suspend();
+            suspend();
             config.slowRamDelay = value;
-            amiga.resume();
+            resume();
             return true;
             
         case OPT_BANKMAP:
@@ -158,10 +164,10 @@ Memory::setConfigItem(Option option, long value)
                 return false;
             }
             
-            amiga.suspend();
+            suspend();
             config.bankMap = (BankMap)value;
             updateMemSrcTables();
-            amiga.resume();
+            resume();
             return true;
 
         case OPT_UNMAPPING_TYPE:
@@ -173,9 +179,9 @@ Memory::setConfigItem(Option option, long value)
                 return false;
             }
             
-            amiga.suspend();
+            suspend();
             config.unmappingType = (UnmappedMemory)value;
-            amiga.resume();
+            resume();
             return true;
             
         case OPT_RAM_INIT_PATTERN:
@@ -187,9 +193,9 @@ Memory::setConfigItem(Option option, long value)
                 return false;
             }
 
-            amiga.suspend();
+            suspend();
             config.ramInitPattern = (RamInitPattern)value;
-            amiga.resume();
+            resume();
             if (isPoweredOff()) fillRamWithInitPattern();
             return true;
             

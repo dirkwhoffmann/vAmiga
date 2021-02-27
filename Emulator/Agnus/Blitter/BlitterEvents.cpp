@@ -8,7 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Blitter.h"
+
+#include "Agnus.h"
 
 void
 Blitter::serviceEvent()

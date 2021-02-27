@@ -8,7 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Copper.h"
+
+#include "Agnus.h"
 
 void
 Copper::serviceEvent(EventID id)
@@ -25,10 +27,10 @@ Copper::serviceEvent(EventID id)
             trace(COP_DEBUG && verbose, "COP_REQ_DMA\n");
             
             // Wait for the next possible DMA cycle
-            if (!amiga.agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Don't wake up in an odd cycle
-            if (amiga.agnus.pos.h % 2) { reschedule(); break; }
+            if (agnus.pos.h % 2) { reschedule(); break; }
 
             // Continue with fetching the first instruction word
             schedule(COP_FETCH);

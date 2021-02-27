@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Denise.h"
+
+#include "Agnus.h"
+#include "ControlPort.h"
 
 void
 Denise::pokeDMACON(u16 oldValue, u16 newValue)
@@ -28,7 +31,7 @@ Denise::pokeDMACON(u16 oldValue, u16 newValue)
 u16
 Denise::peekJOY0DATR()
 {
-    u16 result = amiga.controlPort1.joydat();
+    u16 result = controlPort1.joydat();
     trace(JOYREG_DEBUG, "peekJOY0DATR() = $%04X (%d)\n", result, result);
 
     return result;
@@ -37,7 +40,7 @@ Denise::peekJOY0DATR()
 u16
 Denise::peekJOY1DATR()
 {
-    u16 result = amiga.controlPort2.joydat();
+    u16 result = controlPort2.joydat();
     trace(JOYREG_DEBUG, "peekJOY1DATR() = $%04X (%d)\n", result, result);
 
     return result;
@@ -48,8 +51,8 @@ Denise::pokeJOYTEST(u16 value)
 {
     trace(JOYREG_DEBUG, "pokeJOYTEST(%04X)\n", value);
 
-    amiga.controlPort1.pokeJOYTEST(value);
-    amiga.controlPort2.pokeJOYTEST(value);
+    controlPort1.pokeJOYTEST(value);
+    controlPort2.pokeJOYTEST(value);
 }
 
 u16

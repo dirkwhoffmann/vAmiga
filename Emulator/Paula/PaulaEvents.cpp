@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Paula.h"
+
+#include "ControlPort.h"
+#include "CPU.h"
 
 void
 Paula::serviceIrqEvent()

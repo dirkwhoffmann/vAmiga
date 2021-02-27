@@ -12,6 +12,7 @@
 
 #include "Agnus.h"
 #include "Amiga.h"
+#include "ControlPort.h"
 #include "SSEUtils.h"
 
 Denise::Denise(Amiga& ref) : AmigaComponent(ref)
@@ -166,8 +167,8 @@ Denise::_inspect()
         info.diwVstrt = agnus.diwVstrt;
         info.diwVstop = agnus.diwVstop;
         
-        info.joydat[0] = amiga.controlPort1.joydat();
-        info.joydat[1] = amiga.controlPort2.joydat();
+        info.joydat[0] = controlPort1.joydat();
+        info.joydat[1] = controlPort2.joydat();
         info.clxdat = 0;
         
         for (isize i = 0; i < 6; i++) {

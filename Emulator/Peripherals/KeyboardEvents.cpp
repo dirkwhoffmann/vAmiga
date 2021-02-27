@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Keyboard.h"
+
+#include "Agnus.h"
+#include "CIA.h"
 
 void
 Keyboard::serviceKeyboardEvent(EventID id)

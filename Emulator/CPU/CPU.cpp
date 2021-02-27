@@ -13,6 +13,7 @@
 #include "Agnus.h"
 #include "Amiga.h"
 #include "Memory.h"
+#include "MsgQueue.h"
 
 void
 CPU::sync(int cycles)

@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Paula.h"
 
 template <isize nr> void
 StateMachine<nr>::serviceEvent()

@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Paula.h"
+
+#include "CIA.h"
+#include "ControlPort.h"
 
 u16
 Paula::peekADKCONR() const

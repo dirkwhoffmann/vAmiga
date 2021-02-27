@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "UART.h"
+
+#include "Agnus.h"
+#include "SerialPort.h"
 
 void
 UART::serviceTxdEvent(EventID id)

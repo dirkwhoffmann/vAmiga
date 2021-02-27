@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "DiskController.h"
+
+#include "Agnus.h"
+#include "Drive.h"
 
 void
 DiskController::serviceDiskEvent()

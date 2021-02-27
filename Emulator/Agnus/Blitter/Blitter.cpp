@@ -11,7 +11,6 @@
 #include "Blitter.h"
 
 #include "Agnus.h"
-#include "Amiga.h"
 
 Blitter::Blitter(Amiga& ref) : AmigaComponent(ref)
 {
@@ -89,9 +88,9 @@ Blitter::setConfigItem(Option option, long value)
                 return false;
             }
             
-            amiga.suspend();
+            suspend();
             config.accuracy = (int)value;
-            amiga.resume();
+            resume();
 
             return true;
             

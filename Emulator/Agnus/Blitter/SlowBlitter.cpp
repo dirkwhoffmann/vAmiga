@@ -8,7 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Blitter.h"
+
+#include "Agnus.h"
+#include "Memory.h"
+#include "Paula.h"
 
 /* Micro-instructions:
  *

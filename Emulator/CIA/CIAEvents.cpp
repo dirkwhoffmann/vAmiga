@@ -8,7 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "CIA.h"
+
+#include "Agnus.h"
 
 void
 CIA::scheduleNextExecution()

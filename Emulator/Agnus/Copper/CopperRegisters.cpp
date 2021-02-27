@@ -8,7 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Copper.h"
+
+#include "Agnus.h"
 
 void
 Copper::pokeCOPCON(u16 value)
