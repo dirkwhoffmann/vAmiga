@@ -2037,7 +2037,7 @@ using namespace moira;
 
 - (BOOL)isReleaseBuild
 {
-    return releaseBuild();
+    return releaseBuild;
 }
 
 - (BOOL)warp

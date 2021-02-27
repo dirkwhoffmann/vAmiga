@@ -10,6 +10,7 @@
 #include "config.h"
 #include "FSBlock.h"
 
+#include "Atomic.h"
 #include "FSBitmapBlock.h"
 #include "FSBitmapExtBlock.h"
 #include "FSBootBlock.h"
@@ -103,7 +104,7 @@ FSBlock::write32(u8 *p, u32 value)
 void
 FSBlock::dumpData() const
 {
-    hexdumpLongwords(data, 512);
+    utl::hexdumpLongwords(data, 512);
 }
 
 u32

@@ -983,8 +983,8 @@ Blitter::exec()
             }
 
             if (BLT_CHECKSUM) {
-                check1 = fnv_1a_it32(check1, dhold);
-                check2 = fnv_1a_it32(check2, bltdpt);
+                check1 = utl::fnv_1a_it32(check1, dhold);
+                check2 = utl::fnv_1a_it32(check2, bltdpt);
             }
             trace(BLT_DEBUG, "D: poke(%X), %X (check: %X %X)\n", bltdpt, dhold, check1, check2);
             bltdpt = U32_ADD(bltdpt, desc ? -2 : 2);
@@ -1077,7 +1077,9 @@ Blitter::exec()
         // Run the minterm logic circuit
         trace(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
         dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
-        assert(releaseBuild() || dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
+        if (BLT_DEBUG) {
+            assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
+        }
 
         if (!lockD) {
 

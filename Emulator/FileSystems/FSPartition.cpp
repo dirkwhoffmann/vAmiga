@@ -11,6 +11,7 @@
 #include "config.h"
 #include "FSPartition.h"
 
+#include "Atomic.h"
 #include "FSDevice.h"
 
 FSPartition *

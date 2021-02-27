@@ -8,6 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+
+#include "Atomic.h"
 #include "FSDevice.h"
 
 FSDevice *
@@ -805,7 +807,7 @@ FSDevice::importVolume(const u8 *src, isize size, ErrorCode *err)
     debug(FS_DEBUG, "Success\n");
     info();
     dump();
-    hexdump(blocks[0]->data, 512);
+    utl::hexdump(blocks[0]->data, 512);
     printDirectory(true);
     return true;
 }

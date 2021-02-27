@@ -12,6 +12,7 @@
 
 #include "Amiga.h"
 #include "Agnus.h"
+#include "Checksum.h"
 #include "CIA.h"
 #include "CPU.h"
 #include "Denise.h"
@@ -331,17 +332,17 @@ Memory::_dump(Dump::Category category, std::ostream& os) const
     if (category & Dump::Checksums) {
 
         os << DUMP("Rom checksum");
-        os << HEX32 << fnv_1a_32(rom, config.romSize) << std::endl;
+        os << HEX32 << utl::fnv_1a_32(rom, config.romSize) << std::endl;
         os << DUMP("Wom checksum");
-        os << HEX32 << fnv_1a_32(wom, config.womSize) << std::endl;
+        os << HEX32 << utl::fnv_1a_32(wom, config.womSize) << std::endl;
         os << DUMP("Extended Rom checksum");
-        os << HEX32 << fnv_1a_32(ext, config.extSize) << std::endl;
+        os << HEX32 << utl::fnv_1a_32(ext, config.extSize) << std::endl;
         os << DUMP("Chip Ram checksum");
-        os << HEX32 << fnv_1a_32(chip, config.chipSize) << std::endl;
+        os << HEX32 << utl::fnv_1a_32(chip, config.chipSize) << std::endl;
         os << DUMP("Slow Ram checksum");
-        os << HEX32 << fnv_1a_32(slow, config.slowSize) << std::endl;
+        os << HEX32 << utl::fnv_1a_32(slow, config.slowSize) << std::endl;
         os << DUMP("Fast Ram checksum");
-        os << HEX32 << fnv_1a_32(fast, config.fastSize) << std::endl;
+        os << HEX32 << utl::fnv_1a_32(fast, config.fastSize) << std::endl;
     }
     
     if (category & Dump::BankMap) {
@@ -1502,7 +1503,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_ROM> (u32 addr, u8 value)
         updateMemSrcTables();
     }
         
-    if (!releaseBuild()) {
+    if (!releaseBuild) {
         if (addr == 0xFFFFFF && value == 42) {
             msg("DEBUG STOP\n");
             amiga.signalStop();

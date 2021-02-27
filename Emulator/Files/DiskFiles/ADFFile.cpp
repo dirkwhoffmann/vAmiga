@@ -10,7 +10,9 @@
 #include "config.h"
 #include "ADFFile.h"
 
+#include "Atomic.h"
 #include "BootBlockImage.h"
+#include "Checksum.h"
 #include "Disk.h"
 #include "Drive.h"
 
@@ -382,7 +384,7 @@ ADFFile::encodeTrack(Disk *disk, Track t)
     
     // Compute a debug checksum
     debug(MFM_DEBUG, "Track %d checksum = %x\n",
-          t, fnv_1a_32(disk->data.track[t], disk->length.track[t]));
+          t, utl::fnv_1a_32(disk->data.track[t], disk->length.track[t]));
 
     return result;
 }
@@ -465,7 +467,7 @@ ADFFile::encodeSector(Disk *disk, Track t, Sector s)
 void
 ADFFile::dumpSector(Sector s)
 {
-    hexdump(data + 512 * s, 512);
+    utl::hexdump(data + 512 * s, 512);
 }
 
 void

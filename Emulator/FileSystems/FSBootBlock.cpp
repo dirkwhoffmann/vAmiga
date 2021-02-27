@@ -8,9 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FSBootBlock.h"
-
 #include "BootBlockImage.h"
+
+#include "Atomic.h"
+#include "FSBootBlock.h"
 #include "FSDevice.h"
 #include "FSPartition.h"
 

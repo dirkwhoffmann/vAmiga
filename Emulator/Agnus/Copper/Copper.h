@@ -10,7 +10,9 @@
 #pragma once
 
 #include "Commons.h"
+
 #include "AmigaComponent.h"
+#include "Checksum.h"
 #include "CopperTypes.h"
 #include "Beam.h"
 
@@ -77,7 +79,7 @@ public:
 private:
 
     u64 checkcnt = 0;
-    u32 checksum = fnv_1a_init32();
+    u32 checksum = utl::fnv_1a_init32();
 
 
     //

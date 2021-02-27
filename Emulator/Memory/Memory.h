@@ -10,7 +10,9 @@
 #pragma once
 
 #include "Commons.h"
+
 #include "AmigaComponent.h"
+#include "Checksum.h"
 #include "RomFile.h"
 #include "ExtendedRomFile.h"
 
@@ -337,8 +339,8 @@ private:
 public:
 
     // Computes a CRC-32 checksum
-    u32 romFingerprint() { return crc32(rom, config.romSize); }
-    u32 extFingerprint() { return crc32(ext, config.extSize); }
+    u32 romFingerprint() { return utl::crc32(rom, config.romSize); }
+    u32 extFingerprint() { return utl::crc32(ext, config.extSize); }
 
     // Returns the ROM identifiers of the currently installed ROMs
     RomIdentifier romIdentifier() { return RomFile::identifier(romFingerprint()); }

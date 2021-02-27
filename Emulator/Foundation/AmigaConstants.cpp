@@ -8,6 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "Atomic.h"
+
 #include "Utils.h"
 
 const char *regName(u32 addr)

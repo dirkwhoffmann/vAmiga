@@ -10,6 +10,8 @@
 #pragma once
 
 #include "Commons.h"
+#include "Atomic.h"
+
 #include "AmigaTypes.h"
 #include "Beam.h"
 #include "ChangeRecorder.h"

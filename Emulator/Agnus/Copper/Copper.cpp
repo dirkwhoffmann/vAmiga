@@ -11,6 +11,7 @@
 #include "Copper.h"
 
 #include "Agnus.h"
+#include "Checksum.h"
 #include "PixelEngine.h"
 
 Copper::Copper(Amiga& ref) : AmigaComponent(ref)
@@ -506,7 +507,7 @@ Copper::vsyncHandler()
                 agnus.frame.nr, checksum, checkcnt, cop1lc, cop2lc);
         }
         checkcnt = 0;
-        checksum = fnv_1a_init32();
+        checksum = utl::fnv_1a_init32();
     }
 }
 
