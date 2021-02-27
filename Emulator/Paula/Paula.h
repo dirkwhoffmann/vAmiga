@@ -10,14 +10,15 @@
 #pragma once
 
 #include "Commons.h"
-#include "StateMachine.h"
+
 #include "AudioFilter.h"
-#include "Muxer.h"
 #include "AudioStream.h"
-#include "Buffers.h"
+#include "ChangeRecorder.h"
 #include "DiskController.h"
-#include "UART.h"
+#include "Muxer.h"
+#include "StateMachine.h"
 #include "TimeDelayed.h"
+#include "UART.h"
 
 class Paula : public AmigaComponent {
     
@@ -75,7 +76,8 @@ public:
     u64 iplPipe;
     
     // Interrupt priority line (IPL)
-    TimeDelayed <u8,4> ipl = TimeDelayed <u8,4> ();
+    utl::TimeDelayed <u8,4> ipl = utl::TimeDelayed <u8,4> ();
+    
     
     //
     // Control ports

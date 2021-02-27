@@ -12,6 +12,8 @@
 #include "Commons.h"
 #include "AmigaObject.h"
 
+namespace utl {
+
 template <class T, int delay> class TimeDelayed : AmigaObject {
     
     /* Value pipeline (history buffer)
@@ -116,3 +118,5 @@ public:
         return pipeline[MAX(0, timeStamp - AS_DMA_CYCLES(*clock) + customDelay)];
     }
 };
+
+}

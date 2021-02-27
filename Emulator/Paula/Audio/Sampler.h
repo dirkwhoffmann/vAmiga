@@ -9,9 +9,9 @@
 
 #pragma once
 
+#include "ChangeRecorder.h"
 #include "Commons.h"
 #include "Utils.h"
-#include "Buffers.h"
 
 /* This buffer type is used to temporarily store the generated sound samples as
  * they are produced by the state machine. Note that the state machine doesn't
@@ -37,7 +37,7 @@ struct TaggedSample
     */
 };
 
-struct Sampler : RingBuffer <TaggedSample, VPOS_CNT * HPOS_CNT> {
+struct Sampler : utl::RingBuffer <TaggedSample, VPOS_CNT * HPOS_CNT> {
     
     /* Initializes the ring buffer by removing all existing elements and adding
      * a single dummy element. The dummy element is added because some methods

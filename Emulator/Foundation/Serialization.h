@@ -12,7 +12,7 @@
 #include "Commons.h"
 #include "AmigaTypes.h"
 #include "Beam.h"
-#include "Buffers.h"
+#include "ChangeRecorder.h"
 #include "DDF.h"
 #include "Event.h"
 #include "Frame.h"
@@ -163,9 +163,8 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
-    template <class T, isize capacity> STRUCT(RingBuffer<T __ capacity>)
-    template <class T, isize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
-    template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
+    template <isize capacity> STRUCT(RegChangeRecorder<capacity>)
+    template <class T, int delay> STRUCT(utl::TimeDelayed<T __ delay>)
 
     template <class T, isize N>
     SerCounter& operator&(T (&v)[N])
@@ -243,9 +242,8 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
-    template <class T, isize capacity> STRUCT(RingBuffer<T __ capacity>)
-    template <class T, isize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
-    template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
+    template <isize capacity> STRUCT(RegChangeRecorder<capacity>)
+    template <class T, int delay> STRUCT(utl::TimeDelayed<T __ delay>)
 
     template <class T, isize N>
     SerReader& operator&(T (&v)[N])
@@ -329,9 +327,8 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
-    template <class T, isize capacity> STRUCT(RingBuffer<T __ capacity>)
-    template <class T, isize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
-    template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
+    template <isize capacity> STRUCT(RegChangeRecorder<capacity>)
+    template <class T, int delay> STRUCT(utl::TimeDelayed<T __ delay>)
 
     template <class T, isize N>
     SerWriter& operator&(T (&v)[N])
@@ -404,9 +401,8 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
-    template <class T, isize capacity> STRUCT(RingBuffer<T __ capacity>)
-    template <class T, isize capacity> STRUCT(SortedRingBuffer<T __ capacity>)
-    template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
+    template <isize capacity> STRUCT(RegChangeRecorder<capacity>)
+    template <class T, int delay> STRUCT(utl::TimeDelayed<T __ delay>)
 
     template <class T, isize N>
     SerResetter& operator&(T (&v)[N])

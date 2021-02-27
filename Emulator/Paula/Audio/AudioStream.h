@@ -9,9 +9,9 @@
 
 #pragma once
 
+#include "ChangeRecorder.h"
 #include "Commons.h"
 #include "Concurrency.h"
-#include "Buffers.h"
 #include "Utils.h"
 
 /* About the AudioStream
@@ -143,7 +143,7 @@ struct FloatStereo
 // AudioStream
 //
 
-template <class T> class AudioStream : public RingBuffer <T, 16384> {
+template <class T> class AudioStream : public utl::RingBuffer <T, 16384> {
 
     // Mutex for synchronizing read / write accesses
     Mutex mutex;

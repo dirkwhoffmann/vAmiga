@@ -10,8 +10,10 @@
 #pragma once
 
 #include "Commons.h"
-#include "AmigaPublicTypes.h"
+
 #include <utility>
+
+namespace utl {
 
 /* The emulator uses buffers at various places. Most of them are derived from
  * one of the following two classes:
@@ -38,17 +40,6 @@ template <class T, isize capacity> struct RingBuffer
     void clear() { r = w = 0; }
     void clear(T t) { for (isize i = 0; i < capacity; i++) elements[i] = t; clear(); }
     void align(isize offset) { w = (r + offset) % capacity; }
-
-    
-    //
-    // Serializing
-    //
-
-    template <class W>
-    void applyToItems(W& worker)
-    {
-        worker & elements & r & w;
-    }
 
     
     //
@@ -126,11 +117,13 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
     // Key storage
     i64 keys[capacity];
 
+    /*
     template <class W>
      void applyToItems(W& worker)
      {
          worker & this->elements & this->r & this->w & keys;
      }
+    */
     
     // Inserts an element at the proper position
     void insert(i64 key, T element)
@@ -159,35 +152,4 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
     }
 };
 
-
-/* Register change recorder
- *
- * For certain registers, Agnus and Denise have to keep track about when a
- * value changes. This information is stored in a sorted ring buffers called
- * a register change recorder.
- */
-struct RegChange
-{
-    u32 addr;
-    u16 value;
-
-    template <class T>
-    void applyToItems(T& worker)
-    {
-        worker & addr & value;
-    }
-
-    // Constructors
-    RegChange() : addr(0), value(0) { }
-    RegChange(u32 a, u16 v) : addr(a), value(v) { }
-};
-
-template <isize capacity>
-struct RegChangeRecorder : public SortedRingBuffer<RegChange, capacity>
-{
-    // Returns the closest trigger cycle
-    Cycle trigger() {
-        return this->isEmpty() ? NEVER : this->keys[this->r];
-    }
-};
-
+}

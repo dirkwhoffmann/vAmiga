@@ -15,7 +15,7 @@
 class MsgQueue : public HardwareComponent {
         
     // Ring buffer storing all pending messages
-    RingBuffer<Message, 64> queue;
+    utl::RingBuffer<Message, 64> queue;
             
     // List of registered listeners
     std::vector<std::pair <const void *, Callback *> > listeners;
