@@ -14,11 +14,6 @@
 #include "AmigaConstants.h"
 #include "AudioPublicTypes.h"
 #include "RingBuffer.h"
-/*
-#include "ChangeRecorder.h"
-#include "Commons.h"
-#include "Utils.h"
-*/
 
 /* This buffer type is used to temporarily store the generated sound samples as
  * they are produced by the state machine. Note that the state machine doesn't

@@ -14,10 +14,7 @@
 #include "AmigaConstants.h"
 #include "Debug.h"
 #include "Errors.h"
-// #include "AmigaTypes.h"
 
-#include <assert.h>
-#include <limits.h>
 #include <pthread.h>
 #include <stdarg.h>
 #include <stdint.h>

@@ -10,6 +10,18 @@
 #include "config.h"
 #include "AudioStream.h"
 
+#include <algorithm>
+
+void
+Volume::shift()
+{
+    if (current < target) {
+        current += std::min(delta, target - current);
+    } else {
+        current -= std::min(delta, current - target);
+    }
+}
+
 template <class T> void
 AudioStream<T>::alignWritePtr()
 {

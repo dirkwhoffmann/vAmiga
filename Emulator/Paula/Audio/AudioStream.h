@@ -12,7 +12,7 @@
 #include "ChangeRecorder.h"
 #include "Commons.h"
 #include "Concurrency.h"
-#include "Utils.h"
+// #include "Utils.h"
 
 /* About the AudioStream
  *
@@ -56,13 +56,7 @@ struct Volume {
     bool silent() { return current == 0.0; }
     
     // Shifts the current volume towards the target volume
-    void shift() {
-        if (current < target) {
-            current += MIN(delta, target - current);
-        } else {
-            current -= MIN(delta, current - target);
-        }
-    }
+    void shift();
 };
 
 

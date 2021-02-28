@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "BitUtils.h"
 
-#include "Utils.h"
+#include "AmigaConstants.h"
+#include "Extensions.h"
 
 const char *regName(u32 addr)
 {

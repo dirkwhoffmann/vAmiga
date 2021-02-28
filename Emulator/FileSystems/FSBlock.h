@@ -11,6 +11,7 @@
 
 #include "FSTypes.h"
 #include "AmigaObject.h"
+#include "Extensions.h"
 #include "FSObjects.h"
 
 struct FSBlock : AmigaObject {

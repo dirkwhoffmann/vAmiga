@@ -10,10 +10,6 @@
 #include "config.h"
 #include "DiskController.h"
 
-/*
-#include "Checksum.h"
-#include "Drive.h"
-*/
 #include "Agnus.h"
 #include "Drive.h"
 #include "MsgQueue.h"

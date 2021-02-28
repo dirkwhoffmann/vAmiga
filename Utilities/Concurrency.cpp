@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+
 #include "Concurrency.h"
 
 namespace utl {

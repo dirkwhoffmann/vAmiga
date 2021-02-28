@@ -10,8 +10,7 @@
 #pragma once
 
 #include "Commons.h"
-#include "BitUtils.h"
-
+#include "Extensions.h"
 
 //
 // Basic memory buffer I/O
