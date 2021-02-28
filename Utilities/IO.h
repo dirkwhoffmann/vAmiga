@@ -11,6 +11,12 @@
 
 #include "Datatypes.h"
 
+#include <dirent.h>
+#include <fcntl.h>
+#include <istream>
+#include <sys/stat.h>
+#include <unistd.h>
+
 namespace util {
 
 //

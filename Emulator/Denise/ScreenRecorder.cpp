@@ -16,8 +16,6 @@
 #include "MsgQueue.h"
 #include "Paula.h"
 
-#include <fcntl.h>
-
 ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 {
     subComponents = std::vector<HardwareComponent *> {

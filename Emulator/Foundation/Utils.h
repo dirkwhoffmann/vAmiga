@@ -13,10 +13,6 @@
 
 #include "AmigaConstants.h"
 
-//#include <sys/param.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <dirent.h>
 #include <map>
 #include <list>
 #include <set>

@@ -9,10 +9,6 @@
 
 #include "IO.h"
 
-#include <sys/stat.h>
-#include <dirent.h>
-#include <istream>
-
 namespace util {
 
 string extractPath(const string &s)

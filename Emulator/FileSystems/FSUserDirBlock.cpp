@@ -13,6 +13,7 @@
 #include "BitUtils.h"
 #include "FSDevice.h"
 #include "FSPartition.h"
+#include "IO.h"
 
 FSUserDirBlock::FSUserDirBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
