@@ -493,71 +493,71 @@ private:
     {
         worker
         
-        & slot
-        & nextTrigger
+        >> slot
+        << nextTrigger
 
-        & bplEvent
-        & dasEvent
-        & nextBplEvent
-        & nextDasEvent
+        << bplEvent
+        << dasEvent
+        << nextBplEvent
+        << nextDasEvent
 
-        & hsyncActions
-        & changeRecorder
+        << hsyncActions
+        << changeRecorder
 
-        & pos
-        & frame
+        >> pos
+        >> frame
 
-        & bplcon0
-        & bplcon1
-        & dmacon
-        & dskpt
-        & audpt
-        & audlc
-        & bplpt
-        & bpl1mod
-        & bpl2mod
-        & sprpt
+        << bplcon0
+        << bplcon1
+        << dmacon
+        << dskpt
+        << audpt
+        << audlc
+        << bplpt
+        << bpl1mod
+        << bpl2mod
+        << sprpt
 
-        & bplcon0AtDDFStrt
-        & dmaconAtDDFStrt
-        & dmaDAS
-        & scrollLoresOdd
-        & scrollLoresEven
-        & scrollHiresOdd
-        & scrollHiresEven
-        & bplDmaLine
+        << bplcon0AtDDFStrt
+        << dmaconAtDDFStrt
+        << dmaDAS
+        << scrollLoresOdd
+        << scrollLoresEven
+        << scrollHiresOdd
+        << scrollHiresEven
+        << bplDmaLine
         
-        & busValue
-        & busOwner
+        << busValue
+        << busOwner
 
-        & audxDR
-        & audxDSR
-        & bls
+        << audxDR
+        << audxDSR
+        << bls
 
-        & ddfstrt
-        & ddfstop
-        & ddfstrtReached
-        & ddfstopReached
-        & ddfState
-        & ocsEarlyAccessLine
-        & ddfVFlop
-        & ddfLores
-        & ddfHires
+        << ddfstrt
+        << ddfstop
+        << ddfstrtReached
+        << ddfstopReached
+        << ddfState
+        << ocsEarlyAccessLine
+        << ddfVFlop
+        >> ddfLores
+        >> ddfHires
 
-        & diwstrt
-        & diwstop
-        & diwHstrt
-        & diwHstop
-        & diwVstrt
-        & diwVstop
-        & diwVFlop
-        & diwHFlop
-        & diwHFlopOn
-        & diwHFlopOff
+        << diwstrt
+        << diwstop
+        << diwHstrt
+        << diwHstop
+        << diwVstrt
+        << diwVstop
+        << diwVFlop
+        << diwHFlop
+        << diwHFlopOn
+        << diwHFlopOff
 
-        & sprVStrt
-        & sprVStop
-        & sprDmaState;
+        << sprVStrt
+        << sprVStop
+        << sprDmaState;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
