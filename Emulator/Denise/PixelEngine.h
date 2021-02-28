@@ -11,6 +11,7 @@
 
 #include "Commons.h"
 #include "AmigaComponent.h"
+#include "ChangeRecorder.h"
 
 class PixelEngine : public AmigaComponent {
 

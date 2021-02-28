@@ -13,6 +13,7 @@
 #include "AmigaConstants.h"
 #include "Beam.h"
 #include "Blitter.h"
+#include "ChangeRecorder.h"
 #include "Copper.h"
 #include "DDF.h"
 #include "DmaDebugger.h"

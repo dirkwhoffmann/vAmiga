@@ -11,6 +11,7 @@
 
 #include "Commons.h"
 #include "HardwareComponent.h"
+#include "RingBuffer.h"
 
 class MsgQueue : public HardwareComponent {
         

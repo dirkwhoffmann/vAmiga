@@ -15,6 +15,7 @@
 #include "AudioStream.h"
 #include "AudioFilter.h"
 #include "Chrono.h"
+#include "Sampler.h"
 
 /* Architecture of the audio pipeline
  *
