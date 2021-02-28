@@ -14,12 +14,6 @@
 
 #include <map>
 
-/*
-#include <stdio.h>
-
-#include <string>
-*/
-
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
 
 template <class T, typename E> struct Reflection {

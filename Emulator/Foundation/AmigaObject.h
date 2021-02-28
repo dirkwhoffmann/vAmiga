@@ -15,6 +15,7 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
+#include <map>
 
 /* Base class for all Amiga objects. This class adds a textual description
  * the object together with functions for printing debug messages and warnings.

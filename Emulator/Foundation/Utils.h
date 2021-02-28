@@ -13,8 +13,6 @@
 
 #include "AmigaConstants.h"
 
-#include <map>
-#include <list>
 #include <set>
 #include <sstream>
 #include <fstream>

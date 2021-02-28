@@ -13,6 +13,9 @@
 #include "BitUtils.h"
 #include "FSDevice.h"
 
+#include <set>
+#include <stack>
+
 FSDevice *
 FSDevice::makeWithFormat(FSDeviceDescriptor &layout)
 {
