@@ -9,7 +9,9 @@
 
 #pragma once
 
+#include "Foundation.h"
 #include "AmigaPublicTypes.h"
+
 #include <exception>
 #include <string>
 

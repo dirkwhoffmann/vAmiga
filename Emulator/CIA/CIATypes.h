@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "GenericTypes.h"
 #include "CIAPublicTypes.h"
 #include "Reflection.h"
 
