@@ -140,7 +140,8 @@ public:
     COUNT64(const unsigned long long)
     COUNTD(const float)
     COUNTD(const double)
-    
+   
+    /*
     COUNT64(const MemorySource)
     COUNT64(const EventID)
     COUNT8(const BusOwner)
@@ -158,7 +159,8 @@ public:
     COUNT64(const CIARevision)
     COUNT64(const AgnusRevision)
     COUNT64(const DeniseRevision)
-
+    */
+    
     STRUCT(Beam)
     STRUCT(DDF<true>)
     STRUCT(DDF<false>)
@@ -220,6 +222,7 @@ public:
     DESERIALIZED(float)
     DESERIALIZED(double)
     
+    /*
     DESERIALIZE64(MemorySource)
     DESERIALIZE64(EventID)
     DESERIALIZE8(BusOwner)
@@ -237,7 +240,8 @@ public:
     DESERIALIZE64(CIARevision)
     DESERIALIZE64(AgnusRevision)
     DESERIALIZE64(DeniseRevision)
-
+    */
+    
     STRUCT(Beam)
     STRUCT(DDF<true>)
     STRUCT(DDF<false>)
@@ -305,6 +309,7 @@ public:
     SERIALIZED(const float)
     SERIALIZED(const double)
     
+    /*
     SERIALIZE64(const MemorySource)
     SERIALIZE64(const EventID)
     SERIALIZE8(const BusOwner)
@@ -322,7 +327,8 @@ public:
     SERIALIZE64(const CIARevision)
     SERIALIZE64(const AgnusRevision)
     SERIALIZE64(const DeniseRevision)
-
+    */
+    
     STRUCT(Beam)
     STRUCT(DDF<true>)
     STRUCT(DDF<false>)
@@ -384,6 +390,7 @@ public:
     RESET(float)
     RESET(double)
     
+    /*
     RESET(MemorySource)
     RESET(EventID)
     RESET(BusOwner)
@@ -396,7 +403,8 @@ public:
     RESET(DriveType)
     RESET(DriveState)
     RESET(RTCRevision)
-
+    */
+    
     STRUCT(Beam)
     STRUCT(DDF<true>)
     STRUCT(DDF<false>)

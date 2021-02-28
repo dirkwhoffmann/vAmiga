@@ -78,19 +78,29 @@ typedef size_t             usize;
 #if defined(__SWIFT__)
 
 // Definition for Swift
-#define enum_open(_name, _type) \
+#define enum_generic(_name, _type) \
 typedef enum __attribute__((enum_extensibility(open))) _name : _type _name; \
 enum _name : _type
 
-#define enum_long(_name) enum_open(_name, long)
-#define enum_u32(_name) enum_open(_name, u32)
-#define enum_i8(_name) enum_open(_name, i8)
+#define enum_long(_name) enum_generic(_name, long)
+#define enum_u32(_name) enum_generic(_name, u32)
+#define enum_i8(_name) enum_generic(_name, i8)
 
 #else
 
 // Definition for C
+#define enum_generic(_name, _type) \
+typedef _type _name; \
+enum : _type
+
+#define enum_long(_name) enum_generic(_name, long long)
+#define enum_u32(_name) enum_generic(_name, u32)
+#define enum_i8(_name) enum_generic(_name, i8)
+
+/*
 #define enum_long(_name) enum _name : long long
 #define enum_u32(_name) enum _name : u32
 #define enum_i8(_name) enum _name : i8
+*/
 
 #endif
