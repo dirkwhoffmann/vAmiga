@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "AmigaConstants.h"
-#include "AmigaPublicTypes.h"
+#include "PublicTypes.h"
 
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>

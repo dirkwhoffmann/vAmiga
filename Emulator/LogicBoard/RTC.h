@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "RTCTypes.h"
 #include "AmigaComponent.h"
 
 class RTC : public AmigaComponent {

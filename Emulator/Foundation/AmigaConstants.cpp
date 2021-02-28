@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Atomic.h"
+#include "BitUtils.h"
 
 #include "Utils.h"
 

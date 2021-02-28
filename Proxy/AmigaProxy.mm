@@ -14,10 +14,12 @@
 
 #include "DMSFile.h"
 #include "EXEFile.h"
+#include "ExtendedRomFile.h"
 #include "EXTFile.h"
 #include "Folder.h"
 #include "FSDevice.h"
 #include "IMGFile.h"
+#include "RomFile.h"
 #include "Snapshot.h"
 
 using namespace moira;

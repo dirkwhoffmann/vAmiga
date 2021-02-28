@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "CIATypes.h"
 #include "AmigaComponent.h"
 
 typedef union

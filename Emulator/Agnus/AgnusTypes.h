@@ -10,6 +10,8 @@
 #pragma once
 
 #include "Commons.h"
+#include "BlitterTypes.h"
+#include "CopperTypes.h"
 #include "AgnusPublicTypes.h"
 #include "Reflection.h"
 

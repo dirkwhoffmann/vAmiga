@@ -9,8 +9,9 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "BlitterTypes.h"
 #include "AmigaComponent.h"
+#include "MemoryPublicTypes.h"
 
 /* The Blitter supports three accuracy levels:
  *

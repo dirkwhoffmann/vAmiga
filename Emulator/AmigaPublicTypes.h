@@ -21,23 +21,6 @@
 
 #include "Commons.h"
 
-#include "AgnusPublicTypes.h"
-#include "CPUPublicTypes.h"
-#include "CIAPublicTypes.h"
-#include "DenisePublicTypes.h"
-#include "DiskPublicTypes.h"
-#include "DmaDebuggerPublicTypes.h"
-#include "DrivePublicTypes.h"
-#include "EventHandlerPublicTypes.h"
-#include "FilePublicTypes.h"
-#include "FSPublicTypes.h"
-#include "KeyboardPublicTypes.h"
-#include "MemoryPublicTypes.h"
-#include "MsgQueuePublicTypes.h"
-#include "PaulaPublicTypes.h"
-#include "PortPublicTypes.h"
-#include "RTCPublicTypes.h"
-
 //
 // Enumerations
 //

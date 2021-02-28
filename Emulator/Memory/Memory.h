@@ -9,12 +9,18 @@
 
 #pragma once
 
-#include "Commons.h"
-
+#include "MemoryTypes.h"
 #include "AmigaComponent.h"
+#include "FilePublicTypes.h"
+
+//#include "FileTypes.h"
+
+// #include "RomFile.h"
+
+/*
 #include "Checksum.h"
-#include "RomFile.h"
 #include "ExtendedRomFile.h"
+*/
 
 // DEPRECATED. TODO: GET VALUE FROM ZORRO CARD MANANGER
 const u32 FAST_RAM_STRT = 0x200000;
@@ -339,26 +345,26 @@ private:
 public:
 
     // Computes a CRC-32 checksum
-    u32 romFingerprint() { return utl::crc32(rom, config.romSize); }
-    u32 extFingerprint() { return utl::crc32(ext, config.extSize); }
+    u32 romFingerprint();
+    u32 extFingerprint();
 
     // Returns the ROM identifiers of the currently installed ROMs
-    RomIdentifier romIdentifier() { return RomFile::identifier(romFingerprint()); }
-    RomIdentifier extIdentifier() { return RomFile::identifier(extFingerprint()); }
+    RomIdentifier romIdentifier();
+    RomIdentifier extIdentifier();
 
-    const char *romTitle() { return RomFile::title(romIdentifier()); }
+    const char *romTitle();
     const char *romVersion();
-    const char *romReleased()  { return RomFile::released(romIdentifier()); }
+    const char *romReleased();
 
-    const char *extTitle() { return RomFile::title(extIdentifier()); }
+    const char *extTitle();
     const char *extVersion();
-    const char *extReleased()  { return RomFile::released(extIdentifier()); }
+    const char *extReleased();
 
     // Checks if a certain Rom is present
     bool hasRom() { return rom != nullptr; }
     bool hasBootRom() { return hasRom() && config.romSize <= KB(16); }
     bool hasKickRom() { return hasRom() && config.romSize >= KB(256); }
-    bool hasArosRom() { return RomFile::isArosRom(romIdentifier()); }
+    bool hasArosRom();
     bool hasWom() { return wom != nullptr; }
     bool hasExt() { return ext != nullptr; }
 
@@ -368,13 +374,13 @@ public:
     void eraseExt() { assert(ext); memset(ext, 0, config.extSize); }
     
     // Installs a Boot Rom or Kickstart Rom
-    void loadRom(RomFile *rom) throws;
+    void loadRom(class RomFile *rom) throws;
     void loadRomFromFile(const char *path) throws;
     void loadRomFromFile(const char *path, ErrorCode *ec);
     void loadRomFromBuffer(const u8 *buf, isize len) throws;
     void loadRomFromBuffer(const u8 *buf, isize len, ErrorCode *ec);
     
-    void loadExt(ExtendedRomFile *rom) throws;
+    void loadExt(class ExtendedRomFile *rom) throws;
     void loadExtFromFile(const char *path) throws;
     void loadExtFromFile(const char *path, ErrorCode *ec);
     void loadExtFromBuffer(const u8 *buf, isize len) throws;
@@ -384,7 +390,7 @@ private:
 
      // Loads Rom data from a file
     // DEPRECATED: USE AnyAmigaFile::flash(...) instead
-    void loadRom(AmigaFile *rom, u8 *target, isize length);
+    void loadRom(class AmigaFile *rom, u8 *target, isize length);
     
 public:
     

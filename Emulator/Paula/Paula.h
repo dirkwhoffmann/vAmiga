@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "PaulaTypes.h"
+#include "AmigaComponent.h"
 
 #include "AudioFilter.h"
 #include "AudioStream.h"

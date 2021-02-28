@@ -16,8 +16,10 @@
 #include "CIA.h"
 #include "CPU.h"
 #include "Denise.h"
+#include "ExtendedRomFile.h"
 #include "MsgQueue.h"
 #include "Paula.h"
+#include "RomFile.h"
 #include "RTC.h"
 #include "ZorroManager.h"
 
@@ -474,6 +476,36 @@ Memory::fillRamWithInitPattern()
     }
 }
 
+u32
+Memory::romFingerprint()
+{
+    return utl::crc32(rom, config.romSize);
+}
+
+u32
+Memory::extFingerprint()
+{
+    return utl::crc32(ext, config.extSize);
+}
+
+RomIdentifier
+Memory::romIdentifier()
+{
+    return RomFile::identifier(romFingerprint());
+}
+
+RomIdentifier
+Memory::extIdentifier()
+{
+    return RomFile::identifier(extFingerprint());
+}
+
+const char *
+Memory::romTitle()
+{
+    return RomFile::title(romIdentifier());
+}
+
 const char *
 Memory::romVersion()
 {
@@ -488,6 +520,18 @@ Memory::romVersion()
 }
 
 const char *
+Memory::romReleased()
+{
+    return RomFile::released(romIdentifier());
+}
+
+const char *
+Memory::extTitle()
+{
+    return RomFile::title(extIdentifier());
+}
+
+const char *
 Memory::extVersion()
 {
     static char str[32];
@@ -498,6 +542,18 @@ Memory::extVersion()
     }
 
     return RomFile::version(extIdentifier());
+}
+
+const char *
+Memory::extReleased()
+{
+    return RomFile::released(extIdentifier());
+}
+
+bool
+Memory::hasArosRom()
+{
+    return RomFile::isArosRom(romIdentifier());
 }
 
 void

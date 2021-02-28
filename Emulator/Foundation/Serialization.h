@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Commons.h"
-#include "Atomic.h"
+#include "BitUtils.h"
 
 
 //

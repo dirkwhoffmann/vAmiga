@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "AgnusTypes.h"
+
 #include "AmigaConstants.h"
 #include "Beam.h"
 #include "Blitter.h"

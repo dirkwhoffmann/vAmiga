@@ -12,9 +12,13 @@
 #include "Commons.h"
 #include "Errors.h"
 
-#include <stdio.h>
 #include <map>
+
+/*
+#include <stdio.h>
+
 #include <string>
+*/
 
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
 

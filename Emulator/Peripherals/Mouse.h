@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "PortTypes.h"
 #include "AmigaComponent.h"
 
 class ShakeDetector {

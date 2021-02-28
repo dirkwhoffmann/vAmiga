@@ -9,12 +9,15 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "CopperTypes.h"
+
+#include "EventHandlerPublicTypes.h"
+#include "MemoryPublicTypes.h"
 
 #include "AmigaComponent.h"
+#include "Beam.h"
 #include "Checksum.h"
 #include "CopperTypes.h"
-#include "Beam.h"
 
 class Copper : public AmigaComponent
 {

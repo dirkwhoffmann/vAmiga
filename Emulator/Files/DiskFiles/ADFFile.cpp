@@ -10,7 +10,7 @@
 #include "config.h"
 #include "ADFFile.h"
 
-#include "Atomic.h"
+#include "BitUtils.h"
 #include "BootBlockImage.h"
 #include "Checksum.h"
 #include "Disk.h"

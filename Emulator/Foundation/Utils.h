@@ -14,7 +14,7 @@
 #include "AmigaConstants.h"
 #include "Debug.h"
 #include "Errors.h"
-#include "AmigaTypes.h"
+// #include "AmigaTypes.h"
 
 #include <assert.h>
 #include <limits.h>
@@ -28,7 +28,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <string>
+#include <map>
 #include <list>
 #include <set>
 #include <sstream>

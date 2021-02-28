@@ -12,6 +12,7 @@
 #include "Commons.h"
 #include "AmigaComponent.h"
 #include "Colors.h"
+#include "MemoryPublicTypes.h"
 #include "PixelEngine.h"
 #include "ScreenRecorder.h"
 

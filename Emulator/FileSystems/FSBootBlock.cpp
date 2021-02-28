@@ -10,7 +10,7 @@
 #include "config.h"
 #include "BootBlockImage.h"
 
-#include "Atomic.h"
+#include "BitUtils.h"
 #include "FSBootBlock.h"
 #include "FSDevice.h"
 #include "FSPartition.h"

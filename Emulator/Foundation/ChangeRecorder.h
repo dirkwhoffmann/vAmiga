@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Commons.h"
-#include "AmigaPublicTypes.h"
+#include "EventHandlerPublicTypes.h"
 #include "RingBuffer.h"
 
 

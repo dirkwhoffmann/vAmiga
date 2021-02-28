@@ -9,8 +9,10 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "KeyboardTypes.h"
 #include "AmigaComponent.h"
+#include "EventHandlerPublicTypes.h"
+
 
 class Keyboard : public AmigaComponent {
 

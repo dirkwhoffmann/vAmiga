@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "DiskControllerPublicTypes.h"
 #include "AmigaComponent.h"
 
 class DiskController : public AmigaComponent {

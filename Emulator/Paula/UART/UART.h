@@ -9,8 +9,10 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "PaulaTypes.h"
+
 #include "AmigaComponent.h"
+#include "EventHandlerPublicTypes.h"
 
 class UART : public AmigaComponent {
 

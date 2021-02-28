@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Atomic.h"
+#include "BitUtils.h"
 
 #include "FSRootBlock.h"
 #include "FSDevice.h"

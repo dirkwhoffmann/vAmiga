@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#include "Atomic.h"
+#include "BitUtils.h"
 #include "FSDevice.h"
 
 FSDevice *

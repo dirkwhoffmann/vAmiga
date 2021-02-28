@@ -9,7 +9,9 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "FSTypes.h"
+#include "DiskPublicTypes.h"
+#include "AmigaObject.h"
 #include "FSObjects.h"
 #include "FSBlock.h"
 #include "FSEmptyBlock.h"

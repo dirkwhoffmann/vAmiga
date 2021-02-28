@@ -11,24 +11,8 @@
 
 #include "Commons.h"
 #include "AmigaPublicTypes.h"
+#include "Reflection.h"
 
-#include "AgnusTypes.h"
-#include "AudioTypes.h"
-#include "CPUTypes.h"
-#include "CIATypes.h"
-#include "DeniseTypes.h"
-#include "DiskTypes.h"
-#include "DmaDebuggerTypes.h"
-#include "DriveTypes.h"
-#include "EventHandlerTypes.h"
-#include "FileTypes.h"
-#include "FSTypes.h"
-#include "KeyboardTypes.h"
-#include "MemoryTypes.h"
-#include "MsgQueueTypes.h"
-#include "PaulaTypes.h"
-#include "PortTypes.h"
-#include "RTCTypes.h"
 
 //
 // Reflection APIs

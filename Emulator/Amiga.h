@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Commons.h"
+#include "AmigaTypes.h"
 
 // General
 #include "HardwareComponent.h"

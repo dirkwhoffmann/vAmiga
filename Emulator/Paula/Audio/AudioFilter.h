@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "AudioTypes.h"
 #include "AmigaComponent.h"
 
 class AudioFilter : public AmigaComponent {
