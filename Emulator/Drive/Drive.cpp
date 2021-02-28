@@ -202,7 +202,7 @@ Drive::_size()
     if (hasDisk()) {
 
         // Add the disk type and disk state
-        counter & disk->getDiameter() & disk->getDensity();
+        counter << disk->getDiameter() << disk->getDensity();
         disk->applyToPersistentItems(counter);
         // counter.count += disk->geometry.diskSize;
     }
@@ -229,13 +229,13 @@ Drive::_load(const u8 *buffer)
 
     // Check if the snapshot includes a disk
     bool diskInSnapshot;
-    reader & diskInSnapshot;
+    reader << diskInSnapshot;
 
     // If yes, create recreate the disk
     if (diskInSnapshot) {
         DiskDiameter type;
         DiskDensity density;
-        reader & type & density;
+        reader << type << density;
         
         disk = Disk::makeWithReader(reader, type, density);
     }
@@ -257,12 +257,12 @@ Drive::_save(u8 *buffer)
     applyToResetItems(writer);
 
     // Indicate whether this drive has a disk is inserted
-    writer & hasDisk();
+    writer << hasDisk();
 
     if (hasDisk()) {
 
         // Write the disk type
-        writer & disk->getDiameter() & disk->getDensity();
+        writer << disk->getDiameter() << disk->getDensity();
 
         // Write the disk's state
         disk->applyToPersistentItems(writer);

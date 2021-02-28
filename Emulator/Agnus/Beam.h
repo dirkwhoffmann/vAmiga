@@ -27,10 +27,10 @@ struct Beam
     {
         worker
 
-        & v
-        & h
-        & vLatched
-        & hLatched;
+        << v
+        << h
+        << vLatched
+        << hLatched;
     }
 
     Beam(i16 v, i16 h) : v(v), h(h) { }

@@ -147,17 +147,17 @@ private:
     {
         worker
         
-        & config.samplingMethod
-        & config.filterType
-        & config.filterAlwaysOn
-        & config.pan
-        & config.vol
-        & config.volL
-        & config.volR
-        & pan
-        & vol
-        & volL
-        & volR;
+        << config.samplingMethod
+        << config.filterType
+        << config.filterAlwaysOn
+        << config.pan
+        << config.vol
+        << config.volL
+        << config.volR
+        << pan
+        << vol
+        << volL
+        << volR;
     }
     
     template <class T>

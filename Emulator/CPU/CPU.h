@@ -63,30 +63,30 @@ private:
     {
         worker
 
-        & flags
-        & clock
+        << flags
+        << clock
 
-        & reg.pc
-        & reg.pc0
-        & reg.sr.t
-        & reg.sr.s
-        & reg.sr.x
-        & reg.sr.n
-        & reg.sr.z
-        & reg.sr.v
-        & reg.sr.c
-        & reg.sr.ipl
-        & reg.r
-        & reg.usp
-        & reg.ssp
-        & reg.ipl
+        << reg.pc
+        << reg.pc0
+        << reg.sr.t
+        << reg.sr.s
+        << reg.sr.x
+        << reg.sr.n
+        << reg.sr.z
+        << reg.sr.v
+        << reg.sr.c
+        << reg.sr.ipl
+        << reg.r
+        << reg.usp
+        << reg.ssp
+        << reg.ipl
 
-        & queue.irc
-        & queue.ird
+        << queue.irc
+        << queue.ird
 
-        & ipl
-        & fcl
-        & exception;
+        << ipl
+        << fcl
+        << exception;
     }
 
     template <class T>

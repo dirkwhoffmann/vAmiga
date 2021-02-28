@@ -141,10 +141,10 @@ private:
     {
         worker
 
-        & config.connected
-        & config.speed
-        & config.lockDskSync
-        & config.autoDskSync;
+        << config.connected
+        << config.speed
+        << config.lockDskSync
+        << config.autoDskSync;
     }
 
     template <class T>
@@ -157,17 +157,17 @@ private:
     {
         worker
 
-        & selected
-        & state
-        & syncCycle
-        & syncCounter
-        & dskEventDelay
-        & incoming
-        & fifo
-        & fifoCount
-        & dsklen
-        & dsksync
-        & prb;
+        << selected
+        << state
+        << syncCycle
+        << syncCounter
+        << dskEventDelay
+        << incoming
+        << fifo
+        << fifoCount
+        << dsklen
+        << dsksync
+        << prb;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

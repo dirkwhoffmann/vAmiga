@@ -115,12 +115,12 @@ private:
     {
         worker
 
-        & diameter
-        & density
-        & data.raw
-        & writeProtected
-        & modified
-        & fnv;
+        << diameter
+        << density
+        << data.raw
+        << writeProtected
+        << modified
+        << fnv;
     }
 
 

@@ -215,12 +215,12 @@ Memory::_size()
     applyToResetItems(counter);
     
     counter
-    & config.romSize
-    & config.womSize
-    & config.extSize
-    & config.chipSize
-    & config.slowSize
-    & config.fastSize;
+    << config.romSize
+    << config.womSize
+    << config.extSize
+    << config.chipSize
+    << config.slowSize
+    << config.fastSize;
     
     counter.count += config.romSize;
     counter.count += config.womSize;
@@ -239,12 +239,12 @@ Memory::didLoadFromBuffer(const u8 *buffer)
 
     // Load memory size information
     reader
-    & config.romSize
-    & config.womSize
-    & config.extSize
-    & config.chipSize
-    & config.slowSize
-    & config.fastSize;
+    << config.romSize
+    << config.womSize
+    << config.extSize
+    << config.chipSize
+    << config.slowSize
+    << config.fastSize;
 
     // Make sure that corrupted values do not cause any damage
     if (config.romSize > KB(512)) { config.romSize = 0; assert(false); }
@@ -282,12 +282,12 @@ Memory::didSaveToBuffer(u8 *buffer) const
     // Save memory size information
     SerWriter writer(buffer);
     writer
-    & config.romSize
-    & config.womSize
-    & config.extSize
-    & config.chipSize
-    & config.slowSize
-    & config.fastSize;
+    << config.romSize
+    << config.womSize
+    << config.extSize
+    << config.chipSize
+    << config.slowSize
+    << config.fastSize;
     
     // Save memory contents
     writer.copy(rom, config.romSize);

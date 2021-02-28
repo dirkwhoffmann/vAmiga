@@ -97,10 +97,10 @@ private:
     {
         worker
 
-        & mouseCounterX
-        & mouseCounterY
-        & chargeDX
-        & chargeDY;
+        << mouseCounterX
+        << mouseCounterY
+        << chargeDX
+        << chargeDY;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

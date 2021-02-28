@@ -89,7 +89,7 @@ private:
     {
         worker
 
-        & config.model;
+        << config.model;
     }
 
     template <class T>
@@ -97,11 +97,11 @@ private:
     {
         worker
 
-        & timeDiff
-        & reg
-        & lastCall
-        & lastMeasure
-        & lastMeasuredValue;
+        << timeDiff
+        << reg
+        << lastCall
+        << lastMeasure
+        << lastMeasuredValue;
     }
     
     template <class T>

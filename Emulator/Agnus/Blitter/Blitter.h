@@ -199,7 +199,7 @@ private:
     {
         worker
 
-        & config.accuracy;
+        << config.accuracy;
     }
 
     template <class T>
@@ -212,56 +212,56 @@ private:
     {
         worker
 
-        & bltcon0
-        & bltcon1
+        << bltcon0
+        << bltcon1
 
-        & bltapt
-        & bltbpt
-        & bltcpt
-        & bltdpt
+        << bltapt
+        << bltbpt
+        << bltcpt
+        << bltdpt
 
-        & bltafwm
-        & bltalwm
+        << bltafwm
+        << bltalwm
 
-        & bltsizeH
-        & bltsizeV
+        << bltsizeH
+        << bltsizeV
 
-        & bltamod
-        & bltbmod
-        & bltcmod
-        & bltdmod
+        << bltamod
+        << bltbmod
+        << bltcmod
+        << bltdmod
 
-        & anew
-        & bnew
-        & aold
-        & bold
-        & ahold
-        & bhold
-        & chold
-        & dhold
-        & ashift
-        & bshift
+        << anew
+        << bnew
+        << aold
+        << bold
+        << ahold
+        << bhold
+        << chold
+        << dhold
+        << ashift
+        << bshift
 
-        & bltpc
-        & iteration
+        << bltpc
+        << iteration
         
-        & xCounter
-        & yCounter
-        & cntA
-        & cntB
-        & cntC
-        & cntD
+        << xCounter
+        << yCounter
+        << cntA
+        << cntB
+        << cntC
+        << cntD
 
-        & fillCarry
-        & mask
-        & lockD
+        << fillCarry
+        << mask
+        << lockD
 
-        & running
-        & bbusy
-        & bzero
-        & birq
+        << running
+        << bbusy
+        << bzero
+        << birq
 
-        & remaining;
+        << remaining;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

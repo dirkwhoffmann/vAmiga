@@ -62,7 +62,7 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
-        worker & clockBase;
+        worker << clockBase;
     }
     
     template <class T>

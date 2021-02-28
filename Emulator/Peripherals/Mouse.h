@@ -128,7 +128,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker & config.pullUpResistors;
+        worker << config.pullUpResistors;
     }
 
     template <class T>

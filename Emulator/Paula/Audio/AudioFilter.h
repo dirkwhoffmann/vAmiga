@@ -62,7 +62,7 @@ private:
     {
         worker
 
-        & type;
+        << type;
     }
 
     template <class T>

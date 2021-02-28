@@ -126,10 +126,10 @@ private:
     {
         worker
 
-        & config.type
-        & config.startDelay
-        & config.stopDelay
-        & config.stepDelay;
+        << config.type
+        << config.startDelay
+        << config.stopDelay
+        << config.stepDelay;
     }
 
     template <class T>
@@ -137,19 +137,19 @@ private:
     {
         worker
 
-        & motor
-        & switchCycle
-        & switchSpeed
-        & idCount
-        & idBit
-        & stepCycle
-        & dskchange
-        & dsklen
-        & prb
-        & head.side
-        & head.cylinder
-        & head.offset
-        & cylinderHistory;
+        << motor
+        << switchCycle
+        << switchSpeed
+        << idCount
+        << idBit
+        << stepCycle
+        << dskchange
+        << dsklen
+        << prb
+        << head.side
+        << head.cylinder
+        << head.offset
+        << cylinderHistory;
     }
 
     template <class T>

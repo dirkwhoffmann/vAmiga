@@ -82,7 +82,7 @@ public:
     template <class W>
     void applyToItems(W& worker)
     {
-        worker & pipeline & timeStamp;
+        worker << pipeline << timeStamp;
     }
     
 

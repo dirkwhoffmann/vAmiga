@@ -90,14 +90,14 @@ private:
     {
         worker
 
-        & serper
-        & receiveBuffer
-        & receiveShiftReg
-        & transmitBuffer
-        & transmitShiftReg
-        & outBit
-        & ovrun
-        & recCnt;
+        << serper
+        << receiveBuffer
+        << receiveShiftReg
+        << transmitBuffer
+        << transmitShiftReg
+        << outBit
+        << ovrun
+        << recCnt;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

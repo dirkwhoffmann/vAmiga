@@ -135,9 +135,9 @@ private:
     {
         worker
 
-        & colChanges
-        & colreg
-        & hamMode;
+        >> colChanges
+        << colreg
+        << hamMode;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

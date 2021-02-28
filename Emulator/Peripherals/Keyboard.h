@@ -85,7 +85,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker & config.accurate;
+        worker << config.accurate;
     }
 
     template <class T>
@@ -98,12 +98,12 @@ private:
     {
         worker
 
-        & state
-        & shiftReg
-        & spLow
-        & spHigh
-        & typeAheadBuffer
-        & bufferIndex;
+        << state
+        << shiftReg
+        << spLow
+        << spHigh
+        << typeAheadBuffer
+        << bufferIndex;
     }
 
     

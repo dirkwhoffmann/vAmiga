@@ -239,14 +239,14 @@ private:
     {
         worker
 
-        & romMask
-        & womMask
-        & extMask
-        & chipMask
-        & slowMask
-        & fastMask
+        << romMask
+        << womMask
+        << extMask
+        << chipMask
+        << slowMask
+        << fastMask
 
-        & config.extStart;
+        << config.extStart;
     }
 
     template <class T>
@@ -259,9 +259,9 @@ private:
     {
         worker
 
-        & womIsLocked
-        & cpuMemSrc
-        & dataBus;
+        << womIsLocked
+        << cpuMemSrc
+        << dataBus;
     }
 
     isize _size() override;

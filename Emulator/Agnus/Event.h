@@ -28,8 +28,8 @@ struct Event
     {
         worker
 
-        & triggerCycle
-        & id
-        & data;
+        << triggerCycle
+        << id
+        << data;
     }
 };

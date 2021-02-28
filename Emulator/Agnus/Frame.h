@@ -27,9 +27,9 @@ struct Frame
     {
         worker
 
-        & nr
-        & lof
-        & prevlof;
+        << nr
+        << lof
+        << prevlof;
     }
 
     Frame() : nr(0), lof(false) { }

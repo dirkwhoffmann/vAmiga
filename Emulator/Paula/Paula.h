@@ -149,7 +149,7 @@ private:
     {
         worker
 
-        & audioClock;
+        << audioClock;
     }
 
     template <class T>
@@ -157,21 +157,21 @@ private:
     {
         worker
         
-        & intreq
-        & intena
-        & setIntreq
-        & ipl
-        & iplPipe
-        & potgo
-        & potCntX0
-        & potCntY0
-        & potCntX1
-        & potCntY1
-        & chargeX0
-        & chargeY0
-        & chargeX1
-        & chargeY1
-        & adkcon;
+        << intreq
+        << intena
+        << setIntreq
+        >> ipl
+        << iplPipe
+        << potgo
+        << potCntX0
+        << potCntY0
+        << potCntX1
+        << potCntY1
+        << chargeX0
+        << chargeY0
+        << chargeX1
+        << chargeY1
+        << adkcon;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

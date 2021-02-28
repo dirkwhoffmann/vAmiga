@@ -109,14 +109,14 @@ public:
     {
         worker
 
-        & tod.value
-        & preTod.value
-        & lastInc
-        & latch.value
-        & alarm.value
-        & frozen
-        & stopped
-        & matching;
+        << tod.value
+        << preTod.value
+        << lastInc
+        << latch.value
+        << alarm.value
+        << frozen
+        << stopped
+        << matching;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

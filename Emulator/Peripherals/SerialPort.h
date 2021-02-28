@@ -85,7 +85,7 @@ private:
     {
         worker
 
-        & config.device;
+        << config.device;
     }
 
     template <class T>
@@ -98,7 +98,7 @@ private:
     {
         worker
 
-        & port;
+        << port;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

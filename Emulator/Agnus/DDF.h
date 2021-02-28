@@ -28,10 +28,10 @@ struct DDF
         
         worker
         
-        & strtOdd
-        & strtEven
-        & stopOdd
-        & stopEven;
+        << strtOdd
+        << strtEven
+        << stopOdd
+        << stopEven;
     }
     
     void clear() { strtOdd = strtEven = stopOdd = stopEven = 0; }

@@ -28,7 +28,7 @@ struct RegChange
     template <class T>
     void applyToItems(T& worker)
     {
-        worker & addr & value;
+        worker << addr << value;
     }
 
     RegChange() : addr(0), value(0) { }
@@ -41,7 +41,7 @@ struct RegChangeRecorder : public utl::SortedRingBuffer<RegChange, capacity>
     template <class W>
     void applyToItems(W& worker)
     {
-        worker & this->elements & this->r & this->w & this->keys;
+        worker >> this->elements << this->r << this->w << this->keys;
     }
     
     Cycle trigger() {

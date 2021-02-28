@@ -64,8 +64,8 @@ public:
     {
         worker
 
-        & fastRamConf
-        & fastRamBaseAddr;
+        << fastRamConf
+        << fastRamBaseAddr;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

@@ -98,11 +98,6 @@ inline void writeDouble(u8 *& buf, double value)
 //
 
 #define COUNT(type,size) \
-auto& operator&(type& v) \
-{ \
-count += size; \
-return *this; \
-} \
 auto& operator<<(type& v) \
 { \
 count += size; \
@@ -113,20 +108,6 @@ return *this; \
 #define COUNT16(type) static_assert(sizeof(type) == 2); COUNT(type,2)
 #define COUNT64(type) static_assert(sizeof(type) <= 8); COUNT(type,8)
 #define COUNTD(type) static_assert(sizeof(type) <= 8); COUNT(type,8)
-
-#define STRUCT(type) \
-auto& operator<<(type& v) \
-{ \
-v.applyToItems(*this); \
-return *this; \
-}
-#define STRUCT2(type) \
-auto& operator&(type& v) \
-{ \
-v.applyToItems(*this); \
-return *this; \
-}
-
 
 #define __ ,
 
@@ -152,32 +133,7 @@ public:
     COUNT64(const unsigned long long)
     COUNTD(const float)
     COUNTD(const double)
-   
-    // STRUCT(Beam)
-    // STRUCT(DDF<true>)
-    // STRUCT(DDF<false>)
-    // STRUCT(Event)
-    // STRUCT(Frame)
-    STRUCT(RegChange)
-    // STRUCT2(DDF<true>)
-    // STRUCT2(DDF<false>)
-    // STRUCT2(Event)
-    // STRUCT2(Frame)
-    STRUCT2(RegChange)
-    template <isize capacity> STRUCT(RegChangeRecorder<capacity>)
-    template <class T, int delay> STRUCT(utl::TimeDelayed<T __ delay>)
-    template <isize capacity> STRUCT2(RegChangeRecorder<capacity>)
-    template <class T, int delay> STRUCT2(utl::TimeDelayed<T __ delay>)
-
-    template <class T, isize N>
-    SerCounter& operator&(T (&v)[N])
-    {
-        for(isize i = 0; i < N; ++i) {
-            *this << v[i];
-        }
-        return *this;
-    }
-    
+       
     template <class T, isize N>
     SerCounter& operator<<(T (&v)[N])
     {
@@ -210,11 +166,6 @@ public:
 //
 
 #define DESERIALIZE(type,function) \
-SerReader& operator&(type& v) \
-{ \
-v = (type)function(ptr); \
-return *this; \
-} \
 SerReader& operator<<(type& v) \
 { \
 v = (type)function(ptr); \
@@ -250,32 +201,7 @@ public:
     DESERIALIZE64(unsigned long long)
     DESERIALIZED(float)
     DESERIALIZED(double)
-    
-    // STRUCT(Beam)
-    // STRUCT(DDF<true>)
-    // STRUCT(DDF<false>)
-    // STRUCT(Event)
-    //STRUCT(Frame)
-    STRUCT(RegChange)
-    // STRUCT2(DDF<true>)
-    // STRUCT2(DDF<false>)
-    // STRUCT2(Event)
-    // STRUCT2(Frame)
-    STRUCT2(RegChange)
-    template <isize capacity> STRUCT(RegChangeRecorder<capacity>)
-    template <class T, int delay> STRUCT(utl::TimeDelayed<T __ delay>)
-    template <isize capacity> STRUCT2(RegChangeRecorder<capacity>)
-    template <class T, int delay> STRUCT2(utl::TimeDelayed<T __ delay>)
-
-    template <class T, isize N>
-    SerReader& operator&(T (&v)[N])
-    {
-        for(isize i = 0; i < N; ++i) {
-            *this << v[i];
-        }
-        return *this;
-    }
-
+        
     template <class T, isize N>
     SerReader& operator<<(T (&v)[N])
     {
@@ -314,11 +240,6 @@ public:
 //
 
 #define SERIALIZE(type,function,cast) \
-SerWriter& operator&(type& v) \
-{ \
-function(ptr, (cast)v); \
-return *this; \
-} \
 SerWriter& operator<<(type& v) \
 { \
 function(ptr, (cast)v); \
@@ -355,31 +276,6 @@ public:
     SERIALIZED(const float)
     SERIALIZED(const double)
         
-    // STRUCT(Beam)
-    // STRUCT(DDF<true>)
-    // STRUCT(DDF<false>)
-    //STRUCT(Event)
-    //STRUCT(Frame)
-    STRUCT(RegChange)
-    // STRUCT2(DDF<true>)
-    // STRUCT2(DDF<false>)
-    // STRUCT2(Event)
-    // STRUCT2(Frame)
-    STRUCT2(RegChange)
-    template <isize capacity> STRUCT(RegChangeRecorder<capacity>)
-    template <class T, int delay> STRUCT(utl::TimeDelayed<T __ delay>)
-    template <isize capacity> STRUCT2(RegChangeRecorder<capacity>)
-    template <class T, int delay> STRUCT2(utl::TimeDelayed<T __ delay>)
-
-    template <class T, isize N>
-    SerWriter& operator&(T (&v)[N])
-    {
-        for(isize i = 0; i < N; ++i) {
-            *this << v[i];
-        }
-        return *this;
-    }
-    
     template <class T, isize N>
     SerWriter& operator<<(T (&v)[N])
     {
@@ -419,11 +315,6 @@ public:
 //
 
 #define RESET(type) \
-SerResetter& operator&(type& v) \
-{ \
-v = (type)0; \
-return *this; \
-} \
 SerResetter& operator<<(type& v) \
 { \
 v = (type)0; \
@@ -452,31 +343,6 @@ public:
     RESET(unsigned long long)
     RESET(float)
     RESET(double)
-        
-    // STRUCT(Beam)
-    // STRUCT(DDF<true>)
-    // STRUCT(DDF<false>)
-    // STRUCT(Event)
-    // STRUCT(Frame)
-    STRUCT(RegChange)
-    // STRUCT2(DDF<true>)
-    // STRUCT2(DDF<false>)
-    // STRUCT2(Event)
-    // STRUCT2(Frame)
-    STRUCT2(RegChange)
-    template <isize capacity> STRUCT(RegChangeRecorder<capacity>)
-    template <class T, int delay> STRUCT(utl::TimeDelayed<T __ delay>)
-    template <isize capacity> STRUCT2(RegChangeRecorder<capacity>)
-    template <class T, int delay> STRUCT2(utl::TimeDelayed<T __ delay>)
-
-    template <class T, isize N>
-    SerResetter& operator&(T (&v)[N])
-    {
-        for(isize i = 0; i < N; ++i) {
-            *this & v[i];
-        }
-        return *this;
-    }
 
     template <class T, isize N>
     SerResetter& operator<<(T (&v)[N])

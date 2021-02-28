@@ -476,8 +476,8 @@ private:
     {
         worker
 
-        & config.revision
-        & ptrMask;
+        << config.revision
+        << ptrMask;
     }
 
     template <class T>
@@ -485,7 +485,7 @@ private:
     {
         worker
 
-        & clock;
+        << clock;
     }
 
     template <class T>
@@ -502,7 +502,7 @@ private:
         << nextDasEvent
 
         << hsyncActions
-        << changeRecorder
+        >> changeRecorder
 
         >> pos
         >> frame

@@ -290,9 +290,9 @@ private:
     {
         worker
         
-        & config.revision
-        & config.todBug
-        & config.eClockSyncing;
+        << config.revision
+        << config.todBug
+        << config.eClockSyncing;
     }
 
     template <class T>
@@ -300,12 +300,12 @@ private:
     {
         worker
 
-        & clock
-        & idleCycles
-        & tiredness
-        & sleeping
-        & sleepCycle
-        & wakeUpCycle;
+        << clock
+        << idleCycles
+        << tiredness
+        << sleeping
+        << sleepCycle
+        << wakeUpCycle;
     }
 
     template <class T>
@@ -313,32 +313,32 @@ private:
     {
         worker
         
-        & counterA
-        & counterB
-        & latchA
-        & latchB
-        & delay
-        & feed
-        & CRA
-        & CRB
-        & icr
-        & icrAck
-        & imr
-        & PB67TimerMode
-        & PB67TimerOut
-        & PB67Toggle
-        & PRA
-        & PRB
-        & DDRA
-        & DDRB
-        & PA
-        & PB
-        & sdr
-        & ssr
-        & serCounter
-        & SP
-        & CNT
-        & INT;
+        << counterA
+        << counterB
+        << latchA
+        << latchB
+        << delay
+        << feed
+        << CRA
+        << CRB
+        << icr
+        << icrAck
+        << imr
+        << PB67TimerMode
+        << PB67TimerOut
+        << PB67Toggle
+        << PRA
+        << PRB
+        << DDRA
+        << DDRB
+        << PA
+        << PB
+        << sdr
+        << ssr
+        << serCounter
+        << SP
+        << CNT
+        << INT;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
