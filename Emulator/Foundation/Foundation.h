@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Datatypes.h"
+#include "AmigaConstants.h"
 #include "Aliases.h"
 #include "Debug.h"
 

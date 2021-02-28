@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Commons.h"
-#include "AmigaConstants.h"
+#include "Foundation.h"
 
 struct Beam
 {

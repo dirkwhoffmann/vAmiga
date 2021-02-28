@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "AmigaConstants.h"
+#include "Foundation.h"
 #include "PublicTypes.h"
 
 #import <Cocoa/Cocoa.h>

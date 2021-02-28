@@ -11,7 +11,7 @@
 
 #include "AgnusTypes.h"
 
-#include "AmigaConstants.h"
+#include "Foundation.h"
 #include "Beam.h"
 #include "Blitter.h"
 #include "ChangeRecorder.h"
