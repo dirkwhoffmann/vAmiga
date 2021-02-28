@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Datatypes.h"
+#include "GenericTypes.h"
 #include "AmigaConstants.h"
 #include "Aliases.h"
 #include "Debug.h"

@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "Blitter.h"
-
 #include "Agnus.h"
 
 void

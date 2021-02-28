@@ -11,7 +11,7 @@
 
 #include "BlitterTypes.h"
 #include "AmigaComponent.h"
-#include "MemoryPublicTypes.h"
+#include "MemoryTypes.h"
 
 /* The Blitter supports three accuracy levels:
  *

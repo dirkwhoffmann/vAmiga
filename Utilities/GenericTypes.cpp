@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#include "Datatypes.h"
+#include "GenericTypes.h"
 
 namespace utl {
 
