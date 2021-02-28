@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "FSObjects.h"
-
 #include "FSBlock.h"
 #include <algorithm>
 

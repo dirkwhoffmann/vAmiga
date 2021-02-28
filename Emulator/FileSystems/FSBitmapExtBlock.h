@@ -12,6 +12,8 @@
 #include "Commons.h"
 #include "FSBlock.h"
 
+#include <vector>
+
 struct FSBitmapExtBlock : FSBlock {
                     
     FSBitmapExtBlock(FSPartition &p, Block nr);
