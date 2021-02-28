@@ -179,6 +179,7 @@
 		50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */; };
 		50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C2521EB9059002E32A6 /* Credits.rtf */; };
 		50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */; };
+		50B2BC8925EC3D590032EEFE /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C0B78025EC367000CDE1F2 /* IO.cpp */; };
 		50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
 		50B5C07E241107F200F124DC /* AmigaConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5C07D241107F200F124DC /* AmigaConstants.cpp */; };
 		50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B70CAB252CE0BF006B5191 /* Muxer.cpp */; };
@@ -534,6 +535,9 @@
 		50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = A1000ANSI.xib; path = "XIB files/A1000ANSI.xib"; sourceTree = SOURCE_ROOT; };
 		50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIAEvents.cpp; sourceTree = "<group>"; };
 		50C0B77E25EC300400CDE1F2 /* Extensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Extensions.h; sourceTree = "<group>"; };
+		50C0B78025EC367000CDE1F2 /* IO.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IO.cpp; sourceTree = "<group>"; };
+		50C0B78125EC367000CDE1F2 /* IO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IO.h; sourceTree = "<group>"; };
+		50C0B78325EC391B00CDE1F2 /* Foundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Foundation.h; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C4F5EB25EC10B2009028A0 /* PublicTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PublicTypes.h; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
@@ -1210,6 +1214,7 @@
 		50B14C0421EB212E002E32A6 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				50C0B78325EC391B00CDE1F2 /* Foundation.h */,
 				50B37B6825E9A6C7006B328E /* Commons.h */,
 				507215B025EAF62B00787591 /* Aliases.h */,
 				50EA34F0258E38880010DC63 /* Debug.h */,
@@ -1284,6 +1289,8 @@
 				505A3A3821F4996400132020 /* SSEUtils.cpp */,
 				507F1FAD25074A1A00627C3F /* TimeDelayed.h */,
 				507215A525EA9DD900787591 /* RingBuffer.h */,
+				50C0B78125EC367000CDE1F2 /* IO.h */,
+				50C0B78025EC367000CDE1F2 /* IO.cpp */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1522,6 +1529,7 @@
 				5023519024485BBF00F6C088 /* Preferences.swift in Sources */,
 				508FE02721EA227B0043D0E9 /* Utils.swift in Sources */,
 				505A3A3A21F4996400132020 /* SSEUtils.cpp in Sources */,
+				50B2BC8925EC3D590032EEFE /* IO.cpp in Sources */,
 				502BB09E229C00C800A8DFCD /* CompatibilityPrefs.swift in Sources */,
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
 				508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */,

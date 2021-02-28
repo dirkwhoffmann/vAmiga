@@ -9,6 +9,7 @@
 
 #include "config.h"
 
+#include "IO.h"
 #include "BitUtils.h"
 #include "FSDevice.h"
 
@@ -934,7 +935,7 @@ FSDevice::importDirectory(const char *path, DIR *dir, bool recursive)
             
             // Add file
             u8 *buffer; isize size;
-            if (loadFile(name, &buffer, &size)) {
+            if (util::loadFile(name, &buffer, &size)) {
                 FSBlock *file = makeFile(item->d_name, buffer, size);
                 // result &= file ? (file->append(buffer, size)) : false;
                 result &= file != nullptr;
@@ -954,7 +955,7 @@ FSDevice::exportDirectory(const char *path)
     assert(path != nullptr);
         
     // Only proceed if path points to an empty directory
-    long numItems = numDirectoryItems(path);
+    long numItems = util::numDirectoryItems(path);
     if (numItems != 0) return ERROR_FS_DIRECTORY_NOT_EMPTY;
     
     // Collect files and directories

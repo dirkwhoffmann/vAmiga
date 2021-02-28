@@ -12,6 +12,7 @@
 
 #include "Checksum.h"
 #include "Disk.h"
+#include "IO.h"
 
 bool
 IMGFile::isCompatibleName(const string &name)
@@ -22,7 +23,7 @@ IMGFile::isCompatibleName(const string &name)
 bool
 IMGFile::isCompatibleStream(std::istream &stream)
 {
-    isize length = streamLength(stream);
+    isize length = util::streamLength(stream);
     
     // There are no magic bytes. We can only check the buffer size
     return length == IMGSIZE_35_DD;

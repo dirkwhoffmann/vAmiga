@@ -9,25 +9,31 @@
 
 #pragma once
 
-#include "Commons.h"
-
-#include "AmigaConstants.h"
+#include "Datatypes.h"
+#include "Aliases.h"
 #include "Debug.h"
-#include "Errors.h"
 
-#include <pthread.h>
-#include <stdarg.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/param.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <dirent.h>
-#include <map>
-#include <list>
-#include <set>
-#include <sstream>
-#include <fstream>
 
+//
+// Optimizing code
+//
+
+#define likely(x)      __builtin_expect(!!(x), 1)
+#define unlikely(x)    __builtin_expect(!!(x), 0)
+
+
+//
+// Sanitizer macros
+//
+
+#if defined(__clang__)
+
+// Definition for clang
+#define NO_SANITIZE(x) __attribute__((no_sanitize(x)))
+
+#else
+
+// Definition for gcc
+#define NO_SANITIZE(x)
+
+#endif

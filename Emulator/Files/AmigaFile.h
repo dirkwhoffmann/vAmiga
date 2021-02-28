@@ -11,7 +11,12 @@
 
 #include "FileTypes.h"
 #include "AmigaObject.h"
+
 #include "Checksum.h"
+#include "IO.h"
+
+#include <sstream>
+#include <fstream>
 
 /* All media files are organized in the class hierarchy displayed below. Two
  * abstract classes are involed: AmigaFile and DiskFile. AmigaFile provides

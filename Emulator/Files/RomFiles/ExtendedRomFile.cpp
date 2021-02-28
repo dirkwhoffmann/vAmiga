@@ -10,6 +10,8 @@
 #include "config.h"
 #include "ExtendedRomFile.h"
 
+#include "IO.h"
+
 // AROS Extended ROM
 const u8 ExtendedRomFile::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
 const u8 ExtendedRomFile::magicBytes2[] = { 0x4E, 0x71, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
@@ -27,11 +29,11 @@ ExtendedRomFile::isCompatibleName(const string &name)
 bool
 ExtendedRomFile::isCompatibleStream(std::istream &stream)
 {
-    if (streamLength(stream) != KB(512)) return false;
+    if (util::streamLength(stream) != KB(512)) return false;
     
     return
-    matchingStreamHeader(stream, magicBytes1, sizeof(magicBytes1)) ||
-    matchingStreamHeader(stream, magicBytes2, sizeof(magicBytes2));
+    util::matchingStreamHeader(stream, magicBytes1, sizeof(magicBytes1)) ||
+    util::matchingStreamHeader(stream, magicBytes2, sizeof(magicBytes2));
 }
 
 bool

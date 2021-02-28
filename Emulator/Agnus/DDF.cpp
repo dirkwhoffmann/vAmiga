@@ -10,7 +10,7 @@
 #include "config.h"
 #include "DDF.h"
 
-#include "Utils.h"
+#include <algorithm>
 
 template <bool hires> void
 DDF<hires>::compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1)
@@ -37,7 +37,7 @@ DDF<hires>::compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll)
         int fetchUnits = ((ddfstop - ddfstrt) + 15) >> 3;
         
         // Compute the end of the DDF window
-        stop = MIN(strt + 8 * fetchUnits, 0xE0);
+        stop = std::min(strt + 8 * fetchUnits, 0xE0);
 
     } else {
         
@@ -54,7 +54,7 @@ DDF<hires>::compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll)
         int fetchUnits = ((ddfstop - ddfstrt) + 15) >> 3;
         
         // Compute the end of the DDF window
-        stop = MIN(strt + 8 * fetchUnits, 0xE0);
+        stop = std::min(strt + 8 * fetchUnits, 0xE0);
     }
 }
 

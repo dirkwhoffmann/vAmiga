@@ -27,6 +27,8 @@
 #include "HDFFile.h"
 
 #include <dirent.h>
+#include <stack>
+#include <set>
 
 /* This class provides the basic functionality of the Amiga File Systems OFS
  * and FFS. Starting from an empty volume, files can be added or removed,

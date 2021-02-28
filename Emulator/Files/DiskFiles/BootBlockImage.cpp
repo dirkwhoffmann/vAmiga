@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "BootBlockImage.h"
-#include "Utils.h"
 
 //
 // Bootblock images

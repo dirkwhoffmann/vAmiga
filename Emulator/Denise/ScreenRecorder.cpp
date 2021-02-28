@@ -10,6 +10,8 @@
 #include "config.h"
 #include "ScreenRecorder.h"
 
+#include "IO.h"
+
 #include "Denise.h"
 #include "MsgQueue.h"
 #include "Paula.h"
@@ -27,7 +29,7 @@ ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 bool
 ScreenRecorder::hasFFmpeg() const
 {
-    return getSizeOfFile(ffmpegPath()) > 0;
+    return util::getSizeOfFile(ffmpegPath()) > 0;
 }
 
 void

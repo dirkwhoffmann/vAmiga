@@ -10,6 +10,8 @@
 #include "config.h"
 #include "HDFFile.h"
 
+#include "IO.h"
+
 HDFFile::HDFFile()
 {
 }
@@ -23,7 +25,7 @@ HDFFile::isCompatibleName(const string &name)
 bool
 HDFFile::isCompatibleStream(std::istream &stream)
 {
-    return streamLength(stream) % 512 == 0;
+    return util::streamLength(stream) % 512 == 0;
 }
 
 bool

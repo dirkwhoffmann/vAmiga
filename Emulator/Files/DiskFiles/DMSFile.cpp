@@ -27,7 +27,7 @@ DMSFile::isCompatibleStream(std::istream &stream)
 {
     u8 signature[] = { 'D', 'M', 'S', '!' };
                                                                                             
-    return matchingStreamHeader(stream, signature, sizeof(signature));
+    return util::matchingStreamHeader(stream, signature, sizeof(signature));
 }
 
 isize

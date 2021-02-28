@@ -10,6 +10,8 @@
 #include "config.h"
 #include "EXTFile.h"
 
+#include "IO.h"
+
 const u8 EXTFile::extAdfHeaders[2][8] = {
 
     { 'U', 'A', 'E', '-', '-', 'A', 'D', 'F' },
@@ -25,7 +27,7 @@ EXTFile::isCompatibleName(const string &name)
 bool
 EXTFile::isCompatibleStream(std::istream &stream)
 {
-    isize length = streamLength(stream);
+    isize length = util::streamLength(stream);
     
     isize len = isizeof(extAdfHeaders[0]);
     isize cnt = isizeof(extAdfHeaders) / len;
@@ -33,7 +35,7 @@ EXTFile::isCompatibleStream(std::istream &stream)
     if (length < len) return false;
     
     for (isize i = 0; i < cnt; i++) {
-        if (matchingStreamHeader(stream, extAdfHeaders[i], len)) return true;
+        if (util::matchingStreamHeader(stream, extAdfHeaders[i], len)) return true;
     }
     return false;
 }
