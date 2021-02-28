@@ -22,16 +22,6 @@ struct Frame
     // Value of the frame flipflop in the previous frame
     bool prevlof;
     
-    template <class T>
-    void applyToItems(T& worker)
-    {
-        worker
-
-        << nr
-        << lof
-        << prevlof;
-    }
-
     template <class W>
     void operator<<(W& worker)
     {

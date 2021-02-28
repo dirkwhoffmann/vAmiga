@@ -24,16 +24,6 @@ struct Event
     i64 data;
 
     template <class W>
-    void applyToItems(W& worker)
-    {
-        worker
-
-        << triggerCycle
-        << id
-        << data;
-    }
-    
-    template <class W>
     void operator<<(W& worker)
     {
         worker

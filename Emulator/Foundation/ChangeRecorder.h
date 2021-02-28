@@ -26,12 +26,6 @@ struct RegChange
     u16 value;
 
     template <class W>
-    void applyToItems(W& worker)
-    {
-        worker << addr << value;
-    }
-
-    template <class W>
     void operator<<(W& worker)
     {
         worker << addr << value;
@@ -44,12 +38,6 @@ struct RegChange
 template <isize capacity>
 struct RegChangeRecorder : public utl::SortedRingBuffer<RegChange, capacity>
 {
-    template <class W>
-    void applyToItems(W& worker)
-    {
-        worker >> this->elements << this->r << this->w << this->keys;
-    }
-    
     template <class W>
     void operator<<(W& worker)
     {

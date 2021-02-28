@@ -23,17 +23,6 @@ struct Beam
     i16 hLatched;
 
     template <class W>
-    void applyToItems(W& worker)
-    {
-        worker
-
-        << v
-        << h
-        << vLatched
-        << hLatched;
-    }
-
-    template <class W>
     void operator<<(W& worker)
     {
         worker

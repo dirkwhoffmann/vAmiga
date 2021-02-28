@@ -23,17 +23,6 @@ struct DDF
     i16 stopEven;
 
     DDF() : strtOdd(0), strtEven(0), stopOdd(0), stopEven(0) { }
-
-    template <class W>
-    void applyToItems(W& worker) {
-        
-        worker
-        
-        << strtOdd
-        << strtEven
-        << stopOdd
-        << stopEven;
-    }
     
     template <class W>
     void operator<<(W& worker)

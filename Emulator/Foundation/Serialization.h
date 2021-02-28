@@ -136,7 +136,6 @@ public:
     SerCounter& operator>>(T &v)
     {
         v << *this;
-        // v.applyToItems(*this);
         return *this;
     }
     
@@ -145,7 +144,6 @@ public:
     {
         for(isize i = 0; i < N; ++i) {
             v[i] << *this;
-            // v[i].applyToItems(*this);
         }
         return *this;
     }
@@ -206,7 +204,6 @@ public:
     SerReader& operator>>(T &v)
     {
         v << *this;
-        // v.applyToItems(*this);
         return *this;
     }
     
@@ -215,7 +212,6 @@ public:
     {
         for(isize i = 0; i < N; ++i) {
             v[i] << *this;
-            // v[i].applyToItems(*this);
         }
         return *this;
     }
@@ -282,7 +278,6 @@ public:
     SerWriter& operator>>(T &v)
     {
         v << *this;
-        // v.applyToItems(*this);
         return *this;
     }
     
@@ -291,7 +286,6 @@ public:
     {
         for(isize i = 0; i < N; ++i) {
             v[i] << *this;
-            // v[i].applyToItems(*this);
         }
         return *this;
     }
@@ -352,7 +346,6 @@ public:
     SerResetter& operator>>(T &v)
     {
         v << *this;
-        // v.applyToItems(*this);
         return *this;
     }
     
@@ -361,7 +354,6 @@ public:
     {
         for(isize i = 0; i < N; ++i) {
             v[i] << *this;
-            // v[i].applyToItems(*this);
         }
         return *this;
     }
