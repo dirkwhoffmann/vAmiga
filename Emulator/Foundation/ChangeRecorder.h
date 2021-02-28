@@ -25,12 +25,18 @@ struct RegChange
     u32 addr;
     u16 value;
 
-    template <class T>
-    void applyToItems(T& worker)
+    template <class W>
+    void applyToItems(W& worker)
     {
         worker << addr << value;
     }
 
+    template <class W>
+    void operator<<(W& worker)
+    {
+        worker << addr << value;
+    }
+    
     RegChange() : addr(0), value(0) { }
     RegChange(u32 a, u16 v) : addr(a), value(v) { }
 };
@@ -40,6 +46,12 @@ struct RegChangeRecorder : public utl::SortedRingBuffer<RegChange, capacity>
 {
     template <class W>
     void applyToItems(W& worker)
+    {
+        worker >> this->elements << this->r << this->w << this->keys;
+    }
+    
+    template <class W>
+    void operator<<(W& worker)
     {
         worker >> this->elements << this->r << this->w << this->keys;
     }

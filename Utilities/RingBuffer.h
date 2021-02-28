@@ -116,14 +116,6 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
 {
     // Key storage
     i64 keys[capacity];
-
-    /*
-    template <class W>
-     void applyToItems(W& worker)
-     {
-         worker & this->elements & this->r & this->w & keys;
-     }
-    */
     
     // Inserts an element at the proper position
     void insert(i64 key, T element)

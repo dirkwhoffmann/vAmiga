@@ -32,6 +32,16 @@ struct Frame
         << prevlof;
     }
 
+    template <class W>
+    void operator<<(W& worker)
+    {
+        worker
+
+        << nr
+        << lof
+        << prevlof;
+    }
+    
     Frame() : nr(0), lof(false) { }
     
     bool isLongFrame() const { return lof; }

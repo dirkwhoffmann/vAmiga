@@ -23,8 +23,18 @@ struct Event
     // An optional data value
     i64 data;
 
-    template <class T>
-    void applyToItems(T& worker)
+    template <class W>
+    void applyToItems(W& worker)
+    {
+        worker
+
+        << triggerCycle
+        << id
+        << data;
+    }
+    
+    template <class W>
+    void operator<<(W& worker)
     {
         worker
 

@@ -12,19 +12,6 @@
 #include "Commons.h"
 #include "Atomic.h"
 
-#include "AmigaTypes.h"
-// #include "Beam.h"
-/*
-#include "ChangeRecorder.h"
-#include "DDF.h"
-#include "Event.h"
-#include "Frame.h"
-#include "TimeDelayed.h"
-#include "Sampler.h"
-#include "AudioStream.h"
-*/
-
-#include <arpa/inet.h>
 
 //
 // Basic memory buffer I/O
@@ -148,7 +135,8 @@ public:
     template <class T>
     SerCounter& operator>>(T &v)
     {
-        v.applyToItems(*this);
+        v << *this;
+        // v.applyToItems(*this);
         return *this;
     }
     
@@ -156,7 +144,8 @@ public:
     SerCounter& operator>>(T (&v)[N])
     {
         for(isize i = 0; i < N; ++i) {
-            v[i].applyToItems(*this);
+            v[i] << *this;
+            // v[i].applyToItems(*this);
         }
         return *this;
     }
@@ -216,7 +205,8 @@ public:
     template <class T>
     SerReader& operator>>(T &v)
     {
-        v.applyToItems(*this);
+        v << *this;
+        // v.applyToItems(*this);
         return *this;
     }
     
@@ -224,7 +214,8 @@ public:
     SerReader& operator>>(T (&v)[N])
     {
         for(isize i = 0; i < N; ++i) {
-            v[i].applyToItems(*this);
+            v[i] << *this;
+            // v[i].applyToItems(*this);
         }
         return *this;
     }
@@ -290,7 +281,8 @@ public:
     template <class T>
     SerWriter& operator>>(T &v)
     {
-        v.applyToItems(*this);
+        v << *this;
+        // v.applyToItems(*this);
         return *this;
     }
     
@@ -298,7 +290,8 @@ public:
     SerWriter& operator>>(T (&v)[N])
     {
         for(isize i = 0; i < N; ++i) {
-            v[i].applyToItems(*this);
+            v[i] << *this;
+            // v[i].applyToItems(*this);
         }
         return *this;
     }
@@ -358,7 +351,8 @@ public:
     template <class T>
     SerResetter& operator>>(T &v)
     {
-        v.applyToItems(*this);
+        v << *this;
+        // v.applyToItems(*this);
         return *this;
     }
     
@@ -366,7 +360,8 @@ public:
     SerResetter& operator>>(T (&v)[N])
     {
         for(isize i = 0; i < N; ++i) {
-            v[i].applyToItems(*this);
+            v[i] << *this;
+            // v[i].applyToItems(*this);
         }
         return *this;
     }

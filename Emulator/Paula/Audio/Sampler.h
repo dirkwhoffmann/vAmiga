@@ -24,17 +24,6 @@ struct TaggedSample
 {
     Cycle tag;
     i16   sample;
-
-    /*
-    template <class T>
-    void applyToItems(T& worker)
-    {
-        worker
-
-        & tag
-        & sample;
-    }
-    */
 };
 
 struct Sampler : utl::RingBuffer <TaggedSample, VPOS_CNT * HPOS_CNT> {
