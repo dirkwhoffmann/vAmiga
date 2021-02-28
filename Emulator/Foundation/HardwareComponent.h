@@ -10,6 +10,15 @@
 #pragma once
 
 #include "AmigaObject.h"
+
+#include <set>
+#include <sstream>
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <map>
+
 #include "AmigaPublicTypes.h"
 #include "Serialization.h"
 #include "Concurrency.h"

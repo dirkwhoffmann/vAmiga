@@ -12,6 +12,15 @@
 #include "Commons.h"
 #include "AmigaObject.h"
 
+#include <set>
+#include <sstream>
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <map>
+
+
 struct FSString : AmigaObject {
     
     // File system identifier stored as a C string
