@@ -173,7 +173,6 @@
 		50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
 		50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */; };
 		50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0E21EB410B002E32A6 /* Amiga.cpp */; };
-		50B14C1221EB4314002E32A6 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C1121EB4314002E32A6 /* Utils.cpp */; };
 		50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1721EB8445002E32A6 /* drive_click.aiff */; };
 		50B14C2021EB8445002E32A6 /* drive_head.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1821EB8445002E32A6 /* drive_head.aiff */; };
 		50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */; };
@@ -490,13 +489,11 @@
 		50B0AF92222531C500EE3689 /* CopperTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperTableView.swift; sourceTree = "<group>"; };
 		50B14C0521EB218E002E32A6 /* AmigaObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaObject.cpp; sourceTree = "<group>"; };
 		50B14C0621EB218E002E32A6 /* AmigaObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaObject.h; sourceTree = "<group>"; };
-		50B14C0821EB2248002E32A6 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		50B14C0921EB228E002E32A6 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HardwareComponent.cpp; sourceTree = "<group>"; };
 		50B14C0C21EB3708002E32A6 /* HardwareComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardwareComponent.h; sourceTree = "<group>"; };
 		50B14C0E21EB410B002E32A6 /* Amiga.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Amiga.cpp; sourceTree = "<group>"; };
 		50B14C0F21EB410B002E32A6 /* Amiga.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Amiga.h; sourceTree = "<group>"; };
-		50B14C1121EB4314002E32A6 /* Utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		50B14C1721EB8445002E32A6 /* drive_click.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = drive_click.aiff; sourceTree = "<group>"; };
 		50B14C1821EB8445002E32A6 /* drive_head.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = drive_head.aiff; sourceTree = "<group>"; };
 		50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = drive_snatch_uae.aiff; sourceTree = "<group>"; };
@@ -1223,8 +1220,6 @@
 				50B5F87825AF9E07008B79F1 /* Reflection.h */,
 				5039924625B219FC0084B808 /* Errors.h */,
 				50AE6F8425D71FBE0004AFBC /* Errors.cpp */,
-				50B14C0821EB2248002E32A6 /* Utils.h */,
-				50B14C1121EB4314002E32A6 /* Utils.cpp */,
 				508C6BCF23F7E77500D8938F /* ChangeRecorder.h */,
 				50EFC7DF22E840870036A3DF /* Serialization.h */,
 				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
@@ -1491,7 +1486,6 @@
 				508FDFD821EA20510043D0E9 /* Shaders.metal in Sources */,
 				50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */,
 				508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */,
-				50B14C1221EB4314002E32A6 /* Utils.cpp in Sources */,
 				5057551025EAFF7900280977 /* Checksum.cpp in Sources */,
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
 				507215A925EAB4AC00787591 /* Chrono.cpp in Sources */,
