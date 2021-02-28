@@ -29,7 +29,7 @@ Paula::serviceIrqEvent()
             setINTREQ(true, 1 << src);
             setIntreq[src] = NEVER;
         } else {
-             next = MIN(next, setIntreq[src]);
+             next = std::min(next, setIntreq[src]);
         }
     }
 

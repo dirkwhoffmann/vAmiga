@@ -533,7 +533,7 @@ Copper::instrCount(isize nr) const
     int strt = (nr == 1) ? cop1lc  : cop2lc;
     int stop = (nr == 1) ? cop1end : cop2end;
 
-    return MAX(0, 1 + (stop - strt) / 4);
+    return std::max(0, 1 + (stop - strt) / 4);
 }
 
 void

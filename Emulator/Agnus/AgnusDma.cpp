@@ -235,8 +235,8 @@ Agnus::enableBplDmaECS()
     
     i16 posh = pos.h + 4;
     // debug("posh = %d MAX = %d\n", posh, MAX(posh, ddfstrtReached));
-    ddfLores.compute(MAX(posh, ddfstrtReached), ddfstopReached, bplcon1);
-    ddfHires.compute(MAX(posh, ddfstrtReached), ddfstopReached, bplcon1);
+    ddfLores.compute(std::max(posh, ddfstrtReached), ddfstopReached, bplcon1);
+    ddfHires.compute(std::max(posh, ddfstrtReached), ddfstopReached, bplcon1);
     hsyncActions |= HSYNC_PREDICT_DDF;
     
     updateBplEvents();

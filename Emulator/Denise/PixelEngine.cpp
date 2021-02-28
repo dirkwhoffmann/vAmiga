@@ -207,9 +207,9 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
     double newR = y             + 1.140 * v;
     double newG = y - 0.396 * u - 0.581 * v;
     double newB = y + 2.029 * u;
-    newR = MAX(MIN(newR, 255), 0);
-    newG = MAX(MIN(newG, 255), 0);
-    newB = MAX(MIN(newB, 255), 0);
+    newR = std::max(std::min(newR, 255.0), 0.0);
+    newG = std::max(std::min(newG, 255.0), 0.0);
+    newB = std::max(std::min(newB, 255.0), 0.0);
 
     // Apply Gamma correction for PAL models
     /*

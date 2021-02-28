@@ -612,8 +612,8 @@ FSDevice::check(bool strict) const
     for (isize i = 0; i < numBlocks; i++) {
 
         if (blocks[i]->check(strict) > 0) {
-            min = MIN(min, i);
-            max = MAX(max, i);
+            min = std::min(min, i);
+            max = std::max(max, i);
             blocks[i]->corrupted = ++total;
         } else {
             blocks[i]->corrupted = 0;

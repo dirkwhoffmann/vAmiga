@@ -12,16 +12,8 @@
 #include "Commons.h"
 
 #include "AmigaConstants.h"
-#include "Debug.h"
-#include "Errors.h"
 
-#include <pthread.h>
-#include <stdarg.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/param.h>
+//#include <sys/param.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>

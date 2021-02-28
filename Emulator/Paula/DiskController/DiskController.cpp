@@ -15,6 +15,8 @@
 #include "MsgQueue.h"
 #include "Paula.h"
 
+#include <algorithm>
+
 DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
 {
     // Setup initial configuration
@@ -275,7 +277,7 @@ DiskController::insertDisk(class Disk *disk, isize nr, Cycle delay)
 
         // Make sure there is enough time between ejecting and inserting.
         // Otherwise, the Amiga might not detect the change.
-        delay = MAX((Cycle)SEC(1.5), delay);
+        delay = std::max((Cycle)SEC(1.5), delay);
     }
 
     diskToInsert = disk;

@@ -669,7 +669,7 @@ Memory::loadRom(AmigaFile *file, u8 *target, isize length)
             warn("ROM is smaller than buffer\n");
         }
         
-        memcpy(target, file->data, MIN(file->size, length));
+        memcpy(target, file->data, std::min(file->size, length));
     }
 }
 

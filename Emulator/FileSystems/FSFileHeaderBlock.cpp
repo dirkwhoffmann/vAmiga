@@ -160,7 +160,7 @@ FSFileHeaderBlock::writeData(FILE *file)
         blocksTotal++;
 
         // Iterate through all data blocks references in this block
-        isize num = MIN(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
+        isize num = std::min(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
         for (isize i = 0; i < num; i++) {
             
             Block ref = getDataBlockRef(i);

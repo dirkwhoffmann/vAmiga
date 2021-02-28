@@ -271,7 +271,7 @@ Denise::fillShiftRegisters(bool odd, bool even)
     if (odd) armedOdd = true;
     if (even) armedEven = true;
     
-    spriteClipBegin = MIN(spriteClipBegin, agnus.ppos() + 2);
+    spriteClipBegin = std::min(spriteClipBegin, (Pixel)(agnus.ppos() + 2));
     
     switch (bpu()) {
         case 6: shiftReg[5] = bpldat[5];

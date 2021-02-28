@@ -359,10 +359,10 @@ Drive::motorSpeed()const
     // Compute the current speed
     if (motor) {
         if (config.startDelay == 0) return 100.0;
-        return MIN(switchSpeed + 100.0 * (elapsed / config.startDelay), 100.0);
+        return std::min(switchSpeed + 100.0 * (elapsed / config.startDelay), 100.0);
     } else {
         if (config.stopDelay == 0) return 0.0;
-        return MAX(switchSpeed - 100.0 * (elapsed / config.stopDelay), 0.0);
+        return std::max(switchSpeed - 100.0 * (elapsed / config.stopDelay), 0.0);
     }
 }
 
