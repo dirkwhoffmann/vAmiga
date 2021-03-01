@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "ExtendedRomFile.h"
+#include "Macros.h"
 
 #include "IO.h"
 

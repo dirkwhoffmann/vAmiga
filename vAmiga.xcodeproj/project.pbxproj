@@ -180,7 +180,7 @@
 		50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */; };
 		50B2BC8925EC3D590032EEFE /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C0B78025EC367000CDE1F2 /* IO.cpp */; };
 		50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
-		50B5C07E241107F200F124DC /* AmigaConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5C07D241107F200F124DC /* AmigaConstants.cpp */; };
+		50B5C07E241107F200F124DC /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5C07D241107F200F124DC /* Constants.cpp */; };
 		50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B70CAB252CE0BF006B5191 /* Muxer.cpp */; };
 		50B81E0824E6BCCA004384C9 /* DiskControllerRegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0724E6BCCA004384C9 /* DiskControllerRegisters.cpp */; };
 		50B81E0A24E6BEA5004384C9 /* CIARegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0924E6BEA5004384C9 /* CIARegisters.cpp */; };
@@ -256,6 +256,7 @@
 		500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Concurrency.cpp; sourceTree = "<group>"; };
 		500C716F255EE2AC00DDEEB2 /* Concurrency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Concurrency.h; sourceTree = "<group>"; };
 		500CE875259252ED00462836 /* DevicesPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesPrefs.swift; sourceTree = "<group>"; };
+		50104E8525ECD0EF0047A9AA /* Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
 		5010A78122B50B690041388B /* PortPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortPanel.swift; sourceTree = "<group>"; };
 		501429D82445F12B00FBDC90 /* TextureToolbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToolbox.swift; sourceTree = "<group>"; };
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
@@ -366,7 +367,7 @@
 		507DF0B62549A63C0079BB98 /* FSDataBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDataBlock.cpp; sourceTree = "<group>"; };
 		507DF0B72549A63C0079BB98 /* FSDataBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDataBlock.h; sourceTree = "<group>"; };
 		507F1FAD25074A1A00627C3F /* TimeDelayed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TimeDelayed.h; sourceTree = "<group>"; };
-		5082D83A21EF891200CF7692 /* AmigaConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaConstants.h; sourceTree = "<group>"; };
+		5082D83A21EF891200CF7692 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		5083CF572546A22E00A28EF8 /* FSPublicTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSPublicTypes.h; sourceTree = "<group>"; };
 		5083CF592546AB1C00A28EF8 /* FSBootBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSBootBlock.cpp; sourceTree = "<group>"; };
 		5083CF5A2546AB1C00A28EF8 /* FSBootBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSBootBlock.h; sourceTree = "<group>"; };
@@ -506,7 +507,7 @@
 		50B37B6825E9A6C7006B328E /* Commons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Commons.h; sourceTree = "<group>"; };
 		50B3C44725EAFB5500651700 /* Checksum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Checksum.cpp; sourceTree = "<group>"; };
 		50B3C44825EAFB5500651700 /* Checksum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Checksum.h; sourceTree = "<group>"; };
-		50B5C07D241107F200F124DC /* AmigaConstants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaConstants.cpp; sourceTree = "<group>"; };
+		50B5C07D241107F200F124DC /* Constants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
 		50B5F87625AF9D4E008B79F1 /* RTCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCTypes.h; sourceTree = "<group>"; };
 		50B5F87725AF9D98008B79F1 /* DeniseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeniseTypes.h; sourceTree = "<group>"; };
 		50B5F87825AF9E07008B79F1 /* Reflection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflection.h; sourceTree = "<group>"; };
@@ -536,7 +537,6 @@
 		50C0B78125EC367000CDE1F2 /* IO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IO.h; sourceTree = "<group>"; };
 		50C0B78325EC391B00CDE1F2 /* Foundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Foundation.h; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
-		50C4F5EB25EC10B2009028A0 /* PublicTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PublicTypes.h; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
 		50C685262573E9BF008D34DF /* FSPartition.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSPartition.cpp; sourceTree = "<group>"; };
 		50C685272573E9BF008D34DF /* FSPartition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSPartition.h; sourceTree = "<group>"; };
@@ -971,7 +971,6 @@
 		508FE06021EA318D0043D0E9 /* Emulator */ = {
 			isa = PBXGroup;
 			children = (
-				50C4F5EB25EC10B2009028A0 /* PublicTypes.h */,
 				50D661862282BE1800D67D88 /* AmigaPublicTypes.h */,
 				506F423E24F0ED75005F80D9 /* AmigaTypes.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
@@ -1214,12 +1213,15 @@
 				50C0B78325EC391B00CDE1F2 /* Foundation.h */,
 				50B37B6825E9A6C7006B328E /* Commons.h */,
 				507215B025EAF62B00787591 /* Aliases.h */,
+				5082D83A21EF891200CF7692 /* Constants.h */,
+				50104E8525ECD0EF0047A9AA /* Macros.h */,
 				50EA34F0258E38880010DC63 /* Debug.h */,
-				5082D83A21EF891200CF7692 /* AmigaConstants.h */,
-				50B5C07D241107F200F124DC /* AmigaConstants.cpp */,
+				50B5C07D241107F200F124DC /* Constants.cpp */,
 				50B5F87825AF9E07008B79F1 /* Reflection.h */,
 				5039924625B219FC0084B808 /* Errors.h */,
 				50AE6F8425D71FBE0004AFBC /* Errors.cpp */,
+				50C0B78125EC367000CDE1F2 /* IO.h */,
+				50C0B78025EC367000CDE1F2 /* IO.cpp */,
 				508C6BCF23F7E77500D8938F /* ChangeRecorder.h */,
 				50EFC7DF22E840870036A3DF /* Serialization.h */,
 				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
@@ -1284,8 +1286,6 @@
 				505A3A3821F4996400132020 /* SSEUtils.cpp */,
 				507F1FAD25074A1A00627C3F /* TimeDelayed.h */,
 				507215A525EA9DD900787591 /* RingBuffer.h */,
-				50C0B78125EC367000CDE1F2 /* IO.h */,
-				50C0B78025EC367000CDE1F2 /* IO.cpp */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1598,7 +1598,7 @@
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
 				50F0BD2622AF883C001F4616 /* UART.cpp in Sources */,
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
-				50B5C07E241107F200F124DC /* AmigaConstants.cpp in Sources */,
+				50B5C07E241107F200F124DC /* Constants.cpp in Sources */,
 				5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */,
 				50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */,

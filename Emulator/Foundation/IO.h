@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "GenericTypes.h"
+#include "Aliases.h"
 
 #include <dirent.h>
 #include <fcntl.h>
@@ -20,8 +20,12 @@
 namespace util {
 
 //
-// Handling files
+// Handling file names
 //
+
+// Changes the capitalization of a string
+string lowercased(const string& s);
+string uppercased(const string& s);
 
 // Extracts a certain component from a path
 string extractPath(const string &path);
@@ -32,6 +36,11 @@ string extractSuffix(const string &path);
 string stripPath(const string &path);
 string stripName(const string &path);
 string stripSuffix(const string &path);
+
+
+//
+// Handling files
+//
 
 // Returns the size of a file in bytes
 isize getSizeOfFile(const string &path);

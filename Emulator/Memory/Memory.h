@@ -12,6 +12,7 @@
 #include "MemoryTypes.h"
 #include "AmigaComponent.h"
 #include "FilePublicTypes.h"
+#include "Macros.h"
 
 //#include "FileTypes.h"
 

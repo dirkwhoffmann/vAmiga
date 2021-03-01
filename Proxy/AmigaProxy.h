@@ -8,7 +8,24 @@
 // -----------------------------------------------------------------------------
 
 #include "Foundation.h"
-#include "PublicTypes.h"
+#include "Constants.h"
+#include "AgnusPublicTypes.h"
+#include "AmigaPublicTypes.h"
+#include "CPUPublicTypes.h"
+#include "CIAPublicTypes.h"
+#include "DenisePublicTypes.h"
+#include "DiskPublicTypes.h"
+#include "DmaDebuggerPublicTypes.h"
+#include "DrivePublicTypes.h"
+#include "EventHandlerPublicTypes.h"
+#include "FilePublicTypes.h"
+#include "FSPublicTypes.h"
+#include "KeyboardPublicTypes.h"
+#include "MemoryPublicTypes.h"
+#include "MsgQueuePublicTypes.h"
+#include "PaulaPublicTypes.h"
+#include "PortPublicTypes.h"
+#include "RTCPublicTypes.h"
 
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>

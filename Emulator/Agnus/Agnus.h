@@ -22,6 +22,7 @@
 #include "Frame.h"
 #include "HardwareComponent.h"
 #include "Memory.h"
+#include "Macros.h"
 
 /* Hsync handler action flags
  *

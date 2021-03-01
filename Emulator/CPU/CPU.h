@@ -12,6 +12,7 @@
 #include "CPUTypes.h"
 #include "AmigaComponent.h"
 #include "Moira.h"
+#include "Macros.h"
 
 class CPU : public AmigaComponent, public moira::Moira {
 

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "GenericTypes.h"
+#include "Aliases.h"
 
 #ifdef __MACH__
 #include <mach/mach_time.h>

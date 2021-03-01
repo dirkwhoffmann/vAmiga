@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "GenericTypes.h"
 #include "BitUtils.h"
 #include <algorithm>
 

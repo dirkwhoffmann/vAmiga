@@ -11,6 +11,20 @@
 
 namespace util {
 
+string lowercased(const string& s)
+{
+    string result;
+    for (auto c : s) { result += tolower(c); }
+    return result;
+}
+
+string uppercased(const string& s)
+{
+    string result;
+    for (auto c : s) { result += toupper(c); }
+    return result;
+}
+
 string extractPath(const string &s)
 {
     auto idx = s.rfind('/');

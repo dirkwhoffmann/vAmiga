@@ -11,7 +11,7 @@
 
 #include "Foundation.h"
 
-#include "AmigaConstants.h"
+#include "Constants.h"
 #include "AudioPublicTypes.h"
 #include "RingBuffer.h"
 

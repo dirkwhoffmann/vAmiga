@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#include "AmigaConstants.h"
+#include "Constants.h"
 #include "Extensions.h"
 
 const char *regName(u32 addr)
