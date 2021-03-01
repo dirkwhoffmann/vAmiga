@@ -9,14 +9,6 @@
 // THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
 // -----------------------------------------------------------------------------
 
-/* This file defines all constants and data types that are exposed to the GUI.
- * All definitions comply to standard ANSI-C to make the file accessible by
- * Swift. Note that the Swift GUI does not interact directly with any of the
- * public API methods of the emulator. Since Swift cannot deal with C++ code
- * directly yet, all API accesses are routed through the proxy layer written in
- * Objective-C.
- */
-
 #pragma once
 
 #include "Commons.h"

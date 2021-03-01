@@ -9,9 +9,10 @@
 
 #pragma once
 
-#include "Errors.h"
+// #include "Errors.h"
 
 #include <map>
+#include <exception>
 
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
 
@@ -60,7 +61,7 @@ template <class T, typename E> struct Reflection {
         auto p = pairs();
         
         auto it = p.find(upperKey);
-        if (it == p.end()) throw ParseEnumError(key, keyList());
+        if (it == p.end()) throw std::runtime_error(keyList());
         
         return (E)it->second;
     }

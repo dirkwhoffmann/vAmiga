@@ -204,4 +204,3 @@ enum_u32(RunLoopControlFlag)
     RL_AUTO_SNAPSHOT      = 0b010000,
     RL_USER_SNAPSHOT      = 0b100000
 };
-

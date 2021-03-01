@@ -10,6 +10,8 @@
 #pragma once
 
 #include "Foundation.h"
+#include "AmigaPublicTypes.h"
+#include "Errors.h"
 
 /* Base class for all Amiga objects. This class adds a textual description
  * the object together with functions for printing debug messages and warnings.

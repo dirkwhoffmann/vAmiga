@@ -8,8 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "AmigaTypes.h"
+#include "Errors.h"
 
 const char *
 VAError::what() const throw() {
