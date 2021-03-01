@@ -11,8 +11,6 @@
 
 #include "Concurrency.h"
 
-namespace utl {
-
 Mutex::Mutex()
 {
     pthread_mutex_init(&mutex, nullptr);
@@ -33,6 +31,4 @@ int
 Mutex::unlock()
 {
     return pthread_mutex_unlock(&mutex);
-}
-
 }

@@ -11,8 +11,6 @@
 
 #include "SSEUtils.h"
 
-namespace utl {
-
 #if (defined(__i386__) || defined(__x86_64__)) && defined(__MACH__)
 
 #include <x86intrin.h>
@@ -55,5 +53,3 @@ void transposeSSE(u16 *source, u8* target)
 }
 
 #endif
-
-}

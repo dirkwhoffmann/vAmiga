@@ -29,7 +29,7 @@ class Oscillator : public AmigaComponent {
     Cycle clockBase = 0;
 
     // Kernel clock
-    utl::Time timeBase;
+    Time timeBase;
 
     
     //

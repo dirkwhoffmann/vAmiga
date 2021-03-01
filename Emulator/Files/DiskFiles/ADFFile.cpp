@@ -385,7 +385,7 @@ ADFFile::encodeTrack(Disk *disk, Track t)
     
     // Compute a debug checksum
     debug(MFM_DEBUG, "Track %d checksum = %x\n",
-          t, utl::fnv_1a_32(disk->data.track[t], disk->length.track[t]));
+          t, fnv_1a_32(disk->data.track[t], disk->length.track[t]));
 
     return result;
 }

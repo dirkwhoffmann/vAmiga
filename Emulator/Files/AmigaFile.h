@@ -154,7 +154,7 @@ public:
     virtual FileType type() const { return FILETYPE_UKNOWN; }
             
     // Returns a fingerprint (hash value) for this file
-    virtual u64 fnv() const { return utl::fnv_1a_64(data, size); }
+    virtual u64 fnv() const { return fnv_1a_64(data, size); }
         
     
     //

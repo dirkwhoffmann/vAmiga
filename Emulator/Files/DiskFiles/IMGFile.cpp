@@ -157,7 +157,7 @@ IMGFile::encodeTrack(Disk *disk, Track t)
     // Compute a checksum for debugging
     debug(MFM_DEBUG,
           "Track %d checksum = %x\n",
-          t, utl::fnv_1a_32(disk->data.track[t], disk->length.track[t]));
+          t, fnv_1a_32(disk->data.track[t], disk->length.track[t]));
 
     return result;
 }
@@ -185,7 +185,7 @@ IMGFile::encodeSector(Disk *disk, Track t, Sector s)
     buf[19] = 2;
     
     // Compute and write CRC
-    u16 crc = utl::crc16(&buf[12], 8);
+    u16 crc = crc16(&buf[12], 8);
     buf[20] = HI_BYTE(crc);
     buf[21] = LO_BYTE(crc);
 
@@ -205,7 +205,7 @@ IMGFile::encodeSector(Disk *disk, Track t, Sector s)
     readSector(&buf[60], t, s);
     
     // Compute and write CRC
-    crc = utl::crc16(&buf[56], 516);
+    crc = crc16(&buf[56], 516);
     buf[572] = HI_BYTE(crc);
     buf[573] = LO_BYTE(crc);
 

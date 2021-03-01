@@ -10,18 +10,13 @@
 #pragma once
 
 #include "AmigaObject.h"
-
-#include <set>
-#include <sstream>
-#include <fstream>
-#include <iostream>
-#include <iomanip>
-#include <vector>
-#include <map>
-
 #include "AmigaPublicTypes.h"
 #include "Serialization.h"
 #include "Concurrency.h"
+
+#include <vector>
+#include <iostream>
+#include <iomanip>
 
 /* This class defines the base functionality of all hardware components. It
  * comprises functions for initializing, configuring, and serializing the
@@ -31,7 +26,7 @@
  */
 
 #define synchronized \
-for (utl::AutoMutex _am(mutex); _am.active; _am.active = false)
+for (AutoMutex _am(mutex); _am.active; _am.active = false)
 
 namespace Dump {
 enum Category : usize {
@@ -83,7 +78,7 @@ protected:
      * to prevent multiple threads to enter the same code block. It mimics the
      * behaviour of the well known Java construct 'synchronized(this) { }'.
      */
-    utl::Mutex mutex;
+    Mutex mutex;
 
         
     //

@@ -83,7 +83,7 @@ Copper::serviceEvent(EventID id)
 
             if (COP_CHECKSUM) {
                 checkcnt++;
-                checksum = utl::fnv_1a_it32(checksum, cop1ins);
+                checksum = fnv_1a_it32(checksum, cop1ins);
             }
 
             // Dynamically determine the end of the Copper list
@@ -108,7 +108,7 @@ Copper::serviceEvent(EventID id)
             cop2ins = agnus.doCopperDMA(coppc);
             advancePC();
 
-            if (COP_CHECKSUM) checksum = utl::fnv_1a_it32(checksum, cop2ins);
+            if (COP_CHECKSUM) checksum = fnv_1a_it32(checksum, cop2ins);
 
             // Extract register number from the first instruction word
             reg = (cop1ins & 0x1FE);
@@ -148,7 +148,7 @@ Copper::serviceEvent(EventID id)
             cop2ins = agnus.doCopperDMA(coppc);
             advancePC();
 
-            if (COP_CHECKSUM) checksum = utl::fnv_1a_it32(checksum, cop2ins);
+            if (COP_CHECKSUM) checksum = fnv_1a_it32(checksum, cop2ins);
 
             // Fork execution depending on the instruction type
             schedule(isWaitCmd() ? COP_WAIT1 : COP_SKIP1);

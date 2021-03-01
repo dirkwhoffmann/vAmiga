@@ -458,8 +458,8 @@ DiskController::performDMARead(Drive *drive, u32 remaining)
         // Write word into memory
         if (DSK_CHECKSUM) {
             checkcnt++;
-            check1 = utl::fnv_1a_it32(check1, word);
-            check2 = utl::fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
+            check1 = fnv_1a_it32(check1, word);
+            check2 = fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
         }
         agnus.doDiskDMA(word);
 
@@ -494,12 +494,12 @@ DiskController::performDMAWrite(Drive *drive, u32 remaining)
         // Read next word from memory
         if (DSK_CHECKSUM) {
             checkcnt++;
-            check2 = utl::fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
+            check2 = fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
         }
         u16 word = agnus.doDiskDMA();
 
         if (DSK_CHECKSUM) {
-            check1 = utl::fnv_1a_it32(check1, word);
+            check1 = fnv_1a_it32(check1, word);
         }
 
         // Write word into FIFO buffer
@@ -593,8 +593,8 @@ DiskController::performTurboRead(Drive *drive)
         // Write word into memory
         if (DSK_CHECKSUM) {
             checkcnt++;
-            check1 = utl::fnv_1a_it32(check1, word);
-            check2 = utl::fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
+            check1 = fnv_1a_it32(check1, word);
+            check2 = fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
         }
         mem.poke16 <ACCESSOR_AGNUS> (agnus.dskpt, word);
         agnus.dskpt += 2;
@@ -620,8 +620,8 @@ DiskController::performTurboWrite(Drive *drive)
         
         if (DSK_CHECKSUM) {
             checkcnt++;
-            check1 = utl::fnv_1a_it32(check1, word);
-            check2 = utl::fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
+            check1 = fnv_1a_it32(check1, word);
+            check2 = fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
         }
 
         agnus.dskpt += 2;

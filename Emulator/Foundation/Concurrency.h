@@ -11,8 +11,6 @@
 
 #include <pthread.h>
 
-namespace utl {
-
 class Mutex
 {
     pthread_mutex_t mutex;
@@ -37,5 +35,3 @@ public:
     AutoMutex(Mutex &ref) : mutex(ref) { mutex.lock(); }
     ~AutoMutex() { mutex.unlock(); }
 };
-
-}

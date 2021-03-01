@@ -18,8 +18,6 @@
 #include "Paula.h"
 #include "SerialPort.h"
 
-#include <vector>
-
 #define CIA_DEBUG (nr == 0 ? CIAA_DEBUG : CIAB_DEBUG)
 
 CIA::CIA(int n, Amiga& ref) : AmigaComponent(ref), nr(n)

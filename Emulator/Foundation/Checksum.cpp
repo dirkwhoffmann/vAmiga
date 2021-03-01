@@ -10,8 +10,6 @@
 #include "config.h"
 #include "Checksum.h"
 
-namespace utl {
-
 u32
 NO_SANITIZE("unsigned-integer-overflow")
 fnv_1a_it32(u32 prv, u32 val)
@@ -91,6 +89,4 @@ crc32forByte(u32 r)
     for(int j = 0; j < 8; ++j)
         r = (r & 1? 0: (u32)0xEDB88320L) ^ r >> 1;
     return r ^ (u32)0xFF000000L;
-}
-
 }

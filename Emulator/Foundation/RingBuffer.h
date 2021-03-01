@@ -13,8 +13,6 @@
 
 #include <utility>
 
-namespace utl {
-
 /* The emulator uses buffers at various places. Most of them are derived from
  * one of the following two classes:
  *
@@ -143,5 +141,3 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
         }
     }
 };
-
-}

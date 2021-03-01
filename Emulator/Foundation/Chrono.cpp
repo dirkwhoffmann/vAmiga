@@ -9,8 +9,6 @@
 
 #include "Chrono.h"
 
-namespace utl {
-
 #ifdef __MACH__
 
 //
@@ -184,6 +182,4 @@ Clock::restart()
     start = Time::now();
     
     return result;
-}
-
 }

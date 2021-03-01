@@ -15,8 +15,6 @@
 #include <mach/mach_time.h>
 #endif
 
-namespace utl {
-
 class Time {
     
     i64 ticks;
@@ -63,5 +61,3 @@ public:
     Time getElapsedTime() const;
     Time restart();
 };
-
-}

@@ -42,7 +42,7 @@ void
 Oscillator::restart()
 {
     clockBase = agnus.clock;
-    timeBase = utl::Time::now();
+    timeBase = Time::now();
 }
 
 void
@@ -52,9 +52,9 @@ Oscillator::synchronize()
     if (warpMode) return;
     
     auto clockDelta  = agnus.clock - clockBase;
-    auto elapsedTime = utl::Time((i64)(clockDelta * 1000 / masterClockFrequency));
+    auto elapsedTime = Time((i64)(clockDelta * 1000 / masterClockFrequency));
     auto targetTime  = timeBase + elapsedTime;
-    auto now         = utl::Time::now();
+    auto now         = Time::now();
     
     // Check if we're running too slow ...
     if (now > targetTime) {

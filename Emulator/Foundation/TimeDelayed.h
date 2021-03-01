@@ -13,8 +13,6 @@
 
 #include <algorithm>
 
-namespace utl {
-
 template <class T, int delay> class TimeDelayed : AmigaObject {
     
     /* Value pipeline (history buffer)
@@ -119,5 +117,3 @@ public:
         return pipeline[std::max(0, timeStamp - AS_DMA_CYCLES(*clock) + customDelay)];
     }
 };
-
-}

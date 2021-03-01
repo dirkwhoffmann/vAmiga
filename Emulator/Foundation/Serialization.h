@@ -12,6 +12,7 @@
 #include "Aliases.h"
 #include "Macros.h"
 
+
 //
 // Basic memory buffer I/O
 //
@@ -97,7 +98,7 @@ return *this; \
 #define COUNT64(type) static_assert(sizeof(type) <= 8); COUNT(type,8)
 #define COUNTD(type) static_assert(sizeof(type) <= 8); COUNT(type,8)
 
-#define __ ,
+// #define __ ,
 
 class SerCounter
 {

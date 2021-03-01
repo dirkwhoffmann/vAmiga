@@ -12,8 +12,6 @@
 #include "Aliases.h"
 #include <exception>
 
-namespace utl {
-
 struct Exception : public std::exception {
     
     string description;
@@ -25,5 +23,3 @@ struct Exception : public std::exception {
 
     const char *what() const throw() override { return description.c_str(); }
 };
-
-}
