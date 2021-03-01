@@ -9,9 +9,8 @@
 
 #pragma once
 
-#include "DeniseTypes.h"
 #include "AmigaComponent.h"
-
+#include "DeniseTypes.h"
 #include "ChangeRecorder.h"
 
 class PixelEngine : public AmigaComponent {

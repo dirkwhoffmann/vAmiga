@@ -9,10 +9,9 @@
 
 #pragma once
 
-#include "Aliases.h"
 #include "AmigaComponent.h"
 #include "Colors.h"
-#include "MemoryPublicTypes.h"
+#include "MemoryTypes.h"
 #include "PixelEngine.h"
 #include "ScreenRecorder.h"
 

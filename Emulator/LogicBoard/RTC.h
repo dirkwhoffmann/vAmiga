@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "RTCTypes.h"
 #include "AmigaComponent.h"
+#include "RTCTypes.h"
 
 class RTC : public AmigaComponent {
 

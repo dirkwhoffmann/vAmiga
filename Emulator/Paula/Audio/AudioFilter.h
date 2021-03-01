@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "AudioTypes.h"
 #include "AmigaComponent.h"
+#include "AudioTypes.h"
 
 class AudioFilter : public AmigaComponent {
     

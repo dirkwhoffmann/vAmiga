@@ -10,8 +10,8 @@
 #pragma once
 
 #include "Aliases.h"
-#include "ChangeRecorder.h"
 #include "Concurrency.h"
+#include "RingBuffer.h"
 
 /* About the AudioStream
  *

@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "Constants.h"
 #include "AudioPublicTypes.h"
+#include "Constants.h"
 #include "RingBuffer.h"
 
 /* This buffer type is used to temporarily store the generated sound samples as

@@ -9,8 +9,8 @@
 
 #pragma once
 
+#include "AmigaComponent.h"
 #include "AgnusTypes.h"
-
 #include "Beam.h"
 #include "Blitter.h"
 #include "ChangeRecorder.h"
@@ -19,7 +19,7 @@
 #include "DmaDebugger.h"
 #include "Event.h"
 #include "Frame.h"
-#include "HardwareComponent.h"
+// #include "HardwareComponent.h"
 #include "Memory.h"
 #include "Macros.h"
 

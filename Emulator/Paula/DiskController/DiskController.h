@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "DiskControllerPublicTypes.h"
 #include "AmigaComponent.h"
+#include "DiskControllerTypes.h"
 
 class DiskController : public AmigaComponent {
 
