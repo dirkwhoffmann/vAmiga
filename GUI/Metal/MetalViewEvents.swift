@@ -149,9 +149,11 @@ public extension MetalView {
             }
             
             // Check for a shaking mouse movement
+            /*
             if prefs.releaseMouseByShaking && mouseIsShaking(dx: dx, dy: dy) {
                 releaseMouse()
             }
+            */
         }
     }
     
@@ -195,6 +197,7 @@ public extension MetalView {
         }
     }
     
+    /*
     func mouseIsShaking(dx: CGFloat, dy: CGFloat) -> Bool {
         
         // Accumulate the travelled distance
@@ -242,4 +245,5 @@ public extension MetalView {
         
         return false
     }
+    */
 }

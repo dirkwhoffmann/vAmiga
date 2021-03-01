@@ -33,12 +33,14 @@ public class MetalView: MTKView {
     var mouse2: GamePad?
 
     // Variables needed to detect a shaking mouse
+    var lastShake = DispatchTime.init(uptimeNanoseconds: 0)
+    /*
     var dxsign = CGFloat(1)
     var dxsum = CGFloat(0)
     var dxturns = 0
     var lastTurn = DispatchTime.init(uptimeNanoseconds: 0)
-    var lastShake = DispatchTime.init(uptimeNanoseconds: 0)
-
+    */
+    
     required public init(coder: NSCoder) {
     
         super.init(coder: coder)

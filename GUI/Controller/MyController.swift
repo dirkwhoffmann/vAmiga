@@ -619,6 +619,12 @@ extension MyController {
             window?.backgroundColor = .windowBackgroundColor
             refreshStatusBar()
             
+        case .SHAKING:
+            metal.lastShake = DispatchTime.init(uptimeNanoseconds: 0)
+            if pref.releaseMouseByShaking {
+                metal.releaseMouse()
+            }
+            
         default:
             track("Unknown message: \(msg)")
             assert(false)

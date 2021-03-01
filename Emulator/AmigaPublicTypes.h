@@ -79,6 +79,7 @@ enum_long(OPT)
     
     // Mouse
     OPT_PULLUP_RESISTORS,
+    OPT_SHAKE_DETECTION,
     OPT_MOUSE_VELOCITY,
     
     // Paula audio
