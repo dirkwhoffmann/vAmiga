@@ -7,7 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Foundation.h"
 #include "Constants.h"
 #include "AgnusPublicTypes.h"
 #include "AmigaPublicTypes.h"

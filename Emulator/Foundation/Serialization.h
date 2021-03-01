@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
-#include "Extensions.h"
+#include "Macros.h"
 
 //
 // Basic memory buffer I/O

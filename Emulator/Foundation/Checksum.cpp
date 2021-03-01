@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Foundation.h"
 #include "Checksum.h"
 
 namespace utl {

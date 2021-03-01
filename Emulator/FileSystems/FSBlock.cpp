@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "FSBlock.h"
-#include "BitUtils.h"
 #include "FSBitmapBlock.h"
 #include "FSBitmapExtBlock.h"
 #include "FSBootBlock.h"

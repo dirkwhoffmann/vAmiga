@@ -10,7 +10,6 @@
 #include "config.h"
 #include "FSUserDirBlock.h"
 
-#include "BitUtils.h"
 #include "FSDevice.h"
 #include "FSPartition.h"
 #include "IO.h"

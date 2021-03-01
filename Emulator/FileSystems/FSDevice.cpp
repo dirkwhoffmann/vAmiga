@@ -10,7 +10,6 @@
 #include "config.h"
 
 #include "IO.h"
-#include "BitUtils.h"
 #include "FSDevice.h"
 
 #include <set>

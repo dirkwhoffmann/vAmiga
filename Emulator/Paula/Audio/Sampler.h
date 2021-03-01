@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include "Foundation.h"
-
 #include "Constants.h"
 #include "AudioPublicTypes.h"
 #include "RingBuffer.h"

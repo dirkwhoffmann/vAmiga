@@ -8,9 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "Constants.h"
-#include "Extensions.h"
+#include "Macros.h"
 
 const char *regName(u32 addr)
 {
