@@ -7,7 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "SerialPort.h"
+#include "UART.h"
+#include "Macros.h"
 
 SerialPort::SerialPort(Amiga& ref) : AmigaComponent(ref)
 {

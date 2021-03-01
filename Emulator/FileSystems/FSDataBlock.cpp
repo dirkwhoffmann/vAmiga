@@ -7,7 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
+#include "FSDataBlock.h"
 #include "FSDevice.h"
+#include "FSPartition.h"
 
 FSDataBlock::FSDataBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
@@ -94,7 +97,7 @@ OFSDataBlock::writeData(FILE *file, isize size)
 {
     assert(file != nullptr);
     
-    isize count = MIN(dsize(), size);
+    isize count = std::min(dsize(), size);
     for (isize i = 0; i < count; i++) fputc(data[i + headerSize()], file);
     return count;
 }
@@ -102,7 +105,7 @@ OFSDataBlock::writeData(FILE *file, isize size)
 isize
 OFSDataBlock::addData(const u8 *buffer, isize size)
 {
-    isize count = MIN(bsize() - headerSize(), size);
+    isize count = std::min(bsize() - headerSize(), size);
 
     memcpy(data + headerSize(), buffer, count);
     setDataBytesInBlock((u32)count);
@@ -139,7 +142,7 @@ FFSDataBlock::writeData(FILE *file, isize size)
 {
     assert(file != nullptr);
     
-    isize count = MIN(dsize(), size);
+    isize count = std::min(dsize(), size);
     for (isize i = 0; i < count; i++) fputc(data[i + headerSize()], file);
     return count;
 }
@@ -147,7 +150,7 @@ FFSDataBlock::writeData(FILE *file, isize size)
 isize
 FFSDataBlock::addData(const u8 *buffer, isize size)
 {
-    isize count = MIN(bsize(), size);
+    isize count = std::min(bsize(), size);
     memcpy(data, buffer, count);
     return count;
 }

@@ -9,8 +9,9 @@
 
 #pragma once
 
-#include "Utils.h"
-#include "Buffers.h"
+#include "AudioPublicTypes.h"
+#include "Constants.h"
+#include "RingBuffer.h"
 
 /* This buffer type is used to temporarily store the generated sound samples as
  * they are produced by the state machine. Note that the state machine doesn't
@@ -23,17 +24,6 @@ struct TaggedSample
 {
     Cycle tag;
     i16   sample;
-
-    /*
-    template <class T>
-    void applyToItems(T& worker)
-    {
-        worker
-
-        & tag
-        & sample;
-    }
-    */
 };
 
 struct Sampler : RingBuffer <TaggedSample, VPOS_CNT * HPOS_CNT> {

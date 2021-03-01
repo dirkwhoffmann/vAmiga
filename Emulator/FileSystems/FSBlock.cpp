@@ -7,8 +7,19 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Utils.h"
+#include "config.h"
+#include "FSBlock.h"
+#include "FSBitmapBlock.h"
+#include "FSBitmapExtBlock.h"
+#include "FSBootBlock.h"
 #include "FSDevice.h"
+#include "FSDataBlock.h"
+#include "FSEmptyBlock.h"
+#include "FSFileHeaderBlock.h"
+#include "FSFileListBlock.h"
+#include "FSPartition.h"
+#include "FSRootBlock.h"
+#include "FSUserDirBlock.h"
 
 FSBlock *
 FSBlock::makeWithType(FSPartition &p, Block nr, FSBlockType type)

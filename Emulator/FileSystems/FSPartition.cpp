@@ -8,8 +8,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
+#include "FSPartition.h"
 #include "FSDevice.h"
-#include <algorithm>
 
 FSPartition *
 FSPartition::makeWithFormat(FSDevice &dev, FSPartitionDescriptor &layout)

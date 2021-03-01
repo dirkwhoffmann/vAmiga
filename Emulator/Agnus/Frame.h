@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "Aliases.h"
+
 struct Frame
 {
     // Frame count
@@ -20,16 +22,16 @@ struct Frame
     // Value of the frame flipflop in the previous frame
     bool prevlof;
     
-    template <class T>
-    void applyToItems(T& worker)
+    template <class W>
+    void operator<<(W& worker)
     {
         worker
 
-        & nr
-        & lof
-        & prevlof;
+        << nr
+        << lof
+        << prevlof;
     }
-
+    
     Frame() : nr(0), lof(false) { }
     
     bool isLongFrame() const { return lof; }

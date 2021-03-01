@@ -7,7 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "UART.h"
+
+#include "Agnus.h"
+#include "SerialPort.h"
 
 void
 UART::serviceTxdEvent(EventID id)

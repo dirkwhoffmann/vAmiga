@@ -10,6 +10,7 @@
 #pragma once
 
 #include "KeyboardPublicTypes.h"
+#include "Reflection.h"
 
 //
 // Private types

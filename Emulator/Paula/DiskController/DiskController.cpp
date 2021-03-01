@@ -7,7 +7,15 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "DiskController.h"
+
+#include "Agnus.h"
+#include "Drive.h"
+#include "MsgQueue.h"
+#include "Paula.h"
+
+#include <algorithm>
 
 DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
 {
@@ -158,28 +166,28 @@ DiskController::_dump(Dump::Category category, std::ostream& os) const
 {
     if (category & Dump::Config) {
         
-        os << "  Drive df0: " << (config.connected[0] ? "connected" : "disconnected") << endl;
-        os << "  Drive df1: " << (config.connected[1] ? "connected" : "disconnected") << endl;
-        os << "  Drive df2: " << (config.connected[2] ? "connected" : "disconnected") << endl;
-        os << "  Drive df3: " << (config.connected[3] ? "connected" : "disonnected") << endl;
-        os << "Drive speed: " << DEC << config.speed << endl;
-        os << "lockDskSync: " << YESNO(config.lockDskSync) << endl;
-        os << "autoDskSync: " << YESNO(config.autoDskSync) << endl;
+        os << "  Drive df0: " << (config.connected[0] ? "connected" : "disconnected") << std::endl;
+        os << "  Drive df1: " << (config.connected[1] ? "connected" : "disconnected") << std::endl;
+        os << "  Drive df2: " << (config.connected[2] ? "connected" : "disconnected") << std::endl;
+        os << "  Drive df3: " << (config.connected[3] ? "connected" : "disonnected") << std::endl;
+        os << "Drive speed: " << DEC << config.speed << std::endl;
+        os << "lockDskSync: " << YESNO(config.lockDskSync) << std::endl;
+        os << "autoDskSync: " << YESNO(config.autoDskSync) << std::endl;
     }
     
     if (category & Dump::State) {
         
-        os << "     selected: " << (int)selected << endl;
-        os << "        state: " << DriveDmaStateName(state) << endl;
-        os << "    syncCycle: " << syncCycle << endl;
-        os << "     incoming: " << incoming << endl;
-        os << "         fifo: " << std::hex << fifo << " (" << fifoCount << ")" << endl;
-        os << endl;
-        os << "       dsklen: " << dsklen << endl;
-        os << "      dsksync: " << dsksync << endl;
-        os << "          prb: " << prb << endl;
-        os << endl;
-        os << "     spinningv: " << YESNO(spinning()) << endl;
+        os << "     selected: " << (int)selected << std::endl;
+        os << "        state: " << DriveDmaStateName(state) << std::endl;
+        os << "    syncCycle: " << syncCycle << std::endl;
+        os << "     incoming: " << incoming << std::endl;
+        os << "         fifo: " << std::hex << fifo << " (" << fifoCount << ")" << std::endl;
+        os << std::endl;
+        os << "       dsklen: " << dsklen << std::endl;
+        os << "      dsksync: " << dsksync << std::endl;
+        os << "          prb: " << prb << std::endl;
+        os << std::endl;
+        os << "     spinningv: " << YESNO(spinning()) << std::endl;
     }
 }
 
@@ -238,9 +246,9 @@ DiskController::ejectDisk(isize nr, Cycle delay)
 {
     assert(nr >= 0 && nr <= 3);
 
-    amiga.suspend();
+    suspend();
     agnus.scheduleRel<SLOT_DCH>(delay, DCH_EJECT, nr);
-    amiga.resume();
+    resume();
 }
 
 void
@@ -252,7 +260,7 @@ DiskController::insertDisk(class Disk *disk, isize nr, Cycle delay)
     debug(DSK_DEBUG, "insertDisk(%p, %zd, %lld)\n", disk, nr, delay);
 
     // The easy case: The emulator is not running
-    if (!amiga.isRunning()) {
+    if (!isRunning()) {
 
         df[nr]->ejectDisk();
         df[nr]->insertDisk(disk);
@@ -260,7 +268,7 @@ DiskController::insertDisk(class Disk *disk, isize nr, Cycle delay)
     }
 
     // The not so easy case: The emulator is running
-    amiga.suspend();
+    suspend();
 
     if (df[nr]->hasDisk()) {
 
@@ -269,13 +277,13 @@ DiskController::insertDisk(class Disk *disk, isize nr, Cycle delay)
 
         // Make sure there is enough time between ejecting and inserting.
         // Otherwise, the Amiga might not detect the change.
-        delay = MAX((Cycle)SEC(1.5), delay);
+        delay = std::max((Cycle)SEC(1.5), delay);
     }
 
     diskToInsert = disk;
     agnus.scheduleRel<SLOT_DCH>(delay, DCH_INSERT, nr);
     
-    amiga.resume();
+    resume();
 }
 
 void

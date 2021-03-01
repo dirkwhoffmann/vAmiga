@@ -9,7 +9,9 @@
 
 #pragma once
 
+#include "MsgQueueTypes.h"
 #include "HardwareComponent.h"
+#include "RingBuffer.h"
 
 class MsgQueue : public HardwareComponent {
         

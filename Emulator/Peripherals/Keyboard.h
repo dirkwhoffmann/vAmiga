@@ -9,7 +9,10 @@
 
 #pragma once
 
+#include "KeyboardTypes.h"
 #include "AmigaComponent.h"
+#include "EventHandlerPublicTypes.h"
+
 
 class Keyboard : public AmigaComponent {
 
@@ -84,7 +87,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker & config.accurate;
+        worker << config.accurate;
     }
 
     template <class T>
@@ -97,12 +100,12 @@ private:
     {
         worker
 
-        & state
-        & shiftReg
-        & spLow
-        & spHigh
-        & typeAheadBuffer
-        & bufferIndex;
+        << state
+        << shiftReg
+        << spLow
+        << spHigh
+        << typeAheadBuffer
+        << bufferIndex;
     }
 
     

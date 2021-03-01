@@ -7,7 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "StateMachine.h"
+
+#include "Paula.h"
 
 template <isize nr>
 StateMachine<nr>::StateMachine(Amiga& ref) : AmigaComponent(ref)

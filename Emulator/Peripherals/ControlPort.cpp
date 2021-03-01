@@ -7,12 +7,15 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "ControlPort.h"
+
+#include "Paula.h"
 
 ControlPort::ControlPort(Amiga& ref, PortNr portNr) : AmigaComponent(ref), nr(portNr)
 {
     assert_enum(PortNr, portNr);
-    subComponents = vector<HardwareComponent *> { &mouse, &joystick };
+    subComponents = std::vector<HardwareComponent *> { &mouse, &joystick };
 }
 
 const char *

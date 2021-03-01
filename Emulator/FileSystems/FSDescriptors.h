@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include "FSTypes.h"
+#include "DiskPublicTypes.h"
+#include "AmigaObject.h"
 #include "FSObjects.h"
 #include "FSBlock.h"
 #include "FSEmptyBlock.h"
@@ -74,8 +77,8 @@ struct FSPartitionDescriptor : AmigaObject {
     Block rootBlock = 0;
     
     // References to all bitmap blocks and bitmap extension blocks
-    vector<Block> bmBlocks;
-    vector<Block> bmExtBlocks;
+    std::vector<Block> bmBlocks;
+    std::vector<Block> bmExtBlocks;
 
     
     //

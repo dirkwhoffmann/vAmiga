@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include "Aliases.h"
+
 #define CPUINFO_INSTR_COUNT 256
 
 typedef struct

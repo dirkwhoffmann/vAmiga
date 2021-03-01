@@ -7,11 +7,17 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Muxer.h"
+
+#include "CIA.h"
+#include "MsgQueue.h"
+#include "Oscillator.h"
+#include "Macros.h"
 
 Muxer::Muxer(Amiga& ref) : AmigaComponent(ref)
 {
-    subComponents = vector<HardwareComponent *> {
+    subComponents = std::vector<HardwareComponent *> {
 
         &filterL,
         &filterR
@@ -382,17 +388,16 @@ Muxer::handleBufferUnderflow()
     stream.alignWritePtr();
 
     // Determine the elapsed seconds since the last pointer adjustment
-    u64 now = Oscillator::nanos();
-    double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
-    lastAlignment = now;
+    auto elapsedTime = Time::now() - lastAlignment;
+    lastAlignment = Time::now();
     
     // Adjust the sample rate, if condition (1) holds
-    if (elapsedTime > 10.0) {
+    if (elapsedTime.asSeconds() > 10.0) {
 
         stats.bufferUnderflows++;
         
         // Increase the sample rate based on what we've measured
-        int offPerSecond = (int)(stream.count() / elapsedTime);
+        isize offPerSecond = (isize)(stream.count() / elapsedTime.asSeconds());
         setSampleRate(getSampleRate() + offPerSecond);
     }
 }
@@ -411,18 +416,17 @@ Muxer::handleBufferOverflow()
     stream.alignWritePtr();
 
     // Determine the number of elapsed seconds since the last adjustment
-    u64 now = Oscillator::nanos();
-    double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
-    lastAlignment = now;
-    trace(AUDBUF_DEBUG, "elapsedTime: %f\n", elapsedTime);
+    auto elapsedTime = Time::now() - lastAlignment;
+    lastAlignment = Time::now();
+    trace(AUDBUF_DEBUG, "elapsedTime: %f\n", elapsedTime.asSeconds());
     
     // Adjust the sample rate, if condition (1) holds
-    if (elapsedTime > 10.0) {
+    if (elapsedTime.asSeconds() > 10.0) {
         
         stats.bufferOverflows++;
         
         // Decrease the sample rate based on what we've measured
-        int offPerSecond = (int)(stream.count() / elapsedTime);
+        isize offPerSecond = (isize)(stream.count() / elapsedTime.asSeconds());
         double newSampleRate = getSampleRate() - offPerSecond;
 
         trace(AUDBUF_DEBUG, "Changing sample rate to %f\n", newSampleRate);
@@ -433,7 +437,7 @@ Muxer::handleBufferOverflow()
 void
 Muxer::ignoreNextUnderOrOverflow()
 {
-    lastAlignment = Oscillator::nanos();
+    lastAlignment = Time::now();
 }
 
 void

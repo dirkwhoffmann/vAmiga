@@ -7,7 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Disk.h"
+
+#include "DiskFile.h"
 
 Disk::Disk(DiskDiameter type, DiskDensity density)
 {    

@@ -9,8 +9,10 @@
 
 #pragma once
 
+#include "Aliases.h"
 #include "AmigaComponent.h"
 #include "Sampler.h"
+#include "Agnus.h"
 
 template <isize nr>
 class StateMachine : public AmigaComponent {
@@ -117,7 +119,7 @@ private:
     {
         worker
 
-        & clock;
+        << clock;
     }
 
     template <class T>
@@ -125,20 +127,20 @@ private:
     {
         worker
         
-        & state
-        & buffer
-        & audlenLatch
-        & audlen
-        & audperLatch
-        & audper
-        & audvolLatch
-        & audvol
-        & auddat
-        & audlcLatch
-        & audDR
-        & intreq2
-        & enablePenlo
-        & enablePenhi;
+        << state
+        << buffer
+        << audlenLatch
+        << audlen
+        << audperLatch
+        << audper
+        << audvolLatch
+        << audvol
+        << auddat
+        << audlcLatch
+        << audDR
+        << intreq2
+        << enablePenlo
+        << enablePenhi;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

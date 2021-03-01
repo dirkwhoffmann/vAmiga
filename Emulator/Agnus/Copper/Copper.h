@@ -9,7 +9,15 @@
 
 #pragma once
 
+#include "CopperTypes.h"
+
+#include "EventHandlerPublicTypes.h"
+#include "MemoryPublicTypes.h"
+
+#include "AmigaComponent.h"
 #include "Beam.h"
+#include "Checksum.h"
+#include "CopperTypes.h"
 
 class Copper : public AmigaComponent
 {
@@ -126,17 +134,17 @@ private:
     {
         worker
 
-        & copList
-        & skip
-        & cop1lc
-        & cop2lc
-        & cop1end
-        & cop2end
-        & cdang
-        & cop1ins
-        & cop2ins
-        & coppc
-        & activeInThisFrame;
+        << copList
+        << skip
+        << cop1lc
+        << cop2lc
+        << cop1end
+        << cop2end
+        << cdang
+        << cop1ins
+        << cop2ins
+        << coppc
+        << activeInThisFrame;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

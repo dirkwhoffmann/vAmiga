@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <sys/param.h>
 #include "Aliases.h"
 
 template <bool hires>
@@ -24,15 +23,16 @@ struct DDF
     i16 stopEven;
 
     DDF() : strtOdd(0), strtEven(0), stopOdd(0), stopEven(0) { }
-
-    template <class T> void applyToItems(T& worker) {
-        
+    
+    template <class W>
+    void operator<<(W& worker)
+    {
         worker
         
-        & strtOdd
-        & strtEven
-        & stopOdd
-        & stopEven;
+        << strtOdd
+        << strtEven
+        << stopOdd
+        << stopEven;
     }
     
     void clear() { strtOdd = strtEven = stopOdd = stopEven = 0; }

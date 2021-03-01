@@ -7,7 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "RTC.h"
+
+#include "CPU.h"
+#include "Memory.h"
 
 RTC::RTC(Amiga& ref) : AmigaComponent(ref)
 {
@@ -83,7 +87,7 @@ RTC::_dump(Dump::Category category, std::ostream& os) const
 {
     if (category & Dump::Config) {
         
-        os << DUMP("Chip Model") << RTCRevisionEnum::key(config.model) << endl;
+        os << DUMP("Chip Model") << RTCRevisionEnum::key(config.model) << std::endl;
     }
     
     if (category & Dump::Registers) {
@@ -103,7 +107,7 @@ time_t
 RTC::getTime()
 {
     Cycle result;
-    Cycle master = amiga.cpu.getMasterClock();
+    Cycle master = cpu.getMasterClock();
 
     long timeBetweenCalls = AS_SEC(master - lastCall);
            

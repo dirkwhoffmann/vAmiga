@@ -7,7 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Denise.h"
+
+#include "Agnus.h"
+#include "ControlPort.h"
 
 void
 Denise::pokeDMACON(u16 oldValue, u16 newValue)
@@ -27,7 +31,7 @@ Denise::pokeDMACON(u16 oldValue, u16 newValue)
 u16
 Denise::peekJOY0DATR()
 {
-    u16 result = amiga.controlPort1.joydat();
+    u16 result = controlPort1.joydat();
     trace(JOYREG_DEBUG, "peekJOY0DATR() = $%04X (%d)\n", result, result);
 
     return result;
@@ -36,7 +40,7 @@ Denise::peekJOY0DATR()
 u16
 Denise::peekJOY1DATR()
 {
-    u16 result = amiga.controlPort2.joydat();
+    u16 result = controlPort2.joydat();
     trace(JOYREG_DEBUG, "peekJOY1DATR() = $%04X (%d)\n", result, result);
 
     return result;
@@ -47,8 +51,8 @@ Denise::pokeJOYTEST(u16 value)
 {
     trace(JOYREG_DEBUG, "pokeJOYTEST(%04X)\n", value);
 
-    amiga.controlPort1.pokeJOYTEST(value);
-    amiga.controlPort2.pokeJOYTEST(value);
+    controlPort1.pokeJOYTEST(value);
+    controlPort2.pokeJOYTEST(value);
 }
 
 u16
@@ -80,7 +84,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     trace(BPLREG_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
 
     // Record the register change
-    i64 pixel = MAX(4 * agnus.pos.h - 4, 0);
+    i64 pixel = std::max(4 * agnus.pos.h - 4, 0);
     conChanges.insert(pixel, RegChange { SET_BPLCON0_DENISE, newValue });
     
     // Check if the HAM bit has changed

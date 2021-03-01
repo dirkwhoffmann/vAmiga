@@ -7,7 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "ZorroManager.h"
+
+#include "Memory.h"
 
 ZorroManager::ZorroManager(Amiga& ref) : AmigaComponent(ref)
 {

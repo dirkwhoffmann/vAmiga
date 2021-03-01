@@ -7,7 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
+#include "Snapshot.h"
+
 #include "Amiga.h"
+#include "IO.h"
 
 Thumbnail *
 Thumbnail::makeWithAmiga(Amiga *amiga, isize dx, isize dy)
@@ -54,8 +58,8 @@ Snapshot::isCompatibleStream(std::istream &stream)
 {
     const u8 magicBytes[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     
-    if (streamLength(stream) < 0x15) return false;
-    return matchingStreamHeader(stream, magicBytes, sizeof(magicBytes));
+    if (util::streamLength(stream) < 0x15) return false;
+    return util::matchingStreamHeader(stream, magicBytes, sizeof(magicBytes));
 }
 
 Snapshot::Snapshot()

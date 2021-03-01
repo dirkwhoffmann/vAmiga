@@ -7,9 +7,20 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #import "AmigaProxy.h"
 #import "Amiga.h"
 #import "vAmiga-Swift.h"
+
+#include "DMSFile.h"
+#include "EXEFile.h"
+#include "ExtendedRomFile.h"
+#include "EXTFile.h"
+#include "Folder.h"
+#include "FSDevice.h"
+#include "IMGFile.h"
+#include "RomFile.h"
+#include "Snapshot.h"
 
 using namespace moira;
 
@@ -456,11 +467,6 @@ using namespace moira;
 - (void)saveExt:(NSURL *)url error:(ErrorCode *)ec
 {
     [self mem]->saveExt([url fileSystemRepresentation], ec);
-}
-
-- (void)updateRTC
-{
-    [self mem]->rtc.update();
 }
 
 - (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr
@@ -969,6 +975,25 @@ using namespace moira;
                              h:(NSInteger)size.height
                          scale:s
                          color:c];
+}
+
+@end
+
+
+//
+// Rtc proxy
+//
+
+@implementation RtcProxy
+
+- (RTC *)rtc
+{
+    return (RTC *)obj;
+}
+
+- (void)update
+{
+    [self rtc]->update();
 }
 
 @end
@@ -1950,6 +1975,7 @@ using namespace moira;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
+@synthesize rtc;
 @synthesize serialPort;
 @synthesize screenRecorder;
 @synthesize watchpoints;
@@ -1984,6 +2010,7 @@ using namespace moira;
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
+    rtc = [[RtcProxy alloc] initWith:&amiga->rtc];
     screenRecorder = [[ScreenRecorderProxy alloc] initWith:&amiga->denise.screenRecorder];
     serialPort = [[SerialPortProxy alloc] initWith:&amiga->serialPort];
     watchpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.watchpoints];
@@ -2012,7 +2039,7 @@ using namespace moira;
 
 - (BOOL)isReleaseBuild
 {
-    return releaseBuild();
+    return releaseBuild;
 }
 
 - (BOOL)warp

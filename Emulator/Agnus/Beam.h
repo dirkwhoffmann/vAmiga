@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include "Aliases.h"
+#include "Constants.h"
+
 struct Beam
 {
     // Counters for the vertical and horizontal beam position
@@ -19,17 +22,17 @@ struct Beam
     i16 vLatched;
     i16 hLatched;
 
-    template <class T>
-    void applyToItems(T& worker)
+    template <class W>
+    void operator<<(W& worker)
     {
         worker
 
-        & v
-        & h
-        & vLatched
-        & hLatched;
+        << v
+        << h
+        << vLatched
+        << hLatched;
     }
-
+    
     Beam(i16 v, i16 h) : v(v), h(h) { }
     Beam(u32 cycle = 0) : Beam((i16)(cycle / HPOS_CNT), (i16)(cycle % HPOS_CNT)) { }
 

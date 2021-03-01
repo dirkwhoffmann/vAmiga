@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "BootBlockImage.h"
-#include "Utils.h"
 
 //
 // Bootblock images

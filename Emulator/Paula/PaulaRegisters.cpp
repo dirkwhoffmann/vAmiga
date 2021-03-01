@@ -7,7 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Paula.h"
+
+#include "CIA.h"
+#include "ControlPort.h"
 
 u16
 Paula::peekADKCONR() const

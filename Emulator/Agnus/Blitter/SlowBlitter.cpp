@@ -7,7 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Blitter.h"
+#include "Agnus.h"
+#include "Memory.h"
+#include "Paula.h"
 
 /* Micro-instructions:
  *
@@ -1072,7 +1076,9 @@ Blitter::exec()
         // Run the minterm logic circuit
         trace(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
         dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
-        assert(releaseBuild() || dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
+        if (BLT_DEBUG) {
+            assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
+        }
 
         if (!lockD) {
 

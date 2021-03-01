@@ -7,7 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Joystick.h"
+
+#include "Agnus.h"
+#include "ControlPort.h"
 
 const char *
 Joystick::getDescription() const

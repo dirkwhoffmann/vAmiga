@@ -7,7 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Copper.h"
+
+#include "Agnus.h"
 
 void
 Copper::pokeCOPCON(u16 value)

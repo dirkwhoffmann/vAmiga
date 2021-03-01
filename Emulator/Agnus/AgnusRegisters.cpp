@@ -7,7 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Agnus.h"
+
+#include "Denise.h"
+#include "Paula.h"
 
 void
 Agnus::pokeDSKPTH(u16 value)

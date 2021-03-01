@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "PortTypes.h"
 #include "AmigaComponent.h"
 #include "Joystick.h"
 #include "Mouse.h"
@@ -96,10 +97,10 @@ private:
     {
         worker
 
-        & mouseCounterX
-        & mouseCounterY
-        & chargeDX
-        & chargeDY;
+        << mouseCounterX
+        << mouseCounterY
+        << chargeDX
+        << chargeDY;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

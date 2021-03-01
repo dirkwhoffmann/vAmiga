@@ -10,6 +10,7 @@
 #pragma once
 
 #include "AmigaComponent.h"
+#include "RTCTypes.h"
 
 class RTC : public AmigaComponent {
 
@@ -88,7 +89,7 @@ private:
     {
         worker
 
-        & config.model;
+        << config.model;
     }
 
     template <class T>
@@ -96,11 +97,11 @@ private:
     {
         worker
 
-        & timeDiff
-        & reg
-        & lastCall
-        & lastMeasure
-        & lastMeasuredValue;
+        << timeDiff
+        << reg
+        << lastCall
+        << lastMeasure
+        << lastMeasuredValue;
     }
     
     template <class T>

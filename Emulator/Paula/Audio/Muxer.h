@@ -12,6 +12,8 @@
 #include "AmigaComponent.h"
 #include "AudioStream.h"
 #include "AudioFilter.h"
+#include "Chrono.h"
+#include "Sampler.h"
 
 /* Architecture of the audio pipeline
  *
@@ -53,7 +55,7 @@ class Muxer : public AmigaComponent {
     double fraction;
 
     // Time stamp of the last write pointer alignment
-    Cycle lastAlignment = 0;
+    Time lastAlignment;
 
     // Volume control
     Volume volume;
@@ -144,17 +146,17 @@ private:
     {
         worker
         
-        & config.samplingMethod
-        & config.filterType
-        & config.filterAlwaysOn
-        & config.pan
-        & config.vol
-        & config.volL
-        & config.volR
-        & pan
-        & vol
-        & volL
-        & volR;
+        << config.samplingMethod
+        << config.filterType
+        << config.filterAlwaysOn
+        << config.pan
+        << config.vol
+        << config.volL
+        << config.volR
+        << pan
+        << vol
+        << volL
+        << volR;
     }
     
     template <class T>

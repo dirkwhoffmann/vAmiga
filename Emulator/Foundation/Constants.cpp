@@ -7,7 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Utils.h"
+#include "config.h"
+#include "Constants.h"
+#include "Macros.h"
 
 const char *regName(u32 addr)
 {

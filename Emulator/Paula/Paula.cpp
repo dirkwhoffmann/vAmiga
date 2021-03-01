@@ -7,11 +7,15 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Paula.h"
+
+#include "Agnus.h"
+#include "CPU.h"
 
 Paula::Paula(Amiga& ref) : AmigaComponent(ref)
 {
-    subComponents = vector<HardwareComponent *> {
+    subComponents = std::vector<HardwareComponent *> {
         
         &channel0,
         &channel1,

@@ -42,7 +42,7 @@ class MemTableView: NSTableView {
 
         // Continously update the RTC to get live register updates
         if amiga.mem.memSrc(inspector.accessor, addr: addr) == .RTC {
-            amiga.mem.updateRTC()
+            amiga.rtc.update()
         }
         
         for i in 0 ..< rows {

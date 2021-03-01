@@ -7,7 +7,15 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "ADFFile.h"
+
+#include "BootBlockImage.h"
+#include "Checksum.h"
+#include "Debug.h"
+#include "Disk.h"
+#include "Drive.h"
+#include "IO.h"
 
 bool
 ADFFile::isCompatibleName(const string &name)
@@ -18,7 +26,7 @@ ADFFile::isCompatibleName(const string &name)
 bool
 ADFFile::isCompatibleStream(std::istream &stream)
 {
-    isize length = streamLength(stream);
+    isize length = util::streamLength(stream);
     
     // Some ADFs contain an additional byte at the end. Ignore it.
     length &= ~1;

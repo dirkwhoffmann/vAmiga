@@ -10,6 +10,7 @@
 #pragma once
 
 #include "FilePublicTypes.h"
+#include "DiskPublicTypes.h"
 #include "Reflection.h"
 
 struct FileTypeEnum : Reflection<FileTypeEnum, FileType> {

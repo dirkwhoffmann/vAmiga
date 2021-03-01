@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Utils.h"
+#include "Aliases.h"
 
 /* Transposes a 8 x 16 bit matrix using SSE3 extensions.
  *

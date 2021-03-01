@@ -92,4 +92,3 @@ struct MsgTypeEnum : Reflection<MsgTypeEnum, MsgType> {
         return "???";
     }
 };
-

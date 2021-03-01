@@ -7,13 +7,22 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "CIA.h"
+
+#include "Agnus.h"
+#include "ControlPort.h"
+#include "DiskController.h"
+#include "Memory.h"
+#include "MsgQueue.h"
+#include "Paula.h"
+#include "SerialPort.h"
 
 #define CIA_DEBUG (nr == 0 ? CIAA_DEBUG : CIAB_DEBUG)
 
 CIA::CIA(int n, Amiga& ref) : AmigaComponent(ref), nr(n)
 {    
-    subComponents = vector<HardwareComponent *> { &tod };
+    subComponents = std::vector<HardwareComponent *> { &tod };
     
     config.revision = CIA_8520_DIP;
     config.todBug = true;
@@ -659,7 +668,7 @@ CIA::sleep()
     // CIAs with stopped timers can sleep forever
     if (!(feed & CIACountA0)) sleepA = INT64_MAX;
     if (!(feed & CIACountB0)) sleepB = INT64_MAX;
-    Cycle sleep = MIN(sleepA, sleepB);
+    Cycle sleep = std::min(sleepA, sleepB);
     
     // ZZzzz
     // debug("ZZzzzz: clock = %lld A = %d B = %d sleepA = %lld sleepB = %lld\n", clock, counterA, counterB, sleepA, sleepB);

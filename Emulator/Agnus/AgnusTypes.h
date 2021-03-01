@@ -12,6 +12,9 @@
 #include "AgnusPublicTypes.h"
 #include "Reflection.h"
 
+#include "BlitterTypes.h"
+#include "CopperTypes.h"
+
 //
 // Reflection APIs
 //

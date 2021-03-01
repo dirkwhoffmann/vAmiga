@@ -7,7 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Paula.h"
+
+#include "ControlPort.h"
+#include "CPU.h"
 
 void
 Paula::serviceIrqEvent()
@@ -25,7 +29,7 @@ Paula::serviceIrqEvent()
             setINTREQ(true, 1 << src);
             setIntreq[src] = NEVER;
         } else {
-             next = MIN(next, setIntreq[src]);
+             next = std::min(next, setIntreq[src]);
         }
     }
 

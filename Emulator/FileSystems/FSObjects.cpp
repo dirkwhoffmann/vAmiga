@@ -7,7 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
+#include "FSObjects.h"
 #include "FSBlock.h"
+#include <algorithm>
 
 FSString::FSString(const char *str, isize l) : limit(l)
 {
@@ -24,7 +27,7 @@ FSString::FSString(const u8 *bcplStr, isize l) : limit(l)
     assert(limit <= 91);
 
     // First entry of BCPL string contains the string length
-    u8 len = MIN(bcplStr[0], limit);
+    u8 len = std::min(bcplStr[0], (u8)limit);
 
     strncpy(this->str, (const char *)(bcplStr + 1), limit);
     this->str[len] = 0;

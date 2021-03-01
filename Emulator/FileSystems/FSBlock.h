@@ -9,7 +9,10 @@
 
 #pragma once
 
+#include "AmigaObject.h"
+#include "FSTypes.h"
 #include "FSObjects.h"
+#include "Macros.h"
 
 struct FSBlock : AmigaObject {
         

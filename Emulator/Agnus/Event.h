@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "EventHandlerTypes.h"
+
 struct Event
 {
     // Indicates when the event is due
@@ -20,13 +22,13 @@ struct Event
     // An optional data value
     i64 data;
 
-    template <class T>
-    void applyToItems(T& worker)
+    template <class W>
+    void operator<<(W& worker)
     {
         worker
 
-        & triggerCycle
-        & id
-        & data;
+        << triggerCycle
+        << id
+        << data;
     }
 };

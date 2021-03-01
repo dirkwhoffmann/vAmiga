@@ -7,7 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "CIA.h"
+#include "Constants.h"
+#include "Macros.h"
+
+#include "Keyboard.h"
 
 u8
 CIA::peek(u16 addr)

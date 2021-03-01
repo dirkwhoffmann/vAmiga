@@ -7,7 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Keyboard.h"
+
+#include "Agnus.h"
+#include "CIA.h"
+#include "MsgQueue.h"
 
 Keyboard::Keyboard(Amiga& ref) : AmigaComponent(ref)
 {

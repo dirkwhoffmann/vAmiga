@@ -7,8 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "EXEFile.h"
+
+#include "AmigaFile.h"
 #include "FSDevice.h"
+#include "IO.h"
 
 bool
 EXEFile::isCompatibleName(const string &name)
@@ -22,9 +26,9 @@ EXEFile::isCompatibleStream(std::istream &stream)
     u8 signature[] = { 0x00, 0x00, 0x03, 0xF3 };
                                                                                             
     // Only accept the file if it fits onto a HD disk
-    if (streamLength(stream) > 1710000) return false;
+    if (util::streamLength(stream) > 1710000) return false;
 
-    return matchingStreamHeader(stream, signature, sizeof(signature));
+    return util::matchingStreamHeader(stream, signature, sizeof(signature));
 }
 
 isize

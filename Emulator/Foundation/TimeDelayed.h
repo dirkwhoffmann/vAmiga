@@ -11,6 +11,8 @@
 
 #include "AmigaObject.h"
 
+#include <algorithm>
+
 template <class T, int delay> class TimeDelayed : AmigaObject {
     
     /* Value pipeline (history buffer)
@@ -77,9 +79,9 @@ public:
 public:
         
     template <class W>
-    void applyToItems(W& worker)
+    void operator<<(W& worker)
     {
-        worker & pipeline & timeStamp;
+        worker << pipeline << timeStamp;
     }
     
 
@@ -107,11 +109,11 @@ public:
     T current() { return pipeline[0]; }
     
     // Reads a value from the pipeline with the standard delay
-    T delayed() { return pipeline[MAX(0, timeStamp - AS_DMA_CYCLES(*clock) + delay)]; }
+    T delayed() { return pipeline[std::max((i64)0, timeStamp - AS_DMA_CYCLES(*clock) + delay)]; }
     
     // Reads a value from the pipeline with a custom delay
     T readWithDelay(u8 customDelay) {
         assert(customDelay <= delay);
-        return pipeline[MAX(0, timeStamp - AS_DMA_CYCLES(*clock) + customDelay)];
+        return pipeline[std::max(0, timeStamp - AS_DMA_CYCLES(*clock) + customDelay)];
     }
 };

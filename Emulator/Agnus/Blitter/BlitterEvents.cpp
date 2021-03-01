@@ -7,7 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Blitter.h"
+#include "Agnus.h"
 
 void
 Blitter::serviceEvent()

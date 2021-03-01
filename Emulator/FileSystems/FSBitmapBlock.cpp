@@ -7,7 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
+#include "FSBitmapBlock.h"
 #include "FSDevice.h"
+#include "FSPartition.h"
 
 FSBitmapBlock::FSBitmapBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {

@@ -7,7 +7,13 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
+
+#include "IO.h"
 #include "FSDevice.h"
+
+#include <set>
+#include <stack>
 
 FSDevice *
 FSDevice::makeWithFormat(FSDeviceDescriptor &layout)
@@ -608,8 +614,8 @@ FSDevice::check(bool strict) const
     for (isize i = 0; i < numBlocks; i++) {
 
         if (blocks[i]->check(strict) > 0) {
-            min = MIN(min, i);
-            max = MAX(max, i);
+            min = std::min(min, i);
+            max = std::max(max, i);
             blocks[i]->corrupted = ++total;
         } else {
             blocks[i]->corrupted = 0;
@@ -931,7 +937,7 @@ FSDevice::importDirectory(const char *path, DIR *dir, bool recursive)
             
             // Add file
             u8 *buffer; isize size;
-            if (loadFile(name, &buffer, &size)) {
+            if (util::loadFile(name, &buffer, &size)) {
                 FSBlock *file = makeFile(item->d_name, buffer, size);
                 // result &= file ? (file->append(buffer, size)) : false;
                 result &= file != nullptr;
@@ -951,7 +957,7 @@ FSDevice::exportDirectory(const char *path)
     assert(path != nullptr);
         
     // Only proceed if path points to an empty directory
-    long numItems = numDirectoryItems(path);
+    long numItems = util::numDirectoryItems(path);
     if (numItems != 0) return ERROR_FS_DIRECTORY_NOT_EMPTY;
     
     // Collect files and directories

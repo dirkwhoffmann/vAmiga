@@ -9,7 +9,11 @@
 
 #pragma once
 
+#include "PaulaTypes.h"
+
 #include "AmigaComponent.h"
+#include "EventHandlerPublicTypes.h"
+#include "Macros.h"
 
 class UART : public AmigaComponent {
 
@@ -89,14 +93,14 @@ private:
     {
         worker
 
-        & serper
-        & receiveBuffer
-        & receiveShiftReg
-        & transmitBuffer
-        & transmitShiftReg
-        & outBit
-        & ovrun
-        & recCnt;
+        << serper
+        << receiveBuffer
+        << receiveShiftReg
+        << transmitBuffer
+        << transmitShiftReg
+        << outBit
+        << ovrun
+        << recCnt;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

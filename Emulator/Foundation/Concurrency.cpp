@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
+
 #include "Concurrency.h"
 
 Mutex::Mutex()

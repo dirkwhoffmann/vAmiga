@@ -7,7 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "DMSFile.h"
+
+#include "AmigaFile.h"
 
 extern "C" {
 unsigned short extractDMS(FILE *fi, FILE *fo);
@@ -24,7 +27,7 @@ DMSFile::isCompatibleStream(std::istream &stream)
 {
     u8 signature[] = { 'D', 'M', 'S', '!' };
                                                                                             
-    return matchingStreamHeader(stream, signature, sizeof(signature));
+    return util::matchingStreamHeader(stream, signature, sizeof(signature));
 }
 
 isize

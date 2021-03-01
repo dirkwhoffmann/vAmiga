@@ -7,7 +7,14 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "DiskController.h"
+
+#include "Agnus.h"
+#include "Checksum.h"
+#include "Drive.h"
+#include "MsgQueue.h"
+#include "Paula.h"
 
 u16
 DiskController::peekDSKDATR() const

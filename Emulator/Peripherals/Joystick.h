@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "PortTypes.h"
 #include "AmigaComponent.h"
 
 class Joystick : public AmigaComponent {

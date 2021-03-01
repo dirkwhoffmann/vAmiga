@@ -7,7 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
+#include "FSBitmapExtBlock.h"
+
 #include "FSDevice.h"
+#include "FSPartition.h"
 
 FSBitmapExtBlock::FSBitmapExtBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
@@ -48,7 +52,8 @@ FSBitmapExtBlock::dump() const
 }
 
 void
-FSBitmapExtBlock::addBitmapBlockRefs(vector<Block> &refs, std::vector<Block>::iterator &it)
+FSBitmapExtBlock::addBitmapBlockRefs(std::vector<Block> &refs,
+                                     std::vector<Block>::iterator &it)
 {
     isize max = (bsize() / 4) - 1;
     

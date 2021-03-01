@@ -7,7 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "TOD.h"
+
+#include "CIA.h"
 
 TOD::TOD(CIA *cia, Amiga& ref) : AmigaComponent(ref)
 {

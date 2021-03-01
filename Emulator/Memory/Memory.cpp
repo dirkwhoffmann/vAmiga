@@ -7,8 +7,21 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
+#include "Memory.h"
+
 #include "Amiga.h"
-#include <new>
+#include "Agnus.h"
+#include "Checksum.h"
+#include "CIA.h"
+#include "CPU.h"
+#include "Denise.h"
+#include "ExtendedRomFile.h"
+#include "MsgQueue.h"
+#include "Paula.h"
+#include "RomFile.h"
+#include "RTC.h"
+#include "ZorroManager.h"
 
 Memory::Memory(Amiga& ref) : AmigaComponent(ref)
 {
@@ -140,9 +153,9 @@ Memory::setConfigItem(Option option, long value)
                 return false;
             }
             
-            amiga.suspend();
+            suspend();
             config.slowRamDelay = value;
-            amiga.resume();
+            resume();
             return true;
             
         case OPT_BANKMAP:
@@ -154,10 +167,10 @@ Memory::setConfigItem(Option option, long value)
                 return false;
             }
             
-            amiga.suspend();
+            suspend();
             config.bankMap = (BankMap)value;
             updateMemSrcTables();
-            amiga.resume();
+            resume();
             return true;
 
         case OPT_UNMAPPING_TYPE:
@@ -169,9 +182,9 @@ Memory::setConfigItem(Option option, long value)
                 return false;
             }
             
-            amiga.suspend();
+            suspend();
             config.unmappingType = (UnmappedMemory)value;
-            amiga.resume();
+            resume();
             return true;
             
         case OPT_RAM_INIT_PATTERN:
@@ -183,9 +196,9 @@ Memory::setConfigItem(Option option, long value)
                 return false;
             }
 
-            amiga.suspend();
+            suspend();
             config.ramInitPattern = (RamInitPattern)value;
-            amiga.resume();
+            resume();
             if (isPoweredOff()) fillRamWithInitPattern();
             return true;
             
@@ -204,12 +217,12 @@ Memory::_size()
     applyToResetItems(counter);
     
     counter
-    & config.romSize
-    & config.womSize
-    & config.extSize
-    & config.chipSize
-    & config.slowSize
-    & config.fastSize;
+    << config.romSize
+    << config.womSize
+    << config.extSize
+    << config.chipSize
+    << config.slowSize
+    << config.fastSize;
     
     counter.count += config.romSize;
     counter.count += config.womSize;
@@ -228,12 +241,12 @@ Memory::didLoadFromBuffer(const u8 *buffer)
 
     // Load memory size information
     reader
-    & config.romSize
-    & config.womSize
-    & config.extSize
-    & config.chipSize
-    & config.slowSize
-    & config.fastSize;
+    << config.romSize
+    << config.womSize
+    << config.extSize
+    << config.chipSize
+    << config.slowSize
+    << config.fastSize;
 
     // Make sure that corrupted values do not cause any damage
     if (config.romSize > KB(512)) { config.romSize = 0; assert(false); }
@@ -271,12 +284,12 @@ Memory::didSaveToBuffer(u8 *buffer) const
     // Save memory size information
     SerWriter writer(buffer);
     writer
-    & config.romSize
-    & config.womSize
-    & config.extSize
-    & config.chipSize
-    & config.slowSize
-    & config.fastSize;
+    << config.romSize
+    << config.womSize
+    << config.extSize
+    << config.chipSize
+    << config.slowSize
+    << config.fastSize;
     
     // Save memory contents
     writer.copy(rom, config.romSize);
@@ -463,6 +476,36 @@ Memory::fillRamWithInitPattern()
     }
 }
 
+u32
+Memory::romFingerprint()
+{
+    return crc32(rom, config.romSize);
+}
+
+u32
+Memory::extFingerprint()
+{
+    return crc32(ext, config.extSize);
+}
+
+RomIdentifier
+Memory::romIdentifier()
+{
+    return RomFile::identifier(romFingerprint());
+}
+
+RomIdentifier
+Memory::extIdentifier()
+{
+    return RomFile::identifier(extFingerprint());
+}
+
+const char *
+Memory::romTitle()
+{
+    return RomFile::title(romIdentifier());
+}
+
 const char *
 Memory::romVersion()
 {
@@ -477,6 +520,18 @@ Memory::romVersion()
 }
 
 const char *
+Memory::romReleased()
+{
+    return RomFile::released(romIdentifier());
+}
+
+const char *
+Memory::extTitle()
+{
+    return RomFile::title(extIdentifier());
+}
+
+const char *
 Memory::extVersion()
 {
     static char str[32];
@@ -487,6 +542,18 @@ Memory::extVersion()
     }
 
     return RomFile::version(extIdentifier());
+}
+
+const char *
+Memory::extReleased()
+{
+    return RomFile::released(extIdentifier());
+}
+
+bool
+Memory::hasArosRom()
+{
+    return RomFile::isArosRom(romIdentifier());
 }
 
 void
@@ -602,7 +669,7 @@ Memory::loadRom(AmigaFile *file, u8 *target, isize length)
             warn("ROM is smaller than buffer\n");
         }
         
-        memcpy(target, file->data, MIN(file->size, length));
+        memcpy(target, file->data, std::min(file->size, length));
     }
 }
 
@@ -1492,7 +1559,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_ROM> (u32 addr, u8 value)
         updateMemSrcTables();
     }
         
-    if (!releaseBuild()) {
+    if (!releaseBuild) {
         if (addr == 0xFFFFFF && value == 42) {
             msg("DEBUG STOP\n");
             amiga.signalStop();

@@ -7,7 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Agnus.h"
+
+#include "Denise.h"
 
 /* A central element in the emulation of an Amiga is the accurate modeling of
 * the DMA timeslot allocation table (Fig. 6-9 im the HRM, 3rd revision). All
@@ -232,8 +235,8 @@ Agnus::enableBplDmaECS()
     
     i16 posh = pos.h + 4;
     // debug("posh = %d MAX = %d\n", posh, MAX(posh, ddfstrtReached));
-    ddfLores.compute(MAX(posh, ddfstrtReached), ddfstopReached, bplcon1);
-    ddfHires.compute(MAX(posh, ddfstrtReached), ddfstopReached, bplcon1);
+    ddfLores.compute(std::max(posh, ddfstrtReached), ddfstopReached, bplcon1);
+    ddfHires.compute(std::max(posh, ddfstrtReached), ddfstopReached, bplcon1);
     hsyncActions |= HSYNC_PREDICT_DDF;
     
     updateBplEvents();

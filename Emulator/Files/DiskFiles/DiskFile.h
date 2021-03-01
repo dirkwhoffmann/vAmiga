@@ -10,6 +10,7 @@
 #pragma once
 
 #include "AmigaFile.h"
+#include "FSPublicTypes.h"
 
 // Base class of all file types encoding a disk
 class DiskFile : public AmigaFile {

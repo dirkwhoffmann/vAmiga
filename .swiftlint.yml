@@ -11,3 +11,4 @@ disabled_rules: # rule identifiers to exclude from running
   - trailing_whitespace
   - type_body_length
   - unused_closure_parameter
+  

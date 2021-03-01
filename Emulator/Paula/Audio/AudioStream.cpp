@@ -7,19 +7,25 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "AudioStream.h"
+
+#include <algorithm>
+
+void
+Volume::shift()
+{
+    if (current < target) {
+        current += std::min(delta, target - current);
+    } else {
+        current -= std::min(delta, current - target);
+    }
+}
 
 template <class T> void
 AudioStream<T>::alignWritePtr()
 {
     this->align(8192);
-    /*
-     #ifdef __MACH__
-     this->align(5880);
-     #else
-     this->align(8192);
-     #endif
-     */
 }
 
 template <class T> void

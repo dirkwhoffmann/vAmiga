@@ -7,11 +7,28 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "Constants.h"
+#include "AgnusPublicTypes.h"
+#include "AmigaPublicTypes.h"
+#include "CPUPublicTypes.h"
+#include "CIAPublicTypes.h"
+#include "DenisePublicTypes.h"
+#include "DiskPublicTypes.h"
+#include "DmaDebuggerPublicTypes.h"
+#include "DrivePublicTypes.h"
+#include "EventHandlerPublicTypes.h"
+#include "FilePublicTypes.h"
+#include "FSPublicTypes.h"
+#include "KeyboardPublicTypes.h"
+#include "MemoryPublicTypes.h"
+#include "MsgQueuePublicTypes.h"
+#include "PaulaPublicTypes.h"
+#include "PortPublicTypes.h"
+#include "RTCPublicTypes.h"
+
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>
 
-#include "AmigaConstants.h"
-#include "AmigaPublicTypes.h"
 
 //
 // Forward declarations
@@ -43,6 +60,7 @@
 @class MouseProxy;
 @class PaulaProxy;
 @class RomFileProxy;
+@class RtcProxy;
 @class ScreenRecorderProxy;
 @class SerialPortProxy;
 @class SnapshotProxy;
@@ -75,6 +93,7 @@
     // struct AmigaWrapper *wrapper;
     
     AgnusProxy *agnus;
+    GuardsProxy *breakpoints;
     CIAProxy *ciaA;
     CIAProxy *ciaB;
     ControlPortProxy *controlPort1;
@@ -88,13 +107,13 @@
     DriveProxy *df1;
     DriveProxy *df2;
     DriveProxy *df3;
-    GuardsProxy *breakpoints;
-    GuardsProxy *watchpoints;
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
+    RtcProxy *rtc;
     ScreenRecorderProxy *screenRecorder;
     SerialPortProxy *serialPort;
+    GuardsProxy *watchpoints;
 }
 
 // @property (readonly) struct AmigaWrapper *wrapper;
@@ -118,6 +137,7 @@
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;
+@property (readonly, strong) RtcProxy *rtc;
 @property (readonly, strong) ScreenRecorderProxy *screenRecorder;
 @property (readonly, strong) SerialPortProxy *serialPort;
 
@@ -285,7 +305,6 @@
 - (void)saveWom:(NSURL *)url error:(ErrorCode *)ec;
 - (void)saveExt:(NSURL *)url error:(ErrorCode *)ec;
 
-- (void)updateRTC;
 - (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr;
 - (NSInteger)spypeek16:(Accessor)accessor addr:(NSInteger)addr;
 
@@ -439,6 +458,17 @@
 - (float)drawWaveformL:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c;
 - (float)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c;
 - (float)drawWaveformR:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c;
+
+@end
+
+
+//
+// Rtc proxy
+//
+
+@interface RtcProxy : HardwareComponentProxy { }
+
+- (void)update;
 
 @end
 

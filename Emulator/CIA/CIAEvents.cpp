@@ -7,7 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "CIA.h"
+
+#include "Agnus.h"
 
 void
 CIA::scheduleNextExecution()

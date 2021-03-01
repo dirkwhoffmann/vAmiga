@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "DiskTypes.h"
 #include "HardwareComponent.h"
 
 /* MFM encoded disk data of a standard 3.5" DD disk:
@@ -114,12 +115,12 @@ private:
     {
         worker
 
-        & diameter
-        & density
-        & data.raw
-        & writeProtected
-        & modified
-        & fnv;
+        << diameter
+        << density
+        << data.raw
+        << writeProtected
+        << modified
+        << fnv;
     }
 
 

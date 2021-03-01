@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
+#include "AmigaComponent.h"
 #include "Amiga.h"  
 
 AmigaComponent::AmigaComponent(Amiga& ref) :
@@ -39,6 +41,18 @@ zorro(ref.zorro)
 {
 
 };
+
+void
+AmigaComponent::suspend()
+{
+    amiga.suspend();
+}
+
+void
+AmigaComponent::resume()
+{
+    amiga.resume();
+}
 
 void
 AmigaComponent::prefix() const

@@ -7,7 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSDevice.h"
+#include "config.h"
+#include "FSEmptyBlock.h"
 
 FSItemType
 FSEmptyBlock::itemType(isize byte) const

@@ -7,7 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Keyboard.h"
+
+#include "Agnus.h"
+#include "CIA.h"
 
 void
 Keyboard::serviceKeyboardEvent(EventID id)

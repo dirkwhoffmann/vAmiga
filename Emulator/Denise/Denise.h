@@ -11,6 +11,7 @@
 
 #include "AmigaComponent.h"
 #include "Colors.h"
+#include "MemoryTypes.h"
 #include "PixelEngine.h"
 #include "ScreenRecorder.h"
 
@@ -311,10 +312,10 @@ private:
     {
         worker
 
-        & config.revision
-        & config.clxSprSpr
-        & config.clxSprPlf
-        & config.clxPlfPlf;
+        << config.revision
+        << config.clxSprSpr
+        << config.clxSprPlf
+        << config.clxPlfPlf;
     }
 
     template <class T>
@@ -322,7 +323,7 @@ private:
     {
         worker
 
-        & clock;
+        << clock;
     }
 
     template <class T>
@@ -330,35 +331,35 @@ private:
     {
         worker
         
-        & bplcon0
-        & bplcon1
-        & bplcon2
-        & bplcon3
-        & initialBplcon0
-        & initialBplcon1
-        & initialBplcon2
-        & borderColor
-        & bpldat
-        & clxdat
-        & clxcon
-        & shiftReg
-        & armedEven
-        & armedOdd
-        & pixelOffsetOdd
-        & pixelOffsetEven
-        & conChanges
-        & sprChanges
+        << bplcon0
+        << bplcon1
+        << bplcon2
+        << bplcon3
+        << initialBplcon0
+        << initialBplcon1
+        << initialBplcon2
+        << borderColor
+        << bpldat
+        << clxdat
+        << clxcon
+        << shiftReg
+        << armedEven
+        << armedOdd
+        << pixelOffsetOdd
+        << pixelOffsetEven
+        >> conChanges
+        >> sprChanges
 
-        & sprdata
-        & sprdatb
-        & sprpos
-        & sprctl
-        & ssra
-        & ssrb
-        & armed
-        & wasArmed
-        & spriteClipBegin
-        & spriteClipEnd;
+        << sprdata
+        << sprdatb
+        << sprpos
+        << sprctl
+        << ssra
+        << ssrb
+        << armed
+        << wasArmed
+        << spriteClipBegin
+        << spriteClipEnd;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

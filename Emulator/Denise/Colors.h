@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "Aliases.h"
+
 struct RgbColor {
 
     double r;

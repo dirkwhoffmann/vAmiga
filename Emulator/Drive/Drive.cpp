@@ -7,7 +7,13 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Drive.h"
+
+#include "Agnus.h"
+#include "CIA.h"
+#include "DiskFile.h"
+#include "MsgQueue.h"
 
 Drive::Drive(Amiga& ref, isize n) : AmigaComponent(ref), nr(n)
 {
@@ -196,7 +202,7 @@ Drive::_size()
     if (hasDisk()) {
 
         // Add the disk type and disk state
-        counter & disk->getDiameter() & disk->getDensity();
+        counter << disk->getDiameter() << disk->getDensity();
         disk->applyToPersistentItems(counter);
         // counter.count += disk->geometry.diskSize;
     }
@@ -223,13 +229,13 @@ Drive::_load(const u8 *buffer)
 
     // Check if the snapshot includes a disk
     bool diskInSnapshot;
-    reader & diskInSnapshot;
+    reader << diskInSnapshot;
 
     // If yes, create recreate the disk
     if (diskInSnapshot) {
         DiskDiameter type;
         DiskDensity density;
-        reader & type & density;
+        reader << type << density;
         
         disk = Disk::makeWithReader(reader, type, density);
     }
@@ -251,12 +257,12 @@ Drive::_save(u8 *buffer)
     applyToResetItems(writer);
 
     // Indicate whether this drive has a disk is inserted
-    writer & hasDisk();
+    writer << hasDisk();
 
     if (hasDisk()) {
 
         // Write the disk type
-        writer & disk->getDiameter() & disk->getDensity();
+        writer << disk->getDiameter() << disk->getDensity();
 
         // Write the disk's state
         disk->applyToPersistentItems(writer);
@@ -353,10 +359,10 @@ Drive::motorSpeed()const
     // Compute the current speed
     if (motor) {
         if (config.startDelay == 0) return 100.0;
-        return MIN(switchSpeed + 100.0 * (elapsed / config.startDelay), 100.0);
+        return std::min(switchSpeed + 100.0 * (elapsed / config.startDelay), 100.0);
     } else {
         if (config.stopDelay == 0) return 0.0;
-        return MAX(switchSpeed - 100.0 * (elapsed / config.stopDelay), 0.0);
+        return std::max(switchSpeed - 100.0 * (elapsed / config.stopDelay), 0.0);
     }
 }
 

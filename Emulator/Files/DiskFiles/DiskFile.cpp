@@ -7,7 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "DiskFile.h"
 
 u8
 DiskFile::readByte(isize t, isize s, isize offset) const

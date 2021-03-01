@@ -11,6 +11,8 @@
 
 #include "FSBlock.h"
 
+#include <vector>
+
 struct FSBitmapExtBlock : FSBlock {
                     
     FSBitmapExtBlock(FSPartition &p, Block nr);
@@ -34,5 +36,5 @@ struct FSBitmapExtBlock : FSBlock {
     Block getBmBlockRef(isize nr) const           { return get32(nr     );    }
     void setBmBlockRef(isize nr, Block ref)       {        set32(nr, ref);    }
 
-    void addBitmapBlockRefs(vector<Block> &refs, std::vector<Block>::iterator &it);
+    void addBitmapBlockRefs(std::vector<Block> &refs, std::vector<Block>::iterator &it);
 };

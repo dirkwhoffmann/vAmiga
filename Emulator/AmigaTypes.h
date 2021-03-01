@@ -10,24 +10,7 @@
 #pragma once
 
 #include "AmigaPublicTypes.h"
-
-#include "AgnusTypes.h"
-#include "AudioTypes.h"
-#include "CPUTypes.h"
-#include "CIATypes.h"
-#include "DeniseTypes.h"
-#include "DiskTypes.h"
-#include "DmaDebuggerTypes.h"
-#include "DriveTypes.h"
-#include "EventHandlerTypes.h"
-#include "FileTypes.h"
-#include "FSTypes.h"
-#include "KeyboardTypes.h"
-#include "MemoryTypes.h"
-#include "MsgQueueTypes.h"
-#include "PaulaTypes.h"
-#include "PortTypes.h"
-#include "RTCTypes.h"
+#include "Reflection.h"
 
 //
 // Reflection APIs
@@ -219,4 +202,3 @@ enum_u32(RunLoopControlFlag)
     RL_AUTO_SNAPSHOT      = 0b010000,
     RL_USER_SNAPSHOT      = 0b100000
 };
-

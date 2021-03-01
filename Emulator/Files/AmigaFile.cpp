@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "AmigaFile.h"
 #include "Snapshot.h"
 #include "ADFFile.h"

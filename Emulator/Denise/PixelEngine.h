@@ -10,6 +10,8 @@
 #pragma once
 
 #include "AmigaComponent.h"
+#include "DeniseTypes.h"
+#include "ChangeRecorder.h"
 
 class PixelEngine : public AmigaComponent {
 
@@ -134,9 +136,9 @@ private:
     {
         worker
 
-        & colChanges
-        & colreg
-        & hamMode;
+        >> colChanges
+        << colreg
+        << hamMode;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

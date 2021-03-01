@@ -10,6 +10,7 @@
 #pragma once
 
 #include "AmigaFile.h"
+#include "Constants.h"
 
 class Amiga;
 

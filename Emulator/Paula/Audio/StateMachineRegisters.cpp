@@ -7,7 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Paula.h"
 
 template <isize nr> void
 StateMachine<nr>::pokeAUDxLEN(u16 value)
@@ -32,7 +33,7 @@ StateMachine<nr>::pokeAUDxVOL(u16 value)
 
     // 1. Only the lowest 7 bits are evaluated
     // 2. All values greater than 64 are treated as 64 (max volume)
-    audvolLatch = MIN(value & 0x7F, 64);
+    audvolLatch = std::min(value & 0x7F, 64);
 }
 
 template <isize nr> void

@@ -7,7 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Blitter.h"
+#include "Agnus.h"
 
 void
 Blitter::pokeBLTCON0(u16 value)
@@ -28,7 +30,7 @@ Blitter::setBLTCON0(u16 value)
 void
 Blitter::pokeBLTCON0L(u16 value)
 {
-    debug(MAX(BLTREG_DEBUG, ECSREG_DEBUG), "pokeBLTCON0L(%X)\n", value);
+    debug(std::max(BLTREG_DEBUG, ECSREG_DEBUG), "pokeBLTCON0L(%X)\n", value);
 
     // ECS only register
     if (agnus.isOCS()) return;
@@ -222,7 +224,7 @@ Blitter::setBLTSIZE(u16 value)
 void
 Blitter::pokeBLTSIZV(u16 value)
 {
-    debug(MAX(BLTREG_DEBUG, ECSREG_DEBUG), "pokeBLTSIZV(%X)\n", value);
+    debug(std::max(BLTREG_DEBUG, ECSREG_DEBUG), "pokeBLTSIZV(%X)\n", value);
 
     // ECS only register
     if (agnus.isOCS()) return;
@@ -243,7 +245,7 @@ Blitter::setBLTSIZV(u16 value)
 void
 Blitter::pokeBLTSIZH(u16 value)
 {
-    debug(MAX(BLTREG_DEBUG, ECSREG_DEBUG), "pokeBLTSIZH(%X)\n", value);
+    debug(std::max(BLTREG_DEBUG, ECSREG_DEBUG), "pokeBLTSIZH(%X)\n", value);
 
     // ECS only register
     if (agnus.isOCS()) return;

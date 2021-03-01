@@ -7,7 +7,20 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "Amiga.h"
+#include "Snapshot.h"
+
+// Perform some consistency checks
+static_assert(sizeof(i8) == 1,  "i8 size mismatch");
+static_assert(sizeof(i16) == 2, "i16 size mismatch");
+static_assert(sizeof(i32) == 4, "i32 size mismatch");
+static_assert(sizeof(i64) == 8, "i64 size mismatch");
+static_assert(sizeof(u8) == 1,  "u8 size mismatch");
+static_assert(sizeof(u16) == 2, "u16 size mismatch");
+static_assert(sizeof(u32) == 4, "u32 size mismatch");
+static_assert(sizeof(u64) == 8, "u64 size mismatch");
+
 
 //
 // Emulator thread
@@ -65,7 +78,7 @@ Amiga::Amiga()
      * - Memory mus preceed the CPU, because it contains the CPU reset vector.
      */
 
-    subComponents = vector<HardwareComponent *> {
+    subComponents = std::vector<HardwareComponent *> {
 
         &oscillator,
         &agnus,
@@ -357,9 +370,9 @@ Amiga::_dump(Dump::Category category, std::ostream& os) const
     
     if (category & Dump::State) {
         
-        os << DUMP("Power") << ONOFF(isPoweredOn()) << endl;
-        os << DUMP("Running") << YESNO(isRunning()) << endl;
-        os << DUMP("Warp") << ONOFF(warpMode) << endl;
+        os << DUMP("Power") << ONOFF(isPoweredOn()) << std::endl;
+        os << DUMP("Running") << YESNO(isRunning()) << std::endl;
+        os << DUMP("Warp") << ONOFF(warpMode) << std::endl;
     }
 }
 
@@ -759,52 +772,6 @@ Amiga::runLoop()
         }
     }
 }
-
-/*
-void
-Amiga::restartTimer()
-{
-    timeBase = time_in_nanos();
-    clockBase = agnus.clock;
-}
-*/
-/*
-void
-Amiga::synchronizeTiming()
-{
-    u64 now          = time_in_nanos();
-    Cycle clockDelta = agnus.clock - clockBase;
-    u64 elapsedTime  = (u64)(clockDelta * 1000 / masterClockFrequency);
-    u64 targetTime   = timeBase + elapsedTime;
-        
-    // Check if we're running too slow ...
-    if (now > targetTime) {
-        
-        // Check if we're completely out of sync ...
-        if (now - targetTime > 200000000) {
-            
-            // warn("The emulator is way too slow (%lld).\n", now - targetTime);
-            restartTimer();
-            return;
-        }
-    }
-    
-    // Check if we're running too fast ...
-    if (now < targetTime) {
-        
-        // Check if we're completely out of sync ...
-        if (targetTime - now > 200000000) {
-            
-            warn("The emulator is way too fast (%lld).\n", targetTime - now);
-            restartTimer();
-            return;
-        }
-        
-        // See you soon...
-        mach_wait_until(targetTime);
-    }
-}
-*/
 
 void
 Amiga::requestAutoSnapshot()

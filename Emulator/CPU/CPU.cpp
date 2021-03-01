@@ -7,7 +7,13 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
+#include "CPU.h"
+
+#include "Agnus.h"
 #include "Amiga.h"
+#include "Memory.h"
+#include "MsgQueue.h"
 
 void
 CPU::sync(int cycles)

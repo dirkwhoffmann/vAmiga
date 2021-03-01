@@ -9,71 +9,39 @@
 
 #pragma once
 
-#include "AmigaConfig.h"
-#include "AmigaConstants.h"
-#include "Debug.h"
-#include "Errors.h"
-#include "AmigaTypes.h"
-
-#include <assert.h>
-#include <limits.h>
-#include <pthread.h>
-#include <stdarg.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/param.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <dirent.h>
-#include <string>
-#include <list>
-#include <set>
-#include <sstream>
-#include <fstream>
-
-using std::string;
-
-//
-// Optimizing code
-//
-
-#define likely(x)      __builtin_expect(!!(x), 1)
-#define unlikely(x)    __builtin_expect(!!(x), 0)
-
-// Returns true if this executable is a release build
-bool releaseBuild();
-
-
 //
 // Converting units
 //
 
-// Macros for converting kilo bytes and mega bytes to bytes
+// Converts a certain unit to master cycles
+#define USEC(delay)           ((delay) * 28)
+#define MSEC(delay)           ((delay) * 28000)
+#define SEC(delay)            ((delay) * 28000000)
+
+#define CPU_CYCLES(cycles)    ((cycles) << 2)
+#define CIA_CYCLES(cycles)    ((cycles) * 40)
+#define DMA_CYCLES(cycles)    ((cycles) << 3)
+
+// Converts master cycles to a certain unit
+#define AS_USEC(delay)        ((delay) / 28)
+#define AS_MSEC(delay)        ((delay) / 28000)
+#define AS_SEC(delay)         ((delay) / 28000000)
+
+#define AS_CPU_CYCLES(cycles) ((cycles) >> 2)
+#define AS_CIA_CYCLES(cycles) ((cycles) / 40)
+#define AS_DMA_CYCLES(cycles) ((cycles) >> 3)
+
+#define IS_CPU_CYCLE(cycles)  ((cycles) & 3 == 0)
+#define IS_CIA_CYCLE(cycles)  ((cycles) % 40 == 0)
+#define IS_DMA_CYCLE(cycles)  ((cycles) & 7 == 0)
+
+// Converts kilo and mega bytes to bytes
 #define KB(x) ((x) << 10)
 #define MB(x) ((x) << 20)
 
-// Macros for converting kilo Hertz and mega Hertz to Hertz
+// Converts kilo and mega Hertz to Hertz
 #define KHz(x) ((x) * 1000)
 #define MHz(x) ((x) * 1000000)
-
-
-//
-// Performing overflow-prone arithmetic
-//
-
-// Sanitizer friendly macros for adding signed offsets to u32 values
-#define U32_ADD(x,y) (u32)((i64)(x) + (i64)(y))
-#define U32_SUB(x,y) (u32)((i64)(x) - (i64)(y))
-#define U32_ADD3(x,y,z) (u32)((i64)(x) + (i64)(y) + (i64)(z))
-#define U32_SUB3(x,y,z) (u32)((i64)(x) - (i64)(y) - (i64)(z))
-
-// Sanitizer friendly macros for adding signed offsets to u64 values
-#define U64_ADD(x,y) (u64)((i64)(x) + (i64)(y))
-#define U64_SUB(x,y) (u64)((i64)(x) - (i64)(y))
-#define U64_ADD3(x,y,z) (u64)((i64)(x) + (i64)(y) + (i64)(z))
-#define U64_SUB3(x,y,z) (u64)((i64)(x) - (i64)(y) - (i64)(z))
 
 
 //
@@ -162,10 +130,23 @@ bool releaseBuild();
 
 
 //
-// Pretty printing
+// Performing overflow-prone arithmetic
 //
 
-// Shortcuts for being used in combination with the '<<' stream operator
+// Sanitizer friendly macros for adding signed offsets to u32 values
+#define U32_ADD(x,y) (u32)((i64)(x) + (i64)(y))
+#define U32_SUB(x,y) (u32)((i64)(x) - (i64)(y))
+#define U32_ADD3(x,y,z) (u32)((i64)(x) + (i64)(y) + (i64)(z))
+#define U32_SUB3(x,y,z) (u32)((i64)(x) - (i64)(y) - (i64)(z))
+
+// Sanitizer friendly macros for adding signed offsets to u64 values
+#define U64_ADD(x,y) (u64)((i64)(x) + (i64)(y))
+#define U64_SUB(x,y) (u64)((i64)(x) - (i64)(y))
+#define U64_ADD3(x,y,z) (u64)((i64)(x) + (i64)(y) + (i64)(z))
+#define U64_SUB3(x,y,z) (u64)((i64)(x) - (i64)(y) - (i64)(z))
+
+
+// Controls the '<<' stream operator
 #define DEC std::dec
 #define HEX8 std::hex << "0x" << std::setw(2) << std::setfill('0')
 #define HEX16 std::hex << "0x" << std::setw(4) << std::setfill('0')
@@ -179,81 +160,3 @@ bool releaseBuild();
 #define ISSET(x) ((x) ? "set" : "not set")
 #define EMULATED(x) ((x) ? "emulated" : "not emulated")
 #define DUMP(x) std::setw(24) << std::right << std::setfill(' ') << (x) << " : "
-
-// Prints a hex dump of a buffer to the console (for debugging)
-void hexdump(u8 *p, isize size, isize cols, isize pad);
-void hexdump(u8 *p, isize size, isize cols = 32);
-void hexdumpWords(u8 *p, isize size, isize cols = 32);
-void hexdumpLongwords(u8 *p, isize size, isize cols = 32);
-
-
-//
-// Handling strings
-//
-
-string lowercased(const string& s);
-string uppercased(const string& s);
-
-
-//
-// Handling files
-//
-
-// Extracts a certain component from a path
-string extractPath(const string &path);
-string extractName(const string &path);
-string extractSuffix(const string &path);
-
-// Strips a certain component from a path
-string stripPath(const string &path);
-string stripName(const string &path);
-string stripSuffix(const string &path);
-
-// Returns the size of a file in bytes
-isize getSizeOfFile(const string &path);
-isize getSizeOfFile(const char *path);
-
-// Checks if a path points to a directory
-bool isDirectory(const string &path);
-bool isDirectory(const char *path);
-
-// Returns the number of files in a directory
-isize numDirectoryItems(const string &path);
-isize numDirectoryItems(const char *path);
-
-// Checks the header signature (magic bytes) of a stream or buffer
-bool matchingStreamHeader(std::istream &stream, const u8 *header, isize len);
-bool matchingBufferHeader(const u8 *buffer, const u8 *header, isize len);
-
-// Loads a file from disk
-bool loadFile(const char *path, u8 **buffer, isize *size);
-bool loadFile(const char *path, const char *name, u8 **buffer, isize *size);
-
-
-//
-// Handling streams
-//
-
-isize streamLength(std::istream &stream);
-
-
-//
-// Computing checksums
-//
-
-// Returns the FNV-1a seed value
-inline u32 fnv_1a_init32() { return 0x811c9dc5; }
-inline u64 fnv_1a_init64() { return 0xcbf29ce484222325; }
-
-// Performs a single iteration of the FNV-1a hash algorithm
-u32 fnv_1a_it32(u32 prv, u32 val);
-u64 fnv_1a_it64(u64 prv, u64 val);
-
-// Computes a FNV-1a checksum for a given buffer
-u32 fnv_1a_32(const u8 *addr, isize size);
-u64 fnv_1a_64(const u8 *addr, isize size);
-
-// Computes a CRC checksum for a given buffer
-u16 crc16(const u8 *addr, isize size);
-u32 crc32(const u8 *addr, isize size);
-u32 crc32forByte(u32 r);

@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include "PaulaPublicTypes.h"
+#include "Reflection.h"
+
 //
 // Private types
 //

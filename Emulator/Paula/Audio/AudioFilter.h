@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include "HardwareComponent.h"
+#include "AmigaComponent.h"
+#include "AudioTypes.h"
 
 class AudioFilter : public AmigaComponent {
     
@@ -61,7 +62,7 @@ private:
     {
         worker
 
-        & type;
+        << type;
     }
 
     template <class T>

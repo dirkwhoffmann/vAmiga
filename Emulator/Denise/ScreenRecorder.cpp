@@ -7,12 +7,18 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
-#include <fcntl.h>
+#include "config.h"
+#include "ScreenRecorder.h"
+
+#include "IO.h"
+
+#include "Denise.h"
+#include "MsgQueue.h"
+#include "Paula.h"
 
 ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 {
-    subComponents = vector<HardwareComponent *> {
+    subComponents = std::vector<HardwareComponent *> {
         
         &muxer
     };
@@ -21,7 +27,7 @@ ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 bool
 ScreenRecorder::hasFFmpeg() const
 {
-    return getSizeOfFile(ffmpegPath()) > 0;
+    return util::getSizeOfFile(ffmpegPath()) > 0;
 }
 
 void

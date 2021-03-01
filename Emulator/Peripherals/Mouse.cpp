@@ -7,7 +7,13 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Amiga.h"
+#include "config.h"
+#include "Mouse.h"
+
+#include "Chrono.h"
+#include "ControlPort.h"
+#include "MsgQueue.h"
+#include "Oscillator.h"
 
 Mouse::Mouse(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
 {
@@ -176,7 +182,7 @@ void
 Mouse::setXY(double x, double y)
 {
     // Check for a shaking mouse
-    if (shakeDetector.isShakingAbs(x)) amiga.queue.put(MSG_SHAKING);
+    if (shakeDetector.isShakingAbs(x)) messageQueue.put(MSG_SHAKING);
 
     targetX = x * scaleX;
     targetY = y * scaleY;
@@ -188,7 +194,7 @@ void
 Mouse::setDeltaXY(double dx, double dy)
 {
     // Check for a shaking mouse
-    if (shakeDetector.isShakingRel(dx)) amiga.queue.put(MSG_SHAKING);
+    if (shakeDetector.isShakingRel(dx)) messageQueue.put(MSG_SHAKING);
 
     targetX += dx * scaleX;
     targetY += dy * scaleY;
@@ -254,7 +260,7 @@ ShakeDetector::isShakingRel(double dx) {
     // Check for a direction reversal
     if (dx * dxsign < 0) {
     
-        u64 dt = Oscillator::nanos() - lastTurn;
+        u64 dt = Time::now().asNanoseconds() - lastTurn;
         dxsign = -dxsign;
 
         // A direction reversal is considered part of a shake, if the
@@ -272,7 +278,7 @@ ShakeDetector::isShakingRel(double dx) {
                 if (dxturns > 3) {
                     
                     // printf("Mouse shake detected\n");
-                    lastShake = Oscillator::nanos();
+                    lastShake = Time::now().asNanoseconds();
                     dxturns = 0;
                     return true;
                 }
@@ -286,7 +292,7 @@ ShakeDetector::isShakingRel(double dx) {
             dxsum = 0;
         }
         
-        lastTurn = Oscillator::nanos();
+        lastTurn = Time::now().asNanoseconds();
     }
     
     return false;

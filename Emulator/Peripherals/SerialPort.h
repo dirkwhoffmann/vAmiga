@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "PortTypes.h"
 #include "AmigaComponent.h"
 
 #define TXD_MASK (1 << 2)
@@ -84,7 +85,7 @@ private:
     {
         worker
 
-        & config.device;
+        << config.device;
     }
 
     template <class T>
@@ -97,7 +98,7 @@ private:
     {
         worker
 
-        & port;
+        << port;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
