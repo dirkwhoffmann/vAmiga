@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "Aliases.h"
 #include "MsgQueuePublicTypes.h"
 #include "Reflection.h"
 

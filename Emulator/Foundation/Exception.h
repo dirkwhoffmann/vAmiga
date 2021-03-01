@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Aliases.h"
 #include <exception>
 
 namespace utl {

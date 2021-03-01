@@ -9,6 +9,5 @@
 
 #pragma once
 
-#include "Aliases.h"
 #include "CopperPublicTypes.h"
 #include "Reflection.h"

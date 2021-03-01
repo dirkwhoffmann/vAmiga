@@ -179,6 +179,7 @@
 		50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C2521EB9059002E32A6 /* Credits.rtf */; };
 		50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */; };
 		50B2BC8925EC3D590032EEFE /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C0B78025EC367000CDE1F2 /* IO.cpp */; };
+		50B2E7E325ECE7FF0077B6A3 /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5072159B25EA698600787591 /* Exception.cpp */; };
 		50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
 		50B5C07E241107F200F124DC /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5C07D241107F200F124DC /* Constants.cpp */; };
 		50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B70CAB252CE0BF006B5191 /* Muxer.cpp */; };
@@ -836,7 +837,6 @@
 			isa = PBXGroup;
 			children = (
 				50B14C0921EB228E002E32A6 /* config.h */,
-				50B37B6A25E9A728006B328E /* Utilities */,
 				508FE06021EA318D0043D0E9 /* Emulator */,
 				50B14C2421EB8F25002E32A6 /* Proxy */,
 				508FDFDC21EA20600043D0E9 /* GUI */,
@@ -1228,6 +1228,16 @@
 				507215B025EAF62B00787591 /* Aliases.h */,
 				5082D83A21EF891200CF7692 /* Constants.h */,
 				50104E8525ECD0EF0047A9AA /* Macros.h */,
+				507215A025EA9AE600787591 /* Chrono.h */,
+				5072159F25EA9AE600787591 /* Chrono.cpp */,
+				500C716F255EE2AC00DDEEB2 /* Concurrency.h */,
+				500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */,
+				5072159C25EA698600787591 /* Exception.h */,
+				5072159B25EA698600787591 /* Exception.cpp */,
+				505A3A3921F4996400132020 /* SSEUtils.h */,
+				505A3A3821F4996400132020 /* SSEUtils.cpp */,
+				507F1FAD25074A1A00627C3F /* TimeDelayed.h */,
+				507215A525EA9DD900787591 /* RingBuffer.h */,
 				50B3C44825EAFB5500651700 /* Checksum.h */,
 				50B3C44725EAFB5500651700 /* Checksum.cpp */,
 				50EA34F0258E38880010DC63 /* Debug.h */,
@@ -1267,23 +1277,6 @@
 				5085FE5821FB6856009753EF /* ProxyExtensions.swift */,
 			);
 			path = Proxy;
-			sourceTree = "<group>";
-		};
-		50B37B6A25E9A728006B328E /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				507215A025EA9AE600787591 /* Chrono.h */,
-				5072159F25EA9AE600787591 /* Chrono.cpp */,
-				500C716F255EE2AC00DDEEB2 /* Concurrency.h */,
-				500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */,
-				5072159C25EA698600787591 /* Exception.h */,
-				5072159B25EA698600787591 /* Exception.cpp */,
-				505A3A3921F4996400132020 /* SSEUtils.h */,
-				505A3A3821F4996400132020 /* SSEUtils.cpp */,
-				507F1FAD25074A1A00627C3F /* TimeDelayed.h */,
-				507215A525EA9DD900787591 /* RingBuffer.h */,
-			);
-			path = Utilities;
 			sourceTree = "<group>";
 		};
 		50E2BE25240D417200155AE4 /* Moira */ = {
@@ -1643,6 +1636,7 @@
 				50F54B2E24B5D31D0078FDC9 /* u_rle.c in Sources */,
 				50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */,
 				5056507C25459C8800A79D27 /* FSObjects.cpp in Sources */,
+				50B2E7E325ECE7FF0077B6A3 /* Exception.cpp in Sources */,
 				50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */,
 				50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */,
 				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,

@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include "Aliases.h"
-#include "BlitterTypes.h"
-#include "CopperTypes.h"
 #include "AgnusPublicTypes.h"
 #include "Reflection.h"
+
+#include "BlitterTypes.h"
+#include "CopperTypes.h"
 
 //
 // Reflection APIs
