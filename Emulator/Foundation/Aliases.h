@@ -123,7 +123,29 @@ enum : _type
 #define enum_u32(_name) enum _name : u32
 #define enum_i8(_name) enum _name : i8
 */
+#endif
 
+
+//
+// Optimizing code
+//
+
+#define likely(x)      __builtin_expect(!!(x), 1)
+#define unlikely(x)    __builtin_expect(!!(x), 0)
+
+
+//
+// Code compatibility
+//
+
+/* The following macro can be used to disable clang sanitizer checks. It has
+ * been added to make the code compatible with gcc which doesn't recognize
+ * the 'no_sanitize' keyword.
+ */
+#if defined(__clang__)
+#define NO_SANITIZE(x) __attribute__((no_sanitize(x)))
+#else
+#define NO_SANITIZE(x)
 #endif
 
 

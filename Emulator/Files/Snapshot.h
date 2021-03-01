@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "Commons.h"
 #include "AmigaFile.h"
+#include "Constants.h"
 
 class Amiga;
 

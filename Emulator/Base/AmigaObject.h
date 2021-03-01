@@ -11,6 +11,7 @@
 
 #include "Foundation.h"
 #include "AmigaPublicTypes.h"
+#include "Debug.h"
 #include "Errors.h"
 
 /* Base class for all Amiga objects. This class adds a textual description

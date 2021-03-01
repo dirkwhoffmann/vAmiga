@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "Aliases.h"
+
 namespace utl {
 
 // Returns the FNV-1a seed value

@@ -469,7 +469,7 @@ ADFFile::encodeSector(Disk *disk, Track t, Sector s)
 void
 ADFFile::dumpSector(Sector s)
 {
-    utl::hexdump(data + 512 * s, 512);
+    hexdump(data + 512 * s, 512);
 }
 
 void

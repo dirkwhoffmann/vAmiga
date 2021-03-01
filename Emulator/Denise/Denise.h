@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "Aliases.h"
 #include "AmigaComponent.h"
 #include "Colors.h"
 #include "MemoryPublicTypes.h"

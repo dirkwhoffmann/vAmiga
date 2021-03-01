@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "CIA.h"
+#include "Constants.h"
 #include "Macros.h"
 
 #include "Keyboard.h"

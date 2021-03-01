@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "Aliases.h"
 
 #define CPUINFO_INSTR_COUNT 256
 

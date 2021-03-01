@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "Commons.h"
 #include "EventHandlerTypes.h"
 
 struct Event

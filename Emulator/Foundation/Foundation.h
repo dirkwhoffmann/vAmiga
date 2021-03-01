@@ -7,11 +7,14 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#if 0
+
 #pragma once
 
 #include "Constants.h"
 #include "Aliases.h"
 #include "Debug.h"
+
 
 
 //
@@ -36,4 +39,5 @@
 // Definition for gcc
 #define NO_SANITIZE(x)
 
+#endif
 #endif

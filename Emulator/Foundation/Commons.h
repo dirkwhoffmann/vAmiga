@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#if 0
 #pragma once
 
 #include "Aliases.h"
@@ -46,4 +47,5 @@
 // Definition for gcc
 #define NO_SANITIZE(x)
 
+#endif
 #endif

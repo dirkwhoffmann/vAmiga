@@ -13,10 +13,5 @@
 
 namespace utl {
 
-// Prints a hex dump of a buffer to the console (for debugging)
-void hexdump(u8 *p, isize size, isize cols, isize pad);
-void hexdump(u8 *p, isize size, isize cols = 32);
-void hexdumpWords(u8 *p, isize size, isize cols = 32);
-void hexdumpLongwords(u8 *p, isize size, isize cols = 32);
 
 }

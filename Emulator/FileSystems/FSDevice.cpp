@@ -811,7 +811,7 @@ FSDevice::importVolume(const u8 *src, isize size, ErrorCode *err)
     debug(FS_DEBUG, "Success\n");
     info();
     dump();
-    utl::hexdump(blocks[0]->data, 512);
+    hexdump(blocks[0]->data, 512);
     printDirectory(true);
     return true;
 }

@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "Aliases.h"
+
 #include <map>
 #include <exception>
 

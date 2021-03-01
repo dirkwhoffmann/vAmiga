@@ -103,7 +103,7 @@ FSBlock::write32(u8 *p, u32 value)
 void
 FSBlock::dumpData() const
 {
-    utl::hexdumpLongwords(data, 512);
+    hexdumpLongwords(data, 512);
 }
 
 u32

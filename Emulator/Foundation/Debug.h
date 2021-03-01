@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Commons.h"
+#include "Aliases.h"
 
 /* This file provides several macros for printing messages:
  *
@@ -60,3 +60,10 @@ fprintf(stderr, "%s:%d " format, getDescription(), __LINE__, ##__VA_ARGS__); }
 #define trace(verbose, format, ...)
 
 #endif
+
+
+// Prints a hex dump of a buffer to the console (for debugging)
+void hexdump(u8 *p, isize size, isize cols, isize pad);
+void hexdump(u8 *p, isize size, isize cols = 32);
+void hexdumpWords(u8 *p, isize size, isize cols = 32);
+void hexdumpLongwords(u8 *p, isize size, isize cols = 32);
