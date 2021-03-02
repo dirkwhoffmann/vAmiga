@@ -26,12 +26,18 @@ extension ConfigurationController {
         // Out
         audVolL.integerValue = config.volL
         audVolR.integerValue = config.volR
-        
         audSamplingMethod.selectItem(withTag: config.samplingMethod)
-        audFilterType.selectItem(withTag: config.filterType)
-        audFilterAlwaysOn.state = config.filterAlwaysOn ? .on : .off
-        audFilterAlwaysOn.isEnabled = config.filterType != FilterType.NONE.rawValue
 
+        // Drives
+        audDf0Pan.integerValue = config.df0Pan
+        audDf1Pan.integerValue = config.df1Pan
+        audDf2Pan.integerValue = config.df2Pan
+        audDf3Pan.integerValue = config.df3Pan
+        audStepVolume.integerValue = config.stepVolume
+        audPollVolume.integerValue = config.pollVolume
+        audInsertVolume.integerValue = config.insertVolume
+        audEjectVolume.integerValue = config.ejectVolume
+        
         // Buttons
         audPowerButton.isHidden = !bootable
     }
@@ -102,18 +108,42 @@ extension ConfigurationController {
         refresh()
     }
     
-    @IBAction func audFilterTypeAction(_ sender: NSPopUpButton!) {
+    @IBAction func audDrivePanAction(_ sender: NSSlider!) {
+                                
+        switch sender.tag {
+        case 0: config.df0Pan = sender.integerValue
+        case 1: config.df1Pan = sender.integerValue
+        case 2: config.df2Pan = sender.integerValue
+        case 3: config.df3Pan = sender.integerValue
+        default: fatalError()
+        }
+        refresh()
+    }
+
+    @IBAction func audStepVolumeAction(_ sender: NSSlider!) {
+
+        config.stepVolume = sender.integerValue
+        refresh()
+    }
+
+    @IBAction func audPollVolumeAction(_ sender: NSSlider!) {
+
+        config.pollVolume = sender.integerValue
+        refresh()
+    }
+
+    @IBAction func audInsertVolumeAction(_ sender: NSSlider!) {
+
+        config.insertVolume = sender.integerValue
+        refresh()
+    }
+
+    @IBAction func audEjectVolumeAction(_ sender: NSSlider!) {
+
+        config.ejectVolume = sender.integerValue
+        refresh()
+    }
         
-        config.filterType = sender.selectedTag()
-        refresh()
-    }
-
-    @IBAction func audFilterAlwaysOnAction(_ sender: NSButton!) {
-
-        config.filterAlwaysOn = sender.state == .on
-        refresh()
-    }
-    
     @IBAction func audPresetAction(_ sender: NSPopUpButton!) {
         
         track()

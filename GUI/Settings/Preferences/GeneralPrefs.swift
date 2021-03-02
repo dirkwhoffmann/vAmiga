@@ -33,26 +33,6 @@ extension PreferencesController {
     }
 
     //
-    // Action methods (Drive)
-    //
-        
-    @IBAction func genBlankDiskFormatAction(_ sender: NSPopUpButton!) {
-        
-        let tag = sender.selectedTag()
-        pref.blankDiskFormatIntValue = tag
-        refresh()
-    }
-
-    @IBAction func genBootCodeAction(_ sender: NSPopUpButton!) {
-        
-        track("Tag = \(sender.selectedTag())")
-        
-        let tag = sender.selectedTag()
-        pref.bootBlock = tag
-        refresh()
-    }
-
-    //
     // Action methods (Fullscreen)
     //
     
@@ -82,6 +62,12 @@ extension PreferencesController {
     // Action methods (Miscellaneous)
     //
     
+    @IBAction func genEjectWithoutAskingAction(_ sender: NSButton!) {
+        
+        pref.ejectWithoutAsking = (sender.state == .on)
+        refresh()
+    }
+    
     @IBAction func genPauseInBackgroundAction(_ sender: NSButton!) {
         
         pref.pauseInBackground = (sender.state == .on)
@@ -94,12 +80,6 @@ extension PreferencesController {
         for c in myAppDelegate.controllers {
             c.needsSaving = c.amiga.running
         }
-        refresh()
-    }
-    
-    @IBAction func genEjectWithoutAskingAction(_ sender: NSButton!) {
-        
-        pref.ejectWithoutAsking = (sender.state == .on)
         refresh()
     }
     

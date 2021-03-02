@@ -24,12 +24,6 @@ class PreferencesController: DialogController {
     @IBOutlet weak var genBootCode: NSPopUpButton!
     @IBOutlet weak var genBootCodeVirus: NSImageView!
     @IBOutlet weak var genEjectWithoutAskingButton: NSButton!
-    @IBOutlet weak var genDriveSounds: NSButton!
-    @IBOutlet weak var genDriveSoundPan: NSPopUpButton!
-    @IBOutlet weak var genDriveInsertSound: NSButton!
-    @IBOutlet weak var genDriveEjectSound: NSButton!
-    @IBOutlet weak var genDriveHeadSound: NSButton!
-    @IBOutlet weak var genDrivePollSound: NSButton!
 
     // Fullscreen
     @IBOutlet weak var genAspectRatioButton: NSButton!

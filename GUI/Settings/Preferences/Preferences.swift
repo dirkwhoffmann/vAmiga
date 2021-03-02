@@ -18,19 +18,17 @@
 
 class Preferences {
     
-    // var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
-
     //
     // General
     //
         
     // Floppy
-    var blankDiskFormat = GeneralDefaults.std.blankDiskFormat
+    var blankDiskFormat = PeripheralsDefaults.std.blankDiskFormat
     var blankDiskFormatIntValue: Int {
         get { return Int(blankDiskFormat.rawValue) }
         set { blankDiskFormat = FSVolumeType.init(rawValue: newValue)! }
     }
-    var bootBlock = GeneralDefaults.std.bootBlock
+    var bootBlock = PeripheralsDefaults.std.bootBlock
     
     // Fullscreen
     var keepAspectRatio = GeneralDefaults.std.keepAspectRatio
@@ -148,10 +146,6 @@ class Preferences {
     
     func loadGeneralDefaults(_ defaults: GeneralDefaults) {
                 
-        // Floppy
-        blankDiskFormat = defaults.blankDiskFormat
-        bootBlock = defaults.bootBlock
-
         // Fullscreen
         keepAspectRatio = defaults.keepAspectRatio
         exitOnEsc = defaults.exitOnEsc
@@ -169,10 +163,6 @@ class Preferences {
         
         let defaults = UserDefaults.standard
            
-        // Floppy
-        blankDiskFormatIntValue = defaults.integer(forKey: Keys.Gen.blankDiskFormat)
-        bootBlock = defaults.integer(forKey: Keys.Gen.bootBlock)
-        
         // Fullscreen
         keepAspectRatio = defaults.bool(forKey: Keys.Gen.keepAspectRatio)
         exitOnEsc = defaults.bool(forKey: Keys.Gen.exitOnEsc)
@@ -189,11 +179,7 @@ class Preferences {
     func saveGeneralUserDefaults() {
         
         let defaults = UserDefaults.standard
-        
-        // Floppy
-        defaults.set(blankDiskFormatIntValue, forKey: Keys.Gen.blankDiskFormat)
-        defaults.set(bootBlock, forKey: Keys.Gen.bootBlock)
-        
+                
         // Fullscreen
         defaults.set(keepAspectRatio, forKey: Keys.Gen.keepAspectRatio)
         defaults.set(exitOnEsc, forKey: Keys.Gen.exitOnEsc)

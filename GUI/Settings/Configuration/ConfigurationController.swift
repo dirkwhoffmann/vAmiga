@@ -50,11 +50,8 @@ class ConfigurationController: DialogController {
     
     // Chipset
     @IBOutlet weak var hwAgnusRevisionPopup: NSPopUpButton!
-    @IBOutlet weak var hwSlowRamMirror: NSButton!
     @IBOutlet weak var hwDeniseRevisionPopup: NSPopUpButton!
-    @IBOutlet weak var hwBorderBlank: NSButton!
     @IBOutlet weak var hwCiaRevisionPopup: NSPopUpButton!
-    @IBOutlet weak var hwTodBug: NSButton!
     @IBOutlet weak var hwRealTimeClock: NSPopUpButton!
 
     // Memory
@@ -62,10 +59,13 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var hwSlowRamPopup: NSPopUpButton!
     @IBOutlet weak var hwFastRamPopup: NSPopUpButton!
     @IBOutlet weak var hwRamInitPattern: NSPopUpButton!
-
     @IBOutlet weak var hwBankMap: NSPopUpButton!
     @IBOutlet weak var hwUnmappingType: NSPopUpButton!
 
+    // Filter
+    @IBOutlet weak var hwFilterType: NSPopUpButton!
+    @IBOutlet weak var hwFilterAlwaysOn: NSButton!
+    
     // Lock
     @IBOutlet weak var hwLockImage: NSButton!
     @IBOutlet weak var hwLockText: NSTextField!
@@ -89,16 +89,10 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var perDf3Connect: NSButton!
     @IBOutlet weak var perDf3Type: NSPopUpButton!
 
-    // Drive volumes
-    @IBOutlet weak var perDf0Pan: NSSlider!
-    @IBOutlet weak var perDf1Pan: NSSlider!
-    @IBOutlet weak var perDf2Pan: NSSlider!
-    @IBOutlet weak var perDf3Pan: NSSlider!
-    @IBOutlet weak var perStepVolume: NSSlider!
-    @IBOutlet weak var perPollVolume: NSSlider!
-    @IBOutlet weak var perEjectVolume: NSSlider!
-    @IBOutlet weak var perInsertVolume: NSSlider!
-
+    // Disks
+    @IBOutlet weak var perDriveBlankDiskFormat: NSPopUpButton!
+    @IBOutlet weak var perBootCode: NSPopUpButton!
+    
     // Ports
     @IBOutlet weak var perGameDevice1: NSPopUpButton!
     @IBOutlet weak var perGameDevice2: NSPopUpButton!
@@ -128,15 +122,20 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var compBltLevel2: NSTextField!
     @IBOutlet weak var compBltLevel1: NSTextField!
 
+    // Chipset features
+    @IBOutlet weak var compSlowRamMirror: NSButton!
+    @IBOutlet weak var compBorderBlank: NSButton!
+    @IBOutlet weak var compTodBug: NSButton!
+
+    // Timing
+    @IBOutlet weak var compEClockSyncing: NSButton!
+    @IBOutlet weak var compSlowRamDelay: NSButton!
+    
     // Disk controller
     @IBOutlet weak var compDriveSpeed: NSPopUpButton!
     @IBOutlet weak var compMechanicalDelays: NSButton!
     @IBOutlet weak var compLockDskSync: NSButton!
     @IBOutlet weak var compAutoDskSync: NSButton!
-    
-    // Timing
-    @IBOutlet weak var compEClockSyncing: NSButton!
-    @IBOutlet weak var compSlowRamDelay: NSButton!
 
     // Keyboard
     @IBOutlet weak var compAccurateKeyboard: NSButton!
@@ -167,8 +166,16 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var audVolL: NSSlider!
     @IBOutlet weak var audVolR: NSSlider!
     @IBOutlet weak var audSamplingMethod: NSPopUpButton!
-    @IBOutlet weak var audFilterType: NSPopUpButton!
-    @IBOutlet weak var audFilterAlwaysOn: NSButton!
+
+    // Drive volumes
+    @IBOutlet weak var audDf0Pan: NSSlider!
+    @IBOutlet weak var audDf1Pan: NSSlider!
+    @IBOutlet weak var audDf2Pan: NSSlider!
+    @IBOutlet weak var audDf3Pan: NSSlider!
+    @IBOutlet weak var audStepVolume: NSSlider!
+    @IBOutlet weak var audPollVolume: NSSlider!
+    @IBOutlet weak var audEjectVolume: NSSlider!
+    @IBOutlet weak var audInsertVolume: NSSlider!
 
     // Buttons
     @IBOutlet weak var audOKButton: NSButton!

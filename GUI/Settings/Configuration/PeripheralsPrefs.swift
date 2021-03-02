@@ -22,15 +22,10 @@ extension ConfigurationController {
         perDf2Type.selectItem(withTag: config.df2Type)
         perDf3Type.selectItem(withTag: config.df3Type)
 
-        // Drive sounds
-        perDf0Pan.integerValue = config.df0Pan
-        perDf1Pan.integerValue = config.df1Pan
-        perDf2Pan.integerValue = config.df2Pan
-        perDf3Pan.integerValue = config.df3Pan
-        perStepVolume.integerValue = config.stepVolume
-        perPollVolume.integerValue = config.pollVolume
-        perInsertVolume.integerValue = config.insertVolume
-        perEjectVolume.integerValue = config.ejectVolume
+        // Disk
+        perDriveBlankDiskFormat.selectItem(withTag: config.blankDiskFormatIntValue)
+        perBootCode.selectItem(withTag: config.bootBlock)
+        perBootCode.isEnabled = config.blankDiskFormat != .NODOS
 
         // Ports
         parent.gamePadManager.refresh(popup: perGameDevice1, hide: true)
@@ -86,40 +81,22 @@ extension ConfigurationController {
         }
         refresh()
     }
-
-    @IBAction func perDrivePanAction(_ sender: NSSlider!) {
-                                
-        switch sender.tag {
-        case 0: config.df0Pan = sender.integerValue
-        case 1: config.df1Pan = sender.integerValue
-        case 2: config.df2Pan = sender.integerValue
-        case 3: config.df3Pan = sender.integerValue
-        default: fatalError()
-        }
+            
+    @IBAction func perBlankDiskFormatAction(_ sender: NSPopUpButton!) {
+        
+        track("tag = \(sender.selectedTag())")
+        
+        let tag = sender.selectedTag()
+        config.blankDiskFormatIntValue = tag
         refresh()
     }
 
-    @IBAction func perStepVolumeAction(_ sender: NSSlider!) {
-
-        config.stepVolume = sender.integerValue
-        refresh()
-    }
-
-    @IBAction func perPollVolumeAction(_ sender: NSSlider!) {
-
-        config.pollVolume = sender.integerValue
-        refresh()
-    }
-
-    @IBAction func perInsertVolumeAction(_ sender: NSSlider!) {
-
-        config.insertVolume = sender.integerValue
-        refresh()
-    }
-
-    @IBAction func perEjectVolumeAction(_ sender: NSSlider!) {
-
-        config.ejectVolume = sender.integerValue
+    @IBAction func perBootCodeAction(_ sender: NSPopUpButton!) {
+        
+        track("tag = \(sender.selectedTag())")
+        
+        let tag = sender.selectedTag()
+        config.bootBlock = tag
         refresh()
     }
     

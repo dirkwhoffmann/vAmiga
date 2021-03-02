@@ -161,9 +161,7 @@ public class MacAudio: NSObject {
     }
 
     func playPollSound(drive id: Int) {
-        
-        track("POLL \(id)")
-        
+                
         playSound(name: "drive_head",
                   volume: parent.amiga.getConfig(.POLL_VOLUME, drive: id),
                   pan: parent.amiga.getConfig(.DRIVE_PAN, drive: id))
@@ -190,7 +188,7 @@ public class MacAudio: NSObject {
         let scaledVolume = Float(volume) / 100.0
         let scaledPan = Float(p) / 100.0
         
-        track("\(name) \(scaledVolume) \(scaledPan)")
+        // track("\(name) \(scaledVolume) \(scaledPan)")
         
         playSound(name: name, volume: scaledVolume, pan: scaledPan)
     }

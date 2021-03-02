@@ -474,6 +474,33 @@ extension MyController: NSMenuItemValidation {
         myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
     
+    /*
+    @IBAction func newDiskAction(_ sender: NSMenuItem!) {
+        
+        track()
+
+        // Get drive type
+        let type = DriveType.init(rawValue: config.dfnType(sender.tag))
+        
+        // Create a blank disk
+        var adf: ADFFileProxy
+        switch type {
+        case .DD_35: adf = ADFFileProxy.make(with: .INCH_35, density: .DD)
+        case .HD_35: adf = ADFFileProxy.make(with: .INCH_35, density: .HD)
+        case .DD_525: adf = ADFFileProxy.make(with: .INCH_525, density: .DD)
+        default: fatalError()
+        }
+        
+        // Write file system
+        adf.formatDisk(pref.blankDiskFormat, bootBlock: pref.bootBlock)
+        
+        // Insert disk into drive
+        amiga.diskController.insert(sender.tag, file: adf)
+
+        myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
+    }
+    */
+    
     @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
         
         // Ask the user if an unsafed disk should be replaced

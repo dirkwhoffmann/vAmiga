@@ -40,29 +40,25 @@ class Configuration {
         get { return amiga.getConfig(.AGNUS_REVISION) }
         set { amiga.configure(.AGNUS_REVISION, value: newValue) }
     }
-    var slowRamMirror: Bool {
-        get { return amiga.getConfig(.SLOW_RAM_MIRROR) != 0 }
-        set { amiga.configure(.SLOW_RAM_MIRROR, enable: newValue) }
-    }
     var deniseRev: Int {
         get { return amiga.getConfig(.DENISE_REVISION) }
         set { amiga.configure(.DENISE_REVISION, value: newValue) }
-    }
-    var borderBlank: Bool {
-        get { return amiga.getConfig(.BRDRBLNK) != 0 }
-        set { amiga.configure(.BRDRBLNK, enable: newValue) }
     }
     var ciaRev: Int {
         get { return amiga.getConfig(.CIA_REVISION) }
         set { amiga.configure(.CIA_REVISION, value: newValue) }
     }
-    var todBug: Bool {
-        get { return amiga.getConfig(.TODBUG) != 0 }
-        set { amiga.configure(.TODBUG, enable: newValue) }
-    }
     var rtClock: Int {
         get { return amiga.getConfig(.RTC_MODEL) }
         set { amiga.configure(.RTC_MODEL, value: newValue) }
+    }
+    var filterType: Int {
+        get { return amiga.getConfig(.FILTER_TYPE) }
+        set { amiga.configure(.FILTER_TYPE, value: newValue) }
+    }
+    var filterAlwaysOn: Bool {
+        get { return amiga.getConfig(.FILTER_ALWAYS_ON) != 0}
+        set { amiga.configure(.FILTER_ALWAYS_ON, enable: newValue) }
     }
     var chipRam: Int {
         get { return amiga.getConfig(.CHIP_RAM) }
@@ -141,38 +137,13 @@ class Configuration {
         get { return dfnType(3) }
         set { setDfnType(3, type: newValue) }
     }
-    var df0Pan: Int {
-        get { return amiga.getConfig(.DRIVE_PAN, drive: 0) }
-        set { amiga.configure(.DRIVE_PAN, id: 0, value: newValue) }
+    var blankDiskFormat = PeripheralsDefaults.std.blankDiskFormat
+    var blankDiskFormatIntValue: Int {
+        get { return Int(blankDiskFormat.rawValue) }
+        set { blankDiskFormat = FSVolumeType.init(rawValue: newValue)! }
     }
-    var df1Pan: Int {
-        get { return amiga.getConfig(.DRIVE_PAN, drive: 1) }
-        set { amiga.configure(.DRIVE_PAN, id: 1, value: newValue) }
-    }
-    var df2Pan: Int {
-        get { return amiga.getConfig(.DRIVE_PAN, drive: 2) }
-        set { amiga.configure(.DRIVE_PAN, id: 2, value: newValue) }
-    }
-    var df3Pan: Int {
-        get { return amiga.getConfig(.DRIVE_PAN, drive: 3) }
-        set { amiga.configure(.DRIVE_PAN, id: 3, value: newValue) }
-    }
-    var stepVolume: Int {
-        get { return amiga.getConfig(.STEP_VOLUME, drive: 0) }
-        set { amiga.configure(.STEP_VOLUME, value: newValue) }
-    }
-    var pollVolume: Int {
-        get { return amiga.getConfig(.POLL_VOLUME, drive: 0) }
-        set { amiga.configure(.POLL_VOLUME, value: newValue) }
-    }
-    var insertVolume: Int {
-        get { return amiga.getConfig(.INSERT_VOLUME, drive: 0) }
-        set { amiga.configure(.INSERT_VOLUME, value: newValue) }
-    }
-    var ejectVolume: Int {
-        get { return amiga.getConfig(.EJECT_VOLUME, drive: 0) }
-        set { amiga.configure(.EJECT_VOLUME, value: newValue) }
-    }
+    var bootBlock = PeripheralsDefaults.std.bootBlock
+    
     var gameDevice1 = PeripheralsDefaults.std.gameDevice1 {
         didSet {
                          
@@ -215,6 +186,18 @@ class Configuration {
     var blitterAccuracy: Int {
         get { return amiga.getConfig(.BLITTER_ACCURACY) }
         set { amiga.configure(.BLITTER_ACCURACY, value: newValue) }
+    }
+    var slowRamMirror: Bool {
+        get { return amiga.getConfig(.SLOW_RAM_MIRROR) != 0 }
+        set { amiga.configure(.SLOW_RAM_MIRROR, enable: newValue) }
+    }
+    var borderBlank: Bool {
+        get { return amiga.getConfig(.BRDRBLNK) != 0 }
+        set { amiga.configure(.BRDRBLNK, enable: newValue) }
+    }
+    var todBug: Bool {
+        get { return amiga.getConfig(.TODBUG) != 0 }
+        set { amiga.configure(.TODBUG, enable: newValue) }
     }
     var eClockSyncing: Bool {
         get { return amiga.getConfig(.ECLOCK_SYNCING) != 0 }
@@ -310,13 +293,37 @@ class Configuration {
         get { return amiga.getConfig(.SAMPLING_METHOD) }
         set { amiga.configure(.SAMPLING_METHOD, value: newValue) }
     }
-    var filterType: Int {
-        get { return amiga.getConfig(.FILTER_TYPE) }
-        set { amiga.configure(.FILTER_TYPE, value: newValue) }
+    var df0Pan: Int {
+        get { return amiga.getConfig(.DRIVE_PAN, drive: 0) }
+        set { amiga.configure(.DRIVE_PAN, id: 0, value: newValue) }
     }
-    var filterAlwaysOn: Bool {
-        get { return amiga.getConfig(.FILTER_ALWAYS_ON) != 0}
-        set { amiga.configure(.FILTER_ALWAYS_ON, enable: newValue) }
+    var df1Pan: Int {
+        get { return amiga.getConfig(.DRIVE_PAN, drive: 1) }
+        set { amiga.configure(.DRIVE_PAN, id: 1, value: newValue) }
+    }
+    var df2Pan: Int {
+        get { return amiga.getConfig(.DRIVE_PAN, drive: 2) }
+        set { amiga.configure(.DRIVE_PAN, id: 2, value: newValue) }
+    }
+    var df3Pan: Int {
+        get { return amiga.getConfig(.DRIVE_PAN, drive: 3) }
+        set { amiga.configure(.DRIVE_PAN, id: 3, value: newValue) }
+    }
+    var stepVolume: Int {
+        get { return amiga.getConfig(.STEP_VOLUME, drive: 0) }
+        set { amiga.configure(.STEP_VOLUME, value: newValue) }
+    }
+    var pollVolume: Int {
+        get { return amiga.getConfig(.POLL_VOLUME, drive: 0) }
+        set { amiga.configure(.POLL_VOLUME, value: newValue) }
+    }
+    var insertVolume: Int {
+        get { return amiga.getConfig(.INSERT_VOLUME, drive: 0) }
+        set { amiga.configure(.INSERT_VOLUME, value: newValue) }
+    }
+    var ejectVolume: Int {
+        get { return amiga.getConfig(.EJECT_VOLUME, drive: 0) }
+        set { amiga.configure(.EJECT_VOLUME, value: newValue) }
     }
     
     //
@@ -495,13 +502,13 @@ class Configuration {
         amiga.suspend()
         
         agnusRev = defaults.agnusRev.rawValue
-        slowRamMirror = defaults.slowRamMirror
         deniseRev = defaults.deniseRev.rawValue
-        borderBlank = defaults.borderBlank
         ciaRev = defaults.ciaRev.rawValue
-        todBug = defaults.todBug
         rtClock = defaults.realTimeClock.rawValue
-        
+
+        filterType = defaults.filterType.rawValue
+        filterAlwaysOn = defaults.filterAlwaysOn
+
         chipRam = defaults.chipRam
         slowRam = defaults.slowRam
         fastRam = defaults.fastRam
@@ -520,12 +527,12 @@ class Configuration {
         amiga.suspend()
         
         agnusRev = defaults.integer(forKey: Keys.Hrw.agnusRev)
-        slowRamMirror = defaults.bool(forKey: Keys.Hrw.slowRamMirror)
         deniseRev = defaults.integer(forKey: Keys.Hrw.deniseRev)
-        borderBlank = defaults.bool(forKey: Keys.Hrw.borderBlank)
         ciaRev = defaults.integer(forKey: Keys.Hrw.ciaRev)
-        todBug = defaults.bool(forKey: Keys.Hrw.todBug)
         rtClock = defaults.integer(forKey: Keys.Hrw.realTimeClock)
+
+        filterType = defaults.integer(forKey: Keys.Hrw.filterType)
+        filterAlwaysOn = defaults.bool(forKey: Keys.Hrw.filterAlwaysOn)
 
         chipRam = defaults.integer(forKey: Keys.Hrw.chipRam)
         slowRam = defaults.integer(forKey: Keys.Hrw.slowRam)
@@ -545,12 +552,12 @@ class Configuration {
         let defaults = UserDefaults.standard
 
         defaults.set(agnusRev, forKey: Keys.Hrw.agnusRev)
-        defaults.set(slowRamMirror, forKey: Keys.Hrw.slowRamMirror)
         defaults.set(deniseRev, forKey: Keys.Hrw.deniseRev)
-        defaults.set(borderBlank, forKey: Keys.Hrw.borderBlank)
         defaults.set(ciaRev, forKey: Keys.Hrw.ciaRev)
-        defaults.set(todBug, forKey: Keys.Hrw.todBug)
         defaults.set(rtClock, forKey: Keys.Hrw.realTimeClock)
+
+        defaults.set(filterType, forKey: Keys.Hrw.filterType)
+        defaults.set(filterAlwaysOn, forKey: Keys.Hrw.filterAlwaysOn)
 
         defaults.set(chipRam, forKey: Keys.Hrw.chipRam)
         defaults.set(slowRam, forKey: Keys.Hrw.slowRam)
@@ -577,16 +584,10 @@ class Configuration {
         df1Type = defaults.driveType[1].rawValue
         df2Type = defaults.driveType[2].rawValue
         df3Type = defaults.driveType[3].rawValue
-
-        df0Pan = defaults.drivePan[0]
-        df1Pan = defaults.drivePan[1]
-        df2Pan = defaults.drivePan[2]
-        df3Pan = defaults.drivePan[3]
-        stepVolume = defaults.stepVolume
-        pollVolume = defaults.pollVolume
-        insertVolume = defaults.insertVolume
-        ejectVolume = defaults.ejectVolume
         
+        blankDiskFormat = defaults.blankDiskFormat
+        bootBlock = defaults.bootBlock
+
         gameDevice1 = defaults.gameDevice1
         gameDevice2 = defaults.gameDevice2
         serialDevice = defaults.serialDevice.rawValue
@@ -608,16 +609,10 @@ class Configuration {
         df1Type = defaults.integer(forKey: Keys.Per.df1Type)
         df2Type = defaults.integer(forKey: Keys.Per.df2Type)
         df3Type = defaults.integer(forKey: Keys.Per.df3Type)
-
-        df0Pan = defaults.integer(forKey: Keys.Per.df0Pan)
-        df1Pan = defaults.integer(forKey: Keys.Per.df1Pan)
-        df2Pan = defaults.integer(forKey: Keys.Per.df2Pan)
-        df3Pan = defaults.integer(forKey: Keys.Per.df3Pan)
-        stepVolume = defaults.integer(forKey: Keys.Per.stepVolume)
-        pollVolume = defaults.integer(forKey: Keys.Per.pollVolume)
-        insertVolume = defaults.integer(forKey: Keys.Per.insertVolume)
-        ejectVolume = defaults.integer(forKey: Keys.Per.ejectVolume)
         
+        blankDiskFormatIntValue = defaults.integer(forKey: Keys.Per.blankDiskFormat)
+        bootBlock = defaults.integer(forKey: Keys.Per.bootBlock)
+
         gameDevice1 = defaults.integer(forKey: Keys.Per.gameDevice1)
         gameDevice2 = defaults.integer(forKey: Keys.Per.gameDevice2)
         serialDevice = defaults.integer(forKey: Keys.Per.serialDevice)
@@ -639,15 +634,9 @@ class Configuration {
         defaults.set(df1Type, forKey: Keys.Per.df1Type)
         defaults.set(df2Type, forKey: Keys.Per.df2Type)
         defaults.set(df3Type, forKey: Keys.Per.df3Type)
-
-        defaults.set(df0Pan, forKey: Keys.Per.df0Pan)
-        defaults.set(df1Pan, forKey: Keys.Per.df1Pan)
-        defaults.set(df2Pan, forKey: Keys.Per.df2Pan)
-        defaults.set(df3Pan, forKey: Keys.Per.df3Pan)
-        defaults.set(stepVolume, forKey: Keys.Per.stepVolume)
-        defaults.set(pollVolume, forKey: Keys.Per.pollVolume)
-        defaults.set(insertVolume, forKey: Keys.Per.insertVolume)
-        defaults.set(ejectVolume, forKey: Keys.Per.ejectVolume)
+        
+        defaults.set(blankDiskFormat, forKey: Keys.Per.blankDiskFormat)
+        defaults.set(bootBlock, forKey: Keys.Per.bootBlock)
         
         defaults.set(gameDevice1, forKey: Keys.Per.gameDevice1)
         defaults.set(gameDevice2, forKey: Keys.Per.gameDevice2)
@@ -663,6 +652,10 @@ class Configuration {
         amiga.suspend()
         
         blitterAccuracy = defaults.blitterAccuracy
+
+        slowRamMirror = defaults.slowRamMirror
+        borderBlank = defaults.borderBlank
+        todBug = defaults.todBug
 
         eClockSyncing = defaults.eClockSyncing
         slowRamDelay = defaults.slowRamDelay
@@ -689,6 +682,10 @@ class Configuration {
         
         blitterAccuracy = defaults.integer(forKey: Keys.Com.blitterAccuracy)
 
+        slowRamMirror = defaults.bool(forKey: Keys.Com.slowRamMirror)
+        borderBlank = defaults.bool(forKey: Keys.Com.borderBlank)
+        todBug = defaults.bool(forKey: Keys.Com.todBug)
+
         eClockSyncing = defaults.bool(forKey: Keys.Com.eClockSyncing)
         slowRamDelay = defaults.bool(forKey: Keys.Com.slowRamDelay)
 
@@ -713,6 +710,10 @@ class Configuration {
         let defaults = UserDefaults.standard
         
         defaults.set(blitterAccuracy, forKey: Keys.Com.blitterAccuracy)
+
+        defaults.set(slowRamMirror, forKey: Keys.Com.slowRamMirror)
+        defaults.set(borderBlank, forKey: Keys.Com.borderBlank)
+        defaults.set(todBug, forKey: Keys.Com.todBug)
 
         defaults.set(eClockSyncing, forKey: Keys.Com.eClockSyncing)
         defaults.set(slowRamDelay, forKey: Keys.Com.slowRamDelay)
@@ -749,8 +750,15 @@ class Configuration {
         volL = defaults.volL
         volR = defaults.volR
         samplingMethod = defaults.samplingMethod.rawValue
-        filterType = defaults.filterType.rawValue
-        filterAlwaysOn = defaults.filterAlwaysOn
+        
+        df0Pan = defaults.drivePan[0]
+        df1Pan = defaults.drivePan[1]
+        df2Pan = defaults.drivePan[2]
+        df3Pan = defaults.drivePan[3]
+        stepVolume = defaults.stepVolume
+        pollVolume = defaults.pollVolume
+        insertVolume = defaults.insertVolume
+        ejectVolume = defaults.ejectVolume
         
         amiga.resume()
     }
@@ -773,8 +781,15 @@ class Configuration {
         volL = defaults.integer(forKey: Keys.Aud.volL)
         volR = defaults.integer(forKey: Keys.Aud.volR)
         samplingMethod = defaults.integer(forKey: Keys.Aud.samplingMethod)
-        filterType = defaults.integer(forKey: Keys.Aud.filterType)
-        filterAlwaysOn = defaults.bool(forKey: Keys.Aud.filterAlwaysOn)
+        
+        df0Pan = defaults.integer(forKey: Keys.Aud.df0Pan)
+        df1Pan = defaults.integer(forKey: Keys.Aud.df1Pan)
+        df2Pan = defaults.integer(forKey: Keys.Aud.df2Pan)
+        df3Pan = defaults.integer(forKey: Keys.Aud.df3Pan)
+        stepVolume = defaults.integer(forKey: Keys.Aud.stepVolume)
+        pollVolume = defaults.integer(forKey: Keys.Aud.pollVolume)
+        insertVolume = defaults.integer(forKey: Keys.Aud.insertVolume)
+        ejectVolume = defaults.integer(forKey: Keys.Aud.ejectVolume)
         
         amiga.resume()
     }
@@ -797,8 +812,15 @@ class Configuration {
         defaults.set(volL, forKey: Keys.Aud.volL)
         defaults.set(volR, forKey: Keys.Aud.volR)
         defaults.set(samplingMethod, forKey: Keys.Aud.samplingMethod)
-        defaults.set(filterType, forKey: Keys.Aud.filterType)
-        defaults.set(filterAlwaysOn, forKey: Keys.Aud.filterAlwaysOn)
+        
+        defaults.set(df0Pan, forKey: Keys.Aud.df0Pan)
+        defaults.set(df1Pan, forKey: Keys.Aud.df1Pan)
+        defaults.set(df2Pan, forKey: Keys.Aud.df2Pan)
+        defaults.set(df3Pan, forKey: Keys.Aud.df3Pan)
+        defaults.set(stepVolume, forKey: Keys.Aud.stepVolume)
+        defaults.set(pollVolume, forKey: Keys.Aud.pollVolume)
+        defaults.set(insertVolume, forKey: Keys.Aud.insertVolume)
+        defaults.set(ejectVolume, forKey: Keys.Aud.ejectVolume)
     }
     
     //
