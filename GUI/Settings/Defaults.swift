@@ -131,13 +131,6 @@ struct Keys {
         // Drives
         static let blankDiskFormat        = "VAMIGA_GEN_BlankDiskFormat"
         static let bootBlock              = "VAMIGA_GEN_BootBlock"
-        static let ejectWithoutAsking     = "VAMIGA_GEN_EjectWithoutAsking"
-        static let driveSounds            = "VAMIGA_GEN_DriveSounds"
-        static let driveSoundPan          = "VAMIGA_GEN_DriveSoundPan"
-        static let driveInsertSound       = "VAMIGA_GEN_DriveInsertSound"
-        static let driveEjectSound        = "VAMIGA_GEN_DriveEjectSound"
-        static let driveHeadSound         = "VAMIGA_GEN_DriveHeadSound"
-        static let drivePollSound         = "VAMIGA_GEN_DrivePollSound"
         
         // Fullscreen
         static let keepAspectRatio        = "VAMIGA_GEN_FullscreenKeepAspectRatio"
@@ -147,6 +140,7 @@ struct Keys {
         static let warpMode               = "VAMIGA_GEN_WarpMode"
         
         // Miscellaneous
+        static let ejectWithoutAsking     = "VAMIGA_GEN_EjectWithoutAsking"
         static let pauseInBackground      = "VAMIGA_GEN_PauseInBackground"
         static let closeWithoutAsking     = "VAMIGA_GEN_CloseWithoutAsking"
     }
@@ -157,13 +151,6 @@ struct GeneralDefaults {
     // Drives
     let blankDiskFormat: FSVolumeType
     let bootBlock: Int
-    let ejectWithoutAsking: Bool
-    let driveSounds: Bool
-    let driveSoundPan: Double
-    let driveInsertSound: Bool
-    let driveEjectSound: Bool
-    let driveHeadSound: Bool
-    let drivePollSound: Bool
         
     // Fullscreen
     let keepAspectRatio: Bool
@@ -173,6 +160,7 @@ struct GeneralDefaults {
     let warpMode: WarpMode
 
     // Miscellaneous
+    let ejectWithoutAsking: Bool
     let pauseInBackground: Bool
     let closeWithoutAsking: Bool
 
@@ -184,19 +172,13 @@ struct GeneralDefaults {
         
         blankDiskFormat: .OFS,
         bootBlock: 0,
-        ejectWithoutAsking: false,
-        driveSounds: true,
-        driveSoundPan: 1.0,
-        driveInsertSound: true,
-        driveEjectSound: true,
-        driveHeadSound: true,
-        drivePollSound: false,
                 
         keepAspectRatio: false,
         exitOnEsc: true,
         
         warpMode: .off,
 
+        ejectWithoutAsking: false,
         pauseInBackground: false,
         closeWithoutAsking: false
     )
@@ -211,19 +193,13 @@ extension UserDefaults {
             
             Keys.Gen.blankDiskFormat: Int(defaults.blankDiskFormat.rawValue),
             Keys.Gen.bootBlock: defaults.bootBlock,
-            Keys.Gen.ejectWithoutAsking: defaults.ejectWithoutAsking,
-            Keys.Gen.driveSounds: defaults.driveSounds,
-            Keys.Gen.driveSoundPan: defaults.driveSoundPan,
-            Keys.Gen.driveInsertSound: defaults.driveInsertSound,
-            Keys.Gen.driveEjectSound: defaults.driveEjectSound,
-            Keys.Gen.driveHeadSound: defaults.driveHeadSound,
-            Keys.Gen.drivePollSound: defaults.drivePollSound,
 
             Keys.Gen.keepAspectRatio: defaults.keepAspectRatio,
             Keys.Gen.exitOnEsc: defaults.exitOnEsc,
             
             Keys.Gen.warpMode: Int(defaults.warpMode.rawValue),
 
+            Keys.Gen.ejectWithoutAsking: defaults.ejectWithoutAsking,
             Keys.Gen.pauseInBackground: defaults.pauseInBackground,
             Keys.Gen.closeWithoutAsking: defaults.closeWithoutAsking
         ]
@@ -239,19 +215,13 @@ extension UserDefaults {
         
         let keys = [ Keys.Gen.blankDiskFormat,
                      Keys.Gen.bootBlock,
-                     Keys.Gen.ejectWithoutAsking,
-                     Keys.Gen.driveSounds,
-                     Keys.Gen.driveSoundPan,
-                     Keys.Gen.driveInsertSound,
-                     Keys.Gen.driveEjectSound,
-                     Keys.Gen.driveHeadSound,
-                     Keys.Gen.drivePollSound,
                                           
                      Keys.Gen.keepAspectRatio,
                      Keys.Gen.exitOnEsc,
                      
                      Keys.Gen.warpMode,
                      
+                     Keys.Gen.ejectWithoutAsking,
                      Keys.Gen.pauseInBackground,
                      Keys.Gen.closeWithoutAsking
         ]
