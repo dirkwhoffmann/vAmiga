@@ -58,11 +58,11 @@ typedef struct
     Cycle stepDelay;
     
     // Noise settings
-    bool noiseEnable;
-    bool noiseEject;
-    bool noiseInsert;
-    bool noiseStep;
-    bool noisePoll;
+    i16 pan;
+    u8 stepVolume;
+    u8 pollVolume;
+    u8 insertVolume;
+    u8 ejectVolume;
 }
 DriveConfig;
 

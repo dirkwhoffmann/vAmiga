@@ -89,6 +89,16 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var perDf3Connect: NSButton!
     @IBOutlet weak var perDf3Type: NSPopUpButton!
 
+    // Drive volumes
+    @IBOutlet weak var perDf0Pan: NSSlider!
+    @IBOutlet weak var perDf1Pan: NSSlider!
+    @IBOutlet weak var perDf2Pan: NSSlider!
+    @IBOutlet weak var perDf3Pan: NSSlider!
+    @IBOutlet weak var perStepVolume: NSSlider!
+    @IBOutlet weak var perPollVolume: NSSlider!
+    @IBOutlet weak var perEjectVolume: NSSlider!
+    @IBOutlet weak var perInsertVolume: NSSlider!
+
     // Ports
     @IBOutlet weak var perGameDevice1: NSPopUpButton!
     @IBOutlet weak var perGameDevice2: NSPopUpButton!

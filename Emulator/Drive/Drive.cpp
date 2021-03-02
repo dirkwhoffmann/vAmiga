@@ -44,18 +44,24 @@ Drive::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_DRIVE_TYPE:          return (long)config.type;
-        case OPT_EMULATE_MECHANICS:   return (long)config.mechanicalDelays;
-        case OPT_DRIVE_NOISE_ENABLE:  return (long)config.noiseEnable;
-        case OPT_DRIVE_EJECT_NOISE:   return (long)config.noiseEject;
-        case OPT_DRIVE_INSERT_NOISE:  return (long)config.noiseInsert;
-        case OPT_DRIVE_STEP_NOISE:    return (long)config.noiseStep;
-        case OPT_DRIVE_POLL_NOISE:    return (long)config.noisePoll;
+        case OPT_DRIVE_TYPE:         return (long)config.type;
+        case OPT_EMULATE_MECHANICS:  return (long)config.mechanicalDelays;
+        case OPT_DRIVE_PAN:          return (long)config.pan;
+        case OPT_STEP_VOLUME:        return (long)config.stepVolume;
+        case OPT_POLL_VOLUME:        return (long)config.pollVolume;
+        case OPT_EJECT_VOLUME:       return (long)config.ejectVolume;
+        case OPT_INSERT_VOLUME:      return (long)config.insertVolume;
 
         default:
             assert(false);
             return 0;
     }
+}
+
+bool
+Drive::setConfigItem(Option option, long value)
+{
+    return setConfigItem(option, nr, value);
 }
 
 bool
@@ -75,11 +81,9 @@ Drive::setConfigItem(Option option, long id, long value)
             if (config.type == value) {
                 return false;
             }
-
             if (value != DRIVE_DD_35 && value != DRIVE_HD_35) {
                 throw ConfigUnsupportedError();
             }
-
             config.type = (DriveType)value;
             return true;
 
@@ -88,48 +92,52 @@ Drive::setConfigItem(Option option, long id, long value)
             if (config.mechanicalDelays == value) {
                 return false;
             }
-                        
             config.mechanicalDelays = value;
             return true;
 
-        case OPT_DRIVE_NOISE_ENABLE:
-            
-            if (config.noiseEnable == value) {
-                return false;
-            }
-            config.noiseEnable = value;
-            return true;
-            
-        case OPT_DRIVE_EJECT_NOISE:
+        case OPT_DRIVE_PAN:
 
-            if (config.noiseEject == value) {
+            if (config.pan == value) {
                 return false;
             }
-            config.noiseEject = value;
+            debug(true, "OPT_DRIVE_PAN: %ld\n", value);
+            config.pan = value;
             return true;
 
-        case OPT_DRIVE_INSERT_NOISE:
+        case OPT_STEP_VOLUME:
 
-            if (config.noiseInsert == value) {
+            if (config.stepVolume == value) {
                 return false;
             }
-            config.noiseInsert = value;
+            debug(true, "OPT_STEP_VOLUME: %ld\n", value);
+            config.stepVolume = value;
             return true;
 
-        case OPT_DRIVE_STEP_NOISE:
+        case OPT_POLL_VOLUME:
 
-            if (config.noiseStep == value) {
+            if (config.pollVolume == value) {
                 return false;
             }
-            config.noiseStep = value;
+            debug(true, "OPT_POLL_VOLUME: %ld\n", value);
+            config.pollVolume = value;
             return true;
 
-        case OPT_DRIVE_POLL_NOISE:
+        case OPT_EJECT_VOLUME:
 
-            if (config.noisePoll == value) {
+            if (config.ejectVolume == value) {
                 return false;
             }
-            config.noisePoll = value;
+            debug(true, "OPT_EJECT_VOLUME: %ld\n", value);
+            config.ejectVolume = value;
+            return true;
+
+        case OPT_INSERT_VOLUME:
+
+            if (config.insertVolume == value) {
+                return false;
+            }
+            debug(true, "OPT_INSERT_VOLUME: %ld\n", value);
+            config.insertVolume = value;
             return true;
 
         default:
@@ -158,11 +166,10 @@ Drive::_dump(Dump::Category category, std::ostream& os) const
         os << DUMP("Start delay") << DEC << config.startDelay << std::endl;
         os << DUMP("Stop delay") << DEC << config.stopDelay << std::endl;
         os << DUMP("Step delay") << DEC << config.stepDelay << std::endl;
-        os << DUMP("Noise enable") << ISENABLED(config.noiseEnable) << std::endl;
-        os << DUMP("Insert noise") << ISENABLED(config.noiseInsert) << std::endl;
-        os << DUMP("Eject noise") << ISENABLED(config.noiseEject) << std::endl;
-        os << DUMP("Head step noise") << ISENABLED(config.noiseStep) << std::endl;
-        os << DUMP("head poll noise") << ISENABLED(config.noisePoll) << std::endl;
+        os << DUMP("Insert volume") << ISENABLED(config.insertVolume) << std::endl;
+        os << DUMP("Eject volume") << ISENABLED(config.ejectVolume) << std::endl;
+        os << DUMP("Step volume") << ISENABLED(config.stepVolume) << std::endl;
+        os << DUMP("Poll volume") << ISENABLED(config.pollVolume) << std::endl;
     }
     
     if (category & Dump::State) {
@@ -546,12 +553,14 @@ Drive::step(isize dir)
     if (ALIGN_HEAD) head.offset = 0;
     
     // Notify the GUI
-    if (config.noiseEnable && (pollsForDisk() ? config.noisePoll : config.noiseStep)) {
-        messageQueue.put(MSG_DRIVE_HEAD_NOISE, (nr << 8) | head.cylinder);
+    if (pollsForDisk()) {
+        messageQueue.put(MSG_DRIVE_POLL,
+                         config.pan << 24 | config.pollVolume << 16 | head.cylinder << 8 | nr);
     } else {
-        messageQueue.put(MSG_DRIVE_HEAD, (nr << 8) | head.cylinder);
+        messageQueue.put(MSG_DRIVE_STEP,
+                         config.pan << 24 | config.stepVolume << 16 | head.cylinder << 8 | nr);
     }
-    
+        
     // Remember when we've performed the step
     stepCycle = agnus.clock;
 }
@@ -645,11 +654,8 @@ Drive::ejectDisk()
         disk = nullptr;
         
         // Notify the GUI
-        if (config.noiseEnable && config.noiseEject) {
-            messageQueue.put(MSG_DISK_EJECT_NOISE, nr);
-        } else {
-            messageQueue.put(MSG_DISK_EJECT, nr);
-        }
+        messageQueue.put(MSG_DISK_EJECT,
+                         config.pan << 24 | config.ejectVolume << 16 | nr);
     }
 }
 
@@ -711,11 +717,8 @@ Drive::insertDisk(Disk *disk)
         head.offset = 0;
         
         // Notify the GUI
-        if (config.noiseEnable && config.noiseInsert) {
-            messageQueue.put(MSG_DISK_INSERT_NOISE, nr);
-        } else {
-            messageQueue.put(MSG_DISK_INSERT, nr);
-        }
+        messageQueue.put(MSG_DISK_INSERT,
+                         config.pan << 24 | config.insertVolume << 16 | nr);
         
         return true;
     }

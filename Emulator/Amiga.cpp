@@ -280,12 +280,11 @@ Amiga::getConfigItem(Option option, long id) const
             
         case OPT_DRIVE_TYPE:
         case OPT_EMULATE_MECHANICS:
-        case OPT_DRIVE_NOISE_ENABLE:
-        case OPT_DRIVE_EJECT_NOISE:
-        case OPT_DRIVE_INSERT_NOISE:
-        case OPT_DRIVE_STEP_NOISE:
-        case OPT_DRIVE_POLL_NOISE:
-
+        case OPT_DRIVE_PAN:
+        case OPT_STEP_VOLUME:
+        case OPT_POLL_VOLUME:
+        case OPT_INSERT_VOLUME:
+        case OPT_EJECT_VOLUME:
             return df[id]->getConfigItem(option);
             
         case OPT_PULLUP_RESISTORS:

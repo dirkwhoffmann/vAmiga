@@ -141,6 +141,38 @@ class Configuration {
         get { return dfnType(3) }
         set { setDfnType(3, type: newValue) }
     }
+    var df0Pan: Int {
+        get { return amiga.getConfig(.DRIVE_PAN, drive: 0) }
+        set { amiga.configure(.DRIVE_PAN, id: 0, value: newValue) }
+    }
+    var df1Pan: Int {
+        get { return amiga.getConfig(.DRIVE_PAN, drive: 1) }
+        set { amiga.configure(.DRIVE_PAN, id: 1, value: newValue) }
+    }
+    var df2Pan: Int {
+        get { return amiga.getConfig(.DRIVE_PAN, drive: 2) }
+        set { amiga.configure(.DRIVE_PAN, id: 2, value: newValue) }
+    }
+    var df3Pan: Int {
+        get { return amiga.getConfig(.DRIVE_PAN, drive: 3) }
+        set { amiga.configure(.DRIVE_PAN, id: 3, value: newValue) }
+    }
+    var stepVolume: Int {
+        get { return amiga.getConfig(.STEP_VOLUME, drive: 0) }
+        set { amiga.configure(.STEP_VOLUME, value: newValue) }
+    }
+    var pollVolume: Int {
+        get { return amiga.getConfig(.POLL_VOLUME, drive: 0) }
+        set { amiga.configure(.POLL_VOLUME, value: newValue) }
+    }
+    var insertVolume: Int {
+        get { return amiga.getConfig(.INSERT_VOLUME, drive: 0) }
+        set { amiga.configure(.INSERT_VOLUME, value: newValue) }
+    }
+    var ejectVolume: Int {
+        get { return amiga.getConfig(.EJECT_VOLUME, drive: 0) }
+        set { amiga.configure(.EJECT_VOLUME, value: newValue) }
+    }
     var gameDevice1 = PeripheralsDefaults.std.gameDevice1 {
         didSet {
                          
@@ -545,6 +577,15 @@ class Configuration {
         df1Type = defaults.driveType[1].rawValue
         df2Type = defaults.driveType[2].rawValue
         df3Type = defaults.driveType[3].rawValue
+
+        df0Pan = defaults.drivePan[0]
+        df1Pan = defaults.drivePan[1]
+        df2Pan = defaults.drivePan[2]
+        df3Pan = defaults.drivePan[3]
+        stepVolume = defaults.stepVolume
+        pollVolume = defaults.pollVolume
+        insertVolume = defaults.insertVolume
+        ejectVolume = defaults.ejectVolume
         
         gameDevice1 = defaults.gameDevice1
         gameDevice2 = defaults.gameDevice2
@@ -568,6 +609,15 @@ class Configuration {
         df2Type = defaults.integer(forKey: Keys.Per.df2Type)
         df3Type = defaults.integer(forKey: Keys.Per.df3Type)
 
+        df0Pan = defaults.integer(forKey: Keys.Per.df0Pan)
+        df1Pan = defaults.integer(forKey: Keys.Per.df1Pan)
+        df2Pan = defaults.integer(forKey: Keys.Per.df2Pan)
+        df3Pan = defaults.integer(forKey: Keys.Per.df3Pan)
+        stepVolume = defaults.integer(forKey: Keys.Per.stepVolume)
+        pollVolume = defaults.integer(forKey: Keys.Per.pollVolume)
+        insertVolume = defaults.integer(forKey: Keys.Per.insertVolume)
+        ejectVolume = defaults.integer(forKey: Keys.Per.ejectVolume)
+        
         gameDevice1 = defaults.integer(forKey: Keys.Per.gameDevice1)
         gameDevice2 = defaults.integer(forKey: Keys.Per.gameDevice2)
         serialDevice = defaults.integer(forKey: Keys.Per.serialDevice)
@@ -590,10 +640,18 @@ class Configuration {
         defaults.set(df2Type, forKey: Keys.Per.df2Type)
         defaults.set(df3Type, forKey: Keys.Per.df3Type)
 
+        defaults.set(df0Pan, forKey: Keys.Per.df0Pan)
+        defaults.set(df1Pan, forKey: Keys.Per.df1Pan)
+        defaults.set(df2Pan, forKey: Keys.Per.df2Pan)
+        defaults.set(df3Pan, forKey: Keys.Per.df3Pan)
+        defaults.set(stepVolume, forKey: Keys.Per.stepVolume)
+        defaults.set(pollVolume, forKey: Keys.Per.pollVolume)
+        defaults.set(insertVolume, forKey: Keys.Per.insertVolume)
+        defaults.set(ejectVolume, forKey: Keys.Per.ejectVolume)
+        
         defaults.set(gameDevice1, forKey: Keys.Per.gameDevice1)
         defaults.set(gameDevice2, forKey: Keys.Per.gameDevice2)
         defaults.set(serialDevice, forKey: Keys.Per.serialDevice)
-
     }
     
     //

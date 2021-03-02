@@ -862,6 +862,16 @@ extension Keys {
         static let df2Type            = "VAMIGA_PER_DF2Type"
         static let df3Type            = "VAMIGA_PER_DF3Type"
         
+        // Drive volumes
+        static let df0Pan             = "VAMIGA_PER_DF0Pan"
+        static let df1Pan             = "VAMIGA_PER_DF1Pan"
+        static let df2Pan             = "VAMIGA_PER_DF2Pan"
+        static let df3Pan             = "VAMIGA_PER_DF3Pan"
+        static let stepVolume         = "VAMIGA_PER_StepVolume"
+        static let pollVolume         = "VAMIGA_PER_PollVolume"
+        static let insertVolume       = "VAMIGA_PER_InsertVolume"
+        static let ejectVolume        = "VAMIGA_PER_EjectVolume"
+
         // Ports
         static let gameDevice1        = "VAMIGA_PER_GameDevice1"
         static let gameDevice2        = "VAMIGA_PER_GameDevice2"
@@ -874,6 +884,12 @@ struct PeripheralsDefaults {
     var driveConnect: [Bool]
     var driveType: [DriveType]
 
+    var drivePan: [Int]
+    var stepVolume: Int
+    var pollVolume: Int
+    var insertVolume: Int
+    var ejectVolume: Int
+    
     var gameDevice1: Int
     var gameDevice2: Int
     var serialDevice: SerialPortDevice
@@ -887,6 +903,12 @@ struct PeripheralsDefaults {
         driveConnect: [true, false, false, false],
         driveType: [.DD_35, .DD_35, .DD_35, .DD_35],
         
+        drivePan: [100, 300, 100, 300],
+        stepVolume: 50,
+        pollVolume: 0,
+        insertVolume: 50,
+        ejectVolume: 50,
+            
         gameDevice1: 0,
         gameDevice2: -1,
         serialDevice: .NONE
@@ -908,6 +930,15 @@ extension UserDefaults {
             Keys.Per.df1Type: defaults.driveType[1].rawValue,
             Keys.Per.df2Type: defaults.driveType[2].rawValue,
             Keys.Per.df3Type: defaults.driveType[3].rawValue,
+
+            Keys.Per.df0Pan: defaults.drivePan[0],
+            Keys.Per.df1Pan: defaults.drivePan[1],
+            Keys.Per.df2Pan: defaults.drivePan[2],
+            Keys.Per.df3Pan: defaults.drivePan[3],
+            Keys.Per.stepVolume: defaults.stepVolume,
+            Keys.Per.pollVolume: defaults.pollVolume,
+            Keys.Per.insertVolume: defaults.insertVolume,
+            Keys.Per.ejectVolume: defaults.ejectVolume,
 
             Keys.Per.gameDevice1: defaults.gameDevice1,
             Keys.Per.gameDevice2: defaults.gameDevice2,
@@ -931,6 +962,15 @@ extension UserDefaults {
                      Keys.Per.df2Type,
                      Keys.Per.df3Type,
                      
+                     Keys.Per.df0Pan,
+                     Keys.Per.df1Pan,
+                     Keys.Per.df2Pan,
+                     Keys.Per.df3Pan,
+                     Keys.Per.stepVolume,
+                     Keys.Per.pollVolume,
+                     Keys.Per.insertVolume,
+                     Keys.Per.ejectVolume,
+
                      Keys.Per.gameDevice1,
                      Keys.Per.gameDevice2,
                      Keys.Per.serialDevice

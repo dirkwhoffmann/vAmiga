@@ -21,7 +21,7 @@
 // Uncomment these settings in a release build
 // #define RELEASEBUILD
 
-#ifdef RELEASE_BUILD
+#ifdef RELEASEBUILD
 static const int releaseBuild = 1;
 #define NDEBUG
 #else

@@ -438,6 +438,9 @@ extension MyController {
         
     func processMessage(_ msg: Message) {
         
+        var driveNr: Int { return msg.data & 0xFF }
+        var driveCyl: Int { return (msg.data >> 8) & 0xFF; }
+        
         switch msg.type {
     
         case .REGISTER:
@@ -552,32 +555,21 @@ extension MyController {
             refreshStatusBar()
             updateWarp()
 
-        case .DRIVE_HEAD_NOISE,
-             .DRIVE_HEAD:
-            if pref.driveSounds && pref.driveHeadSound {
-                macAudio.playSound(name: "drive_head", volume: 0.3)
-            }
-            refreshStatusBar(drive: msg.data >> 8, cylinder: msg.data % 0xFF)
-  
-        case .DRIVE_HEAD_POLL:
-            if pref.driveSounds && pref.drivePollSound {
-                macAudio.playSound(name: "drive_head", volume: 0.3)
-            }
-            refreshStatusBar(drive: msg.data >> 8, cylinder: msg.data % 0xFF)
+        case .DRIVE_STEP:
+            macAudio.playStepSound(drive: driveNr)
+            refreshStatusBar(drive: driveNr, cylinder: driveCyl)
 
-        case .DISK_INSERT_NOISE,
-             .DISK_INSERT:
-            if pref.driveSounds && pref.driveInsertSound {
-                macAudio.playSound(name: "insert", volume: 0.3)
-            }
-            if msg.data == 0 { mydocument.setBootDiskID(amiga.df0.fnv) }
+        case .DRIVE_POLL:
+            macAudio.playPollSound(drive: driveNr)
+            refreshStatusBar(drive: driveNr, cylinder: driveCyl)
+  
+        case .DISK_INSERT:
+            if driveNr == 0 { mydocument.setBootDiskID(amiga.df0.fnv) }
+            macAudio.playInsertSound(drive: driveNr)
             refreshStatusBar()
             
-        case .DISK_EJECT_NOISE,
-             .DISK_EJECT:
-            if pref.driveSounds && pref.driveEjectSound {
-                macAudio.playSound(name: "eject", volume: 0.3)
-            }
+        case .DISK_EJECT:
+            macAudio.playEjectSound(drive: driveNr)
             refreshStatusBar()
             
         case .DISK_UNSAVED,
@@ -610,12 +602,10 @@ extension MyController {
             hideOrShowDriveMenus()
             
         case .RECORDING_STARTED:
-            
             window?.backgroundColor = .warningColor
             refreshStatusBar()
                 
         case .RECORDING_STOPPED:
-
             window?.backgroundColor = .windowBackgroundColor
             refreshStatusBar()
             
