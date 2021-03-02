@@ -19,8 +19,9 @@
 
 enum_long(DENISE_REV)
 {
-    DENISE_OCS,          // Revision 8362R8
-    DENISE_ECS,          // Revision 8373 (not supported yet)
+    DENISE_OCS,           // Revision 8362R8
+    DENISE_OCS_BRDRBLNK,  // Revision 8362R8 + ECS Border blank feature
+    DENISE_ECS,           // Revision 8373 (not supported yet)
 
     DENISE_COUNT
 };

@@ -461,6 +461,7 @@ DQ
                                                 <menu key="menu" id="3v0-HJ-QLg">
                                                     <items>
                                                         <menuItem title="MOS 8362R8 (OCS)" state="on" id="6ZC-38-juZ"/>
+                                                        <menuItem title="OCS + BRDRBLNK" tag="1" id="zLq-c3-Uz4"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>

@@ -28,9 +28,10 @@ struct DeniseRevisionEnum : Reflection<DeniseRevisionEnum, DeniseRevision> {
     {
         switch (value) {
                 
-            case DENISE_OCS:    return "OCS";
-            case DENISE_ECS:    return "ECS";
-            case DENISE_COUNT:  return "???";
+            case DENISE_OCS:          return "OCS";
+            case DENISE_OCS_BRDRBLNK: return "OCS_BRDRBLNK";
+            case DENISE_ECS:          return "ECS";
+            case DENISE_COUNT:        return "???";
         }
         return "???";
     }
