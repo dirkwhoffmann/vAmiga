@@ -32,7 +32,6 @@ struct OptionEnum : Reflection<OptionEnum, Option> {
             case OPT_SLOW_RAM_MIRROR:     return "SLOW_RAM_MIRROR";
                 
             case OPT_DENISE_REVISION:     return "DENISE_REVISION";
-            case OPT_BRDRBLNK:            return "BRDRBLNK";
                 
             case OPT_RTC_MODEL:           return "RTC_MODEL";
 

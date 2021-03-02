@@ -214,7 +214,6 @@ Amiga::getConfigItem(Option option) const
             return agnus.getConfigItem(option);
             
         case OPT_DENISE_REVISION:
-        case OPT_BRDRBLNK:
         case OPT_HIDDEN_SPRITES:
         case OPT_HIDDEN_LAYERS:
         case OPT_HIDDEN_LAYER_ALPHA:

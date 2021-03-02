@@ -34,7 +34,6 @@
                 <outlet property="compBltAccuracy" destination="cev-0G-bBM" id="NxU-Mf-yeG"/>
                 <outlet property="compBltLevel1" destination="6br-Nl-Ztc" id="nMu-vk-ygR"/>
                 <outlet property="compBltLevel2" destination="V3E-d1-ztH" id="CLY-sh-STa"/>
-                <outlet property="compBorderBlank" destination="49k-N2-MIV" id="d53-wS-QPP"/>
                 <outlet property="compClxPlfPlf" destination="sdI-ho-fbb" id="dGa-sd-0gw"/>
                 <outlet property="compClxSprPlf" destination="FOL-32-9CM" id="6n1-ZB-KkS"/>
                 <outlet property="compClxSprSpr" destination="feq-t4-YJF" id="vRB-Vw-UPR"/>
@@ -1564,7 +1563,7 @@ DQ
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ezx-ob-U1C">
-                                            <rect key="frame" x="15" y="128" width="194" height="17"/>
+                                            <rect key="frame" x="15" y="155" width="194" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Timing" id="3H7-8h-eQx">
                                                 <font key="font" metaFont="systemBold"/>
@@ -1582,7 +1581,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cUo-6R-FwH">
-                                            <rect key="frame" x="54" y="74" width="202" height="18"/>
+                                            <rect key="frame" x="54" y="101" width="202" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Emulate Slow Ram bus delays" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Ntj-ap-Jlt">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1593,7 +1592,7 @@ DQ
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TR3-l4-fWR">
-                                            <rect key="frame" x="54" y="100" width="216" height="18"/>
+                                            <rect key="frame" x="54" y="127" width="216" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Sync CIA accesses with E-clock" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="JeW-BN-sXB">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1666,7 +1665,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EUp-Gr-Yqi">
-                                            <rect key="frame" x="54" y="190" width="174" height="18"/>
+                                            <rect key="frame" x="54" y="217" width="174" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Emulate Slow Ram mirror" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="K6w-ic-jSN">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1676,19 +1675,8 @@ DQ
                                                 <action selector="compSlowRamMirrorAction:" target="-2" id="h1G-TS-fA4"/>
                                             </connections>
                                         </button>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="49k-N2-MIV">
-                                            <rect key="frame" x="54" y="217" width="194" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Emulate BRDRBLNK feature" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="akn-PD-4O3">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="compBorderBlankAction:" target="-2" id="5oD-lN-YUT"/>
-                                            </connections>
-                                        </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tNc-ID-mnd">
-                                            <rect key="frame" x="54" y="163" width="129" height="18"/>
+                                            <rect key="frame" x="54" y="190" width="129" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Emulate TOD bug" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="rmX-XJ-heH">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>

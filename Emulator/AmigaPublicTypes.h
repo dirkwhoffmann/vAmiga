@@ -25,7 +25,6 @@ enum_long(OPT)
     
     // Denise
     OPT_DENISE_REVISION,
-    OPT_BRDRBLNK,
     
     // Real-time clock
     OPT_RTC_MODEL,

@@ -51,7 +51,6 @@ Denise::getConfigItem(Option option) const
     switch (option) {
             
         case OPT_DENISE_REVISION:     return config.revision;
-        case OPT_BRDRBLNK:            return config.borderblank;
         case OPT_HIDDEN_SPRITES:      return config.hiddenSprites;
         case OPT_HIDDEN_LAYERS:       return config.hiddenLayers;
         case OPT_HIDDEN_LAYER_ALPHA:  return config.hiddenLayerAlpha;
@@ -81,16 +80,7 @@ Denise::setConfigItem(Option option, long value)
             
             config.revision = (DeniseRevision)value;
             return true;
-            
-        case OPT_BRDRBLNK:
-
-            if (config.borderblank == value) {
-                return false;
-            }
-            
-            config.borderblank = value;
-            return true;
-            
+                        
         case OPT_HIDDEN_SPRITES:
             
             if (config.hiddenSprites == value) {
@@ -190,7 +180,6 @@ Denise::_dump(Dump::Category category, std::ostream& os) const
         os << DUMP("Chip revision");
         os << DeniseRevisionEnum::key(config.revision) << std::endl;
         os << DUMP("Borderblank");
-        os << YESNO(config.borderblank) << std::endl;
         os << DUMP("Hidden sprites");
         os << HEX8 << (int)config.hiddenSprites << std::endl;
         os << DUMP("Hidden layers");

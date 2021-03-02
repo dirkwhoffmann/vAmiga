@@ -26,7 +26,6 @@ extension ConfigurationController {
         let ocsAgnus = config.agnusRev == AgnusRevision.OCS.rawValue
         compSlowRamMirror.state = config.slowRamMirror ? .on : .off
         compSlowRamMirror.isEnabled = !ocsAgnus
-        compBorderBlank.state = config.borderBlank ? .on : .off
         compTodBug.state = config.todBug ? .on : .off
 
         // Floppy drives
@@ -68,12 +67,6 @@ extension ConfigurationController {
     @IBAction func compBltAccuracyAction(_ sender: NSSlider!) {
 
         config.blitterAccuracy = sender.integerValue
-        refresh()
-    }
-
-    @IBAction func compBorderBlankAction(_ sender: NSButton!) {
-
-        config.borderBlank = sender.state == .on
         refresh()
     }
     

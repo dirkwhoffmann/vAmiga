@@ -72,9 +72,6 @@ typedef struct
 {
     // Emulated chip model
     DeniseRevision revision;
-
-    // Borderblank feature (was introduced with ECS chipset)
-    bool borderblank;
     
     // Hides certain sprites
     u8 hiddenSprites;

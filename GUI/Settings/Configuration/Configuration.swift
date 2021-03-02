@@ -191,10 +191,6 @@ class Configuration {
         get { return amiga.getConfig(.SLOW_RAM_MIRROR) != 0 }
         set { amiga.configure(.SLOW_RAM_MIRROR, enable: newValue) }
     }
-    var borderBlank: Bool {
-        get { return amiga.getConfig(.BRDRBLNK) != 0 }
-        set { amiga.configure(.BRDRBLNK, enable: newValue) }
-    }
     var todBug: Bool {
         get { return amiga.getConfig(.TODBUG) != 0 }
         set { amiga.configure(.TODBUG, enable: newValue) }
@@ -654,7 +650,6 @@ class Configuration {
         blitterAccuracy = defaults.blitterAccuracy
 
         slowRamMirror = defaults.slowRamMirror
-        borderBlank = defaults.borderBlank
         todBug = defaults.todBug
 
         eClockSyncing = defaults.eClockSyncing
@@ -683,7 +678,6 @@ class Configuration {
         blitterAccuracy = defaults.integer(forKey: Keys.Com.blitterAccuracy)
 
         slowRamMirror = defaults.bool(forKey: Keys.Com.slowRamMirror)
-        borderBlank = defaults.bool(forKey: Keys.Com.borderBlank)
         todBug = defaults.bool(forKey: Keys.Com.todBug)
 
         eClockSyncing = defaults.bool(forKey: Keys.Com.eClockSyncing)
@@ -712,7 +706,6 @@ class Configuration {
         defaults.set(blitterAccuracy, forKey: Keys.Com.blitterAccuracy)
 
         defaults.set(slowRamMirror, forKey: Keys.Com.slowRamMirror)
-        defaults.set(borderBlank, forKey: Keys.Com.borderBlank)
         defaults.set(todBug, forKey: Keys.Com.todBug)
 
         defaults.set(eClockSyncing, forKey: Keys.Com.eClockSyncing)
