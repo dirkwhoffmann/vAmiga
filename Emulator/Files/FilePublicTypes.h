@@ -86,3 +86,13 @@ enum_long(BB_TYPE)
     BB_COUNT
 };
 typedef BB_TYPE BootBlockType;
+
+enum_long(BB_ID)
+{
+    BB_NONE,
+    BB_AMIGADOS_13,
+    BB_AMIGADOS_20,
+    BB_SCA,
+    BB_BYTE_BANDIT
+};
+typedef BB_ID BootBlockId;

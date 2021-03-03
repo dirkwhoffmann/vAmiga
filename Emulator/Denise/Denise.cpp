@@ -179,7 +179,6 @@ Denise::_dump(Dump::Category category, std::ostream& os) const
         printf("_dump(Config)\n");
         os << DUMP("Chip revision");
         os << DeniseRevisionEnum::key(config.revision) << std::endl;
-        os << DUMP("Borderblank");
         os << DUMP("Hidden sprites");
         os << HEX8 << (int)config.hiddenSprites << std::endl;
         os << DUMP("Hidden layers");

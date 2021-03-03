@@ -10,15 +10,7 @@
 extension PreferencesController {
     
     func refreshGeneralTab() {
-        
-        let contaminated = pref.bootBlock >= 10
-                
-        // Drive
-        genDriveBlankDiskFormat.selectItem(withTag: pref.blankDiskFormatIntValue)
-        genBootCode.selectItem(withTag: pref.bootBlock)
-        genBootCode.isEnabled = pref.blankDiskFormat != .NODOS
-        genBootCodeVirus.isHidden = !contaminated
-
+                        
         // Fullscreen
         genAspectRatioButton.state = pref.keepAspectRatio ? .on : .off
         genExitOnEscButton.state = pref.exitOnEsc ? .on : .off

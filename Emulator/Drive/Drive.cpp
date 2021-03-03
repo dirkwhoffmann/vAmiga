@@ -13,6 +13,7 @@
 #include "Agnus.h"
 #include "CIA.h"
 #include "DiskFile.h"
+#include "FSDevice.h"
 #include "MsgQueue.h"
 
 Drive::Drive(Amiga& ref, isize n) : AmigaComponent(ref), nr(n)
@@ -24,6 +25,8 @@ Drive::Drive(Amiga& ref, isize n) : AmigaComponent(ref), nr(n)
     config.startDelay = MSEC(380);
     config.stopDelay = MSEC(80);
     config.stepDelay = USEC(8000);
+    config.defaultFileSystem = FS_OFS;
+    config.defaultBootBlock = BB_NONE;
 }
 
 const char *
@@ -44,13 +47,15 @@ Drive::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_DRIVE_TYPE:         return (long)config.type;
-        case OPT_EMULATE_MECHANICS:  return (long)config.mechanicalDelays;
-        case OPT_DRIVE_PAN:          return (long)config.pan;
-        case OPT_STEP_VOLUME:        return (long)config.stepVolume;
-        case OPT_POLL_VOLUME:        return (long)config.pollVolume;
-        case OPT_EJECT_VOLUME:       return (long)config.ejectVolume;
-        case OPT_INSERT_VOLUME:      return (long)config.insertVolume;
+        case OPT_DRIVE_TYPE:          return (long)config.type;
+        case OPT_EMULATE_MECHANICS:   return (long)config.mechanicalDelays;
+        case OPT_DRIVE_PAN:           return (long)config.pan;
+        case OPT_STEP_VOLUME:         return (long)config.stepVolume;
+        case OPT_POLL_VOLUME:         return (long)config.pollVolume;
+        case OPT_EJECT_VOLUME:        return (long)config.ejectVolume;
+        case OPT_INSERT_VOLUME:       return (long)config.insertVolume;
+        case OPT_DEFAULT_FILESYSTEM:  return (long)config.defaultFileSystem;
+        case OPT_DEFAULT_BOOTBLOCK:   return (long)config.defaultBootBlock;
 
         default:
             assert(false);
@@ -127,7 +132,6 @@ Drive::setConfigItem(Option option, long id, long value)
             if (config.ejectVolume == value) {
                 return false;
             }
-            debug(true, "OPT_EJECT_VOLUME: %ld\n", value);
             config.ejectVolume = value;
             return true;
 
@@ -136,8 +140,23 @@ Drive::setConfigItem(Option option, long id, long value)
             if (config.insertVolume == value) {
                 return false;
             }
-            debug(true, "OPT_INSERT_VOLUME: %ld\n", value);
             config.insertVolume = value;
+            return true;
+
+        case OPT_DEFAULT_FILESYSTEM:
+
+            if (config.defaultFileSystem == value) {
+                return false;
+            }
+            config.defaultFileSystem = value;
+            return true;
+
+        case OPT_DEFAULT_BOOTBLOCK:
+
+            if (config.defaultBootBlock == value) {
+                return false;
+            }
+            config.defaultBootBlock = value;
             return true;
 
         default:
@@ -170,6 +189,8 @@ Drive::_dump(Dump::Category category, std::ostream& os) const
         os << DUMP("Eject volume") << ISENABLED(config.ejectVolume) << std::endl;
         os << DUMP("Step volume") << ISENABLED(config.stepVolume) << std::endl;
         os << DUMP("Poll volume") << ISENABLED(config.pollVolume) << std::endl;
+        os << DUMP("Default file system") << FSVolumeTypeEnum::key(config.defaultFileSystem) << std::endl;
+        os << DUMP("Default boot block") << BootBlockIdEnum::key(config.defaultBootBlock) << std::endl;
     }
     
     if (category & Dump::State) {
@@ -720,6 +741,21 @@ Drive::insertDisk(Disk *disk)
         messageQueue.put(MSG_DISK_INSERT,
                          config.pan << 24 | config.insertVolume << 16 | nr);
         
+        return true;
+    }
+    
+    return false;
+}
+
+bool
+Drive::insertBlankDisk()
+{
+    auto desc = FSDeviceDescriptor(INCH_35, DISK_DD, config.defaultFileSystem);
+    
+    if (FSDevice *volume = FSDevice::makeWithFormat(desc)) {
+        
+        volume->setName(FSName("Disk"));
+        volume->makeBootable(config.defaultBootBlock);
         return true;
     }
     

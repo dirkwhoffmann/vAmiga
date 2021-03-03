@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include "FSPublicTypes.h"
+#include "FSTypes.h"
+#include "FileTypes.h"
 #include "FSDescriptors.h"
 
 struct FSPartition : AmigaObject {
@@ -148,7 +149,7 @@ private:
 public:
     
     // Installs a boot block
-    void makeBootable(long id);
+    void makeBootable(BootBlockId id);
 
     // Eliminates boot block virus (if any)
     void killVirus();

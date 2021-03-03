@@ -10,6 +10,7 @@
 #pragma once
 
 #include "FSBlock.h"
+#include "FileTypes.h"
 
 struct FSBootBlock : FSBlock {
         
@@ -36,5 +37,5 @@ struct FSBootBlock : FSBlock {
     // Block specific methods
     //
 
-    void writeBootBlock(long id, int page);
+    void writeBootBlock(BootBlockId id, int page);
 };

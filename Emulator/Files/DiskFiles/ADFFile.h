@@ -106,7 +106,7 @@ public:
  
 public:
     
-    bool formatDisk(FSVolumeType fs, long bootBlockID);
+    bool formatDisk(FSVolumeType fs, BootBlockId id);
 
     
     //

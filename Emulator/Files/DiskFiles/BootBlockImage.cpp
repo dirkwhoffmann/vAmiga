@@ -1166,18 +1166,18 @@ BootBlockImage::BootBlockImage(const char *name)
     }
 }
 
-BootBlockImage::BootBlockImage(long bootBlockID)
+BootBlockImage::BootBlockImage(BootBlockId bootBlockID)
 {
     memset(data, 0, 1024);
     const char *name;
     
     switch (bootBlockID) {
             
-        case 0:  name = "AmigaDOS Standard Bootblock 1.3"; break;
-        case 1:  name = "AmigaDOS Standard Bootblock 2.0"; break;
-        case 10: name = "SCA Virus";                       break;
-        case 11: name = "Byte Bandit 1 Virus";             break;
-        default: name = "";                                break;
+        case BB_AMIGADOS_13: name = "AmigaDOS Standard Bootblock 1.3"; break;
+        case BB_AMIGADOS_20: name = "AmigaDOS Standard Bootblock 2.0"; break;
+        case BB_SCA:         name = "SCA Virus";                       break;
+        case BB_BYTE_BANDIT: name = "Byte Bandit 1 Virus";             break;
+        default:             name = "";                                break;
     }
     
     BootBlockImage bb = BootBlockImage(name);

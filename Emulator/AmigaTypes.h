@@ -56,6 +56,8 @@ struct OptionEnum : Reflection<OptionEnum, Option> {
             case OPT_POLL_VOLUME:         return "POLL_VOLUME";
             case OPT_INSERT_VOLUME:       return "INSERT_VOLUME";
             case OPT_EJECT_VOLUME:        return "EJECT_VOLUME";
+            case OPT_DEFAULT_FILESYSTEM:  return "DEFAULT_FILESYSTEM";
+            case OPT_DEFAULT_BOOTBLOCK:   return "DEFAULT_BOOTBLOCK";
                 
             case OPT_SERIAL_DEVICE:       return "SERIAL_DEVICE";
  

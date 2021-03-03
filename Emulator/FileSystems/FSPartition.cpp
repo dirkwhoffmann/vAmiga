@@ -460,13 +460,13 @@ FSPartition::locateAllocationBit(Block nr, isize *byte, isize *bit) const
 }
 
 void
-FSPartition::makeBootable(long bootBlockID)
+FSPartition::makeBootable(BootBlockId id)
 {
     assert(dev.blocks[firstBlock + 0]->type() == FS_BOOT_BLOCK);
     assert(dev.blocks[firstBlock + 1]->type() == FS_BOOT_BLOCK);
 
-    ((FSBootBlock *)dev.blocks[firstBlock + 0])->writeBootBlock(bootBlockID, 0);
-    ((FSBootBlock *)dev.blocks[firstBlock + 1])->writeBootBlock(bootBlockID, 1);
+    ((FSBootBlock *)dev.blocks[firstBlock + 0])->writeBootBlock(id, 0);
+    ((FSBootBlock *)dev.blocks[firstBlock + 1])->writeBootBlock(id, 1);
 }
 
 void
@@ -475,11 +475,11 @@ FSPartition::killVirus()
     assert(dev.blocks[firstBlock + 0]->type() == FS_BOOT_BLOCK);
     assert(dev.blocks[firstBlock + 1]->type() == FS_BOOT_BLOCK);
 
-    long bootBlockID = isOFS() ? 0 : isFFS() ? 1 : -1;
+    long id = isOFS() ? BB_AMIGADOS_13 : isFFS() ? BB_AMIGADOS_20 : BB_NONE;
 
-    if (bootBlockID != -1) {
-        ((FSBootBlock *)dev.blocks[firstBlock + 0])->writeBootBlock(bootBlockID, 0);
-        ((FSBootBlock *)dev.blocks[firstBlock + 1])->writeBootBlock(bootBlockID, 1);
+    if (id != BB_NONE) {
+        ((FSBootBlock *)dev.blocks[firstBlock + 0])->writeBootBlock(id, 0);
+        ((FSBootBlock *)dev.blocks[firstBlock + 1])->writeBootBlock(id, 1);
     } else {
         memset(dev.blocks[firstBlock + 0]->data + 4, 0, bsize() - 4);
         memset(dev.blocks[firstBlock + 1]->data, 0, bsize());

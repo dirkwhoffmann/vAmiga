@@ -10,7 +10,7 @@
 #pragma once
 
 #include "FilePublicTypes.h"
-#include "DiskPublicTypes.h"
+#include "DiskTypes.h"
 #include "Reflection.h"
 
 struct FileTypeEnum : Reflection<FileTypeEnum, FileType> {
@@ -101,14 +101,36 @@ struct BootBlockTypeEnum : Reflection<BootBlockTypeEnum, BootBlockType> {
     }
     
     static const char *prefix() { return "BB"; }
-    static const char *key(DiskDensity value)
+    static const char *key(BootBlockType value)
     {
         switch (value) {
                 
-            case DISK_SD:     return "SD";
-            case DISK_DD:     return "DD";
-            case DISK_HD:     return "HD";
-            case DISK_COUNT:  return "???";
+            case BB_STANDARD:  return "STANDARD";
+            case BB_VIRUS:     return "VIRUS";
+            case BB_CUSTOM:    return "CUSTOM";
+            case BB_COUNT:     return "???";
+        }
+        return "???";
+    }
+};
+
+struct BootBlockIdEnum : Reflection<BootBlockIdEnum, BootBlockId> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < BB_COUNT;
+    }
+    
+    static const char *prefix() { return "BB"; }
+    static const char *key(BootBlockId value)
+    {
+        switch (value) {
+                
+            case BB_NONE:         return "NONE";
+            case BB_AMIGADOS_13:  return "AMIGADOS_13";
+            case BB_AMIGADOS_20:  return "AMIGADOS_20";
+            case BB_SCA:          return "SCA";
+            case BB_BYTE_BANDIT:  return "BYTE_BANDIT";
         }
         return "???";
     }

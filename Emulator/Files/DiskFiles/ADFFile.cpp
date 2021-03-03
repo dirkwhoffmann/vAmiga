@@ -288,7 +288,7 @@ ADFFile::killVirus()
 }
 
 bool
-ADFFile::formatDisk(FSVolumeType fs, long bootBlockID)
+ADFFile::formatDisk(FSVolumeType fs, BootBlockId id)
 {
     assert_enum(FSVolumeType, fs);
 
@@ -308,7 +308,7 @@ ADFFile::formatDisk(FSVolumeType fs, long bootBlockID)
     volume->setName(FSName("Disk"));
     
     // Write boot code
-    volume->makeBootable(bootBlockID);
+    volume->makeBootable(id);
     
     // Export the file system to the ADF
     volume->exportVolume(data, size, &error);

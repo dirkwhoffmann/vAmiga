@@ -139,11 +139,13 @@ class Configuration {
     }
     var blankDiskFormat = PeripheralsDefaults.std.blankDiskFormat
     var blankDiskFormatIntValue: Int {
-        get { return Int(blankDiskFormat.rawValue) }
-        set { blankDiskFormat = FSVolumeType.init(rawValue: newValue)! }
+        get { return amiga.getConfig(.DEFAULT_FILESYSTEM, drive: 0) }
+        set { amiga.configure(.DEFAULT_FILESYSTEM, value: newValue) }
     }
-    var bootBlock = PeripheralsDefaults.std.bootBlock
-    
+    var bootBlock: Int {
+        get { return amiga.getConfig(.DEFAULT_BOOTBLOCK, drive: 0) }
+        set { amiga.configure(.DEFAULT_BOOTBLOCK, value: newValue) }
+    }    
     var gameDevice1 = PeripheralsDefaults.std.gameDevice1 {
         didSet {
                          
