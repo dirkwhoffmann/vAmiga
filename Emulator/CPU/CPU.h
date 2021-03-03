@@ -14,7 +14,7 @@
 #include "Moira.h"
 #include "Macros.h"
 
-class CPU : public AmigaComponent, public moira::Moira {
+class CPU : public moira::Moira {
 
     // Result of the latest inspection
     CPUInfo info;
@@ -116,6 +116,7 @@ private:
 
 private:
 
+    /*
     void sync(int cycles) override;
     u8 read8(u32 addr) override;
     u16 read16(u32 addr) override;
@@ -144,7 +145,7 @@ private:
     
     void breakpointReached(u32 addr) override;
     void watchpointReached(u32 addr) override;
-
+    */
     
     //
     // Working with the clock

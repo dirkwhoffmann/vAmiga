@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "AmigaComponent.h"
+
 #include "MoiraConfig.h"
 #include "MoiraTypes.h"
 #include "MoiraDebugger.h"
@@ -21,7 +23,7 @@ namespace moira {
 // Execution control flags
 
 
-class Moira {
+class Moira : public AmigaComponent {
 
     friend class Debugger;
     friend class Breakpoints;
@@ -136,7 +138,7 @@ private:
 
 public:
 
-    Moira();
+    Moira(Amiga &ref);
     virtual ~Moira();
 
     void createJumpTables();
@@ -202,6 +204,8 @@ public:
 
 protected:
 
+#if 0
+    
     // Reads a byte or a word from memory
     virtual u8 read8(u32 addr) = 0;
     virtual u16 read16(u32 addr) = 0;
@@ -245,6 +249,51 @@ protected:
     // Called when a breakpoint is reached
     virtual void watchpointReached(u32 addr) { };
 
+#endif
+    
+    // Reads a byte or a word from memory
+    u8 read8(u32 addr);
+    u16 read16(u32 addr);
+
+    // Special variants used by the reset routine and the disassembler
+    u16 read16OnReset(u32 addr);
+    u16 read16Dasm(u32 addr);
+
+    // Writes a byte or word into memory
+    void write8  (u32 addr, u8  val);
+    void write16 (u32 addr, u16 val);
+
+    // Provides the interrupt level in IRQ_USER mode
+    u16 readIrqUserVector(u8 level) const;
+
+    // Instrution delegates
+    void signalReset();
+    void signalStop(u16 op);
+    void signalTAS();
+
+    // State delegates
+    void signalHalt();
+
+    // Exception delegates
+    void signalAddressError(AEStackFrame &frame);
+    void signalLineAException(u16 opcode);
+    void signalLineFException(u16 opcode);
+    void signalIllegalOpcodeException(u16 opcode);
+    void signalTraceException();
+    void signalTrapException();
+    void signalPrivilegeViolation();
+    void signalInterrupt(u8 level);
+    void signalJumpToVector(int nr, u32 addr);
+
+    // Exception delegates
+    void addressErrorHandler();
+    
+    // Called when a breakpoint is reached
+    void breakpointReached(u32 addr);
+
+    // Called when a breakpoint is reached
+    void watchpointReached(u32 addr);
+    
 
     //
     // Accessing the clock
@@ -258,7 +307,8 @@ public:
 protected:
 
     // Advances the clock (called before each memory access)
-    virtual void sync(int cycles) { clock += cycles; }
+    void sync(int cycles); 
+    // virtual void sync(int cycles) { clock += cycles; }
 
 
     //
