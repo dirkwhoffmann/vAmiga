@@ -105,7 +105,6 @@ Drive::setConfigItem(Option option, long id, long value)
             if (config.pan == value) {
                 return false;
             }
-            debug(true, "OPT_DRIVE_PAN: %ld\n", value);
             config.pan = value;
             return true;
 
@@ -114,7 +113,6 @@ Drive::setConfigItem(Option option, long id, long value)
             if (config.stepVolume == value) {
                 return false;
             }
-            debug(true, "OPT_STEP_VOLUME: %ld\n", value);
             config.stepVolume = value;
             return true;
 
@@ -123,7 +121,6 @@ Drive::setConfigItem(Option option, long id, long value)
             if (config.pollVolume == value) {
                 return false;
             }
-            debug(true, "OPT_POLL_VOLUME: %ld\n", value);
             config.pollVolume = value;
             return true;
 
