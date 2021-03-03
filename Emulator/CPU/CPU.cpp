@@ -15,8 +15,14 @@
 #include "Memory.h"
 #include "MsgQueue.h"
 
+//
+// Moira
+//
+
+namespace moira {
+
 void
-CPU::sync(int cycles)
+Moira::sync(int cycles)
 {
     // Advance the CPU clock
     clock += cycles;
@@ -26,61 +32,31 @@ CPU::sync(int cycles)
 }
 
 u8
-CPU::read8(u32 addr)
+Moira::read8(u32 addr)
 {
     return mem.peek8 <ACCESSOR_CPU> (addr);
 }
 
 u16
-CPU::read16(u32 addr)
+Moira::read16(u32 addr)
 {
-    u16 result = mem.peek16 <ACCESSOR_CPU> (addr);
- 
-    /*
-    static int counter = 0;
-    if (addr == 0xc001b0) {
-        if (counter == 928) {
-            amiga.signalStop();
-            // COPREG_DEBUG = 1;
-        }
-        debug("%d: exec::allocMem(%x,%x)\n", counter++, reg.d[0], reg.d[1]);
-    }
-    */
-    /*
-    if (addr >= 0xE80000 && addr <= 0xE8FFFF) {
-        debug("get_word: Zorro(%x)  = %x\n", addr, result);
-    }
-    */
-    /*
-    if (addr >= 0xDC0000 && addr <= 0xDEFFFF) {
-        debug("read16(%x) = %x\n", addr, result);
-    }
-    
-    if (addr >= 0xD80000 && addr <= 0xD8FFFF) {
-        debug("read16(%x) = %x (%x,%x %x,%x %x,%x)\n", addr, result,
-              agnus.busOwner[agnus.pos.h-2], agnus.busValue[agnus.pos.h-2],
-              agnus.busOwner[agnus.pos.h-1], agnus.busValue[agnus.pos.h-1],
-              agnus.busOwner[agnus.pos.h-0], agnus.busValue[agnus.pos.h-0]);
-    }
-    */
-    
-    return result;
+    return mem.peek16 <ACCESSOR_CPU> (addr); 
 }
 
 u16
-CPU::read16Dasm(u32 addr)
+Moira::read16Dasm(u32 addr)
 {
     return mem.spypeek16 <ACCESSOR_CPU> (addr);
 }
 
 u16
-CPU::read16OnReset(u32 addr)
+Moira::read16OnReset(u32 addr)
 {
     return mem.chip ? read16(addr) : 0;
 }
 
 void
-CPU::write8(u32 addr, u8 val)
+Moira::write8(u32 addr, u8 val)
 {
     trace(XFILES && addr - reg.pc < 5, "XFILES: write8 close to PC %x\n", reg.pc);
 
@@ -88,22 +64,28 @@ CPU::write8(u32 addr, u8 val)
 }
 
 void
-CPU::write16 (u32 addr, u16 val)
+Moira::write16 (u32 addr, u16 val)
 {
     trace(XFILES && addr - reg.pc < 5, "XFILES: write16 close to PC %x\n", reg.pc);
 
     mem.poke16 <ACCESSOR_CPU> (addr, val);
 }
 
+u16
+Moira::readIrqUserVector(u8 level) const
+{
+    return 0;
+}
+
 void
-CPU::signalReset()
+Moira::signalReset()
 {
     trace(XFILES, "XFILES: RESET instruction\n");
     amiga.softReset();
 }
 
 void
-CPU::signalStop(u16 op)
+Moira::signalStop(u16 op)
 {
     if (!(op & 0x2000)) {
         trace(XFILES, "XFILES: STOP instruction (%x)\n", op);
@@ -111,67 +93,67 @@ CPU::signalStop(u16 op)
 }
 
 void
-CPU::signalTAS()
+Moira::signalTAS()
 {
     trace(XFILES, "XFILES: TAS instruction\n");
 }
 
 void
-CPU::signalHalt()
+Moira::signalHalt()
 {
     messageQueue.put(MSG_CPU_HALT);
 }
 
 void
-CPU::signalAddressError(moira::AEStackFrame &frame)
+Moira::signalAddressError(moira::AEStackFrame &frame)
 {
     trace(XFILES, "XFILES: Address error exception %x %x %x %x %x\n",
           frame.code, frame.addr, frame.ird, frame.sr, frame.pc);
 }
 
 void
-CPU::signalLineAException(u16 opcode)
+Moira::signalLineAException(u16 opcode)
 {
     trace(XFILES, "XFILES: lineAException(%x)\n", opcode);
 }
 
 void
-CPU::signalLineFException(u16 opcode)
+Moira::signalLineFException(u16 opcode)
 {
     trace(XFILES, "XFILES: lineFException(%x)\n", opcode);
 }
 
 void
-CPU::signalIllegalOpcodeException(u16 opcode)
+Moira::signalIllegalOpcodeException(u16 opcode)
 {
     trace(XFILES, "XFILES: illegalOpcodeException(%x)\n", opcode);
 }
 
 void
-CPU::signalTraceException()
+Moira::signalTraceException()
 {
     // debug(XFILES, "XFILES: traceException\n");
 }
 
 void
-CPU::signalTrapException()
+Moira::signalTrapException()
 {
     trace(XFILES, "XFILES: trapException\n");
 }
 
 void
-CPU::signalPrivilegeViolation()
+Moira::signalPrivilegeViolation()
 {
 }
 
 void
-CPU::signalInterrupt(u8 level)
+Moira::signalInterrupt(u8 level)
 {
     debug(INT_DEBUG, "Executing level %d IRQ\n", level);
 }
 
 void
-CPU::signalJumpToVector(int nr, u32 addr)
+Moira::signalJumpToVector(int nr, u32 addr)
 {
     bool isIrqException = nr >= 24 && nr <= 31;
 
@@ -181,18 +163,30 @@ CPU::signalJumpToVector(int nr, u32 addr)
 }
 
 void
-CPU::breakpointReached(u32 addr)
+Moira::addressErrorHandler()
+{
+    
+}
+
+void
+Moira::breakpointReached(u32 addr)
 {
     amiga.setControlFlags(RL_BREAKPOINT_REACHED);
 }
 
 void
-CPU::watchpointReached(u32 addr)
+Moira::watchpointReached(u32 addr)
 {
     amiga.setControlFlags(RL_WATCHPOINT_REACHED);
 }
 
-CPU::CPU(Amiga& ref) : AmigaComponent(ref)
+}
+
+//
+// CPU
+//
+
+CPU::CPU(Amiga& ref) : moira::Moira(ref)
 {
 }
 

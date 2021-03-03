@@ -22,6 +22,11 @@ extension ConfigurationController {
         perDf2Type.selectItem(withTag: config.df2Type)
         perDf3Type.selectItem(withTag: config.df3Type)
 
+        // Disk
+        perDriveBlankDiskFormat.selectItem(withTag: config.blankDiskFormatIntValue)
+        perBootCode.selectItem(withTag: config.bootBlock)
+        perBootCode.isEnabled = config.blankDiskFormat != .NODOS
+
         // Ports
         parent.gamePadManager.refresh(popup: perGameDevice1, hide: true)
         parent.gamePadManager.refresh(popup: perGameDevice2, hide: true)
@@ -76,7 +81,25 @@ extension ConfigurationController {
         }
         refresh()
     }
+            
+    @IBAction func perBlankDiskFormatAction(_ sender: NSPopUpButton!) {
+        
+        track("tag = \(sender.selectedTag())")
+        
+        let tag = sender.selectedTag()
+        config.blankDiskFormatIntValue = tag
+        refresh()
+    }
 
+    @IBAction func perBootCodeAction(_ sender: NSPopUpButton!) {
+        
+        track("tag = \(sender.selectedTag())")
+        
+        let tag = sender.selectedTag()
+        config.bootBlock = tag
+        refresh()
+    }
+    
     @IBAction func perGameDeviceAction(_ sender: NSPopUpButton!) {
 
         track("port: \(sender.tag) device: \(sender.selectedTag())")

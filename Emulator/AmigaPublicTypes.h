@@ -25,7 +25,6 @@ enum_long(OPT)
     
     // Denise
     OPT_DENISE_REVISION,
-    OPT_BRDRBLNK,
     
     // Real-time clock
     OPT_RTC_MODEL,
@@ -43,17 +42,19 @@ enum_long(OPT)
     // Disk controller
     OPT_DRIVE_CONNECT,
     OPT_DRIVE_SPEED,
-    OPT_DRIVE_NOISE_ENABLE,
-    OPT_DRIVE_EJECT_NOISE,
-    OPT_DRIVE_INSERT_NOISE,
-    OPT_DRIVE_STEP_NOISE,
-    OPT_DRIVE_POLL_NOISE,
     OPT_LOCK_DSKSYNC,
     OPT_AUTO_DSKSYNC,
 
     // Drives
     OPT_DRIVE_TYPE,
     OPT_EMULATE_MECHANICS,
+    OPT_DRIVE_PAN,
+    OPT_STEP_VOLUME,
+    OPT_POLL_VOLUME,
+    OPT_INSERT_VOLUME,
+    OPT_EJECT_VOLUME,
+    OPT_DEFAULT_FILESYSTEM,
+    OPT_DEFAULT_BOOTBLOCK,
     
     // Ports
     OPT_SERIAL_DEVICE,
@@ -79,6 +80,7 @@ enum_long(OPT)
     
     // Mouse
     OPT_PULLUP_RESISTORS,
+    OPT_SHAKE_DETECTION,
     OPT_MOUSE_VELOCITY,
     
     // Paula audio

@@ -10,20 +10,24 @@
 extension ConfigurationController {
 
     func refreshCompatibilityTab() {
-
-        // let config = amiga.config
-
+        
         // Graphics
         compClxSprSpr.state = config.clxSprSpr ? .on : .off
         compClxSprPlf.state = config.clxSprPlf ? .on : .off
         compClxPlfPlf.state = config.clxPlfPlf ? .on : .off
 
         // Blitter
-        let a = config.blitterAccuracy
-        compBltAccuracy.integerValue = a
-        compBltLevel1.textColor = (a >= 1) ? .labelColor : .tertiaryLabelColor
-        compBltLevel2.textColor = (a >= 2) ? .labelColor : .tertiaryLabelColor
+        let level = config.blitterAccuracy
+        compBltAccuracy.integerValue = level
+        compBltLevel1.textColor = (level >= 1) ? .labelColor : .tertiaryLabelColor
+        compBltLevel2.textColor = (level >= 2) ? .labelColor : .tertiaryLabelColor
         
+        // Chipset features
+        let ocsAgnus = config.agnusRev == AgnusRevision.OCS.rawValue
+        compSlowRamMirror.state = config.slowRamMirror ? .on : .off
+        compSlowRamMirror.isEnabled = !ocsAgnus
+        compTodBug.state = config.todBug ? .on : .off
+
         // Floppy drives
         let speed = config.driveSpeed
         compDriveSpeed.selectItem(withTag: Int(speed))
@@ -65,7 +69,19 @@ extension ConfigurationController {
         config.blitterAccuracy = sender.integerValue
         refresh()
     }
+    
+    @IBAction func compSlowRamMirrorAction(_ sender: NSButton!) {
 
+        config.slowRamMirror = sender.state == .on
+        refresh()
+    }
+    
+    @IBAction func compTodBugAction(_ sender: NSButton!) {
+
+        config.todBug = sender.state == .on
+        refresh()
+    }
+    
     @IBAction func compDriveSpeedAction(_ sender: NSPopUpButton!) {
 
         config.driveSpeed = sender.selectedTag()

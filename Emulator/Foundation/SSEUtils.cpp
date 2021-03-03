@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "SSEUtils.h"
 
 #if (defined(__i386__) || defined(__x86_64__)) && defined(__MACH__)

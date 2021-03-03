@@ -12,6 +12,7 @@
 
 #include "Agnus.h"
 #include "Drive.h"
+#include <math.h>
 
 void
 DiskController::serviceDiskEvent()

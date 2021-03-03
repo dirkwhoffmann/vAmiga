@@ -46,7 +46,7 @@ EXEFile::readFromStream(std::istream &stream)
     volume->setName(FSName("Disk"));
     
     // Make the volume bootable
-    volume->makeBootable(0);
+    volume->makeBootable(BB_AMIGADOS_13);
     
     // Add the executable
     FSBlock *file = volume->makeFile("file", data, size);

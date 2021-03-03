@@ -214,7 +214,6 @@ Amiga::getConfigItem(Option option) const
             return agnus.getConfigItem(option);
             
         case OPT_DENISE_REVISION:
-        case OPT_BRDRBLNK:
         case OPT_HIDDEN_SPRITES:
         case OPT_HIDDEN_LAYERS:
         case OPT_HIDDEN_LAYER_ALPHA:
@@ -280,12 +279,15 @@ Amiga::getConfigItem(Option option, long id) const
             
         case OPT_DRIVE_TYPE:
         case OPT_EMULATE_MECHANICS:
-        case OPT_DRIVE_NOISE_ENABLE:
-        case OPT_DRIVE_EJECT_NOISE:
-        case OPT_DRIVE_INSERT_NOISE:
-        case OPT_DRIVE_STEP_NOISE:
-        case OPT_DRIVE_POLL_NOISE:
-
+        case OPT_DRIVE_PAN:
+        case OPT_STEP_VOLUME:
+        case OPT_POLL_VOLUME:
+        case OPT_INSERT_VOLUME:
+        case OPT_EJECT_VOLUME:
+            return df[id]->getConfigItem(option);
+            
+        case OPT_DEFAULT_FILESYSTEM:
+        case OPT_DEFAULT_BOOTBLOCK:
             return df[id]->getConfigItem(option);
             
         case OPT_PULLUP_RESISTORS:
@@ -309,7 +311,7 @@ Amiga::configure(Option option, long value)
     // Inform the GUI if the configuration has changed
     if (changed) queue.put(MSG_CONFIG);
     
-    // Dump the current configuration in debugging mode
+    // Dump the current configuration in debug mode
     if (changed && CNF_DEBUG) dump(Dump::Config);
 
     return changed;
@@ -323,8 +325,8 @@ Amiga::configure(Option option, long id, long value)
     
     // Inform the GUI if the configuration has changed
     if (changed) queue.put(MSG_CONFIG);
-    
-    // Dump the current configuration in debugging mode
+
+    // Dump the current configuration in debug mode
     if (changed && CNF_DEBUG) dump(Dump::Config);
         
     return changed;
@@ -365,7 +367,15 @@ void
 Amiga::_dump(Dump::Category category, std::ostream& os) const
 {
     if (category & Dump::Config) {
-        
+    
+        if (CNF_DEBUG) {
+            
+            df0.dump(Dump::Config);
+            paula.dump(Dump::Config);
+            paula.muxer.dump(Dump::Config);
+            ciaA.dump(Dump::Config);
+            denise.dump(Dump::Config);
+        }
     }
     
     if (category & Dump::State) {

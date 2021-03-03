@@ -11,7 +11,7 @@
 
 #include "Aliases.h"
 #include "Macros.h"
-
+#include <string.h>
 
 //
 // Basic memory buffer I/O

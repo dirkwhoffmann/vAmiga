@@ -12,6 +12,8 @@
 #pragma once
 
 #include "Aliases.h"
+#include "FilePublicTypes.h"
+#include "FSPublicTypes.h"
 
 //
 // Enumerations
@@ -58,11 +60,15 @@ typedef struct
     Cycle stepDelay;
     
     // Noise settings
-    bool noiseEnable;
-    bool noiseEject;
-    bool noiseInsert;
-    bool noiseStep;
-    bool noisePoll;
+    i16 pan;
+    u8 stepVolume;
+    u8 pollVolume;
+    u8 insertVolume;
+    u8 ejectVolume;
+    
+    // Blank disk defaults
+    FSVolumeType defaultFileSystem;
+    BootBlockId defaultBootBlock;
 }
 DriveConfig;
 

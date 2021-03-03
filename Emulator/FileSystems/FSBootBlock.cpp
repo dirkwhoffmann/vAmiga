@@ -9,10 +9,10 @@
 
 #include "config.h"
 #include "BootBlockImage.h"
-
 #include "FSBootBlock.h"
 #include "FSDevice.h"
 #include "FSPartition.h"
+#include "string.h"
 
 FSBootBlock::FSBootBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
@@ -117,18 +117,21 @@ FSBootBlock::dump() const
 }
 
 void
-FSBootBlock::writeBootBlock(long bootBlockID, int page)
+FSBootBlock::writeBootBlock(BootBlockId id, isize page)
 {
     assert(page == 0 || page == 1);
     
-    debug(FS_DEBUG, "writeBootBlock(id: %ld, page: %d)\n", bootBlockID, page);
+    debug(FS_DEBUG, "writeBootBlock(%s, %zd)\n", BootBlockIdEnum::key(id), page);
     
-    // Read boot block image from the database
-    BootBlockImage image = BootBlockImage(bootBlockID);
-    
-    if (page == 0) {
-        image.write(data + 4, 4, 511); // Write 508 bytes (skip header)
-    } else {
-        image.write(data, 512, 1023);  // Write 512 bytes
+    if (id != BB_NONE) {
+        
+        // Read boot block image from the database
+        auto image = BootBlockImage(id);
+        
+        if (page == 0) {
+            image.write(data + 4, 4, 511); // Write 508 bytes (skip header)
+        } else {
+            image.write(data, 512, 1023);  // Write 512 bytes
+        }
     }
 }

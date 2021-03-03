@@ -18,26 +18,17 @@
 
 class Preferences {
     
-    // var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
-
     //
     // General
     //
         
     // Floppy
-    var blankDiskFormat = GeneralDefaults.std.blankDiskFormat
+    var blankDiskFormat = PeripheralsDefaults.std.blankDiskFormat
     var blankDiskFormatIntValue: Int {
         get { return Int(blankDiskFormat.rawValue) }
         set { blankDiskFormat = FSVolumeType.init(rawValue: newValue)! }
     }
-    var bootBlock = GeneralDefaults.std.bootBlock
-    var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
-    var driveSounds = GeneralDefaults.std.driveSounds
-    var driveSoundPan = GeneralDefaults.std.driveSoundPan
-    var driveInsertSound = GeneralDefaults.std.driveInsertSound
-    var driveEjectSound = GeneralDefaults.std.driveEjectSound
-    var driveHeadSound = GeneralDefaults.std.driveHeadSound
-    var drivePollSound = GeneralDefaults.std.drivePollSound
+    var bootBlock = PeripheralsDefaults.std.bootBlock
     
     // Fullscreen
     var keepAspectRatio = GeneralDefaults.std.keepAspectRatio
@@ -53,6 +44,7 @@ class Preferences {
     }
     
     // Misc
+    var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
     var closeWithoutAsking = GeneralDefaults.std.closeWithoutAsking
     var pauseInBackground = GeneralDefaults.std.pauseInBackground
 
@@ -154,17 +146,6 @@ class Preferences {
     
     func loadGeneralDefaults(_ defaults: GeneralDefaults) {
                 
-        // Floppy
-        blankDiskFormat = defaults.blankDiskFormat
-        bootBlock = defaults.bootBlock
-        ejectWithoutAsking = defaults.ejectWithoutAsking
-        driveSounds = defaults.driveSounds
-        driveSoundPan = defaults.driveSoundPan
-        driveInsertSound = defaults.driveInsertSound
-        driveEjectSound = defaults.driveEjectSound
-        driveHeadSound = defaults.driveHeadSound
-        drivePollSound = defaults.drivePollSound
-
         // Fullscreen
         keepAspectRatio = defaults.keepAspectRatio
         exitOnEsc = defaults.exitOnEsc
@@ -173,6 +154,7 @@ class Preferences {
         warpMode = defaults.warpMode
 
         // Misc
+        ejectWithoutAsking = defaults.ejectWithoutAsking
         pauseInBackground = defaults.pauseInBackground
         closeWithoutAsking = defaults.closeWithoutAsking
     }
@@ -181,17 +163,6 @@ class Preferences {
         
         let defaults = UserDefaults.standard
            
-        // Floppy
-        blankDiskFormatIntValue = defaults.integer(forKey: Keys.Gen.blankDiskFormat)
-        bootBlock = defaults.integer(forKey: Keys.Gen.bootBlock)
-        ejectWithoutAsking = defaults.bool(forKey: Keys.Gen.ejectWithoutAsking)
-        driveSounds = defaults.bool(forKey: Keys.Gen.driveSounds)
-        driveSoundPan = defaults.double(forKey: Keys.Gen.driveSoundPan)
-        driveInsertSound = defaults.bool(forKey: Keys.Gen.driveInsertSound)
-        driveEjectSound = defaults.bool(forKey: Keys.Gen.driveEjectSound)
-        driveHeadSound = defaults.bool(forKey: Keys.Gen.driveHeadSound)
-        drivePollSound = defaults.bool(forKey: Keys.Gen.drivePollSound)
-        
         // Fullscreen
         keepAspectRatio = defaults.bool(forKey: Keys.Gen.keepAspectRatio)
         exitOnEsc = defaults.bool(forKey: Keys.Gen.exitOnEsc)
@@ -200,6 +171,7 @@ class Preferences {
         warpModeIntValue = defaults.integer(forKey: Keys.Gen.warpMode)
 
         // Misc
+        ejectWithoutAsking = defaults.bool(forKey: Keys.Gen.ejectWithoutAsking)
         pauseInBackground = defaults.bool(forKey: Keys.Gen.pauseInBackground)
         closeWithoutAsking = defaults.bool(forKey: Keys.Gen.closeWithoutAsking)
     }
@@ -207,18 +179,7 @@ class Preferences {
     func saveGeneralUserDefaults() {
         
         let defaults = UserDefaults.standard
-        
-        // Floppy
-        defaults.set(blankDiskFormatIntValue, forKey: Keys.Gen.blankDiskFormat)
-        defaults.set(bootBlock, forKey: Keys.Gen.bootBlock)
-        defaults.set(ejectWithoutAsking, forKey: Keys.Gen.ejectWithoutAsking)
-        defaults.set(driveSounds, forKey: Keys.Gen.driveSounds)
-        defaults.set(driveSoundPan, forKey: Keys.Gen.driveSoundPan)
-        defaults.set(driveInsertSound, forKey: Keys.Gen.driveInsertSound)
-        defaults.set(driveEjectSound, forKey: Keys.Gen.driveEjectSound)
-        defaults.set(driveHeadSound, forKey: Keys.Gen.driveHeadSound)
-        defaults.set(drivePollSound, forKey: Keys.Gen.drivePollSound)
-        
+                
         // Fullscreen
         defaults.set(keepAspectRatio, forKey: Keys.Gen.keepAspectRatio)
         defaults.set(exitOnEsc, forKey: Keys.Gen.exitOnEsc)
@@ -227,6 +188,7 @@ class Preferences {
         defaults.set(warpModeIntValue, forKey: Keys.Gen.warpMode)
 
         // Misc
+        defaults.set(ejectWithoutAsking, forKey: Keys.Gen.ejectWithoutAsking)
         defaults.set(pauseInBackground, forKey: Keys.Gen.pauseInBackground)
         defaults.set(closeWithoutAsking, forKey: Keys.Gen.closeWithoutAsking)
     }

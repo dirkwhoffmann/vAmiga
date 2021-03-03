@@ -18,6 +18,7 @@
 Mouse::Mouse(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
 {
     config.pullUpResistors = true;
+    config.shakeDetection = true;
     config.velocity = 100;
 
     updateScalingFactors();
@@ -49,6 +50,7 @@ Mouse::getConfigItem(Option option) const
     switch (option) {
 
         case OPT_PULLUP_RESISTORS:  return config.pullUpResistors;
+        case OPT_SHAKE_DETECTION:   return config.shakeDetection;
         case OPT_MOUSE_VELOCITY:    return config.velocity;
 
         default:
@@ -71,7 +73,15 @@ Mouse::setConfigItem(Option option, long id, long value)
             }
             config.pullUpResistors = value;
             return true;
-  
+ 
+        case OPT_SHAKE_DETECTION:
+            
+            if (config.shakeDetection == value) {
+                return false;
+            }
+            config.shakeDetection = value;
+            return true;
+            
         case OPT_MOUSE_VELOCITY:
             
             printf("config: OPT_MOUSE_VELOCITY\n");
@@ -104,6 +114,7 @@ Mouse::_dump(Dump::Category category, std::ostream& os) const
     if (category & Dump::Config) {
 
         os << DUMP("Pull-up resistors") << YESNO(config.pullUpResistors) << std::endl;
+        os << DUMP("Shake detection") << YESNO(config.shakeDetection) << std::endl;
         os << DUMP("Velocity") << config.velocity << std::endl;
     }
     

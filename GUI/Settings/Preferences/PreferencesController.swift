@@ -11,7 +11,6 @@ class PreferencesController: DialogController {
 
     var pref: Preferences { return parent.pref }
     var gamePadManager: GamePadManager { return parent.gamePadManager! }
-    // var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     
     @IBOutlet weak var tabView: NSTabView!
         
@@ -19,18 +18,6 @@ class PreferencesController: DialogController {
     // General
     //
     
-    // Drive
-    @IBOutlet weak var genDriveBlankDiskFormat: NSPopUpButton!
-    @IBOutlet weak var genBootCode: NSPopUpButton!
-    @IBOutlet weak var genBootCodeVirus: NSImageView!
-    @IBOutlet weak var genEjectWithoutAskingButton: NSButton!
-    @IBOutlet weak var genDriveSounds: NSButton!
-    @IBOutlet weak var genDriveSoundPan: NSPopUpButton!
-    @IBOutlet weak var genDriveInsertSound: NSButton!
-    @IBOutlet weak var genDriveEjectSound: NSButton!
-    @IBOutlet weak var genDriveHeadSound: NSButton!
-    @IBOutlet weak var genDrivePollSound: NSButton!
-
     // Fullscreen
     @IBOutlet weak var genAspectRatioButton: NSButton!
     @IBOutlet weak var genExitOnEscButton: NSButton!
@@ -39,6 +26,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var genWarpMode: NSPopUpButton!
 
     // Misc
+    @IBOutlet weak var genEjectWithoutAskingButton: NSButton!
     @IBOutlet weak var genPauseInBackground: NSButton!
     @IBOutlet weak var genCloseWithoutAskingButton: NSButton!
 

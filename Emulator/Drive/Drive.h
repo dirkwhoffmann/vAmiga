@@ -98,6 +98,7 @@ public:
     const DriveConfig &getConfig() const { return config; }
     
     long getConfigItem(Option option) const;
+    bool setConfigItem(Option option, long value) override;
     bool setConfigItem(Option option, long id, long value) override;
     
     
@@ -265,7 +266,8 @@ public:
 
     void ejectDisk();
     bool insertDisk(Disk *disk);
-    
+    bool insertBlankDisk();
+
     u64 fnv() const;
     
     //

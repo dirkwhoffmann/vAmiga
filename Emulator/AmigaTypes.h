@@ -32,7 +32,6 @@ struct OptionEnum : Reflection<OptionEnum, Option> {
             case OPT_SLOW_RAM_MIRROR:     return "SLOW_RAM_MIRROR";
                 
             case OPT_DENISE_REVISION:     return "DENISE_REVISION";
-            case OPT_BRDRBLNK:            return "BRDRBLNK";
                 
             case OPT_RTC_MODEL:           return "RTC_MODEL";
 
@@ -47,17 +46,18 @@ struct OptionEnum : Reflection<OptionEnum, Option> {
                 
             case OPT_DRIVE_CONNECT:       return "DRIVE_CONNECT";
             case OPT_DRIVE_SPEED:         return "DRIVE_SPEED";
-            case OPT_DRIVE_NOISE_ENABLE:  return "DRIVE_NOISE_ENABLE";
-            case OPT_DRIVE_INSERT_NOISE:  return "DRIVE_NOISE_INSERT";
-            case OPT_DRIVE_EJECT_NOISE:   return "DRIVE_NOISE_EJECT";
-            case OPT_DRIVE_STEP_NOISE:    return "DRIVE_NOISE_STEP";
-            case OPT_DRIVE_POLL_NOISE:    return "DRIVE_NOISE_POLL";
-
             case OPT_LOCK_DSKSYNC:        return "LOCK_DSKSYNC";
             case OPT_AUTO_DSKSYNC:        return "AUTO_DSKSYNC";
 
             case OPT_DRIVE_TYPE:          return "DRIVE_TYPE";
             case OPT_EMULATE_MECHANICS:   return "EMULATE_MECHANICS";
+            case OPT_DRIVE_PAN:           return "DRIVE_PAN";
+            case OPT_STEP_VOLUME:         return "STEP_VOLUME";
+            case OPT_POLL_VOLUME:         return "POLL_VOLUME";
+            case OPT_INSERT_VOLUME:       return "INSERT_VOLUME";
+            case OPT_EJECT_VOLUME:        return "EJECT_VOLUME";
+            case OPT_DEFAULT_FILESYSTEM:  return "DEFAULT_FILESYSTEM";
+            case OPT_DEFAULT_BOOTBLOCK:   return "DEFAULT_BOOTBLOCK";
                 
             case OPT_SERIAL_DEVICE:       return "SERIAL_DEVICE";
  

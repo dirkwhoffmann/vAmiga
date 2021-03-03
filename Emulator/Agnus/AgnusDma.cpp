@@ -466,30 +466,30 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
     // Allocate slots
     if (hires) {
         
-        for (int i = first; i <= last; i++)
+        for (isize i = first; i <= last; i++)
             bplEvent[i] =
             inHiresDmaAreaOdd(i) ? bplDMA[1][channels][i] :
             inHiresDmaAreaEven(i) ? bplDMA[1][channels][i] : EVENT_NONE;
         
         // Add extra shift register events if the even/odd DDF windows differ
         // These events are like BPL_H0 events without performing DMA.
-        for (int i = ddfHires.strtEven; i < ddfHires.strtOdd; i++)
+        for (isize i = ddfHires.strtEven; i < ddfHires.strtOdd; i++)
             if ((i & 3) == 3 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SR;
-        for (int i = ddfHires.stopOdd; i < ddfHires.stopEven; i++)
+        for (isize i = ddfHires.stopOdd; i < ddfHires.stopEven; i++)
             if ((i & 3) == 3 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SR;
 
     } else {
         
-        for (int i = first; i <= last; i++)
+        for (isize i = first; i <= last; i++)
             bplEvent[i] =
             inLoresDmaAreaOdd(i) ? bplDMA[0][channels][i] :
             inLoresDmaAreaEven(i) ? bplDMA[0][channels][i] : EVENT_NONE;
     
         // Add extra shift register events if the even/odd DDF windows differ
         // These events are like BPL_L0 events without performing DMA.
-        for (int i = ddfLores.strtEven; i < ddfLores.strtOdd; i++)
+        for (isize i = ddfLores.strtEven; i < ddfLores.strtOdd; i++)
              if ((i & 7) == 7 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SR;
-        for (int i = ddfLores.stopOdd; i < ddfLores.stopEven; i++)
+        for (isize i = ddfLores.stopOdd; i < ddfLores.stopEven; i++)
              if ((i & 7) == 7 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SR;
     }
         

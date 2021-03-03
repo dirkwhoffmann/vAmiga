@@ -137,8 +137,8 @@ public extension MetalView {
             let dy = event.deltaY
                                     
             // Make coordinate independent of the actual window size
-            let scaleX = (256.0 * 400.0) / frame.width
-            let scaleY = (256.0 * 300.0) / frame.height
+            let scaleX = (256.0 * 400.0) / frame.width / 128.0
+            let scaleY = (256.0 * 300.0) / frame.height / 128.0
             let dxdy = NSPoint.init(x: dx * scaleX, y: dy * scaleY)
             
             // Report the new location to the Amiga mouse
@@ -146,12 +146,7 @@ public extension MetalView {
                 mouse1!.processMouseEvents(delta: dxdy)
             } else {
                 mouse2!.processMouseEvents(delta: dxdy)
-            }
-            
-            // Check for a shaking mouse movement
-            if prefs.releaseMouseByShaking && mouseIsShaking(dx: dx, dy: dy) {
-                releaseMouse()
-            }
+            }            
         }
     }
     
@@ -193,53 +188,5 @@ public extension MetalView {
             default: break
             }
         }
-    }
-    
-    func mouseIsShaking(dx: CGFloat, dy: CGFloat) -> Bool {
-        
-        // Accumulate the travelled distance
-        dxsum += abs(dx)
-        
-        // Check for a direction reversal
-        if dx * dxsign < 0 {
-        
-            let dt = DispatchTime.diffMilliSec(lastTurn)
-            dxsign = -dxsign
-
-            // track("\(dxturns) \(dxsign) \(dx) \(dxabssum) \(dt)")
-
-            // A direction reversal is considered part of a shake, if the
-            // previous reversal happened a short while ago.
-            if dt < 400 {
-      
-                // Eliminate jitter by demanding that the mouse has travelled
-                // a long enough distance.
-                if dxsum > 400 {
-                    
-                    dxturns += 1
-                    dxsum = 0
-                    
-                    // Report a shake if the threshold has been reached.
-                    if dxturns > 3 {
-                        
-                        // track("Mouse shake detected")
-                        lastShake = DispatchTime.now()
-                        dxturns = 0
-                        return true
-                    }
-                }
-                
-            } else {
-                
-                // Time out. The user is definitely not shaking the mouse.
-                // Let's reset the recorded movement histoy.
-                dxturns = 0
-                dxsum = 0
-            }
-            
-            lastTurn = DispatchTime.now()
-        }
-        
-        return false
     }
 }

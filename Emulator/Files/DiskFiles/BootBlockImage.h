@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "FilePublicTypes.h"
+#include "FileTypes.h"
 #include <stddef.h>
 
 typedef struct
@@ -36,7 +36,7 @@ public:
     // Constructors
     BootBlockImage(const u8 *buffer);
     BootBlockImage(const char *name);
-    BootBlockImage(long id);
+    BootBlockImage(BootBlockId id);
     
     // Exports the image
     void write(u8 *buffer, isize first = 0, isize last = 0);

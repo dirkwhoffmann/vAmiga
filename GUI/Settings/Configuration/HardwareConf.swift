@@ -12,17 +12,17 @@ extension ConfigurationController {
     func refreshHardwareTab() {
 
         let poweredOff = amiga.poweredOff
-        let ocsAgnus = config.agnusRev == AgnusRevision.OCS.rawValue
         
         // Chipset
         hwAgnusRevisionPopup.selectItem(withTag: config.agnusRev)
-        hwSlowRamMirror.state = config.slowRamMirror ? .on : .off
-        hwSlowRamMirror.isEnabled = !ocsAgnus
         hwDeniseRevisionPopup.selectItem(withTag: config.deniseRev)
-        hwBorderBlank.state = config.borderBlank ? .on : .off
         hwCiaRevisionPopup.selectItem(withTag: config.ciaRev)
-        hwTodBug.state = config.todBug ? .on : .off
         hwRealTimeClock.selectItem(withTag: config.rtClock)
+
+        // Audio filter
+        hwFilterType.selectItem(withTag: config.filterType)
+        hwFilterAlwaysOn.state = config.filterAlwaysOn ? .on : .off
+        hwFilterAlwaysOn.isEnabled = config.filterType != FilterType.NONE.rawValue
 
         // Memory
         hwChipRamPopup.selectItem(withTag: config.chipRam)
@@ -58,33 +58,27 @@ extension ConfigurationController {
         refresh()
     }
 
-    @IBAction func hwSlowRamMirrorAction(_ sender: NSButton!) {
-
-        config.slowRamMirror = sender.state == .on
-        refresh()
-    }
-
     @IBAction func hwDeniseRevAction(_ sender: NSPopUpButton!) {
 
         config.deniseRev = sender.selectedTag()
         refresh()
     }
 
-    @IBAction func hwBorderBlankAction(_ sender: NSButton!) {
-
-        config.borderBlank = sender.state == .on
+    @IBAction func hwFilterTypeAction(_ sender: NSPopUpButton!) {
+        
+        config.filterType = sender.selectedTag()
         refresh()
     }
 
+    @IBAction func hwFilterAlwaysOnAction(_ sender: NSButton!) {
+
+        config.filterAlwaysOn = sender.state == .on
+        refresh()
+    }
+    
     @IBAction func hwCiaRevAction(_ sender: NSPopUpButton!) {
 
         config.ciaRev = sender.selectedTag()
-        refresh()
-    }
-
-    @IBAction func hwTodBugAction(_ sender: NSButton!) {
-
-        config.todBug = sender.state == .on
         refresh()
     }
 

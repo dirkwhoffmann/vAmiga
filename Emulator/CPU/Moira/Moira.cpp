@@ -22,11 +22,12 @@ namespace moira {
 #include "StrWriter_cpp.h"
 #include "MoiraDasm_cpp.h"
 
-Moira::Moira()
+Moira::Moira(Amiga &ref) : AmigaComponent(ref)
 {
     if (BUILD_INSTR_INFO_TABLE) info = new InstrInfo[65536];
     if (ENABLE_DASM) dasm = new DasmPtr[65536];
 
+    printf("sizeof(ExecPtr) = %zu\n", sizeof(ExecPtr));
     createJumpTables();
 }
 
