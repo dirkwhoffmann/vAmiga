@@ -42,6 +42,9 @@ extension MyController: NSWindowDelegate {
         
         track()
         
+        // Write back screenshot cache
+        try? mydocument!.persistScreenshots()
+
         // Stop timers
         timerLock.lock()
         timer?.invalidate()
@@ -51,9 +54,6 @@ extension MyController: NSWindowDelegate {
         snapshotTimer = nil
         screenshotTimer?.invalidate()
         screenshotTimer = nil
-
-        // Write back screenshot cache
-        try? mydocument!.persistScreenshots()
 
         // Disconnect and close auxiliary windows
         inspector?.amiga = nil
@@ -67,11 +67,14 @@ extension MyController: NSWindowDelegate {
         // Disconnect all game pads
         gamePadManager.shutDown()
         
-        // Unregister from the message queue
+        // Unregister from the message queue and wait for MSG_UNREGISTER
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
         amiga.removeListener(myself)
-        
-        // Kill the emulator
+    }
+    
+    func shutDown() {
+                
+        track("Shutting down the emulator")
         amiga.kill()
         amiga = nil
     }

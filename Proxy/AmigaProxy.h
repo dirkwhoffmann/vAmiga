@@ -142,7 +142,7 @@
 @property (readonly, strong) SerialPortProxy *serialPort;
 
 - (void)dealloc;
-- (void) kill;
+- (void)kill;
 
 @property (readonly) BOOL isReleaseBuild;
 @property BOOL warp;

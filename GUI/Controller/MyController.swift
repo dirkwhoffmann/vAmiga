@@ -66,7 +66,7 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Timer lock
     var timerLock: NSLock!
-
+    
     // Screenshot and snapshot timers
     var snapshotTimer: Timer?
     var screenshotTimer: Timer? // DEPRECATED
@@ -95,7 +95,7 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Remembers the running state for the pauseInBackground feature
     var pauseInBackgroundSavedState = false
-         
+    
     //
     // Timers
     //
@@ -440,7 +440,7 @@ extension MyController {
         
         var driveNr: Int { return msg.data & 0xFF }
         var driveCyl: Int { return (msg.data >> 8) & 0xFF; }
-        
+                
         switch msg.type {
     
         case .REGISTER:
@@ -448,9 +448,7 @@ extension MyController {
             
         case .UNREGISTER:
             track("Unregistered from message queue")
-            // From now on, it's save to delete the document.
-            // To trigger deletion, we remove any reference to it.
-            mydocument = nil
+            shutDown()
             
         case .CONFIG:
             inspector?.fullRefresh()

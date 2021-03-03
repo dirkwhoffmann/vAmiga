@@ -28,15 +28,23 @@ MsgQueue::addListener(const void *listener, Callback *func)
 
 void
 MsgQueue::removeListener(const void *listener)
-{
-    put(MSG_UNREGISTER);
+{    
+    Callback *callback = nullptr;
     
     synchronized {
         
         for (auto it = listeners.begin(); it != listeners.end(); it++) {
-            if (it->first == listener) { listeners.erase(it);  break; }
+            
+            if (it->first == listener) {
+                callback = it->second;
+                listeners.erase(it);
+                break;
+            }
         }
     }
+    
+    // Send a last message to the listener
+    if (callback) callback(listener, MSG_UNREGISTER, 0);
 }
 
 Message
