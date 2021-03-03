@@ -259,7 +259,7 @@ Blitter::doFastLineBlit()
     bool single_dot = false;
     u8 minterm = (u8)(bltcon >> 16);
     
-    for (int i = 0; i < height; ++i)
+    for (isize i = 0; i < height; ++i)
     {
         // Read C-data from memory if the C-channel is enabled
         if (c_enabled) {
