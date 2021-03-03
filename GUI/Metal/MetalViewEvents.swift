@@ -137,8 +137,8 @@ public extension MetalView {
             let dy = event.deltaY
                                     
             // Make coordinate independent of the actual window size
-            let scaleX = (256.0 * 400.0) / frame.width
-            let scaleY = (256.0 * 300.0) / frame.height
+            let scaleX = (256.0 * 400.0) / frame.width / 128.0
+            let scaleY = (256.0 * 300.0) / frame.height / 128.0
             let dxdy = NSPoint.init(x: dx * scaleX, y: dy * scaleY)
             
             // Report the new location to the Amiga mouse
