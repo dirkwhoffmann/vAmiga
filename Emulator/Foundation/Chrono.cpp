@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "Chrono.h"
 
 #ifdef __MACH__
@@ -62,6 +63,8 @@ Time::now()
 void
 Time::sleep()
 {
+    struct timespec req, rem;
+    
     if (ticks > 0) {
         req.tv_sec = 0;
         req.tv_nsec = ticks;

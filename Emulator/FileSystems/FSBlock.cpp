@@ -20,6 +20,7 @@
 #include "FSPartition.h"
 #include "FSRootBlock.h"
 #include "FSUserDirBlock.h"
+#include <string.h>
 
 FSBlock *
 FSBlock::makeWithType(FSPartition &p, Block nr, FSBlockType type)

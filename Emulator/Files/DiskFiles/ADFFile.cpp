@@ -271,13 +271,13 @@ ADFFile::killVirus()
     if (isOFSVolumeType(getDos())) {
 
         msg("a standard OFS bootblock\n");
-        BootBlockImage bb = BootBlockImage((long)0);
+        BootBlockImage bb = BootBlockImage(BB_AMIGADOS_13);
         bb.write(data + 4, 4, 1023);
 
     } else if (isFFSVolumeType(getDos())) {
 
         msg("a standard FFS bootblock\n");
-        BootBlockImage bb = BootBlockImage((long)1);
+        BootBlockImage bb = BootBlockImage(BB_AMIGADOS_20);
         bb.write(data + 4, 4, 1023);
 
     } else {

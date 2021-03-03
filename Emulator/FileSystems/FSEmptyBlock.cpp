@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "FSEmptyBlock.h"
+#include "string.h"
 
 FSItemType
 FSEmptyBlock::itemType(isize byte) const

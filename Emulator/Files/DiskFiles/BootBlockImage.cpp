@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "BootBlockImage.h"
+#include <string.h>
 
 //
 // Bootblock images

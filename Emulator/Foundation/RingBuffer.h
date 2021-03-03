@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "config.h"
 #include "Aliases.h"
 
 #include <utility>
@@ -82,7 +83,7 @@ template <class T, isize capacity> struct RingBuffer
     
     T& read()
     {
-         assert(!isEmpty());
+        assert(!isEmpty());
 
         i64 oldr = r;
         r = next(r);

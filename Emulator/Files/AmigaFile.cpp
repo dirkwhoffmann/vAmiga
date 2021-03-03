@@ -19,7 +19,7 @@
 #include "HDFFile.h"
 #include "RomFile.h"
 #include "ExtendedRomFile.h"
-
+#include "string.h"
 
 AmigaFile::AmigaFile(isize capacity)
 {

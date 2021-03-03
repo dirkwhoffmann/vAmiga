@@ -11,6 +11,9 @@
 #include "config.h"
 #include "FSPartition.h"
 #include "FSDevice.h"
+#include <algorithm>
+#include <string.h>
+#include <vector>
 
 FSPartition *
 FSPartition::makeWithFormat(FSDevice &dev, FSPartitionDescriptor &layout)

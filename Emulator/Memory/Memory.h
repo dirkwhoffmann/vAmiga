@@ -370,9 +370,9 @@ public:
     bool hasExt() { return ext != nullptr; }
 
     // Erases an installed Rom
-    void eraseRom() { assert(rom); memset(rom, 0, config.romSize); }
-    void eraseWom() { assert(wom); memset(wom, 0, config.womSize); }
-    void eraseExt() { assert(ext); memset(ext, 0, config.extSize); }
+    void eraseRom() { memset(rom, 0, config.romSize); }
+    void eraseWom() { memset(wom, 0, config.womSize); }
+    void eraseExt() { memset(ext, 0, config.extSize); }
     
     // Installs a Boot Rom or Kickstart Rom
     void loadRom(class RomFile *rom) throws;
