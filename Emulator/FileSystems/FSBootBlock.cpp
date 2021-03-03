@@ -117,11 +117,11 @@ FSBootBlock::dump() const
 }
 
 void
-FSBootBlock::writeBootBlock(BootBlockId id, int page)
+FSBootBlock::writeBootBlock(BootBlockId id, isize page)
 {
     assert(page == 0 || page == 1);
     
-    debug(FS_DEBUG, "writeBootBlock(id: %lld, page: %d)\n", id, page);
+    debug(FS_DEBUG, "writeBootBlock(%s, %zd)\n", BootBlockIdEnum::key(id), page);
     
     if (id != BB_NONE) {
         
