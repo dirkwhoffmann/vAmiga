@@ -48,15 +48,19 @@ Oscillator::restart()
 void
 Oscillator::synchronize()
 {
+    syncCounter++;
+    
     // Only proceed if we are not running in warp mode
     if (warpMode) return;
     
-    auto clockDelta  = agnus.clock - clockBase;
-    auto elapsedTime = Time((i64)(clockDelta * 1000 / masterClockFrequency));
-    auto targetTime  = timeBase + elapsedTime;
-    auto now         = Time::now();
+    auto now          = Time::now();
+    // lastSync          = now;
+
+    auto elapsedCyles = agnus.clock - clockBase;
+    auto elapsedNanos = Time((i64)(elapsedCyles * 1000 / masterClockFrequency));
+    auto targetTime   = timeBase + elapsedNanos;
     
-    // Check if we're running too slow ...
+    // Check if we're running too slow...
     if (now > targetTime) {
         
         // Check if we're completely out of sync...
@@ -68,7 +72,7 @@ Oscillator::synchronize()
         }
     }
     
-    // Check if we're running too fast ...
+    // Check if we're running too fast...
     if (now < targetTime) {
         
         // Check if we're completely out of sync...
@@ -80,6 +84,20 @@ Oscillator::synchronize()
         }
         
         // See you soon...
+        loadClock.stop();
         targetTime.sleepUntil();
+        loadClock.go();
+    }
+    
+    // Compute the CPU load once in a while
+    if (syncCounter % 32 == 0) {
+        
+        auto used  = loadClock.getElapsedTime().asSeconds();
+        auto total = nonstopClock.getElapsedTime().asSeconds();
+        
+        cpuLoad = used / total;
+        
+        loadClock.restart();
+        nonstopClock.restart();
     }
 }

@@ -172,17 +172,46 @@ Clock::Clock()
     start = Time::now();
 }
 
-Time
-Clock::getElapsedTime() const
+void
+Clock::updateElapsed()
 {
-    return Time::now() - start;
+    auto now = Time::now();
+    if (!paused) elapsed += now - start;
+    start = now;
+}
+
+Time
+Clock::getElapsedTime()
+{
+    updateElapsed();
+    return elapsed;
+}
+
+Time
+Clock::stop()
+{
+    updateElapsed();
+    paused = true;
+    return elapsed;
+}
+
+Time
+Clock::go()
+{
+    updateElapsed();
+    paused = false;
+    return elapsed;
 }
 
 Time
 Clock::restart()
 {
-    Time result = getElapsedTime();
+    updateElapsed();
+    auto result = elapsed;
+
     start = Time::now();
+    elapsed = 0;
+    paused = false;
     
     return result;
 }

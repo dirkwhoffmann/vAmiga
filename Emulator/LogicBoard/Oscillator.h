@@ -27,9 +27,22 @@ class Oscillator : public AmigaComponent {
     
     // Agnus clock (Amiga master cycles)
     Cycle clockBase = 0;
+    
+    // Counts the number of calls to 'synchronize'
+    isize syncCounter = 0;
+    
+    // Time stamp of the last call to synchronize
+    // Time lastSync;
 
     // Kernel clock
     Time timeBase;
+
+    // The current CPU load (%)
+    float cpuLoad = 0.0;
+    
+    // Clocks for measuring the CPU load
+    Clock nonstopClock;
+    Clock loadClock;
 
     
     //

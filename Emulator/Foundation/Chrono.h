@@ -17,13 +17,15 @@
 
 class Time {
     
-    i64 ticks;
+public:
+    
+    i64 ticks = 0;
 
 public:
     
     static Time now();
     
-    Time() : ticks(0) { };
+    Time() { };
     Time(i64 value) : ticks(value) { };
     
     i64 asNanoseconds()  const { return ticks; }
@@ -53,11 +55,19 @@ public:
 class Clock {
         
     Time start;
+    Time elapsed;
     
+    bool paused = false;
+
+    void updateElapsed();
+
 public:
     
     Clock();
 
-    Time getElapsedTime() const;
+    Time getElapsedTime();
+    
+    Time stop();
+    Time go();
     Time restart();
 };
