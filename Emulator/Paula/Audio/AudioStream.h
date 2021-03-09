@@ -115,7 +115,7 @@ struct FloatStereo
     float r;
     
     FloatStereo() { l = 0; r = 0; }
-    FloatStereo(float l, float r) { this->l = l * 0.0000025; this->r = r * 0.0000025; }
+    FloatStereo(float l, float r) { this->l = l * 0.000005; this->r = r * 0.000005; }
     
     float magnitude(bool left) { return left ? abs(l) : abs(r); }
     
