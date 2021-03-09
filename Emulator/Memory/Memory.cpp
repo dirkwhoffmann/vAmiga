@@ -591,7 +591,7 @@ Memory::loadRomFromFile(const char *path, ErrorCode *ec)
 {
     *ec = ERROR_OK;
     try { loadRomFromFile(path); }
-    catch (VAError &err) { *ec = err.errorCode; }
+    catch (VAError &err) { *ec = err.data; }
 }
 
 void
@@ -608,7 +608,7 @@ Memory::loadRomFromBuffer(const u8 *buf, isize len, ErrorCode *ec)
 {
     *ec = ERROR_OK;
     try { loadRomFromBuffer(buf, len); }
-    catch (VAError &err) { *ec = err.errorCode; }
+    catch (VAError &err) { *ec = err.data; }
 }
 
 void
@@ -637,7 +637,7 @@ Memory::loadExtFromFile(const char *path, ErrorCode *ec)
 {
     *ec = ERROR_OK;
     try { loadExtFromFile(path); }
-    catch (VAError &exception) { *ec = exception.errorCode; }
+    catch (VAError &exception) { *ec = exception.data; }
 }
 
 void
@@ -654,7 +654,7 @@ Memory::loadExtFromBuffer(const u8 *buf, isize len, ErrorCode *ec)
 {
     *ec = ERROR_OK;
     try { loadExtFromBuffer(buf, len); }
-    catch (VAError &exception) { *ec = exception.errorCode; }
+    catch (VAError &exception) { *ec = exception.data; }
 }
  
 void
@@ -686,7 +686,7 @@ void
 Memory::saveRom(const char *path, ErrorCode *ec)
 {
     *ec = ERROR_OK;
-    try { saveRom(path); } catch (VAError &err) { *ec = err.errorCode; }
+    try { saveRom(path); } catch (VAError &err) { *ec = err.data; }
 }
 
 void
@@ -702,7 +702,7 @@ void
 Memory::saveWom(const char *path, ErrorCode *ec)
 {
     *ec = ERROR_OK;
-    try { saveWom(path); } catch (VAError &err) { *ec = err.errorCode; }
+    try { saveWom(path); } catch (VAError &err) { *ec = err.data; }
 }
 
 void
@@ -718,7 +718,7 @@ void
 Memory::saveExt(const char *path, ErrorCode *ec)
 {
     *ec = ERROR_OK;
-    try { saveExt(path); } catch (VAError &err) { *ec = err.errorCode; }
+    try { saveExt(path); } catch (VAError &err) { *ec = err.data; }
 }
 
 template <> MemorySource

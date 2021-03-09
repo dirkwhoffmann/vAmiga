@@ -75,6 +75,6 @@ Folder::makeWithFolder(const string &path, ErrorCode *err)
     *err = ERROR_OK;
     
     try { return makeWithFolder(path); }
-    catch (VAError &exception) { *err = exception.errorCode; }
+    catch (VAError &exception) { *err = exception.data; }
     return nullptr;
 }

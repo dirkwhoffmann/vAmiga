@@ -10,20 +10,21 @@
 #pragma once
 
 #include "AmigaPublicTypes.h"
+#include "Exception.h"
 
-#include <exception>
-#include <string>
+// #include <exception>
+// #include <string>
 
 
 //
 // VAError
 //
 
-struct VAError : public std::exception
+struct VAError : public Exception
 {
-    ErrorCode errorCode;
+    // ErrorCode errorCode;
     
-    VAError(ErrorCode code) : errorCode(code) { }
+    VAError(ErrorCode code) : Exception((i64)code) { }
     
     const char *what() const throw() override;
 };

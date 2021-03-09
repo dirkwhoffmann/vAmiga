@@ -13,5 +13,5 @@
 
 const char *
 VAError::what() const throw() {
-    return  ErrorCodeEnum::key(errorCode);
+    return  ErrorCodeEnum::key(data);
 }

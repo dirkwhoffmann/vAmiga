@@ -83,7 +83,7 @@ public:
     {
         *err = ERROR_OK;
         try { return make <T> (stream); }
-        catch (VAError &exception) { *err = exception.errorCode; }
+        catch (VAError &exception) { *err = exception.data; }
         return nullptr;
     }
     
@@ -98,7 +98,7 @@ public:
     {
         *err = ERROR_OK;
         try { return make <T> (buf, len); }
-        catch (VAError &exception) { *err = exception.errorCode; }
+        catch (VAError &exception) { *err = exception.data; }
         return nullptr;
     }
     
@@ -115,7 +115,7 @@ public:
     {
         *err = ERROR_OK;
         try { return make <T> (path); }
-        catch (VAError &exception) { *err = exception.errorCode; }
+        catch (VAError &exception) { *err = exception.data; }
         return nullptr;
     }
 
@@ -130,7 +130,7 @@ public:
     {
         *err = ERROR_OK;
         try { return make <T> (file); }
-        catch (VAError &exception) { *err = exception.errorCode; }
+        catch (VAError &exception) { *err = exception.data; }
         return nullptr;
     }
     

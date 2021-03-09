@@ -92,7 +92,7 @@ ADFFile::makeWithDisk(Disk *disk, ErrorCode *ec)
     *ec = ERROR_OK;
     
     try { return makeWithDisk(disk); }
-    catch (VAError &exception) { *ec = exception.errorCode; }
+    catch (VAError &exception) { *ec = exception.data; }
     return nullptr;
 }
 
@@ -109,7 +109,7 @@ ADFFile::makeWithDrive(Drive *drive, ErrorCode *ec)
     *ec = ERROR_OK;
     
     try { return makeWithDrive(drive); }
-    catch (VAError &exception) { *ec = exception.errorCode; }
+    catch (VAError &exception) { *ec = exception.data; }
     return nullptr;
 }
 
@@ -148,7 +148,7 @@ ADFFile::makeWithVolume(FSDevice &volume, ErrorCode *ec)
     *ec = ERROR_OK;
     
     try { return makeWithVolume(volume); }
-    catch (VAError &exception) { *ec = exception.errorCode; }
+    catch (VAError &exception) { *ec = exception.data; }
     return nullptr;
 }
 

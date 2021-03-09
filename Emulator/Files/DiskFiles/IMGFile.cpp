@@ -66,7 +66,7 @@ IMGFile::makeWithDisk(Disk *disk, ErrorCode *ec)
     *ec = ERROR_OK;
     
     try { return makeWithDisk(disk); }
-    catch (VAError &exception) { *ec = exception.errorCode; }
+    catch (VAError &exception) { *ec = exception.data; }
     return nullptr;
 }
 

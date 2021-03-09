@@ -102,7 +102,7 @@ AmigaFile::writeToStream(std::ostream &stream, ErrorCode *err)
 {
     *err = ERROR_OK;
     try { return writeToStream(stream); }
-    catch (VAError &exception) { *err = exception.errorCode; }
+    catch (VAError &exception) { *err = exception.data; }
     return 0;
 }
 
@@ -128,7 +128,7 @@ AmigaFile::writeToFile(const char *path, ErrorCode *err)
 {
     *err = ERROR_OK;
     try { return writeToFile(path); }
-    catch (VAError &exception) { *err = exception.errorCode; }
+    catch (VAError &exception) { *err = exception.data; }
     return 0;
 }
 
@@ -149,6 +149,6 @@ AmigaFile::writeToBuffer(u8 *buf, ErrorCode *err)
 {
     *err = ERROR_OK;
     try { return writeToBuffer(buf); }
-    catch (VAError &exception) { *err = exception.errorCode; }
+    catch (VAError &exception) { *err = exception.data; }
     return 0;
 }
