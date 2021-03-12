@@ -248,7 +248,7 @@ extension MyController {
         loadUserDefaults()
         
         // Enable message processing
-        addListener()
+        setListener()
 
         // Process attachment (if any)
         mydocument.mountAttachment()
@@ -294,14 +294,14 @@ extension MyController {
         window?.collectionBehavior = .fullScreenPrimary
     }
     
-    func addListener() {
+    func setListener() {
         
         track()
         
         // Convert 'self' to a void pointer
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
         
-        amiga.addListener(myself) { (ptr, type, data) in
+        amiga.setListener(myself) { (ptr, type, data) in
 
             // Convert void pointer back to 'self'
             let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()

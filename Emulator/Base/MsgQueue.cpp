@@ -11,101 +11,44 @@
 #include "MsgQueue.h"
 
 void
-MsgQueue::addListener(const void *listener, Callback *func)
+MsgQueue::setListener(const void *listener, Callback *callback)
 {
     synchronized {
-        listeners.push_back(std::pair <const void *, Callback *> (listener, func));
+        
+        this->listener = listener;
+        this->callback = callback;
+        
+        // Send all pending messages
+        while (!queue.isEmpty()) {
+            Message &msg = queue.read();
+            callback(listener, msg.type, msg.data);
+        }
+        put(MSG_REGISTER);
     }
-    
-    // Distribute all pending messages
-    Message msg;
-    while ((msg = get()).type != MSG_NONE) {
-        propagate(msg);
-    }
-
-    put(MSG_REGISTER);
 }
 
 void
-MsgQueue::removeListener(const void *listener)
-{    
-    Callback *callback = nullptr;
-    
+MsgQueue::removeListener()
+{
     synchronized {
         
-        for (auto it = listeners.begin(); it != listeners.end(); it++) {
-            
-            if (it->first == listener) {
-                callback = it->second;
-                listeners.erase(it);
-                break;
-            }
-        }
+        this->listener = nullptr;
+        this->callback = nullptr;
+        put(MSG_UNREGISTER);
     }
-    
-    // Send a last message to the listener
-    if (callback) callback(listener, MSG_UNREGISTER, 0);
 }
 
-Message
-MsgQueue::get()
-{ 
-	Message result;
-    
-    synchronized {
-        
-        if (queue.isEmpty()) {
-            result = { MSG_NONE, 0 };
-        } else {
-            result = queue.read();
-        }
-    }
-    
-    return result;
-}
- 
 void
 MsgQueue::put(MsgType type, long data)
 {
     synchronized {
-                 
-        Message msg;
         
-        debug (QUEUE_DEBUG, "%s [%ld]\n", MsgTypeEnum::key(type), data);
+        debug(QUEUE_DEBUG, "%s [%ld]\n", MsgTypeEnum::key(type), data);
         
-        // Delete the oldest message if the queue overflows
-        if (queue.isFull()) {
-            msg = queue.read();
-            debug(QUEUE_DEBUG, "Lost %s\n", MsgTypeEnum::key(msg.type));
-        }
+        // Send the message immediately if a lister has been registered
+        if (listener) { callback(listener, type, data); return; }
         
-        // Write data
-        msg = { type, data };
-        queue.write(msg);
-        
-        // Serve registered callbacks
-        propagate(msg);
-    }
-}
-
-void
-MsgQueue::dump()
-{
-    for (isize i = queue.begin(); i != queue.end(); i = queue.next(i)) {
-        msg("%02zd", i); dump(queue.elements[i]);
-    }
-}
-
-void
-MsgQueue::dump(const Message &msg)
-{
-    msg("%s [%ld]\n", MsgTypeEnum::key(msg.type), msg.data);
-}
-
-void
-MsgQueue::propagate(const Message &msg) const
-{
-    for (auto i = listeners.begin(); i != listeners.end(); i++) {
-        i->second(i->first, msg.type, msg.data);
+        // Otherwise, store it in the ring buffer
+        Message msg = { type, data }; queue.write(msg);
     }
 }

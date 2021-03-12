@@ -184,9 +184,9 @@
 - (BOOL)configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val;
 - (BOOL)configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
 
-- (Message)message;
-- (void)addListener:(const void *)sender function:(Callback *)func;
-- (void)removeListener:(const void *)sender;
+// - (Message)message;
+- (void)setListener:(const void *)sender function:(Callback *)func;
+- (void)removeListener;
 
 - (void)stopAndGo;
 - (void)stepInto;

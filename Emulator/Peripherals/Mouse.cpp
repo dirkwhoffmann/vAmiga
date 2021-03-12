@@ -193,7 +193,9 @@ void
 Mouse::setXY(double x, double y)
 {
     // Check for a shaking mouse
-    if (shakeDetector.isShakingAbs(x)) messageQueue.put(MSG_SHAKING);
+    if (config.shakeDetection && shakeDetector.isShakingAbs(x)) {
+        messageQueue.put(MSG_SHAKING);
+    }
 
     targetX = x * scaleX;
     targetY = y * scaleY;

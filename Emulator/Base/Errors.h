@@ -29,25 +29,7 @@ struct VAError : public Exception
     const char *what() const throw() override;
 };
 
-
-//
-// ParseError
-//
-
-struct ParseError : public std::exception {
-
-    string token;
-    string expected;
     
-    ParseError(const string &t) : token(t) { }
-    ParseError(const string &t, const string &e) : token(t), expected(e) { }
-
-    const char *what() const throw() override { return token.c_str(); }
-};
-
-struct ParseEnumError : public ParseError { using ParseError::ParseError; };
-    
-
 //
 // ConfigError
 //

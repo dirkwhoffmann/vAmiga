@@ -18,9 +18,15 @@ class MsgQueue : public HardwareComponent {
     // Ring buffer storing all pending messages
     RingBuffer<Message, 64> queue;
             
-    // List of registered listeners
-    std::vector<std::pair <const void *, Callback *> > listeners;
-
+    // Synchronization mutex
+    RecursiveMutex recMutex;
+    
+    // The registered listener
+    const void *listener = nullptr;
+    
+    // The registered callback function
+    Callback *callback = nullptr;
+    
     
     //
     // Methods from HardwareComponent
@@ -46,23 +52,11 @@ private:
 public:
     
     // Registers a listener together with it's callback function
-    void addListener(const void *listener, Callback *func);
+    void setListener(const void *listener, Callback *func);
     
-    // Unregisters a listener
-    void removeListener(const void *listener);
-    
-    // Returns the next pending message, or nullptr if the queue is empty
-    Message get();
-    
+    // Unregisters the listener
+    void removeListener();
+        
     // Writes a message into the queue and propagates it to all listeners
     void put(MsgType type, long data = 0);
-    
-    // Dumps the current contents of the message queue to the console
-    void dump();
-    void dump(const Message &msg);
-
-private:
-    
-    // Used by 'put' to propagates a single message to all registered listeners
-    void propagate(const Message &msg) const;
 };

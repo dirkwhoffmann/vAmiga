@@ -32,9 +32,12 @@ Joystick::_reset(bool hard)
 void
 Joystick::_dump(Dump::Category category, std::ostream& os) const
 {
-    os << "button : " << button;
-    os << " axisX : " << axisX;
-    os << " axisY : " << axisY;
+    if (category & Dump::State) {
+        
+        os << DUMP("Button pressed") << YESNO(button) << std::endl;
+        os << DUMP("X axis") << (isize)axisX << std::endl;
+        os << DUMP("Y axis") << (isize)axisY << std::endl;
+    }
 }
 
 isize

@@ -50,9 +50,13 @@ ControlPort::_inspect()
 void
 ControlPort::_dump(Dump::Category category, std::ostream& os) const
 {
-    os << "       device : " << ControlPortDeviceEnum::key(device) << std::endl;
-    os << "mouseCounterX : " << mouseCounterX << std::endl;
-    os << "mouseCounterY : " << mouseCounterY << std::endl;
+    if (category & Dump::State) {
+        
+        os << DUMP("Detected device type") << ControlPortDeviceEnum::key(device);
+        os << std::endl;
+        os << DUMP("Mouse X counter") << (isize)mouseCounterX << std::endl;
+        os << DUMP("Mouse Y counter") << (isize)mouseCounterY << std::endl;
+    }
 }
 
 u16

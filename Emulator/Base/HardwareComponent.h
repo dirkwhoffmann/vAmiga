@@ -78,7 +78,7 @@ protected:
      * to prevent multiple threads to enter the same code block. It mimics the
      * behaviour of the well known Java construct 'synchronized(this) { }'.
      */
-    Mutex mutex;
+    RecursiveMutex mutex;
 
         
     //

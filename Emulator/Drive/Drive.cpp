@@ -25,6 +25,11 @@ Drive::Drive(Amiga& ref, isize n) : AmigaComponent(ref), nr(n)
     config.startDelay = MSEC(380);
     config.stopDelay = MSEC(80);
     config.stepDelay = USEC(8000);
+    config.pan = 0;
+    config.stepVolume = 128;
+    config.pollVolume = 128;
+    config.insertVolume = 128;
+    config.ejectVolume = 128;
     config.defaultFileSystem = FS_OFS;
     config.defaultBootBlock = BB_NONE;
 }
@@ -142,6 +147,9 @@ Drive::setConfigItem(Option option, long id, long value)
 
         case OPT_DEFAULT_FILESYSTEM:
 
+            if (!FSVolumeTypeEnum::isValid(value)) {
+                throw ConfigArgError(FSVolumeTypeEnum::keyList());
+            }
             if (config.defaultFileSystem == value) {
                 return false;
             }
@@ -150,6 +158,9 @@ Drive::setConfigItem(Option option, long id, long value)
 
         case OPT_DEFAULT_BOOTBLOCK:
 
+            if (!BootBlockIdEnum::isValid(value)) {
+                throw ConfigArgError(BootBlockIdEnum::keyList());
+            }
             if (config.defaultBootBlock == value) {
                 return false;
             }
@@ -182,10 +193,10 @@ Drive::_dump(Dump::Category category, std::ostream& os) const
         os << DUMP("Start delay") << DEC << config.startDelay << std::endl;
         os << DUMP("Stop delay") << DEC << config.stopDelay << std::endl;
         os << DUMP("Step delay") << DEC << config.stepDelay << std::endl;
-        os << DUMP("Insert volume") << ISENABLED(config.insertVolume) << std::endl;
-        os << DUMP("Eject volume") << ISENABLED(config.ejectVolume) << std::endl;
-        os << DUMP("Step volume") << ISENABLED(config.stepVolume) << std::endl;
-        os << DUMP("Poll volume") << ISENABLED(config.pollVolume) << std::endl;
+        os << DUMP("Insert volume") << DEC << (isize)config.insertVolume << std::endl;
+        os << DUMP("Eject volume") << DEC << (isize)config.ejectVolume << std::endl;
+        os << DUMP("Step volume") << DEC << (isize)config.stepVolume << std::endl;
+        os << DUMP("Poll volume") << DEC << (isize)config.pollVolume << std::endl;
         os << DUMP("Default file system") << FSVolumeTypeEnum::key(config.defaultFileSystem) << std::endl;
         os << DUMP("Default boot block") << BootBlockIdEnum::key(config.defaultBootBlock) << std::endl;
     }

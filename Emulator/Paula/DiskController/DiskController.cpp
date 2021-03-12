@@ -169,7 +169,7 @@ DiskController::_dump(Dump::Category category, std::ostream& os) const
         os << "  Drive df0: " << (config.connected[0] ? "connected" : "disconnected") << std::endl;
         os << "  Drive df1: " << (config.connected[1] ? "connected" : "disconnected") << std::endl;
         os << "  Drive df2: " << (config.connected[2] ? "connected" : "disconnected") << std::endl;
-        os << "  Drive df3: " << (config.connected[3] ? "connected" : "disonnected") << std::endl;
+        os << "  Drive df3: " << (config.connected[3] ? "connected" : "disconnected") << std::endl;
         os << "Drive speed: " << DEC << config.speed << std::endl;
         os << "lockDskSync: " << YESNO(config.lockDskSync) << std::endl;
         os << "autoDskSync: " << YESNO(config.autoDskSync) << std::endl;

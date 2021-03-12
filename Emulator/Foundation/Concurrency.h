@@ -24,14 +24,28 @@ public:
     int unlock();
 };
 
+class RecursiveMutex
+{
+    pthread_mutex_t mutex;
+
+public:
+    
+    RecursiveMutex();
+    ~RecursiveMutex();
+    
+    int lock();
+    int unlock();
+};
+
 class AutoMutex
 {
-    Mutex &mutex;
+    RecursiveMutex &mutex;
 
 public:
 
     bool active = true;
 
-    AutoMutex(Mutex &ref) : mutex(ref) { mutex.lock(); }
+    AutoMutex(RecursiveMutex &ref) : mutex(ref) { mutex.lock(); }
     ~AutoMutex() { mutex.unlock(); }
 };
+

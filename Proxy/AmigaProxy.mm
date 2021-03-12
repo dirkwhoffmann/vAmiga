@@ -2219,19 +2219,21 @@ using namespace moira;
     return [self amiga]->configure(opt, (long)id, val ? 1 : 0);
 }
 
+/*
 - (Message)message
 {
     return [self amiga]->queue.get();
 }
+*/
 
-- (void)addListener:(const void *)sender function:(Callback *)func
+- (void)setListener:(const void *)sender function:(Callback *)func
 {
-    [self amiga]->queue.addListener(sender, func);
+    [self amiga]->queue.setListener(sender, func);
 }
 
-- (void)removeListener:(const void *)sender
+- (void)removeListener
 {
-    [self amiga]->queue.removeListener(sender);
+    [self amiga]->queue.removeListener();
 }
 
 - (void)stopAndGo

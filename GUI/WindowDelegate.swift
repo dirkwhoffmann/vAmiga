@@ -68,8 +68,7 @@ extension MyController: NSWindowDelegate {
         gamePadManager.shutDown()
         
         // Unregister from the message queue and wait for MSG_UNREGISTER
-        let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
-        amiga.removeListener(myself)
+        amiga.removeListener()
     }
     
     func shutDown() {
