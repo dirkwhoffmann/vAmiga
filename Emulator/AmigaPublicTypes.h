@@ -26,6 +26,12 @@ enum_long(OPT)
     // Denise
     OPT_DENISE_REVISION,
     
+    // Pixel engine
+    OPT_PALETTE,
+    OPT_BRIGHTNESS,
+    OPT_CONTRAST,
+    OPT_SATURATION,
+    
     // Real-time clock
     OPT_RTC_MODEL,
 

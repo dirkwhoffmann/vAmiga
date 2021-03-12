@@ -222,6 +222,12 @@ Amiga::getConfigItem(Option option) const
         case OPT_CLX_PLF_PLF:
             return denise.getConfigItem(option);
             
+        case OPT_PALETTE:
+        case OPT_BRIGHTNESS:
+        case OPT_CONTRAST:
+        case OPT_SATURATION:
+            return denise.pixelEngine.getConfigItem(option);
+            
         case OPT_RTC_MODEL:
             return rtc.getConfigItem(option);
 

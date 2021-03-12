@@ -775,46 +775,6 @@ using namespace moira;
     return [self denise]->getSpriteColor(nr, reg);
 }
 
-- (Palette)palette
-{
-   return [self denise]->pixelEngine.getPalette();
-}
-
-- (void)setPalette:(Palette)p
-{
-    [self denise]->pixelEngine.setPalette(p);
-}
-
-- (double)brightness
-{
-    return [self denise]->pixelEngine.getBrightness();
-}
-
-- (void)setBrightness:(double)value
-{
-    [self denise]->pixelEngine.setBrightness(value);
-}
-
-- (double)saturation
-{
-    return [self denise]->pixelEngine.getSaturation();
-}
-
-- (void)setSaturation:(double)value
-{
-    [self denise]->pixelEngine.setSaturation(value);
-}
-
-- (double)contrast
-{
-    return [self denise]->pixelEngine.getContrast();
-}
-
-- (void)setContrast:(double)value
-{
-    [self denise]->pixelEngine.setContrast(value);
-}
-
 - (ScreenBuffer)stableBuffer
 {
     return [self denise]->pixelEngine.getStableBuffer();

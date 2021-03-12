@@ -137,8 +137,7 @@ class Configuration {
         get { return dfnType(3) }
         set { setDfnType(3, type: newValue) }
     }
-    var blankDiskFormat = PeripheralsDefaults.std.blankDiskFormat
-    var blankDiskFormatIntValue: Int {
+    var blankDiskFormat: Int {
         get { return amiga.getConfig(.DEFAULT_FILESYSTEM, drive: 0) }
         set { amiga.configure(.DEFAULT_FILESYSTEM, value: newValue) }
     }
@@ -328,21 +327,21 @@ class Configuration {
     // Video settings
     //
     
-    var palette: Palette {
-        get { return amiga.denise.palette }
-        set { amiga.denise.palette = newValue }
+    var palette: Int {
+        get { return amiga.getConfig(.PALETTE) }
+        set { amiga.configure(.PALETTE, value: newValue) }
     }
-    var brightness: Double {
-        get { return amiga.denise.brightness }
-        set { amiga.denise.brightness = newValue }
+    var brightness: Int {
+        get { return amiga.getConfig(.BRIGHTNESS) }
+        set { amiga.configure(.BRIGHTNESS, value: newValue) }
     }
-    var contrast: Double {
-        get { return amiga.denise.contrast }
-        set { amiga.denise.contrast = newValue }
+    var contrast: Int {
+        get { return amiga.getConfig(.CONTRAST) }
+        set { amiga.configure(.CONTRAST, value: newValue) }
     }
-    var saturation: Double {
-        get { return amiga.denise.saturation }
-        set { amiga.denise.saturation = newValue }
+    var saturation: Int {
+        get { return amiga.getConfig(.SATURATION) }
+        set { amiga.configure(.SATURATION, value: newValue) }
     }
     var hCenter = VideoDefaults.tft.hCenter {
         didSet { renderer.updateTextureRect() }
@@ -583,7 +582,7 @@ class Configuration {
         df2Type = defaults.driveType[2].rawValue
         df3Type = defaults.driveType[3].rawValue
         
-        blankDiskFormat = defaults.blankDiskFormat
+        blankDiskFormat = defaults.blankDiskFormat.rawValue
         bootBlock = defaults.bootBlock
 
         gameDevice1 = defaults.gameDevice1
@@ -608,7 +607,7 @@ class Configuration {
         df2Type = defaults.integer(forKey: Keys.Per.df2Type)
         df3Type = defaults.integer(forKey: Keys.Per.df3Type)
         
-        blankDiskFormatIntValue = defaults.integer(forKey: Keys.Per.blankDiskFormat)
+        blankDiskFormat = defaults.integer(forKey: Keys.Per.blankDiskFormat)
         bootBlock = defaults.integer(forKey: Keys.Per.bootBlock)
 
         gameDevice1 = defaults.integer(forKey: Keys.Per.gameDevice1)
@@ -826,7 +825,7 @@ class Configuration {
         
         amiga.suspend()
         
-        palette = defaults.palette
+        palette = defaults.palette.rawValue
         brightness = defaults.brightness
         contrast = defaults.contrast
         saturation = defaults.saturation
@@ -883,11 +882,10 @@ class Configuration {
         
         amiga.suspend()
         
-        let paletteKey = defaults.integer(forKey: Keys.Vid.palette)
-        palette = Palette(rawValue: paletteKey) ?? .COLOR
-        brightness = defaults.double(forKey: Keys.Vid.brightness)
-        contrast = defaults.double(forKey: Keys.Vid.contrast)
-        saturation = defaults.double(forKey: Keys.Vid.saturation)
+        palette = defaults.integer(forKey: Keys.Vid.palette)
+        brightness = defaults.integer(forKey: Keys.Vid.brightness)
+        contrast = defaults.integer(forKey: Keys.Vid.contrast)
+        saturation = defaults.integer(forKey: Keys.Vid.saturation)
 
         hCenter = defaults.float(forKey: Keys.Vid.hCenter)
         vCenter = defaults.float(forKey: Keys.Vid.vCenter)
@@ -924,7 +922,7 @@ class Configuration {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(palette.rawValue, forKey: Keys.Vid.palette)
+        defaults.set(palette, forKey: Keys.Vid.palette)
         defaults.set(brightness, forKey: Keys.Vid.brightness)
         defaults.set(contrast, forKey: Keys.Vid.contrast)
         defaults.set(saturation, forKey: Keys.Vid.saturation)

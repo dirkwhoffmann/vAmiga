@@ -17,6 +17,9 @@ class PixelEngine : public AmigaComponent {
 
     friend class DmaDebugger;
     
+    // Current configuration
+    PixelEngineConfig config;
+
 public:
 
     // RGBA colors used to visualize the HBLANK and VBLANK area in the debugger
@@ -65,10 +68,10 @@ private:
     u32 indexedRgba[rgbaIndexCnt];
 
     // Color adjustment parameters
-    Palette palette = PALETTE_COLOR;
-    double brightness = 50.0;
-    double contrast = 100.0;
-    double saturation = 50.0;
+    [[deprecated]] Palette palette = PALETTE_COLOR;
+    [[deprecated]] double brightness = 50.0;
+    [[deprecated]] double contrast = 100.0;
+    [[deprecated]] double saturation = 50.0;
     
     // Indicates whether HAM mode is switched
     bool hamMode;
@@ -99,21 +102,14 @@ public:
     //
     // Configuring
     //
-    
+
 public:
     
-    Palette getPalette() { return palette; }
-    void setPalette(Palette p);
-    
-    double getBrightness() { return brightness; }
-    void setBrightness(double value);
-    
-    double getSaturation() { return saturation; }
-    void setSaturation(double value);
-    
-    double getContrast() { return contrast; }
-    void setContrast(double value);
-    
+    const PixelEngineConfig &getConfig() const { return config; }
+
+    long getConfigItem(Option option) const;
+    bool setConfigItem(Option option, long value) override;
+
     
     //
     // Serializing

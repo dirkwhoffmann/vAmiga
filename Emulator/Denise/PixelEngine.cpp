@@ -17,6 +17,11 @@
 
 PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
 {
+    config.palette = PALETTE_COLOR;
+    config.brightness = 50;
+    config.contrast = 100;
+    config.saturation = 50;
+
     // Allocate frame buffers
     emuTexture[0].data = new u32[PIXELS]; emuTexture[0].longFrame = true;
     emuTexture[1].data = new u32[PIXELS]; emuTexture[1].longFrame = true;
@@ -80,33 +85,78 @@ PixelEngine::_reset(bool hard)
     updateRGBA();
 }
 
-void
-PixelEngine::setPalette(Palette p)
+long
+PixelEngine::getConfigItem(Option option) const
 {
-    palette = p;
-    updateRGBA();
+    switch (option) {
+            
+        case OPT_PALETTE:     return config.palette;
+        case OPT_BRIGHTNESS:  return config.brightness;
+        case OPT_CONTRAST:    return config.contrast;
+        case OPT_SATURATION:  return config.saturation;
+
+        default:
+            assert(false);
+            return 0;
+    }
 }
 
-void
-PixelEngine::setBrightness(double value)
+bool
+PixelEngine::setConfigItem(Option option, long value)
 {
-    brightness = value;
-    updateRGBA();
-}
+    switch (option) {
+            
+        case OPT_PALETTE:
+            
+            if (!PaletteEnum::isValid(value)) {
+                throw ConfigArgError(PaletteEnum::keyList());
+            }
+            if (config.palette == value) {
+                return false;
+            }
+            config.palette = value;
+            updateRGBA();
+            return true;
 
-void
-PixelEngine::setSaturation(double value)
-{
-    saturation = value;
-    updateRGBA();
-}
+        case OPT_BRIGHTNESS:
+            
+            if (config.brightness < 0 || config.brightness > 100) {
+                throw ConfigArgError("Expected 0...100");
+            }
+            if (config.brightness == value) {
+                return false;
+            }
+            config.brightness = value;
+            updateRGBA();
+            return true;
+            
+        case OPT_CONTRAST:
 
-void
-PixelEngine::setContrast(double value)
-{
-    contrast = value;
-    updateRGBA();
+            if (config.contrast < 0 || config.contrast > 100) {
+                throw ConfigArgError("Expected 0...100");
+            }
+            if (config.contrast == value) {
+                return false;
+            }
+            config.contrast = value;
+            updateRGBA();
+            return true;
 
+        case OPT_SATURATION:
+        
+            if (config.saturation < 0 || config.saturation > 100) {
+                throw ConfigArgError("Expected 0...100");
+            }
+            if (config.saturation == value) {
+                return false;
+            }
+            config.saturation = value;
+            updateRGBA();
+            return true;
+
+        default:
+            return false;
+    }
 }
 
 void
@@ -150,9 +200,9 @@ void
 PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
 {
     // Normalize adjustment parameters
-    double brightness = this->brightness - 50.0;
-    double contrast = this->contrast / 100.0;
-    double saturation = this->saturation / 50.0;
+    double brightness =  config.brightness - 50.0;
+    double contrast = config.contrast / 100.0;
+    double saturation = config.saturation / 50.0;
 
     // Convert RGB to YUV
     double y =  0.299 * r + 0.587 * g + 0.114 * b;
@@ -172,7 +222,7 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
     y += brightness;
 
     // Translate to monochrome if applicable
-    switch(palette) {
+    switch(config.palette) {
 
         case PALETTE_BLACK_WHITE:
             u = 0.0;
@@ -200,7 +250,7 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
             break;
 
         default:
-            assert(palette == PALETTE_COLOR);
+            assert(config.palette == PALETTE_COLOR);
     }
 
     // Convert YUV to RGB

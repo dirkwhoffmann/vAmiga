@@ -23,9 +23,9 @@ extension ConfigurationController {
         perDf3Type.selectItem(withTag: config.df3Type)
 
         // Disk
-        perDriveBlankDiskFormat.selectItem(withTag: config.blankDiskFormatIntValue)
+        perDriveBlankDiskFormat.selectItem(withTag: config.blankDiskFormat)
         perBootCode.selectItem(withTag: config.bootBlock)
-        perBootCode.isEnabled = config.blankDiskFormat != .NODOS
+        perBootCode.isEnabled = config.blankDiskFormat != FSVolumeType.NODOS.rawValue
 
         // Ports
         parent.gamePadManager.refresh(popup: perGameDevice1, hide: true)
@@ -84,19 +84,13 @@ extension ConfigurationController {
             
     @IBAction func perBlankDiskFormatAction(_ sender: NSPopUpButton!) {
         
-        track("tag = \(sender.selectedTag())")
-        
-        let tag = sender.selectedTag()
-        config.blankDiskFormatIntValue = tag
+        config.blankDiskFormat = sender.selectedTag()
         refresh()
     }
 
     @IBAction func perBootCodeAction(_ sender: NSPopUpButton!) {
-        
-        track("tag = \(sender.selectedTag())")
-        
-        let tag = sender.selectedTag()
-        config.bootBlock = tag
+                
+        config.bootBlock = sender.selectedTag()
         refresh()
     }
     

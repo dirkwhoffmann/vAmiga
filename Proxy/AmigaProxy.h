@@ -402,11 +402,6 @@
 - (u64)sprData:(NSInteger)nr line:(NSInteger)line;
 - (u16)sprColor:(NSInteger)nr reg:(NSInteger)reg;
 
-@property Palette palette;
-@property double brightness;
-@property double saturation;
-@property double contrast;
-
 @property (readonly) ScreenBuffer stableBuffer;
 @property (readonly) u32 *noise;
 

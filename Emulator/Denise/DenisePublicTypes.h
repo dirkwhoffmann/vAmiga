@@ -115,3 +115,12 @@ typedef struct
     u32 color[32];
 }
 DeniseInfo;
+
+typedef struct
+{
+    Palette palette;
+    isize brightness;
+    isize contrast;
+    isize saturation;
+}
+PixelEngineConfig;
