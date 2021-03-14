@@ -27,7 +27,7 @@ public:
     // Class methods
     //
         
-    static bool isCompatibleName(const string &name);
+    static bool isCompatiblePath(const string &path);
     static bool isCompatibleStream(std::istream &stream);
     
     // Returns the size of an ADF file of a given disk type in bytes

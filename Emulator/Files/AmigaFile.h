@@ -38,11 +38,11 @@
  * |  DiskFile  |
  *  ------------
  *       |
- *       |------------------------------------------------------------
- *       |           |           |           |            |           |
- *   ---------   ---------   ---------   ---------    ---------   ---------
+ *       |-----------------------------------------------------------
+ *       |           |           |           |            |          |
+ *   ---------   ---------   ---------   ---------    ---------  ---------
  *  | ADFFile | | EXTFile | | IMGFile | | DMSFile | | EXEFile | | Folder  |
- *   ---------   ---------   ---------   ---------    ---------   ---------
+ *   ---------   ---------   ---------   ---------    ---------  ---------
  */
 
 class AmigaFile : public AmigaObject {
@@ -82,7 +82,7 @@ public:
     template <class T> static T *make(const string &path, std::istream &stream, ErrorCode *err)
     {
         *err = ERROR_OK;
-        try { return make <T> (stream); }
+        try { return make <T> (path, stream); }
         catch (VAError &exception) { *err = exception.data; }
         return nullptr;
     }
@@ -149,6 +149,9 @@ public:
     //
     // Accessing file attributes
     //
+    
+    // Determines the type of an arbitrary file on file
+    static FileType type(const string &path);
     
     // Returns the type of this file
     virtual FileType type() const { return FILETYPE_UKNOWN; }

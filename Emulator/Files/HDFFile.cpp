@@ -17,9 +17,10 @@ HDFFile::HDFFile()
 }
 
 bool
-HDFFile::isCompatibleName(const string &name)
+HDFFile::isCompatiblePath(const string &path)
 {
-    return name == "hdf" || name == "HDF";
+    string suffix = util::extractSuffix(path);
+    return suffix == "hdf" || suffix == "HDF";
 }
 
 bool

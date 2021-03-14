@@ -19,7 +19,7 @@ const u8 EXTFile::extAdfHeaders[2][8] = {
 };
     
 bool
-EXTFile::isCompatibleName(const string &name)
+EXTFile::isCompatiblePath(const string &path)
 {
     return true;
 }

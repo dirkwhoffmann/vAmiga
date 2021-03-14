@@ -16,6 +16,16 @@
 class DiskFile : public AmigaFile {
 
     //
+    // Creating
+    //
+    
+public:
+    
+    static DiskFile *make(const string &path) throws;
+    static DiskFile *make(const string &path, ErrorCode *err);
+    
+    
+    //
     // Initializing
     //
 

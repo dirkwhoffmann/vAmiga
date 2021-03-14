@@ -15,9 +15,10 @@
 #include "IO.h"
 
 bool
-EXEFile::isCompatibleName(const string &name)
+EXEFile::isCompatiblePath(const string &path)
 {
-    return name == "exe" || name == "EXE";
+    string suffix = util::extractSuffix(path);
+    return suffix == "exe" || suffix == "EXE";
 }
 
 bool

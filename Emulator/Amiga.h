@@ -294,10 +294,12 @@ public:
     void clearControlFlags(u32 flags);
     
     // Convenience wrappers for controlling the run loop
+    void signalStop() { setControlFlags(RL_STOP); }
+    void signalInspect() { setControlFlags(RL_INSPECT); }
+    void signalWarpOn() { setControlFlags(RL_WARP_ON); }
+    void signalWarpOff() { setControlFlags(RL_WARP_OFF); }
     void signalAutoSnapshot() { setControlFlags(RL_AUTO_SNAPSHOT); }
     void signalUserSnapshot() { setControlFlags(RL_USER_SNAPSHOT); }
-    void signalInspect() { setControlFlags(RL_INSPECT); }
-    void signalStop() { setControlFlags(RL_STOP); }
 
 
     //

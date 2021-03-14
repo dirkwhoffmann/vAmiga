@@ -11,6 +11,8 @@
 #include "IO.h"
 #include "string.h"
 
+#include <vector>
+
 namespace util {
 
 string lowercased(const string& s)
@@ -75,6 +77,20 @@ string stripSuffix(const string &s)
     return s.substr(pos, len);
 }
 
+string appendPath(const string &path, const string &path2)
+{
+    if (path.back() == '/') {
+        return path + path2;
+    } else {
+        return path + "/" + path2;
+    }
+}
+
+bool fileExists(const string &path)
+{
+    return getSizeOfFile(path) >= 0;
+}
+
 bool isDirectory(const string &path)
 {
     return isDirectory(path.c_str());
@@ -111,6 +127,36 @@ isize numDirectoryItems(const char *path)
     }
     
     return count;
+}
+
+std::vector<string>
+files(const string &path, const string &suffix)
+{
+    std::vector <string> suffixes;
+    if (suffix != "") suffixes.push_back(suffix);
+
+    return files(path, suffixes);
+}
+
+std::vector<string> files(const string &path, std::vector <string> &suffixes)
+{
+    std::vector<string> result;
+    
+    if (DIR *dir = opendir(path.c_str())) {
+        
+        struct dirent *dp;
+        while ((dp = readdir(dir))) {
+            
+            string name = dp->d_name;
+            string suffix = lowercased(extractSuffix(name));
+            
+            if (std::find(suffixes.begin(), suffixes.end(), suffix) != suffixes.end()) {
+                result.push_back(name);
+            }
+        }
+    }
+    
+    return result;
 }
 
 isize

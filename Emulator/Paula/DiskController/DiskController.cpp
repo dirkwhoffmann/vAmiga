@@ -11,6 +11,7 @@
 #include "DiskController.h"
 
 #include "Agnus.h"
+#include "DiskFile.h"
 #include "Drive.h"
 #include "MsgQueue.h"
 #include "Paula.h"
@@ -142,6 +143,29 @@ DiskController::setConfigItem(Option option, long id, long value)
     }
 }
 
+const string &
+DiskController::getSearchPath(isize dfn)
+{
+    assert(dfn >= 0 && dfn <= 3);
+    return searchPath[dfn];
+}
+
+void
+DiskController::setSearchPath(const string &path, isize dfn)
+{
+    assert(dfn >= 0 && dfn <= 3);
+    searchPath[dfn] = path;
+}
+
+void
+DiskController::setSearchPath(const string &path)
+{
+    searchPath[0] = path;
+    searchPath[1] = path;
+    searchPath[2] = path;
+    searchPath[3] = path;
+}
+
 void
 DiskController::_inspect()
 {
@@ -166,28 +190,42 @@ DiskController::_dump(Dump::Category category, std::ostream& os) const
 {
     if (category & Dump::Config) {
         
-        os << "  Drive df0: " << (config.connected[0] ? "connected" : "disconnected") << std::endl;
-        os << "  Drive df1: " << (config.connected[1] ? "connected" : "disconnected") << std::endl;
-        os << "  Drive df2: " << (config.connected[2] ? "connected" : "disconnected") << std::endl;
-        os << "  Drive df3: " << (config.connected[3] ? "connected" : "disconnected") << std::endl;
-        os << "Drive speed: " << DEC << config.speed << std::endl;
-        os << "lockDskSync: " << YESNO(config.lockDskSync) << std::endl;
-        os << "autoDskSync: " << YESNO(config.autoDskSync) << std::endl;
+        os << DUMP("Drive df0");
+        os << (config.connected[0] ? "connected" : "disconnected") << std::endl;
+        os << DUMP("Drive df1");
+        os << (config.connected[1] ? "connected" : "disconnected") << std::endl;
+        os << DUMP("Drive df2");
+        os << (config.connected[2] ? "connected" : "disconnected") << std::endl;
+        os << DUMP("Drive df3");
+        os << (config.connected[3] ? "connected" : "disconnected") << std::endl;
+        os << DUMP("Drive speed");
+        os << DEC << config.speed << std::endl;
+        os << DUMP("lockDskSync");
+        os << YESNO(config.lockDskSync) << std::endl;
+        os << DUMP("autoDskSync");
+        os << YESNO(config.autoDskSync) << std::endl;
     }
     
     if (category & Dump::State) {
         
-        os << "     selected: " << (int)selected << std::endl;
-        os << "        state: " << DriveDmaStateName(state) << std::endl;
-        os << "    syncCycle: " << syncCycle << std::endl;
-        os << "     incoming: " << incoming << std::endl;
-        os << "         fifo: " << std::hex << fifo << " (" << fifoCount << ")" << std::endl;
-        os << std::endl;
-        os << "       dsklen: " << dsklen << std::endl;
-        os << "      dsksync: " << dsksync << std::endl;
-        os << "          prb: " << prb << std::endl;
-        os << std::endl;
-        os << "     spinningv: " << YESNO(spinning()) << std::endl;
+        os << DUMP("selected");
+        os << (int)selected << std::endl;
+        os << DUMP("state");
+        os << DriveDmaStateName(state) << std::endl;
+        os << DUMP("syncCycle");
+        os << syncCycle << std::endl;
+        os << DUMP("incoming");
+        os << incoming << std::endl;
+        os << DUMP("fifo");
+        os << std::hex << fifo << " (" << fifoCount << ")" << std::endl;
+        os << DUMP("dsklen");
+        os << dsklen << std::endl;
+        os << DUMP("dsksync");
+        os << dsksync << std::endl;
+        os << DUMP("prb");
+        os << prb << std::endl;
+        os << DUMP("spinning");
+        os << YESNO(spinning()) << std::endl;
     }
 }
 
@@ -291,6 +329,15 @@ DiskController::insertDisk(class DiskFile *file, isize nr, Cycle delay)
 {
     if (Disk *disk = Disk::makeWithFile(file)) {
         insertDisk(disk, nr, delay);
+    }
+}
+
+void
+DiskController::insertDisk(const string &name, isize nr, Cycle delay)
+{
+    ErrorCode ec;
+    if (DiskFile *file = DiskFile::make(name, &ec)) {
+        insertDisk(file, nr, delay);
     }
 }
 

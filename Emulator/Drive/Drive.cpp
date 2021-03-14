@@ -25,7 +25,7 @@ Drive::Drive(Amiga& ref, isize n) : AmigaComponent(ref), nr(n)
     config.startDelay = MSEC(380);
     config.stopDelay = MSEC(80);
     config.stepDelay = USEC(8000);
-    config.pan = 0;
+    config.pan = IS_EVEN(nr) ? 100 : -100;
     config.stepVolume = 128;
     config.pollVolume = 128;
     config.insertVolume = 128;
@@ -197,6 +197,7 @@ Drive::_dump(Dump::Category category, std::ostream& os) const
         os << DUMP("Eject volume") << DEC << (isize)config.ejectVolume << std::endl;
         os << DUMP("Step volume") << DEC << (isize)config.stepVolume << std::endl;
         os << DUMP("Poll volume") << DEC << (isize)config.pollVolume << std::endl;
+        os << DUMP("Pan") << DEC << (isize)config.pan << std::endl;
         os << DUMP("Default file system") << FSVolumeTypeEnum::key(config.defaultFileSystem) << std::endl;
         os << DUMP("Default boot block") << BootBlockIdEnum::key(config.defaultBootBlock) << std::endl;
     }

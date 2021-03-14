@@ -18,9 +18,10 @@
 #include "IO.h"
 
 bool
-ADFFile::isCompatibleName(const string &name)
+ADFFile::isCompatiblePath(const string &path)
 {
-    return name == "adf" || name == "ADF";
+    string suffix = util::extractSuffix(path);
+    return suffix == "adf" || suffix == "ADF";
 }
 
 bool

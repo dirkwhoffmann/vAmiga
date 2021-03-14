@@ -17,9 +17,10 @@ unsigned short extractDMS(FILE *fi, FILE *fo);
 }
 
 bool
-DMSFile::isCompatibleName(const string &name)
+DMSFile::isCompatiblePath(const string &path)
 {
-    return name == "dms" || name == "DMS";
+    string suffix = util::extractSuffix(path);
+    return suffix == "dms" || suffix == "DMS";
 }
 
 bool

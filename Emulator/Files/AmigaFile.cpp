@@ -39,6 +39,46 @@ AmigaFile::flash(u8 *buffer, isize offset)
     memcpy(buffer + offset, data, size);
 }
 
+FileType
+AmigaFile::type(const string &path)
+{
+    std::ifstream stream(path);
+    if (!stream.is_open()) return FILETYPE_UKNOWN; // throw VAError(ERROR_FILE_NOT_FOUND);
+
+    printf("File was found type()\n");
+    
+    if (Snapshot::isCompatiblePath(path) &&
+        Snapshot::isCompatibleStream(stream)) return FILETYPE_SNAPSHOT;
+
+    if (ADFFile::isCompatiblePath(path) &&
+        ADFFile::isCompatibleStream(stream)) return FILETYPE_ADF;
+
+    if (HDFFile::isCompatiblePath(path) &&
+        HDFFile::isCompatibleStream(stream)) return FILETYPE_HDF;
+
+    if (EXTFile::isCompatiblePath(path) &&
+        EXTFile::isCompatibleStream(stream)) return FILETYPE_EXT;
+
+    if (IMGFile::isCompatiblePath(path) &&
+        IMGFile::isCompatibleStream(stream)) return FILETYPE_IMG;
+
+    if (DMSFile::isCompatiblePath(path) &&
+        DMSFile::isCompatibleStream(stream)) return FILETYPE_DMS;
+
+    if (EXEFile::isCompatiblePath(path) &&
+        EXEFile::isCompatibleStream(stream)) return FILETYPE_EXE;
+
+    if (RomFile::isCompatiblePath(path) &&
+        RomFile::isCompatibleStream(stream)) return FILETYPE_ROM;
+
+    if (EXTFile::isCompatiblePath(path) &&
+        EXTFile::isCompatibleStream(stream)) return FILETYPE_EXT;
+
+    if (Folder::isFolder(path.c_str())) return FILETYPE_DIR;
+
+    return FILETYPE_UKNOWN;
+}
+
 isize
 AmigaFile::readFromStream(std::istream &stream)
 {

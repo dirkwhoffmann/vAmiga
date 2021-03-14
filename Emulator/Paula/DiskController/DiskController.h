@@ -25,6 +25,9 @@ class DiskController : public AmigaComponent {
     // Temorary storage for a disk waiting to be inserted
     class Disk *diskToInsert = nullptr;
 
+    // Search path for disk files, one for each drive
+    string searchPath[4];
+    
     // The currently selected drive (-1 if no drive is selected)
     i8 selected = -1;
 
@@ -115,7 +118,11 @@ public:
     bool setConfigItem(Option option, long value) override;
     bool setConfigItem(Option option, long id, long value) override;
 
-        
+    const string &getSearchPath(isize dfn);
+    void setSearchPath(const string &path, isize dfn);
+    void setSearchPath(const string &path);
+
+    
     //
     // Analyzing
     //
@@ -244,6 +251,7 @@ public:
     // Inserts a disk into the specified drive
     void insertDisk(class Disk *disk, isize nr, Cycle delay = 0);
     void insertDisk(class DiskFile *file, isize nr, Cycle delay = 0);
+    void insertDisk(const string &name, isize nr, Cycle delay = 0) throws;
     
     // Write protects or unprotects a disk
     void setWriteProtection(isize nr, bool value);

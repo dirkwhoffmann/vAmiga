@@ -536,9 +536,7 @@ Amiga::_pause()
 void
 Amiga::setWarp(bool enable)
 {
-    suspend();
     HardwareComponent::setWarp(enable);
-    resume();
 }
 
 void
@@ -747,6 +745,7 @@ Amiga::runLoop()
                 queue.put(MSG_AUTO_SNAPSHOT_TAKEN);
                 clearControlFlags(RL_AUTO_SNAPSHOT);
             }
+            
             if (runLoopCtrl & RL_USER_SNAPSHOT) {
                 debug(RUN_DEBUG, "RL_USER_SNAPSHOT\n");
                 userSnapshot = Snapshot::makeWithAmiga(this);
@@ -784,6 +783,19 @@ Amiga::runLoop()
                 clearControlFlags(RL_STOP);
                 debug(RUN_DEBUG, "RL_STOP\n");
                 break;
+            }
+            
+            // Are we requested to enter of exit warp mode?
+            if (runLoopCtrl & RL_WARP_ON) {
+                clearControlFlags(RL_WARP_ON);
+                debug(RUN_DEBUG, "RL_WARP_ON\n");
+                setWarp(true);
+            }
+
+            if (runLoopCtrl & RL_WARP_OFF) {
+                clearControlFlags(RL_WARP_OFF);
+                debug(RUN_DEBUG, "RL_WARP_OFF\n");
+                setWarp(false);
             }
         }
     }

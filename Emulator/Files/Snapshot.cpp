@@ -48,7 +48,7 @@ Thumbnail::take(Amiga *amiga, isize dx, isize dy)
 }
 
 bool
-Snapshot::isCompatibleName(const string &name)
+Snapshot::isCompatiblePath(const string &path)
 {
     return true;
 }

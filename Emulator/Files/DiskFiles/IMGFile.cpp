@@ -15,9 +15,10 @@
 #include "IO.h"
 
 bool
-IMGFile::isCompatibleName(const string &name)
+IMGFile::isCompatiblePath(const string &path)
 {
-    return true;
+    string suffix = util::extractSuffix(path);
+    return suffix == "img" || suffix == "IMG";
 }
 
 bool

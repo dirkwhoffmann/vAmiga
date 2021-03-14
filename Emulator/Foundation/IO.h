@@ -37,6 +37,9 @@ string stripPath(const string &path);
 string stripName(const string &path);
 string stripSuffix(const string &path);
 
+// Concatinates two path segments
+string appendPath(const string &path, const string &path2);
+
 
 //
 // Handling files
@@ -46,6 +49,9 @@ string stripSuffix(const string &path);
 isize getSizeOfFile(const string &path);
 isize getSizeOfFile(const char *path);
 
+// Checks if a file exists
+bool fileExists(const string &path);
+
 // Checks if a path points to a directory
 bool isDirectory(const string &path);
 bool isDirectory(const char *path);
@@ -53,6 +59,10 @@ bool isDirectory(const char *path);
 // Returns the number of files in a directory
 isize numDirectoryItems(const string &path);
 isize numDirectoryItems(const char *path);
+
+// Returns a list of files in a directory
+std::vector<string> files(const string &path, const string &suffix = "");
+std::vector<string> files(const string &path, std::vector <string> &suffixes);
 
 // Checks the header signature (magic bytes) of a stream or buffer
 bool matchingStreamHeader(std::istream &stream, const u8 *header, isize len);

@@ -9,6 +9,49 @@
 
 #include "config.h"
 #include "DiskFile.h"
+#include "ADFFile.h"
+#include "IMGFile.h"
+#include "DMSFile.h"
+#include "EXEFile.h"
+#include "Folder.h"
+
+DiskFile *
+DiskFile::make(const string &path)
+{
+    std::ifstream stream(path);
+    if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND);
+    
+    switch (type(path)) {
+            
+        case FILETYPE_ADF:
+            return AmigaFile::make <ADFFile> (path, stream);
+            
+        case FILETYPE_IMG:
+            return AmigaFile::make <IMGFile> (path, stream);
+
+        case FILETYPE_DMS:
+            return AmigaFile::make <DMSFile> (path, stream);
+            
+        case FILETYPE_EXE:
+            return AmigaFile::make <EXEFile> (path, stream);
+
+        case FILETYPE_DIR:
+            return Folder::make (path);
+
+        default:
+            break;
+    }
+    throw VAError(ERROR_FILE_TYPE_MISMATCH);
+}
+
+DiskFile *
+DiskFile::make(const string &path, ErrorCode *err)
+{
+    *err = ERROR_OK;
+    try { return make(path); }
+    catch (VAError &exception) { *err = exception.data; }
+    return nullptr;
+}
 
 u8
 DiskFile::readByte(isize t, isize s, isize offset) const
