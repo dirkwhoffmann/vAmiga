@@ -508,9 +508,6 @@ Agnus::executeEventsUntil(Cycle cycle) {
         if (isDue<SLOT_IRQ>(cycle)) {
             paula.serviceIrqEvent();
         }
-        if (isDue<SLOT_IPL>(cycle)) {
-            paula.serviceIplEvent();
-        }
         if (isDue<SLOT_KBD>(cycle)) {
             keyboard.serviceKeyboardEvent(slot[SLOT_KBD].id);
         }
@@ -522,6 +519,9 @@ Agnus::executeEventsUntil(Cycle cycle) {
         }
         if (isDue<SLOT_POT>(cycle)) {
             paula.servicePotEvent(slot[SLOT_POT].id);
+        }
+        if (isDue<SLOT_IPL>(cycle)) {
+            paula.serviceIplEvent();
         }
         if (isDue<SLOT_INS>(cycle)) {
             serviceINSEvent();
