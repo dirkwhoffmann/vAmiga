@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
-#include "EventHandlerPublicTypes.h"
+#include "EventHandlerTypes.h"
 #include "RingBuffer.h"
 
 

@@ -10,10 +10,8 @@
 #pragma once
 
 #include "CopperTypes.h"
-
-#include "EventHandlerPublicTypes.h"
-#include "MemoryPublicTypes.h"
-
+#include "EventHandlerTypes.h"
+#include "MemoryTypes.h"
 #include "AmigaComponent.h"
 #include "Beam.h"
 #include "Checksum.h"

@@ -12,7 +12,7 @@
 #include "PaulaTypes.h"
 
 #include "AmigaComponent.h"
-#include "EventHandlerPublicTypes.h"
+#include "EventHandlerTypes.h"
 #include "Macros.h"
 
 class UART : public AmigaComponent {

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AudioPublicTypes.h"
+#include "AudioTypes.h"
 #include "Constants.h"
 #include "RingBuffer.h"
 

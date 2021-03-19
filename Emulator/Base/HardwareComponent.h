@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaObject.h"
-#include "AmigaPublicTypes.h"
+#include "AmigaTypes.h"
 #include "Serialization.h"
 #include "Concurrency.h"
 

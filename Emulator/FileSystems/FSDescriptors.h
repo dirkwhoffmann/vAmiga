@@ -10,7 +10,7 @@
 #pragma once
 
 #include "FSTypes.h"
-#include "DiskPublicTypes.h"
+#include "DiskTypes.h"
 #include "AmigaObject.h"
 #include "FSObjects.h"
 #include "FSBlock.h"

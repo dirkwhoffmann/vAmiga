@@ -11,7 +11,7 @@
 
 #include "KeyboardTypes.h"
 #include "AmigaComponent.h"
-#include "EventHandlerPublicTypes.h"
+#include "EventHandlerTypes.h"
 
 
 class Keyboard : public AmigaComponent {

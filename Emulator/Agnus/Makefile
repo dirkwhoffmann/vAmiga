@@ -11,14 +11,14 @@ all: $(OBJ) subdirs
 subdirs:
 	@for dir in $(SUBDIRS); do \
 		echo "Entering ${CURDIR}/$$dir"; \
-		$(MAKE) -C $$dir; \
+		$(MYMAKE) -C $$dir; \
 	done
 
 clean:
 	@echo "Cleaning up $(CURDIR)"
 	@rm -f *.o
 	@for dir in $(SUBDIRS); do \
-		$(MAKE) -C $$dir clean; \
+		$(MYMAKE) -C $$dir clean; \
 	done
 
 %.o: %.cpp
