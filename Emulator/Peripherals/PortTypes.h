@@ -12,6 +12,8 @@
 #include "PortPublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 struct SerialPortDeviceEnum : Reflection<SerialPortDeviceEnum, SerialPortDevice> {
     
     static bool isValid(long value)
@@ -101,3 +103,5 @@ struct GamePadActionEnum : Reflection<GamePadActionEnum, GamePadAction> {
         return "???";
     }
 };
+
+}

@@ -12,6 +12,8 @@
 #include "MsgQueuePublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 struct MsgTypeEnum : Reflection<MsgTypeEnum, MsgType> {
     
     static bool isValid(long value)
@@ -89,3 +91,5 @@ struct MsgTypeEnum : Reflection<MsgTypeEnum, MsgType> {
         return "???";
     }
 };
+
+}

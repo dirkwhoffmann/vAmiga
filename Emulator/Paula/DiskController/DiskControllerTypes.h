@@ -12,6 +12,8 @@
 #include "DiskControllerPublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 struct DriveStateEnum : Reflection<DriveStateEnum, DriveState> {
     
     static bool isValid(long value)
@@ -35,3 +37,5 @@ struct DriveStateEnum : Reflection<DriveStateEnum, DriveState> {
         return "???";
     }
 };
+
+}

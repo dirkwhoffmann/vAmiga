@@ -15,6 +15,8 @@
 #include <map>
 #include <exception>
 
+namespace va {
+
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
 
 
@@ -90,3 +92,5 @@ template <class T, typename E> struct Reflection {
         return (E)it->second;
     }
 };
+
+}

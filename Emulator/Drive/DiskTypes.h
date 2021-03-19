@@ -12,6 +12,8 @@
 #include "DiskPublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 struct DiskDiameterEnum : Reflection<DiskDiameterEnum, DiskDiameter> {
     
     static bool isValid(long value)
@@ -52,3 +54,5 @@ struct DiskDensityEnum : Reflection<DiskDensityEnum, DiskDensity> {
         return "???";
     }
 };
+
+}

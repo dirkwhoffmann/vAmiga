@@ -12,6 +12,8 @@
 #include "KeyboardPublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 //
 // Private types
 //
@@ -50,3 +52,5 @@ struct KeyboardStateEnum : Reflection<KeyboardStateEnum, KeyboardState> {
         return "???";
     }
 };
+
+}

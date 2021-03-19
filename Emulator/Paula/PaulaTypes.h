@@ -12,6 +12,8 @@
 #include "PaulaPublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 //
 // Private types
 //
@@ -72,3 +74,5 @@ struct IrqSourceEnum : Reflection<IrqSourceEnum, IrqSource> {
         return "???";
     }
 };
+
+}

@@ -12,6 +12,8 @@
 #include "RTCPublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 struct RTCRevisionEnum : Reflection<RTCRevisionEnum, RTCRevision> {
     
     static bool isValid(long value)
@@ -32,3 +34,5 @@ struct RTCRevisionEnum : Reflection<RTCRevisionEnum, RTCRevision> {
         return "???";
     }
 };
+
+}

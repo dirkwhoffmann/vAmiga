@@ -12,6 +12,8 @@
 #include "CIAPublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 //
 // Reflection APIs
 //
@@ -35,3 +37,5 @@ struct CIARevisionEnum : Reflection<CIARevisionEnum, CIARevision> {
         return "???";
     }
 };
+
+}

@@ -13,6 +13,8 @@
 #include "DiskTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 struct FileTypeEnum : Reflection<FileTypeEnum, FileType> {
     
     static bool isValid(long value)
@@ -135,3 +137,5 @@ struct BootBlockIdEnum : Reflection<BootBlockIdEnum, BootBlockId> {
         return "???";
     }
 };
+
+}

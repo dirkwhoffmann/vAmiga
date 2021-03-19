@@ -12,6 +12,8 @@
 #include "DenisePublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 //
 // Reflection APIs
 //
@@ -60,3 +62,5 @@ struct PaletteEnum : Reflection<PaletteEnum, Palette> {
         return "???";
     }
 };
+
+}

@@ -12,6 +12,8 @@
 #include "DmaDebuggerPublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 //
 // Reflection APIs
 //
@@ -36,3 +38,5 @@ struct DmaDisplayModeEnum : Reflection<DmaDisplayModeEnum, DmaDisplayMode> {
         return "???";
     }
 };
+
+}

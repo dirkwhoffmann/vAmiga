@@ -12,6 +12,8 @@
 #include "AudioPublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 //
 // Reflection APIs
 //
@@ -56,3 +58,5 @@ struct FilterTypeEnum : Reflection<FilterTypeEnum, FilterType> {
         return "???";
     }
 };
+
+}

@@ -12,6 +12,8 @@
 #include "FSPublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 struct FSVolumeTypeEnum : Reflection<FSVolumeTypeEnum, FSVolumeType> {
     
     static bool isValid(long value)
@@ -123,3 +125,5 @@ struct FSItemTypeEnum : Reflection<FSItemTypeEnum, FSItemType> {
         return "???";
     }
 };
+
+}

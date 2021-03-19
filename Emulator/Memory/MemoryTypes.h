@@ -12,6 +12,8 @@
 #include "MemoryPublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 //
 // Reflection APIs
 //
@@ -133,3 +135,5 @@ struct UnmappedMemoryEnum : Reflection<UnmappedMemoryEnum, UnmappedMemory> {
         return "???";
     }
 };
+
+}

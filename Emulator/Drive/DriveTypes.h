@@ -12,6 +12,8 @@
 #include "DrivePublicTypes.h"
 #include "Reflection.h"
 
+namespace va {
+
 struct DriveTypeEnum : Reflection<DriveTypeEnum, DriveType> {
     
     static bool isValid(long value)
@@ -32,3 +34,5 @@ struct DriveTypeEnum : Reflection<DriveTypeEnum, DriveType> {
         return "???";
     }
 };
+
+}
