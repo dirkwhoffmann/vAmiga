@@ -14,6 +14,8 @@
 #include "FSPartition.h"
 #include "string.h"
 
+namespace va {
+
 FSBootBlock::FSBootBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
     data = new u8[bsize()]();
@@ -134,4 +136,6 @@ FSBootBlock::writeBootBlock(BootBlockId id, isize page)
             image.write(data, 512, 1023);  // Write 512 bytes
         }
     }
+}
+
 }

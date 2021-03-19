@@ -14,6 +14,8 @@
 #include "Checksum.h"
 #include "PixelEngine.h"
 
+namespace va {
+
 Copper::Copper(Amiga& ref) : AmigaComponent(ref)
 {
 }
@@ -591,4 +593,6 @@ Copper::dumpCopperList(isize list, isize length)
     for (isize i = 0; i < length; i++) {
         msg("%s\n", disassemble(list, 2*i));
     }
+}
+
 }

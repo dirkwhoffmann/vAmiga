@@ -14,6 +14,8 @@
 #include "FSDevice.h"
 #include "IO.h"
 
+namespace va {
+
 bool
 EXEFile::isCompatiblePath(const string &path)
 {
@@ -97,3 +99,4 @@ EXEFile::readFromStream(std::istream &stream)
     return result;
 }
 
+}

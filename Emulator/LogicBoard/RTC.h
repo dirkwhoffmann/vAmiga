@@ -12,6 +12,8 @@
 #include "AmigaComponent.h"
 #include "RTCTypes.h"
 
+namespace va {
+
 class RTC : public AmigaComponent {
 
     // Current configuration
@@ -175,3 +177,5 @@ private:
     void registers2timeOki(tm *t);
     void registers2timeRicoh(tm *t);
 };
+
+}

@@ -16,6 +16,8 @@
 #include "Paula.h"
 #include "UART.h"
 
+namespace va {
+
 void
 Agnus::inspectEvents(EventInfo &info) const
 {
@@ -542,4 +544,6 @@ Agnus::executeEventsUntil(Cycle cycle) {
     for (isize i = 1; i <= SLOT_SEC; i++)
         if (slot[i].triggerCycle < nextTrigger)
             nextTrigger = slot[i].triggerCycle;
+}
+
 }

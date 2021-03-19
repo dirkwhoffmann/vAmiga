@@ -10,6 +10,8 @@
 #include "FSBlock.h"
 #include <vector>
 
+namespace va {
+
 struct FSRootBlock : FSBlock {
           
     FSRootBlock(FSPartition &p, Block nr);
@@ -49,3 +51,5 @@ struct FSRootBlock : FSBlock {
 
     bool addBitmapBlockRefs(std::vector<Block> &refs);
 };
+
+}

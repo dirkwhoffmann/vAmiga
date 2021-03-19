@@ -13,6 +13,8 @@
 #include "CPU.h"
 #include "Memory.h"
 
+namespace va {
+
 RTC::RTC(Amiga& ref) : AmigaComponent(ref)
 {
     config.model = RTC_OKI;
@@ -323,4 +325,6 @@ RTC::registers2timeRicoh(tm *t)
     t->tm_mday = reg[0][0x7] + 10 * reg[0][0x8];
     t->tm_mon  = reg[0][0x9] + 10 * reg[0][0xA] - 1;
     t->tm_year = reg[0][0xB] + 10 * reg[0][0xC];
+}
+
 }

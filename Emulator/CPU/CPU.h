@@ -14,6 +14,8 @@
 #include "Moira.h"
 #include "Macros.h"
 
+namespace va {
+
 class CPU : public moira::Moira {
 
     // Result of the latest inspection
@@ -182,3 +184,5 @@ public:
     const char *disassembleInstr(isize *len);
     const char *disassembleWords(isize len);
 };
+
+}

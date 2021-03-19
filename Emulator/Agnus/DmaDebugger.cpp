@@ -15,6 +15,8 @@
 #include "MsgQueue.h"
 #include "PixelEngine.h"
 
+namespace va {
+
 DmaDebugger::DmaDebugger(Amiga &ref) : AmigaComponent(ref)
 {
     // By default all DMA channels are visualized, except the CPU channel
@@ -347,3 +349,4 @@ DmaDebugger::vSyncHandler()
     }
 }
 
+}

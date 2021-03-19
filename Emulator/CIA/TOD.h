@@ -12,6 +12,8 @@
 #include "CIATypes.h"
 #include "AmigaComponent.h"
 
+namespace va {
+
 typedef union
 {
     struct
@@ -194,3 +196,5 @@ private:
     // Starts the counter
     void cont() { stopped = false; }
 };
+
+}

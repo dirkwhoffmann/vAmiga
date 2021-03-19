@@ -18,7 +18,7 @@
 
 #include <assert.h>
 
-namespace moira {
+namespace va::moira {
 
 // Execution control flags
 

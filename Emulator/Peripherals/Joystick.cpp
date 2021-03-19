@@ -13,6 +13,8 @@
 #include "Agnus.h"
 #include "ControlPort.h"
 
+namespace va {
+
 const char *
 Joystick::getDescription() const
 {
@@ -187,3 +189,4 @@ Joystick::execute()
     }
 }
 
+}

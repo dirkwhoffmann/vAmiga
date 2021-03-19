@@ -18,6 +18,8 @@
 #include <iostream>
 #include <iomanip>
 
+namespace va {
+
 /* This class defines the base functionality of all hardware components. It
  * comprises functions for initializing, configuring, and serializing the
  * emulator, as well as functions for powering up and down, running and
@@ -324,4 +326,6 @@ applyToHardResetItems(writer); \
 applyToResetItems(writer); \
 debug(SNP_DEBUG, "Serialized to %zu bytes\n", writer.ptr - buffer); \
 return (isize)(writer.ptr - buffer); \
+}
+
 }

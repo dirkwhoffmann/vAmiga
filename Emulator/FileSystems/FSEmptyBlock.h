@@ -11,6 +11,8 @@
 
 #include "FSBlock.h"
 
+namespace va {
+
 struct FSEmptyBlock : FSBlock {
     
     FSEmptyBlock(FSPartition &p, Block nr) : FSBlock(p, nr) { }
@@ -31,3 +33,5 @@ struct FSEmptyBlock : FSBlock {
     void importBlock(const u8 *src, isize bsize) override;
     void exportBlock(u8 *dst, isize bsize) override;
 };
+
+}

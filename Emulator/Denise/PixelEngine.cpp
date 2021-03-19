@@ -15,6 +15,8 @@
 #include "Denise.h"
 #include "DmaDebugger.h"
 
+namespace va {
+
 PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
 {
     config.palette = PALETTE_COLOR;
@@ -487,4 +489,6 @@ PixelEngine::hide(isize line, u16 layers, u8 alpha)
         
         p[i] = 0xFF000000 | newb << 16 | newg << 8 | newr;
     }
+}
+
 }

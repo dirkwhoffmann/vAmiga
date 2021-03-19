@@ -16,6 +16,8 @@
 #include "MsgQueue.h"
 #include "Paula.h"
 
+namespace va {
+
 ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 {
     subComponents = std::vector<HardwareComponent *> {
@@ -310,4 +312,6 @@ ScreenRecorder::vsyncHandler(Cycle target)
         assert(audioPipe != -1);
         (void)write(audioPipe, (u8 *)samples, 2 * sizeof(float) * samplesPerFrame);
     }
+}
+
 }

@@ -13,6 +13,8 @@
 #include "Agnus.h"
 #include "Chrono.h"
 
+namespace va {
+
 Oscillator::Oscillator(Amiga& ref) : AmigaComponent(ref)
 {
 
@@ -100,4 +102,6 @@ Oscillator::synchronize()
         loadClock.restart();
         nonstopClock.restart();
     }
+}
+
 }

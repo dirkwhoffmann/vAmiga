@@ -11,6 +11,8 @@
 
 #include "HardwareComponent.h"
 
+namespace va {
+
 class Agnus;
 class Amiga;
 class Blitter;
@@ -82,3 +84,5 @@ public:
     
     void prefix() const override;
 };
+
+}

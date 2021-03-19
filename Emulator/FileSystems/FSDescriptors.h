@@ -24,6 +24,8 @@
 #include "FSFileListBlock.h"
 #include "FSDataBlock.h"
 
+namespace va {
+
 /* To create a FSDevice, the layout parameters of the represendet device have
  * to be provided. This is done by passing a structure of type FSDeviceLayout
  * which contains physical properties such as the number of cylinders and heads
@@ -99,3 +101,5 @@ struct FSPartitionDescriptor : AmigaObject {
     // Returns the number of cylinders in this partition
     isize numCyls() { return highCyl - lowCyl + 1; }
 };
+
+}

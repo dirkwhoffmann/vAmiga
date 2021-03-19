@@ -16,6 +16,8 @@
 #include <set>
 #include <stack>
 
+namespace va {
+
 FSDevice *
 FSDevice::makeWithFormat(FSDeviceDescriptor &layout)
 {
@@ -975,4 +977,6 @@ FSDevice::exportDirectory(const char *path)
     
     msg("Exported %zu items", items.size());
     return ERROR_OK;
+}
+
 }

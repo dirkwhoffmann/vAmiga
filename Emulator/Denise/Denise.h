@@ -15,6 +15,8 @@
 #include "PixelEngine.h"
 #include "ScreenRecorder.h"
 
+namespace va {
+
 class Denise : public AmigaComponent {
 
     friend class PixelEngine;
@@ -597,3 +599,5 @@ public:
     void dumpBuffer(const u8 *buffer, isize length) const;
 
 };
+
+}

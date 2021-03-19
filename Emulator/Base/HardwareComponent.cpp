@@ -10,7 +10,7 @@
 #include "config.h"
 #include "HardwareComponent.h"
 
-// #include <iostream>
+namespace va {
 
 HardwareComponent::~HardwareComponent()
 {
@@ -286,4 +286,6 @@ HardwareComponent::setDebug(bool enable)
 
      // Enable debug mode for this component
      _setDebug(enable);
+}
+
 }

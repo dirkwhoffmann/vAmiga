@@ -11,6 +11,8 @@
 #include "AmigaComponent.h"
 #include "Amiga.h"  
 
+namespace va {
+
 AmigaComponent::AmigaComponent(Amiga& ref) :
 agnus(ref.agnus),
 amiga(ref),
@@ -58,4 +60,6 @@ void
 AmigaComponent::prefix() const
 {
     amiga.prefix();
+}
+
 }

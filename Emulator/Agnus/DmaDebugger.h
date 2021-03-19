@@ -15,6 +15,8 @@
 #include "AmigaComponent.h"
 #include "Colors.h"
 
+namespace va {
+
 class DmaDebugger : public AmigaComponent {
 
 private:
@@ -126,3 +128,5 @@ public:
     // Cleans up some texture data at the end of each frame
     void vSyncHandler();
 };
+
+}

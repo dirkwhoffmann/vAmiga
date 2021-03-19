@@ -13,6 +13,8 @@
 #include "Memory.h"
 #include "Paula.h"
 
+namespace va {
+
 /* Micro-instructions:
  *
  * To keep the implementation flexible, the SlowBlitter is emulated as a
@@ -1235,4 +1237,6 @@ Blitter::doBarrelShifterB()
     } else {
         bhold = (bold << (16 - bltconBSH())) | (bnew >> bltconBSH());
     }
+}
+
 }

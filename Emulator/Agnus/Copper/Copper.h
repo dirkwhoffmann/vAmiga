@@ -17,6 +17,8 @@
 #include "Checksum.h"
 #include "CopperTypes.h"
 
+namespace va {
+
 class Copper : public AmigaComponent
 {
     friend class Agnus;
@@ -331,3 +333,5 @@ public:
     // Dumps a Copper list
     void dumpCopperList(isize list, isize length);
 };
+
+}

@@ -13,6 +13,8 @@
 #include "DeniseTypes.h"
 #include "ChangeRecorder.h"
 
+namespace va {
+
 class PixelEngine : public AmigaComponent {
 
     friend class DmaDebugger;
@@ -245,3 +247,5 @@ public:
     
     void hide(isize line, u16 layer, u8 alpha);
 };
+
+}

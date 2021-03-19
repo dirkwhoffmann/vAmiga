@@ -16,6 +16,8 @@
 #include "MsgQueue.h"
 #include "Paula.h"
 
+namespace va {
+
 u16
 DiskController::peekDSKDATR() const
 {
@@ -206,4 +208,6 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
         }
         if (selected != -1) messageQueue.put(MSG_DRIVE_SELECT, selected);
     }
+}
+
 }

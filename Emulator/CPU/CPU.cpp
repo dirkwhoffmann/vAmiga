@@ -15,6 +15,8 @@
 #include "Memory.h"
 #include "MsgQueue.h"
 
+namespace va {
+
 //
 // Moira
 //
@@ -379,4 +381,6 @@ CPU::disassembleWords(isize len)
 {
     return disassembleWords(reg.pc0, len);
     return "";
+}
+
 }

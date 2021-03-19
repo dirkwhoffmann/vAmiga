@@ -15,6 +15,8 @@
 #include "Chrono.h"
 #include "Sampler.h"
 
+namespace va {
+
 /* Architecture of the audio pipeline
  *
  *           Mux class
@@ -236,3 +238,5 @@ public:
      */
     SampleType *nocopy(isize n);
 };
+
+}

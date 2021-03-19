@@ -11,6 +11,8 @@
 
 #include "AmigaFile.h"
 
+namespace va {
+
 class RomFile : public AmigaFile {
 
     // Accepted header signatures
@@ -81,3 +83,5 @@ public:
      */
     void decrypt() throws;
 };
+
+}

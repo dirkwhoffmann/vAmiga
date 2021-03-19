@@ -13,6 +13,8 @@
 
 #include <vector>
 
+namespace va {
+
 struct FSBitmapExtBlock : FSBlock {
                     
     FSBitmapExtBlock(FSPartition &p, Block nr);
@@ -38,3 +40,5 @@ struct FSBitmapExtBlock : FSBlock {
 
     void addBitmapBlockRefs(std::vector<Block> &refs, std::vector<Block>::iterator &it);
 };
+
+}

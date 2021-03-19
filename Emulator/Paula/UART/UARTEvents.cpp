@@ -13,6 +13,8 @@
 #include "Agnus.h"
 #include "SerialPort.h"
 
+namespace va {
+
 void
 UART::serviceTxdEvent(EventID id)
 {
@@ -89,4 +91,6 @@ UART::serviceRxdEvent(EventID id)
 
     // Schedule the next reception event
     agnus.scheduleRel<SLOT_RXD>(rate(), RXD_BIT);
+}
+
 }

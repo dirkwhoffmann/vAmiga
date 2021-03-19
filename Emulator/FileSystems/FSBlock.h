@@ -14,6 +14,8 @@
 #include "FSObjects.h"
 #include "Macros.h"
 
+namespace va {
+
 struct FSBlock : AmigaObject {
         
     // The partition this block belongs to
@@ -320,3 +322,5 @@ if (value == 0) return ERROR_FS_EXPECTED_DATABLOCK_NR; }
 
 #define EXPECT_HASHTABLE_SIZE { \
 if (value != 72) return ERROR_FS_INVALID_HASHTABLE_SIZE; }
+
+}

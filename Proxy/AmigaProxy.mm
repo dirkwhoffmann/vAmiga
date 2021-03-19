@@ -22,7 +22,8 @@
 #include "RomFile.h"
 #include "Snapshot.h"
 
-using namespace moira;
+using namespace va;
+using namespace va::moira;
 
 //
 // Base Proxy

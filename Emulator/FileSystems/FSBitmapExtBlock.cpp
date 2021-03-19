@@ -13,6 +13,8 @@
 #include "FSDevice.h"
 #include "FSPartition.h"
 
+namespace va {
+
 FSBitmapExtBlock::FSBitmapExtBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
     data = new u8[p.dev.bsize]();
@@ -61,4 +63,6 @@ FSBitmapExtBlock::addBitmapBlockRefs(std::vector<Block> &refs,
         if (it == refs.end()) return;
         setBmBlockRef(i, *it);
     }
+}
+
 }

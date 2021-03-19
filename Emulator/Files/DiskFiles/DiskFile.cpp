@@ -15,6 +15,8 @@
 #include "EXEFile.h"
 #include "Folder.h"
 
+namespace va {
+
 DiskFile *
 DiskFile::make(const string &path)
 {
@@ -116,4 +118,6 @@ void
 DiskFile::decodeDisk(class Disk *disk)
 {
     assert(false);
+}
+
 }

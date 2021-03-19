@@ -12,6 +12,7 @@
 #include "AmigaTypes.h"
 #include "Exception.h"
 
+namespace va {
 
 //
 // VAError
@@ -57,3 +58,5 @@ struct ConfigLockedError : ConfigError {
 struct ConfigUnsupportedError : ConfigError {
     ConfigUnsupportedError() : ConfigError("") { };
 };
+
+}

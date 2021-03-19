@@ -14,6 +14,8 @@
 
 #include "Keyboard.h"
 
+namespace va {
+
 u8
 CIA::peek(u16 addr)
 {
@@ -542,4 +544,6 @@ CIA::poke(u16 addr, u8 value)
         default:
             assert(false);
     }
+}
+
 }

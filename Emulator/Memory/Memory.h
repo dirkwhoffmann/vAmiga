@@ -14,14 +14,7 @@
 #include "FileTypes.h"
 #include "Macros.h"
 
-//#include "FileTypes.h"
-
-// #include "RomFile.h"
-
-/*
-#include "Checksum.h"
-#include "ExtendedRomFile.h"
-*/
+namespace va {
 
 // DEPRECATED. TODO: GET VALUE FROM ZORRO CARD MANANGER
 const u32 FAST_RAM_STRT = 0x200000;
@@ -495,3 +488,4 @@ public:
     template <Accessor A> const char *hex(u32 addr, isize bytes);
 };
 
+}

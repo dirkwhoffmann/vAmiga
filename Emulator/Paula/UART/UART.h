@@ -15,6 +15,8 @@
 #include "EventHandlerTypes.h"
 #include "Macros.h"
 
+namespace va {
+
 class UART : public AmigaComponent {
 
     friend class Amiga;
@@ -167,3 +169,5 @@ public:
     void serviceRxdEvent(EventID id);
 
 };
+
+}

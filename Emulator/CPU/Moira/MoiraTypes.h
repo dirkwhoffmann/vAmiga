@@ -11,7 +11,7 @@
 
 #include <stdint.h>
 
-namespace moira {
+namespace va::moira {
 
 typedef int8_t             i8;
 typedef int16_t            i16;

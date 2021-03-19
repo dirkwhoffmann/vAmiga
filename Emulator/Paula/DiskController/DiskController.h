@@ -12,6 +12,8 @@
 #include "AmigaComponent.h"
 #include "DiskControllerTypes.h"
 
+namespace va {
+
 class DiskController : public AmigaComponent {
 
     friend class Drive;
@@ -364,3 +366,5 @@ public:
     void performTurboRead(Drive *drive);
     void performTurboWrite(Drive *drive);
 };
+
+}

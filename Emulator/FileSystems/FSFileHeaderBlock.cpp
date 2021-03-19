@@ -14,6 +14,8 @@
 
 #include <set>
 
+namespace va {
+
 FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
     data = new u8[p.dev.bsize]();
@@ -266,4 +268,6 @@ FSFileHeaderBlock::addDataBlockRef(Block first, Block ref)
     }
     
     return false;
+}
+
 }

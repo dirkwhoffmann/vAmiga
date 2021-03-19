@@ -13,6 +13,8 @@
 #include "AmigaComponent.h"
 #include "Chrono.h"
 
+namespace va {
+
 class ShakeDetector {
     
     // Horizontal position
@@ -187,3 +189,5 @@ public:
     // Performs periodic actions for this device
     void execute();
 };
+
+}

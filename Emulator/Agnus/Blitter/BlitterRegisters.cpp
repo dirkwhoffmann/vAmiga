@@ -11,6 +11,8 @@
 #include "Blitter.h"
 #include "Agnus.h"
 
+namespace va {
+
 void
 Blitter::pokeBLTCON0(u16 value)
 {
@@ -360,3 +362,5 @@ Blitter::pokeDMACON(u16 oldValue, u16 newValue)
 
 template void Blitter::pokeBLTSIZE<ACCESSOR_CPU>(u16 value);
 template void Blitter::pokeBLTSIZE<ACCESSOR_AGNUS>(u16 value);
+
+}

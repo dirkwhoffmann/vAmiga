@@ -14,6 +14,8 @@
 #include "MemoryTypes.h"
 #include "Macros.h"
 
+namespace va {
+
 /* The Blitter supports three accuracy levels:
  *
  * Level 0: Moves data in a single chunk.
@@ -488,3 +490,5 @@ private:
     void doBarrelShifterA();
     void doBarrelShifterB();
 };
+
+}

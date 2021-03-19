@@ -12,6 +12,8 @@
 #include "FSBlock.h"
 #include "FileTypes.h"
 
+namespace va {
+
 struct FSBootBlock : FSBlock {
         
     FSBootBlock(FSPartition &p, Block nr);
@@ -39,3 +41,5 @@ struct FSBootBlock : FSBlock {
 
     void writeBootBlock(BootBlockId id, isize page);
 };
+
+}

@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <string.h>
 
+namespace va {
+
 FSString::FSString(const char *str, isize l) : limit(l)
 {
     assert(str != nullptr);
@@ -161,4 +163,6 @@ FSTime::str() const
 {
     string result = dateStr() + "  " + timeStr();
     return result;
+}
+
 }

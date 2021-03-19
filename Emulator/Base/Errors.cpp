@@ -11,7 +11,11 @@
 #include "AmigaTypes.h"
 #include "Errors.h"
 
+namespace va {
+
 const char *
 VAError::what() const throw() {
     return  ErrorCodeEnum::key(data);
+}
+
 }

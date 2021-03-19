@@ -17,6 +17,8 @@
 #include "Drive.h"
 #include "IO.h"
 
+namespace va {
+
 bool
 ADFFile::isCompatiblePath(const string &path)
 {
@@ -556,4 +558,6 @@ ADFFile::decodeSector(u8 *dst, u8 *src)
     // Decode sector data
     Disk::decodeOddEven(dst + sector * 512, src, 512);
     return true;
+}
+
 }

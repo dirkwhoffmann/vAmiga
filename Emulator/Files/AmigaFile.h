@@ -18,6 +18,8 @@
 #include <sstream>
 #include <fstream>
 
+namespace va {
+
 /* All media files are organized in the class hierarchy displayed below. Two
  * abstract classes are involed: AmigaFile and DiskFile. AmigaFile provides
  * basic functionality for reading and writing files, streams, and buffers.
@@ -189,3 +191,5 @@ public:
     isize writeToBuffer(u8 *buf) throws;
     isize writeToBuffer(u8 *buf, ErrorCode *err);    
 };
+
+}

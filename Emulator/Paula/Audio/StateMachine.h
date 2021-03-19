@@ -14,6 +14,8 @@
 #include "Sampler.h"
 #include "Agnus.h"
 
+namespace va {
+
 template <isize nr>
 class StateMachine : public AmigaComponent {
 
@@ -250,3 +252,5 @@ public:
 
     void serviceEvent();
 };
+
+}

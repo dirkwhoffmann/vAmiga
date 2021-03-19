@@ -12,6 +12,8 @@
 
 #include "IO.h"
 
+namespace va {
+
 const u8 EXTFile::extAdfHeaders[2][8] = {
 
     { 'U', 'A', 'E', '-', '-', 'A', 'D', 'F' },
@@ -38,4 +40,6 @@ EXTFile::isCompatibleStream(std::istream &stream)
         if (util::matchingStreamHeader(stream, extAdfHeaders[i], len)) return true;
     }
     return false;
+}
+
 }

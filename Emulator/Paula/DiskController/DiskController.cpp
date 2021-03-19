@@ -18,6 +18,8 @@
 
 #include <algorithm>
 
+namespace va {
+
 DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
 {
     // Setup initial configuration
@@ -682,3 +684,4 @@ DiskController::performTurboWrite(Drive *drive)
           drive->getDescription(), checkcnt, check1, check2);
 }
 
+}

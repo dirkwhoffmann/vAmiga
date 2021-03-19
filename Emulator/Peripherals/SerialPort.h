@@ -12,6 +12,8 @@
 #include "PortTypes.h"
 #include "AmigaComponent.h"
 
+namespace va {
+
 #define TXD_MASK (1 << 2)
 #define RXD_MASK (1 << 3)
 #define RTS_MASK (1 << 4)
@@ -141,3 +143,5 @@ private:
 
     void setPort(u32 mask, bool value);
 };
+
+}

@@ -14,6 +14,8 @@
 #include "CIA.h"
 #include "MsgQueue.h"
 
+namespace va {
+
 Keyboard::Keyboard(Amiga& ref) : AmigaComponent(ref)
 {
     config.accurate = true;
@@ -330,4 +332,6 @@ Keyboard::sendSyncPulse()
          // In simple keyboard mode, send a whole byte
          sendKeyCode(0xFF);
      }
+}
+
 }

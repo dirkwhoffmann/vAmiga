@@ -12,6 +12,8 @@
 
 #include "DiskFile.h"
 
+namespace va {
+
 Disk::Disk(DiskDiameter type, DiskDensity density)
 {    
     this->diameter = type;
@@ -274,4 +276,6 @@ Disk::repeatTracks()
             data.track[t][i] = data.track[t][j];
         }
     }
+}
+
 }

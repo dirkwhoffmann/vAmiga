@@ -13,6 +13,8 @@
 #include "HardwareComponent.h"
 #include "RingBuffer.h"
 
+namespace va {
+
 class MsgQueue : public HardwareComponent {
         
     // Ring buffer storing all pending messages
@@ -60,3 +62,5 @@ public:
     // Writes a message into the queue and propagates it to all listeners
     void put(MsgType type, long data = 0);
 };
+
+}

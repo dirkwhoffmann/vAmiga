@@ -12,6 +12,8 @@
 #include "DiskTypes.h"
 #include "HardwareComponent.h"
 
+namespace va {
+
 /* MFM encoded disk data of a standard 3.5" DD disk:
  *
  *    Cylinder  Track     Head      Sectors
@@ -202,3 +204,5 @@ public:
     // Repeats the MFM data inside the track buffer to ease decoding
     void repeatTracks(); 
 };
+
+}

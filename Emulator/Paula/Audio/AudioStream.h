@@ -132,6 +132,8 @@ struct FloatStereo
 };
 
 
+namespace va {
+
 //
 // AudioStream
 //
@@ -183,3 +185,5 @@ public:
     float draw(u32 *buffer, isize width, isize height,
                bool left, float highestAmplitude, u32 color);
 };
+
+}

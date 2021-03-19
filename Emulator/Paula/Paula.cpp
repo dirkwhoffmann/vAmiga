@@ -13,6 +13,8 @@
 #include "Agnus.h"
 #include "CPU.h"
 
+namespace va {
+
 Paula::Paula(Amiga& ref) : AmigaComponent(ref)
 {
     subComponents = std::vector<HardwareComponent *> {
@@ -192,4 +194,6 @@ Paula::interruptLevel()
     }
 
     return 0;
+}
+
 }

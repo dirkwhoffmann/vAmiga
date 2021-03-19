@@ -12,6 +12,8 @@
 #include "PortTypes.h"
 #include "AmigaComponent.h"
 
+namespace va {
+
 class Joystick : public AmigaComponent {
 
     // Reference to control port this device belongs to
@@ -142,3 +144,5 @@ public:
      */
     void execute();
 };
+
+}

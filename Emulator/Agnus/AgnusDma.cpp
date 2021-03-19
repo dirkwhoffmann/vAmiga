@@ -12,6 +12,8 @@
 
 #include "Denise.h"
 
+namespace va {
+
 /* A central element in the emulation of an Amiga is the accurate modeling of
 * the DMA timeslot allocation table (Fig. 6-9 im the HRM, 3rd revision). All
 * bitplane related events are managed in the BPL_SLOT. All disk, audio, and
@@ -725,3 +727,5 @@ template bool Agnus::allocateBus<BUS_BLITTER>();
 
 template bool Agnus::busIsFree<BUS_COPPER>() const;
 template bool Agnus::busIsFree<BUS_BLITTER>() const;
+
+}

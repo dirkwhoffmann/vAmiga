@@ -10,6 +10,8 @@
 #include "config.h"
 #include "MsgQueue.h"
 
+namespace va {
+
 void
 MsgQueue::setListener(const void *listener, Callback *callback)
 {
@@ -51,4 +53,6 @@ MsgQueue::put(MsgType type, long data)
         // Otherwise, store it in the ring buffer
         Message msg = { type, data }; queue.write(msg);
     }
+}
+
 }

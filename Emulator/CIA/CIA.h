@@ -13,6 +13,8 @@
 #include "AmigaComponent.h"
 #include "TOD.h"
 
+namespace va {
+
 #define CIACountA0     (1ULL << 0) // Decrements timer A
 #define CIACountA1     (1ULL << 1)
 #define CIACountA2     (1ULL << 2)
@@ -584,3 +586,5 @@ private:
     u8 portBexternal() const override;
     void updatePB() override;
 };
+
+}

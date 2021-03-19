@@ -12,6 +12,8 @@
 #include "UART.h"
 #include "Macros.h"
 
+namespace va {
+
 SerialPort::SerialPort(Amiga& ref) : AmigaComponent(ref)
 {
     config.device = SPD_LOOPBACK;
@@ -132,3 +134,4 @@ SerialPort::setPort(u32 mask, bool value)
     if ((oldPort ^ port) & RXD_MASK) uart.rxdHasChanged(value);
 }
 
+}

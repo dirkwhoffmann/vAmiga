@@ -21,6 +21,8 @@
 #include "TimeDelayed.h"
 #include "UART.h"
 
+namespace va {
+
 class Paula : public AmigaComponent {
     
 private:
@@ -274,3 +276,5 @@ private:
     // Computes the interrupt level of a pending interrupt.
     u8 interruptLevel();
 };
+
+}

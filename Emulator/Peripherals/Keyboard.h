@@ -13,6 +13,7 @@
 #include "AmigaComponent.h"
 #include "EventHandlerTypes.h"
 
+namespace va {
 
 class Keyboard : public AmigaComponent {
 
@@ -182,3 +183,5 @@ private:
     // Sends a sync pulse to the Amiga
     void sendSyncPulse();
 };
+
+}

@@ -32,6 +32,8 @@
 #include "SerialPort.h"
 #include "ZorroManager.h"
 
+namespace va {
+
 void threadTerminated(void *thisAmiga);
 void *threadMain(void *thisAmiga);
 
@@ -370,3 +372,5 @@ public:
     void loadFromSnapshotUnsafe(Snapshot *snapshot);
     void loadFromSnapshotSafe(Snapshot *snapshot);
 };
+
+}

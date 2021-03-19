@@ -11,6 +11,8 @@
 
 #include "DiskFile.h"
 
+namespace va {
+
 #define IMGSIZE_35_DD     737280  //  720 KB PC formatted disk
 
 class IMGFile : public DiskFile {
@@ -61,3 +63,5 @@ private:
     bool decodeTrack(class Disk *disk, Track t);
     bool decodeSector(u8 *dst, u8 *src);
 };
+
+}

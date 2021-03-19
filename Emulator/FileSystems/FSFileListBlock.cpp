@@ -12,6 +12,8 @@
 #include "FSDevice.h"
 #include "FSPartition.h"
 
+namespace va {
+
 FSFileListBlock::FSFileListBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
     data = new u8[bsize()]();
@@ -120,4 +122,6 @@ FSFileListBlock::addDataBlockRef(Block first, Block ref)
     }
 
     return false;
+}
+
 }

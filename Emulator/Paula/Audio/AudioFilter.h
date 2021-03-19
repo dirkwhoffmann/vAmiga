@@ -12,6 +12,8 @@
 #include "AmigaComponent.h"
 #include "AudioTypes.h"
 
+namespace va {
+
 class AudioFilter : public AmigaComponent {
     
     // The currently set filter type
@@ -93,3 +95,4 @@ public:
     float apply(float sample);
 };
     
+}

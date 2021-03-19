@@ -16,6 +16,8 @@
 #include "FSDevice.h"
 #include "MsgQueue.h"
 
+namespace va {
+
 Drive::Drive(Amiga& ref, isize n) : AmigaComponent(ref), nr(n)
 {
     assert(nr < 4);
@@ -831,4 +833,6 @@ Drive::PRBdidChange(u8 oldValue, u8 newValue)
         // debug("Switching to side %d\n", !(newValue & 0b100));
     }
     head.side = !(newValue & 0b100);
+}
+
 }

@@ -13,6 +13,8 @@
 #include "Debug.h"
 #include "Errors.h"
 
+namespace va {
+
 /* Base class for all Amiga objects. This class adds a textual description
  * the object together with functions for printing debug messages and warnings.
  */
@@ -35,3 +37,5 @@ public:
     // Called by debug() and trace() to produce a detailed debug output
     virtual void prefix() const { };
 };
+
+}

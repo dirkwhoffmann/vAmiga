@@ -16,6 +16,8 @@
 #include <mach/mach_time.h>
 #endif
 
+namespace va {
+
 class Oscillator : public AmigaComponent {
 
     /* The heart of this class is method sychronize() which puts the thread to
@@ -99,3 +101,5 @@ public:
     // Puts the emulator thread to rest
     void synchronize();
 };
+
+}

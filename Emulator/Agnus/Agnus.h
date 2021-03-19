@@ -19,9 +19,10 @@
 #include "DmaDebugger.h"
 #include "Event.h"
 #include "Frame.h"
-// #include "HardwareComponent.h"
 #include "Memory.h"
 #include "Macros.h"
+
+namespace va {
 
 /* Hsync handler action flags
  *
@@ -935,3 +936,5 @@ private:
 #include "EventHandler.h"
 
 };
+
+}

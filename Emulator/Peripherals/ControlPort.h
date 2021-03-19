@@ -14,6 +14,8 @@
 #include "Joystick.h"
 #include "Mouse.h"
 
+namespace va {
+
 class ControlPort : public AmigaComponent {
 
     friend class Mouse;
@@ -130,3 +132,5 @@ public:
     // Modifies the PRA bits of CIA A according to the connected device
     void changePra(u8 &pra) const;
 };
+
+}
