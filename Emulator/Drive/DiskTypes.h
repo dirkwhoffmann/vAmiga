@@ -9,10 +9,11 @@
 
 #pragma once
 
-#include "DiskPublicTypes.h"
 #include "Reflection.h"
 
 namespace va {
+
+#include "DiskPublicTypes.h"
 
 struct DiskDiameterEnum : Reflection<DiskDiameterEnum, DiskDiameter> {
     

@@ -11,6 +11,8 @@
 #include "BootBlockImage.h"
 #include <string.h>
 
+namespace va {
+
 //
 // Bootblock images
 //
@@ -1193,4 +1195,6 @@ BootBlockImage::write(u8 *buffer, isize first, isize last)
     for (isize i = 0; i < last - first; i++) {
         buffer[i] = data[first + i];
     }
+}
+
 }

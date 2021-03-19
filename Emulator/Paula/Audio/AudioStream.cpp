@@ -12,6 +12,8 @@
 
 #include <algorithm>
 
+namespace va {
+
 void
 Volume::shift()
 {
@@ -21,8 +23,6 @@ Volume::shift()
         current -= std::min(delta, current - target);
     }
 }
-
-namespace va {
 
 template <class T> void
 AudioStream<T>::alignWritePtr()

@@ -12,6 +12,8 @@
 #include "FileTypes.h"
 #include <stddef.h>
 
+namespace va {
+
 typedef struct
 {
     const char *name;
@@ -41,3 +43,5 @@ public:
     // Exports the image
     void write(u8 *buffer, isize first = 0, isize last = 0);
 };
+
+}
