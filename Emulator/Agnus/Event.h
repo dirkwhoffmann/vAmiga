@@ -11,6 +11,8 @@
 
 #include "EventHandlerTypes.h"
 
+namespace va {
+
 struct Event
 {
     // Indicates when the event is due
@@ -32,3 +34,5 @@ struct Event
         << data;
     }
 };
+
+}

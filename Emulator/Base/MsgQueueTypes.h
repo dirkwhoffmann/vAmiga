@@ -9,10 +9,11 @@
 
 #pragma once
 
-#include "MsgQueuePublicTypes.h"
 #include "Reflection.h"
 
 namespace va {
+
+#include "MsgQueuePublicTypes.h"
 
 struct MsgTypeEnum : Reflection<MsgTypeEnum, MsgType> {
     

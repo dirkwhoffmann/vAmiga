@@ -11,6 +11,8 @@
 
 #include "Aliases.h"
 
+namespace va {
+
 template <bool hires>
 struct DDF
 {
@@ -67,3 +69,5 @@ struct DDF
     void compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1);
     void compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll);
 };
+
+}

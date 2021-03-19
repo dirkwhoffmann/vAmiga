@@ -9,5 +9,10 @@
 
 #pragma once
 
-#include "BlitterPublicTypes.h"
 #include "Reflection.h"
+
+namespace va {
+
+#include "BlitterPublicTypes.h"
+
+}

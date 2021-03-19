@@ -9,10 +9,11 @@
 
 #pragma once
 
-#include "PaulaPublicTypes.h"
 #include "Reflection.h"
 
 namespace va {
+
+#include "PaulaPublicTypes.h"
 
 //
 // Private types

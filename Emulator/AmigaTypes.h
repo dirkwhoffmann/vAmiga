@@ -9,10 +9,11 @@
 
 #pragma once
 
-#include "AmigaPublicTypes.h"
 #include "Reflection.h"
 
 namespace va {
+
+#include "AmigaPublicTypes.h"
 
 //
 // Reflection APIs

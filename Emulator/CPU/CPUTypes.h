@@ -9,5 +9,10 @@
 
 #pragma once
 
-#include "CPUPublicTypes.h"
 #include "Reflection.h"
+
+namespace va {
+
+#include "CPUPublicTypes.h"
+
+}

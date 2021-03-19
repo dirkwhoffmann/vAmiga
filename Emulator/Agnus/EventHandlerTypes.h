@@ -9,10 +9,11 @@
 
 #pragma once
 
-#include "EventHandlerPublicTypes.h"
 #include "Reflection.h"
 
 namespace va {
+
+#include "EventHandlerPublicTypes.h"
 
 #define isPrimarySlot(s) ((s) <= SLOT_SEC)
 #define isSecondarySlot(s) ((s) > SLOT_SEC && (s) < SLOT_COUNT)

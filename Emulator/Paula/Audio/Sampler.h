@@ -13,6 +13,8 @@
 #include "Constants.h"
 #include "RingBuffer.h"
 
+namespace va {
+
 /* This buffer type is used to temporarily store the generated sound samples as
  * they are produced by the state machine. Note that the state machine doesn't
  * output samples at a constant sampling rate. Instead, a new sound sample is
@@ -48,3 +50,5 @@ struct Sampler : RingBuffer <TaggedSample, VPOS_CNT * HPOS_CNT> {
      */
     template <SamplingMethod method> i16 interpolate(Cycle clock);
 };
+
+}

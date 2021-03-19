@@ -9,10 +9,11 @@
 
 #pragma once
 
-#include "DmaDebuggerPublicTypes.h"
 #include "Reflection.h"
 
 namespace va {
+
+#include "DmaDebuggerPublicTypes.h"
 
 //
 // Reflection APIs

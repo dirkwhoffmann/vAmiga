@@ -12,6 +12,8 @@
 #include "Aliases.h"
 #include "Constants.h"
 
+namespace va {
+
 struct Beam
 {
     // Counters for the vertical and horizontal beam position
@@ -97,3 +99,5 @@ struct Beam
         return *this;
     }
 };
+
+}

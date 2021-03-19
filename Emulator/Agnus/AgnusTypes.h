@@ -9,13 +9,14 @@
 
 #pragma once
 
-#include "AgnusPublicTypes.h"
 #include "Reflection.h"
 
 #include "BlitterTypes.h"
 #include "CopperTypes.h"
 
 namespace va {
+
+#include "AgnusPublicTypes.h"
 
 //
 // Reflection APIs

@@ -9,10 +9,11 @@
 
 #pragma once
 
-#include "AudioPublicTypes.h"
 #include "Reflection.h"
 
 namespace va {
+
+#include "AudioPublicTypes.h"
 
 //
 // Reflection APIs

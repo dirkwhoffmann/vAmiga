@@ -9,10 +9,11 @@
 
 #pragma once
 
-#include "RTCPublicTypes.h"
 #include "Reflection.h"
 
 namespace va {
+
+#include "RTCPublicTypes.h"
 
 struct RTCRevisionEnum : Reflection<RTCRevisionEnum, RTCRevision> {
     

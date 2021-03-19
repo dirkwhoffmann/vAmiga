@@ -10,6 +10,8 @@
 #include "config.h"
 #include "Sampler.h"
 
+namespace va {
+
 void
 Sampler::reset()
 {
@@ -89,3 +91,5 @@ Sampler::interpolate(Cycle clock)
 template i16 Sampler::interpolate<SMP_NONE>(Cycle clock);
 template i16 Sampler::interpolate<SMP_NEAREST>(Cycle clock);
 template i16 Sampler::interpolate<SMP_LINEAR>(Cycle clock);
+
+}

@@ -9,10 +9,11 @@
 
 #pragma once
 
-#include "KeyboardPublicTypes.h"
 #include "Reflection.h"
 
 namespace va {
+
+#include "KeyboardPublicTypes.h"
 
 //
 // Private types

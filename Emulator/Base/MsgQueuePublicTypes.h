@@ -11,8 +11,6 @@
 
 #pragma once
 
-#include "Aliases.h"
-
 enum_long(MSG_TYPE)
 {
     MSG_NONE = 0,
