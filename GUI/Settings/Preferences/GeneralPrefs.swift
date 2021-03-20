@@ -29,12 +29,18 @@ extension PreferencesController {
         genBitRate.integerValue = pref.bitRate
         genAspectX.integerValue = pref.aspectX
         genAspectY.integerValue = pref.aspectY
-        genFFmpegIcon.isHidden = !hasFFmpeg
         genSource.isEnabled = hasFFmpeg
         genBitRate.isEnabled = hasFFmpeg
         genAspectX.isEnabled = hasFFmpeg
         genAspectY.isEnabled = hasFFmpeg
-
+        if hasFFmpeg {
+            genFFmpegLabel.textColor = .textColor
+            genFFmpegLabel.stringValue = "ffmpeg found in /usr/local/bin"
+        } else {
+            genFFmpegLabel.textColor = .warningColor
+            genFFmpegLabel.stringValue = "/usr/local/bin/ffmpeg not found"
+        }
+        
         // Fullscreen
         genAspectRatioButton.state = pref.keepAspectRatio ? .on : .off
         genExitOnEscButton.state = pref.exitOnEsc ? .on : .off
