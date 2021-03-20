@@ -9,10 +9,6 @@
 
 #pragma once
 
-#include "AmigaObject.h"
-
-#include <algorithm>
-
 namespace my {
 
 template <class T, int delay> class TimeDelayed {
@@ -60,19 +56,6 @@ public:
     // Zeroes out all pipeline entries
     void clear() { reset((T)0); }
     
-    
-    //
-    // Analyzing
-    //
-    
-public:
-    
-    void dump() {
-        msg("TimeStamp: %lld clock: %lld\n", timeStamp, AS_DMA_CYCLES(*clock));
-        for (isize i = delay; i >= 0; i--) msg("[%d] ", readWithDelay(i));
-        msg("\n");
-    }
-
     
     //
     // Serializing

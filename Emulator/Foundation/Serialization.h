@@ -9,9 +9,8 @@
 
 #pragma once
 
-#include "Aliases.h"
+#include "Types.h"
 #include "Macros.h"
-#include <string.h>
 
 namespace my {
 

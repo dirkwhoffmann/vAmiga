@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include "Aliases.h"
+
 //
 // Enumerations
 //
