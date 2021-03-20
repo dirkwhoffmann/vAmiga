@@ -62,14 +62,14 @@ DiskController::serviceDiskChangeEvent()
 {
     if (agnus.slot[SLOT_DCH].id == EVENT_NONE) return;
     
-    int n = (int)agnus.slot[SLOT_DCH].data;
+    isize n = (int)agnus.slot[SLOT_DCH].data;
     assert(n >= 0 && n <= 3);
 
     switch (agnus.slot[SLOT_DCH].id) {
 
         case DCH_INSERT:
 
-            trace(DSK_DEBUG, "DCH_INSERT (df%d)\n", n);
+            trace(DSK_DEBUG, "DCH_INSERT (df%zd)\n", n);
 
             assert(diskToInsert != nullptr);
             df[n]->insertDisk(diskToInsert);
@@ -78,7 +78,7 @@ DiskController::serviceDiskChangeEvent()
 
         case DCH_EJECT:
 
-            trace(DSK_DEBUG, "DCH_EJECT (df%d)\n", n);
+            trace(DSK_DEBUG, "DCH_EJECT (df%zd)\n", n);
 
             df[n]->ejectDisk();
             break;

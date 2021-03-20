@@ -567,15 +567,15 @@ Agnus::updateDasJumpTable(i16 end)
 }
 
 void
-Agnus::dumpEventTable(const EventID *table, char str[256][3], int from, int to) const
+Agnus::dumpEventTable(const EventID *table, char str[256][3], isize from, isize to) const
 {
     char r1[256], r2[256], r3[256], r4[256], r5[256];
-    int i;
+    isize i;
 
     for (i = 0; i <= to - from; i++) {
 
-        int digit1 = (from + i) / 16;
-        int digit2 = (from + i) % 16;
+        isize digit1 = (from + i) / 16;
+        isize digit2 = (from + i) % 16;
 
         r1[i] = (digit1 < 10) ? digit1 + '0' : (digit1 - 10) + 'A';
         r2[i] = (digit2 < 10) ? digit2 + '0' : (digit2 - 10) + 'A';
@@ -641,13 +641,13 @@ Agnus::dumpBplEventTable() const
 
     // Dump the jump table
     msg("\nJump table:\n\n");
-    int i = nextBplEvent[0];
-    msg("0 -> %X", i);
+    isize i = nextBplEvent[0];
+    msg("0 -> %zx", i);
     while (i) {
         assert(i < HPOS_CNT);
         assert(nextBplEvent[i] == 0 || nextBplEvent[i] > i);
         i = nextBplEvent[i];
-        msg(" -> %X", i);
+        msg(" -> %zx", i);
     }
     msg("\n");
 }

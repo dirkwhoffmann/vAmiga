@@ -784,7 +784,7 @@ private:
     void updateDasJumpTable(i16 end = HPOS_MAX);
 
     // Dumps an event table for debugging
-    void dumpEventTable(const EventID *table, char str[256][3], int from, int to) const;
+    void dumpEventTable(const EventID *table, char str[256][3], isize from, isize to) const;
 
 public:
     
