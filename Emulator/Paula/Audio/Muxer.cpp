@@ -393,8 +393,8 @@ Muxer::handleBufferUnderflow()
     stream.alignWritePtr();
 
     // Determine the elapsed seconds since the last pointer adjustment
-    auto elapsedTime = Time::now() - lastAlignment;
-    lastAlignment = Time::now();
+    auto elapsedTime = my::Time::now() - lastAlignment;
+    lastAlignment = my::Time::now();
     
     // Adjust the sample rate, if condition (1) holds
     if (elapsedTime.asSeconds() > 10.0) {
@@ -421,8 +421,8 @@ Muxer::handleBufferOverflow()
     stream.alignWritePtr();
 
     // Determine the number of elapsed seconds since the last adjustment
-    auto elapsedTime = Time::now() - lastAlignment;
-    lastAlignment = Time::now();
+    auto elapsedTime = my::Time::now() - lastAlignment;
+    lastAlignment = my::Time::now();
     trace(AUDBUF_DEBUG, "elapsedTime: %f\n", elapsedTime.asSeconds());
     
     // Adjust the sample rate, if condition (1) holds
@@ -442,7 +442,7 @@ Muxer::handleBufferOverflow()
 void
 Muxer::ignoreNextUnderOrOverflow()
 {
-    lastAlignment = Time::now();
+    lastAlignment = my::Time::now();
 }
 
 void

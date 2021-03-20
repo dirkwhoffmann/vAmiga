@@ -9,6 +9,9 @@
 
 #include "config.h"
 #include "Checksum.h"
+#include "Macros.h"
+
+namespace my {
 
 u32
 NO_SANITIZE("unsigned-integer-overflow")
@@ -89,4 +92,6 @@ crc32forByte(u32 r)
     for(int j = 0; j < 8; ++j)
         r = (r & 1? 0: (u32)0xEDB88320L) ^ r >> 1;
     return r ^ (u32)0xFF000000L;
+}
+
 }

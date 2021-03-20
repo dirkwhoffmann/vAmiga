@@ -21,7 +21,7 @@ namespace va {
 bool
 DMSFile::isCompatiblePath(const string &path)
 {
-    string suffix = util::extractSuffix(path);
+    string suffix = my::extractSuffix(path);
     return suffix == "dms" || suffix == "DMS";
 }
 
@@ -30,7 +30,7 @@ DMSFile::isCompatibleStream(std::istream &stream)
 {
     u8 signature[] = { 'D', 'M', 'S', '!' };
                                                                                             
-    return util::matchingStreamHeader(stream, signature, sizeof(signature));
+    return my::matchingStreamHeader(stream, signature, sizeof(signature));
 }
 
 isize

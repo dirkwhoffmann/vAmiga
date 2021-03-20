@@ -336,17 +336,17 @@ Memory::_dump(Dump::Category category, std::ostream& os) const
     if (category & Dump::Checksums) {
 
         os << DUMP("Rom checksum");
-        os << HEX32 << fnv_1a_32(rom, config.romSize) << std::endl;
+        os << HEX32 << my::fnv_1a_32(rom, config.romSize) << std::endl;
         os << DUMP("Wom checksum");
-        os << HEX32 << fnv_1a_32(wom, config.womSize) << std::endl;
+        os << HEX32 << my::fnv_1a_32(wom, config.womSize) << std::endl;
         os << DUMP("Extended Rom checksum");
-        os << HEX32 << fnv_1a_32(ext, config.extSize) << std::endl;
+        os << HEX32 << my::fnv_1a_32(ext, config.extSize) << std::endl;
         os << DUMP("Chip Ram checksum");
-        os << HEX32 << fnv_1a_32(chip, config.chipSize) << std::endl;
+        os << HEX32 << my::fnv_1a_32(chip, config.chipSize) << std::endl;
         os << DUMP("Slow Ram checksum");
-        os << HEX32 << fnv_1a_32(slow, config.slowSize) << std::endl;
+        os << HEX32 << my::fnv_1a_32(slow, config.slowSize) << std::endl;
         os << DUMP("Fast Ram checksum");
-        os << HEX32 << fnv_1a_32(fast, config.fastSize) << std::endl;
+        os << HEX32 << my::fnv_1a_32(fast, config.fastSize) << std::endl;
     }
     
     if (category & Dump::BankMap) {
@@ -481,13 +481,13 @@ Memory::fillRamWithInitPattern()
 u32
 Memory::romFingerprint()
 {
-    return crc32(rom, config.romSize);
+    return my::crc32(rom, config.romSize);
 }
 
 u32
 Memory::extFingerprint()
 {
-    return crc32(ext, config.extSize);
+    return my::crc32(ext, config.extSize);
 }
 
 RomIdentifier

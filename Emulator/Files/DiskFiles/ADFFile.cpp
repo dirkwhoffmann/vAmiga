@@ -22,14 +22,14 @@ namespace va {
 bool
 ADFFile::isCompatiblePath(const string &path)
 {
-    string suffix = util::extractSuffix(path);
+    string suffix = my::extractSuffix(path);
     return suffix == "adf" || suffix == "ADF";
 }
 
 bool
 ADFFile::isCompatibleStream(std::istream &stream)
 {
-    isize length = util::streamLength(stream);
+    isize length = my::streamLength(stream);
     
     // Some ADFs contain an additional byte at the end. Ignore it.
     length &= ~1;
@@ -388,7 +388,7 @@ ADFFile::encodeTrack(Disk *disk, Track t)
     
     // Compute a debug checksum
     debug(MFM_DEBUG, "Track %d checksum = %x\n",
-          t, fnv_1a_32(disk->data.track[t], disk->length.track[t]));
+          t, my::fnv_1a_32(disk->data.track[t], disk->length.track[t]));
 
     return result;
 }

@@ -10,6 +10,8 @@
 #include "config.h"
 #include "Chrono.h"
 
+namespace my {
+
 #ifdef __MACH__
 
 //
@@ -214,4 +216,6 @@ Clock::restart()
     paused = false;
     
     return result;
+}
+
 }

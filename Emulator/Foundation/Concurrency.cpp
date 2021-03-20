@@ -10,6 +10,8 @@
 #include "config.h"
 #include "Concurrency.h"
 
+namespace my {
+
 Mutex::Mutex()
 {
     pthread_mutex_init(&mutex, nullptr);
@@ -31,7 +33,7 @@ Mutex::unlock()
 {
     return pthread_mutex_unlock(&mutex);
 }
-RecursiveMutex::RecursiveMutex()
+ReentrantMutex::ReentrantMutex()
 {
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
@@ -39,19 +41,21 @@ RecursiveMutex::RecursiveMutex()
     pthread_mutex_init(&mutex, &attr);
 }
 
-RecursiveMutex::~RecursiveMutex()
+ReentrantMutex::~ReentrantMutex()
 {
     pthread_mutex_destroy(&mutex);
 }
 
 int
-RecursiveMutex::lock()
+ReentrantMutex::lock()
 {
     return pthread_mutex_lock(&mutex);
 }
 
 int
-RecursiveMutex::unlock()
+ReentrantMutex::unlock()
 {
     return pthread_mutex_unlock(&mutex);
+}
+
 }

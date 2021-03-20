@@ -18,7 +18,7 @@ namespace va {
 // VAError
 //
 
-struct VAError : public Exception
+struct VAError : public my::Exception
 {
     // ErrorCode errorCode;
     

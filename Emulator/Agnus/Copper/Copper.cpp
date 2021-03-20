@@ -510,7 +510,7 @@ Copper::vsyncHandler()
                 agnus.frame.nr, checksum, checkcnt, cop1lc, cop2lc);
         }
         checkcnt = 0;
-        checksum = fnv_1a_init32();
+        checksum = my::fnv_1a_init32();
     }
 }
 

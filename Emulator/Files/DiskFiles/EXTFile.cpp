@@ -29,7 +29,7 @@ EXTFile::isCompatiblePath(const string &path)
 bool
 EXTFile::isCompatibleStream(std::istream &stream)
 {
-    isize length = util::streamLength(stream);
+    isize length = my::streamLength(stream);
     
     isize len = isizeof(extAdfHeaders[0]);
     isize cnt = isizeof(extAdfHeaders) / len;
@@ -37,7 +37,7 @@ EXTFile::isCompatibleStream(std::istream &stream)
     if (length < len) return false;
     
     for (isize i = 0; i < cnt; i++) {
-        if (util::matchingStreamHeader(stream, extAdfHeaders[i], len)) return true;
+        if (my::matchingStreamHeader(stream, extAdfHeaders[i], len)) return true;
     }
     return false;
 }

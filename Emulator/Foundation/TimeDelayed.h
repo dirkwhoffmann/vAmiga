@@ -13,9 +13,9 @@
 
 #include <algorithm>
 
-namespace va {
+namespace my {
 
-template <class T, int delay> class TimeDelayed : AmigaObject {
+template <class T, int delay> class TimeDelayed {
     
     /* Value pipeline (history buffer)
      *

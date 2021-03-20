@@ -15,6 +15,8 @@
 #include <mach/mach_time.h>
 #endif
 
+namespace my {
+
 class Time {
     
 public:
@@ -71,3 +73,5 @@ public:
     Time go();
     Time restart();
 };
+
+}

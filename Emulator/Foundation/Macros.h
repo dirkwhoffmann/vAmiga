@@ -12,41 +12,6 @@
 #include <arpa/inet.h>
 
 //
-// Converting units
-//
-
-// Converts a certain unit to master cycles
-#define USEC(delay)           ((delay) * 28)
-#define MSEC(delay)           ((delay) * 28000)
-#define SEC(delay)            ((delay) * 28000000)
-
-#define CPU_CYCLES(cycles)    ((cycles) << 2)
-#define CIA_CYCLES(cycles)    ((cycles) * 40)
-#define DMA_CYCLES(cycles)    ((cycles) << 3)
-
-// Converts master cycles to a certain unit
-#define AS_USEC(delay)        ((delay) / 28)
-#define AS_MSEC(delay)        ((delay) / 28000)
-#define AS_SEC(delay)         ((delay) / 28000000)
-
-#define AS_CPU_CYCLES(cycles) ((cycles) >> 2)
-#define AS_CIA_CYCLES(cycles) ((cycles) / 40)
-#define AS_DMA_CYCLES(cycles) ((cycles) >> 3)
-
-#define IS_CPU_CYCLE(cycles)  ((cycles) & 3 == 0)
-#define IS_CIA_CYCLE(cycles)  ((cycles) % 40 == 0)
-#define IS_DMA_CYCLE(cycles)  ((cycles) & 7 == 0)
-
-// Converts kilo and mega bytes to bytes
-#define KB(x) ((x) << 10)
-#define MB(x) ((x) << 20)
-
-// Converts kilo and mega Hertz to Hertz
-#define KHz(x) ((x) * 1000)
-#define MHz(x) ((x) * 1000000)
-
-
-//
 // Accessing bits and bytes
 //
 
@@ -146,3 +111,13 @@
 #define U64_SUB(x,y) (u64)((i64)(x) - (i64)(y))
 #define U64_ADD3(x,y,z) (u64)((i64)(x) + (i64)(y) + (i64)(z))
 #define U64_SUB3(x,y,z) (u64)((i64)(x) - (i64)(y) - (i64)(z))
+
+/* The following macro can be used to disable clang sanitizer checks. It has
+ * been added to make the code compatible with gcc which doesn't recognize
+ * the 'no_sanitize' keyword.
+ */
+#if defined(__clang__)
+#define NO_SANITIZE(x) __attribute__((no_sanitize(x)))
+#else
+#define NO_SANITIZE(x)
+#endif

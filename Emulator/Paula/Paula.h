@@ -79,7 +79,7 @@ public:
     u64 iplPipe;
     
     // Interrupt priority line (IPL)
-    TimeDelayed <u8,4> ipl = TimeDelayed <u8,4> ();
+    my::TimeDelayed <u8,4> ipl = my::TimeDelayed <u8,4> ();
     
     
     //

@@ -11,6 +11,8 @@
 
 #include <pthread.h>
 
+namespace my {
+
 class Mutex
 {
     pthread_mutex_t mutex;
@@ -24,14 +26,14 @@ public:
     int unlock();
 };
 
-class RecursiveMutex
+class ReentrantMutex
 {
     pthread_mutex_t mutex;
 
 public:
     
-    RecursiveMutex();
-    ~RecursiveMutex();
+    ReentrantMutex();
+    ~ReentrantMutex();
     
     int lock();
     int unlock();
@@ -39,13 +41,14 @@ public:
 
 class AutoMutex
 {
-    RecursiveMutex &mutex;
+    ReentrantMutex &mutex;
 
 public:
 
     bool active = true;
 
-    AutoMutex(RecursiveMutex &ref) : mutex(ref) { mutex.lock(); }
+    AutoMutex(ReentrantMutex &ref) : mutex(ref) { mutex.lock(); }
     ~AutoMutex() { mutex.unlock(); }
 };
 
+}

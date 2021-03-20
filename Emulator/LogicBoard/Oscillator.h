@@ -37,14 +37,14 @@ class Oscillator : public AmigaComponent {
     // Time lastSync;
 
     // Kernel clock
-    Time timeBase;
+    my::Time timeBase;
 
     // The current CPU load (%)
     float cpuLoad = 0.0;
     
     // Clocks for measuring the CPU load
-    Clock nonstopClock;
-    Clock loadClock;
+    my::Clock nonstopClock;
+    my::Clock loadClock;
 
     
     //

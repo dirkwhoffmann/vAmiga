@@ -32,11 +32,11 @@ ExtendedRomFile::isCompatibleName(const string &name)
 bool
 ExtendedRomFile::isCompatibleStream(std::istream &stream)
 {
-    if (util::streamLength(stream) != KB(512)) return false;
+    if (my::streamLength(stream) != KB(512)) return false;
     
     return
-    util::matchingStreamHeader(stream, magicBytes1, sizeof(magicBytes1)) ||
-    util::matchingStreamHeader(stream, magicBytes2, sizeof(magicBytes2));
+    my::matchingStreamHeader(stream, magicBytes1, sizeof(magicBytes1)) ||
+    my::matchingStreamHeader(stream, magicBytes2, sizeof(magicBytes2));
 }
 
 bool

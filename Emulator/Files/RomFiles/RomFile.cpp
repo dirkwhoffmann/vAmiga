@@ -313,7 +313,7 @@ RomFile::RomFile()
 bool
 RomFile::isCompatibleStream(std::istream &stream)
 {
-    isize length = util::streamLength(stream);
+    isize length = my::streamLength(stream);
     
     // Boot Roms
     if (length == KB(8) || length == KB(16)) {
@@ -322,7 +322,7 @@ RomFile::isCompatibleStream(std::istream &stream)
         isize cnt = isizeof(bootRomHeaders) / len;
 
         for (isize i = 0; i < cnt; i++) {
-            if (util::matchingStreamHeader(stream, bootRomHeaders[i], len)) return true;
+            if (my::matchingStreamHeader(stream, bootRomHeaders[i], len)) return true;
         }
         return false;
     }
@@ -334,7 +334,7 @@ RomFile::isCompatibleStream(std::istream &stream)
         isize cnt = isizeof(kickRomHeaders) / len;
 
         for (isize i = 0; i < cnt; i++) {
-            if (util::matchingStreamHeader(stream, kickRomHeaders[i], len)) return true;
+            if (my::matchingStreamHeader(stream, kickRomHeaders[i], len)) return true;
         }
         return false;
     }
@@ -346,7 +346,7 @@ RomFile::isCompatibleStream(std::istream &stream)
         isize cnt = isizeof(encrRomHeaders) / len;
         
         for (isize i = 0; i < cnt; i++) {
-            if (util::matchingStreamHeader(stream, encrRomHeaders[i], len)) return true;
+            if (my::matchingStreamHeader(stream, encrRomHeaders[i], len)) return true;
         }
     }
     
@@ -372,7 +372,7 @@ RomFile::isRomFile(const char *path)
 bool
 RomFile::isEncrypted()
 {
-    return util::matchingBufferHeader(data, encrRomHeaders[0], sizeof(encrRomHeaders[0]));
+    return my::matchingBufferHeader(data, encrRomHeaders[0], sizeof(encrRomHeaders[0]));
 }
 
 void
@@ -388,10 +388,10 @@ RomFile::decrypt()
     if (!isEncrypted()) return;
     
     // Locate the rom.key file
-    romKeyPath = util::extractPath(path) + "rom.key";
+    romKeyPath = my::extractPath(path) + "rom.key";
     
     // Load the rom.key file
-    if (!util::loadFile(romKeyPath.c_str(), &romKeyData, &romKeySize)) {
+    if (!my::loadFile(romKeyPath.c_str(), &romKeyData, &romKeySize)) {
         throw VAError(ERROR_MISSING_ROM_KEY);
     }
     

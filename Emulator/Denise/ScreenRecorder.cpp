@@ -29,7 +29,7 @@ ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 bool
 ScreenRecorder::hasFFmpeg() const
 {
-    return util::getSizeOfFile(ffmpegPath()) > 0;
+    return my::getSizeOfFile(ffmpegPath()) > 0;
 }
 
 void

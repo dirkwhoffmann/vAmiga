@@ -138,10 +138,10 @@ struct Volume {
 // AudioStream
 //
 
-template <class T> class AudioStream : public RingBuffer <T, 16384> {
+template <class T> class AudioStream : public my::RingBuffer <T, 16384> {
 
     // Mutex for synchronizing read / write accesses
-    Mutex mutex;
+    my::Mutex mutex;
 
 public:
     

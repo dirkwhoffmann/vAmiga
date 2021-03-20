@@ -536,6 +536,7 @@
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
 		50C685262573E9BF008D34DF /* FSPartition.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSPartition.cpp; sourceTree = "<group>"; };
 		50C685272573E9BF008D34DF /* FSPartition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSPartition.h; sourceTree = "<group>"; };
+		50C8C42C2605D51A00F4E012 /* Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
 		50D263CB21F6377600FA167F /* A500ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ANSI.xib; sourceTree = "<group>"; };
 		50D263CD21F6378000FA167F /* A1000ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ISO.xib; sourceTree = "<group>"; };
 		50D375DD222C7C6B0040987C /* Blitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Blitter.cpp; sourceTree = "<group>"; };
@@ -684,6 +685,9 @@
 		50104E8825ECDAA30047A9AA /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				507215B025EAF62B00787591 /* Aliases.h */,
+				5082D83A21EF891200CF7692 /* Constants.h */,
+				50B5C07D241107F200F124DC /* Constants.cpp */,
 				5039924625B219FC0084B808 /* Errors.h */,
 				50AE6F8425D71FBE0004AFBC /* Errors.cpp */,
 				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
@@ -1227,8 +1231,7 @@
 		50B14C0421EB212E002E32A6 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				507215B025EAF62B00787591 /* Aliases.h */,
-				5082D83A21EF891200CF7692 /* Constants.h */,
+				50C8C42C2605D51A00F4E012 /* Types.h */,
 				50104E8525ECD0EF0047A9AA /* Macros.h */,
 				507215A025EA9AE600787591 /* Chrono.h */,
 				5072159F25EA9AE600787591 /* Chrono.cpp */,
@@ -1244,7 +1247,6 @@
 				50B3C44725EAFB5500651700 /* Checksum.cpp */,
 				50EA34F0258E38880010DC63 /* Debug.h */,
 				50104E8B25ECE1A10047A9AA /* Debug.cpp */,
-				50B5C07D241107F200F124DC /* Constants.cpp */,
 				50B5F87825AF9E07008B79F1 /* Reflection.h */,
 				50C0B78125EC367000CDE1F2 /* IO.h */,
 				50C0B78025EC367000CDE1F2 /* IO.cpp */,

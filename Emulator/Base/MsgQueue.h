@@ -18,10 +18,10 @@ namespace va {
 class MsgQueue : public HardwareComponent {
         
     // Ring buffer storing all pending messages
-    RingBuffer<Message, 64> queue;
+    my::RingBuffer<Message, 64> queue;
             
     // Synchronization mutex
-    RecursiveMutex recMutex;
+    my::ReentrantMutex recMutex;
     
     // The registered listener
     const void *listener = nullptr;

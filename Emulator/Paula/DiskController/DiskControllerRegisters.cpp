@@ -49,8 +49,8 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
     // Initialize checksum (for debugging only)
     if (DSK_CHECKSUM) {
         checkcnt = 0;
-        check1 = fnv_1a_init32();
-        check2 = fnv_1a_init32();
+        check1 = my::fnv_1a_init32();
+        check2 = my::fnv_1a_init32();
     }
     
     // Disable DMA if bit 15 (DMAEN) is zero

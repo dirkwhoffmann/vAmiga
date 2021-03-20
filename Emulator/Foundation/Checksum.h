@@ -9,7 +9,9 @@
 
 #pragma once
 
-#include "Aliases.h"
+#include "Types.h"
+
+namespace my {
 
 // Returns the FNV-1a seed value
 inline u32 fnv_1a_init32() { return 0x811c9dc5; }
@@ -27,3 +29,5 @@ u64 fnv_1a_64(const u8 *addr, isize size);
 u16 crc16(const u8 *addr, isize size);
 u32 crc32(const u8 *addr, isize size);
 u32 crc32forByte(u32 r);
+
+}

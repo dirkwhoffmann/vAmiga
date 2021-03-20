@@ -276,7 +276,7 @@ ShakeDetector::isShakingRel(double dx) {
     // Check for a direction reversal
     if (dx * dxsign < 0) {
     
-        u64 dt = Time::now().asNanoseconds() - lastTurn;
+        u64 dt = my::Time::now().asNanoseconds() - lastTurn;
         dxsign = -dxsign;
 
         // A direction reversal is considered part of a shake, if the
@@ -294,7 +294,7 @@ ShakeDetector::isShakingRel(double dx) {
                 if (dxturns > 3) {
                     
                     // printf("Mouse shake detected\n");
-                    lastShake = Time::now().asNanoseconds();
+                    lastShake = my::Time::now().asNanoseconds();
                     dxturns = 0;
                     return true;
                 }
@@ -308,7 +308,7 @@ ShakeDetector::isShakingRel(double dx) {
             dxsum = 0;
         }
         
-        lastTurn = Time::now().asNanoseconds();
+        lastTurn = my::Time::now().asNanoseconds();
     }
     
     return false;
