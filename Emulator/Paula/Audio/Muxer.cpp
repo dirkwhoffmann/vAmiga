@@ -11,9 +11,11 @@
 #include "Muxer.h"
 
 #include "CIA.h"
+#include "IO.h"
 #include "MsgQueue.h"
 #include "Oscillator.h"
 #include "Macros.h"
+
 #include <math.h>
 
 namespace va {

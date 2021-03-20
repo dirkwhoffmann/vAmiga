@@ -12,6 +12,7 @@
 
 #include "Agnus.h"
 #include "CPU.h"
+#include "IO.h"
 
 namespace va {
 

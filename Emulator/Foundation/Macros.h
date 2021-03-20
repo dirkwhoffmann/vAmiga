@@ -146,19 +146,3 @@
 #define U64_SUB(x,y) (u64)((i64)(x) - (i64)(y))
 #define U64_ADD3(x,y,z) (u64)((i64)(x) + (i64)(y) + (i64)(z))
 #define U64_SUB3(x,y,z) (u64)((i64)(x) - (i64)(y) - (i64)(z))
-
-
-// Controls the '<<' stream operator
-#define DEC std::dec
-#define HEX8 std::hex << "0x" << std::setw(2) << std::setfill('0')
-#define HEX16 std::hex << "0x" << std::setw(4) << std::setfill('0')
-#define HEX32 std::hex << "0x" << std::setw(8) << std::setfill('0')
-#define HEX64 std::hex << "0x" << std::setw(16) << std::setfill('0')
-#define TAB(x) std::left << std::setw(x)
-#define YESNO(x) ((x) ? "yes" : "no")
-#define ONOFF(x) ((x) ? "on" : "off")
-#define HILO(x) ((x) ? "high" : "low")
-#define ISENABLED(x) ((x) ? "enabled" : "disabled")
-#define ISSET(x) ((x) ? "set" : "not set")
-#define EMULATED(x) ((x) ? "emulated" : "not emulated")
-#define DUMP(x) std::setw(24) << std::right << std::setfill(' ') << (x) << " : "

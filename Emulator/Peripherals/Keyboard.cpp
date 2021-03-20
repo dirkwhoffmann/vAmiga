@@ -12,6 +12,7 @@
 
 #include "Agnus.h"
 #include "CIA.h"
+#include "IO.h"
 #include "MsgQueue.h"
 
 namespace va {

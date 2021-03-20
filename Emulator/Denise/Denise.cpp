@@ -13,6 +13,7 @@
 #include "Agnus.h"
 #include "Amiga.h"
 #include "ControlPort.h"
+#include "IO.h"
 #include "SSEUtils.h"
 
 namespace va {

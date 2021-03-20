@@ -12,6 +12,7 @@
 
 #include "Agnus.h"
 #include "Amiga.h"
+#include "IO.h"
 #include "Memory.h"
 #include "MsgQueue.h"
 

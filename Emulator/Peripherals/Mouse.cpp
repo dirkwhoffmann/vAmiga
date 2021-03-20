@@ -12,6 +12,7 @@
 
 #include "Chrono.h"
 #include "ControlPort.h"
+#include "IO.h"
 #include "MsgQueue.h"
 #include "Oscillator.h"
 

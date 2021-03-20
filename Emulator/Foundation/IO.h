@@ -79,4 +79,18 @@ bool loadFile(const char *path, const char *name, u8 **buffer, isize *size);
 
 isize streamLength(std::istream &stream);
 
+#define DEC std::dec
+#define HEX8 std::hex << "0x" << std::setw(2) << std::setfill('0')
+#define HEX16 std::hex << "0x" << std::setw(4) << std::setfill('0')
+#define HEX32 std::hex << "0x" << std::setw(8) << std::setfill('0')
+#define HEX64 std::hex << "0x" << std::setw(16) << std::setfill('0')
+#define TAB(x) std::left << std::setw(x)
+#define YESNO(x) ((x) ? "yes" : "no")
+#define ONOFF(x) ((x) ? "on" : "off")
+#define HILO(x) ((x) ? "high" : "low")
+#define ISENABLED(x) ((x) ? "enabled" : "disabled")
+#define ISSET(x) ((x) ? "set" : "not set")
+#define EMULATED(x) ((x) ? "emulated" : "not emulated")
+#define DUMP(x) std::setw(24) << std::right << std::setfill(' ') << (x) << " : "
+
 }

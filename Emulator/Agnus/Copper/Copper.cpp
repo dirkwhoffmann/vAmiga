@@ -12,6 +12,7 @@
 
 #include "Agnus.h"
 #include "Checksum.h"
+#include "IO.h"
 #include "PixelEngine.h"
 
 namespace va {

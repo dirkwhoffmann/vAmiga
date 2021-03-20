@@ -12,6 +12,7 @@
 
 #include "Agnus.h"
 #include "ControlPort.h"
+#include "IO.h"
 
 namespace va {
 
