@@ -21,7 +21,46 @@ class Preferences {
     //
     // General
     //
-        
+       
+    // Snapshots
+    var autoSnapshots = GeneralDefaults.std.autoSnapshots
+    var snapshotInterval = 0 {
+        didSet { for c in myAppDelegate.controllers { c.startSnapshotTimer() } }
+    }
+
+    // Screenshots
+    var autoScreenshots = GeneralDefaults.std.autoScreenshots
+    var screenshotInterval = 0 {
+        didSet { for c in myAppDelegate.controllers { c.startScreenshotTimer() } }
+    }
+    var screenshotSource = GeneralDefaults.std.screenshotSource
+    var screenshotTarget = GeneralDefaults.std.screenshotTarget
+    var screenshotTargetIntValue: Int {
+        get { return Int(screenshotTarget.rawValue) }
+        set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
+    }
+
+    // Screen captures
+    var captureSource = GeneralDefaults.std.captureSource
+    var bitRate = 512 {
+        didSet {
+            if bitRate < 64 { bitRate = 64 }
+            if bitRate > 16384 { bitRate = 16384 }
+        }
+    }
+    var aspectX = 768 {
+        didSet {
+            if aspectX < 1 { aspectX = 1 }
+            if aspectX > 999 { aspectX = 999 }
+        }
+    }
+    var aspectY = 702 {
+        didSet {
+            if aspectY < 1 { aspectY = 1 }
+            if aspectY > 999 { aspectY = 999 }
+        }
+    }
+    
     // Floppy
     var blankDiskFormat = PeripheralsDefaults.std.blankDiskFormat
     var blankDiskFormatIntValue: Int {
@@ -94,58 +133,27 @@ class Preferences {
     var releaseMouseByShaking = ControlsDefaults.std.releaseMouseByShaking
      
     //
-    // Devices
-    //
-        
-    //
-    // Captures
-    //
-    
-    // Screenshots
-    var autoScreenshots = CaptureDefaults.std.autoScreenshots
-    var screenshotInterval = 0 {
-        didSet { for c in myAppDelegate.controllers { c.startScreenshotTimer() } }
-    }
-    var screenshotSource = CaptureDefaults.std.screenshotSource
-    var screenshotTarget = CaptureDefaults.std.screenshotTarget
-    var screenshotTargetIntValue: Int {
-        get { return Int(screenshotTarget.rawValue) }
-        set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
-    }
-
-    // Snapshots
-    var autoSnapshots = CaptureDefaults.std.autoSnapshots
-    var snapshotInterval = 0 {
-        didSet { for c in myAppDelegate.controllers { c.startSnapshotTimer() } }
-    }
-
-    // Screen captures
-    var captureSource = CaptureDefaults.std.captureSource
-    var bitRate = 512 {
-        didSet {
-            if bitRate < 64 { bitRate = 64 }
-            if bitRate > 16384 { bitRate = 16384 }
-        }
-    }
-    var aspectX = 768 {
-        didSet {
-            if aspectX < 1 { aspectX = 1 }
-            if aspectX > 999 { aspectX = 999 }
-        }
-    }
-    var aspectY = 702 {
-        didSet {
-            if aspectY < 1 { aspectY = 1 }
-            if aspectY > 999 { aspectY = 999 }
-        }
-    }
-    
-    //
     // General
     //
     
     func loadGeneralDefaults(_ defaults: GeneralDefaults) {
                 
+        // Snapshots
+        autoSnapshots = defaults.autoSnapshots
+        snapshotInterval = defaults.autoSnapshotInterval
+
+        // Screenshots
+        autoScreenshots = defaults.autoScreenshots
+        screenshotInterval = defaults.autoScreenshotInterval
+        screenshotSource = defaults.screenshotSource
+        screenshotTarget = defaults.screenshotTarget
+
+        // Captures
+        captureSource = defaults.captureSource
+        bitRate = defaults.bitRate
+        aspectX = defaults.aspectX
+        aspectY = defaults.aspectY
+        
         // Fullscreen
         keepAspectRatio = defaults.keepAspectRatio
         exitOnEsc = defaults.exitOnEsc
@@ -163,6 +171,22 @@ class Preferences {
         
         let defaults = UserDefaults.standard
            
+        // Snapshots
+        autoSnapshots = defaults.bool(forKey: Keys.Gen.autoSnapshots)
+        snapshotInterval = defaults.integer(forKey: Keys.Gen.autoSnapshotInterval)
+
+        // Screenshots
+        autoScreenshots = defaults.bool(forKey: Keys.Gen.autoScreenshots)
+        screenshotInterval = defaults.integer(forKey: Keys.Gen.autoScreenshotInterval)
+        screenshotSource = defaults.integer(forKey: Keys.Gen.screenshotSource)
+        screenshotTargetIntValue = defaults.integer(forKey: Keys.Gen.screenshotTarget)
+
+        // Captures
+        captureSource = defaults.integer(forKey: Keys.Gen.captureSource)
+        bitRate = defaults.integer(forKey: Keys.Gen.bitRate)
+        aspectX = defaults.integer(forKey: Keys.Gen.aspectX)
+        aspectY = defaults.integer(forKey: Keys.Gen.aspectY)
+        
         // Fullscreen
         keepAspectRatio = defaults.bool(forKey: Keys.Gen.keepAspectRatio)
         exitOnEsc = defaults.bool(forKey: Keys.Gen.exitOnEsc)
@@ -180,6 +204,23 @@ class Preferences {
         
         let defaults = UserDefaults.standard
                 
+        // Snapshots
+        defaults.set(autoSnapshots, forKey: Keys.Gen.autoSnapshots)
+        defaults.set(snapshotInterval, forKey: Keys.Gen.autoSnapshotInterval)
+
+        // Screenshots
+        defaults.set(autoSnapshots, forKey: Keys.Gen.autoSnapshots)
+        defaults.set(snapshotInterval, forKey: Keys.Gen.autoSnapshotInterval)
+        defaults.set(autoScreenshots, forKey: Keys.Gen.autoScreenshots)
+        defaults.set(screenshotInterval, forKey: Keys.Gen.autoScreenshotInterval)
+        defaults.set(screenshotSource, forKey: Keys.Gen.screenshotSource)
+
+        // Captures
+        defaults.set(captureSource, forKey: Keys.Gen.captureSource)
+        defaults.set(bitRate, forKey: Keys.Gen.bitRate)
+        defaults.set(aspectX, forKey: Keys.Gen.aspectX)
+        defaults.set(aspectY, forKey: Keys.Gen.aspectY)
+        
         // Fullscreen
         defaults.set(keepAspectRatio, forKey: Keys.Gen.keepAspectRatio)
         defaults.set(exitOnEsc, forKey: Keys.Gen.exitOnEsc)
@@ -284,71 +325,5 @@ class Preferences {
     
     func saveDevicesUserDefaults() {
         
-    }
-    
-    //
-    // Captures
-    //
-    
-    func loadCaptureDefaults(_ defaults: CaptureDefaults) {
-        
-        // Screenshots
-        autoScreenshots = defaults.autoScreenshots
-        screenshotInterval = defaults.autoScreenshotInterval
-        screenshotSource = defaults.screenshotSource
-        screenshotTarget = defaults.screenshotTarget
-
-        // Snapshots
-        autoSnapshots = defaults.autoSnapshots
-        snapshotInterval = defaults.autoSnapshotInterval
-
-        // Captures
-        captureSource = defaults.captureSource
-        bitRate = defaults.bitRate
-        aspectX = defaults.aspectX
-        aspectY = defaults.aspectY
-    }
-    
-    func loadCaptureUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-           
-        // Screenshots
-        autoScreenshots = defaults.bool(forKey: Keys.Cap.autoScreenshots)
-        screenshotInterval = defaults.integer(forKey: Keys.Cap.autoScreenshotInterval)
-        screenshotSource = defaults.integer(forKey: Keys.Cap.screenshotSource)
-        screenshotTargetIntValue = defaults.integer(forKey: Keys.Cap.screenshotTarget)
-
-        // Snapshots
-        autoSnapshots = defaults.bool(forKey: Keys.Cap.autoSnapshots)
-        snapshotInterval = defaults.integer(forKey: Keys.Cap.autoSnapshotInterval)
-
-        // Captures
-        captureSource = defaults.integer(forKey: Keys.Cap.captureSource)
-        bitRate = defaults.integer(forKey: Keys.Cap.bitRate)
-        aspectX = defaults.integer(forKey: Keys.Cap.aspectX)
-        aspectY = defaults.integer(forKey: Keys.Cap.aspectY)
-    }
-    
-    func saveCaptureUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        // Screenshots
-        defaults.set(autoSnapshots, forKey: Keys.Cap.autoSnapshots)
-        defaults.set(snapshotInterval, forKey: Keys.Cap.autoSnapshotInterval)
-        defaults.set(autoScreenshots, forKey: Keys.Cap.autoScreenshots)
-        defaults.set(screenshotInterval, forKey: Keys.Cap.autoScreenshotInterval)
-        defaults.set(screenshotSource, forKey: Keys.Cap.screenshotSource)
-
-        // Snapshots
-        defaults.set(autoSnapshots, forKey: Keys.Cap.autoSnapshots)
-        defaults.set(snapshotInterval, forKey: Keys.Cap.autoSnapshotInterval)
-
-        // Captures
-        defaults.set(captureSource, forKey: Keys.Cap.captureSource)
-        defaults.set(bitRate, forKey: Keys.Cap.bitRate)
-        defaults.set(aspectX, forKey: Keys.Cap.aspectX)
-        defaults.set(aspectY, forKey: Keys.Cap.aspectY)
     }
 }

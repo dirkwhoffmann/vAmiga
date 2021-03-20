@@ -18,6 +18,26 @@ class PreferencesController: DialogController {
     // General
     //
     
+    // Snapshots
+    @IBOutlet weak var genAutoSnapshots: NSButton!
+    @IBOutlet weak var genSnapshotInterval: NSTextField!
+
+    // Screenshots
+    @IBOutlet weak var genAutoScreenshots: NSButton!
+    @IBOutlet weak var genScreenshotInterval: NSTextField!
+    @IBOutlet weak var genScreenshotSourcePopup: NSPopUpButton!
+    @IBOutlet weak var genScreenshotTargetPopup: NSPopUpButton!
+
+    // Screen captures
+    // @IBOutlet weak var genFFmpegText: NSTextField!
+    // @IBOutlet weak var genFFmpegIcon1: NSButton!
+    // @IBOutlet weak var genFFmpegIcon2: NSImageView!
+    @IBOutlet weak var genFFmpegIcon: NSButton!
+    @IBOutlet weak var genSource: NSPopUpButton!
+    @IBOutlet weak var genAspectX: NSTextField!
+    @IBOutlet weak var genAspectY: NSTextField!
+    @IBOutlet weak var genBitRate: NSComboBox!
+    
     // Fullscreen
     @IBOutlet weak var genAspectRatioButton: NSButton!
     @IBOutlet weak var genExitOnEscButton: NSButton!
@@ -116,30 +136,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devLeftScheme: NSPopUpButton!
     @IBOutlet weak var devRightScheme: NSPopUpButton!
     @IBOutlet weak var devHatScheme: NSPopUpButton!
-    
-    //
-    // Captures
-    //
-    
-    // Screenshots
-    @IBOutlet weak var capAutoScreenshots: NSButton!
-    @IBOutlet weak var capScreenshotInterval: NSTextField!
-    @IBOutlet weak var capScreenshotSourcePopup: NSPopUpButton!
-    @IBOutlet weak var capScreenshotTargetPopup: NSPopUpButton!
-
-    // Snapshots
-    @IBOutlet weak var capAutoSnapshots: NSButton!
-    @IBOutlet weak var capSnapshotInterval: NSTextField!
-
-    // Screen captures
-    @IBOutlet weak var capFFmpegText: NSTextField!
-    @IBOutlet weak var capFFmpegIcon1: NSButton!
-    @IBOutlet weak var capFFmpegIcon2: NSImageView!
-    @IBOutlet weak var capSource: NSPopUpButton!
-    @IBOutlet weak var capAspectX: NSTextField!
-    @IBOutlet weak var capAspectY: NSTextField!
-    @IBOutlet weak var capBitRate: NSComboBox!
-    
+        
     // The tab to open first
     var firstTab: String?
 
@@ -178,7 +175,6 @@ class PreferencesController: DialogController {
             case "General": refreshGeneralTab()
             case "Controls": refreshControlsTab()
             case "Devices": refreshDevicesTab()
-            case "Captures": refreshCaptureTab()
             default: fatalError()
             }
         }
@@ -192,7 +188,6 @@ class PreferencesController: DialogController {
         case "General": tabView.selectTabViewItem(at: 0)
         case "Controls": tabView.selectTabViewItem(at: 1)
         case "Devices": tabView.selectTabViewItem(at: 2)
-        case "Captures": tabView.selectTabViewItem(at: 3)
         default: fatalError()
         }
     }
@@ -217,7 +212,6 @@ class PreferencesController: DialogController {
         pref.saveGeneralUserDefaults()
         pref.saveControlsUserDefaults()
         pref.saveDevicesUserDefaults()
-        pref.saveCaptureUserDefaults()
         myAppDelegate.database.save()
         close()
     }
@@ -234,7 +228,6 @@ extension PreferencesController: NSTabViewDelegate {
             case "General": refreshGeneralTab()
             case "Controls": refreshControlsTab()
             case "Devices": selectDevicesTab(); refreshDevicesTab()
-            case "Captures": refreshCaptureTab()
             default: fatalError()
             }
         }
@@ -261,7 +254,7 @@ extension PreferencesController: NSTextFieldDelegate {
             
             switch view {
                 
-            case capSnapshotInterval:
+            case genSnapshotInterval:
                 
                 if formatter?.number(from: view.stringValue) != nil {
                     capSnapshotIntervalAction(view)

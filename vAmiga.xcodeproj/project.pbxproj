@@ -140,7 +140,6 @@
 		508FE05C21EA22CC0043D0E9 /* ImporterDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04A21EA22CC0043D0E9 /* ImporterDialog.swift */; };
 		508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
 		509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509047B5230575E6009CEC1C /* SlowBlitter.cpp */; };
-		50912FF72525A1190049805B /* CapturePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50912FF62525A1190049805B /* CapturePrefs.swift */; };
 		50912FFD2525B7AD0049805B /* ScreenRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50912FFB2525B7AD0049805B /* ScreenRecorder.cpp */; };
 		50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */ = {isa = PBXBuildFile; fileRef = 50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */; };
 		50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50950ED622881B7A0073F755 /* ZorroManager.cpp */; };
@@ -447,7 +446,6 @@
 		508FE06321EA318D0043D0E9 /* AmigaFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaFile.cpp; sourceTree = "<group>"; };
 		508FE06421EA318D0043D0E9 /* AmigaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmigaFile.h; sourceTree = "<group>"; };
 		509047B5230575E6009CEC1C /* SlowBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SlowBlitter.cpp; sourceTree = "<group>"; };
-		50912FF62525A1190049805B /* CapturePrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePrefs.swift; sourceTree = "<group>"; };
 		50912FFB2525B7AD0049805B /* ScreenRecorder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScreenRecorder.cpp; sourceTree = "<group>"; };
 		50912FFC2525B7AD0049805B /* ScreenRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScreenRecorder.h; sourceTree = "<group>"; };
 		50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraExceptions_cpp.h; sourceTree = "<group>"; };
@@ -1039,7 +1037,6 @@
 				508FE04321EA22CC0043D0E9 /* PreferencesController.swift */,
 				508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */,
 				508FE04121EA22CC0043D0E9 /* ControlsPrefs.swift */,
-				50912FF62525A1190049805B /* CapturePrefs.swift */,
 				500CE875259252ED00462836 /* DevicesPrefs.swift */,
 				50001C642593230200D1FC91 /* DeviceDatabase.swift */,
 			);
@@ -1523,7 +1520,6 @@
 				504F4D64252624BD00CF8815 /* RendererRect.swift in Sources */,
 				501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */,
 				504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */,
-				50912FF72525A1190049805B /* CapturePrefs.swift in Sources */,
 				5027418F2297CACF0038E5AF /* Colors.cpp in Sources */,
 				508FDFDA21EA20510043D0E9 /* ImageToolbox.swift in Sources */,
 				508FE05521EA22CC0043D0E9 /* PreferencesWindow.swift in Sources */,

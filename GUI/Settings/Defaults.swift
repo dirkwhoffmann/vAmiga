@@ -59,7 +59,6 @@ extension UserDefaults {
         registerGeneralUserDefaults()
         registerControlsUserDefaults()
         registerDevicesUserDefaults()
-        registerCaptureUserDefaults()
         
         registerRomUserDefaults()
         registerHardwareUserDefaults()
@@ -81,7 +80,6 @@ extension MyController {
         pref.loadGeneralUserDefaults()
         pref.loadControlsUserDefaults()
         pref.loadDevicesUserDefaults()
-        pref.loadCaptureUserDefaults()
 
         config.loadRomUserDefaults()
         config.loadHardwareUserDefaults()
@@ -128,6 +126,22 @@ struct Keys {
     
     struct Gen {
                 
+        // Snapshots
+        static let autoSnapshots          = "VAMIGA_GEN_AutoSnapshots"
+        static let autoSnapshotInterval   = "VAMIGA_GEN_ScreenshotInterval"
+
+        // Screenshots
+        static let autoScreenshots        = "VAMIGA_GEN_AutoScreenshots"
+        static let autoScreenshotInterval = "VAMIGA_GEN_SnapshotInterval"
+        static let screenshotSource       = "VAMIGA_GEN_ScreenshotSource"
+        static let screenshotTarget       = "VAMIGA_GEN_ScreenshotTarget"
+                
+        // Screen captures
+        static let captureSource          = "VAMIGA_GEN_Source"
+        static let bitRate                = "VAMIGA_GEN_BitRate"
+        static let aspectX                = "VAMIGA_GEN_AspectX"
+        static let aspectY                = "VAMIGA_GEN_AspectY"
+        
         // Fullscreen
         static let keepAspectRatio        = "VAMIGA_GEN_FullscreenKeepAspectRatio"
         static let exitOnEsc              = "VAMIGA_GEN_FullscreenExitOnEsc"
@@ -144,6 +158,22 @@ struct Keys {
 
 struct GeneralDefaults {
             
+    // Snapshots
+    let autoSnapshots: Bool
+    let autoSnapshotInterval: Int
+
+    // Screenshots
+    let autoScreenshots: Bool
+    let autoScreenshotInterval: Int
+    let screenshotSource: Int
+    let screenshotTarget: NSBitmapImageRep.FileType
+    
+    // Captures
+    let captureSource: Int
+    let bitRate: Int
+    let aspectX: Int
+    let aspectY: Int
+    
     // Fullscreen
     let keepAspectRatio: Bool
     let exitOnEsc: Bool
@@ -161,7 +191,20 @@ struct GeneralDefaults {
     //
     
     static let std = GeneralDefaults.init(
-                        
+                      
+        autoSnapshots: false,
+        autoSnapshotInterval: 20,
+
+        autoScreenshots: false,
+        autoScreenshotInterval: 10,
+        screenshotSource: 0,
+        screenshotTarget: .png,
+
+        captureSource: 0,
+        bitRate: 2048,
+        aspectX: 768,
+        aspectY: 702,
+        
         keepAspectRatio: false,
         exitOnEsc: true,
         
@@ -179,6 +222,19 @@ extension UserDefaults {
     
         let defaults = GeneralDefaults.std
         let dictionary: [String: Any] = [
+            
+            Keys.Gen.autoSnapshots: defaults.autoSnapshots,
+            Keys.Gen.autoSnapshotInterval: defaults.autoSnapshotInterval,
+
+            Keys.Gen.autoScreenshots: defaults.autoScreenshots,
+            Keys.Gen.autoScreenshotInterval: defaults.autoScreenshotInterval,
+            Keys.Gen.screenshotSource: defaults.screenshotSource,
+            Keys.Gen.screenshotTarget: Int(defaults.screenshotTarget.rawValue),
+
+            Keys.Gen.captureSource: defaults.captureSource,
+            Keys.Gen.bitRate: defaults.bitRate,
+            Keys.Gen.aspectX: defaults.aspectX,
+            Keys.Gen.aspectY: defaults.aspectY,
             
             Keys.Gen.keepAspectRatio: defaults.keepAspectRatio,
             Keys.Gen.exitOnEsc: defaults.exitOnEsc,
@@ -199,7 +255,20 @@ extension UserDefaults {
         
         let defaults = UserDefaults.standard
         
-        let keys = [ Keys.Gen.keepAspectRatio,
+        let keys = [ Keys.Gen.autoSnapshots,
+                     Keys.Gen.autoSnapshotInterval,
+                     
+                     Keys.Gen.autoScreenshots,
+                     Keys.Gen.autoScreenshotInterval,
+                     Keys.Gen.screenshotSource,
+                     Keys.Gen.screenshotTarget,
+                     
+                     Keys.Gen.captureSource,
+                     Keys.Gen.bitRate,
+                     Keys.Gen.aspectX,
+                     Keys.Gen.aspectY,
+            
+                     Keys.Gen.keepAspectRatio,
                      Keys.Gen.exitOnEsc,
                      
                      Keys.Gen.warpMode,
@@ -440,119 +509,6 @@ extension UserDefaults {
                      Keys.Dev.leftStickScheme2,
                      Keys.Dev.rightStickScheme2,
                      Keys.Dev.hatSwitchScheme2 ]
-
-        for key in keys { defaults.removeObject(forKey: key) }
-    }
-}
-
-//
-// User defaults (Captures)
-//
-
-extension Keys {
-    
-    struct Cap {
-        
-        // Screenshots
-        static let autoScreenshots        = "VAMIGA_CAP_AutoScreenshots"
-        static let autoScreenshotInterval = "VAMIGA_CAP_SnapshotInterval"
-        static let screenshotSource       = "VAMIGA_CAP_ScreenshotSource"
-        static let screenshotTarget       = "VAMIGA_CAP_ScreenshotTarget"
-        
-        // Snapshots
-        static let autoSnapshots          = "VAMIGA_CAP_AutoSnapshots"
-        static let autoSnapshotInterval   = "VAMIGA_CAP_ScreenshotInterval"
-        
-        // Screen captures
-        static let captureSource          = "VAMIGA_CAP_Source"
-        static let bitRate                = "VAMIGA_CAP_BitRate"
-        static let aspectX                = "VAMIGA_CAP_AspectX"
-        static let aspectY                = "VAMIGA_CAP_AspectY"
-    }
-}
-
-struct CaptureDefaults {
-
-    // Screenshots
-    let autoScreenshots: Bool
-    let autoScreenshotInterval: Int
-    let screenshotSource: Int
-    let screenshotTarget: NSBitmapImageRep.FileType
-
-    // Snapshots
-    let autoSnapshots: Bool
-    let autoSnapshotInterval: Int
-    
-    // Captures
-    let captureSource: Int
-    let bitRate: Int
-    let aspectX: Int
-    let aspectY: Int
-    
-    //
-    // Schemes
-    //
-    
-    static let std = CaptureDefaults.init(
-                
-        autoScreenshots: false,
-        autoScreenshotInterval: 10,
-        screenshotSource: 0,
-        screenshotTarget: .png,
-
-        autoSnapshots: false,
-        autoSnapshotInterval: 20,
-
-        captureSource: 0,
-        bitRate: 2048,
-        aspectX: 768,
-        aspectY: 702
-    )
-}
-
-extension UserDefaults {
-    
-    static func registerCaptureUserDefaults() {
-    
-        let defaults = CaptureDefaults.std
-        let dictionary: [String: Any] = [
-            
-            Keys.Cap.autoScreenshots: defaults.autoScreenshots,
-            Keys.Cap.autoScreenshotInterval: defaults.autoScreenshotInterval,
-            Keys.Cap.screenshotSource: defaults.screenshotSource,
-            Keys.Cap.screenshotTarget: Int(defaults.screenshotTarget.rawValue),
-
-            Keys.Cap.autoSnapshots: defaults.autoSnapshots,
-            Keys.Cap.autoSnapshotInterval: defaults.autoSnapshotInterval,
-
-            Keys.Cap.captureSource: defaults.captureSource,
-            Keys.Cap.bitRate: defaults.bitRate,
-            Keys.Cap.aspectX: defaults.aspectX,
-            Keys.Cap.aspectY: defaults.aspectY
-        ]
-        
-        let userDefaults = UserDefaults.standard
-        
-        userDefaults.register(defaults: dictionary)
-    }
-    
-    static func resetCaptureUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        let keys = [ Keys.Cap.autoScreenshots,
-                     Keys.Cap.autoScreenshotInterval,
-                     Keys.Cap.screenshotSource,
-                     Keys.Cap.screenshotTarget,
-                     
-                     Keys.Cap.autoSnapshots,
-                     Keys.Cap.autoSnapshotInterval,
-                     
-                     Keys.Cap.captureSource,
-                     Keys.Cap.bitRate,
-                     Keys.Cap.aspectX,
-                     Keys.Cap.aspectY
-        ]
 
         for key in keys { defaults.removeObject(forKey: key) }
     }

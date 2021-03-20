@@ -10,7 +10,31 @@
 extension PreferencesController {
     
     func refreshGeneralTab() {
-                        
+        
+        // Snapshots
+        genAutoSnapshots.state = pref.autoSnapshots ? .on : .off
+        genSnapshotInterval.integerValue = pref.snapshotInterval
+
+        // Screenshots
+        genSnapshotInterval.isEnabled = pref.autoSnapshots
+        genAutoScreenshots.state = pref.autoScreenshots ? .on : .off
+        genScreenshotInterval.integerValue = pref.screenshotInterval
+        genScreenshotInterval.isEnabled = pref.autoScreenshots
+        genScreenshotSourcePopup.selectItem(withTag: pref.screenshotSource)
+        genScreenshotTargetPopup.selectItem(withTag: pref.screenshotTargetIntValue)
+                
+        // Screen captures
+        let hasFFmpeg = amiga.screenRecorder.hasFFmpeg
+        genSource.selectItem(withTag: pref.captureSource)
+        genBitRate.integerValue = pref.bitRate
+        genAspectX.integerValue = pref.aspectX
+        genAspectY.integerValue = pref.aspectY
+        genFFmpegIcon.isHidden = !hasFFmpeg
+        genSource.isEnabled = hasFFmpeg
+        genBitRate.isEnabled = hasFFmpeg
+        genAspectX.isEnabled = hasFFmpeg
+        genAspectY.isEnabled = hasFFmpeg
+
         // Fullscreen
         genAspectRatioButton.state = pref.keepAspectRatio ? .on : .off
         genExitOnEscButton.state = pref.exitOnEsc ? .on : .off
@@ -24,6 +48,86 @@ extension PreferencesController {
         genCloseWithoutAskingButton.state = pref.closeWithoutAsking ? .on : .off
     }
 
+    //
+    // Action methods (Snapshots)
+    //
+    
+    @IBAction func capAutoSnapshotAction(_ sender: NSButton!) {
+        
+        pref.autoSnapshots = sender.state == .on
+        refresh()
+    }
+    
+    @IBAction func capSnapshotIntervalAction(_ sender: NSTextField!) {
+        
+        if sender.integerValue > 0 {
+            pref.snapshotInterval = sender.integerValue
+        }
+        refresh()
+    }
+    
+    //
+    // Action methods (Screenshots)
+    //
+
+    @IBAction func capAutoScreenshotAction(_ sender: NSButton!) {
+        
+        pref.autoScreenshots = sender.state == .on
+        refresh()
+    }
+    
+    @IBAction func capScreenshotIntervalAction(_ sender: NSTextField!) {
+        
+        if sender.integerValue > 0 {
+            pref.screenshotInterval = sender.integerValue
+        }
+        refresh()
+    }
+    
+    @IBAction func capScreenshotSourceAction(_ sender: NSPopUpButton!) {
+        
+        pref.screenshotSource = sender.selectedTag()
+        refresh()
+    }
+    
+    @IBAction func capScreenshotTargetAction(_ sender: NSPopUpButton!) {
+        
+        pref.screenshotTargetIntValue = sender.selectedTag()
+        refresh()
+    }
+
+    //
+    // Action methods (Screen captures)
+    //
+    
+    @IBAction func capSourceAction(_ sender: NSPopUpButton!) {
+        
+        track("tag = \(sender.selectedTag())")
+        pref.captureSource = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func capBitrateAction(_ sender: NSComboBox!) {
+        
+        track("value = \(sender.integerValue)")
+        pref.bitRate = sender.integerValue
+        refresh()
+    }
+
+    @IBAction func capAspectXAction(_ sender: NSTextField!) {
+        
+        track("value = \(sender.integerValue)")
+        pref.aspectX = sender.integerValue
+        refresh()
+    }
+
+    @IBAction func capAspectYAction(_ sender: NSTextField!) {
+        
+        track("value = \(sender.integerValue)")
+        pref.aspectY = sender.integerValue
+        refresh()
+    }
+    
     //
     // Action methods (Fullscreen)
     //
