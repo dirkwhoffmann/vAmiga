@@ -11,7 +11,6 @@
 
 #include <sys/types.h>
 
-
 //
 // Strings
 //
@@ -118,11 +117,6 @@ enum : _type
 #define enum_u32(_name) enum_generic(_name, u32)
 #define enum_i8(_name) enum_generic(_name, i8)
 
-/*
-#define enum_long(_name) enum _name : long long
-#define enum_u32(_name) enum _name : u32
-#define enum_i8(_name) enum _name : i8
-*/
 #endif
 
 

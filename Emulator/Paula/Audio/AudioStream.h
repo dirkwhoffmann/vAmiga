@@ -13,6 +13,8 @@
 #include "Concurrency.h"
 #include "RingBuffer.h"
 
+namespace va {
+
 /* About the AudioStream
  *
  * The audio stream is the last element in the audio pipeline. It is a temporary
@@ -105,8 +107,6 @@ struct FloatStereo
     }
 };
 
-
-namespace va {
 
 //
 // Volume

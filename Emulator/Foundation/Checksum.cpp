@@ -74,7 +74,7 @@ crc32(const u8 *addr, isize size)
 
     // Setup lookup table
     u32 table[256];
-    for(int i = 0; i < 256; i++) table[i] = crc32forByte(i);
+    for(u32 i = 0; i < 256; i++) table[i] = crc32forByte(i);
 
     // Compute CRC-32 checksum
      for(isize i = 0; i < size; i++)
