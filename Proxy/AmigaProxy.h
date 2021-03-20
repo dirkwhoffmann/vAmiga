@@ -21,7 +21,7 @@
 #include "FSPublicTypes.h"
 #include "KeyboardPublicTypes.h"
 #include "MemoryPublicTypes.h"
-#include "MsgQueuePublicTypes.h"
+#include "MsgQueueTypes.h"
 #include "PaulaPublicTypes.h"
 #include "PortPublicTypes.h"
 #include "RTCPublicTypes.h"

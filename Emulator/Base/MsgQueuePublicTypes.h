@@ -9,6 +9,8 @@
 // THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
 // -----------------------------------------------------------------------------
 
+#if 0
+
 #pragma once
 
 enum_long(MSG_TYPE)
@@ -103,3 +105,6 @@ Message;
 
 // Callback function signature
 typedef void Callback(const void *, long, long);
+
+#endif
+
