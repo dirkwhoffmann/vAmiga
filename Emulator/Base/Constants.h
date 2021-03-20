@@ -350,4 +350,3 @@ static inline bool isHPos(i16 pos) { return pos >= 0 && pos < HPOS_CNT; }
 #define VBLANK_MIN    0x00
 #define VBLANK_MAX    0x19
 #define VBLANK_CNT    0x1A // equals VBLANK_MAX - VBLANK_MIN + 1
-

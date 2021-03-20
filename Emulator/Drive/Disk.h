@@ -101,7 +101,7 @@ public:
     const char *getDescription() const override { return "Disk"; }
 
     static Disk *makeWithFile(class DiskFile *file);
-    static Disk *makeWithReader(SerReader &reader, DiskDiameter type, DiskDensity density);
+    static Disk *makeWithReader(my::SerReader &reader, DiskDiameter type, DiskDensity density);
         
     void dump();
     

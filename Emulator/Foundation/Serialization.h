@@ -13,6 +13,8 @@
 #include "Macros.h"
 #include <string.h>
 
+namespace my {
+
 //
 // Basic memory buffer I/O
 //
@@ -97,8 +99,6 @@ return *this; \
 #define COUNT16(type) static_assert(sizeof(type) == 2); COUNT(type,2)
 #define COUNT64(type) static_assert(sizeof(type) <= 8); COUNT(type,8)
 #define COUNTD(type) static_assert(sizeof(type) <= 8); COUNT(type,8)
-
-// #define __ ,
 
 class SerCounter
 {
@@ -358,3 +358,5 @@ public:
         return *this;
     }
 };
+
+}

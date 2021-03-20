@@ -294,7 +294,7 @@ protected:
 //
 
 #define COMPUTE_SNAPSHOT_SIZE \
-SerCounter counter; \
+my::SerCounter counter; \
 applyToPersistentItems(counter); \
 applyToHardResetItems(counter); \
 applyToResetItems(counter); \
@@ -302,7 +302,7 @@ return counter.count;
 
 #define RESET_SNAPSHOT_ITEMS(hard) \
 { \
-SerResetter resetter; \
+my::SerResetter resetter; \
 if (hard) applyToHardResetItems(resetter); \
 applyToResetItems(resetter); \
 debug(SNP_DEBUG, "Resetted (%s)\n", hard ? "hard" : "soft"); \
@@ -310,7 +310,7 @@ debug(SNP_DEBUG, "Resetted (%s)\n", hard ? "hard" : "soft"); \
 
 #define LOAD_SNAPSHOT_ITEMS \
 { \
-SerReader reader(buffer); \
+my::SerReader reader(buffer); \
 applyToPersistentItems(reader); \
 applyToHardResetItems(reader); \
 applyToResetItems(reader); \
@@ -320,7 +320,7 @@ return (isize)(reader.ptr - buffer); \
 
 #define SAVE_SNAPSHOT_ITEMS \
 { \
-SerWriter writer(buffer); \
+my::SerWriter writer(buffer); \
 applyToPersistentItems(writer); \
 applyToHardResetItems(writer); \
 applyToResetItems(writer); \

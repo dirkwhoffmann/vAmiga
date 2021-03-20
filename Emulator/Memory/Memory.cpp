@@ -212,7 +212,7 @@ Memory::setConfigItem(Option option, long value)
 isize
 Memory::_size()
 {
-    SerCounter counter;
+    my::SerCounter counter;
 
     applyToPersistentItems(counter);
     applyToHardResetItems(counter);
@@ -239,7 +239,7 @@ Memory::_size()
 isize
 Memory::didLoadFromBuffer(const u8 *buffer)
 {
-    SerReader reader(buffer);
+    my::SerReader reader(buffer);
 
     // Load memory size information
     reader
@@ -284,7 +284,7 @@ isize
 Memory::didSaveToBuffer(u8 *buffer) const
 {
     // Save memory size information
-    SerWriter writer(buffer);
+    my::SerWriter writer(buffer);
     writer
     << config.romSize
     << config.womSize
