@@ -13,7 +13,11 @@
 
 namespace va {
 
-#include "DiskControllerPublicTypes.h"
+#include "DiskControllerTypes.h"
+
+//
+// Reflection APIs
+//
 
 struct DriveStateEnum : Reflection<DriveStateEnum, DriveState> {
     

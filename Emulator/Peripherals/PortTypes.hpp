@@ -15,6 +15,10 @@ namespace va {
 
 #include "PortTypes.h"
 
+//
+// Reflection APIs
+//
+
 struct SerialPortDeviceEnum : Reflection<SerialPortDeviceEnum, SerialPortDevice> {
     
     static bool isValid(long value)

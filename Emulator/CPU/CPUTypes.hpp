@@ -13,6 +13,6 @@
 
 namespace va {
 
-#include "CPUPublicTypes.h"
+#include "CPUTypes.h"
 
 }

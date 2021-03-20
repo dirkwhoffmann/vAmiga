@@ -10,7 +10,6 @@
 #pragma once
 
 #include "Reflection.h"
-
 #include "BlitterTypes.hpp"
 #include "CopperTypes.hpp"
 

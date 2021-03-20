@@ -15,6 +15,10 @@ namespace va {
 
 #include "MsgQueueTypes.h"
 
+//
+// Reflection APIs
+//
+
 struct MsgTypeEnum : Reflection<MsgTypeEnum, MsgType> {
     
     static bool isValid(long value)

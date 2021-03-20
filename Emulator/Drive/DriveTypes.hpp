@@ -15,6 +15,10 @@ namespace va {
 
 #include "DriveTypes.h"
 
+//
+// Reflection APIs
+//
+
 struct DriveTypeEnum : Reflection<DriveTypeEnum, DriveType> {
     
     static bool isValid(long value)

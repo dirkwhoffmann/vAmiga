@@ -16,28 +16,8 @@ namespace va {
 #include "PaulaTypes.h"
 
 //
-// Private types
+// Reflection APIs
 //
-
-enum_long(INT_SOURCE)
-{
-    INT_TBE,
-    INT_DSKBLK,
-    INT_SOFT,
-    INT_PORTS,
-    INT_COPER,
-    INT_VERTB,
-    INT_BLIT,
-    INT_AUD0,
-    INT_AUD1,
-    INT_AUD2,
-    INT_AUD3,
-    INT_RBF,
-    INT_DSKSYN,
-    INT_EXTER,
-    INT_COUNT
-};
-typedef INT_SOURCE IrqSource;
 
 static inline bool isIrqSource(long value)
 {

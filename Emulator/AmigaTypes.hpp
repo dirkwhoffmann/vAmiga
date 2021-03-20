@@ -15,6 +15,10 @@ namespace va {
 
 #include "AmigaTypes.h"
 
+//
+// Reflection APIs
+//
+
 struct OptionEnum : Reflection<OptionEnum, Option> {
     
     static bool isValid(long value)

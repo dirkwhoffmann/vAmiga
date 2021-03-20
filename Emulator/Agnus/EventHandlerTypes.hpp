@@ -18,6 +18,10 @@ namespace va {
 #define isPrimarySlot(s) ((s) <= SLOT_SEC)
 #define isSecondarySlot(s) ((s) > SLOT_SEC && (s) < SLOT_COUNT)
 
+//
+// Reflection APIs
+//
+
 struct EventSlotEnum : Reflection<EventSlotEnum, EventSlot> {
     
     static bool isValid(long value)

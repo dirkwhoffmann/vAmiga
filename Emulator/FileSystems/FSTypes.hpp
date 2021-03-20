@@ -15,6 +15,10 @@ namespace va {
 
 #include "FSTypes.h"
 
+//
+// Reflection APIs
+//
+
 struct FSVolumeTypeEnum : Reflection<FSVolumeTypeEnum, FSVolumeType> {
     
     static bool isValid(long value)

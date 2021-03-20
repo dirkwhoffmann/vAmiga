@@ -15,6 +15,10 @@ namespace va {
 
 #include "DiskTypes.h"
 
+//
+// Reflection APIs
+//
+
 struct DiskDiameterEnum : Reflection<DiskDiameterEnum, DiskDiameter> {
     
     static bool isValid(long value)

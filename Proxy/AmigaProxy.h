@@ -10,7 +10,7 @@
 #include "Constants.h"
 #include "AgnusTypes.h"
 #include "AmigaTypes.h"
-#include "CPUPublicTypes.h"
+#include "CPUTypes.h"
 #include "CIATypes.h"
 #include "DeniseTypes.h"
 #include "DiskTypes.h"

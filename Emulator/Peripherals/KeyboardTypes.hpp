@@ -16,20 +16,8 @@ namespace va {
 #include "KeyboardTypes.h"
 
 //
-// Private types
+// Reflection APIs
 //
-
-enum_long(KB_STATE)
-{
-    KB_SELFTEST,
-    KB_SYNC,
-    KB_STRM_ON,
-    KB_STRM_OFF,
-    KB_SEND,
-    
-    KB_COUNT
-};
-typedef KB_STATE KeyboardState;
 
 struct KeyboardStateEnum : Reflection<KeyboardStateEnum, KeyboardState> {
     

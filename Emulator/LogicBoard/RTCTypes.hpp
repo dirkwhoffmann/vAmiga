@@ -15,6 +15,10 @@ namespace va {
 
 #include "RTCTypes.h"
 
+//
+// Reflection APIs
+//
+
 struct RTCRevisionEnum : Reflection<RTCRevisionEnum, RTCRevision> {
     
     static bool isValid(long value)
