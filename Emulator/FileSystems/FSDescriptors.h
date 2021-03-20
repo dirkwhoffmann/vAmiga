@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "FSTypes.h"
-#include "DiskTypes.h"
+#include "FSTypes.hpp"
+#include "DiskTypes.hpp"
 #include "AmigaObject.h"
 #include "FSObjects.h"
 #include "FSBlock.h"

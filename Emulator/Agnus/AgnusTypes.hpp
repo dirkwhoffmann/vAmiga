@@ -11,8 +11,8 @@
 
 #include "Reflection.h"
 
-#include "BlitterTypes.h"
-#include "CopperTypes.h"
+#include "BlitterTypes.hpp"
+#include "CopperTypes.hpp"
 
 namespace va {
 

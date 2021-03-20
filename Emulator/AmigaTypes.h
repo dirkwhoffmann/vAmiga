@@ -6,206 +6,199 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
 #pragma once
 
-#include "Reflection.h"
-
-namespace va {
-
-#include "AmigaPublicTypes.h"
+#include "Aliases.h"
 
 //
-// Reflection APIs
+// Enumerations
 //
 
-struct OptionEnum : Reflection<OptionEnum, Option> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value < OPT_COUNT;
-    }
-
-    static const char *prefix() { return "OPT"; }
-    static const char *key(Option value)
-    {
-        switch (value) {
-                
-            case OPT_AGNUS_REVISION:      return "AGNUS_REVISION";
-            case OPT_SLOW_RAM_MIRROR:     return "SLOW_RAM_MIRROR";
-                
-            case OPT_DENISE_REVISION:     return "DENISE_REVISION";
-                
-            case OPT_RTC_MODEL:           return "RTC_MODEL";
-
-            case OPT_CHIP_RAM:            return "CHIP_RAM";
-            case OPT_SLOW_RAM:            return "SLOW_RAM";
-            case OPT_FAST_RAM:            return "FAST_RAM";
-            case OPT_EXT_START:           return "EXT_START";
-            case OPT_SLOW_RAM_DELAY:      return "SLOW_RAM_DELAY";
-            case OPT_BANKMAP:             return "BANKMAP";
-            case OPT_UNMAPPING_TYPE:      return "UNMAPPING_TYPE";
-            case OPT_RAM_INIT_PATTERN:    return "RAM_INIT_PATTERN";
-                
-            case OPT_DRIVE_CONNECT:       return "DRIVE_CONNECT";
-            case OPT_DRIVE_SPEED:         return "DRIVE_SPEED";
-            case OPT_LOCK_DSKSYNC:        return "LOCK_DSKSYNC";
-            case OPT_AUTO_DSKSYNC:        return "AUTO_DSKSYNC";
-
-            case OPT_DRIVE_TYPE:          return "DRIVE_TYPE";
-            case OPT_EMULATE_MECHANICS:   return "EMULATE_MECHANICS";
-            case OPT_DRIVE_PAN:           return "DRIVE_PAN";
-            case OPT_STEP_VOLUME:         return "STEP_VOLUME";
-            case OPT_POLL_VOLUME:         return "POLL_VOLUME";
-            case OPT_INSERT_VOLUME:       return "INSERT_VOLUME";
-            case OPT_EJECT_VOLUME:        return "EJECT_VOLUME";
-            case OPT_DEFAULT_FILESYSTEM:  return "DEFAULT_FILESYSTEM";
-            case OPT_DEFAULT_BOOTBLOCK:   return "DEFAULT_BOOTBLOCK";
-                
-            case OPT_SERIAL_DEVICE:       return "SERIAL_DEVICE";
- 
-            case OPT_HIDDEN_SPRITES:      return "HIDDEN_SPRITES";
-            case OPT_HIDDEN_LAYERS:       return "HIDDEN_LAYERS";
-            case OPT_HIDDEN_LAYER_ALPHA:  return "HIDDEN_LAYER_ALPHA";
-            case OPT_CLX_SPR_SPR:         return "CLX_SPR_SPR";
-            case OPT_CLX_SPR_PLF:         return "CLX_SPR_PLF";
-            case OPT_CLX_PLF_PLF:         return "CLX_PLF_PLF";
-                    
-            case OPT_BLITTER_ACCURACY:    return "BLITTER_ACCURACY";
-                
-            case OPT_CIA_REVISION:        return "CIA_REVISION";
-            case OPT_TODBUG:              return "TODBUG";
-            case OPT_ECLOCK_SYNCING:      return "ECLOCK_SYNCING";
-                
-            case OPT_ACCURATE_KEYBOARD:   return "ACCURATE_KEYBOARD";
-
-            case OPT_PULLUP_RESISTORS:    return "PULLUP_RESISTORS";
-            case OPT_MOUSE_VELOCITY:      return "MOUSE_VELOCITY";
-
-            case OPT_SAMPLING_METHOD:     return "SAMPLING_METHOD";
-            case OPT_FILTER_TYPE:         return "FILTER_TYPE";
-            case OPT_FILTER_ALWAYS_ON:    return "FILTER_ALWAYS_ON";
-            case OPT_AUDPAN:              return "AUDPAN";
-            case OPT_AUDVOL:              return "AUDVOL";
-            case OPT_AUDVOLL:             return "AUDVOLL";
-            case OPT_AUDVOLR:             return "AUDVOLR";
-                
-            case OPT_COUNT:               return "???";
-        }
-        return "???";
-    }
-};
-
-struct EmulatorStateEnum : Reflection<EmulatorStateEnum, EmulatorState> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value < EMULATOR_STATE_COUNT;
-    }
-
-    static const char *prefix() { return "EMULATOR_STATE"; }
-    static const char *key(EmulatorState value)
-    {
-        switch (value) {
-                
-            case EMULATOR_STATE_OFF:      return "OFF";
-            case EMULATOR_STATE_PAUSED:   return "PAUSED";
-            case EMULATOR_STATE_RUNNING:  return "RUNNING";
-            case EMULATOR_STATE_COUNT:    return "???";
-        }
-        return "???";
-    }
-};
-
-struct ErrorCodeEnum : Reflection<ErrorCodeEnum, ErrorCode> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value < ERROR_COUNT;
-    }
-    
-    static const char *prefix() { return "ERROR"; }
-    static const char *key(ErrorCode value)
-    {
-        switch (value) {
-                
-            case ERROR_OK:                          return "OK";
-            case ERROR_UNKNOWN:                     return "UNKNOWN";
-                
-            case ERROR_FILE_NOT_FOUND:              return "FILE_NOT_FOUND";
-            case ERROR_FILE_TYPE_MISMATCH:          return "INVALID_TYPE";
-            case ERROR_FILE_CANT_READ:              return "CANT_READ";
-            case ERROR_FILE_CANT_WRITE:             return "CANT_WRITE";
-            case ERROR_FILE_CANT_CREATE:            return "CANT_CREATE";
-
-            case ERROR_OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
-            case ERROR_CHIP_RAM_LIMIT:              return "CHIP_RAM_LIMIT";
-            case ERROR_AROS_RAM_LIMIT:              return "AROS_RAM_LIMIT";
-
-            case ERROR_ROM_MISSING:                 return "ROM_MISSING";
-            case ERROR_AROS_NO_EXTROM:              return "AROS_NO_EXTROM";
-
-            case ERROR_DISK_CANT_DECODE:            return "DISK_CANT_DECODE";
-            case ERROR_DISK_INVALID_DIAMETER:       return "DISK_INVALID_DIAMETER";
-            case ERROR_DISK_INVALID_DENSITY:        return "DISK_INVALID_DENSITY";
-                
-            case ERROR_SNP_TOO_OLD:                 return "SNP_TOO_OLD";
-            case ERROR_SNP_TOO_NEW:                 return "SNP_TOO_NEW";
-            case ERROR_UNSUPPORTED_SNAPSHOT:        return "UNSUPPORTED_SNAPSHOT";
-                
-            case ERROR_MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
-            case ERROR_INVALID_ROM_KEY:             return "INVALID_ROM_KEY";
-                
-            case ERROR_FS_UNKNOWN:                  return "FS_UNKNOWN";
-            case ERROR_FS_UNSUPPORTED:              return "FS_UNSUPPORTED";
-            case ERROR_FS_WRONG_BSIZE:              return "FS_WRONG_BSIZE";
-            case ERROR_FS_WRONG_CAPACITY:           return "FS_WRONG_CAPACITY";
-            case ERROR_FS_HAS_CYCLES:               return "FS_HAS_CYCLES";
-            case ERROR_FS_CORRUPTED:                return "FS_CORRUPTED";
-
-            case ERROR_FS_DIRECTORY_NOT_EMPTY:      return "FS_DIRECTORY_NOT_EMPTY";
-            case ERROR_FS_CANNOT_CREATE_DIR:        return "FS_CANNOT_CREATE_DIR";
-            case ERROR_FS_CANNOT_CREATE_FILE:       return "FS_CANNOT_CREATE_FILE";
-
-            case ERROR_FS_EXPECTED_VALUE:           return "FS_EXPECTED_VALUE";
-            case ERROR_FS_EXPECTED_SMALLER_VALUE:   return "FS_EXPECTED_SMALLER_VALUE";
-            case ERROR_FS_EXPECTED_DOS_REVISION:    return "FS_EXPECTED_DOS_REVISION";
-            case ERROR_FS_EXPECTED_NO_REF:          return "FS_EXPECTED_NO_REF";
-            case ERROR_FS_EXPECTED_REF:             return "FS_EXPECTED_REF";
-            case ERROR_FS_EXPECTED_SELFREF:         return "FS_EXPECTED_SELFREF";
-            case ERROR_FS_PTR_TO_UNKNOWN_BLOCK:     return "FS_PTR_TO_UNKNOWN_BLOCK";
-            case ERROR_FS_PTR_TO_EMPTY_BLOCK:       return "FS_PTR_TO_EMPTY_BLOCK";
-            case ERROR_FS_PTR_TO_BOOT_BLOCK:        return "FS_PTR_TO_BOOT_BLOCK";
-            case ERROR_FS_PTR_TO_ROOT_BLOCK:        return "FS_PTR_TO_ROOT_BLOCK";
-            case ERROR_FS_PTR_TO_BITMAP_BLOCK:      return "FS_PTR_TO_BITMAP_BLOCK";
-            case ERROR_FS_PTR_TO_BITMAP_EXT_BLOCK:  return "FS_PTR_TO_BITMAP_EXT_BLOCK";
-            case ERROR_FS_PTR_TO_USERDIR_BLOCK:     return "FS_PTR_TO_USERDIR_BLOCK";
-            case ERROR_FS_PTR_TO_FILEHEADER_BLOCK:  return "FS_PTR_TO_FILEHEADER_BLOCK";
-            case ERROR_FS_PTR_TO_FILELIST_BLOCK:    return "FS_PTR_TO_FILELIST_BLOCK";
-            case ERROR_FS_PTR_TO_DATA_BLOCK:        return "FS_PTR_TO_DATA_BLOCK";
-            case ERROR_FS_EXPECTED_DATABLOCK_NR:    return "FS_EXPECTED_DATABLOCK_NR";
-            case ERROR_FS_INVALID_HASHTABLE_SIZE:   return "FS_INVALID_HASHTABLE_SIZE";
-                
-            case ERROR_COUNT:                       return "???";
-        }
-        return "???";
-    }
-};
-
-//
-// Private types
-//
-
-enum_u32(RunLoopControlFlag)
+enum_long(OPT)
 {
-    RL_STOP               = 0b00000001,
-    RL_INSPECT            = 0b00000010,
-    RL_WARP_ON            = 0b00000100,
-    RL_WARP_OFF           = 0b00001000,
-    RL_BREAKPOINT_REACHED = 0b00010000,
-    RL_WATCHPOINT_REACHED = 0b00100000,
-    RL_AUTO_SNAPSHOT      = 0b01000000,
-    RL_USER_SNAPSHOT      = 0b10000000,
-};
+    // Agnus
+    OPT_AGNUS_REVISION,
+    OPT_SLOW_RAM_MIRROR,
+    
+    // Denise
+    OPT_DENISE_REVISION,
+    
+    // Pixel engine
+    OPT_PALETTE,
+    OPT_BRIGHTNESS,
+    OPT_CONTRAST,
+    OPT_SATURATION,
+    
+    // Real-time clock
+    OPT_RTC_MODEL,
 
+    // Memory
+    OPT_CHIP_RAM,
+    OPT_SLOW_RAM,
+    OPT_FAST_RAM,
+    OPT_EXT_START,
+    OPT_SLOW_RAM_DELAY,
+    OPT_BANKMAP,
+    OPT_UNMAPPING_TYPE,
+    OPT_RAM_INIT_PATTERN,
+    
+    // Disk controller
+    OPT_DRIVE_CONNECT,
+    OPT_DRIVE_SPEED,
+    OPT_LOCK_DSKSYNC,
+    OPT_AUTO_DSKSYNC,
+
+    // Drives
+    OPT_DRIVE_TYPE,
+    OPT_EMULATE_MECHANICS,
+    OPT_DRIVE_PAN,
+    OPT_STEP_VOLUME,
+    OPT_POLL_VOLUME,
+    OPT_INSERT_VOLUME,
+    OPT_EJECT_VOLUME,
+    OPT_DEFAULT_FILESYSTEM,
+    OPT_DEFAULT_BOOTBLOCK,
+    
+    // Ports
+    OPT_SERIAL_DEVICE,
+
+    // Compatibility
+    OPT_HIDDEN_SPRITES,
+    OPT_HIDDEN_LAYERS,
+    OPT_HIDDEN_LAYER_ALPHA,
+    OPT_CLX_SPR_SPR,
+    OPT_CLX_SPR_PLF,
+    OPT_CLX_PLF_PLF,
+        
+    // Blitter
+    OPT_BLITTER_ACCURACY,
+    
+    // CIAs
+    OPT_CIA_REVISION,
+    OPT_TODBUG,
+    OPT_ECLOCK_SYNCING,
+    
+    // Keyboard
+    OPT_ACCURATE_KEYBOARD,
+    
+    // Mouse
+    OPT_PULLUP_RESISTORS,
+    OPT_SHAKE_DETECTION,
+    OPT_MOUSE_VELOCITY,
+    
+    // Paula audio
+    OPT_SAMPLING_METHOD,
+    OPT_FILTER_TYPE,
+    OPT_FILTER_ALWAYS_ON,
+    OPT_AUDPAN,
+    OPT_AUDVOL,
+    OPT_AUDVOLL,
+    OPT_AUDVOLR,
+    
+    OPT_COUNT
+};
+typedef OPT Option;
+
+
+enum_long(EMULATOR_STATE)
+{
+    EMULATOR_STATE_OFF,
+    EMULATOR_STATE_PAUSED,
+    EMULATOR_STATE_RUNNING,
+
+    EMULATOR_STATE_COUNT
+};
+typedef EMULATOR_STATE EmulatorState;
+
+
+enum_long(ERROR_CODE)
+{
+    ERROR_OK,
+    ERROR_UNKNOWN,
+    
+    // General
+    ERROR_FILE_NOT_FOUND,
+    ERROR_FILE_TYPE_MISMATCH,
+    ERROR_FILE_CANT_READ,
+    ERROR_FILE_CANT_WRITE,
+    ERROR_FILE_CANT_CREATE,
+
+    // Memory
+    ERROR_OUT_OF_MEMORY,
+    ERROR_CHIP_RAM_LIMIT,
+    ERROR_AROS_RAM_LIMIT,
+
+    // Roms
+    ERROR_ROM_MISSING,
+    ERROR_AROS_NO_EXTROM,
+    
+    // Floppy disks
+    ERROR_DISK_CANT_DECODE,
+    ERROR_DISK_INVALID_DIAMETER,
+    ERROR_DISK_INVALID_DENSITY,
+    
+    // Snapshots
+    ERROR_SNP_TOO_OLD,
+    ERROR_SNP_TOO_NEW,
+    ERROR_UNSUPPORTED_SNAPSHOT,  // DEPRECATED
+    
+    // Encrypted Roms
+    ERROR_MISSING_ROM_KEY,
+    ERROR_INVALID_ROM_KEY,
+    
+    // File system
+    ERROR_FS_UNKNOWN,
+    ERROR_FS_UNSUPPORTED,
+    ERROR_FS_WRONG_BSIZE,
+    ERROR_FS_WRONG_CAPACITY,
+    ERROR_FS_HAS_CYCLES,
+    ERROR_FS_CORRUPTED,
+
+    // File system (export errors)
+    ERROR_FS_DIRECTORY_NOT_EMPTY,
+    ERROR_FS_CANNOT_CREATE_DIR,
+    ERROR_FS_CANNOT_CREATE_FILE,
+
+    // File system (block errors)
+    ERROR_FS_EXPECTED_VALUE,
+    ERROR_FS_EXPECTED_SMALLER_VALUE,
+    ERROR_FS_EXPECTED_DOS_REVISION,
+    ERROR_FS_EXPECTED_NO_REF,
+    ERROR_FS_EXPECTED_REF,
+    ERROR_FS_EXPECTED_SELFREF,
+    ERROR_FS_PTR_TO_UNKNOWN_BLOCK,
+    ERROR_FS_PTR_TO_EMPTY_BLOCK,
+    ERROR_FS_PTR_TO_BOOT_BLOCK,
+    ERROR_FS_PTR_TO_ROOT_BLOCK,
+    ERROR_FS_PTR_TO_BITMAP_BLOCK,
+    ERROR_FS_PTR_TO_BITMAP_EXT_BLOCK,
+    ERROR_FS_PTR_TO_USERDIR_BLOCK,
+    ERROR_FS_PTR_TO_FILEHEADER_BLOCK,
+    ERROR_FS_PTR_TO_FILELIST_BLOCK,
+    ERROR_FS_PTR_TO_DATA_BLOCK,
+    ERROR_FS_EXPECTED_DATABLOCK_NR,
+    ERROR_FS_INVALID_HASHTABLE_SIZE,
+    
+    ERROR_COUNT
+};
+typedef ERROR_CODE ErrorCode;
+
+
+//
+// Structures
+//
+
+typedef struct
+{
+    Cycle cpuClock;
+    Cycle dmaClock;
+    Cycle ciaAClock;
+    Cycle ciaBClock;
+    long frame;
+    long vpos;
+    long hpos;
 }
+AmigaInfo;

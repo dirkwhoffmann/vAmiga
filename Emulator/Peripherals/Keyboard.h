@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include "KeyboardTypes.h"
+#include "KeyboardTypes.hpp"
 #include "AmigaComponent.h"
-#include "EventHandlerTypes.h"
+#include "EventHandlerTypes.hpp"
 
 namespace va {
 

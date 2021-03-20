@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "PortTypes.h"
+#include "PortTypes.hpp"
 #include "AmigaComponent.h"
 
 namespace va {

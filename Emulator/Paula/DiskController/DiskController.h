@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaComponent.h"
-#include "DiskControllerTypes.h"
+#include "DiskControllerTypes.hpp"
 
 namespace va {
 

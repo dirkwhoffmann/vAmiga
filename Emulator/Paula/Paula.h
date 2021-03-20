@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaComponent.h"
-#include "PaulaTypes.h"
+#include "PaulaTypes.hpp"
 
 #include "AudioFilter.h"
 #include "AudioStream.h"

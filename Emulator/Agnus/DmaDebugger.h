@@ -11,7 +11,7 @@
 
 #include "DmaDebuggerTypes.h"
 
-#include "AgnusTypes.h"
+#include "AgnusTypes.hpp"
 #include "AmigaComponent.h"
 #include "Colors.h"
 

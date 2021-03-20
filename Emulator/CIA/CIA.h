@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "CIATypes.h"
+#include "CIATypes.hpp"
 #include "AmigaComponent.h"
 #include "TOD.h"
 

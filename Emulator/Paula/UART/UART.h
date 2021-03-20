@@ -9,10 +9,10 @@
 
 #pragma once
 
-#include "PaulaTypes.h"
+#include "PaulaTypes.hpp"
 
 #include "AmigaComponent.h"
-#include "EventHandlerTypes.h"
+#include "EventHandlerTypes.hpp"
 #include "Macros.h"
 
 namespace va {

@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include "MemoryTypes.h"
+#include "MemoryTypes.hpp"
 #include "AmigaComponent.h"
-#include "FileTypes.h"
+#include "FileTypes.hpp"
 #include "Macros.h"
 
 namespace va {

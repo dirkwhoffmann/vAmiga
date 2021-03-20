@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaComponent.h"
-#include "AgnusTypes.h"
+#include "AgnusTypes.hpp"
 #include "Beam.h"
 #include "Blitter.h"
 #include "ChangeRecorder.h"

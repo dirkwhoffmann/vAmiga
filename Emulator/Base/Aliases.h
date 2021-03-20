@@ -11,6 +11,10 @@
 
 #include "Types.h"
 
+#ifndef __OBJC__
+// namespace va {
+#endif
+
 // Cycles
 typedef i64 Cycle;            // Master cycle units
 typedef i64 CPUCycle;         // CPU cycle units
@@ -72,3 +76,7 @@ typedef u32 Block;
 // Converts kilo and mega Hertz to Hertz
 #define KHz(x) ((x) * 1000)
 #define MHz(x) ((x) * 1000000)
+
+#ifndef __OBJC__
+// }
+#endif

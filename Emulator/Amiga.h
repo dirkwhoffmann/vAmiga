@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
-#include "AmigaTypes.h"
+#include "AmigaTypes.hpp"
 
 // General
 #include "HardwareComponent.h"

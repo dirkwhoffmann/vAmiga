@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaComponent.h"
-#include "DeniseTypes.h"
+#include "DeniseTypes.hpp"
 #include "ChangeRecorder.h"
 
 namespace va {

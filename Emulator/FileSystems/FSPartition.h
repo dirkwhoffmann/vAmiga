@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "FSTypes.h"
-#include "FileTypes.h"
+#include "FSTypes.hpp"
+#include "FileTypes.hpp"
 #include "FSDescriptors.h"
 
 namespace va {

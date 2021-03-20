@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "FileTypes.h"
+#include "FileTypes.hpp"
 #include <stddef.h>
 
 namespace va {

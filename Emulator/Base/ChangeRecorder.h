@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
-#include "EventHandlerTypes.h"
+#include "EventHandlerTypes.hpp"
 #include "RingBuffer.h"
 
 namespace va {

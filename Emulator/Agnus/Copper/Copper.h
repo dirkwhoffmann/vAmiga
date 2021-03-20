@@ -9,13 +9,12 @@
 
 #pragma once
 
-#include "CopperTypes.h"
-#include "EventHandlerTypes.h"
-#include "MemoryTypes.h"
+#include "CopperTypes.hpp"
+#include "EventHandlerTypes.hpp"
+#include "MemoryTypes.hpp"
 #include "AmigaComponent.h"
 #include "Beam.h"
 #include "Checksum.h"
-#include "CopperTypes.h"
 
 namespace va {
 

@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include "BlitterTypes.h"
+#include "BlitterTypes.hpp"
 #include "AmigaComponent.h"
-#include "MemoryTypes.h"
+#include "MemoryTypes.hpp"
 #include "Macros.h"
 
 namespace va {

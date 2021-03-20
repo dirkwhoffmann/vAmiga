@@ -9,7 +9,7 @@
 
 #include "Constants.h"
 #include "AgnusPublicTypes.h"
-#include "AmigaPublicTypes.h"
+#include "AmigaTypes.h"
 #include "CPUPublicTypes.h"
 #include "CIAPublicTypes.h"
 #include "DenisePublicTypes.h"

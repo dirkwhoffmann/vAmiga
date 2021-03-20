@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "EventHandlerTypes.h"
+#include "EventHandlerTypes.hpp"
 
 namespace va {
 

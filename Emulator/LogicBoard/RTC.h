@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaComponent.h"
-#include "RTCTypes.h"
+#include "RTCTypes.hpp"
 
 namespace va {
 

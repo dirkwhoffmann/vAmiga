@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "MsgQueueTypes.h"
+#include "MsgQueueTypes.hpp"
 #include "HardwareComponent.h"
 #include "RingBuffer.h"
 

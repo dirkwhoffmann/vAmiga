@@ -10,7 +10,7 @@
 #pragma once
 
 #include "FSBlock.h"
-#include "FileTypes.h"
+#include "FileTypes.hpp"
 
 namespace va {
 
