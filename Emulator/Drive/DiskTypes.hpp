@@ -13,7 +13,7 @@
 
 namespace va {
 
-#include "DiskPublicTypes.h"
+#include "DiskTypes.h"
 
 struct DiskDiameterEnum : Reflection<DiskDiameterEnum, DiskDiameter> {
     

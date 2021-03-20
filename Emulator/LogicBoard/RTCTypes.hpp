@@ -13,7 +13,7 @@
 
 namespace va {
 
-#include "RTCPublicTypes.h"
+#include "RTCTypes.h"
 
 struct RTCRevisionEnum : Reflection<RTCRevisionEnum, RTCRevision> {
     

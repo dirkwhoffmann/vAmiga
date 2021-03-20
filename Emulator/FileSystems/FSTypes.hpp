@@ -13,7 +13,7 @@
 
 namespace va {
 
-#include "FSPublicTypes.h"
+#include "FSTypes.h"
 
 struct FSVolumeTypeEnum : Reflection<FSVolumeTypeEnum, FSVolumeType> {
     

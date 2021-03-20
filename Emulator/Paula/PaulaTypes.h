@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "AudioPublicTypes.h"
+#include "AudioTypes.h"
 #include "DiskControllerPublicTypes.h"
 
 //

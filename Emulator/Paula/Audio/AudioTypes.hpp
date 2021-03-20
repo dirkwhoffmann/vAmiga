@@ -13,7 +13,7 @@
 
 namespace va {
 
-#include "AudioPublicTypes.h"
+#include "AudioTypes.h"
 
 //
 // Reflection APIs

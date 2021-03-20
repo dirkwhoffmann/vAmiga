@@ -9,5 +9,10 @@
 
 #pragma once
 
-#include "CopperPublicTypes.h"
 #include "Reflection.h"
+
+namespace va {
+
+#include "CopperTypes.h"
+
+}

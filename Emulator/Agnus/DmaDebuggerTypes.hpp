@@ -13,27 +13,28 @@
 
 namespace va {
 
-#include "CIATypes.h"
+#include "DmaDebuggerTypes.h"
 
 //
 // Reflection APIs
 //
 
-struct CIARevisionEnum : Reflection<CIARevisionEnum, CIARevision> {
+struct DmaDisplayModeEnum : Reflection<DmaDisplayModeEnum, DmaDisplayMode> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < CIA_COUNT;
+        return (unsigned long)value < DMA_DISPLAY_MODE_COUNT;
     }
 
-    static const char *prefix() { return "CIA"; }
-    static const char *key(CIARevision value)
+    static const char *prefix() { return "DMA_DISPLAY_MODE"; }
+    static const char *key(DmaDisplayMode value)
     {
         switch (value) {
                 
-            case CIA_8520_DIP:   return "8520_DIP";
-            case CIA_8520_PLCC:  return "8520_PLCC";
-            case CIA_COUNT:      return "???";
+            case DMA_DISPLAY_MODE_FG_LAYER:        return "FG_LAYER";
+            case DMA_DISPLAY_MODE_BG_LAYER:        return "BG_LAYER";
+            case DMA_DISPLAY_MODE_ODD_EVEN_LAYERS: return "ODD_EVEN_LAYERS";
+            case DMA_DISPLAY_MODE_COUNT:           return "???";
         }
         return "???";
     }

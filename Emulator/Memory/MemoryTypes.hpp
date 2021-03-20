@@ -13,7 +13,7 @@
 
 namespace va {
 
-#include "MemoryPublicTypes.h"
+#include "MemoryTypes.h"
 
 //
 // Reflection APIs

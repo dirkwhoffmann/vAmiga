@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "CPUTypes.h"
+#include "CPUTypes.hpp"
 #include "AmigaComponent.h"
 #include "Moira.h"
 #include "Macros.h"

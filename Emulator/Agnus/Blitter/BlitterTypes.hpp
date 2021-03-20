@@ -13,6 +13,6 @@
 
 namespace va {
 
-#include "BlitterPublicTypes.h"
+#include "BlitterTypes.h"
 
 }

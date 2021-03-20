@@ -12,8 +12,8 @@
 #pragma once
 
 #include "Aliases.h"
-#include "FilePublicTypes.h"
-#include "FSPublicTypes.h"
+#include "FileTypes.h"
+#include "FSTypes.h"
 
 //
 // Enumerations

@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include "BlitterPublicTypes.h"
-#include "CopperPublicTypes.h"
+#include "BlitterTypes.h"
+#include "CopperTypes.h"
 
 enum_long(AGNUS_REVISION)
 {

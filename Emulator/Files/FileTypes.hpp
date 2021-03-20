@@ -13,7 +13,7 @@
 
 namespace va {
 
-#include "FilePublicTypes.h"
+#include "FileTypes.h"
 
 struct FileTypeEnum : Reflection<FileTypeEnum, FileType> {
     

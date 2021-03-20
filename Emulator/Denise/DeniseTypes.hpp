@@ -13,7 +13,7 @@
 
 namespace va {
 
-#include "DenisePublicTypes.h"
+#include "DeniseTypes.h"
 
 //
 // Reflection APIs

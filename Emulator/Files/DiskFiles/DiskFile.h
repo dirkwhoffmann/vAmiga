@@ -13,7 +13,7 @@
 
 namespace va {
 
-#include "FSPublicTypes.h"
+#include "FSTypes.h"
 
 // Base class of all file types encoding a disk
 class DiskFile : public AmigaFile {

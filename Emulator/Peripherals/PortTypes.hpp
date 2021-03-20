@@ -13,7 +13,7 @@
 
 namespace va {
 
-#include "PortPublicTypes.h"
+#include "PortTypes.h"
 
 struct SerialPortDeviceEnum : Reflection<SerialPortDeviceEnum, SerialPortDevice> {
     

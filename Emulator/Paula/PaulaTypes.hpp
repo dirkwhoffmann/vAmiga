@@ -13,7 +13,7 @@
 
 namespace va {
 
-#include "PaulaPublicTypes.h"
+#include "PaulaTypes.h"
 
 //
 // Private types

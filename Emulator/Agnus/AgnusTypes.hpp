@@ -16,7 +16,7 @@
 
 namespace va {
 
-#include "AgnusPublicTypes.h"
+#include "AgnusTypes.h"
 
 //
 // Reflection APIs

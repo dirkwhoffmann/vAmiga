@@ -13,7 +13,7 @@
 
 namespace va {
 
-#include "DrivePublicTypes.h"
+#include "DriveTypes.h"
 
 struct DriveTypeEnum : Reflection<DriveTypeEnum, DriveType> {
     

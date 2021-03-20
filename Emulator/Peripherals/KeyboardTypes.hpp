@@ -13,7 +13,7 @@
 
 namespace va {
 
-#include "KeyboardPublicTypes.h"
+#include "KeyboardTypes.h"
 
 //
 // Private types
