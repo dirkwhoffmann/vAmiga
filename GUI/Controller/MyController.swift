@@ -462,7 +462,7 @@ extension MyController {
             inspector?.fullRefresh()
 
         case .POWER_OFF:
-            renderer.zoomOut(steps: 20) // blendOut()
+            // renderer.zoomOut(steps: 20) // blendOut()
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()
 

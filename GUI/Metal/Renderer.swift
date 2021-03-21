@@ -283,7 +283,20 @@ class Renderer: NSObject, MTKViewDelegate {
     }
     
     func updateTexture() {
-                
+        
+        if parent.amiga.poweredOff {
+        
+            var buffer = parent.amiga.denise.noise!
+            longFrameTexture.replace(w: Int(HPIXELS),
+                                     h: longFrameTexture.height,
+                                     buffer: buffer)
+            buffer = parent.amiga.denise.noise!
+            shortFrameTexture.replace(w: Int(HPIXELS),
+                                     h: shortFrameTexture.height,
+                                     buffer: buffer)
+            return
+        }
+        
         let buffer = parent.amiga.denise.stableBuffer
         
         // Only proceed if the emulator delivers a new texture

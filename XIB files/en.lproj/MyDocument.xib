@@ -259,7 +259,7 @@
                         </textFieldCell>
                     </textField>
                     <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DD4-5B-w9h" customClass="MetalView" customModule="vAmiga" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="26" width="800" height="602"/>
+                        <rect key="frame" x="0.0" y="26" width="802" height="602"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <connections>
                             <outlet property="parent" destination="-2" id="DoA-Vt-vqv"/>
