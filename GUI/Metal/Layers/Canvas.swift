@@ -104,6 +104,9 @@ class Canvas: Layer {
 
         super.init(view: view, device: device, renderer: renderer)
 
+        buildTextures()
+        buildDotMasks()
+        
         // Start with a negative alpha to present the start screen for a while
         alpha.set(-1.0)
     }

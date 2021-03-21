@@ -19,7 +19,7 @@ struct TextureSize {
 
 extension Renderer {
 
-    func setupMetal() {
+    func setup() {
 
         track()
 
@@ -44,15 +44,12 @@ extension Renderer {
         )
         
         buildMetal()
-        kernelManager.buildKernels()
-
+        kernelManager = KernelManager.init(view: mtkView, device: device, renderer: self)
         splashScreen = SplashScreen.init(view: mtkView, device: device, renderer: self)
         canvas = Canvas.init(view: mtkView, device: device, renderer: self)
         monis = Monitors.init(view: mtkView, device: device, renderer: self)
         
-        canvas.buildTextures()
         buildSamplers()
-        canvas.buildDotMasks()
         buildPipeline()
         buildVertexBuffers()
         

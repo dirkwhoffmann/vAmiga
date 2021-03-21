@@ -112,13 +112,13 @@ class Renderer: NSObject, MTKViewDelegate {
         self.mtkView = view
         self.device = device
         self.parent = controller
-        
-        super.init()
-        self.kernelManager = KernelManager.init(renderer: self)
-        setupMetal()
 
-        mtkView.device = device
-        mtkView.delegate = self
+        super.init()
+        
+        self.mtkView.device = device
+        self.mtkView.delegate = self
+
+        setup()
     }
     
     //

@@ -10,6 +10,7 @@ import Foundation
 
 class KernelManager {
     
+    let device: MTLDevice
     let renderer: Renderer
     
     var library: MTLLibrary! = nil
@@ -42,9 +43,12 @@ class KernelManager {
     // Initializing
     //
     
-    init(renderer: Renderer) {
+    init(view: MTKView, device: MTLDevice, renderer: Renderer) {
         
+        self.device = device
         self.renderer = renderer
+        
+        buildKernels()
     }
     
     internal func buildKernels() {
