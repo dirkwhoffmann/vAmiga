@@ -451,102 +451,21 @@ class Renderer: NSObject, MTKViewDelegate {
         commandEncoder.setFragmentSamplerState(sampler, index: 0)
     }
 
-    func drawScene2D() {
-
-        startFrame()
+    func draw2D() {
 
         if canvas.isTransparent { splashScreen.render() }
         if canvas.isVisible { canvas.render2D() }
         if monis.drawActivityMonitors { monis.render2D() }
-        
-        /*
-        // Configure vertex shader
-        commandEncoder.setVertexBytes(&vertexUniforms2D,
-                                      length: MemoryLayout<VertexUniforms>.stride,
-                                      index: 1)
-
-        // Configure fragment shader
-        commandEncoder.setFragmentTexture(scanlineTexture, index: 0)
-        commandEncoder.setFragmentBytes(&fragmentUniforms,
-                                        length: MemoryLayout<FragmentUniforms>.stride,
-                                        index: 1)
- 
-        // Draw
-        quad2D!.drawPrimitives(commandEncoder)
-        */
-        
-        // Draw activity monitors
-        /*
-        if drawActivityMonitors {
-            
-            for i in 0 ... monitors.count where monitorAlpha[i].current != 0.0 {
-                
-                fragmentUniforms.alpha = monitorAlpha[i].current * monitorGlobalAlpha
-                commandEncoder.setFragmentBytes(&fragmentUniforms,
-                                                length: MemoryLayout<FragmentUniforms>.stride,
-                                                index: 1)
-                monitors[i].draw(commandEncoder, matrix: canvas.vertexUniforms3D.mvp)
-            }
-        }
-        */
-        
-        endFrame()
     }
     
-    func drawScene3D() {
-
-        // let paused = parent.amiga.paused
-        // let poweredOff = parent.amiga.poweredOff
-        // let renderBackground = poweredOff || fullscreen
-        let renderForeground = alpha.clamped > 0.0
+    func draw3D() {
 
         // Perform a single animation step
         if animates != 0 { performAnimationStep() }
 
-        startFrame()
-
         if canvas.isTransparent { splashScreen.render() }
         if canvas.isVisible { canvas.render3D() }
         if monis.drawActivityMonitors { monis.render2D() }
-        
-        if renderForeground {
-
-            /*
-            // Configure vertex shader
-            commandEncoder.setVertexBytes(&vertexUniforms3D,
-                                          length: MemoryLayout<VertexUniforms>.stride,
-                                          index: 1)
-            // Configure fragment shader
-            fragmentUniforms.alpha = paused ? 0.5 : alpha.clamped
-            commandEncoder.setFragmentTexture(scanlineTexture, index: 0)
-            commandEncoder.setFragmentTexture(bloomTextureR, index: 1)
-            commandEncoder.setFragmentTexture(bloomTextureG, index: 2)
-            commandEncoder.setFragmentTexture(bloomTextureB, index: 3)
-            commandEncoder.setFragmentBytes(&fragmentUniforms,
-                                            length: MemoryLayout<FragmentUniforms>.stride,
-                                            index: 1)
-
-            // Draw (part of) cube
-            quad3D!.draw(commandEncoder, allSides: animates != 0)
-            */
-            
-            // Draw activity monitors
-            /*
-            if drawActivityMonitors {
-                
-                for i in 0 ... monitors.count where monitorAlpha[i].current != 0.0 {
-                    
-                    fragmentUniforms.alpha = monitorAlpha[i].current * monitorGlobalAlpha
-                    commandEncoder.setFragmentBytes(&fragmentUniforms,
-                                                    length: MemoryLayout<FragmentUniforms>.stride,
-                                                    index: 1)
-                    monitors[i].draw(commandEncoder, matrix: canvas.vertexUniforms3D.mvp)
-                }
-            }
-            */
-        }
-        
-        endFrame()
     }
     
     func endFrame() {
@@ -595,20 +514,17 @@ class Renderer: NSObject, MTKViewDelegate {
         
         frames += 1
         
+        updateTexture()
+        splashScreen.update(frames: frames)
+        canvas.update(frames: frames)
+
         semaphore.wait()
         drawable = metalLayer.nextDrawable()
         
         if drawable != nil {
-            
-            updateTexture()
-            splashScreen.update(frames: frames)
-            canvas.update(frames: frames)
-            
-            if fullscreen && !parent.pref.keepAspectRatio {
-                drawScene2D()
-            } else {
-                drawScene3D()
-            }
+            startFrame()
+            fullscreen && !parent.pref.keepAspectRatio ? draw2D() : draw3D()
+            endFrame()
         } 
     }
 }
