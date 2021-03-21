@@ -58,35 +58,17 @@ class Renderer: NSObject, MTKViewDelegate {
                       height: frameSize.height * scale)
     }
 
-    //
     // Drawing layers
-    //
-    
     var splashScreen: SplashScreen! = nil
     var canvas: Canvas! = nil
     var monis: Monitors! = nil
     
-    //
-    // Textures
-    //
-
-    // Background textures
-    // var bgTexture: MTLTexture! = nil
-    // var bgFullscreenTexture: MTLTexture! = nil
-
     // Texture to hold the pixel depth information
     var depthTexture: MTLTexture! = nil
 
-    //
     // Kernels (shaders)
-    //
-    
     var kernelManager: KernelManager! = nil
-     
-    //
-    // Texture samplers
-    //
-    
+
     // Nearest neighbor sampler
     var samplerNearest: MTLSamplerState!
     
@@ -111,7 +93,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var shiftY = AnimatedFloat(0.0)
     var shiftZ = AnimatedFloat(0.0)
     
-    var alpha = AnimatedFloat(0.0)
+    // var alpha = AnimatedFloat(0.0)
     var noise = AnimatedFloat(0.0)
     
     // Animation variables for smooth texture zooming
@@ -148,10 +130,6 @@ class Renderer: NSObject, MTKViewDelegate {
     //  Drawing
     //
 
-    func runTexturePipeline() {
-        
-    }
-    
     func makeCommandEncoder() -> MTLRenderCommandEncoder? {
         
         let descriptor = MTLRenderPassDescriptor.init()
@@ -169,7 +147,6 @@ class Renderer: NSObject, MTKViewDelegate {
         let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
         commandEncoder?.setRenderPipelineState(pipeline)
         commandEncoder?.setDepthStencilState(depthState)
-        commandEncoder?.setFragmentTexture(canvas.dotMaskTexture, index: 4)
         commandEncoder?.setFragmentBytes(&shaderOptions,
                                          length: MemoryLayout<ShaderOptions>.stride,
                                          index: 0)
@@ -182,20 +159,6 @@ class Renderer: NSObject, MTKViewDelegate {
         commandEncoder?.setFragmentSamplerState(sampler, index: 0)
         
         return commandEncoder
-    }
-    
-    func endFrame() {
-
-        commandEncoder.endEncoding()
-
-        commandBuffer.addCompletedHandler { _ in
-            self.semaphore.signal()
-        }
-
-        if drawable != nil {
-            commandBuffer.present(drawable)
-            commandBuffer.commit()
-        }
     }
 
     //
@@ -246,7 +209,7 @@ class Renderer: NSObject, MTKViewDelegate {
             
             commandBuffer = queue.makeCommandBuffer()
             if renderSplash { splashScreen.render(buffer: commandBuffer) }
-            if renderCanvas { canvas.render(buffer: commandBuffer); runTexturePipeline() }
+            if renderCanvas { canvas.render(buffer: commandBuffer) }
             if renderMonitors { monis.render(buffer: commandBuffer) }
             
             if animates != 0 { performAnimationStep() }
@@ -255,8 +218,11 @@ class Renderer: NSObject, MTKViewDelegate {
             if renderSplash { splashScreen.render(encoder: commandEncoder, flat: flat) }
             if renderCanvas { canvas.render(encoder: commandEncoder, flat: flat) }
             if renderMonitors { monis.render(encoder: commandEncoder, flat: flat) }
+            commandEncoder.endEncoding()
             
-            endFrame()
-        } 
+            commandBuffer.addCompletedHandler { _ in self.semaphore.signal() }
+            commandBuffer.present(drawable)
+            commandBuffer.commit()
+        }
     }
 }

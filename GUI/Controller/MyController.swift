@@ -454,11 +454,11 @@ extension MyController {
             inspector?.fullRefresh()
 
         case .POWER_ON:
-            renderer.canvas.open()
+            renderer.canvas.open(delay: 1.0)
             serialIn = ""
             serialOut = ""
             virtualKeyboard = nil
-            renderer.blendIn(steps: 120) // zoomIn()
+            // renderer.blendIn(steps: 120) // zoomIn()
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()
 

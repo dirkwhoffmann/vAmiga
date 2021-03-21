@@ -107,18 +107,6 @@ class Canvas: Layer {
         track()
     }
     
-    func buildVertexBuffer() {
-
-        quad2D = Node.init(device: device,
-                           x: -1.0, y: -1.0, z: 0.0, w: 2.0, h: 2.0,
-                           t: renderer.textureRect)
-
-        quad3D = Quad.init(device: device,
-                           x1: -0.64, y1: -0.48, z1: -0.64,
-                           x2: 0.64, y2: 0.48, z2: 0.64,
-                           t: renderer.textureRect)
-    }
-     
     //
     // Managing textures
     //
@@ -165,6 +153,12 @@ class Canvas: Layer {
     //
     // Rendering
     //
+    
+    override func open() {
+        
+        alpha = -255
+        targetAlpha = 255
+    }
     
     override func render(buffer: MTLCommandBuffer) {
         
@@ -253,7 +247,13 @@ class Canvas: Layer {
     }
     
     override func render(encoder: MTLRenderCommandEncoder, flat: Bool) {
-        
+
+        commandEncoder.setFragmentTexture(scanlineTexture, index: 0)
+        commandEncoder.setFragmentTexture(bloomTextureR, index: 1)
+        commandEncoder.setFragmentTexture(bloomTextureG, index: 2)
+        commandEncoder.setFragmentTexture(bloomTextureB, index: 3)
+        commandEncoder.setFragmentTexture(dotMaskTexture, index: 4)
+
         if flat {
             
             // Configure the vertex shader
@@ -266,9 +266,6 @@ class Canvas: Layer {
             fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
             fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
             fragmentUniforms.scanlineDistance = Int32(renderer.size.height / 256)
-            
-            // Configure the command encoder
-            commandEncoder.setFragmentTexture(scanlineTexture, index: 0)
             commandEncoder.setFragmentBytes(&fragmentUniforms,
                                             length: MemoryLayout<FragmentUniforms>.stride,
                                             index: 1)
@@ -290,12 +287,6 @@ class Canvas: Layer {
             fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
             fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
             fragmentUniforms.scanlineDistance = Int32(renderer.size.height / 256)
-            
-            // Configure the command encoder
-            commandEncoder.setFragmentTexture(scanlineTexture, index: 0)
-            commandEncoder.setFragmentTexture(bloomTextureR, index: 1)
-            commandEncoder.setFragmentTexture(bloomTextureG, index: 2)
-            commandEncoder.setFragmentTexture(bloomTextureB, index: 3)
             commandEncoder.setFragmentBytes(&fragmentUniforms,
                                             length: MemoryLayout<FragmentUniforms>.stride,
                                             index: 1)

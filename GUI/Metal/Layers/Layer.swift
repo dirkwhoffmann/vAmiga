@@ -48,6 +48,8 @@ class Layer: NSObject {
     var isFadingIn: Bool { return targetAlpha > alpha; }
     var isFadingOut: Bool { return targetAlpha < alpha; }
     
+    var floatAlpha: Float { return alpha < 0 ? 0 : alpha > 0xFF ? 1.0 : Float(alpha) / 0xFF }
+    
     //
     // Opening and closing
     //
