@@ -62,7 +62,7 @@ class Layer: NSObject {
     // Performing continuous tasks
     //
     
-    func update(frames: Int) {
+    func update(frames: Int64) {
         
         if alpha != targetAlpha {
             

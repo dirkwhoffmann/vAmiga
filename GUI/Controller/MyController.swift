@@ -454,6 +454,7 @@ extension MyController {
             inspector?.fullRefresh()
 
         case .POWER_ON:
+            renderer.canvas.open()
             serialIn = ""
             serialOut = ""
             virtualKeyboard = nil

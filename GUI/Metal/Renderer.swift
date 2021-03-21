@@ -20,8 +20,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var prefs: Preferences { return parent.pref }
     var config: Configuration { return parent.config }
     
-    /* Number of drawn frames since power up. This value is used to determine
-     * the fps value shown in the emulator's bottom bar.
+    /* Number of drawn frames since power up.
      */
     var frames: Int64 = 0
     
@@ -65,18 +64,17 @@ class Renderer: NSObject, MTKViewDelegate {
     //
     
     var splashScreen: SplashScreen! = nil
+    var canvas: Canvas! = nil
     
     //
     // Buffers and uniforms
     //
     
-    // var bgRect: Node?
-    var quad2D: Node?
-    var quad3D: Quad?
+    // var quad2D: Node?
+    // var quad3D: Quad?
             
-    var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
-    var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
-    // var vertexUniformsBg = VertexUniforms(mvp: matrix_identity_float4x4)
+    // var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
+    // var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
     
     var fragmentUniforms = FragmentUniforms(alpha: 1.0,
                                             dotMaskWidth: 0,
@@ -150,7 +148,7 @@ class Renderer: NSObject, MTKViewDelegate {
      * To emulate a bloom effect, the C64 texture is first split into it's
      * R, G, and B parts. Each texture is then run through a Gaussian blur
      * filter with a large radius. These blurred textures are passed into
-     * the fragment shader as a secondary textures where they are recomposed
+     * the fragment shader as secondary textures where they are recomposed
      * with the upscaled primary texture.
      */
     var bloomTextureR: MTLTexture! = nil
@@ -532,6 +530,10 @@ class Renderer: NSObject, MTKViewDelegate {
 
         startFrame()
 
+        if canvas.isTransparent { splashScreen.render() }
+        if canvas.isVisible { canvas.render2D() }
+
+        /*
         // Configure vertex shader
         commandEncoder.setVertexBytes(&vertexUniforms2D,
                                       length: MemoryLayout<VertexUniforms>.stride,
@@ -542,9 +544,10 @@ class Renderer: NSObject, MTKViewDelegate {
         commandEncoder.setFragmentBytes(&fragmentUniforms,
                                         length: MemoryLayout<FragmentUniforms>.stride,
                                         index: 1)
-
+ 
         // Draw
         quad2D!.drawPrimitives(commandEncoder)
+        */
         
         // Draw activity monitors
         if drawActivityMonitors {
@@ -555,7 +558,7 @@ class Renderer: NSObject, MTKViewDelegate {
                 commandEncoder.setFragmentBytes(&fragmentUniforms,
                                                 length: MemoryLayout<FragmentUniforms>.stride,
                                                 index: 1)
-                monitors[i].draw(commandEncoder, matrix: vertexUniforms3D.mvp)
+                monitors[i].draw(commandEncoder, matrix: canvas.vertexUniforms3D.mvp)
             }
         }
         
@@ -564,7 +567,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func drawScene3D() {
 
-        let paused = parent.amiga.paused
+        // let paused = parent.amiga.paused
         // let poweredOff = parent.amiga.poweredOff
         // let renderBackground = poweredOff || fullscreen
         let renderForeground = alpha.clamped > 0.0
@@ -574,46 +577,12 @@ class Renderer: NSObject, MTKViewDelegate {
 
         startFrame()
 
-        // if canvas.isTransparent() splashScreen.render()
-        splashScreen.render()
+        if canvas.isTransparent { splashScreen.render() }
+        if canvas.isVisible { canvas.render3D() }
         
-        /*
-        // if renderBackground {
-        if drawSplashScreen {
-
-            // Update background texture
-            // if !fullscreen {
-            //     let buffer = parent.amiga.denise.noise
-            //     updateBgTexture(bytes: buffer!)
-            // }
-            
-            // Configure vertex shader
-            vertexUniformsBg.mvp = matrix_identity_float4x4
-            commandEncoder.setVertexBytes(&vertexUniformsBg,
-                                          length: MemoryLayout<VertexUniforms>.stride,
-                                          index: 1)
-
-            // Configure fragment shader
-            if fullscreen {
-                fragmentUniforms.alpha = 1.0
-                commandEncoder.setFragmentTexture(bgFullscreenTexture, index: 0)
-                commandEncoder.setFragmentTexture(bgFullscreenTexture, index: 1)
-            } else {
-                fragmentUniforms.alpha = 1.0 // noise.current
-                commandEncoder.setFragmentTexture(bgTexture, index: 0)
-                commandEncoder.setFragmentTexture(bgTexture, index: 1)
-            }
-            commandEncoder.setFragmentBytes(&fragmentUniforms,
-                                            length: MemoryLayout<FragmentUniforms>.stride,
-                                            index: 1)
-
-            // Draw
-            bgRect!.drawPrimitives(commandEncoder)
-        }
-        */
-
         if renderForeground {
 
+            /*
             // Configure vertex shader
             commandEncoder.setVertexBytes(&vertexUniforms3D,
                                           length: MemoryLayout<VertexUniforms>.stride,
@@ -630,6 +599,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
             // Draw (part of) cube
             quad3D!.draw(commandEncoder, allSides: animates != 0)
+            */
             
             // Draw activity monitors
             if drawActivityMonitors {
@@ -640,7 +610,7 @@ class Renderer: NSObject, MTKViewDelegate {
                     commandEncoder.setFragmentBytes(&fragmentUniforms,
                                                     length: MemoryLayout<FragmentUniforms>.stride,
                                                     index: 1)
-                    monitors[i].draw(commandEncoder, matrix: vertexUniforms3D.mvp)
+                    monitors[i].draw(commandEncoder, matrix: canvas.vertexUniforms3D.mvp)
                 }
             }
         }
@@ -660,8 +630,6 @@ class Renderer: NSObject, MTKViewDelegate {
             commandBuffer.present(drawable)
             commandBuffer.commit()
         }
-
-        frames += 1
     }
 
     //
@@ -676,7 +644,6 @@ class Renderer: NSObject, MTKViewDelegate {
     func reshape(withSize size: CGSize) {
 
         // Rebuild matrices
-        // buildMatricesBg()
         buildMatrices2D()
         buildMatrices3D()
 
@@ -695,12 +662,16 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func draw(in view: MTKView) {
         
+        frames += 1
+        
         semaphore.wait()
         drawable = metalLayer.nextDrawable()
         
         if drawable != nil {
             
             updateTexture()
+            splashScreen.update(frames: frames)
+            canvas.update(frames: frames)
             
             if fullscreen && !parent.pref.keepAspectRatio {
                 drawScene2D()

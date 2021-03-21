@@ -24,6 +24,10 @@ extension Renderer {
         track()
 
         buildMetal()
+
+        splashScreen = SplashScreen.init(view: mtkView, device: device, renderer: self)
+        canvas = Canvas.init(view: mtkView, device: device, renderer: self)
+
         buildMonitors()
         buildTextures()
         buildSamplers()
@@ -32,8 +36,6 @@ extension Renderer {
         buildPipeline()
         buildVertexBuffer()
 
-        splashScreen = SplashScreen.init(view: mtkView, device: device, renderer: self)
-        
         reshape()
     }
 
@@ -456,11 +458,15 @@ extension Renderer {
 
     func buildVertexBuffer() {
 
+        splashScreen.buildVertexBuffer()
+        canvas.buildVertexBuffer()
+
         /*
         bgRect = Node.init(device: device,
                            x: -1.0, y: -1.0, z: 0.99, w: 2.0, h: 2.0,
                            t: NSRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
         */
+        /*
         quad2D = Node.init(device: device,
                            x: -1.0, y: -1.0, z: 0.0, w: 2.0, h: 2.0,
                            t: textureRect)
@@ -469,6 +475,7 @@ extension Renderer {
                            x1: -0.64, y1: -0.48, z1: -0.64,
                            x2: 0.64, y2: 0.48, z2: 0.64,
                            t: textureRect)
+         */
     }
 
     /*
@@ -492,7 +499,8 @@ extension Renderer {
         let view  = matrix_identity_float4x4
         let proj  = matrix_identity_float4x4
 
-        vertexUniforms2D.mvp = proj * view * model
+        // vertexUniforms2D.mvp = proj * view * model
+        canvas.vertexUniforms2D.mvp = proj * view * model
     }
 
     func buildMatrices3D() {
@@ -528,7 +536,8 @@ extension Renderer {
         // Chain all transformations
         let model = transEye * rotX * transRotX * rotY * rotZ
 
-        vertexUniforms3D.mvp = proj * view * model
+        // vertexUniforms3D.mvp = proj * view * model
+        canvas.vertexUniforms3D.mvp = proj * view * model
     }
 
     func buildDepthBuffer() {
