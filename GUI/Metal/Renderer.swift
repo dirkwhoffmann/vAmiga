@@ -417,7 +417,7 @@ class Renderer: NSObject, MTKViewDelegate {
                              length: MemoryLayout<ShaderOptions>.stride)
     }
     
-    func createCommandEncoder() {
+    func makeCommandEncoder() -> MTLRenderCommandEncoder? {
         
         let descriptor = MTLRenderPassDescriptor.init()
         descriptor.colorAttachments[0].texture = drawable.texture
@@ -431,19 +431,21 @@ class Renderer: NSObject, MTKViewDelegate {
         descriptor.depthAttachment.storeAction = MTLStoreAction.dontCare
         
         // Create a command encoder
-        commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
-        commandEncoder.setRenderPipelineState(pipeline)
-        commandEncoder.setDepthStencilState(depthState)
-        commandEncoder.setFragmentTexture(dotMaskTexture, index: 4)
-        commandEncoder.setFragmentBytes(&shaderOptions,
-                                        length: MemoryLayout<ShaderOptions>.stride,
-                                        index: 0)
+        let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
+        commandEncoder?.setRenderPipelineState(pipeline)
+        commandEncoder?.setDepthStencilState(depthState)
+        commandEncoder?.setFragmentTexture(dotMaskTexture, index: 4)
+        commandEncoder?.setFragmentBytes(&shaderOptions,
+                                         length: MemoryLayout<ShaderOptions>.stride,
+                                         index: 0)
         
         // Finally, we have to decide for a texture sampler. We use a linear
         // interpolation sampler, if Gaussian blur is enabled, and a nearest
         // neighbor sampler if Gaussian blur is disabled.
         let sampler = shaderOptions.blur > 0 ? samplerLinear : samplerNearest
-        commandEncoder.setFragmentSamplerState(sampler, index: 0)
+        commandEncoder?.setFragmentSamplerState(sampler, index: 0)
+        
+        return commandEncoder
     }
     
     func endFrame() {
@@ -511,16 +513,14 @@ class Renderer: NSObject, MTKViewDelegate {
             if renderSplash { splashScreen.render(buffer: commandBuffer) }
             if renderCanvas { canvas.render(buffer: commandBuffer); runTexturePipeline() }
             if renderMonitors { monis.render(buffer: commandBuffer) }
-
-            createCommandEncoder()
-            // startFrame()
-        
+            
             if animates != 0 { performAnimationStep() }
-
+            
+            commandEncoder = makeCommandEncoder()
             if renderSplash { splashScreen.render(encoder: commandEncoder, flat: flat) }
             if renderCanvas { canvas.render(encoder: commandEncoder, flat: flat) }
             if renderMonitors { monis.render(encoder: commandEncoder, flat: flat) }
-     
+            
             endFrame()
         } 
     }
