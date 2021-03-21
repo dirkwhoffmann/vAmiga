@@ -195,6 +195,9 @@
 		50C8C44F260740AC00F4E012 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C44E260740AC00F4E012 /* SplashScreen.swift */; };
 		50C8C452260747EA00F4E012 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C451260747EA00F4E012 /* Canvas.swift */; };
 		50C8C4552607524400F4E012 /* Monitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C4542607524400F4E012 /* Monitors.swift */; };
+		50C8C458260758F000F4E012 /* SplashScreenSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C457260758F000F4E012 /* SplashScreenSetup.swift */; };
+		50C8C45B2607590400F4E012 /* CanvasSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C45A2607590400F4E012 /* CanvasSetup.swift */; };
+		50C8C4602607591300F4E012 /* MonitorSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C45F2607591300F4E012 /* MonitorSetup.swift */; };
 		50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CB21F6377600FA167F /* A500ANSI.xib */; };
 		50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CD21F6378000FA167F /* A1000ISO.xib */; };
 		50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D375DD222C7C6B0040987C /* Blitter.cpp */; };
@@ -543,6 +546,9 @@
 		50C8C44E260740AC00F4E012 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 		50C8C451260747EA00F4E012 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		50C8C4542607524400F4E012 /* Monitors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monitors.swift; sourceTree = "<group>"; };
+		50C8C457260758F000F4E012 /* SplashScreenSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenSetup.swift; sourceTree = "<group>"; };
+		50C8C45A2607590400F4E012 /* CanvasSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasSetup.swift; sourceTree = "<group>"; };
+		50C8C45F2607591300F4E012 /* MonitorSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitorSetup.swift; sourceTree = "<group>"; };
 		50D263CB21F6377600FA167F /* A500ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ANSI.xib; sourceTree = "<group>"; };
 		50D263CD21F6378000FA167F /* A1000ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ISO.xib; sourceTree = "<group>"; };
 		50D375DD222C7C6B0040987C /* Blitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Blitter.cpp; sourceTree = "<group>"; };
@@ -1294,8 +1300,11 @@
 			children = (
 				50C8C4492607396200F4E012 /* Layer.swift */,
 				50C8C44E260740AC00F4E012 /* SplashScreen.swift */,
+				50C8C457260758F000F4E012 /* SplashScreenSetup.swift */,
 				50C8C451260747EA00F4E012 /* Canvas.swift */,
+				50C8C45A2607590400F4E012 /* CanvasSetup.swift */,
 				50C8C4542607524400F4E012 /* Monitors.swift */,
+				50C8C45F2607591300F4E012 /* MonitorSetup.swift */,
 			);
 			path = Layers;
 			sourceTree = "<group>";
@@ -1524,6 +1533,7 @@
 				507DF0B42549A6220079BB98 /* FSFileListBlock.cpp in Sources */,
 				50AEBEE024D3D9080037082D /* KeyboardEvents.cpp in Sources */,
 				5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */,
+				50C8C4602607591300F4E012 /* MonitorSetup.swift in Sources */,
 				50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */,
 				508FE01A21EA227B0043D0E9 /* MyFormatter.swift in Sources */,
 				500C7170255EE2AC00DDEEB2 /* Concurrency.cpp in Sources */,
@@ -1614,6 +1624,7 @@
 				50B5C07E241107F200F124DC /* Constants.cpp in Sources */,
 				5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */,
+				50C8C45B2607590400F4E012 /* CanvasSetup.swift in Sources */,
 				50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
@@ -1690,6 +1701,7 @@
 				50F580662431D1A000E7D84D /* Screenshot.swift in Sources */,
 				50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */,
 				50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */,
+				50C8C458260758F000F4E012 /* SplashScreenSetup.swift in Sources */,
 				5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
