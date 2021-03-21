@@ -419,30 +419,31 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func startFrame() {
 
+        // createCommandBuffer()
+        runTexturePipeline()
+        createCommandEncoder()
+    }
+
+    /*
+    func createCommandBuffer() {
+
         commandBuffer = queue.makeCommandBuffer()
         assert(commandBuffer != nil, "Command buffer must not be nil")
-
-        // Set uniforms for the fragment shader
-        /*
-        fragmentUniforms.alpha = 1.0
-        fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
-        fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
-        fragmentUniforms.scanlineDistance = Int32(size.height / 256)
-        */
+    }
+    */
+    
+    func createCommandEncoder() {
         
-        // Create a render pass descriptor
         let descriptor = MTLRenderPassDescriptor.init()
         descriptor.colorAttachments[0].texture = drawable.texture
         descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.95, 0.95, 0.95, 1)
         descriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
         descriptor.colorAttachments[0].storeAction = MTLStoreAction.store
-
+        
         descriptor.depthAttachment.texture = depthTexture
         descriptor.depthAttachment.clearDepth = 1
         descriptor.depthAttachment.loadAction = MTLLoadAction.clear
         descriptor.depthAttachment.storeAction = MTLStoreAction.dontCare
-
-        runTexturePipeline()
         
         // Create a command encoder
         commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
@@ -459,25 +460,6 @@ class Renderer: NSObject, MTKViewDelegate {
         let sampler = shaderOptions.blur > 0 ? samplerLinear : samplerNearest
         commandEncoder.setFragmentSamplerState(sampler, index: 0)
     }
-
-    /*
-    func draw2D() {
-
-        if canvas.isTransparent { splashScreen.render() }
-        if canvas.isVisible { canvas.render2D() }
-        if monis.drawActivityMonitors { monis.render2D() }
-    }
-    
-    func draw3D() {
-
-        // Perform a single animation step
-        if animates != 0 { performAnimationStep() }
-
-        if canvas.isTransparent { splashScreen.render() }
-        if canvas.isVisible { canvas.render3D() }
-        if monis.drawActivityMonitors { monis.render3D() }
-    }
-    */
     
     func endFrame() {
 
@@ -539,6 +521,8 @@ class Renderer: NSObject, MTKViewDelegate {
             let renderMonitors = monis.drawActivityMonitors
             
             let flat = fullscreen && !parent.pref.keepAspectRatio
+            
+            commandBuffer = queue.makeCommandBuffer()
             
             startFrame()
         
