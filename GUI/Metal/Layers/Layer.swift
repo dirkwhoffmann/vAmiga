@@ -16,12 +16,13 @@ class Layer: NSObject {
     var amiga: AmigaProxy { return renderer.parent.amiga }
     var commandEncoder: MTLRenderCommandEncoder { return renderer.commandEncoder }
     
-    // Alpha channel parameters
-    var alpha = 0.0
-    var targetAlpha = 0.0
+    // Alpha channel
+    var alpha: AnimatedFloat = AnimatedFloat.init()
+    // var oldAlpha = 0.0
+    // var oldTargetAlpha = 0.0
     
     // Time until alpha is supposed to reach targetAlpha in seconds
-    var delay = 0.2
+    // var delay = 0.2
     
     //
     // Initializing
@@ -32,7 +33,7 @@ class Layer: NSObject {
         self.mtkView = view
         self.device = device
         self.renderer = renderer
-        
+
         super.init()
     }
     
@@ -41,23 +42,21 @@ class Layer: NSObject {
     //
         
     // Informs about the visual state of this layer
-    var isVisible: Bool { return alpha > 0.0 }
-    var isOpaque: Bool { return alpha == 1.0; }
-    var isTransparent: Bool { return alpha < 1.0; }
-    var isAnimating: Bool { return alpha != targetAlpha; }
-    var isFadingIn: Bool { return targetAlpha > alpha; }
-    var isFadingOut: Bool { return targetAlpha < alpha; }
-    
-    var clampedAlpha: Double { return alpha < 0 ? 0 : alpha > 1.0 ? 1.0 : alpha }
-    
+    var isVisible: Bool { return alpha.current > 0.0 }
+    var isOpaque: Bool { return alpha.current == 1.0 }
+    var isTransparent: Bool { return alpha.current < 1.0 }
+    var isAnimating: Bool { return alpha.animates() }
+    var isFadingIn: Bool { return alpha.target > alpha.current }
+    var isFadingOut: Bool { return alpha.target < alpha.current }
+        
     //
     // Opening and closing
     //
     
-    func open(delay: Double) { self.delay = delay; open(); }
-    func close(delay: Double) { self.delay = delay; close(); }
-    func open() { targetAlpha = 1.0 }
-    func close() { targetAlpha = 0.0 }
+    func open(delay: Double) { alpha.steps = Int(60 * delay); open(); }
+    func close(delay: Double) { alpha.steps = Int(60 * delay); close(); }
+    func open() { alpha.target = 1.0 }
+    func close() { alpha.target = 0.0 }
     func toggle() { isVisible ? close() : open(); }
 
     //
@@ -66,20 +65,10 @@ class Layer: NSObject {
     
     func update(frames: Int64) {
         
-        if alpha != targetAlpha {
-            
-            let delta = 1.0 / 60.0
-            
-            if alpha < targetAlpha {
-                alpha += delta / delay
-                if alpha > targetAlpha { alpha = targetAlpha }
-            }
-            if alpha > targetAlpha {
-                alpha -= delta / delay
-                if alpha < targetAlpha { alpha = targetAlpha }
-            }
-            
-            alphaDidChange()
+        if alpha.animates() {
+
+            alpha.move()
+            // alphaDidChange()
         }
     }
 
@@ -90,5 +79,5 @@ class Layer: NSObject {
     // Responding to events
     //
     
-    func alphaDidChange() { }
+    // func alphaDidChange() { }
 }

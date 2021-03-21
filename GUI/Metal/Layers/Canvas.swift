@@ -103,7 +103,9 @@ class Canvas: Layer {
     override init(view: MTKView, device: MTLDevice, renderer: Renderer) {
 
         super.init(view: view, device: device, renderer: renderer)
-        alpha = -1.0
+
+        // Start with a negative alpha to present the start screen for a while
+        alpha.set(-1.0)
     }
     
     //
@@ -154,9 +156,7 @@ class Canvas: Layer {
     //
     
     override func render(buffer: MTLCommandBuffer) {
-        
-        track()
-        
+                
         // Get the most recent texture from the emulator
         updateTexture()
         
@@ -278,7 +278,7 @@ class Canvas: Layer {
                                           index: 1)
             
             // Configure the fragment shader
-            fragmentUniforms.alpha = amiga.paused ? Float(0.5) : Float(clampedAlpha)
+            fragmentUniforms.alpha = amiga.paused ? Float(0.5) : alpha.clamped
             fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
             fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
             fragmentUniforms.scanlineDistance = Int32(renderer.size.height / 256)
