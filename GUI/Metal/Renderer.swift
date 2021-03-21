@@ -61,16 +61,22 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     //
+    // Drawing layers
+    //
+    
+    var splashScreen: SplashScreen! = nil
+    
+    //
     // Buffers and uniforms
     //
     
-    var bgRect: Node?
+    // var bgRect: Node?
     var quad2D: Node?
     var quad3D: Quad?
             
     var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
     var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
-    var vertexUniformsBg = VertexUniforms(mvp: matrix_identity_float4x4)
+    // var vertexUniformsBg = VertexUniforms(mvp: matrix_identity_float4x4)
     
     var fragmentUniforms = FragmentUniforms(alpha: 1.0,
                                             dotMaskWidth: 0,
@@ -568,16 +574,18 @@ class Renderer: NSObject, MTKViewDelegate {
 
         startFrame()
 
+        // if canvas.isTransparent() splashScreen.render()
+        splashScreen.render()
+        
+        /*
         // if renderBackground {
         if drawSplashScreen {
 
             // Update background texture
-            /*
-            if !fullscreen {
-                let buffer = parent.amiga.denise.noise
-                updateBgTexture(bytes: buffer!)
-            }
-            */
+            // if !fullscreen {
+            //     let buffer = parent.amiga.denise.noise
+            //     updateBgTexture(bytes: buffer!)
+            // }
             
             // Configure vertex shader
             vertexUniformsBg.mvp = matrix_identity_float4x4
@@ -602,6 +610,7 @@ class Renderer: NSObject, MTKViewDelegate {
             // Draw
             bgRect!.drawPrimitives(commandEncoder)
         }
+        */
 
         if renderForeground {
 
@@ -667,7 +676,7 @@ class Renderer: NSObject, MTKViewDelegate {
     func reshape(withSize size: CGSize) {
 
         // Rebuild matrices
-        buildMatricesBg()
+        // buildMatricesBg()
         buildMatrices2D()
         buildMatrices3D()
 
