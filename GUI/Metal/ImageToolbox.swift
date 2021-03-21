@@ -456,9 +456,9 @@ extension Renderer {
     func screenshot(afterUpscaling: Bool = true) -> NSImage? {
         
         if afterUpscaling {
-            return screenshot(texture: upscaledTexture)
+            return screenshot(texture: canvas.upscaledTexture)
         } else {
-            return screenshot(texture: mergeTexture)
+            return screenshot(texture: canvas.mergeTexture)
         }
     }
     

@@ -28,7 +28,7 @@ extension ConfigurationController {
         }
         
         // Create dot mask textures
-        parent.renderer.buildDotMasks()
+        parent.renderer.canvas.buildDotMasks()
     }
     
     func refreshVideoTab() {
@@ -62,7 +62,7 @@ extension ConfigurationController {
 
         vidDotMaskPopUp.selectItem(withTag: Int(config.dotMask))
         for i in 0 ... 4 {
-            vidDotMaskPopUp.item(at: i)?.image = renderer.dotmaskImages[i]
+            vidDotMaskPopUp.item(at: i)?.image = renderer.canvas.dotmaskImages[i]
         }
         vidDotMaskBrightnessSlider.floatValue = config.dotMaskBrightness
         vidDotMaskBrightnessSlider.isEnabled = config.dotMask > 0

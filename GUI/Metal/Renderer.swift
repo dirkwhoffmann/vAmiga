@@ -9,7 +9,7 @@
 
 import Metal
 import MetalKit
-import MetalPerformanceShaders
+// import MetalPerformanceShaders
 
 class Renderer: NSObject, MTKViewDelegate {
     
@@ -71,9 +71,6 @@ class Renderer: NSObject, MTKViewDelegate {
     // Buffers and uniforms
     //
         
-    var mergeUniforms = MergeUniforms(longFrameScale: 1.0,
-                                      shortFrameScale: 1.0)
-
     //
     // Textures
     //
@@ -90,13 +87,13 @@ class Renderer: NSObject, MTKViewDelegate {
      * The texture is updated in function updateTexture() which is called
      * periodically in drawRect().
      */
-    var longFrameTexture: MTLTexture! = nil
-    var shortFrameTexture: MTLTexture! = nil
+    // var longFrameTexture: MTLTexture! = nil
+    // var shortFrameTexture: MTLTexture! = nil
     
     /* Merge texture (1024 x 1024)
      * The long frame and short frame textures are merged into this one.
      */
-    var mergeTexture: MTLTexture! = nil
+    // var mergeTexture: MTLTexture! = nil
     
     /* Bloom textures to emulate blooming (512 x 512)
      * To emulate a bloom effect, the C64 texture is first split into it's
@@ -105,14 +102,16 @@ class Renderer: NSObject, MTKViewDelegate {
      * the fragment shader as secondary textures where they are recomposed
      * with the upscaled primary texture.
      */
+    /*
     var bloomTextureR: MTLTexture! = nil
     var bloomTextureG: MTLTexture! = nil
     var bloomTextureB: MTLTexture! = nil
+    */
     
     /* Lowres enhancement texture (experimental)
      * Trying to use in-texture upscaling to enhance lowres mode
      */
-    var lowresEnhancedTexture: MTLTexture! = nil
+    // var lowresEnhancedTexture: MTLTexture! = nil
     
     /* Upscaled emulator texture (2048 x 2048)
      * In the first texture processing stage, the emulator texture is bumped up
@@ -120,29 +119,26 @@ class Renderer: NSObject, MTKViewDelegate {
      * simply replaces each pixel by a 4x4 quad or more sophisticated upscaling
      * algorithms such as xBr.
      */
-    var upscaledTexture: MTLTexture! = nil
+    // var upscaledTexture: MTLTexture! = nil
     
     /* Upscaled texture with scanlines (2048 x 2048)
      * In the second texture processing stage, a scanline effect is applied to
      * the upscaled texture.
      */
-    var scanlineTexture: MTLTexture! = nil
+    // var scanlineTexture: MTLTexture! = nil
     
     /* Dotmask texture (variable size)
      * This texture is used by the fragment shader to emulate a dotmask
      * effect.
      */
-    var dotMaskTexture: MTLTexture! = nil
+    // var dotMaskTexture: MTLTexture! = nil
         
     //
     // Kernels (shaders)
     //
     
     var kernelManager: KernelManager! = nil
- 
-    // Array holding dotmask preview images
-    var dotmaskImages = [NSImage?](repeating: nil, count: 5)
-    
+     
     //
     // Texture samplers
     //
@@ -182,17 +178,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
     // Part of the texture that is currently visible
     var textureRect = CGRect.init() { didSet { buildVertexBuffer() } }
-
-    // Indicates whether the recently drawn frames were long or short frames
-    var currLOF = true
-    var prevLOF = true
-
-    // Used to determine if the GPU texture needs to be updated
-    var prevBuffer: ScreenBuffer?
-    
-    // Variable used to emulate interlace flickering
-    var flickerCnt = 0
-        
+            
     // Is set to true when fullscreen mode is entered
     var fullscreen = false
     
@@ -213,140 +199,13 @@ class Renderer: NSObject, MTKViewDelegate {
         mtkView.device = device
         mtkView.delegate = self
     }
-
-    //
-    // Managing textures
-    //
     
-    func updateBgTexture(bytes: UnsafeMutablePointer<UInt32>) {
-
-        // bgTexture.replace(w: 512, h: 512, buffer: bytes)
-    }
-    
-    func updateTexture() {
-        
-        if parent.amiga.poweredOff {
-        
-            var buffer = parent.amiga.denise.noise!
-            longFrameTexture.replace(w: Int(HPIXELS),
-                                     h: longFrameTexture.height,
-                                     buffer: buffer)
-            buffer = parent.amiga.denise.noise!
-            shortFrameTexture.replace(w: Int(HPIXELS),
-                                     h: shortFrameTexture.height,
-                                     buffer: buffer)
-            return
-        }
-        
-        let buffer = parent.amiga.denise.stableBuffer
-        
-        // Only proceed if the emulator delivers a new texture
-        if prevBuffer?.data == buffer.data { return }
-        prevBuffer = buffer
-
-        // Determine if the new texture is a long frame or a short frame
-        prevLOF = currLOF
-        currLOF = buffer.longFrame
-        
-        // Update the GPU texture
-        if currLOF {
-            // track("Updating long frame texture")
-            longFrameTexture.replace(w: Int(HPIXELS),
-                                     h: longFrameTexture.height,
-                                     buffer: buffer.data + Int(HBLANK_MIN) * 4)
-        } else {
-            // track("Updating short frame texture")
-            shortFrameTexture.replace(w: Int(HPIXELS),
-                                      h: shortFrameTexture.height,
-                                      buffer: buffer.data + Int(HBLANK_MIN) * 4)
-        }
-    }
-        
     //
     //  Drawing
     //
 
     func runTexturePipeline() {
         
-        // Compute the merge texture
-        if currLOF != prevLOF {
-            
-            // Case 1: Interlace drawing
-            var weight = Float(1.0)
-            if shaderOptions.flicker > 0 { weight -= shaderOptions.flickerWeight }
-            flickerCnt += 1
-            mergeUniforms.longFrameScale = (flickerCnt % 4 >= 2) ? 1.0 : weight
-            mergeUniforms.shortFrameScale = (flickerCnt % 4 >= 2) ? weight : 1.0
-            
-            kernelManager.mergeFilter.apply(commandBuffer: commandBuffer,
-                                            textures: [longFrameTexture,
-                                                       shortFrameTexture,
-                                                       mergeTexture],
-                                            options: &mergeUniforms,
-                                            length: MemoryLayout<MergeUniforms>.stride)
-            
-        } else if currLOF {
-            
-            // Case 2: Non-interlace drawing (two long frames in a row)
-            kernelManager.mergeBypassFilter.apply(commandBuffer: commandBuffer,
-                                    textures: [longFrameTexture, mergeTexture])
-        } else {
-            
-            // Case 3: Non-interlace drawing (two short frames in a row)
-            kernelManager.mergeBypassFilter.apply(commandBuffer: commandBuffer,
-                                    textures: [shortFrameTexture, mergeTexture])
-        }
-        
-        // Compute upscaled texture (first pass, in-texture upscaling)
-        kernelManager.enhancer.apply(commandBuffer: commandBuffer,
-                       source: mergeTexture,
-                       target: lowresEnhancedTexture)
-
-        // Compute the bloom textures
-        if shaderOptions.bloom != 0 {
-            let bloomFilter = kernelManager.currentBloomFilter()
-            bloomFilter.apply(commandBuffer: commandBuffer,
-                              textures: [mergeTexture,
-                                         bloomTextureR,
-                                         bloomTextureG,
-                                         bloomTextureB],
-                              options: &shaderOptions,
-                              length: MemoryLayout<ShaderOptions>.stride)
-            
-            func applyGauss(_ texture: inout MTLTexture, radius: Float) {
-                
-                if #available(OSX 10.13, *) {
-                    let gauss = MPSImageGaussianBlur(device: device, sigma: radius)
-                    gauss.encode(commandBuffer: commandBuffer,
-                                 inPlaceTexture: &texture, fallbackCopyAllocator: nil)
-                }
-            }
-            applyGauss(&bloomTextureR, radius: shaderOptions.bloomRadius)
-            applyGauss(&bloomTextureG, radius: shaderOptions.bloomRadius)
-            applyGauss(&bloomTextureB, radius: shaderOptions.bloomRadius)
-        }
-        
-        // Compute upscaled texture (second pass)
-        kernelManager.upscaler.apply(commandBuffer: commandBuffer,
-                                     source: lowresEnhancedTexture,
-                                     target: upscaledTexture)
-
-        // Blur the upscaled texture
-        if #available(OSX 10.13, *), shaderOptions.blur > 0 {
-            let gauss = MPSImageGaussianBlur(device: device,
-                                             sigma: shaderOptions.blurRadius)
-            gauss.encode(commandBuffer: commandBuffer,
-                         inPlaceTexture: &upscaledTexture,
-                         fallbackCopyAllocator: nil)
-        }
-        
-        // Emulate scanlines
-        let scanlineFilter = kernelManager.currentScanlineFilter()
-        scanlineFilter.apply(commandBuffer: commandBuffer,
-                             source: upscaledTexture,
-                             target: scanlineTexture,
-                             options: &shaderOptions,
-                             length: MemoryLayout<ShaderOptions>.stride)
     }
     
     func makeCommandEncoder() -> MTLRenderCommandEncoder? {
@@ -366,7 +225,7 @@ class Renderer: NSObject, MTKViewDelegate {
         let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
         commandEncoder?.setRenderPipelineState(pipeline)
         commandEncoder?.setDepthStencilState(depthState)
-        commandEncoder?.setFragmentTexture(dotMaskTexture, index: 4)
+        commandEncoder?.setFragmentTexture(canvas.dotMaskTexture, index: 4)
         commandEncoder?.setFragmentBytes(&shaderOptions,
                                          length: MemoryLayout<ShaderOptions>.stride,
                                          index: 0)
@@ -426,7 +285,6 @@ class Renderer: NSObject, MTKViewDelegate {
         
         frames += 1
         
-        updateTexture()
         splashScreen.update(frames: frames)
         canvas.update(frames: frames)
 

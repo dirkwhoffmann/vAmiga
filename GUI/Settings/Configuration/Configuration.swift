@@ -388,13 +388,13 @@ class Configuration {
     var dotMask = VideoDefaults.tft.dotMask {
         didSet {
             renderer.shaderOptions.dotMask = dotMask
-            renderer.buildDotMasks()
+            renderer.canvas.buildDotMasks()
         }
     }
     var dotMaskBrightness = VideoDefaults.tft.dotMaskBrightness {
         didSet {
             renderer.shaderOptions.dotMaskBrightness = dotMaskBrightness
-            renderer.buildDotMasks()
+            renderer.canvas.buildDotMasks()
         }
     }
     var scanlines = VideoDefaults.tft.scanlines {
@@ -866,7 +866,7 @@ class Configuration {
         disalignmentH = defaults.disalignmentH
         disalignment = defaults.disalignment
         
-        renderer.buildDotMasks()
+        renderer.canvas.buildDotMasks()
     }
     
     func loadVideoDefaults(_ defaults: VideoDefaults) {
@@ -911,7 +911,7 @@ class Configuration {
         disalignmentV = defaults.float(forKey: Keys.Vid.disalignmentV)
         
         renderer.updateTextureRect()
-        renderer.buildDotMasks()
+        renderer.canvas.buildDotMasks()
         
         amiga.resume()
     }
