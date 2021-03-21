@@ -89,12 +89,12 @@ class Monitor: DialogController {
     func refresh() {
         
         func enabled(_ monitor: Int) -> NSControl.StateValue {
-            return parent.renderer.monitorEnabled[monitor] ? .on : .off
+            return parent.renderer.monis.monitorEnabled[monitor] ? .on : .off
         }
         
         let info = amiga.dmaDebugger.getInfo()
         let bus = info.enabled
-        let mon = parent.renderer.drawActivityMonitors
+        let mon = parent.renderer.monis.drawActivityMonitors
         let syn = synEnable.state == .on
         let col = bus || mon
                 
@@ -123,21 +123,21 @@ class Monitor: DialogController {
         
         // Activity monitors
         monEnable.state = mon ? .on : .off
-        monCopper.state = enabled(Renderer.Monitor.copper)
-        monBlitter.state = enabled(Renderer.Monitor.blitter)
-        monDisk.state = enabled(Renderer.Monitor.disk)
-        monAudio.state = enabled(Renderer.Monitor.audio)
-        monSprites.state = enabled(Renderer.Monitor.sprite)
-        monBitplanes.state = enabled(Renderer.Monitor.bitplane)
-        monChipRam.state = enabled(Renderer.Monitor.chipRam)
-        monSlowRam.state = enabled(Renderer.Monitor.slowRam)
-        monFastRam.state = enabled(Renderer.Monitor.fastRam)
-        monKickRom.state = enabled(Renderer.Monitor.kickRom)
-        monLeftWave.state = enabled(Renderer.Monitor.waveformL)
-        monRightWave.state = enabled(Renderer.Monitor.waveformR)
-        monOpacity.floatValue = parent.renderer.monitorGlobalAlpha * 100.0
-        monSlider.floatValue = parent.renderer.monitors[0].angle
-        monLayout.selectItem(withTag: parent.renderer.monitorLayout)
+        monCopper.state = enabled(Monitors.Monitor.copper)
+        monBlitter.state = enabled(Monitors.Monitor.blitter)
+        monDisk.state = enabled(Monitors.Monitor.disk)
+        monAudio.state = enabled(Monitors.Monitor.audio)
+        monSprites.state = enabled(Monitors.Monitor.sprite)
+        monBitplanes.state = enabled(Monitors.Monitor.bitplane)
+        monChipRam.state = enabled(Monitors.Monitor.chipRam)
+        monSlowRam.state = enabled(Monitors.Monitor.slowRam)
+        monFastRam.state = enabled(Monitors.Monitor.fastRam)
+        monKickRom.state = enabled(Monitors.Monitor.kickRom)
+        monLeftWave.state = enabled(Monitors.Monitor.waveformL)
+        monRightWave.state = enabled(Monitors.Monitor.waveformR)
+        monOpacity.floatValue = parent.renderer.monis.monitorGlobalAlpha * 100.0
+        monSlider.floatValue = parent.renderer.monis.monitors[0].angle
+        monLayout.selectItem(withTag: parent.renderer.monis.monitorLayout)
         monCopper.isEnabled = mon
         monBlitter.isEnabled = mon
         monDisk.isEnabled = mon
@@ -230,7 +230,7 @@ class Monitor: DialogController {
         default: fatalError()
         }
                 
-        let monitor = parent.renderer.monitors[sender.tag]
+        let monitor = parent.renderer.monis.monitors[sender.tag]
         monitor.setColor(sender.color)
         
         refresh()
@@ -272,36 +272,36 @@ class Monitor: DialogController {
     
     @IBAction func monEnableAction(_ sender: NSButton!) {
     
-        parent.renderer.drawActivityMonitors = sender.state == .on
+        parent.renderer.monis.drawActivityMonitors = sender.state == .on
         refresh()
     }
     
     @IBAction func monDisplayAction(_ sender: NSButton!) {
         
         track("\(sender.tag)")
-        parent.renderer.monitorEnabled[sender.tag] = sender.state == .on
+        parent.renderer.monis.monitorEnabled[sender.tag] = sender.state == .on
         refresh()
     }
     
     @IBAction func monLayoutAction(_ sender: NSPopUpButton!) {
         
         track("\(sender.selectedTag())")
-        parent.renderer.monitorLayout = sender.selectedTag()
+        parent.renderer.monis.monitorLayout = sender.selectedTag()
         refresh()
     }
     
     @IBAction func monRotationAction(_ sender: NSSlider!) {
         
         track()
-        for i in 0 ..< parent.renderer.monitors.count {
-            parent.renderer.monitors[i].angle = sender.floatValue
+        for i in 0 ..< parent.renderer.monis.monitors.count {
+            parent.renderer.monis.monitors[i].angle = sender.floatValue
         }
         refresh()
     }
     
     @IBAction func monOpacityAction(_ sender: NSSlider!) {
         
-        parent.renderer.monitorGlobalAlpha = sender.floatValue / 100.0
+        parent.renderer.monis.monitorGlobalAlpha = sender.floatValue / 100.0
         refresh()
     }
 

@@ -376,20 +376,20 @@ extension MyController {
     }
 
     func addValue(_ nr: Int, _ v: Float) {
-        if let monitor = renderer.monitors[nr] as? BarChart {
+        if let monitor = renderer.monis.monitors[nr] as? BarChart {
             monitor.addValue(v)
         }
     }
     
     func addValues(_ nr: Int, _ v1: Float, _ v2: Float) {
-        if let monitor = renderer.monitors[nr] as? BarChart {
+        if let monitor = renderer.monis.monitors[nr] as? BarChart {
             monitor.addValues(v1, v2)
         }
     }
 
     func updateMonitoringPanels() {
         
-        if !renderer.drawActivityMonitors { return }
+        if !renderer.monis.drawActivityMonitors { return }
             
         // DMA monitors
         let dma = amiga.agnus.getStats()
@@ -400,12 +400,12 @@ extension MyController {
         let sprDMA = Float(dma.spriteActivity) / (313*16)
         let bplDMA = Float(dma.bitplaneActivity) / 39330
         
-        addValue(Renderer.Monitor.copper, copDMA)
-        addValue(Renderer.Monitor.blitter, bltDMA)
-        addValue(Renderer.Monitor.disk, dskDMA)
-        addValue(Renderer.Monitor.audio, audDMA)
-        addValue(Renderer.Monitor.sprite, sprDMA)
-        addValue(Renderer.Monitor.bitplane, bplDMA)
+        addValue(Monitors.Monitor.copper, copDMA)
+        addValue(Monitors.Monitor.blitter, bltDMA)
+        addValue(Monitors.Monitor.disk, dskDMA)
+        addValue(Monitors.Monitor.audio, audDMA)
+        addValue(Monitors.Monitor.sprite, sprDMA)
+        addValue(Monitors.Monitor.bitplane, bplDMA)
         
         // Memory monitors
         let mem = amiga.mem.getStats()
@@ -420,10 +420,10 @@ extension MyController {
         let kickR = Float(mem.kickReads.accumulated) / max
         let kickW = Float(mem.kickWrites.accumulated) / max
 
-        addValues(Renderer.Monitor.chipRam, chipR, chipW)
-        addValues(Renderer.Monitor.slowRam, slowR, slowW)
-        addValues(Renderer.Monitor.fastRam, fastR, fastW)
-        addValues(Renderer.Monitor.kickRom, kickR, kickW)
+        addValues(Monitors.Monitor.chipRam, chipR, chipW)
+        addValues(Monitors.Monitor.slowRam, slowR, slowW)
+        addValues(Monitors.Monitor.fastRam, fastR, fastW)
+        addValues(Monitors.Monitor.kickRom, kickR, kickW)
     }
     
     @objc func snapshotTimerFunc() {

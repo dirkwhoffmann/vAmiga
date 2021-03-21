@@ -65,6 +65,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var splashScreen: SplashScreen! = nil
     var canvas: Canvas! = nil
+    var monis: Monitors! = nil
     
     //
     // Buffers and uniforms
@@ -84,42 +85,6 @@ class Renderer: NSObject, MTKViewDelegate {
     var mergeUniforms = MergeUniforms(longFrameScale: 1.0,
                                       shortFrameScale: 1.0)
 
-    //
-    // Activity monitors
-    //
-
-    struct Monitor {
-        
-        static let copper = 0
-        static let blitter = 1
-        static let disk = 2
-        static let audio = 3
-        static let sprite = 4
-        static let bitplane = 5
-        
-        static let chipRam = 6
-        static let slowRam = 7
-        static let fastRam = 8
-        static let kickRom = 9
-
-        static let waveformL = 10
-        static let waveformR = 11
-    }
-
-    var monitors: [ActivityMonitor] = []
-
-    // Global enable switch for all activity monitors
-    var drawActivityMonitors = false { didSet { updateMonitorAlphas() } }
-
-    // Individual enable switch for each activity monitor
-    var monitorEnabled: [Bool] = [] { didSet { updateMonitorAlphas() } }
-    
-    // Global alpha value of activity monitors
-    var monitorGlobalAlpha = Float(0.5)
-    
-    // Layout scheme used for positioning the monitors
-    var monitorLayout = 0 { didSet { updateMonitorPositions() } }
-    
     //
     // Textures
     //
@@ -235,8 +200,6 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var alpha = AnimatedFloat(0.0)
     var noise = AnimatedFloat(0.0)
-    
-    var monitorAlpha: [AnimatedFloat] = []
     
     // Animation variables for smooth texture zooming
     var cutoutX1 = AnimatedFloat.init()
@@ -363,44 +326,6 @@ class Renderer: NSObject, MTKViewDelegate {
         var nr = Int(shaderOptions.scanlines)
         if scanlineFilterGallery.count <= nr || scanlineFilterGallery[nr] == nil { nr = 0 }
         return scanlineFilterGallery[nr]!
-    }
-
-    //
-    // Managing activity monitors
-    //
-
-    func fadeIn(monitor nr: Int, steps: Int = 40) {
-
-        assert(nr < monitors.count)
-        
-        monitorAlpha[nr].target = 1.0
-        monitorAlpha[nr].steps = steps
-        animates |= AnimationType.monitors
-    }
-        
-    func fadeOut(monitor nr: Int, steps: Int = 40) {
-
-        assert(nr < monitors.count)
-        
-        monitorAlpha[nr].target = 0.0
-        monitorAlpha[nr].steps = steps
-        animates |= AnimationType.monitors
-    }
-
-    func fadeOutMonitors() {
-
-        for i in 0 ..< monitors.count { fadeOut(monitor: i) }
-    }
-
-    func updateMonitorAlphas() {
-        
-        for i in 0 ..< monitors.count where i < monitorEnabled.count {
-            if drawActivityMonitors && monitorEnabled[i] {
-                fadeIn(monitor: i)
-            } else {
-                fadeOut(monitor: i)
-            }
-        }
     }
     
     //
@@ -532,7 +457,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
         if canvas.isTransparent { splashScreen.render() }
         if canvas.isVisible { canvas.render2D() }
-
+        if monis.drawActivityMonitors { monis.render2D() }
+        
         /*
         // Configure vertex shader
         commandEncoder.setVertexBytes(&vertexUniforms2D,
@@ -550,6 +476,7 @@ class Renderer: NSObject, MTKViewDelegate {
         */
         
         // Draw activity monitors
+        /*
         if drawActivityMonitors {
             
             for i in 0 ... monitors.count where monitorAlpha[i].current != 0.0 {
@@ -561,6 +488,7 @@ class Renderer: NSObject, MTKViewDelegate {
                 monitors[i].draw(commandEncoder, matrix: canvas.vertexUniforms3D.mvp)
             }
         }
+        */
         
         endFrame()
     }
@@ -579,6 +507,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
         if canvas.isTransparent { splashScreen.render() }
         if canvas.isVisible { canvas.render3D() }
+        if monis.drawActivityMonitors { monis.render2D() }
         
         if renderForeground {
 
@@ -602,6 +531,7 @@ class Renderer: NSObject, MTKViewDelegate {
             */
             
             // Draw activity monitors
+            /*
             if drawActivityMonitors {
                 
                 for i in 0 ... monitors.count where monitorAlpha[i].current != 0.0 {
@@ -613,6 +543,7 @@ class Renderer: NSObject, MTKViewDelegate {
                     monitors[i].draw(commandEncoder, matrix: canvas.vertexUniforms3D.mvp)
                 }
             }
+            */
         }
         
         endFrame()

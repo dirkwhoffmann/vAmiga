@@ -129,9 +129,9 @@ extension Renderer {
         if (animates & AnimationType.monitors) != 0 {
             
             cont = false
-            for i in 0 ..< monitorAlpha.count {
-                monitorAlpha[i].move()
-                if monitorAlpha[i].animates() { cont = true }
+            for i in 0 ..< monis.monitorAlpha.count {
+                monis.monitorAlpha[i].move()
+                if monis.monitorAlpha[i].animates() { cont = true }
             }
 
             // Check if animation has terminated

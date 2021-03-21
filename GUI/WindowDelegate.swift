@@ -88,7 +88,7 @@ extension MyController: NSWindowDelegate {
     
     public func windowDidEnterFullScreen(_ notification: Notification) {
 
-        renderer.updateMonitorPositions()
+        renderer.monis.updateMonitorPositions()
         track()
     }
     
@@ -101,7 +101,7 @@ extension MyController: NSWindowDelegate {
     
     public func windowDidExitFullScreen(_ notification: Notification) {
 
-        renderer.updateMonitorPositions()
+        renderer.monis.updateMonitorPositions()
         // for m in renderer.monitors { m.isHidden = false }
         track()
     }
