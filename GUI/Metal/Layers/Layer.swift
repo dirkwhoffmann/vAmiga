@@ -17,8 +17,8 @@ class Layer: NSObject {
     var commandEncoder: MTLRenderCommandEncoder { return renderer.commandEncoder }
     
     // Alpha channel parameters
-    var alpha = 0
-    var targetAlpha = 0
+    var alpha = 0.0
+    var targetAlpha = 0.0
     
     // Time until alpha is supposed to reach targetAlpha in seconds
     var delay = 0.2
@@ -41,14 +41,14 @@ class Layer: NSObject {
     //
         
     // Informs about the visual state of this layer
-    var isVisible: Bool { return alpha > 0 }
-    var isOpaque: Bool { return alpha == 0xFF; }
-    var isTransparent: Bool { return alpha < 0xFF; }
+    var isVisible: Bool { return alpha > 0.0 }
+    var isOpaque: Bool { return alpha == 1.0; }
+    var isTransparent: Bool { return alpha < 1.0; }
     var isAnimating: Bool { return alpha != targetAlpha; }
     var isFadingIn: Bool { return targetAlpha > alpha; }
     var isFadingOut: Bool { return targetAlpha < alpha; }
     
-    var floatAlpha: Float { return alpha < 0 ? 0 : alpha > 0xFF ? 1.0 : Float(alpha) / 0xFF }
+    var clampedAlpha: Double { return alpha < 0 ? 0 : alpha > 1.0 ? 1.0 : alpha }
     
     //
     // Opening and closing
@@ -56,8 +56,8 @@ class Layer: NSObject {
     
     func open(delay: Double) { self.delay = delay; open(); }
     func close(delay: Double) { self.delay = delay; close(); }
-    func open() { targetAlpha = 0xFF }
-    func close() { targetAlpha = 0x00 }
+    func open() { targetAlpha = 1.0 }
+    func close() { targetAlpha = 0.0 }
     func toggle() { isVisible ? close() : open(); }
 
     //
@@ -71,11 +71,11 @@ class Layer: NSObject {
             let delta = 1.0 / 60.0
             
             if alpha < targetAlpha {
-                alpha += Int(0xFF * delta / delay)
+                alpha += delta / delay
                 if alpha > targetAlpha { alpha = targetAlpha }
             }
             if alpha > targetAlpha {
-                alpha -= Int(0xFF * delta / delay)
+                alpha -= delta / delay
                 if alpha < targetAlpha { alpha = targetAlpha }
             }
             
