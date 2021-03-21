@@ -69,23 +69,26 @@ extension Renderer {
         track()
                 
         // Texture usages
-        let r: MTLTextureUsage = [ .shaderRead ]
+        // let r: MTLTextureUsage = [ .shaderRead ]
 
         // Background texture used in window mode
+        /*
         let img = NSImage.init(named: "background")!
         bgTexture = img.toTexture(device: device, vflip: false)
         
         metalAssert(bgTexture != nil,
                     "The background texture could not be allocated.")
+        */
         
         // Background texture used in fullscreen mode
+        /*
         let c1 = (0x00, 0x00, 0x00, 0xFF)
         let c2 = (0x44, 0x44, 0x44, 0xFF)
         bgFullscreenTexture = device.makeTexture(size: TextureSize.background,
                                                  gradient: [c1, c2], usage: r)
         metalAssert(bgFullscreenTexture != nil,
                     "The fullscreen texture could not be allocated.")
-
+        */
         canvas.buildTextures()
     }
 

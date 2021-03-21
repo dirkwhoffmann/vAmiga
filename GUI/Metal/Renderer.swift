@@ -20,8 +20,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var prefs: Preferences { return parent.pref }
     var config: Configuration { return parent.config }
     
-    /* Number of drawn frames since power up.
-     */
+    // Number of drawn frames since power up
     var frames: Int64 = 0
     
     /* Synchronization semaphore. The semaphore is locked in function draw()
@@ -68,71 +67,16 @@ class Renderer: NSObject, MTKViewDelegate {
     var monis: Monitors! = nil
     
     //
-    // Buffers and uniforms
-    //
-        
-    //
     // Textures
     //
 
     // Background textures
-    var bgTexture: MTLTexture! = nil
-    var bgFullscreenTexture: MTLTexture! = nil
+    // var bgTexture: MTLTexture! = nil
+    // var bgFullscreenTexture: MTLTexture! = nil
 
     // Texture to hold the pixel depth information
     var depthTexture: MTLTexture! = nil
-    
-    /* Long and short frame textures (raw data from emulator, 1024 x 512)
-     * This texture is filled with the screen buffer data from the emulator.
-     * The texture is updated in function updateTexture() which is called
-     * periodically in drawRect().
-     */
-    // var longFrameTexture: MTLTexture! = nil
-    // var shortFrameTexture: MTLTexture! = nil
-    
-    /* Merge texture (1024 x 1024)
-     * The long frame and short frame textures are merged into this one.
-     */
-    // var mergeTexture: MTLTexture! = nil
-    
-    /* Bloom textures to emulate blooming (512 x 512)
-     * To emulate a bloom effect, the C64 texture is first split into it's
-     * R, G, and B parts. Each texture is then run through a Gaussian blur
-     * filter with a large radius. These blurred textures are passed into
-     * the fragment shader as secondary textures where they are recomposed
-     * with the upscaled primary texture.
-     */
-    /*
-    var bloomTextureR: MTLTexture! = nil
-    var bloomTextureG: MTLTexture! = nil
-    var bloomTextureB: MTLTexture! = nil
-    */
-    
-    /* Lowres enhancement texture (experimental)
-     * Trying to use in-texture upscaling to enhance lowres mode
-     */
-    // var lowresEnhancedTexture: MTLTexture! = nil
-    
-    /* Upscaled emulator texture (2048 x 2048)
-     * In the first texture processing stage, the emulator texture is bumped up
-     * by a factor of 4. The user can choose between bypass upscaling which
-     * simply replaces each pixel by a 4x4 quad or more sophisticated upscaling
-     * algorithms such as xBr.
-     */
-    // var upscaledTexture: MTLTexture! = nil
-    
-    /* Upscaled texture with scanlines (2048 x 2048)
-     * In the second texture processing stage, a scanline effect is applied to
-     * the upscaled texture.
-     */
-    // var scanlineTexture: MTLTexture! = nil
-    
-    /* Dotmask texture (variable size)
-     * This texture is used by the fragment shader to emulate a dotmask
-     * effect.
-     */
-    // var dotMaskTexture: MTLTexture! = nil
-        
+
     //
     // Kernels (shaders)
     //
@@ -212,7 +156,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let descriptor = MTLRenderPassDescriptor.init()
         descriptor.colorAttachments[0].texture = drawable.texture
-        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.95, 0.95, 0.95, 1)
+        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
         descriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
         descriptor.colorAttachments[0].storeAction = MTLStoreAction.store
         
@@ -230,9 +174,10 @@ class Renderer: NSObject, MTKViewDelegate {
                                          length: MemoryLayout<ShaderOptions>.stride,
                                          index: 0)
         
-        // Finally, we have to decide for a texture sampler. We use a linear
-        // interpolation sampler, if Gaussian blur is enabled, and a nearest
-        // neighbor sampler if Gaussian blur is disabled.
+        /* Finally, we have to decide for a texture sampler. We use a linear
+         * interpolation sampler, if Gaussian blur is enabled, and a nearest
+         * neighbor sampler if Gaussian blur is disabled.
+         */
         let sampler = shaderOptions.blur > 0 ? samplerLinear : samplerNearest
         commandEncoder?.setFragmentSamplerState(sampler, index: 0)
         
