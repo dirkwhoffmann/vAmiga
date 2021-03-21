@@ -454,6 +454,7 @@ extension MyController {
             inspector?.fullRefresh()
 
         case .POWER_ON:
+            // renderer.canvas.alpha.set(0.0)
             renderer.canvas.open(delay: 1.5)
             serialIn = ""
             serialOut = ""
