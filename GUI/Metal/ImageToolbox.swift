@@ -275,10 +275,10 @@ public extension NSImage {
         return data
     }
     
-    func toTexture(device: MTLDevice) -> MTLTexture? {
+    func toTexture(device: MTLDevice, vflip: Bool = true) -> MTLTexture? {
  
         guard let (_, width, height) = cgImageWH() else { return nil }
-        guard let data = toData(vflip: true) else { return nil }
+        guard let data = toData(vflip: vflip) else { return nil }
 
         // Use a texture descriptor to create a texture
         let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(

@@ -183,5 +183,7 @@ extension MyController {
         frame.origin.y -= correction
         frame.size = newsize
         window!.setFrame(frame, display: true)
+        
+        track("New size: \(frame.size)")
     }
 }

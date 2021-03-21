@@ -217,6 +217,9 @@ class Renderer: NSObject, MTKViewDelegate {
     // Indicates if an animation is currently performed
     var animates = 0
     
+    // Indicates if the splash screen should be rendered
+    var drawSplashScreen = true
+    
     // Animation parameters
     var angleX = AnimatedFloat(0.0)
     var angleY = AnimatedFloat(0.0)
@@ -276,7 +279,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func updateBgTexture(bytes: UnsafeMutablePointer<UInt32>) {
 
-        bgTexture.replace(w: 512, h: 512, buffer: bytes)
+        // bgTexture.replace(w: 512, h: 512, buffer: bytes)
     }
     
     func updateTexture() {
@@ -543,23 +546,26 @@ class Renderer: NSObject, MTKViewDelegate {
     func drawScene3D() {
 
         let paused = parent.amiga.paused
-        let poweredOff = parent.amiga.poweredOff
-        let renderBackground = poweredOff || fullscreen
-        let renderForeground = alpha.current > 0.0
+        // let poweredOff = parent.amiga.poweredOff
+        // let renderBackground = poweredOff || fullscreen
+        let renderForeground = alpha.clamped > 0.0
 
         // Perform a single animation step
         if animates != 0 { performAnimationStep() }
 
         startFrame()
 
-        if renderBackground {
-            
+        // if renderBackground {
+        if drawSplashScreen {
+
             // Update background texture
+            /*
             if !fullscreen {
                 let buffer = parent.amiga.denise.noise
                 updateBgTexture(bytes: buffer!)
             }
-
+            */
+            
             // Configure vertex shader
             vertexUniformsBg.mvp = matrix_identity_float4x4
             commandEncoder.setVertexBytes(&vertexUniformsBg,
@@ -572,7 +578,7 @@ class Renderer: NSObject, MTKViewDelegate {
                 commandEncoder.setFragmentTexture(bgFullscreenTexture, index: 0)
                 commandEncoder.setFragmentTexture(bgFullscreenTexture, index: 1)
             } else {
-                fragmentUniforms.alpha = noise.current
+                fragmentUniforms.alpha = 1.0 // noise.current
                 commandEncoder.setFragmentTexture(bgTexture, index: 0)
                 commandEncoder.setFragmentTexture(bgTexture, index: 1)
             }
@@ -591,7 +597,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                           length: MemoryLayout<VertexUniforms>.stride,
                                           index: 1)
             // Configure fragment shader
-            fragmentUniforms.alpha = paused ? 0.5 : alpha.current
+            fragmentUniforms.alpha = paused ? 0.5 : alpha.clamped
             commandEncoder.setFragmentTexture(scanlineTexture, index: 0)
             commandEncoder.setFragmentTexture(bloomTextureR, index: 1)
             commandEncoder.setFragmentTexture(bloomTextureG, index: 2)

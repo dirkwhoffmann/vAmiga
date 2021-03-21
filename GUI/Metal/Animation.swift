@@ -23,6 +23,7 @@ class AnimatedFloat {
     var delta = Float(0.0)
     var steps = 1 { didSet { delta = (target - current) / Float(steps) } }
     var target: Float { didSet { delta = (target - current) / Float(steps) } }
+    var clamped: Float { return current < 0.0 ? 0.0 : current > 1.0 ? 1.0 : current }
 
     init(current: Float = 0.0, target: Float = 0.0) {
 
@@ -315,7 +316,7 @@ extension Renderer {
 
         noise.target = 0.0
         noise.steps = steps
-        blend(from: 0.0, to: 1.0, steps: steps)
+        blend(from: -2.0, to: 1.0, steps: steps)
     }
 
     func blendOut(steps: Int = 40) {

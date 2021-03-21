@@ -198,7 +198,12 @@ extension Renderer {
         let rwtp: MTLTextureUsage = [ .shaderRead, .shaderWrite, .renderTarget, .pixelFormatView ]
 
         // Background texture used in window mode
+        /*
         bgTexture = device.makeTexture(size: TextureSize.background, usage: r)
+         */
+        let img = NSImage.init(named: "background")!
+        bgTexture = img.toTexture(device: device, vflip: false)
+        
         metalAssert(bgTexture != nil,
                     "The background texture could not be allocated.")
         

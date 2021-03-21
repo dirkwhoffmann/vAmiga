@@ -457,7 +457,7 @@ extension MyController {
             serialIn = ""
             serialOut = ""
             virtualKeyboard = nil
-            renderer.zoomIn()
+            renderer.blendIn(steps: 120) // zoomIn()
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()
 
