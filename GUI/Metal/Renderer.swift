@@ -38,7 +38,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var queue: MTLCommandQueue! = nil
     var pipeline: MTLRenderPipelineState! = nil
     var depthState: MTLDepthStencilState! = nil
-    var commandBuffer: MTLCommandBuffer! = nil
+    // var commandBuffer: MTLCommandBuffer! = nil
     var commandEncoder: MTLRenderCommandEncoder! = nil
     var drawable: CAMetalDrawable! = nil
     
@@ -130,7 +130,7 @@ class Renderer: NSObject, MTKViewDelegate {
     //  Drawing
     //
 
-    func makeCommandEncoder() -> MTLRenderCommandEncoder? {
+    func makeCommandEncoder(commandBuffer: MTLCommandBuffer) -> MTLRenderCommandEncoder? {
         
         let descriptor = MTLRenderPassDescriptor.init()
         descriptor.colorAttachments[0].texture = drawable.texture
@@ -207,22 +207,22 @@ class Renderer: NSObject, MTKViewDelegate {
             
             let flat = fullscreen && !parent.pref.keepAspectRatio
             
-            commandBuffer = queue.makeCommandBuffer()
-            if renderSplash { splashScreen.render(buffer: commandBuffer) }
-            if renderCanvas { canvas.render(buffer: commandBuffer) }
-            if renderMonitors { monis.render(buffer: commandBuffer) }
+            let buffer = queue.makeCommandBuffer()!
+            if renderSplash { splashScreen.render(buffer: buffer) }
+            if renderCanvas { canvas.render(buffer: buffer) }
+            if renderMonitors { monis.render(buffer: buffer) }
             
             if animates != 0 { performAnimationStep() }
             
-            commandEncoder = makeCommandEncoder()
+            commandEncoder = makeCommandEncoder(commandBuffer: buffer)
             if renderSplash { splashScreen.render(encoder: commandEncoder, flat: flat) }
             if renderCanvas { canvas.render(encoder: commandEncoder, flat: flat) }
             if renderMonitors { monis.render(encoder: commandEncoder, flat: flat) }
             commandEncoder.endEncoding()
             
-            commandBuffer.addCompletedHandler { _ in self.semaphore.signal() }
-            commandBuffer.present(drawable)
-            commandBuffer.commit()
+            buffer.addCompletedHandler { _ in self.semaphore.signal() }
+            buffer.present(drawable)
+            buffer.commit()
         }
     }
 }

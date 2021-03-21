@@ -18,12 +18,7 @@ class Layer: NSObject {
     
     // Alpha channel
     var alpha: AnimatedFloat = AnimatedFloat.init()
-    // var oldAlpha = 0.0
-    // var oldTargetAlpha = 0.0
-    
-    // Time until alpha is supposed to reach targetAlpha in seconds
-    // var delay = 0.2
-    
+
     //
     // Initializing
     //
