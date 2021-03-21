@@ -301,6 +301,8 @@ class Monitor: DialogController {
     
     @IBAction func monOpacityAction(_ sender: NSSlider!) {
         
+        track("alpha = \(sender.floatValue)")
+        
         parent.renderer.monis.monitorGlobalAlpha = sender.floatValue / 100.0
         refresh()
     }

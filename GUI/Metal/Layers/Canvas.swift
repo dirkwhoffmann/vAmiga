@@ -103,8 +103,7 @@ class Canvas: Layer {
     override init(view: MTKView, device: MTLDevice, renderer: Renderer) {
 
         super.init(view: view, device: device, renderer: renderer)
-
-        track()
+        alpha = -255
     }
     
     //
@@ -154,11 +153,12 @@ class Canvas: Layer {
     // Rendering
     //
     
+    /*
     override func open() {
         
-        alpha = -255
         targetAlpha = 255
     }
+    */
     
     override func render(buffer: MTLCommandBuffer) {
         

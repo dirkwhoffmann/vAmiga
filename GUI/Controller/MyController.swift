@@ -264,7 +264,7 @@ extension MyController {
 
             // Open the Rom dialog
             openConfigurator(tab: "Roms")
-            renderer.zoomOut()
+            // renderer.zoomOut()
         }
 
         // Create speed monitor and get the timer tunning

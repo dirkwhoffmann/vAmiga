@@ -38,15 +38,13 @@ class Monitors: Layer {
 
     var monitors: [ActivityMonitor] = []
     var monitorAlpha: [AnimatedFloat] = []
+    var monitorGlobalAlpha = Float(0.5)
     
     // Global enable switch for all activity monitors
     var drawActivityMonitors = false { didSet { updateMonitorAlphas() } }
 
     // Individual enable switch for each activity monitor
     var monitorEnabled: [Bool] = [] { didSet { updateMonitorAlphas() } }
-    
-    // Global alpha value of activity monitors
-    var monitorGlobalAlpha = Float(0.5)
     
     // Layout scheme used for positioning the monitors
     var monitorLayout = 0 { didSet { updateMonitorPositions() } }
