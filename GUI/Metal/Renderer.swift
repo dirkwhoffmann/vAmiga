@@ -9,7 +9,6 @@
 
 import Metal
 import MetalKit
-// import MetalPerformanceShaders
 
 class Renderer: NSObject, MTKViewDelegate {
     
@@ -34,13 +33,9 @@ class Renderer: NSObject, MTKViewDelegate {
     // Metal objects
     //
     
-    var library: MTLLibrary! = nil
     var queue: MTLCommandQueue! = nil
     var pipeline: MTLRenderPipelineState! = nil
     var depthState: MTLDepthStencilState! = nil
-    // var commandBuffer: MTLCommandBuffer! = nil
-    // var commandEncoder: MTLRenderCommandEncoder! = nil
-    var drawable: CAMetalDrawable! = nil
     
     //
     // Metal layers
@@ -103,7 +98,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var cutoutY2 = AnimatedFloat.init()
 
     // Part of the texture that is currently visible
-    var textureRect = CGRect.init() { didSet { buildVertexBuffer() } }
+    var textureRect = CGRect.init() { didSet { buildVertexBuffers() } }
             
     // Is set to true when fullscreen mode is entered
     var fullscreen = false
@@ -130,7 +125,8 @@ class Renderer: NSObject, MTKViewDelegate {
     //  Drawing
     //
 
-    func makeCommandEncoder(commandBuffer: MTLCommandBuffer) -> MTLRenderCommandEncoder? {
+    func makeCommandEncoder(_ commandBuffer: MTLCommandBuffer,
+                            _ drawable: CAMetalDrawable) -> MTLRenderCommandEncoder? {
         
         let descriptor = MTLRenderPassDescriptor.init()
         descriptor.colorAttachments[0].texture = drawable.texture
@@ -192,14 +188,12 @@ class Renderer: NSObject, MTKViewDelegate {
     func draw(in view: MTKView) {
         
         frames += 1
-        
         splashScreen.update(frames: frames)
         canvas.update(frames: frames)
 
         semaphore.wait()
-        drawable = metalLayer.nextDrawable()
         
-        if drawable != nil {
+        if let drawable = metalLayer.nextDrawable() {
             
             let renderSplash = canvas.isTransparent
             let renderCanvas = canvas.isVisible
@@ -214,15 +208,16 @@ class Renderer: NSObject, MTKViewDelegate {
             
             if animates != 0 { performAnimationStep() }
             
-            let commandEncoder = makeCommandEncoder(commandBuffer: buffer)!
-            if renderSplash { splashScreen.render(encoder: commandEncoder, flat: flat) }
-            if renderCanvas { canvas.render(encoder: commandEncoder, flat: flat) }
-            if renderMonitors { monis.render(encoder: commandEncoder, flat: flat) }
-            commandEncoder.endEncoding()
-            
-            buffer.addCompletedHandler { _ in self.semaphore.signal() }
-            buffer.present(drawable)
-            buffer.commit()
+            if let commandEncoder = makeCommandEncoder(buffer, drawable) {
+                if renderSplash { splashScreen.render(encoder: commandEncoder, flat: flat) }
+                if renderCanvas { canvas.render(encoder: commandEncoder, flat: flat) }
+                if renderMonitors { monis.render(encoder: commandEncoder, flat: flat) }
+                commandEncoder.endEncoding()
+                
+                buffer.addCompletedHandler { _ in self.semaphore.signal() }
+                buffer.present(drawable)
+                buffer.commit()
+            }
         }
     }
 }

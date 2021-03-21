@@ -9,7 +9,7 @@
 
 extension SplashScreen {
     
-    func buildVertexBuffer() {
+    func buildVertexBuffers() {
         
         bgRect = Node.init(device: device,
                            x: -1.0, y: -1.0, z: 0.99, w: 2.0, h: 2.0,

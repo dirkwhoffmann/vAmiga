@@ -48,10 +48,14 @@ class KernelManager {
     }
     
     internal func buildKernels() {
-        
+    
         let device = renderer.device
-        let library = renderer.library!
-                
+
+        // Shader library
+        library = device.makeDefaultLibrary()
+        renderer.metalAssert(library != nil,
+                             "The Shader Library could not be built.")
+        
         let mc = (TextureSize.merged.width, TextureSize.merged.height)
         let uc = (TextureSize.upscaled.width, TextureSize.upscaled.height)
 
@@ -85,6 +89,10 @@ class KernelManager {
     // Managing kernels
     //
 
+    func makeFunction(name: String) -> MTLFunction? {
+        return library.makeFunction(name: name)
+    }
+    
     // Tries to select a new enhancer
     func selectEnhancer(_ nr: Int) -> Bool {
         

@@ -23,7 +23,28 @@ extension Renderer {
 
         track()
 
+        shaderOptions = ShaderOptions.init(
+            
+            blur: config.blur,
+            blurRadius: config.blurRadius,
+            bloom: config.bloom,
+            bloomRadius: config.bloomRadius,
+            bloomBrightness: config.bloomBrightness,
+            bloomWeight: config.bloomWeight,
+            flicker: config.flicker,
+            flickerWeight: config.flickerWeight,
+            dotMask: config.dotMask,
+            dotMaskBrightness: config.dotMaskBrightness,
+            scanlines: config.scanlines,
+            scanlineBrightness: config.scanlineBrightness,
+            scanlineWeight: config.scanlineWeight,
+            disalignment: config.disalignment,
+            disalignmentH: config.disalignmentH,
+            disalignmentV: config.disalignmentV
+        )
+        
         buildMetal()
+        kernelManager.buildKernels()
 
         splashScreen = SplashScreen.init(view: mtkView, device: device, renderer: self)
         canvas = Canvas.init(view: mtkView, device: device, renderer: self)
@@ -31,11 +52,10 @@ extension Renderer {
         
         canvas.buildTextures()
         buildSamplers()
-        buildKernels()
         canvas.buildDotMasks()
         buildPipeline()
-        buildVertexBuffer()
-
+        buildVertexBuffers()
+        
         reshape()
     }
 
@@ -57,11 +77,6 @@ extension Renderer {
         queue = device.makeCommandQueue()
         metalAssert(queue != nil,
                     "The Command Queue could not be created.")
-
-        // Shader library
-        library = device.makeDefaultLibrary()
-        metalAssert(library != nil,
-                    "The Shader Library could not be built.")
     }
     
     internal func buildSamplers() {
@@ -82,69 +97,11 @@ extension Renderer {
         samplerNearest = device.makeSamplerState(descriptor: descriptor)
     }
 
-    internal func buildKernels() {
-        
-        // precondition(library != nil)
-        
-        shaderOptions = ShaderOptions.init(
-            blur: config.blur,
-            blurRadius: config.blurRadius,
-            bloom: config.bloom,
-            bloomRadius: config.bloomRadius,
-            bloomBrightness: config.bloomBrightness,
-            bloomWeight: config.bloomWeight,
-            flicker: config.flicker,
-            flickerWeight: config.flickerWeight,
-            dotMask: config.dotMask,
-            dotMaskBrightness: config.dotMaskBrightness,
-            scanlines: config.scanlines,
-            scanlineBrightness: config.scanlineBrightness,
-            scanlineWeight: config.scanlineWeight,
-            disalignment: config.disalignment,
-            disalignmentH: config.disalignmentH,
-            disalignmentV: config.disalignmentV
-        )
-        
-        kernelManager.buildKernels()
-        
-        /*
-        let mc = (TextureSize.merged.width, TextureSize.merged.height)
-        let uc = (TextureSize.upscaled.width, TextureSize.upscaled.height)
-
-        // Build the merge filters
-        mergeFilter = MergeFilter.init(device: device, library: library, cutout: mc)
-        mergeBypassFilter = MergeBypassFilter.init(device: device, library: library, cutout: mc)
-        
-        // Build low-res enhancers (first-pass, in-texture upscaling)
-        enhancerGallery[0] = BypassFilter.init(device: device, library: library, cutout: mc)
-        enhancerGallery[1] = InPlaceEpxScaler.init(device: device, library: library, cutout: mc)
-        enhancerGallery[2] = InPlaceXbrScaler.init(device: device, library: library, cutout: mc)
-        enhancer = enhancerGallery[0]
-
-        // Build upscalers (second-pass upscaling)
-        upscalerGallery[0] = BypassUpscaler.init(device: device, library: library, cutout: uc)
-        upscalerGallery[1] = EPXUpscaler.init(device: device, library: library, cutout: uc)
-        upscalerGallery[2] = XBRUpscaler.init(device: device, library: library, cutout: uc)
-        upscaler = upscalerGallery[0]
-        
-        // Build bloom filters
-        bloomFilterGallery[0] = BypassFilter.init(device: device, library: library, cutout: uc)
-        bloomFilterGallery[1] = SplitFilter.init(device: device, library: library, cutout: uc)
-
-        // Build scanline filters
-        scanlineFilterGallery[0] = BypassFilter.init(device: device, library: library, cutout: uc)
-        scanlineFilterGallery[1] = SimpleScanlines(device: device, library: library, cutout: uc)
-        scanlineFilterGallery[2] = BypassFilter.init(device: device, library: library, cutout: uc)
-        */
-    }
-
     func buildPipeline() {
 
-        precondition(library != nil)
-
         // Get vertex and fragment shader from library
-        let vertexFunc = library.makeFunction(name: "vertex_main")
-        let fragmentFunc = library.makeFunction(name: "fragment_main")
+        let vertexFunc = kernelManager.makeFunction(name: "vertex_main")
+        let fragmentFunc = kernelManager.makeFunction(name: "fragment_main")
         metalAssert(vertexFunc != nil && fragmentFunc != nil,
                     "Cannot create Render Pipeline function objects.")
         
@@ -196,42 +153,11 @@ extension Renderer {
         }
     }
 
-    func buildVertexBuffer() {
+    func buildVertexBuffers() {
 
-        splashScreen.buildVertexBuffer()
-        canvas.buildVertexBuffer()
-
-        /*
-        bgRect = Node.init(device: device,
-                           x: -1.0, y: -1.0, z: 0.99, w: 2.0, h: 2.0,
-                           t: NSRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
-        */
-        /*
-        quad2D = Node.init(device: device,
-                           x: -1.0, y: -1.0, z: 0.0, w: 2.0, h: 2.0,
-                           t: textureRect)
-
-        quad3D = Quad.init(device: device,
-                           x1: -0.64, y1: -0.48, z1: -0.64,
-                           x2: 0.64, y2: 0.48, z2: 0.64,
-                           t: textureRect)
-         */
+        splashScreen.buildVertexBuffers()
+        canvas.buildVertexBuffers()
     }
-
-    /*
-    func buildMatricesBg() {
-
-        let model  = matrix_identity_float4x4
-        let view   = matrix_identity_float4x4
-        let aspect = Float(size.width) / Float(size.height)
-        let proj   = Renderer.perspectiveMatrix(fovY: (Float(65.0 * (.pi / 180.0))),
-                                       aspect: aspect,
-                                       nearZ: 0.1,
-                                       farZ: 100.0)
-
-        vertexUniformsBg.mvp = proj * view * model
-    }
-    */
     
     func buildMatrices2D() {
 
