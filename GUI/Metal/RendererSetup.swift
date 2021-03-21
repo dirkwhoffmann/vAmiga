@@ -151,7 +151,7 @@ extension Renderer {
 
     internal func buildKernels() {
         
-        precondition(library != nil)
+        // precondition(library != nil)
         
         shaderOptions = ShaderOptions.init(
             blur: config.blur,
@@ -172,6 +172,9 @@ extension Renderer {
             disalignmentV: config.disalignmentV
         )
         
+        kernelManager.buildKernels()
+        
+        /*
         let mc = (TextureSize.merged.width, TextureSize.merged.height)
         let uc = (TextureSize.upscaled.width, TextureSize.upscaled.height)
 
@@ -199,6 +202,7 @@ extension Renderer {
         scanlineFilterGallery[0] = BypassFilter.init(device: device, library: library, cutout: uc)
         scanlineFilterGallery[1] = SimpleScanlines(device: device, library: library, cutout: uc)
         scanlineFilterGallery[2] = BypassFilter.init(device: device, library: library, cutout: uc)
+        */
     }
 
     func buildDotMasks() {

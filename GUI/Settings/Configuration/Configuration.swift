@@ -356,10 +356,10 @@ class Configuration {
         didSet { renderer.updateTextureRect() }
     }
     var enhancer = VideoDefaults.tft.enhancer {
-        didSet { if !renderer.selectEnhancer(enhancer) { enhancer = oldValue } }
+        didSet { if !renderer.kernelManager.selectEnhancer(enhancer) { enhancer = oldValue } }
     }
     var upscaler = VideoDefaults.tft.upscaler {
-        didSet { if !renderer.selectUpscaler(upscaler) { upscaler = oldValue } }
+        didSet { if !renderer.kernelManager.selectUpscaler(upscaler) { upscaler = oldValue } }
     }
     var blur = VideoDefaults.tft.blur {
         didSet { renderer.shaderOptions.blur = blur }

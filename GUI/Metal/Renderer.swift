@@ -70,20 +70,7 @@ class Renderer: NSObject, MTKViewDelegate {
     //
     // Buffers and uniforms
     //
-    
-    // var quad2D: Node?
-    // var quad3D: Quad?
-            
-    // var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
-    // var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
-    
-    /*
-    var fragmentUniforms = FragmentUniforms(alpha: 1.0,
-                                            dotMaskWidth: 0,
-                                            dotMaskHeight: 0,
-                                            scanlineDistance: 0)
-    */
-    
+        
     var mergeUniforms = MergeUniforms(longFrameScale: 1.0,
                                       shortFrameScale: 1.0)
 
@@ -147,28 +134,12 @@ class Renderer: NSObject, MTKViewDelegate {
      */
     var dotMaskTexture: MTLTexture! = nil
         
-    // An instance of the merge filter and the merge bypass filter
-    var mergeFilter: MergeFilter! = nil
-    var mergeBypassFilter: MergeBypassFilter! = nil
-
-    // Array holding all available lowres enhancers
-    var enhancerGallery = [ComputeKernel?](repeating: nil, count: 3)
+    //
+    // Kernels (shaders)
+    //
     
-    // The currently selected enhancer
-    var enhancer: ComputeKernel!
-
-    // Array holding all available upscalers
-    var upscalerGallery = [ComputeKernel?](repeating: nil, count: 3)
-
-    // The currently selected enhancer
-    var upscaler: ComputeKernel!
-
-    // Array holding all available bloom filters
-    var bloomFilterGallery = [ComputeKernel?](repeating: nil, count: 2)
-    
-    // Array holding all available scanline filters
-    var scanlineFilterGallery = [ComputeKernel?](repeating: nil, count: 3)
-    
+    var kernelManager: KernelManager! = nil
+ 
     // Array holding dotmask preview images
     var dotmaskImages = [NSImage?](repeating: nil, count: 5)
     
@@ -234,8 +205,9 @@ class Renderer: NSObject, MTKViewDelegate {
         self.mtkView = view
         self.device = device
         self.parent = controller
+        
         super.init()
-
+        self.kernelManager = KernelManager.init(renderer: self)
         setupMetal()
 
         mtkView.device = device
@@ -291,46 +263,6 @@ class Renderer: NSObject, MTKViewDelegate {
     }
         
     //
-    // Managing kernels
-    //
-
-    // Tries to select a new enhancer
-    func selectEnhancer(_ nr: Int) -> Bool {
-        
-        if nr < enhancerGallery.count && enhancerGallery[nr] != nil {
-            enhancer = enhancerGallery[nr]!
-            return true
-        }
-        return false
-    }
-  
-    // Tries to select a new upscaler
-    func selectUpscaler(_ nr: Int) -> Bool {
-        
-        if nr < upscalerGallery.count && upscalerGallery[nr] != nil {
-            upscaler = upscalerGallery[nr]!
-            return true
-        }
-        return false
-    }
-    
-    // Returns the compute kernel of the currently selected bloom filter
-    func currentBloomFilter() -> ComputeKernel {
-
-        var nr = Int(shaderOptions.bloom)
-        if bloomFilterGallery.count <= nr || bloomFilterGallery[nr] == nil { nr = 0 }
-        return bloomFilterGallery[nr]!
-    }
-
-    // Returns the compute kernel of the currently selected scanline filter
-    func currentScanlineFilter() -> ComputeKernel {
-
-        var nr = Int(shaderOptions.scanlines)
-        if scanlineFilterGallery.count <= nr || scanlineFilterGallery[nr] == nil { nr = 0 }
-        return scanlineFilterGallery[nr]!
-    }
-    
-    //
     //  Drawing
     //
 
@@ -346,33 +278,33 @@ class Renderer: NSObject, MTKViewDelegate {
             mergeUniforms.longFrameScale = (flickerCnt % 4 >= 2) ? 1.0 : weight
             mergeUniforms.shortFrameScale = (flickerCnt % 4 >= 2) ? weight : 1.0
             
-            mergeFilter.apply(commandBuffer: commandBuffer,
-                              textures: [longFrameTexture,
-                                         shortFrameTexture,
-                                         mergeTexture],
-                              options: &mergeUniforms,
-                              length: MemoryLayout<MergeUniforms>.stride)
+            kernelManager.mergeFilter.apply(commandBuffer: commandBuffer,
+                                            textures: [longFrameTexture,
+                                                       shortFrameTexture,
+                                                       mergeTexture],
+                                            options: &mergeUniforms,
+                                            length: MemoryLayout<MergeUniforms>.stride)
             
         } else if currLOF {
             
             // Case 2: Non-interlace drawing (two long frames in a row)
-            mergeBypassFilter.apply(commandBuffer: commandBuffer,
+            kernelManager.mergeBypassFilter.apply(commandBuffer: commandBuffer,
                                     textures: [longFrameTexture, mergeTexture])
         } else {
             
             // Case 3: Non-interlace drawing (two short frames in a row)
-            mergeBypassFilter.apply(commandBuffer: commandBuffer,
+            kernelManager.mergeBypassFilter.apply(commandBuffer: commandBuffer,
                                     textures: [shortFrameTexture, mergeTexture])
         }
         
         // Compute upscaled texture (first pass, in-texture upscaling)
-        enhancer.apply(commandBuffer: commandBuffer,
+        kernelManager.enhancer.apply(commandBuffer: commandBuffer,
                        source: mergeTexture,
                        target: lowresEnhancedTexture)
 
         // Compute the bloom textures
         if shaderOptions.bloom != 0 {
-            let bloomFilter = currentBloomFilter()
+            let bloomFilter = kernelManager.currentBloomFilter()
             bloomFilter.apply(commandBuffer: commandBuffer,
                               textures: [mergeTexture,
                                          bloomTextureR,
@@ -380,9 +312,9 @@ class Renderer: NSObject, MTKViewDelegate {
                                          bloomTextureB],
                               options: &shaderOptions,
                               length: MemoryLayout<ShaderOptions>.stride)
-
+            
             func applyGauss(_ texture: inout MTLTexture, radius: Float) {
-
+                
                 if #available(OSX 10.13, *) {
                     let gauss = MPSImageGaussianBlur(device: device, sigma: radius)
                     gauss.encode(commandBuffer: commandBuffer,
@@ -395,9 +327,9 @@ class Renderer: NSObject, MTKViewDelegate {
         }
         
         // Compute upscaled texture (second pass)
-        upscaler.apply(commandBuffer: commandBuffer,
-                       source: lowresEnhancedTexture,
-                       target: upscaledTexture)
+        kernelManager.upscaler.apply(commandBuffer: commandBuffer,
+                                     source: lowresEnhancedTexture,
+                                     target: upscaledTexture)
 
         // Blur the upscaled texture
         if #available(OSX 10.13, *), shaderOptions.blur > 0 {
@@ -407,9 +339,9 @@ class Renderer: NSObject, MTKViewDelegate {
                          inPlaceTexture: &upscaledTexture,
                          fallbackCopyAllocator: nil)
         }
-
+        
         // Emulate scanlines
-        let scanlineFilter = currentScanlineFilter()
+        let scanlineFilter = kernelManager.currentScanlineFilter()
         scanlineFilter.apply(commandBuffer: commandBuffer,
                              source: upscaledTexture,
                              target: scanlineTexture,

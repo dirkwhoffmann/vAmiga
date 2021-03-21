@@ -12,7 +12,7 @@ extension ConfigurationController {
     func awakeVideoPrefsFromNib() {
 
         // Check for available enhancers
-        let enhancers = parent.renderer.enhancerGallery
+        let enhancers = parent.renderer.kernelManager.enhancerGallery
         for i in 0 ..< enhancers.count {
             if let item = vidEnhancerPopUp.menu?.item(withTag: i) {
                 item.isEnabled = (enhancers[i] != nil)
@@ -20,7 +20,7 @@ extension ConfigurationController {
         }
 
         // Check for available upscalers
-        let upscalers = parent.renderer.upscalerGallery
+        let upscalers = parent.renderer.kernelManager.upscalerGallery
         for i in 0 ..< upscalers.count {
             if let item = vidUpscalerPopUp.menu?.item(withTag: i) {
                 item.isEnabled = (upscalers[i] != nil)
