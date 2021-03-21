@@ -417,21 +417,6 @@ class Renderer: NSObject, MTKViewDelegate {
                              length: MemoryLayout<ShaderOptions>.stride)
     }
     
-    func startFrame() {
-
-        // createCommandBuffer()
-        runTexturePipeline()
-        createCommandEncoder()
-    }
-
-    /*
-    func createCommandBuffer() {
-
-        commandBuffer = queue.makeCommandBuffer()
-        assert(commandBuffer != nil, "Command buffer must not be nil")
-    }
-    */
-    
     func createCommandEncoder() {
         
         let descriptor = MTLRenderPassDescriptor.init()
@@ -523,8 +508,12 @@ class Renderer: NSObject, MTKViewDelegate {
             let flat = fullscreen && !parent.pref.keepAspectRatio
             
             commandBuffer = queue.makeCommandBuffer()
-            
-            startFrame()
+            if renderSplash { splashScreen.render(buffer: commandBuffer) }
+            if renderCanvas { canvas.render(buffer: commandBuffer); runTexturePipeline() }
+            if renderMonitors { monis.render(buffer: commandBuffer) }
+
+            createCommandEncoder()
+            // startFrame()
         
             if animates != 0 { performAnimationStep() }
 
