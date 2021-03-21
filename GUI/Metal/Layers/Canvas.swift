@@ -242,52 +242,52 @@ class Canvas: Layer {
     }
     
     override func render(encoder: MTLRenderCommandEncoder, flat: Bool) {
-
-        commandEncoder.setFragmentTexture(scanlineTexture, index: 0)
-        commandEncoder.setFragmentTexture(bloomTextureR, index: 1)
-        commandEncoder.setFragmentTexture(bloomTextureG, index: 2)
-        commandEncoder.setFragmentTexture(bloomTextureB, index: 3)
-        commandEncoder.setFragmentTexture(dotMaskTexture, index: 4)
-
+        
+        encoder.setFragmentTexture(scanlineTexture, index: 0)
+        encoder.setFragmentTexture(bloomTextureR, index: 1)
+        encoder.setFragmentTexture(bloomTextureG, index: 2)
+        encoder.setFragmentTexture(bloomTextureB, index: 3)
+        encoder.setFragmentTexture(dotMaskTexture, index: 4)
+        
         if flat {
             
             // Configure the vertex shader
-            commandEncoder.setVertexBytes(&vertexUniforms2D,
-                                          length: MemoryLayout<VertexUniforms>.stride,
-                                          index: 1)
+            encoder.setVertexBytes(&vertexUniforms2D,
+                                   length: MemoryLayout<VertexUniforms>.stride,
+                                   index: 1)
             
             // Configure the fragment shader
             fragmentUniforms.alpha = 1.0
             fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
             fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
             fragmentUniforms.scanlineDistance = Int32(renderer.size.height / 256)
-            commandEncoder.setFragmentBytes(&fragmentUniforms,
-                                            length: MemoryLayout<FragmentUniforms>.stride,
-                                            index: 1)
+            encoder.setFragmentBytes(&fragmentUniforms,
+                                     length: MemoryLayout<FragmentUniforms>.stride,
+                                     index: 1)
             
             // Render
-            quad2D!.drawPrimitives(commandEncoder)
+            quad2D!.drawPrimitives(encoder)
             
         } else {
             
             let animates = renderer.animates
             
             // Configure the vertex shader
-            commandEncoder.setVertexBytes(&vertexUniforms3D,
-                                          length: MemoryLayout<VertexUniforms>.stride,
-                                          index: 1)
+            encoder.setVertexBytes(&vertexUniforms3D,
+                                   length: MemoryLayout<VertexUniforms>.stride,
+                                   index: 1)
             
             // Configure the fragment shader
             fragmentUniforms.alpha = amiga.paused ? Float(0.5) : alpha.clamped
             fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
             fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
             fragmentUniforms.scanlineDistance = Int32(renderer.size.height / 256)
-            commandEncoder.setFragmentBytes(&fragmentUniforms,
-                                            length: MemoryLayout<FragmentUniforms>.stride,
-                                            index: 1)
+            encoder.setFragmentBytes(&fragmentUniforms,
+                                     length: MemoryLayout<FragmentUniforms>.stride,
+                                     index: 1)
             
             // Render (part of) the cube
-            quad3D!.draw(commandEncoder, allSides: animates != 0)
+            quad3D!.draw(encoder, allSides: animates != 0)
         }
     }
 }

@@ -50,7 +50,7 @@ class SplashScreen: Layer {
                                  index: 1)
         
         // Render
-        bgRect!.drawPrimitives(commandEncoder)
+        bgRect!.drawPrimitives(encoder)
         
     }
 }

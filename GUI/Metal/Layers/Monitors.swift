@@ -104,10 +104,10 @@ class Monitors: Layer {
         for i in 0 ... monitors.count where monitorAlpha[i].current != 0.0 {
             
             fragUniforms.alpha = monitorAlpha[i].current * monitorGlobalAlpha
-            commandEncoder.setFragmentBytes(&fragUniforms,
-                                            length: MemoryLayout<FragmentUniforms>.stride,
-                                            index: 1)
-            monitors[i].draw(commandEncoder, matrix: vertexUniforms3D.mvp)
+            encoder.setFragmentBytes(&fragUniforms,
+                                     length: MemoryLayout<FragmentUniforms>.stride,
+                                     index: 1)
+            monitors[i].draw(encoder, matrix: vertexUniforms3D.mvp)
         }
     }
 }

@@ -39,7 +39,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var pipeline: MTLRenderPipelineState! = nil
     var depthState: MTLDepthStencilState! = nil
     // var commandBuffer: MTLCommandBuffer! = nil
-    var commandEncoder: MTLRenderCommandEncoder! = nil
+    // var commandEncoder: MTLRenderCommandEncoder! = nil
     var drawable: CAMetalDrawable! = nil
     
     //
@@ -214,7 +214,7 @@ class Renderer: NSObject, MTKViewDelegate {
             
             if animates != 0 { performAnimationStep() }
             
-            commandEncoder = makeCommandEncoder(commandBuffer: buffer)
+            let commandEncoder = makeCommandEncoder(commandBuffer: buffer)!
             if renderSplash { splashScreen.render(encoder: commandEncoder, flat: flat) }
             if renderCanvas { canvas.render(encoder: commandEncoder, flat: flat) }
             if renderMonitors { monis.render(encoder: commandEncoder, flat: flat) }
