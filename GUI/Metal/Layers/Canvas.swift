@@ -83,6 +83,11 @@ class Canvas: Layer {
                                       index: 1)
 
         // Configure the fragment shader
+        fragmentUniforms.alpha = 1.0
+        fragmentUniforms.dotMaskHeight = Int32(renderer.dotMaskTexture.height)
+        fragmentUniforms.dotMaskWidth = Int32(renderer.dotMaskTexture.width)
+        fragmentUniforms.scanlineDistance = Int32(renderer.size.height / 256)
+        
         commandEncoder.setFragmentTexture(scanlineTexture, index: 0)
         commandEncoder.setFragmentBytes(&fragmentUniforms,
                                         length: MemoryLayout<FragmentUniforms>.stride,
@@ -103,6 +108,10 @@ class Canvas: Layer {
         
         // Configure the fragment shader
         fragmentUniforms.alpha = amiga.paused ? Float(0.5) : Float(alpha) / 0xFF
+        fragmentUniforms.dotMaskHeight = Int32(renderer.dotMaskTexture.height)
+        fragmentUniforms.dotMaskWidth = Int32(renderer.dotMaskTexture.width)
+        fragmentUniforms.scanlineDistance = Int32(renderer.size.height / 256)
+        
         commandEncoder.setFragmentTexture(scanlineTexture, index: 0)
         commandEncoder.setFragmentTexture(bloomTextureR, index: 1)
         commandEncoder.setFragmentTexture(bloomTextureG, index: 2)

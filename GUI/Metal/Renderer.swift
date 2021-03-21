@@ -77,10 +77,12 @@ class Renderer: NSObject, MTKViewDelegate {
     // var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
     // var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
     
+    /*
     var fragmentUniforms = FragmentUniforms(alpha: 1.0,
                                             dotMaskWidth: 0,
                                             dotMaskHeight: 0,
                                             scanlineDistance: 0)
+    */
     
     var mergeUniforms = MergeUniforms(longFrameScale: 1.0,
                                       shortFrameScale: 1.0)
@@ -332,17 +334,8 @@ class Renderer: NSObject, MTKViewDelegate {
     //  Drawing
     //
 
-    func startFrame() {
-
-        commandBuffer = queue.makeCommandBuffer()
-        assert(commandBuffer != nil, "Command buffer must not be nil")
-
-        // Set uniforms for the fragment shader
-        fragmentUniforms.alpha = 1.0
-        fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
-        fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
-        fragmentUniforms.scanlineDistance = Int32(size.height / 256)
-
+    func runTexturePipeline() {
+        
         // Compute the merge texture
         if currLOF != prevLOF {
             
@@ -422,7 +415,21 @@ class Renderer: NSObject, MTKViewDelegate {
                              target: scanlineTexture,
                              options: &shaderOptions,
                              length: MemoryLayout<ShaderOptions>.stride)
+    }
+    
+    func startFrame() {
 
+        commandBuffer = queue.makeCommandBuffer()
+        assert(commandBuffer != nil, "Command buffer must not be nil")
+
+        // Set uniforms for the fragment shader
+        /*
+        fragmentUniforms.alpha = 1.0
+        fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
+        fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
+        fragmentUniforms.scanlineDistance = Int32(size.height / 256)
+        */
+        
         // Create a render pass descriptor
         let descriptor = MTLRenderPassDescriptor.init()
         descriptor.colorAttachments[0].texture = drawable.texture
@@ -435,6 +442,8 @@ class Renderer: NSObject, MTKViewDelegate {
         descriptor.depthAttachment.loadAction = MTLLoadAction.clear
         descriptor.depthAttachment.storeAction = MTLStoreAction.dontCare
 
+        runTexturePipeline()
+        
         // Create a command encoder
         commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
         commandEncoder.setRenderPipelineState(pipeline)
@@ -465,7 +474,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
         if canvas.isTransparent { splashScreen.render() }
         if canvas.isVisible { canvas.render3D() }
-        if monis.drawActivityMonitors { monis.render2D() }
+        if monis.drawActivityMonitors { monis.render3D() }
     }
     
     func endFrame() {
