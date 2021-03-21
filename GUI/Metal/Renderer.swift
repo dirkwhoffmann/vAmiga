@@ -460,6 +460,7 @@ class Renderer: NSObject, MTKViewDelegate {
         commandEncoder.setFragmentSamplerState(sampler, index: 0)
     }
 
+    /*
     func draw2D() {
 
         if canvas.isTransparent { splashScreen.render() }
@@ -476,6 +477,7 @@ class Renderer: NSObject, MTKViewDelegate {
         if canvas.isVisible { canvas.render3D() }
         if monis.drawActivityMonitors { monis.render3D() }
     }
+    */
     
     func endFrame() {
 
@@ -531,8 +533,21 @@ class Renderer: NSObject, MTKViewDelegate {
         drawable = metalLayer.nextDrawable()
         
         if drawable != nil {
+            
+            let renderSplash = canvas.isTransparent
+            let renderCanvas = canvas.isVisible
+            let renderMonitors = monis.drawActivityMonitors
+            
+            let flat = fullscreen && !parent.pref.keepAspectRatio
+            
             startFrame()
-            fullscreen && !parent.pref.keepAspectRatio ? draw2D() : draw3D()
+        
+            if animates != 0 { performAnimationStep() }
+
+            if renderSplash { splashScreen.render(encoder: commandEncoder, flat: flat) }
+            if renderCanvas { canvas.render(encoder: commandEncoder, flat: flat) }
+            if renderMonitors { monis.render(encoder: commandEncoder, flat: flat) }
+     
             endFrame()
         } 
     }

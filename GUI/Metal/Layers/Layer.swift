@@ -80,8 +80,9 @@ class Layer: NSObject {
             alphaDidChange()
         }
     }
-    
-    func render() { }
+
+    func render(buffer: MTLCommandBuffer) { }
+    func render(encoder: MTLRenderCommandEncoder, flat: Bool) { }
     
     //
     // Responding to events

@@ -33,20 +33,24 @@ class SplashScreen: Layer {
                              "The background texture could not be allocated.")
     }
     
-    override func render() {
+    override func render(buffer: MTLCommandBuffer) {
+        
+    }
+    
+    override func render(encoder: MTLRenderCommandEncoder, flat: Bool) {
         
         // Configure vertex shader
-        commandEncoder.setVertexBytes(&vertUniforms,
-                                      length: MemoryLayout<VertexUniforms>.stride,
-                                      index: 1)
-
+        encoder.setVertexBytes(&vertUniforms,
+                               length: MemoryLayout<VertexUniforms>.stride,
+                               index: 1)
+        
         // Configure fragment shader
-        commandEncoder.setFragmentTexture(bgTexture, index: 0)
-        commandEncoder.setFragmentTexture(bgTexture, index: 1)
-        commandEncoder.setFragmentBytes(&fragUniforms,
-                                        length: MemoryLayout<FragmentUniforms>.stride,
-                                        index: 1)
-
+        encoder.setFragmentTexture(bgTexture, index: 0)
+        encoder.setFragmentTexture(bgTexture, index: 1)
+        encoder.setFragmentBytes(&fragUniforms,
+                                 length: MemoryLayout<FragmentUniforms>.stride,
+                                 index: 1)
+        
         // Render
         bgRect!.drawPrimitives(commandEncoder)
         

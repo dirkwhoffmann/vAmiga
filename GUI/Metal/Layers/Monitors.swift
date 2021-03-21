@@ -97,20 +97,11 @@ class Monitors: Layer {
         }
     }
     
-    func render2D() {
-        
-        for i in 0 ... monitors.count where monitorAlpha[i].current != 0.0 {
-            
-            fragUniforms.alpha = monitorAlpha[i].current * monitorGlobalAlpha
-            commandEncoder.setFragmentBytes(&fragUniforms,
-                                            length: MemoryLayout<FragmentUniforms>.stride,
-                                            index: 1)
-            monitors[i].draw(commandEncoder, matrix: vertexUniforms3D.mvp)
-        }
+    override func render(buffer: MTLCommandBuffer) {
         
     }
     
-    func render3D() {
+    override func render(encoder: MTLRenderCommandEncoder, flat: Bool) {
         
         for i in 0 ... monitors.count where monitorAlpha[i].current != 0.0 {
             
