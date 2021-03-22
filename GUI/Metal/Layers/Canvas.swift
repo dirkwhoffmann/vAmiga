@@ -108,7 +108,7 @@ class Canvas: Layer {
         buildDotMasks()
         
         // Start with a negative alpha to present the start screen for a while
-        alpha.set(-0.5)
+        alpha.set(-2.5)
     }
     
     //

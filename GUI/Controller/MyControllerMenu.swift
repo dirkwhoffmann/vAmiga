@@ -242,6 +242,14 @@ extension MyController: NSMenuItemValidation {
         }
         monitor?.showWindow(self)
     }
+ 
+    @IBAction func consoleAction(_ sender: Any!) {
+        
+        if console == nil {
+            console = Console.init(controller: self)
+        }
+        console!.toggle()
+    }
     
     @IBAction func takeSnapshotAction(_ sender: Any!) {
         

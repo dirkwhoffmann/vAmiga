@@ -153,7 +153,14 @@ extension MyController: NSWindowDelegate {
     
     public func windowWillResize(_ sender: NSWindow, to frameSize: NSSize) -> NSSize {
         
+        track()
         return fixSize(window: sender, size: frameSize)
+    }
+    
+    public func windowDidResize(_ notification: Notification) {
+        
+        track()
+        console?.resize()
     }
     
     public func windowWillUseStandardFrame(_ window: NSWindow,

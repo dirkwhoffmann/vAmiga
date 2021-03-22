@@ -37,6 +37,9 @@ class MyController: NSWindowController, MessageReceiver {
     // Monitor panel of this emulator instance
     var monitor: Monitor?
 
+    // The debug console for this emulator instance
+    var console: Console?
+    
     // Configuration panel of this emulator instance
     var configurator: ConfigurationController?
     
@@ -462,7 +465,7 @@ extension MyController {
             // renderer.blendIn(steps: 120) // zoomIn()
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()
-
+            
         case .POWER_OFF:
             // renderer.zoomOut(steps: 20) // blendOut()
             toolbar.validateVisibleItems()

@@ -164,6 +164,12 @@
                                     <action selector="monitorAction:" target="-1" id="hps-FK-7Yl"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Console..." id="x3U-7k-jeR" userLabel="Monitor...">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="consoleAction:" target="-1" id="Nx9-Xz-OIt"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="bDU-dO-xxe"/>
                             <menuItem title="Take Snapshot" keyEquivalent="t" id="BX4-y5-PoI" userLabel="Take Snapshot">
                                 <connections>
