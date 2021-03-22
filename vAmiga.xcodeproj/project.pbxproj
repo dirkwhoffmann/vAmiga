@@ -1093,7 +1093,6 @@
 				508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */,
 				508FDFEB21EA22780043D0E9 /* Speedometer.swift */,
 				508FE00E21EA227B0043D0E9 /* MacAudio.swift */,
-				5026EDBE2608DC8E00D90CE1 /* Console.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1311,6 +1310,7 @@
 				50C8C45A2607590400F4E012 /* CanvasSetup.swift */,
 				50C8C4542607524400F4E012 /* Monitors.swift */,
 				50C8C45F2607591300F4E012 /* MonitorSetup.swift */,
+				5026EDBE2608DC8E00D90CE1 /* Console.swift */,
 			);
 			path = Layers;
 			sourceTree = "<group>";

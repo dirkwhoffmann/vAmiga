@@ -160,7 +160,7 @@ extension MyController: NSWindowDelegate {
     public func windowDidResize(_ notification: Notification) {
         
         track()
-        console?.resize()
+        renderer?.console.resize()
     }
     
     public func windowWillUseStandardFrame(_ window: NSWindow,

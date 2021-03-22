@@ -48,6 +48,7 @@ extension Renderer {
         splashScreen = SplashScreen.init(view: mtkView, device: device, renderer: self)
         canvas = Canvas.init(view: mtkView, device: device, renderer: self)
         monis = Monitors.init(view: mtkView, device: device, renderer: self)
+        console = Console.init(view: mtkView, device: device, renderer: self)
         
         buildSamplers()
         buildPipeline()

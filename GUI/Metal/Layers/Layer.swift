@@ -63,7 +63,7 @@ class Layer: NSObject {
         if alpha.animates() {
 
             alpha.move()
-            // alphaDidChange()
+            alphaDidChange()
         }
     }
 
@@ -74,5 +74,5 @@ class Layer: NSObject {
     // Responding to events
     //
     
-    // func alphaDidChange() { }
+    func alphaDidChange() { }
 }

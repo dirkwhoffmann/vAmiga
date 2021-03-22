@@ -57,6 +57,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var splashScreen: SplashScreen! = nil
     var canvas: Canvas! = nil
     var monis: Monitors! = nil
+    var console: Console! = nil
     
     // Texture to hold the pixel depth information
     var depthTexture: MTLTexture! = nil
@@ -190,7 +191,8 @@ class Renderer: NSObject, MTKViewDelegate {
         frames += 1
         splashScreen.update(frames: frames)
         canvas.update(frames: frames)
-
+        console.update(frames: frames)
+        
         semaphore.wait()
         
         if let drawable = metalLayer.nextDrawable() {

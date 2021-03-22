@@ -245,10 +245,11 @@ extension MyController: NSMenuItemValidation {
  
     @IBAction func consoleAction(_ sender: Any!) {
         
-        if console == nil {
-            console = Console.init(controller: self)
+        if renderer.console.isVisible {
+            renderer.console.close(delay: 0.25)
+        } else {
+            renderer.console.open(delay: 0.25)
         }
-        console!.toggle()
     }
     
     @IBAction func takeSnapshotAction(_ sender: Any!) {

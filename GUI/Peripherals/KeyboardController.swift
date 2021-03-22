@@ -51,7 +51,7 @@ class KeyboardController: NSObject {
     
     func keyDown(with event: NSEvent) {
         
-        if let console = parent.console { console.keyDown(with: event); return }
+        if let console = renderer.console { console.keyDown(with: event); return }
                 
         // Ignore repeating keys
         if event.isARepeat { return }
@@ -72,7 +72,7 @@ class KeyboardController: NSObject {
     
     func keyUp(with event: NSEvent) {
            
-        if let console = parent.console { console.keyUp(with: event); return }
+        if let console = renderer.console { console.keyUp(with: event); return }
 
         keyUp(with: MacKey.init(event: event))
     }
