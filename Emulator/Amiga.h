@@ -28,6 +28,7 @@
 #include "Memory.h"
 #include "Oscillator.h"
 #include "Paula.h"
+#include "RetroShell.h"
 #include "RTC.h"
 #include "SerialPort.h"
 #include "ZorroManager.h"
@@ -95,6 +96,10 @@ public:
     
     // Shortcuts to all four drives
     Drive *df[4] = { &df0, &df1, &df2, &df3 };
+    
+    // Command shell
+    RetroShell retroShell = RetroShell(*this);
+    
     
     //
     // Message queue

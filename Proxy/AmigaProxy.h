@@ -59,6 +59,7 @@
 @class MemProxy;
 @class MouseProxy;
 @class PaulaProxy;
+@class RetroShellProxy;
 @class RomFileProxy;
 @class RtcProxy;
 @class ScreenRecorderProxy;
@@ -110,6 +111,7 @@
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
+    RetroShellProxy *retroShell;
     RtcProxy *rtc;
     ScreenRecorderProxy *screenRecorder;
     SerialPortProxy *serialPort;
@@ -137,6 +139,7 @@
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;
+@property (readonly, strong) RetroShellProxy *retroShell;
 @property (readonly, strong) RtcProxy *rtc;
 @property (readonly, strong) ScreenRecorderProxy *screenRecorder;
 @property (readonly, strong) SerialPortProxy *serialPort;
@@ -614,6 +617,18 @@
 
 
 //
+// RetroShell proxy
+//
+
+@interface RetroShellProxy : Proxy { }
+
+// @property (readonly) NSString *text;
+- (void)pressKey:(char)c;
+
+@end
+
+
+//
 // F I L E   T Y P E   P R O X I E S
 //
 
@@ -677,6 +692,7 @@
 // @property (readonly) RomType romType;
 
 @end
+
 
 //
 // ExtendedRomFile proxy

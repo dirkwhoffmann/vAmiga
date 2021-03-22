@@ -43,14 +43,6 @@ class Console: Layer {
         resize()
     }
 
-    /*
-    override func close() {
-    
-        super.close()
-        resize()
-    }
-    */
-    
     override func alphaDidChange() {
         
         track("alpha = \(alpha.current)")
@@ -109,6 +101,11 @@ class Console: Layer {
         
         track()
 
+        if let c = event.characters?.utf8CString.first {
+            track()
+            amiga.retroShell.pressKey(c)
+        }
+        
         if let characters = event.characters {
             
             let attr = [

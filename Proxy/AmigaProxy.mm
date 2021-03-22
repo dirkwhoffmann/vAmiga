@@ -1392,6 +1392,32 @@ using namespace va::moira;
 @end
 
 //
+// FSDevice proxy
+//
+
+@implementation RetroShellProxy
+
+- (RetroShell *)shell
+{
+    return (RetroShell *)obj;
+}
+
++ (instancetype)make:(RetroShell *)shell
+{
+    if (shell == nullptr) { return nil; }
+    
+    RetroShellProxy *proxy = [[self alloc] initWith: shell];
+    return proxy;
+}
+
+- (void)pressKey:(char)c
+{
+    printf("PROXY: %c\n", c);
+}
+
+@end
+
+//
 // AmigaFile proxy
 //
 
@@ -1936,6 +1962,7 @@ using namespace va::moira;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
+@synthesize retroShell;
 @synthesize rtc;
 @synthesize serialPort;
 @synthesize screenRecorder;
@@ -1971,6 +1998,7 @@ using namespace va::moira;
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
+    retroShell = [[RetroShellProxy alloc] initWith:&amiga->retroShell];
     rtc = [[RtcProxy alloc] initWith:&amiga->rtc];
     screenRecorder = [[ScreenRecorderProxy alloc] initWith:&amiga->denise.screenRecorder];
     serialPort = [[SerialPortProxy alloc] initWith:&amiga->serialPort];
