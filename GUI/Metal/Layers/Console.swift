@@ -33,7 +33,6 @@ class Console: Layer {
         controller = renderer.parent        
         textView = (scrollView.documentView as? NSTextView)!
         textView.backgroundColor = NSColor.init(r: 0x80, g: 0x80, b: 0x80, a: 0x80)
-
         super.init(view: view, device: device, renderer: renderer)
 
     }
