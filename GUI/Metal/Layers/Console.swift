@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import Foundation
+import Carbon.HIToolbox
 
 class Console: Layer {
  
@@ -81,33 +82,49 @@ class Console: Layer {
     
     func keyDown(with event: NSEvent) {
         
+        let macKey = MacKey.init(event: event)
+        
         track()
 
-        if let c = event.characters?.utf8CString.first {
-            track()
-            amiga.retroShell.pressKey(c)
-                    
-            let attr = [
-                NSAttributedString.Key.foregroundColor: NSColor.white,
-                NSAttributedString.Key.font: NSFont.monospacedSystemFont(ofSize: 14, weight: .medium)
-            ]
+        switch macKey.keyCode {
+        
+        case kVK_UpArrow: amiga.retroShell.pressUp()
+        case kVK_DownArrow: amiga.retroShell.pressDown()
+        case kVK_LeftArrow: amiga.retroShell.pressLeft()
+        case kVK_RightArrow: amiga.retroShell.pressRight()
+        case kVK_Return: amiga.retroShell.pressReturn()
+        case kVK_Tab: amiga.retroShell.pressTab()
 
-            if let text = amiga.retroShell.getText() {
-                
-                track("text = \(text)")
-                let string = NSMutableAttributedString(string: text, attributes: attr)
-
-                if string.length > 0 {
-                    string.addAttribute(.backgroundColor, value: NSColor.blue, range: NSRange(location: string.length - 1, length: 1))
-                }
-                textView.textStorage?.setAttributedString(string)
-                                
-            } else {
-                track("text is NULL\n")
+        default:
+            
+            if let c = event.characters?.utf8CString.first {
+                amiga.retroShell.pressKey(c)
             }
         }
-    }
+                    
+        let cpos = amiga.retroShell.cposRel
+        track("cpos = \(cpos)")
+        
+        let attr = [
+            NSAttributedString.Key.foregroundColor: NSColor.white,
+            NSAttributedString.Key.font: NSFont.monospacedSystemFont(ofSize: 14, weight: .medium)
+        ]
+        
+        if let text = amiga.retroShell.getText() {
+            
+            let string = NSMutableAttributedString(string: text, attributes: attr)
+            
+            assert(string.length > 0)
+            string.addAttribute(.backgroundColor,
+                                value: NSColor.blue,
+                                range: NSRange(location: string.length - 1 - cpos, length: 1))
+            textView.textStorage?.setAttributedString(string)
 
+        } else {
+            track("ERROR: text is NULL\n")
+        }
+    }
+    
     func keyUp(with event: NSEvent) {
         
     }

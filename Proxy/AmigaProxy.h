@@ -622,7 +622,15 @@
 
 @interface RetroShellProxy : Proxy { }
 
+@property (readonly) NSInteger cposRel;
+
 - (NSString *)getText;
+- (void)pressUp;
+- (void)pressDown;
+- (void)pressLeft;
+- (void)pressRight;
+- (void)pressReturn;
+- (void)pressTab;
 - (void)pressKey:(char)c;
 
 @end

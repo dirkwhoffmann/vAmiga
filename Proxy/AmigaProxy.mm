@@ -1410,11 +1410,45 @@ using namespace va::moira;
     return proxy;
 }
 
+-(NSInteger)cposRel
+{
+    return [self shell]->cposRel();
+}
+
 -(NSString *)getText
 {
     const char *str = [self shell]->text();
-    printf("getText = %s\n", str);
     return str ? [NSString stringWithUTF8String:str] : nullptr;
+}
+
+- (void)pressUp
+{
+    [self shell]->pressUp();
+}
+
+- (void)pressDown
+{
+    [self shell]->pressDown();
+}
+
+- (void)pressLeft
+{
+    [self shell]->pressLeft();
+}
+
+- (void)pressRight
+{
+    [self shell]->pressRight();
+}
+
+- (void)pressReturn
+{
+    [self shell]->pressReturn();
+}
+
+- (void)pressTab
+{
+    [self shell]->pressTab();
 }
 
 - (void)pressKey:(char)c
