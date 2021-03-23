@@ -19,7 +19,7 @@ RetroShell::RetroShell(Amiga& ref) : AmigaComponent(ref)
     storage.push_back("");
 
     // Initialize the input buffer
-    // input.push_back("");
+    input.push_back("");
     
     // Print a startup message
     *this << "Retro shell 0.1, ";
@@ -141,40 +141,31 @@ RetroShell::replace(const string& text, const string& prefix)
 void
 RetroShell::pressUp()
 {
-    printf("CURSOR UP\n");
-    for (auto &it: input) printf("%s\n", it.c_str());
-
-    if (ipos < (isize)input.size()) lastLine() = prompt + input[ipos];
+    if (ipos == (isize)input.size() - 1) {
+        lastInput() = lastLine().substr(cposMin);
+    }
+    
     if (ipos > 0) ipos--;
-        
-    printf("Replacing last line by %s\n", lastLine().c_str());
+    if (ipos < (isize)input.size()) lastLine() = prompt + input[ipos];
 }
 
 void
 RetroShell::pressDown()
 {
-    printf("CURSOR DOWN\n");
-    for (auto &it: input) printf("%s\n", it.c_str());
-
-    if (ipos < (isize)input.size()) lastLine() = prompt + input[ipos];
     if (ipos + 1 < (isize)input.size()) ipos++;
-    
-    printf("Replacing last line by %s\n", lastLine().c_str());
+    if (ipos < (isize)input.size()) lastLine() = prompt + input[ipos];
 }
 
 void
 RetroShell::pressLeft()
 {
     cpos = std::max(cpos - 1, cposMin);
-    // if (cpos > cposMin) cpos--;
-    // printf("CURSOR LEFT: %zd\n", cpos);
 }
 
 void
 RetroShell::pressRight()
 {
     cpos = std::min(cpos + 1, (isize)lastLine().size());
-    // if (cpos < (isize)lastLine().size()) cpos++;
 }
 
 void
@@ -215,10 +206,24 @@ RetroShell::pressTab()
 }
 
 void
+RetroShell::pressBackspace()
+{
+    if (cpos > cposMin) {
+        lastLine().erase(lastLine().begin() + --cpos);
+    }
+}
+
+void
+RetroShell::pressDelete()
+{
+    if (cpos < (isize)lastLine().size()) {
+        lastLine().erase(lastLine().begin() + cpos);
+    }
+}
+
+void
 RetroShell::pressReturn()
 {
-    printf("RETURN key\n");
-    
     // Get the last line without the prompt
     string command = lastLine().substr(cposMin);
     
@@ -232,11 +237,10 @@ RetroShell::pressReturn()
     }
     
     // Add command to the command history buffer
-    if (input.empty() || input.back() != command) {
-        input.push_back(command);
-        ipos = (isize)input.size() - 1;
-    }
-
+    input[input.size() - 1] = command;
+    input.push_back("");
+    ipos = (isize)input.size() - 1;
+    
     // Execute the command
     exec(command);
     printPrompt();

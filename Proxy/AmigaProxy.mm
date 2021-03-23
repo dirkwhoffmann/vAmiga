@@ -1451,6 +1451,16 @@ using namespace va::moira;
     [self shell]->pressEnd();
 }
 
+- (void)pressBackspace
+{
+    [self shell]->pressBackspace();
+}
+
+- (void)pressDelete
+{
+    [self shell]->pressDelete();
+}
+
 - (void)pressReturn
 {
     [self shell]->pressReturn();

@@ -54,16 +54,16 @@ class Console: Layer {
 
         if isDirty {
             
-            let cursorColor = NSColor.init(r: 255, g: 255, b: 255, a: 128)
-            let cpos = amiga.retroShell.cposRel
-            
-            let attr = [
-                NSAttributedString.Key.foregroundColor: NSColor.white,
-                NSAttributedString.Key.font: NSFont.monospacedSystemFont(ofSize: 14, weight: .medium)
-            ]
-            
             if let text = amiga.retroShell.getText() {
                 
+                let cursorColor = NSColor.init(r: 255, g: 255, b: 255, a: 128)
+                let monoFont = NSFont.monospacedSystemFont(ofSize: 14, weight: .medium)
+                let cpos = amiga.retroShell.cposRel
+                
+                let attr = [
+                    NSAttributedString.Key.foregroundColor: NSColor.white,
+                    NSAttributedString.Key.font: monoFont
+                ]
                 let string = NSMutableAttributedString(string: text, attributes: attr)
                 string.addAttribute(.backgroundColor,
                                     value: cursorColor,
@@ -124,6 +124,8 @@ class Console: Layer {
         case kVK_RightArrow: amiga.retroShell.pressRight()
         case kVK_Home: amiga.retroShell.pressHome()
         case kVK_End: amiga.retroShell.pressEnd()
+        case kVK_Delete: amiga.retroShell.pressBackspace()
+        case kVK_ForwardDelete: amiga.retroShell.pressDelete()
         case kVK_Return: amiga.retroShell.pressReturn()
         case kVK_Tab: amiga.retroShell.pressTab()
 
