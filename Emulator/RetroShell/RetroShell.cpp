@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "RetroShell.h"
+#include "Exception.h"
 
 namespace va {
 
@@ -18,7 +19,7 @@ RetroShell::RetroShell(Amiga& ref) : AmigaComponent(ref)
     storage.push_back("");
 
     // Initialize the input buffer
-    input.push_back("");
+    // input.push_back("");
     
     // Print a startup message
     *this << "Retro shell 0.1, ";
@@ -129,22 +130,36 @@ RetroShell::tab(int hpos)
     }
 }
 
+/*
 void
 RetroShell::replace(const string& text, const string& prefix)
 {
     storage.back() = prefix + text;
 }
+*/
 
 void
 RetroShell::pressUp()
 {
-    printf("CURSOR UP: TO BE IMPLEMENTED\n");
+    printf("CURSOR UP\n");
+    for (auto &it: input) printf("%s\n", it.c_str());
+
+    if (ipos < (isize)input.size()) lastLine() = prompt + input[ipos];
+    if (ipos > 0) ipos--;
+        
+    printf("Replacing last line by %s\n", lastLine().c_str());
 }
 
 void
 RetroShell::pressDown()
 {
-    printf("CURSOR DOWN: TO BE IMPLEMENTED\n");
+    printf("CURSOR DOWN\n");
+    for (auto &it: input) printf("%s\n", it.c_str());
+
+    if (ipos < (isize)input.size()) lastLine() = prompt + input[ipos];
+    if (ipos + 1 < (isize)input.size()) ipos++;
+    
+    printf("Replacing last line by %s\n", lastLine().c_str());
 }
 
 void
@@ -207,21 +222,23 @@ RetroShell::pressReturn()
     // Get the last line without the prompt
     string command = lastLine().substr(cposMin);
     
-    printf("last: %s\n", lastLine().c_str());
-    printf("stripped: '%s'\n", command.c_str());
-    
     *this << '\n';
     
-    if (input.empty()) {
+    // Print help message if there was no input
+    if (command.empty()) {
         printHelp();
-    } else {
+        printPrompt();
+        return;
+    }
+    
+    // Add command to the command history buffer
+    if (input.empty() || input.back() != command) {
         input.push_back(command);
         ipos = (isize)input.size() - 1;
     }
-    
+
     // Execute the command
-    // exec(command);
-    
+    exec(command);
     printPrompt();
 }
 
@@ -231,10 +248,7 @@ RetroShell::pressKey(char c)
     printf("pressKey %c\n", c);
     
     if (isprint(c)) {
-        
-        printf("ipos = %zd input.size = %zu\n", ipos, input.size());
-        printf("input[%zd] = %s\n", ipos, input[ipos].c_str());
-        
+                
         if (cpos < (isize)lastLine().size()) {
             lastLine().insert(lastLine().begin() + cpos, c);
         } else {
@@ -321,14 +335,108 @@ RetroShell::text()
         for (usize i = 0; i < numRows - 1; i++) all += storage[i] + "\n";
         
         // Add the last row
-        all += storage[numRows - 1] + "_";
-        
-        // Add a space for the cursor if neccessary
-        // printf("cpos = %zd size = %zd\n", cpos, (isize)storage[numRows - 1].size());
-        // if (cpos >= (isize)storage[numRows - 1].size()) all += "_";
+        all += storage[numRows - 1] + " ";        
     }
     
     return all.c_str();
+}
+
+bool
+RetroShell::exec(const string &command, bool verbose)
+{
+    bool success = false;
+    
+    // Print the command string if requested
+    if (verbose) *this << command << '\n';
+        
+    printf("Command: %s\n", command.c_str());
+ 
+    /*
+    try {
+        
+        // Hand the command over to the intepreter
+        interpreter.exec(command);
+        success = true;
+               
+    } catch (TooFewArgumentsError &err) {
+        *this << err.what() << ": Too few arguments";
+        *this << '\n';
+        
+    } catch (TooManyArgumentsError &err) {
+        *this << err.what() << ": Too many arguments";
+        *this << '\n';
+            
+    } catch (EnumParseError &err) {
+        *this << err.token << " is not a valid key" << '\n';
+        *this << "Expected: " << err.expected << '\n';
+        
+    } catch (ParseNumError &err) {
+        *this << err.token << " is not a number" << '\n';
+
+    } catch (ParseBoolError &err) {
+        *this << err.token << " must be true or false" << '\n';
+
+    } catch (ParseError &err) {
+        *this << err.what() << ": Syntax error";
+        *this << '\n';
+        
+    } catch (ConfigUnsupportedError) {
+        *this << "This option is not yet supported.";
+        *this << '\n';
+        
+    } catch (ConfigLockedError &err) {
+        *this << "This option is locked because the Amiga is powered on.";
+        *this << '\n';
+        
+    } catch (ConfigArgError &err) {
+        *this << "Error: Invalid argument. Expected: " << err.what();
+        *this << '\n';
+        
+    } catch (ConfigFileNotFoundError &err) {
+        *this << err.what() << " not found";
+        *this << '\n';
+        success = true; // Don't break the execution
+        
+    } catch (ConfigFileReadError &err) {
+        *this << "Error: Unable to read file " << err.what();
+        *this << '\n';
+        
+    } catch (VAError &err) {
+        *this << err.what();
+        *this << '\n';
+    }
+    
+    // Print a new prompt
+    // printf("Command: %s\n", command.c_str());
+    // *this << string(prompt);
+    */
+    // printPrompt();
+    
+    return success;
+}
+
+void
+RetroShell::exec(std::istream &stream)
+{
+    isize line = 0;
+    string command;
+        
+    while(std::getline(stream, command)) {
+
+        line++;
+        printf("Line %zd: %s\n", line, command.c_str());
+
+        // Skip empty lines
+        if (command == "") continue;
+
+        // Skip comments
+        if (command.substr(0,1) == "#") continue;
+        
+        // Execute the command
+        if (!exec(command, true)) {
+            throw my::Exception(command, line);
+        }
+    }
 }
 
 }

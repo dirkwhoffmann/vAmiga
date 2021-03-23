@@ -14,14 +14,12 @@ class Console: Layer {
  
     let controller: MyController
     
-    // var amiga: AmigaProxy { return controller.amiga }
     var window: NSWindow { return controller.window! }
     var contentView: NSView { return window.contentView! }
     
     let scrollView = NSTextView.scrollableTextView()
     var textView: NSTextView
-    
-    // var isOpen = false
+        
     var isDirty = false
         
     //
@@ -56,6 +54,7 @@ class Console: Layer {
 
         if isDirty {
             
+            let cursorColor = NSColor.init(r: 255, g: 255, b: 255, a: 128)
             let cpos = amiga.retroShell.cposRel
             
             let attr = [
@@ -67,7 +66,7 @@ class Console: Layer {
                 
                 let string = NSMutableAttributedString(string: text, attributes: attr)
                 string.addAttribute(.backgroundColor,
-                                    value: NSColor.blue,
+                                    value: cursorColor,
                                     range: NSRange(location: string.length - 1 - cpos, length: 1))
                 textView.textStorage?.setAttributedString(string)
 

@@ -129,8 +129,19 @@ private:
     void tab(int hpos);
 
     // Replaces the last line
-    void replace(const string &text, const string &prefix);
-    void replace(const string &text) { replace(text, prompt); }    
+    // void replace(const string &text, const string &prefix);
+    // void replace(const string &text) { replace(text, prompt); }
+    
+    
+    //
+    // Executing commands
+    //
+    
+    // Executes a user command
+    bool exec(const string &command, bool verbose = false);
+    
+    // Executes a user script
+    void exec(std::istream &stream) throws;
 };
 
 }
