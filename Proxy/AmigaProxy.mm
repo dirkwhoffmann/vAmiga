@@ -1410,9 +1410,16 @@ using namespace va::moira;
     return proxy;
 }
 
+-(NSString *)getText
+{
+    const char *str = [self shell]->text();
+    printf("getText = %s\n", str);
+    return str ? [NSString stringWithUTF8String:str] : nullptr;
+}
+
 - (void)pressKey:(char)c
 {
-    printf("PROXY: %c\n", c);
+    [self shell]->pressKey(c);
 }
 
 @end

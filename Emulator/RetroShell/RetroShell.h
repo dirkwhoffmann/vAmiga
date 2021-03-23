@@ -15,7 +15,7 @@ namespace va {
 
 class RetroShell : public AmigaComponent {
 
-    string t;
+    string t = " ";
     
     
     //
@@ -45,6 +45,8 @@ private:
     //
     //
     //
+    
+public:
     
     void pressKey(char c);
     const char *text();

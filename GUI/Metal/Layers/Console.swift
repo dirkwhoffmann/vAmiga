@@ -30,11 +30,15 @@ class Console: Layer {
         
         track()
 
-        controller = renderer.parent        
+        controller = renderer.parent
+        
         textView = (scrollView.documentView as? NSTextView)!
+        textView.isEditable = false
         textView.backgroundColor = NSColor.init(r: 0x80, g: 0x80, b: 0x80, a: 0x80)
+        
         super.init(view: view, device: device, renderer: renderer)
-
+        
+        resize()
     }
 
     override func open() {
@@ -44,9 +48,7 @@ class Console: Layer {
     }
 
     override func alphaDidChange() {
-        
-        track("alpha = \(alpha.current)")
-        
+                
         let a1 = Int(alpha.current * 0xFF)
         let a2 = Int(alpha.current * 0.8 * 0xFF)
         textView.textColor = NSColor.init(r: 0xFF, g: 0xFF, b: 0xFF, a: a1)
@@ -55,32 +57,12 @@ class Console: Layer {
         if alpha.current > 0 && scrollView.superview == nil {
             
             track("Adding console sub view")
-            
             contentView.addSubview(scrollView)
-            
-            textView.isEditable = false
-            
-            // textView.size
-            for _ in 0...25 {
-                let myString = "Swift Attributed String\n"
-                let myAttribute = [
-                    NSAttributedString.Key.foregroundColor: NSColor.white,
-                    NSAttributedString.Key.font: NSFont.monospacedSystemFont(ofSize: 20, weight: .medium)
-                ]
-                let myAttrString = NSAttributedString(string: myString, attributes: myAttribute)
-                let myString2 = "Holla, die Waldfee\n"
-                let myAttrString2 = NSAttributedString(string: myString2, attributes: myAttribute)
-
-                textView.textStorage?.append(myAttrString)
-                textView.textStorage?.append(myAttrString2)
-            }
-            resize()
         }
         
         if alpha.current == 0 && scrollView.superview != nil {
         
             track("Removing console sub view")
-
             scrollView.removeFromSuperview()
         }
     }
@@ -104,24 +86,30 @@ class Console: Layer {
         if let c = event.characters?.utf8CString.first {
             track()
             amiga.retroShell.pressKey(c)
-        }
-        
-        if let characters = event.characters {
-            
+                    
             let attr = [
                 NSAttributedString.Key.foregroundColor: NSColor.white,
-                NSAttributedString.Key.font: NSFont.systemFont(ofSize: 20, weight: .medium)
+                NSAttributedString.Key.font: NSFont.monospacedSystemFont(ofSize: 14, weight: .medium)
             ]
-            let string = NSAttributedString(string: characters, attributes: attr)
-            
-            textView.textStorage?.append(string)
-            textView.scrollToEndOfDocument(self)
+
+            if let text = amiga.retroShell.getText() {
+                
+                track("text = \(text)")
+                let string = NSMutableAttributedString(string: text, attributes: attr)
+
+                if string.length > 0 {
+                    string.addAttribute(.backgroundColor, value: NSColor.blue, range: NSRange(location: string.length - 1, length: 1))
+                }
+                textView.textStorage?.setAttributedString(string)
+                                
+            } else {
+                track("text is NULL\n")
+            }
         }
     }
 
     func keyUp(with event: NSEvent) {
         
-        track()
     }
 
 }

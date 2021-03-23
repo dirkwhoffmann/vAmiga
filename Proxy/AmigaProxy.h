@@ -622,7 +622,7 @@
 
 @interface RetroShellProxy : Proxy { }
 
-// @property (readonly) NSString *text;
+- (NSString *)getText;
 - (void)pressKey:(char)c;
 
 @end

@@ -14,12 +14,16 @@ namespace va {
 void
 RetroShell::pressKey(char c)
 {
+    printf("pressKey %c\n", c);
+    t.pop_back();
     t += c;
+    t += " ";
 }
 
 const char *
 RetroShell::text()
 {
+    printf("t.c_str = %s\n", t.c_str());
     return t.c_str();
 }
 
