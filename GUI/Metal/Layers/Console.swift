@@ -21,8 +21,9 @@ class Console: Layer {
     let scrollView = NSTextView.scrollableTextView()
     var textView: NSTextView
     
-    var isOpen = false
-    
+    // var isOpen = false
+    var isDirty = false
+        
     //
     // Initializing
     //
@@ -40,6 +41,7 @@ class Console: Layer {
         super.init(view: view, device: device, renderer: renderer)
         
         resize()
+        isDirty = true
     }
 
     override func open() {
@@ -48,6 +50,35 @@ class Console: Layer {
         resize()
     }
 
+    override func update(frames: Int64) {
+        
+        super.update(frames: frames)
+
+        if isDirty {
+            
+            let cpos = amiga.retroShell.cposRel
+            
+            let attr = [
+                NSAttributedString.Key.foregroundColor: NSColor.white,
+                NSAttributedString.Key.font: NSFont.monospacedSystemFont(ofSize: 14, weight: .medium)
+            ]
+            
+            if let text = amiga.retroShell.getText() {
+                
+                let string = NSMutableAttributedString(string: text, attributes: attr)
+                string.addAttribute(.backgroundColor,
+                                    value: NSColor.blue,
+                                    range: NSRange(location: string.length - 1 - cpos, length: 1))
+                textView.textStorage?.setAttributedString(string)
+
+            } else {
+                track("ERROR: text is NULL\n")
+            }
+            
+            isDirty = false
+        }
+    }
+        
     override func alphaDidChange() {
                 
         let a1 = Int(alpha.current * 0xFF)
@@ -92,6 +123,8 @@ class Console: Layer {
         case kVK_DownArrow: amiga.retroShell.pressDown()
         case kVK_LeftArrow: amiga.retroShell.pressLeft()
         case kVK_RightArrow: amiga.retroShell.pressRight()
+        case kVK_Home: amiga.retroShell.pressHome()
+        case kVK_End: amiga.retroShell.pressEnd()
         case kVK_Return: amiga.retroShell.pressReturn()
         case kVK_Tab: amiga.retroShell.pressTab()
 
@@ -101,28 +134,8 @@ class Console: Layer {
                 amiga.retroShell.pressKey(c)
             }
         }
-                    
-        let cpos = amiga.retroShell.cposRel
-        track("cpos = \(cpos)")
         
-        let attr = [
-            NSAttributedString.Key.foregroundColor: NSColor.white,
-            NSAttributedString.Key.font: NSFont.monospacedSystemFont(ofSize: 14, weight: .medium)
-        ]
-        
-        if let text = amiga.retroShell.getText() {
-            
-            let string = NSMutableAttributedString(string: text, attributes: attr)
-            
-            assert(string.length > 0)
-            string.addAttribute(.backgroundColor,
-                                value: NSColor.blue,
-                                range: NSRange(location: string.length - 1 - cpos, length: 1))
-            textView.textStorage?.setAttributedString(string)
-
-        } else {
-            track("ERROR: text is NULL\n")
-        }
+        isDirty = true
     }
     
     func keyUp(with event: NSEvent) {

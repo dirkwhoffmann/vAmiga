@@ -150,15 +150,28 @@ RetroShell::pressDown()
 void
 RetroShell::pressLeft()
 {
-    if (cpos > cposMin) cpos--;
-    printf("CURSOR LEFT: %zd\n", cpos);
+    cpos = std::max(cpos - 1, cposMin);
+    // if (cpos > cposMin) cpos--;
+    // printf("CURSOR LEFT: %zd\n", cpos);
 }
 
 void
 RetroShell::pressRight()
 {
-    if (cpos < (isize)lastLine().size()) cpos++;
-    printf("CURSOR RIGHT: %zd\n", cpos);
+    cpos = std::min(cpos + 1, (isize)lastLine().size());
+    // if (cpos < (isize)lastLine().size()) cpos++;
+}
+
+void
+RetroShell::pressHome()
+{
+    cpos = cposMin;
+}
+
+void
+RetroShell::pressEnd()
+{
+    cpos = (isize)lastLine().size();
 }
 
 void
@@ -175,14 +188,14 @@ RetroShell::pressTab()
         // interpreter.help(input[ipos]);
         
         // Repeat the old input string
-        *this << string(prompt) << input[ipos];
+        // *this << string(prompt) << input[ipos];
         
     } else {
         
         printf("TODO: CALL interpreter.autoComplete\n");
         // interpreter.autoComplete(input[ipos]);
-        cpos = (isize)input[ipos].length();
-        replace(input[ipos]);
+        // cpos = (isize)input[ipos].length();
+        // replace(input[ipos]);
     }
 }
 
@@ -191,24 +204,25 @@ RetroShell::pressReturn()
 {
     printf("RETURN key\n");
     
+    // Get the last line without the prompt
+    string command = lastLine().substr(cposMin);
+    
+    printf("last: %s\n", lastLine().c_str());
+    printf("stripped: '%s'\n", command.c_str());
+    
     *this << '\n';
     
-    // Print a help message if no input is given
-    if (input[ipos].empty()) {
+    if (input.empty()) {
         printHelp();
-        printPrompt();
-        return;
+    } else {
+        input.push_back(command);
+        ipos = (isize)input.size() - 1;
     }
     
-    // Add the current input line to the user input history
-    input[input.size() - 1] = input[ipos];
-    
-    // Create a new input line
-    input.push_back(" ");
-    ipos = (isize)input.size() - 1;
-    
     // Execute the command
-    // exec(input[ipos - 1]);
+    // exec(command);
+    
+    printPrompt();
 }
 
 void

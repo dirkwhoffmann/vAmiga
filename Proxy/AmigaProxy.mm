@@ -1441,6 +1441,16 @@ using namespace va::moira;
     [self shell]->pressRight();
 }
 
+- (void)pressHome
+{
+    [self shell]->pressHome();
+}
+
+- (void)pressEnd
+{
+    [self shell]->pressEnd();
+}
+
 - (void)pressReturn
 {
     [self shell]->pressReturn();

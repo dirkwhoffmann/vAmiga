@@ -81,6 +81,8 @@ public:
     void pressDown();
     void pressLeft();
     void pressRight();
+    void pressHome();
+    void pressEnd();
     void pressTab();
     void pressReturn();
     void pressKey(char c);

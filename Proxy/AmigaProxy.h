@@ -629,6 +629,8 @@
 - (void)pressDown;
 - (void)pressLeft;
 - (void)pressRight;
+- (void)pressHome;
+- (void)pressEnd;
 - (void)pressReturn;
 - (void)pressTab;
 - (void)pressKey:(char)c;
