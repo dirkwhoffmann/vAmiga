@@ -15,6 +15,8 @@
 
 namespace va {
 
+class RetroShell;
+
 typedef std::list<string> Arguments;
 
 struct Command {
@@ -35,8 +37,8 @@ struct Command {
     std::list<Command> args;
     
     // Command handler
-    // void (Controller::*func)(Arguments&, long) = nullptr;
-    void *func;
+    // std::function <void(Arguments&, long)> action;
+    void (RetroShell::*action)(Arguments&, long) = nullptr;
     
     // Number of additional arguments expected by the command handler
     isize numArgs = 0;
@@ -47,12 +49,31 @@ struct Command {
     // Indicates if this command appears in the help descriptions
     bool hidden = false;
         
-    // Appends a new descriptor to the args vector
+    // Creates a new node in the command tree
+    Command *add(std::vector<string> tokens,
+                 const string &a1,
+                 const string &help,
+                 void (RetroShell::*action)(Arguments&, long) = nullptr,
+                 // std::function <void(Arguments&, long)> action = nullptr,
+                 isize numArgs = 0, long param = 0);
+
+    // Creates multiple nodes in the command tree
+    Command *add(std::vector<string> firstTokens,
+                 std::vector<string> tokens,
+                 const string &a1,
+                 const string &help,
+                 void (RetroShell::*action)(Arguments&, long) = nullptr,
+                 // std::function <void(Arguments&, long)> action = nullptr,
+                 isize numArgs = 0, long param = 0);
+
+    
+    /*
     Command *add(const string &token,
                        const string &a1,
                        const string &help,
+                       std::function <void(Arguments&, long)> action,
                        // void (Controller::*func)(Arguments&, long) = nullptr,
-                 void *func,
+                 // void *func,
                        isize numArgs = 0, long param = 0);
     
     Command *add(const string &t1, const string &t2,
@@ -75,7 +96,8 @@ struct Command {
                        // void (Controller::*func)(Arguments&, long) = nullptr,
                  void *func,
                        isize numArgs = 0, long param = 0);
-
+    */
+    
     // Removes a registered command
     void remove(const string& token);
     

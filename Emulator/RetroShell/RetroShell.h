@@ -148,6 +148,19 @@ private:
     
     // Executes a user script
     void exec(std::istream &stream) throws;
+    
+    
+    //
+    // Command handlers
+    //
+    
+public:
+    
+    void handler(const string& command) throws;
+    
+    template <Token t1> void handler(Arguments& argv, long param) throws;
+    template <Token t1, Token t2> void handler(Arguments& argv, long param) throws;
+    template <Token t1, Token t2, Token t3> void handler(Arguments& argv, long param) throws;
 };
 
 }

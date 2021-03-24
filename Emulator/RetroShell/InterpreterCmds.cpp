@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Interpreter.h"
+#include "RetroShell.h"
 
 namespace va {
 
@@ -21,12 +22,18 @@ Interpreter::registerInstructions()
     //
     // Commands
     //
-
-    root.add("clear",
+    
+    root.add( { "clear" },
              "command", "Clears the console window",
-             nullptr, 0, 0);
+             &RetroShell::handler <Token::clear>,
+             0, 0);
     root.seek("clear")->hidden = true;
+    
+    root.add( { "clear", "test" },
+             "command", "Clears the console window",
+             &RetroShell::handler <Token::clear>, 0, 0);
 
+    
     /*
     root.add("clear",
              "command", "Clears the console window",

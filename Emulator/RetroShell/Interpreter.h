@@ -128,6 +128,7 @@ public:
     void help(const string &userInput);
     void help(Arguments &argv);
     void help(Command &command);
+
 };
 
 }

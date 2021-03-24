@@ -13,10 +13,54 @@
 namespace va {
 
 Command *
+Command::add(std::vector<string> tokens,
+             const string &a1,
+             const string &help,
+             void (RetroShell::*action)(Arguments&, long),
+             // std::function <void(Arguments&, long)> action,
+             isize numArgs, long param)
+{
+    assert(!tokens.empty());
+    
+    if (tokens.size() > 1) {
+
+        auto node = seek(tokens.front());
+        tokens.erase(tokens.begin());
+        return node->add(tokens, a1, help, action, numArgs, param);
+    }
+    
+    printf("Registering %s...\n", tokens.front().c_str());
+    
+    // Register instruction
+    Command d { this, tokens.front(), a1, help, std::list<Command>(), action, numArgs, param };
+    args.push_back(d);
+    
+    return seek(tokens.front());
+}
+
+Command *
+Command::add(std::vector<string> firstTokens,
+             std::vector<string> tokens,
+             const string &a1,
+             const string &help,
+             void (RetroShell::*action)(Arguments&, long),
+             // std::function <void(Arguments&, long)> action,
+             isize numArgs, long param)
+{
+    for (usize i = 0; i < firstTokens.size(); i++) {
+        
+        tokens[0] = firstTokens[i];
+        add(tokens, a1, help, action, numArgs, i);
+    }
+    return nullptr;
+}
+
+#if 0
+Command *
 Command::add(const string &token,
              const string &a1,
              const string &help,
-             void *ptr,
+             std::function <void(Arguments&, long)> action,
              isize num, long param)
 {
     // Make sure the key does not yet exist
@@ -44,7 +88,7 @@ Command::add(const string &token,
     */
     
     // Register instruction
-    Command d { this, token, a1, help, std::list<Command>(), func, num, param };
+    Command d { this, token, a1, help, std::list<Command>(), action, num, param };
     args.push_back(d);
     
     return seek(token);
@@ -78,9 +122,11 @@ Command::add(const string &t1, const string &t2,
         if (t2 == "set") { add("dfn", t2, a1, help, func, num, 4); }
         return nullptr;
     }
-    */
+     */
     
-    return seek(t1)->add(t2, a1, help, func, num, param);
+    return seek(t1)->add(t2, a1, help,
+                         [this](Arguments&, long) { },
+                         num, param);
 }
 
 Command *
@@ -129,6 +175,7 @@ Command::add(const string &t1, const string &t2, const string &t3, const string 
     
     return seek(t1)->add(t2, t3, t4, a1, help, func, num, param);
 }
+#endif
 
 void
 Command::remove(const string& token)
@@ -251,7 +298,7 @@ Command::usage()
         // Describe the remaining arguments (if any)
         bool printArg = false, printOpt = false;
         for (auto &it : args) {
-            if (it.func != nullptr && it.numArgs == 0) printOpt = true;
+            if (it.action != nullptr && it.numArgs == 0) printOpt = true;
             if (it.numArgs > 0 || !it.args.empty()) printArg = true;
         }
         if (printArg) {

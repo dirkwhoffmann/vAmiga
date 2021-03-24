@@ -131,11 +131,11 @@ Interpreter::exec(Arguments &argv, bool verbose)
     }
         
     // Error out if no command handler is present
-    if (current->func == nullptr && !argv.empty()) {
+    if (current->action == nullptr && !argv.empty()) {
         printf("NO COMMAND HANDLER FOUND\n");
         throw ParseError(token);
     }
-    if (current->func == nullptr && argv.empty()) {
+    if (current->action == nullptr && argv.empty()) {
         throw TooFewArgumentsError(current->tokens());
     }
     
@@ -145,7 +145,7 @@ Interpreter::exec(Arguments &argv, bool verbose)
     
     // Call the command handler
     printf("TODO:CALL COMMAND HANDLER FOR command object %p\n", current);
-    // (controller.*(current->func))(argv, current->param);
+    (retroShell.*(current->action))(argv, current->param);
 }
 
 void
