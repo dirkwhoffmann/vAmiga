@@ -547,6 +547,7 @@ RetroShell::exec <Token::controlport, Token::config> (Arguments& argv, long para
     dump(param == 0 ? amiga.controlPort1 : amiga.controlPort2, Dump::Config);
 }
 
+/*
 template <> void
 RetroShell::exec <Token::controlport, Token::connect, Token::mouse> (Arguments& argv, long param)
 {
@@ -564,6 +565,7 @@ RetroShell::exec <Token::controlport, Token::connect, Token::keyset> (Arguments&
 {
     //
 }
+*/
 
 template <> void
 RetroShell::exec <Token::controlport, Token::inspect> (Arguments& argv, long param)

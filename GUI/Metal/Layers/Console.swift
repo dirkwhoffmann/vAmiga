@@ -115,8 +115,6 @@ class Console: Layer {
         
         let macKey = MacKey.init(event: event)
         
-        track()
-
         switch macKey.keyCode {
         
         case kVK_UpArrow: amiga.retroShell.pressUp()

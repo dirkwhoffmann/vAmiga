@@ -24,12 +24,13 @@ RetroShell::RetroShell(Amiga& ref) : AmigaComponent(ref), interpreter(ref)
     input.push_back("");
     
     // Print a startup message
-    *this << "Retro shell 0.1, ";
-    *this << "Dirk W. Hoffmann, ";
-    *this << __DATE__ << " " << __TIME__ << "." << '\n';
-    *this << "Linked to vAmiga core ";
-    *this << V_MAJOR << '.' << V_MINOR << '.' << V_SUBMINOR << '.' << '\n' << '\n';
-    
+    *this << "vAmiga " << V_MAJOR << '.' << V_MINOR << '.' << V_SUBMINOR;
+    *this << " (" << __DATE__ << " " << __TIME__ << ")" << '\n';
+    *this << '\n';
+    *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
+    *this << "Licensed under the GNU General Public License v3" << '\n';
+    *this << '\n';
+
     printHelp();
     *this << '\n';
     printPrompt();
@@ -193,14 +194,14 @@ RetroShell::pressTab()
 {
     if (tabPressed) {
         
+        // TAB was pressed twice
         string currentInput = lastLine();
         isize cposMinOld = cposMin;
         
-        // TAB was pressed twice
-        *this << '\n';
+        // *this << '\n';
         
         // Print the instructions for this command
-        interpreter.help(input[ipos]);
+        interpreter.help(lastLine().substr(cposMin));
         
         // Repeat the old input string
         *this << currentInput;
@@ -276,11 +277,7 @@ RetroShell::pressKey(char c)
         }
         cpos++;
         
-        // input[ipos].insert(input[ipos].begin() + cpos++, c);
-        // *this << '\r' << string(prompt) << input[ipos];
-        isDirty = true;
-        printf("END presskey\n");
-        
+        isDirty = true;        
         tabPressed = false;
     }
     

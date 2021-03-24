@@ -162,6 +162,8 @@ Interpreter::usage(Command& current)
 void
 Interpreter::help(const string& userInput)
 {
+    printf("help(%s)\n", userInput.c_str());
+    
     // Split the command string
     Arguments tokens = split(userInput);
         
@@ -177,6 +179,8 @@ Interpreter::help(Arguments &argv)
 {
     Command *current = &root;
     string prefix, token;
+    
+    retroShell << '\n';
     
     while (1) {
                 
