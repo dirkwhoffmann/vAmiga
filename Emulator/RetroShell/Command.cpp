@@ -17,7 +17,6 @@ Command::add(std::vector<string> tokens,
              const string &a1,
              const string &help,
              void (RetroShell::*action)(Arguments&, long),
-             // std::function <void(Arguments&, long)> action,
              isize numArgs, long param)
 {
     assert(!tokens.empty());
@@ -34,7 +33,6 @@ Command::add(std::vector<string> tokens,
     // Register instruction
     Command d { this, tokens.front(), a1, help, std::list<Command>(), action, numArgs, param };
     args.push_back(d);
-    
     return seek(tokens.front());
 }
 
@@ -44,7 +42,6 @@ Command::add(std::vector<string> firstTokens,
              const string &a1,
              const string &help,
              void (RetroShell::*action)(Arguments&, long),
-             // std::function <void(Arguments&, long)> action,
              isize numArgs, long param)
 {
     for (usize i = 0; i < firstTokens.size(); i++) {
@@ -54,128 +51,6 @@ Command::add(std::vector<string> firstTokens,
     }
     return nullptr;
 }
-
-#if 0
-Command *
-Command::add(const string &token,
-             const string &a1,
-             const string &help,
-             std::function <void(Arguments&, long)> action,
-             isize num, long param)
-{
-    // Make sure the key does not yet exist
-    assert(seek(token) == nullptr);
-
-    // Expand template tokens
-    /*
-    if (token == "controlport") {
-        add("controlport1", a1, help, func, num, PORT_1);
-        add("controlport2", a1, help, func, num, PORT_2);
-        return nullptr;
-    }
-    if (token == "cia") {
-        add("ciaa", a1, help, func, num, 0);
-        add("ciab", a1, help, func, num, 1);
-        return nullptr;
-    }
-    if (token == "df") {
-        add("df0", a1, help, func, num, 0);
-        add("df1", a1, help, func, num, 1);
-        add("df2", a1, help, func, num, 2);
-        add("df3", a1, help, func, num, 3);
-        return nullptr;
-    }
-    */
-    
-    // Register instruction
-    Command d { this, token, a1, help, std::list<Command>(), action, num, param };
-    args.push_back(d);
-    
-    return seek(token);
-}
-
-Command *
-Command::add(const string &t1, const string &t2,
-             const string &a1,
-             const string &help,
-             void *func,
-             // void (Controller::*func)(Arguments&, long),
-             isize num, long param)
-{
-    // Expand template tokens
-    /*
-    if (t1 == "controlport") {
-        add("controlport1", t2, a1, help, func, num, PORT_1);
-        add("controlport2", t2, a1, help, func, num, PORT_2);
-        return nullptr;
-    }
-    if (t1 == "cia") {
-        add("ciaa", t2, a1, help, func, num, 0);
-        add("ciab", t2, a1, help, func, num, 1);
-        return nullptr;
-    }
-    if (t1 == "df") {
-        add("df0", t2, a1, help, func, num, 0);
-        add("df1", t2, a1, help, func, num, 1);
-        add("df2", t2, a1, help, func, num, 2);
-        add("df3", t2, a1, help, func, num, 3);
-        if (t2 == "set") { add("dfn", t2, a1, help, func, num, 4); }
-        return nullptr;
-    }
-     */
-    
-    return seek(t1)->add(t2, a1, help,
-                         [this](Arguments&, long) { },
-                         num, param);
-}
-
-Command *
-Command::add(const string &t1, const string &t2, const string &t3,
-             const string &a1,
-             const string &help,
-             // void (Controller::*func)(Arguments&, long),
-             void *func,
-             isize num, long param)
-{
-    // Expand template tokens
-    /*
-    if (t1 == "controlport") {
-        add("controlport1", t2, t3, a1, help, func, num, PORT_1);
-        add("controlport2", t2, t3, a1, help, func, num, PORT_2);
-        return nullptr;
-    }
-    if (t1 == "cia") {
-        add("ciaa", t2, t3, a1, help, func, num, 0);
-        add("ciab", t2, t3, a1, help, func, num, 1);
-        return nullptr;
-    }
-    if (t1 == "df") {
-        add("df0", t2, t3, a1, help, func, num, 0);
-        add("df1", t2, t3, a1, help, func, num, 1);
-        add("df2", t2, t3, a1, help, func, num, 2);
-        add("df3", t2, t3, a1, help, func, num, 3);
-        if (t2 == "set") { add("dfn", t2, t3, a1, help, func, num, 4); }
-        return nullptr;
-    }
-    */
-    return seek(t1)->add(t2, t3, a1, help, func, num, param);
-}
-
-Command *
-Command::add(const string &t1, const string &t2, const string &t3, const string &t4,
-             const string &a1,
-             const string &help,
-             // void (Controller::*func)(Arguments&, long),
-             void *func,
-             isize num, long param)
-{
-    assert(t1 != "controlport");
-    assert(t1 != "cia");
-    assert(t1 != "df");
-    
-    return seek(t1)->add(t2, t3, t4, a1, help, func, num, param);
-}
-#endif
 
 void
 Command::remove(const string& token)

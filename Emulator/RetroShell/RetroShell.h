@@ -156,11 +156,19 @@ private:
     
 public:
     
-    void handler(const string& command) throws;
+    // void handler(const string& command) throws;
     
-    template <Token t1> void handler(Arguments& argv, long param) throws;
-    template <Token t1, Token t2> void handler(Arguments& argv, long param) throws;
-    template <Token t1, Token t2, Token t3> void handler(Arguments& argv, long param) throws;
+    template <Token t1> void exec(Arguments& argv, long param) throws;
+    template <Token t1, Token t2> void exec(Arguments& argv, long param) throws;
+    template <Token t1, Token t2, Token t3> void exec(Arguments& argv, long param) throws;
+
+private:
+    
+    bool parseBool(string& token);
+    long parseNum(string& token);
+
+    void dump(HardwareComponent &component, Dump::Category category);
+
 };
 
 }

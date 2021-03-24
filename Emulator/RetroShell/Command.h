@@ -54,7 +54,6 @@ struct Command {
                  const string &a1,
                  const string &help,
                  void (RetroShell::*action)(Arguments&, long) = nullptr,
-                 // std::function <void(Arguments&, long)> action = nullptr,
                  isize numArgs = 0, long param = 0);
 
     // Creates multiple nodes in the command tree
@@ -63,41 +62,8 @@ struct Command {
                  const string &a1,
                  const string &help,
                  void (RetroShell::*action)(Arguments&, long) = nullptr,
-                 // std::function <void(Arguments&, long)> action = nullptr,
                  isize numArgs = 0, long param = 0);
 
-    
-    /*
-    Command *add(const string &token,
-                       const string &a1,
-                       const string &help,
-                       std::function <void(Arguments&, long)> action,
-                       // void (Controller::*func)(Arguments&, long) = nullptr,
-                 // void *func,
-                       isize numArgs = 0, long param = 0);
-    
-    Command *add(const string &t1, const string &t2,
-                       const string &a1,
-                       const string &help,
-                       // void (Controller::*func)(Arguments&, long) = nullptr,
-                 void *func,
-                       isize numArgs = 0, long param = 0);
-    
-    Command *add(const string &t1, const string &t2, const string &t3,
-                       const string &a1,
-                       const string &help,
-                       // void (Controller::*func)(Arguments&, long) = nullptr,
-                 void *func,
-                       isize numArgs = 0, long param = 0);
-
-    Command *add(const string &t1, const string &t2, const string &t3, const string &t4,
-                       const string &a1,
-                       const string &help,
-                       // void (Controller::*func)(Arguments&, long) = nullptr,
-                 void *func,
-                       isize numArgs = 0, long param = 0);
-    */
-    
     // Removes a registered command
     void remove(const string& token);
     

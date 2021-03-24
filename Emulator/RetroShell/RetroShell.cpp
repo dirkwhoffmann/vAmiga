@@ -9,6 +9,9 @@
 
 #include "config.h"
 #include "RetroShell.h"
+#include "Amiga.h"
+
+#include <sstream>
 
 namespace va {
 
@@ -439,6 +442,38 @@ RetroShell::exec(std::istream &stream)
             throw my::Exception(command, line);
         }
     }
+}
+
+bool
+RetroShell::parseBool(string& token)
+{
+    if (token == "1" || token == "true" || token == "yes") return true;
+    if (token == "0" || token == "false" || token == "no") return false;
+
+    throw ParseBoolError("");
+}
+
+long
+RetroShell::parseNum(string& token)
+{
+    long result;
+    
+    try { result = stol(token, nullptr, 0); }
+    catch (std::exception& err) { throw ParseNumError(token); }
+
+    return result;
+}
+
+void
+RetroShell::dump(HardwareComponent &component, Dump::Category category)
+{
+    std::stringstream ss; string line;
+    
+    amiga.suspend();
+    component.dump(category, ss);
+    amiga.resume();
+    
+    while(std::getline(ss, line)) *this << line << '\n';
 }
 
 }
