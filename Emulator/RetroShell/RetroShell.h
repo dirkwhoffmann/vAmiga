@@ -10,13 +10,14 @@
 #pragma once
 
 #include "AmigaComponent.h"
+#include "Interpreter.h"
 
 namespace va {
 
 class RetroShell : public AmigaComponent {
 
-    // Interpreter for commands typed into the debug console
-    // Interpreter interpreter;
+    // Interpreter for commands typed into the console window
+    Interpreter interpreter;
     
     //
     // Text storage
@@ -107,6 +108,9 @@ public:
     // Returns the cursor position relative to the line end
     isize cposRel();
 
+    // Moves the cursor forward to a certain column
+    void tab(int hpos);
+
 private:
 
     // Returns a reference to the last line in the text storage
@@ -129,9 +133,6 @@ private:
     
     // Clears the current line
     void clearLine() { *this << '\r'; }
-
-    // Moves the cursor forward to a certain column
-    void tab(int hpos);
 
     // Replaces the last line
     // void replace(const string &text, const string &prefix);

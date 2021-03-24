@@ -9,11 +9,10 @@
 
 #include "config.h"
 #include "RetroShell.h"
-#include "Exception.h"
 
 namespace va {
 
-RetroShell::RetroShell(Amiga& ref) : AmigaComponent(ref)
+RetroShell::RetroShell(Amiga& ref) : AmigaComponent(ref), interpreter(ref)
 {
     // Initialize the text storage
     storage.push_back("");
@@ -355,7 +354,6 @@ RetroShell::exec(const string &command, bool verbose)
         
     printf("Command: %s\n", command.c_str());
  
-    /*
     try {
         
         // Hand the command over to the intepreter
@@ -413,7 +411,7 @@ RetroShell::exec(const string &command, bool verbose)
     // Print a new prompt
     // printf("Command: %s\n", command.c_str());
     // *this << string(prompt);
-    */
+    
     // printPrompt();
     
     return success;

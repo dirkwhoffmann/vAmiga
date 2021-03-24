@@ -47,6 +47,10 @@ struct ConfigArgError : ConfigError {
     ConfigArgError(const string &s) : ConfigError(s) { };
 };
 
+struct ConfigFileNotFoundError : ConfigError {
+    ConfigFileNotFoundError(const string &s) : ConfigError(s) { };
+};
+
 struct ConfigFileReadError : ConfigError {
     ConfigFileReadError(const string &s) : ConfigError(s) { };
 };
