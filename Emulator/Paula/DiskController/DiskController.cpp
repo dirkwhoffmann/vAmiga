@@ -337,10 +337,15 @@ DiskController::insertDisk(class DiskFile *file, isize nr, Cycle delay)
 void
 DiskController::insertDisk(const string &name, isize nr, Cycle delay)
 {
+    if (DiskFile *file = DiskFile::make(name)) {
+        insertDisk(file, nr, delay);
+    }
+    /*
     ErrorCode ec;
     if (DiskFile *file = DiskFile::make(name, &ec)) {
         insertDisk(file, nr, delay);
     }
+    */
 }
 
 void

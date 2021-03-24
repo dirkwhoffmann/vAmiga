@@ -125,13 +125,10 @@ class Console: Layer {
         case kVK_End: amiga.retroShell.pressEnd()
         case kVK_Delete: amiga.retroShell.pressBackspace()
         case kVK_ForwardDelete: amiga.retroShell.pressDelete()
-
-        case kVK_Return:
-            amiga.retroShell.pressReturn()
-
-        case kVK_Tab:
-            amiga.retroShell.pressTab()
-
+        case kVK_Return: amiga.retroShell.pressReturn()
+        case kVK_Tab: amiga.retroShell.pressTab()
+        case kVK_Escape: close()
+        
         default:
             
             if let c = event.characters?.utf8CString.first {

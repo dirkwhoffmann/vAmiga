@@ -767,20 +767,10 @@ RetroShell::exec <Token::dfn, Token::disconnect> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::dfn, Token::insert> (Arguments& argv, long param)
 {
-    // insertDisk(argv.front(), param);
+    auto path = argv.front();
+    if (!my::fileExists(path)) throw ConfigFileNotFoundError(path);
     
-    /*
-    string path = argv.front();
-    
-    try {
-        ADFFile *adf = AmigaFile::make <ADFFile> (path.c_str());
-        Disk *disk = Disk::makeWithFile(adf);
-        amiga.df[param]->insertDisk(disk);
-        
-    } catch (VAError &err) {
-        console << "Failed to insert disk: " << err.what() << '\n';
-    }
-    */
+    amiga.paula.diskController.insertDisk(path, param);
 }
 
 template <> void

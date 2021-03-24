@@ -265,9 +265,7 @@ RetroShell::pressReturn()
 
 void
 RetroShell::pressKey(char c)
-{
-    printf("pressKey %c\n", c);
-    
+{    
     if (isprint(c)) {
                 
         if (cpos < (isize)lastLine().size()) {

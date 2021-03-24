@@ -110,7 +110,7 @@ Interpreter::registerInstructions()
 
     root.add({"memory", "set", "slowramdelay"},
              "key", "Enables or disables slow Ram bus delays",
-             &RetroShell::exec <Token::memory, Token::set, Token::slowramdelay>, 10);
+             &RetroShell::exec <Token::memory, Token::set, Token::slowramdelay>, 1);
 
     root.add({"memory", "set", "bankmap"},
              "key", "Selects the bank mapping scheme",
