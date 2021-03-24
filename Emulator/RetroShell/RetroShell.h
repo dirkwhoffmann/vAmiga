@@ -115,7 +115,7 @@ private:
 
     // Returns a reference to the last line in the text storage
     string &lastLine() { return storage.back(); }
-
+    
     // Returns a reference to the last line in the input history buffer
     string &lastInput() { return input.back(); }
 

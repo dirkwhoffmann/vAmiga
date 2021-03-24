@@ -149,6 +149,7 @@ RetroShell::pressUp()
     
     if (ipos > 0) ipos--;
     if (ipos < (isize)input.size()) lastLine() = prompt + input[ipos];
+    tabPressed = false;
 }
 
 void
@@ -156,30 +157,35 @@ RetroShell::pressDown()
 {
     if (ipos + 1 < (isize)input.size()) ipos++;
     if (ipos < (isize)input.size()) lastLine() = prompt + input[ipos];
+    tabPressed = false;
 }
 
 void
 RetroShell::pressLeft()
 {
     cpos = std::max(cpos - 1, cposMin);
+    tabPressed = false;
 }
 
 void
 RetroShell::pressRight()
 {
     cpos = std::min(cpos + 1, (isize)lastLine().size());
+    tabPressed = false;
 }
 
 void
 RetroShell::pressHome()
 {
     cpos = cposMin;
+    tabPressed = false;
 }
 
 void
 RetroShell::pressEnd()
 {
     cpos = (isize)lastLine().size();
+    tabPressed = false;
 }
 
 void
@@ -188,23 +194,24 @@ RetroShell::pressTab()
     if (tabPressed) {
         
         // TAB was pressed twice
-        printf("TAB TWICE\n");
-        // *this << '\n';
+        *this << '\n';
         
         // Print the instructions for this command
-        printf("TODO: CALL interpreter.help\n");
-        // interpreter.help(input[ipos]);
+        interpreter.help(input[ipos]);
         
         // Repeat the old input string
-        // *this << string(prompt) << input[ipos];
+        *this << string(prompt) << lastLine();
         
     } else {
         
-        printf("TODO: CALL interpreter.autoComplete\n");
-        // interpreter.autoComplete(input[ipos]);
-        // cpos = (isize)input[ipos].length();
-        // replace(input[ipos]);
+        // Auto-complete the typed in command
+        string stripped = storage.back().substr(cposMin);
+        interpreter.autoComplete(stripped);
+        lastLine() = prompt + stripped;
+        cpos = (isize)lastLine().length();
     }
+    
+    tabPressed = true;
 }
 
 void
@@ -213,6 +220,7 @@ RetroShell::pressBackspace()
     if (cpos > cposMin) {
         lastLine().erase(lastLine().begin() + --cpos);
     }
+    tabPressed = false;
 }
 
 void
@@ -221,6 +229,7 @@ RetroShell::pressDelete()
     if (cpos < (isize)lastLine().size()) {
         lastLine().erase(lastLine().begin() + cpos);
     }
+    tabPressed = false;
 }
 
 void
@@ -246,6 +255,7 @@ RetroShell::pressReturn()
     // Execute the command
     exec(command);
     printPrompt();
+    tabPressed = false;
 }
 
 void
@@ -262,11 +272,12 @@ RetroShell::pressKey(char c)
         }
         cpos++;
         
-        
         // input[ipos].insert(input[ipos].begin() + cpos++, c);
         // *this << '\r' << string(prompt) << input[ipos];
         isDirty = true;
         printf("END presskey\n");
+        
+        tabPressed = false;
     }
     
 /*

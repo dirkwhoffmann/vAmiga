@@ -128,6 +128,7 @@ void
 Command::autoComplete(string& token)
 {
     auto matches = filterPrefix(token);
+    
     if (!matches.empty()) {
         
         Command *first = matches.front();
