@@ -105,7 +105,7 @@ public:
 
     // Auto-completes a command. Returns the number of auto-completed tokens
     void autoComplete(Arguments &argv);
-    void autoComplete(string& userInput);
+    string autoComplete(const string& userInput);
 
     
     //

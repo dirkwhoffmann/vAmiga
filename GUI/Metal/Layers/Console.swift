@@ -74,6 +74,7 @@ class Console: Layer {
                 track("ERROR: text is NULL\n")
             }
             
+            textView.scrollToEndOfDocument(self)
             isDirty = false
         }
     }
@@ -126,8 +127,12 @@ class Console: Layer {
         case kVK_End: amiga.retroShell.pressEnd()
         case kVK_Delete: amiga.retroShell.pressBackspace()
         case kVK_ForwardDelete: amiga.retroShell.pressDelete()
-        case kVK_Return: amiga.retroShell.pressReturn()
-        case kVK_Tab: amiga.retroShell.pressTab()
+
+        case kVK_Return:
+            amiga.retroShell.pressReturn()
+
+        case kVK_Tab:
+            amiga.retroShell.pressTab()
 
         default:
             

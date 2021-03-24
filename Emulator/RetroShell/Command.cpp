@@ -20,6 +20,12 @@ Command::add(std::vector<string> tokens,
              isize numArgs, long param)
 {
     assert(!tokens.empty());
+ 
+    printf("Registering ");
+    for (auto &it: tokens) {
+        printf("%s ", it.c_str());
+    }
+    printf("\n");
     
     if (tokens.size() > 1) {
 
@@ -28,7 +34,7 @@ Command::add(std::vector<string> tokens,
         return node->add(tokens, a1, help, action, numArgs, param);
     }
     
-    printf("Registering %s...\n", tokens.front().c_str());
+    // printf("Registering %s...\n", tokens.front().c_str());
     
     // Register instruction
     Command d { this, tokens.front(), a1, help, std::list<Command>(), action, numArgs, param };
@@ -72,10 +78,13 @@ Command::seek(const string& token)
 Command *
 Command::seek(Arguments argv)
 {
-    Command *result = this;
+    Command *result = nullptr;
     
-    for (auto& it : argv) {
-        if (!(result = result->seek(it))) break;
+    if (!argv.empty()) {
+        result = this;
+        for (auto& it : argv) {
+            if (!(result = result->seek(it))) break;
+        }
     }
     
     return result;
@@ -124,11 +133,12 @@ Command::filterPrefix(const string& prefix)
     return result;
 }
 
-void
-Command::autoComplete(string& token)
+string
+Command::autoComplete(const string& token)
 {
-    auto matches = filterPrefix(token);
+    string result = token;
     
+    auto matches = filterPrefix(token);
     if (!matches.empty()) {
         
         Command *first = matches.front();
@@ -136,12 +146,13 @@ Command::autoComplete(string& token)
             
             for (auto m: matches) {
                 if (m->token.size() <= i || m->token[i] != first->token[i]) {
-                    return;
+                    return result;
                 }
             }
-            token += first->token[i];
+            result += first->token[i];
         }
     }
+    return result;
 }
 
 string

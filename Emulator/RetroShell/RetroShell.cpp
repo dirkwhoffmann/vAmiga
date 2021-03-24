@@ -193,6 +193,9 @@ RetroShell::pressTab()
 {
     if (tabPressed) {
         
+        string currentInput = lastLine();
+        isize cposMinOld = cposMin;
+        
         // TAB was pressed twice
         *this << '\n';
         
@@ -200,14 +203,15 @@ RetroShell::pressTab()
         interpreter.help(input[ipos]);
         
         // Repeat the old input string
-        *this << string(prompt) << lastLine();
+        *this << currentInput;
+        cposMin = cposMinOld;
+        cpos = lastLine().length();
         
     } else {
         
         // Auto-complete the typed in command
         string stripped = storage.back().substr(cposMin);
-        interpreter.autoComplete(stripped);
-        lastLine() = prompt + stripped;
+        lastLine() = prompt + interpreter.autoComplete(stripped);
         cpos = (isize)lastLine().length();
     }
     

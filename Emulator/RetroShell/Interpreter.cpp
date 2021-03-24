@@ -61,14 +61,16 @@ Interpreter::autoComplete(Arguments &argv)
 
     for (auto it = argv.begin(); current && it != argv.end(); it++) {
         
-        current->autoComplete(*it);
+        *it = current->autoComplete(*it);
         current = current->seek(*it);
     }
 }
 
-void
-Interpreter::autoComplete(string& userInput)
+string
+Interpreter::autoComplete(const string& userInput)
 {
+    string result;
+    
     // Split input string
     Arguments tokens = split(userInput);
     
@@ -76,15 +78,18 @@ Interpreter::autoComplete(string& userInput)
     autoComplete(tokens);
 
     // Recreate the command string
-    userInput = "";
     for (const auto &it : tokens) {
-        userInput += (userInput == "" ? "" : " ") + it;
+        result += (result == "" ? "" : " ") + it;
     }
 
     // Add a space if the command has been fully completed
+    printf("autoComplete: '%s'\n", result.c_str());
     if (root.seek(tokens) != nullptr) {
-        userInput += " ";
+        printf("Adding space\n");
+        result += " ";
     }
+    
+    return result;
 }
 
 void
