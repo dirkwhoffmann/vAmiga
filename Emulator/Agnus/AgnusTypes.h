@@ -24,6 +24,21 @@ enum_long(AGNUS_REVISION)
 };
 typedef AGNUS_REVISION AgnusRevision;
 
+enum_long(DDF_STATE)
+{
+    DDF_OFF,
+    DDF_READY,
+    DDF_ON
+};
+typedef DDF_STATE DDFState;
+
+enum_long(SPR_DMA_STATE)
+{
+    SPR_DMA_IDLE,
+    SPR_DMA_ACTIVE
+};
+typedef SPR_DMA_STATE SprDMAState;
+
 
 //
 // Structures

@@ -11,7 +11,7 @@
 
 #include "DmaDebuggerTypes.hpp"
 
-#include "AgnusTypes.hpp"
+#include "Bus.hpp"
 #include "AmigaComponent.hpp"
 #include "Colors.hpp"
 

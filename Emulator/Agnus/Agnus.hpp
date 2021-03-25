@@ -10,7 +10,6 @@
 #pragma once
 
 #include "AmigaComponent.hpp"
-#include "AgnusTypes.hpp"
 #include "Beam.hpp"
 #include "Blitter.hpp"
 #include "ChangeRecorder.hpp"
@@ -23,6 +22,72 @@
 #include "Macros.h"
 
 namespace va {
+
+#include "AgnusTypes.h"
+
+//
+// Reflection APIs
+//
+
+struct AgnusRevisionEnum : Reflection<AgnusRevisionEnum, AgnusRevision> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < AGNUS_COUNT;
+    }
+
+    static const char *prefix() { return "AGNUS"; }
+    static const char *key(AgnusRevision value)
+    {
+        switch (value) {
+                
+            case AGNUS_OCS:     return "OCS";
+            case AGNUS_ECS_1MB: return "ECS_1MB";
+            case AGNUS_ECS_2MB: return "ECS_2MB";
+            case AGNUS_COUNT:   return "???";
+        }
+        return "???";
+    }
+};
+
+struct DDFStateEnum : Reflection<DDFStateEnum, DDFState> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value <= DDF_ON;
+    }
+
+    static const char *prefix() { return "DDF"; }
+    static const char *key(AgnusRevision value)
+    {
+        switch (value) {
+                
+            case DDF_OFF:   return "OFF";
+            case DDF_READY: return "READY";
+            case DDF_ON:    return "ON";
+        }
+        return "???";
+    }
+};
+
+struct SprDmaStateEnum : Reflection<SprDmaStateEnum, SprDMAState> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value <= SPR_DMA_ACTIVE;
+    }
+
+    static const char *prefix() { return "SPR_DMA"; }
+    static const char *key(SprDMAState value)
+    {
+        switch (value) {
+                
+            case SPR_DMA_IDLE:   return "IDLE";
+            case SPR_DMA_ACTIVE: return "ACTIVE";
+        }
+        return "???";
+    }
+};
 
 /* Hsync handler action flags
  *
