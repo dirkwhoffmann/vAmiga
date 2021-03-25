@@ -8,8 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
-#include "AmigaTypes.hpp"
 #include "Error.hpp"
 
 namespace va {

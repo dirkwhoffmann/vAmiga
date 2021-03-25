@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "AmigaTypes.hpp"
 #include "Exception.hpp"
+#include "Reflection.hpp"
 
 namespace va {
 
