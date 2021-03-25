@@ -8,18 +8,20 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FSBlock.h"
-#include "FSBitmapBlock.h"
-#include "FSBitmapExtBlock.h"
-#include "FSBootBlock.h"
-#include "FSDevice.h"
-#include "FSDataBlock.h"
-#include "FSEmptyBlock.h"
-#include "FSFileHeaderBlock.h"
-#include "FSFileListBlock.h"
-#include "FSPartition.h"
-#include "FSRootBlock.h"
-#include "FSUserDirBlock.h"
+
+#include "FSBlock.hpp"
+#include "FSBitmapBlock.hpp"
+#include "FSBitmapExtBlock.hpp"
+#include "FSBootBlock.hpp"
+#include "FSDevice.hpp"
+#include "FSDataBlock.hpp"
+#include "FSEmptyBlock.hpp"
+#include "FSFileHeaderBlock.hpp"
+#include "FSFileListBlock.hpp"
+#include "FSPartition.hpp"
+#include "FSRootBlock.hpp"
+#include "FSUserDirBlock.hpp"
+
 #include <string.h>
 
 namespace va {

@@ -8,7 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "HDFFile.h"
+
+#include "HDFFile.hpp"
 #include "IO.hpp"
 #include "string.h"
 

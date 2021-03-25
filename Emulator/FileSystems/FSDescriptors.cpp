@@ -8,7 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FSDescriptors.h"
+
+#include "FSDescriptors.hpp"
 
 namespace va {
 

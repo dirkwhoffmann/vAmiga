@@ -8,10 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "IMGFile.h"
 
+#include "IMGFile.hpp"
 #include "Checksum.hpp"
-#include "Disk.h"
+#include "Disk.hpp"
 #include "IO.hpp"
 
 namespace va {

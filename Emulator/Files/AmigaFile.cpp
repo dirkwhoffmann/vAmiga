@@ -8,17 +8,18 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "AmigaFile.h"
-#include "Snapshot.h"
-#include "ADFFile.h"
-#include "EXTFile.h"
-#include "IMGFile.h"
-#include "DMSFile.h"
-#include "EXEFile.h"
-#include "Folder.h"
-#include "HDFFile.h"
-#include "RomFile.h"
-#include "ExtendedRomFile.h"
+
+#include "AmigaFile.hpp"
+#include "Snapshot.hpp"
+#include "ADFFile.hpp"
+#include "EXTFile.hpp"
+#include "IMGFile.hpp"
+#include "DMSFile.hpp"
+#include "EXEFile.hpp"
+#include "Folder.hpp"
+#include "HDFFile.hpp"
+#include "RomFile.hpp"
+#include "ExtendedRomFile.hpp"
 #include "string.h"
 
 namespace va {

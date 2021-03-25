@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+
 #include "AmigaTypes.hpp"
 #include "Errors.hpp"
 

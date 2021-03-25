@@ -8,10 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "DiskController.h"
 
-#include "Agnus.h"
-#include "Drive.h"
+#include "DiskController.hpp"
+#include "Agnus.hpp"
+#include "Drive.hpp"
 #include <math.h>
 
 namespace va {

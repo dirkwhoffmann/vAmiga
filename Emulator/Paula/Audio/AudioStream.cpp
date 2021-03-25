@@ -8,8 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "AudioStream.h"
 
+#include "AudioStream.hpp"
 #include <algorithm>
 
 namespace va {

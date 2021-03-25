@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Paula.h"
+#include "Paula.hpp"
 
 namespace va {
 

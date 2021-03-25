@@ -10,7 +10,7 @@
 #include "config.h"
 
 #include "IO.hpp"
-#include "FSDevice.h"
+#include "FSDevice.hpp"
 #include "limits.h"
 #include <string.h>
 #include <set>

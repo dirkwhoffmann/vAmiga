@@ -8,8 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Interpreter.h"
-#include "RetroShell.h"
+
+#include "Interpreter.hpp"
+#include "RetroShell.hpp"
 
 namespace va {
 

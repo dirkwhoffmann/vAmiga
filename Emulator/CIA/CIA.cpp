@@ -8,16 +8,16 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "CIA.h"
 
-#include "Agnus.h"
-#include "ControlPort.h"
-#include "DiskController.h"
+#include "CIA.hpp"
+#include "Agnus.hpp"
+#include "ControlPort.hpp"
+#include "DiskController.hpp"
 #include "IO.hpp"
-#include "Memory.h"
+#include "Memory.hpp"
 #include "MsgQueue.hpp"
-#include "Paula.h"
-#include "SerialPort.h"
+#include "Paula.hpp"
+#include "SerialPort.hpp"
 
 namespace va {
 

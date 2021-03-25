@@ -8,8 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "EXTFile.h"
 
+#include "EXTFile.hpp"
 #include "IO.hpp"
 
 namespace va {

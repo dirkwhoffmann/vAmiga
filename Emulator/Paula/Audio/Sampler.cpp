@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Sampler.h"
+#include "Sampler.hpp"
 
 namespace va {
 

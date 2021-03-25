@@ -8,9 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FSBitmapBlock.h"
-#include "FSDevice.h"
-#include "FSPartition.h"
+
+#include "FSBitmapBlock.hpp"
+#include "FSDevice.hpp"
+#include "FSPartition.hpp"
 
 namespace va {
 

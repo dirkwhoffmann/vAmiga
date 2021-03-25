@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Blitter.h"
 
-#include "Agnus.h"
+#include "Blitter.hpp"
+#include "Agnus.hpp"
 #include "Checksum.hpp"
 #include "IO.hpp"
 

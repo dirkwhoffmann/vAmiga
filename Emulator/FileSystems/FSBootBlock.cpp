@@ -8,10 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "BootBlockImage.h"
-#include "FSBootBlock.h"
-#include "FSDevice.h"
-#include "FSPartition.h"
+
+#include "BootBlockImage.hpp"
+#include "FSBootBlock.hpp"
+#include "FSDevice.hpp"
+#include "FSPartition.hpp"
 #include "string.h"
 
 namespace va {

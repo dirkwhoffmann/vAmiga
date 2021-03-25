@@ -8,10 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Blitter.h"
-#include "Agnus.h"
-#include "Memory.h"
-#include "Paula.h"
+
+#include "Blitter.hpp"
+#include "Agnus.hpp"
+#include "Memory.hpp"
+#include "Paula.hpp"
 
 namespace va {
 

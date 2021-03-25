@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Disk.h"
 
-#include "DiskFile.h"
+#include "Disk.hpp"
+#include "DiskFile.hpp"
 
 namespace va {
 

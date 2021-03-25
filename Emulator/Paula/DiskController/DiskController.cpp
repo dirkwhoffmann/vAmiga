@@ -8,13 +8,13 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "DiskController.h"
 
-#include "Agnus.h"
-#include "DiskFile.h"
-#include "Drive.h"
+#include "DiskController.hpp"
+#include "Agnus.hpp"
+#include "DiskFile.hpp"
+#include "Drive.hpp"
 #include "MsgQueue.hpp"
-#include "Paula.h"
+#include "Paula.hpp"
 
 #include <algorithm>
 

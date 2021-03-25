@@ -8,10 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Joystick.h"
 
-#include "Agnus.h"
-#include "ControlPort.h"
+#include "Joystick.hpp"
+#include "Agnus.hpp"
+#include "ControlPort.hpp"
 #include "IO.hpp"
 
 namespace va {

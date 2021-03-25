@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "ExtendedRomFile.h"
-#include "Macros.h"
 
+#include "ExtendedRomFile.hpp"
+#include "Macros.h"
 #include "IO.hpp"
 
 namespace va {

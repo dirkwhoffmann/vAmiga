@@ -8,10 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Keyboard.h"
 
-#include "Agnus.h"
-#include "CIA.h"
+#include "Keyboard.hpp"
+#include "Agnus.hpp"
+#include "CIA.hpp"
 #include "IO.hpp"
 #include "MsgQueue.hpp"
 

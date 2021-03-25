@@ -8,10 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Denise.h"
 
-#include "Agnus.h"
-#include "ControlPort.h"
+#include "Denise.hpp"
+#include "Agnus.hpp"
+#include "ControlPort.hpp"
 
 namespace va {
 

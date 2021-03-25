@@ -8,11 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "CIA.h"
+
+#include "CIA.hpp"
 #include "Constants.h"
 #include "Macros.h"
-
-#include "Keyboard.h"
+#include "Keyboard.hpp"
 
 namespace va {
 

@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Oscillator.h"
 
-#include "Agnus.h"
+#include "Oscillator.hpp"
+#include "Agnus.hpp"
 #include "Chrono.hpp"
 
 namespace va {

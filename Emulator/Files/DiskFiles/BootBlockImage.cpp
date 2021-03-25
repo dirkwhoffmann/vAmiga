@@ -8,7 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "BootBlockImage.h"
+
+#include "BootBlockImage.hpp"
 #include <string.h>
 
 namespace va {

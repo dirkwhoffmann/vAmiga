@@ -8,8 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Agnus.h"
-#include "Amiga.h"
+
+#include "Agnus.hpp"
+#include "Amiga.hpp"
 #include "IO.hpp"
 
 namespace va {

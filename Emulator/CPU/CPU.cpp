@@ -8,12 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "CPU.h"
 
-#include "Agnus.h"
-#include "Amiga.h"
+#include "CPU.hpp"
+#include "Agnus.hpp"
+#include "Amiga.hpp"
 #include "IO.hpp"
-#include "Memory.h"
+#include "Memory.hpp"
 #include "MsgQueue.hpp"
 
 namespace va {

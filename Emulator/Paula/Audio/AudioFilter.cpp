@@ -8,7 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "AudioFilter.h"
+
+#include "AudioFilter.hpp"
 #include "math.h"
 
 namespace va {

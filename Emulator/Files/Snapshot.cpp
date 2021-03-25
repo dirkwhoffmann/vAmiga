@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Snapshot.h"
 
-#include "Amiga.h"
+#include "Snapshot.hpp"
+#include "Amiga.hpp"
 #include "IO.hpp"
 
 namespace va {

@@ -8,13 +8,13 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Mouse.h"
 
+#include "Mouse.hpp"
 #include "Chrono.hpp"
-#include "ControlPort.h"
+#include "ControlPort.hpp"
 #include "IO.hpp"
 #include "MsgQueue.hpp"
-#include "Oscillator.h"
+#include "Oscillator.hpp"
 
 namespace va {
 

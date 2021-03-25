@@ -8,10 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "UART.h"
 
-#include "Agnus.h"
-#include "SerialPort.h"
+#include "UART.hpp"
+#include "Agnus.hpp"
+#include "SerialPort.hpp"
 
 namespace va {
 

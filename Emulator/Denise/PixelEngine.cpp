@@ -8,12 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "PixelEngine.h"
 
-#include "Agnus.h"
-#include "Colors.h"
-#include "Denise.h"
-#include "DmaDebugger.h"
+#include "PixelEngine.hpp"
+#include "Agnus.hpp"
+#include "Colors.hpp"
+#include "Denise.hpp"
+#include "DmaDebugger.hpp"
 
 namespace va {
 

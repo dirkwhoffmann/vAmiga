@@ -8,13 +8,13 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "DiskController.h"
 
-#include "Agnus.h"
+#include "DiskController.hpp"
+#include "Agnus.hpp"
 #include "Checksum.hpp"
-#include "Drive.h"
+#include "Drive.hpp"
 #include "MsgQueue.hpp"
-#include "Paula.h"
+#include "Paula.hpp"
 
 namespace va {
 

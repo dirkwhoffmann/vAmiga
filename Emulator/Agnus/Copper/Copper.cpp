@@ -8,12 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Copper.h"
 
-#include "Agnus.h"
+#include "Copper.hpp"
+#include "Agnus.hpp"
 #include "Checksum.hpp"
 #include "IO.hpp"
-#include "PixelEngine.h"
+#include "PixelEngine.hpp"
 
 namespace va {
 

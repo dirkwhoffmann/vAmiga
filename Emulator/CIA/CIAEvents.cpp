@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "CIA.h"
 
-#include "Agnus.h"
+#include "CIA.hpp"
+#include "Agnus.hpp"
 
 namespace va {
 

@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "TOD.h"
 
-#include "CIA.h"
+#include "TOD.hpp"
+#include "CIA.hpp"
 #include "IO.hpp"
 
 namespace va {

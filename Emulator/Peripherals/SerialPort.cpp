@@ -8,8 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "SerialPort.h"
-#include "UART.h"
+
+#include "SerialPort.hpp"
+#include "UART.hpp"
 #include "IO.hpp"
 
 namespace va {

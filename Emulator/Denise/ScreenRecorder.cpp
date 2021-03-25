@@ -8,13 +8,13 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "ScreenRecorder.h"
+#include "ScreenRecorder.hpp"
 
 #include "IO.hpp"
 
-#include "Denise.h"
+#include "Denise.hpp"
 #include "MsgQueue.hpp"
-#include "Paula.h"
+#include "Paula.hpp"
 
 namespace va {
 

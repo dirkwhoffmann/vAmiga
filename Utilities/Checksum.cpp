@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+
 #include "Checksum.hpp"
 #include "Macros.h"
 

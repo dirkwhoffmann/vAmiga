@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "RetroShell.h"
-#include "Amiga.h"
 
+#include "RetroShell.hpp"
+#include "Amiga.hpp"
 #include <sstream>
 
 namespace va {

@@ -8,11 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Denise.h"
 
-#include "Agnus.h"
-#include "Amiga.h"
-#include "ControlPort.h"
+#include "Denise.hpp"
+#include "Agnus.hpp"
+#include "Amiga.hpp"
+#include "ControlPort.hpp"
 #include "IO.hpp"
 #include "SSEUtils.hpp"
 

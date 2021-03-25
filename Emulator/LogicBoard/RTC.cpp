@@ -8,11 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "RTC.h"
 
-#include "CPU.h"
+#include "RTC.hpp"
+#include "CPU.hpp"
 #include "IO.hpp"
-#include "Memory.h"
+#include "Memory.hpp"
 
 namespace va {
 

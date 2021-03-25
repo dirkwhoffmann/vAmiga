@@ -8,13 +8,13 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "ADFFile.h"
 
-#include "BootBlockImage.h"
+#include "ADFFile.hpp"
+#include "BootBlockImage.hpp"
 #include "Checksum.hpp"
 #include "Debug.hpp"
-#include "Disk.h"
-#include "Drive.h"
+#include "Disk.hpp"
+#include "Drive.hpp"
 #include "IO.hpp"
 
 namespace va {

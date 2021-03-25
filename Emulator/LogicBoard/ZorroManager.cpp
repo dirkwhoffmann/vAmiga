@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "ZorroManager.h"
 
-#include "Memory.h"
+#include "ZorroManager.hpp"
+#include "Memory.hpp"
 
 namespace va {
 

@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Folder.h"
 
-#include "FSDevice.h"
+#include "Folder.hpp"
+#include "FSDevice.hpp"
 
 namespace va {
 

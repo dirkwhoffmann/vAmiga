@@ -8,10 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "EXEFile.h"
 
-#include "AmigaFile.h"
-#include "FSDevice.h"
+#include "EXEFile.hpp"
+#include "AmigaFile.hpp"
+#include "FSDevice.hpp"
 #include "IO.hpp"
 
 namespace va {

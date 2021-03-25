@@ -8,12 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Drive.h"
 
-#include "Agnus.h"
-#include "CIA.h"
-#include "DiskFile.h"
-#include "FSDevice.h"
+#include "Drive.hpp"
+#include "Agnus.hpp"
+#include "CIA.hpp"
+#include "DiskFile.hpp"
+#include "FSDevice.hpp"
 #include "MsgQueue.hpp"
 
 namespace va {

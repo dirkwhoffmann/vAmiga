@@ -8,12 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "UART.h"
 
-#include "Agnus.h"
+#include "UART.hpp"
+#include "Agnus.hpp"
 #include "MsgQueue.hpp"
-#include "Paula.h"
-#include "SerialPort.h"
+#include "Paula.hpp"
+#include "SerialPort.hpp"
 
 namespace va {
 

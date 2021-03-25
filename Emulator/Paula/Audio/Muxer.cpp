@@ -8,12 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Muxer.h"
 
-#include "CIA.h"
+#include "Muxer.hpp"
+#include "CIA.hpp"
 #include "IO.hpp"
 #include "MsgQueue.hpp"
-#include "Oscillator.h"
+#include "Oscillator.hpp"
 #include "Macros.h"
 
 #include <math.h>

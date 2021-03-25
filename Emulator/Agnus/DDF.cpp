@@ -8,8 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "DDF.h"
 
+#include "DDF.hpp"
 #include <algorithm>
 
 namespace va {

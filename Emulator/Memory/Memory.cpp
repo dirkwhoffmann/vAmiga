@@ -8,20 +8,20 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Memory.h"
 
-#include "Amiga.h"
-#include "Agnus.h"
+#include "Memory.hpp"
+#include "Amiga.hpp"
+#include "Agnus.hpp"
 #include "Checksum.hpp"
-#include "CIA.h"
-#include "CPU.h"
-#include "Denise.h"
-#include "ExtendedRomFile.h"
+#include "CIA.hpp"
+#include "CPU.hpp"
+#include "Denise.hpp"
+#include "ExtendedRomFile.hpp"
 #include "MsgQueue.hpp"
-#include "Paula.h"
-#include "RomFile.h"
-#include "RTC.h"
-#include "ZorroManager.h"
+#include "Paula.hpp"
+#include "RomFile.hpp"
+#include "RTC.hpp"
+#include "ZorroManager.hpp"
 
 namespace va {
 

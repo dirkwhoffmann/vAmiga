@@ -8,10 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Agnus.h"
 
-#include "Denise.h"
-#include "Paula.h"
+#include "Agnus.hpp"
+#include "Denise.hpp"
+#include "Paula.hpp"
 
 namespace va {
 

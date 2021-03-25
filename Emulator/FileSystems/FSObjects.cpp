@@ -8,8 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FSObjects.h"
-#include "FSBlock.h"
+
+#include "FSObjects.hpp"
+#include "FSBlock.hpp"
+
 #include <algorithm>
 #include <string.h>
 

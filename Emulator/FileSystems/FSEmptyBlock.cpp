@@ -8,7 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FSEmptyBlock.h"
+
+#include "FSEmptyBlock.hpp"
 #include "string.h"
 
 namespace va {

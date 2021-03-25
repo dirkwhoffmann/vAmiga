@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Agnus.h"
 
-#include "Denise.h"
+#include "Agnus.hpp"
+#include "Denise.hpp"
 
 namespace va {
 

@@ -8,9 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FSFileListBlock.h"
-#include "FSDevice.h"
-#include "FSPartition.h"
+
+#include "FSFileListBlock.hpp"
+#include "FSDevice.hpp"
+#include "FSPartition.hpp"
 
 namespace va {
 

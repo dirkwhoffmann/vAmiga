@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "StateMachine.h"
 
-#include "Paula.h"
+#include "StateMachine.hpp"
+#include "Paula.hpp"
 
 namespace va {
 

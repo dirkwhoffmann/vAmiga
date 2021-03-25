@@ -8,13 +8,13 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Agnus.h"
 
-#include "CIA.h"
-#include "CPU.h"
-#include "Keyboard.h"
-#include "Paula.h"
-#include "UART.h"
+#include "Agnus.hpp"
+#include "CIA.hpp"
+#include "CPU.hpp"
+#include "Keyboard.hpp"
+#include "Paula.hpp"
+#include "UART.hpp"
 
 namespace va {
 
