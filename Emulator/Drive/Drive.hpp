@@ -9,11 +9,37 @@
 
 #pragma once
 
-#include "DriveTypes.hpp"
 #include "AmigaComponent.hpp"
 #include "Disk.hpp"
 
 namespace va {
+
+#include "Drive.h"
+
+//
+// Reflection APIs
+//
+
+struct DriveTypeEnum : Reflection<DriveTypeEnum, DriveType> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value <  DRIVE_COUNT;
+    }
+    
+    static const char *prefix() { return "DRIVE"; }
+    static const char *key(DriveType value)
+    {
+        switch (value) {
+                
+            case DRIVE_DD_35:   return "DD_35";
+            case DRIVE_HD_35:   return "HD_35";
+            case DRIVE_DD_525:  return "DD_525";
+            case DRIVE_COUNT:   return "???";
+        }
+        return "???";
+    }
+};
 
 class Drive : public AmigaComponent {
     

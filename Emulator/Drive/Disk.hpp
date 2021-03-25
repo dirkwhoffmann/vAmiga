@@ -13,7 +13,7 @@
 
 namespace va {
 
-#include "DiskTypes.h"
+#include "Disk.h"
 
 //
 // Reflection APIs

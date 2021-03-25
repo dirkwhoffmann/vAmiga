@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 #pragma once
 
 #include "Reflection.hpp"
@@ -41,3 +42,5 @@ struct DriveTypeEnum : Reflection<DriveTypeEnum, DriveType> {
 };
 
 }
+
+ */

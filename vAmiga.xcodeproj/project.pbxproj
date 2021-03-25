@@ -256,8 +256,8 @@
 		50001C642593230200D1FC91 /* DeviceDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDatabase.swift; sourceTree = "<group>"; };
 		500217B72449CF7000E1A096 /* Configuration.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Configuration.xib; sourceTree = "<group>"; };
 		500217B92449CFF500E1A096 /* ConfigurationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationController.swift; sourceTree = "<group>"; };
-		50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardTypes.h; sourceTree = "<group>"; };
-		500770C1227C9FF3003A5F76 /* DriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveTypes.h; sourceTree = "<group>"; };
+		50045A5C2371D1A8008A2AB0 /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
+		500770C1227C9FF3003A5F76 /* Drive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drive.h; sourceTree = "<group>"; };
 		5009B7FA2557051A0037288E /* EXTFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXTFile.cpp; sourceTree = "<group>"; };
 		5009B7FB2557051A0037288E /* EXTFile.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EXTFile.hpp; sourceTree = "<group>"; };
 		500A4E9D24470713002A4DE1 /* disk_eject.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = disk_eject.aiff; sourceTree = "<group>"; };
@@ -544,7 +544,6 @@
 		50B5F87D25AFA007008B79F1 /* CIATypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CIATypes.hpp; sourceTree = "<group>"; };
 		50B5F87E25AFA061008B79F1 /* CPUTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPUTypes.hpp; sourceTree = "<group>"; };
 		50B5F88025AFA0DF008B79F1 /* DriveTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DriveTypes.hpp; sourceTree = "<group>"; };
-		50B5F88125AFA10E008B79F1 /* DiskTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiskTypes.hpp; sourceTree = "<group>"; };
 		50B5F88225AFA132008B79F1 /* FileTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FileTypes.hpp; sourceTree = "<group>"; };
 		50B5F88325AFA1AD008B79F1 /* FSTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FSTypes.hpp; sourceTree = "<group>"; };
 		50B5F88525AFA36C008B79F1 /* MemoryTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MemoryTypes.hpp; sourceTree = "<group>"; };
@@ -576,7 +575,7 @@
 		50D263CD21F6378000FA167F /* A1000ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ISO.xib; sourceTree = "<group>"; };
 		50D375DD222C7C6B0040987C /* Blitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Blitter.cpp; sourceTree = "<group>"; };
 		50D375DE222C7C6B0040987C /* Blitter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Blitter.hpp; sourceTree = "<group>"; };
-		50D52442227878E900F8959D /* DiskTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskTypes.h; sourceTree = "<group>"; };
+		50D52442227878E900F8959D /* Disk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Disk.h; sourceTree = "<group>"; };
 		50D5244322787D3C00F8959D /* MsgQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MsgQueue.h; sourceTree = "<group>"; };
 		50D661862282BE1800D67D88 /* AmigaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaTypes.h; sourceTree = "<group>"; };
 		50D7CDC22286E968002689F0 /* Joystick.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick.cpp; sourceTree = "<group>"; };
@@ -1159,12 +1158,11 @@
 		50A2953B21FF12170046BAA0 /* Drive */ = {
 			isa = PBXGroup;
 			children = (
-				500770C1227C9FF3003A5F76 /* DriveTypes.h */,
+				500770C1227C9FF3003A5F76 /* Drive.h */,
 				50B5F88025AFA0DF008B79F1 /* DriveTypes.hpp */,
 				50F6EEBD21F4F61F0091155D /* Drive.hpp */,
 				50F6EEBC21F4F61F0091155D /* Drive.cpp */,
-				50D52442227878E900F8959D /* DiskTypes.h */,
-				50B5F88125AFA10E008B79F1 /* DiskTypes.hpp */,
+				50D52442227878E900F8959D /* Disk.h */,
 				50F6EEB721F4F5C60091155D /* Disk.hpp */,
 				50F6EEB621F4F5C60091155D /* Disk.cpp */,
 			);
@@ -1186,7 +1184,7 @@
 				50A61446260CF25700A01428 /* Joystick.h */,
 				50D7CDC32286E968002689F0 /* Joystick.hpp */,
 				50D7CDC22286E968002689F0 /* Joystick.cpp */,
-				50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */,
+				50045A5C2371D1A8008A2AB0 /* Keyboard.h */,
 				5063DD4724F0F43900DA209F /* KeyboardTypes.hpp */,
 				5014DD1421F3625200BC14BA /* Keyboard.hpp */,
 				5014DD1321F3625200BC14BA /* Keyboard.cpp */,
