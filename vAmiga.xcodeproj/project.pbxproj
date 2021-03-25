@@ -322,7 +322,6 @@
 		5042FD7E23FFF0D200B315B2 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
-		504D078625B2376E00E577DD /* AudioTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AudioTypes.hpp; sourceTree = "<group>"; };
 		504F4D63252624BD00CF8815 /* RendererRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererRect.swift; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* GuardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardTableView.swift; sourceTree = "<group>"; };
 		5051922722B61C1B0012C4BB /* FileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileTypes.h; sourceTree = "<group>"; };
@@ -1219,7 +1218,6 @@
 		50AEBED424D3D7050037082D /* Audio */ = {
 			isa = PBXGroup;
 			children = (
-				504D078625B2376E00E577DD /* AudioTypes.hpp */,
 				5042FD7E23FFF0D200B315B2 /* StateMachine.h */,
 				507D7768228BE3EF001E97A9 /* StateMachine.hpp */,
 				507D7767228BE3EF001E97A9 /* StateMachine.cpp */,

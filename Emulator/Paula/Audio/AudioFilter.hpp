@@ -10,7 +10,6 @@
 #pragma once
 
 #include "AmigaComponent.hpp"
-#include "AudioTypes.hpp"
 
 namespace va {
 
