@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include "AudioTypes.hpp"
 #include "Constants.h"
 #include "RingBuffer.hpp"
+#include "Reflection.hpp"
 
 namespace va {
 

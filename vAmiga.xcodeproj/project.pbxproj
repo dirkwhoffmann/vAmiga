@@ -318,8 +318,8 @@
 		5039924625B219FC0084B808 /* Errors.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Errors.hpp; sourceTree = "<group>"; };
 		503DECAC255E6180005FFA0B /* Oscillator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Oscillator.cpp; sourceTree = "<group>"; };
 		503DECAD255E6180005FFA0B /* Oscillator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Oscillator.hpp; sourceTree = "<group>"; };
-		5042FD7D23FFF08500B315B2 /* DiskControllerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskControllerTypes.h; sourceTree = "<group>"; };
-		5042FD7E23FFF0D200B315B2 /* AudioTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioTypes.h; sourceTree = "<group>"; };
+		5042FD7D23FFF08500B315B2 /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
+		5042FD7E23FFF0D200B315B2 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
 		504D078625B2376E00E577DD /* AudioTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AudioTypes.hpp; sourceTree = "<group>"; };
@@ -532,7 +532,6 @@
 		50B14C2521EB9059002E32A6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AmigaProxy.mm; sourceTree = "<group>"; };
 		50B14C2921EB9806002E32A6 /* AmigaProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaProxy.h; sourceTree = "<group>"; };
-		50B2E7E625ECEC7D0077B6A3 /* DiskControllerTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiskControllerTypes.hpp; sourceTree = "<group>"; };
 		50B35B6022B2382E001A9C17 /* SerialPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SerialPort.cpp; sourceTree = "<group>"; };
 		50B35B6122B2382E001A9C17 /* SerialPort.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SerialPort.hpp; sourceTree = "<group>"; };
 		50B3C44725EAFB5500651700 /* Checksum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Checksum.cpp; sourceTree = "<group>"; };
@@ -540,7 +539,6 @@
 		50B5C07D241107F200F124DC /* Constants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
 		50B5F87825AF9E07008B79F1 /* Reflection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Reflection.hpp; sourceTree = "<group>"; };
 		50B5F87925AF9EED008B79F1 /* EventHandlerTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EventHandlerTypes.hpp; sourceTree = "<group>"; };
-		50B5F87D25AFA007008B79F1 /* CIATypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CIATypes.hpp; sourceTree = "<group>"; };
 		50B5F87E25AFA061008B79F1 /* CPUTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPUTypes.hpp; sourceTree = "<group>"; };
 		50B5F88025AFA0DF008B79F1 /* DriveTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DriveTypes.hpp; sourceTree = "<group>"; };
 		50B5F88225AFA132008B79F1 /* FileTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FileTypes.hpp; sourceTree = "<group>"; };
@@ -911,7 +909,6 @@
 			isa = PBXGroup;
 			children = (
 				5051922922B61CEC0012C4BB /* CIA.h */,
-				50B5F87D25AFA007008B79F1 /* CIATypes.hpp */,
 				508FDF5721EA1FBC0043D0E9 /* CIA.hpp */,
 				508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */,
 				50B81E0924E6BEA5004384C9 /* CIARegisters.cpp */,
@@ -1222,8 +1219,8 @@
 		50AEBED424D3D7050037082D /* Audio */ = {
 			isa = PBXGroup;
 			children = (
-				5042FD7E23FFF0D200B315B2 /* AudioTypes.h */,
 				504D078625B2376E00E577DD /* AudioTypes.hpp */,
+				5042FD7E23FFF0D200B315B2 /* StateMachine.h */,
 				507D7768228BE3EF001E97A9 /* StateMachine.hpp */,
 				507D7767228BE3EF001E97A9 /* StateMachine.cpp */,
 				50AE6EE624D9B2C7000AA367 /* StateMachineRegisters.cpp */,
@@ -1246,8 +1243,7 @@
 		50AEBED524D3D7160037082D /* DiskController */ = {
 			isa = PBXGroup;
 			children = (
-				5042FD7D23FFF08500B315B2 /* DiskControllerTypes.h */,
-				50B2E7E625ECEC7D0077B6A3 /* DiskControllerTypes.hpp */,
+				5042FD7D23FFF08500B315B2 /* DiskController.h */,
 				500C0A552259402D000121CD /* DiskController.hpp */,
 				500C0A542259402D000121CD /* DiskController.cpp */,
 				50B81E0724E6BCCA004384C9 /* DiskControllerRegisters.cpp */,

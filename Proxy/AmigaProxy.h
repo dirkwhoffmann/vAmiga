@@ -17,6 +17,7 @@
 #include "CIA.h"
 #include "Denise.h"
 #include "Disk.h"
+#include "DiskController.h"
 #include "DmaDebugger.h"
 #include "Drive.h"
 #include "EventHandlerTypes.h"
@@ -32,6 +33,7 @@
 #include "PixelEngine.h"
 #include "RTC.h"
 #include "SerialPort.h"
+#include "StateMachine.h"
 #include "UART.h"
 
 #import <Cocoa/Cocoa.h>

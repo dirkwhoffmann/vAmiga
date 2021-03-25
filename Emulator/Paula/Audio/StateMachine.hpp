@@ -15,6 +15,8 @@
 
 namespace va {
 
+#include "StateMachine.h"
+
 template <isize nr>
 class StateMachine : public AmigaComponent {
 
