@@ -12,7 +12,7 @@
 #include "AmigaComponent.hpp"
 #include "Command.hpp"
 #include "Exception.hpp"
-#include "Errors.hpp"
+#include "Error.hpp"
 
 namespace va {
 

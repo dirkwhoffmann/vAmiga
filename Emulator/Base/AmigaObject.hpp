@@ -11,7 +11,7 @@
 
 #include "AmigaTypes.hpp"
 #include "Debug.hpp"
-#include "Errors.hpp"
+#include "Error.hpp"
 
 namespace va {
 

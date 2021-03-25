@@ -20,6 +20,7 @@
 #include "DiskController.h"
 #include "DmaDebugger.h"
 #include "Drive.h"
+#include "Error.h"
 #include "EventHandlerTypes.h"
 #include "FileTypes.h"
 #include "FSTypes.h"

@@ -10,7 +10,7 @@
 #include "config.h"
 
 #include "AmigaTypes.hpp"
-#include "Errors.hpp"
+#include "Error.hpp"
 
 namespace va {
 
