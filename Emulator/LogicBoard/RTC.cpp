@@ -11,7 +11,7 @@
 #include "RTC.h"
 
 #include "CPU.h"
-#include "IO.h"
+#include "IO.hpp"
 #include "Memory.h"
 
 namespace va {

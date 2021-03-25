@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Debug.h"
+#include "Debug.hpp"
 
 void hexdump(u8 *p, isize size, isize cols, isize pad)
 {

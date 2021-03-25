@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "DeniseTypes.hpp"
-#include "ChangeRecorder.h"
+#include "ChangeRecorder.hpp"
 
 namespace va {
 

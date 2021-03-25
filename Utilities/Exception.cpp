@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Exception.h"
+#include "Exception.hpp"
 
 namespace my {
 

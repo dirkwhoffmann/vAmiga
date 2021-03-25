@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Reflection.h"
+#include "Reflection.hpp"
 #include "BlitterTypes.hpp"
 #include "CopperTypes.hpp"
 

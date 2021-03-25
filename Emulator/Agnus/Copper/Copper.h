@@ -12,9 +12,9 @@
 #include "CopperTypes.hpp"
 #include "EventHandlerTypes.hpp"
 #include "MemoryTypes.hpp"
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "Beam.h"
-#include "Checksum.h"
+#include "Checksum.hpp"
 
 namespace va {
 

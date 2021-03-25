@@ -11,7 +11,7 @@
 #include "Oscillator.h"
 
 #include "Agnus.h"
-#include "Chrono.h"
+#include "Chrono.hpp"
 
 namespace va {
 

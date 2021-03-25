@@ -12,9 +12,9 @@
 
 #include "Agnus.h"
 #include "Amiga.h"
-#include "IO.h"
+#include "IO.hpp"
 #include "Memory.h"
-#include "MsgQueue.h"
+#include "MsgQueue.hpp"
 
 namespace va {
 

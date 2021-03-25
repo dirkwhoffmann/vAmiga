@@ -13,7 +13,7 @@
 #include "Agnus.h"
 #include "DiskFile.h"
 #include "Drive.h"
-#include "MsgQueue.h"
+#include "MsgQueue.hpp"
 #include "Paula.h"
 
 #include <algorithm>

@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "AgnusTypes.hpp"
 #include "Beam.h"
 #include "Blitter.h"
-#include "ChangeRecorder.h"
+#include "ChangeRecorder.hpp"
 #include "Copper.h"
 #include "DDF.h"
 #include "DmaDebugger.h"

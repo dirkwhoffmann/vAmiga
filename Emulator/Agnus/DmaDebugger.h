@@ -12,7 +12,7 @@
 #include "DmaDebuggerTypes.hpp"
 
 #include "AgnusTypes.hpp"
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "Colors.h"
 
 namespace va {

@@ -10,7 +10,7 @@
 #pragma once
 
 #include "PortTypes.hpp"
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "Joystick.h"
 #include "Mouse.h"
 

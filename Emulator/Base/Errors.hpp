@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaTypes.hpp"
-#include "Exception.h"
+#include "Exception.hpp"
 
 namespace va {
 

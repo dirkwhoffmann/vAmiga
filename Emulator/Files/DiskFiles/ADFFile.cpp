@@ -11,11 +11,11 @@
 #include "ADFFile.h"
 
 #include "BootBlockImage.h"
-#include "Checksum.h"
-#include "Debug.h"
+#include "Checksum.hpp"
+#include "Debug.hpp"
 #include "Disk.h"
 #include "Drive.h"
-#include "IO.h"
+#include "IO.hpp"
 
 namespace va {
 

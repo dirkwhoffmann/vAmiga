@@ -10,7 +10,7 @@
 #pragma once
 
 #include "CIATypes.hpp"
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "TOD.h"
 
 namespace va {

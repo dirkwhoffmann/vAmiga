@@ -9,10 +9,10 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "Command.h"
-#include "Exception.h"
-#include "Errors.h"
+#include "Exception.hpp"
+#include "Errors.hpp"
 
 namespace va {
 

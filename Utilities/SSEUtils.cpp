@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "SSEUtils.h"
+#include "SSEUtils.hpp"
 
 namespace my {
 

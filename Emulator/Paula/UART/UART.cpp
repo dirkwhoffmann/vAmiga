@@ -11,7 +11,7 @@
 #include "UART.h"
 
 #include "Agnus.h"
-#include "MsgQueue.h"
+#include "MsgQueue.hpp"
 #include "Paula.h"
 #include "SerialPort.h"
 

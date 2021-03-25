@@ -10,10 +10,10 @@
 #pragma once
 
 #include "FileTypes.hpp"
-#include "AmigaObject.h"
+#include "AmigaObject.hpp"
 
-#include "Checksum.h"
-#include "IO.h"
+#include "Checksum.hpp"
+#include "IO.hpp"
 
 #include <sstream>
 #include <fstream>

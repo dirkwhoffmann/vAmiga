@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
-#include "Chrono.h"
+#include "AmigaComponent.hpp"
+#include "Chrono.hpp"
 
 #ifdef __MACH__
 #include <mach/mach_time.h>

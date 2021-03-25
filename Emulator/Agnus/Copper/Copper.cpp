@@ -11,8 +11,8 @@
 #include "Copper.h"
 
 #include "Agnus.h"
-#include "Checksum.h"
-#include "IO.h"
+#include "Checksum.hpp"
+#include "IO.hpp"
 #include "PixelEngine.h"
 
 namespace va {

@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "MsgQueue.h"
+#include "MsgQueue.hpp"
 
 namespace va {
 

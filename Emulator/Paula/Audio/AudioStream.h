@@ -10,8 +10,8 @@
 #pragma once
 
 #include "Aliases.h"
-#include "Concurrency.h"
-#include "RingBuffer.h"
+#include "Concurrency.hpp"
+#include "RingBuffer.hpp"
 
 namespace va {
 

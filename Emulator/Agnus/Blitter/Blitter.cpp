@@ -11,8 +11,8 @@
 #include "Blitter.h"
 
 #include "Agnus.h"
-#include "Checksum.h"
-#include "IO.h"
+#include "Checksum.hpp"
+#include "IO.hpp"
 
 namespace va {
 

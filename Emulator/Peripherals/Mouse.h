@@ -10,8 +10,8 @@
 #pragma once
 
 #include "PortTypes.hpp"
-#include "AmigaComponent.h"
-#include "Chrono.h"
+#include "AmigaComponent.hpp"
+#include "Chrono.hpp"
 
 namespace va {
 

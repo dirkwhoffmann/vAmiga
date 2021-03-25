@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "HDFFile.h"
-#include "IO.h"
+#include "IO.hpp"
 #include "string.h"
 
 namespace va {

@@ -9,10 +9,10 @@
 
 #pragma once
 
-#include "AmigaObject.h"
+#include "AmigaObject.hpp"
 #include "AmigaTypes.hpp"
-#include "Serialization.h"
-#include "Concurrency.h"
+#include "Serialization.hpp"
+#include "Concurrency.hpp"
 
 #include <vector>
 #include <iostream>

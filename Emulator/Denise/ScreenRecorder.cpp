@@ -10,10 +10,10 @@
 #include "config.h"
 #include "ScreenRecorder.h"
 
-#include "IO.h"
+#include "IO.hpp"
 
 #include "Denise.h"
-#include "MsgQueue.h"
+#include "MsgQueue.hpp"
 #include "Paula.h"
 
 namespace va {

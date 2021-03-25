@@ -10,9 +10,9 @@
 #include "config.h"
 #include "IMGFile.h"
 
-#include "Checksum.h"
+#include "Checksum.hpp"
 #include "Disk.h"
-#include "IO.h"
+#include "IO.hpp"
 
 namespace va {
 

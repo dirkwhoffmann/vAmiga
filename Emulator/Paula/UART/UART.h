@@ -11,7 +11,7 @@
 
 #include "PaulaTypes.hpp"
 
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "EventHandlerTypes.hpp"
 #include "Macros.h"
 

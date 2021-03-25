@@ -10,8 +10,8 @@
 #pragma once
 
 #include "AmigaTypes.hpp"
-#include "Debug.h"
-#include "Errors.h"
+#include "Debug.hpp"
+#include "Errors.hpp"
 
 namespace va {
 

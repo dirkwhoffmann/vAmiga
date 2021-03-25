@@ -11,8 +11,8 @@
 #include "Muxer.h"
 
 #include "CIA.h"
-#include "IO.h"
-#include "MsgQueue.h"
+#include "IO.hpp"
+#include "MsgQueue.hpp"
 #include "Oscillator.h"
 #include "Macros.h"
 

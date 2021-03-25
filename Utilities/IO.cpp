@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "IO.h"
+#include "IO.hpp"
 #include "string.h"
 
 #include <vector>

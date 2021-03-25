@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Chrono.h"
+#include "Chrono.hpp"
 
 #ifdef __MACH__
 #include <mach/mach_time.h>

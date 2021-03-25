@@ -10,7 +10,7 @@
 #pragma once
 
 #include "KeyboardTypes.hpp"
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "EventHandlerTypes.hpp"
 
 namespace va {

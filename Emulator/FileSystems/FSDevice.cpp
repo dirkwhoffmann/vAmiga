@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#include "IO.h"
+#include "IO.hpp"
 #include "FSDevice.h"
 #include "limits.h"
 #include <string.h>

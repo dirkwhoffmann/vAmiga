@@ -11,9 +11,9 @@
 #include "DiskController.h"
 
 #include "Agnus.h"
-#include "Checksum.h"
+#include "Checksum.hpp"
 #include "Drive.h"
-#include "MsgQueue.h"
+#include "MsgQueue.hpp"
 #include "Paula.h"
 
 namespace va {

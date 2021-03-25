@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaObject.h"
+#include "AmigaObject.hpp"
 
 namespace va {
 

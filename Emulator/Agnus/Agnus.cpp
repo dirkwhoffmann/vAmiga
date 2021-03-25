@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Agnus.h"
 #include "Amiga.h"
-#include "IO.h"
+#include "IO.hpp"
 
 namespace va {
 

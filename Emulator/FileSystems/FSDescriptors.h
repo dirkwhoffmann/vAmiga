@@ -11,7 +11,7 @@
 
 #include "FSTypes.hpp"
 #include "DiskTypes.hpp"
-#include "AmigaObject.h"
+#include "AmigaObject.hpp"
 #include "FSObjects.h"
 #include "FSBlock.h"
 #include "FSEmptyBlock.h"

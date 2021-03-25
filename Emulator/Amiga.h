@@ -12,9 +12,9 @@
 #include "AmigaTypes.hpp"
 
 // General
-#include "HardwareComponent.h"
-#include "Serialization.h"
-#include "MsgQueue.h"
+#include "HardwareComponent.hpp"
+#include "Serialization.hpp"
+#include "MsgQueue.hpp"
 
 // Sub components
 #include "Agnus.h"

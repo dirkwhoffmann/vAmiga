@@ -10,7 +10,7 @@
 #include "config.h"
 #include "EXTFile.h"
 
-#include "IO.h"
+#include "IO.hpp"
 
 namespace va {
 

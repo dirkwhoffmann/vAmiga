@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "Colors.h"
 #include "MemoryTypes.hpp"
 #include "PixelEngine.h"

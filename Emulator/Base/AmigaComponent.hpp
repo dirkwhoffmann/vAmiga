@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "HardwareComponent.h"
+#include "HardwareComponent.hpp"
 
 namespace va {
 

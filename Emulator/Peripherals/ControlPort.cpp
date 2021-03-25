@@ -10,7 +10,7 @@
 #include "config.h"
 #include "ControlPort.h"
 
-#include "IO.h"
+#include "IO.hpp"
 #include "Paula.h"
 
 namespace va {

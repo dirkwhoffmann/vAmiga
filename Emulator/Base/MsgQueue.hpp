@@ -10,8 +10,8 @@
 #pragma once
 
 #include "MsgQueueTypes.hpp"
-#include "HardwareComponent.h"
-#include "RingBuffer.h"
+#include "HardwareComponent.hpp"
+#include "RingBuffer.hpp"
 
 namespace va {
 

@@ -10,7 +10,7 @@
 #pragma once
 
 #include "BlitterTypes.hpp"
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "MemoryTypes.hpp"
 #include "Macros.h"
 

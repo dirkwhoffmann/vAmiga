@@ -10,7 +10,7 @@
 #pragma once
 
 #include "MemoryTypes.hpp"
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "FileTypes.hpp"
 #include "Macros.h"
 

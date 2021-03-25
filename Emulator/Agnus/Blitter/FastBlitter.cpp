@@ -11,7 +11,7 @@
 #include "Blitter.h"
 
 #include "Agnus.h"
-#include "Checksum.h"
+#include "Checksum.hpp"
 #include "Memory.h"
 #include "Paula.h"
 

@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "Amiga.h"  
 
 namespace va {

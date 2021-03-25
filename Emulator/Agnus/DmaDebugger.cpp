@@ -12,7 +12,7 @@
 
 #include "Agnus.h"
 #include "Denise.h"
-#include "MsgQueue.h"
+#include "MsgQueue.hpp"
 #include "PixelEngine.h"
 
 namespace va {

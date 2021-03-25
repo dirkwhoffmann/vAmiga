@@ -11,7 +11,7 @@
 #include "RetroShell.h"
 #include "Amiga.h"
 #include "FSTypes.hpp"
-#include "IO.h"
+#include "IO.hpp"
 
 #include <fstream>
 #include <sstream>

@@ -13,9 +13,9 @@
 #include "Agnus.h"
 #include "ControlPort.h"
 #include "DiskController.h"
-#include "IO.h"
+#include "IO.hpp"
 #include "Memory.h"
-#include "MsgQueue.h"
+#include "MsgQueue.hpp"
 #include "Paula.h"
 #include "SerialPort.h"
 

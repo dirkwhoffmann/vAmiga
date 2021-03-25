@@ -13,7 +13,7 @@
 
 #include <map>
 #include <exception>
-#include "Exception.h"
+#include "Exception.hpp"
 
 namespace va {
 

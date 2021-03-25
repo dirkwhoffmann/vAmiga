@@ -11,7 +11,7 @@
 #include "ExtendedRomFile.h"
 #include "Macros.h"
 
-#include "IO.h"
+#include "IO.hpp"
 
 namespace va {
 

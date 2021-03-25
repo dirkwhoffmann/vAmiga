@@ -10,7 +10,7 @@
 #pragma once
 
 #include "EventHandlerTypes.hpp"
-#include "RingBuffer.h"
+#include "RingBuffer.hpp"
 
 namespace va {
 

@@ -9,10 +9,10 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "AudioStream.h"
 #include "AudioFilter.h"
-#include "Chrono.h"
+#include "Chrono.hpp"
 #include "Sampler.h"
 
 namespace va {

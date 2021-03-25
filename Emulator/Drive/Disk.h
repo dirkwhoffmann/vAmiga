@@ -10,7 +10,7 @@
 #pragma once
 
 #include "DiskTypes.hpp"
-#include "HardwareComponent.h"
+#include "HardwareComponent.hpp"
 
 namespace va {
 

@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "HardwareComponent.h"
+#include "HardwareComponent.hpp"
 
 namespace va {
 

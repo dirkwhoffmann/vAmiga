@@ -10,7 +10,7 @@
 #pragma once
 
 #include "DriveTypes.hpp"
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "Disk.h"
 
 namespace va {

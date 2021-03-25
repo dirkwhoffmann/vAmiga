@@ -10,10 +10,10 @@
 #include "config.h"
 #include "Mouse.h"
 
-#include "Chrono.h"
+#include "Chrono.hpp"
 #include "ControlPort.h"
-#include "IO.h"
-#include "MsgQueue.h"
+#include "IO.hpp"
+#include "MsgQueue.hpp"
 #include "Oscillator.h"
 
 namespace va {

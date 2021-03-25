@@ -9,16 +9,16 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "PaulaTypes.hpp"
 
 #include "AudioFilter.h"
 #include "AudioStream.h"
-#include "ChangeRecorder.h"
+#include "ChangeRecorder.hpp"
 #include "DiskController.h"
 #include "Muxer.h"
 #include "StateMachine.h"
-#include "TimeDelayed.h"
+#include "TimeDelayed.hpp"
 #include "UART.h"
 
 namespace va {

@@ -12,7 +12,7 @@
 
 #include "AmigaFile.h"
 #include "FSDevice.h"
-#include "IO.h"
+#include "IO.hpp"
 
 namespace va {
 

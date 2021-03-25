@@ -10,7 +10,7 @@
 #pragma once
 
 // #include "Aliases.h"
-#include "AmigaComponent.h"
+#include "AmigaComponent.hpp"
 #include "Sampler.h"
 #include "Agnus.h"
 

@@ -14,7 +14,7 @@
 #include "CIA.h"
 #include "DiskFile.h"
 #include "FSDevice.h"
-#include "MsgQueue.h"
+#include "MsgQueue.hpp"
 
 namespace va {
 
