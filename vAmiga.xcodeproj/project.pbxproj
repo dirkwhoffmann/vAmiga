@@ -495,6 +495,9 @@
 		50A61438260CE6B100A01428 /* Bus.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Bus.hpp; sourceTree = "<group>"; };
 		50A6143B260CE6C400A01428 /* Bus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bus.h; sourceTree = "<group>"; };
 		50A61442260CF00200A01428 /* SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerialPort.h; sourceTree = "<group>"; };
+		50A61445260CF23D00A01428 /* ControlPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControlPort.h; sourceTree = "<group>"; };
+		50A61446260CF25700A01428 /* Joystick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Joystick.h; sourceTree = "<group>"; };
+		50A61447260CF26100A01428 /* Mouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mouse.h; sourceTree = "<group>"; };
 		50A64B94257A63A600442964 /* BootBlockImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BootBlockImage.hpp; sourceTree = "<group>"; };
 		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
 		50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperRegisters.cpp; sourceTree = "<group>"; };
@@ -540,7 +543,6 @@
 		50B5F87B25AF9F83008B79F1 /* BlitterTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BlitterTypes.hpp; sourceTree = "<group>"; };
 		50B5F87D25AFA007008B79F1 /* CIATypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CIATypes.hpp; sourceTree = "<group>"; };
 		50B5F87E25AFA061008B79F1 /* CPUTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPUTypes.hpp; sourceTree = "<group>"; };
-		50B5F87F25AFA089008B79F1 /* PortTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PortTypes.hpp; sourceTree = "<group>"; };
 		50B5F88025AFA0DF008B79F1 /* DriveTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DriveTypes.hpp; sourceTree = "<group>"; };
 		50B5F88125AFA10E008B79F1 /* DiskTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiskTypes.hpp; sourceTree = "<group>"; };
 		50B5F88225AFA132008B79F1 /* FileTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FileTypes.hpp; sourceTree = "<group>"; };
@@ -579,7 +581,6 @@
 		50D661862282BE1800D67D88 /* AmigaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaTypes.h; sourceTree = "<group>"; };
 		50D7CDC22286E968002689F0 /* Joystick.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick.cpp; sourceTree = "<group>"; };
 		50D7CDC32286E968002689F0 /* Joystick.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Joystick.hpp; sourceTree = "<group>"; };
-		50D7CDC52286EA48002689F0 /* PortTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PortTypes.h; sourceTree = "<group>"; };
 		50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DmaDebugDialog.xib; sourceTree = "<group>"; };
 		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
@@ -1173,15 +1174,16 @@
 		50A2953C21FF12C20046BAA0 /* Peripherals */ = {
 			isa = PBXGroup;
 			children = (
-				50D7CDC52286EA48002689F0 /* PortTypes.h */,
-				50B5F87F25AFA089008B79F1 /* PortTypes.hpp */,
+				50A61445260CF23D00A01428 /* ControlPort.h */,
 				50A2953E21FF12EF0046BAA0 /* ControlPort.hpp */,
 				50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */,
 				50A61442260CF00200A01428 /* SerialPort.h */,
 				50B35B6122B2382E001A9C17 /* SerialPort.hpp */,
 				50B35B6022B2382E001A9C17 /* SerialPort.cpp */,
+				50A61447260CF26100A01428 /* Mouse.h */,
 				505554AB2264C47600CB07E0 /* Mouse.hpp */,
 				505554AA2264C47600CB07E0 /* Mouse.cpp */,
+				50A61446260CF25700A01428 /* Joystick.h */,
 				50D7CDC32286E968002689F0 /* Joystick.hpp */,
 				50D7CDC22286E968002689F0 /* Joystick.cpp */,
 				50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */,

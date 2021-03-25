@@ -9,11 +9,13 @@
 
 #pragma once
 
-#include "PortTypes.hpp"
+#include "Joystick.hpp"
 #include "AmigaComponent.hpp"
 #include "Chrono.hpp"
 
 namespace va {
+
+#include "Mouse.h"
 
 class ShakeDetector {
     

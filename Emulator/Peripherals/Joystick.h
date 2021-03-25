@@ -6,8 +6,6 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
-// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
-// -----------------------------------------------------------------------------
 
 #pragma once
 
@@ -16,37 +14,6 @@
 //
 // Enumerations
 //
-
-/*
-enum_long(SPD)
-{
-    SPD_NONE,
-    SPD_LOOPBACK,
-    
-    SPD_COUNT
-};
-typedef SPD SerialPortDevice;
-
-inline bool isSerialPortDevice(long value) {
-    return value >= 0 && value <= SPD_LOOPBACK;
-}
-*/
-
-enum_long(PortNr)
-{
-    PORT_1 = 1,
-    PORT_2 = 2    
-};
-
-enum_long(CPD)
-{
-    CPD_NONE,
-    CPD_MOUSE,
-    CPD_JOYSTICK,
-    
-    CPD_COUNT
-};
-typedef CPD ControlPortDevice;
 
 enum_long(GAME_PAD_ACTION)
 {
@@ -65,43 +32,3 @@ enum_long(GAME_PAD_ACTION)
     RELEASE_RIGHT  // Release the right mouse button
 };
 typedef GAME_PAD_ACTION GamePadAction;
-
-
-//
-// Structures
-//
-
-typedef struct
-{
-    bool m0v;
-    bool m0h;
-    bool m1v;
-    bool m1h;
-    u16 joydat;
-    u16 potgo;
-    u16 potgor;
-    u16 potdat;
-}
-ControlPortInfo;
-
-typedef struct
-{
-    u32 port;
-
-    bool txd;
-    bool rxd;
-    bool rts;
-    bool cts;
-    bool dsr;
-    bool cd;
-    bool dtr;
-}
-SerialPortInfo;
-
-typedef struct
-{
-    bool pullUpResistors;
-    bool shakeDetection;
-    long velocity;
-}
-MouseConfig;

@@ -6,8 +6,6 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
-// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
-// -----------------------------------------------------------------------------
 
 #pragma once
 
@@ -17,15 +15,21 @@
 // Enumerations
 //
 
-enum_long(SPD)
+enum_long(PortNr)
 {
-    SPD_NONE,
-    SPD_LOOPBACK,
-    
-    SPD_COUNT
+    PORT_1 = 1,
+    PORT_2 = 2
 };
-typedef SPD SerialPortDevice;
 
+enum_long(CPD)
+{
+    CPD_NONE,
+    CPD_MOUSE,
+    CPD_JOYSTICK,
+    
+    CPD_COUNT
+};
+typedef CPD ControlPortDevice;
 
 //
 // Structures
@@ -33,20 +37,13 @@ typedef SPD SerialPortDevice;
 
 typedef struct
 {
-    SerialPortDevice device;
+    bool m0v;
+    bool m0h;
+    bool m1v;
+    bool m1h;
+    u16 joydat;
+    u16 potgo;
+    u16 potgor;
+    u16 potdat;
 }
-SerialPortConfig;
-
-typedef struct
-{
-    u32 port;
-
-    bool txd;
-    bool rxd;
-    bool rts;
-    bool cts;
-    bool dsr;
-    bool cd;
-    bool dtr;
-}
-SerialPortInfo;
+ControlPortInfo;
