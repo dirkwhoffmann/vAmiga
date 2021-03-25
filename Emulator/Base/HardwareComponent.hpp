@@ -13,6 +13,7 @@
 #include "AmigaTypes.hpp"
 #include "Serialization.hpp"
 #include "Concurrency.hpp"
+#include "Option.hpp"
 
 #include <vector>
 #include <iostream>

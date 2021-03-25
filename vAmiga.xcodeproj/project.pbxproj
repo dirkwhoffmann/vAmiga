@@ -499,6 +499,8 @@
 		50A61447260CF26100A01428 /* Mouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mouse.h; sourceTree = "<group>"; };
 		50A61452260D113C00A01428 /* TOD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TOD.h; sourceTree = "<group>"; };
 		50A6145A260D14FE00A01428 /* Error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
+		50A6145E260D175F00A01428 /* Option.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Option.h; sourceTree = "<group>"; };
+		50A6145F260D177100A01428 /* Option.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Option.hpp; sourceTree = "<group>"; };
 		50A64B94257A63A600442964 /* BootBlockImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BootBlockImage.hpp; sourceTree = "<group>"; };
 		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
 		50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperRegisters.cpp; sourceTree = "<group>"; };
@@ -720,6 +722,8 @@
 				50B5C07D241107F200F124DC /* Constants.cpp */,
 				50EA34F0258E38880010DC63 /* Debug.hpp */,
 				50104E8B25ECE1A10047A9AA /* Debug.cpp */,
+				50A6145E260D175F00A01428 /* Option.h */,
+				50A6145F260D177100A01428 /* Option.hpp */,
 				50A6145A260D14FE00A01428 /* Error.h */,
 				5039924625B219FC0084B808 /* Error.hpp */,
 				50AE6F8425D71FBE0004AFBC /* Error.cpp */,

@@ -30,6 +30,7 @@
 #include "MsgQueue.h"
 #include "Muxer.h"
 #include "Mouse.h"
+#include "Option.h"
 #include "Paula.h"
 #include "PixelEngine.h"
 #include "RTC.h"

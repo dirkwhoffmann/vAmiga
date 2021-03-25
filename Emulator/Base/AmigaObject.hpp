@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "AmigaTypes.hpp"
 #include "Debug.hpp"
 #include "Error.hpp"
 
