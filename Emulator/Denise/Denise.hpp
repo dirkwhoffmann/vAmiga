@@ -11,7 +11,7 @@
 
 #include "AmigaComponent.hpp"
 #include "Colors.hpp"
-#include "MemoryTypes.hpp"
+#include "Memory.hpp"
 #include "PixelEngine.hpp"
 #include "Reflection.hpp"
 #include "ScreenRecorder.hpp"

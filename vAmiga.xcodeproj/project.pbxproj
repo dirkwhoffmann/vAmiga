@@ -328,7 +328,7 @@
 		5051922722B61C1B0012C4BB /* FileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileTypes.h; sourceTree = "<group>"; };
 		5051922822B61C8A0012C4BB /* CPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPU.h; sourceTree = "<group>"; };
 		5051922922B61CEC0012C4BB /* CIA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CIA.h; sourceTree = "<group>"; };
-		5051922A22B61DAA0012C4BB /* MemoryTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemoryTypes.h; sourceTree = "<group>"; };
+		5051922A22B61DAA0012C4BB /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
 		505554AA2264C47600CB07E0 /* Mouse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mouse.cpp; sourceTree = "<group>"; };
 		505554AB2264C47600CB07E0 /* Mouse.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Mouse.hpp; sourceTree = "<group>"; };
 		5056506A25440FFB00A79D27 /* FSDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDevice.cpp; sourceTree = "<group>"; };
@@ -540,7 +540,6 @@
 		50B5C07D241107F200F124DC /* Constants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
 		50B5F87825AF9E07008B79F1 /* Reflection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Reflection.hpp; sourceTree = "<group>"; };
 		50B5F87925AF9EED008B79F1 /* EventHandlerTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EventHandlerTypes.hpp; sourceTree = "<group>"; };
-		50B5F87B25AF9F83008B79F1 /* BlitterTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BlitterTypes.hpp; sourceTree = "<group>"; };
 		50B5F87D25AFA007008B79F1 /* CIATypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CIATypes.hpp; sourceTree = "<group>"; };
 		50B5F87E25AFA061008B79F1 /* CPUTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPUTypes.hpp; sourceTree = "<group>"; };
 		50B5F88025AFA0DF008B79F1 /* DriveTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DriveTypes.hpp; sourceTree = "<group>"; };
@@ -827,7 +826,7 @@
 		505B801C23FE626E002407FE /* Memory */ = {
 			isa = PBXGroup;
 			children = (
-				5051922A22B61DAA0012C4BB /* MemoryTypes.h */,
+				5051922A22B61DAA0012C4BB /* Memory.h */,
 				50B5F88525AFA36C008B79F1 /* MemoryTypes.hpp */,
 				5064851021EC7A1700FC4AC3 /* Memory.hpp */,
 				5064850F21EC7A1700FC4AC3 /* Memory.cpp */,
@@ -1198,7 +1197,6 @@
 			isa = PBXGroup;
 			children = (
 				50AEBECD24D3D4AD0037082D /* Blitter.h */,
-				50B5F87B25AF9F83008B79F1 /* BlitterTypes.hpp */,
 				50D375DE222C7C6B0040987C /* Blitter.hpp */,
 				50D375DD222C7C6B0040987C /* Blitter.cpp */,
 				50AE6EE024D9407F000AA367 /* BlitterRegisters.cpp */,

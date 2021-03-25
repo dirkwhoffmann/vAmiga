@@ -24,7 +24,7 @@
 #include "FSTypes.h"
 #include "Joystick.h"
 #include "Keyboard.h"
-#include "MemoryTypes.h"
+#include "Memory.h"
 #include "MsgQueue.h"
 #include "Muxer.h"
 #include "Mouse.h"

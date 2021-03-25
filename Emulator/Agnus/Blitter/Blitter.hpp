@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaComponent.hpp"
-#include "MemoryTypes.hpp"
+#include "Memory.hpp"
 #include "Macros.h"
 
 namespace va {

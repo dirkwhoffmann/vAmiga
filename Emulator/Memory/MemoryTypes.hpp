@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 #pragma once
 
 #include "Reflection.hpp"
@@ -138,3 +139,4 @@ struct UnmappedMemoryEnum : Reflection<UnmappedMemoryEnum, UnmappedMemory> {
 };
 
 }
+*/

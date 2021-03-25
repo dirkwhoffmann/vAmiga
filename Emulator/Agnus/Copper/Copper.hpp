@@ -10,7 +10,7 @@
 #pragma once
 
 #include "EventHandlerTypes.hpp"
-#include "MemoryTypes.hpp"
+#include "Memory.hpp"
 #include "AmigaComponent.hpp"
 #include "Beam.hpp"
 #include "Checksum.hpp"
