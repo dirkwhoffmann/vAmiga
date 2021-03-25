@@ -9,11 +9,36 @@
 
 #pragma once
 
-#include "CIATypes.hpp"
 #include "AmigaComponent.hpp"
 #include "TOD.hpp"
 
 namespace va {
+
+#include "CIA.h"
+
+//
+// Reflection APIs
+//
+
+struct CIARevisionEnum : Reflection<CIARevisionEnum, CIARevision> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < CIA_COUNT;
+    }
+
+    static const char *prefix() { return "CIA"; }
+    static const char *key(CIARevision value)
+    {
+        switch (value) {
+                
+            case CIA_8520_DIP:   return "8520_DIP";
+            case CIA_8520_PLCC:  return "8520_PLCC";
+            case CIA_COUNT:      return "???";
+        }
+        return "???";
+    }
+};
 
 #define CIACountA0     (1ULL << 0) // Decrements timer A
 #define CIACountA1     (1ULL << 1)

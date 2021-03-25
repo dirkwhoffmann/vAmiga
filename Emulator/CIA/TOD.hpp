@@ -9,10 +9,12 @@
 
 #pragma once
 
-#include "CIATypes.hpp"
+// #include "CIATypes.hpp"
 #include "AmigaComponent.hpp"
 
 namespace va {
+
+#include "TOD.h"
 
 typedef union
 {

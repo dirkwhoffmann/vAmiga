@@ -9,12 +9,13 @@
 
 #pragma once
 
-#include "BlitterTypes.hpp"
 #include "AmigaComponent.hpp"
 #include "MemoryTypes.hpp"
 #include "Macros.h"
 
 namespace va {
+
+#include "Blitter.h"
 
 /* The Blitter supports three accuracy levels:
  *

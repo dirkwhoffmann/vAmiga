@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 #pragma once
 
 #include "Reflection.hpp"
@@ -16,3 +17,4 @@ namespace va {
 #include "BlitterTypes.h"
 
 }
+*/

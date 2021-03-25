@@ -6,15 +6,21 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
-/*
 #pragma once
 
-#include "Reflection.hpp"
+#include "Aliases.h"
 
-namespace va {
+//
+// Structures
+//
 
-#include "CopperTypes.h"
-
+typedef struct
+{
+    long value;
+    long latch;
+    long alarm;
 }
-*/
+CounterInfo;

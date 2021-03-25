@@ -12,6 +12,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include "TOD.h"
 
 /* Emulated CIA model
  *
@@ -38,14 +39,6 @@ typedef struct
     bool eClockSyncing;
 }
 CIAConfig;
-
-typedef struct
-{
-    long value;
-    long latch;
-    long alarm;
-}
-CounterInfo;
 
 typedef struct
 {
