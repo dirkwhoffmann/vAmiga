@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "CopperTypes.hpp"
 #include "EventHandlerTypes.hpp"
 #include "MemoryTypes.hpp"
 #include "AmigaComponent.hpp"
@@ -17,6 +16,8 @@
 #include "Checksum.hpp"
 
 namespace va {
+
+#include "Copper.h"
 
 class Copper : public AmigaComponent
 {

@@ -326,7 +326,7 @@
 		504F4D63252624BD00CF8815 /* RendererRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererRect.swift; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* GuardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardTableView.swift; sourceTree = "<group>"; };
 		5051922722B61C1B0012C4BB /* FileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileTypes.h; sourceTree = "<group>"; };
-		5051922822B61C8A0012C4BB /* CPUTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPUTypes.h; sourceTree = "<group>"; };
+		5051922822B61C8A0012C4BB /* CPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPU.h; sourceTree = "<group>"; };
 		5051922922B61CEC0012C4BB /* CIATypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CIATypes.h; sourceTree = "<group>"; };
 		5051922A22B61DAA0012C4BB /* MemoryTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemoryTypes.h; sourceTree = "<group>"; };
 		505554AA2264C47600CB07E0 /* Mouse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mouse.cpp; sourceTree = "<group>"; };
@@ -508,7 +508,7 @@
 		50AE6EE624D9B2C7000AA367 /* StateMachineRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachineRegisters.cpp; sourceTree = "<group>"; };
 		50AE6F8425D71FBE0004AFBC /* Errors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Errors.cpp; sourceTree = "<group>"; };
 		50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterEvents.cpp; sourceTree = "<group>"; };
-		50AEBECA24D3D40C0037082D /* CopperTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CopperTypes.h; sourceTree = "<group>"; };
+		50AEBECA24D3D40C0037082D /* Copper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Copper.h; sourceTree = "<group>"; };
 		50AEBECB24D3D4540037082D /* CopperEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperEvents.cpp; sourceTree = "<group>"; };
 		50AEBECD24D3D4AD0037082D /* BlitterTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlitterTypes.h; sourceTree = "<group>"; };
 		50AEBED024D3D61A0037082D /* PaulaEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PaulaEvents.cpp; sourceTree = "<group>"; };
@@ -864,7 +864,7 @@
 			isa = PBXGroup;
 			children = (
 				50E2BE25240D417200155AE4 /* Moira */,
-				5051922822B61C8A0012C4BB /* CPUTypes.h */,
+				5051922822B61C8A0012C4BB /* CPU.h */,
 				50B5F87E25AFA061008B79F1 /* CPUTypes.hpp */,
 				508E7F942206CDBD00F7D88C /* CPU.hpp */,
 				508E7F932206CDBD00F7D88C /* CPU.cpp */,
@@ -1211,7 +1211,7 @@
 		50AEBEC924D3D3BE0037082D /* Copper */ = {
 			isa = PBXGroup;
 			children = (
-				50AEBECA24D3D40C0037082D /* CopperTypes.h */,
+				50AEBECA24D3D40C0037082D /* Copper.h */,
 				50B5F87A25AF9F54008B79F1 /* CopperTypes.hpp */,
 				502F7DD1222172CA00AEEC65 /* Copper.hpp */,
 				502F7DCD2221706000AEEC65 /* Copper.cpp */,

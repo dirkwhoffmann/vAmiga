@@ -9,12 +9,13 @@
 
 #pragma once
 
-#include "CPUTypes.hpp"
 #include "AmigaComponent.hpp"
 #include "Moira.h"
 #include "Macros.h"
 
 namespace va {
+
+#include "CPU.h"
 
 class CPU : public moira::Moira {
 
