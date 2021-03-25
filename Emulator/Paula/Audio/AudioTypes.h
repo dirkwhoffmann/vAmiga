@@ -12,6 +12,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include "AudioFilter.h"
 
 //
 // Enumerations
@@ -26,16 +27,6 @@ enum_long(SMP_METHOD)
     SMP_COUNT
 };
 typedef SMP_METHOD SamplingMethod;
-
-enum_long(FILTER_TYPE)
-{
-    FILTER_NONE,
-    FILTER_BUTTERWORTH,
-    
-    FILTER_COUNT
-};
-typedef FILTER_TYPE FilterType;
-
 
 //
 // Structures

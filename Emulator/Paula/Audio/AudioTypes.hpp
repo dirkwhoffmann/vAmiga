@@ -40,24 +40,4 @@ struct SamplingMethodEnum : Reflection<SamplingMethodEnum, SamplingMethod> {
     }
 };
 
-struct FilterTypeEnum : Reflection<FilterTypeEnum, FilterType> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value < FILTER_COUNT;
-    }
-
-    static const char *prefix() { return "FILTER"; }
-    static const char *key(FilterType value)
-    {
-        switch (value) {
-                
-            case FILTER_NONE:         return "NONE";
-            case FILTER_BUTTERWORTH:  return "BUTTERWORTH";
-            case FILTER_COUNT:        return "???";
-        }
-        return "???";
-    }
-};
-
 }

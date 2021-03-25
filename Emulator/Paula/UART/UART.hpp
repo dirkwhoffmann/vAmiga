@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include "PaulaTypes.hpp"
-
 #include "AmigaComponent.hpp"
 #include "EventHandlerTypes.hpp"
 #include "Macros.h"

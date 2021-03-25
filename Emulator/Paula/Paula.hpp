@@ -22,7 +22,7 @@
 
 namespace va {
 
-#include "PaulaTypes.h"
+#include "Paula.h"
 
 //
 // Reflection APIs
