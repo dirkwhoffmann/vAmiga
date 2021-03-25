@@ -364,7 +364,7 @@
 		5072CAF92456D1C800C8F606 /* AudioConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConf.swift; sourceTree = "<group>"; };
 		507653CA2216F91E001D26E9 /* AgnusPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgnusPanel.swift; sourceTree = "<group>"; };
 		507653CC2216F938001D26E9 /* DenisePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenisePanel.swift; sourceTree = "<group>"; };
-		50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DmaDebuggerTypes.h; sourceTree = "<group>"; };
+		50769B8B24BD7B01006FE743 /* DmaDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DmaDebugger.h; sourceTree = "<group>"; };
 		507727EC242F2CE3009D01DA /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		507727ED242F2CE3009D01DA /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		5078A5D32529E7FA00FCE384 /* Sampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sampler.cpp; sourceTree = "<group>"; };
@@ -537,7 +537,6 @@
 		50B5F87925AF9EED008B79F1 /* EventHandlerTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EventHandlerTypes.hpp; sourceTree = "<group>"; };
 		50B5F87A25AF9F54008B79F1 /* CopperTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CopperTypes.hpp; sourceTree = "<group>"; };
 		50B5F87B25AF9F83008B79F1 /* BlitterTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BlitterTypes.hpp; sourceTree = "<group>"; };
-		50B5F87C25AF9FBF008B79F1 /* DmaDebuggerTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DmaDebuggerTypes.hpp; sourceTree = "<group>"; };
 		50B5F87D25AFA007008B79F1 /* CIATypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CIATypes.hpp; sourceTree = "<group>"; };
 		50B5F87E25AFA061008B79F1 /* CPUTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPUTypes.hpp; sourceTree = "<group>"; };
 		50B5F87F25AFA089008B79F1 /* PortTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PortTypes.hpp; sourceTree = "<group>"; };
@@ -584,7 +583,7 @@
 		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
 		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
-		50DF2C9E2268CFC000795256 /* AgnusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusTypes.h; sourceTree = "<group>"; };
+		50DF2C9E2268CFC000795256 /* Agnus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Agnus.h; sourceTree = "<group>"; };
 		50DF2C9F2269135800795256 /* SpriteTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteTableView.swift; sourceTree = "<group>"; };
 		50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FastBlitter.cpp; sourceTree = "<group>"; };
 		50E204E82295A3F20082B63D /* DmaDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DmaDebugger.cpp; sourceTree = "<group>"; };
@@ -765,7 +764,7 @@
 				5085830523265B3D004F942F /* Event.hpp */,
 				50F924FC2428B8CD00DD91AB /* DDF.hpp */,
 				50F924FB2428B8CD00DD91AB /* DDF.cpp */,
-				50DF2C9E2268CFC000795256 /* AgnusTypes.h */,
+				50DF2C9E2268CFC000795256 /* Agnus.h */,
 				5020B17C21EF121E00B9E80E /* Agnus.hpp */,
 				5020B17B21EF121E00B9E80E /* Agnus.cpp */,
 				50AE6EDE24D93EDD000AA367 /* AgnusRegisters.cpp */,
@@ -778,8 +777,7 @@
 				50B5F87925AF9EED008B79F1 /* EventHandlerTypes.hpp */,
 				5085FE5621FB3BAE009753EF /* EventHandler.hpp */,
 				5085FE5521FB3BAE009753EF /* EventHandler.cpp */,
-				50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */,
-				50B5F87C25AF9FBF008B79F1 /* DmaDebuggerTypes.hpp */,
+				50769B8B24BD7B01006FE743 /* DmaDebugger.h */,
 				50E204E92295A3F20082B63D /* DmaDebugger.hpp */,
 				50E204E82295A3F20082B63D /* DmaDebugger.cpp */,
 				50AEBEC924D3D3BE0037082D /* Copper */,

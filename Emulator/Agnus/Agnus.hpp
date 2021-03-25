@@ -23,7 +23,7 @@
 
 namespace va {
 
-#include "AgnusTypes.h"
+#include "Agnus.h"
 
 //
 // Reflection APIs

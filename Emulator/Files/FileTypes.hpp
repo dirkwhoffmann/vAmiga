@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "DiskTypes.hpp"
+#include "Disk.hpp"
 
 namespace va {
 

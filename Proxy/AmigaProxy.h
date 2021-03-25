@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "Constants.h"
-#include "AgnusTypes.h"
+#include "Agnus.h"
 #include "AmigaTypes.h"
 #include "BlitterTypes.h"
 #include "CopperTypes.h"
@@ -16,7 +16,7 @@
 #include "CIATypes.h"
 #include "Denise.h"
 #include "DiskTypes.h"
-#include "DmaDebuggerTypes.h"
+#include "DmaDebugger.h"
 #include "DriveTypes.h"
 #include "EventHandlerTypes.h"
 #include "FileTypes.h"

@@ -9,13 +9,38 @@
 
 #pragma once
 
-#include "DmaDebuggerTypes.hpp"
-
 #include "Bus.hpp"
 #include "AmigaComponent.hpp"
 #include "Colors.hpp"
 
 namespace va {
+
+#include "DmaDebugger.h"
+
+//
+// Reflection APIs
+//
+
+struct DmaDisplayModeEnum : Reflection<DmaDisplayModeEnum, DmaDisplayMode> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < DMA_DISPLAY_MODE_COUNT;
+    }
+
+    static const char *prefix() { return "DMA_DISPLAY_MODE"; }
+    static const char *key(DmaDisplayMode value)
+    {
+        switch (value) {
+                
+            case DMA_DISPLAY_MODE_FG_LAYER:        return "FG_LAYER";
+            case DMA_DISPLAY_MODE_BG_LAYER:        return "BG_LAYER";
+            case DMA_DISPLAY_MODE_ODD_EVEN_LAYERS: return "ODD_EVEN_LAYERS";
+            case DMA_DISPLAY_MODE_COUNT:           return "???";
+        }
+        return "???";
+    }
+};
 
 class DmaDebugger : public AmigaComponent {
 
