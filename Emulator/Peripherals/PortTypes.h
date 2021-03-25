@@ -17,6 +17,7 @@
 // Enumerations
 //
 
+/*
 enum_long(SPD)
 {
     SPD_NONE,
@@ -29,6 +30,7 @@ typedef SPD SerialPortDevice;
 inline bool isSerialPortDevice(long value) {
     return value >= 0 && value <= SPD_LOOPBACK;
 }
+*/
 
 enum_long(PortNr)
 {
@@ -81,12 +83,6 @@ typedef struct
     u16 potdat;
 }
 ControlPortInfo;
-
-typedef struct
-{
-    SerialPortDevice device;
-}
-SerialPortConfig;
 
 typedef struct
 {

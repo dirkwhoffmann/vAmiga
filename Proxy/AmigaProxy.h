@@ -29,6 +29,7 @@
 #include "PixelEngine.h"
 #include "PortTypes.h"
 #include "RTC.h"
+#include "SerialPort.h"
 #include "UART.h"
 
 #import <Cocoa/Cocoa.h>

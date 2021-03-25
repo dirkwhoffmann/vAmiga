@@ -40,7 +40,7 @@ SerialPort::setConfigItem(Option option, long value)
             
         case OPT_SERIAL_DEVICE:
             
-            if (!isSerialPortDevice(value)) {
+            if (!SerialPortDeviceEnum::isValid(value)) {
                 warn("Invalid serial port device: %ld\n", value);
                 return false;
             }

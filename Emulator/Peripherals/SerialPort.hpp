@@ -14,6 +14,32 @@
 
 namespace va {
 
+#include "SerialPort.h"
+
+//
+// Reflection APIs
+//
+
+struct SerialPortDeviceEnum : Reflection<SerialPortDeviceEnum, SerialPortDevice> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < SPD_COUNT;
+    }
+    
+    static const char *prefix() { return "SPD"; }
+    static const char *key(SerialPortDevice value)
+    {
+        switch (value) {
+                
+            case SPD_NONE:      return "NONE";
+            case SPD_LOOPBACK:  return "LOOPBACK";
+            case SPD_COUNT:     return "???";
+        }
+        return "???";
+    }
+};
+
 #define TXD_MASK (1 << 2)
 #define RXD_MASK (1 << 3)
 #define RTS_MASK (1 << 4)
