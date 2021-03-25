@@ -77,6 +77,9 @@ typedef u32 Block;
 #define KHz(x) ((x) * 1000)
 #define MHz(x) ((x) * 1000000)
 
+// Time stamp used for messages that never trigger
+#define NEVER INT64_MAX
+
 #ifndef __OBJC__
 // }
 #endif

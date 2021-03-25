@@ -10,6 +10,8 @@
 #include "Constants.h"
 #include "AgnusTypes.h"
 #include "AmigaTypes.h"
+#include "BlitterTypes.h"
+#include "CopperTypes.h"
 #include "CPUTypes.h"
 #include "CIATypes.h"
 #include "Denise.h"

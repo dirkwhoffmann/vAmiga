@@ -10,8 +10,6 @@
 #pragma once
 
 #include "Reflection.hpp"
-#include "BlitterTypes.hpp"
-#include "CopperTypes.hpp"
 
 namespace va {
 

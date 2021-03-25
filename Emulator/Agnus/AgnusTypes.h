@@ -12,8 +12,6 @@
 #pragma once
 
 #include "Aliases.h"
-#include "BlitterTypes.h"
-#include "CopperTypes.h"
 
 enum_long(AGNUS_REVISION)
 {
