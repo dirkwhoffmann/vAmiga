@@ -27,30 +27,9 @@ enum_long(DENISE_REV)
 };
 typedef DENISE_REV DeniseRevision;
 
-enum_long(PALETTE)
-{
-    PALETTE_COLOR,
-    PALETTE_BLACK_WHITE,
-    PALETTE_PAPER_WHITE,
-    PALETTE_GREEN,
-    PALETTE_AMBER,
-    PALETTE_SEPIA,
-    
-    PALETTE_COUNT
-};
-typedef PALETTE Palette;
-
-
 //
 // Structures
 //
-
-typedef struct
-{
-    u32 *data;
-    bool longFrame;
-}
-ScreenBuffer;
 
 typedef struct
 {
@@ -115,12 +94,3 @@ typedef struct
     u32 color[32];
 }
 DeniseInfo;
-
-typedef struct
-{
-    Palette palette;
-    isize brightness;
-    isize contrast;
-    isize saturation;
-}
-PixelEngineConfig;

@@ -487,6 +487,7 @@
 		50A2953E21FF12EF0046BAA0 /* ControlPort.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ControlPort.hpp; sourceTree = "<group>"; };
 		50A493832374560D003ECD2C /* RTCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCTypes.h; sourceTree = "<group>"; };
 		50A5969724F7F9ED008632C0 /* PeripheralsConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralsConf.swift; sourceTree = "<group>"; };
+		50A61413260CCF9B00A01428 /* PixelEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PixelEngine.h; sourceTree = "<group>"; };
 		50A64B94257A63A600442964 /* BootBlockImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BootBlockImage.hpp; sourceTree = "<group>"; };
 		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
 		50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperRegisters.cpp; sourceTree = "<group>"; };
@@ -746,6 +747,7 @@
 				50AE6EE424D9B210000AA367 /* DeniseRegisters.cpp */,
 				5027418E2297CACF0038E5AF /* Colors.hpp */,
 				5027418D2297CACF0038E5AF /* Colors.cpp */,
+				50A61413260CCF9B00A01428 /* PixelEngine.h */,
 				502F7DD32221E52200AEEC65 /* PixelEngine.hpp */,
 				502F7DD22221E52200AEEC65 /* PixelEngine.cpp */,
 				50912FFC2525B7AD0049805B /* ScreenRecorder.hpp */,

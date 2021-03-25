@@ -23,6 +23,7 @@
 #include "MemoryTypes.h"
 #include "MsgQueueTypes.h"
 #include "PaulaTypes.h"
+#include "PixelEngine.h"
 #include "PortTypes.h"
 #include "RTCTypes.h"
 

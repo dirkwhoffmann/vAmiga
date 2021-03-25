@@ -13,9 +13,41 @@
 #include "Colors.hpp"
 #include "MemoryTypes.hpp"
 #include "PixelEngine.hpp"
+#include "Reflection.hpp"
 #include "ScreenRecorder.hpp"
 
 namespace va {
+
+#include "DeniseTypes.h"
+
+//
+// Reflection APIs
+//
+
+struct DeniseRevisionEnum : Reflection<DeniseRevisionEnum, DeniseRevision> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < DENISE_COUNT;
+    }
+
+    static const char *prefix() { return "DENISE"; }
+    static const char *key(DeniseRevision value)
+    {
+        switch (value) {
+                
+            case DENISE_OCS:          return "OCS";
+            case DENISE_OCS_BRDRBLNK: return "OCS_BRDRBLNK";
+            case DENISE_ECS:          return "ECS";
+            case DENISE_COUNT:        return "???";
+        }
+        return "???";
+    }
+};
+
+//
+// Class
+//
 
 class Denise : public AmigaComponent {
 

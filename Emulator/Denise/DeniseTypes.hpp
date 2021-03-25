@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 #pragma once
 
 #include "Reflection.hpp"
@@ -40,28 +41,5 @@ struct DeniseRevisionEnum : Reflection<DeniseRevisionEnum, DeniseRevision> {
     }
 };
 
-struct PaletteEnum : Reflection<PaletteEnum, Palette> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value < PALETTE_COUNT;
-    }
-
-    static const char *prefix() { return "PALETTE"; }
-    static const char *key(Palette value)
-    {
-        switch (value) {
-                
-            case PALETTE_COLOR:        return "COLOR";
-            case PALETTE_BLACK_WHITE:  return "BLACK_WHITE";
-            case PALETTE_PAPER_WHITE:  return "PAPER_WHITE";
-            case PALETTE_GREEN:        return "GREEN";
-            case PALETTE_AMBER:        return "AMBER";
-            case PALETTE_SEPIA:        return "SEPIA";
-            case PALETTE_COUNT:        return "???";
-        }
-        return "???";
-    }
-};
-
 }
+*/
