@@ -17,6 +17,8 @@
 
 namespace va {
 
+#include "Muxer.h"
+
 /* Architecture of the audio pipeline
  *
  *           Mux class

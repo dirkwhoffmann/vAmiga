@@ -6,13 +6,23 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
+// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
+// -----------------------------------------------------------------------------
 
 #pragma once
 
-#include "Reflection.hpp"
+#include "Aliases.h"
 
-namespace va {
+//
+// Enumerations
+//
 
-#include "AudioTypes.h"
+enum_long(SMP_METHOD)
+{
+    SMP_NONE,
+    SMP_NEAREST,
+    SMP_LINEAR,
 
-}
+    SMP_COUNT
+};
+typedef SMP_METHOD SamplingMethod;

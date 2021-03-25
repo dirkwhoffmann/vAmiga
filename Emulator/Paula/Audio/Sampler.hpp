@@ -15,6 +15,33 @@
 
 namespace va {
 
+#include "Sampler.h"
+
+//
+// Reflection APIs
+//
+
+struct SamplingMethodEnum : Reflection<SamplingMethodEnum, SamplingMethod> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < SMP_COUNT;
+    }
+
+    static const char *prefix() { return "SMP"; }
+    static const char *key(SamplingMethod value)
+    {
+        switch (value) {
+                
+            case SMP_NONE:     return "NONE";
+            case SMP_NEAREST:  return "NEAREST";
+            case SMP_LINEAR:   return "LINEAR";
+            case SMP_COUNT:    return "???";
+        }
+        return "???";
+    }
+};
+
 /* This buffer type is used to temporarily store the generated sound samples as
  * they are produced by the state machine. Note that the state machine doesn't
  * output samples at a constant sampling rate. Instead, a new sound sample is

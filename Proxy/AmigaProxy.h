@@ -22,6 +22,7 @@
 #include "KeyboardTypes.h"
 #include "MemoryTypes.h"
 #include "MsgQueue.h"
+#include "Muxer.h"
 #include "Paula.h"
 #include "PixelEngine.h"
 #include "PortTypes.h"

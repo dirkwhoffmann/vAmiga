@@ -489,6 +489,8 @@
 		50A61413260CCF9B00A01428 /* PixelEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PixelEngine.h; sourceTree = "<group>"; };
 		50A6141A260CD4F300A01428 /* UART.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UART.h; sourceTree = "<group>"; };
 		50A6141F260CD67600A01428 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
+		50A61421260CD74E00A01428 /* Muxer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Muxer.h; sourceTree = "<group>"; };
+		50A61424260CD85000A01428 /* Sampler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sampler.h; sourceTree = "<group>"; };
 		50A64B94257A63A600442964 /* BootBlockImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BootBlockImage.hpp; sourceTree = "<group>"; };
 		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
 		50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperRegisters.cpp; sourceTree = "<group>"; };
@@ -1223,11 +1225,13 @@
 				507D7767228BE3EF001E97A9 /* StateMachine.cpp */,
 				50AE6EE624D9B2C7000AA367 /* StateMachineRegisters.cpp */,
 				50AEBED224D3D6D10037082D /* StateMachineEvents.cpp */,
+				50A61424260CD85000A01428 /* Sampler.h */,
 				5078A5D42529E7FA00FCE384 /* Sampler.hpp */,
 				5078A5D32529E7FA00FCE384 /* Sampler.cpp */,
 				50A6141F260CD67600A01428 /* AudioFilter.h */,
 				505A214F22869FF10016EA21 /* AudioFilter.hpp */,
 				505A214E22869FF10016EA21 /* AudioFilter.cpp */,
+				50A61421260CD74E00A01428 /* Muxer.h */,
 				50B70CAC252CE0BF006B5191 /* Muxer.hpp */,
 				50B70CAB252CE0BF006B5191 /* Muxer.cpp */,
 				5030C2DF252A2E8400107E00 /* AudioStream.hpp */,
