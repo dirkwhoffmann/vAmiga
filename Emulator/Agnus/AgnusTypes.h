@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include "Aliases.h"
 #include "BlitterTypes.h"
 #include "CopperTypes.h"
 

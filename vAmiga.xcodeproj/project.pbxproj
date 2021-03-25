@@ -873,6 +873,7 @@
 			isa = PBXGroup;
 			children = (
 				50B14C0921EB228E002E32A6 /* config.h */,
+				50B14C0421EB212E002E32A6 /* Utilities */,
 				508FE06021EA318D0043D0E9 /* Emulator */,
 				50B14C2421EB8F25002E32A6 /* Proxy */,
 				508FDFDC21EA20600043D0E9 /* GUI */,
@@ -1027,7 +1028,6 @@
 				506F423E24F0ED75005F80D9 /* AmigaTypes.hpp */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
-				50B14C0421EB212E002E32A6 /* Foundation */,
 				50104E8825ECDAA30047A9AA /* Base */,
 				505B801D23FE628F002407FE /* LogicBoard */,
 				50EE993D21FF4D42003BD74B /* Paula */,
@@ -1261,7 +1261,7 @@
 			path = UART;
 			sourceTree = "<group>";
 		};
-		50B14C0421EB212E002E32A6 /* Foundation */ = {
+		50B14C0421EB212E002E32A6 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
 				50C8C42C2605D51A00F4E012 /* Types.h */,
@@ -1283,7 +1283,7 @@
 				50C0B78125EC367000CDE1F2 /* IO.h */,
 				50C0B78025EC367000CDE1F2 /* IO.cpp */,
 			);
-			path = Foundation;
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		50B14C1321EB8445002E32A6 /* sounds */ = {
