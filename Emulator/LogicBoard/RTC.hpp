@@ -10,9 +10,35 @@
 #pragma once
 
 #include "AmigaComponent.hpp"
-#include "RTCTypes.hpp"
 
 namespace va {
+
+#include "RTC.h"
+
+//
+// Reflection APIs
+//
+
+struct RTCRevisionEnum : Reflection<RTCRevisionEnum, RTCRevision> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < RTC_COUNT;
+    }
+
+    static const char *prefix() { return "RTC"; }
+    static const char *key(RTCRevision value)
+    {
+        switch (value) {
+                
+            case RTC_NONE:   return "NONE";
+            case RTC_OKI:    return "OKI";
+            case RTC_RICOH:  return "RICOH";
+            case RTC_COUNT:  return "???";
+        }
+        return "???";
+    }
+};
 
 class RTC : public AmigaComponent {
 

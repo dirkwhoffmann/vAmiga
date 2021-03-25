@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 #pragma once
 
 #include "Reflection.hpp"
@@ -57,3 +58,4 @@ struct IrqSourceEnum : Reflection<IrqSourceEnum, IrqSource> {
 };
 
 }
+*/

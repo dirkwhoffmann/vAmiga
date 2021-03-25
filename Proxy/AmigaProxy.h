@@ -12,7 +12,7 @@
 #include "AmigaTypes.h"
 #include "CPUTypes.h"
 #include "CIATypes.h"
-#include "DeniseTypes.h"
+#include "Denise.h"
 #include "DiskTypes.h"
 #include "DmaDebuggerTypes.h"
 #include "DriveTypes.h"
@@ -21,11 +21,12 @@
 #include "FSTypes.h"
 #include "KeyboardTypes.h"
 #include "MemoryTypes.h"
-#include "MsgQueueTypes.h"
+#include "MsgQueue.h"
 #include "PaulaTypes.h"
 #include "PixelEngine.h"
 #include "PortTypes.h"
-#include "RTCTypes.h"
+#include "RTC.h"
+#include "UART.h"
 
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>

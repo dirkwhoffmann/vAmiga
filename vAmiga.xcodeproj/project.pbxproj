@@ -286,7 +286,7 @@
 		501A9936243A07A100D269B2 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		501B821B2262FFB200042871 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
 		501B821C2262FFB200042871 /* RTC.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RTC.hpp; sourceTree = "<group>"; };
-		501E715022671FC20070B17D /* DeniseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeniseTypes.h; sourceTree = "<group>"; };
+		501E715022671FC20070B17D /* Denise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Denise.h; sourceTree = "<group>"; };
 		501E715122677BFF0070B17D /* EventHandlerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventHandlerTypes.h; sourceTree = "<group>"; };
 		5020B17B21EF121E00B9E80E /* Agnus.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Agnus.cpp; sourceTree = "<group>"; };
 		5020B17C21EF121E00B9E80E /* Agnus.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Agnus.hpp; sourceTree = "<group>"; };
@@ -485,9 +485,10 @@
 		509F7F1C21EDEA0200A530E4 /* RomFile.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RomFile.hpp; sourceTree = "<group>"; };
 		50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
 		50A2953E21FF12EF0046BAA0 /* ControlPort.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ControlPort.hpp; sourceTree = "<group>"; };
-		50A493832374560D003ECD2C /* RTCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCTypes.h; sourceTree = "<group>"; };
+		50A493832374560D003ECD2C /* RTC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTC.h; sourceTree = "<group>"; };
 		50A5969724F7F9ED008632C0 /* PeripheralsConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralsConf.swift; sourceTree = "<group>"; };
 		50A61413260CCF9B00A01428 /* PixelEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PixelEngine.h; sourceTree = "<group>"; };
+		50A6141A260CD4F300A01428 /* UART.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UART.h; sourceTree = "<group>"; };
 		50A64B94257A63A600442964 /* BootBlockImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BootBlockImage.hpp; sourceTree = "<group>"; };
 		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
 		50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperRegisters.cpp; sourceTree = "<group>"; };
@@ -527,8 +528,6 @@
 		50B3C44725EAFB5500651700 /* Checksum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Checksum.cpp; sourceTree = "<group>"; };
 		50B3C44825EAFB5500651700 /* Checksum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Checksum.hpp; sourceTree = "<group>"; };
 		50B5C07D241107F200F124DC /* Constants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
-		50B5F87625AF9D4E008B79F1 /* RTCTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RTCTypes.hpp; sourceTree = "<group>"; };
-		50B5F87725AF9D98008B79F1 /* DeniseTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DeniseTypes.hpp; sourceTree = "<group>"; };
 		50B5F87825AF9E07008B79F1 /* Reflection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Reflection.hpp; sourceTree = "<group>"; };
 		50B5F87925AF9EED008B79F1 /* EventHandlerTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EventHandlerTypes.hpp; sourceTree = "<group>"; };
 		50B5F87A25AF9F54008B79F1 /* CopperTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CopperTypes.hpp; sourceTree = "<group>"; };
@@ -542,7 +541,6 @@
 		50B5F88225AFA132008B79F1 /* FileTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FileTypes.hpp; sourceTree = "<group>"; };
 		50B5F88325AFA1AD008B79F1 /* FSTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FSTypes.hpp; sourceTree = "<group>"; };
 		50B5F88525AFA36C008B79F1 /* MemoryTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MemoryTypes.hpp; sourceTree = "<group>"; };
-		50B5F88725AFA3B4008B79F1 /* MsgQueueTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MsgQueueTypes.hpp; sourceTree = "<group>"; };
 		50B70CAB252CE0BF006B5191 /* Muxer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Muxer.cpp; sourceTree = "<group>"; };
 		50B70CAC252CE0BF006B5191 /* Muxer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Muxer.hpp; sourceTree = "<group>"; };
 		50B81E0724E6BCCA004384C9 /* DiskControllerRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskControllerRegisters.cpp; sourceTree = "<group>"; };
@@ -572,7 +570,7 @@
 		50D375DD222C7C6B0040987C /* Blitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Blitter.cpp; sourceTree = "<group>"; };
 		50D375DE222C7C6B0040987C /* Blitter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Blitter.hpp; sourceTree = "<group>"; };
 		50D52442227878E900F8959D /* DiskTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskTypes.h; sourceTree = "<group>"; };
-		50D5244322787D3C00F8959D /* MsgQueueTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MsgQueueTypes.h; sourceTree = "<group>"; };
+		50D5244322787D3C00F8959D /* MsgQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MsgQueue.h; sourceTree = "<group>"; };
 		50D661862282BE1800D67D88 /* AmigaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaTypes.h; sourceTree = "<group>"; };
 		50D7CDC22286E968002689F0 /* Joystick.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick.cpp; sourceTree = "<group>"; };
 		50D7CDC32286E968002689F0 /* Joystick.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Joystick.hpp; sourceTree = "<group>"; };
@@ -728,8 +726,7 @@
 				50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */,
 				50E79BE8232D123000D296FB /* AmigaComponent.hpp */,
 				50E79BE7232D123000D296FB /* AmigaComponent.cpp */,
-				50D5244322787D3C00F8959D /* MsgQueueTypes.h */,
-				50B5F88725AFA3B4008B79F1 /* MsgQueueTypes.hpp */,
+				50D5244322787D3C00F8959D /* MsgQueue.h */,
 				508FDEF821EA1FBC0043D0E9 /* MsgQueue.hpp */,
 				508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */,
 				508C6BCF23F7E77500D8938F /* ChangeRecorder.hpp */,
@@ -740,8 +737,7 @@
 		502F7DCF2221709700AEEC65 /* Denise */ = {
 			isa = PBXGroup;
 			children = (
-				501E715022671FC20070B17D /* DeniseTypes.h */,
-				50B5F87725AF9D98008B79F1 /* DeniseTypes.hpp */,
+				501E715022671FC20070B17D /* Denise.h */,
 				5020B17F21EF136100B9E80E /* Denise.hpp */,
 				5020B17E21EF136100B9E80E /* Denise.cpp */,
 				50AE6EE424D9B210000AA367 /* DeniseRegisters.cpp */,
@@ -838,8 +834,7 @@
 			children = (
 				503DECAD255E6180005FFA0B /* Oscillator.hpp */,
 				503DECAC255E6180005FFA0B /* Oscillator.cpp */,
-				50A493832374560D003ECD2C /* RTCTypes.h */,
-				50B5F87625AF9D4E008B79F1 /* RTCTypes.hpp */,
+				50A493832374560D003ECD2C /* RTC.h */,
 				501B821C2262FFB200042871 /* RTC.hpp */,
 				501B821B2262FFB200042871 /* RTC.cpp */,
 				50950ED722881B7A0073F755 /* ZorroManager.hpp */,
@@ -1256,6 +1251,7 @@
 		50AEBED624D3D7270037082D /* UART */ = {
 			isa = PBXGroup;
 			children = (
+				50A6141A260CD4F300A01428 /* UART.h */,
 				50F0BD2522AF883C001F4616 /* UART.hpp */,
 				50F0BD2422AF883C001F4616 /* UART.cpp */,
 				50AEBEDB24D3D8170037082D /* UARTEvents.cpp */,

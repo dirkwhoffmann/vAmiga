@@ -17,6 +17,8 @@
 
 namespace va {
 
+#include "UART.h"
+
 class UART : public AmigaComponent {
 
     friend class Amiga;
