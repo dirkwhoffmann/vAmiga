@@ -11,6 +11,7 @@
 
 #include "AmigaFile.hpp"
 #include "BootBlockImage.hpp"
+#include "Disk.hpp"
 
 namespace va {
 

@@ -325,7 +325,7 @@
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
 		504F4D63252624BD00CF8815 /* RendererRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererRect.swift; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* GuardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardTableView.swift; sourceTree = "<group>"; };
-		5051922722B61C1B0012C4BB /* FileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileTypes.h; sourceTree = "<group>"; };
+		5051922722B61C1B0012C4BB /* AmigaFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaFile.h; sourceTree = "<group>"; };
 		5051922822B61C8A0012C4BB /* CPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPU.h; sourceTree = "<group>"; };
 		5051922922B61CEC0012C4BB /* CIA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CIA.h; sourceTree = "<group>"; };
 		5051922A22B61DAA0012C4BB /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
@@ -547,7 +547,6 @@
 		50B5F87825AF9E07008B79F1 /* Reflection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Reflection.hpp; sourceTree = "<group>"; };
 		50B5F87925AF9EED008B79F1 /* EventHandlerTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EventHandlerTypes.hpp; sourceTree = "<group>"; };
 		50B5F87E25AFA061008B79F1 /* CPUTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPUTypes.hpp; sourceTree = "<group>"; };
-		50B5F88225AFA132008B79F1 /* FileTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FileTypes.hpp; sourceTree = "<group>"; };
 		50B5F88325AFA1AD008B79F1 /* FSTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FSTypes.hpp; sourceTree = "<group>"; };
 		50B70CAB252CE0BF006B5191 /* Muxer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Muxer.cpp; sourceTree = "<group>"; };
 		50B70CAC252CE0BF006B5191 /* Muxer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Muxer.hpp; sourceTree = "<group>"; };
@@ -1058,8 +1057,7 @@
 		508FE06621EA31E50043D0E9 /* Files */ = {
 			isa = PBXGroup;
 			children = (
-				5051922722B61C1B0012C4BB /* FileTypes.h */,
-				50B5F88225AFA132008B79F1 /* FileTypes.hpp */,
+				5051922722B61C1B0012C4BB /* AmigaFile.h */,
 				508FE06421EA318D0043D0E9 /* AmigaFile.hpp */,
 				508FE06321EA318D0043D0E9 /* AmigaFile.cpp */,
 				50384C8521FC6B66006E7748 /* Snapshot.hpp */,

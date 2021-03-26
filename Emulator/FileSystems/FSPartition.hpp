@@ -10,7 +10,6 @@
 #pragma once
 
 #include "FSTypes.hpp"
-#include "FileTypes.hpp"
 #include "FSDescriptors.hpp"
 
 namespace va {
