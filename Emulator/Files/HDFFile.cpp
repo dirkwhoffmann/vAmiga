@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "HDFFile.hpp"
-#include "IO.hpp"
+#include "HDFFile.h"
+#include "IO.h"
 #include "string.h"
 
 HDFFile::HDFFile()

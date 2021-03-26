@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "Agnus.hpp"
-#include "Denise.hpp"
-#include "Paula.hpp"
+#include "Agnus.h"
+#include "Denise.h"
+#include "Paula.h"
 
 void
 Agnus::pokeDSKPTH(u16 value)

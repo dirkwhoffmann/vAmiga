@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "HardwareComponent.hpp"
+#include "HardwareComponent.h"
 
 HardwareComponent::~HardwareComponent()
 {

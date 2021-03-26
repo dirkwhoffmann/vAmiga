@@ -9,12 +9,12 @@
 
 #include "config.h"
 
-#include "Bus.hpp"
-#include "DmaDebugger.hpp"
-#include "Agnus.hpp"
-#include "Denise.hpp"
-#include "MsgQueue.hpp"
-#include "PixelEngine.hpp"
+#include "Bus.h"
+#include "DmaDebugger.h"
+#include "Agnus.h"
+#include "Denise.h"
+#include "MsgQueue.h"
+#include "PixelEngine.h"
 
 DmaDebugger::DmaDebugger(Amiga &ref) : AmigaComponent(ref)
 {

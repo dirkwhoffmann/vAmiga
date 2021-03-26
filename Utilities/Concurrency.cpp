@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Concurrency.hpp"
+#include "Concurrency.h"
 
 namespace util {
 

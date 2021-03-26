@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "Denise.hpp"
-#include "Agnus.hpp"
-#include "ControlPort.hpp"
+#include "Denise.h"
+#include "Agnus.h"
+#include "ControlPort.h"
 
 void
 Denise::pokeDMACON(u16 oldValue, u16 newValue)

@@ -9,12 +9,12 @@
 
 #include "config.h"
 
-#include "DiskController.hpp"
-#include "Agnus.hpp"
-#include "Checksum.hpp"
-#include "Drive.hpp"
-#include "MsgQueue.hpp"
-#include "Paula.hpp"
+#include "DiskController.h"
+#include "Agnus.h"
+#include "Checksum.h"
+#include "Drive.h"
+#include "MsgQueue.h"
+#include "Paula.h"
 
 u16
 DiskController::peekDSKDATR() const

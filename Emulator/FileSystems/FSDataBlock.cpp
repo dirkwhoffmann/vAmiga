@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "FSDataBlock.hpp"
-#include "FSDevice.hpp"
-#include "FSPartition.hpp"
+#include "FSDataBlock.h"
+#include "FSDevice.h"
+#include "FSPartition.h"
 
 #include <string.h>
 

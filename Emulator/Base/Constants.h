@@ -327,3 +327,9 @@
 #define VBLANK_MIN    0x00
 #define VBLANK_MAX    0x19
 #define VBLANK_CNT    0x1A // equals VBLANK_MAX - VBLANK_MIN + 1
+
+// Returns a printable name for a custom register
+const char *regName(u32 addr);
+
+// Returns a printable name for a CIA register
+const char *ciaRegName(u32 addr);

@@ -9,19 +9,19 @@
 
 #include "config.h"
 
-#include "Memory.hpp"
-#include "Amiga.hpp"
-#include "Agnus.hpp"
-#include "Checksum.hpp"
-#include "CIA.hpp"
-#include "CPU.hpp"
-#include "Denise.hpp"
-#include "ExtendedRomFile.hpp"
-#include "MsgQueue.hpp"
-#include "Paula.hpp"
-#include "RomFile.hpp"
-#include "RTC.hpp"
-#include "ZorroManager.hpp"
+#include "Memory.h"
+#include "Amiga.h"
+#include "Agnus.h"
+#include "Checksum.h"
+#include "CIA.h"
+#include "CPU.h"
+#include "Denise.h"
+#include "ExtendedRomFile.h"
+#include "MsgQueue.h"
+#include "Paula.h"
+#include "RomFile.h"
+#include "RTC.h"
+#include "ZorroManager.h"
 
 Memory::Memory(Amiga& ref) : AmigaComponent(ref)
 {

@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "AmigaComponent.hpp"
-#include "Amiga.hpp"  
+#include "AmigaComponent.h"
+#include "Amiga.h"  
 
 AmigaComponent::AmigaComponent(Amiga& ref) :
 agnus(ref.agnus),

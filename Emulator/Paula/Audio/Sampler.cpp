@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Sampler.hpp"
+#include "Sampler.h"
 
 void
 Sampler::reset()

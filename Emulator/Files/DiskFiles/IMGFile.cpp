@@ -9,10 +9,10 @@
 
 #include "config.h"
 
-#include "IMGFile.hpp"
-#include "Checksum.hpp"
-#include "Disk.hpp"
-#include "IO.hpp"
+#include "IMGFile.h"
+#include "Checksum.h"
+#include "Disk.h"
+#include "IO.h"
 
 bool
 IMGFile::isCompatiblePath(const string &path)

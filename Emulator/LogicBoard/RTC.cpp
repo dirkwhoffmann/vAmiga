@@ -9,10 +9,10 @@
 
 #include "config.h"
 
-#include "RTC.hpp"
-#include "CPU.hpp"
-#include "IO.hpp"
-#include "Memory.hpp"
+#include "RTC.h"
+#include "CPU.h"
+#include "IO.h"
+#include "Memory.h"
 
 RTC::RTC(Amiga& ref) : AmigaComponent(ref)
 {

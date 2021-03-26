@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "Blitter.hpp"
-#include "Agnus.hpp"
+#include "Blitter.h"
+#include "Agnus.h"
 
 void
 Blitter::pokeBLTCON0(u16 value)

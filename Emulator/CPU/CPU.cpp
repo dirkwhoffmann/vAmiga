@@ -9,12 +9,12 @@
 
 #include "config.h"
 
-#include "CPU.hpp"
-#include "Agnus.hpp"
-#include "Amiga.hpp"
-#include "IO.hpp"
-#include "Memory.hpp"
-#include "MsgQueue.hpp"
+#include "CPU.h"
+#include "Agnus.h"
+#include "Amiga.h"
+#include "IO.h"
+#include "Memory.h"
+#include "MsgQueue.h"
 
 //
 // Moira

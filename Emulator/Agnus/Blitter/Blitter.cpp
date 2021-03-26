@@ -9,10 +9,10 @@
 
 #include "config.h"
 
-#include "Blitter.hpp"
-#include "Agnus.hpp"
-#include "Checksum.hpp"
-#include "IO.hpp"
+#include "Blitter.h"
+#include "Agnus.h"
+#include "Checksum.h"
+#include "IO.h"
 
 Blitter::Blitter(Amiga& ref) : AmigaComponent(ref)
 {

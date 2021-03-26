@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "RetroShell.hpp"
-#include "Amiga.hpp"
-#include "Parser.hpp"
+#include "RetroShell.h"
+#include "Amiga.h"
+#include "Parser.h"
 
 #include <sstream>
 

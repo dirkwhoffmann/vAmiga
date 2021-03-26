@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Exception.hpp"
+#include "Exception.h"
 
 namespace util {
 

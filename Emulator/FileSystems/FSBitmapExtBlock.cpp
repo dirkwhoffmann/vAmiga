@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "FSBitmapExtBlock.hpp"
-#include "FSDevice.hpp"
-#include "FSPartition.hpp"
+#include "FSBitmapExtBlock.h"
+#include "FSDevice.h"
+#include "FSPartition.h"
 
 FSBitmapExtBlock::FSBitmapExtBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {

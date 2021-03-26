@@ -13,7 +13,7 @@
 
 #include "Aliases.h"
 #include "Reflection.h"
-#include "TOD.h"
+#include "TODTypes.h"
 
 /* Emulated CIA model
  *

@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "Agnus.hpp"
-#include "Denise.hpp"
+#include "Agnus.h"
+#include "Denise.h"
 
 /* A central element in the emulation of an Amiga is the accurate modeling of
 * the DMA timeslot allocation table (Fig. 6-9 im the HRM, 3rd revision). All

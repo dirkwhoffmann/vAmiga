@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "Keyboard.hpp"
-#include "Agnus.hpp"
-#include "CIA.hpp"
+#include "Keyboard.h"
+#include "Agnus.h"
+#include "CIA.h"
 
 void
 Keyboard::serviceKeyboardEvent(EventID id)

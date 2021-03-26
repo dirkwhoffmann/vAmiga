@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "Disk.hpp"
-#include "DiskFile.hpp"
+#include "Disk.h"
+#include "DiskFile.h"
 
 Disk::Disk(DiskDiameter type, DiskDensity density)
 {    

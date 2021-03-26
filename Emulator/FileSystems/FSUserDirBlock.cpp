@@ -9,10 +9,10 @@
 
 #include "config.h"
 
-#include "FSUserDirBlock.hpp"
-#include "FSDevice.hpp"
-#include "FSPartition.hpp"
-#include "IO.hpp"
+#include "FSUserDirBlock.h"
+#include "FSDevice.h"
+#include "FSPartition.h"
+#include "IO.h"
 
 FSUserDirBlock::FSUserDirBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {

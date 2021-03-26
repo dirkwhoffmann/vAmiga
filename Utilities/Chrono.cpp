@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#include "Chrono.hpp"
+#include "Chrono.h"
 #ifdef __MACH__
 #include <mach/mach_time.h>
 #endif

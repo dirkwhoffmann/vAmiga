@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "SerialPort.hpp"
-#include "UART.hpp"
-#include "IO.hpp"
+#include "SerialPort.h"
+#include "UART.h"
+#include "IO.h"
 
 SerialPort::SerialPort(Amiga& ref) : AmigaComponent(ref)
 {

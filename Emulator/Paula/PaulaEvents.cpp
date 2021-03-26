@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "Paula.hpp"
-#include "ControlPort.hpp"
-#include "CPU.hpp"
+#include "Paula.h"
+#include "ControlPort.h"
+#include "CPU.h"
 
 void
 Paula::serviceIrqEvent()

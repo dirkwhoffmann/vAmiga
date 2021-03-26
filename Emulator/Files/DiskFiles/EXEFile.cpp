@@ -9,10 +9,10 @@
 
 #include "config.h"
 
-#include "EXEFile.hpp"
-#include "AmigaFile.hpp"
-#include "FSDevice.hpp"
-#include "IO.hpp"
+#include "EXEFile.h"
+#include "AmigaFile.h"
+#include "FSDevice.h"
+#include "IO.h"
 
 bool
 EXEFile::isCompatiblePath(const string &path)

@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "Paula.hpp"
-#include "CIA.hpp"
-#include "ControlPort.hpp"
+#include "Paula.h"
+#include "CIA.h"
+#include "ControlPort.h"
 
 u16
 Paula::peekADKCONR() const

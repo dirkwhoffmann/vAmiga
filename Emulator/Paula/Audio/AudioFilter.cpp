@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#include "AudioFilter.hpp"
+#include "AudioFilter.h"
 #include "math.h"
 
 AudioFilter::AudioFilter(Amiga& ref) : AmigaComponent(ref)

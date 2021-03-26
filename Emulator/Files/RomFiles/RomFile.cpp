@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "RomFile.hpp"
+#include "RomFile.h"
 #include "Macros.h"
-#include "IO.hpp"
+#include "IO.h"
 
 //
 // Boot Roms

@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "Oscillator.hpp"
-#include "Agnus.hpp"
-#include "Chrono.hpp"
+#include "Oscillator.h"
+#include "Agnus.h"
+#include "Chrono.h"
 
 const double Oscillator::masterClockFrequency = 28.37516;
 const double Oscillator::cpuClockFrequency = masterClockFrequency / 4.0;

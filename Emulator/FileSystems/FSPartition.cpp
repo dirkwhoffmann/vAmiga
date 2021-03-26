@@ -10,8 +10,8 @@
 
 #include "config.h"
 
-#include "FSPartition.hpp"
-#include "FSDevice.hpp"
+#include "FSPartition.h"
+#include "FSDevice.h"
 
 #include <algorithm>
 #include <string.h>

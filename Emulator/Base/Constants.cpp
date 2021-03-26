@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#include "Constants.hpp"
+#include "Constants.h"
 #include "Macros.h"
 
 const char *regName(u32 addr)

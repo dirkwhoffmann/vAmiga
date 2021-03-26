@@ -9,11 +9,11 @@
 
 #include "config.h"
 
-#include "Keyboard.hpp"
-#include "Agnus.hpp"
-#include "CIA.hpp"
-#include "IO.hpp"
-#include "MsgQueue.hpp"
+#include "Keyboard.h"
+#include "Agnus.h"
+#include "CIA.h"
+#include "IO.h"
+#include "MsgQueue.h"
 
 Keyboard::Keyboard(Amiga& ref) : AmigaComponent(ref)
 {

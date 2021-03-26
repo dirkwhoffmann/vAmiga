@@ -6,33 +6,39 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
-// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
-// -----------------------------------------------------------------------------
 
 #pragma once
 
-#include "Aliases.h"
+#include "BootBlockImageTypes.h"
+#include "Reflection.h"
+#include <stddef.h>
 
-//
-// Enumerations
-//
-
-enum_long(BB_TYPE)
+typedef struct
 {
-    BB_STANDARD,
-    BB_VIRUS,
-    BB_CUSTOM,
+    const char *name;
+    u16 signature[14];
+    const u8 *image;
+    isize size;
+    BootBlockType type;
+}
+BBRecord;
+
+class BootBlockImage {
+
+    // Image data
+    u8 data[1024];
     
-    BB_COUNT
+public:
+    
+    // Result of the data inspection
+    BootBlockType type = BB_CUSTOM;
+    const char *name = "Custom boot block";
+    
+    // Constructors
+    BootBlockImage(const u8 *buffer);
+    BootBlockImage(const char *name);
+    BootBlockImage(BootBlockId id);
+    
+    // Exports the image
+    void write(u8 *buffer, isize first = 0, isize last = 0);
 };
-typedef BB_TYPE BootBlockType;
-
-enum_long(BB_ID)
-{
-    BB_NONE,
-    BB_AMIGADOS_13,
-    BB_AMIGADOS_20,
-    BB_SCA,
-    BB_BYTE_BANDIT
-};
-typedef BB_ID BootBlockId;

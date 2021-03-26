@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "CIA.hpp"
-#include "Agnus.hpp"
+#include "CIA.h"
+#include "Agnus.h"
 
 void
 CIA::scheduleNextExecution()

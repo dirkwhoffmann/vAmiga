@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "DiskController.hpp"
-#include "Agnus.hpp"
-#include "Drive.hpp"
+#include "DiskController.h"
+#include "Agnus.h"
+#include "Drive.h"
 
 #include <math.h>
 

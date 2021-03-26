@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "Copper.hpp"
-#include "Agnus.hpp"
+#include "Copper.h"
+#include "Agnus.h"
 
 void
 Copper::pokeCOPCON(u16 value)

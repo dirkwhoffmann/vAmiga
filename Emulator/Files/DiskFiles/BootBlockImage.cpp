@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#include "BootBlockImage.hpp"
+#include "BootBlockImage.h"
 #include <string.h>
 
 //

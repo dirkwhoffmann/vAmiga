@@ -9,12 +9,12 @@
 
 #include "config.h"
 
-#include "Agnus.hpp"
-#include "CIA.hpp"
-#include "CPU.hpp"
-#include "Keyboard.hpp"
-#include "Paula.hpp"
-#include "UART.hpp"
+#include "Agnus.h"
+#include "CIA.h"
+#include "CPU.h"
+#include "Keyboard.h"
+#include "Paula.h"
+#include "UART.h"
 
 void
 Agnus::inspectEvents(EventInfo &info) const

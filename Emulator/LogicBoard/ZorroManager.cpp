@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "ZorroManager.hpp"
-#include "Memory.hpp"
+#include "ZorroManager.h"
+#include "Memory.h"
 
 ZorroManager::ZorroManager(Amiga& ref) : AmigaComponent(ref)
 {

@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "Folder.hpp"
-#include "FSDevice.hpp"
+#include "Folder.h"
+#include "FSDevice.h"
 
 bool
 Folder::isFolder(const char *path)

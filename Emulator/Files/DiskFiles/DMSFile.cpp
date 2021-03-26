@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "DMSFile.hpp"
-#include "AmigaFile.hpp"
+#include "DMSFile.h"
+#include "AmigaFile.h"
 
 extern "C" {
 unsigned short extractDMS(FILE *fi, FILE *fo);

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaComponent.hpp"
+#include "AmigaComponent.h"
 
 #include "MoiraConfig.h"
 #include "MoiraTypes.h"

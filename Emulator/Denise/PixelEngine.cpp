@@ -9,11 +9,11 @@
 
 #include "config.h"
 
-#include "PixelEngine.hpp"
-#include "Agnus.hpp"
-#include "Colors.hpp"
-#include "Denise.hpp"
-#include "DmaDebugger.hpp"
+#include "PixelEngine.h"
+#include "Agnus.h"
+#include "Colors.h"
+#include "Denise.h"
+#include "DmaDebugger.h"
 
 PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
 {

@@ -9,11 +9,11 @@
 
 #include "config.h"
 
-#include "UART.hpp"
-#include "Agnus.hpp"
-#include "MsgQueue.hpp"
-#include "Paula.hpp"
-#include "SerialPort.hpp"
+#include "UART.h"
+#include "Agnus.h"
+#include "MsgQueue.h"
+#include "Paula.h"
+#include "SerialPort.h"
 
 UART::UART(Amiga& ref) : AmigaComponent(ref)
 {

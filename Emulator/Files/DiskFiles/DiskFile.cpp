@@ -9,12 +9,12 @@
 
 #include "config.h"
 
-#include "DiskFile.hpp"
-#include "ADFFile.hpp"
-#include "IMGFile.hpp"
-#include "DMSFile.hpp"
-#include "EXEFile.hpp"
-#include "Folder.hpp"
+#include "DiskFile.h"
+#include "ADFFile.h"
+#include "IMGFile.h"
+#include "DMSFile.h"
+#include "EXEFile.h"
+#include "Folder.h"
 
 DiskFile *
 DiskFile::make(const string &path)

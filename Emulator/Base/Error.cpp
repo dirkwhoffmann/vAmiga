@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Error.hpp"
+#include "Error.h"
 
 const char *
 VAError::what() const throw() {

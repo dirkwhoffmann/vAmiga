@@ -9,10 +9,10 @@
 
 #include "config.h"
 
-#include "Blitter.hpp"
-#include "Agnus.hpp"
-#include "Memory.hpp"
-#include "Paula.hpp"
+#include "Blitter.h"
+#include "Agnus.h"
+#include "Memory.h"
+#include "Paula.h"
 
 /* Micro-instructions:
  *

@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "MsgQueue.hpp"
+#include "MsgQueue.h"
 
 void
 MsgQueue::setListener(const void *listener, Callback *callback)

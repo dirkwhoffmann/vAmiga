@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "IO.hpp"
-#include "FSDevice.hpp"
+#include "IO.h"
+#include "FSDevice.h"
 #include "limits.h"
 #include <string.h>
 #include <set>

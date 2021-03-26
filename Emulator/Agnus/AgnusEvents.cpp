@@ -9,14 +9,14 @@
 
 #include "config.h"
 
-#include "Agnus.hpp"
-#include "Amiga.hpp"
-#include "CIA.hpp"
-#include "ControlPort.hpp"
-#include "CPU.hpp"
-#include "Denise.hpp"
-#include "Paula.hpp"
-#include "SerialPort.hpp"
+#include "Agnus.h"
+#include "Amiga.h"
+#include "CIA.h"
+#include "ControlPort.h"
+#include "CPU.h"
+#include "Denise.h"
+#include "Paula.h"
+#include "SerialPort.h"
 
 void
 Agnus::serviceVblEvent()

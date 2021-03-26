@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "ControlPort.hpp"
-#include "IO.hpp"
-#include "Paula.hpp"
+#include "ControlPort.h"
+#include "IO.h"
+#include "Paula.h"
 
 ControlPort::ControlPort(Amiga& ref, PortNr portNr) : AmigaComponent(ref), nr(portNr)
 {

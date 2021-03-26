@@ -12,6 +12,7 @@
 #include "AmigaTypes.h"
 #include "AmigaFileTypes.h"
 #include "BlitterTypes.h"
+#include "BootBlockImageTypes.h"
 #include "ControlPortTypes.h"
 #include "CopperTypes.h"
 #include "CPUTypes.h"

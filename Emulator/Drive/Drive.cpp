@@ -9,13 +9,13 @@
 
 #include "config.h"
 
-#include "Drive.hpp"
-#include "Agnus.hpp"
-#include "BootBlockImage.hpp"
-#include "CIA.hpp"
-#include "DiskFile.hpp"
-#include "FSDevice.hpp"
-#include "MsgQueue.hpp"
+#include "Drive.h"
+#include "Agnus.h"
+#include "BootBlockImage.h"
+#include "CIA.h"
+#include "DiskFile.h"
+#include "FSDevice.h"
+#include "MsgQueue.h"
 
 Drive::Drive(Amiga& ref, isize n) : AmigaComponent(ref), nr(n)
 {

@@ -12,7 +12,7 @@
 #pragma once
 
 #include "Aliases.h"
-#include "BootBlockImage.h"
+#include "BootBlockImageTypes.h"
 #include "FSTypes.h"
 #include "Reflection.h"
 

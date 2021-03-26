@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#include "Checksum.hpp"
+#include "Checksum.h"
 #include "Macros.h"
 
 namespace util {

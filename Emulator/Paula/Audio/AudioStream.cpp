@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#include "AudioStream.hpp"
+#include "AudioStream.h"
 #include <algorithm>
 
 void

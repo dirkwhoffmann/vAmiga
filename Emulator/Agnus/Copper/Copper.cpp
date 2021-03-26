@@ -9,11 +9,11 @@
 
 #include "config.h"
 
-#include "Copper.hpp"
-#include "Agnus.hpp"
-#include "Checksum.hpp"
-#include "IO.hpp"
-#include "PixelEngine.hpp"
+#include "Copper.h"
+#include "Agnus.h"
+#include "Checksum.h"
+#include "IO.h"
+#include "PixelEngine.h"
 
 Copper::Copper(Amiga& ref) : AmigaComponent(ref)
 {

@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "DDF.hpp"
+#include "DDF.h"
 #include <algorithm>
 
 template <bool hires> void

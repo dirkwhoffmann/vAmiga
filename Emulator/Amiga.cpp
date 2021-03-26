@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "Amiga.hpp"
-#include "Snapshot.hpp"
+#include "Amiga.h"
+#include "Snapshot.h"
 
 // Perform some consistency checks
 static_assert(sizeof(i8) == 1,  "i8 size mismatch");

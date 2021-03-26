@@ -9,15 +9,15 @@
 
 #include "config.h"
 
-#include "CIA.hpp"
-#include "Agnus.hpp"
-#include "ControlPort.hpp"
-#include "DiskController.hpp"
-#include "IO.hpp"
-#include "Memory.hpp"
-#include "MsgQueue.hpp"
-#include "Paula.hpp"
-#include "SerialPort.hpp"
+#include "CIA.h"
+#include "Agnus.h"
+#include "ControlPort.h"
+#include "DiskController.h"
+#include "IO.h"
+#include "Memory.h"
+#include "MsgQueue.h"
+#include "Paula.h"
+#include "SerialPort.h"
 
 #define CIA_DEBUG (nr == 0 ? CIAA_DEBUG : CIAB_DEBUG)
 

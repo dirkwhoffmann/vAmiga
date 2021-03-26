@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "EXTFile.hpp"
-#include "IO.hpp"
+#include "EXTFile.h"
+#include "IO.h"
 
 const u8 EXTFile::extAdfHeaders[2][8] = {
 

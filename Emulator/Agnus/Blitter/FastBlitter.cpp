@@ -9,11 +9,11 @@
 
 #include "config.h"
 
-#include "Blitter.hpp"
-#include "Agnus.hpp"
-#include "Checksum.hpp"
-#include "Memory.hpp"
-#include "Paula.hpp"
+#include "Blitter.h"
+#include "Agnus.h"
+#include "Checksum.h"
+#include "Memory.h"
+#include "Paula.h"
 
 void
 Blitter::initFastBlitter()

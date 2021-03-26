@@ -9,10 +9,10 @@
 
 #include "config.h"
 
-#include "BootBlockImage.hpp"
-#include "FSBootBlock.hpp"
-#include "FSDevice.hpp"
-#include "FSPartition.hpp"
+#include "BootBlockImage.h"
+#include "FSBootBlock.h"
+#include "FSDevice.h"
+#include "FSPartition.h"
 #include "string.h"
 
 FSBootBlock::FSBootBlock(FSPartition &p, Block nr) : FSBlock(p, nr)

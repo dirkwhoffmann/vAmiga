@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "FSObjects.hpp"
-#include "FSBlock.hpp"
+#include "FSObjects.h"
+#include "FSBlock.h"
 
 #include <algorithm>
 #include <string.h>

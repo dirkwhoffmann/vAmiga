@@ -9,11 +9,11 @@
 
 #include "config.h"
 
-#include "ScreenRecorder.hpp"
-#include "IO.hpp"
-#include "Denise.hpp"
-#include "MsgQueue.hpp"
-#include "Paula.hpp"
+#include "ScreenRecorder.h"
+#include "IO.h"
+#include "Denise.h"
+#include "MsgQueue.h"
+#include "Paula.h"
 
 ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 {

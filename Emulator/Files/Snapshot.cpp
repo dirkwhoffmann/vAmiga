@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "Snapshot.hpp"
-#include "Amiga.hpp"
-#include "IO.hpp"
+#include "Snapshot.h"
+#include "Amiga.h"
+#include "IO.h"
 
 Thumbnail *
 Thumbnail::makeWithAmiga(Amiga *amiga, isize dx, isize dy)

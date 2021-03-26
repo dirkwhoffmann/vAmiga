@@ -9,12 +9,12 @@
 
 #include "config.h"
 
-#include "Mouse.hpp"
-#include "Chrono.hpp"
-#include "ControlPort.hpp"
-#include "IO.hpp"
-#include "MsgQueue.hpp"
-#include "Oscillator.hpp"
+#include "Mouse.h"
+#include "Chrono.h"
+#include "ControlPort.h"
+#include "IO.h"
+#include "MsgQueue.h"
+#include "Oscillator.h"
 
 Mouse::Mouse(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
 {

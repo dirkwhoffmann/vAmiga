@@ -9,8 +9,8 @@
 
 #include "config.h"
 
-#include "StateMachine.hpp"
-#include "Paula.hpp"
+#include "StateMachine.h"
+#include "Paula.h"
 
 template <isize nr>
 StateMachine<nr>::StateMachine(Amiga& ref) : AmigaComponent(ref)

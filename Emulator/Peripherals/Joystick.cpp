@@ -9,10 +9,10 @@
 
 #include "config.h"
 
-#include "Joystick.hpp"
-#include "Agnus.hpp"
-#include "ControlPort.hpp"
-#include "IO.hpp"
+#include "Joystick.h"
+#include "Agnus.h"
+#include "ControlPort.h"
+#include "IO.h"
 
 const char *
 Joystick::getDescription() const

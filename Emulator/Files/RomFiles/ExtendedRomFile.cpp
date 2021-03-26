@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "ExtendedRomFile.hpp"
+#include "ExtendedRomFile.h"
 #include "Macros.h"
-#include "IO.hpp"
+#include "IO.h"
 
 // AROS Extended ROM
 const u8 ExtendedRomFile::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };

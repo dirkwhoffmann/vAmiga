@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#include "FSEmptyBlock.hpp"
+#include "FSEmptyBlock.h"
 #include "string.h"
 
 FSItemType

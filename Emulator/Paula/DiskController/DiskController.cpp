@@ -9,12 +9,12 @@
 
 #include "config.h"
 
-#include "DiskController.hpp"
-#include "Agnus.hpp"
-#include "DiskFile.hpp"
-#include "Drive.hpp"
-#include "MsgQueue.hpp"
-#include "Paula.hpp"
+#include "DiskController.h"
+#include "Agnus.h"
+#include "DiskFile.h"
+#include "Drive.h"
+#include "MsgQueue.h"
+#include "Paula.h"
 
 #include <algorithm>
 

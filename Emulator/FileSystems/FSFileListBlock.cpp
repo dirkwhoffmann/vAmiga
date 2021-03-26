@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "FSFileListBlock.hpp"
-#include "FSDevice.hpp"
-#include "FSPartition.hpp"
+#include "FSFileListBlock.h"
+#include "FSDevice.h"
+#include "FSPartition.h"
 
 FSFileListBlock::FSFileListBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {

@@ -9,12 +9,12 @@
 
 #include "config.h"
 
-#include "RetroShell.hpp"
-#include "Amiga.hpp"
-#include "BootBlockImage.hpp"
+#include "RetroShell.h"
+#include "Amiga.h"
+#include "BootBlockImage.h"
 #include "FSTypes.h"
-#include "IO.hpp"
-#include "Parser.hpp"
+#include "IO.h"
+#include "Parser.h"
 
 #include <fstream>
 #include <sstream>

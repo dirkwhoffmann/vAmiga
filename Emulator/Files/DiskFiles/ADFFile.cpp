@@ -9,13 +9,13 @@
 
 #include "config.h"
 
-#include "ADFFile.hpp"
-#include "BootBlockImage.hpp"
-#include "Checksum.hpp"
-#include "Debug.hpp"
-#include "Disk.hpp"
-#include "Drive.hpp"
-#include "IO.hpp"
+#include "ADFFile.h"
+#include "BootBlockImage.h"
+#include "Checksum.h"
+#include "Debug.h"
+#include "Disk.h"
+#include "Drive.h"
+#include "IO.h"
 
 bool
 ADFFile::isCompatiblePath(const string &path)

@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "UART.hpp"
-#include "Agnus.hpp"
-#include "SerialPort.hpp"
+#include "UART.h"
+#include "Agnus.h"
+#include "SerialPort.h"
 
 void
 UART::serviceTxdEvent(EventID id)

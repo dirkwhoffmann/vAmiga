@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Paula.hpp"
+#include "Paula.h"
 
 template <isize nr> void
 StateMachine<nr>::pokeAUDxLEN(u16 value)

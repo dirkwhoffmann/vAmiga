@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Command.hpp"
+#include "Command.h"
 
 Command *
 Command::add(std::vector<string> tokens,

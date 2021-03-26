@@ -9,10 +9,10 @@
 
 #include "config.h"
 
-#include "Paula.hpp"
-#include "Agnus.hpp"
-#include "CPU.hpp"
-#include "IO.hpp"
+#include "Paula.h"
+#include "Agnus.h"
+#include "CPU.h"
+#include "IO.h"
 
 Paula::Paula(Amiga& ref) : AmigaComponent(ref)
 {

@@ -8,4 +8,4 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "AmigaObject.hpp"
+#include "AmigaObject.h"

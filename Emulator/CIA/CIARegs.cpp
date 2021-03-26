@@ -9,10 +9,10 @@
 
 #include "config.h"
 
-#include "CIA.hpp"
-#include "Constants.hpp"
+#include "CIA.h"
+#include "Constants.h"
 #include "Macros.h"
-#include "Keyboard.hpp"
+#include "Keyboard.h"
 
 u8
 CIA::peek(u16 addr)

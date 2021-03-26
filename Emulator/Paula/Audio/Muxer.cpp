@@ -9,11 +9,11 @@
 
 #include "config.h"
 
-#include "Muxer.hpp"
-#include "CIA.hpp"
-#include "IO.hpp"
-#include "MsgQueue.hpp"
-#include "Oscillator.hpp"
+#include "Muxer.h"
+#include "CIA.h"
+#include "IO.h"
+#include "MsgQueue.h"
+#include "Oscillator.h"
 #include "Macros.h"
 
 #include <math.h>

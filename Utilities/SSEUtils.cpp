@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "SSEUtils.hpp"
+#include "SSEUtils.h"
 
 namespace util {
 

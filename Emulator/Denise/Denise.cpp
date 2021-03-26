@@ -9,12 +9,12 @@
 
 #include "config.h"
 
-#include "Denise.hpp"
-#include "Agnus.hpp"
-#include "Amiga.hpp"
-#include "ControlPort.hpp"
-#include "IO.hpp"
-#include "SSEUtils.hpp"
+#include "Denise.h"
+#include "Agnus.h"
+#include "Amiga.h"
+#include "ControlPort.h"
+#include "IO.h"
+#include "SSEUtils.h"
 
 Denise::Denise(Amiga& ref) : AmigaComponent(ref)
 {    

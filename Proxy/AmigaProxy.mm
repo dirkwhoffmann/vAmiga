@@ -10,18 +10,18 @@
 #include "config.h"
 
 #import "AmigaProxy.h"
-#import "Amiga.hpp"
+#import "Amiga.h"
 #import "vAmiga-Swift.h"
 
-#include "DMSFile.hpp"
-#include "EXEFile.hpp"
-#include "ExtendedRomFile.hpp"
-#include "EXTFile.hpp"
-#include "Folder.hpp"
-#include "FSDevice.hpp"
-#include "IMGFile.hpp"
-#include "RomFile.hpp"
-#include "Snapshot.hpp"
+#include "DMSFile.h"
+#include "EXEFile.h"
+#include "ExtendedRomFile.h"
+#include "EXTFile.h"
+#include "Folder.h"
+#include "FSDevice.h"
+#include "IMGFile.h"
+#include "RomFile.h"
+#include "Snapshot.h"
 
 using namespace moira;
 
