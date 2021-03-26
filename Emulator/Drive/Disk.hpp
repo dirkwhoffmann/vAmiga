@@ -12,51 +12,6 @@
 #include "DiskTypes.h"
 #include "HardwareComponent.hpp"
 
-//
-// Reflection APIs
-//
-
-struct DiskDiameterEnum : util::Reflection<DiskDiameterEnum, DiskDiameter> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value < INCH_COUNT;
-    }
-    
-    static const char *prefix() { return ""; }
-    static const char *key(DiskDiameter value)
-    {
-        switch (value) {
-                
-            case INCH_35:     return "INCH_35";
-            case INCH_525:    return "INCH_525";
-            case INCH_COUNT:  return "???";
-        }
-        return "???";
-    }
-};
-
-struct DiskDensityEnum : util::Reflection<DiskDensityEnum, DiskDensity> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value < DISK_COUNT;
-    }
-    
-    static const char *prefix() { return "DISK"; }
-    static const char *key(DiskDensity value)
-    {
-        switch (value) {
-                
-            case DISK_SD:     return "SD";
-            case DISK_DD:     return "DD";
-            case DISK_HD:     return "HD";
-            case DISK_COUNT:  return "???";
-        }
-        return "???";
-    }
-};
-
 /* MFM encoded disk data of a standard 3.5" DD disk:
  *
  *    Cylinder  Track     Head      Sectors

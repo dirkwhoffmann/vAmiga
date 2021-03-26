@@ -12,6 +12,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include "Reflection.h"
 
 //
 // Enumerations
@@ -25,3 +26,25 @@ enum_long(FILTER_TYPE)
     FILTER_COUNT
 };
 typedef FILTER_TYPE FilterType;
+
+#ifdef __cplusplus
+struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < FILTER_COUNT;
+    }
+
+    static const char *prefix() { return "FILTER"; }
+    static const char *key(FilterType value)
+    {
+        switch (value) {
+                
+            case FILTER_NONE:         return "NONE";
+            case FILTER_BUTTERWORTH:  return "BUTTERWORTH";
+            case FILTER_COUNT:        return "???";
+        }
+        return "???";
+    }
+};
+#endif

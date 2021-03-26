@@ -12,30 +12,6 @@
 #include "AudioFilterTypes.h"
 #include "AmigaComponent.hpp"
 
-//
-// Reflection APIs
-//
-
-struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value < FILTER_COUNT;
-    }
-
-    static const char *prefix() { return "FILTER"; }
-    static const char *key(FilterType value)
-    {
-        switch (value) {
-                
-            case FILTER_NONE:         return "NONE";
-            case FILTER_BUTTERWORTH:  return "BUTTERWORTH";
-            case FILTER_COUNT:        return "???";
-        }
-        return "???";
-    }
-};
-
 class AudioFilter : public AmigaComponent {
     
     // The currently set filter type

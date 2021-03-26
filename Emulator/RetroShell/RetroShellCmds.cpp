@@ -12,7 +12,7 @@
 #include "RetroShell.hpp"
 #include "Amiga.hpp"
 #include "BootBlockImage.hpp"
-#include "FSTypes.hpp"
+#include "FSTypes.h"
 #include "IO.hpp"
 #include "Parser.hpp"
 

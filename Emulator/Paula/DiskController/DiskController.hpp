@@ -14,34 +14,6 @@
 #include "AmigaComponent.hpp"
 #include "Reflection.h"
 
-//
-// Reflection APIs
-//
-
-struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= DRIVE_DMA_FLUSH;
-    }
-
-    static const char *prefix() { return "DRIVE_DMA"; }
-    static const char *key(DriveState value)
-    {
-        switch (value) {
-                
-            case DRIVE_DMA_OFF:    return "OFF";
-
-            case DRIVE_DMA_WAIT:   return "WAIT";
-            case DRIVE_DMA_READ:   return "READ";
-
-            case DRIVE_DMA_WRITE:  return "WRITE";
-            case DRIVE_DMA_FLUSH:  return "FLUSH";
-        }
-        return "???";
-    }
-};
-
 class DiskController : public AmigaComponent {
 
     friend class Drive;

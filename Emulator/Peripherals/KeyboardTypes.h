@@ -12,6 +12,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include "Reflection.h"
 
 //
 // Enumerations
@@ -29,6 +30,30 @@ enum_long(KB_STATE)
 };
 typedef KB_STATE KeyboardState;
 
+#ifdef __cplusplus
+struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value <  KB_COUNT;
+    }
+    
+    static const char *prefix() { return "KB"; }
+    static const char *key(KeyboardState value)
+    {
+        switch (value) {
+                
+            case KB_SELFTEST:  return "SELFTEST";
+            case KB_SYNC:      return "SYNC";
+            case KB_STRM_ON:   return "STRM_ON";
+            case KB_STRM_OFF:  return "STRM_OFF";
+            case KB_SEND:      return "SEND";
+            case KB_COUNT:     return "???";
+        }
+        return "???";
+    }
+};
+#endif
 
 //
 // Structures

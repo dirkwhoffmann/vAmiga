@@ -14,6 +14,7 @@
 #include "Aliases.h"
 #include "BootBlockImage.h"
 #include "FSTypes.h"
+#include "Reflection.h"
 
 //
 // Enumerations
@@ -29,6 +30,28 @@ enum_long(DRIVE_TYPE)
 };
 typedef DRIVE_TYPE DriveType;
 
+#ifdef __cplusplus
+struct DriveTypeEnum : util::Reflection<DriveTypeEnum, DriveType> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value <  DRIVE_COUNT;
+    }
+    
+    static const char *prefix() { return "DRIVE"; }
+    static const char *key(DriveType value)
+    {
+        switch (value) {
+                
+            case DRIVE_DD_35:   return "DD_35";
+            case DRIVE_HD_35:   return "HD_35";
+            case DRIVE_DD_525:  return "DD_525";
+            case DRIVE_COUNT:   return "???";
+        }
+        return "???";
+    }
+};
+#endif
 
 //
 // Structures

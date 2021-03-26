@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include "Reflection.h"
 
 //
 // Enumerations
@@ -21,6 +22,27 @@ enum_long(PortNr)
     PORT_2 = 2
 };
 
+#ifdef __cplusplus
+struct PortNrEnum : util::Reflection<PortNrEnum, PortNr> {
+    
+    static bool isValid(long value)
+    {
+        return value == PORT_1 || value == PORT_2;
+    }
+    
+    static const char *prefix() { return ""; }
+    static const char *key(PortNr value)
+    {
+        switch (value) {
+                
+            case PORT_1:  return "PORT_1";
+            case PORT_2:  return "PORT_2";
+        }
+        return "???";
+    }
+};
+#endif
+
 enum_long(CPD)
 {
     CPD_NONE,
@@ -30,6 +52,29 @@ enum_long(CPD)
     CPD_COUNT
 };
 typedef CPD ControlPortDevice;
+
+#ifdef __cplusplus
+struct ControlPortDeviceEnum : util::Reflection<ControlPortDeviceEnum, ControlPortDevice> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value <  CPD_COUNT;
+    }
+    
+    static const char *prefix() { return "CPD"; }
+    static const char *key(ControlPortDevice value)
+    {
+        switch (value) {
+                
+            case CPD_NONE:      return "NONE";
+            case CPD_MOUSE:     return "MOUSE";
+            case CPD_JOYSTICK:  return "JOYSTICK";
+            case CPD_COUNT:     return "???";
+        }
+        return "???";
+    }
+};
+#endif
 
 //
 // Structures

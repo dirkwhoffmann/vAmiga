@@ -137,7 +137,7 @@ Paula::raiseIrq(IrqSource src)
 void
 Paula::scheduleIrqAbs(IrqSource src, Cycle trigger)
 {
-    assert(isIrqSource(src));
+    assert_enum(IrqSource, src);
     assert(trigger != 0);
     assert(agnus.slot[SLOT_IRQ].id == IRQ_CHECK);
 

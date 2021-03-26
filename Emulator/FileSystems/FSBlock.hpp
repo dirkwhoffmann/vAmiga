@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaObject.hpp"
-#include "FSTypes.hpp"
+#include "FSTypes.h"
 #include "FSObjects.hpp"
 #include "Macros.h"
 

@@ -12,6 +12,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include "Reflection.h"
 
 //
 // Enumerations
@@ -26,6 +27,29 @@ enum_long(DENISE_REV)
     DENISE_COUNT
 };
 typedef DENISE_REV DeniseRevision;
+
+#ifdef __cplusplus
+struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < DENISE_COUNT;
+    }
+
+    static const char *prefix() { return "DENISE"; }
+    static const char *key(DeniseRevision value)
+    {
+        switch (value) {
+                
+            case DENISE_OCS:          return "OCS";
+            case DENISE_OCS_BRDRBLNK: return "OCS_BRDRBLNK";
+            case DENISE_ECS:          return "ECS";
+            case DENISE_COUNT:        return "???";
+        }
+        return "???";
+    }
+};
+#endif
 
 //
 // Structures

@@ -14,6 +14,7 @@
 #include "Aliases.h"
 #include "BusTypes.h"
 #include "EventTypes.h"
+#include "Reflection.h"
 
 //
 // Enumerations
@@ -29,6 +30,29 @@ enum_long(AGNUS_REVISION)
 };
 typedef AGNUS_REVISION AgnusRevision;
 
+#ifdef __cplusplus
+struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < AGNUS_COUNT;
+    }
+
+    static const char *prefix() { return "AGNUS"; }
+    static const char *key(AgnusRevision value)
+    {
+        switch (value) {
+                
+            case AGNUS_OCS:     return "OCS";
+            case AGNUS_ECS_1MB: return "ECS_1MB";
+            case AGNUS_ECS_2MB: return "ECS_2MB";
+            case AGNUS_COUNT:   return "???";
+        }
+        return "???";
+    }
+};
+#endif
+
 enum_long(DDF_STATE)
 {
     DDF_OFF,
@@ -37,12 +61,55 @@ enum_long(DDF_STATE)
 };
 typedef DDF_STATE DDFState;
 
+#ifdef __cplusplus
+struct DDFStateEnum : util::Reflection<DDFStateEnum, DDFState> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value <= DDF_ON;
+    }
+
+    static const char *prefix() { return "DDF"; }
+    static const char *key(AgnusRevision value)
+    {
+        switch (value) {
+                
+            case DDF_OFF:   return "OFF";
+            case DDF_READY: return "READY";
+            case DDF_ON:    return "ON";
+        }
+        return "???";
+    }
+};
+#endif
+
 enum_long(SPR_DMA_STATE)
 {
     SPR_DMA_IDLE,
     SPR_DMA_ACTIVE
 };
 typedef SPR_DMA_STATE SprDMAState;
+
+#ifdef __cplusplus
+struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value <= SPR_DMA_ACTIVE;
+    }
+
+    static const char *prefix() { return "SPR_DMA"; }
+    static const char *key(SprDMAState value)
+    {
+        switch (value) {
+                
+            case SPR_DMA_IDLE:   return "IDLE";
+            case SPR_DMA_ACTIVE: return "ACTIVE";
+        }
+        return "???";
+    }
+};
+#endif
 
 enum_long(SLOT)
 {
@@ -76,6 +143,50 @@ enum_long(SLOT)
     SLOT_COUNT
 };
 typedef SLOT EventSlot;
+
+#ifdef __cplusplus
+struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < SLOT_COUNT;
+    }
+    
+    static const char *prefix() { return "SLOT"; }
+    static const char *key(EventSlot value)
+    {
+        switch (value) {
+                
+            case SLOT_REG:   return "REG";
+            case SLOT_RAS:   return "RAS";
+            case SLOT_CIAA:  return "CIAA";
+            case SLOT_CIAB:  return "CIAB";
+            case SLOT_BPL:   return "BPL";
+            case SLOT_DAS:   return "DAS";
+            case SLOT_COP:   return "COP";
+            case SLOT_BLT:   return "BLT";
+            case SLOT_SEC:   return "SEC";
+
+            case SLOT_CH0:   return "CH0";
+            case SLOT_CH1:   return "CH1";
+            case SLOT_CH2:   return "CH2";
+            case SLOT_CH3:   return "CH3";
+            case SLOT_DSK:   return "DSK";
+            case SLOT_DCH:   return "DCH";
+            case SLOT_VBL:   return "VBL";
+            case SLOT_IRQ:   return "IRQ";
+            case SLOT_IPL:   return "IPL";
+            case SLOT_KBD:   return "KBD";
+            case SLOT_TXD:   return "TXD";
+            case SLOT_RXD:   return "RXD";
+            case SLOT_POT:   return "POT";
+            case SLOT_INS:   return "INS";
+            case SLOT_COUNT: return "???";
+        }
+        return "???";
+    }
+};
+#endif
 
 // Inspection interval in seconds (interval between INS_xxx events)
 static const double inspectionInterval = 0.1;

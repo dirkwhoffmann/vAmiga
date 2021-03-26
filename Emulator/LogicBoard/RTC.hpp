@@ -12,10 +12,6 @@
 #include "RTCTypes.h"
 #include "AmigaComponent.hpp"
 
-//
-// Reflection APIs
-//
-
 class RTC : public AmigaComponent {
 
     // Current configuration

@@ -543,8 +543,6 @@
 		50B3C44725EAFB5500651700 /* Checksum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Checksum.cpp; sourceTree = "<group>"; };
 		50B3C44825EAFB5500651700 /* Checksum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Checksum.hpp; sourceTree = "<group>"; };
 		50B5C07D241107F200F124DC /* Constants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
-		50B5F87825AF9E07008B79F1 /* Reflection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Reflection.hpp; sourceTree = "<group>"; };
-		50B5F88325AFA1AD008B79F1 /* FSTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FSTypes.hpp; sourceTree = "<group>"; };
 		50B70CAB252CE0BF006B5191 /* Muxer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Muxer.cpp; sourceTree = "<group>"; };
 		50B70CAC252CE0BF006B5191 /* Muxer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Muxer.hpp; sourceTree = "<group>"; };
 		50B81E0724E6BCCA004384C9 /* DiskControllerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskControllerRegs.cpp; sourceTree = "<group>"; };
@@ -795,7 +793,6 @@
 			isa = PBXGroup;
 			children = (
 				5083CF572546A22E00A28EF8 /* FSTypes.h */,
-				50B5F88325AFA1AD008B79F1 /* FSTypes.hpp */,
 				505C01092577A8C000F9E05C /* FSDescriptors.hpp */,
 				505C01082577A8C000F9E05C /* FSDescriptors.cpp */,
 				5056506B25440FFB00A79D27 /* FSDevice.hpp */,
@@ -1269,7 +1266,6 @@
 				50C8C42C2605D51A00F4E012 /* Types.h */,
 				50104E8525ECD0EF0047A9AA /* Macros.h */,
 				50CA602E260E02B700C4A22C /* Reflection.h */,
-				50B5F87825AF9E07008B79F1 /* Reflection.hpp */,
 				507215A525EA9DD900787591 /* RingBuffer.hpp */,
 				50EFC7DF22E840870036A3DF /* Serialization.hpp */,
 				507F1FAD25074A1A00627C3F /* TimeDelayed.hpp */,
