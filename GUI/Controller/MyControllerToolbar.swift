@@ -34,6 +34,7 @@ extension MyController {
 
         case 0: inspectorAction(sender)
         case 1: monitorAction(sender)
+        case 2: consoleAction(sender)
 
         default: assert(false)
         }

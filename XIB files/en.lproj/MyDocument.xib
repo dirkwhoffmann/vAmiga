@@ -369,16 +369,19 @@
             </view>
             <toolbar key="toolbar" implicitIdentifier="562FDE63-25B0-4E4E-80C7-EF6E742B5F6F" displayMode="iconAndLabel" sizeMode="regular" id="1845" customClass="MyToolbar" customModule="vAmiga" customModuleProvider="target">
                 <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="9054C81F-F3B3-47C7-867A-1B9C59B2173C" label="Inspect" paletteLabel="Inspect" sizingBehavior="auto" id="EzM-bM-4na">
+                    <toolbarItem implicitItemIdentifier="9054C81F-F3B3-47C7-867A-1B9C59B2173C" label="Inspectors" paletteLabel="Inspectors" sizingBehavior="auto" id="EzM-bM-4na">
                         <nil key="toolTip"/>
                         <segmentedControl key="view" verticalHuggingPriority="750" id="MNc-2l-pfj">
-                            <rect key="frame" x="0.0" y="14" width="91" height="23"/>
+                            <rect key="frame" x="0.0" y="14" width="125" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="3Uk-v8-yDJ">
                                 <font key="font" metaFont="system"/>
                                 <segments>
                                     <segment toolTip="Open Inspector" image="inspectTemplate" width="40"/>
                                     <segment toolTip="Open Monitor" image="monitorTemplate" width="40" tag="1"/>
+                                    <segment image="consoleTemplate" tag="2">
+                                        <nil key="label"/>
+                                    </segment>
                                 </segments>
                             </segmentedCell>
                             <connections>
@@ -596,6 +599,7 @@
         <image name="clickTemplate" width="36" height="36"/>
         <image name="cmdLockTemplate" width="228" height="156"/>
         <image name="confTemplate" width="37" height="36"/>
+        <image name="consoleTemplate" width="176" height="176"/>
         <image name="devGamepad1Template" width="20" height="21"/>
         <image name="devGamepad2Template" width="20" height="21"/>
         <image name="devKeys1Template" width="20" height="20"/>
