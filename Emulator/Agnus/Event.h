@@ -12,6 +12,9 @@
 #include "Aliases.h"
 #include "EventTypes.h"
 
+// Time stamp used for messages that never trigger
+#define NEVER INT64_MAX
+
 struct Event
 {
     // Indicates when the event is due

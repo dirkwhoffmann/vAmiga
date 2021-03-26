@@ -6,8 +6,6 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
-// THIS FILE MUST CONFORM TO ANSI-C TO BE COMPATIBLE WITH SWIFT
-// -----------------------------------------------------------------------------
 
 #pragma once
 

@@ -11,12 +11,6 @@
 
 #include "AmigaTypes.h"
 
-// General
-#include "HardwareComponent.h"
-#include "Serialization.h"
-#include "MsgQueue.h"
-
-// Sub components
 #include "Agnus.h"
 #include "ControlPort.h"
 #include "CIA.h"
@@ -25,6 +19,7 @@
 #include "Drive.h"
 #include "Keyboard.h"
 #include "Memory.h"
+#include "MsgQueue.h"
 #include "Oscillator.h"
 #include "Paula.h"
 #include "RetroShell.h"

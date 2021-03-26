@@ -32,14 +32,6 @@ typedef u32 Block;
 
 
 //
-// Optimizing code
-//
-
-#define likely(x)      __builtin_expect(!!(x), 1)
-#define unlikely(x)    __builtin_expect(!!(x), 0)
-
-
-//
 // Converting units
 //
 
@@ -72,6 +64,3 @@ typedef u32 Block;
 // Converts kilo and mega Hertz to Hertz
 #define KHz(x) ((x) * 1000)
 #define MHz(x) ((x) * 1000000)
-
-// Time stamp used for messages that never trigger
-#define NEVER INT64_MAX
