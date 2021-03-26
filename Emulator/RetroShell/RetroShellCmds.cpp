@@ -56,7 +56,7 @@ RetroShell::exec <Token::source> (Arguments &argv, long param)
     
     try {
         exec(stream);
-    } catch (my::Exception &e) {
+    } catch (util::Exception &e) {
         retroShell << "Error in line " << (isize)e.data << '\n';
         retroShell << e.what() << '\n';
     }
@@ -116,7 +116,7 @@ template <> void
 RetroShell::exec <Token::memory, Token::load, Token::rom> (Arguments& argv, long param)
 {
     auto path = argv.front();
-    if (!my::fileExists(path)) throw ConfigFileNotFoundError(path);
+    if (!util::fileExists(path)) throw ConfigFileNotFoundError(path);
 
     amiga.mem.loadRomFromFile(path.c_str());
 }
@@ -125,7 +125,7 @@ template <> void
 RetroShell::exec <Token::memory, Token::load, Token::extrom> (Arguments& argv, long param)
 {
     auto path = argv.front();
-    if (!my::fileExists(path)) throw ConfigFileNotFoundError(path);
+    if (!util::fileExists(path)) throw ConfigFileNotFoundError(path);
 
     amiga.mem.loadExtFromFile(path.c_str());
 }
@@ -770,7 +770,7 @@ template <> void
 RetroShell::exec <Token::dfn, Token::insert> (Arguments& argv, long param)
 {
     auto path = argv.front();
-    if (!my::fileExists(path)) throw ConfigFileNotFoundError(path);
+    if (!util::fileExists(path)) throw ConfigFileNotFoundError(path);
     
     amiga.paula.diskController.insertDisk(path, param);
 }

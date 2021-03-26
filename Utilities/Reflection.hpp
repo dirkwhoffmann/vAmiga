@@ -13,7 +13,7 @@
 
 #include <map>
 
-namespace va {
+namespace util {
 
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
 

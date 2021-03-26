@@ -12,7 +12,7 @@
 #include "Types.h"
 #include <exception>
 
-namespace my {
+namespace util {
 
 struct Exception : public std::exception {
     

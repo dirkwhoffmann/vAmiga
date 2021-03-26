@@ -44,7 +44,7 @@ void
 Oscillator::restart()
 {
     clockBase = agnus.clock;
-    timeBase = my::Time::now();
+    timeBase = util::Time::now();
 }
 
 void
@@ -55,9 +55,9 @@ Oscillator::synchronize()
     // Only proceed if we are not running in warp mode
     if (warpMode) return;
     
-    auto now          = my::Time::now();
+    auto now          = util::Time::now();
     auto elapsedCyles = agnus.clock - clockBase;
-    auto elapsedNanos = my::Time((i64)(elapsedCyles * 1000 / masterClockFrequency));
+    auto elapsedNanos = util::Time((i64)(elapsedCyles * 1000 / masterClockFrequency));
     auto targetTime   = timeBase + elapsedNanos;
     
     // Check if we're running too slow...

@@ -11,7 +11,7 @@
 
 #include "Types.h"
 
-namespace my {
+namespace util {
 
 /* Transposes a 8 x 16 bit matrix using SSE3 extensions.
  *

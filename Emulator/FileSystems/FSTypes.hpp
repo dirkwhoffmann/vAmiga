@@ -19,7 +19,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct FSVolumeTypeEnum : Reflection<FSVolumeTypeEnum, FSVolumeType> {
+struct FSVolumeTypeEnum : util::Reflection<FSVolumeTypeEnum, FSVolumeType> {
     
     static bool isValid(long value)
     {
@@ -45,7 +45,7 @@ struct FSVolumeTypeEnum : Reflection<FSVolumeTypeEnum, FSVolumeType> {
     }
 };
 
-struct FSBlockTypeEnum : Reflection<FSBlockTypeEnum, FSBlockType> {
+struct FSBlockTypeEnum : util::Reflection<FSBlockTypeEnum, FSBlockType> {
     
     static bool isValid(long value)
     {
@@ -74,7 +74,7 @@ struct FSBlockTypeEnum : Reflection<FSBlockTypeEnum, FSBlockType> {
     }
 };
 
-struct FSItemTypeEnum : Reflection<FSItemTypeEnum, FSItemType> {
+struct FSItemTypeEnum : util::Reflection<FSItemTypeEnum, FSItemType> {
     
     static bool isValid(long value)
     {

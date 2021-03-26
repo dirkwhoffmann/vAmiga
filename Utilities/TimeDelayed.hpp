@@ -9,7 +9,7 @@
 
 #pragma once
 
-namespace my {
+namespace util {
 
 template <class T, int delay> class TimeDelayed {
     

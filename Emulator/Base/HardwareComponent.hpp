@@ -27,7 +27,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct EmulatorStateEnum : Reflection<EmulatorStateEnum, EmulatorState> {
+struct EmulatorStateEnum : util::Reflection<EmulatorStateEnum, EmulatorState> {
     
     static bool isValid(long value)
     {
@@ -56,7 +56,7 @@ struct EmulatorStateEnum : Reflection<EmulatorStateEnum, EmulatorState> {
  */
 
 #define synchronized \
-for (my::AutoMutex _am(mutex); _am.active; _am.active = false)
+for (util::AutoMutex _am(mutex); _am.active; _am.active = false)
 
 namespace Dump {
 enum Category : usize {
@@ -108,7 +108,7 @@ protected:
      * to prevent multiple threads to enter the same code block. It mimics the
      * behaviour of the well known Java construct 'synchronized(this) { }'.
      */
-    my::ReentrantMutex mutex;
+    util::ReentrantMutex mutex;
 
         
     //
@@ -322,7 +322,7 @@ protected:
 //
 
 #define COMPUTE_SNAPSHOT_SIZE \
-my::SerCounter counter; \
+util::SerCounter counter; \
 applyToPersistentItems(counter); \
 applyToHardResetItems(counter); \
 applyToResetItems(counter); \
@@ -330,7 +330,7 @@ return counter.count;
 
 #define RESET_SNAPSHOT_ITEMS(hard) \
 { \
-my::SerResetter resetter; \
+util::SerResetter resetter; \
 if (hard) applyToHardResetItems(resetter); \
 applyToResetItems(resetter); \
 debug(SNP_DEBUG, "Resetted (%s)\n", hard ? "hard" : "soft"); \
@@ -338,7 +338,7 @@ debug(SNP_DEBUG, "Resetted (%s)\n", hard ? "hard" : "soft"); \
 
 #define LOAD_SNAPSHOT_ITEMS \
 { \
-my::SerReader reader(buffer); \
+util::SerReader reader(buffer); \
 applyToPersistentItems(reader); \
 applyToHardResetItems(reader); \
 applyToResetItems(reader); \
@@ -348,7 +348,7 @@ return (isize)(reader.ptr - buffer); \
 
 #define SAVE_SNAPSHOT_ITEMS \
 { \
-my::SerWriter writer(buffer); \
+util::SerWriter writer(buffer); \
 applyToPersistentItems(writer); \
 applyToHardResetItems(writer); \
 applyToResetItems(writer); \

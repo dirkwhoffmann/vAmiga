@@ -17,7 +17,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-namespace my {
+namespace util {
 
 //
 // Handling file names

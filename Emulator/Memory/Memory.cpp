@@ -212,7 +212,7 @@ Memory::setConfigItem(Option option, long value)
 isize
 Memory::_size()
 {
-    my::SerCounter counter;
+    util::SerCounter counter;
 
     applyToPersistentItems(counter);
     applyToHardResetItems(counter);
@@ -239,7 +239,7 @@ Memory::_size()
 isize
 Memory::didLoadFromBuffer(const u8 *buffer)
 {
-    my::SerReader reader(buffer);
+    util::SerReader reader(buffer);
 
     // Load memory size information
     reader
@@ -284,7 +284,7 @@ isize
 Memory::didSaveToBuffer(u8 *buffer) const
 {
     // Save memory size information
-    my::SerWriter writer(buffer);
+    util::SerWriter writer(buffer);
     writer
     << config.romSize
     << config.womSize
@@ -336,17 +336,17 @@ Memory::_dump(Dump::Category category, std::ostream& os) const
     if (category & Dump::Checksums) {
 
         os << DUMP("Rom checksum");
-        os << HEX32 << my::fnv_1a_32(rom, config.romSize) << std::endl;
+        os << HEX32 << util::fnv_1a_32(rom, config.romSize) << std::endl;
         os << DUMP("Wom checksum");
-        os << HEX32 << my::fnv_1a_32(wom, config.womSize) << std::endl;
+        os << HEX32 << util::fnv_1a_32(wom, config.womSize) << std::endl;
         os << DUMP("Extended Rom checksum");
-        os << HEX32 << my::fnv_1a_32(ext, config.extSize) << std::endl;
+        os << HEX32 << util::fnv_1a_32(ext, config.extSize) << std::endl;
         os << DUMP("Chip Ram checksum");
-        os << HEX32 << my::fnv_1a_32(chip, config.chipSize) << std::endl;
+        os << HEX32 << util::fnv_1a_32(chip, config.chipSize) << std::endl;
         os << DUMP("Slow Ram checksum");
-        os << HEX32 << my::fnv_1a_32(slow, config.slowSize) << std::endl;
+        os << HEX32 << util::fnv_1a_32(slow, config.slowSize) << std::endl;
         os << DUMP("Fast Ram checksum");
-        os << HEX32 << my::fnv_1a_32(fast, config.fastSize) << std::endl;
+        os << HEX32 << util::fnv_1a_32(fast, config.fastSize) << std::endl;
     }
     
     if (category & Dump::BankMap) {
@@ -481,13 +481,13 @@ Memory::fillRamWithInitPattern()
 u32
 Memory::romFingerprint()
 {
-    return my::crc32(rom, config.romSize);
+    return util::crc32(rom, config.romSize);
 }
 
 u32
 Memory::extFingerprint()
 {
-    return my::crc32(ext, config.extSize);
+    return util::crc32(ext, config.extSize);
 }
 
 RomIdentifier

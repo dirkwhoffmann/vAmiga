@@ -20,7 +20,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct KeyboardStateEnum : Reflection<KeyboardStateEnum, KeyboardState> {
+struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState> {
     
     static bool isValid(long value)
     {

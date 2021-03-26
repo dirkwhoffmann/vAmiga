@@ -13,7 +13,7 @@
 
 #include <utility>
 
-namespace my {
+namespace util {
 
 /* The emulator uses buffers at various places. Most of them are derived from
  * one of the following two classes:

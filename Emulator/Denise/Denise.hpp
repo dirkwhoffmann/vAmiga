@@ -24,7 +24,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct DeniseRevisionEnum : Reflection<DeniseRevisionEnum, DeniseRevision> {
+struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision> {
     
     static bool isValid(long value)
     {

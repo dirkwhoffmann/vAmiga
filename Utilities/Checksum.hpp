@@ -11,7 +11,7 @@
 
 #include "Types.h"
 
-namespace my {
+namespace util {
 
 // Returns the FNV-1a seed value
 inline u32 fnv_1a_init32() { return 0x811c9dc5; }

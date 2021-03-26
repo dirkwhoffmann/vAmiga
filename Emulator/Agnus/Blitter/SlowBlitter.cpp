@@ -985,8 +985,8 @@ Blitter::exec()
             }
 
             if (BLT_CHECKSUM) {
-                check1 = my::fnv_1a_it32(check1, dhold);
-                check2 = my::fnv_1a_it32(check2, bltdpt);
+                check1 = util::fnv_1a_it32(check1, dhold);
+                check2 = util::fnv_1a_it32(check2, bltdpt);
             }
             trace(BLT_DEBUG, "D: poke(%X), %X (check: %X %X)\n", bltdpt, dhold, check1, check2);
             bltdpt = U32_ADD(bltdpt, desc ? -2 : 2);

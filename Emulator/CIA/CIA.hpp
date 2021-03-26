@@ -20,7 +20,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct CIARevisionEnum : Reflection<CIARevisionEnum, CIARevision> {
+struct CIARevisionEnum : util::Reflection<CIARevisionEnum, CIARevision> {
     
     static bool isValid(long value)
     {

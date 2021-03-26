@@ -59,7 +59,7 @@ class Muxer : public AmigaComponent {
     double fraction;
 
     // Time stamp of the last write pointer alignment
-    my::Time lastAlignment;
+    util::Time lastAlignment;
 
     // Volume control
     Volume volume;

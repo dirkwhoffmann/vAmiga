@@ -20,7 +20,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct DriveTypeEnum : Reflection<DriveTypeEnum, DriveType> {
+struct DriveTypeEnum : util::Reflection<DriveTypeEnum, DriveType> {
     
     static bool isValid(long value)
     {

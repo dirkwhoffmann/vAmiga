@@ -9,6 +9,6 @@
 
 #include "Exception.hpp"
 
-namespace my {
+namespace util {
 
 }

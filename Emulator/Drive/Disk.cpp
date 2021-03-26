@@ -50,7 +50,7 @@ Disk::makeWithFile(DiskFile *file)
 }
 
 Disk *
-Disk::makeWithReader(my::SerReader &reader, DiskDiameter type, DiskDensity density)
+Disk::makeWithReader(util::SerReader &reader, DiskDiameter type, DiskDensity density)
 {
     Disk *disk = new Disk(type, density);
     disk->applyToPersistentItems(reader);

@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Concurrency.hpp"
 
-namespace my {
+namespace util {
 
 Mutex::Mutex()
 {

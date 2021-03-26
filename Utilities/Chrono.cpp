@@ -14,7 +14,7 @@
 #include <mach/mach_time.h>
 #endif
 
-namespace my {
+namespace util {
 
 #ifdef __MACH__
 

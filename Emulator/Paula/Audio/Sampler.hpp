@@ -21,7 +21,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct SamplingMethodEnum : Reflection<SamplingMethodEnum, SamplingMethod> {
+struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod> {
     
     static bool isValid(long value)
     {
@@ -55,7 +55,7 @@ struct TaggedSample
     i16   sample;
 };
 
-struct Sampler : my::RingBuffer <TaggedSample, VPOS_CNT * HPOS_CNT> {
+struct Sampler : util::RingBuffer <TaggedSample, VPOS_CNT * HPOS_CNT> {
     
     /* Initializes the ring buffer by removing all existing elements and adding
      * a single dummy element. The dummy element is added because some methods

@@ -20,7 +20,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct MsgTypeEnum : Reflection<MsgTypeEnum, MsgType> {
+struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType> {
     
     static bool isValid(long value)
     {
@@ -101,10 +101,10 @@ struct MsgTypeEnum : Reflection<MsgTypeEnum, MsgType> {
 class MsgQueue : public HardwareComponent {
         
     // Ring buffer storing all pending messages
-    my::RingBuffer<Message, 64> queue;
+    util::RingBuffer<Message, 64> queue;
             
     // Synchronization mutex
-    my::ReentrantMutex recMutex;
+    util::ReentrantMutex recMutex;
     
     // The registered listener
     const void *listener = nullptr;

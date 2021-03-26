@@ -19,7 +19,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct GamePadActionEnum : Reflection<GamePadActionEnum, GamePadAction> {
+struct GamePadActionEnum : util::Reflection<GamePadActionEnum, GamePadAction> {
     
     static bool isValid(long value)
     {

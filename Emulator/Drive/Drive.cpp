@@ -229,7 +229,7 @@ Drive::_dump(Dump::Category category, std::ostream& os) const
 isize
 Drive::_size()
 {
-    my::SerCounter counter;
+    util::SerCounter counter;
 
     applyToPersistentItems(counter);
     applyToHardResetItems(counter);
@@ -252,7 +252,7 @@ Drive::_size()
 isize
 Drive::_load(const u8 *buffer) 
 {
-    my::SerReader reader(buffer);
+    util::SerReader reader(buffer);
     isize result;
     
     // Read own state
@@ -287,7 +287,7 @@ Drive::_load(const u8 *buffer)
 isize
 Drive::_save(u8 *buffer)
 {
-    my::SerWriter writer(buffer);
+    util::SerWriter writer(buffer);
     isize result;
     
     // Write own state

@@ -20,7 +20,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct ErrorCodeEnum : Reflection<ErrorCodeEnum, ErrorCode> {
+struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
     
     static bool isValid(long value)
     {
@@ -99,7 +99,7 @@ struct ErrorCodeEnum : Reflection<ErrorCodeEnum, ErrorCode> {
 // VAError
 //
 
-struct VAError : public my::Exception
+struct VAError : public util::Exception
 {
     // ErrorCode errorCode;
     

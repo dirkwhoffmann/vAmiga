@@ -21,7 +21,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct PortNrEnum : Reflection<PortNrEnum, PortNr> {
+struct PortNrEnum : util::Reflection<PortNrEnum, PortNr> {
     
     static bool isValid(long value)
     {
@@ -40,7 +40,7 @@ struct PortNrEnum : Reflection<PortNrEnum, PortNr> {
     }
 };
 
-struct ControlPortDeviceEnum : Reflection<ControlPortDeviceEnum, ControlPortDevice> {
+struct ControlPortDeviceEnum : util::Reflection<ControlPortDeviceEnum, ControlPortDevice> {
     
     static bool isValid(long value)
     {

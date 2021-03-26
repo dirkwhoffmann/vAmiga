@@ -29,7 +29,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct AgnusRevisionEnum : Reflection<AgnusRevisionEnum, AgnusRevision> {
+struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision> {
     
     static bool isValid(long value)
     {
@@ -50,7 +50,7 @@ struct AgnusRevisionEnum : Reflection<AgnusRevisionEnum, AgnusRevision> {
     }
 };
 
-struct DDFStateEnum : Reflection<DDFStateEnum, DDFState> {
+struct DDFStateEnum : util::Reflection<DDFStateEnum, DDFState> {
     
     static bool isValid(long value)
     {
@@ -70,7 +70,7 @@ struct DDFStateEnum : Reflection<DDFStateEnum, DDFState> {
     }
 };
 
-struct SprDmaStateEnum : Reflection<SprDmaStateEnum, SprDMAState> {
+struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState> {
     
     static bool isValid(long value)
     {

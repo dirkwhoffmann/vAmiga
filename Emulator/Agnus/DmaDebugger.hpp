@@ -21,7 +21,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct DmaDisplayModeEnum : Reflection<DmaDisplayModeEnum, DmaDisplayMode> {
+struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode> {
     
     static bool isValid(long value)
     {

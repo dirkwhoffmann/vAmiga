@@ -33,7 +33,7 @@ class ShakeDetector {
     
     // Time stamps
     u64 lastTurn = 0;
-    my::Time lastShake;
+    util::Time lastShake;
     
 public:
     

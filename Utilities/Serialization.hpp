@@ -12,7 +12,7 @@
 #include "Types.h"
 #include "Macros.h"
 
-namespace my {
+namespace util {
 
 //
 // Basic memory buffer I/O

@@ -451,7 +451,7 @@ RetroShell::exec(std::istream &stream)
         
         // Execute the command
         if (!exec(command, true)) {
-            throw my::Exception(command, line);
+            throw util::Exception(command, line);
         }
     }
 }

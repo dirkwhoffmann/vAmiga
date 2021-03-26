@@ -20,7 +20,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct PaletteEnum : Reflection<PaletteEnum, Palette> {
+struct PaletteEnum : util::Reflection<PaletteEnum, Palette> {
     
     static bool isValid(long value)
     {

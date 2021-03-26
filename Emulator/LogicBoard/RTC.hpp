@@ -19,7 +19,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct RTCRevisionEnum : Reflection<RTCRevisionEnum, RTCRevision> {
+struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision> {
     
     static bool isValid(long value)
     {

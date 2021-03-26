@@ -19,14 +19,14 @@ namespace va {
 bool
 IMGFile::isCompatiblePath(const string &path)
 {
-    string suffix = my::extractSuffix(path);
+    string suffix = util::extractSuffix(path);
     return suffix == "img" || suffix == "IMG";
 }
 
 bool
 IMGFile::isCompatibleStream(std::istream &stream)
 {
-    isize length = my::streamLength(stream);
+    isize length = util::streamLength(stream);
     
     // There are no magic bytes. We can only check the buffer size
     return length == IMGSIZE_35_DD;
@@ -160,7 +160,7 @@ IMGFile::encodeTrack(Disk *disk, Track t)
     // Compute a checksum for debugging
     debug(MFM_DEBUG,
           "Track %d checksum = %x\n",
-          t, my::fnv_1a_32(disk->data.track[t], disk->length.track[t]));
+          t, util::fnv_1a_32(disk->data.track[t], disk->length.track[t]));
 
     return result;
 }
@@ -188,7 +188,7 @@ IMGFile::encodeSector(Disk *disk, Track t, Sector s)
     buf[19] = 2;
     
     // Compute and write CRC
-    u16 crc = my::crc16(&buf[12], 8);
+    u16 crc = util::crc16(&buf[12], 8);
     buf[20] = HI_BYTE(crc);
     buf[21] = LO_BYTE(crc);
 
@@ -208,7 +208,7 @@ IMGFile::encodeSector(Disk *disk, Track t, Sector s)
     readSector(&buf[60], t, s);
     
     // Compute and write CRC
-    crc = my::crc16(&buf[56], 516);
+    crc = util::crc16(&buf[56], 516);
     buf[572] = HI_BYTE(crc);
     buf[573] = LO_BYTE(crc);
 

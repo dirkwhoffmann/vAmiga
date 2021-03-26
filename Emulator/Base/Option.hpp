@@ -10,7 +10,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct OptionEnum : Reflection<OptionEnum, Option> {
+struct OptionEnum : util::Reflection<OptionEnum, Option> {
     
     static bool isValid(long value)
     {

@@ -15,7 +15,7 @@
 // #include <mach/mach_time.h>
 #endif
 
-namespace my {
+namespace util {
 
 class Time {
     

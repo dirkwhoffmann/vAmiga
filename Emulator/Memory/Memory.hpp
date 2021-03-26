@@ -21,7 +21,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct MemorySourceEnum : Reflection<MemorySourceEnum, MemorySource> {
+struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource> {
     
     static bool isValid(long value)
     {
@@ -55,7 +55,7 @@ struct MemorySourceEnum : Reflection<MemorySourceEnum, MemorySource> {
     }
 };
 
-struct AccessorEnum : Reflection<AccessorEnum, Accessor> {
+struct AccessorEnum : util::Reflection<AccessorEnum, Accessor> {
     
     static bool isValid(long value)
     {
@@ -75,7 +75,7 @@ struct AccessorEnum : Reflection<AccessorEnum, Accessor> {
     }
 };
 
-struct BankMapEnum : Reflection<BankMapEnum, BankMap> {
+struct BankMapEnum : util::Reflection<BankMapEnum, BankMap> {
     
     static bool isValid(long value)
     {
@@ -97,7 +97,7 @@ struct BankMapEnum : Reflection<BankMapEnum, BankMap> {
     }
 };
 
-struct RamInitPatternEnum : Reflection<RamInitPatternEnum, RamInitPattern> {
+struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern> {
     
     static bool isValid(long value)
     {
@@ -118,7 +118,7 @@ struct RamInitPatternEnum : Reflection<RamInitPatternEnum, RamInitPattern> {
     }
 };
 
-struct UnmappedMemoryEnum : Reflection<UnmappedMemoryEnum, UnmappedMemory> {
+struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory> {
     
     static bool isValid(long value)
     {

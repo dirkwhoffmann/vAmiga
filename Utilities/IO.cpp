@@ -14,7 +14,7 @@
 
 #include <vector>
 
-namespace my {
+namespace util {
 
 string lowercased(const string& s)
 {

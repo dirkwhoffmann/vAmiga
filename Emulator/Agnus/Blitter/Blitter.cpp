@@ -564,7 +564,7 @@ Blitter::beginBlit()
         if (BLT_CHECKSUM) {
             
             linecount++;
-            check1 = check2 = my::fnv_1a_init32();
+            check1 = check2 = util::fnv_1a_init32();
             msg("Line %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
                 linecount, bltsizeH, bltsizeV,
                 bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
@@ -583,7 +583,7 @@ Blitter::beginBlit()
         if (BLT_CHECKSUM) {
             
             copycount++;
-            check1 = check2 = my::fnv_1a_init32();
+            check1 = check2 = util::fnv_1a_init32();
             msg("Blit %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
                 copycount,
                 bltsizeH, bltsizeV,

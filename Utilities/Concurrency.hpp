@@ -11,7 +11,7 @@
 
 #include <pthread.h>
 
-namespace my {
+namespace util {
 
 class Mutex
 {

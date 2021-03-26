@@ -22,7 +22,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct EventSlotEnum : Reflection<EventSlotEnum, EventSlot> {
+struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot> {
     
     static bool isValid(long value)
     {

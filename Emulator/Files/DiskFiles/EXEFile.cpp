@@ -19,7 +19,7 @@ namespace va {
 bool
 EXEFile::isCompatiblePath(const string &path)
 {
-    string suffix = my::extractSuffix(path);
+    string suffix = util::extractSuffix(path);
     return suffix == "exe" || suffix == "EXE";
 }
 
@@ -29,9 +29,9 @@ EXEFile::isCompatibleStream(std::istream &stream)
     u8 signature[] = { 0x00, 0x00, 0x03, 0xF3 };
                                                                                             
     // Only accept the file if it fits onto a HD disk
-    if (my::streamLength(stream) > 1710000) return false;
+    if (util::streamLength(stream) > 1710000) return false;
 
-    return my::matchingStreamHeader(stream, signature, sizeof(signature));
+    return util::matchingStreamHeader(stream, signature, sizeof(signature));
 }
 
 isize

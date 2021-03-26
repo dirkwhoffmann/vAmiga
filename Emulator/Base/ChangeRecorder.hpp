@@ -133,7 +133,7 @@ struct RegChange
 };
 
 template <isize capacity>
-struct RegChangeRecorder : public my::SortedRingBuffer<RegChange, capacity>
+struct RegChangeRecorder : public util::SortedRingBuffer<RegChange, capacity>
 {
     template <class W>
     void operator<<(W& worker)

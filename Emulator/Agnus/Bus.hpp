@@ -19,7 +19,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct BusOwnerEnum : Reflection<BusOwnerEnum, BusOwner> {
+struct BusOwnerEnum : util::Reflection<BusOwnerEnum, BusOwner> {
     
     static bool isValid(long value)
     {

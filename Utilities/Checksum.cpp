@@ -12,7 +12,7 @@
 #include "Checksum.hpp"
 #include "Macros.h"
 
-namespace my {
+namespace util {
 
 u32
 NO_SANITIZE("unsigned-integer-overflow")

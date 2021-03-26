@@ -60,8 +60,8 @@ Snapshot::isCompatibleStream(std::istream &stream)
 {
     const u8 magicBytes[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     
-    if (my::streamLength(stream) < 0x15) return false;
-    return my::matchingStreamHeader(stream, magicBytes, sizeof(magicBytes));
+    if (util::streamLength(stream) < 0x15) return false;
+    return util::matchingStreamHeader(stream, magicBytes, sizeof(magicBytes));
 }
 
 Snapshot::Snapshot()

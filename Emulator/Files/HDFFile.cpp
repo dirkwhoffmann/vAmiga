@@ -22,14 +22,14 @@ HDFFile::HDFFile()
 bool
 HDFFile::isCompatiblePath(const string &path)
 {
-    string suffix = my::extractSuffix(path);
+    string suffix = util::extractSuffix(path);
     return suffix == "hdf" || suffix == "HDF";
 }
 
 bool
 HDFFile::isCompatibleStream(std::istream &stream)
 {
-    return my::streamLength(stream) % 512 == 0;
+    return util::streamLength(stream) % 512 == 0;
 }
 
 bool

@@ -19,7 +19,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct FilterTypeEnum : Reflection<FilterTypeEnum, FilterType> {
+struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType> {
     
     static bool isValid(long value)
     {

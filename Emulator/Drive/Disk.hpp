@@ -19,7 +19,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct DiskDiameterEnum : Reflection<DiskDiameterEnum, DiskDiameter> {
+struct DiskDiameterEnum : util::Reflection<DiskDiameterEnum, DiskDiameter> {
     
     static bool isValid(long value)
     {
@@ -39,7 +39,7 @@ struct DiskDiameterEnum : Reflection<DiskDiameterEnum, DiskDiameter> {
     }
 };
 
-struct DiskDensityEnum : Reflection<DiskDensityEnum, DiskDensity> {
+struct DiskDensityEnum : util::Reflection<DiskDensityEnum, DiskDensity> {
     
     static bool isValid(long value)
     {
@@ -147,7 +147,7 @@ public:
     const char *getDescription() const override { return "Disk"; }
 
     static Disk *makeWithFile(class DiskFile *file);
-    static Disk *makeWithReader(my::SerReader &reader, DiskDiameter type, DiskDensity density);
+    static Disk *makeWithReader(util::SerReader &reader, DiskDiameter type, DiskDensity density);
         
     void dump();
     

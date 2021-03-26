@@ -19,7 +19,7 @@ namespace va {
 // Reflection APIs
 //
 
-struct SerialPortDeviceEnum : Reflection<SerialPortDeviceEnum, SerialPortDevice> {
+struct SerialPortDeviceEnum : util::Reflection<SerialPortDeviceEnum, SerialPortDevice> {
     
     static bool isValid(long value)
     {

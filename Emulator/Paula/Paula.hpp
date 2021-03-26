@@ -33,7 +33,7 @@ static inline bool isIrqSource(long value)
     return value >= 0 && value < INT_COUNT;
 }
 
-struct IrqSourceEnum : Reflection<IrqSourceEnum, IrqSource> {
+struct IrqSourceEnum : util::Reflection<IrqSourceEnum, IrqSource> {
     
     static bool isValid(long value)
     {
@@ -125,7 +125,7 @@ public:
     u64 iplPipe;
     
     // Interrupt priority line (IPL)
-    my::TimeDelayed <u8,4> ipl = my::TimeDelayed <u8,4> ();
+    util::TimeDelayed <u8,4> ipl = util::TimeDelayed <u8,4> ();
     
     
     //

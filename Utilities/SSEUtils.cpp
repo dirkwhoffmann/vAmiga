@@ -10,7 +10,7 @@
 #include "config.h"
 #include "SSEUtils.hpp"
 
-namespace my {
+namespace util {
 
 #if (defined(__i386__) || defined(__x86_64__)) && defined(__MACH__)
 

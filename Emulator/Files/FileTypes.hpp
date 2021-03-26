@@ -15,7 +15,7 @@ namespace va {
 
 #include "FileTypes.h"
 
-struct FileTypeEnum : Reflection<FileTypeEnum, FileType> {
+struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType> {
     
     static bool isValid(long value)
     {
@@ -44,7 +44,7 @@ struct FileTypeEnum : Reflection<FileTypeEnum, FileType> {
     }
 };
 
-struct RomIdentifierEnum : Reflection<RomIdentifierEnum, RomIdentifier> {
+struct RomIdentifierEnum : util::Reflection<RomIdentifierEnum, RomIdentifier> {
     
     static bool isValid(long value)
     {
@@ -95,7 +95,7 @@ struct RomIdentifierEnum : Reflection<RomIdentifierEnum, RomIdentifier> {
     }
 };
 
-struct BootBlockTypeEnum : Reflection<BootBlockTypeEnum, BootBlockType> {
+struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType> {
     
     static bool isValid(long value)
     {
@@ -116,7 +116,7 @@ struct BootBlockTypeEnum : Reflection<BootBlockTypeEnum, BootBlockType> {
     }
 };
 
-struct BootBlockIdEnum : Reflection<BootBlockIdEnum, BootBlockId> {
+struct BootBlockIdEnum : util::Reflection<BootBlockIdEnum, BootBlockId> {
     
     static bool isValid(long value)
     {
