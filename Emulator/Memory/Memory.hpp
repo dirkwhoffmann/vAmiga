@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaComponent.hpp"
-#include "FileTypes.hpp"
+#include "RomFile.h"
 #include "Macros.h"
 
 namespace va {

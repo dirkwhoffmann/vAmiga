@@ -11,6 +11,7 @@
 
 #include "RetroShell.hpp"
 #include "Amiga.hpp"
+#include "BootBlockImage.hpp"
 #include "FSTypes.hpp"
 #include "IO.hpp"
 #include "Parser.hpp"

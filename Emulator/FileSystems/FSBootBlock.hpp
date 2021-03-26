@@ -10,7 +10,8 @@
 #pragma once
 
 #include "FSBlock.hpp"
-#include "FileTypes.hpp"
+// #include "FileTypes.hpp"
+#include "BootBlockImage.hpp"
 
 namespace va {
 

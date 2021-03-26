@@ -12,7 +12,8 @@
 #pragma once
 
 #include "Aliases.h"
-#include "FileTypes.h"
+// #include "FileTypes.h"
+#include "BootBlockImage.h"
 #include "FSTypes.h"
 
 //

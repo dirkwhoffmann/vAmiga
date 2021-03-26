@@ -11,6 +11,7 @@
 
 #include "Drive.hpp"
 #include "Agnus.hpp"
+#include "BootBlockImage.hpp"
 #include "CIA.hpp"
 #include "DiskFile.hpp"
 #include "FSDevice.hpp"

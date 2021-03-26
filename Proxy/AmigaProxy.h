@@ -33,6 +33,7 @@
 #include "Option.h"
 #include "Paula.h"
 #include "PixelEngine.h"
+#include "RomFile.h"
 #include "RTC.h"
 #include "SerialPort.h"
 #include "StateMachine.h"

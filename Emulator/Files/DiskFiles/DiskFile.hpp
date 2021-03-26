@@ -10,6 +10,7 @@
 #pragma once
 
 #include "AmigaFile.hpp"
+#include "BootBlockImage.hpp"
 
 namespace va {
 
