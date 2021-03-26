@@ -82,7 +82,7 @@
 		5083CF602546BCB200A28EF8 /* FSRootBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083CF5E2546BCB200A28EF8 /* FSRootBlock.cpp */; };
 		5083CF652546BEAA00A28EF8 /* FSBitmapBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083CF632546BEAA00A28EF8 /* FSBitmapBlock.cpp */; };
 		5083CF6A2546C0D700A28EF8 /* FSUserDirBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083CF682546C0D700A28EF8 /* FSUserDirBlock.cpp */; };
-		5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5521FB3BAE009753EF /* EventHandler.cpp */; };
+		5085FE5721FB3BAE009753EF /* EventHandlerOld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5521FB3BAE009753EF /* EventHandlerOld.cpp */; };
 		5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5821FB6856009753EF /* ProxyExtensions.swift */; };
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		50894D822593CF4400C0499D /* HIDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50894D812593CF4400C0499D /* HIDExtensions.swift */; };
@@ -388,8 +388,8 @@
 		5083CF682546C0D700A28EF8 /* FSUserDirBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSUserDirBlock.cpp; sourceTree = "<group>"; };
 		5083CF692546C0D700A28EF8 /* FSUserDirBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSUserDirBlock.h; sourceTree = "<group>"; };
 		5085830523265B3D004F942F /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
-		5085FE5521FB3BAE009753EF /* EventHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EventHandler.cpp; sourceTree = "<group>"; };
-		5085FE5621FB3BAE009753EF /* EventHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventHandler.h; sourceTree = "<group>"; };
+		5085FE5521FB3BAE009753EF /* EventHandlerOld.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EventHandlerOld.cpp; sourceTree = "<group>"; };
+		5085FE5621FB3BAE009753EF /* EventHandlerOld.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventHandlerOld.h; sourceTree = "<group>"; };
 		5085FE5821FB6856009753EF /* ProxyExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyExtensions.swift; sourceTree = "<group>"; };
 		508833EC21F0D21B009890EA /* ADFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ADFFile.cpp; sourceTree = "<group>"; };
 		508833ED21F0D21B009890EA /* ADFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADFFile.h; sourceTree = "<group>"; };
@@ -774,8 +774,8 @@
 				50A6143B260CE6C400A01428 /* BusTypes.h */,
 				50A61438260CE6B100A01428 /* Bus.h */,
 				50A61437260CE6B100A01428 /* Bus.cpp */,
-				5085FE5621FB3BAE009753EF /* EventHandler.h */,
-				5085FE5521FB3BAE009753EF /* EventHandler.cpp */,
+				5085FE5621FB3BAE009753EF /* EventHandlerOld.h */,
+				5085FE5521FB3BAE009753EF /* EventHandlerOld.cpp */,
 				50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */,
 				50E204E92295A3F20082B63D /* DmaDebugger.h */,
 				50E204E82295A3F20082B63D /* DmaDebugger.cpp */,
@@ -1742,7 +1742,7 @@
 				50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */,
 				50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */,
 				50C8C458260758F000F4E012 /* SplashScreenSetup.swift in Sources */,
-				5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */,
+				5085FE5721FB3BAE009753EF /* EventHandlerOld.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
