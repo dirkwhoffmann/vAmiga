@@ -11,6 +11,8 @@
 
 #include "RetroShell.hpp"
 #include "Amiga.hpp"
+#include "Parser.hpp"
+
 #include <sstream>
 
 namespace va {
@@ -381,17 +383,17 @@ RetroShell::exec(const string &command, bool verbose)
         *this << err.what() << ": Too many arguments";
         *this << '\n';
             
-    } catch (EnumParseError &err) {
+    } catch (util::EnumParseError &err) {
         *this << err.token << " is not a valid key" << '\n';
         *this << "Expected: " << err.expected << '\n';
         
-    } catch (ParseNumError &err) {
+    } catch (util::ParseNumError &err) {
         *this << err.token << " is not a number" << '\n';
 
-    } catch (ParseBoolError &err) {
+    } catch (util::ParseBoolError &err) {
         *this << err.token << " must be true or false" << '\n';
 
-    } catch (ParseError &err) {
+    } catch (util::ParseError &err) {
         *this << err.what() << ": Syntax error";
         *this << '\n';
         
@@ -454,6 +456,7 @@ RetroShell::exec(std::istream &stream)
     }
 }
 
+/*
 bool
 RetroShell::parseBool(string& token)
 {
@@ -473,6 +476,7 @@ RetroShell::parseNum(string& token)
 
     return result;
 }
+*/
 
 void
 RetroShell::dump(HardwareComponent &component, Dump::Category category)

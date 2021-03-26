@@ -12,35 +12,10 @@
 #include "Types.h"
 
 #include <map>
-#include <exception>
-#include "Exception.hpp"
 
 namespace va {
 
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
-
-
-//
-// ParseError
-//
-
-struct ParseError : public std::exception {
-
-    string token;
-    string expected;
-    
-    ParseError(const string &t) : token(t) { }
-    ParseError(const string &t, const string &e) : token(t), expected(e) { }
-
-    const char *what() const throw() override { return token.c_str(); }
-};
-
-struct EnumParseError : public ParseError { using ParseError::ParseError; };
-
-
-//
-// Reflection
-//
 
 template <class T, typename E> struct Reflection {
 
@@ -76,20 +51,6 @@ template <class T, typename E> struct Reflection {
         }
         
         return result;
-    }
-    
-    // Parses a string
-    static E parse(const string& key) {
-          
-        string upperKey;
-        for (auto c : key) { upperKey += toupper(c); }
-        
-        auto p = pairs();
-        
-        auto it = p.find(upperKey);
-        if (it == p.end()) throw EnumParseError(key, keyList());
-        
-        return (E)it->second;
     }
 };
 

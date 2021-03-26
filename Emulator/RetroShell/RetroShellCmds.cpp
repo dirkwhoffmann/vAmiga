@@ -13,6 +13,7 @@
 #include "Amiga.hpp"
 #include "FSTypes.hpp"
 #include "IO.hpp"
+#include "Parser.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -132,49 +133,49 @@ RetroShell::exec <Token::memory, Token::load, Token::extrom> (Arguments& argv, l
 template <> void
 RetroShell::exec <Token::memory, Token::set, Token::chip> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_CHIP_RAM, parseNum(argv.front()));
+    amiga.configure(OPT_CHIP_RAM, util::parseNum(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::memory, Token::set, Token::slow> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_SLOW_RAM, parseNum(argv.front()));
+    amiga.configure(OPT_SLOW_RAM, util::parseNum(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::memory, Token::set, Token::fast> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_FAST_RAM, parseNum(argv.front()));
+    amiga.configure(OPT_FAST_RAM, util::parseNum(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::memory, Token::set, Token::extstart> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_EXT_START, parseNum(argv.front()));
+    amiga.configure(OPT_EXT_START, util::parseNum(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::memory, Token::set, Token::slowramdelay> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_SLOW_RAM_DELAY, parseBool(argv.front()));
+    amiga.configure(OPT_SLOW_RAM_DELAY, util::parseBool(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::memory, Token::set, Token::bankmap> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_BANKMAP, BankMapEnum::parse(argv.front()));
+    amiga.configure(OPT_BANKMAP, util::parseEnum <BankMapEnum> (argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::memory, Token::set, Token::unmappingtype> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_UNMAPPING_TYPE, UnmappedMemoryEnum::parse(argv.front()));
+    amiga.configure(OPT_UNMAPPING_TYPE, util::parseEnum <UnmappedMemoryEnum> (argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::memory, Token::set, Token::raminitpattern> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_RAM_INIT_PATTERN, RamInitPatternEnum::parse(argv.front()));
+    amiga.configure(OPT_RAM_INIT_PATTERN, util::parseEnum <RamInitPatternEnum> (argv.front()));
 }
 
 template <> void
@@ -229,9 +230,9 @@ template <> void
 RetroShell::exec <Token::cia, Token::set, Token::revision> (Arguments &argv, long param)
 {
     if (param == 0) {
-        amiga.ciaA.configure(OPT_CIA_REVISION, CIARevisionEnum::parse(argv.front()));
+        amiga.ciaA.configure(OPT_CIA_REVISION, util::parseEnum <CIARevisionEnum> (argv.front()));
     } else {
-        amiga.ciaB.configure(OPT_CIA_REVISION, CIARevisionEnum::parse(argv.front()));
+        amiga.ciaB.configure(OPT_CIA_REVISION, util::parseEnum <CIARevisionEnum> (argv.front()));
     }
 }
 
@@ -239,9 +240,9 @@ template <> void
 RetroShell::exec <Token::cia, Token::set, Token::todbug> (Arguments &argv, long param)
 {
     if (param == 0) {
-        amiga.ciaA.configure(OPT_TODBUG, parseBool(argv.front()));
+        amiga.ciaA.configure(OPT_TODBUG, util::parseBool(argv.front()));
     } else {
-        amiga.ciaB.configure(OPT_TODBUG,parseBool(argv.front()));
+        amiga.ciaB.configure(OPT_TODBUG, util::parseBool(argv.front()));
     }
 }
 
@@ -249,9 +250,9 @@ template <> void
 RetroShell::exec <Token::cia, Token::set, Token::esync> (Arguments &argv, long param)
 {
     if (param == 0) {
-        amiga.ciaA.configure(OPT_ECLOCK_SYNCING, parseBool(argv.front()));
+        amiga.ciaA.configure(OPT_ECLOCK_SYNCING, util::parseBool(argv.front()));
     } else {
-        amiga.ciaB.configure(OPT_ECLOCK_SYNCING, parseBool(argv.front()));
+        amiga.ciaB.configure(OPT_ECLOCK_SYNCING, util::parseBool(argv.front()));
     }
 }
 
@@ -298,13 +299,13 @@ RetroShell::exec <Token::agnus, Token::config> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::agnus, Token::set, Token::revision> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_AGNUS_REVISION, AgnusRevisionEnum::parse(argv.front()));
+    amiga.configure(OPT_AGNUS_REVISION, util::parseEnum <AgnusRevisionEnum> (argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::agnus, Token::set, Token::slowrammirror> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_SLOW_RAM_MIRROR, parseBool(argv.front()));
+    amiga.configure(OPT_SLOW_RAM_MIRROR, util::parseBool(argv.front()));
 }
 
 template <> void
@@ -338,7 +339,7 @@ RetroShell::exec <Token::blitter, Token::config> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::blitter, Token::set, Token::accuracy> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_BLITTER_ACCURACY, parseNum(argv.front()));
+    amiga.configure(OPT_BLITTER_ACCURACY, util::parseNum(argv.front()));
 }
 
 template <> void
@@ -382,25 +383,25 @@ RetroShell::exec <Token::denise, Token::config> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::denise, Token::set, Token::revision> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_DENISE_REVISION, DeniseRevisionEnum::parse(argv.front()));
+    amiga.configure(OPT_DENISE_REVISION, util::parseEnum <DeniseRevisionEnum> (argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::denise, Token::set, Token::clxsprspr> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_CLX_SPR_SPR, parseBool(argv.front()));
+    amiga.configure(OPT_CLX_SPR_SPR, util::parseBool(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::denise, Token::set, Token::clxsprplf> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_CLX_SPR_PLF, parseBool(argv.front()));
+    amiga.configure(OPT_CLX_SPR_PLF, util::parseBool(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::denise, Token::set, Token::clxplfplf> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_CLX_PLF_PLF, parseBool(argv.front()));
+    amiga.configure(OPT_CLX_PLF_PLF, util::parseBool(argv.front()));
 }
 
 template <> void
@@ -422,25 +423,25 @@ RetroShell::exec <Token::denise, Token::inspect, Token::registers> (Arguments& a
 template <> void
 RetroShell::exec <Token::monitor, Token::set, Token::palette> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_PALETTE, PaletteEnum::parse(argv.front()));
+    amiga.configure(OPT_PALETTE, util::parseEnum <PaletteEnum> (argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::monitor, Token::set, Token::brightness> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_BRIGHTNESS, parseNum(argv.front()));
+    amiga.configure(OPT_BRIGHTNESS, util::parseNum(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::monitor, Token::set, Token::contrast> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_CONTRAST, parseNum(argv.front()));
+    amiga.configure(OPT_CONTRAST, util::parseNum(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::monitor, Token::set, Token::saturation> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_SATURATION, parseNum(argv.front()));
+    amiga.configure(OPT_SATURATION, util::parseNum(argv.front()));
 }
 
 //
@@ -456,13 +457,13 @@ RetroShell::exec <Token::audio, Token::config> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::audio, Token::set, Token::sampling> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_SAMPLING_METHOD, SamplingMethodEnum::parse(argv.front()));
+    amiga.configure(OPT_SAMPLING_METHOD, util::parseEnum <SamplingMethodEnum> (argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::audio, Token::set, Token::filter> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_FILTER_TYPE, FilterTypeEnum::parse(argv.front()));
+    amiga.configure(OPT_FILTER_TYPE, util::parseEnum <FilterTypeEnum> (argv.front()));
 }
 
 template <> void
@@ -470,12 +471,12 @@ RetroShell::exec <Token::audio, Token::set, Token::volume> (Arguments& argv, lon
 {
     switch (param) {
             
-        case 0: amiga.configure(OPT_AUDVOL, 0, parseNum(argv.front())); break;
-        case 1: amiga.configure(OPT_AUDVOL, 1, parseNum(argv.front())); break;
-        case 2: amiga.configure(OPT_AUDVOL, 2, parseNum(argv.front())); break;
-        case 3: amiga.configure(OPT_AUDVOL, 3, parseNum(argv.front())); break;
-        case 4: amiga.configure(OPT_AUDVOLL, parseNum(argv.front())); break;
-        case 5: amiga.configure(OPT_AUDVOLR, parseNum(argv.front())); break;
+        case 0: amiga.configure(OPT_AUDVOL, 0, util::parseNum(argv.front())); break;
+        case 1: amiga.configure(OPT_AUDVOL, 1, util::parseNum(argv.front())); break;
+        case 2: amiga.configure(OPT_AUDVOL, 2, util::parseNum(argv.front())); break;
+        case 3: amiga.configure(OPT_AUDVOL, 3, util::parseNum(argv.front())); break;
+        case 4: amiga.configure(OPT_AUDVOLL, util::parseNum(argv.front())); break;
+        case 5: amiga.configure(OPT_AUDVOLR, util::parseNum(argv.front())); break;
             
         default:
             assert(false);
@@ -485,7 +486,7 @@ RetroShell::exec <Token::audio, Token::set, Token::volume> (Arguments& argv, lon
 template <> void
 RetroShell::exec <Token::audio, Token::set, Token::pan> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_AUDPAN, param, parseNum(argv.front()));
+    amiga.configure(OPT_AUDPAN, param, util::parseNum(argv.front()));
 }
 
 template <> void
@@ -535,7 +536,7 @@ RetroShell::exec <Token::rtc, Token::inspect, Token::registers> (Arguments& argv
 template <> void
 RetroShell::exec <Token::rtc, Token::set, Token::revision> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_RTC_MODEL, RTCRevisionEnum::parse(argv.front()));
+    amiga.configure(OPT_RTC_MODEL, util::parseEnum <RTCRevisionEnum> (argv.front()));
 }
 
 //
@@ -587,7 +588,7 @@ RetroShell::exec <Token::keyboard, Token::config> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::keyboard, Token::set, Token::accuracy> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_ACCURATE_KEYBOARD, parseBool(argv.front()));
+    amiga.configure(OPT_ACCURATE_KEYBOARD, util::parseBool(argv.front()));
 }
 
 template <> void
@@ -609,22 +610,22 @@ RetroShell::exec <Token::mouse, Token::config> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::mouse, Token::set, Token::pullup> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_PULLUP_RESISTORS, PORT_1, parseBool(argv.front()));
-    amiga.configure(OPT_PULLUP_RESISTORS, PORT_2, parseBool(argv.front()));
+    amiga.configure(OPT_PULLUP_RESISTORS, PORT_1, util::parseBool(argv.front()));
+    amiga.configure(OPT_PULLUP_RESISTORS, PORT_2, util::parseBool(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::mouse, Token::set, Token::shakedetector> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_SHAKE_DETECTION, PORT_1, parseBool(argv.front()));
-    amiga.configure(OPT_SHAKE_DETECTION, PORT_2, parseBool(argv.front()));
+    amiga.configure(OPT_SHAKE_DETECTION, PORT_1, util::parseBool(argv.front()));
+    amiga.configure(OPT_SHAKE_DETECTION, PORT_2, util::parseBool(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::mouse, Token::set, Token::velocity> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_MOUSE_VELOCITY, PORT_1, parseNum(argv.front()));
-    amiga.configure(OPT_MOUSE_VELOCITY, PORT_2, parseNum(argv.front()));
+    amiga.configure(OPT_MOUSE_VELOCITY, PORT_1, util::parseNum(argv.front()));
+    amiga.configure(OPT_MOUSE_VELOCITY, PORT_2, util::parseNum(argv.front()));
 }
 
 template <> void
@@ -646,7 +647,7 @@ RetroShell::exec <Token::serial, Token::config> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::serial, Token::set, Token::device> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_SERIAL_DEVICE, SerialPortDeviceEnum::parse(argv.front()));
+    amiga.configure(OPT_SERIAL_DEVICE, util::parseEnum <SerialPortDeviceEnum> (argv.front()));
 }
 
 template <> void
@@ -674,19 +675,19 @@ RetroShell::exec <Token::dc, Token::inspect> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::dc, Token::speed> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_DRIVE_SPEED, parseNum(argv.front()));
+    amiga.configure(OPT_DRIVE_SPEED, util::parseNum(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::dc, Token::dsksync, Token::autosync> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_AUTO_DSKSYNC, parseBool(argv.front()));
+    amiga.configure(OPT_AUTO_DSKSYNC, util::parseBool(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::dc, Token::dsksync, Token::lock> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_LOCK_DSKSYNC, parseBool(argv.front()));
+    amiga.configure(OPT_LOCK_DSKSYNC, util::parseBool(argv.front()));
 }
 
 //
@@ -702,7 +703,7 @@ RetroShell::exec <Token::dfn, Token::config> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::dfn, Token::audiate, Token::insert> (Arguments& argv, long param)
 {
-    long num = parseNum(argv.front());
+    long num = util::parseNum(argv.front());
 
     if (param >= 0 && param <= 3) {
         amiga.configure(OPT_INSERT_VOLUME, param, num);
@@ -714,7 +715,7 @@ RetroShell::exec <Token::dfn, Token::audiate, Token::insert> (Arguments& argv, l
 template <> void
 RetroShell::exec <Token::dfn, Token::audiate, Token::eject> (Arguments& argv, long param)
 {
-    long num = parseNum(argv.front());
+    long num = util::parseNum(argv.front());
     
     if (param >= 0 && param <= 3) {
         amiga.configure(OPT_EJECT_VOLUME, param, num);
@@ -726,7 +727,7 @@ RetroShell::exec <Token::dfn, Token::audiate, Token::eject> (Arguments& argv, lo
 template <> void
 RetroShell::exec <Token::dfn, Token::audiate, Token::step> (Arguments& argv, long param)
 {
-    long num = parseNum(argv.front());
+    long num = util::parseNum(argv.front());
     
     if (param >= 0 && param <= 3) {
         amiga.configure(OPT_STEP_VOLUME, param, num);
@@ -738,7 +739,7 @@ RetroShell::exec <Token::dfn, Token::audiate, Token::step> (Arguments& argv, lon
 template <> void
 RetroShell::exec <Token::dfn, Token::audiate, Token::poll> (Arguments& argv, long param)
 {
-    long num = parseNum(argv.front());
+    long num = util::parseNum(argv.front());
     
     if (param >= 0 && param <= 3) {
         amiga.configure(OPT_POLL_VOLUME, param, num);
@@ -777,7 +778,7 @@ RetroShell::exec <Token::dfn, Token::insert> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::dfn, Token::set, Token::model> (Arguments& argv, long param)
 {
-    long num = DriveTypeEnum::parse(argv.front());
+    long num = util::parseEnum <DriveTypeEnum> (argv.front());
     
     if (param >= 0 && param <= 3) {
         amiga.configure(OPT_DRIVE_TYPE, param, num);
@@ -789,7 +790,7 @@ RetroShell::exec <Token::dfn, Token::set, Token::model> (Arguments& argv, long p
 template <> void
 RetroShell::exec <Token::dfn, Token::set, Token::pan> (Arguments& argv, long param)
 {
-    long num = parseNum(argv.front());
+    long num = util::parseNum(argv.front());
     
     if (param >= 0 && param <= 3) {
         amiga.configure(OPT_DRIVE_PAN, param, num);
@@ -801,7 +802,7 @@ RetroShell::exec <Token::dfn, Token::set, Token::pan> (Arguments& argv, long par
 template <> void
 RetroShell::exec <Token::dfn, Token::set, Token::mechanics> (Arguments& argv, long param)
 {
-    long num = parseBool(argv.front());
+    long num = util::parseBool(argv.front());
     
     if (param >= 0 && param <= 3) {
         amiga.configure(OPT_EMULATE_MECHANICS, param, num);
@@ -825,7 +826,7 @@ RetroShell::exec <Token::dfn, Token::set, Token::searchpath> (Arguments& argv, l
 template <> void
 RetroShell::exec <Token::dfn, Token::set, Token::defaultbb> (Arguments& argv, long param)
 {
-    long num = BootBlockIdEnum::parse(argv.front());
+    long num = util::parseEnum <BootBlockIdEnum> (argv.front());
     
     if (param >= 0 && param <= 3) {
         amiga.configure(OPT_DEFAULT_BOOTBLOCK, param, num);
@@ -837,7 +838,7 @@ RetroShell::exec <Token::dfn, Token::set, Token::defaultbb> (Arguments& argv, lo
 template <> void
 RetroShell::exec <Token::dfn, Token::set, Token::defaultfs> (Arguments& argv, long param)
 {
-    long num = FSVolumeTypeEnum::parse(argv.front());
+    long num = util::parseEnum <FSVolumeTypeEnum> (argv.front());
     
     if (param >= 0 && param <= 3) {
         amiga.configure(OPT_DEFAULT_FILESYSTEM, param, num);

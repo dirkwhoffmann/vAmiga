@@ -159,6 +159,7 @@
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
 		50A5969824F7F9ED008632C0 /* PeripheralsConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A5969724F7F9ED008632C0 /* PeripheralsConf.swift */; };
 		50A61439260CE6B100A01428 /* Bus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A61437260CE6B100A01428 /* Bus.cpp */; };
+		50A61463260DB7F900A01428 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A61461260DB7F900A01428 /* Parser.cpp */; };
 		50A64B96257A63A600442964 /* BootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A64B95257A63A600442964 /* BootBlockImage.cpp */; };
 		50AE6EDD24D93DC4000AA367 /* CopperRegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */; };
 		50AE6EDF24D93EDD000AA367 /* AgnusRegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDE24D93EDD000AA367 /* AgnusRegisters.cpp */; };
@@ -501,6 +502,8 @@
 		50A6145A260D14FE00A01428 /* Error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
 		50A6145E260D175F00A01428 /* Option.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Option.h; sourceTree = "<group>"; };
 		50A6145F260D177100A01428 /* Option.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Option.hpp; sourceTree = "<group>"; };
+		50A61461260DB7F900A01428 /* Parser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Parser.cpp; sourceTree = "<group>"; };
+		50A61462260DB7F900A01428 /* Parser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Parser.hpp; sourceTree = "<group>"; };
 		50A64B94257A63A600442964 /* BootBlockImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BootBlockImage.hpp; sourceTree = "<group>"; };
 		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
 		50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperRegisters.cpp; sourceTree = "<group>"; };
@@ -1288,6 +1291,8 @@
 				50B3C44725EAFB5500651700 /* Checksum.cpp */,
 				50C0B78125EC367000CDE1F2 /* IO.hpp */,
 				50C0B78025EC367000CDE1F2 /* IO.cpp */,
+				50A61462260DB7F900A01428 /* Parser.hpp */,
+				50A61461260DB7F900A01428 /* Parser.cpp */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1580,6 +1585,7 @@
 				50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */,
 				508FE01A21EA227B0043D0E9 /* MyFormatter.swift in Sources */,
 				500C7170255EE2AC00DDEEB2 /* Concurrency.cpp in Sources */,
+				50A61463260DB7F900A01428 /* Parser.cpp in Sources */,
 				5083CF5B2546AB1C00A28EF8 /* FSBootBlock.cpp in Sources */,
 				50C8C4552607524400F4E012 /* Monitors.swift in Sources */,
 				501A9937243A07A100D269B2 /* Storage.swift in Sources */,

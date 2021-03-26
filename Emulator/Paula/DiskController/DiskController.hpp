@@ -10,6 +10,7 @@
 #pragma once
 
 #include "AmigaComponent.hpp"
+#include "Reflection.hpp"
 
 namespace va {
 

@@ -13,6 +13,7 @@
 #include "Command.hpp"
 #include "Exception.hpp"
 #include "Error.hpp"
+#include "Parser.hpp"
 
 namespace va {
 
@@ -43,6 +44,7 @@ enum class Token
     unmappingtype, velocity, volume, wom
 };
 
+/*
 struct ParseNumError : public ParseError {
     using ParseError::ParseError;
 };
@@ -50,12 +52,13 @@ struct ParseNumError : public ParseError {
 struct ParseBoolError : public ParseError {
     using ParseError::ParseError;
 };
+*/
 
-struct TooFewArgumentsError : public ParseError {
+struct TooFewArgumentsError : public util::ParseError {
     using ParseError::ParseError;
 };
 
-struct TooManyArgumentsError : public ParseError {
+struct TooManyArgumentsError : public util::ParseError {
     using ParseError::ParseError;
 };
 

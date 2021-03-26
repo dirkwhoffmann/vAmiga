@@ -164,9 +164,6 @@ public:
 
 private:
     
-    bool parseBool(string& token);
-    long parseNum(string& token);
-
     void dump(HardwareComponent &component, Dump::Category category);
 
 };
