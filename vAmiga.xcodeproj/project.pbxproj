@@ -24,7 +24,6 @@
 		5010A78222B50B690041388B /* PortPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5010A78122B50B690041388B /* PortPanel.swift */; };
 		501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501429D82445F12B00FBDC90 /* TextureToolbox.swift */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
-		5016DFB4260E2FD2004E0307 /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5016DFB2260E2FD2004E0307 /* EventHandler.cpp */; };
 		501702E3256FFC5400C84CE1 /* FSBitmapExtBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501702E1256FFC5400C84CE1 /* FSBitmapExtBlock.cpp */; };
 		5019605B231257270051B669 /* Monitor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5019605A231257270051B669 /* Monitor.xib */; };
 		5019605D23125E680051B669 /* Monitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019605C23125E680051B669 /* Monitor.swift */; };
@@ -280,8 +279,6 @@
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
 		5015FF3E242BA00F005175D9 /* Frame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Frame.h; sourceTree = "<group>"; };
-		5016DFB2260E2FD2004E0307 /* EventHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EventHandler.cpp; sourceTree = "<group>"; };
-		5016DFB3260E2FD2004E0307 /* EventHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventHandler.h; sourceTree = "<group>"; };
 		5016DFB6260E3048004E0307 /* EventHandlerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventHandlerTypes.h; sourceTree = "<group>"; };
 		501702E1256FFC5400C84CE1 /* FSBitmapExtBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSBitmapExtBlock.cpp; sourceTree = "<group>"; };
 		501702E2256FFC5400C84CE1 /* FSBitmapExtBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSBitmapExtBlock.h; sourceTree = "<group>"; };
@@ -779,8 +776,6 @@
 				50A61438260CE6B100A01428 /* Bus.h */,
 				50A61437260CE6B100A01428 /* Bus.cpp */,
 				5016DFB6260E3048004E0307 /* EventHandlerTypes.h */,
-				5016DFB3260E2FD2004E0307 /* EventHandler.h */,
-				5016DFB2260E2FD2004E0307 /* EventHandler.cpp */,
 				5085FE5621FB3BAE009753EF /* EventHandlerOld.h */,
 				5085FE5521FB3BAE009753EF /* EventHandlerOld.cpp */,
 				50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */,
@@ -1544,7 +1539,6 @@
 				509C365E260B177E004F160A /* Interpreter.cpp in Sources */,
 				508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */,
 				5057551025EAFF7900280977 /* Checksum.cpp in Sources */,
-				5016DFB4260E2FD2004E0307 /* EventHandler.cpp in Sources */,
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
 				507215A925EAB4AC00787591 /* Chrono.cpp in Sources */,
 				50104E8E25ECE2FA0047A9AA /* Debug.cpp in Sources */,
