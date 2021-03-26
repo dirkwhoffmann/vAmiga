@@ -9,7 +9,7 @@
 
 #include "Constants.h"
 #include "Agnus.h"
-#include "AmigaTypes.h"
+#include "Amiga.h"
 #include "Blitter.h"
 #include "ControlPort.h"
 #include "Copper.h"

@@ -354,7 +354,6 @@
 		5064851021EC7A1700FC4AC3 /* Memory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Memory.hpp; sourceTree = "<group>"; };
 		506B47172562E06A009FEFC3 /* ExporterDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExporterDialog.xib; sourceTree = "<group>"; };
 		506B471C256396BC009FEFC3 /* ExporterDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExporterDialog.swift; sourceTree = "<group>"; };
-		506F423E24F0ED75005F80D9 /* AmigaTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AmigaTypes.hpp; sourceTree = "<group>"; };
 		5072159B25EA698600787591 /* Exception.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Exception.cpp; sourceTree = "<group>"; };
 		5072159C25EA698600787591 /* Exception.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Exception.hpp; sourceTree = "<group>"; };
 		5072159F25EA9AE600787591 /* Chrono.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Chrono.cpp; sourceTree = "<group>"; };
@@ -504,6 +503,7 @@
 		50A6145F260D177100A01428 /* Option.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Option.hpp; sourceTree = "<group>"; };
 		50A61461260DB7F900A01428 /* Parser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Parser.cpp; sourceTree = "<group>"; };
 		50A61462260DB7F900A01428 /* Parser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Parser.hpp; sourceTree = "<group>"; };
+		50A61468260DC2D700A01428 /* HardwareComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardwareComponent.h; sourceTree = "<group>"; };
 		50A64B94257A63A600442964 /* BootBlockImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BootBlockImage.hpp; sourceTree = "<group>"; };
 		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
 		50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperRegisters.cpp; sourceTree = "<group>"; };
@@ -579,7 +579,7 @@
 		50D375DE222C7C6B0040987C /* Blitter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Blitter.hpp; sourceTree = "<group>"; };
 		50D52442227878E900F8959D /* Disk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Disk.h; sourceTree = "<group>"; };
 		50D5244322787D3C00F8959D /* MsgQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MsgQueue.h; sourceTree = "<group>"; };
-		50D661862282BE1800D67D88 /* AmigaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaTypes.h; sourceTree = "<group>"; };
+		50D661862282BE1800D67D88 /* Amiga.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Amiga.h; sourceTree = "<group>"; };
 		50D7CDC22286E968002689F0 /* Joystick.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick.cpp; sourceTree = "<group>"; };
 		50D7CDC32286E968002689F0 /* Joystick.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Joystick.hpp; sourceTree = "<group>"; };
 		50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DmaDebugDialog.xib; sourceTree = "<group>"; };
@@ -732,6 +732,7 @@
 				50AE6F8425D71FBE0004AFBC /* Error.cpp */,
 				50B14C0621EB218E002E32A6 /* AmigaObject.hpp */,
 				50B14C0521EB218E002E32A6 /* AmigaObject.cpp */,
+				50A61468260DC2D700A01428 /* HardwareComponent.h */,
 				50B14C0C21EB3708002E32A6 /* HardwareComponent.hpp */,
 				50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */,
 				50E79BE8232D123000D296FB /* AmigaComponent.hpp */,
@@ -1032,8 +1033,7 @@
 		508FE06021EA318D0043D0E9 /* Emulator */ = {
 			isa = PBXGroup;
 			children = (
-				50D661862282BE1800D67D88 /* AmigaTypes.h */,
-				506F423E24F0ED75005F80D9 /* AmigaTypes.hpp */,
+				50D661862282BE1800D67D88 /* Amiga.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.hpp */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
 				50104E8825ECDAA30047A9AA /* Base */,

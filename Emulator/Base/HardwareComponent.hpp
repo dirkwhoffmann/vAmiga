@@ -10,16 +10,43 @@
 #pragma once
 
 #include "AmigaObject.hpp"
-#include "AmigaTypes.hpp"
 #include "Serialization.hpp"
 #include "Concurrency.hpp"
 #include "Option.hpp"
+#include "Reflection.hpp"
 
 #include <vector>
 #include <iostream>
 #include <iomanip>
 
 namespace va {
+
+#include "HardwareComponent.h"
+
+//
+// Reflection APIs
+//
+
+struct EmulatorStateEnum : Reflection<EmulatorStateEnum, EmulatorState> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < EMULATOR_STATE_COUNT;
+    }
+
+    static const char *prefix() { return "EMULATOR_STATE"; }
+    static const char *key(EmulatorState value)
+    {
+        switch (value) {
+                
+            case EMULATOR_STATE_OFF:      return "OFF";
+            case EMULATOR_STATE_PAUSED:   return "PAUSED";
+            case EMULATOR_STATE_RUNNING:  return "RUNNING";
+            case EMULATOR_STATE_COUNT:    return "???";
+        }
+        return "???";
+    }
+};
 
 /* This class defines the base functionality of all hardware components. It
  * comprises functions for initializing, configuring, and serializing the

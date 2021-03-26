@@ -17,16 +17,6 @@
 // Enumerations
 //
 
-enum_long(EMULATOR_STATE)
-{
-    EMULATOR_STATE_OFF,
-    EMULATOR_STATE_PAUSED,
-    EMULATOR_STATE_RUNNING,
-
-    EMULATOR_STATE_COUNT
-};
-typedef EMULATOR_STATE EmulatorState;
-
 enum_u32(RunLoopControlFlag)
 {
     RL_STOP               = 0b00000001,

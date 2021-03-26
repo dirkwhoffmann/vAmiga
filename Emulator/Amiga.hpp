@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include "AmigaTypes.hpp"
-
 // General
 #include "Option.h"
 #include "HardwareComponent.hpp"
@@ -34,6 +32,8 @@
 #include "ZorroManager.hpp"
 
 namespace va {
+
+#include "Amiga.h"
 
 void threadTerminated(void *thisAmiga);
 void *threadMain(void *thisAmiga);
