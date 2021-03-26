@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Keyboard.h"
+#include "KeyboardTypes.h"
 #include "AmigaComponent.hpp"
 #include "Event.hpp"
 

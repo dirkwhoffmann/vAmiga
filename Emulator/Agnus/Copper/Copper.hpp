@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Copper.h"
+#include "CopperTypes.h"
 
 #include "Event.hpp"
 #include "Memory.hpp"

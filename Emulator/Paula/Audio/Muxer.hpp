@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Muxer.h"
+#include "MuxerTypes.h"
 
 #include "AmigaComponent.hpp"
 #include "AudioStream.hpp"

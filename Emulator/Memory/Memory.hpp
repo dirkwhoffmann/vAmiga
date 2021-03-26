@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include "Memory.h"
+#include "MemoryTypes.h"
 #include "AmigaComponent.hpp"
-#include "RomFile.h"
+#include "RomFileTypes.h"
 #include "Macros.h"
 
 //

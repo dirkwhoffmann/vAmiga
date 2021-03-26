@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "Bus.h"
-#include "Reflection.hpp"
+#include "BusTypes.h"
+#include "Reflection.h"
 
 //
 // Reflection APIs

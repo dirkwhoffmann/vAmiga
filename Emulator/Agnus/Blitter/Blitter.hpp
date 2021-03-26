@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Blitter.h"
+#include "BlitterTypes.h"
 
 #include "AmigaComponent.hpp"
 #include "Memory.hpp"

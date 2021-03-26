@@ -9,12 +9,12 @@
 
 #pragma once
 
-#include "AmigaFile.h"
+#include "AmigaFileTypes.h"
 
 #include "AmigaObject.hpp"
 #include "Checksum.hpp"
 #include "IO.hpp"
-#include "Reflection.hpp"
+#include "Reflection.h"
 
 #include <sstream>
 #include <fstream>

@@ -12,8 +12,8 @@
 #pragma once
 
 #include "Aliases.h"
-#include "Bus.h"
-#include "Event.h"
+#include "BusTypes.h"
+#include "EventTypes.h"
 
 //
 // Enumerations

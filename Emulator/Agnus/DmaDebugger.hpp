@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "DmaDebugger.h"
+#include "DmaDebuggerTypes.h"
 
 #include "Bus.hpp"
 #include "AmigaComponent.hpp"

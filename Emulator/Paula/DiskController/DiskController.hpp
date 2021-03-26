@@ -9,10 +9,10 @@
 
 #pragma once
 
-#include "DiskController.h"
+#include "DiskControllerTypes.h"
 
 #include "AmigaComponent.hpp"
-#include "Reflection.hpp"
+#include "Reflection.h"
 
 //
 // Reflection APIs

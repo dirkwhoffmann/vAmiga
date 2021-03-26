@@ -9,11 +9,11 @@
 
 #pragma once
 
+#include "SamplerTypes.h"
+
 #include "Constants.hpp"
 #include "RingBuffer.hpp"
-#include "Reflection.hpp"
-
-#include "Sampler.h"
+#include "Reflection.h"
 
 //
 // Reflection APIs

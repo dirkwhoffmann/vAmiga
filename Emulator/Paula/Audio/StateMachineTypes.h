@@ -12,8 +12,6 @@
 #pragma once
 
 #include "Aliases.h"
-#include "AudioFilter.h"
-#include "Sampler.h"
 
 //
 // Structures
@@ -21,28 +19,20 @@
 
 typedef struct
 {
-    // Selects how the audio buffer is resampled to match the target frequency
-    SamplingMethod samplingMethod;
-
-    // The selected audio filter
-    FilterType filterType;
-
-    // If set to true, the Amiga can't deactivate the filter
-    bool filterAlwaysOn;
-
-    // Master volume (left and right channel)
-    i64 volL;
-    i64 volR;
-
-    // Channel volumes and pan factors
-    i64 vol[4];
-    i64 pan[4];
+    i8 state;
+    bool dma;
+    u16 audlenLatch;
+    u16 audlen;
+    u16 audperLatch;
+    i32 audper;
+    u16 audvolLatch;
+    u16 audvol;
+    u16 auddat;
 }
-MuxerConfig;
+AudioChannelInfo;
 
 typedef struct
 {
-    long bufferUnderflows;
-    long bufferOverflows;
+    AudioChannelInfo channel[4];
 }
-MuxerStats;
+AudioInfo;

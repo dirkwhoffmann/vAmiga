@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AudioFilter.h"
+#include "AudioFilterTypes.h"
 #include "AmigaComponent.hpp"
 
 //

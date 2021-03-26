@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Mouse.h"
+#include "MouseTypes.h"
 
 #include "Joystick.hpp"
 #include "AmigaComponent.hpp"

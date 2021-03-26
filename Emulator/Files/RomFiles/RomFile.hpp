@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "RomFile.h"
+#include "RomFileTypes.h"
 
 #include "AmigaFile.hpp"
 

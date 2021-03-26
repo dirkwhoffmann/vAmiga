@@ -9,12 +9,12 @@
 
 #pragma once
 
-#include "HardwareComponent.h"
+#include "HardwareComponentTypes.h"
 
 #include "AmigaObject.hpp"
 #include "Serialization.hpp"
 #include "Concurrency.hpp"
-#include "Reflection.hpp"
+#include "Reflection.h"
 
 #include <vector>
 #include <iostream>

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Agnus.h"
+#include "AgnusTypes.h"
 
 #include "AmigaComponent.hpp"
 #include "Beam.hpp"

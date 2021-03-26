@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include "Error.h"
+#include "ErrorTypes.h"
 #include "Exception.hpp"
-#include "Reflection.hpp"
+#include "Reflection.h"
 
 //
 // Reflection APIs

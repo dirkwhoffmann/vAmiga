@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "AmigaTypes.h"
+
 // General
 #include "HardwareComponent.hpp"
 #include "Serialization.hpp"
@@ -29,8 +31,6 @@
 #include "RTC.hpp"
 #include "SerialPort.hpp"
 #include "ZorroManager.hpp"
-
-#include "Amiga.h"
 
 void threadTerminated(void *thisAmiga);
 void *threadMain(void *thisAmiga);

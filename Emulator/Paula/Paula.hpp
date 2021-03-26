@@ -9,8 +9,9 @@
 
 #pragma once
 
-#include "AmigaComponent.hpp"
+#include "PaulaTypes.h"
 
+#include "AmigaComponent.hpp"
 #include "AudioFilter.hpp"
 #include "AudioStream.hpp"
 #include "ChangeRecorder.hpp"
@@ -19,8 +20,6 @@
 #include "StateMachine.hpp"
 #include "TimeDelayed.hpp"
 #include "UART.hpp"
-
-#include "Paula.h"
 
 //
 // Reflection APIs

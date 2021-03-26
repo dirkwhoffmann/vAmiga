@@ -10,7 +10,7 @@
 #pragma once
 
 #include "FSTypes.h"
-#include "Reflection.hpp"
+#include "Reflection.h"
 
 //
 // Reflection APIs

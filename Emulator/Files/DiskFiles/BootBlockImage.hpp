@@ -10,7 +10,7 @@
 #pragma once
 
 #include "BootBlockImage.h"
-#include "Reflection.hpp"
+#include "Reflection.h"
 #include <stddef.h>
 
 struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType> {

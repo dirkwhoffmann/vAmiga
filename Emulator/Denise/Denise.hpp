@@ -9,13 +9,13 @@
 
 #pragma once
 
-#include "Denise.h"
+#include "DeniseTypes.h"
 
 #include "AmigaComponent.hpp"
 #include "Colors.hpp"
 #include "Memory.hpp"
 #include "PixelEngine.hpp"
-#include "Reflection.hpp"
+#include "Reflection.h"
 #include "ScreenRecorder.hpp"
 
 //

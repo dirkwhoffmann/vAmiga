@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Disk.h"
-
+#include "DiskTypes.h"
 #include "HardwareComponent.hpp"
 
 //

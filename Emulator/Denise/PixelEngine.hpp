@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "PixelEngine.h"
+#include "PixelEngineTypes.h"
 
 #include "AmigaComponent.hpp"
 #include "ChangeRecorder.hpp"

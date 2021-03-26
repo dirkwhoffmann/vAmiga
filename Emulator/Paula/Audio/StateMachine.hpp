@@ -9,11 +9,11 @@
 
 #pragma once
 
+#include "StateMachineTypes.h"
+
 #include "AmigaComponent.hpp"
 #include "Sampler.hpp"
 #include "Agnus.hpp"
-
-#include "StateMachine.h"
 
 template <isize nr>
 class StateMachine : public AmigaComponent {

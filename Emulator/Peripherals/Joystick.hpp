@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Joystick.h"
+#include "JoystickTypes.h"
 #include "AmigaComponent.hpp"
 
 //

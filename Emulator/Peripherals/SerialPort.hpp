@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "SerialPort.h"
+#include "SerialPortTypes.h"
 #include "AmigaComponent.hpp"
 
 //

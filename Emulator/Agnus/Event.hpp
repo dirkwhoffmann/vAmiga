@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Aliases.hpp"
-#include "Event.h"
+#include "EventTypes.h"
 
 struct Event
 {

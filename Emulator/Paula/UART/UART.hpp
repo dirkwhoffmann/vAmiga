@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "UART.h"
+#include "UARTTypes.h"
 
 #include "AmigaComponent.hpp"
 #include "Event.hpp"

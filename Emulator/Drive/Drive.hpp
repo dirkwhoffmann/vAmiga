@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Drive.h"
+#include "DriveTypes.h"
 
 #include "AmigaComponent.hpp"
 #include "Disk.hpp"
