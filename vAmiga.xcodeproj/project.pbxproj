@@ -505,6 +505,7 @@
 		50A61470260DCA6200A01428 /* RomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFile.h; sourceTree = "<group>"; };
 		50A61475260DD81000A01428 /* Aliases.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Aliases.hpp; sourceTree = "<group>"; };
 		50A61478260DDC7900A01428 /* Constants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Constants.hpp; sourceTree = "<group>"; };
+		50A61489260DEA5100A01428 /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		50A64B94257A63A600442964 /* BootBlockImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BootBlockImage.hpp; sourceTree = "<group>"; };
 		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
 		50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperRegisters.cpp; sourceTree = "<group>"; };
@@ -767,6 +768,7 @@
 			children = (
 				503990C522D8CCB600035783 /* Beam.hpp */,
 				5015FF3E242BA00F005175D9 /* Frame.hpp */,
+				50A61489260DEA5100A01428 /* Event.h */,
 				5085830523265B3D004F942F /* Event.hpp */,
 				50F924FC2428B8CD00DD91AB /* DDF.hpp */,
 				50F924FB2428B8CD00DD91AB /* DDF.cpp */,

@@ -14,6 +14,10 @@
 #include "Aliases.h"
 #include "Bus.h"
 
+//
+// Enumerations
+//
+
 enum_long(AGNUS_REVISION)
 {
     AGNUS_OCS,              // Revision 8367
@@ -50,10 +54,6 @@ typedef struct
     bool slowRamMirror;
 }
 AgnusConfig;
-
-//
-// Structures
-//
 
 typedef struct
 {

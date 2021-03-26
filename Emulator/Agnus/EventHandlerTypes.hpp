@@ -13,6 +13,7 @@
 
 namespace va {
 
+#include "Event.hpp"
 #include "EventHandlerTypes.h"
 
 #define isPrimarySlot(s) ((s) <= SLOT_SEC)
@@ -62,40 +63,6 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot> {
         }
         return "???";
     }
-    /*
-    static const char *description(EventSlot value)
-    {
-        switch (value) {
-                
-            case SLOT_REG:   return "Registers";
-            case SLOT_RAS:   return "Rasterline";
-            case SLOT_CIAA:  return "CIA A";
-            case SLOT_CIAB:  return "CIA B";
-            case SLOT_BPL:   return "Bitplane DMA";
-            case SLOT_DAS:   return "Other DMA";
-            case SLOT_COP:   return "Copper";
-            case SLOT_BLT:   return "Blitter";
-            case SLOT_SEC:   return "Secondary";
-
-            case SLOT_CH0:   return "Audio channel 0";
-            case SLOT_CH1:   return "Audio channel 1";
-            case SLOT_CH2:   return "Audio channel 2";
-            case SLOT_CH3:   return "Audio channel 3";
-            case SLOT_DSK:   return "Disk Controller";
-            case SLOT_DCH:   return "Disk Change";
-            case SLOT_VBL:   return "Vertical blank";
-            case SLOT_IRQ:   return "Interrupts";
-            case SLOT_IPL:   return "IPL";
-            case SLOT_KBD:   return "Keyboard";
-            case SLOT_TXD:   return "UART out";
-            case SLOT_RXD:   return "UART in";
-            case SLOT_POT:   return "Potentiometer";
-            case SLOT_INS:   return "Inspector";
-            case SLOT_COUNT: return "???";
-        }
-        return "???";
-    }
-    */
 };
 
 }

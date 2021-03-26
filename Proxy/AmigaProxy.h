@@ -22,6 +22,7 @@
 #include "DmaDebugger.h"
 #include "Drive.h"
 #include "Error.h"
+#include "Event.h"
 #include "EventHandlerTypes.h"
 #include "FSTypes.h"
 #include "HardwareComponent.h"

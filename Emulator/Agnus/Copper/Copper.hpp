@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "EventHandlerTypes.hpp"
+#include "Event.hpp"
 #include "Memory.hpp"
 #include "AmigaComponent.hpp"
 #include "Beam.hpp"

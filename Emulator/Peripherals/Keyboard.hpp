@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaComponent.hpp"
-#include "EventHandlerTypes.hpp"
+#include "Event.hpp"
 
 namespace va {
 
