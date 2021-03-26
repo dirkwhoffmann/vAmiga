@@ -935,6 +935,6 @@ private:
     // Class extensions
     //
 
-#include "EventHandlerOld.h"
+#include "EventHandler.h"
 
 };
