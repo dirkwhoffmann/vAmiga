@@ -18,8 +18,6 @@
 #include "Paula.hpp"
 #include "SerialPort.hpp"
 
-namespace va {
-
 void
 Agnus::serviceVblEvent()
 {
@@ -651,5 +649,3 @@ Agnus::serviceRASEvent()
 
 template void Agnus::serviceCIAEvent<0>();
 template void Agnus::serviceCIAEvent<1>();
-
-}

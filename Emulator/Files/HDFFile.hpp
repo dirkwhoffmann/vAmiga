@@ -12,8 +12,6 @@
 #include "DiskFile.hpp"
 #include "FSDevice.hpp"
 
-namespace va {
-
 class Disk;
 
 class HDFFile : public AmigaFile {
@@ -76,5 +74,3 @@ private:
     // Extract the DOS revision number from a certain block
     FSVolumeType dos(isize blockNr);    
 };
-
-}

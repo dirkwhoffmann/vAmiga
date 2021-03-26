@@ -11,8 +11,6 @@
 
 #include "FSBlock.hpp"
 
-namespace va {
-
 struct FSFileHeaderBlock : FSBlock {
                 
     FSFileHeaderBlock(FSPartition &p, Block nr);
@@ -81,5 +79,3 @@ struct FSFileHeaderBlock : FSBlock {
     
     u32 hashValue() const override { return getName().hashValue(); }
 };
-
-}

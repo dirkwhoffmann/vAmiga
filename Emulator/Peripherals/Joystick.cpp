@@ -14,8 +14,6 @@
 #include "ControlPort.hpp"
 #include "IO.hpp"
 
-namespace va {
-
 const char *
 Joystick::getDescription() const
 {
@@ -188,6 +186,4 @@ Joystick::execute()
         }
         scheduleNextShot();
     }
-}
-
 }

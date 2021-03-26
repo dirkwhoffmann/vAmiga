@@ -9,12 +9,10 @@
 
 #pragma once
 
+#include "PixelEngine.h"
+
 #include "AmigaComponent.hpp"
 #include "ChangeRecorder.hpp"
-
-namespace va {
-
-#include "PixelEngine.h"
 
 //
 // Reflection APIs
@@ -280,5 +278,3 @@ public:
     
     void hide(isize line, u16 layer, u8 alpha);
 };
-
-}

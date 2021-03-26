@@ -14,8 +14,6 @@
 #include "Disk.hpp"
 #include "IO.hpp"
 
-namespace va {
-
 bool
 IMGFile::isCompatiblePath(const string &path)
 {
@@ -329,6 +327,4 @@ IMGFile::decodeSector(u8 *dst, u8 *src)
 {
     Disk::decodeMFM(dst, src, 512);
     return true;
-}
-
 }

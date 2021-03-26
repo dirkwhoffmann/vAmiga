@@ -19,8 +19,6 @@
 #include "Paula.hpp"
 #include "SerialPort.hpp"
 
-namespace va {
-
 #define CIA_DEBUG (nr == 0 ? CIAA_DEBUG : CIAB_DEBUG)
 
 CIA::CIA(int n, Amiga& ref) : AmigaComponent(ref), nr(n)
@@ -1035,6 +1033,4 @@ CIAB::updatePB()
         */
         diskController.PRBdidChange(oldPB, PB);
     }
-}
-
 }

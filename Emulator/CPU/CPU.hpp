@@ -9,13 +9,11 @@
 
 #pragma once
 
+#include "CPU.h"
+
 #include "AmigaComponent.hpp"
 #include "Moira.h"
 #include "Macros.h"
-
-namespace va {
-
-#include "CPU.h"
 
 class CPU : public moira::Moira {
 
@@ -185,5 +183,3 @@ public:
     const char *disassembleInstr(isize *len);
     const char *disassembleWords(isize len);
 };
-
-}

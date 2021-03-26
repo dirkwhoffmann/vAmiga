@@ -16,8 +16,6 @@
 #include "MsgQueue.hpp"
 #include "Oscillator.hpp"
 
-namespace va {
-
 Mouse::Mouse(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
 {
     config.pullUpResistors = true;
@@ -312,6 +310,4 @@ ShakeDetector::isShakingRel(double dx) {
     }
     
     return false;
-}
-
 }

@@ -10,8 +10,6 @@
 #include "config.h"
 #include "Command.hpp"
 
-namespace va {
-
 Command *
 Command::add(std::vector<string> tokens,
              const string &a1,
@@ -194,6 +192,4 @@ Command::usage()
     }
     
     return tokens() + " " + firstArg + " " + otherArgs;
-}
-
 }

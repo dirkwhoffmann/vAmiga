@@ -9,11 +9,9 @@
 
 #pragma once
 
-#include "AmigaFile.hpp"
-
-namespace va {
-
 #include "RomFile.h"
+
+#include "AmigaFile.hpp"
 
 //
 // Reflection APIs
@@ -140,5 +138,3 @@ public:
      */
     void decrypt() throws;
 };
-
-}

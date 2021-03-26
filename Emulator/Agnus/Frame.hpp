@@ -11,8 +11,6 @@
 
 #include "Aliases.hpp"
 
-namespace va {
-
 struct Frame
 {
     // Frame count
@@ -56,5 +54,3 @@ struct Frame
         if (laceBit) { lof = !lof; }
     }
 };
-
-}

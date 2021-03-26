@@ -9,11 +9,8 @@
 
 #pragma once
 
-#include "AmigaComponent.hpp"
-
-namespace va {
-
 #include "RTC.h"
+#include "AmigaComponent.hpp"
 
 //
 // Reflection APIs
@@ -203,5 +200,3 @@ private:
     void registers2timeOki(tm *t);
     void registers2timeRicoh(tm *t);
 };
-
-}

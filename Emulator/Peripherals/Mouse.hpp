@@ -9,13 +9,11 @@
 
 #pragma once
 
+#include "Mouse.h"
+
 #include "Joystick.hpp"
 #include "AmigaComponent.hpp"
 #include "Chrono.hpp"
-
-namespace va {
-
-#include "Mouse.h"
 
 class ShakeDetector {
     
@@ -191,5 +189,3 @@ public:
     // Performs periodic actions for this device
     void execute();
 };
-
-}

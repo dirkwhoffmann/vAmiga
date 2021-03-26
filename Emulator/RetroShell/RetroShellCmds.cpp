@@ -19,8 +19,6 @@
 #include <fstream>
 #include <sstream>
 
-namespace va {
-
 //
 // Top-level commands
 //
@@ -852,6 +850,4 @@ template <> void
 RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 {
     dump(*amiga.df[param], Dump::State);
-}
-
 }

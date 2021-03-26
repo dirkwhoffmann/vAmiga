@@ -12,8 +12,6 @@
 #include "DiskFile.hpp"
 #include "FSDevice.hpp"
 
-namespace va {
-
 #define ADFSIZE_35_DD     901120  //  880 KB
 #define ADFSIZE_35_DD_81  912384  //  891 KB (1 extra cylinder)
 #define ADFSIZE_35_DD_82  923648  //  902 KB (2 extra cylinders)
@@ -119,5 +117,3 @@ public:
     
     void dumpSector(Sector s);
 };
-
-}

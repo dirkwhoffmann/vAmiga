@@ -15,8 +15,6 @@
 
 #include <string.h>
 
-namespace va {
-
 FSDataBlock::FSDataBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
     data = new u8[p.dev.bsize]();
@@ -164,6 +162,4 @@ isize
 FFSDataBlock::dsize() const
 {
     return bsize() - headerSize();
-}
-
 }

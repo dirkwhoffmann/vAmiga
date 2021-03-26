@@ -9,11 +9,9 @@
 
 #pragma once
 
-#include "HardwareComponent.hpp"
-
-namespace va {
-
 #include "Disk.h"
+
+#include "HardwareComponent.hpp"
 
 //
 // Reflection APIs
@@ -250,5 +248,3 @@ public:
     // Repeats the MFM data inside the track buffer to ease decoding
     void repeatTracks(); 
 };
-
-}

@@ -8,9 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "Types.h"
-
-namespace va {
-
 #include "Constants.h"
 
 // Returns a printable name for a custom register
@@ -18,5 +15,3 @@ const char *regName(u32 addr);
 
 // Returns a printable name for a CIA register
 const char *ciaRegName(u32 addr);
-
-}

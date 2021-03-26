@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "HardwareComponent.h"
+
 #include "AmigaObject.hpp"
 #include "Serialization.hpp"
 #include "Concurrency.hpp"
@@ -17,10 +19,6 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
-
-namespace va {
-
-#include "HardwareComponent.h"
 
 //
 // Reflection APIs
@@ -430,6 +428,4 @@ applyToHardResetItems(writer); \
 applyToResetItems(writer); \
 debug(SNP_DEBUG, "Serialized to %zu bytes\n", writer.ptr - buffer); \
 return (isize)(writer.ptr - buffer); \
-}
-
 }

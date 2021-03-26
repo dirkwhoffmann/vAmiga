@@ -13,8 +13,6 @@
 #include "FSDevice.hpp"
 #include "FSPartition.hpp"
 
-namespace va {
-
 FSBitmapBlock::FSBitmapBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
     data = new u8[p.dev.bsize]();
@@ -54,6 +52,4 @@ FSBitmapBlock::dump() const
         }
     }
     printf("         Free : %zd blocks\n", count);
-}
-
 }

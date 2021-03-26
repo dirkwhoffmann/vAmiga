@@ -9,7 +9,3 @@
 
 #include "config.h"
 #include "AmigaObject.hpp"
-
-namespace va {
-
-}

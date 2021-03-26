@@ -12,8 +12,6 @@
 #include "StateMachine.hpp"
 #include "Paula.hpp"
 
-namespace va {
-
 template <isize nr>
 StateMachine<nr>::StateMachine(Amiga& ref) : AmigaComponent(ref)
 {
@@ -432,5 +430,3 @@ template void StateMachine<0>::move_011_010();
 template void StateMachine<1>::move_011_010();
 template void StateMachine<2>::move_011_010();
 template void StateMachine<3>::move_011_010();
-
-}

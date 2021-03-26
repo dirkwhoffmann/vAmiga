@@ -13,8 +13,6 @@
 #include "Sampler.hpp"
 #include "Agnus.hpp"
 
-namespace va {
-
 #include "StateMachine.h"
 
 template <isize nr>
@@ -253,5 +251,3 @@ public:
 
     void serviceEvent();
 };
-
-}

@@ -20,8 +20,6 @@
 #include "TimeDelayed.hpp"
 #include "UART.hpp"
 
-namespace va {
-
 #include "Paula.h"
 
 //
@@ -322,5 +320,3 @@ private:
     // Computes the interrupt level of a pending interrupt.
     u8 interruptLevel();
 };
-
-}

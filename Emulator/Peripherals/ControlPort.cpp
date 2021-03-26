@@ -13,8 +13,6 @@
 #include "IO.hpp"
 #include "Paula.hpp"
 
-namespace va {
-
 ControlPort::ControlPort(Amiga& ref, PortNr portNr) : AmigaComponent(ref), nr(portNr)
 {
     assert_enum(PortNr, portNr);
@@ -113,6 +111,4 @@ ControlPort::changePra(u8 &pra) const
         joystick.changePra(pra);
         return;
     }
-}
-
 }

@@ -9,12 +9,10 @@
 
 #pragma once
 
+#include "MsgQueue.h"
+
 #include "HardwareComponent.hpp"
 #include "RingBuffer.hpp"
-
-namespace va {
-
-#include "MsgQueue.h"
 
 //
 // Reflection APIs
@@ -145,5 +143,3 @@ public:
     // Writes a message into the queue and propagates it to all listeners
     void put(MsgType type, long data = 0);
 };
-
-}

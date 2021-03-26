@@ -10,8 +10,6 @@
 #include "config.h"
 #include "Paula.hpp"
 
-namespace va {
-
 template <isize nr> void
 StateMachine<nr>::pokeAUDxLEN(u16 value)
 {
@@ -111,5 +109,3 @@ template void StateMachine<0>::pokeAUDxDAT(u16 value);
 template void StateMachine<1>::pokeAUDxDAT(u16 value);
 template void StateMachine<2>::pokeAUDxDAT(u16 value);
 template void StateMachine<3>::pokeAUDxDAT(u16 value);
-
-}

@@ -12,8 +12,6 @@
 #include "Aliases.hpp"
 #include "Constants.hpp"
 
-namespace va {
-
 struct Beam
 {
     // Counters for the vertical and horizontal beam position
@@ -99,5 +97,3 @@ struct Beam
         return *this;
     }
 };
-
-}

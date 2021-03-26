@@ -9,15 +9,13 @@
 
 #pragma once
 
+#include "Muxer.h"
+
 #include "AmigaComponent.hpp"
 #include "AudioStream.hpp"
 #include "AudioFilter.hpp"
 #include "Chrono.hpp"
 #include "Sampler.hpp"
-
-namespace va {
-
-#include "Muxer.h"
 
 /* Architecture of the audio pipeline
  *
@@ -240,5 +238,3 @@ public:
      */
     SampleType *nocopy(isize n);
 };
-
-}

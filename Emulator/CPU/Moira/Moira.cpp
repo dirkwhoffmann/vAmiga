@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <algorithm>
 
-namespace va::moira {
+namespace moira {
 
 #include "MoiraInit_cpp.h"
 #include "MoiraALU_cpp.h"

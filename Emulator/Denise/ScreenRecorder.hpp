@@ -12,8 +12,6 @@
 #include "AmigaComponent.hpp"
 #include "Muxer.hpp"
 
-namespace va {
-
 class ScreenRecorder : public AmigaComponent {
 
     //
@@ -187,5 +185,3 @@ public:
     // Records a single frame
     void vsyncHandler(Cycle target);
 };
-
-}

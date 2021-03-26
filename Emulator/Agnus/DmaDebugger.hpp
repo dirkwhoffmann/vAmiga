@@ -9,13 +9,11 @@
 
 #pragma once
 
+#include "DmaDebugger.h"
+
 #include "Bus.hpp"
 #include "AmigaComponent.hpp"
 #include "Colors.hpp"
-
-namespace va {
-
-#include "DmaDebugger.h"
 
 //
 // Reflection APIs
@@ -153,5 +151,3 @@ public:
     // Cleans up some texture data at the end of each frame
     void vSyncHandler();
 };
-
-}

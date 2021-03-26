@@ -8,15 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+
 #include "ScreenRecorder.hpp"
-
 #include "IO.hpp"
-
 #include "Denise.hpp"
 #include "MsgQueue.hpp"
 #include "Paula.hpp"
-
-namespace va {
 
 ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 {
@@ -312,6 +309,4 @@ ScreenRecorder::vsyncHandler(Cycle target)
         assert(audioPipe != -1);
         (void)write(audioPipe, (u8 *)samples, 2 * sizeof(float) * samplesPerFrame);
     }
-}
-
 }

@@ -17,8 +17,6 @@
  *   github.com/PR77/A500_ACCEL_RAM_IDE-Rev-1/blob/master/Logic/RAM/A500_RAM.v
  */
 
-namespace va {
-
 class ZorroManager : public AmigaComponent {
     
     // Current configuration state (0 = unconfigured)
@@ -83,5 +81,3 @@ public:
     u8 spypeekFastRamDevice(u32 addr) const;
     void pokeFastRamDevice(u32 addr, u8 value);
 };
-
-}

@@ -10,8 +10,6 @@
 #include "config.h"
 #include "HardwareComponent.hpp"
 
-namespace va {
-
 HardwareComponent::~HardwareComponent()
 {
     debug(RUN_DEBUG, "Terminated\n");
@@ -286,6 +284,4 @@ HardwareComponent::setDebug(bool enable)
 
      // Enable debug mode for this component
      _setDebug(enable);
-}
-
 }

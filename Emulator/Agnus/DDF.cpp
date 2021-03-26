@@ -8,11 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "DDF.hpp"
 #include <algorithm>
-
-namespace va {
 
 template <bool hires> void
 DDF<hires>::compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1)
@@ -62,5 +59,3 @@ DDF<hires>::compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll)
 
 template void DDF<true>::compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1);
 template void DDF<false>::compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1);
-
-}

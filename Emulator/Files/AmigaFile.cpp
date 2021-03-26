@@ -22,8 +22,6 @@
 #include "ExtendedRomFile.hpp"
 #include "string.h"
 
-namespace va {
-
 AmigaFile::AmigaFile(isize capacity)
 {
     data = new u8[capacity]();
@@ -194,6 +192,4 @@ AmigaFile::writeToBuffer(u8 *buf, ErrorCode *err)
     try { return writeToBuffer(buf); }
     catch (VAError &exception) { *err = exception.data; }
     return 0;
-}
-
 }

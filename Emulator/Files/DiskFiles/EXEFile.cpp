@@ -14,8 +14,6 @@
 #include "FSDevice.hpp"
 #include "IO.hpp"
 
-namespace va {
-
 bool
 EXEFile::isCompatiblePath(const string &path)
 {
@@ -97,6 +95,4 @@ EXEFile::readFromStream(std::istream &stream)
     
     if (!adf) throw VAError(ERROR_UNKNOWN);
     return result;
-}
-
 }

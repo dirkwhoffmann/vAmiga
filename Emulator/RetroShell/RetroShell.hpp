@@ -12,8 +12,6 @@
 #include "AmigaComponent.hpp"
 #include "Interpreter.hpp"
 
-namespace va {
-
 class RetroShell : public AmigaComponent {
 
     // Interpreter for commands typed into the console window
@@ -167,5 +165,3 @@ private:
     void dump(HardwareComponent &component, Dump::Category category);
 
 };
-
-}

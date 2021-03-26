@@ -13,8 +13,6 @@
 #include "RetroShell.hpp"
 #include <sstream>
 
-namespace va {
-
 Interpreter::Interpreter(Amiga &ref) : AmigaComponent(ref)
 {
     registerInstructions();
@@ -238,6 +236,4 @@ Interpreter::help(Command& current)
         }
         retroShell << '\n';
     }
-}
-
 }

@@ -23,8 +23,6 @@
 #include "RTC.hpp"
 #include "ZorroManager.hpp"
 
-namespace va {
-
 Memory::Memory(Amiga& ref) : AmigaComponent(ref)
 {
     memset(&config, 0, sizeof(config));
@@ -2502,5 +2500,3 @@ template const char *Memory::ascii <ACCESSOR_AGNUS> (u32 addr);
 
 template const char *Memory::hex <ACCESSOR_CPU> (u32 addr, isize bytes);
 template const char *Memory::hex <ACCESSOR_AGNUS> (u32 addr, isize bytes);
-
-}

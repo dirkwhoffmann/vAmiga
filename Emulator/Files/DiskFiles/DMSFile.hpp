@@ -11,8 +11,6 @@
 
 #include "ADFFile.hpp"
 
-namespace va {
-
 class DMSFile : public DiskFile {
         
 public:
@@ -56,5 +54,3 @@ public:
     void readSector(u8 *target, isize t, isize s) const override { return adf->readSector(target, t, s); }
     bool encodeDisk(class Disk *disk) override { return adf->encodeDisk(disk); }
 };
-
-}

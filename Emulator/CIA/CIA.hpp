@@ -9,12 +9,10 @@
 
 #pragma once
 
+#include "CIA.h"
+
 #include "AmigaComponent.hpp"
 #include "TOD.hpp"
-
-namespace va {
-
-#include "CIA.h"
 
 //
 // Reflection APIs
@@ -611,5 +609,3 @@ private:
     u8 portBexternal() const override;
     void updatePB() override;
 };
-
-}

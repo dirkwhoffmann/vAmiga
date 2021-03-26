@@ -24,8 +24,6 @@
 
 #include <string.h>
 
-namespace va {
-
 FSBlock *
 FSBlock::makeWithType(FSPartition &p, Block nr, FSBlockType type)
 {
@@ -240,6 +238,4 @@ isize
 FSBlock::getMaxDataBlockRefs() const
 {
     return bsize() / 4 - 56;
-}
-
 }

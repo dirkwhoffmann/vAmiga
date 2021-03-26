@@ -11,8 +11,6 @@
 
 #include "FSBlock.hpp"
 
-namespace va {
-
 struct FSUserDirBlock : FSBlock {
                 
     FSUserDirBlock(FSPartition &p, Block nr);
@@ -56,5 +54,3 @@ struct FSUserDirBlock : FSBlock {
     isize hashTableSize() const override       { return 72; }
     u32 hashValue() const override             { return getName().hashValue(); }
 };
-
-}

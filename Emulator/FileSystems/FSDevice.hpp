@@ -28,8 +28,6 @@
 #include <stack>
 #include <set>
 
-namespace va {
-
 /* This class provides the basic functionality of the Amiga File Systems OFS
  * and FFS. Starting from an empty volume, files can be added or removed,
  * and boot blocks can be installed. Furthermore, functionality is provided to
@@ -352,5 +350,3 @@ public:
     // Exports the volume to a directory of the host file system
     ErrorCode exportDirectory(const char *path);
 };
-
-}

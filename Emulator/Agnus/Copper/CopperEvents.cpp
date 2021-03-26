@@ -12,8 +12,6 @@
 #include "Copper.hpp"
 #include "Agnus.hpp"
 
-namespace va {
-
 void
 Copper::serviceEvent(EventID id)
 {
@@ -307,6 +305,4 @@ void
 Copper::reschedule(int delay)
 {
     agnus.rescheduleRel<SLOT_COP>(DMA_CYCLES(delay));
-}
-
 }

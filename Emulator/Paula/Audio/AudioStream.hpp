@@ -13,8 +13,6 @@
 #include "Concurrency.hpp"
 #include "RingBuffer.hpp"
 
-namespace va {
-
 /* About the AudioStream
  *
  * The audio stream is the last element in the audio pipeline. It is a temporary
@@ -185,5 +183,3 @@ public:
     float draw(u32 *buffer, isize width, isize height,
                bool left, float highestAmplitude, u32 color);
 };
-
-}

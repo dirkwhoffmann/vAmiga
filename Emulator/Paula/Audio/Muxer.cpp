@@ -18,8 +18,6 @@
 
 #include <math.h>
 
-namespace va {
-
 Muxer::Muxer(Amiga& ref) : AmigaComponent(ref)
 {
     subComponents = std::vector<HardwareComponent *> {
@@ -485,6 +483,4 @@ Muxer::nocopy(isize n)
         
     stream.unlock();
     return addr;
-}
-
 }

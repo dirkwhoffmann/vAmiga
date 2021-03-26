@@ -16,8 +16,6 @@
 #include "MsgQueue.hpp"
 #include "PixelEngine.hpp"
 
-namespace va {
-
 DmaDebugger::DmaDebugger(Amiga &ref) : AmigaComponent(ref)
 {
     // By default all DMA channels are visualized, except the CPU channel
@@ -348,6 +346,4 @@ DmaDebugger::vSyncHandler()
             ptr[row * HPIXELS + col] = PixelEngine::rgbaVBlank;
         }
     }
-}
-
 }

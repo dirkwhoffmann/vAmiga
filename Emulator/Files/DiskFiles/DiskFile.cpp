@@ -16,8 +16,6 @@
 #include "EXEFile.hpp"
 #include "Folder.hpp"
 
-namespace va {
-
 DiskFile *
 DiskFile::make(const string &path)
 {
@@ -119,6 +117,4 @@ void
 DiskFile::decodeDisk(class Disk *disk)
 {
     assert(false);
-}
-
 }

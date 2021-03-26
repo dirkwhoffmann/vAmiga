@@ -13,8 +13,6 @@
 #include "IO.hpp"
 #include "string.h"
 
-namespace va {
-
 HDFFile::HDFFile()
 {
 }
@@ -150,6 +148,4 @@ HDFFile::dos(isize blockNr)
     }
 
     return (FSVolumeType)p[3];
-}
-
 }

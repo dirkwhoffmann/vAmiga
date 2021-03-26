@@ -9,12 +9,9 @@
 
 #pragma once
 
+#include "Keyboard.h"
 #include "AmigaComponent.hpp"
 #include "Event.hpp"
-
-namespace va {
-
-#include "Keyboard.h"
 
 //
 // Reflection APIs
@@ -211,5 +208,3 @@ private:
     // Sends a sync pulse to the Amiga
     void sendSyncPulse();
 };
-
-}

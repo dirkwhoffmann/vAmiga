@@ -11,8 +11,6 @@
 
 #include "DiskFile.hpp"
 
-namespace va {
-
 /* This class is a dummy class for detecting extended ADFs. Once the emulator
  * detects such a file, it tells the user that this format is not supported.
  */
@@ -62,5 +60,3 @@ public:
     void readSector(u8 *target, isize s) const override { assert(false); }
     void readSector(u8 *target, isize t, isize s) const override { assert(false); }
 };
-
-}

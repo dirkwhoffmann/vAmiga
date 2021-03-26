@@ -8,14 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Blitter.hpp"
 
+#include "Blitter.hpp"
 #include "Agnus.hpp"
 #include "Checksum.hpp"
 #include "Memory.hpp"
 #include "Paula.hpp"
-
-namespace va {
 
 void
 Blitter::initFastBlitter()
@@ -366,6 +364,4 @@ Blitter::doFastLineBlit()
     bltcpt = bltcpt_local & agnus.ptrMask;
     bltdpt = bltdpt_local & agnus.ptrMask;
     bzero  = bzero_local == 0;
-}
-
 }

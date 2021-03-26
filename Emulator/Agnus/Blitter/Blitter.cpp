@@ -14,8 +14,6 @@
 #include "Checksum.hpp"
 #include "IO.hpp"
 
-namespace va {
-
 Blitter::Blitter(Amiga& ref) : AmigaComponent(ref)
 {
     // Initialize fill pattern tables    
@@ -667,6 +665,4 @@ Blitter::endBlit()
     
     // Let the Copper know about the termination
     copper.blitterDidTerminate();
-}
-
 }

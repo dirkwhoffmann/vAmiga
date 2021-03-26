@@ -12,8 +12,6 @@
 #include "Copper.hpp"
 #include "Agnus.hpp"
 
-namespace va {
-
 void
 Copper::pokeCOPCON(u16 value)
 {
@@ -158,5 +156,3 @@ template void Copper::pokeCOPJMP1<ACCESSOR_CPU>();
 template void Copper::pokeCOPJMP1<ACCESSOR_AGNUS>();
 template void Copper::pokeCOPJMP2<ACCESSOR_CPU>();
 template void Copper::pokeCOPJMP2<ACCESSOR_AGNUS>();
-
-}

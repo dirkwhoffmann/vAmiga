@@ -13,8 +13,6 @@
 #include "FSDevice.hpp"
 #include "FSPartition.hpp"
 
-namespace va {
-
 FSRootBlock::FSRootBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
     data = new u8[bsize()]();
@@ -143,6 +141,4 @@ FSRootBlock::addBitmapBlockRefs(std::vector<Block> &refs)
     }
     
     return it == refs.end();
-}
-
 }

@@ -11,8 +11,6 @@
 
 #include "RingBuffer.hpp"
 
-namespace va {
-
 enum RegChangeID : i32
 {
     SET_NONE,
@@ -145,5 +143,3 @@ struct RegChangeRecorder : public util::SortedRingBuffer<RegChange, capacity>
         return this->isEmpty() ? NEVER : this->keys[this->r];
     }
 };
-
-}

@@ -13,8 +13,6 @@
 #include "RingBuffer.hpp"
 #include "Reflection.hpp"
 
-namespace va {
-
 #include "Sampler.h"
 
 //
@@ -77,5 +75,3 @@ struct Sampler : util::RingBuffer <TaggedSample, VPOS_CNT * HPOS_CNT> {
      */
     template <SamplingMethod method> i16 interpolate(Cycle clock);
 };
-
-}

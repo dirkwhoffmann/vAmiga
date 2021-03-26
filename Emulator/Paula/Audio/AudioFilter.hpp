@@ -9,11 +9,8 @@
 
 #pragma once
 
-#include "AmigaComponent.hpp"
-
-namespace va {
-
 #include "AudioFilter.h"
+#include "AmigaComponent.hpp"
 
 //
 // Reflection APIs
@@ -119,5 +116,3 @@ public:
     // Inserts a sample into the filter pipeline
     float apply(float sample);
 };
-    
-}

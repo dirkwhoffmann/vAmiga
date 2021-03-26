@@ -9,12 +9,10 @@
 
 #pragma once
 
+#include "DiskController.h"
+
 #include "AmigaComponent.hpp"
 #include "Reflection.hpp"
-
-namespace va {
-
-#include "DiskController.h"
 
 //
 // Reflection APIs
@@ -396,5 +394,3 @@ public:
     void performTurboRead(Drive *drive);
     void performTurboWrite(Drive *drive);
 };
-
-}

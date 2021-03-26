@@ -15,8 +15,6 @@
 #include "Error.hpp"
 #include "Parser.hpp"
 
-namespace va {
-
 typedef std::list<string> Arguments;
 
 enum class Token
@@ -133,5 +131,3 @@ public:
     void help(Command &command);
 
 };
-
-}

@@ -11,8 +11,6 @@
 
 #include "AmigaFile.hpp"
 
-namespace va {
-
 class ExtendedRomFile : public AmigaFile {
 
 private:
@@ -49,5 +47,3 @@ public:
 
     FileType type() const override { return FILETYPE_EXTENDED_ROM; }
 };
-
-}

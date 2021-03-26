@@ -13,8 +13,6 @@
 #include <list>
 #include <vector>
 
-namespace va {
-
 class RetroShell;
 
 typedef std::list<string> Arguments;
@@ -87,5 +85,3 @@ struct Command {
     // Returns a syntax string for this command
     string usage();
 };
-
-}

@@ -16,8 +16,6 @@ extern "C" {
 unsigned short extractDMS(FILE *fi, FILE *fo);
 }
 
-namespace va {
-
 bool
 DMSFile::isCompatiblePath(const string &path)
 {
@@ -66,6 +64,4 @@ DMSFile::readFromStream(std::istream &stream)
     
     if (!adf) throw VAError(ERROR_UNKNOWN);
     return result;
-}
-
 }

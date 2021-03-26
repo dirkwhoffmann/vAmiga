@@ -13,8 +13,6 @@
 #include "Agnus.hpp"
 #include "ControlPort.hpp"
 
-namespace va {
-
 void
 Denise::pokeDMACON(u16 oldValue, u16 newValue)
 {
@@ -423,5 +421,3 @@ template void Denise::pokeCOLORxx<ACCESSOR_CPU, 30>(u16 value);
 template void Denise::pokeCOLORxx<ACCESSOR_AGNUS, 30>(u16 value);
 template void Denise::pokeCOLORxx<ACCESSOR_CPU, 31>(u16 value);
 template void Denise::pokeCOLORxx<ACCESSOR_AGNUS, 31>(u16 value);
-
-}

@@ -9,13 +9,10 @@
 
 #pragma once
 
+#include "Memory.h"
 #include "AmigaComponent.hpp"
 #include "RomFile.h"
 #include "Macros.h"
-
-namespace va {
-
-#include "Memory.h"
 
 //
 // Reflection APIs
@@ -610,5 +607,3 @@ public:
     // Returns a certain amount of bytes as a string containing hex words
     template <Accessor A> const char *hex(u32 addr, isize bytes);
 };
-
-}

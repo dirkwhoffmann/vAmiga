@@ -13,8 +13,6 @@
 #include "ControlPort.hpp"
 #include "CPU.hpp"
 
-namespace va {
-
 void
 Paula::serviceIrqEvent()
 {
@@ -123,6 +121,4 @@ Paula::servicePotEvent(EventID id)
         default:
             assert(false);
     }
-}
-
 }

@@ -23,8 +23,7 @@
 #include "RomFile.hpp"
 #include "Snapshot.hpp"
 
-using namespace va;
-using namespace va::moira;
+using namespace moira;
 
 //
 // Base Proxy

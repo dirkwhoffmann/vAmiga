@@ -9,13 +9,11 @@
 
 #pragma once
 
+#include "Blitter.h"
+
 #include "AmigaComponent.hpp"
 #include "Memory.hpp"
 #include "Macros.h"
-
-namespace va {
-
-#include "Blitter.h"
 
 /* The Blitter supports three accuracy levels:
  *
@@ -491,5 +489,3 @@ private:
     void doBarrelShifterA();
     void doBarrelShifterB();
 };
-
-}

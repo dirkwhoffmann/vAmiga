@@ -12,8 +12,6 @@
 #include "Blitter.hpp"
 #include "Agnus.hpp"
 
-namespace va {
-
 void
 Blitter::serviceEvent()
 {
@@ -73,6 +71,4 @@ Blitter::serviceEvent()
             assert(false);
             break;
     }
-}
-
 }

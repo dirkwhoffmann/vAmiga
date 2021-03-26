@@ -10,11 +10,7 @@
 #include "config.h"
 #include "Error.hpp"
 
-namespace va {
-
 const char *
 VAError::what() const throw() {
     return  ErrorCodeEnum::key(data);
-}
-
 }

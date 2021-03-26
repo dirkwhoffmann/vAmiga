@@ -9,13 +9,10 @@
 
 #pragma once
 
+#include "ControlPort.h"
 #include "AmigaComponent.hpp"
 #include "Joystick.hpp"
 #include "Mouse.hpp"
-
-namespace va {
-
-#include "ControlPort.h"
 
 //
 // Reflection APIs
@@ -181,5 +178,3 @@ public:
     // Modifies the PRA bits of CIA A according to the connected device
     void changePra(u8 &pra) const;
 };
-
-}

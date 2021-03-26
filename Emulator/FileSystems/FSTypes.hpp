@@ -9,11 +9,8 @@
 
 #pragma once
 
-#include "Reflection.hpp"
-
-namespace va {
-
 #include "FSTypes.h"
+#include "Reflection.hpp"
 
 //
 // Reflection APIs
@@ -130,5 +127,3 @@ struct FSItemTypeEnum : util::Reflection<FSItemTypeEnum, FSItemType> {
         return "???";
     }
 };
-
-}

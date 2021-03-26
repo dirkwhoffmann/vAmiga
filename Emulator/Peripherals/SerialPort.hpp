@@ -9,11 +9,8 @@
 
 #pragma once
 
-#include "AmigaComponent.hpp"
-
-namespace va {
-
 #include "SerialPort.h"
+#include "AmigaComponent.hpp"
 
 //
 // Reflection APIs
@@ -168,5 +165,3 @@ private:
 
     void setPort(u32 mask, bool value);
 };
-
-}

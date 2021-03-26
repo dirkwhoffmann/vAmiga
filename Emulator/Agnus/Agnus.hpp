@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "Agnus.h"
+
 #include "AmigaComponent.hpp"
 #include "Beam.hpp"
 #include "Blitter.hpp"
@@ -20,10 +22,6 @@
 #include "Frame.hpp"
 #include "Memory.hpp"
 #include "Macros.h"
-
-namespace va {
-
-#include "Agnus.h"
 
 #define isPrimarySlot(s) ((s) <= SLOT_SEC)
 #define isSecondarySlot(s) ((s) > SLOT_SEC && (s) < SLOT_COUNT)
@@ -1046,5 +1044,3 @@ private:
 #include "EventHandler.hpp"
 
 };
-
-}

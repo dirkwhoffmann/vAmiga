@@ -12,8 +12,6 @@
 #include "FSBlock.hpp"
 #include "BootBlockImage.hpp"
 
-namespace va {
-
 struct FSBootBlock : FSBlock {
         
     FSBootBlock(FSPartition &p, Block nr);
@@ -41,5 +39,3 @@ struct FSBootBlock : FSBlock {
 
     void writeBootBlock(BootBlockId id, isize page);
 };
-
-}

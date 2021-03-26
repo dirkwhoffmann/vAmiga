@@ -12,7 +12,7 @@
 #include <string.h>
 #include <stdio.h>
 
-namespace va::moira {
+namespace moira {
 
 //
 // Guard

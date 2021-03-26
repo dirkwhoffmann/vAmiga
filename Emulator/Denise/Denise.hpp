@@ -9,16 +9,14 @@
 
 #pragma once
 
+#include "Denise.h"
+
 #include "AmigaComponent.hpp"
 #include "Colors.hpp"
 #include "Memory.hpp"
 #include "PixelEngine.hpp"
 #include "Reflection.hpp"
 #include "ScreenRecorder.hpp"
-
-namespace va {
-
-#include "Denise.h"
 
 //
 // Reflection APIs
@@ -631,5 +629,3 @@ public:
     void dumpBuffer(const u8 *buffer, isize length) const;
 
 };
-
-}

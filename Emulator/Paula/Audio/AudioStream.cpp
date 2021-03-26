@@ -12,8 +12,6 @@
 #include "AudioStream.hpp"
 #include <algorithm>
 
-namespace va {
-
 void
 Volume::shift()
 {
@@ -156,5 +154,3 @@ template void AudioStream<SampleType>::alignWritePtr();
 template void AudioStream<SampleType>::copy(void *, isize, Volume &);
 template void AudioStream<SampleType>::copy(void *, void *, isize, Volume &);
 template float AudioStream<SampleType>::draw(u32 *, isize, isize, bool, float, u32);
-
-}

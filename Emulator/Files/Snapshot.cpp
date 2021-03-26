@@ -13,8 +13,6 @@
 #include "Amiga.hpp"
 #include "IO.hpp"
 
-namespace va {
-
 Thumbnail *
 Thumbnail::makeWithAmiga(Amiga *amiga, isize dx, isize dy)
 {
@@ -99,6 +97,4 @@ void
 Snapshot::takeScreenshot(Amiga &amiga)
 {
     ((SnapshotHeader *)data)->screenshot.take(&amiga);
-}
-
 }

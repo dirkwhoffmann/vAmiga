@@ -9,7 +9,7 @@
 
 #pragma once
 
-namespace va::moira {
+namespace moira {
 
 // Base structure for a single breakpoint or watchpoint
 struct Guard {

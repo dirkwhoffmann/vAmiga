@@ -9,11 +9,8 @@
 
 #pragma once
 
-#include "Reflection.hpp"
-
-namespace va {
-
 #include "Bus.h"
+#include "Reflection.hpp"
 
 //
 // Reflection APIs
@@ -57,5 +54,3 @@ struct BusOwnerEnum : util::Reflection<BusOwnerEnum, BusOwner> {
         return "???";
     }
 };
-
-}

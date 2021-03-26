@@ -12,8 +12,6 @@
 #include "CIA.hpp"
 #include "Agnus.hpp"
 
-namespace va {
-
 void
 CIA::scheduleNextExecution()
 {
@@ -32,6 +30,4 @@ CIA::scheduleWakeUp()
     } else {
         agnus.scheduleAbs<SLOT_CIAB>(wakeUpCycle, CIA_WAKEUP);
     }
-}
-
 }

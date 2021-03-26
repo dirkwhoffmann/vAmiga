@@ -12,8 +12,6 @@
 #include "FSTypes.hpp"
 #include "FSDescriptors.hpp"
 
-namespace va {
-
 struct FSPartition : AmigaObject {
     
     // The device this partition is part of
@@ -170,5 +168,3 @@ public:
 };
 
 typedef FSPartition* FSPartitionPtr;
-
-}

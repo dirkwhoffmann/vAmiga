@@ -10,10 +10,7 @@
 #pragma once
 
 #include "FSBlock.hpp"
-
 #include <vector>
-
-namespace va {
 
 struct FSBitmapExtBlock : FSBlock {
                     
@@ -40,5 +37,3 @@ struct FSBitmapExtBlock : FSBlock {
 
     void addBitmapBlockRefs(std::vector<Block> &refs, std::vector<Block>::iterator &it);
 };
-
-}

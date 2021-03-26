@@ -9,13 +9,11 @@
 
 #pragma once
 
+#include "FSTypes.h"
+
 #include "AmigaFile.hpp"
 #include "BootBlockImage.hpp"
 #include "Disk.hpp"
-
-namespace va {
-
-#include "FSTypes.h"
 
 // Base class of all file types encoding a disk
 class DiskFile : public AmigaFile {
@@ -97,5 +95,3 @@ public:
     virtual bool encodeDisk(class Disk *disk);
     virtual void decodeDisk(class Disk *disk) throws;
 };
-
-}

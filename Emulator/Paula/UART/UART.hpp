@@ -9,13 +9,11 @@
 
 #pragma once
 
+#include "UART.h"
+
 #include "AmigaComponent.hpp"
 #include "Event.hpp"
 #include "Macros.h"
-
-namespace va {
-
-#include "UART.h"
 
 class UART : public AmigaComponent {
 
@@ -169,5 +167,3 @@ public:
     void serviceRxdEvent(EventID id);
 
 };
-
-}

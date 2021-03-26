@@ -10,9 +10,6 @@
 #pragma once
 
 #include "Aliases.hpp"
-
-namespace va {
-
 #include "Event.h"
 
 struct Event
@@ -36,5 +33,3 @@ struct Event
         << data;
     }
 };
-
-}

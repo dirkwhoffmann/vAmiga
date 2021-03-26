@@ -13,8 +13,6 @@
 #include "Denise.hpp"
 #include "Paula.hpp"
 
-namespace va {
-
 void
 Agnus::pokeDSKPTH(u16 value)
 {
@@ -896,5 +894,3 @@ template void Agnus::pokeDIWSTRT<ACCESSOR_CPU>(u16 value);
 template void Agnus::pokeDIWSTRT<ACCESSOR_AGNUS>(u16 value);
 template void Agnus::pokeDIWSTOP<ACCESSOR_CPU>(u16 value);
 template void Agnus::pokeDIWSTOP<ACCESSOR_AGNUS>(u16 value);
-
-}

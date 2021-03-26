@@ -9,15 +9,13 @@
 
 #pragma once
 
+#include "Copper.h"
+
 #include "Event.hpp"
 #include "Memory.hpp"
 #include "AmigaComponent.hpp"
 #include "Beam.hpp"
 #include "Checksum.hpp"
-
-namespace va {
-
-#include "Copper.h"
 
 class Copper : public AmigaComponent
 {
@@ -333,5 +331,3 @@ public:
     // Dumps a Copper list
     void dumpCopperList(isize list, isize length);
 };
-
-}

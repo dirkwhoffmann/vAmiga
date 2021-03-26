@@ -11,8 +11,6 @@
 
 #include "AmigaObject.hpp"
 
-namespace va {
-
 struct FSString : AmigaObject {
     
     // File system identifier stored as a C string
@@ -71,5 +69,3 @@ struct FSTime : AmigaObject {
     string timeStr() const;
     string str() const;
 };
-
-}

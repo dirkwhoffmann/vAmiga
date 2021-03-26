@@ -16,8 +16,6 @@
 #include "IO.hpp"
 #include "SSEUtils.hpp"
 
-namespace va {
-
 Denise::Denise(Amiga& ref) : AmigaComponent(ref)
 {    
     subComponents = std::vector<HardwareComponent *> {
@@ -1210,5 +1208,3 @@ template void Denise::drawEven<true>(Pixel offset);
 
 template void Denise::translateDPF<true>(Pixel from, Pixel to, PFState &state);
 template void Denise::translateDPF<false>(Pixel from, Pixel to, PFState &state);
-
-}

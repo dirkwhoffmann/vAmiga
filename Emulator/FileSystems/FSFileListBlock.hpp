@@ -11,8 +11,6 @@
 
 #include "FSBlock.hpp"
 
-namespace va {
-
 struct FSFileListBlock : FSBlock {
         
     FSFileListBlock(FSPartition &p, Block nr);
@@ -49,5 +47,3 @@ struct FSFileListBlock : FSBlock {
     
     bool addDataBlockRef(Block first, Block ref) override;
 };
-
-}

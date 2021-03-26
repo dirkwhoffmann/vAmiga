@@ -11,7 +11,7 @@
 
 #include <math.h>
 
-namespace va::moira {
+namespace moira {
 
 //
 // Wrapper structures controlling the output format

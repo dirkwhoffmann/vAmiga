@@ -11,8 +11,6 @@
 
 #include "FSBlock.hpp"
 
-namespace va {
-
 struct FSDataBlock : FSBlock {
       
     FSDataBlock(FSPartition &p, Block nr);
@@ -93,5 +91,3 @@ struct FFSDataBlock : FSDataBlock {
     
     isize dsize() const override;
 };
-
-}

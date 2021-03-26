@@ -14,8 +14,6 @@
 #include "FSPartition.hpp"
 #include "IO.hpp"
 
-namespace va {
-
 FSUserDirBlock::FSUserDirBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
 {
     data = new u8[bsize()]();
@@ -121,6 +119,4 @@ FSUserDirBlock::exportBlock(const char *exportDir)
     if (mkdir(path.c_str(), 0777) != 0) return ERROR_FS_CANNOT_CREATE_DIR;
     
     return ERROR_OK;
-}
-
 }

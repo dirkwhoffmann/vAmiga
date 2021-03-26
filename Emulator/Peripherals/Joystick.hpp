@@ -9,11 +9,8 @@
 
 #pragma once
 
-#include "AmigaComponent.hpp"
-
-namespace va {
-
 #include "Joystick.h"
+#include "AmigaComponent.hpp"
 
 //
 // Reflection APIs
@@ -179,5 +176,3 @@ public:
      */
     void execute();
 };
-
-}

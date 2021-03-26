@@ -9,12 +9,9 @@
 
 #pragma once
 
+#include "Error.h"
 #include "Exception.hpp"
 #include "Reflection.hpp"
-
-namespace va {
-
-#include "Error.h"
 
 //
 // Reflection APIs
@@ -143,5 +140,3 @@ struct ConfigLockedError : ConfigError {
 struct ConfigUnsupportedError : ConfigError {
     ConfigUnsupportedError() : ConfigError("") { };
 };
-
-}

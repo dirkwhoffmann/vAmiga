@@ -13,8 +13,6 @@
 #include "Amiga.hpp"
 #include "IO.hpp"
 
-namespace va {
-
 Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
 {    
     subComponents = std::vector<HardwareComponent *> {
@@ -1150,5 +1148,3 @@ template void Agnus::executeSecondSpriteCycle<4>();
 template void Agnus::executeSecondSpriteCycle<5>();
 template void Agnus::executeSecondSpriteCycle<6>();
 template void Agnus::executeSecondSpriteCycle<7>();
-
-}

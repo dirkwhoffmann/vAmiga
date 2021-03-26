@@ -9,12 +9,10 @@
 
 #pragma once
 
+#include "Drive.h"
+
 #include "AmigaComponent.hpp"
 #include "Disk.hpp"
-
-namespace va {
-
-#include "Drive.h"
 
 //
 // Reflection APIs
@@ -305,5 +303,3 @@ public:
     // Write handler for the PRB register of CIA B
     void PRBdidChange(u8 oldValue, u8 newValue);
 };
-
-}

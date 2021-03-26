@@ -12,8 +12,6 @@
 #include "Interpreter.hpp"
 #include "RetroShell.hpp"
 
-namespace va {
-
 void
 Interpreter::registerInstructions()
 {
@@ -735,6 +733,4 @@ Interpreter::registerInstructions()
     root.add({"df0", "df1", "df2", "df3", "dfn"}, {"", "inspect"},
              "command", "Displays the internal state",
              &RetroShell::exec <Token::dfn, Token::inspect>);
-}
-
 }

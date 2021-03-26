@@ -12,9 +12,8 @@
 #include "DiskController.hpp"
 #include "Agnus.hpp"
 #include "Drive.hpp"
-#include <math.h>
 
-namespace va {
+#include <math.h>
 
 void
 DiskController::serviceDiskEvent()
@@ -88,6 +87,4 @@ DiskController::serviceDiskChangeEvent()
     }
 
     agnus.cancel<SLOT_DCH>();
-}
-
 }

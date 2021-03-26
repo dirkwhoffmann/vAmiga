@@ -9,18 +9,15 @@
 
 #pragma once
 
-#include "AmigaObject.hpp"
+#include "AmigaFile.h"
 
+#include "AmigaObject.hpp"
 #include "Checksum.hpp"
 #include "IO.hpp"
 #include "Reflection.hpp"
 
 #include <sstream>
 #include <fstream>
-
-namespace va {
-
-#include "AmigaFile.h"
 
 struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType> {
     
@@ -222,5 +219,3 @@ public:
     isize writeToBuffer(u8 *buf) throws;
     isize writeToBuffer(u8 *buf, ErrorCode *err);    
 };
-
-}

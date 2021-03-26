@@ -11,8 +11,6 @@
 
 #include "FSBlock.hpp"
 
-namespace va {
-
 struct FSBitmapBlock : FSBlock {
                     
     FSBitmapBlock(FSPartition &p, Block nr);
@@ -31,5 +29,3 @@ struct FSBitmapBlock : FSBlock {
     void dump() const override;
     isize checksumLocation() const override { return 0; }
 };
-
-}

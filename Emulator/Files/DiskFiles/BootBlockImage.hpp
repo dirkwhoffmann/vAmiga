@@ -9,12 +9,9 @@
 
 #pragma once
 
+#include "BootBlockImage.h"
 #include "Reflection.hpp"
 #include <stddef.h>
-
-namespace va {
-
-#include "BootBlockImage.h"
 
 struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType> {
     
@@ -88,5 +85,3 @@ public:
     // Exports the image
     void write(u8 *buffer, isize first = 0, isize last = 0);
 };
-
-}

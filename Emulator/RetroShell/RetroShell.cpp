@@ -15,8 +15,6 @@
 
 #include <sstream>
 
-namespace va {
-
 RetroShell::RetroShell(Amiga& ref) : AmigaComponent(ref), interpreter(ref)
 {
     // Initialize the text storage
@@ -488,6 +486,4 @@ RetroShell::dump(HardwareComponent &component, Dump::Category category)
     amiga.resume();
     
     while(std::getline(ss, line)) *this << line << '\n';
-}
-
 }

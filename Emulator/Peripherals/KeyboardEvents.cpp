@@ -13,8 +13,6 @@
 #include "Agnus.hpp"
 #include "CIA.hpp"
 
-namespace va {
-
 void
 Keyboard::serviceKeyboardEvent(EventID id)
 {
@@ -99,6 +97,4 @@ Keyboard::serviceKeyboardEvent(EventID id)
             assert(false);
             break;
     }
-}
-
 }
