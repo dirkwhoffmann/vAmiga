@@ -9,8 +9,10 @@
 
 #include "config.h"
 
-#include "Constants.h"
+#include "Constants.hpp"
 #include "Macros.h"
+
+namespace va {
 
 const char *regName(u32 addr)
 {
@@ -122,4 +124,6 @@ const char *ciaRegName(u32 addr)
     };
 
     return name[addr];
+}
+
 }

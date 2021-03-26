@@ -15,6 +15,10 @@
 
 namespace va {
 
+const double Oscillator::masterClockFrequency = 28.37516;
+const double Oscillator::cpuClockFrequency = masterClockFrequency / 4.0;
+const double Oscillator::dmaClockFrequency = masterClockFrequency / 8.0;
+
 Oscillator::Oscillator(Amiga& ref) : AmigaComponent(ref)
 {
 

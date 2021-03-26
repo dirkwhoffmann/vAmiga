@@ -13,20 +13,6 @@
 #include <stdbool.h>
 
 //
-// Clock rates (TODO: MOVE TO Oscillator class)
-//
-
-// Clock rate of the master clock in MHz (PAL Amiga)
-static const double masterClockFrequency = 28.37516;
-
-// Clock rate of the Motorola 68000 CPU (7.09379 MHz)
-static const double cpuClockFrequency = masterClockFrequency / 4.0;
-
-// Clock rate of the DMA bus (3.546895 MHz)
-static const double dmaClockFrequency = masterClockFrequency / 8.0;
-
-
-//
 // Custom registers
 //
 
@@ -268,12 +254,6 @@ static const double dmaClockFrequency = masterClockFrequency / 8.0;
 #define FMODE    0x1FCL // AGA
 #define NO_OP    0x1FEL
 
-// Returns a printable name for a custom register
-const char *regName(u32 addr);
-
-// Returns a printable name for a CIA register
-const char *ciaRegName(u32 addr);
-
 // DMACON register bits
 #define BBUSY  0x4000
 #define BZERO  0x2000
@@ -307,9 +287,6 @@ const char *ciaRegName(u32 addr);
 
 #define HPOS_MAX      226
 #define HPOS_CNT      227
-
-static inline bool isVPos(i16 pos) { return pos >= 0 && pos < VPOS_CNT; }
-static inline bool isHPos(i16 pos) { return pos >= 0 && pos < HPOS_CNT; }
 
 
 /* Screen buffer dimensions

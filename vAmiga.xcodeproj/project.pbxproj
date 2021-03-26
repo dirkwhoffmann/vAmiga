@@ -506,6 +506,8 @@
 		50A61468260DC2D700A01428 /* HardwareComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardwareComponent.h; sourceTree = "<group>"; };
 		50A6146E260DC91600A01428 /* BootBlockImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BootBlockImage.h; sourceTree = "<group>"; };
 		50A61470260DCA6200A01428 /* RomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFile.h; sourceTree = "<group>"; };
+		50A61475260DD81000A01428 /* Aliases.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Aliases.hpp; sourceTree = "<group>"; };
+		50A61478260DDC7900A01428 /* Constants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Constants.hpp; sourceTree = "<group>"; };
 		50A64B94257A63A600442964 /* BootBlockImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BootBlockImage.hpp; sourceTree = "<group>"; };
 		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
 		50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperRegisters.cpp; sourceTree = "<group>"; };
@@ -722,7 +724,9 @@
 			isa = PBXGroup;
 			children = (
 				507215B025EAF62B00787591 /* Aliases.h */,
+				50A61475260DD81000A01428 /* Aliases.hpp */,
 				5082D83A21EF891200CF7692 /* Constants.h */,
+				50A61478260DDC7900A01428 /* Constants.hpp */,
 				50B5C07D241107F200F124DC /* Constants.cpp */,
 				50EA34F0258E38880010DC63 /* Debug.hpp */,
 				50104E8B25ECE1A10047A9AA /* Debug.cpp */,

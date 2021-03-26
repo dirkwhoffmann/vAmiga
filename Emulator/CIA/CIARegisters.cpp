@@ -10,7 +10,7 @@
 #include "config.h"
 
 #include "CIA.hpp"
-#include "Constants.h"
+#include "Constants.hpp"
 #include "Macros.h"
 #include "Keyboard.hpp"
 

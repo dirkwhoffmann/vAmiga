@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Constants.h"
+#include "Constants.hpp"
 #include "RingBuffer.hpp"
 #include "Reflection.hpp"
 

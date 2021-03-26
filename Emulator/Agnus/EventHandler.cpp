@@ -389,7 +389,7 @@ Agnus::getEventSlotInfo(isize nr)
 void
 Agnus::scheduleNextBplEvent(i16 hpos)
 {
-    assert(isHPos(hpos));
+    assert(hpos >= 0 && hpos < HPOS_CNT);
 
     if (u8 next = nextBplEvent[hpos]) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), bplEvent[next]);
@@ -400,8 +400,7 @@ Agnus::scheduleNextBplEvent(i16 hpos)
 void
 Agnus::scheduleBplEventForCycle(i16 hpos)
 {
-    assert(isHPos(hpos));
-    assert(hpos >= pos.h);
+    assert(hpos >= pos.h && hpos < HPOS_CNT);
 
     if (bplEvent[hpos] != EVENT_NONE) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(hpos - pos.h), bplEvent[hpos]);
@@ -415,7 +414,7 @@ Agnus::scheduleBplEventForCycle(i16 hpos)
 void
 Agnus::scheduleNextDasEvent(i16 hpos)
 {
-    assert(isHPos(hpos));
+    assert(hpos >= 0 && hpos < HPOS_CNT);
 
     if (u8 next = nextDasEvent[hpos]) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), dasEvent[next]);
@@ -428,8 +427,7 @@ Agnus::scheduleNextDasEvent(i16 hpos)
 void
 Agnus::scheduleDasEventForCycle(i16 hpos)
 {
-    assert(isHPos(hpos));
-    assert(hpos >= pos.h);
+    assert(hpos >= pos.h && hpos < HPOS_CNT);
 
     if (dasEvent[hpos] != EVENT_NONE) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(hpos - pos.h), dasEvent[hpos]);

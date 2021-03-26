@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaFile.hpp"
-#include "Constants.h"
+#include "Constants.hpp"
 
 namespace va {
 

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Aliases.h"
+#include "Aliases.hpp"
 #include "Concurrency.hpp"
 #include "RingBuffer.hpp"
 

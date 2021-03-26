@@ -11,10 +11,6 @@
 
 #include "Types.h"
 
-#ifndef __OBJC__
-// namespace va {
-#endif
-
 // Cycles
 typedef i64 Cycle;            // Master cycle units
 typedef i64 CPUCycle;         // CPU cycle units
@@ -79,7 +75,3 @@ typedef u32 Block;
 
 // Time stamp used for messages that never trigger
 #define NEVER INT64_MAX
-
-#ifndef __OBJC__
-// }
-#endif

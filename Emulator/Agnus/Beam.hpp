@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "Aliases.h"
-#include "Constants.h"
+#include "Aliases.hpp"
+#include "Constants.hpp"
 
 namespace va {
 
