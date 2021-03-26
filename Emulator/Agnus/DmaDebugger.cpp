@@ -9,9 +9,9 @@
 
 #include "config.h"
 
-#include "Bus.h"
 #include "DmaDebugger.h"
 #include "Agnus.h"
+#include "Bus.h"
 #include "Denise.h"
 #include "MsgQueue.h"
 #include "PixelEngine.h"

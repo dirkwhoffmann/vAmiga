@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include "Reflection.h"
 
 enum_long(DMA_DISPLAY_MODE)
 {
