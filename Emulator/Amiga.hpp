@@ -10,7 +10,6 @@
 #pragma once
 
 // General
-#include "Option.h"
 #include "HardwareComponent.hpp"
 #include "Serialization.hpp"
 #include "MsgQueue.hpp"
