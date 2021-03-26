@@ -13,6 +13,7 @@
 
 #include "Aliases.h"
 #include "Bus.h"
+#include "Event.h"
 
 //
 // Enumerations
@@ -43,6 +44,41 @@ enum_long(SPR_DMA_STATE)
 };
 typedef SPR_DMA_STATE SprDMAState;
 
+enum_long(SLOT)
+{
+    // Primary slots
+    SLOT_REG,                       // Register changes
+    SLOT_RAS,                       // Rasterline
+    SLOT_CIAA,                      // CIA A execution
+    SLOT_CIAB,                      // CIA B execution
+    SLOT_BPL,                       // Bitplane DMA
+    SLOT_DAS,                       // Disk, Audio, and Sprite DMA
+    SLOT_COP,                       // Copper
+    SLOT_BLT,                       // Blitter
+    SLOT_SEC,                       // Enables secondary slots
+
+    // Secondary slots
+    SLOT_CH0,                       // Audio channel 0
+    SLOT_CH1,                       // Audio channel 1
+    SLOT_CH2,                       // Audio channel 2
+    SLOT_CH3,                       // Audio channel 3
+    SLOT_DSK,                       // Disk controller
+    SLOT_DCH,                       // Disk changes (insert, eject)
+    SLOT_VBL,                       // Vertical blank
+    SLOT_IRQ,                       // Interrupts
+    SLOT_IPL,                       // CPU Interrupt Priority Lines
+    SLOT_KBD,                       // Keyboard
+    SLOT_TXD,                       // Serial data out (UART)
+    SLOT_RXD,                       // Serial data in (UART)
+    SLOT_POT,                       // Potentiometer
+    SLOT_INS,                       // Handles periodic calls to inspect()
+    
+    SLOT_COUNT
+};
+typedef SLOT EventSlot;
+
+// Inspection interval in seconds (interval between INS_xxx events)
+static const double inspectionInterval = 0.1;
 
 //
 // Structures
@@ -100,3 +136,38 @@ typedef struct
     double bitplaneActivity;
 }
 AgnusStats;
+
+typedef struct
+{
+    EventSlot slot;
+    EventID eventId;
+    const char *eventName;
+
+    // Trigger cycle of the event
+    Cycle trigger;
+    Cycle triggerRel;
+
+    // Trigger relative to the current frame
+    // -1 = earlier frame, 0 = current frame, 1 = later frame
+    long frameRel;
+
+    // The trigger cycle translated to a beam position.
+    long vpos;
+    long hpos;
+}
+EventSlotInfo;
+
+typedef struct
+{
+    Cycle cpuClock;
+    Cycle cpuCycles;
+    Cycle dmaClock;
+    Cycle ciaAClock;
+    Cycle ciaBClock;
+    long frame;
+    long vpos;
+    long hpos;
+
+    EventSlotInfo slotInfo[SLOT_COUNT];
+}
+EventInfo;

@@ -9,9 +9,11 @@
 
 #pragma once
 
-#include "EventHandlerTypes.hpp"
+#include "Aliases.hpp"
 
 namespace va {
+
+#include "Event.h"
 
 struct Event
 {

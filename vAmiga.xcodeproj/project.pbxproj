@@ -289,7 +289,6 @@
 		501B821B2262FFB200042871 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
 		501B821C2262FFB200042871 /* RTC.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RTC.hpp; sourceTree = "<group>"; };
 		501E715022671FC20070B17D /* Denise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Denise.h; sourceTree = "<group>"; };
-		501E715122677BFF0070B17D /* EventHandlerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventHandlerTypes.h; sourceTree = "<group>"; };
 		5020B17B21EF121E00B9E80E /* Agnus.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Agnus.cpp; sourceTree = "<group>"; };
 		5020B17C21EF121E00B9E80E /* Agnus.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Agnus.hpp; sourceTree = "<group>"; };
 		5020B17E21EF136100B9E80E /* Denise.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Denise.cpp; sourceTree = "<group>"; };
@@ -545,7 +544,6 @@
 		50B3C44825EAFB5500651700 /* Checksum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Checksum.hpp; sourceTree = "<group>"; };
 		50B5C07D241107F200F124DC /* Constants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
 		50B5F87825AF9E07008B79F1 /* Reflection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Reflection.hpp; sourceTree = "<group>"; };
-		50B5F87925AF9EED008B79F1 /* EventHandlerTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EventHandlerTypes.hpp; sourceTree = "<group>"; };
 		50B5F88325AFA1AD008B79F1 /* FSTypes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FSTypes.hpp; sourceTree = "<group>"; };
 		50B70CAB252CE0BF006B5191 /* Muxer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Muxer.cpp; sourceTree = "<group>"; };
 		50B70CAC252CE0BF006B5191 /* Muxer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Muxer.hpp; sourceTree = "<group>"; };
@@ -781,8 +779,6 @@
 				50A6143B260CE6C400A01428 /* Bus.h */,
 				50A61438260CE6B100A01428 /* Bus.hpp */,
 				50A61437260CE6B100A01428 /* Bus.cpp */,
-				501E715122677BFF0070B17D /* EventHandlerTypes.h */,
-				50B5F87925AF9EED008B79F1 /* EventHandlerTypes.hpp */,
 				5085FE5621FB3BAE009753EF /* EventHandler.hpp */,
 				5085FE5521FB3BAE009753EF /* EventHandler.cpp */,
 				50769B8B24BD7B01006FE743 /* DmaDebugger.h */,
