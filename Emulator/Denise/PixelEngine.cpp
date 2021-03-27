@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "PixelEngine.h"
 #include "Agnus.h"
 #include "Colors.h"

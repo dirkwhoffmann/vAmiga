@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "Interpreter.h"
 #include "RetroShell.h"
 

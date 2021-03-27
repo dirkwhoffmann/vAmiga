@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "Paula.h"
 #include "ControlPort.h"
 #include "CPU.h"

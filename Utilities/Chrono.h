@@ -11,10 +11,6 @@
 
 #include "Types.h"
 
-#ifdef __MACH__
-// #include <mach/mach_time.h>
-#endif
-
 namespace util {
 
 class Time {

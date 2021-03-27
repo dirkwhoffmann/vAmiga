@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "ZorroManager.h"
 #include "Memory.h"
 

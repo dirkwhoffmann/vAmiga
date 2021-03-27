@@ -11,7 +11,6 @@
 
 #include "Types.h"
 
-
 #ifdef __cplusplus
 
 // Prints a hex dump of a buffer to the console (for debugging)

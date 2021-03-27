@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "Agnus.h"
 #include "CIA.h"
 #include "CPU.h"

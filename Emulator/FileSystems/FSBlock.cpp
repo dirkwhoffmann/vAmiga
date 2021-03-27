@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "FSBlock.h"
 #include "FSBitmapBlock.h"
 #include "FSBitmapExtBlock.h"
@@ -22,7 +21,7 @@
 #include "FSRootBlock.h"
 #include "FSUserDirBlock.h"
 
-#include <string.h>
+// #include <string.h>
 
 FSBlock *
 FSBlock::makeWithType(FSPartition &p, Block nr, FSBlockType type)

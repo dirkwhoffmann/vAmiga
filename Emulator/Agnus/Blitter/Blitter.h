@@ -10,10 +10,8 @@
 #pragma once
 
 #include "BlitterTypes.h"
-
 #include "AmigaComponent.h"
 #include "Memory.h"
-#include "Macros.h"
 
 /* The Blitter supports three accuracy levels:
  *

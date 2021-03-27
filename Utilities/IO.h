@@ -10,7 +10,6 @@
 #pragma once
 
 #include "Types.h"
-
 #include <dirent.h>
 #include <fcntl.h>
 #include <istream>

@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "EXEFile.h"
 #include "AmigaFile.h"
 #include "FSDevice.h"

@@ -8,14 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "DiskController.h"
 #include "Agnus.h"
 #include "DiskFile.h"
 #include "Drive.h"
 #include "MsgQueue.h"
 #include "Paula.h"
-
 #include <algorithm>
 
 DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)

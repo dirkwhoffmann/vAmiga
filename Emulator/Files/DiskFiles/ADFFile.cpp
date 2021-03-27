@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "ADFFile.h"
 #include "BootBlockImage.h"
 #include "Checksum.h"

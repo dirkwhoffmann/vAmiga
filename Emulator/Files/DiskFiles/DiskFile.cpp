@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "DiskFile.h"
 #include "ADFFile.h"
 #include "IMGFile.h"

@@ -8,11 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "FSFileHeaderBlock.h"
 #include "FSDevice.h"
 #include "FSPartition.h"
-
 #include <set>
 
 FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, Block nr) : FSBlock(p, nr)

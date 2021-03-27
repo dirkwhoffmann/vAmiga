@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "AmigaComponent.h"
 #include "Amiga.h"  
 

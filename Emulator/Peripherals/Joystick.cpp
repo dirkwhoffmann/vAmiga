@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "Joystick.h"
 #include "Agnus.h"
 #include "ControlPort.h"

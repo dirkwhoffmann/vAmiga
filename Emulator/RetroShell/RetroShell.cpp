@@ -8,11 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "RetroShell.h"
 #include "Amiga.h"
 #include "Parser.h"
-
 #include <sstream>
 
 RetroShell::RetroShell(Amiga& ref) : AmigaComponent(ref), interpreter(ref)

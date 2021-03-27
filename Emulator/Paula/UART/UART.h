@@ -10,10 +10,8 @@
 #pragma once
 
 #include "UARTTypes.h"
-
 #include "AmigaComponent.h"
 #include "Event.h"
-#include "Macros.h"
 
 class UART : public AmigaComponent {
 

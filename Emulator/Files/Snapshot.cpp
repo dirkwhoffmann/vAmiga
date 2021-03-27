@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "Snapshot.h"
 #include "Amiga.h"
 #include "IO.h"

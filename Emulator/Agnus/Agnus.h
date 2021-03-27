@@ -10,7 +10,6 @@
 #pragma once
 
 #include "AgnusTypes.h"
-
 #include "AmigaComponent.h"
 #include "Beam.h"
 #include "Blitter.h"
@@ -21,7 +20,6 @@
 #include "Event.h"
 #include "Frame.h"
 #include "Memory.h"
-#include "Macros.h"
 
 #define isPrimarySlot(s) ((s) <= SLOT_SEC)
 #define isSecondarySlot(s) ((s) > SLOT_SEC && (s) < SLOT_COUNT)

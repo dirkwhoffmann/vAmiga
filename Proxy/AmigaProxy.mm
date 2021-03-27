@@ -8,11 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #import "AmigaProxy.h"
 #import "Amiga.h"
 #import "vAmiga-Swift.h"
-
 #include "DMSFile.h"
 #include "EXEFile.h"
 #include "ExtendedRomFile.h"

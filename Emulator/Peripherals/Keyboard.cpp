@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "Keyboard.h"
 #include "Agnus.h"
 #include "CIA.h"

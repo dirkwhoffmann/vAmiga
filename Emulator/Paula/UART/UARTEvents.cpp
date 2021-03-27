@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "UART.h"
 #include "Agnus.h"
 #include "SerialPort.h"

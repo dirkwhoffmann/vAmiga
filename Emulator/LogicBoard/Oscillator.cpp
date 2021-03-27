@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "Oscillator.h"
 #include "Agnus.h"
 #include "Chrono.h"

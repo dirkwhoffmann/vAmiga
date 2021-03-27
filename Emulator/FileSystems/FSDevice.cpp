@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "IO.h"
 #include "FSDevice.h"
 #include "limits.h"

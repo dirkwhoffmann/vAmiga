@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "Mouse.h"
 #include "Chrono.h"
 #include "ControlPort.h"

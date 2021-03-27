@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "Denise.h"
 #include "Agnus.h"
 #include "ControlPort.h"

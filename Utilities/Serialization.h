@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "Types.h"
 #include "Macros.h"
 
 namespace util {

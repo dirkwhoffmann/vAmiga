@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
+#include "Macros.h"
 
 // Cycles
 typedef i64 Cycle;            // Master cycle units

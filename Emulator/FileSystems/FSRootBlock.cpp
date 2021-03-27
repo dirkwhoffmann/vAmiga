@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "FSRootBlock.h"
 #include "FSDevice.h"
 #include "FSPartition.h"

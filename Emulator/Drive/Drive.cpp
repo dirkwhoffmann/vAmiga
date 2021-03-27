@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "Drive.h"
 #include "Agnus.h"
 #include "BootBlockImage.h"

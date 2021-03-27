@@ -10,7 +10,6 @@
 #pragma once
 
 #include "AmigaTypes.h"
-
 #include "Agnus.h"
 #include "ControlPort.h"
 #include "CIA.h"

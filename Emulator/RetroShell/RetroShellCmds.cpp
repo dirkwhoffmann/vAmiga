@@ -8,14 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "RetroShell.h"
 #include "Amiga.h"
 #include "BootBlockImage.h"
 #include "FSTypes.h"
 #include "IO.h"
 #include "Parser.h"
-
 #include <fstream>
 #include <sstream>
 

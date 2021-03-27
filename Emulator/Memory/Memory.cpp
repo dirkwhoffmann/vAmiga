@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "Memory.h"
 #include "Amiga.h"
 #include "Agnus.h"

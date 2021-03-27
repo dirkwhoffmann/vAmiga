@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "DiskController.h"
 #include "Agnus.h"
 #include "Checksum.h"

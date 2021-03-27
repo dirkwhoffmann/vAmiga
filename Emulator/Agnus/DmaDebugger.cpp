@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "DmaDebugger.h"
 #include "Agnus.h"
 #include "Bus.h"

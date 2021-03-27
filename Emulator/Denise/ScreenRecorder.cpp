@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "ScreenRecorder.h"
 #include "IO.h"
 #include "Denise.h"
