@@ -12,6 +12,14 @@
 #include <sys/types.h>
 
 //
+// Booleans
+//
+
+#ifndef __cplusplus
+#include <stdbool.h>
+#endif
+
+
 // Strings
 //
 
@@ -22,7 +30,7 @@ using std::string;
 
 
 //
-// Integer types
+// Integers
 //
 
 // Signed integers
