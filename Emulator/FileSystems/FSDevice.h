@@ -23,7 +23,6 @@
 #include "FSDataBlock.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
-#include <dirent.h>
 #include <stack>
 #include <set>
 
