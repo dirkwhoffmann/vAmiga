@@ -66,12 +66,6 @@ private:
      */
     static const int rgbaIndexCnt = 32 + 32 + 1 + 8;
     u32 indexedRgba[rgbaIndexCnt];
-
-    // Color adjustment parameters
-    [[deprecated]] Palette palette = PALETTE_COLOR;
-    [[deprecated]] double brightness = 50.0;
-    [[deprecated]] double contrast = 100.0;
-    [[deprecated]] double saturation = 50.0;
     
     // Indicates whether HAM mode is switched
     bool hamMode;
