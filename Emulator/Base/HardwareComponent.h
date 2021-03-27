@@ -10,12 +10,10 @@
 #pragma once
 
 #include "HardwareComponentTypes.h"
-
 #include "AmigaObject.h"
 #include "Serialization.h"
 #include "Concurrency.h"
 #include "Reflection.h"
-
 #include <vector>
 #include <iostream>
 #include <iomanip>

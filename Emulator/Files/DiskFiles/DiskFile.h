@@ -10,7 +10,6 @@
 #pragma once
 
 #include "FSTypes.h"
-
 #include "AmigaFile.h"
 #include "BootBlockImage.h"
 #include "Disk.h"

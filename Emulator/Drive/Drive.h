@@ -10,7 +10,6 @@
 #pragma once
 
 #include "DriveTypes.h"
-
 #include "AmigaComponent.h"
 #include "Disk.h"
 

@@ -10,7 +10,6 @@
 #pragma once
 
 #include "CIATypes.h"
-
 #include "AmigaComponent.h"
 #include "TOD.h"
 

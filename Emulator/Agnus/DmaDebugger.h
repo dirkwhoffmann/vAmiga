@@ -10,7 +10,6 @@
 #pragma once
 
 #include "DmaDebuggerTypes.h"
-
 #include "Bus.h"
 #include "AmigaComponent.h"
 #include "Colors.h"

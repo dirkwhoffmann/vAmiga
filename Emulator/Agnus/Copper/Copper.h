@@ -10,7 +10,6 @@
 #pragma once
 
 #include "CopperTypes.h"
-
 #include "Event.h"
 #include "Memory.h"
 #include "AmigaComponent.h"

@@ -10,7 +10,6 @@
 #pragma once
 
 #include "SamplerTypes.h"
-
 #include "Constants.h"
 #include "RingBuffer.h"
 #include "Reflection.h"

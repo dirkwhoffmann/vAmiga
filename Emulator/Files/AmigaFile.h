@@ -10,12 +10,10 @@
 #pragma once
 
 #include "AmigaFileTypes.h"
-
 #include "AmigaObject.h"
 #include "Checksum.h"
 #include "IO.h"
 #include "Reflection.h"
-
 #include <sstream>
 #include <fstream>
 

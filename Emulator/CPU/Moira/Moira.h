@@ -10,7 +10,6 @@
 #pragma once
 
 #include "AmigaComponent.h"
-
 #include "MoiraConfig.h"
 #include "MoiraTypes.h"
 #include "MoiraDebugger.h"

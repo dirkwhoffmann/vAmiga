@@ -10,7 +10,6 @@
 #pragma once
 
 #include "DiskControllerTypes.h"
-
 #include "AmigaComponent.h"
 #include "Reflection.h"
 

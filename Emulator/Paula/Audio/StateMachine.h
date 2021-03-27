@@ -10,7 +10,6 @@
 #pragma once
 
 #include "StateMachineTypes.h"
-
 #include "AmigaComponent.h"
 #include "Sampler.h"
 #include "Agnus.h"

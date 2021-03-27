@@ -10,7 +10,6 @@
 #pragma once
 
 #include "DeniseTypes.h"
-
 #include "AmigaComponent.h"
 #include "Colors.h"
 #include "Memory.h"

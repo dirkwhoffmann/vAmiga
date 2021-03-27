@@ -12,9 +12,8 @@
 #include "Aliases.h"
 #include "BusTypes.h"
 #include "EventTypes.h"
-#include "Reflection.h"
-
 #include "EventHandlerTypes.h"
+#include "Reflection.h"
 
 //
 // Enumerations

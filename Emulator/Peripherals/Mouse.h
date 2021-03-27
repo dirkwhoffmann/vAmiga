@@ -10,7 +10,6 @@
 #pragma once
 
 #include "MouseTypes.h"
-
 #include "Joystick.h"
 #include "AmigaComponent.h"
 #include "Chrono.h"

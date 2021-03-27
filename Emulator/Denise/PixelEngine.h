@@ -10,7 +10,6 @@
 #pragma once
 
 #include "PixelEngineTypes.h"
-
 #include "AmigaComponent.h"
 #include "ChangeRecorder.h"
 
