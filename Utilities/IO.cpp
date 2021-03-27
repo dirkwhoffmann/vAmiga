@@ -8,8 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "IO.h"
-#include "string.h"
-
 #include <vector>
 
 namespace util {

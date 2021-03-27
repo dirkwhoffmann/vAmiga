@@ -11,7 +11,6 @@
 #include "IO.h"
 #include "FSDevice.h"
 #include "limits.h"
-#include <string.h>
 #include <set>
 #include <stack>
 

@@ -12,8 +12,6 @@
 #include "FSDevice.h"
 #include "FSPartition.h"
 
-// #include <string.h>
-
 FSDataBlock::FSDataBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
     data = new u8[p.dev.bsize]();

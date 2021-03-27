@@ -10,7 +10,6 @@
 #include "config.h"
 #include "HDFFile.h"
 #include "IO.h"
-#include "string.h"
 
 HDFFile::HDFFile()
 {
