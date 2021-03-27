@@ -96,18 +96,25 @@ public:
 public:
     
     const char *text();
-        
+    
+    // Returns a reference to the text storage
+    const std::vector<string> &getStorage() { return storage; }
+    
+    // Returns the cursor position (relative to the line end)
+    isize cposAbs() { return cpos; }
+    isize cposRel();
+
     // Prints a message
     RetroShell &operator<<(char value);
     RetroShell &operator<<(const string &value);
     RetroShell &operator<<(int value);
     RetroShell &operator<<(long value);
 
-    // Returns the cursor position relative to the line end
-    isize cposRel();
-
     // Moves the cursor forward to a certain column
     void tab(int hpos);
+
+    // Prints the input prompt
+    void printPrompt();
 
 private:
 
@@ -122,24 +129,19 @@ private:
     
     // Prints a help line
     void printHelp();
-
-    // Prints the input prompt
-    void printPrompt();
     
     // Shortens the text storage if it grows too large
     void shorten();
     
     // Clears the current line
     void clearLine() { *this << '\r'; }
-
-    // Replaces the last line
-    // void replace(const string &text, const string &prefix);
-    // void replace(const string &text) { replace(text, prompt); }
     
     
     //
     // Executing commands
     //
+    
+public:
     
     // Executes a user command
     bool exec(const string &command, bool verbose = false);

@@ -34,6 +34,14 @@ RetroShell::RetroShell(Amiga& ref) : AmigaComponent(ref), interpreter(ref)
     printPrompt();
 }
 
+isize
+RetroShell::cposRel()
+{
+    isize lineLength = (isize)lastLine().size();
+    
+    return cpos >= lineLength ? 0 : lineLength - cpos;
+}
+
 RetroShell&
 RetroShell::operator<<(char value)
 {
@@ -52,7 +60,6 @@ RetroShell::operator<<(char value)
     } else {
         
         // Add a single character
-        // if (storage.back().length() >= numCols) storage.push_back("");
         storage.back() += value;
     }
     
@@ -81,25 +88,13 @@ RetroShell::operator<<(long value)
     return *this;
 }
 
-isize
-RetroShell::cposRel()
-{
-    isize lineLength = (isize)lastLine().size();
-    
-    return cpos >= lineLength ? 0 : lineLength - cpos;
-}
-
 void
-RetroShell::clear()
+RetroShell::tab(int hpos)
 {
-    printf("IMPLEMENTATION MISSING\n");
-    assert(false);
-}
-
-void
-RetroShell::printHelp()
-{
-    *this << "Press 'TAB' twice for help." << '\n';
+    int delta = hpos - (int)storage.back().length();
+    for (int i = 0; i < delta; i++) {
+        *this << ' ';
+    }
 }
 
 void
@@ -114,6 +109,19 @@ RetroShell::printPrompt()
 }
 
 void
+RetroShell::clear()
+{
+    storage.clear();
+    printPrompt();
+}
+
+void
+RetroShell::printHelp()
+{
+    *this << "Press 'TAB' twice for help." << '\n';
+}
+
+void
 RetroShell::shorten()
 {
     while (storage.size() > 600) {
@@ -121,23 +129,6 @@ RetroShell::shorten()
         storage.erase(storage.begin());
     }
 }
-
-void
-RetroShell::tab(int hpos)
-{
-    int delta = hpos - (int)storage.back().length();
-    for (int i = 0; i < delta; i++) {
-        *this << ' ';
-    }
-}
-
-/*
-void
-RetroShell::replace(const string& text, const string& prefix)
-{
-    storage.back() = prefix + text;
-}
-*/
 
 void
 RetroShell::pressUp()
@@ -276,66 +267,6 @@ RetroShell::pressKey(char c)
         isDirty = true;        
         tabPressed = false;
     }
-    
-/*
-        case '\b':
-            
-            printf("BACKSPACE key\n");
-            
-            if (cpos > 0) {
-                input[ipos].erase(input[ipos].begin() + --cpos);
-            }
-            // *this << '\r' << string(prompt) << input[ipos];
-            break;
-            
-        case '\t':
-            
-*/
-            /*
-             case sf::Keyboard::Up:
-             
-             if (ipos > 0) {
-             ipos--;
-             cpos = (isize)input[ipos].size();
-             
-             replace(input[ipos]);
-             }
-             break;
-             
-             case sf::Keyboard::Down:
-             
-             if (ipos < input.size() - 1) {
-             ipos++;
-             cpos = (isize)input[ipos].size();
-             
-             replace(input[ipos]);
-             }
-             break;
-             
-             case sf::Keyboard::Left:
-             
-             if (cpos > 0) {
-             cpos--;
-             }
-             break;
-             
-             case sf::Keyboard::Right:
-             
-             if (cpos < input[ipos].length()) {
-             cpos++;
-             }
-             break;
-             
-             case sf::Keyboard::Home:
-             
-             cpos = 0;
-             break;
-             
-             case sf::Keyboard::End:
-             
-             cpos = (isize)input[ipos].length();
-             break;
-             */
 }
 
 const char *
@@ -393,7 +324,7 @@ RetroShell::exec(const string &command, bool verbose)
         *this << err.what() << ": Syntax error";
         *this << '\n';
         
-    } catch (ConfigUnsupportedError) {
+    } catch (ConfigUnsupportedError &err) {
         *this << "This option is not yet supported.";
         *this << '\n';
         
@@ -418,12 +349,6 @@ RetroShell::exec(const string &command, bool verbose)
         *this << err.what();
         *this << '\n';
     }
-    
-    // Print a new prompt
-    // printf("Command: %s\n", command.c_str());
-    // *this << string(prompt);
-    
-    // printPrompt();
     
     return success;
 }

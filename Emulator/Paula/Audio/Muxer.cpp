@@ -13,6 +13,7 @@
 #include "IO.h"
 #include "MsgQueue.h"
 #include "Oscillator.h"
+#include <cmath>
 
 Muxer::Muxer(Amiga& ref) : AmigaComponent(ref)
 {

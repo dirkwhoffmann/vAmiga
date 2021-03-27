@@ -16,17 +16,10 @@
 // Snapshot version number
 #define V_MAJOR 0
 #define V_MINOR 9
-#define V_SUBMINOR 17
+#define V_SUBMINOR 18
 
 // Uncomment these settings in a release build
 // #define RELEASEBUILD
-
-#ifdef RELEASEBUILD
-static const int releaseBuild = 1;
-#define NDEBUG
-#else
-static const int releaseBuild = 0;
-#endif
 
 
 //
@@ -167,3 +160,13 @@ static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 static const int RTC_DEBUG       = 0; // Real-time clock
 static const int KBD_DEBUG       = 0; // Keyboard
 static const int REC_DEBUG       = 0; // Screen recorder
+
+
+#ifdef RELEASEBUILD
+static const int releaseBuild = 1;
+#define NDEBUG
+#else
+static const int releaseBuild = 0;
+#endif
+
+#include <assert.h>

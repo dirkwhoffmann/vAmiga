@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Command.h"
+#include <algorithm>
 
 Command *
 Command::add(std::vector<string> tokens,

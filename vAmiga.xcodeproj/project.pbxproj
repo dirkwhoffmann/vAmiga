@@ -541,6 +541,7 @@
 		50B35B6122B2382E001A9C17 /* SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerialPort.h; sourceTree = "<group>"; };
 		50B3C44725EAFB5500651700 /* Checksum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Checksum.cpp; sourceTree = "<group>"; };
 		50B3C44825EAFB5500651700 /* Checksum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Checksum.h; sourceTree = "<group>"; };
+		50B3DCC3260F7BA100F05C22 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		50B5C07D241107F200F124DC /* Constants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
 		50B70CAB252CE0BF006B5191 /* Muxer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Muxer.cpp; sourceTree = "<group>"; };
 		50B70CAC252CE0BF006B5191 /* Muxer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Muxer.h; sourceTree = "<group>"; };
@@ -1316,6 +1317,7 @@
 		50B9C42A2609430F00A86C31 /* RetroShell */ = {
 			isa = PBXGroup;
 			children = (
+				50B3DCC3260F7BA100F05C22 /* Makefile */,
 				50B9C427260942D000A86C31 /* RetroShell.h */,
 				50B9C426260942D000A86C31 /* RetroShell.cpp */,
 				509C3667260B3ED0004F160A /* RetroShellCmds.cpp */,

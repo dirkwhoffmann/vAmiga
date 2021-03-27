@@ -11,6 +11,7 @@
 #include "FSObjects.h"
 #include "FSBlock.h"
 #include <algorithm>
+#include <cstring>
 
 FSString::FSString(const char *str, isize l) : limit(l)
 {

@@ -1,12 +1,13 @@
 SUBDIRS = \
-Agnus Base CIA CPU Denise Drive Files FileSystems Foundation LogicBoard \
-Memory Paula Peripherals xdms
+Agnus Base CIA CPU Denise Drive FileSystems Files LogicBoard Memory Paula \
+Peripherals RetroShell xdms
 
 MYCC = g++ -std=c++17 -Wfatal-errors
 
 MYFLAGS = \
 -Wall \
 -I $(CURDIR)/.. \
+-I $(CURDIR)/../Utilities \
 -I $(CURDIR) \
 -I $(CURDIR)/Agnus \
 -I $(CURDIR)/Agnus/Blitter \
@@ -20,7 +21,6 @@ MYFLAGS = \
 -I $(CURDIR)/Files/DiskFiles \
 -I $(CURDIR)/Files/RomFiles \
 -I $(CURDIR)/FileSystems \
--I $(CURDIR)/Foundation \
 -I $(CURDIR)/Base \
 -I $(CURDIR)/LogicBoard \
 -I $(CURDIR)/Memory \
@@ -29,6 +29,7 @@ MYFLAGS = \
 -I $(CURDIR)/Paula/DiskController \
 -I $(CURDIR)/Paula/UART \
 -I $(CURDIR)/Peripherals \
+-I $(CURDIR)/RetroShell \
 -I $(CURDIR)/xdms
 
 export MYCC MYFLAGS
@@ -42,7 +43,8 @@ all: prebuild $(OBJ) subdirs
 	@echo > /dev/null
 	
 prebuild:
-
+	@echo "Entering ${CURDIR}"
+		
 subdirs:
 	@for dir in $(SUBDIRS); do \
 		echo "Entering ${CURDIR}/$$dir"; \
