@@ -7,7 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
 #include "Debug.h"
 
 void hexdump(u8 *p, isize size, isize cols, isize pad)

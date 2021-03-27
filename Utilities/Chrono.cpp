@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
-
 #include "Chrono.h"
 #ifdef __MACH__
 #include <mach/mach_time.h>
