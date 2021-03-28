@@ -38,10 +38,17 @@ class AnimatedFloat {
 
     func set(_ value: Float) {
 
-        current = value
-        target = value
+        self.current = value
+        self.target = value
     }
 
+    func set(from: Float, to: Float, steps: Int) {
+            
+        self.current = from
+        self.target = to
+        self.steps = steps
+    }
+    
     func animates() -> Bool {
 
         return current != target

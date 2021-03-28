@@ -86,7 +86,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var animates = 0
     
     // Indicates if the splash screen should be rendered
-    var drawSplashScreen = true
+    var renderSplash = true
     
     // Animation parameters
     var angleX = AnimatedFloat(0.0)
@@ -139,7 +139,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let descriptor = MTLRenderPassDescriptor.init()
         descriptor.colorAttachments[0].texture = drawable.texture
-        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
+        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(1, 1, 1, 1)
         descriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
         descriptor.colorAttachments[0].storeAction = MTLStoreAction.store
         
@@ -243,7 +243,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         if let drawable = metalLayer.nextDrawable() {
             
-            let renderSplash = canvas.isTransparent
+            renderSplash = renderSplash && canvas.isTransparent
             let renderCanvas = canvas.isVisible
             let renderMonitors = monis.drawActivityMonitors
             

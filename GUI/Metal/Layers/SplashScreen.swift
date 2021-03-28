@@ -51,6 +51,5 @@ class SplashScreen: Layer {
         
         // Render
         bgRect!.drawPrimitives(encoder)
-        
     }
 }
