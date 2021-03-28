@@ -37,7 +37,7 @@ extension Renderer {
         let x1 = Int(HBLANK_CNT) * 4
         let x2 = Int(HPOS_CNT) * 4
         let y1 = Int(VBLANK_CNT)
-        let y2 = Int(VPOS_CNT)
+        let y2 = Int(VPOS_CNT) - 1
         
         return CGRect.init(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
     }

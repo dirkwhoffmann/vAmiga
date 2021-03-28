@@ -534,12 +534,9 @@ extension UserDefaults {
     
     static func romUrl(name: String) -> URL? {
         
-        do {
-            let folder = try URL.appSupportFolder("Roms", create: true)
-            return folder.appendingPathComponent(name)
-        } catch {
-            return nil
-        }
+        let folder = try? URL.appSupportFolder("Roms")
+        
+        return folder?.appendingPathComponent(name)        
     }
     
     static var womUrl: URL? { return romUrl(name: "wom.bin") }

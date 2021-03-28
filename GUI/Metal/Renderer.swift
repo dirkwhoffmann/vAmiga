@@ -10,6 +10,14 @@
 import Metal
 import MetalKit
 
+enum ScreenshotSource: Int {
+        
+    case visible = 0
+    case visibleUpscaled = 1
+    case entire = 2
+    case entireUpscaled = 3
+}
+
 class Renderer: NSObject, MTKViewDelegate {
     
     let mtkView: MTKView
@@ -177,6 +185,44 @@ class Renderer: NSObject, MTKViewDelegate {
         buildDepthBuffer()
     }
     
+    //
+    // Screenshots
+    //
+    
+    func screenshot(source: ScreenshotSource) -> NSImage? {
+
+        track("source: \(source)")
+
+        switch source {
+            
+        case .entire:
+            return screenshot(texture: canvas.mergeTexture, rect: largestVisibleNormalized)
+            
+        case .entireUpscaled:
+            return screenshot(texture: canvas.upscaledTexture, rect: largestVisibleNormalized)
+            
+        case .visible:
+            return screenshot(texture: canvas.mergeTexture, rect: visibleNormalized)
+            
+        case .visibleUpscaled:
+            return screenshot(texture: canvas.upscaledTexture, rect: visibleNormalized)
+        }
+    }
+
+    func screenshot(texture: MTLTexture, rect: CGRect) -> NSImage? {
+        
+        // Use the blitter to copy the texture data back from the GPU
+        let queue = texture.device.makeCommandQueue()!
+        let commandBuffer = queue.makeCommandBuffer()!
+        let blitEncoder = commandBuffer.makeBlitCommandEncoder()!
+        blitEncoder.synchronize(texture: texture, slice: 0, level: 0)
+        blitEncoder.endEncoding()
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
+        
+        return NSImage.make(texture: texture, rect: rect)
+    }
+
     //
     // Methods from MTKViewDelegate
     //

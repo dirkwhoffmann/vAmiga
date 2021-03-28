@@ -16,7 +16,7 @@ class Screenshot {
     var format = NSBitmapImageRep.FileType.jpeg
     
     // Creation date
-    var data = Date()
+    var date = Date()
     
     // Image width and heigt
     var width: Int { return Int(screen?.size.width ?? 0) }
@@ -56,7 +56,7 @@ class Screenshot {
         
         self.screen = screen
         self.format = format
-        data = Date()
+        date = Date()
     }
     
     convenience init?(fromUrl url: URL) {
@@ -67,30 +67,16 @@ class Screenshot {
         self.init(screen: image, format: format)
     }
     
-    func quicksave(format: NSBitmapImageRep.FileType) {
-        
-        // Get URL to desktop directory
-        let paths = NSSearchPathForDirectoriesInDomains(.desktopDirectory,
-                                                        .userDomainMask,
-                                                        true)
-        let desktop = NSURL.init(fileURLWithPath: paths[0])
-        
-        // Assemble filename
-        if var url = desktop.appendingPathComponent("Screenshot.") {
-            
-            url = url.byAddingExtension(for: format)
-            url = url.byAddingTimeStamp()
-            url = url.makeUnique()
-            
-            do {
-                try save(url: url, format: format)
-            } catch {
-                track("Failed to quicksave screenshot to \(url.path)")
-            }
+    func save(id: UInt64) throws {
+                
+        if let url = Screenshot.newUrl(diskID: id, using: format) {
+            try? save(url: url)
         }
     }
-      
-    func save(url: URL, format: NSBitmapImageRep.FileType) throws {
+
+    func save(url: URL) throws {
+        
+        track("url: \(url)")
         
         // Convert to target format
         let data = screen?.representation(using: format)
@@ -99,11 +85,11 @@ class Screenshot {
         try data?.write(to: url, options: .atomic)
     }
     
-    static func folder(forDisk diskID: UInt64, create: Bool = false) -> URL? {
+    static func folder(forDisk diskID: UInt64) -> URL? {
         
-        let subdir = String(format: "%8X", diskID)
+        let subdir = String(format: "%08X", diskID)
         do {
-            return try URL.appSupportFolder("Screenshots/\(subdir)", create: create)
+            return try URL.appSupportFolder("Screenshots/\(subdir)")
         } catch {
             return nil
         }
@@ -128,30 +114,39 @@ class Screenshot {
         
         return nil
     }
-        
-    static func newUrl(in folder: URL?,
-                       using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
-        
-        if folder == nil { return nil }
-        
-        for i in 0...999 {
-            
-            let filename = String(format: "%03d", i)
-            let url = folder!.appendingPathComponent(filename).byAddingExtension(for: format)
-            
-            if !FileManager.default.fileExists(atPath: url.path) {
-                return url
-            }
-        }
-        
-        return nil
-    }
     
     static func newUrl(diskID: UInt64,
                        using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
 
-        let folder = Screenshot.folder(forDisk: diskID, create: true)
+        let folder = Screenshot.folder(forDisk: diskID)
         return Screenshot.newUrl(in: folder, using: format)
+    }
+
+    static func newUrl(in folder: URL?,
+                       using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
+                
+        if folder == nil { return nil }
+        
+        track("Determining next free URL in \(folder!)")
+
+        // Get a list of all filenames without extensions
+        let files = collectFiles(in: folder)
+        let names = files.map({ (url) -> String in
+            return url.deletingPathExtension().lastPathComponent
+        })
+        
+        // Determine new name
+        for i in 0...999 {
+            let name = String(format: "%03d", i)
+            if !names.contains(name) {
+                let url = folder!.appendingPathComponent(name)
+                return url.byAddingExtension(for: format)
+            } else {
+                track("\(name) already exists")
+            }
+        }
+        
+        return nil
     }
     
     static func collectFiles(in folder: URL?) -> [URL] {
@@ -186,5 +181,4 @@ class Screenshot {
         
         deleteFolder(withUrl: folder(forDisk: diskID))
     }
-
 }

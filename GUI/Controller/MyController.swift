@@ -72,7 +72,6 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Screenshot and snapshot timers
     var snapshotTimer: Timer?
-    var screenshotTimer: Timer? // DEPRECATED
     
     // Speedometer to measure clock frequence and frames per second
     var speedometer: Speedometer!

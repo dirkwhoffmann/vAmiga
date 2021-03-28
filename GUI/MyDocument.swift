@@ -27,12 +27,8 @@ class MyDocument: NSDocument {
     // Snapshots
     private(set) var snapshots = ManagedArray<SnapshotProxy>.init(capacity: 32)
 
-    // Screenshots (DEPRECATED)
-    private(set) var autoScreenshots = ManagedArray<Screenshot>.init(capacity: 32)
-    private(set) var userScreenshots = ManagedArray<Screenshot>.init(capacity: Int.max)
-
     // Fingerprint of the first disk inserted into df0 after reset
-    private var bootDiskID = UInt64(0)
+    var bootDiskID = UInt64(0)
         
     //
     // Initializing
@@ -333,46 +329,13 @@ class MyDocument: NSDocument {
     @discardableResult
     func setBootDiskID(_ id: UInt64) -> Bool {
         
+        track("setBootDiskID(\(id))")
+        
         if bootDiskID == 0 {
+            track("Assigning new ID")
             bootDiskID = id
-            try? loadScreenshots()
             return true
         }
         return false
-    }
-    
-    // Writes screenshots back to disk if needed
-    func persistScreenshots() throws {
-
-        if userScreenshots.modified { try saveScreenshots() }
-    }
-
-    func saveScreenshots() throws {
-        
-        track("Saving user screenshots to disk (\(bootDiskID))")
-        
-        let format = parent.pref.screenshotTarget
-        
-        Screenshot.deleteFolder(forDisk: bootDiskID)
-        for n in 0 ..< userScreenshots.count {
-            let data = userScreenshots.element(at: n)?.screen?.representation(using: format)
-            if let url = Screenshot.newUrl(diskID: bootDiskID, using: format) {
-                try data?.write(to: url, options: .atomic)
-            }
-        }
-    }
-        
-    func loadScreenshots() throws {
-        
-        track("Seeking screenshots for disk with id \(bootDiskID)")
-        
-        userScreenshots.clear()
-        for url in Screenshot.collectFiles(forDisk: bootDiskID) {
-            if let screenshot = Screenshot.init(fromUrl: url) {
-                userScreenshots.append(screenshot)
-            }
-        }
-        
-        track("\(userScreenshots.count) screenshots loaded")
     }
 }

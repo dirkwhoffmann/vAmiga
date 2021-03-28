@@ -42,9 +42,6 @@ extension MyController: NSWindowDelegate {
         
         track()
         
-        // Write back screenshot cache
-        try? mydocument!.persistScreenshots()
-
         // Stop timers
         timerLock.lock()
         timer?.invalidate()
@@ -52,8 +49,6 @@ extension MyController: NSWindowDelegate {
         timerLock.unlock()
         snapshotTimer?.invalidate()
         snapshotTimer = nil
-        screenshotTimer?.invalidate()
-        screenshotTimer = nil
 
         // Disconnect and close auxiliary windows
         inspector?.amiga = nil

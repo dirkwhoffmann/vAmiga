@@ -196,7 +196,6 @@ class ImporterDialog: DialogController {
          track()
                          
          hideSheet()
-         try? myDocument.persistScreenshots()
      }
 }
 

@@ -42,6 +42,7 @@ extension MyController {
     // Screenshots
     //
     
+    /*
     func takeScreenshot(auto: Bool) {
         
         track()
@@ -60,4 +61,5 @@ extension MyController {
     }
     
     func takeUserScreenshot() { takeScreenshot(auto: false) }
+    */
 }

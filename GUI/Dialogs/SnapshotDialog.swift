@@ -208,8 +208,7 @@ class SnapshotDialog: DialogController {
         hideSheet()
         parent.validateSnapshotTimer()
         for item in items { item.isHidden = true }
-        try? myDocument.persistScreenshots()
-    }
+     }
 }
 
 //

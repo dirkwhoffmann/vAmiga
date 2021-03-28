@@ -126,21 +126,18 @@ extension URL {
         }
     }
     
-    // Returns the URL of a sub directory inside the application support folder
-    static func appSupportFolder(_ name: String, create: Bool = false) throws -> URL {
-
+    // Returns the URL of a subdirectory inside the application support folder
+    static func appSupportFolder(_ name: String) throws -> URL {
+        
         let support = try URL.appSupportFolder()
         
         let fm = FileManager.default
         let folder = support.appendingPathComponent("\(name)")
-        
-        // Check if the folder already exists
         var isDirectory: ObjCBool = false
         let folderExists = fm.fileExists(atPath: folder.path,
                                          isDirectory: &isDirectory)
         
-        // If not, create the folder (if requested)
-        if create && (!folderExists || !isDirectory.boolValue) {
+        if !folderExists || !isDirectory.boolValue {
             
             try fm.createDirectory(at: folder,
                                    withIntermediateDirectories: true,
@@ -150,10 +147,10 @@ extension URL {
         return folder
     }
         
-    // Return the URL to an empty temporary folder
+    // Returns the URL of an empty temporary folder
     static func tmpFolder() throws -> URL {
         
-        let tmp = try appSupportFolder("tmp", create: true)
+        let tmp = try appSupportFolder("tmp")
         try tmp.delete()
         return tmp
     }
@@ -165,10 +162,18 @@ extension URL {
             at: self, includingPropertiesForKeys: nil,
             options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
         )
+        track("urls = \(urls)")
+
+        // Filter out sub directories
+        var filtered = urls.filter {
+            $0.hasDirectoryPath == false
+        }
         
-        let filtered = urls.filter {
+        // Filter out all files with an unallowed type
+        filtered = filtered.filter {
             allowedTypes?.contains($0.pathExtension.uppercased()) ?? true
         }
+        track("filtered = \(filtered)")
         return filtered
     }
     

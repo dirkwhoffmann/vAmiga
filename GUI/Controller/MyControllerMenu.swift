@@ -275,7 +275,24 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func takeScreenshotAction(_ sender: Any!) {
         
-        takeUserScreenshot()
+        track()
+        
+        // Determine screenshot format
+        let format = ScreenshotSource.init(rawValue: pref.screenshotSource)!
+        
+        // Take screenshot
+        guard let screen = renderer.screenshot(source: format) else {
+            track("Failed to create screenshot")
+            return
+        }
+
+        // Convert to Screenshot object
+        let screenshot = Screenshot.init(screen: screen, format: pref.screenshotTarget)
+
+        // Save to disk
+        try? screenshot.save(id: mydocument.bootDiskID)
+        
+        // Create a visual effect
         renderer.blendIn(steps: 20)
     }
     

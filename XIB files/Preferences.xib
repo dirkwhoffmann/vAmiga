@@ -96,7 +96,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="646" height="495"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="646" height="495"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -317,7 +317,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hst-Cn-3YK">
-                                            <rect key="frame" x="88" y="293" width="197" height="26"/>
+                                            <rect key="frame" x="88" y="293" width="203" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Visible Texture" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="Izq-aZ-EjX" id="oFh-wS-8JF">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -328,6 +328,12 @@
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem title="Visible Texture (Upscaled)" tag="1" id="uIQ-Vh-4OI">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Entire Texture" tag="2" id="sfC-eT-3oc">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Entire Texture (Upscaled)" tag="3" id="liY-R1-e1q">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -347,7 +353,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Oag-9U-PiB">
-                                            <rect key="frame" x="88" y="263" width="197" height="26"/>
+                                            <rect key="frame" x="88" y="263" width="203" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="TIFF image" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="1yz-yK-0RR" id="YMC-wt-brN">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -413,7 +419,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="etB-PX-kNT">
-                                            <rect key="frame" x="88" y="147" width="197" height="26"/>
+                                            <rect key="frame" x="88" y="147" width="203" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Visible Texture" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="dd1-rv-WCT" id="MOQ-mo-kbo">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -523,7 +529,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vjW-JA-zQ3">
-                                            <rect key="frame" x="253" y="177" width="28" height="28"/>
+                                            <rect key="frame" x="258" y="177" width="28" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="FFmpegIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="9Jf-vG-TYA">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
