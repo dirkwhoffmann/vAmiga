@@ -36,6 +36,9 @@ class ActivityMonitor {
     // Set to true to hide the view
     var isHidden = false
     
+    // Indicates if the monitor is paused
+    var paused = true { didSet { if oldValue != paused { pauseChanged(paused) } } }
+    
     // Canvas dimensions on the xy plane
     var position = NSRect.init() { didSet { updateMatrix() } }
     
@@ -52,6 +55,8 @@ class ActivityMonitor {
         
         self.device = device
     }
+    
+    func pauseChanged(_ value: Bool) { }
     
     func updateMatrix() {
         
@@ -184,6 +189,13 @@ class BarChart: ActivityMonitor {
         updateBars()
         updateTextures()
         updateMatrix()
+    }
+    
+    override func pauseChanged(_ value: Bool) {
+        
+        upperSumCnt = 0
+        lowerSumCnt = 0
+        microStep = 0
     }
     
     func updateBgBuffer() {
@@ -344,17 +356,20 @@ class BarChart: ActivityMonitor {
     
     override func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
                 
-        microStep += 1
-        
-        if microStep == microSteps {
-            upperValues.remove(at: 0)
-            lowerValues.remove(at: 0)
-            upperValues.append(upperSumCnt == 0 ? upperSum : upperSum / Float(upperSumCnt))
-            lowerValues.append(lowerSumCnt == 0 ? lowerSum : lowerSum / Float(lowerSumCnt))
-            upperSumCnt = 0
-            lowerSumCnt = 0
-            microStep = 0
-            updateBars()
+        if !paused {
+            
+            microStep += 1
+            
+            if microStep == microSteps {
+                upperValues.remove(at: 0)
+                lowerValues.remove(at: 0)
+                upperValues.append(upperSumCnt == 0 ? upperSum : upperSum / Float(upperSumCnt))
+                lowerValues.append(lowerSumCnt == 0 ? lowerSum : lowerSum / Float(lowerSumCnt))
+                upperSumCnt = 0
+                lowerSumCnt = 0
+                microStep = 0
+                updateBars()
+            }
         }
         
         if isHidden { return }

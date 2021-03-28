@@ -14,7 +14,6 @@ class Layer: NSObject {
     let renderer: Renderer
     
     var amiga: AmigaProxy { return renderer.parent.amiga }
-    // var commandEncoder: MTLRenderCommandEncoder { return renderer.commandEncoder }
     
     // Alpha channel
     var alpha: AnimatedFloat = AnimatedFloat.init()

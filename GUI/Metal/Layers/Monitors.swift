@@ -49,6 +49,9 @@ class Monitors: Layer {
     // Layout scheme used for positioning the monitors
     var monitorLayout = 0 { didSet { updateMonitorPositions() } }
     
+    // Indicates if the monitor is paused
+    var paused = true { didSet { for m in monitors { m.paused = paused } } }
+    
     override init(view: MTKView, device: MTLDevice, renderer: Renderer) {
 
         super.init(view: view, device: device, renderer: renderer)
