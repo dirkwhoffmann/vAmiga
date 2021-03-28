@@ -32,12 +32,14 @@ extension PreferencesController {
         genAspectY.isEnabled = hasFFmpeg
         if hasFFmpeg {
             genFFmpegIcon.isHidden = false
-            genFFmpegLabel.textColor = .textColor
-            genFFmpegLabel.stringValue = "/usr/local/bin/ffmpeg"
+            genFFmpegText.isHidden = false
+            genFFmpegPath.textColor = .textColor
+            genFFmpegPath.stringValue = "/usr/local/bin/ffmpeg"
         } else {
             genFFmpegIcon.isHidden = true
-            genFFmpegLabel.textColor = .warningColor
-            genFFmpegLabel.stringValue = "/usr/local/bin/ffmpeg not found"
+            genFFmpegText.isHidden = true
+            genFFmpegPath.textColor = .warningColor
+            genFFmpegPath.stringValue = "Requires /usr/local/bin/ffmpeg"
         }
         
         // Fullscreen

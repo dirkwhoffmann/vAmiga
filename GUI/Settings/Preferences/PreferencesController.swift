@@ -28,7 +28,8 @@ class PreferencesController: DialogController {
 
     // Screen captures
     @IBOutlet weak var genFFmpegIcon: NSButton!
-    @IBOutlet weak var genFFmpegLabel: NSTextField!
+    @IBOutlet weak var genFFmpegText: NSTextField!
+    @IBOutlet weak var genFFmpegPath: NSTextField!
     @IBOutlet weak var genSource: NSPopUpButton!
     @IBOutlet weak var genAspectX: NSTextField!
     @IBOutlet weak var genAspectY: NSTextField!

@@ -79,7 +79,8 @@
                 <outlet property="genEjectWithoutAskingButton" destination="U1B-Lg-BCh" id="aA2-mn-aQv"/>
                 <outlet property="genExitOnEscButton" destination="eNe-UG-MA9" id="A5a-Uq-grj"/>
                 <outlet property="genFFmpegIcon" destination="vjW-JA-zQ3" id="Pbz-3b-PCa"/>
-                <outlet property="genFFmpegLabel" destination="LDN-1z-rbJ" id="S3Y-nj-O7r"/>
+                <outlet property="genFFmpegPath" destination="LDN-1z-rbJ" id="S3Y-nj-O7r"/>
+                <outlet property="genFFmpegText" destination="mKG-yQ-Fr6" id="Rdo-5N-K4f"/>
                 <outlet property="genPauseInBackground" destination="0hK-zR-osA" id="dMZ-Ub-2WW"/>
                 <outlet property="genScreenshotSourcePopup" destination="hst-Cn-3YK" id="AC6-OU-KhY"/>
                 <outlet property="genScreenshotTargetPopup" destination="Oag-9U-PiB" id="DrC-yo-EER"/>
@@ -412,7 +413,7 @@
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="olQ-S6-VHk">
                                             <rect key="frame" x="26" y="181" width="61" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="FFmpeg:" id="EAq-aB-7dT">
+                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Engine:" id="EAq-aB-7dT">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -519,23 +520,32 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LDN-1z-rbJ">
-                                            <rect key="frame" x="89" y="183" width="211" height="16"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Found in /usr/local/bin" id="7aZ-9p-cCg">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vjW-JA-zQ3">
-                                            <rect key="frame" x="258" y="177" width="28" height="28"/>
+                                            <rect key="frame" x="239" y="13" width="28" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="FFmpegIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="9Jf-vG-TYA">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LDN-1z-rbJ">
+                                            <rect key="frame" x="89" y="183" width="211" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="/usr/local/bin/ffmpeg" id="7aZ-9p-cCg">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mKG-yQ-Fr6">
+                                            <rect key="frame" x="273" y="20" width="128" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Powered by FFmpeg" id="qbZ-Z0-MmA">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>
