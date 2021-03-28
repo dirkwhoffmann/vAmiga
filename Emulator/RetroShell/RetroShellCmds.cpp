@@ -30,9 +30,7 @@ RetroShell::exec <Token::clear> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::close> (Arguments &argv, long param)
 {
-    printf("EXEC CLOSE\n");
-    
-    // app.console.close();
+    messageQueue.put(MSG_CLOSE_CONSOLE);
 }
 
 template <> void

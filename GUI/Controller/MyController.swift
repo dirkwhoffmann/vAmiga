@@ -488,6 +488,9 @@ extension MyController {
         case .POWER_LED_OFF:
             powerLED.image = NSImage.init(named: "powerLedOff")
 
+        case .CLOSE_CONSOLE:
+            renderer.console.close(delay: 0.25)
+            
         case .DMA_DEBUG_ON:
             renderer.zoomTextureOut()
 
