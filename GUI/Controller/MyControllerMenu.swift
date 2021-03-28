@@ -39,9 +39,7 @@ extension MyController: NSMenuItemValidation {
         switch item.action {
             
         // Machine menu
-        case #selector(MyController.importConfigAction(_:)),
-             #selector(MyController.exportConfigAction(_:)),
-             #selector(MyController.resetConfigAction(_:)):
+        case #selector(MyController.resetConfigAction(_:)):
             return !powered
 
         case #selector(MyController.captureScreenAction(_:)):
@@ -145,57 +143,13 @@ extension MyController: NSMenuItemValidation {
         myAppDelegate.prefController!.refresh()
     }
     
-    func importPrefs(_ prefixes: [String]) {
-        
-        track("Importing user defaults with prefixes \(prefixes)")
-        
-        let panel = NSOpenPanel()
-        panel.prompt = "Import"
-        panel.allowedFileTypes = ["vaconf"]
-        
-        panel.beginSheetModal(for: window!, completionHandler: { result in
-            if result == .OK {
-                if let url = panel.url {
-                    self.loadUserDefaults(url: url, prefixes: prefixes)
-                }
-            }
-        })
-    }
-    
-    func exportPrefs(_ prefixes: [String]) {
-        
-        track("Exporting user defaults with prefixes \(prefixes)")
-        
-        let panel = NSSavePanel()
-        panel.prompt = "Export"
-        panel.allowedFileTypes = ["vaconf"]
-        
-        panel.beginSheetModal(for: window!, completionHandler: { result in
-            if result == .OK {
-                if let url = panel.url {
-                    track()
-                    self.saveUserDefaults(url: url, prefixes: prefixes)
-                }
-            }
-        })
-    }
-    
-    @IBAction func importConfigAction(_ sender: Any!) {
-        
-        importPrefs(["VAMIGA_ROM", "VAMIGA_HW", "VAMIGA_COM", "VAMIGA_VID", "VAMIGA_AUD"])
-    }
-    
-    @IBAction func exportConfigAction(_ sender: Any!) {
-        
-        exportPrefs(["VAMIGA_ROM", "VAMIGA_HW", "VAMIGA_COM", "VAMIGA_VID", "VAMIGA_AUD"])
-    }
-    
     @IBAction func resetConfigAction(_ sender: Any!) {
         
         track()
         
         UserDefaults.resetRomUserDefaults()
         UserDefaults.resetHardwareUserDefaults()
+        UserDefaults.resetPeripheralsUserDefaults()
         UserDefaults.resetCompatibilityUserDefaults()
         UserDefaults.resetAudioUserDefaults()
         UserDefaults.resetVideoUserDefaults()
@@ -203,6 +157,7 @@ extension MyController: NSMenuItemValidation {
         amiga.suspend()
         config.loadRomUserDefaults()
         config.loadHardwareUserDefaults()
+        config.loadPeripheralsUserDefaults()
         config.loadCompatibilityUserDefaults()
         config.loadAudioUserDefaults()
         config.loadVideoUserDefaults()
