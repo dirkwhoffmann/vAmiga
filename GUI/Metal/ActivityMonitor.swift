@@ -35,10 +35,7 @@ class ActivityMonitor {
     
     // Set to true to hide the view
     var isHidden = false
-    
-    // Indicates if the monitor is paused
-    var paused = true { didSet { if oldValue != paused { pauseChanged(paused) } } }
-    
+        
     // Canvas dimensions on the xy plane
     var position = NSRect.init() { didSet { updateMatrix() } }
     
@@ -55,9 +52,7 @@ class ActivityMonitor {
         
         self.device = device
     }
-    
-    func pauseChanged(_ value: Bool) { }
-    
+        
     func updateMatrix() {
         
         let posx = Float(position.origin.x)
@@ -101,6 +96,7 @@ class ActivityMonitor {
     
     func setColor(_ color: NSColor) { }
     func setColor(rgb: (Double, Double, Double)) { setColor(NSColor.init(rgb)) }
+    func animate() { }
     func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) { }
 }
 
@@ -190,14 +186,7 @@ class BarChart: ActivityMonitor {
         updateTextures()
         updateMatrix()
     }
-    
-    override func pauseChanged(_ value: Bool) {
         
-        upperSumCnt = 0
-        lowerSumCnt = 0
-        microStep = 0
-    }
-    
     func updateBgBuffer() {
         
         let y1 = lowerBorder * Float(bgSize.height)
@@ -354,24 +343,26 @@ class BarChart: ActivityMonitor {
         upperColor = color
     }
     
+    override func animate() {
+        
+        microStep += 1
+        
+        if microStep == microSteps {
+            
+            upperValues.remove(at: 0)
+            lowerValues.remove(at: 0)
+            upperValues.append(upperSumCnt == 0 ? upperSum : upperSum / Float(upperSumCnt))
+            lowerValues.append(lowerSumCnt == 0 ? lowerSum : lowerSum / Float(lowerSumCnt))
+            upperSumCnt = 0
+            lowerSumCnt = 0
+            microStep = 0
+            
+            updateBars()
+        }
+    }
+    
     override func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
                 
-        if !paused {
-            
-            microStep += 1
-            
-            if microStep == microSteps {
-                upperValues.remove(at: 0)
-                lowerValues.remove(at: 0)
-                upperValues.append(upperSumCnt == 0 ? upperSum : upperSum / Float(upperSumCnt))
-                lowerValues.append(lowerSumCnt == 0 ? lowerSum : lowerSum / Float(lowerSumCnt))
-                upperSumCnt = 0
-                lowerSumCnt = 0
-                microStep = 0
-                updateBars()
-            }
-        }
-        
         if isHidden { return }
 
         let shift = Renderer.translationMatrix(x: xOffset, y: 0.0, z: 0.0)
@@ -486,12 +477,10 @@ class WaveformMonitor: ActivityMonitor {
         self.color = UInt32(a << 24 | r << 16 | g << 8 | b)
     }
 
-    override func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
-
-        if isHidden { return }
+    override func animate() {
         
         count += 1
-
+        
         // Update the foreground texture from time to time
         if count % 5 == 0 {
             
@@ -507,7 +496,12 @@ class WaveformMonitor: ActivityMonitor {
             }
             updateFgTexture()
         }
-        
+    }
+    
+    override func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
+
+        if isHidden { return }
+                
         // Configure vertex shader
         let len = MemoryLayout<VertexUniforms>.stride
         var uniforms = VertexUniforms(mvp: matrix * self.matrix)

@@ -455,13 +455,11 @@ extension MyController {
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()
             refreshStatusBar()
-            renderer.monis.paused = false
 
         case .PAUSE:
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()
             refreshStatusBar()
-            renderer.monis.paused = true
 
         case .RESET:
             mydocument.deleteBootDiskID()

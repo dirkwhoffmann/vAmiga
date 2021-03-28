@@ -48,10 +48,7 @@ class Monitors: Layer {
     
     // Layout scheme used for positioning the monitors
     var monitorLayout = 0 { didSet { updateMonitorPositions() } }
-    
-    // Indicates if the monitor is paused
-    var paused = true { didSet { for m in monitors { m.paused = paused } } }
-    
+        
     override init(view: MTKView, device: MTLDevice, renderer: Renderer) {
 
         super.init(view: view, device: device, renderer: renderer)
@@ -106,6 +103,8 @@ class Monitors: Layer {
         
         for i in 0 ... monitors.count where monitorAlpha[i].current != 0.0 {
             
+            if !amiga.paused { monitors[i].animate() }
+
             fragUniforms.alpha = monitorAlpha[i].current * monitorGlobalAlpha
             encoder.setFragmentBytes(&fragUniforms,
                                      length: MemoryLayout<FragmentUniforms>.stride,
