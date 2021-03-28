@@ -43,7 +43,7 @@ class SnapshotDialog: DialogController {
         
         self.carousel.type = iCarouselType.timeMachine
         self.carousel.isHidden = false
-        self.updateCarousel(goto: self.lastItem, animated: false)
+        self.updateCarousel(goto: Int.max, animated: false)
     }
     
     func updateLabels() {
@@ -206,7 +206,7 @@ class SnapshotDialog: DialogController {
         ]
 
         hideSheet()
-        parent.startSnapshotTimer()
+        parent.validateSnapshotTimer()
         for item in items { item.isHidden = true }
         try? myDocument.persistScreenshots()
     }

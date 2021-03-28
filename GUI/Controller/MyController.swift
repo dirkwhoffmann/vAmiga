@@ -103,17 +103,21 @@ class MyController: NSWindowController, MessageReceiver {
     // Timers
     //
         
-    func startSnapshotTimer() {
+    func validateSnapshotTimer() {
         
-        if pref.snapshotInterval > 0 {
+        snapshotTimer?.invalidate()
+        if pref.autoSnapshots && pref.snapshotInterval > 0 {
             
-            snapshotTimer?.invalidate()
             snapshotTimer =
                 Timer.scheduledTimer(timeInterval: TimeInterval(pref.snapshotInterval),
                                      target: self,
                                      selector: #selector(snapshotTimerFunc),
                                      userInfo: nil,
                                      repeats: true)
+            
+            track("Taking a snapshot every \(pref.snapshotInterval) seconds")
+        } else {
+            track("Disabling auto snapshots")
         }
     }
     

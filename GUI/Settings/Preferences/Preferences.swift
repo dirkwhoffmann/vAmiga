@@ -23,9 +23,11 @@ class Preferences {
     //
        
     // Snapshots
-    var autoSnapshots = GeneralDefaults.std.autoSnapshots
+    var autoSnapshots = GeneralDefaults.std.autoSnapshots {
+        didSet { for c in myAppDelegate.controllers { c.validateSnapshotTimer() } }
+    }
     var snapshotInterval = 0 {
-        didSet { for c in myAppDelegate.controllers { c.startSnapshotTimer() } }
+        didSet { for c in myAppDelegate.controllers { c.validateSnapshotTimer() } }
     }
 
     // Screenshots
