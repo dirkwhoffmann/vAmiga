@@ -23,15 +23,10 @@ class PreferencesController: DialogController {
     @IBOutlet weak var genSnapshotInterval: NSTextField!
 
     // Screenshots
-    @IBOutlet weak var genAutoScreenshots: NSButton!
-    @IBOutlet weak var genScreenshotInterval: NSTextField!
     @IBOutlet weak var genScreenshotSourcePopup: NSPopUpButton!
     @IBOutlet weak var genScreenshotTargetPopup: NSPopUpButton!
 
     // Screen captures
-    // @IBOutlet weak var genFFmpegText: NSTextField!
-    // @IBOutlet weak var genFFmpegIcon1: NSButton!
-    // @IBOutlet weak var genFFmpegIcon2: NSImageView!
     @IBOutlet weak var genFFmpegIcon: NSButton!
     @IBOutlet weak var genFFmpegLabel: NSTextField!
     @IBOutlet weak var genSource: NSPopUpButton!

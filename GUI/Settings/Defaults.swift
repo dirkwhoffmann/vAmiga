@@ -131,8 +131,6 @@ struct Keys {
         static let autoSnapshotInterval   = "VAMIGA_GEN_ScreenshotInterval"
 
         // Screenshots
-        static let autoScreenshots        = "VAMIGA_GEN_AutoScreenshots"
-        static let autoScreenshotInterval = "VAMIGA_GEN_SnapshotInterval"
         static let screenshotSource       = "VAMIGA_GEN_ScreenshotSource"
         static let screenshotTarget       = "VAMIGA_GEN_ScreenshotTarget"
                 
@@ -226,8 +224,6 @@ extension UserDefaults {
             Keys.Gen.autoSnapshots: defaults.autoSnapshots,
             Keys.Gen.autoSnapshotInterval: defaults.autoSnapshotInterval,
 
-            Keys.Gen.autoScreenshots: defaults.autoScreenshots,
-            Keys.Gen.autoScreenshotInterval: defaults.autoScreenshotInterval,
             Keys.Gen.screenshotSource: defaults.screenshotSource,
             Keys.Gen.screenshotTarget: Int(defaults.screenshotTarget.rawValue),
 
@@ -258,8 +254,6 @@ extension UserDefaults {
         let keys = [ Keys.Gen.autoSnapshots,
                      Keys.Gen.autoSnapshotInterval,
                      
-                     Keys.Gen.autoScreenshots,
-                     Keys.Gen.autoScreenshotInterval,
                      Keys.Gen.screenshotSource,
                      Keys.Gen.screenshotTarget,
                      

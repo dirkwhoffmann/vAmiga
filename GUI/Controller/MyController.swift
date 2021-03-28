@@ -125,26 +125,7 @@ class MyController: NSWindowController, MessageReceiver {
         
         snapshotTimer?.invalidate()
     }
-            
-    func startScreenshotTimer() {
-        
-        if pref.snapshotInterval > 0 {
-            
-            screenshotTimer?.invalidate()
-            screenshotTimer =
-                Timer.scheduledTimer(timeInterval: TimeInterval(pref.screenshotInterval),
-                                     target: self,
-                                     selector: #selector(screenshotTimerFunc),
-                                     userInfo: nil,
-                                     repeats: true)
-        }
-    }
-    
-    func stopScreenshotTimer() {
-        
-        screenshotTimer?.invalidate()
-    }
-            
+
     func updateWarp() {
         
         var warp: Bool
@@ -437,12 +418,7 @@ extension MyController {
 
         if pref.autoSnapshots { amiga.requestAutoSnapshot() }
     }
-    
-    @objc func screenshotTimerFunc() {
-        
-        if pref.autoScreenshots { takeAutoScreenshot() }
-    }
-        
+            
     func processMessage(_ msg: Message) {
         
         var driveNr: Int { return msg.data & 0xFF }

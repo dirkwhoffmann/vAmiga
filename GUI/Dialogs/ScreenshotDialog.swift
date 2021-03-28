@@ -48,8 +48,6 @@ class ScreenshotDialog: DialogController {
         track()
         
         now = Date()
-        
-        parent.stopScreenshotTimer()
         updateLabels()
         
         self.carousel.type = iCarouselType.coverFlow
@@ -179,9 +177,7 @@ class ScreenshotDialog: DialogController {
         track()
                         
         hideSheet()
-        
-        parent.startScreenshotTimer()
-        
+                
         carousel.isHidden = true
         leftButton.isHidden = true
         rightButton.isHidden = true

@@ -17,9 +17,6 @@ extension PreferencesController {
 
         // Screenshots
         genSnapshotInterval.isEnabled = pref.autoSnapshots
-        genAutoScreenshots.state = pref.autoScreenshots ? .on : .off
-        genScreenshotInterval.integerValue = pref.screenshotInterval
-        genScreenshotInterval.isEnabled = pref.autoScreenshots
         genScreenshotSourcePopup.selectItem(withTag: pref.screenshotSource)
         genScreenshotTargetPopup.selectItem(withTag: pref.screenshotTargetIntValue)
                 
@@ -34,9 +31,11 @@ extension PreferencesController {
         genAspectX.isEnabled = hasFFmpeg
         genAspectY.isEnabled = hasFFmpeg
         if hasFFmpeg {
+            genFFmpegIcon.isHidden = false
             genFFmpegLabel.textColor = .textColor
-            genFFmpegLabel.stringValue = "ffmpeg found in /usr/local/bin"
+            genFFmpegLabel.stringValue = "/usr/local/bin/ffmpeg"
         } else {
+            genFFmpegIcon.isHidden = true
             genFFmpegLabel.textColor = .warningColor
             genFFmpegLabel.stringValue = "/usr/local/bin/ffmpeg not found"
         }
@@ -76,20 +75,6 @@ extension PreferencesController {
     // Action methods (Screenshots)
     //
 
-    @IBAction func capAutoScreenshotAction(_ sender: NSButton!) {
-        
-        pref.autoScreenshots = sender.state == .on
-        refresh()
-    }
-    
-    @IBAction func capScreenshotIntervalAction(_ sender: NSTextField!) {
-        
-        if sender.integerValue > 0 {
-            pref.screenshotInterval = sender.integerValue
-        }
-        refresh()
-    }
-    
     @IBAction func capScreenshotSourceAction(_ sender: NSPopUpButton!) {
         
         pref.screenshotSource = sender.selectedTag()

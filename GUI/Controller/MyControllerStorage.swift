@@ -59,6 +59,5 @@ extension MyController {
             mydocument!.userScreenshots.append(screenshot)
     }
     
-    func takeAutoScreenshot() { takeScreenshot(auto: true) }
     func takeUserScreenshot() { takeScreenshot(auto: false) }
 }

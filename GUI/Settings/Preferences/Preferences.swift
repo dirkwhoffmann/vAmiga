@@ -31,10 +31,6 @@ class Preferences {
     }
 
     // Screenshots
-    var autoScreenshots = GeneralDefaults.std.autoScreenshots
-    var screenshotInterval = 0 {
-        didSet { for c in myAppDelegate.controllers { c.startScreenshotTimer() } }
-    }
     var screenshotSource = GeneralDefaults.std.screenshotSource
     var screenshotTarget = GeneralDefaults.std.screenshotTarget
     var screenshotTargetIntValue: Int {
@@ -145,8 +141,6 @@ class Preferences {
         snapshotInterval = defaults.autoSnapshotInterval
 
         // Screenshots
-        autoScreenshots = defaults.autoScreenshots
-        screenshotInterval = defaults.autoScreenshotInterval
         screenshotSource = defaults.screenshotSource
         screenshotTarget = defaults.screenshotTarget
 
@@ -178,8 +172,6 @@ class Preferences {
         snapshotInterval = defaults.integer(forKey: Keys.Gen.autoSnapshotInterval)
 
         // Screenshots
-        autoScreenshots = defaults.bool(forKey: Keys.Gen.autoScreenshots)
-        screenshotInterval = defaults.integer(forKey: Keys.Gen.autoScreenshotInterval)
         screenshotSource = defaults.integer(forKey: Keys.Gen.screenshotSource)
         screenshotTargetIntValue = defaults.integer(forKey: Keys.Gen.screenshotTarget)
 
@@ -213,8 +205,6 @@ class Preferences {
         // Screenshots
         defaults.set(autoSnapshots, forKey: Keys.Gen.autoSnapshots)
         defaults.set(snapshotInterval, forKey: Keys.Gen.autoSnapshotInterval)
-        defaults.set(autoScreenshots, forKey: Keys.Gen.autoScreenshots)
-        defaults.set(screenshotInterval, forKey: Keys.Gen.autoScreenshotInterval)
         defaults.set(screenshotSource, forKey: Keys.Gen.screenshotSource)
 
         // Captures
