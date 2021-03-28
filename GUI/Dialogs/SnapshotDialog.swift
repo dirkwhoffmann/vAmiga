@@ -55,9 +55,7 @@ class SnapshotDialog: DialogController {
         moveUp.isHidden = empty
         moveDown.isHidden = empty
         nr.isHidden = empty
-        // restore.isHidden = empty
-        restore.isHidden = false
-        restore.isEnabled = !empty
+        restore.isHidden = empty
         
         if let snapshot = myDocument.snapshots.element(at: currentItem) {
             let takenAt = snapshot.timeStamp
