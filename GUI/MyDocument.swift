@@ -25,8 +25,7 @@ class MyDocument: NSDocument {
     var amigaAttachment: AmigaFileProxy?
     
     // Snapshots
-    private(set) var autoSnapshots = ManagedArray<SnapshotProxy>.init(capacity: 32)
-    private(set) var userSnapshots = ManagedArray<SnapshotProxy>.init(capacity: Int.max)
+    private(set) var snapshots = ManagedArray<SnapshotProxy>.init(capacity: 32)
 
     // Screenshots (DEPRECATED)
     private(set) var autoScreenshots = ManagedArray<Screenshot>.init(capacity: 32)
@@ -164,7 +163,7 @@ class MyDocument: NSDocument {
             
             let proxy = amigaAttachment as! SnapshotProxy
             parent.load(snapshot: proxy)
-            userSnapshots.append(proxy)
+            snapshots.append(proxy)
             
         case _ as HDFFileProxy:
             

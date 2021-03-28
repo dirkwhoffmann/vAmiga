@@ -254,12 +254,12 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func takeSnapshotAction(_ sender: Any!) {
         
-        takeUserSnapshot()
+        amiga.requestUserSnapshot()
     }
     
     @IBAction func restoreSnapshotAction(_ sender: Any!) {
         
-        if !restoreLatestUserSnapshot() {
+        if !restoreLatestSnapshot() {
             NSSound.beep()
         }
     }

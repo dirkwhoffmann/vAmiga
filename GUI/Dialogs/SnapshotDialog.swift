@@ -11,23 +11,16 @@ class SnapshotDialog: DialogController {
     
     var now: Date!
 
-    @IBOutlet weak var selector: NSSegmentedControl!
-    
-    @IBOutlet weak var seperator: NSBox!
     @IBOutlet weak var carousel: iCarousel!
     @IBOutlet weak var moveUp: NSButton!
     @IBOutlet weak var moveDown: NSButton!
-    @IBOutlet weak var save: NSButton!
     @IBOutlet weak var restore: NSButton!
-    @IBOutlet weak var trash: NSButton!
     @IBOutlet weak var nr: NSTextField!
     @IBOutlet weak var text1: NSTextField!
     @IBOutlet weak var text2: NSTextField!
     
     // Computed variables
     var myDocument: MyDocument { return parent.mydocument! }
-    var userView: Bool { return selector.selectedSegment == 0 }
-    var autoView: Bool { return selector.selectedSegment == 1 }
     var numItems: Int { return carousel.numberOfItems }
     var currentItem: Int { return carousel.currentItemIndex }
     var centerItem: Int { return numItems / 2 }
@@ -59,23 +52,17 @@ class SnapshotDialog: DialogController {
         moveDown.isEnabled = currentItem > 0
         nr.stringValue = "\(currentItem + 1) / \(numItems)"
     
-        seperator.isHidden = true
         moveUp.isHidden = empty
         moveDown.isHidden = empty
         nr.isHidden = empty
-        save.isHidden = empty
-        restore.isHidden = empty
-        trash.isHidden = empty
+        // restore.isHidden = empty
+        restore.isHidden = false
+        restore.isEnabled = !empty
         
-        userView ? updateUserLabels() : updateAutoLabels()
-    }
-    
-    func updateUserLabels() {
-        
-        if let snapshot = myDocument.userSnapshots.element(at: currentItem) {
+        if let snapshot = myDocument.snapshots.element(at: currentItem) {
             let takenAt = snapshot.timeStamp
-            text1.stringValue = timeDiffInfo(time: takenAt)
-            text2.stringValue = timeInfo(time: takenAt)
+            text1.stringValue = "Taken at " + timeInfo(time: takenAt)
+            text2.stringValue = timeDiffInfo(time: takenAt)
         } else {
             text1.stringValue = "No snapshots available"
             text2.stringValue = ""
@@ -83,21 +70,7 @@ class SnapshotDialog: DialogController {
         text1.isHidden = false
         text2.isHidden = false
     }
-    
-    func updateAutoLabels() {
-        
-        if let snapshot = myDocument.autoSnapshots.element(at: currentItem) {
-            let takenAt = snapshot.timeStamp
-            text1.stringValue = timeDiffInfo(time: takenAt)
-            text2.stringValue = timeInfo(time: takenAt)
-        } else {
-            text1.stringValue = "No snapshots available"
-            text2.stringValue = ""
-        }
-        text1.isHidden = false
-        text2.isHidden = false
-    }
-  
+      
     func updateCarousel(goto item: Int, animated: Bool) {
         
         carousel.reloadData()
@@ -209,87 +182,36 @@ class SnapshotDialog: DialogController {
             carousel.scrollToItem(at: currentItem - 1, animated: true)
         }
     }
-    
-    @IBAction func trashAction(_ sender: NSButton!) {
         
-        if userView {
-            myDocument.userSnapshots.remove(at: currentItem)
-        } else {
-            myDocument.autoSnapshots.remove(at: currentItem)
-        }
-        updateCarousel()
-    }
-    
-    @IBAction func restoreAction(_ sender: NSButton!) {
+    @IBAction func revertAction(_ sender: NSButton!) {
         
         track()
-        if userView && !parent.restoreUserSnapshot(item: currentItem) {
+        if !parent.restoreSnapshot(item: currentItem) {
             NSSound.beep()
         }
-        if autoView && !parent.restoreAutoSnapshot(item: currentItem) {
-            NSSound.beep()
-        }
+        hideSheet()
     }
-    
-    /*
-    @IBAction func saveAction(_ sender: NSButton!) {
-        
-        track()
-        if userView {
-            saveAs(snapshot: myDocument.userSnapshots.element(at: currentItem))
-        } else {
-            saveAs(snapshot: myDocument.autoSnapshots.element(at: currentItem))
-        }
-    }
-    */
-    
+
     @IBAction override func cancelAction(_ sender: Any!) {
         
         track()
-                        
-        hideSheet()
 
-        parent.startSnapshotTimer()
-        
-        // Hide some controls
         let items: [NSView] = [
             
-            seperator,
             nr,
             moveUp,
             moveDown,
             restore,
-            save,
-            trash,
             text1,
             text2,
             carousel
         ]
-        
+
+        hideSheet()
+        parent.startSnapshotTimer()
         for item in items { item.isHidden = true }
-        
         try? myDocument.persistScreenshots()
     }
-    
-    /*
-    func saveAs(snapshot: SnapshotProxy?) {
-        
-        track()
-        if snapshot == nil { return }
-        
-        let panel = NSSavePanel()
-        panel.prompt = "Save As"
-        panel.allowedFileTypes = ["vAmiga"]
-        
-        panel.beginSheetModal(for: window!, completionHandler: { result in
-            if result == .OK {
-                if let url = panel.url {
-                    try? snapshot!.data?.write(to: url)
-                }
-            }
-        })
-    }
-    */
 }
 
 //
@@ -300,9 +222,7 @@ extension SnapshotDialog: iCarouselDataSource, iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
                 
-        return userView ?
-            myDocument.userSnapshots.count :
-            myDocument.autoSnapshots.count
+        return myDocument.snapshots.count
     }
     
     func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: NSView?) -> NSView {
@@ -311,9 +231,7 @@ extension SnapshotDialog: iCarouselDataSource, iCarouselDelegate {
         let w = h * 4 / 3
         let itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: w, height: h))
         
-        itemView.image = userView ?
-            myDocument.userSnapshots.element(at: index)?.previewImage?.roundCorners() :
-            myDocument.autoSnapshots.element(at: index)?.previewImage?.roundCorners()
+        itemView.image = myDocument.snapshots.element(at: index)?.previewImage?.roundCorners()
         
         /*
         itemView.wantsLayer = true
