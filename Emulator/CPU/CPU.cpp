@@ -286,6 +286,7 @@ CPU::_dump(Dump::Category category, std::ostream& os) const
 void
 CPU::_debugOn()
 {
+    HardwareComponent::_debugOn();
     msg("Enabling debug mode\n");
     debugger.enableLogging();
 }
@@ -293,6 +294,7 @@ CPU::_debugOn()
 void
 CPU::_debugOff()
 {
+    HardwareComponent::_debugOff();
     msg("Disabling debug mode\n");
     debugger.disableLogging();
 }

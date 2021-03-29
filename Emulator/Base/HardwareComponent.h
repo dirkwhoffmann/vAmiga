@@ -281,14 +281,14 @@ protected:
     // Switches warp mode on or off
     void warpOn();
     void warpOff();
-    virtual void _warpOn() { };
-    virtual void _warpOff() { };
+    virtual void _warpOn();
+    virtual void _warpOff();
 
     // Switches debug mode on or off
     void debugOn();
     void debugOff();
-    virtual void _debugOn() { };
-    virtual void _debugOff() { };
+    virtual void _debugOn();
+    virtual void _debugOff();
 };
 
 //

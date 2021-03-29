@@ -522,24 +522,30 @@ Amiga::_pause()
 void
 Amiga::warpOn()
 {
-    HardwareComponent::warpOn();
+    if (!warpMode) {
+        HardwareComponent::warpOn();
+    }
 }
 
 void
 Amiga::warpOff()
 {
-    HardwareComponent::warpOff();
+    if (warpMode) {
+        HardwareComponent::warpOff();
+    }
 }
 
 void
 Amiga::_warpOn()
 {
+    HardwareComponent::_warpOn();
     queue.put(MSG_WARP_ON);
 }
 
 void
 Amiga::_warpOff()
 {
+    HardwareComponent::_warpOff();
     oscillator.restart();
     queue.put(MSG_WARP_OFF);
 }

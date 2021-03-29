@@ -246,10 +246,6 @@ HardwareComponent::_pause()
 void
 HardwareComponent::warpOn()
 {
-    if (warpMode) return;
-    
-    warpMode = true;
-
      // Enable or disable warp mode for all subcomponents
      for (HardwareComponent *c : subComponents) {
          c->warpOn();
@@ -260,12 +256,14 @@ HardwareComponent::warpOn()
 }
 
 void
+HardwareComponent::_warpOn()
+{
+    warpMode = true;
+}
+
+void
 HardwareComponent::warpOff()
 {
-    if (!warpMode) return;
-    
-    warpMode = false;
-
      // Enable or disable warp mode for all subcomponents
      for (HardwareComponent *c : subComponents) {
          c->warpOff();
@@ -276,12 +274,14 @@ HardwareComponent::warpOff()
 }
 
 void
-HardwareComponent::debugOn()
+HardwareComponent::_warpOff()
 {
-    if (debugMode) return;
-    
-    debugMode = true;
-    
+    warpMode = false;
+}
+
+void
+HardwareComponent::debugOn()
+{    
     // Enable or disable debug mode for all subcomponents
     for (HardwareComponent *c : subComponents) {
         c->debugOn();
@@ -292,12 +292,14 @@ HardwareComponent::debugOn()
 }
 
 void
+HardwareComponent::_debugOn()
+{
+    debugMode = true;
+}
+
+void
 HardwareComponent::debugOff()
 {
-    if (!debugMode) return;
-    
-    debugMode = false;
-    
     // Enable or disable debug mode for all subcomponents
     for (HardwareComponent *c : subComponents) {
         c->debugOff();
@@ -305,4 +307,10 @@ HardwareComponent::debugOff()
     
     // Enable debug mode for this component
     _debugOff();
+}
+
+void
+HardwareComponent::_debugOff()
+{
+    debugMode = false;
 }
