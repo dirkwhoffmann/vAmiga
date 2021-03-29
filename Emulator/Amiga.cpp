@@ -393,6 +393,8 @@ Amiga::_dump(Dump::Category category, std::ostream& os) const
 void
 Amiga::powerOn()
 {
+    assert(!isEmulatorThread());
+    
     debug(RUN_DEBUG, "powerOn()\n");
     
     #ifdef DF0_DISK
@@ -446,6 +448,8 @@ Amiga::_powerOn()
 void
 Amiga::powerOff()
 {
+    assert(!isEmulatorThread());
+
     debug(RUN_DEBUG, "powerOff()\n");
             
     if (isPoweredOn()) {
@@ -522,6 +526,8 @@ Amiga::_pause()
 void
 Amiga::warpOn()
 {
+    assert(!isEmulatorThread());
+
     if (!warpMode) {
         HardwareComponent::warpOn();
     }
@@ -530,6 +536,8 @@ Amiga::warpOn()
 void
 Amiga::warpOff()
 {
+    assert(!isEmulatorThread());
+
     if (warpMode) {
         HardwareComponent::warpOff();
     }
@@ -553,13 +561,21 @@ Amiga::_warpOff()
 void
 Amiga::debugOn()
 {
-    HardwareComponent::debugOn();
+    assert(!isEmulatorThread());
+
+    if (!debugMode) {
+        HardwareComponent::debugOn();
+    }
 }
 
 void
 Amiga::debugOff()
 {
-    HardwareComponent::debugOff();
+    assert(!isEmulatorThread());
+    
+    if (debugMode) {
+        HardwareComponent::debugOff();
+    }
 }
 
 void

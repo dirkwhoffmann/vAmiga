@@ -253,6 +253,9 @@ private:
     
 public:
     
+    // Returns true if the currently executed thread is the emulator thread
+    bool isEmulatorThread() { return pthread_self() == p; }
+    
     /* Requests the emulator thread to stop and locks the threadLock. The
      * function is called in all state changing methods to obtain ownership
      * of the emulator thread. After returning, the emulator is either powered
