@@ -93,12 +93,14 @@ Paula::didLoadFromBuffer(const u8 *buffer)
 void
 Paula::_run()
 {
+    HardwareComponent::_run();
     muxer.clear();
 }
 
 void
 Paula::_pause()
 {
+    HardwareComponent::_pause();
     muxer.clear();
 }
 

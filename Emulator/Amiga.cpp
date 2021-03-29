@@ -483,7 +483,7 @@ Amiga::run()
 void
 Amiga::_run()
 {
-    debug(RUN_DEBUG, "_run()\n");
+    HardwareComponent::_run();
     
     // Start the emulator thread
     pthread_create(&p, nullptr, threadMain, (void *)this);
@@ -507,7 +507,7 @@ Amiga::pause()
 void
 Amiga::_pause()
 {
-    debug(RUN_DEBUG, "_pause()\n");
+    HardwareComponent::_pause();
     
     // When we reach this line, the emulator thread is already gone
     assert(p == (pthread_t)0);

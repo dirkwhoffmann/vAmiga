@@ -2186,6 +2186,7 @@ using namespace moira;
 
 - (void)run
 {
+    [self amiga]->powerOn();
     [self amiga]->run();
 }
 
