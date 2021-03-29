@@ -192,7 +192,8 @@ private:
     
     void _run() override;
     void _pause() override;
-    void _setWarp(bool enable) override;
+    void _warpOn() override;
+    void _warpOff() override;
 
 
     //

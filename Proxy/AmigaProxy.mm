@@ -2097,7 +2097,11 @@ using namespace moira;
 
 - (void)setWarp:(BOOL)value
 {
-    [self amiga]->setWarp(value);
+    if (value) {
+        [self amiga]->warpOn();
+    } else {
+        [self amiga]->warpOff();
+    }
 }
 
 - (BOOL)debugMode
@@ -2105,9 +2109,13 @@ using namespace moira;
     return [self amiga]->inDebugMode();
 }
 
-- (void)setDebugMode:(BOOL)enable
+- (void)setDebugMode:(BOOL)value
 {
-    [self amiga]->setDebug(enable);
+    if (value) {
+        [self amiga]->debugOn();
+    } else {
+        [self amiga]->debugOff();
+    }
 }
 
 - (EventID)inspectionTarget

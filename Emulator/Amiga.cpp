@@ -534,29 +534,40 @@ Amiga::_pause()
 }
 
 void
-Amiga::setWarp(bool enable)
+Amiga::warpOn()
 {
-    HardwareComponent::setWarp(enable);
+    HardwareComponent::warpOn();
 }
 
 void
-Amiga::_setWarp(bool enable)
+Amiga::warpOff()
 {
-    if (enable) {
-        
-        queue.put(MSG_WARP_ON);
-        
-    } else {
-        
-        oscillator.restart();
-        queue.put(MSG_WARP_OFF);
-    }
+    HardwareComponent::warpOff();
 }
 
 void
-Amiga::setDebug(bool enable)
+Amiga::_warpOn()
 {
-    HardwareComponent::setDebug(enable);
+    queue.put(MSG_WARP_ON);
+}
+
+void
+Amiga::_warpOff()
+{
+    oscillator.restart();
+    queue.put(MSG_WARP_OFF);
+}
+
+void
+Amiga::debugOn()
+{
+    HardwareComponent::debugOn();
+}
+
+void
+Amiga::debugOff()
+{
+    HardwareComponent::debugOff();
 }
 
 void
@@ -789,13 +800,13 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_WARP_ON) {
                 clearControlFlags(RL_WARP_ON);
                 debug(RUN_DEBUG, "RL_WARP_ON\n");
-                setWarp(true);
+                warpOn();
             }
 
             if (runLoopCtrl & RL_WARP_OFF) {
                 clearControlFlags(RL_WARP_OFF);
                 debug(RUN_DEBUG, "RL_WARP_OFF\n");
-                setWarp(false);
+                warpOff();
             }
         }
     }

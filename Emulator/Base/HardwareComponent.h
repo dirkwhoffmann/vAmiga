@@ -279,12 +279,16 @@ protected:
     virtual void _pause() { };
         
     // Switches warp mode on or off
-    void setWarp(bool enable);
-    virtual void _setWarp(bool enable) { };
-    
+    void warpOn();
+    void warpOff();
+    virtual void _warpOn() { };
+    virtual void _warpOff() { };
+
     // Switches debug mode on or off
-    void setDebug(bool enable);
-    virtual void _setDebug(bool enable) { };
+    void debugOn();
+    void debugOff();
+    virtual void _debugOn() { };
+    virtual void _debugOff() { };
 };
 
 //

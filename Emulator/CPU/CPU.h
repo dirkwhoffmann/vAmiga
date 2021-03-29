@@ -106,7 +106,8 @@ private:
     
 private:
 
-    void _setDebug(bool enable) override;
+    void _debugOn() override;
+    void _debugOff() override;
 
         
     //

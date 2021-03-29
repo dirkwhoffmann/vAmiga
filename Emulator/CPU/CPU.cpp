@@ -284,18 +284,17 @@ CPU::_dump(Dump::Category category, std::ostream& os) const
 }
 
 void
-CPU::_setDebug(bool enable)
+CPU::_debugOn()
 {
-    if (enable) {
-         
-         msg("Enabling debug mode\n");
-         debugger.enableLogging();
+    msg("Enabling debug mode\n");
+    debugger.enableLogging();
+}
 
-     } else {
-
-         msg("Disabling debug mode\n");
-         debugger.disableLogging();
-     }
+void
+CPU::_debugOff()
+{
+    msg("Disabling debug mode\n");
+    debugger.disableLogging();
 }
 
 isize

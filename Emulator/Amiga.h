@@ -234,15 +234,13 @@ public:
     void run();
     void pause();
     
-    void setWarp(bool enable);
+    void warpOn();
+    void warpOff();
     bool inWarpMode() { return warpMode; }
-    void enableWarpMode() { setWarp(true); }
-    void disableWarpMode() { setWarp(false); }
 
-    void setDebug(bool enable);
+    void debugOn();
+    void debugOff();
     bool inDebugMode() { return debugMode; }
-    void enableDebugMode() { setDebug(true); }
-    void disableDebugMode() { setDebug(false); }
 
 private:
     
@@ -250,7 +248,8 @@ private:
     void _powerOff() override;
     void _run() override;
     void _pause() override;
-    void _setWarp(bool enable) override;
+    void _warpOn() override;
+    void _warpOff() override;
 
     
     //
