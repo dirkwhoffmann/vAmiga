@@ -127,12 +127,7 @@ private:
      */
     pthread_mutex_t threadLock;
     
-    /* Lock to synchronize the access to all state changing methods such as
-     * run(), pause(), etc.
-     */
-    pthread_mutex_t stateChangeLock;
-    
-    
+        
     //
     // Snapshot storage
     //

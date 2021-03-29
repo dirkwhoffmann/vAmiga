@@ -2145,6 +2145,7 @@ using namespace moira;
 
 - (void)powerOff
 {
+    [self amiga]->pause();
     [self amiga]->powerOff();
 }
 

@@ -178,19 +178,14 @@ HardwareComponent::save(u8 *buffer)
 void
 HardwareComponent::powerOn()
 {
-    if (isPoweredOff()) {
-
-        assert(!isRunning());
-        
-        // Power all subcomponents on
-        for (HardwareComponent *c : subComponents) {
-            c->powerOn();
-        }
-        
-        // Power this component on
-        debug(RUN_DEBUG, "Powering on\n");
-        _powerOn();
+    // Power all subcomponents on
+    for (HardwareComponent *c : subComponents) {
+        c->powerOn();
     }
+    
+    // Power this component on
+    debug(RUN_DEBUG, "Powering on\n");
+    _powerOn();
 }
 
 void
@@ -205,19 +200,13 @@ HardwareComponent::_powerOn()
 void
 HardwareComponent::powerOff()
 {
-    if (isPoweredOn()) {
-        
-        // Pause if needed
-        pause();
-        
-        // Power off this component
-        debug(RUN_DEBUG, "Powering off\n");
-        _powerOff();
-
-        // Power all subcomponents off
-        for (HardwareComponent *c : subComponents) {
-            c->powerOff();
-        }
+    // Power off this component
+    debug(RUN_DEBUG, "Powering off\n");
+    _powerOff();
+    
+    // Power all subcomponents off
+    for (HardwareComponent *c : subComponents) {
+        c->powerOff();
     }
 }
 

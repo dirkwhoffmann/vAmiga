@@ -110,7 +110,6 @@ Amiga::Amiga()
     
     // Initialize mutex
     pthread_mutex_init(&threadLock, nullptr);
-    pthread_mutex_init(&stateChangeLock, nullptr);
     
     // Print some debug information
     if (SNP_DEBUG) {
@@ -149,7 +148,6 @@ Amiga::~Amiga()
     powerOff();
     
     pthread_mutex_destroy(&threadLock);
-    pthread_mutex_destroy(&stateChangeLock);
 }
 
 void
@@ -422,15 +420,11 @@ Amiga::powerOn()
         cpu.debugger.breakpoints.addAt(INITIAL_BREAKPOINT);
     #endif
     
-    pthread_mutex_lock(&stateChangeLock);
-        
-    if (!isPoweredOn() && isReady()) {
+    if (isPoweredOff() && isReady()) {
         
         acquireThreadLock();
         HardwareComponent::powerOn();
-    }
-    
-    pthread_mutex_unlock(&stateChangeLock);
+    }    
 }
 
 void
@@ -453,16 +447,12 @@ void
 Amiga::powerOff()
 {
     debug(RUN_DEBUG, "powerOff()\n");
-    
-    pthread_mutex_lock(&stateChangeLock);
-    
-    if (!isPoweredOff()) {
-        
+            
+    if (isPoweredOn()) {
+            
         acquireThreadLock();
         HardwareComponent::powerOff();
     }
-    
-    pthread_mutex_unlock(&stateChangeLock);
 }
 
 void
@@ -482,16 +472,12 @@ void
 Amiga::run()
 {
     debug(RUN_DEBUG, "run()\n");
-        
-    pthread_mutex_lock(&stateChangeLock);
-    
+            
     if (!isRunning() && isReady()) {
         
         acquireThreadLock();
         HardwareComponent::run();
     }
-    
-    pthread_mutex_unlock(&stateChangeLock);
 }
 
 void
@@ -511,15 +497,11 @@ Amiga::pause()
 {
     debug(RUN_DEBUG, "pause()\n");
 
-    pthread_mutex_lock(&stateChangeLock);
-    
     if (!isPaused()) {
         
         acquireThreadLock();
         HardwareComponent::pause();
     }
-    
-    pthread_mutex_unlock(&stateChangeLock);
 }
 
 void
@@ -640,8 +622,6 @@ Amiga::isReady(ErrorCode *error)
 void
 Amiga::suspend()
 {
-    pthread_mutex_lock(&stateChangeLock);
-    
     debug(RUN_DEBUG, "Suspending (%zu)...\n", suspendCounter);
     
     if (suspendCounter || isRunning()) {
@@ -651,15 +631,11 @@ Amiga::suspend()
                 
         suspendCounter++;
     }
-    
-    pthread_mutex_unlock(&stateChangeLock);
 }
 
 void
 Amiga::resume()
 {
-    pthread_mutex_lock(&stateChangeLock);
-    
     debug(RUN_DEBUG, "Resuming (%zu)...\n", suspendCounter);
     
     if (suspendCounter && --suspendCounter == 0) {
@@ -667,8 +643,6 @@ Amiga::resume()
         acquireThreadLock();
         HardwareComponent::run();
     }
-    
-    pthread_mutex_unlock(&stateChangeLock);
 }
 
 void
