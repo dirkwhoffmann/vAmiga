@@ -178,10 +178,7 @@ HardwareComponent::save(u8 *buffer)
 void
 HardwareComponent::powerOn()
 {
-    for (HardwareComponent *c : subComponents) {
-        c->powerOn();
-    }
-    
+    for (auto c : subComponents) { c->powerOn(); }
     _powerOn();
 }
 
@@ -198,10 +195,7 @@ void
 HardwareComponent::powerOff()
 {
     _powerOff();
-    
-    for (HardwareComponent *c : subComponents) {
-        c->powerOff();
-    }
+    for (auto c : subComponents) { c->powerOff(); }
 }
 
 void
@@ -213,10 +207,7 @@ HardwareComponent::_powerOff()
 void
 HardwareComponent::run()
 {
-    for (HardwareComponent *c : subComponents) {
-        c->run();
-    }
-    
+    for (auto c : subComponents) { c->run(); }
     _run();
 }
 
@@ -230,11 +221,7 @@ void
 HardwareComponent::pause()
 {
     _pause();
-    
-    // Pause all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        c->pause();
-    }
+    for (auto c : subComponents) { c->pause(); }
 }
 
 void
@@ -246,12 +233,7 @@ HardwareComponent::_pause()
 void
 HardwareComponent::warpOn()
 {
-     // Enable or disable warp mode for all subcomponents
-     for (HardwareComponent *c : subComponents) {
-         c->warpOn();
-     }
-
-     // Enable warp mode for this component
+     for (auto c : subComponents) { c->warpOn(); }
      _warpOn();
 }
 
@@ -264,12 +246,7 @@ HardwareComponent::_warpOn()
 void
 HardwareComponent::warpOff()
 {
-     // Enable or disable warp mode for all subcomponents
-     for (HardwareComponent *c : subComponents) {
-         c->warpOff();
-     }
-
-     // Enable warp mode for this component
+     for (auto c : subComponents) { c->warpOff(); }
      _warpOff();
 }
 
@@ -282,12 +259,7 @@ HardwareComponent::_warpOff()
 void
 HardwareComponent::debugOn()
 {    
-    // Enable or disable debug mode for all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        c->debugOn();
-    }
-    
-    // Enable debug mode for this component
+    for (auto c : subComponents) { c->debugOn(); }
     _debugOn();
 }
 
@@ -300,12 +272,7 @@ HardwareComponent::_debugOn()
 void
 HardwareComponent::debugOff()
 {
-    // Enable or disable debug mode for all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        c->debugOff();
-    }
-    
-    // Enable debug mode for this component
+    for (auto c : subComponents) { c->debugOff(); }
     _debugOff();
 }
 
