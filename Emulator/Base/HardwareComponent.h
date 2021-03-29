@@ -243,7 +243,7 @@ protected:
      * running   | running   | none
      */
     void powerOn();
-    virtual void _powerOn() { }
+    virtual void _powerOn();
     
     /* powerOff() powers the component off.
      *
@@ -254,7 +254,7 @@ protected:
      * running   | off       | pause(), _powerOff() on each subcomponent
      */
     void powerOff();
-    virtual void _powerOff() { }
+    virtual void _powerOff();
     
     /* run() puts the component in 'running' state.
      *

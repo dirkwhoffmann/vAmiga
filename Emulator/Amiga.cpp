@@ -436,6 +436,8 @@ Amiga::powerOn()
 void
 Amiga::_powerOn()
 {
+    HardwareComponent::_powerOn();
+    
     debug(RUN_DEBUG, "_powerOn()\n");
 
     // Clear all runloop flags
@@ -466,6 +468,8 @@ Amiga::powerOff()
 void
 Amiga::_powerOff()
 {
+    HardwareComponent::_powerOff();
+    
     debug(RUN_DEBUG, "_powerOff()\n");
     
     // Update the recorded debug information

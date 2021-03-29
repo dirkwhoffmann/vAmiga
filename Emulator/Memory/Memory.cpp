@@ -363,6 +363,8 @@ Memory::_dump(Dump::Category category, std::ostream& os) const
 void
 Memory::_powerOn()
 {
+    HardwareComponent::_powerOn();
+
     // Erase WOM (if any)
     if (hasWom()) eraseWom();
 

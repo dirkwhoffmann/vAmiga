@@ -187,16 +187,21 @@ HardwareComponent::powerOn()
             c->powerOn();
         }
         
-        // Reset all non-persistant snapshot items
-        _reset(true);
-
         // Power this component on
         debug(RUN_DEBUG, "Powering on\n");
-        state = EMULATOR_STATE_PAUSED;
         _powerOn();
     }
 }
 
+void
+HardwareComponent::_powerOn()
+{
+    // Reset all non-persistant snapshot items
+    _reset(true);
+
+    state = EMULATOR_STATE_PAUSED;
+}
+    
 void
 HardwareComponent::powerOff()
 {
@@ -207,7 +212,6 @@ HardwareComponent::powerOff()
         
         // Power off this component
         debug(RUN_DEBUG, "Powering off\n");
-        state = EMULATOR_STATE_OFF;
         _powerOff();
 
         // Power all subcomponents off
@@ -215,6 +219,12 @@ HardwareComponent::powerOff()
             c->powerOff();
         }
     }
+}
+
+void
+HardwareComponent::_powerOff()
+{
+    state = EMULATOR_STATE_OFF;
 }
 
 void
