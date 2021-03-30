@@ -273,6 +273,7 @@ class ConfigurationController: DialogController {
     
     @IBAction func unlockAction(_ sender: Any!) {
 
+        amiga.pause()
         amiga.powerOff()
         refresh()
     }
@@ -285,6 +286,7 @@ class ConfigurationController: DialogController {
     @IBAction func powerAction(_ sender: Any!) {
         
         hideSheet()
+        amiga.powerOn()
         amiga.run()
     }
 }
