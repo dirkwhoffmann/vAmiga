@@ -51,10 +51,7 @@ public:
     std::vector<HardwareComponent *> subComponents;
     
 protected:
-    
 
-    // EmulatorState state = EMULATOR_STATE_OFF;
-    
     /* Indicates if the emulator should be executed in warp mode. To speed up
      * emulation (e.g., during disk accesses), the virtual hardware may be put
      * into warp mode. In this mode, the emulation thread is no longer paused
@@ -208,17 +205,10 @@ public:
      *     Paused: The Amiga is turned on, but there is no emulator thread
      *    Running: The Amiga is turned on and the emulator thread running
      *
-     *
-     *          -----------------------------------------------
-     *         |                     run()                     |
-     *         |                                               V
      *     ---------   powerOn()   ---------     run()     ---------
      *    |   Off   |------------>| Paused  |------------>| Running |
      *    |         |<------------|         |<------------|         |
      *     ---------   powerOff()  ---------    pause()    ---------
-     *         ^                                               |
-     *         |                   powerOff()                  |
-     *          -----------------------------------------------
      *
      *     isPoweredOff()         isPaused()          isRunning()
      * |-------------------||-------------------||-------------------|
