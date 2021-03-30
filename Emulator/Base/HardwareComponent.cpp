@@ -181,27 +181,12 @@ HardwareComponent::powerOn()
     for (auto c : subComponents) { c->powerOn(); }
     _powerOn();
 }
-
-void
-HardwareComponent::_powerOn()
-{
-    // Reset all non-persistant snapshot items (TODO: REMOVE)
-    // _reset(true);
-
-    // state = EMULATOR_STATE_PAUSED;
-}
     
 void
 HardwareComponent::powerOff()
 {
     _powerOff();
     for (auto c : subComponents) { c->powerOff(); }
-}
-
-void
-HardwareComponent::_powerOff()
-{
-    // state = EMULATOR_STATE_OFF;
 }
 
 void
@@ -212,22 +197,10 @@ HardwareComponent::run()
 }
 
 void
-HardwareComponent::_run()
-{
-    // state = EMULATOR_STATE_RUNNING;
-}
-
-void
 HardwareComponent::pause()
 {
     _pause();
     for (auto c : subComponents) { c->pause(); }
-}
-
-void
-HardwareComponent::_pause()
-{
-    // state = EMULATOR_STATE_PAUSED;
 }
 
 void

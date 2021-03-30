@@ -737,14 +737,12 @@ CIAA::CIAA(Amiga& ref) : CIA(0, ref)
 void
 CIAA::_powerOn()
 {
-    HardwareComponent::_powerOn();
     messageQueue.put(MSG_POWER_LED_DIM);
 }
 
 void
 CIAA::_powerOff()
 {
-    HardwareComponent::_powerOff();
     messageQueue.put(MSG_POWER_LED_OFF);
 }
 

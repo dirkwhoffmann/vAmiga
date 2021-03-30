@@ -413,8 +413,6 @@ Amiga::powerOn()
 void
 Amiga::_powerOn()
 {
-    HardwareComponent::_powerOn();
-    
 #ifdef DF0_DISK
     DiskFile *df0file = AmigaFile::make <ADFFile> (DF0_DISK);
     if (df0file) {
@@ -468,8 +466,6 @@ Amiga::powerOff()
 void
 Amiga::_powerOff()
 {
-    HardwareComponent::_powerOff();
-    
     debug(RUN_DEBUG, "_powerOff()\n");
 }
 
@@ -498,7 +494,6 @@ Amiga::run()
 void
 Amiga::_run()
 {
-    HardwareComponent::_run();
 }
 
 void
@@ -528,7 +523,6 @@ Amiga::pause()
 void
 Amiga::_pause()
 {
-    HardwareComponent::_pause();
 }
 
 void

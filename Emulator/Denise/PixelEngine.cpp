@@ -63,8 +63,6 @@ PixelEngine::didLoadFromBuffer(const u8 *buffer)
 void
 PixelEngine::_powerOn()
 {
-    HardwareComponent::_powerOn();
-
     // Initialize frame buffers with a checkerboard pattern (for debugging)
     for (isize line = 0; line < VPIXELS; line++) {
         for (isize i = 0; i < HPIXELS; i++) {

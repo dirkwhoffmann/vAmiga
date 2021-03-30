@@ -242,7 +242,7 @@ protected:
      * running   | running   | none
      */
     void powerOn();
-    virtual void _powerOn();
+    virtual void _powerOn() { };
     
     /* powerOff() powers the component off.
      *
@@ -253,7 +253,7 @@ protected:
      * running   | off       | pause(), _powerOff() on each subcomponent
      */
     void powerOff();
-    virtual void _powerOff();
+    virtual void _powerOff() { };
     
     /* run() puts the component in 'running' state.
      *
@@ -264,7 +264,7 @@ protected:
      * running   | running   | none
      */
     void run();
-    virtual void _run();
+    virtual void _run() { };
     
     /* pause() puts the component in 'paused' state.
      *
@@ -275,7 +275,7 @@ protected:
      * running   | paused    | _pause() on each subcomponent
      */
     void pause();
-    virtual void _pause();
+    virtual void _pause() { };
         
     // Switches warp mode on or off
     void warpOn();
