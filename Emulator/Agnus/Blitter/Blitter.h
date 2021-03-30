@@ -304,7 +304,7 @@ private:
 public:
     
     // Returns true if the Blitter is processing a blit
-    bool isRunning() const { return running; }
+    bool isActive() const { return running; }
 
     // Returns the value of the Blitter Busy Flag
     bool isBusy() const { return bbusy; }

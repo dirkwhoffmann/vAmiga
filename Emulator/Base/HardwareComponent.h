@@ -50,14 +50,8 @@ public:
     
 protected:
     
-    /* State model. The virtual hardware components can be in three different
-     * states called 'Off', 'Paused', and 'Running':
-     *
-     *        Off: The Amiga is turned off
-     *     Paused: The Amiga is turned on, but there is no emulator thread
-     *    Running: The Amiga is turned on and the emulator thread running
-     */
-    EmulatorState state = EMULATOR_STATE_OFF;
+
+    // EmulatorState state = EMULATOR_STATE_OFF;
     
     /* Indicates if the emulator should be executed in warp mode. To speed up
      * emulation (e.g., during disk accesses), the virtual hardware may be put
@@ -208,6 +202,11 @@ public:
     
     /* State model. At any time, a component is in one of three states:
      *
+     *        Off: The Amiga is turned off
+     *     Paused: The Amiga is turned on, but there is no emulator thread
+     *    Running: The Amiga is turned on and the emulator thread running
+     *
+     *
      *          -----------------------------------------------
      *         |                     run()                     |
      *         |                                               V
@@ -227,10 +226,10 @@ public:
      * Additional component flags: warp (on / off), debug (on / off)
      */
     
-    bool isPoweredOff() const { return state == EMULATOR_STATE_OFF; }
-    bool isPoweredOn() const { return state != EMULATOR_STATE_OFF; }
-    bool isPaused() const { return state == EMULATOR_STATE_PAUSED; }
-    bool isRunning() const { return state == EMULATOR_STATE_RUNNING; }
+    virtual bool isPoweredOff() const = 0;
+    virtual bool isPoweredOn() const = 0;
+    virtual bool isPaused() const = 0;
+    virtual bool isRunning() const = 0;
     
 protected:
     

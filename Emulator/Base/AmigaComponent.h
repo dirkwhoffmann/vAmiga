@@ -79,6 +79,11 @@ public:
 
     AmigaComponent(Amiga& ref);
 
+    virtual bool isPoweredOff() const override;
+    virtual bool isPoweredOn() const override;
+    virtual bool isPaused() const override;
+    virtual bool isRunning() const override; 
+
     void suspend();
     void resume();
     

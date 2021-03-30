@@ -35,7 +35,7 @@ Copper::pokeCOPJMP1()
     }
     if (s == ACCESSOR_CPU) {
 
-        if (agnus.blitter.isRunning()) {
+        if (agnus.blitter.isActive()) {
             trace(XFILES, "pokeCOPJMP1: Blitter is running\n");
         }
         switchToCopperList(1);
@@ -54,7 +54,7 @@ Copper::pokeCOPJMP2()
     }
     if (s == ACCESSOR_CPU) {
 
-        if (agnus.blitter.isRunning()) {
+        if (agnus.blitter.isActive()) {
             trace(XFILES, "pokeCOPJMP2: Blitter is running\n");
         }
         switchToCopperList(2);

@@ -417,6 +417,7 @@ Amiga::powerOn()
     if (isPoweredOff() && isReady()) {
         
         assert(p == nullptr);
+        state = EMULATOR_STATE_PAUSED;
         HardwareComponent::powerOn();
     }    
 }
@@ -447,6 +448,7 @@ Amiga::powerOff()
             
     if (isPoweredOn()) {
            
+        state = EMULATOR_STATE_OFF;
         HardwareComponent::powerOff();
     }
 }
@@ -474,11 +476,8 @@ Amiga::run()
     if (!isRunning() && isReady()) {
         
         assert(p == nullptr);
-        
-        // Start the emulator thread
+        state = EMULATOR_STATE_RUNNING;
         pthread_create(&p, nullptr, threadMain, (void *)this);
-
-        HardwareComponent::run();
     }
 }
 
@@ -497,12 +496,14 @@ Amiga::pause()
     debug(RUN_DEBUG, "pause()\n");
 
     if (!isPaused()) {
-        
+                
         // Ask the emulator thread to terminate
         signalStop();
         
         // Wait until the emulator thread has terminated
         pthread_join(p, nullptr);
+        
+        state = EMULATOR_STATE_PAUSED;
     }
 }
 
@@ -689,6 +690,8 @@ Amiga::runLoop()
 {
     debug(RUN_DEBUG, "runLoop()\n");
 
+    HardwareComponent::run();
+    
     // Prepare to run
     oscillator.restart();
     

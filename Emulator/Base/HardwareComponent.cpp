@@ -188,7 +188,7 @@ HardwareComponent::_powerOn()
     // Reset all non-persistant snapshot items (TODO: REMOVE)
     _reset(true);
 
-    state = EMULATOR_STATE_PAUSED;
+    // state = EMULATOR_STATE_PAUSED;
 }
     
 void
@@ -201,7 +201,7 @@ HardwareComponent::powerOff()
 void
 HardwareComponent::_powerOff()
 {
-    state = EMULATOR_STATE_OFF;
+    // state = EMULATOR_STATE_OFF;
 }
 
 void
@@ -214,7 +214,7 @@ HardwareComponent::run()
 void
 HardwareComponent::_run()
 {
-    state = EMULATOR_STATE_RUNNING;
+    // state = EMULATOR_STATE_RUNNING;
 }
 
 void
@@ -227,7 +227,7 @@ HardwareComponent::pause()
 void
 HardwareComponent::_pause()
 {
-    state = EMULATOR_STATE_PAUSED;
+    // state = EMULATOR_STATE_PAUSED;
 }
 
 void

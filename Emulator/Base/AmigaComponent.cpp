@@ -43,6 +43,30 @@ zorro(ref.zorro)
 
 };
 
+bool
+AmigaComponent::isPoweredOff() const
+{
+    return amiga.isPoweredOff();
+}
+
+bool
+AmigaComponent::isPoweredOn() const
+{
+    return amiga.isPoweredOn();
+}
+
+bool
+AmigaComponent::isPaused() const
+{
+    return amiga.isPaused();
+}
+
+bool
+AmigaComponent::isRunning() const
+{
+    return amiga.isRunning();
+}
+
 void
 AmigaComponent::suspend()
 {

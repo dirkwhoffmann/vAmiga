@@ -99,7 +99,7 @@ public:
     /* Communication channel to the GUI. The GUI registers a listener and a
      * callback function to retrieve messages.
      */
-    MsgQueue queue;
+    MsgQueue queue = MsgQueue(*this);
 
     
     //
@@ -107,6 +107,9 @@ public:
     //
     
 private:
+    
+    // The current emulator state
+    EmulatorState state = EMULATOR_STATE_OFF;
     
     /* Run loop control. This variable is checked at the end of each runloop
      * iteration. Most of the time, the variable is 0 which causes the runloop
@@ -219,6 +222,11 @@ private:
     
 public:
     
+    bool isPoweredOff() const override { return state == EMULATOR_STATE_OFF; }
+    bool isPoweredOn() const override { return state != EMULATOR_STATE_OFF; }
+    bool isPaused() const override { return state == EMULATOR_STATE_PAUSED; }
+    bool isRunning() const override { return state == EMULATOR_STATE_RUNNING; }
+
     void powerOn();
     void powerOff();
     void run();
