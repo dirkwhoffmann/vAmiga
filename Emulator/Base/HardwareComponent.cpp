@@ -186,7 +186,7 @@ void
 HardwareComponent::_powerOn()
 {
     // Reset all non-persistant snapshot items (TODO: REMOVE)
-    _reset(true);
+    // _reset(true);
 
     // state = EMULATOR_STATE_PAUSED;
 }

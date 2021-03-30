@@ -388,35 +388,13 @@ Amiga::powerOn()
     assert(!isEmulatorThread());
     
     debug(RUN_DEBUG, "powerOn()\n");
-    
-    #ifdef DF0_DISK
-    DiskFile *df0file = AmigaFile::make <ADFFile> (DF0_DISK);
-    if (df0file) {
-        Disk *disk = Disk::makeWithFile(df0file);
-        df0.ejectDisk();
-        df0.insertDisk(disk);
-        df0.setWriteProtection(false);
-    }
-    #endif
-
-    #ifdef DF1_DISK
-        DiskFile *df1file = DiskFile::makeWithFile(DF1_DISK);
-        if (df1file) {
-            Disk *disk = Disk::makeWithFile(df1file);
-            df1.ejectDisk();
-            df1.insertDisk(disk);
-            df1.setWriteProtection(false);
-        }
-    #endif
-    
-    #ifdef INITIAL_BREAKPOINT
-        debugMode = true;
-        cpu.debugger.breakpoints.addAt(INITIAL_BREAKPOINT);
-    #endif
-    
+        
     if (isPoweredOff() && isReady()) {
         
         assert(p == nullptr);
+        
+        // Perform a hard reset
+        hardReset();
         
         // Switch state
         state = EMULATOR_STATE_PAUSED;
@@ -437,7 +415,30 @@ Amiga::_powerOn()
 {
     HardwareComponent::_powerOn();
     
-    debug(RUN_DEBUG, "_powerOn()\n");
+#ifdef DF0_DISK
+    DiskFile *df0file = AmigaFile::make <ADFFile> (DF0_DISK);
+    if (df0file) {
+        Disk *disk = Disk::makeWithFile(df0file);
+        df0.ejectDisk();
+        df0.insertDisk(disk);
+        df0.setWriteProtection(false);
+    }
+#endif
+    
+#ifdef DF1_DISK
+    DiskFile *df1file = DiskFile::makeWithFile(DF1_DISK);
+    if (df1file) {
+        Disk *disk = Disk::makeWithFile(df1file);
+        df1.ejectDisk();
+        df1.insertDisk(disk);
+        df1.setWriteProtection(false);
+    }
+#endif
+    
+#ifdef INITIAL_BREAKPOINT
+    debugMode = true;
+    cpu.debugger.breakpoints.addAt(INITIAL_BREAKPOINT);
+#endif
 }
 
 void
