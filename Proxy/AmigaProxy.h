@@ -172,6 +172,7 @@
 - (void)powerOff;
 - (void)hardReset;
 - (void)softReset;
+- (void)shutdown;
 
 - (AmigaInfo) getInfo;
 
@@ -203,7 +204,6 @@
 
 // - (Message)message;
 - (void)setListener:(const void *)sender function:(Callback *)func;
-- (void)removeListener;
 
 - (void)stopAndGo;
 - (void)stepInto;

@@ -62,8 +62,12 @@ extension MyController: NSWindowDelegate {
         // Disconnect all game pads
         gamePadManager.shutDown()
         
-        // Unregister from the message queue and wait for MSG_UNREGISTER
-        amiga.removeListener()
+        // Power off the emulator
+        amiga.pause()
+        amiga.powerOff()
+        
+        // Ask the emulator to shutdown (will send MSG_SHUTDOWN)
+        amiga.shutdown()
     }
     
     func shutDown() {

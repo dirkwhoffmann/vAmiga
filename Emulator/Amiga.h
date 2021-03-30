@@ -231,6 +231,7 @@ public:
     void powerOff();
     void run();
     void pause();
+    void shutdown();
     
     void warpOn();
     void warpOff();
@@ -291,7 +292,7 @@ public:
     void signalWarpOff() { setControlFlags(RL_WARP_OFF); }
     void signalAutoSnapshot() { setControlFlags(RL_AUTO_SNAPSHOT); }
     void signalUserSnapshot() { setControlFlags(RL_USER_SNAPSHOT); }
-
+    // void signalShutdown() { setControlFlags(RL_STOP | RL_SHUTDOWN); }
 
     //
     // Running the emulator

@@ -34,7 +34,6 @@ MsgQueue::removeListener()
         
         this->listener = nullptr;
         this->callback = nullptr;
-        put(MSG_UNREGISTER);
     }
 }
 

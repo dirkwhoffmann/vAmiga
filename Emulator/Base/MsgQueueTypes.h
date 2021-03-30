@@ -18,7 +18,6 @@ enum_long(MSG_TYPE)
     
     // Message queue
     MSG_REGISTER,
-    MSG_UNREGISTER,
     
     // Emulator state
     MSG_CONFIG,
@@ -27,6 +26,7 @@ enum_long(MSG_TYPE)
     MSG_RUN,
     MSG_PAUSE,
     MSG_RESET,
+    MSG_SHUTDOWN,
     MSG_WARP_ON,
     MSG_WARP_OFF,
     MSG_MUTE_ON,
@@ -108,14 +108,14 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType> {
                 
             case MSG_NONE:                return "NONE";
             case MSG_REGISTER:            return "REGISTER";
-            case MSG_UNREGISTER:          return "UNREGISTER";
-                
+
             case MSG_CONFIG:              return "CONFIG";
             case MSG_POWER_ON:            return "POWER_ON";
             case MSG_POWER_OFF:           return "POWER_OFF";
             case MSG_RUN:                 return "RUN";
             case MSG_PAUSE:               return "PAUSE";
             case MSG_RESET:               return "RESET";
+            case MSG_SHUTDOWN:            return "SHUTDOWN";
             case MSG_WARP_ON:             return "WARP_ON";
             case MSG_WARP_OFF:            return "WARP_OFF";
             case MSG_MUTE_ON:             return "MUTE_ON";

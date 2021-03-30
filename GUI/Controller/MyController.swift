@@ -427,11 +427,7 @@ extension MyController {
     
         case .REGISTER:
             track("Registered to message queue")
-            
-        case .UNREGISTER:
-            track("Unregistered from message queue")
-            shutDown()
-            
+                        
         case .CONFIG:
             inspector?.fullRefresh()
 
@@ -467,6 +463,9 @@ extension MyController {
             inspector?.fullRefresh()
             updateWarp()
             
+        case .SHUTDOWN:
+            shutDown()
+
         case .MUTE_ON:
             muted = true
             refreshStatusBar()

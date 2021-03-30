@@ -139,7 +139,6 @@ Amiga::Amiga()
 Amiga::~Amiga()
 {
     debug(RUN_DEBUG, "Destroying Amiga[%p]\n", this);
-    powerOff();
 }
 
 void
@@ -466,7 +465,6 @@ Amiga::powerOff()
 void
 Amiga::_powerOff()
 {
-    debug(RUN_DEBUG, "_powerOff()\n");
 }
 
 void
@@ -508,16 +506,28 @@ Amiga::pause()
         
         // Wait until the emulator thread has terminated
         pthread_join(p, nullptr);
-        
-        // Switch state
-        state = EMULATOR_STATE_PAUSED;
-        
+                
         // Update the recorded debug information
         inspect();
         
         // Inform the GUI
         queue.put(MSG_PAUSE);
     }
+}
+
+void
+Amiga::shutdown()
+{
+    // Assure the Amiga is powered off
+    assert(isPoweredOff());
+    
+    /* Send the SHUTDOWN message which is the last message ever send. The
+     * purpose of this message is to signal the GUI that no more messages will
+     * show up in the message queue. When the GUI receives this message, it
+     * knows that the Amiga is powered off and the message queue empty. From
+     * this time on, it is safe to destroy the Amiga object.
+     */
+    queue.put(MSG_SHUTDOWN);
 }
 
 void
@@ -764,7 +774,7 @@ Amiga::runLoop()
                 debug(RUN_DEBUG, "RL_STOP\n");
                 break;
             }
-            
+
             // Are we requested to enter of exit warp mode?
             if (runLoopCtrl & RL_WARP_ON) {
                 clearControlFlags(RL_WARP_ON);
@@ -780,7 +790,9 @@ Amiga::runLoop()
         }
     }
     
-    HardwareComponent::pause();
+    // Switch state
+    state = EMULATOR_STATE_PAUSED;
+    HardwareComponent::pause();    
 }
 
 void
