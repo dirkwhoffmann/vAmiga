@@ -104,13 +104,7 @@ Amiga::Amiga()
     // Set up the initial state
     initialize();
     hardReset();
-
-    // Initialize the mach timer info
-    // mach_timebase_info(&tb);
-    
-    // Initialize mutex
-    pthread_mutex_init(&threadLock, nullptr);
-    
+        
     // Print some debug information
     if (SNP_DEBUG) {
         
@@ -146,8 +140,6 @@ Amiga::~Amiga()
 {
     debug(RUN_DEBUG, "Destroying Amiga[%p]\n", this);
     powerOff();
-    
-    pthread_mutex_destroy(&threadLock);
 }
 
 void
@@ -593,13 +585,7 @@ Amiga::acquireThreadLock()
         
         // There must be no emulator thread
         assert(p == (pthread_t)0);
-        
-        // It's save to free the lock immediately
-        pthread_mutex_unlock(&threadLock);
     }
-    
-    // Acquire the lock
-    pthread_mutex_lock(&threadLock);
 }
 
 bool
@@ -647,10 +633,7 @@ Amiga::suspend()
     debug(RUN_DEBUG, "Suspending (%zu)...\n", suspendCounter);
     
     if (suspendCounter || isRunning()) {
-        
-        acquireThreadLock();
-        assert(!isRunning()); // At this point, the emulator is already paused
-                
+        pause();
         suspendCounter++;
     }
 }
@@ -661,9 +644,7 @@ Amiga::resume()
     debug(RUN_DEBUG, "Resuming (%zu)...\n", suspendCounter);
     
     if (suspendCounter && --suspendCounter == 0) {
-        
-        acquireThreadLock();
-        HardwareComponent::run();
+        run();
     }
 }
 
@@ -715,10 +696,7 @@ Amiga::threadDidTerminate()
     debug(RUN_DEBUG, "Emulator thread terminated\n");
 
     // Trash the thread pointer
-    p = (pthread_t)0;
-    
-    // Release the thread lock
-    pthread_mutex_unlock(&threadLock);
+    p = (pthread_t)0;    
 }
 
 void

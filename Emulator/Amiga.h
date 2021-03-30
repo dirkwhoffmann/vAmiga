@@ -121,13 +121,8 @@ private:
     
     // The emulator thread
     pthread_t p = (pthread_t)0;
-    
-    /* Mutex to coordinate the ownership of the emulator thread.
-     *
-     */
-    pthread_mutex_t threadLock;
-    
         
+
     //
     // Snapshot storage
     //
@@ -261,7 +256,7 @@ public:
      * of the emulator thread. After returning, the emulator is either powered
      * off (if it was powered off before) or paused (if it was running before).
      */
-    void acquireThreadLock();
+    [[deprecated]] void acquireThreadLock();
     
     /* Returns true if a call to powerOn() will be successful. It returns false,
      * e.g., if no Kickstart Rom or Boot Rom is installed.
