@@ -83,21 +83,6 @@ class MyDocument: NSDocument {
         myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
         
         track("Attachment created successfully")
-        
-        /*
-        let (file, err) = openFile(url: url, allowedTypes: allowedTypes)
-        
-        if file != nil {
-            amigaAttachment = file
-
-            // Remember the URL
-            if (file as? DiskFileProxy) != nil {
-                myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
-            }
-        }
-        
-        return err
-        */
     }
     
     fileprivate
@@ -217,15 +202,6 @@ class MyDocument: NSDocument {
         } catch let error as VAError {
             error.cantOpen(url: url)
         }
-        
-        /*
-        // let err = createAttachment(url: url, allowedTypes: [.SNAPSHOT])
-        let err = createAttachment(url: url)
-
-        if err != .OK {
-            throw NSError.fileError(err, url: url)
-        }
-        */
     }
     
     override open func revert(toContentsOf url: URL, ofType typeName: String) throws {

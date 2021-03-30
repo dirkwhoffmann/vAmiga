@@ -51,7 +51,8 @@ class KeyboardController: NSObject {
     
     func keyDown(with event: NSEvent) {
         
-        if let console = renderer.console { console.keyDown(with: event); return }
+        // Intercept if the console is open
+        if renderer.console.isVisible { renderer.console.keyDown(with: event); return }
                 
         // Ignore repeating keys
         if event.isARepeat { return }
