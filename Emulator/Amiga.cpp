@@ -416,7 +416,7 @@ Amiga::powerOn()
     
     if (isPoweredOff() && isReady()) {
         
-        acquireThreadLock();
+        assert(p == nullptr);
         HardwareComponent::powerOn();
     }    
 }
@@ -441,12 +441,12 @@ void
 Amiga::powerOff()
 {
     assert(!isEmulatorThread());
-
+    assert(!isRunning());
+    
     debug(RUN_DEBUG, "powerOff()\n");
             
     if (isPoweredOn()) {
-            
-        acquireThreadLock();
+           
         HardwareComponent::powerOff();
     }
 }
@@ -467,11 +467,13 @@ Amiga::_powerOff()
 void
 Amiga::run()
 {
+    assert(isPoweredOn());
+    
     debug(RUN_DEBUG, "run()\n");
             
     if (!isRunning() && isReady()) {
         
-        acquireThreadLock();
+        assert(p == nullptr);
         HardwareComponent::run();
     }
 }
@@ -567,24 +569,6 @@ Amiga::debugOff()
     
     if (debugMode) {
         HardwareComponent::debugOff();
-    }
-}
-
-void
-Amiga::acquireThreadLock()
-{
-    if (state == EMULATOR_STATE_RUNNING) {
-        
-        // Assure the emulator thread exists
-        assert(p != (pthread_t)0);
-        
-        // Free the thread lock by terminating the thread
-        signalStop();
-        
-    } else {
-        
-        // There must be no emulator thread
-        assert(p == (pthread_t)0);
     }
 }
 
