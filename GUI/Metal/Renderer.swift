@@ -139,7 +139,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let descriptor = MTLRenderPassDescriptor.init()
         descriptor.colorAttachments[0].texture = drawable.texture
-        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(1, 1, 1, 1)
+        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
         descriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
         descriptor.colorAttachments[0].storeAction = MTLStoreAction.store
         
