@@ -66,4 +66,16 @@ extension MyController {
             assert(false)
         }
     }
+    
+    @IBAction func controlsAction(_ sender: NSSegmentedControl) {
+
+        switch sender.selectedSegment {
+
+        case 0: stopAndGoAction(self)
+        case 1: resetAction(self)
+        case 2: powerAction(self)
+
+        default: assert(false)
+        }
+    }
 }

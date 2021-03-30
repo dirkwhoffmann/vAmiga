@@ -176,7 +176,7 @@ class MyController: NSWindowController, MessageReceiver {
     @IBOutlet weak var warpIcon: NSButton!
 
     // Toolbar
-    @IBOutlet weak var toolbar: NSToolbar!
+    @IBOutlet weak var toolbar: MyToolbar!
 }
 
 extension MyController {
@@ -438,22 +438,22 @@ extension MyController {
             serialOut = ""
             virtualKeyboard = nil
             // renderer.blendIn(steps: 120) // zoomIn()
-            toolbar.validateVisibleItems()
+            toolbar.updateToolbar()
             inspector?.fullRefresh()
             
         case .POWER_OFF:
             // renderer.zoomOut(steps: 20) // blendOut()
-            toolbar.validateVisibleItems()
+            toolbar.updateToolbar()
             inspector?.fullRefresh()
 
         case .RUN:
             needsSaving = true
-            toolbar.validateVisibleItems()
+            toolbar.updateToolbar()
             inspector?.fullRefresh()
             refreshStatusBar()
 
         case .PAUSE:
-            toolbar.validateVisibleItems()
+            toolbar.updateToolbar()
             inspector?.fullRefresh()
             refreshStatusBar()
 

@@ -325,18 +325,18 @@ extension MyController: NSMenuItemValidation {
         keyboard.autoType(text)
     }
     
-    @IBAction func stopAndGoAction(_ sender: NSButton!) {
+    @IBAction func stopAndGoAction(_ sender: Any!) {
         
         amiga?.stopAndGo()
     }
     
-    @IBAction func stepIntoAction(_ sender: NSButton!) {
+    @IBAction func stepIntoAction(_ sender: Any!) {
         
         needsSaving = true
         amiga?.stepInto()
     }
     
-    @IBAction func stepOverAction(_ sender: NSButton!) {
+    @IBAction func stepOverAction(_ sender: Any!) {
         
         needsSaving = true
         amiga?.stepOver()

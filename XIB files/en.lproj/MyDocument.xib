@@ -517,47 +517,23 @@
                             </connections>
                         </segmentedControl>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="38C1F02C-6E2B-41A9-A7C0-22595E378CC9" label="Pause" paletteLabel="Pause" tag="30" image="pauseTemplate" sizingBehavior="auto" id="BPW-KG-AkM" userLabel="Pause">
+                    <toolbarItem implicitItemIdentifier="74F68049-821E-4F86-A15C-F4678F2ED8AD" label="Emulator State" paletteLabel="Emulator State" sizingBehavior="auto" id="9Rb-b3-ubi">
                         <nil key="toolTip"/>
-                        <button key="view" verticalHuggingPriority="750" tag="30" id="Hi7-3E-CdD">
-                            <rect key="frame" x="5" y="14" width="30" height="23"/>
+                        <segmentedControl key="view" verticalHuggingPriority="750" id="xdt-LW-MS0">
+                            <rect key="frame" x="0.0" y="14" width="136" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="pauseTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CS0-py-1mX">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="3Zp-pa-1qS">
                                 <font key="font" metaFont="system"/>
-                            </buttonCell>
-                        </button>
-                        <connections>
-                            <action selector="stopAndGoAction:" target="-1" id="9Yy-Ej-fDB"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="A7703F1E-1ECE-4A69-B243-7B7358E0BFC2" label="Reset" paletteLabel="Reset" tag="1" image="resetTemplate" sizingBehavior="auto" id="Yax-iM-1LE" userLabel="Reset">
-                        <nil key="toolTip"/>
-                        <button key="view" verticalHuggingPriority="750" tag="1" id="aeA-0b-sne">
-                            <rect key="frame" x="4" y="14" width="30" height="23"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="resetTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IQr-xE-Y9D">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                        </button>
-                        <connections>
-                            <action selector="resetAction:" target="-2" id="MKH-2d-rUU"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="FDB7F361-51A6-49C0-8DA9-F7290508D826" label="Power" paletteLabel="Power" tag="30" image="powerTemplate" sizingBehavior="auto" id="wVB-PW-axj">
-                        <nil key="toolTip"/>
-                        <button key="view" verticalHuggingPriority="750" tag="30" id="tu0-4o-Osa">
-                            <rect key="frame" x="5" y="14" width="30" height="23"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="powerTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="22E-O0-WFm">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                        </button>
-                        <connections>
-                            <action selector="powerAction:" target="-2" id="eFg-df-Hnh"/>
-                        </connections>
+                                <segments>
+                                    <segment image="pauseTemplate" width="40" tag="2"/>
+                                    <segment toolTip="Reset" image="resetTemplate" width="40" tag="1"/>
+                                    <segment image="powerTemplate" width="40"/>
+                                </segments>
+                            </segmentedCell>
+                            <connections>
+                                <action selector="controlsAction:" target="-2" id="r2T-ad-cIz"/>
+                            </connections>
+                        </segmentedControl>
                     </toolbarItem>
                 </allowedToolbarItems>
                 <defaultToolbarItems>
@@ -573,18 +549,14 @@
                     <toolbarItem reference="1851"/>
                     <toolbarItem reference="Tmo-Cs-EVn"/>
                     <toolbarItem reference="1851"/>
-                    <toolbarItem reference="BPW-KG-AkM"/>
-                    <toolbarItem reference="Yax-iM-1LE"/>
-                    <toolbarItem reference="wVB-PW-axj"/>
+                    <toolbarItem reference="9Rb-b3-ubi"/>
                 </defaultToolbarItems>
                 <connections>
                     <outlet property="controlPort1" destination="L2b-nG-yBo" id="LaW-Wo-oKb"/>
                     <outlet property="controlPort2" destination="4MP-rV-xX2" id="SJk-D4-9MF"/>
+                    <outlet property="controlsSegCtrl" destination="xdt-LW-MS0" id="sxA-d1-Y55"/>
                     <outlet property="keyboardButton" destination="Ckl-d3-vFW" id="0sK-fd-hJt"/>
                     <outlet property="parent" destination="-2" id="V0k-GF-uXZ"/>
-                    <outlet property="pauseButton" destination="BPW-KG-AkM" id="XDm-2Y-e3O"/>
-                    <outlet property="powerButton" destination="wVB-PW-axj" id="v7U-Mu-EYn"/>
-                    <outlet property="resetButton" destination="Yax-iM-1LE" id="ooV-Rk-fGf"/>
                     <outlet property="snapshotSegCtrl" destination="AHD-MB-nXC" id="Gpg-sH-vaL"/>
                 </connections>
             </toolbar>
