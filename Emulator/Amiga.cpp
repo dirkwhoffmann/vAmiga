@@ -474,6 +474,10 @@ Amiga::run()
     if (!isRunning() && isReady()) {
         
         assert(p == nullptr);
+        
+        // Start the emulator thread
+        pthread_create(&p, nullptr, threadMain, (void *)this);
+
         HardwareComponent::run();
     }
 }
@@ -482,10 +486,7 @@ void
 Amiga::_run()
 {
     HardwareComponent::_run();
-    
-    // Start the emulator thread
-    pthread_create(&p, nullptr, threadMain, (void *)this);
-    
+        
     // Inform the GUI
     queue.put(MSG_RUN);
 }
