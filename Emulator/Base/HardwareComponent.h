@@ -43,6 +43,8 @@ enum Category : usize {
 
 class HardwareComponent : public AmigaObject {
     
+    friend class Amiga;
+    
 public:
     
     // Sub components
@@ -231,9 +233,9 @@ public:
     virtual bool isPaused() const = 0;
     virtual bool isRunning() const = 0;
     
-protected:
+private:
     
-    /* powerOn() powers the component on.
+    /* powerOn() powers the component on
      *
      * current   | next      | action
      * ------------------------------------------------------------------------
@@ -244,29 +246,29 @@ protected:
     void powerOn();
     virtual void _powerOn() { };
     
-    /* powerOff() powers the component off.
+    /* powerOff() powers the component off
      *
      * current   | next      | action
      * ------------------------------------------------------------------------
      * off       | off       | none
      * paused    | off       | _powerOff() on each subcomponent
-     * running   | off       | pause(), _powerOff() on each subcomponent
+     * running   | off       | ERROR (call pause() first)
      */
     void powerOff();
     virtual void _powerOff() { };
     
-    /* run() puts the component in 'running' state.
+    /* run() puts the component in 'running' state
      *
      * current   | next      | action
      * ------------------------------------------------------------------------
-     * off       | running   | powerOn(), _run() on each subcomponent
+     * off       | running   | ERROR (call powerOn() first)
      * paused    | running   | _run() on each subcomponent
      * running   | running   | none
      */
     void run();
     virtual void _run() { };
     
-    /* pause() puts the component in 'paused' state.
+    /* pause() puts the component in 'paused' state
      *
      * current   | next      | action
      * ------------------------------------------------------------------------
@@ -280,14 +282,14 @@ protected:
     // Switches warp mode on or off
     void warpOn();
     void warpOff();
-    virtual void _warpOn();
-    virtual void _warpOff();
+    virtual void _warpOn() { };
+    virtual void _warpOff() { };
 
     // Switches debug mode on or off
     void debugOn();
     void debugOff();
-    virtual void _debugOn();
-    virtual void _debugOff();
+    virtual void _debugOn() { };
+    virtual void _debugOff() { };
 };
 
 //

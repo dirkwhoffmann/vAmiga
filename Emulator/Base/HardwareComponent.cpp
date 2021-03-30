@@ -206,51 +206,31 @@ HardwareComponent::pause()
 void
 HardwareComponent::warpOn()
 {
-     for (auto c : subComponents) { c->warpOn(); }
-     _warpOn();
-}
-
-void
-HardwareComponent::_warpOn()
-{
+    for (auto c : subComponents) { c->warpOn(); }
     warpMode = true;
+    _warpOn();
 }
 
 void
 HardwareComponent::warpOff()
 {
-     for (auto c : subComponents) { c->warpOff(); }
-     _warpOff();
-}
-
-void
-HardwareComponent::_warpOff()
-{
+    for (auto c : subComponents) { c->warpOff(); }
     warpMode = false;
+    _warpOff();
 }
 
 void
 HardwareComponent::debugOn()
 {    
     for (auto c : subComponents) { c->debugOn(); }
-    _debugOn();
-}
-
-void
-HardwareComponent::_debugOn()
-{
     debugMode = true;
+    _debugOn();
 }
 
 void
 HardwareComponent::debugOff()
 {
     for (auto c : subComponents) { c->debugOff(); }
-    _debugOff();
-}
-
-void
-HardwareComponent::_debugOff()
-{
     debugMode = false;
+    _debugOff();
 }
