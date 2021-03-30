@@ -503,8 +503,11 @@ Amiga::pause()
 
     if (!isPaused()) {
         
-        acquireThreadLock();
-        HardwareComponent::pause();
+        // Ask the emulator thread to terminate
+        signalStop();
+        
+        // Wait until the emulator thread has terminated
+        pthread_join(p, nullptr);
     }
 }
 
@@ -512,10 +515,7 @@ void
 Amiga::_pause()
 {
     HardwareComponent::_pause();
-    
-    // When we reach this line, the emulator thread is already gone
-    assert(p == (pthread_t)0);
-    
+        
     // Update the recorded debug information
     inspect();
 
@@ -717,9 +717,6 @@ Amiga::threadDidTerminate()
     // Trash the thread pointer
     p = (pthread_t)0;
     
-    // Pause all components
-    HardwareComponent::pause();
-        
     // Release the thread lock
     pthread_mutex_unlock(&threadLock);
 }
@@ -810,6 +807,8 @@ Amiga::runLoop()
             }
         }
     }
+    
+    HardwareComponent::pause();
 }
 
 void
