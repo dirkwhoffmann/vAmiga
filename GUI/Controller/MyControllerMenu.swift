@@ -58,6 +58,11 @@ extension MyController: NSMenuItemValidation {
             item.title = powered ? "Power Off" : "Power On"
             return true
             
+        case #selector(MyController.stepIntoAction(_:)),
+             #selector(MyController.stepOverAction(_:)),
+             #selector(MyController.stopAndGoAction(_:)):
+            return paused
+
         // View menu
         case #selector(MyController.toggleStatusBarAction(_:)):
             item.title = statusBar ? "Hide Status Bar" : "Show Status Bar"
@@ -105,16 +110,7 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.dragAndDropTargetAction(_:)):
             item.state = dfn === dragAndDropDrive ? .on : .off
             return true
-            
-        // Debug menu
-        case #selector(MyController.stepIntoAction(_:)),
-             #selector(MyController.stepOverAction(_:)),
-             #selector(MyController.stopAndGoAction(_:)):
-            return paused
-            
-        case #selector(MyController.dumpStateAction(_:)):
-            return !amiga.isReleaseBuild
-            
+                                    
         default:
             return true
         }
@@ -617,121 +613,5 @@ extension MyController: NSMenuItemValidation {
         
         let drive = amiga.df(sender)
         dragAndDropDrive = (dragAndDropDrive == drive) ? nil : drive
-    }
-    
-    //
-    // Action methods (Debug menu)
-    //
-    
-    @IBAction func hideSpriteAction(_ sender: NSMenuItem!) {
-
-        var mask = amiga.getConfig(.HIDDEN_SPRITES)
-        
-        sender.state = (sender.state == .off) ? .on : .off
-        if sender.state == .on {
-            mask |= 1 << sender.tag
-        } else {
-            mask &= ~(1 << sender.tag)
-        }
-        
-        amiga.suspend()
-        amiga.configure(.HIDDEN_SPRITES, value: mask)
-        amiga.resume()
-        
-        track()
-    }
-    
-    @IBAction func dumpStateAction(_ sender: Any!) {
-        // Dummy target to make menu item validatable
-    }
-    @IBAction func dumpAmigaAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpCPUAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.cpu.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpCIAAAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.ciaA.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpCIABAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.ciaB.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpMemoryAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.mem.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpDiskControllerAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.diskController.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpDfxAction(_ sender: NSMenuItem!) {
-        amiga.suspend()
-        amiga.df(sender)!.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpDf0Action(_ sender: Any!) {
-        amiga.suspend()
-        amiga.df0.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpDf1Action(_ sender: Any!) {
-        amiga.suspend()
-        amiga.df1.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpAgnusAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.agnus.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpCopperAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.copper.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpBlitterAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.blitter.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpPaulaAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.paula.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpDeniseAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.denise.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpKeyboardAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.keyboard.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpControlPort1Action(_ sender: Any!) {
-        amiga.suspend()
-        amiga.controlPort1.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpControlPort2Action(_ sender: Any!) {
-        amiga.suspend()
-        amiga.controlPort2.dump()
-        amiga.resume()
-    }
-    @IBAction func dumpSerialPortAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.serialPort.dump()
-        amiga.resume()
     }
 }
