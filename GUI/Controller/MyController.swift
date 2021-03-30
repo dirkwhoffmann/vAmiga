@@ -578,10 +578,10 @@ extension MyController {
         case .USER_SNAPSHOT_TAKEN:
             track("MSG_USER_SNAPSHOT_TAKEN")
             mydocument.snapshots.append(amiga.latestUserSnapshot)
-            renderer.canvas.alpha.set(from: 0.0, to: 1.0, steps: 40)
+            renderer.canvas.alpha.set(from: 0.0, to: 1.0, steps: 20)
             
         case .SNAPSHOT_RESTORED:
-            renderer.canvas.alpha.set(from: 0.0, to: 1.0, steps: 40)
+            renderer.canvas.alpha.set(from: 0.0, to: 1.0, steps: 20)
             refreshStatusBar()
             hideOrShowDriveMenus()
             

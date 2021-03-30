@@ -242,9 +242,6 @@ extension MyController: NSMenuItemValidation {
 
         // Save to disk
         try? screenshot.save(id: mydocument.bootDiskID)
-        
-        // Create a visual effect
-        renderer.blendIn(steps: 20)
     }
     
     @IBAction func browseScreenshotsAction(_ sender: Any!) {
@@ -341,7 +338,6 @@ extension MyController: NSMenuItemValidation {
     @IBAction func resetAction(_ sender: Any!) {
         
         track()
-        renderer.blendIn(steps: 20)
         amiga.hardReset()
         amiga.powerOn()
         amiga.run()

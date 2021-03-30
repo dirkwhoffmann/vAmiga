@@ -142,7 +142,7 @@ class Renderer: NSObject, MTKViewDelegate {
         descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
         descriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
         descriptor.colorAttachments[0].storeAction = MTLStoreAction.store
-        
+
         descriptor.depthAttachment.texture = depthTexture
         descriptor.depthAttachment.clearDepth = 1
         descriptor.depthAttachment.loadAction = MTLLoadAction.clear
