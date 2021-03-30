@@ -417,8 +417,18 @@ Amiga::powerOn()
     if (isPoweredOff() && isReady()) {
         
         assert(p == nullptr);
+        
+        // Switch state
         state = EMULATOR_STATE_PAUSED;
+        
+        // Power on all subcomponents
         HardwareComponent::powerOn();
+        
+        // Update the recorded debug information
+        inspect();
+
+        // Inform the GUI
+        queue.put(MSG_POWER_ON);
     }    
 }
 
@@ -428,14 +438,6 @@ Amiga::_powerOn()
     HardwareComponent::_powerOn();
     
     debug(RUN_DEBUG, "_powerOn()\n");
-
-    // Clear all runloop flags
-    // runLoopCtrl = 0;
-
-    // Update the recorded debug information
-    inspect();
-
-    queue.put(MSG_POWER_ON);
 }
 
 void
@@ -448,8 +450,17 @@ Amiga::powerOff()
             
     if (isPoweredOn()) {
            
+        // Switch state
         state = EMULATOR_STATE_OFF;
+        
+        // Power off all subcomponents
         HardwareComponent::powerOff();
+        
+        // Update the recorded debug information
+        inspect();
+        
+        // Inform the GUI
+        queue.put(MSG_POWER_OFF);
     }
 }
 
@@ -459,11 +470,6 @@ Amiga::_powerOff()
     HardwareComponent::_powerOff();
     
     debug(RUN_DEBUG, "_powerOff()\n");
-    
-    // Update the recorded debug information
-    inspect();
-    
-    queue.put(MSG_POWER_OFF);
 }
 
 void
@@ -476,8 +482,15 @@ Amiga::run()
     if (!isRunning() && isReady()) {
         
         assert(p == nullptr);
+
+        // Switch state
         state = EMULATOR_STATE_RUNNING;
+
+        // Create the emulator thread
         pthread_create(&p, nullptr, threadMain, (void *)this);
+
+        // Inform the GUI
+        queue.put(MSG_RUN);
     }
 }
 
@@ -485,9 +498,6 @@ void
 Amiga::_run()
 {
     HardwareComponent::_run();
-        
-    // Inform the GUI
-    queue.put(MSG_RUN);
 }
 
 void
@@ -503,7 +513,14 @@ Amiga::pause()
         // Wait until the emulator thread has terminated
         pthread_join(p, nullptr);
         
+        // Switch state
         state = EMULATOR_STATE_PAUSED;
+        
+        // Update the recorded debug information
+        inspect();
+        
+        // Inform the GUI
+        queue.put(MSG_PAUSE);
     }
 }
 
@@ -511,12 +528,6 @@ void
 Amiga::_pause()
 {
     HardwareComponent::_pause();
-        
-    // Update the recorded debug information
-    inspect();
-
-    // Inform the GUI
-    queue.put(MSG_PAUSE);
 }
 
 void
