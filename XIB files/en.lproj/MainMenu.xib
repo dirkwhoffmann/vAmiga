@@ -232,7 +232,7 @@
                             <menuItem isSeparatorItem="YES" id="qq8-Qm-VmD"/>
                             <menuItem title="Pause" keyEquivalent="p" id="430">
                                 <connections>
-                                    <action selector="pauseAction:" target="-1" id="505"/>
+                                    <action selector="stopAndGoAction:" target="-1" id="MO3-RA-MNi"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Reset" keyEquivalent="r" id="432">

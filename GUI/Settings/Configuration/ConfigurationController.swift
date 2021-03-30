@@ -295,7 +295,6 @@ extension ConfigurationController: NSTabViewDelegate {
 
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
 
-        track()
         refresh()
     }
 }
