@@ -20,7 +20,7 @@ ExtendedRomFile::ExtendedRomFile()
 }
 
 bool
-ExtendedRomFile::isCompatibleName(const string &name)
+ExtendedRomFile::isCompatiblePath(const string &name)
 {
     return true;
 }

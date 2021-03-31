@@ -95,6 +95,7 @@ public:
     
     template <class T> static T *make(const string &path, std::istream &stream) throws
     {
+        if (!T::isCompatiblePath(path)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
         if (!T::isCompatibleStream(stream)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
         
         T *obj = new T();
