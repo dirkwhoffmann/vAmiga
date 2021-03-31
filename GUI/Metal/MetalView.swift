@@ -47,7 +47,6 @@ public class MetalView: MTKView {
     
     override open func awakeFromNib() {
 
-        track()
         setupDragAndDrop()
     }
     

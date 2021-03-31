@@ -40,9 +40,7 @@ extension NSTouchBarItem.Identifier {
 extension MyController: NSTouchBarDelegate {
     
     override open func makeTouchBar() -> NSTouchBar? {
-        
-        track()
-        
+                
         let touchBar = NSTouchBar()
         touchBar.delegate = self
         

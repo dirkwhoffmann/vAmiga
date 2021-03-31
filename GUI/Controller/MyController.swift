@@ -199,8 +199,6 @@ extension MyController {
     //
     
     override open func awakeFromNib() {
-
-        track()
         
         mydocument = document as? MyDocument
         config = Configuration.init(with: self)
@@ -208,9 +206,7 @@ extension MyController {
     }
 
     override open func windowDidLoad() {
- 
-        track()
-                
+                 
         // Create keyboard controller
         keyboard = KeyboardController(parent: self)
         assert(keyboard != nil, "Failed to create keyboard controller")

@@ -36,7 +36,6 @@ class MyDocument: NSDocument {
     
     override init() {
         
-        track()
         super.init()
 
         // Check for Metal support
@@ -54,9 +53,7 @@ class MyDocument: NSDocument {
     }
  
     override open func makeWindowControllers() {
-        
-        track()
-        
+                
         let nibName = NSNib.Name("MyDocument")
         let controller = MyController.init(windowNibName: nibName)
         controller.amiga = amiga

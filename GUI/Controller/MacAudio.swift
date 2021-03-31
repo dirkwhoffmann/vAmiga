@@ -29,8 +29,6 @@ public class MacAudio: NSObject {
     }
     
     convenience init?(with controller: MyController) {
-
-        track()
     
         self.init()
         parent = controller

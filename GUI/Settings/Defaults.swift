@@ -53,9 +53,7 @@ extension UserDefaults {
 extension UserDefaults {
     
     static func registerUserDefaults() {
-        
-        track()
-        
+                
         registerGeneralUserDefaults()
         registerControlsUserDefaults()
         registerDevicesUserDefaults()
@@ -72,9 +70,7 @@ extension UserDefaults {
 extension MyController {
     
     func loadUserDefaults() {
-        
-        track()
-        
+                
         amiga.suspend()
         
         pref.loadGeneralUserDefaults()

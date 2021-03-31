@@ -57,8 +57,6 @@ extension Renderer {
 
     internal func buildMetal() {
 
-        track()
-
         // Metal layer
         metalLayer = mtkView.layer as? CAMetalLayer
         metalAssert(metalLayer != nil,

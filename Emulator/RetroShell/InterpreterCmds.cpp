@@ -14,9 +14,6 @@
 void
 Interpreter::registerInstructions()
 {
-    msg("registerInstructions()");
-    
-    
     //
     // Commands
     //
