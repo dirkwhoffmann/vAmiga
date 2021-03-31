@@ -73,7 +73,8 @@ class KeyboardController: NSObject {
     
     func keyUp(with event: NSEvent) {
            
-        if let console = renderer.console { console.keyUp(with: event); return }
+        // Intercept if the console is open
+        if renderer.console.isVisible { renderer.console.keyUp(with: event); return }
 
         keyUp(with: MacKey.init(event: event))
     }
