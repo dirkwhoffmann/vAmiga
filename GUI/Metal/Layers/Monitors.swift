@@ -53,7 +53,6 @@ class Monitors: Layer {
 
         super.init(view: view, device: device, renderer: renderer)
 
-        track()
         buildMonitors()
     }
     

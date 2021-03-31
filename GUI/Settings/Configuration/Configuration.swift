@@ -150,7 +150,6 @@ class Configuration {
                          
             // Try to connect the device (may disconnect the other device)
             gamePadManager.connect(slot: gameDevice1, port: 1)
-            gamePadManager.listDevices()
 
             // Avoid double mappings
             if gameDevice1 != -1 && gameDevice1 == gameDevice2 {
@@ -165,7 +164,6 @@ class Configuration {
  
             // Try to connect the device (may disconnect the other device)
             gamePadManager.connect(slot: gameDevice2, port: 2)
-            gamePadManager.listDevices()
 
             // Avoid double mappings
             if gameDevice2 != -1 && gameDevice2 == gameDevice1 {
@@ -432,15 +430,15 @@ class Configuration {
         extStart = defaults.integer(forKey: Keys.Rom.extStart)
         
         if let url = UserDefaults.womUrl {
-            track("Seeking Wom")
+            // track("Seeking Wom")
             amiga.mem.loadRom(fromFile: url, error: &error)
         }
         if let url = UserDefaults.romUrl {
-            track("Seeking Rom")
+            // track("Seeking Kickstart Rom")
             amiga.mem.loadRom(fromFile: url, error: &error)
         }
         if let url = UserDefaults.extUrl {
-            track("Seeking Ext")
+            // track("Seeking Extended Rom")
             amiga.mem.loadExt(fromFile: url, error: &error)
         }
         

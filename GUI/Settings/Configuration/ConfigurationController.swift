@@ -243,14 +243,12 @@ class ConfigurationController: DialogController {
 
     override func awakeFromNib() {
 
-        track()
         super.awakeFromNib()
         awakeVideoPrefsFromNib()
     }
 
     override func sheetWillShow() {
         
-        track()
         if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
         refresh()
     }

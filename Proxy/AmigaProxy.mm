@@ -2029,7 +2029,7 @@ using namespace moira;
 
 - (instancetype) init
 {
-    NSLog(@"AmigaProxy::init");
+    // NSLog(@"AmigaProxy::init");
     
     if (!(self = [super init]))
         return self;

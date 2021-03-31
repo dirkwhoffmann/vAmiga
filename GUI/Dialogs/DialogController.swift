@@ -56,16 +56,13 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     }
 
     override func windowWillLoad() {
-        track()
     }
     
     override func windowDidLoad() {
-        track()
     }
     
     override func awakeFromNib() {
     
-        track()
         awake = true
         sheetWillShow()
     }

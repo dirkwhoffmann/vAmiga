@@ -164,8 +164,7 @@ class GamePadManager {
                         device: IOHIDDevice) {
     
         lock.lock(); defer { lock.unlock() }
-        track()
-        
+                
         // Ignore internal devices
         if device.isInternalDevice { return }
         
@@ -185,6 +184,7 @@ class GamePadManager {
         parent.toolbar.validateVisibleItems()
         myAppDelegate.deviceAdded()
         
+        track()
         listDevices()
     }
     
@@ -222,6 +222,7 @@ class GamePadManager {
                           device: IOHIDDevice) {
         
         lock.lock(); defer { lock.unlock() }
+        
         track()
             
         // Search for a matching locationID and remove device

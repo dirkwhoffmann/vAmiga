@@ -113,10 +113,6 @@ class MyController: NSWindowController, MessageReceiver {
                                      selector: #selector(snapshotTimerFunc),
                                      userInfo: nil,
                                      repeats: true)
-            
-            track("Taking a snapshot every \(pref.snapshotInterval) seconds")
-        } else {
-            track("Disabling auto snapshots")
         }
     }
     
@@ -282,9 +278,7 @@ extension MyController {
     }
     
     func setListener() {
-        
-        track()
-        
+                
         // Convert 'self' to a void pointer
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
         
@@ -302,8 +296,6 @@ extension MyController {
     }
     
     func createTimer() {
-
-        track()
 
         // Create speed monitor
         speedometer = Speedometer()
@@ -426,23 +418,20 @@ extension MyController {
         switch msg.type {
     
         case .REGISTER:
-            track("Registered to message queue")
+            track("Successfully connected to message queue")
                         
         case .CONFIG:
             inspector?.fullRefresh()
 
         case .POWER_ON:
-            // renderer.canvas.alpha.set(0.0)
             renderer.canvas.open(delay: 1.5)
             serialIn = ""
             serialOut = ""
             virtualKeyboard = nil
-            // renderer.blendIn(steps: 120) // zoomIn()
             toolbar.updateToolbar()
             inspector?.fullRefresh()
             
         case .POWER_OFF:
-            // renderer.zoomOut(steps: 20) // blendOut()
             toolbar.updateToolbar()
             inspector?.fullRefresh()
 
@@ -572,11 +561,9 @@ extension MyController {
             serialOut += String(UnicodeScalar.init(msg.data & 0xFF)!)
 
         case .AUTO_SNAPSHOT_TAKEN:
-            track("MSG_AUTO_SNAPSHOT_TAKEN")
             mydocument.snapshots.append(amiga.latestAutoSnapshot)
 
         case .USER_SNAPSHOT_TAKEN:
-            track("MSG_USER_SNAPSHOT_TAKEN")
             mydocument.snapshots.append(amiga.latestUserSnapshot)
             renderer.canvas.alpha.set(from: 0.0, to: 1.0, steps: 20)
             

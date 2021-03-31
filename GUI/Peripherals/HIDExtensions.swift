@@ -95,24 +95,9 @@ extension IOHIDDevice {
          * evaluates the Transport property and classifies each wireless device
          * as external.
          */
-        
-        /* VirtualC64
-        if transportKey.hasPrefix("Bluetooth") == true {
-            return false
-        }
-        
-        return builtInKey == "1"
-        */
-        
-        track()
-        // listProperties()
-        
+                        
         let bluetooth = transportKey.hasPrefix("Bluetooth")
         let builtIn = builtInKey == "1"
-
-        // track("bluetooth = \(bluetooth)")
-        // track("builtIn = \(builtIn)")
-        // track("isMouse = \(isMouse)")
         
         // For mice, evaluate the BuiltIn key
         if isMouse { return builtIn }

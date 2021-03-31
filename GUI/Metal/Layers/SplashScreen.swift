@@ -22,7 +22,6 @@ class SplashScreen: Layer {
 
         super.init(view: view, device: device, renderer: renderer)
 
-        track()
         alpha.set(1.0)        
         let img = NSImage.init(named: "background")!
         bgTexture = img.toTexture(device: device, vflip: false)

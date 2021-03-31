@@ -152,13 +152,11 @@ extension MyController: NSWindowDelegate {
     
     public func windowWillResize(_ sender: NSWindow, to frameSize: NSSize) -> NSSize {
         
-        track()
         return fixSize(window: sender, size: frameSize)
     }
     
     public func windowDidResize(_ notification: Notification) {
         
-        track()
         renderer?.console.resize()
     }
     
@@ -172,9 +170,7 @@ extension MyController: NSWindowDelegate {
 extension MyController {
     
     func adjustWindowSize() {
-        
-        track()
-        
+                
         // Only proceed in window mode
         if renderer?.fullscreen == true { return }
         
@@ -190,6 +186,6 @@ extension MyController {
         frame.size = newsize
         window!.setFrame(frame, display: true)
         
-        track("New size: \(frame.size)")
+        track("New window size is \(frame.size)")
     }
 }

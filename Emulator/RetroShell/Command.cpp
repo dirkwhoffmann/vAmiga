@@ -19,22 +19,14 @@ Command::add(std::vector<string> tokens,
              isize numArgs, long param)
 {
     assert(!tokens.empty());
- 
-    printf("Registering ");
-    for (auto &it: tokens) {
-        printf("%s ", it.c_str());
-    }
-    printf("\n");
-    
+     
     if (tokens.size() > 1) {
 
         auto node = seek(tokens.front());
         tokens.erase(tokens.begin());
         return node->add(tokens, a1, help, action, numArgs, param);
     }
-    
-    // printf("Registering %s...\n", tokens.front().c_str());
-    
+        
     // Register instruction
     Command d { this, tokens.front(), a1, help, std::list<Command>(), action, numArgs, param };
     args.push_back(d);

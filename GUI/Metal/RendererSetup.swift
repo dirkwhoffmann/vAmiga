@@ -21,8 +21,6 @@ extension Renderer {
 
     func setup() {
 
-        track()
-
         shaderOptions = ShaderOptions.init(
             
             blur: config.blur,
