@@ -387,7 +387,7 @@ RomFile::decrypt()
     romKeyPath = util::extractPath(path) + "rom.key";
     
     // Load the rom.key file
-    if (!util::loadFile(romKeyPath.c_str(), &romKeyData, &romKeySize)) {
+    if (!util::loadFile(romKeyPath, &romKeyData, &romKeySize)) {
         throw VAError(ERROR_MISSING_ROM_KEY);
     }
     

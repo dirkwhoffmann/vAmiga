@@ -936,7 +936,7 @@ FSDevice::importDirectory(const char *path, DIR *dir, bool recursive)
             
             // Add file
             u8 *buffer; isize size;
-            if (util::loadFile(name, &buffer, &size)) {
+            if (util::loadFile(string(name), &buffer, &size)) {
                 FSBlock *file = makeFile(item->d_name, buffer, size);
                 // result &= file ? (file->append(buffer, size)) : false;
                 result &= file != nullptr;
