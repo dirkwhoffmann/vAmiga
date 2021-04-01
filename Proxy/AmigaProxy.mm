@@ -2252,32 +2252,56 @@ using namespace moira;
 
 - (BOOL)configure:(Option)opt value:(NSInteger)val
 {
-    return [self amiga]->configure(opt, val);
+    try {
+        return [self amiga]->configure(opt, val);
+    } catch (ConfigError &exception) {
+        return false;
+    }
 }
 
 - (BOOL)configure:(Option)opt enable:(BOOL)val
 {
-    return [self amiga]->configure(opt, val ? 1 : 0);
+    try {
+        return [self amiga]->configure(opt, val ? 1 : 0);
+    } catch (ConfigError &exception) {
+        return false;
+    }
 }
 
 - (BOOL)configure:(Option)opt id:(NSInteger)id value:(NSInteger)val
 {
-    return [self amiga]->configure(opt, id, val);
+    try {
+        return [self amiga]->configure(opt, id, val);
+    } catch (ConfigError &exception) {
+        return false;
+    }
 }
 
 - (BOOL)configure:(Option)opt id:(NSInteger)id enable:(BOOL)val
 {
-    return [self amiga]->configure(opt, id, val ? 1 : 0);
+    try {
+        return [self amiga]->configure(opt, id, val ? 1 : 0);
+    } catch (ConfigError &exception) {
+        return false;
+    }
 }
 
 - (BOOL)configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val
 {
-    return [self amiga]->configure(opt, (long)id, val);
+    try {
+        return [self amiga]->configure(opt, (long)id, val);
+    } catch (ConfigError &exception) {
+        return false;
+    }
 }
 
 - (BOOL)configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val
 {
-    return [self amiga]->configure(opt, (long)id, val ? 1 : 0);
+    try {
+        return [self amiga]->configure(opt, (long)id, val ? 1 : 0);
+    } catch (ConfigError &exception) {
+        return false;
+    }
 }
 
 - (void)setListener:(const void *)sender function:(Callback *)func

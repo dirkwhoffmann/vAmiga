@@ -71,6 +71,9 @@ bool matchingBufferHeader(const u8 *buffer, const u8 *header, isize len);
 bool loadFile(const char *path, u8 **buffer, isize *size);
 bool loadFile(const char *path, const char *name, u8 **buffer, isize *size);
 
+bool loadFile(const std::string &path, u8 **bufptr, long *lenptr);
+bool loadFile(const std::string &path, const std::string &name, u8 **bufptr, isize *size);
+
 
 //
 // Handling streams

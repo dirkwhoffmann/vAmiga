@@ -44,9 +44,6 @@ private:
     // Counts the number of calls to 'synchronize'
     isize syncCounter = 0;
     
-    // Time stamp of the last call to synchronize
-    // Time lastSync;
-
     // Kernel clock
     util::Time timeBase;
 

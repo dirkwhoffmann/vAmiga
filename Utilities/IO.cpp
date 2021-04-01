@@ -9,6 +9,7 @@
 
 #include "IO.h"
 #include <vector>
+#include <fstream>
 
 namespace util {
 
@@ -249,6 +250,27 @@ loadFile(const char *path, const char *name, u8 **buffer, isize *size)
     strcat(fullpath, name);
     
     return loadFile(fullpath, buffer, size);
+}
+
+bool loadFile(const std::string &path, u8 **bufptr, isize *lenptr)
+{
+    assert(bufptr); assert(lenptr);
+
+    std::ifstream stream(path);
+    if (!stream.is_open()) return false;
+    
+    usize len = streamLength(stream);
+    u8 *buf = new u8[len];
+    stream.read((char *)buf, len);
+    
+    *bufptr = buf;
+    *lenptr = len;
+    return true;
+}
+
+bool loadFile(const std::string &path, const std::string &name, u8 **bufptr, isize *lenptr)
+{
+    return loadFile(path + "/" + name, bufptr, lenptr);
 }
 
 isize
