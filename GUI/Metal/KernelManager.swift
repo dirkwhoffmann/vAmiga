@@ -1,12 +1,11 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
-//  KernelManager.swift
-//  vAmiga
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the GNU General Public License v3
 //
-//  Created by Dirk Hoffmann on 21.03.21.
-//  Copyright © 2021 Dirk Hoffmann. All rights reserved.
-//
-
-import Foundation
+// See https://www.gnu.org for license information
+// -----------------------------------------------------------------------------
 
 class KernelManager {
     
@@ -15,29 +14,21 @@ class KernelManager {
     
     var library: MTLLibrary! = nil
     
-    // An instance of the merge filter
+    // An instance of the merge filters
     var mergeFilter: MergeFilter! = nil
-
-    // An instance of the merge bypass filter
     var mergeBypassFilter: MergeBypassFilter! = nil
 
-    // Array holding all available lowres enhancers
+    // Filter galleries
     var enhancerGallery = [ComputeKernel?](repeating: nil, count: 3)
-    
-    // The currently selected enhancer
-    var enhancer: ComputeKernel!
-
-    // Array holding all available upscalers
     var upscalerGallery = [ComputeKernel?](repeating: nil, count: 3)
-
-    // The currently selected enhancer
-    var upscaler: ComputeKernel!
-
-    // Array holding all available bloom filters
     var bloomFilterGallery = [ComputeKernel?](repeating: nil, count: 2)
-    
-    // Array holding all available scanline filters
     var scanlineFilterGallery = [ComputeKernel?](repeating: nil, count: 3)
+
+    // The currently selected filters
+    var enhancer: ComputeKernel!
+    var upscaler: ComputeKernel!
+    var bloomFilter: ComputeKernel!
+    var scanlineFilter: ComputeKernel!
     
     //
     // Initializing
@@ -97,27 +88,44 @@ class KernelManager {
         return library.makeFunction(name: name)
     }
     
-    // Tries to select a new enhancer
     func selectEnhancer(_ nr: Int) -> Bool {
         
-        if nr < enhancerGallery.count && enhancerGallery[nr] != nil {
+        if nr >= 0 && nr < enhancerGallery.count && enhancerGallery[nr] != nil {
             enhancer = enhancerGallery[nr]!
             return true
         }
         return false
     }
-  
-    // Tries to select a new upscaler
+
     func selectUpscaler(_ nr: Int) -> Bool {
         
-        if nr < upscalerGallery.count && upscalerGallery[nr] != nil {
+        if nr >= 0 && nr < upscalerGallery.count && upscalerGallery[nr] != nil {
             upscaler = upscalerGallery[nr]!
             return true
         }
         return false
     }
     
+    func selectBloomFilter(_ nr: Int) -> Bool {
+        
+        if nr >= 0 && nr < bloomFilterGallery.count && bloomFilterGallery[nr] != nil {
+            bloomFilter = bloomFilterGallery[nr]!
+            return true
+        }
+        return false
+    }
+
+    func selectScanlineFilter(_ nr: Int) -> Bool {
+        
+        if nr >= 0 && nr < scanlineFilterGallery.count && scanlineFilterGallery[nr] != nil {
+            scanlineFilter = scanlineFilterGallery[nr]!
+            return true
+        }
+        return false
+    }
+
     // Returns the compute kernel of the currently selected bloom filter
+    // DEPRECATED
     func currentBloomFilter() -> ComputeKernel {
 
         var nr = Int(renderer.shaderOptions.bloom)
@@ -126,6 +134,7 @@ class KernelManager {
     }
 
     // Returns the compute kernel of the currently selected scanline filter
+    // DEPRECATED
     func currentScanlineFilter() -> ComputeKernel {
 
         var nr = Int(renderer.shaderOptions.scanlines)

@@ -17,10 +17,11 @@ public extension MetalView {
     
     // Returns a list of supported drag and drop types
     func acceptedTypes() -> [NSPasteboard.PasteboardType] {
+        
         return [.compatibleFileURL, .string, .fileContents]
     }
     
-    // Register supported drag and drop types
+    // Registers the supported drag and drop types
     func setupDragAndDrop() {
     
         registerForDraggedTypes(acceptedTypes())
@@ -48,7 +49,7 @@ public extension MetalView {
             return NSDragOperation.copy
             
         default:
-            
+            track("Unsupported type")
             return NSDragOperation()
         }
     }
@@ -91,18 +92,18 @@ public extension MetalView {
             let nsData = fileData! as NSData
             let rawPtr = nsData.bytes
             
-            do {
-                let snapshot = try Proxy.make(buffer: rawPtr, length: length) as SnapshotProxy
-
-                if document.proceedWithUnexportedDisk() {
-                    DispatchQueue.main.async {
-                        let snap = snapshot
-                        self.parent.load(snapshot: snap)
-                    }
-                    return true
+            let snapshot: SnapshotProxy? = try? Proxy.make(buffer: rawPtr, length: length)
+            if snapshot == nil { return false }
+            
+            if document.proceedWithUnexportedDisk() {
+                DispatchQueue.main.async {
+                    let snap = snapshot
+                    self.parent.load(snapshot: snap)
                 }
-            } catch { return false }
-            return true
+                return true
+            } else {
+                return false
+            }
             
         case .compatibleFileURL:
             

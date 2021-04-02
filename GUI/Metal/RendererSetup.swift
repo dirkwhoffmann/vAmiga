@@ -25,7 +25,7 @@ extension Renderer {
             
             blur: config.blur,
             blurRadius: config.blurRadius,
-            bloom: config.bloom,
+            bloom: Int32(config.bloom),
             bloomRadius: config.bloomRadius,
             bloomBrightness: config.bloomBrightness,
             bloomWeight: config.bloomWeight,
@@ -33,7 +33,7 @@ extension Renderer {
             flickerWeight: config.flickerWeight,
             dotMask: config.dotMask,
             dotMaskBrightness: config.dotMaskBrightness,
-            scanlines: config.scanlines,
+            scanlines: Int32(config.scanlines),
             scanlineBrightness: config.scanlineBrightness,
             scanlineWeight: config.scanlineWeight,
             disalignment: config.disalignment,

@@ -147,7 +147,7 @@ extension ConfigurationController {
     
     @IBAction func vidBloomAction(_ sender: NSPopUpButton!) {
         
-        config.bloom = Int32(sender.selectedTag())
+        config.bloom = sender.selectedTag()
         refresh()
     }
     
@@ -195,7 +195,7 @@ extension ConfigurationController {
     
     @IBAction func vidScanlinesAction(_ sender: NSPopUpButton!) {
         
-        config.scanlines = Int32(sender.selectedTag())
+        config.scanlines = sender.selectedTag()
         refresh()
     }
 
