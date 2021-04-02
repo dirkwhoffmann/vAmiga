@@ -956,7 +956,6 @@
 				507C9C4526076EF7006779B5 /* KernelManager.swift */,
 				508FDFD321EA20510043D0E9 /* Shaders.swift */,
 				508FDFD021EA20510043D0E9 /* Shaders.metal */,
-				50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */,
 				50C8C44C2607409B00F4E012 /* Layers */,
 			);
 			path = Metal;
@@ -1182,6 +1181,42 @@
 			path = Peripherals;
 			sourceTree = "<group>";
 		};
+		50AA3ECA261744D100C96EDB /* ActivityMonitors */ = {
+			isa = PBXGroup;
+			children = (
+				50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */,
+				50C8C4542607524400F4E012 /* Monitors.swift */,
+				50C8C45F2607591300F4E012 /* MonitorSetup.swift */,
+			);
+			path = ActivityMonitors;
+			sourceTree = "<group>";
+		};
+		50AA3ECC261746FE00C96EDB /* Canvas */ = {
+			isa = PBXGroup;
+			children = (
+				50C8C451260747EA00F4E012 /* Canvas.swift */,
+				50C8C45A2607590400F4E012 /* CanvasSetup.swift */,
+			);
+			path = Canvas;
+			sourceTree = "<group>";
+		};
+		50AA3ECE2617470700C96EDB /* SplashScreen */ = {
+			isa = PBXGroup;
+			children = (
+				50C8C44E260740AC00F4E012 /* SplashScreen.swift */,
+				50C8C457260758F000F4E012 /* SplashScreenSetup.swift */,
+			);
+			path = SplashScreen;
+			sourceTree = "<group>";
+		};
+		50AA3ECF2617471600C96EDB /* Console */ = {
+			isa = PBXGroup;
+			children = (
+				5026EDBE2608DC8E00D90CE1 /* Console.swift */,
+			);
+			path = Console;
+			sourceTree = "<group>";
+		};
 		50AEBEC824D3D3B30037082D /* Blitter */ = {
 			isa = PBXGroup;
 			children = (
@@ -1331,13 +1366,10 @@
 			isa = PBXGroup;
 			children = (
 				50C8C4492607396200F4E012 /* Layer.swift */,
-				50C8C44E260740AC00F4E012 /* SplashScreen.swift */,
-				50C8C457260758F000F4E012 /* SplashScreenSetup.swift */,
-				50C8C451260747EA00F4E012 /* Canvas.swift */,
-				50C8C45A2607590400F4E012 /* CanvasSetup.swift */,
-				50C8C4542607524400F4E012 /* Monitors.swift */,
-				50C8C45F2607591300F4E012 /* MonitorSetup.swift */,
-				5026EDBE2608DC8E00D90CE1 /* Console.swift */,
+				50AA3ECE2617470700C96EDB /* SplashScreen */,
+				50AA3ECC261746FE00C96EDB /* Canvas */,
+				50AA3ECA261744D100C96EDB /* ActivityMonitors */,
+				50AA3ECF2617471600C96EDB /* Console */,
 			);
 			path = Layers;
 			sourceTree = "<group>";

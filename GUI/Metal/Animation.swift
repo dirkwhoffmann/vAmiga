@@ -13,7 +13,6 @@ struct AnimationType {
     
     static let geometry = 1
     static let texture = 2
-    static let monitors = 4
 }
 
 class AnimatedFloat {
@@ -115,21 +114,6 @@ extension Renderer {
             // Check if animation has terminated
             if !cont {
                 animates -= AnimationType.texture
-            }
-        }
-        
-        // Check for activity monitor animation
-        if (animates & AnimationType.monitors) != 0 {
-            
-            cont = false
-            for i in 0 ..< monis.monitorAlpha.count {
-                monis.monitorAlpha[i].move()
-                if monis.monitorAlpha[i].animates() { cont = true }
-            }
-
-            // Check if animation has terminated
-            if !cont {
-                animates -= AnimationType.monitors
             }
         }
     }

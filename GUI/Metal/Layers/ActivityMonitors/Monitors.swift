@@ -49,6 +49,9 @@ class Monitors: Layer {
     // Layout scheme used for positioning the monitors
     var monitorLayout = 0 { didSet { updateMonitorPositions() } }
         
+    // Indicates if at least one monitor is animating
+    var animates = false
+    
     override init(view: MTKView, device: MTLDevice, renderer: Renderer) {
 
         super.init(view: view, device: device, renderer: renderer)
@@ -66,7 +69,8 @@ class Monitors: Layer {
         
         monitorAlpha[nr].target = 1.0
         monitorAlpha[nr].steps = steps
-        renderer.animates |= AnimationType.monitors
+        animates = true
+        // renderer.animates |= AnimationType.monitors
     }
         
     func fadeOut(monitor nr: Int, steps: Int = 40) {
@@ -75,7 +79,8 @@ class Monitors: Layer {
         
         monitorAlpha[nr].target = 0.0
         monitorAlpha[nr].steps = steps
-        renderer.animates |= AnimationType.monitors
+        animates = true
+        // renderer.animates |= AnimationType.monitors
     }
 
     func fadeOutMonitors() {
@@ -94,13 +99,26 @@ class Monitors: Layer {
         }
     }
     
+    override func update(frames: Int64) {
+    
+        if animates {
+            
+            animates = false
+            for i in 0 ..< monitors.count {
+                
+                monitorAlpha[i].move()
+                if monitorAlpha[i].animates() { animates = true }
+            }
+        }
+    }
+        
     override func render(buffer: MTLCommandBuffer) {
         
     }
     
     override func render(encoder: MTLRenderCommandEncoder, flat: Bool) {
         
-        for i in 0 ... monitors.count where monitorAlpha[i].current != 0.0 {
+        for i in 0 ..< monitors.count where monitorAlpha[i].current != 0.0 {
             
             if !amiga.paused { monitors[i].animate() }
 

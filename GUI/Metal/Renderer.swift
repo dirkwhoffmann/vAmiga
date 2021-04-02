@@ -237,6 +237,7 @@ class Renderer: NSObject, MTKViewDelegate {
         frames += 1
         splashScreen.update(frames: frames)
         canvas.update(frames: frames)
+        monis.update(frames: frames)
         console.update(frames: frames)
         
         semaphore.wait()

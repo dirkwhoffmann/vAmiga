@@ -517,7 +517,7 @@
                             </connections>
                         </segmentedControl>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="74F68049-821E-4F86-A15C-F4678F2ED8AD" label="Emulator State" paletteLabel="Emulator State" sizingBehavior="auto" id="9Rb-b3-ubi">
+                    <toolbarItem implicitItemIdentifier="74F68049-821E-4F86-A15C-F4678F2ED8AD" label="Controls" paletteLabel="Controls" sizingBehavior="auto" id="9Rb-b3-ubi">
                         <nil key="toolTip"/>
                         <segmentedControl key="view" verticalHuggingPriority="750" id="xdt-LW-MS0">
                             <rect key="frame" x="0.0" y="14" width="136" height="23"/>
