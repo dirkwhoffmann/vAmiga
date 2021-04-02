@@ -73,11 +73,13 @@ class KernelManager {
         // Build bloom filters
         bloomFilterGallery[0] = BypassFilter.init(device: device, library: library, cutout: uc)
         bloomFilterGallery[1] = SplitFilter.init(device: device, library: library, cutout: uc)
-
+        bloomFilter = bloomFilterGallery[0]
+        
         // Build scanline filters
         scanlineFilterGallery[0] = BypassFilter.init(device: device, library: library, cutout: uc)
         scanlineFilterGallery[1] = SimpleScanlines(device: device, library: library, cutout: uc)
         scanlineFilterGallery[2] = BypassFilter.init(device: device, library: library, cutout: uc)
+        scanlineFilter = scanlineFilterGallery[0]
     }
     
     //
@@ -122,23 +124,5 @@ class KernelManager {
             return true
         }
         return false
-    }
-
-    // Returns the compute kernel of the currently selected bloom filter
-    // DEPRECATED
-    func currentBloomFilter() -> ComputeKernel {
-
-        var nr = Int(renderer.shaderOptions.bloom)
-        if bloomFilterGallery.count <= nr || bloomFilterGallery[nr] == nil { nr = 0 }
-        return bloomFilterGallery[nr]!
-    }
-
-    // Returns the compute kernel of the currently selected scanline filter
-    // DEPRECATED
-    func currentScanlineFilter() -> ComputeKernel {
-
-        var nr = Int(renderer.shaderOptions.scanlines)
-        if scanlineFilterGallery.count <= nr || scanlineFilterGallery[nr] == nil { nr = 0 }
-        return scanlineFilterGallery[nr]!
     }
 }

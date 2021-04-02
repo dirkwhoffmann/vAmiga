@@ -169,7 +169,9 @@ class Canvas: Layer {
             
             // Case 1: Interlace drawing
             var weight = Float(1.0)
-            if renderer.shaderOptions.flicker > 0 { weight -= renderer.shaderOptions.flickerWeight }
+            if renderer.shaderOptions.flicker > 0 {
+                weight -= renderer.shaderOptions.flickerWeight
+            }
             flickerCnt += 1
             mergeUniforms.longFrameScale = (flickerCnt % 4 >= 2) ? 1.0 : weight
             mergeUniforms.shortFrameScale = (flickerCnt % 4 >= 2) ? weight : 1.0
@@ -195,19 +197,18 @@ class Canvas: Layer {
         
         // Compute upscaled texture (first pass, in-texture upscaling)
         kernelManager.enhancer.apply(commandBuffer: buffer,
-                       source: mergeTexture,
-                       target: lowresEnhancedTexture)
-
+                                     source: mergeTexture,
+                                     target: lowresEnhancedTexture)
+        
         // Compute the bloom textures
         if renderer.shaderOptions.bloom != 0 {
-            let bloomFilter = kernelManager.currentBloomFilter()
-            bloomFilter.apply(commandBuffer: buffer,
-                              textures: [mergeTexture,
-                                         bloomTextureR,
-                                         bloomTextureG,
-                                         bloomTextureB],
-                              options: &renderer.shaderOptions,
-                              length: MemoryLayout<ShaderOptions>.stride)
+            kernelManager.bloomFilter.apply(commandBuffer: buffer,
+                                            textures: [mergeTexture,
+                                                       bloomTextureR,
+                                                       bloomTextureG,
+                                                       bloomTextureB],
+                                            options: &renderer.shaderOptions,
+                                            length: MemoryLayout<ShaderOptions>.stride)
             
             func applyGauss(_ texture: inout MTLTexture, radius: Float) {
                 
@@ -237,12 +238,11 @@ class Canvas: Layer {
         }
         
         // Emulate scanlines
-        let scanlineFilter = kernelManager.currentScanlineFilter()
-        scanlineFilter.apply(commandBuffer: buffer,
-                             source: upscaledTexture,
-                             target: scanlineTexture,
-                             options: &renderer.shaderOptions,
-                             length: MemoryLayout<ShaderOptions>.stride)
+        kernelManager.scanlineFilter.apply(commandBuffer: buffer,
+                                           source: upscaledTexture,
+                                           target: scanlineTexture,
+                                           options: &renderer.shaderOptions,
+                                           length: MemoryLayout<ShaderOptions>.stride)
     }
     
     override func render(encoder: MTLRenderCommandEncoder, flat: Bool) {
