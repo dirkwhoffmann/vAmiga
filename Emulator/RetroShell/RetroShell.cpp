@@ -89,10 +89,10 @@ RetroShell::operator<<(long value)
 }
 
 void
-RetroShell::tab(int hpos)
+RetroShell::tab(isize hpos)
 {
-    int delta = hpos - (int)storage.back().length();
-    for (int i = 0; i < delta; i++) {
+    isize delta = hpos - (int)storage.back().length();
+    for (isize i = 0; i < delta; i++) {
         *this << ' ';
     }
 }

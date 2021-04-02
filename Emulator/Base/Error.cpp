@@ -11,6 +11,13 @@
 #include "Error.h"
 
 const char *
-VAError::what() const throw() {
+VAError::what() const throw()
+{
     return  ErrorCodeEnum::key(data);
+}
+
+const char *
+ConfigError::what() const throw()
+{
+    return  description.c_str();
 }
