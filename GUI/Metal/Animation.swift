@@ -13,6 +13,7 @@ struct AnimationType {
     
     static let geometry = 1
     static let texture = 2
+    static let color = 4
 }
 
 class AnimatedFloat {
@@ -63,6 +64,68 @@ class AnimatedFloat {
 }
 
 extension Renderer {
+    
+    func animate() {
+        
+        // Geometry animations
+        if (animates & AnimationType.geometry) != 0 {
+                        
+            angleX.move()
+            angleY.move()
+            angleZ.move()
+            var cont = angleX.animates() || angleY.animates() || angleZ.animates()
+                    
+            shiftX.move()
+            shiftY.move()
+            shiftZ.move()
+            cont = cont || shiftX.animates() || shiftY.animates() || shiftZ.animates()
+            
+            // Check if animation has terminated
+            if !cont {
+                animates -= AnimationType.geometry
+                angleX.set(0)
+                angleY.set(0)
+                angleZ.set(0)
+            }
+        
+            buildMatrices3D()
+        }
+        
+        // Texture animations
+        if (animates & AnimationType.texture) != 0 {
+            
+            cutoutX1.move()
+            cutoutY1.move()
+            cutoutX2.move()
+            cutoutY2.move()
+            
+            let cont = cutoutX1.animates() || cutoutY1.animates() || cutoutX2.animates() || cutoutY2.animates()
+            
+            let x = CGFloat(cutoutX1.current)
+            let y = CGFloat(cutoutY1.current)
+            let w = CGFloat(cutoutX2.current - cutoutX1.current)
+            let h = CGFloat(cutoutY2.current - cutoutY1.current)
+            
+            // Update texture cutout
+            textureRect = CGRect.init(x: x, y: y, width: w, height: h)
+         
+            if !cont {
+                animates -= AnimationType.texture
+            }
+        }
+        
+        // Color animations
+        if (animates & AnimationType.color) != 0 {
+
+            white.move()
+         
+            let cont = white.animates()
+         
+            if !cont {
+                animates -= AnimationType.color
+            }
+        }
+    }
     
     //
     // Texture animations
@@ -200,4 +263,20 @@ extension Renderer {
 
         animates |= AnimationType.geometry
     }
+    
+    //
+    // Color animation
+    //
+    
+    func flash() {
+        
+        track("Flashing...")
+        
+        white.current = 1.0
+        white.target = 0.0
+        white.steps = 20
+        
+        animates |= AnimationType.color
+    }
+    
 }

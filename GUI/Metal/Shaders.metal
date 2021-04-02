@@ -78,6 +78,7 @@ struct MergeUniforms {
 struct FragmentUniforms {
     
     float alpha;
+    float mix;
     uint dotMaskWidth;
     uint dotMaskHeight;
     uint scanlineDistance;
@@ -194,6 +195,8 @@ fragment half4 fragment_main(ProjectedVertex vert [[ stage_in ]],
         color += gain - loose;
     }
     
+    color = mix(color, float4(1.0, 1.0, 1.0, 1.0), uniforms.mix);
+        
     return half4(color.r, color.g, color.b, color.a * uniforms.alpha);
 }
 

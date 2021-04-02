@@ -33,6 +33,7 @@ class Canvas: Layer {
     var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
     var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
     var fragmentUniforms = FragmentUniforms(alpha: 1.0,
+                                            mix: 0.0,
                                             dotMaskWidth: 0,
                                             dotMaskHeight: 0,
                                             scanlineDistance: 0)
@@ -260,7 +261,8 @@ class Canvas: Layer {
                                    index: 1)
             
             // Configure the fragment shader
-            fragmentUniforms.alpha = 1.0
+            fragmentUniforms.alpha = amiga.paused ? Float(0.5) : alpha.clamped
+            fragmentUniforms.mix = renderer.white.current
             fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
             fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
             fragmentUniforms.scanlineDistance = Int32(renderer.size.height / 256)
@@ -282,6 +284,7 @@ class Canvas: Layer {
             
             // Configure the fragment shader
             fragmentUniforms.alpha = amiga.paused ? Float(0.5) : alpha.clamped
+            fragmentUniforms.mix = renderer.white.current
             fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
             fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
             fragmentUniforms.scanlineDistance = Int32(renderer.size.height / 256)

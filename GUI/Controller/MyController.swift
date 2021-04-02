@@ -561,7 +561,8 @@ extension MyController {
 
         case .USER_SNAPSHOT_TAKEN:
             mydocument.snapshots.append(amiga.latestUserSnapshot)
-            renderer.canvas.alpha.set(from: 0.0, to: 1.0, steps: 20)
+            renderer.flash()
+            // renderer.canvas.alpha.set(from: 0.0, to: 1.0, steps: 20)
             
         case .SNAPSHOT_RESTORED:
             renderer.rotateRight()

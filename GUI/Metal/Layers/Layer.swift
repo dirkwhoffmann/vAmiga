@@ -17,6 +17,7 @@ class Layer: NSObject {
     
     // Alpha channel
     var alpha: AnimatedFloat = AnimatedFloat.init()
+    var mix: AnimatedFloat = AnimatedFloat.init()
 
     //
     // Initializing
