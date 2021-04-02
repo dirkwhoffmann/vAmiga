@@ -63,61 +63,7 @@ class AnimatedFloat {
 }
 
 extension Renderer {
-
-    func performAnimationStep() {
-
-        assert(animates != 0)
-
-        var cont: Bool
-
-        // Check for geometry animation
-        if (animates & AnimationType.geometry) != 0 {
-
-            angleX.move()
-            angleY.move()
-            angleZ.move()
-            cont = angleX.animates() || angleY.animates() || angleZ.animates()
-
-            shiftX.move()
-            shiftY.move()
-            shiftZ.move()
-            cont = cont || shiftX.animates() || shiftY.animates() || shiftZ.animates()
-
-            // Check if animation has terminated
-            if !cont {
-                animates -= AnimationType.geometry
-                angleX.set(0)
-                angleY.set(0)
-                angleZ.set(0)
-            }
-
-            buildMatrices3D()
-        }
-
-        // Check for texture animation
-        if (animates & AnimationType.texture) != 0 {
-
-            cutoutX1.move()
-            cutoutY1.move()
-            cutoutX2.move()
-            cutoutY2.move()
-            cont = cutoutX1.animates() || cutoutY1.animates() || cutoutX2.animates() || cutoutY2.animates()
-
-            let x = CGFloat(cutoutX1.current)
-            let y = CGFloat(cutoutY1.current)
-            let w = CGFloat(cutoutX2.current - cutoutX1.current)
-            let h = CGFloat(cutoutY2.current - cutoutY1.current)
-
-            // Update texture cutout
-            textureRect = CGRect.init(x: x, y: y, width: w, height: h)
-
-            // Check if animation has terminated
-            if !cont {
-                animates -= AnimationType.texture
-            }
-        }
-    }
-
+    
     //
     // Texture animations
     //
@@ -179,14 +125,11 @@ extension Renderer {
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0
-        noise.current = 0.0
-        noise.target = 0.0
 
         shiftZ.steps = steps
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
-        noise.steps = steps
 
         animates |= AnimationType.geometry
     }
@@ -199,13 +142,11 @@ extension Renderer {
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0
-        noise.target = 1.0
 
         shiftZ.steps = steps
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
-        noise.steps = steps
 
         animates |= AnimationType.geometry
     }

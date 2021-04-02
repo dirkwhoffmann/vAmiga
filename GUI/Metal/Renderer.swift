@@ -96,10 +96,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var shiftX = AnimatedFloat(0.0)
     var shiftY = AnimatedFloat(0.0)
     var shiftZ = AnimatedFloat(0.0)
-    
-    // var alpha = AnimatedFloat(0.0)
-    var noise = AnimatedFloat(0.0)
-    
+        
     // Animation variables for smooth texture zooming
     var cutoutX1 = AnimatedFloat.init()
     var cutoutY1 = AnimatedFloat.init()
@@ -232,9 +229,60 @@ class Renderer: NSObject, MTKViewDelegate {
         reshape(withSize: size)
     }
     
+    func update(frames: Int64) {
+                            
+        // Geometry animation
+        if (animates & AnimationType.geometry) != 0 {
+                        
+            angleX.move()
+            angleY.move()
+            angleZ.move()
+            var cont = angleX.animates() || angleY.animates() || angleZ.animates()
+                    
+            shiftX.move()
+            shiftY.move()
+            shiftZ.move()
+            cont = cont || shiftX.animates() || shiftY.animates() || shiftZ.animates()
+            
+            // Check if animation has terminated
+            if !cont {
+                animates -= AnimationType.geometry
+                angleX.set(0)
+                angleY.set(0)
+                angleZ.set(0)
+            }
+        
+            buildMatrices3D()
+        }
+        
+        // Check for texture animation
+        if (animates & AnimationType.texture) != 0 {
+            
+            cutoutX1.move()
+            cutoutY1.move()
+            cutoutX2.move()
+            cutoutY2.move()
+            
+            let cont = cutoutX1.animates() || cutoutY1.animates() || cutoutX2.animates() || cutoutY2.animates()
+            
+            let x = CGFloat(cutoutX1.current)
+            let y = CGFloat(cutoutY1.current)
+            let w = CGFloat(cutoutX2.current - cutoutX1.current)
+            let h = CGFloat(cutoutY2.current - cutoutY1.current)
+            
+            // Update texture cutout
+            textureRect = CGRect.init(x: x, y: y, width: w, height: h)
+         
+            if !cont {
+                animates -= AnimationType.texture
+            }
+        }
+    }
+    
     func draw(in view: MTKView) {
         
         frames += 1
+        update(frames: frames)
         splashScreen.update(frames: frames)
         canvas.update(frames: frames)
         monis.update(frames: frames)
@@ -254,8 +302,6 @@ class Renderer: NSObject, MTKViewDelegate {
             if renderSplash { splashScreen.render(buffer: buffer) }
             if renderCanvas { canvas.render(buffer: buffer) }
             if renderMonitors { monis.render(buffer: buffer) }
-            
-            if animates != 0 { performAnimationStep() }
             
             if let commandEncoder = makeCommandEncoder(buffer, drawable) {
                 if renderSplash { splashScreen.render(encoder: commandEncoder, flat: flat) }
