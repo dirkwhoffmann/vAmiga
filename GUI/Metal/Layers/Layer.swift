@@ -26,7 +26,7 @@ class Layer: NSObject {
     init(renderer: Renderer) {
         
         self.renderer = renderer
-        self.mtkView = renderer.mtkView
+        self.mtkView = renderer.view
         self.device = renderer.device
 
         super.init()

@@ -22,6 +22,7 @@ extension Renderer {
     func setup() {
 
         buildMetal()
+        buildDescriptors()
         buildShaders()
         buildLayers()
         buildSamplers()
@@ -34,7 +35,7 @@ extension Renderer {
     internal func buildMetal() {
 
         // Metal layer
-        metalLayer = mtkView.layer as? CAMetalLayer
+        metalLayer = view.layer as? CAMetalLayer
         metalAssert(metalLayer != nil,
                     "The Core Animation layer could not be accessed.")
 
@@ -49,9 +50,21 @@ extension Renderer {
                     "The Command Queue could not be created.")
     }
     
+    func buildDescriptors() {
+        
+        // Render pass descriptor
+        descriptor = MTLRenderPassDescriptor.init()
+        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
+        descriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
+        descriptor.colorAttachments[0].storeAction = MTLStoreAction.store
+        descriptor.depthAttachment.clearDepth = 1
+        descriptor.depthAttachment.loadAction = MTLLoadAction.clear
+        descriptor.depthAttachment.storeAction = MTLStoreAction.dontCare
+    }
+    
     func buildShaders() {
         
-        kernelManager = KernelManager.init(view: mtkView, device: device, renderer: self)
+        kernelManager = KernelManager.init(view: view, device: device, renderer: self)
 
         shaderOptions = ShaderOptions.init(
             

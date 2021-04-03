@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 import Metal
-import MetalKit
 
 enum ScreenshotSource: Int {
         
@@ -20,7 +19,7 @@ enum ScreenshotSource: Int {
 
 class Renderer: NSObject, MTKViewDelegate {
     
-    let mtkView: MTKView
+    let view: MTKView
     let device: MTLDevice
     let parent: MyController
     
@@ -40,6 +39,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var queue: MTLCommandQueue! = nil
     var pipeline: MTLRenderPipelineState! = nil
     var depthState: MTLDepthStencilState! = nil
+    var descriptor: MTLRenderPassDescriptor! = nil
     
     //
     // Layers
@@ -104,14 +104,14 @@ class Renderer: NSObject, MTKViewDelegate {
 
     init(view: MTKView, device: MTLDevice, controller: MyController) {
         
-        self.mtkView = view
+        self.view = view
         self.device = device
         self.parent = controller
 
         super.init()
         
-        self.mtkView.device = device
-        self.mtkView.delegate = self
+        self.view.device = device
+        self.view.delegate = self
 
         setup()
     }
@@ -122,8 +122,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
     var size: CGSize {
 
-        let frameSize = mtkView.frame.size
-        let scale = mtkView.layer?.contentsScale ?? 1
+        let frameSize = view.frame.size
+        let scale = view.layer?.contentsScale ?? 1
 
         return CGSize(width: frameSize.width * scale,
                       height: frameSize.height * scale)
@@ -189,16 +189,9 @@ class Renderer: NSObject, MTKViewDelegate {
     func makeCommandEncoder(_ commandBuffer: MTLCommandBuffer,
                             _ drawable: CAMetalDrawable) -> MTLRenderCommandEncoder? {
         
-        let descriptor = MTLRenderPassDescriptor.init()
+        // Update the render pass descriptor
         descriptor.colorAttachments[0].texture = drawable.texture
-        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
-        descriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
-        descriptor.colorAttachments[0].storeAction = MTLStoreAction.store
-
         descriptor.depthAttachment.texture = depthTexture
-        descriptor.depthAttachment.clearDepth = 1
-        descriptor.depthAttachment.loadAction = MTLLoadAction.clear
-        descriptor.depthAttachment.storeAction = MTLStoreAction.dontCare
         
         // Create a command encoder
         let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
