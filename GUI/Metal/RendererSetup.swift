@@ -21,32 +21,13 @@ extension Renderer {
 
     func setup() {
 
-        shaderOptions = ShaderOptions.init(
-            
-            blur: config.blur,
-            blurRadius: config.blurRadius,
-            bloom: Int32(config.bloom),
-            bloomRadius: config.bloomRadius,
-            bloomBrightness: config.bloomBrightness,
-            bloomWeight: config.bloomWeight,
-            flicker: config.flicker,
-            flickerWeight: config.flickerWeight,
-            dotMask: config.dotMask,
-            dotMaskBrightness: config.dotMaskBrightness,
-            scanlines: Int32(config.scanlines),
-            scanlineBrightness: config.scanlineBrightness,
-            scanlineWeight: config.scanlineWeight,
-            disalignment: config.disalignment,
-            disalignmentH: config.disalignmentH,
-            disalignmentV: config.disalignmentV
-        )
-        
         buildMetal()
-        kernelManager = KernelManager.init(view: mtkView, device: device, renderer: self)
-        splashScreen = SplashScreen.init(view: mtkView, device: device, renderer: self)
-        canvas = Canvas.init(view: mtkView, device: device, renderer: self)
-        monis = Monitors.init(view: mtkView, device: device, renderer: self)
-        console = Console.init(view: mtkView, device: device, renderer: self)
+        buildShaders()
+
+        splashScreen = SplashScreen.init(renderer: self)
+        canvas = Canvas.init(renderer: self)
+        monis = Monitors.init(renderer: self)
+        console = Console.init(renderer: self)
         
         buildSamplers()
         buildPipeline()
@@ -71,6 +52,31 @@ extension Renderer {
         queue = device.makeCommandQueue()
         metalAssert(queue != nil,
                     "The Command Queue could not be created.")
+    }
+    
+    func buildShaders() {
+        
+        kernelManager = KernelManager.init(view: mtkView, device: device, renderer: self)
+
+        shaderOptions = ShaderOptions.init(
+            
+            blur: config.blur,
+            blurRadius: config.blurRadius,
+            bloom: Int32(config.bloom),
+            bloomRadius: config.bloomRadius,
+            bloomBrightness: config.bloomBrightness,
+            bloomWeight: config.bloomWeight,
+            flicker: config.flicker,
+            flickerWeight: config.flickerWeight,
+            dotMask: config.dotMask,
+            dotMaskBrightness: config.dotMaskBrightness,
+            scanlines: Int32(config.scanlines),
+            scanlineBrightness: config.scanlineBrightness,
+            scanlineWeight: config.scanlineWeight,
+            disalignment: config.disalignment,
+            disalignmentH: config.disalignmentH,
+            disalignmentV: config.disalignmentV
+        )
     }
     
     internal func buildSamplers() {

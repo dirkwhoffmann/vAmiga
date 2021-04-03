@@ -126,8 +126,7 @@ class ComputeKernel: NSObject {
         }
     }
     
-    func apply(commandBuffer: MTLCommandBuffer,
-               textures: [MTLTexture],
+    func apply(commandBuffer: MTLCommandBuffer, textures: [MTLTexture],
                options: UnsafeRawPointer? = nil, length: Int = 0) {
         
         if let encoder = commandBuffer.makeComputeCommandEncoder() {

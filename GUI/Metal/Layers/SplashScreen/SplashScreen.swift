@@ -19,9 +19,9 @@ class SplashScreen: Layer {
                                         dotMaskHeight: 0,
                                         scanlineDistance: 0)
     
-    override init(view: MTKView, device: MTLDevice, renderer: Renderer) {
+    override init(renderer: Renderer) {
 
-        super.init(view: view, device: device, renderer: renderer)
+        super.init(renderer: renderer)
 
         alpha.set(1.0)        
         let img = NSImage.init(named: "background")!

@@ -26,7 +26,7 @@ class Console: Layer {
     // Initializing
     //
     
-    override init(view: MTKView, device: MTLDevice, renderer: Renderer) {
+    override init(renderer: Renderer) {
         
         controller = renderer.parent
         
@@ -34,7 +34,7 @@ class Console: Layer {
         textView.isEditable = false
         textView.backgroundColor = NSColor.init(r: 0x80, g: 0x80, b: 0x80, a: 0x80)
         
-        super.init(view: view, device: device, renderer: renderer)
+        super.init(renderer: renderer)
         
         resize()
         isDirty = true

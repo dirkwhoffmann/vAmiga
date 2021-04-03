@@ -23,11 +23,11 @@ class Layer: NSObject {
     // Initializing
     //
     
-    init(view: MTKView, device: MTLDevice, renderer: Renderer) {
+    init(renderer: Renderer) {
         
-        self.mtkView = view
-        self.device = device
         self.renderer = renderer
+        self.mtkView = renderer.mtkView
+        self.device = renderer.device
 
         super.init()
     }

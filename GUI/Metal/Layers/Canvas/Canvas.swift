@@ -101,9 +101,9 @@ class Canvas: Layer {
     // Functions
     //
     
-    override init(view: MTKView, device: MTLDevice, renderer: Renderer) {
+    override init(renderer: Renderer) {
 
-        super.init(view: view, device: device, renderer: renderer)
+        super.init(renderer: renderer)
 
         buildTextures()
         buildDotMasks()

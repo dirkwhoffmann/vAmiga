@@ -44,21 +44,18 @@ class KernelManager {
     
     internal func buildKernels() {
     
-        let device = renderer.device
-
-        // Shader library
-        library = device.makeDefaultLibrary()
-        renderer.metalAssert(library != nil,
-                             "The Shader Library could not be built.")
-        
         let mc = (TextureSize.merged.width, TextureSize.merged.height)
         let uc = (TextureSize.upscaled.width, TextureSize.upscaled.height)
 
-        // Build the merge filters
+        // Create shader library
+        library = device.makeDefaultLibrary()
+        renderer.metalAssert(library != nil, "The Shader Library could not be built.")
+        
+        // Build merge filters
         mergeFilter = MergeFilter.init(device: device, library: library, cutout: mc)
         mergeBypassFilter = MergeBypassFilter.init(device: device, library: library, cutout: mc)
         
-        // Build low-res enhancers (first-pass, in-texture upscaling)
+        // Build enhancers (first-pass, in-texture upscaling)
         enhancerGallery[0] = BypassFilter.init(device: device, library: library, cutout: mc)
         enhancerGallery[1] = InPlaceEpxScaler.init(device: device, library: library, cutout: mc)
         enhancerGallery[2] = InPlaceXbrScaler.init(device: device, library: library, cutout: mc)
