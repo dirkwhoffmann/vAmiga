@@ -12,7 +12,7 @@ extension Renderer {
     var texW: CGFloat { return CGFloat(TextureSize.original.width) }
     var texH: CGFloat { return CGFloat(TextureSize.original.height) }
     
-    func normalized(_ rect: CGRect) -> CGRect {
+    fileprivate func normalize(_ rect: CGRect) -> CGRect {
         
         return CGRect.init(x: rect.origin.x / texW,
                            y: rect.origin.y / texH,
@@ -28,7 +28,7 @@ extension Renderer {
     
     var entireNormalized: CGRect {
         
-        return normalized(entire)
+        return normalize(entire)
     }
     
     // Returns the largest visibile texture area (excluding HBLANK and VBLANK)
@@ -44,7 +44,7 @@ extension Renderer {
     
     var largestVisibleNormalized: CGRect {
         
-        return normalized(largestVisible)
+        return normalize(largestVisible)
     }
     
     // Returns the visible texture area based on the zoom and center parameters
@@ -80,7 +80,7 @@ extension Renderer {
     
     var visibleNormalized: CGRect {
         
-        return normalized(visible)
+        return normalize(visible)
     }
     
     func updateTextureRect() {

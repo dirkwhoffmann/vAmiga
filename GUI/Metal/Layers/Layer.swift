@@ -33,10 +33,9 @@ class Layer: NSObject {
     }
     
     //
-    // Working with the layer
+    // Querying the visual state
     //
         
-    // Informs about the visual state of this layer
     var isVisible: Bool { return alpha.current > 0.0 }
     var isOpaque: Bool { return alpha.current == 1.0 }
     var isTransparent: Bool { return alpha.current < 1.0 }

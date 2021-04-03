@@ -23,12 +23,7 @@ extension Renderer {
 
         buildMetal()
         buildShaders()
-
-        splashScreen = SplashScreen.init(renderer: self)
-        canvas = Canvas.init(renderer: self)
-        monis = Monitors.init(renderer: self)
-        console = Console.init(renderer: self)
-        
+        buildLayers()
         buildSamplers()
         buildPipeline()
         buildVertexBuffers()
@@ -79,6 +74,14 @@ extension Renderer {
         )
     }
     
+    func buildLayers() {
+        
+        splashScreen = SplashScreen.init(renderer: self)
+        canvas = Canvas.init(renderer: self)
+        monitors = Monitors.init(renderer: self)
+        console = Console.init(renderer: self)
+    }
+    
     internal func buildSamplers() {
 
         let descriptor = MTLSamplerDescriptor()
@@ -99,7 +102,7 @@ extension Renderer {
 
     func buildPipeline() {
 
-        // Get vertex and fragment shader from library
+        // Read vertex and fragment shader from library
         let vertexFunc = kernelManager.makeFunction(name: "vertex_main")
         let fragmentFunc = kernelManager.makeFunction(name: "fragment_main")
         metalAssert(vertexFunc != nil && fragmentFunc != nil,
@@ -167,7 +170,7 @@ extension Renderer {
         let mvp = proj * view * model
         
         canvas.vertexUniforms2D.mvp = mvp
-        monis.vertexUniforms2D.mvp = mvp
+        monitors.vertexUniforms2D.mvp = mvp
     }
 
     func buildMatrices3D() {
@@ -205,7 +208,7 @@ extension Renderer {
         let mvp = proj * view * model
         
         canvas.vertexUniforms3D.mvp = mvp
-        monis.vertexUniforms3D.mvp = mvp
+        monitors.vertexUniforms3D.mvp = mvp
     }
 
     func buildDepthBuffer() {

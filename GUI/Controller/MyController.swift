@@ -351,20 +351,20 @@ extension MyController {
     }
 
     func addValue(_ nr: Int, _ v: Float) {
-        if let monitor = renderer.monis.monitors[nr] as? BarChart {
+        if let monitor = renderer.monitors.monitors[nr] as? BarChart {
             monitor.addValue(v)
         }
     }
     
     func addValues(_ nr: Int, _ v1: Float, _ v2: Float) {
-        if let monitor = renderer.monis.monitors[nr] as? BarChart {
+        if let monitor = renderer.monitors.monitors[nr] as? BarChart {
             monitor.addValues(v1, v2)
         }
     }
 
     func updateMonitoringPanels() {
         
-        if !renderer.monis.drawActivityMonitors { return }
+        if !renderer.monitors.drawActivityMonitors { return }
             
         // DMA monitors
         let dma = amiga.agnus.getStats()

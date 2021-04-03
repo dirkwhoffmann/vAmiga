@@ -89,12 +89,12 @@ class Monitor: DialogController {
     func refresh() {
         
         func enabled(_ monitor: Int) -> NSControl.StateValue {
-            return parent.renderer.monis.monitorEnabled[monitor] ? .on : .off
+            return parent.renderer.monitors.monitorEnabled[monitor] ? .on : .off
         }
         
         let info = amiga.dmaDebugger.getInfo()
         let bus = info.enabled
-        let mon = parent.renderer.monis.drawActivityMonitors
+        let mon = parent.renderer.monitors.drawActivityMonitors
         let syn = synEnable.state == .on
         let col = bus || mon
                 
@@ -135,9 +135,9 @@ class Monitor: DialogController {
         monKickRom.state = enabled(Monitors.Monitor.kickRom)
         monLeftWave.state = enabled(Monitors.Monitor.waveformL)
         monRightWave.state = enabled(Monitors.Monitor.waveformR)
-        monOpacity.floatValue = parent.renderer.monis.monitorGlobalAlpha * 100.0
-        monSlider.floatValue = parent.renderer.monis.monitors[0].angle
-        monLayout.selectItem(withTag: parent.renderer.monis.monitorLayout)
+        monOpacity.floatValue = parent.renderer.monitors.monitorGlobalAlpha * 100.0
+        monSlider.floatValue = parent.renderer.monitors.monitors[0].angle
+        monLayout.selectItem(withTag: parent.renderer.monitors.monitorLayout)
         monCopper.isEnabled = mon
         monBlitter.isEnabled = mon
         monDisk.isEnabled = mon
@@ -230,7 +230,7 @@ class Monitor: DialogController {
         default: fatalError()
         }
                 
-        let monitor = parent.renderer.monis.monitors[sender.tag]
+        let monitor = parent.renderer.monitors.monitors[sender.tag]
         monitor.setColor(sender.color)
         
         refresh()
@@ -272,29 +272,29 @@ class Monitor: DialogController {
     
     @IBAction func monEnableAction(_ sender: NSButton!) {
     
-        parent.renderer.monis.drawActivityMonitors = sender.state == .on
+        parent.renderer.monitors.drawActivityMonitors = sender.state == .on
         refresh()
     }
     
     @IBAction func monDisplayAction(_ sender: NSButton!) {
         
         track("\(sender.tag)")
-        parent.renderer.monis.monitorEnabled[sender.tag] = sender.state == .on
+        parent.renderer.monitors.monitorEnabled[sender.tag] = sender.state == .on
         refresh()
     }
     
     @IBAction func monLayoutAction(_ sender: NSPopUpButton!) {
         
         track("\(sender.selectedTag())")
-        parent.renderer.monis.monitorLayout = sender.selectedTag()
+        parent.renderer.monitors.monitorLayout = sender.selectedTag()
         refresh()
     }
     
     @IBAction func monRotationAction(_ sender: NSSlider!) {
         
         track()
-        for i in 0 ..< parent.renderer.monis.monitors.count {
-            parent.renderer.monis.monitors[i].angle = sender.floatValue
+        for i in 0 ..< parent.renderer.monitors.monitors.count {
+            parent.renderer.monitors.monitors[i].angle = sender.floatValue
         }
         refresh()
     }
@@ -303,7 +303,7 @@ class Monitor: DialogController {
         
         track("alpha = \(sender.floatValue)")
         
-        parent.renderer.monis.monitorGlobalAlpha = sender.floatValue / 100.0
+        parent.renderer.monitors.monitorGlobalAlpha = sender.floatValue / 100.0
         refresh()
     }
 

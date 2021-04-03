@@ -82,10 +82,6 @@ class KernelManager {
     //
     // Managing kernels
     //
-
-    func makeFunction(name: String) -> MTLFunction? {
-        return library.makeFunction(name: name)
-    }
     
     func selectEnhancer(_ nr: Int) -> Bool {
         
@@ -121,5 +117,14 @@ class KernelManager {
             return true
         }
         return false
+    }
+    
+    //
+    // Accessing the library
+    //
+    
+    func makeFunction(name: String) -> MTLFunction? {
+        
+        return library.makeFunction(name: name)
     }
 }

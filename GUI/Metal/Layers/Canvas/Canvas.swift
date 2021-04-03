@@ -98,7 +98,7 @@ class Canvas: Layer {
     var dotmaskImages = [NSImage?](repeating: nil, count: 5)
     
     //
-    // Functions
+    // Initializing
     //
     
     override init(renderer: Renderer) {
@@ -108,7 +108,7 @@ class Canvas: Layer {
         buildTextures()
         buildDotMasks()
         
-        // Start with a negative alpha to present the start screen for a while
+        // Start with a negative alpha to keep the splash screen for a while
         alpha.set(-2.5)
     }
     

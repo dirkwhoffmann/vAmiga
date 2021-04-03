@@ -26,7 +26,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var prefs: Preferences { return parent.pref }
     var config: Configuration { return parent.config }
-    
+
     // Number of drawn frames since power up
     var frames: Int64 = 0
     
@@ -46,12 +46,11 @@ class Renderer: NSObject, MTKViewDelegate {
     var depthState: MTLDepthStencilState! = nil
     
     //
-    // Metal layers
+    // Layers
     //
     
     var metalLayer: CAMetalLayer! = nil
-
-    // Current canvas size
+    
     var size: CGSize {
 
         let frameSize = mtkView.frame.size
@@ -61,10 +60,9 @@ class Renderer: NSObject, MTKViewDelegate {
                       height: frameSize.height * scale)
     }
 
-    // Drawing layers
     var splashScreen: SplashScreen! = nil
     var canvas: Canvas! = nil
-    var monis: Monitors! = nil
+    var monitors: Monitors! = nil
     var console: Console! = nil
     
     // Texture to hold the pixel depth information
@@ -130,42 +128,6 @@ class Renderer: NSObject, MTKViewDelegate {
     }
     
     //
-    //  Drawing
-    //
-
-    func makeCommandEncoder(_ commandBuffer: MTLCommandBuffer,
-                            _ drawable: CAMetalDrawable) -> MTLRenderCommandEncoder? {
-        
-        let descriptor = MTLRenderPassDescriptor.init()
-        descriptor.colorAttachments[0].texture = drawable.texture
-        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
-        descriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
-        descriptor.colorAttachments[0].storeAction = MTLStoreAction.store
-
-        descriptor.depthAttachment.texture = depthTexture
-        descriptor.depthAttachment.clearDepth = 1
-        descriptor.depthAttachment.loadAction = MTLLoadAction.clear
-        descriptor.depthAttachment.storeAction = MTLStoreAction.dontCare
-        
-        // Create a command encoder
-        let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
-        commandEncoder?.setRenderPipelineState(pipeline)
-        commandEncoder?.setDepthStencilState(depthState)
-        commandEncoder?.setFragmentBytes(&shaderOptions,
-                                         length: MemoryLayout<ShaderOptions>.stride,
-                                         index: 0)
-        
-        /* Finally, we have to decide for a texture sampler. We use a linear
-         * interpolation sampler, if Gaussian blur is enabled, and a nearest
-         * neighbor sampler if Gaussian blur is disabled.
-         */
-        let sampler = shaderOptions.blur > 0 ? samplerLinear : samplerNearest
-        commandEncoder?.setFragmentSamplerState(sampler, index: 0)
-        
-        return commandEncoder
-    }
-
-    //
     // Managing layout
     //
 
@@ -223,6 +185,42 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     //
+    //  Drawing
+    //
+
+    func makeCommandEncoder(_ commandBuffer: MTLCommandBuffer,
+                            _ drawable: CAMetalDrawable) -> MTLRenderCommandEncoder? {
+        
+        let descriptor = MTLRenderPassDescriptor.init()
+        descriptor.colorAttachments[0].texture = drawable.texture
+        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
+        descriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
+        descriptor.colorAttachments[0].storeAction = MTLStoreAction.store
+
+        descriptor.depthAttachment.texture = depthTexture
+        descriptor.depthAttachment.clearDepth = 1
+        descriptor.depthAttachment.loadAction = MTLLoadAction.clear
+        descriptor.depthAttachment.storeAction = MTLStoreAction.dontCare
+        
+        // Create a command encoder
+        let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
+        commandEncoder?.setRenderPipelineState(pipeline)
+        commandEncoder?.setDepthStencilState(depthState)
+        commandEncoder?.setFragmentBytes(&shaderOptions,
+                                         length: MemoryLayout<ShaderOptions>.stride,
+                                         index: 0)
+        
+        /* Finally, we have to decide for a texture sampler. We use a linear
+         * interpolation sampler, if Gaussian blur is enabled, and a nearest
+         * neighbor sampler if Gaussian blur is disabled.
+         */
+        let sampler = shaderOptions.blur > 0 ? samplerLinear : samplerNearest
+        commandEncoder?.setFragmentSamplerState(sampler, index: 0)
+        
+        return commandEncoder
+    }
+
+    //
     // Methods from MTKViewDelegate
     //
 
@@ -242,7 +240,7 @@ class Renderer: NSObject, MTKViewDelegate {
         update(frames: frames)
         splashScreen.update(frames: frames)
         canvas.update(frames: frames)
-        monis.update(frames: frames)
+        monitors.update(frames: frames)
         console.update(frames: frames)
         
         semaphore.wait()
@@ -251,19 +249,19 @@ class Renderer: NSObject, MTKViewDelegate {
             
             renderSplash = renderSplash && canvas.isTransparent
             let renderCanvas = canvas.isVisible
-            let renderMonitors = monis.drawActivityMonitors
+            let renderMonitors = monitors.drawActivityMonitors
             
             let flat = fullscreen && !parent.pref.keepAspectRatio
             
             let buffer = queue.makeCommandBuffer()!
             if renderSplash { splashScreen.render(buffer: buffer) }
             if renderCanvas { canvas.render(buffer: buffer) }
-            if renderMonitors { monis.render(buffer: buffer) }
+            if renderMonitors { monitors.render(buffer: buffer) }
             
             if let commandEncoder = makeCommandEncoder(buffer, drawable) {
                 if renderSplash { splashScreen.render(encoder: commandEncoder, flat: flat) }
                 if renderCanvas { canvas.render(encoder: commandEncoder, flat: flat) }
-                if renderMonitors { monis.render(encoder: commandEncoder, flat: flat) }
+                if renderMonitors { monitors.render(encoder: commandEncoder, flat: flat) }
                 commandEncoder.endEncoding()
                 
                 buffer.addCompletedHandler { _ in self.semaphore.signal() }
