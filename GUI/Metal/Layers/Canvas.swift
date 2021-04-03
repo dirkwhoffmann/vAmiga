@@ -108,8 +108,10 @@ class Canvas: Layer {
         buildTextures()
         buildDotMasks()
         
-        // Start with a negative alpha to keep the splash screen for a while
-        alpha.set(-2.5)
+        /* We start with a negative alpha value to give it some time until
+         * it becomes greater than 0. During this time, the splash screen will
+         * be fully visible. */
+        alpha.set(-1.5)
     }
     
     //
