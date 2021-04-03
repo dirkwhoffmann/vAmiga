@@ -66,7 +66,7 @@ struct MergeUniforms {
 struct FragmentUniforms {
     
     var alpha: Float
-    var mix: Float
+    var white: Float
     var dotMaskWidth: Int32
     var dotMaskHeight: Int32
     var scanlineDistance: Int32

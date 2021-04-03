@@ -62,10 +62,7 @@ public:
     
     // Registers a listener together with it's callback function
     void setListener(const void *listener, Callback *func);
-    
-    // Unregisters the listener
-    void removeListener();
-        
+            
     // Writes a message into the queue and propagates it to all listeners
     void put(MsgType type, long data = 0);
 };

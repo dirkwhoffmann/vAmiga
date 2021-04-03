@@ -28,16 +28,6 @@ MsgQueue::setListener(const void *listener, Callback *callback)
 }
 
 void
-MsgQueue::removeListener()
-{
-    synchronized {
-        
-        this->listener = nullptr;
-        this->callback = nullptr;
-    }
-}
-
-void
 MsgQueue::put(MsgType type, long data)
 {
     synchronized {

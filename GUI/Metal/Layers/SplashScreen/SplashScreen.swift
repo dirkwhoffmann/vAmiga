@@ -14,7 +14,7 @@ class SplashScreen: Layer {
         
     var vertUniforms = VertexUniforms(mvp: matrix_identity_float4x4)
     var fragUniforms = FragmentUniforms(alpha: 1.0,
-                                        mix: 0.0,
+                                        white: 0.0,
                                         dotMaskWidth: 0,
                                         dotMaskHeight: 0,
                                         scanlineDistance: 0)

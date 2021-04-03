@@ -30,11 +30,7 @@ class Renderer: NSObject, MTKViewDelegate {
     // Number of drawn frames since power up
     var frames: Int64 = 0
     
-    /* Synchronization semaphore. The semaphore is locked in function draw()
-     * and released in function endFrame(). It's puprpose is to prevent a new
-     * frame from being drawn if the previous isn't finished yet. Not sure if
-     * we really need it.
-     */
+    // Frame synchronization semaphore
     var semaphore = DispatchSemaphore(value: 1)
 
     //
@@ -50,26 +46,19 @@ class Renderer: NSObject, MTKViewDelegate {
     //
     
     var metalLayer: CAMetalLayer! = nil
-    
-    var size: CGSize {
-
-        let frameSize = mtkView.frame.size
-        let scale = mtkView.layer?.contentsScale ?? 1
-
-        return CGSize(width: frameSize.width * scale,
-                      height: frameSize.height * scale)
-    }
-
     var splashScreen: SplashScreen! = nil
     var canvas: Canvas! = nil
     var monitors: Monitors! = nil
     var console: Console! = nil
     
+    //
+    // Ressources
+    //
+    
+    var kernelManager: KernelManager! = nil
+
     // Texture to hold the pixel depth information
     var depthTexture: MTLTexture! = nil
-
-    // Kernels (shaders)
-    var kernelManager: KernelManager! = nil
 
     // Nearest neighbor sampler
     var samplerNearest: MTLSamplerState!
@@ -131,6 +120,15 @@ class Renderer: NSObject, MTKViewDelegate {
     // Managing layout
     //
 
+    var size: CGSize {
+
+        let frameSize = mtkView.frame.size
+        let scale = mtkView.layer?.contentsScale ?? 1
+
+        return CGSize(width: frameSize.width * scale,
+                      height: frameSize.height * scale)
+    }
+    
     func reshape() {
 
         reshape(withSize: size)
