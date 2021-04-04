@@ -107,7 +107,7 @@ extension Renderer {
             let h = CGFloat(cutoutY2.current - cutoutY1.current)
             
             // Update texture cutout
-            textureRect = CGRect.init(x: x, y: y, width: w, height: h)
+            canvas.textureRect = CGRect.init(x: x, y: y, width: w, height: h)
          
             if !cont {
                 animates -= AnimationType.texture
@@ -135,7 +135,7 @@ extension Renderer {
 
         track("Zooming texture in...")
 
-        let target = visibleNormalized
+        let target = canvas.visibleNormalized
         
         cutoutX1.target = Float(target.minX)
         cutoutY1.target = Float(target.minY)
@@ -154,8 +154,8 @@ extension Renderer {
 
         track("Zooming texture out...")
         
-        let current = textureRect
-        let target = entireNormalized
+        let current = canvas.textureRect
+        let target = canvas.entireNormalized
         
         cutoutX1.current = Float(current.minX)
         cutoutY1.current = Float(current.minY)

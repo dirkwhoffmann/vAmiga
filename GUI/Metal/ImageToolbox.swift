@@ -439,6 +439,7 @@ extension Renderer {
     // Image handling
     //
 
+    /*
     func screenshot(texture: MTLTexture) -> NSImage? {
 
         // Use the blitter to copy the texture data back from the GPU
@@ -461,6 +462,7 @@ extension Renderer {
             return screenshot(texture: canvas.mergeTexture)
         }
     }
+    */
     
     func createBackgroundTexture() -> MTLTexture? {
 

@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-extension Renderer {
+extension Canvas {
     
     var texW: CGFloat { return CGFloat(TextureSize.original.width) }
     var texH: CGFloat { return CGFloat(TextureSize.original.height) }
@@ -70,10 +70,10 @@ extension Renderer {
         
         let max = largestVisible
         
-        let width = (1 - CGFloat(config.hZoom)) * max.width
-        let bw = max.minX + CGFloat(config.hCenter) * (max.width - width)
-        let height = (1 - CGFloat(config.vZoom)) * max.height
-        let bh = max.minY + CGFloat(config.vCenter) * (max.height - height)
+        let width = (1 - CGFloat(renderer.config.hZoom)) * max.width
+        let bw = max.minX + CGFloat(renderer.config.hCenter) * (max.width - width)
+        let height = (1 - CGFloat(renderer.config.vZoom)) * max.height
+        let bh = max.minY + CGFloat(renderer.config.vCenter) * (max.height - height)
         
         return CGRect.init(x: bw, y: bh, width: width, height: height)
     }

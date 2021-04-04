@@ -50,7 +50,7 @@
 		503DECAE255E6180005FFA0B /* Oscillator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503DECAC255E6180005FFA0B /* Oscillator.cpp */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
 		504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504C48B324143AB4008ADAB3 /* AgnusDma.cpp */; };
-		504F4D64252624BD00CF8815 /* RendererRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F4D63252624BD00CF8815 /* RendererRect.swift */; };
+		504F4D64252624BD00CF8815 /* TextureRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F4D63252624BD00CF8815 /* TextureRect.swift */; };
 		504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* GuardTableView.swift */; };
 		505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505554AA2264C47600CB07E0 /* Mouse.cpp */; };
 		5056506C25440FFB00A79D27 /* FSDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056506A25440FFB00A79D27 /* FSDevice.cpp */; };
@@ -321,7 +321,7 @@
 		5042FD7E23FFF0D200B315B2 /* StateMachineTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachineTypes.h; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
-		504F4D63252624BD00CF8815 /* RendererRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererRect.swift; sourceTree = "<group>"; };
+		504F4D63252624BD00CF8815 /* TextureRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureRect.swift; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* GuardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardTableView.swift; sourceTree = "<group>"; };
 		5051922722B61C1B0012C4BB /* AmigaFileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaFileTypes.h; sourceTree = "<group>"; };
 		5051922822B61C8A0012C4BB /* CPUTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPUTypes.h; sourceTree = "<group>"; };
@@ -946,7 +946,7 @@
 				508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */,
 				50357BB5239123B2007E7563 /* Renderer.swift */,
 				50357BB723912929007E7563 /* RendererSetup.swift */,
-				504F4D63252624BD00CF8815 /* RendererRect.swift */,
+				504F4D63252624BD00CF8815 /* TextureRect.swift */,
 				508FDFCD21EA20510043D0E9 /* Animation.swift */,
 				508FDFD121EA20510043D0E9 /* MetalViewEvents.swift */,
 				508FDFD221EA20510043D0E9 /* ImageToolbox.swift */,
@@ -1582,7 +1582,7 @@
 				502BB09E229C00C800A8DFCD /* CompatibilityConf.swift in Sources */,
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
 				508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */,
-				504F4D64252624BD00CF8815 /* RendererRect.swift in Sources */,
+				504F4D64252624BD00CF8815 /* TextureRect.swift in Sources */,
 				501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */,
 				504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */,
 				5027418F2297CACF0038E5AF /* Colors.cpp in Sources */,

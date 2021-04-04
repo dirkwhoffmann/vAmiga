@@ -232,7 +232,7 @@ extension MyController: NSMenuItemValidation {
         let format = ScreenshotSource.init(rawValue: pref.screenshotSource)!
         
         // Take screenshot
-        guard let screen = renderer.screenshot(source: format) else {
+        guard let screen = renderer.canvas.screenshot(source: format) else {
             track("Failed to create screenshot")
             return
         }
@@ -271,9 +271,9 @@ extension MyController: NSMenuItemValidation {
         
         var rect: CGRect
         if pref.captureSource == 0 {
-            rect = renderer.textureRectAbs
+            rect = renderer.canvas.textureRectAbs
         } else {
-            rect = renderer.entire
+            rect = renderer.canvas.entire
         }
         
         track("Cature source = \(pref.captureSource)")

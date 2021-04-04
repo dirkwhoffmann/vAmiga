@@ -343,16 +343,16 @@ class Configuration {
         set { amiga.configure(.SATURATION, value: newValue) }
     }
     var hCenter = VideoDefaults.tft.hCenter {
-        didSet { renderer.updateTextureRect() }
+        didSet { renderer.canvas.updateTextureRect() }
     }
     var vCenter = VideoDefaults.tft.vCenter {
-        didSet { renderer.updateTextureRect() }
+        didSet { renderer.canvas.updateTextureRect() }
     }
     var hZoom = VideoDefaults.tft.hZoom {
-        didSet { renderer.updateTextureRect() }
+        didSet { renderer.canvas.updateTextureRect() }
     }
     var vZoom = VideoDefaults.tft.vZoom {
-        didSet { renderer.updateTextureRect() }
+        didSet { renderer.canvas.updateTextureRect() }
     }
     var enhancer = VideoDefaults.tft.enhancer {
         didSet {
@@ -850,7 +850,7 @@ class Configuration {
         hZoom = defaults.hZoom
         vZoom = defaults.vZoom
         
-        renderer.updateTextureRect()
+        renderer.canvas.updateTextureRect()
     }
     
     func loadShaderDefaults(_ defaults: VideoDefaults) {
@@ -875,8 +875,6 @@ class Configuration {
         disalignment = defaults.disalignment
         disalignmentH = defaults.disalignmentH
         disalignment = defaults.disalignment
-        
-        ressourceManager.buildDotMasks()
     }
     
     func loadVideoDefaults(_ defaults: VideoDefaults) {
@@ -920,8 +918,7 @@ class Configuration {
         disalignmentH = defaults.float(forKey: Keys.Vid.disalignmentH)
         disalignmentV = defaults.float(forKey: Keys.Vid.disalignmentV)
         
-        renderer.updateTextureRect()
-        ressourceManager.buildDotMasks()
+        renderer.canvas.updateTextureRect()
         
         amiga.resume()
     }

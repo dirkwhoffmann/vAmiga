@@ -22,24 +22,6 @@ class Canvas: Layer {
     var flickerCnt = 0
 
     //
-    // Buffers and Uniforms
-    //
-    
-    var quad2D: Node?
-    var quad3D: Quad?
-            
-    var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
-    var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
-    var fragmentUniforms = FragmentUniforms(alpha: 1.0,
-                                            white: 0.0,
-                                            dotMaskWidth: 0,
-                                            dotMaskHeight: 0,
-                                            scanlineDistance: 0)
-
-    var mergeUniforms = MergeUniforms(longFrameScale: 1.0,
-                                      shortFrameScale: 1.0)
-    
-    //
     // Textures
     //
     
@@ -86,6 +68,27 @@ class Canvas: Layer {
      */
     var scanlineTexture: MTLTexture! = nil
 
+    // Part of the texture that is currently visible
+    var textureRect = CGRect.init() { didSet { buildVertexBuffers() } }
+
+    //
+    // Buffers and Uniforms
+    //
+    
+    var quad2D: Node?
+    var quad3D: Quad?
+            
+    var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
+    var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
+    var fragmentUniforms = FragmentUniforms(alpha: 1.0,
+                                            white: 0.0,
+                                            dotMaskWidth: 0,
+                                            dotMaskHeight: 0,
+                                            scanlineDistance: 0)
+
+    var mergeUniforms = MergeUniforms(longFrameScale: 1.0,
+                                      shortFrameScale: 1.0)
+    
     //
     // Initializing
     //
@@ -106,12 +109,12 @@ class Canvas: Layer {
 
         quad2D = Node.init(device: device,
                            x: -1.0, y: -1.0, z: 0.0, w: 2.0, h: 2.0,
-                           t: renderer.textureRect)
+                           t: textureRect)
 
         quad3D = Quad.init(device: device,
                            x1: -0.64, y1: -0.48, z1: -0.64,
                            x2: 0.64, y2: 0.48, z2: 0.64,
-                           t: renderer.textureRect)
+                           t: textureRect)
     }
     
     func buildTextures() {
@@ -163,8 +166,50 @@ class Canvas: Layer {
     }
 
     //
-    // Managing textures
+    // Taking screenshots
     //
+    
+    func screenshot(source: ScreenshotSource) -> NSImage? {
+
+        switch source {
+            
+        case .entire:
+            return screenshot(texture: mergeTexture, rect: largestVisibleNormalized)
+            
+        case .entireUpscaled:
+            return screenshot(texture: upscaledTexture, rect: largestVisibleNormalized)
+            
+        case .visible:
+            return screenshot(texture: mergeTexture, rect: visibleNormalized)
+            
+        case .visibleUpscaled:
+            return screenshot(texture: upscaledTexture, rect: visibleNormalized)
+        }
+    }
+
+    func screenshot(texture: MTLTexture, rect: CGRect) -> NSImage? {
+        
+        // Use the blitter to copy the texture data back from the GPU
+        let queue = texture.device.makeCommandQueue()!
+        let commandBuffer = queue.makeCommandBuffer()!
+        let blitEncoder = commandBuffer.makeBlitCommandEncoder()!
+        blitEncoder.synchronize(texture: texture, slice: 0, level: 0)
+        blitEncoder.endEncoding()
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
+        
+        return NSImage.make(texture: texture, rect: rect)
+    }
+
+    //
+    // Updating
+    //
+    
+    override func update(frames: Int64) {
+            
+        super.update(frames: frames)
+        updateTexture()
+    }
     
     func updateTexture() {
         

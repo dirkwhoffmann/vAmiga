@@ -82,9 +82,6 @@ class Renderer: NSObject, MTKViewDelegate {
     var cutoutY1 = AnimatedFloat.init()
     var cutoutX2 = AnimatedFloat.init()
     var cutoutY2 = AnimatedFloat.init()
-
-    // Part of the texture that is currently visible
-    var textureRect = CGRect.init() { didSet { buildVertexBuffers() } }
             
     // Is set to true when fullscreen mode is entered
     var fullscreen = false
@@ -136,44 +133,6 @@ class Renderer: NSObject, MTKViewDelegate {
     }
     
     //
-    // Screenshots
-    //
-    
-    func screenshot(source: ScreenshotSource) -> NSImage? {
-
-        track("source: \(source)")
-
-        switch source {
-            
-        case .entire:
-            return screenshot(texture: canvas.mergeTexture, rect: largestVisibleNormalized)
-            
-        case .entireUpscaled:
-            return screenshot(texture: canvas.upscaledTexture, rect: largestVisibleNormalized)
-            
-        case .visible:
-            return screenshot(texture: canvas.mergeTexture, rect: visibleNormalized)
-            
-        case .visibleUpscaled:
-            return screenshot(texture: canvas.upscaledTexture, rect: visibleNormalized)
-        }
-    }
-
-    func screenshot(texture: MTLTexture, rect: CGRect) -> NSImage? {
-        
-        // Use the blitter to copy the texture data back from the GPU
-        let queue = texture.device.makeCommandQueue()!
-        let commandBuffer = queue.makeCommandBuffer()!
-        let blitEncoder = commandBuffer.makeBlitCommandEncoder()!
-        blitEncoder.synchronize(texture: texture, slice: 0, level: 0)
-        blitEncoder.endEncoding()
-        commandBuffer.commit()
-        commandBuffer.waitUntilCompleted()
-        
-        return NSImage.make(texture: texture, rect: rect)
-    }
-
-    //
     //  Drawing
     //
 
@@ -203,6 +162,20 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     //
+    // Updating
+    //
+    
+    func update(frames: Int64) {
+                         
+        if animates != 0 { animate() }
+
+        splashScreen.update(frames: frames)
+        console.update(frames: frames)
+        canvas.update(frames: frames)
+        monitors.update(frames: frames)
+    }
+    
+    //
     // Methods from MTKViewDelegate
     //
 
@@ -210,25 +183,15 @@ class Renderer: NSObject, MTKViewDelegate {
 
         reshape(withSize: size)
     }
-    
-    func update(frames: Int64) {
-                         
-        if animates != 0 { animate() }
-    }
-    
+
     func draw(in view: MTKView) {
         
         frames += 1
         update(frames: frames)
-        splashScreen.update(frames: frames)
-        canvas.update(frames: frames)
-        monitors.update(frames: frames)
-        console.update(frames: frames)
-        
+
         semaphore.wait()
-        
         if let drawable = metalLayer.nextDrawable() {
-            
+
             renderSplash = renderSplash && canvas.isTransparent
             let renderCanvas = canvas.isVisible
             let renderMonitors = monitors.drawActivityMonitors
