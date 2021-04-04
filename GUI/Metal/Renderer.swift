@@ -149,15 +149,14 @@ class Renderer: NSObject, MTKViewDelegate {
         return commandBuffer
     }
     
-    func makeCommandEncoder(_ commandBuffer: MTLCommandBuffer,
-                            _ drawable: CAMetalDrawable) -> MTLRenderCommandEncoder? {
+    func makeCommandEncoder(_ drawable: CAMetalDrawable, _ buffer: MTLCommandBuffer) -> MTLRenderCommandEncoder? {
         
         // Update the render pass descriptor
         descriptor.colorAttachments[0].texture = drawable.texture
         descriptor.depthAttachment.texture = ressourceManager.depthTexture
         
         // Create a command encoder
-        let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
+        let encoder = buffer.makeRenderCommandEncoder(descriptor: descriptor)
         encoder?.setRenderPipelineState(pipeline)
         encoder?.setDepthStencilState(depthState)
         
@@ -197,21 +196,24 @@ class Renderer: NSObject, MTKViewDelegate {
 
             // Create the command buffer
             let buffer = makeCommandBuffer()
-                        
-            if let encoder = makeCommandEncoder(buffer, drawable) {
-
-                // Render the scene
-                let flat = fullscreen && !parent.pref.keepAspectRatio
-                if canvas.isTransparent { splashScreen.render(encoder: encoder) }
-                if canvas.isVisible { canvas.render(encoder: encoder, flat: flat) }
-                if monitors.drawActivityMonitors { monitors.render(encoder: encoder) }
-
-                // Commit the command buffer
-                encoder.endEncoding()
-                buffer.addCompletedHandler { _ in self.semaphore.signal() }
-                buffer.present(drawable)
-                buffer.commit()
+            
+            // Create the command encoder
+            guard let encoder = makeCommandEncoder(drawable, buffer) else {
+                semaphore.signal()
+                return
             }
+            
+            // Render the scene
+            let flat = fullscreen && !parent.pref.keepAspectRatio
+            if canvas.isTransparent || animates != 0 { splashScreen.render(encoder: encoder) }
+            if canvas.isVisible { canvas.render(encoder: encoder, flat: flat) }
+            if monitors.drawActivityMonitors { monitors.render(encoder: encoder) }
+            
+            // Commit the command buffer
+            encoder.endEncoding()
+            buffer.addCompletedHandler { _ in self.semaphore.signal() }
+            buffer.present(drawable)
+            buffer.commit()
         }
     }
 }
