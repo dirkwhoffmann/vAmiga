@@ -25,7 +25,6 @@ extension Renderer {
         buildDescriptors()
         buildShaders()
         buildLayers()
-        buildSamplers()
         buildPipeline()
         buildVertexBuffers()
         
@@ -64,8 +63,6 @@ extension Renderer {
     
     func buildShaders() {
         
-        kernelManager = KernelManager.init(view: view, device: device, renderer: self)
-
         shaderOptions = ShaderOptions.init(
             
             blur: config.blur,
@@ -76,7 +73,7 @@ extension Renderer {
             bloomWeight: config.bloomWeight,
             flicker: config.flicker,
             flickerWeight: config.flickerWeight,
-            dotMask: config.dotMask,
+            dotMask: Int32(config.dotMask),
             dotMaskBrightness: config.dotMaskBrightness,
             scanlines: Int32(config.scanlines),
             scanlineBrightness: config.scanlineBrightness,
@@ -85,6 +82,8 @@ extension Renderer {
             disalignmentH: config.disalignmentH,
             disalignmentV: config.disalignmentV
         )
+        
+        ressourceManager = RessourceManager.init(view: view, device: device, renderer: self)
     }
     
     func buildLayers() {
@@ -94,30 +93,12 @@ extension Renderer {
         monitors = Monitors.init(renderer: self)
         console = Console.init(renderer: self)
     }
-    
-    internal func buildSamplers() {
-
-        let descriptor = MTLSamplerDescriptor()
-        descriptor.sAddressMode = MTLSamplerAddressMode.clampToEdge
-        descriptor.tAddressMode = MTLSamplerAddressMode.clampToEdge
-        descriptor.mipFilter = MTLSamplerMipFilter.notMipmapped
-
-        // Nearest neighbor sampler
-        descriptor.minFilter = MTLSamplerMinMagFilter.linear
-        descriptor.magFilter = MTLSamplerMinMagFilter.linear
-        samplerLinear = device.makeSamplerState(descriptor: descriptor)
-
-        // Linear sampler
-        descriptor.minFilter = MTLSamplerMinMagFilter.nearest
-        descriptor.magFilter = MTLSamplerMinMagFilter.nearest
-        samplerNearest = device.makeSamplerState(descriptor: descriptor)
-    }
-
+        
     func buildPipeline() {
 
         // Read vertex and fragment shader from library
-        let vertexFunc = kernelManager.makeFunction(name: "vertex_main")
-        let fragmentFunc = kernelManager.makeFunction(name: "fragment_main")
+        let vertexFunc = ressourceManager.makeFunction(name: "vertex_main")
+        let fragmentFunc = ressourceManager.makeFunction(name: "fragment_main")
         metalAssert(vertexFunc != nil && fragmentFunc != nil,
                     "Cannot create Render Pipeline function objects.")
         
@@ -224,27 +205,6 @@ extension Renderer {
         monitors.vertexUniforms3D.mvp = mvp
     }
 
-    func buildDepthBuffer() {
-
-        let width = Int(size.width)
-        let height = Int(size.height)
-
-        precondition(width != 0)
-        precondition(height != 0)
-
-        let descriptor = MTLTextureDescriptor.texture2DDescriptor(
-            pixelFormat: MTLPixelFormat.depth32Float,
-            width: width,
-            height: height,
-            mipmapped: false)
-        descriptor.resourceOptions = MTLResourceOptions.storageModePrivate
-        descriptor.usage = MTLTextureUsage.renderTarget
-
-        depthTexture = device.makeTexture(descriptor: descriptor)
-        metalAssert(depthTexture != nil,
-                    "Could not create depth texture.")
-    }
-    
     //
     // Matrix utilities
     //

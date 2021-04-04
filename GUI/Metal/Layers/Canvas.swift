@@ -11,8 +11,6 @@ import MetalPerformanceShaders
 
 class Canvas: Layer {
     
-    var kernelManager: KernelManager { return renderer.kernelManager }
-
     // Indicates whether the recently drawn frames were long or short frames
     var currLOF = true
     var prevLOF = true
@@ -88,15 +86,6 @@ class Canvas: Layer {
      */
     var scanlineTexture: MTLTexture! = nil
 
-    /* Dotmask texture (variable size)
-     * This texture is used by the fragment shader to emulate a dotmask
-     * effect.
-     */
-    var dotMaskTexture: MTLTexture! = nil
-
-    // Array holding dotmask preview images
-    var dotmaskImages = [NSImage?](repeating: nil, count: 5)
-    
     //
     // Initializing
     //
@@ -104,9 +93,8 @@ class Canvas: Layer {
     override init(renderer: Renderer) {
 
         super.init(renderer: renderer)
-
+        buildVertexBuffers()
         buildTextures()
-        buildDotMasks()
         
         /* We start with a negative alpha value to give it some time until
          * it becomes greater than 0. During this time, the splash screen will
@@ -114,6 +102,66 @@ class Canvas: Layer {
         alpha.set(-1.5)
     }
     
+    func buildVertexBuffers() {
+
+        quad2D = Node.init(device: device,
+                           x: -1.0, y: -1.0, z: 0.0, w: 2.0, h: 2.0,
+                           t: renderer.textureRect)
+
+        quad3D = Quad.init(device: device,
+                           x1: -0.64, y1: -0.48, z1: -0.64,
+                           x2: 0.64, y2: 0.48, z2: 0.64,
+                           t: renderer.textureRect)
+    }
+    
+    func buildTextures() {
+     
+        // Texture usages
+        let r: MTLTextureUsage = [ .shaderRead ]
+        let rwt: MTLTextureUsage = [ .shaderRead, .shaderWrite, .renderTarget ]
+        let rwtp: MTLTextureUsage = [ .shaderRead, .shaderWrite, .renderTarget, .pixelFormatView ]
+
+        // Emulator texture (long frames)
+        longFrameTexture = device.makeTexture(size: TextureSize.original, usage: r)
+        renderer.metalAssert(longFrameTexture != nil,
+                             "The frame texture (long frames) could not be allocated.")
+        
+        // Emulator texture (short frames)
+        shortFrameTexture = device.makeTexture(size: TextureSize.original, usage: r)
+        renderer.metalAssert(shortFrameTexture != nil,
+                             "The frame texture (short frames) could not be allocated.")
+        
+        // Merged emulator texture (long frame + short frame)
+        mergeTexture = device.makeTexture(size: TextureSize.merged, usage: rwt)
+        renderer.metalAssert(mergeTexture != nil,
+                             "The merge texture could not be allocated.")
+        
+        // Bloom textures
+        bloomTextureR = device.makeTexture(size: TextureSize.merged, usage: rwt)
+        bloomTextureG = device.makeTexture(size: TextureSize.merged, usage: rwt)
+        bloomTextureB = device.makeTexture(size: TextureSize.merged, usage: rwt)
+        
+        renderer.metalAssert(bloomTextureR != nil,
+                             "The bloom texture (R channel) could not be allocated.")
+        renderer.metalAssert(bloomTextureG != nil,
+                             "The bloom texture (G channel) could not be allocated.")
+        renderer.metalAssert(bloomTextureB != nil,
+                             "The bloom texture (B channel) could not be allocated.")
+        
+        // Target for in-texture upscaling
+        lowresEnhancedTexture = device.makeTexture(size: TextureSize.merged, usage: rwt)
+        renderer.metalAssert(lowresEnhancedTexture != nil,
+                             "The lowres enhancer texture could not be allocated.")
+        
+        // Upscaled merge texture
+        upscaledTexture = device.makeTexture(size: TextureSize.upscaled, usage: rwtp)
+        scanlineTexture = device.makeTexture(size: TextureSize.upscaled, usage: rwtp)
+        renderer.metalAssert(upscaledTexture != nil,
+                             "The upscaling texture could not be allocated.")
+        renderer.metalAssert(scanlineTexture != nil,
+                             "The scanline texture could not be allocated.")
+    }
+
     //
     // Managing textures
     //
@@ -163,6 +211,15 @@ class Canvas: Layer {
     
     override func render(buffer: MTLCommandBuffer) {
                 
+        func applyGauss(_ texture: inout MTLTexture, radius: Float) {
+            
+            if #available(OSX 10.13, *) {
+                let gauss = MPSImageGaussianBlur(device: device, sigma: radius)
+                gauss.encode(commandBuffer: buffer,
+                             inPlaceTexture: &texture, fallbackCopyAllocator: nil)
+            }
+        }
+
         // Get the most recent texture from the emulator
         updateTexture()
         
@@ -178,58 +235,50 @@ class Canvas: Layer {
             mergeUniforms.longFrameScale = (flickerCnt % 4 >= 2) ? 1.0 : weight
             mergeUniforms.shortFrameScale = (flickerCnt % 4 >= 2) ? weight : 1.0
             
-            kernelManager.mergeFilter.apply(commandBuffer: buffer,
-                                            textures: [longFrameTexture,
-                                                       shortFrameTexture,
-                                                       mergeTexture],
-                                            options: &mergeUniforms,
-                                            length: MemoryLayout<MergeUniforms>.stride)
+            ressourceManager.mergeFilter.apply(commandBuffer: buffer,
+                                               textures: [longFrameTexture,
+                                                          shortFrameTexture,
+                                                          mergeTexture],
+                                               options: &mergeUniforms,
+                                               length: MemoryLayout<MergeUniforms>.stride)
             
         } else if currLOF {
             
             // Case 2: Non-interlace drawing (two long frames in a row)
-            kernelManager.mergeBypassFilter.apply(commandBuffer: buffer,
-                                    textures: [longFrameTexture, mergeTexture])
+            ressourceManager.mergeBypassFilter.apply(commandBuffer: buffer,
+                                                     textures: [longFrameTexture, mergeTexture])
         } else {
             
             // Case 3: Non-interlace drawing (two short frames in a row)
-            kernelManager.mergeBypassFilter.apply(commandBuffer: buffer,
-                                    textures: [shortFrameTexture, mergeTexture])
+            ressourceManager.mergeBypassFilter.apply(commandBuffer: buffer,
+                                                     textures: [shortFrameTexture, mergeTexture])
         }
         
         // Compute upscaled texture (first pass, in-texture upscaling)
-        kernelManager.enhancer.apply(commandBuffer: buffer,
-                                     source: mergeTexture,
-                                     target: lowresEnhancedTexture)
+        ressourceManager.enhancer.apply(commandBuffer: buffer,
+                                        source: mergeTexture,
+                                        target: lowresEnhancedTexture)
         
         // Compute the bloom textures
         if renderer.shaderOptions.bloom != 0 {
-            kernelManager.bloomFilter.apply(commandBuffer: buffer,
-                                            textures: [mergeTexture,
-                                                       bloomTextureR,
-                                                       bloomTextureG,
-                                                       bloomTextureB],
-                                            options: &renderer.shaderOptions,
-                                            length: MemoryLayout<ShaderOptions>.stride)
+            ressourceManager.bloomFilter.apply(commandBuffer: buffer,
+                                               textures: [mergeTexture,
+                                                          bloomTextureR,
+                                                          bloomTextureG,
+                                                          bloomTextureB],
+                                               options: &renderer.shaderOptions,
+                                               length: MemoryLayout<ShaderOptions>.stride)
             
-            func applyGauss(_ texture: inout MTLTexture, radius: Float) {
-                
-                if #available(OSX 10.13, *) {
-                    let gauss = MPSImageGaussianBlur(device: device, sigma: radius)
-                    gauss.encode(commandBuffer: buffer,
-                                 inPlaceTexture: &texture, fallbackCopyAllocator: nil)
-                }
-            }
             applyGauss(&bloomTextureR, radius: renderer.shaderOptions.bloomRadius)
             applyGauss(&bloomTextureG, radius: renderer.shaderOptions.bloomRadius)
             applyGauss(&bloomTextureB, radius: renderer.shaderOptions.bloomRadius)
         }
         
         // Compute upscaled texture (second pass)
-        kernelManager.upscaler.apply(commandBuffer: buffer,
-                                     source: lowresEnhancedTexture,
-                                     target: upscaledTexture)
-
+        ressourceManager.upscaler.apply(commandBuffer: buffer,
+                                        source: lowresEnhancedTexture,
+                                        target: upscaledTexture)
+        
         // Blur the upscaled texture
         if #available(OSX 10.13, *), renderer.shaderOptions.blur > 0 {
             let gauss = MPSImageGaussianBlur(device: device,
@@ -240,62 +289,74 @@ class Canvas: Layer {
         }
         
         // Emulate scanlines
-        kernelManager.scanlineFilter.apply(commandBuffer: buffer,
-                                           source: upscaledTexture,
-                                           target: scanlineTexture,
-                                           options: &renderer.shaderOptions,
-                                           length: MemoryLayout<ShaderOptions>.stride)
+        ressourceManager.scanlineFilter.apply(commandBuffer: buffer,
+                                              source: upscaledTexture,
+                                              target: scanlineTexture,
+                                              options: &renderer.shaderOptions,
+                                              length: MemoryLayout<ShaderOptions>.stride)
     }
     
-    override func render(encoder: MTLRenderCommandEncoder, flat: Bool) {
+    func setupFragmentShader(encoder: MTLRenderCommandEncoder) {
         
+        // Setup textures
         encoder.setFragmentTexture(scanlineTexture, index: 0)
         encoder.setFragmentTexture(bloomTextureR, index: 1)
         encoder.setFragmentTexture(bloomTextureG, index: 2)
         encoder.setFragmentTexture(bloomTextureB, index: 3)
-        encoder.setFragmentTexture(dotMaskTexture, index: 4)
-        
-        if flat {
-            
-            // Configure the vertex shader
-            encoder.setVertexBytes(&vertexUniforms2D,
-                                   length: MemoryLayout<VertexUniforms>.stride,
-                                   index: 1)
-            
-            // Configure the fragment shader
-            fragmentUniforms.alpha = amiga.paused ? Float(0.5) : alpha.clamped
-            fragmentUniforms.white = renderer.white.current
-            fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
-            fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
-            fragmentUniforms.scanlineDistance = Int32(renderer.size.height / 256)
-            encoder.setFragmentBytes(&fragmentUniforms,
-                                     length: MemoryLayout<FragmentUniforms>.stride,
-                                     index: 1)
-            
-            // Render
-            quad2D!.drawPrimitives(encoder)
-            
+        encoder.setFragmentTexture(ressourceManager.dotMask, index: 4)
+
+        // Select the texture sampler
+        if renderer.shaderOptions.blur > 0 {
+            encoder.setFragmentSamplerState(ressourceManager.samplerLinear, index: 0)
         } else {
-            
-            let animates = renderer.animates
-            
-            // Configure the vertex shader
-            encoder.setVertexBytes(&vertexUniforms3D,
-                                   length: MemoryLayout<VertexUniforms>.stride,
-                                   index: 1)
-            
-            // Configure the fragment shader
-            fragmentUniforms.alpha = amiga.paused ? Float(0.5) : alpha.clamped
-            fragmentUniforms.white = renderer.white.current
-            fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
-            fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
-            fragmentUniforms.scanlineDistance = Int32(renderer.size.height / 256)
-            encoder.setFragmentBytes(&fragmentUniforms,
-                                     length: MemoryLayout<FragmentUniforms>.stride,
-                                     index: 1)
-            
-            // Render (part of) the cube
-            quad3D!.draw(encoder, allSides: animates != 0)
+            encoder.setFragmentSamplerState(ressourceManager.samplerNearest, index: 0)
         }
+        
+        // Setup uniforms
+        fragmentUniforms.alpha = amiga.paused ? 0.5 : alpha.current
+        fragmentUniforms.dotMaskHeight = Int32(ressourceManager.dotMask.height)
+        fragmentUniforms.dotMaskWidth = Int32(ressourceManager.dotMask.width)
+        fragmentUniforms.scanlineDistance = Int32(renderer.size.height / 256)
+        encoder.setFragmentBytes(&renderer.shaderOptions,
+                                 length: MemoryLayout<ShaderOptions>.stride,
+                                 index: 0)
+        encoder.setFragmentBytes(&fragmentUniforms,
+                                 length: MemoryLayout<FragmentUniforms>.stride,
+                                 index: 1)
+    }
+    
+    override func render(encoder: MTLRenderCommandEncoder, flat: Bool) {
+        
+        flat ? render2D(encoder: encoder) : render3D(encoder: encoder)
+    }
+    
+    func render2D(encoder: MTLRenderCommandEncoder) {
+        
+        // Configure the vertex shader
+        encoder.setVertexBytes(&vertexUniforms2D,
+                               length: MemoryLayout<VertexUniforms>.stride,
+                               index: 1)
+        
+        // Configure the fragment shader
+        setupFragmentShader(encoder: encoder)
+        
+        // Render
+        quad2D!.drawPrimitives(encoder)
+    }
+    
+    func render3D(encoder: MTLRenderCommandEncoder) {
+        
+        let animates = renderer.animates
+        
+        // Configure the vertex shader
+        encoder.setVertexBytes(&vertexUniforms3D,
+                               length: MemoryLayout<VertexUniforms>.stride,
+                               index: 1)
+        
+        // Configure fragment shader
+        setupFragmentShader(encoder: encoder)
+        
+        // Render (part of) the cube
+        quad3D!.draw(encoder, allSides: animates != 0)
     }
 }

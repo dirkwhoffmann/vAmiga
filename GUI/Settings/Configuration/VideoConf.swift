@@ -12,7 +12,7 @@ extension ConfigurationController {
     func awakeVideoPrefsFromNib() {
 
         // Check for available enhancers
-        let enhancers = parent.renderer.kernelManager.enhancerGallery
+        let enhancers = parent.renderer.ressourceManager.enhancerGallery
         for i in 0 ..< enhancers.count {
             if let item = vidEnhancerPopUp.menu?.item(withTag: i) {
                 item.isEnabled = (enhancers[i] != nil)
@@ -20,15 +20,15 @@ extension ConfigurationController {
         }
 
         // Check for available upscalers
-        let upscalers = parent.renderer.kernelManager.upscalerGallery
+        let upscalers = parent.renderer.ressourceManager.upscalerGallery
         for i in 0 ..< upscalers.count {
             if let item = vidUpscalerPopUp.menu?.item(withTag: i) {
                 item.isEnabled = (upscalers[i] != nil)
             }
         }
         
-        // Create dot mask textures
-        parent.renderer.canvas.buildDotMasks()
+        // Update dot mask textures
+        parent.renderer.ressourceManager.buildDotMasks()
     }
     
     func refreshVideoTab() {
@@ -62,7 +62,7 @@ extension ConfigurationController {
 
         vidDotMaskPopUp.selectItem(withTag: Int(config.dotMask))
         for i in 0 ... 4 {
-            vidDotMaskPopUp.item(at: i)?.image = renderer.canvas.dotmaskImages[i]
+            vidDotMaskPopUp.item(at: i)?.image = renderer.ressourceManager.dotmaskImages[i]
         }
         vidDotMaskBrightnessSlider.floatValue = config.dotMaskBrightness
         vidDotMaskBrightnessSlider.isEnabled = config.dotMask > 0
@@ -183,7 +183,7 @@ extension ConfigurationController {
     
     @IBAction func vidDotMaskAction(_ sender: NSPopUpButton!) {
         
-        config.dotMask = Int32(sender.selectedTag())
+        config.dotMask = sender.selectedTag()
         refresh()
     }
     

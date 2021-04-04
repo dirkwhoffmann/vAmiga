@@ -1310,7 +1310,7 @@ struct VideoDefaults {
     let bloomWeight: Float
     let flicker: Int32
     let flickerWeight: Float
-    let dotMask: Int32
+    let dotMask: Int
     let dotMaskBrightness: Float
     let scanlines: Int
     let scanlineBrightness: Float

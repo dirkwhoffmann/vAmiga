@@ -73,7 +73,7 @@
 		507727EE242F2CE4009D01DA /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 507727ED242F2CE3009D01DA /* iCarousel.m */; };
 		5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5078A5D32529E7FA00FCE384 /* Sampler.cpp */; };
 		507957AC244AD25B007B8B8D /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507957AB244AD25B007B8B8D /* Configuration.swift */; };
-		507C9C4626076EF7006779B5 /* KernelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C9C4526076EF7006779B5 /* KernelManager.swift */; };
+		507C9C4626076EF7006779B5 /* RessourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C9C4526076EF7006779B5 /* RessourceManager.swift */; };
 		507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507D7767228BE3EF001E97A9 /* StateMachine.cpp */; };
 		507DF0AD254710C30079BB98 /* FSFileHeaderBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507DF0AB254710C30079BB98 /* FSFileHeaderBlock.cpp */; };
 		507DF0B42549A6220079BB98 /* FSFileListBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507DF0B22549A6220079BB98 /* FSFileListBlock.cpp */; };
@@ -204,7 +204,6 @@
 		50C8C452260747EA00F4E012 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C451260747EA00F4E012 /* Canvas.swift */; };
 		50C8C4552607524400F4E012 /* Monitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C4542607524400F4E012 /* Monitors.swift */; };
 		50C8C458260758F000F4E012 /* SplashScreenSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C457260758F000F4E012 /* SplashScreenSetup.swift */; };
-		50C8C45B2607590400F4E012 /* CanvasSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C45A2607590400F4E012 /* CanvasSetup.swift */; };
 		50C8C4602607591300F4E012 /* MonitorSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C45F2607591300F4E012 /* MonitorSetup.swift */; };
 		50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CB21F6377600FA167F /* A500ANSI.xib */; };
 		50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CD21F6378000FA167F /* A1000ISO.xib */; };
@@ -367,7 +366,7 @@
 		5078A5D32529E7FA00FCE384 /* Sampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sampler.cpp; sourceTree = "<group>"; };
 		5078A5D42529E7FA00FCE384 /* Sampler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sampler.h; sourceTree = "<group>"; };
 		507957AB244AD25B007B8B8D /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
-		507C9C4526076EF7006779B5 /* KernelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KernelManager.swift; sourceTree = "<group>"; };
+		507C9C4526076EF7006779B5 /* RessourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RessourceManager.swift; sourceTree = "<group>"; };
 		507D7767228BE3EF001E97A9 /* StateMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachine.cpp; sourceTree = "<group>"; };
 		507D7768228BE3EF001E97A9 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
 		507DF0AB254710C30079BB98 /* FSFileHeaderBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSFileHeaderBlock.cpp; sourceTree = "<group>"; };
@@ -563,7 +562,6 @@
 		50C8C451260747EA00F4E012 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		50C8C4542607524400F4E012 /* Monitors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monitors.swift; sourceTree = "<group>"; };
 		50C8C457260758F000F4E012 /* SplashScreenSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenSetup.swift; sourceTree = "<group>"; };
-		50C8C45A2607590400F4E012 /* CanvasSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasSetup.swift; sourceTree = "<group>"; };
 		50C8C45F2607591300F4E012 /* MonitorSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitorSetup.swift; sourceTree = "<group>"; };
 		50CA602E260E02B700C4A22C /* Reflection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflection.h; sourceTree = "<group>"; };
 		50D263CB21F6377600FA167F /* A500ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ANSI.xib; sourceTree = "<group>"; };
@@ -953,7 +951,7 @@
 				508FDFD121EA20510043D0E9 /* MetalViewEvents.swift */,
 				508FDFD221EA20510043D0E9 /* ImageToolbox.swift */,
 				501429D82445F12B00FBDC90 /* TextureToolbox.swift */,
-				507C9C4526076EF7006779B5 /* KernelManager.swift */,
+				507C9C4526076EF7006779B5 /* RessourceManager.swift */,
 				508FDFD321EA20510043D0E9 /* Shaders.swift */,
 				508FDFD021EA20510043D0E9 /* Shaders.metal */,
 				50C8C44C2607409B00F4E012 /* Layers */,
@@ -1331,7 +1329,6 @@
 			children = (
 				50C8C4492607396200F4E012 /* Layer.swift */,
 				50C8C451260747EA00F4E012 /* Canvas.swift */,
-				50C8C45A2607590400F4E012 /* CanvasSetup.swift */,
 				50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */,
 				50C8C4542607524400F4E012 /* Monitors.swift */,
 				50C8C45F2607591300F4E012 /* MonitorSetup.swift */,
@@ -1663,7 +1660,6 @@
 				50B5C07E241107F200F124DC /* Constants.cpp in Sources */,
 				5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */,
-				50C8C45B2607590400F4E012 /* CanvasSetup.swift in Sources */,
 				50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
@@ -1687,7 +1683,7 @@
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
 				508FE01D21EA227B0043D0E9 /* Defaults.swift in Sources */,
 				50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */,
-				507C9C4626076EF7006779B5 /* KernelManager.swift in Sources */,
+				507C9C4626076EF7006779B5 /* RessourceManager.swift in Sources */,
 				50B9354B243481AB000C78B8 /* SnapshotDialog.swift in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,
 				508FE04E21EA22CC0043D0E9 /* RomConf.swift in Sources */,

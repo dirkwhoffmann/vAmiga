@@ -13,6 +13,7 @@ class Layer: NSObject {
     let device: MTLDevice
     let renderer: Renderer
     
+    var ressourceManager: RessourceManager { return renderer.ressourceManager }
     var amiga: AmigaProxy { return renderer.parent.amiga }
     
     // Alpha channel

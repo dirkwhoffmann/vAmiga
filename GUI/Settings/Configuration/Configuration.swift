@@ -22,7 +22,7 @@ class Configuration {
     var amiga: AmigaProxy { return parent.amiga }
     var renderer: Renderer { return parent.renderer }
     var gamePadManager: GamePadManager { return parent.gamePadManager }
-    var kernelManager: KernelManager { return renderer.kernelManager }
+    var ressourceManager: RessourceManager { return renderer.ressourceManager }
     
     //
     // Roms
@@ -356,12 +356,12 @@ class Configuration {
     }
     var enhancer = VideoDefaults.tft.enhancer {
         didSet {
-            if !kernelManager.selectEnhancer(enhancer) { enhancer = oldValue }
+            if !ressourceManager.selectEnhancer(enhancer) { enhancer = oldValue }
         }
     }
     var upscaler = VideoDefaults.tft.upscaler {
         didSet {
-            if !kernelManager.selectUpscaler(upscaler) { upscaler = oldValue }
+            if !ressourceManager.selectUpscaler(upscaler) { upscaler = oldValue }
         }
     }
     var blur = VideoDefaults.tft.blur {
@@ -373,7 +373,7 @@ class Configuration {
     var bloom = VideoDefaults.tft.bloom {
         didSet {
             renderer.shaderOptions.bloom = Int32(bloom)
-            if !kernelManager.selectBloomFilter(bloom) { bloom = oldValue }
+            if !ressourceManager.selectBloomFilter(bloom) { bloom = oldValue }
         }
     }
     var bloomRadius = VideoDefaults.tft.bloomRadius {
@@ -393,20 +393,21 @@ class Configuration {
     }
     var dotMask = VideoDefaults.tft.dotMask {
         didSet {
-            renderer.shaderOptions.dotMask = dotMask
-            renderer.canvas.buildDotMasks()
+            renderer.shaderOptions.dotMask = Int32(dotMask)
+            ressourceManager.buildDotMasks()
+            if !ressourceManager.selectDotMask(dotMask) { dotMask = oldValue }
         }
     }
     var dotMaskBrightness = VideoDefaults.tft.dotMaskBrightness {
         didSet {
             renderer.shaderOptions.dotMaskBrightness = dotMaskBrightness
-            renderer.canvas.buildDotMasks()
+            ressourceManager.buildDotMasks()
         }
     }
     var scanlines = VideoDefaults.tft.scanlines {
         didSet {
             renderer.shaderOptions.scanlines = Int32(scanlines)
-            if !kernelManager.selectScanlineFilter(scanlines) { scanlines = oldValue }
+            if !ressourceManager.selectScanlineFilter(scanlines) { scanlines = oldValue }
         }
     }
     var scanlineBrightness = VideoDefaults.tft.scanlineBrightness {
@@ -875,7 +876,7 @@ class Configuration {
         disalignmentH = defaults.disalignmentH
         disalignment = defaults.disalignment
         
-        renderer.canvas.buildDotMasks()
+        ressourceManager.buildDotMasks()
     }
     
     func loadVideoDefaults(_ defaults: VideoDefaults) {
@@ -910,7 +911,7 @@ class Configuration {
         bloomWeight = defaults.float(forKey: Keys.Vid.bloomWeight)
         flicker = Int32(defaults.integer(forKey: Keys.Vid.flicker))
         flickerWeight = defaults.float(forKey: Keys.Vid.flickerWeight)
-        dotMask = Int32(defaults.integer(forKey: Keys.Vid.dotMask))
+        dotMask = defaults.integer(forKey: Keys.Vid.dotMask)
         dotMaskBrightness = defaults.float(forKey: Keys.Vid.dotMaskBrightness)
         scanlines = defaults.integer(forKey: Keys.Vid.scanlines)
         scanlineBrightness = defaults.float(forKey: Keys.Vid.scanlineBrightness)
@@ -920,7 +921,7 @@ class Configuration {
         disalignmentV = defaults.float(forKey: Keys.Vid.disalignmentV)
         
         renderer.updateTextureRect()
-        renderer.canvas.buildDotMasks()
+        ressourceManager.buildDotMasks()
         
         amiga.resume()
     }

@@ -55,16 +55,7 @@ class Renderer: NSObject, MTKViewDelegate {
     // Ressources
     //
     
-    var kernelManager: KernelManager! = nil
-
-    // Texture to hold the pixel depth information
-    var depthTexture: MTLTexture! = nil
-
-    // Nearest neighbor sampler
-    var samplerNearest: MTLSamplerState!
-    
-    // Linear interpolation sampler
-    var samplerLinear: MTLSamplerState!
+    var ressourceManager: RessourceManager! = nil
     
     // Shader options
     var shaderOptions: ShaderOptions!
@@ -141,7 +132,7 @@ class Renderer: NSObject, MTKViewDelegate {
         buildMatrices3D()
 
         // Rebuild depth buffer
-        buildDepthBuffer()
+        ressourceManager.buildDepthBuffer()
     }
     
     //
@@ -191,7 +182,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // Update the render pass descriptor
         descriptor.colorAttachments[0].texture = drawable.texture
-        descriptor.depthAttachment.texture = depthTexture
+        descriptor.depthAttachment.texture = ressourceManager.depthTexture
         
         // Create a command encoder
         let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
@@ -205,7 +196,7 @@ class Renderer: NSObject, MTKViewDelegate {
          * interpolation sampler, if Gaussian blur is enabled, and a nearest
          * neighbor sampler if Gaussian blur is disabled.
          */
-        let sampler = shaderOptions.blur > 0 ? samplerLinear : samplerNearest
+        let sampler = shaderOptions.blur > 0 ? ressourceManager.samplerLinear : ressourceManager.samplerNearest
         commandEncoder?.setFragmentSamplerState(sampler, index: 0)
         
         return commandEncoder
