@@ -91,6 +91,18 @@ extension Renderer {
             buildMatrices3D()
         }
         
+        // Color animations
+        if (animates & AnimationType.color) != 0 {
+
+            white.move()
+         
+            let cont = white.animates()
+         
+            if !cont {
+                animates -= AnimationType.color
+            }
+        }
+        
         // Texture animations
         if (animates & AnimationType.texture) != 0 {
             
@@ -111,18 +123,6 @@ extension Renderer {
          
             if !cont {
                 animates -= AnimationType.texture
-            }
-        }
-        
-        // Color animations
-        if (animates & AnimationType.color) != 0 {
-
-            white.move()
-         
-            let cont = white.animates()
-         
-            if !cont {
-                animates -= AnimationType.color
             }
         }
     }
