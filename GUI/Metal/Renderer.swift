@@ -33,7 +33,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var semaphore = DispatchSemaphore(value: 1)
 
     //
-    // Metal objects
+    // Metal entities
     //
     
     var queue: MTLCommandQueue! = nil
@@ -57,16 +57,20 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var ressourceManager: RessourceManager! = nil
     
-    // Shader options
+    //
+    // Uniforms
+    //
+    
     var shaderOptions: ShaderOptions!
+
+    //
+    // Animations
+    //
     
-    // Indicates if an animation is currently performed
+    // Indicates if an animation is in progress
     var animates = 0
-    
-    // Indicates if the splash screen should be rendered
-    var renderSplash = true
-    
-    // Animation parameters
+        
+    // Geometry animation parameters
     var angleX = AnimatedFloat(0.0)
     var angleY = AnimatedFloat(0.0)
     var angleZ = AnimatedFloat(0.0)
@@ -74,16 +78,17 @@ class Renderer: NSObject, MTKViewDelegate {
     var shiftX = AnimatedFloat(0.0)
     var shiftY = AnimatedFloat(0.0)
     var shiftZ = AnimatedFloat(0.0)
-        
+     
+    // Color animation parameters
     var white = AnimatedFloat(0.0)
     
-    // Animation variables for smooth texture zooming
+    // Texture animation parameters
     var cutoutX1 = AnimatedFloat.init()
     var cutoutY1 = AnimatedFloat.init()
     var cutoutX2 = AnimatedFloat.init()
     var cutoutY2 = AnimatedFloat.init()
             
-    // Is set to true when fullscreen mode is entered
+    // Indicates if fullscreen mode is enabled
     var fullscreen = false
     
     //
@@ -136,6 +141,14 @@ class Renderer: NSObject, MTKViewDelegate {
     //  Drawing
     //
 
+    func makeCommandBuffer() -> MTLCommandBuffer {
+    
+        let commandBuffer = queue.makeCommandBuffer()!
+        canvas.makeCommandBuffer(buffer: commandBuffer)
+        
+        return commandBuffer
+    }
+    
     func makeCommandEncoder(_ commandBuffer: MTLCommandBuffer,
                             _ drawable: CAMetalDrawable) -> MTLRenderCommandEncoder? {
         
@@ -144,21 +157,11 @@ class Renderer: NSObject, MTKViewDelegate {
         descriptor.depthAttachment.texture = ressourceManager.depthTexture
         
         // Create a command encoder
-        let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
-        commandEncoder?.setRenderPipelineState(pipeline)
-        commandEncoder?.setDepthStencilState(depthState)
-        commandEncoder?.setFragmentBytes(&shaderOptions,
-                                         length: MemoryLayout<ShaderOptions>.stride,
-                                         index: 0)
+        let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
+        encoder?.setRenderPipelineState(pipeline)
+        encoder?.setDepthStencilState(depthState)
         
-        /* Finally, we have to decide for a texture sampler. We use a linear
-         * interpolation sampler, if Gaussian blur is enabled, and a nearest
-         * neighbor sampler if Gaussian blur is disabled.
-         */
-        let sampler = shaderOptions.blur > 0 ? ressourceManager.samplerLinear : ressourceManager.samplerNearest
-        commandEncoder?.setFragmentSamplerState(sampler, index: 0)
-        
-        return commandEncoder
+        return encoder
     }
 
     //
@@ -192,21 +195,19 @@ class Renderer: NSObject, MTKViewDelegate {
         semaphore.wait()
         if let drawable = metalLayer.nextDrawable() {
 
-            renderSplash = renderSplash && canvas.isTransparent
-            let renderCanvas = canvas.isVisible
-            let renderMonitors = monitors.drawActivityMonitors
-            
+            // Create the command buffer
+            let buffer = makeCommandBuffer()
+
             let flat = fullscreen && !parent.pref.keepAspectRatio
             
-            let buffer = queue.makeCommandBuffer()!
-            if renderSplash { splashScreen.render(buffer: buffer) }
-            if renderCanvas { canvas.render(buffer: buffer) }
-            if renderMonitors { monitors.render(buffer: buffer) }
+            // if canvas.isTransparent { splashScreen.render(buffer: buffer) }
+            if canvas.isVisible { canvas.render(buffer: buffer) }
+            if monitors.drawActivityMonitors { monitors.render(buffer: buffer) }
             
             if let commandEncoder = makeCommandEncoder(buffer, drawable) {
-                if renderSplash { splashScreen.render(encoder: commandEncoder, flat: flat) }
-                if renderCanvas { canvas.render(encoder: commandEncoder, flat: flat) }
-                if renderMonitors { monitors.render(encoder: commandEncoder, flat: flat) }
+                if canvas.isTransparent { splashScreen.render(encoder: commandEncoder, flat: flat) }
+                if canvas.isVisible { canvas.render(encoder: commandEncoder, flat: flat) }
+                if monitors.drawActivityMonitors { monitors.render(encoder: commandEncoder, flat: flat) }
                 commandEncoder.endEncoding()
                 
                 buffer.addCompletedHandler { _ in self.semaphore.signal() }

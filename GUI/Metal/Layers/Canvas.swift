@@ -214,7 +214,7 @@ class Canvas: Layer {
     func updateTexture() {
         
         if amiga.poweredOff {
-        
+                    
             var buffer = amiga.denise.noise!
             longFrameTexture.replace(w: Int(HPIXELS),
                                      h: longFrameTexture.height,
@@ -254,7 +254,7 @@ class Canvas: Layer {
     // Rendering
     //
     
-    override func render(buffer: MTLCommandBuffer) {
+    func makeCommandBuffer(buffer: MTLCommandBuffer) {
                 
         func applyGauss(_ texture: inout MTLTexture, radius: Float) {
             
@@ -264,9 +264,6 @@ class Canvas: Layer {
                              inPlaceTexture: &texture, fallbackCopyAllocator: nil)
             }
         }
-
-        // Get the most recent texture from the emulator
-        updateTexture()
         
         // Compute the merge texture
         if currLOF != prevLOF {

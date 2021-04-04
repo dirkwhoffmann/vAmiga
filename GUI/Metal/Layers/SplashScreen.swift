@@ -11,13 +11,13 @@ class SplashScreen: Layer {
         
     var bgTexture: MTLTexture! = nil
     var bgRect: Node?
-        
-    var vertUniforms = VertexUniforms(mvp: matrix_identity_float4x4)
-    var fragUniforms = FragmentUniforms(alpha: 1.0,
-                                        white: 0.0,
-                                        dotMaskWidth: 0,
-                                        dotMaskHeight: 0,
-                                        scanlineDistance: 0)
+    
+    var vertexUniforms = VertexUniforms(mvp: matrix_identity_float4x4)
+    var fragmentUniforms = FragmentUniforms(alpha: 1.0,
+                                            white: 0.0,
+                                            dotMaskWidth: 0,
+                                            dotMaskHeight: 0,
+                                            scanlineDistance: 0)
     
     override init(renderer: Renderer) {
 
@@ -35,19 +35,33 @@ class SplashScreen: Layer {
         
     }
     
+    func setupFragmentShader(encoder: MTLRenderCommandEncoder) {
+        
+        // Setup textures
+        encoder.setFragmentTexture(bgTexture, index: 0)
+        encoder.setFragmentTexture(bgTexture, index: 1)
+        
+        // Select the texture sampler
+        encoder.setFragmentSamplerState(ressourceManager.samplerLinear, index: 0)
+
+        // Setup uniforms
+        encoder.setFragmentBytes(&renderer.shaderOptions,
+                                 length: MemoryLayout<ShaderOptions>.stride,
+                                 index: 0)
+        encoder.setFragmentBytes(&fragmentUniforms,
+                                 length: MemoryLayout<FragmentUniforms>.stride,
+                                 index: 1)
+    }
+    
     override func render(encoder: MTLRenderCommandEncoder, flat: Bool) {
         
         // Configure vertex shader
-        encoder.setVertexBytes(&vertUniforms,
+        encoder.setVertexBytes(&vertexUniforms,
                                length: MemoryLayout<VertexUniforms>.stride,
                                index: 1)
         
-        // Configure fragment shader
-        encoder.setFragmentTexture(bgTexture, index: 0)
-        encoder.setFragmentTexture(bgTexture, index: 1)
-        encoder.setFragmentBytes(&fragUniforms,
-                                 length: MemoryLayout<FragmentUniforms>.stride,
-                                 index: 1)
+        // Configure the fragment shader
+        setupFragmentShader(encoder: encoder)
         
         // Render
         bgRect!.drawPrimitives(encoder)
