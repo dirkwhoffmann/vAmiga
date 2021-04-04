@@ -33,20 +33,18 @@ extension Renderer {
 
     internal func buildMetal() {
 
+        // Command queue
+        queue = device.makeCommandQueue()
+        metalAssert(queue != nil, "Failed to create command queue")
+
         // Metal layer
         metalLayer = view.layer as? CAMetalLayer
-        metalAssert(metalLayer != nil,
-                    "The Core Animation layer could not be accessed.")
-
+        metalAssert(metalLayer != nil, "Failed to create CAMetalLayer")
+        
         metalLayer.device = device
         metalLayer.pixelFormat = MTLPixelFormat.bgra8Unorm
         metalLayer.framebufferOnly = true
         metalLayer.frame = metalLayer.frame
-
-        // Command queue
-        queue = device.makeCommandQueue()
-        metalAssert(queue != nil,
-                    "The Command Queue could not be created.")
     }
     
     func buildDescriptors() {
@@ -96,11 +94,13 @@ extension Renderer {
         
     func buildPipeline() {
 
-        // Read vertex and fragment shader from library
+        // Read vertex shader from library
         let vertexFunc = ressourceManager.makeFunction(name: "vertex_main")
+        metalAssert(vertexFunc != nil, "Failed to create vertex shader")
+
+        // Read fragment shader from library
         let fragmentFunc = ressourceManager.makeFunction(name: "fragment_main")
-        metalAssert(vertexFunc != nil && fragmentFunc != nil,
-                    "Cannot create Render Pipeline function objects.")
+        metalAssert(fragmentFunc != nil, "Failed to create fragment shader")
         
         // Create depth stencil state
         let stencilDescriptor = MTLDepthStencilDescriptor.init()
@@ -143,11 +143,9 @@ extension Renderer {
         colorAttachment.sourceAlphaBlendFactor = MTLBlendFactor.sourceAlpha
         colorAttachment.destinationRGBBlendFactor = MTLBlendFactor.oneMinusSourceAlpha
         colorAttachment.destinationAlphaBlendFactor = MTLBlendFactor.oneMinusSourceAlpha
-        do {
-            try pipeline = device.makeRenderPipelineState(descriptor: pipelineDescriptor)
-        } catch {
-            metalAssert(false, "Cannot create the Metal GPU pipeline.")
-        }
+        
+        try? pipeline = device.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        metalAssert(pipeline != nil, "Failed to create the GPU pipeline.")
     }
 
     func buildVertexBuffers() {
@@ -197,7 +195,6 @@ extension Renderer {
         let rotY = Renderer.rotationMatrix(radians: yAngle, x: 0.0, y: 0.5, z: 0.0)
         let rotZ = Renderer.rotationMatrix(radians: zAngle, x: 0.0, y: 0.0, z: 0.5)
 
-        // Chain all transformations
         let model = transEye * rotX * transRotX * rotY * rotZ
         let mvp = proj * view * model
         
