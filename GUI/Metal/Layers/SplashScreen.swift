@@ -49,7 +49,7 @@ class SplashScreen: Layer {
                                  index: 1)
     }
     
-    func render(encoder: MTLRenderCommandEncoder) {
+    func render(_ encoder: MTLRenderCommandEncoder) {
         
         // Configure vertex shader
         encoder.setVertexBytes(&vertexUniforms,

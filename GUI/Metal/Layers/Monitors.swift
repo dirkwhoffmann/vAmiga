@@ -113,7 +113,7 @@ class Monitors: Layer {
         }
     }
             
-    func render(encoder: MTLRenderCommandEncoder) {
+    func render(_ encoder: MTLRenderCommandEncoder) {
         
         for i in 0 ..< monitors.count where monitorAlpha[i].current != 0.0 {
             
