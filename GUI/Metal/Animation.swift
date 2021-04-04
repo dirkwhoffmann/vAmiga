@@ -12,8 +12,8 @@ import simd
 struct AnimationType {
     
     static let geometry = 1
-    static let texture = 2
-    static let color = 4
+    static let color = 2
+    static let texture = 4
 }
 
 class AnimatedFloat {
@@ -66,7 +66,7 @@ class AnimatedFloat {
 extension Renderer {
     
     func animate() {
-        
+                
         // Geometry animations
         if (animates & AnimationType.geometry) != 0 {
                         
@@ -278,5 +278,4 @@ extension Renderer {
         
         animates |= AnimationType.color
     }
-    
 }
