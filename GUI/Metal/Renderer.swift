@@ -197,19 +197,17 @@ class Renderer: NSObject, MTKViewDelegate {
 
             // Create the command buffer
             let buffer = makeCommandBuffer()
+                        
+            if let encoder = makeCommandEncoder(buffer, drawable) {
 
-            let flat = fullscreen && !parent.pref.keepAspectRatio
-            
-            // if canvas.isTransparent { splashScreen.render(buffer: buffer) }
-            if canvas.isVisible { canvas.render(buffer: buffer) }
-            if monitors.drawActivityMonitors { monitors.render(buffer: buffer) }
-            
-            if let commandEncoder = makeCommandEncoder(buffer, drawable) {
-                if canvas.isTransparent { splashScreen.render(encoder: commandEncoder, flat: flat) }
-                if canvas.isVisible { canvas.render(encoder: commandEncoder, flat: flat) }
-                if monitors.drawActivityMonitors { monitors.render(encoder: commandEncoder, flat: flat) }
-                commandEncoder.endEncoding()
-                
+                // Render the scene
+                let flat = fullscreen && !parent.pref.keepAspectRatio
+                if canvas.isTransparent { splashScreen.render(encoder: encoder) }
+                if canvas.isVisible { canvas.render(encoder: encoder, flat: flat) }
+                if monitors.drawActivityMonitors { monitors.render(encoder: encoder) }
+
+                // Commit the command buffer
+                encoder.endEncoding()
                 buffer.addCompletedHandler { _ in self.semaphore.signal() }
                 buffer.present(drawable)
                 buffer.commit()

@@ -30,11 +30,7 @@ class SplashScreen: Layer {
         renderer.metalAssert(bgTexture != nil,
                              "The background texture could not be allocated.")
     }
-    
-    override func render(buffer: MTLCommandBuffer) {
-        
-    }
-    
+
     func setupFragmentShader(encoder: MTLRenderCommandEncoder) {
         
         // Setup textures
@@ -53,7 +49,7 @@ class SplashScreen: Layer {
                                  index: 1)
     }
     
-    override func render(encoder: MTLRenderCommandEncoder, flat: Bool) {
+    func render(encoder: MTLRenderCommandEncoder) {
         
         // Configure vertex shader
         encoder.setVertexBytes(&vertexUniforms,

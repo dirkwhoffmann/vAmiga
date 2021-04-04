@@ -368,7 +368,7 @@ class Canvas: Layer {
                                  index: 1)
     }
     
-    override func render(encoder: MTLRenderCommandEncoder, flat: Bool) {
+    func render(encoder: MTLRenderCommandEncoder, flat: Bool) {
         
         flat ? render2D(encoder: encoder) : render3D(encoder: encoder)
     }

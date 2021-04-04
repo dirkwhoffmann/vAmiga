@@ -112,12 +112,8 @@ class Monitors: Layer {
             }
         }
     }
-        
-    override func render(buffer: MTLCommandBuffer) {
-        
-    }
-    
-    override func render(encoder: MTLRenderCommandEncoder, flat: Bool) {
+            
+    func render(encoder: MTLRenderCommandEncoder) {
         
         for i in 0 ..< monitors.count where monitorAlpha[i].current != 0.0 {
             
