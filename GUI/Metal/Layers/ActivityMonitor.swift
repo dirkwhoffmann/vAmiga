@@ -20,7 +20,9 @@ enum Side {
 
 class ActivityMonitor {
     
-    // Dimensions in normalized rectangle (0,0) - (1,1)
+    let device: MTLDevice
+
+    // Dimensions in normalized coordinates
     let leftBorder  = Float(0.1)
     let rightBorder = Float(0.1)
     let upperBorder = Float(0.275)
@@ -29,13 +31,7 @@ class ActivityMonitor {
     var innerWidth: Float { return 1.0 - borderWidth }
     var borderHeight: Float { return upperBorder + lowerBorder }
     var innerHeight: Float { return 1.0 - borderHeight }
-    
-    // Reference to the owning MTLDevice
-    let device: MTLDevice
-    
-    // Set to true to hide the view
-    var isHidden = false
-        
+                
     // Canvas dimensions on the xy plane
     var position = NSRect.init() { didSet { updateMatrix() } }
     
@@ -48,6 +44,9 @@ class ActivityMonitor {
     // Transformation matrix computed out of the above parameters
     var matrix = matrix_identity_float4x4
     
+    // Indicates if the monitor is visible
+    var hidden = false
+
     init (device: MTLDevice) {
         
         self.device = device
@@ -363,7 +362,7 @@ class BarChart: ActivityMonitor {
     
     override func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
                 
-        if isHidden { return }
+        if hidden { return }
 
         let shift = Renderer.translationMatrix(x: xOffset, y: 0.0, z: 0.0)
         
@@ -500,7 +499,7 @@ class WaveformMonitor: ActivityMonitor {
     
     override func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
 
-        if isHidden { return }
+        if hidden { return }
                 
         // Configure vertex shader
         let len = MemoryLayout<VertexUniforms>.stride

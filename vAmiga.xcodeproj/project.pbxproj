@@ -204,7 +204,6 @@
 		50C8C452260747EA00F4E012 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C451260747EA00F4E012 /* Canvas.swift */; };
 		50C8C4552607524400F4E012 /* Monitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C4542607524400F4E012 /* Monitors.swift */; };
 		50C8C458260758F000F4E012 /* SplashScreenSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C457260758F000F4E012 /* SplashScreenSetup.swift */; };
-		50C8C4602607591300F4E012 /* MonitorSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C45F2607591300F4E012 /* MonitorSetup.swift */; };
 		50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CB21F6377600FA167F /* A500ANSI.xib */; };
 		50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CD21F6378000FA167F /* A1000ISO.xib */; };
 		50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D375DD222C7C6B0040987C /* Blitter.cpp */; };
@@ -562,7 +561,6 @@
 		50C8C451260747EA00F4E012 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		50C8C4542607524400F4E012 /* Monitors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monitors.swift; sourceTree = "<group>"; };
 		50C8C457260758F000F4E012 /* SplashScreenSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenSetup.swift; sourceTree = "<group>"; };
-		50C8C45F2607591300F4E012 /* MonitorSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitorSetup.swift; sourceTree = "<group>"; };
 		50CA602E260E02B700C4A22C /* Reflection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflection.h; sourceTree = "<group>"; };
 		50D263CB21F6377600FA167F /* A500ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ANSI.xib; sourceTree = "<group>"; };
 		50D263CD21F6378000FA167F /* A1000ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ISO.xib; sourceTree = "<group>"; };
@@ -1329,9 +1327,8 @@
 			children = (
 				50C8C4492607396200F4E012 /* Layer.swift */,
 				50C8C451260747EA00F4E012 /* Canvas.swift */,
-				50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */,
 				50C8C4542607524400F4E012 /* Monitors.swift */,
-				50C8C45F2607591300F4E012 /* MonitorSetup.swift */,
+				50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */,
 				50C8C44E260740AC00F4E012 /* SplashScreen.swift */,
 				50C8C457260758F000F4E012 /* SplashScreenSetup.swift */,
 				5026EDBE2608DC8E00D90CE1 /* Console.swift */,
@@ -1565,7 +1562,6 @@
 				507DF0B42549A6220079BB98 /* FSFileListBlock.cpp in Sources */,
 				50AEBEE024D3D9080037082D /* KeyboardEvents.cpp in Sources */,
 				5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */,
-				50C8C4602607591300F4E012 /* MonitorSetup.swift in Sources */,
 				50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */,
 				508FE01A21EA227B0043D0E9 /* MyFormatter.swift in Sources */,
 				500C7170255EE2AC00DDEEB2 /* Concurrency.cpp in Sources */,

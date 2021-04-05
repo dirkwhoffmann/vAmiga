@@ -88,8 +88,8 @@ class Monitor: DialogController {
 
     func refresh() {
                 
-        func enabled(_ monitor: Int) -> NSControl.StateValue {
-            return parent.renderer.monitors.enabled[monitor] ? .on : .off
+        func enabled(_ i: Int) -> NSControl.StateValue {
+            return parent.renderer.monitors.monitors[i].hidden ? .off : .on
         }
         
         let info = amiga.dmaDebugger.getInfo()
@@ -282,21 +282,18 @@ class Monitor: DialogController {
     
     @IBAction func monDisplayAction(_ sender: NSButton!) {
         
-        track("\(sender.tag)")
-        parent.renderer.monitors.enabled[sender.tag] = sender.state == .on
+        parent.renderer.monitors.monitors[sender.tag].hidden = sender.state == .off
         refresh()
     }
     
     @IBAction func monLayoutAction(_ sender: NSPopUpButton!) {
         
-        track("\(sender.selectedTag())")
         parent.renderer.monitors.layout = sender.selectedTag()
         refresh()
     }
     
     @IBAction func monRotationAction(_ sender: NSSlider!) {
-        
-        track()
+
         for i in 0 ..< parent.renderer.monitors.monitors.count {
             parent.renderer.monitors.monitors[i].angle = sender.floatValue
         }
@@ -304,9 +301,7 @@ class Monitor: DialogController {
     }
     
     @IBAction func monOpacityAction(_ sender: NSSlider!) {
-        
-        track("alpha = \(sender.floatValue)")
-        
+
         parent.renderer.monitors.maxAlpha = sender.floatValue / 100.0
         refresh()
     }
