@@ -51,8 +51,8 @@ extension Monitors {
                                              paula: amiga.paula,
                                              leftChannel: false))
 
-        for _ in 0 ... monitors.count {
-            monitorAlpha.append(AnimatedFloat(0))
+        for _ in 0 ..< monitors.count {
+            // monitorAlpha.append(AnimatedFloat(1.0))
             monitorEnabled.append(true)
         }
         

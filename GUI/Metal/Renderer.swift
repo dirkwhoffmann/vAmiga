@@ -83,10 +83,10 @@ class Renderer: NSObject, MTKViewDelegate {
     var white = AnimatedFloat(0.0)
     
     // Texture animation parameters
-    var cutoutX1 = AnimatedFloat.init()
-    var cutoutY1 = AnimatedFloat.init()
-    var cutoutX2 = AnimatedFloat.init()
-    var cutoutY2 = AnimatedFloat.init()
+    var cutoutX1 = AnimatedFloat.init(0.0)
+    var cutoutY1 = AnimatedFloat.init(0.0)
+    var cutoutX2 = AnimatedFloat.init(0.0)
+    var cutoutY2 = AnimatedFloat.init(0.0)
             
     // Indicates if fullscreen mode is enabled
     var fullscreen = false
@@ -207,7 +207,7 @@ class Renderer: NSObject, MTKViewDelegate {
             let flat = fullscreen && !parent.pref.keepAspectRatio
             if canvas.isTransparent || animates != 0 { splashScreen.render(encoder) }
             if canvas.isVisible { canvas.render(encoder, flat: flat) }
-            if monitors.drawActivityMonitors { monitors.render(encoder) }
+            if monitors.isVisible { monitors.render(encoder) }
             
             // Commit the command buffer
             encoder.endEncoding()

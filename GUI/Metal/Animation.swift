@@ -16,7 +16,7 @@ struct AnimationType {
     static let texture = 4
 }
 
-class AnimatedFloat {
+struct AnimatedFloat {
 
     var current: Float
     var delta = Float(0.0)
@@ -30,18 +30,18 @@ class AnimatedFloat {
         self.target = target
     }
 
-    convenience init(_ value: Float) {
+    init(_ value: Float) {
 
         self.init(current: value, target: value)
     }
 
-    func set(_ value: Float) {
+    mutating func set(_ value: Float) {
 
         self.current = value
         self.target = value
     }
 
-    func set(from: Float, to: Float, steps: Int) {
+    mutating func set(from: Float, to: Float, steps: Int) {
             
         self.current = from
         self.target = to
@@ -53,7 +53,7 @@ class AnimatedFloat {
         return current != target
     }
 
-    func move() {
+    mutating func move() {
 
         if abs(current - target) < abs(delta) {
             current = target

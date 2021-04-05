@@ -364,7 +364,7 @@ extension MyController {
 
     func updateMonitoringPanels() {
         
-        if !renderer.monitors.drawActivityMonitors { return }
+        if !renderer.monitors.isVisible { return }
             
         // DMA monitors
         let dma = amiga.agnus.getStats()

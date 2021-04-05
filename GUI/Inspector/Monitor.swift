@@ -87,16 +87,16 @@ class Monitor: DialogController {
     }
 
     func refresh() {
-        
+                
         func enabled(_ monitor: Int) -> NSControl.StateValue {
             return parent.renderer.monitors.monitorEnabled[monitor] ? .on : .off
         }
         
         let info = amiga.dmaDebugger.getInfo()
         let bus = info.enabled
-        let mon = parent.renderer.monitors.drawActivityMonitors
+        let mon = monEnable.state == .on
         let syn = synEnable.state == .on
-        let col = bus || mon
+        let col = bus || monEnable.isEnabled
                 
         // Bus debugger
         busEnable.state = bus ? .on : .off
@@ -122,7 +122,7 @@ class Monitor: DialogController {
         busDisplayMode.isEnabled = bus
         
         // Activity monitors
-        monEnable.state = mon ? .on : .off
+        // monEnable.state = mon ? .on : .off
         monCopper.state = enabled(Monitors.Monitor.copper)
         monBlitter.state = enabled(Monitors.Monitor.blitter)
         monDisk.state = enabled(Monitors.Monitor.disk)
@@ -272,7 +272,11 @@ class Monitor: DialogController {
     
     @IBAction func monEnableAction(_ sender: NSButton!) {
     
-        parent.renderer.monitors.drawActivityMonitors = sender.state == .on
+        if sender.state == .on {
+            parent.renderer.monitors.open(delay: 1.0)
+        } else {
+            parent.renderer.monitors.close(delay: 1.0)
+        }
         refresh()
     }
     
