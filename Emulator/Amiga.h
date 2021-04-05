@@ -88,7 +88,7 @@ public:
     // Shortcuts to all four drives
     Drive *df[4] = { &df0, &df1, &df2, &df3 };
     
-    // Command shell
+    // Command console
     RetroShell retroShell = RetroShell(*this);
     
     

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
     </dependencies>
     <objects>
@@ -296,7 +295,7 @@
                         <items>
                             <menuItem title="Show..." keyEquivalent="k" id="q11-Wg-Mnp">
                                 <connections>
-                                    <action selector="keyboardAction:" target="-1" id="5ZR-vX-Iyg"/>
+                                    <action selector="stickyKeyboardAction:" target="-1" id="5ZR-vX-Iyg"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="9ee-jY-6ug"/>

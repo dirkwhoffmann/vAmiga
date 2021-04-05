@@ -42,7 +42,7 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" animationBehavior="default" tabbingMode="preferred" toolbarStyle="expanded" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="800" height="626"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
             <value key="minSize" type="size" width="400" height="314"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="800" height="626"/>
@@ -385,7 +385,7 @@
                                 </segments>
                             </segmentedCell>
                             <connections>
-                                <action selector="inspectAction:" target="-2" id="MEA-qk-7j3"/>
+                                <action selector="inspectAction:" target="1845" id="XVN-Zd-6h5"/>
                             </connections>
                         </segmentedControl>
                     </toolbarItem>
@@ -402,7 +402,7 @@
                                 </segments>
                             </segmentedCell>
                             <connections>
-                                <action selector="screenshotAction:" target="-2" id="gLo-1V-lhE"/>
+                                <action selector="screenshotAction:" target="1845" id="88L-xe-dG2"/>
                             </connections>
                         </segmentedControl>
                     </toolbarItem>
@@ -420,7 +420,7 @@
                                 </segments>
                             </segmentedCell>
                             <connections>
-                                <action selector="snapshotAction:" target="-2" id="S6l-w4-GtS"/>
+                                <action selector="snapshotAction:" target="1845" id="1Ip-wm-4jP"/>
                             </connections>
                         </segmentedControl>
                     </toolbarItem>
@@ -450,7 +450,7 @@
                                 </menu>
                             </popUpButtonCell>
                             <connections>
-                                <action selector="port1Action:" target="-1" id="bkl-pL-dUs"/>
+                                <action selector="port1Action:" target="1845" id="P9O-Oa-i61"/>
                             </connections>
                         </popUpButton>
                     </toolbarItem>
@@ -478,12 +478,9 @@
                                 </menu>
                             </popUpButtonCell>
                             <connections>
-                                <action selector="port2Action:" target="-2" id="tNW-Lk-3IB"/>
+                                <action selector="port2Action:" target="1845" id="rTJ-wk-Gs9"/>
                             </connections>
                         </popUpButton>
-                        <connections>
-                            <action selector="port2Action:" target="-1" id="8fT-U5-wh8"/>
-                        </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSeparatorItem" id="1848"/>
                     <toolbarItem implicitItemIdentifier="173C7588-F1F5-45F4-9A0F-C42BA4D023EB" label="Keyboard" paletteLabel="Keyboard" image="keyboardTemplate" sizingBehavior="auto" id="Ckl-d3-vFW">
@@ -495,10 +492,10 @@
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                             </buttonCell>
+                            <connections>
+                                <action selector="keyboardAction:" target="1845" id="Y8i-UY-hzz"/>
+                            </connections>
                         </button>
-                        <connections>
-                            <action selector="keyboardAction:" target="-2" id="eA2-HY-f3N"/>
-                        </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="E58BE7CC-80A0-4160-88DB-486199BE286E" label="Preferences" paletteLabel="Preferences" sizingBehavior="auto" id="Tmo-Cs-EVn" userLabel="Preferences">
                         <nil key="toolTip"/>
@@ -531,7 +528,7 @@
                                 </segments>
                             </segmentedCell>
                             <connections>
-                                <action selector="controlsAction:" target="-2" id="r2T-ad-cIz"/>
+                                <action selector="controlsAction:" target="1845" id="qDN-a9-DQQ"/>
                             </connections>
                         </segmentedControl>
                     </toolbarItem>

@@ -7,17 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-struct InputDevice {
-    static let none = -1
-    static let mouse = 0
-    static let keyset1 = 1
-    static let keyset2 = 2
-    static let joystick1 = 3
-    static let joystick2 = 4
-}
-
 extension MyController {
 
+    /*
     @IBAction func port1Action(_ sender: NSPopUpButton) {
         
         config.gameDevice1 = sender.selectedTag()
@@ -66,7 +58,25 @@ extension MyController {
             assert(false)
         }
     }
-    
+ */
+    /*
+    @IBAction func keyboardAction(_ sender: Any!) {
+        
+        track()
+
+        if virtualKeyboard == nil {
+            let name = NSNib.Name("VirtualKeyboard")
+            virtualKeyboard = VirtualKeyboardController.make(parent: self, nibName: name)
+        }
+        if virtualKeyboard?.window?.isVisible == true {
+            track("Virtual keyboard already open")
+        } else {
+            track("Opeining virtual keyboard as a sheet")
+            virtualKeyboard?.showSheet()
+        }
+    }
+    */
+    /*
     @IBAction func controlsAction(_ sender: NSSegmentedControl) {
 
         switch sender.selectedSegment {
@@ -78,4 +88,5 @@ extension MyController {
         default: assert(false)
         }
     }
+    */
 }

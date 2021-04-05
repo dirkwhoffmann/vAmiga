@@ -378,7 +378,7 @@ extension MyController: NSMenuItemValidation {
     // Action methods (Keyboard menu)
     //
     
-    @IBAction func keyboardAction(_ sender: Any!) {
+    @IBAction func stickyKeyboardAction(_ sender: Any!) {
         
         // Open the virtual keyboard as a sheet
         if virtualKeyboard == nil {
