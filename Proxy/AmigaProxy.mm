@@ -1390,7 +1390,7 @@ using namespace moira;
 @end
 
 //
-// FSDevice proxy
+// RetroShell proxy
 //
 
 @implementation RetroShellProxy

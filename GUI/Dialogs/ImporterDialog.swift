@@ -58,21 +58,21 @@ class ImporterDialog: DialogController {
     
         track()
 
-        type = myDocument.amigaAttachment?.type
+        type = myDocument.attachment?.type
 
-        if let attachment = myDocument.amigaAttachment as? ADFFileProxy {
+        if let attachment = myDocument.attachment as? ADFFileProxy {
             disk = attachment
         }
-        if let attachment = myDocument.amigaAttachment as? IMGFileProxy {
+        if let attachment = myDocument.attachment as? IMGFileProxy {
             disk = attachment
         }
-        if let attachment = myDocument.amigaAttachment as? DMSFileProxy {
+        if let attachment = myDocument.attachment as? DMSFileProxy {
             disk = attachment
         }
-        if let attachment = myDocument.amigaAttachment as? EXEFileProxy {
+        if let attachment = myDocument.attachment as? EXEFileProxy {
             disk = attachment
         }
-        if let attachment = myDocument.amigaAttachment as? FolderProxy {
+        if let attachment = myDocument.attachment as? FolderProxy {
             disk = attachment
         }
 

@@ -526,7 +526,7 @@ extension MyController: NSMenuItemValidation {
             // Ask the user if an unsafed disk should be replaced
             if !proceedWithUnexportedDisk(drive: drive) { return }
             
-            if let file = mydocument.amigaAttachment as? DiskFileProxy {
+            if let file = mydocument.attachment as? DiskFileProxy {
                 
                 // Insert the disk
                 amiga.diskController.insert(drive, file: file)
@@ -608,6 +608,6 @@ extension MyController: NSMenuItemValidation {
     @IBAction func dragAndDropTargetAction(_ sender: NSMenuItem!) {
         
         let drive = amiga.df(sender)
-        dragAndDropDrive = (dragAndDropDrive == drive) ? nil : drive
+        dragAndDropDrive = (dragAndDropDrive === drive) ? nil : drive
     }
 }

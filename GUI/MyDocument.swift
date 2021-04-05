@@ -22,7 +22,7 @@ class MyDocument: NSDocument {
      * attachment is present, e.g., an ADF archive, it is automatically
      * attached to the emulator.
      */
-    var amigaAttachment: AmigaFileProxy?
+    var attachment: AmigaFileProxy?
     
     // Snapshots
     private(set) var snapshots = ManagedArray<SnapshotProxy>.init(capacity: 32)
@@ -76,7 +76,7 @@ class MyDocument: NSDocument {
         
         track("Creating attachment from URL: \(url.lastPathComponent)")
         
-        try amigaAttachment = createFileProxy(from: url, allowedTypes: allowedTypes)
+        try attachment = createFileProxy(from: url, allowedTypes: allowedTypes)
         myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
         
         track("Attachment created successfully")
@@ -135,11 +135,14 @@ class MyDocument: NSDocument {
     @discardableResult
     func mountAttachment() -> Bool {
         
-        switch amigaAttachment {
+        // Only proceed if an attachment is present
+        if attachment == nil { return false }
+        
+        switch attachment {
 
         case _ as SnapshotProxy:
             
-            let proxy = amigaAttachment as! SnapshotProxy
+            let proxy = attachment as! SnapshotProxy
             parent.load(snapshot: proxy)
             snapshots.append(proxy)
             
@@ -157,7 +160,7 @@ class MyDocument: NSDocument {
         // examine the contents of the HDF and to check for file system
         // errors.
         /*
-            if let vol = FSDeviceProxy.make(withHDF: amigaAttachment as? HDFFileProxy) {
+            if let vol = FSDeviceProxy.make(withHDF: attachment as? HDFFileProxy) {
 
                 vol.dump()
             
@@ -170,7 +173,7 @@ class MyDocument: NSDocument {
         case _ as DiskFileProxy:
 
             if let df = parent.dragAndDropDrive?.nr {
-                amiga.diskController.insert(df, file: amigaAttachment as? DiskFileProxy)
+                amiga.diskController.insert(df, file: attachment as? DiskFileProxy)
             } else {
                 runImporterDialog()
             }
