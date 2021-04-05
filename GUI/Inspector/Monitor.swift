@@ -89,7 +89,7 @@ class Monitor: DialogController {
     func refresh() {
                 
         func enabled(_ monitor: Int) -> NSControl.StateValue {
-            return parent.renderer.monitors.monitorEnabled[monitor] ? .on : .off
+            return parent.renderer.monitors.enabled[monitor] ? .on : .off
         }
         
         let info = amiga.dmaDebugger.getInfo()
@@ -135,9 +135,9 @@ class Monitor: DialogController {
         monKickRom.state = enabled(Monitors.Monitor.kickRom)
         monLeftWave.state = enabled(Monitors.Monitor.waveformL)
         monRightWave.state = enabled(Monitors.Monitor.waveformR)
-        monOpacity.floatValue = parent.renderer.monitors.monitorGlobalAlpha * 100.0
+        monOpacity.floatValue = parent.renderer.monitors.maxAlpha * 100.0
         monSlider.floatValue = parent.renderer.monitors.monitors[0].angle
-        monLayout.selectItem(withTag: parent.renderer.monitors.monitorLayout)
+        monLayout.selectItem(withTag: parent.renderer.monitors.layout)
         monCopper.isEnabled = mon
         monBlitter.isEnabled = mon
         monDisk.isEnabled = mon
@@ -283,14 +283,14 @@ class Monitor: DialogController {
     @IBAction func monDisplayAction(_ sender: NSButton!) {
         
         track("\(sender.tag)")
-        parent.renderer.monitors.monitorEnabled[sender.tag] = sender.state == .on
+        parent.renderer.monitors.enabled[sender.tag] = sender.state == .on
         refresh()
     }
     
     @IBAction func monLayoutAction(_ sender: NSPopUpButton!) {
         
         track("\(sender.selectedTag())")
-        parent.renderer.monitors.monitorLayout = sender.selectedTag()
+        parent.renderer.monitors.layout = sender.selectedTag()
         refresh()
     }
     
@@ -307,7 +307,7 @@ class Monitor: DialogController {
         
         track("alpha = \(sender.floatValue)")
         
-        parent.renderer.monitors.monitorGlobalAlpha = sender.floatValue / 100.0
+        parent.renderer.monitors.maxAlpha = sender.floatValue / 100.0
         refresh()
     }
 

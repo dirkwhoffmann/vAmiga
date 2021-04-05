@@ -37,18 +37,18 @@ class Monitors: Layer {
         static let waveformR = 11
     }
 
+    // Array holding all activity monitors
     var monitors: [ActivityMonitor] = []
-    var monitorGlobalAlpha = Float(0.5)
     
-    // Individual enable switch for each activity monitor
-    var monitorEnabled: [Bool] = []
+    // Indicates if a monitor should be displayes
+    var enabled: [Bool] = []
+
+    // Maximum alpha value
+    var maxAlpha = Float(0.5)
     
     // Layout scheme used for positioning the monitors
-    var monitorLayout = 0 { didSet { updateMonitorPositions() } }
-        
-    // Indicates if at least one monitor is animating
-    var animates = false
-    
+    var layout = 0 { didSet { updateMonitorPositions() } }
+
     override init(renderer: Renderer) {
         
         super.init(renderer: renderer)
@@ -56,74 +56,13 @@ class Monitors: Layer {
         buildMonitors()
     }
     
-    //
-    // Managing activity monitors
-    //
-
-    /*
-    func fadeIn(monitor nr: Int, steps: Int = 40) {
-
-        assert(nr < monitors.count)
-        
-        monitorAlpha[nr].target = 1.0
-        monitorAlpha[nr].steps = steps
-        animates = true
-    }
-        
-    func fadeOut(monitor nr: Int, steps: Int = 40) {
-
-        assert(nr < monitors.count)
-        
-        monitorAlpha[nr].target = 0.0
-        monitorAlpha[nr].steps = steps
-        animates = true
-    }
-
-    func fadeOutMonitors() {
-
-        for i in 0 ..< monitors.count { fadeOut(monitor: i) }
-    }
-
-    func updateMonitorAlphas() {
-        
-        for i in 0 ..< monitors.count where i < monitorEnabled.count {
-            if monitorEnabled[i] {
-                fadeIn(monitor: i)
-            } else {
-                fadeOut(monitor: i)
-            }
-        }
-    }
-    */
-    
-    override func update(frames: Int64) {
-    
-        super.update(frames: frames)
-
-        /*
-        if isAnimating {
-            track("alpha = \(alpha.current)")
-        }
-        
-        if animates {
-            
-            animates = false
-            for i in 0 ..< monitors.count {
-                
-                monitorAlpha[i].move()
-                if monitorAlpha[i].animates() { animates = true }
-            }
-        }
-        */
-    }
-            
     func render(_ encoder: MTLRenderCommandEncoder) {
         
-        for i in 0 ..< monitors.count where monitorEnabled[i] {
+        for i in 0 ..< monitors.count where enabled[i] {
             
             if !amiga.paused { monitors[i].animate() }
 
-            fragUniforms.alpha = monitorGlobalAlpha * alpha.current
+            fragUniforms.alpha = maxAlpha * alpha.current
             encoder.setFragmentBytes(&fragUniforms,
                                      length: MemoryLayout<FragmentUniforms>.stride,
                                      index: 1)

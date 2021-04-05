@@ -53,7 +53,7 @@ extension Monitors {
 
         for _ in 0 ..< monitors.count {
             // monitorAlpha.append(AnimatedFloat(1.0))
-            monitorEnabled.append(true)
+            enabled.append(true)
         }
         
         updateMonitorPositions()
@@ -75,7 +75,7 @@ extension Monitors {
         // Grid position and rotation side for all monitors
         var grid: [(Int, Int, Side)]
         
-        switch monitorLayout {
+        switch layout {
             
         case 0: // Top and bottom
 
