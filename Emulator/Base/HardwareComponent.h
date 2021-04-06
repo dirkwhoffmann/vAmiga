@@ -28,7 +28,7 @@
 #define synchronized \
 for (util::AutoMutex _am(mutex); _am.active; _am.active = false)
 
-namespace Dump {
+namespace dump {
 enum Category : usize {
     
     Config    = 0b0000001,
@@ -159,12 +159,11 @@ public:
      * parameter is a bit field which can be used to limit the displayed
      * information to certain categories.
      */
-    void dump(Dump::Category category, std::ostream& ss) const;
-    virtual void _dump(Dump::Category category, std::ostream& ss) const { };
-
-    void dump(Dump::Category category) const;
+    void dump(dump::Category category, std::ostream& ss) const;
+    void dump(dump::Category category) const;
     void dump(std::ostream& ss) const;
     void dump() const;
+    virtual void _dump(dump::Category category, std::ostream& ss) const { };
 
     
     //

@@ -204,9 +204,9 @@ Agnus::_inspect()
 }
 
 void
-Agnus::_dump(Dump::Category category, std::ostream& os) const
+Agnus::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::Config) {
+    if (category & dump::Config) {
     
         os << DUMP("Chip Revison");
         os << AgnusRevisionEnum::key(config.revision) << std::endl;
@@ -214,7 +214,7 @@ Agnus::_dump(Dump::Category category, std::ostream& os) const
         os << EMULATED(config.slowRamMirror) << std::endl;
     }
 
-    if (category & Dump::State) {
+    if (category & dump::State) {
         
         os << DUMP("Clock") << DEC << clock << std::endl;
         os << DUMP("Frame") << DEC << (isize)frame.nr << std::endl;
@@ -232,7 +232,7 @@ Agnus::_dump(Dump::Category category, std::ostream& os) const
         os << DUMP("BLS signal") << ISENABLED(bls) << std::endl;
     }
 
-    if (category & Dump::Registers) {
+    if (category & dump::Registers) {
         
         os << DUMP("DMACON");
         os << HEX32 << dmacon << std::endl;
@@ -271,7 +271,7 @@ Agnus::_dump(Dump::Category category, std::ostream& os) const
         os << HEX32 << dskpt << std::endl;
     }
     
-    if (category & Dump::Events) {
+    if (category & dump::Events) {
         
         EventInfo eventInfo;
         inspectEvents(eventInfo);

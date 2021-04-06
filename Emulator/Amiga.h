@@ -187,7 +187,7 @@ public:
 private:
     
     void _inspect() override;
-    void _dump(Dump::Category category, std::ostream& os) const override;
+    void _dump(dump::Category category, std::ostream& os) const override;
     
     
     //
@@ -292,7 +292,6 @@ public:
     void signalWarpOff() { setControlFlags(RL_WARP_OFF); }
     void signalAutoSnapshot() { setControlFlags(RL_AUTO_SNAPSHOT); }
     void signalUserSnapshot() { setControlFlags(RL_USER_SNAPSHOT); }
-    // void signalShutdown() { setControlFlags(RL_STOP | RL_SHUTDOWN); }
 
     //
     // Running the emulator

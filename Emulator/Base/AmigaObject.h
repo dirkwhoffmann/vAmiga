@@ -16,23 +16,20 @@
  * the object together with functions for printing debug messages and warnings.
  */
 class AmigaObject {
-    
-public:
 
-    virtual ~AmigaObject() { };
-
-    
     //
     // Initializing
     //
-    
+
 public:
+
+    virtual ~AmigaObject() { };
     
     // Returns the name for this component (e.g., "Agnus" or "Denise")
-    virtual const char *getDescription() const { return ""; }
+    virtual const char *getDescription() const = 0;
     
     // Called by debug() and trace() to produce a detailed debug output
-    virtual void prefix() const { };
+    virtual void prefix() const;
 };
 
 /* This file provides several macros for printing messages:

@@ -66,7 +66,7 @@ extension MyController: NSWindowDelegate {
         amiga.pause()
         amiga.powerOff()
         
-        // Ask the emulator to shutdown (will send MSG_SHUTDOWN)
+        // Ask the emulator to shutdown and to send the MSG_SHUTDOWN message
         amiga.shutdown()
     }
     

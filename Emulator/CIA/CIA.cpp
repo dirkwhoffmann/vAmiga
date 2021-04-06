@@ -157,16 +157,16 @@ CIA::_inspect()
 }
 
 void
-CIA::_dump(Dump::Category category, std::ostream& os) const
+CIA::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::Config) {
+    if (category & dump::Config) {
         
         os << DUMP("Revision") << CIARevisionEnum::key(config.revision) << std::endl;
         os << DUMP("Emulate TOD bug") << YESNO(config.todBug) << std::endl;
         os << DUMP("Sync with E-clock") << YESNO(config.eClockSyncing) << std::endl;
     }
     
-    if (category & Dump::State) {
+    if (category & dump::State) {
         
         os << DUMP("Clock") << DEC << clock << std::endl;
         os << DUMP("Sleeping") << YESNO(sleeping) << std::endl;
@@ -178,7 +178,7 @@ CIA::_dump(Dump::Category category, std::ostream& os) const
 
     }
     
-    if (category & Dump::Registers) {
+    if (category & dump::Registers) {
         
         os << std::endl;
         os << DUMP("Counter A") << HEX16 << (isize)counterA << std::endl;

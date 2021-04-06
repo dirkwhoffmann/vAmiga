@@ -240,16 +240,16 @@ CPU::_inspect(u32 dasmStart)
 }
 
 void
-CPU::_dump(Dump::Category category, std::ostream& os) const
+CPU::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::State) {
+    if (category & dump::State) {
         
         os << DUMP("Clock") << DEC << clock << std::endl;
         os << DUMP("Control flags") <<  std::hex << flags << std::endl;
         os << DUMP("Last exception") << DEC << exception;
     }
     
-    if (category & Dump::Registers) {
+    if (category & dump::Registers) {
 
         os << DUMP("PC") << HEX32 << reg.pc0 << std::endl;
         os << std::endl;

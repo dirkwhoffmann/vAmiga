@@ -45,7 +45,7 @@ TOD::_inspect()
 }
 
 void 
-TOD::_dump(Dump::Category category, std::ostream& os) const
+TOD::_dump(dump::Category category, std::ostream& os) const
 {
     os << DUMP("Counter");
     os << HEX8 << tod.hi << ":" << HEX8 << tod.mid << ":" << HEX8 << tod.lo;

@@ -140,14 +140,14 @@ Blitter::_inspect()
 }
 
 void
-Blitter::_dump(Dump::Category category, std::ostream& os) const
+Blitter::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::Config) {
+    if (category & dump::Config) {
     
         os << DUMP("Accuracy level") << config.accuracy << std::endl;
     }
     
-    if (category & Dump::State) {
+    if (category & dump::State) {
 
         os << DUMP("Iteration") << DEC << iteration << std::endl;
         os << DUMP("Micro instruction PC") << DEC << bltpc << std::endl;
@@ -173,7 +173,7 @@ Blitter::_dump(Dump::Category category, std::ostream& os) const
 
     }
     
-    if (category & Dump::Registers) {
+    if (category & dump::Registers) {
         
         os << DUMP("BLTCON0") << HEX16 << bltcon0 << std::endl;
         os << DUMP("ASH") << HEX16 << bltconASH() << std::endl;

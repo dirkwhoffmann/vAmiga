@@ -219,9 +219,9 @@ Muxer::setConfigItem(Option option, long id, i64 value)
 }
 
 void
-Muxer::_dump(Dump::Category category, std::ostream& os) const
+Muxer::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::Config) {
+    if (category & dump::Config) {
         
         os << " Sampling method : ";
         os << SamplingMethodEnum::key(config.samplingMethod) << std::endl;

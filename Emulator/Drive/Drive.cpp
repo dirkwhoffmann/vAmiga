@@ -184,9 +184,9 @@ Drive::_inspect()
 }
 
 void
-Drive::_dump(Dump::Category category, std::ostream& os) const
+Drive::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::Config) {
+    if (category & dump::Config) {
         
         os << DUMP("Type") << DriveTypeEnum::key(config.type) << std::endl;
         os << DUMP("Emulate mechanics") << YESNO(config.mechanicalDelays) << std::endl;
@@ -202,7 +202,7 @@ Drive::_dump(Dump::Category category, std::ostream& os) const
         os << DUMP("Default boot block") << BootBlockIdEnum::key(config.defaultBootBlock) << std::endl;
     }
     
-    if (category & Dump::State) {
+    if (category & dump::State) {
         
         os << DUMP("Nr") << DEC << (isize)nr << std::endl;
         os << DUMP("Id count") << DEC << (isize)idCount << std::endl;

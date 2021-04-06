@@ -9,3 +9,9 @@
 
 #include "config.h"
 #include "AmigaObject.h"
+
+void
+AmigaObject::prefix() const
+{
+    fprintf(stderr, "%s: ", getDescription());
+}

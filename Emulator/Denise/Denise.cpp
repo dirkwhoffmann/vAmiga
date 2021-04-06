@@ -172,9 +172,9 @@ Denise::_inspect()
 }
 
 void
-Denise::_dump(Dump::Category category, std::ostream& os) const
+Denise::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::Config) {
+    if (category & dump::Config) {
         
         printf("_dump(Config)\n");
         os << DUMP("Chip revision");
@@ -190,7 +190,7 @@ Denise::_dump(Dump::Category category, std::ostream& os) const
         os << DUMP("clxSprSpr") << YESNO(config.clxSprSpr) << std::endl;
     }
     
-    if (category & Dump::Registers) {
+    if (category & dump::Registers) {
         
         os << "  BPLCON0: " << HEX16 << bplcon0;
         os << "  BPLCON1: " << HEX16 << bplcon1;

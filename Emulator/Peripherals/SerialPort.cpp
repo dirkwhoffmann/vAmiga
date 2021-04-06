@@ -70,14 +70,14 @@ SerialPort::_inspect()
 }
 
 void
-SerialPort::_dump(Dump::Category category, std::ostream& os) const
+SerialPort::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::Config) {
+    if (category & dump::Config) {
         
         os << DUMP("device") << SerialPortDeviceEnum::key(config.device) << std::endl;
     }
     
-    if (category & Dump::State) {
+    if (category & dump::State) {
     
         os << DUMP("port") << HEX32 << port;
     }

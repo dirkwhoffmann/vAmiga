@@ -35,7 +35,7 @@ ScreenRecorder::_reset(bool hard)
 }
 
 void
-ScreenRecorder::_dump(Dump::Category category, std::ostream& os) const
+ScreenRecorder::_dump(dump::Category category, std::ostream& os) const
 {
     os << DUMP("ffmpeg path") << ffmpegPath() << std::endl;
     os << DUMP("Installed") << YESNO(hasFFmpeg()) << std::endl;

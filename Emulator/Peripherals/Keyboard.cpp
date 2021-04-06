@@ -62,14 +62,14 @@ Keyboard::setConfigItem(Option option, i64 value)
 }
 
 void
-Keyboard::_dump(Dump::Category category, std::ostream& os) const
+Keyboard::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::Config) {
+    if (category & dump::Config) {
         
         os << DUMP("Accurate emulation") << YESNO(config.accurate) << std::endl;
     }
     
-    if (category & Dump::State) {
+    if (category & dump::State) {
         
         os << DUMP("State") << KeyboardStateEnum::key(state) << std::endl;
         os << DUMP("Shift register") << HEX8 << (isize)shiftReg << std::endl;

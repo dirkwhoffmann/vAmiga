@@ -87,7 +87,7 @@ public:
     CounterInfo getInfo() { return HardwareComponent::getInfo(info); }
 
     void _inspect() override;
-    void _dump(Dump::Category category, std::ostream& os) const override;
+    void _dump(dump::Category category, std::ostream& os) const override;
 
     
     //

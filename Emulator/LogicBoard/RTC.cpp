@@ -83,14 +83,14 @@ RTC::_reset(bool hard)
 }
 
 void
-RTC::_dump(Dump::Category category, std::ostream& os) const
+RTC::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::Config) {
+    if (category & dump::Config) {
         
         os << DUMP("Chip Model") << RTCRevisionEnum::key(config.model) << std::endl;
     }
     
-    if (category & Dump::Registers) {
+    if (category & dump::Registers) {
         
         for (isize i = 0; i < 16; i++) {
             os << "    " << std::hex << i << " : ";

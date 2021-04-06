@@ -184,9 +184,9 @@ DiskController::_inspect()
 }
 
 void
-DiskController::_dump(Dump::Category category, std::ostream& os) const
+DiskController::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::Config) {
+    if (category & dump::Config) {
         
         os << DUMP("Drive df0");
         os << (config.connected[0] ? "connected" : "disconnected") << std::endl;
@@ -204,7 +204,7 @@ DiskController::_dump(Dump::Category category, std::ostream& os) const
         os << YESNO(config.autoDskSync) << std::endl;
     }
     
-    if (category & Dump::State) {
+    if (category & dump::State) {
         
         os << DUMP("selected");
         os << (int)selected << std::endl;

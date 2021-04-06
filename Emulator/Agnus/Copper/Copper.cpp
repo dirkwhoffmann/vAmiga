@@ -43,15 +43,15 @@ Copper::_inspect()
 }
 
 void
-Copper::_dump(Dump::Category category, std::ostream& os) const
+Copper::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::State) {
+    if (category & dump::State) {
         
         os << DUMP("Active Copper list") << DEC << (isize)copList << std::endl;
         os << DUMP("Skip flag") << ISSET(skip) << std::endl;
     }
     
-    if (category & Dump::Registers) {
+    if (category & dump::Registers) {
         
         os << DUMP("COPPC") << HEX32 << (isize)coppc << std::endl;
         os << DUMP("COP1LC") << HEX32 << (isize)cop1lc << std::endl;

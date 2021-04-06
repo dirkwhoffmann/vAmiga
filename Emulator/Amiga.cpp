@@ -307,7 +307,7 @@ Amiga::configure(Option option, i64 value)
     if (changed) queue.put(MSG_CONFIG);
     
     // Dump the current configuration in debug mode
-    if (changed && CNF_DEBUG) dump(Dump::Config);
+    if (changed && CNF_DEBUG) dump(dump::Config);
 
     return changed;
 }
@@ -322,7 +322,7 @@ Amiga::configure(Option option, long id, i64 value)
     if (changed) queue.put(MSG_CONFIG);
 
     // Dump the current configuration in debug mode
-    if (changed && CNF_DEBUG) dump(Dump::Config);
+    if (changed && CNF_DEBUG) dump(dump::Config);
         
     return changed;
 }
@@ -359,21 +359,21 @@ Amiga::_inspect()
 }
 
 void
-Amiga::_dump(Dump::Category category, std::ostream& os) const
+Amiga::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::Config) {
+    if (category & dump::Config) {
     
         if (CNF_DEBUG) {
             
-            df0.dump(Dump::Config);
-            paula.dump(Dump::Config);
-            paula.muxer.dump(Dump::Config);
-            ciaA.dump(Dump::Config);
-            denise.dump(Dump::Config);
+            df0.dump(dump::Config);
+            paula.dump(dump::Config);
+            paula.muxer.dump(dump::Config);
+            ciaA.dump(dump::Config);
+            denise.dump(dump::Config);
         }
     }
     
-    if (category & Dump::State) {
+    if (category & dump::State) {
         
         os << DUMP("Power") << ONOFF(isPoweredOn()) << std::endl;
         os << DUMP("Running") << YESNO(isRunning()) << std::endl;
@@ -518,14 +518,14 @@ Amiga::pause()
 void
 Amiga::shutdown()
 {
-    // Assure the Amiga is powered off
+    // Assure the emulator is powered off
     assert(isPoweredOff());
     
     /* Send the SHUTDOWN message which is the last message ever send. The
      * purpose of this message is to signal the GUI that no more messages will
      * show up in the message queue. When the GUI receives this message, it
      * knows that the Amiga is powered off and the message queue empty. From
-     * this time on, it is safe to destroy the Amiga object.
+     * this time on, it is safe to destroy the emulator object.
      */
     queue.put(MSG_SHUTDOWN);
 }
@@ -706,12 +706,14 @@ Amiga::runLoop()
 {
     debug(RUN_DEBUG, "runLoop()\n");
 
+    // Leave pause mode
     HardwareComponent::run();
     
-    // Prepare to run
+    // Restart the synchronization timer
     oscillator.restart();
     
     // Enable or disable debugging features
+    // TODO: MOVE TO CPU::_run()
     if (debugMode) {
         cpu.debugger.enableLogging();
     } else {
@@ -790,7 +792,7 @@ Amiga::runLoop()
         }
     }
     
-    // Switch state
+    // Enter pause mode
     state = EMULATOR_STATE_PAUSED;
     HardwareComponent::pause();    
 }

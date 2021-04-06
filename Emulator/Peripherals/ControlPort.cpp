@@ -49,9 +49,9 @@ ControlPort::_inspect()
 }
 
 void
-ControlPort::_dump(Dump::Category category, std::ostream& os) const
+ControlPort::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::State) {
+    if (category & dump::State) {
         
         os << DUMP("Detected device type") << ControlPortDeviceEnum::key(device);
         os << std::endl;

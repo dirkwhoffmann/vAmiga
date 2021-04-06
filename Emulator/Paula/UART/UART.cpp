@@ -38,7 +38,7 @@ UART::_inspect()
 }
 
 void
-UART::_dump(Dump::Category category, std::ostream& os) const
+UART::_dump(dump::Category category, std::ostream& os) const
 {
     os << "serper: %X\n" << (int)serper;
 }

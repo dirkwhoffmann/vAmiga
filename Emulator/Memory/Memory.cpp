@@ -302,9 +302,9 @@ Memory::didSaveToBuffer(u8 *buffer) const
 }
 
 void
-Memory::_dump(Dump::Category category, std::ostream& os) const
+Memory::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & Dump::Config) {
+    if (category & dump::Config) {
         
         os << DUMP("Chip Ram") << std::dec << config.chipSize / 1024 << " KB" << std::endl;
         os << DUMP("Slow Ram") << std::dec << config.slowSize / 1024 << " KB" << std::endl;
@@ -324,13 +324,13 @@ Memory::_dump(Dump::Category category, std::ostream& os) const
         os << UnmappedMemoryEnum::key(config.unmappingType) << std::endl;
     }
     
-    if (category & Dump::State) {
+    if (category & dump::State) {
 
         os << DUMP("Data bus") << HEX16 << dataBus << std::endl;
         os << DUMP("Wom is locked") << YESNO(womIsLocked) << std::endl;
     }
     
-    if (category & Dump::Checksums) {
+    if (category & dump::Checksums) {
 
         os << DUMP("Rom checksum");
         os << HEX32 << util::fnv_1a_32(rom, config.romSize) << std::endl;
@@ -346,7 +346,7 @@ Memory::_dump(Dump::Category category, std::ostream& os) const
         os << HEX32 << util::fnv_1a_32(fast, config.fastSize) << std::endl;
     }
     
-    if (category & Dump::BankMap) {
+    if (category & dump::BankMap) {
 
         MemorySource oldsrc = cpuMemSrc[0]; isize oldi = 0;
         for (isize i = 0; i <= 0x100; i++) {

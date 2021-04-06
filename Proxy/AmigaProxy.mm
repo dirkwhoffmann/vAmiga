@@ -60,7 +60,7 @@ using namespace moira;
 
 - (void)dumpConfig
 {
-    [self hwc]->dump(Dump::Config);
+    [self hwc]->dump(dump::Config);
 }
 
 @end
