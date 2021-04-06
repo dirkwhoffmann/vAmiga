@@ -10,6 +10,7 @@
 #include "config.h"
 #include "StateMachine.h"
 #include "Paula.h"
+#include "IO.h"
 
 template <isize nr>
 StateMachine<nr>::StateMachine(Amiga& ref) : AmigaComponent(ref)
@@ -54,9 +55,12 @@ StateMachine<nr>::_inspect()
 template <isize nr> void
 StateMachine<nr>::_dump(Dump::Category category, std::ostream& os) const
 {
-    os << "   State : " << (int)state;
-    os << "  AUDxIP : " << (int)AUDxIP();
-    os << "  AUDxON : " << (int)AUDxON();
+    if (category & Dump::State) {
+        
+        os << DUMP("State") << (isize)state << std::endl;
+        os << DUMP("AUDxIP") << (isize)AUDxIP() << std::endl;
+        os << DUMP("AUDxON") << (isize)AUDxON() << std::endl;
+    }
 }
 
 template <isize nr> void

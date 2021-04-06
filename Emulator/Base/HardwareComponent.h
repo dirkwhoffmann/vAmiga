@@ -155,8 +155,8 @@ public:
         return result;
     }
     
-    /* Prints debug information about the current configuration. The additional
-     * 'flags' parameter is a bit field which can be used to limit the displayed
+    /* Prints debug information about this component. The additional 'flags'
+     * parameter is a bit field which can be used to limit the displayed
      * information to certain categories.
      */
     void dump(Dump::Category category, std::ostream& ss) const;
