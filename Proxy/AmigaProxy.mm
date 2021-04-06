@@ -2306,7 +2306,7 @@ using namespace moira;
 
 - (void)setListener:(const void *)sender function:(Callback *)func
 {
-    [self amiga]->queue.setListener(sender, func);
+    [self amiga]->msgQueue.setListener(sender, func);
 }
 
 - (void)stopAndGo

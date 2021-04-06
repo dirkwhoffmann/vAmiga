@@ -98,7 +98,7 @@ Amiga::Amiga()
         &ciaB,
         &mem,
         &cpu,
-        &queue
+        &msgQueue
     };
 
     // Set up the initial state
@@ -181,7 +181,7 @@ Amiga::reset(bool hard)
     if (hard) resume();
 
     // Inform the GUI
-    if (hard) queue.put(MSG_RESET);
+    if (hard) msgQueue.put(MSG_RESET);
 }
 
 void
@@ -304,7 +304,7 @@ Amiga::configure(Option option, i64 value)
     bool changed = HardwareComponent::configure(option, value);
     
     // Inform the GUI if the configuration has changed
-    if (changed) queue.put(MSG_CONFIG);
+    if (changed) msgQueue.put(MSG_CONFIG);
     
     // Dump the current configuration in debug mode
     if (changed && CNF_DEBUG) dump(dump::Config);
@@ -319,7 +319,7 @@ Amiga::configure(Option option, long id, i64 value)
     bool changed = HardwareComponent::configure(option, id, value);
     
     // Inform the GUI if the configuration has changed
-    if (changed) queue.put(MSG_CONFIG);
+    if (changed) msgQueue.put(MSG_CONFIG);
 
     // Dump the current configuration in debug mode
     if (changed && CNF_DEBUG) dump(dump::Config);
@@ -405,7 +405,7 @@ Amiga::powerOn()
         inspect();
 
         // Inform the GUI
-        queue.put(MSG_POWER_ON);
+        msgQueue.put(MSG_POWER_ON);
     }    
 }
 
@@ -458,7 +458,7 @@ Amiga::powerOff()
         inspect();
         
         // Inform the GUI
-        queue.put(MSG_POWER_OFF);
+        msgQueue.put(MSG_POWER_OFF);
     }
 }
 
@@ -485,7 +485,7 @@ Amiga::run()
         pthread_create(&p, nullptr, threadMain, (void *)this);
 
         // Inform the GUI
-        queue.put(MSG_RUN);
+        msgQueue.put(MSG_RUN);
     }
 }
 
@@ -511,7 +511,7 @@ Amiga::pause()
         inspect();
         
         // Inform the GUI
-        queue.put(MSG_PAUSE);
+        msgQueue.put(MSG_PAUSE);
     }
 }
 
@@ -527,7 +527,7 @@ Amiga::shutdown()
      * knows that the Amiga is powered off and the message queue empty. From
      * this time on, it is safe to destroy the emulator object.
      */
-    queue.put(MSG_SHUTDOWN);
+    msgQueue.put(MSG_SHUTDOWN);
 }
 
 void
@@ -559,7 +559,7 @@ void
 Amiga::_warpOn()
 {
     HardwareComponent::_warpOn();
-    queue.put(MSG_WARP_ON);
+    msgQueue.put(MSG_WARP_ON);
 }
 
 void
@@ -567,7 +567,7 @@ Amiga::_warpOff()
 {
     HardwareComponent::_warpOff();
     oscillator.restart();
-    queue.put(MSG_WARP_OFF);
+    msgQueue.put(MSG_WARP_OFF);
 }
 
 void
@@ -734,14 +734,14 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_AUTO_SNAPSHOT) {
                 debug(RUN_DEBUG, "RL_AUTO_SNAPSHOT\n");
                 autoSnapshot = Snapshot::makeWithAmiga(this);
-                queue.put(MSG_AUTO_SNAPSHOT_TAKEN);
+                msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
                 clearControlFlags(RL_AUTO_SNAPSHOT);
             }
             
             if (runLoopCtrl & RL_USER_SNAPSHOT) {
                 debug(RUN_DEBUG, "RL_USER_SNAPSHOT\n");
                 userSnapshot = Snapshot::makeWithAmiga(this);
-                queue.put(MSG_USER_SNAPSHOT_TAKEN);
+                msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
                 clearControlFlags(RL_USER_SNAPSHOT);
             }
 
@@ -755,7 +755,7 @@ Amiga::runLoop()
             // Did we reach a breakpoint?
             if (runLoopCtrl & RL_BREAKPOINT_REACHED) {
                 inspect();
-                queue.put(MSG_BREAKPOINT_REACHED);
+                msgQueue.put(MSG_BREAKPOINT_REACHED);
                 debug(RUN_DEBUG, "BREAKPOINT_REACHED pc: %x\n", cpu.getPC());
                 clearControlFlags(RL_BREAKPOINT_REACHED);
                 break;
@@ -764,7 +764,7 @@ Amiga::runLoop()
             // Did we reach a watchpoint?
             if (runLoopCtrl & RL_WATCHPOINT_REACHED) {
                 inspect();
-                queue.put(MSG_WATCHPOINT_REACHED);
+                msgQueue.put(MSG_WATCHPOINT_REACHED);
                 debug(RUN_DEBUG, "WATCHPOINT_REACHED pc: %x\n", cpu.getPC());
                 clearControlFlags(RL_WATCHPOINT_REACHED);
                 break;
@@ -804,7 +804,7 @@ Amiga::requestAutoSnapshot()
 
         // Take snapshot immediately
         autoSnapshot = Snapshot::makeWithAmiga(this);
-        queue.put(MSG_AUTO_SNAPSHOT_TAKEN);
+        msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
         
     } else {
 
@@ -820,7 +820,7 @@ Amiga::requestUserSnapshot()
         
         // Take snapshot immediately
         userSnapshot = Snapshot::makeWithAmiga(this);
-        queue.put(MSG_USER_SNAPSHOT_TAKEN);
+        msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
         
     } else {
         
@@ -852,7 +852,7 @@ Amiga::loadFromSnapshotUnsafe(Snapshot *snapshot)
     
     if (snapshot && (ptr = snapshot->getData())) {
         load(ptr);
-        queue.put(MSG_SNAPSHOT_RESTORED);
+        msgQueue.put(MSG_SNAPSHOT_RESTORED);
     }
 }
 

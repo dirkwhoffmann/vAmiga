@@ -99,7 +99,7 @@ public:
     /* Communication channel to the GUI. The GUI registers a listener and a
      * callback function to retrieve messages.
      */
-    MsgQueue queue = MsgQueue(*this);
+    MsgQueue msgQueue = MsgQueue(*this);
 
     
     //
