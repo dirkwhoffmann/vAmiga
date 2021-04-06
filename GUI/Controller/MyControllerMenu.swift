@@ -380,11 +380,16 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func stickyKeyboardAction(_ sender: Any!) {
         
-        // Open the virtual keyboard as a sheet
+        // Create keyboard if neccessary
         if virtualKeyboard == nil {
             virtualKeyboard = VirtualKeyboardController.make(parent: self)
         }
-        virtualKeyboard?.showSheet()
+        if virtualKeyboard?.window?.isVisible == true {
+            track("Virtual keyboard already open")
+        } else {
+            track("Opeining virtual keyboard as a window")
+        }
+        virtualKeyboard?.showWindow()
     }
      
     @IBAction func mapCmdKeysAction(_ sender: Any!) {

@@ -1130,9 +1130,9 @@
 		509F7F1621ED156100A530E4 /* Peripherals */ = {
 			isa = PBXGroup;
 			children = (
+				50894D812593CF4400C0499D /* HIDExtensions.swift */,
 				508FDFF121EA22780043D0E9 /* GamePad.swift */,
 				508FE00121EA227A0043D0E9 /* GamePadManager.swift */,
-				50894D812593CF4400C0499D /* HIDExtensions.swift */,
 				508FE00021EA227A0043D0E9 /* KeyboardController.swift */,
 				508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */,
 				508FDFFF21EA227A0043D0E9 /* MacKey.swift */,

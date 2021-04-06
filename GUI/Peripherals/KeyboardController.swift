@@ -135,6 +135,7 @@ class KeyboardController: NSObject {
         }
 
         if let amigaKey = macKey.amigaKeyCode { keyboard.pressKey(amigaKey) }
+        parent.virtualKeyboard?.refreshIfVisible()
     }
     
     func keyUp(with macKey: MacKey) {
@@ -148,18 +149,21 @@ class KeyboardController: NSObject {
         }
 
         if let amigaKey = macKey.amigaKeyCode { keyboard.releaseKey(amigaKey) }
+        parent.virtualKeyboard?.refreshIfVisible()
     }
     
     func keyDown(with keyCode: UInt16) {
         
         let macKey = MacKey.init(keyCode: keyCode)
         if let amigaKey = macKey.amigaKeyCode { keyboard.pressKey(amigaKey) }
+        parent.virtualKeyboard?.refreshIfVisible()
     }
     
     func keyUp(with keyCode: UInt16) {
         
         let macKey = MacKey.init(keyCode: keyCode)
         if let amigaKey = macKey.amigaKeyCode { keyboard.releaseKey(amigaKey) }
+        parent.virtualKeyboard?.refreshIfVisible()
     }
     
     func autoType(_ string: String) {

@@ -7,9 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-/* Emulated keyboard model. This variable controls the overall appearance of the
- * virtual keyboard. The keyboard can be drawn in a narrow style (Amiga 1000
- * keyboard) and a wide style (Amiga 500 keyboard).
+/* Emulated keyboard model. This variable controls the overall appearance of
+ * the virtual keyboard. The keyboard can be drawn in a narrow style (A1000
+ * keyboard) or a wide style (A500, A2000 keyboard).
  */
 enum KBStyle: Int, Codable {
 
@@ -73,16 +73,16 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
         return keyboard
     }
 
-    func showSheet(autoClose: Bool) {
+    func showSheet() {
 
-        self.autoClose = autoClose
-        showSheet()
+        autoClose = true
+        super.showSheet()
     }
 
-    func showWindow(autoClose: Bool) {
+    func showWindow() {
         
-        self.autoClose = autoClose
-        showWindow(self)
+        autoClose = false
+        super.showWindow(self)
     }
     
     override func windowDidLoad() {
@@ -99,6 +99,12 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
         refresh()
     }
     
+    override func sheetDidShow() {
+        
+        track()
+        refresh()
+    }
+    
     func windowWillClose(_ notification: Notification) {
 
         track()
@@ -109,8 +115,15 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
         refresh()
     }
     
-    func refresh() {
-                
+    func refreshIfVisible() {
+        
+        if window?.isVisible == true {
+            refresh()
+        }
+    }
+    
+    fileprivate func refresh() {
+                       
         guard let keyboard = amiga.keyboard else { return }
         
         for keycode in 0 ... 127 {
@@ -170,11 +183,10 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
     
     override func mouseDown(with event: NSEvent) {
                 
-        // Close window if the user clicked inside the unused area
         track()
-        if autoClose {
-            cancelAction(self)
-        }
+
+        // If opened as a sheet, close if the user clicked inside unsued area
+        if autoClose { cancelAction(self) }
     }
 }
 
