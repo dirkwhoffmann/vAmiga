@@ -84,7 +84,7 @@ PixelEngine::_reset(bool hard)
     updateRGBA();
 }
 
-long
+i64
 PixelEngine::getConfigItem(Option option) const
 {
     switch (option) {
@@ -101,7 +101,7 @@ PixelEngine::getConfigItem(Option option) const
 }
 
 bool
-PixelEngine::setConfigItem(Option option, long value)
+PixelEngine::setConfigItem(Option option, i64 value)
 {
     switch (option) {
             

@@ -104,8 +104,8 @@ public:
     
     const MouseConfig &getConfig() const { return config; }
 
-    long getConfigItem(Option option) const;
-    bool setConfigItem(Option option, long id, long value) override;
+    i64 getConfigItem(Option option) const;
+    bool setConfigItem(Option option, long id, i64 value) override;
     
 private:
     

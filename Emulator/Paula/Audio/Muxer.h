@@ -112,10 +112,10 @@ public:
     
     const MuxerConfig &getConfig() const { return config; }
 
-    long getConfigItem(Option option) const;
-    long getConfigItem(Option option, long id) const;
-    bool setConfigItem(Option option, long value) override;
-    bool setConfigItem(Option option, long id, long value) override;
+    i64 getConfigItem(Option option) const;
+    i64 getConfigItem(Option option, long id) const;
+    bool setConfigItem(Option option, i64 value) override;
+    bool setConfigItem(Option option, long id, i64 value) override;
 
     bool isMuted() const { return config.volL == 0 && config.volR == 0; }
 

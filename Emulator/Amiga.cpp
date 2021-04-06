@@ -193,7 +193,7 @@ Amiga::_reset(bool hard)
     runLoopCtrl = 0;
 }
 
-long
+i64
 Amiga::getConfigItem(Option option) const
 {
     switch (option) {
@@ -260,7 +260,7 @@ Amiga::getConfigItem(Option option) const
     }
 }
 
-long
+i64
 Amiga::getConfigItem(Option option, long id) const
 {
     switch (option) {
@@ -298,7 +298,7 @@ Amiga::getConfigItem(Option option, long id) const
 }
 
 bool
-Amiga::configure(Option option, long value)
+Amiga::configure(Option option, i64 value)
 {
     // Propagate configuration request to all components
     bool changed = HardwareComponent::configure(option, value);
@@ -313,7 +313,7 @@ Amiga::configure(Option option, long value)
 }
 
 bool
-Amiga::configure(Option option, long id, long value)
+Amiga::configure(Option option, long id, i64 value)
 {
     // Propagate configuration request to all components
     bool changed = HardwareComponent::configure(option, id, value);

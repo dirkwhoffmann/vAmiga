@@ -113,11 +113,11 @@ public:
     const DiskControllerConfig &getConfig() const { return config; }
     bool turboMode() const { return config.speed == -1; }
 
-    long getConfigItem(Option option) const;
-    long getConfigItem(Option option, long id) const;
+    i64 getConfigItem(Option option) const;
+    i64 getConfigItem(Option option, long id) const;
     
-    bool setConfigItem(Option option, long value) override;
-    bool setConfigItem(Option option, long id, long value) override;
+    bool setConfigItem(Option option, i64 value) override;
+    bool setConfigItem(Option option, long id, i64 value) override;
 
     const string &getSearchPath(isize dfn);
     void setSearchPath(const string &path, isize dfn);

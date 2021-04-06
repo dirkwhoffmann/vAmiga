@@ -42,7 +42,7 @@ DiskController::_reset(bool hard)
     }
 }
 
-long
+i64
 DiskController::getConfigItem(Option option) const
 {
     switch (option) {
@@ -57,7 +57,7 @@ DiskController::getConfigItem(Option option) const
     }
 }
 
-long
+i64
 DiskController::getConfigItem(Option option, long id) const
 {
     switch (option) {
@@ -71,7 +71,7 @@ DiskController::getConfigItem(Option option, long id) const
 }
 
 bool
-DiskController::setConfigItem(Option option, long value)
+DiskController::setConfigItem(Option option, i64 value)
 {
     switch (option) {
             
@@ -117,7 +117,7 @@ DiskController::setConfigItem(Option option, long value)
 }
 
 bool
-DiskController::setConfigItem(Option option, long id, long value)
+DiskController::setConfigItem(Option option, long id, i64 value)
 {
     switch (option) {
             

@@ -47,7 +47,7 @@ Drive::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
 }
 
-long
+i64
 Drive::getConfigItem(Option option) const
 {
     switch (option) {
@@ -69,13 +69,13 @@ Drive::getConfigItem(Option option) const
 }
 
 bool
-Drive::setConfigItem(Option option, long value)
+Drive::setConfigItem(Option option, i64 value)
 {
     return setConfigItem(option, nr, value);
 }
 
 bool
-Drive::setConfigItem(Option option, long id, long value)
+Drive::setConfigItem(Option option, long id, i64 value)
 {
     assert(id >= 0 && id <= 3);
 

@@ -65,7 +65,7 @@ Muxer::clear()
     filterR.clear();
 }
 
-long
+i64
 Muxer::getConfigItem(Option option) const
 {
     switch (option) {
@@ -93,7 +93,7 @@ Muxer::getConfigItem(Option option) const
     }
 }
 
-long
+i64
 Muxer::getConfigItem(Option option, long id) const
 {
     switch (option) {
@@ -111,7 +111,7 @@ Muxer::getConfigItem(Option option, long id) const
 }
 
 bool
-Muxer::setConfigItem(Option option, long value)
+Muxer::setConfigItem(Option option, i64 value)
 {
     bool wasMuted = isMuted();
     
@@ -182,7 +182,7 @@ Muxer::setConfigItem(Option option, long value)
 }
 
 bool
-Muxer::setConfigItem(Option option, long id, long value)
+Muxer::setConfigItem(Option option, long id, i64 value)
 {
     switch (option) {
                         
@@ -201,7 +201,7 @@ Muxer::setConfigItem(Option option, long id, long value)
                         
             assert(id >= 0 && id <= 3);
             if (value < 0 || value > 200) {
-                warn(" Invalid pan: %ld\n", value);
+                warn(" Invalid pan: %lld\n", value);
                 warn("Valid values: 0 ... 200\n");
                 return false;
             }

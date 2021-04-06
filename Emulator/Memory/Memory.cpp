@@ -61,7 +61,7 @@ Memory::_reset(bool hard)
     if (hard) fillRamWithInitPattern();
 }
 
-long
+i64
 Memory::getConfigItem(Option option) const
 {
     switch (option) {
@@ -82,7 +82,7 @@ Memory::getConfigItem(Option option) const
 }
 
 bool
-Memory::setConfigItem(Option option, long value)
+Memory::setConfigItem(Option option, i64 value)
 {
     switch (option) {
             

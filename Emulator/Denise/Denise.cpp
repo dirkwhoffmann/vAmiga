@@ -45,7 +45,7 @@ Denise::_reset(bool hard)
     memset(zBuffer, 0, sizeof(zBuffer));
 }
 
-long
+i64
 Denise::getConfigItem(Option option) const
 {
     switch (option) {
@@ -65,7 +65,7 @@ Denise::getConfigItem(Option option) const
 }
 
 bool
-Denise::setConfigItem(Option option, long value)
+Denise::setConfigItem(Option option, i64 value)
 {
     switch (option) {
             

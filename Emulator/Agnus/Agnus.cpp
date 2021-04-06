@@ -72,7 +72,7 @@ void Agnus::_reset(bool hard)
     pokeVPOS(0);
 }
 
-long
+i64
 Agnus::getConfigItem(Option option) const
 {
     switch (option) {
@@ -87,7 +87,7 @@ Agnus::getConfigItem(Option option) const
 }
 
 bool
-Agnus::setConfigItem(Option option, long value)
+Agnus::setConfigItem(Option option, i64 value)
 {
     switch (option) {
             

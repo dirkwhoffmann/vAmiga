@@ -44,7 +44,7 @@ void Mouse::_reset(bool hard)
     targetY = 0;
 }
 
-long
+i64
 Mouse::getConfigItem(Option option) const
 {
     switch (option) {
@@ -60,7 +60,7 @@ Mouse::getConfigItem(Option option) const
 }
 
 bool
-Mouse::setConfigItem(Option option, long id, long value)
+Mouse::setConfigItem(Option option, long id, i64 value)
 {
     if (port.nr != id) return false;
     

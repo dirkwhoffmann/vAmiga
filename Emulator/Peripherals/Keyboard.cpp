@@ -29,7 +29,7 @@ Keyboard::_reset(bool hard)
     execute();
 }
 
-long
+i64
 Keyboard::getConfigItem(Option option) const
 {
     switch (option) {
@@ -43,7 +43,7 @@ Keyboard::getConfigItem(Option option) const
 }
 
 bool
-Keyboard::setConfigItem(Option option, long value)
+Keyboard::setConfigItem(Option option, i64 value)
 {
     switch (option) {
             

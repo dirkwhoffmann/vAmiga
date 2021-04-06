@@ -18,7 +18,7 @@ RTC::RTC(Amiga& ref) : AmigaComponent(ref)
     config.model = RTC_OKI;
 }
 
-long
+i64
 RTC::getConfigItem(Option option) const
 {
     switch (option) {
@@ -32,7 +32,7 @@ RTC::getConfigItem(Option option) const
 }
 
 bool
-RTC::setConfigItem(Option option, long value)
+RTC::setConfigItem(Option option, i64 value)
 {
     switch (option) {
             
