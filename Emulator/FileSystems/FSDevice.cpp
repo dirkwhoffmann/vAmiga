@@ -373,7 +373,7 @@ FSDevice::getPath(FSBlock *block)
 }
 
 FSBlock *
-FSDevice::makeDir(const char *name)
+FSDevice::makeDir(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
     FSUserDirBlock *block = cdb->partition.newUserDirBlock(name);
@@ -386,10 +386,8 @@ FSDevice::makeDir(const char *name)
 }
 
 FSBlock *
-FSDevice::makeFile(const char *name)
+FSDevice::makeFile(const string &name)
 {
-    assert(name != nullptr);
- 
     FSBlock *cdb = currentDirBlock();
     FSFileHeaderBlock *block = cdb->partition.newFileHeaderBlock(name);
     if (block == nullptr) return nullptr;
@@ -401,7 +399,7 @@ FSDevice::makeFile(const char *name)
 }
 
 FSBlock *
-FSDevice::makeFile(const char *name, const u8 *buf, isize size)
+FSDevice::makeFile(const string &name, const u8 *buf, isize size)
 {
     assert(buf);
 
@@ -416,11 +414,9 @@ FSDevice::makeFile(const char *name, const u8 *buf, isize size)
 }
 
 FSBlock *
-FSDevice::makeFile(const char *name, const char *str)
-{
-    assert(str != nullptr);
-    
-    return makeFile(name, (const u8 *)str, strlen(str));
+FSDevice::makeFile(const string &name, const string &str)
+{    
+    return makeFile(name, (const u8 *)str.c_str(), str.size());
 }
 
 Block

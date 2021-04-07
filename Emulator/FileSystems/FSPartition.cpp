@@ -339,7 +339,7 @@ FSPartition::addDataBlock(isize count, Block head, Block prev)
 
 
 FSUserDirBlock *
-FSPartition::newUserDirBlock(const char *name)
+FSPartition::newUserDirBlock(const string &name)
 {
     FSUserDirBlock *block = nullptr;
     
@@ -353,7 +353,7 @@ FSPartition::newUserDirBlock(const char *name)
 }
 
 FSFileHeaderBlock *
-FSPartition::newFileHeaderBlock(const char *name)
+FSPartition::newFileHeaderBlock(const string &name)
 {
     FSFileHeaderBlock *block = nullptr;
     

@@ -23,7 +23,7 @@ FSUserDirBlock::FSUserDirBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
     set32(-1, 2);                        // Sub type
 }
 
-FSUserDirBlock::FSUserDirBlock(FSPartition &p, Block nr, const char *name) :
+FSUserDirBlock::FSUserDirBlock(FSPartition &p, Block nr, const string &name) :
 FSUserDirBlock(p, nr)
 {
     setName(FSName(name));

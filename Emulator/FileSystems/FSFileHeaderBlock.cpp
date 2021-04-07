@@ -25,7 +25,7 @@ FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
     set32(-1, (u32)-3);              // Sub type
 }
 
-FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, Block nr, const char *name) :
+FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, Block nr, const string &name) :
 FSFileHeaderBlock(p, nr)
 {
     setName(FSName(name));

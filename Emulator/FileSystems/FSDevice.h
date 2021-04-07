@@ -228,22 +228,22 @@ public:
 
     // Seeks an item inside the current directory
     Block seekRef(FSName name);
-    Block seekRef(const char *name) { return seekRef(FSName(name)); }
-    FSBlock *seek(const char *name) { return blockPtr(seekRef(name)); }
-    FSBlock *seekDir(const char *name) { return userDirBlockPtr(seekRef(name)); }
-    FSBlock *seekFile(const char *name) { return fileHeaderBlockPtr(seekRef(name)); }
+    Block seekRef(const string &name) { return seekRef(FSName(name)); }
+    FSBlock *seek(const string &name) { return blockPtr(seekRef(name)); }
+    FSBlock *seekDir(const string &name) { return userDirBlockPtr(seekRef(name)); }
+    FSBlock *seekFile(const string &name) { return fileHeaderBlockPtr(seekRef(name)); }
 
     // Adds a reference to the current directory
     void addHashRef(Block nr);
     void addHashRef(FSBlock *block);
     
     // Creates a new directory
-    FSBlock *makeDir(const char *name);
+    FSBlock *makeDir(const string &name);
 
     // Creates a new file
-    FSBlock *makeFile(const char *name);
-    FSBlock *makeFile(const char *name, const u8 *buffer, isize size);
-    FSBlock *makeFile(const char *name, const char *str);
+    FSBlock *makeFile(const string &name);
+    FSBlock *makeFile(const string &name, const u8 *buffer, isize size);
+    FSBlock *makeFile(const string &name, const string &str);
         
     
     //

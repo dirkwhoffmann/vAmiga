@@ -13,6 +13,10 @@
 #include <algorithm>
 #include <cstring>
 
+FSString::FSString(const string &cppString, isize limit) : FSString(cppString.c_str(), limit)
+{
+}
+
 FSString::FSString(const char *str, isize l) : limit(l)
 {
     assert(str != nullptr);

@@ -21,6 +21,7 @@ struct FSString : AmigaObject {
 
     static char capital(char c);
 
+    FSString(const string &cppString, isize limit);
     FSString(const char *cString, isize limit);
     FSString(const u8 *bcplString, isize limit);
 
@@ -34,7 +35,8 @@ struct FSString : AmigaObject {
 
 struct FSName : FSString {
     
-    FSName(const char *cString) : FSString(cString, 30) {rectify(); }
+    FSName(const string &cppString) : FSString(cppString, 30) { rectify(); }
+    FSName(const char *cString) : FSString(cString, 30) { rectify(); }
     FSName(const u8 *bcplString) : FSString(bcplString, 30) { rectify(); }
 
     const char *getDescription() const override { return "FSName"; }
