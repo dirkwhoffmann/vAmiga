@@ -1069,14 +1069,14 @@ extension Keys {
         static let samplingMethod     = "VAMIGA_AUD_SamplingMethod"
         
         // Drive volumes
-        static let df0Pan             = "VAMIGA_PER_DF0Pan"
-        static let df1Pan             = "VAMIGA_PER_DF1Pan"
-        static let df2Pan             = "VAMIGA_PER_DF2Pan"
-        static let df3Pan             = "VAMIGA_PER_DF3Pan"
-        static let stepVolume         = "VAMIGA_PER_StepVolume"
-        static let pollVolume         = "VAMIGA_PER_PollVolume"
-        static let insertVolume       = "VAMIGA_PER_InsertVolume"
-        static let ejectVolume        = "VAMIGA_PER_EjectVolume"
+        static let df0Pan             = "VAMIGA_AUD_DF0Pan"
+        static let df1Pan             = "VAMIGA_AUD_DF1Pan"
+        static let df2Pan             = "VAMIGA_AUD_DF2Pan"
+        static let df3Pan             = "VAMIGA_AUD_DF3Pan"
+        static let stepVolume         = "VAMIGA_AUD_StepVolume"
+        static let pollVolume         = "VAMIGA_AUD_PollVolume"
+        static let insertVolume       = "VAMIGA_AUD_InsertVolume"
+        static let ejectVolume        = "VAMIGA_AUD_EjectVolume"
     }
 }
 

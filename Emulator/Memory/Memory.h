@@ -366,6 +366,7 @@ public:
     
     // Installs a Boot Rom or Kickstart Rom
     void loadRom(class RomFile *rom) throws;
+    void loadRom(class RomFile *rom, ErrorCode *ec);
     void loadRomFromFile(const char *path) throws;
     void loadRomFromFile(const char *path, ErrorCode *ec);
     void loadRomFromBuffer(const u8 *buf, isize len) throws;
@@ -376,13 +377,7 @@ public:
     void loadExtFromFile(const char *path, ErrorCode *ec);
     void loadExtFromBuffer(const u8 *buf, isize len) throws;
     void loadExtFromBuffer(const u8 *buf, isize len, ErrorCode *ec);
-    
-private:
-
-     // Loads Rom data from a file
-    // DEPRECATED: USE AnyAmigaFile::flash(...) instead
-    void loadRom(class AmigaFile *rom, u8 *target, isize length);
-    
+        
 public:
     
     // Saves a Rom to disk

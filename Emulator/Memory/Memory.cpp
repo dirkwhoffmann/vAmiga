@@ -567,13 +567,21 @@ Memory::loadRom(RomFile *file)
     if (!allocRom((i32)file->size)) throw VAError(ERROR_OUT_OF_MEMORY);
     
     // Load Rom
-    loadRom(file, rom, config.romSize);
+    assert(config.romSize == file->size);
+    file->flash(rom);
 
     // Add a Wom if a Boot Rom is installed instead of a Kickstart Rom
     hasBootRom() ? (void)allocWom(KB(256)) : deleteWom();
 
     // Remove extended Rom (if any)
     deleteExt();
+}
+
+void
+Memory::loadRom(RomFile *file, ErrorCode *ec)
+{
+    try { loadRom(file); *ec = ERROR_OK; }
+    catch (VAError &err) { *ec = err.data; }
 }
 
 void
@@ -588,8 +596,7 @@ Memory::loadRomFromFile(const char *path)
 void
 Memory::loadRomFromFile(const char *path, ErrorCode *ec)
 {
-    *ec = ERROR_OK;
-    try { loadRomFromFile(path); }
+    try { loadRomFromFile(path); *ec = ERROR_OK; }
     catch (VAError &err) { *ec = err.data; }
 }
 
@@ -605,8 +612,7 @@ Memory::loadRomFromBuffer(const u8 *buf, isize len)
 void
 Memory::loadRomFromBuffer(const u8 *buf, isize len, ErrorCode *ec)
 {
-    *ec = ERROR_OK;
-    try { loadRomFromBuffer(buf, len); }
+    try { loadRomFromBuffer(buf, len); *ec = ERROR_OK; }
     catch (VAError &err) { *ec = err.data; }
 }
 
@@ -619,7 +625,8 @@ Memory::loadExt(ExtendedRomFile *file)
     if (!allocExt((i32)file->size)) throw VAError(ERROR_OUT_OF_MEMORY);
     
     // Load Rom
-    loadRom(file, ext, config.extSize);
+    assert(config.extSize == file->size);
+    file->flash(ext);
 }
 
 void
@@ -656,22 +663,6 @@ Memory::loadExtFromBuffer(const u8 *buf, isize len, ErrorCode *ec)
     catch (VAError &exception) { *ec = exception.data; }
 }
  
-void
-Memory::loadRom(AmigaFile *file, u8 *target, isize length)
-{
-    if (file) {
-
-        assert(target != nullptr);
-        memset(target, 0, length);
-
-        if (file->size < length) {
-            warn("ROM is smaller than buffer\n");
-        }
-        
-        memcpy(target, file->data, std::min(file->size, length));
-    }
-}
-
 void
 Memory::saveRom(const char *path)
 {
