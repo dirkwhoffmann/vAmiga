@@ -35,7 +35,7 @@ public:
     
     // Constructors
     BootBlockImage(const u8 *buffer);
-    BootBlockImage(const char *name);
+    BootBlockImage(const string &name);
     BootBlockImage(BootBlockId id);
     
     // Exports the image
