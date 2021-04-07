@@ -369,15 +369,15 @@ public:
     void loadRom(class RomFile *rom, ErrorCode *ec);
     void loadRom(const string &path) throws;
     void loadRom(const string &path, ErrorCode *ec);
-    void loadRomFromBuffer(const u8 *buf, isize len) throws;
-    void loadRomFromBuffer(const u8 *buf, isize len, ErrorCode *ec);
+    void loadRom(const u8 *buf, isize len) throws;
+    void loadRom(const u8 *buf, isize len, ErrorCode *ec);
     
     void loadExt(class ExtendedRomFile *rom) throws;
     void loadExt(class ExtendedRomFile *rom, ErrorCode *ec);
     void loadExt(const string &path) throws;
     void loadExt(const string &path, ErrorCode *ec);
-    void loadExtFromBuffer(const u8 *buf, isize len) throws;
-    void loadExtFromBuffer(const u8 *buf, isize len, ErrorCode *ec);
+    void loadExt(const u8 *buf, isize len) throws;
+    void loadExt(const u8 *buf, isize len, ErrorCode *ec);
         
 public:
     
@@ -398,7 +398,6 @@ public:
         
     // Returns the memory source for a given address
     template <Accessor A> MemorySource getMemSrc(u32 addr);
-    // MemorySource getMemSource(Accessor accessor, u32 addr);
     
     // Updates both memory source lookup tables
     void updateMemSrcTables();
@@ -449,9 +448,6 @@ public:
     u8 peekRTC8(u32 addr) const;
     u16 peekRTC16(u32 addr) const;
     
-    // u8 spypeekRTC8(u32 addr) { return peekRTC8(addr); }
-    // u16 spypeekRTC16(u32 addr) { return peekRTC16(addr); }
-
     void pokeRTC8(u32 addr, u8 value);
     void pokeRTC16(u32 addr, u16 value);
 

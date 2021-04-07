@@ -600,7 +600,7 @@ Memory::loadRom(const string &path, ErrorCode *ec)
 }
 
 void
-Memory::loadRomFromBuffer(const u8 *buf, isize len)
+Memory::loadRom(const u8 *buf, isize len)
 {
     RomFile *file = AmigaFile::make <RomFile> (buf, len);
     loadRom(file);
@@ -608,9 +608,9 @@ Memory::loadRomFromBuffer(const u8 *buf, isize len)
 }
 
 void
-Memory::loadRomFromBuffer(const u8 *buf, isize len, ErrorCode *ec)
+Memory::loadRom(const u8 *buf, isize len, ErrorCode *ec)
 {
-    try { *ec = ERROR_OK; loadRomFromBuffer(buf, len); }
+    try { *ec = ERROR_OK; loadRom(buf, len); }
     catch (VAError &err) { *ec = err.data; }
 }
 
@@ -650,17 +650,17 @@ Memory::loadExt(const string &path, ErrorCode *ec)
 }
 
 void
-Memory::loadExtFromBuffer(const u8 *buf, isize len)
+Memory::loadExt(const u8 *buf, isize len)
 {    
     ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (buf, len);
     loadExt(file);
 }
 
 void
-Memory::loadExtFromBuffer(const u8 *buf, isize len, ErrorCode *ec)
+Memory::loadExt(const u8 *buf, isize len, ErrorCode *ec)
 {
     *ec = ERROR_OK;
-    try { loadExtFromBuffer(buf, len); }
+    try { loadExt(buf, len); }
     catch (VAError &exception) { *ec = exception.data; }
 }
  

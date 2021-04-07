@@ -347,7 +347,7 @@ using namespace moira;
     if (data == nullptr) return NO;
     const u8 *bytes = (const u8 *)[data bytes];
     
-    [self mem]->loadRomFromBuffer(bytes, [data length], &ec);
+    [self mem]->loadRom(bytes, [data length], &ec);
     return ec == ERROR_OK;
 }
 
@@ -411,7 +411,7 @@ using namespace moira;
     if (data == nullptr) return NO;
     const u8 *bytes = (const u8 *)[data bytes];
     
-    [self mem]->loadExtFromBuffer(bytes, [data length], &ec);
+    [self mem]->loadExt(bytes, [data length], &ec);
     return ec == ERROR_OK;
 }
 
