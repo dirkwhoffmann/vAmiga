@@ -17,7 +17,7 @@ public:
 
     ADFFile *adf = nullptr;
     
-    static bool isFolder(const char *path);
+    static bool isFolder(const string &path);
     
     
     //

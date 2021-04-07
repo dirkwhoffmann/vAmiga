@@ -128,10 +128,9 @@ FSFileHeaderBlock::dump() const
 }
 
 ErrorCode
-FSFileHeaderBlock::exportBlock(const char *exportDir)
+FSFileHeaderBlock::exportBlock(const string &dir)
 {
-    string path = exportDir;
-    path += "/" + partition.dev.getPath(this);
+    string path = dir + "/" + partition.dev.getPath(this);
 
     printf("Creating file %s\n", path.c_str());
     

@@ -32,7 +32,7 @@ public:
     static bool isCompatibleStream(std::istream &stream);
     
     static bool isRomBuffer(const u8 *buf, isize len);
-    static bool isRomFile(const char *path);
+    static bool isRomFile(const string &path);
     
     // Translates a CRC-32 checksum into a ROM identifier
     static RomIdentifier identifier(u32 fingerprint);

@@ -105,7 +105,7 @@ FSDevice::makeWithHDF(HDFFile *hdf, ErrorCode *error)
 }
 
 FSDevice *
-FSDevice::make(DiskDiameter type, DiskDensity density, const char *path)
+FSDevice::make(DiskDiameter type, DiskDensity density, const string &path)
 {
     FSDevice *device = makeWithFormat(type, density);
     
@@ -125,7 +125,7 @@ FSDevice::make(DiskDiameter type, DiskDensity density, const char *path)
 }
 
 FSDevice *
-FSDevice::make(FSVolumeType type, const char *path)
+FSDevice::make(FSVolumeType type, const string &path)
 {
     // Try to fit the directory into files system with DD disk capacity
     if (FSDevice *device = make(INCH_35, DISK_DD, path)) return device;
@@ -887,23 +887,21 @@ FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *
 }
 
 bool
-FSDevice::importDirectory(const char *path, bool recursive)
+FSDevice::importDirectory(const string &path, bool recursive)
 {
-    assert(path);
-    
-    if (DIR *dir = opendir(path)) {
+    if (DIR *dir = opendir(path.c_str())) {
         
         bool result = importDirectory(path, dir, recursive);
         closedir(dir);
         return result;
     }
 
-    warn("Error opening directory %s\n", path);
+    warn("Error opening directory %s\n", path.c_str());
     return false;
 }
 
 bool
-FSDevice::importDirectory(const char *path, DIR *dir, bool recursive)
+FSDevice::importDirectory(const string &path, DIR *dir, bool recursive)
 {
     assert(dir);
     
@@ -916,12 +914,15 @@ FSDevice::importDirectory(const char *path, DIR *dir, bool recursive)
         if (item->d_name[0] == '.') continue;
 
         // Assemble file name
+        /*
         char *name = new char [strlen(path) + strlen(item->d_name) + 2];
         strcpy(name, path);
         strcat(name, "/");
         strcat(name, item->d_name);
-
-        msg("importDirectory: Processing %s\n", name);
+        */
+        string name = path + "/" + string(item->d_name);
+        
+        msg("importDirectory: Processing %s\n", name.c_str());
         
         if (item->d_type == DT_DIR) {
             
@@ -938,13 +939,10 @@ FSDevice::importDirectory(const char *path, DIR *dir, bool recursive)
             u8 *buffer; isize size;
             if (util::loadFile(string(name), &buffer, &size)) {
                 FSBlock *file = makeFile(item->d_name, buffer, size);
-                // result &= file ? (file->append(buffer, size)) : false;
                 result &= file != nullptr;
                 delete(buffer);
             }
-        }
-        
-        delete [] name;
+        }        
     }
 
     return result;

@@ -36,7 +36,7 @@ ExtendedRomFile::isCompatibleStream(std::istream &stream)
 }
 
 bool
-ExtendedRomFile::isExtendedRomFile(const char *path)
+ExtendedRomFile::isExtendedRomFile(const string &path)
 {
     std::ifstream stream(path);
     return stream.is_open() ? isCompatibleStream(stream) : false;

@@ -107,10 +107,9 @@ FSUserDirBlock::dump() const
 }
 
 ErrorCode
-FSUserDirBlock::exportBlock(const char *exportDir)
+FSUserDirBlock::exportBlock(const string &dir)
 {
-    string path = exportDir;
-    path += "/" + partition.dev.getPath(this);
+    string path = dir + "/" + partition.dev.getPath(this);
 
     printf("Creating directory %s\n", path.c_str());
     

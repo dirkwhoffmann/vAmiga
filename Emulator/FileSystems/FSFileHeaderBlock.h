@@ -29,7 +29,7 @@ struct FSFileHeaderBlock : FSBlock {
     void dump() const override;
     isize checksumLocation() const override { return 5; }
 
-    ErrorCode exportBlock(const char *path) override;
+    ErrorCode exportBlock(const string &path) override;
 
     isize getNumDataBlockRefs() const override    { return get32(2);           }
     void setNumDataBlockRefs(u32 val) override    {        set32(2, val);      }

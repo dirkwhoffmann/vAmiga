@@ -91,8 +91,8 @@ public:
     static FSDevice *makeWithHDF(class HDFFile *hdf, ErrorCode *error);
     
     // Creates a file system with the contents of a host file system directory
-    static FSDevice *make(DiskDiameter type, DiskDensity density, const char *path);
-    static FSDevice *make(FSVolumeType type, const char *path);
+    static FSDevice *make(DiskDiameter type, DiskDensity density, const string &path);
+    static FSDevice *make(FSVolumeType type, const string &path);
     
     
     //
@@ -332,8 +332,8 @@ public:
     bool importVolume(const u8 *src, isize size, ErrorCode *error);
 
     // Imports a directory from the host file system
-    bool importDirectory(const char *path, bool recursive = true);
-    bool importDirectory(const char *path, DIR *dir, bool recursive = true);
+    bool importDirectory(const string &path, bool recursive = true);
+    bool importDirectory(const string &path, DIR *dir, bool recursive = true);
 
     // Exports the volume to a buffer compatible with the ADF format
     bool exportVolume(u8 *dst, isize size);

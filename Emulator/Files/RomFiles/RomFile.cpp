@@ -359,7 +359,7 @@ RomFile::isRomBuffer(const u8 *buf, isize len)
 }
 
 bool
-RomFile::isRomFile(const char *path)
+RomFile::isRomFile(const string &path)
 {
     std::ifstream stream(path);
     return stream.is_open() ? isCompatibleStream(stream) : false;

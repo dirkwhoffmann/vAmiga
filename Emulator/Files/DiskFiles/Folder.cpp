@@ -12,12 +12,12 @@
 #include "FSDevice.h"
 
 bool
-Folder::isFolder(const char *path)
+Folder::isFolder(const string &path)
 {
     DIR *dir;
     
     // We accept all directories
-    if ((dir = opendir(path)) == nullptr) return false;
+    if ((dir = opendir(path.c_str())) == nullptr) return false;
     
     closedir(dir);
     return true;

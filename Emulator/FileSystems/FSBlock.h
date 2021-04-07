@@ -121,7 +121,7 @@ public:
     virtual void exportBlock(u8 *dst, isize bsize);
     
     // Exports this block to the host file system
-    virtual ErrorCode exportBlock(const char *path) { return ERROR_OK; }
+    virtual ErrorCode exportBlock(const string &path) { return ERROR_OK; }
         
                 
     //
