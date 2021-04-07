@@ -110,14 +110,13 @@ public:
 
     template <class T> static T *make(const string &path, std::istream &stream, ErrorCode *err)
     {
-        *err = ERROR_OK;
-        try { return make <T> (path, stream); }
-        catch (VAError &exception) { *err = exception.data; }
-        return nullptr;
+        try { *err = ERROR_OK; return make <T> (path, stream); }
+        catch (VAError &exception) { *err = exception.data; return nullptr; }
     }
     
     template <class T> static T *make(const u8 *buf, isize len) throws
     {
+        assert(buf);
         std::stringstream stream;
         stream.write((const char *)buf, len);
         return make <T> ("", stream);
@@ -125,31 +124,28 @@ public:
     
     template <class T> static T *make(const u8 *buf, isize len, ErrorCode *err)
     {
-        *err = ERROR_OK;
-        try { return make <T> (buf, len); }
-        catch (VAError &exception) { *err = exception.data; }
-        return nullptr;
+        try { *err = ERROR_OK; return make <T> (buf, len); }
+        catch (VAError &exception) { *err = exception.data; return nullptr; }
     }
     
-    template <class T> static T *make(const char *path) throws
+    template <class T> static T *make(const string &path) throws
     {
         std::ifstream stream(path);
         if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND);
 
-        T *file = make <T> (string(path), stream);
+        T *file = make <T> (path, stream);
         return file;
     }
 
-    template <class T> static T *make(const char *path, ErrorCode *err)
+    template <class T> static T *make(const string &path, ErrorCode *err)
     {
-        *err = ERROR_OK;
-        try { return make <T> (path); }
-        catch (VAError &exception) { *err = exception.data; }
-        return nullptr;
+        try { *err = ERROR_OK; return make <T> (path); }
+        catch (VAError &exception) { *err = exception.data; return nullptr; }
     }
 
     template <class T> static T *make(FILE *file) throws
     {
+        assert(file);
         std::stringstream stream;
         int c; while ((c = fgetc(file)) != EOF) { stream.put(c); }
         return make <T> ("", stream);
@@ -157,10 +153,8 @@ public:
     
     template <class T> static T *make(FILE *file, ErrorCode *err)
     {
-        *err = ERROR_OK;
-        try { return make <T> (file); }
-        catch (VAError &exception) { *err = exception.data; }
-        return nullptr;
+        try { *err = ERROR_OK; return make <T> (file); }
+        catch (VAError &exception) { *err = exception.data; return nullptr; }
     }
     
     

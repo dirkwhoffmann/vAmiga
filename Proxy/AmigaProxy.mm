@@ -353,7 +353,7 @@ using namespace moira;
 
 - (void)loadRomFromFile:(NSURL *)url error:(ErrorCode *)ec
 {
-    [self mem]->loadRomFromFile([url fileSystemRepresentation], ec);
+    [self mem]->loadRom([url fileSystemRepresentation], ec);
 }
 
 - (u64)romFingerprint
@@ -417,7 +417,7 @@ using namespace moira;
 
 - (void)loadExtFromFile:(NSURL *)url error:(ErrorCode *)ec
 {
-    [self mem]->loadExtFromFile([url fileSystemRepresentation], ec);
+    [self mem]->loadExt([url fileSystemRepresentation], ec);
 }
 
 - (u64)extFingerprint

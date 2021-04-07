@@ -113,7 +113,7 @@ RetroShell::exec <Token::memory, Token::load, Token::rom> (Arguments& argv, long
     auto path = argv.front();
     if (!util::fileExists(path)) throw ConfigFileNotFoundError(path);
 
-    amiga.mem.loadRomFromFile(path.c_str());
+    amiga.mem.loadRom(path.c_str());
 }
 
 template <> void
@@ -122,7 +122,7 @@ RetroShell::exec <Token::memory, Token::load, Token::extrom> (Arguments& argv, l
     auto path = argv.front();
     if (!util::fileExists(path)) throw ConfigFileNotFoundError(path);
 
-    amiga.mem.loadExtFromFile(path.c_str());
+    amiga.mem.loadExt(path.c_str());
 }
 
 template <> void

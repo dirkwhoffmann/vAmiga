@@ -585,34 +585,32 @@ Memory::loadRom(RomFile *file, ErrorCode *ec)
 }
 
 void
-Memory::loadRomFromFile(const char *path)
+Memory::loadRom(const string &path)
 {
-    assert(path);
-    
     RomFile *file = AmigaFile::make <RomFile> (path);
     loadRom(file);
+    delete(file);
 }
 
 void
-Memory::loadRomFromFile(const char *path, ErrorCode *ec)
+Memory::loadRom(const string &path, ErrorCode *ec)
 {
-    try { loadRomFromFile(path); *ec = ERROR_OK; }
+    try { loadRom(path); *ec = ERROR_OK; }
     catch (VAError &err) { *ec = err.data; }
 }
 
 void
 Memory::loadRomFromBuffer(const u8 *buf, isize len)
 {
-    assert(buf);
-    
     RomFile *file = AmigaFile::make <RomFile> (buf, len);
     loadRom(file);
+    delete(file);
 }
 
 void
 Memory::loadRomFromBuffer(const u8 *buf, isize len, ErrorCode *ec)
 {
-    try { loadRomFromBuffer(buf, len); *ec = ERROR_OK; }
+    try { *ec = ERROR_OK; loadRomFromBuffer(buf, len); }
     catch (VAError &err) { *ec = err.data; }
 }
 
@@ -630,27 +628,30 @@ Memory::loadExt(ExtendedRomFile *file)
 }
 
 void
-Memory::loadExtFromFile(const char *path)
+Memory::loadExt(ExtendedRomFile *file, ErrorCode *ec)
 {
-    assert(path);
-    
-    ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (path);
-    loadExt(file);
+    try { *ec = ERROR_OK; loadExt(file); }
+    catch (VAError &err) { *ec = err.data; }
 }
 
 void
-Memory::loadExtFromFile(const char *path, ErrorCode *ec)
+Memory::loadExt(const string &path)
 {
-    *ec = ERROR_OK;
-    try { loadExtFromFile(path); }
+    ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (path);
+    loadExt(file);
+    delete file;
+}
+
+void
+Memory::loadExt(const string &path, ErrorCode *ec)
+{
+    try { *ec = ERROR_OK; loadExt(path); }
     catch (VAError &exception) { *ec = exception.data; }
 }
 
 void
 Memory::loadExtFromBuffer(const u8 *buf, isize len)
-{
-    assert(buf);
-    
+{    
     ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (buf, len);
     loadExt(file);
 }
