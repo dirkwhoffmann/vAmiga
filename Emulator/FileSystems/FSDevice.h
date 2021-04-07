@@ -216,7 +216,7 @@ public:
     FSBlock *currentDirBlock();
     
     // Changes the current directory
-    FSBlock *changeDir(const char *name);
+    FSBlock *changeDir(const string &name);
 
     // Prints a directory listing
     void printDirectory(bool recursive);

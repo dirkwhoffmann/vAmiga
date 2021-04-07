@@ -316,20 +316,18 @@ FSDevice::currentDirBlock()
 }
 
 FSBlock *
-FSDevice::changeDir(const char *name)
+FSDevice::changeDir(const string &name)
 {
-    assert(name != nullptr);
-
     FSBlock *cdb = currentDirBlock();
 
-    if (strcmp(name, "/") == 0) {
+    if (name == "/") {
                 
         // Move to top level
         cd = partitions[cp]->rootBlock;
         return currentDirBlock();
     }
 
-    if (strcmp(name, "..") == 0) {
+    if (name == "..") {
                 
         // Move one level up
         cd = cdb->getParentDirRef();
@@ -415,7 +413,7 @@ FSDevice::makeFile(const string &name, const u8 *buf, isize size)
 
 FSBlock *
 FSDevice::makeFile(const string &name, const string &str)
-{    
+{
     return makeFile(name, (const u8 *)str.c_str(), str.size());
 }
 
