@@ -19,15 +19,15 @@ class ScreenRecorder : public AmigaComponent {
     //
     
     // Path to the FFmpeg executable
-    static const char *ffmpegPath() { return "/usr/local/bin/ffmpeg"; }
+    static string ffmpegPath() { return "/usr/local/bin/ffmpeg"; }
 
     // Path to the two named input pipes
-    static const char *videoPipePath() { return "/tmp/videoPipe"; }
-    static const char *audioPipePath() { return "/tmp/audioPipe"; }
+    static string videoPipePath() { return "/tmp/videoPipe"; }
+    static string audioPipePath() { return "/tmp/audioPipe"; }
 
     // Path to the two temporary output files
-    static const char *videoStreamPath() { return "/tmp/video.mp4"; }
-    static const char *audioStreamPath() { return "/tmp/audio.mp4"; }
+    static string videoStreamPath() { return "/tmp/video.mp4"; }
+    static string audioStreamPath() { return "/tmp/audio.mp4"; }
 
     // Audio sample frequency in the output stream
     static const int frameRate = 50;
@@ -35,7 +35,7 @@ class ScreenRecorder : public AmigaComponent {
     static const int samplesPerFrame = sampleRate / frameRate;
 
     // Log level passed to FFmpef
-    static const char *loglevel() { return REC_DEBUG ? "verbose" : "warning"; }
+    static const string loglevel() { return REC_DEBUG ? "verbose" : "warning"; }
     
     
     //
@@ -170,7 +170,7 @@ public:
     void stopRecording();
 
     // Exports the recorded video
-    bool exportAs(const char *path);
+    bool exportAs(const string &path);
     
     
     //

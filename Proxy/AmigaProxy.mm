@@ -836,7 +836,7 @@ using namespace moira;
 
 - (BOOL)exportAs:(NSString *)path
 {
-    return [self recorder]->exportAs([path fileSystemRepresentation]);
+    return [self recorder]->exportAs(string([path fileSystemRepresentation]));
 }
 
 @end

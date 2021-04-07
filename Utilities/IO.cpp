@@ -160,15 +160,9 @@ std::vector<string> files(const string &path, std::vector <string> &suffixes)
 isize
 getSizeOfFile(const string &path)
 {
-    return getSizeOfFile(path.c_str());
-}
-
-isize
-getSizeOfFile(const char *path)
-{
     struct stat fileProperties;
         
-    if (stat(path, &fileProperties) != 0)
+    if (stat(path.c_str(), &fileProperties) != 0)
         return -1;
     
     return (isize)fileProperties.st_size;

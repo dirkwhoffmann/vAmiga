@@ -54,10 +54,10 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
     // Create pipes
     debug(REC_DEBUG, "Creating pipes...\n");
 
-    unlink(videoPipePath());
-    unlink(audioPipePath());
-    if (mkfifo(videoPipePath(), 0666) == -1) return false;
-    if (mkfifo(audioPipePath(), 0666) == -1) return false;
+    unlink(videoPipePath().c_str());
+    unlink(audioPipePath().c_str());
+    if (mkfifo(videoPipePath().c_str(), 0666) == -1) return false;
+    if (mkfifo(audioPipePath().c_str(), 0666) == -1) return false;
         
     debug(REC_DEBUG, "Pipes created\n");
     dump();
@@ -76,69 +76,84 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         //
         // Assemble the command line arguments for the video encoder
         //
-        
-        char cmd1[512]; char *ptr = cmd1;
-        
+                
         // Path to the FFmpeg executable
-        ptr += sprintf(ptr, "%s -nostdin", ffmpegPath());
+        // ptr += sprintf(ptr, "%s -nostdin", ffmpegPath());
+        string cmd1 = ffmpegPath() + " -nostdin";
         
         // Verbosity
-        ptr += sprintf(ptr, " -loglevel %s", loglevel());
-        
+        // ptr += sprintf(ptr, " -loglevel %s", loglevel());
+        cmd1 += " -loglevel " + loglevel();
+
         // Input stream format
-        ptr += sprintf(ptr, " -f:v rawvideo -pixel_format rgba");
-        
+        // ptr += sprintf(ptr, " -f:v rawvideo -pixel_format rgba");
+        cmd1 += " -f:v rawvideo -pixel_format rgba";
+
         // Frame rate
-        ptr += sprintf(ptr, " -r %d", frameRate);
-        
+        // ptr += sprintf(ptr, " -r %d", frameRate);
+        cmd1 += " -r " + std::to_string(frameRate);
+
         // Frame size (width x height)
-        ptr += sprintf(ptr, " -s:v %dx%d", x2 - x1, y2 - y1);
-        
+        // ptr += sprintf(ptr, " -s:v %dx%d", x2 - x1, y2 - y1);
+        cmd1 += " -s:v " + std::to_string(x2 - x1) + "x" + std::to_string(y2 - y1);
+
         // Input source (named pipe)
-        ptr += sprintf(ptr, " -i %s", videoPipePath());
-        
+        // ptr += sprintf(ptr, " -i %s", videoPipePath());
+        cmd1 += " -i " + videoPipePath();
+
         // Output stream format
-        ptr += sprintf(ptr, " -f mp4 -pix_fmt yuv420p");
-        
+        // ptr += sprintf(ptr, " -f mp4 -pix_fmt yuv420p");
+        cmd1 += " -f mp4 -pix_fmt yuv420p";
+
         // Bit rate
-        ptr += sprintf(ptr, " -b:v %ldk", bitRate);
-        
+        // ptr += sprintf(ptr, " -b:v %ldk", bitRate);
+        cmd1 += " -b:v " + std::to_string(bitRate) + "k";
+
         // Aspect ratio
-        ptr += sprintf(ptr, " -bsf:v ");
-        ptr += sprintf(ptr, "\"h264_metadata=sample_aspect_ratio=");
-        ptr += sprintf(ptr, "%ld/%ld\"", aspectX, 2*aspectY);
-        
+        // ptr += sprintf(ptr, " -bsf:v ");
+        // ptr += sprintf(ptr, "\"h264_metadata=sample_aspect_ratio=");
+        // ptr += sprintf(ptr, "%ld/%ld\"", aspectX, 2*aspectY);
+        cmd1 += " -bsf:v ";
+        cmd1 += "\"h264_metadata=sample_aspect_ratio=";
+        cmd1 += std::to_string(aspectX) + "/" + std::to_string(2*aspectY) + "\"";
+
         // Output file
-        ptr += sprintf(ptr, " -y %s", videoStreamPath());
-        
+        // ptr += sprintf(ptr, " -y %s", videoStreamPath());
+        cmd1 += " -y " + videoStreamPath();
+
         
         //
         // Assemble the command line arguments for the audio encoder
         //
-        
-        char cmd2[512]; ptr = cmd2;
-        
+                
         // Path to the FFmpeg executable
-        ptr += sprintf(ptr, "%s -nostdin", ffmpegPath());
-        
+        // ptr += sprintf(ptr, "%s -nostdin", ffmpegPath());
+        string cmd2 = ffmpegPath() + " -nostdin";
+
         // Verbosity
-        ptr += sprintf(ptr, " -loglevel %s", loglevel());
-        
+        // ptr += sprintf(ptr, " -loglevel %s", loglevel());
+        cmd2 += " -loglevel " + loglevel();
+
         // Audio format and number of channels
-        ptr += sprintf(ptr, " -f:a f32le -ac 2");
-        
+        // ptr += sprintf(ptr, " -f:a f32le -ac 2");
+        cmd2 += " -f:a f32le -ac 2";
+
         // Sampling rate
-        ptr += sprintf(ptr, " -sample_rate %d", sampleRate);
-        
+        // ptr += sprintf(ptr, " -sample_rate %d", sampleRate);
+        cmd2 += " -sample_rate " + std::to_string(sampleRate);
+
         // Input source (named pipe)
-        ptr += sprintf(ptr, " -i %s", audioPipePath());
-        
+        // ptr += sprintf(ptr, " -i %s", audioPipePath());
+        cmd2 += " -i " + audioPipePath();
+
         // Output stream format
-        ptr += sprintf(ptr, " -f mp4");
-        
+        // ptr += sprintf(ptr, " -f mp4");
+        cmd2 += " -f mp4";
+
         // Output file
-        ptr += sprintf(ptr, " -y %s", audioStreamPath());
-        
+        // ptr += sprintf(ptr, " -y %s", audioStreamPath());
+        cmd2 += " -y " + audioStreamPath();
+
         //
         // Launch FFmpeg instances
         //
@@ -146,17 +161,17 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         assert(videoFFmpeg == nullptr);
         assert(audioFFmpeg == nullptr);
         
-        msg("\nStarting video encoder with options:\n%s\n", cmd1);
-        videoFFmpeg = popen(cmd1, "w");
+        msg("\nStarting video encoder with options:\n%s\n", cmd1.c_str());
+        videoFFmpeg = popen(cmd1.c_str(), "w");
         msg(videoFFmpeg ? "Success\n" : "Failed to launch\n");
         
-        msg("\nStarting audio encoder with options:\n%s\n", cmd2);
-        audioFFmpeg = popen(cmd2, "w");
+        msg("\nStarting audio encoder with options:\n%s\n", cmd2.c_str());
+        audioFFmpeg = popen(cmd2.c_str(), "w");
         msg(audioFFmpeg ? "Success\n" : "Failed to launch\n");
         
         // Open pipes
-        videoPipe = open(videoPipePath(), O_WRONLY);
-        audioPipe = open(audioPipePath(), O_WRONLY);
+        videoPipe = open(videoPipePath().c_str(), O_WRONLY);
+        audioPipe = open(audioPipePath().c_str(), O_WRONLY);
         debug(REC_DEBUG, "Pipes are open");
         
         recording = videoFFmpeg && audioFFmpeg && videoPipe != -1 && audioPipe != -1;
@@ -200,7 +215,7 @@ ScreenRecorder::stopRecording()
 }
 
 bool
-ScreenRecorder::exportAs(const char *path)
+ScreenRecorder::exportAs(const string &path)
 {
     if (isRecording()) return false;
     
@@ -208,29 +223,36 @@ ScreenRecorder::exportAs(const char *path)
     // Assemble the command line arguments for the video encoder
     //
     
-    char cmd[512]; char *ptr = cmd;
+    // char cmd[512]; char *ptr = cmd;
+    string cmd;
     
     // Path to the FFmpeg executable
-    ptr += sprintf(ptr, "%s", ffmpegPath());
-    
+    // ptr += sprintf(ptr, "%s", ffmpegPath());
+    cmd += ffmpegPath();
+
     // Verbosity
-    ptr += sprintf(ptr, " -loglevel %s", loglevel());
+    // ptr += sprintf(ptr, " -loglevel %s", loglevel());
+    cmd += " -loglevel " + loglevel();
 
     // Input streams
-    ptr += sprintf(ptr, " -i %s", videoStreamPath());
-    ptr += sprintf(ptr, " -i %s", audioStreamPath());
+    // ptr += sprintf(ptr, " -i %s", videoStreamPath());
+    // ptr += sprintf(ptr, " -i %s", audioStreamPath());
+    cmd += " -i " + videoStreamPath();
+    cmd += " -i " + audioStreamPath();
 
     // Don't reencode
-    ptr += sprintf(ptr, " -c:v copy -c:a copy");
-    
+    // ptr += sprintf(ptr, " -c:v copy -c:a copy");
+    cmd += " -c:v copy -c:a copy";
+
     // Output file
-    ptr += sprintf(ptr, " -y %s", path);
-    
+    // ptr += sprintf(ptr, " -y %s", path);
+    cmd += " -y " + path;
+
     //
     // Launch FFmpeg
     //
     
-    msg("\nMerging video and audio stream with options:\n%s\n", cmd);
+    msg("\nMerging video and audio stream with options:\n%s\n", cmd.c_str());
     /*
     FILE *ffmpeg = popen(cmd, "w");
 
@@ -242,8 +264,8 @@ ScreenRecorder::exportAs(const char *path)
     // Wait for FFmpeg to finish
     fclose(ffmpeg);
     */
-    if (system(cmd) == -1) {
-        warn("Failed: %s\n", cmd);
+    if (system(cmd.c_str()) == -1) {
+        warn("Failed: %s\n", cmd.c_str());
     }
     
     msg("Done\n");

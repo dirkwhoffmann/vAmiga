@@ -46,7 +46,6 @@ string appendPath(const string &path, const string &path2);
 
 // Returns the size of a file in bytes
 isize getSizeOfFile(const string &path);
-isize getSizeOfFile(const char *path);
 
 // Checks if a file exists
 bool fileExists(const string &path);
