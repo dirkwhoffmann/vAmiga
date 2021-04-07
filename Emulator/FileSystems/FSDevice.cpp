@@ -951,10 +951,8 @@ FSDevice::importDirectory(const char *path, DIR *dir, bool recursive)
 }
 
 ErrorCode
-FSDevice::exportDirectory(const char *path)
+FSDevice::exportDirectory(const string &path)
 {
-    assert(path != nullptr);
-        
     // Only proceed if path points to an empty directory
     long numItems = util::numDirectoryItems(path);
     if (numItems != 0) return ERROR_FS_DIRECTORY_NOT_EMPTY;
@@ -965,7 +963,7 @@ FSDevice::exportDirectory(const char *path)
     
     // Export all items
     for (auto const& i : items) {
-        if (ErrorCode error = blockPtr(i)->exportBlock(path); error != ERROR_OK) {
+        if (ErrorCode error = blockPtr(i)->exportBlock(path.c_str()); error != ERROR_OK) {
             msg("Export error: %lld\n", error);
             return error; 
         }

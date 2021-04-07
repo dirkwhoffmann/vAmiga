@@ -346,5 +346,5 @@ public:
     bool exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *error);
 
     // Exports the volume to a directory of the host file system
-    ErrorCode exportDirectory(const char *path);
+    ErrorCode exportDirectory(const string &path);
 };

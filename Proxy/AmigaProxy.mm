@@ -1384,7 +1384,7 @@ using namespace moira;
 
 - (ErrorCode)export:(NSString *)path
 {
-    return [self fs]->exportDirectory([path fileSystemRepresentation]);
+    return [self fs]->exportDirectory(string([path fileSystemRepresentation]));
 }
 
 @end

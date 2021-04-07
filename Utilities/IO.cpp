@@ -91,17 +91,9 @@ bool fileExists(const string &path)
 
 bool isDirectory(const string &path)
 {
-    return isDirectory(path.c_str());
-}
-
-bool isDirectory(const char *path)
-{
     struct stat fileProperties;
     
-    if (path == nullptr)
-        return -1;
-        
-    if (stat(path, &fileProperties) != 0)
+    if (stat(path.c_str(), &fileProperties) != 0)
         return -1;
     
     return S_ISDIR(fileProperties.st_mode);
