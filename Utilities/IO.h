@@ -52,11 +52,9 @@ bool fileExists(const string &path);
 
 // Checks if a path points to a directory
 bool isDirectory(const string &path);
-[[deprecated]] bool isDirectory(const char *path);
 
 // Returns the number of files in a directory
 isize numDirectoryItems(const string &path);
-isize numDirectoryItems(const char *path);
 
 // Returns a list of files in a directory
 std::vector<string> files(const string &path, const string &suffix = "");

@@ -101,14 +101,9 @@ bool isDirectory(const string &path)
 
 isize numDirectoryItems(const string &path)
 {
-    return numDirectoryItems(path.c_str());
-}
-
-isize numDirectoryItems(const char *path)
-{
     isize count = 0;
     
-    if (DIR *dir = opendir(path)) {
+    if (DIR *dir = opendir(path.c_str())) {
         
         struct dirent *dp;
         while ((dp = readdir(dir))) {
