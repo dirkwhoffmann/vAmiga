@@ -137,17 +137,7 @@ private:
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-    
-    //
-    // Preparing to record a video stream
-    //
-    
-public:
-    
-    // Sets the target file name
-    bool setPath(const char *path);
-    
-    
+
     //
     // Starting and stopping a video stream
     //

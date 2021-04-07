@@ -198,7 +198,7 @@ public:
 protected:
     
     virtual isize readFromStream(std::istream &stream) throws;
-    isize readFromFile(const char *path) throws;
+    isize readFromFile(const string &path) throws;
     isize readFromBuffer(const u8 *buf, isize len) throws;
 
 public:
@@ -206,8 +206,8 @@ public:
     virtual isize writeToStream(std::ostream &stream) throws;
     isize writeToStream(std::ostream &stream, ErrorCode *err);
 
-    isize writeToFile(const char *path) throws;
-    isize writeToFile(const char *path, ErrorCode *err);
+    isize writeToFile(const string &path) throws;
+    isize writeToFile(const string &path, ErrorCode *err);
     
     isize writeToBuffer(u8 *buf) throws;
     isize writeToBuffer(u8 *buf, ErrorCode *err);    

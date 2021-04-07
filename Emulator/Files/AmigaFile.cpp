@@ -99,10 +99,8 @@ AmigaFile::readFromStream(std::istream &stream)
 }
 
 isize
-AmigaFile::readFromFile(const char *path)
-{
-    assert(path);
-        
+AmigaFile::readFromFile(const string &path)
+{        
     std::ifstream stream(path);
 
     if (!stream.is_open()) {
@@ -146,10 +144,8 @@ AmigaFile::writeToStream(std::ostream &stream, ErrorCode *err)
 }
 
 isize
-AmigaFile::writeToFile(const char *path)
+AmigaFile::writeToFile(const string &path)
 {
-    assert(path);
-        
     std::ofstream stream(path);
 
     if (!stream.is_open()) {
@@ -163,12 +159,10 @@ AmigaFile::writeToFile(const char *path)
 }
 
 isize
-AmigaFile::writeToFile(const char *path, ErrorCode *err)
+AmigaFile::writeToFile(const string &path, ErrorCode *err)
 {
-    *err = ERROR_OK;
-    try { return writeToFile(path); }
-    catch (VAError &exception) { *err = exception.data; }
-    return 0;
+    try { *err = ERROR_OK; return writeToFile(path); }
+    catch (VAError &exception) { *err = exception.data; return 0; }
 }
 
 isize
@@ -186,8 +180,6 @@ AmigaFile::writeToBuffer(u8 *buf)
 isize
 AmigaFile::writeToBuffer(u8 *buf, ErrorCode *err)
 {
-    *err = ERROR_OK;
-    try { return writeToBuffer(buf); }
-    catch (VAError &exception) { *err = exception.data; }
-    return 0;
+    try { *err = ERROR_OK; return writeToBuffer(buf); }
+    catch (VAError &exception) { *err = exception.data; return 0; }
 }

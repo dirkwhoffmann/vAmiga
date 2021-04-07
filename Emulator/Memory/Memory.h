@@ -382,12 +382,12 @@ public:
 public:
     
     // Saves a Rom to disk
-    void saveRom(const char *path) throws;
-    void saveRom(const char *path, ErrorCode *ec);
-    void saveWom(const char *path) throws;
-    void saveWom(const char *path, ErrorCode *ec);
-    void saveExt(const char *path) throws;
-    void saveExt(const char *path, ErrorCode *ec);
+    void saveRom(const string &path) throws;
+    void saveRom(const string &path, ErrorCode *ec);
+    void saveWom(const string &path) throws;
+    void saveWom(const string &path, ErrorCode *ec);
+    void saveExt(const string &path) throws;
+    void saveExt(const string &path, ErrorCode *ec);
 
     
     //

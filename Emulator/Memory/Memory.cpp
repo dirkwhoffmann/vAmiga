@@ -665,7 +665,7 @@ Memory::loadExt(const u8 *buf, isize len, ErrorCode *ec)
 }
  
 void
-Memory::saveRom(const char *path)
+Memory::saveRom(const string &path)
 {
     if (rom == nullptr) return;
     
@@ -674,14 +674,14 @@ Memory::saveRom(const char *path)
 }
 
 void
-Memory::saveRom(const char *path, ErrorCode *ec)
+Memory::saveRom(const string &path, ErrorCode *ec)
 {
     *ec = ERROR_OK;
     try { saveRom(path); } catch (VAError &err) { *ec = err.data; }
 }
 
 void
-Memory::saveWom(const char *path)
+Memory::saveWom(const string &path)
 {
     if (wom == nullptr) return;
     
@@ -690,14 +690,14 @@ Memory::saveWom(const char *path)
 }
 
 void
-Memory::saveWom(const char *path, ErrorCode *ec)
+Memory::saveWom(const string &path, ErrorCode *ec)
 {
     *ec = ERROR_OK;
     try { saveWom(path); } catch (VAError &err) { *ec = err.data; }
 }
 
 void
-Memory::saveExt(const char *path)
+Memory::saveExt(const string &path)
 {
     if (ext == nullptr) return;
 
@@ -706,7 +706,7 @@ Memory::saveExt(const char *path)
 }
 
 void
-Memory::saveExt(const char *path, ErrorCode *ec)
+Memory::saveExt(const string &path, ErrorCode *ec)
 {
     *ec = ERROR_OK;
     try { saveExt(path); } catch (VAError &err) { *ec = err.data; }
