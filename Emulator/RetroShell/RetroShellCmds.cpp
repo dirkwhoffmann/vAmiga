@@ -70,6 +70,7 @@ RetroShell::exec <Token::amiga, Token::on> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::amiga, Token::off> (Arguments &argv, long param)
 {
+    amiga.pause();
     amiga.powerOff();
 }
 

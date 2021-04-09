@@ -138,7 +138,7 @@
             <windowStyleMask key="styleMask" titled="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="646" height="496"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1120"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="960"/>
             <value key="minSize" type="size" width="646" height="486"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="646" height="496"/>
@@ -1176,7 +1176,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nyi-RK-Yy2">
-                                            <rect key="frame" x="313" y="362" width="95" height="18"/>
+                                            <rect key="frame" x="313" y="363" width="95" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Game 1:" id="aTT-Yz-AcB">
                                                 <font key="font" metaFont="system"/>
@@ -1275,7 +1275,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fih-ie-PfE">
-                                            <rect key="frame" x="26" y="198" width="83" height="20"/>
+                                            <rect key="frame" x="22" y="198" width="83" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="File System:" id="QfA-RS-35B">
                                                 <font key="font" metaFont="system"/>
@@ -1284,7 +1284,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LTx-WK-8P2">
-                                            <rect key="frame" x="26" y="166" width="83" height="19"/>
+                                            <rect key="frame" x="22" y="166" width="83" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Boot block: " id="Onu-dS-epZ">
                                                 <font key="font" metaFont="system"/>

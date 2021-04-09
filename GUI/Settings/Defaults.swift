@@ -759,7 +759,7 @@ extension Keys {
         static let df2Type            = "VAMIGA_PER_DF2Type"
         static let df3Type            = "VAMIGA_PER_DF3Type"
         
-        // Floppy disks
+        // Disks
         static let blankDiskFormat    = "VAMIGA_PER_BlankDiskFormat"
         static let bootBlock          = "VAMIGA_PER_BootBlock"
 

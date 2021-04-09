@@ -384,20 +384,16 @@ Amiga::_dump(dump::Category category, std::ostream& os) const
 void
 Amiga::powerOn()
 {
-    assert(!isEmulatorThread());
-    
     debug(RUN_DEBUG, "powerOn()\n");
-        
+    assert(!isEmulatorThread());
+            
     if (isPoweredOff() && isReady()) {
         
         assert(p == nullptr);
         
         // Perform a hard reset
         hardReset();
-        
-        // Switch state
-        state = EMULATOR_STATE_PAUSED;
-        
+                
         // Power on all subcomponents
         HardwareComponent::powerOn();
         
@@ -412,6 +408,8 @@ Amiga::powerOn()
 void
 Amiga::_powerOn()
 {
+    state = EMULATOR_STATE_PAUSED;
+
 #ifdef DF0_DISK
     DiskFile *df0file = AmigaFile::make <ADFFile> (DF0_DISK);
     if (df0file) {
@@ -441,16 +439,15 @@ Amiga::_powerOn()
 void
 Amiga::powerOff()
 {
-    assert(!isEmulatorThread());
-    assert(!isRunning());
-    
     debug(RUN_DEBUG, "powerOff()\n");
-            
+    assert(!isEmulatorThread());
+    
+    // Pause if needed
+    pause();
+    assert(!isRunning());
+
     if (isPoweredOn()) {
-           
-        // Switch state
-        state = EMULATOR_STATE_OFF;
-        
+                   
         // Power off all subcomponents
         HardwareComponent::powerOff();
         
@@ -465,33 +462,35 @@ Amiga::powerOff()
 void
 Amiga::_powerOff()
 {
+    state = EMULATOR_STATE_OFF;
 }
 
 void
 Amiga::run()
 {
-    assert(isPoweredOn());
-    
     debug(RUN_DEBUG, "run()\n");
-            
+    assert(isPoweredOn());
+                
+    // Power on if needed
+    powerOn();
+    assert(isPoweredOn());
+
     if (!isRunning() && isReady()) {
         
         assert(p == nullptr);
 
-        // Switch state
-        state = EMULATOR_STATE_RUNNING;
+        // Launch all subcomponents
+        HardwareComponent::run();
 
         // Create the emulator thread
         pthread_create(&p, nullptr, threadMain, (void *)this);
-
-        // Inform the GUI
-        msgQueue.put(MSG_RUN);
     }
 }
 
 void
 Amiga::_run()
 {
+    state = EMULATOR_STATE_RUNNING;
 }
 
 void
@@ -506,12 +505,10 @@ Amiga::pause()
         
         // Wait until the emulator thread has terminated
         pthread_join(p, nullptr);
-                
-        // Update the recorded debug information
-        inspect();
-        
-        // Inform the GUI
-        msgQueue.put(MSG_PAUSE);
+               
+        // Assure the emulator is no longer running
+        assert(state == EMULATOR_STATE_PAUSED);
+        assert(p == (pthread_t)0);
     }
 }
 
@@ -533,6 +530,7 @@ Amiga::shutdown()
 void
 Amiga::_pause()
 {
+    state = EMULATOR_STATE_PAUSED;
 }
 
 void
@@ -705,10 +703,10 @@ void
 Amiga::runLoop()
 {
     debug(RUN_DEBUG, "runLoop()\n");
-
-    // Leave pause mode
-    HardwareComponent::run();
     
+    // Inform the GUI
+    msgQueue.put(MSG_RUN);
+
     // Restart the synchronization timer
     oscillator.restart();
     
@@ -793,8 +791,13 @@ Amiga::runLoop()
     }
     
     // Enter pause mode
-    state = EMULATOR_STATE_PAUSED;
-    HardwareComponent::pause();    
+    HardwareComponent::pause();
+    
+    // Update the recorded debug information
+    inspect();
+
+    // Inform the GUI
+    msgQueue.put(MSG_PAUSE);
 }
 
 void
