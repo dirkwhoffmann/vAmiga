@@ -204,10 +204,16 @@ public:
      *     Paused: The Amiga is turned on, but there is no emulator thread
      *    Running: The Amiga is turned on and the emulator thread running
      *
+     *          -----------------------------------------------
+     *         |                     run()                     |
+     *         |                                               V
      *     ---------   powerOn()   ---------     run()     ---------
      *    |   Off   |------------>| Paused  |------------>| Running |
      *    |         |<------------|         |<------------|         |
      *     ---------   powerOff()  ---------    pause()    ---------
+     *         ^                                               |
+     *         |                  powerOff()                   |
+     *          -----------------------------------------------
      *
      *     isPoweredOff()         isPaused()          isRunning()
      * |-------------------||-------------------||-------------------|
@@ -241,21 +247,21 @@ private:
      * ------------------------------------------------------------------------
      * off       | off       | none
      * paused    | off       | _powerOff() on each subcomponent
-     * running   | off       | ERROR (call pause() first)
+     * running   | off       | pause(), _powerOff() on each subcomponent
      */
     void powerOff();
-    virtual void _powerOff() { };
+    virtual void _powerOff() { }
     
     /* run() puts the component in 'running' state
      *
      * current   | next      | action
      * ------------------------------------------------------------------------
-     * off       | running   | ERROR (call powerOn() first)
+     * off       | running   | powerOn(), _run() on each subcomponent
      * paused    | running   | _run() on each subcomponent
      * running   | running   | none
      */
     void run();
-    virtual void _run() { };
+    virtual void _run() { }
     
     /* pause() puts the component in 'paused' state
      *

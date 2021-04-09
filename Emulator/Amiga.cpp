@@ -498,7 +498,7 @@ Amiga::pause()
 {
     debug(RUN_DEBUG, "pause()\n");
 
-    if (!isPaused()) {
+    if (isRunning()) {
                 
         // Ask the emulator thread to terminate
         signalStop();

@@ -1,10 +1,18 @@
 SRC=$(wildcard *.cpp)
 OBJ=$(SRC:.cpp=.o)
 
-.PHONY: all clean
+MYCC = g++ -std=c++17 -Wfatal-errors
+MYFLAGS = \
+-Wall \
+-I $(CURDIR)/..
 
-all: $(OBJ)
+.PHONY: all prebuild clean
+
+all: prebuild $(OBJ)
 	@echo > /dev/null
+
+prebuild:
+	@echo "Entering ${CURDIR}"
 	
 clean:
 	@echo "Cleaning up $(CURDIR)"
