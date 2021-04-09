@@ -469,8 +469,8 @@ void
 Amiga::run()
 {
     debug(RUN_DEBUG, "run()\n");
-    assert(isPoweredOn());
-                
+    assert(!isEmulatorThread());
+
     // Power on if needed
     powerOn();
     assert(isPoweredOn());
@@ -497,6 +497,7 @@ void
 Amiga::pause()
 {
     debug(RUN_DEBUG, "pause()\n");
+    assert(!isEmulatorThread());
 
     if (isRunning()) {
                 
@@ -537,33 +538,27 @@ void
 Amiga::warpOn()
 {
     assert(!isEmulatorThread());
-
-    if (!warpMode) {
-        HardwareComponent::warpOn();
-    }
+    
+    if (!warpMode) signalWarpOn();
 }
 
 void
 Amiga::warpOff()
 {
     assert(!isEmulatorThread());
-
-    if (warpMode) {
-        HardwareComponent::warpOff();
-    }
+    
+    if (warpMode) signalWarpOff();
 }
 
 void
 Amiga::_warpOn()
 {
-    HardwareComponent::_warpOn();
     msgQueue.put(MSG_WARP_ON);
 }
 
 void
 Amiga::_warpOff()
 {
-    HardwareComponent::_warpOff();
     oscillator.restart();
     msgQueue.put(MSG_WARP_OFF);
 }
@@ -775,17 +770,17 @@ Amiga::runLoop()
                 break;
             }
 
-            // Are we requested to enter of exit warp mode?
+            // Are we requested to enter or exit warp mode?
             if (runLoopCtrl & RL_WARP_ON) {
                 clearControlFlags(RL_WARP_ON);
                 debug(RUN_DEBUG, "RL_WARP_ON\n");
-                warpOn();
+                HardwareComponent::warpOn();
             }
 
             if (runLoopCtrl & RL_WARP_OFF) {
                 clearControlFlags(RL_WARP_OFF);
                 debug(RUN_DEBUG, "RL_WARP_OFF\n");
-                warpOff();
+                HardwareComponent::warpOff();
             }
         }
     }

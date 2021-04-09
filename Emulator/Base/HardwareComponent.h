@@ -276,14 +276,16 @@ private:
         
     // Switches warp mode on or off
     void warpOn();
-    void warpOff();
     virtual void _warpOn() { };
+
+    void warpOff();
     virtual void _warpOff() { };
 
     // Switches debug mode on or off
     void debugOn();
-    void debugOff();
     virtual void _debugOn() { };
+
+    void debugOff();
     virtual void _debugOff() { };
 };
 
