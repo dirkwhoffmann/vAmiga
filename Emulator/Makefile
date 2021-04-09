@@ -2,8 +2,8 @@ SUBDIRS = \
 Agnus Base CIA CPU Denise Drive FileSystems Files LogicBoard Memory Paula \
 Peripherals RetroShell xdms
 
+MYMAKE = $(MAKE) --no-print-directory
 MYCC = g++ -std=c++17 -Wfatal-errors
-
 MYFLAGS = \
 -Wall \
 -I $(CURDIR)/.. \
@@ -32,7 +32,7 @@ MYFLAGS = \
 -I $(CURDIR)/RetroShell \
 -I $(CURDIR)/xdms
 
-export MYCC MYFLAGS
+export MYMAKE MYCC MYFLAGS
 
 DEPS =
 OBJ = Amiga.o

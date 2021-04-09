@@ -79,13 +79,6 @@ class ScreenRecorder : public AmigaComponent {
     
     // The texture cutout that is going to be recorded
     struct { int x1; int y1; int x2; int y2; } cutout;
-
-    // Bitrate passed to FFmpeg
-    long bitRate = 0;
-    
-    // Pixel aspect ratio
-    long aspectX;
-    long aspectY;
             
     
     //

@@ -537,7 +537,6 @@
 		50B35B6122B2382E001A9C17 /* SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerialPort.h; sourceTree = "<group>"; };
 		50B3C44725EAFB5500651700 /* Checksum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Checksum.cpp; sourceTree = "<group>"; };
 		50B3C44825EAFB5500651700 /* Checksum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Checksum.h; sourceTree = "<group>"; };
-		50B3DCC3260F7BA100F05C22 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		50B5C07D241107F200F124DC /* Constants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
 		50B70CAB252CE0BF006B5191 /* Muxer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Muxer.cpp; sourceTree = "<group>"; };
 		50B70CAC252CE0BF006B5191 /* Muxer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Muxer.h; sourceTree = "<group>"; };
@@ -562,6 +561,28 @@
 		50C8C4542607524400F4E012 /* Monitors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monitors.swift; sourceTree = "<group>"; };
 		50C8C457260758F000F4E012 /* SplashScreenSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenSetup.swift; sourceTree = "<group>"; };
 		50CA602E260E02B700C4A22C /* Reflection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflection.h; sourceTree = "<group>"; };
+		50CF461C2620420500BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF461F2620423300BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF46222620427600BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF46252620428600BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF46282620429E00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF462B262042AA00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF462E262042B900BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF4631262042C400BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF4634262042D300BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF4637262042E000BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF463A262042F300BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF463D262042FC00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF46402620430D00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF46432620431900BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF46462620432300BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF46492620432B00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF464C2620433400BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF464F2620433F00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF46562620436A00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF46592620437900BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF465C262043C500BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF465F262043CF00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		50D263CB21F6377600FA167F /* A500ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ANSI.xib; sourceTree = "<group>"; };
 		50D263CD21F6378000FA167F /* A1000ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ISO.xib; sourceTree = "<group>"; };
 		50D375DD222C7C6B0040987C /* Blitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Blitter.cpp; sourceTree = "<group>"; };
@@ -675,6 +696,7 @@
 		5009B7F5255702C00037288E /* RomFiles */ = {
 			isa = PBXGroup;
 			children = (
+				50CF464C2620433400BB3B95 /* Makefile */,
 				50A61470260DCA6200A01428 /* RomFileTypes.h */,
 				509F7F1C21EDEA0200A530E4 /* RomFile.h */,
 				509F7F1B21EDEA0200A530E4 /* RomFile.cpp */,
@@ -687,6 +709,7 @@
 		5009B7F7255702D40037288E /* DiskFiles */ = {
 			isa = PBXGroup;
 			children = (
+				50CF464F2620433F00BB3B95 /* Makefile */,
 				50FAC77425160BBF00E47421 /* DiskFile.h */,
 				50FAC77325160BBF00E47421 /* DiskFile.cpp */,
 				508833ED21F0D21B009890EA /* ADFFile.h */,
@@ -711,6 +734,7 @@
 		50104E8825ECDAA30047A9AA /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				50CF461F2620423300BB3B95 /* Makefile */,
 				507215B025EAF62B00787591 /* Aliases.h */,
 				5082D83A21EF891200CF7692 /* Constants.h */,
 				50B5C07D241107F200F124DC /* Constants.cpp */,
@@ -735,6 +759,7 @@
 		502F7DCF2221709700AEEC65 /* Denise */ = {
 			isa = PBXGroup;
 			children = (
+				50CF4631262042C400BB3B95 /* Makefile */,
 				501E715022671FC20070B17D /* DeniseTypes.h */,
 				5020B17F21EF136100B9E80E /* Denise.h */,
 				5020B17E21EF136100B9E80E /* Denise.cpp */,
@@ -753,6 +778,7 @@
 		502F7DD0222170AE00AEEC65 /* Agnus */ = {
 			isa = PBXGroup;
 			children = (
+				50CF4634262042D300BB3B95 /* Makefile */,
 				503990C522D8CCB600035783 /* Beam.h */,
 				5015FF3E242BA00F005175D9 /* Frame.h */,
 				50A61489260DEA5100A01428 /* EventTypes.h */,
@@ -819,6 +845,7 @@
 		505B801C23FE626E002407FE /* Memory */ = {
 			isa = PBXGroup;
 			children = (
+				50CF46402620430D00BB3B95 /* Makefile */,
 				5051922A22B61DAA0012C4BB /* MemoryTypes.h */,
 				5064851021EC7A1700FC4AC3 /* Memory.h */,
 				5064850F21EC7A1700FC4AC3 /* Memory.cpp */,
@@ -829,6 +856,7 @@
 		505B801D23FE628F002407FE /* LogicBoard */ = {
 			isa = PBXGroup;
 			children = (
+				50CF46222620427600BB3B95 /* Makefile */,
 				503DECAD255E6180005FFA0B /* Oscillator.h */,
 				503DECAC255E6180005FFA0B /* Oscillator.cpp */,
 				50A493832374560D003ECD2C /* RTCTypes.h */,
@@ -854,6 +882,7 @@
 		508E7F962206CDC600F7D88C /* CPU */ = {
 			isa = PBXGroup;
 			children = (
+				50CF463A262042F300BB3B95 /* Makefile */,
 				50E2BE25240D417200155AE4 /* Moira */,
 				5051922822B61C8A0012C4BB /* CPUTypes.h */,
 				508E7F942206CDBD00F7D88C /* CPU.h */,
@@ -901,6 +930,7 @@
 		508FDF5621EA1FBC0043D0E9 /* CIA */ = {
 			isa = PBXGroup;
 			children = (
+				50CF4637262042E000BB3B95 /* Makefile */,
 				5051922922B61CEC0012C4BB /* CIATypes.h */,
 				508FDF5721EA1FBC0043D0E9 /* CIA.h */,
 				508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */,
@@ -1016,6 +1046,7 @@
 		508FE06021EA318D0043D0E9 /* Emulator */ = {
 			isa = PBXGroup;
 			children = (
+				50CF461C2620420500BB3B95 /* Makefile */,
 				50D661862282BE1800D67D88 /* AmigaTypes.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
@@ -1040,6 +1071,7 @@
 		508FE06621EA31E50043D0E9 /* Files */ = {
 			isa = PBXGroup;
 			children = (
+				50CF46492620432B00BB3B95 /* Makefile */,
 				5051922722B61C1B0012C4BB /* AmigaFileTypes.h */,
 				508FE06421EA318D0043D0E9 /* AmigaFile.h */,
 				508FE06321EA318D0043D0E9 /* AmigaFile.cpp */,
@@ -1144,6 +1176,7 @@
 		50A2953B21FF12170046BAA0 /* Drive */ = {
 			isa = PBXGroup;
 			children = (
+				50CF46462620432300BB3B95 /* Makefile */,
 				500770C1227C9FF3003A5F76 /* DriveTypes.h */,
 				50F6EEBD21F4F61F0091155D /* Drive.h */,
 				50F6EEBC21F4F61F0091155D /* Drive.cpp */,
@@ -1157,6 +1190,7 @@
 		50A2953C21FF12C20046BAA0 /* Peripherals */ = {
 			isa = PBXGroup;
 			children = (
+				50CF46432620431900BB3B95 /* Makefile */,
 				50A61445260CF23D00A01428 /* ControlPortTypes.h */,
 				50A2953E21FF12EF0046BAA0 /* ControlPort.h */,
 				50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */,
@@ -1180,6 +1214,7 @@
 		50AEBEC824D3D3B30037082D /* Blitter */ = {
 			isa = PBXGroup;
 			children = (
+				50CF465F262043CF00BB3B95 /* Makefile */,
 				50AEBECD24D3D4AD0037082D /* BlitterTypes.h */,
 				50D375DE222C7C6B0040987C /* Blitter.h */,
 				50D375DD222C7C6B0040987C /* Blitter.cpp */,
@@ -1194,6 +1229,7 @@
 		50AEBEC924D3D3BE0037082D /* Copper */ = {
 			isa = PBXGroup;
 			children = (
+				50CF465C262043C500BB3B95 /* Makefile */,
 				50AEBECA24D3D40C0037082D /* CopperTypes.h */,
 				502F7DD1222172CA00AEEC65 /* Copper.h */,
 				502F7DCD2221706000AEEC65 /* Copper.cpp */,
@@ -1206,6 +1242,7 @@
 		50AEBED424D3D7050037082D /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				50CF46282620429E00BB3B95 /* Makefile */,
 				5042FD7E23FFF0D200B315B2 /* StateMachineTypes.h */,
 				507D7768228BE3EF001E97A9 /* StateMachine.h */,
 				507D7767228BE3EF001E97A9 /* StateMachine.cpp */,
@@ -1229,6 +1266,7 @@
 		50AEBED524D3D7160037082D /* DiskController */ = {
 			isa = PBXGroup;
 			children = (
+				50CF462B262042AA00BB3B95 /* Makefile */,
 				5042FD7D23FFF08500B315B2 /* DiskControllerTypes.h */,
 				500C0A552259402D000121CD /* DiskController.h */,
 				500C0A542259402D000121CD /* DiskController.cpp */,
@@ -1241,6 +1279,7 @@
 		50AEBED624D3D7270037082D /* UART */ = {
 			isa = PBXGroup;
 			children = (
+				50CF462E262042B900BB3B95 /* Makefile */,
 				50A6141A260CD4F300A01428 /* UARTTypes.h */,
 				50F0BD2522AF883C001F4616 /* UART.h */,
 				50F0BD2422AF883C001F4616 /* UART.cpp */,
@@ -1309,7 +1348,7 @@
 		50B9C42A2609430F00A86C31 /* RetroShell */ = {
 			isa = PBXGroup;
 			children = (
-				50B3DCC3260F7BA100F05C22 /* Makefile */,
+				50CF46562620436A00BB3B95 /* Makefile */,
 				50B9C427260942D000A86C31 /* RetroShell.h */,
 				50B9C426260942D000A86C31 /* RetroShell.cpp */,
 				509C3667260B3ED0004F160A /* RetroShellCmds.cpp */,
@@ -1339,6 +1378,7 @@
 		50E2BE25240D417200155AE4 /* Moira */ = {
 			isa = PBXGroup;
 			children = (
+				50CF463D262042FC00BB3B95 /* Makefile */,
 				50E2BE35240D41EE00155AE4 /* MoiraConfig.h */,
 				50E2BE2F240D418500155AE4 /* MoiraTypes.h */,
 				50E2BE34240D41DD00155AE4 /* Moira.h */,
@@ -1365,6 +1405,7 @@
 		50EE993D21FF4D42003BD74B /* Paula */ = {
 			isa = PBXGroup;
 			children = (
+				50CF46252620428600BB3B95 /* Makefile */,
 				509D4EF4228596A900E2C252 /* PaulaTypes.h */,
 				5030891021EFA74600FEAD12 /* Paula.h */,
 				5030890F21EFA74600FEAD12 /* Paula.cpp */,
@@ -1380,6 +1421,7 @@
 		50F54B0B24B5D31D0078FDC9 /* xdms */ = {
 			isa = PBXGroup;
 			children = (
+				50CF46592620437900BB3B95 /* Makefile */,
 				50F54B0C24B5D31D0078FDC9 /* u_heavy.c */,
 				50F54B0D24B5D31D0078FDC9 /* tables.c */,
 				50F54B0E24B5D31D0078FDC9 /* u_deep.c */,
