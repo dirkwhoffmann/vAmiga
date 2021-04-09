@@ -60,6 +60,12 @@ Mouse::getConfigItem(Option option) const
 }
 
 bool
+Mouse::setConfigItem(Option option, i64 value)
+{
+    return setConfigItem(option, port.nr, value);
+}
+
+bool
 Mouse::setConfigItem(Option option, long id, i64 value)
 {
     if (port.nr != id) return false;

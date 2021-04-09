@@ -88,6 +88,11 @@ enum_long(OPT)
     OPT_SHAKE_DETECTION,
     OPT_MOUSE_VELOCITY,
     
+    // Joystick
+    OPT_AUTOFIRE,
+    OPT_AUTOFIRE_BULLETS,
+    OPT_AUTOFIRE_DELAY,
+    
     // Paula audio
     OPT_SAMPLING_METHOD,
     OPT_FILTER_TYPE,
@@ -164,6 +169,10 @@ struct OptionEnum : util::Reflection<OptionEnum, Option> {
 
             case OPT_PULLUP_RESISTORS:    return "PULLUP_RESISTORS";
             case OPT_MOUSE_VELOCITY:      return "MOUSE_VELOCITY";
+
+            case OPT_AUTOFIRE:            return "AUTOFIRE";
+            case OPT_AUTOFIRE_BULLETS:    return "AUTOFIRE_BULLETS";
+            case OPT_AUTOFIRE_DELAY:      return "AUTOFIRE_DELAY";
 
             case OPT_SAMPLING_METHOD:     return "SAMPLING_METHOD";
             case OPT_FILTER_TYPE:         return "FILTER_TYPE";

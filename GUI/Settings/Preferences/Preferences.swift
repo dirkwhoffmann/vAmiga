@@ -99,28 +99,26 @@ class Preferences {
     var autofire = ControlsDefaults.std.autofire {
         didSet {
             for amiga in myAppDelegate.proxies {
-                amiga.controlPort1.joystick.autofire = autofire
-                amiga.controlPort2.joystick.autofire = autofire
+                amiga.configure(.AUTOFIRE, enable: autofire)
             }
         }
     }
     var autofireBullets = ControlsDefaults.std.autofireBullets {
         didSet {
             for amiga in myAppDelegate.proxies {
-                amiga.controlPort1.joystick.autofireBullets = autofireBullets
-                amiga.controlPort2.joystick.autofireBullets = autofireBullets
+                amiga.configure(.AUTOFIRE_BULLETS, value: autofireBullets)
             }
         }
     }
     var autofireFrequency = ControlsDefaults.std.autofireFrequency {
         didSet {
+            let autofireDelay = Int(50.0 / autofireFrequency)
             for amiga in myAppDelegate.proxies {
-                amiga.controlPort1.joystick.autofireFrequency = autofireFrequency
-                amiga.controlPort2.joystick.autofireFrequency = autofireFrequency
+                amiga.configure(.AUTOFIRE_DELAY, value: autofireDelay)
             }
         }
     }
-    
+
     // Mouse
     var retainMouseKeyComb = ControlsDefaults.std.retainMouseKeyComb
     var retainMouseWithKeys = ControlsDefaults.std.retainMouseWithKeys
@@ -266,7 +264,7 @@ class Preferences {
         // Joysticks
         autofire = defaults.bool(forKey: Keys.Con.autofire)
         autofireBullets = defaults.integer(forKey: Keys.Con.autofireBullets)
-        autofireFrequency = defaults.float(forKey: Keys.Con.autofireFrequency)
+        autofireFrequency = defaults.double(forKey: Keys.Con.autofireFrequency)
         
         // Mouse
         retainMouseKeyComb = defaults.integer(forKey: Keys.Con.retainMouseKeyComb)

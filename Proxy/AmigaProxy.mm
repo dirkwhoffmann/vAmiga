@@ -1003,6 +1003,7 @@ using namespace moira;
     [self joystick]->trigger(event);
 }
 
+/*
 - (BOOL)autofire
 {
     return [self joystick]->getAutofire();
@@ -1032,6 +1033,7 @@ using namespace moira;
 {
     [self joystick]->setAutofireFrequency(value);
 }
+*/
 
 @end
 

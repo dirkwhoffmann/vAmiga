@@ -291,6 +291,13 @@ Amiga::getConfigItem(Option option, long id) const
             if (id == PORT_2) return controlPort2.mouse.getConfigItem(option);
             assert(false);
             
+        case OPT_AUTOFIRE:
+        case OPT_AUTOFIRE_BULLETS:
+        case OPT_AUTOFIRE_DELAY:
+            if (id == PORT_1) return controlPort1.joystick.getConfigItem(option);
+            if (id == PORT_2) return controlPort2.joystick.getConfigItem(option);
+            assert(false);
+
         default: assert(false);
     }
     

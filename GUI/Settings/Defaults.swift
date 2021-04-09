@@ -313,7 +313,7 @@ struct ControlsDefaults {
     // Joysticks
     let autofire: Bool
     let autofireBullets: Int
-    let autofireFrequency: Float
+    let autofireFrequency: Double
     
     // Mouse
     let retainMouseKeyComb: Int

@@ -17,6 +17,9 @@ class Joystick : public AmigaComponent {
     // Reference to control port this device belongs to
     ControlPort &port;
 
+    // Current configuration
+    JoystickConfig config;
+
     // Button state
     bool button = false;
     
@@ -25,16 +28,7 @@ class Joystick : public AmigaComponent {
     
     // Vertical joystick position (-1 = up, 1 = down, 0 = released)
     int axisY = 0;
-    
-    // Indicates whether multi-shot mode is enabled
-    bool autofire = false;
-    
-    // Number of bullets per gun volley
-    int autofireBullets = -3;
-    
-    // Autofire frequency in Hz
-    float autofireFrequency = 2.5;
-    
+        
     // Bullet counter used in multi-fire mode
     i64 bulletCounter = 0;
     
@@ -48,7 +42,7 @@ class Joystick : public AmigaComponent {
     
 public:
     
-    Joystick(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref) { };
+    Joystick(Amiga& ref, ControlPort& pref);
 
     const char *getDescription() const override;
     
@@ -56,6 +50,19 @@ private:
     
     void _reset(bool hard) override;
 
+    
+    //
+    // Configuring
+    //
+    
+public:
+
+    const JoystickConfig &getConfig() const { return config; }
+
+    i64 getConfigItem(Option option) const;
+    bool setConfigItem(Option option, i64 value) override;
+    bool setConfigItem(Option option, long id, i64 value) override;
+    
     
     //
     // Analyzing
@@ -96,30 +103,19 @@ private:
     //
     // Accessing
     //
-    
-public:
-    
-    // Configures autofire mode
-    bool getAutofire() const { return autofire; }
-    void setAutofire(bool value);
-    
-    // Configures the bullets per gun volley (negative value = infinite)
-    int getAutofireBullets() const { return autofireBullets; }
-    void setAutofireBullets(int value);
-    
-    // Configures the autofire frequency
-    float getAutofireFrequency() const { return autofireFrequency; }
-    void setAutofireFrequency(float value) { autofireFrequency = value; }
-
-private:
-    
-    // Updates variable nextAutofireFrame
-    void scheduleNextShot();
 
 public:
 
     // Modifies the PRA bits of CIA A according to the current button state
     void changePra(u8 &pra) const;
+
+private:
+
+    // Reloads the autofire magazine
+    void reload();
+    
+    // Updates variable nextAutofireFrame
+    void scheduleNextShot();
 
 
     //

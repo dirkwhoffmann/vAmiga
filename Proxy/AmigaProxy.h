@@ -534,9 +534,11 @@
 @interface JoystickProxy : HardwareComponentProxy { }
 
 - (void)trigger:(GamePadAction)event;
+/*
 @property BOOL autofire;
 @property NSInteger autofireBullets;
 @property float autofireFrequency;
+*/
 
 @end
 
