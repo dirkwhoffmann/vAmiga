@@ -13,6 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: makeUtil
+      working-directory: ./Utilities
+      run: make
     - name: make
       working-directory: ./Emulator
       run: make
