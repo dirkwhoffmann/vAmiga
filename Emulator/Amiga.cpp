@@ -389,7 +389,7 @@ Amiga::powerOn()
             
     if (isPoweredOff() && isReady()) {
         
-        assert(p == nullptr);
+        assert(p == (pthread_t)0);
         
         // Perform a hard reset
         hardReset();
@@ -477,7 +477,7 @@ Amiga::run()
 
     if (!isRunning() && isReady()) {
         
-        assert(p == nullptr);
+        assert(p == (pthread_t)0);
 
         // Launch all subcomponents
         HardwareComponent::run();
