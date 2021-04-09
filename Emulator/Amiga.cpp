@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Amiga.h"
 #include "Snapshot.h"
+#include <assert.h>
 
 // Perform some consistency checks
 static_assert(sizeof(i8) == 1,  "i8 size mismatch");
@@ -30,7 +31,7 @@ void
 threadTerminated(void *thisAmiga)
 {
     assert(thisAmiga != nullptr);
-    
+
     // Inform the Amiga that the thread has been canceled
     Amiga *amiga = (Amiga *)thisAmiga;
     amiga->threadDidTerminate();
@@ -38,21 +39,21 @@ threadTerminated(void *thisAmiga)
 
 void
 *threadMain(void *thisAmiga) {
-    
+
     assert(thisAmiga != nullptr);
-    
+
     // Inform the Amiga that the thread is about to start
     Amiga *amiga = (Amiga *)thisAmiga;
     amiga->threadWillStart();
-    
+
     // Configure the thread
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, nullptr);
     pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, nullptr);
     pthread_cleanup_push(threadTerminated, thisAmiga);
-    
+
     // Enter the run loop
     amiga->runLoop();
-    
+
     // Clean up and exit
     pthread_cleanup_pop(1);
     pthread_exit(nullptr);
@@ -104,10 +105,10 @@ Amiga::Amiga()
     // Set up the initial state
     initialize();
     hardReset();
-        
+
     // Print some debug information
     if (SNP_DEBUG) {
-        
+
         msg("             Agnus : %zu bytes\n", sizeof(Agnus));
         msg("       AudioFilter : %zu bytes\n", sizeof(AudioFilter));
         // msg("       AudioStream : %zu bytes\n", sizeof(AudioStream));
@@ -171,13 +172,13 @@ void
 Amiga::reset(bool hard)
 {
     if (hard) suspend();
-    
+
     // If a disk change is in progress, finish it
     paula.diskController.serviceDiskChangeEvent();
-    
+
     // Execute the standard reset routine
     HardwareComponent::reset(hard);
-    
+
     if (hard) resume();
 
     // Inform the GUI
@@ -188,7 +189,7 @@ void
 Amiga::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
-    
+
     // Clear all runloop flags
     runLoopCtrl = 0;
 }
@@ -201,7 +202,7 @@ Amiga::getConfigItem(Option option) const
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
             return agnus.getConfigItem(option);
-            
+
         case OPT_DENISE_REVISION:
         case OPT_HIDDEN_SPRITES:
         case OPT_HIDDEN_LAYERS:
@@ -210,13 +211,13 @@ Amiga::getConfigItem(Option option) const
         case OPT_CLX_SPR_PLF:
         case OPT_CLX_PLF_PLF:
             return denise.getConfigItem(option);
-            
+
         case OPT_PALETTE:
         case OPT_BRIGHTNESS:
         case OPT_CONTRAST:
         case OPT_SATURATION:
             return denise.pixelEngine.getConfigItem(option);
-            
+
         case OPT_RTC_MODEL:
             return rtc.getConfigItem(option);
 
@@ -229,7 +230,7 @@ Amiga::getConfigItem(Option option) const
         case OPT_UNMAPPING_TYPE:
         case OPT_RAM_INIT_PATTERN:
             return mem.getConfigItem(option);
-            
+
         case OPT_SAMPLING_METHOD:
         case OPT_FILTER_TYPE:
         case OPT_FILTER_ALWAYS_ON:
@@ -244,11 +245,11 @@ Amiga::getConfigItem(Option option) const
         case OPT_LOCK_DSKSYNC:
         case OPT_AUTO_DSKSYNC:
             return paula.diskController.getConfigItem(option);
-            
+
         case OPT_SERIAL_DEVICE:
             return serialPort.getConfigItem(option);
 
-        case OPT_CIA_REVISION: 
+        case OPT_CIA_REVISION:
         case OPT_TODBUG:
         case OPT_ECLOCK_SYNCING:
             return ciaA.getConfigItem(option);
@@ -264,14 +265,14 @@ long
 Amiga::getConfigItem(Option option, long id) const
 {
     switch (option) {
-            
+
         case OPT_AUDPAN:
         case OPT_AUDVOL:
             return paula.muxer.getConfigItem(option, id);
 
         case OPT_DRIVE_CONNECT:
             return paula.diskController.getConfigItem(option, id);
-            
+
         case OPT_DRIVE_TYPE:
         case OPT_EMULATE_MECHANICS:
         case OPT_DRIVE_PAN:
@@ -280,20 +281,20 @@ Amiga::getConfigItem(Option option, long id) const
         case OPT_INSERT_VOLUME:
         case OPT_EJECT_VOLUME:
             return df[id]->getConfigItem(option);
-            
+
         case OPT_DEFAULT_FILESYSTEM:
         case OPT_DEFAULT_BOOTBLOCK:
             return df[id]->getConfigItem(option);
-            
+
         case OPT_PULLUP_RESISTORS:
         case OPT_MOUSE_VELOCITY:
             if (id == PORT_1) return controlPort1.mouse.getConfigItem(option);
             if (id == PORT_2) return controlPort2.mouse.getConfigItem(option);
             assert(false);
-            
+
         default: assert(false);
     }
-    
+
     return 0;
 }
 
@@ -302,10 +303,10 @@ Amiga::configure(Option option, long value)
 {
     // Propagate configuration request to all components
     bool changed = HardwareComponent::configure(option, value);
-    
+
     // Inform the GUI if the configuration has changed
     if (changed) queue.put(MSG_CONFIG);
-    
+
     // Dump the current configuration in debug mode
     if (changed && CNF_DEBUG) dump(Dump::Config);
 
@@ -317,13 +318,13 @@ Amiga::configure(Option option, long id, long value)
 {
     // Propagate configuration request to all components
     bool changed = HardwareComponent::configure(option, id, value);
-    
+
     // Inform the GUI if the configuration has changed
     if (changed) queue.put(MSG_CONFIG);
 
     // Dump the current configuration in debug mode
     if (changed && CNF_DEBUG) dump(Dump::Config);
-        
+
     return changed;
 }
 
@@ -347,7 +348,7 @@ void
 Amiga::_inspect()
 {
     synchronized {
-        
+
         info.cpuClock = cpu.getMasterClock();
         info.dmaClock = agnus.clock;
         info.ciaAClock = ciaA.clock;
@@ -362,9 +363,9 @@ void
 Amiga::_dump(Dump::Category category, std::ostream& os) const
 {
     if (category & Dump::Config) {
-    
+
         if (CNF_DEBUG) {
-            
+
             df0.dump(Dump::Config);
             paula.dump(Dump::Config);
             paula.muxer.dump(Dump::Config);
@@ -372,9 +373,9 @@ Amiga::_dump(Dump::Category category, std::ostream& os) const
             denise.dump(Dump::Config);
         }
     }
-    
+
     if (category & Dump::State) {
-        
+
         os << DUMP("Power") << ONOFF(isPoweredOn()) << std::endl;
         os << DUMP("Running") << YESNO(isRunning()) << std::endl;
         os << DUMP("Warp") << ONOFF(warpMode) << std::endl;
@@ -385,28 +386,28 @@ void
 Amiga::powerOn()
 {
     assert(!isEmulatorThread());
-    
+
     debug(RUN_DEBUG, "powerOn()\n");
-        
+
     if (isPoweredOff() && isReady()) {
-        
-        assert(p == nullptr);
-        
+
+        assert(p == 0);
+
         // Perform a hard reset
         hardReset();
-        
+
         // Switch state
         state = EMULATOR_STATE_PAUSED;
-        
+
         // Power on all subcomponents
         HardwareComponent::powerOn();
-        
+
         // Update the recorded debug information
         inspect();
 
         // Inform the GUI
         queue.put(MSG_POWER_ON);
-    }    
+    }
 }
 
 void
@@ -421,7 +422,7 @@ Amiga::_powerOn()
         df0.setWriteProtection(false);
     }
 #endif
-    
+
 #ifdef DF1_DISK
     DiskFile *df1file = DiskFile::makeWithFile(DF1_DISK);
     if (df1file) {
@@ -431,7 +432,7 @@ Amiga::_powerOn()
         df1.setWriteProtection(false);
     }
 #endif
-    
+
 #ifdef INITIAL_BREAKPOINT
     debugMode = true;
     cpu.debugger.breakpoints.addAt(INITIAL_BREAKPOINT);
@@ -443,20 +444,20 @@ Amiga::powerOff()
 {
     assert(!isEmulatorThread());
     assert(!isRunning());
-    
+
     debug(RUN_DEBUG, "powerOff()\n");
-            
+
     if (isPoweredOn()) {
-           
+
         // Switch state
         state = EMULATOR_STATE_OFF;
-        
+
         // Power off all subcomponents
         HardwareComponent::powerOff();
-        
+
         // Update the recorded debug information
         inspect();
-        
+
         // Inform the GUI
         queue.put(MSG_POWER_OFF);
     }
@@ -471,12 +472,12 @@ void
 Amiga::run()
 {
     assert(isPoweredOn());
-    
+
     debug(RUN_DEBUG, "run()\n");
-            
+
     if (!isRunning() && isReady()) {
-        
-        assert(p == nullptr);
+
+        assert(p == 0);
 
         // Switch state
         state = EMULATOR_STATE_RUNNING;
@@ -500,16 +501,16 @@ Amiga::pause()
     debug(RUN_DEBUG, "pause()\n");
 
     if (!isPaused()) {
-                
+
         // Ask the emulator thread to terminate
         signalStop();
-        
+
         // Wait until the emulator thread has terminated
         pthread_join(p, nullptr);
-                
+
         // Update the recorded debug information
         inspect();
-        
+
         // Inform the GUI
         queue.put(MSG_PAUSE);
     }
@@ -520,7 +521,7 @@ Amiga::shutdown()
 {
     // Assure the Amiga is powered off
     assert(isPoweredOff());
-    
+
     /* Send the SHUTDOWN message which is the last message ever send. The
      * purpose of this message is to signal the GUI that no more messages will
      * show up in the message queue. When the GUI receives this message, it
@@ -584,7 +585,7 @@ void
 Amiga::debugOff()
 {
     assert(!isEmulatorThread());
-    
+
     if (debugMode) {
         HardwareComponent::debugOff();
     }
@@ -604,7 +605,7 @@ Amiga::isReady(ErrorCode *error)
         if (error) *error = ERROR_ROM_MISSING;
         return false;
     }
-    
+
     if (mem.hasArosRom()) {
 
         if (!mem.hasExt()) {
@@ -633,7 +634,7 @@ void
 Amiga::suspend()
 {
     debug(RUN_DEBUG, "Suspending (%zu)...\n", suspendCounter);
-    
+
     if (suspendCounter || isRunning()) {
         pause();
         suspendCounter++;
@@ -644,7 +645,7 @@ void
 Amiga::resume()
 {
     debug(RUN_DEBUG, "Resuming (%zu)...\n", suspendCounter);
-    
+
     if (suspendCounter && --suspendCounter == 0) {
         run();
     }
@@ -681,7 +682,7 @@ void
 Amiga::stepOver()
 {
     if (isRunning()) return;
-    
+
     cpu.debugger.stepOver();
     run();
 }
@@ -698,7 +699,7 @@ Amiga::threadDidTerminate()
     debug(RUN_DEBUG, "Emulator thread terminated\n");
 
     // Trash the thread pointer
-    p = (pthread_t)0;    
+    p = (pthread_t)0;
 }
 
 void
@@ -707,10 +708,10 @@ Amiga::runLoop()
     debug(RUN_DEBUG, "runLoop()\n");
 
     HardwareComponent::run();
-    
+
     // Prepare to run
     oscillator.restart();
-    
+
     // Enable or disable debugging features
     if (debugMode) {
         cpu.debugger.enableLogging();
@@ -718,16 +719,16 @@ Amiga::runLoop()
         cpu.debugger.disableLogging();
     }
     agnus.scheduleRel<SLOT_INS>(0, inspectionTarget);
-    
+
     // Enter the loop
     while(1) {
-        
+
         // Emulate the next CPU instruction
         cpu.execute();
 
         // Check if special action needs to be taken
         if (runLoopCtrl) {
-            
+
             // Are we requested to take a snapshot?
             if (runLoopCtrl & RL_AUTO_SNAPSHOT) {
                 debug(RUN_DEBUG, "RL_AUTO_SNAPSHOT\n");
@@ -735,7 +736,7 @@ Amiga::runLoop()
                 queue.put(MSG_AUTO_SNAPSHOT_TAKEN);
                 clearControlFlags(RL_AUTO_SNAPSHOT);
             }
-            
+
             if (runLoopCtrl & RL_USER_SNAPSHOT) {
                 debug(RUN_DEBUG, "RL_USER_SNAPSHOT\n");
                 userSnapshot = Snapshot::makeWithAmiga(this);
@@ -789,10 +790,10 @@ Amiga::runLoop()
             }
         }
     }
-    
+
     // Switch state
     state = EMULATOR_STATE_PAUSED;
-    HardwareComponent::pause();    
+    HardwareComponent::pause();
 }
 
 void
@@ -803,7 +804,7 @@ Amiga::requestAutoSnapshot()
         // Take snapshot immediately
         autoSnapshot = Snapshot::makeWithAmiga(this);
         queue.put(MSG_AUTO_SNAPSHOT_TAKEN);
-        
+
     } else {
 
         // Schedule the snapshot to be taken
@@ -815,13 +816,13 @@ void
 Amiga::requestUserSnapshot()
 {
     if (!isRunning()) {
-        
+
         // Take snapshot immediately
         userSnapshot = Snapshot::makeWithAmiga(this);
         queue.put(MSG_USER_SNAPSHOT_TAKEN);
-        
+
     } else {
-        
+
         // Schedule the snapshot to be taken
         signalUserSnapshot();
     }
@@ -847,7 +848,7 @@ void
 Amiga::loadFromSnapshotUnsafe(Snapshot *snapshot)
 {
     u8 *ptr;
-    
+
     if (snapshot && (ptr = snapshot->getData())) {
         load(ptr);
         queue.put(MSG_SNAPSHOT_RESTORED);
@@ -858,7 +859,7 @@ void
 Amiga::loadFromSnapshotSafe(Snapshot *snapshot)
 {
     trace(SNP_DEBUG, "loadFromSnapshotSafe\n");
-    
+
     suspend();
     loadFromSnapshotUnsafe(snapshot);
     resume();
