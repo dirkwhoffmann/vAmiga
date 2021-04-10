@@ -90,8 +90,6 @@ Mouse::setConfigItem(Option option, long id, i64 value)
             
         case OPT_MOUSE_VELOCITY:
             
-            printf("config: OPT_MOUSE_VELOCITY\n");
-            
             if (value < 0 || value > 255) {
                 throw ConfigArgError("0 ... 255");
             }
@@ -195,13 +193,30 @@ Mouse::getXY()
     return HI_LO((u16)mouseY & 0xFF, (u16)mouseX & 0xFF);
 }
 
+bool
+Mouse::detectShakeXY(double x, double y)
+{
+    if (config.shakeDetection && shakeDetector.isShakingAbs(x)) {
+        messageQueue.put(MSG_SHAKING);
+        return true;
+    }
+    return false;
+}
+
+bool
+Mouse::detectShakeDxDy(double dx, double dy)
+{
+    if (config.shakeDetection && shakeDetector.isShakingRel(dx)) {
+        messageQueue.put(MSG_SHAKING);
+        return true;
+    }
+    return false;
+}
+
 void
 Mouse::setXY(double x, double y)
 {
-    // Check for a shaking mouse
-    if (config.shakeDetection && shakeDetector.isShakingAbs(x)) {
-        messageQueue.put(MSG_SHAKING);
-    }
+    debug(PRT_DEBUG, "setXY(%f,%f)\n", x, y);
 
     targetX = x * scaleX;
     targetY = y * scaleY;
@@ -210,11 +225,10 @@ Mouse::setXY(double x, double y)
 }
 
 void
-Mouse::setDeltaXY(double dx, double dy)
+Mouse::setDxDy(double dx, double dy)
 {
-    // Check for a shaking mouse
-    if (shakeDetector.isShakingRel(dx)) messageQueue.put(MSG_SHAKING);
-
+    debug(PRT_DEBUG, "setDxDy(%f,%f)\n", dx, dy);
+    
     targetX += dx * scaleX;
     targetY += dy * scaleY;
     
@@ -224,7 +238,7 @@ Mouse::setDeltaXY(double dx, double dy)
 void
 Mouse::setLeftButton(bool value)
 {
-    trace(PORT_DEBUG, "setLeftButton(%d)\n", value);
+    trace(PRT_DEBUG, "setLeftButton(%d)\n", value);
     
     leftButton = value;
     port.device = CPD_MOUSE;
@@ -233,7 +247,7 @@ Mouse::setLeftButton(bool value)
 void
 Mouse::setRightButton(bool value)
 {
-    trace(PORT_DEBUG, "setRightButton(%d)\n", value);
+    trace(PRT_DEBUG, "setRightButton(%d)\n", value);
     
     rightButton = value;
     port.device = CPD_MOUSE;
@@ -244,7 +258,7 @@ Mouse::trigger(GamePadAction event)
 {
     assert_enum(GamePadAction, event);
 
-    trace(PORT_DEBUG, "trigger(%lld)\n", event);
+    trace(PRT_DEBUG, "trigger(%lld)\n", event);
 
     switch (event) {
 
@@ -274,7 +288,7 @@ ShakeDetector::isShakingRel(double dx) {
     
     // Accumulate the travelled distance
     x += dx;
-    dxsum += abs(dx);
+    dxsum += std::abs(dx);
     
     // Check for a direction reversal
     if (dx * dxsign < 0) {

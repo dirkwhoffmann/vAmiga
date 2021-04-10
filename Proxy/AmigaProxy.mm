@@ -969,14 +969,24 @@ using namespace moira;
     return (Mouse *)obj;
 }
 
+- (BOOL)detectShakeAbs:(NSPoint)pos
+{
+    return [self mouse]->detectShakeXY(pos.x, pos.y);
+}
+
+- (BOOL)detectShakeRel:(NSPoint)pos
+{
+    return [self mouse]->detectShakeDxDy(pos.x, pos.y);
+}
+
 - (void)setXY:(NSPoint)pos
 {
     [self mouse]->setXY((double)pos.x, (double)pos.y);
 }
 
-- (void)setDeltaXY:(NSPoint)pos
+- (void)setDxDy:(NSPoint)pos
 {
-    [self mouse]->setDeltaXY((double)pos.x, (double)pos.y);
+    [self mouse]->setDxDy((double)pos.x, (double)pos.y);
 }
 
 - (void)trigger:(GamePadAction)event
@@ -1002,38 +1012,6 @@ using namespace moira;
 {
     [self joystick]->trigger(event);
 }
-
-/*
-- (BOOL)autofire
-{
-    return [self joystick]->getAutofire();
-}
-
-- (void)setAutofire:(BOOL)value
-{
-    return [self joystick]->setAutofire(value);
-}
-
-- (NSInteger)autofireBullets
-{
-    return (NSInteger)[self joystick]->getAutofireBullets();
-}
-
-- (void)setAutofireBullets:(NSInteger)value
-{
-    [self joystick]->setAutofireBullets((int)value);
-}
-
-- (float)autofireFrequency
-{
-    return [self joystick]->getAutofireFrequency();
-}
-
-- (void)setAutofireFrequency:(float)value
-{
-    [self joystick]->setAutofireFrequency(value);
-}
-*/
 
 @end
 

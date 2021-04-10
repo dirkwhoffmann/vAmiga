@@ -520,8 +520,10 @@
 
 @interface MouseProxy : HardwareComponentProxy { }
 
+- (BOOL)detectShakeAbs:(NSPoint)pos;
+- (BOOL)detectShakeRel:(NSPoint)pos;
 - (void)setXY:(NSPoint)pos;
-- (void)setDeltaXY:(NSPoint)pos;
+- (void)setDxDy:(NSPoint)pos;
 - (void)trigger:(GamePadAction)event;
 
 @end
@@ -534,11 +536,6 @@
 @interface JoystickProxy : HardwareComponentProxy { }
 
 - (void)trigger:(GamePadAction)event;
-/*
-@property BOOL autofire;
-@property NSInteger autofireBullets;
-@property float autofireFrequency;
-*/
 
 @end
 

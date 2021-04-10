@@ -130,23 +130,22 @@ public extension MetalView {
     
     override func mouseMoved(with event: NSEvent) {
         
-        if gotMouse {
-            
-            // Determine delta movement steps
-            let dx = event.deltaX
-            let dy = event.deltaY
-                                    
-            // Make coordinate independent of the actual window size
-            let scaleX = (256.0 * 400.0) / frame.width / 128.0
-            let scaleY = (256.0 * 300.0) / frame.height / 128.0
-            let dxdy = NSPoint.init(x: dx * scaleX, y: dy * scaleY)
-            
-            // Report the new location to the Amiga mouse
-            if mouse2 == nil || event.deviceID != 0 {
-                mouse1!.processMouseEvents(delta: dxdy)
-            } else {
-                mouse2!.processMouseEvents(delta: dxdy)
-            }            
+        if !gotMouse { return }
+        
+        // Determine delta movement steps
+        let dx = event.deltaX
+        let dy = event.deltaY
+        
+        // Make coordinate independent of the actual window size
+        let scaleX = (256.0 * 400.0) / frame.width / 128.0
+        let scaleY = (256.0 * 300.0) / frame.height / 128.0
+        let dxdy = NSPoint.init(x: dx * scaleX, y: dy * scaleY)
+        
+        // Report the new location to the Amiga mouse
+        if mouse2 == nil || event.deviceID != 0 {
+            mouse1!.processMouseEvents(delta: dxdy)
+        } else {
+            mouse2!.processMouseEvents(delta: dxdy)
         }
     }
     

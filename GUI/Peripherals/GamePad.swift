@@ -395,9 +395,12 @@ class GamePad {
     func processMouseEvents(delta: NSPoint) {
         
         let amiga = manager.parent.amiga!
-        
-        if port == 1 { amiga.controlPort1.mouse.setDeltaXY(delta) }
-        if port == 2 { amiga.controlPort2.mouse.setDeltaXY(delta) }
+
+        // Check for a shaking mouse
+        amiga.controlPort1.mouse.detectShakeRel(delta)
+
+        if port == 1 { amiga.controlPort1.mouse.setDxDy(delta) }
+        if port == 2 { amiga.controlPort2.mouse.setDxDy(delta) }
     }
     
     func processKeyDownEvent(macKey: MacKey) -> Bool {

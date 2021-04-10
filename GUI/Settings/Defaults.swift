@@ -305,9 +305,9 @@ extension Keys {
 struct ControlsDefaults {
     
     // Emulation keys
+    let mouseKeyMap: [MacKey: Int]
     let joyKeyMap1: [MacKey: Int]
     let joyKeyMap2: [MacKey: Int]
-    let mouseKeyMap: [MacKey: Int]
     let disconnectJoyKeys: Bool
     
     // Joysticks
@@ -347,9 +347,9 @@ struct ControlsDefaults {
     
     static let std = ControlsDefaults.init(
         
+        mouseKeyMap: [:],
         joyKeyMap1: stdKeyMap1,
         joyKeyMap2: stdKeyMap2,
-        mouseKeyMap: [:],
         disconnectJoyKeys: true,
         
         autofire: false,
@@ -392,19 +392,18 @@ extension UserDefaults {
         ]
         
         let userDefaults = UserDefaults.standard
+        userDefaults.register(encodableItem: defaults.joyKeyMap2, forKey: Keys.Con.joyKeyMap2)
         userDefaults.register(defaults: dictionary)
         userDefaults.register(encodableItem: defaults.joyKeyMap1, forKey: Keys.Con.joyKeyMap1)
-        userDefaults.register(encodableItem: defaults.joyKeyMap2, forKey: Keys.Con.joyKeyMap2)
-        userDefaults.register(encodableItem: defaults.mouseKeyMap, forKey: Keys.Con.mouseKeyMap)
     }
     
     static func resetControlsUserDefaults() {
         
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.Con.joyKeyMap1,
+        let keys = [ Keys.Con.mouseKeyMap,
+                     Keys.Con.joyKeyMap1,
                      Keys.Con.joyKeyMap2,
-                     Keys.Con.mouseKeyMap,
                      Keys.Con.disconnectJoyKeys,
                      
                      Keys.Con.autofire,

@@ -31,6 +31,7 @@ Joystick::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
+    // Discard any active joystick movements
     button = false;
     axisX = 0;
     axisY = 0;
@@ -123,28 +124,6 @@ Joystick::didLoadFromBuffer(const u8 *buffer)
     return 0;
 }
 
-/*
-void
-Joystick::setAutofire(bool value)
-{
-    autofire = value;
-    
-    // Release button immediately if autofire-mode is switches off
-    if (value == false) button = false;
-}
-
-void
-Joystick::setAutofireBullets(int value)
-{
-    autofireBullets = value;
-    
-    // Update the bullet counter if we're currently firing
-    if (bulletCounter > 0) {
-        bulletCounter = (autofireBullets < 0) ? UINT64_MAX : autofireBullets;
-    }
-}
-*/
-
 void
 Joystick::reload()
 {
@@ -201,7 +180,7 @@ Joystick::trigger(GamePadAction event)
 {
     assert_enum(GamePadAction, event);
 
-    debug(PORT_DEBUG, "trigger(%lld)\n", event);
+    debug(PRT_DEBUG, "trigger(%lld)\n", event);
      
     switch (event) {
             
@@ -248,21 +227,20 @@ Joystick::trigger(GamePadAction event)
 void
 Joystick::execute()
 {
-    if (!config.autofire || config.autofireDelay < 0)
-        return;
+    // Only proceed if auto fire is enabled
+    if (!config.autofire || config.autofireDelay < 0) return;
+  
+    // Only proceed if a trigger frame has been reached
+    if (agnus.frame.nr != nextAutofireFrame) return;
+
+    // Only proceed if there are bullets left
+    if (bulletCounter == 0) return;
     
-    // Wait until it's time to push or release fire
-    if (agnus.frame.nr != nextAutofireFrame)
-        return;
-    
-    // Are there any bullets left?
-    if (bulletCounter) {
-        if (button) {
-            button = false;
-            bulletCounter--;
-        } else {
-            button = true;
-        }
-        scheduleNextShot();
+    if (button) {
+        button = false;
+        bulletCounter--;
+    } else {
+        button = true;
     }
+    scheduleNextShot();
 }

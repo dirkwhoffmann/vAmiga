@@ -126,7 +126,7 @@ class KeyboardController: NSObject {
     
     func keyDown(with macKey: MacKey) {
         
-        // Check if this key is used for joystick emulation
+        // Check if this key is used to emulate a game device
         if parent.gamePad1?.processKeyDownEvent(macKey: macKey) == true {
             if pref.disconnectJoyKeys { return }
         }
@@ -140,7 +140,7 @@ class KeyboardController: NSObject {
     
     func keyUp(with macKey: MacKey) {
         
-        // Check if this key is used for joystick emulation
+        // Check if this key is used to emulate a game device
         if parent.gamePad1?.processKeyUpEvent(macKey: macKey) == true {
             if pref.disconnectJoyKeys { return }
         }

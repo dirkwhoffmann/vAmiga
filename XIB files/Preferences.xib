@@ -22,13 +22,10 @@
                 <outlet property="conFire1button" destination="CiA-Ih-QDo" id="Djf-Uf-Jwi"/>
                 <outlet property="conFire2" destination="6Om-vG-1oa" id="9cv-RH-h9a"/>
                 <outlet property="conFire2button" destination="djn-TO-cmE" id="oMr-sf-93b"/>
-                <outlet property="conJoy1KeysDelButton" destination="HiD-6D-klX" id="obh-w0-ZXe"/>
-                <outlet property="conJoy2KeysDelButton" destination="HXz-VN-lav" id="h9O-mM-MZD"/>
                 <outlet property="conLeft1" destination="uV2-JW-f79" id="AlV-3u-zeI"/>
                 <outlet property="conLeft1button" destination="5mS-Ar-Jsd" id="TGK-uv-Upv"/>
                 <outlet property="conLeft2" destination="miM-YL-Ani" id="73D-0j-3bZ"/>
                 <outlet property="conLeft2button" destination="F4n-ks-cTv" id="Ctx-q9-aY8"/>
-                <outlet property="conMouseKeysDelButton" destination="g51-Ax-Tce" id="OEi-dC-Fez"/>
                 <outlet property="conMouseLeft" destination="ahV-0K-IDB" id="vRk-1F-tCa"/>
                 <outlet property="conMouseLeftButton" destination="VUi-BM-ADA" id="DBj-2l-jLp"/>
                 <outlet property="conMouseRight" destination="2Qh-Sl-CZI" id="eKS-Nd-aGY"/>

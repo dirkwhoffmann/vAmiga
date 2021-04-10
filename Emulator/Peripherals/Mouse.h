@@ -34,7 +34,7 @@ class ShakeDetector {
     
 public:
     
-    // Feed in new coordinates and checks for a shake
+    // Feeds in new coordinates and checks for a shake
     bool isShakingAbs(double x);
     bool isShakingRel(double dx);
 };
@@ -53,26 +53,26 @@ class Mouse : public AmigaComponent {
 public:
     
     // Mouse button states
-    bool leftButton;
-    bool rightButton;
+    bool leftButton = false;
+    bool rightButton = false;
     
 private:
     
     // The current mouse position
-    double mouseX;
-    double mouseY;
+    double mouseX = 0.0;
+    double mouseY = 0.0;
 
     // Recorded mouse position in getDeltaX() and getDeltaY()
-    double oldMouseX;
-    double oldMouseY;
+    double oldMouseX = 0.0;
+    double oldMouseY = 0.0;
 
     /* The target mouse position. In order to achieve a smooth mouse movement,
      * a new mouse coordinate is not written directly into mouseX and mouseY.
      * Instead, these variables are set. In execute(), mouseX and mouseY are
      * shifted smoothly towards the target positions.
      */
-    double targetX;
-    double targetY;
+    double targetX = 0.0;
+    double targetY = 0.0;
     
     // Scaling factors applied to the raw mouse coordinates in setXY()
     double scaleX = 1.0;
@@ -90,8 +90,9 @@ private:
 public:
     
     Mouse(Amiga& ref, ControlPort& pref);
-    
     const char *getDescription() const override;
+    
+private:
     
     void _reset(bool hard) override;
     
@@ -175,9 +176,13 @@ public:
     // Returns the mouse coordinates as they appear in the JOYDAT register
     u16 getXY();
     
+    // Runs the shake detector
+    bool detectShakeXY(double x, double y);
+    bool detectShakeDxDy(double dx, double dy);
+
     // Emulates a mouse movement
     void setXY(double x, double y);
-    void setDeltaXY(double dx, double dy);
+    void setDxDy(double dx, double dy);
 
     // Presses or releases a mouse button
     void setLeftButton(bool value);

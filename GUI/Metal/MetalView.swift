@@ -15,6 +15,15 @@ public class MetalView: MTKView {
     
     var prefs: Preferences { return parent.pref }
     
+    // Reference to the first mouse (internal, always connected)
+    var mouse1: GamePad?
+
+    // Reference to the second mouse (USB, usually unconnected)
+    var mouse2: GamePad?
+
+    // Shows whether the Amiga possesses of the mouse
+    var gotMouse = false
+
     /* Tracking area for trapping the mouse. The tracking area is utilized to
      * determine when the mouse is moved into or out of the emulator window.
      */
@@ -22,17 +31,8 @@ public class MetalView: MTKView {
     
     // Indicates whether the mouse is currently within the tracking area
     var insideTrackingArea = false
-    
-    // Shows whether the Amiga is currently in control of the mouse
-    var gotMouse = false
-    
-    // Reference to the first mouse (internal, always connected)
-    var mouse1: GamePad?
-
-    // Reference to the second mouse (USB, usually unconnected)
-    var mouse2: GamePad?
-
-    // Variables needed to detect a shaking mouse
+        
+    // Time stamp needed to detect a shaking mouse
     var lastShake = DispatchTime.init(uptimeNanoseconds: 0)
     
     required public init(coder: NSCoder) {

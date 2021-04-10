@@ -54,7 +54,7 @@ class PreferencesController: DialogController {
     // Tag of the button that is currently being recorded
     var conRecordedKey: Int?
 
-    // Joystick emulation keys
+    // Emulation keys
     @IBOutlet weak var conLeft1: NSTextField!
     @IBOutlet weak var conLeft1button: NSButton!
     @IBOutlet weak var conRight1: NSTextField!
@@ -65,6 +65,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var conDown1button: NSButton!
     @IBOutlet weak var conFire1: NSTextField!
     @IBOutlet weak var conFire1button: NSButton!
+    
     @IBOutlet weak var conLeft2: NSTextField!
     @IBOutlet weak var conLeft2button: NSButton!
     @IBOutlet weak var conRight2: NSTextField!
@@ -76,18 +77,14 @@ class PreferencesController: DialogController {
     @IBOutlet weak var conFire2: NSTextField!
     @IBOutlet weak var conFire2button: NSButton!
 
-    // Mouse emulation keys
     @IBOutlet weak var conMouseLeft: NSTextField!
     @IBOutlet weak var conMouseLeftButton: NSButton!
     @IBOutlet weak var conMouseRight: NSTextField!
     @IBOutlet weak var conMouseRightButton: NSButton!
+
     @IBOutlet weak var conDisconnectKeys: NSButton!
 
-    @IBOutlet weak var conJoy1KeysDelButton: NSButton!
-    @IBOutlet weak var conJoy2KeysDelButton: NSButton!
-    @IBOutlet weak var conMouseKeysDelButton: NSButton!
-
-    // Mouse control
+    // Mouse
     @IBOutlet weak var conRetainMouseKeyComb: NSPopUpButton!
     @IBOutlet weak var conRetainMouseWithKeys: NSButton!
     @IBOutlet weak var conRetainMouseByClick: NSButton!
@@ -96,7 +93,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var conReleaseMouseWithKeys: NSButton!
     @IBOutlet weak var conReleaseMouseByShaking: NSButton!
 
-    // Joystick buttons
+    // Joystick
     @IBOutlet weak var conAutofire: NSButton!
     @IBOutlet weak var conAutofireCease: NSButton!
     @IBOutlet weak var conAutofireCeaseText: NSTextField!

@@ -99,30 +99,15 @@ private:
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     isize didLoadFromBuffer(const u8 *buffer) override;
     
-    
-    //
-    // Accessing
-    //
-
-public:
-
-    // Modifies the PRA bits of CIA A according to the current button state
-    void changePra(u8 &pra) const;
-
-private:
-
-    // Reloads the autofire magazine
-    void reload();
-    
-    // Updates variable nextAutofireFrame
-    void scheduleNextShot();
-
 
     //
     // Using the device
     //
     
 public:
+
+    // Modifies the PRA bits of CIA A according to the current button state
+    void changePra(u8 &pra) const;
 
     // Callback handler for function ControlPort::joydat()
     u16 joydat() const;
@@ -137,4 +122,12 @@ public:
      * invoked at the end of each frame to make the auto-fire mechanism work.
      */
     void execute();
+    
+private:
+
+    // Reloads the autofire magazine
+    void reload();
+    
+    // Updates variable nextAutofireFrame
+    void scheduleNextShot();
 };
