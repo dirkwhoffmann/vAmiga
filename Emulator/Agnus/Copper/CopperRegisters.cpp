@@ -91,7 +91,8 @@ Copper::pokeCOP1LCH(u16 value)
         cop1end = cop1lc;
 
         if (!activeInThisFrame && copList == 1) {
-            coppc = cop1lc;
+            setPC(cop1lc);
+            // coppc = cop1lc;
         }
     }
 }
@@ -108,7 +109,8 @@ Copper::pokeCOP1LCL(u16 value)
         cop1end = cop1lc;
         
         if (!activeInThisFrame && copList == 1) {
-            coppc = cop1lc;
+            setPC(cop1lc);
+            // coppc = cop1lc;
         }
     }
 }
@@ -123,7 +125,8 @@ Copper::pokeCOP2LCH(u16 value)
         cop2end = cop2lc;
 
         if (!activeInThisFrame && copList == 2) {
-            coppc = cop2lc;
+            setPC(cop2lc);
+            // coppc = cop2lc;
         }
     }
 }
@@ -140,7 +143,8 @@ Copper::pokeCOP2LCL(u16 value)
         cop2end = cop2lc;
         
         if (!activeInThisFrame && copList == 2) {
-            coppc = cop2lc;
+            setPC(cop2lc);
+            // coppc = cop2lc;
         }
     }
 }

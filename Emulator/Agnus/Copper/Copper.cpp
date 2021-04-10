@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Copper.h"
+#include "CopperDebugger.h"
 #include "Agnus.h"
 #include "Checksum.h"
 #include "IO.h"
@@ -16,6 +17,10 @@
 
 Copper::Copper(Amiga& ref) : AmigaComponent(ref)
 {
+    subComponents = std::vector<HardwareComponent *> {
+        
+        &debugger
+    };
 }
 
 void
@@ -49,6 +54,9 @@ Copper::_dump(dump::Category category, std::ostream& os) const
         
         os << DUMP("Active Copper list") << DEC << (isize)copList << std::endl;
         os << DUMP("Skip flag") << ISSET(skip) << std::endl;
+        
+        // Remove ASAP
+        debugger.dump(category, os);
     }
     
     if (category & dump::Registers) {
@@ -63,9 +71,21 @@ Copper::_dump(dump::Category category, std::ostream& os) const
 }
 
 void
+Copper::setPC(u32 addr)
+{
+    coppc = addr;
+    
+    // Notify the debugger
+    if (debugMode) { debugger.jumped(); }
+}
+
+void
 Copper::advancePC()
 {
     coppc += 2;
+    
+    // Notify the debugger
+    if (debugMode) { debugger.advanced(); }
 }
 
 void
@@ -73,8 +93,8 @@ Copper::switchToCopperList(isize nr)
 {
     assert(nr == 1 || nr == 2);
 
-    // debug("switchToCopperList(%d) coppc: %x -> %x\n", nr, coppc, (nr == 1) ? cop1lc : cop2lc);
-    coppc = (nr == 1) ? cop1lc : cop2lc;
+    // coppc = (nr == 1) ? cop1lc : cop2lc;
+    setPC(nr == 1 ? cop1lc : cop2lc);
     copList = nr;
     agnus.scheduleRel<SLOT_COP>(0, COP_REQ_DMA);
 }
@@ -249,46 +269,6 @@ Copper::move(u32 addr, u16 value)
     agnus.doCopperDMA(addr, value);
 }
 
-#if 0
-bool
-Copper::comparator(u32 beam, u32 waitpos, u32 mask)
-{
-    // Get comparison bits for the vertical beam position
-    u8 vBeam = (beam >> 8) & 0xFF;
-    u8 vWaitpos = (waitpos >> 8) & 0xFF;
-    u8 vMask = (mask >> 8) | 0x80;
-    
-    trace(COP_DEBUG && verbose,
-          " * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
-
-    // Compare vertical positions
-    if ((vBeam & vMask) < (vWaitpos & vMask)) {
-        // debug("beam %d waitpos %d mask 0x%x FALSE\n", beam, waitpos, mask);
-        return false;
-    }
-    if ((vBeam & vMask) > (vWaitpos & vMask)) {
-        // debug("beam %d waitpos %d mask 0x%x TRUE\n", beam, waitpos, mask);
-        return true;
-    }
-
-    // Get comparison bits for horizontal position
-    u8 hBeam = beam & 0xFE;
-    u8 hWaitpos = waitpos & 0xFE;
-    u8 hMask = mask & 0xFE;
-
-    trace(COP_DEBUG && verbose,
-          " * hBeam = %X hWaitpos = %X hMask = %X\n", hBeam, hWaitpos, hMask);
-    /*
-    debug("Comparing horizontal position waitpos = %d vWait = %d hWait = %d \n", waitpos, vWaitpos, hWaitpos);
-    debug("hBeam = %d ($x) hMask = %X\n", hBeam, hBeam, hMask);
-    debug("Result = %d\n", (hBeam & hMask) >= (hWaitpos & hMask));
-    */
-
-    // Compare horizontal positions
-    return (hBeam & hMask) >= (hWaitpos & hMask);
-}
-#endif
-
 bool
 Copper::comparator(Beam beam, u16 waitpos, u16 mask) const
 {
@@ -296,8 +276,6 @@ Copper::comparator(Beam beam, u16 waitpos, u16 mask) const
     u8 vBeam = beam.v & 0xFF;
     u8 vWaitpos = HI_BYTE(waitpos);
     u8 vMask = HI_BYTE(mask) | 0x80;
-
-    // msg(" * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
 
     // Compare vertical positions
     if ((vBeam & vMask) < (vWaitpos & vMask)) {
@@ -313,13 +291,6 @@ Copper::comparator(Beam beam, u16 waitpos, u16 mask) const
     u8 hBeam = beam.h & 0xFE;
     u8 hWaitpos = LO_BYTE(waitpos) & 0xFE;
     u8 hMask = LO_BYTE(mask) & 0xFE;
-
-    // msg(" * hBeam = %X hWaitpos = %X hMask = %X\n", hBeam, hWaitpos, hMask);
-    /*
-     debug("Comparing horizontal position waitpos = %d vWait = %d hWait = %d \n", waitpos, vWaitpos, hWaitpos);
-     debug("hBeam = %d ($x) hMask = %X\n", hBeam, hBeam, hMask);
-     debug("Result = %d\n", (hBeam & hMask) >= (hWaitpos & hMask));
-     */
 
     // Compare horizontal positions
     return (hBeam & hMask) >= (hWaitpos & hMask);

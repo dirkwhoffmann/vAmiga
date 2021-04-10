@@ -10,19 +10,24 @@
 #pragma once
 
 #include "CopperTypes.h"
-#include "Event.h"
-#include "Memory.h"
 #include "AmigaComponent.h"
 #include "Beam.h"
 #include "Checksum.h"
+#include "CopperDebugger.h"
+#include "Event.h"
+#include "Memory.h"
 
 class Copper : public AmigaComponent
 {
     friend class Agnus;
+    friend class CopperDebugger;
     
     // Result of the latest inspection
     CopperInfo info;
 
+    // The Copper debugger
+    CopperDebugger debugger = CopperDebugger(amiga);
+    
     // The currently executed Copper list (1 or 2)
     u8 copList = 1;
 
@@ -174,6 +179,9 @@ public:
     
 private:
  
+    // Sets the program counter to a given address
+    void setPC(u32 addr);
+    
     // Advances the program counter
     void advancePC();
 
