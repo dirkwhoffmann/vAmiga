@@ -54,10 +54,14 @@ Copper::_inspect()
 void
 Copper::_dump(dump::Category category, std::ostream& os) const
 {
+    using namespace util;
+    
     if (category & dump::State) {
         
-        os << DUMP("Active Copper list") << DEC << (isize)copList << std::endl;
-        os << DUMP("Skip flag") << ISSET(skip) << std::endl;
+        os << tab("Active Copper list");
+        os << dec(copList) << std::endl;
+        os << tab("Skip flag");
+        os << bol(skip) << std::endl;
         
         // Remove ASAP
         debugger.dump(category, os);
@@ -65,12 +69,18 @@ Copper::_dump(dump::Category category, std::ostream& os) const
     
     if (category & dump::Registers) {
         
-        os << DUMP("COPPC") << HEX32 << (isize)coppc << std::endl;
-        os << DUMP("COP1LC") << HEX32 << (isize)cop1lc << std::endl;
-        os << DUMP("COP1LC") << HEX32 << (isize)cop2lc << std::endl;
-        os << DUMP("COPINS1") << HEX16 << (isize)cop1ins << std::endl;
-        os << DUMP("COPINS2") << HEX16 << (isize)cop2ins << std::endl;
-        os << DUMP("CDANG") << DEC << (isize)cdang << std::endl;
+        os << tab("COPPC");
+        os << hex(coppc) << std::endl;
+        os << tab("COP1LC");
+        os << hex(cop1lc) << std::endl;
+        os << tab("COP1LC");
+        os << hex(cop2lc) << std::endl;
+        os << tab("COPINS1");
+        os << hex(cop1ins) << std::endl;
+        os << tab("COPINS2");
+        os << hex(cop2ins) << std::endl;
+        os << tab("CDANG");
+        os << bol(cdang) << std::endl;
     }
     
     if ((category & dump::List1) || (category & dump::List2)) {

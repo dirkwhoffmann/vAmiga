@@ -186,41 +186,72 @@ Drive::_inspect()
 void
 Drive::_dump(dump::Category category, std::ostream& os) const
 {
+    using namespace util;
+    
     if (category & dump::Config) {
         
-        os << DUMP("Type") << DriveTypeEnum::key(config.type) << std::endl;
-        os << DUMP("Emulate mechanics") << YESNO(config.mechanicalDelays) << std::endl;
-        os << DUMP("Start delay") << DEC << config.startDelay << std::endl;
-        os << DUMP("Stop delay") << DEC << config.stopDelay << std::endl;
-        os << DUMP("Step delay") << DEC << config.stepDelay << std::endl;
-        os << DUMP("Insert volume") << DEC << (isize)config.insertVolume << std::endl;
-        os << DUMP("Eject volume") << DEC << (isize)config.ejectVolume << std::endl;
-        os << DUMP("Step volume") << DEC << (isize)config.stepVolume << std::endl;
-        os << DUMP("Poll volume") << DEC << (isize)config.pollVolume << std::endl;
-        os << DUMP("Pan") << DEC << (isize)config.pan << std::endl;
-        os << DUMP("Default file system") << FSVolumeTypeEnum::key(config.defaultFileSystem) << std::endl;
-        os << DUMP("Default boot block") << BootBlockIdEnum::key(config.defaultBootBlock) << std::endl;
+        os << tab("Type");
+        os << DriveTypeEnum::key(config.type) << std::endl;
+        os << tab("Emulate mechanics");
+        os << bol(config.mechanicalDelays) << std::endl;
+        os << tab("Start delay");
+        os << dec(config.startDelay) << std::endl;
+        os << tab("Stop delay");
+        os << dec(config.stopDelay) << std::endl;
+        os << tab("Step delay");
+        os << dec(config.stepDelay) << std::endl;
+        os << tab("Insert volume");
+        os << dec(config.insertVolume) << std::endl;
+        os << tab("Eject volume");
+        os << dec(config.ejectVolume) << std::endl;
+        os << tab("Step volume");
+        os << dec(config.stepVolume) << std::endl;
+        os << tab("Poll volume");
+        os << dec(config.pollVolume) << std::endl;
+        os << tab("Pan");
+        os << dec(config.pan) << std::endl;
+        os << tab("Default file system");
+        os << FSVolumeTypeEnum::key(config.defaultFileSystem) << std::endl;
+        os << tab("Default boot block");
+        os << BootBlockIdEnum::key(config.defaultBootBlock) << std::endl;
     }
     
     if (category & dump::State) {
         
-        os << DUMP("Nr") << DEC << (isize)nr << std::endl;
-        os << DUMP("Id count") << DEC << (isize)idCount << std::endl;
-        os << DUMP("Id bit") << DEC << (isize)idBit << std::endl;
-        os << DUMP("motorSpeed()") << DEC << motorSpeed() << std::endl;
-        os << DUMP("getMotor()") << YESNO(getMotor()) << std::endl;
-        os << DUMP("motorSpeedingUp()") << YESNO(motorSpeedingUp()) << std::endl;
-        os << DUMP("motorAtFullSpeed()") << YESNO(motorAtFullSpeed()) << std::endl;
-        os << DUMP("motorSlowingDown()") << YESNO(motorSlowingDown()) << std::endl;
-        os << DUMP("motorStopped()") << YESNO(motorStopped()) << std::endl;
-        os << DUMP("dskchange") << DEC << (isize)dskchange << std::endl;
-        os << DUMP("dsklen") << DEC << (isize)dsklen << std::endl;
-        os << DUMP("prb") << HEX8 << (isize)prb << std::endl;
-        os << DUMP("Side") << DEC << (isize)head.side << std::endl;
-        os << DUMP("Cylinder") << DEC << (isize)head.cylinder << std::endl;
-        os << DUMP("Offset") << DEC << (isize)head.offset << std::endl;
-        os << DUMP("cylinderHistory") << HEX64 << cylinderHistory << std::endl;
-        os << DUMP("Disk") << YESNO(disk) << std::endl;
+        os << tab("Nr");
+        os << dec(nr) << std::endl;
+        os << tab("Id count");
+        os << dec(idCount) << std::endl;
+        os << tab("Id bit");
+        os << dec(idBit) << std::endl;
+        os << tab("motorSpeed()");
+        os << motorSpeed() << std::endl;
+        os << tab("getMotor()");
+        os << bol(getMotor()) << std::endl;
+        os << tab("motorSpeedingUp()");
+        os << bol(motorSpeedingUp()) << std::endl;
+        os << tab("motorAtFullSpeed()");
+        os << bol(motorAtFullSpeed()) << std::endl;
+        os << tab("motorSlowingDown()");
+        os << bol(motorSlowingDown()) << std::endl;
+        os << tab("motorStopped()");
+        os << bol(motorStopped()) << std::endl;
+        os << tab("dskchange");
+        os << dec(dskchange) << std::endl;
+        os << tab("dsklen");
+        os << dec(dsklen) << std::endl;
+        os << tab("prb");
+        os << hex(prb) << std::endl;
+        os << tab("Side");
+        os << dec(head.side) << std::endl;
+        os << tab("Cylinder");
+        os << dec(head.cylinder) << std::endl;
+        os << tab("Offset");
+        os << dec(head.offset) << std::endl;
+        os << tab("cylinderHistory");
+        os << hex(cylinderHistory) << std::endl;
+        os << tab("Disk");
+        os << bol(disk) << std::endl;
     }
 }
 

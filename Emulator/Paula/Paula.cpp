@@ -62,24 +62,26 @@ Paula::_inspect()
 void
 Paula::_dump(dump::Category category, std::ostream& os) const
 {
+    using namespace util;
+    
     if (category & dump::State) {
     
-        os << DUMP("potCntX0") << (isize)potCntX0 << std::endl;
-        os << DUMP("potCntY0") << (isize)potCntY0 << std::endl;
-        os << DUMP("potCntX1") << (isize)potCntX1 << std::endl;
-        os << DUMP("potCntY1") << (isize)potCntY1 << std::endl;
-        os << DUMP("chargeX0") << chargeX0 << std::endl;
-        os << DUMP("chargeY0") << chargeX0 << std::endl;
-        os << DUMP("chargeX1") << chargeX1 << std::endl;
-        os << DUMP("chargeY1") << chargeY1 << std::endl;
+        os << tab("potCntX0") << dec(potCntX0) << std::endl;
+        os << tab("potCntY0") << dec(potCntY0) << std::endl;
+        os << tab("potCntX1") << dec(potCntX1) << std::endl;
+        os << tab("potCntY1") << dec(potCntY1) << std::endl;
+        os << tab("chargeX0") << chargeX0 << std::endl;
+        os << tab("chargeY0") << chargeX0 << std::endl;
+        os << tab("chargeX1") << chargeX1 << std::endl;
+        os << tab("chargeY1") << chargeY1 << std::endl;
     }
     
     if (category & dump::Registers) {
         
-        os << DUMP("INTENA") << HEX16 << (isize)intena << std::endl;
-        os << DUMP("INTREQ") << HEX16 << (isize)intreq << std::endl;
-        os << DUMP("ADKCON") << HEX16 << (isize)adkcon << std::endl;
-        os << DUMP("POTGO") << HEX16 << (isize)potgo << std::endl;
+        os << tab("INTENA") << hex(intena) << std::endl;
+        os << tab("INTREQ") << hex(intreq) << std::endl;
+        os << tab("ADKCON") << hex(adkcon) << std::endl;
+        os << tab("POTGO") << hex(potgo) << std::endl;
     }
 }
 

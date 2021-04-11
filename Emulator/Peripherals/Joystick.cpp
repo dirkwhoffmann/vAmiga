@@ -105,11 +105,13 @@ Joystick::setConfigItem(Option option, long id, i64 value)
 void
 Joystick::_dump(dump::Category category, std::ostream& os) const
 {
+    using namespace util;
+    
     if (category & dump::State) {
         
-        os << DUMP("Button pressed") << YESNO(button) << std::endl;
-        os << DUMP("X axis") << (isize)axisX << std::endl;
-        os << DUMP("Y axis") << (isize)axisY << std::endl;
+        os << tab("Button pressed") << bol(button) << std::endl;
+        os << tab("X axis") << dec(axisX) << std::endl;
+        os << tab("Y axis") << dec(axisY) << std::endl;
     }
 }
 

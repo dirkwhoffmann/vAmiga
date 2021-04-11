@@ -159,48 +159,53 @@ CIA::_inspect()
 void
 CIA::_dump(dump::Category category, std::ostream& os) const
 {
+    using namespace util;
+    
     if (category & dump::Config) {
         
-        os << DUMP("Revision") << CIARevisionEnum::key(config.revision) << std::endl;
-        os << DUMP("Emulate TOD bug") << YESNO(config.todBug) << std::endl;
-        os << DUMP("Sync with E-clock") << YESNO(config.eClockSyncing) << std::endl;
+        os << tab("Revision");
+        os << CIARevisionEnum::key(config.revision) << std::endl;
+        os << tab("Emulate TOD bug");
+        os << bol(config.todBug) << std::endl;
+        os << tab("Sync with E-clock");
+        os << bol(config.eClockSyncing) << std::endl;
     }
     
     if (category & dump::State) {
         
-        os << DUMP("Clock") << DEC << clock << std::endl;
-        os << DUMP("Sleeping") << YESNO(sleeping) << std::endl;
-        os << DUMP("Tiredness") << (isize)tiredness << std::endl;
-        os << DUMP("Sleep cycle") << DEC << sleepCycle << std::endl;
-        os << DUMP("Wakeup cycle") << DEC << wakeUpCycle << std::endl;
-        os << DUMP("CNT") << CNT << std::endl;
-        os << DUMP("INT") << INT << std::endl;
+        os << tab("Clock") << dec(clock) << std::endl;
+        os << tab("Sleeping") << bol(sleeping) << std::endl;
+        os << tab("Tiredness") << (isize)tiredness << std::endl;
+        os << tab("Sleep cycle") << dec(sleepCycle) << std::endl;
+        os << tab("Wakeup cycle") << dec(wakeUpCycle) << std::endl;
+        os << tab("CNT") << bol(CNT) << std::endl;
+        os << tab("INT") << bol(INT) << std::endl;
 
     }
     
     if (category & dump::Registers) {
         
         os << std::endl;
-        os << DUMP("Counter A") << HEX16 << (isize)counterA << std::endl;
-        os << DUMP("Latch A") << HEX16 << (isize)latchA << std::endl;
-        os << DUMP("Data register A") << HEX8 << (isize)PRA << std::endl;
-        os << DUMP("Data port direction A") << HEX8 << (isize)DDRA << std::endl;
-        os << DUMP("Data port A") << HEX8 << (isize)PA << std::endl;
-        os << DUMP("Control register A") << HEX8 << (isize)CRA << std::endl;
+        os << tab("Counter A") << hex(counterA) << std::endl;
+        os << tab("Latch A") << hex(latchA) << std::endl;
+        os << tab("Data register A") << hex(PRA) << std::endl;
+        os << tab("Data port direction A") << hex(DDRA) << std::endl;
+        os << tab("Data port A") << hex(PA) << std::endl;
+        os << tab("Control register A") << hex(CRA) << std::endl;
         os << std::endl;
-        os << DUMP("Counter B") << HEX16 << (isize)counterB << std::endl;
-        os << DUMP("Latch B") << HEX16 << (isize)latchB << std::endl;
-        os << DUMP("Data register B") << HEX8 << (isize)PRB << std::endl;
-        os << DUMP("Data port direction B") << HEX8 << (isize)DDRB << std::endl;
-        os << DUMP("Data port B") << HEX8 << (isize)PB << std::endl;
-        os << DUMP("Control register B") << HEX8 << (isize)CRB << std::endl;
+        os << tab("Counter B") << hex(counterB) << std::endl;
+        os << tab("Latch B") << hex(latchB) << std::endl;
+        os << tab("Data register B") << hex(PRB) << std::endl;
+        os << tab("Data port direction B") << hex(DDRB) << std::endl;
+        os << tab("Data port B") << hex(PB) << std::endl;
+        os << tab("Control register B") << hex(CRB) << std::endl;
         os << std::endl;
-        os << DUMP("Interrupt control reg") << HEX8 << (isize)icr << std::endl;
-        os << DUMP("Interrupt mask reg") << HEX8 << (isize)imr << std::endl;
+        os << tab("Interrupt control reg") << hex(icr) << std::endl;
+        os << tab("Interrupt mask reg") << hex(imr) << std::endl;
         os << std::endl;
-        os << DUMP("SDR") << HEX8 << (isize)sdr << std::endl;
-        os << DUMP("SSR") << HEX8 << (isize)ssr << std::endl;
-        os << DUMP("serCounter") << HEX8 << (isize)serCounter << std::endl;
+        os << tab("SDR") << hex(sdr) << std::endl;
+        os << tab("SSR") << hex(ssr) << std::endl;
+        os << tab("serCounter") << dec(serCounter) << std::endl;
         os << std::endl;
     }
 }

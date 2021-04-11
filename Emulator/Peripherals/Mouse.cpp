@@ -115,25 +115,40 @@ Mouse::updateScalingFactors()
 void
 Mouse::_dump(dump::Category category, std::ostream& os) const
 {
+    using namespace util;
+    
     if (category & dump::Config) {
 
-        os << DUMP("Pull-up resistors") << YESNO(config.pullUpResistors) << std::endl;
-        os << DUMP("Shake detection") << YESNO(config.shakeDetection) << std::endl;
-        os << DUMP("Velocity") << config.velocity << std::endl;
+        os << tab("Pull-up resistors");
+        os << bol(config.pullUpResistors) << std::endl;
+        os << tab("Shake detection");
+        os << bol(config.shakeDetection) << std::endl;
+        os << tab("Velocity");
+        os << dec(config.velocity) << std::endl;
     }
     
     if (category & dump::State) {
         
-        os << DUMP("leftButton") << leftButton << std::endl;
-        os << DUMP("rightButton") << rightButton << std::endl;
-        os << DUMP("mouseX") << mouseX << std::endl;
-        os << DUMP("mouseY") << mouseY << std::endl;
-        os << DUMP("oldMouseX") << oldMouseX << std::endl;
-        os << DUMP("oldMouseY") << oldMouseY << std::endl;
-        os << DUMP("targetX") << targetX << std::endl;
-        os << DUMP("targetY") << targetY << std::endl;
-        os << DUMP("shiftX") << shiftX << std::endl;
-        os << DUMP("shiftY") << shiftY << std::endl;
+        os << tab("leftButton");
+        os << bol(leftButton) << std::endl;
+        os << tab("rightButton");
+        os << bol(rightButton) << std::endl;
+        os << tab("mouseX");
+        os << mouseX << std::endl;
+        os << tab("mouseY");
+        os << mouseY << std::endl;
+        os << tab("oldMouseX");
+        os << oldMouseX << std::endl;
+        os << tab("oldMouseY");
+        os << oldMouseY << std::endl;
+        os << tab("targetX");
+        os << targetX << std::endl;
+        os << tab("targetY");
+        os << targetY << std::endl;
+        os << tab("shiftX");
+        os << shiftX << std::endl;
+        os << tab("shiftY");
+        os << shiftY << std::endl;
     }
 }
 

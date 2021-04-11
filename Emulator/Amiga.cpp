@@ -368,6 +368,8 @@ Amiga::_inspect()
 void
 Amiga::_dump(dump::Category category, std::ostream& os) const
 {
+    using namespace util;
+    
     if (category & dump::Config) {
     
         if (CNF_DEBUG) {
@@ -382,9 +384,12 @@ Amiga::_dump(dump::Category category, std::ostream& os) const
     
     if (category & dump::State) {
         
-        os << DUMP("Power") << ONOFF(isPoweredOn()) << std::endl;
-        os << DUMP("Running") << YESNO(isRunning()) << std::endl;
-        os << DUMP("Warp") << ONOFF(warpMode) << std::endl;
+        os << tab("Power");
+        os << bol(isPoweredOn()) << std::endl;
+        os << tab("Running");
+        os << bol(isRunning()) << std::endl;
+        os << tab("Warp");
+        os << bol(warpMode) << std::endl;
     }
 }
 

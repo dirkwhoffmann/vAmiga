@@ -74,8 +74,7 @@ bool loadFile(const string &path, const string &name, u8 **bufptr, isize *size);
 // Handling streams
 //
 
-isize streamLength(std::istream &stream);
-
+/*
 #define DEC std::dec
 #define HEX8 std::hex << "0x" << std::setw(2) << std::setfill('0')
 #define HEX16 std::hex << "0x" << std::setw(4) << std::setfill('0')
@@ -89,5 +88,61 @@ isize streamLength(std::istream &stream);
 #define ISSET(x) ((x) ? "set" : "not set")
 #define EMULATED(x) ((x) ? "emulated" : "not emulated")
 #define DUMP(x) std::setw(24) << std::right << std::setfill(' ') << (x) << " : "
+*/
+
+//
+// Handling streams
+//
+
+isize streamLength(std::istream &stream);
+
+struct dec {
+    
+    i64 value;
+    
+    dec(i64 v) : value(v) { };
+    std::ostream &operator()(std::ostream &os) const;
+};
+
+struct hex {
+    
+    int digits;
+    u64 value;
+    
+    hex(int d, u64 v) : digits(d), value(v) { };
+    hex(u64 v) : hex(16, v) { };
+    hex(u32 v) : hex(8, v) { };
+    hex(u16 v) : hex(4, v) { };
+    hex(u8 v) : hex(2, v) { };
+    std::ostream &operator()(std::ostream &os) const;
+};
+
+struct tab {
+    
+    int pads;
+    const string &str;
+    
+    tab(int p, const string &s) : pads(p), str(s) { };
+    tab(const string &s) : tab(24, s) { };
+    std::ostream &operator()(std::ostream &os) const;
+};
+
+struct bol {
+    
+    static const string& yes;
+    static const string& no;
+    
+    bool value;
+    const string &str1, &str2;
+    
+    bol(bool v, const string &s1, const string &s2) : value(v), str1(s1), str2(s2) { };
+    bol(bool v) : bol(v, yes, no) { };
+    std::ostream &operator()(std::ostream &os) const;
+};
+
+inline std::ostream &operator <<(std::ostream &os, dec v) { return v(os); }
+inline std::ostream &operator <<(std::ostream &os, hex v) { return v(os); }
+inline std::ostream &operator <<(std::ostream &os, tab v) { return v(os); }
+inline std::ostream &operator <<(std::ostream &os, bol v) { return v(os); }
 
 }

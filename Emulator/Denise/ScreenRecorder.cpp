@@ -37,10 +37,12 @@ ScreenRecorder::_reset(bool hard)
 void
 ScreenRecorder::_dump(dump::Category category, std::ostream& os) const
 {
-    os << DUMP("ffmpeg path") << ffmpegPath() << std::endl;
-    os << DUMP("Installed") << YESNO(hasFFmpeg()) << std::endl;
-    os << DUMP("Video pipe") << YESNO(videoPipe != -1) << std::endl;
-    os << DUMP("Audio pipe") << YESNO(audioPipe != -1) << std::endl;
+    using namespace util;
+    
+    os << tab("ffmpeg path") << ffmpegPath() << std::endl;
+    os << tab("Installed") << bol(hasFFmpeg()) << std::endl;
+    os << tab("Video pipe") << bol(videoPipe != -1) << std::endl;
+    os << tab("Audio pipe") << bol(audioPipe != -1) << std::endl;
 }
     
 bool

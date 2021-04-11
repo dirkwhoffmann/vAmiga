@@ -306,44 +306,52 @@ Memory::_dump(dump::Category category, std::ostream& os) const
 {
     if (category & dump::Config) {
         
-        os << DUMP("Chip Ram") << std::dec << config.chipSize / 1024 << " KB" << std::endl;
-        os << DUMP("Slow Ram") << std::dec << config.slowSize / 1024 << " KB" << std::endl;
-        os << DUMP("Fast Ram") << std::dec << config.fastSize / 1024 << " KB" << std::endl;
-        os << DUMP("Rom") << std::dec << config.romSize / 1024 << " KB" << std::endl;
-        os << DUMP("Wom") << std::dec << config.womSize / 1024 << " KB" << std::endl;
-        os << DUMP("Rom extension") << std::dec << config.extSize / 1024 << " KB";
-        os << " at " << std::hex << config.extStart << "0000" << std::endl;
+        os << util::tab("Chip Ram");
+        os << util::dec(config.chipSize / 1024) << " KB" << std::endl;
+        os << util::tab("Slow Ram");
+        os << util::dec(config.slowSize / 1024) << " KB" << std::endl;
+        os << util::tab("Fast Ram");
+        os << util::dec(config.fastSize / 1024) << " KB" << std::endl;
+        os << util::tab("Rom");
+        os << util::dec(config.romSize / 1024) << " KB" << std::endl;
+        os << util::tab("Wom");
+        os << util::dec(config.womSize / 1024) << " KB" << std::endl;
+        os << util::tab("Rom extension");
+        os << util::dec(config.extSize / 1024) << " KB";
+        os << " at " << util::hex(config.extStart) << "0000" << std::endl;
         os << std::endl;
-        os << DUMP("Emulate Slow Ram delay");
-        os << YESNO(config.slowRamDelay) << std::endl;
-        os << DUMP("Bank mapping scheme");
+        os << util::tab("Emulate Slow Ram delay");
+        os << util::bol(config.slowRamDelay) << std::endl;
+        os << util::tab("Bank mapping scheme");
         os << BankMapEnum::key(config.bankMap) << std::endl;
-        os << DUMP("Ram init pattern");
+        os << util::tab("Ram init pattern");
         os << RamInitPatternEnum::key(config.ramInitPattern) << std::endl;
-        os << DUMP("Unmapped memory");
+        os << util::tab("Unmapped memory");
         os << UnmappedMemoryEnum::key(config.unmappingType) << std::endl;
     }
     
     if (category & dump::State) {
 
-        os << DUMP("Data bus") << HEX16 << dataBus << std::endl;
-        os << DUMP("Wom is locked") << YESNO(womIsLocked) << std::endl;
+        os << util::tab("Data bus");
+        os << util::hex(dataBus) << std::endl;
+        os << util::tab("Wom is locked");
+        os << util::bol(womIsLocked) << std::endl;
     }
     
     if (category & dump::Checksums) {
 
-        os << DUMP("Rom checksum");
-        os << HEX32 << util::fnv_1a_32(rom, config.romSize) << std::endl;
-        os << DUMP("Wom checksum");
-        os << HEX32 << util::fnv_1a_32(wom, config.womSize) << std::endl;
-        os << DUMP("Extended Rom checksum");
-        os << HEX32 << util::fnv_1a_32(ext, config.extSize) << std::endl;
-        os << DUMP("Chip Ram checksum");
-        os << HEX32 << util::fnv_1a_32(chip, config.chipSize) << std::endl;
-        os << DUMP("Slow Ram checksum");
-        os << HEX32 << util::fnv_1a_32(slow, config.slowSize) << std::endl;
-        os << DUMP("Fast Ram checksum");
-        os << HEX32 << util::fnv_1a_32(fast, config.fastSize) << std::endl;
+        os << util::tab("Rom checksum");
+        os << util::hex(util::fnv_1a_32(rom, config.romSize)) << std::endl;
+        os << util::tab("Wom checksum");
+        os << util::hex(util::fnv_1a_32(wom, config.womSize)) << std::endl;
+        os << util::tab("Extended Rom checksum");
+        os << util::hex(util::fnv_1a_32(ext, config.extSize)) << std::endl;
+        os << util::tab("Chip Ram checksum");
+        os << util::hex(util::fnv_1a_32(chip, config.chipSize)) << std::endl;
+        os << util::tab("Slow Ram checksum");
+        os << util::hex(util::fnv_1a_32(slow, config.slowSize)) << std::endl;
+        os << util::tab("Fast Ram checksum");
+        os << util::hex(util::fnv_1a_32(fast, config.fastSize)) << std::endl;
     }
     
     if (category & dump::BankMap) {
@@ -352,7 +360,9 @@ Memory::_dump(dump::Category category, std::ostream& os) const
         for (isize i = 0; i <= 0x100; i++) {
             MemorySource newsrc = i < 0x100 ? cpuMemSrc[i] : (MemorySource)-1;
             if (oldsrc != newsrc) {
-                os << HEX8 << oldi << " - " << HEX8 << i - 1 << " : ";
+                os << "        ";
+                os << util::hex((u8)(oldi)) << "0000" << " - ";
+                os << util::hex((u8)(i - 1)) << "ffff : ";
                 os << MemorySourceEnum::key(oldsrc) << std::endl;
                 oldsrc = newsrc; oldi = i;
             }

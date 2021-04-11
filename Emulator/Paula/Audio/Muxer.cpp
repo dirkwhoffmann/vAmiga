@@ -221,27 +221,36 @@ Muxer::setConfigItem(Option option, long id, i64 value)
 void
 Muxer::_dump(dump::Category category, std::ostream& os) const
 {
+    using namespace util;
+    
     if (category & dump::Config) {
         
-        os << " Sampling method : ";
+        os << tab("Sampling method");
         os << SamplingMethodEnum::key(config.samplingMethod) << std::endl;
-        os << "     Filter type : ";
+        os << tab("Filter type");
         os << FilterTypeEnum::key(config.filterType) << std::endl;
-        os << "Filter always on : ";
-        os << (config.filterAlwaysOn ? "yes" : "no") << std::endl;
-        os << " Channel volumes : ";
-        os << TAB(10) << config.vol[0];
-        os << TAB(10) << config.vol[1];
-        os << TAB(10) << config.vol[2];
-        os << TAB(10) << config.vol[3] << std::endl;
-        os << "     Channel pan : ";
-        os << TAB(10) << config.pan[0];
-        os << TAB(10) << config.pan[1];
-        os << TAB(10) << config.pan[2];
-        os << TAB(10) << config.pan[3] << std::endl;
-        os << "  Master volumes : ";
-        os << TAB(10) << config.volL;
-        os << TAB(10) << config.volR;
+        os << tab("Filter always on");
+        os << bol(config.filterAlwaysOn) << std::endl;
+        os << tab("Channel 1 pan");
+        os << dec(config.pan[0]) << std::endl;
+        os << tab("Channel 2 pan");
+        os << dec(config.pan[1]) << std::endl;
+        os << tab("Channel 3 pan");
+        os << dec(config.pan[2]) << std::endl;
+        os << tab("Channel 4 pan");
+        os << dec(config.pan[3]) << std::endl;
+        os << tab("Channel 1 volume");
+        os << dec(config.vol[0]) << std::endl;
+        os << tab("Channel 2 volume");
+        os << dec(config.vol[1]) << std::endl;
+        os << tab("Channel 3 volume");
+        os << dec(config.vol[2]) << std::endl;
+        os << tab("Channel 4 volume");
+        os << dec(config.vol[3]) << std::endl;
+        os << tab("Left master volume");
+        os << dec(config.volL) << std::endl;
+        os << tab("Right master volume");
+        os << dec(config.volR) << std::endl;
     }
 }
 

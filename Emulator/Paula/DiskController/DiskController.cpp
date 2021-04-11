@@ -186,44 +186,49 @@ DiskController::_inspect()
 void
 DiskController::_dump(dump::Category category, std::ostream& os) const
 {
+    using namespace util;
+    
+    string con = string("connected");
+    string dis = string("disconnected");
+    
     if (category & dump::Config) {
         
-        os << DUMP("Drive df0");
-        os << (config.connected[0] ? "connected" : "disconnected") << std::endl;
-        os << DUMP("Drive df1");
-        os << (config.connected[1] ? "connected" : "disconnected") << std::endl;
-        os << DUMP("Drive df2");
-        os << (config.connected[2] ? "connected" : "disconnected") << std::endl;
-        os << DUMP("Drive df3");
-        os << (config.connected[3] ? "connected" : "disconnected") << std::endl;
-        os << DUMP("Drive speed");
-        os << DEC << config.speed << std::endl;
-        os << DUMP("lockDskSync");
-        os << YESNO(config.lockDskSync) << std::endl;
-        os << DUMP("autoDskSync");
-        os << YESNO(config.autoDskSync) << std::endl;
+        os << tab("Drive df0");
+        os << bol(config.connected[0], con, dis) << std::endl;
+        os << tab("Drive df1");
+        os << bol(config.connected[1], con, dis) << std::endl;
+        os << tab("Drive df2");
+        os << bol(config.connected[2], con, dis) << std::endl;
+        os << tab("Drive df3");
+        os << bol(config.connected[3], con, dis) << std::endl;
+        os << tab("Drive speed");
+        os << dec(config.speed) << std::endl;
+        os << tab("lockDskSync");
+        os << bol(config.lockDskSync) << std::endl;
+        os << tab("autoDskSync");
+        os << bol(config.autoDskSync) << std::endl;
     }
     
     if (category & dump::State) {
         
-        os << DUMP("selected");
+        os << tab("selected");
         os << (int)selected << std::endl;
-        os << DUMP("state");
+        os << tab("state");
         os << DriveDmaStateName(state) << std::endl;
-        os << DUMP("syncCycle");
+        os << tab("syncCycle");
         os << syncCycle << std::endl;
-        os << DUMP("incoming");
+        os << tab("incoming");
         os << incoming << std::endl;
-        os << DUMP("fifo");
-        os << std::hex << fifo << " (" << fifoCount << ")" << std::endl;
-        os << DUMP("dsklen");
+        os << tab("fifo");
+        os << hex(fifo) << " (" << fifoCount << ")" << std::endl;
+        os << tab("dsklen");
         os << dsklen << std::endl;
-        os << DUMP("dsksync");
+        os << tab("dsksync");
         os << dsksync << std::endl;
-        os << DUMP("prb");
+        os << tab("prb");
         os << prb << std::endl;
-        os << DUMP("spinning");
-        os << YESNO(spinning()) << std::endl;
+        os << tab("spinning");
+        os << bol(spinning()) << std::endl;
     }
 }
 

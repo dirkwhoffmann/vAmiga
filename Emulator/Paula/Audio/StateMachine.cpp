@@ -55,11 +55,13 @@ StateMachine<nr>::_inspect()
 template <isize nr> void
 StateMachine<nr>::_dump(dump::Category category, std::ostream& os) const
 {
+    using namespace util;
+    
     if (category & dump::State) {
         
-        os << DUMP("State") << (isize)state << std::endl;
-        os << DUMP("AUDxIP") << (isize)AUDxIP() << std::endl;
-        os << DUMP("AUDxON") << (isize)AUDxON() << std::endl;
+        os << tab("State") << dec(state) << std::endl;
+        os << tab("AUDxIP") << bol(AUDxIP()) << std::endl;
+        os << tab("AUDxON") << bol(AUDxON()) << std::endl;
     }
 }
 

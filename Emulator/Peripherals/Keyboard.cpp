@@ -64,28 +64,36 @@ Keyboard::setConfigItem(Option option, i64 value)
 void
 Keyboard::_dump(dump::Category category, std::ostream& os) const
 {
+    using namespace util;
+    
     if (category & dump::Config) {
         
-        os << DUMP("Accurate emulation") << YESNO(config.accurate) << std::endl;
+        os << tab("Accurate emulation");
+        os << bol(config.accurate) << std::endl;
     }
     
     if (category & dump::State) {
         
-        os << DUMP("State") << KeyboardStateEnum::key(state) << std::endl;
-        os << DUMP("Shift register") << HEX8 << (isize)shiftReg << std::endl;
-        os << DUMP("SP LO cycle") << DEC << (isize)spLow << std::endl;
-        os << DUMP("SP HI cycle") << DEC << (isize)spHigh << std::endl;
+        os << tab("State");
+        os << KeyboardStateEnum::key(state) << std::endl;
+        os << tab("Shift register");
+        os << hex(shiftReg) << std::endl;
+        os << tab("SP LO cycle");
+        os << dec(spLow) << std::endl;
+        os << tab("SP HI cycle");
+        os << dec(spHigh) << std::endl;
 
-        os << DUMP("Type ahead buffer");
+        os << tab("Type ahead buffer");
         os << "[ ";
         for (isize i = 0; i < bufferIndex; i++) {
-            os << HEX8 << (int)typeAheadBuffer[i] << " ";
+            os << hex(typeAheadBuffer[i]) << " ";
         }
         os << " ]" << std::endl;
 
         isize count = 0;
         for (isize i = 0; i < 128; i++) count += (isize)keyDown[i];
-        os << DUMP("Down") << DEC << (isize)count << " keys" << std::endl;
+        os << tab("Down");
+        os << dec(count) << " keys" << std::endl;
     }
 }
 

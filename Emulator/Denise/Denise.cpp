@@ -174,37 +174,45 @@ Denise::_inspect()
 void
 Denise::_dump(dump::Category category, std::ostream& os) const
 {
+    using namespace util;
+    
     if (category & dump::Config) {
         
-        printf("_dump(Config)\n");
-        os << DUMP("Chip revision");
+        os << tab("Chip revision");
         os << DeniseRevisionEnum::key(config.revision) << std::endl;
-        os << DUMP("Hidden sprites");
-        os << HEX8 << (int)config.hiddenSprites << std::endl;
-        os << DUMP("Hidden layers");
-        os << HEX16 << (int)config.hiddenLayers << std::endl;
-        os << DUMP("Hidden layer alpha");
-        os << DEC << (int)config.hiddenLayerAlpha << std::endl;
-        os << DUMP("clxSprSpr") << YESNO(config.clxSprSpr) << std::endl;
-        os << DUMP("clxSprSpr") << YESNO(config.clxSprSpr) << std::endl;
-        os << DUMP("clxSprSpr") << YESNO(config.clxSprSpr) << std::endl;
+        os << tab("Hidden sprites");
+        os << hex(config.hiddenSprites) << std::endl;
+        os << tab("Hidden layers");
+        os << hex(config.hiddenLayers) << std::endl;
+        os << tab("Hidden layer alpha");
+        os << dec(config.hiddenLayerAlpha) << std::endl;
+        os << tab("clxSprSpr");
+        os << bol(config.clxSprSpr) << std::endl;
+        os << tab("clxSprSpr");
+        os << bol(config.clxSprSpr) << std::endl;
+        os << tab("clxSprSpr");
+        os << bol(config.clxSprSpr) << std::endl;
     }
     
     if (category & dump::Registers) {
         
-        os << "  BPLCON0: " << HEX16 << bplcon0;
-        os << "  BPLCON1: " << HEX16 << bplcon1;
-        os << "  BPLCON2: " << HEX16 << bplcon2;
-        os << "  BPLCON3: " << HEX16 << bplcon3 << std::endl;
-        
-        for (isize i = 0; i < 8; i++) {
-            
-            os << " SPR"+std::to_string(i)+"DATA: " << HEX16 << sprdata[i];
-            os << " SPR"+std::to_string(i)+"DATB: " << HEX16 << sprdatb[i];
-            os << "  SPR"+std::to_string(i)+"POS: " << HEX16 << sprpos[i];
-            os << "  SPR"+std::to_string(i)+"CTL: " << HEX16 << sprctl[i];
-            os << std::endl;
-        }
+        os << tab("BPLCON0");
+        os << hex(bplcon0) << std::endl;
+        os << tab("BPLCON1");
+        os << hex(bplcon1) << std::endl;
+        os << tab("BPLCON2");
+        os << hex(bplcon2) << std::endl;
+        os << tab("BPLCON3");
+        os << hex(bplcon3) << std::endl;
+    
+        os << tab("SPRxDATA");
+        for (isize i = 0; i < 8; i++) os << hex(sprdata[i]); os << std::endl;
+        os << tab("SPRxDATB");
+        for (isize i = 0; i < 8; i++) os << hex(sprdatb[i]); os << std::endl;
+        os << tab("SPRxPOS");
+        for (isize i = 0; i < 8; i++) os << hex(sprpos[i]); os << std::endl;
+        os << tab("SPRxCTL");
+        for (isize i = 0; i < 8; i++) os << hex(sprctl[i]); os << std::endl;
     }
 }
 

@@ -220,4 +220,33 @@ streamLength(std::istream &stream)
     return (isize)(end - beg);
 }
 
+std::ostream &
+dec::operator()(std::ostream &os) const
+{
+    os << std::dec << value;
+    return os;
+};
+
+std::ostream &
+hex::operator()(std::ostream &os) const
+{
+    os << std::hex << "0x" << std::setw(digits) << std::setfill('0') << value;
+    return os;
+};
+
+std::ostream &
+tab::operator()(std::ostream &os) const {
+    os << std::setw(pads) << std::right << std::setfill(' ') << str << " : ";
+    return os;
+}
+
+std::ostream &
+bol::operator()(std::ostream &os) const {
+    os << (value ? str1 : str2);
+    return os;
+}
+
+const string &bol::yes = "yes";
+const string &bol::no = "no";
+
 }
