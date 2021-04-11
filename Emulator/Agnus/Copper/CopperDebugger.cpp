@@ -16,7 +16,8 @@ void
 CopperDebugger::_reset(bool hard)
 {
     cache.clear();
-    current = nullptr;
+    current1 = nullptr;
+    current2 = nullptr;
     dump();
 }
 
@@ -37,33 +38,52 @@ CopperDebugger::_dump(dump::Category category, std::ostream& os) const
 }
 
 u32
-CopperDebugger::startOfCopperList()
+CopperDebugger::startOfCopperList(isize nr)
 {
-    return current ? current->start : 0;
+    assert(nr == 1 || nr == 2);
+
+    if (nr == 1) {
+        return current1 ? current1->start : 0;
+    } else {
+        return current2 ? current2->start : 0;
+    }
 }
 
 u32
-CopperDebugger::endOfCopperList()
+CopperDebugger::endOfCopperList(isize nr)
 {
-    return current ? current->end : 0;
+    assert(nr == 1 || nr == 2);
+
+    if (nr == 1) {
+        return current1 ? current1->end : 0;
+    } else {
+        return current2 ? current2->end : 0;
+    }
 }
 
 void
 CopperDebugger::advanced()
 {
-    u32 addr = copper.coppc;
+    auto addr = copper.coppc;
+    auto nr = copper.copList;
+    assert(nr == 1 || nr == 2);
     
     // Adjust the end address if the Copper went beyond
-    if (current && current->end < addr) {
-        current->end = addr;
+    if (nr == 1 && current1 && current1->end < addr) {
+        current1->end = addr;
+    }
+    if (nr == 2 && current2 && current2->end < addr) {
+        current2->end = addr;
     }
 }
 
 void
 CopperDebugger::jumped()
 {
-    u32 addr = copper.coppc;
-    
+    auto addr = copper.coppc;
+    auto nr = copper.copList;
+    assert(nr == 1 || nr == 2);
+
     // Lookup Copper list in cache
     auto list = cache.find(addr);
 
@@ -74,5 +94,9 @@ CopperDebugger::jumped()
     }
     
     // Switch to the new list
-    current = &list->second;
+    if (nr == 1) {
+        current1 = &list->second;
+    } else {
+        current2 = &list->second;
+    }
 }

@@ -18,6 +18,10 @@
 typedef struct
 {
     u8   copList;
+    u32  copList1Start;
+    u32  copList1End;
+    u32  copList2Start;
+    u32  copList2End;
     bool active;
     bool cdang;
     u32  coppc;

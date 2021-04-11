@@ -40,12 +40,21 @@ class CopperTableView: NSTableView {
         illegalInRow = [:]
 
         copperInfo = amiga.copper.getInfo()
-
+            
+        var addr, count: Int
+    
+        // nr = Int(copperInfo.copList)
+        track("nr = \(nr)")
+        
         assert(nr == 1 || nr == 2)
-        var addr = nr == 1 ? Int(copperInfo.cop1lc) : Int(copperInfo.cop2lc)
-        let count = nr == 1 ? Int(copperInfo.length1) : Int(copperInfo.length2)
-
-        for i in 0 ..< count {
+        if nr == 1 {
+            addr = Int(copperInfo.copList1Start)
+            count = Int(copperInfo.copList1End - copperInfo.copList1Start) / 4
+        } else {
+            addr = Int(copperInfo.copList2Start)
+            count = Int(copperInfo.copList2End - copperInfo.copList2Start) / 4
+        }
+        for i in 0 ..< min(count, 100) {
 
             addrInRow[i] = addr
             data1InRow[i] = amiga.mem.spypeek16(.AGNUS, addr: addr)
@@ -85,10 +94,13 @@ extension CopperTableView: NSTableViewDataSource {
 
     func numberOfRows(in tableView: NSTableView) -> Int {
 
+        /*
         if let info = copperInfo {
             return  nr == 1 ? Int(info.length1) : Int(info.length2)
         }
         return 0
+        */
+        return addrInRow.count
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {

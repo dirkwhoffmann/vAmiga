@@ -23,9 +23,12 @@ class CopperDebugger: public AmigaComponent {
     // Cached Copper lists
     std::map<u32, CopperList> cache;
         
-    // The currently executed Copper list
-    CopperList *current = nullptr;
-    
+    // The most recently used Copper list 1
+    CopperList *current1 = nullptr;
+
+    // The most recently used Copper list 2
+    CopperList *current2 = nullptr;
+
     
     //
     // Initializing
@@ -53,22 +56,6 @@ private:
     //
     
 private:
-    /*
-    template <class T>
-    void applyToPersistentItems(T& worker)
-    {
-    }
-
-    template <class T>
-    void applyToHardResetItems(T& worker)
-    {
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
-    }
-    */
     
     isize _size() override { return 0; }
     isize _load(const u8 *buffer) override { return 0; }
@@ -82,8 +69,8 @@ private:
 public:
     
     // Returns the start or end address of the currently processed Copper list
-    u32 startOfCopperList();
-    u32 endOfCopperList();
+    u32 startOfCopperList(isize nr);
+    u32 endOfCopperList(isize nr);
 
     // Notifies the debugger that the Copper has advanced the program counter
     void advanced();
