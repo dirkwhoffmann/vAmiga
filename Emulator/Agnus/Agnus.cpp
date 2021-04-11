@@ -288,13 +288,12 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         EventInfo eventInfo;
         inspectEvents(eventInfo);
             
-        os << tab(10, "Slot");
-        os << tab(14, "Event");
-        os << tab(18, "Trigger position");
-        os << tab(16, "Trigger cycle") << std::endl;
+        os << std::left << std::setw(10) << "Slot";
+        os << std::left << std::setw(14) << "Event";
+        os << std::left << std::setw(18) << "Trigger position";
+        os << std::left << std::setw(16) << "Trigger cycle" << std::endl;
         
-        for (isize i = 0; i < 15; i++) {
-        // for (isize i = 0; i < SLOT_COUNT; i++) {
+        for (isize i = 0; i < 23; i++) {
 
             EventSlotInfo &info = eventInfo.slotInfo[i];
             bool willTrigger = info.trigger != NEVER;

@@ -58,7 +58,7 @@ class CopperTableView: NSTableView {
         }
         length = (end - start) / 4
         addr = start
-        count = min(length, 100) + extraRows
+        count = min(length, 500) + extraRows
 
         for i in 0 ..< count {
 
