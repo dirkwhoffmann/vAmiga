@@ -20,6 +20,7 @@
 #include "FSPartition.h"
 #include "FSRootBlock.h"
 #include "FSUserDirBlock.h"
+#include "MemUtils.h"
 
 FSBlock *
 FSBlock::makeWithType(FSPartition &p, Block nr, FSBlockType type)
@@ -102,7 +103,7 @@ FSBlock::write32(u8 *p, u32 value)
 void
 FSBlock::dumpData() const
 {
-    hexdumpLongwords(data, 512);
+    util::hexdumpLongwords(data, 512);
 }
 
 u32

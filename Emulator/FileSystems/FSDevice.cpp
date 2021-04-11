@@ -10,7 +10,8 @@
 #include "config.h"
 #include "IO.h"
 #include "FSDevice.h"
-#include "limits.h"
+#include "MemUtils.h"
+#include <limits.h>
 #include <set>
 #include <stack>
 
@@ -803,7 +804,7 @@ FSDevice::importVolume(const u8 *src, isize size, ErrorCode *err)
     debug(FS_DEBUG, "Success\n");
     info();
     dump();
-    hexdump(blocks[0]->data, 512);
+    util::hexdump(blocks[0]->data, 512);
     printDirectory(true);
     return true;
 }

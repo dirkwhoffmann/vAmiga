@@ -11,6 +11,7 @@
 		500217B82449CF7000E1A096 /* Configuration.xib in Resources */ = {isa = PBXBuildFile; fileRef = 500217B72449CF7000E1A096 /* Configuration.xib */; };
 		500217BA2449CFF500E1A096 /* ConfigurationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500217B92449CFF500E1A096 /* ConfigurationController.swift */; };
 		5009B7FC2557051A0037288E /* EXTFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5009B7FA2557051A0037288E /* EXTFile.cpp */; };
+		500A0A2A262305BE0019F013 /* MemUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500A0A28262305BE0019F013 /* MemUtils.cpp */; };
 		500A4E9F24470713002A4DE1 /* disk_eject.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4E9D24470713002A4DE1 /* disk_eject.aiff */; };
 		500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4E9E24470713002A4DE1 /* disk_insert.aiff */; };
 		500A4EA824472B4F002A4DE1 /* door_open.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4EA724472B4F002A4DE1 /* door_open.aiff */; };
@@ -20,7 +21,6 @@
 		500C0A562259402D000121CD /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		500C7170255EE2AC00DDEEB2 /* Concurrency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */; };
 		500CE876259252ED00462836 /* DevicesPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500CE875259252ED00462836 /* DevicesPrefs.swift */; };
-		50104E8E25ECE2FA0047A9AA /* Debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50104E8B25ECE1A10047A9AA /* Debug.cpp */; };
 		5010A78222B50B690041388B /* PortPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5010A78122B50B690041388B /* PortPanel.swift */; };
 		501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501429D82445F12B00FBDC90 /* TextureToolbox.swift */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
@@ -259,6 +259,8 @@
 		500770C1227C9FF3003A5F76 /* DriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveTypes.h; sourceTree = "<group>"; };
 		5009B7FA2557051A0037288E /* EXTFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXTFile.cpp; sourceTree = "<group>"; };
 		5009B7FB2557051A0037288E /* EXTFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXTFile.h; sourceTree = "<group>"; };
+		500A0A28262305BE0019F013 /* MemUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MemUtils.cpp; sourceTree = "<group>"; };
+		500A0A29262305BE0019F013 /* MemUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemUtils.h; sourceTree = "<group>"; };
 		500A4E9D24470713002A4DE1 /* disk_eject.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = disk_eject.aiff; sourceTree = "<group>"; };
 		500A4E9E24470713002A4DE1 /* disk_insert.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = disk_insert.aiff; sourceTree = "<group>"; };
 		500A4EA724472B4F002A4DE1 /* door_open.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = door_open.aiff; sourceTree = "<group>"; };
@@ -271,7 +273,6 @@
 		500C716F255EE2AC00DDEEB2 /* Concurrency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Concurrency.h; sourceTree = "<group>"; };
 		500CE875259252ED00462836 /* DevicesPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesPrefs.swift; sourceTree = "<group>"; };
 		50104E8525ECD0EF0047A9AA /* Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
-		50104E8B25ECE1A10047A9AA /* Debug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Debug.cpp; sourceTree = "<group>"; };
 		5010A78122B50B690041388B /* PortPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortPanel.swift; sourceTree = "<group>"; };
 		501429D82445F12B00FBDC90 /* TextureToolbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToolbox.swift; sourceTree = "<group>"; };
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
@@ -625,7 +626,6 @@
 		50E79BE7232D123000D296FB /* AmigaComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaComponent.cpp; sourceTree = "<group>"; };
 		50E79BE8232D123000D296FB /* AmigaComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaComponent.h; sourceTree = "<group>"; };
 		50E8199225B350DA00D2E3A5 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
-		50EA34F0258E38880010DC63 /* Debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Debug.h; sourceTree = "<group>"; };
 		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
 		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
 		50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportVideoDialog.xib; sourceTree = "<group>"; };
@@ -1306,12 +1306,12 @@
 				5072159F25EA9AE600787591 /* Chrono.cpp */,
 				500C716F255EE2AC00DDEEB2 /* Concurrency.h */,
 				500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */,
-				50EA34F0258E38880010DC63 /* Debug.h */,
-				50104E8B25ECE1A10047A9AA /* Debug.cpp */,
 				5072159C25EA698600787591 /* Exception.h */,
 				5072159B25EA698600787591 /* Exception.cpp */,
 				505A3A3921F4996400132020 /* SSEUtils.h */,
 				505A3A3821F4996400132020 /* SSEUtils.cpp */,
+				500A0A29262305BE0019F013 /* MemUtils.h */,
+				500A0A28262305BE0019F013 /* MemUtils.cpp */,
 				50B3C44825EAFB5500651700 /* Checksum.h */,
 				50B3C44725EAFB5500651700 /* Checksum.cpp */,
 				50C0B78125EC367000CDE1F2 /* IO.h */,
@@ -1581,7 +1581,6 @@
 				5057551025EAFF7900280977 /* Checksum.cpp in Sources */,
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
 				507215A925EAB4AC00787591 /* Chrono.cpp in Sources */,
-				50104E8E25ECE2FA0047A9AA /* Debug.cpp in Sources */,
 				50FFA7D02440CB0300BEBA6B /* ActivityMonitor.swift in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
@@ -1769,6 +1768,7 @@
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
 				5083CF602546BCB200A28EF8 /* FSRootBlock.cpp in Sources */,
 				508FDF8721EA1FBC0043D0E9 /* MsgQueue.cpp in Sources */,
+				500A0A2A262305BE0019F013 /* MemUtils.cpp in Sources */,
 				50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */,
 				50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */,
 				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,

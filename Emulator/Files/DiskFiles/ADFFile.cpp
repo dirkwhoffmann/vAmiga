@@ -11,10 +11,10 @@
 #include "ADFFile.h"
 #include "BootBlockImage.h"
 #include "Checksum.h"
-#include "Debug.h"
 #include "Disk.h"
 #include "Drive.h"
 #include "IO.h"
+#include "MemUtils.h"
 
 bool
 ADFFile::isCompatiblePath(const string &path)
@@ -468,7 +468,7 @@ ADFFile::encodeSector(Disk *disk, Track t, Sector s)
 void
 ADFFile::dumpSector(Sector s)
 {
-    hexdump(data + 512 * s, 512);
+    util::hexdump(data + 512 * s, 512);
 }
 
 void

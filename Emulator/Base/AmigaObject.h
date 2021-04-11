@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "Debug.h"
 #include "Error.h"
 
 /* Base class for all Amiga objects. This class adds a textual description

@@ -7,7 +7,17 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Debug.h"
+#include "MemUtils.h"
+
+namespace util {
+
+bool isZero(const u8 *ptr, usize size)
+{
+    for (usize i = 0; i < size; i++) {
+        if (ptr[i]) return false;
+    }
+    return true;
+}
 
 void hexdump(u8 *p, isize size, isize cols, isize pad)
 {
@@ -39,4 +49,6 @@ void hexdumpWords(u8 *p, isize size, isize cols)
 void hexdumpLongwords(u8 *p, isize size, isize cols)
 {
     hexdump(p, size, cols, 4);
+}
+
 }
