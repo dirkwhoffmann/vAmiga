@@ -329,7 +329,7 @@ public:
     isize instrCount(isize nr) const;
 
     // Manually lengthens or shortens the value returned by instrCount()
-    void adjustInstrCount(isize nr, isize offset);
+    // void adjustInstrCount(isize nr, isize offset);
 
     // Disassembles a single Copper command
     char *disassemble(u32 addr);

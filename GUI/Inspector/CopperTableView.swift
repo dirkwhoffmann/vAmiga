@@ -16,8 +16,14 @@ class CopperTableView: NSTableView {
     // Copper list (1 or 2)
     var nr = 1
 
+    // Length of the currently displayed Copper list
+    var length = 0
+    
+    // Number of additional rows to displays
+    var extraRows = 0
+    
     // Data caches
-    var copperInfo: CopperInfo!
+    // var copperInfo: CopperInfo!
     var addrInRow: [Int: Int] = [:]
     var data1InRow: [Int: Int] = [:]
     var data2InRow: [Int: Int] = [:]
@@ -33,28 +39,28 @@ class CopperTableView: NSTableView {
 
     private func cache() {
 
+        assert(nr == 1 || nr == 2)
+
         addrInRow = [:]
         data1InRow = [:]
         data2InRow = [:]
         instrInRow = [:]
         illegalInRow = [:]
 
-        copperInfo = amiga.copper.getInfo()
+        var start, end, addr, count: Int
             
-        var addr, count: Int
-    
-        // nr = Int(copperInfo.copList)
-        track("nr = \(nr)")
-        
-        assert(nr == 1 || nr == 2)
         if nr == 1 {
-            addr = Int(copperInfo.copList1Start)
-            count = Int(copperInfo.copList1End - copperInfo.copList1Start) / 4
+            start = Int(inspector.copperInfo.copList1Start)
+            end = Int(inspector.copperInfo.copList1End)
         } else {
-            addr = Int(copperInfo.copList2Start)
-            count = Int(copperInfo.copList2End - copperInfo.copList2Start) / 4
+            start = Int(inspector.copperInfo.copList2Start)
+            end = Int(inspector.copperInfo.copList2End)
         }
-        for i in 0 ..< min(count, 100) {
+        length = (end - start) / 4
+        addr = start
+        count = min(length, 100) + extraRows
+
+        for i in 0 ..< count {
 
             addrInRow[i] = addr
             data1InRow[i] = amiga.mem.spypeek16(.AGNUS, addr: addr)
@@ -94,12 +100,6 @@ extension CopperTableView: NSTableViewDataSource {
 
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        /*
-        if let info = copperInfo {
-            return  nr == 1 ? Int(info.length1) : Int(info.length2)
-        }
-        return 0
-        */
         return addrInRow.count
     }
     
@@ -122,8 +122,17 @@ extension CopperTableView: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
         if let cell = cell as? NSTextFieldCell {
+            
+            if row >= length {
+                cell.textColor = .secondaryLabelColor
+                return
+            }
+            
             if tableColumn?.identifier.rawValue == "instr" {
-                if illegalInRow[row] == true { cell.textColor = .warningColor; return }
+                if illegalInRow[row] == true {
+                    cell.textColor = .warningColor
+                    return
+                }
             }
             cell.textColor = .textColor
         }

@@ -500,6 +500,7 @@ Copper::blitterDidTerminate()
     }
 }
 
+/*
 isize
 Copper::instrCount(isize nr) const
 {
@@ -510,7 +511,8 @@ Copper::instrCount(isize nr) const
 
     return std::max(0, 1 + (stop - strt) / 4);
 }
-
+*/
+/*
 void
 Copper::adjustInstrCount(isize nr, isize offset)
 {
@@ -523,6 +525,7 @@ Copper::adjustInstrCount(isize nr, isize offset)
     }
     inspect();
 }
+*/
 
 char *
 Copper::disassemble(u32 addr)

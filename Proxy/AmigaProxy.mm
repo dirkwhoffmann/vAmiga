@@ -576,6 +576,7 @@ using namespace moira;
     return [self copper]->getInfo();
 }
 
+/*
 - (NSInteger)instrCount:(NSInteger)list
 {
     return [self copper]->instrCount(list);
@@ -585,6 +586,7 @@ using namespace moira;
 {
     [self copper]->adjustInstrCount(list, offset);
 }
+*/
 
 - (BOOL)isIllegalInstr:(NSInteger)addr
 {

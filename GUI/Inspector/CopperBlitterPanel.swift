@@ -24,20 +24,27 @@ extension Inspector {
         cacheCopper()
 
         if full {
-            let elements = [ copPC: fmt24 ]
+            
+            let elements = [ cop1LC: fmt24,
+                             cop2LC: fmt24,
+                             cop1INS: fmt16,
+                             cop2INS: fmt16,
+                             copPC: fmt24
+            ]
             for (c, f) in elements { assignFormatter(f, c!) }
         }
 
         let nr = Int(copperInfo.copList)
         let active = copperInfo.active
-        let paused = amiga.paused
 
-        copPC.integerValue = Int(copperInfo.coppc)
-        copCDANG.state = copperInfo.cdang ? .on : .off
         copActive1.state = active && nr == 1 ? .on : .off
         copActive2.state = active && nr == 2 ? .on : .off
-        copPlus.isEnabled = paused
-        copMinus.isEnabled = paused
+        cop1LC.integerValue = Int(copperInfo.cop1lc)
+        cop2LC.integerValue = Int(copperInfo.cop2lc)
+        cop1INS.integerValue = Int(copperInfo.cop1ins)
+        cop2INS.integerValue = Int(copperInfo.cop2ins)
+        copPC.integerValue = Int(copperInfo.coppc)
+        copCDANG.state = copperInfo.cdang ? .on : .off
 
         copList.refresh(count: count, full: full)
     }
@@ -128,14 +135,14 @@ extension Inspector {
 
     @IBAction func expandCopperListAction(_ sender: Any!) {
 
-        amiga.copper.adjustInstrCount(selectedCopperList, offset: 4)
+        copList.extraRows += 1
         fullRefresh()
         copList.scrollToBottom()
     }
 
     @IBAction func shrinkCopperListAction(_ sender: Any!) {
 
-        amiga.copper.adjustInstrCount(selectedCopperList, offset: -4)
+        copList.extraRows = max(copList.extraRows - 1, 0)
         fullRefresh()
         copList.scrollToBottom()
     }

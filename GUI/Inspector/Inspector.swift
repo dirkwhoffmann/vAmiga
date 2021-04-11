@@ -234,12 +234,16 @@ class Inspector: DialogController {
     @IBOutlet weak var dmaDSKEnable: NSButton!
 
     // Copper and Blitter panel
-    @IBOutlet weak var copSelector: NSSegmentedControl!
-    @IBOutlet weak var copList: CopperTableView!
     @IBOutlet weak var copActive1: NSButton!
     @IBOutlet weak var copActive2: NSButton!
+    @IBOutlet weak var cop1LC: NSTextField!
+    @IBOutlet weak var cop2LC: NSTextField!
+    @IBOutlet weak var cop1INS: NSTextField!
+    @IBOutlet weak var cop2INS: NSTextField!
     @IBOutlet weak var copPC: NSTextField!
     @IBOutlet weak var copCDANG: NSButton!
+    @IBOutlet weak var copSelector: NSSegmentedControl!
+    @IBOutlet weak var copList: CopperTableView!
     @IBOutlet weak var copPlus: NSButton!
     @IBOutlet weak var copMinus: NSButton!
 
