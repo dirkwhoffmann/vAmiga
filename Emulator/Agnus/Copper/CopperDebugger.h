@@ -29,6 +29,9 @@ class CopperDebugger: public AmigaComponent {
     // The most recently used Copper list 2
     CopperList *current2 = nullptr;
 
+    // Storage for disassembled instruction
+    char disassembly[128];
+
     
     //
     // Initializing
@@ -37,7 +40,6 @@ class CopperDebugger: public AmigaComponent {
 public:
     
     using AmigaComponent::AmigaComponent;
-    // CopperDebugger(Amiga& ref);
     const char *getDescription() const override { return "CopperDebugger"; }
     void _reset(bool hard) override;
     
@@ -77,4 +79,13 @@ public:
     
     // Notifies the debugger that the Copper has jumped to a new Copper list
     void jumped();
+    
+    
+    //
+    // Disassembling instructions
+    //
+    
+    // Disassembles a single Copper command
+    string disassemble(u32 addr) const;
+    string disassemble(isize list, isize offset) const;    
 };

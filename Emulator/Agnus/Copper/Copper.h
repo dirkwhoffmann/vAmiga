@@ -22,11 +22,15 @@ class Copper : public AmigaComponent
     friend class Agnus;
     friend class CopperDebugger;
     
-    // Result of the latest inspection
-    CopperInfo info;
+public:
 
     // The Copper debugger
     CopperDebugger debugger = CopperDebugger(amiga);
+
+private:
+    
+    // Result of the latest inspection
+    CopperInfo info;
     
     // The currently executed Copper list (1 or 2)
     u8 copList = 1;
@@ -65,9 +69,6 @@ class Copper : public AmigaComponent
      */
     bool activeInThisFrame;
    
-    // Storage for disassembled instruction
-    char disassembly[128];
-
 public:
 
     // Indicates if Copper is currently servicing an event (for debugging only)
@@ -317,24 +318,4 @@ private:
 public:
 
     void blitterDidTerminate();
-
-
-    //
-    // Debugging
-    //
-    
-public:
-
-    // Returns the number of instructions in Copper list 1 or 2
-    isize instrCount(isize nr) const;
-
-    // Manually lengthens or shortens the value returned by instrCount()
-    // void adjustInstrCount(isize nr, isize offset);
-
-    // Disassembles a single Copper command
-    char *disassemble(u32 addr);
-    char *disassemble(isize list, isize offset);
-
-    // Dumps a Copper list
-    void dumpCopperList(isize list, isize length);
 };

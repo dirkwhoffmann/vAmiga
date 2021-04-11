@@ -50,11 +50,22 @@ Interpreter::registerInstructions()
     
     root.add({"amiga", "power", "on"},
              "state", "Switches the Amiga on",
-             &RetroShell::exec <Token::amiga, Token::on>);
+             &RetroShell::exec <Token::amiga, Token::power, Token::on>);
 
     root.add({"amiga", "power", "off"},
              "state", "Switches the Amiga off",
-             &RetroShell::exec <Token::amiga, Token::off>);
+             &RetroShell::exec <Token::amiga, Token::power, Token::off>);
+
+    root.add({"amiga", "debug"},
+             "command", "Switches debug mode on or off");
+    
+    root.add({"amiga", "debug", "on"},
+             "state", "Switches debug mode on",
+             &RetroShell::exec <Token::amiga, Token::debug, Token::on>);
+
+    root.add({"amiga", "debug", "off"},
+             "state", "Switches debug mode off",
+             &RetroShell::exec <Token::amiga, Token::debug, Token::off>);
 
     root.add({"amiga", "run"},
              "command", "Starts the emulator thread",
@@ -295,6 +306,10 @@ Interpreter::registerInstructions()
     root.add({"copper", "inspect", "registers"},
              "category", "Displays the current register value",
              &RetroShell::exec <Token::copper, Token::inspect, Token::registers>);
+
+    root.add({"copper", "list"},
+             "command", "Disassembles a Copper list",
+             &RetroShell::exec <Token::copper, Token::list>, 1);
 
     
     //

@@ -62,16 +62,27 @@ RetroShell::exec <Token::source> (Arguments &argv, long param)
 //
 
 template <> void
-RetroShell::exec <Token::amiga, Token::on> (Arguments &argv, long param)
+RetroShell::exec <Token::amiga, Token::power, Token::on> (Arguments &argv, long param)
 {
     amiga.powerOn();
 }
 
 template <> void
-RetroShell::exec <Token::amiga, Token::off> (Arguments &argv, long param)
+RetroShell::exec <Token::amiga, Token::power, Token::off> (Arguments &argv, long param)
 {
-    amiga.pause();
     amiga.powerOff();
+}
+
+template <> void
+RetroShell::exec <Token::amiga, Token::debug, Token::on> (Arguments &argv, long param)
+{
+    amiga.debugOn();
+}
+
+template <> void
+RetroShell::exec <Token::amiga, Token::debug, Token::off> (Arguments &argv, long param)
+{
+    amiga.debugOff();
 }
 
 template <> void
@@ -364,6 +375,18 @@ template <> void
 RetroShell::exec <Token::copper, Token::inspect, Token::registers> (Arguments& argv, long param)
 {
     dump(amiga.agnus.copper, dump::Registers);
+}
+
+template <> void
+RetroShell::exec <Token::copper, Token::list> (Arguments& argv, long param)
+{
+    auto value = util::parseNum(argv.front());
+    
+    switch (value) {
+        case 1: dump(amiga.agnus.copper, dump::List1); break;
+        case 2: dump(amiga.agnus.copper, dump::List2); break;
+        default: throw ConfigArgError("1 or 2");
+    }
 }
 
 //

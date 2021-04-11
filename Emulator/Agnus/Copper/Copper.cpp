@@ -72,6 +72,11 @@ Copper::_dump(dump::Category category, std::ostream& os) const
         os << DUMP("COPINS2") << HEX16 << (isize)cop2ins << std::endl;
         os << DUMP("CDANG") << DEC << (isize)cdang << std::endl;
     }
+    
+    if ((category & dump::List1) || (category & dump::List2)) {
+        
+        debugger.dump(category, os);
+    }
 }
 
 void
@@ -497,76 +502,5 @@ Copper::blitterDidTerminate()
         } else {
             agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(1), COP_WAIT_BLIT);
         }
-    }
-}
-
-/*
-isize
-Copper::instrCount(isize nr) const
-{
-    assert(nr == 1 || nr == 2);
-
-    int strt = (nr == 1) ? cop1lc  : cop2lc;
-    int stop = (nr == 1) ? cop1end : cop2end;
-
-    return std::max(0, 1 + (stop - strt) / 4);
-}
-*/
-/*
-void
-Copper::adjustInstrCount(isize nr, isize offset)
-{
-    assert(nr == 1 || nr == 2);
-
-    if (nr == 1) {
-        if (cop1end + offset >= cop1lc) cop1end += offset;
-    } else {
-        if (cop2end + offset >= cop2lc) cop2end += offset;
-    }
-    inspect();
-}
-*/
-
-char *
-Copper::disassemble(u32 addr)
-{
-    char pos[16];
-    char mask[16];
-    
-    if (isMoveCmd(addr)) {
-        
-        sprintf(disassembly, "MOVE $%04X, %s", getDW(addr), regName(getRA(addr)));
-        return disassembly;
-    }
-    
-    const char *mnemonic = isWaitCmd(addr) ? "WAIT" : "SKIP";
-    const char *suffix = getBFD(addr) ? "" : "b";
-    
-    sprintf(pos, "($%02X,$%02X)", getVP(addr), getHP(addr));
-    
-    if (getVM(addr) == 0xFF && getHM(addr) == 0xFF) {
-        mask[0] = 0;
-    } else {
-        sprintf(mask, ", ($%02X,$%02X)", getHM(addr), getVM(addr));
-    }
-    
-    sprintf(disassembly, "%s%s %s%s", mnemonic, suffix, pos, mask);
-    return disassembly;
-}
-
-char *
-Copper::disassemble(isize list, isize offset)
-{
-    assert(list == 1 || list == 2);
-    
-    u32 addr = (u32)((list == 1 ? cop1lc : cop2lc) + 2 * offset);
-    return disassemble(addr);
-}
-
-void
-Copper::dumpCopperList(isize list, isize length)
-{
-    for (isize i = 0; i < length; i++) {
-        msg("%s\n", disassemble(list, 2*i));
     }
 }

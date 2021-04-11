@@ -576,18 +576,6 @@ using namespace moira;
     return [self copper]->getInfo();
 }
 
-/*
-- (NSInteger)instrCount:(NSInteger)list
-{
-    return [self copper]->instrCount(list);
-}
-
-- (void)adjustInstrCount:(NSInteger)list offset:(NSInteger)offset
-{
-    [self copper]->adjustInstrCount(list, offset);
-}
-*/
-
 - (BOOL)isIllegalInstr:(NSInteger)addr
 {
     return [self copper]->isIllegalInstr((u32)addr);
@@ -595,14 +583,14 @@ using namespace moira;
 
 - (NSString *)disassemble:(NSInteger)addr
 {
-    const char *str = [self copper]->disassemble((u32)addr);
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    string str = [self copper]->debugger.disassemble((u32)addr);
+    return [NSString stringWithUTF8String:str.c_str()];
 }
 
 - (NSString *)disassemble:(NSInteger)list instr:(NSInteger)offset
 {
-    const char *str = [self copper]->disassemble(list, offset);
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    string str = [self copper]->debugger.disassemble(list, offset);
+    return [NSString stringWithUTF8String:str.c_str()];
 }
 
 @end

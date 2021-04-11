@@ -31,13 +31,15 @@ for (util::AutoMutex _am(mutex); _am.active; _am.active = false)
 namespace dump {
 enum Category : usize {
     
-    Config    = 0b0000001,
-    State     = 0b0000010,
-    Registers = 0b0000100,
-    Events    = 0b0001000,
-    Checksums = 0b0010000,
-    Dma       = 0b0100000,
-    BankMap   = 0b1000000
+    Config    = 0b000000001,
+    State     = 0b000000010,
+    Registers = 0b000000100,
+    Events    = 0b000001000,
+    Checksums = 0b000010000,
+    Dma       = 0b000100000,
+    BankMap   = 0b001000000,
+    List1     = 0b010000000,
+    List2     = 0b100000000,
 };
 }
 

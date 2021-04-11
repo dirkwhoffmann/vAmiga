@@ -26,9 +26,9 @@ enum class Token
     dc, keyboard, memory, monitor, mouse, paula, serial, rtc,
 
     // Commands
-    about, audiate, autosync, clear, config, connect, disconnect, dsksync,
-    easteregg, eject, close, insert, inspect, list, load, lock, on, off, pause,
-    reset, run, set, source,
+    about, audiate, autosync, clear, config, connect, debug, disconnect,
+    dsksync, easteregg, eject, close, insert, inspect, list,
+    load, lock, on, off, pause, power, reset, run, set, source,
     
     // Categories
     checksums, devices, events, registers, state,
