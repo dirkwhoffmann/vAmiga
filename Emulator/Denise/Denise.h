@@ -508,11 +508,11 @@ public:
     template <bool hiresMode> void drawOdd(Pixel offset);
     template <bool hiresMode> void drawEven(Pixel offset);
     template <bool hiresMode> void drawBoth(Pixel offset);
-    void drawHiresOdd()  { if (armedOdd)  drawOdd <true>  (pixelOffsetOdd);  }
-    void drawHiresEven() { if (armedEven) drawEven<true>  (pixelOffsetEven); }
+    void drawHiresOdd()  { updateShiftRegisters(); if (armedOdd)  drawOdd <true>  (pixelOffsetOdd);  }
+    void drawHiresEven() { updateShiftRegisters(); if (armedEven) drawEven<true>  (pixelOffsetEven); }
     void drawHiresBoth();
-    void drawLoresOdd()  { if (armedOdd)  drawOdd <false> (pixelOffsetOdd);  }
-    void drawLoresEven() { if (armedEven) drawEven<false> (pixelOffsetEven); }
+    void drawLoresOdd() { updateShiftRegisters(); if (armedOdd)  drawOdd <false> (pixelOffsetOdd);  }
+    void drawLoresEven() { updateShiftRegisters(); if (armedEven) drawEven<false> (pixelOffsetEven); }
     void drawLoresBoth();
 
 private:
