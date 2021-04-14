@@ -23,16 +23,7 @@ DDF<hires>::compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll)
 {
     if (hires) {
                
-        /*
-        // Take the scroll value of BPLCON1 into account
-        i16 hiresStrt = ddfstrt - ((scroll & 0x7) >> 1);
-        
-        // Align the start cycle to the start of the next fetch unit
-        int hiresShift = (4 - (hiresStrt & 0b11)) & 0b11;
-        
         // Compute the beginning of the fetch window
-        strt = hiresStrt + hiresShift;
-        */
         strt = ddfstrt & ~0b11;
         
         // Compute the number of fetch units
@@ -43,16 +34,7 @@ DDF<hires>::compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll)
 
     } else {
         
-        /*
-        // Take the scroll value of BPLCON1 into account
-        i16 loresStrt = ddfstrt - ((scroll & 0xF) >> 1);
-        
-        // Align ddfstrt at the start of the next fetch unit
-        int loresShift = (8 - (loresStrt & 0b111)) & 0b111;
-        
         // Compute the beginning of the fetch window
-        strt = loresStrt + loresShift;
-        */
         strt = ddfstrt & ~0b111;
 
         // Compute the number of fetch units

@@ -50,11 +50,7 @@ struct DDF
     {
         return !(*this == ddf);
     }
-    
-    bool inRangeOdd(i16 pos) const { return pos > strtOdd && pos < stopOdd; }
-    bool inRangeEven(i16 pos) const { return pos > strtEven && pos < stopEven; }
-    bool oddAndEvenDiffer() const { return strtOdd != strtEven || stopOdd != stopEven; }
-    
+        
     /* Computes a DDF window
      *
      *       strt : Cycle number from DDFSTRT

@@ -352,6 +352,7 @@ private:
         << clxdat
         << clxcon
         << shiftReg
+        << fillPos
         << armedEven
         << armedOdd
         << pixelOffsetOdd
