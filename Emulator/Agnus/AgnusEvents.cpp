@@ -383,21 +383,25 @@ Agnus::serviceBPLEvent()
             break;
 
         case BPL_SR:
-            denise.fillShiftRegisters(false, true);
+            denise.updateShiftRegisters();
+            // denise.fillShiftRegisters(false, true);
             break;
             
         case BPL_SR | DRAW_ODD:
-            denise.fillShiftRegisters(false, true);
+            // denise.fillShiftRegisters(false, true);
+            denise.updateShiftRegisters();
             hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
             break;
             
         case BPL_SR | DRAW_EVEN:
-            denise.fillShiftRegisters(false, true);
+            // denise.fillShiftRegisters(false, true);
+            denise.updateShiftRegisters();
             hires() ? denise.drawHiresEven() : denise.drawLoresEven();
             break;
             
         case BPL_SR | DRAW_ODD | DRAW_EVEN:
-            denise.fillShiftRegisters(false, true);
+            // denise.fillShiftRegisters(false, true);
+            denise.updateShiftRegisters();
             hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
             break;
             

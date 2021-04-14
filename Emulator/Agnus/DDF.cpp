@@ -22,7 +22,8 @@ template <bool hires> void
 DDF<hires>::compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll)
 {
     if (hires) {
-                
+               
+        /*
         // Take the scroll value of BPLCON1 into account
         i16 hiresStrt = ddfstrt - ((scroll & 0x7) >> 1);
         
@@ -31,6 +32,8 @@ DDF<hires>::compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll)
         
         // Compute the beginning of the fetch window
         strt = hiresStrt + hiresShift;
+        */
+        strt = ddfstrt & ~0b11;
         
         // Compute the number of fetch units
         int fetchUnits = ((ddfstop - ddfstrt) + 15) >> 3;
@@ -40,6 +43,7 @@ DDF<hires>::compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll)
 
     } else {
         
+        /*
         // Take the scroll value of BPLCON1 into account
         i16 loresStrt = ddfstrt - ((scroll & 0xF) >> 1);
         
@@ -48,7 +52,9 @@ DDF<hires>::compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll)
         
         // Compute the beginning of the fetch window
         strt = loresStrt + loresShift;
-        
+        */
+        strt = ddfstrt & ~0b111;
+
         // Compute the number of fetch units
         int fetchUnits = ((ddfstop - ddfstrt) + 15) >> 3;
         

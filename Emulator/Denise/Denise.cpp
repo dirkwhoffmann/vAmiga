@@ -270,12 +270,56 @@ Denise::fillShiftRegisters(bool odd, bool even)
     spriteClipBegin = std::min(spriteClipBegin, (Pixel)(agnus.ppos() + 2));
     
     switch (bpu()) {
-        case 6: shiftReg[5] = bpldat[5];
-        case 5: shiftReg[4] = bpldat[4];
-        case 4: shiftReg[3] = bpldat[3];
-        case 3: shiftReg[2] = bpldat[2];
-        case 2: shiftReg[1] = bpldat[1];
-        case 1: shiftReg[0] = bpldat[0];
+        case 6: shiftReg[5] = bpldatPipe[5];
+        case 5: shiftReg[4] = bpldatPipe[4];
+        case 4: shiftReg[3] = bpldatPipe[3];
+        case 3: shiftReg[2] = bpldatPipe[2];
+        case 2: shiftReg[1] = bpldatPipe[1];
+        case 1: shiftReg[0] = bpldatPipe[0];
+    }
+    
+    // On Intel machines, call the optimized SSE code
+    #if (defined(__i386__) || defined(__x86_64__)) && defined(__MACH__)
+    
+    if (!NO_SSE) {
+        util::transposeSSE(shiftReg, slice);
+        return;
+    }
+    
+    #endif
+    
+    // On all other machines, fallback to the slower standard implementation
+    u32 mask = 0x8000;
+    for (isize i = 0; i < 16; i++, mask >>= 1) {
+        
+        slice[i] =
+        (!!(shiftReg[0] & mask) << 0) |
+        (!!(shiftReg[1] & mask) << 1) |
+        (!!(shiftReg[2] & mask) << 2) |
+        (!!(shiftReg[3] & mask) << 3) |
+        (!!(shiftReg[4] & mask) << 4) |
+        (!!(shiftReg[5] & mask) << 5);
+    }
+}
+
+void
+Denise::updateShiftRegisters()
+{
+    if (agnus.pos.h < fillPos) return;
+    fillPos = INT16_MAX;
+    
+    armedOdd = true;
+    armedEven = true;
+    
+    spriteClipBegin = std::min(spriteClipBegin, (Pixel)(agnus.ppos() + 2));
+    
+    switch (bpu()) {
+        case 6: shiftReg[5] = bpldatPipe[5];
+        case 5: shiftReg[4] = bpldatPipe[4];
+        case 4: shiftReg[3] = bpldatPipe[3];
+        case 3: shiftReg[2] = bpldatPipe[2];
+        case 2: shiftReg[1] = bpldatPipe[1];
+        case 1: shiftReg[0] = bpldatPipe[0];
     }
     
     // On Intel machines, call the optimized SSE code
@@ -437,6 +481,8 @@ Denise::drawBoth(Pixel offset)
 void
 Denise::drawHiresBoth()
 {
+    updateShiftRegisters();
+
     if (armedOdd && armedEven && pixelOffsetOdd == pixelOffsetEven) {
 
         assert((agnus.pos.h & 0x3) == agnus.scrollHiresOdd);
@@ -453,6 +499,8 @@ Denise::drawHiresBoth()
 void
 Denise::drawLoresBoth()
 {
+    updateShiftRegisters();
+
     if (armedOdd && armedEven && pixelOffsetOdd == pixelOffsetEven) {
 
         assert((agnus.pos.h & 0x7) == agnus.scrollLoresOdd);

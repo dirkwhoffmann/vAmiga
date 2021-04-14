@@ -78,6 +78,9 @@ public:
     // Bitplane data registers
     u16 bpldat[6];
     
+    // Pipelines data registers (EXPERIMENTAL)
+    u16 bpldatPipe[6];
+
     // Sprite collision registers
     u16 clxdat;
     u16 clxcon;
@@ -93,6 +96,9 @@ public:
 
     // Bit slices computed out of the shift registers
     u8 __attribute__ ((aligned (64))) slice[16];
+    
+    // Indicates the DMA cycle where the shift register gets filled
+    i16 fillPos; 
     
     // Flags indicating that the shift registers have been loaded
     bool armedEven;
@@ -490,6 +496,8 @@ public:
     // Transfers the bitplane registers to the shift registers
     void fillShiftRegisters(bool odd = true, bool even = true);
 
+    // EXPERIMENTAL CODE
+    void updateShiftRegisters();
     
     //
     // Synthesizing pixels

@@ -209,10 +209,18 @@ Denise::setBPLxDAT(u16 value)
 {
     assert(x < 6);
     trace(BPLDAT_DEBUG, "setBPL%zdDAT(%X)\n", x + 1, value);
-        
+
     bpldat[x] = value;
 
     if (x == 0) {
+        
+        updateShiftRegisters();
+        
+        // Feed data registers into pipe
+        for (isize i = 0; i < 6; i++) bpldatPipe[i] = bpldat[i];
+        
+        fillPos = agnus.pos.h + (agnus.ddfstrt & 0b111) + 1;
+        /*
         if (hires()) {
             denise.fillShiftRegisters(agnus.ddfHires.inRangeOdd(agnus.pos.h),
                                       agnus.ddfHires.inRangeEven(agnus.pos.h));
@@ -220,6 +228,7 @@ Denise::setBPLxDAT(u16 value)
             denise.fillShiftRegisters(agnus.ddfLores.inRangeOdd(agnus.pos.h),
                                       agnus.ddfLores.inRangeEven(agnus.pos.h));
         }
+        */
     }
 }
 
