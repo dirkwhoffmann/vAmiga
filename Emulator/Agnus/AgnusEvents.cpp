@@ -384,23 +384,19 @@ Agnus::serviceBPLEvent()
 
         case BPL_SR:
             denise.updateShiftRegisters();
-            // denise.fillShiftRegisters(false, true);
             break;
             
         case BPL_SR | DRAW_ODD:
-            // denise.fillShiftRegisters(false, true);
             denise.updateShiftRegisters();
             hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
             break;
             
         case BPL_SR | DRAW_EVEN:
-            // denise.fillShiftRegisters(false, true);
             denise.updateShiftRegisters();
             hires() ? denise.drawHiresEven() : denise.drawLoresEven();
             break;
             
         case BPL_SR | DRAW_ODD | DRAW_EVEN:
-            // denise.fillShiftRegisters(false, true);
             denise.updateShiftRegisters();
             hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
             break;
@@ -438,15 +434,6 @@ Agnus::serviceBPLEventHires()
 {
     // Perform bitplane DMA
     denise.setBPLxDAT<nr>(doBitplaneDMA<nr>());
-
-    /*
-    // Perform bitplane DMA
-    denise.bpldat[nr] = doBitplaneDMA<nr>();
-
-    // Fill shift registers if bpldat[0] has been written
-    if (nr == 0) denise.fillShiftRegisters(ddfHires.inRangeOdd(pos.h),
-                                           ddfHires.inRangeEven(pos.h));
-    */
     
     // Add modulo if this is the last fetch unit
     if (pos.h >= ddfHires.stopOdd - 4) addBPLMOD<nr>();
@@ -457,16 +444,7 @@ Agnus::serviceBPLEventLores()
 {
     // Perform bitplane DMA
     denise.setBPLxDAT<nr>(doBitplaneDMA<nr>());
-    
-    // Perform bitplane DMA
-    /*
-    denise.bpldat[nr] = doBitplaneDMA<nr>();
-    
-    // Fill shift registers if bpldat[0] has been written
-    if (nr == 0) denise.fillShiftRegisters(ddfLores.inRangeOdd(pos.h),
-                                           ddfLores.inRangeEven(pos.h));
-    */
-    
+
     // Add modulo if this is the last fetch unit
     if (pos.h >= ddfLores.stopOdd - 8) addBPLMOD<nr>();
 }

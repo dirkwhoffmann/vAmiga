@@ -78,7 +78,7 @@ public:
     // Bitplane data registers
     u16 bpldat[6];
     
-    // Pipelines data registers (EXPERIMENTAL)
+    // Pipeline registers
     u16 bpldatPipe[6];
 
     // Sprite collision registers
@@ -348,6 +348,7 @@ private:
         << initialBplcon2
         << borderColor
         << bpldat
+        << bpldatPipe
         << clxdat
         << clxcon
         << shiftReg
@@ -493,11 +494,9 @@ public:
 
 public:
     
-    // Transfers the bitplane registers to the shift registers
-    void fillShiftRegisters(bool odd = true, bool even = true);
-
-    // EXPERIMENTAL CODE
+    // Transfers the bitplane pipeline registers to the shift registers
     void updateShiftRegisters();
+    
     
     //
     // Synthesizing pixels
@@ -508,11 +507,11 @@ public:
     template <bool hiresMode> void drawOdd(Pixel offset);
     template <bool hiresMode> void drawEven(Pixel offset);
     template <bool hiresMode> void drawBoth(Pixel offset);
-    void drawHiresOdd()  { updateShiftRegisters(); if (armedOdd)  drawOdd <true>  (pixelOffsetOdd);  }
-    void drawHiresEven() { updateShiftRegisters(); if (armedEven) drawEven<true>  (pixelOffsetEven); }
+    void drawHiresOdd();
+    void drawHiresEven();
     void drawHiresBoth();
-    void drawLoresOdd() { updateShiftRegisters(); if (armedOdd)  drawOdd <false> (pixelOffsetOdd);  }
-    void drawLoresEven() { updateShiftRegisters(); if (armedEven) drawEven<false> (pixelOffsetEven); }
+    void drawLoresOdd();
+    void drawLoresEven();
     void drawLoresBoth();
 
 private:

@@ -224,15 +224,6 @@ Denise::setBPLxDAT(u16 value)
         } else {
             fillPos = agnus.pos.h + (agnus.ddfstrt & 0b111) + 1;
         }
-        /*
-        if (hires()) {
-            denise.fillShiftRegisters(agnus.ddfHires.inRangeOdd(agnus.pos.h),
-                                      agnus.ddfHires.inRangeEven(agnus.pos.h));
-        } else {
-            denise.fillShiftRegisters(agnus.ddfLores.inRangeOdd(agnus.pos.h),
-                                      agnus.ddfLores.inRangeEven(agnus.pos.h));
-        }
-        */
     }
 }
 

@@ -262,49 +262,9 @@ Denise::spritePixelIsVisible(Pixel hpos) const
 }
 
 void
-Denise::fillShiftRegisters(bool odd, bool even)
-{
-    if (odd) armedOdd = true;
-    if (even) armedEven = true;
-    
-    spriteClipBegin = std::min(spriteClipBegin, (Pixel)(agnus.ppos() + 2));
-    
-    switch (bpu()) {
-        case 6: shiftReg[5] = bpldatPipe[5];
-        case 5: shiftReg[4] = bpldatPipe[4];
-        case 4: shiftReg[3] = bpldatPipe[3];
-        case 3: shiftReg[2] = bpldatPipe[2];
-        case 2: shiftReg[1] = bpldatPipe[1];
-        case 1: shiftReg[0] = bpldatPipe[0];
-    }
-    
-    // On Intel machines, call the optimized SSE code
-    #if (defined(__i386__) || defined(__x86_64__)) && defined(__MACH__)
-    
-    if (!NO_SSE) {
-        util::transposeSSE(shiftReg, slice);
-        return;
-    }
-    
-    #endif
-    
-    // On all other machines, fallback to the slower standard implementation
-    u32 mask = 0x8000;
-    for (isize i = 0; i < 16; i++, mask >>= 1) {
-        
-        slice[i] =
-        (!!(shiftReg[0] & mask) << 0) |
-        (!!(shiftReg[1] & mask) << 1) |
-        (!!(shiftReg[2] & mask) << 2) |
-        (!!(shiftReg[3] & mask) << 3) |
-        (!!(shiftReg[4] & mask) << 4) |
-        (!!(shiftReg[5] & mask) << 5);
-    }
-}
-
-void
 Denise::updateShiftRegisters()
 {
+    // Only proceed if the load cycle has been reached
     if (agnus.pos.h < fillPos) return;
     fillPos = INT16_MAX;
     
@@ -479,6 +439,28 @@ Denise::drawBoth(Pixel offset)
 }
 
 void
+Denise::drawHiresOdd()
+{
+    updateShiftRegisters();
+    
+    if (armedOdd) {
+        
+        drawOdd <true> (pixelOffsetOdd);
+    }
+}
+
+void
+Denise::drawHiresEven()
+{
+    updateShiftRegisters();
+    
+    if (armedEven) {
+        
+        drawEven<true> (pixelOffsetEven);
+    }
+}
+
+void
 Denise::drawHiresBoth()
 {
     updateShiftRegisters();
@@ -493,6 +475,28 @@ Denise::drawHiresBoth()
     
         drawHiresOdd();
         drawHiresEven();
+    }
+}
+
+void
+Denise::drawLoresOdd()
+{
+    updateShiftRegisters();
+    
+    if (armedOdd) {
+        
+        drawOdd <false> (pixelOffsetOdd);
+    }
+}
+
+void
+Denise::drawLoresEven()
+{
+    updateShiftRegisters();
+    
+    if (armedEven) {
+        
+        drawEven<false> (pixelOffsetEven);
     }
 }
 
