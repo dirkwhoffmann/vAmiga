@@ -795,13 +795,7 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
     scheduleBplEventForCycle(pos.h);
     
     // Schedule the bitplane event table to be recomputed
-    agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-    
-    // REMOVE ASAP
-    // predictDDF();
-    
-    // Schedule the DDF window to be recomputed
-    hsyncActions |= HSYNC_PREDICT_DDF;
+    agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;        
 }
 
 template void Agnus::pokeAUDxLCH<0>(u16 value);
