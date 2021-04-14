@@ -219,7 +219,11 @@ Denise::setBPLxDAT(u16 value)
         // Feed data registers into pipe
         for (isize i = 0; i < 6; i++) bpldatPipe[i] = bpldat[i];
         
-        fillPos = agnus.pos.h + (agnus.ddfstrt & 0b111) + 1;
+        if (hires()) {
+            fillPos = agnus.pos.h + (agnus.ddfstrt & 0b11) + 1;
+        } else {
+            fillPos = agnus.pos.h + (agnus.ddfstrt & 0b111) + 1;
+        }
         /*
         if (hires()) {
             denise.fillShiftRegisters(agnus.ddfHires.inRangeOdd(agnus.pos.h),
