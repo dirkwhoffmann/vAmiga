@@ -11,6 +11,7 @@
 #include "Agnus.h"
 #include "Amiga.h"
 #include "IO.h"
+#include <iomanip>
 
 Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
 {    
