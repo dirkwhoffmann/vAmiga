@@ -271,8 +271,7 @@ Denise::updateShiftRegisters()
     armedOdd = true;
     armedEven = true;
     
-    spriteClipBegin = std::min(spriteClipBegin, (Pixel)(agnus.ppos() + 2));
-    
+    // spriteClipBegin = std::min(spriteClipBegin, (Pixel)(agnus.ppos() + 2));
     switch (bpu()) {
         case 6: shiftReg[5] = bpldatPipe[5];
         case 5: shiftReg[4] = bpldatPipe[4];

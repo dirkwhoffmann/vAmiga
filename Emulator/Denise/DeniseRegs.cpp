@@ -224,6 +224,8 @@ Denise::setBPLxDAT(u16 value)
         } else {
             fillPos = agnus.pos.h + (agnus.ddfstrt & 0b111) + 1;
         }
+        spriteClipBegin = std::min(spriteClipBegin,
+                                   (Pixel)(agnus.ppos(fillPos) - 2));
     }
 }
 
