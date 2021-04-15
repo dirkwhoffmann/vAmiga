@@ -436,7 +436,7 @@ Agnus::serviceBPLEventHires()
     denise.setBPLxDAT<nr>(doBitplaneDMA<nr>());
     
     // Add modulo if this is the last fetch unit
-    if (pos.h >= ddfHires.stopOdd - 4) addBPLMOD<nr>();
+    if (pos.h >= ddfHires.stop - 4) addBPLMOD<nr>();
 }
 
 template <int nr> void
@@ -446,7 +446,7 @@ Agnus::serviceBPLEventLores()
     denise.setBPLxDAT<nr>(doBitplaneDMA<nr>());
 
     // Add modulo if this is the last fetch unit
-    if (pos.h >= ddfLores.stopOdd - 8) addBPLMOD<nr>();
+    if (pos.h >= ddfLores.stop - 8) addBPLMOD<nr>();
 }
 
 void

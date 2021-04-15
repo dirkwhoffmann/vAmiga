@@ -15,35 +15,39 @@ template <bool hires>
 struct DDF
 {
     // First bitplane DMA cycle of odd and even bitplanes
-    i16 strtOdd;
+    i16 strt;
+
+private:
     i16 strtEven;
+public:
     
     // Last bitplane DMA cycle + 1 of odd and even bitplanes
-    i16 stopOdd;
-    i16 stopEven;
+    i16 stop;
 
-    DDF() : strtOdd(0), strtEven(0), stopOdd(0), stopEven(0) { }
+private:
+    i16 stopEven;
+public:
+
+    DDF() : strt(0), strtEven(0), stop(0), stopEven(0) { }
     
     template <class W>
     void operator<<(W& worker)
     {
         worker
         
-        << strtOdd
+        << strt
         << strtEven
-        << stopOdd
+        << stop
         << stopEven;
     }
     
-    void clear() { strtOdd = strtEven = stopOdd = stopEven = 0; }
+    void clear() { strt = strtEven = stop = stopEven = 0; }
     
     bool operator==(const DDF& ddf) const
     {
         return
-        strtOdd == ddf.strtOdd &&
-        strtEven == ddf.strtEven &&
-        stopOdd == ddf.stopOdd &&
-        stopEven == ddf.stopEven;
+        strt == ddf.strt &&
+        stop == ddf.stop;
     }
 
     bool operator!=(const DDF& ddf) const

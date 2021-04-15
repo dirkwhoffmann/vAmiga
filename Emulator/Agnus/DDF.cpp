@@ -15,10 +15,10 @@ template <bool hires> void
 DDF<hires>::compute(i16 ddfstrt, i16 ddfstop)
 {
     compute(strtEven, stopEven, ddfstrt, ddfstop);
-    compute(strtOdd,  stopOdd,  ddfstrt, ddfstop);
+    compute(strt,  stop,  ddfstrt, ddfstop);
     
-    assert(strtEven == strtOdd);
-    assert(stopEven == stopOdd);
+    assert(strtEven == strt);
+    assert(stopEven == stop);
 }
 
 template <bool hires> void

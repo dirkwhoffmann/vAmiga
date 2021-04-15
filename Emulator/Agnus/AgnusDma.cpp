@@ -472,10 +472,10 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
         
         // Add extra shift register events if the even/odd DDF windows differ
         // These events are like BPL_H0 events without performing DMA.
-        for (isize i = ddfHires.strtEven; i < ddfHires.strtOdd; i++)
+        /*
+        for (isize i = ddfHires.stop; i < ddfHires.stopEven; i++)
             if ((i & 3) == 3 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SR;
-        for (isize i = ddfHires.stopOdd; i < ddfHires.stopEven; i++)
-            if ((i & 3) == 3 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SR;
+         */
 
     } else {
         
@@ -486,10 +486,10 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
     
         // Add extra shift register events if the even/odd DDF windows differ
         // These events are like BPL_L0 events without performing DMA.
-        for (isize i = ddfLores.strtEven; i < ddfLores.strtOdd; i++)
+        /*
+        for (isize i = ddfLores.stop; i < ddfLores.stopEven; i++)
              if ((i & 7) == 7 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SR;
-        for (isize i = ddfLores.stopOdd; i < ddfLores.stopEven; i++)
-             if ((i & 7) == 7 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SR;
+         */
     }
         
     // Make sure the table ends with a BPL_EOL event
@@ -627,10 +627,8 @@ Agnus::dumpBplEventTable() const
     // Dump the event table
     msg("Event table:\n\n");
     msg("ddfstrt = %X dffstop = %X\n", ddfstrt, ddfstop);
-    msg("ddfLoresOdd:  (%X - %X)\n", ddfLores.strtOdd, ddfLores.stopOdd);
-    msg("ddfLoresEven: (%X - %X)\n", ddfLores.strtEven, ddfLores.stopEven);
-    msg("ddfHiresOdd:  (%X - %X)\n", ddfHires.strtOdd, ddfHires.stopOdd);
-    msg("ddfHiresEven: (%X - %X)\n", ddfHires.strtEven, ddfHires.stopEven);
+    msg("ddfLores: (%X - %X)\n", ddfLores.strt, ddfLores.stop);
+    msg("ddfHires: (%X - %X)\n", ddfHires.strt, ddfHires.stop);
 
     dumpBplEventTable(0x00, 0x4F);
     dumpBplEventTable(0x50, 0x9F);

@@ -611,13 +611,13 @@ public:
 
     // Indicates if the electron beam is inside a certain DMA area
     bool inLoresDmaAreaEven(i16 pos) const {
-        return !(pos & 4) && pos >= ddfLores.strtEven && pos < ddfLores.stopEven; }
+        return !(pos & 4) && pos >= ddfLores.strt && pos < ddfLores.stop; }
     bool inLoresDmaAreaOdd(i16 pos) const {
-        return (pos & 4) && pos >= ddfLores.strtOdd && pos < ddfLores.stopOdd; }
+        return (pos & 4) && pos >= ddfLores.strt && pos < ddfLores.stop; }
     bool inHiresDmaAreaEven(i16 pos) const {
-        return !(pos & 2) && pos >= ddfHires.strtEven && pos < ddfHires.stopEven; }
+        return !(pos & 2) && pos >= ddfHires.strt && pos < ddfHires.stop; }
     bool inHiresDmaAreaOdd(i16 pos) const {
-        return (pos & 2) && pos >= ddfHires.strtOdd && pos < ddfHires.stopOdd; }
+        return (pos & 2) && pos >= ddfHires.strt && pos < ddfHires.stop; }
     
     // Returns the pixel position for the current horizontal position
     Pixel ppos(i16 posh) const { return (posh * 4) + 2; }
