@@ -31,6 +31,13 @@ class SplashScreen: Layer {
                              "The background texture could not be allocated.")
     }
 
+    func buildVertexBuffers() {
+        
+        bgRect = Node.init(device: device,
+                           x: -1.0, y: -1.0, z: 0.99, w: 2.0, h: 2.0,
+                           t: NSRect.init(x: 0.025, y: 0.025, width: 0.95, height: 0.95))
+    }
+
     func setupFragmentShader(encoder: MTLRenderCommandEncoder) {
         
         // Setup textures
