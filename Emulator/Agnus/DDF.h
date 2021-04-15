@@ -60,6 +60,6 @@ struct DDF
      * The function assumes that stop is greater than strt. Other combinations
      * are not yet supported by the emulator.
      */
-    void compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1);
-    void compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll);
+    void compute(i16 ddfstrt, i16 ddfstop);
+    void compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop);
 };

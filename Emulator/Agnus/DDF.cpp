@@ -12,14 +12,17 @@
 #include <algorithm>
 
 template <bool hires> void
-DDF<hires>::compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1)
+DDF<hires>::compute(i16 ddfstrt, i16 ddfstop)
 {
-    compute(strtEven, stopEven, ddfstrt, ddfstop, bplcon1 >> 4);
-    compute(strtOdd,  stopOdd,  ddfstrt, ddfstop, bplcon1);
+    compute(strtEven, stopEven, ddfstrt, ddfstop);
+    compute(strtOdd,  stopOdd,  ddfstrt, ddfstop);
+    
+    assert(strtEven == strtOdd);
+    assert(stopEven == stopOdd);
 }
 
 template <bool hires> void
-DDF<hires>::compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll)
+DDF<hires>::compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop)
 {
     if (hires) {
                
@@ -45,5 +48,5 @@ DDF<hires>::compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll)
     }
 }
 
-template void DDF<true>::compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1);
-template void DDF<false>::compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1);
+template void DDF<true>::compute(i16 ddfstrt, i16 ddfstop);
+template void DDF<false>::compute(i16 ddfstrt, i16 ddfstop);
