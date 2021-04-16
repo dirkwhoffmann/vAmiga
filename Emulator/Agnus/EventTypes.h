@@ -167,8 +167,7 @@ enum_long(EventID)
     SCR_EVENT_COUNT,
     
     // Inspector slot
-    INS_NONE = 1,
-    INS_AMIGA,
+    INS_AMIGA = 1,
     INS_CPU,
     INS_MEM,
     INS_CIA,

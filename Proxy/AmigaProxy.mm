@@ -2004,6 +2004,11 @@ using namespace moira;
     [self amiga]->setInspectionTarget(id);
 }
 
+- (void) removeInspectionTarget
+{
+    [self amiga]->removeInspectionTarget();
+}
+
 - (BOOL)isReady:(ErrorCode *)error
 {
     return [self amiga]->isReady(error);

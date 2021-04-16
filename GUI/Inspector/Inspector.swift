@@ -627,7 +627,7 @@ extension Inspector: NSWindowDelegate {
 
         // Leave debug mode
         amiga?.debugMode = false
-        amiga?.inspectionTarget = .INS_NONE
+        amiga?.removeInspectionTarget()
     }
 }
 

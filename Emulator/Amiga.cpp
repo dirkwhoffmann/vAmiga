@@ -353,9 +353,17 @@ void
 Amiga::setInspectionTarget(EventID id)
 {
     suspend();
-    inspectionTarget = id;
-    agnus.scheduleRel<SLOT_INS>(0, inspectionTarget);
+    // inspectionTarget = id;
+    agnus.scheduleRel<SLOT_INS>(0, id);
     agnus.serviceINSEvent();
+    resume();
+}
+
+void
+Amiga::removeInspectionTarget()
+{
+    suspend();
+    agnus.cancel<SLOT_INS>();
     resume();
 }
 
@@ -733,7 +741,7 @@ Amiga::runLoop()
     } else {
         cpu.debugger.disableLogging();
     }
-    agnus.scheduleRel<SLOT_INS>(0, inspectionTarget);
+    // agnus.scheduleRel<SLOT_INS>(0, inspectionTarget);
     // agnus.scheduleAbs<SLOT_INS>(140000000, INS_TEXTURE);
     
     // Enter the loop

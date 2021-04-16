@@ -165,7 +165,7 @@
 @property BOOL warp;
 @property BOOL debugMode;
 @property EventID inspectionTarget;
-
+- (void) removeInspectionTarget;
 - (BOOL)isReady:(ErrorCode *)ec;
 - (BOOL)isReady;
 - (void)powerOn;

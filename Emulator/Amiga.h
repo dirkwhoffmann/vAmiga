@@ -39,15 +39,12 @@ void *threadMain(void *thisAmiga);
  */
 class Amiga : public HardwareComponent {
 
-    /* The inspection target. In order to update the GUI periodically, the
-     * emulator schedules this event in the inspector slot (INS_SLOT in the
-     * secondary table) on a periodic basis. If the event is EVENT_NONE, no
-     * action is taken. If an INS_xxx event is scheduled, inspect() is called
-     * on a certain Amiga component.
+    /* Result of the latest inspection. In order to update the GUI inspector
+     * panels, the emulator schedules events in the inspector slot (SLOT_INS in
+     * the secondary table) on a periodic basis. Inside the event handler, the
+     * current state is recorded. When the GUI updates the inspector panels, it
+     * displays the result of the latest inspection.
      */
-    EventID inspectionTarget = INS_NONE;
-
-    // Result of the latest inspection
     AmigaInfo info;
 
      
@@ -183,6 +180,7 @@ public:
     
     EventID getInspectionTarget() const;
     void setInspectionTarget(EventID id);
+    void removeInspectionTarget();
     
 private:
     

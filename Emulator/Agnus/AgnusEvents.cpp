@@ -588,7 +588,6 @@ Agnus::serviceINSEvent()
 {
     switch (slot[SLOT_INS].id) {
 
-        case INS_NONE:   break;
         case INS_AMIGA:  amiga.inspect(); break;
         case INS_CPU:    cpu.inspect(); break;
         case INS_MEM:    mem.inspect(); break;
