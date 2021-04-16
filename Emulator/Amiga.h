@@ -180,6 +180,7 @@ public:
     
     EventID getInspectionTarget() const;
     void setInspectionTarget(EventID id);
+    void setInspectionTarget(EventID id, Cycle trigger);
     void removeInspectionTarget();
     
 private:

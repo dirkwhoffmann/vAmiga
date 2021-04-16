@@ -27,12 +27,14 @@ Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
     
     initLookupTables();
     
-    // Wipe out the event slots
+    // Wipe out event slots
     memset(slot, 0, sizeof(slot));
 }
 
 void Agnus::_reset(bool hard)
 {
+    auto insEvent = slot[SLOT_INS].id;
+    
     RESET_SNAPSHOT_ITEMS(hard)
     
     // Start with a long frame
@@ -47,8 +49,9 @@ void Agnus::_reset(bool hard)
     updateBplJumpTable();
     updateDasJumpTable();
     
-    // Initialize the event slots
+    // Initialize event slots
     for (isize i = 0; i < SLOT_COUNT; i++) {
+        
         slot[i].triggerCycle = NEVER;
         slot[i].id = (EventID)0;
         slot[i].data = 0;
@@ -65,10 +68,9 @@ void Agnus::_reset(bool hard)
     scheduleNextBplEvent();
     scheduleNextDasEvent();
     
-    /*
-    // Start with long frames by setting the LOF bit
-    pokeVPOS(0x8000);
-    */
+    // Reschedule the old inspection event if there was one
+    if (insEvent) scheduleAbs<SLOT_INS>(0, insEvent);
+    
     pokeVPOS(0);
 }
 

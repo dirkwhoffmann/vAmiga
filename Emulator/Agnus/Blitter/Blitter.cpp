@@ -42,7 +42,7 @@ void
 Blitter::_initialize()
 {    
     initFastBlitter();
-    initSlowBlitter();
+    initSlowBlitter();    
 }
 
 void
