@@ -603,6 +603,11 @@ Agnus::serviceINSEvent()
             controlPort2.inspect();
             break;
         case INS_EVENTS: inspectEvents(); break;
+        case INS_TEXTURE:
+            printf("INS_TEXTURE\n");
+            pixelEngine.dumpTexture();
+            exit(1);
+            break;
         default:         assert(false);
     }
 

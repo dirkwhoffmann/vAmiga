@@ -734,6 +734,7 @@ Amiga::runLoop()
         cpu.debugger.disableLogging();
     }
     agnus.scheduleRel<SLOT_INS>(0, inspectionTarget);
+    // agnus.scheduleAbs<SLOT_INS>(140000000, INS_TEXTURE);
     
     // Enter the loop
     while(1) {

@@ -58,7 +58,7 @@ class DiskController : public AmigaComponent {
         
     /* The drive controller's FIFO buffer. On each DSK_ROTATE event, a byte is
      * read from the selected drive and put into this buffer. Each Disk DMA
-     * operation will read two bytes from the buffer and store them at the
+     * operation will read two bytes from the buffer and stores them at the
      * desired location.
      */
     u64 fifo;

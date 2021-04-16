@@ -59,7 +59,6 @@ void Agnus::_reset(bool hard)
     scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleRel<SLOT_SEC>(NEVER, SEC_TRIGGER);
-    // scheduleRel<SLOT_VBL>(DMA_CYCLES(HPOS_CNT * vStrobeLine()), VBL_STROBE0);
     scheduleStrobe0Event();
     scheduleRel<SLOT_IRQ>(NEVER, IRQ_CHECK);
     diskController.scheduleFirstDiskEvent();

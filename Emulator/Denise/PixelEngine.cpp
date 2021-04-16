@@ -14,6 +14,8 @@
 #include "Denise.h"
 #include "DmaDebugger.h"
 
+#include <fstream>
+
 PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
 {
     config.palette = PALETTE_COLOR;
@@ -58,6 +60,29 @@ PixelEngine::didLoadFromBuffer(const u8 *buffer)
 {
     updateRGBA();
     return 0;
+}
+
+void
+PixelEngine::dumpTexture()
+{
+    std::ofstream file;
+    
+    file.open("/tmp/texture.raw");
+    dumpTexture(file);
+}
+
+void
+PixelEngine::dumpTexture(std::ostream& ss)
+{
+    auto buffer = getStableBuffer();
+    
+    for (isize i = 0; i < PIXELS; i++) {
+    
+        char *cptr = (char *)(buffer.data + i);
+        ss.write(cptr + 0, 1);
+        ss.write(cptr + 1, 1);
+        ss.write(cptr + 2, 1);
+    }
 }
 
 void
