@@ -42,6 +42,13 @@ RetroShell::exec <Token::easteregg> (Arguments& argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::screenshot> (Arguments& argv, long param)
+{
+    auto trigger = util::parseNum(argv.front());
+    amiga.setInspectionTarget(INS_TEXTURE, trigger);
+}
+
+template <> void
 RetroShell::exec <Token::source> (Arguments &argv, long param)
 {
     string filename = argv.front();

@@ -33,6 +33,11 @@ Interpreter::registerInstructions()
              &RetroShell::exec <Token::easteregg>);
     root.seek("joshua")->hidden = true;
 
+    root.add({"screenshot"},
+             "command", "",
+             &RetroShell::exec <Token::screenshot>, 1);
+    root.seek("screenshot")->hidden = true;
+
     root.add({"source"},
              "command", "Processes a command script",
              &RetroShell::exec <Token::source>, 1);

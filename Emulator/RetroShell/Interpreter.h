@@ -28,8 +28,8 @@ enum class Token
     // Commands
     about, audiate, autosync, clear, config, connect, debug, disable,
     disconnect, dsksync, easteregg, eject, enable, close, hide, insert, inspect,
-    list, load, lock, off, on, open, pause, power, reset, run, show, set,
-    source,
+    list, load, lock, off, on, open, pause, power, reset, run, screenshot, set,
+    show, source,
     
     // Categories
     checksums, devices, events, registers, state,

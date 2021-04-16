@@ -65,17 +65,53 @@ PixelEngine::didLoadFromBuffer(const u8 *buffer)
 void
 PixelEngine::dumpTexture()
 {
+    /* This function is used for automatic regression testing. It generates a
+     * TIFF image of the current emulator texture in the /tmp  directory and
+     * exits the application. The regression testing script will pick up the
+     * texture and compare it against a previously recorded reference image.
+     */
     std::ofstream file;
     
+    isize x1 = 4 * (HBLANK_MAX + 1);
+    isize y1 = VBLANK_MAX + 1;
+    isize x2 = HPIXELS;
+    isize y2 = VPIXELS;
+    
+    // Open an output stream
     file.open("/tmp/texture.raw");
-    dumpTexture(file);
+    
+    // Dump texture
+    dumpTexture(file, x1, y1, x2, y2);
+    file.close();
+    
+    // Convert raw data into a TIFF file
+    string cmd = "/usr/local/bin/raw2tiff";
+    cmd += " -p rgb -b 3";
+    cmd += " -w " + std::to_string(x2 - x1);
+    cmd += " -l " + std::to_string(y2 - y1);
+    cmd += " /tmp/texture.raw /tmp/texture.tiff";
+    
+    msg("Executing %s\n", cmd.c_str());
+    system(cmd.c_str());
 }
 
 void
-PixelEngine::dumpTexture(std::ostream& ss)
+PixelEngine::dumpTexture(std::ostream& ss, isize x1, isize y1, isize x2, isize y2)
 {
     auto buffer = getStableBuffer();
     
+    for (isize y = y1; y < y2; y++) {
+
+        for (isize x = x1; x < x2; x++) {
+            
+            char *cptr = (char *)(buffer.data + y * HPIXELS + x);
+            ss.write(cptr + 0, 1);
+            ss.write(cptr + 1, 1);
+            ss.write(cptr + 2, 1);
+
+        }
+    }
+    /*
     for (isize i = 0; i < PIXELS; i++) {
     
         char *cptr = (char *)(buffer.data + i);
@@ -83,6 +119,7 @@ PixelEngine::dumpTexture(std::ostream& ss)
         ss.write(cptr + 1, 1);
         ss.write(cptr + 2, 1);
     }
+    */
 }
 
 void
