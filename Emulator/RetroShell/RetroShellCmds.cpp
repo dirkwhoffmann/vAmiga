@@ -436,6 +436,22 @@ RetroShell::exec <Token::denise, Token::inspect, Token::registers> (Arguments& a
 }
 
 //
+// DMA Debugger
+//
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::enable> (Arguments& argv, long param)
+{
+    printf("DMA Debugger enable\n");
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::enable, Token::channel> (Arguments& argv, long param)
+{
+    printf("DMA Debugger CHANNEL enable %ld\n", param);
+}
+
+//
 // Monitor
 //
 

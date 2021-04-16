@@ -355,6 +355,21 @@ Interpreter::registerInstructions()
 
     
     //
+    // DMA Debugger
+    //
+
+    root.add({"dmadebugger"},
+             "component", "DMA Debugger");
+
+    root.add({"dmadebugger", "enable"},
+             "command", "Enables DMA debugging",
+             &RetroShell::exec <Token::dmadebugger, Token::enable>);
+
+    root.add({"dmadebugger", "enable", "channel"},
+             "command", "Enables a certain DMA channel",
+             &RetroShell::exec <Token::dmadebugger, Token::enable, Token::channel>, 1);
+
+    //
     // Monitor
     //
 

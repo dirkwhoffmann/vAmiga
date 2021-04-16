@@ -46,6 +46,49 @@ struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
 };
 #endif
 
+enum_long(DMA_CHANNEL)
+{
+    DMA_CHANNEL_COPPER,
+    DMA_CHANNEL_BLITTER,
+    DMA_CHANNEL_DISK,
+    DMA_CHANNEL_AUDIO,
+    DMA_CHANNEL_SPRITE,
+    DMA_CHANNEL_BITPLANE,
+    DMA_CHANNEL_CPU,
+    DMA_CHANNEL_REFRESH,
+    DMA_CHANNEL_COUNT,
+};
+typedef DMA_CHANNEL DmaChannel;
+
+#ifdef __cplusplus
+struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value < DMA_CHANNEL_COUNT;
+    }
+
+    static const char *prefix() { return "DMA_CHANNEL"; }
+    static const char *key(DmaDisplayMode value)
+    {
+        switch (value) {
+                
+            case DMA_CHANNEL_COPPER:    return "COPPER";
+            case DMA_CHANNEL_BLITTER:   return "BLITTER";
+            case DMA_CHANNEL_DISK:      return "DISK";
+            case DMA_CHANNEL_AUDIO:     return "AUDIO";
+            case DMA_CHANNEL_SPRITE:    return "SPRITE";
+            case DMA_CHANNEL_BITPLANE:  return "BITPLANE";
+            case DMA_CHANNEL_CPU:       return "CPU";
+            case DMA_CHANNEL_REFRESH:   return "REFRESH";
+            case DMA_CHANNEL_COUNT:     return "???";
+        }
+        return "???";
+    }
+};
+#endif
+
+
 //
 // Structures
 //
@@ -56,13 +99,13 @@ typedef struct
     bool enabled;
 
     // Individual enable switch for each DMA channel
-    bool visualize[BUS_COUNT];
+    bool visualize[DMA_CHANNEL_COUNT];
 
     // Display mode
     DmaDisplayMode displayMode;
 
     // Color palette
-    u32 debugColor[BUS_COUNT];
+    u32 debugColor[DMA_CHANNEL_COUNT];
 
     // Opacity
     isize opacity;

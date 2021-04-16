@@ -19,6 +19,9 @@ class DmaDebugger : public AmigaComponent {
     // Current configuration
     DmaDebuggerConfig config;
 
+    // Enable bits
+    bool visualize[BUS_COUNT];
+    
     // Debug colors, derived from the debug color palette
     RgbColor debugColor[BUS_COUNT][5];
 
@@ -51,12 +54,8 @@ public:
 
 private:
 
-    void getColor(BusOwner owner, double *rgb);
+    void getColor(DmaChannel channel, double *rgb);
     void setColor(BusOwner owner, u32 rgba);
-    /*
-    void setColor(BusOwner owner, RgbColor color);
-    void setColor(BusOwner owner, double r, double g, double b);
-    */
 
     
     //

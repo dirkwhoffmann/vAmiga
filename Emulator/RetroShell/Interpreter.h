@@ -22,24 +22,24 @@ enum class Token
     none,
     
     // Components
-    agnus, amiga, audio, blitter, cia, controlport, copper, cpu, denise, dfn,
-    dc, keyboard, memory, monitor, mouse, paula, serial, rtc,
+    agnus, amiga, audio, blitter, cia, controlport, copper, cpu, dc, denise,
+    dfn, dmadebugger, keyboard, memory, monitor, mouse, paula, serial, rtc,
 
     // Commands
-    about, audiate, autosync, clear, config, connect, debug, disconnect,
-    dsksync, easteregg, eject, close, insert, inspect, list,
+    about, audiate, autosync, clear, config, connect, debug, disable,
+    disconnect, dsksync, easteregg, eject, enable, close, insert, inspect, list,
     load, lock, on, off, pause, power, reset, run, set, source,
     
     // Categories
     checksums, devices, events, registers, state,
     
     // Keys
-    accuracy, bankmap, brightness, chip, clxsprspr, clxsprplf, clxplfplf,
-    contrast, defaultbb, defaultfs, device, esync, extrom, extstart, fast,
-    filter, joystick, keyset, mechanics, model, palette, pan, poll, pullup,
-    raminitpattern, revision, rom, sampling, saturation, searchpath,
-    shakedetector, slow, slowramdelay, slowrammirror, speed, step, tod, todbug,
-    unmappingtype, velocity, volume, wom
+    accuracy, bankmap, brightness, channel, chip, clxsprspr, clxsprplf,
+    clxplfplf, color, contrast, defaultbb, defaultfs, device, esync, extrom,
+    extstart, fast, filter, joystick, keyset, mechanics, mode, model, opacity,
+    palette, pan, poll, pullup, raminitpattern, revision, rom, sampling,
+    saturation, searchpath, shakedetector, slow, slowramdelay, slowrammirror,
+    speed, step, tod, todbug, unmappingtype, velocity, volume, wom
 };
 
 struct TooFewArgumentsError : public util::ParseError {

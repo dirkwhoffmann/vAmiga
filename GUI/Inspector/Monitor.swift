@@ -85,21 +85,6 @@ class Monitor: DialogController {
         super.awakeFromNib()
         refresh()
     }
-
-    func busOwner(tag: Int) -> BusOwner {
-        
-        switch tag {
-        case 0: return .COPPER
-        case 1: return .BLITTER
-        case 2: return .DISK
-        case 3: return .AUDIO
-        case 4: return .SPRITE0
-        case 5: return .BPL1
-        case 6: return .CPU
-        case 7: return .REFRESH
-        default: fatalError()
-        }
-    }
     
     func refresh() {
                 
@@ -236,8 +221,7 @@ class Monitor: DialogController {
         let b = Int(sender.color.blueComponent * 255.0)
         let rgb = (r << 24) | (g << 16) | (b << 8)
 
-        let id = Int(busOwner(tag: sender.tag).rawValue)
-        amiga.configure(.DMA_DEBUG_COLOR, id: id, value: rgb)
+        amiga.configure(.DMA_DEBUG_COLOR, id: sender.tag, value: rgb)
                 
         let monitor = parent.renderer.monitors.monitors[sender.tag]
         monitor.setColor(sender.color)
@@ -253,8 +237,7 @@ class Monitor: DialogController {
     
     @IBAction func busDisplayAction(_ sender: NSButton!) {
         
-        let id = Int(busOwner(tag: sender.tag).rawValue)
-        amiga.configure(.DMA_DEBUG_ENABLE, id: id, enable: sender.state == .on)
+        amiga.configure(.DMA_DEBUG_ENABLE, id: sender.tag, enable: sender.state == .on)
         refresh()
     }
     
