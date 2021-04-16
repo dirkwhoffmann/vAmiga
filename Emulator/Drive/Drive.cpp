@@ -77,8 +77,6 @@ Drive::setConfigItem(Option option, i64 value)
 bool
 Drive::setConfigItem(Option option, long id, i64 value)
 {
-    assert(id >= 0 && id <= 3);
-
     if (id != nr) return false;
  
     switch (option) {

@@ -20,6 +20,7 @@ struct RgbColor {
     RgbColor() : r(0), g(0), b(0) {}
     RgbColor(double rv, double gv, double bv) : r(rv), g(gv), b(bv) {}
     RgbColor(u8 rv, u8 gv, u8 bv) : r(rv / 255.0), g(gv / 255.0), b(bv / 255.0) {}
+    RgbColor(u32 rgba) : RgbColor((u8)(rgba >> 24), (u8)(rgba >> 16), (u8)(rgba >> 8)) {}
     RgbColor(const struct YuvColor &c);
     RgbColor(const struct AmigaColor &c);
     RgbColor(const struct GpuColor &c);

@@ -217,6 +217,11 @@ Amiga::getConfigItem(Option option) const
         case OPT_SATURATION:
             return denise.pixelEngine.getConfigItem(option);
             
+        case OPT_DMA_DEBUG_ENABLE:
+        case OPT_DMA_DEBUG_MODE:
+        case OPT_DMA_DEBUG_OPACITY:
+            return agnus.dmaDebugger.getConfigItem(option);
+            
         case OPT_RTC_MODEL:
             return rtc.getConfigItem(option);
 
@@ -265,6 +270,10 @@ Amiga::getConfigItem(Option option, long id) const
 {
     switch (option) {
             
+        case OPT_DMA_DEBUG_ENABLE:
+        case OPT_DMA_DEBUG_COLOR:
+            return agnus.dmaDebugger.getConfigItem(option, id);
+
         case OPT_AUDPAN:
         case OPT_AUDVOL:
             return paula.muxer.getConfigItem(option, id);

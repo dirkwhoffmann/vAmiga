@@ -84,7 +84,7 @@ AmigaColor::AmigaColor(const GpuColor &c)
     u8 g = c.rawValue & 0x00F000;
     u8 b = c.rawValue & 0xF00000;
 
-    rawValue = (r << 4) | g | (b >> 4);
+    rawValue = r << 4 | g | b >> 4;
 }
 
 AmigaColor::AmigaColor(const struct RgbColor &c)
@@ -93,7 +93,7 @@ AmigaColor::AmigaColor(const struct RgbColor &c)
     u8 g = (u8)(c.g * 0xF);
     u8 b = (u8)(c.b * 0xF);
 
-    rawValue = (r << 8) | (g << 4) | b;
+    rawValue = r << 8 | g << 4 | b;
 }
 
 const AmigaColor AmigaColor::black(RgbColor::black);
@@ -116,7 +116,7 @@ GpuColor::GpuColor(const AmigaColor &c)
     u8 g = c.rawValue & 0x0F0;
     u8 b = c.rawValue & 0x00F;
 
-    rawValue = (a << 24) | (b << 20) | (g << 8) | (r >> 4);
+    rawValue = a << 24 | b << 20 | g << 8 | r >> 4;
 }
 
 GpuColor::GpuColor(const RgbColor &c)
@@ -126,13 +126,13 @@ GpuColor::GpuColor(const RgbColor &c)
     u8 g = (u8)(c.g * 255);
     u8 b = (u8)(c.b * 255);
 
-    rawValue = (a << 24) | (b << 16) | (g << 8) | r;
+    rawValue = a << 24 | b << 16 | g << 8 | r;
 }
 
 GpuColor::GpuColor(u8 r, u8 g, u8 b)
 {
     u8 a = 255;
-    rawValue = (a << 24) | (b << 16) | (g << 8) | r;
+    rawValue = a << 24 | b << 16 | g << 8 | r;
 }
 
 const GpuColor GpuColor::black(RgbColor::black);

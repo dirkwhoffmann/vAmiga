@@ -17,20 +17,213 @@
 
 DmaDebugger::DmaDebugger(Amiga &ref) : AmigaComponent(ref)
 {
+    config.enabled = false;
+
     // By default all DMA channels are visualized, except the CPU channel
     for (isize i = 0; i < BUS_COUNT; i++) {
-        visualize[i] = (i != BUS_NONE) && (i != BUS_CPU);
+        config.visualize[i] = (i != BUS_NONE) && (i != BUS_CPU);
     }
-
+    
     // Assign default colors
-    setCpuColor      (1.0, 1.0, 1.0);
-    setRefreshColor  (1.0, 0.0, 0.0);
-    setDiskColor     (0.0, 1.0, 0.0);
-    setAudioColor    (1.0, 0.0, 1.0);
-    setBitplaneColor (0.0, 1.0, 1.0);
-    setSpriteColor   (0.0, 0.5, 1.0);
-    setCopperColor   (1.0, 1.0, 0.0);
-    setBlitterColor  (1.0, 0.8, 0.0);
+    setConfigItem(OPT_DMA_DEBUG_COLOR, BUS_CPU,     0xFFFFFF00);
+    setConfigItem(OPT_DMA_DEBUG_COLOR, BUS_REFRESH, 0xFF000000);
+    setConfigItem(OPT_DMA_DEBUG_COLOR, BUS_DISK,    0x00FF0000);
+    setConfigItem(OPT_DMA_DEBUG_COLOR, BUS_AUDIO,   0xFF00FF00);
+    setConfigItem(OPT_DMA_DEBUG_COLOR, BUS_BPL1,    0x00FFFF00);
+    setConfigItem(OPT_DMA_DEBUG_COLOR, BUS_SPRITE0, 0x0088FF00);
+    setConfigItem(OPT_DMA_DEBUG_COLOR, BUS_COPPER,  0xFFFF0000);
+    setConfigItem(OPT_DMA_DEBUG_COLOR, BUS_BLITTER, 0xFFCC0000);
+ 
+    config.displayMode = DMA_DISPLAY_MODE_FG_LAYER;
+    config.opacity = 50;
+}
+
+i64
+DmaDebugger::getConfigItem(Option option) const
+{
+    switch (option) {
+            
+        case OPT_DMA_DEBUG_ENABLE: return config.enabled;
+        case OPT_DMA_DEBUG_MODE: return config.displayMode;
+        case OPT_DMA_DEBUG_OPACITY: return config.opacity;
+                        
+        default:
+            assert(false);
+            return 0;
+    }
+}
+
+i64
+DmaDebugger::getConfigItem(Option option, long id) const
+{
+    assert(id >= 0 && id < BUS_COUNT);
+    
+    switch (option) {
+            
+        case OPT_DMA_DEBUG_ENABLE: return config.visualize[id];
+        case OPT_DMA_DEBUG_COLOR: return config.debugColor[id];
+                        
+        default:
+            assert(false);
+            return 0;
+    }
+}
+
+bool
+DmaDebugger::setConfigItem(Option option, i64 value)
+{
+    switch (option) {
+                                    
+        case OPT_DMA_DEBUG_ENABLE:
+            
+            if (config.enabled == value) {
+                return false;
+            }
+            
+            config.enabled = value;
+            messageQueue.put(value ? MSG_DMA_DEBUG_ON : MSG_DMA_DEBUG_OFF);
+            return true;
+            
+        case OPT_DMA_DEBUG_MODE:
+            
+            if (!DmaDisplayModeEnum::isValid(value)) {
+                throw ConfigArgError(DeniseRevisionEnum::keyList());
+            }
+            if (config.displayMode == value) {
+                return false;
+            }
+            
+            config.displayMode = (DmaDisplayMode)value;
+            return true;
+
+        case OPT_DMA_DEBUG_OPACITY:
+            
+            if (config.opacity == value) {
+                return false;
+            }
+            
+            config.opacity = value;
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+bool
+DmaDebugger::setConfigItem(Option option, long id, i64 value)
+{
+    if (!BusOwnerEnum::isValid(id)) { return false; }
+    BusOwner owner = (BusOwner)id;
+    
+    switch (option) {
+                                    
+        case OPT_DMA_DEBUG_ENABLE:
+            
+            switch(owner) {
+                    
+                case BUS_CPU:
+                case BUS_REFRESH:
+                case BUS_DISK:
+                case BUS_AUDIO:
+                case BUS_COPPER:
+                case BUS_BLITTER:
+                    
+                    config.visualize[owner] = value;
+                    return true;
+        
+                case BUS_BPL1:
+                case BUS_BPL2:
+                case BUS_BPL3:
+                case BUS_BPL4:
+                case BUS_BPL5:
+                case BUS_BPL6:
+
+                    config.visualize[BUS_BPL1] = value;
+                    config.visualize[BUS_BPL2] = value;
+                    config.visualize[BUS_BPL3] = value;
+                    config.visualize[BUS_BPL4] = value;
+                    config.visualize[BUS_BPL5] = value;
+                    config.visualize[BUS_BPL6] = value;
+                    return true;
+                                         
+                case BUS_SPRITE0:
+                case BUS_SPRITE1:
+                case BUS_SPRITE2:
+                case BUS_SPRITE3:
+                case BUS_SPRITE4:
+                case BUS_SPRITE5:
+                case BUS_SPRITE6:
+                case BUS_SPRITE7:
+
+                    config.visualize[BUS_SPRITE0] = value;
+                    config.visualize[BUS_SPRITE1] = value;
+                    config.visualize[BUS_SPRITE2] = value;
+                    config.visualize[BUS_SPRITE3] = value;
+                    config.visualize[BUS_SPRITE4] = value;
+                    config.visualize[BUS_SPRITE5] = value;
+                    config.visualize[BUS_SPRITE6] = value;
+                    config.visualize[BUS_SPRITE7] = value;
+                    return true;
+                    
+                default:
+                    return false;
+            }
+
+        case OPT_DMA_DEBUG_COLOR:
+            
+            switch(owner) {
+                    
+                case BUS_CPU:
+                case BUS_REFRESH:
+                case BUS_DISK:
+                case BUS_AUDIO:
+                case BUS_COPPER:
+                case BUS_BLITTER:
+                    
+                    setColor(owner, (u32)value);
+                    return true;
+        
+                case BUS_BPL1:
+                case BUS_BPL2:
+                case BUS_BPL3:
+                case BUS_BPL4:
+                case BUS_BPL5:
+                case BUS_BPL6:
+
+                    setColor(BUS_BPL1, (u32)value);
+                    setColor(BUS_BPL2, (u32)value);
+                    setColor(BUS_BPL3, (u32)value);
+                    setColor(BUS_BPL4, (u32)value);
+                    setColor(BUS_BPL5, (u32)value);
+                    setColor(BUS_BPL6, (u32)value);
+                    return true;
+                                         
+                case BUS_SPRITE0:
+                case BUS_SPRITE1:
+                case BUS_SPRITE2:
+                case BUS_SPRITE3:
+                case BUS_SPRITE4:
+                case BUS_SPRITE5:
+                case BUS_SPRITE6:
+                case BUS_SPRITE7:
+
+                    setColor(BUS_SPRITE0, (u32)value);
+                    setColor(BUS_SPRITE1, (u32)value);
+                    setColor(BUS_SPRITE2, (u32)value);
+                    setColor(BUS_SPRITE3, (u32)value);
+                    setColor(BUS_SPRITE4, (u32)value);
+                    setColor(BUS_SPRITE5, (u32)value);
+                    setColor(BUS_SPRITE6, (u32)value);
+                    setColor(BUS_SPRITE7, (u32)value);
+                    return true;
+                    
+                default:
+                    return false;
+            }
+        default:
+            return false;
+    }
 }
 
 DMADebuggerInfo
@@ -39,20 +232,15 @@ DmaDebugger::getInfo()
     DMADebuggerInfo result;
     
     synchronized {
-        
-        result.enabled = enabled;
-        
-        result.visualizeCopper = visualize[BUS_COPPER];
-        result.visualizeBlitter = visualize[BUS_BLITTER];
-        result.visualizeDisk = visualize[BUS_DISK];
-        result.visualizeAudio = visualize[BUS_AUDIO];
-        result.visualizeSprites = visualize[BUS_SPRITE0];
-        result.visualizeBitplanes = visualize[BUS_BPL1];
-        result.visualizeCpu = visualize[BUS_CPU];
-        result.visualizeRefresh = visualize[BUS_REFRESH];
-        
-        result.displayMode = displayMode;
-        result.opacity = opacity;
+                
+        result.visualizeCopper = config.visualize[BUS_COPPER];
+        result.visualizeBlitter = config.visualize[BUS_BLITTER];
+        result.visualizeDisk = config.visualize[BUS_DISK];
+        result.visualizeAudio = config.visualize[BUS_AUDIO];
+        result.visualizeSprites = config.visualize[BUS_SPRITE0];
+        result.visualizeBitplanes = config.visualize[BUS_BPL1];
+        result.visualizeCpu = config.visualize[BUS_CPU];
+        result.visualizeRefresh = config.visualize[BUS_REFRESH];
         
         getColor(BUS_COPPER, result.copperColor);
         getColor(BUS_BLITTER, result.blitterColor);
@@ -68,117 +256,25 @@ DmaDebugger::getInfo()
 }
 
 void
-DmaDebugger::setEnabled(bool value)
-{
-    if (!enabled && value) {
-        enabled = true;
-        messageQueue.put(MSG_DMA_DEBUG_ON);
-    }
-    if (enabled && !value) {
-        enabled = false;
-        messageQueue.put(MSG_DMA_DEBUG_OFF);
-    }
-}
-
-bool
-DmaDebugger::isVisualized(BusOwner owner) const
-{
-    assert_enum(BusOwner, owner);
-    return visualize[owner];
-}
-
-void
-DmaDebugger::setVisualized(BusOwner owner, bool value)
-{
-    assert_enum(BusOwner, owner);
-    visualize[owner] = value;
-}
-
-void
-DmaDebugger::visualizeCopper(bool value)
-{
-    setVisualized(BUS_COPPER, value);
-}
-
-void
-DmaDebugger::visualizeBlitter(bool value)
-{
-    setVisualized(BUS_BLITTER, value);
-}
-
-void
-DmaDebugger::visualizeDisk(bool value)
-{
-    setVisualized(BUS_DISK, value);
-}
-
-void
-DmaDebugger::visualizeAudio(bool value)
-{
-    setVisualized(BUS_AUDIO, value);
-}
-
-void
-DmaDebugger::visualizeSprite(bool value)
-{
-    setVisualized(BUS_SPRITE0, value);
-    setVisualized(BUS_SPRITE1, value);
-    setVisualized(BUS_SPRITE2, value);
-    setVisualized(BUS_SPRITE3, value);
-    setVisualized(BUS_SPRITE4, value);
-    setVisualized(BUS_SPRITE5, value);
-    setVisualized(BUS_SPRITE6, value);
-    setVisualized(BUS_SPRITE7, value);
-}
-
-void
-DmaDebugger::visualizeBitplane(bool value)
-{
-    setVisualized(BUS_BPL1, value);
-    setVisualized(BUS_BPL2, value);
-    setVisualized(BUS_BPL3, value);
-    setVisualized(BUS_BPL4, value);
-    setVisualized(BUS_BPL5, value);
-    setVisualized(BUS_BPL6, value);
-}
-
-void
-DmaDebugger::visualizeCpu(bool value)
-{
-    setVisualized(BUS_CPU, value);
-}
-
-void
-DmaDebugger::visualizeRefresh(bool value)
-{
-    setVisualized(BUS_REFRESH, value);
-}
-
-RgbColor
-DmaDebugger::getColor(BusOwner owner) const
-{
-    assert_enum(BusOwner, owner);
-    return debugColor[owner][4];
-}
-
-void
 DmaDebugger::getColor(BusOwner owner, double *rgb)
 {
-    RgbColor color = getColor(owner);
+    assert_enum(BusOwner, owner);
+    
+    RgbColor color = RgbColor(config.debugColor[owner]);
     rgb[0] = color.r;
     rgb[1] = color.g;
     rgb[2] = color.b;
 }
 
 void
-DmaDebugger::setColor(BusOwner owner, RgbColor color)
+DmaDebugger::setColor(BusOwner owner, u32 rgba)
 {
     assert_enum(BusOwner, owner);
-
-    // Store the original color at an unused location
-    debugColor[owner][4] = color;
-
+    
+    config.debugColor[owner] = rgba;
+                      
     // Compute the color variants that are used for drawing
+    RgbColor color = RgbColor(rgba);
     debugColor[owner][0] = color.shade(0.3);
     debugColor[owner][1] = color.shade(0.1);
     debugColor[owner][2] = color.tint(0.1);
@@ -186,93 +282,20 @@ DmaDebugger::setColor(BusOwner owner, RgbColor color)
 }
 
 void
-DmaDebugger::setColor(BusOwner owner, double r, double g, double b)
-{
-    assert_enum(BusOwner, owner);
-    setColor(owner, RgbColor(r, g, b));
-}
-
-void
-DmaDebugger::setCopperColor(double r, double g, double b)
-{
-    setColor(BUS_COPPER, r, g, b);
-}
-
-void
-DmaDebugger::setBlitterColor(double r, double g, double b)
-{
-    setColor(BUS_BLITTER, r, g, b);
-}
-
-void
-DmaDebugger::setDiskColor(double r, double g, double b)
-{
-    setColor(BUS_DISK, r, g, b);
-}
-
-void
-DmaDebugger::setAudioColor(double r, double g, double b)
-{
-    setColor(BUS_AUDIO, r, g, b);
-}
-
-void
-DmaDebugger::setSpriteColor(double r, double g, double b)
-{
-    setColor(BUS_SPRITE0, r, g, b);
-    setColor(BUS_SPRITE1, r, g, b);
-    setColor(BUS_SPRITE2, r, g, b);
-    setColor(BUS_SPRITE3, r, g, b);
-    setColor(BUS_SPRITE4, r, g, b);
-    setColor(BUS_SPRITE5, r, g, b);
-    setColor(BUS_SPRITE6, r, g, b);
-    setColor(BUS_SPRITE7, r, g, b);
-}
-
-void
-DmaDebugger::setBitplaneColor(double r, double g, double b)
-{
-    setColor(BUS_BPL1, r, g, b);
-    setColor(BUS_BPL2, r, g, b);
-    setColor(BUS_BPL3, r, g, b);
-    setColor(BUS_BPL4, r, g, b);
-    setColor(BUS_BPL5, r, g, b);
-    setColor(BUS_BPL6, r, g, b);
-}
-
-void
-DmaDebugger::setCpuColor(double r, double g, double b)
-{
-    setColor(BUS_CPU, r, g, b);
-}
-
-void
-DmaDebugger::setRefreshColor(double r, double g, double b)
-{
-    setColor(BUS_REFRESH, r, g, b);
-}
-
-void
-DmaDebugger::setOpacity(double value)
-{
-    assert(value >= 0.0 && value <= 1.0);
-    opacity = value;
-}
-
-void
 DmaDebugger::computeOverlay()
 {
     // Only proceed if DMA debugging has been turned on
-    if (!enabled) return;
+    if (!config.enabled) return;
 
     BusOwner *owners = agnus.busOwner;
     u16 *values = agnus.busValue;
     u32 *ptr = denise.pixelEngine.pixelAddr(0);
 
+    double opacity = config.opacity / 100.0;
     double bgWeight = 0;
     double fgWeight = 0;
 
-    switch (displayMode) {
+    switch (config.displayMode) {
 
         case DMA_DISPLAY_MODE_FG_LAYER:
 
@@ -301,7 +324,7 @@ DmaDebugger::computeOverlay()
         BusOwner owner = owners[i];
 
         // Handle the easy case first: No foreground pixels
-        if (!visualize[owner]) {
+        if (!config.visualize[owner]) {
 
             if (bgWeight != 0.0) {
                 ptr[0] = GpuColor(ptr[0]).shade(bgWeight).rawValue;
@@ -336,7 +359,7 @@ void
 DmaDebugger::vSyncHandler()
 {
     // Only proceed if the debugger is enabled
-    if (!enabled) return;
+    if (!config.enabled) return;
 
     // Clear old data in the next frame's VBLANK area
     u32 *ptr = denise.pixelEngine.frameBuffer->data;

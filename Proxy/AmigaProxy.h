@@ -381,27 +381,6 @@
 
 - (DMADebuggerInfo)getInfo;
 
-- (void)setEnable:(BOOL)value;
-- (void)visualizeCopper:(BOOL)value;
-- (void)visualizeBlitter:(BOOL)value;
-- (void)visualizeDisk:(BOOL)value;
-- (void)visualizeAudio:(BOOL)value;
-- (void)visualizeSprite:(BOOL)value;
-- (void)visualizeBitplane:(BOOL)value;
-- (void)visualizeCpu:(BOOL)value;
-- (void)visualizeRefresh:(BOOL)value;
-
-- (void)setOpacity:(double)value;
-- (void)setDisplayMode:(NSInteger)mode;
-- (void)setCopperColor:(double)r g:(double)g b:(double)b;
-- (void)setBlitterColor:(double)r g:(double)g b:(double)b;
-- (void)setDiskColor:(double)r g:(double)g b:(double)b;
-- (void)setAudioColor:(double)r g:(double)g b:(double)b;
-- (void)setSpriteColor:(double)r g:(double)g b:(double)b;
-- (void)setBitplaneColor:(double)r g:(double)g b:(double)b;
-- (void)setCpuColor:(double)r g:(double)g b:(double)b;
-- (void)setRefreshColor:(double)r g:(double)g b:(double)b;
-
 @end
 
 //

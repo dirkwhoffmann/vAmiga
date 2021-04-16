@@ -11,6 +11,7 @@
 
 #include "Aliases.h"
 #include "Reflection.h"
+#include "BusTypes.h"
 
 enum_long(DMA_DISPLAY_MODE)
 {
@@ -51,8 +52,25 @@ struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
 
 typedef struct
 {
+    // Global enable switch
     bool enabled;
-    
+
+    // Individual enable switch for each DMA channel
+    bool visualize[BUS_COUNT];
+
+    // Display mode
+    DmaDisplayMode displayMode;
+
+    // Color palette
+    u32 debugColor[BUS_COUNT];
+
+    // Opacity
+    isize opacity;
+}
+DmaDebuggerConfig;
+
+typedef struct
+{
     bool visualizeCopper;
     bool visualizeBlitter;
     bool visualizeDisk;
@@ -61,9 +79,6 @@ typedef struct
     bool visualizeBitplanes;
     bool visualizeCpu;
     bool visualizeRefresh;
-
-    DmaDisplayMode displayMode;
-    double opacity;
     
     double copperColor[3];
     double blitterColor[3];

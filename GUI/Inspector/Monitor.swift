@@ -86,19 +86,37 @@ class Monitor: DialogController {
         refresh()
     }
 
+    func busOwner(tag: Int) -> BusOwner {
+        
+        switch tag {
+        case 0: return .COPPER
+        case 1: return .BLITTER
+        case 2: return .DISK
+        case 3: return .AUDIO
+        case 4: return .SPRITE0
+        case 5: return .BPL1
+        case 6: return .CPU
+        case 7: return .REFRESH
+        default: fatalError()
+        }
+    }
+    
     func refresh() {
                 
         func enabled(_ i: Int) -> NSControl.StateValue {
             return parent.renderer.monitors.monitors[i].hidden ? .off : .on
         }
         
-        let info = amiga.dmaDebugger.getInfo()
-        let bus = info.enabled
+        let bus = amiga.getConfig(.DMA_DEBUG_ENABLE) != 0
         let mon = monEnable.state == .on
         let syn = synEnable.state == .on
         let col = bus || monEnable.isEnabled
                 
         // Bus debugger
+        let info = amiga.dmaDebugger.getInfo()
+        let opacity = amiga.getConfig(.DMA_DEBUG_OPACITY)
+        let mode = amiga.getConfig(.DMA_DEBUG_MODE)
+        
         busEnable.state = bus ? .on : .off
         busCopper.state = info.visualizeCopper ? .on : .off
         busBlitter.state = info.visualizeBlitter ? .on : .off
@@ -108,8 +126,8 @@ class Monitor: DialogController {
         busBitplanes.state = info.visualizeBitplanes ? .on : .off
         busCPU.state = info.visualizeCpu ? .on : .off
         busRefresh.state = info.visualizeRefresh ? .on : .off
-        busOpacity.doubleValue = info.opacity * 100.0
-        busDisplayMode.selectItem(withTag: info.displayMode.rawValue)
+        busOpacity.integerValue = opacity
+        busDisplayMode.selectItem(withTag: mode)
         busBlitter.isEnabled = bus
         busCopper.isEnabled = bus
         busDisk.isEnabled = bus
@@ -122,7 +140,6 @@ class Monitor: DialogController {
         busDisplayMode.isEnabled = bus
         
         // Activity monitors
-        // monEnable.state = mon ? .on : .off
         monCopper.state = enabled(Monitors.Monitor.copper)
         monBlitter.state = enabled(Monitors.Monitor.blitter)
         monDisk.state = enabled(Monitors.Monitor.disk)
@@ -214,21 +231,13 @@ class Monitor: DialogController {
     
     @IBAction func colorAction(_ sender: NSColorWell!) {
         
-        let r = Double(sender.color.redComponent)
-        let g = Double(sender.color.greenComponent)
-        let b = Double(sender.color.blueComponent)
-        
-        switch sender.tag {
-        case 0: amiga.dmaDebugger.setCopperColor(r, g: g, b: b)
-        case 1: amiga.dmaDebugger.setBlitterColor(r, g: g, b: b)
-        case 2: amiga.dmaDebugger.setDiskColor(r, g: g, b: b)
-        case 3: amiga.dmaDebugger.setAudioColor(r, g: g, b: b)
-        case 4: amiga.dmaDebugger.setSpriteColor(r, g: g, b: b)
-        case 5: amiga.dmaDebugger.setBitplaneColor(r, g: g, b: b)
-        case 6: amiga.dmaDebugger.setCpuColor(r, g: g, b: b)
-        case 7: amiga.dmaDebugger.setRefreshColor(r, g: g, b: b)
-        default: fatalError()
-        }
+        let r = Int(sender.color.redComponent * 255)
+        let g = Int(sender.color.greenComponent * 255.0)
+        let b = Int(sender.color.blueComponent * 255.0)
+        let rgb = (r << 24) | (g << 16) | (b << 8)
+
+        let id = Int(busOwner(tag: sender.tag).rawValue)
+        amiga.configure(.DMA_DEBUG_COLOR, id: id, value: rgb)
                 
         let monitor = parent.renderer.monitors.monitors[sender.tag]
         monitor.setColor(sender.color)
@@ -238,35 +247,26 @@ class Monitor: DialogController {
 
     @IBAction func busEnableAction(_ sender: NSButton!) {
         
-        amiga.dmaDebugger.setEnable(sender.state == .on)
+        amiga.configure(.DMA_DEBUG_ENABLE, enable: sender.state == .on)
         refresh()
     }
     
     @IBAction func busDisplayAction(_ sender: NSButton!) {
         
-        switch sender.tag {
-        case 0: amiga.dmaDebugger.visualizeCopper(sender.state == .on)
-        case 1: amiga.dmaDebugger.visualizeBlitter(sender.state == .on)
-        case 2: amiga.dmaDebugger.visualizeDisk(sender.state == .on)
-        case 3: amiga.dmaDebugger.visualizeAudio(sender.state == .on)
-        case 4: amiga.dmaDebugger.visualizeSprite(sender.state == .on)
-        case 5: amiga.dmaDebugger.visualizeBitplane(sender.state == .on)
-        case 6: amiga.dmaDebugger.visualizeCpu(sender.state == .on)
-        case 7: amiga.dmaDebugger.visualizeRefresh(sender.state == .on)
-        default: fatalError()
-        }
+        let id = Int(busOwner(tag: sender.tag).rawValue)
+        amiga.configure(.DMA_DEBUG_ENABLE, id: id, enable: sender.state == .on)
         refresh()
     }
     
     @IBAction func busDisplayModeAction(_ sender: NSPopUpButton!) {
         
-        amiga.dmaDebugger.setDisplayMode(sender.selectedTag())
+        amiga.configure(.DMA_DEBUG_MODE, value: sender.selectedTag())
         refresh()
     }
     
     @IBAction func busOpacityAction(_ sender: NSSlider!) {
-        
-        amiga.dmaDebugger.setOpacity(sender.doubleValue / 100.0)
+
+        amiga.configure(.DMA_DEBUG_OPACITY, value: sender.integerValue)
         refresh()
     }
     

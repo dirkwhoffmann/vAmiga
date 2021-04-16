@@ -16,22 +16,11 @@
 
 class DmaDebugger : public AmigaComponent {
 
-private:
+    // Current configuration
+    DmaDebuggerConfig config;
 
-    // Indicates if DMA debugging is turned on or off
-    bool enabled = false;
-
-    // Indicates if a certain DMA channel should be visualized
-    bool visualize[BUS_COUNT]; 
-
-    // DMA debugging colors
+    // Debug colors, derived from the debug color palette
     RgbColor debugColor[BUS_COUNT][5];
-
-    // Opacity of DMA pixels
-    double opacity = 0.5;
-
-    // Currently selected display mode
-    DmaDisplayMode displayMode = DMA_DISPLAY_MODE_FG_LAYER;
 
 
     //
@@ -52,44 +41,22 @@ public:
     //
 
 public:
+    
+    const DmaDebuggerConfig &getConfig() const { return config; }
 
-    // Turns DMA debugging on or off
-    bool isEnabled() const { return enabled; }
-    void setEnabled(bool value);
+    i64 getConfigItem(Option option) const;
+    i64 getConfigItem(Option option, long id) const;
+    bool setConfigItem(Option option, i64 value) override;
+    bool setConfigItem(Option option, long id, i64 value) override;
 
-    // Enables or disables the visual effects for a certain DMA source
-    bool isVisualized(BusOwner owner) const;
-    void setVisualized(BusOwner owner, bool value);
-    void visualizeCopper(bool value);
-    void visualizeBlitter(bool value);
-    void visualizeDisk(bool value);
-    void visualizeAudio(bool value);
-    void visualizeSprite(bool value);
-    void visualizeBitplane(bool value);
-    void visualizeCpu(bool value);
-    void visualizeRefresh(bool value);
+private:
 
-    // Gets or sets the opacity of the superimposed visual effect
-    double getOpacity() const { return opacity; }
-    void setOpacity(double value);
-
-    // Gets or sets the display mode
-    DmaDisplayMode getDisplayMode() { return displayMode; }
-    void setDisplayMode(DmaDisplayMode mode) { displayMode = mode; }
-
-    // Gets or sets a debug color
-    RgbColor getColor(BusOwner owner) const;
     void getColor(BusOwner owner, double *rgb);
+    void setColor(BusOwner owner, u32 rgba);
+    /*
     void setColor(BusOwner owner, RgbColor color);
     void setColor(BusOwner owner, double r, double g, double b);
-    void setCopperColor(double r, double g, double b);
-    void setBlitterColor(double r, double g, double b);
-    void setDiskColor(double r, double g, double b);
-    void setAudioColor(double r, double g, double b);
-    void setSpriteColor(double r, double g, double b);
-    void setBitplaneColor(double r, double g, double b);
-    void setCpuColor(double r, double g, double b);
-    void setRefreshColor(double r, double g, double b);
+    */
 
     
     //

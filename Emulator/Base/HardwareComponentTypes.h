@@ -31,6 +31,12 @@ enum_long(OPT)
     OPT_CONTRAST,
     OPT_SATURATION,
     
+    // DMA Debugger
+    OPT_DMA_DEBUG_ENABLE,
+    OPT_DMA_DEBUG_MODE,
+    OPT_DMA_DEBUG_COLOR,
+    OPT_DMA_DEBUG_OPACITY,
+    
     // Real-time clock
     OPT_RTC_MODEL,
 
