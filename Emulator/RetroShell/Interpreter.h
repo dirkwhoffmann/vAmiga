@@ -27,19 +27,21 @@ enum class Token
 
     // Commands
     about, audiate, autosync, clear, config, connect, debug, disable,
-    disconnect, dsksync, easteregg, eject, enable, close, insert, inspect, list,
-    load, lock, on, off, pause, power, reset, run, set, source,
+    disconnect, dsksync, easteregg, eject, enable, close, hide, insert, inspect,
+    list, load, lock, off, on, open, pause, power, reset, run, show, set,
+    source,
     
     // Categories
     checksums, devices, events, registers, state,
-    
+        
     // Keys
-    accuracy, bankmap, brightness, channel, chip, clxsprspr, clxsprplf,
-    clxplfplf, color, contrast, defaultbb, defaultfs, device, esync, extrom,
-    extstart, fast, filter, joystick, keyset, mechanics, mode, model, opacity,
-    palette, pan, poll, pullup, raminitpattern, revision, rom, sampling,
-    saturation, searchpath, shakedetector, slow, slowramdelay, slowrammirror,
-    speed, step, tod, todbug, unmappingtype, velocity, volume, wom
+    accuracy, bankmap, bitplanes, brightness, channel, chip, clxsprspr,
+    clxsprplf, clxplfplf, color, contrast, defaultbb, defaultfs, device, disk,
+    esync, extrom, extstart, fast, filter, joystick, keyset, mechanics, mode,
+    model, opacity, palette, pan, poll, pullup, raminitpattern, refresh,
+    revision, rom, sampling, saturation, searchpath, shakedetector, slow,
+    slowramdelay, slowrammirror, speed, sprites, step, tod, todbug,
+    unmappingtype, velocity, volume, wom
 };
 
 struct TooFewArgumentsError : public util::ParseError {

@@ -440,16 +440,113 @@ RetroShell::exec <Token::denise, Token::inspect, Token::registers> (Arguments& a
 //
 
 template <> void
-RetroShell::exec <Token::dmadebugger, Token::enable> (Arguments& argv, long param)
+RetroShell::exec <Token::dmadebugger, Token::open> (Arguments& argv, long param)
 {
-    printf("DMA Debugger enable\n");
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, true);
 }
 
 template <> void
-RetroShell::exec <Token::dmadebugger, Token::enable, Token::channel> (Arguments& argv, long param)
+RetroShell::exec <Token::dmadebugger, Token::close> (Arguments& argv, long param)
 {
-    printf("DMA Debugger CHANNEL enable %ld\n", param);
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, false);
 }
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::show, Token::copper> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_COPPER, true);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::show, Token::blitter> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_BLITTER, true);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::show, Token::disk> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_DISK, true);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::show, Token::audio> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_AUDIO, true);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::show, Token::sprites> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_SPRITE, true);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::show, Token::bitplanes> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_BITPLANE, true);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::show, Token::cpu> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_CPU, true);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::show, Token::refresh> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_REFRESH, true);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::hide, Token::copper> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_COPPER, false);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::hide, Token::blitter> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_BLITTER, false);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::hide, Token::disk> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_DISK, false);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::hide, Token::audio> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_AUDIO, false);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::hide, Token::sprites> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_SPRITE, false);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::hide, Token::bitplanes> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_BITPLANE, false);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::hide, Token::cpu> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_CPU, false);
+}
+
+template <> void
+RetroShell::exec <Token::dmadebugger, Token::hide, Token::refresh> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_REFRESH, false);
+}
+
 
 //
 // Monitor

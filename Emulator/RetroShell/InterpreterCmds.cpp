@@ -361,14 +361,85 @@ Interpreter::registerInstructions()
     root.add({"dmadebugger"},
              "component", "DMA Debugger");
 
-    root.add({"dmadebugger", "enable"},
-             "command", "Enables DMA debugging",
-             &RetroShell::exec <Token::dmadebugger, Token::enable>);
+    root.add({"dmadebugger", "open"},
+             "command", "Opens the DMA debugger",
+             &RetroShell::exec <Token::dmadebugger, Token::open>);
 
-    root.add({"dmadebugger", "enable", "channel"},
-             "command", "Enables a certain DMA channel",
-             &RetroShell::exec <Token::dmadebugger, Token::enable, Token::channel>, 1);
+    root.add({"dmadebugger", "close"},
+             "command", "Closes the DMA debugger",
+             &RetroShell::exec <Token::dmadebugger, Token::close>);
 
+    root.add({"dmadebugger", "show"},
+             "command", "Enables the debugger for a certain DMA channel");
+
+    root.add({"dmadebugger", "show", "copper"},
+             "command", "Visualizes Copper DMA",
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::copper>);
+
+    root.add({"dmadebugger", "show", "blitter"},
+             "command", "Visualizes Blitter DMA",
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::blitter>);
+
+    root.add({"dmadebugger", "show", "disk"},
+             "command", "Visualizes Disk DMA",
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::disk>);
+
+    root.add({"dmadebugger", "show", "audio"},
+             "command", "Visualizes Audio DMA",
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::audio>);
+
+    root.add({"dmadebugger", "show", "sprites"},
+             "command", "Visualizes Sprite DMA",
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::sprites>);
+
+    root.add({"dmadebugger", "show", "bitplanes"},
+             "command", "Visualizes Bitplane DMA",
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::bitplanes>);
+
+    root.add({"dmadebugger", "show", "cpu"},
+             "command", "Visualizes CPU accesses",
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::cpu>);
+
+    root.add({"dmadebugger", "show", "refresh"},
+             "command", "Visualizes memory refresh cycles",
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::refresh>);
+
+    root.add({"dmadebugger", "hide"},
+             "command", "Disables the debugger for a certain DMA channel");
+
+    root.add({"dmadebugger", "hide", "copper"},
+             "command", "Hides Copper DMA",
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::copper>);
+
+    root.add({"dmadebugger", "hide", "blitter"},
+             "command", "Hides Blitter DMA",
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::blitter>);
+
+    root.add({"dmadebugger", "hide", "disk"},
+             "command", "Hides Disk DMA",
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::disk>);
+
+    root.add({"dmadebugger", "hide", "audio"},
+             "command", "Hides Audio DMA",
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::audio>);
+
+    root.add({"dmadebugger", "hide", "sprites"},
+             "command", "Hides Sprite DMA",
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::sprites>);
+
+    root.add({"dmadebugger", "hide", "bitplanes"},
+             "command", "Hides Bitplane DMA",
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::bitplanes>);
+
+    root.add({"dmadebugger", "hide", "cpu"},
+             "command", "Hides CPU accesses",
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::cpu>);
+
+    root.add({"dmadebugger", "hide", "refresh"},
+             "command", "Hides memory refresh cycles",
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::refresh>);
+
+    
     //
     // Monitor
     //
