@@ -343,6 +343,32 @@ Amiga::configure(Option option, long id, i64 value)
     return changed;
 }
 
+void
+Amiga::init(RegressionScheme scheme)
+{
+    powerOff();
+
+    // Configure memory
+    switch(scheme) {
+            
+        case A500_OCS_1MB:
+            
+            configure(OPT_CHIP_RAM, 512);
+            configure(OPT_SLOW_RAM, 512);
+            configure(OPT_AGNUS_REVISION, AGNUS_OCS);
+            break;
+            
+        case A500_ECS_1MB:
+            
+            configure(OPT_CHIP_RAM, 512);
+            configure(OPT_SLOW_RAM, 512);
+            configure(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
+            break;
+    }
+    
+    powerOn();
+}
+
 EventID
 Amiga::getInspectionTarget() const
 {

@@ -85,10 +85,7 @@ public:
     virtual ~HardwareComponent();
     
     /* Initializes the component and it's subcomponents. The initialization
-     * procedure is initiated exactly once, in the constructor of the Amiga
-     * class. Some subcomponents implement the delegation method _initialize()
-     * to finalize their initialization, e.g., by setting up referecens that
-     * did not exist when they were constructed.
+     * procedure puts every components back into it's initial state.
      */
     void initialize();
     virtual void _initialize() { };

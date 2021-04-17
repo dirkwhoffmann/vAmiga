@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include "Reflection.h"
 
 //
 // Enumerations
@@ -26,6 +27,35 @@ enum_u32(RunLoopControlFlag)
     RL_AUTO_SNAPSHOT      = 0b001000000,
     RL_USER_SNAPSHOT      = 0b010000000
 };
+
+enum_long(REGRESSION_SCHEME)
+{
+    A500_OCS_1MB,
+    A500_ECS_1MB
+};
+typedef REGRESSION_SCHEME RegressionScheme;
+
+#ifdef __cplusplus
+struct RegressionSchemeEnum : util::Reflection<RegressionSchemeEnum, RegressionScheme> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value <= A500_ECS_1MB;
+    }
+
+    static const char *prefix() { return ""; }
+    static const char *key(RegressionScheme value)
+    {
+        switch (value) {
+                
+            case A500_OCS_1MB:  return "A500_OCS_1MB";
+            case A500_ECS_1MB:  return "A500_ECS_1MB";
+        }
+        return "???";
+    }
+};
+#endif
+
 
 //
 // Structures

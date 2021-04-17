@@ -169,6 +169,9 @@ public:
     bool configure(Option option, i64 value) throws;
     bool configure(Option option, long id, i64 value) throws;
     
+    // Prepares the Amiga for regression testing
+    void init(RegressionScheme scheme);
+    
     
     //
     // Analyzing
