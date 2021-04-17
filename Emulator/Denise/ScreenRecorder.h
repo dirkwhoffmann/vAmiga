@@ -93,6 +93,9 @@ public:
 
     bool hasFFmpeg() const;
     
+private:
+    
+    void _initialize() override;
     void _reset(bool hard) override;
 
     

@@ -11,6 +11,12 @@
 #include "MsgQueue.h"
 
 void
+MsgQueue::_initialize()
+{
+    
+}
+
+void
 MsgQueue::setListener(const void *listener, Callback *callback)
 {
     synchronized {

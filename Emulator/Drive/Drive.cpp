@@ -19,7 +19,18 @@
 Drive::Drive(Amiga& ref, isize n) : AmigaComponent(ref), nr(n)
 {
     assert(nr < 4);
-    
+}
+
+const char *
+Drive::getDescription() const
+{
+    assert(nr <= 3);
+    return nr == 0 ? "Df0" : nr == 1 ? "Df1" : nr == 2 ? "Df2" : "Df3";
+}
+
+void
+Drive::_initialize()
+{
     config.type = DRIVE_DD_35;
     config.mechanicalDelays = true;
     config.startDelay = MSEC(380);
@@ -32,13 +43,6 @@ Drive::Drive(Amiga& ref, isize n) : AmigaComponent(ref), nr(n)
     config.ejectVolume = 128;
     config.defaultFileSystem = FS_OFS;
     config.defaultBootBlock = BB_NONE;
-}
-
-const char *
-Drive::getDescription() const
-{
-    assert(nr <= 3);
-    return nr == 0 ? "Df0" : nr == 1 ? "Df1" : nr == 2 ? "Df2" : "Df3";
 }
 
 void

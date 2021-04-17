@@ -185,6 +185,12 @@ Amiga::reset(bool hard)
 }
 
 void
+Amiga::_initialize()
+{
+    
+}
+
+void
 Amiga::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)

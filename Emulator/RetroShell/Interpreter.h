@@ -73,6 +73,9 @@ private:
     // Registers the instruction set
     void registerInstructions();
 
+private:
+    
+    void _initialize() override;
     void _reset(bool hard) override { }
     
     

@@ -41,6 +41,10 @@ public:
     
     using AmigaComponent::AmigaComponent;
     const char *getDescription() const override { return "CopperDebugger"; }
+
+private:
+    
+    void _initialize() override;
     void _reset(bool hard) override;
     
     

@@ -17,6 +17,12 @@ Interpreter::Interpreter(Amiga &ref) : AmigaComponent(ref)
     registerInstructions();
 };
 
+void
+Interpreter::_initialize()
+{
+
+}
+
 Arguments
 Interpreter::split(const string& userInput)
 {

@@ -98,6 +98,7 @@ public:
 
     const char *getDescription() const override { return "Copper"; }
     
+    void _initialize() override;
     void _reset(bool hard) override;
 
     
@@ -112,7 +113,6 @@ public:
 
 private:
 
-    void _initialize() override;
     void _inspect() override;
     void _dump(dump::Category category, std::ostream& os) const override;
 

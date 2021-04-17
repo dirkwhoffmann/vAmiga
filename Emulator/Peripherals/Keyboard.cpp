@@ -16,6 +16,12 @@
 
 Keyboard::Keyboard(Amiga& ref) : AmigaComponent(ref)
 {
+ 
+}
+
+void
+Keyboard::_initialize()
+{
     config.accurate = true;
 }
 

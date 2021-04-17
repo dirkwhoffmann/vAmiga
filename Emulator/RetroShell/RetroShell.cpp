@@ -34,6 +34,12 @@ RetroShell::RetroShell(Amiga& ref) : AmigaComponent(ref), interpreter(ref)
     printPrompt();
 }
 
+void
+RetroShell::_initialize()
+{
+
+}
+
 isize
 RetroShell::cposRel()
 {

@@ -29,6 +29,12 @@ ScreenRecorder::hasFFmpeg() const
 }
 
 void
+ScreenRecorder::_initialize()
+{
+        
+}
+
+void
 ScreenRecorder::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)

@@ -57,6 +57,9 @@ public:
         
     const char *getDescription() const override { return "RetroShell"; }
 
+private:
+    
+    void _initialize() override;
     void _reset(bool hard) override { }
     
     

@@ -15,15 +15,21 @@
 
 Joystick::Joystick(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
 {
-    config.autofire = false;
-    config.autofireBullets = -3;
-    config.autofireDelay = 125;
+
 };
 
 const char *
 Joystick::getDescription() const
 {
     return port.nr == PORT_1 ? "Joystick1" : "Joystick2";
+}
+
+void
+Joystick::_initialize()
+{
+    config.autofire = false;
+    config.autofireBullets = -3;
+    config.autofireDelay = 125;
 }
 
 void

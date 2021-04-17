@@ -88,7 +88,7 @@ public:
      * procedure puts every components back into it's initial state.
      */
     void initialize();
-    virtual void _initialize() { };
+    virtual void _initialize() = 0;
     
     /* Resets the component and it's subcomponents. Two reset modes are
      * distinguished:

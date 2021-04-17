@@ -15,6 +15,12 @@ ZorroManager::ZorroManager(Amiga& ref) : AmigaComponent(ref)
 {
 }
 
+void
+ZorroManager::_initialize()
+{
+    
+}
+
 u8
 ZorroManager::peekFastRamDevice(u32 addr) const
 {

@@ -14,6 +14,12 @@
 
 SerialPort::SerialPort(Amiga& ref) : AmigaComponent(ref)
 {
+
+}
+
+void
+SerialPort::_initialize()
+{
     config.device = SPD_LOOPBACK;
 }
 

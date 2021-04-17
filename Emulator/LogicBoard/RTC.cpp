@@ -61,6 +61,12 @@ RTC::setConfigItem(Option option, i64 value)
 }
 
 void
+RTC::_initialize()
+{
+    
+}
+
+void
 RTC::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)

@@ -17,17 +17,23 @@
 
 Mouse::Mouse(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
 {
-    config.pullUpResistors = true;
-    config.shakeDetection = true;
-    config.velocity = 100;
 
-    updateScalingFactors();
 }
 
 const char *
 Mouse::getDescription() const
 {
     return port.nr == PORT_1 ? "Mouse1" : "Mouse2";
+}
+
+void
+Mouse::_initialize()
+{
+    config.pullUpResistors = true;
+    config.shakeDetection = true;
+    config.velocity = 100;
+
+    updateScalingFactors();
 }
 
 void Mouse::_reset(bool hard)
