@@ -293,70 +293,82 @@ RetroShell::text()
 }
 
 bool
-RetroShell::exec(const string &command, bool verbose)
+RetroShell::exec(const string &command, isize line)
 {
-    bool success = false;
-    
-    // Print the command string if requested
-    if (verbose) *this << command << '\n';
-        
     printf("Command: %s\n", command.c_str());
  
     try {
-        
+
+        // Print command if a script is executed
+        // if (line) *this << command << '\n';
+
         // Hand the command over to the intepreter
         interpreter.exec(command);
-        success = true;
-               
-    } catch (TooFewArgumentsError &err) {
-        *this << err.what() << ": Too few arguments";
-        *this << '\n';
+        return true;
         
-    } catch (TooManyArgumentsError &err) {
-        *this << err.what() << ": Too many arguments";
-        *this << '\n';
+    } catch (std::exception &e) {
             
-    } catch (util::EnumParseError &err) {
-        *this << err.token << " is not a valid key" << '\n';
-        *this << "Expected: " << err.expected << '\n';
+        if (line) {
+            // *this << "Error in line " << line << ": " << command << '\n';
+        }
+        if (auto err = dynamic_cast<TooFewArgumentsError *>(&e)) {
+            *this << err->what() << ": Too few arguments";
+            *this << '\n';
+            return false;
+        }
+        if (auto err = dynamic_cast<TooManyArgumentsError *>(&e)) {
+            *this << err->what() << ": Too many arguments";
+            *this << '\n';
+            return false;
+        }
+        if (auto err = dynamic_cast<util::EnumParseError *>(&e)) {
+            *this << err->token << " is not a valid key" << '\n';
+            *this << "Expected: " << err->expected << '\n';
+            return false;
+        }
+        if (auto err = dynamic_cast<util::ParseNumError *>(&e)) {
+            *this << err->token << " is not a number" << '\n';
+            return false;
+        }
+        if (auto err = dynamic_cast<util::ParseBoolError *>(&e)) {
+            *this << err->token << " must be true or false" << '\n';
+            return false;
+        }
+        if (auto err = dynamic_cast<util::ParseError *>(&e)) {
+            *this << err->what() << ": Syntax error";
+            *this << '\n';
+            return false;
+        }
+        if (auto err = dynamic_cast<ConfigUnsupportedError *>(&e)) {
+            *this << "This option is not yet supported.";
+            *this << '\n';
+            return false;
+        }
+        if (auto err = dynamic_cast<ConfigLockedError *>(&e)) {
+            *this << "This option is locked because the Amiga is powered on.";
+            *this << '\n';
+            return false;
+        }
+        if (auto err = dynamic_cast<ConfigArgError *>(&e)) {
+            *this << "Error: Invalid argument. Expected: " << err->what();
+            *this << '\n';
+            return false;
+        }
+        if (auto err = dynamic_cast<ConfigFileNotFoundError *>(&e)) {
+            *this << err->what() << " not found";
+            *this << '\n';
+            return true; // Don't break script execution
+        }
+        if (auto err = dynamic_cast<ConfigFileReadError *>(&e)) {
+            *this << "Error: Unable to read file " << err->what();
+            *this << '\n';
+            return false;
+        }
         
-    } catch (util::ParseNumError &err) {
-        *this << err.token << " is not a number" << '\n';
-
-    } catch (util::ParseBoolError &err) {
-        *this << err.token << " must be true or false" << '\n';
-
-    } catch (util::ParseError &err) {
-        *this << err.what() << ": Syntax error";
+        *this << e.what();
         *this << '\n';
-        
-    } catch (ConfigUnsupportedError &err) {
-        *this << "This option is not yet supported.";
-        *this << '\n';
-        
-    } catch (ConfigLockedError &err) {
-        *this << "This option is locked because the Amiga is powered on.";
-        *this << '\n';
-        
-    } catch (ConfigArgError &err) {
-        *this << "Error: Invalid argument. Expected: " << err.what();
-        *this << '\n';
-        
-    } catch (ConfigFileNotFoundError &err) {
-        *this << err.what() << " not found";
-        *this << '\n';
-        success = true; // Don't break the execution
-        
-    } catch (ConfigFileReadError &err) {
-        *this << "Error: Unable to read file " << err.what();
-        *this << '\n';
-        
-    } catch (VAError &err) {
-        *this << err.what();
-        *this << '\n';
+        return false;
     }
-    
-    return success;
 }
 
 void
@@ -365,19 +377,16 @@ RetroShell::exec(std::istream &stream)
     isize line = 0;
     string command;
         
+    // *this << '\n';
+    
     while(std::getline(stream, command)) {
 
         line++;
         printf("Line %zd: %s\n", line, command.c_str());
 
-        // Skip empty lines
-        if (command == "") continue;
-
-        // Skip comments
-        if (command.substr(0,1) == "#") continue;
-        
         // Execute the command
-        bool result = exec(command, true);
+        *this << command << '\n';
+        bool result = exec(command, line);
         
         if (!result) {
             

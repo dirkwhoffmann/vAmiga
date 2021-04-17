@@ -145,7 +145,7 @@ private:
 public:
     
     // Executes a user command
-    bool exec(const string &command, bool verbose = false);
+    bool exec(const string &command, isize line = 0);
     
     // Executes a user script
     void exec(std::istream &stream) throws;

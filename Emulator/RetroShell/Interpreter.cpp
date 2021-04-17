@@ -92,6 +92,9 @@ Interpreter::autoComplete(const string& userInput)
 void
 Interpreter::exec(const string& userInput, bool verbose)
 {
+    // Ignore empty lines and comments
+    if (userInput == "" || userInput.substr(0,1) == "#") return;
+    
     // Split the command string
     Arguments tokens = split(userInput);
         

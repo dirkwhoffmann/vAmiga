@@ -58,12 +58,7 @@ RetroShell::exec <Token::source> (Arguments &argv, long param)
     
     try {
         exec(stream);
-    } catch (util::Exception &e) {
-        /*
-        retroShell << "Error in line " << (isize)e.data << '\n';
-        retroShell << e.what() << '\n';
-        */
-    }
+    } catch (util::Exception &e) { }
 }
 
 //
