@@ -12,6 +12,8 @@
 #include "Amiga.h"
 #include "IO.h"
 
+#include <sstream>
+
 Script::Script()
 {
 }
@@ -33,4 +35,10 @@ void
 Script::execute(class Amiga &amiga)
 {
     msg("TODO: EXECUTE SCRIPT\n");
+    
+    string s((char *)data, size);
+    std::istringstream ss(s);
+    
+    try { amiga.retroShell.exec(ss); } catch (util::Exception &e) { }
+    
 }

@@ -152,8 +152,8 @@ class MyDocument: NSDocument {
         case _ as ScriptProxy:
             
             let proxy = attachment as! ScriptProxy
-            proxy.execute(amiga)
-
+            parent.renderer.console.runScript(script: proxy)
+            
         case _ as HDFFileProxy:
             
             track()

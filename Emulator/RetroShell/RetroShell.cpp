@@ -64,6 +64,7 @@ RetroShell::operator<<(char value)
     }
     
     shorten();
+    isDirty = true;
     return *this;
 }
 
@@ -71,6 +72,7 @@ RetroShell&
 RetroShell::operator<<(const string& text)
 {
     storage.back() += text;
+    isDirty = true;
     return *this;
 }
 
@@ -78,6 +80,7 @@ RetroShell&
 RetroShell::operator<<(int value)
 {
     *this << std::to_string(value);
+    isDirty = true;
     return *this;
 }
 
@@ -85,6 +88,7 @@ RetroShell&
 RetroShell::operator<<(long value)
 {
     *this << std::to_string(value);
+    isDirty = true;
     return *this;
 }
 
@@ -95,6 +99,7 @@ RetroShell::tab(isize hpos)
     for (isize i = 0; i < delta; i++) {
         *this << ' ';
     }
+    isDirty = true;
 }
 
 void
@@ -372,9 +377,17 @@ RetroShell::exec(std::istream &stream)
         if (command.substr(0,1) == "#") continue;
         
         // Execute the command
-        if (!exec(command, true)) {
+        bool result = exec(command, true);
+        
+        if (!result) {
+            
+            printf("Aborted in line %zd\n", line);
+            *this << "Aborted in line " << line << '\n';
+            printPrompt();
+            
             throw util::Exception(command, line);
         }
+        printPrompt();
     }
 }
 

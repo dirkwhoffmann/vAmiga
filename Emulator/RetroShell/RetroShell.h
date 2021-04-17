@@ -43,6 +43,7 @@ class RetroShell : public AmigaComponent {
     // Indicates if TAB was the most recently pressed key
     bool tabPressed = false;
     
+    // Indicates whether the shell needs to be redrawn
     bool isDirty = false;
     
     
@@ -69,13 +70,13 @@ private:
     isize _load(const u8 *buffer) override {return 0; }
     isize _save(u8 *buffer) override { return 0; }
 
-    
+
     //
     // Managing user input
     //
 
 public:
-    
+
     void pressUp();
     void pressDown();
     void pressLeft();
