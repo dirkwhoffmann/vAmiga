@@ -50,6 +50,10 @@ Interpreter::registerInstructions()
     root.add({"amiga"},
              "component", "The virtual Amiga");
         
+    root.add({"amiga", "init"},
+             "command", "Initializes the Amiga with a predefined scheme",
+             &RetroShell::exec <Token::amiga, Token::init>, 1);
+
     root.add({"amiga", "power"},
              "command", "Switches the Amiga on or off");
     

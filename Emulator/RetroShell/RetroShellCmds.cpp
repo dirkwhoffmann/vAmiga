@@ -66,6 +66,13 @@ RetroShell::exec <Token::source> (Arguments &argv, long param)
 //
 
 template <> void
+RetroShell::exec <Token::amiga, Token::init> (Arguments &argv, long param)
+{
+    auto scheme = util::parseEnum <ConfigSchemeEnum> (argv.front());
+    amiga.configure(scheme);
+}
+
+template <> void
 RetroShell::exec <Token::amiga, Token::power, Token::on> (Arguments &argv, long param)
 {
     amiga.powerOn();

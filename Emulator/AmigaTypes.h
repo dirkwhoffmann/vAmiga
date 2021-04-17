@@ -28,28 +28,28 @@ enum_u32(RunLoopControlFlag)
     RL_USER_SNAPSHOT      = 0b010000000
 };
 
-enum_long(REGRESSION_SCHEME)
+enum_long(CONFIG_SCHEME)
 {
-    A500_OCS_1MB,
-    A500_ECS_1MB
+    CONFIG_A500_OCS_1MB,
+    CONFIG_A500_ECS_1MB
 };
-typedef REGRESSION_SCHEME RegressionScheme;
+typedef CONFIG_SCHEME ConfigScheme;
 
 #ifdef __cplusplus
-struct RegressionSchemeEnum : util::Reflection<RegressionSchemeEnum, RegressionScheme> {
+struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value <= A500_ECS_1MB;
+        return (unsigned long)value <= CONFIG_A500_ECS_1MB;
     }
 
-    static const char *prefix() { return ""; }
-    static const char *key(RegressionScheme value)
+    static const char *prefix() { return "CONFIG"; }
+    static const char *key(ConfigScheme value)
     {
         switch (value) {
                 
-            case A500_OCS_1MB:  return "A500_OCS_1MB";
-            case A500_ECS_1MB:  return "A500_ECS_1MB";
+            case CONFIG_A500_OCS_1MB:  return "A500_OCS_1MB";
+            case CONFIG_A500_ECS_1MB:  return "A500_ECS_1MB";
         }
         return "???";
     }

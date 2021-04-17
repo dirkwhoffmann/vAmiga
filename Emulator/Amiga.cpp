@@ -350,28 +350,37 @@ Amiga::configure(Option option, long id, i64 value)
 }
 
 void
-Amiga::init(RegressionScheme scheme)
+Amiga::configure(ConfigScheme scheme)
 {
+    assert_enum(ConfigScheme, scheme);
+    msg("Using ConfigScheme %s", ConfigSchemeEnum::key(scheme));
+    
+    // Switch the Amiga off
     powerOff();
 
-    // Configure memory
+    // Revert to the initial state
+    initialize();
+    
+    // Apply the selected scheme
     switch(scheme) {
             
-        case A500_OCS_1MB:
+        case CONFIG_A500_OCS_1MB:
             
-            configure(OPT_CHIP_RAM, 512);
             configure(OPT_SLOW_RAM, 512);
             configure(OPT_AGNUS_REVISION, AGNUS_OCS);
             break;
             
-        case A500_ECS_1MB:
+        case CONFIG_A500_ECS_1MB:
             
-            configure(OPT_CHIP_RAM, 512);
             configure(OPT_SLOW_RAM, 512);
             configure(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
             break;
+            
+        default:
+            assert(false);
     }
     
+    // Switch the Amiga on
     powerOn();
 }
 
@@ -540,14 +549,14 @@ Amiga::run()
 {
     debug(RUN_DEBUG, "run()\n");
     assert(!isEmulatorThread());
-
-    // Power on if needed
-    powerOn();
-    assert(isPoweredOn());
-
+    
     if (!isRunning() && isReady()) {
-        
+    
         assert(p == (pthread_t)0);
+
+        // Power on if needed
+        powerOn();
+        assert(isPoweredOn());
 
         // Launch all subcomponents
         HardwareComponent::run();

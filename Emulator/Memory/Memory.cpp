@@ -45,13 +45,30 @@ Memory::dealloc()
 void
 Memory::_initialize()
 {
-    memset(&config, 0, sizeof(config));
+    dealloc();
 
-    config.slowRamDelay   = true;
-    config.bankMap        = BANK_MAP_A500;
+    romMask = 0;
+    womMask = 0;
+    extMask = 0;
+    chipMask = 0;
+    slowMask = 0;
+    fastMask = 0;
+
+    womIsLocked = false;
+    
+    config.chipSize = 0;
+    config.slowSize = 0;
+    config.fastSize = 0;
+
+    config.romSize = 0;
+    config.womSize = 0;
+    config.extSize = 0;
+    
+    config.slowRamDelay = true;
+    config.bankMap = BANK_MAP_A500;
     config.ramInitPattern = RAM_INIT_ALL_ZEROES;
-    config.unmappingType  = UNMAPPED_FLOATING;
-    config.extStart       = 0xE0;
+    config.unmappingType = UNMAPPED_FLOATING;
+    config.extStart = 0xE0;
 }
 
 void
