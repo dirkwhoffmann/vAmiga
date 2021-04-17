@@ -263,6 +263,9 @@ public:
     bool isCIAA() const { return nr == 0; }
     bool isCIAB() const { return nr == 1; }
 
+private:
+    
+    void _initialize() override;
     void _reset(bool hard) override;
     
     

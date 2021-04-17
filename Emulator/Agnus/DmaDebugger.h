@@ -36,6 +36,9 @@ public:
 
     const char *getDescription() const override { return "DmaDebugger"; }
 
+private:
+    
+    void _initialize() override;
     void _reset(bool hard) override { }
 
 

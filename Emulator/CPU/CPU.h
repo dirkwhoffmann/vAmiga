@@ -29,6 +29,9 @@ public:
 
     const char *getDescription() const override { return "CPU"; }
     
+private:
+    
+    void _initialize() override;
     void _reset(bool hard) override;
     
     

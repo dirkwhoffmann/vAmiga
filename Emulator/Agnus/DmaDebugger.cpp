@@ -17,6 +17,11 @@
 
 DmaDebugger::DmaDebugger(Amiga &ref) : AmigaComponent(ref)
 {
+}
+
+void
+DmaDebugger::_initialize()
+{
     config.enabled = false;
 
     // Visualize all channels by default except the CPU channel

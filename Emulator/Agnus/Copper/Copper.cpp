@@ -24,6 +24,12 @@ Copper::Copper(Amiga& ref) : AmigaComponent(ref)
 }
 
 void
+Copper::_initialize()
+{
+
+}
+
+void
 Copper::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)

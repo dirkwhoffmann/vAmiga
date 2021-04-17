@@ -400,6 +400,9 @@ private:
     void initBplEventTableHires();
     void initDasEventTable();
 
+private:
+    
+    void _initialize() override;
     void _reset(bool hard) override;
     
     

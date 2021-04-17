@@ -188,12 +188,13 @@ public:
     
     Memory(Amiga& ref);
     ~Memory();
+    void dealloc();
 
     const char *getDescription() const override { return "Memory"; }
     
 private:
     
-    void dealloc();
+    void _initialize() override;
     void _reset(bool hard) override;
     
     

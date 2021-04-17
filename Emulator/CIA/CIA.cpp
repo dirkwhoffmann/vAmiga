@@ -23,7 +23,11 @@
 CIA::CIA(int n, Amiga& ref) : AmigaComponent(ref), nr(n)
 {    
     subComponents = std::vector<HardwareComponent *> { &tod };
-    
+}
+
+void
+CIA::_initialize()
+{
     config.revision = CIA_8520_DIP;
     config.todBug = true;
     config.eClockSyncing = true;

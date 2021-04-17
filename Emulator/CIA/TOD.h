@@ -77,6 +77,10 @@ public:
     TOD(CIA *cia, Amiga& ref);
 
     const char *getDescription() const override;
+
+private:
+    
+    void _initialize() override;
     void _reset(bool hard) override;
 
 

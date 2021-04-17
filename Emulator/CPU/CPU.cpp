@@ -191,6 +191,12 @@ CPU::CPU(Amiga& ref) : moira::Moira(ref)
 }
 
 void
+CPU::_initialize()
+{
+    
+}
+
+void
 CPU::_reset(bool hard)
 {    
     RESET_SNAPSHOT_ITEMS(hard)

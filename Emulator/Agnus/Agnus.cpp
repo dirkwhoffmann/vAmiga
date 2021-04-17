@@ -21,17 +21,22 @@ Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
         &blitter,
         &dmaDebugger
     };
-    
+        
+    initLookupTables();
+}
+
+void
+Agnus::_initialize()
+{
     config.revision = AGNUS_ECS_1MB;
     ptrMask = 0x0FFFFF;
-    
-    initLookupTables();
     
     // Wipe out event slots
     memset(slot, 0, sizeof(slot));
 }
 
-void Agnus::_reset(bool hard)
+void
+Agnus::_reset(bool hard)
 {
     auto insEvent = slot[SLOT_INS].id;
     

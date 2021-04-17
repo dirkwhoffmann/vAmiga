@@ -24,13 +24,6 @@
 
 Memory::Memory(Amiga& ref) : AmigaComponent(ref)
 {
-    memset(&config, 0, sizeof(config));
-
-    config.slowRamDelay   = true;
-    config.bankMap        = BANK_MAP_A500;
-    config.ramInitPattern = RAM_INIT_ALL_ZEROES;
-    config.unmappingType  = UNMAPPED_FLOATING;
-    config.extStart       = 0xE0;
 }
 
 Memory::~Memory()
@@ -47,6 +40,18 @@ Memory::dealloc()
     if (chip) { delete[] chip; chip = nullptr; }
     if (slow) { delete[] slow; slow = nullptr; }
     if (fast) { delete[] fast; fast = nullptr; }
+}
+
+void
+Memory::_initialize()
+{
+    memset(&config, 0, sizeof(config));
+
+    config.slowRamDelay   = true;
+    config.bankMap        = BANK_MAP_A500;
+    config.ramInitPattern = RAM_INIT_ALL_ZEROES;
+    config.unmappingType  = UNMAPPED_FLOATING;
+    config.extStart       = 0xE0;
 }
 
 void
