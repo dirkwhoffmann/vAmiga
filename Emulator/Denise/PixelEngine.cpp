@@ -18,14 +18,9 @@
 
 PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
 {
-    config.palette = PALETTE_COLOR;
-    config.brightness = 50;
-    config.contrast = 100;
-    config.saturation = 50;
-
     // Allocate frame buffers
-    emuTexture[0].data = new u32[PIXELS]; emuTexture[0].longFrame = true;
-    emuTexture[1].data = new u32[PIXELS]; emuTexture[1].longFrame = true;
+    emuTexture[0].data = new u32[PIXELS];
+    emuTexture[1].data = new u32[PIXELS];
     
     // Create random background noise pattern
     const isize noiseSize = 2 * VPIXELS * HPIXELS;
@@ -33,7 +28,27 @@ PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
     for (isize i = 0; i < noiseSize; i++) {
         noise[i] = rand() % 2 ? 0xFF000000 : 0xFFFFFFFF;
     }
+}
 
+PixelEngine::~PixelEngine()
+{
+    delete[] emuTexture[0].data;
+    delete[] emuTexture[1].data;
+    delete[] noise;
+}
+
+void
+PixelEngine::_initialize()
+{
+    config.palette = PALETTE_COLOR;
+    config.brightness = 50;
+    config.contrast = 100;
+    config.saturation = 50;
+    
+    // Start with a long frame
+    emuTexture[0].longFrame = true;
+    emuTexture[1].longFrame = true;
+    
     // Setup ECS BRDRBLNK color
     indexedRgba[64] = GpuColor(0x00, 0x00, 0x00).rawValue;
     
@@ -48,11 +63,13 @@ PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
     indexedRgba[72] = GpuColor(0xFF, 0x00, 0x00).rawValue;
 }
 
-PixelEngine::~PixelEngine()
+void
+PixelEngine::_reset(bool hard)
 {
-    delete[] emuTexture[0].data;
-    delete[] emuTexture[1].data;
-    delete[] noise;
+    RESET_SNAPSHOT_ITEMS(hard)
+    
+    frameBuffer = & emuTexture[0];
+    updateRGBA();
 }
 
 isize
@@ -135,15 +152,6 @@ PixelEngine::_powerOn()
             emuTexture[1].data[pos] = col;
         }
     }
-}
-
-void
-PixelEngine::_reset(bool hard)
-{
-    RESET_SNAPSHOT_ITEMS(hard)
-    
-    frameBuffer = & emuTexture[0];
-    updateRGBA();
 }
 
 i64

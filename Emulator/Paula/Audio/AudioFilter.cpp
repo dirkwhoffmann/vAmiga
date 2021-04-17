@@ -17,6 +17,12 @@ AudioFilter::AudioFilter(Amiga& ref) : AmigaComponent(ref)
 }
 
 void
+AudioFilter::_initialize()
+{
+    type = FILTER_BUTTERWORTH;
+}
+
+void
 AudioFilter::setFilterType(FilterType type)
 {
     assert_enum(FilterType, type);

@@ -40,6 +40,24 @@ Muxer::~Muxer()
 }
 
 void
+Muxer::_initialize()
+{
+    config.samplingMethod = SMP_NONE;
+    config.filterType = FILTER_BUTTERWORTH;
+    config.filterAlwaysOn = false;
+    config.volL = 50;
+    config.volR = 50;
+    config.vol[0] = 100;
+    config.vol[1] = 100;
+    config.vol[2] = 100;
+    config.vol[3] = 100;
+    config.pan[0] = 170;
+    config.pan[1] = 30;
+    config.pan[2] = 30;
+    config.pan[3] = 170;
+}
+
+void
 Muxer::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)

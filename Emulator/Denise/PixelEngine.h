@@ -92,6 +92,11 @@ public:
 
     const char *getDescription() const override { return "PixelEngine"; }
 
+private:
+    
+    void _initialize() override;
+    void _reset(bool hard) override;
+
     
     //
     // Configuring
@@ -149,7 +154,6 @@ public:
 private:
 
     void _powerOn() override;
-    void _reset(bool hard) override;
 
 
     //

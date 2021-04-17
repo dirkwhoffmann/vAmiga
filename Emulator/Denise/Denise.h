@@ -276,6 +276,9 @@ public:
 
     const char *getDescription() const override { return "Denise"; }
 
+private:
+    
+    void _initialize() override;
     void _reset(bool hard) override;
 
     

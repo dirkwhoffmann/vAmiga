@@ -18,7 +18,11 @@
 
 DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
 {
-    // Setup initial configuration
+}
+
+void
+DiskController::_initialize()
+{
     config.connected[0] = true;
     config.connected[1] = false;
     config.connected[2] = false;

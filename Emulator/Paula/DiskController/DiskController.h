@@ -101,6 +101,9 @@ public:
 
     const char *getDescription() const override { return "DiskController"; }
     
+private:
+    
+    void _initialize() override;
     void _reset(bool hard) override;
     
     

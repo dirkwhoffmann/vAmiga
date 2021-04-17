@@ -22,7 +22,11 @@ Denise::Denise(Amiga& ref) : AmigaComponent(ref)
         &pixelEngine,
         &screenRecorder
     };
+}
 
+void
+Denise::_initialize()
+{
     config.hiddenSprites = 0;
     config.hiddenLayers = 0;
     config.hiddenLayerAlpha = 128;
