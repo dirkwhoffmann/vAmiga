@@ -17,7 +17,7 @@ class MyDocument: NSDocument {
      */
     var amiga: AmigaProxy!
 
-    /* An otional media object attached to this document. This variable is
+    /* An optional media object attached to this document. This variable is
      * checked in mountAttachment() which is called in windowDidLoad(). If an
      * attachment is present, e.g., an ADF archive, it is automatically
      * attached to the emulator.
@@ -67,7 +67,7 @@ class MyDocument: NSDocument {
     func createAttachment(from url: URL) throws {
         
         let types: [FileType] =
-            [ .SNAPSHOT, .ADF, .HDF, .EXT, .IMG, .DMS, .EXE, .DIR ]
+            [ .SNAPSHOT, .SCRIPT, .ADF, .HDF, .EXT, .IMG, .DMS, .EXE, .DIR ]
         
         try createAttachment(from: url, allowedTypes: types)
     }
@@ -99,7 +99,10 @@ class MyDocument: NSDocument {
             
             case .SNAPSHOT:
                 try? result = Proxy.make(url: newUrl) as SnapshotProxy
-                
+
+            case .SCRIPT:
+                try? result = Proxy.make(url: newUrl) as ScriptProxy
+
             case .ADF:
                 try? result = Proxy.make(url: newUrl) as ADFFileProxy
                                 
@@ -145,7 +148,12 @@ class MyDocument: NSDocument {
             let proxy = attachment as! SnapshotProxy
             parent.load(snapshot: proxy)
             snapshots.append(proxy)
+
+        case _ as ScriptProxy:
             
+            let proxy = attachment as! ScriptProxy
+            proxy.execute(amiga)
+
         case _ as HDFFileProxy:
             
             track()

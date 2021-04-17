@@ -31,6 +31,7 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType> {
                 
             case FILETYPE_UKNOWN:       return "UKNOWN";
             case FILETYPE_SNAPSHOT:     return "SNAPSHOT";
+            case FILETYPE_SCRIPT:       return "SCRIPT";
             case FILETYPE_ADF:          return "ADF";
             case FILETYPE_HDF:          return "HDF";
             case FILETYPE_EXT:          return "EXT";
@@ -56,11 +57,11 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType> {
  * | AmigaFile  |
  *  ------------
  *       |
- *       |---------------------------------------------------
- *       |           |           |            |              |
- *       |      ----------   ---------   ---------   -----------------
- *       |     | Snapshot | | HDFFile | | RomFile | | ExtendedRomFile |
- *       |      ----------   ---------   ---------   -----------------
+ *       |-----------------------------------------------------------
+ *       |       |           |           |           |               |
+ *       |  ----------   ---------   ---------   ---------   -----------------
+ *       | | Snapshot | | Script  | | HDFFile | | RomFile | | ExtendedRomFile |
+ *       |  ----------   ---------   ---------   ---------   -----------------
  *       |
  *  ------------
  * |  DiskFile  |

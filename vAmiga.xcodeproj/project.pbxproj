@@ -247,6 +247,7 @@
 		50F924FD2428B8CD00DD91AB /* DDF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F924FB2428B8CD00DD91AB /* DDF.cpp */; };
 		50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
 		50FAC77525160BBF00E47421 /* DiskFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* DiskFile.cpp */; };
+		50FCCA7C262AAAEA00398342 /* Script.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FCCA7A262AAAEA00398342 /* Script.cpp */; };
 		50FFA7D02440CB0300BEBA6B /* ActivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */; };
 /* End PBXBuildFile section */
 
@@ -674,6 +675,8 @@
 		50FAC76F2515EBED00E47421 /* IMGFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMGFile.h; sourceTree = "<group>"; };
 		50FAC77325160BBF00E47421 /* DiskFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskFile.cpp; sourceTree = "<group>"; };
 		50FAC77425160BBF00E47421 /* DiskFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskFile.h; sourceTree = "<group>"; };
+		50FCCA7A262AAAEA00398342 /* Script.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Script.cpp; sourceTree = "<group>"; };
+		50FCCA7B262AAAEA00398342 /* Script.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Script.h; sourceTree = "<group>"; };
 		50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMonitor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1078,6 +1081,8 @@
 				508FE06321EA318D0043D0E9 /* AmigaFile.cpp */,
 				50384C8521FC6B66006E7748 /* Snapshot.h */,
 				50384C8421FC6B66006E7748 /* Snapshot.cpp */,
+				50FCCA7B262AAAEA00398342 /* Script.h */,
+				50FCCA7A262AAAEA00398342 /* Script.cpp */,
 				50EAD99B256E76820053F9AC /* HDFFile.h */,
 				50EAD99F256E76A40053F9AC /* HDFFile.cpp */,
 				5009B7F5255702C00037288E /* RomFiles */,
@@ -1647,6 +1652,7 @@
 				50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */,
 				50001C652593230200D1FC91 /* DeviceDatabase.swift in Sources */,
 				500217BA2449CFF500E1A096 /* ConfigurationController.swift in Sources */,
+				50FCCA7C262AAAEA00398342 /* Script.cpp in Sources */,
 				50AE6EE524D9B210000AA367 /* DeniseRegs.cpp in Sources */,
 				50AEBED324D3D6D10037082D /* StateMachineEvents.cpp in Sources */,
 				508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */,

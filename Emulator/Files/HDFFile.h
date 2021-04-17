@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "DiskFile.h"
+#include "AmigaFile.h"
 #include "FSDevice.h"
 
 class Disk;

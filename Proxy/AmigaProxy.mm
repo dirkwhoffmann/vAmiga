@@ -19,6 +19,7 @@
 #include "FSDevice.h"
 #include "IMGFile.h"
 #include "RomFile.h"
+#include "Script.h"
 #include "Snapshot.h"
 
 using namespace moira;
@@ -1468,6 +1469,42 @@ using namespace moira;
 - (time_t)timeStamp
 {
     return [self snapshot]->getThumbnail().timestamp;
+}
+
+@end
+
+
+//
+// Script proxy
+//
+
+@implementation ScriptProxy
+
+- (Script *)script
+{
+    return (Script *)obj;
+}
+
++ (instancetype)make:(Script *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
+{
+    return [self make: AmigaFile::make <Script> ([path fileSystemRepresentation], err)];
+}
+
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
+{
+    return [self make: AmigaFile::make <Script> ((const u8 *)buf, len, err)];
+}
+
+- (void)execute:(AmigaProxy *)proxy
+{
+    Amiga *amiga = (Amiga *)proxy->obj;
+    
+    [self script]->execute(*amiga);
 }
 
 @end

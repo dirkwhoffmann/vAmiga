@@ -77,6 +77,7 @@
 @class RomFileProxy;
 @class RtcProxy;
 @class ScreenRecorderProxy;
+@class ScriptProxy;
 @class SerialPortProxy;
 @class SnapshotProxy;
 
@@ -683,6 +684,20 @@
 
 
 //
+// Script proxy
+//
+
+@interface ScriptProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> { }
+
++ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err;
+ 
+- (void)execute:(AmigaProxy *)proxy;
+
+@end
+
+
+//
 // RomFile proxy
 //
 
@@ -691,8 +706,6 @@
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err;
  
-// @property (readonly) RomType romType;
-
 @end
 
 

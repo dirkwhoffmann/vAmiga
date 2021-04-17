@@ -11,6 +11,7 @@
 #include "AmigaFile.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
+#include "ExtendedRomFile.h"
 #include "EXTFile.h"
 #include "IMGFile.h"
 #include "DMSFile.h"
@@ -18,7 +19,7 @@
 #include "Folder.h"
 #include "HDFFile.h"
 #include "RomFile.h"
-#include "ExtendedRomFile.h"
+#include "Script.h"
 
 AmigaFile::AmigaFile(isize capacity)
 {
