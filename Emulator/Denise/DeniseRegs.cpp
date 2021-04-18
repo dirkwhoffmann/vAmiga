@@ -83,7 +83,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     trace(BPLREG_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
 
     // Record the register change
-    i64 pixel = std::max(4 * agnus.pos.h - 6, 0);
+    i64 pixel = std::max(4 * agnus.pos.h - 4, 0);
     conChanges.insert(pixel, RegChange { SET_BPLCON0_DENISE, newValue });
     
     // Check if the HAM bit has changed
@@ -303,7 +303,7 @@ Denise::pokeCOLORxx(u16 value)
     if (s != ACCESSOR_AGNUS && agnus.pos.h != 0) pos--;
     
     // Record the color change
-    pixelEngine.colChanges.insert(4 * pos - 2, RegChange { reg, value } );
+    pixelEngine.colChanges.insert(4 * pos, RegChange { reg, value } );
 }
 
 template void Denise::pokeBPLxDAT<0,ACCESSOR_CPU>(u16 value);
