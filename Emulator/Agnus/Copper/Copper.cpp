@@ -280,7 +280,6 @@ Copper::move(u32 addr, u16 value)
     assert(addr < 0x1FF);
 
     // Catch registers with special timing needs
-
     if (addr >= 0x180 && addr <= 0x1BE) {
 
         trace(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, regName(addr), value);
