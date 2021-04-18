@@ -395,7 +395,6 @@ Amiga::getInspectionTarget() const
 void
 Amiga::setInspectionTarget(EventID id)
 {
-    printf("setInspectionTarget(%lld)\n", id);
     suspend();
     agnus.scheduleRel<SLOT_INS>(0, id);
     agnus.serviceINSEvent();

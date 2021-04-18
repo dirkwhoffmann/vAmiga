@@ -12,6 +12,7 @@
 #include "PixelEngineTypes.h"
 #include "AmigaComponent.h"
 #include "ChangeRecorder.h"
+#include "Constants.h"
 
 class PixelEngine : public AmigaComponent {
 
@@ -26,6 +27,15 @@ public:
     static const i32 rgbaHBlank = 0xFF444444;
     static const i32 rgbaVBlank = 0xFF444444;
 
+    // Filename used by dumpTexture()
+    string dumpTexturePath = "texture";
+    
+    // Pixel area dumped by dumpTexture()
+    isize x1 = 4 * (HBLANK_MAX + 1);
+    isize y1 = VBLANK_MAX + 1;
+    isize x2 = HPIXELS;
+    isize y2 = VPIXELS;
+    
 private:
 
     //
@@ -143,8 +153,8 @@ private:
 
 public:
     
-    void dumpTexture(); 
-    void dumpTexture(std::ostream& ss, isize x1, isize y1, isize x2, isize y2);
+    void dumpTexture();
+    void dumpTexture(std::ostream& ss);
     
     
     //

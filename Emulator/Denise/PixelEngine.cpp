@@ -88,17 +88,16 @@ PixelEngine::dumpTexture()
      * texture and compare it against a previously recorded reference image.
      */
     std::ofstream file;
-    
-    isize x1 = 4 * (HBLANK_MAX + 1);
-    isize y1 = VBLANK_MAX + 1;
-    isize x2 = HPIXELS;
-    isize y2 = VPIXELS;
-    
+        
+    // Assemble the target file names
+    string rawFile = "/tmp/" + dumpTexturePath + ".raw";
+    string tiffFile = "/tmp/" + dumpTexturePath + ".tiff";
+
     // Open an output stream
-    file.open("/tmp/texture.raw");
+    file.open(rawFile.c_str());
     
     // Dump texture
-    dumpTexture(file, x1, y1, x2, y2);
+    dumpTexture(file);
     file.close();
     
     // Convert raw data into a TIFF file
@@ -106,14 +105,14 @@ PixelEngine::dumpTexture()
     cmd += " -p rgb -b 3";
     cmd += " -w " + std::to_string(x2 - x1);
     cmd += " -l " + std::to_string(y2 - y1);
-    cmd += " /tmp/texture.raw /tmp/texture.tiff";
+    cmd += " " + rawFile + " " + tiffFile;
     
     // msg("Executing %s\n", cmd.c_str());
     system(cmd.c_str());
 }
 
 void
-PixelEngine::dumpTexture(std::ostream& ss, isize x1, isize y1, isize x2, isize y2)
+PixelEngine::dumpTexture(std::ostream& ss)
 {
     auto buffer = getStableBuffer();
     
@@ -128,15 +127,6 @@ PixelEngine::dumpTexture(std::ostream& ss, isize x1, isize y1, isize x2, isize y
 
         }
     }
-    /*
-    for (isize i = 0; i < PIXELS; i++) {
-    
-        char *cptr = (char *)(buffer.data + i);
-        ss.write(cptr + 0, 1);
-        ss.write(cptr + 1, 1);
-        ss.write(cptr + 2, 1);
-    }
-    */
 }
 
 void

@@ -23,23 +23,24 @@ enum class Token
     
     // Components
     agnus, amiga, audio, blitter, cia, controlport, copper, cpu, dc, denise,
-    dfn, dmadebugger, keyboard, memory, monitor, mouse, paula, serial, rtc,
+    dfn, dmadebugger, keyboard, memory, monitor, mouse, paula, screenshot,
+    serial, rtc,
 
     // Commands
     about, audiate, autosync, clear, config, connect, debug, disable,
     disconnect, dsksync, easteregg, eject, enable, close, hide, init, insert,
-    inspect, list, load, lock, off, on, open, pause, power, reset, run,
-    screenshot, set, show, source,
+    inspect, list, load, lock, off, on, open, pause, power, reset, run, set,
+    show, source,
     
     // Categories
     checksums, devices, events, registers, state,
         
     // Keys
     accuracy, bankmap, bitplanes, brightness, channel, chip, clxsprspr,
-    clxsprplf, clxplfplf, color, contrast, defaultbb, defaultfs, device, disk,
-    esync, extrom, extstart, fast, filter, joystick, keyset, mechanics, mode,
-    model, opacity, palette, pan, poll, pullup, raminitpattern, refresh,
-    revision, rom, sampling, saturation, searchpath,
+    clxsprplf, clxplfplf, color, contrast, cutout, defaultbb, defaultfs, delay,
+    device, disk, esync, extrom, extstart, fast, filename, filter, joystick,
+    keyset, mechanics, mode, model, opacity, palette, pan, path, poll, pullup,
+    raminitpattern, refresh, revision, rom, sampling, saturation, searchpath,
     shakedetector, slow, slowramdelay, slowrammirror, speed, sprites, step,
     timeout, tod, todbug, unmappingtype, velocity, volume, wom
 };

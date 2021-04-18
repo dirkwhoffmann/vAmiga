@@ -32,13 +32,6 @@ Interpreter::registerInstructions()
              "command", "",
              &RetroShell::exec <Token::easteregg>);
     root.seek("joshua")->hidden = true;
-
-    /*
-    root.add({"screenshot"},
-             "command", "",
-             &RetroShell::exec <Token::screenshot>, 1);
-    root.seek("screenshot")->hidden = true;
-    */
     
     root.add({"source"},
              "command", "Processes a command script",
@@ -846,4 +839,23 @@ Interpreter::registerInstructions()
     root.add({"df0", "df1", "df2", "df3", "dfn"}, {"", "inspect"},
              "command", "Displays the internal state",
              &RetroShell::exec <Token::dfn, Token::inspect>);
+    
+    //
+    // Screenshots (regression testing)
+    //
+    
+    root.add({"screenshot"},
+             "component", "Regression test image");
+    root.seek("screenshot")->hidden = true;
+    
+    root.add({"screenshot", "set"},
+             "command", "Configures the regression test");
+        
+    root.add({"screenshot", "set", "filename"},
+             "key", "Assigns the screen shot filename",
+             &RetroShell::exec <Token::screenshot, Token::set, Token::filename>, 1);
+
+    root.add({"screenshot", "set", "cutout"},
+             "key", "Adjusts the texture cutout",
+             &RetroShell::exec <Token::screenshot, Token::set, Token::cutout>, 4);
 }
