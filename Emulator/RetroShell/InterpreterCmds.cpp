@@ -33,11 +33,13 @@ Interpreter::registerInstructions()
              &RetroShell::exec <Token::easteregg>);
     root.seek("joshua")->hidden = true;
 
+    /*
     root.add({"screenshot"},
              "command", "",
              &RetroShell::exec <Token::screenshot>, 1);
     root.seek("screenshot")->hidden = true;
-
+    */
+    
     root.add({"source"},
              "command", "Processes a command script",
              &RetroShell::exec <Token::source>, 1);
@@ -80,6 +82,11 @@ Interpreter::registerInstructions()
              "command", "Starts the emulator thread",
              &RetroShell::exec <Token::amiga, Token::run>);
 
+    root.add({"amiga", "run", "timeout"},
+             "command", "Runs a regression test",
+             &RetroShell::exec <Token::amiga, Token::run, Token::timeout>, 1);
+    root.seek("amiga")->seek("run")->seek("timeout")->hidden = true;
+    
     root.add({"amiga", "pause"},
              "command", "Halts the emulator thread",
              &RetroShell::exec <Token::amiga, Token::pause>);

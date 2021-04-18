@@ -108,7 +108,7 @@ PixelEngine::dumpTexture()
     cmd += " -l " + std::to_string(y2 - y1);
     cmd += " /tmp/texture.raw /tmp/texture.tiff";
     
-    msg("Executing %s\n", cmd.c_str());
+    // msg("Executing %s\n", cmd.c_str());
     system(cmd.c_str());
 }
 

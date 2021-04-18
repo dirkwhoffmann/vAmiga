@@ -34,8 +34,6 @@ Script::isCompatibleStream(std::istream &stream)
 void
 Script::execute(class Amiga &amiga)
 {
-    msg("TODO: EXECUTE SCRIPT\n");
-    
     string s((char *)data, size);
     std::istringstream ss(s);
     

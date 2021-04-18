@@ -141,6 +141,7 @@ class Console: Layer {
 
     func runScript(script: ScriptProxy) {
         
+        open()
         script.execute(amiga)
         isDirty = true
     }

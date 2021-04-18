@@ -313,7 +313,7 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
                 if (info.frameRel == -1) {
                     os << std::left << std::setw(18) << "previous frame";
                 } else if (info.frameRel > 0) {
-                    os << std::left << std::setw(18) << "next frame";
+                    os << std::left << std::setw(18) << "other frame";
                 } else {
                     string vpos = std::to_string(info.vpos);
                     string hpos = std::to_string(info.hpos);

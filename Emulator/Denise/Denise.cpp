@@ -210,13 +210,17 @@ Denise::_dump(dump::Category category, std::ostream& os) const
         os << hex(bplcon3) << std::endl;
     
         os << tab("SPRxDATA");
-        for (isize i = 0; i < 8; i++) os << hex(sprdata[i]); os << std::endl;
+        for (isize i = 0; i < 8; i++) os << hex(sprdata[i]) << ' ';
+        os << std::endl;
         os << tab("SPRxDATB");
-        for (isize i = 0; i < 8; i++) os << hex(sprdatb[i]); os << std::endl;
+        for (isize i = 0; i < 8; i++) os << hex(sprdatb[i]) << ' ';
+        os << std::endl;
         os << tab("SPRxPOS");
-        for (isize i = 0; i < 8; i++) os << hex(sprpos[i]); os << std::endl;
+        for (isize i = 0; i < 8; i++) os << hex(sprpos[i]) << ' ';
+        os << std::endl;
         os << tab("SPRxCTL");
-        for (isize i = 0; i < 8; i++) os << hex(sprctl[i]); os << std::endl;
+        for (isize i = 0; i < 8; i++) os << hex(sprctl[i]) << ' ';
+        os << std::endl;
     }
 }
 

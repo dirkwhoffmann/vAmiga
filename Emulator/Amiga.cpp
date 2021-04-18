@@ -353,7 +353,7 @@ void
 Amiga::configure(ConfigScheme scheme)
 {
     assert_enum(ConfigScheme, scheme);
-    msg("Using ConfigScheme %s", ConfigSchemeEnum::key(scheme));
+    debug(CNF_DEBUG, "Using ConfigScheme %s", ConfigSchemeEnum::key(scheme));
     
     // Switch the Amiga off
     powerOff();
@@ -405,9 +405,8 @@ Amiga::setInspectionTarget(EventID id)
 void
 Amiga::setInspectionTarget(EventID id, Cycle trigger)
 {
-    printf("setInspectionTarget(%lld, %lld)\n", id, trigger);
     suspend();
-    agnus.scheduleAbs<SLOT_INS>(trigger, id);
+    agnus.scheduleRel<SLOT_INS>(trigger, id);
     resume();
 }
 
