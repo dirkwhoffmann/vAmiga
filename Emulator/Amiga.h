@@ -230,9 +230,9 @@ public:
     bool isPaused() const override { return state == EMULATOR_STATE_PAUSED; }
     bool isRunning() const override { return state == EMULATOR_STATE_RUNNING; }
 
-    void powerOn();
+    void powerOn() throws;
     void powerOff();
-    void run();
+    void run() throws;
     void pause();
     void shutdown();
     

@@ -380,10 +380,7 @@ Amiga::configure(ConfigScheme scheme)
             
         default:
             assert(false);
-    }
-    
-    // Switch the Amiga on
-    powerOn();
+    }    
 }
 
 EventID
@@ -464,24 +461,29 @@ void
 Amiga::powerOn()
 {
     debug(RUN_DEBUG, "powerOn()\n");
+    
+    // Never call this function inside the emulator thread
     assert(!isEmulatorThread());
-            
-    if (isPoweredOff() && isReady()) {
+    
+    if (!isPoweredOn()) {
         
         assert(p == (pthread_t)0);
         
+        // Check if the emulator is fully configured
+        ErrorCode ec; if (!isReady(&ec)) throw VAError(ec);
+        
         // Perform a hard reset
         hardReset();
-                
+        
         // Power on all subcomponents
         HardwareComponent::powerOn();
         
         // Update the recorded debug information
         inspect();
-
+        
         // Inform the GUI
         msgQueue.put(MSG_POWER_ON);
-    }    
+    }
 }
 
 void
@@ -519,14 +521,15 @@ void
 Amiga::powerOff()
 {
     debug(RUN_DEBUG, "powerOff()\n");
+    
+    // Never call this function inside the emulator thread
     assert(!isEmulatorThread());
     
-    // Pause if needed
-    pause();
-    assert(!isRunning());
-
-    if (isPoweredOn()) {
-                   
+    if (!isPoweredOff()) {
+        
+        // Pause if needed
+        pause(); assert(!isRunning());
+        
         // Power off all subcomponents
         HardwareComponent::powerOff();
         
@@ -548,19 +551,20 @@ void
 Amiga::run()
 {
     debug(RUN_DEBUG, "run()\n");
+    
+    // Never call this function inside the emulator thread
     assert(!isEmulatorThread());
     
-    if (!isRunning() && isReady()) {
-    
+    if (!isRunning()) {
+        
         assert(p == (pthread_t)0);
-
+        
         // Power on if needed
-        powerOn();
-        assert(isPoweredOn());
-
+        powerOn(); assert(isPoweredOn());
+        
         // Launch all subcomponents
         HardwareComponent::run();
-
+        
         // Create the emulator thread
         pthread_create(&p, nullptr, threadMain, (void *)this);
     }
@@ -576,6 +580,8 @@ void
 Amiga::pause()
 {
     debug(RUN_DEBUG, "pause()\n");
+    
+    // Never call this function inside the emulator thread
     assert(!isEmulatorThread());
 
     if (isRunning()) {
@@ -682,7 +688,7 @@ Amiga::isReady(ErrorCode *ec)
 
     if (!mem.hasChipRam()) {
         msg("isReady: No Chip Ram found\n");
-        *ec = ERROR_ROM_MISSING;
+        *ec = ERROR_CHIP_RAM_MISSING;
         return false;
     }
     

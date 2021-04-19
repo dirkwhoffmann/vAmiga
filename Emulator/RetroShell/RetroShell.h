@@ -153,6 +153,13 @@ public:
     // Executes a user script
     void exec(std::istream &stream) throws;
     
+private:
+    
+    // Displays a warning or error message
+    bool displayWarning(const std::exception &exception);
+    bool displayError(const std::exception &exception);
+    bool displayError(const class VAError &error);
+
     
     //
     // Command handlers

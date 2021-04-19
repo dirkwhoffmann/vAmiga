@@ -305,75 +305,124 @@ RetroShell::exec(const string &command, isize line)
  
     try {
 
-        // Print command if a script is executed
-        // if (line) *this << command << '\n';
-
-        // Hand the command over to the intepreter
         interpreter.exec(command);
         return true;
-        
+            
     } catch (std::exception &e) {
             
-        if (line) {
-            // *this << "Error in line " << line << ": " << command << '\n';
+        // Check for warnings (which won't break the execution)
+        if (displayWarning(e)) {
+            return true;
         }
-        if (auto err = dynamic_cast<TooFewArgumentsError *>(&e)) {
-            *this << err->what() << ": Too few arguments";
-            *this << '\n';
+        // Check for errors (which will break the execution)
+        if (displayError(e)) {
             return false;
         }
-        if (auto err = dynamic_cast<TooManyArgumentsError *>(&e)) {
-            *this << err->what() << ": Too many arguments";
-            *this << '\n';
-            return false;
-        }
-        if (auto err = dynamic_cast<util::EnumParseError *>(&e)) {
-            *this << err->token << " is not a valid key" << '\n';
-            *this << "Expected: " << err->expected << '\n';
-            return false;
-        }
-        if (auto err = dynamic_cast<util::ParseNumError *>(&e)) {
-            *this << err->token << " is not a number" << '\n';
-            return false;
-        }
-        if (auto err = dynamic_cast<util::ParseBoolError *>(&e)) {
-            *this << err->token << " must be true or false" << '\n';
-            return false;
-        }
-        if (auto err = dynamic_cast<util::ParseError *>(&e)) {
-            *this << err->what() << ": Syntax error";
-            *this << '\n';
-            return false;
-        }
-        if (auto err = dynamic_cast<ConfigUnsupportedError *>(&e)) {
-            *this << "This option is not yet supported.";
-            *this << '\n';
-            return false;
-        }
-        if (auto err = dynamic_cast<ConfigLockedError *>(&e)) {
-            *this << "This option is locked because the Amiga is powered on.";
-            *this << '\n';
-            return false;
-        }
-        if (auto err = dynamic_cast<ConfigArgError *>(&e)) {
-            *this << "Error: Invalid argument. Expected: " << err->what();
-            *this << '\n';
-            return false;
-        }
-        if (auto err = dynamic_cast<ConfigFileNotFoundError *>(&e)) {
-            *this << err->what() << " not found";
-            *this << '\n';
-            return true; // Don't break script execution
-        }
-        if (auto err = dynamic_cast<ConfigFileReadError *>(&e)) {
-            *this << "Error: Unable to read file " << err->what();
-            *this << '\n';
-            return false;
-        }
-        
+        // This is an unknown error
         *this << e.what();
         *this << '\n';
         return false;
+    }
+}
+
+bool
+RetroShell::displayWarning(const std::exception &exception)
+{
+    if (auto err = dynamic_cast<const ConfigFileNotFoundError *>(&exception)) {
+        *this << err->what() << " not found";
+        *this << '\n';
+        return true;
+    }
+    
+    return false;
+}
+
+bool
+RetroShell::displayError(const std::exception &e)
+{
+    if (auto err = dynamic_cast<const TooFewArgumentsError *>(&e)) {
+        *this << err->what() << ": Too few arguments";
+        *this << '\n';
+        return true;
+    }
+    if (auto err = dynamic_cast<const TooManyArgumentsError *>(&e)) {
+        *this << err->what() << ": Too many arguments";
+        *this << '\n';
+        return true;
+    }
+    if (auto err = dynamic_cast<const util::EnumParseError *>(&e)) {
+        *this << err->token << " is not a valid key" << '\n';
+        *this << "Expected: " << err->expected << '\n';
+        return true;
+    }
+    if (auto err = dynamic_cast<const util::ParseNumError *>(&e)) {
+        *this << err->token << " is not a number" << '\n';
+        return true;
+    }
+    if (auto err = dynamic_cast<const util::ParseBoolError *>(&e)) {
+        *this << err->token << " must be true or false" << '\n';
+        return true;
+    }
+    if (auto err = dynamic_cast<const util::ParseError *>(&e)) {
+        *this << err->what() << ": Syntax error";
+        *this << '\n';
+        return true;
+    }
+    if (auto err = dynamic_cast<const ConfigUnsupportedError *>(&e)) {
+        *this << "This option is not yet supported.";
+        *this << '\n';
+        return true;
+    }
+    if (auto err = dynamic_cast<const ConfigLockedError *>(&e)) {
+        *this << "This option is locked because the Amiga is powered on.";
+        *this << '\n';
+        return true;
+    }
+    if (auto err = dynamic_cast<const ConfigArgError *>(&e)) {
+        *this << "Error: Invalid argument. Expected: " << err->what();
+        *this << '\n';
+        return true;
+    }
+    if (auto err = dynamic_cast<const ConfigFileReadError *>(&e)) {
+        *this << "Error: Unable to read file " << err->what();
+        *this << '\n';
+        return true;
+    }
+    if (auto err = dynamic_cast<const VAError *>(&e)) {
+        return displayError(*err);
+    }
+    
+    return false;
+}
+
+bool
+RetroShell::displayError(const class VAError &e)
+{
+    switch ((ErrorCode)e.data) {
+            
+        case ERROR_ROM_MISSING:
+            *this << "No Boot or Kickstart Rom found" << '\n';
+            return true;
+            
+        case ERROR_CHIP_RAM_MISSING:
+            *this << "No Chip Ram found" << '\n';
+            return true;
+
+        case ERROR_AROS_NO_EXTROM:
+            *this << "The Aros Kickstart requires an extension Rom" << '\n';
+            return true;
+
+        case ERROR_AROS_RAM_LIMIT:
+            *this << "Aros requires at least 1 MB of memory" << '\n';
+            return true;
+
+        case ERROR_CHIP_RAM_LIMIT:
+            *this << "The selected Agnus can only handle ";
+            *this << agnus.chipRamLimit() << " MB of Chip Ram" << '\n';
+            return true;
+            
+        default:
+            return false;
     }
 }
 

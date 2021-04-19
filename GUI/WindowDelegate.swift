@@ -17,7 +17,7 @@ extension MyController: NSWindowDelegate {
         myAppDelegate.windowDidBecomeMain(window)
         
         // Restart the emulator if it was paused when the window lost focus
-        if pref.pauseInBackground && pauseInBackgroundSavedState { amiga.run() }
+        if pref.pauseInBackground && pauseInBackgroundSavedState { try? amiga.run() }
 
         // Register to receive mouse movement events
         window.acceptsMouseMovedEvents = true

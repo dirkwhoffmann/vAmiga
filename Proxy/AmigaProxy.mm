@@ -2056,9 +2056,11 @@ using namespace moira;
     return [self amiga]->isReady();
 }
 
-- (void)powerOn
+- (void)powerOn:(ErrorCode *)ec
 {
-    [self amiga]->powerOn();
+    *ec = ERROR_OK;
+    try { [self amiga]->powerOn(); }
+    catch (VAError &error) { *ec = (ErrorCode)error.data; }
 }
 
 - (void)powerOff
@@ -2106,9 +2108,11 @@ using namespace moira;
     return [self amiga]->isPaused();
 }
 
-- (void)run
+- (void)run:(ErrorCode *)ec
 {
-    [self amiga]->run();
+    *ec = ERROR_OK;
+    try { [self amiga]->run(); }
+    catch (VAError &error) { *ec = (ErrorCode)error.data; }
 }
 
 - (void)pause

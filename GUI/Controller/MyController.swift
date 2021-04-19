@@ -236,7 +236,7 @@ extension MyController {
         if amiga.isReady() {
 
             // Switch on and launch the emulator thread
-            amiga.run()
+            try? amiga.run()
 
         } else {
 

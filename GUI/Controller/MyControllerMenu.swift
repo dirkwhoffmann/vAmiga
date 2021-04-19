@@ -339,7 +339,7 @@ extension MyController: NSMenuItemValidation {
         
         track()
         amiga.hardReset()
-        amiga.run()
+        try? amiga.run()
     }
     
     @IBAction func powerAction(_ sender: Any!) {
@@ -352,7 +352,7 @@ extension MyController: NSMenuItemValidation {
         }
         
         if amiga.isReady(&error) {
-            amiga.run()
+            try? amiga.run()
         } else {
             mydocument.showConfigurationAltert(error)
         }

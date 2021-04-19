@@ -169,7 +169,7 @@
 - (void) removeInspectionTarget;
 - (BOOL)isReady:(ErrorCode *)ec;
 - (BOOL)isReady;
-- (void)powerOn;
+- (void)powerOn:(ErrorCode *)ec;
 - (void)powerOff;
 - (void)hardReset;
 - (void)softReset;
@@ -182,7 +182,7 @@
 @property (readonly) BOOL running;
 @property (readonly) BOOL paused;
 
-- (void)run;
+- (void)run:(ErrorCode *)ec;
 - (void)pause;
 - (void)suspend;
 - (void)resume;
