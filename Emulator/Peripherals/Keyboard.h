@@ -12,6 +12,7 @@
 #include "KeyboardTypes.h"
 #include "AmigaComponent.h"
 #include "Event.h"
+#include "RingBuffer.h"
 
 class Keyboard : public AmigaComponent {
 
@@ -30,13 +31,9 @@ class Keyboard : public AmigaComponent {
     Cycle spLow;
     Cycle spHigh;
 
-    // The keycode type-ahead buffer. The Amiga can hold up to 10 keycodes.
-    static const isize bufferSize = 10;
-    u8 typeAheadBuffer[bufferSize];
-    
-    // Next free position in the type ahead buffer
-    u8 bufferIndex;
-    
+    // The keycode type-ahead buffer. The Amiga can hold up to 10 keycodes
+    util::RingBuffer<KeyCode, 10> queue;
+        
     // Remebers the keys that are currently held down
     bool keyDown[128];
 
@@ -104,8 +101,7 @@ private:
         << shiftReg
         << spLow
         << spHigh
-        << typeAheadBuffer
-        << bufferIndex;
+        >> queue;
     }
 
     
@@ -131,23 +127,12 @@ public:
     void releaseKey(long keycode);
     void releaseAllKeys();
     
-    
-    //
-    // Managing the type-ahead buffer
-    //
-
 private:
-
-    bool bufferIsEmpty() const { return bufferIndex == 0; }
-    bool bufferIsFull() const { return bufferIndex == bufferSize; }
-
-    // Reads a keycode from the type-ahead buffer
-    u8 readFromBuffer();
-
-    // Writes a keycode into the type-ahead buffer
-    void writeToBuffer(u8 keycode);
-
     
+    // Wake up the keyboard if it has gone idle
+    void wakeUp();
+    
+
     //
     // Talking to the Amiga
     //

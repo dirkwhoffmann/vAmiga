@@ -91,8 +91,8 @@ Keyboard::_dump(dump::Category category, std::ostream& os) const
 
         os << tab("Type ahead buffer");
         os << "[ ";
-        for (isize i = 0; i < bufferIndex; i++) {
-            os << hex(typeAheadBuffer[i]) << " ";
+        for (isize i = queue.begin(); i != queue.end(); i = queue.next(i)) {
+            os << hex(queue.elements[i]) << " ";
         }
         os << " ]" << std::endl;
 
@@ -115,12 +115,13 @@ Keyboard::pressKey(long keycode)
 {
     assert(keycode < 0x80);
 
-    if (!keyDown[keycode] && !bufferIsFull()) {
+    if (!keyDown[keycode] && !queue.isFull()) {
 
         trace(KBD_DEBUG, "Pressing Amiga key %02lX\n", keycode);
 
         keyDown[keycode] = true;
-        writeToBuffer(keycode);
+        queue.write(keycode);
+        wakeUp();
         
         // Check for reset key combination (CTRL + Amiga Left + Amiga Right)
         if (keyDown[0x63] && keyDown[0x66] && keyDown[0x67]) {
@@ -134,12 +135,13 @@ Keyboard::releaseKey(long keycode)
 {
     assert(keycode < 0x80);
 
-    if (keyDown[keycode] && !bufferIsFull()) {
+    if (keyDown[keycode] && !queue.isFull()) {
 
         trace(KBD_DEBUG, "Releasing Amiga key %02lX\n", keycode);
 
         keyDown[keycode] = false;
-        writeToBuffer(keycode | 0x80);
+        queue.write(keycode | 0x80);
+        wakeUp();
     }
 }
 
@@ -151,30 +153,9 @@ Keyboard::releaseAllKeys()
     }
 }
 
-u8
-Keyboard::readFromBuffer()
-{
-    assert(!bufferIsEmpty());
-
-    u8 result = typeAheadBuffer[0];
-
-    bufferIndex--;
-    for (isize i = 0; i < bufferIndex; i++) {
-        typeAheadBuffer[i] = typeAheadBuffer[i+1];
-    }
-
-    return result;
-}
-
 void
-Keyboard::writeToBuffer(u8 keycode)
+Keyboard::wakeUp()
 {
-    assert(!bufferIsFull());
-
-    typeAheadBuffer[bufferIndex] = keycode;
-    bufferIndex++;
-
-    // Wake up the keyboard if it has gone idle
     if (!agnus.hasEvent<SLOT_KBD>()) {
         trace(KBD_DEBUG, "Wake up\n");
         state = KB_SEND;
@@ -279,8 +260,8 @@ Keyboard::execute()
             trace(KBD_DEBUG, "KB_SEND\n");
             
             // Send a key code if the buffer is filled
-            if (!bufferIsEmpty()) {
-                sendKeyCode(readFromBuffer());
+            if (!queue.isEmpty()) {
+                sendKeyCode(queue.read());
             } else {
                 agnus.cancel<SLOT_KBD>();
             }

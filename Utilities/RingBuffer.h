@@ -40,6 +40,11 @@ template <class T, isize capacity> struct RingBuffer
     void clear(T t) { for (isize i = 0; i < capacity; i++) elements[i] = t; clear(); }
     void align(isize offset) { w = (r + offset) % capacity; }
 
+    template <class W>
+    void operator<<(W& worker)
+    {
+        worker << this->elements << this->r << this->w;
+    }
     
     //
     // Querying the fill status

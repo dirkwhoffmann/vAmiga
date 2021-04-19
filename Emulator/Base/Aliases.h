@@ -26,6 +26,8 @@ typedef i16 Cylinder;
 typedef i16 Track;
 typedef i16 Sector;
 
+// Keyboard
+typedef u8 KeyCode;
 
 // File Systems
 typedef u32 Block;
