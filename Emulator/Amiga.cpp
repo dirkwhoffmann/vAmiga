@@ -663,17 +663,26 @@ Amiga::debugOff()
 }
 
 bool
-Amiga::isReady(ErrorCode *error)
+Amiga::isReady()
 {
+    ErrorCode ec;
+    return isReady(&ec);
+}
+
+bool
+Amiga::isReady(ErrorCode *ec)
+{
+    assert(ec);
+    
     if (!mem.hasRom()) {
         msg("isReady: No Boot Rom or Kickstart Rom found\n");
-        if (error) *error = ERROR_ROM_MISSING;
+        *ec = ERROR_ROM_MISSING;
         return false;
     }
 
     if (!mem.hasChipRam()) {
         msg("isReady: No Chip Ram found\n");
-        if (error) *error = ERROR_ROM_MISSING;
+        *ec = ERROR_ROM_MISSING;
         return false;
     }
     
@@ -681,20 +690,20 @@ Amiga::isReady(ErrorCode *error)
 
         if (!mem.hasExt()) {
             msg("isReady: Aros requires an extension Rom\n");
-            if (error) *error = ERROR_AROS_NO_EXTROM;
+            *ec = ERROR_AROS_NO_EXTROM;
             return false;
         }
 
         if (mem.ramSize() < MB(1)) {
             msg("isReady: Aros requires at least 1 MB of memory\n");
-            if (error) *error = ERROR_AROS_RAM_LIMIT;
+            *ec = ERROR_AROS_RAM_LIMIT;
             return false;
         }
     }
 
     if (mem.chipRamSize() > KB(agnus.chipRamLimit())) {
         msg("isReady: Chip Ram exceeds Agnus limit\n");
-        if (error) *error = ERROR_CHIP_RAM_LIMIT;
+        *ec = ERROR_CHIP_RAM_LIMIT;
         return false;
     }
 
