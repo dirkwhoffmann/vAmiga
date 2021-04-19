@@ -339,7 +339,6 @@ extension MyController: NSMenuItemValidation {
         
         track()
         amiga.hardReset()
-        amiga.powerOn()
         amiga.run()
     }
     
@@ -348,13 +347,11 @@ extension MyController: NSMenuItemValidation {
         var error: ErrorCode = .OK
 
         if amiga.poweredOn {
-            amiga.pause()
             amiga.powerOff()
             return
         }
         
         if amiga.isReady(&error) {
-            amiga.powerOn()
             amiga.run()
         } else {
             mydocument.showConfigurationAltert(error)

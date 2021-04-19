@@ -236,14 +236,12 @@ extension MyController {
         if amiga.isReady() {
 
             // Switch on and launch the emulator thread
-            amiga.powerOn()
             amiga.run()
 
         } else {
 
             // Open the Rom dialog
             openConfigurator(tab: "Roms")
-            // renderer.zoomOut()
         }
 
         // Create speed monitor and get the timer tunning
