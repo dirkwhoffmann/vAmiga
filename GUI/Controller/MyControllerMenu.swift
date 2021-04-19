@@ -315,7 +315,7 @@ extension MyController: NSMenuItemValidation {
             return
         }
         
-        keyboard.autoType(text)
+        keyboard.autoTypeAsync(text)
     }
     
     @IBAction func stopAndGoAction(_ sender: Any!) {

@@ -166,28 +166,59 @@ class KeyboardController: NSObject {
         parent.virtualKeyboard?.refreshIfVisible()
     }
     
+    func autoTypeAsync(_ string: String, completion: (() -> Void)? = nil) {
+        
+        var truncated = string
+        
+        // Shorten string if it is too large
+        if string.count > 255 { truncated = truncated.prefix(256) + "..." }
+        
+        // Type string
+        DispatchQueue.global().async {
+            
+            self.autoType(truncated)
+            completion?()
+        }
+    }
+    
     func autoType(_ string: String) {
         
         var shift = false
+
+        func pressShift() {
+            if !shift { keyboard.pressKey(MacKey.shift.amigaKeyCode!) }
+            shift = true
+        }
+        func releaseShift() {
+            if shift { keyboard.releaseKey(MacKey.shift.amigaKeyCode!) }
+            shift = false
+        }
+
         for scalar in string.unicodeScalars {
+            
+            usleep(useconds_t(50000))
             
             if let keyCode = symKeyMap[scalar] {
                 
-                if shift { keyUp(with: MacKey.shift); shift = false }
-                keyDown(with: keyCode)
-                keyUp(with: keyCode)
-                continue
+                if let amigaKeyCode = MacKey.init(keyCode: keyCode).amigaKeyCode {
+                    
+                    releaseShift()
+                    keyboard.pressKey(amigaKeyCode)
+                    keyboard.releaseKey(amigaKeyCode)
+                    continue
+                }
             }
-            
             if let keyCode = symKeyMapShifted[scalar] {
                 
-                if !shift { keyDown(with: MacKey.shift); shift = true }
-                keyDown(with: keyCode)
-                keyUp(with: keyCode)
-                continue
+                if let amigaKeyCode = MacKey.init(keyCode: keyCode).amigaKeyCode {
+                    
+                    pressShift()
+                    keyboard.pressKey(amigaKeyCode)
+                    keyboard.releaseKey(amigaKeyCode)
+                    continue
+                }
             }
         }
-        
-        if shift { keyUp(with: MacKey.shift) }
+        releaseShift()
     }
 }

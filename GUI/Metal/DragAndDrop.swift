@@ -80,7 +80,7 @@ public extension MetalView {
             guard let text = pasteBoard.string(forType: .string) else {
                 return false
             }
-            parent.keyboard.autoType(text)
+            parent.keyboard.autoTypeAsync(text)
             return true
             
         case .fileContents:
