@@ -83,7 +83,7 @@ void
 PixelEngine::dumpTexture()
 {
     /* This function is used for automatic regression testing. It generates a
-     * TIFF image of the current emulator texture in the /tmp  directory and
+     * TIFF image of the current emulator texture in the /tmp directory and
      * exits the application. The regression testing script will pick up the
      * texture and compare it against a previously recorded reference image.
      */

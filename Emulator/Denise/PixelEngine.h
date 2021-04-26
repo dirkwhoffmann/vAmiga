@@ -154,7 +154,7 @@ private:
 public:
     
     void dumpTexture();
-    void dumpTexture(std::ostream& ss);
+    void dumpTexture(std::ostream& os);
     
     
     //
