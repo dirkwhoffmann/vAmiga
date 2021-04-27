@@ -26,7 +26,7 @@ class DialogWindow: NSWindow {
  * proxy object. It also provides some wrappers around showing and hiding the
  * window.
  */
-protocol DialogControllerDelegate: class {
+protocol DialogControllerDelegate: AnyObject {
     
     // Called before beginSheet() is called
     func sheetWillShow()
