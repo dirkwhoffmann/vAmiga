@@ -40,7 +40,9 @@ MuxerConfig;
 
 typedef struct
 {
-    long bufferUnderflows;
-    long bufferOverflows;
+    isize bufferUnderflows;
+    isize bufferOverflows;
+    i64 producedSamples;
+    i64 consumedSamples;
 }
 MuxerStats;
