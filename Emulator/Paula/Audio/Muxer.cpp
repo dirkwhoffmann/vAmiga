@@ -64,7 +64,9 @@ Muxer::_reset(bool hard)
     
     stats.bufferUnderflows = 0;
     stats.bufferOverflows = 0;
-
+    stats.producedSamples = 0;
+    stats.consumedSamples = 0;
+    
     for (isize i = 0; i < 4; i++) sampler[i]->reset();
     stream.clear();
 }
@@ -394,6 +396,7 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         
         // Write sample into ringbuffer
         stream.add(l, r);
+        stats.producedSamples++;
         
         cycle += cyclesPerSample;
     }
@@ -424,8 +427,8 @@ Muxer::handleBufferUnderflow()
         stats.bufferUnderflows++;
         
         // Increase the sample rate based on what we've measured
-        isize offPerSecond = (isize)(stream.count() / elapsedTime.asSeconds());
-        setSampleRate(getSampleRate() + offPerSecond);
+        auto offPerSec = (stream.cap() / 2) / elapsedTime.asSeconds();
+        setSampleRate(getSampleRate() + (isize)offPerSec);
     }
 }
 
@@ -453,8 +456,8 @@ Muxer::handleBufferOverflow()
         stats.bufferOverflows++;
         
         // Decrease the sample rate based on what we've measured
-        isize offPerSecond = (isize)(stream.count() / elapsedTime.asSeconds());
-        double newSampleRate = getSampleRate() - offPerSecond;
+        auto offPerSec = (stream.cap() / 2) / elapsedTime.asSeconds();
+        double newSampleRate = getSampleRate() - (isize)offPerSec;
 
         trace(AUDBUF_DEBUG, "Changing sample rate to %f\n", newSampleRate);
         setSampleRate(newSampleRate);
@@ -477,6 +480,7 @@ Muxer::copy(void *buffer, isize n)
     
     // Copy sound samples
     stream.copy(buffer, n, volume);
+    stats.consumedSamples += n;
     
     stream.unlock();
 }
@@ -491,7 +495,8 @@ Muxer::copy(void *buffer1, void *buffer2, isize n)
     
     // Copy sound samples
     stream.copy(buffer1, buffer2, n, volume);
-    
+    stats.consumedSamples += n;
+
     stream.unlock();
 }
 
@@ -504,7 +509,8 @@ Muxer::nocopy(isize n)
     if (stream.count() < n) handleBufferUnderflow();
     addr = stream.currentAddr();
     stream.skip(n);
-        
+    stats.consumedSamples += n;
+
     stream.unlock();
     return addr;
 }

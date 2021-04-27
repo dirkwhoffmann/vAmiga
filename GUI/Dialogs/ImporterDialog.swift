@@ -194,7 +194,6 @@ class ImporterDialog: DialogController {
     @IBAction override func cancelAction(_ sender: Any!) {
          
          track()
-                         
          hideSheet()
      }
 }

@@ -109,4 +109,8 @@ public:
 
     // Puts the emulator thread to rest
     void synchronize();
+    
+    // Getter for the reference time
+    util::Time getTimeBase() { return timeBase; }
+    
 };
