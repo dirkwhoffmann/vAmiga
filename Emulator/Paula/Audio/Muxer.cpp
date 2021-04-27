@@ -427,8 +427,8 @@ Muxer::handleBufferUnderflow()
         stats.bufferUnderflows++;
         
         // Increase the sample rate based on what we've measured
-        isize offPerSecond = (isize)(stream.count() / elapsedTime.asSeconds());
-        setSampleRate(getSampleRate() + offPerSecond);
+        auto offPerSec = (stream.cap() / 2) / elapsedTime.asSeconds();
+        setSampleRate(getSampleRate() + (isize)offPerSec);
     }
 }
 
@@ -456,8 +456,8 @@ Muxer::handleBufferOverflow()
         stats.bufferOverflows++;
         
         // Decrease the sample rate based on what we've measured
-        isize offPerSecond = (isize)(stream.count() / elapsedTime.asSeconds());
-        double newSampleRate = getSampleRate() - offPerSecond;
+        auto offPerSec = (stream.cap() / 2) / elapsedTime.asSeconds();
+        double newSampleRate = getSampleRate() - (isize)offPerSec;
 
         trace(AUDBUF_DEBUG, "Changing sample rate to %f\n", newSampleRate);
         setSampleRate(newSampleRate);

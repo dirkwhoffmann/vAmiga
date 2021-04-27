@@ -24,7 +24,7 @@ Volume::shift()
 template <class T> void
 AudioStream<T>::alignWritePtr()
 {
-    this->align(8192);
+    this->align(this->cap() / 2);
 }
 
 template <class T> void
