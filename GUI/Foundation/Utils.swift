@@ -342,6 +342,22 @@ extension URL {
 }
 
 //
+// NSFont
+//
+
+extension NSFont {
+ 
+    static func monospaced(ofSize fontSize: CGFloat, weight: Weight) -> NSFont {
+        
+        if #available(macOS 10.15, *) {
+            return NSFont.monospacedSystemFont(ofSize: fontSize, weight: weight)
+        } else {
+            return NSFont.systemFont(ofSize: fontSize)
+        }
+    }
+}
+
+//
 // FileManager
 //
 

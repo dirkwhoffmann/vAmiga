@@ -102,7 +102,7 @@ Agnus::setConfigItem(Option option, i64 value)
             
             #ifdef FORCE_AGNUS_REVISION
             value = FORCE_AGNUS_REVISION;
-            warn("Overriding Agnus revision: %ld\n", value);
+            warn("Overriding Agnus revision: %lld\n", value);
             #endif
             
             if (!AgnusRevisionEnum::isValid(value)) {

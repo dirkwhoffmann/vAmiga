@@ -40,7 +40,7 @@ RTC::setConfigItem(Option option, i64 value)
             
             #ifdef FORCE_RTC
             value = FORCE_RTC;
-            warn("Overriding RTC revision: %ld KB\n", value);
+            warn("Overriding RTC revision: %lld KB\n", value);
             #endif
             
             if (!RTCRevisionEnum::isValid(value)) {
