@@ -29,8 +29,8 @@ enum class Token
     // Commands
     about, audiate, autosync, clear, config, connect, debug, disable,
     disconnect, dsksync, easteregg, eject, enable, close, hide, init, insert,
-    inspect, list, load, lock, off, on, open, pause, power, reset, run, set,
-    show, source,
+    inspect, list, load, lock, off, on, open, pause, power, reset, run, save,
+    set, show, source, wait,
     
     // Categories
     checksums, devices, events, registers, state,
@@ -42,7 +42,7 @@ enum class Token
     keyset, mechanics, mode, model, opacity, palette, pan, path, poll, pullup,
     raminitpattern, refresh, revision, rom, sampling, saturation, searchpath,
     shakedetector, slow, slowramdelay, slowrammirror, speed, sprites, step,
-    timeout, tod, todbug, unmappingtype, velocity, volume, wom
+    tod, todbug, unmappingtype, velocity, volume, wom
 };
 
 struct TooFewArgumentsError : public util::ParseError {
@@ -51,6 +51,10 @@ struct TooFewArgumentsError : public util::ParseError {
 
 struct TooManyArgumentsError : public util::ParseError {
     using ParseError::ParseError;
+};
+
+struct ScriptInterruption: util::Exception {
+    using Exception::Exception;
 };
 
 class Interpreter: AmigaComponent

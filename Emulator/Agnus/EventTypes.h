@@ -176,7 +176,7 @@ enum_long(EventID)
     INS_DENISE,
     INS_PORTS,
     INS_EVENTS,
-    INS_TEXTURE,
+    // INS_TEXTURE,
     INS_EVENT_COUNT,
 
     // Rasterline slot

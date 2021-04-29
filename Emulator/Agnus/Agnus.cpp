@@ -102,7 +102,7 @@ Agnus::setConfigItem(Option option, i64 value)
             
             #ifdef FORCE_AGNUS_REVISION
             value = FORCE_AGNUS_REVISION;
-            warn("Overriding Agnus revision: %ld\n", value);
+            warn("Overriding Agnus revision: %lld\n", value);
             #endif
             
             if (!AgnusRevisionEnum::isValid(value)) {
@@ -1120,11 +1120,12 @@ Agnus::vsyncHandler()
     diwVFlop = false;
     diwHFlop = true; 
             
-    // Let other subcomponents do their own VSYNC stuff
+    // Let other components do their own VSYNC stuff
     copper.vsyncHandler();
     denise.vsyncHandler();
     controlPort1.joystick.execute();
     controlPort2.joystick.execute();
+    retroShell.vsyncHandler();
 
     // Update statistics
     updateStats();
@@ -1132,11 +1133,6 @@ Agnus::vsyncHandler()
     
     // Count some sheep (zzzzzz) ...
     oscillator.synchronize();
-    /*
-    if (!amiga.inWarpMode()) {
-        amiga.synchronizeTiming();
-    }
-    */
 }
 
 //

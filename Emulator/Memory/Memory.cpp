@@ -114,7 +114,7 @@ Memory::setConfigItem(Option option, i64 value)
 
             #ifdef FORCE_CHIP_RAM
             value = FORCE_CHIP_RAM;
-            warn("Overriding Chip Ram size: %ld KB\n", value);
+            warn("Overriding Chip Ram size: %lld KB\n", value);
             #endif
             
             if (value != 256 && value != 512 && value != 1024 && value != 2048) {
@@ -130,7 +130,7 @@ Memory::setConfigItem(Option option, i64 value)
             
             #ifdef FORCE_SLOW_RAM
             value = FORCE_SLOW_RAM;
-            warn("Overriding Slow Ram size: %ld KB\n", value);
+            warn("Overriding Slow Ram size: %lld KB\n", value);
             #endif
             
             if ((value % 256) != 0 || value > 512) {
@@ -146,7 +146,7 @@ Memory::setConfigItem(Option option, i64 value)
             
             #ifdef FORCE_FAST_RAM
             value = FORCE_FAST_RAM;
-            warn("Overriding Fast Ram size: %ld KB\n", value);
+            warn("Overriding Fast Ram size: %lld KB\n", value);
             #endif
             
             if ((value % 64) != 0 || value > 8192) {

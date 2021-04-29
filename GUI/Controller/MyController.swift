@@ -446,6 +446,16 @@ extension MyController {
             inspector?.fullRefresh()
             updateWarp()
             
+        case .SCRIPT_DONE,
+             .SCRIPT_PAUSE,
+             .SCRIPT_ABORT:
+            renderer.console.isDirty = true
+            
+        case .SCRIPT_WAKEUP:
+            track()
+            amiga.continueScript()
+            renderer.console.isDirty = true
+            
         case .SHUTDOWN:
             shutDown()
 

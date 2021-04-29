@@ -186,6 +186,7 @@
 - (void)pause;
 - (void)suspend;
 - (void)resume;
+- (void)continueScript;
 
 - (void)requestAutoSnapshot;
 - (void)requestUserSnapshot;

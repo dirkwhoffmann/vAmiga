@@ -116,7 +116,7 @@ Moira::execute()
     }
 
     // Check if the T flag is set inside the status register
-    if (flags & CPU_TRACE_FLAG) {
+    if ((flags & CPU_TRACE_FLAG) && !(flags & CPU_IS_STOPPED)) {
         flags |= CPU_TRACE_EXCEPTION;
     }
 

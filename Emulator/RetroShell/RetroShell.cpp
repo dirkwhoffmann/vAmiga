@@ -11,7 +11,6 @@
 #include "RetroShell.h"
 #include "Amiga.h"
 #include "Parser.h"
-#include <sstream>
 
 RetroShell::RetroShell(Amiga& ref) : AmigaComponent(ref), interpreter(ref)
 {
@@ -298,134 +297,186 @@ RetroShell::text()
     return all.c_str();
 }
 
-bool
-RetroShell::exec(const string &command, isize line)
+void
+RetroShell::exec(const string &command)
 {
-    printf("Command: %s\n", command.c_str());
- 
-    try {
+    // Skip empty lines
+    if (command == "") return;
 
+    // Skip comments
+    if (command.substr(0,1) == "#") return;
+
+    // Call the interpreter
+    try {
+        
         interpreter.exec(command);
-        return true;
-            
-    } catch (std::exception &e) {
-            
-        // Check for warnings (which won't break the execution)
-        if (displayWarning(e)) {
-            return true;
-        }
-        // Check for errors (which will break the execution)
-        if (displayError(e)) {
-            return false;
-        }
-        // This is an unknown error
-        *this << e.what();
-        *this << '\n';
-        return false;
+    
+    } catch (std::exception &err) {
+        
+        describe(err);
+        throw;
     }
 }
 
-bool
-RetroShell::displayWarning(const std::exception &exception)
+void
+RetroShell::execScript(std::ifstream &fs)
 {
-    if (auto err = dynamic_cast<const ConfigFileNotFoundError *>(&exception)) {
-        *this << err->what() << " not found";
-        *this << '\n';
-        return true;
+    msg("execScript(ifstream)\n");
+    
+    script.str("");
+    script << fs.rdbuf();
+    scriptLine = 1;
+    printPrompt();
+    continueScript();
+}
+
+void
+RetroShell::execScript(const string &contents)
+{
+    // msg("execScript(string)\n");
+
+    script.str("");
+    script << contents;
+    scriptLine = 1;
+    printPrompt();
+    continueScript();
+}
+
+void
+RetroShell::continueScript()
+{
+    // msg("continueScript()\n");
+    
+    string command;
+    while(std::getline(script, command)) {
+                
+        // Print the command
+        printPrompt();
+        *this << command << '\n';
+        
+        // Execute the command
+        try {
+            exec(command);
+            
+        } catch (ScriptInterruption &e) {
+            
+            messageQueue.put(MSG_SCRIPT_PAUSE, scriptLine);
+            printPrompt();
+            return;
+        
+        } catch (std::exception &e) {
+            
+            *this << "Aborted in line " << scriptLine << '\n';
+            messageQueue.put(MSG_SCRIPT_ABORT, scriptLine);
+            printPrompt();
+            return;
+        }
+
+        scriptLine++;
     }
     
-    return false;
+    printPrompt();
+    messageQueue.put(MSG_SCRIPT_DONE, scriptLine);
 }
 
-bool
-RetroShell::displayError(const std::exception &e)
+void
+RetroShell::describe(const std::exception &e)
 {
     if (auto err = dynamic_cast<const TooFewArgumentsError *>(&e)) {
+        
         *this << err->what() << ": Too few arguments";
         *this << '\n';
-        return true;
-    }
-    if (auto err = dynamic_cast<const TooManyArgumentsError *>(&e)) {
+        
+    } else if (auto err = dynamic_cast<const TooManyArgumentsError *>(&e)) {
+        
         *this << err->what() << ": Too many arguments";
         *this << '\n';
-        return true;
-    }
-    if (auto err = dynamic_cast<const util::EnumParseError *>(&e)) {
+    
+    } else if (auto err = dynamic_cast<const util::EnumParseError *>(&e)) {
+        
         *this << err->token << " is not a valid key" << '\n';
         *this << "Expected: " << err->expected << '\n';
-        return true;
-    }
-    if (auto err = dynamic_cast<const util::ParseNumError *>(&e)) {
-        *this << err->token << " is not a number" << '\n';
-        return true;
-    }
-    if (auto err = dynamic_cast<const util::ParseBoolError *>(&e)) {
-        *this << err->token << " must be true or false" << '\n';
-        return true;
-    }
-    if (auto err = dynamic_cast<const util::ParseError *>(&e)) {
+
+    } else if (auto err = dynamic_cast<const util::ParseNumError *>(&e)) {
+        
+        *this << err->token << " is not a number";
+        *this << '\n';
+
+    } else if (auto err = dynamic_cast<const util::ParseBoolError *>(&e)) {
+
+        *this << err->token << " must be true or false";
+        *this << '\n';
+
+    } else if (auto err = dynamic_cast<const util::ParseError *>(&e)) {
+
         *this << err->what() << ": Syntax error";
         *this << '\n';
-        return true;
-    }
-    if (auto err = dynamic_cast<const ConfigUnsupportedError *>(&e)) {
+
+    } else if (auto err = dynamic_cast<const ConfigUnsupportedError *>(&e)) {
+
         *this << "This option is not yet supported.";
         *this << '\n';
-        return true;
-    }
-    if (auto err = dynamic_cast<const ConfigLockedError *>(&e)) {
+
+    } else if (auto err = dynamic_cast<const ConfigLockedError *>(&e)) {
+
         *this << "This option is locked because the Amiga is powered on.";
         *this << '\n';
-        return true;
-    }
-    if (auto err = dynamic_cast<const ConfigArgError *>(&e)) {
+
+    } else if (auto err = dynamic_cast<const ConfigArgError *>(&e)) {
+
         *this << "Error: Invalid argument. Expected: " << err->what();
         *this << '\n';
-        return true;
-    }
-    if (auto err = dynamic_cast<const ConfigFileReadError *>(&e)) {
+
+    } else if (auto err = dynamic_cast<const ConfigFileNotFoundError *>(&e)) {
+
+        *this << err->what() << ": File not found";
+        *this << '\n';
+
+    } else if (auto err = dynamic_cast<const ConfigFileReadError *>(&e)) {
+
         *this << "Error: Unable to read file " << err->what();
         *this << '\n';
-        return true;
-    }
-    if (auto err = dynamic_cast<const VAError *>(&e)) {
-        return displayError(*err);
-    }
     
-    return false;
+    } else if (auto err = dynamic_cast<const VAError *>(&e)) {
+
+        describe(*err);
+    }
 }
 
-bool
-RetroShell::displayError(const class VAError &e)
+void
+RetroShell::describe(const struct VAError &err)
 {
-    switch ((ErrorCode)e.data) {
+    switch ((ErrorCode)err.data) {
             
         case ERROR_ROM_MISSING:
             *this << "No Boot or Kickstart Rom found" << '\n';
-            return true;
+            return;
             
         case ERROR_CHIP_RAM_MISSING:
             *this << "No Chip Ram found" << '\n';
-            return true;
+            return;
 
         case ERROR_AROS_NO_EXTROM:
             *this << "The Aros Kickstart requires an extension Rom" << '\n';
-            return true;
+            return;
 
         case ERROR_AROS_RAM_LIMIT:
             *this << "Aros requires at least 1 MB of memory" << '\n';
-            return true;
+            return;
 
         case ERROR_CHIP_RAM_LIMIT:
             *this << "The selected Agnus can only handle ";
             *this << agnus.chipRamLimit() << " MB of Chip Ram" << '\n';
-            return true;
+            return;
             
         default:
-            return false;
+            
+            *this << "Command failed with error code " << (isize)err.data;
+            *this << " (" << err.what() << ")" << '\n';
     }
 }
 
+/*
 void
 RetroShell::exec(std::istream &stream)
 {
@@ -454,6 +505,7 @@ RetroShell::exec(std::istream &stream)
         printPrompt();
     }
 }
+*/
 
 void
 RetroShell::dump(HardwareComponent &component, dump::Category category)
@@ -465,4 +517,15 @@ RetroShell::dump(HardwareComponent &component, dump::Category category)
     amiga.resume();
     
     while(std::getline(ss, line)) *this << line << '\n';
+}
+
+void
+RetroShell::vsyncHandler()
+{
+    if (agnus.clock >= wakeUp) {
+        
+        // Ask the external thread (GUI) to continue the script
+        messageQueue.put(MSG_SCRIPT_WAKEUP);
+        wakeUp = INT64_MAX;
+    }
 }

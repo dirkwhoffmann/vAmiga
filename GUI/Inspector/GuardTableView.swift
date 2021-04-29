@@ -68,13 +68,13 @@ extension GuardTableView: NSTableViewDataSource {
         switch tableColumn?.identifier.rawValue {
 
         case "break" where disabledCache[row] == true:
-            return last ? "" : "\u{26AA}" /* ⚪ */
+            return last ? "" : "\u{26AA}"  // ⚪
         case "break":
-            return last ? "" : "\u{26D4}" /* ⛔ */
+            return last ? "" : "\u{26D4}"  // ⛔
         case "addr":
             return last ? "Add address" : addrCache[row]!
         case "delete":
-            return last ? "" : "\u{1F5D1}" // "🗑"
+            return last ? "" : "\u{1F5D1}" // 🗑
 
         default: return ""
         }
