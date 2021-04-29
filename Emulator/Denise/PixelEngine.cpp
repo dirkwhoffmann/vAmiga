@@ -79,14 +79,10 @@ PixelEngine::didLoadFromBuffer(const u8 *buffer)
     return 0;
 }
 
+/*
 void
 PixelEngine::dumpTexture()
 {
-    /* This function is used for automatic regression testing. It generates a
-     * TIFF image of the current emulator texture in the /tmp  directory and
-     * exits the application. The regression testing script will pick up the
-     * texture and compare it against a previously recorded reference image.
-     */
     std::ofstream file;
         
     // Assemble the target file names
@@ -110,7 +106,7 @@ PixelEngine::dumpTexture()
     // msg("Executing %s\n", cmd.c_str());
     system(cmd.c_str());
 }
-
+ 
 void
 PixelEngine::dumpTexture(std::ostream& ss)
 {
@@ -128,6 +124,7 @@ PixelEngine::dumpTexture(std::ostream& ss)
         }
     }
 }
+*/
 
 void
 PixelEngine::_powerOn()

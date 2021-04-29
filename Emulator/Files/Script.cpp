@@ -35,8 +35,6 @@ void
 Script::execute(class Amiga &amiga)
 {
     string s((char *)data, size);
-    std::istringstream ss(s);
-    
-    try { amiga.retroShell.exec(ss); } catch (util::Exception &e) { }
+    try { amiga.retroShell.exec(s); } catch (util::Exception &e) { }
     
 }

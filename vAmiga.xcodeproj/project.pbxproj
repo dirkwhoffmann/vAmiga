@@ -145,6 +145,7 @@
 		50912FFD2525B7AD0049805B /* ScreenRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50912FFB2525B7AD0049805B /* ScreenRecorder.cpp */; };
 		50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */ = {isa = PBXBuildFile; fileRef = 50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */; };
 		50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50950ED622881B7A0073F755 /* ZorroManager.cpp */; };
+		50984B65263A9E9C00E37184 /* RegressionTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50984B63263A9B5100E37184 /* RegressionTester.cpp */; };
 		509C365A260B1766004F160A /* Command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3658260B1766004F160A /* Command.cpp */; };
 		509C365E260B177E004F160A /* Interpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C365C260B177E004F160A /* Interpreter.cpp */; };
 		509C3663260B1D95004F160A /* InterpreterCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3662260B1D95004F160A /* InterpreterCmds.cpp */; };
@@ -464,6 +465,8 @@
 		50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraExceptions_cpp.h; sourceTree = "<group>"; };
 		50950ED622881B7A0073F755 /* ZorroManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZorroManager.cpp; sourceTree = "<group>"; };
 		50950ED722881B7A0073F755 /* ZorroManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZorroManager.h; sourceTree = "<group>"; };
+		50984B63263A9B5100E37184 /* RegressionTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RegressionTester.cpp; sourceTree = "<group>"; };
+		50984B64263A9B5100E37184 /* RegressionTester.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RegressionTester.h; sourceTree = "<group>"; };
 		509C3658260B1766004F160A /* Command.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Command.cpp; sourceTree = "<group>"; };
 		509C3659260B1766004F160A /* Command.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Command.h; sourceTree = "<group>"; };
 		509C365C260B177E004F160A /* Interpreter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Interpreter.cpp; sourceTree = "<group>"; };
@@ -756,6 +759,8 @@
 				508FDEF821EA1FBC0043D0E9 /* MsgQueue.h */,
 				508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */,
 				508C6BCF23F7E77500D8938F /* ChangeRecorder.h */,
+				50984B64263A9B5100E37184 /* RegressionTester.h */,
+				50984B63263A9B5100E37184 /* RegressionTester.cpp */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1585,6 +1590,7 @@
 				507215A925EAB4AC00787591 /* Chrono.cpp in Sources */,
 				50FFA7D02440CB0300BEBA6B /* ActivityMonitor.swift in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
+				50984B65263A9E9C00E37184 /* RegressionTester.cpp in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
 				50B9C428260942D000A86C31 /* RetroShell.cpp in Sources */,
 				50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */,

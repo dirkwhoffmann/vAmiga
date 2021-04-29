@@ -627,11 +627,13 @@ Agnus::serviceINSEvent()
             inspectEvents();
             break;
             
+        /*
         case INS_TEXTURE:
             pixelEngine.dumpTexture();
             exit(0);
             break;
-
+        */
+            
         default:
             assert(false);
     }

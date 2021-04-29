@@ -21,6 +21,7 @@
 #include "MsgQueue.h"
 #include "Oscillator.h"
 #include "Paula.h"
+#include "RegressionTester.h"
 #include "RetroShell.h"
 #include "RTC.h"
 #include "SerialPort.h"
@@ -88,16 +89,12 @@ public:
     // Command console
     RetroShell retroShell = RetroShell(*this);
     
-    
-    //
-    // Message queue
-    //
-    
-    /* Communication channel to the GUI. The GUI registers a listener and a
-     * callback function to retrieve messages.
-     */
+    // Communication channel to the GUI
     MsgQueue msgQueue = MsgQueue(*this);
 
+    // Regression test manager
+    RegressionTester regressionTester;
+    
     
     //
     // Emulator thread

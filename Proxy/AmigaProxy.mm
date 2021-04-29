@@ -2130,6 +2130,11 @@ using namespace moira;
     return [self amiga]->resume();
 }
 
+- (void)continueScript
+{
+    [self amiga]->retroShell.continueScript();
+}
+
 - (void)requestAutoSnapshot
 {
     [self amiga]->requestAutoSnapshot();

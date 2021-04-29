@@ -37,6 +37,10 @@ Interpreter::registerInstructions()
              "command", "Processes a command script",
              &RetroShell::exec <Token::source>, 1);
     
+    root.add({"wait"},
+             "command", "Pauses the execution of a command script",
+             &RetroShell::exec <Token::wait>, 2);
+
     
     //
     // Amiga
@@ -75,10 +79,12 @@ Interpreter::registerInstructions()
              "command", "Starts the emulator thread",
              &RetroShell::exec <Token::amiga, Token::run>);
 
+    /*
     root.add({"amiga", "run", "timeout"},
              "command", "Runs a regression test",
              &RetroShell::exec <Token::amiga, Token::run, Token::timeout>, 1);
     root.seek("amiga")->seek("run")->seek("timeout")->hidden = true;
+    */
     
     root.add({"amiga", "pause"},
              "command", "Halts the emulator thread",
@@ -858,4 +864,8 @@ Interpreter::registerInstructions()
     root.add({"screenshot", "set", "cutout"},
              "key", "Adjusts the texture cutout",
              &RetroShell::exec <Token::screenshot, Token::set, Token::cutout>, 4);
+
+    root.add({"screenshot", "save"},
+             "key", "Saves a screenshot and exits the emulator",
+             &RetroShell::exec <Token::screenshot, Token::save>, 1);
 }

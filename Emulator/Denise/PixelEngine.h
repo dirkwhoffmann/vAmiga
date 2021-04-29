@@ -27,6 +27,7 @@ public:
     static const i32 rgbaHBlank = 0xFF444444;
     static const i32 rgbaVBlank = 0xFF444444;
 
+    /*
     // Filename used by dumpTexture()
     string dumpTexturePath = "texture";
     
@@ -35,6 +36,7 @@ public:
     isize y1 = VBLANK_MAX + 1;
     isize x2 = HPIXELS;
     isize y2 = VPIXELS;
+    */
     
 private:
 
@@ -151,11 +153,12 @@ private:
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     isize didLoadFromBuffer(const u8 *buffer) override;
 
+    /*
 public:
     
     void dumpTexture();
     void dumpTexture(std::ostream& ss);
-    
+     */
     
     //
     // Controlling

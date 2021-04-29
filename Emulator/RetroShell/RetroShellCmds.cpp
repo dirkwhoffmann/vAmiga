@@ -44,14 +44,21 @@ RetroShell::exec <Token::easteregg> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::source> (Arguments &argv, long param)
 {
-    string filename = argv.front();
+    auto stream = std::ifstream(argv.front());
+    if (!stream.is_open()) throw ConfigFileNotFoundError(argv.front());
     
-    std::ifstream stream(filename);
-    if (!stream.is_open()) throw ConfigFileReadError(filename);
+    execScript(stream);
+}
+
+template <> void
+RetroShell::exec <Token::wait> (Arguments &argv, long param)
+{
+    auto seconds = util::parseNum(argv.front());
     
-    try {
-        exec(stream);
-    } catch (util::Exception &e) { }
+    Cycle limit = agnus.clock + SEC(seconds);
+    amiga.retroShell.wakeUp = limit;
+    
+    throw ScriptInterruption("");
 }
 
 
@@ -96,6 +103,7 @@ RetroShell::exec <Token::amiga, Token::run> (Arguments &argv, long param)
     amiga.run();
 }
 
+/*
 template <> void
 RetroShell::exec <Token::amiga, Token::run, Token::timeout> (Arguments &argv, long param)
 {
@@ -104,6 +112,7 @@ RetroShell::exec <Token::amiga, Token::run, Token::timeout> (Arguments &argv, lo
     amiga.run();
     amiga.setInspectionTarget(INS_TEXTURE, SEC(trigger));
 }
+*/
 
 template <> void
 RetroShell::exec <Token::amiga, Token::pause> (Arguments &argv, long param)
@@ -1004,7 +1013,8 @@ RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::screenshot, Token::set, Token::filename> (Arguments &argv, long param)
 {
-    pixelEngine.dumpTexturePath = argv.front();
+    amiga.regressionTester.dumpTexturePath = argv.front();
+    // pixelEngine.dumpTexturePath = argv.front();
 }
 
 template <> void
@@ -1017,8 +1027,20 @@ RetroShell::exec <Token::screenshot, Token::set, Token::cutout> (Arguments &argv
     isize x2 = util::parseNum(vec[2]);
     isize y2 = util::parseNum(vec[3]);
 
+    amiga.regressionTester.x1 = x1;
+    amiga.regressionTester.y1 = y1;
+    amiga.regressionTester.x2 = x2;
+    amiga.regressionTester.y2 = y2;
+    /*
     pixelEngine.x1 = x1;
     pixelEngine.y1 = y1;
     pixelEngine.x2 = x2;
     pixelEngine.y2 = y2;
+    */
+}
+
+template <> void
+RetroShell::exec <Token::screenshot, Token::save> (Arguments &argv, long param)
+{
+    amiga.regressionTester.dumpTexture(amiga, argv.front());
 }
