@@ -851,7 +851,7 @@ Interpreter::registerInstructions()
     //
     
     root.add({"screenshot"},
-             "component", "Regression test image");
+             "component", "Manages regression tests");
     root.seek("screenshot")->hidden = true;
     
     root.add({"screenshot", "set"},

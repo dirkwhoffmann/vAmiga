@@ -79,53 +79,6 @@ PixelEngine::didLoadFromBuffer(const u8 *buffer)
     return 0;
 }
 
-/*
-void
-PixelEngine::dumpTexture()
-{
-    std::ofstream file;
-        
-    // Assemble the target file names
-    string rawFile = "/tmp/" + dumpTexturePath + ".raw";
-    string tiffFile = "/tmp/" + dumpTexturePath + ".tiff";
-
-    // Open an output stream
-    file.open(rawFile.c_str());
-    
-    // Dump texture
-    dumpTexture(file);
-    file.close();
-    
-    // Convert raw data into a TIFF file
-    string cmd = "/usr/local/bin/raw2tiff";
-    cmd += " -p rgb -b 3";
-    cmd += " -w " + std::to_string(x2 - x1);
-    cmd += " -l " + std::to_string(y2 - y1);
-    cmd += " " + rawFile + " " + tiffFile;
-    
-    // msg("Executing %s\n", cmd.c_str());
-    system(cmd.c_str());
-}
- 
-void
-PixelEngine::dumpTexture(std::ostream& ss)
-{
-    auto buffer = getStableBuffer();
-    
-    for (isize y = y1; y < y2; y++) {
-
-        for (isize x = x1; x < x2; x++) {
-            
-            char *cptr = (char *)(buffer.data + y * HPIXELS + x);
-            ss.write(cptr + 0, 1);
-            ss.write(cptr + 1, 1);
-            ss.write(cptr + 2, 1);
-
-        }
-    }
-}
-*/
-
 void
 PixelEngine::_powerOn()
 {
