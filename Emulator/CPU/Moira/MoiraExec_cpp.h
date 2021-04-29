@@ -1663,9 +1663,9 @@ Moira::execStop(u16 opcode)
     setSR(src);
     flags |= CPU_IS_STOPPED;
 
-    if (MIMIC_MUSASHI) sync(-4);
+    sync(-4);
     prefetch<POLLIPL>();
-    
+
     signalStop(src);
 }
 
