@@ -13,7 +13,6 @@
 #include "Interpreter.h"
 
 #include <sstream>
-// #include <iostream>
 #include <fstream>
 
 class RetroShell : public AmigaComponent {
@@ -179,14 +178,6 @@ public:
     void describe(const std::exception &exception);
     void describe(const struct VAError &error);
 
-    /*
-private:
-    
-    // Displays a warning or error message
-    bool displayWarning(const std::exception &exception);
-    bool displayError(const std::exception &exception);
-    bool displayError(const class VAError &error);
-    */
     
     //
     // Command handlers

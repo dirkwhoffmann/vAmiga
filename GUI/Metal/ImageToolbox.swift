@@ -161,7 +161,7 @@ extension NSColor {
 }
 
 //
-// Extensions to NSColor
+// Extensions to NSColorWell
 //
 
 extension NSColorWell {

@@ -101,11 +101,11 @@ typedef struct
     // Individual enable switch for each DMA channel
     bool visualize[DMA_CHANNEL_COUNT];
 
-    // Display mode
-    DmaDisplayMode displayMode;
-
     // Color palette
     u32 debugColor[DMA_CHANNEL_COUNT];
+
+    // Display mode
+    DmaDisplayMode displayMode;
 
     // Opacity
     isize opacity;
