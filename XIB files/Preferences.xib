@@ -1247,6 +1247,7 @@
                                                     <items>
                                                         <menuItem title="Standard" state="on" id="sv4-dI-KQh"/>
                                                         <menuItem title="Rotated" tag="1" id="8bD-wh-ttJ"/>
+                                                        <menuItem title="11-12-13-14" tag="2" id="UmZ-s8-aUK"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>

@@ -162,7 +162,6 @@ class PreferencesController: DialogController {
         
     func refresh() {
         
-        track()
         if let id = tabView?.selectedTabViewItem?.identifier as? String {
             
             switch id {

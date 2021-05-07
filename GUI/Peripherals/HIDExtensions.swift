@@ -110,9 +110,7 @@ extension IOHIDDevice {
     }
     
     var usageDescription: String? {
-        
-        track("kHIDUsage_GD_Mouse = \(kHIDUsage_GD_Mouse)")
-        
+                
         if let usage = Int(usageKey) {
             
             switch usage {

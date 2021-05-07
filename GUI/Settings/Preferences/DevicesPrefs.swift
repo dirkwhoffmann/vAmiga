@@ -25,8 +25,6 @@ extension PreferencesController {
             return pad?.property(key: key) ?? "-"
         }
 
-        track()
-
         // Let us notify when the device is pulled
         pad?.notify = true
         
@@ -80,9 +78,7 @@ extension PreferencesController {
     }
 
     func refreshDeviceEvents(events: [GamePadAction]) {
-    
-        track()
-        
+            
         var activity = "", activity2 = ""
         
         func add(_ str: String) {
@@ -121,10 +117,7 @@ extension PreferencesController {
     @IBAction func devLeftAction(_ sender: NSPopUpButton!) {
         
         let selectedTag = "\(sender.selectedTag())"
-        
-        track("tag = \(sender.tag)")
-        track("selectedTag = \(selectedTag)")
-        
+                
         if let device = selectedDev {
             myAppDelegate.database.setLeft(vendorID: device.vendorID,
                                            productID: device.productID,
@@ -137,10 +130,7 @@ extension PreferencesController {
     @IBAction func devRightAction(_ sender: NSPopUpButton!) {
         
         let selectedTag = "\(sender.selectedTag())"
-        
-        track("tag = \(sender.tag)")
-        track("selectedTag = \(selectedTag)")
-        
+                
         if let device = selectedDev {
             myAppDelegate.database.setRight(vendorID: device.vendorID,
                                             productID: device.productID,
@@ -153,9 +143,6 @@ extension PreferencesController {
     @IBAction func devHatSwitchAction(_ sender: NSPopUpButton!) {
         
         let selectedTag = "\(sender.selectedTag())"
-
-        track("tag = \(sender.tag)")
-        track("selectedTag = \(selectedTag)")
         
         if let device = selectedDev {
             myAppDelegate.database.setHatSwitch(vendorID: device.vendorID,

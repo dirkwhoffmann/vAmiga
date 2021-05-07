@@ -26,8 +26,6 @@ class PreferencesWindow: DialogWindow {
     }
 
     override func flagsChanged(with event: NSEvent) {
-
-        track()
         
         /* We do not allow the Cmd and Opt keys as emulation keys because they
          * interact directly with the OS when pressed in combination with

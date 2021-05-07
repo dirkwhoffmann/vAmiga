@@ -35,7 +35,8 @@ class DeviceDatabase {
              "1035":
                 ["25907": [:]],                 // Competition Pro SL-6602
              "1118":
-                ["2835": ["H": "1", "R": "1"]], // XBox Carbon Black
+                ["2835": ["H": "1", "R": "1"],  // XBox Carbon Black
+                 "746": ["H": "2", "R": "1"]],  // XBox One Wired Controller
              "1133":
                 ["49250": [:]],                 // Logitech Mouse
              "1155":

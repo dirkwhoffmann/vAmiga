@@ -57,13 +57,15 @@ class GamePad {
     // Minimum and maximum value of analog axis event
     var min: Int?, max: Int?
     
-    // Cotroller specific usage IDs (set in updateMappingScheme())
+    // Cotroller specific mapping parameters (set in updateMappingScheme())
     var lxAxis = kHIDUsage_GD_X
     var lyAxis = kHIDUsage_GD_Y
     var rxAxis = kHIDUsage_GD_Z
     var ryAxis = kHIDUsage_GD_Rz
     var hShift = 0
-    
+    var pressActions: [Int: [GamePadAction]] = [:]
+    var releaseActions: [Int: [GamePadAction]] = [:]
+
     /* Rescued information from the latest invocation of the action function.
      * This information is utilized to determine whether a joystick event has
      * to be triggered.
@@ -101,7 +103,12 @@ class GamePad {
         let lScheme = db.left(vendorID: vendorID, productID: productID)
         let rScheme = db.right(vendorID: vendorID, productID: productID)
         let hScheme = db.hatSwitch(vendorID: vendorID, productID: productID)
-                
+                        
+        for i in 0...14 {
+            pressActions[i] = [.PRESS_FIRE]
+            releaseActions[i] = [.RELEASE_FIRE]
+        }
+
         switch lScheme { // Left stick
         case 1:
             lxAxis = kHIDUsage_GD_Y
@@ -123,6 +130,27 @@ class GamePad {
         switch hScheme { // Hat switch
         case 1:
             hShift = 1
+        case 2:
+            hShift = 0
+            pressActions[11] = [.PULL_UP]
+            releaseActions[11] = [.RELEASE_Y]
+            pressActions[12] = [.PULL_DOWN]
+            releaseActions[12] = [.RELEASE_Y]
+            pressActions[13] = [.PULL_LEFT]
+            releaseActions[13] = [.RELEASE_X]
+            pressActions[14] = [.PULL_RIGHT]
+            releaseActions[14] = [.RELEASE_X]
+            /*
+            pressActions[5] = [.PULL_UP]
+            releaseActions[5] = [.RELEASE_Y]
+            pressActions[1] = [.PULL_DOWN]
+            releaseActions[1] = [.RELEASE_Y]
+            pressActions[4] = [.PULL_LEFT]
+            releaseActions[4] = [.RELEASE_X]
+            pressActions[2] = [.PULL_RIGHT]
+            releaseActions[2] = [.RELEASE_X]
+            */
+
         default:
             hShift = 0
         }
@@ -295,8 +323,14 @@ class GamePad {
                 
         // Buttons
         if usagePage == kHIDPage_Button {
-
-            let events: [GamePadAction] = (intValue != 0) ? [.PRESS_FIRE] : [.RELEASE_FIRE]
+            
+            // let events: [GamePadAction] = (intValue != 0) ? [.PRESS_FIRE] : [.RELEASE_FIRE]
+            var events: [GamePadAction]
+            if intValue != 0 {
+                events = pressActions[usage] ?? []
+            } else {
+                events = releaseActions[usage] ?? []
+            }
             processJoystickEvents(events: events)                
             return
         }

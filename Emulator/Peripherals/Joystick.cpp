@@ -188,7 +188,7 @@ Joystick::trigger(GamePadAction event)
 {
     assert_enum(GamePadAction, event);
 
-    debug(PRT_DEBUG, "trigger(%lld)\n", event);
+    debug(PRT_DEBUG, "trigger(%s)\n", GamePadActionEnum::key(event));
      
     switch (event) {
             
