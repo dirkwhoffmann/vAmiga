@@ -1206,13 +1206,15 @@
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0sa-cN-ImA">
                                             <rect key="frame" x="455" y="116" width="128" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Standard" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="icV-cr-TYz" id="Q46-Ka-huZ">
+                                            <popUpButtonCell key="cell" type="push" title="A2 + A5" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="icV-cr-TYz" id="Q46-Ka-huZ">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="7Ea-we-l9b">
                                                     <items>
-                                                        <menuItem title="Standard" state="on" id="icV-cr-TYz"/>
-                                                        <menuItem title="Switched" tag="1" id="2dY-yD-rmk"/>
+                                                        <menuItem title="A2 + A5" state="on" id="icV-cr-TYz"/>
+                                                        <menuItem title="A2 + A3" tag="1" id="05k-FN-6ln"/>
+                                                        <menuItem title="A3 + A4" tag="2" id="2dY-yD-rmk"/>
+                                                        <menuItem title="A3 + A4 rev" tag="3" id="z43-Ya-mae"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -1223,13 +1225,13 @@
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8B9-QV-Z6T">
                                             <rect key="frame" x="16" y="116" width="128" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Standard" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Vpv-pS-lNG" id="lyf-uv-dBl">
+                                            <popUpButtonCell key="cell" type="push" title="A0 + A1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Vpv-pS-lNG" id="lyf-uv-dBl">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="loR-Rr-9hA">
                                                     <items>
-                                                        <menuItem title="Standard" state="on" id="Vpv-pS-lNG"/>
-                                                        <menuItem title="Switched" tag="1" id="GFv-Y6-wHb"/>
+                                                        <menuItem title="A0 + A1" state="on" id="Vpv-pS-lNG"/>
+                                                        <menuItem title="A0 + A1 rev" tag="1" id="di1-ad-2rm"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -1240,14 +1242,16 @@
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cx8-Ww-EiR">
                                             <rect key="frame" x="17" y="179" width="128" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Standard" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="sv4-dI-KQh" id="nGl-Eu-Cwo">
+                                            <popUpButtonCell key="cell" type="push" title="H0 - H7" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="sv4-dI-KQh" id="nGl-Eu-Cwo">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="Ban-7g-8gH">
                                                     <items>
-                                                        <menuItem title="Standard" state="on" id="sv4-dI-KQh"/>
-                                                        <menuItem title="Rotated" tag="1" id="8bD-wh-ttJ"/>
-                                                        <menuItem title="11-12-13-14" tag="2" id="UmZ-s8-aUK"/>
+                                                        <menuItem title="H0 - H7" state="on" id="sv4-dI-KQh"/>
+                                                        <menuItem title="H1 - H8" tag="1" id="8bD-wh-ttJ"/>
+                                                        <menuItem title="B4 - B7" tag="2" id="UmZ-s8-aUK"/>
+                                                        <menuItem title="B11 - B14" tag="3" id="Xhr-hl-pWS"/>
+                                                        <menuItem title="U90 - U93" tag="4" id="QdQ-ft-tD7"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
