@@ -30,20 +30,30 @@ Interpreter::split(const string& userInput)
     Arguments result;
 
     string token;
-    bool str = false;
+    bool str = false; // String mode
+    bool esc = false; // Escape mode
     
     for (usize i = 0; i < userInput.size(); i++) {
 
+        char c = userInput[i];
+        
+        // Check for escape mode
+        if (c == '\\') { esc = true; continue; }
+            
         // Switch between string mode and non-string mode if '"' is detected
-        if (userInput[i] == '"') { str = !str; continue; }
+        if (c == '"' && !esc) { str = !str; continue; }
+        
+        // Check for special characters in escape mode
+        if (esc && c == 'n') c = '\n';
         
         // Process character
-        if (userInput[i] != ' ' || str) {
-            token += userInput[i];
+        if (c != ' ' || str) {
+            token += c;
         } else {
             if (!token.empty()) result.push_back(token);
             token = "";
         }
+        esc = false;
     }
     if (!token.empty()) result.push_back(token);
     
@@ -81,14 +91,10 @@ Interpreter::autoComplete(const string& userInput)
     autoComplete(tokens);
 
     // Recreate the command string
-    for (const auto &it : tokens) {
-        result += (result == "" ? "" : " ") + it;
-    }
+    for (const auto &it : tokens) { result += (result == "" ? "" : " ") + it; }
 
     // Add a space if the command has been fully completed
-    if (root.seek(tokens) != nullptr) {
-        result += " ";
-    }
+    if (root.seek(tokens) != nullptr) { result += " "; }
     
     return result;
 }
@@ -96,12 +102,12 @@ Interpreter::autoComplete(const string& userInput)
 void
 Interpreter::exec(const string& userInput, bool verbose)
 {
-    // Ignore empty lines and comments
-    if (userInput == "" || userInput.substr(0,1) == "#") return;
-    
     // Split the command string
     Arguments tokens = split(userInput);
         
+    // Remove the 'try' keyword
+    if (tokens.front() == "try") tokens.pop_front();
+    
     // Auto complete the token list
     autoComplete(tokens);
             

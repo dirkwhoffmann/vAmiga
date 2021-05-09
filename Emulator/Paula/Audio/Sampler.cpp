@@ -52,9 +52,9 @@ Sampler::interpolate(Cycle clock)
     
     /*
     if (!(clock >= c1 && clock < c2)) {
-        printf("WARNING: clock: %lld count: %zu ", clock, count());
-        printf("r: %d w: %d\n", r, w);
-        printf("r1: %d r2: %d c1: %lld c2: %lld\n", r1, r2, c1, c2);
+        warn("WARNING: clock: %lld count: %zu ", clock, count());
+        warn("r: %d w: %d\n", r, w);
+        warn("r1: %d r2: %d c1: %lld c2: %lld\n", r1, r2, c1, c2);
     }
     */
     assert(clock >= c1 && clock < c2);

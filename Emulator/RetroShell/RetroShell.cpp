@@ -306,6 +306,9 @@ RetroShell::exec(const string &command)
     // Skip comments
     if (command.substr(0,1) == "#") return;
 
+    // Check if the command marked with 'try'
+    bool ignoreError = command.rfind("try", 0) == 0;
+    
     // Call the interpreter
     try {
         
@@ -313,8 +316,11 @@ RetroShell::exec(const string &command)
     
     } catch (std::exception &err) {
         
+        // Print error message
         describe(err);
-        throw;
+        
+        // Rethrow the exception
+        if (!ignoreError) throw;
     }
 }
 
@@ -345,11 +351,13 @@ RetroShell::execScript(const string &contents)
 void
 RetroShell::continueScript()
 {
-    // msg("continueScript()\n");
+    msg("continueScript()\n");
     
     string command;
     while(std::getline(script, command)) {
-                
+            
+        msg("%s\n", command.c_str());
+        
         // Print the command
         printPrompt();
         *this << command << '\n';

@@ -44,8 +44,6 @@ AmigaFile::type(const string &path)
 {
     std::ifstream stream(path);
     if (!stream.is_open()) return FILETYPE_UKNOWN; // throw VAError(ERROR_FILE_NOT_FOUND);
-
-    printf("File was found type()\n");
     
     if (Snapshot::isCompatiblePath(path) &&
         Snapshot::isCompatibleStream(stream)) return FILETYPE_SNAPSHOT;

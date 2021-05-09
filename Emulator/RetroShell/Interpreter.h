@@ -115,9 +115,6 @@ public:
     
 public:
     
-    // Executes a script file
-    // void exec(std::istream &stream) throws;
-
     // Executes a single command
     void exec(const string& userInput, bool verbose = false) throws;
     void exec(Arguments &argv, bool verbose = false) throws;

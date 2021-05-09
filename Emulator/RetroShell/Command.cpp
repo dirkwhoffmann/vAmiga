@@ -158,15 +158,15 @@ Command::usage()
 {
     string firstArg, otherArgs;
     
-    // Collect all argument types
-    auto t = types();
-
-    if (t.empty()) {
+    if (args.empty()) {
 
         firstArg = numArgs == 0 ? "" : numArgs == 1 ? "<value>" : "<values>";
 
     } else {
-                
+        
+        // Collect all argument types
+        auto t = types();
+        
         // Describe the first argument
         for (usize i = 0; i < t.size(); i++) {
             firstArg += (i == 0 ? "" : "|") + t[i];

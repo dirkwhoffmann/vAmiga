@@ -29,9 +29,6 @@ class CopperDebugger: public AmigaComponent {
     // The most recently used Copper list 2
     CopperList *current2 = nullptr;
 
-    // Storage for disassembled instruction
-    char disassembly[128];
-
     
     //
     // Initializing

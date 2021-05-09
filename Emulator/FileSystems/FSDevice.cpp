@@ -46,7 +46,6 @@ FSDevice::makeWithFormat(FSDeviceDescriptor &layout)
     for (isize i = 0; i < dev->numBlocks; i++) assert(dev->blocks[i] != nullptr);
     
     if (FS_DEBUG) {
-        printf("cd = %d\n", dev->cd);
         dev->info();
         dev->dump();
     }

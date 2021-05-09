@@ -86,47 +86,35 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         //
                 
         // Path to the FFmpeg executable
-        // ptr += sprintf(ptr, "%s -nostdin", ffmpegPath());
         string cmd1 = ffmpegPath() + " -nostdin";
         
         // Verbosity
-        // ptr += sprintf(ptr, " -loglevel %s", loglevel());
         cmd1 += " -loglevel " + loglevel();
 
         // Input stream format
-        // ptr += sprintf(ptr, " -f:v rawvideo -pixel_format rgba");
         cmd1 += " -f:v rawvideo -pixel_format rgba";
 
         // Frame rate
-        // ptr += sprintf(ptr, " -r %d", frameRate);
         cmd1 += " -r " + std::to_string(frameRate);
 
         // Frame size (width x height)
-        // ptr += sprintf(ptr, " -s:v %dx%d", x2 - x1, y2 - y1);
         cmd1 += " -s:v " + std::to_string(x2 - x1) + "x" + std::to_string(y2 - y1);
 
         // Input source (named pipe)
-        // ptr += sprintf(ptr, " -i %s", videoPipePath());
         cmd1 += " -i " + videoPipePath();
 
         // Output stream format
-        // ptr += sprintf(ptr, " -f mp4 -pix_fmt yuv420p");
         cmd1 += " -f mp4 -pix_fmt yuv420p";
 
         // Bit rate
-        // ptr += sprintf(ptr, " -b:v %ldk", bitRate);
         cmd1 += " -b:v " + std::to_string(bitRate) + "k";
 
         // Aspect ratio
-        // ptr += sprintf(ptr, " -bsf:v ");
-        // ptr += sprintf(ptr, "\"h264_metadata=sample_aspect_ratio=");
-        // ptr += sprintf(ptr, "%ld/%ld\"", aspectX, 2*aspectY);
         cmd1 += " -bsf:v ";
         cmd1 += "\"h264_metadata=sample_aspect_ratio=";
         cmd1 += std::to_string(aspectX) + "/" + std::to_string(2*aspectY) + "\"";
 
         // Output file
-        // ptr += sprintf(ptr, " -y %s", videoStreamPath());
         cmd1 += " -y " + videoStreamPath();
 
         
@@ -135,31 +123,24 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         //
                 
         // Path to the FFmpeg executable
-        // ptr += sprintf(ptr, "%s -nostdin", ffmpegPath());
         string cmd2 = ffmpegPath() + " -nostdin";
 
         // Verbosity
-        // ptr += sprintf(ptr, " -loglevel %s", loglevel());
         cmd2 += " -loglevel " + loglevel();
 
         // Audio format and number of channels
-        // ptr += sprintf(ptr, " -f:a f32le -ac 2");
         cmd2 += " -f:a f32le -ac 2";
 
         // Sampling rate
-        // ptr += sprintf(ptr, " -sample_rate %d", sampleRate);
         cmd2 += " -sample_rate " + std::to_string(sampleRate);
 
         // Input source (named pipe)
-        // ptr += sprintf(ptr, " -i %s", audioPipePath());
         cmd2 += " -i " + audioPipePath();
 
         // Output stream format
-        // ptr += sprintf(ptr, " -f mp4");
         cmd2 += " -f mp4";
 
         // Output file
-        // ptr += sprintf(ptr, " -y %s", audioStreamPath());
         cmd2 += " -y " + audioStreamPath();
 
         //
