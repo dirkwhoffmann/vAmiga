@@ -37,8 +37,11 @@ string stripPath(const string &path);
 string stripName(const string &path);
 string stripSuffix(const string &path);
 
-// Concatinates two path segments
+// Concatenates two path segments
 string appendPath(const string &path, const string &path2);
+
+// Checks if a string starts with '/'
+bool isAbsolutePath(const string &path);
 
 
 //

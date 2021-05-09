@@ -773,25 +773,25 @@ Interpreter::registerInstructions()
     root.add({"dfn"},
              "component", "All connected drives");
 
-    root.add({"df0", "df1", "df2", "df3", "dfn"}, {"", "config"},
+    root.add({"df0", "df1", "df2", "df3"}, {"", "config"},
              "command", "Displays the current configuration",
              &RetroShell::exec <Token::dfn, Token::config>);
 
-    root.add({"df0", "df1", "df2", "df3", "dfn"}, {"", "connect"},
+    root.add({"df0", "df1", "df2", "df3"}, {"", "connect"},
              "command", "Connects the drive",
              &RetroShell::exec <Token::dfn, Token::connect>);
     root.seek("df0")->remove("connect");
 
-    root.add({"df0", "df1", "df2", "df3", "dfn"}, {"", "disconnect"},
+    root.add({"df0", "df1", "df2", "df3"}, {"", "disconnect"},
              "command", "Disconnects the drive",
              &RetroShell::exec <Token::dfn, Token::disconnect>);
     root.seek("df0")->remove("disconnect");
 
-    root.add({"df0", "df1", "df2", "df3", "dfn"}, {"", "eject"},
+    root.add({"df0", "df1", "df2", "df3"}, {"", "eject"},
              "command", "Ejects a floppy disk",
              &RetroShell::exec <Token::dfn, Token::eject>);
 
-    root.add({"df0", "df1", "df2", "df3", "dfn"}, {"", "insert"},
+    root.add({"df0", "df1", "df2", "df3"}, {"", "insert"},
              "command", "Inserts a floppy disk",
              &RetroShell::exec <Token::dfn, Token::insert>, 1);
 

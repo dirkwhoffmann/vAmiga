@@ -19,6 +19,7 @@
 struct VAError : public util::Exception
 {
     VAError(ErrorCode code) : Exception((i64)code) { }
+    VAError(const string &s, ErrorCode code) : Exception(s, (i64)code) { }
     
     const char *what() const throw() override;
 };
@@ -41,9 +42,11 @@ struct ConfigArgError : ConfigError {
     ConfigArgError(const string &s) : ConfigError(s) { };
 };
 
+/*
 struct ConfigFileNotFoundError : ConfigError {
     ConfigFileNotFoundError(const string &s) : ConfigError(s) { };
 };
+*/
 
 struct ConfigFileReadError : ConfigError {
     ConfigFileReadError(const string &s) : ConfigError(s) { };

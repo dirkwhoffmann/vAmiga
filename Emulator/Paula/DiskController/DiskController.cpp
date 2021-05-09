@@ -12,6 +12,7 @@
 #include "Agnus.h"
 #include "DiskFile.h"
 #include "Drive.h"
+#include "IO.h"
 #include "MsgQueue.h"
 #include "Paula.h"
 #include <algorithm>
@@ -146,7 +147,7 @@ DiskController::setConfigItem(Option option, long id, i64 value)
 }
 
 const string &
-DiskController::getSearchPath(isize dfn)
+DiskController::getSearchPath(isize dfn) const
 {
     assert(dfn >= 0 && dfn <= 3);
     return searchPath[dfn];
@@ -191,20 +192,17 @@ void
 DiskController::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
-    
-    string con = string("connected");
-    string dis = string("disconnected");
-    
+        
     if (category & dump::Config) {
         
         os << tab("Drive df0");
-        os << bol(config.connected[0], con, dis) << std::endl;
+        os << bol(config.connected[0], "connected", "disconnected") << std::endl;
         os << tab("Drive df1");
-        os << bol(config.connected[1], con, dis) << std::endl;
+        os << bol(config.connected[1], "connected", "disconnected") << std::endl;
         os << tab("Drive df2");
-        os << bol(config.connected[2], con, dis) << std::endl;
+        os << bol(config.connected[2], "connected", "disconnected") << std::endl;
         os << tab("Drive df3");
-        os << bol(config.connected[3], con, dis) << std::endl;
+        os << bol(config.connected[3], "connected", "disconnected") << std::endl;
         os << tab("Drive speed");
         os << dec(config.speed) << std::endl;
         os << tab("lockDskSync");
@@ -216,23 +214,31 @@ DiskController::_dump(dump::Category category, std::ostream& os) const
     if (category & dump::State) {
         
         os << tab("selected");
-        os << (int)selected << std::endl;
+        os << dec(selected) << std::endl;
         os << tab("state");
-        os << DriveDmaStateName(state) << std::endl;
+        os << DriveStateEnum::key(state) << std::endl;
         os << tab("syncCycle");
-        os << syncCycle << std::endl;
+        os << dec(syncCycle) << std::endl;
         os << tab("incoming");
-        os << incoming << std::endl;
+        os << hex(incoming) << std::endl;
         os << tab("fifo");
-        os << hex(fifo) << " (" << fifoCount << ")" << std::endl;
+        os << hex(fifo) << " (" << dec(fifoCount) << ")" << std::endl;
         os << tab("dsklen");
-        os << dsklen << std::endl;
+        os << dec(dsklen) << std::endl;
         os << tab("dsksync");
-        os << dsksync << std::endl;
+        os << hex(dsksync) << std::endl;
         os << tab("prb");
-        os << prb << std::endl;
+        os << hex(prb) << std::endl;
         os << tab("spinning");
         os << bol(spinning()) << std::endl;
+        os << tab("Search paths df0");
+        os << "\"" << searchPath[0] << "\"" << std::endl;
+        os << tab("Search paths df1");
+        os << "\"" << searchPath[1] << "\"" << std::endl;
+        os << tab("Search paths df2");
+        os << "\"" << searchPath[2] << "\"" << std::endl;
+        os << tab("Search paths df3");
+        os << "\"" << searchPath[3] << "\"" << std::endl;
     }
 }
 
@@ -266,7 +272,7 @@ void
 DiskController::setState(DriveState oldState, DriveState newState)
 {
     trace(DSK_DEBUG, "%s -> %s\n",
-          DriveDmaStateName(oldState), DriveDmaStateName(newState));
+          DriveStateEnum::key(oldState), DriveStateEnum::key(newState));
     
     state = newState;
     
@@ -342,15 +348,14 @@ DiskController::insertDisk(class DiskFile *file, isize nr, Cycle delay)
 void
 DiskController::insertDisk(const string &name, isize nr, Cycle delay)
 {
-    if (DiskFile *file = DiskFile::make(name)) {
+    assert(nr >= 0 && nr <= 3);
+    
+    bool append = !util::isAbsolutePath(name) && searchPath[nr] != "";
+    string path = append ? searchPath[nr] + "/" + name : name;
+            
+    if (DiskFile *file = DiskFile::make(path)) {
         insertDisk(file, nr, delay);
     }
-    /*
-    ErrorCode ec;
-    if (DiskFile *file = DiskFile::make(name, &ec)) {
-        insertDisk(file, nr, delay);
-    }
-    */
 }
 
 void

@@ -258,7 +258,7 @@ RetroShell::pressReturn()
     ipos = (isize)input.size() - 1;
     
     // Execute the command
-    exec(command);
+    try { exec(command); } catch (...) { };
     printPrompt();
     tabPressed = false;
 }
@@ -427,11 +427,12 @@ RetroShell::describe(const std::exception &e)
         *this << "Error: Invalid argument. Expected: " << err->what();
         *this << '\n';
 
+    /*
     } else if (auto err = dynamic_cast<const ConfigFileNotFoundError *>(&e)) {
 
         *this << err->what() << ": File not found";
         *this << '\n';
-
+    */
     } else if (auto err = dynamic_cast<const ConfigFileReadError *>(&e)) {
 
         *this << "Error: Unable to read file " << err->what();
@@ -447,6 +448,10 @@ void
 RetroShell::describe(const struct VAError &err)
 {
     switch ((ErrorCode)err.data) {
+            
+        case ERROR_FILE_NOT_FOUND:
+            *this << err.description << ": File not found" << '\n';
+            return;
             
         case ERROR_ROM_MISSING:
             *this << "No Boot or Kickstart Rom found" << '\n';

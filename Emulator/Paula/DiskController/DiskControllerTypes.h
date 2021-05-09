@@ -33,19 +33,6 @@ inline bool isDriveState(long value)
     return (unsigned long)value <= DRIVE_DMA_FLUSH;
 }
 
-inline const char *DriveDmaStateName(DriveState state)
-{
-    switch (state) {
-            
-        case DRIVE_DMA_OFF:   return "OFF";
-        case DRIVE_DMA_WAIT:  return "WAIT";
-        case DRIVE_DMA_READ:  return "READ";
-        case DRIVE_DMA_WRITE: return "WRITE";
-        case DRIVE_DMA_FLUSH: return "FLUSH";
-    }
-    return "???";
-}
-
 #ifdef __cplusplus
 struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState> {
     

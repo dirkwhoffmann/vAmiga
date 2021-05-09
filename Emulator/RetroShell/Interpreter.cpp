@@ -86,9 +86,7 @@ Interpreter::autoComplete(const string& userInput)
     }
 
     // Add a space if the command has been fully completed
-    printf("autoComplete: '%s'\n", result.c_str());
     if (root.seek(tokens) != nullptr) {
-        printf("Adding space\n");
         result += " ";
     }
     
@@ -143,7 +141,6 @@ Interpreter::exec(Arguments &argv, bool verbose)
         
     // Error out if no command handler is present
     if (current->action == nullptr && !argv.empty()) {
-        printf("NO COMMAND HANDLER FOUND\n");
         throw util::ParseError(token);
     }
     if (current->action == nullptr && argv.empty()) {

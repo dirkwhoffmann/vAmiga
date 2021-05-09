@@ -80,11 +80,18 @@ string stripSuffix(const string &s)
 
 string appendPath(const string &path, const string &path2)
 {
+    if (path.empty()) {
+        return path2;
+    }
     if (path.back() == '/') {
         return path + path2;
-    } else {
-        return path + "/" + path2;
     }
+    return path + "/" + path2;
+}
+
+bool isAbsolutePath(const string &path)
+{
+    return !path.empty() && path.front() == '/';
 }
 
 bool fileExists(const string &path)

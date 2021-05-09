@@ -45,7 +45,7 @@ template <> void
 RetroShell::exec <Token::source> (Arguments &argv, long param)
 {
     auto stream = std::ifstream(argv.front());
-    if (!stream.is_open()) throw ConfigFileNotFoundError(argv.front());
+    if (!stream.is_open()) throw VAError(argv.front(), ERROR_FILE_NOT_FOUND);
     
     execScript(stream);
 }
@@ -136,8 +136,6 @@ template <> void
 RetroShell::exec <Token::memory, Token::load, Token::rom> (Arguments& argv, long param)
 {
     auto path = argv.front();
-    if (!util::fileExists(path)) throw ConfigFileNotFoundError(path);
-
     amiga.mem.loadRom(path.c_str());
 }
 
@@ -145,8 +143,6 @@ template <> void
 RetroShell::exec <Token::memory, Token::load, Token::extrom> (Arguments& argv, long param)
 {
     auto path = argv.front();
-    if (!util::fileExists(path)) throw ConfigFileNotFoundError(path);
-
     amiga.mem.loadExt(path.c_str());
 }
 
@@ -809,7 +805,7 @@ RetroShell::exec <Token::dc, Token::config> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::dc, Token::inspect> (Arguments& argv, long param)
 {
-    dump(amiga.paula.diskController, dump::Registers);
+    dump(amiga.paula.diskController, dump::State);
 }
 
 template <> void
@@ -911,8 +907,6 @@ template <> void
 RetroShell::exec <Token::dfn, Token::insert> (Arguments& argv, long param)
 {
     auto path = argv.front();
-    if (!util::fileExists(path)) throw ConfigFileNotFoundError(path);
-    
     amiga.paula.diskController.insertDisk(path, param);
 }
 

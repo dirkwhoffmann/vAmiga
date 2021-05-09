@@ -395,37 +395,37 @@ class GamePad {
             
             switch usage {
             
-            case kHIDUsage_GD_X where lScheme == Schemes.A0A1:  // A0
+            case kHIDUsage_GD_X where lScheme == Schemes.A0A1:   // A0
                 events = mapHAxis(value: value, element: element)
 
-            case kHIDUsage_GD_X where lScheme == Schemes.A0A1r: // A0
+            case kHIDUsage_GD_X where lScheme == Schemes.A0A1r:  // A0
                 events = mapHAxis(value: value, element: element)
                 
-            case kHIDUsage_GD_Y where lScheme == Schemes.A0A1:  // A1
+            case kHIDUsage_GD_Y where lScheme == Schemes.A0A1:   // A1
                 events = mapVAxis(value: value, element: element)
                 
-            case kHIDUsage_GD_Y where lScheme == Schemes.A0A1r: // A1
+            case kHIDUsage_GD_Y where lScheme == Schemes.A0A1r:  // A1
                events = mapVAxisRev(value: value, element: element)
 
-            case kHIDUsage_GD_Z where rScheme == Schemes.A2A5:  // A2
+            case kHIDUsage_GD_Z where rScheme == Schemes.A2A5:   // A2
                 events = mapHAxis(value: value, element: element)
 
-            case kHIDUsage_GD_Z where rScheme == Schemes.A2A5r: // A2
+            case kHIDUsage_GD_Z where rScheme == Schemes.A2A5r:  // A2
                 events = mapHAxis(value: value, element: element)
 
-            case kHIDUsage_GD_Z where rScheme == Schemes.A2A3:  // A2
+            case kHIDUsage_GD_Z where rScheme == Schemes.A2A3:   // A2
                 events = mapHAxis(value: value, element: element)
                     
-            case kHIDUsage_GD_Rx where lScheme == Schemes.A3A4: // A3
+            case kHIDUsage_GD_Rx where lScheme == Schemes.A3A4:  // A3
                 events = mapHAxis(value: value, element: element)
 
-            case kHIDUsage_GD_Rx where lScheme == Schemes.A2A3: // A3
+            case kHIDUsage_GD_Rx where lScheme == Schemes.A2A3:  // A3
                 events = mapVAxisRev(value: value, element: element)
 
-            case kHIDUsage_GD_Ry where lScheme == Schemes.A3A4: // A4
+            case kHIDUsage_GD_Ry where lScheme == Schemes.A3A4:  // A4
                 events = mapVAxis(value: value, element: element)
 
-            case kHIDUsage_GD_Rz where rScheme == Schemes.A2A5: // A5
+            case kHIDUsage_GD_Rz where rScheme == Schemes.A2A5:  // A5
                 events = mapVAxis(value: value, element: element)
 
             case kHIDUsage_GD_Rz where rScheme == Schemes.A2A5r: // A5
