@@ -17,10 +17,7 @@ class MsgQueue : public AmigaComponent {
         
     // Ring buffer storing all pending messages
     util::RingBuffer<Message, 64> queue;
-            
-    // Synchronization mutex
-    util::ReentrantMutex recMutex;
-    
+                
     // The registered listener
     const void *listener = nullptr;
     
@@ -34,7 +31,8 @@ class MsgQueue : public AmigaComponent {
     
 public:
     
-    MsgQueue(Amiga& ref) : AmigaComponent(ref) { }
+    using AmigaComponent::AmigaComponent;
+    // MsgQueue(Amiga& ref) : AmigaComponent(ref) { }
 
     
     //
@@ -43,7 +41,7 @@ public:
     
 public:
         
-    const char *getDescription() const override { return "MessageQueue"; }
+    const char *getDescription() const override { return "MsgQueue"; }
 
 private:
     
@@ -64,6 +62,6 @@ public:
     // Registers a listener together with it's callback function
     void setListener(const void *listener, Callback *func);
             
-    // Writes a message into the queue and propagates it to all listeners
+    // Sends a message
     void put(MsgType type, long data = 0);
 };

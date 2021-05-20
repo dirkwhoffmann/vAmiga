@@ -409,6 +409,9 @@ extension MyController {
         var driveNr: Int { return msg.data & 0xFF }
         var driveCyl: Int { return (msg.data >> 8) & 0xFF; }
                 
+        // Only proceed if the proxy object is still alive
+        if amiga == nil { return }
+
         switch msg.type {
     
         case .REGISTER:

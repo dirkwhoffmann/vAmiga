@@ -59,7 +59,7 @@ clean:
 
 bin:
 	@echo "Linking vAmiga"
-	@g++ -pthread -o vAmiga *.o */*.o */*/*.o
+	@g++ -pthread -o vAmiga ../Utilities/*.o *.o */*.o */*/*.o
 
 %.o: %.cpp $(DEPS)
 	@echo "Compiling $<"
