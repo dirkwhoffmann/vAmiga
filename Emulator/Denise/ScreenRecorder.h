@@ -164,10 +164,7 @@ public:
     //
 
 public:
-    
-    // Writes an audio sample to the temporary buffer
-    // void addSample(float left, float right);
-    
+        
     // Records a single frame
     void vsyncHandler(Cycle target);
 };

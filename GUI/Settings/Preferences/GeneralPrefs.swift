@@ -23,7 +23,7 @@ extension PreferencesController {
         // Screen captures
         let hasFFmpeg = amiga.screenRecorder.hasFFmpeg
         genSource.selectItem(withTag: pref.captureSource)
-        genBitRate.integerValue = pref.bitRate
+        genBitRate.stringValue = "\(pref.bitRate)"
         genAspectX.integerValue = pref.aspectX
         genAspectY.integerValue = pref.aspectY
         genSource.isEnabled = hasFFmpeg
@@ -100,21 +100,26 @@ extension PreferencesController {
         refresh()
     }
 
-    @IBAction func capBitrateAction(_ sender: NSComboBox!) {
+    @IBAction func genBitRateAction(_ sender: NSComboBox!) {
         
-        track("value = \(sender.integerValue)")
-        pref.bitRate = sender.integerValue
+        var input = sender.objectValueOfSelectedItem as? Int
+        if input == nil { input = sender.integerValue }
+        
+        if let bitrate = input {
+            track("bitrate = \(bitrate)")
+            pref.bitRate = bitrate
+        }
         refresh()
     }
 
-    @IBAction func capAspectXAction(_ sender: NSTextField!) {
+    @IBAction func genAspectXAction(_ sender: NSTextField!) {
         
         track("value = \(sender.integerValue)")
         pref.aspectX = sender.integerValue
         refresh()
     }
 
-    @IBAction func capAspectYAction(_ sender: NSTextField!) {
+    @IBAction func genAspectYAction(_ sender: NSTextField!) {
         
         track("value = \(sender.integerValue)")
         pref.aspectY = sender.integerValue

@@ -133,7 +133,6 @@
     GuardsProxy *watchpoints;
 }
 
-// @property (readonly) struct AmigaWrapper *wrapper;
 @property (readonly, strong) AgnusProxy *agnus;
 @property (readonly, strong) BlitterProxy *blitter;
 @property (readonly, strong) CIAProxy *ciaA;
