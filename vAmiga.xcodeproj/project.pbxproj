@@ -73,7 +73,6 @@
 		507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CC2216F938001D26E9 /* DenisePanel.swift */; };
 		507727EE242F2CE4009D01DA /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 507727ED242F2CE3009D01DA /* iCarousel.m */; };
 		5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5078A5D32529E7FA00FCE384 /* Sampler.cpp */; };
-		5078BEA7264D6F8200EDA161 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 5078BEA6264D6F8200EDA161 /* Makefile */; };
 		507957AC244AD25B007B8B8D /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507957AB244AD25B007B8B8D /* Configuration.swift */; };
 		507C9C4626076EF7006779B5 /* RessourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C9C4526076EF7006779B5 /* RessourceManager.swift */; };
 		507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507D7767228BE3EF001E97A9 /* StateMachine.cpp */; };
@@ -1736,7 +1735,6 @@
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
-				5078BEA7264D6F8200EDA161 /* Makefile in Sources */,
 				508FE01D21EA227B0043D0E9 /* Defaults.swift in Sources */,
 				50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */,
 				507C9C4626076EF7006779B5 /* RessourceManager.swift in Sources */,
