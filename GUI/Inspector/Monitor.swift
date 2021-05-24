@@ -214,6 +214,11 @@ class Monitor: DialogController {
     // Action methods
     //
     
+    @IBAction override func okAction(_ sender: Any!) {
+                        
+        close()
+    }
+    
     @IBAction func colorAction(_ sender: NSColorWell!) {
         
         let r = Int(sender.color.redComponent * 255)
