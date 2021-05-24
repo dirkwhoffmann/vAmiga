@@ -42,7 +42,6 @@ enum_long(ERROR_CODE)
     // Snapshots
     ERROR_SNP_TOO_OLD,
     ERROR_SNP_TOO_NEW,
-    ERROR_UNSUPPORTED_SNAPSHOT,  // DEPRECATED
     
     // Encrypted Roms
     ERROR_MISSING_ROM_KEY,
@@ -120,7 +119,6 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
                 
             case ERROR_SNP_TOO_OLD:                 return "SNP_TOO_OLD";
             case ERROR_SNP_TOO_NEW:                 return "SNP_TOO_NEW";
-            case ERROR_UNSUPPORTED_SNAPSHOT:        return "UNSUPPORTED_SNAPSHOT";
                 
             case ERROR_MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
             case ERROR_INVALID_ROM_KEY:             return "INVALID_ROM_KEY";

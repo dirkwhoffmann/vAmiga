@@ -53,8 +53,6 @@ class VAError: Error {
         case .SNP_TOO_NEW:
             return "The snapshot was created with a newer version of " +
                 "vAmiga and is incompatible with this release."
-        case .UNSUPPORTED_SNAPSHOT:
-            return "Unsupported Snapshot Revision."
         case .MISSING_ROM_KEY:
             return "No key.rom file found."
         case .INVALID_ROM_KEY:

@@ -283,11 +283,7 @@ extension NSError {
         case .OUT_OF_MEMORY:
             info1 = "The file operation cannot be performed."
             info2 = "Not enough memory."
-            
-        case .UNSUPPORTED_SNAPSHOT:
-            info1 = "Snapshot " + str + " could not be opened."
-            info2 = "The file was created with a different version of vAmiga."
-            
+                        
         case .MISSING_ROM_KEY:
             info1 = "Failed to decrypt the selected Rom image."
             info2 = "A rom.key file is required to process this file."
