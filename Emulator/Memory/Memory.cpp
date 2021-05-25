@@ -110,7 +110,7 @@ Memory::setConfigItem(Option option, i64 value)
             
         case OPT_CHIP_RAM:
             
-            if (isPoweredOn()) throw ConfigLockedError();
+            if (isPoweredOn()) throw VAError(ERROR_OPT_LOCKED);
 
             #ifdef FORCE_CHIP_RAM
             value = FORCE_CHIP_RAM;
@@ -118,7 +118,7 @@ Memory::setConfigItem(Option option, i64 value)
             #endif
             
             if (value != 256 && value != 512 && value != 1024 && value != 2048) {
-                throw ConfigArgError("256, 512, 1024, 2048");
+                throw VAError(ERROR_OPT_INVALID_ARG, "256, 512, 1024, 2048");
             }
             
             mem.allocChip((i32)KB(value));
@@ -126,7 +126,7 @@ Memory::setConfigItem(Option option, i64 value)
             
         case OPT_SLOW_RAM:
             
-            if (isPoweredOn()) throw ConfigLockedError();
+            if (isPoweredOn()) throw VAError(ERROR_OPT_LOCKED);
             
             #ifdef FORCE_SLOW_RAM
             value = FORCE_SLOW_RAM;
@@ -134,7 +134,7 @@ Memory::setConfigItem(Option option, i64 value)
             #endif
             
             if ((value % 256) != 0 || value > 512) {
-                throw ConfigArgError("0, 256, 512");
+                throw VAError(ERROR_OPT_INVALID_ARG, "0, 256, 512");
             }
                         
             mem.allocSlow((i32)KB(value));
@@ -142,7 +142,7 @@ Memory::setConfigItem(Option option, i64 value)
             
         case OPT_FAST_RAM:
             
-            if (isPoweredOn()) throw ConfigLockedError();
+            if (isPoweredOn()) throw VAError(ERROR_OPT_LOCKED);
             
             #ifdef FORCE_FAST_RAM
             value = FORCE_FAST_RAM;
@@ -150,7 +150,7 @@ Memory::setConfigItem(Option option, i64 value)
             #endif
             
             if ((value % 64) != 0 || value > 8192) {
-                throw ConfigArgError("0, 64, 128, ..., 8192");
+                throw VAError(ERROR_OPT_INVALID_ARG, "0, 64, 128, ..., 8192");
             }
                         
             mem.allocFast((i32)KB(value));
@@ -158,10 +158,10 @@ Memory::setConfigItem(Option option, i64 value)
             
         case OPT_EXT_START:
             
-            if (isPoweredOn()) throw ConfigLockedError();
+            if (isPoweredOn()) throw VAError(ERROR_OPT_LOCKED);
             
             if (value != 0xE0 && value != 0xF0) {
-                throw ConfigArgError("E0, F0");
+                throw VAError(ERROR_OPT_INVALID_ARG, "E0, F0");
             }
             
             config.extStart = (u32)value;
@@ -182,7 +182,7 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_BANKMAP:
             
             if (!BankMapEnum::isValid(value)) {
-                throw ConfigArgError(BankMapEnum::keyList());
+                throw VAError(ERROR_OPT_INVALID_ARG, BankMapEnum::keyList());
             }
             if (config.bankMap == value) {
                 return false;
@@ -197,7 +197,7 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_UNMAPPING_TYPE:
             
             if (!UnmappedMemoryEnum::isValid(value)) {
-                throw ConfigArgError(UnmappedMemoryEnum::keyList());
+                throw VAError(ERROR_OPT_INVALID_ARG, UnmappedMemoryEnum::keyList());
             }
             if (config.unmappingType == value) {
                 return false;
@@ -211,7 +211,7 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_RAM_INIT_PATTERN:
             
             if (!RamInitPatternEnum::isValid(value)) {
-                throw ConfigArgError(RamInitPatternEnum::keyList());
+                throw VAError(ERROR_OPT_INVALID_ARG, RamInitPatternEnum::keyList());
             }
             if (config.ramInitPattern == value) {
                 return false;

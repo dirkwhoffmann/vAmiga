@@ -88,13 +88,13 @@ Drive::setConfigItem(Option option, long id, i64 value)
         case OPT_DRIVE_TYPE:
             
             if (!DriveTypeEnum::isValid(value)) {
-                throw ConfigArgError(DriveTypeEnum::keyList());
+                throw VAError(ERROR_OPT_INVALID_ARG, DriveTypeEnum::keyList());
             }
             if (config.type == value) {
                 return false;
             }
             if (value != DRIVE_DD_35 && value != DRIVE_HD_35) {
-                throw ConfigUnsupportedError();
+                throw VAError(ERROR_OPT_UNSUPPORTED);
             }
             config.type = (DriveType)value;
             return true;
@@ -150,7 +150,7 @@ Drive::setConfigItem(Option option, long id, i64 value)
         case OPT_DEFAULT_FILESYSTEM:
 
             if (!FSVolumeTypeEnum::isValid(value)) {
-                throw ConfigArgError(FSVolumeTypeEnum::keyList());
+                throw VAError(ERROR_OPT_INVALID_ARG, FSVolumeTypeEnum::keyList());
             }
             if (config.defaultFileSystem == value) {
                 return false;
@@ -161,7 +161,7 @@ Drive::setConfigItem(Option option, long id, i64 value)
         case OPT_DEFAULT_BOOTBLOCK:
 
             if (!BootBlockIdEnum::isValid(value)) {
-                throw ConfigArgError(BootBlockIdEnum::keyList());
+                throw VAError(ERROR_OPT_INVALID_ARG, BootBlockIdEnum::keyList());
             }
             if (config.defaultBootBlock == value) {
                 return false;

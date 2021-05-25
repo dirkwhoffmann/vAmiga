@@ -420,32 +420,6 @@ RetroShell::describe(const std::exception &e)
         *this << err->what() << ": Syntax error";
         *this << '\n';
 
-    } else if (auto err = dynamic_cast<const ConfigUnsupportedError *>(&e)) {
-
-        *this << "This option is not yet supported.";
-        *this << '\n';
-
-    } else if (auto err = dynamic_cast<const ConfigLockedError *>(&e)) {
-
-        *this << "This option is locked because the Amiga is powered on.";
-        *this << '\n';
-
-    } else if (auto err = dynamic_cast<const ConfigArgError *>(&e)) {
-
-        *this << "Error: Invalid argument. Expected: " << err->what();
-        *this << '\n';
-
-    /*
-    } else if (auto err = dynamic_cast<const ConfigFileNotFoundError *>(&e)) {
-
-        *this << err->what() << ": File not found";
-        *this << '\n';
-    */
-    } else if (auto err = dynamic_cast<const ConfigFileReadError *>(&e)) {
-
-        *this << "Error: Unable to read file " << err->what();
-        *this << '\n';
-    
     } else if (auto err = dynamic_cast<const VAError *>(&e)) {
 
         describe(*err);
@@ -456,6 +430,18 @@ void
 RetroShell::describe(const struct VAError &err)
 {
     switch ((ErrorCode)err.data) {
+            
+        case ERROR_OPT_UNSUPPORTED:
+            *this << "This option is not yet supported." << '\n';
+            return;
+            
+        case ERROR_OPT_INVALID_ARG:
+            *this << "Error: Invalid argument. Expected: " << err.description << '\n';
+            return;
+
+        case ERROR_OPT_LOCKED:
+            *this << "This option is locked because the Amiga is powered on" << '\n';
+            return;
             
         case ERROR_FILE_NOT_FOUND:
             *this << err.description << ": File not found" << '\n';

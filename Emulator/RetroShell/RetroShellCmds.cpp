@@ -45,7 +45,7 @@ template <> void
 RetroShell::exec <Token::source> (Arguments &argv, long param)
 {
     auto stream = std::ifstream(argv.front());
-    if (!stream.is_open()) throw VAError(argv.front(), ERROR_FILE_NOT_FOUND);
+    if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND, argv.front());
     
     execScript(stream);
 }
@@ -399,7 +399,7 @@ RetroShell::exec <Token::copper, Token::list> (Arguments& argv, long param)
     switch (value) {
         case 1: dump(amiga.agnus.copper, dump::List1); break;
         case 2: dump(amiga.agnus.copper, dump::List2); break;
-        default: throw ConfigArgError("1 or 2");
+        default: throw VAError(ERROR_OPT_INVALID_ARG, "1 or 2");
     }
 }
 

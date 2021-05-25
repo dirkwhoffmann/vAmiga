@@ -89,6 +89,9 @@
     
     // Reference to the wrapped C++ object
     @public void *obj;
+    
+    // Error string (used for exception passing)
+    @public NSString *error;
 }
 
 @end

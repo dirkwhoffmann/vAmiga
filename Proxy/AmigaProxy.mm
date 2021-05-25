@@ -37,6 +37,7 @@ using namespace moira;
     }
     if (self = [super init]) {
         obj = ref;
+        error = @"";
     }
     return self;
 }
@@ -2181,7 +2182,7 @@ using namespace moira;
 {
     try {
         return [self amiga]->configure(opt, val);
-    } catch (ConfigError &exception) {
+    } catch (VAError &exception) {
         return false;
     }
 }
@@ -2190,7 +2191,7 @@ using namespace moira;
 {
     try {
         return [self amiga]->configure(opt, val ? 1 : 0);
-    } catch (ConfigError &exception) {
+    } catch (VAError &exception) {
         return false;
     }
 }
@@ -2199,7 +2200,7 @@ using namespace moira;
 {
     try {
         return [self amiga]->configure(opt, id, val);
-    } catch (ConfigError &exception) {
+    } catch (VAError &exception) {
         return false;
     }
 }
@@ -2208,7 +2209,7 @@ using namespace moira;
 {
     try {
         return [self amiga]->configure(opt, id, val ? 1 : 0);
-    } catch (ConfigError &exception) {
+    } catch (VAError &exception) {
         return false;
     }
 }
@@ -2217,7 +2218,7 @@ using namespace moira;
 {
     try {
         return [self amiga]->configure(opt, (long)id, val);
-    } catch (ConfigError &exception) {
+    } catch (VAError &exception) {
         return false;
     }
 }
@@ -2226,7 +2227,7 @@ using namespace moira;
 {
     try {
         return [self amiga]->configure(opt, (long)id, val ? 1 : 0);
-    } catch (ConfigError &exception) {
+    } catch (VAError &exception) {
         return false;
     }
 }
