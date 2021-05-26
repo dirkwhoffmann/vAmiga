@@ -56,7 +56,7 @@ private:
     ScreenBuffer *frameBuffer = &emuTexture[0];
 
     // Buffer with background noise (random black and white pixels)
-    u32 *noise;
+    u32 *noise = nullptr;
 
     
     //

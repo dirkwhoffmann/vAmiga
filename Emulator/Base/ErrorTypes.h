@@ -17,6 +17,11 @@ enum_long(ERROR_CODE)
     ERROR_OK,
     ERROR_UNKNOWN,
     
+    // Configuration
+    ERROR_OPT_UNSUPPORTED,
+    ERROR_OPT_INVALID_ARG,
+    ERROR_OPT_LOCKED,
+
     // General
     ERROR_FILE_NOT_FOUND,
     ERROR_FILE_TYPE_MISMATCH,
@@ -42,7 +47,6 @@ enum_long(ERROR_CODE)
     // Snapshots
     ERROR_SNP_TOO_OLD,
     ERROR_SNP_TOO_NEW,
-    ERROR_UNSUPPORTED_SNAPSHOT,  // DEPRECATED
     
     // Encrypted Roms
     ERROR_MISSING_ROM_KEY,
@@ -101,6 +105,10 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_OK:                          return "OK";
             case ERROR_UNKNOWN:                     return "UNKNOWN";
                 
+            case ERROR_OPT_UNSUPPORTED:             return "ERROR_OPT_UNSUPPORTED";
+            case ERROR_OPT_INVALID_ARG:             return "ERROR_OPT_INVALID_ARG";
+            case ERROR_OPT_LOCKED:                  return "ERROR_OPT_LOCKED";
+                
             case ERROR_FILE_NOT_FOUND:              return "FILE_NOT_FOUND";
             case ERROR_FILE_TYPE_MISMATCH:          return "INVALID_TYPE";
             case ERROR_FILE_CANT_READ:              return "CANT_READ";
@@ -108,6 +116,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_FILE_CANT_CREATE:            return "CANT_CREATE";
 
             case ERROR_OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
+            case ERROR_CHIP_RAM_MISSING:            return "ERROR_CHIP_RAM_MISSING";
             case ERROR_CHIP_RAM_LIMIT:              return "CHIP_RAM_LIMIT";
             case ERROR_AROS_RAM_LIMIT:              return "AROS_RAM_LIMIT";
 
@@ -120,7 +129,6 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
                 
             case ERROR_SNP_TOO_OLD:                 return "SNP_TOO_OLD";
             case ERROR_SNP_TOO_NEW:                 return "SNP_TOO_NEW";
-            case ERROR_UNSUPPORTED_SNAPSHOT:        return "UNSUPPORTED_SNAPSHOT";
                 
             case ERROR_MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
             case ERROR_INVALID_ROM_KEY:             return "INVALID_ROM_KEY";

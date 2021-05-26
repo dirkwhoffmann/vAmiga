@@ -10,14 +10,142 @@
 #include "config.h"
 #include "Error.h"
 
-const char *
-VAError::what() const throw()
+VAError::VAError(ErrorCode code, const string &s)
 {
-    return  ErrorCodeEnum::key(data);
+    data = code;
+    
+    switch (code) {
+            
+        case ERROR_OK:
+            assert(false);
+            break;
+            
+        case ERROR_OPT_UNSUPPORTED:
+            description = "This option is not supported yet.";
+            break;
+            
+        case ERROR_OPT_INVALID_ARG:
+            description = "Invalid argument. Expected: " + s;
+            break;
+            
+        case ERROR_OPT_LOCKED:
+            description = "This option is locked because the Amiga is powered on.";
+            break;
+
+        case ERROR_FILE_NOT_FOUND:
+            description = "File \"" + s + "\" not found.";
+            break;
+            
+        case ERROR_FILE_TYPE_MISMATCH:
+            description = "The file content and the file type do not match.";
+            break;
+            
+        case ERROR_FILE_CANT_READ:
+            description = "Failed to read from file \"" + s + "\".";
+            break;
+            
+        case ERROR_FILE_CANT_WRITE:
+            description = "Failed to write to file \"" + s + "\".";
+            break;
+            
+        case ERROR_FILE_CANT_CREATE:
+            description = "Failed to create file \"" + s + "\".";
+            break;
+
+        case ERROR_OUT_OF_MEMORY:
+            description = "Out of memory.";
+            break;
+            
+        case ERROR_CHIP_RAM_MISSING:
+            description = "No Chip RAM installed.";
+            break;
+            
+        case ERROR_CHIP_RAM_LIMIT:
+            description = "Agnus is not able to handle the installed amount of Chip RAM.";
+            break;
+
+        case ERROR_AROS_RAM_LIMIT:
+            description = "The Aros Kickstart requires at least 1 MB of memory.";
+            break;
+
+        case ERROR_ROM_MISSING:
+            description = "No Rom installed.";
+            break;
+            
+        case ERROR_AROS_NO_EXTROM:
+            description = "No Extension Rom installed.";
+            break;
+
+        case ERROR_DISK_CANT_DECODE:
+            description = "Unable to decode the MFM bit stream.";
+            break;
+
+        case ERROR_DISK_INVALID_DIAMETER:
+            description = "Invalid disk diameter.";
+            break;
+
+        case ERROR_DISK_INVALID_DENSITY:
+            description = "Invalid disk density.";
+            break;
+            
+        case ERROR_SNP_TOO_OLD:
+            description = "The snapshot was created with an older version of vAmiga";
+            description += " and is incompatible with this release.";
+            break;
+
+        case ERROR_SNP_TOO_NEW:
+            description = "The snapshot was created with a newer version of vAmiga";
+            description += " and is incompatible with this release.";
+            break;
+
+        case ERROR_MISSING_ROM_KEY:
+            description = "No \"key.rom\" file found.";
+            break;
+
+        case ERROR_INVALID_ROM_KEY:
+            description = "Invalid Rom key.";
+            break;
+            
+        case ERROR_FS_UNSUPPORTED:
+            description = "Unsupported file system.";
+            break;
+            
+        case ERROR_FS_WRONG_BSIZE:
+            description = "Invalid block size.";
+            break;
+
+        case ERROR_FS_WRONG_CAPACITY:
+            description = "Wrong file system capacity.";
+            break;
+
+        case ERROR_FS_HAS_CYCLES:
+            description = "Cyclic reference chain detected.";
+            break;
+
+        case ERROR_FS_CORRUPTED:
+            description = "Corrupted file system.";
+            break;
+
+        case ERROR_FS_DIRECTORY_NOT_EMPTY:
+            description = "Directory is not empty.";
+            break;
+
+        case ERROR_FS_CANNOT_CREATE_DIR:
+            description = "Unable to create directory.";
+            break;
+
+        case ERROR_FS_CANNOT_CREATE_FILE:
+            description = "Unable to create file.";
+            break;
+
+        default:
+            description = "Error code " + std::to_string(data) + " (" + ErrorCodeEnum::key(data) + ").";
+            break;
+    }
 }
 
 const char *
-ConfigError::what() const throw()
+VAError::what() const throw()
 {
-    return  description.c_str();
+    return description.c_str();
 }

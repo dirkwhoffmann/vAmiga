@@ -140,7 +140,7 @@ Muxer::setConfigItem(Option option, i64 value)
         case OPT_SAMPLING_METHOD:
             
             if (!SamplingMethodEnum::isValid(value)) {
-                throw ConfigArgError(SamplingMethodEnum::keyList());
+                throw VAError(ERROR_OPT_INVALID_ARG, SamplingMethodEnum::keyList());
             }
             if (config.samplingMethod == value) {
                 return false;
@@ -152,7 +152,7 @@ Muxer::setConfigItem(Option option, i64 value)
         case OPT_FILTER_TYPE:
             
             if (!FilterTypeEnum::isValid(value)) {
-                throw ConfigArgError(FilterTypeEnum::keyList());
+                throw VAError(ERROR_OPT_INVALID_ARG, FilterTypeEnum::keyList());
             }
             if (config.filterType == value) {
                 return false;

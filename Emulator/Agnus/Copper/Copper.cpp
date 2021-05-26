@@ -67,10 +67,7 @@ Copper::_dump(dump::Category category, std::ostream& os) const
         os << tab("Active Copper list");
         os << dec(copList) << std::endl;
         os << tab("Skip flag");
-        os << bol(skip) << std::endl;
-        
-        // Remove ASAP
-        debugger.dump(category, os);
+        os << bol(skip) << std::endl;        
     }
     
     if (category & dump::Registers) {

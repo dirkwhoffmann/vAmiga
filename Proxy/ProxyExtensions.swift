@@ -17,34 +17,33 @@ extension Proxy {
         
         track()
         
-        var ec = ErrorCode.OK
-        let obj = T.make(withBuffer: buffer, length: length, error: &ec)
-        if ec != ErrorCode.OK { throw VAError(ec) }
-        if obj == nil { fatalError() }
+        let exc = ExceptionWrapper()
+        let obj = T.make(withBuffer: buffer, length: length, exception: exc)
+        if exc.errorCode != ErrorCode.OK { throw VAError(exc) }
         return obj!
     }
     
     static func make<T: MakeWithFile>(url: URL) throws -> T {
         
-        var ec = ErrorCode.OK
-        let obj = T.make(withFile: url.path, error: &ec)
-        if ec != ErrorCode.OK { throw VAError(ec) }
+        let exc = ExceptionWrapper()
+        let obj = T.make(withFile: url.path, exception: exc)
+        if exc.errorCode != ErrorCode.OK { throw VAError(exc) }
         return obj!
     }
 
     static func make<T: MakeWithDrive>(drive: DriveProxy) throws -> T {
         
-        var ec = ErrorCode.OK
-        let obj = T.make(withDrive: drive, error: &ec)
-        if ec != ErrorCode.OK { throw VAError(ec) }
+        let exc = ExceptionWrapper()
+        let obj = T.make(withDrive: drive, exception: exc)
+        if exc.errorCode != ErrorCode.OK { throw VAError(exc) }
         return obj!
     }
 
     static func make<T: MakeWithFileSystem>(fs: FSDeviceProxy) throws -> T {
         
-        var ec = ErrorCode.OK
-        let obj = T.make(withFileSystem: fs, error: &ec)
-        if ec != ErrorCode.OK { throw VAError(ec) }
+        let exc = ExceptionWrapper()
+        let obj = T.make(withFileSystem: fs, exception: exc)
+        if exc.errorCode != ErrorCode.OK { throw VAError(exc) }
         return obj!
     }
 }
@@ -64,33 +63,75 @@ extension AmigaProxy {
 
     func run() throws {
         
-        var err = ErrorCode.OK
-        run(&err)
-        if err != .OK { throw VAError(err) }
+        let exception = ExceptionWrapper()
+        run(exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
     }
 }
 
 extension MemProxy {
  
+    func loadRom(_ proxy: RomFileProxy) throws {
+
+        let exception = ExceptionWrapper()
+        loadRom(proxy, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+    
+    func loadRom(buffer: Data) throws {
+
+        let exception = ExceptionWrapper()
+        loadRom(fromBuffer: buffer, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+    
+    func loadRom(_ url: URL) throws {
+
+        let exception = ExceptionWrapper()
+        loadRom(fromFile: url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+    
+    func loadExt(_ proxy: ExtendedRomFileProxy) throws {
+
+        let exception = ExceptionWrapper()
+        loadExt(proxy, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
+    func loadExt(buffer: Data) throws {
+
+        let exception = ExceptionWrapper()
+        loadExt(fromBuffer: buffer, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+    
+    func loadExt(_ url: URL) throws {
+
+        let exception = ExceptionWrapper()
+        loadExt(fromFile: url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
     func saveRom(_ url: URL) throws {
 
-        var err = ErrorCode.OK
-        saveRom(url, error: &err)
-        if err != .OK { throw VAError(err) }
+        let exception = ExceptionWrapper()
+        saveRom(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
     }
 
     func saveWom(_ url: URL) throws {
 
-        var err = ErrorCode.OK
-        saveWom(url, error: &err)
-        if err != .OK { throw VAError(err) }
+        let exception = ExceptionWrapper()
+        saveWom(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
     }
 
     func saveExt(_ url: URL) throws {
 
-        var err = ErrorCode.OK
-        saveExt(url, error: &err)
-        if err != .OK { throw VAError(err) }
+        let exception = ExceptionWrapper()
+        saveExt(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
     }
 }
 
@@ -283,11 +324,7 @@ extension NSError {
         case .OUT_OF_MEMORY:
             info1 = "The file operation cannot be performed."
             info2 = "Not enough memory."
-            
-        case .UNSUPPORTED_SNAPSHOT:
-            info1 = "Snapshot " + str + " could not be opened."
-            info2 = "The file was created with a different version of vAmiga."
-            
+                        
         case .MISSING_ROM_KEY:
             info1 = "Failed to decrypt the selected Rom image."
             info2 = "A rom.key file is required to process this file."

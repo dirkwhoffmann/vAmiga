@@ -539,7 +539,7 @@ extension MyController: NSMenuItemValidation {
             
         } catch {
             
-            (error as? VAError)?.cantOpen(url: url)
+            (error as? VAError)?.warning("Failed to insert disk")
         }
     }
     

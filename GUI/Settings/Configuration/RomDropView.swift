@@ -24,6 +24,8 @@ class DropView: NSImageView {
     @IBOutlet var parent: ConfigurationController!
     var amiga: AmigaProxy { return parent.amiga }
 
+    var oldImage: NSImage?
+    
     override func awakeFromNib() {
 
         registerForDraggedTypes([NSPasteboard.PasteboardType.compatibleFileURL])
@@ -35,6 +37,7 @@ class DropView: NSImageView {
 
         if let url = sender.url {
             if acceptDragSource(url: url) {
+                oldImage = image
                 image = NSImage.init(named: "rom_medium")
                 return .copy
             }
@@ -79,11 +82,12 @@ class RomDropView: DropView {
         
         do {
             let rom = try Proxy.make(url: url) as RomFileProxy
-            amiga.mem.loadRom(rom)
+            try amiga.mem.loadRom(rom)
             return true
         } catch {
+            image = oldImage
             let name = url.lastPathComponent
-            (error as? VAError)?.warning("Cannot open Rom file \"\(name)\"")
+            (error as? VAError)?.warning("Cannot open Rom file \"\(name)\"", async: true)
         }
         return false
     }
@@ -105,11 +109,11 @@ class ExtRomDropView: DropView {
         
         do {
             let ext = try Proxy.make(url: url) as ExtendedRomFileProxy
-            amiga.mem.loadExt(ext)
+            try amiga.mem.loadExt(ext)
             return true
         } catch {
             let name = url.lastPathComponent
-            (error as? VAError)?.warning("Cannot open ExtendedRom file \"\(name)\"")
+            (error as? VAError)?.warning("Cannot open extended Rom file \"\(name)\"")
         }
         return false        
     }

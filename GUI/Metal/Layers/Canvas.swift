@@ -208,11 +208,15 @@ class Canvas: Layer {
     override func update(frames: Int64) {
             
         super.update(frames: frames)
-        updateTexture()
+        // updateTexture()
     }
     
     func updateTexture() {
         
+        precondition(longFrameTexture != nil)
+        precondition(shortFrameTexture != nil)
+
+        // track() // "longFrameTexture = \(longFrameTexture)")
         if amiga.poweredOff {
                     
             var buffer = amiga.denise.noise!

@@ -31,10 +31,7 @@ Folder::makeWithFolder(const string &path)
     if (FS_DEBUG) msg("makeWithFolder(%s)\n", path.c_str());
               
     // Only proceed if the provided filename points to a directory
-    if (!isFolder(path.c_str())) {
-        warn("%s is not a directory\n", path.c_str());
-        throw VAError(ERROR_FILE_TYPE_MISMATCH);
-    }
+    if (!isFolder(path.c_str())) throw VAError(ERROR_FILE_TYPE_MISMATCH);
     
     // Create a file system and import the directory
     FSDevice *volume = FSDevice::make(FS_OFS, path.c_str());
@@ -55,16 +52,9 @@ Folder::makeWithFolder(const string &path)
     // volume->dump();
     
     // Convert the file system into an ADF
-    ErrorCode fsError;
-    folder->adf = ADFFile::makeWithVolume(*volume, &fsError);
-    if (FS_DEBUG) msg("makeWithVolume: %s\n", ErrorCodeEnum::key(fsError));
+    folder->adf = ADFFile::makeWithVolume(*volume);
     delete volume;
-    
-    if (!folder->adf) {
-        warn("Failed to create file system from folder %s\n", path.c_str());
-        throw VAError(ERROR_UNKNOWN);
-    }
-    
+        
     return folder;
 }
 

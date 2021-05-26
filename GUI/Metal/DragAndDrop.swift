@@ -112,7 +112,7 @@ public extension MetalView {
                     try document.createAttachment(from: url)
                     return document.mountAttachment()
                 } catch {
-                    (error as? VAError)?.cantOpen(url: url)
+                    (error as? VAError)?.warning("Drag operation failed")
                 }
             }
             return false

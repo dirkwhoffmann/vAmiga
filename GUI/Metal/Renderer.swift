@@ -208,10 +208,13 @@ class Renderer: NSObject, MTKViewDelegate {
             if canvas.isTransparent || animates != 0 { splashScreen.render(encoder) }
             if canvas.isVisible { canvas.render(encoder, flat: flat) }
             if monitors.isVisible { monitors.render(encoder) }
-            
-            // Commit the command buffer
             encoder.endEncoding()
-            buffer.addCompletedHandler { _ in self.semaphore.signal() }
+
+            // Commit the command buffer
+            buffer.addCompletedHandler { _ in
+                self.canvas.updateTexture()
+                self.semaphore.signal()
+            }
             buffer.present(drawable)
             buffer.commit()
         }

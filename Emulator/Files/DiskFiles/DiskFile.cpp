@@ -19,7 +19,7 @@ DiskFile *
 DiskFile::make(const string &path)
 {
     std::ifstream stream(path);
-    if (!stream.is_open()) throw VAError(path, ERROR_FILE_NOT_FOUND);
+    if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND, path);
     
     switch (type(path)) {
             

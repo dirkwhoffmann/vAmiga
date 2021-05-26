@@ -367,28 +367,19 @@ public:
     
     // Installs a Boot Rom or Kickstart Rom
     void loadRom(class RomFile *rom) throws;
-    void loadRom(class RomFile *rom, ErrorCode *ec);
     void loadRom(const string &path) throws;
-    void loadRom(const string &path, ErrorCode *ec);
     void loadRom(const u8 *buf, isize len) throws;
-    void loadRom(const u8 *buf, isize len, ErrorCode *ec);
     
     void loadExt(class ExtendedRomFile *rom) throws;
-    void loadExt(class ExtendedRomFile *rom, ErrorCode *ec);
     void loadExt(const string &path) throws;
-    void loadExt(const string &path, ErrorCode *ec);
     void loadExt(const u8 *buf, isize len) throws;
-    void loadExt(const u8 *buf, isize len, ErrorCode *ec);
         
 public:
     
     // Saves a Rom to disk
     void saveRom(const string &path) throws;
-    void saveRom(const string &path, ErrorCode *ec);
     void saveWom(const string &path) throws;
-    void saveWom(const string &path, ErrorCode *ec);
     void saveExt(const string &path) throws;
-    void saveExt(const string &path, ErrorCode *ec);
 
     
     //

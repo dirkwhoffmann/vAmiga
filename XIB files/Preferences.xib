@@ -99,7 +99,7 @@
             <value key="maxSize" type="size" width="646" height="495"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="646" height="495"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oqr-61-gYB">
                         <rect key="frame" x="13" y="2" width="620" height="479"/>
@@ -467,7 +467,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <action selector="capAspectXAction:" target="-2" id="Mxg-LV-1CI"/>
+                                                <action selector="genAspectXAction:" target="-2" id="Mxg-LV-1CI"/>
                                             </connections>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zOx-VG-0JB">
@@ -489,7 +489,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <action selector="capAspectYAction:" target="-2" id="XKm-w1-Qc3"/>
+                                                <action selector="genAspectYAction:" target="-2" id="XKm-w1-Qc3"/>
                                             </connections>
                                         </textField>
                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dvV-xI-xMu">
@@ -501,13 +501,13 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 <objectValues>
                                                     <string>512</string>
-                                                    <string>1.024</string>
-                                                    <string>2.048</string>
-                                                    <string>4.096</string>
+                                                    <string>1024</string>
+                                                    <string>2048</string>
+                                                    <string>4096</string>
                                                 </objectValues>
                                             </comboBoxCell>
                                             <connections>
-                                                <action selector="capBitrateAction:" target="-2" id="hCP-7S-SjV"/>
+                                                <action selector="genBitRateAction:" target="-2" id="hCP-7S-SjV"/>
                                             </connections>
                                         </comboBox>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SJl-vF-JBM">

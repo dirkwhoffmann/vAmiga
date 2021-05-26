@@ -44,7 +44,7 @@ RTC::setConfigItem(Option option, i64 value)
             #endif
             
             if (!RTCRevisionEnum::isValid(value)) {
-                throw ConfigArgError(RTCRevisionEnum::keyList());
+                throw VAError(ERROR_OPT_INVALID_ARG, RTCRevisionEnum::keyList());
             }
             if (config.model == value) {
                 return false;

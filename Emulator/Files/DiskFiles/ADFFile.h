@@ -35,11 +35,11 @@ public:
 
     static ADFFile *makeWithType(DiskDiameter t, DiskDensity d);    
     static ADFFile *makeWithDisk(class Disk *disk) throws;
-    static ADFFile *makeWithDisk(class Disk *disk, ErrorCode *ec);
+//    static ADFFile *makeWithDisk(class Disk *disk, ErrorCode *ec);
     static ADFFile *makeWithDrive(class Drive *drive) throws;
-    static ADFFile *makeWithDrive(class Drive *drive, ErrorCode *ec);
+//    static ADFFile *makeWithDrive(class Drive *drive, ErrorCode *ec);
     static ADFFile *makeWithVolume(FSDevice &volume) throws;
-    static ADFFile *makeWithVolume(FSDevice &volume, ErrorCode *ec);
+//     static ADFFile *makeWithVolume(FSDevice &volume, ErrorCode *ec);
 
     
     //

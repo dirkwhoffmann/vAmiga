@@ -106,7 +106,7 @@ Agnus::setConfigItem(Option option, i64 value)
             #endif
             
             if (!AgnusRevisionEnum::isValid(value)) {
-                throw ConfigArgError(AgnusRevisionEnum::keyList());
+                throw VAError(ERROR_OPT_INVALID_ARG, AgnusRevisionEnum::keyList());
             }            
             if (config.revision == value) {
                 return false;

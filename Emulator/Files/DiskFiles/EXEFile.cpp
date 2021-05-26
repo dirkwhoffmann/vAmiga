@@ -76,22 +76,10 @@ EXEFile::readFromStream(std::istream &stream)
     }
     
     // Convert the volume into an ADF
-    if (success) {
-        ErrorCode fsError;
-        assert(adf == nullptr);
-        adf = ADFFile::makeWithVolume(*volume, &fsError);
-        if (fsError != ERROR_OK) {
-            warn("readFromBuffer: Cannot export volume (%s)\n",
-                 ErrorCodeEnum::key(fsError));
-        }
-    }
-    
-    // REMOVE ASAP
-    const string dir = "/tmp/test";
-    msg("Doing a test export to %s\n", dir.c_str());
-    
+    if (success) { adf = ADFFile::makeWithVolume(*volume); }
+        
+    // Export the ADF
     volume->exportDirectory(path);
     
-    if (!adf) throw VAError(ERROR_UNKNOWN);
     return result;
 }
