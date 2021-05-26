@@ -21,7 +21,7 @@ extension PreferencesController {
         genScreenshotTargetPopup.selectItem(withTag: pref.screenshotTargetIntValue)
                 
         // Screen captures
-        let hasFFmpeg = amiga.screenRecorder.hasFFmpeg
+        let hasFFmpeg = amiga.recorder.hasFFmpeg
         genSource.selectItem(withTag: pref.captureSource)
         genBitRate.stringValue = "\(pref.bitRate)"
         genAspectX.integerValue = pref.aspectX

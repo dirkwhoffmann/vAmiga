@@ -10,51 +10,79 @@
 class ExportVideoDialog: DialogController {
 
     @IBOutlet weak var text: NSTextField!
-    @IBOutlet weak var subtext: NSTextField!
+    @IBOutlet weak var duration: NSTextField!
+    @IBOutlet weak var sizeOnDisk: NSTextField!
+    @IBOutlet weak var frameRate: NSTextField!
+    @IBOutlet weak var bitRate: NSTextField!
+    @IBOutlet weak var sampleRate: NSTextField!
     @IBOutlet weak var progress: NSProgressIndicator!
-    @IBOutlet weak var button: NSButton!
+    @IBOutlet weak var cancelButton: NSButton!
+    @IBOutlet weak var exportButton: NSButton!
+    @IBOutlet weak var icon: NSImageView!
 
     var panel: NSSavePanel!
 
+    let path = "/tmp/vAmiga.mp4"
+    
     override func showSheet(completionHandler handler: (() -> Void)? = nil) {
             
         track()
-                
+        super.showSheet()
+
+        duration.stringValue = ""
+        sizeOnDisk.stringValue = ""
+        frameRate.stringValue = ""
+        bitRate.stringValue = ""
+        sampleRate.stringValue = ""
+        progress.startAnimation(self)
+            
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            self.text.isHidden = false
+        }
+
+        if amiga.recorder.export(as: path) {
+                        
+            text.stringValue = "MPEG-4 Video Stream"
+            icon.isHidden = false
+            exportButton.isHidden = false
+            sizeOnDisk.stringValue = URL.init(fileURLWithPath: path).fileSizeString
+            duration.stringValue = String(format: "%.1f sec", amiga.recorder.duration)
+            frameRate.stringValue = "\(amiga.recorder.frameRate) Hz"
+            bitRate.stringValue = "\(amiga.recorder.bitRate) kHz"
+            sampleRate.stringValue = "\(amiga.recorder.sampleRate) Hz"
+
+        } else {
+            
+            text.stringValue = "Encoding error"
+            text.textColor = .warningColor
+        }
+        
+        cancelButton.isHidden = false
+        progress.stopAnimation(self)
+        progress.isHidden = true
+    }
+    
+    @IBAction func exportAction(_ sender: NSButton!) {
+
+        track()
+        
         // Create save panel
         panel = NSSavePanel()
-        panel.prompt = "Export"
-        panel.title = "Export"
         panel.allowedFileTypes = ["mp4"]
         
         // Run panel as sheet
-        if let win = parent.window {
+        if let win = window {
+            track()
             panel.beginSheetModal(for: win, completionHandler: { result in
                 if result == .OK {
+                    track()
                     if let url = self.panel.url {
                         track("url = \(url)")
-                        self.export(to: url)
+                        let source = URL.init(fileURLWithPath: self.path)
+                        FileManager.copy(from: source, to: url)
                     }
                 }
             })
         }
-    }
-    
-    func export(to url: URL) {
-
-        track("url = \(url)")
-
-        super.showSheet()
-
-        text.stringValue = "Exporting video to"
-        subtext.stringValue = url.path
-        button.isHidden = true
-        progress.startAnimation(self)
-                
-        amiga.screenRecorder.export(as: url.path)
-
-        text.stringValue = "Video exported to"
-        progress.stopAnimation(self)
-        progress.isHidden = true
-        button.isHidden = false
     }
 }

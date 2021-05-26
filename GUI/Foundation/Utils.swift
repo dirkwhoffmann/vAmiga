@@ -109,6 +109,27 @@ extension URL {
     }
 
     //
+    // Querying file attributes
+    //
+    
+    var attributes: [FileAttributeKey: Any]? {
+        
+        return try? FileManager.default.attributesOfItem(atPath: path)
+    }
+    
+    var fileSize: UInt64 {
+        return attributes?[.size] as? UInt64 ?? UInt64(0)
+    }
+    
+    var fileSizeString: String {
+        return ByteCountFormatter.string(fromByteCount: Int64(fileSize), countStyle: .file)
+    }
+    
+    var creationDate: Date? {
+        return attributes?[.creationDate] as? Date
+    }
+    
+    //
     // Working with folders
     //
     
@@ -379,6 +400,20 @@ extension FileManager {
         let result = String(data: data, encoding: .utf8)
         
         return result
+    }
+    
+    @discardableResult
+    static func copy(from source: URL, to dest: URL) -> Bool {
+        
+        do {
+            if FileManager.default.fileExists(atPath: dest.path) {
+                try FileManager.default.removeItem(at: dest)
+            }
+            try FileManager.default.copyItem(at: source, to: dest)
+        } catch {
+            return false
+        }
+        return true
     }
 }
 

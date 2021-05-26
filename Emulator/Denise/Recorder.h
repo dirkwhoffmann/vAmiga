@@ -10,9 +10,10 @@
 #pragma once
 
 #include "AmigaComponent.h"
+#include "Chrono.h"
 #include "Muxer.h"
 
-class ScreenRecorder : public AmigaComponent {
+class Recorder : public AmigaComponent {
 
     //
     // Constants
@@ -28,11 +29,6 @@ class ScreenRecorder : public AmigaComponent {
     // Path to the two temporary output files
     static string videoStreamPath() { return "/tmp/video.mp4"; }
     static string audioStreamPath() { return "/tmp/audio.mp4"; }
-
-    // Audio sample frequency in the output stream
-    static const int frameRate = 50;
-    static const int sampleRate = 44100;
-    static const int samplesPerFrame = sampleRate / frameRate;
 
     // Log level passed to FFmpef
     static const string loglevel() { return REC_DEBUG ? "verbose" : "warning"; }
@@ -63,11 +59,9 @@ class ScreenRecorder : public AmigaComponent {
     // Recording status
     //
     
-    // Indicates if a video is being recorded
-    bool recording = false;
-
-    // Number of records that have been made
-    long recordCounter = 0;
+    // The current recorder state
+    enum class State { wait, prepare, record, finalize };
+    State state = State::wait;
     
     // Audio has been recorded up to this cycle
     Cycle audioClock = 0;
@@ -77,9 +71,21 @@ class ScreenRecorder : public AmigaComponent {
     // Recording parameters
     //
     
+    // Frame rate, Bit rate, Sample rate
+    isize frameRate = 0;
+    isize bitRate = 0;
+    isize sampleRate = 0;
+
+    // Sound samples per frame
+    isize samplesPerFrame = 0;
+    
     // The texture cutout that is going to be recorded
     struct { int x1; int y1; int x2; int y2; } cutout;
             
+    // Time stamps
+    util::Time recStart;
+    util::Time recStop;
+    
     
     //
     // Initializing
@@ -87,7 +93,7 @@ class ScreenRecorder : public AmigaComponent {
     
 public:
     
-    ScreenRecorder(Amiga& ref);
+    Recorder(Amiga& ref);
     
     const char *getDescription() const override { return "ScreenRecorder"; }
 
@@ -133,25 +139,34 @@ private:
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
+    
+    //
+    // Querying recording parameters
+    //
+
+public:
+    
+    util::Time getDuration() const;
+    isize getFrameRate() const { return frameRate; }
+    isize getBitRate() const { return bitRate; }
+    isize getSampleRate() const { return sampleRate; }
+    
 
     //
-    // Starting and stopping a video stream
+    // Starting and stopping a video capture
     //
     
 public:
         
     // Checks whether the screen is currently recorded
-    bool isRecording() { return recording; }
-    
-    // Returns the record counter
-    long getRecordCounter() { return recordCounter; }
-    
+    bool isRecording() const { return state != State::wait; }
+        
     // Starts the screen recorder
     bool startRecording(int x1, int y1, int x2, int y2,
                         long bitRate,
                         long aspectX,
                         long aspectY);
-
+    
     // Stops the screen recorder
     void stopRecording();
 
@@ -167,4 +182,12 @@ public:
         
     // Records a single frame
     void vsyncHandler(Cycle target);
+    
+private:
+    
+    void prepare();
+    void record(Cycle target);
+    void recordVideo(Cycle target);
+    void recordAudio(Cycle target);
+    void finalize();
 };
