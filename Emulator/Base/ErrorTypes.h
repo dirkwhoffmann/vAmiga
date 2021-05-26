@@ -116,6 +116,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_FILE_CANT_CREATE:            return "CANT_CREATE";
 
             case ERROR_OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
+            case ERROR_CHIP_RAM_MISSING:            return "ERROR_CHIP_RAM_MISSING";
             case ERROR_CHIP_RAM_LIMIT:              return "CHIP_RAM_LIMIT";
             case ERROR_AROS_RAM_LIMIT:              return "AROS_RAM_LIMIT";
 

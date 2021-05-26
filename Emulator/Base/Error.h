@@ -18,8 +18,8 @@
 
 struct VAError : public util::Exception
 {
-    VAError(ErrorCode code) : Exception((i64)code) { }
-    VAError(ErrorCode code, const string &s) : Exception((i64)code, s) { }
+    VAError(ErrorCode code, const string &s);
+    VAError(ErrorCode code) : VAError(code, "") { }
     
     const char *what() const throw() override;
 };

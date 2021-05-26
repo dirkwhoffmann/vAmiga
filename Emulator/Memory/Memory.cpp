@@ -610,13 +610,6 @@ Memory::loadRom(RomFile *file)
 }
 
 void
-Memory::loadRom(RomFile *file, ErrorCode *ec)
-{
-    try { loadRom(file); *ec = ERROR_OK; }
-    catch (VAError &err) { *ec = err.data; }
-}
-
-void
 Memory::loadRom(const string &path)
 {
     RomFile *file = AmigaFile::make <RomFile> (path);
@@ -625,25 +618,11 @@ Memory::loadRom(const string &path)
 }
 
 void
-Memory::loadRom(const string &path, ErrorCode *ec)
-{
-    try { loadRom(path); *ec = ERROR_OK; }
-    catch (VAError &err) { *ec = err.data; }
-}
-
-void
 Memory::loadRom(const u8 *buf, isize len)
 {
     RomFile *file = AmigaFile::make <RomFile> (buf, len);
     loadRom(file);
     delete(file);
-}
-
-void
-Memory::loadRom(const u8 *buf, isize len, ErrorCode *ec)
-{
-    try { *ec = ERROR_OK; loadRom(buf, len); }
-    catch (VAError &err) { *ec = err.data; }
 }
 
 void
@@ -660,13 +639,6 @@ Memory::loadExt(ExtendedRomFile *file)
 }
 
 void
-Memory::loadExt(ExtendedRomFile *file, ErrorCode *ec)
-{
-    try { *ec = ERROR_OK; loadExt(file); }
-    catch (VAError &err) { *ec = err.data; }
-}
-
-void
 Memory::loadExt(const string &path)
 {
     ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (path);
@@ -675,25 +647,10 @@ Memory::loadExt(const string &path)
 }
 
 void
-Memory::loadExt(const string &path, ErrorCode *ec)
-{
-    try { *ec = ERROR_OK; loadExt(path); }
-    catch (VAError &exception) { *ec = exception.data; }
-}
-
-void
 Memory::loadExt(const u8 *buf, isize len)
 {    
     ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (buf, len);
     loadExt(file);
-}
-
-void
-Memory::loadExt(const u8 *buf, isize len, ErrorCode *ec)
-{
-    *ec = ERROR_OK;
-    try { loadExt(buf, len); }
-    catch (VAError &exception) { *ec = exception.data; }
 }
  
 void
@@ -706,13 +663,6 @@ Memory::saveRom(const string &path)
 }
 
 void
-Memory::saveRom(const string &path, ErrorCode *ec)
-{
-    *ec = ERROR_OK;
-    try { saveRom(path); } catch (VAError &err) { *ec = err.data; }
-}
-
-void
 Memory::saveWom(const string &path)
 {
     if (wom == nullptr) return;
@@ -722,26 +672,12 @@ Memory::saveWom(const string &path)
 }
 
 void
-Memory::saveWom(const string &path, ErrorCode *ec)
-{
-    *ec = ERROR_OK;
-    try { saveWom(path); } catch (VAError &err) { *ec = err.data; }
-}
-
-void
 Memory::saveExt(const string &path)
 {
     if (ext == nullptr) return;
 
     RomFile *file = AmigaFile::make <RomFile> (ext, config.extSize);
     file->writeToFile(path);
-}
-
-void
-Memory::saveExt(const string &path, ErrorCode *ec)
-{
-    *ec = ERROR_OK;
-    try { saveExt(path); } catch (VAError &err) { *ec = err.data; }
 }
 
 template <> MemorySource

@@ -64,33 +64,103 @@ extension AmigaProxy {
 
     func run() throws {
         
-        var err = ErrorCode.OK
-        run(&err)
-        if err != .OK { throw VAError(err) }
+        let exception = ExceptionWrapper()
+        run(exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
     }
 }
 
 extension MemProxy {
  
+    func loadRom(buffer: Data) throws {
+
+        let exception = ExceptionWrapper()
+        loadRom(fromBuffer: buffer, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+
+        /*
+        var err = ErrorCode.OK
+        loadRom(fromBuffer: buffer, error: &err)
+        if err != .OK { throw VAError(err) }
+        */
+    }
+    
+    func loadRom(_ url: URL) throws {
+
+        let exception = ExceptionWrapper()
+        loadRom(fromFile: url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+
+        /*
+        var err = ErrorCode.OK
+        loadRom(fromFile: url, error: &err)
+        if err != .OK { throw VAError(err) }
+        */
+    }
+    
+    func loadExt(buffer: Data) throws {
+
+        let exception = ExceptionWrapper()
+        loadExt(fromBuffer: buffer, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+
+        /*
+        var err = ErrorCode.OK
+        loadExt(fromBuffer: buffer, error: &err)
+        if err != .OK { throw VAError(err) }
+        */
+    }
+    
+    func loadExt(_ url: URL) throws {
+
+        let exception = ExceptionWrapper()
+        loadExt(fromFile: url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+
+        /*
+        var err = ErrorCode.OK
+        loadExt(fromFile: url, error: &err)
+        if err != .OK { throw VAError(err) }
+        */
+    }
+
     func saveRom(_ url: URL) throws {
 
+        let exception = ExceptionWrapper()
+        saveRom(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+
+        /*
         var err = ErrorCode.OK
         saveRom(url, error: &err)
         if err != .OK { throw VAError(err) }
+        */
     }
 
     func saveWom(_ url: URL) throws {
 
+        let exception = ExceptionWrapper()
+        saveWom(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+
+        /*
         var err = ErrorCode.OK
         saveWom(url, error: &err)
         if err != .OK { throw VAError(err) }
+        */
     }
 
     func saveExt(_ url: URL) throws {
 
+        let exception = ExceptionWrapper()
+        saveExt(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+
+        /*
         var err = ErrorCode.OK
         saveExt(url, error: &err)
         if err != .OK { throw VAError(err) }
+        */
     }
 }
 

@@ -136,9 +136,6 @@ ADFFile::makeWithVolume(FSDevice &volume)
     volume.exportVolume(adf->data, adf->size, &ec);
     if (ec != ERROR_OK) throw VAError(ec);
     
-    // REMOVE ASAP
-    // adf->dumpSector(0);
-
     return adf;
 }
 

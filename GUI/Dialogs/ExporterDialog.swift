@@ -198,7 +198,6 @@ class ExporterDialog: DialogController {
         // If it is an ADF, try to extract the file system
         if disk != nil { volume = FSDeviceProxy.make(withADF: disk as? ADFFileProxy) }
         
-        // REMOVE ASAP
         // volume?.printDirectory(true)
         
         // If it is not an ADF, try the DOS decoder

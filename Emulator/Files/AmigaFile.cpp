@@ -43,7 +43,7 @@ FileType
 AmigaFile::type(const string &path)
 {
     std::ifstream stream(path);
-    if (!stream.is_open()) return FILETYPE_UKNOWN; // throw VAError(ERROR_FILE_NOT_FOUND);
+    if (!stream.is_open()) return FILETYPE_UKNOWN;
     
     if (Snapshot::isCompatiblePath(path) &&
         Snapshot::isCompatibleStream(stream)) return FILETYPE_SNAPSHOT;
@@ -103,7 +103,7 @@ AmigaFile::readFromFile(const string &path)
     std::ifstream stream(path);
 
     if (!stream.is_open()) {
-        throw VAError(ERROR_FILE_CANT_READ);
+        throw VAError(ERROR_FILE_CANT_READ, path);
     }
     
     isize result = readFromStream(stream);
@@ -148,7 +148,7 @@ AmigaFile::writeToFile(const string &path)
     std::ofstream stream(path);
 
     if (!stream.is_open()) {
-        throw VAError(ERROR_FILE_CANT_WRITE);
+        throw VAError(ERROR_FILE_CANT_WRITE, path);
     }
     
     isize result = writeToStream(stream);

@@ -111,12 +111,12 @@ extension ConfigurationController {
 
     @IBAction func installArosAction(_ sender: NSButton!) {
 
-        let arosRom = NSDataAsset(name: "aros-amiga-m68k-rom")?.data
-        let arosExt = NSDataAsset(name: "aros-amiga-m68k-ext")?.data
+        let arosRom = NSDataAsset(name: "aros-amiga-m68k-rom")!.data
+        let arosExt = NSDataAsset(name: "aros-amiga-m68k-ext")!.data
 
         // Install the Aros Roms
-        amiga.mem.loadRom(fromBuffer: arosRom)
-        amiga.mem.loadExt(fromBuffer: arosExt)
+        try? amiga.mem.loadRom(buffer: arosRom)
+        try? amiga.mem.loadExt(buffer: arosExt)
         config.extStart = 0xE0
 
         // Make sure the machine has enough Ram to run Aros

@@ -10,8 +10,19 @@
 class VAError: Error {
     
     var errorCode: ErrorCode
+    var what: String
+
+    init(_ exception: ExceptionWrapper) {
+
+        self.errorCode = exception.errorCode
+        self.what = exception.what
+    }
     
-    init(_ errorCode: ErrorCode) { self.errorCode = errorCode }
+    init(_ errorCode: ErrorCode, _ what: String = "") {
+        
+        self.errorCode = errorCode
+        self.what = what
+    }
 
     var description: String {
         

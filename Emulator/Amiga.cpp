@@ -552,7 +552,7 @@ void
 Amiga::run()
 {
     debug(RUN_DEBUG, "run()\n");
-    
+        
     // Never call this function inside the emulator thread
     assert(!isEmulatorThread());
     

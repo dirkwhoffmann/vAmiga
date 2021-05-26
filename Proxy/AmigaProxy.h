@@ -43,6 +43,16 @@
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>
 
+@interface ExceptionWrapper : NSObject {
+    
+    ErrorCode errorCode;
+    NSString *what;
+}
+
+@property ErrorCode errorCode;
+@property NSString *what;
+
+@end
 
 //
 // Forward declarations
@@ -81,6 +91,7 @@
 @class SerialPortProxy;
 @class SnapshotProxy;
 
+
 //
 // Base proxies
 //
@@ -88,10 +99,7 @@
 @interface Proxy : NSObject {
     
     // Reference to the wrapped C++ object
-    @public void *obj;
-    
-    // Error string (used for exception passing)
-    @public NSString *error;
+    @public void *obj;    
 }
 
 @end
@@ -99,7 +107,7 @@
 @interface HardwareComponentProxy : Proxy { }
 
 - (void)dump;
-- (void) dumpConfig;
+- (void)dumpConfig;
 
 @end
 
@@ -108,9 +116,7 @@
 //
 
 @interface AmigaProxy : HardwareComponentProxy {
-    
-    // struct AmigaWrapper *wrapper;
-    
+        
     AgnusProxy *agnus;
     GuardsProxy *breakpoints;
     CIAProxy *ciaA;
@@ -184,7 +190,8 @@
 @property (readonly) BOOL running;
 @property (readonly) BOOL paused;
 
-- (void)run:(ErrorCode *)ec;
+// - (void)run:(ErrorCode *)ec;
+- (void)run:(ExceptionWrapper *)exc;
 - (void)pause;
 - (void)suspend;
 - (void)resume;
@@ -301,8 +308,8 @@
 - (void)deleteRom;
 - (BOOL)isRom:(NSURL *)url;
 - (void)loadRom:(RomFileProxy *)proxy;
-- (BOOL)loadRomFromBuffer:(NSData *)buffer;
-- (void)loadRomFromFile:(NSURL *)url error:(ErrorCode *)ec;
+- (void)loadRomFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)exc;
+- (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)exc;
 @property (readonly) u64 romFingerprint;
 @property (readonly) RomIdentifier romIdentifier;
 @property (readonly, copy) NSString *romTitle;
@@ -313,8 +320,8 @@
 - (void)deleteExt;
 - (BOOL)isExt:(NSURL *)url;
 - (void)loadExt:(ExtendedRomFileProxy *)proxy;
-- (BOOL)loadExtFromBuffer:(NSData *)buffer;
-- (void)loadExtFromFile:(NSURL *)url error:(ErrorCode *)ec;
+- (void)loadExtFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)exc;
+- (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)exc;
 @property (readonly) u64 extFingerprint;
 @property (readonly) RomIdentifier extIdentifier;
 @property (readonly, copy) NSString *extTitle;
@@ -322,9 +329,14 @@
 @property (readonly, copy) NSString *extReleased;
 @property (readonly) NSInteger extStart;
 
+/*
 - (void)saveRom:(NSURL *)url error:(ErrorCode *)ec;
 - (void)saveWom:(NSURL *)url error:(ErrorCode *)ec;
 - (void)saveExt:(NSURL *)url error:(ErrorCode *)ec;
+ */
+- (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)exc;
+- (void)saveWom:(NSURL *)url exception:(ExceptionWrapper *)exc;
+- (void)saveExt:(NSURL *)url exception:(ExceptionWrapper *)exc;
 
 - (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr;
 - (NSInteger)spypeek16:(Accessor)accessor addr:(NSInteger)addr;
@@ -677,6 +689,7 @@
 }
 
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec;
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec;
 + (instancetype)makeWithAmiga:(AmigaProxy *)proxy;
 

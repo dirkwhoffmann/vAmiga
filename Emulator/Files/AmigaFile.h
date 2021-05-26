@@ -132,7 +132,7 @@ public:
     template <class T> static T *make(const string &path) throws
     {
         std::ifstream stream(path);
-        if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND);
+        if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND, path);
 
         T *file = make <T> (path, stream);
         return file;
@@ -143,7 +143,7 @@ public:
         try { *err = ERROR_OK; return make <T> (path); }
         catch (VAError &exception) { *err = exception.data; return nullptr; }
     }
-
+    
     template <class T> static T *make(FILE *file) throws
     {
         assert(file);
