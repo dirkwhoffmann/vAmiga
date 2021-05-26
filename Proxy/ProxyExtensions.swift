@@ -226,7 +226,7 @@ public extension DriveProxy {
             name = isModifiedDisk ? "diskUTemplate" : "diskTemplate"
         }
 
-        return NSImage.init(named: name)!
+        return NSImage(named: name)!
     }
 }
 
@@ -247,7 +247,7 @@ extension DiskFileProxy {
         }
         
         if protected { name += "_protected" }
-        return NSImage.init(named: name)!
+        return NSImage(named: name)!
     }
     
     var layoutInfo: String {
@@ -278,7 +278,7 @@ extension HDFFileProxy {
     
     func icon() -> NSImage {
         
-        return NSImage.init(named: "hdf")!
+        return NSImage(named: "hdf")!
     }
     
     var layoutInfo: String {
@@ -340,7 +340,8 @@ extension NSError {
         
         return NSError(domain: "vAmiga", code: ec.rawValue,
                        userInfo: [NSLocalizedDescriptionKey: info1,
-                                  NSLocalizedRecoverySuggestionErrorKey: info2])
+                                  NSLocalizedRecoverySuggestionErrorKey: info2,
+                                  NSURLErrorKey: url])
     }
 }
 
@@ -361,24 +362,27 @@ extension NSAlert {
         addButton(withTitle: "OK")
     }
             
-    // DEPRECATED
+    /// DEPRECATED
+    @available(macOS, deprecated)
     static func warning(_ msg1: String, _ msg2: String, icon: String? = nil) {
 
         alert(msg1, msg2, style: .warning, icon: icon)
     }
 
-    // DEPRECATED
+    /// DEPRECATED
+    @available(macOS, deprecated)
     static func critical(_ msg1: String, _ msg2: String, icon: String? = nil) {
         
         alert(msg1, msg2, style: .critical, icon: icon)
     }
     
-    // DEPRECATED
+    /// DEPRECATED
+    @available(macOS, deprecated)
     static func alert(_ msg1: String, _ msg2: String, style: NSAlert.Style, icon: String?) {
         
         let alert = NSAlert()
         alert.alertStyle = style
-        if icon != nil { alert.icon = NSImage.init(named: icon!) }
+        if let icon = icon { alert.icon = NSImage(named: icon) }
         alert.messageText = msg1
         alert.informativeText = msg2
         alert.addButton(withTitle: "OK")
@@ -390,7 +394,7 @@ extension ErrorCode {
     
     func showAlert(url: URL) {
         
-        let alert = NSAlert.init(fileError: self, url: url)
+        let alert = NSAlert(fileError: self, url: url)
         alert.runModal()
     }
 }

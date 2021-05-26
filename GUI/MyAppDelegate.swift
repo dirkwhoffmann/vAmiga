@@ -178,22 +178,22 @@ extension MyAppDelegate {
         }
     }
     
-    // Callen when a HID device has been added
+    /// Callen when a HID device has been added
     func deviceAdded() {
         prefController?.refresh()
     }
     
-    // Callen when a HID device has been removed
+    /// Callen when a HID device has been removed
     func deviceRemoved() {
         prefController?.refresh()
     }
 
-    // Callen when a HID device has been pulled
+    /// Callen when a HID device has been pulled
     func devicePulled(events: [GamePadAction]) {
         prefController?.refreshDeviceEvents(events: events)
     }
 
-    // Use this variable to switch direct mapping of the Command keys on or off
+    /// Use this variable to switch direct mapping of the Command keys on or off
     var mapCommandKeys: Bool {
         
         get {
@@ -261,12 +261,11 @@ extension MyAppDelegate {
     }
 }
 
-/* To establish a direct mapping of the Command keys to the Amiga keys, this
- * callback is registered. It intercepts keyDown and keyUp events and filters
- * out the Command key modifier flag. As a result, all keyboard shortcuts are
- * disabled and all keys that are pressed in combination with the Command key
- * will trigger a standard Cocoa key event.
- */
+/// To establish a direct mapping of the Command keys to the Amiga keys, this
+/// callback is registered. It intercepts keyDown and keyUp events and filters
+/// out the Command key modifier flag. As a result, all keyboard shortcuts are
+/// disabled and all keys that are pressed in combination with the Command key
+/// will trigger a standard Cocoa key event.
 func cgEventCallback(proxy: CGEventTapProxy,
                      type: CGEventType,
                      event: CGEvent,

@@ -9,28 +9,28 @@
 
 class Screenshot: CustomStringConvertible {
     
-    // The actual screenshot
+    /// The actual screenshot
     var screen: NSImage?
     
-    // Proposed file format for this screenshot
+    /// Proposed file format for this screenshot
     var format = NSBitmapImageRep.FileType.jpeg
     
-    // Creation date
+    /// Creation date
     var date = Date()
     
-    // Image width and heigt
+    /// Image width and heigt
     var width: Int { return Int(screen?.size.width ?? 0) }
     var height: Int { return Int(screen?.size.height ?? 0) }
 
-    // Indicates if the upspaced texture has been recorded
+    /// Indicates if the upspaced texture has been recorded
     var upscaled: Bool { return height > 1000 }
 
-    // Textual description of the image source
+    /// Textual description of the image source
     var sourceString: String {
         return upscaled ? "upscaled texture" : "emulator texture"
     }
     
-    // Textual description of the image format
+    /// Textual description of the image format
     var formatString: String {
         switch format {
         case .tiff: return "TIFF image"
@@ -42,12 +42,12 @@ class Screenshot: CustomStringConvertible {
         }
     }
     
-    // Combined textual description
+    /// Combined textual description
     var description: String {
         return formatString + " from " + sourceString
     }
     
-    // Textual representation of the image size
+    /// Textual representation of the image size
     var sizeString: String {
         return screen != nil ? "\(width) x \(height)" : ""
     }
