@@ -15,7 +15,7 @@
 #include "Memory.h"
 #include "PixelEngine.h"
 #include "Reflection.h"
-#include "ScreenRecorder.h"
+#include "Recorder.h"
 
 class Denise : public AmigaComponent {
 
@@ -46,7 +46,7 @@ public:
     PixelEngine pixelEngine = PixelEngine(amiga);
 
     // A screen recorder for creating video streams
-    ScreenRecorder screenRecorder = ScreenRecorder(amiga);
+    Recorder screenRecorder = Recorder(amiga);
 
 
     //

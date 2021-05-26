@@ -14,8 +14,7 @@ extension MyController: NSMenuItemValidation {
         let powered = amiga.poweredOn
         let running = amiga.running
         let paused = amiga.paused
-        let recording = amiga.screenRecorder.recording
-        let counter = amiga.screenRecorder.recordCounter
+        let recording = amiga.recorder.recording
         
         var dfn: DriveProxy { return amiga.df(item.tag)! }
         
@@ -45,9 +44,6 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.captureScreenAction(_:)):
             item.title = recording ? "Stop Recording" : "Record Screen"
             return true
-
-        case #selector(MyController.exportVideoAction(_:)):
-            return counter > 0
 
         // Edit menu
         case #selector(MyController.stopAndGoAction(_:)):
@@ -256,15 +252,16 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func captureScreenAction(_ sender: Any!) {
         
-        track("Recording = \(amiga.screenRecorder.recording)")
+        track("Recording = \(amiga.recorder.recording)")
         
-        if amiga.screenRecorder.recording {
+        if amiga.recorder.recording {
             
-            amiga.screenRecorder.stopRecording()
+            amiga.recorder.stopRecording()
+            exportVideoAction(self)
             return
         }
         
-        if !amiga.screenRecorder.hasFFmpeg {
+        if !amiga.recorder.hasFFmpeg {
             showMissingFFmpegAlert()
             return
         }
@@ -276,19 +273,13 @@ extension MyController: NSMenuItemValidation {
             rect = renderer.canvas.entire
         }
         
-        track("Cature source = \(pref.captureSource)")
-        track("(\(rect.minX),\(rect.minY)) - (\(rect.maxX),\(rect.maxY))")
-        
-        let success = amiga.screenRecorder.startRecording(rect,
-                                                          bitRate: pref.bitRate,
-                                                          aspectX: pref.aspectX,
-                                                          aspectY: pref.aspectY)
-        
+        let success = amiga.recorder.startRecording(rect,
+                                                    bitRate: pref.bitRate,
+                                                    aspectX: pref.aspectX,
+                                                    aspectY: pref.aspectY)
         if !success {
             showFailedToLaunchFFmpegAlert()
-            return
         }
-        
     }
     
     @IBAction func exportVideoAction(_ sender: Any!) {

@@ -129,7 +129,7 @@ Amiga::Amiga()
         msg("       PixelEngine : %zu bytes\n", sizeof(PixelEngine));
         msg("               RTC : %zu bytes\n", sizeof(RTC));
         msg("           Sampler : %zu bytes\n", sizeof(Sampler));
-        msg("    ScreenRecorder : %zu bytes\n", sizeof(ScreenRecorder));
+        msg("    ScreenRecorder : %zu bytes\n", sizeof(Recorder));
         msg("        SerialPort : %zu bytes\n", sizeof(SerialPort));
         msg("            Volume : %zu bytes\n", sizeof(Volume));
         msg("             Zorro : %zu bytes\n", sizeof(ZorroManager));
@@ -470,8 +470,8 @@ Amiga::powerOn()
         
         assert(p == (pthread_t)0);
         
-        // Check if the emulator is fully configured
-        ErrorCode ec; if (!isReady(&ec)) throw VAError(ec);
+        // Throw an exception if the emulator is not fully configured
+        isReady();
         
         // Perform a hard reset
         hardReset();
@@ -669,52 +669,36 @@ Amiga::debugOff()
     }
 }
 
-bool
+void
 Amiga::isReady()
 {
-    ErrorCode ec;
-    return isReady(&ec);
-}
-
-bool
-Amiga::isReady(ErrorCode *ec)
-{
-    assert(ec);
-    
     if (!mem.hasRom()) {
         msg("isReady: No Boot Rom or Kickstart Rom found\n");
-        *ec = ERROR_ROM_MISSING;
-        return false;
+        throw VAError(ERROR_ROM_MISSING);
     }
 
     if (!mem.hasChipRam()) {
         msg("isReady: No Chip Ram found\n");
-        *ec = ERROR_CHIP_RAM_MISSING;
-        return false;
+        throw VAError(ERROR_CHIP_RAM_MISSING);
     }
     
     if (mem.hasArosRom()) {
 
         if (!mem.hasExt()) {
             msg("isReady: Aros requires an extension Rom\n");
-            *ec = ERROR_AROS_NO_EXTROM;
-            return false;
+            throw VAError(ERROR_AROS_NO_EXTROM);
         }
 
         if (mem.ramSize() < MB(1)) {
             msg("isReady: Aros requires at least 1 MB of memory\n");
-            *ec = ERROR_AROS_RAM_LIMIT;
-            return false;
+            throw VAError(ERROR_AROS_RAM_LIMIT);
         }
     }
 
     if (mem.chipRamSize() > KB(agnus.chipRamLimit())) {
         msg("isReady: Chip Ram exceeds Agnus limit\n");
-        *ec = ERROR_CHIP_RAM_LIMIT;
-        return false;
+        throw VAError(ERROR_CHIP_RAM_LIMIT);
     }
-
-    return true;
 }
 
 void

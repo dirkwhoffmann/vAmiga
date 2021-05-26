@@ -86,7 +86,7 @@
 @class RetroShellProxy;
 @class RomFileProxy;
 @class RtcProxy;
-@class ScreenRecorderProxy;
+@class RecorderProxy;
 @class ScriptProxy;
 @class SerialPortProxy;
 @class SnapshotProxy;
@@ -137,7 +137,7 @@
     PaulaProxy *paula;
     RetroShellProxy *retroShell;
     RtcProxy *rtc;
-    ScreenRecorderProxy *screenRecorder;
+    RecorderProxy *recorder;
     SerialPortProxy *serialPort;
     GuardsProxy *watchpoints;
 }
@@ -164,7 +164,7 @@
 @property (readonly, strong) PaulaProxy *paula;
 @property (readonly, strong) RetroShellProxy *retroShell;
 @property (readonly, strong) RtcProxy *rtc;
-@property (readonly, strong) ScreenRecorderProxy *screenRecorder;
+@property (readonly, strong) RecorderProxy *recorder;
 @property (readonly, strong) SerialPortProxy *serialPort;
 
 - (void)dealloc;
@@ -419,14 +419,17 @@
 
 
 //
-// ScreenRecorder
+// Recorder proxy
 //
 
-@interface ScreenRecorderProxy : Proxy { }
+@interface RecorderProxy : Proxy { }
 
 @property (readonly) BOOL hasFFmpeg;
 @property (readonly) BOOL recording;
-@property (readonly) NSInteger recordCounter;
+@property (readonly) double duration;
+@property (readonly) NSInteger frameRate;
+@property (readonly) NSInteger bitRate;
+@property (readonly) NSInteger sampleRate;
 
 - (BOOL)startRecording:(NSRect)rect
                bitRate:(NSInteger)rate

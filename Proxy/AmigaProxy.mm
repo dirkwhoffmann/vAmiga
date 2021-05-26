@@ -716,14 +716,14 @@ using namespace moira;
 
 
 //
-// ScreenRecorder
+// Recorder
 //
 
-@implementation ScreenRecorderProxy
+@implementation RecorderProxy
 
-- (ScreenRecorder *)recorder
+- (Recorder *)recorder
 {
-    return (ScreenRecorder *)obj;
+    return (Recorder *)obj;
 }
 
 - (BOOL)hasFFmpeg
@@ -736,9 +736,24 @@ using namespace moira;
     return [self recorder]->isRecording();
 }
 
-- (NSInteger)recordCounter
+- (double)duration
 {
-    return [self recorder]->getRecordCounter();
+    return [self recorder]->getDuration().asSeconds();
+}
+
+- (NSInteger)frameRate
+{
+    return [self recorder]->getFrameRate();
+}
+
+- (NSInteger)bitRate
+{
+    return [self recorder]->getBitRate();
+}
+
+- (NSInteger)sampleRate
+{
+    return [self recorder]->getSampleRate();
 }
 
 - (BOOL)startRecording:(NSRect)rect
@@ -2092,7 +2107,7 @@ using namespace moira;
 @synthesize retroShell;
 @synthesize rtc;
 @synthesize serialPort;
-@synthesize screenRecorder;
+@synthesize recorder;
 @synthesize watchpoints;
 
 - (instancetype) init
@@ -2127,7 +2142,7 @@ using namespace moira;
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
     retroShell = [[RetroShellProxy alloc] initWith:&amiga->retroShell];
     rtc = [[RtcProxy alloc] initWith:&amiga->rtc];
-    screenRecorder = [[ScreenRecorderProxy alloc] initWith:&amiga->denise.screenRecorder];
+    recorder = [[RecorderProxy alloc] initWith:&amiga->denise.screenRecorder];
     serialPort = [[SerialPortProxy alloc] initWith:&amiga->serialPort];
     watchpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.watchpoints];
 
@@ -2203,12 +2218,20 @@ using namespace moira;
 
 - (BOOL)isReady:(ErrorCode *)error
 {
-    return [self amiga]->isReady(error);
+    try {
+        *error = ERROR_OK;
+        [self amiga]->isReady();
+        return true;
+    } catch (const VAError &exc) {
+        *error = exc.data;
+        return false;
+    }
 }
 
 - (BOOL)isReady
 {
-    return [self amiga]->isReady();
+    ErrorCode ec;
+    return [self isReady:&ec];
 }
 
 - (void)powerOn:(ErrorCode *)ec

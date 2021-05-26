@@ -142,7 +142,7 @@
 		508FE05C21EA22CC0043D0E9 /* ImporterDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04A21EA22CC0043D0E9 /* ImporterDialog.swift */; };
 		508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
 		509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509047B5230575E6009CEC1C /* SlowBlitter.cpp */; };
-		50912FFD2525B7AD0049805B /* ScreenRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50912FFB2525B7AD0049805B /* ScreenRecorder.cpp */; };
+		50912FFD2525B7AD0049805B /* Recorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50912FFB2525B7AD0049805B /* Recorder.cpp */; };
 		50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */ = {isa = PBXBuildFile; fileRef = 50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */; };
 		50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50950ED622881B7A0073F755 /* ZorroManager.cpp */; };
 		50984B65263A9E9C00E37184 /* RegressionTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50984B63263A9B5100E37184 /* RegressionTester.cpp */; };
@@ -189,6 +189,7 @@
 		50B2BC8925EC3D590032EEFE /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C0B78025EC367000CDE1F2 /* IO.cpp */; };
 		50B2E7E325ECE7FF0077B6A3 /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5072159B25EA698600787591 /* Exception.cpp */; };
 		50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
+		50B5663C265E769200226D80 /* DragAndDropImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B5663B265E769200226D80 /* DragAndDropImageView.swift */; };
 		50B5C07E241107F200F124DC /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5C07D241107F200F124DC /* Constants.cpp */; };
 		50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B70CAB252CE0BF006B5191 /* Muxer.cpp */; };
 		50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0724E6BCCA004384C9 /* DiskControllerRegs.cpp */; };
@@ -461,8 +462,8 @@
 		508FE06321EA318D0043D0E9 /* AmigaFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaFile.cpp; sourceTree = "<group>"; };
 		508FE06421EA318D0043D0E9 /* AmigaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmigaFile.h; sourceTree = "<group>"; };
 		509047B5230575E6009CEC1C /* SlowBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SlowBlitter.cpp; sourceTree = "<group>"; };
-		50912FFB2525B7AD0049805B /* ScreenRecorder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScreenRecorder.cpp; sourceTree = "<group>"; };
-		50912FFC2525B7AD0049805B /* ScreenRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScreenRecorder.h; sourceTree = "<group>"; };
+		50912FFB2525B7AD0049805B /* Recorder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Recorder.cpp; sourceTree = "<group>"; };
+		50912FFC2525B7AD0049805B /* Recorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Recorder.h; sourceTree = "<group>"; };
 		50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraExceptions_cpp.h; sourceTree = "<group>"; };
 		50950ED622881B7A0073F755 /* ZorroManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZorroManager.cpp; sourceTree = "<group>"; };
 		50950ED722881B7A0073F755 /* ZorroManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZorroManager.h; sourceTree = "<group>"; };
@@ -545,6 +546,7 @@
 		50B35B6122B2382E001A9C17 /* SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerialPort.h; sourceTree = "<group>"; };
 		50B3C44725EAFB5500651700 /* Checksum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Checksum.cpp; sourceTree = "<group>"; };
 		50B3C44825EAFB5500651700 /* Checksum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Checksum.h; sourceTree = "<group>"; };
+		50B5663B265E769200226D80 /* DragAndDropImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragAndDropImageView.swift; sourceTree = "<group>"; };
 		50B5C07D241107F200F124DC /* Constants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
 		50B70CAB252CE0BF006B5191 /* Muxer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Muxer.cpp; sourceTree = "<group>"; };
 		50B70CAC252CE0BF006B5191 /* Muxer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Muxer.h; sourceTree = "<group>"; };
@@ -779,8 +781,8 @@
 				50A61413260CCF9B00A01428 /* PixelEngineTypes.h */,
 				502F7DD32221E52200AEEC65 /* PixelEngine.h */,
 				502F7DD22221E52200AEEC65 /* PixelEngine.cpp */,
-				50912FFC2525B7AD0049805B /* ScreenRecorder.h */,
-				50912FFB2525B7AD0049805B /* ScreenRecorder.cpp */,
+				50912FFC2525B7AD0049805B /* Recorder.h */,
+				50912FFB2525B7AD0049805B /* Recorder.cpp */,
 			);
 			path = Denise;
 			sourceTree = "<group>";
@@ -1035,6 +1037,7 @@
 				508FE04A21EA22CC0043D0E9 /* ImporterDialog.swift */,
 				506B471C256396BC009FEFC3 /* ExporterDialog.swift */,
 				50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */,
+				50B5663B265E769200226D80 /* DragAndDropImageView.swift */,
 				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
 				509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */,
 				507727EC242F2CE3009D01DA /* iCarousel.h */,
@@ -1599,6 +1602,7 @@
 				505C010A2577A8C000F9E05C /* FSDescriptors.cpp in Sources */,
 				506B471D256396BC009FEFC3 /* ExporterDialog.swift in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
+				50B5663C265E769200226D80 /* DragAndDropImageView.swift in Sources */,
 				50AE6EE324D9B08C000AA367 /* PaulaRegisters.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				50565072254573E100A79D27 /* FSBlock.cpp in Sources */,
@@ -1704,7 +1708,7 @@
 				50AE6EE724D9B2C7000AA367 /* StateMachineRegs.cpp in Sources */,
 				507DF0AD254710C30079BB98 /* FSFileHeaderBlock.cpp in Sources */,
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
-				50912FFD2525B7AD0049805B /* ScreenRecorder.cpp in Sources */,
+				50912FFD2525B7AD0049805B /* Recorder.cpp in Sources */,
 				507727EE242F2CE4009D01DA /* iCarousel.m in Sources */,
 				50EB8CCE2530710E0053988A /* ExportVideoDialog.swift in Sources */,
 				50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */,
