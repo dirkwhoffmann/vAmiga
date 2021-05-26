@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class Screenshot {
+class Screenshot: CustomStringConvertible {
     
     // The actual screenshot
     var screen: NSImage?
