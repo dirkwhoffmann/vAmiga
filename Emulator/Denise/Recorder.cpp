@@ -38,6 +38,8 @@ void
 Recorder::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
+
+    if (hard) audioClock = 0;
 }
 
 void
@@ -65,7 +67,7 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
                                long aspectY)
 {
     synchronized {
-        
+                
         debug(REC_DEBUG, "startRecording(%d,%d,%d,%d,%ld,%ld,%ld)\n",
               x1, y1, x2, y2, bitRate, aspectX, aspectY);
 
@@ -100,7 +102,7 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
         
         // Set the bit rate, frame rate, and sample rate
         this->bitRate = bitRate;
-        frameRate = 60;
+        frameRate = 50;
         sampleRate = 44100;
         samplesPerFrame = sampleRate / frameRate;
         
