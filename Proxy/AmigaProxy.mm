@@ -359,25 +359,11 @@ using namespace moira;
     return RomFile::isRomFile([url fileSystemRepresentation]);
 }
 
-- (void)loadRom:(RomFileProxy *)proxy
+- (void)loadRom:(RomFileProxy *)proxy exception:(ExceptionWrapper *)exc
 {
-    [self mem]->loadRom((RomFile *)proxy->obj);
+    try { return [self mem]->loadRom((RomFile *)proxy->obj); }
+    catch (VAError &error) { [exc save:error]; }
 }
-
-/*
-- (void)loadRomFromBuffer:(NSData *)data error:(ErrorCode *)ec
-{
-    assert(data);
-    const u8 *bytes = (const u8 *)[data bytes];
-    
-    TRY([self mem]->loadRom(bytes, [data length]))
-}
-
-- (void)loadRomFromFile:(NSURL *)url error:(ErrorCode *)ec
-{
-    TRY([self mem]->loadRom([url fileSystemRepresentation]))
-}
-*/
 
 - (void)loadRomFromBuffer:(NSData *)data exception:(ExceptionWrapper *)exc
 {
@@ -442,20 +428,11 @@ using namespace moira;
     [self mem]->loadExt((ExtendedRomFile *)proxy->obj);
 }
 
-/*
-- (void)loadExtFromBuffer:(NSData *)data error:(ErrorCode *)ec
+- (void)loadExt:(ExtendedRomFileProxy *)proxy exception:(ExceptionWrapper *)exc
 {
-    assert(data);
-    const u8 *bytes = (const u8 *)[data bytes];
-    
-    TRY([self mem]->loadExt(bytes, [data length]))
+    try { return [self mem]->loadExt((ExtendedRomFile *)proxy->obj); }
+    catch (VAError &error) { [exc save:error]; }
 }
-
-- (void)loadExtFromFile:(NSURL *)url error:(ErrorCode *)ec
-{
-    TRY([self mem]->loadExt([url fileSystemRepresentation]))
-}
-*/
 
 - (void)loadExtFromBuffer:(NSData *)data exception:(ExceptionWrapper *)exc
 {
@@ -522,23 +499,6 @@ using namespace moira;
     try { return [self mem]->saveExt([url fileSystemRepresentation]); }
     catch (VAError &error) { [exc save:error]; }
 }
-
-/*
-- (void)saveRom:(NSURL *)url error:(ErrorCode *)ec
-{
-    TRY([self mem]->saveRom([url fileSystemRepresentation]))
-}
-
-- (void)saveWom:(NSURL *)url error:(ErrorCode *)ec
-{
-    TRY([self mem]->saveWom([url fileSystemRepresentation]))
-}
-
-- (void)saveExt:(NSURL *)url error:(ErrorCode *)ec
-{
-    TRY([self mem]->saveExt([url fileSystemRepresentation]))
-}
-*/
 
 - (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr
 {
@@ -1800,25 +1760,13 @@ using namespace moira;
     catch (VAError &error) { [exc save:error]; return nil; }
 }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec
-{
-    ADFFile *archive = AmigaFile::make <ADFFile> ([path fileSystemRepresentation], ec);
-    return [self make: archive];
-}
-
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc
 {
     try { return [self make: AmigaFile::make <ADFFile> ((const u8 *)buf, len)]; }
     catch (VAError &error) { [exc save:error]; return nil; }
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
-{
-    ADFFile *archive = AmigaFile::make <ADFFile> ((const u8 *)buf, len, ec);
-    return [self make: archive];
-}
-
-+ (instancetype)makeWithDrive:(DriveProxy *)proxy error:(ErrorCode *)ec
++ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)exc
 {
     Drive *drive = [proxy drive];
     ADFFile *archive = ADFFile::makeWithDrive(drive);
@@ -1952,11 +1900,13 @@ using namespace moira;
     catch (VAError &error) { [exc save:error]; return nil; }
 }
 
+/*
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec
 {
     IMGFile *archive = AmigaFile::make <IMGFile> ([path fileSystemRepresentation], ec);
     return [self make: archive];
 }
+*/
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc
 {
@@ -1964,16 +1914,18 @@ using namespace moira;
     catch (VAError &error) { [exc save:error]; return nil; }
 }
 
+/*
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
 {
     IMGFile *archive = AmigaFile::make <IMGFile> ((const u8 *)buf, len, ec);
     return [self make: archive];
 }
+*/
 
-+ (instancetype)makeWithDrive:(DriveProxy *)proxy error:(ErrorCode *)ec
++ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)exc
 {
-    IMGFile *archive = IMGFile::makeWithDisk([proxy drive]->disk, ec);
-    return archive ? [self make: archive] : nil;
+    try { return [self make: IMGFile::makeWithDisk([proxy drive]->disk)]; }
+    catch (VAError &error) { [exc save:error]; return nil; }
 }
 
 @end

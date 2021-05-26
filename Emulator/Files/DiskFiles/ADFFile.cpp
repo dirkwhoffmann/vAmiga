@@ -86,6 +86,7 @@ ADFFile::makeWithDisk(Disk *disk)
     return adf;
 }
 
+/*
 ADFFile *
 ADFFile::makeWithDisk(Disk *disk, ErrorCode *ec)
 {
@@ -95,6 +96,7 @@ ADFFile::makeWithDisk(Disk *disk, ErrorCode *ec)
     catch (VAError &exception) { *ec = exception.data; }
     return nullptr;
 }
+*/
 
 ADFFile *
 ADFFile::makeWithDrive(Drive *drive)
@@ -103,6 +105,7 @@ ADFFile::makeWithDrive(Drive *drive)
     return drive->disk ? makeWithDisk(drive->disk) : nullptr;
 }
 
+/*
 ADFFile *
 ADFFile::makeWithDrive(Drive *drive, ErrorCode *ec)
 {
@@ -112,6 +115,7 @@ ADFFile::makeWithDrive(Drive *drive, ErrorCode *ec)
     catch (VAError &exception) { *ec = exception.data; }
     return nullptr;
 }
+*/
 
 ADFFile *
 ADFFile::makeWithVolume(FSDevice &volume)
@@ -139,6 +143,7 @@ ADFFile::makeWithVolume(FSDevice &volume)
     return adf;
 }
 
+/*
 ADFFile *
 ADFFile::makeWithVolume(FSDevice &volume, ErrorCode *ec)
 {
@@ -148,6 +153,7 @@ ADFFile::makeWithVolume(FSDevice &volume, ErrorCode *ec)
     catch (VAError &exception) { *ec = exception.data; }
     return nullptr;
 }
+*/
 
 FSVolumeType
 ADFFile::getDos() const

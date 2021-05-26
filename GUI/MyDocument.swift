@@ -84,55 +84,58 @@ class MyDocument: NSDocument {
     
     fileprivate
     func createFileProxy(from url: URL, allowedTypes: [FileType]) throws -> AmigaFileProxy? {
-        
-        var result: AmigaFileProxy?
-        
+            
         track("Creating proxy object from URL: \(url.lastPathComponent)")
         
         // If the provided URL points to compressed file, decompress it first
         let newUrl = url.unpacked
-
+        
         // Iterate through all allowed file types
         for type in allowedTypes {
             
-            switch type {
-            
-            case .SNAPSHOT:
-                try? result = Proxy.make(url: newUrl) as SnapshotProxy
-
-            case .SCRIPT:
-                try? result = Proxy.make(url: newUrl) as ScriptProxy
-
-            case .ADF:
-                try? result = Proxy.make(url: newUrl) as ADFFileProxy
-                                
-            case .EXT:
-                try? result = Proxy.make(url: newUrl) as EXTFileProxy
+            do {
+                switch type {
                 
-            case .IMG:
-                try? result = Proxy.make(url: newUrl) as IMGFileProxy
+                case .SNAPSHOT:
+                    return try Proxy.make(url: newUrl) as SnapshotProxy
+                    
+                case .SCRIPT:
+                    return try Proxy.make(url: newUrl) as ScriptProxy
+                    
+                case .ADF:
+                    return try Proxy.make(url: newUrl) as ADFFileProxy
+                    
+                case .EXT:
+                    return try Proxy.make(url: newUrl) as EXTFileProxy
+                    
+                case .IMG:
+                    return try Proxy.make(url: newUrl) as IMGFileProxy
+                    
+                case .DMS:
+                    return try Proxy.make(url: newUrl) as DMSFileProxy
+                    
+                case .EXE:
+                    return try Proxy.make(url: newUrl) as EXEFileProxy
+                    
+                case .DIR:
+                    return try Proxy.make(url: newUrl) as FolderProxy
+                    
+                case .HDF:
+                    return try Proxy.make(url: newUrl) as HDFFileProxy
+                    
+                default:
+                    fatalError()
+                }
                 
-            case .DMS:
-                try? result = Proxy.make(url: newUrl) as DMSFileProxy
-                
-            case .EXE:
-                try? result = Proxy.make(url: newUrl) as EXEFileProxy
-                
-            case .DIR:
-                try? result = Proxy.make(url: newUrl) as FolderProxy
-                
-            case .HDF:
-                try? result = Proxy.make(url: newUrl) as HDFFileProxy
-                
-            default:
-                fatalError()
+            } catch let error as VAError {
+                if error.errorCode != .FILE_TYPE_MISMATCH {
+                    throw error
+                }
             }
-            
-            if result != nil { return result }
         }
         
         // None of the allowed typed matched the file
-        throw VAError(.FILE_TYPE_MISMATCH)
+        throw VAError(.FILE_TYPE_MISMATCH, url.lastPathComponent)
     }
 
     @discardableResult
@@ -208,7 +211,7 @@ class MyDocument: NSDocument {
         do {
             try createAttachment(from: url)
         } catch let error as VAError {
-            error.cantOpen(url: url)
+            error.warning("Operation failed")
         }
     }
     
@@ -220,7 +223,7 @@ class MyDocument: NSDocument {
             try createAttachment(from: url)
             mountAttachment()
         } catch let error as VAError {
-            error.cantOpen(url: url)
+            error.warning("Operation failed")
         }
     }
     
