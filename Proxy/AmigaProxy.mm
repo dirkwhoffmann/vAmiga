@@ -2203,12 +2203,20 @@ using namespace moira;
 
 - (BOOL)isReady:(ErrorCode *)error
 {
-    return [self amiga]->isReady(error);
+    try {
+        *error = ERROR_OK;
+        [self amiga]->isReady();
+        return true;
+    } catch (const VAError &exc) {
+        *error = exc.data;
+        return false;
+    }
 }
 
 - (BOOL)isReady
 {
-    return [self amiga]->isReady();
+    ErrorCode ec;
+    return [self isReady:&ec];
 }
 
 - (void)powerOn:(ErrorCode *)ec

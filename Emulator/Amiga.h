@@ -260,9 +260,8 @@ public:
     // Returns true if the currently executed thread is the emulator thread
     bool isEmulatorThread() { return pthread_self() == p; }
         
-    // Checks whether the Amiga is ready to run (Kickstart installed, etc.)
-    bool isReady();
-    bool isReady(ErrorCode *error);
+    // Checks whether the Amiga is ready or throws an exception if not
+    void isReady() throws;
     
     /* Pauses the emulation thread temporarily. Because the emulator is running
      * in a separate thread, the GUI has to pause the emulator before changing
