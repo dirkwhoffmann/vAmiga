@@ -48,7 +48,7 @@ extension String {
     
     init?(keyCode: UInt16, carbonFlags: Int) {
         
-        let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource().takeUnretainedValue()
+        let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource().takeRetainedValue()
         let layoutData = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
         let dataRef = unsafeBitCast(layoutData, to: CFData.self)
         let keyLayout = UnsafePointer<CoreServices.UCKeyboardLayout>.self

@@ -7,9 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-extension EventSlot {
+extension EventSlot: CustomStringConvertible {
 
-    var description: String {
+    public var description: String {
         
         switch self {
         
@@ -43,9 +43,9 @@ extension EventSlot {
     }
 }
 
-extension FSVolumeType {
+extension FSVolumeType: CustomStringConvertible {
 
-    var description: String {
+    public var description: String {
         
         switch self {
         case .NODOS:    return "Unknown File System"
@@ -62,9 +62,9 @@ extension FSVolumeType {
     }
 }
 
-extension FSBlockType {
+extension FSBlockType: CustomStringConvertible {
     
-    var description: String {
+    public var description: String {
         
         switch self {
         case .UNKNOWN_BLOCK:    return "Unknown block type"
@@ -83,9 +83,9 @@ extension FSBlockType {
     }
 }
 
-extension FSItemType {
+extension FSItemType: CustomStringConvertible {
     
-    var description: String {
+    public var description: String {
         
         switch self {
         
