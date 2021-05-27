@@ -21,7 +21,7 @@ RetroShell::RetroShell(Amiga& ref) : AmigaComponent(ref), interpreter(ref)
     input.push_back("");
     
     // Print a startup message
-    *this << "vAmiga " << V_MAJOR << '.' << V_MINOR << '.' << V_SUBMINOR;
+    *this << "vAmiga " << VER_MAJOR << '.' << VER_MINOR << '.' << VER_SUBMINOR;
     *this << " (" << __DATE__ << " " << __TIME__ << ")" << '\n';
     *this << '\n';
     *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';

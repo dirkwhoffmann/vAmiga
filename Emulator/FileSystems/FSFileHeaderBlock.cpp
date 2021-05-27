@@ -131,8 +131,6 @@ ErrorCode
 FSFileHeaderBlock::exportBlock(const string &dir)
 {
     string path = dir + "/" + partition.dev.getPath(this);
-
-    printf("Creating file %s\n", path.c_str());
     
     FILE *file = fopen(path.c_str(), "w");
     if (file == nullptr) return ERROR_FS_CANNOT_CREATE_FILE;

@@ -331,7 +331,7 @@ ShakeDetector::isShakingRel(double dx) {
                 // Report a shake if the threshold has been reached.
                 if (dxturns > 3) {
                     
-                    // printf("Mouse shake detected\n");
+                    // debug(PRT_DEBUG, "Mouse shake detected\n");
                     lastShake = util::Time::now().asNanoseconds();
                     dxturns = 0;
                     return true;

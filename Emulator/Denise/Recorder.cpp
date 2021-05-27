@@ -290,8 +290,6 @@ Recorder::vsyncHandler(Cycle target)
 void
 Recorder::prepare()
 {
-    printf("Prepare\n");
-    
     state = State::record;
     audioClock = 0;
     recStart = util::Time::now();

@@ -76,9 +76,9 @@ Snapshot::Snapshot(isize capacity)
     
     for (isize i = 0; i < isizeof(signature); i++)
         header->magic[i] = signature[i];
-    header->major = V_MAJOR;
-    header->minor = V_MINOR;
-    header->subminor = V_SUBMINOR;
+    header->major = SNP_MAJOR;
+    header->minor = SNP_MINOR;
+    header->subminor = SNP_SUBMINOR;
 }
 
 Snapshot *

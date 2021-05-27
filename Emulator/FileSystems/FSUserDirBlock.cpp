@@ -110,8 +110,6 @@ ErrorCode
 FSUserDirBlock::exportBlock(const string &dir)
 {
     string path = dir + "/" + partition.dev.getPath(this);
-
-    printf("Creating directory %s\n", path.c_str());
     
     // Try to create a directory on the host file system
     if (mkdir(path.c_str(), 0777) != 0) return ERROR_FS_CANNOT_CREATE_DIR;

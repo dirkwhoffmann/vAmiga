@@ -13,14 +13,18 @@
 // Release settings
 //
 
-// Snapshot version number
-#define V_MAJOR 1
-#define V_MINOR 0
-#define V_SUBMINOR 0
+// Version number
+#define VER_MAJOR 1
+#define VER_MINOR 0
+#define VER_SUBMINOR 1
 
-// Uncomment these settings in a release build
+// Snapshot version number
+#define SNP_MAJOR 1
+#define SNP_MINOR 0
+#define SNP_SUBMINOR 0
+
+// Uncomment this setting in a release build
 #define RELEASEBUILD
-// #define NDEBUG
 
 //
 // Build settings
@@ -163,6 +167,7 @@ static const int REC_DEBUG       = 0; // Screen recorder
 
 
 #ifdef RELEASEBUILD
+#define NDEBUG
 static const int releaseBuild = 1;
 #else
 static const int releaseBuild = 0;
