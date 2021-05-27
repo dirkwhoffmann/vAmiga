@@ -56,8 +56,8 @@ class DragDropImageView: NSImageView, NSDraggingSource {
         track()
         
         // Create a file promise provider
-        let provider = NSFilePromiseProvider.init(fileType: "public.data",
-                                                  delegate: self)
+        let provider = NSFilePromiseProvider(fileType: "public.data",
+                                             delegate: self)
         
         // Embed the provider into a dragging item
         let draggingItem = NSDraggingItem(pasteboardWriter: provider)
@@ -79,7 +79,7 @@ extension DragDropImageView: NSFilePromiseProviderDelegate {
         
         track("\(url)")
 
-        let source = URL.init(fileURLWithPath: "/tmp/vAmiga.mp4")
+        let source = URL(fileURLWithPath: "/tmp/vAmiga.mp4")
         
         do {
             if FileManager.default.fileExists(atPath: url.path) {

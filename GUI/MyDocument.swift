@@ -25,7 +25,7 @@ class MyDocument: NSDocument {
     var attachment: AmigaFileProxy?
     
     // Snapshots
-    private(set) var snapshots = ManagedArray<SnapshotProxy>.init(capacity: 32)
+    private(set) var snapshots = ManagedArray<SnapshotProxy>(capacity: 32)
 
     // Fingerprint of the first disk inserted into df0 after reset
     var bootDiskID = UInt64(0)
@@ -55,7 +55,7 @@ class MyDocument: NSDocument {
     override open func makeWindowControllers() {
                 
         let nibName = NSNib.Name("MyDocument")
-        let controller = MyController.init(windowNibName: nibName)
+        let controller = MyController(windowNibName: nibName)
         controller.amiga = amiga
         self.addWindowController(controller)
     }

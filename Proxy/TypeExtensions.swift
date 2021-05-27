@@ -143,9 +143,9 @@ extension ErrorCode {
         case .OK:
             return ""
         case .FS_EXPECTED_VALUE:
-            return String.init(format: "Expected $%02X", exp)
+            return String(format: "Expected $%02X", exp)
         case .FS_EXPECTED_SMALLER_VALUE:
-            return String.init(format: "Expected a value less or equal $%02X", exp)
+            return String(format: "Expected a value less or equal $%02X", exp)
         case .FS_EXPECTED_DOS_REVISION:
             return "Expected a value between 0 and 7"
         case .FS_EXPECTED_NO_REF:

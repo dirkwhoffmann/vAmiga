@@ -17,8 +17,8 @@ class Layer: NSObject {
     var amiga: AmigaProxy { return renderer.parent.amiga }
     
     // Alpha channel
-    var alpha: AnimatedFloat = AnimatedFloat.init(0.0)
-    var mix: AnimatedFloat = AnimatedFloat.init(0.0)
+    var alpha: AnimatedFloat = AnimatedFloat(0.0)
+    var mix: AnimatedFloat = AnimatedFloat(0.0)
 
     //
     // Initializing

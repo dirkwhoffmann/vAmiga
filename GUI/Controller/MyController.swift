@@ -86,7 +86,7 @@ class MyController: NSWindowController, MessageReceiver {
     var statusBar = true
 
     // Small disk icon to be shown in NSMenuItems
-    var smallDisk = NSImage.init(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
+    var smallDisk = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
     
     // Drive that receives drag and drop inputs
     var dragAndDropDrive: DriveProxy?
@@ -201,8 +201,8 @@ extension MyController {
     override open func awakeFromNib() {
         
         mydocument = document as? MyDocument
-        config = Configuration.init(with: self)
-        macAudio = MacAudio.init(with: self)
+        config = Configuration(with: self)
+        macAudio = MacAudio(with: self)
     }
 
     override open func windowDidLoad() {
@@ -475,13 +475,13 @@ extension MyController {
             refreshStatusBar()
 
         case .POWER_LED_ON:
-            powerLED.image = NSImage.init(named: "powerLedOn")
+            powerLED.image = NSImage(named: "powerLedOn")
 
         case .POWER_LED_DIM:
-            powerLED.image = NSImage.init(named: "powerLedDim")
+            powerLED.image = NSImage(named: "powerLedDim")
 
         case .POWER_LED_OFF:
-            powerLED.image = NSImage.init(named: "powerLedOff")
+            powerLED.image = NSImage(named: "powerLedOff")
 
         case .CLOSE_CONSOLE:
             renderer.console.close(delay: 0.25)
@@ -565,7 +565,7 @@ extension MyController {
             serialIn += String(UnicodeScalar(msg.data & 0xFF)!)
 
         case .SER_OUT:
-            serialOut += String(UnicodeScalar.init(msg.data & 0xFF)!)
+            serialOut += String(UnicodeScalar(msg.data & 0xFF)!)
 
         case .AUTO_SNAPSHOT_TAKEN:
             mydocument.snapshots.append(amiga.latestAutoSnapshot)
@@ -588,7 +588,7 @@ extension MyController {
             refreshStatusBar()
             
         case .SHAKING:
-            metal.lastShake = DispatchTime.init(uptimeNanoseconds: 0)
+            metal.lastShake = DispatchTime(uptimeNanoseconds: 0)
             if pref.releaseMouseByShaking {
                 metal.releaseMouse()
             }

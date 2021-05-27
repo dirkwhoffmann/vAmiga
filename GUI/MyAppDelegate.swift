@@ -37,7 +37,7 @@ var myAppDelegate: MyAppDelegate {
     var prefController: PreferencesController?
     
     // Information provider for connected HID devices
-    var database = DeviceDatabase.init()
+    var database = DeviceDatabase()
     
     // The list of recently inserted disk URLs.
     var recentlyInsertedDiskURLs: [URL] = [] {
@@ -53,7 +53,7 @@ var myAppDelegate: MyAppDelegate {
     override init() {
         
         super.init()
-        pref = Preferences.init()
+        pref = Preferences()
     }
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {

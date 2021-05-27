@@ -83,10 +83,10 @@ class Renderer: NSObject, MTKViewDelegate {
     var white = AnimatedFloat(0.0)
     
     // Texture animation parameters
-    var cutoutX1 = AnimatedFloat.init(0.0)
-    var cutoutY1 = AnimatedFloat.init(0.0)
-    var cutoutX2 = AnimatedFloat.init(0.0)
-    var cutoutY2 = AnimatedFloat.init(0.0)
+    var cutoutX1 = AnimatedFloat(0.0)
+    var cutoutY1 = AnimatedFloat(0.0)
+    var cutoutX2 = AnimatedFloat(0.0)
+    var cutoutY2 = AnimatedFloat(0.0)
             
     // Indicates if fullscreen mode is enabled
     var fullscreen = false

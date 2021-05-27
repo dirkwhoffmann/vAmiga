@@ -33,7 +33,7 @@ class ActivityMonitor {
     var innerHeight: Float { return 1.0 - borderHeight }
                 
     // Canvas dimensions on the xy plane
-    var position = NSRect.init() { didSet { updateMatrix() } }
+    var position = NSRect() { didSet { updateMatrix() } }
     
     // Rotation angle of the canvas
     var angle = Float(0.0) { didSet { updateMatrix() } }
@@ -94,7 +94,7 @@ class ActivityMonitor {
     }
     
     func setColor(_ color: NSColor) { }
-    func setColor(rgb: (Double, Double, Double)) { setColor(NSColor.init(rgb)) }
+    func setColor(rgb: (Double, Double, Double)) { setColor(NSColor(rgb)) }
     func animate() { }
     func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) { }
 }
@@ -174,7 +174,7 @@ class BarChart: ActivityMonitor {
         upperTexture = device.makeTexture(size: fgSize, buffer: upperBuffer)!
         lowerTexture = device.makeTexture(size: fgSize, buffer: lowerBuffer)!
 
-        bgRect = Node.init(device: device, x: 0.00, y: 0.00, z: 0.001, w: 1.0, h: 1.0)
+        bgRect = Node(device: device, x: 0.00, y: 0.00, z: 0.001, w: 1.0, h: 1.0)
         
         upperValues = Array(repeating: 0.0, count: capacity)
         lowerValues = Array(repeating: 0.0, count: capacity)
@@ -264,12 +264,12 @@ class BarChart: ActivityMonitor {
     
     func setUpperColor(_ rgb: (Double, Double, Double) ) {
         
-        upperColor = NSColor.init(r: rgb.0, g: rgb.1, b: rgb.2)
+        upperColor = NSColor(r: rgb.0, g: rgb.1, b: rgb.2)
     }
 
     func setlowerColor(_ rgb: (Double, Double, Double) ) {
         
-        lowerColor = NSColor.init(r: rgb.0, g: rgb.1, b: rgb.2)
+        lowerColor = NSColor(r: rgb.0, g: rgb.1, b: rgb.2)
     }
 
     func addUpperValue(_ value: Float) {
@@ -310,12 +310,11 @@ class BarChart: ActivityMonitor {
         for n in 0 ..< upperValues.count {
             
             let v = Double(upperValues[n])
-            let t = NSRect.init(x: 0, y: 1.0 - v, width: 1.0, height: v)
+            let t = NSRect(x: 0, y: 1.0 - v, width: 1.0, height: v)
             let x = leftBorder + (Float(n) + 1) * barWidth
             let h = Float(max(v, 0.025) * (splitView ? 0.5 : 1)) * barHeight
             
-            upperBars.append(Node.init(device: device,
-                                       x: x, y: y, z: 0, w: w, h: h, t: t))
+            upperBars.append(Node(device: device, x: x, y: y, z: 0, w: w, h: h, t: t))
         }
     }
     
@@ -328,12 +327,11 @@ class BarChart: ActivityMonitor {
         for n in 0 ..< lowerValues.count {
             
             let v = Double(lowerValues[n])
-            let t = NSRect.init(x: 0, y: 1.0 - v, width: 1.0, height: v)
+            let t = NSRect(x: 0, y: 1.0 - v, width: 1.0, height: v)
             let x = leftBorder + (Float(n) + 1) * barWidth
             let h = Float(max(v, 0.025) * -0.5) * barHeight
             
-            lowerBars.append(Node.init(device: device,
-                                       x: x, y: y, z: 0, w: w, h: h, t: t))
+            lowerBars.append(Node(device: device, x: x, y: y, z: 0, w: w, h: h, t: t))
         }
     }
     
@@ -436,11 +434,11 @@ class WaveformMonitor: ActivityMonitor {
         bgTexture = device.makeTexture(size: size, buffer: bgBuffer)!
         fgTexture = device.makeTexture(size: size, buffer: fgBuffer)!
         
-        bgRect = Node.init(device: device,
-                           x: 0.00, y: 0.00, z: 0.001, w: 1.0, h: 1.0)
-        fgRect = Node.init(device: device,
-                           x: leftBorder, y: lowerBorder,
-                           z: 0.000, w: innerWidth, h: innerHeight)
+        bgRect = Node(device: device,
+                      x: 0.00, y: 0.00, z: 0.001, w: 1.0, h: 1.0)
+        fgRect = Node(device: device,
+                      x: leftBorder, y: lowerBorder,
+                      z: 0.000, w: innerWidth, h: innerHeight)
     }
      
     func initBgBuffer() {

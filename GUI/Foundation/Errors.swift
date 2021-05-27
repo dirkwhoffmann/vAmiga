@@ -37,7 +37,7 @@ class VAError: Error {
             
             let alert = NSAlert()
             alert.alertStyle = style
-            alert.icon = icon != nil ? NSImage.init(named: icon!) : nil
+            alert.icon = icon != nil ? NSImage(named: icon!) : nil
             alert.messageText = msg1
             alert.informativeText = msg2
             alert.addButton(withTitle: "OK")

@@ -117,7 +117,7 @@ class GamePad {
         icon = db.icon(vendorID: vendorID, productID: productID)
 
         if icon == nil && isMouse {
-            icon = NSImage.init(named: "devMouseTemplate")
+            icon = NSImage(named: "devMouseTemplate")
         }
         
         updateMappingScheme()
@@ -175,7 +175,7 @@ class GamePad {
         
     func setIcon(name: String) {
         
-        icon = NSImage.init(named: name)
+        icon = NSImage(named: name)
     }
     
     func property(key: String) -> String? {
@@ -228,7 +228,7 @@ class GamePad {
         
         guard let n = keyMap, let direction = prefs.keyMaps[n][macKey] else { return [] }
                     
-        switch GamePadAction.init(rawValue: direction) {
+        switch GamePadAction(rawValue: direction) {
             
         case .PULL_UP:
             keyUp = true

@@ -63,7 +63,7 @@ class Preferences {
     var blankDiskFormat = PeripheralsDefaults.std.blankDiskFormat
     var blankDiskFormatIntValue: Int {
         get { return Int(blankDiskFormat.rawValue) }
-        set { blankDiskFormat = FSVolumeType.init(rawValue: newValue)! }
+        set { blankDiskFormat = FSVolumeType(rawValue: newValue)! }
     }
     var bootBlock = PeripheralsDefaults.std.bootBlock
     
@@ -77,7 +77,7 @@ class Preferences {
     }
     var warpModeIntValue: Int {
         get { return Int(warpMode.rawValue) }
-        set { warpMode = WarpMode.init(rawValue: newValue)! }
+        set { warpMode = WarpMode(rawValue: newValue)! }
     }
     
     // Misc

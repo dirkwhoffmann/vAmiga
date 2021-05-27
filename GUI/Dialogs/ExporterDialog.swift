@@ -339,15 +339,15 @@ class ExporterDialog: DialogController {
         */
         
         // Update all elements
-        cylinderField.stringValue      = String.init(format: "%d", cylinderNr)
+        cylinderField.stringValue      = String(format: "%d", cylinderNr)
         cylinderStepper.integerValue   = cylinderNr
-        headField.stringValue          = String.init(format: "%d", headNr)
+        headField.stringValue          = String(format: "%d", headNr)
         headStepper.integerValue       = headNr
-        trackField.stringValue         = String.init(format: "%d", trackNr)
+        trackField.stringValue         = String(format: "%d", trackNr)
         trackStepper.integerValue      = trackNr
-        sectorField.stringValue        = String.init(format: "%d", sectorNr)
+        sectorField.stringValue        = String(format: "%d", sectorNr)
         sectorStepper.integerValue     = sectorNr
-        blockField.stringValue         = String.init(format: "%d", blockNr)
+        blockField.stringValue         = String(format: "%d", blockNr)
         blockStepper.integerValue      = blockNr
         corruptionStepper.integerValue = blockNr
         
@@ -380,7 +380,7 @@ class ExporterDialog: DialogController {
         
         if driveNr == nil {
             
-            diskIcon.image = NSImage.init(named: "hdf")!
+            diskIcon.image = NSImage(named: "hdf")!
             virusIcon.isHidden = true
             decontaminationButton.isHidden = true
             

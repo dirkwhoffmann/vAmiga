@@ -27,12 +27,12 @@ extension ConfigurationController {
         let hasCommodoreExt = amiga.mem.isCommodoreRom(extIdentifier)
         let hasHyperionExt  = amiga.mem.isHyperionRom(extIdentifier)
 
-        let romMissing      = NSImage.init(named: "rom_missing")
-        let romOrig         = NSImage.init(named: "rom_original")
-        let romHyperion     = NSImage.init(named: "rom_hyp")
-        let romAros         = NSImage.init(named: "rom_aros")
-        let romDiag         = NSImage.init(named: "rom_diag")
-        let romUnknown      = NSImage.init(named: "rom_unknown")
+        let romMissing      = NSImage(named: "rom_missing")
+        let romOrig         = NSImage(named: "rom_original")
+        let romHyperion     = NSImage(named: "rom_hyp")
+        let romAros         = NSImage(named: "rom_aros")
+        let romDiag         = NSImage(named: "rom_diag")
+        let romUnknown      = NSImage(named: "rom_unknown")
         
         // Lock controls if emulator is powered on
         romDropView.isEnabled = poweredOff
@@ -74,11 +74,11 @@ extension ConfigurationController {
 
         // Lock symbol and explanation
         if poweredOff {
-            romLockImage.image = NSImage.init(named: "NSInfo")
+            romLockImage.image = NSImage(named: "NSInfo")
             romLockText.stringValue = "To add a Rom, drag a Rom image file onto one of the chip icons."
             romLockSubText.stringValue = "Original Roms are protected by copyright. Please obey legal regulations."
         } else {
-            romLockImage.image = NSImage.init(named: "Lock")
+            romLockImage.image = NSImage(named: "Lock")
             romLockText.stringValue = "The settings are locked because the emulator is running."
             romLockSubText.stringValue = "Click the lock to power down the emulator."
         }

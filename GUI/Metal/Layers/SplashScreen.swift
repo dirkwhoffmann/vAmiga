@@ -24,7 +24,7 @@ class SplashScreen: Layer {
         super.init(renderer: renderer)
 
         alpha.set(1.0)        
-        let img = NSImage.init(named: "background")!
+        let img = NSImage(named: "background")!
         bgTexture = img.toTexture(device: device, vflip: false)
         
         renderer.metalAssert(bgTexture != nil,
@@ -33,9 +33,9 @@ class SplashScreen: Layer {
 
     func buildVertexBuffers() {
         
-        bgRect = Node.init(device: device,
-                           x: -1.0, y: -1.0, z: 0.99, w: 2.0, h: 2.0,
-                           t: NSRect.init(x: 0.025, y: 0.025, width: 0.95, height: 0.95))
+        bgRect = Node(device: device,
+                      x: -1.0, y: -1.0, z: 0.99, w: 2.0, h: 2.0,
+                      t: NSRect(x: 0.025, y: 0.025, width: 0.95, height: 0.95))
     }
 
     func setupFragmentShader(encoder: MTLRenderCommandEncoder) {

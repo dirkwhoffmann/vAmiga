@@ -225,7 +225,7 @@ extension MyController: NSMenuItemValidation {
         track()
         
         // Determine screenshot format
-        let format = ScreenshotSource.init(rawValue: pref.screenshotSource)!
+        let format = ScreenshotSource(rawValue: pref.screenshotSource)!
         
         // Take screenshot
         guard let screen = renderer.canvas.screenshot(source: format) else {
@@ -234,7 +234,7 @@ extension MyController: NSMenuItemValidation {
         }
 
         // Convert to Screenshot object
-        let screenshot = Screenshot.init(screen: screen, format: pref.screenshotTarget)
+        let screenshot = Screenshot(screen: screen, format: pref.screenshotTarget)
 
         // Save to disk
         try? screenshot.save(id: mydocument.bootDiskID)
@@ -423,7 +423,7 @@ extension MyController: NSMenuItemValidation {
         track()
 
         // Get drive type
-        let type = DriveType.init(rawValue: config.dfnType(sender.tag))
+        let type = DriveType(rawValue: config.dfnType(sender.tag))
         
         // Create a blank disk
         var adf: ADFFileProxy
@@ -442,34 +442,7 @@ extension MyController: NSMenuItemValidation {
 
         myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
-    
-    /*
-    @IBAction func newDiskAction(_ sender: NSMenuItem!) {
-        
-        track()
 
-        // Get drive type
-        let type = DriveType.init(rawValue: config.dfnType(sender.tag))
-        
-        // Create a blank disk
-        var adf: ADFFileProxy
-        switch type {
-        case .DD_35: adf = ADFFileProxy.make(with: .INCH_35, density: .DD)
-        case .HD_35: adf = ADFFileProxy.make(with: .INCH_35, density: .HD)
-        case .DD_525: adf = ADFFileProxy.make(with: .INCH_525, density: .DD)
-        default: fatalError()
-        }
-        
-        // Write file system
-        adf.formatDisk(pref.blankDiskFormat, bootBlock: pref.bootBlock)
-        
-        // Insert disk into drive
-        amiga.diskController.insert(sender.tag, file: adf)
-
-        myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
-    }
-    */
-    
     @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
         
         // Ask the user if an unsafed disk should be replaced

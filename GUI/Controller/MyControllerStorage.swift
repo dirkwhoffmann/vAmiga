@@ -37,29 +37,4 @@ extension MyController {
         let count = mydocument!.snapshots.count
         return count > 0 ? restoreSnapshot(item: count - 1) : false
     }
-    
-    //
-    // Screenshots
-    //
-    
-    /*
-    func takeScreenshot(auto: Bool) {
-        
-        track()
-        let upscaled = pref.screenshotSource > 0
-        
-        // Take screenshot
-        guard let screen = renderer.screenshot(afterUpscaling: upscaled) else {
-            track("Failed to create screenshot")
-            return
-        }
-        let screenshot = Screenshot.init(screen: screen, format: pref.screenshotTarget)
-        
-        auto ?
-            mydocument!.autoScreenshots.append(screenshot) :
-            mydocument!.userScreenshots.append(screenshot)
-    }
-    
-    func takeUserScreenshot() { takeScreenshot(auto: false) }
-    */
 }

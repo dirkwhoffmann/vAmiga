@@ -47,10 +47,10 @@ class MyToolbar: NSToolbar {
         }
         if amiga.running {
             controlsSegCtrl.setToolTip("Pause", forSegment: 0)
-            controlsSegCtrl.setImage(NSImage.init(named: "pauseTemplate"), forSegment: 0)
+            controlsSegCtrl.setImage(NSImage(named: "pauseTemplate"), forSegment: 0)
         } else {
             controlsSegCtrl.setToolTip("Run", forSegment: 0)
-            controlsSegCtrl.setImage(NSImage.init(named: "runTemplate"), forSegment: 0)
+            controlsSegCtrl.setImage(NSImage(named: "runTemplate"), forSegment: 0)
         }
     }
     

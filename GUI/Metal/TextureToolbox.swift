@@ -61,9 +61,6 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
     func drawLine(size: MTLSize, y: Int, border: Int) {
         
         let width = size.width - 2 * border
-        // let origin = MTLOrigin.init(x: border, y: size.height - y, z: 0)
-        // let lineSize = MTLSize.init(width: width, height: 1, depth: 0)
-        // let region = MTLRegion.init(origin: origin, size: lineSize)
         let region = MTLRegionMake2D(border, size.height - y, width, 1)
         scale(size: size, region: region, factor: 1.5)
     }
@@ -158,16 +155,16 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
         // Wrap this buffer into a CGContext
         let alphaInfo = CGImageAlphaInfo.premultipliedLast.rawValue
         let orderInfo = CGBitmapInfo.byteOrder32Big.rawValue
-        let context = CGContext.init(data: self,
-                                     width: size.width,
-                                     height: size.height,
-                                     bitsPerComponent: 8,
-                                     bytesPerRow: 4 * size.width,
-                                     space: CGColorSpaceCreateDeviceRGB(),
-                                     bitmapInfo: alphaInfo | orderInfo)
+        let context = CGContext(data: self,
+                                width: size.width,
+                                height: size.height,
+                                bitsPerComponent: 8,
+                                bytesPerRow: 4 * size.width,
+                                space: CGColorSpaceCreateDeviceRGB(),
+                                bitmapInfo: alphaInfo | orderInfo)
         
         // Create an attributed string
-        let string = NSAttributedString.init(text, size: 28, color: .white)
+        let string = NSAttributedString(text, size: 28, color: .white)
        
         // Draw text centered on top
         let line = CTLineCreateWithAttributedString(string)

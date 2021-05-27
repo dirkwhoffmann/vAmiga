@@ -62,7 +62,7 @@ class Screenshot: CustomStringConvertible {
     convenience init?(fromUrl url: URL) {
         
         guard let format = url.imageFormat else { return nil }
-        guard let image = NSImage.init(contentsOf: url) else { return nil }
+        guard let image = NSImage(contentsOf: url) else { return nil }
 
         self.init(screen: image, format: format)
     }

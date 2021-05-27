@@ -42,7 +42,7 @@ class ScreenshotDialog: DialogController {
         track("Seeking screenshots for disk with id \(checksum)")
         
         for url in Screenshot.collectFiles(forDisk: checksum) {
-            if let screenshot = Screenshot.init(fromUrl: url) {
+            if let screenshot = Screenshot(fromUrl: url) {
                 screenshots.append(screenshot)
             }
         }
@@ -93,7 +93,7 @@ class ScreenshotDialog: DialogController {
         rightButton.isEnabled = currentItem >= 0 && currentItem < lastItem
         itemLabel.stringValue = "\(currentItem + 1) / \(screenshots.count)"
 
-        deleteButton.image = NSImage.init(named: "trashTemplate")
+        deleteButton.image = NSImage(named: "trashTemplate")
         deleteButton.isHidden = empty
         leftButton.isHidden = empty
         rightButton.isHidden = empty

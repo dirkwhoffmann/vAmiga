@@ -58,12 +58,12 @@ class Monitors: Layer {
         let info = amiga.dmaDebugger.getInfo()
         
         // DMA monitors
-        monitors.append(BarChart.init(device: device, name: "Copper DMA", logScale: true))
-        monitors.append(BarChart.init(device: device, name: "Blitter DMA", logScale: true))
-        monitors.append(BarChart.init(device: device, name: "Disk DMA"))
-        monitors.append(BarChart.init(device: device, name: "Audio DMA"))
-        monitors.append(BarChart.init(device: device, name: "Sprite DMA"))
-        monitors.append(BarChart.init(device: device, name: "Bitplane DMA"))
+        monitors.append(BarChart(device: device, name: "Copper DMA", logScale: true))
+        monitors.append(BarChart(device: device, name: "Blitter DMA", logScale: true))
+        monitors.append(BarChart(device: device, name: "Disk DMA"))
+        monitors.append(BarChart(device: device, name: "Audio DMA"))
+        monitors.append(BarChart(device: device, name: "Sprite DMA"))
+        monitors.append(BarChart(device: device, name: "Bitplane DMA"))
         
         monitors[0].setColor(rgb: info.copperColor)
         monitors[1].setColor(rgb: info.blitterColor)
@@ -73,22 +73,14 @@ class Monitors: Layer {
         monitors[5].setColor(rgb: info.bitplaneColor)
 
         // Memory monitors
-        monitors.append(BarChart.init(device: device, name: "CPU (Chip Ram)",
-                                      splitView: true))
-        monitors.append(BarChart.init(device: device, name: "CPU (Slow Ram)",
-                                      splitView: true))
-        monitors.append(BarChart.init(device: device, name: "CPU (Fast Ram)",
-                                      splitView: true))
-        monitors.append(BarChart.init(device: device, name: "CPU (Rom)",
-                                      splitView: true))
+        monitors.append(BarChart(device: device, name: "CPU (Chip Ram)", splitView: true))
+        monitors.append(BarChart(device: device, name: "CPU (Slow Ram)", splitView: true))
+        monitors.append(BarChart(device: device, name: "CPU (Fast Ram)", splitView: true))
+        monitors.append(BarChart(device: device, name: "CPU (Rom)", splitView: true))
 
         // Waveform monitors
-        monitors.append(WaveformMonitor.init(device: device,
-                                             paula: amiga.paula,
-                                             leftChannel: true))
-        monitors.append(WaveformMonitor.init(device: device,
-                                             paula: amiga.paula,
-                                             leftChannel: false))
+        monitors.append(WaveformMonitor(device: device, paula: amiga.paula, leftChannel: true))
+        monitors.append(WaveformMonitor(device: device, paula: amiga.paula, leftChannel: false))
 
         updateMonitorPositions()
     }
@@ -172,7 +164,7 @@ class Monitors: Layer {
     
             let x = xmin + Double(grid[i].0) * (w + d)
             let y = ymin + Double(grid[i].1) * (h + d)
-            monitors[i].position = NSRect.init(x: x, y: y, width: w, height: h)
+            monitors[i].position = NSRect(x: x, y: y, width: w, height: h)
             monitors[i].rotationSide = grid[i].2
         }
     }

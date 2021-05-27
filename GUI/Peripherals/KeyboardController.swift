@@ -36,12 +36,12 @@ class KeyboardController: NSObject {
         // Setup symbolic key maps
         for keyCode: UInt16 in 0 ... 255 {
             
-            if let s = String.init(keyCode: keyCode, carbonFlags: 0), s.count == 1 {
+            if let s = String(keyCode: keyCode, carbonFlags: 0), s.count == 1 {
                 if let scalar = s.unicodeScalars.first {
                     symKeyMap[scalar] = keyCode
                 }
             }
-            if let s = String.init(keyCode: keyCode, carbonFlags: shiftKey), s.count == 1 {
+            if let s = String(keyCode: keyCode, carbonFlags: shiftKey), s.count == 1 {
                 if let scalar = s.unicodeScalars.first {
                     symKeyMapShifted[scalar] = keyCode
                 }
@@ -68,7 +68,7 @@ class KeyboardController: NSObject {
             return
         }
         
-        keyDown(with: MacKey.init(event: event))
+        keyDown(with: MacKey(event: event))
     }
     
     func keyUp(with event: NSEvent) {
@@ -76,7 +76,7 @@ class KeyboardController: NSObject {
         // Intercept if the console is open
         if renderer.console.isVisible { renderer.console.keyUp(with: event); return }
 
-        keyUp(with: MacKey.init(event: event))
+        keyUp(with: MacKey(event: event))
     }
     
     func flagsChanged(with event: NSEvent) {
@@ -154,14 +154,14 @@ class KeyboardController: NSObject {
     
     func keyDown(with keyCode: UInt16) {
         
-        let macKey = MacKey.init(keyCode: keyCode)
+        let macKey = MacKey(keyCode: keyCode)
         if let amigaKey = macKey.amigaKeyCode { keyboard.pressKey(amigaKey) }
         parent.virtualKeyboard?.refreshIfVisible()
     }
     
     func keyUp(with keyCode: UInt16) {
         
-        let macKey = MacKey.init(keyCode: keyCode)
+        let macKey = MacKey(keyCode: keyCode)
         if let amigaKey = macKey.amigaKeyCode { keyboard.releaseKey(amigaKey) }
         parent.virtualKeyboard?.refreshIfVisible()
     }
@@ -200,7 +200,7 @@ class KeyboardController: NSObject {
             
             if let keyCode = symKeyMap[scalar] {
                 
-                if let amigaKeyCode = MacKey.init(keyCode: keyCode).amigaKeyCode {
+                if let amigaKeyCode = MacKey(keyCode: keyCode).amigaKeyCode {
                     
                     releaseShift()
                     keyboard.pressKey(amigaKeyCode)
@@ -210,7 +210,7 @@ class KeyboardController: NSObject {
             }
             if let keyCode = symKeyMapShifted[scalar] {
                 
-                if let amigaKeyCode = MacKey.init(keyCode: keyCode).amigaKeyCode {
+                if let amigaKeyCode = MacKey(keyCode: keyCode).amigaKeyCode {
                     
                     pressShift()
                     keyboard.pressKey(amigaKeyCode)

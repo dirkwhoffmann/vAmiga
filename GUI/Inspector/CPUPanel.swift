@@ -34,17 +34,17 @@ extension Inspector {
             for (c, f) in elements { assignFormatter(f, c!) }
 
             if parent!.amiga.running {
-                cpuStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
+                cpuStopAndGoButton.image = NSImage(named: "pauseTemplate")
                 cpuStepIntoButton.isEnabled = false
                 cpuStepOverButton.isEnabled = false
-                cpuTraceStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
+                cpuTraceStopAndGoButton.image = NSImage(named: "pauseTemplate")
                 cpuTraceStepIntoButton.isEnabled = false
                 cpuTraceStepOverButton.isEnabled = false
             } else {
-                cpuStopAndGoButton.image = NSImage.init(named: "runTemplate")
+                cpuStopAndGoButton.image = NSImage(named: "runTemplate")
                 cpuStepIntoButton.isEnabled = true
                 cpuStepOverButton.isEnabled = true
-                cpuTraceStopAndGoButton.image = NSImage.init(named: "runTemplate")
+                cpuTraceStopAndGoButton.image = NSImage(named: "runTemplate")
                 cpuTraceStepIntoButton.isEnabled = true
                 cpuTraceStepOverButton.isEnabled = true
             }

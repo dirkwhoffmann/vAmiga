@@ -7,11 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-let image0 = NSImage.init(named: "state0Template")!
-let image1 = NSImage.init(named: "state1Template")!
-let image2 = NSImage.init(named: "state2Template")!
-let image3 = NSImage.init(named: "state3Template")!
-let image5 = NSImage.init(named: "state5Template")!
+let image0 = NSImage(named: "state0Template")!
+let image1 = NSImage(named: "state1Template")!
+let image2 = NSImage(named: "state2Template")!
+let image3 = NSImage(named: "state3Template")!
+let image5 = NSImage(named: "state5Template")!
 
 extension Inspector {
 

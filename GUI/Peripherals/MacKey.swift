@@ -241,7 +241,7 @@ struct MacKey: Codable {
         }
 
         // Return standard representation (keyboard dependent)
-        if let s = String.init(keyCode: UInt16(keyCode), carbonFlags: carbonFlags) {
+        if let s = String(keyCode: UInt16(keyCode), carbonFlags: carbonFlags) {
             return s.uppercased()
         }
 
@@ -258,13 +258,13 @@ extension MacKey: Equatable, Hashable {
 
 extension MacKey {
     
-    static let escape       = MacKey.init(keyCode: kVK_Escape)
-    static let shift        = MacKey.init(keyCode: kVK_Shift)
-    static let rightShift   = MacKey.init(keyCode: kVK_RightShift)
-    static let option       = MacKey.init(keyCode: kVK_Option)
-    static let rightOption  = MacKey.init(keyCode: kVK_RightOption)
-    static let control      = MacKey.init(keyCode: kVK_Control)
-    static let rightControl = MacKey.init(keyCode: kVK_RightControl)
-    static let command      = MacKey.init(keyCode: kVK_Command)
-    static let rightCommand = MacKey.init(keyCode: kVK_RightCommand)
+    static let escape       = MacKey(keyCode: kVK_Escape)
+    static let shift        = MacKey(keyCode: kVK_Shift)
+    static let rightShift   = MacKey(keyCode: kVK_RightShift)
+    static let option       = MacKey(keyCode: kVK_Option)
+    static let rightOption  = MacKey(keyCode: kVK_RightOption)
+    static let control      = MacKey(keyCode: kVK_Control)
+    static let rightControl = MacKey(keyCode: kVK_RightControl)
+    static let command      = MacKey(keyCode: kVK_Command)
+    static let rightCommand = MacKey(keyCode: kVK_RightCommand)
 }

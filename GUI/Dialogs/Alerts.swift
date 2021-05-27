@@ -54,7 +54,7 @@ extension MyDocument {
         
         let alert = NSAlert()
         alert.alertStyle = .critical
-        alert.icon = NSImage.init(named: "metal")
+        alert.icon = NSImage(named: "metal")
         alert.messageText = "No suitable GPU hardware found"
         alert.informativeText = "vAmiga can only run on machines supporting the Metal graphics technology (2012 models and above)."
         alert.addButton(withTitle: "Exit")
@@ -66,7 +66,7 @@ extension MyDocument {
        
         let alert = NSAlert()
         alert.alertStyle = .warning
-        alert.icon = NSImage.init(named: "adf")
+        alert.icon = NSImage(named: "adf")
         alert.messageText = messageText
         alert.informativeText = "Your changes will be lost if you proceed."
         alert.addButton(withTitle: "Proceed")
@@ -125,39 +125,12 @@ extension MyDocument {
 
         let alert = NSAlert()
         alert.alertStyle = .informational
-        alert.icon = NSImage.init(named: "pref_transparent")
+        alert.icon = NSImage(named: "pref_transparent")
         alert.messageText = "Configuration error"
         alert.informativeText = msg
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }
-    
-    /*
-    @discardableResult
-    func showDecryptionAlert(error: FileError) -> NSApplication.ModalResponse {
-       
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.icon = NSImage.init(named: "rom_alert")
-        alert.messageText = "Failed to decrypt Rom image"
-        alert.addButton(withTitle: "OK")
-        
-        switch error {
-        case .ERR_MISSING_ROM_KEY:
-            alert.informativeText = "A rom.key file is required to decrypt the image."
-            return alert.runModal()
-            
-        case .ERR_INVALID_ROM_KEY:
-            alert.informativeText = "Decryption didn't produce a valid ROM."
-            return alert.runModal()
-            
-        default:
-            break
-        }
-        
-        return NSApplication.ModalResponse.OK
-    }
-    */
 }
 
 extension MyController {
@@ -176,7 +149,7 @@ extension MyController {
         
         let alert = NSAlert()
         alert.alertStyle = style
-        if icon != nil { alert.icon = NSImage.init(named: icon!) }
+        if icon != nil { alert.icon = NSImage(named: icon!) }
         alert.messageText = msg1
         alert.informativeText = msg2
         alert.addButton(withTitle: "OK")
@@ -199,7 +172,7 @@ extension MyController {
 
         let alert = NSAlert()
         alert.alertStyle = .warning
-        alert.icon = NSImage.init(named: "FFmpegIcon")
+        alert.icon = NSImage(named: "FFmpegIcon")
         alert.messageText = "Screen recording requires FFmpeg to be installed in /usr/local/bin."
         alert.informativeText = "Visit FFmpeg.org for installation instructions."
         alert.addButton(withTitle: "OK")
@@ -210,7 +183,7 @@ extension MyController {
 
         let alert = NSAlert()
         alert.alertStyle = .warning
-        alert.icon = NSImage.init(named: "FFmpegIcon")
+        alert.icon = NSImage(named: "FFmpegIcon")
         alert.messageText = "Failed to launch the screen recorder."
         alert.informativeText = "No content will be recorded."
         alert.addButton(withTitle: "OK")
@@ -221,7 +194,7 @@ extension MyController {
 
         let alert = NSAlert()
         alert.alertStyle = .critical
-        alert.icon = NSImage.init(named: "FFmpegIcon")
+        alert.icon = NSImage(named: "FFmpegIcon")
         alert.messageText = "\"\(url.lastPathComponent)\" cannot be opened."
         alert.informativeText = "The screen recorder failed to open this file for output."
         alert.addButton(withTitle: "OK")

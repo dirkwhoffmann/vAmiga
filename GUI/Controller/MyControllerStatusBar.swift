@@ -13,13 +13,13 @@ extension MyController {
         
         switch pref.warpMode {
         case .auto where amiga.warp:
-            return NSImage.init(named: "hourglass3Template")
+            return NSImage(named: "hourglass3Template")
         case .auto:
-            return NSImage.init(named: "hourglass1Template")
+            return NSImage(named: "hourglass1Template")
         case .off:
-            return NSImage.init(named: "warpOffTemplate")
+            return NSImage(named: "warpOffTemplate")
         case .on:
-            return NSImage.init(named: "warpOnTemplate")
+            return NSImage(named: "warpOnTemplate")
         }
     }
     
@@ -106,7 +106,7 @@ extension MyController {
     
     public func refreshStatusBar(drive: Int, led: Bool) {
         
-        let image = NSImage.init(named: led ? "driveLedOn" : "driveLedOff")
+        let image = NSImage(named: led ? "driveLedOn" : "driveLedOff")
         
         switch drive {
         case 0: df0LED.image = image

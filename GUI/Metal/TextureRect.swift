@@ -14,16 +14,16 @@ extension Canvas {
     
     fileprivate func normalize(_ rect: CGRect) -> CGRect {
         
-        return CGRect.init(x: rect.origin.x / texW,
-                           y: rect.origin.y / texH,
-                           width: rect.width / texW,
-                           height: rect.height / texH)
+        return CGRect(x: rect.origin.x / texW,
+                      y: rect.origin.y / texH,
+                      width: rect.width / texW,
+                      height: rect.height / texH)
     }
 
     // Returns the used texture area (including HBLANK and VBLANK)
     var entire: CGRect {
         
-        return CGRect.init(x: 0, y: 0, width: 4 * Int(HPOS_CNT), height: Int(VPOS_CNT))
+        return CGRect(x: 0, y: 0, width: 4 * Int(HPOS_CNT), height: Int(VPOS_CNT))
     }
     
     var entireNormalized: CGRect {
@@ -39,7 +39,7 @@ extension Canvas {
         let y1 = Int(VBLANK_CNT)
         let y2 = Int(VPOS_CNT) - 1
         
-        return CGRect.init(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
+        return CGRect(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
     }
     
     var largestVisibleNormalized: CGRect {
@@ -75,7 +75,7 @@ extension Canvas {
         let height = (1 - CGFloat(renderer.config.vZoom)) * max.height
         let bh = max.minY + CGFloat(renderer.config.vCenter) * (max.height - height)
         
-        return CGRect.init(x: bw, y: bh, width: width, height: height)
+        return CGRect(x: bw, y: bh, width: width, height: height)
     }
     
     var visibleNormalized: CGRect {
@@ -90,9 +90,9 @@ extension Canvas {
     
     var textureRectAbs: CGRect {
         
-        return CGRect.init(x: textureRect.origin.x * texW,
-                           y: textureRect.origin.y * texH,
-                           width: textureRect.width * texW,
-                           height: textureRect.height * texH)
+        return CGRect(x: textureRect.origin.x * texW,
+                      y: textureRect.origin.y * texH,
+                      width: textureRect.width * texW,
+                      height: textureRect.height * texH)
     }
 }

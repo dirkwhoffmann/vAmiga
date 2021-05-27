@@ -66,7 +66,7 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
             xibName = ansi ? "A500ANSI" : "A500ISO"
         }
 
-        let keyboard = VirtualKeyboardController.init(windowNibName: xibName)
+        let keyboard = VirtualKeyboardController(windowNibName: xibName)
         keyboard.parent = parent
         keyboard.amiga = parent.amiga
 
@@ -142,7 +142,7 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
         let layout = VirtualKeyboardController.kbLayout(parent)
 
         for keycode in 0 ... 127 {
-            let key = AmigaKey.init(keyCode: keycode)
+            let key = AmigaKey(keyCode: keycode)
             if let image = key.image(style: style, layout: layout) {
                 keyImage[keycode] = image
                 pressedKeyImage[keycode] = image.copy() as? NSImage

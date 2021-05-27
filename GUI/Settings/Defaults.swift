@@ -109,7 +109,7 @@ extension MyController {
         
         let dict = UserDefaults.standard.dictionaryRepresentation()
         let filteredDict = dict.filter { prefixes.contains(where: $0.0.hasPrefix) }
-        let nsDict = NSDictionary.init(dictionary: filteredDict)
+        let nsDict = NSDictionary(dictionary: filteredDict)
         nsDict.write(to: url, atomically: true)
     }
 }
@@ -184,7 +184,7 @@ struct GeneralDefaults {
     // Schemes
     //
     
-    static let std = GeneralDefaults.init(
+    static let std = GeneralDefaults(
                       
         autoSnapshots: false,
         autoSnapshotInterval: 20,
@@ -330,22 +330,22 @@ struct ControlsDefaults {
     
     static let stdKeyMap1 = [
         
-        MacKey.init(keyCode: kVK_LeftArrow): GamePadAction.PULL_LEFT.rawValue,
-        MacKey.init(keyCode: kVK_RightArrow): GamePadAction.PULL_RIGHT.rawValue,
-        MacKey.init(keyCode: kVK_UpArrow): GamePadAction.PULL_UP.rawValue,
-        MacKey.init(keyCode: kVK_DownArrow): GamePadAction.PULL_DOWN.rawValue,
-        MacKey.init(keyCode: kVK_Space): GamePadAction.PRESS_FIRE.rawValue
+        MacKey(keyCode: kVK_LeftArrow): GamePadAction.PULL_LEFT.rawValue,
+        MacKey(keyCode: kVK_RightArrow): GamePadAction.PULL_RIGHT.rawValue,
+        MacKey(keyCode: kVK_UpArrow): GamePadAction.PULL_UP.rawValue,
+        MacKey(keyCode: kVK_DownArrow): GamePadAction.PULL_DOWN.rawValue,
+        MacKey(keyCode: kVK_Space): GamePadAction.PRESS_FIRE.rawValue
     ]
     static let stdKeyMap2 = [
         
-        MacKey.init(keyCode: kVK_ANSI_S): GamePadAction.PULL_LEFT.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_D): GamePadAction.PULL_RIGHT.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_E): GamePadAction.PULL_UP.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_X): GamePadAction.PULL_DOWN.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_C): GamePadAction.PRESS_FIRE.rawValue
+        MacKey(keyCode: kVK_ANSI_S): GamePadAction.PULL_LEFT.rawValue,
+        MacKey(keyCode: kVK_ANSI_D): GamePadAction.PULL_RIGHT.rawValue,
+        MacKey(keyCode: kVK_ANSI_E): GamePadAction.PULL_UP.rawValue,
+        MacKey(keyCode: kVK_ANSI_X): GamePadAction.PULL_DOWN.rawValue,
+        MacKey(keyCode: kVK_ANSI_C): GamePadAction.PRESS_FIRE.rawValue
     ]
     
-    static let std = ControlsDefaults.init(
+    static let std = ControlsDefaults(
         
         mouseKeyMap: [:],
         joyKeyMap1: stdKeyMap1,
@@ -454,7 +454,7 @@ struct DevicesDefaults {
     let rightStickScheme2: Int
     let hatSwitchScheme2: Int
 
-    static let std = DevicesDefaults.init(
+    static let std = DevicesDefaults(
         
         leftStickScheme1: 0,
         rightStickScheme1: 0,
@@ -519,7 +519,7 @@ struct RomDefaults {
     
     let extStart: Int
     
-    static let std = RomDefaults.init(
+    static let std = RomDefaults(
         
         extStart: 0xE0
     )
@@ -628,7 +628,7 @@ struct HardwareDefaults {
     // Schemes
     //
     
-    static let A500 = HardwareDefaults.init(
+    static let A500 = HardwareDefaults(
         
         agnusRev: .ECS_1MB,
         deniseRev: .OCS,
@@ -647,7 +647,7 @@ struct HardwareDefaults {
         unmappingType: .FLOATING
     )
     
-    static let A1000 = HardwareDefaults.init(
+    static let A1000 = HardwareDefaults(
         
         agnusRev: .OCS,
         deniseRev: .OCS,
@@ -666,7 +666,7 @@ struct HardwareDefaults {
         unmappingType: .FLOATING
     )
     
-    static let A2000 = HardwareDefaults.init(
+    static let A2000 = HardwareDefaults(
         
         agnusRev: .ECS_2MB,
         deniseRev: .OCS,
@@ -784,7 +784,7 @@ struct PeripheralsDefaults {
     // Schemes
     //
     
-    static let std = PeripheralsDefaults.init(
+    static let std = PeripheralsDefaults(
         
         driveConnect: [true, false, false, false],
         driveType: [.DD_35, .DD_35, .DD_35, .DD_35],
@@ -913,7 +913,7 @@ struct CompatibilityDefaults {
     // Schemes
     //
     
-    static let std = CompatibilityDefaults.init(
+    static let std = CompatibilityDefaults(
         
         blitterAccuracy: 2,
         
@@ -936,7 +936,7 @@ struct CompatibilityDefaults {
         accurateKeyboard: true
      )
     
-    static let accurate = CompatibilityDefaults.init(
+    static let accurate = CompatibilityDefaults(
         
         blitterAccuracy: 2,
 
@@ -959,7 +959,7 @@ struct CompatibilityDefaults {
         accurateKeyboard: true
     )
 
-    static let accelerated = CompatibilityDefaults.init(
+    static let accelerated = CompatibilityDefaults(
         
         blitterAccuracy: 0,
 
@@ -1106,7 +1106,7 @@ struct AudioDefaults {
     // Schemes
     //
     
-    static let std = AudioDefaults.init(
+    static let std = AudioDefaults(
         
         vol0: 100,
         vol1: 100,
@@ -1128,7 +1128,7 @@ struct AudioDefaults {
         ejectVolume: 50
     )
     
-    static let stereo = AudioDefaults.init(
+    static let stereo = AudioDefaults(
         
         vol0: 100,
         vol1: 100,
@@ -1150,7 +1150,7 @@ struct AudioDefaults {
         ejectVolume: 50
     )
 
-    static let mono = AudioDefaults.init(
+    static let mono = AudioDefaults(
         
         vol0: 100,
         vol1: 100,
@@ -1322,7 +1322,7 @@ struct VideoDefaults {
     //
     
     // TFT monitor appearance with a texture cutout similar to UAE
-    static let tft = VideoDefaults.init(
+    static let tft = VideoDefaults(
         
         palette: Palette.COLOR,
         brightness: 50,
@@ -1356,7 +1356,7 @@ struct VideoDefaults {
     )
     
     // CRT monitor appearance with a texture-cutout closer to the center
-    static let crt = VideoDefaults.init(
+    static let crt = VideoDefaults(
         
         palette: Palette.COLOR,
         brightness: 50,

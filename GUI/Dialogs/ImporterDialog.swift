@@ -80,7 +80,7 @@ class ImporterDialog: DialogController {
             
             // Load screenshots (if any)
             for url in Screenshot.collectFiles(forDisk: disk!.fnv) {
-                if let screenshot = Screenshot.init(fromUrl: url) {
+                if let screenshot = Screenshot(fromUrl: url) {
                     screenshots.append(screenshot)
                 }
             }

@@ -73,7 +73,7 @@ public extension CGImage {
                          from: MTLRegionMake2D(x, y, w, h),
                          mipmapLevel: 0)
         
-        return make(data: data, size: CGSize.init(width: w, height: h))
+        return make(data: data, size: CGSize(width: w, height: h))
     }
 }
 
@@ -168,7 +168,7 @@ extension NSColorWell {
     
     func setColor(_ rgb: (Double, Double, Double) ) {
         
-        color = NSColor.init(r: rgb.0, g: rgb.1, b: rgb.2)
+        color = NSColor(r: rgb.0, g: rgb.1, b: rgb.2)
     }
 }
 
@@ -210,7 +210,7 @@ public extension NSImage {
 
     func expand(toSize size: NSSize) -> NSImage? {
  
-        let newImage = NSImage.init(size: size)
+        let newImage = NSImage(size: size)
     
         NSGraphicsContext.saveGraphicsState()
         newImage.lockFocus()
@@ -220,8 +220,8 @@ public extension NSImage {
         t.scaleX(by: 1.0, yBy: -1.0)
         t.concat()
         
-        let inRect = NSRect.init(x: 0, y: 0, width: size.width, height: size.height)
-        let fromRect = NSRect.init(x: 0, y: 0, width: self.size.width, height: self.size.height)
+        let inRect = NSRect(x: 0, y: 0, width: size.width, height: size.height)
+        let fromRect = NSRect(x: 0, y: 0, width: self.size.width, height: self.size.height)
         let operation = NSCompositingOperation.copy
         self.draw(in: inRect, from: fromRect, operation: operation, fraction: 1.0)
         
@@ -232,7 +232,7 @@ public extension NSImage {
     }
     
     var cgImage: CGImage? {
-        var rect = CGRect.init(origin: .zero, size: self.size)
+        var rect = CGRect(origin: .zero, size: self.size)
         return self.cgImage(forProposedRect: &rect, context: nil, hints: nil)
     }
     
@@ -270,7 +270,7 @@ public extension NSImage {
         }
         
         // Call 'draw' to fill the data array
-        let rect = CGRect.init(x: 0, y: 0, width: width, height: height)
+        let rect = CGRect(x: 0, y: 0, width: width, height: height)
         bitmapContext?.draw(cgimage, in: rect)
         return data
     }
@@ -313,7 +313,7 @@ public extension NSImage {
         let ctx = NSGraphicsContext.current
         ctx?.imageInterpolation = interpolation
         self.draw(in: cutout,
-                  from: NSRect.init(x: 0, y: 0, width: size.width, height: size.height),
+                  from: NSRect(x: 0, y: 0, width: size.width, height: size.height),
                   operation: .sourceOver,
                   fraction: 1)
         img.unlockFocus()
@@ -334,8 +334,8 @@ public extension NSImage {
         img.lockFocus()
         let ctx = NSGraphicsContext.current
         ctx?.imageInterpolation = interpolation
-        self.draw(in: NSRect.init(x: dx, y: dy, width: cw, height: ch),
-                  from: NSRect.init(x: 0, y: 0, width: cw, height: ch),
+        self.draw(in: NSRect(x: dx, y: dy, width: cw, height: ch),
+                  from: NSRect(x: 0, y: 0, width: cw, height: ch),
                   operation: .sourceOver,
                   fraction: 1)
         img.unlockFocus()
@@ -345,14 +345,14 @@ public extension NSImage {
     
     func resize(width: CGFloat, height: CGFloat) -> NSImage {
         
-        let cutout = NSRect.init(x: 0, y: 0, width: width, height: height)
+        let cutout = NSRect(x: 0, y: 0, width: width, height: height)
         return resizeImage(width: width, height: height,
                            cutout: cutout)
     }
 
     func resizeSharp(width: CGFloat, height: CGFloat) -> NSImage {
         
-        let cutout = NSRect.init(x: 0, y: 0, width: width, height: height)
+        let cutout = NSRect(x: 0, y: 0, width: width, height: height)
         return resizeImage(width: width, height: height,
                            cutout: cutout,
                            interpolation: .none)
@@ -360,7 +360,7 @@ public extension NSImage {
         
     func roundCorners(withRadius radius: CGFloat) -> NSImage {
         
-        let rect = NSRect.init(origin: NSPoint.zero, size: size)
+        let rect = NSRect(origin: NSPoint.zero, size: size)
         if
             let cgImage = self.cgImage,
             let context = CGContext(data: nil,
@@ -405,7 +405,7 @@ public extension NSImage {
     
     func tint(_ color: NSColor) {
         
-        let imageRect = NSRect.init(origin: .zero, size: size)
+        let imageRect = NSRect(origin: .zero, size: size)
         
         lockFocus()
         color.set()
@@ -415,18 +415,18 @@ public extension NSImage {
     
     func darken() {
         
-        tint(NSColor.init(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.33))
+        tint(NSColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.33))
     }
 
     func pressed() {
         
-        tint(NSColor.init(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.5))
-        // tint(NSColor.init(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.15))
+        tint(NSColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.5))
+        // tint(NSColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.15))
     }
 
     func red() {
         
-        tint(NSColor.init(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.5))
+        tint(NSColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.5))
     }
 }
 //

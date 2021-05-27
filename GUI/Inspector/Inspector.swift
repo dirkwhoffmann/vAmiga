@@ -7,12 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-let fmt4  = MyFormatter.init(radix: 16, min: 0, max: 0xF)
-let fmt8  = MyFormatter.init(radix: 16, min: 0, max: 0xFF)
-let fmt16 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFF)
-let fmt24 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFF)
-let fmt32 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFFFF)
-let fmt8b = MyFormatter.init(radix: 2, min: 0, max: 255)
+let fmt4  = MyFormatter(radix: 16, min: 0, max: 0xF)
+let fmt8  = MyFormatter(radix: 16, min: 0, max: 0xFF)
+let fmt16 = MyFormatter(radix: 16, min: 0, max: 0xFFFF)
+let fmt24 = MyFormatter(radix: 16, min: 0, max: 0xFFFFFF)
+let fmt32 = MyFormatter(radix: 16, min: 0, max: 0xFFFFFFFF)
+let fmt8b = MyFormatter(radix: 2, min: 0, max: 255)
 
 class Inspector: DialogController {
 
