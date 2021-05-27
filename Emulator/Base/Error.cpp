@@ -99,7 +99,7 @@ VAError::VAError(ErrorCode code, const string &s)
             break;
 
         case ERROR_MISSING_ROM_KEY:
-            description = "No \"key.rom\" file found.";
+            description = "No \"rom.key\" file found.";
             break;
 
         case ERROR_INVALID_ROM_KEY:
