@@ -38,6 +38,8 @@ class MyDocument: NSDocument {
         
         super.init()
 
+        track()
+
         // Check for Metal support
         if MTLCreateSystemDefaultDevice() == nil {
             showNoMetalSupportAlert()
@@ -54,6 +56,8 @@ class MyDocument: NSDocument {
  
     override open func makeWindowControllers() {
                 
+        track()
+        
         let nibName = NSNib.Name("MyDocument")
         let controller = MyController(windowNibName: nibName)
         controller.amiga = amiga

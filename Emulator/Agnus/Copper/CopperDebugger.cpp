@@ -24,7 +24,6 @@ CopperDebugger::_reset(bool hard)
     cache.clear();
     current1 = nullptr;
     current2 = nullptr;
-    dump();
 }
 
 void

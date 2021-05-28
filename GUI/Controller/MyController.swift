@@ -36,9 +36,6 @@ class MyController: NSWindowController, MessageReceiver {
 
     // Monitor panel of this emulator instance
     var monitor: Monitor?
-
-    // The debug console for this emulator instance
-    // var console: Console?
     
     // Configuration panel of this emulator instance
     var configurator: ConfigurationController?

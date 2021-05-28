@@ -1,12 +1,11 @@
 SUBDIRS = \
 Agnus Base CIA CPU Denise Drive FileSystems Files LogicBoard Memory Paula \
-Peripherals RetroShell xdms
+Peripherals RetroShell Utilities xdms
 
 MYCC = g++ -std=c++17 -Wfatal-errors
 MYFLAGS = \
 -Wall \
 -I $(CURDIR)/.. \
--I $(CURDIR)/../Utilities \
 -I $(CURDIR) \
 -I $(CURDIR)/Agnus \
 -I $(CURDIR)/Agnus/Blitter \
@@ -29,6 +28,7 @@ MYFLAGS = \
 -I $(CURDIR)/Paula/UART \
 -I $(CURDIR)/Peripherals \
 -I $(CURDIR)/RetroShell \
+-I $(CURDIR)/Utilities \
 -I $(CURDIR)/xdms
 
 export MYCC MYFLAGS
