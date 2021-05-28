@@ -79,7 +79,7 @@ class AmigaFile : public AmigaObject {
 public:
     
     // Physical location of this file
-    string path = "";
+    string path;
     
     // The raw data of this file
     u8 *data = nullptr;
@@ -93,14 +93,21 @@ public:
     //
     
 public:
-    
+
     template <class T> static T *make(const string &path, std::istream &stream) throws
     {
         if (!T::isCompatiblePath(path)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
+        
+        T *obj = make <T> (stream);
+        obj->path = path;
+        return obj;
+    }
+
+    template <class T> static T *make(std::istream &stream) throws
+    {
         if (!T::isCompatibleStream(stream)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
         
         T *obj = new T();
-        obj->path = path;
         
         try { obj->readFromStream(stream); } catch (VAError &err) {
             delete obj;
@@ -108,7 +115,7 @@ public:
         }
         return obj;
     }
-
+    
     template <class T> static T *make(const string &path, std::istream &stream, ErrorCode *err)
     {
         try { *err = ERROR_OK; return make <T> (path, stream); }
@@ -149,7 +156,7 @@ public:
         assert(file);
         std::stringstream stream;
         int c; while ((c = fgetc(file)) != EOF) { stream.put(c); }
-        return make <T> ("", stream);
+        return make <T> (stream);
     }
     
     template <class T> static T *make(FILE *file, ErrorCode *err)

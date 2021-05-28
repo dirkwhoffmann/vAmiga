@@ -71,7 +71,6 @@ USHORT extractDMS(FILE *fi, FILE *fo) {
     }
         
     if (fread(b1,1,HEADLEN,fi) != HEADLEN) {
-        fclose(fi);
         free(b1);
         free(b2);
         free(text);
@@ -80,7 +79,6 @@ USHORT extractDMS(FILE *fi, FILE *fo) {
     
     if ( (b1[0] != 'D') || (b1[1] != 'M') || (b1[2] != 'S') || (b1[3] != '!') ) {
         /*  Check the first 4 bytes of file to see if it is "DMS!"  */
-        fclose(fi);
         free(b1);
         free(b2);
         free(text);
@@ -91,7 +89,6 @@ USHORT extractDMS(FILE *fi, FILE *fo) {
     /* Header CRC */
     
     if (hcrc != CreateCRC(b1+4,(ULONG)(HEADLEN-6))) {
-        fclose(fi);
         free(b1);
         free(b2);
         free(text);
@@ -114,7 +111,6 @@ USHORT extractDMS(FILE *fi, FILE *fo) {
     
     if (disktype == 7) {
         /*  It's not a DMS compressed disk image, but a FMS archive  */
-        fclose(fi);
         free(b1);
         free(b2);
         free(text);
@@ -147,10 +143,7 @@ USHORT extractDMS(FILE *fi, FILE *fo) {
     /*  So, when we find something that is not a track header,   */
     /*  we suppose that the valid data is over. And say it's ok. */
     if (ret == ERR_NOTTRACK) ret = NO_PROBLEM;
-    
-    fclose(fi);
-    fclose(fo);
-    
+        
     free(b1);
     free(b2);
     free(text);

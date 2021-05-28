@@ -39,24 +39,27 @@ DMSFile::readFromStream(std::istream &stream)
     
     isize result = AmigaFile::readFromStream(stream);
         
-    // We use a third-party tool called xdms to convert the DMS file into an
-    // ADF file. Originally, xdms is a command line utility that is designed
-    // to work with the file system. To ease the integration of this tool, we
-    // utilize memory streams for getting data in and out.
+    /* We use a third-party tool called xdms to convert the DMS into an ADF.
+     * Originally, xdms is a command line utility designed to work on files.
+     * To ease the integration of this tool, we utilize memory streams for
+     * passing data in and out.
+     */
 
     // Setup input stream
     fpi = open_memstream(&pi, &si);
     for (isize i = 0; i < size; i++) putc(data[i], fpi);
     fclose(fpi);
     
-    // Setup output file
+    // Setup output stream
     fpi = fmemopen(pi, si, "r");
     fpo = open_memstream(&po, &so);
+    
+    // Extract the DMS
     extractDMS(fpi, fpo);
     fclose(fpi);
     fclose(fpo);
     
-    // Create ADF
+    // Create the ADF
     fpo = fmemopen(po, so, "r");
     adf = AmigaFile::make <ADFFile> (fpo);
     fclose(fpo);
