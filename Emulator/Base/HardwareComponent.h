@@ -16,7 +16,6 @@
 
 #include <vector>
 #include <iostream>
-// #include <iomanip>
 
 /* This class defines the base functionality of all hardware components. It
  * comprises functions for initializing, configuring, and serializing the

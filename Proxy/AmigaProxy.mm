@@ -7,20 +7,20 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#import "config.h"
 #import "AmigaProxy.h"
 #import "Amiga.h"
 #import "vAmiga-Swift.h"
-#include "DMSFile.h"
-#include "EXEFile.h"
-#include "ExtendedRomFile.h"
-#include "EXTFile.h"
-#include "Folder.h"
-#include "FSDevice.h"
-#include "IMGFile.h"
-#include "RomFile.h"
-#include "Script.h"
-#include "Snapshot.h"
+#import "DMSFile.h"
+#import "EXEFile.h"
+#import "ExtendedRomFile.h"
+#import "EXTFile.h"
+#import "Folder.h"
+#import "FSDevice.h"
+#import "IMGFile.h"
+#import "RomFile.h"
+#import "Script.h"
+#import "Snapshot.h"
 
 using namespace moira;
 

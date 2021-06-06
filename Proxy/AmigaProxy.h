@@ -7,38 +7,40 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Constants.h"
-#include "AgnusTypes.h"
-#include "AmigaTypes.h"
-#include "AmigaFileTypes.h"
-#include "BlitterTypes.h"
-#include "BootBlockImageTypes.h"
-#include "ControlPortTypes.h"
-#include "CopperTypes.h"
-#include "CPUTypes.h"
-#include "CIATypes.h"
-#include "DeniseTypes.h"
-#include "DiskTypes.h"
-#include "DiskControllerTypes.h"
-#include "DmaDebuggerTypes.h"
-#include "DriveTypes.h"
-#include "ErrorTypes.h"
-#include "EventTypes.h"
-#include "FSTypes.h"
-#include "HardwareComponentTypes.h"
-#include "JoystickTypes.h"
-#include "KeyboardTypes.h"
-#include "MemoryTypes.h"
-#include "MsgQueueTypes.h"
-#include "MuxerTypes.h"
-#include "MouseTypes.h"
-#include "PaulaTypes.h"
-#include "PixelEngineTypes.h"
-#include "RomFileTypes.h"
-#include "RTCTypes.h"
-#include "SerialPortTypes.h"
-#include "StateMachineTypes.h"
-#include "UARTTypes.h"
+#pragma once
+
+#import "Constants.h"
+#import "AgnusTypes.h"
+#import "AmigaTypes.h"
+#import "AmigaFileTypes.h"
+#import "BlitterTypes.h"
+#import "BootBlockImageTypes.h"
+#import "ControlPortTypes.h"
+#import "CopperTypes.h"
+#import "CPUTypes.h"
+#import "CIATypes.h"
+#import "DeniseTypes.h"
+#import "DiskTypes.h"
+#import "DiskControllerTypes.h"
+#import "DmaDebuggerTypes.h"
+#import "DriveTypes.h"
+#import "ErrorTypes.h"
+#import "EventTypes.h"
+#import "FSTypes.h"
+#import "HardwareComponentTypes.h"
+#import "JoystickTypes.h"
+#import "KeyboardTypes.h"
+#import "MemoryTypes.h"
+#import "MsgQueueTypes.h"
+#import "MuxerTypes.h"
+#import "MouseTypes.h"
+#import "PaulaTypes.h"
+#import "PixelEngineTypes.h"
+#import "RomFileTypes.h"
+#import "RTCTypes.h"
+#import "SerialPortTypes.h"
+#import "StateMachineTypes.h"
+#import "UARTTypes.h"
 
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>
@@ -190,7 +192,6 @@
 @property (readonly) BOOL running;
 @property (readonly) BOOL paused;
 
-// - (void)run:(ErrorCode *)ec;
 - (void)run:(ExceptionWrapper *)exc;
 - (void)pause;
 - (void)suspend;
@@ -213,7 +214,6 @@
 - (BOOL)configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val;
 - (BOOL)configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
 
-// - (Message)message;
 - (void)setListener:(const void *)sender function:(Callback *)func;
 
 - (void)stopAndGo;

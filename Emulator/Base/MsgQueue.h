@@ -32,7 +32,6 @@ class MsgQueue : public AmigaComponent {
 public:
     
     using AmigaComponent::AmigaComponent;
-    // MsgQueue(Amiga& ref) : AmigaComponent(ref) { }
 
     
     //
