@@ -16,7 +16,7 @@
 // Version number
 #define VER_MAJOR 1
 #define VER_MINOR 0
-#define VER_SUBMINOR 1
+#define VER_SUBMINOR 2
 
 // Snapshot version number
 #define SNP_MAJOR 1
