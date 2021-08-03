@@ -145,6 +145,12 @@ class MyDocument: NSDocument {
 
     @discardableResult
     func mountAttachment() -> Bool {
+
+        mountAttachment(destination: parent.dragAndDropDrive)
+    }
+    
+    @discardableResult
+    func mountAttachment(destination: DriveProxy?) -> Bool {
         
         // Only proceed if an attachment is present
         if attachment == nil { return false }
@@ -188,7 +194,7 @@ class MyDocument: NSDocument {
 
         case _ as DiskFileProxy:
 
-            if let df = parent.dragAndDropDrive?.nr {
+            if let df = destination?.nr {
                 amiga.diskController.insert(df, file: attachment as? DiskFileProxy)
             } else {
                 runImporterDialog()
