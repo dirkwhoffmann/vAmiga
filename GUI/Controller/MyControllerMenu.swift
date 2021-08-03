@@ -483,7 +483,7 @@ extension MyController: NSMenuItemValidation {
         
         track("insertDiskAction \(url) drive \(drive)")
         
-        let types: [FileType] = [ .ADF, .HDF, .DMS, .EXE, .DIR ]
+        let types: [FileType] = [ .ADF, .HDF, .EXT, .DMS, .EXE, .DIR ]
         
         do {
             // Try to create a file proxy

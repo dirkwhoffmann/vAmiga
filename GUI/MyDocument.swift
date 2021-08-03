@@ -110,7 +110,8 @@ class MyDocument: NSDocument {
                     return try Proxy.make(url: newUrl) as ADFFileProxy
                     
                 case .EXT:
-                    return try Proxy.make(url: newUrl) as EXTFileProxy
+                    // return try Proxy.make(url: newUrl) as EXTFileProxy
+                    throw VAError(.FILE_TYPE_UNSUPPORTED, "The file is encoded in extended ADF format which is not supported by the emulator.")
                     
                 case .IMG:
                     return try Proxy.make(url: newUrl) as IMGFileProxy
