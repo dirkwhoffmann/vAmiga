@@ -436,13 +436,6 @@
                                     <action selector="exportRecentDiskDummyAction0:" target="-1" id="iOQ-oj-hWO"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="PlF-BJ-HIT"/>
-                            <menuItem title="Drag and Drop Target" id="F4s-hA-4ng">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="dragAndDropTargetAction:" target="-1" id="D27-Fj-l7S"/>
-                                </connections>
-                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>
@@ -570,13 +563,6 @@
                                 </menu>
                                 <connections>
                                     <action selector="exportRecentDiskDummyAction1:" target="-1" id="5DC-lQ-ZDS"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="sTY-kz-ChE"/>
-                            <menuItem title="Drag and Drop Target" tag="1" id="iWr-Ke-wpa">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="dragAndDropTargetAction:" target="-1" id="cW4-pv-MEd"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -708,13 +694,6 @@
                                     <action selector="exportRecentDiskDummyAction2:" target="-1" id="RR0-Av-81o"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="lCC-5c-qbD"/>
-                            <menuItem title="Drag and Drop Target" tag="2" id="qnD-mg-rIP">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="dragAndDropTargetAction:" target="-1" id="YKs-lg-jCw"/>
-                                </connections>
-                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>
@@ -842,13 +821,6 @@
                                 </menu>
                                 <connections>
                                     <action selector="exportRecentDiskDummyAction3:" target="-1" id="Kkj-Wb-HsR"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="58W-Ye-H4G"/>
-                            <menuItem title="Drag and Drop Target" tag="3" id="Ux8-3V-WBB">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="dragAndDropTargetAction:" target="-1" id="GOr-hj-af2"/>
                                 </connections>
                             </menuItem>
                         </items>

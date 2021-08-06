@@ -85,9 +85,6 @@ class MyController: NSWindowController, MessageReceiver {
     // Small disk icon to be shown in NSMenuItems
     var smallDisk = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
     
-    // Drive that receives drag and drop inputs
-    var dragAndDropDrive: DriveProxy?
-
     // Serial input and output
     var serialIn = ""
     var serialOut = ""
@@ -508,11 +505,6 @@ extension MyController {
         case .DRIVE_DISCONNECT:
             hideOrShowDriveMenus()
             refreshStatusBar()
-
-            // Remove drop target status from the disconnect drive
-            if dragAndDropDrive === amiga.df(msg.data) {
-                dragAndDropDrive = nil
-            }
 
         case .DRIVE_SELECT:
             refreshStatusBar(writing: nil)

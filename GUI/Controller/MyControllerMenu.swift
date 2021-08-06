@@ -102,11 +102,7 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.writeProtectAction(_:)):
             item.state = dfn.hasWriteProtectedDisk() ? .on : .off
             return dfn.hasDisk
-            
-        case #selector(MyController.dragAndDropTargetAction(_:)):
-            item.state = dfn === dragAndDropDrive ? .on : .off
-            return true
-                                    
+                                                
         default:
             return true
         }
@@ -569,11 +565,5 @@ extension MyController: NSMenuItemValidation {
         let nibName = NSNib.Name("ExporterDialog")
         let exportPanel = ExporterDialog.make(parent: self, nibName: nibName)
         exportPanel?.showSheet(forDrive: sender.tag)
-    }
-    
-    @IBAction func dragAndDropTargetAction(_ sender: NSMenuItem!) {
-        
-        let drive = amiga.df(sender)
-        dragAndDropDrive = (dragAndDropDrive === drive) ? nil : drive
     }
 }

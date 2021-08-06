@@ -143,14 +143,16 @@ class MyDocument: NSDocument {
         throw VAError(.FILE_TYPE_MISMATCH, url.lastPathComponent)
     }
 
+    /*
     @discardableResult
     func mountAttachment() -> Bool {
 
-        mountAttachment(destination: parent.dragAndDropDrive)
+        mountAttachment(destination: nil)
     }
+    */
     
     @discardableResult
-    func mountAttachment(destination: DriveProxy?) -> Bool {
+    func mountAttachment(destination: DriveProxy? = nil) -> Bool {
         
         // Only proceed if an attachment is present
         if attachment == nil { return false }
