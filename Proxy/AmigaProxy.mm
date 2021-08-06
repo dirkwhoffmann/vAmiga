@@ -1415,6 +1415,16 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
++ (FileType)urlType:(NSURL *)url
+{
+    return AmigaFile::type([url fileSystemRepresentation]);
+}
+
+- (FileType)type
+{
+    return [self file]->type();
+}
+
 - (void)setPath:(NSString *)path
 {
     [self file]->path = [path fileSystemRepresentation];
@@ -1429,11 +1439,6 @@ using namespace moira;
 - (NSInteger)writeToFile:(NSString *)path error:(ErrorCode *)err
 {
     return [self file]->writeToFile([path fileSystemRepresentation], err);
-}
-
-- (FileType)type
-{
-    return [self file]->type();
 }
 
 - (u64)fnv

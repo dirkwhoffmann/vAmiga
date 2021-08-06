@@ -46,6 +46,14 @@ public extension MetalView {
             
         case .compatibleFileURL:
             track("Dragged in filename")
+            
+            if let url = NSURL.init(from: pasteBoard) as URL? {
+            
+                // Open the drop zone layer
+                let type = AmigaFileProxy.urlType(url)
+                parent.renderer.dropZone.open(type: type, delay: 0.25)
+            }
+
             return NSDragOperation.copy
             
         default:
@@ -54,12 +62,20 @@ public extension MetalView {
         }
     }
     
+    override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation {
+        
+        parent.renderer.dropZone.draggingUpdated(sender)
+        return NSDragOperation.copy
+    }
+
     override func draggingExited(_ sender: NSDraggingInfo?) {
     
+        parent.renderer.dropZone.close(delay: 0.25)
     }
     
     override func prepareForDragOperation(_ sender: NSDraggingInfo) -> Bool {
         
+        parent.renderer.dropZone.close(delay: 0.25)
         return true
     }
     
@@ -108,9 +124,19 @@ public extension MetalView {
         case .compatibleFileURL:
             
             if let url = NSURL(from: pasteBoard) as URL? {
+                
                 do {
                     try document.createAttachment(from: url)
+                    
+                    // Check drop zones
+                    for i in 0...3 {
+                        if parent.renderer.dropZone.isInside(sender, zone: i) {
+                            return document.mountAttachment(destination: parent.amiga.df(i))
+                        }
+                    }
+
                     return document.mountAttachment()
+                    
                 } catch {
                     (error as? VAError)?.warning("Drag operation failed")
                 }

@@ -50,7 +50,8 @@ class Renderer: NSObject, MTKViewDelegate {
     var canvas: Canvas! = nil
     var monitors: Monitors! = nil
     var console: Console! = nil
-    
+    var dropZone: DropZone! = nil
+
     //
     // Ressources
     //
@@ -172,6 +173,7 @@ class Renderer: NSObject, MTKViewDelegate {
         if animates != 0 { animate() }
 
         splashScreen.update(frames: frames)
+        dropZone.update(frames: frames)
         console.update(frames: frames)
         canvas.update(frames: frames)
         monitors.update(frames: frames)

@@ -29,7 +29,7 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType> {
     {
         switch (value) {
                 
-            case FILETYPE_UKNOWN:       return "UKNOWN";
+            case FILETYPE_UNKNOWN:      return "UNKNOWN";
             case FILETYPE_SNAPSHOT:     return "SNAPSHOT";
             case FILETYPE_SCRIPT:       return "SCRIPT";
             case FILETYPE_ADF:          return "ADF";
@@ -185,7 +185,7 @@ public:
     static FileType type(const string &path);
     
     // Returns the type of this file
-    virtual FileType type() const { return FILETYPE_UKNOWN; }
+    virtual FileType type() const { return FILETYPE_UNKNOWN; }
             
     // Returns a fingerprint (hash value) for this file
     virtual u64 fnv() const { return util::fnv_1a_64(data, size); }

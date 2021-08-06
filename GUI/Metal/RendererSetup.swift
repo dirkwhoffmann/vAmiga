@@ -90,6 +90,7 @@ extension Renderer {
         canvas = Canvas(renderer: self)
         monitors = Monitors(renderer: self)
         console = Console(renderer: self)
+        dropZone = DropZone(renderer: self)
     }
         
     func buildPipeline() {

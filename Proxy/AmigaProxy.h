@@ -675,6 +675,7 @@
 
 @interface AmigaFileProxy : Proxy { }
 
++ (FileType) urlType:(NSURL *)url;
 @property (readonly) FileType type;
 - (void)setPath:(NSString *)path;
 - (NSInteger)writeToFile:(NSString *)path error:(ErrorCode *)err;

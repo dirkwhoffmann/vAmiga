@@ -43,7 +43,7 @@ FileType
 AmigaFile::type(const string &path)
 {
     std::ifstream stream(path);
-    if (!stream.is_open()) return FILETYPE_UKNOWN;
+    if (!stream.is_open()) return FILETYPE_UNKNOWN;
     
     if (Snapshot::isCompatiblePath(path) &&
         Snapshot::isCompatibleStream(stream)) return FILETYPE_SNAPSHOT;
@@ -74,7 +74,7 @@ AmigaFile::type(const string &path)
 
     if (Folder::isFolder(path.c_str())) return FILETYPE_DIR;
 
-    return FILETYPE_UKNOWN;
+    return FILETYPE_UNKNOWN;
 }
 
 isize
