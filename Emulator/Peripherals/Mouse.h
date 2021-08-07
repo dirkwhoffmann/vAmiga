@@ -11,7 +11,7 @@
 
 #include "MouseTypes.h"
 #include "Joystick.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Chrono.h"
 
 class ShakeDetector {
@@ -39,7 +39,7 @@ public:
     bool isShakingRel(double dx);
 };
 
-class Mouse : public AmigaComponent {
+class Mouse : public SubComponent {
 
     // Reference to the control port this device belongs to
     ControlPort &port;

@@ -10,11 +10,11 @@
 #pragma once
 
 #include "ControlPortTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Joystick.h"
 #include "Mouse.h"
 
-class ControlPort : public AmigaComponent {
+class ControlPort : public SubComponent {
 
     friend class Mouse;
     friend class Joystick;

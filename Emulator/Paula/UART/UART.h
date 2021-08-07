@@ -10,10 +10,10 @@
 #pragma once
 
 #include "UARTTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Event.h"
 
-class UART : public AmigaComponent {
+class UART : public SubComponent {
 
     friend class Amiga;
     

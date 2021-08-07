@@ -9,13 +9,13 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Interpreter.h"
 
 #include <sstream>
 #include <fstream>
 
-class RetroShell : public AmigaComponent {
+class RetroShell : public SubComponent {
 
     // Interpreter for commands typed into the console window
     Interpreter interpreter;

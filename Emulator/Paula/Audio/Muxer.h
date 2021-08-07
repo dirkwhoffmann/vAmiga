@@ -11,7 +11,7 @@
 
 #include "MuxerTypes.h"
 
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "AudioStream.h"
 #include "AudioFilter.h"
 #include "Chrono.h"
@@ -39,7 +39,7 @@
  *           -----------------------------------------------------
  */
 
-class Muxer : public AmigaComponent {
+class Muxer : public SubComponent {
 
     // Current configuration
     MuxerConfig config;

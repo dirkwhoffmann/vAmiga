@@ -11,10 +11,10 @@
 
 #include "DmaDebuggerTypes.h"
 #include "Bus.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Colors.h"
 
-class DmaDebugger : public AmigaComponent {
+class DmaDebugger : public SubComponent {
 
     // Current configuration
     DmaDebuggerConfig config;

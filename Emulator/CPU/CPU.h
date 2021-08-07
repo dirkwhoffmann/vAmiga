@@ -10,7 +10,7 @@
 #pragma once
 
 #include "CPUTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Moira.h"
 
 class CPU : public moira::Moira {

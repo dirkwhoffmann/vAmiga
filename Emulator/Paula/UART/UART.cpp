@@ -14,7 +14,7 @@
 #include "Paula.h"
 #include "SerialPort.h"
 
-UART::UART(Amiga& ref) : AmigaComponent(ref)
+UART::UART(Amiga& ref) : SubComponent(ref)
 {
 }
 

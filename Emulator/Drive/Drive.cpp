@@ -16,7 +16,7 @@
 #include "FSDevice.h"
 #include "MsgQueue.h"
 
-Drive::Drive(Amiga& ref, isize n) : AmigaComponent(ref), nr(n)
+Drive::Drive(Amiga& ref, isize n) : SubComponent(ref), nr(n)
 {
     assert(nr < 4);
 }

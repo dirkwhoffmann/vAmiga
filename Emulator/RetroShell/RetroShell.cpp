@@ -12,7 +12,7 @@
 #include "Amiga.h"
 #include "Parser.h"
 
-RetroShell::RetroShell(Amiga& ref) : AmigaComponent(ref), interpreter(ref)
+RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
 {
     // Initialize the text storage
     storage.push_back("");

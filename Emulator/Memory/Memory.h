@@ -10,7 +10,7 @@
 #pragma once
 
 #include "MemoryTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "RomFileTypes.h"
 
 // DEPRECATED. TODO: GET VALUE FROM ZORRO CARD MANANGER
@@ -91,7 +91,7 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 #define WRITE_EXT_16(x,y) W16BE_ALIGNED(ext + ((x) & extMask), (y))
 
 
-class Memory : public AmigaComponent {
+class Memory : public SubComponent {
 
     // Current configuration
     MemoryConfig config;

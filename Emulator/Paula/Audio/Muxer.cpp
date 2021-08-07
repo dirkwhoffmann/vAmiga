@@ -15,7 +15,7 @@
 #include "Oscillator.h"
 #include <cmath>
 
-Muxer::Muxer(Amiga& ref) : AmigaComponent(ref)
+Muxer::Muxer(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<HardwareComponent *> {
 

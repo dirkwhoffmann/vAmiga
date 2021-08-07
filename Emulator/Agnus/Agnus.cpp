@@ -13,7 +13,7 @@
 #include "IO.h"
 #include <iomanip>
 
-Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
+Agnus::Agnus(Amiga& ref) : SubComponent(ref)
 {    
     subComponents = std::vector<HardwareComponent *> {
         

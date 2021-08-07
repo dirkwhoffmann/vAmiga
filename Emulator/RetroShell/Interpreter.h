@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Command.h"
 #include "Exception.h"
 #include "Error.h"
@@ -57,7 +57,7 @@ struct ScriptInterruption: util::Exception {
     using Exception::Exception;
 };
 
-class Interpreter: AmigaComponent
+class Interpreter: SubComponent
 {
     // The registered instruction set
     Command root;

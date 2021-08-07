@@ -13,7 +13,7 @@
 #include "IO.h"
 #include "Memory.h"
 
-RTC::RTC(Amiga& ref) : AmigaComponent(ref)
+RTC::RTC(Amiga& ref) : SubComponent(ref)
 {
     config.model = RTC_OKI;
 }

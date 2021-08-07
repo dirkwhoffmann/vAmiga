@@ -10,9 +10,9 @@
 #pragma once
 
 #include "AudioFilterTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 
-class AudioFilter : public AmigaComponent {
+class AudioFilter : public SubComponent {
     
     // The currently set filter type
     FilterType type = FILTER_BUTTERWORTH;

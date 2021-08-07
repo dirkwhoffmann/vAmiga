@@ -10,7 +10,7 @@
 #pragma once
 
 #include "BlitterTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Memory.h"
 
 /* The Blitter supports three accuracy levels:
@@ -27,7 +27,7 @@
  * Level 0 and 1 invoke the FastBlitter. Level 2 invokes the SlowBlitter.
  */
 
-class Blitter : public AmigaComponent
+class Blitter : public SubComponent
 {
     friend class Agnus;
 

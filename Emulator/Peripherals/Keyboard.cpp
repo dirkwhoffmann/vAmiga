@@ -14,7 +14,7 @@
 #include "IO.h"
 #include "MsgQueue.h"
 
-Keyboard::Keyboard(Amiga& ref) : AmigaComponent(ref)
+Keyboard::Keyboard(Amiga& ref) : SubComponent(ref)
 {
  
 }

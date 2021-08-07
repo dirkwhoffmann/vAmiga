@@ -9,14 +9,14 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Chrono.h"
 
 #ifdef __MACH__
 #include <mach/mach_time.h>
 #endif
 
-class Oscillator : public AmigaComponent {
+class Oscillator : public SubComponent {
 
 public:
     
@@ -61,7 +61,8 @@ private:
     
 public:
     
-    Oscillator(Amiga& ref);
+    using SubComponent::SubComponent;
+    // Oscillator(Amiga& ref);
 
     const char *getDescription() const override;
 

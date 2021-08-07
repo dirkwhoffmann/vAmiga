@@ -13,7 +13,7 @@
 #include "IO.h"
 
 template <isize nr>
-StateMachine<nr>::StateMachine(Amiga& ref) : AmigaComponent(ref)
+StateMachine<nr>::StateMachine(Amiga& ref) : SubComponent(ref)
 {
 }
 

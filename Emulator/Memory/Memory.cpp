@@ -22,7 +22,7 @@
 #include "RTC.h"
 #include "ZorroManager.h"
 
-Memory::Memory(Amiga& ref) : AmigaComponent(ref)
+Memory::Memory(Amiga& ref) : SubComponent(ref)
 {
 }
 

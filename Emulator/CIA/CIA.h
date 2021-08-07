@@ -10,7 +10,7 @@
 #pragma once
 
 #include "CIATypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "TOD.h"
 
 #define CIACountA0     (1ULL << 0) // Decrements timer A
@@ -72,7 +72,7 @@
 | CIASdrToSsr0 | CIASsrToSdr0 \
 | CIASerClk0)
 
-class CIA : public AmigaComponent {
+class CIA : public SubComponent {
     
     friend class TOD;
     

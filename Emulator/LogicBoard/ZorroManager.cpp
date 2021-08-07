@@ -11,7 +11,7 @@
 #include "ZorroManager.h"
 #include "Memory.h"
 
-ZorroManager::ZorroManager(Amiga& ref) : AmigaComponent(ref)
+ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
 {
 }
 

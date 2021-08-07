@@ -10,12 +10,12 @@
 #pragma once
 
 #include "StateMachineTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Sampler.h"
 #include "Agnus.h"
 
 template <isize nr>
-class StateMachine : public AmigaComponent {
+class StateMachine : public SubComponent {
 
     // Result of the latest inspection
     AudioChannelInfo info;

@@ -15,7 +15,7 @@
 #include "IO.h"
 #include "PixelEngine.h"
 
-Copper::Copper(Amiga& ref) : AmigaComponent(ref)
+Copper::Copper(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<HardwareComponent *> {
         

@@ -15,7 +15,7 @@
 #include "MsgQueue.h"
 #include "Oscillator.h"
 
-Mouse::Mouse(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
+Mouse::Mouse(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref)
 {
 
 }

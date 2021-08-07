@@ -10,10 +10,10 @@
 #pragma once
 
 #include "MsgQueueTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "RingBuffer.h"
 
-class MsgQueue : public AmigaComponent {
+class MsgQueue : public SubComponent {
         
     // Ring buffer storing all pending messages
     util::RingBuffer<Message, 64> queue;
@@ -31,7 +31,7 @@ class MsgQueue : public AmigaComponent {
     
 public:
     
-    using AmigaComponent::AmigaComponent;
+    using SubComponent::SubComponent;
 
     
     //

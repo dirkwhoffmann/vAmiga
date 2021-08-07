@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include <map>
 
 struct CopperList {
@@ -18,7 +18,7 @@ struct CopperList {
     u32 end;
 };
 
-class CopperDebugger: public AmigaComponent {
+class CopperDebugger: public SubComponent {
                 
     // Cached Copper lists
     std::map<u32, CopperList> cache;
@@ -36,7 +36,7 @@ class CopperDebugger: public AmigaComponent {
     
 public:
     
-    using AmigaComponent::AmigaComponent;
+    using SubComponent::SubComponent;
     const char *getDescription() const override { return "CopperDebugger"; }
 
 private:

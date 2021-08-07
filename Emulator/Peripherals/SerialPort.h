@@ -10,7 +10,7 @@
 #pragma once
 
 #include "SerialPortTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 
 #define TXD_MASK (1 << 2)
 #define RXD_MASK (1 << 3)
@@ -21,7 +21,7 @@
 #define DTR_MASK (1 << 20)
 #define RI_MASK (1 << 22)
 
-class SerialPort : public AmigaComponent {
+class SerialPort : public SubComponent {
 
     // Current configuration
     SerialPortConfig config;

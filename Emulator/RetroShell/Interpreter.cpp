@@ -12,7 +12,7 @@
 #include "RetroShell.h"
 #include <sstream>
 
-Interpreter::Interpreter(Amiga &ref) : AmigaComponent(ref)
+Interpreter::Interpreter(Amiga &ref) : SubComponent(ref)
 {
     registerInstructions();
 };

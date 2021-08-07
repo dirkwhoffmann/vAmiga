@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AgnusTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Beam.h"
 #include "Blitter.h"
 #include "ChangeRecorder.h"
@@ -47,7 +47,7 @@
 #define DRAW_ODD                0b001
 #define DRAW_EVEN               0b010
 
-class Agnus : public AmigaComponent {
+class Agnus : public SubComponent {
     
     // Current configuration
     AgnusConfig config;

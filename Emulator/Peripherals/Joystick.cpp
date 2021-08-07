@@ -13,7 +13,7 @@
 #include "ControlPort.h"
 #include "IO.h"
 
-Joystick::Joystick(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
+Joystick::Joystick(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref)
 {
 
 };

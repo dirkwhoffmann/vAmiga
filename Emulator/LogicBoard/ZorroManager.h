@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 
 /* Additional information:
  *
@@ -17,7 +17,7 @@
  *   github.com/PR77/A500_ACCEL_RAM_IDE-Rev-1/blob/master/Logic/RAM/A500_RAM.v
  */
 
-class ZorroManager : public AmigaComponent {
+class ZorroManager : public SubComponent {
     
     // Current configuration state (0 = unconfigured)
     u8 fastRamConf;

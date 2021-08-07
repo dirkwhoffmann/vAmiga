@@ -10,11 +10,11 @@
 #pragma once
 
 #include "PixelEngineTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "ChangeRecorder.h"
 #include "Constants.h"
 
-class PixelEngine : public AmigaComponent {
+class PixelEngine : public SubComponent {
 
     friend class DmaDebugger;
     

@@ -10,11 +10,11 @@
 #pragma once
 
 #include "KeyboardTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Event.h"
 #include "RingBuffer.h"
 
-class Keyboard : public AmigaComponent {
+class Keyboard : public SubComponent {
 
     // Current configuration
     KeyboardConfig config;

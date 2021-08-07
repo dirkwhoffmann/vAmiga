@@ -13,7 +13,7 @@
 #include "Checksum.h"
 #include "IO.h"
 
-Blitter::Blitter(Amiga& ref) : AmigaComponent(ref)
+Blitter::Blitter(Amiga& ref) : SubComponent(ref)
 {
     // Initialize fill pattern tables    
     for (isize carryIn = 0; carryIn < 2; carryIn++) {

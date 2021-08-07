@@ -10,7 +10,7 @@
 #pragma once
 
 #include "TODTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 
 typedef union
 {
@@ -24,7 +24,7 @@ typedef union
 }
 Counter24;
 
-class TOD : public AmigaComponent {
+class TOD : public SubComponent {
     
     friend CIA;
     

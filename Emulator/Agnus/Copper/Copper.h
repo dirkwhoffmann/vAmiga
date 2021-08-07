@@ -10,14 +10,14 @@
 #pragma once
 
 #include "CopperTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Beam.h"
 #include "Checksum.h"
 #include "CopperDebugger.h"
 #include "Event.h"
 #include "Memory.h"
 
-class Copper : public AmigaComponent
+class Copper : public SubComponent
 {
     friend class Agnus;
     friend class CopperDebugger;

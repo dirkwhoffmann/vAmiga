@@ -10,9 +10,9 @@
 #pragma once
 
 #include "RTCTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 
-class RTC : public AmigaComponent {
+class RTC : public SubComponent {
 
     // Current configuration
     RTCConfig config;

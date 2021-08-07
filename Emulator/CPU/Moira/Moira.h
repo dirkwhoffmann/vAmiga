@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "MoiraConfig.h"
 #include "MoiraTypes.h"
 #include "MoiraDebugger.h"
@@ -22,7 +22,7 @@ namespace moira {
 // Execution control flags
 
 
-class Moira : public AmigaComponent {
+class Moira : public SubComponent {
 
     friend class Debugger;
     friend class Breakpoints;

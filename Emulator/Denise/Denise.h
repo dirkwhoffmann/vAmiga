@@ -10,14 +10,14 @@
 #pragma once
 
 #include "DeniseTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Colors.h"
 #include "Memory.h"
 #include "PixelEngine.h"
 #include "Reflection.h"
 #include "Recorder.h"
 
-class Denise : public AmigaComponent {
+class Denise : public SubComponent {
 
     friend class PixelEngine;
     

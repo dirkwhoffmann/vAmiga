@@ -11,7 +11,7 @@
 #include "AudioFilter.h"
 #include "math.h"
 
-AudioFilter::AudioFilter(Amiga& ref) : AmigaComponent(ref)
+AudioFilter::AudioFilter(Amiga& ref) : SubComponent(ref)
 {
     a1 = a2 = b0 = b1 = b2 = 0.0;
 }

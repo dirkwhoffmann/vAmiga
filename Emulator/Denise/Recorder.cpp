@@ -14,7 +14,7 @@
 #include "MsgQueue.h"
 #include "Paula.h"
 
-Recorder::Recorder(Amiga& ref) : AmigaComponent(ref)
+Recorder::Recorder(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<HardwareComponent *> {
         

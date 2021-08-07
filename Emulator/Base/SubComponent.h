@@ -38,10 +38,10 @@ class SerialPort;
 class UART;
 class ZorroManager;
 
-/* This class is the base class for all Amiga subcomponents. It extends class
- * HardwareComponents with references to all other components.
+/* This class extends the AmigaComponent class with references to all components
+ * that are part of the Amiga class.
  */
-class AmigaComponent : public HardwareComponent {
+class SubComponent : public HardwareComponent {
 
 protected:
 
@@ -77,7 +77,7 @@ protected:
 
 public:
 
-    AmigaComponent(Amiga& ref);
+    SubComponent(Amiga& ref);
 
     virtual bool isPoweredOff() const override;
     virtual bool isPoweredOn() const override;

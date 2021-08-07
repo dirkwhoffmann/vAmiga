@@ -10,10 +10,10 @@
 #pragma once
 
 #include "DriveTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Disk.h"
 
-class Drive : public AmigaComponent {
+class Drive : public SubComponent {
     
     friend class DiskController;
         

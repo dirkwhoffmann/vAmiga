@@ -12,7 +12,7 @@
 #include "UART.h"
 #include "IO.h"
 
-SerialPort::SerialPort(Amiga& ref) : AmigaComponent(ref)
+SerialPort::SerialPort(Amiga& ref) : SubComponent(ref)
 {
 
 }

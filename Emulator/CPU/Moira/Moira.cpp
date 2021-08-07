@@ -22,7 +22,7 @@ namespace moira {
 #include "StrWriter_cpp.h"
 #include "MoiraDasm_cpp.h"
 
-Moira::Moira(Amiga &ref) : AmigaComponent(ref)
+Moira::Moira(Amiga &ref) : SubComponent(ref)
 {
     if (BUILD_INSTR_INFO_TABLE) info = new InstrInfo[65536];
     if (ENABLE_DASM) dasm = new DasmPtr[65536];

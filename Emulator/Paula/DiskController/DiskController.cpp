@@ -17,7 +17,7 @@
 #include "Paula.h"
 #include <algorithm>
 
-DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
+DiskController::DiskController(Amiga& ref) : SubComponent(ref)
 {
 }
 

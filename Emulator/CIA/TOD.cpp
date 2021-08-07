@@ -12,7 +12,7 @@
 #include "CIA.h"
 #include "IO.h"
 
-TOD::TOD(CIA *cia, Amiga& ref) : AmigaComponent(ref)
+TOD::TOD(CIA *cia, Amiga& ref) : SubComponent(ref)
 {
     this->cia = cia;
 }

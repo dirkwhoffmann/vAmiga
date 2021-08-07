@@ -10,7 +10,7 @@
 #pragma once
 
 #include "PaulaTypes.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "AudioFilter.h"
 #include "AudioStream.h"
 #include "ChangeRecorder.h"
@@ -24,7 +24,7 @@
 // Class
 //
 
-class Paula : public AmigaComponent {
+class Paula : public SubComponent {
     
 private:
 

@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Chrono.h"
 #include "Muxer.h"
 
-class Recorder : public AmigaComponent {
+class Recorder : public SubComponent {
 
     //
     // Constants

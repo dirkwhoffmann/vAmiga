@@ -13,7 +13,7 @@
 #include "CPU.h"
 #include "IO.h"
 
-Paula::Paula(Amiga& ref) : AmigaComponent(ref)
+Paula::Paula(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<HardwareComponent *> {
         

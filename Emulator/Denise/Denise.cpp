@@ -15,7 +15,7 @@
 #include "IO.h"
 #include "SSEUtils.h"
 
-Denise::Denise(Amiga& ref) : AmigaComponent(ref)
+Denise::Denise(Amiga& ref) : SubComponent(ref)
 {    
     subComponents = std::vector<HardwareComponent *> {
         

@@ -8,10 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "AmigaComponent.h"
+#include "SubComponent.h"
 #include "Amiga.h"  
 
-AmigaComponent::AmigaComponent(Amiga& ref) :
+SubComponent::SubComponent(Amiga& ref) :
 agnus(ref.agnus),
 amiga(ref),
 blitter(ref.agnus.blitter),
@@ -44,43 +44,43 @@ zorro(ref.zorro)
 };
 
 bool
-AmigaComponent::isPoweredOff() const
+SubComponent::isPoweredOff() const
 {
     return amiga.isPoweredOff();
 }
 
 bool
-AmigaComponent::isPoweredOn() const
+SubComponent::isPoweredOn() const
 {
     return amiga.isPoweredOn();
 }
 
 bool
-AmigaComponent::isPaused() const
+SubComponent::isPaused() const
 {
     return amiga.isPaused();
 }
 
 bool
-AmigaComponent::isRunning() const
+SubComponent::isRunning() const
 {
     return amiga.isRunning();
 }
 
 void
-AmigaComponent::suspend()
+SubComponent::suspend()
 {
     amiga.suspend();
 }
 
 void
-AmigaComponent::resume()
+SubComponent::resume()
 {
     amiga.resume();
 }
 
 void
-AmigaComponent::prefix() const
+SubComponent::prefix() const
 {
     amiga.prefix();
 }

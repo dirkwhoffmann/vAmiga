@@ -15,7 +15,7 @@
 #include "MsgQueue.h"
 #include "PixelEngine.h"
 
-DmaDebugger::DmaDebugger(Amiga &ref) : AmigaComponent(ref)
+DmaDebugger::DmaDebugger(Amiga &ref) : SubComponent(ref)
 {
 }
 

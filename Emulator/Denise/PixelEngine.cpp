@@ -16,7 +16,7 @@
 
 #include <fstream>
 
-PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
+PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 {
     // Allocate frame buffers
     emuTexture[0].data = new u32[PIXELS];
