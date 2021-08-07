@@ -68,7 +68,7 @@ Denise::getConfigItem(Option option) const
     }
 }
 
-bool
+void
 Denise::setConfigItem(Option option, i64 value)
 {
     switch (option) {
@@ -78,69 +78,41 @@ Denise::setConfigItem(Option option, i64 value)
             if (!DeniseRevisionEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, DeniseRevisionEnum::keyList());
             }
-            if (config.revision == value) {
-                return false;
-            }
-            
             config.revision = (DeniseRevision)value;
-            return true;
+            return;
                         
         case OPT_HIDDEN_SPRITES:
             
-            if (config.hiddenSprites == value) {
-                return false;
-            }
-            
             config.hiddenSprites = value;
-            return true;
+            return;
             
         case OPT_HIDDEN_LAYERS:
             
-            if (config.hiddenLayers == value) {
-                return false;
-            }
-
             config.hiddenLayers = value;
-            return true;
+            return;
             
         case OPT_HIDDEN_LAYER_ALPHA:
             
-            if (config.hiddenLayerAlpha == value) {
-                return false;
-            }
-            
             config.hiddenLayerAlpha = value;
-            return true;
+            return;
 
         case OPT_CLX_SPR_SPR:
             
-            if (config.clxSprSpr == value) {
-                return false;
-            }
-
             config.clxSprSpr = value;
-            return true;
+            return;
             
         case OPT_CLX_SPR_PLF:
             
-            if (config.clxSprPlf == value) {
-                return false;
-            }
-
             config.clxSprPlf = value;
-            return true;
+            return;
             
         case OPT_CLX_PLF_PLF:
             
-            if (config.clxPlfPlf == value) {
-                return false;
-            }
-
             config.clxPlfPlf = value;
-            return true;
+            return;
 
         default:
-            return false;
+            return;
     }
 }
 

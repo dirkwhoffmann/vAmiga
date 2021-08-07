@@ -207,7 +207,7 @@ public:
     const MemoryConfig &getConfig() const { return config; }
     
     i64 getConfigItem(Option option) const;
-    bool setConfigItem(Option option, i64 value) override;
+    void setConfigItem(Option option, i64 value) override;
 
     
     //

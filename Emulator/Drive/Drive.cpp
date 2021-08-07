@@ -72,16 +72,16 @@ Drive::getConfigItem(Option option) const
     }
 }
 
-bool
+void
 Drive::setConfigItem(Option option, i64 value)
 {
-    return setConfigItem(option, nr, value);
+    setConfigItem(option, nr, value);
 }
 
-bool
+void
 Drive::setConfigItem(Option option, long id, i64 value)
 {
-    if (id != nr) return false;
+    if (id != nr) return;
  
     switch (option) {
                             
@@ -90,87 +90,60 @@ Drive::setConfigItem(Option option, long id, i64 value)
             if (!DriveTypeEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, DriveTypeEnum::keyList());
             }
-            if (config.type == value) {
-                return false;
-            }
             if (value != DRIVE_DD_35 && value != DRIVE_HD_35) {
                 throw VAError(ERROR_OPT_UNSUPPORTED);
             }
             config.type = (DriveType)value;
-            return true;
+            return;
 
         case OPT_EMULATE_MECHANICS:
         
-            if (config.mechanicalDelays == value) {
-                return false;
-            }
             config.mechanicalDelays = value;
-            return true;
+            return;
 
         case OPT_DRIVE_PAN:
 
-            if (config.pan == value) {
-                return false;
-            }
             config.pan = value;
-            return true;
+            return;
 
         case OPT_STEP_VOLUME:
 
-            if (config.stepVolume == value) {
-                return false;
-            }
             config.stepVolume = value;
-            return true;
+            return;
 
         case OPT_POLL_VOLUME:
 
-            if (config.pollVolume == value) {
-                return false;
-            }
             config.pollVolume = value;
-            return true;
+            return;
 
         case OPT_EJECT_VOLUME:
 
-            if (config.ejectVolume == value) {
-                return false;
-            }
             config.ejectVolume = value;
-            return true;
+            return;
 
         case OPT_INSERT_VOLUME:
 
-            if (config.insertVolume == value) {
-                return false;
-            }
             config.insertVolume = value;
-            return true;
+            return;
 
         case OPT_DEFAULT_FILESYSTEM:
 
             if (!FSVolumeTypeEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, FSVolumeTypeEnum::keyList());
             }
-            if (config.defaultFileSystem == value) {
-                return false;
-            }
             config.defaultFileSystem = value;
-            return true;
+            return;
 
         case OPT_DEFAULT_BOOTBLOCK:
 
             if (!BootBlockIdEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, BootBlockIdEnum::keyList());
             }
-            if (config.defaultBootBlock == value) {
-                return false;
-            }
             config.defaultBootBlock = value;
-            return true;
+            return;
 
         default:
-            return false;
+            return;
     }
 }
 

@@ -103,7 +103,7 @@ Memory::getConfigItem(Option option) const
     }
 }
 
-bool
+void
 Memory::setConfigItem(Option option, i64 value)
 {
     switch (option) {
@@ -122,7 +122,7 @@ Memory::setConfigItem(Option option, i64 value)
             }
             
             mem.allocChip((i32)KB(value));
-            return true;
+            return;
             
         case OPT_SLOW_RAM:
             
@@ -138,7 +138,7 @@ Memory::setConfigItem(Option option, i64 value)
             }
                         
             mem.allocSlow((i32)KB(value));
-            return true;
+            return;
             
         case OPT_FAST_RAM:
             
@@ -154,7 +154,7 @@ Memory::setConfigItem(Option option, i64 value)
             }
                         
             mem.allocFast((i32)KB(value));
-            return true;
+            return;
             
         case OPT_EXT_START:
             
@@ -166,65 +166,52 @@ Memory::setConfigItem(Option option, i64 value)
             
             config.extStart = (u32)value;
             updateMemSrcTables();
-            return true;
+            return;
             
         case OPT_SLOW_RAM_DELAY:
-            
-            if (config.slowRamDelay == value) {
-                return false;
-            }
-            
+                        
             suspend();
             config.slowRamDelay = value;
             resume();
-            return true;
+            return;
             
         case OPT_BANKMAP:
             
             if (!BankMapEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, BankMapEnum::keyList());
             }
-            if (config.bankMap == value) {
-                return false;
-            }
             
             suspend();
             config.bankMap = (BankMap)value;
             updateMemSrcTables();
             resume();
-            return true;
+            return;
 
         case OPT_UNMAPPING_TYPE:
             
             if (!UnmappedMemoryEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, UnmappedMemoryEnum::keyList());
             }
-            if (config.unmappingType == value) {
-                return false;
-            }
             
             suspend();
             config.unmappingType = (UnmappedMemory)value;
             resume();
-            return true;
+            return;
             
         case OPT_RAM_INIT_PATTERN:
             
             if (!RamInitPatternEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, RamInitPatternEnum::keyList());
             }
-            if (config.ramInitPattern == value) {
-                return false;
-            }
 
             suspend();
             config.ramInitPattern = (RamInitPattern)value;
             resume();
             if (isPoweredOff()) fillRamWithInitPattern();
-            return true;
+            return;
             
         default:
-            return false;
+            return;
     }
 }
 

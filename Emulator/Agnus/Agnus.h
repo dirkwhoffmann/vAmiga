@@ -415,7 +415,7 @@ public:
     const AgnusConfig &getConfig() const { return config; }
     
     i64 getConfigItem(Option option) const;
-    bool setConfigItem(Option option, i64 value) override;
+    void setConfigItem(Option option, i64 value) override;
     
     bool isOCS() const { return config.revision == AGNUS_OCS; }
     bool isECS() const { return config.revision != AGNUS_OCS; }

@@ -65,49 +65,40 @@ Mouse::getConfigItem(Option option) const
     }
 }
 
-bool
+void
 Mouse::setConfigItem(Option option, i64 value)
 {
-    return setConfigItem(option, port.nr, value);
+    setConfigItem(option, port.nr, value);
 }
 
-bool
+void
 Mouse::setConfigItem(Option option, long id, i64 value)
 {
-    if (port.nr != id) return false;
+    if (port.nr != id) return;
     
     switch (option) {
             
         case OPT_PULLUP_RESISTORS:
             
-            if (config.pullUpResistors == value) {
-                return false;
-            }
             config.pullUpResistors = value;
-            return true;
+            return;
  
         case OPT_SHAKE_DETECTION:
             
-            if (config.shakeDetection == value) {
-                return false;
-            }
             config.shakeDetection = value;
-            return true;
+            return;
             
         case OPT_MOUSE_VELOCITY:
             
             if (value < 0 || value > 255) {
                 throw VAError(ERROR_OPT_INVALID_ARG, "0 ... 255");
             }
-            if (config.velocity == value) {
-                return false;
-            }
             config.velocity= value;
             updateScalingFactors();
-            return true;
+            return;
 
         default:
-            return false;
+            return;
     }
 }
 

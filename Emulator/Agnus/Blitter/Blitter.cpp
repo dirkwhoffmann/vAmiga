@@ -69,7 +69,7 @@ Blitter::getConfigItem(Option option) const
     }
 }
 
-bool
+void
 Blitter::setConfigItem(Option option, i64 value)
 {
     switch (option) {
@@ -83,20 +83,15 @@ Blitter::setConfigItem(Option option, i64 value)
             
             if (value < 0 || value > 2) {
                 warn("Invalid Blitter accuracy level: %lld\n", value);
-                return false;
+                return;
             }
-            if (config.accuracy == value) {
-                return false;
-            }
-            
             suspend();
-            config.accuracy = (int)value;
+            config.accuracy = value;
             resume();
-
-            return true;
+            return;
             
         default:
-            return false;
+            return;
     }
 }
 
@@ -554,7 +549,7 @@ Blitter::prepareBlit()
 void
 Blitter::beginBlit()
 {
-    int level = config.accuracy;
+    auto level = config.accuracy;
 
     if (BLT_GUARD) memset(memguard, 0, sizeof(memguard));
     
@@ -601,13 +596,13 @@ Blitter::beginBlit()
 }
 
 void
-Blitter::beginLineBlit(int level)
+Blitter::beginLineBlit(isize level)
 {
     static bool verbose = true;
 
     if (BLT_CHECKSUM && verbose) {
         verbose = false;
-        msg("Performing level %d line blits.\n", level);
+        msg("Performing level %zd line blits.\n", level);
     }
 
     switch (level) {
@@ -619,13 +614,13 @@ Blitter::beginLineBlit(int level)
 }
 
 void
-Blitter::beginCopyBlit(int level)
+Blitter::beginCopyBlit(isize level)
 {
     static bool verbose = true;
 
     if (BLT_CHECKSUM && verbose) {
         verbose = false;
-        msg("Performing level %d copy blits.\n", level);
+        msg("Performing level %zd copy blits.\n", level);
     }
 
     switch (level) {

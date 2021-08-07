@@ -65,7 +65,7 @@ public:
     const RTCConfig &getConfig() const { return config; }
     
     i64 getConfigItem(Option option) const;
-    bool setConfigItem(Option option, i64 value) override;
+    void setConfigItem(Option option, i64 value) override;
     
     bool isPresent() const { return config.model != RTC_NONE; }
 

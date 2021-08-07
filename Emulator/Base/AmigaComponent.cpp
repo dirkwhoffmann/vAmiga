@@ -39,36 +39,28 @@ AmigaComponent::reset(bool hard)
     _reset(hard);
 }
 
-bool
+void
 AmigaComponent::configure(Option option, i64 value)
-{
-    bool result = false;
-    
+{    
     // Configure all subcomponents
     for (AmigaComponent *c : subComponents) {
-        result |= c->configure(option, value);
+        c->configure(option, value);
     }
     
     // Configure this component
-    result |= setConfigItem(option, value);
-
-    return result;
+    setConfigItem(option, value);
 }
 
-bool
+void
 AmigaComponent::configure(Option option, long id, i64 value)
 {
-    bool result = false;
-    
     // Configure all subcomponents
     for (AmigaComponent *c : subComponents) {
-        result |= c->configure(option, id, value);
+        c->configure(option, id, value);
     }
     
     // Configure this component
-    result |= setConfigItem(option, id, value);
-
-    return result;
+    setConfigItem(option, id, value);
 }
 
 void

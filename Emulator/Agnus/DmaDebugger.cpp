@@ -79,51 +79,41 @@ DmaDebugger::getConfigItem(Option option, long id) const
     }
 }
 
-bool
+void
 DmaDebugger::setConfigItem(Option option, i64 value)
 {
     switch (option) {
                                     
         case OPT_DMA_DEBUG_ENABLE:
-            
-            if (config.enabled == value) {
-                return false;
-            }
-            
+                        
             config.enabled = value;
             messageQueue.put(value ? MSG_DMA_DEBUG_ON : MSG_DMA_DEBUG_OFF);
-            return true;
+            return;
             
         case OPT_DMA_DEBUG_MODE:
             
             if (!DmaDisplayModeEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, DmaDisplayModeEnum::keyList());
             }
-            if (config.displayMode == value) {
-                return false;
-            }
             
             config.displayMode = (DmaDisplayMode)value;
-            return true;
+            return;
 
         case OPT_DMA_DEBUG_OPACITY:
-            
-            if (config.opacity == value) {
-                return false;
-            }
-            
+                        
             config.opacity = value;
-            return true;
+            return;
 
         default:
-            return false;
+            return;
     }
 }
 
-bool
+void
 DmaDebugger::setConfigItem(Option option, long id, i64 value)
 {
-    if (!DmaChannelEnum::isValid(id)) { return false; }
+    if (!DmaChannelEnum::isValid(id)) { return; }
+    
     DmaChannel channel = (DmaChannel)id;
     
     switch (option) {
@@ -137,32 +127,32 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
                 case DMA_CHANNEL_CPU:
                     
                     visualize[BUS_CPU] = value;
-                    return true;
+                    return;
                     
                 case DMA_CHANNEL_REFRESH:
                     
                     visualize[BUS_REFRESH] = value;
-                    return true;
+                    return;
 
                 case DMA_CHANNEL_DISK:
                     
                     visualize[BUS_DISK] = value;
-                    return true;
+                    return;
 
                 case DMA_CHANNEL_AUDIO:
 
                     visualize[BUS_AUDIO] = value;
-                    return true;
+                    return;
 
                 case DMA_CHANNEL_COPPER:
 
                     visualize[BUS_COPPER] = value;
-                    return true;
+                    return;
 
                 case DMA_CHANNEL_BLITTER:
 
                     visualize[BUS_BLITTER] = value;
-                    return true;
+                    return;
         
                 case DMA_CHANNEL_BITPLANE:
 
@@ -172,7 +162,7 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
                     visualize[BUS_BPL4] = value;
                     visualize[BUS_BPL5] = value;
                     visualize[BUS_BPL6] = value;
-                    return true;
+                    return;
 
                 case DMA_CHANNEL_SPRITE:
 
@@ -184,10 +174,10 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
                     visualize[BUS_SPRITE5] = value;
                     visualize[BUS_SPRITE6] = value;
                     visualize[BUS_SPRITE7] = value;
-                    return true;
+                    return;
                                         
                 default:
-                    return false;
+                    return;
             }
 
         case OPT_DMA_DEBUG_COLOR:
@@ -199,32 +189,32 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
                 case DMA_CHANNEL_CPU:
                     
                     setColor(BUS_CPU, (u32)value);
-                    return true;
+                    return;
                     
                 case DMA_CHANNEL_REFRESH:
 
                     setColor(BUS_REFRESH, (u32)value);
-                    return true;
+                    return;
 
                 case DMA_CHANNEL_DISK:
                     
                     setColor(BUS_DISK, (u32)value);
-                    return true;
+                    return;
 
                 case DMA_CHANNEL_AUDIO:
 
                     setColor(BUS_AUDIO, (u32)value);
-                    return true;
+                    return;
 
                 case DMA_CHANNEL_COPPER:
 
                     setColor(BUS_COPPER, (u32)value);
-                    return true;
+                    return;
 
                 case DMA_CHANNEL_BLITTER:
 
                     setColor(BUS_BLITTER, (u32)value);
-                    return true;
+                    return;
         
                 case DMA_CHANNEL_BITPLANE:
 
@@ -234,7 +224,7 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
                     setColor(BUS_BPL4, (u32)value);
                     setColor(BUS_BPL5, (u32)value);
                     setColor(BUS_BPL6, (u32)value);
-                    return true;
+                    return;
 
                 case DMA_CHANNEL_SPRITE:
 
@@ -246,13 +236,13 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
                     setColor(BUS_SPRITE5, (u32)value);
                     setColor(BUS_SPRITE6, (u32)value);
                     setColor(BUS_SPRITE7, (u32)value);
-                    return true;
+                    return;
                                         
                 default:
-                    return false;
+                    return;
             }
         default:
-            return false;
+            return;
     }
 }
 

@@ -2359,7 +2359,8 @@ using namespace moira;
 - (BOOL)configure:(Option)opt value:(NSInteger)val
 {
     try {
-        return [self amiga]->configure(opt, val);
+        [self amiga]->configure(opt, val);
+        return true;
     } catch (VAError &exception) {
         return false;
     }
@@ -2368,7 +2369,8 @@ using namespace moira;
 - (BOOL)configure:(Option)opt enable:(BOOL)val
 {
     try {
-        return [self amiga]->configure(opt, val ? 1 : 0);
+        [self amiga]->configure(opt, val ? 1 : 0);
+        return true;
     } catch (VAError &exception) {
         return false;
     }
@@ -2377,7 +2379,8 @@ using namespace moira;
 - (BOOL)configure:(Option)opt id:(NSInteger)id value:(NSInteger)val
 {
     try {
-        return [self amiga]->configure(opt, id, val);
+        [self amiga]->configure(opt, id, val);
+        return true;
     } catch (VAError &exception) {
         return false;
     }
@@ -2386,7 +2389,8 @@ using namespace moira;
 - (BOOL)configure:(Option)opt id:(NSInteger)id enable:(BOOL)val
 {
     try {
-        return [self amiga]->configure(opt, id, val ? 1 : 0);
+        [self amiga]->configure(opt, id, val ? 1 : 0);
+        return true;
     } catch (VAError &exception) {
         return false;
     }
@@ -2395,7 +2399,8 @@ using namespace moira;
 - (BOOL)configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val
 {
     try {
-        return [self amiga]->configure(opt, (long)id, val);
+        [self amiga]->configure(opt, (long)id, val);
+        return true;
     } catch (VAError &exception) {
         return false;
     }
@@ -2404,7 +2409,8 @@ using namespace moira;
 - (BOOL)configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val
 {
     try {
-        return [self amiga]->configure(opt, (long)id, val ? 1 : 0);
+        [self amiga]->configure(opt, (long)id, val ? 1 : 0);
+        return true;
     } catch (VAError &exception) {
         return false;
     }

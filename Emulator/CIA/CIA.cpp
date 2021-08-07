@@ -76,7 +76,7 @@ CIA::getConfigItem(Option option) const
     }
 }
 
-bool
+void
 CIA::setConfigItem(Option option, i64 value)
 {
     switch (option) {
@@ -86,33 +86,22 @@ CIA::setConfigItem(Option option, i64 value)
             if (!CIARevisionEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, CIARevisionEnum::keyList());
             }
-            if (config.revision == value) {
-                return false;
-            }
             
             config.revision = (CIARevision)value;
-            return true;
+            return;
 
         case OPT_TODBUG:
-            
-            if (config.todBug == value) {
-                return false;
-            }
-            
+                        
             config.todBug = value;
-            return true;
+            return;
             
         case OPT_ECLOCK_SYNCING:
             
-            if (config.eClockSyncing == value) {
-                return false;
-            }
-
             config.eClockSyncing = value;
-            return true;
+            return;
             
         default:
-            return false;
+            return;
     }
 }
 

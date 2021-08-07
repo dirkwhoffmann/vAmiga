@@ -110,7 +110,7 @@ PixelEngine::getConfigItem(Option option) const
     }
 }
 
-bool
+void
 PixelEngine::setConfigItem(Option option, i64 value)
 {
     switch (option) {
@@ -120,51 +120,39 @@ PixelEngine::setConfigItem(Option option, i64 value)
             if (!PaletteEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, PaletteEnum::keyList());
             }
-            if (config.palette == value) {
-                return false;
-            }
             config.palette = value;
             updateRGBA();
-            return true;
+            return;
 
         case OPT_BRIGHTNESS:
             
             if (config.brightness < 0 || config.brightness > 100) {
                 throw VAError(ERROR_OPT_INVALID_ARG, "Expected 0...100");
             }
-            if (config.brightness == value) {
-                return false;
-            }
             config.brightness = value;
             updateRGBA();
-            return true;
+            return;
             
         case OPT_CONTRAST:
 
             if (config.contrast < 0 || config.contrast > 100) {
                 throw VAError(ERROR_OPT_INVALID_ARG, "Expected 0...100");
             }
-            if (config.contrast == value) {
-                return false;
-            }
             config.contrast = value;
             updateRGBA();
-            return true;
+            return;
 
         case OPT_SATURATION:
         
             if (config.saturation < 0 || config.saturation > 100) {
                 throw VAError(ERROR_OPT_INVALID_ARG, "Expected 0...100");
             }
-            if (config.saturation == value) {
-                return false;
-            }
             config.saturation = value;
             updateRGBA();
-            return true;
+            return;
 
         default:
-            return false;
+            return;
     }
 }
 

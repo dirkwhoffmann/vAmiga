@@ -283,34 +283,36 @@ Amiga::getConfigItem(Option option, long id) const
     return 0;
 }
 
-bool
+void
 Amiga::configure(Option option, i64 value)
 {
-    // Propagate configuration request to all components
-    bool changed = AmigaComponent::configure(option, value);
-    
-    // Inform the GUI if the configuration has changed
-    if (changed) msgQueue.put(MSG_CONFIG);
-    
-    // Dump the current configuration in debug mode
-    if (changed && CNF_DEBUG) dump(dump::Config);
-
-    return changed;
+    _configure(option, value);
+    msgQueue.put(MSG_CONFIG);
 }
 
-bool
+void
+Amiga::_configure(Option option, i64 value)
+{
+    debug(CNF_DEBUG, "configure(%lld, %lld)\n", option, value);
+
+    // Propagate configuration request to all components
+    AmigaComponent::configure(option, value);
+}
+
+void
 Amiga::configure(Option option, long id, i64 value)
 {
-    // Propagate configuration request to all components
-    bool changed = AmigaComponent::configure(option, id, value);
-    
-    // Inform the GUI if the configuration has changed
-    if (changed) msgQueue.put(MSG_CONFIG);
+    _configure(option, id, value);
+    msgQueue.put(MSG_CONFIG);
+}
 
-    // Dump the current configuration in debug mode
-    if (changed && CNF_DEBUG) dump(dump::Config);
-        
-    return changed;
+void
+Amiga::_configure(Option option, long id, i64 value)
+{
+    debug(CNF_DEBUG, "configure(%lld, %ld, %lld)\n", option, id, value);
+    
+    // Propagate configuration request to all components
+    AmigaComponent::configure(option, id, value);
 }
 
 void

@@ -17,7 +17,7 @@
 
 typedef struct
 {
-    int accuracy;
+    isize accuracy;
 }
 BlitterConfig;
 

@@ -93,7 +93,7 @@ Agnus::getConfigItem(Option option) const
     }
 }
 
-bool
+void
 Agnus::setConfigItem(Option option, i64 value)
 {
     switch (option) {
@@ -108,9 +108,6 @@ Agnus::setConfigItem(Option option, i64 value)
             if (!AgnusRevisionEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, AgnusRevisionEnum::keyList());
             }            
-            if (config.revision == value) {
-                return false;
-            }
             
             amiga.suspend();
             
@@ -124,18 +121,15 @@ Agnus::setConfigItem(Option option, i64 value)
             mem.updateMemSrcTables();
             
             amiga.resume();
-            return true;
+            return;
             
         case OPT_SLOW_RAM_MIRROR:
             
-            if (config.slowRamMirror == value) {
-                return false;
-            }
             config.slowRamMirror = value;
-            return true;
+            return;
             
         default:
-            return false;
+            return;
     }
 }
 

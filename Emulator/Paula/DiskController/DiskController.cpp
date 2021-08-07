@@ -75,7 +75,7 @@ DiskController::getConfigItem(Option option, long id) const
     }
 }
 
-bool
+void
 DiskController::setConfigItem(Option option, i64 value)
 {
     switch (option) {
@@ -90,38 +90,27 @@ DiskController::setConfigItem(Option option, i64 value)
             if (!isValidDriveSpeed(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, "-1, 1, 2, 4, 8");
             }
-            if (config.speed == value) {
-                return false;
-            }
             
             config.speed = (i32)value;
             scheduleFirstDiskEvent();
-            return true;
+            return;
                         
         case OPT_AUTO_DSKSYNC:
 
-            if (config.autoDskSync == value) {
-                return false;
-            }
-
             config.autoDskSync = value;
-            return true;
+            return;
             
         case OPT_LOCK_DSKSYNC:
-            
-            if (config.lockDskSync == value) {
-                return false;
-            }
-            
+                        
             config.lockDskSync = value;
-            return true;
+            return;
             
         default:
-            return false;
+            return;
     }
 }
 
-bool
+void
 DiskController::setConfigItem(Option option, long id, i64 value)
 {
     switch (option) {
@@ -131,7 +120,7 @@ DiskController::setConfigItem(Option option, long id, i64 value)
             assert(id >= 0 && id <= 3);
             
             // We don't allow the internal drive (Df0) to be disconnected
-            if (id == 0 && value == false) return false;
+            if (id == 0 && value == false) return;
             
             // Connect or disconnect the drive
             config.connected[id] = value;
@@ -139,10 +128,10 @@ DiskController::setConfigItem(Option option, long id, i64 value)
             // Inform the GUI
             messageQueue.put(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, id);
             messageQueue.put(MSG_CONFIG);
-            return true;
+            return;
             
         default:
-            return false;
+            return;
     }
 }
 

@@ -130,7 +130,7 @@ Muxer::getConfigItem(Option option, long id) const
     }
 }
 
-bool
+void
 Muxer::setConfigItem(Option option, i64 value)
 {
     bool wasMuted = isMuted();
@@ -142,35 +142,25 @@ Muxer::setConfigItem(Option option, i64 value)
             if (!SamplingMethodEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, SamplingMethodEnum::keyList());
             }
-            if (config.samplingMethod == value) {
-                return false;
-            }
             
             config.samplingMethod = (SamplingMethod)value;
-            return true;
+            return;
             
         case OPT_FILTER_TYPE:
             
             if (!FilterTypeEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, FilterTypeEnum::keyList());
             }
-            if (config.filterType == value) {
-                return false;
-            }
 
             config.filterType = (FilterType)value;
             filterL.setFilterType((FilterType)value);
             filterR.setFilterType((FilterType)value);
-            return true;
+            return;
                         
         case OPT_FILTER_ALWAYS_ON:
-            
-            if (config.filterAlwaysOn == value) {
-                return false;
-            }
-            
+                        
             config.filterAlwaysOn = value;
-            return true;
+            return;
 
         case OPT_AUDVOLL:
             
@@ -182,7 +172,7 @@ Muxer::setConfigItem(Option option, i64 value)
                         
             if (wasMuted != isMuted())
                 messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
-            return true;
+            return;
             
         case OPT_AUDVOLR:
 
@@ -194,14 +184,14 @@ Muxer::setConfigItem(Option option, i64 value)
 
             if (wasMuted != isMuted())
                 messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
-            return true;
+            return;
             
         default:
-            return false;
+            return;
     }
 }
 
-bool
+void
 Muxer::setConfigItem(Option option, long id, i64 value)
 {
     switch (option) {
@@ -215,7 +205,7 @@ Muxer::setConfigItem(Option option, long id, i64 value)
             config.vol[id] = value;
             vol[id] = pow((double)value / 100, 1.4);
             
-            return true;
+            return;
             
         case OPT_AUDPAN:
                         
@@ -223,7 +213,7 @@ Muxer::setConfigItem(Option option, long id, i64 value)
             if (value < 0 || value > 200) {
                 warn(" Invalid pan: %lld\n", value);
                 warn("Valid values: 0 ... 200\n");
-                return false;
+                return;
             }
 
             config.pan[id] = value;
@@ -231,10 +221,10 @@ Muxer::setConfigItem(Option option, long id, i64 value)
             if (value <= 50) pan[id] = (50 + value) / 100.0;
             else if (value <= 150) pan[id] = (150 - value) / 100.0;
             else if (value <= 200) pan[id] = (value - 150) / 100.0;
-            return true;
+            return;
 
         default:
-            return false;
+            return;
     }
 }
 

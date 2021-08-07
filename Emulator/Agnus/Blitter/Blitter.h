@@ -279,7 +279,7 @@ public:
     const BlitterConfig &getConfig() const { return config; }
     
     i64 getConfigItem(Option option) const;
-    bool setConfigItem(Option option, i64 value) override;
+    void setConfigItem(Option option, i64 value) override;
     
     
     //
@@ -425,8 +425,8 @@ private:
 
     // Starts a Blitter operation
     void beginBlit();
-    void beginLineBlit(int level);
-    void beginCopyBlit(int level);
+    void beginLineBlit(isize level);
+    void beginCopyBlit(isize level);
 
     // Clears the BBUSY flag and triggers the Blitter interrupt
     void signalEnd();

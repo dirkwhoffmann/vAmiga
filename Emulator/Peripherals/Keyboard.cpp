@@ -48,22 +48,18 @@ Keyboard::getConfigItem(Option option) const
     }
 }
 
-bool
+void
 Keyboard::setConfigItem(Option option, i64 value)
 {
     switch (option) {
             
         case OPT_ACCURATE_KEYBOARD:
             
-            if (config.accurate == value) {
-                return false;
-            }
-            
             config.accurate = value;
-            return true;
+            return;
                         
         default:
-            return false;
+            return;
     }
 }
 

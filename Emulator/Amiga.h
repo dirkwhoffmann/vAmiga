@@ -161,10 +161,14 @@ public:
     i64 getConfigItem(Option option) const;
     i64 getConfigItem(Option option, long id) const;
     
-    // Sets a single configuration item
-    bool configure(Option option, i64 value) throws;
-    bool configure(Option option, long id, i64 value) throws;
-    
+    // Sets a single configuration item and informs the GUI
+    void configure(Option option, i64 value) throws;
+    void configure(Option option, long id, i64 value) throws;
+
+    // Sets a single configuration item without informing the GUI
+    void _configure(Option option, i64 value) throws;
+    void _configure(Option option, long id, i64 value) throws;
+
     // Prepares the Amiga for regression testing
     void configure(ConfigScheme scheme);
     

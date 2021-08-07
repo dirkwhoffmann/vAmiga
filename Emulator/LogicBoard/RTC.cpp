@@ -31,7 +31,7 @@ RTC::getConfigItem(Option option) const
     }
 }
 
-bool
+void
 RTC::setConfigItem(Option option, i64 value)
 {
     switch (option) {
@@ -46,17 +46,12 @@ RTC::setConfigItem(Option option, i64 value)
             if (!RTCRevisionEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, RTCRevisionEnum::keyList());
             }
-            if (config.model == value) {
-                return false;
-            }
-            
             config.model = (RTCRevision)value;
             mem.updateMemSrcTables();
-            
-            return true;
+            return;
                         
         default:
-            return false;
+            return;
     }
 }
 

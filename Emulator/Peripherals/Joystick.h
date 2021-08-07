@@ -61,8 +61,8 @@ public:
     const JoystickConfig &getConfig() const { return config; }
 
     i64 getConfigItem(Option option) const;
-    bool setConfigItem(Option option, i64 value) override;
-    bool setConfigItem(Option option, long id, i64 value) override;
+    void setConfigItem(Option option, i64 value) override;
+    void setConfigItem(Option option, long id, i64 value) override;
     
     
     //

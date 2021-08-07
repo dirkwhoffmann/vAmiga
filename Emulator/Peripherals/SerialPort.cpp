@@ -36,7 +36,7 @@ SerialPort::getConfigItem(Option option) const
     }
 }
 
-bool
+void
 SerialPort::setConfigItem(Option option, i64 value)
 {
     switch (option) {
@@ -45,17 +45,14 @@ SerialPort::setConfigItem(Option option, i64 value)
             
             if (!SerialPortDeviceEnum::isValid(value)) {
                 warn("Invalid serial port device: %lld\n", value);
-                return false;
-            }
-            if (config.device == value) {
-                return false;
+                return;
             }
             
             config.device = (SerialPortDevice)value;
-            return true;
+            return;
                         
         default:
-            return false;
+            return;
     }
 }
 
