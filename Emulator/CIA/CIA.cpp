@@ -22,7 +22,7 @@
 
 CIA::CIA(int n, Amiga& ref) : SubComponent(ref), nr(n)
 {    
-    subComponents = std::vector<HardwareComponent *> { &tod };
+    subComponents = std::vector<AmigaComponent *> { &tod };
 }
 
 void

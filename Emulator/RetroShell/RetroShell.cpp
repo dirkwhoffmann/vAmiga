@@ -507,7 +507,7 @@ RetroShell::exec(std::istream &stream)
 */
 
 void
-RetroShell::dump(HardwareComponent &component, dump::Category category)
+RetroShell::dump(AmigaComponent &component, dump::Category category)
 {
     std::stringstream ss; string line;
     

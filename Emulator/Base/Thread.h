@@ -10,7 +10,7 @@
 #pragma once
 
 #include "ThreadTypes.h"
-#include "HardwareComponent.h"
+#include "AmigaComponent.h"
 #include "Chrono.h"
 #include <thread>
 

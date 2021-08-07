@@ -10,7 +10,7 @@
 #pragma once
 
 #include "DiskTypes.h"
-#include "HardwareComponent.h"
+#include "AmigaComponent.h"
 
 /* MFM encoded disk data of a standard 3.5" DD disk:
  *

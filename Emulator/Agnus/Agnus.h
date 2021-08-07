@@ -447,7 +447,7 @@ public:
     
 public:
     
-    AgnusInfo getInfo() { return HardwareComponent::getInfo(info); }
+    AgnusInfo getInfo() { return AmigaComponent::getInfo(info); }
     EventInfo getEventInfo();
     EventSlotInfo getEventSlotInfo(isize nr);
     

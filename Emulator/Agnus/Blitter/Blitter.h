@@ -288,7 +288,7 @@ public:
     
 public:
     
-    BlitterInfo getInfo() { return HardwareComponent::getInfo(info); }
+    BlitterInfo getInfo() { return AmigaComponent::getInfo(info); }
 
 private:
     

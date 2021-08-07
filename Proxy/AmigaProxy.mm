@@ -72,9 +72,9 @@ using namespace moira;
 
 @implementation HardwareComponentProxy
 
--(HardwareComponent *)hwc
+-(AmigaComponent *)hwc
 {
-    return (HardwareComponent *)obj;
+    return (AmigaComponent *)obj;
 }
 
 -(void)dump

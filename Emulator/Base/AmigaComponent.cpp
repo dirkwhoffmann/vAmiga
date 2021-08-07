@@ -8,17 +8,17 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "HardwareComponent.h"
+#include "AmigaComponent.h"
 
-HardwareComponent::~HardwareComponent()
+AmigaComponent::~AmigaComponent()
 {
 }
 
 void
-HardwareComponent::initialize()
+AmigaComponent::initialize()
 {
     // Initialize all subcomponents
-    for (HardwareComponent *c : subComponents) {
+    for (AmigaComponent *c : subComponents) {
         c->initialize();
     }
 
@@ -27,10 +27,10 @@ HardwareComponent::initialize()
 }
 
 void
-HardwareComponent::reset(bool hard)
+AmigaComponent::reset(bool hard)
 {
     // Reset all subcomponents
-    for (HardwareComponent *c : subComponents) {
+    for (AmigaComponent *c : subComponents) {
         c->reset(hard);
     }
     
@@ -40,12 +40,12 @@ HardwareComponent::reset(bool hard)
 }
 
 bool
-HardwareComponent::configure(Option option, i64 value)
+AmigaComponent::configure(Option option, i64 value)
 {
     bool result = false;
     
     // Configure all subcomponents
-    for (HardwareComponent *c : subComponents) {
+    for (AmigaComponent *c : subComponents) {
         result |= c->configure(option, value);
     }
     
@@ -56,12 +56,12 @@ HardwareComponent::configure(Option option, i64 value)
 }
 
 bool
-HardwareComponent::configure(Option option, long id, i64 value)
+AmigaComponent::configure(Option option, long id, i64 value)
 {
     bool result = false;
     
     // Configure all subcomponents
-    for (HardwareComponent *c : subComponents) {
+    for (AmigaComponent *c : subComponents) {
         result |= c->configure(option, id, value);
     }
     
@@ -72,10 +72,10 @@ HardwareComponent::configure(Option option, long id, i64 value)
 }
 
 void
-HardwareComponent::inspect()
+AmigaComponent::inspect()
 {
     // Inspect all subcomponents
-    for (HardwareComponent *c : subComponents) {
+    for (AmigaComponent *c : subComponents) {
         c->inspect();
     }
     
@@ -83,35 +83,35 @@ HardwareComponent::inspect()
     _inspect();
 }
 
-void HardwareComponent::dump(dump::Category category, std::ostream& ss) const
+void AmigaComponent::dump(dump::Category category, std::ostream& ss) const
 {
     _dump(category, ss);
 }
 
 void
-HardwareComponent::dump(dump::Category category) const
+AmigaComponent::dump(dump::Category category) const
 {
     dump(category, std::cout);
 }
 
 void
-HardwareComponent::dump(std::ostream& ss) const
+AmigaComponent::dump(std::ostream& ss) const
 {
     dump((dump::Category)(-1), ss);
 }
 
 void
-HardwareComponent::dump() const
+AmigaComponent::dump() const
 {
     dump((dump::Category)(-1));
 }
 
 isize
-HardwareComponent::size()
+AmigaComponent::size()
 {
     isize result = _size();
 
-    for (HardwareComponent *c : subComponents) {
+    for (AmigaComponent *c : subComponents) {
         result += c->size();
     }
 
@@ -119,7 +119,7 @@ HardwareComponent::size()
 }
 
 isize
-HardwareComponent::load(const u8 *buffer)
+AmigaComponent::load(const u8 *buffer)
 {
     const u8 *ptr = buffer;
     isize result;
@@ -128,7 +128,7 @@ HardwareComponent::load(const u8 *buffer)
     ptr += willLoadFromBuffer(ptr);
 
     // Load internal state of all subcomponents
-    for (HardwareComponent *c : subComponents) {
+    for (AmigaComponent *c : subComponents) {
         ptr += c->load(ptr);
     }
 
@@ -147,7 +147,7 @@ HardwareComponent::load(const u8 *buffer)
 }
 
 isize
-HardwareComponent::save(u8 *buffer)
+AmigaComponent::save(u8 *buffer)
 {
     u8 *ptr = buffer;
     isize result;
@@ -156,7 +156,7 @@ HardwareComponent::save(u8 *buffer)
     ptr += willSaveToBuffer(ptr);
 
     // Save internal state of all subcomponents
-    for (HardwareComponent *c : subComponents) {
+    for (AmigaComponent *c : subComponents) {
         ptr += c->save(ptr);
     }
 
@@ -175,35 +175,35 @@ HardwareComponent::save(u8 *buffer)
 }
 
 void
-HardwareComponent::powerOn()
+AmigaComponent::powerOn()
 {
     for (auto c : subComponents) { c->powerOn(); }
     _powerOn();
 }
     
 void
-HardwareComponent::powerOff()
+AmigaComponent::powerOff()
 {
     _powerOff();
     for (auto c : subComponents) { c->powerOff(); }
 }
 
 void
-HardwareComponent::run()
+AmigaComponent::run()
 {
     for (auto c : subComponents) { c->run(); }
     _run();
 }
 
 void
-HardwareComponent::pause()
+AmigaComponent::pause()
 {
     _pause();
     for (auto c : subComponents) { c->pause(); }
 }
 
 void
-HardwareComponent::warpOn()
+AmigaComponent::warpOn()
 {
     for (auto c : subComponents) { c->warpOn(); }
     warpMode = true;
@@ -211,7 +211,7 @@ HardwareComponent::warpOn()
 }
 
 void
-HardwareComponent::warpOff()
+AmigaComponent::warpOff()
 {
     for (auto c : subComponents) { c->warpOff(); }
     warpMode = false;
@@ -219,7 +219,7 @@ HardwareComponent::warpOff()
 }
 
 void
-HardwareComponent::debugOn()
+AmigaComponent::debugOn()
 {    
     for (auto c : subComponents) { c->debugOn(); }
     debugMode = true;
@@ -227,7 +227,7 @@ HardwareComponent::debugOn()
 }
 
 void
-HardwareComponent::debugOff()
+AmigaComponent::debugOff()
 {
     for (auto c : subComponents) { c->debugOff(); }
     debugMode = false;

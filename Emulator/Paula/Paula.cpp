@@ -15,7 +15,7 @@
 
 Paula::Paula(Amiga& ref) : SubComponent(ref)
 {
-    subComponents = std::vector<HardwareComponent *> {
+    subComponents = std::vector<AmigaComponent *> {
         
         &channel0,
         &channel1,

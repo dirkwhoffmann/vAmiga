@@ -16,7 +16,7 @@
 
 Recorder::Recorder(Amiga& ref) : SubComponent(ref)
 {
-    subComponents = std::vector<HardwareComponent *> {
+    subComponents = std::vector<AmigaComponent *> {
         
         &muxer
     };

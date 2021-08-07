@@ -128,8 +128,8 @@ private:
     
 public:
     
-    PaulaInfo getInfo() { return HardwareComponent::getInfo(info); }
-    AudioInfo getAudioInfo() { return HardwareComponent::getInfo(audioInfo); }
+    PaulaInfo getInfo() { return AmigaComponent::getInfo(info); }
+    AudioInfo getAudioInfo() { return AmigaComponent::getInfo(audioInfo); }
 
     
 private:

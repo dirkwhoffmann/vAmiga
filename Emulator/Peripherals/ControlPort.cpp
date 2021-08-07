@@ -16,7 +16,7 @@
 ControlPort::ControlPort(Amiga& ref, PortNr portNr) : SubComponent(ref), nr(portNr)
 {
     assert_enum(PortNr, portNr);
-    subComponents = std::vector<HardwareComponent *> { &mouse, &joystick };
+    subComponents = std::vector<AmigaComponent *> { &mouse, &joystick };
 }
 
 const char *

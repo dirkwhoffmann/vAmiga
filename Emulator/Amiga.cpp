@@ -79,7 +79,7 @@ Amiga::Amiga()
      * - Memory mus preceed the CPU, because it contains the CPU reset vector.
      */
 
-    subComponents = std::vector<HardwareComponent *> {
+    subComponents = std::vector<AmigaComponent *> {
 
         &oscillator,
         &agnus,
@@ -177,7 +177,7 @@ Amiga::reset(bool hard)
     paula.diskController.serviceDiskChangeEvent();
     
     // Execute the standard reset routine
-    HardwareComponent::reset(hard);
+    AmigaComponent::reset(hard);
     
     if (hard) resume();
 
@@ -324,7 +324,7 @@ bool
 Amiga::configure(Option option, i64 value)
 {
     // Propagate configuration request to all components
-    bool changed = HardwareComponent::configure(option, value);
+    bool changed = AmigaComponent::configure(option, value);
     
     // Inform the GUI if the configuration has changed
     if (changed) msgQueue.put(MSG_CONFIG);
@@ -339,7 +339,7 @@ bool
 Amiga::configure(Option option, long id, i64 value)
 {
     // Propagate configuration request to all components
-    bool changed = HardwareComponent::configure(option, id, value);
+    bool changed = AmigaComponent::configure(option, id, value);
     
     // Inform the GUI if the configuration has changed
     if (changed) msgQueue.put(MSG_CONFIG);
@@ -477,7 +477,7 @@ Amiga::powerOn()
         hardReset();
         
         // Power on all subcomponents
-        HardwareComponent::powerOn();
+        AmigaComponent::powerOn();
         
         // Update the recorded debug information
         inspect();
@@ -532,7 +532,7 @@ Amiga::powerOff()
         pause(); assert(!isRunning());
         
         // Power off all subcomponents
-        HardwareComponent::powerOff();
+        AmigaComponent::powerOff();
         
         // Update the recorded debug information
         inspect();
@@ -564,7 +564,7 @@ Amiga::run()
         powerOn(); assert(isPoweredOn());
         
         // Launch all subcomponents
-        HardwareComponent::run();
+        AmigaComponent::run();
         
         // Create the emulator thread
         pthread_create(&p, nullptr, threadMain, (void *)this);
@@ -655,7 +655,7 @@ Amiga::debugOn()
     assert(!isEmulatorThread());
 
     if (!debugMode) {
-        HardwareComponent::debugOn();
+        AmigaComponent::debugOn();
     }
 }
 
@@ -665,7 +665,7 @@ Amiga::debugOff()
     assert(!isEmulatorThread());
     
     if (debugMode) {
-        HardwareComponent::debugOff();
+        AmigaComponent::debugOff();
     }
 }
 
@@ -852,19 +852,19 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_WARP_ON) {
                 clearControlFlags(RL_WARP_ON);
                 debug(RUN_DEBUG, "RL_WARP_ON\n");
-                HardwareComponent::warpOn();
+                AmigaComponent::warpOn();
             }
 
             if (runLoopCtrl & RL_WARP_OFF) {
                 clearControlFlags(RL_WARP_OFF);
                 debug(RUN_DEBUG, "RL_WARP_OFF\n");
-                HardwareComponent::warpOff();
+                AmigaComponent::warpOff();
             }
         }
     }
     
     // Enter pause mode
-    HardwareComponent::pause();
+    AmigaComponent::pause();
     
     // Update the recorded debug information
     inspect();

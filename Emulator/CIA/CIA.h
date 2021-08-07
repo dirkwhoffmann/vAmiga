@@ -356,7 +356,7 @@ private:
     
 public:
     
-    CIAInfo getInfo() { return HardwareComponent::getInfo(info); }
+    CIAInfo getInfo() { return AmigaComponent::getInfo(info); }
 
 protected:
     

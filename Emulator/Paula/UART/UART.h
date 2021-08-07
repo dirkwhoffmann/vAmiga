@@ -63,7 +63,7 @@ private:
 
 public:
 
-    UARTInfo getInfo() { return HardwareComponent::getInfo(info); }
+    UARTInfo getInfo() { return AmigaComponent::getInfo(info); }
 
 private:
     

@@ -69,7 +69,7 @@ private:
 
 public:
     
-    ControlPortInfo getInfo() { return HardwareComponent::getInfo(info); }
+    ControlPortInfo getInfo() { return AmigaComponent::getInfo(info); }
 
 private:
     

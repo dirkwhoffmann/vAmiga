@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "HardwareComponent.h"
+#include "AmigaComponent.h"
 
 class Agnus;
 class Amiga;
@@ -41,7 +41,7 @@ class ZorroManager;
 /* This class extends the AmigaComponent class with references to all components
  * that are part of the Amiga class.
  */
-class SubComponent : public HardwareComponent {
+class SubComponent : public AmigaComponent {
 
 protected:
 

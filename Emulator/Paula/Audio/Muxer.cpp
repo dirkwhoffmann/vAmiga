@@ -17,7 +17,7 @@
 
 Muxer::Muxer(Amiga& ref) : SubComponent(ref)
 {
-    subComponents = std::vector<HardwareComponent *> {
+    subComponents = std::vector<AmigaComponent *> {
 
         &filterL,
         &filterR

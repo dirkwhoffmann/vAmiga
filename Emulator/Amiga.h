@@ -39,7 +39,7 @@ void *threadMain(void *thisAmiga);
  * E.g., to query information from Paula, you need to invoke a public method on
  * amiga.paula.
  */
-class Amiga : public HardwareComponent {
+class Amiga : public AmigaComponent {
 
     /* Result of the latest inspection. In order to update the GUI inspector
      * panels, the emulator schedules events in the inspector slot (SLOT_INS in
@@ -178,7 +178,7 @@ public:
     
 public:
     
-    AmigaInfo getInfo() { return HardwareComponent::getInfo(info); }
+    AmigaInfo getInfo() { return AmigaComponent::getInfo(info); }
     
     EventID getInspectionTarget() const;
     void setInspectionTarget(EventID id);

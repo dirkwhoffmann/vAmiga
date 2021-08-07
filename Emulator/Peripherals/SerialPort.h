@@ -67,7 +67,7 @@ public:
     
 public:
 
-    SerialPortInfo getInfo() { return HardwareComponent::getInfo(info); }
+    SerialPortInfo getInfo() { return AmigaComponent::getInfo(info); }
 
 private:
     

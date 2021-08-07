@@ -41,7 +41,7 @@ private:
     
 public:
     
-    CPUInfo getInfo() { return HardwareComponent::getInfo(info); }
+    CPUInfo getInfo() { return AmigaComponent::getInfo(info); }
         
 private:
     

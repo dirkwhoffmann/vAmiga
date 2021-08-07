@@ -109,7 +109,7 @@ public:
 
 public:
     
-    DriveInfo getInfo() { return HardwareComponent::getInfo(info); }
+    DriveInfo getInfo() { return AmigaComponent::getInfo(info); }
 
 private:
     

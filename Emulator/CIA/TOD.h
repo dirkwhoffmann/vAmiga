@@ -88,7 +88,7 @@ private:
     // Analyzing
     //
     
-    CounterInfo getInfo() { return HardwareComponent::getInfo(info); }
+    CounterInfo getInfo() { return AmigaComponent::getInfo(info); }
 
     void _inspect() override;
     void _dump(dump::Category category, std::ostream& os) const override;

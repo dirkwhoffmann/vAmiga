@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "HardwareComponentTypes.h"
+#include "AmigaComponentTypes.h"
 #include "AmigaObject.h"
 #include "Serialization.h"
 #include "Concurrency.h"
@@ -42,14 +42,14 @@ enum Category : usize {
 };
 }
 
-class HardwareComponent : public AmigaObject {
+class AmigaComponent : public AmigaObject {
     
     friend class Amiga;
     
 public:
     
     // Sub components
-    std::vector<HardwareComponent *> subComponents;
+    std::vector<AmigaComponent *> subComponents;
     
 protected:
 
@@ -81,7 +81,7 @@ protected:
     
 public:
     
-    virtual ~HardwareComponent();
+    virtual ~AmigaComponent();
     
     /* Initializes the component and it's subcomponents. The initialization
      * procedure puts every components back into it's initial state.

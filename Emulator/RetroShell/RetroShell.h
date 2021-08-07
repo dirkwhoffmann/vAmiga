@@ -193,7 +193,7 @@ public:
 
 private:
     
-    void dump(HardwareComponent &component, dump::Category category);
+    void dump(AmigaComponent &component, dump::Category category);
 
     
     //

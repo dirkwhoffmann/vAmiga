@@ -96,7 +96,7 @@ private:
     
 public:
     
-    AudioChannelInfo getInfo() { return HardwareComponent::getInfo(info); }
+    AudioChannelInfo getInfo() { return AmigaComponent::getInfo(info); }
     
 private:
     

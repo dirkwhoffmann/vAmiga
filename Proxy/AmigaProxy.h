@@ -27,7 +27,7 @@
 #import "ErrorTypes.h"
 #import "EventTypes.h"
 #import "FSTypes.h"
-#import "HardwareComponentTypes.h"
+#import "AmigaComponentTypes.h"
 #import "JoystickTypes.h"
 #import "KeyboardTypes.h"
 #import "MemoryTypes.h"

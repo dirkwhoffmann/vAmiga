@@ -133,7 +133,7 @@ public:
     
 public:
     
-    DiskControllerInfo getInfo() { return HardwareComponent::getInfo(info); }
+    DiskControllerInfo getInfo() { return AmigaComponent::getInfo(info); }
     
 private:
     

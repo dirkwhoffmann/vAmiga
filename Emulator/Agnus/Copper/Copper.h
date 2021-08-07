@@ -109,7 +109,7 @@ public:
 public:
     
     // Returns the result of the latest inspection
-    CopperInfo getInfo() { return HardwareComponent::getInfo(info); }
+    CopperInfo getInfo() { return AmigaComponent::getInfo(info); }
 
 private:
 
