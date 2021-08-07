@@ -49,6 +49,7 @@ Oscillator::_reset(bool hard)
     }
 }
 
+/*
 void
 Oscillator::restart()
 {
@@ -110,3 +111,4 @@ Oscillator::synchronize()
         nonstopClock.restart();
     }
 }
+*/

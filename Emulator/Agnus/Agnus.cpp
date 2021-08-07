@@ -1131,8 +1131,8 @@ Agnus::vsyncHandler()
     updateStats();
     mem.updateStats();
     
-    // Count some sheep (zzzzzz) ...
-    oscillator.synchronize();
+    // Let the thread synchronize
+    amiga.setControlFlags(RL_SYNC_THREAD);
 }
 
 //

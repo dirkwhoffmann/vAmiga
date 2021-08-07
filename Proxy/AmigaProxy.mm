@@ -2084,12 +2084,11 @@ using namespace moira;
 
 
 //
-// Amiga
+// AmigaProxy
 //
 
 @implementation AmigaProxy
 
-// @synthesize wrapper;
 @synthesize agnus;
 @synthesize blitter;
 @synthesize breakpoints;
@@ -2117,8 +2116,6 @@ using namespace moira;
 
 - (instancetype) init
 {
-    // NSLog(@"AmigaProxy::init");
-    
     if (!(self = [super init]))
         return self;
     
@@ -2173,6 +2170,11 @@ using namespace moira;
     obj = NULL;
 }
 
+- (AmigaInfo)getInfo
+{
+    return [self amiga]->getInfo();
+}
+
 - (BOOL)isReleaseBuild
 {
     return releaseBuild;
@@ -2221,6 +2223,36 @@ using namespace moira;
     [self amiga]->removeInspectionTarget();
 }
 
+- (void)hardReset
+{
+    [self amiga]->reset(true);
+}
+
+- (void)softReset
+{
+    [self amiga]->reset(false);
+}
+
+- (BOOL)poweredOn
+{
+    return [self amiga]->isPoweredOn();
+}
+
+- (BOOL)poweredOff
+{
+    return [self amiga]->isPoweredOff();
+}
+
+- (BOOL)running
+{
+    return [self amiga]->isRunning();
+}
+
+- (BOOL)paused
+{
+    return [self amiga]->isPaused();
+}
+
 - (BOOL)isReady:(ErrorCode *)error
 {
     try {
@@ -2251,55 +2283,6 @@ using namespace moira;
     [self amiga]->powerOff();
 }
 
-- (void)hardReset
-{
-    [self amiga]->reset(true);
-}
-
-- (void)softReset
-{
-    [self amiga]->reset(false);
-}
-
-- (void)shutdown
-{
-    [self amiga]->shutdown();
-}
-
-- (AmigaInfo)getInfo
-{
-    return [self amiga]->getInfo();
-}
-
-- (BOOL)poweredOn
-{
-    return [self amiga]->isPoweredOn();
-}
-
-- (BOOL)poweredOff
-{
-    return [self amiga]->isPoweredOff();
-}
-
-- (BOOL)running
-{
-    return [self amiga]->isRunning();
-}
-
-- (BOOL)paused
-{
-    return [self amiga]->isPaused();
-}
-
-/*
-- (void)run:(ErrorCode *)ec
-{
-    *ec = ERROR_OK;
-    try { [self amiga]->run(); }
-    catch (VAError &error) { *ec = (ErrorCode)error.data; }
-}
-*/
-
 - (void)run:(ExceptionWrapper *)exc
 {
     try { [self amiga]->run(); }
@@ -2309,6 +2292,11 @@ using namespace moira;
 - (void)pause
 {
     [self amiga]->pause();
+}
+
+- (void)halt
+{
+    [self amiga]->halt();
 }
 
 - (void)suspend

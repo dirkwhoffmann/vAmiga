@@ -105,10 +105,7 @@ public:
     //
     
 private:
-    
-    // The current emulator state
-    EmulatorState state = EMULATOR_STATE_OFF;
-    
+        
     /* Run loop control. This variable is checked at the end of each runloop
      * iteration. Most of the time, the variable is 0 which causes the runloop
      * to repeat. A value greater than 0 means that one or more runloop control
@@ -119,10 +116,7 @@ private:
     
     // The invocation counter for implementing suspend() / resume()
     isize suspendCounter = 0;
-    
-    // The emulator thread
-    pthread_t p = (pthread_t)0;
-        
+            
 
     //
     // Snapshot storage
@@ -241,33 +235,25 @@ private:
     
 public:
     
-    bool isPoweredOff() const override { return state == EMULATOR_STATE_OFF; }
-    bool isPoweredOn() const override { return state != EMULATOR_STATE_OFF; }
-    bool isPaused() const override { return state == EMULATOR_STATE_PAUSED; }
-    bool isRunning() const override { return state == EMULATOR_STATE_RUNNING; }
+    bool isPoweredOff() const override { return thread.isPoweredOff(); }
+    bool isPoweredOn() const override { return thread.isPoweredOn(); }
+    bool isPaused() const override { return thread.isPaused(); }
+    bool isRunning() const override { return thread.isRunning(); }
+    bool inWarpMode() const { return thread.warp; }
+    bool inDebugMode() const { return debugMode; }
 
-    void powerOn() throws;
-    void powerOff();
-    void run() throws;
-    void pause();
-    void shutdown();
-    
-    void warpOn();
-    void warpOff();
-    bool inWarpMode() { return warpMode; }
-
+    void powerOn() { thread.powerOn(); }
+    void powerOff() { thread.powerOff(); }
+    void run() { thread.run(); }
+    void pause() { thread.pause(); }
+    void halt() { thread.halt(); }
+    void warpOn() { thread.warpOn(); }
+    void warpOff() { thread.warpOff(); }
     void debugOn();
     void debugOff();
-    bool inDebugMode() { return debugMode; }
-
-private:
     
-    void _powerOn() override;
-    void _powerOff() override;
-    void _run() override;
-    void _pause() override;
-    void _warpOn() override;
-    void _warpOff() override;
+    void lockWarpMode() { thread.setWarpLock(true); }
+    void unlockWarpMode() { thread.setWarpLock(false); }
 
     
     //
@@ -275,10 +261,7 @@ private:
     //
     
 public:
-    
-    // Returns true if the currently executed thread is the emulator thread
-    bool isEmulatorThread() { return pthread_self() == p; }
-        
+            
     // Checks whether the Amiga is ready or throws an exception if not
     void isReady() throws;
     
@@ -331,25 +314,13 @@ public:
      * length bytes of the current instruction and starts the emulator thread.
      */
     void stepOver();
-    
-    /* The thread enter function. This (private) method is invoked when the
-     * emulator thread launches. It has to be declared public to make it
-     * accessible by the emulator thread.
-     */
-    void threadWillStart();
-    
-    /* The thread exit function. This (private) method is invoked when the
-     * emulator thread terminates. It has to be declared public to make it
-     * accessible by the emulator thread.
-     */
-    void threadDidTerminate();
-    
+        
     /* The Amiga run loop. This function is one of the most prominent ones. It
      * implements the outermost loop of the emulator and therefore the place
      * where emulation starts. If you want to understand how the emulator works,
      * this function should be your starting point.
      */
-    void runLoop();
+    // void runLoop();
 
     
     //

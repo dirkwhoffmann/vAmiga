@@ -98,7 +98,7 @@ public:
 
 class Thread : public AmigaObject {
     
-    friend class C64;
+    friend class Amiga;
     
     // The actual thread and the thread delegate
     std::thread thread;

@@ -297,10 +297,11 @@ void
 Muxer::rampUp()
 {
     // Only proceed if the emulator is not running in warp mode
-    if (warpMode) return;
+    // if (warpMode) return;
     
     volume.target = 1.0;
     volume.delta = 3;
+    
     ignoreNextUnderOrOverflow();
 }
 
@@ -308,6 +309,7 @@ void
 Muxer::rampUpFromZero()
 {
     volume.current = 0.0;
+    
     rampUp();
 }
  
@@ -316,6 +318,7 @@ Muxer::rampDown()
 {
     volume.target = 0.0;
     volume.delta = 50;
+    
     ignoreNextUnderOrOverflow();
 }
 

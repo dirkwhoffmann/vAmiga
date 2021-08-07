@@ -172,28 +172,31 @@
 - (void)dealloc;
 - (void)kill;
 
+- (AmigaInfo) getInfo;
+
 @property (readonly) BOOL isReleaseBuild;
 @property BOOL warp;
 @property BOOL debugMode;
 @property EventID inspectionTarget;
-- (void) removeInspectionTarget;
-- (BOOL)isReady:(ErrorCode *)ec;
-- (BOOL)isReady;
-- (void)powerOn:(ErrorCode *)ec;
-- (void)powerOff;
+
+- (void) removeInspectionTarget; // DEPRECATED
+
 - (void)hardReset;
 - (void)softReset;
-- (void)shutdown;
-
-- (AmigaInfo) getInfo;
 
 @property (readonly) BOOL poweredOn;
 @property (readonly) BOOL poweredOff;
 @property (readonly) BOOL running;
 @property (readonly) BOOL paused;
 
+- (BOOL)isReady:(ErrorCode *)ec;
+- (BOOL)isReady;
+- (void)powerOn:(ErrorCode *)ec;
+- (void)powerOff;
 - (void)run:(ExceptionWrapper *)exc;
 - (void)pause;
+- (void)halt;
+
 - (void)suspend;
 - (void)resume;
 - (void)continueScript;

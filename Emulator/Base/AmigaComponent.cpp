@@ -206,7 +206,6 @@ void
 AmigaComponent::warpOn()
 {
     for (auto c : subComponents) { c->warpOn(); }
-    warpMode = true;
     _warpOn();
 }
 
@@ -214,22 +213,21 @@ void
 AmigaComponent::warpOff()
 {
     for (auto c : subComponents) { c->warpOff(); }
-    warpMode = false;
     _warpOff();
 }
 
 void
 AmigaComponent::debugOn()
 {    
-    for (auto c : subComponents) { c->debugOn(); }
     debugMode = true;
+    for (auto c : subComponents) { c->debugOn(); }
     _debugOn();
 }
 
 void
 AmigaComponent::debugOff()
 {
-    for (auto c : subComponents) { c->debugOff(); }
     debugMode = false;
+    for (auto c : subComponents) { c->debugOff(); }
     _debugOff();
 }

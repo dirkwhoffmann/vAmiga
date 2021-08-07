@@ -106,12 +106,12 @@ private:
 public:
     
     // Restarts the synchronization timer
-    void restart();
+    // void restart();
 
     // Puts the emulator thread to rest
-    void synchronize();
+    // void synchronize();
     
     // Getter for the reference time
-    util::Time getTimeBase() { return timeBase; }
+    // util::Time getTimeBase() { return timeBase; }
     
 };

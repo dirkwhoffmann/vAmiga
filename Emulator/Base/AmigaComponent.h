@@ -52,13 +52,6 @@ public:
     std::vector<AmigaComponent *> subComponents;
     
 protected:
-
-    /* Indicates if the emulator should be executed in warp mode. To speed up
-     * emulation (e.g., during disk accesses), the virtual hardware may be put
-     * into warp mode. In this mode, the emulation thread is no longer paused
-     * to match the target frequency and runs as fast as possible.
-     */
-    bool warpMode = false;
     
     /* Indicates if the emulator should be executed in debug mode. Debug mode
      * is enabled when the GUI debugger is opend and disabled when the GUI
@@ -84,10 +77,13 @@ public:
     virtual ~AmigaComponent();
     
     /* Initializes the component and it's subcomponents. The initialization
-     * procedure puts every components back into it's initial state.
+     * procedure is initiated once, in the constructor of the C64 class. By
+     * default, a component enters it's initial configuration. Custom actions
+     * can be performed by implementing the _initialize() delegation function.
      */
     void initialize();
-    virtual void _initialize() = 0;
+    // virtual void _initialize() { resetConfig(); }
+    virtual void _initialize() { };
     
     /* Resets the component and it's subcomponents. Two reset modes are
      * distinguished:
@@ -106,6 +102,9 @@ public:
     // Configuring
     //
     
+    // Initializes all configuration items with their default values
+    // virtual void resetConfig() { };
+
     /* Configures the component and it's subcomponents. This function
      * distributes a configuration request to all subcomponents by calling
      * setConfigItem(). The function returns true iff the current configuration
@@ -191,100 +190,35 @@ public:
     
     
     //
-    // Controlling
+    // Controlling the state (see Thread class for details)
     //
     
 public:
-    
-    /* State model. At any time, a component is in one of three states:
-     *
-     *        Off: The Amiga is turned off
-     *     Paused: The Amiga is turned on, but there is no emulator thread
-     *    Running: The Amiga is turned on and the emulator thread running
-     *
-     *          -----------------------------------------------
-     *         |                     run()                     |
-     *         |                                               V
-     *     ---------   powerOn()   ---------     run()     ---------
-     *    |   Off   |------------>| Paused  |------------>| Running |
-     *    |         |<------------|         |<------------|         |
-     *     ---------   powerOff()  ---------    pause()    ---------
-     *         ^                                               |
-     *         |                  powerOff()                   |
-     *          -----------------------------------------------
-     *
-     *     isPoweredOff()         isPaused()          isRunning()
-     * |-------------------||-------------------||-------------------|
-     *                      |----------------------------------------|
-     *                                     isPoweredOn()
-     *
-     * Additional component flags: warp (on / off), debug (on / off)
-     */
     
     virtual bool isPoweredOff() const = 0;
     virtual bool isPoweredOn() const = 0;
     virtual bool isPaused() const = 0;
     virtual bool isRunning() const = 0;
     
-private:
+protected:
     
-    /* powerOn() powers the component on
-     *
-     * current   | next      | action
-     * ------------------------------------------------------------------------
-     * off       | paused    | _powerOn() on each subcomponent
-     * paused    | paused    | none
-     * running   | running   | none
-     */
     void powerOn();
-    virtual void _powerOn() { };
-    
-    /* powerOff() powers the component off
-     *
-     * current   | next      | action
-     * ------------------------------------------------------------------------
-     * off       | off       | none
-     * paused    | off       | _powerOff() on each subcomponent
-     * running   | off       | pause(), _powerOff() on each subcomponent
-     */
     void powerOff();
-    virtual void _powerOff() { }
-    
-    /* run() puts the component in 'running' state
-     *
-     * current   | next      | action
-     * ------------------------------------------------------------------------
-     * off       | running   | powerOn(), _run() on each subcomponent
-     * paused    | running   | _run() on each subcomponent
-     * running   | running   | none
-     */
     void run();
-    virtual void _run() { }
-    
-    /* pause() puts the component in 'paused' state
-     *
-     * current   | next      | action
-     * ------------------------------------------------------------------------
-     * off       | off       | none
-     * paused    | paused    | none
-     * running   | paused    | _pause() on each subcomponent
-     */
     void pause();
-    virtual void _pause() { };
-        
-    // Switches warp mode on or off
     void warpOn();
-    virtual void _warpOn() { };
-
     void warpOff();
-    virtual void _warpOff() { };
-
-    // Switches debug mode on or off
     void debugOn();
-    virtual void _debugOn() { };
-
     void debugOff();
-    virtual void _debugOff() { };
+    
+    virtual void _powerOn() { }
+    virtual void _powerOff() { }
+    virtual void _run() { }
+    virtual void _pause() { }
+    virtual void _warpOn() { }
+    virtual void _warpOff() { }
+    virtual void _debugOn() { }
+    virtual void _debugOff() { }
 };
 
 //

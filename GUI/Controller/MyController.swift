@@ -453,7 +453,7 @@ extension MyController {
             amiga.continueScript()
             renderer.console.isDirty = true
             
-        case .SHUTDOWN:
+        case .HALT:
             shutDown()
 
         case .MUTE_ON:
