@@ -25,6 +25,7 @@
 #include "RetroShell.h"
 #include "RTC.h"
 #include "SerialPort.h"
+#include "Thread.h"
 #include "ZorroManager.h"
 
 void threadTerminated(void *thisAmiga);

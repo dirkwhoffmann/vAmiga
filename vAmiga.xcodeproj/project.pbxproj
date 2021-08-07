@@ -48,6 +48,7 @@
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
 		503DECAE255E6180005FFA0B /* Oscillator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503DECAC255E6180005FFA0B /* Oscillator.cpp */; };
+		5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
 		504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504C48B324143AB4008ADAB3 /* AgnusDma.cpp */; };
 		504F4D64252624BD00CF8815 /* TextureRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F4D63252624BD00CF8815 /* TextureRect.swift */; };
@@ -321,6 +322,9 @@
 		5039924625B219FC0084B808 /* Error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
 		503DECAC255E6180005FFA0B /* Oscillator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Oscillator.cpp; sourceTree = "<group>"; };
 		503DECAD255E6180005FFA0B /* Oscillator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Oscillator.h; sourceTree = "<group>"; };
+		5042F2DB26BE57E600126C05 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
+		5042F2DC26BE57E600126C05 /* Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
+		5042F2DE26BE57F700126C05 /* ThreadTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadTypes.h; sourceTree = "<group>"; };
 		5042FD7D23FFF08500B315B2 /* DiskControllerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskControllerTypes.h; sourceTree = "<group>"; };
 		5042FD7E23FFF0D200B315B2 /* StateMachineTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachineTypes.h; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
@@ -763,6 +767,9 @@
 				50D5244322787D3C00F8959D /* MsgQueueTypes.h */,
 				508FDEF821EA1FBC0043D0E9 /* MsgQueue.h */,
 				508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */,
+				5042F2DE26BE57F700126C05 /* ThreadTypes.h */,
+				5042F2DC26BE57E600126C05 /* Thread.h */,
+				5042F2DB26BE57E600126C05 /* Thread.cpp */,
 				508C6BCF23F7E77500D8938F /* ChangeRecorder.h */,
 				50984B64263A9B5100E37184 /* RegressionTester.h */,
 				50984B63263A9B5100E37184 /* RegressionTester.cpp */,
@@ -1735,6 +1742,7 @@
 				50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */,
 				509C66792551577D0028D497 /* Folder.cpp in Sources */,
 				508FE04F21EA22CC0043D0E9 /* GeneralPrefs.swift in Sources */,
+				5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
 				50F54B2B24B5D31D0078FDC9 /* maketbl.c in Sources */,
 				50F54B3324B5DDAF0078FDC9 /* DMSFile.cpp in Sources */,
