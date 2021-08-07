@@ -39,7 +39,7 @@ void *threadMain(void *thisAmiga);
  * E.g., to query information from Paula, you need to invoke a public method on
  * amiga.paula.
  */
-class Amiga : public AmigaComponent {
+class Amiga : public AmigaComponent, ThreadDelegate {
 
     /* Result of the latest inspection. In order to update the GUI inspector
      * panels, the emulator schedules events in the inspector slot (SLOT_INS in
@@ -56,6 +56,9 @@ class Amiga : public AmigaComponent {
     
 public:
     
+    // The thread manager
+    Thread thread = Thread(*this);
+
     // Core components
     CPU cpu = CPU(*this);
     CIAA ciaA = CIAA(*this);
@@ -215,6 +218,21 @@ private:
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+
+    
+    //
+    // Methods from ThreadDelegate
+    //
+    
+    bool readyToPowerOn() override;
+    void threadPowerOff() override;
+    void threadPowerOn() override;
+    void threadRun() override;
+    void threadPause() override;
+    void threadHalt() override;
+    void threadWarpOff() override;
+    void threadWarpOn() override;
+    void threadExecute() override;
 
 
     //

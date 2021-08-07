@@ -458,6 +458,191 @@ Amiga::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
+bool
+Amiga::readyToPowerOn()
+{
+    debug(RUN_DEBUG, "readyToPowerOn()\n");
+    
+    try { isReady(); return true; } catch (...) { return false; }
+}
+
+void
+Amiga::threadPowerOff()
+{
+    debug(RUN_DEBUG, "threadPowerOff()\n");
+    
+    /*
+    // Power off all subcomponents
+    AmigaComponent::powerOff();
+
+    // Update the recorded debug information
+    inspect();
+    
+    // Inform the GUI
+    msgQueue.put(MSG_POWER_OFF);
+    */
+}
+
+void
+Amiga::threadPowerOn()
+{
+    debug(RUN_DEBUG, "threadPowerOn()\n");
+    
+    /*
+    // Perform a reset
+    hardReset();
+            
+    // Power on all subcomponents
+    AmigaComponent::powerOn();
+    
+    // Update the recorded debug information
+    inspect();
+
+    // Inform the GUI
+    msgQueue.put(MSG_POWER_ON);
+    */
+}
+
+void
+Amiga::threadRun()
+{
+    debug(RUN_DEBUG, "threadRun()\n");
+    
+    /*
+    // Launch all subcomponents
+    AmigaComponent::run();
+    
+    // Inform the GUI
+    msgQueue.put(MSG_RUN);
+    */
+}
+
+void
+Amiga::threadPause()
+{
+    debug(RUN_DEBUG, "threadPause()\n");
+        
+    /*
+    // Enter pause mode
+    AmigaComponent::pause();
+    
+    // Update the recorded debug information
+    inspect();
+    
+    // Inform the GUI
+    msgQueue.put(MSG_PAUSE);
+    */
+}
+
+void
+Amiga::threadHalt()
+{
+    debug(RUN_DEBUG, "threadHalt()\n");
+
+    /*
+    // Inform the GUI
+    msgQueue.put(MSG_HALT);
+    */
+}
+
+void
+Amiga::threadWarpOff()
+{
+    debug(WARP_DEBUG, "threadWarpOff()\n");
+    /*
+    AmigaComponent::warpOff();
+    
+    // Inform the GUI
+    msgQueue.put(MSG_WARP_OFF);
+    */
+}
+
+void
+Amiga::threadWarpOn()
+{
+    debug(WARP_DEBUG, "threadWarpOn()\n");
+    /*
+    AmigaComponent::warpOn();
+
+    // Inform the GUI
+    msgQueue.put(MSG_WARP_ON);
+    */
+}
+
+void
+Amiga::threadExecute()
+{
+    /*
+    // Run the emulator
+    executeOneFrame();
+    
+    // Check if special action needs to be taken
+    if (runLoopCtrl) {
+        
+        // Are we requested to take a snapshot?
+        if (runLoopCtrl & ACTION_FLAG_AUTO_SNAPSHOT) {
+            trace(RUN_DEBUG, "RL_AUTO_SNAPSHOT\n");
+            autoSnapshot = Snapshot::makeWithC64(this);
+            putMessage(MSG_AUTO_SNAPSHOT_TAKEN);
+            clearActionFlags(ACTION_FLAG_AUTO_SNAPSHOT);
+        }
+        if (runLoopCtrl & ACTION_FLAG_USER_SNAPSHOT) {
+            trace(RUN_DEBUG, "RL_USER_SNAPSHOT\n");
+            userSnapshot = Snapshot::makeWithC64(this);
+            putMessage(MSG_USER_SNAPSHOT_TAKEN);
+            clearActionFlags(ACTION_FLAG_USER_SNAPSHOT);
+        }
+        
+        // Are we requested to update the debugger info structs?
+        if (runLoopCtrl & ACTION_FLAG_INSPECT) {
+            trace(RUN_DEBUG, "RL_INSPECT\n");
+            inspect();
+            clearActionFlags(ACTION_FLAG_INSPECT);
+        }
+        
+        // Did we reach a breakpoint?
+        if (runLoopCtrl & ACTION_FLAG_BREAKPOINT) {
+            putMessage(MSG_BREAKPOINT_REACHED);
+            trace(RUN_DEBUG, "BREAKPOINT_REACHED pc: %x\n", cpu.getPC0());
+            clearActionFlags(ACTION_FLAG_BREAKPOINT);
+            thread.newState = EXEC_PAUSED;
+        }
+        
+        // Did we reach a watchpoint?
+        if (runLoopCtrl & ACTION_FLAG_WATCHPOINT) {
+            putMessage(MSG_WATCHPOINT_REACHED);
+            trace(RUN_DEBUG, "WATCHPOINT_REACHED pc: %x\n", cpu.getPC0());
+            clearActionFlags(ACTION_FLAG_WATCHPOINT);
+            thread.newState = EXEC_PAUSED;
+        }
+        
+        // Are we requested to terminate the run loop?
+        if (runLoopCtrl & ACTION_FLAG_STOP) {
+            clearActionFlags(ACTION_FLAG_STOP);
+            trace(RUN_DEBUG, "STOP\n");
+            thread.newState = EXEC_PAUSED;
+        }
+        
+        // Are we requested to pull the NMI line down?
+        if (runLoopCtrl & ACTION_FLAG_EXTERNAL_NMI) {
+            cpu.pullDownNmiLine(INTSRC_EXP);
+            trace(RUN_DEBUG, "EXTERNAL_NMI\n");
+            clearActionFlags(ACTION_FLAG_EXTERNAL_NMI);
+        }
+        
+        // Is the CPU jammed due the execution of an illegal instruction?
+        if (runLoopCtrl & ACTION_FLAG_CPU_JAM) {
+            putMessage(MSG_CPU_JAMMED);
+            trace(RUN_DEBUG, "CPU_JAMMED\n");
+            clearActionFlags(ACTION_FLAG_CPU_JAM);
+            thread.newState = EXEC_PAUSED;
+        }
+                    
+        assert(runLoopCtrl == 0);
+    }
+    */
+}
+
 void
 Amiga::powerOn()
 {
