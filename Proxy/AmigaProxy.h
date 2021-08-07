@@ -675,11 +675,13 @@
 
 @interface AmigaFileProxy : Proxy { }
 
-+ (FileType) urlType:(NSURL *)url;
++ (FileType) typeOfUrl:(NSURL *)url;
+
 @property (readonly) FileType type;
+@property (readonly) u64 fnv;
+
 - (void)setPath:(NSString *)path;
 - (NSInteger)writeToFile:(NSString *)path error:(ErrorCode *)err;
-@property (readonly) u64 fnv;
 
 @end
 

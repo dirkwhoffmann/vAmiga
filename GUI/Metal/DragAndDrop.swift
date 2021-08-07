@@ -50,7 +50,7 @@ public extension MetalView {
             if let url = NSURL.init(from: pasteBoard) as URL? {
             
                 // Open the drop zone layer
-                let type = AmigaFileProxy.urlType(url)
+                let type = AmigaFileProxy.type(of: url)
                 parent.renderer.dropZone.open(type: type, delay: 0.25)
             }
 

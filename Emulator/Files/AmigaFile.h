@@ -178,7 +178,7 @@ public:
         
     
     //
-    // Accessing file attributes
+    // Accessing
     //
     
     // Determines the type of an arbitrary file on file
@@ -192,7 +192,7 @@ public:
         
     
     //
-    // Flashing data
+    // Flashing
     //
             
     // Copies the file contents into a buffer starting at the provided offset

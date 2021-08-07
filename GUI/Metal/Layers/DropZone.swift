@@ -32,8 +32,6 @@ class DropZone: Layer {
     var targetAlpha = [unselected, unselected, unselected, unselected]
     var maxAlpha = [0.0, 0.0, 0.0, 0.0]
         
-    var isDirty = false
-        
     //
     // Initializing
     //
@@ -42,14 +40,9 @@ class DropZone: Layer {
         
         controller = renderer.parent
         
-        for i in 0...3 {
-            zones[i].unregisterDraggedTypes()
-        }
-
+        for i in 0...3 { zones[i].unregisterDraggedTypes() }
         super.init(renderer: renderer)
-        
         resize()
-        isDirty = true
     }
 
     private func setType(_ type: FileType) {
@@ -84,14 +77,7 @@ class DropZone: Layer {
         
         super.update(frames: frames)
 
-        if alpha.current > 0 {
-            updateAlpha()
-        }
-        
-        if isDirty {
-            
-            isDirty = false
-        }
+        if alpha.current > 0 { updateAlpha() }
     }
     
     func isInside(_ sender: NSDraggingInfo, zone i: Int) -> Bool {
