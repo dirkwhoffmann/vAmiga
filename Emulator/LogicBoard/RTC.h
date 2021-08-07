@@ -52,7 +52,6 @@ public:
 
 private:
     
-    void _initialize() override;
     void _reset(bool hard) override;
 
     
@@ -62,7 +61,9 @@ private:
     
 public:
     
+    static RTCConfig getDefaultConfig();
     const RTCConfig &getConfig() const { return config; }
+    void resetConfig() override;
     
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value) override;

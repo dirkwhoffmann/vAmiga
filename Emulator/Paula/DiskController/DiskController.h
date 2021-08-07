@@ -103,7 +103,6 @@ public:
     
 private:
     
-    void _initialize() override;
     void _reset(bool hard) override;
     
     
@@ -113,7 +112,10 @@ private:
     
 public:
     
+    static DiskControllerConfig getDefaultConfig();
     const DiskControllerConfig &getConfig() const { return config; }
+    void resetConfig() override;
+    
     bool turboMode() const { return config.speed == -1; }
 
     i64 getConfigItem(Option option) const;

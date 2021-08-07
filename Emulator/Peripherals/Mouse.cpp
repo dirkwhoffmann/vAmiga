@@ -26,16 +26,6 @@ Mouse::getDescription() const
     return port.nr == PORT_1 ? "Mouse1" : "Mouse2";
 }
 
-void
-Mouse::_initialize()
-{
-    config.pullUpResistors = true;
-    config.shakeDetection = true;
-    config.velocity = 100;
-
-    updateScalingFactors();
-}
-
 void Mouse::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
@@ -48,6 +38,28 @@ void Mouse::_reset(bool hard)
     oldMouseY = 0;
     targetX = 0;
     targetY = 0;
+}
+
+MouseConfig
+Mouse::getDefaultConfig()
+{
+    MouseConfig defaults;
+
+    defaults.pullUpResistors = true;
+    defaults.shakeDetection = true;
+    defaults.velocity = 100;
+    
+    return defaults;
+}
+
+void
+Mouse::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_PULLUP_RESISTORS, defaults.pullUpResistors);
+    setConfigItem(OPT_SHAKE_DETECTION, defaults.shakeDetection);
+    setConfigItem(OPT_MOUSE_VELOCITY, defaults.velocity);
 }
 
 i64

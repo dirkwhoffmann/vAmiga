@@ -28,10 +28,8 @@ CIA::CIA(int n, Amiga& ref) : SubComponent(ref), nr(n)
 void
 CIA::_initialize()
 {
-    config.revision = CIA_8520_DIP;
-    config.todBug = true;
-    config.eClockSyncing = true;
-    
+    resetConfig();
+
     PA = 0xFF;
     PB = 0xFF;
 }
@@ -59,6 +57,28 @@ CIA::_reset(bool hard)
     
     // Update the memory layout because the OVL bit may have changed
     mem.updateMemSrcTables();
+}
+
+CIAConfig
+CIA::getDefaultConfig()
+{
+    CIAConfig defaults;
+    
+    defaults.revision = CIA_8520_DIP;
+    defaults.todBug = true;
+    defaults.eClockSyncing = true;
+
+    return defaults;
+}
+
+void
+CIA::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_CIA_REVISION, defaults.revision);
+    setConfigItem(OPT_TODBUG, defaults.todBug);
+    setConfigItem(OPT_ECLOCK_SYNCING, defaults.eClockSyncing);
 }
 
 i64

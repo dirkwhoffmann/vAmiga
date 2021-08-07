@@ -13,12 +13,6 @@
 #include "IO.h"
 
 void
-CopperDebugger::_initialize()
-{
-
-}
-
-void
 CopperDebugger::_reset(bool hard)
 {
     cache.clear();

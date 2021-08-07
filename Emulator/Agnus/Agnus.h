@@ -412,7 +412,9 @@ private:
     
 public:
     
+    static AgnusConfig getDefaultConfig();
     const AgnusConfig &getConfig() const { return config; }
+    void resetConfig() override;
     
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value) override;

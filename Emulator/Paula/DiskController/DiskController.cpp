@@ -22,18 +22,6 @@ DiskController::DiskController(Amiga& ref) : SubComponent(ref)
 }
 
 void
-DiskController::_initialize()
-{
-    config.connected[0] = true;
-    config.connected[1] = false;
-    config.connected[2] = false;
-    config.connected[3] = false;
-    config.speed = 1;
-    config.lockDskSync = false;
-    config.autoDskSync = false;
-}
-
-void
 DiskController::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
@@ -45,6 +33,35 @@ DiskController::_reset(bool hard)
     if (hard) {
         assert(diskToInsert == nullptr);
     }
+}
+
+DiskControllerConfig
+DiskController::getDefaultConfig()
+{
+    DiskControllerConfig defaults;
+
+    defaults.connected[0] = true;
+    defaults.connected[1] = false;
+    defaults.connected[2] = false;
+    defaults.connected[3] = false;
+    defaults.speed = 1;
+    defaults.lockDskSync = false;
+    defaults.autoDskSync = false;
+    
+    return defaults;
+}
+
+void
+DiskController::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+    
+    for (isize i = 0; i < 4; i++) {
+        setConfigItem(OPT_DRIVE_CONNECT, i, defaults.connected[i]);
+    }
+    setConfigItem(OPT_DRIVE_SPEED, defaults.speed);
+    setConfigItem(OPT_AUTO_DSKSYNC, defaults.lockDskSync);
+    setConfigItem(OPT_LOCK_DSKSYNC, defaults.autoDskSync);
 }
 
 i64

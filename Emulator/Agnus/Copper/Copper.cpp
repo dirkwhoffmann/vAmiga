@@ -24,12 +24,6 @@ Copper::Copper(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Copper::_initialize()
-{
-
-}
-
-void
 Copper::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)

@@ -27,13 +27,8 @@ Denise::Denise(Amiga& ref) : SubComponent(ref)
 void
 Denise::_initialize()
 {
-    config.hiddenSprites = 0;
-    config.hiddenLayers = 0;
-    config.hiddenLayerAlpha = 128;
-    config.clxSprSpr = true;
-    config.clxSprPlf = true;
-    config.clxPlfPlf = true;
-    
+    resetConfig();
+
     memset(spriteInfo, 0, sizeof(spriteInfo));
     memset(latchedSpriteInfo, 0, sizeof(latchedSpriteInfo));
 }
@@ -47,6 +42,36 @@ Denise::_reset(bool hard)
     memset(iBuffer, 0, sizeof(iBuffer));
     memset(mBuffer, 0, sizeof(mBuffer));
     memset(zBuffer, 0, sizeof(zBuffer));
+}
+
+DeniseConfig
+Denise::getDefaultConfig()
+{
+    DeniseConfig defaults;
+
+    defaults.revision = DENISE_OCS;
+    defaults.hiddenSprites = 0;
+    defaults.hiddenLayers = 0;
+    defaults.hiddenLayerAlpha = 128;
+    defaults.clxSprSpr = true;
+    defaults.clxSprPlf = true;
+    defaults.clxPlfPlf = true;
+
+    return defaults;
+}
+
+void
+Denise::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_DENISE_REVISION, defaults.revision);
+    setConfigItem(OPT_HIDDEN_SPRITES, defaults.hiddenSprites);
+    setConfigItem(OPT_HIDDEN_LAYERS, defaults.hiddenLayers);
+    setConfigItem(OPT_HIDDEN_LAYER_ALPHA, defaults.hiddenLayerAlpha);
+    setConfigItem(OPT_CLX_SPR_SPR, defaults.clxSprSpr);
+    setConfigItem(OPT_CLX_SPR_PLF, defaults.clxSprPlf);
+    setConfigItem(OPT_CLX_PLF_PLF, defaults.clxPlfPlf);
 }
 
 i64

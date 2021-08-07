@@ -19,33 +19,50 @@ DmaDebugger::DmaDebugger(Amiga &ref) : SubComponent(ref)
 {
 }
 
-void
-DmaDebugger::_initialize()
+DmaDebuggerConfig
+DmaDebugger::getDefaultConfig()
 {
-    config.enabled = false;
+    DmaDebuggerConfig defaults;
 
-    // Visualize all channels by default except the CPU channel
-    setConfigItem(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_CPU,      false);
-    setConfigItem(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_REFRESH,  true);
-    setConfigItem(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_DISK,     true);
-    setConfigItem(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_AUDIO,    true);
-    setConfigItem(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_BITPLANE, true);
-    setConfigItem(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_SPRITE,   true);
-    setConfigItem(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_COPPER,   true);
-    setConfigItem(OPT_DMA_DEBUG_ENABLE, DMA_CHANNEL_BLITTER,  true);
+    defaults.enabled = false;
+    defaults.displayMode = DMA_DISPLAY_MODE_FG_LAYER;
+    defaults.opacity = 50;
+
+    defaults.visualize[DMA_CHANNEL_CPU] = false;
+    defaults.visualize[DMA_CHANNEL_REFRESH] = false;
+    defaults.visualize[DMA_CHANNEL_DISK] = false;
+    defaults.visualize[DMA_CHANNEL_AUDIO] = false;
+    defaults.visualize[DMA_CHANNEL_BITPLANE] = false;
+    defaults.visualize[DMA_CHANNEL_SPRITE] = false;
+    defaults.visualize[DMA_CHANNEL_COPPER] = false;
+    defaults.visualize[DMA_CHANNEL_BLITTER] = false;
+
+    defaults.debugColor[DMA_CHANNEL_CPU] = 0xFFFFFF00;
+    defaults.debugColor[DMA_CHANNEL_REFRESH] = 0xFF000000;
+    defaults.debugColor[DMA_CHANNEL_DISK] = 0x00FF0000;
+    defaults.debugColor[DMA_CHANNEL_AUDIO] = 0xFF00FF00;
+    defaults.debugColor[DMA_CHANNEL_BITPLANE] = 0x00FFFF00;
+    defaults.debugColor[DMA_CHANNEL_SPRITE] = 0x0088FF00;
+    defaults.debugColor[DMA_CHANNEL_COPPER] = 0xFFFF0000;
+    defaults.debugColor[DMA_CHANNEL_BLITTER] = 0xFFCC0000;
     
-    // Assign default colors
-    setConfigItem(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_CPU,      0xFFFFFF00);
-    setConfigItem(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_REFRESH,  0xFF000000);
-    setConfigItem(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_DISK,     0x00FF0000);
-    setConfigItem(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_AUDIO,    0xFF00FF00);
-    setConfigItem(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_BITPLANE, 0x00FFFF00);
-    setConfigItem(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_SPRITE,   0x0088FF00);
-    setConfigItem(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_COPPER,   0xFFFF0000);
-    setConfigItem(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_BLITTER,  0xFFCC0000);
- 
-    config.displayMode = DMA_DISPLAY_MODE_FG_LAYER;
-    config.opacity = 50;
+    return defaults;
+}
+
+void
+DmaDebugger::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_DMA_DEBUG_ENABLE, defaults.enabled);
+    setConfigItem(OPT_DMA_DEBUG_MODE, defaults.displayMode);
+    setConfigItem(OPT_DMA_DEBUG_OPACITY, defaults.opacity);
+
+    for (isize i = 0; i < DmaChannelEnum::isValid(i); i++) {
+
+        setConfigItem(OPT_DMA_DEBUG_ENABLE, i, defaults.visualize[i]);
+        setConfigItem(OPT_DMA_DEBUG_COLOR, i, defaults.debugColor[i]);
+    }
 }
 
 i64

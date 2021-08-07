@@ -17,10 +17,22 @@ SerialPort::SerialPort(Amiga& ref) : SubComponent(ref)
 
 }
 
-void
-SerialPort::_initialize()
+SerialPortConfig
+SerialPort::getDefaultConfig()
 {
-    config.device = SPD_LOOPBACK;
+    SerialPortConfig defaults;
+    
+    defaults.device = SPD_LOOPBACK;
+    
+    return defaults;
+}
+
+void
+SerialPort::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_SERIAL_DEVICE, defaults.device);
 }
 
 i64

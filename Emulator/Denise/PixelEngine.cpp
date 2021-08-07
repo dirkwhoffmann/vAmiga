@@ -40,11 +40,8 @@ PixelEngine::~PixelEngine()
 void
 PixelEngine::_initialize()
 {
-    config.palette = PALETTE_COLOR;
-    config.brightness = 50;
-    config.contrast = 100;
-    config.saturation = 50;
-    
+    resetConfig();
+
     // Start with a long frame
     emuTexture[0].longFrame = true;
     emuTexture[1].longFrame = true;
@@ -60,7 +57,7 @@ PixelEngine::_initialize()
     indexedRgba[69] = GpuColor(0x00, 0xD0, 0xD0).rawValue;
     indexedRgba[70] = GpuColor(0x00, 0xA0, 0xA0).rawValue;
     indexedRgba[71] = GpuColor(0x00, 0x90, 0x90).rawValue;
-    indexedRgba[72] = GpuColor(0xFF, 0x00, 0x00).rawValue;
+    indexedRgba[72] = GpuColor(0xFF, 0x00, 0x00).rawValue;    
 }
 
 void
@@ -92,6 +89,31 @@ PixelEngine::_powerOn()
             emuTexture[1].data[pos] = col;
         }
     }
+}
+
+PixelEngineConfig
+PixelEngine::getDefaultConfig()
+{
+    PixelEngineConfig defaults;
+
+    defaults.palette = PALETTE_COLOR;
+    defaults.brightness = 50;
+    defaults.contrast = 100;
+    defaults.saturation = 50;
+    
+    return defaults;
+}
+
+void
+PixelEngine::resetConfig()
+{
+    
+    auto defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_PALETTE, defaults.palette);
+    setConfigItem(OPT_BRIGHTNESS, defaults.brightness);
+    setConfigItem(OPT_CONTRAST, defaults.contrast);
+    setConfigItem(OPT_SATURATION, defaults.saturation);
 }
 
 i64
@@ -126,7 +148,7 @@ PixelEngine::setConfigItem(Option option, i64 value)
 
         case OPT_BRIGHTNESS:
             
-            if (config.brightness < 0 || config.brightness > 100) {
+            if (value < 0 || value > 100) {
                 throw VAError(ERROR_OPT_INVALID_ARG, "Expected 0...100");
             }
             config.brightness = value;
@@ -135,7 +157,7 @@ PixelEngine::setConfigItem(Option option, i64 value)
             
         case OPT_CONTRAST:
 
-            if (config.contrast < 0 || config.contrast > 100) {
+            if (value < 0 || value > 100) {
                 throw VAError(ERROR_OPT_INVALID_ARG, "Expected 0...100");
             }
             config.contrast = value;
@@ -144,7 +166,7 @@ PixelEngine::setConfigItem(Option option, i64 value)
 
         case OPT_SATURATION:
         
-            if (config.saturation < 0 || config.saturation > 100) {
+            if (value < 0 || value > 100) {
                 throw VAError(ERROR_OPT_INVALID_ARG, "Expected 0...100");
             }
             config.saturation = value;

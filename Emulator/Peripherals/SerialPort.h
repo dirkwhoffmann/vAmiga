@@ -45,7 +45,6 @@ public:
     
 private:
     
-    void _initialize() override;
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) };
 
     
@@ -55,7 +54,9 @@ private:
     
 public:
 
+    static SerialPortConfig getDefaultConfig();
     const SerialPortConfig &getConfig() const { return config; }
+    void resetConfig() override;
 
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value) override;

@@ -16,7 +16,7 @@ AmigaComponent::~AmigaComponent()
 
 void
 AmigaComponent::initialize()
-{
+{    
     // Initialize all subcomponents
     for (AmigaComponent *c : subComponents) {
         c->initialize();

@@ -20,12 +20,6 @@ Keyboard::Keyboard(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Keyboard::_initialize()
-{
-    config.accurate = true;
-}
-
-void
 Keyboard::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
@@ -33,6 +27,24 @@ Keyboard::_reset(bool hard)
     memset(keyDown, 0, sizeof(keyDown));
     state = KB_SELFTEST;
     execute();
+}
+
+KeyboardConfig
+Keyboard::getDefaultConfig()
+{
+    KeyboardConfig defaults;
+
+    defaults.accurate = true;
+    
+    return defaults;
+}
+
+void
+Keyboard::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_ACCURATE_KEYBOARD, defaults.accurate);
 }
 
 i64

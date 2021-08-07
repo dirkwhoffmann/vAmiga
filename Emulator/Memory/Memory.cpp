@@ -24,6 +24,7 @@
 
 Memory::Memory(Amiga& ref) : SubComponent(ref)
 {
+    memset(&config, 0, sizeof(config));
 }
 
 Memory::~Memory()
@@ -45,30 +46,8 @@ Memory::dealloc()
 void
 Memory::_initialize()
 {
-    dealloc();
-
-    romMask = 0;
-    womMask = 0;
-    extMask = 0;
-    chipMask = 0;
-    slowMask = 0;
-    fastMask = 0;
-
-    womIsLocked = false;
-    
-    config.chipSize = 0;
-    config.slowSize = 0;
-    config.fastSize = 0;
-
-    config.romSize = 0;
-    config.womSize = 0;
-    config.extSize = 0;
-    
-    config.slowRamDelay = true;
-    config.bankMap = BANK_MAP_A500;
-    config.ramInitPattern = RAM_INIT_ALL_ZEROES;
-    config.unmappingType = UNMAPPED_FLOATING;
-    config.extStart = 0xE0;
+    resetConfig();
+    // womIsLocked = false;
 }
 
 void
@@ -81,6 +60,43 @@ Memory::_reset(bool hard)
     
     // In hard-reset mode, we also initialize RAM
     if (hard) fillRamWithInitPattern();
+}
+
+MemoryConfig
+Memory::getDefaultConfig()
+{
+    MemoryConfig defaults;
+    
+    defaults.chipSize = 512;
+    defaults.slowSize = 0;
+    defaults.fastSize = 0;
+
+    defaults.romSize = 0;
+    defaults.womSize = 0;
+    defaults.extSize = 0;
+    
+    defaults.slowRamDelay = true;
+    defaults.bankMap = BANK_MAP_A500;
+    defaults.ramInitPattern = RAM_INIT_ALL_ZEROES;
+    defaults.unmappingType = UNMAPPED_FLOATING;
+    defaults.extStart = 0xE0;
+    
+    return defaults;
+}
+
+void
+Memory::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_CHIP_RAM, defaults.chipSize);
+    setConfigItem(OPT_SLOW_RAM, defaults.slowSize);
+    setConfigItem(OPT_FAST_RAM, defaults.fastSize);
+    setConfigItem(OPT_EXT_START, defaults.extStart);
+    setConfigItem(OPT_SLOW_RAM_DELAY, defaults.slowRamDelay);
+    setConfigItem(OPT_BANKMAP, defaults.bankMap);
+    setConfigItem(OPT_UNMAPPING_TYPE, defaults.unmappingType);
+    setConfigItem(OPT_RAM_INIT_PATTERN, defaults.ramInitPattern);
 }
 
 i64
@@ -490,7 +506,7 @@ Memory::fillRamWithInitPattern()
             break;
             
         default:
-            assert(false);
+            break;
     }
 }
 
@@ -681,7 +697,7 @@ Memory::getMemSrc <ACCESSOR_AGNUS> (u32 addr)
 
 void
 Memory::updateMemSrcTables()
-{
+{    
     updateCpuMemSrcTable();
     updateAgnusMemSrcTable();
 }
@@ -693,14 +709,14 @@ Memory::updateCpuMemSrcTable()
     MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
     MemorySource mem_rom_mirror = rom ? MEM_ROM_MIRROR : MEM_NONE;
 
-    isize chipRamPages = config.chipSize / 0x10000;
-    isize slowRamPages = config.slowSize / 0x10000;
-    isize fastRamPages = config.fastSize / 0x10000;
-    
     assert(config.chipSize % 0x10000 == 0);
     assert(config.slowSize % 0x10000 == 0);
     assert(config.fastSize % 0x10000 == 0);
 
+    isize chipRamPages = config.chipSize / 0x10000;
+    isize slowRamPages = config.slowSize / 0x10000;
+    isize fastRamPages = config.fastSize / 0x10000;
+    
     bool ovl = ciaa.getPA() & 1;
     bool old = config.bankMap == BANK_MAP_A1000 || config.bankMap == BANK_MAP_A2000A;
 

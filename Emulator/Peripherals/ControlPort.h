@@ -59,7 +59,6 @@ public:
     
 private:
     
-    void _initialize() override;
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
 
     

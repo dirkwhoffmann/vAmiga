@@ -44,7 +44,6 @@ public:
 
 private:
     
-    void _initialize() override;
     void _reset(bool hard) override { };
     
     isize _size() override { return 0; }

@@ -82,8 +82,7 @@ public:
      * can be performed by implementing the _initialize() delegation function.
      */
     void initialize();
-    // virtual void _initialize() { resetConfig(); }
-    virtual void _initialize() { };
+    virtual void _initialize() { resetConfig(); }
     
     /* Resets the component and it's subcomponents. Two reset modes are
      * distinguished:

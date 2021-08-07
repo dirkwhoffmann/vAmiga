@@ -38,7 +38,6 @@ public:
 
 private:
     
-    void _initialize() override;
     void _reset(bool hard) override { }
 
 
@@ -48,7 +47,9 @@ private:
 
 public:
     
+    static DmaDebuggerConfig getDefaultConfig();
     const DmaDebuggerConfig &getConfig() const { return config; }
+    void resetConfig() override;
 
     i64 getConfigItem(Option option) const;
     i64 getConfigItem(Option option, long id) const;

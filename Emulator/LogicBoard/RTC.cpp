@@ -15,7 +15,7 @@
 
 RTC::RTC(Amiga& ref) : SubComponent(ref)
 {
-    config.model = RTC_OKI;
+    config.model = RTC_OKI; // TODO: REMOVE
 }
 
 i64
@@ -56,12 +56,6 @@ RTC::setConfigItem(Option option, i64 value)
 }
 
 void
-RTC::_initialize()
-{
-    
-}
-
-void
 RTC::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
@@ -81,6 +75,24 @@ RTC::_reset(bool hard)
             reg[0][0xF] = 0b0100;
         }
     }
+}
+
+RTCConfig
+RTC::getDefaultConfig()
+{
+    RTCConfig defaults;
+
+    defaults.model = RTC_OKI;
+    
+    return defaults;
+}
+
+void
+RTC::resetConfig()
+{
+    RTCConfig defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_RTC_MODEL, defaults.model);
 }
 
 void

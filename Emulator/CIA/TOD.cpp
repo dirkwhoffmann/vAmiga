@@ -24,12 +24,6 @@ TOD::getDescription() const
 }
 
 void
-TOD::_initialize()
-{
-    
-}
-
-void
 TOD::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)

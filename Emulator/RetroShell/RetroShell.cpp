@@ -33,12 +33,6 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
     printPrompt();
 }
 
-void
-RetroShell::_initialize()
-{
-
-}
-
 isize
 RetroShell::cposRel()
 {

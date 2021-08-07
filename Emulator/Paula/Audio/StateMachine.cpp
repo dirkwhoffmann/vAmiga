@@ -29,11 +29,13 @@ StateMachine<nr>::getDescription() const
     }
 }
 
+/*
 template <isize nr> void
 StateMachine<nr>::_initialize()
 {
     
 }
+*/
 
 template <isize nr> void
 StateMachine<nr>::_reset(bool hard)

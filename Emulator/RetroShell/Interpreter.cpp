@@ -17,12 +17,6 @@ Interpreter::Interpreter(Amiga &ref) : SubComponent(ref)
     registerInstructions();
 };
 
-void
-Interpreter::_initialize()
-{
-
-}
-
 Arguments
 Interpreter::split(const string& userInput)
 {

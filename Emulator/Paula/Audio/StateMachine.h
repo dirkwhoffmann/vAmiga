@@ -86,7 +86,6 @@ public:
 
 private:
     
-    void _initialize() override;
     void _reset(bool hard) override;
 
     

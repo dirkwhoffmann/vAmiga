@@ -26,12 +26,6 @@ ControlPort::getDescription() const
 }
     
 void
-ControlPort::_initialize()
-{
-    
-}
-
-void
 ControlPort::_inspect()
 {
     synchronized {

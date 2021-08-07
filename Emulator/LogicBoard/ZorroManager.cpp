@@ -13,12 +13,7 @@
 
 ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
 {
-}
 
-void
-ZorroManager::_initialize()
-{
-    
 }
 
 u8

@@ -25,14 +25,6 @@ Joystick::getDescription() const
 }
 
 void
-Joystick::_initialize()
-{
-    config.autofire = false;
-    config.autofireBullets = -3;
-    config.autofireDelay = 125;
-}
-
-void
 Joystick::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
@@ -41,6 +33,28 @@ Joystick::_reset(bool hard)
     button = false;
     axisX = 0;
     axisY = 0;
+}
+
+JoystickConfig
+Joystick::getDefaultConfig()
+{
+    JoystickConfig defaults;
+
+    defaults.autofire = false;
+    defaults.autofireBullets = -3;
+    defaults.autofireDelay = 125;
+    
+    return defaults;
+}
+
+void
+Joystick::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_AUTOFIRE, defaults.autofire);
+    setConfigItem(OPT_AUTOFIRE_BULLETS, defaults.autofireBullets);
+    setConfigItem(OPT_AUTOFIRE_DELAY, defaults.autofireDelay);
 }
 
 i64

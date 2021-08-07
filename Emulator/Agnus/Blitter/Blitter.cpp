@@ -56,6 +56,24 @@ Blitter::_reset(bool hard)
     }
 }
 
+BlitterConfig
+Blitter::getDefaultConfig()
+{
+    BlitterConfig defaults;
+    
+    defaults.accuracy = 2;
+
+    return defaults;
+}
+
+void
+Blitter::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_BLITTER_ACCURACY, defaults.accuracy);
+}
+
 i64
 Blitter::getConfigItem(Option option) const
 {

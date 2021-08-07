@@ -29,12 +29,6 @@ Recorder::hasFFmpeg() const
 }
 
 void
-Recorder::_initialize()
-{
-        
-}
-
-void
 Recorder::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)

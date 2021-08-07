@@ -40,24 +40,6 @@ Muxer::~Muxer()
 }
 
 void
-Muxer::_initialize()
-{
-    config.samplingMethod = SMP_NONE;
-    config.filterType = FILTER_BUTTERWORTH;
-    config.filterAlwaysOn = false;
-    config.volL = 50;
-    config.volR = 50;
-    config.vol[0] = 100;
-    config.vol[1] = 100;
-    config.vol[2] = 100;
-    config.vol[3] = 100;
-    config.pan[0] = 170;
-    config.pan[1] = 30;
-    config.pan[2] = 30;
-    config.pan[3] = 170;
-}
-
-void
 Muxer::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
@@ -83,6 +65,46 @@ Muxer::clear()
     // Wipe out the filter buffers
     filterL.clear();
     filterR.clear();
+}
+
+MuxerConfig
+Muxer::getDefaultConfig()
+{
+    MuxerConfig defaults;
+
+    defaults.samplingMethod = SMP_NONE;
+    defaults.filterType = FILTER_BUTTERWORTH;
+    defaults.filterAlwaysOn = false;
+    defaults.volL = 50;
+    defaults.volR = 50;
+    defaults.vol[0] = 100;
+    defaults.vol[1] = 100;
+    defaults.vol[2] = 100;
+    defaults.vol[3] = 100;
+    defaults.pan[0] = 170;
+    defaults.pan[1] = 30;
+    defaults.pan[2] = 30;
+    defaults.pan[3] = 170;
+
+    return defaults;
+}
+
+void
+Muxer::resetConfig()
+{
+    MuxerConfig defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_SAMPLING_METHOD, defaults.samplingMethod);
+    setConfigItem(OPT_FILTER_TYPE, defaults.filterType);
+    setConfigItem(OPT_FILTER_ALWAYS_ON, defaults.filterAlwaysOn);
+    setConfigItem(OPT_AUDVOLL, defaults.volL);
+    setConfigItem(OPT_AUDVOLR, defaults.volR);
+
+    for (isize i = 0; i < 4; i++) {
+
+        setConfigItem(OPT_AUDVOL, defaults.vol[i]);
+        setConfigItem(OPT_AUDPAN, defaults.pan[i]);
+    }
 }
 
 i64

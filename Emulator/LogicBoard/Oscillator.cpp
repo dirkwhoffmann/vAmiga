@@ -34,12 +34,6 @@ Oscillator::getDescription() const
 }
 
 void
-Oscillator::_initialize()
-{
-    
-}
-
-void
 Oscillator::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)

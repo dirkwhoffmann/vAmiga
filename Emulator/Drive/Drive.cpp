@@ -29,26 +29,46 @@ Drive::getDescription() const
 }
 
 void
-Drive::_initialize()
-{
-    config.type = DRIVE_DD_35;
-    config.mechanicalDelays = true;
-    config.startDelay = MSEC(380);
-    config.stopDelay = MSEC(80);
-    config.stepDelay = USEC(8000);
-    config.pan = IS_EVEN(nr) ? 100 : -100;
-    config.stepVolume = 128;
-    config.pollVolume = 128;
-    config.insertVolume = 128;
-    config.ejectVolume = 128;
-    config.defaultFileSystem = FS_OFS;
-    config.defaultBootBlock = BB_NONE;
-}
-
-void
 Drive::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
+}
+
+DriveConfig
+Drive::getDefaultConfig(isize nr)
+{
+    DriveConfig defaults;
+    
+    defaults.type = DRIVE_DD_35;
+    defaults.mechanicalDelays = true;
+    defaults.startDelay = MSEC(380);
+    defaults.stopDelay = MSEC(80);
+    defaults.stepDelay = USEC(8000);
+    defaults.pan = IS_EVEN(nr) ? 100 : -100;
+    defaults.stepVolume = 128;
+    defaults.pollVolume = 128;
+    defaults.insertVolume = 128;
+    defaults.ejectVolume = 128;
+    defaults.defaultFileSystem = FS_OFS;
+    defaults.defaultBootBlock = BB_NONE;
+
+    return defaults;
+}
+
+void
+Drive::resetConfig()
+{
+    auto defaults = getDefaultConfig(nr);
+    
+    setConfigItem(OPT_DRIVE_TYPE, defaults.type);
+    setConfigItem(OPT_EMULATE_MECHANICS, defaults.mechanicalDelays);
+    setConfigItem(OPT_DRIVE_PAN, defaults.pan);
+    setConfigItem(OPT_STEP_VOLUME, defaults.stepVolume);
+    setConfigItem(OPT_POLL_VOLUME, defaults.pollVolume);
+    setConfigItem(OPT_INSERT_VOLUME, defaults.insertVolume);
+    setConfigItem(OPT_EJECT_VOLUME, defaults.ejectVolume);
+    setConfigItem(OPT_DEFAULT_FILESYSTEM, defaults.defaultFileSystem);
+    setConfigItem(OPT_DEFAULT_BOOTBLOCK, defaults.defaultBootBlock);
 }
 
 i64
@@ -61,8 +81,8 @@ Drive::getConfigItem(Option option) const
         case OPT_DRIVE_PAN:           return (long)config.pan;
         case OPT_STEP_VOLUME:         return (long)config.stepVolume;
         case OPT_POLL_VOLUME:         return (long)config.pollVolume;
-        case OPT_EJECT_VOLUME:        return (long)config.ejectVolume;
         case OPT_INSERT_VOLUME:       return (long)config.insertVolume;
+        case OPT_EJECT_VOLUME:        return (long)config.ejectVolume;
         case OPT_DEFAULT_FILESYSTEM:  return (long)config.defaultFileSystem;
         case OPT_DEFAULT_BOOTBLOCK:   return (long)config.defaultBootBlock;
 

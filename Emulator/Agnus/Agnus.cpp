@@ -28,8 +28,9 @@ Agnus::Agnus(Amiga& ref) : SubComponent(ref)
 void
 Agnus::_initialize()
 {
-    config.revision = AGNUS_ECS_1MB;
-    ptrMask = 0x0FFFFF;
+    resetConfig();
+
+    ptrMask = 0x0FFFFF; // TODO: REMOVE?!
     
     // Wipe out event slots
     memset(slot, 0, sizeof(slot));
@@ -77,6 +78,26 @@ Agnus::_reset(bool hard)
     if (insEvent) scheduleAbs<SLOT_INS>(0, insEvent);
     
     pokeVPOS(0);
+}
+
+AgnusConfig
+Agnus::getDefaultConfig()
+{
+    AgnusConfig defaults;
+
+    defaults.revision = AGNUS_ECS_1MB;
+    defaults.slowRamMirror = true;
+        
+    return defaults;
+}
+
+void
+Agnus::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_AGNUS_REVISION, defaults.revision);
+    setConfigItem(OPT_SLOW_RAM_MIRROR, defaults.slowRamMirror);
 }
 
 i64

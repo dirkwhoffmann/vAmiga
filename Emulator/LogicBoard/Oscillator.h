@@ -62,13 +62,11 @@ private:
 public:
     
     using SubComponent::SubComponent;
-    // Oscillator(Amiga& ref);
 
     const char *getDescription() const override;
 
 private:
     
-    void _initialize() override;
     void _reset(bool hard) override;
     
     
@@ -97,21 +95,4 @@ private:
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    
-    
-    //
-    // Managing emulation speed
-    //
-        
-public:
-    
-    // Restarts the synchronization timer
-    // void restart();
-
-    // Puts the emulator thread to rest
-    // void synchronize();
-    
-    // Getter for the reference time
-    // util::Time getTimeBase() { return timeBase; }
-    
 };
