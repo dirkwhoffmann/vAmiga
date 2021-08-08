@@ -22,14 +22,14 @@ struct Thumbnail {
     // Raw texture data
     u32 screen[(HPIXELS / 2) * (VPIXELS / 1)];
     
-    // Date and time of screenshot creation
+    // Creation date and time
     time_t timestamp;
     
     // Factory methods
-    static Thumbnail *makeWithAmiga(Amiga *amiga, isize dx = 2, isize dy = 1);
+    static Thumbnail *makeWithAmiga(Amiga &amiga, isize dx = 2, isize dy = 1);
     
     // Takes a screenshot from a given Amiga
-    void take(Amiga *amiga, isize dx = 2, isize dy = 1);
+    void take(Amiga &amiga, isize dx = 2, isize dy = 1);
 };
 
 struct SnapshotHeader {
@@ -42,7 +42,7 @@ struct SnapshotHeader {
     u8 minor;
     u8 subminor;
     
-    // Screenshot
+    // Preview image
     Thumbnail screenshot;
 };
 
@@ -80,18 +80,23 @@ public:
     
     
     //
-    // Accessing snapshot properties
+    // Accessing
     //
     
 public:
     
-    // Returns pointer to header data
+    // Checks the snapshot version number
+    bool isTooOld() const;
+    bool isTooNew() const;
+    bool matches() { return !isTooOld() && !isTooNew(); }
+    
+    // Returns a pointer to the snapshot header
     const SnapshotHeader *getHeader() const { return (SnapshotHeader *)data; }
     
     // Returns a pointer to the thumbnail image
     const Thumbnail &getThumbnail() const { return getHeader()->screenshot; }
     
-    // Returns pointer to core data
+    // Returns pointer to the core data
     u8 *getData() { return data + sizeof(SnapshotHeader); }
     
     // Takes a screenshot

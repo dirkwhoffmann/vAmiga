@@ -171,13 +171,13 @@ Moira::addressErrorHandler()
 void
 Moira::breakpointReached(u32 addr)
 {
-    amiga.setControlFlags(RL_BREAKPOINT_REACHED);
+    amiga.setControlFlags(RL::BREAKPOINT_REACHED);
 }
 
 void
 Moira::watchpointReached(u32 addr)
 {
-    amiga.setControlFlags(RL_WATCHPOINT_REACHED);
+    amiga.setControlFlags(RL::WATCHPOINT_REACHED);
 }
 
 }

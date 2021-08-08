@@ -1509,8 +1509,9 @@ using namespace moira;
 
 - (NSImage *)previewImage
 {
-    if (preview != nullptr) { return preview; }
-    
+    // Return cached image (if any)
+    if (preview) { return preview; }
+
     // Create preview image
     const Thumbnail &thumbnail = [self snapshot]->getThumbnail();
     unsigned char *data = (unsigned char *)thumbnail.screen;

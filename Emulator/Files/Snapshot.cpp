@@ -13,7 +13,7 @@
 #include "IO.h"
 
 Thumbnail *
-Thumbnail::makeWithAmiga(Amiga *amiga, isize dx, isize dy)
+Thumbnail::makeWithAmiga(Amiga &amiga, isize dx, isize dy)
 {
     Thumbnail *screenshot = new Thumbnail();
     screenshot->take(amiga, dx, dy);
@@ -22,9 +22,9 @@ Thumbnail::makeWithAmiga(Amiga *amiga, isize dx, isize dy)
 }
 
 void
-Thumbnail::take(Amiga *amiga, isize dx, isize dy)
+Thumbnail::take(Amiga &amiga, isize dx, isize dy)
 {
-    u32 *source = (u32 *)amiga->denise.pixelEngine.getStableBuffer().data;
+    u32 *source = (u32 *)amiga.denise.pixelEngine.getStableBuffer().data;
     u32 *target = screen;
     
     isize xStart = 4 * HBLANK_MAX + 1, xEnd = HPIXELS + 4 * HBLANK_MIN;
@@ -92,8 +92,34 @@ Snapshot::makeWithAmiga(Amiga *amiga)
     return snapshot;
 }
 
+bool
+Snapshot::isTooOld() const
+{
+    auto header = getHeader();
+    
+    if (header->major < SNP_MAJOR) return true;
+    if (header->major > SNP_MAJOR) return false;
+    if (header->minor < SNP_MINOR) return true;
+    if (header->minor > SNP_MINOR) return false;
+    
+    return header->subminor < SNP_SUBMINOR;
+}
+
+bool
+Snapshot::isTooNew() const
+{
+    auto header = getHeader();
+    
+    if (header->major > SNP_MAJOR) return true;
+    if (header->major < SNP_MAJOR) return false;
+    if (header->minor > SNP_MINOR) return true;
+    if (header->minor < SNP_MINOR) return false;
+
+    return header->subminor > SNP_SUBMINOR;
+}
+
 void
 Snapshot::takeScreenshot(Amiga &amiga)
 {
-    ((SnapshotHeader *)data)->screenshot.take(&amiga);
+    ((SnapshotHeader *)data)->screenshot.take(amiga);
 }

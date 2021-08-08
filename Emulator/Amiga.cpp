@@ -154,7 +154,7 @@ Amiga::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
     
     // Clear all runloop flags
-    runLoopCtrl = 0;
+    flags = 0;
 }
 
 i64
@@ -559,74 +559,66 @@ Amiga::threadExecute()
         cpu.execute();
 
         // Check if special action needs to be taken
-        if (runLoopCtrl) {
+        if (flags) {
             
             // Are we requested to take a snapshot?
-            if (runLoopCtrl & RL_AUTO_SNAPSHOT) {
-                debug(RUN_DEBUG, "RL_AUTO_SNAPSHOT\n");
+            if (flags & RL::AUTO_SNAPSHOT) {
+                clearControlFlags(RL::AUTO_SNAPSHOT);
                 autoSnapshot = Snapshot::makeWithAmiga(this);
                 msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
-                clearControlFlags(RL_AUTO_SNAPSHOT);
             }
             
-            if (runLoopCtrl & RL_USER_SNAPSHOT) {
-                debug(RUN_DEBUG, "RL_USER_SNAPSHOT\n");
+            if (flags & RL::USER_SNAPSHOT) {
+                clearControlFlags(RL::USER_SNAPSHOT);
                 userSnapshot = Snapshot::makeWithAmiga(this);
                 msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
-                clearControlFlags(RL_USER_SNAPSHOT);
             }
 
             // Are we requested to update the debugger info structs?
-            if (runLoopCtrl & RL_INSPECT) {
-                debug(RUN_DEBUG, "RL_INSPECT\n");
+            if (flags & RL::INSPECT) {
+                clearControlFlags(RL::INSPECT);
                 inspect();
-                clearControlFlags(RL_INSPECT);
             }
 
             // Did we reach a breakpoint?
-            if (runLoopCtrl & RL_BREAKPOINT_REACHED) {
+            if (flags & RL::BREAKPOINT_REACHED) {
+                clearControlFlags(RL::BREAKPOINT_REACHED);
                 inspect();
                 msgQueue.put(MSG_BREAKPOINT_REACHED);
-                debug(RUN_DEBUG, "BREAKPOINT_REACHED pc: %x\n", cpu.getPC());
-                clearControlFlags(RL_BREAKPOINT_REACHED);
                 thread.newState = EXEC_PAUSED;
                 break;
             }
 
             // Did we reach a watchpoint?
-            if (runLoopCtrl & RL_WATCHPOINT_REACHED) {
+            if (flags & RL::WATCHPOINT_REACHED) {
+                clearControlFlags(RL::WATCHPOINT_REACHED);
                 inspect();
                 msgQueue.put(MSG_WATCHPOINT_REACHED);
-                debug(RUN_DEBUG, "WATCHPOINT_REACHED pc: %x\n", cpu.getPC());
-                clearControlFlags(RL_WATCHPOINT_REACHED);
                 thread.newState = EXEC_PAUSED;
                 break;
             }
 
             // Are we requested to terminate the run loop?
-            if (runLoopCtrl & RL_STOP) {
-                clearControlFlags(RL_STOP);
-                debug(RUN_DEBUG, "RL_STOP\n");
+            if (flags & RL::STOP) {
+                clearControlFlags(RL::STOP);
                 thread.newState = EXEC_PAUSED;
                 break;
             }
 
             // Are we requested to enter or exit warp mode?
-            if (runLoopCtrl & RL_WARP_ON) {
-                clearControlFlags(RL_WARP_ON);
-                debug(RUN_DEBUG, "RL_WARP_ON\n");
+            if (flags & RL::WARP_ON) {
+                clearControlFlags(RL::WARP_ON);
                 AmigaComponent::warpOn();
             }
 
-            if (runLoopCtrl & RL_WARP_OFF) {
-                clearControlFlags(RL_WARP_OFF);
-                debug(RUN_DEBUG, "RL_WARP_OFF\n");
+            if (flags & RL::WARP_OFF) {
+                clearControlFlags(RL::WARP_OFF);
                 AmigaComponent::warpOff();
             }
             
             // Are we requested to synchronize the thread?
-            if (runLoopCtrl & RL_SYNC_THREAD) {
-                clearControlFlags(RL_SYNC_THREAD);
+            if (flags & RL::SYNC_THREAD) {
+                clearControlFlags(RL::SYNC_THREAD);
                 break;
             }
         }
@@ -709,14 +701,13 @@ Amiga::resume()
 void
 Amiga::setControlFlags(u32 flags)
 {
-    // runLoopCtrl |= flags;
-    synchronized { runLoopCtrl |= flags; }
+    synchronized { flags |= flags; }
 }
 
 void
 Amiga::clearControlFlags(u32 flags)
 {
-    synchronized { runLoopCtrl &= ~flags; }
+    synchronized { flags &= ~flags; }
 }
 
 void
@@ -742,108 +733,6 @@ Amiga::stepOver()
     cpu.debugger.stepOver();
     run();
 }
-
-/*
-void
-Amiga::runLoop()
-{
-    debug(RUN_DEBUG, "runLoop()\n");
-    
-    // Inform the GUI
-    msgQueue.put(MSG_RUN);
-
-    // Restart the synchronization timer
-    oscillator.restart();
-    
-    // Enable or disable debugging features
-    // TODO: MOVE TO CPU::_run()
-    if (debugMode) {
-        cpu.debugger.enableLogging();
-    } else {
-        cpu.debugger.disableLogging();
-    }
-    
-    // Enter the loop
-    while(1) {
-        
-        // Emulate the next CPU instruction
-        cpu.execute();
-
-        // Check if special action needs to be taken
-        if (runLoopCtrl) {
-            
-            // Are we requested to take a snapshot?
-            if (runLoopCtrl & RL_AUTO_SNAPSHOT) {
-                debug(RUN_DEBUG, "RL_AUTO_SNAPSHOT\n");
-                autoSnapshot = Snapshot::makeWithAmiga(this);
-                msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
-                clearControlFlags(RL_AUTO_SNAPSHOT);
-            }
-            
-            if (runLoopCtrl & RL_USER_SNAPSHOT) {
-                debug(RUN_DEBUG, "RL_USER_SNAPSHOT\n");
-                userSnapshot = Snapshot::makeWithAmiga(this);
-                msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
-                clearControlFlags(RL_USER_SNAPSHOT);
-            }
-
-            // Are we requested to update the debugger info structs?
-            if (runLoopCtrl & RL_INSPECT) {
-                debug(RUN_DEBUG, "RL_INSPECT\n");
-                inspect();
-                clearControlFlags(RL_INSPECT);
-            }
-
-            // Did we reach a breakpoint?
-            if (runLoopCtrl & RL_BREAKPOINT_REACHED) {
-                inspect();
-                msgQueue.put(MSG_BREAKPOINT_REACHED);
-                debug(RUN_DEBUG, "BREAKPOINT_REACHED pc: %x\n", cpu.getPC());
-                clearControlFlags(RL_BREAKPOINT_REACHED);
-                break;
-            }
-
-            // Did we reach a watchpoint?
-            if (runLoopCtrl & RL_WATCHPOINT_REACHED) {
-                inspect();
-                msgQueue.put(MSG_WATCHPOINT_REACHED);
-                debug(RUN_DEBUG, "WATCHPOINT_REACHED pc: %x\n", cpu.getPC());
-                clearControlFlags(RL_WATCHPOINT_REACHED);
-                break;
-            }
-
-            // Are we requested to terminate the run loop?
-            if (runLoopCtrl & RL_STOP) {
-                clearControlFlags(RL_STOP);
-                debug(RUN_DEBUG, "RL_STOP\n");
-                break;
-            }
-
-            // Are we requested to enter or exit warp mode?
-            if (runLoopCtrl & RL_WARP_ON) {
-                clearControlFlags(RL_WARP_ON);
-                debug(RUN_DEBUG, "RL_WARP_ON\n");
-                AmigaComponent::warpOn();
-            }
-
-            if (runLoopCtrl & RL_WARP_OFF) {
-                clearControlFlags(RL_WARP_OFF);
-                debug(RUN_DEBUG, "RL_WARP_OFF\n");
-                AmigaComponent::warpOff();
-            }
-        }
-    }
-    
-    // Enter pause mode
-    AmigaComponent::pause();
-    
-    // Update the recorded debug information
-    inspect();
-
-    // Inform the GUI
-    msgQueue.put(MSG_PAUSE);
-}
-*/
 
 void
 Amiga::requestAutoSnapshot()

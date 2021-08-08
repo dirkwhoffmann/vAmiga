@@ -106,13 +106,13 @@ public:
     
 private:
         
-    /* Run loop control. This variable is checked at the end of each runloop
+    /* Run loop flags. This variable is checked at the end of each runloop
      * iteration. Most of the time, the variable is 0 which causes the runloop
      * to repeat. A value greater than 0 means that one or more runloop control
      * flags are set. These flags are flags processed and the loop either
      * repeats or terminates depending on the provided flags.
      */
-    u32 runLoopCtrl = 0;
+    RunLoopFlags flags = 0;
     
     // The invocation counter for implementing suspend() / resume()
     isize suspendCounter = 0;
@@ -289,12 +289,12 @@ public:
     void clearControlFlags(u32 flags);
     
     // Convenience wrappers for controlling the run loop
-    void signalStop() { setControlFlags(RL_STOP); }
-    void signalInspect() { setControlFlags(RL_INSPECT); }
-    void signalWarpOn() { setControlFlags(RL_WARP_ON); }
-    void signalWarpOff() { setControlFlags(RL_WARP_OFF); }
-    void signalAutoSnapshot() { setControlFlags(RL_AUTO_SNAPSHOT); }
-    void signalUserSnapshot() { setControlFlags(RL_USER_SNAPSHOT); }
+    void signalStop() { setControlFlags(RL::STOP); }
+    void signalInspect() { setControlFlags(RL::INSPECT); }
+    void signalWarpOn() { setControlFlags(RL::WARP_ON); }
+    void signalWarpOff() { setControlFlags(RL::WARP_OFF); }
+    void signalAutoSnapshot() { setControlFlags(RL::AUTO_SNAPSHOT); }
+    void signalUserSnapshot() { setControlFlags(RL::USER_SNAPSHOT); }
 
     //
     // Running the emulator
@@ -318,13 +318,6 @@ public:
      */
     void stepOver();
         
-    /* The Amiga run loop. This function is one of the most prominent ones. It
-     * implements the outermost loop of the emulator and therefore the place
-     * where emulation starts. If you want to understand how the emulator works,
-     * this function should be your starting point.
-     */
-    // void runLoop();
-
     
     //
     // Handling snapshots
