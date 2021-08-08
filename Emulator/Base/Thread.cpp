@@ -51,7 +51,7 @@ Thread::sleep <ThreadMode::Periodic> ()
     auto now = util::Time::now();
 
     // Only proceed if we're not running in warp mode
-    if (warp) return;
+    if (warpMode) return;
         
     // Check if we're running too slow...
     if (now > targetTime) {
@@ -86,7 +86,7 @@ template <> void
 Thread::sleep <ThreadMode::Pulsed> ()
 {
     // Wait for the next pulse
-    if (!warp) waitForCondition();
+    if (!warpMode) waitForCondition();
 }
 
 void
@@ -104,7 +104,7 @@ Thread::main()
             }
         }
         
-        if (!warp || isPaused()) {
+        if (!warpMode || isPaused()) {
 
             switch (mode) {
                 case ThreadMode::Periodic: sleep<ThreadMode::Periodic>(); break;
@@ -113,63 +113,71 @@ Thread::main()
         }
         
         // Are we requested to enter or exit warp mode?
-        while (newWarp != warp) {
+        while (newWarpMode != warpMode) {
             
-            newWarp ? threadWarpOn() : threadWarpOff();
-            warp = newWarp;
+            AmigaComponent::warpOnOff(newWarpMode);
+            warpMode = newWarpMode;
             break;
         }
-        
+
+        // Are we requested to enter or exit warp mode?
+        while (newDebugMode != debugMode) {
+            
+            AmigaComponent::debugOnOff(newDebugMode);
+            debugMode = newDebugMode;
+            break;
+        }
+
         // Are we requested to change state?
         while (newState != state) {
             
             if (state == EXEC_OFF && newState == EXEC_PAUSED) {
                 
-                threadPowerOn();
+                AmigaComponent::powerOn();
                 state = newState;
                 break;
             }
 
             if (state == EXEC_OFF && newState == EXEC_RUNNING) {
                 
-                threadPowerOn();
-                threadRun();
+                AmigaComponent::powerOn();
+                AmigaComponent::run();
                 state = newState;
                 break;
             }
 
             if (state == EXEC_PAUSED && newState == EXEC_OFF) {
                 
-                threadPowerOff();
+                AmigaComponent::powerOff();
                 state = newState;
                 break;
             }
 
             if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
                 
-                threadRun();
+                AmigaComponent::run();
                 state = newState;
                 break;
             }
 
             if (state == EXEC_RUNNING && newState == EXEC_OFF) {
                 
-                threadPause();
-                threadPowerOff();
+                AmigaComponent::pause();
+                AmigaComponent::powerOff();
                 state = newState;
                 break;
             }
 
             if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
                 
-                threadPause();
+                AmigaComponent::pause();
                 state = newState;
                 break;
             }
             
             if (newState == EXEC_TERMINATED) {
                 
-                threadHalt();
+                AmigaComponent::halt();
                 state = newState;
                 return;
             }
@@ -205,8 +213,6 @@ Thread::setSyncDelay(util::Time newDelay)
 void
 Thread::setMode(ThreadMode newMode)
 {
-    if (mode == newMode) return;
-    
     mode = newMode;
 }
 
@@ -214,6 +220,12 @@ void
 Thread::setWarpLock(bool value)
 {
     warpLock = value;
+}
+
+void
+Thread::setDebugLock(bool value)
+{
+    debugLock = value;
 }
 
 void
@@ -311,6 +323,19 @@ Thread::warpOff(bool blocking)
 }
 
 void
+Thread::debugOn(bool blocking)
+{
+    if (!debugLock) changeDebugTo(true, blocking);
+}
+
+void
+Thread::debugOff(bool blocking)
+{
+    if (!debugLock) changeDebugTo(false, blocking);
+}
+
+
+void
 Thread::changeStateTo(ExecutionState requestedState, bool blocking)
 {
     newState = requestedState;
@@ -320,8 +345,15 @@ Thread::changeStateTo(ExecutionState requestedState, bool blocking)
 void
 Thread::changeWarpTo(bool value, bool blocking)
 {
-    newWarp = value;
-    if (blocking) while (warp != newWarp) { };
+    newWarpMode = value;
+    if (blocking) while (warpMode != newWarpMode) { };
+}
+
+void
+Thread::changeDebugTo(bool value, bool blocking)
+{
+    newDebugMode = value;
+    if (blocking) while (debugMode != newDebugMode) { };
 }
 
 void

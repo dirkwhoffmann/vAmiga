@@ -9,8 +9,8 @@
 
 #include "config.h"
 #include "Copper.h"
+#include "Amiga.h"
 #include "CopperDebugger.h"
-#include "Agnus.h"
 #include "Checksum.h"
 #include "IO.h"
 #include "PixelEngine.h"
@@ -92,7 +92,7 @@ Copper::setPC(u32 addr)
     coppc = addr;
     
     // Notify the debugger
-    if (debugMode) { debugger.jumped(); }
+    if (amiga.inDebugMode()) { debugger.jumped(); }
 }
 
 void
@@ -101,7 +101,7 @@ Copper::advancePC()
     coppc += 2;
     
     // Notify the debugger
-    if (debugMode) { debugger.advanced(); }
+    if (amiga.inDebugMode()) { debugger.advanced(); }
 }
 
 void

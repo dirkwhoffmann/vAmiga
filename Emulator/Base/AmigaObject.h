@@ -9,6 +9,34 @@
 
 #pragma once
 
+/* Object model
+ *
+ *  ------------------
+ * |   AmigaObject    |
+ *  ------------------
+ *           |
+ *           |
+ *           v
+ *  ------------------
+ * |  AmigaComponent  |
+ *  ------------------
+ *           |
+ *           |      ------------------
+ *           |---->|   SubComponent   |
+ *           |      ------------------
+ *           v
+ *  ------------------
+ * |      Thread      |
+ *  ------------------
+ *           |
+ *           |
+ *           v
+ *  ------------------
+ * |       Amiga      |
+ *  ------------------
+ *
+ */
+
 #include "Error.h"
 
 /* Base class for all Amiga objects. This class adds a textual description

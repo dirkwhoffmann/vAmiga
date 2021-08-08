@@ -59,7 +59,7 @@ protected:
      * performed that are usually left out. E.g., the CPU checks for
      * breakpoints and records the executed instruction in it's trace buffer.
      */
-    bool debugMode = false;
+    // bool debugMode = false;
             
     /* Mutex for implementing the 'synchronized' macro. The macro can be used
      * to prevent multiple threads to enter the same code block. It mimics the
@@ -203,15 +203,21 @@ protected:
     void powerOff();
     void run();
     void pause();
+    void halt();
     void warpOn();
     void warpOff();
     void debugOn();
     void debugOff();
     
+    void powerOnOff(bool value) { value ? powerOn() : powerOff(); }
+    void warpOnOff(bool value) { value ? warpOn() : warpOff(); }
+    void debugOnOff(bool value) { value ? debugOn() : debugOff(); }
+
     virtual void _powerOn() { }
     virtual void _powerOff() { }
     virtual void _run() { }
     virtual void _pause() { }
+    virtual void _halt() { }
     virtual void _warpOn() { }
     virtual void _warpOff() { }
     virtual void _debugOn() { }

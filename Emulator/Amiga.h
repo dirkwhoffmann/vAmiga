@@ -201,6 +201,7 @@ private:
     void _powerOff() override;
     void _run() override;
     void _pause() override;
+    void _halt() override;
     void _warpOn() override;
     void _warpOff() override;
     
@@ -236,13 +237,6 @@ private:
     //
     
     bool readyToPowerOn() override;
-    void threadPowerOff() override;
-    void threadPowerOn() override;
-    void threadRun() override;
-    void threadPause() override;
-    void threadHalt() override;
-    void threadWarpOff() override;
-    void threadWarpOn() override;
     void threadExecute() override;
 
 

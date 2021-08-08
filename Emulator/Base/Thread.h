@@ -45,30 +45,30 @@
  *
  * Command    | Current   | Next      | Actions on the delegate
  * ------------------------------------------------------------------------
- * powerOn()  | off       | paused    | threadPowerOn()
+ * powerOn()  | off       | paused    | _powerOn()
  *            | paused    | paused    | none
  *            | running   | running   | none
  * ------------------------------------------------------------------------
  * powerOff() | off       | off       | none
- *            | paused    | off       | threadPowerOff()
- *            | running   | off       | threadPowerOff() + threadPause()
+ *            | paused    | off       | _powerOff()
+ *            | running   | off       | _powerOff() + _pause()
  * ------------------------------------------------------------------------
- * run()      | off       | running   | threadPowerOn() + threadRunning()
- *            | paused    | running   | threadRunning()
+ * run()      | off       | running   | _powerOn() + _run()
+ *            | paused    | running   | _run()
  *            | running   | running   | none
  * ------------------------------------------------------------------------
  * pause()    |  off      | off       | none
  *            | paused    | paused    | none
- *            | running   | paused    | threadPaused()
+ *            | running   | paused    | _pause()
  *
  * When an instance of the Thread class has been created, a new thread is
  * started which executes the thread's main() function. This function executes
- * a loop which periodically calls the delegate's threadExecute() function.
- * After each iteration, the thread is put to sleep to synchronize timing. Two
- * synchronization modes are supported: Periodic or Pulsed. In periodic mode,
- * the thread is put to sleep for a certain amout of time and wakes up
- * automatically. The second mode puts the thread to sleep indefinitely and
- * waits for an external signal (a call to pulse()) to continue.
+ * a loop which periodically calls function execute(). After each iteration,
+ * the thread is put to sleep to synchronize timing. Two synchronization modes
+ * are supported: Periodic or Pulsed. In periodic mode, the thread is put to
+ * sleep for a certain amout of time and wakes up automatically. The second
+ * mode puts the thread to sleep indefinitely and waits for an external signal
+ * (a call to pulse()) to continue.
  *
  * To speed up emulation (e.g., during disk accesses), the emulator may be put
  * into warp mode. In this mode, timing synchronization is disabled causing the
@@ -76,6 +76,12 @@
  * "locked" which means that it can't be changed any more. This lock is utilized
  * by the regression tester to prevent the GUI from disabling warp mode during
  * an ongoing test.
+ *
+ * Similar to warp mode, the emulator may be put into debug mode. This mode is
+ * enabled when the GUI debugger is opend and disabled when the debugger is
+ * closed. In debug mode, several time-consuming tasks are performed that are
+ * usually left out. E.g., the CPU checks for breakpoints and records the
+ * executed instruction in it's trace buffer.
  */
 
 class Thread : public AmigaComponent {
@@ -93,8 +99,12 @@ class Thread : public AmigaComponent {
     volatile ExecutionState newState = EXEC_OFF;
 
     // The current and the next warp state
-    volatile bool warp = false;
-    volatile bool newWarp = false;
+    volatile bool warpMode = false;
+    volatile bool newWarpMode = false;
+
+    // The current and the next warp state
+    volatile bool debugMode = false;
+    volatile bool newDebugMode = false;
 
     // Variables needed to implement "pulsed" mode
     std::mutex condMutex;
@@ -105,9 +115,10 @@ class Thread : public AmigaComponent {
     util::Time delay = util::Time(1000000000 / 50);
     util::Time targetTime;
     
-    // Indicates if the warp mode setting is locked
+    // Indicates if the warp mode or debug mode is locked
     bool warpLock = false;
-    
+    bool debugLock = false;
+
     // Guard for securing non-reentrant functions (for debugging only)
     bool entered = false;
     
@@ -149,13 +160,6 @@ private:
 
     // Delegation functions
     virtual bool readyToPowerOn() = 0;
-    virtual void threadPowerOn() = 0;
-    virtual void threadPowerOff() = 0;
-    virtual void threadRun() = 0;
-    virtual void threadPause() = 0;
-    virtual void threadHalt() = 0;
-    virtual void threadWarpOn() = 0;
-    virtual void threadWarpOff() = 0;
     virtual void threadExecute() = 0;
 
     
@@ -168,7 +172,8 @@ public:
     void setSyncDelay(util::Time newDelay);
     void setMode(ThreadMode newMode);
     void setWarpLock(bool value);
-    
+    void setDebugLock(bool value);
+
     
     //
     // Analyzing
@@ -195,15 +200,20 @@ public:
     void pause(bool blocking = true);
     void halt(bool blocking = true);
     
-    bool inWarpMode() const { return warp; }
+    bool inWarpMode() const { return warpMode; }
     void warpOn(bool blocking = false);
     void warpOff(bool blocking = false);
+
+    bool inDebugMode() const { return debugMode; }
+    void debugOn(bool blocking = false);
+    void debugOff(bool blocking = false);
 
 private:
 
     void changeStateTo(ExecutionState requestedState, bool blocking);
     void changeWarpTo(bool value, bool blocking);
-    
+    void changeDebugTo(bool value, bool blocking);
+
     void waitForCondition();
     void signalCondition();
     

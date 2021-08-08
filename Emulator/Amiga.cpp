@@ -420,14 +420,18 @@ Amiga::_dump(dump::Category category, std::ostream& os) const
         os << bol(isPoweredOn()) << std::endl;
         os << tab("Running");
         os << bol(isRunning()) << std::endl;
-        os << tab("Warp");
-        os << bol(warp) << std::endl;
+        os << tab("Warp mode");
+        os << bol(inWarpMode()) << std::endl;
+        os << tab("Debug mode");
+        os << bol(inDebugMode()) << std::endl;
     }
 }
 
 void
 Amiga::_powerOn()
 {
+    debug(RUN_DEBUG, "_powerOn\n");
+
     // Perform a reset
     hardReset();
                 
@@ -465,6 +469,8 @@ Amiga::_powerOn()
 void
 Amiga::_powerOff()
 {
+    debug(RUN_DEBUG, "_powerOff\n");
+
     inspect();
     msgQueue.put(MSG_POWER_OFF);
 }
@@ -472,6 +478,8 @@ Amiga::_powerOff()
 void
 Amiga::_run()
 {
+    debug(RUN_DEBUG, "_run\n");
+
     // Enable or disable CPU debugging
     debugMode ? cpu.debugger.enableLogging() : cpu.debugger.disableLogging();
 
@@ -481,19 +489,33 @@ Amiga::_run()
 void
 Amiga::_pause()
 {
+    debug(RUN_DEBUG, "_pause\n");
+
     inspect();
     msgQueue.put(MSG_PAUSE);
 }
 
 void
+Amiga::_halt()
+{
+    debug(RUN_DEBUG, "_halt\n");
+
+    msgQueue.put(MSG_HALT);
+}
+
+void
 Amiga::_warpOn()
 {
+    debug(RUN_DEBUG, "_warpOn\n");
+
     msgQueue.put(MSG_WARP_ON);
 }
 
 void
 Amiga::_warpOff()
 {
+    debug(RUN_DEBUG, "_powerOff\n");
+
     msgQueue.put(MSG_WARP_OFF);
 }
 
@@ -506,68 +528,9 @@ Amiga::readyToPowerOn()
 }
 
 void
-Amiga::threadPowerOff()
-{
-    debug(RUN_DEBUG, "threadPowerOff()\n");
-    
-    // Power off all subcomponents
-    AmigaComponent::powerOff();
-}
-
-void
-Amiga::threadPowerOn()
-{
-    debug(RUN_DEBUG, "threadPowerOn()\n");
-                
-    // Power on all subcomponents
-    AmigaComponent::powerOn();
-}
-
-void
-Amiga::threadRun()
-{
-    debug(RUN_DEBUG, "threadRun()\n");
-    
-    // Launch all subcomponents
-    AmigaComponent::run();
-}
-
-void
-Amiga::threadPause()
-{
-    debug(RUN_DEBUG, "threadPause()\n");
-        
-    // Enter pause mode
-    AmigaComponent::pause();
-}
-
-void
-Amiga::threadHalt()
-{
-    debug(RUN_DEBUG, "threadHalt()\n");
-
-    // Inform the GUI
-    msgQueue.put(MSG_HALT);
-}
-
-void
-Amiga::threadWarpOff()
-{
-    debug(WARP_DEBUG, "threadWarpOff()\n");
-    AmigaComponent::warpOff();
-}
-
-void
-Amiga::threadWarpOn()
-{
-    debug(WARP_DEBUG, "threadWarpOn()\n");
-    AmigaComponent::warpOn();
-}
-
-void
 Amiga::threadExecute()
 {
-    // debug(RUN_DEBUG, "threadExecute()\n");
+    // debug(RUN_DEBUG, "execute()\n");
     
     while(1) {
         

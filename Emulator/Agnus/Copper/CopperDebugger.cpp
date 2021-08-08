@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "CopperDebugger.h"
+#include "Amiga.h"
 #include "Copper.h"
 #include "IO.h"
 
@@ -25,7 +26,7 @@ CopperDebugger::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
 
-    if (!debugMode) {
+    if (!amiga.inDebugMode()) {
         os << "No recorded data. Debug mode is off." << std::endl;
         return;
     }

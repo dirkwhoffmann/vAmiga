@@ -307,10 +307,7 @@ Muxer::didLoadFromBuffer(const u8 *buffer)
 
 void
 Muxer::rampUp()
-{
-    // Only proceed if the emulator is not running in warp mode
-    // if (warpMode) return;
-    
+{    
     volume.target = 1.0;
     volume.delta = 3;
     
