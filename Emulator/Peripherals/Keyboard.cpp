@@ -14,11 +14,6 @@
 #include "IO.h"
 #include "MsgQueue.h"
 
-Keyboard::Keyboard(Amiga& ref) : SubComponent(ref)
-{
- 
-}
-
 void
 Keyboard::_reset(bool hard)
 {

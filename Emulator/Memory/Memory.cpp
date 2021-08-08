@@ -22,11 +22,6 @@
 #include "RTC.h"
 #include "ZorroManager.h"
 
-Memory::Memory(Amiga& ref) : SubComponent(ref)
-{
-    memset(&config, 0, sizeof(config));
-}
-
 Memory::~Memory()
 {
     dealloc();

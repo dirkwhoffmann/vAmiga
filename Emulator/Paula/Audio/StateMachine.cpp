@@ -15,6 +15,7 @@
 template <isize nr>
 StateMachine<nr>::StateMachine(Amiga& ref) : SubComponent(ref)
 {
+    
 }
 
 template <isize nr> const char *

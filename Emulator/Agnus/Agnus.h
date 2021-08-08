@@ -50,14 +50,14 @@
 class Agnus : public SubComponent {
     
     // Current configuration
-    AgnusConfig config;
+    AgnusConfig config = {};
 
     // Result of the latest inspection
-    AgnusInfo info;
-    EventInfo eventInfo;
+    AgnusInfo info = {};
+    EventInfo eventInfo = {};
 
     // Current workload
-    AgnusStats stats;
+    AgnusStats stats = {};
 
 
     //

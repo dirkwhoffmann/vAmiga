@@ -18,10 +18,17 @@ class AudioFilter : public SubComponent {
     FilterType type = FILTER_BUTTERWORTH;
     
     // Coefficients of the butterworth filter
-    double a1, a2, b0, b1, b2;
+    double a1 = 0.0;
+    double a2 = 0.0;
+    double b0 = 0.0;
+    double b1 = 0.0;
+    double b2 = 0.0;
     
     // The butterworth filter pipeline
-    double x1, x2, y1, y2;
+    double x1 = 0.0;
+    double x2 = 0.0;
+    double y1 = 0.0;
+    double y2 = 0.0;
     
     
     //
@@ -30,8 +37,8 @@ class AudioFilter : public SubComponent {
     
 public:
     
-    AudioFilter(Amiga& ref);
-
+    using SubComponent::SubComponent;
+    
     const char *getDescription() const override { return "AudioFilter"; }
     
 private:

@@ -18,7 +18,7 @@ class UART : public SubComponent {
     friend class Amiga;
     
     // Result of the latest inspection
-    UARTInfo info;
+    UARTInfo info = {};
 
     // Port period and control register
     u16 serper;
@@ -47,7 +47,7 @@ class UART : public SubComponent {
 
 public:
     
-    UART(Amiga& ref);
+    using SubComponent::SubComponent;
     
     const char *getDescription() const override { return "UART"; }
 

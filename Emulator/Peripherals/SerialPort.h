@@ -24,13 +24,13 @@
 class SerialPort : public SubComponent {
 
     // Current configuration
-    SerialPortConfig config;
+    SerialPortConfig config = {};
 
     // Result of the latest inspection
-    SerialPortInfo info;
+    SerialPortInfo info = {};
 
     // The current values of the port pins
-    u32 port;
+    u32 port = 0;
 
     
     //
@@ -39,7 +39,7 @@ class SerialPort : public SubComponent {
 
 public:
 
-    SerialPort(Amiga& ref);
+    using SubComponent::SubComponent;
 
     const char *getDescription() const override { return "SerialPort"; }
     

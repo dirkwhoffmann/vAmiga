@@ -11,11 +11,6 @@
 #include "ZorroManager.h"
 #include "Memory.h"
 
-ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
-{
-
-}
-
 u8
 ZorroManager::peekFastRamDevice(u32 addr) const
 {

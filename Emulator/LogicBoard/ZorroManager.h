@@ -32,7 +32,7 @@ class ZorroManager : public SubComponent {
     
 public:
     
-    ZorroManager(Amiga& ref);
+    using SubComponent::SubComponent;
 
     const char *getDescription() const override { return "Zorro"; }
 

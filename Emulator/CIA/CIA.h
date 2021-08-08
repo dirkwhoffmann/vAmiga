@@ -82,10 +82,10 @@ protected:
     int nr;
 
     // Current configuration
-    CIAConfig config;
+    CIAConfig config = {};
 
     // Result of the latest inspection
-    CIAInfo info;
+    CIAInfo info = {};
 
 
     //
@@ -536,7 +536,7 @@ class CIAA : public CIA {
     
 public:
     
-    CIAA(Amiga& ref);
+    CIAA(Amiga& ref) : CIA(0, ref) { };
     
     const char *getDescription() const override { return "CIAA"; }
 
@@ -573,7 +573,7 @@ class CIAB : public CIA {
     
 public:
     
-    CIAB(Amiga& ref);
+    CIAB(Amiga& ref) : CIA(1, ref) { };
     
     const char *getDescription() const override { return "CIAB"; }
 

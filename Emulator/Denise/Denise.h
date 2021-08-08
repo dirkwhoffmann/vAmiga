@@ -22,10 +22,10 @@ class Denise : public SubComponent {
     friend class PixelEngine;
     
     // Current configuration
-    DeniseConfig config;
+    DeniseConfig config = {};
 
     // Result of the latest inspection
-    DeniseInfo info;
+    DeniseInfo info = {};
 
     // Sprite information recorded in the previous frame (shown by the GUI)
     SpriteInfo latchedSpriteInfo[8];

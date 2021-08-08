@@ -32,7 +32,7 @@ class TOD : public SubComponent {
     CIA *cia;
 
     // Result of the latest inspection
-    CounterInfo info;
+    CounterInfo info = {};
             
     // The 24 bit counter
     Counter24 tod;

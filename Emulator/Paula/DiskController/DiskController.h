@@ -18,10 +18,10 @@ class DiskController : public SubComponent {
     friend class Drive;
     
     // Current configuration
-    DiskControllerConfig config;
+    DiskControllerConfig config = {};
 
     // Result of the latest inspection
-    DiskControllerInfo info;
+    DiskControllerInfo info = {};
 
     // Temorary storage for a disk waiting to be inserted
     class Disk *diskToInsert = nullptr;
@@ -97,7 +97,7 @@ class DiskController : public SubComponent {
     
 public:
     
-    DiskController(Amiga& ref);
+    using SubComponent::SubComponent;
 
     const char *getDescription() const override { return "DiskController"; }
     

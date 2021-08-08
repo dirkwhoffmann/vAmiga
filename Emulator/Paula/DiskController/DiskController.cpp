@@ -17,10 +17,6 @@
 #include "Paula.h"
 #include <algorithm>
 
-DiskController::DiskController(Amiga& ref) : SubComponent(ref)
-{
-}
-
 void
 DiskController::_reset(bool hard)
 {

@@ -42,10 +42,10 @@
 class Muxer : public SubComponent {
 
     // Current configuration
-    MuxerConfig config;
+    MuxerConfig config = {};
     
     // Underflow and overflow counters
-    MuxerStats stats;
+    MuxerStats stats = {};
 
     // Sample rate in Hz
     double sampleRate = 0;

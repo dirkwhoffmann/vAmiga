@@ -94,10 +94,10 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 class Memory : public SubComponent {
 
     // Current configuration
-    MemoryConfig config;
+    MemoryConfig config = {};
 
     // Current workload
-    MemoryStats stats;
+    MemoryStats stats = {};
 
 public:
 
@@ -186,7 +186,8 @@ public:
     
 public:
     
-    Memory(Amiga& ref);
+    using SubComponent::SubComponent;
+    
     ~Memory();
     void dealloc();
 

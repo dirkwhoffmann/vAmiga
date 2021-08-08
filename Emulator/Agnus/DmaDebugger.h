@@ -17,13 +17,13 @@
 class DmaDebugger : public SubComponent {
 
     // Current configuration
-    DmaDebuggerConfig config;
+    DmaDebuggerConfig config = {};
 
     // Enable bits
-    bool visualize[BUS_COUNT];
+    bool visualize[BUS_COUNT] = {};
     
     // Debug colors, derived from the debug color palette
-    RgbColor debugColor[BUS_COUNT][5];
+    RgbColor debugColor[BUS_COUNT][5] = {};
 
 
     //

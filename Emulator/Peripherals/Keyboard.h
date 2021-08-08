@@ -44,7 +44,7 @@ class Keyboard : public SubComponent {
     
 public:
     
-    Keyboard(Amiga& ref);
+    using SubComponent::SubComponent;
     
     const char *getDescription() const override { return "Keyboard"; }
 

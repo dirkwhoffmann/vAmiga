@@ -32,10 +32,10 @@ class Blitter : public SubComponent
     friend class Agnus;
 
     // Current configuration
-    BlitterConfig config;
+    BlitterConfig config = {};
 
     // Result of the latest inspection
-    BlitterInfo info;
+    BlitterInfo info = {};
 
     // The fill pattern lookup tables
     u8 fillPattern[2][2][256];     // [inclusive/exclusive][carry in][data]

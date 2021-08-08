@@ -19,7 +19,7 @@ class PixelEngine : public SubComponent {
     friend class DmaDebugger;
     
     // Current configuration
-    PixelEngineConfig config;
+    PixelEngineConfig config = {};
 
 public:
 
@@ -27,22 +27,11 @@ public:
     static const i32 rgbaHBlank = 0xFF444444;
     static const i32 rgbaVBlank = 0xFF444444;
 
-    /*
-    // Filename used by dumpTexture()
-    string dumpTexturePath = "texture";
-    
-    // Pixel area dumped by dumpTexture()
-    isize x1 = 4 * (HBLANK_MAX + 1);
-    isize y1 = VBLANK_MAX + 1;
-    isize x2 = HPIXELS;
-    isize y2 = VPIXELS;
-    */
-    
-private:
-
     //
     // Screen buffers
     //
+
+private:
 
     /* The emulator uses double-buffering for storing the computed textures.
      * At any time, one of the two buffers is the "working buffer" and the other

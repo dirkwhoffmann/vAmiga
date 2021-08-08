@@ -18,7 +18,7 @@ template <isize nr>
 class StateMachine : public SubComponent {
 
     // Result of the latest inspection
-    AudioChannelInfo info;
+    AudioChannelInfo info = {};
 
 public:
 

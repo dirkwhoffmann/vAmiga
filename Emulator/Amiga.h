@@ -47,7 +47,7 @@ class Amiga : public AmigaComponent, ThreadDelegate {
      * current state is recorded. When the GUI updates the inspector panels, it
      * displays the result of the latest inspection.
      */
-    AmigaInfo info;
+    AmigaInfo info = {};
 
      
     //

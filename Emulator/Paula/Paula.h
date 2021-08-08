@@ -29,8 +29,8 @@ class Paula : public SubComponent {
 private:
 
     // Result of the latest inspection
-    PaulaInfo info;
-    AudioInfo audioInfo;
+    PaulaInfo info = {};
+    AudioInfo audioInfo = {};
 
     
     //

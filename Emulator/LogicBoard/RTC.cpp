@@ -13,11 +13,6 @@
 #include "IO.h"
 #include "Memory.h"
 
-RTC::RTC(Amiga& ref) : SubComponent(ref)
-{
-    config.model = RTC_OKI; // TODO: REMOVE
-}
-
 i64
 RTC::getConfigItem(Option option) const
 {

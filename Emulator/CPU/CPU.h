@@ -16,7 +16,7 @@
 class CPU : public moira::Moira {
 
     // Result of the latest inspection
-    CPUInfo info;
+    CPUInfo info = {};
 
     
     //

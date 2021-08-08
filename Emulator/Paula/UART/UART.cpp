@@ -14,10 +14,6 @@
 #include "Paula.h"
 #include "SerialPort.h"
 
-UART::UART(Amiga& ref) : SubComponent(ref)
-{
-}
-
 void
 UART::_reset(bool hard)
 {

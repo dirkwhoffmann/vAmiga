@@ -12,11 +12,6 @@
 #include "UART.h"
 #include "IO.h"
 
-SerialPort::SerialPort(Amiga& ref) : SubComponent(ref)
-{
-
-}
-
 SerialPortConfig
 SerialPort::getDefaultConfig()
 {

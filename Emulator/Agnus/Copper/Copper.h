@@ -30,7 +30,7 @@ public:
 private:
     
     // Result of the latest inspection
-    CopperInfo info;
+    CopperInfo info = {};
     
     // The currently executed Copper list (1 or 2)
     u8 copList = 1;

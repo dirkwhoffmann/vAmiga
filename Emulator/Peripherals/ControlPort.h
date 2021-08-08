@@ -23,7 +23,7 @@ class ControlPort : public SubComponent {
     PortNr nr;
 
     // The result of the latest inspection
-    ControlPortInfo info;
+    ControlPortInfo info = {};
     
     // The connected device
     ControlPortDevice device = CPD_NONE;

@@ -15,7 +15,7 @@
 class RTC : public SubComponent {
 
     // Current configuration
-    RTCConfig config;
+    RTCConfig config = {};
 
     /* The currently stored time. The RTC stores the time as a difference to
      * the time provided by the host machine. I.e.:
@@ -46,8 +46,8 @@ class RTC : public SubComponent {
     
 public:
     
-    RTC(Amiga& ref);
-
+    using SubComponent::SubComponent;
+    
     const char *getDescription() const override { return "RTC"; }
 
 private:

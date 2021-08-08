@@ -188,6 +188,7 @@ Moira::watchpointReached(u32 addr)
 
 CPU::CPU(Amiga& ref) : moira::Moira(ref)
 {
+    
 }
 
 void

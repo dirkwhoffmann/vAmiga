@@ -45,7 +45,7 @@ class Mouse : public SubComponent {
     ControlPort &port;
     
     // Current configuration
-    MouseConfig config;
+    MouseConfig config = {};
 
     // Shake detector
     class ShakeDetector shakeDetector;

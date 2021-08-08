@@ -21,10 +21,10 @@ class Drive : public SubComponent {
     const isize nr;
 
     // Current configuration
-    DriveConfig config;
+    DriveConfig config = {};
 
     // Result of the latest inspection
-    DriveInfo info;
+    DriveInfo info = {};
 
     // Drive motor status (on or off)
     bool motor;
