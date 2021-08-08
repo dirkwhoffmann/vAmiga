@@ -201,12 +201,12 @@ public:
     void halt(bool blocking = true);
     
     bool inWarpMode() const { return warpMode; }
-    void warpOn(bool blocking = false);
-    void warpOff(bool blocking = false);
+    void warpOn(bool blocking = true);
+    void warpOff(bool blocking = true);
 
     bool inDebugMode() const { return debugMode; }
-    void debugOn(bool blocking = false);
-    void debugOff(bool blocking = false);
+    void debugOn(bool blocking = true);
+    void debugOff(bool blocking = true);
 
 private:
 

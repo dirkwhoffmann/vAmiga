@@ -238,40 +238,7 @@ private:
     
     bool readyToPowerOn() override;
     void threadExecute() override;
-
-
-    //
-    // Controlling
-    //
     
-public:
-    
-    /*
-    bool isPoweredOff() const override { return thread.isPoweredOff(); }
-    bool isPoweredOn() const override { return thread.isPoweredOn(); }
-    bool isPaused() const override { return thread.isPaused(); }
-    bool isRunning() const override { return thread.isRunning(); }
-    bool inWarpMode() const { return thread.warp; }
-    */
-    bool inDebugMode() const { return debugMode; }
-
-    /*
-    void powerOn() { thread.powerOn(); }
-    void powerOff() { thread.powerOff(); }
-    void run() { thread.run(); }
-    void pause() { thread.pause(); }
-    void halt() { thread.halt(); }
-    void warpOn() { thread.warpOn(); }
-    void warpOff() { thread.warpOff(); }
-    */
-    void debugOn();
-    void debugOff();
-    
-    /*
-    void lockWarpMode() { thread.setWarpLock(true); }
-    void unlockWarpMode() { thread.setWarpLock(false); }
-    */
-
     
     //
     // Working with the emulator thread

@@ -605,26 +605,6 @@ Amiga::threadExecute()
 }
 
 void
-Amiga::debugOn()
-{
-    assert(!isEmulatorThread());
-
-    suspend();
-    AmigaComponent::debugOn();
-    resume();
-}
-
-void
-Amiga::debugOff()
-{
-    assert(!isEmulatorThread());
-    
-    suspend();
-    AmigaComponent::debugOff();
-    resume();
-}
-
-void
 Amiga::isReady()
 {
     if (!mem.hasRom()) {

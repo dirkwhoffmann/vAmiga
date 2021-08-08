@@ -300,14 +300,14 @@ CPU::_dump(dump::Category category, std::ostream& os) const
 void
 CPU::_debugOn()
 {
-    msg("Enabling debug mode\n");
+    debug(RUN_DEBUG, "Enabling debug mode\n");
     debugger.enableLogging();
 }
 
 void
 CPU::_debugOff()
 {
-    msg("Disabling debug mode\n");
+    debug(RUN_DEBUG, "Disabling debug mode\n");
     debugger.disableLogging();
 }
 

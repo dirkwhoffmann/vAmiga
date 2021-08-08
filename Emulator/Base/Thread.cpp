@@ -334,7 +334,6 @@ Thread::debugOff(bool blocking)
     if (!debugLock) changeDebugTo(false, blocking);
 }
 
-
 void
 Thread::changeStateTo(ExecutionState requestedState, bool blocking)
 {
