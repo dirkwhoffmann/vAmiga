@@ -81,7 +81,7 @@ static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
 static const int NO_SSE          = 0; // Don't use SSE extensions
 
 // Runloop
-static const int RUN_DEBUG       = 0; // Run loop, component states
+static const int RUN_DEBUG       = 1; // Run loop, component states
 static const int WARP_DEBUG      = 0; // Warp mode
 static const int QUEUE_DEBUG     = 0; // Message queue
 static const int SNP_DEBUG       = 0; // Serialization (snapshots)

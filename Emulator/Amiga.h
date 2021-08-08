@@ -39,7 +39,7 @@ void *threadMain(void *thisAmiga);
  * E.g., to query information from Paula, you need to invoke a public method on
  * amiga.paula.
  */
-class Amiga : public AmigaComponent, ThreadDelegate {
+class Amiga : public Thread {
 
     /* Result of the latest inspection. In order to update the GUI inspector
      * panels, the emulator schedules events in the inspector slot (SLOT_INS in
@@ -57,7 +57,7 @@ class Amiga : public AmigaComponent, ThreadDelegate {
 public:
     
     // The thread manager
-    Thread thread = Thread(*this);
+    // Thread thread = Thread(*this);
 
     // Core components
     CPU cpu = CPU(*this);
@@ -238,13 +238,16 @@ private:
     
 public:
     
+    /*
     bool isPoweredOff() const override { return thread.isPoweredOff(); }
     bool isPoweredOn() const override { return thread.isPoweredOn(); }
     bool isPaused() const override { return thread.isPaused(); }
     bool isRunning() const override { return thread.isRunning(); }
     bool inWarpMode() const { return thread.warp; }
+    */
     bool inDebugMode() const { return debugMode; }
 
+    /*
     void powerOn() { thread.powerOn(); }
     void powerOff() { thread.powerOff(); }
     void run() { thread.run(); }
@@ -252,11 +255,14 @@ public:
     void halt() { thread.halt(); }
     void warpOn() { thread.warpOn(); }
     void warpOff() { thread.warpOff(); }
+    */
     void debugOn();
     void debugOff();
     
+    /*
     void lockWarpMode() { thread.setWarpLock(true); }
     void unlockWarpMode() { thread.setWarpLock(false); }
+    */
 
     
     //
@@ -285,16 +291,16 @@ public:
     /* Sets or clears a run loop control flag. The functions are thread-safe
      * and can be called from inside or outside the emulator thread.
      */
-    void setControlFlags(u32 flags);
-    void clearControlFlags(u32 flags);
+    void setControlFlag(u32 flags);
+    void clearControlFlag(u32 flags);
     
     // Convenience wrappers for controlling the run loop
-    void signalStop() { setControlFlags(RL::STOP); }
-    void signalInspect() { setControlFlags(RL::INSPECT); }
-    void signalWarpOn() { setControlFlags(RL::WARP_ON); }
-    void signalWarpOff() { setControlFlags(RL::WARP_OFF); }
-    void signalAutoSnapshot() { setControlFlags(RL::AUTO_SNAPSHOT); }
-    void signalUserSnapshot() { setControlFlags(RL::USER_SNAPSHOT); }
+    void signalStop() { setControlFlag(RL::STOP); }
+    void signalInspect() { setControlFlag(RL::INSPECT); }
+    void signalWarpOn() { setControlFlag(RL::WARP_ON); }
+    void signalWarpOff() { setControlFlag(RL::WARP_OFF); }
+    void signalAutoSnapshot() { setControlFlag(RL::AUTO_SNAPSHOT); }
+    void signalUserSnapshot() { setControlFlag(RL::USER_SNAPSHOT); }
 
     //
     // Running the emulator

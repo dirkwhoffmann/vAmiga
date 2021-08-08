@@ -78,6 +78,7 @@
  * an ongoing test.
  */
 
+/*
 class ThreadDelegate {
     
 public:
@@ -86,23 +87,24 @@ public:
     
     virtual bool readyToPowerOn() = 0;
     
-    virtual void threadPowerOff() = 0;
     virtual void threadPowerOn() = 0;
+    virtual void threadPowerOff() = 0;
     virtual void threadRun() = 0;
     virtual void threadPause() = 0;
     virtual void threadHalt() = 0;
-    virtual void threadWarpOff() = 0;
     virtual void threadWarpOn() = 0;
+    virtual void threadWarpOff() = 0;
     virtual void threadExecute() = 0;
 };
+*/
 
-class Thread : public AmigaObject {
+class Thread : public AmigaComponent {
     
     friend class Amiga;
     
     // The actual thread and the thread delegate
     std::thread thread;
-    ThreadDelegate &delegate;
+    // ThreadDelegate &delegate;
 
     // The current synchronization mode
     volatile ThreadMode mode = ThreadMode::Periodic;
@@ -147,7 +149,7 @@ class Thread : public AmigaObject {
 
 public:
     
-    Thread(ThreadDelegate &d);
+    Thread();
     ~Thread();
     
     const char *getDescription() const override { return "Thread"; }
@@ -165,6 +167,17 @@ private:
 
     // Returns true if this functions is called from within the emulator thread
     bool isEmulatorThread() { return std::this_thread::get_id() == thread.get_id(); }
+
+    // Delegation functions
+    virtual bool readyToPowerOn() = 0;
+    virtual void threadPowerOn() = 0;
+    virtual void threadPowerOff() = 0;
+    virtual void threadRun() = 0;
+    virtual void threadPause() = 0;
+    virtual void threadHalt() = 0;
+    virtual void threadWarpOn() = 0;
+    virtual void threadWarpOff() = 0;
+    virtual void threadExecute() = 0;
 
     
     //
@@ -192,10 +205,10 @@ public:
     
 public:
     
-    bool isPoweredOn() const { return state != EXEC_OFF; }
-    bool isPoweredOff() const { return state == EXEC_OFF; }
-    bool isRunning() const { return state == EXEC_RUNNING; }
-    bool isPaused() const { return state == EXEC_PAUSED; }
+    bool isPoweredOn() const override { return state != EXEC_OFF; }
+    bool isPoweredOff() const override { return state == EXEC_OFF; }
+    bool isRunning() const override { return state == EXEC_RUNNING; }
+    bool isPaused() const override { return state == EXEC_PAUSED; }
 
     void powerOn(bool blocking = true);
     void powerOff(bool blocking = true);
@@ -203,9 +216,10 @@ public:
     void pause(bool blocking = true);
     void halt(bool blocking = true);
     
+    bool inWarpMode() const { return warp; }
     void warpOn(bool blocking = false);
     void warpOff(bool blocking = false);
-    
+
 private:
 
     void changeStateTo(ExecutionState requestedState, bool blocking);

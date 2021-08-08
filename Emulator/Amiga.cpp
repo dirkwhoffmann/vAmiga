@@ -421,7 +421,7 @@ Amiga::_dump(dump::Category category, std::ostream& os) const
         os << tab("Running");
         os << bol(isRunning()) << std::endl;
         os << tab("Warp");
-        os << bol(inWarpMode()) << std::endl;
+        os << bol(warp) << std::endl;
     }
 }
 
@@ -553,6 +553,8 @@ Amiga::threadWarpOn()
 void
 Amiga::threadExecute()
 {
+    // debug(RUN_DEBUG, "threadExecute()\n");
+    
     while(1) {
         
         // Emulate the next CPU instruction
@@ -563,62 +565,62 @@ Amiga::threadExecute()
             
             // Are we requested to take a snapshot?
             if (flags & RL::AUTO_SNAPSHOT) {
-                clearControlFlags(RL::AUTO_SNAPSHOT);
+                clearControlFlag(RL::AUTO_SNAPSHOT);
                 autoSnapshot = Snapshot::makeWithAmiga(this);
                 msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
             }
             
             if (flags & RL::USER_SNAPSHOT) {
-                clearControlFlags(RL::USER_SNAPSHOT);
+                clearControlFlag(RL::USER_SNAPSHOT);
                 userSnapshot = Snapshot::makeWithAmiga(this);
                 msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
             }
 
             // Are we requested to update the debugger info structs?
             if (flags & RL::INSPECT) {
-                clearControlFlags(RL::INSPECT);
+                clearControlFlag(RL::INSPECT);
                 inspect();
             }
 
             // Did we reach a breakpoint?
             if (flags & RL::BREAKPOINT_REACHED) {
-                clearControlFlags(RL::BREAKPOINT_REACHED);
+                clearControlFlag(RL::BREAKPOINT_REACHED);
                 inspect();
                 msgQueue.put(MSG_BREAKPOINT_REACHED);
-                thread.newState = EXEC_PAUSED;
+                newState = EXEC_PAUSED;
                 break;
             }
 
             // Did we reach a watchpoint?
             if (flags & RL::WATCHPOINT_REACHED) {
-                clearControlFlags(RL::WATCHPOINT_REACHED);
+                clearControlFlag(RL::WATCHPOINT_REACHED);
                 inspect();
                 msgQueue.put(MSG_WATCHPOINT_REACHED);
-                thread.newState = EXEC_PAUSED;
+                newState = EXEC_PAUSED;
                 break;
             }
 
             // Are we requested to terminate the run loop?
             if (flags & RL::STOP) {
-                clearControlFlags(RL::STOP);
-                thread.newState = EXEC_PAUSED;
+                clearControlFlag(RL::STOP);
+                newState = EXEC_PAUSED;
                 break;
             }
 
             // Are we requested to enter or exit warp mode?
             if (flags & RL::WARP_ON) {
-                clearControlFlags(RL::WARP_ON);
+                clearControlFlag(RL::WARP_ON);
                 AmigaComponent::warpOn();
             }
 
             if (flags & RL::WARP_OFF) {
-                clearControlFlags(RL::WARP_OFF);
+                clearControlFlag(RL::WARP_OFF);
                 AmigaComponent::warpOff();
             }
             
             // Are we requested to synchronize the thread?
             if (flags & RL::SYNC_THREAD) {
-                clearControlFlags(RL::SYNC_THREAD);
+                clearControlFlag(RL::SYNC_THREAD);
                 break;
             }
         }
@@ -628,7 +630,7 @@ Amiga::threadExecute()
 void
 Amiga::debugOn()
 {
-    assert(!thread.isEmulatorThread());
+    assert(!isEmulatorThread());
 
     suspend();
     AmigaComponent::debugOn();
@@ -638,7 +640,7 @@ Amiga::debugOn()
 void
 Amiga::debugOff()
 {
-    assert(!thread.isEmulatorThread());
+    assert(!isEmulatorThread());
     
     suspend();
     AmigaComponent::debugOff();
@@ -699,15 +701,15 @@ Amiga::resume()
 }
 
 void
-Amiga::setControlFlags(u32 flags)
+Amiga::setControlFlag(u32 flag)
 {
-    synchronized { flags |= flags; }
+    synchronized { flags |= flag; }
 }
 
 void
-Amiga::clearControlFlags(u32 flags)
+Amiga::clearControlFlag(u32 flag)
 {
-    synchronized { flags &= ~flags; }
+    synchronized { flags &= ~flag; }
 }
 
 void

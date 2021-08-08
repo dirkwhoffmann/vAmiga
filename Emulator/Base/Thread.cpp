@@ -12,7 +12,7 @@
 #include "Chrono.h"
 #include <iostream>
 
-Thread::Thread(ThreadDelegate &d) : delegate(d)
+Thread::Thread()
 {
     restartSyncTimer();
     
@@ -31,7 +31,7 @@ Thread::execute <ThreadMode::Periodic> ()
 {
     // Call the execution function
     loadClock.go();
-    delegate.threadExecute();
+    threadExecute();
     loadClock.stop();
 }
 
@@ -40,7 +40,7 @@ Thread::execute <ThreadMode::Pulsed> ()
 {
     // Call the execution function
     loadClock.go();
-    delegate.threadExecute();
+    threadExecute();
     loadClock.stop();
     
 }
@@ -115,7 +115,7 @@ Thread::main()
         // Are we requested to enter or exit warp mode?
         while (newWarp != warp) {
             
-            newWarp ? delegate.threadWarpOn() : delegate.threadWarpOff();
+            newWarp ? threadWarpOn() : threadWarpOff();
             warp = newWarp;
             break;
         }
@@ -125,51 +125,51 @@ Thread::main()
             
             if (state == EXEC_OFF && newState == EXEC_PAUSED) {
                 
-                delegate.threadPowerOn();
+                threadPowerOn();
                 state = newState;
                 break;
             }
 
             if (state == EXEC_OFF && newState == EXEC_RUNNING) {
                 
-                delegate.threadPowerOn();
-                delegate.threadRun();
+                threadPowerOn();
+                threadRun();
                 state = newState;
                 break;
             }
 
             if (state == EXEC_PAUSED && newState == EXEC_OFF) {
                 
-                delegate.threadPowerOff();
+                threadPowerOff();
                 state = newState;
                 break;
             }
 
             if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
                 
-                delegate.threadRun();
+                threadRun();
                 state = newState;
                 break;
             }
 
             if (state == EXEC_RUNNING && newState == EXEC_OFF) {
                 
-                delegate.threadPause();
-                delegate.threadPowerOff();
+                threadPause();
+                threadPowerOff();
                 state = newState;
                 break;
             }
 
             if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
                 
-                delegate.threadPause();
+                threadPause();
                 state = newState;
                 break;
             }
             
             if (newState == EXEC_TERMINATED) {
                 
-                delegate.threadHalt();
+                threadHalt();
                 state = newState;
                 return;
             }
@@ -227,7 +227,7 @@ Thread::powerOn(bool blocking)
     // Never reenter this function
     assert(!entered); entered = true;
 
-    if (isPoweredOff() && delegate.readyToPowerOn()) {
+    if (isPoweredOff() && readyToPowerOn()) {
         
         // Request a state change and wait until the new state has been reached
         changeStateTo(EXEC_PAUSED, blocking);
@@ -265,7 +265,7 @@ Thread::run(bool blocking)
     // Never reenter this function
     assert(!entered); entered = true;
     
-    if (!isRunning() && delegate.readyToPowerOn()) {
+    if (!isRunning() && readyToPowerOn()) {
         
         // Request a state change and wait until the new state has been reached
         changeStateTo(EXEC_RUNNING, blocking);
