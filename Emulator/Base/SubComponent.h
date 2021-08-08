@@ -29,7 +29,6 @@ class Keyboard;
 class Memory;
 class Mouse;
 class MsgQueue;
-class Oscillator;
 class Paula;
 class PixelEngine;
 class RetroShell;
@@ -64,7 +63,6 @@ protected:
     Keyboard &keyboard;
     Memory &mem;
     MsgQueue &messageQueue;
-    Oscillator &oscillator;
     Paula &paula;
     PixelEngine &pixelEngine;
     RetroShell &retroShell;

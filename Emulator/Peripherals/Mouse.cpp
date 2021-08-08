@@ -13,7 +13,6 @@
 #include "ControlPort.h"
 #include "IO.h"
 #include "MsgQueue.h"
-#include "Oscillator.h"
 
 Mouse::Mouse(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref)
 {

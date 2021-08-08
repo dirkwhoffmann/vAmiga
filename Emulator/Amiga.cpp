@@ -39,12 +39,11 @@ Amiga::Amiga()
      * - The CIAs must preceed memory, because they determine if the lower
      *   memory banks are overlayed by Rom.
      *
-     * - Memory mus preceed the CPU, because it contains the CPU reset vector.
+     * - Memory must preceed the CPU, because it contains the CPU reset vector.
      */
 
     subComponents = std::vector<AmigaComponent *> {
 
-        &oscillator,
         &agnus,
         &rtc,
         &denise,
@@ -87,7 +86,6 @@ Amiga::Amiga()
         msg("   moira::Debugger : %zu bytes\n", sizeof(moira::Debugger));
         msg("      moira::Moira : %zu bytes\n", sizeof(moira::Moira));
         msg("             Muxer : %zu bytes\n", sizeof(Muxer));
-        msg("        Oscillator : %zu bytes\n", sizeof(Oscillator));
         msg("             Paula : %zu bytes\n", sizeof(Paula));
         msg("       PixelEngine : %zu bytes\n", sizeof(PixelEngine));
         msg("               RTC : %zu bytes\n", sizeof(RTC));

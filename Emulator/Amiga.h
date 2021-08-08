@@ -19,7 +19,6 @@
 #include "Keyboard.h"
 #include "Memory.h"
 #include "MsgQueue.h"
-#include "Oscillator.h"
 #include "Paula.h"
 #include "RegressionTester.h"
 #include "RetroShell.h"
@@ -69,7 +68,6 @@ public:
     Paula paula = Paula(*this);
     
     // Logic board
-    Oscillator oscillator = Oscillator(*this);
     RTC rtc = RTC(*this);
     ZorroManager zorro = ZorroManager(*this);
     
