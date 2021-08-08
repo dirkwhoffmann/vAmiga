@@ -94,12 +94,7 @@ DiskController::setConfigItem(Option option, i64 value)
     switch (option) {
             
         case OPT_DRIVE_SPEED:
-            
-            #ifdef FORCE_DRIVE_SPEED
-            value = FORCE_DRIVE_SPEED;
-            warn("Overriding drive speed: %lld\n", value);
-            #endif
-            
+                        
             if (!isValidDriveSpeed(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, "-1, 1, 2, 4, 8");
             }

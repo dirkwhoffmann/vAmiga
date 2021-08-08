@@ -122,11 +122,6 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_CHIP_RAM:
             
             if (isPoweredOn()) throw VAError(ERROR_OPT_LOCKED);
-
-            #ifdef FORCE_CHIP_RAM
-            value = FORCE_CHIP_RAM;
-            warn("Overriding Chip Ram size: %lld KB\n", value);
-            #endif
             
             if (value != 256 && value != 512 && value != 1024 && value != 2048) {
                 throw VAError(ERROR_OPT_INVALID_ARG, "256, 512, 1024, 2048");
@@ -138,12 +133,7 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_SLOW_RAM:
             
             if (isPoweredOn()) throw VAError(ERROR_OPT_LOCKED);
-            
-            #ifdef FORCE_SLOW_RAM
-            value = FORCE_SLOW_RAM;
-            warn("Overriding Slow Ram size: %lld KB\n", value);
-            #endif
-            
+                        
             if ((value % 256) != 0 || value > 512) {
                 throw VAError(ERROR_OPT_INVALID_ARG, "0, 256, 512");
             }
@@ -154,12 +144,7 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_FAST_RAM:
             
             if (isPoweredOn()) throw VAError(ERROR_OPT_LOCKED);
-            
-            #ifdef FORCE_FAST_RAM
-            value = FORCE_FAST_RAM;
-            warn("Overriding Fast Ram size: %lld KB\n", value);
-            #endif
-            
+                        
             if ((value % 64) != 0 || value > 8192) {
                 throw VAError(ERROR_OPT_INVALID_ARG, "0, 64, 128, ..., 8192");
             }

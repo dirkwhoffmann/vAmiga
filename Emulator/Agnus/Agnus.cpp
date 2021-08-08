@@ -120,12 +120,7 @@ Agnus::setConfigItem(Option option, i64 value)
     switch (option) {
             
         case OPT_AGNUS_REVISION:
-            
-            #ifdef FORCE_AGNUS_REVISION
-            value = FORCE_AGNUS_REVISION;
-            warn("Overriding Agnus revision: %lld\n", value);
-            #endif
-            
+                        
             if (!AgnusRevisionEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, AgnusRevisionEnum::keyList());
             }            

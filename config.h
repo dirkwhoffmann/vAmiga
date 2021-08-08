@@ -9,6 +9,7 @@
 
 #pragma once
 
+
 //
 // Release settings
 //
@@ -40,16 +41,15 @@ struct FloatStereo; typedef FloatStereo SampleType;
 // Configuration overrides
 //
 
-// Uncomment to override a configuration setting
-
-// #define FORCE_AGNUS_REVISION AGNUS_OCS
-// #define FORCE_BLT_LEVEL      0
-// #define FORCE_CHIP_RAM       512
-// #define FORCE_SLOW_RAM       512
-// #define FORCE_FAST_RAM       0
-// #define FORCE_RTC            RTC_NONE
-// #define FORCE_DRIVE_SPEED    -1
-// #define FORCE_RTC_REGISTER   0
+#define OVERRIDES { }
+// { \
+// { OPT_AGNUS_REVISION,   AGNUS_OCS }, \
+// { OPT_BLITTER_ACCURACY, 0         }, \
+// { OPT_CHIP_RAM,         512       }, \
+// { OPT_SLOW_RAM,         512       }, \
+// { OPT_FAST_RAM,         0         }, \
+// { OPT_RTC_MODEL,        RTC_NONE  }, \
+// { OPT_DRIVE_SPEED,      -1        }  }
 
 // Uncomment to set a breakpoint on startup
 // #define INITIAL_BREAKPOINT 0xFC1354

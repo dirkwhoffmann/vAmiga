@@ -32,12 +32,7 @@ RTC::setConfigItem(Option option, i64 value)
     switch (option) {
             
         case OPT_RTC_MODEL:
-            
-            #ifdef FORCE_RTC
-            value = FORCE_RTC;
-            warn("Overriding RTC revision: %lld KB\n", value);
-            #endif
-            
+                        
             if (!RTCRevisionEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVALID_ARG, RTCRevisionEnum::keyList());
             }
@@ -187,11 +182,7 @@ RTC::spypeek(isize nr) const
             
             result = reg[bank()][nr];
     }
-    
-    #ifdef FORCE_RTC_REGISTER
-    result = FORCE_RTC_REGISTER;
-    #endif
-    
+        
     trace(RTC_DEBUG, "peek(%zu) = $%X [bank %zu]\n", nr, result, bank());
     return result;
 }
