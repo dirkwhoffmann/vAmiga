@@ -140,8 +140,9 @@ PixelEngine::setConfigItem(Option option, i64 value)
         case OPT_PALETTE:
             
             if (!PaletteEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVALID_ARG, PaletteEnum::keyList());
+                throw VAError(ERROR_OPT_INVARG, PaletteEnum::keyList());
             }
+            
             config.palette = value;
             updateRGBA();
             return;
@@ -149,8 +150,9 @@ PixelEngine::setConfigItem(Option option, i64 value)
         case OPT_BRIGHTNESS:
             
             if (value < 0 || value > 100) {
-                throw VAError(ERROR_OPT_INVALID_ARG, "Expected 0...100");
+                throw VAError(ERROR_OPT_INVARG, "0...100");
             }
+            
             config.brightness = value;
             updateRGBA();
             return;
@@ -158,8 +160,9 @@ PixelEngine::setConfigItem(Option option, i64 value)
         case OPT_CONTRAST:
 
             if (value < 0 || value > 100) {
-                throw VAError(ERROR_OPT_INVALID_ARG, "Expected 0...100");
+                throw VAError(ERROR_OPT_INVARG, "0...100");
             }
+            
             config.contrast = value;
             updateRGBA();
             return;
@@ -167,8 +170,9 @@ PixelEngine::setConfigItem(Option option, i64 value)
         case OPT_SATURATION:
         
             if (value < 0 || value > 100) {
-                throw VAError(ERROR_OPT_INVALID_ARG, "Expected 0...100");
+                throw VAError(ERROR_OPT_INVARG, "0...100");
             }
+            
             config.saturation = value;
             updateRGBA();
             return;

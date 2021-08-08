@@ -24,7 +24,7 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "This option is not supported yet.";
             break;
             
-        case ERROR_OPT_INVALID_ARG:
+        case ERROR_OPT_INVARG:
             description = "Invalid argument. Expected: " + s;
             break;
             

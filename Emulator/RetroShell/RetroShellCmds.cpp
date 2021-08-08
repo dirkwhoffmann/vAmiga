@@ -399,7 +399,7 @@ RetroShell::exec <Token::copper, Token::list> (Arguments& argv, long param)
     switch (value) {
         case 1: dump(amiga.agnus.copper, dump::List1); break;
         case 2: dump(amiga.agnus.copper, dump::List2); break;
-        default: throw VAError(ERROR_OPT_INVALID_ARG, "1 or 2");
+        default: throw VAError(ERROR_OPT_INVARG, "1 or 2");
     }
 }
 

@@ -104,7 +104,7 @@ CIA::setConfigItem(Option option, i64 value)
         case OPT_CIA_REVISION:
             
             if (!CIARevisionEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVALID_ARG, CIARevisionEnum::keyList());
+                throw VAError(ERROR_OPT_INVARG, CIARevisionEnum::keyList());
             }
             
             config.revision = (CIARevision)value;

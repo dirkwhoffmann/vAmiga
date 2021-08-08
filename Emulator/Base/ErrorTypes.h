@@ -19,7 +19,7 @@ enum_long(ERROR_CODE)
     
     // Configuration
     ERROR_OPT_UNSUPPORTED,
-    ERROR_OPT_INVALID_ARG,
+    ERROR_OPT_INVARG,
     ERROR_OPT_LOCKED,
 
     // General
@@ -107,7 +107,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_UNKNOWN:                     return "UNKNOWN";
                 
             case ERROR_OPT_UNSUPPORTED:             return "ERROR_OPT_UNSUPPORTED";
-            case ERROR_OPT_INVALID_ARG:             return "ERROR_OPT_INVALID_ARG";
+            case ERROR_OPT_INVARG:             return "ERROR_OPT_INVARG";
             case ERROR_OPT_LOCKED:                  return "ERROR_OPT_LOCKED";
                 
             case ERROR_FILE_NOT_FOUND:              return "FILE_NOT_FOUND";

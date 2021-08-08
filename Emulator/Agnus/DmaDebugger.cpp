@@ -110,7 +110,7 @@ DmaDebugger::setConfigItem(Option option, i64 value)
         case OPT_DMA_DEBUG_MODE:
             
             if (!DmaDisplayModeEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVALID_ARG, DmaDisplayModeEnum::keyList());
+                throw VAError(ERROR_OPT_INVARG, DmaDisplayModeEnum::keyList());
             }
             
             config.displayMode = (DmaDisplayMode)value;

@@ -423,13 +423,15 @@ RetroShell::describe(const std::exception &e)
 void
 RetroShell::describe(const struct VAError &err)
 {
+    *this << err.what();
+    /*
     switch ((ErrorCode)err.data) {
             
         case ERROR_OPT_UNSUPPORTED:
             *this << "This option is not yet supported." << '\n';
             return;
             
-        case ERROR_OPT_INVALID_ARG:
+        case ERROR_OPT_INVARG:
             *this << "Error: Invalid argument. Expected: " << err.description << '\n';
             return;
 
@@ -467,38 +469,8 @@ RetroShell::describe(const struct VAError &err)
             *this << "Command failed with error code " << (isize)err.data;
             *this << " (" << err.what() << ")" << '\n';
     }
+    */
 }
-
-/*
-void
-RetroShell::exec(std::istream &stream)
-{
-    isize line = 0;
-    string command;
-        
-    // *this << '\n';
-    
-    while(std::getline(stream, command)) {
-
-        line++;
-        printf("Line %zd: %s\n", line, command.c_str());
-
-        // Execute the command
-        *this << command << '\n';
-        bool result = exec(command, line);
-        
-        if (!result) {
-            
-            printf("Aborted in line %zd\n", line);
-            *this << "Aborted in line " << line << '\n';
-            printPrompt();
-            
-            throw util::Exception(command, line);
-        }
-        printPrompt();
-    }
-}
-*/
 
 void
 RetroShell::dump(AmigaComponent &component, dump::Category category)

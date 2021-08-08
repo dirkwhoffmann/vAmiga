@@ -87,7 +87,7 @@ Joystick::setConfigItem(Option option, long id, i64 value)
             
         case OPT_AUTOFIRE:
             
-            config.autofire = (bool)value;
+            config.autofire = value;
 
             // Release button immediately if autofire-mode is switches off
             if (value == false) button = false;

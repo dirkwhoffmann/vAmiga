@@ -32,10 +32,14 @@ RTC::setConfigItem(Option option, i64 value)
     switch (option) {
             
         case OPT_RTC_MODEL:
-                        
-            if (!RTCRevisionEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVALID_ARG, RTCRevisionEnum::keyList());
+                
+            if (!isPoweredOff()) {
+                throw VAError(ERROR_OPT_LOCKED);
             }
+            if (!RTCRevisionEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, RTCRevisionEnum::keyList());
+            }
+            
             config.model = (RTCRevision)value;
             mem.updateMemSrcTables();
             return;

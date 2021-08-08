@@ -121,12 +121,13 @@ Agnus::setConfigItem(Option option, i64 value)
             
         case OPT_AGNUS_REVISION:
                         
+            if (!isPoweredOff()) {
+                throw VAError(ERROR_OPT_LOCKED);
+            }
             if (!AgnusRevisionEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVALID_ARG, AgnusRevisionEnum::keyList());
+                throw VAError(ERROR_OPT_INVARG, AgnusRevisionEnum::keyList());
             }            
-            
-            amiga.suspend();
-            
+                        
             config.revision = (AgnusRevision)value;
             switch (config.revision) {
                 case AGNUS_OCS:     ptrMask = 0x07FFFF; break;
@@ -135,8 +136,6 @@ Agnus::setConfigItem(Option option, i64 value)
                 default: assert(false);
             }
             mem.updateMemSrcTables();
-            
-            amiga.resume();
             return;
             
         case OPT_SLOW_RAM_MIRROR:

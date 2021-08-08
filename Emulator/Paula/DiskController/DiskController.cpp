@@ -96,7 +96,7 @@ DiskController::setConfigItem(Option option, i64 value)
         case OPT_DRIVE_SPEED:
                         
             if (!isValidDriveSpeed(value)) {
-                throw VAError(ERROR_OPT_INVALID_ARG, "-1, 1, 2, 4, 8");
+                throw VAError(ERROR_OPT_INVARG, "-1, 1, 2, 4, 8");
             }
             
             config.speed = (i32)value;

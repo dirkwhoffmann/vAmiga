@@ -93,11 +93,11 @@ Blitter::setConfigItem(Option option, i64 value)
     switch (option) {
             
         case OPT_BLITTER_ACCURACY:
-                        
+                      
             if (value < 0 || value > 2) {
-                warn("Invalid Blitter accuracy level: %lld\n", value);
-                return;
+                throw VAError(ERROR_OPT_INVARG, "0, 1, 2");
             }
+
             suspend();
             config.accuracy = value;
             resume();

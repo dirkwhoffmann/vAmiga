@@ -51,7 +51,7 @@ SerialPort::setConfigItem(Option option, i64 value)
         case OPT_SERIAL_DEVICE:
             
             if (!SerialPortDeviceEnum::isValid(value)) {
-                warn("Invalid serial port device: %lld\n", value);
+                throw VAError(ERROR_OPT_INVARG, SerialPortDeviceEnum::keyList());
                 return;
             }
             
