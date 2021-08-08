@@ -167,6 +167,13 @@ AmigaComponent::save(u8 *buffer)
 }
 
 void
+AmigaComponent::isReady()
+{
+    for (auto c : subComponents) { c->isReady(); }
+    _isReady();
+}
+
+void
 AmigaComponent::powerOn()
 {
     for (auto c : subComponents) { c->powerOn(); }

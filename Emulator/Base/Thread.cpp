@@ -31,7 +31,7 @@ Thread::execute <ThreadMode::Periodic> ()
 {
     // Call the execution function
     loadClock.go();
-    threadExecute();
+    execute();
     loadClock.stop();
 }
 
@@ -40,7 +40,7 @@ Thread::execute <ThreadMode::Pulsed> ()
 {
     // Call the execution function
     loadClock.go();
-    threadExecute();
+    execute();
     loadClock.stop();
     
 }

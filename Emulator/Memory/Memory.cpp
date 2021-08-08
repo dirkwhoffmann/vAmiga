@@ -380,6 +380,26 @@ Memory::_dump(dump::Category category, std::ostream& os) const
 }
 
 void
+Memory::_isReady()
+{
+    if (!hasRom()) {
+        throw VAError(ERROR_ROM_MISSING);
+    }
+    if (!hasChipRam()) {
+        throw VAError(ERROR_CHIP_RAM_MISSING);
+    }
+    if (hasArosRom() && !hasExt()) {
+        throw VAError(ERROR_AROS_NO_EXTROM);
+    }
+    if (hasArosRom() && ramSize() < MB(1)) {
+        throw VAError(ERROR_AROS_RAM_LIMIT);
+    }
+    if (mem.chipRamSize() > KB(agnus.chipRamLimit())) {
+        throw VAError(ERROR_CHIP_RAM_LIMIT);
+    }
+}
+
+void
 Memory::_powerOn()
 {
     // Erase WOM (if any)

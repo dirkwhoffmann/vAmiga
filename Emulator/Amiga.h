@@ -233,11 +233,11 @@ private:
 
     
     //
-    // Methods from ThreadDelegate
+    // Methods from Thread class
     //
     
     bool readyToPowerOn() override;
-    void threadExecute() override;
+    void execute() override;
     
     
     //
@@ -245,10 +245,7 @@ private:
     //
     
 public:
-            
-    // Checks whether the Amiga is ready or throws an exception if not
-    void isReady() throws;
-    
+                
     /* Pauses the emulation thread temporarily. Because the emulator is running
      * in a separate thread, the GUI has to pause the emulator before changing
      * it's internal state. This is done by embedding the code inside a

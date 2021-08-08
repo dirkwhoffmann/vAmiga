@@ -52,15 +52,7 @@ public:
     std::vector<AmigaComponent *> subComponents;
     
 protected:
-    
-    /* Indicates if the emulator should be executed in debug mode. Debug mode
-     * is enabled when the GUI debugger is opend and disabled when the GUI
-     * debugger is closed. In debug mode, several time-consuming tasks are
-     * performed that are usually left out. E.g., the CPU checks for
-     * breakpoints and records the executed instruction in it's trace buffer.
-     */
-    // bool debugMode = false;
-            
+                
     /* Mutex for implementing the 'synchronized' macro. The macro can be used
      * to prevent multiple threads to enter the same code block. It mimics the
      * behaviour of the well known Java construct 'synchronized(this) { }'.
@@ -77,7 +69,7 @@ public:
     virtual ~AmigaComponent();
     
     /* Initializes the component and it's subcomponents. The initialization
-     * procedure is initiated once, in the constructor of the C64 class. By
+     * procedure is initiated once, in the constructor of the Amiga class. By
      * default, a component enters it's initial configuration. Custom actions
      * can be performed by implementing the _initialize() delegation function.
      */
@@ -100,16 +92,17 @@ public:
     //
     // Configuring
     //
+        
+public:
     
-    // Initializes all configuration items with their default values
-    virtual void resetConfig() { };
-
     /* Configures the component and it's subcomponents. This function
      * distributes a configuration request to all subcomponents by calling
      * setConfigItem().
      */
     void configure(Option option, i64 value) throws;
     void configure(Option option, long id, i64 value) throws;
+    
+private:
     
     /* Requests the change of a single configuration item. Each sub-component
      * checks if it is responsible for the requested configuration item. If
@@ -118,10 +111,15 @@ public:
     virtual void setConfigItem(Option option, i64 value) throws { }
     virtual void setConfigItem(Option option, long id, i64 value) throws { }
     
+    // Initializes all configuration items with their default values
+    virtual void resetConfig() { };
+
         
     //
     // Analyzing
     //
+    
+public:
     
     /* Collects information about the component and it's subcomponents. Many
      * components contain an info variable of a class specific type (e.g.,
@@ -199,6 +197,7 @@ public:
     
 protected:
     
+    void isReady() throws;
     void powerOn();
     void powerOff();
     void run();
@@ -213,6 +212,7 @@ protected:
     void warpOnOff(bool value) { value ? warpOn() : warpOff(); }
     void debugOnOff(bool value) { value ? debugOn() : debugOff(); }
 
+    virtual void _isReady() throws { }
     virtual void _powerOn() { }
     virtual void _powerOff() { }
     virtual void _run() { }

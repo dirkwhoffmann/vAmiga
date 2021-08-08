@@ -278,6 +278,7 @@ private:
     
 private:
 
+    void _isReady() override;
     void _powerOn() override;
 
         

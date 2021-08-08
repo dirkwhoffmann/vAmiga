@@ -160,7 +160,7 @@ private:
 
     // Delegation functions
     virtual bool readyToPowerOn() = 0;
-    virtual void threadExecute() = 0;
+    virtual void execute() = 0;
 
     
     //
@@ -194,6 +194,7 @@ public:
     bool isRunning() const override { return state == EXEC_RUNNING; }
     bool isPaused() const override { return state == EXEC_PAUSED; }
 
+    void isReady() throws { AmigaComponent::isReady(); }
     void powerOn(bool blocking = true);
     void powerOff(bool blocking = true);
     void run(bool blocking = true);
