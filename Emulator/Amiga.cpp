@@ -425,40 +425,12 @@ Amiga::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
-bool
-Amiga::readyToPowerOn()
-{
-    debug(RUN_DEBUG, "readyToPowerOn()\n");
-    
-    try { isReady(); return true; } catch (...) { return false; }
-}
-
 void
-Amiga::threadPowerOff()
+Amiga::_powerOn()
 {
-    debug(RUN_DEBUG, "threadPowerOff()\n");
-    
-    // Power off all subcomponents
-    AmigaComponent::powerOff();
-
-    // Update the recorded debug information
-    inspect();
-    
-    // Inform the GUI
-    msgQueue.put(MSG_POWER_OFF);
-}
-
-void
-Amiga::threadPowerOn()
-{
-    debug(RUN_DEBUG, "threadPowerOn()\n");
-    
     // Perform a reset
     hardReset();
-            
-    // Power on all subcomponents
-    AmigaComponent::powerOn();
-    
+                
     // Update the recorded debug information
     inspect();
 
@@ -487,8 +459,68 @@ Amiga::threadPowerOn()
     cpu.debugger.breakpoints.addAt(INITIAL_BREAKPOINT);
 #endif
     
-    // Inform the GUI
     msgQueue.put(MSG_POWER_ON);
+}
+
+void
+Amiga::_powerOff()
+{
+    inspect();
+    msgQueue.put(MSG_POWER_OFF);
+}
+
+void
+Amiga::_run()
+{
+    // Enable or disable CPU debugging
+    debugMode ? cpu.debugger.enableLogging() : cpu.debugger.disableLogging();
+
+    msgQueue.put(MSG_RUN);
+}
+
+void
+Amiga::_pause()
+{
+    inspect();
+    msgQueue.put(MSG_PAUSE);
+}
+
+void
+Amiga::_warpOn()
+{
+    msgQueue.put(MSG_WARP_ON);
+}
+
+void
+Amiga::_warpOff()
+{
+    msgQueue.put(MSG_WARP_OFF);
+}
+
+bool
+Amiga::readyToPowerOn()
+{
+    debug(RUN_DEBUG, "readyToPowerOn()\n");
+    
+    try { isReady(); return true; } catch (...) { return false; }
+}
+
+void
+Amiga::threadPowerOff()
+{
+    debug(RUN_DEBUG, "threadPowerOff()\n");
+    
+    // Power off all subcomponents
+    AmigaComponent::powerOff();
+}
+
+void
+Amiga::threadPowerOn()
+{
+    debug(RUN_DEBUG, "threadPowerOn()\n");
+                
+    // Power on all subcomponents
+    AmigaComponent::powerOn();
 }
 
 void
@@ -498,12 +530,6 @@ Amiga::threadRun()
     
     // Launch all subcomponents
     AmigaComponent::run();
-    
-    // Enable or disable CPU debugging
-    debugMode ? cpu.debugger.enableLogging() : cpu.debugger.disableLogging();
-
-    // Inform the GUI
-    msgQueue.put(MSG_RUN);
 }
 
 void
@@ -513,12 +539,6 @@ Amiga::threadPause()
         
     // Enter pause mode
     AmigaComponent::pause();
-    
-    // Update the recorded debug information
-    inspect();
-    
-    // Inform the GUI
-    msgQueue.put(MSG_PAUSE);
 }
 
 void
@@ -535,9 +555,6 @@ Amiga::threadWarpOff()
 {
     debug(WARP_DEBUG, "threadWarpOff()\n");
     AmigaComponent::warpOff();
-    
-    // Inform the GUI
-    msgQueue.put(MSG_WARP_OFF);
 }
 
 void
@@ -545,9 +562,6 @@ Amiga::threadWarpOn()
 {
     debug(WARP_DEBUG, "threadWarpOn()\n");
     AmigaComponent::warpOn();
-
-    // Inform the GUI
-    msgQueue.put(MSG_WARP_ON);
 }
 
 void

@@ -176,8 +176,8 @@ AmigaComponent::powerOn()
 void
 AmigaComponent::powerOff()
 {
-    _powerOff();
     for (auto c : subComponents) { c->powerOff(); }
+    _powerOff();
 }
 
 void
@@ -190,8 +190,8 @@ AmigaComponent::run()
 void
 AmigaComponent::pause()
 {
-    _pause();
     for (auto c : subComponents) { c->pause(); }
+    _pause();
 }
 
 void

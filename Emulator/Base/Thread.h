@@ -78,33 +78,12 @@
  * an ongoing test.
  */
 
-/*
-class ThreadDelegate {
-    
-public:
-    
-    virtual ~ThreadDelegate() { };
-    
-    virtual bool readyToPowerOn() = 0;
-    
-    virtual void threadPowerOn() = 0;
-    virtual void threadPowerOff() = 0;
-    virtual void threadRun() = 0;
-    virtual void threadPause() = 0;
-    virtual void threadHalt() = 0;
-    virtual void threadWarpOn() = 0;
-    virtual void threadWarpOff() = 0;
-    virtual void threadExecute() = 0;
-};
-*/
-
 class Thread : public AmigaComponent {
     
     friend class Amiga;
     
     // The actual thread and the thread delegate
     std::thread thread;
-    // ThreadDelegate &delegate;
 
     // The current synchronization mode
     volatile ThreadMode mode = ThreadMode::Periodic;

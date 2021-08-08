@@ -748,12 +748,6 @@ CIA::idleSince() const
 // CIA A
 //
 
-/*
-CIAA::CIAA(Amiga& ref) : CIA(0, ref)
-{
-}
-*/
-
 void
 CIAA::_powerOn()
 {
@@ -908,12 +902,6 @@ CIAA::setKeyCode(u8 keyCode)
 //
 // CIA B
 // 
-
-/*
-CIAB::CIAB(Amiga& ref) : CIA(1, ref)
-{
-}
-*/
 
 void 
 CIAB::pullDownInterruptLine()
