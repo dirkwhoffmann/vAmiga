@@ -11,37 +11,29 @@
 
 /* Object model
  *
- *  ------------------
- * |   AmigaObject    |
- *  ------------------
- *           |
- *           |
- *           v
- *  ------------------
- * |  AmigaComponent  |
- *  ------------------
- *           |
- *           |      ------------------
- *           |---->|   SubComponent   |
- *           |      ------------------
- *           v
- *  ------------------
- * |      Thread      |
- *  ------------------
- *           |
- *           |
- *           v
- *  ------------------
- * |       Amiga      |
- *  ------------------
+ * ----------------   ------------------    ----------------   ----------------
+ * | AmigaObject  |-->| AmigaComponent |--->|    Thread    |-->|    Amiga     |
+ * ----------------   ------------------ |  ----------------   ----------------
+ *                                       |  ----------------
+ *                                       -->| SubComponent |
+ *                                          ----------------
  *
+ * AmigaObject is the base class for all Amiga related classes. It provides a
+ * a textual description for the object as well as functions for printing
+ * debug messages and warnings.
+ *
+ * AmigaComponent defines the base functionality of all hardware components. It
+ * comprises functions for initializing, configuring, and serializing the
+ * object, as well as functions for powering up and down, running and
+ * pausing. Furthermore, a 'synchronized' macro is provided to prevent mutual
+ * execution of certain code components.
+ *
+ * Thread adds the ability to run the component asynchroneously. It is the base
+ * class of the Amiga class which represents a complete virtal Amiga.
  */
 
 #include "Error.h"
 
-/* Base class for all Amiga objects. This class adds a textual description
- * the object together with functions for printing debug messages and warnings.
- */
 class AmigaObject {
 
     //

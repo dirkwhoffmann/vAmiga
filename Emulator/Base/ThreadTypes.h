@@ -21,7 +21,7 @@ enum_long(EXEC_STATE)
     EXEC_OFF,
     EXEC_PAUSED,
     EXEC_RUNNING,
-    EXEC_TERMINATED
+    EXEC_HALTED
 };
 typedef EXEC_STATE ExecutionState;
 
@@ -30,7 +30,7 @@ struct ExecutionStateEnum : util::Reflection<ExecutionStateEnum, ExecutionState>
     
     static bool isValid(long value)
     {
-        return (unsigned long)value <= EXEC_TERMINATED;
+        return (unsigned long)value <= EXEC_HALTED;
     }
 
     static const char *prefix() { return "EXEC"; }
@@ -41,7 +41,7 @@ struct ExecutionStateEnum : util::Reflection<ExecutionStateEnum, ExecutionState>
             case EXEC_OFF:         return "OFF";
             case EXEC_PAUSED:      return "PAUSED";
             case EXEC_RUNNING:     return "RUNNING";
-            case EXEC_TERMINATED:  return "TERMINATED";
+            case EXEC_HALTED:      return "HALTED";
         }
         return "???";
     }

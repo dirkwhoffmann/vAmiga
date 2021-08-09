@@ -17,13 +17,6 @@
 #include <vector>
 #include <iostream>
 
-/* This class defines the base functionality of all hardware components. It
- * comprises functions for initializing, configuring, and serializing the
- * emulator, as well as functions for powering up and down, running and
- * pausing. Furthermore, a 'synchronized' macro is provided to prevent mutual
- * execution of certain code components.
- */
-
 #define synchronized \
 for (util::AutoMutex _am(mutex); _am.active; _am.active = false)
 

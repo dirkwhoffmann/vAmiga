@@ -18,12 +18,14 @@
  * the graphical user interface. The thread exists during the lifetime of
  * the emulator instance, but does not have to be active all the time. The
  * behavior of the thread is controlled by its internal state, which defines
- * the "emulator state". During the lifetime of the thread, three possible
+ * the "emulator state". During the lifetime of the thread, four possible
  * states are distinguished:
  *
  *        Off: The emulator is turned off.
  *     Paused: The emulator is turned on, but not running.
  *    Running: The emulator is turned on and running.
+ *     Halted: The emulator is shutting down.
+ *     
  *
  *          -----------------------------------------------
  *         |                     run()                     |
@@ -57,9 +59,11 @@
  *            | paused    | running   | _run()
  *            | running   | running   | none
  * ------------------------------------------------------------------------
- * pause()    |  off      | off       | none
+ * pause()    | off       | off       | none
  *            | paused    | paused    | none
  *            | running   | paused    | _pause()
+ * ------------------------------------------------------------------------
+ * halt()     | --        | halted    | _halt()
  *
  * When an instance of the Thread class has been created, a new thread is
  * started which executes the thread's main() function. This function executes

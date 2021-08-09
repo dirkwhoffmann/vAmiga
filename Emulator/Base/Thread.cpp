@@ -175,7 +175,7 @@ Thread::main()
                 break;
             }
             
-            if (newState == EXEC_TERMINATED) {
+            if (newState == EXEC_HALTED) {
                 
                 AmigaComponent::halt();
                 state = newState;
@@ -291,7 +291,7 @@ Thread::pause(bool blocking)
 void
 Thread::halt(bool blocking)
 {
-    changeStateTo(EXEC_TERMINATED, blocking);
+    changeStateTo(EXEC_HALTED, blocking);
 }
 
 void
