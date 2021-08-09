@@ -55,9 +55,6 @@ class Amiga : public Thread {
     
 public:
     
-    // The thread manager
-    // Thread thread = Thread(*this);
-
     // Core components
     CPU cpu = CPU(*this);
     CIAA ciaA = CIAA(*this);
@@ -111,10 +108,7 @@ private:
      * repeats or terminates depending on the provided flags.
      */
     RunLoopFlags flags = 0;
-    
-    // The invocation counter for implementing suspend() / resume()
-    isize suspendCounter = 0;
-            
+                
 
     //
     // Snapshot storage
@@ -243,21 +237,7 @@ private:
     //
     
 public:
-                
-    /* Pauses the emulation thread temporarily. Because the emulator is running
-     * in a separate thread, the GUI has to pause the emulator before changing
-     * it's internal state. This is done by embedding the code inside a
-     * suspend / resume block:
-     *
-     *            suspend();
-     *            do something with the internal state;
-     *            resume();
-     *
-     *  It it safe to nest multiple suspend() / resume() blocks.
-     */
-    void suspend();
-    void resume();
-    
+                    
     /* Sets or clears a run loop control flag. The functions are thread-safe
      * and can be called from inside or outside the emulator thread.
      */

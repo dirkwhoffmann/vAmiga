@@ -27,7 +27,7 @@ Thread::~Thread()
 }
 
 template <> void
-Thread::execute <ThreadMode::Periodic> ()
+Thread::execute <Thread::SyncMode::Periodic> ()
 {
     // Call the execution function
     loadClock.go();
@@ -36,7 +36,7 @@ Thread::execute <ThreadMode::Periodic> ()
 }
 
 template <> void
-Thread::execute <ThreadMode::Pulsed> ()
+Thread::execute <Thread::SyncMode::Pulsed> ()
 {
     // Call the execution function
     loadClock.go();
@@ -46,7 +46,7 @@ Thread::execute <ThreadMode::Pulsed> ()
 }
 
 template <> void
-Thread::sleep <ThreadMode::Periodic> ()
+Thread::sleep <Thread::SyncMode::Periodic> ()
 {
     auto now = util::Time::now();
 
@@ -83,7 +83,7 @@ Thread::sleep <ThreadMode::Periodic> ()
 }
 
 template <> void
-Thread::sleep <ThreadMode::Pulsed> ()
+Thread::sleep <Thread::SyncMode::Pulsed> ()
 {
     // Wait for the next pulse
     if (!warpMode) waitForCondition();
@@ -99,16 +99,16 @@ Thread::main()
         if (isRunning()) {
                         
             switch (mode) {
-                case ThreadMode::Periodic: execute<ThreadMode::Periodic>(); break;
-                case ThreadMode::Pulsed: execute<ThreadMode::Pulsed>(); break;
+                case SyncMode::Periodic: execute<SyncMode::Periodic>(); break;
+                case SyncMode::Pulsed: execute<SyncMode::Pulsed>(); break;
             }
         }
         
         if (!warpMode || isPaused()) {
 
             switch (mode) {
-                case ThreadMode::Periodic: sleep<ThreadMode::Periodic>(); break;
-                case ThreadMode::Pulsed: sleep<ThreadMode::Pulsed>(); break;
+                case SyncMode::Periodic: sleep<SyncMode::Periodic>(); break;
+                case SyncMode::Pulsed: sleep<SyncMode::Pulsed>(); break;
             }
         }
         
@@ -211,7 +211,7 @@ Thread::setSyncDelay(util::Time newDelay)
 }
 
 void
-Thread::setMode(ThreadMode newMode)
+Thread::setMode(SyncMode newMode)
 {
     mode = newMode;
 }
@@ -236,15 +236,11 @@ Thread::powerOn(bool blocking)
     // Never call this function inside the emulator thread
     assert(!isEmulatorThread());
 
-    // Never reenter this function
-    assert(!entered); entered = true;
-
     if (isPoweredOff() && readyToPowerOn()) {
         
         // Request a state change and wait until the new state has been reached
         changeStateTo(EXEC_PAUSED, blocking);
     }
-    entered = false;
 }
 
 void
@@ -254,16 +250,12 @@ Thread::powerOff(bool blocking)
 
     // Never call this function inside the emulator thread
     assert(!isEmulatorThread());
-
-    // Never reenter this function
-    assert(!entered); entered = true;
     
     if (!isPoweredOff()) {
                 
         // Request a state change and wait until the new state has been reached
         changeStateTo(EXEC_OFF, blocking);
     }
-    entered = false;
 }
 
 void
@@ -273,16 +265,12 @@ Thread::run(bool blocking)
 
     // Never call this function inside the emulator thread
     assert(!isEmulatorThread());
-
-    // Never reenter this function
-    assert(!entered); entered = true;
     
     if (!isRunning() && readyToPowerOn()) {
         
         // Request a state change and wait until the new state has been reached
         changeStateTo(EXEC_RUNNING, blocking);
     }
-    entered = false;
 }
 
 void
@@ -292,22 +280,39 @@ Thread::pause(bool blocking)
 
     // Never call this function inside the emulator thread
     assert(!isEmulatorThread());
-
-    // Never reenter this function
-    assert(!entered); entered = true;
     
     if (isRunning()) {
                 
         // Request a state change and wait until the new state has been reached
         changeStateTo(EXEC_PAUSED, blocking);
     }
-    entered = false;
 }
 
 void
 Thread::halt(bool blocking)
 {
     changeStateTo(EXEC_TERMINATED, blocking);
+}
+
+void
+Thread::suspend()
+{
+    debug(RUN_DEBUG, "Suspending (%zu)...\n", suspendCounter);
+    
+    if (suspendCounter || isRunning()) {
+        pause();
+        suspendCounter++;
+    }
+}
+
+void
+Thread::resume()
+{
+    debug(RUN_DEBUG, "Resuming (%zu)...\n", suspendCounter);
+    
+    if (suspendCounter && --suspendCounter == 0) {
+        run();
+    }
 }
 
 void
@@ -376,7 +381,7 @@ Thread::signalCondition()
 void
 Thread::pulse()
 {
-    if (mode == ThreadMode::Pulsed) {
+    if (mode == SyncMode::Pulsed) {
         signalCondition();
     }
 }

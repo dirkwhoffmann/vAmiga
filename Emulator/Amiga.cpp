@@ -603,27 +603,6 @@ Amiga::execute()
 }
 
 void
-Amiga::suspend()
-{
-    debug(RUN_DEBUG, "Suspending (%zu)...\n", suspendCounter);
-    
-    if (suspendCounter || isRunning()) {
-        pause();
-        suspendCounter++;
-    }
-}
-
-void
-Amiga::resume()
-{
-    debug(RUN_DEBUG, "Resuming (%zu)...\n", suspendCounter);
-    
-    if (suspendCounter && --suspendCounter == 0) {
-        run();
-    }
-}
-
-void
 Amiga::setControlFlag(u32 flag)
 {
     synchronized { flags |= flag; }

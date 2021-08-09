@@ -82,17 +82,28 @@
  * closed. In debug mode, several time-consuming tasks are performed that are
  * usually left out. E.g., the CPU checks for breakpoints and records the
  * executed instruction in it's trace buffer.
+ *
+ * In many occasions, the thread needs to be paused temporarily (e.g., when the
+ * GUI changes state). This can be done easily by embedding the code inside a
+ * suspend / resume block like so:
+ *
+ *            suspend();
+ *            do something with the internal state;
+ *            resume();
+ *
+ *  It it safe to nest multiple suspend() / resume() blocks.
  */
 
 class Thread : public AmigaComponent {
     
     friend class Amiga;
     
-    // The actual thread and the thread delegate
+    // The actual thread
     std::thread thread;
 
     // The current synchronization mode
-    volatile ThreadMode mode = ThreadMode::Periodic;
+    enum class SyncMode { Periodic, Pulsed };
+    volatile SyncMode mode = SyncMode::Periodic;
     
     // The current and the next thread state
     volatile ExecutionState state = EXEC_OFF;
@@ -106,6 +117,10 @@ class Thread : public AmigaComponent {
     volatile bool debugMode = false;
     volatile bool newDebugMode = false;
 
+    // Indicates if the warp mode or debug mode is locked
+    bool warpLock = false;
+    bool debugLock = false;
+
     // Variables needed to implement "pulsed" mode
     std::mutex condMutex;
     std::condition_variable cond;
@@ -114,16 +129,12 @@ class Thread : public AmigaComponent {
     // Variables needed to implement "periodic" mode
     util::Time delay = util::Time(1000000000 / 50);
     util::Time targetTime;
-    
-    // Indicates if the warp mode or debug mode is locked
-    bool warpLock = false;
-    bool debugLock = false;
-
-    // Guard for securing non-reentrant functions (for debugging only)
-    bool entered = false;
-    
+        
     // Loop counter
     isize loops = 0;
+
+    // Counter for implementing suspend() / resume()
+    isize suspendCounter = 0;
 
     // The current CPU load (%)
     double cpuLoad = 0.0;
@@ -151,8 +162,8 @@ public:
 
 private:
     
-    template <ThreadMode M> void execute();
-    template <ThreadMode M> void sleep();
+    template <SyncMode M> void execute();
+    template <SyncMode M> void sleep();
     void main();
 
     // Returns true if this functions is called from within the emulator thread
@@ -170,7 +181,7 @@ private:
 public:
     
     void setSyncDelay(util::Time newDelay);
-    void setMode(ThreadMode newMode);
+    void setMode(SyncMode newMode);
     void setWarpLock(bool value);
     void setDebugLock(bool value);
 
@@ -200,6 +211,9 @@ public:
     void run(bool blocking = true);
     void pause(bool blocking = true);
     void halt(bool blocking = true);
+
+    void suspend();
+    void resume();
     
     bool inWarpMode() const { return warpMode; }
     void warpOn(bool blocking = true);

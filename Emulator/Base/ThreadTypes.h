@@ -12,8 +12,6 @@
 #include "Aliases.h"
 #include "Reflection.h"
 
-enum class ThreadMode { Periodic, Pulsed };
-
 //
 // Enumerations
 //
