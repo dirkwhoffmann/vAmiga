@@ -33,9 +33,9 @@ void *threadMain(void *thisAmiga);
 /* A complete virtual Amiga. This class is the most prominent one of all. To
  * run the emulator, it is sufficient to create a single object of this type.
  * All subcomponents are created automatically. The public API gives you
- * control over the emulator's behaviour such as running and pausing the
- * emulation. Please note that most subcomponents have their own public API.
- * E.g., to query information from Paula, you need to invoke a public method on
+ * control over the emulator's behaviour such as running and pausing emulation.
+ * Please note that most subcomponents have their own public API. E.g., to
+ * query information from Paula, you need to invoke a public method on
  * amiga.paula.
  */
 class Amiga : public Thread {
@@ -67,16 +67,12 @@ public:
     // Logic board
     RTC rtc = RTC(*this);
     ZorroManager zorro = ZorroManager(*this);
-    
-    // Ports
     ControlPort controlPort1 = ControlPort(*this, PORT_1);
     ControlPort controlPort2 = ControlPort(*this, PORT_2);
     SerialPort serialPort = SerialPort(*this);
 
     // Peripherals
     Keyboard keyboard = Keyboard(*this);
-
-    // Floppy drives
     Drive df0 = Drive(*this, 0);
     Drive df1 = Drive(*this, 1);
     Drive df2 = Drive(*this, 2);
@@ -130,7 +126,6 @@ public:
     ~Amiga();
 
     const char *getDescription() const override { return "Amiga"; }
-
     void prefix() const override;
 
     void reset(bool hard);
@@ -228,12 +223,11 @@ private:
     // Methods from Thread class
     //
     
-    bool readyToPowerOn() override;
     void execute() override;
     
     
     //
-    // Working with the emulator thread
+    // Controlling the run loop
     //
     
 public:
@@ -252,6 +246,7 @@ public:
     void signalAutoSnapshot() { setControlFlag(RL::AUTO_SNAPSHOT); }
     void signalUserSnapshot() { setControlFlag(RL::USER_SNAPSHOT); }
 
+    
     //
     // Running the emulator
     //

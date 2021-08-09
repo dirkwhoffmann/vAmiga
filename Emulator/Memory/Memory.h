@@ -278,7 +278,7 @@ private:
     
 private:
 
-    void _isReady() override;
+    bool _isReady() throws override;
     void _powerOn() override;
 
         

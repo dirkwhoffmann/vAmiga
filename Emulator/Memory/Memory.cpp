@@ -379,7 +379,7 @@ Memory::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
-void
+bool
 Memory::_isReady()
 {
     if (!hasRom()) {
@@ -397,6 +397,8 @@ Memory::_isReady()
     if (mem.chipRamSize() > KB(agnus.chipRamLimit())) {
         throw VAError(ERROR_CHIP_RAM_LIMIT);
     }
+    
+    return true;
 }
 
 void

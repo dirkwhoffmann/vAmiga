@@ -170,7 +170,6 @@ private:
     bool isEmulatorThread() { return std::this_thread::get_id() == thread.get_id(); }
 
     // Delegation functions
-    virtual bool readyToPowerOn() = 0;
     virtual void execute() = 0;
 
     
@@ -205,10 +204,10 @@ public:
     bool isRunning() const override { return state == EXEC_RUNNING; }
     bool isPaused() const override { return state == EXEC_PAUSED; }
 
-    void isReady() throws { AmigaComponent::isReady(); }
-    void powerOn(bool blocking = true);
+    bool isReady() throws { return AmigaComponent::isReady(); }
+    void powerOn(bool blocking = true) throws;
     void powerOff(bool blocking = true);
-    void run(bool blocking = true);
+    void run(bool blocking = true) throws;
     void pause(bool blocking = true);
     void halt(bool blocking = true);
 

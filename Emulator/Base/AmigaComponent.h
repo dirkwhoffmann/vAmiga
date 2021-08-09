@@ -197,7 +197,7 @@ public:
     
 protected:
     
-    void isReady() throws;
+    bool isReady() throws;
     void powerOn();
     void powerOff();
     void run();
@@ -212,7 +212,7 @@ protected:
     void warpOnOff(bool value) { value ? warpOn() : warpOff(); }
     void debugOnOff(bool value) { value ? debugOn() : debugOff(); }
 
-    virtual void _isReady() throws { }
+    virtual bool _isReady() throws { return true; }
     virtual void _powerOn() { }
     virtual void _powerOff() { }
     virtual void _run() { }

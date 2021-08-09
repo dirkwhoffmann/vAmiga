@@ -17,61 +17,45 @@ AmigaComponent::~AmigaComponent()
 void
 AmigaComponent::initialize()
 {    
-    // Initialize all subcomponents
     for (AmigaComponent *c : subComponents) {
         c->initialize();
     }
-
-    // Initialize this component
     _initialize();
 }
 
 void
 AmigaComponent::reset(bool hard)
 {
-    // Reset all subcomponents
     for (AmigaComponent *c : subComponents) {
         c->reset(hard);
     }
-    
-    // Reset this component
-    debug(RUN_DEBUG, "Reset [%p]\n", this);
     _reset(hard);
 }
 
 void
 AmigaComponent::configure(Option option, i64 value)
 {    
-    // Configure all subcomponents
     for (AmigaComponent *c : subComponents) {
         c->configure(option, value);
     }
-    
-    // Configure this component
     setConfigItem(option, value);
 }
 
 void
 AmigaComponent::configure(Option option, long id, i64 value)
 {
-    // Configure all subcomponents
     for (AmigaComponent *c : subComponents) {
         c->configure(option, id, value);
     }
-    
-    // Configure this component
     setConfigItem(option, id, value);
 }
 
 void
 AmigaComponent::inspect()
 {
-    // Inspect all subcomponents
     for (AmigaComponent *c : subComponents) {
         c->inspect();
     }
-    
-    // Inspect this component
     _inspect();
 }
 
@@ -166,11 +150,11 @@ AmigaComponent::save(u8 *buffer)
     return result;
 }
 
-void
+bool
 AmigaComponent::isReady()
 {
-    for (auto c : subComponents) { c->isReady(); }
-    _isReady();
+    for (auto c : subComponents) { if (!c->isReady()) return false; }
+    return _isReady();
 }
 
 void

@@ -73,7 +73,6 @@ Amiga::Amiga()
         
         msg("             Agnus : %zu bytes\n", sizeof(Agnus));
         msg("       AudioFilter : %zu bytes\n", sizeof(AudioFilter));
-        // msg("       AudioStream : %zu bytes\n", sizeof(AudioStream));
         msg("               CIA : %zu bytes\n", sizeof(CIA));
         msg("       ControlPort : %zu bytes\n", sizeof(ControlPort));
         msg("               CPU : %zu bytes\n", sizeof(CPU));
@@ -515,14 +514,6 @@ Amiga::_warpOff()
     debug(RUN_DEBUG, "_powerOff\n");
 
     msgQueue.put(MSG_WARP_OFF);
-}
-
-bool
-Amiga::readyToPowerOn()
-{
-    debug(RUN_DEBUG, "readyToPowerOn()\n");
-    
-    try { isReady(); return true; } catch (...) { return false; }
 }
 
 void
