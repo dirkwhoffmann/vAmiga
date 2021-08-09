@@ -634,6 +634,9 @@
 		50E79BE7232D123000D296FB /* SubComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SubComponent.cpp; sourceTree = "<group>"; };
 		50E79BE8232D123000D296FB /* SubComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SubComponent.h; sourceTree = "<group>"; };
 		50E8199225B350DA00D2E3A5 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		50EAB95726C10B6C00BFA9D8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50EAB95926C10B8600BFA9D8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50EAB95B26C10B9400BFA9D8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
 		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
 		50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportVideoDialog.xib; sourceTree = "<group>"; };
@@ -880,6 +883,12 @@
 				501B821B2262FFB200042871 /* RTC.cpp */,
 				50950ED722881B7A0073F755 /* ZorroManager.h */,
 				50950ED622881B7A0073F755 /* ZorroManager.cpp */,
+				50A61445260CF23D00A01428 /* ControlPortTypes.h */,
+				50A2953E21FF12EF0046BAA0 /* ControlPort.h */,
+				50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */,
+				50A61442260CF00200A01428 /* SerialPortTypes.h */,
+				50B35B6122B2382E001A9C17 /* SerialPort.h */,
+				50B35B6022B2382E001A9C17 /* SerialPort.cpp */,
 			);
 			path = LogicBoard;
 			sourceTree = "<group>";
@@ -1076,7 +1085,6 @@
 				508E7F962206CDC600F7D88C /* CPU */,
 				505B801C23FE626E002407FE /* Memory */,
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
-				50A2953B21FF12170046BAA0 /* Drive */,
 				508FE06621EA31E50043D0E9 /* Files */,
 				5056506925440FDE00A79D27 /* FileSystems */,
 				50B9C42A2609430F00A86C31 /* RetroShell */,
@@ -1210,22 +1218,10 @@
 			isa = PBXGroup;
 			children = (
 				50CF46432620431900BB3B95 /* Makefile */,
-				50A61445260CF23D00A01428 /* ControlPortTypes.h */,
-				50A2953E21FF12EF0046BAA0 /* ControlPort.h */,
-				50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */,
-				50A61442260CF00200A01428 /* SerialPortTypes.h */,
-				50B35B6122B2382E001A9C17 /* SerialPort.h */,
-				50B35B6022B2382E001A9C17 /* SerialPort.cpp */,
-				50A61447260CF26100A01428 /* MouseTypes.h */,
-				505554AB2264C47600CB07E0 /* Mouse.h */,
-				505554AA2264C47600CB07E0 /* Mouse.cpp */,
-				50A61446260CF25700A01428 /* JoystickTypes.h */,
-				50D7CDC32286E968002689F0 /* Joystick.h */,
-				50D7CDC22286E968002689F0 /* Joystick.cpp */,
-				50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */,
-				5014DD1421F3625200BC14BA /* Keyboard.h */,
-				5014DD1321F3625200BC14BA /* Keyboard.cpp */,
-				50AEBEDF24D3D9080037082D /* KeyboardEvents.cpp */,
+				50EAB95426C10B3D00BFA9D8 /* Mouse */,
+				50EAB95526C10B4600BFA9D8 /* Joystick */,
+				50EAB95626C10B5900BFA9D8 /* Keyboard */,
+				50A2953B21FF12170046BAA0 /* Drive */,
 			);
 			path = Peripherals;
 			sourceTree = "<group>";
@@ -1422,6 +1418,40 @@
 				50E2BE2D240D418500155AE4 /* StrWriter_cpp.h */,
 			);
 			path = Moira;
+			sourceTree = "<group>";
+		};
+		50EAB95426C10B3D00BFA9D8 /* Mouse */ = {
+			isa = PBXGroup;
+			children = (
+				50EAB95B26C10B9400BFA9D8 /* Makefile */,
+				50A61447260CF26100A01428 /* MouseTypes.h */,
+				505554AB2264C47600CB07E0 /* Mouse.h */,
+				505554AA2264C47600CB07E0 /* Mouse.cpp */,
+			);
+			path = Mouse;
+			sourceTree = "<group>";
+		};
+		50EAB95526C10B4600BFA9D8 /* Joystick */ = {
+			isa = PBXGroup;
+			children = (
+				50EAB95926C10B8600BFA9D8 /* Makefile */,
+				50A61446260CF25700A01428 /* JoystickTypes.h */,
+				50D7CDC32286E968002689F0 /* Joystick.h */,
+				50D7CDC22286E968002689F0 /* Joystick.cpp */,
+			);
+			path = Joystick;
+			sourceTree = "<group>";
+		};
+		50EAB95626C10B5900BFA9D8 /* Keyboard */ = {
+			isa = PBXGroup;
+			children = (
+				50EAB95726C10B6C00BFA9D8 /* Makefile */,
+				50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */,
+				5014DD1421F3625200BC14BA /* Keyboard.h */,
+				5014DD1321F3625200BC14BA /* Keyboard.cpp */,
+				50AEBEDF24D3D9080037082D /* KeyboardEvents.cpp */,
+			);
+			path = Keyboard;
 			sourceTree = "<group>";
 		};
 		50EE993D21FF4D42003BD74B /* Paula */ = {

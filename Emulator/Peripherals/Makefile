@@ -1,15 +1,23 @@
+SUBDIRS = Drive Joystick Mouse Keyboard
+
 SRC=$(wildcard *.cpp)
 OBJ=$(SRC:.cpp=.o)
 
-.PHONY: all clean
+.PHONY: all clean subdirs
 
-all: $(OBJ)
+all: subdirs
 	@echo > /dev/null
-	
+
+subdirs:
+	@for dir in $(SUBDIRS); do \
+		echo "Entering ${CURDIR}/$$dir"; \
+		$(MAKE) -C $$dir; \
+	done
+
 clean:
 	@echo "Cleaning up $(CURDIR)"
 	@rm -f *.o
 
 %.o: %.cpp $(DEPS)
 	@echo "Compiling $<"
-	@$(MYCC) $(MYFLAGS) -c -o $@ $<
+	@$(MYCC) $(MYFLAGS) -c -o $@ $< $(CFLAGS)
