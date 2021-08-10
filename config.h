@@ -58,6 +58,9 @@ struct FloatStereo; typedef FloatStereo SampleType;
 // Uncomment to fallback to a simpler Agnus execution function
 // #define AGNUS_EXEC_DEBUG
 
+// Uncomment to fallback to an older style thread messaging mechanism
+// #define USE_CONDITION_VARIABLE
+
 // Uncomment to lauch the emulator with a disk in df0
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/Planet_Rocklobster_Oxyron.adf"
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/Ruffntumble.adf"
