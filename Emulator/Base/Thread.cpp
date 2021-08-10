@@ -14,7 +14,8 @@
 
 Thread::Thread()
 {
-    restartSyncTimer();
+    // Initialize the sync timer
+    targetTime = util::Time::now();
     
     // Start the thread and enter the main function
     thread = std::thread(&Thread::main, this);
@@ -58,9 +59,11 @@ Thread::sleep <Thread::SyncMode::Periodic> ()
         
         // Check if we're completely out of sync...
         if ((now - targetTime).asMilliseconds() > 200) {
-            
+                        
             warn("Emulation is way too slow: %f\n",(now - targetTime).asSeconds());
-            restartSyncTimer();
+
+            // Restart the sync timer
+            targetTime = util::Time::now();
         }
     }
     
@@ -71,7 +74,9 @@ Thread::sleep <Thread::SyncMode::Periodic> ()
         if ((targetTime - now).asMilliseconds() > 200) {
             
             warn("Emulation is way too slow: %f\n",(targetTime - now).asSeconds());
-            restartSyncTimer();
+
+            // Restart the sync timer
+            targetTime = util::Time::now();
         }
     }
         
@@ -359,13 +364,7 @@ Thread::changeDebugTo(bool value, bool blocking)
 }
 
 void
-Thread::pulse()
+Thread::wakeUp()
 {
     if (mode == SyncMode::Pulsed) wakeUp();
-}
-
-void
-Thread::restartSyncTimer()
-{
-    targetTime = util::Time::now();
 }

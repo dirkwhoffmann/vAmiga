@@ -14,34 +14,32 @@
 #include "Chrono.h"
 #include "Concurrency.h"
 
-/* The Thread class manages the emulator thread that runs side by side to
- * the graphical user interface. The thread exists during the lifetime of
- * the emulator instance, but does not have to be active all the time. The
- * behavior of the thread is controlled by its internal state, which defines
- * the "emulator state". During the lifetime of the thread, four possible
+/* This class manages the emulator thread that runs side by side to the
+ * graphical user interface. The thread exists during the lifetime of the
+ * emulator instance, but does not have to be active all the time. The
+ * behavior of the thread is controlled by it's internal state. Four possible
  * states are distinguished:
  *
- *        Off: The emulator is turned off.
- *     Paused: The emulator is turned on, but not running.
- *    Running: The emulator is turned on and running.
- *     Halted: The emulator is shutting down.
- *     
+ *        Off: The emulator is turned off
+ *     Paused: The emulator is turned on, but not running
+ *    Running: The emulator is turned on and running
+ *     Halted: The emulator is shutting down
  *
- *          -----------------------------------------------
- *         |                     run()                     |
- *         |                                               V
- *     ---------   powerOn()   ---------     run()     ---------
- *    |   Off   |------------>| Paused  |------------>| Running |
- *    |         |<------------|         |<------------|         |
- *     ---------   powerOff()  ---------    pause()    ---------
- *         ^                                               |
- *         |                   powerOff()                  |
- *          -----------------------------------------------
+ *         -----------------------------------------------
+ *        |                     run()                     |
+ *        |                                               V
+ *    ---------   powerOn()   ---------     run()     ---------
+ *   |   Off   |------------>| Paused  |------------>| Running |
+ *   |         |<------------|         |<------------|         |
+ *    ---------   powerOff()  ---------    pause()    ---------
+ *        ^                                               |
+ *        |                   powerOff()                  |
+ *         -----------------------------------------------
  *
  *     isPoweredOff()         isPaused()          isRunning()
- * |-------------------||-------------------||-------------------|
- *                      |----------------------------------------|
- *                                     isPoweredOn()
+ *   |----------------||-------------------||------------------|
+ *                     |---------------------------------------|
+ *                                    isPoweredOn()
  *
  * State changes are triggered by the following functions:
  *
@@ -72,7 +70,7 @@
  * are supported: Periodic or Pulsed. In periodic mode, the thread is put to
  * sleep for a certain amout of time and wakes up automatically. The second
  * mode puts the thread to sleep indefinitely and waits for an external signal
- * (a call to pulse()) to continue.
+ * (a call to wakeUp()) to continue.
  *
  * To speed up emulation (e.g., during disk accesses), the emulator may be put
  * into warp mode. In this mode, timing synchronization is disabled causing the
@@ -109,36 +107,36 @@ class Thread : public AmigaComponent, util::Wakeable {
     enum class SyncMode { Periodic, Pulsed };
     volatile SyncMode mode = SyncMode::Periodic;
     
-    // The current and the next thread state
+    // The current thread state and a change request
     volatile ExecutionState state = EXEC_OFF;
     volatile ExecutionState newState = EXEC_OFF;
 
-    // The current and the next warp state
+    // The current warp state and a change request
     volatile bool warpMode = false;
     volatile bool newWarpMode = false;
 
-    // The current and the next warp state
+    // The current debug state and a change request
     volatile bool debugMode = false;
     volatile bool newDebugMode = false;
 
-    // Indicates if the warp mode or debug mode is locked
+    // Indicates if warp mode or debug mode is locked
     bool warpLock = false;
     bool debugLock = false;
     
-    // Variables needed to implement "periodic" mode
-    util::Time delay = util::Time(1000000000 / 50);
-    util::Time targetTime;
-        
     // Counters
     isize loopCounter = 0;
     isize suspendCounter = 0;
 
-    // The current CPU load (%)
-    double cpuLoad = 0.0;
-    
+    // Synchronization variables
+    util::Time delay = util::Time(1000000000 / 50);
+    util::Time targetTime;
+            
     // Clocks for measuring the CPU load
     util::Clock nonstopClock;
     util::Clock loadClock;
+
+    // The current CPU load (%)
+    double cpuLoad = 0.0;
 
     
     //
@@ -161,13 +159,15 @@ private:
     
     template <SyncMode M> void execute();
     template <SyncMode M> void sleep();
+
+    // The main entry point (called when the thread is created)
     void main();
+
+    // The code to be executed in each iteration (implemented by the subclass)
+    virtual void execute() = 0;
 
     // Returns true if this functions is called from within the emulator thread
     bool isEmulatorThread() { return std::this_thread::get_id() == thread.get_id(); }
-
-    // Delegation functions
-    virtual void execute() = 0;
 
     
     //
@@ -186,7 +186,6 @@ public:
     // Analyzing
     //
     
-    // Returns the current CPU load
     double getCpuLoad() { return cpuLoad; }
     
     
@@ -233,13 +232,10 @@ private:
 public:
     
     // Awakes the thread if it runs in pulse mode
-    void pulse();
+    void wakeUp();
 
 private:
     
-    // Resynchonizes a periodic thread that got out-of-sync
-    void restartSyncTimer();
-
     // Wait until the thread has terminated
     void join() { if (thread.joinable()) thread.join(); }
 };
