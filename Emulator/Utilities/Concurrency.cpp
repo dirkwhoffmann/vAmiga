@@ -58,4 +58,24 @@ ReentrantMutex::unlock()
     return pthread_mutex_unlock(&mutex);
 }
 
+void
+Wakeable::waitForWakeUp()
+{
+    std::unique_lock<std::mutex> lock(condMutex);
+    condFlag = false;
+    cond.wait_for(lock,
+                  std::chrono::seconds(1000),
+                  [this]() { return condFlag; } );
+}
+
+void
+Wakeable::wakeUp()
+{
+    {
+        std::lock_guard<std::mutex> lock(condMutex);
+        condFlag = true;
+    }
+    cond.notify_one();
+}
+
 }

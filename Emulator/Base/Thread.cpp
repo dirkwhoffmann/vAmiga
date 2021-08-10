@@ -86,7 +86,7 @@ template <> void
 Thread::sleep <Thread::SyncMode::Pulsed> ()
 {
     // Wait for the next pulse
-    if (!warpMode) waitForCondition();
+    if (!warpMode) waitForWakeUp();
 }
 
 void
@@ -94,7 +94,7 @@ Thread::main()
 {
     debug(RUN_DEBUG, "main()\n");
           
-    while (++loops) {
+    while (++loopCounter) {
            
         if (isRunning()) {
                         
@@ -188,7 +188,7 @@ Thread::main()
         }
         
         // Compute the CPU load once in a while
-        if (loops % 32 == 0) {
+        if (loopCounter % 32 == 0) {
             
             auto used  = loadClock.getElapsedTime().asSeconds();
             auto total = nonstopClock.getElapsedTime().asSeconds();
@@ -198,8 +198,6 @@ Thread::main()
             loadClock.restart();
             loadClock.stop();
             nonstopClock.restart();
-            
-            // printf("CPU load = %f\n", cpuLoad);
         }
     }
 }
@@ -361,29 +359,9 @@ Thread::changeDebugTo(bool value, bool blocking)
 }
 
 void
-Thread::waitForCondition()
-{
-    std::unique_lock<std::mutex> lock(condMutex);
-    condFlag = false;
-    cond.wait_for(lock,
-                  std::chrono::seconds(1000),
-                  [this]() { return condFlag; } );
-}
-
-void
-Thread::signalCondition()
-{
-    std::lock_guard<std::mutex> lock(condMutex);
-    condFlag = true;
-    cond.notify_one();
-}
-
-void
 Thread::pulse()
 {
-    if (mode == SyncMode::Pulsed) {
-        signalCondition();
-    }
+    if (mode == SyncMode::Pulsed) wakeUp();
 }
 
 void

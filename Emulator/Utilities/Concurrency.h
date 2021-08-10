@@ -10,6 +10,7 @@
 #pragma once
 
 #include <pthread.h>
+#include <thread>
 
 namespace util {
 
@@ -49,6 +50,18 @@ public:
 
     AutoMutex(ReentrantMutex &ref) : mutex(ref) { mutex.lock(); }
     ~AutoMutex() { mutex.unlock(); }
+};
+
+class Wakeable
+{
+    std::mutex condMutex;
+    std::condition_variable cond;
+    bool condFlag = false;
+ 
+public:
+
+    void waitForWakeUp();
+    void wakeUp();
 };
 
 }

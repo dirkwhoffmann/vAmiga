@@ -12,7 +12,7 @@
 #include "ThreadTypes.h"
 #include "AmigaComponent.h"
 #include "Chrono.h"
-#include <thread>
+#include "Concurrency.h"
 
 /* The Thread class manages the emulator thread that runs side by side to
  * the graphical user interface. The thread exists during the lifetime of
@@ -98,11 +98,11 @@
  *  It it safe to nest multiple suspend() / resume() blocks.
  */
 
-class Thread : public AmigaComponent {
+class Thread : public AmigaComponent, util::Wakeable {
     
     friend class Amiga;
     
-    // The actual thread
+    // The thread object
     std::thread thread;
 
     // The current synchronization mode
@@ -124,20 +124,13 @@ class Thread : public AmigaComponent {
     // Indicates if the warp mode or debug mode is locked
     bool warpLock = false;
     bool debugLock = false;
-
-    // Variables needed to implement "pulsed" mode
-    std::mutex condMutex;
-    std::condition_variable cond;
-    bool condFlag = false;
-
+    
     // Variables needed to implement "periodic" mode
     util::Time delay = util::Time(1000000000 / 50);
     util::Time targetTime;
         
-    // Loop counter
-    isize loops = 0;
-
-    // Counter for implementing suspend() / resume()
+    // Counters
+    isize loopCounter = 0;
     isize suspendCounter = 0;
 
     // The current CPU load (%)
@@ -231,9 +224,6 @@ private:
     void changeStateTo(ExecutionState requestedState, bool blocking);
     void changeWarpTo(bool value, bool blocking);
     void changeDebugTo(bool value, bool blocking);
-
-    void waitForCondition();
-    void signalCondition();
     
     
     //
