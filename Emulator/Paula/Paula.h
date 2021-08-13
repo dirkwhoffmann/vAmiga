@@ -17,7 +17,6 @@
 #include "DiskController.h"
 #include "Muxer.h"
 #include "StateMachine.h"
-#include "TimeDelayed.h"
 #include "UART.h"
 
 //
@@ -76,12 +75,9 @@ public:
     // Trigger cycle for setting a bit in INTREQ
     Cycle setIntreq[16];
 
-    // Value pipe for emulating the four cycle delay on the IPL pins (DEPRECATED)
+    // Value pipe for emulating the delay on the IPL pins
     u64 iplPipe;
-    
-    // Interrupt priority line (IPL)
-    util::TimeDelayed <u8,4> ipl = util::TimeDelayed <u8,4> ();
-    
+        
     
     //
     // Control ports
@@ -163,7 +159,6 @@ private:
         << intreq
         << intena
         << setIntreq
-        >> ipl
         << iplPipe
         << potgo
         << potCntX0

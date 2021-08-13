@@ -40,12 +40,8 @@ void
 Paula::serviceIplEvent()
 {
     assert(agnus.slot[SLOT_IPL].id == IPL_CHANGE);    
-    assert(ipl.delayed() == ((iplPipe >> 32) & 0xFF));
 
     cpu.setIPL((iplPipe >> 24) & 0xFF);
-    // cpu.setIPL((iplPipe >> 32) & 0xFF);
-    // debug(CPU_DEBUG, "New IPL value: %d\n", (iplPipe >> 32) & 0xFF);
-    
     iplPipe = (iplPipe << 8) | (iplPipe & 0xFF);
 
     trace(CPU_DEBUG, "iplPipe shifted: %016llx\n", iplPipe);

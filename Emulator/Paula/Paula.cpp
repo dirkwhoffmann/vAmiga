@@ -25,8 +25,6 @@ Paula::Paula(Amiga& ref) : SubComponent(ref)
         &diskController,
         &uart
     };
-    
-    ipl.setClock(&agnus.clock); 
 }
 
 void
@@ -36,7 +34,6 @@ Paula::_reset(bool hard)
 
     // Interrupts
     for (isize i = 0; i < 16; i++) setIntreq[i] = NEVER;
-    ipl.clear();
     cpu.setIPL(0);    
 }
 
@@ -164,12 +161,8 @@ Paula::checkInterrupt()
         
     if ((iplPipe & 0xFF) != level) {
     
-        ipl.write(level);
         iplPipe = (iplPipe & ~0xFF) | level;
-                
-        trace(CPU_DEBUG, "iplPipe: %016llx\n", iplPipe);        
-        assert(ipl.delayed() == ((iplPipe >> 32) & 0xFF));
-            
+        trace(CPU_DEBUG, "iplPipe: %016llx\n", iplPipe);
         agnus.scheduleRel<SLOT_IPL>(0, IPL_CHANGE, 5);
     }
 }
