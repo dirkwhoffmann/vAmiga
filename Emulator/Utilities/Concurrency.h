@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <pthread.h>
 #include <thread>
 #include <future>
 
@@ -17,28 +16,22 @@ namespace util {
 
 class Mutex
 {
-    pthread_mutex_t mutex;
+    std::mutex mutex;
 
 public:
-    
-    Mutex();
-    ~Mutex();
-    
-    int lock();
-    int unlock();
+        
+    void lock() { mutex.lock(); }
+    void unlock() { mutex.unlock(); }
 };
 
 class ReentrantMutex
 {
-    pthread_mutex_t mutex;
+    std::recursive_mutex mutex;
 
 public:
-    
-    ReentrantMutex();
-    ~ReentrantMutex();
-    
-    int lock();
-    int unlock();
+        
+    void lock() { mutex.lock(); }
+    void unlock() { mutex.unlock(); }
 };
 
 class AutoMutex

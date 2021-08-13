@@ -287,13 +287,8 @@ Amiga::_configure(Option option, i64 value)
     debug(CNF_DEBUG, "configure(%lld, %lld)\n", option, value);
 
     // Check if this option has been locked for debugging
-    static std::map<Option,i64> overrides = OVERRIDES;
-    if (overrides.find(option) != overrides.end()) {
+    value = overrideOption(option, value);
 
-        msg("Overriding option: %s = %lld\n", OptionEnum::key(option), value);
-        value = overrides[option];
-    }
-    
     // Propagate configuration request to all components
     AmigaComponent::configure(option, value);
 }
@@ -301,6 +296,9 @@ Amiga::_configure(Option option, i64 value)
 void
 Amiga::configure(Option option, long id, i64 value)
 {
+    // Check if this option has been locked for debugging
+    value = overrideOption(option, value);
+
     _configure(option, id, value);
     msgQueue.put(MSG_CONFIG);
 }
@@ -353,6 +351,20 @@ Amiga::revertToFactorySettings()
 
     // Revert to the initial state
     initialize();
+}
+
+i64
+Amiga::overrideOption(Option option, i64 value)
+{
+    static std::map<Option,i64> overrides = OVERRIDES;
+
+    if (overrides.find(option) != overrides.end()) {
+
+        msg("Overriding option: %s = %lld\n", OptionEnum::key(option), value);
+        return overrides[option];
+    }
+
+    return value;
 }
 
 EventID
@@ -685,7 +697,7 @@ Amiga::latestUserSnapshot()
 }
 
 void
-Amiga::loadFromSnapshot(const Snapshot &snapshot)
+Amiga::loadSnapshot(const Snapshot &snapshot)
 {
     // Check if this snapshot is compatible with the emulator
     if (snapshot.isTooOld() || FORCE_SNAPSHOT_TOO_OLD) {

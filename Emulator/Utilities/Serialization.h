@@ -10,7 +10,6 @@
 #pragma once
 
 #include "Macros.h"
-#include <cstring>
 
 namespace util {
 

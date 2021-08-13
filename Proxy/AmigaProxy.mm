@@ -2310,7 +2310,7 @@ using namespace moira;
 
 - (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { [self amiga]->loadFromSnapshot(*[proxy snapshot]); }
+    try { [self amiga]->loadSnapshot(*[proxy snapshot]); }
     catch (VAError &error) { [ex save:error]; }
 }
 

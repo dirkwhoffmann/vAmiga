@@ -13,12 +13,14 @@ namespace util {
 
 template <class T, int delay> class TimeDelayed {
     
+    static constexpr isize capacity = delay + 1;
+    
     /* Value pipeline (history buffer)
      *
      *    pipeline[0] : Value that was written at time timeStamp
      *    pipeline[n] : Value that was written at time timeStamp - n
      */
-    T pipeline[delay + 1];
+    T pipeline[capacity];
         
     // Remembers the time of the most recent call to write()
     i64 timeStamp = 0;
@@ -66,7 +68,10 @@ public:
     template <class W>
     void operator<<(W& worker)
     {
-        worker << pipeline << timeStamp;
+        worker
+        
+        << pipeline
+        << timeStamp;
     }
     
 

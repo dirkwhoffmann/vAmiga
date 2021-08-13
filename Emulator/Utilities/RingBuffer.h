@@ -40,11 +40,17 @@ template <class T, isize capacity> struct RingBuffer
     void clear(T t) { for (isize i = 0; i < capacity; i++) elements[i] = t; clear(); }
     void align(isize offset) { w = (r + offset) % capacity; }
 
+    
+    //
+    // Serializing
+    //
+    
     template <class W>
     void operator<<(W& worker)
     {
         worker << this->elements << this->r << this->w;
     }
+    
     
     //
     // Querying the fill status
@@ -52,6 +58,7 @@ template <class T, isize capacity> struct RingBuffer
 
     isize cap() const { return capacity; }
     isize count() const { return (capacity + w - r) % capacity; }
+    isize free() const { return capacity - count() - 1; }
     double fillLevel() const { return (double)count() / capacity; }
     bool isEmpty() const { return r == w; }
     bool isFull() const { return count() == capacity - 1; }
@@ -70,21 +77,6 @@ template <class T, isize capacity> struct RingBuffer
     //
     // Reading and writing elements
     //
-
-    const T& current() const
-    {
-        return elements[r];
-    }
-
-    T *currentAddr()
-    {
-        return &elements[r];
-    }
-
-    const T& current(isize offset) const
-    {
-        return elements[(r + offset) % capacity];
-    }
     
     T& read()
     {
@@ -109,10 +101,25 @@ template <class T, isize capacity> struct RingBuffer
         r = (r + n) % capacity;
     }
     
+    
     //
     // Examining the element storage
     //
 
+    const T& current() const
+    {
+        return elements[r];
+    }
+
+    T *currentAddr()
+    {
+        return &elements[r];
+    }
+
+    const T& current(isize offset) const
+    {
+        return elements[(r + offset) % capacity];
+    }
 };
 
 template <class T, isize capacity>
