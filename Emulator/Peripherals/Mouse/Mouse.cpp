@@ -79,14 +79,6 @@ Mouse::getConfigItem(Option option) const
 void
 Mouse::setConfigItem(Option option, i64 value)
 {
-    setConfigItem(option, port.nr, value);
-}
-
-void
-Mouse::setConfigItem(Option option, long id, i64 value)
-{
-    if (port.nr != id) return;
-    
     switch (option) {
             
         case OPT_PULLUP_RESISTORS:
@@ -109,7 +101,7 @@ Mouse::setConfigItem(Option option, long id, i64 value)
             return;
 
         default:
-            return;
+            assert(false);
     }
 }
 

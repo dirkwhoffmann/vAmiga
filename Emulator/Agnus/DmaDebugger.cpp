@@ -122,7 +122,7 @@ DmaDebugger::setConfigItem(Option option, i64 value)
             return;
 
         default:
-            return;
+            assert(false);
     }
 }
 
@@ -259,7 +259,7 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
                     return;
             }
         default:
-            return;
+            assert(false);
     }
 }
 

@@ -249,31 +249,22 @@ RetroShell::exec <Token::cia, Token::config> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::cia, Token::set, Token::revision> (Arguments &argv, long param)
 {
-    if (param == 0) {
-        amiga.ciaA.configure(OPT_CIA_REVISION, util::parseEnum <CIARevisionEnum> (argv.front()));
-    } else {
-        amiga.ciaB.configure(OPT_CIA_REVISION, util::parseEnum <CIARevisionEnum> (argv.front()));
-    }
+    auto value = util::parseEnum <CIARevisionEnum> (argv.front());
+    amiga.configure(OPT_CIA_REVISION, param, value);
 }
 
 template <> void
 RetroShell::exec <Token::cia, Token::set, Token::todbug> (Arguments &argv, long param)
 {
-    if (param == 0) {
-        amiga.ciaA.configure(OPT_TODBUG, util::parseBool(argv.front()));
-    } else {
-        amiga.ciaB.configure(OPT_TODBUG, util::parseBool(argv.front()));
-    }
+    auto value = util::parseBool(argv.front());
+    amiga.configure(OPT_TODBUG, param, value);
 }
 
 template <> void
 RetroShell::exec <Token::cia, Token::set, Token::esync> (Arguments &argv, long param)
 {
-    if (param == 0) {
-        amiga.ciaA.configure(OPT_ECLOCK_SYNCING, util::parseBool(argv.front()));
-    } else {
-        amiga.ciaB.configure(OPT_ECLOCK_SYNCING, util::parseBool(argv.front()));
-    }
+    auto value = util::parseBool(argv.front());
+    amiga.configure(OPT_ECLOCK_SYNCING, param, value);
 }
 
 template <> void

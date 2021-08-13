@@ -36,16 +36,12 @@ enum Category : usize {
 }
 
 class AmigaComponent : public AmigaObject {
-    
-    friend class Amiga;
-    
-public:
+        
+protected:
     
     // Sub components
     std::vector<AmigaComponent *> subComponents;
-    
-protected:
-                
+                    
     /* Mutex for implementing the 'synchronized' macro. The macro can be used
      * to prevent multiple threads to enter the same code block. It mimics the
      * behaviour of the well known Java construct 'synchronized(this) { }'.
@@ -85,25 +81,7 @@ public:
     //
     // Configuring
     //
-        
-public:
-    
-    /* Configures the component and it's subcomponents. This function
-     * distributes a configuration request to all subcomponents by calling
-     * setConfigItem().
-     */
-    void configure(Option option, i64 value) throws;
-    void configure(Option option, long id, i64 value) throws;
-    
-private:
-    
-    /* Requests the change of a single configuration item. Each sub-component
-     * checks if it is responsible for the requested configuration item. If
-     * yes, it changes the internal state. If no, it ignores the request.
-     */
-    virtual void setConfigItem(Option option, i64 value) throws { }
-    virtual void setConfigItem(Option option, long id, i64 value) throws { }
-    
+            
     // Initializes all configuration items with their default values
     virtual void resetConfig() { };
 

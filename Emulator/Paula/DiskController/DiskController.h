@@ -121,8 +121,8 @@ public:
     i64 getConfigItem(Option option) const;
     i64 getConfigItem(Option option, long id) const;
     
-    void setConfigItem(Option option, i64 value) override;
-    void setConfigItem(Option option, long id, i64 value) override;
+    void setConfigItem(Option option, i64 value);
+    void setConfigItem(Option option, long id, i64 value);
 
     const string &getSearchPath(isize dfn) const;
     void setSearchPath(const string &path, isize dfn);

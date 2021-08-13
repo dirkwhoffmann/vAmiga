@@ -249,8 +249,6 @@ Amiga::getConfigItem(Option option, long id) const
         case OPT_POLL_VOLUME:
         case OPT_INSERT_VOLUME:
         case OPT_EJECT_VOLUME:
-            return df[id]->getConfigItem(option);
-            
         case OPT_DEFAULT_FILESYSTEM:
         case OPT_DEFAULT_BOOTBLOCK:
             return df[id]->getConfigItem(option);
@@ -268,7 +266,8 @@ Amiga::getConfigItem(Option option, long id) const
             if (id == PORT_2) return controlPort2.joystick.getConfigItem(option);
             assert(false);
 
-        default: assert(false);
+        default:
+            assert(false);
     }
     
     return 0;
@@ -289,8 +288,124 @@ Amiga::_configure(Option option, i64 value)
     // Check if this option has been locked for debugging
     value = overrideOption(option, value);
 
-    // Propagate configuration request to all components
-    AmigaComponent::configure(option, value);
+    switch (option) {
+
+        case OPT_AGNUS_REVISION:
+        case OPT_SLOW_RAM_MIRROR:
+            agnus.setConfigItem(option, value);
+            break;
+            
+        case OPT_DENISE_REVISION:
+        case OPT_HIDDEN_SPRITES:
+        case OPT_HIDDEN_LAYERS:
+        case OPT_HIDDEN_LAYER_ALPHA:
+        case OPT_CLX_SPR_SPR:
+        case OPT_CLX_SPR_PLF:
+        case OPT_CLX_PLF_PLF:
+            denise.setConfigItem(option, value);
+            break;
+
+        case OPT_PALETTE:
+        case OPT_BRIGHTNESS:
+        case OPT_CONTRAST:
+        case OPT_SATURATION:
+            denise.pixelEngine.setConfigItem(option, value);
+            break;
+
+        case OPT_DMA_DEBUG_ENABLE:
+        case OPT_DMA_DEBUG_MODE:
+        case OPT_DMA_DEBUG_OPACITY:
+            agnus.dmaDebugger.setConfigItem(option, value);
+            break;
+
+        case OPT_RTC_MODEL:
+            rtc.setConfigItem(option, value);
+            break;
+
+        case OPT_CHIP_RAM:
+        case OPT_SLOW_RAM:
+        case OPT_FAST_RAM:
+        case OPT_EXT_START:
+        case OPT_SLOW_RAM_DELAY:
+        case OPT_BANKMAP:
+        case OPT_UNMAPPING_TYPE:
+        case OPT_RAM_INIT_PATTERN:
+            mem.setConfigItem(option, value);
+            break;
+
+        case OPT_DRIVE_TYPE:
+        case OPT_EMULATE_MECHANICS:
+        case OPT_DRIVE_PAN:
+        case OPT_STEP_VOLUME:
+        case OPT_POLL_VOLUME:
+        case OPT_INSERT_VOLUME:
+        case OPT_EJECT_VOLUME:
+        case OPT_DEFAULT_FILESYSTEM:
+        case OPT_DEFAULT_BOOTBLOCK:
+            df[0]->setConfigItem(option, value);
+            df[1]->setConfigItem(option, value);
+            df[2]->setConfigItem(option, value);
+            df[3]->setConfigItem(option, value);
+            break;
+            
+        case OPT_SAMPLING_METHOD:
+        case OPT_FILTER_TYPE:
+        case OPT_FILTER_ALWAYS_ON:
+        case OPT_AUDVOLL:
+        case OPT_AUDVOLR:
+            paula.muxer.setConfigItem(option, value);
+            break;
+
+        case OPT_BLITTER_ACCURACY:
+            agnus.blitter.setConfigItem(option, value);
+            break;
+
+        case OPT_DRIVE_SPEED:
+        case OPT_LOCK_DSKSYNC:
+        case OPT_AUTO_DSKSYNC:
+            paula.diskController.setConfigItem(option, value);
+            break;
+
+        case OPT_SERIAL_DEVICE:
+            serialPort.setConfigItem(option, value);
+            break;
+
+        case OPT_CIA_REVISION:
+        case OPT_TODBUG:
+        case OPT_ECLOCK_SYNCING:
+            ciaA.setConfigItem(option, value);
+            ciaB.setConfigItem(option, value);
+            break;
+
+        case OPT_ACCURATE_KEYBOARD:
+            keyboard.setConfigItem(option, value);
+            break;
+
+        case OPT_PULLUP_RESISTORS:
+        case OPT_MOUSE_VELOCITY:
+            controlPort1.mouse.setConfigItem(option, value);
+            controlPort2.mouse.setConfigItem(option, value);
+            break;
+            
+        case OPT_AUTOFIRE:
+        case OPT_AUTOFIRE_BULLETS:
+        case OPT_AUTOFIRE_DELAY:
+            controlPort1.joystick.setConfigItem(option, value);
+            controlPort2.joystick.setConfigItem(option, value);
+            break;
+
+        case OPT_AUDPAN:
+        case OPT_AUDVOL:
+            paula.muxer.setConfigItem(option, 0, value);
+            paula.muxer.setConfigItem(option, 1, value);
+            paula.muxer.setConfigItem(option, 2, value);
+            paula.muxer.setConfigItem(option, 3, value);
+            break;
+
+        default:
+            assert(false);
+    }
+    
 }
 
 void
@@ -309,7 +424,52 @@ Amiga::_configure(Option option, long id, i64 value)
     debug(CNF_DEBUG, "configure(%lld, %ld, %lld)\n", option, id, value);
     
     // Propagate configuration request to all components
-    AmigaComponent::configure(option, id, value);
+    // AmigaComponent::configure(option, id, value);
+
+    switch (option) {
+            
+        case OPT_DMA_DEBUG_ENABLE:
+        case OPT_DMA_DEBUG_COLOR:
+            agnus.dmaDebugger.setConfigItem(option, id, value);
+            break;
+
+        case OPT_AUDPAN:
+        case OPT_AUDVOL:
+            paula.muxer.setConfigItem(option, id, value);
+            break;
+
+        case OPT_DRIVE_CONNECT:
+            paula.diskController.setConfigItem(option, id, value);
+            break;
+
+        case OPT_DRIVE_TYPE:
+        case OPT_EMULATE_MECHANICS:
+        case OPT_DRIVE_PAN:
+        case OPT_STEP_VOLUME:
+        case OPT_POLL_VOLUME:
+        case OPT_INSERT_VOLUME:
+        case OPT_EJECT_VOLUME:
+        case OPT_DEFAULT_FILESYSTEM:
+        case OPT_DEFAULT_BOOTBLOCK:
+            df[id]->setConfigItem(option, value);
+            break;
+
+        case OPT_PULLUP_RESISTORS:
+        case OPT_MOUSE_VELOCITY:
+            if (id == PORT_1) controlPort1.mouse.setConfigItem(option, value);
+            if (id == PORT_2) controlPort2.mouse.setConfigItem(option, value);
+            break;
+            
+        case OPT_AUTOFIRE:
+        case OPT_AUTOFIRE_BULLETS:
+        case OPT_AUTOFIRE_DELAY:
+            if (id == PORT_1) controlPort1.joystick.setConfigItem(option, value);
+            if (id == PORT_2) controlPort2.joystick.setConfigItem(option, value);
+            break;
+
+        default:
+            assert(false);
+    }
 }
 
 void

@@ -104,7 +104,7 @@ Blitter::setConfigItem(Option option, i64 value)
             return;
             
         default:
-            return;
+            assert(false);
     }
 }
 

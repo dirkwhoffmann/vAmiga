@@ -103,8 +103,8 @@ Muxer::resetConfig()
 
     for (isize i = 0; i < 4; i++) {
 
-        setConfigItem(OPT_AUDVOL, defaults.vol[i]);
-        setConfigItem(OPT_AUDPAN, defaults.pan[i]);
+        setConfigItem(OPT_AUDVOL, i, defaults.vol[i]);
+        setConfigItem(OPT_AUDPAN, i, defaults.pan[i]);
     }
 }
 
@@ -210,7 +210,7 @@ Muxer::setConfigItem(Option option, i64 value)
             return;
             
         default:
-            return;
+            assert(false);
     }
 }
 
@@ -247,7 +247,7 @@ Muxer::setConfigItem(Option option, long id, i64 value)
             return;
 
         default:
-            return;
+            assert(false);
     }
 }
 

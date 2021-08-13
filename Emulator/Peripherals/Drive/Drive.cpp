@@ -95,14 +95,6 @@ Drive::getConfigItem(Option option) const
 void
 Drive::setConfigItem(Option option, i64 value)
 {
-    setConfigItem(option, nr, value);
-}
-
-void
-Drive::setConfigItem(Option option, long id, i64 value)
-{
-    if (id != nr) return;
- 
     switch (option) {
                             
         case OPT_DRIVE_TYPE:
@@ -166,7 +158,7 @@ Drive::setConfigItem(Option option, long id, i64 value)
             return;
 
         default:
-            return;
+            assert(false);
     }
 }
 

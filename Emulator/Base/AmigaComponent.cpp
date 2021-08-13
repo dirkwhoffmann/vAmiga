@@ -33,24 +33,6 @@ AmigaComponent::reset(bool hard)
 }
 
 void
-AmigaComponent::configure(Option option, i64 value)
-{    
-    for (AmigaComponent *c : subComponents) {
-        c->configure(option, value);
-    }
-    setConfigItem(option, value);
-}
-
-void
-AmigaComponent::configure(Option option, long id, i64 value)
-{
-    for (AmigaComponent *c : subComponents) {
-        c->configure(option, id, value);
-    }
-    setConfigItem(option, id, value);
-}
-
-void
 AmigaComponent::inspect()
 {
     for (AmigaComponent *c : subComponents) {
