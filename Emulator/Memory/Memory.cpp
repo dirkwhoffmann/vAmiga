@@ -378,8 +378,8 @@ Memory::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
-bool
-Memory::_isReady()
+void
+Memory::_isReady() const
 {
     if (!hasRom()) {
         throw VAError(ERROR_ROM_MISSING);
@@ -396,8 +396,6 @@ Memory::_isReady()
     if (mem.chipRamSize() > KB(agnus.chipRamLimit())) {
         throw VAError(ERROR_CHIP_RAM_LIMIT);
     }
-    
-    return true;
 }
 
 void
@@ -516,25 +514,25 @@ Memory::fillRamWithInitPattern()
 }
 
 u32
-Memory::romFingerprint()
+Memory::romFingerprint() const
 {
     return util::crc32(rom, config.romSize);
 }
 
 u32
-Memory::extFingerprint()
+Memory::extFingerprint() const
 {
     return util::crc32(ext, config.extSize);
 }
 
 RomIdentifier
-Memory::romIdentifier()
+Memory::romIdentifier() const
 {
     return RomFile::identifier(romFingerprint());
 }
 
 RomIdentifier
-Memory::extIdentifier()
+Memory::extIdentifier() const
 {
     return RomFile::identifier(extFingerprint());
 }
@@ -590,7 +588,7 @@ Memory::extReleased()
 }
 
 bool
-Memory::hasArosRom()
+Memory::hasArosRom() const
 {
     return RomFile::isArosRom(romIdentifier());
 }

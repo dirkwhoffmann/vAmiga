@@ -150,11 +150,11 @@ AmigaComponent::save(u8 *buffer)
     return result;
 }
 
-bool
-AmigaComponent::isReady()
+void
+AmigaComponent::isReady() const
 {
-    for (auto c : subComponents) { if (!c->isReady()) return false; }
-    return _isReady();
+    for (auto c : subComponents) { c->isReady(); }
+    _isReady();
 }
 
 void

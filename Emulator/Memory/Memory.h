@@ -273,7 +273,7 @@ private:
     
 private:
 
-    bool _isReady() throws override;
+    void _isReady() const throws override;
     void _powerOn() override;
 
         
@@ -336,12 +336,12 @@ private:
 public:
 
     // Computes a CRC-32 checksum
-    u32 romFingerprint();
-    u32 extFingerprint();
+    u32 romFingerprint() const;
+    u32 extFingerprint() const;
 
     // Returns the ROM identifiers of the currently installed ROMs
-    RomIdentifier romIdentifier();
-    RomIdentifier extIdentifier();
+    RomIdentifier romIdentifier() const;
+    RomIdentifier extIdentifier() const;
 
     const char *romTitle();
     const char *romVersion();
@@ -352,12 +352,12 @@ public:
     const char *extReleased();
 
     // Checks if a certain Rom is present
-    bool hasRom() { return rom != nullptr; }
-    bool hasBootRom() { return hasRom() && config.romSize <= KB(16); }
-    bool hasKickRom() { return hasRom() && config.romSize >= KB(256); }
-    bool hasArosRom();
-    bool hasWom() { return wom != nullptr; }
-    bool hasExt() { return ext != nullptr; }
+    bool hasRom() const { return rom != nullptr; }
+    bool hasBootRom() const { return hasRom() && config.romSize <= KB(16); }
+    bool hasKickRom() const { return hasRom() && config.romSize >= KB(256); }
+    bool hasArosRom() const;
+    bool hasWom() const { return wom != nullptr; }
+    bool hasExt() const { return ext != nullptr; }
 
     // Erases an installed Rom
     void eraseRom() { memset(rom, 0, config.romSize); }

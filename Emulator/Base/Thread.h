@@ -189,7 +189,6 @@ public:
     bool isRunning() const override { return state == EXEC_RUNNING; }
     bool isPaused() const override { return state == EXEC_PAUSED; }
 
-    bool isReady() throws { return AmigaComponent::isReady(); }
     void powerOn(bool blocking = true) throws;
     void powerOff(bool blocking = true);
     void run(bool blocking = true) throws;
