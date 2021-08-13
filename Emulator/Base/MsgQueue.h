@@ -32,19 +32,16 @@ class MsgQueue : public SubComponent {
 public:
     
     using SubComponent::SubComponent;
-
-    
-    //
-    // Methods from HardwareComponent
-    //
-    
-public:
-        
     const char *getDescription() const override { return "MsgQueue"; }
 
 private:
     
     void _reset(bool hard) override { };
+    
+    
+    //
+    // Serializing
+    //
     
     isize _size() override { return 0; }
     isize _load(const u8 *buffer) override { return 0; }

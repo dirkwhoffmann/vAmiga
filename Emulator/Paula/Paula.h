@@ -109,7 +109,6 @@ public:
 public:
 
     Paula(Amiga& ref);
-
     const char *getDescription() const override { return "Paula"; }
 
 private:

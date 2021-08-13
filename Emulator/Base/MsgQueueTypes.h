@@ -188,6 +188,7 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType> {
 };
 #endif
 
+
 //
 // Structures
 //
@@ -199,5 +200,9 @@ typedef struct
 }
 Message;
 
-// Callback function signature
+
+//
+// Signatures
+//
+
 typedef void Callback(const void *, long, long);

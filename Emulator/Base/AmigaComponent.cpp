@@ -10,34 +10,24 @@
 #include "config.h"
 #include "AmigaComponent.h"
 
-AmigaComponent::~AmigaComponent()
-{
-}
-
 void
 AmigaComponent::initialize()
 {    
-    for (AmigaComponent *c : subComponents) {
-        c->initialize();
-    }
+    for (AmigaComponent *c : subComponents) { c->initialize(); }
     _initialize();
 }
 
 void
 AmigaComponent::reset(bool hard)
 {
-    for (AmigaComponent *c : subComponents) {
-        c->reset(hard);
-    }
+    for (AmigaComponent *c : subComponents) { c->reset(hard); }
     _reset(hard);
 }
 
 void
 AmigaComponent::inspect()
 {
-    for (AmigaComponent *c : subComponents) {
-        c->inspect();
-    }
+    for (AmigaComponent *c : subComponents) { c->inspect(); }
     _inspect();
 }
 
@@ -68,11 +58,7 @@ isize
 AmigaComponent::size()
 {
     isize result = _size();
-
-    for (AmigaComponent *c : subComponents) {
-        result += c->size();
-    }
-
+    for (AmigaComponent *c : subComponents) { result += c->size(); }
     return result;
 }
 
@@ -80,7 +66,6 @@ isize
 AmigaComponent::load(const u8 *buffer)
 {
     const u8 *ptr = buffer;
-    isize result;
     
     // Call delegation method
     ptr += willLoadFromBuffer(ptr);
@@ -95,7 +80,7 @@ AmigaComponent::load(const u8 *buffer)
 
     // Call delegation method
     ptr += didLoadFromBuffer(ptr);
-    result = (isize)(ptr - buffer);
+    isize result = (isize)(ptr - buffer);
     
     // Verify that the number of written bytes matches the snapshot size
     trace(SNP_DEBUG, "Loaded %zd bytes (expected %zd)\n", result, size());
@@ -108,7 +93,6 @@ isize
 AmigaComponent::save(u8 *buffer)
 {
     u8 *ptr = buffer;
-    isize result;
     
     // Call delegation method
     ptr += willSaveToBuffer(ptr);
@@ -123,7 +107,7 @@ AmigaComponent::save(u8 *buffer)
 
     // Call delegation method
     ptr += didSaveToBuffer(ptr);
-    result = (isize)(ptr - buffer);
+    isize result = (isize)(ptr - buffer);
     
     // Verify that the number of written bytes matches the snapshot size
     trace(SNP_DEBUG, "Saved %zd bytes (expected %zd)\n", result, size());

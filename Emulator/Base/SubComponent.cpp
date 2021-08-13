@@ -39,7 +39,6 @@ serialPort(ref.serialPort),
 uart(ref.paula.uart),
 zorro(ref.zorro)
 {
-
 };
 
 bool
