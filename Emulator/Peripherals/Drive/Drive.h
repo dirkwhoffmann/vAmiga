@@ -136,28 +136,26 @@ private:
     }
 
     template <class T>
-    void applyToHardResetItems(T& worker)
+    void applyToResetItems(T& worker, bool hard = true)
     {
-        worker
-
-        << motor
-        << switchCycle
-        << switchSpeed
-        << idCount
-        << idBit
-        << stepCycle
-        << dskchange
-        << dsklen
-        << prb
-        << head.side
-        << head.cylinder
-        << head.offset
-        << cylinderHistory;
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
+        if (hard) {
+            
+            worker
+            
+            << motor
+            << switchCycle
+            << switchSpeed
+            << idCount
+            << idBit
+            << stepCycle
+            << dskchange
+            << dsklen
+            << prb
+            << head.side
+            << head.cylinder
+            << head.offset
+            << cylinderHistory;
+        }
     }
 
     isize _size() override;

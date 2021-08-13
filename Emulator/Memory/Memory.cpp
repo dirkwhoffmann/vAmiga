@@ -221,7 +221,6 @@ Memory::_size()
     util::SerCounter counter;
 
     applyToPersistentItems(counter);
-    applyToHardResetItems(counter);
     applyToResetItems(counter);
     
     counter

@@ -302,21 +302,20 @@ private:
     }
 
     template <class T>
-    void applyToHardResetItems(T& worker)
+    void applyToResetItems(T& worker, bool hard = true)
     {
-        worker
+        if (hard) {
+            
+            worker
+            
+            << clock
+            << idleCycles
+            << tiredness
+            << sleeping
+            << sleepCycle
+            << wakeUpCycle;
+        }
 
-        << clock
-        << idleCycles
-        << tiredness
-        << sleeping
-        << sleepCycle
-        << wakeUpCycle;
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
         worker
         
         << counterA

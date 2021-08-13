@@ -139,7 +139,7 @@ struct Volume {
 template <class T> class AudioStream : public util::RingBuffer <T, 16384> {
 
     // Mutex for synchronizing read / write accesses
-    util::Mutex mutex;
+    util::ReentrantMutex mutex;
 
 public:
     

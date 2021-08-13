@@ -84,16 +84,13 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+        
     }
 
     template <class T>
-    void applyToHardResetItems(T& worker)
+    void applyToResetItems(T& worker, bool hard = true)
     {
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
+        
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

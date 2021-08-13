@@ -37,10 +37,7 @@ Paula::_reset(bool hard)
     // Interrupts
     for (isize i = 0; i < 16; i++) setIntreq[i] = NEVER;
     ipl.clear();
-    cpu.setIPL(0);
-    
-    // Audio
-    muxer.clear();
+    cpu.setIPL(0);    
 }
 
 void

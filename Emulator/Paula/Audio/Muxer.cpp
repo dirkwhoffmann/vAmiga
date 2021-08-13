@@ -49,17 +49,19 @@ Muxer::_reset(bool hard)
     stats.consumedSamples = 0;
     
     for (isize i = 0; i < 4; i++) sampler[i]->reset();
-    stream.clear();
+    clear();
 }
 
 void
 Muxer::clear()
 {
-    trace(AUDBUF_DEBUG, "clear()\n");
+    debug(AUDBUF_DEBUG, "clear()\n");
     
     // Wipe out the ringbuffer
+    stream.lock();
     stream.wipeOut();
     stream.alignWritePtr();
+    stream.unlock();
     
     // Wipe out the filter buffers
     filterL.clear();
@@ -423,7 +425,7 @@ Muxer::handleBufferUnderflow()
     // (1) The consumer runs slightly faster than the producer
     // (2) The producer is halted or not startet yet
     
-    trace(AUDBUF_DEBUG, "UNDERFLOW (r: %zd w: %zd)\n", stream.r, stream.w);
+    debug(AUDBUF_DEBUG, "UNDERFLOW (r: %zd w: %zd)\n", stream.r, stream.w);
     
     // Reset the write pointer
     stream.alignWritePtr();
@@ -451,7 +453,7 @@ Muxer::handleBufferOverflow()
     // (1) The consumer runs slightly slower than the producer
     // (2) The consumer is halted or not startet yet
     
-    trace(AUDBUF_DEBUG, "OVERFLOW (r: %zd w: %zd)\n", stream.r, stream.w);
+    debug(AUDBUF_DEBUG, "OVERFLOW (r: %zd w: %zd)\n", stream.r, stream.w);
     
     // Reset the write pointer
     stream.alignWritePtr();
@@ -459,7 +461,7 @@ Muxer::handleBufferOverflow()
     // Determine the number of elapsed seconds since the last adjustment
     auto elapsedTime = util::Time::now() - lastAlignment;
     lastAlignment = util::Time::now();
-    trace(AUDBUF_DEBUG, "elapsedTime: %f\n", elapsedTime.asSeconds());
+    debug(AUDBUF_DEBUG, "elapsedTime: %f\n", elapsedTime.asSeconds());
     
     // Adjust the sample rate, if condition (1) holds
     if (elapsedTime.asSeconds() > 10.0) {
@@ -470,7 +472,7 @@ Muxer::handleBufferOverflow()
         auto offPerSec = (stream.cap() / 2) / elapsedTime.asSeconds();
         double newSampleRate = getSampleRate() - (isize)offPerSec;
 
-        trace(AUDBUF_DEBUG, "Changing sample rate to %f\n", newSampleRate);
+        debug(AUDBUF_DEBUG, "Changing sample rate to %f\n", newSampleRate);
         setSampleRate(newSampleRate);
     }
 }
@@ -514,11 +516,10 @@ Muxer::copy(void *buffer1, void *buffer2, isize n)
 SampleType *
 Muxer::nocopy(isize n)
 {
-    SampleType *addr;
     stream.lock();
     
     if (stream.count() < n) handleBufferUnderflow();
-    addr = stream.currentAddr();
+    SampleType *addr = stream.currentAddr();
     stream.skip(n);
     stats.consumedSamples += n;
 

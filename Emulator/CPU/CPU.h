@@ -61,39 +61,37 @@ private:
     }
 
     template <class T>
-    void applyToHardResetItems(T& worker)
+    void applyToResetItems(T& worker, bool hard = true)
     {
-        worker
-
-        << flags
-        << clock
-
-        << reg.pc
-        << reg.pc0
-        << reg.sr.t
-        << reg.sr.s
-        << reg.sr.x
-        << reg.sr.n
-        << reg.sr.z
-        << reg.sr.v
-        << reg.sr.c
-        << reg.sr.ipl
-        << reg.r
-        << reg.usp
-        << reg.ssp
-        << reg.ipl
-
-        << queue.irc
-        << queue.ird
-
-        << ipl
-        << fcl
-        << exception;
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
+        if (hard) {
+            
+            worker
+            
+            << flags
+            << clock
+            
+            << reg.pc
+            << reg.pc0
+            << reg.sr.t
+            << reg.sr.s
+            << reg.sr.x
+            << reg.sr.n
+            << reg.sr.z
+            << reg.sr.v
+            << reg.sr.c
+            << reg.sr.ipl
+            << reg.r
+            << reg.usp
+            << reg.ssp
+            << reg.ipl
+            
+            << queue.irc
+            << queue.ird
+            
+            << ipl
+            << fcl
+            << exception;
+        }
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

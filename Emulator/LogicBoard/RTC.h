@@ -95,22 +95,20 @@ private:
     }
 
     template <class T>
-    void applyToHardResetItems(T& worker)
+    void applyToResetItems(T& worker, bool hard = true)
     {
-        worker
-
-        << timeDiff
-        << reg
-        << lastCall
-        << lastMeasure
-        << lastMeasuredValue;
+        if (hard) {
+            
+            worker
+            
+            << timeDiff
+            << reg
+            << lastCall
+            << lastMeasure
+            << lastMeasuredValue;
+        }
     }
     
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
-    }
-
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }

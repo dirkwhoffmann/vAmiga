@@ -115,16 +115,15 @@ private:
     }
 
     template <class T>
-    void applyToHardResetItems(T& worker)
+    void applyToResetItems(T& worker, bool hard = true)
     {
-        worker
+        if (hard) {
+            
+            worker
+            
+            << clock;
+        }
 
-        << clock;
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
         worker
         
         << state
