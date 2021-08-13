@@ -135,7 +135,7 @@ CopperDebugger::disassemble(u32 addr) const
     
     if (copper.isMoveCmd(addr)) {
         
-        sprintf(disassembly, "MOVE $%04X, %s", copper.getDW(addr), regName(copper.getRA(addr)));
+        sprintf(disassembly, "MOVE $%04X, %s", copper.getDW(addr), Memory::regName(copper.getRA(addr)));
         return string(disassembly);
     }
     

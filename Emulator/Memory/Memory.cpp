@@ -1913,6 +1913,8 @@ Memory::peekCustom16(u32 addr)
 
     }
 
+    assert(string(regName(addr)) == string(Memory::regName(addr)));
+
     trace(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n", addr, regName(addr), result);
 
     dataBus = result;
@@ -1958,6 +1960,8 @@ Memory::spypeekCustom16(u32 addr) const
 template <Accessor s> void
 Memory::pokeCustom16(u32 addr, u16 value)
 {
+
+    assert(string(regName(addr)) == string(Memory::regName(addr)));
 
     if ((addr & 0xFFF) == 0x30) {
         trace(OCSREG_DEBUG, "pokeCustom16(SERDAT, '%c')\n", (char)value);
@@ -2411,6 +2415,8 @@ Memory::pokeCustom16(u32 addr, u16 value)
             copper.pokeNOOP(value); return;
     }
     
+    assert(string(regName(addr)) == string(Memory::regName(addr)));
+
     if (addr <= 0x1E) {
         trace(INVREG_DEBUG,
               "pokeCustom16(%X [%s]): READ-ONLY\n", addr, regName(addr));
@@ -2418,6 +2424,12 @@ Memory::pokeCustom16(u32 addr, u16 value)
         trace(INVREG_DEBUG,
               "pokeCustom16(%X [%s]): NON-OCS\n", addr, regName(addr));
     }
+}
+
+const char *
+Memory::regName(u32 addr)
+{
+    return ChipsetRegEnum::key((addr >> 1) & 0xFF);
 }
 
 template <Accessor A> const char *

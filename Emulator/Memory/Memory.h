@@ -461,6 +461,9 @@ public:
     
 public:
     
+    // Returns the name of a chipset register
+    static const char *regName(u32 addr);
+    
     // Returns 16 bytes of memory as an ASCII string
     template <Accessor A> const char *ascii(u32 addr);
     

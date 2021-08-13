@@ -41,7 +41,7 @@ Amiga::Amiga()
      *
      * - Memory must preceed the CPU, because it contains the CPU reset vector.
      */
-
+    
     subComponents = std::vector<AmigaComponent *> {
 
         &agnus,

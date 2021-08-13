@@ -264,16 +264,17 @@ Copper::findHorizontalMatchNew(u32 &match, u32 comp, u32 mask) const
 void
 Copper::move(u32 addr, u16 value)
 {
-    trace(COP_DEBUG,
-          "COPPC: %X move(%s, $%X) (%d)\n", coppc, regName(addr), value, value);
-
     assert(IS_EVEN(addr));
     assert(addr < 0x1FF);
+    
+    trace(COP_DEBUG,
+          "COPPC: %X move(%s, $%X) (%d)\n", coppc, Memory::regName(addr), value, value);
 
     // Catch registers with special timing needs
     if (addr >= 0x180 && addr <= 0x1BE) {
 
-        trace(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, regName(addr), value);
+        trace(OCSREG_DEBUG,
+              "pokeCustom16(%X [%s], %X)\n", addr, Memory::regName(addr), value);
 
         // Color registers
         pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { addr, value} );

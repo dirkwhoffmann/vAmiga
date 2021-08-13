@@ -191,7 +191,6 @@
 		50B2E7E325ECE7FF0077B6A3 /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5072159B25EA698600787591 /* Exception.cpp */; };
 		50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
 		50B5663C265E769200226D80 /* DragAndDropImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B5663B265E769200226D80 /* DragAndDropImageView.swift */; };
-		50B5C07E241107F200F124DC /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5C07D241107F200F124DC /* Constants.cpp */; };
 		50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B70CAB252CE0BF006B5191 /* Muxer.cpp */; };
 		50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0724E6BCCA004384C9 /* DiskControllerRegs.cpp */; };
 		50B81E0A24E6BEA5004384C9 /* CIARegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0924E6BEA5004384C9 /* CIARegs.cpp */; };
@@ -550,7 +549,6 @@
 		50B3C44725EAFB5500651700 /* Checksum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Checksum.cpp; sourceTree = "<group>"; };
 		50B3C44825EAFB5500651700 /* Checksum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Checksum.h; sourceTree = "<group>"; };
 		50B5663B265E769200226D80 /* DragAndDropImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragAndDropImageView.swift; sourceTree = "<group>"; };
-		50B5C07D241107F200F124DC /* Constants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
 		50B70CAB252CE0BF006B5191 /* Muxer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Muxer.cpp; sourceTree = "<group>"; };
 		50B70CAC252CE0BF006B5191 /* Muxer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Muxer.h; sourceTree = "<group>"; };
 		50B81E0724E6BCCA004384C9 /* DiskControllerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskControllerRegs.cpp; sourceTree = "<group>"; };
@@ -755,7 +753,6 @@
 				50CF461F2620423300BB3B95 /* Makefile */,
 				507215B025EAF62B00787591 /* Aliases.h */,
 				5082D83A21EF891200CF7692 /* Constants.h */,
-				50B5C07D241107F200F124DC /* Constants.cpp */,
 				50A6145A260D14FE00A01428 /* ErrorTypes.h */,
 				5039924625B219FC0084B808 /* Error.h */,
 				50AE6F8425D71FBE0004AFBC /* Error.cpp */,
@@ -1755,7 +1752,6 @@
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
 				50F0BD2622AF883C001F4616 /* UART.cpp in Sources */,
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
-				50B5C07E241107F200F124DC /* Constants.cpp in Sources */,
 				5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */,
 				50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */,
