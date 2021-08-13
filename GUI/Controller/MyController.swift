@@ -200,7 +200,7 @@ extension MyController {
     }
 
     override open func windowDidLoad() {
-                 
+                         
         // Create keyboard controller
         keyboard = KeyboardController(parent: self)
         assert(keyboard != nil, "Failed to create keyboard controller")
@@ -224,15 +224,16 @@ extension MyController {
         setListener()
 
         // Process attachment (if any)
-        mydocument.mountAttachment(destination: amiga.df0)
+        try? mydocument.mountAttachment(destination: amiga.df0)
 
-        // Check if the Amiga is ready to power on
-        if amiga.isReady() {
-
+        do {
+            // Let the Amiga throw an exception if it is not ready to power on
+            try amiga.isReady()
+            
             // Switch on and launch the emulator thread
-            try? amiga.run()
+            try amiga.run()
 
-        } else {
+        } catch {
 
             // Open the Rom dialog
             openConfigurator(tab: "Roms")

@@ -151,62 +151,60 @@ class MyDocument: NSDocument {
     }
     */
     
-    @discardableResult
-    func mountAttachment(destination: DriveProxy? = nil) -> Bool {
+    func mountAttachment(destination: DriveProxy? = nil) throws {
         
         // Only proceed if an attachment is present
-        if attachment == nil { return false }
+        if attachment == nil { return }
         
-        switch attachment {
-
-        case _ as SnapshotProxy:
-            
-            let proxy = attachment as! SnapshotProxy
-            parent.load(snapshot: proxy)
+        // If the attachment is a snapshot, flash it
+        if let proxy = attachment as? SnapshotProxy {
+            try amiga.loadSnapshot(proxy)
             snapshots.append(proxy)
+            return
+        }
 
-        case _ as ScriptProxy:
-            
-            let proxy = attachment as! ScriptProxy
+        // If the attachment is a script, execute it
+        if let proxy = attachment as? ScriptProxy {
             parent.renderer.console.runScript(script: proxy)
+            return
+        }
+
+        // If the attachment is a hard drive image, show a message
+        if let proxy = attachment as? HDFFileProxy {
             
-        case _ as HDFFileProxy:
-            
-            track()
+            track("HDF with \(proxy.numBlocks) blocks")
             
             parent.warning("This file is a hard drive image (HDF)",
                            "Hard drive emulation is not supported yet.",
                            icon: "hdf")
+                    
+            // Experimental code: The current version of vAmiga does not
+            // support hard drives. If a HDF file is dragged in, we open the
+            // disk export dialog for debugging purposes. It enables us to
+            // examine the contents of the HDF and to check for file system
+            // errors.
+            /*
+             if let vol = FSDeviceProxy.make(withHDF: attachment as? HDFFileProxy) {
+             
+             vol.dump()
+             
+             let nibName = NSNib.Name("ExporterDialog")
+             let exportPanel = ExporterDialog.make(parent: parent, nibName: nibName)
+             exportPanel?.showSheet(forVolume: vol)
+             }
+             */
+            return
+        }
         
-        // Experimental code: The current version of vAmiga does not
-        // support hard drives. If a HDF file is dragged in, we open the
-        // disk export dialog for debugging purposes. It enables us to
-        // examine the contents of the HDF and to check for file system
-        // errors.
-        /*
-            if let vol = FSDeviceProxy.make(withHDF: attachment as? HDFFileProxy) {
-
-                vol.dump()
+        // If the attachment is a disk, insert it or run the importer
+        if let proxy = attachment as? DiskFileProxy {
             
-                let nibName = NSNib.Name("ExporterDialog")
-                let exportPanel = ExporterDialog.make(parent: parent, nibName: nibName)
-                exportPanel?.showSheet(forVolume: vol)
-            }
-        */
-
-        case _ as DiskFileProxy:
-
             if let df = destination?.nr {
-                amiga.diskController.insert(df, file: attachment as? DiskFileProxy)
+                amiga.diskController.insert(df, file: proxy)
             } else {
                 runImporterDialog()
             }
-                    
-        default:
-            break
         }
-        
-        return true
     }
     
     func runImporterDialog() {
@@ -223,8 +221,10 @@ class MyDocument: NSDocument {
         
         do {
             try createAttachment(from: url)
+            
         } catch let error as VAError {
-            error.warning("Operation failed")
+            
+            error.cantOpen(url: url)
         }
     }
     
@@ -234,9 +234,11 @@ class MyDocument: NSDocument {
         
         do {
             try createAttachment(from: url)
-            mountAttachment()
+            try mountAttachment()
+            
         } catch let error as VAError {
-            error.warning("Operation failed")
+            
+            error.cantOpen(url: url)
         }
     }
     

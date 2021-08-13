@@ -12,29 +12,17 @@ extension MyController {
     //
     // Snapshots
     //
-    
-    func load(snapshot: SnapshotProxy?) {
         
-        if snapshot == nil { return }
-        
-        amiga.suspend()
-        amiga.load(fromSnapshot: snapshot)
-        amiga.resume()
-    }
-        
-    func restoreSnapshot(item: Int) -> Bool {
+    func restoreSnapshot(item: Int) throws {
         
         if let snapshot = mydocument.snapshots.element(at: item) {
-            load(snapshot: snapshot)
-            return true
+            try amiga.loadSnapshot(snapshot)
         }
-        
-        return false
     }
-        
-    func restoreLatestSnapshot() -> Bool {
+    
+    func restoreLatestSnapshot() throws {
         
         let count = mydocument!.snapshots.count
-        return count > 0 ? restoreSnapshot(item: count - 1) : false
+        if count > 0 { try restoreSnapshot(item: count - 1) }
     }
 }

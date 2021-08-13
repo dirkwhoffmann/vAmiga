@@ -54,17 +54,31 @@ extension Proxy {
 
 extension AmigaProxy {
 
+    func isReady() throws {
+        
+        let exception = ExceptionWrapper()
+        isReady(exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
     func powerOn() throws {
         
-        var err = ErrorCode.OK
-        power(on: &err)
-        if err != .OK { throw VAError(err) }
+        let exception = ExceptionWrapper()
+        power(on: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
     }
 
     func run() throws {
         
         let exception = ExceptionWrapper()
         run(exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+    
+    func loadSnapshot(_ proxy: SnapshotProxy) throws {
+
+        let exception = ExceptionWrapper()
+        loadSnapshot(proxy, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 }

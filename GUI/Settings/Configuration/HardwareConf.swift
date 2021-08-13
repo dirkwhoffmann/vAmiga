@@ -90,15 +90,7 @@ extension ConfigurationController {
     
     @IBAction func hwChipRamAction(_ sender: NSPopUpButton!) {
 
-        let chipRamWanted = sender.selectedTag()
-        let chipRamLimit = amiga.agnus.chipRamLimit
-
-        if chipRamWanted > chipRamLimit {
-            parent.mydocument.showConfigurationAltert(.CHIP_RAM_LIMIT)
-        } else {
-            config.chipRam = sender.selectedTag()
-        }
-        
+        config.chipRam = sender.selectedTag()
         refresh()
     }
 

@@ -65,6 +65,7 @@ extension MyDocument {
                                                    amiga.df3 ])
     }
     
+    /*
     func showConfigurationAltert(_ error: ErrorCode) {
 
         var msg: String
@@ -90,6 +91,7 @@ extension MyDocument {
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }
+    */
 }
 
 extension MyController {

@@ -61,7 +61,8 @@ VAError::VAError(ErrorCode code, const string &s)
             break;
             
         case ERROR_CHIP_RAM_LIMIT:
-            description = "Agnus is not able to handle the installed amount of Chip RAM.";
+            description = "The selected Agnus revision is not able to address";
+            description += " the selected amount of Chip RAM.";
             break;
 
         case ERROR_AROS_RAM_LIMIT:

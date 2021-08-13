@@ -47,20 +47,21 @@ class VAError: Error {
     
     static func informational(_ msg1: String, _ msg2: String,
                               async: Bool = false, icon: String? = nil) {
-        
-        alert(msg1, msg2, style: .informational, async: async, icon: nil)
+        alert(msg1, msg2, style: .informational, async: async, icon: icon)
     }
     
     static func warning(_ msg1: String, _ msg2: String,
                         async: Bool = false, icon: String? = nil) {
-        
         alert(msg1, msg2, style: .warning, async: async, icon: icon)
     }
     
     static func critical(_ msg1: String, _ msg2: String,
                          async: Bool = false, icon: String? = nil) {
-        
         alert(msg1, msg2, style: .critical, async: async, icon: icon)
+    }
+
+    func informational(_ msg: String, async: Bool = false, icon: String? = nil) {
+        VAError.informational(msg, what, async: async, icon: icon)
     }
 
     func warning(_ msg: String, async: Bool = false, icon: String? = nil) {
@@ -69,5 +70,18 @@ class VAError: Error {
 
     func critical(_ msg: String, async: Bool = false, icon: String? = nil) {
         VAError.critical(msg, what, async: async, icon: icon)
+    }
+    
+    //
+    // Customized alerts
+    //
+    
+    func cantOpen(url: URL, async: Bool = false) {
+        warning("\"\(url.lastPathComponent)\" can't be opened.", async: async)
+    }
+    
+    func notReady(async: Bool = false) {
+        track("what = \(what)")
+        informational("Configuration error", async: async, icon: "pref_transparent")
     }
 }

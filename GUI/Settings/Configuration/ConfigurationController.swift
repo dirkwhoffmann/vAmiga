@@ -227,9 +227,9 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var vidPowerButton: NSButton!
 
     var bootable: Bool {
-        let off   = amiga.poweredOff
-        let ready = amiga.isReady()
-        return off && ready
+        
+        do { try amiga.isReady() } catch { return false }
+        return amiga.poweredOff
     }
     
     // The tab to open first

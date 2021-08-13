@@ -192,11 +192,10 @@
 @property (readonly) BOOL running;
 @property (readonly) BOOL paused;
 
-- (BOOL)isReady:(ErrorCode *)ec;
-- (BOOL)isReady;
-- (void)powerOn:(ErrorCode *)ec;
+- (void)isReady:(ExceptionWrapper *)ex;
+- (void)powerOn:(ExceptionWrapper *)ex;
 - (void)powerOff;
-- (void)run:(ExceptionWrapper *)exc;
+- (void)run:(ExceptionWrapper *)ex;
 - (void)pause;
 - (void)halt;
 
@@ -208,7 +207,7 @@
 - (void)requestUserSnapshot;
 @property (readonly) SnapshotProxy *latestAutoSnapshot;
 @property (readonly) SnapshotProxy *latestUserSnapshot;
-- (void) loadFromSnapshot:(SnapshotProxy *)proxy;
+- (void) loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex;
 
 - (NSInteger)getConfig:(Option)opt;
 - (NSInteger)getConfig:(Option)opt id:(NSInteger)id;
@@ -313,9 +312,9 @@
 @property (readonly) BOOL hasKickRom;
 - (void)deleteRom;
 - (BOOL)isRom:(NSURL *)url;
-- (void)loadRom:(RomFileProxy *)proxy exception:(ExceptionWrapper *)exc;
-- (void)loadRomFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)exc;
-- (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)exc;
+- (void)loadRom:(RomFileProxy *)proxy exception:(ExceptionWrapper *)ex;
+- (void)loadRomFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
+- (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 @property (readonly) u64 romFingerprint;
 @property (readonly) RomIdentifier romIdentifier;
 @property (readonly, copy) NSString *romTitle;
@@ -325,9 +324,9 @@
 - (BOOL)hasExt;
 - (void)deleteExt;
 - (BOOL)isExt:(NSURL *)url;
-- (void)loadExt:(ExtendedRomFileProxy *)proxy exception:(ExceptionWrapper *)exc;
-- (void)loadExtFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)exc;
-- (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)exc;
+- (void)loadExt:(ExtendedRomFileProxy *)proxy exception:(ExceptionWrapper *)ex;
+- (void)loadExtFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
+- (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 @property (readonly) u64 extFingerprint;
 @property (readonly) RomIdentifier extIdentifier;
 @property (readonly, copy) NSString *extTitle;
@@ -340,9 +339,9 @@
 - (void)saveWom:(NSURL *)url error:(ErrorCode *)ec;
 - (void)saveExt:(NSURL *)url error:(ErrorCode *)ec;
  */
-- (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)exc;
-- (void)saveWom:(NSURL *)url exception:(ExceptionWrapper *)exc;
-- (void)saveExt:(NSURL *)url exception:(ExceptionWrapper *)exc;
+- (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex;
+- (void)saveWom:(NSURL *)url exception:(ExceptionWrapper *)ex;
+- (void)saveExt:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
 - (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr;
 - (NSInteger)spypeek16:(Accessor)accessor addr:(NSInteger)addr;
@@ -660,19 +659,19 @@
 //
 
 @protocol MakeWithFile
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc;
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 @end
 
 @protocol MakeWithBuffer
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 @end
 
 @protocol MakeWithDrive
-+ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)exc;
++ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex;
 @end
 
 @protocol MakeWithFileSystem
-+ (instancetype)makeWithFileSystem:(FSDeviceProxy *)proxy exception:(ExceptionWrapper *)exc;
++ (instancetype)makeWithFileSystem:(FSDeviceProxy *)proxy exception:(ExceptionWrapper *)ex;
 @end
 
 //
@@ -785,10 +784,10 @@
 @interface ADFFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithDiameter:(DiskDiameter)type density:(DiskDensity)density;
-+ (instancetype)makeWithDrive:(DriveProxy *)drive exception:(ExceptionWrapper *)exc;
++ (instancetype)makeWithDrive:(DriveProxy *)drive exception:(ExceptionWrapper *)ex;
 
 - (void)formatDisk:(FSVolumeType)fs bootBlock:(NSInteger)bootBlockID;
 
@@ -802,8 +801,8 @@
 @interface HDFFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> {
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 
 @property (readonly) NSInteger numBlocks;
 
@@ -817,8 +816,8 @@
 @interface EXTFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer> {
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 
 @end
 
@@ -830,9 +829,9 @@
 @interface IMGFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc;
-+ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)exc;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex;
 
 @end
 
@@ -844,8 +843,8 @@
 @interface DMSFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer> {
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 
 @property (readonly) ADFFileProxy *adf;
 
@@ -859,8 +858,8 @@
 @interface EXEFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer> {
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 
 @property (readonly) ADFFileProxy *adf;
 
@@ -874,7 +873,7 @@
 @interface FolderProxy : DiskFileProxy <MakeWithFile> {
 }
 
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc;
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 
 @property (readonly) ADFFileProxy *adf;
 

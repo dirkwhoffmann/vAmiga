@@ -281,6 +281,5 @@ public:
      * and thread-safe version of this function. The first one can be unsed
      * inside the emulator thread or from outside if the emulator is halted.
      */
-    void loadFromSnapshotUnsafe(Snapshot *snapshot);
-    void loadFromSnapshotSafe(Snapshot *snapshot);
+    void loadFromSnapshot(const Snapshot &snapshot) throws;
 };

@@ -685,22 +685,25 @@ Amiga::latestUserSnapshot()
 }
 
 void
-Amiga::loadFromSnapshotUnsafe(Snapshot *snapshot)
+Amiga::loadFromSnapshot(const Snapshot &snapshot)
 {
-    u8 *ptr;
-    
-    if (snapshot && (ptr = snapshot->getData())) {
-        load(ptr);
-        msgQueue.put(MSG_SNAPSHOT_RESTORED);
+    // Check if this snapshot is compatible with the emulator
+    if (snapshot.isTooOld() || FORCE_SNAPSHOT_TOO_OLD) {
+        throw VAError(ERROR_SNP_TOO_OLD);
     }
-}
+    if (snapshot.isTooNew() || FORCE_SNAPSHOT_TOO_NEW) {
+        throw VAError(ERROR_SNP_TOO_NEW);
+    }
 
-void
-Amiga::loadFromSnapshotSafe(Snapshot *snapshot)
-{
-    trace(SNP_DEBUG, "loadFromSnapshotSafe\n");
+    suspended {
+        
+        // Restore the saved state
+        load(snapshot.getData());
+                
+        // Print some debug info if requested
+        if (SNP_DEBUG) dump();
+    }
     
-    suspend();
-    loadFromSnapshotUnsafe(snapshot);
-    resume();
+    // Inform the GUI
+    msgQueue.put(MSG_SNAPSHOT_RESTORED);
 }

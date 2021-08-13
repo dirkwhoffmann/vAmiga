@@ -381,19 +381,19 @@ Memory::_dump(dump::Category category, std::ostream& os) const
 void
 Memory::_isReady() const
 {
-    if (!hasRom()) {
+    if (!hasRom() || FORCE_ROM_MISSING) {
         throw VAError(ERROR_ROM_MISSING);
     }
-    if (!hasChipRam()) {
+    if (!hasChipRam() || FORCE_CHIP_RAM_MISSING) {
         throw VAError(ERROR_CHIP_RAM_MISSING);
     }
-    if (hasArosRom() && !hasExt()) {
+    if ((hasArosRom() && !hasExt()) || FORCE_AROS_NO_EXTROM) {
         throw VAError(ERROR_AROS_NO_EXTROM);
     }
-    if (hasArosRom() && ramSize() < MB(1)) {
+    if ((hasArosRom() && ramSize() < MB(1)) || FORCE_AROS_RAM_LIMIT) {
         throw VAError(ERROR_AROS_RAM_LIMIT);
     }
-    if (mem.chipRamSize() > KB(agnus.chipRamLimit())) {
+    if (mem.chipRamSize() > KB(agnus.chipRamLimit()) || FORCE_CHIP_RAM_LIMIT) {
         throw VAError(ERROR_CHIP_RAM_LIMIT);
     }
 }

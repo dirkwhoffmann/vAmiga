@@ -359,25 +359,25 @@ using namespace moira;
     return RomFile::isRomFile([url fileSystemRepresentation]);
 }
 
-- (void)loadRom:(RomFileProxy *)proxy exception:(ExceptionWrapper *)exc
+- (void)loadRom:(RomFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadRom((RomFile *)proxy->obj); }
-    catch (VAError &error) { [exc save:error]; }
+    catch (VAError &error) { [ex save:error]; }
 }
 
-- (void)loadRomFromBuffer:(NSData *)data exception:(ExceptionWrapper *)exc
+- (void)loadRomFromBuffer:(NSData *)data exception:(ExceptionWrapper *)ex
 {
     assert(data);
     const u8 *bytes = (const u8 *)[data bytes];
     
     try { return [self mem]->loadRom(bytes, [data length]); }
-    catch (VAError &error) { [exc save:error]; }
+    catch (VAError &error) { [ex save:error]; }
 }
 
-- (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)exc
+- (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadRom([url fileSystemRepresentation]); }
-    catch (VAError &error) { [exc save:error]; }
+    catch (VAError &error) { [ex save:error]; }
 }
 
 - (u64)romFingerprint
@@ -428,25 +428,25 @@ using namespace moira;
     [self mem]->loadExt((ExtendedRomFile *)proxy->obj);
 }
 
-- (void)loadExt:(ExtendedRomFileProxy *)proxy exception:(ExceptionWrapper *)exc
+- (void)loadExt:(ExtendedRomFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadExt((ExtendedRomFile *)proxy->obj); }
-    catch (VAError &error) { [exc save:error]; }
+    catch (VAError &error) { [ex save:error]; }
 }
 
-- (void)loadExtFromBuffer:(NSData *)data exception:(ExceptionWrapper *)exc
+- (void)loadExtFromBuffer:(NSData *)data exception:(ExceptionWrapper *)ex
 {
     assert(data);
     const u8 *bytes = (const u8 *)[data bytes];
     
     try { return [self mem]->loadExt(bytes, [data length]); }
-    catch (VAError &error) { [exc save:error]; }
+    catch (VAError &error) { [ex save:error]; }
 }
 
-- (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)exc
+- (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadExt([url fileSystemRepresentation]); }
-    catch (VAError &error) { [exc save:error]; }
+    catch (VAError &error) { [ex save:error]; }
 }
 
 - (u64)extFingerprint
@@ -482,22 +482,22 @@ using namespace moira;
     return [self mem]->getConfigItem(OPT_EXT_START);
 }
 
-- (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)exc
+- (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->saveRom([url fileSystemRepresentation]); }
-    catch (VAError &error) { [exc save:error]; }
+    catch (VAError &error) { [ex save:error]; }
 }
 
-- (void)saveWom:(NSURL *)url exception:(ExceptionWrapper *)exc
+- (void)saveWom:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->saveWom([url fileSystemRepresentation]); }
-    catch (VAError &error) { [exc save:error]; }
+    catch (VAError &error) { [ex save:error]; }
 }
 
-- (void)saveExt:(NSURL *)url exception:(ExceptionWrapper *)exc
+- (void)saveExt:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->saveExt([url fileSystemRepresentation]); }
-    catch (VAError &error) { [exc save:error]; }
+    catch (VAError &error) { [ex save:error]; }
 }
 
 - (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr
@@ -1435,10 +1435,10 @@ using namespace moira;
     [self file]->path = [path fileSystemRepresentation];
 }
 
-- (NSInteger)writeToFile:(NSString *)path exception:(ExceptionWrapper *)exc
+- (NSInteger)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self file]->writeToFile([path fileSystemRepresentation]); }
-    catch (VAError &error) { [exc save:error]; return 0; }
+    catch (VAError &error) { [ex save:error]; return 0; }
 }
 
 - (NSInteger)writeToFile:(NSString *)path error:(ErrorCode *)err
@@ -1472,10 +1472,10 @@ using namespace moira;
     return proxy;
 }
 
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <Snapshot> ([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
@@ -1484,10 +1484,10 @@ using namespace moira;
     return [self make:snapshot];
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <Snapshot> ((u8 *)buf, len)]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
@@ -1560,10 +1560,10 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <Script> ([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
@@ -1571,10 +1571,10 @@ using namespace moira;
     return [self make: AmigaFile::make <Script> ([path fileSystemRepresentation], err)];
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <Script> ((const u8 *)buf, len)]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
@@ -1603,10 +1603,10 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <RomFile> ([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
@@ -1614,10 +1614,10 @@ using namespace moira;
     return [self make: AmigaFile::make <RomFile> ([path fileSystemRepresentation], err)];
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <RomFile> ((const u8 *)buf, len)]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
@@ -1639,10 +1639,10 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <ExtendedRomFile> ([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
@@ -1650,10 +1650,10 @@ using namespace moira;
     return [self make: AmigaFile::make <ExtendedRomFile> ([path fileSystemRepresentation], err)];
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <ExtendedRomFile> ((const u8 *)buf, len)]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
@@ -1775,19 +1775,19 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <ADFFile> ([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <ADFFile> ((const u8 *)buf, len)]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     Drive *drive = [proxy drive];
     ADFFile *archive = ADFFile::makeWithDrive(drive);
@@ -1824,10 +1824,10 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <HDFFile> ([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec
@@ -1836,10 +1836,10 @@ using namespace moira;
     return [self make: archive];
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <HDFFile> ((const u8 *)buf, len)]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
@@ -1872,10 +1872,10 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <EXTFile> ([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec
@@ -1884,10 +1884,10 @@ using namespace moira;
     return [self make: archive];
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <EXTFile> ((const u8 *)buf, len)]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
@@ -1915,38 +1915,22 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <IMGFile> ([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-/*
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec
-{
-    IMGFile *archive = AmigaFile::make <IMGFile> ([path fileSystemRepresentation], ec);
-    return [self make: archive];
-}
-*/
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <IMGFile> ((const u8 *)buf, len)]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-/*
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
-{
-    IMGFile *archive = AmigaFile::make <IMGFile> ((const u8 *)buf, len, ec);
-    return [self make: archive];
-}
-*/
-
-+ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self make: IMGFile::makeWithDisk([proxy drive]->disk)]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 @end
@@ -1968,10 +1952,10 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <DMSFile> ([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
@@ -1980,10 +1964,10 @@ using namespace moira;
     return [self make: archive];
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <DMSFile> ((const u8 *)buf, len)]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
@@ -2016,10 +2000,10 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <EXEFile> ([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec
@@ -2028,10 +2012,10 @@ using namespace moira;
     return [self make: archive];
 }
 
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <EXEFile> ((const u8 *)buf, len)]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
@@ -2064,10 +2048,10 @@ using namespace moira;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)exc
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: Folder::makeWithFolder([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [exc save:error]; return nil; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec
@@ -2254,29 +2238,16 @@ using namespace moira;
     return [self amiga]->isPaused();
 }
 
-- (BOOL)isReady:(ErrorCode *)ec
+- (void)isReady:(ExceptionWrapper *)ex
 {
-    try {
-        *ec = ERROR_OK;
-        [self amiga]->isReady();
-        return true;
-    } catch (const VAError &exc) {
-        *ec = exc.data;
-        return false;
-    }
+    try { [self amiga]->isReady(); }
+    catch (VAError &error) { [ex save:error]; }
 }
 
-- (BOOL)isReady
+- (void)powerOn:(ExceptionWrapper *)ex
 {
-    ErrorCode ec;
-    return [self isReady:&ec];
-}
-
-- (void)powerOn:(ErrorCode *)ec
-{
-    *ec = ERROR_OK;
     try { [self amiga]->powerOn(); }
-    catch (VAError &error) { *ec = (ErrorCode)error.data; }
+    catch (VAError &error) { [ex save:error]; }
 }
 
 - (void)powerOff
@@ -2284,10 +2255,10 @@ using namespace moira;
     [self amiga]->powerOff();
 }
 
-- (void)run:(ExceptionWrapper *)exc
+- (void)run:(ExceptionWrapper *)ex
 {
     try { [self amiga]->run(); }
-    catch (VAError &error) { [exc save:error]; }
+    catch (VAError &error) { [ex save:error]; }
 }
 
 - (void)pause
@@ -2337,9 +2308,10 @@ using namespace moira;
     return [SnapshotProxy make:snapshot];
 }
 
-- (void)loadFromSnapshot:(SnapshotProxy *)proxy
+- (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    [self amiga]->loadFromSnapshotSafe([proxy snapshot]);
+    try { [self amiga]->loadFromSnapshot(*[proxy snapshot]); }
+    catch (VAError &error) { [ex save:error]; }
 }
 
 - (NSInteger)getConfig:(Option)opt

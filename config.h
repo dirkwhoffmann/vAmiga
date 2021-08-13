@@ -173,6 +173,19 @@ static const int KBD_DEBUG       = 0; // Keyboard
 static const int REC_DEBUG       = 0; // Screen recorder
 
 
+//
+// Forced error conditions
+//
+
+static const int FORCE_ROM_MISSING      = 0;
+static const int FORCE_CHIP_RAM_MISSING = 0;
+static const int FORCE_AROS_NO_EXTROM   = 0;
+static const int FORCE_AROS_RAM_LIMIT   = 0;
+static const int FORCE_CHIP_RAM_LIMIT   = 0;
+static const int FORCE_SNAPSHOT_TOO_OLD = 0;
+static const int FORCE_SNAPSHOT_TOO_NEW = 0;
+
+
 #ifdef RELEASEBUILD
 #define NDEBUG
 static const int releaseBuild = 1;

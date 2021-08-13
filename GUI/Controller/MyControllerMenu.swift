@@ -202,7 +202,9 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func restoreSnapshotAction(_ sender: Any!) {
         
-        if !restoreLatestSnapshot() {
+        do {
+            try restoreLatestSnapshot()
+        } catch {
             NSSound.beep()
         }
     }
@@ -331,17 +333,17 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func powerAction(_ sender: Any!) {
         
-        var error: ErrorCode = .OK
-
         if amiga.poweredOn {
             amiga.powerOff()
             return
         }
         
-        if amiga.isReady(&error) {
-            try? amiga.run()
-        } else {
-            mydocument.showConfigurationAltert(error)
+        do {
+            try amiga.run()
+        } catch let error as VAError {
+            error.notReady()
+        } catch {
+            fatalError()
         }
     }
     

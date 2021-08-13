@@ -86,7 +86,7 @@ public extension MetalView {
         guard
             let type = pasteBoard.availableType(from: acceptedTypes()),
             let document = parent.mydocument
-            else { return false }
+        else { return false }
         
         switch type {
             
@@ -113,12 +113,9 @@ public extension MetalView {
             
             if document.proceedWithUnexportedDisk() {
                 DispatchQueue.main.async {
-                    let snap = snapshot
-                    self.parent.load(snapshot: snap)
+                    try? self.parent.amiga.loadSnapshot(snapshot!)
                 }
                 return true
-            } else {
-                return false
             }
             
         case .compatibleFileURL:
@@ -131,21 +128,24 @@ public extension MetalView {
                     // Check drop zones
                     for i in 0...3 {
                         if parent.renderer.dropZone.isInside(sender, zone: i) {
-                            return document.mountAttachment(destination: parent.amiga.df(i))
+                            try document.mountAttachment(destination: parent.amiga.df(i))
+                            return true
                         }
                     }
 
-                    return document.mountAttachment()
+                    try document.mountAttachment()
+                    return true
                     
                 } catch {
-                    (error as? VAError)?.warning("Drag operation failed")
+                    (error as? VAError)?.cantOpen(url: url)
                 }
             }
-            return false
                         
         default:
-            return false
+            break
         }
+        
+        return false
     }
     
     override func concludeDragOperation(_ sender: NSDraggingInfo?) {
