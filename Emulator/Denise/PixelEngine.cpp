@@ -356,7 +356,7 @@ PixelEngine::applyRegisterChange(const RegChange &change)
         case 0:
             break;
 
-        case BPLCON0:
+        case 0x100: // BPLCON0
             hamMode = Denise::ham(change.value);
             break;
             

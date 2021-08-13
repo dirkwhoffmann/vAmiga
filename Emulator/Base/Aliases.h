@@ -11,7 +11,10 @@
 
 #include "Macros.h"
 
-// Cycles
+//
+// Type aliases
+//
+
 typedef i64 Cycle;            // Master cycle units
 typedef i64 CPUCycle;         // CPU cycle units
 typedef i64 CIACycle;         // CIA cycle units
@@ -34,7 +37,7 @@ typedef u32 Block;
 
 
 //
-// Converting units
+// Conversion macros
 //
 
 // Converts a certain unit to master cycles

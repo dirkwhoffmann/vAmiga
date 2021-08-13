@@ -17,7 +17,7 @@ CIA::peek(u16 addr)
 {
     u8 result;
 
-    trace(CIAREG_DEBUG, "Peek(%d [%s])\n", addr, ciaRegName(addr));
+    trace(CIAREG_DEBUG, "Peek(%d [%s])\n", addr, CIARegEnum::key(addr))
 
     wakeUp();
 
@@ -217,7 +217,7 @@ CIA::spypeek(u16 addr) const
 void
 CIA::poke(u16 addr, u8 value)
 {
-    trace(CIAREG_DEBUG, "Poke(%d [%s],$%X)\n", addr, ciaRegName(addr), value);
+    trace(CIAREG_DEBUG, "Poke(%d [%s],$%X)\n", addr, CIARegEnum::key(addr), value);
     
     wakeUp();
     

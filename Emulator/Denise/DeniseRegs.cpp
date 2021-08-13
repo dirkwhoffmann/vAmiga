@@ -88,7 +88,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     
     // Check if the HAM bit has changed
     if (ham(oldValue) ^ ham(newValue)) {
-        pixelEngine.colChanges.insert(pixel, RegChange { BPLCON0, newValue } );
+        pixelEngine.colChanges.insert(pixel, RegChange { 0x100, newValue } );
     }
     
     // Update value

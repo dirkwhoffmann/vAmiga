@@ -26,9 +26,70 @@
 
 
 //
+// Screen parameters
+//
+
+/* Beam positions
+ *
+ * Vertical coordinates are measured in scanlines.
+ * Horizontal coordinates are measured in DMA cycles.
+ */
+
+#define VPOS_MAX      312
+#define VPOS_CNT      313
+
+#define HPOS_MAX      226
+#define HPOS_CNT      227
+
+
+/* Screen buffer dimensions
+ *
+ * All values are measured in pixels. One DMA cycle corresponds to 4 pixels.
+ * Hence, HPIXELS equals 4 * HPOS_CNT. VPIXELS is one greater than VPOS_CNT,
+ * because of the misalignment offset applied to the screen buffer start
+ * address (see below).
+ */
+
+#define VPIXELS       314                    // VPOS_CNT + 1 line
+#define HPIXELS       910                    // 4 * HPOS_CNT + 2
+#define PIXELS        (VPIXELS * HPIXELS)
+#define LAST_PIXEL    909
+
+/* Blanking area
+ *
+ * To understand the horizontal position of the Amiga screen, it is important
+ * to note that the HBLANK area does *not* start at DMA cycle 0. According to
+ * "Amiga Intern", DMA cycle $0F (15) is the first and $35 (53) the last cycles
+ * inside the HBLANK area. However, these values seem to be wrong and I am
+ * using different values instead.
+ *
+ * As a result, the early DMA cycles do not appear on the left side of the
+ * screen, but on the right side in the previous scanline. To mimic this
+ * behaviour, a misalignment offset is added to the start address of the screen
+ * buffer before it is written into the GPU texture. The offset is chosen such
+ * that the HBLANK area starts at the first pixel of each line in the texture.
+ * As a side effect of adding this offset, constant VPIXELS needs to be greater
+ * than VPOS_CNT. Otherwise, we would access unallocated memory at the end of
+ * the last scanline.
+ */
+
+#define HBLANK_MIN    0x0A
+#define HBLANK_MAX    0x30
+#define HBLANK_CNT    0x27 // equals HBLANK_MAX - HBLANK_MIN + 1
+
+#define VBLANK_MIN    0x00
+#define VBLANK_MAX    0x19
+#define VBLANK_CNT    0x1A // equals VBLANK_MAX - VBLANK_MIN + 1
+
+// Returns a printable name for a custom register
+const char *regName(u32 addr);
+
+
+//
 // Custom registers
 //
 
+/*
 #define BLTDDAT  0x000L
 #define DMACONR  0x002L
 #define VPOSR    0x004L
@@ -266,6 +327,7 @@
 #define BPLHPTL  0x1EEL // AGA
 #define FMODE    0x1FCL // AGA
 #define NO_OP    0x1FEL
+ */
 
 // DMACON register bits
 #define BBUSY  0x4000
@@ -283,66 +345,3 @@
 #define AUD0EN 0x0001
 
 #define AUDEN  0x000F
-
-
-//
-// Screen parameters
-//
-
-/* Beam positions
- *
- * Vertical coordinates are measured in scanlines.
- * Horizontal coordinates are measured in DMA cycles.
- */
-
-#define VPOS_MAX      312
-#define VPOS_CNT      313
-
-#define HPOS_MAX      226
-#define HPOS_CNT      227
-
-
-/* Screen buffer dimensions
- *
- * All values are measured in pixels. One DMA cycle corresponds to 4 pixels.
- * Hence, HPIXELS equals 4 * HPOS_CNT. VPIXELS is one greater than VPOS_CNT,
- * because of the misalignment offset applied to the screen buffer start
- * address (see below).
- */
-
-#define VPIXELS       314                    // VPOS_CNT + 1 line
-#define HPIXELS       910                    // 4 * HPOS_CNT + 2
-#define PIXELS        (VPIXELS * HPIXELS)
-#define LAST_PIXEL    909
-
-/* Blanking area
- *
- * To understand the horizontal position of the Amiga screen, it is important
- * to note that the HBLANK area does *not* start at DMA cycle 0. According to
- * "Amiga Intern", DMA cycle $0F (15) is the first and $35 (53) the last cycles
- * inside the HBLANK area. However, these values seem to be wrong and I am
- * using different values instead.
- *
- * As a result, the early DMA cycles do not appear on the left side of the
- * screen, but on the right side in the previous scanline. To mimic this
- * behaviour, a misalignment offset is added to the start address of the screen
- * buffer before it is written into the GPU texture. The offset is chosen such
- * that the HBLANK area starts at the first pixel of each line in the texture.
- * As a side effect of adding this offset, constant VPIXELS needs to be greater
- * than VPOS_CNT. Otherwise, we would access unallocated memory at the end of
- * the last scanline.
- */
-
-#define HBLANK_MIN    0x0A
-#define HBLANK_MAX    0x30
-#define HBLANK_CNT    0x27 // equals HBLANK_MAX - HBLANK_MIN + 1
-
-#define VBLANK_MIN    0x00
-#define VBLANK_MAX    0x19
-#define VBLANK_CNT    0x1A // equals VBLANK_MAX - VBLANK_MIN + 1
-
-// Returns a printable name for a custom register
-const char *regName(u32 addr);
-
-// Returns a printable name for a CIA register
-const char *ciaRegName(u32 addr);
