@@ -16,21 +16,24 @@
 
 namespace util {
 
-string lowercased(const string& s)
+string
+lowercased(const string& s)
 {
     string result;
     for (auto c : s) { result += tolower(c); }
     return result;
 }
 
-string uppercased(const string& s)
+string
+uppercased(const string& s)
 {
     string result;
     for (auto c : s) { result += toupper(c); }
     return result;
 }
 
-string extractPath(const string &s)
+string
+extractPath(const string &s)
 {
     auto idx = s.rfind('/');
     auto pos = 0;
@@ -38,7 +41,8 @@ string extractPath(const string &s)
     return s.substr(pos, len);
 }
 
-string extractName(const string &s)
+string
+extractName(const string &s)
 {
     auto idx = s.rfind('/');
     auto pos = idx != string::npos ? idx + 1 : 0;
@@ -46,7 +50,8 @@ string extractName(const string &s)
     return s.substr(pos, len);
 }
 
-string extractSuffix(const string &s)
+string
+extractSuffix(const string &s)
 {
     auto idx = s.rfind('.');
     auto pos = idx != string::npos ? idx + 1 : 0;
@@ -54,7 +59,8 @@ string extractSuffix(const string &s)
     return s.substr(pos, len);
 }
 
-string stripPath(const string &s)
+string
+stripPath(const string &s)
 {
     auto idx = s.rfind('/');
     auto pos = idx != string::npos ? idx + 1 : 0;
@@ -62,7 +68,8 @@ string stripPath(const string &s)
     return s.substr(pos, len);
 }
 
-string stripName(const string &s)
+string
+stripName(const string &s)
 {
     auto idx = s.rfind('/');
     auto pos = 0;
@@ -70,7 +77,8 @@ string stripName(const string &s)
     return s.substr(pos, len);
 }
 
-string stripSuffix(const string &s)
+string
+stripSuffix(const string &s)
 {
     auto idx = s.rfind('.');
     auto pos = 0;
@@ -78,7 +86,8 @@ string stripSuffix(const string &s)
     return s.substr(pos, len);
 }
 
-string appendPath(const string &path, const string &path2)
+string
+appendPath(const string &path, const string &path2)
 {
     if (path.empty()) {
         return path2;
@@ -89,17 +98,20 @@ string appendPath(const string &path, const string &path2)
     return path + "/" + path2;
 }
 
-bool isAbsolutePath(const string &path)
+bool
+isAbsolutePath(const string &path)
 {
     return !path.empty() && path.front() == '/';
 }
 
-bool fileExists(const string &path)
+bool
+fileExists(const string &path)
 {
     return getSizeOfFile(path) >= 0;
 }
 
-bool isDirectory(const string &path)
+bool
+isDirectory(const string &path)
 {
     struct stat fileProperties;
     
@@ -109,7 +121,8 @@ bool isDirectory(const string &path)
     return S_ISDIR(fileProperties.st_mode);
 }
 
-isize numDirectoryItems(const string &path)
+isize
+numDirectoryItems(const string &path)
 {
     isize count = 0;
     
@@ -133,7 +146,8 @@ files(const string &path, const string &suffix)
     return files(path, suffixes);
 }
 
-std::vector<string> files(const string &path, std::vector <string> &suffixes)
+std::vector<string>
+files(const string &path, std::vector <string> &suffixes)
 {
     std::vector<string> result;
     
@@ -165,29 +179,32 @@ getSizeOfFile(const string &path)
     return (isize)fileProperties.st_size;
 }
 
-bool matchingStreamHeader(std::istream &stream, const u8 *header, isize len)
+bool
+matchingStreamHeader(std::istream &is, const u8 *header, isize len, isize offset)
 {
-    stream.seekg(0, std::ios::beg);
+    assert(header != nullptr);
+    
+    is.seekg(offset, std::ios::beg);
     
     for (isize i = 0; i < len; i++) {
-        int c = stream.get();
+        int c = is.get();
         if (c != (int)header[i]) {
-            stream.seekg(0, std::ios::beg);
+            is.seekg(0, std::ios::beg);
             return false;
         }
     }
-    stream.seekg(0, std::ios::beg);
+    is.seekg(0, std::ios::beg);
     return true;
 }
 
 bool
-matchingBufferHeader(const u8 *buffer, const u8 *header, isize len)
+matchingBufferHeader(const u8 *buffer, const u8 *header, isize len, isize offset)
 {
     assert(buffer != nullptr);
     assert(header != nullptr);
     
     for (isize i = 0; i < len; i++) {
-        if (header[i] != buffer[i])
+        if (buffer[offset + i] != header[i])
             return false;
     }
 
