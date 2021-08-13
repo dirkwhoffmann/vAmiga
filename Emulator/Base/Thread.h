@@ -84,17 +84,7 @@
  * closed. In debug mode, several time-consuming tasks are performed that are
  * usually left out. E.g., the CPU checks for breakpoints and records the
  * executed instruction in it's trace buffer.
- *
- * In many occasions, the thread needs to be paused temporarily (e.g., when the
- * GUI changes state). This can be done easily by embedding the code inside a
- * suspend / resume block like so:
- *
- *            suspend();
- *            do something with the internal state;
- *            resume();
- *
- *  It it safe to nest multiple suspend() / resume() blocks.
- */
+*/
 
 class Thread : public AmigaComponent, util::Wakeable {
     
@@ -125,7 +115,6 @@ class Thread : public AmigaComponent, util::Wakeable {
     
     // Counters
     isize loopCounter = 0;
-    isize suspendCounter = 0;
 
     // Synchronization variables
     util::Time delay = util::Time(1000000000 / 50);
@@ -206,9 +195,6 @@ public:
     void run(bool blocking = true) throws;
     void pause(bool blocking = true);
     void halt(bool blocking = true);
-
-    void suspend();
-    void resume();
     
     bool inWarpMode() const { return warpMode; }
     void warpOn(bool blocking = true);

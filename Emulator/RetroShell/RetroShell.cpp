@@ -416,60 +416,9 @@ RetroShell::describe(const std::exception &e)
 
     } else if (auto err = dynamic_cast<const VAError *>(&e)) {
 
-        describe(*err);
+        *this << err->what();
+        *this << '\n';
     }
-}
-
-void
-RetroShell::describe(const struct VAError &err)
-{
-    *this << err.what();
-    /*
-    switch ((ErrorCode)err.data) {
-            
-        case ERROR_OPT_UNSUPPORTED:
-            *this << "This option is not yet supported." << '\n';
-            return;
-            
-        case ERROR_OPT_INVARG:
-            *this << "Error: Invalid argument. Expected: " << err.description << '\n';
-            return;
-
-        case ERROR_OPT_LOCKED:
-            *this << "This option is locked because the Amiga is powered on" << '\n';
-            return;
-            
-        case ERROR_FILE_NOT_FOUND:
-            *this << err.description << ": File not found" << '\n';
-            return;
-            
-        case ERROR_ROM_MISSING:
-            *this << "No Boot or Kickstart Rom found" << '\n';
-            return;
-            
-        case ERROR_CHIP_RAM_MISSING:
-            *this << "No Chip Ram found" << '\n';
-            return;
-
-        case ERROR_AROS_NO_EXTROM:
-            *this << "The Aros Kickstart requires an extension Rom" << '\n';
-            return;
-
-        case ERROR_AROS_RAM_LIMIT:
-            *this << "Aros requires at least 1 MB of memory" << '\n';
-            return;
-
-        case ERROR_CHIP_RAM_LIMIT:
-            *this << "The selected Agnus can only handle ";
-            *this << agnus.chipRamLimit() << " MB of Chip Ram" << '\n';
-            return;
-            
-        default:
-            
-            *this << "Command failed with error code " << (isize)err.data;
-            *this << " (" << err.what() << ")" << '\n';
-    }
-    */
 }
 
 void

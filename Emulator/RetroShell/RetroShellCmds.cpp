@@ -70,6 +70,8 @@ template <> void
 RetroShell::exec <Token::amiga, Token::init> (Arguments &argv, long param)
 {
     auto scheme = util::parseEnum <ConfigSchemeEnum> (argv.front());
+
+    amiga.revertToFactorySettings();
     amiga.configure(scheme);
 }
 

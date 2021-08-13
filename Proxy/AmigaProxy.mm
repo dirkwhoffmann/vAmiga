@@ -2254,14 +2254,14 @@ using namespace moira;
     return [self amiga]->isPaused();
 }
 
-- (BOOL)isReady:(ErrorCode *)error
+- (BOOL)isReady:(ErrorCode *)ec
 {
     try {
-        *error = ERROR_OK;
+        *ec = ERROR_OK;
         [self amiga]->isReady();
         return true;
     } catch (const VAError &exc) {
-        *error = exc.data;
+        *ec = exc.data;
         return false;
     }
 }

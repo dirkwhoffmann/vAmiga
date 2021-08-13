@@ -82,8 +82,8 @@ public:
     virtual bool isPaused() const override;
     virtual bool isRunning() const override; 
 
-    void suspend();
-    void resume();
+    void suspend() override;
+    void resume() override;
     
     void prefix() const override;
 };

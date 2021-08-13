@@ -9,14 +9,22 @@
 
 #pragma once
 
-/* Object model
+/* Object model:
  *
- * ----------------   ------------------    ----------------   ----------------
- * | AmigaObject  |-->| AmigaComponent |--->|    Thread    |-->|    Amiga     |
- * ----------------   ------------------ |  ----------------   ----------------
- *                                       |  ----------------
- *                                       -->| SubComponent |
- *                                          ----------------
+ * ------------------
+ * |  AmigaObject   |
+ * ------------------
+ *         |
+ * ------------------
+ * | AmigaComponent |
+ * ------------------
+ *         |
+ *         |   ------------------   ---------------------   ----------------
+ *         |-->|     Thread     |-->| SuspendableThread |-->|    Amiga     |
+ *         |   ------------------   ---------------------   ----------------
+ *         |   ------------------
+ *         |-->|  SubComponent  |
+ *             ------------------
  *
  * AmigaObject is the base class for all Amiga related classes. It provides a
  * a textual description for the object as well as functions for printing
@@ -28,8 +36,10 @@
  * pausing. Furthermore, a 'synchronized' macro is provided to prevent mutual
  * execution of certain code components.
  *
- * Thread adds the ability to run the component asynchroneously. It is the base
- * class of the Amiga class which represents a complete virtal Amiga.
+ * Thread adds the ability to run the component asynchroneously. It implements
+ * the emulator's state model (off, paused, running). SuspendableThread extends
+ * the Thread class with the suspend/resume mechanism which can be utilized to
+ * pause the emulator temporarily.
  */
 
 #include "Error.h"

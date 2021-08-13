@@ -24,11 +24,8 @@
 #include "RetroShell.h"
 #include "RTC.h"
 #include "SerialPort.h"
-#include "Thread.h"
+#include "SuspendableThread.h"
 #include "ZorroManager.h"
-
-void threadTerminated(void *thisAmiga);
-void *threadMain(void *thisAmiga);
 
 /* A complete virtual Amiga. This class is the most prominent one of all. To
  * run the emulator, it is sufficient to create a single object of this type.
@@ -38,7 +35,7 @@ void *threadMain(void *thisAmiga);
  * query information from Paula, you need to invoke a public method on
  * amiga.paula.
  */
-class Amiga : public Thread {
+class Amiga : public SuspendableThread {
 
     /* Result of the latest inspection. In order to update the GUI inspector
      * panels, the emulator schedules events in the inspector slot (SLOT_INS in
@@ -55,6 +52,9 @@ class Amiga : public Thread {
     
 public:
     
+    // Communication channel to the GUI
+    MsgQueue msgQueue = MsgQueue(*this);
+
     // Core components
     CPU cpu = CPU(*this);
     CIAA ciaA = CIAA(*this);
@@ -81,13 +81,8 @@ public:
     // Shortcuts to all four drives
     Drive *df[4] = { &df0, &df1, &df2, &df3 };
     
-    // Command console
+    // Misc
     RetroShell retroShell = RetroShell(*this);
-    
-    // Communication channel to the GUI
-    MsgQueue msgQueue = MsgQueue(*this);
-
-    // Regression test manager
     RegressionTester regressionTester;
     
     
@@ -155,8 +150,11 @@ public:
     void _configure(Option option, i64 value) throws;
     void _configure(Option option, long id, i64 value) throws;
 
-    // Prepares the Amiga for regression testing
+    // Configures the Amiga with a predefined set of options
     void configure(ConfigScheme scheme);
+
+    // Reverts to factory settings
+    void revertToFactorySettings();
     
     
     //
@@ -177,22 +175,7 @@ private:
     void _inspect() override;
     void _dump(dump::Category category, std::ostream& os) const override;
     
-    
-    //
-    // Controlling
-    //
-    
-private:
-    
-    void _powerOn() override;
-    void _powerOff() override;
-    void _run() override;
-    void _pause() override;
-    void _halt() override;
-    void _warpOn() override;
-    void _warpOff() override;
-    
-    
+        
     //
     // Serializing
     //
@@ -220,38 +203,44 @@ private:
 
     
     //
-    // Methods from Thread class
+    // Controlling
     //
     
-    void execute() override;
+private:
     
-    
-    //
-    // Controlling the run loop
-    //
-    
-public:
-                    
-    /* Sets or clears a run loop control flag. The functions are thread-safe
-     * and can be called from inside or outside the emulator thread.
-     */
-    void setControlFlag(u32 flags);
-    void clearControlFlag(u32 flags);
-    
-    // Convenience wrappers for controlling the run loop
-    void signalStop() { setControlFlag(RL::STOP); }
-    void signalInspect() { setControlFlag(RL::INSPECT); }
-    void signalWarpOn() { setControlFlag(RL::WARP_ON); }
-    void signalWarpOff() { setControlFlag(RL::WARP_OFF); }
-    void signalAutoSnapshot() { setControlFlag(RL::AUTO_SNAPSHOT); }
-    void signalUserSnapshot() { setControlFlag(RL::USER_SNAPSHOT); }
+    void _powerOn() override;
+    void _powerOff() override;
+    void _run() override;
+    void _pause() override;
+    void _halt() override;
+    void _warpOn() override;
+    void _warpOff() override;
 
     
     //
     // Running the emulator
     //
     
+private:
+    
+    // Main execution method (from Thread class)
+    void execute() override;
+        
 public:
+                    
+    /* Sets or clears a flag for controlling the run loop. The functions are
+     * thread-safe and can be called safely from outside the emulator thread.
+     */
+    void setFlag(u32 flags);
+    void clearFlag(u32 flags);
+    
+    // Convenience wrappers
+    void signalStop() { setFlag(RL::STOP); }
+    void signalInspect() { setFlag(RL::INSPECT); }
+    void signalWarpOn() { setFlag(RL::WARP_ON); }
+    void signalWarpOff() { setFlag(RL::WARP_OFF); }
+    void signalAutoSnapshot() { setFlag(RL::AUTO_SNAPSHOT); }
+    void signalUserSnapshot() { setFlag(RL::USER_SNAPSHOT); }
     
     // Runs or pauses the emulator
     void stopAndGo();
@@ -284,14 +273,16 @@ public:
     void requestAutoSnapshot();
     void requestUserSnapshot();
      
-    // Returns the most recent snapshot or nullptr if none was taken
+    /* Returns the most recent snapshot or nullptr if none was taken. If a
+     * snapshot was taken, the function hands over the ownership to the caller
+     * and deletes the internal pointer.
+     */
     Snapshot *latestAutoSnapshot();
     Snapshot *latestUserSnapshot();
 
     /* Loads the current state from a snapshot file. There is an thread-unsafe
      * and thread-safe version of this function. The first one can be unsed
      * inside the emulator thread or from outside if the emulator is halted.
-     * The second one can be called any time.
      */
     void loadFromSnapshotUnsafe(Snapshot *snapshot);
     void loadFromSnapshotSafe(Snapshot *snapshot);

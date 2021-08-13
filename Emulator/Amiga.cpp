@@ -318,14 +318,9 @@ void
 Amiga::configure(ConfigScheme scheme)
 {
     assert_enum(ConfigScheme, scheme);
-    debug(CNF_DEBUG, "Using ConfigScheme %s", ConfigSchemeEnum::key(scheme));
-    
-    // Switch the Amiga off
-    powerOff();
 
-    // Revert to the initial state
-    initialize();
-    
+    suspend();
+        
     // Apply the selected scheme
     switch(scheme) {
             
@@ -345,7 +340,19 @@ Amiga::configure(ConfigScheme scheme)
             
         default:
             assert(false);
-    }    
+    }
+    
+    resume();
+}
+
+void
+Amiga::revertToFactorySettings()
+{
+    // Switch the emulator off
+    powerOff();
+
+    // Revert to the initial state
+    initialize();
 }
 
 EventID
@@ -511,7 +518,7 @@ Amiga::_warpOn()
 void
 Amiga::_warpOff()
 {
-    debug(RUN_DEBUG, "_powerOff\n");
+    debug(RUN_DEBUG, "_warpOff\n");
 
     msgQueue.put(MSG_WARP_OFF);
 }
@@ -531,26 +538,26 @@ Amiga::execute()
             
             // Are we requested to take a snapshot?
             if (flags & RL::AUTO_SNAPSHOT) {
-                clearControlFlag(RL::AUTO_SNAPSHOT);
+                clearFlag(RL::AUTO_SNAPSHOT);
                 autoSnapshot = Snapshot::makeWithAmiga(this);
                 msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
             }
             
             if (flags & RL::USER_SNAPSHOT) {
-                clearControlFlag(RL::USER_SNAPSHOT);
+                clearFlag(RL::USER_SNAPSHOT);
                 userSnapshot = Snapshot::makeWithAmiga(this);
                 msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
             }
 
             // Are we requested to update the debugger info structs?
             if (flags & RL::INSPECT) {
-                clearControlFlag(RL::INSPECT);
+                clearFlag(RL::INSPECT);
                 inspect();
             }
 
             // Did we reach a breakpoint?
             if (flags & RL::BREAKPOINT_REACHED) {
-                clearControlFlag(RL::BREAKPOINT_REACHED);
+                clearFlag(RL::BREAKPOINT_REACHED);
                 inspect();
                 msgQueue.put(MSG_BREAKPOINT_REACHED);
                 newState = EXEC_PAUSED;
@@ -559,7 +566,7 @@ Amiga::execute()
 
             // Did we reach a watchpoint?
             if (flags & RL::WATCHPOINT_REACHED) {
-                clearControlFlag(RL::WATCHPOINT_REACHED);
+                clearFlag(RL::WATCHPOINT_REACHED);
                 inspect();
                 msgQueue.put(MSG_WATCHPOINT_REACHED);
                 newState = EXEC_PAUSED;
@@ -568,25 +575,25 @@ Amiga::execute()
 
             // Are we requested to terminate the run loop?
             if (flags & RL::STOP) {
-                clearControlFlag(RL::STOP);
+                clearFlag(RL::STOP);
                 newState = EXEC_PAUSED;
                 break;
             }
 
             // Are we requested to enter or exit warp mode?
             if (flags & RL::WARP_ON) {
-                clearControlFlag(RL::WARP_ON);
+                clearFlag(RL::WARP_ON);
                 AmigaComponent::warpOn();
             }
 
             if (flags & RL::WARP_OFF) {
-                clearControlFlag(RL::WARP_OFF);
+                clearFlag(RL::WARP_OFF);
                 AmigaComponent::warpOff();
             }
             
             // Are we requested to synchronize the thread?
             if (flags & RL::SYNC_THREAD) {
-                clearControlFlag(RL::SYNC_THREAD);
+                clearFlag(RL::SYNC_THREAD);
                 break;
             }
         }
@@ -594,13 +601,13 @@ Amiga::execute()
 }
 
 void
-Amiga::setControlFlag(u32 flag)
+Amiga::setFlag(u32 flag)
 {
     synchronized { flags |= flag; }
 }
 
 void
-Amiga::clearControlFlag(u32 flag)
+Amiga::clearFlag(u32 flag)
 {
     synchronized { flags &= ~flag; }
 }

@@ -22,6 +22,9 @@ enum_long(ERROR_CODE)
     ERROR_OPT_INVARG,
     ERROR_OPT_LOCKED,
 
+    // Memory
+    ERROR_OUT_OF_MEMORY,
+
     // General
     ERROR_FILE_NOT_FOUND,
     ERROR_FILE_TYPE_MISMATCH,
@@ -30,13 +33,12 @@ enum_long(ERROR_CODE)
     ERROR_FILE_CANT_WRITE,
     ERROR_FILE_CANT_CREATE,
 
-    // Memory
-    ERROR_OUT_OF_MEMORY,
+    // Ram
     ERROR_CHIP_RAM_MISSING,
     ERROR_CHIP_RAM_LIMIT,
     ERROR_AROS_RAM_LIMIT,
 
-    // Roms
+    // Rom
     ERROR_ROM_MISSING,
     ERROR_AROS_NO_EXTROM,
     
@@ -107,9 +109,11 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_UNKNOWN:                     return "UNKNOWN";
                 
             case ERROR_OPT_UNSUPPORTED:             return "ERROR_OPT_UNSUPPORTED";
-            case ERROR_OPT_INVARG:             return "ERROR_OPT_INVARG";
+            case ERROR_OPT_INVARG:                  return "ERROR_OPT_INVARG";
             case ERROR_OPT_LOCKED:                  return "ERROR_OPT_LOCKED";
                 
+            case ERROR_OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
+
             case ERROR_FILE_NOT_FOUND:              return "FILE_NOT_FOUND";
             case ERROR_FILE_TYPE_MISMATCH:          return "FILE_TYPE_MISMATCH";
             case ERROR_FILE_TYPE_UNSUPPORTED:       return "FILE_TYPE_UNSUPPORTED";
@@ -117,7 +121,6 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_FILE_CANT_WRITE:             return "FILE_CANT_WRITE";
             case ERROR_FILE_CANT_CREATE:            return "FILE_CANT_CREATE";
 
-            case ERROR_OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
             case ERROR_CHIP_RAM_MISSING:            return "ERROR_CHIP_RAM_MISSING";
             case ERROR_CHIP_RAM_LIMIT:              return "CHIP_RAM_LIMIT";
             case ERROR_AROS_RAM_LIMIT:              return "AROS_RAM_LIMIT";

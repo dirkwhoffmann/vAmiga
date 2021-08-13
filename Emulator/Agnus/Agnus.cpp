@@ -1141,7 +1141,7 @@ Agnus::vsyncHandler()
     mem.updateStats();
     
     // Let the thread synchronize
-    amiga.setControlFlag(RL::SYNC_THREAD);
+    amiga.setFlag(RL::SYNC_THREAD);
 }
 
 //

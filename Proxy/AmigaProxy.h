@@ -45,17 +45,6 @@
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>
 
-@interface ExceptionWrapper : NSObject {
-    
-    ErrorCode errorCode;
-    NSString *what;
-}
-
-@property ErrorCode errorCode;
-@property NSString *what;
-
-@end
-
 //
 // Forward declarations
 //
@@ -93,6 +82,20 @@
 @class SerialPortProxy;
 @class SnapshotProxy;
 
+//
+// Exception wrapper
+//
+
+@interface ExceptionWrapper : NSObject {
+    
+    ErrorCode errorCode;
+    NSString *what;
+}
+
+@property ErrorCode errorCode;
+@property NSString *what;
+
+@end
 
 //
 // Base proxies
