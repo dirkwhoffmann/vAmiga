@@ -1320,9 +1320,10 @@ using namespace moira;
     return [self fs]->readByte((u32)block, offset);
 }
 
-- (ErrorCode)export:(NSString *)path
+- (void)export:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    return [self fs]->exportDirectory(string([path fileSystemRepresentation]));
+    try { return [self fs]->exportDirectory(string([path fileSystemRepresentation])); }
+    catch (VAError &error) { [ex save:error]; }
 }
 
 @end

@@ -173,17 +173,7 @@ extension AmigaFileProxy {
 }
 
 extension FSDeviceProxy {
-        
-    /*
-    func exportDirectory(url: URL) throws {
             
-        var err = ErrorCode.OK
-        if exportDirectory(url.path, error: &err) == false {
-            throw VAError(err)
-        }
-    }
-    */
-    
     static func make(withADF adf: ADFFileProxy) throws -> FSDeviceProxy {
         
         let exception = ExceptionWrapper()
@@ -191,6 +181,13 @@ extension FSDeviceProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
         
         return result!
+    }
+    
+    func export(url: URL) throws {
+            
+        let exception = ExceptionWrapper()
+        export(url.path, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
     }
 }
 

@@ -625,7 +625,7 @@
 - (void)printDirectory:(BOOL) recursive;
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
-- (ErrorCode)export:(NSString *)path;
+- (void)export:(NSString *)path exception:(ExceptionWrapper *)exc;
 
 @end
 

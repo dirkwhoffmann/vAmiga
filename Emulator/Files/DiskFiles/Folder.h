@@ -21,15 +21,24 @@ public:
     
     
     //
-    // Constructing
+    // Initializing
     //
     
     static Folder *make(const string &path) throws;
-
+    
+    using DiskFile::DiskFile;
+    Folder(const string &path) throws { init(path); }
+    
+private:
+    
+    void init(const string &path) throws;
+    
     
     //
     // Methods from AmigaObject
     //
+    
+public:
     
     const char *getDescription() const override { return "Folder"; }
         

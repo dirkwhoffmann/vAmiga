@@ -588,19 +588,14 @@ class ExporterDialog: DialogController {
         
         track("url = \(url)")
         
-        let error = volume!.export(url.path)
-
-        switch error {
-
-        case .FS_DIRECTORY_NOT_EMPTY:
-            
-            parent.critical("The destination directory is not empty.",
-                            "To prevent accidental exports, the disk exporter " +
-                            "refuses to work on non-empty folders.")
-            
-        default:
-
+        do {
+            try volume!.export(url: url)
             hideSheet()
+
+        } catch let error as VAError {
+            error.warning("Failed to export disk.")
+        } catch {
+            fatalError()
         }
     }
     

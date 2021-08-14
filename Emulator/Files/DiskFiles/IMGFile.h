@@ -23,10 +23,27 @@ public:
     static IMGFile *make(DiskDiameter t, DiskDensity d) throws;
     static IMGFile *make(class Disk &disk) throws;
 
+    //
+    // Initializing
+    //
+    
+public:
+    
+    using DiskFile::DiskFile;
+    IMGFile(DiskDiameter dia, DiskDensity den) throws { init(dia, den); }
+    IMGFile(class Disk &disk) throws { init(disk); }
+
+private:
+    
+    void init(DiskDiameter dia, DiskDensity den) throws;
+    void init(class Disk &disk) throws;
+
     
     //
     // Methods from AmigaObject
     //
+    
+public:
     
     const char *getDescription() const override { return "IMG"; }
     

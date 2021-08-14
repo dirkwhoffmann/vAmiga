@@ -48,14 +48,14 @@ private:
 public:
     
     using DiskFile::DiskFile;
-    ADFFile(DiskDiameter diameter, DiskDensity density) throws { init(diameter, density); }
+    ADFFile(DiskDiameter dia, DiskDensity den) throws { init(dia, den); }
     ADFFile(class Disk &disk) throws { init(disk); }
     ADFFile(class Drive &drive) throws { init(drive); }
     ADFFile(FSDevice &volume) throws { init(volume); }
 
 private:
     
-    void init(DiskDiameter diameter, DiskDensity density) throws;
+    void init(DiskDiameter dia, DiskDensity den) throws;
     void init(Disk &disk) throws;
     void init(Drive &drive) throws;
     void init(FSDevice &volume) throws;

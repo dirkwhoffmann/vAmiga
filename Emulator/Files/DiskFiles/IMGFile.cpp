@@ -30,34 +30,35 @@ IMGFile::isCompatibleStream(std::istream &stream)
 }
 
 IMGFile *
-IMGFile::make(DiskDiameter t, DiskDensity d)
+IMGFile::make(DiskDiameter dia, DiskDensity den)
 {
-    if (t == INCH_35 && d == DISK_DD) {
-
-        IMGFile *img = new IMGFile();
-        
-        img->size = 9 * 160 * 512;
-        img->data = new u8[img->size]();
-        
-        return img;
-    }
-
-    throw VAError(ERROR_DISK_INVALID_LAYOUT);
+    return new IMGFile(dia, den);
 }
 
 IMGFile *
 IMGFile::make(Disk &disk)
 {
+    return new IMGFile(disk);
+}
+
+void
+IMGFile::init(DiskDiameter dia, DiskDensity den)
+{
     // We only support 3.5"DD disks at the moment
-    if (disk.getDiameter() != INCH_35 || disk.getDensity() != DISK_DD) {
-        throw VAError(ERROR_UNKNOWN);
+    if (dia == INCH_35 && den == DISK_DD) {
+
+        size = 9 * 160 * 512;
+        data = new u8[size]();
     }
-    
-    IMGFile *img = make(INCH_35, DISK_DD);
-    try { img->decodeDisk(disk); }
-    catch (VAError &exception) { delete img; throw exception; }
-    
-    return img;
+
+    throw VAError(ERROR_DISK_INVALID_LAYOUT);
+}
+
+void
+IMGFile::init(Disk &disk)
+{
+    init(INCH_35, DISK_DD);
+    decodeDisk(disk);
 }
 
 isize

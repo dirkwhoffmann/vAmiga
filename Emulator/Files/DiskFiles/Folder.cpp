@@ -26,8 +26,12 @@ Folder::isFolder(const string &path)
 Folder *
 Folder::make(const string &path)
 {
-    Folder *folder = new Folder();
-    
+    return new Folder(path);
+}
+
+void
+Folder::init(const string &path)
+{    
     if (FS_DEBUG) msg("make(%s)\n", path.c_str());
               
     // Only proceed if the provided filename points to a directory
@@ -52,8 +56,6 @@ Folder::make(const string &path)
     // volume->dump();
     
     // Convert the file system into an ADF
-    folder->adf = ADFFile::make(*volume);
+    adf = new ADFFile(*volume);
     delete volume;
-        
-    return folder;
 }

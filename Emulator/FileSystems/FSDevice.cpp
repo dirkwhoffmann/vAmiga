@@ -18,118 +18,142 @@
 FSDevice *
 FSDevice::make(FSDeviceDescriptor &layout)
 {
-    FSDevice *dev = new FSDevice(layout.numBlocks);
-    
-    if (FS_DEBUG) { layout.dump(); }
-    
-    // Copy layout parameters from descriptor
-    dev->numCyls    = layout.numCyls;
-    dev->numHeads   = layout.numHeads;
-    dev->numSectors = layout.numSectors;
-    dev->bsize      = layout.bsize;
-    dev->numBlocks  = layout.numBlocks;
-        
-    // Create all partitions
-    for (auto& descriptor : layout.partitions) {
-        
-        FSPartition *p = FSPartition::make(*dev, descriptor);
-        dev->partitions.push_back(p);
-    }
-
-    // Compute checksums for all blocks
-    dev->updateChecksums();
-    
-    // Set the current directory to '/'
-    dev->cd = dev->partitions[0]->rootBlock;
-    
-    // Do some consistency checking
-    for (isize i = 0; i < dev->numBlocks; i++) assert(dev->blocks[i] != nullptr);
-    
-    if (FS_DEBUG) {
-        dev->info();
-        dev->dump();
-    }
-    
-    return dev;
+    return new FSDevice(layout);
 }
-
+ 
 FSDevice *
-FSDevice::make(DiskDiameter type, DiskDensity density)
+FSDevice::make(DiskDiameter dia, DiskDensity den)
 {
-    FSDeviceDescriptor layout = FSDeviceDescriptor(type, density);
-    return make(layout);
+    return new FSDevice(dia, den);
 }
 
 FSDevice *
 FSDevice::make(ADFFile &adf)
 {
-    // Get a device descriptor for the ADF
-    FSDeviceDescriptor descriptor = adf.layout();
-        
-    // Create the device
-    FSDevice *volume = make(descriptor);
-
-    // Import file system from ADF
-    volume->importVolume(adf.data, adf.size);
-    return volume;
+    return new FSDevice(adf);
 }
 
 FSDevice *
 FSDevice::make(HDFFile &hdf)
 {
-    // Get a device descriptor for the ADF
-    FSDeviceDescriptor descriptor = hdf.layout();
-
-    // Create the device
-    FSDevice *volume = make(descriptor);
-
-    volume->info();
-    
-    // Import file system from HDF
-    /*
-    volume->importVolume(adf.data, adf.size);
-    */
-    
-    return volume;
+    return new FSDevice(hdf);
 }
 
 FSDevice *
-FSDevice::make(DiskDiameter type, DiskDensity density, const string &path)
+FSDevice::make(DiskDiameter dia, DiskDensity den, const string &path)
 {
-    FSDevice *device = make(type, density);
-    
-    if (device) {
-        
-        // Try to import directory
-        if (!device->importDirectory(path)) { delete device; return nullptr; }
-
-        // Assign device name
-        device->setName(FSName("Directory")); // TODO: Use last path component
-
-        // Change to the root directory
-        device->changeDir("/");
-    }
-
-    return device;
+    return new FSDevice(dia, den);
 }
 
 FSDevice *
 FSDevice::make(FSVolumeType type, const string &path)
 {
-    // Try to fit the directory into files system with DD disk capacity
-    if (FSDevice *device = make(INCH_35, DISK_DD, path)) return device;
-
-    // Try to fit the directory into files system with HD disk capacity
-    if (FSDevice *device = make(INCH_35, DISK_HD, path)) return device;
-
-    return nullptr;
+    return new FSDevice(type, path);
 }
- 
-FSDevice::FSDevice(isize capacity)
+
+void
+FSDevice::init(isize capacity)
 {
-    // Initialize the block storage
+    assert(blocks.empty());
+    
     blocks.reserve(capacity);
     blocks.assign(capacity, 0);
+}
+
+void
+FSDevice::init(FSDeviceDescriptor &layout)
+{
+    init(layout.numBlocks);
+    
+    if (FS_DEBUG) { layout.dump(); }
+    
+    // Copy layout parameters from descriptor
+    numCyls    = layout.numCyls;
+    numHeads   = layout.numHeads;
+    numSectors = layout.numSectors;
+    bsize      = layout.bsize;
+    numBlocks  = layout.numBlocks;
+        
+    // Create all partitions
+    for (auto& descriptor : layout.partitions) {
+        
+        FSPartition *p = FSPartition::make(*this, descriptor);
+        partitions.push_back(p);
+    }
+
+    // Compute checksums for all blocks
+    updateChecksums();
+    
+    // Set the current directory to '/'
+    cd = partitions[0]->rootBlock;
+    
+    // Do some consistency checking
+    for (isize i = 0; i < numBlocks; i++) assert(blocks[i] != nullptr);
+    
+    // Print some debug information
+    if (FS_DEBUG) { info(); dump(); }
+}
+
+void
+FSDevice::init(DiskDiameter dia, DiskDensity den)
+{
+    // Get a device descriptor
+    auto descriptor = FSDeviceDescriptor(dia, den);
+    
+    // Create the device
+    init(descriptor);
+}
+
+void
+FSDevice::init(ADFFile &adf)
+{
+    // Get a device descriptor for the ADF
+    FSDeviceDescriptor descriptor = adf.layout();
+        
+    // Create the device
+    init(descriptor);
+
+    // Import file system from ADF
+    importVolume(adf.data, adf.size);
+}
+
+void
+FSDevice::init(HDFFile &hdf)
+{
+    // Get a device descriptor for the HDF
+    FSDeviceDescriptor descriptor = hdf.layout();
+
+    // Create the device
+    init(descriptor);
+
+    // Import file system from HDF
+    info();
+    // importVolume(adf.data, adf.size);
+}
+
+void
+FSDevice::init(DiskDiameter dia, DiskDensity den, const string &path)
+{
+    init(dia, den);
+    
+    // Try to import directory
+    importDirectory(path);
+    
+    // Assign device name
+    setName(FSName("Directory")); // TODO: Use last path component
+    
+    // Change to the root directory
+    changeDir("/");
+}
+
+void
+FSDevice::init(FSVolumeType type, const string &path)
+{
+    // Try to fit the directory into files system with DD disk capacity
+    try { init(INCH_35, DISK_DD, path); } catch (...) { };
+
+    // Try to fit the directory into files system with HD disk capacity
+    init(INCH_35, DISK_HD, path);
 }
 
 FSDevice::~FSDevice()
@@ -850,27 +874,22 @@ FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *
     return true;
 }
 
-bool
+void
 FSDevice::importDirectory(const string &path, bool recursive)
 {
-    if (DIR *dir = opendir(path.c_str())) {
-        
-        bool result = importDirectory(path, dir, recursive);
-        closedir(dir);
-        return result;
-    }
-
-    warn("Error opening directory %s\n", path.c_str());
-    return false;
+    DIR *dir = opendir(path.c_str());
+    if (dir == nullptr) throw VAError(ERROR_FILE_CANT_READ);
+    
+    importDirectory(path, dir, recursive);
+    closedir(dir);
 }
 
-bool
+void
 FSDevice::importDirectory(const string &path, DIR *dir, bool recursive)
 {
     assert(dir);
     
     struct dirent *item;
-    bool result = true;
     
     while ((item = readdir(dir))) {
 
@@ -891,10 +910,9 @@ FSDevice::importDirectory(const string &path, DIR *dir, bool recursive)
         if (item->d_type == DT_DIR) {
             
             // Add directory
-            result &= makeDir(item->d_name) != nullptr;
-            if (recursive && result) {
+            if(makeDir(item->d_name) && recursive) {
                 changeDir(item->d_name);
-                result &= importDirectory(name, recursive);
+                importDirectory(name, recursive);
             }
             
         } else {
@@ -902,22 +920,19 @@ FSDevice::importDirectory(const string &path, DIR *dir, bool recursive)
             // Add file
             u8 *buffer; isize size;
             if (util::loadFile(string(name), &buffer, &size)) {
-                FSBlock *file = makeFile(item->d_name, buffer, size);
-                result &= file != nullptr;
+                makeFile(item->d_name, buffer, size);
                 delete(buffer);
             }
         }        
     }
-
-    return result;
 }
 
-ErrorCode
+void
 FSDevice::exportDirectory(const string &path)
 {
     // Only proceed if path points to an empty directory
     long numItems = util::numDirectoryItems(path);
-    if (numItems != 0) return ERROR_FS_DIRECTORY_NOT_EMPTY;
+    if (numItems != 0) throw VAError(ERROR_FS_DIRECTORY_NOT_EMPTY);
     
     // Collect files and directories
     std::vector<Block> items;
@@ -926,11 +941,9 @@ FSDevice::exportDirectory(const string &path)
     // Export all items
     for (auto const& i : items) {
         if (ErrorCode error = blockPtr(i)->exportBlock(path.c_str()); error != ERROR_OK) {
-            msg("Export error: %lld\n", error);
-            return error; 
+            throw VAError(error);
         }
     }
     
     msg("Exported %zu items", items.size());
-    return ERROR_OK;
 }

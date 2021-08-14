@@ -80,17 +80,10 @@ protected:
     
 public:
 
-    // Creates a file system with a custom device descriptor
     static FSDevice *make(FSDeviceDescriptor &layout);
-
-    // Creates a file system for a standard floppy disk
     static FSDevice *make(DiskDiameter type, DiskDensity density);
-
-    // Creates a file system from an ADF or HDF
     static FSDevice *make(class ADFFile &adf) throws;
     static FSDevice *make(class HDFFile &hdf) throws;
-    
-    // Creates a file system with the contents of a host file system directory
     static FSDevice *make(DiskDiameter type, DiskDensity density, const string &path);
     static FSDevice *make(FSVolumeType type, const string &path);
     
@@ -101,11 +94,34 @@ public:
     
 public:
 
-    FSDevice(isize capacity);
+    FSDevice(isize capacity) { init(capacity); }
+    FSDevice(FSDeviceDescriptor &layout) { init(layout); }
+    FSDevice(DiskDiameter type, DiskDensity density) { init(density); }
+    FSDevice(class ADFFile &adf) throws { init(adf); }
+    FSDevice(class HDFFile &hdf) throws { init(hdf); }
+    FSDevice(DiskDiameter dia, DiskDensity den, const string &path) { init(dia, den, path); }
+    FSDevice(FSVolumeType type, const string &path) { init(type, path); }
     ~FSDevice();
     
     const char *getDescription() const override { return "FSVolume"; }
         
+private:
+    
+    void init(isize capacity);
+    void init(FSDeviceDescriptor &layout);
+    void init(DiskDiameter type, DiskDensity density);
+    void init(class ADFFile &adf) throws;
+    void init(class HDFFile &hdf) throws;
+    void init(DiskDiameter type, DiskDensity density, const string &path);
+    void init(FSVolumeType type, const string &path);
+
+
+    //
+    // Analyzing
+    //
+    
+public:
+    
     // Prints information about this volume
     void info();
     
@@ -329,11 +345,10 @@ public:
 
     // Imports the volume from a buffer compatible with the ADF format
     void importVolume(const u8 *src, isize size) throws;
-    // bool importVolume(const u8 *src, isize size, ErrorCode *error);
 
     // Imports a directory from the host file system
-    bool importDirectory(const string &path, bool recursive = true);
-    bool importDirectory(const string &path, DIR *dir, bool recursive = true);
+    void importDirectory(const string &path, bool recursive = true) throws;
+    void importDirectory(const string &path, DIR *dir, bool recursive = true) throws;
 
     // Exports the volume to a buffer compatible with the ADF format
     bool exportVolume(u8 *dst, isize size);
@@ -346,5 +361,5 @@ public:
     bool exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *error);
 
     // Exports the volume to a directory of the host file system
-    ErrorCode exportDirectory(const string &path);
+    void exportDirectory(const string &path) throws;
 };
