@@ -52,9 +52,6 @@ class Amiga : public SuspendableThread {
     
 public:
     
-    // Communication channel to the GUI
-    MsgQueue msgQueue = MsgQueue(*this);
-
     // Core components
     CPU cpu = CPU(*this);
     CIAA ciaA = CIAA(*this);
@@ -83,7 +80,8 @@ public:
     
     // Misc
     RetroShell retroShell = RetroShell(*this);
-    RegressionTester regressionTester;
+    RegressionTester regressionTester = RegressionTester(*this);
+    MsgQueue msgQueue = MsgQueue(*this);
     
     
     //

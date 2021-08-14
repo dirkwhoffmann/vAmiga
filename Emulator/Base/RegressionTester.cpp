@@ -15,13 +15,13 @@
 #include <fstream>
 
 void
-RegressionTester::dumpTexture(Amiga &amiga) const
+RegressionTester::dumpTexture(Amiga &amiga)
 {
     dumpTexture(amiga, dumpTexturePath);
 }
 
 void
-RegressionTester::dumpTexture(Amiga &amiga, const string &filename) const
+RegressionTester::dumpTexture(Amiga &amiga, const string &filename)
 {
     /* This function is used for automatic regression testing. It generates a
      * TIFF image of the current emulator texture in the /tmp directory and
@@ -48,26 +48,30 @@ RegressionTester::dumpTexture(Amiga &amiga, const string &filename) const
     cmd += " -l " + std::to_string(y2 - y1);
     cmd += " " + rawFile + " " + tiffFile;
     
-    // msg("Executing %s\n", cmd.c_str());
-    system(cmd.c_str());
+    if (system(cmd.c_str()) == -1) {
+        warn("Error executing %s\n", cmd.c_str());
+    }
     
     // Exit the emulator
     exit(retValue);
 }
 
 void
-RegressionTester::dumpTexture(Amiga &amiga, std::ostream& os) const
+RegressionTester::dumpTexture(Amiga &amiga, std::ostream& os)
 {
-    auto buffer = amiga.denise.pixelEngine.getStableBuffer();
-    
-    for (isize y = y1; y < y2; y++) {
-
-        for (isize x = x1; x < x2; x++) {
+    suspended {
+        
+        auto buffer = amiga.denise.pixelEngine.getStableBuffer();
+        
+        for (isize y = y1; y < y2; y++) {
             
-            char *cptr = (char *)(buffer.data + y * HPIXELS + x);
-            os.write(cptr + 0, 1);
-            os.write(cptr + 1, 1);
-            os.write(cptr + 2, 1);
+            for (isize x = x1; x < x2; x++) {
+                
+                char *cptr = (char *)(buffer.data + y * HPIXELS + x);
+                os.write(cptr + 0, 1);
+                os.write(cptr + 1, 1);
+                os.write(cptr + 2, 1);
+            }
         }
     }
 }

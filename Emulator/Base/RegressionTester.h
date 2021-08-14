@@ -9,10 +9,10 @@
 
 #pragma once
 
-#include "AmigaObject.h"
+#include "SubComponent.h"
 #include "Constants.h"
 
-class RegressionTester : public AmigaObject {
+class RegressionTester : public SubComponent {
 
 public:
         
@@ -32,12 +32,26 @@ private:
 
     
     //
-    // Methods from AmigaObject
+    // Constructing
     //
+    
+public:
+    
+    using SubComponent::SubComponent;
+    const char *getDescription() const override { return "RegressionTester"; }
     
 private:
     
-    const char *getDescription() const override { return "RegressionTester"; }
+    void _reset(bool hard) override { };
+    
+    
+    //
+    // Serializing
+    //
+    
+    isize _size() override { return 0; }
+    isize _load(const u8 *buffer) override { return 0; }
+    isize _save(u8 *buffer) override { return 0; }
     
     
     //
@@ -47,9 +61,9 @@ private:
 public:
     
     // Creates the test image and exits the emulator
-    void dumpTexture(class Amiga &amiga) const;
-    void dumpTexture(class Amiga &amiga, const string &filename) const;
-    void dumpTexture(class Amiga &amiga, std::ostream& os) const;
+    void dumpTexture(class Amiga &amiga);
+    void dumpTexture(class Amiga &amiga, const string &filename);
+    void dumpTexture(class Amiga &amiga, std::ostream& os);
 
     
     //

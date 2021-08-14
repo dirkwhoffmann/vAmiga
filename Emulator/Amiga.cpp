@@ -61,6 +61,8 @@ Amiga::Amiga()
         &ciaB,
         &mem,
         &cpu,
+        &retroShell,
+        &regressionTester,
         &msgQueue
     };
 
