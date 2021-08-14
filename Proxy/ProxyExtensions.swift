@@ -183,6 +183,15 @@ extension FSDeviceProxy {
         }
     }
     */
+    
+    static func make(withADF adf: ADFFileProxy) throws -> FSDeviceProxy {
+        
+        let exception = ExceptionWrapper()
+        let result = FSDeviceProxy.make(withADF: adf, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+        
+        return result!
+    }
 }
 
 //

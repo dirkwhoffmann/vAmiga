@@ -35,7 +35,7 @@ Disk::~Disk()
 }
 
 Disk *
-Disk::makeWithFile(DiskFile *file)
+Disk::make(DiskFile *file)
 {
     // TODO: Return a unique_ptr 
     Disk *disk = new Disk(file->getDiskDiameter(), file->getDiskDensity());
@@ -54,7 +54,7 @@ Disk::makeWithFile(DiskFile *file)
 }
 
 Disk *
-Disk::makeWithReader(util::SerReader &reader, DiskDiameter type, DiskDensity density)
+Disk::make(util::SerReader &reader, DiskDiameter type, DiskDensity density)
 {
     Disk *disk = new Disk(type, density);
     disk->applyToPersistentItems(reader);

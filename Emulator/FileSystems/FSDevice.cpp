@@ -61,32 +61,24 @@ FSDevice::makeWithFormat(DiskDiameter type, DiskDensity density)
 }
 
 FSDevice *
-FSDevice::makeWithADF(ADFFile *adf, ErrorCode *error)
+FSDevice::makeWithADF(ADFFile &adf)
 {
-    assert(adf != nullptr);
-
     // Get a device descriptor for the ADF
-    FSDeviceDescriptor descriptor = adf->layout();
+    FSDeviceDescriptor descriptor = adf.layout();
         
     // Create the device
     FSDevice *volume = makeWithFormat(descriptor);
 
     // Import file system from ADF
-    if (!volume->importVolume(adf->data, adf->size, error)) {
-        delete volume;
-        return nullptr;
-    }
-    
+    volume->importVolume(adf.data, adf.size);
     return volume;
 }
 
 FSDevice *
-FSDevice::makeWithHDF(HDFFile *hdf, ErrorCode *error)
+FSDevice::makeWithHDF(HDFFile &hdf)
 {
-    assert(hdf != nullptr);
-
     // Get a device descriptor for the ADF
-    FSDeviceDescriptor descriptor = hdf->layout();
+    FSDeviceDescriptor descriptor = hdf.layout();
 
     // Create the device
     FSDevice *volume = makeWithFormat(descriptor);
@@ -95,10 +87,7 @@ FSDevice::makeWithHDF(HDFFile *hdf, ErrorCode *error)
     
     // Import file system from HDF
     /*
-    if (!volume->importVolume(hdf->getData(), hdf->getSize(), error)) {
-        delete volume;
-        return nullptr;
-    }
+    volume->importVolume(adf.data, adf.size);
     */
     
     return volume;
@@ -740,39 +729,22 @@ FSDevice::predictBlockType(Block nr, const u8 *buffer)
     return FS_UNKNOWN_BLOCK;
 }
 
-bool
+void
 FSDevice::importVolume(const u8 *src, isize size)
-{
-    ErrorCode error;
-    bool result = importVolume(src, size, &error);
-    
-    assert(result == (error == ERROR_OK));
-    return result;
-}
-
-bool
-FSDevice::importVolume(const u8 *src, isize size, ErrorCode *err)
 {
     assert(src != nullptr);
 
     debug(FS_DEBUG, "Importing file system...\n");
 
     // Only proceed if the (predicted) block size matches
-    if (size % bsize != 0) {
-        if (err) *err = ERROR_FS_WRONG_BSIZE;
-        return false;
-    }
+    if (size % bsize != 0) throw VAError(ERROR_FS_WRONG_BSIZE);
+
     // Only proceed if the source buffer contains the right amount of data
-    if (numBlocks * bsize != size) {
-        if (err) *err = ERROR_FS_WRONG_CAPACITY;
-        return false;
-    }
+    if (numBlocks * bsize != size) throw VAError(ERROR_FS_WRONG_CAPACITY);
+
     // Only proceed if all partitions contain a valid file system
     for (auto &it : partitions) {
-        if (it->dos == FS_NODOS) {
-            if (err) *err = ERROR_FS_UNSUPPORTED;
-            return false;
-        }
+        if (it->dos == FS_NODOS) throw VAError(ERROR_FS_UNSUPPORTED);
     }
         
     // Import all blocks
@@ -788,7 +760,6 @@ FSDevice::importVolume(const u8 *src, isize size, ErrorCode *err)
         
         // Create new block
         FSBlock *newBlock = FSBlock::makeWithType(p, (Block)i, type);
-        if (newBlock == nullptr) return false;
 
         // Import block data
         newBlock->importBlock(data, bsize);
@@ -799,13 +770,12 @@ FSDevice::importVolume(const u8 *src, isize size, ErrorCode *err)
         blocks[i] = newBlock;
     }
     
-    if (err) *err = ERROR_OK;
+    // Print some debug information
     debug(FS_DEBUG, "Success\n");
-    info();
-    dump();
-    util::hexdump(blocks[0]->data, 512);
+    // info();
+    // dump();
+    // util::hexdump(blocks[0]->data, 512);
     printDirectory(true);
-    return true;
 }
 
 bool

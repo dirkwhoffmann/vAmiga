@@ -619,7 +619,7 @@ Amiga::_powerOn()
 #ifdef DF0_DISK
     DiskFile *df0file = AmigaFile::make <ADFFile> (DF0_DISK);
     if (df0file) {
-        Disk *disk = Disk::makeWithFile(df0file);
+        Disk *disk = Disk::make(df0file);
         df0.ejectDisk();
         df0.insertDisk(disk);
         df0.setWriteProtection(false);
@@ -627,9 +627,9 @@ Amiga::_powerOn()
 #endif
     
 #ifdef DF1_DISK
-    DiskFile *df1file = DiskFile::makeWithFile(DF1_DISK);
+    DiskFile *df1file = DiskFile::make(DF1_DISK);
     if (df1file) {
-        Disk *disk = Disk::makeWithFile(df1file);
+        Disk *disk = Disk::make(df1file);
         df1.ejectDisk();
         df1.insertDisk(disk);
         df1.setWriteProtection(false);
@@ -713,13 +713,13 @@ Amiga::execute()
             // Are we requested to take a snapshot?
             if (flags & RL::AUTO_SNAPSHOT) {
                 clearFlag(RL::AUTO_SNAPSHOT);
-                autoSnapshot = Snapshot::makeWithAmiga(this);
+                autoSnapshot = Snapshot::make(this);
                 msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
             }
             
             if (flags & RL::USER_SNAPSHOT) {
                 clearFlag(RL::USER_SNAPSHOT);
-                userSnapshot = Snapshot::makeWithAmiga(this);
+                userSnapshot = Snapshot::make(this);
                 msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
             }
 
@@ -816,7 +816,7 @@ Amiga::requestAutoSnapshot()
     if (!isRunning()) {
 
         // Take snapshot immediately
-        autoSnapshot = Snapshot::makeWithAmiga(this);
+        autoSnapshot = Snapshot::make(this);
         msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
         
     } else {
@@ -832,7 +832,7 @@ Amiga::requestUserSnapshot()
     if (!isRunning()) {
         
         // Take snapshot immediately
-        userSnapshot = Snapshot::makeWithAmiga(this);
+        userSnapshot = Snapshot::make(this);
         msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
         
     } else {

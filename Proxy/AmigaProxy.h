@@ -603,8 +603,8 @@
 
 @interface FSDeviceProxy : Proxy { }
 
-+ (instancetype)makeWithADF:(ADFFileProxy *)adf;
-+ (instancetype)makeWithHDF:(HDFFileProxy *)hdf;
++ (instancetype)makeWithADF:(ADFFileProxy *)adf exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithHDF:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
 
 @property (readonly) FSVolumeType dos;
 @property (readonly) NSInteger numCyls;

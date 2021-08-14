@@ -87,8 +87,8 @@ public:
     static FSDevice *makeWithFormat(DiskDiameter type, DiskDensity density);
 
     // Creates a file system from an ADF or HDF
-    static FSDevice *makeWithADF(class ADFFile *adf, ErrorCode *error);
-    static FSDevice *makeWithHDF(class HDFFile *hdf, ErrorCode *error);
+    static FSDevice *makeWithADF(class ADFFile &adf) throws;
+    static FSDevice *makeWithHDF(class HDFFile &hdf) throws;
     
     // Creates a file system with the contents of a host file system directory
     static FSDevice *make(DiskDiameter type, DiskDensity density, const string &path);
@@ -328,8 +328,8 @@ public:
     FSBlockType predictBlockType(Block nr, const u8 *buffer);
 
     // Imports the volume from a buffer compatible with the ADF format
-    bool importVolume(const u8 *src, isize size);
-    bool importVolume(const u8 *src, isize size, ErrorCode *error);
+    void importVolume(const u8 *src, isize size) throws;
+    // bool importVolume(const u8 *src, isize size, ErrorCode *error);
 
     // Imports a directory from the host file system
     bool importDirectory(const string &path, bool recursive = true);

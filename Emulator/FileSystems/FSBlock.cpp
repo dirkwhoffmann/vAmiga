@@ -38,7 +38,8 @@ FSBlock::makeWithType(FSPartition &p, Block nr, FSBlockType type)
         case FS_DATA_BLOCK_OFS:   return new OFSDataBlock(p, nr);
         case FS_DATA_BLOCK_FFS:   return new FFSDataBlock(p, nr);
             
-        default:                  return nullptr;
+        default:
+            throw VAError(ERROR_FS_INVALID_BLOCK_TYPE);
     }
 }
 

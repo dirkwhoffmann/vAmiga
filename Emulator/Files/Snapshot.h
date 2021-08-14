@@ -26,7 +26,7 @@ struct Thumbnail {
     time_t timestamp;
     
     // Factory methods
-    static Thumbnail *makeWithAmiga(Amiga &amiga, isize dx = 2, isize dy = 1);
+    static Thumbnail *make(Amiga &amiga, isize dx = 2, isize dy = 1);
     
     // Takes a screenshot from a given Amiga
     void take(Amiga &amiga, isize dx = 2, isize dy = 1);
@@ -69,7 +69,7 @@ public:
     
     bool setCapacity(isize size);
     
-    static Snapshot *makeWithAmiga(Amiga *amiga);
+    static Snapshot *make(Amiga *amiga);
     
     
     //

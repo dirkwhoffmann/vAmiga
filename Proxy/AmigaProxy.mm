@@ -1204,18 +1204,32 @@ using namespace moira;
     return proxy;
 }
 
-+ (instancetype)makeWithADF:(ADFFileProxy *)proxy
++ (instancetype)makeWithADF:(ADFFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    ErrorCode error;
-    FSDevice *volume = FSDevice::makeWithADF((ADFFile *)(proxy->obj), &error);
-    return [self make:volume];
+    try {
+        
+        FSDevice *volume = FSDevice::makeWithADF(*(ADFFile *)(proxy->obj));
+        return [self make:volume];
+        
+    }  catch (VAError &error) {
+        
+        [ex save:error];
+        return nil;
+    }
 }
 
-+ (instancetype)makeWithHDF:(HDFFileProxy *)proxy
++ (instancetype)makeWithHDF:(HDFFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    ErrorCode error;
-    FSDevice *volume = FSDevice::makeWithHDF((HDFFile *)(proxy->obj), &error);
-    return [self make:volume];
+    try {
+        
+        FSDevice *volume = FSDevice::makeWithHDF(*(HDFFile *)(proxy->obj));
+        return [self make:volume];
+        
+    }  catch (VAError &error) {
+        
+        [ex save:error];
+        return nil;
+    }
 }
 
 - (FSVolumeType)dos
@@ -1506,7 +1520,7 @@ using namespace moira;
     Amiga *amiga = (Amiga *)proxy->obj;
     
     amiga->suspend();
-    Snapshot *snapshot = Snapshot::makeWithAmiga(amiga);
+    Snapshot *snapshot = Snapshot::make(amiga);
     amiga->resume();
     
     return [self make:snapshot];

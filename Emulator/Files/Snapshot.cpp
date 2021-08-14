@@ -13,7 +13,7 @@
 #include "IO.h"
 
 Thumbnail *
-Thumbnail::makeWithAmiga(Amiga &amiga, isize dx, isize dy)
+Thumbnail::make(Amiga &amiga, isize dx, isize dy)
 {
     Thumbnail *screenshot = new Thumbnail();
     screenshot->take(amiga, dx, dy);
@@ -82,7 +82,7 @@ Snapshot::Snapshot(isize capacity)
 }
 
 Snapshot *
-Snapshot::makeWithAmiga(Amiga *amiga)
+Snapshot::make(Amiga *amiga)
 {
     Snapshot *snapshot = new Snapshot(amiga->size());
 

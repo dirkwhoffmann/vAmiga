@@ -192,11 +192,12 @@ class ExporterDialog: DialogController {
         driveNr = nr
         
         // Try to decode the disk with the ADF decoder
-        disk = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy
-        
-        // If it is an ADF, try to extract the file system
-        if disk != nil { volume = FSDeviceProxy.make(withADF: disk as? ADFFileProxy) }
-        
+        if let adf = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy {
+            
+            disk = adf
+            volume = try? FSDeviceProxy.make(withADF: adf)
+        }
+                
         // volume?.printDirectory(true)
         
         // If it is not an ADF, try the DOS decoder

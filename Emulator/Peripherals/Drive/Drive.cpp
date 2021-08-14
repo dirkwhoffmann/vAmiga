@@ -293,7 +293,7 @@ Drive::_load(const u8 *buffer)
         DiskDensity density;
         reader << type << density;
         
-        disk = Disk::makeWithReader(reader, type, density);
+        disk = Disk::make(reader, type, density);
     }
 
     result = (isize)(reader.ptr - buffer);

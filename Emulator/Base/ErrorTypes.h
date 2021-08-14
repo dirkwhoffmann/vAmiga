@@ -71,6 +71,7 @@ enum_long(ERROR_CODE)
     ERROR_FS_CANNOT_CREATE_FILE,
 
     // File system (block errors)
+    ERROR_FS_INVALID_BLOCK_TYPE,
     ERROR_FS_EXPECTED_VALUE,
     ERROR_FS_EXPECTED_SMALLER_VALUE,
     ERROR_FS_EXPECTED_DOS_REVISION,
@@ -153,6 +154,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_FS_CANNOT_CREATE_DIR:        return "FS_CANNOT_CREATE_DIR";
             case ERROR_FS_CANNOT_CREATE_FILE:       return "FS_CANNOT_CREATE_FILE";
 
+            case ERROR_FS_INVALID_BLOCK_TYPE:       return "FS_INVALID_BLOCK_TYPE";
             case ERROR_FS_EXPECTED_VALUE:           return "FS_EXPECTED_VALUE";
             case ERROR_FS_EXPECTED_SMALLER_VALUE:   return "FS_EXPECTED_SMALLER_VALUE";
             case ERROR_FS_EXPECTED_DOS_REVISION:    return "FS_EXPECTED_DOS_REVISION";

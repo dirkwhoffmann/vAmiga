@@ -337,7 +337,7 @@ DiskController::insertDisk(class Disk *disk, isize nr, Cycle delay)
 void
 DiskController::insertDisk(class DiskFile *file, isize nr, Cycle delay)
 {
-    if (Disk *disk = Disk::makeWithFile(file)) {
+    if (Disk *disk = Disk::make(file)) {
         insertDisk(disk, nr, delay);
     }
 }
