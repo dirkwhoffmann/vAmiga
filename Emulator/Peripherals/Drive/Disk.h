@@ -181,7 +181,7 @@ public:
 public:
     
     // Encodes a disk
-    bool encodeDisk(class DiskFile *df);
+    void encodeDisk(class DiskFile *df);
     
     
     //

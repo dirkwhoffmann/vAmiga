@@ -36,10 +36,7 @@ Disk::makeWithFile(DiskFile *file)
 {
     Disk *disk = new Disk(file->getDiskDiameter(), file->getDiskDensity());
     
-    if (!disk->encodeDisk(file)) {
-        delete disk;
-        return nullptr;
-    }
+    try { disk->encodeDisk(file); } catch (...) { delete disk; return nullptr; }
     
     disk->fnv = file->fnv();
     
@@ -162,7 +159,7 @@ Disk::clearTrack(Track t, u8 value1, u8 value2)
     }
 }
 
-bool
+void
 Disk::encodeDisk(DiskFile *df)
 {
     assert(df != nullptr);
@@ -172,7 +169,7 @@ Disk::encodeDisk(DiskFile *df)
     clearDisk();
 
     // Call the MFM encoder
-    return df->encodeDisk(this);
+    df->encodeDisk(this);
 }
 
 void

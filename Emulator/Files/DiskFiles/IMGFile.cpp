@@ -88,50 +88,39 @@ IMGFile::numSectors() const
     return 9;
 }
 
-bool
+void
 IMGFile::encodeDisk(Disk *disk)
 {
-    long tracks = numTracks();
+    assert(disk != nullptr);
     
-    debug(MFM_DEBUG, "Encoding DOS disk with %ld tracks\n", tracks);
-
     if (disk->getDiameter() != getDiskDiameter()) {
-        warn("Incompatible disk types: %s %s\n",
-             DiskDiameterEnum::key(disk->getDiameter()),
-             DiskDiameterEnum::key(getDiskDiameter()));
-        return false;
+        throw VAError(ERROR_DISK_INVALID_DIAMETER);
     }
     if (disk->getDensity() != getDiskDensity()) {
-        warn("Incompatible disk densities: %s %s\n",
-             DiskDensityEnum::key(disk->getDensity()),
-             DiskDensityEnum::key(getDiskDensity()));
-        return false;
+        throw VAError(ERROR_DISK_INVALID_DENSITY);
     }
-    
+
+    isize tracks = numTracks();
+    debug(MFM_DEBUG, "Encoding DOS disk with %zd tracks\n", tracks);
+
     // Encode all tracks
-    bool result = true;
-    for (Track t = 0; t < tracks; t++) {
-        result &= encodeTrack(disk, t);
-    }
+    for (Track t = 0; t < tracks; t++) encodeTrack(disk, t);
     
     // In debug mode, also run the decoder
     if (MFM_DEBUG) {
-        msg("DOS disk fully encoded (success = %d)\n", result);
+        msg("DOS disk fully encoded\n");
         IMGFile *tmp = IMGFile::makeWithDisk(disk);
         if (tmp) {
             msg("Decoded image written to /tmp/debug.img\n");
             tmp->writeToFile("/tmp/tmp.img");
         }
     }
-
-    return result;
 }
 
-bool
+void
 IMGFile::encodeTrack(Disk *disk, Track t)
 {
-    long sectors = numSectors();
-
+    isize sectors = numSectors();
     debug(MFM_DEBUG, "Encoding DOS track %d with %ld sectors\n", t, sectors);
 
     u8 *p = disk->data.track[t];
@@ -151,18 +140,14 @@ IMGFile::encodeTrack(Disk *disk, Track t)
     p += 80;                                        // GAP
         
     // Encode all sectors
-    bool result = true;
-    for (Sector s = 0; s < sectors; s++) result &= encodeSector(disk, t, s);
+    for (Sector s = 0; s < sectors; s++) encodeSector(disk, t, s);
     
     // Compute a checksum for debugging
-    debug(MFM_DEBUG,
-          "Track %d checksum = %x\n",
+    debug(MFM_DEBUG, "Track %d checksum = %x\n",
           t, util::fnv_1a_32(disk->data.track[t], disk->length.track[t]));
-
-    return result;
 }
 
-bool
+void
 IMGFile::encodeSector(Disk *disk, Track t, Sector s)
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
@@ -228,8 +213,6 @@ IMGFile::encodeSector(Disk *disk, Track t, Sector s)
     p[2*56+1] &= 0xDF;
     p[2*57+1] &= 0xDF;
     p[2*58+1] &= 0xDF;
-
-    return true;
 }
 
 void

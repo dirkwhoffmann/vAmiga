@@ -104,16 +104,3 @@ DiskFile::readSectorHex(char *dst, isize s, isize count) const
         sprintf(dst + 3*i, "%02X ", data[offset + i]);
     }
 }
-
-bool
-DiskFile::encodeDisk(class Disk *disk)
-{
-    assert(false);
-    return false;
-}
-
-void
-DiskFile::decodeDisk(class Disk *disk)
-{
-    assert(false);
-}

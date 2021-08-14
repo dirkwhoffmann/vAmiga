@@ -77,13 +77,13 @@ public:
     
     void killVirus() override;
 
-    bool encodeDisk(class Disk *disk) override;
+    void encodeDisk(class Disk *disk) throws override;
     void decodeDisk(class Disk *disk) throws override;
 
 private:
     
-    bool encodeTrack(class Disk *disk, Track t);
-    bool encodeSector(class Disk *disk, Track t, Sector s);
+    void encodeTrack(class Disk *disk, Track t) throws;
+    void encodeSector(class Disk *disk, Track t, Sector s) throws;
 
     bool decodeTrack(class Disk *disk, Track t);
     bool decodeSector(u8 *dst, u8 *src);

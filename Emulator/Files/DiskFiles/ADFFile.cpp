@@ -290,61 +290,49 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockId id)
     }
 }
 
-bool
+void
 ADFFile::encodeDisk(Disk *disk)
 {
     assert(disk != nullptr);
     
     if (disk->getDiameter() != getDiskDiameter()) {
-        warn("Incompatible disk types: %s %s\n",
-             DiskDiameterEnum::key(disk->getDiameter()),
-             DiskDiameterEnum::key(getDiskDiameter()));
-        return false;
+        throw VAError(ERROR_DISK_INVALID_DIAMETER);
     }
     if (disk->getDensity() != getDiskDensity()) {
-        warn("Incompatible disk densities: %s %s\n",
-             DiskDensityEnum::key(disk->getDensity()),
-             DiskDensityEnum::key(getDiskDensity()));
-        return false;
+        throw VAError(ERROR_DISK_INVALID_DENSITY);
     }
 
-    long tracks = numTracks();
-    debug(MFM_DEBUG, "Encoding %ld tracks\n", tracks);
+    isize tracks = numTracks();
+    debug(MFM_DEBUG, "Encoding Amiga disk with %zd tracks\n", tracks);
 
     // Start with an unformatted disk
     disk->clearDisk();
 
     // Encode all tracks
-    bool result = true;
-    for (Track t = 0; t < tracks; t++) result &= encodeTrack(disk, t);
+    for (Track t = 0; t < tracks; t++) encodeTrack(disk, t);
 
     // In debug mode, also run the decoder
     if (MFM_DEBUG) {
-        msg("Amiga disk fully encoded (success = %d)\n", result);
+        msg("Amiga disk fully encoded\n");
         ADFFile *tmp = ADFFile::makeWithDisk(disk);
         if (tmp) {
             msg("Decoded image written to /tmp/debug.adf\n");
             tmp->writeToFile("/tmp/tmp.adf");
         }
     }
-
-    return result;
 }
 
-bool
+void
 ADFFile::encodeTrack(Disk *disk, Track t)
 {
-    long sectors = numSectors();
-    // assert(disk->geometry.sectors == sectors);
-    
-    trace(MFM_DEBUG, "Encoding Amiga track %d (%ld sectors)\n", t, sectors);
+    isize sectors = numSectors();
+    debug(MFM_DEBUG, "Encoding Amiga track %d with %ld sectors\n", t, sectors);
 
     // Format track
     disk->clearTrack(t, 0xAA);
 
     // Encode all sectors
-    bool result = true;
-    for (Sector s = 0; s < sectors; s++) result &= encodeSector(disk, t, s);
+    for (Sector s = 0; s < sectors; s++) encodeSector(disk, t, s);
     
     // Rectify the first clock bit (where buffer wraps over)
     if (disk->data.track[t][disk->length.track[t] - 1] & 1) {
@@ -354,11 +342,9 @@ ADFFile::encodeTrack(Disk *disk, Track t)
     // Compute a debug checksum
     debug(MFM_DEBUG, "Track %d checksum = %x\n",
           t, util::fnv_1a_32(disk->data.track[t], disk->length.track[t]));
-
-    return result;
 }
 
-bool
+void
 ADFFile::encodeSector(Disk *disk, Track t, Sector s)
 {
     assert(t < disk->numTracks());
@@ -428,9 +414,7 @@ ADFFile::encodeSector(Disk *disk, Track t, Sector s)
     // Add clock bits
     for(isize i = 8; i < 1088; i++) {
         p[i] = Disk::addClockBits(p[i], p[i-1]);
-    }
-    
-    return true;
+    }    
 }
 
 void

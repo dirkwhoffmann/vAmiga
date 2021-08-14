@@ -91,6 +91,6 @@ public:
  
 public:
     
-    virtual bool encodeDisk(class Disk *disk);
-    virtual void decodeDisk(class Disk *disk) throws;
+    virtual void encodeDisk(class Disk *disk) throws { assert(false); }
+    virtual void decodeDisk(class Disk *disk) throws { assert(false); }
 };
