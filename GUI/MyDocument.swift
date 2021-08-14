@@ -142,14 +142,6 @@ class MyDocument: NSDocument {
         // None of the allowed typed matched the file
         throw VAError(.FILE_TYPE_MISMATCH, url.lastPathComponent)
     }
-
-    /*
-    @discardableResult
-    func mountAttachment() -> Bool {
-
-        mountAttachment(destination: nil)
-    }
-    */
     
     func mountAttachment(destination: DriveProxy? = nil) throws {
         
@@ -200,7 +192,11 @@ class MyDocument: NSDocument {
         if let proxy = attachment as? DiskFileProxy {
             
             if let df = destination?.nr {
-                amiga.diskController.insert(df, file: proxy)
+                do {
+                    try amiga.diskController.insert(df, file: proxy)
+                } catch {
+                    (error as? VAError)?.warning("Failed to insert disk")
+                }
             } else {
                 runImporterDialog()
             }

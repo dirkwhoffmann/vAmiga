@@ -149,6 +149,16 @@ extension MemProxy {
     }
 }
 
+extension DiskControllerProxy {
+
+    func insert(_ nr: Int, file: DiskFileProxy) throws {
+        
+        let exception = ExceptionWrapper()
+        insert(nr, file: file, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+}
+
 extension AmigaFileProxy {
     
     @discardableResult

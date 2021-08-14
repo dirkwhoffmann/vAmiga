@@ -43,9 +43,9 @@ enum_long(ERROR_CODE)
     ERROR_AROS_NO_EXTROM,
     
     // Floppy disks
-    ERROR_DISK_CANT_DECODE, // DEPRECATED
     ERROR_DISK_INVALID_DIAMETER,
     ERROR_DISK_INVALID_DENSITY,
+    ERROR_DISK_INVALID_LAYOUT,
     ERROR_DISK_WRONG_SECTOR_COUNT,
     ERROR_DISK_INVALID_SECTOR_NUMBER,
     
@@ -130,9 +130,9 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_ROM_MISSING:                 return "ROM_MISSING";
             case ERROR_AROS_NO_EXTROM:              return "AROS_NO_EXTROM";
 
-            case ERROR_DISK_CANT_DECODE:            return "DISK_CANT_DECODE";
             case ERROR_DISK_INVALID_DIAMETER:       return "DISK_INVALID_DIAMETER";
             case ERROR_DISK_INVALID_DENSITY:        return "DISK_INVALID_DENSITY";
+            case ERROR_DISK_INVALID_LAYOUT:         return "DISK_INVALID_LAYOUT";
             case ERROR_DISK_WRONG_SECTOR_COUNT:     return "DISK_WRONG_SECTOR_COUNT";
             case ERROR_DISK_INVALID_SECTOR_NUMBER:  return "DISK_INVALID_SECTOR_NUMBER";
                 

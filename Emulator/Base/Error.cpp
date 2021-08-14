@@ -77,10 +77,6 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "No Extension Rom installed.";
             break;
 
-        case ERROR_DISK_CANT_DECODE:
-            description = "Unable to decode the MFM bit stream.";
-            break;
-
         case ERROR_DISK_INVALID_DIAMETER:
             description = "Invalid disk diameter.";
             break;
@@ -88,7 +84,19 @@ VAError::VAError(ErrorCode code, const string &s)
         case ERROR_DISK_INVALID_DENSITY:
             description = "Invalid disk density.";
             break;
+
+        case ERROR_DISK_INVALID_LAYOUT:
+            description = "The disk density and disk diameter do not match.";
+            break;
+
+        case ERROR_DISK_WRONG_SECTOR_COUNT:
+            description = "Unable to decode the MFM bit stream (wrong sector count).";
+            break;
             
+        case ERROR_DISK_INVALID_SECTOR_NUMBER:
+            description = "Unable to decode the MFM bit stream (invalid sector number).";
+            break;
+
         case ERROR_SNP_TOO_OLD:
             description = "The snapshot was created with an older version of vAmiga";
             description += " and is incompatible with this release.";

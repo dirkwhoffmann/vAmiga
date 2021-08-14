@@ -17,13 +17,16 @@ Disk::Disk(DiskDiameter type, DiskDensity density)
     this->density = density;
     
     u32 trackLength = 0;
+    
     if (type == INCH_35  && density == DISK_DD) trackLength = 12668;
     if (type == INCH_35  && density == DISK_HD) trackLength = 24636;
     if (type == INCH_525 && density == DISK_DD) trackLength = 12668;
-
-    assert(trackLength != 0);
-    for (isize i = 0; i < 168; i++) length.track[i] = trackLength;
     
+    if (trackLength == 0 || FORCE_DISK_INVALID_LAYOUT) {
+        throw VAError(ERROR_DISK_INVALID_LAYOUT);
+    }
+    
+    for (isize i = 0; i < 168; i++) length.track[i] = trackLength;
     clearDisk();
 }
 
@@ -34,13 +37,20 @@ Disk::~Disk()
 Disk *
 Disk::makeWithFile(DiskFile *file)
 {
+    // TODO: Return a unique_ptr 
     Disk *disk = new Disk(file->getDiskDiameter(), file->getDiskDensity());
     
-    try { disk->encodeDisk(file); } catch (...) { delete disk; return nullptr; }
-    
-    disk->fnv = file->fnv();
-    
-    return disk;
+    try {
+        
+        disk->encodeDisk(file);
+        disk->fnv = file->fnv();
+        return disk;
+        
+    } catch (VAError &exception) {
+        
+        delete disk;
+        throw exception;
+    }
 }
 
 Disk *

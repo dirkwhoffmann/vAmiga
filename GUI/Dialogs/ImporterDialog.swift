@@ -185,10 +185,13 @@ class ImporterDialog: DialogController {
         
         track("insertDiskAction df\(sender.tag)")
                 
-        amiga.diskController.insert(sender.tag, file: disk)
-        
-        amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)     
-        hideSheet()
+        do {
+            try amiga.diskController.insert(sender.tag, file: disk!)
+            amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)
+            hideSheet()
+        } catch {
+            (error as? VAError)?.warning("Failed to insert disk")
+        }
     }
     
     @IBAction override func cancelAction(_ sender: Any!) {

@@ -93,13 +93,13 @@ private:
     
 public:
     
-    Disk(DiskDiameter type, DiskDensity density);
+    Disk(DiskDiameter type, DiskDensity density) throws;
     ~Disk();
 
     const char *getDescription() const override { return "Disk"; }
 
-    static Disk *makeWithFile(class DiskFile *file);
-    static Disk *makeWithReader(util::SerReader &reader, DiskDiameter type, DiskDensity density);
+    static Disk *makeWithFile(class DiskFile *file) throws;
+    static Disk *makeWithReader(util::SerReader &reader, DiskDiameter type, DiskDensity density) throws;
         
     void dump();
     

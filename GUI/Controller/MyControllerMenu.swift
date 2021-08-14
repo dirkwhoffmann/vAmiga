@@ -435,10 +435,13 @@ extension MyController: NSMenuItemValidation {
         // Write file system
         adf.formatDisk(pref.blankDiskFormat, bootBlock: pref.bootBlock)
         
-        // Insert disk into drive
-        amiga.diskController.insert(sender.tag, file: adf)
-
-        myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
+        // Insert disk
+        do {
+            try amiga.diskController.insert(sender.tag, file: adf)
+            myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
+        } catch {
+            (error as? VAError)?.warning("Failed to insert disk")
+        }
     }
 
     @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
@@ -493,7 +496,7 @@ extension MyController: NSMenuItemValidation {
             if let file = mydocument.attachment as? DiskFileProxy {
                 
                 // Insert the disk
-                amiga.diskController.insert(drive, file: file)
+                try amiga.diskController.insert(drive, file: file)
                         
                 // Remember the URL
                 myAppDelegate.noteNewRecentlyInsertedDiskURL(url)

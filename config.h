@@ -177,13 +177,14 @@ static const int REC_DEBUG       = 0; // Screen recorder
 // Forced error conditions
 //
 
-static const int FORCE_ROM_MISSING      = 0;
-static const int FORCE_CHIP_RAM_MISSING = 0;
-static const int FORCE_AROS_NO_EXTROM   = 0;
-static const int FORCE_AROS_RAM_LIMIT   = 0;
-static const int FORCE_CHIP_RAM_LIMIT   = 0;
-static const int FORCE_SNAPSHOT_TOO_OLD = 0;
-static const int FORCE_SNAPSHOT_TOO_NEW = 0;
+static const int FORCE_ROM_MISSING         = 0;
+static const int FORCE_CHIP_RAM_MISSING    = 0;
+static const int FORCE_AROS_NO_EXTROM      = 0;
+static const int FORCE_AROS_RAM_LIMIT      = 0;
+static const int FORCE_CHIP_RAM_LIMIT      = 0;
+static const int FORCE_SNAPSHOT_TOO_OLD    = 0;
+static const int FORCE_SNAPSHOT_TOO_NEW    = 0;
+static const int FORCE_DISK_INVALID_LAYOUT = 0;
 
 
 #ifdef RELEASEBUILD
