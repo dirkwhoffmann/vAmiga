@@ -23,7 +23,7 @@
 #include "MemUtils.h"
 
 FSBlock *
-FSBlock::makeWithType(FSPartition &p, Block nr, FSBlockType type)
+FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
 {
     switch (type) {
 

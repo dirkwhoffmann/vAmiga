@@ -15,7 +15,7 @@
 #include <vector>
 
 FSPartition *
-FSPartition::makeWithFormat(FSDevice &dev, FSPartitionDescriptor &layout)
+FSPartition::make(FSDevice &dev, FSPartitionDescriptor &layout)
 {
     FSPartition *p = new FSPartition(dev);
 

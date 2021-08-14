@@ -55,7 +55,7 @@ ADFFile::make(DiskDiameter diameter, DiskDensity density)
 }
 
 ADFFile *
-ADFFile::makeWithDisk(Disk *disk)
+ADFFile::make(Disk *disk)
 {
     assert(disk);
 
@@ -75,14 +75,14 @@ ADFFile::makeWithDisk(Disk *disk)
 }
 
 ADFFile *
-ADFFile::makeWithDrive(Drive *drive)
+ADFFile::make(Drive *drive)
 {
     assert(drive);
-    return drive->disk ? makeWithDisk(drive->disk) : nullptr;
+    return drive->disk ? make(drive->disk) : nullptr;
 }
 
 ADFFile *
-ADFFile::makeWithVolume(FSDevice &volume)
+ADFFile::make(FSDevice &volume)
 {
     ADFFile *adf = nullptr;
     
@@ -272,7 +272,7 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockId id)
     descriptor.partitions[0].dos = fs;
     
     // Create an empty file system
-    FSDevice *volume = FSDevice::makeWithFormat(descriptor);
+    FSDevice *volume = FSDevice::make(descriptor);
     volume->setName(FSName("Disk"));
     
     // Write boot code
@@ -314,7 +314,7 @@ ADFFile::encodeDisk(Disk *disk)
     // In debug mode, also run the decoder
     if (MFM_DEBUG) {
         msg("Amiga disk fully encoded\n");
-        ADFFile *tmp = ADFFile::makeWithDisk(disk);
+        ADFFile *tmp = ADFFile::make(disk);
         if (tmp) {
             msg("Decoded image written to /tmp/debug.adf\n");
             tmp->writeToFile("/tmp/tmp.adf");

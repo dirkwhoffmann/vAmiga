@@ -81,14 +81,14 @@ protected:
 public:
 
     // Creates a file system with a custom device descriptor
-    static FSDevice *makeWithFormat(FSDeviceDescriptor &layout);
+    static FSDevice *make(FSDeviceDescriptor &layout);
 
     // Creates a file system for a standard floppy disk
-    static FSDevice *makeWithFormat(DiskDiameter type, DiskDensity density);
+    static FSDevice *make(DiskDiameter type, DiskDensity density);
 
     // Creates a file system from an ADF or HDF
-    static FSDevice *makeWithADF(class ADFFile &adf) throws;
-    static FSDevice *makeWithHDF(class HDFFile &hdf) throws;
+    static FSDevice *make(class ADFFile &adf) throws;
+    static FSDevice *make(class HDFFile &hdf) throws;
     
     // Creates a file system with the contents of a host file system directory
     static FSDevice *make(DiskDiameter type, DiskDensity density, const string &path);

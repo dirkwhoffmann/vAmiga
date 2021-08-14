@@ -24,11 +24,11 @@ Folder::isFolder(const string &path)
 }
 
 Folder *
-Folder::makeWithFolder(const string &path)
+Folder::make(const string &path)
 {
     Folder *folder = new Folder();
     
-    if (FS_DEBUG) msg("makeWithFolder(%s)\n", path.c_str());
+    if (FS_DEBUG) msg("make(%s)\n", path.c_str());
               
     // Only proceed if the provided filename points to a directory
     if (!isFolder(path.c_str())) throw VAError(ERROR_FILE_TYPE_MISMATCH);
@@ -52,7 +52,7 @@ Folder::makeWithFolder(const string &path)
     // volume->dump();
     
     // Convert the file system into an ADF
-    folder->adf = ADFFile::makeWithVolume(*volume);
+    folder->adf = ADFFile::make(*volume);
     delete volume;
         
     return folder;

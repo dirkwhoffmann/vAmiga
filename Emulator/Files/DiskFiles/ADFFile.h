@@ -31,9 +31,9 @@ public:
     static bool isCompatibleStream(std::istream &stream);
     
     static ADFFile *make(DiskDiameter t, DiskDensity d) throws;
-    static ADFFile *makeWithDisk(class Disk *disk) throws;
-    static ADFFile *makeWithDrive(class Drive *drive) throws;
-    static ADFFile *makeWithVolume(FSDevice &volume) throws;
+    static ADFFile *make(class Disk *disk) throws;
+    static ADFFile *make(class Drive *drive) throws;
+    static ADFFile *make(FSDevice &volume) throws;
 
 private:
     

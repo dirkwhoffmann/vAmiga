@@ -779,7 +779,7 @@ Drive::insertBlankDisk()
 {
     auto desc = FSDeviceDescriptor(INCH_35, DISK_DD, config.defaultFileSystem);
     
-    if (FSDevice *volume = FSDevice::makeWithFormat(desc)) {
+    if (FSDevice *volume = FSDevice::make(desc)) {
         
         volume->setName(FSName("Disk"));
         volume->makeBootable(config.defaultBootBlock);

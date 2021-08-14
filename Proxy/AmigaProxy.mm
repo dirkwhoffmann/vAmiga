@@ -1208,7 +1208,7 @@ using namespace moira;
 {
     try {
         
-        FSDevice *volume = FSDevice::makeWithADF(*(ADFFile *)(proxy->obj));
+        FSDevice *volume = FSDevice::make(*(ADFFile *)(proxy->obj));
         return [self make:volume];
         
     }  catch (VAError &error) {
@@ -1222,7 +1222,7 @@ using namespace moira;
 {
     try {
         
-        FSDevice *volume = FSDevice::makeWithHDF(*(HDFFile *)(proxy->obj));
+        FSDevice *volume = FSDevice::make(*(HDFFile *)(proxy->obj));
         return [self make:volume];
         
     }  catch (VAError &error) {
@@ -1779,7 +1779,7 @@ using namespace moira;
 + (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     Drive *drive = [proxy drive];
-    ADFFile *archive = ADFFile::makeWithDrive(drive);
+    ADFFile *archive = ADFFile::make(drive);
     return archive ? [self make: archive] : nil;
 }
 
@@ -1991,7 +1991,7 @@ using namespace moira;
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: Folder::makeWithFolder([path fileSystemRepresentation])]; }
+    try { return [self make: Folder::make([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 

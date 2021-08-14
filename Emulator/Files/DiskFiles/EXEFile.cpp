@@ -42,7 +42,7 @@ EXEFile::readFromStream(std::istream &stream)
     bool hd = size > 853000;
         
     // Create a new file system
-    FSDevice *volume = FSDevice::makeWithFormat(INCH_35, hd ? DISK_HD : DISK_DD);
+    FSDevice *volume = FSDevice::make(INCH_35, hd ? DISK_HD : DISK_DD);
     volume->setName(FSName("Disk"));
     
     // Make the volume bootable
@@ -76,7 +76,7 @@ EXEFile::readFromStream(std::istream &stream)
     }
     
     // Convert the volume into an ADF
-    if (success) { adf = ADFFile::makeWithVolume(*volume); }
+    if (success) { adf = ADFFile::make(*volume); }
         
     // Export the ADF
     volume->exportDirectory(path);

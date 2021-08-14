@@ -43,7 +43,7 @@ struct FSPartition : AmigaObject {
 public:
 
     // Creates a file system with a custom device descriptor
-    static FSPartition *makeWithFormat(FSDevice &ref, FSPartitionDescriptor &layout);
+    static FSPartition *make(FSDevice &ref, FSPartitionDescriptor &layout);
 
     
     //

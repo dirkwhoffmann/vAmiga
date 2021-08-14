@@ -16,7 +16,7 @@
 #include <stack>
 
 FSDevice *
-FSDevice::makeWithFormat(FSDeviceDescriptor &layout)
+FSDevice::make(FSDeviceDescriptor &layout)
 {
     FSDevice *dev = new FSDevice(layout.numBlocks);
     
@@ -32,7 +32,7 @@ FSDevice::makeWithFormat(FSDeviceDescriptor &layout)
     // Create all partitions
     for (auto& descriptor : layout.partitions) {
         
-        FSPartition *p = FSPartition::makeWithFormat(*dev, descriptor);
+        FSPartition *p = FSPartition::make(*dev, descriptor);
         dev->partitions.push_back(p);
     }
 
@@ -54,20 +54,20 @@ FSDevice::makeWithFormat(FSDeviceDescriptor &layout)
 }
 
 FSDevice *
-FSDevice::makeWithFormat(DiskDiameter type, DiskDensity density)
+FSDevice::make(DiskDiameter type, DiskDensity density)
 {
     FSDeviceDescriptor layout = FSDeviceDescriptor(type, density);
-    return makeWithFormat(layout);
+    return make(layout);
 }
 
 FSDevice *
-FSDevice::makeWithADF(ADFFile &adf)
+FSDevice::make(ADFFile &adf)
 {
     // Get a device descriptor for the ADF
     FSDeviceDescriptor descriptor = adf.layout();
         
     // Create the device
-    FSDevice *volume = makeWithFormat(descriptor);
+    FSDevice *volume = make(descriptor);
 
     // Import file system from ADF
     volume->importVolume(adf.data, adf.size);
@@ -75,13 +75,13 @@ FSDevice::makeWithADF(ADFFile &adf)
 }
 
 FSDevice *
-FSDevice::makeWithHDF(HDFFile &hdf)
+FSDevice::make(HDFFile &hdf)
 {
     // Get a device descriptor for the ADF
     FSDeviceDescriptor descriptor = hdf.layout();
 
     // Create the device
-    FSDevice *volume = makeWithFormat(descriptor);
+    FSDevice *volume = make(descriptor);
 
     volume->info();
     
@@ -96,7 +96,7 @@ FSDevice::makeWithHDF(HDFFile &hdf)
 FSDevice *
 FSDevice::make(DiskDiameter type, DiskDensity density, const string &path)
 {
-    FSDevice *device = makeWithFormat(type, density);
+    FSDevice *device = make(type, density);
     
     if (device) {
         
@@ -759,7 +759,7 @@ FSDevice::importVolume(const u8 *src, isize size)
         FSBlockType type = p.predictBlockType((Block)i, data);
         
         // Create new block
-        FSBlock *newBlock = FSBlock::makeWithType(p, (Block)i, type);
+        FSBlock *newBlock = FSBlock::make(p, (Block)i, type);
 
         // Import block data
         newBlock->importBlock(data, bsize);

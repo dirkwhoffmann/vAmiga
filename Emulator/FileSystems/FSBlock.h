@@ -35,7 +35,7 @@ struct FSBlock : AmigaObject {
     FSBlock(FSPartition &p, Block nr) : partition(p) { this->nr = nr; }
     virtual ~FSBlock() { }
 
-    static FSBlock *makeWithType(FSPartition &p, Block nr, FSBlockType type) throws;
+    static FSBlock *make(FSPartition &p, Block nr, FSBlockType type) throws;
     
     
     //
