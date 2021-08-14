@@ -24,7 +24,6 @@ class DiskFile : public AmigaFile {
 public:
     
     static DiskFile *make(const string &path) throws;
-    static DiskFile *make(const string &path, ErrorCode *err);
     
     
     //

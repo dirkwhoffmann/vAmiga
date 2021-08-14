@@ -44,15 +44,6 @@ DiskFile::make(const string &path)
     throw VAError(ERROR_FILE_TYPE_MISMATCH);
 }
 
-DiskFile *
-DiskFile::make(const string &path, ErrorCode *err)
-{
-    *err = ERROR_OK;
-    try { return make(path); }
-    catch (VAError &exception) { *err = exception.data; }
-    return nullptr;
-}
-
 u8
 DiskFile::readByte(isize t, isize s, isize offset) const
 {

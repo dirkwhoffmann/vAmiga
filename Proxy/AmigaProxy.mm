@@ -1479,11 +1479,13 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
+/*
 + (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
 {
     Snapshot *snapshot = AmigaFile::make <Snapshot> ([path fileSystemRepresentation], err);
     return [self make:snapshot];
 }
+*/
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
@@ -1491,11 +1493,13 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
+/*
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
 {
     Snapshot *snapshot = AmigaFile::make <Snapshot> ((u8 *)buf, len, err);
     return [self make:snapshot];
 }
+*/
 
 + (instancetype)makeWithAmiga:(AmigaProxy *)proxy
 {
@@ -1567,20 +1571,10 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
-{
-    return [self make: AmigaFile::make <Script> ([path fileSystemRepresentation], err)];
-}
-
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <Script> ((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
-{
-    return [self make: AmigaFile::make <Script> ((const u8 *)buf, len, err)];
 }
 
 - (void)execute:(AmigaProxy *)proxy
@@ -1610,20 +1604,10 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
-{
-    return [self make: AmigaFile::make <RomFile> ([path fileSystemRepresentation], err)];
-}
-
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <RomFile> ((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
-{
-    return [self make: AmigaFile::make <RomFile> ((const u8 *)buf, len, err)];
 }
 
 @end
@@ -1646,20 +1630,10 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
-{
-    return [self make: AmigaFile::make <ExtendedRomFile> ([path fileSystemRepresentation], err)];
-}
-
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <ExtendedRomFile> ((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
-{
-    return [self make: AmigaFile::make <ExtendedRomFile> ((const u8 *)buf, len, err)];
 }
 
 @end
@@ -1831,22 +1805,10 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec
-{
-    HDFFile *archive = AmigaFile::make <HDFFile> ([path fileSystemRepresentation], ec);
-    return [self make: archive];
-}
-
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <HDFFile> ((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
-{
-    HDFFile *archive = AmigaFile::make <HDFFile> ((const u8 *)buf, len, ec);
-    return [self make: archive];
 }
 
 - (NSInteger)numBlocks
@@ -1879,22 +1841,10 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec
-{
-    EXTFile *archive = AmigaFile::make <EXTFile> ([path fileSystemRepresentation], ec);
-    return [self make: archive];
-}
-
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <EXTFile> ((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
-{
-    EXTFile *archive = AmigaFile::make <EXTFile> ((const u8 *)buf, len, ec);
-    return [self make: archive];
 }
 
 @end
@@ -1959,22 +1909,10 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
-{
-    DMSFile *archive = AmigaFile::make <DMSFile> ([path fileSystemRepresentation], err);
-    return [self make: archive];
-}
-
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <DMSFile> ((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
-{
-    DMSFile *archive = AmigaFile::make <DMSFile> ((const u8 *)buf, len, ec);
-    return [self make: archive];
 }
 
 - (ADFFileProxy *)adf
@@ -2007,22 +1945,10 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec
-{
-    EXEFile *archive = AmigaFile::make <EXEFile> ([path fileSystemRepresentation], ec);
-    return [self make: archive];
-}
-
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: AmigaFile::make <EXEFile> ((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec
-{
-    EXEFile *archive = AmigaFile::make <EXEFile> ((const u8 *)buf, len);
-    return [self make: archive];
 }
 
 - (ADFFileProxy *)adf

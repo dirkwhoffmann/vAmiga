@@ -686,7 +686,7 @@
 @property (readonly) u64 fnv;
 
 - (void)setPath:(NSString *)path;
-- (NSInteger)writeToFile:(NSString *)path error:(ErrorCode *)err;
+- (NSInteger)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 
 @end
 
@@ -699,9 +699,8 @@
     NSImage *preview;
 }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)ec;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithAmiga:(AmigaProxy *)proxy;
 
 @property (readonly, strong) NSImage *previewImage;
@@ -716,8 +715,8 @@
 
 @interface ScriptProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> { }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err;
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
  
 - (void)execute:(AmigaProxy *)proxy;
 
@@ -730,8 +729,8 @@
 
 @interface RomFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> { }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err;
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
  
 @end
 
@@ -742,8 +741,8 @@
 
 @interface ExtendedRomFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> { }
 
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err;
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err;
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
  
 @end
 

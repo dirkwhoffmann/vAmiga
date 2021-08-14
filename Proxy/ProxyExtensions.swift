@@ -164,9 +164,9 @@ extension AmigaFileProxy {
     @discardableResult
     func writeToFile(url: URL) throws -> Int {
         
-        var err = ErrorCode.OK
-        let result = write(toFile: url.path, error: &err)
-        if err != .OK { throw VAError(err) }
+        let exception = ExceptionWrapper()
+        let result = write(toFile: url.path, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
         
         return result
     }
