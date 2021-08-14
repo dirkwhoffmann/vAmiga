@@ -57,13 +57,3 @@ Folder::makeWithFolder(const string &path)
         
     return folder;
 }
-
-Folder *
-Folder::makeWithFolder(const string &path, ErrorCode *err)
-{
-    *err = ERROR_OK;
-    
-    try { return makeWithFolder(path); }
-    catch (VAError &exception) { *err = exception.data; }
-    return nullptr;
-}

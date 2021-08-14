@@ -25,7 +25,7 @@ public:
     //
     
     static Folder *makeWithFolder(const string &path) throws;
-    static Folder *makeWithFolder(const string &path, ErrorCode *err);
+    // static Folder *makeWithFolder(const string &path, ErrorCode *err);
 
     
     //

@@ -20,9 +20,8 @@ public:
     static bool isCompatiblePath(const string &path);
     static bool isCompatibleStream(std::istream &stream);
 
-    static IMGFile *makeWithDiskType(DiskDiameter t, DiskDensity d);
-    static IMGFile *makeWithDisk(class Disk *disk) throws;
-    static IMGFile *makeWithDisk(class Disk *disk, ErrorCode *ec);
+    static IMGFile *make(DiskDiameter t, DiskDensity d) throws;
+    static IMGFile *make(class Disk *disk) throws;
 
     
     //

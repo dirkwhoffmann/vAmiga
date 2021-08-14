@@ -30,21 +30,23 @@ IMGFile::isCompatibleStream(std::istream &stream)
 }
 
 IMGFile *
-IMGFile::makeWithDiskType(DiskDiameter t, DiskDensity d)
+IMGFile::make(DiskDiameter t, DiskDensity d)
 {
-    assert(t == INCH_35);
-    assert(d == DISK_DD);
-    
-    IMGFile *img = new IMGFile();
-    
-    img->size = 9 * 160 * 512;
-    img->data = new u8[img->size]();
-    
-    return img;
+    if (t == INCH_35 && d == DISK_DD) {
+
+        IMGFile *img = new IMGFile();
+        
+        img->size = 9 * 160 * 512;
+        img->data = new u8[img->size]();
+        
+        return img;
+    }
+
+    throw VAError(ERROR_DISK_INVALID_LAYOUT);
 }
 
 IMGFile *
-IMGFile::makeWithDisk(Disk *disk)
+IMGFile::make(Disk *disk)
 {
     assert(disk != nullptr);
         
@@ -53,21 +55,11 @@ IMGFile::makeWithDisk(Disk *disk)
         throw VAError(ERROR_UNKNOWN);
     }
     
-    IMGFile *img = makeWithDiskType(INCH_35, DISK_DD);
+    IMGFile *img = make(INCH_35, DISK_DD);
     try { img->decodeDisk(disk); }
     catch (VAError &exception) { delete img; throw exception; }
     
     return img;
-}
-
-IMGFile *
-IMGFile::makeWithDisk(Disk *disk, ErrorCode *ec)
-{
-    *ec = ERROR_OK;
-    
-    try { return makeWithDisk(disk); }
-    catch (VAError &exception) { *ec = exception.data; }
-    return nullptr;
 }
 
 isize
@@ -109,7 +101,7 @@ IMGFile::encodeDisk(Disk *disk)
     // In debug mode, also run the decoder
     if (MFM_DEBUG) {
         msg("DOS disk fully encoded\n");
-        IMGFile *tmp = IMGFile::makeWithDisk(disk);
+        IMGFile *tmp = IMGFile::make(disk);
         if (tmp) {
             msg("Decoded image written to /tmp/debug.img\n");
             tmp->writeToFile("/tmp/tmp.img");

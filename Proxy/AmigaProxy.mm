@@ -1785,7 +1785,7 @@ using namespace moira;
 
 + (instancetype)makeWithDiameter:(DiskDiameter)type density:(DiskDensity)density
 {
-    ADFFile *archive = ADFFile::makeWithType(type, density);
+    ADFFile *archive = ADFFile::make(type, density);
     return [self make: archive];
 }
 
@@ -1894,7 +1894,7 @@ using namespace moira;
 
 + (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: IMGFile::makeWithDisk([proxy drive]->disk)]; }
+    try { return [self make: IMGFile::make([proxy drive]->disk)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
@@ -1993,12 +1993,6 @@ using namespace moira;
 {
     try { return [self make: Folder::makeWithFolder([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)ec
-{
-    string str = string([path fileSystemRepresentation]);
-    return [self make: Folder::makeWithFolder(str, ec)];
 }
 
 - (ADFFileProxy *)adf

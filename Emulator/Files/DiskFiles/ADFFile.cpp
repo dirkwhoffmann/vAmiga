@@ -42,7 +42,7 @@ ADFFile::isCompatibleStream(std::istream &stream)
 }
 
 ADFFile *
-ADFFile::makeWithType(DiskDiameter diameter, DiskDensity density)
+ADFFile::make(DiskDiameter diameter, DiskDensity density)
 {
     assert_enum(DiskDiameter, diameter);
     
@@ -63,7 +63,7 @@ ADFFile::makeWithDisk(Disk *disk)
     DiskDensity density = disk->getDensity();
 
     // Create an empty ADF
-    ADFFile *adf = makeWithType(type, density);
+    ADFFile *adf = make(type, density);
     
     // Export disk
     assert(adf->numTracks() == 160);
@@ -89,11 +89,11 @@ ADFFile::makeWithVolume(FSDevice &volume)
     switch (volume.getCapacity()) {
             
         case 2 * 880:
-            adf = makeWithType(INCH_35, DISK_DD);
+            adf = make(INCH_35, DISK_DD);
             break;
             
         case 4 * 880:
-            adf = makeWithType(INCH_35, DISK_HD);
+            adf = make(INCH_35, DISK_HD);
             break;
             
         default:

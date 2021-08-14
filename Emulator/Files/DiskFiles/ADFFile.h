@@ -30,7 +30,7 @@ public:
     static bool isCompatiblePath(const string &path);
     static bool isCompatibleStream(std::istream &stream);
     
-    static ADFFile *makeWithType(DiskDiameter t, DiskDensity d) throws;
+    static ADFFile *make(DiskDiameter t, DiskDensity d) throws;
     static ADFFile *makeWithDisk(class Disk *disk) throws;
     static ADFFile *makeWithDrive(class Drive *drive) throws;
     static ADFFile *makeWithVolume(FSDevice &volume) throws;
