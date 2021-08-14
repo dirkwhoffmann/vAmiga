@@ -30,15 +30,28 @@ Disk::Disk(DiskDiameter type, DiskDensity density)
     clearDisk();
 }
 
+Disk::Disk(DiskFile &file) : Disk(file.getDiskDiameter(), file.getDiskDensity())
+{
+    encodeDisk(file);
+    file.fnv();
+}
+
+Disk::Disk(util::SerReader &reader, DiskDiameter type, DiskDensity density) : Disk(type, density)
+{
+    applyToPersistentItems(reader);
+}
+
 Disk::~Disk()
 {
 }
 
 Disk *
-Disk::make(DiskFile *file)
+Disk::make(DiskFile &file)
 {
-    // TODO: Return a unique_ptr 
-    Disk *disk = new Disk(file->getDiskDiameter(), file->getDiskDensity());
+    return new Disk(file);
+
+    /*
+    Disk *disk = new Disk(file.getDiskDiameter(), file.getDiskDensity());
     
     try {
         
@@ -51,15 +64,19 @@ Disk::make(DiskFile *file)
         delete disk;
         throw exception;
     }
+    */
 }
 
 Disk *
 Disk::make(util::SerReader &reader, DiskDiameter type, DiskDensity density)
 {
+    return new Disk(reader, type, density);
+    /*
     Disk *disk = new Disk(type, density);
     disk->applyToPersistentItems(reader);
     
     return disk;
+    */
 }
 
 void
@@ -170,16 +187,15 @@ Disk::clearTrack(Track t, u8 value1, u8 value2)
 }
 
 void
-Disk::encodeDisk(DiskFile *df)
+Disk::encodeDisk(DiskFile &df)
 {
-    assert(df != nullptr);
-    assert(df->getDiskDiameter() == getDiameter());
+    assert(df.getDiskDiameter() == getDiameter());
 
     // Start with an unformatted disk
     clearDisk();
 
     // Call the MFM encoder
-    df->encodeDisk(this);
+    df.encodeDisk(this);
 }
 
 void

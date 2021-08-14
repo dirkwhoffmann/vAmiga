@@ -94,11 +94,13 @@ private:
 public:
     
     Disk(DiskDiameter type, DiskDensity density) throws;
+    Disk(class DiskFile &file) throws;
+    Disk(util::SerReader &reader, DiskDiameter type, DiskDensity density) throws;
     ~Disk();
 
     const char *getDescription() const override { return "Disk"; }
 
-    static Disk *make(class DiskFile *file) throws;
+    static Disk *make(class DiskFile &file) throws;
     static Disk *make(util::SerReader &reader, DiskDiameter type, DiskDensity density) throws;
         
     void dump();
@@ -181,7 +183,7 @@ public:
 public:
     
     // Encodes a disk
-    void encodeDisk(class DiskFile *df);
+    void encodeDisk(class DiskFile &df);
     
     
     //
