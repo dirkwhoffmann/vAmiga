@@ -52,5 +52,5 @@ public:
     void killVirus() override { adf->killVirus(); }
     void readSector(u8 *target, isize s) const override { return adf->readSector(target, s); }
     void readSector(u8 *target, isize t, isize s) const override { return adf->readSector(target, t, s); }
-    void encodeDisk(class Disk *disk) throws override { return adf->encodeDisk(disk); }
+    void encodeDisk(class Disk &disk) throws override { return adf->encodeDisk(disk); }
 };

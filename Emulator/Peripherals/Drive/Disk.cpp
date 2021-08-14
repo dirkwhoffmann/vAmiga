@@ -49,34 +49,12 @@ Disk *
 Disk::make(DiskFile &file)
 {
     return new Disk(file);
-
-    /*
-    Disk *disk = new Disk(file.getDiskDiameter(), file.getDiskDensity());
-    
-    try {
-        
-        disk->encodeDisk(file);
-        disk->fnv = file->fnv();
-        return disk;
-        
-    } catch (VAError &exception) {
-        
-        delete disk;
-        throw exception;
-    }
-    */
 }
 
 Disk *
 Disk::make(util::SerReader &reader, DiskDiameter type, DiskDensity density)
 {
     return new Disk(reader, type, density);
-    /*
-    Disk *disk = new Disk(type, density);
-    disk->applyToPersistentItems(reader);
-    
-    return disk;
-    */
 }
 
 void
@@ -187,15 +165,15 @@ Disk::clearTrack(Track t, u8 value1, u8 value2)
 }
 
 void
-Disk::encodeDisk(DiskFile &df)
+Disk::encodeDisk(DiskFile &file)
 {
-    assert(df.getDiskDiameter() == getDiameter());
+    assert(file.getDiskDiameter() == getDiameter());
 
     // Start with an unformatted disk
     clearDisk();
 
     // Call the MFM encoder
-    df.encodeDisk(this);
+    file.encodeDisk(*this);
 }
 
 void

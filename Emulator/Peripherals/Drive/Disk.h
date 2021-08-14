@@ -183,7 +183,7 @@ public:
 public:
     
     // Encodes a disk
-    void encodeDisk(class DiskFile &df);
+    void encodeDisk(class DiskFile &file);
     
     
     //

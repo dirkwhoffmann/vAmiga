@@ -1779,7 +1779,7 @@ using namespace moira;
 + (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     Drive *drive = [proxy drive];
-    ADFFile *archive = ADFFile::make(drive);
+    ADFFile *archive = ADFFile::make(*drive);
     return archive ? [self make: archive] : nil;
 }
 
@@ -1894,7 +1894,7 @@ using namespace moira;
 
 + (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: IMGFile::make([proxy drive]->disk)]; }
+    try { return [self make: IMGFile::make(*[proxy drive]->disk)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 

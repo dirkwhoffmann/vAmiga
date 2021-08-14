@@ -31,8 +31,8 @@ public:
     static bool isCompatibleStream(std::istream &stream);
     
     static ADFFile *make(DiskDiameter t, DiskDensity d) throws;
-    static ADFFile *make(class Disk *disk) throws;
-    static ADFFile *make(class Drive *drive) throws;
+    static ADFFile *make(class Disk &disk) throws;
+    static ADFFile *make(class Drive &drive) throws;
     static ADFFile *make(FSDevice &volume) throws;
 
 private:
@@ -77,15 +77,15 @@ public:
     
     void killVirus() override;
 
-    void encodeDisk(class Disk *disk) throws override;
-    void decodeDisk(class Disk *disk) throws override;
+    void encodeDisk(class Disk &disk) throws override;
+    void decodeDisk(class Disk &disk) throws override;
 
 private:
     
-    void encodeTrack(class Disk *disk, Track t) throws;
-    void encodeSector(class Disk *disk, Track t, Sector s) throws;
+    void encodeTrack(class Disk &disk, Track t) throws;
+    void encodeSector(class Disk &disk, Track t, Sector s) throws;
 
-    void decodeTrack(class Disk *disk, Track t) throws;
+    void decodeTrack(class Disk &disk, Track t) throws;
     void decodeSector(u8 *dst, u8 *src) throws;
 
     

@@ -21,7 +21,7 @@ public:
     static bool isCompatibleStream(std::istream &stream);
 
     static IMGFile *make(DiskDiameter t, DiskDensity d) throws;
-    static IMGFile *make(class Disk *disk) throws;
+    static IMGFile *make(class Disk &disk) throws;
 
     
     //
@@ -49,14 +49,14 @@ public:
     isize numSides() const override;
     isize numCyls() const override;
     isize numSectors() const override;
-    void encodeDisk(class Disk *disk) throws override;
-    void decodeDisk(class Disk *disk) throws override;
+    void encodeDisk(class Disk &disk) throws override;
+    void decodeDisk(class Disk &disk) throws override;
 
 private:
     
-    void encodeTrack(class Disk *disk, Track t) throws;
-    void encodeSector(class Disk *disk, Track t, Sector s) throws;
+    void encodeTrack(class Disk &disk, Track t) throws;
+    void encodeSector(class Disk &disk, Track t, Sector s) throws;
 
-    void decodeTrack(class Disk *disk, Track t) throws;
+    void decodeTrack(class Disk &disk, Track t) throws;
     void decodeSector(u8 *dst, u8 *src);
 };

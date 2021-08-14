@@ -46,12 +46,10 @@ IMGFile::make(DiskDiameter t, DiskDensity d)
 }
 
 IMGFile *
-IMGFile::make(Disk *disk)
+IMGFile::make(Disk &disk)
 {
-    assert(disk != nullptr);
-        
     // We only support 3.5"DD disks at the moment
-    if (disk->getDiameter() != INCH_35 || disk->getDensity() != DISK_DD) {
+    if (disk.getDiameter() != INCH_35 || disk.getDensity() != DISK_DD) {
         throw VAError(ERROR_UNKNOWN);
     }
     
@@ -81,14 +79,12 @@ IMGFile::numSectors() const
 }
 
 void
-IMGFile::encodeDisk(Disk *disk)
+IMGFile::encodeDisk(Disk &disk)
 {
-    assert(disk != nullptr);
-    
-    if (disk->getDiameter() != getDiskDiameter()) {
+    if (disk.getDiameter() != getDiskDiameter()) {
         throw VAError(ERROR_DISK_INVALID_DIAMETER);
     }
-    if (disk->getDensity() != getDiskDensity()) {
+    if (disk.getDensity() != getDiskDensity()) {
         throw VAError(ERROR_DISK_INVALID_DENSITY);
     }
 
@@ -110,15 +106,15 @@ IMGFile::encodeDisk(Disk *disk)
 }
 
 void
-IMGFile::encodeTrack(Disk *disk, Track t)
+IMGFile::encodeTrack(Disk &disk, Track t)
 {
     isize sectors = numSectors();
     debug(MFM_DEBUG, "Encoding DOS track %d with %ld sectors\n", t, sectors);
 
-    u8 *p = disk->data.track[t];
+    u8 *p = disk.data.track[t];
 
     // Clear track
-    disk->clearTrack(t, 0x92, 0x54);
+    disk.clearTrack(t, 0x92, 0x54);
 
     // Encode track header
     p += 82;                                        // GAP
@@ -136,11 +132,11 @@ IMGFile::encodeTrack(Disk *disk, Track t)
     
     // Compute a checksum for debugging
     debug(MFM_DEBUG, "Track %d checksum = %x\n",
-          t, util::fnv_1a_32(disk->data.track[t], disk->length.track[t]));
+          t, util::fnv_1a_32(disk.data.track[t], disk.length.track[t]));
 }
 
 void
-IMGFile::encodeSector(Disk *disk, Track t, Sector s)
+IMGFile::encodeSector(Disk &disk, Track t, Sector s)
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
         
@@ -190,7 +186,7 @@ IMGFile::encodeSector(Disk *disk, Track t, Sector s)
     for (isize i = 574; i < isizeof(buf); i++) { buf[i] = 0x4E; }
 
     // Determine the start of this sector
-    u8 *p = disk->data.track[t] + 194 + s * 1300;
+    u8 *p = disk.data.track[t] + 194 + s * 1300;
 
     // Create the MFM data stream
     Disk::encodeMFM(p, buf, sizeof(buf));
@@ -208,33 +204,33 @@ IMGFile::encodeSector(Disk *disk, Track t, Sector s)
 }
 
 void
-IMGFile::decodeDisk(Disk *disk)
+IMGFile::decodeDisk(Disk &disk)
 {
     long tracks = numTracks();
     
     trace(MFM_DEBUG, "Decoding DOS disk (%ld tracks)\n", tracks);
     
-    if (disk->getDiameter() != getDiskDiameter()) {
+    if (disk.getDiameter() != getDiskDiameter()) {
         throw VAError(ERROR_DISK_INVALID_DIAMETER);
     }
-    if (disk->getDensity() != getDiskDensity()) {
+    if (disk.getDensity() != getDiskDensity()) {
         throw VAError(ERROR_DISK_INVALID_DENSITY);
     }
     
     // Make the MFM stream scannable beyond the track end
-    disk->repeatTracks();
+    disk.repeatTracks();
 
     // Decode all tracks
     for (Track t = 0; t < tracks; t++) decodeTrack(disk, t);
 }
 
 void
-IMGFile::decodeTrack(Disk *disk, Track t)
+IMGFile::decodeTrack(Disk &disk, Track t)
 {
-    assert(t < disk->numTracks());
+    assert(t < disk.numTracks());
         
     long numSectors = 9;
-    u8 *src = disk->data.track[t];
+    u8 *src = disk.data.track[t];
     u8 *dst = data + t * numSectors * 512;
     
     trace(MFM_DEBUG, "Decoding DOS track %d\n", t);
@@ -245,7 +241,7 @@ IMGFile::decodeTrack(Disk *disk, Track t)
         sectorStart[i] = 0;
     }
     isize cnt = 0;
-    for (isize i = 0; i < isizeof(disk->data.track[t]) - 16;) {
+    for (isize i = 0; i < isizeof(disk.data.track[t]) - 16;) {
         
         // Seek IDAM block
         if (src[i++] != 0x44) continue;
