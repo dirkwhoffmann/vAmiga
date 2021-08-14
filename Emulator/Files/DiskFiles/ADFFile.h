@@ -85,8 +85,8 @@ private:
     void encodeTrack(class Disk *disk, Track t) throws;
     void encodeSector(class Disk *disk, Track t, Sector s) throws;
 
-    bool decodeTrack(class Disk *disk, Track t);
-    bool decodeSector(u8 *dst, u8 *src);
+    void decodeTrack(class Disk *disk, Track t) throws;
+    void decodeSector(u8 *dst, u8 *src) throws;
 
     
     //

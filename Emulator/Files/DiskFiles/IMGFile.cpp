@@ -232,12 +232,11 @@ IMGFile::decodeDisk(Disk *disk)
     // Make the MFM stream scannable beyond the track end
     disk->repeatTracks();
 
-    for (Track t = 0; t < tracks; t++) {
-        if (!decodeTrack(disk, t)) throw VAError(ERROR_DISK_CANT_DECODE);
-    }
+    // Decode all tracks
+    for (Track t = 0; t < tracks; t++) decodeTrack(disk, t);
 }
 
-bool
+void
 IMGFile::decodeTrack(Disk *disk, Track t)
 {
     assert(t < disk->numTracks());
@@ -281,32 +280,27 @@ IMGFile::decodeTrack(Disk *disk, Track t)
             cnt++;
 
         } else {
-            warn("Invalid sector number %d. Aborting", chrn.r);
-            return false;
+            warn("Invalid sector number %d. Aborting.\n", chrn.r);
+            throw VAError(ERROR_DISK_INVALID_SECTOR_NUMBER);
         }
     }
 
     if (cnt != numSectors) {
-        warn("Found %zd sectors, expected %ld. Aborting", cnt, numSectors);
-        return false;
+        warn("Found %zd sectors, expected %ld. Aborting.\n", cnt, numSectors);
+        throw VAError(ERROR_DISK_WRONG_SECTOR_COUNT);
     }
         
     // Do some consistency checking
     for (isize i = 0; i < numSectors; i++) assert(sectorStart[i] != 0);
     
-    // Encode all sectors
-    bool result = true;
-    for (Sector s = 0; s < numSectors; s++) {
-        result &= decodeSector(dst, src + sectorStart[s]);
-        dst += 512;
+    // Decode all sectors
+    for (Sector s = 0; s < numSectors; s++, dst += 512) {
+        decodeSector(dst, src + sectorStart[s]);
     }
-    
-    return result;
 }
 
-bool
+void
 IMGFile::decodeSector(u8 *dst, u8 *src)
 {
     Disk::decodeMFM(dst, src, 512);
-    return true;
 }

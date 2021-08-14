@@ -440,12 +440,11 @@ ADFFile::decodeDisk(Disk *disk)
     // Make the MFM stream scannable beyond the track end
     disk->repeatTracks();
 
-    for (Track t = 0; t < tracks; t++) {
-        if (!decodeTrack(disk, t)) throw VAError(ERROR_DISK_CANT_DECODE);
-    }
+    // Decode all tracks
+    for (Track t = 0; t < tracks; t++) decodeTrack(disk, t);
 }
 
-bool
+void
 ADFFile::decodeTrack(Disk *disk, Track t)
 { 
     long sectors = numSectors();
@@ -474,20 +473,18 @@ ADFFile::decodeTrack(Disk *disk, Track t)
     trace(MFM_DEBUG, "Found %zd sectors (expected %ld)\n", nr, sectors);
 
     if (nr != sectors) {
+        
         warn("Found %zd sectors, expected %ld. Aborting.\n", nr, sectors);
-        return false;
+        throw VAError(ERROR_DISK_WRONG_SECTOR_COUNT);
     }
     
-    // Encode all sectors
-    bool result = true;
+    // Decode all sectors
     for (Sector s = 0; s < sectors; s++) {
-        result &= decodeSector(dst, src + sectorStart[s]);
+        decodeSector(dst, src + sectorStart[s]);
     }
-    
-    return result;
 }
 
-bool
+void
 ADFFile::decodeSector(u8 *dst, u8 *src)
 {
     assert(dst != nullptr);
@@ -499,12 +496,14 @@ ADFFile::decodeSector(u8 *dst, u8 *src)
     
     // Only proceed if the sector number is valid
     u8 sector = info[2];
-    if (sector >= numSectors()) return false;
+    if (sector >= numSectors()) {
+        warn("Invalid sector number %d. Aborting.\n", sector);
+        throw VAError(ERROR_DISK_INVALID_SECTOR_NUMBER);
+    }
     
     // Skip sector header
     src += 56;
     
     // Decode sector data
     Disk::decodeOddEven(dst + sector * 512, src, 512);
-    return true;
 }
