@@ -41,18 +41,6 @@ ADFFile::isCompatibleStream(std::istream &stream)
     length == ADFSIZE_35_HD;
 }
 
-isize
-ADFFile::fileSize(DiskDiameter diameter, DiskDensity density)
-{
-    assert_enum(DiskDiameter, density);
-    
-    if (diameter == INCH_35 && density == DISK_DD) return ADFSIZE_35_DD;
-    if (diameter == INCH_35 && density == DISK_HD) return ADFSIZE_35_HD;
-
-    assert(false);
-    return 0;
-}
-
 ADFFile *
 ADFFile::makeWithType(DiskDiameter diameter, DiskDensity density)
 {
@@ -86,36 +74,12 @@ ADFFile::makeWithDisk(Disk *disk)
     return adf;
 }
 
-/*
-ADFFile *
-ADFFile::makeWithDisk(Disk *disk, ErrorCode *ec)
-{
-    *ec = ERROR_OK;
-    
-    try { return makeWithDisk(disk); }
-    catch (VAError &exception) { *ec = exception.data; }
-    return nullptr;
-}
-*/
-
 ADFFile *
 ADFFile::makeWithDrive(Drive *drive)
 {
     assert(drive);
     return drive->disk ? makeWithDisk(drive->disk) : nullptr;
 }
-
-/*
-ADFFile *
-ADFFile::makeWithDrive(Drive *drive, ErrorCode *ec)
-{
-    *ec = ERROR_OK;
-    
-    try { return makeWithDrive(drive); }
-    catch (VAError &exception) { *ec = exception.data; }
-    return nullptr;
-}
-*/
 
 ADFFile *
 ADFFile::makeWithVolume(FSDevice &volume)
@@ -133,7 +97,7 @@ ADFFile::makeWithVolume(FSDevice &volume)
             break;
             
         default:
-            assert(false);
+            throw VAError(ERROR_FS_WRONG_CAPACITY);
     }
 
     ErrorCode ec;
@@ -143,17 +107,18 @@ ADFFile::makeWithVolume(FSDevice &volume)
     return adf;
 }
 
-/*
-ADFFile *
-ADFFile::makeWithVolume(FSDevice &volume, ErrorCode *ec)
+isize
+ADFFile::fileSize(DiskDiameter diameter, DiskDensity density)
 {
-    *ec = ERROR_OK;
+    assert_enum(DiskDiameter, density);
     
-    try { return makeWithVolume(volume); }
-    catch (VAError &exception) { *ec = exception.data; }
-    return nullptr;
+    if (diameter != INCH_35) throw VAError(ERROR_DISK_INVALID_DIAMETER);
+    
+    if (density == DISK_DD) return ADFSIZE_35_DD;
+    if (density == DISK_HD) return ADFSIZE_35_HD;
+
+    throw VAError(ERROR_DISK_INVALID_DENSITY);
 }
-*/
 
 FSVolumeType
 ADFFile::getDos() const
@@ -469,7 +434,7 @@ ADFFile::encodeSector(Disk *disk, Track t, Sector s)
 }
 
 void
-ADFFile::dumpSector(Sector s)
+ADFFile::dumpSector(Sector s) const
 {
     util::hexdump(data + 512 * s, 512);
 }

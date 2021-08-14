@@ -30,16 +30,15 @@ public:
     static bool isCompatiblePath(const string &path);
     static bool isCompatibleStream(std::istream &stream);
     
-    // Returns the size of an ADF file of a given disk type in bytes
-    static isize fileSize(DiskDiameter t, DiskDensity d);
-
-    static ADFFile *makeWithType(DiskDiameter t, DiskDensity d);    
+    static ADFFile *makeWithType(DiskDiameter t, DiskDensity d) throws;
     static ADFFile *makeWithDisk(class Disk *disk) throws;
-//    static ADFFile *makeWithDisk(class Disk *disk, ErrorCode *ec);
     static ADFFile *makeWithDrive(class Drive *drive) throws;
-//    static ADFFile *makeWithDrive(class Drive *drive, ErrorCode *ec);
     static ADFFile *makeWithVolume(FSDevice &volume) throws;
-//     static ADFFile *makeWithVolume(FSDevice &volume, ErrorCode *ec);
+
+private:
+    
+    // Returns the size of an ADF file of a given disk type in bytes
+    static isize fileSize(DiskDiameter t, DiskDensity d) throws;
 
     
     //
@@ -115,5 +114,5 @@ public:
  
 public:
     
-    void dumpSector(Sector s);
+    void dumpSector(Sector s) const;
 };
