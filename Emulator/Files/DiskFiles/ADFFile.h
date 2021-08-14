@@ -30,7 +30,7 @@ public:
     static bool isCompatiblePath(const string &path);
     static bool isCompatibleStream(std::istream &stream);
     
-    static ADFFile *make(DiskDiameter t, DiskDensity d) throws;
+    static ADFFile *make(DiskDiameter dia, DiskDensity den) throws;
     static ADFFile *make(class Disk &disk) throws;
     static ADFFile *make(class Drive &drive) throws;
     static ADFFile *make(FSDevice &volume) throws;
@@ -38,7 +38,27 @@ public:
 private:
     
     // Returns the size of an ADF file of a given disk type in bytes
-    static isize fileSize(DiskDiameter t, DiskDensity d) throws;
+    static isize fileSize(DiskDiameter diameter, DiskDensity density) throws;
+
+    
+    //
+    // Initializing
+    //
+    
+public:
+    
+    using DiskFile::DiskFile;
+    ADFFile(DiskDiameter diameter, DiskDensity density) throws { init(diameter, density); }
+    ADFFile(class Disk &disk) throws { init(disk); }
+    ADFFile(class Drive &drive) throws { init(drive); }
+    ADFFile(FSDevice &volume) throws { init(volume); }
+
+private:
+    
+    void init(DiskDiameter diameter, DiskDensity density) throws;
+    void init(Disk &disk) throws;
+    void init(Drive &drive) throws;
+    void init(FSDevice &volume) throws;
 
     
     //

@@ -44,64 +44,25 @@ ADFFile::isCompatibleStream(std::istream &stream)
 ADFFile *
 ADFFile::make(DiskDiameter diameter, DiskDensity density)
 {
-    assert_enum(DiskDiameter, diameter);
-    
-    ADFFile *adf = new ADFFile();
-    
-    adf->size = fileSize(diameter, density);
-    adf->data = new u8[adf->size]();
-
-    return adf;
+    return new ADFFile(diameter, density);
 }
 
 ADFFile *
 ADFFile::make(Disk &disk)
 {
-    DiskDiameter type = disk.getDiameter();
-    DiskDensity density = disk.getDensity();
-
-    // Create an empty ADF
-    ADFFile *adf = make(type, density);
-    
-    // Export disk
-    assert(adf->numTracks() == 160);
-    assert(adf->numSectors() == 11 || adf->numSectors() == 22);
-    try { adf->decodeDisk(disk); }
-    catch (VAError &exception) { delete adf; throw exception; }
-    
-    return adf;
+    return new ADFFile(disk);
 }
 
 ADFFile *
 ADFFile::make(Drive &drive)
 {
-    return drive.disk ? make(*drive.disk) : nullptr;
+    return new ADFFile(drive);
 }
 
 ADFFile *
 ADFFile::make(FSDevice &volume)
 {
-    ADFFile *adf = nullptr;
-    
-    switch (volume.getCapacity()) {
-            
-        case 2 * 880:
-            adf = make(INCH_35, DISK_DD);
-            break;
-            
-        case 4 * 880:
-            adf = make(INCH_35, DISK_HD);
-            break;
-            
-        default:
-            throw VAError(ERROR_FS_WRONG_CAPACITY);
-    }
-
-    ErrorCode ec;
-    volume.exportVolume(adf->data, adf->size, &ec);
-    if (ec != ERROR_OK) throw VAError(ec);
-    
-    return adf;
+    return new ADFFile(volume);
 }
 
 isize
@@ -115,6 +76,76 @@ ADFFile::fileSize(DiskDiameter diameter, DiskDensity density)
     if (density == DISK_HD) return ADFSIZE_35_HD;
 
     throw VAError(ERROR_DISK_INVALID_DENSITY);
+}
+
+/*
+ADFFile::ADFFile(DiskDiameter diameter, DiskDensity density)
+{
+    init(diameter, density);
+}
+
+ADFFile::ADFFile(Disk &disk)
+{
+    init(disk);
+}
+
+ADFFile::ADFFile(Drive &drive)
+{
+    init(drive);
+}
+
+ADFFile::ADFFile(FSDevice &volume)
+{
+    init(volume);
+}
+*/
+
+void
+ADFFile::init(DiskDiameter diameter, DiskDensity density)
+{
+    assert_enum(DiskDiameter, diameter);
+    assert(size == 0 && data == nullptr);
+    
+    size = fileSize(diameter, density);
+    data = new u8[size]();
+}
+
+void
+ADFFile::init(Disk &disk)
+{
+    init(disk.getDiameter(), disk.getDensity());
+    
+    assert(numTracks() == 160);
+    assert(numSectors() == 11 || numSectors() == 22);
+    
+    decodeDisk(disk);
+}
+
+void
+ADFFile::init(Drive &drive)
+{
+    if (drive.disk == nullptr) throw VAError(ERROR_DISK_MISSING);
+    init(*drive.disk);
+}
+
+void
+ADFFile::init(FSDevice &volume)
+{
+    switch (volume.getCapacity()) {
+            
+        case 2 * 880:
+            init(INCH_35, DISK_DD);
+            break;
+            
+        case 4 * 880:
+            init(INCH_35, DISK_HD);
+            break;
+            
+        default:
+            throw VAError(ERROR_FS_WRONG_CAPACITY);
+    }
+
+    volume.exportVolume(data, size);
 }
 
 FSVolumeType
