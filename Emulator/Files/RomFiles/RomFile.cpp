@@ -302,9 +302,11 @@ RomFile::released(RomIdentifier rev)
     }
 }
 
+/*
 RomFile::RomFile()
 {
 }
+*/
 
 bool
 RomFile::isCompatibleStream(std::istream &stream)

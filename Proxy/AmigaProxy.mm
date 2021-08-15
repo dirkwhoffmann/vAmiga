@@ -1609,13 +1609,13 @@ using namespace moira;
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <RomFile> ([path fileSystemRepresentation])]; }
+    try { return [self make: new RomFile([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <RomFile> ((const u8 *)buf, len)]; }
+    try { return [self make: new RomFile((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 

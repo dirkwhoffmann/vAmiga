@@ -94,15 +94,6 @@ public:
     
 public:
 
-    template <class T> static T *make(const string &path, std::istream &stream) throws
-    {
-        if (!T::isCompatiblePath(path)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
-        
-        T *obj = make <T> (stream);
-        obj->path = path;
-        return obj;
-    }
-
     template <class T> static T *make(std::istream &stream) throws
     {
         if (!T::isCompatibleStream(stream)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
@@ -113,6 +104,15 @@ public:
             delete obj;
             throw err;
         }
+        return obj;
+    }
+
+    template <class T> static T *make(const string &path, std::istream &stream) throws
+    {
+        if (!T::isCompatiblePath(path)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
+        
+        T *obj = make <T> (stream);
+        obj->path = path;
         return obj;
     }
         
@@ -141,7 +141,6 @@ public:
         return make <T> (stream);
     }
     
-    
     //
     // Initializing
     //
@@ -150,12 +149,27 @@ public:
 
     AmigaFile() { };
     AmigaFile(isize capacity);
+    AmigaFile(std::istream &stream) throws { init(stream); }
+    AmigaFile(const string &path, std::istream &stream) throws { init(path, stream); }
+    AmigaFile(const u8 *buf, isize len) throws { init(buf, len); }
+    AmigaFile(const string &path) throws { init(path); }
+    AmigaFile(FILE *file) throws { init(file); }
     virtual ~AmigaFile();
         
+protected:
+    
+    void init(std::istream &stream) throws;
+    void init(const string &path, std::istream &stream) throws;
+    void init(const u8 *buf, isize len) throws;
+    void init(const string &path) throws;
+    void init(FILE *file) throws;
+    
     
     //
     // Accessing
     //
+    
+public:
     
     // Determines the type of an arbitrary file on file
     static FileType type(const string &path);
@@ -181,6 +195,9 @@ public:
     
 protected:
     
+    virtual bool compatiblePath(const string &path) { return false; }
+    virtual bool compatibleStream(std::istream &stream) { return false; }
+
     virtual isize readFromStream(std::istream &stream) throws;
     isize readFromFile(const string &path) throws;
     isize readFromBuffer(const u8 *buf, isize len) throws;

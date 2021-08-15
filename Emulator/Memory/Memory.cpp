@@ -618,17 +618,20 @@ Memory::loadRom(RomFile *file)
 void
 Memory::loadRom(const string &path)
 {
+    /*
     RomFile *file = AmigaFile::make <RomFile> (path);
     loadRom(file);
     delete(file);
+    */
+    RomFile file(path);
+    loadRom(&file);
 }
 
 void
 Memory::loadRom(const u8 *buf, isize len)
 {
-    RomFile *file = AmigaFile::make <RomFile> (buf, len);
-    loadRom(file);
-    delete(file);
+    RomFile file(buf, len);
+    loadRom(&file);
 }
 
 void
@@ -664,8 +667,8 @@ Memory::saveRom(const string &path)
 {
     if (rom == nullptr) return;
     
-    RomFile *file = AmigaFile::make <RomFile> (rom, config.romSize);
-    file->writeToFile(path);
+    RomFile file(rom, config.romSize);
+    file.writeToFile(path);
 }
 
 void
@@ -673,8 +676,8 @@ Memory::saveWom(const string &path)
 {
     if (wom == nullptr) return;
     
-    RomFile *file = AmigaFile::make <RomFile> (wom, config.womSize);
-    file->writeToFile(path);
+    RomFile file(wom, config.womSize);
+    file.writeToFile(path);
 }
 
 void
@@ -682,8 +685,8 @@ Memory::saveExt(const string &path)
 {
     if (ext == nullptr) return;
 
-    RomFile *file = AmigaFile::make <RomFile> (ext, config.extSize);
-    file->writeToFile(path);
+    RomFile file(ext, config.extSize);
+    file.writeToFile(path);
 }
 
 template <> MemorySource

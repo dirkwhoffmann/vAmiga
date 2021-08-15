@@ -45,16 +45,14 @@ struct SnapshotHeader {
 
 class Snapshot : public AmigaFile {
  
-    //
-    // Class methods
-    //
-    
 public:
     
     static bool isCompatiblePath(const string &path);
     static bool isCompatibleStream(std::istream &stream);
 
-            
+    bool compatiblePath(const string &path) override { return isCompatiblePath(path); }
+    bool compatibleStream(std::istream &stream) override { return isCompatibleStream(stream); }
+
     //
     // Initializing
     //
