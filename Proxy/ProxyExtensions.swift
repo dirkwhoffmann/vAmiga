@@ -205,7 +205,7 @@ extension FSDeviceProxy {
 }
 
 //
-//
+// Other extensions
 //
 
 public extension AmigaProxy {
@@ -218,7 +218,9 @@ public extension AmigaProxy {
         case 1: return df1
         case 2: return df2
         case 3: return df3
-        default:return nil
+            
+        default:
+            return nil
         }
     }
     
@@ -246,7 +248,7 @@ public extension AmigaProxy {
                                         hasAlpha: true,
                                         isPlanar: false,
                                         colorSpaceName: NSColorSpaceName.calibratedRGB,
-                                        bytesPerRow: 4*width,
+                                        bytesPerRow: 4 * width,
                                         bitsPerPixel: 32)
         
         let image = NSImage(size: (imageRep?.size)!)
@@ -333,111 +335,5 @@ extension HDFFileProxy {
     var bootInfo: String {
 
         return ""
-    }
-}
-
-extension NSError {
-    
-    static func fileError(_ ec: ErrorCode, url: URL) -> NSError {
-        
-        let str = "\"" + url.lastPathComponent + "\""
-        var info1, info2: String
-
-        switch ec {
-                    
-        case .OK:
-            fatalError()
-        
-        case .FILE_NOT_FOUND:
-            info1 = "File " + str + " could not be opened."
-            info2 = "The file does not exist."
-            
-        case .FILE_TYPE_MISMATCH:
-            info1 = "File " + str + " could not be opened."
-            info2 = "The file format does not match."
-            
-        case .FILE_CANT_READ:
-            info1 = "Can't read from file " + str + "."
-            info2 = "The file cannot be opened."
-            
-        case .FILE_CANT_WRITE:
-            info1 = "Can't write to file " + str + "."
-            info2 = "The file cannot be opened."
-            
-        case .OUT_OF_MEMORY:
-            info1 = "The file operation cannot be performed."
-            info2 = "Not enough memory."
-                        
-        case .MISSING_ROM_KEY:
-            info1 = "Failed to decrypt the selected Rom image."
-            info2 = "A rom.key file is required to process this file."
-            
-        case .INVALID_ROM_KEY:
-            info1 = "Failed to decrypt the selected Rom image."
-            info2 = "Decrypting the Rom with the provided rom.key file did not produce a valid Rom image."
-            
-        default:
-            info1 = "The operation cannot be performed."
-            info2 = "An uncategorized error exception has been thrown."
-        }
-        
-        return NSError(domain: "vAmiga", code: ec.rawValue,
-                       userInfo: [NSLocalizedDescriptionKey: info1,
-                                  NSLocalizedRecoverySuggestionErrorKey: info2,
-                                  NSURLErrorKey: url])
-    }
-}
-
-extension NSAlert {
-
-    convenience init(fileError ec: ErrorCode, url: URL) {
-        
-        self.init()
-     
-        let err = NSError.fileError(ec, url: url)
-        
-        let msg1 = err.userInfo[NSLocalizedDescriptionKey] as! String
-        let msg2 = err.userInfo[NSLocalizedRecoverySuggestionErrorKey] as! String
-
-        alertStyle = .warning
-        messageText = msg1
-        informativeText = msg2
-        addButton(withTitle: "OK")
-    }
-            
-    /// DEPRECATED
-    @available(macOS, deprecated)
-    static func warning(_ msg1: String, _ msg2: String, icon: String? = nil) {
-
-        alert(msg1, msg2, style: .warning, icon: icon)
-    }
-
-    /// DEPRECATED
-    @available(macOS, deprecated)
-    static func critical(_ msg1: String, _ msg2: String, icon: String? = nil) {
-        
-        alert(msg1, msg2, style: .critical, icon: icon)
-    }
-    
-    /// DEPRECATED
-    @available(macOS, deprecated)
-    static func alert(_ msg1: String, _ msg2: String, style: NSAlert.Style, icon: String?) {
-        
-        let alert = NSAlert()
-        alert.alertStyle = style
-        if let icon = icon { alert.icon = NSImage(named: icon) }
-        alert.messageText = msg1
-        alert.informativeText = msg2
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
-    }
-}
-
-extension ErrorCode {
-    
-    func showAlert(url: URL) {
-        
-        let alert = NSAlert(fileError: self, url: url)
-        alert.runModal()
     }
 }

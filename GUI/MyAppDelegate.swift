@@ -10,6 +10,7 @@
 import Cocoa
 
 var myAppDelegate: MyAppDelegate {
+    
     let delegate = NSApp.delegate as? MyAppDelegate
     return delegate!
 }
@@ -40,9 +41,7 @@ var myAppDelegate: MyAppDelegate {
     var database = DeviceDatabase()
     
     // The list of recently inserted disk URLs.
-    var recentlyInsertedDiskURLs: [URL] = [] {
-        didSet { track() }
-    }
+    var recentlyInsertedDiskURLs: [URL] = []
     
     // The list of recently exported disk URLs.
     var recentlyExportedDisk0URLs: [URL] = []
@@ -51,9 +50,7 @@ var myAppDelegate: MyAppDelegate {
     var recentlyExportedDisk3URLs: [URL] = []
     
     override init() {
-        
-        track()
-        
+                
         super.init()
         pref = Preferences()
     }
@@ -80,10 +77,11 @@ var myAppDelegate: MyAppDelegate {
     func noteRecentlyUsedURL(_ url: URL, to list: inout [URL], size: Int) {
         
         if !list.contains(url) {
-            track()
-            if list.count == size {
-                list.remove(at: size - 1)
-            }
+
+            // Shorten the list if it is too large
+            if list.count == size { list.remove(at: size - 1) }
+            
+            // Add new item at the beginning
             list.insert(url, at: 0)
         }
     }
@@ -182,22 +180,22 @@ extension MyAppDelegate {
         }
     }
     
-    /// Callen when a HID device has been added
+    // Callen when a HID device has been added
     func deviceAdded() {
         prefController?.refresh()
     }
     
-    /// Callen when a HID device has been removed
+    // Callen when a HID device has been removed
     func deviceRemoved() {
         prefController?.refresh()
     }
 
-    /// Callen when a HID device has been pulled
+    // Callen when a HID device has been pulled
     func devicePulled(events: [GamePadAction]) {
         prefController?.refreshDeviceEvents(events: events)
     }
 
-    /// Use this variable to switch direct mapping of the Command keys on or off
+    // Use this variable to switch direct mapping of the Command keys on or off
     var mapCommandKeys: Bool {
         
         get {
@@ -265,11 +263,11 @@ extension MyAppDelegate {
     }
 }
 
-/// To establish a direct mapping of the Command keys to the Amiga keys, this
-/// callback is registered. It intercepts keyDown and keyUp events and filters
-/// out the Command key modifier flag. As a result, all keyboard shortcuts are
-/// disabled and all keys that are pressed in combination with the Command key
-/// will trigger a standard Cocoa key event.
+// To establish a direct mapping of the Command keys to the Amiga keys, this
+// callback is registered. It intercepts keyDown and keyUp events and filters
+// out the Command key modifier flag. As a result, all keyboard shortcuts are
+// disabled and all keys that are pressed in combination with the Command key
+// will trigger a standard Cocoa key event.
 func cgEventCallback(proxy: CGEventTapProxy,
                      type: CGEventType,
                      event: CGEvent,

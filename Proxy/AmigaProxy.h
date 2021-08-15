@@ -114,7 +114,7 @@
 @end
 
 //
-// Amiga proxy
+// Amiga
 //
 
 @interface AmigaProxy : AmigaComponentProxy {
@@ -227,7 +227,7 @@
 
 
 //
-// Guards proxy (Breakpoints, Watchpoints)
+// Guards (Breakpoints, Watchpoints)
 //
 
 @interface GuardsProxy : Proxy { }
@@ -253,7 +253,7 @@
 
 
 //
-// CPU proxy
+// CPU
 //
 
 @interface CPUProxy : AmigaComponentProxy { }
@@ -280,7 +280,7 @@
 
 
 //
-// CIA proxy
+// CIA
 //
 
 @interface CIAProxy : AmigaComponentProxy { }
@@ -291,7 +291,7 @@
 
 
 //
-// Memory proxy
+// Memory
 //
 
 @interface MemProxy : AmigaComponentProxy { }
@@ -422,7 +422,7 @@
 
 
 //
-// Recorder proxy
+// Recorder
 //
 
 @interface RecorderProxy : Proxy { }
@@ -445,7 +445,7 @@
 
 
 //
-// Paula proxy
+// Paula
 //
 
 @interface PaulaProxy : AmigaComponentProxy { }
@@ -474,7 +474,7 @@
 
 
 //
-// Rtc proxy
+// RTC
 //
 
 @interface RtcProxy : AmigaComponentProxy { }
@@ -485,7 +485,7 @@
 
 
 //
-// ControlPort proxy
+// ControlPort
 //
 
 @interface ControlPortProxy : AmigaComponentProxy {
@@ -514,7 +514,7 @@
 
 
 //
-// Mouse proxy
+// Mouse
 //
 
 @interface MouseProxy : AmigaComponentProxy { }
@@ -529,7 +529,7 @@
 
 
 //
-// Joystick proxy
+// Joystick
 //
 
 @interface JoystickProxy : AmigaComponentProxy { }
@@ -540,7 +540,7 @@
 
 
 //
-// Keyboard proxy
+// Keyboard
 //
 
 @interface KeyboardProxy : AmigaComponentProxy { }
@@ -629,7 +629,7 @@
 
 
 //
-// RetroShell proxy
+// RetroShell
 //
 
 @interface RetroShellProxy : Proxy { }
@@ -689,7 +689,7 @@
 @end
 
 //
-// Snapshot proxy
+// Snapshot
 //
 
 @interface SnapshotProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> {
@@ -708,7 +708,7 @@
 
 
 //
-// Script proxy
+// Script
 //
 
 @interface ScriptProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> { }
@@ -722,7 +722,7 @@
 
 
 //
-// RomFile proxy
+// RomFile
 //
 
 @interface RomFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> { }
@@ -734,7 +734,7 @@
 
 
 //
-// ExtendedRomFile proxy
+// ExtendedRomFile
 //
 
 @interface ExtendedRomFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> { }
@@ -792,7 +792,7 @@
 
 
 //
-// HDFFile proxy
+// HDFFile
 //
 
 @interface HDFFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> {
@@ -864,7 +864,7 @@
 
 
 //
-// Folder proxy
+// Folder
 //
 
 @interface FolderProxy : DiskFileProxy <MakeWithFile> {
