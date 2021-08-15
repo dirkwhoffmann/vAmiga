@@ -175,7 +175,7 @@
 - (AmigaInfo) getInfo;
 
 @property (readonly) BOOL isReleaseBuild;
-@property BOOL warp;
+@property BOOL warpMode;
 @property BOOL debugMode;
 @property (readonly) NSInteger cpuLoad;
 

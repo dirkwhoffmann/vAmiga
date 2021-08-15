@@ -2076,12 +2076,12 @@ using namespace moira;
     return releaseBuild;
 }
 
-- (BOOL)warp
+- (BOOL)warpMode
 {
     return [self amiga]->inWarpMode();
 }
 
-- (void)setWarp:(BOOL)value
+- (void)setWarpMode:(BOOL)value
 {
     if (value) {
         [self amiga]->warpOn();

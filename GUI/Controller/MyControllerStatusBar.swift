@@ -12,7 +12,7 @@ extension MyController {
     var hourglassIcon: NSImage? {
         
         switch pref.warpMode {
-        case .auto where amiga.warp:
+        case .auto where amiga.warpMode:
             return NSImage(named: "hourglass3Template")
         case .auto:
             return NSImage(named: "hourglass1Template")
@@ -43,7 +43,7 @@ extension MyController {
         let running = amiga.running
         let debug = amiga.debugMode
         let halted = amiga.cpu.halted
-        let warp = amiga.warp
+        let warp = amiga.warpMode
 
         // Cylinders
         refreshStatusBar(drive: 0, cylinder: amiga.df0.cylinder)
