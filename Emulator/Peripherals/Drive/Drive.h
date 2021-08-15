@@ -260,8 +260,8 @@ public:
     void toggleWriteProtection();
     
     bool isInsertable(DiskDiameter t, DiskDensity d) const;
-    bool isInsertable(DiskFile *file) const;
-    bool isInsertable(Disk *disk) const;
+    bool isInsertable(const DiskFile &file) const;
+    bool isInsertable(const Disk &disk) const;
 
     void ejectDisk();
     bool insertDisk(Disk *disk);

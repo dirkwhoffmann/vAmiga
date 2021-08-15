@@ -724,23 +724,19 @@ Drive::isInsertable(DiskDiameter t, DiskDensity d) const
 }
 
 bool
-Drive::isInsertable(DiskFile *file) const
+Drive::isInsertable(const DiskFile &file) const
 {
-    debug(DSK_DEBUG, "isInsertable(DiskFile %p)\n", file);
-   
-    if (!file) return false;
-    
-    return isInsertable(file->getDiskDiameter(), file->getDiskDensity());
+    debug(DSK_DEBUG, "isInsertable(DiskFile %p)\n", &file);
+       
+    return isInsertable(file.getDiskDiameter(), file.getDiskDensity());
 }
 
 bool
-Drive::isInsertable(Disk *disk) const
+Drive::isInsertable(const Disk &disk) const
 {
-    debug(DSK_DEBUG, "isInsertable(Disk %p)\n", disk);
+    debug(DSK_DEBUG, "isInsertable(Disk %p)\n", &disk);
     
-    if (!disk) return false;
-
-    return isInsertable(disk->diameter, disk->density);
+    return isInsertable(disk.diameter, disk.density);
 }
 
 bool
@@ -748,7 +744,7 @@ Drive::insertDisk(Disk *disk)
 {
     trace(DSK_DEBUG, "insertDisk(%p)", disk);
 
-    if (isInsertable(disk)) {
+    if (isInsertable(*disk)) {
 
         // Don't insert a disk if there is already one
         assert(!hasDisk());
