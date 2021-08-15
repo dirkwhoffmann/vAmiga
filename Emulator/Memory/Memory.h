@@ -219,7 +219,7 @@ public:
     
 public:
     
-    MemoryStats getStats() { return stats; }
+    const MemoryStats &getStats() { return stats; }
     
     void clearStats() { memset(&stats, 0, sizeof(stats)); }
     void updateStats();
@@ -286,21 +286,21 @@ private:
     /* Dynamically allocates Ram or Rom. As side effects, the memory table is
      * updated and the GUI is informed about the changed memory layout.
      */
-    bool alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask);
+    void alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask);
 
 public:
 
-    bool allocChip(i32 bytes) { return alloc(bytes, chip, config.chipSize, chipMask); }
-    bool allocSlow(i32 bytes) { return alloc(bytes, slow, config.slowSize, slowMask); }
-    bool allocFast(i32 bytes) { return alloc(bytes, fast, config.fastSize, fastMask); }
+    void allocChip(i32 bytes) { alloc(bytes, chip, config.chipSize, chipMask); }
+    void allocSlow(i32 bytes) { alloc(bytes, slow, config.slowSize, slowMask); }
+    void allocFast(i32 bytes) { alloc(bytes, fast, config.fastSize, fastMask); }
 
     void deleteChip() { allocChip(0); }
     void deleteSlow() { allocSlow(0); }
     void deleteFast() { allocFast(0); }
 
-    bool allocRom(i32 bytes) { return alloc(bytes, rom, config.romSize, romMask); }
-    bool allocWom(i32 bytes) { return alloc(bytes, wom, config.womSize, womMask); }
-    bool allocExt(i32 bytes) { return alloc(bytes, ext, config.extSize, extMask); }
+    void allocRom(i32 bytes) { alloc(bytes, rom, config.romSize, romMask); }
+    void allocWom(i32 bytes) { alloc(bytes, wom, config.womSize, womMask); }
+    void allocExt(i32 bytes) { alloc(bytes, ext, config.extSize, extMask); }
 
     void deleteRom() { allocRom(0); }
     void deleteWom() { allocWom(0); }
@@ -365,11 +365,11 @@ public:
     void eraseExt() { memset(ext, 0, config.extSize); }
     
     // Installs a Boot Rom or Kickstart Rom
-    void loadRom(class RomFile *rom) throws;
+    void loadRom(class RomFile &rom) throws;
     void loadRom(const string &path) throws;
     void loadRom(const u8 *buf, isize len) throws;
     
-    void loadExt(class ExtendedRomFile *rom) throws;
+    void loadExt(class ExtendedRomFile &rom) throws;
     void loadExt(const string &path) throws;
     void loadExt(const u8 *buf, isize len) throws;
         

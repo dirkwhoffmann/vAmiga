@@ -465,7 +465,7 @@ private:
 
 public:
     
-    AgnusStats getStats() { return stats; }
+    const AgnusStats &getStats() { return stats; }
     
 private:
     

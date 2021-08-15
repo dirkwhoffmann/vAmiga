@@ -443,7 +443,7 @@ Memory::updateStats()
     stats.kickWrites.raw = 0;
 }
 
-bool
+void
 Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask)
 {
     // Check the invariants
@@ -452,7 +452,7 @@ Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask)
     assert((ptr == nullptr) || (mask == (u32)size - 1));
 
     // Only proceed if memory layout changes
-    if (bytes == size) return true;
+    if (bytes == size) return;
     
     // Delete previous allocation
     if (ptr) { delete[] ptr; ptr = nullptr; size = 0; mask = 0; }
@@ -462,10 +462,7 @@ Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask)
         
         isize allocSize = bytes;
         
-        if (!(ptr = new (std::nothrow) u8[allocSize])) {
-            warn("Cannot allocate %d KB of memory\n", bytes);
-            return false;
-        }
+        ptr = new u8[allocSize];
         size = (u32)bytes;
         mask = size - 1;
         fillRamWithInitPattern();
@@ -476,7 +473,6 @@ Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask)
         }
     }
     updateMemSrcTables();
-    return true;
 }
 
 void
@@ -594,19 +590,17 @@ Memory::hasArosRom() const
 }
 
 void
-Memory::loadRom(RomFile *file)
+Memory::loadRom(RomFile &file)
 {
-    assert(file);
-
     // Decrypt Rom
-    file->decrypt();
+    file.decrypt();
 
     // Allocate memory
-    if (!allocRom((i32)file->size)) throw VAError(ERROR_OUT_OF_MEMORY);
+    allocRom((i32)file.size);
     
     // Load Rom
-    assert(config.romSize == file->size);
-    file->flash(rom);
+    assert(config.romSize == file.size);
+    file.flash(rom);
 
     // Add a Wom if a Boot Rom is installed instead of a Kickstart Rom
     hasBootRom() ? (void)allocWom(KB(256)) : deleteWom();
@@ -618,47 +612,40 @@ Memory::loadRom(RomFile *file)
 void
 Memory::loadRom(const string &path)
 {
-    /*
-    RomFile *file = AmigaFile::make <RomFile> (path);
-    loadRom(file);
-    delete(file);
-    */
     RomFile file(path);
-    loadRom(&file);
+    loadRom(file);
 }
 
 void
 Memory::loadRom(const u8 *buf, isize len)
 {
     RomFile file(buf, len);
-    loadRom(&file);
+    loadRom(file);
 }
 
 void
-Memory::loadExt(ExtendedRomFile *file)
+Memory::loadExt(ExtendedRomFile &file)
 {
-    assert(file);
-
     // Allocate memory
-    if (!allocExt((i32)file->size)) throw VAError(ERROR_OUT_OF_MEMORY);
+    allocExt((i32)file.size);
     
     // Load Rom
-    assert(config.extSize == file->size);
-    file->flash(ext);
+    assert(config.extSize == file.size);
+    file.flash(ext);
 }
 
 void
 Memory::loadExt(const string &path)
 {
     ExtendedRomFile file(path);
-    loadExt(&file);
+    loadExt(file);
 }
 
 void
 Memory::loadExt(const u8 *buf, isize len)
 {
     ExtendedRomFile file(buf, len);
-    loadExt(&file);
+    loadExt(file);
 }
  
 void

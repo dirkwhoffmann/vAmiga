@@ -361,7 +361,7 @@ using namespace moira;
 
 - (void)loadRom:(RomFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->loadRom((RomFile *)proxy->obj); }
+    try { return [self mem]->loadRom(*(RomFile *)proxy->obj); }
     catch (VAError &error) { [ex save:error]; }
 }
 
@@ -425,12 +425,12 @@ using namespace moira;
 
 - (void)loadExt:(ExtendedRomFileProxy *)proxy
 {
-    [self mem]->loadExt((ExtendedRomFile *)proxy->obj);
+    [self mem]->loadExt(*(ExtendedRomFile *)proxy->obj);
 }
 
 - (void)loadExt:(ExtendedRomFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->loadExt((ExtendedRomFile *)proxy->obj); }
+    try { return [self mem]->loadExt(*(ExtendedRomFile *)proxy->obj); }
     catch (VAError &error) { [ex save:error]; }
 }
 

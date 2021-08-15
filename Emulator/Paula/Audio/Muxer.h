@@ -136,7 +136,7 @@ public:
 public:
     
     // Returns information about the gathered statistical information
-    MuxerStats getStats() const { return stats; }
+    const MuxerStats &getStats() const { return stats; }
     
 private:
     

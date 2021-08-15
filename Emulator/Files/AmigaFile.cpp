@@ -68,7 +68,7 @@ AmigaFile::~AmigaFile()
 }
 
 void
-AmigaFile::flash(u8 *buffer, isize offset)
+AmigaFile::flash(u8 *buffer, isize offset) const
 {
     assert(buffer != nullptr);
     memcpy(buffer + offset, data, size);

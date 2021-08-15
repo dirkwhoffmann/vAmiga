@@ -126,7 +126,7 @@ public:
     //
             
     // Copies the file contents into a buffer starting at the provided offset
-    virtual void flash(u8 *buf, isize offset = 0);
+    virtual void flash(u8 *buf, isize offset = 0) const;
     
     
     //
