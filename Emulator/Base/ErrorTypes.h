@@ -66,6 +66,9 @@ enum_long(ERROR_CODE)
     ERROR_FS_HAS_CYCLES,
     ERROR_FS_CORRUPTED,
 
+    // File system (import errors)
+    ERROR_FS_OUT_OF_SPACE,
+    
     // File system (export errors)
     ERROR_FS_DIRECTORY_NOT_EMPTY,
     ERROR_FS_CANNOT_CREATE_DIR,
@@ -152,6 +155,8 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_FS_HAS_CYCLES:               return "FS_HAS_CYCLES";
             case ERROR_FS_CORRUPTED:                return "FS_CORRUPTED";
 
+            case ERROR_FS_OUT_OF_SPACE:             return "FS_OUT_OF_SPACE";
+                
             case ERROR_FS_DIRECTORY_NOT_EMPTY:      return "FS_DIRECTORY_NOT_EMPTY";
             case ERROR_FS_CANNOT_CREATE_DIR:        return "FS_CANNOT_CREATE_DIR";
             case ERROR_FS_CANNOT_CREATE_FILE:       return "FS_CANNOT_CREATE_FILE";

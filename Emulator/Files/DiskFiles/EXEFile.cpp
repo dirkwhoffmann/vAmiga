@@ -34,52 +34,47 @@ EXEFile::isCompatibleStream(std::istream &stream)
 isize
 EXEFile::readFromStream(std::istream &stream)
 {
-    bool success = false;
-    
     isize result = AmigaFile::readFromStream(stream);
     
     // Check if this file requires an HD disk
     bool hd = size > 853000;
         
     // Create a new file system
-    FSDevice *volume = FSDevice::make(INCH_35, hd ? DISK_HD : DISK_DD);
-    volume->setName(FSName("Disk"));
+    FSDevice volume(INCH_35, hd ? DISK_HD : DISK_DD);
+    volume.setName(FSName("Disk"));
     
     // Make the volume bootable
-    volume->makeBootable(BB_AMIGADOS_13);
+    volume.makeBootable(BB_AMIGADOS_13);
     
     // Add the executable
-    FSBlock *file = volume->makeFile("file", data, size);
-    success = file != nullptr;
+    FSBlock *file = volume.makeFile("file", data, size);
+    if (!file) throw VAError(ERROR_FS_OUT_OF_SPACE);
     
     // Add a script directory
-    volume->makeDir("s");
-    volume->changeDir("s");
+    volume.makeDir("s");
+    volume.changeDir("s");
     
     // Add a startup sequence
-    file = volume->makeFile("startup-sequence", "file");
-    success &= file != nullptr;
-    
+    file = volume.makeFile("startup-sequence", "file");
+    if (!file) throw VAError(ERROR_FS_OUT_OF_SPACE);
+
     // Finalize
-    volume->updateChecksums();
+    volume.updateChecksums();
     
     // Check for file system errors
-    volume->changeDir("/");
-    volume->info();
-    volume->printDirectory(true);
+    volume.changeDir("/");
+    volume.info();
+    volume.printDirectory(true);
 
     // Check the file system for consistency
-    FSErrorReport report = volume->check(true);
+    FSErrorReport report = volume.check(true);
     if (report.corruptedBlocks > 0) {
         warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
-        volume->dump();
+        if (FS_DEBUG) volume.dump();
     }
-    
-    // Convert the volume into an ADF
-    if (success) { adf = ADFFile::make(*volume); }
         
-    // Export the ADF
-    volume->exportDirectory(path);
-    
+    // Convert the volume into an ADF
+    adf = new ADFFile(volume);
+        
     return result;
 }

@@ -172,6 +172,19 @@ extension AmigaFileProxy {
     }
 }
 
+extension ADFFileProxy {
+
+    static func make (diameter: DiskDiameter, density: DiskDensity) throws -> ADFFileProxy {
+
+        let exception = ExceptionWrapper()
+        let result = ADFFileProxy.make(with: diameter, density: density, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+        
+        return result!
+
+    }
+}
+
 extension FSDeviceProxy {
             
     static func make(withADF adf: ADFFileProxy) throws -> FSDeviceProxy {

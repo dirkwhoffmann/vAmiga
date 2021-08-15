@@ -100,8 +100,8 @@ public:
 
     const char *getDescription() const override { return "Disk"; }
 
-    static Disk *make(class DiskFile &file) throws;
-    static Disk *make(util::SerReader &reader, DiskDiameter type, DiskDensity density) throws;
+    [[deprecated]] static Disk *make(class DiskFile &file) throws;
+    [[deprecated]] static Disk *make(util::SerReader &reader, DiskDiameter type, DiskDensity density) throws;
         
     void dump();
     

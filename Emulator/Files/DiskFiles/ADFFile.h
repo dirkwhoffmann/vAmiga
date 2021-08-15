@@ -30,10 +30,10 @@ public:
     static bool isCompatiblePath(const string &path);
     static bool isCompatibleStream(std::istream &stream);
     
-    static ADFFile *make(DiskDiameter dia, DiskDensity den) throws;
-    static ADFFile *make(class Disk &disk) throws;
-    static ADFFile *make(class Drive &drive) throws;
-    static ADFFile *make(FSDevice &volume) throws;
+    [[deprecated]] static ADFFile *make(DiskDiameter dia, DiskDensity den) throws;
+    [[deprecated]] static ADFFile *make(class Disk &disk) throws;
+    [[deprecated]] static ADFFile *make(class Drive &drive) throws;
+    [[deprecated]] static ADFFile *make(FSDevice &volume) throws;
 
 private:
     
@@ -125,7 +125,7 @@ public:
  
 public:
     
-    bool formatDisk(FSVolumeType fs, BootBlockId id);
+    void formatDisk(FSVolumeType fs, BootBlockId id) throws;
 
     
     //

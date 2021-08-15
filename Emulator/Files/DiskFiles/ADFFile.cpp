@@ -283,39 +283,29 @@ ADFFile::killVirus()
     }
 }
 
-bool
+void
 ADFFile::formatDisk(FSVolumeType fs, BootBlockId id)
 {
     assert_enum(FSVolumeType, fs);
 
-    ErrorCode error;
-
-    msg("Formatting disk with %lld blocks (%s)\n", numBlocks(), FSVolumeTypeEnum::key(fs));
+    msg("Formatting disk (%lld blocks, %s)\n", numBlocks(), FSVolumeTypeEnum::key(fs));
 
     // Only proceed if a file system is given
-    if (fs == FS_NODOS) return false;
+    if (fs == FS_NODOS) return;
     
     // Get a device descriptor for this ADF
     FSDeviceDescriptor descriptor = layout();
     descriptor.partitions[0].dos = fs;
     
     // Create an empty file system
-    FSDevice *volume = FSDevice::make(descriptor);
-    volume->setName(FSName("Disk"));
+    FSDevice volume(descriptor);
+    volume.setName(FSName("Disk"));
     
     // Write boot code
-    volume->makeBootable(id);
+    volume.makeBootable(id);
     
     // Export the file system to the ADF
-    volume->exportVolume(data, size, &error);
-    delete(volume);
-
-    if (error == ERROR_OK) {
-        return true;
-    } else {
-        warn("Failed to export file system from ADF: %s\n", ErrorCodeEnum::key(error));
-        return false;
-    }
+    if (!volume.exportVolume(data, size)) throw VAError(ERROR_FS_UNKNOWN);
 }
 
 void
@@ -339,12 +329,9 @@ ADFFile::encodeDisk(Disk &disk)
 
     // In debug mode, also run the decoder
     if (MFM_DEBUG) {
-        msg("Amiga disk fully encoded\n");
-        ADFFile *tmp = ADFFile::make(disk);
-        if (tmp) {
-            msg("Decoded image written to /tmp/debug.adf\n");
-            tmp->writeToFile("/tmp/tmp.adf");
-        }
+        ADFFile tmp(disk);
+        msg("Saving image to /tmp/debug.adf for debugging\n");
+        tmp.writeToFile("/tmp/tmp.adf");
     }
 }
 

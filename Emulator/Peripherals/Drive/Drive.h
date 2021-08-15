@@ -265,7 +265,7 @@ public:
 
     void ejectDisk();
     bool insertDisk(Disk *disk);
-    bool insertBlankDisk();
+    // bool insertBlankDisk();
 
     u64 fnv() const;
     

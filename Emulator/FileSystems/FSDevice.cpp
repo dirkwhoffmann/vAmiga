@@ -99,9 +99,24 @@ FSDevice::init(DiskDiameter dia, DiskDensity den)
 {
     // Get a device descriptor
     auto descriptor = FSDeviceDescriptor(dia, den);
-    
+        
     // Create the device
     init(descriptor);
+}
+
+void
+FSDevice::init(DiskDiameter dia, DiskDensity den, const string &path)
+{
+    init(dia, den);
+    
+    // Try to import directory
+    importDirectory(path);
+    
+    // Assign device name
+    setName(FSName("Directory")); // TODO: Use last path component
+    
+    // Change to the root directory
+    changeDir("/");
 }
 
 void
@@ -129,21 +144,6 @@ FSDevice::init(HDFFile &hdf)
     // Import file system from HDF
     info();
     // importVolume(adf.data, adf.size);
-}
-
-void
-FSDevice::init(DiskDiameter dia, DiskDensity den, const string &path)
-{
-    init(dia, den);
-    
-    // Try to import directory
-    importDirectory(path);
-    
-    // Assign device name
-    setName(FSName("Directory")); // TODO: Use last path component
-    
-    // Change to the root directory
-    changeDir("/");
 }
 
 void

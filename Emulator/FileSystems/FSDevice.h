@@ -80,12 +80,12 @@ protected:
     
 public:
 
-    static FSDevice *make(FSDeviceDescriptor &layout);
-    static FSDevice *make(DiskDiameter type, DiskDensity density);
-    static FSDevice *make(class ADFFile &adf) throws;
-    static FSDevice *make(class HDFFile &hdf) throws;
-    static FSDevice *make(DiskDiameter type, DiskDensity density, const string &path);
-    static FSDevice *make(FSVolumeType type, const string &path);
+    [[deprecated]] static FSDevice *make(FSDeviceDescriptor &layout);
+    [[deprecated]] static FSDevice *make(DiskDiameter type, DiskDensity density);
+    [[deprecated]] static FSDevice *make(class ADFFile &adf) throws;
+    [[deprecated]] static FSDevice *make(class HDFFile &hdf) throws;
+    [[deprecated]] static FSDevice *make(DiskDiameter type, DiskDensity density, const string &path);
+    [[deprecated]] static FSDevice *make(FSVolumeType type, const string &path);
     
     
     //
@@ -96,10 +96,10 @@ public:
 
     FSDevice(isize capacity) { init(capacity); }
     FSDevice(FSDeviceDescriptor &layout) { init(layout); }
-    FSDevice(DiskDiameter type, DiskDensity density) { init(density); }
+    FSDevice(DiskDiameter dia, DiskDensity den) { init(dia, den); }
+    FSDevice(DiskDiameter dia, DiskDensity den, const string &path) { init(dia, den, path); }
     FSDevice(class ADFFile &adf) throws { init(adf); }
     FSDevice(class HDFFile &hdf) throws { init(hdf); }
-    FSDevice(DiskDiameter dia, DiskDensity den, const string &path) { init(dia, den, path); }
     FSDevice(FSVolumeType type, const string &path) { init(type, path); }
     ~FSDevice();
     
@@ -110,9 +110,9 @@ private:
     void init(isize capacity);
     void init(FSDeviceDescriptor &layout);
     void init(DiskDiameter type, DiskDensity density);
+    void init(DiskDiameter type, DiskDensity density, const string &path);
     void init(class ADFFile &adf) throws;
     void init(class HDFFile &hdf) throws;
-    void init(DiskDiameter type, DiskDensity density, const string &path);
     void init(FSVolumeType type, const string &path);
 
 

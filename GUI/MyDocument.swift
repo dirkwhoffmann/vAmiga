@@ -110,8 +110,8 @@ class MyDocument: NSDocument {
                     return try Proxy.make(url: newUrl) as ADFFileProxy
                     
                 case .EXT:
-                    // return try Proxy.make(url: newUrl) as EXTFileProxy
-                    throw VAError(.FILE_TYPE_UNSUPPORTED, "The file is encoded in extended ADF format which is not supported by the emulator.")
+                    return try Proxy.make(url: newUrl) as EXTFileProxy
+                    // throw VAError(.FILE_TYPE_UNSUPPORTED, "The file is encoded in extended ADF format which is not supported by the emulator.")
                     
                 case .IMG:
                     return try Proxy.make(url: newUrl) as IMGFileProxy
@@ -161,7 +161,17 @@ class MyDocument: NSDocument {
             return
         }
 
-        // If the attachment is a hard drive image, show a message
+        // If the attachment is an extended ADF, show an error message
+        if let proxy = attachment as? EXTFileProxy {
+
+            track("Etended ADF (\(proxy.fnv))")
+            
+            parent.warning("This file is an extended ADF",
+                           "Extended ADFs are not supported yet.")
+            return
+        }
+        
+        // If the attachment is a hard drive image, show an error message
         if let proxy = attachment as? HDFFileProxy {
             
             track("HDF with \(proxy.numBlocks) blocks")

@@ -293,7 +293,7 @@ Drive::_load(const u8 *buffer)
         DiskDensity density;
         reader << type << density;
         
-        disk = Disk::make(reader, type, density);
+        disk = new Disk(reader, type, density);
     }
 
     result = (isize)(reader.ptr - buffer);
@@ -774,6 +774,7 @@ Drive::insertDisk(Disk *disk)
     return false;
 }
 
+/*
 bool
 Drive::insertBlankDisk()
 {
@@ -788,6 +789,7 @@ Drive::insertBlankDisk()
     
     return false;
 }
+*/
 
 u64
 Drive::fnv() const

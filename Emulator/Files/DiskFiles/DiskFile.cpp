@@ -36,7 +36,7 @@ DiskFile::make(const string &path)
             return AmigaFile::make <EXEFile> (path, stream);
 
         case FILETYPE_DIR:
-            return Folder::make (path);
+            return new Folder(path);
 
         default:
             break;

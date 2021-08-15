@@ -1208,8 +1208,9 @@ using namespace moira;
 {
     try {
         
-        FSDevice *volume = FSDevice::make(*(ADFFile *)(proxy->obj));
-        return [self make:volume];
+        auto adf = (ADFFile *)(proxy->obj);
+        auto dev = new FSDevice(*adf);
+        return [self make:dev];
         
     }  catch (VAError &error) {
         
@@ -1222,9 +1223,10 @@ using namespace moira;
 {
     try {
         
-        FSDevice *volume = FSDevice::make(*(HDFFile *)(proxy->obj));
-        return [self make:volume];
-        
+        auto hdf = (HDFFile *)(proxy->obj);
+        auto dev = new FSDevice(*hdf);
+        return [self make:dev];
+                
     }  catch (VAError &error) {
         
         [ex save:error];
@@ -1779,15 +1781,14 @@ using namespace moira;
 
 + (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    Drive *drive = [proxy drive];
-    ADFFile *archive = ADFFile::make(*drive);
-    return archive ? [self make: archive] : nil;
+    try { return [self make: new ADFFile(*[proxy drive])]; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithDiameter:(DiskDiameter)type density:(DiskDensity)density
++ (instancetype)makeWithDiameter:(DiskDiameter)dia density:(DiskDensity)den exception:(ExceptionWrapper *)ex
 {
-    ADFFile *archive = ADFFile::make(type, density);
-    return [self make: archive];
+    try { return [self make: new ADFFile(dia, den)]; }
+    catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 - (void)formatDisk:(FSVolumeType)fs bootBlock:(NSInteger)bootBlockID
@@ -1895,7 +1896,7 @@ using namespace moira;
 
 + (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: IMGFile::make(*[proxy drive]->disk)]; }
+    try { return [self make: new IMGFile(*[proxy drive]->disk)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
@@ -1992,7 +1993,7 @@ using namespace moira;
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: Folder::make([path fileSystemRepresentation])]; }
+    try { return [self make: new Folder([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 

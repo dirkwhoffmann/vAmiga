@@ -783,9 +783,9 @@
 @interface ADFFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
 }
 
++ (instancetype)makeWithDiameter:(DiskDiameter)type density:(DiskDensity)density exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithDiameter:(DiskDiameter)type density:(DiskDensity)density;
 + (instancetype)makeWithDrive:(DriveProxy *)drive exception:(ExceptionWrapper *)ex;
 
 - (void)formatDisk:(FSVolumeType)fs bootBlock:(NSInteger)bootBlockID;
