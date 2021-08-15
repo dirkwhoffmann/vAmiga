@@ -1492,21 +1492,13 @@ using namespace moira;
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <Snapshot> ([path fileSystemRepresentation])]; }
+    try { return [self make: new Snapshot([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-/*
-+ (instancetype)makeWithFile:(NSString *)path error:(ErrorCode *)err
-{
-    Snapshot *snapshot = AmigaFile::make <Snapshot> ([path fileSystemRepresentation], err);
-    return [self make:snapshot];
-}
-*/
-
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <Snapshot> ((u8 *)buf, len)]; }
+    try { return [self make: new Snapshot((u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
@@ -1576,13 +1568,13 @@ using namespace moira;
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <Script> ([path fileSystemRepresentation])]; }
+    try { return [self make: new Script([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <Script> ((const u8 *)buf, len)]; }
+    try { return [self make: new Script((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
@@ -1809,13 +1801,13 @@ using namespace moira;
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <HDFFile> ([path fileSystemRepresentation])]; }
+    try { return [self make: new HDFFile([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <HDFFile> ((const u8 *)buf, len)]; }
+    try { return [self make: new HDFFile((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
@@ -1845,13 +1837,13 @@ using namespace moira;
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <EXTFile> ([path fileSystemRepresentation])]; }
+    try { return [self make: new EXTFile([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <EXTFile> ((const u8 *)buf, len)]; }
+    try { return [self make: new EXTFile((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 

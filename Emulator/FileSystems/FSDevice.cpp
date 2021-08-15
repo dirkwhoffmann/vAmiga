@@ -112,7 +112,7 @@ void
 FSDevice::init(FSVolumeType type, const string &path)
 {
     // Try to fit the directory into files system with DD disk capacity
-    try { init(INCH_35, DISK_DD, path); } catch (...) { };
+    try { init(INCH_35, DISK_DD, path); return; } catch (...) { };
 
     // Try to fit the directory into files system with HD disk capacity
     init(INCH_35, DISK_HD, path);

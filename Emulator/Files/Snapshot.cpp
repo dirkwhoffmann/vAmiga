@@ -52,10 +52,6 @@ Snapshot::isCompatibleStream(std::istream &stream)
     return util::matchingStreamHeader(stream, magicBytes, sizeof(magicBytes));
 }
 
-Snapshot::Snapshot()
-{
-}
-
 Snapshot::Snapshot(isize capacity)
 {
     u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };

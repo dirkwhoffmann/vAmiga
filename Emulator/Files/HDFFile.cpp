@@ -11,10 +11,6 @@
 #include "HDFFile.h"
 #include "IO.h"
 
-HDFFile::HDFFile()
-{
-}
-
 bool
 HDFFile::isCompatiblePath(const string &path)
 {

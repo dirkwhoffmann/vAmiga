@@ -21,12 +21,6 @@
 #include "RomFile.h"
 #include "Script.h"
 
-AmigaFile::AmigaFile(isize capacity)
-{
-    data = new u8[capacity]();
-    size = capacity;
-}
-
 void
 AmigaFile::init(const string &path)
 {

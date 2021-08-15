@@ -14,10 +14,6 @@
 
 #include <sstream>
 
-Script::Script()
-{
-}
-
 bool
 Script::isCompatiblePath(const string &path)
 {

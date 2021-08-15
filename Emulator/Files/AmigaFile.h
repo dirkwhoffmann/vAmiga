@@ -87,73 +87,13 @@ public:
     // The size of this file in bytes
     isize size = 0;
     
-    
-    //
-    // Creating
-    //
-    
-public:
 
-    template <class T> static T *make(std::istream &stream) throws
-    {
-        if (!T::isCompatibleStream(stream)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
-        
-        T *obj = new T();
-        
-        try { obj->readFromStream(stream); } catch (VAError &err) {
-            delete obj;
-            throw err;
-        }
-        return obj;
-    }
-
-    template <class T> static T *make(const string &path, std::istream &stream) throws
-    {
-        if (!T::isCompatiblePath(path)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
-        
-        T *obj = make <T> (stream);
-        obj->path = path;
-        return obj;
-    }
-        
-    template <class T> static T *make(const u8 *buf, isize len) throws
-    {
-        assert(buf);
-        std::stringstream stream;
-        stream.write((const char *)buf, len);
-        return make <T> ("", stream);
-    }
-        
-    template <class T> static T *make(const string &path) throws
-    {
-        std::ifstream stream(path);
-        if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND, path);
-
-        T *file = make <T> (path, stream);
-        return file;
-    }
-    
-    template <class T> static T *make(FILE *file) throws
-    {
-        assert(file);
-        std::stringstream stream;
-        int c; while ((c = fgetc(file)) != EOF) { stream.put(c); }
-        return make <T> (stream);
-    }
-    
     //
     // Initializing
     //
     
 public:
 
-    AmigaFile() { };
-    AmigaFile(isize capacity);
-    AmigaFile(const string &path) throws { init(path); }
-    AmigaFile(const string &path, std::istream &stream) throws { init(path, stream); }
-    AmigaFile(std::istream &stream) throws { init(stream); }
-    AmigaFile(const u8 *buf, isize len) throws { init(buf, len); }
-    AmigaFile(FILE *file) throws { init(file); }
     virtual ~AmigaFile();
         
 public:
@@ -195,8 +135,8 @@ public:
     
 protected:
     
-    virtual bool compatiblePath(const string &path) { return false; }
-    virtual bool compatibleStream(std::istream &stream) { return false; }
+    virtual bool compatiblePath(const string &path) = 0;
+    virtual bool compatibleStream(std::istream &stream) = 0;
 
     virtual isize readFromStream(std::istream &stream) throws;
     isize readFromFile(const string &path) throws;
