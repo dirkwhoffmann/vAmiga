@@ -2104,6 +2104,12 @@ using namespace moira;
     }
 }
 
+- (NSInteger)cpuLoad
+{
+    double load = [self amiga]->getCpuLoad();
+    return (NSInteger)(100 * load);
+}
+
 - (InspectionTarget)inspectionTarget
 {
     return [self amiga]->getInspectionTarget();

@@ -177,6 +177,7 @@
 @property (readonly) BOOL isReleaseBuild;
 @property BOOL warp;
 @property BOOL debugMode;
+@property (readonly) NSInteger cpuLoad;
 
 @property InspectionTarget inspectionTarget;
 - (void) removeInspectionTarget;
