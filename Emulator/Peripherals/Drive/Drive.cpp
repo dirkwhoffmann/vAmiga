@@ -681,25 +681,6 @@ Drive::toggleWriteProtection()
     }
 }
 
-void
-Drive::ejectDisk()
-{
-    trace(DSK_DEBUG, "ejectDisk()\n");
-
-    if (disk) {
-        
-        // Flag disk change in the CIAA::PA
-        dskchange = false;
-        
-        // Get rid of the disk
-        disk = nullptr;
-        
-        // Notify the GUI
-        messageQueue.put(MSG_DISK_EJECT,
-                         config.pan << 24 | config.ejectVolume << 16 | nr);
-    }
-}
-
 bool
 Drive::isInsertable(DiskDiameter t, DiskDensity d) const
 {
@@ -739,10 +720,29 @@ Drive::isInsertable(const Disk &disk) const
     return isInsertable(disk.diameter, disk.density);
 }
 
-bool
-Drive::insertDisk(Disk *disk)
+void
+Drive::ejectDisk()
 {
-    trace(DSK_DEBUG, "insertDisk(%p)", disk);
+    trace(DSK_DEBUG, "ejectDisk()\n");
+
+    if (disk) {
+        
+        // Flag disk change in the CIAA::PA
+        dskchange = false;
+        
+        // Get rid of the disk
+        disk = nullptr;
+        
+        // Notify the GUI
+        messageQueue.put(MSG_DISK_EJECT,
+                         config.pan << 24 | config.ejectVolume << 16 | nr);
+    }
+}
+
+bool
+Drive::insertDisk(std::unique_ptr<Disk> disk)
+{
+    trace(DSK_DEBUG, "insertDisk(%p)", disk.get());
 
     if (isInsertable(*disk)) {
 
@@ -750,7 +750,7 @@ Drive::insertDisk(Disk *disk)
         assert(!hasDisk());
 
         // Insert disk
-        this->disk = std::unique_ptr<Disk>(disk);
+        this->disk = std::move(disk);
         head.offset = 0;
         
         // Notify the GUI

@@ -12,6 +12,8 @@
 #include "DiskControllerTypes.h"
 #include "SubComponent.h"
 #include "Reflection.h"
+#include "Disk.h"
+// class Disk;
 
 class DiskController : public SubComponent {
 
@@ -24,7 +26,7 @@ class DiskController : public SubComponent {
     DiskControllerInfo info = {};
 
     // Temorary storage for a disk waiting to be inserted
-    class Disk *diskToInsert = nullptr;
+    std::unique_ptr<Disk> diskToInsert;
 
     // Search path for disk files, one for each drive
     string searchPath[4];
@@ -250,8 +252,8 @@ public:
     void ejectDisk(isize nr, Cycle delay = 0);
 
     // Inserts a disk into the specified drive
-    void insertDisk(class Disk *disk, isize nr, Cycle delay = 0);
-    void insertDisk(class DiskFile *file, isize nr, Cycle delay = 0) throws;
+    void insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay = 0);
+    void insertDisk(class DiskFile &file, isize nr, Cycle delay = 0) throws;
     void insertDisk(const string &name, isize nr, Cycle delay = 0) throws;
     
     // Write protects or unprotects a disk

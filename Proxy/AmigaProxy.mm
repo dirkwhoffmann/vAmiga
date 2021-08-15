@@ -1089,7 +1089,7 @@ using namespace moira;
 
 - (void)insert:(NSInteger)nr file:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self dc]->insertDisk((DiskFile *)fileProxy->obj, nr); }
+    try { return [self dc]->insertDisk(*(DiskFile *)fileProxy->obj, nr); }
     catch (VAError &error) { [ex save:error]; }
 }
 

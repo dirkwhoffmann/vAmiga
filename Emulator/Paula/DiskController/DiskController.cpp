@@ -300,18 +300,18 @@ DiskController::ejectDisk(isize nr, Cycle delay)
 }
 
 void
-DiskController::insertDisk(class Disk *disk, isize nr, Cycle delay)
+DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
 {
     assert(disk != nullptr);
     assert(nr >= 0 && nr <= 3);
 
-    debug(DSK_DEBUG, "insertDisk(%p, %zd, %lld)\n", disk, nr, delay);
+    debug(DSK_DEBUG, "insertDisk(%p, %zd, %lld)\n", disk.get(), nr, delay);
 
     // The easy case: The emulator is not running
     if (!isRunning()) {
 
         df[nr]->ejectDisk();
-        df[nr]->insertDisk(disk);
+        df[nr]->insertDisk(std::move(disk));
         return;
     }
 
@@ -328,16 +328,16 @@ DiskController::insertDisk(class Disk *disk, isize nr, Cycle delay)
         delay = std::max((Cycle)SEC(1.5), delay);
     }
 
-    diskToInsert = disk;
+    diskToInsert = std::move(disk);
     agnus.scheduleRel<SLOT_DCH>(delay, DCH_INSERT, nr);
     
     resume();
 }
 
 void
-DiskController::insertDisk(class DiskFile *file, isize nr, Cycle delay)
+DiskController::insertDisk(class DiskFile &file, isize nr, Cycle delay)
 {
-    insertDisk(new Disk(*file), nr, delay);
+    insertDisk(std::make_unique<Disk>(file), nr, delay);
 }
 
 void
@@ -348,9 +348,8 @@ DiskController::insertDisk(const string &name, isize nr, Cycle delay)
     bool append = !util::isAbsolutePath(name) && searchPath[nr] != "";
     string path = append ? searchPath[nr] + "/" + name : name;
             
-    if (DiskFile *file = DiskFile::make(path)) {
-        insertDisk(file, nr, delay);
-    }
+    std::unique_ptr<DiskFile> file(DiskFile::make(path));
+    insertDisk(*file, nr, delay);
 }
 
 void
