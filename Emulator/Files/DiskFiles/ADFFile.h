@@ -41,7 +41,10 @@ private:
     
 public:
     
-    using DiskFile::DiskFile;
+    ADFFile(const string &path) throws { AmigaFile::init(path); }
+    ADFFile(const string &path, std::istream &stream) throws { AmigaFile::init(path, stream); }
+    ADFFile(const u8 *buf, isize len) throws { AmigaFile::init(buf, len); }
+    ADFFile(FILE *file) throws { AmigaFile::init(file); }
     ADFFile(DiskDiameter dia, DiskDensity den) throws { init(dia, den); }
     ADFFile(class Disk &disk) throws { init(disk); }
     ADFFile(class Drive &drive) throws { init(drive); }

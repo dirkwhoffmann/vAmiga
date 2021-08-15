@@ -23,20 +23,11 @@ DiskFile::make(const string &path)
     
     switch (type(path)) {
             
-        case FILETYPE_ADF:
-            return AmigaFile::make <ADFFile> (path, stream);
-            
-        case FILETYPE_IMG:
-            return AmigaFile::make <IMGFile> (path, stream);
-
-        case FILETYPE_DMS:
-            return AmigaFile::make <DMSFile> (path, stream);
-            
-        case FILETYPE_EXE:
-            return AmigaFile::make <EXEFile> (path, stream);
-
-        case FILETYPE_DIR:
-            return new Folder(path);
+        case FILETYPE_ADF:  return new ADFFile(path, stream);
+        case FILETYPE_IMG:  return new IMGFile(path, stream);
+        case FILETYPE_DMS:  return new DMSFile(path, stream);
+        case FILETYPE_EXE:  return new EXEFile(path, stream);
+        case FILETYPE_DIR:  return new Folder(path);
 
         default:
             break;

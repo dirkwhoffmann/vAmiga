@@ -53,12 +53,9 @@ public:
     // Initializing
     //
     
-    // RomFile() { };
-    RomFile(std::istream &stream) throws { init(stream); }
+    RomFile(const string &path) throws { init(path); }
     RomFile(const string &path, std::istream &stream) throws { init(path, stream); }
     RomFile(const u8 *buf, isize len) throws { init(buf, len); }
-    RomFile(const string &path) throws { init(path); }
-    RomFile(FILE *file) throws { init(file); }
 
     const char *getDescription() const override { return "ROM"; }
         

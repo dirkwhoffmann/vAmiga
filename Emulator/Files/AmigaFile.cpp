@@ -28,46 +28,37 @@ AmigaFile::AmigaFile(isize capacity)
 }
 
 void
-AmigaFile::init(std::istream &stream)
+AmigaFile::init(const string &path)
 {
-    msg("init(stream)\n");
-
-    if (!compatibleStream(stream)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
-    readFromStream(stream);
+    std::ifstream stream(path);
+    if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND, path);
+    init(path, stream);
 }
 
 void
 AmigaFile::init(const string &path, std::istream &stream)
 {
-    msg("init(%s,stream)\n", path.c_str());
-
     if (!compatiblePath(path)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
     init(stream);
     this->path = path;
 }
-    
+
+void
+AmigaFile::init(std::istream &stream)
+{
+    if (!compatibleStream(stream)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
+    readFromStream(stream);
+}
+
 void
 AmigaFile::init(const u8 *buf, isize len)
-{
-    msg("init(%p,%zd)\n", buf, len);
-    
+{    
     assert(buf);
     std::stringstream stream;
     stream.write((const char *)buf, len);
     init(stream);
 }
     
-void
-AmigaFile::init(const string &path)
-{
-    msg("init(%s)\n", path.c_str());
-    
-    std::ifstream stream(path);
-    printf("Searching %s\n", path.c_str());
-    if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND, path);
-    init(path, stream);
-}
-
 void
 AmigaFile::init(FILE *file)
 {
@@ -76,7 +67,7 @@ AmigaFile::init(FILE *file)
     int c; while ((c = fgetc(file)) != EOF) { stream.put(c); }
     init(stream);
 }
-
+    
 AmigaFile::~AmigaFile()
 {
     if (data) delete[] data;

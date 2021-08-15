@@ -30,7 +30,9 @@ public:
     
 public:
     
-    using DiskFile::DiskFile;
+    IMGFile(const string &path) throws { AmigaFile::init(path); }
+    IMGFile(const string &path, std::istream &stream) throws { AmigaFile::init(path, stream); }
+    IMGFile(const u8 *buf, isize len) throws { AmigaFile::init(buf, len); }
     IMGFile(DiskDiameter dia, DiskDensity den) throws { init(dia, den); }
     IMGFile(class Disk &disk) throws { init(disk); }
 

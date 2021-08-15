@@ -149,14 +149,14 @@ public:
 
     AmigaFile() { };
     AmigaFile(isize capacity);
-    AmigaFile(std::istream &stream) throws { init(stream); }
-    AmigaFile(const string &path, std::istream &stream) throws { init(path, stream); }
-    AmigaFile(const u8 *buf, isize len) throws { init(buf, len); }
     AmigaFile(const string &path) throws { init(path); }
+    AmigaFile(const string &path, std::istream &stream) throws { init(path, stream); }
+    AmigaFile(std::istream &stream) throws { init(stream); }
+    AmigaFile(const u8 *buf, isize len) throws { init(buf, len); }
     AmigaFile(FILE *file) throws { init(file); }
     virtual ~AmigaFile();
         
-protected:
+public:
     
     void init(std::istream &stream) throws;
     void init(const string &path, std::istream &stream) throws;

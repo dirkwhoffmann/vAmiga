@@ -61,7 +61,7 @@ DMSFile::readFromStream(std::istream &stream)
     
     // Create the ADF
     fpo = fmemopen(po, so, "r");
-    adf = AmigaFile::make <ADFFile> (fpo);
+    adf = new ADFFile(fpo);
     fclose(fpo);
     
     if (!adf) throw VAError(ERROR_UNKNOWN);

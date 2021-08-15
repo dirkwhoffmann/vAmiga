@@ -35,7 +35,8 @@ public:
     // Initializing
     //
 
-    ExtendedRomFile();
+    ExtendedRomFile(const string &path) throws { init(path); }
+    ExtendedRomFile(const u8 *buf, isize len) throws { init(buf, len); }
 
     const char *getDescription() const override { return "ExtendedRom"; }
 

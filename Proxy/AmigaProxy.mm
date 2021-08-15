@@ -1635,13 +1635,13 @@ using namespace moira;
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <ExtendedRomFile> ([path fileSystemRepresentation])]; }
+    try { return [self make: new ExtendedRomFile([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <ExtendedRomFile> ((const u8 *)buf, len)]; }
+    try { return [self make: new ExtendedRomFile((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
@@ -1761,13 +1761,13 @@ using namespace moira;
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <ADFFile> ([path fileSystemRepresentation])]; }
+    try { return [self make: new ADFFile([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <ADFFile> ((const u8 *)buf, len)]; }
+    try { return [self make: new ADFFile((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
@@ -1876,13 +1876,13 @@ using namespace moira;
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <IMGFile> ([path fileSystemRepresentation])]; }
+    try { return [self make: new IMGFile([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <IMGFile> ((const u8 *)buf, len)]; }
+    try { return [self make: new IMGFile((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
@@ -1913,13 +1913,13 @@ using namespace moira;
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <DMSFile> ([path fileSystemRepresentation])]; }
+    try { return [self make: new DMSFile([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <DMSFile> ((const u8 *)buf, len)]; }
+    try { return [self make: new DMSFile((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
@@ -1949,13 +1949,13 @@ using namespace moira;
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <EXEFile> ([path fileSystemRepresentation])]; }
+    try { return [self make: new EXEFile([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: AmigaFile::make <EXEFile> ((const u8 *)buf, len)]; }
+    try { return [self make: new EXEFile((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 

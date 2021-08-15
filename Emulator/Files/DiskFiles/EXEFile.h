@@ -23,11 +23,17 @@ public:
     bool compatiblePath(const string &path) override { return isCompatiblePath(path); }
     bool compatibleStream(std::istream &stream) override { return isCompatibleStream(stream); }
 
-        
+    
     //
-    // Methods from AmigaObject
+    // Initializing
     //
-        
+    
+public:
+    
+    EXEFile(const string &path) throws { AmigaFile::init(path); }
+    EXEFile(const string &path, std::istream &stream) throws { AmigaFile::init(path, stream); }
+    EXEFile(const u8 *buf, isize len) throws { AmigaFile::init(buf, len); }
+    
     const char *getDescription() const override { return "EXE"; }
         
     

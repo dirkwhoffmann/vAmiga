@@ -650,16 +650,15 @@ Memory::loadExt(ExtendedRomFile *file)
 void
 Memory::loadExt(const string &path)
 {
-    ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (path);
-    loadExt(file);
-    delete file;
+    ExtendedRomFile file(path);
+    loadExt(&file);
 }
 
 void
 Memory::loadExt(const u8 *buf, isize len)
-{    
-    ExtendedRomFile *file = AmigaFile::make <ExtendedRomFile> (buf, len);
-    loadExt(file);
+{
+    ExtendedRomFile file(buf, len);
+    loadExt(&file);
 }
  
 void
