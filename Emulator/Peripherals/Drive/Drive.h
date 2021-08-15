@@ -69,8 +69,8 @@ class Drive : public SubComponent {
 
 public:
     
-    // The currently inserted disk (nullptr if the drive is empty)
-    Disk *disk = nullptr;
+    // The currently inserted disk (if any)
+    std::unique_ptr<Disk> disk;
 
     
     //

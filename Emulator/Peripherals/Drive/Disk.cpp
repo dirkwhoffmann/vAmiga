@@ -12,7 +12,7 @@
 #include "DiskFile.h"
 
 Disk::Disk(DiskDiameter type, DiskDensity density)
-{    
+{
     this->diameter = type;
     this->density = density;
     
@@ -43,6 +43,7 @@ Disk::Disk(util::SerReader &reader, DiskDiameter type, DiskDensity density) : Di
 
 Disk::~Disk()
 {
+    msg("Deleting disk\n");
 }
 
 void

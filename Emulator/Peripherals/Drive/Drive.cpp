@@ -241,7 +241,7 @@ Drive::_dump(dump::Category category, std::ostream& os) const
         os << tab("cylinderHistory");
         os << hex(cylinderHistory) << std::endl;
         os << tab("Disk");
-        os << bol(disk) << std::endl;
+        os << bol(disk != nullptr) << std::endl;
     }
 }
 
@@ -277,12 +277,6 @@ Drive::_load(const u8 *buffer)
     applyToPersistentItems(reader);
     applyToResetItems(reader);
 
-    // Delete the current disk
-    if (disk) {
-        delete disk;
-        disk = nullptr;
-    }
-
     // Check if the snapshot includes a disk
     bool diskInSnapshot;
     reader << diskInSnapshot;
@@ -293,7 +287,7 @@ Drive::_load(const u8 *buffer)
         DiskDensity density;
         reader << type << density;
         
-        disk = new Disk(reader, type, density);
+        disk = std::make_unique<Disk>(reader, type, density);
     }
 
     result = (isize)(reader.ptr - buffer);
@@ -698,7 +692,6 @@ Drive::ejectDisk()
         dskchange = false;
         
         // Get rid of the disk
-        delete disk;
         disk = nullptr;
         
         // Notify the GUI
@@ -761,7 +754,7 @@ Drive::insertDisk(Disk *disk)
         assert(!hasDisk());
 
         // Insert disk
-        this->disk = disk;
+        this->disk = std::unique_ptr<Disk>(disk);
         head.offset = 0;
         
         // Notify the GUI
