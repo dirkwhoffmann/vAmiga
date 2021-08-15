@@ -1,5 +1,5 @@
 SUBDIRS = \
-Agnus Base CIA CPU Denise FileSystems Files LogicBoard Memory Paula \
+Agnus Base CIA CPU Denise FileSystems LogicBoard Media Memory Paula \
 Peripherals RetroShell Utilities xdms
 
 MYCC = g++ -std=c++17 -Wfatal-errors
@@ -14,9 +14,9 @@ MYFLAGS = \
 -I $(CURDIR)/CPU \
 -I $(CURDIR)/CPU/Moira \
 -I $(CURDIR)/Denise \
--I $(CURDIR)/Files \
--I $(CURDIR)/Files/DiskFiles \
--I $(CURDIR)/Files/RomFiles \
+-I $(CURDIR)/Media \
+-I $(CURDIR)/Media/DiskFiles \
+-I $(CURDIR)/Media/RomFiles \
 -I $(CURDIR)/FileSystems \
 -I $(CURDIR)/Base \
 -I $(CURDIR)/LogicBoard \

@@ -1078,15 +1078,15 @@
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
 				50B14C0421EB212E002E32A6 /* Utilities */,
 				50104E8825ECDAA30047A9AA /* Base */,
+				505B801D23FE628F002407FE /* LogicBoard */,
+				508E7F962206CDC600F7D88C /* CPU */,
+				508FDF5621EA1FBC0043D0E9 /* CIA */,
 				50EE993D21FF4D42003BD74B /* Paula */,
 				502F7DCF2221709700AEEC65 /* Denise */,
 				502F7DD0222170AE00AEEC65 /* Agnus */,
-				508FDF5621EA1FBC0043D0E9 /* CIA */,
-				508E7F962206CDC600F7D88C /* CPU */,
 				505B801C23FE626E002407FE /* Memory */,
-				505B801D23FE628F002407FE /* LogicBoard */,
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
-				508FE06621EA31E50043D0E9 /* Files */,
+				508FE06621EA31E50043D0E9 /* Media */,
 				5056506925440FDE00A79D27 /* FileSystems */,
 				50B9C42A2609430F00A86C31 /* RetroShell */,
 				50F54B0B24B5D31D0078FDC9 /* xdms */,
@@ -1094,7 +1094,7 @@
 			path = Emulator;
 			sourceTree = "<group>";
 		};
-		508FE06621EA31E50043D0E9 /* Files */ = {
+		508FE06621EA31E50043D0E9 /* Media */ = {
 			isa = PBXGroup;
 			children = (
 				50CF46492620432B00BB3B95 /* Makefile */,
@@ -1110,7 +1110,7 @@
 				5009B7F5255702C00037288E /* RomFiles */,
 				5009B7F7255702D40037288E /* DiskFiles */,
 			);
-			path = Files;
+			path = Media;
 			sourceTree = "<group>";
 		};
 		5099123C24BA46E10007CAB6 /* Preferences */ = {
@@ -1219,10 +1219,10 @@
 			isa = PBXGroup;
 			children = (
 				50CF46432620431900BB3B95 /* Makefile */,
+				50A2953B21FF12170046BAA0 /* Drive */,
 				50EAB95426C10B3D00BFA9D8 /* Mouse */,
 				50EAB95526C10B4600BFA9D8 /* Joystick */,
 				50EAB95626C10B5900BFA9D8 /* Keyboard */,
-				50A2953B21FF12170046BAA0 /* Drive */,
 			);
 			path = Peripherals;
 			sourceTree = "<group>";
