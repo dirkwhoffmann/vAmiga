@@ -14,14 +14,14 @@
 #include "IO.h"
 
 bool
-IMGFile::isCompatiblePath(const string &path)
+IMGFile::isCompatible(const string &path)
 {
     auto suffix = util::extractSuffix(path);
     return suffix == "img" || suffix == "IMG";
 }
 
 bool
-IMGFile::isCompatibleStream(std::istream &stream)
+IMGFile::isCompatible(std::istream &stream)
 {
     isize length = util::streamLength(stream);
     

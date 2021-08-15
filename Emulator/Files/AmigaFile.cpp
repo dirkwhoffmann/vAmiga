@@ -32,7 +32,7 @@ AmigaFile::init(const string &path)
 void
 AmigaFile::init(const string &path, std::istream &stream)
 {
-    if (!compatiblePath(path)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
+    if (!isCompatiblePath(path)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
     init(stream);
     this->path = path;
 }
@@ -40,7 +40,7 @@ AmigaFile::init(const string &path, std::istream &stream)
 void
 AmigaFile::init(std::istream &stream)
 {
-    if (!compatibleStream(stream)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
+    if (!isCompatibleStream(stream)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
     readFromStream(stream);
 }
 
@@ -80,32 +80,29 @@ AmigaFile::type(const string &path)
     std::ifstream stream(path);
     if (!stream.is_open()) return FILETYPE_UNKNOWN;
     
-    if (Snapshot::isCompatiblePath(path) &&
-        Snapshot::isCompatibleStream(stream)) return FILETYPE_SNAPSHOT;
+    if (Snapshot::isCompatible(path) &&
+        Snapshot::isCompatible(stream)) return FILETYPE_SNAPSHOT;
 
-    if (ADFFile::isCompatiblePath(path) &&
-        ADFFile::isCompatibleStream(stream)) return FILETYPE_ADF;
+    if (ADFFile::isCompatible(path) &&
+        ADFFile::isCompatible(stream)) return FILETYPE_ADF;
 
-    if (HDFFile::isCompatiblePath(path) &&
-        HDFFile::isCompatibleStream(stream)) return FILETYPE_HDF;
+    if (HDFFile::isCompatible(path) &&
+        HDFFile::isCompatible(stream)) return FILETYPE_HDF;
 
-    if (EXTFile::isCompatiblePath(path) &&
-        EXTFile::isCompatibleStream(stream)) return FILETYPE_EXT;
+    if (EXTFile::isCompatible(path) &&
+        EXTFile::isCompatible(stream)) return FILETYPE_EXT;
 
-    if (IMGFile::isCompatiblePath(path) &&
-        IMGFile::isCompatibleStream(stream)) return FILETYPE_IMG;
+    if (IMGFile::isCompatible(path) &&
+        IMGFile::isCompatible(stream)) return FILETYPE_IMG;
 
-    if (DMSFile::isCompatiblePath(path) &&
-        DMSFile::isCompatibleStream(stream)) return FILETYPE_DMS;
+    if (DMSFile::isCompatible(path) &&
+        DMSFile::isCompatible(stream)) return FILETYPE_DMS;
 
-    if (EXEFile::isCompatiblePath(path) &&
-        EXEFile::isCompatibleStream(stream)) return FILETYPE_EXE;
+    if (EXEFile::isCompatible(path) &&
+        EXEFile::isCompatible(stream)) return FILETYPE_EXE;
 
-    if (RomFile::isCompatiblePath(path) &&
-        RomFile::isCompatibleStream(stream)) return FILETYPE_ROM;
-
-    if (EXTFile::isCompatiblePath(path) &&
-        EXTFile::isCompatibleStream(stream)) return FILETYPE_EXT;
+    if (RomFile::isCompatible(path) &&
+        RomFile::isCompatible(stream)) return FILETYPE_ROM;
 
     if (Folder::isFolder(path.c_str())) return FILETYPE_DIR;
 

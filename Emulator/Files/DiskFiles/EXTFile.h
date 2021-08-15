@@ -24,11 +24,11 @@ class EXTFile : public DiskFile {
     
 public:
             
-    static bool isCompatiblePath(const string &path);
-    static bool isCompatibleStream(std::istream &stream);
+    static bool isCompatible(const string &path);
+    static bool isCompatible(std::istream &stream);
 
-    bool compatiblePath(const string &path) override { return isCompatiblePath(path); }
-    bool compatibleStream(std::istream &stream) override { return isCompatibleStream(stream); }
+    bool isCompatiblePath(const string &path) override { return isCompatible(path); }
+    bool isCompatibleStream(std::istream &stream) override { return isCompatible(stream); }
 
  
     //

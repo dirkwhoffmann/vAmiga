@@ -17,14 +17,14 @@
 #include "MemUtils.h"
 
 bool
-ADFFile::isCompatiblePath(const string &path)
+ADFFile::isCompatible(const string &path)
 {
     auto suffix = util::extractSuffix(path);
     return suffix == "adf" || suffix == "ADF";
 }
 
 bool
-ADFFile::isCompatibleStream(std::istream &stream)
+ADFFile::isCompatible(std::istream &stream)
 {
     isize length = util::streamLength(stream);
     

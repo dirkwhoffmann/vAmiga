@@ -18,13 +18,13 @@ const u8 EXTFile::extAdfHeaders[2][8] = {
 };
     
 bool
-EXTFile::isCompatiblePath(const string &path)
+EXTFile::isCompatible(const string &path)
 {
     return true;
 }
 
 bool
-EXTFile::isCompatibleStream(std::istream &stream)
+EXTFile::isCompatible(std::istream &stream)
 {
     isize length = util::streamLength(stream);
     

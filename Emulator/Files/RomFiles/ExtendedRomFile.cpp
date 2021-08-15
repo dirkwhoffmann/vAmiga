@@ -16,13 +16,13 @@ const u8 ExtendedRomFile::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 
 const u8 ExtendedRomFile::magicBytes2[] = { 0x4E, 0x71, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
 
 bool
-ExtendedRomFile::isCompatiblePath(const string &name)
+ExtendedRomFile::isCompatible(const string &name)
 {
     return true;
 }
 
 bool
-ExtendedRomFile::isCompatibleStream(std::istream &stream)
+ExtendedRomFile::isCompatible(std::istream &stream)
 {
     if (util::streamLength(stream) != KB(512)) return false;
     
@@ -35,5 +35,5 @@ bool
 ExtendedRomFile::isExtendedRomFile(const string &path)
 {
     std::ifstream stream(path);
-    return stream.is_open() ? isCompatibleStream(stream) : false;
+    return stream.is_open() ? isCompatible(stream) : false;
 }

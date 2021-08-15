@@ -15,14 +15,14 @@
 #include <sstream>
 
 bool
-Script::isCompatiblePath(const string &path)
+Script::isCompatible(const string &path)
 {
     auto suffix = util::extractSuffix(path);
     return suffix == "ini" || suffix == "INI";
 }
 
 bool
-Script::isCompatibleStream(std::istream &stream)
+Script::isCompatible(std::istream &stream)
 {
     return true;
 }

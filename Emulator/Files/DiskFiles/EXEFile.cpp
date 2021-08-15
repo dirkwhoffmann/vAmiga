@@ -14,14 +14,14 @@
 #include "IO.h"
 
 bool
-EXEFile::isCompatiblePath(const string &path)
+EXEFile::isCompatible(const string &path)
 {
     auto suffix = util::extractSuffix(path);
     return suffix == "exe" || suffix == "EXE";
 }
 
 bool
-EXEFile::isCompatibleStream(std::istream &stream)
+EXEFile::isCompatible(std::istream &stream)
 {
     u8 signature[] = { 0x00, 0x00, 0x03, 0xF3 };
                                                                                             

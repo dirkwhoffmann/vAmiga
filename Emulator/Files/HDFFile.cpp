@@ -12,14 +12,14 @@
 #include "IO.h"
 
 bool
-HDFFile::isCompatiblePath(const string &path)
+HDFFile::isCompatible(const string &path)
 {
     auto suffix = util::extractSuffix(path);
     return suffix == "hdf" || suffix == "HDF";
 }
 
 bool
-HDFFile::isCompatibleStream(std::istream &stream)
+HDFFile::isCompatible(std::istream &stream)
 {
     return util::streamLength(stream) % 512 == 0;
 }

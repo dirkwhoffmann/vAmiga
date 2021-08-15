@@ -98,7 +98,7 @@ RomFile::identifier(u32 fingerprint)
 }
 
 bool
-RomFile::isCompatiblePath(const string &path)
+RomFile::isCompatible(const string &path)
 {
     return true;
 }
@@ -309,7 +309,7 @@ RomFile::RomFile()
 */
 
 bool
-RomFile::isCompatibleStream(std::istream &stream)
+RomFile::isCompatible(std::istream &stream)
 {
     isize length = util::streamLength(stream);
     
@@ -357,14 +357,14 @@ RomFile::isRomBuffer(const u8 *buf, isize len)
     std::stringstream stream;
     stream.write((const char *)buf, len);
     
-    return isCompatibleStream(stream);
+    return isCompatible(stream);
 }
 
 bool
 RomFile::isRomFile(const string &path)
 {
     std::ifstream stream(path);
-    return stream.is_open() ? isCompatibleStream(stream) : false;
+    return stream.is_open() ? isCompatible(stream) : false;
 }
 
 bool

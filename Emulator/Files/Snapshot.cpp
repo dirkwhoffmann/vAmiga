@@ -38,13 +38,13 @@ Thumbnail::take(Amiga &amiga, isize dx, isize dy)
 }
 
 bool
-Snapshot::isCompatiblePath(const string &path)
+Snapshot::isCompatible(const string &path)
 {
     return true;
 }
 
 bool
-Snapshot::isCompatibleStream(std::istream &stream)
+Snapshot::isCompatible(std::istream &stream)
 {
     const u8 magicBytes[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     

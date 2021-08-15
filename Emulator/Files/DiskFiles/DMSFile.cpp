@@ -16,14 +16,14 @@ unsigned short extractDMS(FILE *fi, FILE *fo);
 }
 
 bool
-DMSFile::isCompatiblePath(const string &path)
+DMSFile::isCompatible(const string &path)
 {
     auto suffix = util::extractSuffix(path);
     return suffix == "dms" || suffix == "DMS";
 }
 
 bool
-DMSFile::isCompatibleStream(std::istream &stream)
+DMSFile::isCompatible(std::istream &stream)
 {
     u8 signature[] = { 'D', 'M', 'S', '!' };
                                                                                             
