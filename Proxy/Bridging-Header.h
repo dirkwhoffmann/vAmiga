@@ -1,5 +1,5 @@
 //
-//  Public headers that are exposed to Swift.
+//  Public headers that are exposed to Swift
 //
 
 #define __SWIFT__

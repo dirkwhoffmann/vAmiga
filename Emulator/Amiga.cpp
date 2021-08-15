@@ -278,15 +278,26 @@ Amiga::getConfigItem(Option option, long id) const
 void
 Amiga::configure(Option option, i64 value)
 {
-    _configure(option, value);
-    msgQueue.put(MSG_CONFIG);
-}
-
-void
-Amiga::_configure(Option option, i64 value)
-{
     debug(CNF_DEBUG, "configure(%lld, %lld)\n", option, value);
 
+    // The following options do not send a message to the GUI
+    static std::vector<Option> quiet = {
+        
+        OPT_HIDDEN_LAYER_ALPHA,
+        OPT_BRIGHTNESS,
+        OPT_CONTRAST,
+        OPT_SATURATION,
+        OPT_DRIVE_PAN,
+        OPT_STEP_VOLUME,
+        OPT_POLL_VOLUME,
+        OPT_INSERT_VOLUME,
+        OPT_EJECT_VOLUME,
+        OPT_AUDVOLL,
+        OPT_AUDVOLR,
+        OPT_AUDPAN,
+        OPT_AUDVOL
+    };
+    
     // Check if this option has been locked for debugging
     value = overrideOption(option, value);
 
@@ -358,6 +369,14 @@ Amiga::_configure(Option option, i64 value)
             paula.muxer.setConfigItem(option, value);
             break;
 
+        case OPT_AUDPAN:
+        case OPT_AUDVOL:
+            paula.muxer.setConfigItem(option, 0, value);
+            paula.muxer.setConfigItem(option, 1, value);
+            paula.muxer.setConfigItem(option, 2, value);
+            paula.muxer.setConfigItem(option, 3, value);
+            break;
+
         case OPT_BLITTER_ACCURACY:
             agnus.blitter.setConfigItem(option, value);
             break;
@@ -396,38 +415,38 @@ Amiga::_configure(Option option, i64 value)
             controlPort2.joystick.setConfigItem(option, value);
             break;
 
-        case OPT_AUDPAN:
-        case OPT_AUDVOL:
-            paula.muxer.setConfigItem(option, 0, value);
-            paula.muxer.setConfigItem(option, 1, value);
-            paula.muxer.setConfigItem(option, 2, value);
-            paula.muxer.setConfigItem(option, 3, value);
-            break;
-
         default:
             assert(false);
     }
-    
+
+    if (std::find(quiet.begin(), quiet.end(), option) == quiet.end()) {
+        msgQueue.put(MSG_CONFIG, option);
+    }
 }
 
 void
 Amiga::configure(Option option, long id, i64 value)
 {
+    debug(CNF_DEBUG, "configure(%lld, %ld, %lld)\n", option, id, value);
+
     // Check if this option has been locked for debugging
     value = overrideOption(option, value);
 
-    _configure(option, id, value);
-    msgQueue.put(MSG_CONFIG);
-}
-
-void
-Amiga::_configure(Option option, long id, i64 value)
-{
-    debug(CNF_DEBUG, "configure(%lld, %ld, %lld)\n", option, id, value);
+    // The following options do not send a message to the GUI
+    static std::vector<Option> quiet = {
+        
+        OPT_DRIVE_PAN,
+        OPT_STEP_VOLUME,
+        OPT_POLL_VOLUME,
+        OPT_INSERT_VOLUME,
+        OPT_EJECT_VOLUME,
+        OPT_AUDVOLL,
+        OPT_AUDVOLR,
+        OPT_AUDPAN,
+        OPT_AUDVOL,
+        OPT_MOUSE_VELOCITY
+    };
     
-    // Propagate configuration request to all components
-    // AmigaComponent::configure(option, id, value);
-
     switch (option) {
             
         case OPT_DMA_DEBUG_ENABLE:
@@ -471,6 +490,10 @@ Amiga::_configure(Option option, long id, i64 value)
 
         default:
             assert(false);
+    }
+    
+    if (std::find(quiet.begin(), quiet.end(), option) == quiet.end()) {
+        msgQueue.put(MSG_CONFIG, option);
     }
 }
 
@@ -529,29 +552,58 @@ Amiga::overrideOption(Option option, i64 value)
     return value;
 }
 
-EventID
+InspectionTarget
 Amiga::getInspectionTarget() const
 {
-    return agnus.slot[SLOT_INS].id;
+    switch(agnus.slot[SLOT_INS].id) {
+            
+        case EVENT_NONE:  return INSPECTION_NONE;
+        case INS_AMIGA:   return INSPECTION_AMIGA;
+        case INS_CPU:     return INSPECTION_CPU;
+        case INS_MEM:     return INSPECTION_MEM;
+        case INS_CIA:     return INSPECTION_CIA;
+        case INS_AGNUS:   return INSPECTION_AGNUS;
+        case INS_PAULA:   return INSPECTION_PAULA;
+        case INS_DENISE:  return INSPECTION_DENISE;
+        case INS_PORTS:   return INSPECTION_PORTS;
+        case INS_EVENTS:  return INSPECTION_EVENTS;
+
+        default:
+            assert(false);
+    }
 }
 
 void
-Amiga::setInspectionTarget(EventID id)
+Amiga::setInspectionTarget(InspectionTarget target, Cycle trigger)
 {
-    suspend();
-    agnus.scheduleRel<SLOT_INS>(0, id);
-    agnus.serviceINSEvent();
-    resume();
+    EventID id;
+    
+    suspended {
+        
+        switch(target) {
+                
+            case INSPECTION_NONE:    agnus.cancel<SLOT_INS>(); return;
+                
+            case INSPECTION_AMIGA:   id = INS_AMIGA; break;
+            case INSPECTION_CPU:     id = INS_CPU; break;
+            case INSPECTION_MEM:     id = INS_MEM; break;
+            case INSPECTION_CIA:     id = INS_CIA; break;
+            case INSPECTION_AGNUS:   id = INS_AGNUS; break;
+            case INSPECTION_PAULA:   id = INS_PAULA; break;
+            case INSPECTION_DENISE:  id = INS_DENISE; break;
+            case INSPECTION_PORTS:   id = INS_PORTS; break;
+            case INSPECTION_EVENTS:  id = INS_EVENTS; break;
+                
+            default:
+                assert(false);
+        }
+        
+        agnus.scheduleRel<SLOT_INS>(trigger, id);
+        if (trigger == 0) agnus.serviceINSEvent();
+    }
 }
 
-void
-Amiga::setInspectionTarget(EventID id, Cycle trigger)
-{
-    suspend();
-    agnus.scheduleRel<SLOT_INS>(trigger, id);
-    resume();
-}
-
+/*
 void
 Amiga::removeInspectionTarget()
 {
@@ -559,6 +611,7 @@ Amiga::removeInspectionTarget()
     agnus.cancel<SLOT_INS>();
     resume();
 }
+*/
 
 void
 Amiga::_inspect()

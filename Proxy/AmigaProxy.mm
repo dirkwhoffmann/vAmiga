@@ -67,24 +67,14 @@ using namespace moira;
 @end
 
 //
-// HardwareComponent proxy
+// AmigaComponent proxy
 //
 
-@implementation HardwareComponentProxy
+@implementation AmigaComponentProxy
 
--(AmigaComponent *)hwc
+-(AmigaComponent *)component
 {
     return (AmigaComponent *)obj;
-}
-
--(void)dump
-{
-    [self hwc]->dump();
-}
-
-- (void)dumpConfig
-{
-    [self hwc]->dump(dump::Config);
 }
 
 @end
@@ -2114,14 +2104,14 @@ using namespace moira;
     }
 }
 
-- (EventID)inspectionTarget
+- (InspectionTarget)inspectionTarget
 {
     return [self amiga]->getInspectionTarget();
 }
 
-- (void)setInspectionTarget:(EventID)id
+- (void)setInspectionTarget:(InspectionTarget)target
 {
-    [self amiga]->setInspectionTarget(id);
+    [self amiga]->setInspectionTarget(target);
 }
 
 - (void) removeInspectionTarget

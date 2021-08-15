@@ -140,14 +140,16 @@ public:
     i64 getConfigItem(Option option) const;
     i64 getConfigItem(Option option, long id) const;
     
-    // Sets a single configuration item and informs the GUI
+    // Sets a single configuration item
     void configure(Option option, i64 value) throws;
     void configure(Option option, long id, i64 value) throws;
 
     // Sets a single configuration item without informing the GUI
+    /*
     void _configure(Option option, i64 value) throws;
     void _configure(Option option, long id, i64 value) throws;
-
+    */
+    
     // Configures the Amiga with a predefined set of options
     void configure(ConfigScheme scheme);
 
@@ -168,10 +170,9 @@ public:
     
     AmigaInfo getInfo() { return AmigaComponent::getInfo(info); }
     
-    EventID getInspectionTarget() const;
-    void setInspectionTarget(EventID id);
-    void setInspectionTarget(EventID id, Cycle trigger);
-    void removeInspectionTarget();
+    InspectionTarget getInspectionTarget() const;
+    void setInspectionTarget(InspectionTarget target, Cycle trigger = 0);
+    void removeInspectionTarget() { setInspectionTarget(INSPECTION_NONE); }
     
 private:
     

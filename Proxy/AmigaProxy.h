@@ -109,10 +109,7 @@
 
 @end
 
-@interface HardwareComponentProxy : Proxy { }
-
-- (void)dump;
-- (void)dumpConfig;
+@interface AmigaComponentProxy : Proxy { }
 
 @end
 
@@ -120,10 +117,9 @@
 // Amiga proxy
 //
 
-@interface AmigaProxy : HardwareComponentProxy {
+@interface AmigaProxy : AmigaComponentProxy {
         
     AgnusProxy *agnus;
-    GuardsProxy *breakpoints;
     CIAProxy *ciaA;
     CIAProxy *ciaB;
     ControlPortProxy *controlPort1;
@@ -137,6 +133,8 @@
     DriveProxy *df1;
     DriveProxy *df2;
     DriveProxy *df3;
+    GuardsProxy *breakpoints;
+    GuardsProxy *watchpoints;
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
@@ -144,7 +142,6 @@
     RtcProxy *rtc;
     RecorderProxy *recorder;
     SerialPortProxy *serialPort;
-    GuardsProxy *watchpoints;
 }
 
 @property (readonly, strong) AgnusProxy *agnus;
@@ -180,9 +177,9 @@
 @property (readonly) BOOL isReleaseBuild;
 @property BOOL warp;
 @property BOOL debugMode;
-@property EventID inspectionTarget;
 
-- (void) removeInspectionTarget; // DEPRECATED
+@property InspectionTarget inspectionTarget;
+- (void) removeInspectionTarget;
 
 - (void)hardReset;
 - (void)softReset;
@@ -258,7 +255,7 @@
 // CPU proxy
 //
 
-@interface CPUProxy : HardwareComponentProxy { }
+@interface CPUProxy : AmigaComponentProxy { }
     
 - (CPUInfo) getInfo;
 
@@ -285,7 +282,7 @@
 // CIA proxy
 //
 
-@interface CIAProxy : HardwareComponentProxy { }
+@interface CIAProxy : AmigaComponentProxy { }
     
 - (CIAInfo) getInfo;
 
@@ -296,7 +293,7 @@
 // Memory proxy
 //
 
-@interface MemProxy : HardwareComponentProxy { }
+@interface MemProxy : AmigaComponentProxy { }
 
 @property (readonly) MemoryConfig config;
 - (MemoryStats) getStats;
@@ -356,7 +353,7 @@
 // Agnus
 //
 
-@interface AgnusProxy : HardwareComponentProxy { }
+@interface AgnusProxy : AmigaComponentProxy { }
 
 @property (readonly) NSInteger chipRamLimit;
 
@@ -372,7 +369,7 @@
 // Copper
 //
 
-@interface CopperProxy : HardwareComponentProxy { }
+@interface CopperProxy : AmigaComponentProxy { }
 
 - (CopperInfo)getInfo;
 
@@ -387,7 +384,7 @@
 // Blitter
 //
 
-@interface BlitterProxy : HardwareComponentProxy { }
+@interface BlitterProxy : AmigaComponentProxy { }
 
 - (BlitterInfo)getInfo;
 
@@ -408,7 +405,7 @@
 // Denise
 //
 
-@interface DeniseProxy : HardwareComponentProxy { }
+@interface DeniseProxy : AmigaComponentProxy { }
 
 - (DeniseInfo)getInfo;
 - (SpriteInfo)getSpriteInfo:(NSInteger)nr;
@@ -450,7 +447,7 @@
 // Paula proxy
 //
 
-@interface PaulaProxy : HardwareComponentProxy { }
+@interface PaulaProxy : AmigaComponentProxy { }
 
 - (PaulaInfo)getInfo;
 - (AudioInfo)getAudioInfo;
@@ -479,7 +476,7 @@
 // Rtc proxy
 //
 
-@interface RtcProxy : HardwareComponentProxy { }
+@interface RtcProxy : AmigaComponentProxy { }
 
 - (void)update;
 
@@ -490,7 +487,7 @@
 // ControlPort proxy
 //
 
-@interface ControlPortProxy : HardwareComponentProxy {
+@interface ControlPortProxy : AmigaComponentProxy {
         
     MouseProxy *mouse;
     JoystickProxy *joystick;
@@ -508,7 +505,7 @@
 // SerialPort
 //
 
-@interface SerialPortProxy : HardwareComponentProxy { }
+@interface SerialPortProxy : AmigaComponentProxy { }
 
 - (SerialPortInfo)getInfo;
 
@@ -519,7 +516,7 @@
 // Mouse proxy
 //
 
-@interface MouseProxy : HardwareComponentProxy { }
+@interface MouseProxy : AmigaComponentProxy { }
 
 - (BOOL)detectShakeAbs:(NSPoint)pos;
 - (BOOL)detectShakeRel:(NSPoint)pos;
@@ -534,7 +531,7 @@
 // Joystick proxy
 //
 
-@interface JoystickProxy : HardwareComponentProxy { }
+@interface JoystickProxy : AmigaComponentProxy { }
 
 - (void)trigger:(GamePadAction)event;
 
@@ -545,7 +542,7 @@
 // Keyboard proxy
 //
 
-@interface KeyboardProxy : HardwareComponentProxy { }
+@interface KeyboardProxy : AmigaComponentProxy { }
 
 - (BOOL)keyIsPressed:(NSInteger)keycode;
 - (void)pressKey:(NSInteger)keycode;
@@ -559,7 +556,7 @@
 // DiskController
 //
 
-@interface DiskControllerProxy : HardwareComponentProxy { }
+@interface DiskControllerProxy : AmigaComponentProxy { }
 
 - (DiskControllerConfig)getConfig;
 - (DiskControllerInfo)getInfo;
@@ -577,7 +574,7 @@
 // Drive
 //
 
-@interface DriveProxy : HardwareComponentProxy { }
+@interface DriveProxy : AmigaComponentProxy { }
 
 - (DriveInfo) getInfo;
 
@@ -625,7 +622,7 @@
 - (void)printDirectory:(BOOL) recursive;
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
-- (void)export:(NSString *)path exception:(ExceptionWrapper *)exc;
+- (void)export:(NSString *)path exception:(ExceptionWrapper *)ex;
 
 @end
 

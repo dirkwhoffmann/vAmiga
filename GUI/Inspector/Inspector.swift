@@ -639,15 +639,15 @@ extension Inspector: NSTabViewDelegate {
 
             switch id {
 
-            case "CPU":     parent?.amiga.inspectionTarget = .INS_CPU
-            case "CIA":     parent?.amiga.inspectionTarget = .INS_CIA
-            case "Memory":  parent?.amiga.inspectionTarget = .INS_MEM
-            case "Agnus":   parent?.amiga.inspectionTarget = .INS_AGNUS
-            case "Copper and Blitter":  parent?.amiga.inspectionTarget = .INS_AGNUS
-            case "Denise":  parent?.amiga.inspectionTarget = .INS_DENISE
-            case "Paula":   parent?.amiga.inspectionTarget = .INS_PAULA
-            case "Ports":   parent?.amiga.inspectionTarget = .INS_PORTS
-            case "Events":  parent?.amiga.inspectionTarget = .INS_EVENTS
+            case "CPU":     parent?.amiga.inspectionTarget = .CPU
+            case "CIA":     parent?.amiga.inspectionTarget = .CIA
+            case "Memory":  parent?.amiga.inspectionTarget = .MEM
+            case "Agnus":   parent?.amiga.inspectionTarget = .AGNUS
+            case "Copper and Blitter":  parent?.amiga.inspectionTarget = .AGNUS
+            case "Denise":  parent?.amiga.inspectionTarget = .DENISE
+            case "Paula":   parent?.amiga.inspectionTarget = .PAULA
+            case "Ports":   parent?.amiga.inspectionTarget = .PORTS
+            case "Events":  parent?.amiga.inspectionTarget = .EVENTS
             default:        break
             }
             

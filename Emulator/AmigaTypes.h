@@ -44,6 +44,50 @@ struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme> {
 };
 #endif
 
+enum_long(INSPECTION_TARGET)
+{
+    INSPECTION_NONE,
+    INSPECTION_AMIGA,
+    INSPECTION_CPU,
+    INSPECTION_CIA,
+    INSPECTION_MEM,
+    INSPECTION_AGNUS,
+    INSPECTION_DENISE,
+    INSPECTION_PAULA,
+    INSPECTION_PORTS,
+    INSPECTION_EVENTS,
+};
+typedef INSPECTION_TARGET InspectionTarget;
+
+#ifdef __cplusplus
+struct InspectionTargetEnum : util::Reflection<InspectionTargetEnum, InspectionTarget> {
+    
+    static bool isValid(long value)
+    {
+        return (unsigned long)value <= INSPECTION_EVENTS;
+    }
+    
+    static const char *prefix() { return "INSPECTION"; }
+    static const char *key(InspectionTarget value)
+    {
+        switch (value) {
+                
+            case INSPECTION_NONE:    return "NONE";
+            case INSPECTION_AMIGA:   return "AMIGA";
+            case INSPECTION_CPU:     return "CPU";
+            case INSPECTION_CIA:     return "CIA";
+            case INSPECTION_MEM:     return "MEM";
+            case INSPECTION_AGNUS:   return "AGNUS";
+            case INSPECTION_DENISE:  return "DENISE";
+            case INSPECTION_PAULA:   return "PAULA";
+            case INSPECTION_PORTS:   return "PORTS";
+            case INSPECTION_EVENTS:  return "EVENTS";
+        }
+        return "???";
+    }
+};
+#endif
+
 enum_long(REG_CHIPSET)
 {
     REG_BLTDDAT,  REG_DMACONR,  REG_VPOSR,    REG_VHPOSR,   REG_DSKDATR,
