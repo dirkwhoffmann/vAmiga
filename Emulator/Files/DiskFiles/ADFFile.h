@@ -30,11 +30,6 @@ public:
     static bool isCompatiblePath(const string &path);
     static bool isCompatibleStream(std::istream &stream);
     
-    [[deprecated]] static ADFFile *make(DiskDiameter dia, DiskDensity den) throws;
-    [[deprecated]] static ADFFile *make(class Disk &disk) throws;
-    [[deprecated]] static ADFFile *make(class Drive &drive) throws;
-    [[deprecated]] static ADFFile *make(FSDevice &volume) throws;
-
 private:
     
     // Returns the size of an ADF file of a given disk type in bytes

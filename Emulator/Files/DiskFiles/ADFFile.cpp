@@ -41,30 +41,6 @@ ADFFile::isCompatibleStream(std::istream &stream)
     length == ADFSIZE_35_HD;
 }
 
-ADFFile *
-ADFFile::make(DiskDiameter diameter, DiskDensity density)
-{
-    return new ADFFile(diameter, density);
-}
-
-ADFFile *
-ADFFile::make(Disk &disk)
-{
-    return new ADFFile(disk);
-}
-
-ADFFile *
-ADFFile::make(Drive &drive)
-{
-    return new ADFFile(drive);
-}
-
-ADFFile *
-ADFFile::make(FSDevice &volume)
-{
-    return new ADFFile(volume);
-}
-
 isize
 ADFFile::fileSize(DiskDiameter diameter, DiskDensity density)
 {

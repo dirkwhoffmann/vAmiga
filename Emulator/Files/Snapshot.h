@@ -25,9 +25,6 @@ struct Thumbnail {
     // Creation date and time
     time_t timestamp;
     
-    // Factory methods
-    static Thumbnail *make(Amiga &amiga, isize dx = 2, isize dy = 1);
-    
     // Takes a screenshot from a given Amiga
     void take(Amiga &amiga, isize dx = 2, isize dy = 1);
 };
@@ -64,13 +61,10 @@ public:
     
     Snapshot();
     Snapshot(isize capacity);
+    Snapshot(Amiga &amiga);
     
     const char *getDescription() const override { return "Snapshot"; }
-    
-    bool setCapacity(isize size);
-    
-    static Snapshot *make(Amiga *amiga);
-    
+            
     
     //
     // Methods from AmigaFile

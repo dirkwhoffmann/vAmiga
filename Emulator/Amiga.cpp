@@ -713,13 +713,13 @@ Amiga::execute()
             // Are we requested to take a snapshot?
             if (flags & RL::AUTO_SNAPSHOT) {
                 clearFlag(RL::AUTO_SNAPSHOT);
-                autoSnapshot = Snapshot::make(this);
+                autoSnapshot = new Snapshot(*this);
                 msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
             }
             
             if (flags & RL::USER_SNAPSHOT) {
                 clearFlag(RL::USER_SNAPSHOT);
-                userSnapshot = Snapshot::make(this);
+                userSnapshot = new Snapshot(*this);
                 msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
             }
 
@@ -816,7 +816,7 @@ Amiga::requestAutoSnapshot()
     if (!isRunning()) {
 
         // Take snapshot immediately
-        autoSnapshot = Snapshot::make(this);
+        autoSnapshot = new Snapshot(*this);
         msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
         
     } else {
@@ -832,7 +832,7 @@ Amiga::requestUserSnapshot()
     if (!isRunning()) {
         
         // Take snapshot immediately
-        userSnapshot = Snapshot::make(this);
+        userSnapshot = new Snapshot(*this);
         msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
         
     } else {

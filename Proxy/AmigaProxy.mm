@@ -1510,20 +1510,12 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-/*
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len error:(ErrorCode *)err
-{
-    Snapshot *snapshot = AmigaFile::make <Snapshot> ((u8 *)buf, len, err);
-    return [self make:snapshot];
-}
-*/
-
 + (instancetype)makeWithAmiga:(AmigaProxy *)proxy
 {
     Amiga *amiga = (Amiga *)proxy->obj;
     
     amiga->suspend();
-    Snapshot *snapshot = Snapshot::make(amiga);
+    Snapshot *snapshot = new Snapshot(*amiga);
     amiga->resume();
     
     return [self make:snapshot];

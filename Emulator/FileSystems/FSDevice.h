@@ -73,20 +73,6 @@ protected:
     // The currently selected directory (reference to FSDirBlock)
     Block cd = 0;
     
-
-    //
-    // Factory methods
-    //
-    
-public:
-
-    [[deprecated]] static FSDevice *make(FSDeviceDescriptor &layout);
-    [[deprecated]] static FSDevice *make(DiskDiameter type, DiskDensity density);
-    [[deprecated]] static FSDevice *make(class ADFFile &adf) throws;
-    [[deprecated]] static FSDevice *make(class HDFFile &hdf) throws;
-    [[deprecated]] static FSDevice *make(DiskDiameter type, DiskDensity density, const string &path);
-    [[deprecated]] static FSDevice *make(FSVolumeType type, const string &path);
-    
     
     //
     // Initializing

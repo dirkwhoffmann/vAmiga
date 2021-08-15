@@ -45,18 +45,6 @@ Disk::~Disk()
 {
 }
 
-Disk *
-Disk::make(DiskFile &file)
-{
-    return new Disk(file);
-}
-
-Disk *
-Disk::make(util::SerReader &reader, DiskDiameter type, DiskDensity density)
-{
-    return new Disk(reader, type, density);
-}
-
 void
 Disk::dump()
 {

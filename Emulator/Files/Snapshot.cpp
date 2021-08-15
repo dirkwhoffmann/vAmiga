@@ -12,15 +12,6 @@
 #include "Amiga.h"
 #include "IO.h"
 
-Thumbnail *
-Thumbnail::make(Amiga &amiga, isize dx, isize dy)
-{
-    Thumbnail *screenshot = new Thumbnail();
-    screenshot->take(amiga, dx, dy);
-    
-    return screenshot;
-}
-
 void
 Thumbnail::take(Amiga &amiga, isize dx, isize dy)
 {
@@ -81,15 +72,10 @@ Snapshot::Snapshot(isize capacity)
     header->subminor = SNP_SUBMINOR;
 }
 
-Snapshot *
-Snapshot::make(Amiga *amiga)
+Snapshot::Snapshot(Amiga &amiga) : Snapshot(amiga.size())
 {
-    Snapshot *snapshot = new Snapshot(amiga->size());
-
-    snapshot->takeScreenshot(*amiga);
-    amiga->save(snapshot->getData());
-
-    return snapshot;
+    takeScreenshot(amiga);
+    amiga.save(getData());
 }
 
 bool

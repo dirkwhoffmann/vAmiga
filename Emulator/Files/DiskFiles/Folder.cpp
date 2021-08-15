@@ -23,12 +23,6 @@ Folder::isFolder(const string &path)
     return true;
 }
 
-Folder *
-Folder::make(const string &path)
-{
-    return new Folder(path);
-}
-
 void
 Folder::init(const string &path)
 {    

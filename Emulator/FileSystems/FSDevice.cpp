@@ -15,42 +15,6 @@
 #include <set>
 #include <stack>
 
-FSDevice *
-FSDevice::make(FSDeviceDescriptor &layout)
-{
-    return new FSDevice(layout);
-}
- 
-FSDevice *
-FSDevice::make(DiskDiameter dia, DiskDensity den)
-{
-    return new FSDevice(dia, den);
-}
-
-FSDevice *
-FSDevice::make(ADFFile &adf)
-{
-    return new FSDevice(adf);
-}
-
-FSDevice *
-FSDevice::make(HDFFile &hdf)
-{
-    return new FSDevice(hdf);
-}
-
-FSDevice *
-FSDevice::make(DiskDiameter dia, DiskDensity den, const string &path)
-{
-    return new FSDevice(dia, den);
-}
-
-FSDevice *
-FSDevice::make(FSVolumeType type, const string &path)
-{
-    return new FSDevice(type, path);
-}
-
 void
 FSDevice::init(isize capacity)
 {
@@ -76,9 +40,7 @@ FSDevice::init(FSDeviceDescriptor &layout)
         
     // Create all partitions
     for (auto& descriptor : layout.partitions) {
-        
-        FSPartition *p = FSPartition::make(*this, descriptor);
-        partitions.push_back(p);
+        partitions.push_back(new FSPartition(*this, descriptor));
     }
 
     // Compute checksums for all blocks

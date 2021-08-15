@@ -29,18 +29,6 @@ IMGFile::isCompatibleStream(std::istream &stream)
     return length == IMGSIZE_35_DD;
 }
 
-IMGFile *
-IMGFile::make(DiskDiameter dia, DiskDensity den)
-{
-    return new IMGFile(dia, den);
-}
-
-IMGFile *
-IMGFile::make(Disk &disk)
-{
-    return new IMGFile(disk);
-}
-
 void
 IMGFile::init(DiskDiameter dia, DiskDensity den)
 {

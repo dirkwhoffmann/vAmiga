@@ -99,9 +99,6 @@ public:
     ~Disk();
 
     const char *getDescription() const override { return "Disk"; }
-
-    [[deprecated]] static Disk *make(class DiskFile &file) throws;
-    [[deprecated]] static Disk *make(util::SerReader &reader, DiskDiameter type, DiskDensity density) throws;
         
     void dump();
     

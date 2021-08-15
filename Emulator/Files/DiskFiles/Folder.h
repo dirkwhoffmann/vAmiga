@@ -24,8 +24,6 @@ public:
     // Initializing
     //
     
-    [[deprecated]] static Folder *make(const string &path) throws;
-    
     using DiskFile::DiskFile;
     Folder(const string &path) throws { init(path); }
     

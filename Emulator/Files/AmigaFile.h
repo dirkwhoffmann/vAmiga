@@ -115,15 +115,7 @@ public:
         }
         return obj;
     }
-    
-    /*
-    template <class T> static T *make(const string &path, std::istream &stream, ErrorCode *err)
-    {
-        try { *err = ERROR_OK; return make <T> (path, stream); }
-        catch (VAError &exception) { *err = exception.data; return nullptr; }
-    }
-    */
-    
+        
     template <class T> static T *make(const u8 *buf, isize len) throws
     {
         assert(buf);
@@ -131,15 +123,7 @@ public:
         stream.write((const char *)buf, len);
         return make <T> ("", stream);
     }
-    
-    /*
-    template <class T> static T *make(const u8 *buf, isize len, ErrorCode *err)
-    {
-        try { *err = ERROR_OK; return make <T> (buf, len); }
-        catch (VAError &exception) { *err = exception.data; return nullptr; }
-    }
-    */
-    
+        
     template <class T> static T *make(const string &path) throws
     {
         std::ifstream stream(path);
@@ -148,14 +132,6 @@ public:
         T *file = make <T> (path, stream);
         return file;
     }
-
-    /*
-    template <class T> static T *make(const string &path, ErrorCode *err)
-    {
-        try { *err = ERROR_OK; return make <T> (path); }
-        catch (VAError &exception) { *err = exception.data; return nullptr; }
-    }
-    */
     
     template <class T> static T *make(FILE *file) throws
     {
@@ -165,13 +141,6 @@ public:
         return make <T> (stream);
     }
     
-    /*
-    template <class T> static T *make(FILE *file, ErrorCode *err)
-    {
-        try { *err = ERROR_OK; return make <T> (file); }
-        catch (VAError &exception) { *err = exception.data; return nullptr; }
-    }
-    */
     
     //
     // Initializing
