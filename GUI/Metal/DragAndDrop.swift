@@ -123,17 +123,20 @@ public extension MetalView {
             if let url = NSURL(from: pasteBoard) as URL? {
                 
                 do {
-                    try document.createAttachment(from: url)
-                    
                     // Check drop zones
                     for i in 0...3 {
                         if parent.renderer.dropZone.isInside(sender, zone: i) {
-                            try document.mountAttachment(destination: parent.amiga.df(i))
+                            
+                            let types: [FileType] = [ .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
+                            try document.createAttachment(from: url, allowedTypes: types)
+                            try document.mountAttachment(drive: i)
                             return true
                         }
                     }
 
-                    try document.mountAttachment()
+                    // Run the import dialog
+                    try document.createAttachment(from: url)
+                    document.runImportDialog()
                     return true
                     
                 } catch {

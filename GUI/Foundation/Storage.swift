@@ -41,8 +41,9 @@ class ManagedArray<Element> {
         // Thin out the array if capacity has been reached
         if elements.count >= capacity {
             
-            var itemToDelete = 0
+            let itemToDelete = 0
             
+            /*
             if counter % 2 == 0 {
                 itemToDelete = 24
             } else if (counter >> 1) % 2 == 0 {
@@ -50,6 +51,7 @@ class ManagedArray<Element> {
             } else if (counter >> 2) % 2 == 0 {
                 itemToDelete = 8
             }
+            */
             counter += 1
             
             elements.remove(at: itemToDelete)

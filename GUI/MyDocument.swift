@@ -12,15 +12,13 @@ class MyDocument: NSDocument {
     // The window controller for this document
     var parent: MyController { return windowControllers.first as! MyController }
     
-    /* Emulator proxy. This object is an Objective-C bridge between the Swift
-     * GUI an the core emulator which is written in C++.
-     */
+    // Gateway to the core emulator
     var amiga: AmigaProxy!
 
     /* An optional media object attached to this document. This variable is
      * checked in mountAttachment() which is called in windowDidLoad(). If an
-     * attachment is present, e.g., an ADF archive, it is automatically
-     * attached to the emulator.
+     * attachment is present, e.g., a D64 archive, it is automatically attached
+     * to the emulator.
      */
     var attachment: AmigaFileProxy?
     
@@ -38,8 +36,6 @@ class MyDocument: NSDocument {
         
         super.init()
 
-        track()
-
         // Check for Metal support
         if MTLCreateSystemDefaultDevice() == nil {
             showNoMetalSupportAlert()
@@ -50,7 +46,7 @@ class MyDocument: NSDocument {
         // Register standard user defaults
         UserDefaults.registerUserDefaults()
         
-        // Create emulator instance
+        // Create an emulator instance
         amiga = AmigaProxy()
     }
  
@@ -77,9 +73,7 @@ class MyDocument: NSDocument {
     }
     
     func createAttachment(from url: URL, allowedTypes: [FileType]) throws {
-        
-        track("Creating attachment from URL: \(url.lastPathComponent)")
-        
+                
         try attachment = createFileProxy(from: url, allowedTypes: allowedTypes)
         myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
         
@@ -111,7 +105,6 @@ class MyDocument: NSDocument {
                     
                 case .EXT:
                     return try Proxy.make(url: newUrl) as EXTFileProxy
-                    // throw VAError(.FILE_TYPE_UNSUPPORTED, "The file is encoded in extended ADF format which is not supported by the emulator.")
                     
                 case .IMG:
                     return try Proxy.make(url: newUrl) as IMGFileProxy
@@ -142,40 +135,29 @@ class MyDocument: NSDocument {
         // None of the allowed typed matched the file
         throw VAError(.FILE_TYPE_MISMATCH, url.lastPathComponent)
     }
-    
+            
     func mountAttachment(destination: DriveProxy? = nil) throws {
         
         // Only proceed if an attachment is present
         if attachment == nil { return }
         
-        // If the attachment is a snapshot, flash it
         if let proxy = attachment as? SnapshotProxy {
             try amiga.loadSnapshot(proxy)
             snapshots.append(proxy)
             return
         }
-
-        // If the attachment is a script, execute it
         if let proxy = attachment as? ScriptProxy {
             parent.renderer.console.runScript(script: proxy)
             return
         }
-
-        // If the attachment is an extended ADF, show an error message
         if let proxy = attachment as? EXTFileProxy {
-
             track("Etended ADF (\(proxy.fnv))")
-            
             parent.warning("This file is an extended ADF",
                            "Extended ADFs are not supported yet.")
             return
         }
-        
-        // If the attachment is a hard drive image, show an error message
         if let proxy = attachment as? HDFFileProxy {
-            
             track("HDF with \(proxy.numBlocks) blocks")
-            
             parent.warning("This file is a hard drive image (HDF)",
                            "Hard drive emulation is not supported yet.",
                            icon: "hdf")
@@ -198,22 +180,23 @@ class MyDocument: NSDocument {
             return
         }
         
-        // If the attachment is a disk, insert it or run the importer
+        // Try to mount the attachment as a disk in df0
+        try mountAttachment(drive: 0)
+    }
+    
+    func mountAttachment(drive: Int) throws {
+
         if let proxy = attachment as? DiskFileProxy {
             
-            if let df = destination?.nr {
-                do {
-                    try amiga.diskController.insert(df, file: proxy)
-                } catch {
-                    (error as? VAError)?.warning("Failed to insert disk")
-                }
-            } else {
-                runImporterDialog()
+            do {
+                try amiga.diskController.insert(drive, file: proxy)
+            } catch {
+                (error as? VAError)?.warning("Failed to insert disk")
             }
         }
     }
     
-    func runImporterDialog() {
+    func runImportDialog() {
         let name = NSNib.Name("ImporterDialog")
         let controller = ImporterDialog.make(parent: parent, nibName: name)
         controller?.showSheet()
