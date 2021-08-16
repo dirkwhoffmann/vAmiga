@@ -194,6 +194,7 @@ class Renderer: NSObject, MTKViewDelegate {
         update(frames: frames)
 
         semaphore.wait()
+        
         if let drawable = metalLayer.nextDrawable() {
 
             // Create the command buffer
@@ -220,5 +221,8 @@ class Renderer: NSObject, MTKViewDelegate {
             buffer.present(drawable)
             buffer.commit()
         }
+        
+        // Perform periodic events inside the controller
+        if frames % 5 == 0 { parent.timerFunc() }
     }
 }

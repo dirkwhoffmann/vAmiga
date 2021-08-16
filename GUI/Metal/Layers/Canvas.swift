@@ -208,7 +208,6 @@ class Canvas: Layer {
     override func update(frames: Int64) {
             
         super.update(frames: frames)
-        // updateTexture()
     }
     
     func updateTexture() {

@@ -60,13 +60,7 @@ class MyController: NSWindowController, MessageReceiver {
 
     // Virtual keyboard
     var virtualKeyboard: VirtualKeyboardController?
-    
-    // Loop timer for scheduling periodic updates
-    var timer: Timer?
-    
-    // Timer lock
-    var timerLock: NSLock!
-    
+        
     // Screenshot and snapshot timers
     var snapshotTimer: Timer?
     
@@ -239,8 +233,8 @@ extension MyController {
             openConfigurator(tab: "Roms")
         }
 
-        // Create speed monitor and get the timer tunning
-        createTimer()
+        // Create speed monitor
+        speedometer = Speedometer()
         
         // Update toolbar
         toolbar.validateVisibleItems()
@@ -284,29 +278,12 @@ extension MyController {
         }
     }
     
-    func createTimer() {
-
-        // Create speed monitor
-        speedometer = Speedometer()
-        
-        // Create timer and speedometer
-        timerLock = NSLock()
-        timer = Timer.scheduledTimer(timeInterval: 1.0/10, // 10 times a second
-                                     target: self,
-                                     selector: #selector(timerFunc),
-                                     userInfo: nil,
-                                     repeats: true)
-    }
-
     //
     // Timer and message processing
     //
     
     @objc func timerFunc() {
 
-        assert(timerLock != nil)
-        timerLock.lock()
- 
         animationCounter += 1
 
         // Animate the inspector
@@ -330,8 +307,6 @@ extension MyController {
                 NSCursor.setHiddenUntilMouseMoves(true)
             }
         }
-                
-        timerLock.unlock()
     }
     
     func updateSpeedometer() {

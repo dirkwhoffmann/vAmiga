@@ -43,10 +43,6 @@ extension MyController: NSWindowDelegate {
         track()
         
         // Stop timers
-        timerLock.lock()
-        timer?.invalidate()
-        timer = nil
-        timerLock.unlock()
         snapshotTimer?.invalidate()
         snapshotTimer = nil
 

@@ -1449,11 +1449,6 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return 0; }
 }
 
-- (NSInteger)writeToFile:(NSString *)path error:(ErrorCode *)err
-{
-    return [self file]->writeToFile([path fileSystemRepresentation], err);
-}
-
 - (void)dealloc
 {
     delete (AmigaFile *)obj;

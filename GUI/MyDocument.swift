@@ -285,29 +285,7 @@ class MyDocument: NSDocument {
         
         try df.writeToFile(url: url)        
     }
-    
-    //
-    // Snapshots
-    //
         
-    private func thinOut(numItems: Int, counter: inout Int) -> Int? {
-        
-        if numItems < 32 { return nil }
-              
-        var itemToDelete = 0
-        
-        if counter % 2 == 0 {
-            itemToDelete = 24
-        } else if (counter >> 1) % 2 == 0 {
-            itemToDelete = 16
-        } else if (counter >> 2) % 2 == 0 {
-            itemToDelete = 8
-        }
-        counter += 1
-        
-        return itemToDelete
-    }
-    
     //
     // Screenshots
     //
