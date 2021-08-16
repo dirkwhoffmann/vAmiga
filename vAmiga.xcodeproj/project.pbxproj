@@ -897,10 +897,10 @@
 		505B801E23FE6582002407FE /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				50E8199225B350DA00D2E3A5 /* Errors.swift */,
 				508FE00521EA227A0043D0E9 /* Utils.swift */,
 				50F580652431D1A000E7D84D /* Screenshot.swift */,
 				501A9936243A07A100D269B2 /* Storage.swift */,
-				50E8199225B350DA00D2E3A5 /* Errors.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";

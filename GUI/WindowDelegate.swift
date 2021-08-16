@@ -65,6 +65,7 @@ extension MyController: NSWindowDelegate {
     func shutDown() {
                 
         track("Shutting down the emulator")
+        
         amiga.kill()
         amiga = nil
     }
@@ -73,14 +74,13 @@ extension MyController: NSWindowDelegate {
 
         track()
         renderer.fullscreen = true
-        // renderer.clearBgTexture()
         showStatusBar(false)
     }
     
     public func windowDidEnterFullScreen(_ notification: Notification) {
 
-        renderer.monitors.updateMonitorPositions()
         track()
+        renderer.monitors.updateMonitorPositions()
     }
     
     public func windowWillExitFullScreen(_ notification: Notification) {
@@ -92,9 +92,8 @@ extension MyController: NSWindowDelegate {
     
     public func windowDidExitFullScreen(_ notification: Notification) {
 
-        renderer.monitors.updateMonitorPositions()
-        // for m in renderer.monitors { m.isHidden = false }
         track()
+        renderer.monitors.updateMonitorPositions()
     }
     
     public func window(_ window: NSWindow, willUseFullScreenPresentationOptions proposedOptions: NSApplication.PresentationOptions = []) -> NSApplication.PresentationOptions {
@@ -176,8 +175,6 @@ extension MyController {
         // Adjust frame
         frame.origin.y -= correction
         frame.size = newsize
-        window!.setFrame(frame, display: true)
-        
-        track("New window size is \(frame.size)")
+        window!.setFrame(frame, display: true)        
     }
 }
