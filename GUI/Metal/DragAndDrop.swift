@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import AppKit
+// import AppKit
 
 extension NSPasteboard.PasteboardType {
     static let compatibleFileURL = NSPasteboard.PasteboardType(kUTTypeFileURL as String)
@@ -37,16 +37,12 @@ public extension MetalView {
         switch type {
             
         case .string:
-            track("Dragged in string")
             return NSDragOperation.copy
         
         case .fileContents:
-            track("Dragged in file contents")
             return NSDragOperation.copy
             
         case .compatibleFileURL:
-            track("Dragged in filename")
-            
             if let url = NSURL.init(from: pasteBoard) as URL? {
             
                 // Open the drop zone layer

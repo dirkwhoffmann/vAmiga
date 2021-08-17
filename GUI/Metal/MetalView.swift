@@ -21,7 +21,7 @@ public class MetalView: MTKView {
     // Reference to the second mouse (USB, usually unconnected)
     var mouse2: GamePad?
 
-    // Shows whether the Amiga possesses of the mouse
+    // Shows whether the emulator possesses of the mouse
     var gotMouse = false
 
     /* Tracking area for trapping the mouse. The tracking area is utilized to

@@ -48,9 +48,9 @@ class Renderer: NSObject, MTKViewDelegate {
     var metalLayer: CAMetalLayer! = nil
     var splashScreen: SplashScreen! = nil
     var canvas: Canvas! = nil
-    var monitors: Monitors! = nil
     var console: Console! = nil
     var dropZone: DropZone! = nil
+    var monitors: Monitors! = nil
 
     //
     // Ressources

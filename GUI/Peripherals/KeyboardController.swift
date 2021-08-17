@@ -82,8 +82,8 @@ class KeyboardController: NSObject {
     func flagsChanged(with event: NSEvent) {
         
         // Check for a mouse controlling key combination
-        parent.metal.checkForMouseKeys(with: event)
-        
+        if parent.metal.checkForMouseKeys(with: event) { return }
+
         // Determine the pressed or released key
         switch Int(event.keyCode) {
             

@@ -159,7 +159,7 @@ public extension MetalView {
         mouseMoved(with: event)
     }
     
-    func checkForMouseKeys(with event: NSEvent) {
+    func checkForMouseKeys(with event: NSEvent) -> Bool {
                 
         if !gotMouse && prefs.retainMouseWithKeys {
             
@@ -170,6 +170,7 @@ public extension MetalView {
                 
                 track()
                 retainMouse()
+                return true
                 
             default: break
             }
@@ -183,9 +184,11 @@ public extension MetalView {
                 
                 track()
                 releaseMouse()
+                return true
                 
             default: break
             }
         }
+        return false
     }
 }

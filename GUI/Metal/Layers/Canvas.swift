@@ -143,7 +143,6 @@ class Canvas: Layer {
         bloomTextureR = device.makeTexture(size: TextureSize.merged, usage: rwt)
         bloomTextureG = device.makeTexture(size: TextureSize.merged, usage: rwt)
         bloomTextureB = device.makeTexture(size: TextureSize.merged, usage: rwt)
-        
         renderer.metalAssert(bloomTextureR != nil,
                              "The bloom texture (R channel) could not be allocated.")
         renderer.metalAssert(bloomTextureG != nil,
@@ -215,7 +214,6 @@ class Canvas: Layer {
         precondition(longFrameTexture != nil)
         precondition(shortFrameTexture != nil)
 
-        // track() // "longFrameTexture = \(longFrameTexture)")
         if amiga.poweredOff {
                     
             var buffer = amiga.denise.noise!
@@ -229,7 +227,9 @@ class Canvas: Layer {
             return
         }
         
+        // Get a pointer to most recent texture
         let buffer = amiga.denise.stableBuffer
+        precondition(buffer.data != nil)
         
         // Only proceed if the emulator delivers a new texture
         if prevBuffer?.data == buffer.data { return }
@@ -241,12 +241,10 @@ class Canvas: Layer {
         
         // Update the GPU texture
         if currLOF {
-            // track("Updating long frame texture")
             longFrameTexture.replace(w: Int(HPIXELS),
                                      h: longFrameTexture.height,
                                      buffer: buffer.data + Int(HBLANK_MIN) * 4)
         } else {
-            // track("Updating short frame texture")
             shortFrameTexture.replace(w: Int(HPIXELS),
                                       h: shortFrameTexture.height,
                                       buffer: buffer.data + Int(HBLANK_MIN) * 4)
@@ -299,7 +297,7 @@ class Canvas: Layer {
                                                      textures: [shortFrameTexture, mergeTexture])
         }
         
-        // Compute upscaled texture (first pass, in-texture upscaling)
+        // Compute the upscaled texture (first pass, in-texture upscaling)
         ressourceManager.enhancer.apply(commandBuffer: buffer,
                                         source: mergeTexture,
                                         target: lowresEnhancedTexture)
@@ -319,7 +317,7 @@ class Canvas: Layer {
             applyGauss(&bloomTextureB, radius: renderer.shaderOptions.bloomRadius)
         }
         
-        // Compute upscaled texture (second pass)
+        // Compute the upscaled texture (second pass)
         ressourceManager.upscaler.apply(commandBuffer: buffer,
                                         source: lowresEnhancedTexture,
                                         target: upscaledTexture)

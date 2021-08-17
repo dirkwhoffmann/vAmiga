@@ -12,9 +12,9 @@ import simd
 struct TextureSize {
 
     static let background = MTLSizeMake(512, 512, 0)
-    static let original   = MTLSizeMake(1024, 320, 0)
-    static let merged     = MTLSizeMake(1024, 640, 0)
-    static let upscaled   = MTLSizeMake(2048, 1280, 0)
+    static let original = MTLSizeMake(1024, 320, 0)
+    static let merged = MTLSizeMake(1024, 640, 0)
+    static let upscaled = MTLSizeMake(2048, 1280, 0)
 }
 
 extension Renderer {
@@ -88,9 +88,9 @@ extension Renderer {
         
         splashScreen = SplashScreen(renderer: self)
         canvas = Canvas(renderer: self)
-        monitors = Monitors(renderer: self)
         console = Console(renderer: self)
         dropZone = DropZone(renderer: self)
+        monitors = Monitors(renderer: self)
     }
         
     func buildPipeline() {

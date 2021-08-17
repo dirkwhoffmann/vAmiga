@@ -9,16 +9,15 @@
 
 class Layer: NSObject {
     
-    let mtkView: MTKView
-    let device: MTLDevice
     let renderer: Renderer
     
     var ressourceManager: RessourceManager { return renderer.ressourceManager }
+    var device: MTLDevice { return renderer.device }
+    var view: MTKView { return renderer.view }
     var amiga: AmigaProxy { return renderer.parent.amiga }
     
-    // Alpha channel
+    // Alpha channel of this layer
     var alpha: AnimatedFloat = AnimatedFloat(0.0)
-    var mix: AnimatedFloat = AnimatedFloat(0.0)
 
     //
     // Initializing
@@ -27,9 +26,6 @@ class Layer: NSObject {
     init(renderer: Renderer) {
         
         self.renderer = renderer
-        self.mtkView = renderer.view
-        self.device = renderer.device
-
         super.init()
     }
     
