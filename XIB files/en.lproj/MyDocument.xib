@@ -45,7 +45,7 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" animationBehavior="default" tabbingMode="preferred" toolbarStyle="expanded" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="800" height="626"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="960"/>
             <value key="minSize" type="size" width="400" height="314"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="800" height="626"/>
@@ -196,7 +196,7 @@
                         </buttonCell>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="214">
-                        <rect key="frame" x="531" y="7" width="54" height="11"/>
+                        <rect key="frame" x="532" y="7" width="54" height="11"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="99.99 MHz" id="1703">
                             <font key="font" metaFont="menu" size="9"/>
@@ -283,7 +283,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oNV-mZ-JGc">
-                        <rect key="frame" x="671" y="7" width="54" height="11"/>
+                        <rect key="frame" x="674" y="7" width="52" height="11"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="00% CPU" id="GSz-Xi-cus">
                             <font key="font" metaFont="label" size="9"/>
@@ -483,7 +483,7 @@
                                 </segments>
                             </segmentedCell>
                             <connections>
-                                <action selector="toolbarPrefAction:" target="1845" id="MAH-hb-8Fz"/>
+                                <action selector="preferencesAction:" target="1845" id="MAH-hb-8Fz"/>
                             </connections>
                         </segmentedControl>
                     </toolbarItem>

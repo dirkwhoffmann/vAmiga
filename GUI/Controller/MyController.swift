@@ -86,42 +86,6 @@ class MyController: NSWindowController, MessageReceiver {
     var pauseInBackgroundSavedState = false
     
     //
-    // Timers
-    //
-        
-    func validateSnapshotTimer() {
-        
-        snapshotTimer?.invalidate()
-        if pref.autoSnapshots && pref.snapshotInterval > 0 {
-            
-            snapshotTimer =
-                Timer.scheduledTimer(timeInterval: TimeInterval(pref.snapshotInterval),
-                                     target: self,
-                                     selector: #selector(snapshotTimerFunc),
-                                     userInfo: nil,
-                                     repeats: true)
-        }
-    }
-    
-    func stopSnapshotTimer() {
-        
-        snapshotTimer?.invalidate()
-    }
-
-    func updateWarp() {
-        
-        var warp: Bool
-        
-        switch pref.warpMode {
-        case .auto: warp = amiga.diskController.isSpinning
-        case .off: warp = false
-        case .on: warp = true
-        }
-        
-        if warp != amiga.warpMode { amiga.warpMode = warp }
-    }
-
-    //
     // Outlets
     //
     
@@ -323,6 +287,19 @@ extension MyController {
         mhzIndicator.doubleValue = 10 * mhz
     }
 
+    func updateWarp() {
+        
+        var warp: Bool
+        
+        switch pref.warpMode {
+        case .auto: warp = amiga.diskController.isSpinning
+        case .off: warp = false
+        case .on: warp = true
+        }
+        
+        if warp != amiga.warpMode { amiga.warpMode = warp }
+    }
+
     func addValue(_ nr: Int, _ v: Float) {
         if let monitor = renderer.monitors.monitors[nr] as? BarChart {
             monitor.addValue(v)
@@ -373,12 +350,7 @@ extension MyController {
         addValues(Monitors.Monitor.fastRam, fastR, fastW)
         addValues(Monitors.Monitor.kickRom, kickR, kickW)
     }
-    
-    @objc func snapshotTimerFunc() {
-
-        if pref.autoSnapshots { amiga.requestAutoSnapshot() }
-    }
-            
+                
     func processMessage(_ msg: Message) {
         
         var driveNr: Int { return msg.data & 0xFF }
@@ -430,7 +402,6 @@ extension MyController {
             renderer.console.isDirty = true
             
         case .SCRIPT_WAKEUP:
-            track()
             amiga.continueScript()
             renderer.console.isDirty = true
             
@@ -567,22 +538,5 @@ extension MyController {
             track("Unknown message: \(msg)")
             assert(false)
         }
-    }
-
-    //
-    // Action methods (status bar)
-    //
-    
-    @IBAction func warpAction(_ sender: Any!) {
-
-        track()
-
-        switch pref.warpMode {
-        case .auto: pref.warpMode = .off
-        case .off: pref.warpMode = .on
-        case .on: pref.warpMode = .auto
-        }
-
-        refreshStatusBar()
     }
 }

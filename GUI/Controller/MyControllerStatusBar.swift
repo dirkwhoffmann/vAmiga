@@ -106,7 +106,7 @@ extension MyController {
         }
     }
     
-    public func refreshStatusBar(drive: Int, led: Bool) {
+    func refreshStatusBar(drive: Int, led: Bool) {
         
         let image = NSImage(named: led ? "driveLedOn" : "driveLedOff")
         
@@ -119,7 +119,7 @@ extension MyController {
         }
     }
     
-    public func refreshStatusBar(drive: Int, cylinder: Int) {
+    func refreshStatusBar(drive: Int, cylinder: Int) {
         
         switch drive {
         case 0: df0Cylinder.integerValue = cylinder
@@ -130,7 +130,7 @@ extension MyController {
         }
     }
          
-    public func refreshStatusBar(writing: Bool?) {
+    func refreshStatusBar(writing: Bool?) {
         
         let sel = amiga.diskController.selectedDrive
         let w = writing ?? (amiga.diskController.state == .WRITE)
@@ -141,7 +141,7 @@ extension MyController {
         df3Cylinder.textColor = w && (sel == 3) ? .warningColor : .secondaryLabelColor
     }
         
-    public func refreshStatusBar(drive: Int, motor: Bool) {
+    func refreshStatusBar(drive: Int, motor: Bool) {
         
         let spin = amiga.running && motor
         
@@ -154,7 +154,7 @@ extension MyController {
         }
     }
          
-    public func showStatusBar(_ value: Bool) {
+    func showStatusBar(_ value: Bool) {
         
         if statusBar != value {
             
@@ -174,5 +174,22 @@ extension MyController {
             statusBar = value
             refreshStatusBar()
         }
+    }
+    
+    //
+    // Action methods
+    //
+    
+    @IBAction func warpAction(_ sender: Any!) {
+        
+        track()
+        
+        switch pref.warpMode {
+        case .auto: pref.warpMode = .off
+        case .off: pref.warpMode = .on
+        case .on: pref.warpMode = .auto
+        }
+        
+        refreshStatusBar()
     }
 }

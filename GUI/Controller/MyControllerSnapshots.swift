@@ -9,9 +9,29 @@
 
 extension MyController {
     
-    //
-    // Snapshots
-    //
+    func stopSnapshotTimer() {
+        
+        snapshotTimer?.invalidate()
+    }
+    
+    func validateSnapshotTimer() {
+        
+        snapshotTimer?.invalidate()
+        if pref.autoSnapshots && pref.snapshotInterval > 0 {
+            
+            snapshotTimer =
+                Timer.scheduledTimer(timeInterval: TimeInterval(pref.snapshotInterval),
+                                     target: self,
+                                     selector: #selector(snapshotTimerFunc),
+                                     userInfo: nil,
+                                     repeats: true)
+        }
+    }
+
+    @objc func snapshotTimerFunc() {
+
+        if pref.autoSnapshots { amiga.requestAutoSnapshot() }
+    }
         
     func restoreSnapshot(item: Int) throws {
         

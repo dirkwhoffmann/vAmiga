@@ -26,6 +26,18 @@ public func track(_ message: String = "",
 }
 
 //
+// Extensions to Double
+//
+
+extension Double {
+   
+    func truncate(digits: Int) -> Double {
+        let factor = Double(truncating: pow(10, digits) as NSNumber)
+        return (self * factor).rounded() / factor
+    }
+}
+
+//
 // Extensions to comparable
 //
 
