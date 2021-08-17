@@ -143,12 +143,12 @@ template <class T> class AudioStream : public util::RingBuffer <T, 16384> {
 
 public:
     
-    // Locks or unlocks the synchronization mutex
+    // Locks or unlocks the mutex
     void lock() { mutex.lock(); }
     void unlock() { mutex.unlock(); }
 
     // Initializes the ring buffer with zeroes
-    void wipeOut() { this->clear(T(0,0)); }
+    void wipeOut();
     
     // Adds a sample to the ring buffer
     void add(float l, float r) { this->write(T(l,r)); }

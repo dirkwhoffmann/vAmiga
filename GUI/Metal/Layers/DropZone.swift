@@ -26,6 +26,7 @@ class DropZone: Layer {
     static let unselected = 0.92
     static let selected = 0.92
     
+    var hideAll = false
     var enabled = [false, false, false, false]
     var inside = [false, false, false, false]
     var currentAlpha = [0.0, 0.0, 0.0, 0.0]
@@ -63,6 +64,9 @@ class DropZone: Layer {
             let imgZone = enabled[i] ? "dropZoneDf\(i)Empty" : "dropZoneDf\(i)Disabled"
             zones[i].image = NSImage.init(named: imgZone)
         }
+        
+        // Hide all drop zones if none is enabled
+        hideAll = !enabled[0] && !enabled[1] && !enabled[2] && !enabled[3]
     }
 
     func open(type: FileType, delay: Double) {
@@ -94,6 +98,8 @@ class DropZone: Layer {
     
     func draggingUpdated(_ sender: NSDraggingInfo) {
                         
+        if hideAll { return }
+        
         for i in 0...3 {
 
             if !enabled[i] {
@@ -120,7 +126,9 @@ class DropZone: Layer {
     }
     
     override func alphaDidChange() {
-                
+        
+        if hideAll { return }
+        
         for i in 0...3 {
             
             maxAlpha[i] = Double(alpha.current)

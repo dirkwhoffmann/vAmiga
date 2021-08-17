@@ -1386,9 +1386,9 @@
 				50C8C44E260740AC00F4E012 /* SplashScreen.swift */,
 				50C8C451260747EA00F4E012 /* Canvas.swift */,
 				5026EDBE2608DC8E00D90CE1 /* Console.swift */,
+				505CEF5D26BD12430078FF52 /* DropZone.swift */,
 				50C8C4542607524400F4E012 /* Monitors.swift */,
 				50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */,
-				505CEF5D26BD12430078FF52 /* DropZone.swift */,
 			);
 			path = Layers;
 			sourceTree = "<group>";

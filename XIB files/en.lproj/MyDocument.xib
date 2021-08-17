@@ -10,7 +10,8 @@
             <connections>
                 <outlet property="clockSpeed" destination="214" id="216"/>
                 <outlet property="clockSpeedBar" destination="212" id="215"/>
-                <outlet property="cmdLock" destination="70n-GV-8LP" id="jTg-GL-AWT"/>
+                <outlet property="cpuIndicator" destination="212" id="HBj-Wd-Pbq"/>
+                <outlet property="cpuInfo" destination="oNV-mZ-JGc" id="XOV-TH-brY"/>
                 <outlet property="debugIcon" destination="cdG-NT-T3J" id="Oxi-mf-eZE"/>
                 <outlet property="df0Cylinder" destination="f19-16-42W" id="qi6-Qi-Wnz"/>
                 <outlet property="df0DMA" destination="xzf-hU-AKK" id="oNt-cd-Fkh"/>
@@ -30,6 +31,8 @@
                 <outlet property="df3LED" destination="wnl-Bi-Ego" id="1Bn-5L-EfU"/>
                 <outlet property="haltIcon" destination="46l-A8-v8C" id="IN7-Hf-03C"/>
                 <outlet property="metal" destination="DD4-5B-w9h" id="rGV-rL-MLo"/>
+                <outlet property="mhzIndicator" destination="yvz-Z4-pqn" id="uA0-2X-LxO"/>
+                <outlet property="mhzInfo" destination="214" id="J0q-N5-ZF8"/>
                 <outlet property="muteIcon" destination="iho-fa-H5O" id="k5F-Wk-R5B"/>
                 <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>
                 <outlet property="toolbar" destination="1845" id="JVx-NQ-tw7"/>
@@ -42,7 +45,7 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" animationBehavior="default" tabbingMode="preferred" toolbarStyle="expanded" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="800" height="626"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
             <value key="minSize" type="size" width="400" height="314"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="800" height="626"/>
@@ -73,30 +76,20 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <levelIndicator verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="212">
-                        <rect key="frame" x="712" y="3" width="80" height="18"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="16" id="NQB-nX-13C"/>
-                            <constraint firstAttribute="width" constant="80" id="gTN-Ex-Ypg"/>
-                        </constraints>
+                    <levelIndicator verticalHuggingPriority="750" id="212">
+                        <rect key="frame" x="729" y="3" width="64" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <levelIndicatorCell key="cell" alignment="left" maxValue="140" warningValue="77" criticalValue="105" id="1702">
                             <font key="font" metaFont="system"/>
                         </levelIndicatorCell>
                     </levelIndicator>
-                    <button toolTip="Warp mode" translatesAutoresizingMaskIntoConstraints="NO" id="1052">
-                        <rect key="frame" x="690" y="4" width="18" height="18"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="18" id="NEg-m8-jTX"/>
-                            <constraint firstAttribute="width" constant="18" id="heH-2p-hd6"/>
-                        </constraints>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="hourglass1Template" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="1707">
-                            <behavior key="behavior" lightByContents="YES"/>
+                    <levelIndicator verticalHuggingPriority="750" id="yvz-Z4-pqn">
+                        <rect key="frame" x="588" y="3" width="64" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <levelIndicatorCell key="cell" alignment="left" maxValue="140" warningValue="77" criticalValue="105" id="TLs-YH-Tyz">
                             <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="warpAction:" target="-2" id="7h2-KE-103"/>
-                        </connections>
-                    </button>
+                        </levelIndicatorCell>
+                    </levelIndicator>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="xzf-hU-AKK">
                         <rect key="frame" x="120" y="4" width="16" height="16"/>
                         <constraints>
@@ -202,12 +195,9 @@
                             <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="214">
-                        <rect key="frame" x="626" y="7" width="58" height="11"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="11" id="eTx-0c-FGQ"/>
-                            <constraint firstAttribute="width" constant="54" id="rkf-cA-xTO"/>
-                        </constraints>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="214">
+                        <rect key="frame" x="531" y="7" width="54" height="11"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="99.99 MHz" id="1703">
                             <font key="font" metaFont="menu" size="9"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -265,48 +255,25 @@
                             <outlet property="parent" destination="-2" id="DoA-Vt-vqv"/>
                         </connections>
                     </customView>
-                    <button tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="iho-fa-H5O" userLabel="Mute">
-                        <rect key="frame" x="604" y="4" width="16" height="16"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="16" id="pUP-tV-Q4e"/>
-                            <constraint firstAttribute="width" constant="16" id="zrl-Qm-DYQ"/>
-                        </constraints>
+                    <button tag="2" id="iho-fa-H5O" userLabel="Mute">
+                        <rect key="frame" x="509" y="3" width="20" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="muteTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="izA-UN-588">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <button tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="70n-GV-8LP" userLabel="Cmd Lock">
-                        <rect key="frame" x="536" y="4" width="36" height="16"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="36" id="9hs-2E-rP5"/>
-                            <constraint firstAttribute="height" constant="16" id="ymp-gN-SpH"/>
-                        </constraints>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="cmdLockTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="kM6-fj-IIO">
-                            <behavior key="behavior" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="mapCmdKeysAction:" target="-2" id="iVB-Kz-avV"/>
-                        </connections>
-                    </button>
-                    <button tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="cdG-NT-T3J" userLabel="Debug Mode">
-                        <rect key="frame" x="580" y="4" width="16" height="16"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="16" id="TCL-QT-RDO"/>
-                            <constraint firstAttribute="height" constant="16" id="yXI-39-IXv"/>
-                        </constraints>
+                    <button tag="2" id="cdG-NT-T3J" userLabel="Debug Mode">
+                        <rect key="frame" x="483" y="3" width="20" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="inspectTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="ePm-pT-sH6">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <button tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="46l-A8-v8C" userLabel="Halt">
-                        <rect key="frame" x="512" y="4" width="16" height="16"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="16" id="7oV-Xa-E8H"/>
-                            <constraint firstAttribute="height" constant="16" id="eVf-94-C8j"/>
-                        </constraints>
+                    <button tag="2" id="46l-A8-v8C" userLabel="Halt">
+                        <rect key="frame" x="458" y="3" width="20" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="haltTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Qoa-ac-fgt">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -315,27 +282,40 @@
                             <action selector="mapCmdKeysAction:" target="-2" id="4rP-jE-apn"/>
                         </connections>
                     </button>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oNV-mZ-JGc">
+                        <rect key="frame" x="671" y="7" width="54" height="11"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="00% CPU" id="GSz-Xi-cus">
+                            <font key="font" metaFont="label" size="9"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button toolTip="Warp mode" id="1052">
+                        <rect key="frame" x="656" y="4" width="18" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="hourglass1Template" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="1707">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="warpAction:" target="-2" id="7h2-KE-103"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="iho-fa-H5O" secondAttribute="bottom" constant="4" id="02t-sL-zFr"/>
-                    <constraint firstItem="1052" firstAttribute="leading" secondItem="214" secondAttribute="trailing" constant="8" symbolic="YES" id="1WX-cE-VhN"/>
                     <constraint firstAttribute="bottom" secondItem="P62-wC-T1P" secondAttribute="bottom" constant="5" id="2kU-to-rgt"/>
-                    <constraint firstItem="cdG-NT-T3J" firstAttribute="leading" secondItem="70n-GV-8LP" secondAttribute="trailing" constant="8" symbolic="YES" id="3r1-Bt-Nlh"/>
                     <constraint firstItem="iKN-RM-vsV" firstAttribute="leading" secondItem="1208" secondAttribute="trailing" constant="8" symbolic="YES" id="5C4-zy-CEW"/>
                     <constraint firstAttribute="bottom" secondItem="iKN-RM-vsV" secondAttribute="bottom" constant="4" id="5YA-3H-hJB"/>
                     <constraint firstAttribute="bottom" secondItem="Pjc-SJ-rsn" secondAttribute="bottom" constant="4" id="6dF-1B-uXj"/>
                     <constraint firstItem="1208" firstAttribute="leading" secondItem="6" secondAttribute="leading" constant="8" id="7lx-9H-ApR"/>
                     <constraint firstAttribute="bottom" secondItem="f7g-mT-LE7" secondAttribute="bottom" constant="5" id="80f-ZK-qbp"/>
-                    <constraint firstItem="iho-fa-H5O" firstAttribute="leading" secondItem="cdG-NT-T3J" secondAttribute="trailing" constant="8" id="8Bg-Rk-4WS"/>
                     <constraint firstItem="Pjc-SJ-rsn" firstAttribute="leading" secondItem="X4r-q5-8Lh" secondAttribute="trailing" constant="8" symbolic="YES" id="CN4-cd-WOz"/>
-                    <constraint firstAttribute="bottom" secondItem="46l-A8-v8C" secondAttribute="bottom" constant="4" id="Chw-1Y-BK8"/>
                     <constraint firstItem="K68-Xr-JJH" firstAttribute="leading" secondItem="xzf-hU-AKK" secondAttribute="trailing" constant="8" symbolic="YES" id="Dfi-NW-4u7"/>
                     <constraint firstAttribute="bottom" secondItem="Qp9-H4-2Q7" secondAttribute="bottom" constant="4" id="E4V-Zk-iJg"/>
                     <constraint firstAttribute="bottom" secondItem="K68-Xr-JJH" secondAttribute="bottom" constant="4" id="EaJ-4B-OvH"/>
                     <constraint firstAttribute="bottom" secondItem="Lc0-yC-JdI" secondAttribute="bottom" constant="4" id="EjN-oJ-pRo"/>
-                    <constraint firstItem="214" firstAttribute="leading" secondItem="iho-fa-H5O" secondAttribute="trailing" constant="8" symbolic="YES" id="Ek8-FZ-mnN"/>
                     <constraint firstAttribute="bottom" secondItem="BLY-CO-Zam" secondAttribute="bottom" constant="4" id="FME-Gj-71o"/>
-                    <constraint firstAttribute="bottom" secondItem="cdG-NT-T3J" secondAttribute="bottom" constant="4" id="HJf-Gc-tAr"/>
                     <constraint firstAttribute="bottom" secondItem="wnl-Bi-Ego" secondAttribute="bottom" constant="4" id="HZ5-3c-jQM"/>
                     <constraint firstAttribute="bottom" secondItem="xzf-hU-AKK" secondAttribute="bottom" constant="4" id="LWM-UY-mJf"/>
                     <constraint firstItem="X4r-q5-8Lh" firstAttribute="leading" secondItem="gkQ-Nr-aDz" secondAttribute="trailing" constant="8" symbolic="YES" id="LeB-vM-aUS"/>
@@ -343,24 +323,17 @@
                     <constraint firstAttribute="bottom" secondItem="Cg3-r8-KR5" secondAttribute="bottom" constant="4" id="NOR-Ny-a3Q"/>
                     <constraint firstItem="D1i-Ep-fTN" firstAttribute="leading" secondItem="f19-16-42W" secondAttribute="trailing" constant="8" symbolic="YES" id="Ns6-ev-VQ5"/>
                     <constraint firstItem="Qp9-H4-2Q7" firstAttribute="leading" secondItem="Cg3-r8-KR5" secondAttribute="trailing" constant="8" symbolic="YES" id="Rne-JT-wcT"/>
-                    <constraint firstItem="212" firstAttribute="leading" secondItem="1052" secondAttribute="trailing" constant="4" id="TJ4-DR-MGg"/>
                     <constraint firstItem="gkQ-Nr-aDz" firstAttribute="leading" secondItem="f7g-mT-LE7" secondAttribute="trailing" constant="8" symbolic="YES" id="VTr-UY-q2o"/>
                     <constraint firstAttribute="bottom" secondItem="8yk-0g-1sA" secondAttribute="bottom" constant="5" id="VgG-0H-6Zc"/>
-                    <constraint firstAttribute="bottom" secondItem="214" secondAttribute="bottom" constant="7" id="YJ2-PG-JPL"/>
-                    <constraint firstAttribute="bottom" secondItem="1052" secondAttribute="bottom" constant="4" id="YYy-ym-ub5"/>
                     <constraint firstAttribute="bottom" secondItem="X4r-q5-8Lh" secondAttribute="bottom" constant="4" id="ZrM-Pv-WFD"/>
                     <constraint firstItem="wnl-Bi-Ego" firstAttribute="leading" secondItem="Lc0-yC-JdI" secondAttribute="trailing" constant="8" symbolic="YES" id="Zuh-BK-0Ep"/>
-                    <constraint firstAttribute="trailing" secondItem="212" secondAttribute="trailing" constant="8" id="Zyb-LZ-BLB"/>
-                    <constraint firstItem="70n-GV-8LP" firstAttribute="leading" secondItem="46l-A8-v8C" secondAttribute="trailing" constant="8" symbolic="YES" id="abU-bK-Tnf"/>
                     <constraint firstAttribute="bottom" secondItem="f19-16-42W" secondAttribute="bottom" constant="5" id="auB-jf-bUb"/>
                     <constraint firstAttribute="bottom" secondItem="gkQ-Nr-aDz" secondAttribute="bottom" constant="4" id="exj-M2-b7S"/>
                     <constraint firstItem="Lc0-yC-JdI" firstAttribute="leading" secondItem="BLY-CO-Zam" secondAttribute="trailing" constant="8" symbolic="YES" id="lkf-LH-ulx"/>
                     <constraint firstItem="P62-wC-T1P" firstAttribute="leading" secondItem="Pjc-SJ-rsn" secondAttribute="trailing" constant="8" symbolic="YES" id="mjR-ff-st2"/>
                     <constraint firstItem="xzf-hU-AKK" firstAttribute="leading" secondItem="D1i-Ep-fTN" secondAttribute="trailing" constant="8" symbolic="YES" id="pOf-Vf-WHh"/>
                     <constraint firstAttribute="bottom" secondItem="1208" secondAttribute="bottom" constant="4" id="pee-ts-hJk"/>
-                    <constraint firstAttribute="bottom" secondItem="212" secondAttribute="bottom" constant="5" id="rwf-4Q-tgH"/>
                     <constraint firstItem="BLY-CO-Zam" firstAttribute="leading" secondItem="P62-wC-T1P" secondAttribute="trailing" constant="8" symbolic="YES" id="u1y-9q-t3A"/>
-                    <constraint firstAttribute="bottom" secondItem="70n-GV-8LP" secondAttribute="bottom" constant="4" id="vjg-tg-hLP"/>
                     <constraint firstItem="Cg3-r8-KR5" firstAttribute="leading" secondItem="8yk-0g-1sA" secondAttribute="trailing" constant="8" symbolic="YES" id="vwB-Ut-UAc"/>
                     <constraint firstItem="f7g-mT-LE7" firstAttribute="leading" secondItem="K68-Xr-JJH" secondAttribute="trailing" constant="8" symbolic="YES" id="wTE-yN-DTf"/>
                     <constraint firstItem="f19-16-42W" firstAttribute="leading" secondItem="iKN-RM-vsV" secondAttribute="trailing" constant="8" symbolic="YES" id="wUU-gO-cXK"/>
@@ -565,7 +538,6 @@
     </objects>
     <resources>
         <image name="clickTemplate" width="36" height="36"/>
-        <image name="cmdLockTemplate" width="228" height="156"/>
         <image name="confTemplate" width="37" height="36"/>
         <image name="consoleTemplate" width="176" height="176"/>
         <image name="devGamepad1Template" width="20" height="21"/>

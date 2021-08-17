@@ -23,7 +23,7 @@ extension MyController {
         }
     }
     
-    public func refreshStatusBar() {
+    func refreshStatusBar() {
         
         let config = amiga.diskController.getConfig()
         let connected0 = config.connected.0
@@ -90,13 +90,15 @@ extension MyController {
             df3DMA: motor3,
 
             haltIcon: halted,
-            cmdLock: myAppDelegate.mapCommandKeys,
+            // cmdLock: myAppDelegate.mapCommandKeys,
             debugIcon: debug,
             muteIcon: warp || muted,
 
-            clockSpeed: running,
-            clockSpeedBar: running,
-            warpIcon: running
+            warpIcon: running,
+            cpuInfo: running,
+            mhzInfo: running,
+            cpuIndicator: running,
+            mhzIndicator: running
         ]
         
         for (item, visible) in items {

@@ -22,7 +22,6 @@ protocol MessageReceiver {
 
 class MyController: NSWindowController, MessageReceiver {
 
-    // var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     var pref: Preferences { return myAppDelegate.pref }
 
     // Reference to the connected document
@@ -151,13 +150,15 @@ class MyController: NSWindowController, MessageReceiver {
     @IBOutlet weak var df3DMA: NSProgressIndicator!
 
     @IBOutlet weak var haltIcon: NSButton!
-    @IBOutlet weak var cmdLock: NSButton!
+    // @IBOutlet weak var cmdLock: NSButton!
     @IBOutlet weak var debugIcon: NSButton!
     @IBOutlet weak var muteIcon: NSButton!
 
-    @IBOutlet weak var clockSpeed: NSTextField!
-    @IBOutlet weak var clockSpeedBar: NSLevelIndicator!
     @IBOutlet weak var warpIcon: NSButton!
+    @IBOutlet weak var cpuInfo: NSTextField!
+    @IBOutlet weak var mhzInfo: NSTextField!
+    @IBOutlet weak var cpuIndicator: NSLevelIndicator!
+    @IBOutlet weak var mhzIndicator: NSLevelIndicator!
 
     // Toolbar
     @IBOutlet weak var toolbar: MyToolbar!
@@ -215,7 +216,7 @@ extension MyController {
         loadUserDefaults()
         
         // Enable message processing
-        setListener()
+        registerAsListener()
 
         // Process attachment (if any)
         try? mydocument.mountAttachment(destination: amiga.df0)
@@ -260,7 +261,7 @@ extension MyController {
         window?.collectionBehavior = .fullScreenPrimary
     }
     
-    func setListener() {
+    func registerAsListener() {
                 
         // Convert 'self' to a void pointer
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
@@ -282,23 +283,22 @@ extension MyController {
     // Timer and message processing
     //
     
-    @objc func timerFunc() {
+    func timerFunc() {
 
         animationCounter += 1
 
         // Animate the inspector
         if inspector?.window?.isVisible == true { inspector!.continuousRefresh() }
- 
-        // Do less frequently...
-        if (animationCounter % 2) == 0 {
- 
-        }
-        
-        // Do even less frequently...
+         
+        // Do less times...
         if (animationCounter % 3) == 0 {
             
             updateSpeedometer()
             updateMonitoringPanels()
+        }
+        
+        // Do lesser times...
+        if (animationCounter % 32) == 0 {
             
             // Let the cursor disappear in fullscreen mode
             if renderer.fullscreen &&
@@ -312,10 +312,15 @@ extension MyController {
     func updateSpeedometer() {
         
         speedometer.updateWith(cycle: amiga.cpu.cycles, frame: renderer.frames)
+        
+        // let fps = speedometer.fps
+        let cpu = amiga.cpuLoad
         let mhz = speedometer.mhz
-        let fps = speedometer.fps
-        clockSpeed.stringValue = String(format: "%.2f MHz %.0f fps", mhz, fps)
-        clockSpeedBar.doubleValue = 10 * mhz
+
+        cpuInfo.stringValue = String(format: "%d%% CPU", cpu)
+        mhzInfo.stringValue = String(format: "%.2f MHz", mhz)
+        cpuIndicator.integerValue = cpu
+        mhzIndicator.doubleValue = 10 * mhz
     }
 
     func addValue(_ nr: Int, _ v: Float) {

@@ -101,9 +101,10 @@ Paula::_pause()
 void
 Paula::_warpOn()
 {
-    // Warping has the unavoidable drawback that audio playback gets out of
-    // sync. To cope with this issue, we ramp down the volume when warping
-    // is switched on and fade in smoothly when it is switched off.
+    /* Warping has the unavoidable drawback that audio playback gets out of
+     * sync. To cope with it, we ramp down the volume when warping is switched
+     * on and fade in smoothly when it is switched off.
+     */
     muxer.rampDown();
 }
 
