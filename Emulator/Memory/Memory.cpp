@@ -170,9 +170,9 @@ Memory::setConfigItem(Option option, i64 value)
             
         case OPT_SLOW_RAM_DELAY:
                         
-            suspend();
-            config.slowRamDelay = value;
-            resume();
+            suspended {
+                config.slowRamDelay = value;
+            }
             return;
             
         case OPT_BANKMAP:
@@ -181,10 +181,10 @@ Memory::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, BankMapEnum::keyList());
             }
             
-            suspend();
-            config.bankMap = (BankMap)value;
-            updateMemSrcTables();
-            resume();
+            suspended {
+                config.bankMap = (BankMap)value;
+                updateMemSrcTables();
+            }
             return;
 
         case OPT_UNMAPPING_TYPE:
@@ -193,9 +193,9 @@ Memory::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, UnmappedMemoryEnum::keyList());
             }
             
-            suspend();
-            config.unmappingType = (UnmappedMemory)value;
-            resume();
+            suspended {
+                config.unmappingType = (UnmappedMemory)value;
+            }
             return;
             
         case OPT_RAM_INIT_PATTERN:
@@ -204,9 +204,9 @@ Memory::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, RamInitPatternEnum::keyList());
             }
 
-            suspend();
-            config.ramInitPattern = (RamInitPattern)value;
-            resume();
+            suspended {
+                config.ramInitPattern = (RamInitPattern)value;
+            }
             if (isPoweredOff()) fillRamWithInitPattern();
             return;
             

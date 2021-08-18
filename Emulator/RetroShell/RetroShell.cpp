@@ -426,10 +426,9 @@ RetroShell::dump(AmigaComponent &component, dump::Category category)
 {
     std::stringstream ss; string line;
     
-    amiga.suspend();
-    component.dump(category, ss);
-    amiga.resume();
-    
+    suspended {
+        component.dump(category, ss);
+    }
     while(std::getline(ss, line)) *this << line << '\n';
 }
 

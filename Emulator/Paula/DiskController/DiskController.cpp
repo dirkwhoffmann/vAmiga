@@ -15,6 +15,7 @@
 #include "IO.h"
 #include "MsgQueue.h"
 #include "Paula.h"
+#include "SuspendableThread.h"
 #include <algorithm>
 
 void
@@ -294,9 +295,10 @@ DiskController::ejectDisk(isize nr, Cycle delay)
 {
     assert(nr >= 0 && nr <= 3);
 
-    suspend();
-    agnus.scheduleRel<SLOT_DCH>(delay, DCH_EJECT, nr);
-    resume();
+    suspended {
+        
+        agnus.scheduleRel<SLOT_DCH>(delay, DCH_EJECT, nr);
+    }
 }
 
 void
@@ -316,22 +318,21 @@ DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
     }
 
     // The not so easy case: The emulator is running
-    suspend();
-
-    if (df[nr]->hasDisk()) {
-
-        // Eject the old disk first
-        df[nr]->ejectDisk();
-
-        // Make sure there is enough time between ejecting and inserting.
-        // Otherwise, the Amiga might not detect the change.
-        delay = std::max((Cycle)SEC(1.5), delay);
+    suspended {
+        
+        if (df[nr]->hasDisk()) {
+            
+            // Eject the old disk first
+            df[nr]->ejectDisk();
+            
+            // Make sure there is enough time between ejecting and inserting.
+            // Otherwise, the Amiga might not detect the change.
+            delay = std::max((Cycle)SEC(1.5), delay);
+        }
+        
+        diskToInsert = std::move(disk);
+        agnus.scheduleRel<SLOT_DCH>(delay, DCH_INSERT, nr);
     }
-
-    diskToInsert = std::move(disk);
-    agnus.scheduleRel<SLOT_DCH>(delay, DCH_INSERT, nr);
-    
-    resume();
 }
 
 void
