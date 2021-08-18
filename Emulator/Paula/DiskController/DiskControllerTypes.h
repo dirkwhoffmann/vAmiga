@@ -34,14 +34,19 @@ inline bool isDriveState(long value)
 }
 
 #ifdef __cplusplus
-struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState> {
-    
+struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState>
+{
+
     static bool isValid(long value)
     {
         return (unsigned long)value <= DRIVE_DMA_FLUSH;
     }
-
-    static const char *prefix() { return "DRIVE_DMA"; }
+    
+    static const char *prefix()
+    {
+        return "DRIVE_DMA";
+    }
+    
     static const char *key(DriveState value)
     {
         switch (value) {
@@ -66,7 +71,7 @@ struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState> {
 typedef struct
 {
     bool connected[4];
-    
+
     /* Acceleration factor. This value equals the number of words that get
      * transfered into memory during a single disk DMA cycle. This value must
      * be 1 to emulate a real Amiga. If it set to, e.g., 2, the drive loads
@@ -82,7 +87,8 @@ DiskControllerConfig;
 
 inline bool isValidDriveSpeed(i16 speed)
 {
-    switch (speed) {
+    switch (speed)
+    {
         case -1: case 1: case 2: case 4: case 8: return true;
     }
     return false;

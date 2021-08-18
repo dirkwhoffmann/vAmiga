@@ -15,8 +15,8 @@
 #include "Disk.h"
 // class Disk;
 
-class DiskController : public SubComponent {
-
+class DiskController : public SubComponent
+{
     friend class Drive;
     
     // Current configuration
