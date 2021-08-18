@@ -124,7 +124,6 @@
 		508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00021EA227A0043D0E9 /* KeyboardController.swift */; };
 		508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00121EA227A0043D0E9 /* GamePadManager.swift */; };
 		508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00221EA227A0043D0E9 /* MemoryPanel.swift */; };
-		508FE02721EA227B0043D0E9 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00521EA227A0043D0E9 /* Utils.swift */; };
 		508FE02921EA227B0043D0E9 /* MyControllerTouchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */; };
 		508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00921EA227B0043D0E9 /* WindowDelegate.swift */; };
 		508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */; };
@@ -215,6 +214,10 @@
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
 		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C9F2269135800795256 /* SpriteTableView.swift */; };
+		50E1D2C226CCF830001FE199 /* DatatypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */; };
+		50E1D2C426CCF8C9001FE199 /* FileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */; };
+		50E1D2C626CCF942001FE199 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C526CCF942001FE199 /* FontExtensions.swift */; };
+		50E1D2C826CCF97C001FE199 /* ChronoExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C726CCF97C001FE199 /* ChronoExtensions.swift */; };
 		50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */; };
 		50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E204E82295A3F20082B63D /* DmaDebugger.cpp */; };
 		50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */; };
@@ -444,7 +447,6 @@
 		508FE00021EA227A0043D0E9 /* KeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardController.swift; sourceTree = "<group>"; };
 		508FE00121EA227A0043D0E9 /* GamePadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePadManager.swift; sourceTree = "<group>"; };
 		508FE00221EA227A0043D0E9 /* MemoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryPanel.swift; sourceTree = "<group>"; };
-		508FE00521EA227A0043D0E9 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerTouchBar.swift; sourceTree = "<group>"; };
 		508FE00921EA227B0043D0E9 /* WindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowDelegate.swift; sourceTree = "<group>"; };
 		508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAppDelegate.swift; sourceTree = "<group>"; };
@@ -608,6 +610,10 @@
 		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
 		50DF2C9E2268CFC000795256 /* AgnusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusTypes.h; sourceTree = "<group>"; };
 		50DF2C9F2269135800795256 /* SpriteTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteTableView.swift; sourceTree = "<group>"; };
+		50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatatypeExtensions.swift; sourceTree = "<group>"; };
+		50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExtensions.swift; sourceTree = "<group>"; };
+		50E1D2C526CCF942001FE199 /* FontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtensions.swift; sourceTree = "<group>"; };
+		50E1D2C726CCF97C001FE199 /* ChronoExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChronoExtensions.swift; sourceTree = "<group>"; };
 		50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FastBlitter.cpp; sourceTree = "<group>"; };
 		50E204E82295A3F20082B63D /* DmaDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DmaDebugger.cpp; sourceTree = "<group>"; };
 		50E204E92295A3F20082B63D /* DmaDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DmaDebugger.h; sourceTree = "<group>"; };
@@ -898,9 +904,12 @@
 			isa = PBXGroup;
 			children = (
 				50E8199225B350DA00D2E3A5 /* Errors.swift */,
-				508FE00521EA227A0043D0E9 /* Utils.swift */,
 				50F580652431D1A000E7D84D /* Screenshot.swift */,
 				501A9936243A07A100D269B2 /* Storage.swift */,
+				50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */,
+				50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */,
+				50E1D2C526CCF942001FE199 /* FontExtensions.swift */,
+				50E1D2C726CCF97C001FE199 /* ChronoExtensions.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1667,7 +1676,6 @@
 				501702E3256FFC5400C84CE1 /* FSBitmapExtBlock.cpp in Sources */,
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
 				5023519024485BBF00F6C088 /* Preferences.swift in Sources */,
-				508FE02721EA227B0043D0E9 /* Utils.swift in Sources */,
 				505A3A3A21F4996400132020 /* SSEUtils.cpp in Sources */,
 				50B2BC8925EC3D590032EEFE /* IO.cpp in Sources */,
 				502BB09E229C00C800A8DFCD /* CompatibilityConf.swift in Sources */,
@@ -1698,6 +1706,8 @@
 				50A61439260CE6B100A01428 /* Bus.cpp in Sources */,
 				509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */,
 				508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */,
+				50E1D2C626CCF942001FE199 /* FontExtensions.swift in Sources */,
+				50E1D2C426CCF8C9001FE199 /* FileExtensions.swift in Sources */,
 				50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */,
 				50001C652593230200D1FC91 /* DeviceDatabase.swift in Sources */,
 				500217BA2449CFF500E1A096 /* ConfigurationController.swift in Sources */,
@@ -1781,6 +1791,7 @@
 				50B9354B243481AB000C78B8 /* SnapshotDialog.swift in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,
 				508FE04E21EA22CC0043D0E9 /* RomConf.swift in Sources */,
+				50E1D2C826CCF97C001FE199 /* ChronoExtensions.swift in Sources */,
 				50F54B2A24B5D31D0078FDC9 /* u_init.c in Sources */,
 				507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */,
 				5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */,
@@ -1791,6 +1802,7 @@
 				505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */,
 				50E8199325B350DA00D2E3A5 /* Errors.swift in Sources */,
 				50F54B2C24B5D31D0078FDC9 /* crc_csum.c in Sources */,
+				50E1D2C226CCF830001FE199 /* DatatypeExtensions.swift in Sources */,
 				5083CF652546BEAA00A28EF8 /* FSBitmapBlock.cpp in Sources */,
 				508FE05321EA22CC0043D0E9 /* VideoConf.swift in Sources */,
 				50357BB823912929007E7563 /* RendererSetup.swift in Sources */,

@@ -7,108 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Carbon.HIToolbox
-
 //
-// Logging / Debugging
-// 
-
-public func track(_ message: String = "",
-                  path: String = #file, function: String = #function, line: Int = #line ) {
-    
-    if let file = URL(string: path)?.deletingPathExtension().lastPathComponent {
-        if message == "" {
-            print("\(file).\(line)::\(function)")
-        } else {
-            print("\(file).\(line)::\(function): \(message)")
-        }
-    }
-}
-
-//
-// Extensions to Double
-//
-
-extension Double {
-   
-    func truncate(digits: Int) -> Double {
-        let factor = Double(truncating: pow(10, digits) as NSNumber)
-        return (self * factor).rounded() / factor
-    }
-}
-
-//
-// Extensions to comparable
-//
-
-extension Comparable {
-    
-    func clamped(_ f: Self, _ t: Self) -> Self {
-        
-        var r = self
-        if r < f { r = f }
-        if r > t { r = t }
-        return r
-    }
-}
-
-//
-// String class extensions
-//
-
-extension String {
-    
-    init?(keyCode: UInt16, carbonFlags: Int) {
-        
-        let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource().takeRetainedValue()
-        let layoutData = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
-        let dataRef = unsafeBitCast(layoutData, to: CFData.self)
-        let keyLayout = UnsafePointer<CoreServices.UCKeyboardLayout>.self
-        let keyLayoutPtr = unsafeBitCast(CFDataGetBytePtr(dataRef), to: keyLayout)
-        let modifierKeyState = (carbonFlags >> 8) & 0xFF
-        let keyTranslateOptions = OptionBits(CoreServices.kUCKeyTranslateNoDeadKeysBit)
-        var deadKeyState: UInt32 = 0
-        let maxChars = 1
-        var length = 0
-        var chars = [UniChar](repeating: 0, count: maxChars)
-        
-        let error = CoreServices.UCKeyTranslate(keyLayoutPtr,
-                                                keyCode,
-                                                UInt16(CoreServices.kUCKeyActionDisplay),
-                                                UInt32(modifierKeyState),
-                                                UInt32(LMGetKbdType()),
-                                                keyTranslateOptions,
-                                                &deadKeyState,
-                                                maxChars,
-                                                &length,
-                                                &chars)
-        if error == noErr {
-            self.init(NSString(characters: &chars, length: length))
-        } else {
-            return nil
-        }
-    }
-}
-
-extension NSAttributedString {
-    
-    convenience init(_ text: String, size: CGFloat, color: NSColor) {
-        
-        let paraStyle = NSMutableParagraphStyle()
-        paraStyle.alignment = .center
-
-        let attr: [NSAttributedString.Key: Any] = [
-            .font: NSFont.systemFont(ofSize: size),
-            .foregroundColor: color,
-            .paragraphStyle: paraStyle
-        ]
-        
-        self.init(string: text, attributes: attr)
-    }
-}
-
-//
-// URL class extensions
+// URL
 //
 
 extension URL {
@@ -375,22 +275,6 @@ extension URL {
 }
 
 //
-// NSFont
-//
-
-extension NSFont {
- 
-    static func monospaced(ofSize fontSize: CGFloat, weight: Weight) -> NSFont {
-        
-        if #available(macOS 10.15, *) {
-            return NSFont.monospacedSystemFont(ofSize: fontSize, weight: weight)
-        } else {
-            return NSFont.systemFont(ofSize: fontSize)
-        }
-    }
-}
-
-//
 // FileManager
 //
 
@@ -426,56 +310,5 @@ extension FileManager {
             return false
         }
         return true
-    }
-}
-
-//
-// Data class extensions
-//
-
-extension Data {
-    var bitmap: NSBitmapImageRep? {
-        return NSBitmapImageRep(data: self)
-    }
-}
-
-//
-// Managing time and date
-//
-
-extension DispatchTime {
-
-    static func diffNano(_ t: DispatchTime) -> UInt64 {
-        return DispatchTime.now().uptimeNanoseconds - t.uptimeNanoseconds
-    }
-
-    static func diffMicroSec(_ t: DispatchTime) -> UInt64 { return diffNano(t) / 1_000 }
-    static func diffMilliSec(_ t: DispatchTime) -> UInt64 { return diffNano(t) / 1_000_000 }
-    static func diffSec(_ t: DispatchTime) -> UInt64 { return diffNano(t) / 1_000_000_000 }
-}
-
-extension Date {
-
-    func diff(_ date: Date) -> TimeInterval {
-        
-        let interval1 = self.timeIntervalSinceReferenceDate
-        let interval2 = date.timeIntervalSinceReferenceDate
-
-        return interval2 - interval1
-    }
-}
-
-//
-// Controls
-//
-
-extension NSTabView {
-    
-    var selectedIndex: Int {
-        
-        guard let selected = self.selectedTabViewItem else {
-            return -1
-        }
-        return self.indexOfTabViewItem(selected)
     }
 }
