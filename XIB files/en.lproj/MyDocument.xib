@@ -8,9 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MyController">
             <connections>
-                <outlet property="clockSpeed" destination="214" id="216"/>
-                <outlet property="clockSpeedBar" destination="212" id="215"/>
-                <outlet property="cpuIndicator" destination="212" id="HBj-Wd-Pbq"/>
+                <outlet property="cmdLock" destination="Qzo-AS-059" id="L1Y-30-MFU"/>
                 <outlet property="cpuInfo" destination="oNV-mZ-JGc" id="XOV-TH-brY"/>
                 <outlet property="debugIcon" destination="cdG-NT-T3J" id="Oxi-mf-eZE"/>
                 <outlet property="df0Cylinder" destination="f19-16-42W" id="qi6-Qi-Wnz"/>
@@ -31,9 +29,11 @@
                 <outlet property="df3LED" destination="wnl-Bi-Ego" id="1Bn-5L-EfU"/>
                 <outlet property="haltIcon" destination="46l-A8-v8C" id="IN7-Hf-03C"/>
                 <outlet property="metal" destination="DD4-5B-w9h" id="rGV-rL-MLo"/>
-                <outlet property="mhzIndicator" destination="yvz-Z4-pqn" id="uA0-2X-LxO"/>
-                <outlet property="mhzInfo" destination="214" id="J0q-N5-ZF8"/>
+                <outlet property="modeSelect" destination="0go-7K-IPf" id="uFZ-5b-ldJ"/>
                 <outlet property="muteIcon" destination="iho-fa-H5O" id="k5F-Wk-R5B"/>
+                <outlet property="observeIndicator" destination="212" id="Enu-fB-P92"/>
+                <outlet property="observeInfo" destination="oNV-mZ-JGc" id="HDY-Cq-tSN"/>
+                <outlet property="observeSelect" destination="0go-7K-IPf" id="caX-Zm-vUc"/>
                 <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>
                 <outlet property="toolbar" destination="1845" id="JVx-NQ-tw7"/>
                 <outlet property="warpIcon" destination="1052" id="QGs-ln-NvN"/>
@@ -45,7 +45,7 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" animationBehavior="default" tabbingMode="preferred" toolbarStyle="expanded" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="800" height="626"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="960"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
             <value key="minSize" type="size" width="400" height="314"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="800" height="626"/>
@@ -80,13 +80,6 @@
                         <rect key="frame" x="729" y="3" width="64" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <levelIndicatorCell key="cell" alignment="left" maxValue="140" warningValue="77" criticalValue="105" id="1702">
-                            <font key="font" metaFont="system"/>
-                        </levelIndicatorCell>
-                    </levelIndicator>
-                    <levelIndicator verticalHuggingPriority="750" id="yvz-Z4-pqn">
-                        <rect key="frame" x="588" y="3" width="64" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <levelIndicatorCell key="cell" alignment="left" maxValue="140" warningValue="77" criticalValue="105" id="TLs-YH-Tyz">
                             <font key="font" metaFont="system"/>
                         </levelIndicatorCell>
                     </levelIndicator>
@@ -195,15 +188,6 @@
                             <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="214">
-                        <rect key="frame" x="532" y="7" width="54" height="11"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="99.99 MHz" id="1703">
-                            <font key="font" metaFont="menu" size="9"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="f19-16-42W">
                         <rect key="frame" x="70" y="5" width="20" height="14"/>
                         <constraints>
@@ -256,7 +240,7 @@
                         </connections>
                     </customView>
                     <button tag="2" id="iho-fa-H5O" userLabel="Mute">
-                        <rect key="frame" x="509" y="3" width="20" height="20"/>
+                        <rect key="frame" x="566" y="3" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="muteTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="izA-UN-588">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -264,7 +248,7 @@
                         </buttonCell>
                     </button>
                     <button tag="2" id="cdG-NT-T3J" userLabel="Debug Mode">
-                        <rect key="frame" x="483" y="3" width="20" height="20"/>
+                        <rect key="frame" x="536" y="3" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="inspectTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="ePm-pT-sH6">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -272,7 +256,7 @@
                         </buttonCell>
                     </button>
                     <button tag="2" id="46l-A8-v8C" userLabel="Halt">
-                        <rect key="frame" x="458" y="3" width="20" height="20"/>
+                        <rect key="frame" x="507" y="3" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="haltTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Qoa-ac-fgt">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -282,17 +266,8 @@
                             <action selector="mapCmdKeysAction:" target="-2" id="4rP-jE-apn"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oNV-mZ-JGc">
-                        <rect key="frame" x="674" y="7" width="52" height="11"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="00% CPU" id="GSz-Xi-cus">
-                            <font key="font" metaFont="label" size="9"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <button toolTip="Warp mode" id="1052">
-                        <rect key="frame" x="656" y="4" width="18" height="18"/>
+                        <rect key="frame" x="703" y="4" width="18" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="hourglass1Template" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="1707">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -301,6 +276,41 @@
                         <connections>
                             <action selector="warpAction:" target="-2" id="7h2-KE-103"/>
                         </connections>
+                    </button>
+                    <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0go-7K-IPf">
+                        <rect key="frame" x="674" y="3" width="27" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <popUpButtonCell key="cell" type="check" title="CPU Frequency (Amiga)" bezelStyle="regularSquare" imagePosition="left" lineBreakMode="truncatingTail" inset="2" arrowPosition="arrowAtCenter" preferredEdge="minX" selectedItem="ebX-Qd-V1U" id="fbh-jz-zm9">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <menu key="menu" id="VSY-08-JkF">
+                                <items>
+                                    <menuItem title="CPU Frequency (Amiga)" id="ebX-Qd-V1U"/>
+                                    <menuItem title="CPU Load (Mac)" tag="1" id="e2a-oz-kXg"/>
+                                    <menuItem title="Frames per Second (Mac)" tag="2" id="LD4-F0-Zv0"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <action selector="modeAction:" target="-2" id="YGy-zQ-c4T"/>
+                        </connections>
+                    </popUpButton>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oNV-mZ-JGc">
+                        <rect key="frame" x="614" y="8" width="64" height="11"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="00% CPU" id="GSz-Xi-cus">
+                            <font key="font" metaFont="label" size="9"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button tag="2" id="Qzo-AS-059" userLabel="Halt">
+                        <rect key="frame" x="461" y="3" width="39" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="cmdLockTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="nah-aa-GCT">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
                     </button>
                 </subviews>
                 <constraints>
@@ -538,6 +548,7 @@
     </objects>
     <resources>
         <image name="clickTemplate" width="36" height="36"/>
+        <image name="cmdLockTemplate" width="228" height="156"/>
         <image name="confTemplate" width="37" height="36"/>
         <image name="consoleTemplate" width="176" height="176"/>
         <image name="devGamepad1Template" width="20" height="21"/>

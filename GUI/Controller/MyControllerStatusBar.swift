@@ -90,15 +90,14 @@ extension MyController {
             df3DMA: motor3,
 
             haltIcon: halted,
-            // cmdLock: myAppDelegate.mapCommandKeys,
+            cmdLock: myAppDelegate.mapCommandKeys,
             debugIcon: debug,
             muteIcon: warp || muted,
 
             warpIcon: running,
-            cpuInfo: running,
-            mhzInfo: running,
-            cpuIndicator: running,
-            mhzIndicator: running
+            observeSelect: running,
+            observeInfo: running,
+            observeIndicator: running
         ]
         
         for (item, visible) in items {
@@ -176,6 +175,33 @@ extension MyController {
         }
     }
     
+    func updateSpeedometer() {
+        
+        speedometer.updateWith(cycle: amiga.cpu.cycles, frame: renderer.frames)
+        
+        switch observeSelect.selectedTag() {
+
+        case 0:
+            let mhz = speedometer.mhz
+            observeIndicator.doubleValue = 10 * mhz
+            observeInfo.stringValue = String(format: "%.2f MHz", mhz)
+            
+        case 1:
+            let cpu = amiga.cpuLoad
+            observeIndicator.integerValue = cpu
+            observeInfo.stringValue = String(format: "%d%% CPU", cpu)
+            
+        case 2:
+            let fps = speedometer.fps
+            observeIndicator.doubleValue = fps
+            observeInfo.stringValue = String(format: "%d FPS", Int(fps))
+
+        default:
+            observeIndicator.integerValue = 0
+            observeInfo.stringValue = "???"
+        }
+    }
+    
     //
     // Action methods
     //
@@ -190,6 +216,39 @@ extension MyController {
         case .on: pref.warpMode = .auto
         }
         
+        refreshStatusBar()
+    }
+
+    @IBAction func modeAction(_ sender: NSPopUpButton!) {
+
+        track()
+        
+        var min, max, warn, crit: Double
+        
+        switch sender.selectedTag() {
+        
+        case 0: min = 0; max = 140; warn = 77; crit = 105
+        case 1: min = 0; max = 100; warn = 50; crit = 75
+        case 2: min = 0; max = 120; warn = 75; crit = 100
+
+        default:
+            fatalError()
+        }
+        
+        observeIndicator.minValue = min
+        observeIndicator.maxValue = max
+        observeIndicator.warningValue = warn
+        observeIndicator.criticalValue = crit
+
+        refreshStatusBar()
+    }
+
+    @IBAction func modeComboAction(_ sender: NSComboBox!) {
+        
+        let tag = sender.tag
+        let sel = sender.selectedTag()
+        track("\(tag) \(sel)")
+                
         refreshStatusBar()
     }
 }

@@ -114,15 +114,14 @@ class MyController: NSWindowController, MessageReceiver {
     @IBOutlet weak var df3DMA: NSProgressIndicator!
 
     @IBOutlet weak var haltIcon: NSButton!
-    // @IBOutlet weak var cmdLock: NSButton!
+    @IBOutlet weak var cmdLock: NSButton!
     @IBOutlet weak var debugIcon: NSButton!
     @IBOutlet weak var muteIcon: NSButton!
 
     @IBOutlet weak var warpIcon: NSButton!
-    @IBOutlet weak var cpuInfo: NSTextField!
-    @IBOutlet weak var mhzInfo: NSTextField!
-    @IBOutlet weak var cpuIndicator: NSLevelIndicator!
-    @IBOutlet weak var mhzIndicator: NSLevelIndicator!
+    @IBOutlet weak var observeSelect: NSPopUpButton!
+    @IBOutlet weak var observeInfo: NSTextField!
+    @IBOutlet weak var observeIndicator: NSLevelIndicator!
 
     // Toolbar
     @IBOutlet weak var toolbar: MyToolbar!
@@ -273,20 +272,6 @@ extension MyController {
         }
     }
     
-    func updateSpeedometer() {
-        
-        speedometer.updateWith(cycle: amiga.cpu.cycles, frame: renderer.frames)
-        
-        // let fps = speedometer.fps
-        let cpu = amiga.cpuLoad
-        let mhz = speedometer.mhz
-
-        cpuInfo.stringValue = String(format: "%d%% CPU", cpu)
-        mhzInfo.stringValue = String(format: "%.2f MHz", mhz)
-        cpuIndicator.integerValue = cpu
-        mhzIndicator.doubleValue = 10 * mhz
-    }
-
     func updateWarp() {
         
         var warp: Bool
