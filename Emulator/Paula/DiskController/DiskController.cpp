@@ -688,7 +688,7 @@ DiskController::performTurboRead(Drive *drive)
         agnus.dskpt += 2;
     }
     
-    debug(DSK_CHECKSUM, "Turbo read %s: cyl: %d side: %d offset: %d ",
+    debug(DSK_CHECKSUM, "Turbo read %s: cyl: %zd side: %zd offset: %zd ",
           drive->getDescription(),
           drive->head.cylinder,
           drive->head.side,

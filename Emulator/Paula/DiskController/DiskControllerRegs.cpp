@@ -36,7 +36,7 @@ DiskController::pokeDSKLEN(u16 value)
 void
 DiskController::setDSKLEN(u16 oldValue, u16 newValue)
 {
-    trace(DSKREG_DEBUG, "setDSKLEN(%x) [%d,%d,%d]\n",
+    trace(DSKREG_DEBUG, "setDSKLEN(%x) [%zd,%zd,%zd]\n",
           newValue, df0.head.cylinder, df0.head.side, df0.head.offset);
 
     Drive *drive = getSelectedDrive();
@@ -182,7 +182,7 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
     // Store a copy of the new value for reference
     prb = newValue;
     
-    i8 oldSelected = selected;
+    auto oldSelected = selected;
     selected = -1;
     
     // Iterate over all connected drives

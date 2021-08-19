@@ -173,7 +173,7 @@ public:
     u32 getDriveId() const;
 
     // Operation
-    u8 getCylinder() const { return head.cylinder; }
+    isize getCylinder() const { return head.cylinder; }
     
     
     //

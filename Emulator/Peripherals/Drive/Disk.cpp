@@ -247,7 +247,7 @@ Disk::addClockBits(u8 value, u8 previous)
     u8 cBitsInv = (u8)(lShifted | rShifted);
 
     // Reverse the computed clock bits
-    u64 cBits = cBitsInv ^ 0xAA;
+    u8 cBits = cBitsInv ^ 0xAA;
     
     // Return original value with the clock bits added
     return value | cBits;

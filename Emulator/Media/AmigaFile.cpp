@@ -58,7 +58,7 @@ AmigaFile::init(FILE *file)
 {
     assert(file);
     std::stringstream stream;
-    int c; while ((c = fgetc(file)) != EOF) { stream.put(c); }
+    int c; while ((c = fgetc(file)) != EOF) { stream.put((char)c); }
     init(stream);
 }
     

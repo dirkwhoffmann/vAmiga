@@ -687,7 +687,7 @@ u8
 Agnus::bpu(u16 v)
 {
     // Extract the three BPU bits and check for hires mode
-    int bpu = (v >> 12) & 0b111;
+    u8 bpu = (v >> 12) & 0b111;
     bool hires = GET_BIT(v, 15);
 
     if (hires) {

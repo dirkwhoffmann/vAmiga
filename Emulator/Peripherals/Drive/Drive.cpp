@@ -116,27 +116,27 @@ Drive::setConfigItem(Option option, i64 value)
 
         case OPT_DRIVE_PAN:
 
-            config.pan = value;
+            config.pan = (i16)value;
             return;
 
         case OPT_STEP_VOLUME:
 
-            config.stepVolume = value;
+            config.stepVolume = (u8)value;
             return;
 
         case OPT_POLL_VOLUME:
 
-            config.pollVolume = value;
+            config.pollVolume = (u8)value;
             return;
 
         case OPT_EJECT_VOLUME:
 
-            config.ejectVolume = value;
+            config.ejectVolume = (u8)value;
             return;
 
         case OPT_INSERT_VOLUME:
 
-            config.insertVolume = value;
+            config.insertVolume = (u8)value;
             return;
 
         case OPT_DEFAULT_FILESYSTEM:
@@ -550,7 +550,7 @@ Drive::findSyncMark()
         break;
     }
 
-    trace(DSK_DEBUG, "Moving to SYNC mark at offset %d\n", head.offset);
+    trace(DSK_DEBUG, "Moving to SYNC mark at offset %zd\n", head.offset);
 }
 
 bool
@@ -579,7 +579,7 @@ Drive::step(isize dir)
             head.cylinder--;
             recordCylinder(head.cylinder);
         }
-        debug(DSK_CHECKSUM, "Stepping down to cylinder %d\n", head.cylinder);
+        debug(DSK_CHECKSUM, "Stepping down to cylinder %zd\n", head.cylinder);
 
     } else {
         
@@ -588,7 +588,7 @@ Drive::step(isize dir)
             head.cylinder++;
             recordCylinder(head.cylinder);
         }
-        debug(DSK_CHECKSUM, "Stepping up to cylinder %d\n", head.cylinder);
+        debug(DSK_CHECKSUM, "Stepping up to cylinder %zd\n", head.cylinder);
     }
     
     // Push drive head forward

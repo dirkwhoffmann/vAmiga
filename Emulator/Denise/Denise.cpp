@@ -295,13 +295,12 @@ Denise::updateShiftRegisters()
     u32 mask = 0x8000;
     for (isize i = 0; i < 16; i++, mask >>= 1) {
         
-        slice[i] =
-        (!!(shiftReg[0] & mask) << 0) |
-        (!!(shiftReg[1] & mask) << 1) |
-        (!!(shiftReg[2] & mask) << 2) |
-        (!!(shiftReg[3] & mask) << 3) |
-        (!!(shiftReg[4] & mask) << 4) |
-        (!!(shiftReg[5] & mask) << 5);
+        slice[i] = (u8) ((!!(shiftReg[0] & mask) << 0) |
+                         (!!(shiftReg[1] & mask) << 1) |
+                         (!!(shiftReg[2] & mask) << 2) |
+                         (!!(shiftReg[3] & mask) << 3) |
+                         (!!(shiftReg[4] & mask) << 4) |
+                         (!!(shiftReg[5] & mask) << 5) );
     }
 }
 
@@ -368,7 +367,7 @@ Denise::drawEven(Pixel offset)
     };
     
     u16 mask = masks[bpu()];
-    i16 currentPixel = agnus.ppos() + offset;
+    Pixel currentPixel = agnus.ppos() + offset;
     
     for (isize i = 0; i < 16; i++) {
 
@@ -411,7 +410,7 @@ Denise::drawBoth(Pixel offset)
     };
     
     u16 mask = masks[bpu()];
-    i16 currentPixel = agnus.ppos() + offset;
+    Pixel currentPixel = agnus.ppos() + offset;
     
     for (isize i = 0; i < 16; i++) {
         
@@ -922,7 +921,7 @@ Denise::drawSpritePixel(Pixel hpos)
     if (col) {
 
         u16 z = Z_SP[x];
-        int base = 16 + 2 * (x & 6);
+        u8 base = 16 + 2 * (x & 6);
 
         if (z > zBuffer[hpos]) mBuffer[hpos] = base | col;
         if (z > zBuffer[hpos + 1]) mBuffer[hpos + 1] = base | col;
@@ -937,16 +936,17 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
     assert(IS_ODD(x));
     assert(hpos >= spriteClipBegin && hpos < spriteClipEnd);
 
-    u8 a1 = !!GET_BIT(ssra[x-1], 15);
-    u8 b1 = !!GET_BIT(ssrb[x-1], 15) << 1;
-    u8 a2 = !!GET_BIT(ssra[x], 15) << 2;
-    u8 b2 = !!GET_BIT(ssrb[x], 15) << 3;
+    auto a1 = !!GET_BIT(ssra[x - 1], 15);
+    auto b1 = !!GET_BIT(ssrb[x - 1], 15) << 1;
+    auto a2 = !!GET_BIT(ssra[x],     15) << 2;
+    auto b2 = !!GET_BIT(ssrb[x],     15) << 3;
+    
     assert(a1 == ((ssra[x-1] >> 15)));
     assert(b1 == ((ssrb[x-1] >> 14) & 0b0010));
     assert(a2 == ((ssra[x] >> 13) & 0b0100));
     assert(b2 == ((ssrb[x] >> 12) & 0b1000));
 
-    u8 col = a1 | b1 | a2 | b2;
+    u8 col = (u8)(a1 | b1 | a2 | b2);
 
     if (col) {
 
