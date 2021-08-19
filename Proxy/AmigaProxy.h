@@ -332,11 +332,6 @@
 @property (readonly, copy) NSString *extReleased;
 @property (readonly) NSInteger extStart;
 
-/*
-- (void)saveRom:(NSURL *)url error:(ErrorCode *)ec;
-- (void)saveWom:(NSURL *)url error:(ErrorCode *)ec;
-- (void)saveExt:(NSURL *)url error:(ErrorCode *)ec;
- */
 - (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)saveWom:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)saveExt:(NSURL *)url exception:(ExceptionWrapper *)ex;
