@@ -206,7 +206,7 @@ Agnus::pokeSPRxPOS(u16 value)
     trace(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
-    i16 v = (pos.h < 0xDF) ? pos.v : (pos.v + 1);
+    i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
 
     // Compute the new vertical start position
     sprVStrt[x] = ((value & 0xFF00) >> 8) | (sprVStrt[x] & 0x0100);
@@ -222,7 +222,7 @@ Agnus::pokeSPRxCTL(u16 value)
     trace(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
-    i16 v = (pos.h < 0xDF) ? pos.v : (pos.v + 1);
+    i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
 
     // Compute the new vertical start and stop position
     sprVStrt[x] = (i16)((value & 0b100) << 6 | (sprVStrt[x] & 0x00FF));

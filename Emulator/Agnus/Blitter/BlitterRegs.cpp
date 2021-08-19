@@ -51,7 +51,7 @@ Blitter::setBLTCON0ASH(u16 ash)
 {
     assert(ash <= 0xF);
     
-    bltcon0 = (bltcon0 & 0x0FFF) | (ash << 12);
+    bltcon0 = (u16)((bltcon0 & 0x0FFF) | ash << 12);
 }
 
 void
@@ -74,7 +74,7 @@ Blitter::setBLTCON1BSH(u16 bsh)
 {
     assert(bsh <= 0xF);
     
-    bltcon1 = (bltcon1 & 0x0FFF) | (bsh << 12);
+    bltcon1 = (u16)((bltcon1 & 0x0FFF) | bsh << 12);
 }
 
 void

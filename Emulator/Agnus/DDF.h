@@ -15,10 +15,10 @@ template <bool hires>
 struct DDF
 {
     // First bitplane DMA cycle of odd and even bitplanes
-    i16 strt;
+    isize strt;
     
     // Last bitplane DMA cycle + 1 of odd and even bitplanes
-    i16 stop;
+    isize stop;
 
     DDF() : strt(0), stop(0) { }
     
@@ -54,5 +54,5 @@ struct DDF
      * The function assumes that stop is greater than strt. Other combinations
      * are not yet supported by the emulator.
      */
-    void compute(i16 ddfstrt, i16 ddfstop);
+    void compute(isize ddfstrt, isize ddfstop);
 };

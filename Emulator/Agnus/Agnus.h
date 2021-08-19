@@ -278,8 +278,8 @@ public:
      * where the hpos counter matched ddfstrt or ddfstop, respectively. A
      * value of -1 indicates that no matching event took place.
      */
-    i16 ddfstrtReached;
-    i16 ddfstopReached;
+    isize ddfstrtReached;
+    isize ddfstopReached;
 
     /* At the end of a rasterline, this variable contains the DDF state.
      */
@@ -376,8 +376,8 @@ public:
     /* The vertical trigger positions of all 8 sprites. Note that Agnus knows
      * nothing about the horizontal trigger positions (only Denise does).
      */
-    i16 sprVStrt[8];
-    i16 sprVStop[8];
+    i16 sprVStrt[8]; // TODO: Change to isize
+    i16 sprVStop[8]; // TODO: Change to isize
 
     // The current DMA states of all 8 sprites
     SprDMAState sprDmaState[8];

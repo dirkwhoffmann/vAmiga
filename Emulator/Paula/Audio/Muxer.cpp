@@ -191,7 +191,7 @@ Muxer::setConfigItem(Option option, i64 value)
             if (value > 100) value = 100;
 
             config.volL = value;
-            volL = pow((double)value / 50, 1.4);
+            volL = powf((float)value / 50, 1.4f);
                         
             if (wasMuted != isMuted())
                 messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
@@ -203,7 +203,7 @@ Muxer::setConfigItem(Option option, i64 value)
             if (value > 100) value = 100;
 
             config.volR = value;
-            volR = pow((double)value / 50, 1.4);
+            volR = powf((float)value / 50, 1.4f);
 
             if (wasMuted != isMuted())
                 messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
@@ -228,7 +228,7 @@ Muxer::setConfigItem(Option option, long id, i64 value)
             }
             
             config.vol[id] = value;
-            vol[id] = pow((double)value / 100, 1.4);
+            vol[id] = powf((float)value / 100, 1.4f);
             return;
             
         case OPT_AUDPAN:
@@ -241,9 +241,9 @@ Muxer::setConfigItem(Option option, long id, i64 value)
 
             config.pan[id] = value;
             
-            if (value <= 50) pan[id] = (50 + value) / 100.0;
-            else if (value <= 150) pan[id] = (150 - value) / 100.0;
-            else if (value <= 200) pan[id] = (value - 150) / 100.0;
+            if (value <= 50) pan[id] = (50 + value) / 100.0f;
+            else if (value <= 150) pan[id] = (150 - value) / 100.0f;
+            else if (value <= 200) pan[id] = (value - 150) / 100.0f;
             return;
 
         default:

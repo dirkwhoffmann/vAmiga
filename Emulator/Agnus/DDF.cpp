@@ -12,7 +12,7 @@
 #include <algorithm>
 
 template <bool hires> void
-DDF<hires>::compute(i16 ddfstrt, i16 ddfstop)
+DDF<hires>::compute(isize ddfstrt, isize ddfstop)
 {
     if (hires) {
                
@@ -20,10 +20,10 @@ DDF<hires>::compute(i16 ddfstrt, i16 ddfstop)
         strt = ddfstrt & ~0b11;
         
         // Compute the number of fetch units
-        int fetchUnits = ((ddfstop - ddfstrt) + 15) >> 3;
+        isize fetchUnits = ((ddfstop - ddfstrt) + 15) >> 3;
         
         // Compute the end of the DDF window
-        stop = std::min(strt + 8 * fetchUnits, 0xE0);
+        stop = std::min(strt + 8 * fetchUnits, (isize)0xE0);
 
     } else {
         
@@ -31,12 +31,12 @@ DDF<hires>::compute(i16 ddfstrt, i16 ddfstop)
         strt = ddfstrt & ~0b111;
 
         // Compute the number of fetch units
-        int fetchUnits = ((ddfstop - ddfstrt) + 15) >> 3;
+        isize fetchUnits = ((ddfstop - ddfstrt) + 15) >> 3;
         
         // Compute the end of the DDF window
-        stop = std::min(strt + 8 * fetchUnits, 0xE0);
+        stop = std::min(strt + 8 * fetchUnits, (isize)0xE0);
     }
 }
 
-template void DDF<true>::compute(i16 ddfstrt, i16 ddfstop);
-template void DDF<false>::compute(i16 ddfstrt, i16 ddfstop);
+template void DDF<true>::compute(isize ddfstrt, isize ddfstop);
+template void DDF<false>::compute(isize ddfstrt, isize ddfstop);

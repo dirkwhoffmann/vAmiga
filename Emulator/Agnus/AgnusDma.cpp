@@ -232,7 +232,7 @@ Agnus::enableBplDmaECS()
     
     // debug("Enable DMA ECS: %d %d %d %d (%x)\n", ddfstrt, ddfstrtReached, ddfstop, ddfstopReached, bplcon1);
     
-    i16 posh = pos.h + 4;
+    isize posh = pos.h + 4;
     // debug("posh = %d MAX = %d\n", posh, MAX(posh, ddfstrtReached));
     ddfLores.compute(std::max(posh, ddfstrtReached), ddfstopReached);
     ddfHires.compute(std::max(posh, ddfstrtReached), ddfstopReached);
@@ -613,8 +613,8 @@ Agnus::dumpBplEventTable() const
     // Dump the event table
     msg("Event table:\n\n");
     msg("ddfstrt = %X dffstop = %X\n", ddfstrt, ddfstop);
-    msg("ddfLores: (%X - %X)\n", ddfLores.strt, ddfLores.stop);
-    msg("ddfHires: (%X - %X)\n", ddfHires.strt, ddfHires.stop);
+    msg("ddfLores: (%zX - %zX)\n", ddfLores.strt, ddfLores.stop);
+    msg("ddfHires: (%zX - %zX)\n", ddfHires.strt, ddfHires.stop);
 
     dumpBplEventTable(0x00, 0x4F);
     dumpBplEventTable(0x50, 0x9F);
