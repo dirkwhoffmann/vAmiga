@@ -403,8 +403,8 @@ Agnus::peekVHPOSR()
     // Return the latched position if the counters are frozen
     if (ersy()) return HI_LO(pos.vLatched & 0xFF, pos.hLatched);
                      
-    i16 posh = pos.h + 4;
-    i16 posv = pos.v;
+    auto posh = pos.h + 4;
+    auto posv = pos.v;
     
     // Check if posh has wrapped over (we just added 4)
     if (posh > HPOS_MAX) {
@@ -518,10 +518,10 @@ Agnus::setDIWSTRT(u16 value)
     diwstrt = value;
     
     // Extract the upper left corner of the display window
-    i16 newDiwVstrt = HI_BYTE(value);
-    i16 newDiwHstrt = LO_BYTE(value);
+    isize newDiwVstrt = HI_BYTE(value);
+    isize newDiwHstrt = LO_BYTE(value);
     
-    trace(DIW_DEBUG, "newDiwVstrt = %d newDiwHstrt = %d\n", newDiwVstrt, newDiwHstrt);
+    trace(DIW_DEBUG, "newDiwVstrt = %zd newDiwHstrt = %zd\n", newDiwVstrt, newDiwHstrt);
     
     // Invalidate the horizontal coordinate if it is out of range
     if (newDiwHstrt < 2) {
@@ -545,12 +545,12 @@ Agnus::setDIWSTRT(u16 value)
      *    6) old < new < cur : Already triggered. Nothing to do in this line.
      */
     
-    i16 cur = 2 * pos.h;
+    isize cur = 2 * pos.h;
     
     // (1) and (2)
     if (cur < diwHstrt && cur < newDiwHstrt) {
         
-        trace(DIW_DEBUG, "Updating DIW hflop immediately at %d\n", cur);
+        trace(DIW_DEBUG, "Updating DIW hflop immediately at %zd\n", cur);
         diwHFlopOn = newDiwHstrt;
     }
     
@@ -586,10 +586,10 @@ Agnus::setDIWSTOP(u16 value)
     diwstop = value;
     
     // Extract the lower right corner of the display window
-    i16 newDiwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
-    i16 newDiwHstop = LO_BYTE(value) | 0x100;
+    isize newDiwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
+    isize newDiwHstop = LO_BYTE(value) | 0x100;
     
-    trace(DIW_DEBUG, "newDiwVstop = %d newDiwHstop = %d\n", newDiwVstop, newDiwHstop);
+    trace(DIW_DEBUG, "newDiwVstop = %zd newDiwHstop = %zd\n", newDiwVstop, newDiwHstop);
     
     // Invalidate the coordinate if it is out of range
     if (newDiwHstop > 0x1C7) {
@@ -598,12 +598,12 @@ Agnus::setDIWSTOP(u16 value)
     }
     
     // Check if the change already takes effect in the current rasterline.
-    i16 cur = 2 * pos.h;
+    isize cur = 2 * pos.h;
     
     // (1) and (2) (see setDIWSTRT)
     if (cur < diwHstop && cur < newDiwHstop) {
         
-        trace(DIW_DEBUG, "Updating hFlopOff immediately at %d\n", cur);
+        trace(DIW_DEBUG, "Updating hFlopOff immediately at %zd\n", cur);
         diwHFlopOff = newDiwHstop;
     }
     

@@ -33,7 +33,7 @@ private:
     CopperInfo info = {};
     
     // The currently executed Copper list (1 or 2)
-    u8 copList = 1;
+    isize copList = 1;
 
     /* Indicates if the next instruction should be skipped. This flag is
      * usually false. It is set to true by the SKIP instruction if the skip
@@ -196,14 +196,14 @@ private:
      * false: The Copper does not wake up the current frame.
      *        Variable 'result' remains untouched.
      */
-    bool findMatch(Beam &result) const;
+   //  bool findMatch(Beam &result) const;
     bool findMatchNew(Beam &result) const;
 
     // Called by findMatch() to determine the vertical trigger position
-    bool findVerticalMatch(i16 vStrt, i16 vComp, i16 vMask, i16 &result) const;
+    // bool findVerticalMatch(isize vStrt, isize vComp, isize vMask, isize &result) const;
 
     // Called by findMatch() to determine the horizontal trigger position
-    bool findHorizontalMatch(i16 hStrt, i16 hComp, i16 hMask, i16 &result) const;
+    // bool findHorizontalMatch(isize hStrt, isize hComp, isize hMask, isize &result) const;
     bool findHorizontalMatchNew(u32 &beam, u32 comp, u32 mask) const;
 
     // Emulates the Copper writing a value into one of the custom registers

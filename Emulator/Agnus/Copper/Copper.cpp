@@ -109,16 +109,16 @@ Copper::switchToCopperList(isize nr)
 {
     assert(nr == 1 || nr == 2);
 
-    // coppc = (nr == 1) ? cop1lc : cop2lc;
     copList = nr;
     setPC(nr == 1 ? cop1lc : cop2lc);
     agnus.scheduleRel<SLOT_COP>(0, COP_REQ_DMA);
 }
 
+/*
 bool
 Copper::findMatch(Beam &result) const
 {
-    i16 vMatch, hMatch;
+    isize vMatch, hMatch;
 
     // Get the current beam position
     Beam b = agnus.pos;
@@ -165,9 +165,9 @@ Copper::findMatch(Beam &result) const
 }
 
 bool
-Copper::findVerticalMatch(i16 vStrt, i16 vComp, i16 vMask, i16 &result) const
+Copper::findVerticalMatch(isize vStrt, isize vComp, isize vMask, isize &result) const
 {
-    i16 vStop = agnus.frame.numLines();
+    isize vStop = agnus.frame.numLines();
 
     // Iterate through all vertical positions
     for (isize v = vStrt; v < vStop; v++) {
@@ -182,7 +182,7 @@ Copper::findVerticalMatch(i16 vStrt, i16 vComp, i16 vMask, i16 &result) const
 }
 
 bool
-Copper::findHorizontalMatch(i16 hStrt, i16 hComp, i16 hMask, i16 &result) const
+Copper::findHorizontalMatch(isize hStrt, isize hComp, isize hMask, isize &result) const
 {
     i16 hStop = HPOS_CNT;
 
@@ -197,6 +197,7 @@ Copper::findHorizontalMatch(i16 hStrt, i16 hComp, i16 hMask, i16 &result) const
     }
     return false;
 }
+*/
 
 bool
 Copper::findMatchNew(Beam &match) const
@@ -209,7 +210,7 @@ Copper::findMatchNew(Beam &match) const
     u32 mask = getVMHM();
 
     // Iterate through all lines starting from the current position
-    u32 numLines = agnus.frame.numLines();
+    isize numLines = agnus.frame.numLines();
     while ((beam >> 8) < numLines) {
 
         // Check if the vertical components are equal

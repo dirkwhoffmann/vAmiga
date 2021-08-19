@@ -290,7 +290,7 @@ public:
      * access is enables every other line. In this case, this variable stores
      * the number of the next line where early DMA is possible.
      */
-    i16 ocsEarlyAccessLine;
+    isize ocsEarlyAccessLine;
 
     // DDF flipflops
     bool ddfVFlop;
@@ -346,10 +346,10 @@ public:
      * A -1 is assigned if DIWSTRT or DIWSTOP are written with values that
      * result in coordinates outside the valid range.
      */
-    i16 diwHstrt;
-    i16 diwHstop;
-    i16 diwVstrt;
-    i16 diwVstop;
+    isize diwHstrt;
+    isize diwHstop;
+    isize diwVstrt;
+    isize diwVstop;
 
     /* Value of the DIW flipflops. Variable vFlop stores the value of the
      * vertical DIW flipflop. The value is updated at the beginning of each
@@ -365,8 +365,8 @@ public:
      * where the hpos counter matched diwHstrt or diwHstop, respectively. A
      * value of -1 indicates that no matching event took place.
      */
-    i16 diwHFlopOn;
-    i16 diwHFlopOff;
+    isize diwHFlopOn;
+    isize diwHFlopOff;
 
 
     //

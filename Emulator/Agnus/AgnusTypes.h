@@ -126,8 +126,8 @@ AgnusConfig;
 
 typedef struct
 {
-    i16 vpos;
-    i16 hpos;
+    isize vpos;
+    isize hpos;
 
     u16 dmacon;
     u16 bplcon0;

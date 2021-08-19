@@ -98,7 +98,7 @@ public:
     u8 __attribute__ ((aligned (64))) slice[16];
     
     // Indicates the DMA cycle where the shift register gets filled
-    i16 fillPos; 
+    isize fillPos; 
     
     // Flags indicating that the shift registers have been loaded
     bool armedEven;

@@ -297,7 +297,7 @@ Denise::pokeCOLORxx(u16 value)
     trace(COLREG_DEBUG, "pokeCOLOR%02zd(%X)\n", xx, value);
 
     u32 reg = 0x180 + 2*xx;
-    i16 pos = agnus.pos.h;
+    isize pos = agnus.pos.h;
 
     // If the CPU modifies color, the change takes effect one DMA cycle earlier
     if (s != ACCESSOR_AGNUS && agnus.pos.h != 0) pos--;

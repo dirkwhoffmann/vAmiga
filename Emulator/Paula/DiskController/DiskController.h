@@ -32,7 +32,7 @@ class DiskController : public SubComponent
     string searchPath[4];
     
     // The currently selected drive (-1 if no drive is selected)
-    i8 selected = -1;
+    isize selected = -1;
 
     // The current drive state (off, read, or write)
     DriveState state;
@@ -192,7 +192,7 @@ private:
 public:
     
     // Returns the number of the currently selected drive
-    i8 getSelected() const { return selected; }
+    isize getSelected() const { return selected; }
 
     // Returns the currently selected (nullptr if none is selected)
     class Drive *getSelectedDrive();

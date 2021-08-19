@@ -17,19 +17,19 @@
 
 typedef struct
 {
-    u8   copList;
-    u32  copList1Start;
-    u32  copList1End;
-    u32  copList2Start;
-    u32  copList2End;
-    bool active;
-    bool cdang;
-    u32  coppc;
-    u32  cop1lc;
-    u32  cop2lc;
-    u16  cop1ins;
-    u16  cop2ins;
-    i16  length1;
-    i16  length2;
+    isize copList;
+    u32   copList1Start;
+    u32   copList1End;
+    u32   copList2Start;
+    u32   copList2End;
+    bool  active;
+    bool  cdang;
+    u32   coppc;
+    u32   cop1lc;
+    u32   cop2lc;
+    u16   cop1ins;
+    u16   cop2ins;
+    isize length1;
+    isize length2;
 }
 CopperInfo;

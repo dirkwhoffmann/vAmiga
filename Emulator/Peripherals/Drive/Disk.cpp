@@ -170,7 +170,7 @@ Disk::encodeMFM(u8 *dst, u8 *src, isize count)
 {
     for(isize i = 0; i < count; i++) {
         
-        u16 mfm =
+        auto mfm =
         ((src[i] & 0b10000000) << 7) |
         ((src[i] & 0b01000000) << 6) |
         ((src[i] & 0b00100000) << 5) |
@@ -220,7 +220,7 @@ Disk::decodeOddEven(u8 *dst, u8 *src, isize count)
 {
     // Decode odd bits
     for(isize i = 0; i < count; i++)
-        dst[i] = (src[i] & 0x55) << 1;
+        dst[i] = (u8)((src[i] & 0x55) << 1);
     
     // Decode even bits
     for(isize i = 0; i < count; i++)
