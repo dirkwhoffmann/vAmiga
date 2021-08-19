@@ -202,7 +202,7 @@ bool
 Copper::findMatchNew(Beam &match) const
 {
     // Start searching at the current beam position
-    u32 beam = (agnus.pos.v << 8) | agnus.pos.h;
+    u32 beam = (u32)(agnus.pos.v << 8 | agnus.pos.h);
 
     // Get the comparison position and the comparison mask
     u32 comp = getVPHP();
@@ -333,7 +333,7 @@ Copper::scheduleWaitWakeup(bool bfd)
     if (findMatchNew(trigger)) {
 
         // In how many cycles do we get there?
-        int delay = trigger - agnus.pos;
+        isize delay = trigger - agnus.pos;
 
         // msg("(%d,%d) matches in %d cycles\n", trigger.v, trigger.h, delay);
 

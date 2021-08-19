@@ -25,7 +25,7 @@ Paula::serviceIrqEvent()
 
         // Check if the interrupt source is due
         if (clock >= setIntreq[src]) {
-            setINTREQ(true, 1 << src);
+            setINTREQ(true, (u16)(1 << src));
             setIntreq[src] = NEVER;
         } else {
              next = std::min(next, setIntreq[src]);

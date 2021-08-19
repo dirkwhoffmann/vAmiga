@@ -21,7 +21,7 @@ typedef i64 CIACycle;         // CIA cycle units
 typedef i64 DMACycle;         // DMA cycle units
 
 // Pixels
-typedef i16 Pixel;
+typedef isize Pixel;
 
 // Floppy disks
 typedef i16 Side;

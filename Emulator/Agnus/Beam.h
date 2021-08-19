@@ -15,12 +15,12 @@
 struct Beam
 {
     // Counters for the vertical and horizontal beam position
-    i16 v;
-    i16 h;
+    isize v;
+    isize h;
     
     // Latches counter values (recorded when BPLCON0::ERSY is set)
-    i16 vLatched;
-    i16 hLatched;
+    isize vLatched;
+    isize hLatched;
 
     template <class W>
     void operator<<(W& worker)
@@ -33,8 +33,8 @@ struct Beam
         << hLatched;
     }
     
-    Beam(i16 v, i16 h) : v(v), h(h) { }
-    Beam(isize cycle = 0) : Beam((i16)(cycle / HPOS_CNT), (i16)(cycle % HPOS_CNT)) { }
+    Beam(isize v, isize h) : v(v), h(h) { }
+    Beam(isize cycle = 0) : Beam(cycle / HPOS_CNT, cycle % HPOS_CNT) { }
 
     Beam& operator=(const Beam& beam)
     {
@@ -66,8 +66,8 @@ struct Beam
 
     Beam operator+(const Beam& beam) const
     {
-        i16 newv = v + beam.v;
-        i16 newh = h + beam.h;
+        auto newv = v + beam.v;
+        auto newh = h + beam.h;
 
         if (newh >= HPOS_CNT) { newh -= HPOS_CNT; newv++; }
         else if (newh < 0)    { newh += HPOS_CNT; newv--; }
@@ -80,7 +80,7 @@ struct Beam
         return *this + Beam(i);
     }
 
-    int operator-(const Beam& beam) const
+    isize operator-(const Beam& beam) const
     {
         return (v * HPOS_CNT + h) - (beam.v * HPOS_CNT + beam.h);
     }

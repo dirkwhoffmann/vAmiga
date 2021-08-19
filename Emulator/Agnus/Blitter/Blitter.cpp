@@ -648,7 +648,7 @@ Blitter::beginCopyBlit(isize level)
 void
 Blitter::signalEnd()
 {
-    debug(BLTTIM_DEBUG, "(%d,%d) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
+    debug(BLTTIM_DEBUG, "(%zd,%zd) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
 
     // Clear the Blitter busy flag
     bbusy = false;
@@ -657,7 +657,7 @@ Blitter::signalEnd()
 void
 Blitter::endBlit()
 {
-    debug(BLTTIM_DEBUG, "(%d,%d) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
+    debug(BLTTIM_DEBUG, "(%zd,%zd) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
     
     running = false;
     

@@ -587,10 +587,10 @@ public:
     void vsyncHandler();
 
     // Called by Agnus at the beginning of each rasterline
-    void beginOfLine(int vpos);
+    void beginOfLine(isize vpos);
 
     // Called by Agnus at the end of a rasterline
-    void endOfLine(int vpos);
+    void endOfLine(isize vpos);
 
     // Called by Agnus if the DMACON register changes
     void pokeDMACON(u16 oldValue, u16 newValue);

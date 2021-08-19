@@ -385,7 +385,7 @@ Agnus::getEventSlotInfo(isize nr)
 }
 
 void
-Agnus::scheduleNextBplEvent(i16 hpos)
+Agnus::scheduleNextBplEvent(isize hpos)
 {
     assert(hpos >= 0 && hpos < HPOS_CNT);
 
@@ -396,7 +396,7 @@ Agnus::scheduleNextBplEvent(i16 hpos)
 }
 
 void
-Agnus::scheduleBplEventForCycle(i16 hpos)
+Agnus::scheduleBplEventForCycle(isize hpos)
 {
     assert(hpos >= pos.h && hpos < HPOS_CNT);
 
@@ -410,7 +410,7 @@ Agnus::scheduleBplEventForCycle(i16 hpos)
 }
 
 void
-Agnus::scheduleNextDasEvent(i16 hpos)
+Agnus::scheduleNextDasEvent(isize hpos)
 {
     assert(hpos >= 0 && hpos < HPOS_CNT);
 
@@ -423,7 +423,7 @@ Agnus::scheduleNextDasEvent(i16 hpos)
 }
 
 void
-Agnus::scheduleDasEventForCycle(i16 hpos)
+Agnus::scheduleDasEventForCycle(isize hpos)
 {
     assert(hpos >= pos.h && hpos < HPOS_CNT);
 

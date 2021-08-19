@@ -116,7 +116,7 @@ AudioStream<T>::draw(u32 *buffer, isize width, isize height,
                      bool left, float highestAmplitude, u32 color)
 {
     isize dw = this->cap() / width;
-    float newHighestAmplitude = 0.001;
+    float newHighestAmplitude = 0.001f;
     
     // Clear buffer
     for (isize i = 0; i < width * height; i++) {

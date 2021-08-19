@@ -146,12 +146,12 @@ template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, i64 data)
     slot[s].data = data;
 }
 
-template<EventSlot s> void schedulePos(i16 vpos, i16 hpos, EventID id)
+template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id)
 {
     scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
 }
 
-template<EventSlot s> void schedulePos(i16 vpos, i16 hpos, EventID id, i64 data)
+template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id, i64 data)
 {
     scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
 }
@@ -193,25 +193,25 @@ template<EventSlot s> void cancel()
 //
 
 // Schedules the next BPL event relative to a given DMA cycle.
-void scheduleNextBplEvent(i16 hpos);
+void scheduleNextBplEvent(isize hpos);
 
 // Schedules the next BPL event relative to the currently emulated DMA cycle.
 void scheduleNextBplEvent() { scheduleNextBplEvent(pos.h); }
 
 // Schedules the earliest BPL event that occurs at or after the given DMA cycle.
-void scheduleBplEventForCycle(i16 hpos);
+void scheduleBplEventForCycle(isize hpos);
 
 // Updates the scheduled BPL event according to the current event table.
 void updateBplEvent() { scheduleBplEventForCycle(pos.h); }
 
 // Schedules the next DAS event relative to a given DMA cycle.
-void scheduleNextDasEvent(i16 hpos);
+void scheduleNextDasEvent(isize hpos);
 
 // Schedules the next DAS event relative to the currently emulated DMA cycle.
 void scheduleNextDasEvent() { scheduleNextDasEvent(pos.h); }
 
 // Schedules the earliest DAS event that occurs at or after the given DMA cycle.
-void scheduleDasEventForCycle(i16 hpos);
+void scheduleDasEventForCycle(isize hpos);
 
 // Updates the scheduled DAS event according to the current event table.
 void updateDasEvent() { scheduleDasEventForCycle(pos.h); }

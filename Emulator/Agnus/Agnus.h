@@ -624,7 +624,7 @@ public:
         return (posh & 2) && posh >= ddfHires.strt && posh < ddfHires.stop; }
     
     // Returns the pixel position for the current horizontal position
-    Pixel ppos(i16 posh) const { return (posh * 4) + 2; }
+    Pixel ppos(isize posh) const { return (posh * 4) + 2; }
     Pixel ppos() const { return ppos(pos.h); }
 
     
@@ -768,8 +768,8 @@ public:
     void clearBplEvents();
 
     // Renews all events in the BPL event table
-    void updateBplEvents(u16 dmacon, u16 bplcon0, int first = 0, int last = HPOS_MAX);
-    void updateBplEvents(int first = 0, int last = HPOS_MAX) {
+    void updateBplEvents(u16 dmacon, u16 bplcon0, isize first = 0, isize last = HPOS_MAX);
+    void updateBplEvents(isize first = 0, isize last = HPOS_MAX) {
         updateBplEvents(dmacon, bplcon0, first, last); }
     void updateDrawingFlags(bool hires);
         

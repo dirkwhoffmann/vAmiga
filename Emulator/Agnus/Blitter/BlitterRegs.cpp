@@ -186,7 +186,7 @@ Blitter::pokeBLTALWM(u16 value)
 template <Accessor s> void
 Blitter::pokeBLTSIZE(u16 value)
 {
-    debug(BLTTIM_DEBUG, "(%d,%d) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
+    debug(BLTTIM_DEBUG, "(%zd,%zd) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
 
     if (s == ACCESSOR_AGNUS) {

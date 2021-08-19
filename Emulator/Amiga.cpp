@@ -107,7 +107,7 @@ Amiga::~Amiga()
 void
 Amiga::prefix() const
 {
-    fprintf(stderr, "[%lld] (%3d,%3d) ",
+    fprintf(stderr, "[%lld] (%3zd,%3zd) ",
             agnus.frame.nr, agnus.pos.v, agnus.pos.h);
 
     fprintf(stderr, "%06X ", cpu.getPC0());

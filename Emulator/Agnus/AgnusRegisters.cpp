@@ -461,7 +461,7 @@ Agnus::peekVPOSR()
 void
 Agnus::pokeVPOS(u16 value)
 {
-    trace(POSREG_DEBUG, "pokeVPOS(%x) (%d,%d)\n", value, pos.v, frame.lof);
+    trace(POSREG_DEBUG, "pokeVPOS(%x) (%zd,%d)\n", value, pos.v, frame.lof);
     
     /* I don't really know what exactly we are supposed to do here.
      * For the time being, I only take care of the LOF bit.
@@ -469,7 +469,7 @@ Agnus::pokeVPOS(u16 value)
     bool newlof = value & 0x8000;
     if (frame.lof == newlof) return;
     
-    trace(XFILES, "XFILES (VPOS): %x (%d,%d)\n", value, pos.v, frame.lof);
+    trace(XFILES, "XFILES (VPOS): %x (%zd,%d)\n", value, pos.v, frame.lof);
 
     /* If a long frame gets changed to a short frame, we only proceed if
      * Agnus is not in the last rasterline. Otherwise, we would corrupt the

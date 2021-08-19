@@ -1154,7 +1154,7 @@ Denise::vsyncHandler()
 }
 
 void
-Denise::beginOfLine(int vpos)
+Denise::beginOfLine(isize vpos)
 {
     // Reset the register change recorders
     conChanges.clear();
@@ -1178,7 +1178,7 @@ Denise::beginOfLine(int vpos)
 }
 
 void
-Denise::endOfLine(int vpos)
+Denise::endOfLine(isize vpos)
 {
     // debug("endOfLine pixel = %d HPIXELS = %d\n", pixel, HPIXELS);
 
