@@ -119,9 +119,9 @@ class MyController: NSWindowController, MessageReceiver {
     @IBOutlet weak var muteIcon: NSButton!
 
     @IBOutlet weak var warpIcon: NSButton!
-    @IBOutlet weak var observeSelect: NSPopUpButton!
-    @IBOutlet weak var observeInfo: NSTextField!
-    @IBOutlet weak var observeIndicator: NSLevelIndicator!
+    @IBOutlet weak var activityType: NSPopUpButton!
+    @IBOutlet weak var activityInfo: NSTextField!
+    @IBOutlet weak var activityBar: NSLevelIndicator!
 
     // Toolbar
     @IBOutlet weak var toolbar: MyToolbar!

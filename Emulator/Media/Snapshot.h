@@ -50,8 +50,6 @@ public:
     static bool isCompatible(const string &path);
     static bool isCompatible(std::istream &stream);
 
-    bool isCompatiblePath(const string &path) override { return isCompatible(path); }
-    bool isCompatibleStream(std::istream &stream) override { return isCompatible(stream); }
 
     //
     // Initializing
@@ -70,7 +68,9 @@ public:
     //
     
     FileType type() const override { return FILETYPE_SNAPSHOT; }
-    
+    bool isCompatiblePath(const string &path) override { return isCompatible(path); }
+    bool isCompatibleStream(std::istream &stream) override { return isCompatible(stream); }
+
     
     //
     // Accessing

@@ -26,9 +26,6 @@ public:
     static bool isCompatible(const string &path);
     static bool isCompatible(std::istream &stream);
     
-    bool isCompatiblePath(const string &path) override { return isCompatible(path); }
-    bool isCompatibleStream(std::istream &stream) override { return isCompatible(stream); }
-
 private:
     
     // Returns the size of an ADF file of a given disk type in bytes
@@ -73,6 +70,8 @@ public:
     
 public:
     
+    bool isCompatiblePath(const string &path) override { return isCompatible(path); }
+    bool isCompatibleStream(std::istream &stream) override { return isCompatible(stream); }
     FileType type() const override { return FILETYPE_ADF; }
     
     

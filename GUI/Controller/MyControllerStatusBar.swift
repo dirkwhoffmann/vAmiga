@@ -95,9 +95,9 @@ extension MyController {
             muteIcon: warp || muted,
 
             warpIcon: running,
-            observeSelect: running,
-            observeInfo: running,
-            observeIndicator: running
+            activityType: running,
+            activityInfo: running,
+            activityBar: running
         ]
         
         for (item, visible) in items {
@@ -179,26 +179,26 @@ extension MyController {
         
         speedometer.updateWith(cycle: amiga.cpu.cycles, frame: renderer.frames)
         
-        switch observeSelect.selectedTag() {
+        switch activityType.selectedTag() {
 
         case 0:
             let mhz = speedometer.mhz
-            observeIndicator.doubleValue = 10 * mhz
-            observeInfo.stringValue = String(format: "%.2f MHz", mhz)
+            activityBar.doubleValue = 10 * mhz
+            activityInfo.stringValue = String(format: "%.2f MHz", mhz)
             
         case 1:
             let cpu = amiga.cpuLoad
-            observeIndicator.integerValue = cpu
-            observeInfo.stringValue = String(format: "%d%% CPU", cpu)
+            activityBar.integerValue = cpu
+            activityInfo.stringValue = String(format: "%d%% CPU", cpu)
             
         case 2:
             let fps = speedometer.fps
-            observeIndicator.doubleValue = fps
-            observeInfo.stringValue = String(format: "%d FPS", Int(fps))
+            activityBar.doubleValue = fps
+            activityInfo.stringValue = String(format: "%d FPS", Int(fps))
 
         default:
-            observeIndicator.integerValue = 0
-            observeInfo.stringValue = "???"
+            activityBar.integerValue = 0
+            activityInfo.stringValue = "???"
         }
     }
     
@@ -219,7 +219,7 @@ extension MyController {
         refreshStatusBar()
     }
 
-    @IBAction func modeAction(_ sender: NSPopUpButton!) {
+    @IBAction func activityTypeAction(_ sender: NSPopUpButton!) {
 
         track()
         
@@ -235,20 +235,11 @@ extension MyController {
             fatalError()
         }
         
-        observeIndicator.minValue = min
-        observeIndicator.maxValue = max
-        observeIndicator.warningValue = warn
-        observeIndicator.criticalValue = crit
+        activityBar.minValue = min
+        activityBar.maxValue = max
+        activityBar.warningValue = warn
+        activityBar.criticalValue = crit
 
-        refreshStatusBar()
-    }
-
-    @IBAction func modeComboAction(_ sender: NSComboBox!) {
-        
-        let tag = sender.tag
-        let sel = sender.selectedTag()
-        track("\(tag) \(sel)")
-                
         refreshStatusBar()
     }
 }

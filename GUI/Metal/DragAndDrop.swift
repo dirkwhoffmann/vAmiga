@@ -136,7 +136,7 @@ public extension MetalView {
                     return true
                     
                 } catch {
-                    (error as? VAError)?.cantOpen(url: url)
+                    (error as? VAError)?.cantOpen(url: url, async: true)
                 }
             }
                         

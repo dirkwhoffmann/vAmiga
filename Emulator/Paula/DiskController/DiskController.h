@@ -195,7 +195,6 @@ public:
     i8 getSelected() const { return selected; }
 
     // Returns the currently selected (nullptr if none is selected)
-    // TODO: Return reference
     class Drive *getSelectedDrive();
 
     // Indicates if the motor of the specified drive is switched on

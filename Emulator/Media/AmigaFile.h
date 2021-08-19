@@ -66,8 +66,6 @@ public:
 
     virtual ~AmigaFile();
         
-public:
-    
     void init(std::istream &stream) throws;
     void init(const string &path, std::istream &stream) throws;
     void init(const u8 *buf, isize len) throws;

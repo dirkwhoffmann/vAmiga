@@ -104,7 +104,7 @@ AmigaFile::type(const string &path)
     if (RomFile::isCompatible(path) &&
         RomFile::isCompatible(stream)) return FILETYPE_ROM;
 
-    if (Folder::isFolder(path.c_str())) return FILETYPE_DIR;
+    if (Folder::isCompatible(path)) return FILETYPE_DIR;
 
     return FILETYPE_UNKNOWN;
 }

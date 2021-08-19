@@ -8,6 +8,9 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MyController">
             <connections>
+                <outlet property="activityBar" destination="212" id="Enu-fB-P92"/>
+                <outlet property="activityInfo" destination="oNV-mZ-JGc" id="HDY-Cq-tSN"/>
+                <outlet property="activityType" destination="0go-7K-IPf" id="caX-Zm-vUc"/>
                 <outlet property="cmdLock" destination="Qzo-AS-059" id="L1Y-30-MFU"/>
                 <outlet property="cpuInfo" destination="oNV-mZ-JGc" id="XOV-TH-brY"/>
                 <outlet property="debugIcon" destination="cdG-NT-T3J" id="Oxi-mf-eZE"/>
@@ -31,9 +34,6 @@
                 <outlet property="metal" destination="DD4-5B-w9h" id="rGV-rL-MLo"/>
                 <outlet property="modeSelect" destination="0go-7K-IPf" id="uFZ-5b-ldJ"/>
                 <outlet property="muteIcon" destination="iho-fa-H5O" id="k5F-Wk-R5B"/>
-                <outlet property="observeIndicator" destination="212" id="Enu-fB-P92"/>
-                <outlet property="observeInfo" destination="oNV-mZ-JGc" id="HDY-Cq-tSN"/>
-                <outlet property="observeSelect" destination="0go-7K-IPf" id="caX-Zm-vUc"/>
                 <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>
                 <outlet property="toolbar" destination="1845" id="JVx-NQ-tw7"/>
                 <outlet property="warpIcon" destination="1052" id="QGs-ln-NvN"/>
@@ -45,7 +45,7 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" animationBehavior="default" tabbingMode="preferred" toolbarStyle="expanded" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="800" height="626"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="960"/>
             <value key="minSize" type="size" width="400" height="314"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="800" height="626"/>
@@ -278,7 +278,7 @@
                         </connections>
                     </button>
                     <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0go-7K-IPf">
-                        <rect key="frame" x="674" y="3" width="27" height="20"/>
+                        <rect key="frame" x="675" y="3" width="27" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <popUpButtonCell key="cell" type="check" title="CPU Frequency (Amiga)" bezelStyle="regularSquare" imagePosition="left" lineBreakMode="truncatingTail" inset="2" arrowPosition="arrowAtCenter" preferredEdge="minX" selectedItem="ebX-Qd-V1U" id="fbh-jz-zm9">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -292,11 +292,11 @@
                             </menu>
                         </popUpButtonCell>
                         <connections>
-                            <action selector="modeAction:" target="-2" id="YGy-zQ-c4T"/>
+                            <action selector="activityTypeAction:" target="-2" id="YGy-zQ-c4T"/>
                         </connections>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oNV-mZ-JGc">
-                        <rect key="frame" x="614" y="8" width="64" height="11"/>
+                        <rect key="frame" x="615" y="8" width="64" height="11"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="00% CPU" id="GSz-Xi-cus">
                             <font key="font" metaFont="label" size="9"/>

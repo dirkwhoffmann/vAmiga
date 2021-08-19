@@ -16,14 +16,9 @@ class Folder : public DiskFile {
 public:
 
     ADFFile *adf = nullptr;
-    
-    static bool isFolder(const string &path);
-            
-    static bool isCompatible(const string &path) { return true; }
+                
+    static bool isCompatible(const string &path);
     static bool isCompatible(std::istream &stream) { return false; }
-
-    bool isCompatiblePath(const string &path) override { return isCompatible(path); }
-    bool isCompatibleStream(std::istream &stream) override { return isCompatible(stream); }
 
     
     //
@@ -50,6 +45,8 @@ public:
     // Methods from AmigaFile
     //
     
+    bool isCompatiblePath(const string &path) override { return isCompatible(path); }
+    bool isCompatibleStream(std::istream &stream) override { return isCompatible(stream); }
     FileType type() const override { return FILETYPE_DIR; }
     u64 fnv() const override { return adf->fnv(); }
     
