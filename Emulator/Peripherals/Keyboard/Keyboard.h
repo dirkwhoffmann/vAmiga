@@ -10,6 +10,7 @@
 #pragma once
 
 #include "KeyboardTypes.h"
+// #include "Aliases.h"
 #include "SubComponent.h"
 #include "Event.h"
 #include "RingBuffer.h"
@@ -118,9 +119,9 @@ private:
     
 public:
 
-    bool keyIsPressed(long keycode) const;
-    void pressKey(long keycode);
-    void releaseKey(long keycode);
+    bool keyIsPressed(KeyCode keycode) const;
+    void pressKey(KeyCode keycode);
+    void releaseKey(KeyCode keycode);
     void releaseAllKeys();
     
 private:

@@ -231,24 +231,24 @@ RTC::time2registers()
 void
 RTC::time2registersOki(tm *t)
 {
-    reg[0][0x0] = t->tm_sec % 10;
-    reg[0][0x1] = t->tm_sec / 10;
-    reg[0][0x2] = t->tm_min % 10;
-    reg[0][0x3] = t->tm_min / 10;
-    reg[0][0x4] = t->tm_hour % 10;
-    reg[0][0x5] = t->tm_hour / 10;
-    reg[0][0x6] = t->tm_mday % 10;
-    reg[0][0x7] = t->tm_mday / 10;
-    reg[0][0x8] = (t->tm_mon + 1) % 10;
-    reg[0][0x9] = (t->tm_mon + 1) / 10;
-    reg[0][0xA] = t->tm_year % 10;
-    reg[0][0xB] = t->tm_year / 10;
-    reg[0][0xC] = t->tm_yday / 7;
+    reg[0][0x0] = (u8)(t->tm_sec % 10);
+    reg[0][0x1] = (u8)(t->tm_sec / 10);
+    reg[0][0x2] = (u8)(t->tm_min % 10);
+    reg[0][0x3] = (u8)(t->tm_min / 10);
+    reg[0][0x4] = (u8)(t->tm_hour % 10);
+    reg[0][0x5] = (u8)(t->tm_hour / 10);
+    reg[0][0x6] = (u8)(t->tm_mday % 10);
+    reg[0][0x7] = (u8)(t->tm_mday / 10);
+    reg[0][0x8] = (u8)((t->tm_mon + 1) % 10);
+    reg[0][0x9] = (u8)((t->tm_mon + 1) / 10);
+    reg[0][0xA] = (u8)(t->tm_year % 10);
+    reg[0][0xB] = (u8)(t->tm_year / 10);
+    reg[0][0xC] = (u8)(t->tm_yday / 7);
     
     // Change the hour format in AM/PM mode
     if (t->tm_hour > 12 && GET_BIT(reg[0][15], 2) == 0) {
-        reg[0][4] = (t->tm_hour - 12) % 10;
-        reg[0][5] = (t->tm_hour - 12) / 10;
+        reg[0][4] = (u8)((t->tm_hour - 12) % 10);
+        reg[0][5] = (u8)((t->tm_hour - 12) / 10);
         reg[0][5] |= 0b100;
     }
 }
@@ -256,24 +256,24 @@ RTC::time2registersOki(tm *t)
 void
 RTC::time2registersRicoh(tm *t)
 {
-    reg[0][0x0] = t->tm_sec % 10;
-    reg[0][0x1] = t->tm_sec / 10;
-    reg[0][0x2] = t->tm_min % 10;
-    reg[0][0x3] = t->tm_min / 10;
-    reg[0][0x4] = t->tm_hour % 10;
-    reg[0][0x5] = t->tm_hour / 10;
-    reg[0][0x6] = t->tm_yday / 7;
-    reg[0][0x7] = t->tm_mday % 10;
-    reg[0][0x8] = t->tm_mday / 10;
-    reg[0][0x9] = (t->tm_mon + 1) % 10;
-    reg[0][0xA] = (t->tm_mon + 1) / 10;
-    reg[0][0xB] = t->tm_year % 10;
-    reg[0][0xC] = t->tm_year / 10;
+    reg[0][0x0] = (u8)(t->tm_sec % 10);
+    reg[0][0x1] = (u8)(t->tm_sec / 10);
+    reg[0][0x2] = (u8)(t->tm_min % 10);
+    reg[0][0x3] = (u8)(t->tm_min / 10);
+    reg[0][0x4] = (u8)(t->tm_hour % 10);
+    reg[0][0x5] = (u8)(t->tm_hour / 10);
+    reg[0][0x6] = (u8)(t->tm_yday / 7);
+    reg[0][0x7] = (u8)(t->tm_mday % 10);
+    reg[0][0x8] = (u8)(t->tm_mday / 10);
+    reg[0][0x9] = (u8)((t->tm_mon + 1) % 10);
+    reg[0][0xA] = (u8)((t->tm_mon + 1) / 10);
+    reg[0][0xB] = (u8)(t->tm_year % 10);
+    reg[0][0xC] = (u8)(t->tm_year / 10);
     
     // Change the hour format in AM/PM mode
     if (t->tm_hour > 12 && GET_BIT(reg[0][10], 0) == 0) {
-        reg[0][4] = (t->tm_hour - 12) % 10;
-        reg[0][5] = (t->tm_hour - 12) / 10;
+        reg[0][4] = (u8)((t->tm_hour - 12) % 10);
+        reg[0][5] = (u8)((t->tm_hour - 12) / 10);
         reg[0][5] |= 0b010;
     }
     

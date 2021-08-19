@@ -109,32 +109,32 @@ Denise::setConfigItem(Option option, i64 value)
                         
         case OPT_HIDDEN_SPRITES:
             
-            config.hiddenSprites = value;
+            config.hiddenSprites = (u8)value;
             return;
             
         case OPT_HIDDEN_LAYERS:
             
-            config.hiddenLayers = value;
+            config.hiddenLayers = (u16)value;
             return;
             
         case OPT_HIDDEN_LAYER_ALPHA:
             
-            config.hiddenLayerAlpha = value;
+            config.hiddenLayerAlpha = (u8)value;
             return;
 
         case OPT_CLX_SPR_SPR:
             
-            config.clxSprSpr = value;
+            config.clxSprSpr = (bool)value;
             return;
             
         case OPT_CLX_SPR_PLF:
             
-            config.clxSprPlf = value;
+            config.clxSprPlf = (bool)value;
             return;
             
         case OPT_CLX_PLF_PLF:
             
-            config.clxPlfPlf = value;
+            config.clxPlfPlf = (bool)value;
             return;
 
         default:

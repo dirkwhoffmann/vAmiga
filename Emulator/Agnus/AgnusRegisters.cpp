@@ -225,8 +225,8 @@ Agnus::pokeSPRxCTL(u16 value)
     i16 v = (pos.h < 0xDF) ? pos.v : (pos.v + 1);
 
     // Compute the new vertical start and stop position
-    sprVStrt[x] = ((value & 0b100) << 6) | (sprVStrt[x] & 0x00FF);
-    sprVStop[x] = ((value & 0b010) << 7) | (value >> 8);
+    sprVStrt[x] = (i16)((value & 0b100) << 6 | (sprVStrt[x] & 0x00FF));
+    sprVStop[x] = (i16)((value & 0b010) << 7 | (value >> 8));
 
     // Update sprite DMA status
     if (sprVStrt[x] == v) sprDmaState[x] = SPR_DMA_ACTIVE;

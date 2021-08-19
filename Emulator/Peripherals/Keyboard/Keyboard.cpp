@@ -107,20 +107,20 @@ Keyboard::_dump(dump::Category category, std::ostream& os) const
 }
 
 bool
-Keyboard::keyIsPressed(long keycode) const
+Keyboard::keyIsPressed(KeyCode keycode) const
 {
     assert(keycode < 0x80);
     return keyDown[keycode];
 }
 
 void
-Keyboard::pressKey(long keycode)
+Keyboard::pressKey(KeyCode keycode)
 {
     assert(keycode < 0x80);
 
     if (!keyDown[keycode] && !queue.isFull()) {
 
-        trace(KBD_DEBUG, "Pressing Amiga key %02lX\n", keycode);
+        trace(KBD_DEBUG, "Pressing Amiga key %02X\n", keycode);
 
         keyDown[keycode] = true;
         queue.write(keycode);
@@ -134,13 +134,13 @@ Keyboard::pressKey(long keycode)
 }
 
 void
-Keyboard::releaseKey(long keycode)
+Keyboard::releaseKey(KeyCode keycode)
 {
     assert(keycode < 0x80);
 
     if (keyDown[keycode] && !queue.isFull()) {
 
-        trace(KBD_DEBUG, "Releasing Amiga key %02lX\n", keycode);
+        trace(KBD_DEBUG, "Releasing Amiga key %02X\n", keycode);
 
         keyDown[keycode] = false;
         queue.write(keycode | 0x80);
@@ -151,7 +151,7 @@ Keyboard::releaseKey(long keycode)
 void
 Keyboard::releaseAllKeys()
 {
-    for (isize i = 0; i < 0x80; i++) {
+    for (KeyCode i = 0; i < 0x80; i++) {
         releaseKey(i);
     }
 }

@@ -467,8 +467,8 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
         
         for (isize i = first; i <= last; i++)
             bplEvent[i] =
-            inHiresDmaAreaOdd(i) ? bplDMA[1][channels][i] :
-            inHiresDmaAreaEven(i) ? bplDMA[1][channels][i] : EVENT_NONE;
+            inHiresDmaAreaOdd((i16)i) ? bplDMA[1][channels][i] :
+            inHiresDmaAreaEven((i16)i) ? bplDMA[1][channels][i] : EVENT_NONE;
         
         // Add extra shift register events if the even/odd DDF windows differ
         // These events are like BPL_H0 events without performing DMA.
@@ -481,8 +481,8 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
         
         for (isize i = first; i <= last; i++)
             bplEvent[i] =
-            inLoresDmaAreaOdd(i) ? bplDMA[0][channels][i] :
-            inLoresDmaAreaEven(i) ? bplDMA[0][channels][i] : EVENT_NONE;
+            inLoresDmaAreaOdd((i16)i) ? bplDMA[0][channels][i] :
+            inLoresDmaAreaEven((i16)i) ? bplDMA[0][channels][i] : EVENT_NONE;
     
         // Add extra shift register events if the even/odd DDF windows differ
         // These events are like BPL_L0 events without performing DMA.
@@ -547,7 +547,7 @@ Agnus::updateBplJumpTable(i16 end)
     u8 next = nextBplEvent[end];
     for (isize i = end; i >= 0; i--) {
         nextBplEvent[i] = next;
-        if (bplEvent[i]) next = i;
+        if (bplEvent[i]) next = (u8)i;
     }
 }
 
@@ -559,7 +559,7 @@ Agnus::updateDasJumpTable(i16 end)
     u8 next = nextDasEvent[end];
     for (isize i = end; i >= 0; i--) {
         nextDasEvent[i] = next;
-        if (dasEvent[i]) next = i;
+        if (dasEvent[i]) next = (u8)i;
     }
 }
 
@@ -571,8 +571,8 @@ Agnus::dumpEventTable(const EventID *table, char str[256][3], isize from, isize 
 
     for (i = 0; i <= to - from; i++) {
 
-        isize digit1 = (from + i) / 16;
-        isize digit2 = (from + i) % 16;
+        char digit1 = (char)((from + i) / 16);
+        char digit2 = (char)((from + i) % 16);
 
         r1[i] = (digit1 < 10) ? digit1 + '0' : (digit1 - 10) + 'A';
         r2[i] = (digit2 < 10) ? digit2 + '0' : (digit2 - 10) + 'A';

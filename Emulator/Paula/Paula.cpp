@@ -126,7 +126,7 @@ Paula::executeUntil(Cycle target)
 void
 Paula::raiseIrq(IrqSource src)
 {
-    setINTREQ(true, 1 << src);
+    setINTREQ(true, (u16)(1 << src));
 }
 
 void

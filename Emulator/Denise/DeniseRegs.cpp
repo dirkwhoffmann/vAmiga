@@ -126,8 +126,8 @@ Denise::setBPLCON1(u16 value)
 
     bplcon1 = value & 0xFF;
 
-    pixelOffsetOdd  = (bplcon1 & 0b00000001) << 1;
-    pixelOffsetEven = (bplcon1 & 0b00010000) >> 3;
+    pixelOffsetOdd  = (i8)((bplcon1 & 0b00000001) << 1);
+    pixelOffsetEven = (i8)((bplcon1 & 0b00010000) >> 3);
 }
 
 void

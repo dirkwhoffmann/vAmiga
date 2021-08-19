@@ -1221,9 +1221,9 @@ Blitter::doBarrelShifterA()
     if (isLastWord())  masked &= bltalwm;
 
     if(bltconDESC()){
-        ahold = (aold >> (16 - bltconASH())) | (masked << bltconASH());
+        ahold = (u16)(aold >> (16 - bltconASH()) | masked << bltconASH());
     }else{
-        ahold = (aold << (16 - bltconASH())) | (masked >> bltconASH());
+        ahold = (u16)(aold << (16 - bltconASH()) | masked >> bltconASH());
     }
 }
 
@@ -1231,8 +1231,8 @@ void
 Blitter::doBarrelShifterB()
 {
     if(bltconDESC()) {
-        bhold = (bold >> (16 - bltconBSH())) | (bnew << bltconBSH());
+        bhold = (u16)(bold >> (16 - bltconBSH()) | bnew << bltconBSH());
     } else {
-        bhold = (bold << (16 - bltconBSH())) | (bnew >> bltconBSH());
+        bhold = (u16)(bold << (16 - bltconBSH()) | bnew >> bltconBSH());
     }
 }

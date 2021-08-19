@@ -21,9 +21,9 @@ Blitter::Blitter(Amiga& ref) : SubComponent(ref)
         
         for (isize byte = 0; byte < 256; byte++) {
             
-            u8 carry = carryIn;
-            u8 inclPattern = byte;
-            u8 exclPattern = byte;
+            u8 carry = (u8)carryIn;
+            u8 inclPattern = (u8)byte;
+            u8 exclPattern = (u8)byte;
             
             for (isize bit = 0; bit < 8; bit++) {
                 

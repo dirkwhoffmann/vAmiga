@@ -265,9 +265,9 @@ CIA::poke(u16 addr, u8 value)
             
         case 0x05: // CIA_TIMER_A_HIGH
             
-            latchA = (latchA & 0x00FF) | (value << 8);
+            latchA = (u16)((latchA & 0x00FF) | value << 8);
             if (delay & CIALoadA2) {
-                counterA = (counterA & 0x00FF) | (value << 8);
+                counterA = (u16)((counterA & 0x00FF) | value << 8);
             }
             
             // Load counter if timer is stopped
@@ -303,10 +303,9 @@ CIA::poke(u16 addr, u8 value)
             
         case 0x07: // CIA_TIMER_B_HIGH
             
-            // debug("CIA7: %x\n", value);
-            latchB = (latchB & 0x00FF) | (value << 8);
+            latchB = (u16)((latchB & 0x00FF) | value << 8);
             if (delay & CIALoadB2) {
-                counterB = (counterB & 0x00FF) | (value << 8);
+                counterB = (u16)((counterB & 0x00FF) | value << 8);
             }
             
             // Load counter if timer is stopped
