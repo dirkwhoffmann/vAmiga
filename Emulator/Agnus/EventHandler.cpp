@@ -366,10 +366,11 @@ Agnus::inspectEventSlot(EventInfo &info, EventSlot nr) const
 
 EventInfo
 Agnus::getEventInfo()
-{
-    EventInfo result;
-    synchronized { result = eventInfo; }
-    return result;
+{    
+    if (!isRunning()) inspectEvents();
+    
+    synchronized { return eventInfo; }
+    unreachable;
 }
 
 EventSlotInfo
@@ -377,9 +378,10 @@ Agnus::getEventSlotInfo(isize nr)
 {
     assert_enum(EventSlot, nr);
 
-    EventSlotInfo result;
-    synchronized { result = eventInfo.slotInfo[nr]; }
-    return result;
+    if (!isRunning()) inspectEventSlot(nr);
+    
+    synchronized { return eventInfo.slotInfo[nr]; }
+    unreachable;
 }
 
 void

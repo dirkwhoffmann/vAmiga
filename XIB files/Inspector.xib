@@ -157,14 +157,8 @@
                 <outlet property="cpuPC" destination="LKc-rz-j6m" id="zIU-VQ-s4u"/>
                 <outlet property="cpuS" destination="KJX-rt-0fr" id="5BO-yj-UYh"/>
                 <outlet property="cpuSSP" destination="84x-qJ-ss7" id="5no-DO-SMI"/>
-                <outlet property="cpuStepIntoButton" destination="i48-Od-rYl" id="SiW-aN-AFs"/>
-                <outlet property="cpuStepOverButton" destination="RyZ-E9-b7L" id="P2h-eL-dss"/>
-                <outlet property="cpuStopAndGoButton" destination="rfh-1e-vf2" id="mHM-HO-Ctc"/>
                 <outlet property="cpuT" destination="kji-ty-NOX" id="d2C-Sl-1Jm"/>
                 <outlet property="cpuTraceClearButton" destination="KgG-yb-NNc" id="9nJ-mh-hx2"/>
-                <outlet property="cpuTraceStepIntoButton" destination="D4j-Y8-ayb" id="YWi-Xb-Cp9"/>
-                <outlet property="cpuTraceStepOverButton" destination="mgB-ce-57G" id="gbN-h0-aQg"/>
-                <outlet property="cpuTraceStopAndGoButton" destination="6rP-tx-mMX" id="6dG-V7-OEx"/>
                 <outlet property="cpuTraceView" destination="9F9-Qx-tLH" id="1zf-01-nk7"/>
                 <outlet property="cpuUSP" destination="mex-HF-QUG" id="0DW-Pu-DMg"/>
                 <outlet property="cpuV" destination="QXG-ho-9j4" id="qql-ca-tjH"/>
@@ -438,6 +432,9 @@
                 <outlet property="sprTableView" destination="s6H-id-bwp" id="UCU-3E-do9"/>
                 <outlet property="sprVStart" destination="Dvm-aZ-h0W" id="659-TE-Xhj"/>
                 <outlet property="sprVStop" destination="z11-9N-wy4" id="o8h-b7-gu8"/>
+                <outlet property="stepIntoButton" destination="i48-Od-rYl" id="SiW-aN-AFs"/>
+                <outlet property="stepOverButton" destination="RyZ-E9-b7L" id="P2h-eL-dss"/>
+                <outlet property="stopAndGoButton" destination="rfh-1e-vf2" id="mHM-HO-Ctc"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="5Nr-At-Pvk"/>
             </connections>
         </customObject>
@@ -446,16 +443,16 @@
         <window title="Inspector" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="868" height="468"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1120"/>
+            <rect key="contentRect" x="196" y="240" width="868" height="506"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
             <value key="minSize" type="size" width="868" height="468"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="868" height="468"/>
+                <rect key="frame" x="0.0" y="0.0" width="868" height="506"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="de9-x5-3g3">
-                        <rect key="frame" x="13" y="2" width="842" height="452"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <rect key="frame" x="13" y="40" width="842" height="452"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="CPU" identifier="" id="P8s-x5-kgY">
@@ -1049,7 +1046,7 @@
                                                                 </connections>
                                                             </searchField>
                                                             <button toolTip="Refresh" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o8Y-z2-avk">
-                                                                <rect key="frame" x="232" y="330" width="47" height="32"/>
+                                                                <rect key="frame" x="0.0" y="329" width="47" height="32"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSRefreshTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="72g-ve-xKg">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1057,39 +1054,6 @@
                                                                 </buttonCell>
                                                                 <connections>
                                                                     <action selector="refreshAction:" target="-2" id="JhN-Mo-Xtv"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button toolTip="Step Into" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i48-Od-rYl">
-                                                                <rect key="frame" x="38" y="331" width="32" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepIntoTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="aC4-Zj-CQR">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="cpuStepIntoAction:" target="-2" id="E3M-kV-Tpu"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button toolTip="Step Over" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RyZ-E9-b7L">
-                                                                <rect key="frame" x="70" y="331" width="32" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepOverTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="IKI-GE-3tJ">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="cpuStepOverAction:" target="-2" id="akI-jp-Fiy"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button toolTip="Run / Pause" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rfh-1e-vf2">
-                                                                <rect key="frame" x="6" y="331" width="32" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="pauseTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="jSz-xO-JMV">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="cpuStopAndGoAction:" target="-2" id="60A-zR-dQf"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -1105,7 +1069,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" id="GzR-dn-mO8">
                                                                     <rect key="frame" x="1" y="1" width="368" height="315"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="DdI-Dc-nEd" id="9F9-Qx-tLH" customClass="TraceTableView" customModule="vAmiga" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="0.0" width="368" height="290"/>
@@ -1171,39 +1135,6 @@
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </tableHeaderView>
                                                             </scrollView>
-                                                            <button toolTip="Step Into" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D4j-Y8-ayb">
-                                                                <rect key="frame" x="39" y="330" width="32" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepIntoTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="d0S-Pm-aqR">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="cpuStepIntoAction:" target="-2" id="94L-di-Z3f"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button toolTip="Step Over" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mgB-ce-57G">
-                                                                <rect key="frame" x="71" y="330" width="32" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepOverTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="L3E-Lc-mzz">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="cpuStepOverAction:" target="-2" id="dWE-bg-gDr"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button toolTip="Run / Pause" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6rP-tx-mMX">
-                                                                <rect key="frame" x="7" y="330" width="32" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="pauseTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="i42-E7-tu3">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="cpuStopAndGoAction:" target="-2" id="cHv-ID-Cn0"/>
-                                                                </connections>
-                                                            </button>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KgG-yb-NNc">
                                                                 <rect key="frame" x="313" y="329" width="72" height="32"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -6975,7 +6906,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="pnp-LT-l5r">
                                                 <rect key="frame" x="1" y="1" width="786" height="279"/>
-                                                <autoresizingMask key="autoresizingMask"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="oWx-2a-T42" id="HR6-To-4IS" userLabel="Primary Events" customClass="EventTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="786" height="254"/>
@@ -7056,7 +6987,7 @@
                                                                 </textFieldCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
-                                                            <tableColumn identifier="remark" width="192" minWidth="10" maxWidth="3.4028234663852886e+38" id="GJv-hb-iGq">
+                                                            <tableColumn identifier="remark" width="212" minWidth="10" maxWidth="3.4028234663852886e+38" id="GJv-hb-iGq">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Remark">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -7281,10 +7212,43 @@
                             <outlet property="delegate" destination="-2" id="T01-0F-Umv"/>
                         </connections>
                     </tabView>
+                    <button toolTip="Step Into" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i48-Od-rYl">
+                        <rect key="frame" x="50" y="9" width="32" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepIntoTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="aC4-Zj-CQR">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="stepIntoAction:" target="-2" id="E3M-kV-Tpu"/>
+                        </connections>
+                    </button>
+                    <button toolTip="Step Over" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RyZ-E9-b7L">
+                        <rect key="frame" x="82" y="9" width="32" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="stepOverTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="IKI-GE-3tJ">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="stepOverAction:" target="-2" id="akI-jp-Fiy"/>
+                        </connections>
+                    </button>
+                    <button toolTip="Run / Pause" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rfh-1e-vf2">
+                        <rect key="frame" x="18" y="9" width="32" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="pauseTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="jSz-xO-JMV">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="stopAndGoAction:" target="-2" id="60A-zR-dQf"/>
+                        </connections>
+                    </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h5D-Xp-p6b">
-                        <rect key="frame" x="37" y="447" width="254" height="16"/>
+                        <rect key="frame" x="119" y="18" width="731" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="JQf-46-kcK">
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Ipsum lorem" id="JQf-46-kcK">
                             <font key="font" usesAppearanceFont="YES"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -7295,7 +7259,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="CoV-Ow-UGM"/>
             </connections>
-            <point key="canvasLocation" x="143" y="233"/>
+            <point key="canvasLocation" x="143" y="252"/>
         </window>
     </objects>
     <resources>

@@ -18,8 +18,11 @@ class Inspector: DialogController {
 
     // Commons
     @IBOutlet weak var panel: NSTabView!
+    @IBOutlet weak var stopAndGoButton: NSButton!
+    @IBOutlet weak var stepIntoButton: NSButton!
+    @IBOutlet weak var stepOverButton: NSButton!
     @IBOutlet weak var message: NSTextField!
-    
+
     // CPU panel
     @IBOutlet weak var cpuInstrView: InstrTableView!
     @IBOutlet weak var cpuTraceView: TraceTableView!
@@ -56,12 +59,6 @@ class Inspector: DialogController {
     @IBOutlet weak var cpuV: NSButton!
     @IBOutlet weak var cpuC: NSButton!
 
-    @IBOutlet weak var cpuStopAndGoButton: NSButton!
-    @IBOutlet weak var cpuStepIntoButton: NSButton!
-    @IBOutlet weak var cpuStepOverButton: NSButton!
-    @IBOutlet weak var cpuTraceStopAndGoButton: NSButton!
-    @IBOutlet weak var cpuTraceStepIntoButton: NSButton!
-    @IBOutlet weak var cpuTraceStepOverButton: NSButton!
     @IBOutlet weak var cpuTraceClearButton: NSButton!
 
     // Memory panel
@@ -590,6 +587,19 @@ class Inspector: DialogController {
         
         if window?.isVisible == false { return }
 
+        if full {
+        
+            if parent!.amiga.running {
+                stopAndGoButton.image = NSImage(named: "pauseTemplate")
+                stepIntoButton.isEnabled = false
+                stepOverButton.isEnabled = false
+            } else {
+                stopAndGoButton.image = NSImage(named: "runTemplate")
+                stepIntoButton.isEnabled = true
+                stepOverButton.isEnabled = true
+            }
+        }
+        
         if let id = panel.selectedTabViewItem?.label {
 
             switch id {
@@ -608,12 +618,6 @@ class Inspector: DialogController {
         }
     }
     
-    @IBAction func refreshAction(_ sender: Any!) {
-        
-        track()
-        fullRefresh()
-    }
-        
     func scrollToPC() {
 
         cpuInstrView.jumpTo(addr: Int(cpuInfo.pc0))
@@ -673,6 +677,27 @@ class Inspector: DialogController {
         message.stringValue = String(format: "Watchpoint reached")
         cpuInstrView.watchpointPC = pc
         scrollToPC()
+    }
+    
+    @IBAction func refreshAction(_ sender: Any!) {
+        
+        track()
+        fullRefresh()
+    }
+    
+    @IBAction func stopAndGoAction(_ sender: NSButton!) {
+
+        amiga.stopAndGo()
+    }
+    
+    @IBAction func stepIntoAction(_ sender: NSButton!) {
+
+        amiga.stepInto()
+    }
+    
+    @IBAction func stepOverAction(_ sender: NSButton!) {
+
+        amiga.stepOver()
     }
 }
 
