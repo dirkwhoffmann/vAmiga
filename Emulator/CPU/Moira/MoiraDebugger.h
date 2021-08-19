@@ -194,6 +194,11 @@ public:
     // Returns true if a watchpoint hits at the provides address
     bool watchpointMatches(u32 addr, Size S);
 
+    // Saved program counters
+    i64 breakpointPC = -1;
+    i64 watchpointPC = -1;
+
+    
     //
     // Working with the log buffer
     //

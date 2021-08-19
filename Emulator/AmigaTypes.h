@@ -279,15 +279,16 @@ typedef u32 RunLoopFlags;
 
 namespace RL
 {
-constexpr u32 STOP               = 0b000000001;
-constexpr u32 INSPECT            = 0b000000010;
-constexpr u32 WARP_ON            = 0b000000100;
-constexpr u32 WARP_OFF           = 0b000001000;
-constexpr u32 BREAKPOINT_REACHED = 0b000010000;
-constexpr u32 WATCHPOINT_REACHED = 0b000100000;
-constexpr u32 AUTO_SNAPSHOT      = 0b001000000;
-constexpr u32 USER_SNAPSHOT      = 0b010000000;
-constexpr u32 SYNC_THREAD        = 0b100000000;
+constexpr u32 STOP               = 0b0000000001;
+constexpr u32 INSPECT            = 0b0000000010;
+constexpr u32 WARP_ON            = 0b0000000100;
+constexpr u32 WARP_OFF           = 0b0000001000;
+constexpr u32 SOFTSTOP_REACHED   = 0b0000010000;
+constexpr u32 BREAKPOINT_REACHED = 0b0000100000;
+constexpr u32 WATCHPOINT_REACHED = 0b0001000000;
+constexpr u32 AUTO_SNAPSHOT      = 0b0010000000;
+constexpr u32 USER_SNAPSHOT      = 0b0100000000;
+constexpr u32 SYNC_THREAD        = 0b1000000000;
 };
 
 #endif

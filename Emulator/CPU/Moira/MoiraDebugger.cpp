@@ -213,17 +213,24 @@ Debugger::breakpointMatches(u32 addr)
         // Soft breakpoints are deleted when reached
         softStop = UINT64_MAX - 1;
         breakpoints.setNeedsCheck(breakpoints.elements() != 0);
-
+        breakpointPC = -1;
+        
         return true;
     }
 
-    return breakpoints.eval(addr);
+    if (!breakpoints.eval(addr)) return false;
+        
+    breakpointPC = moira.reg.pc;
+    return true;
 }
 
 bool
 Debugger::watchpointMatches(u32 addr, Size S)
 {
-    return watchpoints.eval(addr, S);
+    if (!watchpoints.eval(addr, S)) return false;
+    
+    watchpointPC = moira.reg.pc0;
+    return true;
 }
 
 void

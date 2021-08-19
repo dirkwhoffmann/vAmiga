@@ -358,27 +358,31 @@ extension MyController {
             serialOut = ""
             virtualKeyboard = nil
             toolbar.updateToolbar()
-            inspector?.fullRefresh()
+            inspector?.powerOn()
             
         case .POWER_OFF:
             toolbar.updateToolbar()
-            inspector?.fullRefresh()
+            inspector?.powerOff()
 
         case .RUN:
             needsSaving = true
             toolbar.updateToolbar()
-            inspector?.fullRefresh()
+            inspector?.run()
             refreshStatusBar()
 
         case .PAUSE:
             toolbar.updateToolbar()
-            inspector?.fullRefresh()
+            inspector?.pause()
             refreshStatusBar()
 
+        case .STEP:
+            needsSaving = true
+            inspector?.step()
+            
         case .RESET:
             mydocument.deleteBootDiskID()
             mydocument.setBootDiskID(amiga.df0.fnv)
-            inspector?.fullRefresh()
+            inspector?.reset()
             updateWarp()
             
         case .SCRIPT_DONE,
@@ -423,12 +427,16 @@ extension MyController {
         case .DMA_DEBUG_OFF:
             renderer.zoomTextureIn()
 
-        case .BREAKPOINT_CONFIG,
-             .BREAKPOINT_REACHED,
-             .WATCHPOINT_REACHED:
+        case .BREAKPOINT_CONFIG:
             inspector?.fullRefresh()
             inspector?.scrollToPC()
 
+        case .BREAKPOINT_REACHED:
+            inspector?.signalBreakPoint(pc: msg.data)
+                
+        case .WATCHPOINT_REACHED:
+            inspector?.signalWatchPoint(pc: msg.data)
+            
         case .CPU_HALT:
             refreshStatusBar()
             

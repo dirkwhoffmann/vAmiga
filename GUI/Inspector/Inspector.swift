@@ -18,7 +18,8 @@ class Inspector: DialogController {
 
     // Commons
     @IBOutlet weak var panel: NSTabView!
-
+    @IBOutlet weak var message: NSTextField!
+    
     // CPU panel
     @IBOutlet weak var cpuInstrView: InstrTableView!
     @IBOutlet weak var cpuTraceView: TraceTableView!
@@ -616,6 +617,62 @@ class Inspector: DialogController {
     func scrollToPC() {
 
         cpuInstrView.jumpTo(addr: Int(cpuInfo.pc0))
+    }
+    
+    func powerOn() {
+    
+        message.stringValue = ""
+        fullRefresh()
+    }
+
+    func powerOff() {
+    
+        message.stringValue = ""
+        fullRefresh()
+    }
+
+    func run() {
+        
+        message.stringValue = ""
+        cpuInstrView.breakpointPC = -1
+        cpuInstrView.watchpointPC = -1
+        fullRefresh()
+    }
+    
+    func pause() {
+        
+        fullRefresh()
+    }
+
+    func step() {
+                
+        message.stringValue = ""
+        cpuInstrView.breakpointPC = -1
+        cpuInstrView.watchpointPC = -1
+        fullRefresh()
+        scrollToPC()
+    }
+    
+    func reset() {
+        
+        message.stringValue = ""
+        cpuInstrView.breakpointPC = -1
+        cpuInstrView.watchpointPC = -1
+        fullRefresh()
+    }
+    
+    func signalBreakPoint(pc: Int) {
+            
+        message.stringValue = String(format: "Breakpoint reached")
+        cpuInstrView.breakpointPC = pc
+        scrollToPC()
+    }
+
+    func signalWatchPoint(pc: Int) {
+    
+        message.stringValue = String(format: "Watchpoint reached")
+        cpuInstrView.watchpointPC = pc
+        scrollToPC()
     }
 }
 

@@ -770,11 +770,19 @@ Amiga::execute()
                 inspect();
             }
 
+            // Did we reach a soft breakpoint?
+            if (flags & RL::SOFTSTOP_REACHED) {
+                clearFlag(RL::SOFTSTOP_REACHED);
+                inspect();
+                newState = EXEC_PAUSED;
+                break;
+            }
+
             // Did we reach a breakpoint?
             if (flags & RL::BREAKPOINT_REACHED) {
                 clearFlag(RL::BREAKPOINT_REACHED);
                 inspect();
-                msgQueue.put(MSG_BREAKPOINT_REACHED);
+                msgQueue.put(MSG_BREAKPOINT_REACHED, cpu.debugger.breakpointPC);
                 newState = EXEC_PAUSED;
                 break;
             }
@@ -783,7 +791,7 @@ Amiga::execute()
             if (flags & RL::WATCHPOINT_REACHED) {
                 clearFlag(RL::WATCHPOINT_REACHED);
                 inspect();
-                msgQueue.put(MSG_WATCHPOINT_REACHED);
+                msgQueue.put(MSG_WATCHPOINT_REACHED, cpu.debugger.watchpointPC);
                 newState = EXEC_PAUSED;
                 break;
             }
@@ -840,6 +848,9 @@ Amiga::stepInto()
 
     cpu.debugger.stepInto();
     run();
+    
+    // Inform the GUI
+    msgQueue.put(MSG_STEP);
 }
 
 void
@@ -849,6 +860,9 @@ Amiga::stepOver()
     
     cpu.debugger.stepOver();
     run();
+    
+    // Inform the GUI
+    msgQueue.put(MSG_STEP);
 }
 
 void

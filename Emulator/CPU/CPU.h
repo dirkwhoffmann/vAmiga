@@ -109,43 +109,6 @@ private:
     void _debugOn() override;
     void _debugOff() override;
 
-        
-    //
-    // Talking to Moira
-    //
-
-private:
-
-    /*
-    void sync(int cycles) override;
-    u8 read8(u32 addr) override;
-    u16 read16(u32 addr) override;
-    u16 read16OnReset(u32 addr) override;
-    u16 read16Dasm(u32 addr) override;
-    void write8 (u32 addr, u8  val) override;
-    void write16 (u32 addr, u16 val) override;
-    u16 readIrqUserVector(u8 level) const override { return 0; }
- 
-    void signalReset() override;
-    void signalStop(u16 op) override;
-    void signalTAS() override;
-    
-    void signalHalt() override;
-    
-    void signalAddressError(moira::AEStackFrame &frame) override;
-    void signalLineAException(u16 opcode) override;
-    void signalLineFException(u16 opcode) override;
-    void signalIllegalOpcodeException(u16 opcode) override;
-    void signalTraceException() override;
-    void signalTrapException() override;
-    void signalPrivilegeViolation() override;
-    void signalInterrupt(u8 level) override;
-    
-    void signalJumpToVector(int nr, u32 addr) override;
-    
-    void breakpointReached(u32 addr) override;
-    void watchpointReached(u32 addr) override;
-    */
     
     //
     // Working with the clock

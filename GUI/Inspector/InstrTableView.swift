@@ -16,6 +16,7 @@ class InstrTableView: NSTableView {
     var breakpoints: GuardsProxy { return amiga.breakpoints }
     
     enum BreakpointType {
+        
         case none
         case enabled
         case disabled
@@ -34,6 +35,10 @@ class InstrTableView: NSTableView {
     
     // Number format
     // var hex = true
+    
+    // Saved program counters
+    var breakpointPC = -1
+    var watchpointPC = -1
     
     override func awakeFromNib() {
         
@@ -180,6 +185,8 @@ extension InstrTableView: NSTableViewDataSource {
         
         switch tableColumn?.identifier.rawValue {
             
+        case "break" where addrInRow[row] == watchpointPC:
+            return "⚠️"
         case "break" where bpInRow[row] == .enabled:
             return "\u{26D4}" // "⛔" ("\u{1F534}" // "🔴")
         case "break" where bpInRow[row] == .disabled:
