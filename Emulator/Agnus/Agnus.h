@@ -867,8 +867,8 @@ public:
      * bits reflect an invalid bit pattern. Compare with Denise::bpu() which
      * returns the Denise view of the BPU bits.
      */
-    static int bpu(u16 v);
-    int bpu() { return bpu(bplcon0); }
+    static u8 bpu(u16 v);
+    u8 bpu() { return bpu(bplcon0); }
 
 
     //

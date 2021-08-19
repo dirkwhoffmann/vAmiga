@@ -422,8 +422,8 @@ public:
      * differs if the BPU bits reflect an invalid bit pattern.
      * Compare with Agnus::bpu() which returns the Agnus view of the BPU bits.
      */
-    static int bpu(u16 v);
-    int bpu() const { return bpu(bplcon0); }
+    static u8 bpu(u16 v);
+    u8 bpu() const { return bpu(bplcon0); }
 
     // BPLCON1
     void pokeBPLCON1(u16 value);

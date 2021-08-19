@@ -683,7 +683,7 @@ Agnus::computeDDFWindowECS()
 }
 
 
-int
+u8
 Agnus::bpu(u16 v)
 {
     // Extract the three BPU bits and check for hires mode

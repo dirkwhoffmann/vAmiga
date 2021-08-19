@@ -230,19 +230,14 @@ Denise::getSpriteInfo(isize nr)
     return result;
 }
 
-int
+u8
 Denise::bpu(u16 v)
 {
-    // Extract the three BPU bits and check for hires mode
-    int bpu = (v >> 12) & 0b111;
-    bool hires = GET_BIT(v, 15);
-
-    if (hires) {
-        // return bpu < 5 ? bpu : 0; // Disable all bitplanes if value is invalid
-        return bpu < 7 ? bpu : 6; 
-    } else {
-        return bpu < 7 ? bpu : 6; // Enable six bitplanes if value is invalid
-    }
+    // Extract the three BPU bits
+    u8 bpu = (v >> 12) & 0b111;
+    
+    // An invalid value enables all 6 planes
+    return  bpu < 7 ? bpu : 6;
 }
 
 u16

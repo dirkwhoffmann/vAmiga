@@ -453,7 +453,7 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
     assert(first >= 0 && last < HPOS_CNT);
 
     bool hires = Denise::hires(bplcon0);
-    int channels = bpu(bplcon0);
+    auto channels = bpu(bplcon0);
     assert(channels <= 6);
 
     // Set number of bitplanes to 0 if we are not in a bitplane DMA line
