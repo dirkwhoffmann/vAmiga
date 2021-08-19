@@ -485,9 +485,9 @@ Memory::fillRamWithInitPattern()
         case RAM_INIT_RANDOMIZED:
 
             srand(0);
-            if (chip) for (isize i = 0; i < config.chipSize; i++) chip[i] = rand();
-            if (slow) for (isize i = 0; i < config.slowSize; i++) slow[i] = rand();
-            if (fast) for (isize i = 0; i < config.fastSize; i++) fast[i] = rand();
+            if (chip) for (isize i = 0; i < config.chipSize; i++) chip[i] = (u8)rand();
+            if (slow) for (isize i = 0; i < config.slowSize; i++) slow[i] = (u8)rand();
+            if (fast) for (isize i = 0; i < config.fastSize; i++) fast[i] = (u8)rand();
             break;
             
         case RAM_INIT_ALL_ZEROES:
@@ -865,7 +865,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_CHIP> (u32 addr)
     
     stats.chipReads.raw++;
     dataBus = READ_CHIP_8(addr);
-    return dataBus;
+    return (u8)dataBus;
 }
     
 template<> u16
@@ -893,7 +893,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_SLOW> (u32 addr)
     
     stats.slowReads.raw++;
     dataBus = READ_SLOW_8(addr);
-    return dataBus;
+    return (u8)dataBus;
 }
     
 template<> u16
@@ -945,7 +945,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_CIA> (u32 addr)
     agnus.executeUntilBusIsFreeForCIA();
 
     dataBus = peekCIA8(addr);
-    return dataBus;
+    return (u8)dataBus;
 }
 
 template<> u16
@@ -974,7 +974,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_RTC> (u32 addr)
     // agnus.executeUntilBusIsFree();
     
     dataBus = peekRTC8(addr);
-    return dataBus;
+    return (u8)dataBus;
 }
 
 template<> u16
@@ -1007,7 +1007,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr)
     } else {
         dataBus = LO_BYTE(peekCustom16(addr & 0x1FE));
     }
-    return dataBus;
+    return (u8)dataBus;
 }
 
 template<> u16
@@ -1035,12 +1035,12 @@ Memory::peek8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
     // Experimental code to match UAE output (for debugging)
     if (MIMIC_UAE && fastRamSize() == 0) {
         dataBus = (addr & 0b10) ? 0xE8 : 0x02;
-        return dataBus;
+        return (u8)dataBus;
     }
     
-    dataBus = zorro.peekFastRamDevice(addr) << 4;
+    dataBus = (u16)(zorro.peekFastRamDevice(addr) << 4);
     trace(FAS_DEBUG, "peek8<AUTOCONF>(%x) = %x\n", addr, dataBus);
-    return dataBus;
+    return (u8)dataBus;
 }
 
 template<> u16
@@ -1050,19 +1050,20 @@ Memory::peek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
     
     // agnus.executeUntilBusIsFree();
     
-    u8 hi = zorro.peekFastRamDevice(addr) << 4;
-    u8 lo = zorro.peekFastRamDevice(addr + 1) << 4;
+    auto hi = zorro.peekFastRamDevice(addr) << 4;
+    auto lo = zorro.peekFastRamDevice(addr + 1) << 4;
     
     dataBus = HI_LO(hi,lo);
     trace(FAS_DEBUG, "peek16<AUTOCONF>(%x) = %x\n", addr, dataBus);
+
     return dataBus;
 }
 
 template<> u16
 Memory::spypeek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr) const
 {
-    u8 hi = zorro.spypeekFastRamDevice(addr) << 4;
-    u8 lo = zorro.spypeekFastRamDevice(addr + 1) << 4;
+    auto hi = zorro.spypeekFastRamDevice(addr) << 4;
+    auto lo = zorro.spypeekFastRamDevice(addr + 1) << 4;
     
     return HI_LO(hi,lo);
 }
@@ -1524,7 +1525,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_ROM> (u32 addr, u8 value)
 template <> void
 Memory::poke16 <ACCESSOR_CPU, MEM_ROM> (u32 addr, u16 value)
 {
-    poke8 <ACCESSOR_CPU, MEM_ROM> (addr, value);
+    poke8 <ACCESSOR_CPU, MEM_ROM> (addr, (u8)value);
 }
 
 template <> void
@@ -1680,9 +1681,7 @@ Memory::poke16 <ACCESSOR_AGNUS> (u32 addr, u16 value)
 u8
 Memory::peekCIA8(u32 addr)
 {
-    // trace("peekCIA8(%6X)\n", addr);
-    
-    u32 reg = (addr >> 8)  & 0b1111;
+    u16 reg = (u16)(addr >> 8 & 0b1111);
     u32 sel = (addr >> 12) & 0b11;
     bool a0 = addr & 1;
     
@@ -1707,9 +1706,7 @@ Memory::peekCIA8(u32 addr)
 u16
 Memory::peekCIA16(u32 addr)
 {
-    // trace(CIA_DEBUG, "peekCIA16(%6X)\n", addr);
-    
-    u32 reg = (addr >> 8)  & 0b1111;
+    u16 reg = (u16)(addr >> 8 & 0b1111);
     u32 sel = (addr >> 12) & 0b11;
     
     switch (sel) {
@@ -1734,7 +1731,7 @@ Memory::peekCIA16(u32 addr)
 u8
 Memory::spypeekCIA8(u32 addr) const
 {
-    u32 reg = (addr >> 8)  & 0b1111;
+    u16 reg = (u16)(addr >> 8 & 0b1111);
     u32 sel = (addr >> 12) & 0b11;
     bool a0 = addr & 1;
     
@@ -1759,7 +1756,7 @@ Memory::spypeekCIA8(u32 addr) const
 u16
 Memory::spypeekCIA16(u32 addr) const
 {
-    u32 reg = (addr >> 8) & 0b1111;
+    u16 reg = (u16)(addr >> 8 & 0b1111);
     u32 sel = (addr >> 12) & 0b11;
     
     switch (sel) {
@@ -1784,9 +1781,7 @@ Memory::spypeekCIA16(u32 addr) const
 void
 Memory::pokeCIA8(u32 addr, u8 value)
 {
-    // trace(CIA_DEBUG, "pokeCIA8(%6X, %X)\n", addr, value);
-    
-    u32 reg = (addr >> 8) & 0b1111;
+    u16 reg = (u16)(addr >> 8 & 0b1111);
     u32 selA = (addr & 0x1000) == 0;
     u32 selB = (addr & 0x2000) == 0;
 
@@ -1797,11 +1792,9 @@ Memory::pokeCIA8(u32 addr, u8 value)
 void
 Memory::pokeCIA16(u32 addr, u16 value)
 {
-    // trace(CIA_DEBUG, "pokeCIA16(%6X, %X)\n", addr, value);
-    
     assert(IS_EVEN(addr));
     
-    u32 reg = (addr >> 8) & 0b1111;
+    u16 reg = (u16)(addr >> 8 & 0b1111);
     u32 selA = (addr & 0x1000) == 0;
     u32 selB = (addr & 0x2000) == 0;
     
@@ -1857,7 +1850,7 @@ Memory::pokeRTC16(u32 addr, u16 value)
 u16
 Memory::peekCustom16(u32 addr)
 {
-    u32 result;
+    u16 result;
 
     assert(IS_EVEN(addr));
 

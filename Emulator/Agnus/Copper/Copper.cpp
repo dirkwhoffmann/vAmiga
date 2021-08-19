@@ -114,93 +114,8 @@ Copper::switchToCopperList(isize nr)
     agnus.scheduleRel<SLOT_COP>(0, COP_REQ_DMA);
 }
 
-/*
 bool
-Copper::findMatch(Beam &result) const
-{
-    isize vMatch, hMatch;
-
-    // Get the current beam position
-    Beam b = agnus.pos;
-
-    // Set up the comparison positions
-    i16 vComp = getVP();
-    i16 hComp = getHP();
-
-    // Set up the comparison masks
-    i16 vMask = getVM() | 0x80;
-    i16 hMask = getHM() & 0xFE;
-
-    // Check if the current line is already below the vertical trigger position
-    if ((b.v & vMask) > (vComp & vMask)) {
-
-        // Success. The current position already matches
-        result = b;
-        return true;
-    }
-
-    // Check if the current line matches the vertical trigger position
-    if ((b.v & vMask) == (vComp & vMask)) {
-
-        // Check if we find a horizontal match in this line
-        if (findHorizontalMatch(b.h, hComp, hMask, hMatch)) {
-
-            // Success. We've found a match in the current line
-            result.v = b.v;
-            result.h = hMatch;
-            return true;
-        }
-    }
-
-    // Find the first vertical match below the current line
-    if (!findVerticalMatch(b.v + 1, vComp, vMask, vMatch)) return false;
-
-    // Find the first horizontal match in that line
-    if (!findHorizontalMatch(0, hComp, hMask, hMatch)) return false;
-
-    // Success. We've found a match below the current line
-    result.v = vMatch;
-    result.h = hMatch;
-    return true;
-}
-
-bool
-Copper::findVerticalMatch(isize vStrt, isize vComp, isize vMask, isize &result) const
-{
-    isize vStop = agnus.frame.numLines();
-
-    // Iterate through all vertical positions
-    for (isize v = vStrt; v < vStop; v++) {
-
-        // Check if the comparator triggers at this position
-        if ((v & vMask) >= (vComp & vMask)) {
-            result = v;
-            return true;
-        }
-    }
-    return false;
-}
-
-bool
-Copper::findHorizontalMatch(isize hStrt, isize hComp, isize hMask, isize &result) const
-{
-    i16 hStop = HPOS_CNT;
-
-    // Iterate through all horizontal positions
-    for (isize h = hStrt; h < hStop; h++) {
-
-        // Check if the comparator triggers at this position
-        if ((h & hMask) >= (hComp & hMask)) {
-            result = h;
-            return true;
-        }
-    }
-    return false;
-}
-*/
-
-bool
-Copper::findMatchNew(Beam &match) const
+Copper::findMatch(Beam &match) const
 {
     // Start searching at the current beam position
     u32 beam = (u32)(agnus.pos.v << 8 | agnus.pos.h);
@@ -219,7 +134,7 @@ Copper::findMatchNew(Beam &match) const
             // debug("Matching vertically: beam = %X comp = %X mask = %X\n", beam, comp, mask);
 
             // Try to match the horizontal coordinate as well
-            if (findHorizontalMatchNew(beam, comp, mask)) {
+            if (findHorizontalMatch(beam, comp, mask)) {
 
                 // Success
                 match.v = beam >> 8;
@@ -245,7 +160,7 @@ Copper::findMatchNew(Beam &match) const
 }
 
 bool
-Copper::findHorizontalMatchNew(u32 &match, u32 comp, u32 mask) const
+Copper::findHorizontalMatch(u32 &match, u32 comp, u32 mask) const
 {
     // Iterate through all horizontal positions
     for (u32 beam = match; (beam & 0xFF) < HPOS_CNT; beam++) {
@@ -331,7 +246,7 @@ Copper::scheduleWaitWakeup(bool bfd)
     Beam trigger;
 
     // Find the trigger position for this WAIT command
-    if (findMatchNew(trigger)) {
+    if (findMatch(trigger)) {
 
         // In how many cycles do we get there?
         isize delay = trigger - agnus.pos;

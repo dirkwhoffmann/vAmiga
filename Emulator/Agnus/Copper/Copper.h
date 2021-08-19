@@ -196,15 +196,10 @@ private:
      * false: The Copper does not wake up the current frame.
      *        Variable 'result' remains untouched.
      */
-   //  bool findMatch(Beam &result) const;
-    bool findMatchNew(Beam &result) const;
-
-    // Called by findMatch() to determine the vertical trigger position
-    // bool findVerticalMatch(isize vStrt, isize vComp, isize vMask, isize &result) const;
+    bool findMatch(Beam &result) const;
 
     // Called by findMatch() to determine the horizontal trigger position
-    // bool findHorizontalMatch(isize hStrt, isize hComp, isize hMask, isize &result) const;
-    bool findHorizontalMatchNew(u32 &beam, u32 comp, u32 mask) const;
+    bool findHorizontalMatch(u32 &beam, u32 comp, u32 mask) const;
 
     // Emulates the Copper writing a value into one of the custom registers
     void move(u32 addr, u16 value);
