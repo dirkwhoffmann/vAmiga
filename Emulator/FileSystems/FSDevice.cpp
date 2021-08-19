@@ -506,7 +506,7 @@ FSDevice::lastFileListBlockInChain(FSBlock *block)
     return nullptr;
 }
 
-ErrorCode
+void
 FSDevice::collect(Block nr, std::vector<Block> &result, bool recursive)
 {
     std::stack<Block> remainingItems;
@@ -527,11 +527,9 @@ FSDevice::collect(Block nr, std::vector<Block> &result, bool recursive)
             collectHashedRefs(item, remainingItems, visited);
         }
     }
-
-    return ERROR_OK;
 }
 
-ErrorCode
+void
 FSDevice::collectHashedRefs(Block nr,
                             std::stack<Block> &result, std::set<Block> &visited)
 {
@@ -542,11 +540,9 @@ FSDevice::collectHashedRefs(Block nr,
             collectRefsWithSameHashValue(b->getHashRef((u32)i), result, visited);
         }
     }
-    
-    return ERROR_OK;
 }
 
-ErrorCode
+void
 FSDevice::collectRefsWithSameHashValue(Block nr,
                                        std::stack<Block> &result, std::set<Block> &visited)
 {
@@ -555,17 +551,15 @@ FSDevice::collectRefsWithSameHashValue(Block nr,
     // Walk down the linked list
     for (FSBlock *b = hashableBlockPtr(nr); b; b = b->getNextHashBlock()) {
 
-        // Break the loop if we've already seen this block
-        if (visited.find(b->nr) != visited.end()) return ERROR_FS_HAS_CYCLES;
-        visited.insert(b->nr);
+        // Only proceed if we haven't seen this block yet
+        if (visited.find(b->nr) != visited.end()) throw VAError(ERROR_FS_HAS_CYCLES);
 
+        visited.insert(b->nr);
         refs.push(b->nr);
     }
   
     // Push the collected elements onto the result stack
     while (refs.size() > 0) { result.push(refs.top()); refs.pop(); }
-    
-    return ERROR_OK;
 }
 
 FSErrorReport

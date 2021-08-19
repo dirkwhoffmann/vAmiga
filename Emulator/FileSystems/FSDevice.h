@@ -221,7 +221,7 @@ public:
     FSBlock *changeDir(const string &name);
 
     // Prints a directory listing
-    void printDirectory(bool recursive);
+    void printDirectory(bool recursive) throws;
 
     // Returns the path of a file system item
     string getPath(FSBlock *block);
@@ -268,17 +268,17 @@ public:
 public:
     
     // Returns a collections of nodes for all items in the current directory
-    ErrorCode collect(Block nr, std::vector<Block> &list, bool recursive = true);
-
+    void collect(Block nr, std::vector<Block> &list, bool recursive = true) throws;
+    
 private:
     
     // Collects all references stored in a hash table
-    ErrorCode collectHashedRefs(Block nr, std::stack<Block> &list,
-                                std::set<Block> &visited);
-
+    void collectHashedRefs(Block nr, std::stack<Block> &list,
+                           std::set<Block> &visited) throws;
+    
     // Collects all references with the same hash value
-    ErrorCode collectRefsWithSameHashValue(Block nr, std::stack<Block> &list,
-                                           std::set<Block> &visited);
+    void collectRefsWithSameHashValue(Block nr, std::stack<Block> &list,
+                                      std::set<Block> &visited) throws;
 
  
     //
