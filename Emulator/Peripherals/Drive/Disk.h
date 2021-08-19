@@ -150,12 +150,12 @@ public:
     //
     
     // Reads a byte from disk
-    u8 readByte(Track track, u16 offset) const;
-    u8 readByte(Cylinder cylinder, Side side, u16 offset) const;
+    u8 readByte(Track track, isize offset) const;
+    u8 readByte(Cylinder cylinder, Side side, isize offset) const;
 
     // Writes a byte to disk
-    void writeByte(u8 value, Track track, u16 offset);
-    void writeByte(u8 value, Cylinder cylinder, Side side, u16 offset);
+    void writeByte(u8 value, Track track, isize offset);
+    void writeByte(u8 value, Cylinder cylinder, Side side, isize offset);
         
     
     //

@@ -24,10 +24,10 @@ typedef i64 DMACycle;         // DMA cycle units
 typedef isize Pixel;
 
 // Floppy disks
-typedef i16 Side;
-typedef i16 Cylinder;
-typedef i16 Track;
-typedef i16 Sector;
+typedef isize Side;
+typedef isize Cylinder;
+typedef isize Track;
+typedef isize Sector;
 
 // Keyboard
 typedef u8 KeyCode;

@@ -315,7 +315,7 @@ void
 ADFFile::encodeTrack(Disk &disk, Track t)
 {
     isize sectors = numSectors();
-    debug(MFM_DEBUG, "Encoding Amiga track %d with %ld sectors\n", t, sectors);
+    debug(MFM_DEBUG, "Encoding Amiga track %zd with %ld sectors\n", t, sectors);
 
     // Format track
     disk.clearTrack(t, 0xAA);
@@ -329,7 +329,7 @@ ADFFile::encodeTrack(Disk &disk, Track t)
     }
     
     // Compute a debug checksum
-    debug(MFM_DEBUG, "Track %d checksum = %x\n",
+    debug(MFM_DEBUG, "Track %zd checksum = %x\n",
           t, util::fnv_1a_32(disk.data.track[t], disk.length.track[t]));
 }
 
@@ -338,7 +338,7 @@ ADFFile::encodeSector(Disk &disk, Track t, Sector s)
 {
     assert(t < disk.numTracks());
     
-    debug(MFM_DEBUG, "Encoding sector %d\n", s);
+    debug(MFM_DEBUG, "Encoding sector %zd\n", s);
     
     // Block header layout:
     //
@@ -437,7 +437,7 @@ ADFFile::decodeTrack(Disk &disk, Track t)
 { 
     long sectors = numSectors();
 
-    trace(MFM_DEBUG, "Decoding track %d\n", t);
+    trace(MFM_DEBUG, "Decoding track %zd\n", t);
     
     u8 *src = disk.data.track[t];
     u8 *dst = data + t * sectors * 512;

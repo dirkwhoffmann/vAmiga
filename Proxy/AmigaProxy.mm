@@ -1015,17 +1015,17 @@ using namespace moira;
 
 - (BOOL)keyIsPressed:(NSInteger)keycode
 {
-    return [self kb]->keyIsPressed(keycode);
+    return [self kb]->keyIsPressed((KeyCode)keycode);
 }
 
 - (void)pressKey:(NSInteger)keycode
 {
-    [self kb]->pressKey(keycode);
+    [self kb]->pressKey((KeyCode)keycode);
 }
 
 - (void)releaseKey:(NSInteger)keycode
 {
-    [self kb]->releaseKey(keycode);
+    [self kb]->releaseKey((KeyCode)keycode);
 }
 
 - (void)releaseAllKeys

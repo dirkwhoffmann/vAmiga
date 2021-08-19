@@ -59,9 +59,9 @@ typedef struct
     u16 height;
 
     // Extracted information from SPRxPOS and SPRxCTL
-    i16 hstrt;
-    i16 vstrt;
-    i16 vstop;
+    isize hstrt;
+    isize vstrt;
+    isize vstop;
     bool attach;
     
     // Upper 16 color register (recorded where the observed sprite starts)

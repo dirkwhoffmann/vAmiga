@@ -376,8 +376,8 @@ public:
     /* The vertical trigger positions of all 8 sprites. Note that Agnus knows
      * nothing about the horizontal trigger positions (only Denise does).
      */
-    i16 sprVStrt[8]; // TODO: Change to isize
-    i16 sprVStop[8]; // TODO: Change to isize
+    isize sprVStrt[8];
+    isize sprVStop[8];
 
     // The current DMA states of all 8 sprites
     SprDMAState sprDmaState[8];

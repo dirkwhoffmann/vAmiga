@@ -1069,10 +1069,10 @@ Denise::checkS2PCollisions(Pixel start, Pixel end)
     // For the odd sprites, only proceed if collision detection is enabled
     if (IS_ODD(x) && !getENSP<x>()) return;
     
-    u8 enabled1 = getENBP1();
-    u8 enabled2 = getENBP2();
-    u8 compare1 = getMVBP1() & enabled1;
-    u8 compare2 = getMVBP2() & enabled2;
+    u8 enabled1 = (u8)getENBP1();
+    u8 enabled2 = (u8)getENBP2();
+    u8 compare1 = (u8)getMVBP1() & enabled1;
+    u8 compare2 = (u8)getMVBP2() & enabled2;
 
     // Check for sprite-playfield collisions
     for (Pixel pos = end; pos >= start; pos -= 2) {
@@ -1112,10 +1112,10 @@ Denise::checkP2PCollisions()
     if (GET_BIT(clxdat, 0)) return;
 
     // Set up comparison masks
-    u8 enabled1 = getENBP1();
-    u8 enabled2 = getENBP2();
-    u8 compare1 = getMVBP1() & enabled1;
-    u8 compare2 = getMVBP2() & enabled2;
+    u8 enabled1 = (u8)getENBP1();
+    u8 enabled2 = (u8)getENBP2();
+    u8 compare1 = (u8)getMVBP1() & enabled1;
+    u8 compare2 = (u8)getMVBP2() & enabled2;
 
     // Check all pixels one by one
     for (isize pos = 0; pos < HPIXELS; pos++) {

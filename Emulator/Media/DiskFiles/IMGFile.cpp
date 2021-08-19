@@ -95,7 +95,7 @@ void
 IMGFile::encodeTrack(Disk &disk, Track t)
 {
     isize sectors = numSectors();
-    debug(MFM_DEBUG, "Encoding DOS track %d with %ld sectors\n", t, sectors);
+    debug(MFM_DEBUG, "Encoding DOS track %zd with %ld sectors\n", t, sectors);
 
     u8 *p = disk.data.track[t];
 
@@ -117,7 +117,7 @@ IMGFile::encodeTrack(Disk &disk, Track t)
     for (Sector s = 0; s < sectors; s++) encodeSector(disk, t, s);
     
     // Compute a checksum for debugging
-    debug(MFM_DEBUG, "Track %d checksum = %x\n",
+    debug(MFM_DEBUG, "Track %zd checksum = %x\n",
           t, util::fnv_1a_32(disk.data.track[t], disk.length.track[t]));
 }
 
@@ -126,7 +126,7 @@ IMGFile::encodeSector(Disk &disk, Track t, Sector s)
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
         
-    debug(MFM_DEBUG, "  Encoding DOS sector %d\n", s);
+    debug(MFM_DEBUG, "  Encoding DOS sector %zd\n", s);
     
     // Write SYNC
     for (isize i = 0; i < 12; i++) { buf[i] = 0x00; }
@@ -219,7 +219,7 @@ IMGFile::decodeTrack(Disk &disk, Track t)
     u8 *src = disk.data.track[t];
     u8 *dst = data + t * numSectors * 512;
     
-    trace(MFM_DEBUG, "Decoding DOS track %d\n", t);
+    trace(MFM_DEBUG, "Decoding DOS track %zd\n", t);
 
     // Determine the start of all sectors contained in this track
     isize sectorStart[numSectors];

@@ -62,7 +62,7 @@ Disk::dump()
 }
 
 u8
-Disk::readByte(Track t, u16 offset) const
+Disk::readByte(Track t, isize offset) const
 {
     assert(t < numTracks());
     assert(offset < length.track[t]);
@@ -71,7 +71,7 @@ Disk::readByte(Track t, u16 offset) const
 }
 
 u8
-Disk::readByte(Cylinder c, Side s, u16 offset) const
+Disk::readByte(Cylinder c, Side s, isize offset) const
 {
     assert(c < numCyls());
     assert(s < numSides());
@@ -81,7 +81,7 @@ Disk::readByte(Cylinder c, Side s, u16 offset) const
 }
 
 void
-Disk::writeByte(u8 value, Track t, u16 offset)
+Disk::writeByte(u8 value, Track t, isize offset)
 {
     assert(t < numTracks());
     assert(offset < length.track[t]);
@@ -90,7 +90,7 @@ Disk::writeByte(u8 value, Track t, u16 offset)
 }
 
 void
-Disk::writeByte(u8 value, Cylinder c, Side s, u16 offset)
+Disk::writeByte(u8 value, Cylinder c, Side s, isize offset)
 {
     assert(c < numCyls());
     assert(s < numSides());

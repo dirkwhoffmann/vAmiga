@@ -85,7 +85,7 @@ typedef struct
 }
 DiskControllerConfig;
 
-inline bool isValidDriveSpeed(i16 speed)
+inline bool isValidDriveSpeed(isize speed)
 {
     switch (speed)
     {
@@ -96,7 +96,7 @@ inline bool isValidDriveSpeed(i16 speed)
 
 typedef struct
 {
-    i8 selectedDrive;
+    isize selectedDrive;
     DriveState state;
     i32 fifo[6];
     u8 fifoCount;

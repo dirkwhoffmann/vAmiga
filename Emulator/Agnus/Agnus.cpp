@@ -822,7 +822,7 @@ Agnus::inSyncWithEClock()
 void
 Agnus::executeUntilBusIsFree()
 {    
-    i16 posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
+    isize posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
 
     // Check if the bus is blocked
     if (busOwner[posh] != BUS_NONE) {
@@ -857,7 +857,7 @@ Agnus::executeUntilBusIsFreeForCIA()
     // Sync with the E clock driving the CIA
     syncWithEClock();
     
-    i16 posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
+    isize posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
     
     // Check if the bus is blocked
     if (busOwner[posh] != BUS_NONE) {
@@ -961,7 +961,7 @@ Agnus::updateSpriteDMA()
 {
     // When the function is called, the sprite logic already sees an inremented
     // vertical position counter
-    i16 v = pos.v + 1;
+    isize v = pos.v + 1;
 
     // Reset the vertical trigger coordinates in line 25
     if (v == 25 && sprdma()) {

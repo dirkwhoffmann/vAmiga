@@ -98,7 +98,7 @@ DiskController::setConfigItem(Option option, i64 value)
     {
         case OPT_DRIVE_SPEED:
             
-            if (!isValidDriveSpeed(value))
+            if (!isValidDriveSpeed((isize)value))
             {
                 throw VAError(ERROR_OPT_INVARG, "-1, 1, 2, 4, 8");
             }
@@ -433,7 +433,7 @@ DiskController::executeFifo()
             incoming = drive ? drive->readByteAndRotate() : 0;
             
             // Write byte into the FIFO buffer
-            writeFifo(incoming);
+            writeFifo((u8)incoming);
             incoming |= 0x8000;
             
             // Check if we've reached a SYNC mark

@@ -608,7 +608,7 @@ Drive::step(isize dir)
 }
 
 void
-Drive::recordCylinder(u8 cylinder)
+Drive::recordCylinder(Cylinder cylinder)
 {
     cylinderHistory = (cylinderHistory << 8) | cylinder;
 }

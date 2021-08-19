@@ -57,8 +57,8 @@ struct DriveTypeEnum : util::Reflection<DriveTypeEnum, DriveType> {
 
 typedef struct
 {
-    isize side;
-    isize cylinder;
+    Side side;
+    Cylinder cylinder;
     isize offset;
 }
 DriveHead;
