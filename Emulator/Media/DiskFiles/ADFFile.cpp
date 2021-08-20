@@ -304,7 +304,7 @@ ADFFile::encodeDisk(Disk &disk)
     for (Track t = 0; t < tracks; t++) encodeTrack(disk, t);
 
     // In debug mode, also run the decoder
-    if (MFM_DEBUG) {
+    if constexpr (MFM_DEBUG) {
         ADFFile tmp(disk);
         msg("Saving image to /tmp/debug.adf for debugging\n");
         tmp.writeToFile("/tmp/tmp.adf");

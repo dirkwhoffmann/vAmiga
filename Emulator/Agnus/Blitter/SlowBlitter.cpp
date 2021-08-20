@@ -926,7 +926,7 @@ Blitter::beginSlowCopyBlit()
 
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the fast Blitter.
-    if (SLOW_BLT_DEBUG) {
+    if constexpr (SLOW_BLT_DEBUG) {
         
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
@@ -1076,7 +1076,7 @@ Blitter::exec()
         // Run the minterm logic circuit
         trace(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
         dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
-        if (BLT_DEBUG) {
+        if constexpr (BLT_DEBUG) {
             assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
         }
 

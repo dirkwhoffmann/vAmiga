@@ -18,8 +18,6 @@
 #include "Paula.h"
 #include "SerialPort.h"
 
-#define CIA_DEBUG (nr == 0 ? CIAA_DEBUG : CIAB_DEBUG)
-
 CIA::CIA(int n, Amiga& ref) : SubComponent(ref), nr(n)
 {    
     subComponents = std::vector<AmigaComponent *> { &tod };

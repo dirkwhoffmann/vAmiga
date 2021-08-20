@@ -71,7 +71,7 @@ Amiga::Amiga()
     hardReset();
         
     // Print some debug information
-    if (SNP_DEBUG) {
+    if constexpr (SNP_DEBUG) {
         
         msg("             Agnus : %zu bytes\n", sizeof(Agnus));
         msg("       AudioFilter : %zu bytes\n", sizeof(AudioFilter));
@@ -623,7 +623,7 @@ Amiga::_dump(dump::Category category, std::ostream& os) const
     
     if (category & dump::Config) {
     
-        if (CNF_DEBUG) {
+        if constexpr (CNF_DEBUG) {
             
             df0.dump(dump::Config);
             paula.dump(dump::Config);
@@ -930,7 +930,7 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
         load(snapshot.getData());
                 
         // Print some debug info if requested
-        if (SNP_DEBUG) dump();
+        if constexpr (SNP_DEBUG) dump();
     }
     
     // Inform the GUI

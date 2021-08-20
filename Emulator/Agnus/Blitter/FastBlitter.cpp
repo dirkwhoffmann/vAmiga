@@ -155,7 +155,7 @@ void Blitter::doFastCopyBlit()
             // Run the minterm logic circuit
             trace(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
             dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
-            if (BLT_DEBUG) {
+            if constexpr (BLT_DEBUG) {
                 assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
             }
 

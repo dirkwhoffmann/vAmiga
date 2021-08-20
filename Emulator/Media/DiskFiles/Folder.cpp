@@ -25,8 +25,8 @@ Folder::isCompatible(const string &path)
 
 void
 Folder::init(const string &path)
-{    
-    if (FS_DEBUG) msg("make(%s)\n", path.c_str());
+{
+    debug(FS_DEBUG, "make(%s)\n", path.c_str());
               
     // Only proceed if the provided filename points to a directory
     if (!isCompatiblePath(path)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
@@ -43,7 +43,7 @@ Folder::init(const string &path)
     if (report.corruptedBlocks > 0) {
         warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
     }
-    if (FS_DEBUG) volume.dump();
+    if constexpr (FS_DEBUG) volume.dump();
     
     // Convert the file system into an ADF
     adf = new ADFFile(volume);

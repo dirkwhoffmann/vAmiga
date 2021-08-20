@@ -84,7 +84,7 @@ IMGFile::encodeDisk(Disk &disk)
     for (Track t = 0; t < tracks; t++) encodeTrack(disk, t);
 
     // In debug mode, also run the decoder
-    if (MFM_DEBUG) {
+    if constexpr (MFM_DEBUG) {
         IMGFile tmp(disk);
         msg("Saving image to /tmp/debug.img for debugging\n");
         tmp.writeToFile("/tmp/tmp.img");

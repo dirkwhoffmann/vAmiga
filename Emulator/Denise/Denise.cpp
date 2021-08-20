@@ -972,7 +972,7 @@ Denise::updateBorderColor()
         borderColor = 0;  // Background color
     }
     
-    if (BORDER_DEBUG) {
+    if constexpr (BORDER_DEBUG) {
         borderColor = 65; // Debug color
     }
 }
@@ -1011,7 +1011,7 @@ Denise::drawBorder()
     }
 
 #ifdef LINE_DEBUG
-    if (LINE_DEBUG) {
+    if constexpr (LINE_DEBUG) {
         for (Pixel i = 0; i <= LAST_PIXEL / 2; i++) {
             iBuffer[i] = mBuffer[i] = 64;
         }
@@ -1050,15 +1050,14 @@ Denise::checkS2SCollisions(Pixel start, Pixel end)
         if ((z & comp01) && (z & comp45)) SET_BIT(clxdat, 10);
         if ((z & comp01) && (z & comp23)) SET_BIT(clxdat, 9);
         
-        if (CLX_DEBUG) {
+        if constexpr (CLX_DEBUG) {
             
-            trace((z & comp45) && (z & comp67), "Collision: 45 and 67\n");
-            trace((z & comp45) && (z & comp67), "Collision: 45 and 67\n");
-            trace((z & comp23) && (z & comp67), "Collision: 23 and 67\n");
-            trace((z & comp23) && (z & comp45), "Collision: 23 and 45\n");
-            trace((z & comp01) && (z & comp67), "Collision: 01 and 67\n");
-            trace((z & comp01) && (z & comp45), "Collision: 01 and 45\n");
-            trace((z & comp01) && (z & comp23), "Collision: 01 and 23\n");
+            if ((z & comp45) && (z & comp67)) trace(true, "Coll: 45 and 67\n");
+            if ((z & comp23) && (z & comp67)) trace(true, "Coll: 23 and 67\n");
+            if ((z & comp23) && (z & comp45)) trace(true, "Coll: 23 and 45\n");
+            if ((z & comp01) && (z & comp67)) trace(true, "Coll: 01 and 67\n");
+            if ((z & comp01) && (z & comp45)) trace(true, "Coll: 01 and 45\n");
+            if ((z & comp01) && (z & comp23)) trace(true, "Coll: 01 and 23\n");
         }
     }
 }

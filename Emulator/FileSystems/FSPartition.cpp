@@ -291,13 +291,10 @@ FSPartition::requiredBlocks(isize fileSize) const
     isize numDataBlocks = requiredDataBlocks(fileSize);
     isize numFileListBlocks = requiredFileListBlocks(fileSize);
     
-    if (FS_DEBUG) {
-        
-        msg("Required file header blocks : %d\n",  1);
-        msg("       Required data blocks : %zd\n", numDataBlocks);
-        msg("  Required file list blocks : %zd\n", numFileListBlocks);
-        msg("                Free blocks : %zd\n", freeBlocks());
-    }
+    debug(FS_DEBUG, "Required file header blocks : %d\n",  1);
+    debug(FS_DEBUG, "       Required data blocks : %zd\n", numDataBlocks);
+    debug(FS_DEBUG, "  Required file list blocks : %zd\n", numFileListBlocks);
+    debug(FS_DEBUG, "                Free blocks : %zd\n", freeBlocks());
     
     return 1 + numDataBlocks + numFileListBlocks;
 }

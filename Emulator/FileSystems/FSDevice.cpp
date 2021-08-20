@@ -29,7 +29,7 @@ FSDevice::init(FSDeviceDescriptor &layout)
 {
     init(layout.numBlocks);
     
-    if (FS_DEBUG) { layout.dump(); }
+    if constexpr (FS_DEBUG) { layout.dump(); }
     
     // Copy layout parameters from descriptor
     numCyls    = layout.numCyls;
@@ -53,7 +53,7 @@ FSDevice::init(FSDeviceDescriptor &layout)
     for (isize i = 0; i < numBlocks; i++) assert(blocks[i] != nullptr);
     
     // Print some debug information
-    if (FS_DEBUG) { info(); dump(); }
+    if constexpr (FS_DEBUG) { info(); dump(); }
 }
 
 void
