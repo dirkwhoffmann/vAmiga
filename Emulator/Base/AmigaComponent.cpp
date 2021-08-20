@@ -31,29 +31,6 @@ AmigaComponent::inspect()
     _inspect();
 }
 
-void AmigaComponent::dump(dump::Category category, std::ostream& ss) const
-{
-    _dump(category, ss);
-}
-
-void
-AmigaComponent::dump(dump::Category category) const
-{
-    dump(category, std::cout);
-}
-
-void
-AmigaComponent::dump(std::ostream& ss) const
-{
-    dump((dump::Category)(-1), ss);
-}
-
-void
-AmigaComponent::dump() const
-{
-    dump((dump::Category)(-1));
-}
-
 isize
 AmigaComponent::size()
 {

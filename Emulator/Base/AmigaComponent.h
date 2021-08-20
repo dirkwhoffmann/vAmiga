@@ -15,25 +15,9 @@
 #include "Concurrency.h"
 
 #include <vector>
-#include <iostream>
 
 #define synchronized \
 for (util::AutoMutex _am(mutex); _am.active; _am.active = false)
-
-namespace dump {
-enum Category : usize {
-    
-    Config    = 0b000000001,
-    State     = 0b000000010,
-    Registers = 0b000000100,
-    Events    = 0b000001000,
-    Checksums = 0b000010000,
-    Dma       = 0b000100000,
-    BankMap   = 0b001000000,
-    List1     = 0b010000000,
-    List2     = 0b100000000,
-};
-}
 
 class AmigaComponent : public AmigaObject {
         
@@ -114,17 +98,6 @@ public:
         synchronized { return cachedValues; }
         unreachable;
     }
-    
-    /* Prints debug information about this component. The additional 'flags'
-     * parameter is a bit field which can be used to limit the displayed
-     * information to certain categories.
-     */
-    void dump(dump::Category category, std::ostream& ss) const;
-    void dump(dump::Category category) const;
-    void dump(std::ostream& ss) const;
-    void dump() const;
-    virtual void _dump(dump::Category category, std::ostream& ss) const { };
-
     
     //
     // Serializing

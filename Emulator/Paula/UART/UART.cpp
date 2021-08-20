@@ -13,6 +13,7 @@
 #include "MsgQueue.h"
 #include "Paula.h"
 #include "SerialPort.h"
+#include <iostream>
 
 void
 UART::_reset(bool hard)
