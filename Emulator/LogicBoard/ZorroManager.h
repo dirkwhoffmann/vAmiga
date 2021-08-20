@@ -34,8 +34,21 @@ public:
     
     using SubComponent::SubComponent;
 
+    
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override { return "Zorro"; }
+    void _dump(dump::Category category, std::ostream& os) const override { }
 
+    
+    //
+    // Methods from AmigaComponent
+    //
+    
 private:
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }

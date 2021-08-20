@@ -43,13 +43,20 @@ struct FSPartition : AmigaObject {
     FSPartition(FSDevice &ref);
     FSPartition(FSDevice &ref, FSPartitionDescriptor &layout);
     
+    //
+    // Methods from AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override { return "FSPartition"; }
-
+    void _dump(dump::Category category, std::ostream& os) const override;
+    
+        
+public:
+    
     // Prints a summary about this partition (called by FSDevice::info)
     void info() const;
-
-    // Prints debug information about this partition
-    void dump() const;
 
     // Predicts the type of a block by analyzing its number and data
     FSBlockType predictBlockType(Block nr, const u8 *buffer) const;

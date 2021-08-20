@@ -32,7 +32,7 @@
  * import and export the file system from and to ADF files.
  */
 
-class FSDevice : AmigaObject {
+class FSDevice : public AmigaObject {
     
     friend struct FSPartition;
     friend struct FSBlock;
@@ -89,8 +89,6 @@ public:
     FSDevice(FSVolumeType type, const string &path) { init(type, path); }
     ~FSDevice();
     
-    const char *getDescription() const override { return "FSVolume"; }
-        
 private:
     
     void init(isize capacity);
@@ -101,6 +99,16 @@ private:
     void init(class HDFFile &hdf) throws;
     void init(FSVolumeType type, const string &path);
 
+    
+    //
+    // Methods from AmigaObject
+    //
+    
+private:
+    
+    const char *getDescription() const override { return "FSVolume"; }
+    void _dump(dump::Category category, std::ostream& os) const override;
+    
 
     //
     // Analyzing
@@ -110,10 +118,7 @@ public:
     
     // Prints information about this volume
     void info();
-    
-    // Prints debug information about this volume
-    void dump();
-        
+            
     
     //
     // Querying file system properties

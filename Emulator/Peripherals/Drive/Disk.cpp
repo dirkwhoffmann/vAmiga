@@ -47,18 +47,31 @@ Disk::~Disk()
 }
 
 void
-Disk::dump()
+Disk::_dump(dump::Category category, std::ostream& os) const
 {
-    msg("\nDisk:\n");
-    msg("            type : %s\n", DiskDiameterEnum::key(diameter));
-    msg("         density : %s\n", DiskDensityEnum::key(density));
-    msg("       numCyls() : %zd\n", numCyls());
-    msg("      numSides() : %zd\n", numSides());
-    msg("     numTracks() : %zd\n", numTracks());
-    msg("  track 0 length : %d\n", length.track[0]);
-    msg("  writeProtected : %s\n", writeProtected ? "yes" : "no");
-    msg("        modified : %s\n", modified ? "yes" : "no");
-    msg("             fnv : %llu\n", fnv);
+    using namespace util;
+    
+    if (category & dump::State) {
+        
+        os << tab("Type");
+        os << DiskDiameterEnum::key(diameter) << std::endl;
+        os << tab("Density");
+        os << DiskDensityEnum::key(density) << std::endl;
+        os << tab("numCyls()");
+        os << dec(numCyls()) << std::endl;
+        os << tab("numSides()");
+        os << dec(numSides()) << std::endl;
+        os << tab("numTracks()");
+        os << dec(numTracks()) << std::endl;
+        os << tab("Track 0 length");
+        os << dec(length.track[0]) << std::endl;
+        os << tab("Write protected");
+        os << bol(writeProtected) << std::endl;
+        os << tab("Modified");
+        os << bol(modified) << std::endl;
+        os << tab("FNV checksum");
+        os << hex(fnv) << " / " << dec(fnv) << std::endl;
+    }
 }
 
 u8

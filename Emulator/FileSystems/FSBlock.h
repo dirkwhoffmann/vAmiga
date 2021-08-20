@@ -36,12 +36,24 @@ struct FSBlock : AmigaObject {
     virtual ~FSBlock() { }
 
     static FSBlock *make(FSPartition &p, Block nr, FSBlockType type) throws;
+
+    
+    //
+    // Methods from AmigaObject
+    //
+    
+private:
+    
+    // const char *getDescription() const override { return "FSBlock"; }
+    void _dump(dump::Category category, std::ostream& os) const override { }
     
     
     //
     // Querying block properties
     //
 
+public:
+    
     // Returns the type of this block
     virtual FSBlockType type() const = 0; 
 

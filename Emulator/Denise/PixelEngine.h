@@ -91,8 +91,20 @@ public:
     PixelEngine(Amiga& ref);
     ~PixelEngine();
 
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override { return "PixelEngine"; }
+    void _dump(dump::Category category, std::ostream& os) const override { }
 
+    
+    //
+    // Methods from AmigaComponent
+    //
+    
 private:
     
     void _initialize() override;

@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "FSDescriptors.h"
+#include "IO.h"
 
 FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, FSVolumeType dos)
 {
@@ -39,23 +40,27 @@ FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, F
 }
 
 void
-FSDeviceDescriptor::dump()
+FSDeviceDescriptor::_dump(dump::Category category, std::ostream& os) const
 {
-    msg("       Cylinders : %zd\n", numCyls);
-    msg("           Heads : %zd\n", numHeads);
-    msg("         Sectors : %zd\n", numSectors);
-    msg("          Blocks : %lld\n", numBlocks);
-    msg("        Reserved : %zd\n", numReserved);
-    msg("           BSize : %zd\n", bsize);
-    msg("\n");
+    using namespace util;
     
-    for (auto& p : partitions) { p.dump(); }
+    if (category & dump::State) {
         
-    /*
-    for (isize i = 0; i < (isize)partitions.size(); i++) {
-        partitions[i].dump();
+        os << tab("Cylinders");
+        os << dec(numCyls) << std::endl;
+        os << tab("Heads");
+        os << dec(numHeads) << std::endl;
+        os << tab("Sectors");
+        os << dec(numSectors) << std::endl;
+        os << tab("Blocks");
+        os << dec(numBlocks) << std::endl;
+        os << tab("Reserved");
+        os << dec(numReserved) << std::endl;
+        os << tab("BSize");
+        os << dec(bsize) << std::endl;
+    
+        for (auto& p : partitions) { p.dump(category, os); }
     }
-    */
 }
 
 FSPartitionDescriptor::FSPartitionDescriptor(FSVolumeType dos,
@@ -72,15 +77,21 @@ FSPartitionDescriptor::FSPartitionDescriptor(FSVolumeType dos,
 }
 
 void
-FSPartitionDescriptor::dump()
+FSPartitionDescriptor::_dump(dump::Category category, std::ostream& os) const
 {
-    msg("       Partition : %zd - %zd\n", lowCyl, highCyl);
-    msg("     File system : %s\n", FSVolumeTypeEnum::key(dos));
-    msg("      Root block : %d\n", rootBlock);
-    msg("   Bitmap blocks : ");
-    for (auto& it : bmBlocks) { msg("%d ", it); }
-    msg("\n");
-    msg("Extension blocks : ");
-    for (auto& it : bmExtBlocks) { msg("%d ", it); }
-    msg("\n\n");
+    using namespace util;
+    
+    if (category & dump::State) {
+        
+        os << tab("Partition");
+        os << dec(lowCyl) << " - " << dec(highCyl) << std::endl;
+        os << tab("File system");
+        os << FSVolumeTypeEnum::key(dos) << std::endl;
+        os << tab("Root block");
+        os << dec(rootBlock) << std::endl;
+        os << tab("Bitmap blocks");
+        for (auto& it : bmBlocks) { os << dec(it) << " "; }
+        os << tab("Extension blocks");
+        for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
+    }
 }

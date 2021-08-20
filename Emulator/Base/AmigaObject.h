@@ -88,8 +88,8 @@ public:
     void dump(dump::Category category) const;
     void dump(std::ostream& ss) const;
     void dump() const;
-    virtual void _dump(dump::Category category, std::ostream& ss) const { };
-    
+    virtual void _dump(dump::Category category, std::ostream& ss) const = 0;
+    // virtual void _dump(dump::Category category, std::ostream& ss) const { };
 };
 
 /* This file provides several macros for printing messages:

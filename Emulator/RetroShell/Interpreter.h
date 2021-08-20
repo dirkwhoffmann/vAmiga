@@ -71,13 +71,26 @@ public:
     
     Interpreter(Amiga &ref);
 
-    const char *getDescription() const override { return "Interpreter"; }
-
 private:
     
-    // Registers the instruction set
+    // Registers the instruction set TODO: MOVE CODE TO _initialize
     void registerInstructions();
 
+    
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
+    const char *getDescription() const override { return "Interpreter"; }
+    void _dump(dump::Category category, std::ostream& os) const override { }
+
+    
+    //
+    // Methods from AmigaComponent
+    //
+    
 private:
     
     void _reset(bool hard) override { }

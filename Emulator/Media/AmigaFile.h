@@ -74,6 +74,15 @@ public:
     
     
     //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
+    void _dump(dump::Category category, std::ostream& os) const override { }
+
+    
+    //
     // Accessing
     //
     

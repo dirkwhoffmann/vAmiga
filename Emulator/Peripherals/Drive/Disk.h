@@ -98,15 +98,21 @@ public:
     Disk(util::SerReader &reader, DiskDiameter type, DiskDensity density) throws;
     ~Disk();
 
+    
+    //
+    // Methods from AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override { return "Disk"; }
+    void _dump(dump::Category category, std::ostream& os) const override;
+    
+    
+    //
+    // Methods from AmigaComponent
+    //
         
-    void dump();
-    
-    
-    //
-    // Serializing
-    //
-
 private:
     
     template <class T>

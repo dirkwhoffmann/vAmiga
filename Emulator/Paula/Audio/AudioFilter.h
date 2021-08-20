@@ -39,32 +39,24 @@ public:
     
     using SubComponent::SubComponent;
     
+    
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override { return "AudioFilter"; }
+    void _dump(dump::Category category, std::ostream& os) const override { }
+
+    
+    //
+    // Methods from AmigaComponent
+    //
     
 private:
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
-    
-    
-    //
-    // Configuring
-    //
-    
-public:
-    
-    // Filter type
-    FilterType getFilterType() const { return type; }
-    void setFilterType(FilterType type);
-    
-    // Sample rate
-    void setSampleRate(double sampleRate);
-    
-    
-    //
-    // Serializing
-    //
-    
-private:
     
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -83,7 +75,21 @@ private:
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-
+    
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    // Filter type
+    FilterType getFilterType() const { return type; }
+    void setFilterType(FilterType type);
+    
+    // Sample rate
+    void setSampleRate(double sampleRate);
+    
 
     //
     // Using

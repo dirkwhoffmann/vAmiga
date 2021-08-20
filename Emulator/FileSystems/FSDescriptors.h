@@ -61,7 +61,7 @@ struct FSDeviceDescriptor : AmigaObject {
     FSDeviceDescriptor(DiskDiameter type, DiskDensity density, FSVolumeType dos = FS_OFS);
 
     const char *getDescription() const override { return "FSLayout"; }
-    void dump();
+    void _dump(dump::Category category, std::ostream& os) const override;
 };
 
 struct FSPartitionDescriptor : AmigaObject {
@@ -88,8 +88,7 @@ struct FSPartitionDescriptor : AmigaObject {
     FSPartitionDescriptor(FSVolumeType dos, isize firstCyl, isize lastCyl, Block root);
 
     const char *getDescription() const override { return "FSPartition"; }
-    
-    void dump();
+    void _dump(dump::Category category, std::ostream& os) const override;
 
     
     //

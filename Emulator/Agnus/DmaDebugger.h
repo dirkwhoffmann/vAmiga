@@ -34,8 +34,21 @@ public:
 
     DmaDebugger(Amiga &ref);
 
+    
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override { return "DmaDebugger"; }
+    void _dump(dump::Category category, std::ostream& os) const override { }
 
+    
+    //
+    // Methods from AmigaComponent
+    //
+    
 private:
     
     void _reset(bool hard) override { }

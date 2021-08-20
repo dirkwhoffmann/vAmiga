@@ -32,17 +32,25 @@ class MsgQueue : public SubComponent {
 public:
     
     using SubComponent::SubComponent;
+    
+    
+    //
+    // Methods from AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override { return "MsgQueue"; }
-
+    void _dump(dump::Category category, std::ostream& os) const override { }
+    
+    
+    //
+    // Methods from AmigaComponent
+    //
+    
 private:
     
     void _reset(bool hard) override { };
-    
-    
-    //
-    // Serializing
-    //
-    
     isize _size() override { return 0; }
     isize _load(const u8 *buffer) override { return 0; }
     isize _save(u8 *buffer) override { return 0; }

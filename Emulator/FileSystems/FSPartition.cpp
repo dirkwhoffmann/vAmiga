@@ -141,19 +141,27 @@ FSPartition::info() const
 }
 
 void
-FSPartition::dump() const
+FSPartition::_dump(dump::Category category, std::ostream& os) const
 {
-    msg("      First cylinder : %zd\n", lowCyl);
-    msg("       Last cylinder : %zd\n", highCyl);
-    msg("         First block : %d\n", firstBlock);
-    msg("          Last block : %d\n", lastBlock);
-    msg("          Root block : %d\n", rootBlock);
-    msg("       Bitmap blocks : ");
-    for (auto& it : bmBlocks) { msg("%d ", it); }
-    msg("\n");
-    msg("Extension blocks : ");
-    for (auto& it : bmExtBlocks) { msg("%d ", it); }
-    msg("\n\n");
+    using namespace util;
+    
+    if (category & dump::State) {
+        
+        os << tab("First cylinder");
+        os << dec(lowCyl) << std::endl;
+        os << tab("Last cylinder");
+        os << dec(highCyl) << std::endl;
+        os << tab("First block");
+        os << dec(firstBlock) << std::endl;
+        os << tab("Last block");
+        os << dec(lastBlock) << std::endl;
+        os << tab("Root block");
+        os << dec(rootBlock) << std::endl;
+        os << tab("Bitmap blocks");
+        for (auto& it : bmBlocks) { os << dec(it) << " "; }
+        os << util::tab("Extension blocks");
+        for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
+    }
 }
 
 FSBlockType

@@ -132,7 +132,7 @@ FSDevice::info()
 }
 
 void
-FSDevice::dump()
+FSDevice::_dump(dump::Category category, std::ostream& os) const
 {
     // Dump all partitions
     for (auto &p : partitions) {
