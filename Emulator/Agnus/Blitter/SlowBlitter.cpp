@@ -947,7 +947,7 @@ Blitter::exec()
     bool desc = bltconDESC();
     
     // Determine if we need the bus
-    if (instr & WRITE_D) {
+    if constexpr ((bool)(instr & WRITE_D)) {
         bus     = !lockD;
         busidle = lockD;
     } else {
@@ -970,18 +970,18 @@ Blitter::exec()
 
     bltpc++;
 
-    if (instr & WRITE_D) {
+    if constexpr ((bool)(instr & WRITE_D)) {
 
         // Only proceed if channel D is unlocked
         if (!lockD) {
 
             agnus.doBlitterDMA(bltdpt, dhold);
 
-            if (BLT_GUARD) {
+            if constexpr (BLT_GUARD) {
                 memguard[bltdpt & agnus.ptrMask & mem.chipMask] = 1;
             }
 
-            if (BLT_CHECKSUM) {
+            if constexpr (BLT_CHECKSUM) {
                 check1 = util::fnv_1a_it32(check1, dhold);
                 check2 = util::fnv_1a_it32(check2, bltdpt);
             }
@@ -995,7 +995,7 @@ Blitter::exec()
         }
     }
 
-    if (instr & FETCH_A) {
+    if constexpr ((bool)(instr & FETCH_A)) {
 
         trace(BLT_DEBUG, "FETCH_A\n");
 
@@ -1009,7 +1009,7 @@ Blitter::exec()
         }
     }
 
-    if (instr & FETCH_B) {
+    if constexpr ((bool)(instr & FETCH_B)) {
 
         trace(BLT_DEBUG, "FETCH_B\n");
 
@@ -1023,7 +1023,7 @@ Blitter::exec()
         }
     }
 
-    if (instr & FETCH_C) {
+    if constexpr ((bool)(instr & FETCH_C)) {
 
         trace(BLT_DEBUG, "FETCH_C\n");
 
@@ -1037,7 +1037,7 @@ Blitter::exec()
         }
     }
 
-    if (instr & HOLD_A) {
+    if constexpr ((bool)(instr & HOLD_A)) {
 
         trace(BLT_DEBUG, "HOLD_A\n");
 
@@ -1054,7 +1054,7 @@ Blitter::exec()
         trace(BLT_DEBUG, "    After shifting A (%d) A = %x\n", bltconASH(), ahold);
     }
 
-    if (instr & HOLD_B) {
+    if constexpr ((bool)(instr & HOLD_B)) {
 
         trace(BLT_DEBUG, "HOLD_B\n");
 
@@ -1069,7 +1069,7 @@ Blitter::exec()
         trace(BLT_DEBUG, "    After shifting B (%d) B = %x\n", bltconBSH(), bhold);
     }
 
-    if (instr & HOLD_D) {
+    if constexpr ((bool)(instr & HOLD_D)) {
 
         trace(BLT_DEBUG, "HOLD_D\n");
 
@@ -1091,7 +1091,7 @@ Blitter::exec()
         
     }
 
-    if (instr & REPEAT) {
+    if constexpr ((bool)(instr & REPEAT)) {
 
         u16 newpc = 0;
 
@@ -1116,7 +1116,7 @@ Blitter::exec()
         }
     }
 
-    if (instr & BLTDONE) {
+    if constexpr ((bool)(instr & BLTDONE)) {
 
         trace(BLT_DEBUG, "BLTDONE\n");
         endBlit();
@@ -1129,7 +1129,7 @@ Blitter::fakeExec()
     bool bus, busidle;
 
     // Determine if we need the bus
-    if (instr & WRITE_D) {
+    if constexpr ((bool)(instr & WRITE_D)) {
         bus     = !lockD;
         busidle = lockD;
     } else {
@@ -1152,14 +1152,14 @@ Blitter::fakeExec()
 
     bltpc++;
 
-    if (instr & (FETCH | WRITE_D)) {
+    if constexpr ((bool)(instr & (FETCH | WRITE_D))) {
 
         // Record some fake data to make the DMA debugger happy
         assert(agnus.pos.h < HPOS_CNT);
         agnus.busValue[agnus.pos.h] = 0x8888;
     }
 
-    if (instr & REPEAT) {
+    if constexpr ((bool)(instr & REPEAT)) {
 
         u16 newpc = 0;
 
@@ -1184,7 +1184,7 @@ Blitter::fakeExec()
         }
     }
 
-    if (instr & BLTDONE) {
+    if constexpr ((bool)(instr & BLTDONE)) {
 
         trace(BLT_DEBUG, "BLTDONE\n");
         endBlit();
