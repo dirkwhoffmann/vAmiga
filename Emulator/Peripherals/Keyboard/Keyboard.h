@@ -10,7 +10,6 @@
 #pragma once
 
 #include "KeyboardTypes.h"
-// #include "Aliases.h"
 #include "SubComponent.h"
 #include "Event.h"
 #include "RingBuffer.h"
@@ -47,42 +46,25 @@ public:
     
     using SubComponent::SubComponent;
     
+    
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override { return "Keyboard"; }
-
+    void _dump(dump::Category category, std::ostream& os) const override;
+    
+    
+    //
+    // Methods from AmigaComponent
+    //
+        
 private:
     
     void _reset(bool hard) override;
 
-    
-    //
-    // Configuring
-    //
-    
-public:
-    
-    static KeyboardConfig getDefaultConfig();
-    const KeyboardConfig &getConfig() const { return config; }
-    void resetConfig() override;
-
-    i64 getConfigItem(Option option) const;
-    void setConfigItem(Option option, i64 value);
-
-        
-    //
-    // Analyzing
-    //
-    
-private:
-    
-    void _dump(dump::Category category, std::ostream& os) const override;
-
-    
-    //
-    // Serialization
-    //
-    
-private:
-    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -101,16 +83,23 @@ private:
         >> queue;
     }
 
-    
-    //
-    // Controlling
-    //
-    
-private:
-    
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    static KeyboardConfig getDefaultConfig();
+    const KeyboardConfig &getConfig() const { return config; }
+    void resetConfig() override;
+
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
 
     
     //

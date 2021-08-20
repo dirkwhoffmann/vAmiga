@@ -180,21 +180,32 @@ public:
     
     Blitter(Amiga& ref);
 
-    const char *getDescription() const override { return "Blitter"; }
+private:
     
     void initFastBlitter();
     void initSlowBlitter();
 
-    void _initialize() override;
-    void _reset(bool hard) override;
-
     
     //
-    // Serializing
+    // Methods From AmigaObject
     //
     
 private:
     
+    const char *getDescription() const override { return "Blitter"; }
+    void _dump(dump::Category category, std::ostream& os) const override;
+
+    
+    //
+    // Methods from AmigaComponent
+    //
+    
+private:
+    
+    void _initialize() override;
+    void _reset(bool hard) override;
+    void _inspect() override;
+
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -286,12 +297,6 @@ public:
 public:
     
     BlitterInfo getInfo() { return AmigaComponent::getInfo(info); }
-
-private:
-    
-    // Methods from HardwareComponent
-    void _inspect() override;
-    void _dump(dump::Category category, std::ostream& os) const override;
 
 
     //

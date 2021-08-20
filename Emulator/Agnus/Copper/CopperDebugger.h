@@ -37,27 +37,25 @@ class CopperDebugger: public SubComponent {
 public:
     
     using SubComponent::SubComponent;
+
+
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override { return "CopperDebugger"; }
-
-private:
-    
-    void _reset(bool hard) override;
-    
-    
-    //
-    // Analyzing
-    //
-
-private:
-
     void _dump(dump::Category category, std::ostream& os) const override;
     
     
     //
-    // Serialization
+    // Methods from AmigaComponent
     //
-    
+
 private:
+    
+    void _reset(bool hard) override;
     
     isize _size() override { return 0; }
     isize _load(const u8 *buffer) override { return 0; }

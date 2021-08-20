@@ -96,31 +96,25 @@ public:
     
     Copper(Amiga& ref);
 
-    const char *getDescription() const override { return "Copper"; }
-    
-    void _reset(bool hard) override;
-
     
     //
-    // Analyzing
+    // Methods From AmigaObject
     //
-
-public:
     
-    // Returns the result of the latest inspection
-    CopperInfo getInfo() { return AmigaComponent::getInfo(info); }
-
 private:
-
-    void _inspect() override;
+    
+    const char *getDescription() const override { return "Copper"; }
     void _dump(dump::Category category, std::ostream& os) const override;
 
     
     //
-    // Serialization
+    // Methods from AmigaComponent
     //
     
 private:
+    
+    void _reset(bool hard) override;
+    void _inspect() override;
     
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -149,6 +143,16 @@ private:
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+
+    
+    //
+    // Analyzing
+    //
+
+public:
+    
+    // Returns the result of the latest inspection
+    CopperInfo getInfo() { return AmigaComponent::getInfo(info); }
 
 
     //

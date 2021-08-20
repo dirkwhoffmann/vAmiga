@@ -44,42 +44,25 @@ public:
     
     Joystick(Amiga& ref, ControlPort& pref);
 
-    const char *getDescription() const override;
     
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
+    const char *getDescription() const override;
+    void _dump(dump::Category category, std::ostream& os) const override;
+    
+    
+    //
+    // Methods from AmigaComponent
+    //
+        
 private:
     
     void _reset(bool hard) override;
 
-    
-    //
-    // Configuring
-    //
-    
-public:
-
-    static JoystickConfig getDefaultConfig();
-    const JoystickConfig &getConfig() const { return config; }
-    void resetConfig() override;
-
-    i64 getConfigItem(Option option) const;
-    void setConfigItem(Option option, i64 value);
-    
-    
-    //
-    // Analyzing
-    //
-    
-private:
-    
-    void _dump(dump::Category category, std::ostream& os) const override;
-
-    
-    //
-    // Serializing
-    //
-    
-private:
-    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -97,6 +80,20 @@ private:
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     isize didLoadFromBuffer(const u8 *buffer) override;
     
+    
+    //
+    // Configuring
+    //
+    
+public:
+
+    static JoystickConfig getDefaultConfig();
+    const JoystickConfig &getConfig() const { return config; }
+    void resetConfig() override;
+
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
+        
 
     //
     // Using the device

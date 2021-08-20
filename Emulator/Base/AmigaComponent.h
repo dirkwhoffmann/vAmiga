@@ -58,12 +58,61 @@ public:
      */
     void reset(bool hard);
     virtual void _reset(bool hard) = 0;
+
+    
+    //
+    // Controlling the state (see Thread class for details)
+    //
+    
+public:
+    
+    virtual bool isPoweredOff() const = 0;
+    virtual bool isPoweredOn() const = 0;
+    virtual bool isPaused() const = 0;
+    virtual bool isRunning() const = 0;
+    
+    virtual void suspend() = 0;
+    virtual void resume() = 0;
+
+    // Throws an exception if the emulator is not ready to power on
+    void isReady() const throws;
+
+protected:
+    
+    void powerOn();
+    void powerOff();
+    void run();
+    void pause();
+    void halt();
+    void warpOn();
+    void warpOff();
+    void debugOn();
+    void debugOff();
+    
+    void powerOnOff(bool value) { value ? powerOn() : powerOff(); }
+    void warpOnOff(bool value) { value ? warpOn() : warpOff(); }
+    void debugOnOff(bool value) { value ? debugOn() : debugOff(); }
+
+private:
+    
+    virtual void _isReady() const throws { }
+    virtual void _powerOn() { }
+    virtual void _powerOff() { }
+    virtual void _run() { }
+    virtual void _pause() { }
+    virtual void _halt() { }
+    virtual void _warpOn() { }
+    virtual void _warpOff() { }
+    virtual void _debugOn() { }
+    virtual void _debugOff() { }
     
     
     //
     // Configuring
     //
             
+public:
+    
     // Initializes all configuration items with their default values
     virtual void resetConfig() { };
 
@@ -123,51 +172,6 @@ public:
     virtual isize didLoadFromBuffer(const u8 *buf) { return 0; }
     virtual isize willSaveToBuffer(u8 *buf) const {return 0; }
     virtual isize didSaveToBuffer(u8 *buf) const { return 0; }
-    
-    
-    //
-    // Controlling the state (see Thread class for details)
-    //
-    
-public:
-    
-    virtual bool isPoweredOff() const = 0;
-    virtual bool isPoweredOn() const = 0;
-    virtual bool isPaused() const = 0;
-    virtual bool isRunning() const = 0;
-    
-    virtual void suspend() = 0;
-    virtual void resume() = 0;
-
-    // Throws an exception if the emulator is not ready to power on
-    void isReady() const throws;
-
-protected:
-    
-    void powerOn();
-    void powerOff();
-    void run();
-    void pause();
-    void halt();
-    void warpOn();
-    void warpOff();
-    void debugOn();
-    void debugOff();
-    
-    void powerOnOff(bool value) { value ? powerOn() : powerOff(); }
-    void warpOnOff(bool value) { value ? warpOn() : warpOff(); }
-    void debugOnOff(bool value) { value ? debugOn() : debugOff(); }
-
-    virtual void _isReady() const throws { }
-    virtual void _powerOn() { }
-    virtual void _powerOff() { }
-    virtual void _run() { }
-    virtual void _pause() { }
-    virtual void _halt() { }
-    virtual void _warpOn() { }
-    virtual void _warpOff() { }
-    virtual void _debugOn() { }
-    virtual void _debugOff() { }
 };
 
 //

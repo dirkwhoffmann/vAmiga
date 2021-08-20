@@ -81,48 +81,26 @@ public:
 
     Drive(Amiga& ref, isize nr);
     
+    
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override;
-    long getNr() { return nr; }
-
+    void _dump(dump::Category category, std::ostream& os) const override;
+    
+    
+    //
+    // Methods from AmigaComponent
+    //
+    
 private:
     
     void _reset(bool hard) override;
-
-    
-    //
-    // Configuring
-    //
-    
-public:
-    
-    static DriveConfig getDefaultConfig(isize nr);
-    const DriveConfig &getConfig() const { return config; }
-    void resetConfig() override;
-    
-    i64 getConfigItem(Option option) const;
-    void setConfigItem(Option option, i64 value);
-    
-    
-    //
-    // Analyzing
-    //
-
-public:
-    
-    DriveInfo getInfo() { return AmigaComponent::getInfo(info); }
-
-private:
-    
     void _inspect() override;
-    void _dump(dump::Category category, std::ostream& os) const override;
-
     
-    //
-    // Serializing
-    //
-
-private:
-
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -161,6 +139,30 @@ private:
     isize _load(const u8 *buffer) override;
     isize _save(u8 *buffer) override;
 
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    static DriveConfig getDefaultConfig(isize nr);
+    const DriveConfig &getConfig() const { return config; }
+    void resetConfig() override;
+    
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
+    
+    
+    //
+    // Analyzing
+    //
+
+public:
+    
+    long getNr() { return nr; }
+    DriveInfo getInfo() { return AmigaComponent::getInfo(info); }
+ 
 
     //
     // Accessing

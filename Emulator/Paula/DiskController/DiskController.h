@@ -101,55 +101,20 @@ public:
     
     using SubComponent::SubComponent;
 
+    
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override { return "DiskController"; }
+    void _dump(dump::Category category, std::ostream& os) const override;
     
 private:
     
     void _reset(bool hard) override;
-    
-    
-    //
-    // Configuring
-    //
-    
-public:
-    
-    static DiskControllerConfig getDefaultConfig();
-    const DiskControllerConfig &getConfig() const { return config; }
-    void resetConfig() override;
-    
-    bool turboMode() const { return config.speed == -1; }
-
-    i64 getConfigItem(Option option) const;
-    i64 getConfigItem(Option option, long id) const;
-    
-    void setConfigItem(Option option, i64 value);
-    void setConfigItem(Option option, long id, i64 value);
-
-    const string &getSearchPath(isize dfn) const;
-    void setSearchPath(const string &path, isize dfn);
-    void setSearchPath(const string &path);
-
-    
-    //
-    // Analyzing
-    //
-    
-public:
-    
-    DiskControllerInfo getInfo() { return AmigaComponent::getInfo(info); }
-    
-private:
-    
     void _inspect() override;
-    void _dump(dump::Category category, std::ostream& os) const override;
-
-    
-    //
-    // Serializing
-    //
-    
-private:
     
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -183,6 +148,38 @@ private:
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    static DiskControllerConfig getDefaultConfig();
+    const DiskControllerConfig &getConfig() const { return config; }
+    void resetConfig() override;
+    
+    bool turboMode() const { return config.speed == -1; }
+
+    i64 getConfigItem(Option option) const;
+    i64 getConfigItem(Option option, long id) const;
+    
+    void setConfigItem(Option option, i64 value);
+    void setConfigItem(Option option, long id, i64 value);
+
+    const string &getSearchPath(isize dfn) const;
+    void setSearchPath(const string &path, isize dfn);
+    void setSearchPath(const string &path);
+
+    
+    //
+    // Analyzing
+    //
+    
+public:
+    
+    DiskControllerInfo getInfo() { return AmigaComponent::getInfo(info); }
 
 
     //

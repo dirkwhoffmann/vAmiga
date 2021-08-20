@@ -55,33 +55,26 @@ public:
     
     ControlPort(Amiga& ref, PortNr nr);
 
+    
+    //
+    // Methods from AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override;
+    void _dump(dump::Category category, std::ostream& os) const override;
+    
+    
+    //
+    // Methods from AmigaComponent
+    //
     
 private:
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
-
-    
-    //
-    // Configuring
-    //
-
-public:
-    
-    ControlPortInfo getInfo() { return AmigaComponent::getInfo(info); }
-
-private:
-    
     void _inspect() override;
-    void _dump(dump::Category category, std::ostream& os) const override;
 
-    
-    //
-    // Serializing
-    //
-    
-private:
-    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -101,6 +94,15 @@ private:
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+
+    
+    //
+    // Analyzing
+    //
+
+public:
+    
+    ControlPortInfo getInfo() { return AmigaComponent::getInfo(info); }
 
     
     //

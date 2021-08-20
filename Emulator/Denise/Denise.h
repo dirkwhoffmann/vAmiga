@@ -274,51 +274,26 @@ public:
 
     Denise(Amiga& ref);
 
+    
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override { return "Denise"; }
-
+    void _dump(dump::Category category, std::ostream& os) const override;
+    
+    
+    //
+    // Methods from AmigaComponent
+    //
+    
 private:
     
     void _initialize() override;
     void _reset(bool hard) override;
-
-    
-    //
-    // Configuring
-    //
-
-public:
-    
-    static DeniseConfig getDefaultConfig();
-    const DeniseConfig &getConfig() const { return config; }
-    void resetConfig() override;
-
-    i64 getConfigItem(Option option) const;
-    void setConfigItem(Option option, i64 value);
-    
-    
-    //
-    // Analyzing
-    //
-
-public:
-    
-    DeniseInfo getInfo() { return AmigaComponent::getInfo(info); }
-    SpriteInfo getSpriteInfo(isize nr);
-    u16 getSpriteHeight(isize nr) const { return latchedSpriteInfo[nr].height; }
-    u16 getSpriteColor(isize nr, isize reg) const { return latchedSpriteInfo[nr].colors[reg]; }
-    u64 getSpriteData(isize nr, isize line) const { return latchedSpriteData[nr][line]; }
-    
-private:
-    
     void _inspect() override;
-    void _dump(dump::Category category, std::ostream& os) const override;
-
-    
-    //
-    // Serializing
-    //
-    
-private:
     
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -379,6 +354,33 @@ private:
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    
+    
+    //
+    // Configuring
+    //
+
+public:
+    
+    static DeniseConfig getDefaultConfig();
+    const DeniseConfig &getConfig() const { return config; }
+    void resetConfig() override;
+
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
+    
+    
+    //
+    // Analyzing
+    //
+
+public:
+    
+    DeniseInfo getInfo() { return AmigaComponent::getInfo(info); }
+    SpriteInfo getSpriteInfo(isize nr);
+    u16 getSpriteHeight(isize nr) const { return latchedSpriteInfo[nr].height; }
+    u16 getSpriteColor(isize nr, isize reg) const { return latchedSpriteInfo[nr].colors[reg]; }
+    u64 getSpriteData(isize nr, isize line) const { return latchedSpriteData[nr][line]; }
 
     
     //

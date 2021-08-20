@@ -53,13 +53,6 @@ private:
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
 
-    
-    //
-    // Serializing
-    //
-
-public:
-    
     template <class T>
     void applyToPersistentItems(T& worker)
     {

@@ -263,34 +263,23 @@ public:
     bool isCIAA() const { return nr == 0; }
     bool isCIAB() const { return nr == 1; }
 
+    
+    //
+    // Methods from AmigaObject
+    //
+    
 private:
     
+    void _dump(dump::Category category, std::ostream& os) const override;
+    
+    
+    //
+    // Methods from AmigaComponent
+    //
+
     void _initialize() override;
     void _reset(bool hard) override;
-    
-    
-    //
-    // Configuring
-    //
-    
-public:
-    
-    static CIAConfig getDefaultConfig();
-    const CIAConfig &getConfig() const { return config; }
-    void resetConfig() override;
-    
-    i64 getConfigItem(Option option) const;
-    void setConfigItem(Option option, i64 value);
-    
-    bool getEClockSyncing() const { return config.eClockSyncing; }
 
-    
-    //
-    // Serializing
-    //
-    
-private:
-    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -349,6 +338,22 @@ private:
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    static CIAConfig getDefaultConfig();
+    const CIAConfig &getConfig() const { return config; }
+    void resetConfig() override;
+    
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
+    
+    bool getEClockSyncing() const { return config.eClockSyncing; }
 
     
     //
@@ -362,7 +367,6 @@ public:
 protected:
     
     void _inspect() override;
-    void _dump(dump::Category category, std::ostream& os) const override;
 
     
     //

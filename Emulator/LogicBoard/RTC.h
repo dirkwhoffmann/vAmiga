@@ -48,43 +48,23 @@ public:
     
     using SubComponent::SubComponent;
     
+    //
+    // Methods from AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override { return "RTC"; }
-
-private:
-    
-    void _reset(bool hard) override;
-
-    
-    //
-    // Configuring
-    //
-    
-public:
-    
-    static RTCConfig getDefaultConfig();
-    const RTCConfig &getConfig() const { return config; }
-    void resetConfig() override;
-    
-    i64 getConfigItem(Option option) const;
-    void setConfigItem(Option option, i64 value);
-    
-    bool isPresent() const { return config.model != RTC_NONE; }
-
-    
-    //
-    // Analyzing
-    //
-    
-private:
-    
     void _dump(dump::Category category, std::ostream& os) const override;
 
     
     //
-    // Serializing
+    // Methods from AmigaComponent
     //
     
 private:
+    
+    void _reset(bool hard) override;
     
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -115,7 +95,23 @@ private:
 
     
     //
-    // Accessing the stored time
+    // Configuring
+    //
+    
+public:
+    
+    static RTCConfig getDefaultConfig();
+    const RTCConfig &getConfig() const { return config; }
+    void resetConfig() override;
+    
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
+    
+    bool isPresent() const { return config.model != RTC_NONE; }
+
+    
+    //
+    // Accessing time
     //
     
     // Returns the current value of the real-time clock

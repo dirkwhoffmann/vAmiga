@@ -390,9 +390,7 @@ public:
 public:
     
     Agnus(Amiga& ref);
-
-    const char *getDescription() const override { return "Agnus"; }
-
+    
 private:
     
     void initLookupTables();
@@ -400,85 +398,27 @@ private:
     void initBplEventTableHires();
     void initDasEventTable();
 
+    
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
+    const char *getDescription() const override { return "Agnus"; }
+    void _dump(dump::Category category, std::ostream& os) const override;
+
+    
+    //
+    // Methods from AmigaComponent
+    //
+    
 private:
     
     void _initialize() override;
     void _reset(bool hard) override;
-    
-    
-    //
-    // Configuring
-    //
-    
-public:
-    
-    static AgnusConfig getDefaultConfig();
-    const AgnusConfig &getConfig() const { return config; }
-    void resetConfig() override;
-    
-    i64 getConfigItem(Option option) const;
-    void setConfigItem(Option option, i64 value);
-    
-    bool isOCS() const { return config.revision == AGNUS_OCS; }
-    bool isECS() const { return config.revision != AGNUS_OCS; }
-    
-    // Returns the chip identification bits of this Agnus (shows up in VPOSR)
-    i16 idBits();
-    
-    // Returns the maximum amout of Chip Ram in KB this Agnus can handle
-    isize chipRamLimit();
-        
-    // Returns the line in which the VERTB interrupt gets triggered
-    int vStrobeLine() { return isECS() || MIMIC_UAE ? 0 : 1; }
-    
-    // Returns the connected bits in DDFSTRT / DDFSTOP
-    u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }
-    
-    /* Returns true if Agnus is able to access to the Slow Ram area. The ECS
-     * revision of Agnus has a special feature that makes Slow Ram accessible
-     * for DMA. In the 512 MB Chip Ram + 512 Slow Ram configuration, the Slow
-     * Ram is mapped into the second Chip Ram segment. The OCS Agnus does not
-     * have this feature. It has access to Chip Ram, only.
-     */
-    bool slowRamIsMirroredIn();
-        
-    
-    //
-    // Analyzing
-    //
-    
-public:
-    
-    AgnusInfo getInfo() { return AmigaComponent::getInfo(info); }
-    EventInfo getEventInfo();
-    EventSlotInfo getEventSlotInfo(isize nr);
-    
-private:
-    
     void _inspect() override;
-    void _dump(dump::Category category, std::ostream& os) const override;
-    
-    void inspectEvents(EventInfo &info) const;
-    void inspectEvents() { synchronized { inspectEvents(eventInfo); } }
-    void inspectEventSlot(EventInfo &info, EventSlot nr) const;
-    void inspectEventSlot(EventSlot nr) { inspectEventSlot(eventInfo, nr); }
 
-public:
-    
-    const AgnusStats &getStats() { return stats; }
-    
-private:
-    
-    void clearStats();
-    void updateStats();
-    
-    
-    //
-    // Serializing
-    //
-    
-private:
-    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -570,7 +510,71 @@ private:
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    static AgnusConfig getDefaultConfig();
+    const AgnusConfig &getConfig() const { return config; }
+    void resetConfig() override;
+    
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
+    
+    bool isOCS() const { return config.revision == AGNUS_OCS; }
+    bool isECS() const { return config.revision != AGNUS_OCS; }
+    
+    // Returns the chip identification bits of this Agnus (shows up in VPOSR)
+    i16 idBits();
+    
+    // Returns the maximum amout of Chip Ram in KB this Agnus can handle
+    isize chipRamLimit();
+        
+    // Returns the line in which the VERTB interrupt gets triggered
+    int vStrobeLine() { return isECS() || MIMIC_UAE ? 0 : 1; }
+    
+    // Returns the connected bits in DDFSTRT / DDFSTOP
+    u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }
+    
+    /* Returns true if Agnus is able to access to the Slow Ram area. The ECS
+     * revision of Agnus has a special feature that makes Slow Ram accessible
+     * for DMA. In the 512 MB Chip Ram + 512 Slow Ram configuration, the Slow
+     * Ram is mapped into the second Chip Ram segment. The OCS Agnus does not
+     * have this feature. It has access to Chip Ram, only.
+     */
+    bool slowRamIsMirroredIn();
+        
+    
+    //
+    // Analyzing
+    //
+    
+public:
+    
+    AgnusInfo getInfo() { return AmigaComponent::getInfo(info); }
+    EventInfo getEventInfo();
+    EventSlotInfo getEventSlotInfo(isize nr);
+    
+private:
+        
+    void inspectEvents(EventInfo &info) const;
+    void inspectEvents() { synchronized { inspectEvents(eventInfo); } }
+    void inspectEventSlot(EventInfo &info, EventSlot nr) const;
+    void inspectEventSlot(EventSlot nr) { inspectEventSlot(eventInfo, nr); }
 
+public:
+    
+    const AgnusStats &getStats() { return stats; }
+    
+private:
+    
+    void clearStats();
+    void updateStats();
+    
 
     //
     // Examining the current frame

@@ -76,27 +76,25 @@ public:
 
     TOD(CIA *cia, Amiga& ref);
 
-    const char *getDescription() const override;
-
+    
+    //
+    // Methods From AmigaObject
+    //
+    
 private:
     
-    void _reset(bool hard) override;
-
-
-    //
-    // Analyzing
-    //
-    
-    CounterInfo getInfo() { return AmigaComponent::getInfo(info); }
-
-    void _inspect() override;
+    const char *getDescription() const override;
     void _dump(dump::Category category, std::ostream& os) const override;
 
     
     //
-    // Serializing
+    // Methods from AmigaComponent
     //
     
+private:
+    
+    void _reset(bool hard) override;
+
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -122,7 +120,18 @@ private:
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
+
+    //
+    // Analyzing
+    //
     
+public:
+    
+    CounterInfo getInfo() { return AmigaComponent::getInfo(info); }
+
+    void _inspect() override;
+
+ 
     //
     // Accessing
     //

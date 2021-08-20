@@ -97,57 +97,27 @@ public:
     Muxer(Amiga& ref);
     ~Muxer();
 
-    const char *getDescription() const override { return "Muxer"; }
-
     // Resets the output buffer and the two audio filters
     void clear();
 
+
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
+    const char *getDescription() const override { return "Muxer"; }
+    void _dump(dump::Category category, std::ostream& os) const override;
+    
+    
+    //
+    // Methods from AmigaComponent
+    //
+    
 private:
     
     void _reset(bool hard) override;
-    
-    
-    
-    //
-    // Configuring
-    //
-    
-public:
-    
-    static MuxerConfig getDefaultConfig();
-    const MuxerConfig &getConfig() const { return config; }
-    void resetConfig() override;
-    
-    i64 getConfigItem(Option option) const;
-    i64 getConfigItem(Option option, long id) const;
-    void setConfigItem(Option option, i64 value);
-    void setConfigItem(Option option, long id, i64 value);
-
-    bool isMuted() const { return config.volL == 0 && config.volR == 0; }
-
-    double getSampleRate() const { return sampleRate; }
-    void setSampleRate(double hz);
-
-
-    //
-    // Analyzing
-    //
-    
-public:
-    
-    // Returns information about the gathered statistical information
-    const MuxerStats &getStats() const { return stats; }
-    
-private:
-    
-    void _dump(dump::Category category, std::ostream& os) const override;
-
-        
-    //
-    // Serializing
-    //
-    
-private:
     
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -180,7 +150,39 @@ private:
     
     
     //
-    // Controlling the volume
+    // Configuring
+    //
+    
+public:
+    
+    static MuxerConfig getDefaultConfig();
+    const MuxerConfig &getConfig() const { return config; }
+    void resetConfig() override;
+    
+    i64 getConfigItem(Option option) const;
+    i64 getConfigItem(Option option, long id) const;
+    void setConfigItem(Option option, i64 value);
+    void setConfigItem(Option option, long id, i64 value);
+
+    double getSampleRate() const { return sampleRate; }
+    void setSampleRate(double hz);
+
+
+    //
+    // Analyzing
+    //
+    
+public:
+    
+    // Returns information about the gathered statistical information
+    const MuxerStats &getStats() const { return stats; }
+
+    // Returns true if the output volume is zero
+    bool isMuted() const { return config.volL == 0 && config.volR == 0; }
+
+        
+    //
+    // Controlling volume
     //
     
 public:
