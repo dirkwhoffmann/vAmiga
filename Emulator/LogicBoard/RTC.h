@@ -17,8 +17,8 @@ class RTC : public SubComponent {
     // Current configuration
     RTCConfig config = {};
 
-    /* The currently stored time. The RTC stores the time as a difference to
-     * the time provided by the host machine. I.e.:
+    /* The current time of the real-time clock. The RTC stores the time as a
+     * difference to the time provided by the host machine. I.e.:
      *
      *     Time of the real-time clock = Time of the host machine + timeDiff
      *
@@ -30,7 +30,7 @@ class RTC : public SubComponent {
     // The RTC registers
     u8 reg[4][16];
     
-    // The last call to function getTime()
+    // Time stamp of the last call to function getTime()
     Cycle lastCall;
 
     // Remembers the most recent query of the host machine's real-time clock

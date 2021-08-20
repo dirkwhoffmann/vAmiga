@@ -19,9 +19,7 @@
 enum_long(SPD)
 {
     SPD_NONE,
-    SPD_LOOPBACK,
-    
-    SPD_COUNT
+    SPD_LOOPBACK
 };
 typedef SPD SerialPortDevice;
 
@@ -30,7 +28,7 @@ struct SerialPortDeviceEnum : util::Reflection<SerialPortDeviceEnum, SerialPortD
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < SPD_COUNT;
+        return (unsigned long)value <= SPD_LOOPBACK;
     }
     
     static const char *prefix() { return "SPD"; }
@@ -40,7 +38,6 @@ struct SerialPortDeviceEnum : util::Reflection<SerialPortDeviceEnum, SerialPortD
                 
             case SPD_NONE:      return "NONE";
             case SPD_LOOPBACK:  return "LOOPBACK";
-            case SPD_COUNT:     return "???";
         }
         return "???";
     }

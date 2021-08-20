@@ -296,8 +296,7 @@ RTC::time2registersRicoh(tm *t)
 void
 RTC::registers2time()
 {
-    tm t;
-    memset(&t, 0, sizeof(t));
+    tm t = { };
     
     // Read the registers
     config.model == RTC_RICOH ? registers2timeRicoh(&t) : registers2timeOki(&t);

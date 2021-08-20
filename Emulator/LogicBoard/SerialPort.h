@@ -17,9 +17,9 @@
 #define RTS_MASK (1 << 4)
 #define CTS_MASK (1 << 5)
 #define DSR_MASK (1 << 6)
-#define CD_MASK (1 << 8)
+#define CD_MASK  (1 << 8)
 #define DTR_MASK (1 << 20)
-#define RI_MASK (1 << 22)
+#define RI_MASK  (1 << 22)
 
 class SerialPort : public SubComponent {
 
@@ -123,18 +123,18 @@ public:
     bool getRTS() const { return getPin(4); }
     bool getCTS() const { return getPin(5); }
     bool getDSR() const { return getPin(6); }
-    bool getCD() const { return getPin(8); }
+    bool getCD () const { return getPin(8); }
     bool getDTR() const { return getPin(20); }
-    bool getRI() const { return getPin(22); }
+    bool getRI () const { return getPin(22); }
 
     void setTXD(bool value) { setPin(2, value); }
     void setRXD(bool value) { setPin(3, value); }
     void setRTS(bool value) { setPin(4, value); }
     void setCTS(bool value) { setPin(5, value); }
     void setDSR(bool value) { setPin(6, value); }
-    void setCD(bool value) { setPin(8, value); }
+    void setCD (bool value) { setPin(8, value); }
     void setDTR(bool value) { setPin(20, value); }
-    void setRI(bool value) { setPin(22, value); }
+    void setRI (bool value) { setPin(22, value); }
 
 private:
 

@@ -35,7 +35,7 @@ SerialPort::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_SERIAL_DEVICE: return (long)config.device;
+        case OPT_SERIAL_DEVICE:  return (i64)config.device;
         
         default:
             assert(false);
@@ -52,7 +52,6 @@ SerialPort::setConfigItem(Option option, i64 value)
             
             if (!SerialPortDeviceEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVARG, SerialPortDeviceEnum::keyList());
-                return;
             }
             
             config.device = (SerialPortDevice)value;
@@ -142,6 +141,6 @@ SerialPort::setPort(u32 mask, bool value)
     // Change the port pins
     if (value) port |= mask; else port &= ~mask;
 
-    // Let the UART know if RXD has changed
+    // Inform the UART if RXD has changed
     if ((oldPort ^ port) & RXD_MASK) uart.rxdHasChanged(value);
 }

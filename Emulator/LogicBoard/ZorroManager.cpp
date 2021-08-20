@@ -15,9 +15,9 @@ u8
 ZorroManager::peekFastRamDevice(u32 addr) const
 {
     trace(FAS_DEBUG, "peekFastRamDevice(%X)\n", addr & 0xFFFF);
-    // debug(FAS_DEBUG, "fastRamSize = %d\n", mem.fastRamSize());
 
-    if (fastRamConf || mem.fastRamSize() == 0) return 0xF; // Already configured
+    // Only proceed if the device has not been configured yet
+    if (fastRamConf || mem.fastRamSize() == 0) return 0xF;
     
     /* Register pair 00/02 (er_Type)
      *
@@ -43,6 +43,7 @@ ZorroManager::peekFastRamDevice(u32 addr) const
     u8 erTypeLo = 0b0000;
     
     switch (mem.fastRamSize()) {
+            
         case KB(64):  erTypeLo = 0b001; break;
         case KB(128): erTypeLo = 0b010; break;
         case KB(256): erTypeLo = 0b011; break;
@@ -51,6 +52,7 @@ ZorroManager::peekFastRamDevice(u32 addr) const
         case MB(2):   erTypeLo = 0b110; break;
         case MB(4):   erTypeLo = 0b111; break;
         case MB(8):   erTypeLo = 0b000; break;
+            
         default: assert(false);
     }
     
@@ -163,33 +165,32 @@ void
 ZorroManager::pokeFastRamDevice(u32 addr, u8 value)
 {
     if (mem.fastRamSize() == 0) return;
-    
-    // debug("pokeFastRamDevice(%X, %X)\n", addr, value);
-    
+        
     switch (addr & 0xFFFF) {
             
         case 0x44: // ec_BaseAddress (A31 - A28, 0xX---0000, Zorro III)
+            
             return;
             
         case 0x46: // ec_BaseAddress (A27 - A24, 0x-X--0000, Zorro III)
+            
             return;
             
         case 0x48: // ec_BaseAddress (A23 - A20, 0x--X-0000)
+            
             fastRamBaseAddr |= (value & 0xF0) << 16;
             trace(FAS_DEBUG, "Zorro II card mapped to $%x\n", fastRamBaseAddr);
             
-            /* "Note that writing to register 48 actually configures the board for
-             *  both Zorro II and Zorro III boards in the Zorro II configuration
-             *  block." [HRM 3rd]
+            /* "Note that writing to register 48 actually configures the board
+             *  for both Zorro II and Zorro III boards in the Zorro II
+             *  configuration block." [HRM 3rd]
              */
             fastRamConf = 1;
             return;
             
         case 0x4A: // ec_BaseAddress (A19 - A16, 0x---X0000)
-            fastRamBaseAddr = (value & 0xF0) << 12;
-            return;
             
-        default:
+            fastRamBaseAddr = (value & 0xF0) << 12;
             return;
     }
 }

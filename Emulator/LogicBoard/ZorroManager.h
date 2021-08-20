@@ -22,7 +22,7 @@ class ZorroManager : public SubComponent {
     // Current configuration state (0 = unconfigured)
     u8 fastRamConf;
     
-    // Base address of the Fast Ram (provided by Kickstart)
+    // Fast Ram base address (provided by Kickstart)
     u32 fastRamBaseAddr;
     
     

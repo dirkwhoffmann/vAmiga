@@ -44,7 +44,7 @@ ControlPort::_inspect()
         
         info.potgo = paula.potgo;
         info.potgor = paula.peekPOTGOR();
-        info.potdat = (nr == 1) ? paula.peekPOTxDAT<0>() : paula.peekPOTxDAT<1>();
+        info.potdat = (nr == PORT_1) ? paula.peekPOTxDAT<0>() : paula.peekPOTxDAT<1>();
     }
 }
 
@@ -68,8 +68,9 @@ ControlPort::_dump(dump::Category category, std::ostream& os) const
 u16
 ControlPort::joydat()
 {
-    // Update the mouse counters first if a mouse is connected
+    // Update the mouse counters if a mouse is connected
     if (device == CPD_MOUSE) {
+        
         mouseCounterX += mouse.getDeltaX();
         mouseCounterY += mouse.getDeltaY();
     }
@@ -78,12 +79,12 @@ ControlPort::joydat()
     u16 xxxxxx__xxxxxx__ = HI_LO(mouseCounterY & 0xFC, mouseCounterX & 0xFC);
     u16 ______xx______xx = 0;
 
-    if (device == CPD_MOUSE)
+    if (device == CPD_MOUSE) {
         ______xx______xx = HI_LO(mouseCounterY & 0x03, mouseCounterX & 0x03);
-
-    if (device == CPD_JOYSTICK)
+    }
+    if (device == CPD_JOYSTICK) {
         ______xx______xx = joystick.joydat();
-
+    }
     return xxxxxx__xxxxxx__ | ______xx______xx;
 }
 
@@ -109,10 +110,12 @@ void
 ControlPort::changePra(u8 &pra) const
 {
     if (device == CPD_MOUSE) {
+        
         mouse.changePra(pra);
         return;
     }
     if (device == CPD_JOYSTICK) {
+        
         joystick.changePra(pra);
         return;
     }

@@ -47,9 +47,7 @@ enum_long(CPD)
 {
     CPD_NONE,
     CPD_MOUSE,
-    CPD_JOYSTICK,
-    
-    CPD_COUNT
+    CPD_JOYSTICK
 };
 typedef CPD ControlPortDevice;
 
@@ -58,7 +56,7 @@ struct ControlPortDeviceEnum : util::Reflection<ControlPortDeviceEnum, ControlPo
     
     static bool isValid(long value)
     {
-        return (unsigned long)value <  CPD_COUNT;
+        return (unsigned long)value <= CPD_JOYSTICK;
     }
     
     static const char *prefix() { return "CPD"; }
@@ -69,7 +67,6 @@ struct ControlPortDeviceEnum : util::Reflection<ControlPortDeviceEnum, ControlPo
             case CPD_NONE:      return "NONE";
             case CPD_MOUSE:     return "MOUSE";
             case CPD_JOYSTICK:  return "JOYSTICK";
-            case CPD_COUNT:     return "???";
         }
         return "???";
     }

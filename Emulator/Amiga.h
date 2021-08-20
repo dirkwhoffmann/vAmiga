@@ -118,16 +118,67 @@ public:
     Amiga();
     ~Amiga();
 
-    const char *getDescription() const override { return "Amiga"; }
-    void prefix() const override;
+    
+    //
+    // Methods from AmigaObject
+    //
+    
+public:
 
-    void reset(bool hard);
-    void hardReset() { reset(true); }
-    void softReset() { reset(false); }
+    void prefix() const override;
 
 private:
     
+    const char *getDescription() const override { return "Amiga"; }
+    void _dump(dump::Category category, std::ostream& os) const override;
+
+    
+    //
+    // Methods from AmigaComponent
+    //
+    
+public:
+    
+    void reset(bool hard);
+    void hardReset() { reset(true); }
+    void softReset() { reset(false); }
+    
+private:
+    
     void _reset(bool hard) override;
+    void _powerOn() override;
+    void _powerOff() override;
+    void _run() override;
+    void _pause() override;
+    void _halt() override;
+    void _warpOn() override;
+    void _warpOff() override;
+    void _inspect() override;
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+        
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker, bool hard = true)
+    {
+        
+    }
+
+    isize _size() override { COMPUTE_SNAPSHOT_SIZE }
+    isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    
+    
+    //
+    // Methods from Thread
+    //
+    
+private:
+    
+    void execute() override;
 
     
     //
@@ -143,12 +194,6 @@ public:
     // Sets a single configuration item
     void configure(Option option, i64 value) throws;
     void configure(Option option, long id, i64 value) throws;
-
-    // Sets a single configuration item without informing the GUI
-    /*
-    void _configure(Option option, i64 value) throws;
-    void _configure(Option option, long id, i64 value) throws;
-    */
     
     // Configures the Amiga with a predefined set of options
     void configure(ConfigScheme scheme);
@@ -173,62 +218,14 @@ public:
     InspectionTarget getInspectionTarget() const;
     void setInspectionTarget(InspectionTarget target, Cycle trigger = 0);
     void removeInspectionTarget() { setInspectionTarget(INSPECTION_NONE); }
-    
-private:
-    
-    void _inspect() override;
-    void _dump(dump::Category category, std::ostream& os) const override;
-    
         
-    //
-    // Serializing
-    //
-    
-private:
-    
-    template <class T>
-    void applyToPersistentItems(T& worker)
-    {
         
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker, bool hard = true)
-    {
-        
-    }
-
-    isize _size() override { COMPUTE_SNAPSHOT_SIZE }
-    isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-
-    
-    //
-    // Controlling
-    //
-    
-private:
-    
-    void _powerOn() override;
-    void _powerOff() override;
-    void _run() override;
-    void _pause() override;
-    void _halt() override;
-    void _warpOn() override;
-    void _warpOff() override;
-
-    
     //
     // Running the emulator
     //
-    
-private:
-    
-    // Main execution method (from Thread class)
-    void execute() override;
-        
+            
 public:
-                    
+        
     /* Sets or clears a flag for controlling the run loop. The functions are
      * thread-safe and can be called safely from outside the emulator thread.
      */
