@@ -632,7 +632,7 @@ struct HardwareDefaults {
         
         agnusRev: .ECS_1MB,
         deniseRev: .OCS,
-        ciaRev: ._8520_DIP,
+        ciaRev: .MOS_8520_DIP,
         realTimeClock: .OKI,
 
         filterType: .BUTTERWORTH,
@@ -651,7 +651,7 @@ struct HardwareDefaults {
         
         agnusRev: .OCS,
         deniseRev: .OCS,
-        ciaRev: ._8520_DIP,
+        ciaRev: .MOS_8520_DIP,
         realTimeClock: .NONE,
         
         filterType: .BUTTERWORTH,
@@ -670,7 +670,7 @@ struct HardwareDefaults {
         
         agnusRev: .ECS_2MB,
         deniseRev: .OCS,
-        ciaRev: ._8520_DIP,
+        ciaRev: .MOS_8520_DIP,
         realTimeClock: .OKI,
         
         filterType: .BUTTERWORTH,

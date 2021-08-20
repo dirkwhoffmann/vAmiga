@@ -62,7 +62,7 @@ CIA::getDefaultConfig()
 {
     CIAConfig defaults;
     
-    defaults.revision = CIA_8520_DIP;
+    defaults.revision = CIA_MOS_8520_DIP;
     defaults.todBug = true;
     defaults.eClockSyncing = true;
 

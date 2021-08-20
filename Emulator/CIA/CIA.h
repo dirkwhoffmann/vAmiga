@@ -13,64 +13,59 @@
 #include "SubComponent.h"
 #include "TOD.h"
 
-#define CIACountA0     (1ULL << 0) // Decrements timer A
-#define CIACountA1     (1ULL << 1)
-#define CIACountA2     (1ULL << 2)
-#define CIACountA3     (1ULL << 3)
-#define CIACountB0     (1ULL << 4) // Decrements timer B
-#define CIACountB1     (1ULL << 5)
-#define CIACountB2     (1ULL << 6)
-#define CIACountB3     (1ULL << 7)
-#define CIALoadA0      (1ULL << 8) // Loads timer A
-#define CIALoadA1      (1ULL << 9)
-#define CIALoadA2      (1ULL << 10)
-#define CIALoadB0      (1ULL << 11) // Loads timer B
-#define CIALoadB1      (1ULL << 12)
-#define CIALoadB2      (1ULL << 13)
-#define CIAPB6Low0     (1ULL << 14) // Sets pin PB6 low
-#define CIAPB6Low1     (1ULL << 15)
-#define CIAPB7Low0     (1ULL << 16) // Sets pin PB7 low
-#define CIAPB7Low1     (1ULL << 17)
-#define CIASetInt0     (1ULL << 18) // Triggers an interrupt
-#define CIASetInt1     (1ULL << 19)
-#define CIAClearInt0   (1ULL << 20) // Releases the interrupt line
-#define CIAOneShotA0   (1ULL << 21)
-#define CIAOneShotB0   (1ULL << 22)
-#define CIAReadIcr0    (1ULL << 23) // Indicates that ICR was read recently
-#define CIAReadIcr1    (1ULL << 24)
-#define CIAClearIcr0   (1ULL << 25) // Clears bit 8 in ICR register
-#define CIAClearIcr1   (1ULL << 26)
-#define CIAClearIcr2   (1ULL << 27)
-#define CIAAckIcr0     (1ULL << 28) // Clears bit 0 - 7 in ICR register
-#define CIAAckIcr1     (1ULL << 29)
-#define CIASetIcr0     (1ULL << 30) // Sets bit 8 in ICR register
-#define CIASetIcr1     (1ULL << 31)
-#define CIATODInt0     (1ULL << 32) // Triggers an IRQ with TOD as source
-#define CIASerInt0     (1ULL << 33) // Triggers an IRQ with serial reg as source
-#define CIASerInt1     (1ULL << 34)
-#define CIASerInt2     (1ULL << 35)
-#define CIASdrToSsr0   (1ULL << 36) // Move serial data reg to serial shift reg
-#define CIASdrToSsr1   (1ULL << 37)
-#define CIASsrToSdr0   (1ULL << 38) // Move serial shift reg to serial data reg
-#define CIASsrToSdr1   (1ULL << 39)
-#define CIASsrToSdr2   (1ULL << 40)
-#define CIASsrToSdr3   (1ULL << 41)
-#define CIASerClk0     (1ULL << 42) // Clock signal driving the serial register
-#define CIASerClk1     (1ULL << 43)
-#define CIASerClk2     (1ULL << 44)
-#define CIASerClk3     (1ULL << 45)
+constexpr u64 CIACountA0 =   (1ULL << 0); // Decrements timer A
+constexpr u64 CIACountA1 =   (1ULL << 1);
+constexpr u64 CIACountA2 =   (1ULL << 2);
+constexpr u64 CIACountA3 =   (1ULL << 3);
+constexpr u64 CIACountB0 =   (1ULL << 4); // Decrements timer B
+constexpr u64 CIACountB1 =   (1ULL << 5);
+constexpr u64 CIACountB2 =   (1ULL << 6);
+constexpr u64 CIACountB3 =   (1ULL << 7);
+constexpr u64 CIALoadA0 =    (1ULL << 8); // Loads timer A
+constexpr u64 CIALoadA1 =    (1ULL << 9);
+constexpr u64 CIALoadA2 =    (1ULL << 10);
+constexpr u64 CIALoadB0 =    (1ULL << 11); // Loads timer B
+constexpr u64 CIALoadB1 =    (1ULL << 12);
+constexpr u64 CIALoadB2 =    (1ULL << 13);
+constexpr u64 CIAPB6Low0 =   (1ULL << 14); // Sets pin PB6 low
+constexpr u64 CIAPB6Low1 =   (1ULL << 15);
+constexpr u64 CIAPB7Low0 =   (1ULL << 16); // Sets pin PB7 low
+constexpr u64 CIAPB7Low1 =   (1ULL << 17);
+constexpr u64 CIASetInt0 =   (1ULL << 18); // Triggers an interrupt
+constexpr u64 CIASetInt1 =   (1ULL << 19);
+constexpr u64 CIAClearInt0 = (1ULL << 20); // Releases the interrupt line
+constexpr u64 CIAOneShotA0 = (1ULL << 21);
+constexpr u64 CIAOneShotB0 = (1ULL << 22);
+constexpr u64 CIAReadIcr0 =  (1ULL << 23); // Indicates that ICR was read recently
+constexpr u64 CIAReadIcr1 =  (1ULL << 24);
+constexpr u64 CIAClearIcr0 = (1ULL << 25); // Clears bit 8 in ICR register
+constexpr u64 CIAClearIcr1 = (1ULL << 26);
+constexpr u64 CIAClearIcr2 = (1ULL << 27);
+constexpr u64 CIAAckIcr0 =   (1ULL << 28); // Clears bit 0 - 7 in ICR register
+constexpr u64 CIAAckIcr1 =   (1ULL << 29);
+constexpr u64 CIASetIcr0 =   (1ULL << 30); // Sets bit 8 in ICR register
+constexpr u64 CIASetIcr1 =   (1ULL << 31);
+constexpr u64 CIATODInt0 =   (1ULL << 32); // Triggers an IRQ with TOD as source
+constexpr u64 CIASerInt0 =   (1ULL << 33); // Triggers an IRQ with serial reg as source
+constexpr u64 CIASerInt1 =   (1ULL << 34);
+constexpr u64 CIASerInt2 =   (1ULL << 35);
+constexpr u64 CIASdrToSsr0 = (1ULL << 36); // Move serial data reg to serial shift reg
+constexpr u64 CIASdrToSsr1 = (1ULL << 37);
+constexpr u64 CIASsrToSdr0 = (1ULL << 38); // Move serial shift reg to serial data reg
+constexpr u64 CIASsrToSdr1 = (1ULL << 39);
+constexpr u64 CIASsrToSdr2 = (1ULL << 40);
+constexpr u64 CIASsrToSdr3 = (1ULL << 41);
+constexpr u64 CIASerClk0 =   (1ULL << 42); // Clock signal driving the serial register
+constexpr u64 CIASerClk1 =   (1ULL << 43);
+constexpr u64 CIASerClk2 =   (1ULL << 44);
+constexpr u64 CIASerClk3 =   (1ULL << 45);
+constexpr u64 CIALast =      (1ULL << 46);
 
-#define CIADelayMask ~((1ULL << 46) \
-| CIACountA0 | CIACountB0 \
-| CIALoadA0 | CIALoadB0 \
-| CIAPB6Low0 | CIAPB7Low0 \
-| CIASetInt0 | CIAClearInt0 \
-| CIAOneShotA0 | CIAOneShotB0 \
-| CIAReadIcr0 | CIAClearIcr0 \
-| CIAAckIcr0 | CIASetIcr0 \
-| CIATODInt0 | CIASerInt0 \
-| CIASdrToSsr0 | CIASsrToSdr0 \
-| CIASerClk0)
+constexpr u64 CIADelayMask = ~CIALast
+& ~CIACountA0 & ~CIACountB0 & ~CIALoadA0 & ~CIALoadB0 & ~CIAPB6Low0
+& ~CIAPB7Low0 & ~CIASetInt0 & ~CIAClearInt0 & ~CIAOneShotA0 & ~CIAOneShotB0
+& ~CIAReadIcr0 & ~CIAClearIcr0 & ~CIAAckIcr0 & ~CIASetIcr0 & ~CIATODInt0
+& ~CIASerInt0 & ~CIASdrToSsr0 & ~CIASsrToSdr0 & ~CIASerClk0;
 
 class CIA : public SubComponent {
     

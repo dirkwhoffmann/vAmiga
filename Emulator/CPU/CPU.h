@@ -27,33 +27,28 @@ public:
 
     CPU(Amiga& ref);
 
+    
+    //
+    // Methods From AmigaObject
+    //
+    
+private:
+    
     const char *getDescription() const override { return "CPU"; }
-    
-private:
-    
-    void _reset(bool hard) override;
-    
-    
-    //
-    // Analyzing
-    //
-    
-public:
-    
-    CPUInfo getInfo() { return AmigaComponent::getInfo(info); }
-        
-private:
-    
-    void _inspect() override;
-    void _inspect(u32 dasmStart);
     void _dump(dump::Category category, std::ostream& os) const override;
 
     
     //
-    // Serializing
+    // Methods from AmigaComponent
     //
     
 private:
+    
+    void _reset(bool hard) override;
+    void _inspect() override;
+    void _debugOn() override;
+    void _debugOff() override;
+    void _inspect(u32 dasmStart);
     
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -98,18 +93,17 @@ private:
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     isize didLoadFromBuffer(const u8 *buffer) override;
-
-
+    
+    
     //
-    // Controlling
+    // Analyzing
     //
     
-private:
-
-    void _debugOn() override;
-    void _debugOff() override;
-
+public:
     
+    CPUInfo getInfo() { return AmigaComponent::getInfo(info); }
+        
+
     //
     // Working with the clock
     //

@@ -20,10 +20,8 @@
  */
 enum_long(CIA_REVISION)
 {
-    CIA_8520_DIP,
-    CIA_8520_PLCC,
-    
-    CIA_COUNT
+    CIA_MOS_8520_DIP,
+    CIA_MOS_8520_PLCC
 };
 typedef CIA_REVISION CIARevision;
 
@@ -32,7 +30,7 @@ struct CIARevisionEnum : util::Reflection<CIARevisionEnum, CIARevision> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < CIA_COUNT;
+        return (unsigned long)value <= CIA_MOS_8520_PLCC;
     }
 
     static const char *prefix() { return "CIA"; }
@@ -40,9 +38,8 @@ struct CIARevisionEnum : util::Reflection<CIARevisionEnum, CIARevision> {
     {
         switch (value) {
                 
-            case CIA_8520_DIP:   return "8520_DIP";
-            case CIA_8520_PLCC:  return "8520_PLCC";
-            case CIA_COUNT:      return "???";
+            case CIA_MOS_8520_DIP:   return "MOS_8520_DIP";
+            case CIA_MOS_8520_PLCC:  return "MOS_8520_PLCC";
         }
         return "???";
     }
@@ -104,6 +101,7 @@ struct CIARegEnum : util::Reflection<CIARegEnum, CIAReg> {
     }
 };
 #endif
+
 
 //
 // Structures
