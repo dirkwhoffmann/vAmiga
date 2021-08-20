@@ -443,7 +443,9 @@ ADFFile::decodeTrack(Disk &disk, Track t)
     u8 *dst = data + t * sectors * 512;
     
     // Seek all sync marks
-    isize sectorStart[sectors], nr = 0; isize index = 0;
+    std::vector<isize> sectorStart(sectors);
+    isize nr = 0; isize index = 0;
+    
     while (index < isizeof(disk.data.track[t]) && nr < sectors) {
 
         // Scan MFM stream for $4489 $4489

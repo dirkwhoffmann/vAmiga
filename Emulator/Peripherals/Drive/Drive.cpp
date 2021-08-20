@@ -707,16 +707,12 @@ Drive::isInsertable(DiskDiameter t, DiskDensity d) const
 bool
 Drive::isInsertable(const DiskFile &file) const
 {
-    debug(DSK_DEBUG, "isInsertable(DiskFile %p)\n", &file);
-       
     return isInsertable(file.getDiskDiameter(), file.getDiskDensity());
 }
 
 bool
 Drive::isInsertable(const Disk &disk) const
 {
-    debug(DSK_DEBUG, "isInsertable(Disk %p)\n", &disk);
-    
     return isInsertable(disk.diameter, disk.density);
 }
 
@@ -742,8 +738,6 @@ Drive::ejectDisk()
 bool
 Drive::insertDisk(std::unique_ptr<Disk> disk)
 {
-    trace(DSK_DEBUG, "insertDisk(%p)", disk.get());
-
     if (isInsertable(*disk)) {
 
         // Don't insert a disk if there is already one
@@ -762,23 +756,6 @@ Drive::insertDisk(std::unique_ptr<Disk> disk)
     
     return false;
 }
-
-/*
-bool
-Drive::insertBlankDisk()
-{
-    auto desc = FSDeviceDescriptor(INCH_35, DISK_DD, config.defaultFileSystem);
-    
-    if (FSDevice *volume = FSDevice::make(desc)) {
-        
-        volume->setName(FSName("Disk"));
-        volume->makeBootable(config.defaultBootBlock);
-        return true;
-    }
-    
-    return false;
-}
-*/
 
 u64
 Drive::fnv() const

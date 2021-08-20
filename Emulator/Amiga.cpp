@@ -101,7 +101,7 @@ Amiga::Amiga()
 
 Amiga::~Amiga()
 {
-    debug(RUN_DEBUG, "Destroying Amiga[%p]\n", this);
+    debug(RUN_DEBUG, "Destroying Amiga\n");
 }
 
 void

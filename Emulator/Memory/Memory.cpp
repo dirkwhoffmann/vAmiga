@@ -468,7 +468,7 @@ Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask)
         fillRamWithInitPattern();
         
         if ((uintptr_t)ptr & 1) {
-            warn("Memory at %p (%d bytes) is not aligned\n", ptr, bytes);
+            warn("Memory at %p (%d bytes) is not aligned\n", (void *)ptr, bytes);
             assert(false);
         }
     }

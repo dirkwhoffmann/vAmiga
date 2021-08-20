@@ -311,7 +311,7 @@ DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
     assert(disk != nullptr);
     assert(nr >= 0 && nr <= 3);
     
-    debug(DSK_DEBUG, "insertDisk(%p, %zd, %lld)\n", disk.get(), nr, delay);
+    debug(DSK_DEBUG, "insertDisk(%zd, %lld)\n", nr, delay);
     
     // The easy case: The emulator is not running
     if (!isRunning())

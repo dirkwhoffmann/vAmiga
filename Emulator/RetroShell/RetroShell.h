@@ -32,7 +32,7 @@ class RetroShell : public SubComponent {
     std::vector<string> input;
 
     // Input prompt
-    string prompt = "vAmiga\% ";
+    string prompt = "vAmiga% ";
     
     // The current cursor position
     isize cpos = 0;

@@ -222,7 +222,7 @@ IMGFile::decodeTrack(Disk &disk, Track t)
     trace(MFM_DEBUG, "Decoding DOS track %zd\n", t);
 
     // Determine the start of all sectors contained in this track
-    isize sectorStart[numSectors];
+    std::vector <isize> sectorStart(numSectors);
     for (isize i = 0; i < numSectors; i++) {
         sectorStart[i] = 0;
     }
