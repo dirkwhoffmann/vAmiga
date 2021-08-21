@@ -207,7 +207,6 @@ private:
     
 private:
     
-    void _initialize() override;
     void _reset(bool hard) override;
     
     template <class T>
