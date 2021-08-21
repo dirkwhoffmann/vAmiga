@@ -93,7 +93,6 @@ Keyboard::serviceKeyboardEvent(EventID id)
             break;
 
         default:
-            assert(false);
-            break;
+            fatalError;
     }
 }

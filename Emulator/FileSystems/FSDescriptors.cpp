@@ -13,6 +13,9 @@
 
 FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, FSVolumeType dos)
 {
+    /* TODO: REPLACE BY init(...)
+     * Then, add init(isize numCyls, isize numSectors, FSVolumeType dos) and call it
+     */
     if (type == INCH_525 && density == DISK_DD) {
         numCyls = 40; numSectors = 11;
 
@@ -23,7 +26,7 @@ FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, F
         numCyls = 80; numSectors = 22;
 
     } else {
-        assert(false);
+        fatalError;
     }
 
     numHeads    = 2;

@@ -39,14 +39,47 @@ Muxer::~Muxer()
 }
 
 void
+Muxer::_dump(dump::Category category, std::ostream& os) const
+{
+    using namespace util;
+    
+    if (category & dump::Config) {
+        
+        os << tab("Sampling method");
+        os << SamplingMethodEnum::key(config.samplingMethod) << std::endl;
+        os << tab("Filter type");
+        os << FilterTypeEnum::key(config.filterType) << std::endl;
+        os << tab("Filter always on");
+        os << bol(config.filterAlwaysOn) << std::endl;
+        os << tab("Channel 1 pan");
+        os << dec(config.pan[0]) << std::endl;
+        os << tab("Channel 2 pan");
+        os << dec(config.pan[1]) << std::endl;
+        os << tab("Channel 3 pan");
+        os << dec(config.pan[2]) << std::endl;
+        os << tab("Channel 4 pan");
+        os << dec(config.pan[3]) << std::endl;
+        os << tab("Channel 1 volume");
+        os << dec(config.vol[0]) << std::endl;
+        os << tab("Channel 2 volume");
+        os << dec(config.vol[1]) << std::endl;
+        os << tab("Channel 3 volume");
+        os << dec(config.vol[2]) << std::endl;
+        os << tab("Channel 4 volume");
+        os << dec(config.vol[3]) << std::endl;
+        os << tab("Left master volume");
+        os << dec(config.volL) << std::endl;
+        os << tab("Right master volume");
+        os << dec(config.volR) << std::endl;
+    }
+}
+
+void
 Muxer::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
-    stats.bufferUnderflows = 0;
-    stats.bufferOverflows = 0;
-    stats.producedSamples = 0;
-    stats.consumedSamples = 0;
+    stats = { };
     
     for (isize i = 0; i < 4; i++) sampler[i]->reset();
     clear();
@@ -117,8 +150,8 @@ Muxer::getConfigItem(Option option) const
             return config.samplingMethod;
             
         case OPT_FILTER_TYPE:
-            assert(filterL.getFilterType() == config.filterType);
-            assert(filterR.getFilterType() == config.filterType);
+            assert(filterL.type == config.filterType);
+            assert(filterR.type == config.filterType);
             return config.filterType;
                         
         case OPT_FILTER_ALWAYS_ON:
@@ -131,8 +164,7 @@ Muxer::getConfigItem(Option option) const
             return config.volR;
 
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -148,8 +180,7 @@ Muxer::getConfigItem(Option option, long id) const
             return config.pan[id];
             
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -176,8 +207,8 @@ Muxer::setConfigItem(Option option, i64 value)
             }
 
             config.filterType = (FilterType)value;
-            filterL.setFilterType((FilterType)value);
-            filterR.setFilterType((FilterType)value);
+            filterL.type = ((FilterType)value);
+            filterR.type = ((FilterType)value);
             return;
                         
         case OPT_FILTER_ALWAYS_ON:
@@ -187,10 +218,7 @@ Muxer::setConfigItem(Option option, i64 value)
 
         case OPT_AUDVOLL:
             
-            if (value < 0) value = 0;
-            if (value > 100) value = 100;
-
-            config.volL = value;
+            config.volL = std::clamp(value, 0LL, 100LL);
             volL = powf((float)value / 50, 1.4f);
                         
             if (wasMuted != isMuted())
@@ -199,10 +227,7 @@ Muxer::setConfigItem(Option option, i64 value)
             
         case OPT_AUDVOLR:
 
-            if (value < 0) value = 0;
-            if (value > 100) value = 100;
-
-            config.volR = value;
+            config.volR = std::clamp(value, 0LL, 100LL);
             volR = powf((float)value / 50, 1.4f);
 
             if (wasMuted != isMuted())
@@ -210,7 +235,7 @@ Muxer::setConfigItem(Option option, i64 value)
             return;
             
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -222,12 +247,8 @@ Muxer::setConfigItem(Option option, long id, i64 value)
         case OPT_AUDVOL:
     
             assert(id >= 0 && id <= 3);
-            
-            if (value < 0 || value > 100) {
-                throw VAError(ERROR_OPT_INVARG, "0...100");
-            }
-            
-            config.vol[id] = value;
+                        
+            config.vol[id] = std::clamp(value, 0LL, 100LL);
             vol[id] = powf((float)value / 100, 1.4f);
             return;
             
@@ -235,11 +256,7 @@ Muxer::setConfigItem(Option option, long id, i64 value)
                         
             assert(id >= 0 && id <= 3);
             
-            if (value < 0 || value > 200) {
-                throw VAError(ERROR_OPT_INVARG, "0...200");
-            }
-
-            config.pan[id] = value;
+            config.pan[id] = std::clamp(value, 0LL, 200LL);
             
             if (value <= 50) pan[id] = (50 + value) / 100.0f;
             else if (value <= 150) pan[id] = (150 - value) / 100.0f;
@@ -247,43 +264,7 @@ Muxer::setConfigItem(Option option, long id, i64 value)
             return;
 
         default:
-            assert(false);
-    }
-}
-
-void
-Muxer::_dump(dump::Category category, std::ostream& os) const
-{
-    using namespace util;
-    
-    if (category & dump::Config) {
-        
-        os << tab("Sampling method");
-        os << SamplingMethodEnum::key(config.samplingMethod) << std::endl;
-        os << tab("Filter type");
-        os << FilterTypeEnum::key(config.filterType) << std::endl;
-        os << tab("Filter always on");
-        os << bol(config.filterAlwaysOn) << std::endl;
-        os << tab("Channel 1 pan");
-        os << dec(config.pan[0]) << std::endl;
-        os << tab("Channel 2 pan");
-        os << dec(config.pan[1]) << std::endl;
-        os << tab("Channel 3 pan");
-        os << dec(config.pan[2]) << std::endl;
-        os << tab("Channel 4 pan");
-        os << dec(config.pan[3]) << std::endl;
-        os << tab("Channel 1 volume");
-        os << dec(config.vol[0]) << std::endl;
-        os << tab("Channel 2 volume");
-        os << dec(config.vol[1]) << std::endl;
-        os << tab("Channel 3 volume");
-        os << dec(config.vol[2]) << std::endl;
-        os << tab("Channel 4 volume");
-        os << dec(config.vol[3]) << std::endl;
-        os << tab("Left master volume");
-        os << dec(config.volL) << std::endl;
-        os << tab("Right master volume");
-        os << dec(config.volR) << std::endl;
+            fatalError;
     }
 }
 
@@ -343,10 +324,23 @@ Muxer::synthesize(Cycle clock, Cycle target, long count)
                 
     switch (config.samplingMethod) {
             
-        case SMP_NONE:    synthesize<SMP_NONE>   (clock, count, cyclesPerSample); break;
-        case SMP_NEAREST: synthesize<SMP_NEAREST>(clock, count, cyclesPerSample); break;
-        case SMP_LINEAR:  synthesize<SMP_LINEAR> (clock, count, cyclesPerSample); break;
-        default:          assert(false);
+        case SMP_NONE:
+            
+            synthesize <SMP_NONE> (clock, count, cyclesPerSample);
+            break;
+            
+        case SMP_NEAREST:
+            
+            synthesize <SMP_NEAREST> (clock, count, cyclesPerSample);
+            break;
+            
+        case SMP_LINEAR:
+            
+            synthesize<SMP_LINEAR> (clock, count, cyclesPerSample);
+            break;
+            
+        default:
+            fatalError;
     }
 }
 
@@ -362,10 +356,23 @@ Muxer::synthesize(Cycle clock, Cycle target)
     fraction = exact - (double)count;
              
     switch (config.samplingMethod) {
-        case SMP_NONE:    synthesize<SMP_NONE>   (clock, count, cyclesPerSample); break;
-        case SMP_NEAREST: synthesize<SMP_NEAREST>(clock, count, cyclesPerSample); break;
-        case SMP_LINEAR:  synthesize<SMP_LINEAR> (clock, count, cyclesPerSample); break;
-        default:          assert(false);
+        case SMP_NONE:
+            
+            synthesize <SMP_NONE> (clock, count, cyclesPerSample);
+            break;
+            
+        case SMP_NEAREST:
+            
+            synthesize <SMP_NEAREST> (clock, count, cyclesPerSample);
+            break;
+            
+        case SMP_LINEAR:
+            
+            synthesize <SMP_LINEAR> (clock, count, cyclesPerSample);
+            break;
+            
+        default:
+            fatalError;
 
     }
 }

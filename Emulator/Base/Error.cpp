@@ -17,7 +17,7 @@ VAError::VAError(ErrorCode code, const string &s)
     switch (code) {
             
         case ERROR_OK:
-            assert(false);
+            fatalError;
             break;
             
         case ERROR_OPT_UNSUPPORTED:

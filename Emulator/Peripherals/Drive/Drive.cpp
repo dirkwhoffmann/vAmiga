@@ -87,8 +87,7 @@ Drive::getConfigItem(Option option) const
         case OPT_DEFAULT_BOOTBLOCK:   return (long)config.defaultBootBlock;
 
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -158,7 +157,7 @@ Drive::setConfigItem(Option option, i64 value)
             return;
 
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -353,7 +352,7 @@ Drive::getDriveId() const
                 return 0x55555555;
                 
             default:
-                assert(false);
+                fatalError;
         }
     }
     
@@ -699,9 +698,8 @@ Drive::isInsertable(DiskDiameter t, DiskDensity d) const
             return t == INCH_525 && d == DISK_DD;
                         
         default:
-            assert(false);
+            fatalError;
     }
-    return false;
 }
 
 bool

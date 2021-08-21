@@ -176,8 +176,7 @@ ADFFile::numCyls() const
         case ADFSIZE_35_HD:    return 80;
             
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -190,8 +189,7 @@ ADFFile::numSectors() const
         case DISK_HD: return 22;
             
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 

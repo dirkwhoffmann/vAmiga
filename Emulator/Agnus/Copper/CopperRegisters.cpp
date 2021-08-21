@@ -28,12 +28,13 @@ Copper::pokeCOPJMP1()
 {
     trace(COPREG_DEBUG, "pokeCOPJMP1: Jumping to %X\n", cop1lc);
 
-    if (s == ACCESSOR_AGNUS) {
+    if constexpr (s == ACCESSOR_AGNUS) {
 
-        assert(false);
+        // TODO: REMOVE TEMPLATE PARAMETER
+        fatalError;
 
     }
-    if (s == ACCESSOR_CPU) {
+    if constexpr (s == ACCESSOR_CPU) {
 
         if (agnus.blitter.isActive()) {
             trace(XFILES, "pokeCOPJMP1: Blitter is running\n");
@@ -47,9 +48,10 @@ Copper::pokeCOPJMP2()
 {
     trace(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
 
-    if (s == ACCESSOR_AGNUS) {
+    if constexpr (s == ACCESSOR_AGNUS) {
 
-        assert(false);
+        // TODO: REMOVE TEMPLATE PARAMETER
+        fatalError;
 
     }
     if (s == ACCESSOR_CPU) {

@@ -71,8 +71,7 @@ Mouse::getConfigItem(Option option) const
         case OPT_MOUSE_VELOCITY:    return config.velocity;
 
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -101,7 +100,7 @@ Mouse::setConfigItem(Option option, i64 value)
             return;
 
         default:
-            assert(false);
+            fatalError;
     }
 }
 

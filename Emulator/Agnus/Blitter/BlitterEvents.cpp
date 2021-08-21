@@ -35,7 +35,7 @@ Blitter::serviceEvent(EventID id)
 
             // Only proceed if the bus is free
             if (!agnus.busIsFree<BUS_BLITTER>()) {
-                trace(BLTTIM_DEBUG, "Blitter blocked in BLT_STRT1 by %d\n", agnus.busOwner[agnus.pos.h]);
+                trace(BLTTIM_DEBUG, "BLT_STRT1: Blocked by %d\n", agnus.busOwner[agnus.pos.h]);
                 break;
             }
 
@@ -47,7 +47,7 @@ Blitter::serviceEvent(EventID id)
 
             // Only proceed if the bus is a free
             if (!agnus.busIsFree<BUS_BLITTER>()) {
-                trace(BLTTIM_DEBUG, "Blitter blocked in BLT_STRT2 by %d\n", agnus.busOwner[agnus.pos.h]);
+                trace(BLTTIM_DEBUG, "BLT_STRT2: Blocked by %d\n", agnus.busOwner[agnus.pos.h]);
                 break;
             }
 
@@ -68,12 +68,11 @@ Blitter::serviceEvent(EventID id)
             break;
 
         case BLT_LINE_FAKE:
+            
             (this->*lineBlitInstr[bltpc])();
             break;
 
         default:
-            
-            assert(false);
-            break;
+            fatalError;
     }
 }

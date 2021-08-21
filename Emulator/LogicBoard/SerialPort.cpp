@@ -38,8 +38,7 @@ SerialPort::getConfigItem(Option option) const
         case OPT_SERIAL_DEVICE:  return (i64)config.device;
         
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -58,7 +57,7 @@ SerialPort::setConfigItem(Option option, i64 value)
             return;
                         
         default:
-            assert(false);
+            fatalError;
     }
 }
 

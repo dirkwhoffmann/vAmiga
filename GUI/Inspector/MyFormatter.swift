@@ -91,8 +91,7 @@ class MyFormatter: Formatter {
             return String(format: format, number)
 
         default:
-            assert(false)
-            return "?"
+            fatalError()
         }
     }
 }

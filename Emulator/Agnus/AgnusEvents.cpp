@@ -58,7 +58,7 @@ Agnus::serviceVblEvent()
             break;
             
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -96,7 +96,7 @@ Agnus::serviceCIAEvent()
             break;
 
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -166,8 +166,7 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_SPR7PTL: setSPRxPTL<7>(change.value); break;
 
             default:
-                warn("Register change ID %d is invalid.\n", change.addr);
-                assert(false);
+                fatalError;
         }
     }
 
@@ -421,8 +420,7 @@ Agnus::serviceBPLEvent()
             return;
             
         default:
-            dump(dump::Events);
-            assert(false);
+            fatalError;
     }
 
     // Schedule next event
@@ -576,7 +574,7 @@ Agnus::serviceDASEvent()
             break;
 
         default:
-            assert(false);
+            fatalError;
     }
 
     // Schedule next event
@@ -589,34 +587,43 @@ Agnus::serviceINSEvent()
     switch (slot[SLOT_INS].id) {
 
         case INS_AMIGA:
+            
             amiga.inspect();
             break;
             
         case INS_CPU:
+            
             cpu.inspect();
             break;
+            
         case INS_MEM:
+            
             mem.inspect();
             break;
             
         case INS_CIA:
+            
             ciaa.inspect();
             ciab.inspect();
             break;
             
         case INS_AGNUS:
+            
             inspect();
             break;
             
         case INS_PAULA:
+            
             paula.inspect();
             break;
             
         case INS_DENISE:
+            
             denise.inspect();
             break;
             
         case INS_PORTS:
+            
             serialPort.inspect();
             paula.uart.inspect();
             controlPort1.inspect();
@@ -624,18 +631,12 @@ Agnus::serviceINSEvent()
             break;
             
         case INS_EVENTS:
+            
             inspectEvents();
             break;
-            
-        /*
-        case INS_TEXTURE:
-            pixelEngine.dumpTexture();
-            exit(0);
-            break;
-        */
-            
+                        
         default:
-            assert(false);
+            fatalError;
     }
 
     // Reschedule event
@@ -648,12 +649,12 @@ Agnus::serviceRASEvent()
     switch (slot[SLOT_RAS].id) {
 
         case RAS_HSYNC:
+            
             hsyncHandler();
             break;
 
         default:
-            assert(false);
-            break;
+            fatalError;
     }
 
     // Reschedule event

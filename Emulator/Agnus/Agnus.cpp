@@ -109,8 +109,7 @@ Agnus::getConfigItem(Option option) const
         case OPT_SLOW_RAM_MIRROR: return config.slowRamMirror;
             
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -128,12 +127,16 @@ Agnus::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, AgnusRevisionEnum::keyList());
             }            
                         
-            config.revision = (AgnusRevision)value;
-            switch (config.revision) {
+            // config.revision = (AgnusRevision)value;
+            
+            switch (config.revision = (AgnusRevision)value) {
+                    
                 case AGNUS_OCS:     ptrMask = 0x07FFFF; break;
                 case AGNUS_ECS_1MB: ptrMask = 0x0FFFFF; break;
                 case AGNUS_ECS_2MB: ptrMask = 0x1FFFFF; break;
-                default: assert(false);
+                
+                default:
+                    fatalError;
             }
             mem.updateMemSrcTables();
             return;
@@ -144,7 +147,7 @@ Agnus::setConfigItem(Option option, i64 value)
             return;
             
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -780,7 +783,9 @@ Agnus::syncWithEClock()
     // We want to sync to position (2).
     // If we are already too close, we seek (2) in the next E clock cycle.
     Cycle delay = 0;
+    
     switch (eClk) {
+            
         case 0: delay = 4 * (2 + 10); break;
         case 1: delay = 4 * (1 + 10); break;
         case 2: delay = 4 * (0 + 10); break;
@@ -791,7 +796,9 @@ Agnus::syncWithEClock()
         case 7: delay = 4 * (5 + 10); break;
         case 8: delay = 4 * (4 + 10); break;
         case 9: delay = 4 * (3 + 10); break;
-        default: assert(false);
+
+        default:
+            fatalError;
     }
     
     // Doublecheck that we are going to sync to a DMA cycle

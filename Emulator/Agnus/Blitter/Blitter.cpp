@@ -83,8 +83,7 @@ Blitter::getConfigItem(Option option) const
         case OPT_BLITTER_ACCURACY: return config.accuracy;
         
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -105,7 +104,7 @@ Blitter::setConfigItem(Option option, i64 value)
             return;
             
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -620,10 +619,13 @@ Blitter::beginLineBlit(isize level)
     }
 
     switch (level) {
+            
         case 0: beginFastLineBlit(); break;
         case 1: beginFakeLineBlit(); break;
         case 2: beginSlowLineBlit(); break;
-        default: assert(false);
+            
+        default:
+            fatalError;
     }
 }
 
@@ -638,10 +640,13 @@ Blitter::beginCopyBlit(isize level)
     }
 
     switch (level) {
+            
         case 0: beginFastCopyBlit(); break;
         case 1: beginFakeCopyBlit(); break;
         case 2: beginSlowCopyBlit(); break;
-        default: assert(false);
+            
+        default:
+            fatalError;
     }
 }
 

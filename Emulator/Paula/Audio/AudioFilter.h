@@ -14,6 +14,8 @@
 
 class AudioFilter : public SubComponent {
     
+    friend class Muxer;
+    
     // The currently set filter type
     FilterType type = FILTER_BUTTERWORTH;
     
@@ -81,13 +83,9 @@ private:
     // Configuring
     //
     
-public:
-    
-    // Filter type
-    FilterType getFilterType() const { return type; }
-    void setFilterType(FilterType type);
-    
-    // Sample rate
+private:
+        
+    // Sets the sample rate (only to be called by the Muxer)
     void setSampleRate(double sampleRate);
     
 

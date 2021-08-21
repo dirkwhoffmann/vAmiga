@@ -621,7 +621,7 @@ RetroShell::exec <Token::audio, Token::set, Token::volume> (Arguments& argv, lon
         case 5: amiga.configure(OPT_AUDVOLR, util::parseNum(argv.front())); break;
             
         default:
-            assert(false);
+            fatalError;
     }
 }
 

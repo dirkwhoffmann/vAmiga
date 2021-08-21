@@ -30,7 +30,7 @@ StateMachine<nr>::serviceEvent()
             return;
 
         default:
-            assert(false);
+            fatalError;
     }
 }
 

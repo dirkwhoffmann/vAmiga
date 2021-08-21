@@ -50,7 +50,7 @@ void transposeSSE(u16 *source, u8* target)
 
 void transposeSSE(u16 *source, u8* target)
 {
-    assert(false);
+    fatalError;
 }
 
 #endif

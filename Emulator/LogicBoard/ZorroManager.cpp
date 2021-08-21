@@ -53,7 +53,8 @@ ZorroManager::peekFastRamDevice(u32 addr) const
         case MB(4):   erTypeLo = 0b111; break;
         case MB(8):   erTypeLo = 0b000; break;
             
-        default: assert(false);
+        default:
+            fatalError;
     }
     
     /* Register pair 08/0A (er_flags) Note: Bits must be returned negated.

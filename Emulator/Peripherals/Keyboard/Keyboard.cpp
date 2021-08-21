@@ -50,8 +50,7 @@ Keyboard::getConfigItem(Option option) const
         case OPT_ACCURATE_KEYBOARD:  return config.accurate;
         
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -66,7 +65,7 @@ Keyboard::setConfigItem(Option option, i64 value)
             return;
                         
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -216,7 +215,7 @@ Keyboard::processHandshake()
         case KB_SEND:                           break;
        
         default:
-            assert(false);
+            fatalError;
     }
     
     // Perform all state specific actions
@@ -271,7 +270,7 @@ Keyboard::execute()
             break;
             
         default:
-            assert(false);
+            fatalError;
     }
 }
 

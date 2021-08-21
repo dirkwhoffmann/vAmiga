@@ -81,7 +81,7 @@ DiskController::serviceDiskChangeEvent()
             break;
 
         default:
-            assert(false);
+            fatalError;
     }
 
     agnus.cancel<SLOT_DCH>();

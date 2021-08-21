@@ -130,9 +130,7 @@ CIA::peek(u16 addr)
             break;
             
         default:
-            assert(false);
-            result = 0;
-            break;
+            fatalError;
     }
     
     trace(CIAREG_DEBUG, "Peek(%d [%s]) = %02x\n", addr, CIARegEnum::key(addr), result);
@@ -202,8 +200,7 @@ CIA::spypeek(u16 addr) const
             return crb & ~0x10;
             
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -545,6 +542,6 @@ CIA::poke(u16 addr, u8 value)
         }
             
         default:
-            assert(false);
+            fatalError;
     }
 }

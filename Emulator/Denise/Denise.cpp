@@ -88,8 +88,7 @@ Denise::getConfigItem(Option option) const
         case OPT_CLX_PLF_PLF:         return config.clxPlfPlf;
             
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -138,7 +137,7 @@ Denise::setConfigItem(Option option, i64 value)
             return;
 
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -733,36 +732,43 @@ Denise::drawSpritePair()
             switch (change.addr) {
                     
                 case SET_SPR0DATA + sprite1:
+                    
                     sprdata[sprite1] = change.value;
                     SET_BIT(armed, sprite1);
                     armed1 = true;
                     break;
                     
                 case SET_SPR0DATA + sprite2:
+                    
                     sprdata[sprite2] = change.value;
                     SET_BIT(armed, sprite2);
                     armed2 = true;
                     break;
                     
                 case SET_SPR0DATB + sprite1:
+                    
                     sprdatb[sprite1] = change.value;
                     break;
                     
                 case SET_SPR0DATB + sprite2:
+                    
                     sprdatb[sprite2] = change.value;
                     break;
                                         
                 case SET_SPR0POS + sprite1:
+                    
                     sprpos[sprite1] = change.value;
                     strt1 = sprhppos<sprite1>();
                     break;
                     
                 case SET_SPR0POS + sprite2:
+                    
                     sprpos[sprite2] = change.value;
                     strt2 = sprhppos<sprite2>();
                     break;
                     
                 case SET_SPR0CTL + sprite1:
+                    
                     sprctl[sprite1] = change.value;
                     strt1 = sprhppos<sprite1>();
                     CLR_BIT(armed, sprite1);
@@ -770,6 +776,7 @@ Denise::drawSpritePair()
                     break;
                     
                 case SET_SPR0CTL + sprite2:
+                    
                     sprctl[sprite2] = change.value;
                     strt2 = sprhppos<sprite2>();
                     CLR_BIT(armed, sprite2);
@@ -777,7 +784,7 @@ Denise::drawSpritePair()
                     break;
 
                 default:
-                    assert(false);
+                    fatalError;
             }
         }
     }
@@ -809,39 +816,47 @@ Denise::replaySpriteRegChanges()
         switch (change.addr) {
                 
             case SET_SPR0DATA + sprite1:
+                
                 sprdata[sprite1] = change.value;
                 break;
                 
             case SET_SPR0DATA + sprite2:
+                
                 sprdata[sprite2] = change.value;
                 break;
                 
             case SET_SPR0DATB + sprite1:
+                
                 sprdatb[sprite1] = change.value;
                 break;
                 
             case SET_SPR0DATB + sprite2:
+                
                 sprdatb[sprite2] = change.value;
                 break;
                 
             case SET_SPR0POS + sprite1:
+                
                 sprpos[sprite1] = change.value;
                 break;
                 
             case SET_SPR0POS + sprite2:
+                
                 sprpos[sprite2] = change.value;
                 break;
                 
             case SET_SPR0CTL + sprite1:
+                
                 sprctl[sprite1] = change.value;
                 break;
                 
             case SET_SPR0CTL + sprite2:
+                
                 sprctl[sprite2] = change.value;
                 break;
                 
             default:
-                assert(false);
+                fatalError;
         }
     }
     

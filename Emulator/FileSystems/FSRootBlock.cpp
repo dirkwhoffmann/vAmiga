@@ -67,8 +67,7 @@ FSRootBlock::itemType(isize byte) const
             if (word >= -20 && word <= -8)  return FSI_BCPL_DISK_NAME;
     }
     
-    assert(false);
-    return FSI_UNKNOWN;
+    fatalError;
 }
 
 ErrorCode

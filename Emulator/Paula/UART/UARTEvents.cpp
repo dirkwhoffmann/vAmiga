@@ -54,7 +54,7 @@ UART::serviceTxdEvent(EventID id)
             break;
 
         default:
-            assert(false);
+            fatalError;
     }
 }
 

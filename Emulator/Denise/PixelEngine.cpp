@@ -127,8 +127,7 @@ PixelEngine::getConfigItem(Option option) const
         case OPT_SATURATION:  return config.saturation;
 
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -178,7 +177,7 @@ PixelEngine::setConfigItem(Option option, i64 value)
             return;
 
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -456,7 +455,7 @@ PixelEngine::colorizeHAM(u32 *dst, Pixel from, Pixel to, u16& ham)
                 break;
 
             default:
-                assert(false);
+                fatalError;
         }
 
         // Synthesize pixel

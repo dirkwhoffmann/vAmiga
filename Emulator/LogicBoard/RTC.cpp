@@ -21,8 +21,7 @@ RTC::getConfigItem(Option option) const
         case OPT_RTC_MODEL:  return (long)config.model;
         
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -45,7 +44,7 @@ RTC::setConfigItem(Option option, i64 value)
             return;
                         
         default:
-            assert(false);
+            fatalError;
     }
 }
 

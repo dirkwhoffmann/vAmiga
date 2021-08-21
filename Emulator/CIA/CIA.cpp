@@ -89,8 +89,7 @@ CIA::getConfigItem(Option option) const
         case OPT_ECLOCK_SYNCING: return config.eClockSyncing;
         
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -119,7 +118,7 @@ CIA::setConfigItem(Option option, i64 value)
             return;
             
         default:
-            assert(false);
+            fatalError;
     }
 }
 

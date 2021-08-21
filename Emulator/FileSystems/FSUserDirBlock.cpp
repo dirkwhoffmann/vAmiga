@@ -68,8 +68,7 @@ FSUserDirBlock::itemType(isize byte) const
     if (word >= -46 && word <= -24) return FSI_BCPL_COMMENT;
     if (word >= -20 && word <= -5)  return FSI_BCPL_DIR_NAME;
 
-    assert(false);
-    return FSI_UNKNOWN;
+    fatalError;
 }
 
 ErrorCode

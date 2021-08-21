@@ -90,6 +90,6 @@ public:
  
 public:
     
-    virtual void encodeDisk(class Disk &disk) throws { assert(false); }
-    virtual void decodeDisk(class Disk &disk) throws { assert(false); }
+    virtual void encodeDisk(class Disk &disk) throws { fatalError; }
+    virtual void decodeDisk(class Disk &disk) throws { fatalError; }
 };

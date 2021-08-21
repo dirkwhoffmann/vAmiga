@@ -251,8 +251,6 @@ Copper::serviceEvent(EventID id)
 
         case COP_JMP1:
 
-            // debug("COP_JMP1\n");
-
             // The bus is not needed in this cycle, but still allocated
             (void)agnus.allocateBus<BUS_COPPER>();
 
@@ -261,13 +259,10 @@ Copper::serviceEvent(EventID id)
                 schedule(COP_JMP2, 1);
                 break;
             }
-
             schedule(COP_JMP2);
             break;
 
         case COP_JMP2:
-
-            // debug("COP_JMP2\n");
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
@@ -277,9 +272,6 @@ Copper::serviceEvent(EventID id)
             break;
 
         case COP_VBLANK:
-
-            // debug("COP_VBLANK\n");
-            // debug("agnus.copdma = %d\n", agnus.copdma());
             
             // Allocate the bus
             // TODO: FIND OUT IF THE BUS IS REALLY ALLOCATED IN THIS STATE
@@ -288,13 +280,10 @@ Copper::serviceEvent(EventID id)
             switchToCopperList(1);
             activeInThisFrame = agnus.copdma();
             schedule(COP_FETCH);
-
             break;
 
         default:
-            
-            assert(false);
-            break;
+            fatalError;
     }
 
     servicing = false;

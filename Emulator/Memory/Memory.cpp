@@ -109,8 +109,7 @@ Memory::getConfigItem(Option option) const
         case OPT_RAM_INIT_PATTERN:  return config.ramInitPattern;
 
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -211,7 +210,7 @@ Memory::setConfigItem(Option option, i64 value)
             return;
             
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -256,6 +255,7 @@ Memory::didLoadFromBuffer(const u8 *buffer)
     << config.fastSize;
 
     // Make sure that corrupted values do not cause any damage
+    // TODO: throw SNAPSHOT_CORRUPTED error
     if (config.romSize > KB(512)) { config.romSize = 0; assert(false); }
     if (config.womSize > KB(256)) { config.womSize = 0; assert(false); }
     if (config.extSize > KB(512)) { config.extSize = 0; assert(false); }
@@ -841,7 +841,8 @@ Memory::spypeek16 <ACCESSOR_CPU, MEM_NONE> (u32 addr) const
         case UNMAPPED_ALL_ONES:   return 0xFFFF;
         case UNMAPPED_ALL_ZEROES: return 0x0000;
 
-        default: assert(false); return 0;
+        default:
+            fatalError;
     }
 }
 
@@ -1145,6 +1146,7 @@ Memory::peek8 <ACCESSOR_CPU> (u32 addr)
 {
     u8 result;
         
+    // TODO: REPLACE BY if constexpr (...)
     switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
         case MEM_NONE:          result = peek8 <ACCESSOR_CPU, MEM_NONE>     (addr); break;
@@ -1164,7 +1166,8 @@ Memory::peek8 <ACCESSOR_CPU> (u32 addr)
         case MEM_WOM:           result = peek8 <ACCESSOR_CPU, MEM_WOM>      (addr); break;
         case MEM_EXT:           result = peek8 <ACCESSOR_CPU, MEM_EXT>      (addr); break;
             
-        default: assert(false); return 0;
+        default:
+            fatalError;
     }
         
     return result;
@@ -1177,6 +1180,7 @@ Memory::peek16 <ACCESSOR_CPU> (u32 addr)
     
     assert(IS_EVEN(addr));
     
+    // TODO: REPLACE BY if constexpr (...)
     switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
         case MEM_NONE:          result = peek16 <ACCESSOR_CPU, MEM_NONE>     (addr); break;
@@ -1196,7 +1200,8 @@ Memory::peek16 <ACCESSOR_CPU> (u32 addr)
         case MEM_WOM:           result = peek16 <ACCESSOR_CPU, MEM_WOM>      (addr); break;
         case MEM_EXT:           result = peek16 <ACCESSOR_CPU, MEM_EXT>      (addr); break;
             
-        default: assert(false); return 0;
+        default:
+            fatalError;
     }
         
     return result;
@@ -1209,6 +1214,7 @@ Memory::spypeek16 <ACCESSOR_CPU> (u32 addr) const
 
     auto src = cpuMemSrc[(addr & 0xFFFFFF) >> 16];
         
+    // TODO: REPLACE BY if constexpr (...)
     switch (src) {
             
         case MEM_NONE:          return spypeek16 <ACCESSOR_CPU, MEM_NONE>     (addr);
@@ -1228,7 +1234,8 @@ Memory::spypeek16 <ACCESSOR_CPU> (u32 addr) const
         case MEM_WOM:           return spypeek16 <ACCESSOR_CPU, MEM_WOM>      (addr);
         case MEM_EXT:           return spypeek16 <ACCESSOR_CPU, MEM_EXT>      (addr);
             
-        default: assert(false); return 0;
+        default:
+            fatalError;
     }
 }
 
@@ -1290,13 +1297,15 @@ Memory::peek16 <ACCESSOR_AGNUS> (u32 addr)
     assert(IS_EVEN(addr));
     addr &= agnus.ptrMask;
 
+    // TODO: REPLACE BY if constexpr (...)
     switch (agnusMemSrc[addr >> 16]) {
             
         case MEM_NONE:        result = peek16 <ACCESSOR_AGNUS, MEM_NONE> (addr); break;
         case MEM_CHIP:        result = peek16 <ACCESSOR_AGNUS, MEM_CHIP> (addr); break;
         case MEM_SLOW_MIRROR: result = peek16 <ACCESSOR_AGNUS, MEM_SLOW> (addr); break;
             
-        default: assert(false); return 0;
+        default:
+            fatalError;
     }
         
     return result;
@@ -1308,13 +1317,15 @@ Memory::spypeek16 <ACCESSOR_AGNUS> (u32 addr) const
     assert(IS_EVEN(addr));
     addr &= agnus.ptrMask;
     
+    // TODO: REPLACE BY if constexpr (...)
     switch (agnusMemSrc[addr >> 16]) {
             
         case MEM_NONE:        return spypeek16 <ACCESSOR_AGNUS, MEM_NONE> (addr);
         case MEM_CHIP:        return spypeek16 <ACCESSOR_AGNUS, MEM_CHIP> (addr);
         case MEM_SLOW_MIRROR: return spypeek16 <ACCESSOR_AGNUS, MEM_SLOW> (addr);
             
-        default: assert(false); return 0;
+        default:
+            fatalError;
     }
 }
 
@@ -1563,6 +1574,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_EXT> (u32 addr, u16 value)
 template<> void
 Memory::poke8 <ACCESSOR_CPU> (u32 addr, u8 value)
 {
+    // TODO: REPLACE BY if constexpr (...)
     switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
         case MEM_NONE:          poke8 <ACCESSOR_CPU, MEM_NONE>     (addr, value); return;
@@ -1582,7 +1594,8 @@ Memory::poke8 <ACCESSOR_CPU> (u32 addr, u8 value)
         case MEM_WOM:           poke8 <ACCESSOR_CPU, MEM_WOM>      (addr, value); return;
         case MEM_EXT:           poke8 <ACCESSOR_CPU, MEM_EXT>      (addr, value); return;
             
-        default: assert(false);
+        default:
+            fatalError;
     }
 }
 
@@ -1590,24 +1603,8 @@ template<> void
 Memory::poke16 <ACCESSOR_CPU> (u32 addr, u16 value)
 {
     assert(IS_EVEN(addr));
-
-    /*
-    if (addr == 0xC01EC2) {
-        trace("poke16 <ACCESSOR_CPU> (%x,%x)\n", addr, value);
-        // if (value == 0x302) amiga.signalStop();
-    }
-
-    if (addr == 0xC05CF0) { // WRITTEN AT FD1724
-        trace("poke16 <ACCESSOR_CPU> (%x,%x)\n", addr, value);
-        if (value == 0x302) amiga.signalStop();
-    }
-
-    if (addr == 0x010124 - 2) {
-        trace("poke16 <ACCESSOR_CPU> (%x,%x)\n", addr, value);
-        if (value == 0x302) amiga.signalStop();
-    }
-    */
     
+    // TODO: REPLACE BY if constexpr (...)
     switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
         case MEM_NONE:          poke16 <ACCESSOR_CPU, MEM_NONE>     (addr, value); return;
@@ -1627,7 +1624,8 @@ Memory::poke16 <ACCESSOR_CPU> (u32 addr, u16 value)
         case MEM_WOM:           poke16 <ACCESSOR_CPU, MEM_WOM>      (addr, value); return;
         case MEM_EXT:           poke16 <ACCESSOR_CPU, MEM_EXT>      (addr, value); return;
             
-        default: assert(false);
+        default:
+            fatalError;
     }
 }
 
@@ -1668,13 +1666,15 @@ Memory::poke16 <ACCESSOR_AGNUS> (u32 addr, u16 value)
     assert(IS_EVEN(addr));
     addr &= agnus.ptrMask;
     
+    // TODO: REPLACE BY if constexpr (...)
     switch (agnusMemSrc[addr >> 16]) {
             
         case MEM_NONE:          poke16 <ACCESSOR_AGNUS, MEM_NONE> (addr, value); return;
         case MEM_CHIP:          poke16 <ACCESSOR_AGNUS, MEM_CHIP> (addr, value); return;
         case MEM_SLOW_MIRROR:   poke16 <ACCESSOR_AGNUS, MEM_SLOW> (addr, value); return;
             
-        default: assert(false);
+        default:
+            fatalError;
     }
 }
 
@@ -1698,9 +1698,10 @@ Memory::peekCIA8(u32 addr)
             
         case 0b11:
             return a0 ? LO_BYTE(cpu.getIRD()) : HI_BYTE(cpu.getIRD());
+            
+        default:
+            fatalError;
     }
-    assert(false);
-    return 0;
 }
 
 u16
@@ -1723,9 +1724,9 @@ Memory::peekCIA16(u32 addr)
         case 0b11:
             return cpu.getIRD();
             
+        default:
+            fatalError;
     }
-    assert(false);
-    return 0;
 }
 
 u8
@@ -1748,9 +1749,10 @@ Memory::spypeekCIA8(u32 addr) const
             
         case 0b11:
             return a0 ? LO_BYTE(cpu.getIRD()) : HI_BYTE(cpu.getIRD());
+            
+        default:
+            fatalError;
     }
-    assert(false);
-    return 0;
 }
 
 u16
@@ -1773,9 +1775,9 @@ Memory::spypeekCIA16(u32 addr) const
         case 0b11:
             return cpu.getIRD();
             
+        default:
+            fatalError;
     }
-    assert(false);
-    return 0;
 }
 
 void

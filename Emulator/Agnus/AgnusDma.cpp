@@ -253,34 +253,30 @@ Agnus::disableBplDmaECS()
 template <BusOwner owner> bool
 Agnus::busIsFree() const
 {
-    // Deny if the bus is already in use
+    // Deny if the bus is in use
     if (busOwner[pos.h] != BUS_NONE) return false;
 
-    switch (owner) {
-
-        case BUS_COPPER:
-        {
-            // Deny if Copper DMA is disabled
-            if (!copdma()) return false;
-
-            // Deny in cycle E0
-            if (unlikely(pos.h == 0xE0)) return false;
-            return true;
-        }
-        case BUS_BLITTER:
-        {
-            // Deny if Blitter DMA is disabled
-            if (!bltdma()) return false;
-            
-            // Deny if the CPU has precedence
-            if (bls && !bltpri()) return false;
-
-            return true;
-        }
+    if constexpr (owner == BUS_COPPER) {
+        
+        // Deny if Copper DMA is disabled
+        if (!copdma()) return false;
+        
+        // Deny in cycle E0
+        if (unlikely(pos.h == 0xE0)) return false;
+        
+        return true;
     }
-
-    assert(false);
-    return false;
+    
+    if constexpr (owner == BUS_BLITTER) {
+        
+        // Deny if Blitter DMA is disabled
+        if (!bltdma()) return false;
+        
+        // Deny if the CPU has precedence
+        if (bls && !bltpri()) return false;
+        
+        return true;
+    }
 }
 
 template <BusOwner owner> bool
@@ -288,31 +284,27 @@ Agnus::allocateBus()
 {
     // Deny if the bus has been allocated already
     if (busOwner[pos.h] != BUS_NONE) return false;
-
-    switch (owner) {
-
-        case BUS_COPPER:
-        {
-            // Assign bus to the Copper
-            busOwner[pos.h] = BUS_COPPER;
-            return true;
-        }
-        case BUS_BLITTER:
-        {
-            // Deny if Blitter DMA is off
-            if (!bltdma()) return false;
-
-            // Deny if the CPU has precedence
-            if (bls && !bltpri()) return false;
-
-            // Assign the bus to the Blitter
-            busOwner[pos.h] = BUS_BLITTER;
-            return true;
-        }
+    
+    if constexpr (owner == BUS_COPPER) {
+        
+        // Assign bus to the Copper
+        busOwner[pos.h] = BUS_COPPER;
+        
+        return true;
     }
-
-    assert(false);
-    return false;
+    if constexpr (owner == BUS_BLITTER) {
+        
+        // Deny if Blitter DMA is off
+        if (!bltdma()) return false;
+        
+        // Deny if the CPU has precedence
+        if (bls && !bltpri()) return false;
+        
+        // Assign the bus to the Blitter
+        busOwner[pos.h] = BUS_BLITTER;
+        
+        return true;
+    }
 }
 
 u16

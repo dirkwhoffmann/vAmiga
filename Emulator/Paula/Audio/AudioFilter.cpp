@@ -12,13 +12,6 @@
 #include "math.h"
 
 void
-AudioFilter::setFilterType(FilterType type)
-{
-    assert_enum(FilterType, type);
-    this->type = type;
-}
-
-void
 AudioFilter::setSampleRate(double sampleRate)
 {
     trace(AUD_DEBUG, "Setting sample rate to %f Hz\n", sampleRate);

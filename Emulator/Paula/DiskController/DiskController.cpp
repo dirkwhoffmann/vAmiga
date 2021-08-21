@@ -73,8 +73,7 @@ DiskController::getConfigItem(Option option) const
         case OPT_LOCK_DSKSYNC:  return config.lockDskSync;
             
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -86,8 +85,7 @@ DiskController::getConfigItem(Option option, long id) const
         case OPT_DRIVE_CONNECT:  return config.connected[id];
             
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -118,7 +116,7 @@ DiskController::setConfigItem(Option option, i64 value)
             return;
             
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -143,7 +141,7 @@ DiskController::setConfigItem(Option option, long id, i64 value)
             return;
             
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -504,15 +502,17 @@ DiskController::performDMA()
     {
             
         case DRIVE_DMA_READ:
+            
             performDMARead(drive, count);
             break;
             
         case DRIVE_DMA_WRITE:
+            
             performDMAWrite(drive, count);
             break;
             
         default:
-            assert(false);
+            fatalError;
     }
 }
 

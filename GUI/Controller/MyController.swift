@@ -529,7 +529,7 @@ extension MyController {
             
         default:
             track("Unknown message: \(msg)")
-            assert(false)
+            fatalError()
         }
     }
 }

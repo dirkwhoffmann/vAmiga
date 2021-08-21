@@ -156,11 +156,12 @@ isize
 FSDevice::partitionForBlock(Block nr)
 {
     for (isize i = 0; i < (isize)partitions.size(); i++) {
-        if (nr >= partitions[i]->firstBlock && nr <= partitions[i]->lastBlock) return i;
+        if (nr >= partitions[i]->firstBlock && nr <= partitions[i]->lastBlock) {
+            return i;
+        }
     }
-
-    assert(false);
-    return 0;
+    
+    fatalError;
 }
 
 FSBlockType

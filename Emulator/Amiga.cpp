@@ -163,6 +163,7 @@ Amiga::getConfigItem(Option option) const
 
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
+            
             return agnus.getConfigItem(option);
             
         case OPT_DENISE_REVISION:
@@ -172,20 +173,24 @@ Amiga::getConfigItem(Option option) const
         case OPT_CLX_SPR_SPR:
         case OPT_CLX_SPR_PLF:
         case OPT_CLX_PLF_PLF:
+            
             return denise.getConfigItem(option);
             
         case OPT_PALETTE:
         case OPT_BRIGHTNESS:
         case OPT_CONTRAST:
         case OPT_SATURATION:
+            
             return denise.pixelEngine.getConfigItem(option);
             
         case OPT_DMA_DEBUG_ENABLE:
         case OPT_DMA_DEBUG_MODE:
         case OPT_DMA_DEBUG_OPACITY:
+            
             return agnus.dmaDebugger.getConfigItem(option);
             
         case OPT_RTC_MODEL:
+            
             return rtc.getConfigItem(option);
 
         case OPT_CHIP_RAM:
@@ -196,6 +201,7 @@ Amiga::getConfigItem(Option option) const
         case OPT_BANKMAP:
         case OPT_UNMAPPING_TYPE:
         case OPT_RAM_INIT_PATTERN:
+            
             return mem.getConfigItem(option);
             
         case OPT_SAMPLING_METHOD:
@@ -203,28 +209,35 @@ Amiga::getConfigItem(Option option) const
         case OPT_FILTER_ALWAYS_ON:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
+            
             return paula.muxer.getConfigItem(option);
 
         case OPT_BLITTER_ACCURACY:
+            
             return agnus.blitter.getConfigItem(option);
 
         case OPT_DRIVE_SPEED:
         case OPT_LOCK_DSKSYNC:
         case OPT_AUTO_DSKSYNC:
+            
             return paula.diskController.getConfigItem(option);
             
         case OPT_SERIAL_DEVICE:
+            
             return serialPort.getConfigItem(option);
 
         case OPT_CIA_REVISION: 
         case OPT_TODBUG:
         case OPT_ECLOCK_SYNCING:
+            
             return ciaA.getConfigItem(option);
 
         case OPT_ACCURATE_KEYBOARD:
+            
             return keyboard.getConfigItem(option);
 
-        default: assert(false); return 0;
+        default:
+            fatalError;
     }
 }
 
@@ -235,13 +248,16 @@ Amiga::getConfigItem(Option option, long id) const
             
         case OPT_DMA_DEBUG_ENABLE:
         case OPT_DMA_DEBUG_COLOR:
+            
             return agnus.dmaDebugger.getConfigItem(option, id);
 
         case OPT_AUDPAN:
         case OPT_AUDVOL:
+            
             return paula.muxer.getConfigItem(option, id);
 
         case OPT_DRIVE_CONNECT:
+            
             return paula.diskController.getConfigItem(option, id);
             
         case OPT_DRIVE_TYPE:
@@ -253,23 +269,26 @@ Amiga::getConfigItem(Option option, long id) const
         case OPT_EJECT_VOLUME:
         case OPT_DEFAULT_FILESYSTEM:
         case OPT_DEFAULT_BOOTBLOCK:
+            
             return df[id]->getConfigItem(option);
             
         case OPT_PULLUP_RESISTORS:
         case OPT_MOUSE_VELOCITY:
+            
             if (id == PORT_1) return controlPort1.mouse.getConfigItem(option);
             if (id == PORT_2) return controlPort2.mouse.getConfigItem(option);
-            assert(false);
+            fatalError;
             
         case OPT_AUTOFIRE:
         case OPT_AUTOFIRE_BULLETS:
         case OPT_AUTOFIRE_DELAY:
+            
             if (id == PORT_1) return controlPort1.joystick.getConfigItem(option);
             if (id == PORT_2) return controlPort2.joystick.getConfigItem(option);
-            assert(false);
+            fatalError;
 
         default:
-            assert(false);
+            fatalError;
     }
     
     return 0;
@@ -305,6 +324,7 @@ Amiga::configure(Option option, i64 value)
 
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
+            
             agnus.setConfigItem(option, value);
             break;
             
@@ -315,6 +335,7 @@ Amiga::configure(Option option, i64 value)
         case OPT_CLX_SPR_SPR:
         case OPT_CLX_SPR_PLF:
         case OPT_CLX_PLF_PLF:
+            
             denise.setConfigItem(option, value);
             break;
 
@@ -322,16 +343,19 @@ Amiga::configure(Option option, i64 value)
         case OPT_BRIGHTNESS:
         case OPT_CONTRAST:
         case OPT_SATURATION:
+            
             denise.pixelEngine.setConfigItem(option, value);
             break;
 
         case OPT_DMA_DEBUG_ENABLE:
         case OPT_DMA_DEBUG_MODE:
         case OPT_DMA_DEBUG_OPACITY:
+            
             agnus.dmaDebugger.setConfigItem(option, value);
             break;
 
         case OPT_RTC_MODEL:
+            
             rtc.setConfigItem(option, value);
             break;
 
@@ -343,6 +367,7 @@ Amiga::configure(Option option, i64 value)
         case OPT_BANKMAP:
         case OPT_UNMAPPING_TYPE:
         case OPT_RAM_INIT_PATTERN:
+            
             mem.setConfigItem(option, value);
             break;
 
@@ -355,6 +380,7 @@ Amiga::configure(Option option, i64 value)
         case OPT_EJECT_VOLUME:
         case OPT_DEFAULT_FILESYSTEM:
         case OPT_DEFAULT_BOOTBLOCK:
+            
             df[0]->setConfigItem(option, value);
             df[1]->setConfigItem(option, value);
             df[2]->setConfigItem(option, value);
@@ -366,11 +392,13 @@ Amiga::configure(Option option, i64 value)
         case OPT_FILTER_ALWAYS_ON:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
+            
             paula.muxer.setConfigItem(option, value);
             break;
 
         case OPT_AUDPAN:
         case OPT_AUDVOL:
+            
             paula.muxer.setConfigItem(option, 0, value);
             paula.muxer.setConfigItem(option, 1, value);
             paula.muxer.setConfigItem(option, 2, value);
@@ -378,32 +406,38 @@ Amiga::configure(Option option, i64 value)
             break;
 
         case OPT_BLITTER_ACCURACY:
+            
             agnus.blitter.setConfigItem(option, value);
             break;
 
         case OPT_DRIVE_SPEED:
         case OPT_LOCK_DSKSYNC:
         case OPT_AUTO_DSKSYNC:
+            
             paula.diskController.setConfigItem(option, value);
             break;
 
         case OPT_SERIAL_DEVICE:
+            
             serialPort.setConfigItem(option, value);
             break;
 
         case OPT_CIA_REVISION:
         case OPT_TODBUG:
         case OPT_ECLOCK_SYNCING:
+            
             ciaA.setConfigItem(option, value);
             ciaB.setConfigItem(option, value);
             break;
 
         case OPT_ACCURATE_KEYBOARD:
+            
             keyboard.setConfigItem(option, value);
             break;
 
         case OPT_PULLUP_RESISTORS:
         case OPT_MOUSE_VELOCITY:
+            
             controlPort1.mouse.setConfigItem(option, value);
             controlPort2.mouse.setConfigItem(option, value);
             break;
@@ -411,12 +445,13 @@ Amiga::configure(Option option, i64 value)
         case OPT_AUTOFIRE:
         case OPT_AUTOFIRE_BULLETS:
         case OPT_AUTOFIRE_DELAY:
+            
             controlPort1.joystick.setConfigItem(option, value);
             controlPort2.joystick.setConfigItem(option, value);
             break;
 
         default:
-            assert(false);
+            fatalError;
     }
 
     if (std::find(quiet.begin(), quiet.end(), option) == quiet.end()) {
@@ -451,15 +486,18 @@ Amiga::configure(Option option, long id, i64 value)
             
         case OPT_DMA_DEBUG_ENABLE:
         case OPT_DMA_DEBUG_COLOR:
+            
             agnus.dmaDebugger.setConfigItem(option, id, value);
             break;
 
         case OPT_AUDPAN:
         case OPT_AUDVOL:
+            
             paula.muxer.setConfigItem(option, id, value);
             break;
 
         case OPT_DRIVE_CONNECT:
+            
             paula.diskController.setConfigItem(option, id, value);
             break;
 
@@ -472,11 +510,13 @@ Amiga::configure(Option option, long id, i64 value)
         case OPT_EJECT_VOLUME:
         case OPT_DEFAULT_FILESYSTEM:
         case OPT_DEFAULT_BOOTBLOCK:
+            
             df[id]->setConfigItem(option, value);
             break;
 
         case OPT_PULLUP_RESISTORS:
         case OPT_MOUSE_VELOCITY:
+            
             if (id == PORT_1) controlPort1.mouse.setConfigItem(option, value);
             if (id == PORT_2) controlPort2.mouse.setConfigItem(option, value);
             break;
@@ -484,12 +524,13 @@ Amiga::configure(Option option, long id, i64 value)
         case OPT_AUTOFIRE:
         case OPT_AUTOFIRE_BULLETS:
         case OPT_AUTOFIRE_DELAY:
+            
             if (id == PORT_1) controlPort1.joystick.setConfigItem(option, value);
             if (id == PORT_2) controlPort2.joystick.setConfigItem(option, value);
             break;
 
         default:
-            assert(false);
+            fatalError;
     }
     
     if (std::find(quiet.begin(), quiet.end(), option) == quiet.end()) {
@@ -521,7 +562,7 @@ Amiga::configure(ConfigScheme scheme)
                 break;
                 
             default:
-                assert(false);
+                fatalError;
         }
     }
 }
@@ -567,7 +608,7 @@ Amiga::getInspectionTarget() const
         case INS_EVENTS:  return INSPECTION_EVENTS;
 
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -593,7 +634,7 @@ Amiga::setInspectionTarget(InspectionTarget target, Cycle trigger)
             case INSPECTION_EVENTS:  id = INS_EVENTS; break;
                 
             default:
-                assert(false);
+                fatalError;
         }
         
         agnus.scheduleRel<SLOT_INS>(trigger, id);

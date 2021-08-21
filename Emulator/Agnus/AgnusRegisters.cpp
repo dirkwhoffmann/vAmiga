@@ -149,17 +149,14 @@ Agnus::pokeSPRxPTH(u16 value)
 {
     trace(SPRREG_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
 
-    switch (x) {
-        case 0: recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTH, value); break;
-        case 1: recordRegisterChange(DMA_CYCLES(2), SET_SPR1PTH, value); break;
-        case 2: recordRegisterChange(DMA_CYCLES(2), SET_SPR2PTH, value); break;
-        case 3: recordRegisterChange(DMA_CYCLES(2), SET_SPR3PTH, value); break;
-        case 4: recordRegisterChange(DMA_CYCLES(2), SET_SPR4PTH, value); break;
-        case 5: recordRegisterChange(DMA_CYCLES(2), SET_SPR5PTH, value); break;
-        case 6: recordRegisterChange(DMA_CYCLES(2), SET_SPR6PTH, value); break;
-        case 7: recordRegisterChange(DMA_CYCLES(2), SET_SPR7PTH, value); break;
-        default: assert(false);
-    }
+    if constexpr (x == 0) recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTH, value);
+    if constexpr (x == 1) recordRegisterChange(DMA_CYCLES(2), SET_SPR1PTH, value);
+    if constexpr (x == 2) recordRegisterChange(DMA_CYCLES(2), SET_SPR2PTH, value);
+    if constexpr (x == 3) recordRegisterChange(DMA_CYCLES(2), SET_SPR3PTH, value);
+    if constexpr (x == 4) recordRegisterChange(DMA_CYCLES(2), SET_SPR4PTH, value);
+    if constexpr (x == 5) recordRegisterChange(DMA_CYCLES(2), SET_SPR5PTH, value);
+    if constexpr (x == 6) recordRegisterChange(DMA_CYCLES(2), SET_SPR6PTH, value);
+    if constexpr (x == 7) recordRegisterChange(DMA_CYCLES(2), SET_SPR7PTH, value);
 }
 
 template <int x> void
@@ -177,17 +174,14 @@ Agnus::pokeSPRxPTL(u16 value)
 {
     trace(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
 
-    switch (x) {
-        case 0: recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTL, value); break;
-        case 1: recordRegisterChange(DMA_CYCLES(2), SET_SPR1PTL, value); break;
-        case 2: recordRegisterChange(DMA_CYCLES(2), SET_SPR2PTL, value); break;
-        case 3: recordRegisterChange(DMA_CYCLES(2), SET_SPR3PTL, value); break;
-        case 4: recordRegisterChange(DMA_CYCLES(2), SET_SPR4PTL, value); break;
-        case 5: recordRegisterChange(DMA_CYCLES(2), SET_SPR5PTL, value); break;
-        case 6: recordRegisterChange(DMA_CYCLES(2), SET_SPR6PTL, value); break;
-        case 7: recordRegisterChange(DMA_CYCLES(2), SET_SPR7PTL, value); break;
-        default: assert(false);
-    }
+    if constexpr (x == 0) recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTL, value);
+    if constexpr (x == 1) recordRegisterChange(DMA_CYCLES(2), SET_SPR1PTL, value);
+    if constexpr (x == 2) recordRegisterChange(DMA_CYCLES(2), SET_SPR2PTL, value);
+    if constexpr (x == 3) recordRegisterChange(DMA_CYCLES(2), SET_SPR3PTL, value);
+    if constexpr (x == 4) recordRegisterChange(DMA_CYCLES(2), SET_SPR4PTL, value);
+    if constexpr (x == 5) recordRegisterChange(DMA_CYCLES(2), SET_SPR5PTL, value);
+    if constexpr (x == 6) recordRegisterChange(DMA_CYCLES(2), SET_SPR6PTL, value);
+    if constexpr (x == 7) recordRegisterChange(DMA_CYCLES(2), SET_SPR7PTL, value);
 }
 
 template <int x> void

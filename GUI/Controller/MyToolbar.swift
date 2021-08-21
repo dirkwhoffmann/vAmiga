@@ -64,7 +64,8 @@ class MyToolbar: NSToolbar {
         case 1: parent.monitorAction(sender)
         case 2: parent.consoleAction(sender)
 
-        default: assert(false)
+        default:
+            fatalError()
         }
     }
     
@@ -76,7 +77,8 @@ class MyToolbar: NSToolbar {
         case 1: parent.restoreSnapshotAction(self)
         case 2: parent.browseSnapshotsAction(self)
             
-        default: assert(false)
+        default:
+            fatalError()
         }
     }
     
@@ -89,7 +91,8 @@ class MyToolbar: NSToolbar {
         case 0: parent.takeScreenshotAction(self)
         case 1: parent.browseScreenshotsAction(self)
             
-        default: assert(false)
+        default:
+            fatalError()
         }
     }
 
@@ -120,7 +123,8 @@ class MyToolbar: NSToolbar {
         case 0: parent.preferencesAction(sender)
         case 1: parent.configureAction(sender)
 
-        default: assert(false)
+        default:
+            fatalError()
         }
     }
 
@@ -132,7 +136,8 @@ class MyToolbar: NSToolbar {
         case 1: parent.resetAction(self)
         case 2: parent.powerAction(self)
 
-        default: assert(false)
+        default:
+            fatalError()
         }
     }
 }

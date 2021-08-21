@@ -67,8 +67,7 @@ Joystick::getConfigItem(Option option) const
         case OPT_AUTOFIRE_DELAY:      return (i64)config.autofireDelay;
 
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -101,7 +100,7 @@ Joystick::setConfigItem(Option option, i64 value)
             return;
 
         default:
-            assert(false);
+            fatalError;
     }
 }
 

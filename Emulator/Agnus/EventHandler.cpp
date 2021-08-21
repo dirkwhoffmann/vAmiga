@@ -360,7 +360,8 @@ Agnus::inspectEventSlot(EventInfo &info, EventSlot nr) const
             }
             break;
 
-        default: assert(false);
+        default:
+            fatalError;
     }
 }
 

@@ -81,8 +81,7 @@ Sampler::interpolate(Cycle clock)
             return (i16)(s1 + weight * dy);
         }
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 

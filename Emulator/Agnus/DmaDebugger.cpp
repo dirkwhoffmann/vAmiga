@@ -75,8 +75,7 @@ DmaDebugger::getConfigItem(Option option) const
         case OPT_DMA_DEBUG_OPACITY: return config.opacity;
                         
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -91,8 +90,7 @@ DmaDebugger::getConfigItem(Option option, long id) const
         case OPT_DMA_DEBUG_COLOR:  return config.debugColor[id];
                         
         default:
-            assert(false);
-            return 0;
+            fatalError;
     }
 }
 
@@ -122,7 +120,7 @@ DmaDebugger::setConfigItem(Option option, i64 value)
             return;
 
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -259,7 +257,7 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
                     return;
             }
         default:
-            assert(false);
+            fatalError;
     }
 }
 
@@ -350,7 +348,8 @@ DmaDebugger::computeOverlay()
             fgWeight = 1.0 - opacity;
             break;
 
-        default: assert(false);
+        default:
+            fatalError;
 
     }
 
