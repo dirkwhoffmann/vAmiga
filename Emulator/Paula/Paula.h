@@ -19,10 +19,6 @@
 #include "StateMachine.h"
 #include "UART.h"
 
-//
-// Class
-//
-
 class Paula : public SubComponent {
     
 private:
@@ -133,6 +129,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+        
     }
 
     template <class T>
@@ -206,14 +203,14 @@ public:
     // INTREQR and INTREQ
     u16 peekINTREQR() const;
     template <Accessor s> void pokeINTREQ(u16 value);
-    void setINTREQ(bool setclr, u16 value);
     void setINTREQ(u16 value) { setINTREQ(value & 0x8000, value & 0x7FFF); }
+    void setINTREQ(bool setclr, u16 value);
 
     // INTENAR and INTENA
     u16 peekINTENAR() const { return intena; }
     template <Accessor s> void pokeINTENA(u16 value);
-    void setINTENA(bool setclr, u16 value);
     void setINTENA(u16 value) { setINTENA(value & 0x8000, value & 0x7FFF); }
+    void setINTENA(bool setclr, u16 value);
 
     // POTxDAT
     template <isize x> u16 peekPOTxDAT() const;

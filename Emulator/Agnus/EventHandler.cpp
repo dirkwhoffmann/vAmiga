@@ -527,17 +527,21 @@ Agnus::executeEventsUntil(Cycle cycle) {
 
         // Determine the next trigger cycle for all secondary slots
         Cycle nextSecTrigger = slot[SLOT_SEC + 1].triggerCycle;
-        for (isize i = SLOT_SEC + 2; i < SLOT_COUNT; i++)
-            if (slot[i].triggerCycle < nextSecTrigger)
+        for (isize i = SLOT_SEC + 2; i < SLOT_COUNT; i++) {
+            if (slot[i].triggerCycle < nextSecTrigger) {
                 nextSecTrigger = slot[i].triggerCycle;
-
+            }
+        }
+        
         // Update the secondary table trigger in the primary table
         rescheduleAbs<SLOT_SEC>(nextSecTrigger);
     }
 
     // Determine the next trigger cycle for all primary slots
     nextTrigger = slot[0].triggerCycle;
-    for (isize i = 1; i <= SLOT_SEC; i++)
-        if (slot[i].triggerCycle < nextTrigger)
+    for (isize i = 1; i <= SLOT_SEC; i++) {
+        if (slot[i].triggerCycle < nextTrigger) {
             nextTrigger = slot[i].triggerCycle;
+        }
+    }
 }

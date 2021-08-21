@@ -28,9 +28,12 @@ TOD::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
-    if (hard) stopped = true;
-    if (hard) matching = true;
-    if (hard) tod.hi = 0x1;
+    if (hard) {
+        
+        stopped = true;
+        matching = true;
+        tod.hi = 0x1;
+    }
 }
 
 void
@@ -114,6 +117,7 @@ TOD::setCounterHi(u8 value)
 {
     trace(TOD_DEBUG, "setCounterHi(%x)\n", value);
     tod.hi = value;
+    
     checkIrq();
 }
 
@@ -122,6 +126,7 @@ TOD::setCounterMid(u8 value)
 {
     trace(TOD_DEBUG, "setCounterMid(%x)\n", value);
     tod.mid = value;
+    
     checkIrq();
 }
 
@@ -130,6 +135,7 @@ TOD::setCounterLo(u8 value)
 {
     trace(TOD_DEBUG, "setCounterLo(%x)\n", value);
     tod.lo = value;
+    
     checkIrq();
 }
 
@@ -138,6 +144,7 @@ TOD::setAlarmHi(u8 value)
 {
     trace(TOD_DEBUG, "setAlarmHi(%x)\n", value);
     alarm.hi = value;
+    
     checkIrq();
 }
 
@@ -146,6 +153,7 @@ TOD::setAlarmMid(u8 value)
 {
     trace(TOD_DEBUG, "setAlarmMid(%x)\n", value);
     alarm.mid = value;
+    
     checkIrq();
 }
 
@@ -154,6 +162,7 @@ TOD::setAlarmLo(u8 value)
 {
     trace(TOD_DEBUG, "setAlarmLo(%x)\n", value);
     alarm.lo = value;
+    
     checkIrq();
 }
 
@@ -207,6 +216,7 @@ void
 TOD::checkIrq()
 {
     if (!matching && tod.value == alarm.value) {
+        
         trace(TOD_DEBUG, "TOD IRQ (%02x:%02x:%02x)\n", tod.hi, tod.mid, tod.lo);
         cia.todInterrupt();
     }
