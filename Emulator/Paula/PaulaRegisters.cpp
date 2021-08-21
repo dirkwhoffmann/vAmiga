@@ -88,8 +88,8 @@ Paula::setINTREQ(bool setclr, u16 value)
         intreq &= ~value;
     }
 
-    if (ciaa.irqPin() == 0) SET_BIT(intreq, 3);
-    if (ciab.irqPin() == 0) SET_BIT(intreq, 13);
+    if (ciaa.getIrq() == 0) SET_BIT(intreq, 3);
+    if (ciab.getIrq() == 0) SET_BIT(intreq, 13);
 
     checkInterrupt();
 }

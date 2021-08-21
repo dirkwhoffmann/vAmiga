@@ -349,14 +349,12 @@ private:
 public:
     
     static CIAConfig getDefaultConfig();
-    const CIAConfig &getConfig() const { return config; }
-    void resetConfig() override;
     
+    void resetConfig() override;
+    const CIAConfig &getConfig() const { return config; }
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
     
-    bool getEClockSyncing() const { return config.eClockSyncing; }
-
     
     //
     // Analyzing
@@ -382,7 +380,6 @@ public:
     u8 peek(u16 addr);
     
     // Reads a value from a CIA register without causing side effects
-    u8 spypeek(u16 addr);
     u8 spypeek(u16 addr) const;
 
     // Writes a value into a CIA register
@@ -439,7 +436,7 @@ protected:
 public:
     
     // Getter for the interrupt line
-    bool irqPin() const { return irq; }
+    bool getIrq() const { return irq; }
 
     // Simulates an edge edge on the flag pin
     void emulateRisingEdgeOnFlagPin();
@@ -456,6 +453,11 @@ public:
     //
     // Handling interrupts
     //
+
+public:
+    
+    // Handles an interrupt request from TOD
+    void todInterrupt();
 
 private:
 
@@ -475,15 +477,12 @@ private:
     void triggerFlagPinIrq();
     void triggerSerialIrq();
     
-public:
-    
-    // Handles an interrupt request from TOD
-    void todInterrupt();
-
     
     //
     // Handling events
     //
+    
+public:
     
     // Schedules the next execution event
     void scheduleNextExecution();
@@ -497,10 +496,7 @@ public:
     //
     
 public:
-    
-    // Advances the 24-bit counter by one tick
-    // void incrementTOD();
-    
+        
     // Executes the CIA for one CIA cycle
     void executeOneCycle();
     
@@ -520,16 +516,14 @@ public:
     void wakeUp();
     void wakeUp(Cycle targetCycle);
     
-    // Returns true if the CIA is in idle state
+    // Returns true if the CIA is in idle state or not
     bool isSleeping() const { return sleeping; }
-    
-    // Returns true if the CIA is awake
     bool isAwake() const { return !sleeping; }
         
-    // The CIA is idle since this number of cycles
+    // Returns the number of cycles the CIA is idle since
     CIACycle idleSince() const;
     
-    // Total number of cycles the CIA was idle
+    // Retruns the total number of cycles the CIA was idle
     CIACycle idleTotal() const { return idleCycles; }
 };
 
@@ -544,9 +538,9 @@ public:
     
     CIAA(Amiga& ref) : CIA(0, ref) { };
     
-    const char *getDescription() const override { return "CIAA"; }
-
 private:
+
+    const char *getDescription() const override { return "CIAA"; }
     
     void _powerOn() override;
     void _powerOff() override;
@@ -581,9 +575,9 @@ public:
     
     CIAB(Amiga& ref) : CIA(1, ref) { };
     
-    const char *getDescription() const override { return "CIAB"; }
-
 private:
+
+    const char *getDescription() const override { return "CIAB"; }
         
     void pullDownInterruptLine() override;
     void releaseInterruptLine() override;

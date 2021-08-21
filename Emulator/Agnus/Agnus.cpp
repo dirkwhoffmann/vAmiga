@@ -765,7 +765,7 @@ void
 Agnus::syncWithEClock()
 {
     // Check if E clock syncing is disabled
-    if (!ciaa.getEClockSyncing()) return;
+    if (!ciaa.getConfig().eClockSyncing) return;
 
     /* The E clock is 6 clocks low and 4 clocks high:
      *
@@ -803,21 +803,6 @@ Agnus::syncWithEClock()
     // Add wait states to the CPU
     cpu.addWaitStates(delay);
 }
-
-/*
-bool
-Agnus::inSyncWithEClock()
-{
-    // Check if E clock syncing is disabled
-    if (!ciaa.getEClockSyncing()) return true;
-        
-    // Determine where we are in the current E clock cycle
-    Cycle eClk = (clock >> 2) % 10;
-    
-    // Unsure if this condition is accurate
-    return eClk >= 2 && eClk <= 6;
-}
-*/
 
 void
 Agnus::executeUntilBusIsFree()
