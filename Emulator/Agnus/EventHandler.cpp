@@ -473,7 +473,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
         copper.serviceEvent(slot[SLOT_COP].id);
     }
     if (isDue<SLOT_BLT>(cycle)) {
-        blitter.serviceEvent();
+        blitter.serviceEvent(slot[SLOT_BLT].id);
     }
 
     if (isDue<SLOT_SEC>(cycle)) {

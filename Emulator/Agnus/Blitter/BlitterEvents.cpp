@@ -14,7 +14,13 @@
 void
 Blitter::serviceEvent()
 {
-    switch (agnus.slot[SLOT_BLT].id) {
+    serviceEvent(agnus.slot[SLOT_BLT].id);
+}
+
+void
+Blitter::serviceEvent(EventID id)
+{
+    switch (id) {
 
         case BLT_STRT1:
 

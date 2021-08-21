@@ -10,8 +10,9 @@
 #pragma once
 
 #include "BlitterTypes.h"
-#include "SubComponent.h"
+#include "Event.h"
 #include "Memory.h"
+#include "SubComponent.h"
 
 /* The Blitter supports three accuracy levels:
  *
@@ -394,6 +395,7 @@ public:
     
     // Processes a Blitter event
     void serviceEvent();
+    void serviceEvent(EventID id);
 
 
     //
