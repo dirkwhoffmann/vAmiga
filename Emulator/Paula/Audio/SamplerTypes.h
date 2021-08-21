@@ -20,9 +20,7 @@ enum_long(SMP_METHOD)
 {
     SMP_NONE,
     SMP_NEAREST,
-    SMP_LINEAR,
-
-    SMP_COUNT
+    SMP_LINEAR
 };
 typedef SMP_METHOD SamplingMethod;
 
@@ -31,7 +29,7 @@ struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod>
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < SMP_COUNT;
+        return (unsigned long)value <= SMP_LINEAR;
     }
 
     static const char *prefix() { return "SMP"; }
@@ -42,7 +40,6 @@ struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod>
             case SMP_NONE:     return "NONE";
             case SMP_NEAREST:  return "NEAREST";
             case SMP_LINEAR:   return "LINEAR";
-            case SMP_COUNT:    return "???";
         }
         return "???";
     }

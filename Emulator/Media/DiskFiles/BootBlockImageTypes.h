@@ -20,9 +20,7 @@ enum_long(BB_TYPE)
 {
     BB_STANDARD,
     BB_VIRUS,
-    BB_CUSTOM,
-    
-    BB_COUNT
+    BB_CUSTOM
 };
 typedef BB_TYPE BootBlockType;
 
@@ -31,7 +29,7 @@ struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < BB_COUNT;
+        return (unsigned long)value <= BB_CUSTOM;
     }
     
     static const char *prefix() { return "BB"; }
@@ -42,7 +40,6 @@ struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType> {
             case BB_STANDARD:  return "STANDARD";
             case BB_VIRUS:     return "VIRUS";
             case BB_CUSTOM:    return "CUSTOM";
-            case BB_COUNT:     return "???";
         }
         return "???";
     }
@@ -64,7 +61,7 @@ struct BootBlockIdEnum : util::Reflection<BootBlockIdEnum, BootBlockId> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < BB_COUNT;
+        return (unsigned long)value <= BB_BYTE_BANDIT;
     }
     
     static const char *prefix() { return "BB"; }

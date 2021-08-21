@@ -23,9 +23,7 @@ enum_long(PALETTE)
     PALETTE_PAPER_WHITE,
     PALETTE_GREEN,
     PALETTE_AMBER,
-    PALETTE_SEPIA,
-    
-    PALETTE_COUNT
+    PALETTE_SEPIA
 };
 typedef PALETTE Palette;
 
@@ -34,7 +32,7 @@ struct PaletteEnum : util::Reflection<PaletteEnum, Palette> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < PALETTE_COUNT;
+        return (unsigned long)value <= PALETTE_SEPIA;
     }
 
     static const char *prefix() { return "PALETTE"; }
@@ -48,7 +46,6 @@ struct PaletteEnum : util::Reflection<PaletteEnum, Palette> {
             case PALETTE_GREEN:        return "GREEN";
             case PALETTE_AMBER:        return "AMBER";
             case PALETTE_SEPIA:        return "SEPIA";
-            case PALETTE_COUNT:        return "???";
         }
         return "???";
     }

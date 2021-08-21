@@ -20,9 +20,7 @@ enum_long(DENISE_REV)
 {
     DENISE_OCS,           // Revision 8362R8
     DENISE_OCS_BRDRBLNK,  // Revision 8362R8 + ECS Border blank feature
-    DENISE_ECS,           // Revision 8373 (not supported yet)
-
-    DENISE_COUNT
+    DENISE_ECS            // Revision 8373 (not supported yet)
 };
 typedef DENISE_REV DeniseRevision;
 
@@ -31,7 +29,7 @@ struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < DENISE_COUNT;
+        return (unsigned long)value <= DENISE_ECS;
     }
 
     static const char *prefix() { return "DENISE"; }
@@ -42,7 +40,6 @@ struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
             case DENISE_OCS:          return "OCS";
             case DENISE_OCS_BRDRBLNK: return "OCS_BRDRBLNK";
             case DENISE_ECS:          return "ECS";
-            case DENISE_COUNT:        return "???";
         }
         return "???";
     }

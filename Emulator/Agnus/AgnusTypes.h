@@ -23,9 +23,7 @@ enum_long(AGNUS_REVISION)
 {
     AGNUS_OCS,              // Revision 8367
     AGNUS_ECS_1MB,          // Revision 8372
-    AGNUS_ECS_2MB,          // Revision 8375
-    
-    AGNUS_COUNT
+    AGNUS_ECS_2MB           // Revision 8375
 };
 typedef AGNUS_REVISION AgnusRevision;
 
@@ -34,7 +32,7 @@ struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < AGNUS_COUNT;
+        return (unsigned long)value <= AGNUS_ECS_2MB;
     }
 
     static const char *prefix() { return "AGNUS"; }
@@ -45,7 +43,6 @@ struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision> {
             case AGNUS_OCS:     return "OCS";
             case AGNUS_ECS_1MB: return "ECS_1MB";
             case AGNUS_ECS_2MB: return "ECS_2MB";
-            case AGNUS_COUNT:   return "???";
         }
         return "???";
     }

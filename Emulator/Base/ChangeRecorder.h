@@ -105,9 +105,7 @@ enum RegChangeID : i32
     SET_SPR4PTL,
     SET_SPR5PTL,
     SET_SPR6PTL,
-    SET_SPR7PTL,
-
-    REG_COUNT
+    SET_SPR7PTL
 };
 
 /* Register change recorder

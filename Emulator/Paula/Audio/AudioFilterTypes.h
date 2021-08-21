@@ -19,9 +19,7 @@
 enum_long(FILTER_TYPE)
 {
     FILTER_NONE,
-    FILTER_BUTTERWORTH,
-    
-    FILTER_COUNT
+    FILTER_BUTTERWORTH
 };
 typedef FILTER_TYPE FilterType;
 
@@ -30,7 +28,7 @@ struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < FILTER_COUNT;
+        return (unsigned long)value <= FILTER_BUTTERWORTH;
     }
 
     static const char *prefix() { return "FILTER"; }
@@ -40,7 +38,6 @@ struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType> {
                 
             case FILTER_NONE:         return "NONE";
             case FILTER_BUTTERWORTH:  return "BUTTERWORTH";
-            case FILTER_COUNT:        return "???";
         }
         return "???";
     }

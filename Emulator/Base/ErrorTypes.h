@@ -104,7 +104,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < ERROR_COUNT;
+        return (unsigned long)value <= ERROR_COUNT;
     }
     
     static const char *prefix() { return "ERROR"; }
