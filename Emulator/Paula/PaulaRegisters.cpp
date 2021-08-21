@@ -15,8 +15,7 @@
 u16
 Paula::peekADKCONR() const
 {
-    debug(AUDREG_DEBUG, "peekADKCON() = %x\n", adkcon);
-    debug(DSKREG_DEBUG, "peekADKCON() = %x\n", adkcon);
+    debug(AUDREG_DEBUG || DSKREG_DEBUG, "peekADKCON() = %x\n", adkcon);
     
     return adkcon;
 }
@@ -24,13 +23,12 @@ Paula::peekADKCONR() const
 void
 Paula::pokeADKCON(u16 value)
 {
-    debug(AUDREG_DEBUG, "pokeADKCON(%x)\n", value);
-    debug(DSKREG_DEBUG, "pokeADKCON(%x)\n", value);
+    debug(AUDREG_DEBUG || DSKREG_DEBUG, "pokeADKCON(%x)\n", value);
 
     bool set = value & 0x8000;
     bool clr = !set;
     
-    // Report unusual values for debugging
+    // Report unusual values
     if (set && (GET_BIT(value, 13) || GET_BIT(value, 14))) {
         trace(XFILES, "XFILES (ADKCON): PRECOMP set (%x)\n", value);
     }
@@ -49,17 +47,17 @@ Paula::pokeADKCON(u16 value)
     // Take care of a possible change of the UARTBRK bit
     uart.updateTXD();
 
-    if (adkcon & 0b1110111) trace(AUDREG_DEBUG, "ADKCON MODULATION: %x\n", adkcon);
+    if (adkcon & 0b1110111) {
+        trace(AUDREG_DEBUG, "ADKCON MODULATION: %x\n", adkcon);
+    }
 }
 
 u16
 Paula::peekINTREQR() const
 {
-    u16 result = intreq;
+    trace(INTREG_DEBUG, "peekINTREQR(): %x (INTENA = %x)\n", intreq, intena);
 
-    trace(INTREG_DEBUG, "peekINTREQR(): %x (INTENA = %x)\n", result, intena);
-
-    return result;
+    return intreq;
 }
 
 template <Accessor s> void
@@ -121,11 +119,12 @@ Paula::setINTENA(bool setclr, u16 value)
 template <isize x> u16
 Paula::peekPOTxDAT() const
 {
-    assert(x == 0 || x == 1);
+    u16 result;
+    
+    if constexpr (x == 0) result = HI_LO(potCntY0, potCntX0);
+    if constexpr (x == 1) result = HI_LO(potCntY1, potCntX1);
 
-    u16 result = x ? HI_LO(potCntY1, potCntX1) : HI_LO(potCntY0, potCntX0);
     trace(POTREG_DEBUG, "peekPOT%zdDAT() = %x\n", x, result);
-
     return result;
 }
 

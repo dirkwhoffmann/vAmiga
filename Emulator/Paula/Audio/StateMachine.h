@@ -26,7 +26,7 @@ public:
     Cycle clock;
 
     // The current state of this machine
-    i8 state;
+    isize state;
 
     // The 16 bit output buffer
     u16 buffer;
@@ -68,7 +68,7 @@ public:
      * penlo() and penhi(). The locks are released whenever a new sample is
      * written into the AUDxDAT register.
      *
-     * This feature is experimental (and might well be disabled).
+     * This feature is experimental (and might be well disabled).
      */
     bool enablePenlo = false;
     bool enablePenhi = false;
@@ -105,6 +105,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+        
     }
 
     template <class T>
@@ -155,6 +156,7 @@ public:
 
 public:
 
+    // Writes a value into an audio register
     void pokeAUDxLEN(u16 value);
     void pokeAUDxPER(u16 value);
     void pokeAUDxVOL(u16 value);
@@ -172,13 +174,13 @@ public:
 public:
 
     // Returns true if the state machine is running in DMA mode
-    bool AUDxON() const;
+    bool AUDxON() const { return agnus.auddma<nr>(); }
 
     // Returns true if the audio interrupt is pending
     bool AUDxIP() const;
 
     // Asks Paula to trigger the audio interrupt
-    void AUDxIR();
+    void AUDxIR() const;
 
     // Asks Agnus for one word of data
     void AUDxDR() { audDR = true; }
@@ -214,7 +216,7 @@ public:
     bool AUDxAP() const;
 
     // Condition for normal DMA and interrupt requests
-    bool napnav() { return !AUDxAP() || AUDxAV(); }
+    bool napnav() const { return !AUDxAP() || AUDxAV(); }
 
     // Enables the high byte of data to go to the digital-analog converter
     void penhi();
@@ -222,7 +224,7 @@ public:
     // Enables the high byte of data to go to the digital-analog converter
     void penlo();
 
-    // Transfers DMA requests to Agnus (done in the first refresh cycle)
+    // Transfers a DMA request to Agnus (done in the first refresh cycle)
     void requestDMA() { if (audDR) { agnus.setAudxDR<nr>(); audDR = 0; } }
     
     

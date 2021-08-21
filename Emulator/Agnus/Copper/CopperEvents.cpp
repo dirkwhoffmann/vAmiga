@@ -12,6 +12,12 @@
 #include "Agnus.h"
 
 void
+Copper::serviceEvent()
+{
+    serviceEvent(agnus.slot[SLOT_COP].id);
+}
+
+void
 Copper::serviceEvent(EventID id)
 {
     u16 reg;

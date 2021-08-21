@@ -18,25 +18,27 @@ StateMachine<nr>::StateMachine(Amiga& ref) : SubComponent(ref)
     
 }
 
-template <isize nr> const char *
-StateMachine<nr>::getDescription() const
+template <isize nr> void
+StateMachine<nr>::_dump(dump::Category category, std::ostream& os) const
 {
-    switch (nr) {
-        case 0: return "StateMachine 0";
-        case 1: return "StateMachine 1";
-        case 2: return "StateMachine 2";
-        case 3: return "StateMachine 3";
-        default: assert(false);
+    using namespace util;
+    
+    if (category & dump::State) {
+        
+        os << tab("State") << dec(state) << std::endl;
+        os << tab("AUDxIP") << bol(AUDxIP()) << std::endl;
+        os << tab("AUDxON") << bol(AUDxON()) << std::endl;
     }
 }
 
-/*
-template <isize nr> void
-StateMachine<nr>::_initialize()
+template <isize nr> const char *
+StateMachine<nr>::getDescription() const
 {
-    
+    if constexpr (nr == 0) return "StateMachine 0";
+    if constexpr (nr == 1) return "StateMachine 1";
+    if constexpr (nr == 2) return "StateMachine 2";
+    if constexpr (nr == 3) return "StateMachine 3";
 }
-*/
 
 template <isize nr> void
 StateMachine<nr>::_reset(bool hard)
@@ -58,19 +60,6 @@ StateMachine<nr>::_inspect()
         info.audvolLatch = audvolLatch;
         info.audvol = audvol;
         info.auddat = auddat;
-    }
-}
-
-template <isize nr> void
-StateMachine<nr>::_dump(dump::Category category, std::ostream& os) const
-{
-    using namespace util;
-    
-    if (category & dump::State) {
-        
-        os << tab("State") << dec(state) << std::endl;
-        os << tab("AUDxIP") << bol(AUDxIP()) << std::endl;
-        os << tab("AUDxON") << bol(AUDxON()) << std::endl;
     }
 }
 
@@ -108,37 +97,31 @@ StateMachine<nr>::disableDMA()
 }
 
 template <isize nr> bool
-StateMachine<nr>::AUDxON() const
-{
-    return agnus.auddma<nr>();
-}
-
-template <isize nr> bool
 StateMachine<nr>::AUDxIP() const 
 {
     return GET_BIT(paula.intreq, 7 + nr);
 }
 
 template <isize nr> void
-StateMachine<nr>::AUDxIR()
+StateMachine<nr>::AUDxIR() const
 {
-    if (DISABLE_AUDIRQ) return;
+    if constexpr (DISABLE_AUDIRQ) return;
     
-    IrqSource source =
-    nr == 0 ? INT_AUD0 : nr == 1 ? INT_AUD1 : nr == 2 ? INT_AUD2 : INT_AUD3;
-    
-    paula.scheduleIrqRel(source, DMA_CYCLES(1));
+    if constexpr (nr == 0) { paula.scheduleIrqRel(INT_AUD0, DMA_CYCLES(1)); }
+    if constexpr (nr == 1) { paula.scheduleIrqRel(INT_AUD1, DMA_CYCLES(1)); }
+    if constexpr (nr == 2) { paula.scheduleIrqRel(INT_AUD2, DMA_CYCLES(1)); }
+    if constexpr (nr == 3) { paula.scheduleIrqRel(INT_AUD3, DMA_CYCLES(1)); }
 }
 
 template <isize nr> void
 StateMachine<nr>::percntrld()
 {
-    const EventSlot slot = (EventSlot)(SLOT_CH0+nr);
+    u64 delay = DMA_CYCLES(audperLatch == 0 ? 0x10000 : audperLatch);
 
-    
-    u64 delay = (audperLatch == 0) ? 0x10000 : audperLatch;
-
-    agnus.scheduleRel<slot>(DMA_CYCLES(delay), CHX_PERFIN);
+    if constexpr (nr == 0) agnus.scheduleRel <SLOT_CH0> (delay, CHX_PERFIN);
+    if constexpr (nr == 1) agnus.scheduleRel <SLOT_CH1> (delay, CHX_PERFIN);
+    if constexpr (nr == 2) agnus.scheduleRel <SLOT_CH2> (delay, CHX_PERFIN);
+    if constexpr (nr == 3) agnus.scheduleRel <SLOT_CH3> (delay, CHX_PERFIN);
 }
 
 template <isize nr> void
@@ -146,13 +129,9 @@ StateMachine<nr>::pbufld1()
 {
     if (!AUDxAV()) { buffer = auddat; return; }
     
-    // trace("Volume modulation %d (%d)\n", auddat & 0x7F, (i16)auddat);
-    switch (nr) {
-        case 0: paula.channel1.pokeAUDxVOL(auddat); break;
-        case 1: paula.channel2.pokeAUDxVOL(auddat); break;
-        case 2: paula.channel3.pokeAUDxVOL(auddat); break;
-        case 3: break;
-    }
+    if constexpr (nr == 0) paula.channel1.pokeAUDxVOL(auddat);
+    if constexpr (nr == 1) paula.channel2.pokeAUDxVOL(auddat);
+    if constexpr (nr == 2) paula.channel3.pokeAUDxVOL(auddat);
 }
 
 template <isize nr> void
@@ -160,12 +139,9 @@ StateMachine<nr>::pbufld2()
 {
     assert(AUDxAP());
     
-    switch (nr) {
-        case 0: paula.channel1.pokeAUDxPER(auddat); break;
-        case 1: paula.channel2.pokeAUDxPER(auddat); break;
-        case 2: paula.channel3.pokeAUDxPER(auddat); break;
-        case 3: break;
-    }
+    if constexpr (nr == 0) paula.channel1.pokeAUDxPER(auddat);
+    if constexpr (nr == 1) paula.channel2.pokeAUDxPER(auddat);
+    if constexpr (nr == 2) paula.channel3.pokeAUDxPER(auddat);
 }
 
 template <isize nr> bool
@@ -185,15 +161,15 @@ StateMachine<nr>::penhi()
 {
     if (!enablePenhi) return;
  
-    Sampler *sampler = paula.muxer.sampler[nr];
+    Sampler &sampler = *paula.muxer.sampler[nr];
 
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = sample * audvol;
     
     trace(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
                 
-    if (!sampler->isFull()) {
-        sampler->write( TaggedSample { agnus.clock, scaled } );
+    if (!sampler.isFull()) {
+        sampler.write( TaggedSample { agnus.clock, scaled } );
     } else {
         warn("penhi: Sample buffer is full\n");
     }
@@ -206,15 +182,15 @@ StateMachine<nr>::penlo()
 {
     if (!enablePenlo) return;
 
-    Sampler *sampler = paula.muxer.sampler[nr];
+    Sampler &sampler = *paula.muxer.sampler[nr];
     
     i8 sample = (i8)LO_BYTE(buffer);
     i16 scaled = sample * audvol;
 
     trace(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
 
-    if (!sampler->isFull()) {
-        sampler->write( TaggedSample { agnus.clock, scaled } );
+    if (!sampler.isFull()) {
+        sampler.write( TaggedSample { agnus.clock, scaled } );
     } else {
         warn("penlo: Sample buffer is full\n");
     }
@@ -343,7 +319,7 @@ StateMachine<nr>::move_011_000() {
 
     trace(AUD_DEBUG, "move_011_000\n");
 
-    const EventSlot slot = (EventSlot)(SLOT_CH0+nr);
+    constexpr EventSlot slot = (EventSlot)(SLOT_CH0 + nr);
     agnus.cancel<slot>();
 
     intreq2 = false;

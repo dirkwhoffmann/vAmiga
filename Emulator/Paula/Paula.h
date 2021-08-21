@@ -124,6 +124,10 @@ private:
 private:
     
     void _reset(bool hard) override;
+    void _run() override;
+    void _pause() override;
+    void _warpOn() override;
+    void _warpOff() override;
     void _inspect() override;
 
     template <class T>
@@ -174,18 +178,6 @@ public:
     
     PaulaInfo getInfo() { return AmigaComponent::getInfo(info); }
     AudioInfo getAudioInfo() { return AmigaComponent::getInfo(audioInfo); }
-
- 
-    //
-    // Controlling
-    //
-    
-private:
-    
-    void _run() override;
-    void _pause() override;
-    void _warpOn() override;
-    void _warpOff() override;
 
 
     //

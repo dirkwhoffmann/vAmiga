@@ -28,32 +28,6 @@ Paula::Paula(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Paula::_reset(bool hard)
-{
-    RESET_SNAPSHOT_ITEMS(hard)
-
-    // Interrupts
-    for (isize i = 0; i < 16; i++) setIntreq[i] = NEVER;
-    cpu.setIPL(0);    
-}
-
-void
-Paula::_inspect()
-{
-    synchronized {
-        
-        info.intreq = intreq;
-        info.intena = intena;
-        info.adkcon = adkcon;
-        
-        audioInfo.channel[0] = channel0.getInfo();
-        audioInfo.channel[1] = channel1.getInfo();
-        audioInfo.channel[2] = channel2.getInfo();
-        audioInfo.channel[3] = channel3.getInfo();
-    }
-}
-
-void
 Paula::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
@@ -79,11 +53,13 @@ Paula::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
-isize
-Paula::didLoadFromBuffer(const u8 *buffer)
+void
+Paula::_reset(bool hard)
 {
-    muxer.clear();
-    return 0;
+    RESET_SNAPSHOT_ITEMS(hard)
+
+    for (isize i = 0; i < 16; i++) setIntreq[i] = NEVER;
+    cpu.setIPL(0);    
 }
 
 void
@@ -116,12 +92,34 @@ Paula::_warpOff()
 }
 
 void
+Paula::_inspect()
+{
+    synchronized {
+        
+        info.intreq = intreq;
+        info.intena = intena;
+        info.adkcon = adkcon;
+        
+        audioInfo.channel[0] = channel0.getInfo();
+        audioInfo.channel[1] = channel1.getInfo();
+        audioInfo.channel[2] = channel2.getInfo();
+        audioInfo.channel[3] = channel3.getInfo();
+    }
+}
+
+isize
+Paula::didLoadFromBuffer(const u8 *buffer)
+{
+    muxer.clear();
+    return 0;
+}
+
+void
 Paula::executeUntil(Cycle target)
 {
     muxer.synthesize(audioClock, target);
     audioClock = target;
 }
-
 
 void
 Paula::raiseIrq(IrqSource src)
@@ -142,10 +140,9 @@ Paula::scheduleIrqAbs(IrqSource src, Cycle trigger)
     if (trigger < setIntreq[src])
         setIntreq[src] = trigger;
 
-    // Schedule the interrupt to be triggered with the proper delay
-    if (trigger < agnus.slot[SLOT_IRQ].triggerCycle) {
+    // Schedule the interrupt
+    if (trigger < agnus.slot[SLOT_IRQ].triggerCycle)
         agnus.scheduleAbs<SLOT_IRQ>(trigger, IRQ_CHECK);
-    }
 }
 
 void

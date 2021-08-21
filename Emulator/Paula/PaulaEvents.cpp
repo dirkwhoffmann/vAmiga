@@ -41,12 +41,13 @@ Paula::serviceIplEvent()
 {
     assert(agnus.slot[SLOT_IPL].id == IPL_CHANGE);    
 
+    // Update the value on the CPU's IPL pin
     cpu.setIPL((iplPipe >> 24) & 0xFF);
-    iplPipe = (iplPipe << 8) | (iplPipe & 0xFF);
-
-    trace(CPU_DEBUG, "iplPipe shifted: %016llx\n", iplPipe);
     
-    // Reschedule event until the pipe has been shifted through entirely
+    // Shift the pipe
+    iplPipe = (iplPipe << 8) | (iplPipe & 0xFF);
+    
+    // Reschedule the event until the pipe has been shifted through entirely
     i64 repeat = agnus.slot[SLOT_IPL].data;
     if (repeat) {
         agnus.scheduleRel<SLOT_IPL>(DMA_CYCLES(1), IPL_CHANGE, repeat - 1);
@@ -72,19 +73,19 @@ Paula::servicePotEvent(EventID id)
                 if (!OUTRY()) chargeY1 = 0.0;
                 if (!OUTRX()) chargeX1 = 0.0;
 
+                // Schedule the next discharge event
                 agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_DISCHARGE);
 
             } else {
 
-                // Reset counters
-                // For input pins, we need to set the couter value to -1. It'll
-                // wrap over to 0 in the hsync handler.
+                // Reset counters. For input pins, we need to set the couter
+                // value to -1. It'll wrap over to 0 in the hsync handler.
                 potCntY0 = OUTLY() ? 0 : -1;
                 potCntX0 = OUTLX() ? 0 : -1;
                 potCntY1 = OUTRY() ? 0 : -1;
                 potCntX1 = OUTRX() ? 0 : -1;
 
-                // Schedule first charge event
+                // Schedule the first charge event
                 agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
             }
             break;

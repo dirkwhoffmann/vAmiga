@@ -292,6 +292,7 @@ public:
 public:
     
     // Processes a Copper event
+    void serviceEvent();
     void serviceEvent(EventID id);
 
     // Schedules the next Copper event
