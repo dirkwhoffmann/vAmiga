@@ -154,7 +154,7 @@ typedef struct
     bool irq;
     
     TODInfo tod;
-    bool todIntEnable;
+    bool todIrqEnable;
     
     Cycle idleSince;
     Cycle idleTotal;

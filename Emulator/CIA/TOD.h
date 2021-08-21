@@ -29,7 +29,7 @@ class TOD : public SubComponent {
     friend CIA;
     
     // Reference to the connected CIA
-    CIA *cia;
+    CIA &cia;
 
     // Result of the latest inspection
     TODInfo info = {};
@@ -74,7 +74,7 @@ class TOD : public SubComponent {
 
 public:
 
-    TOD(CIA *cia, Amiga& ref);
+    TOD(CIA &ciaref, Amiga& ref);
 
     
     //

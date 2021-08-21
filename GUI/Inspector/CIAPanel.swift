@@ -119,13 +119,13 @@ extension Inspector {
         ciaIMRbinary.intValue = Int32(ciaInfo.imr)
         ciaIntLineLow.state = ciaInfo.irq ? .off : .on
 
-        ciaCntHi.integerValue = (ciaInfo.tod.value >> 16) & 0xFF
-        ciaCntMid.integerValue = (ciaInfo.tod.value >> 8) & 0xFF
-        ciaCntLo.integerValue = ciaInfo.tod.value & 0xFF
-        ciaAlarmHi.integerValue = (ciaInfo.tod.alarm >> 16) & 0xFF
-        ciaAlarmMid.integerValue = (ciaInfo.tod.alarm >> 8) & 0xFF
-        ciaAlarmLo.integerValue = ciaInfo.tod.alarm & 0xFF
-        ciaCntIntEnable.state = ciaInfo.todIntEnable ? .on : .off
+        ciaCntHi.intValue = Int32(ciaInfo.tod.value >> 16) & 0xFF
+        ciaCntMid.intValue = Int32(ciaInfo.tod.value >> 8) & 0xFF
+        ciaCntLo.intValue = Int32(ciaInfo.tod.value) & 0xFF
+        ciaAlarmHi.intValue = Int32(ciaInfo.tod.alarm >> 16) & 0xFF
+        ciaAlarmMid.intValue = Int32(ciaInfo.tod.alarm >> 8) & 0xFF
+        ciaAlarmLo.intValue = Int32(ciaInfo.tod.alarm) & 0xFF
+        ciaCntIntEnable.state = ciaInfo.todIrqEnable ? .on : .off
 
         ciaSDR.intValue = Int32(ciaInfo.sdr)
         ciaSSR.intValue = Int32(ciaInfo.ssr)

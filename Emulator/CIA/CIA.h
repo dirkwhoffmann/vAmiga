@@ -89,7 +89,7 @@ protected:
 
 public:
     
-    TOD tod = TOD(this, amiga);
+    TOD tod = TOD(*this, amiga);
 
 
     //

@@ -159,7 +159,7 @@ CIA::_inspect()
         info.irq = irq;
         
         info.tod = tod.info;
-        info.todIntEnable = imr & 0x04;
+        info.todIrqEnable = imr & 0x04;
         
         info.idleSince = idleSince();
         info.idleTotal = idleTotal();

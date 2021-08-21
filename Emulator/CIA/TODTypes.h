@@ -17,8 +17,8 @@
 
 typedef struct
 {
-    long value;
-    long latch;
-    long alarm;
+    u32 value;
+    u32 latch;
+    u32 alarm;
 }
 TODInfo;

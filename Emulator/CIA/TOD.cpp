@@ -12,15 +12,15 @@
 #include "CIA.h"
 #include "IO.h"
 
-TOD::TOD(CIA *cia, Amiga& ref) : SubComponent(ref)
+TOD::TOD(CIA &ciaref, Amiga& ref) : SubComponent(ref), cia(ciaref)
 {
-    this->cia = cia;
+
 }
 
 const char *
 TOD::getDescription() const
 {
-    return cia->isCIAA() ? "TODA" : "TODB";
+    return cia.isCIAA() ? "TODA" : "TODB";
 }
 
 void
@@ -163,7 +163,7 @@ TOD::increment()
     if (stopped) return;
 
     preTod = tod;
-    lastInc = cia->clock;
+    lastInc = cia.clock;
         
     if (!incLoNibble(tod.lo))  goto check;
     if (!incHiNibble(tod.lo))  goto check;
@@ -173,7 +173,7 @@ TOD::increment()
         trace(TOD_DEBUG, "TOD bug hits: %x:%x:%x (%d,%d)\n",
               tod.hi, tod.mid, tod.lo, frozen, stopped);
     }
-    if (cia->config.todBug) checkIrq();
+    if (cia.config.todBug) checkIrq();
 
     if (!incHiNibble(tod.mid)) goto check;
     if (!incLoNibble(tod.hi))  goto check;
@@ -208,7 +208,7 @@ TOD::checkIrq()
 {
     if (!matching && tod.value == alarm.value) {
         trace(TOD_DEBUG, "TOD IRQ (%02x:%02x:%02x)\n", tod.hi, tod.mid, tod.lo);
-        cia->todInterrupt();
+        cia.todInterrupt();
     }
     matching = (tod.value == alarm.value);
 }
