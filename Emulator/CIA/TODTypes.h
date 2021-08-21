@@ -21,4 +21,4 @@ typedef struct
     long latch;
     long alarm;
 }
-CounterInfo;
+TODInfo;

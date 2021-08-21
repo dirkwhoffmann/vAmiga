@@ -153,7 +153,7 @@ typedef struct
     u8 imr;
     bool irq;
     
-    CounterInfo tod;
+    TODInfo tod;
     bool todIntEnable;
     
     Cycle idleSince;

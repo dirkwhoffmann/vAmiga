@@ -422,12 +422,14 @@ private:
     
 protected:
     
-    // Action method for poking the PA register
+    // Action method for poking the PA or PB register
     virtual void pokePA(u8 value) { pra = value; updatePA(); }
-    
-    // Action method for poking the DDRA register
+    virtual void pokePB(u8 value) { prb = value; updatePB(); }
+
+    // Action method for poking the DDRA or DDRB register
     virtual void pokeDDRA(u8 value) { ddra = value; updatePA(); }
-    
+    virtual void pokeDDRB(u8 value) { ddrb = value; updatePB(); }
+
     
     //
     // Accessing port pins
