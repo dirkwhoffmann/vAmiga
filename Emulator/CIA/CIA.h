@@ -96,81 +96,94 @@ public:
     // Internals
     //
     
+protected:
+    
     // The CIA has been executed up to this master clock cycle
     Cycle clock;
 
-protected:
-
     // Total number of skipped cycles (used by the debugger, only)
     Cycle idleCycles;
-    
-    // Timer A counter
-    u16 counterA;
-    
-    // Timer B counter
-    u16 counterB;
-        
-    // Timer A latch
-    u16 latchA;
-    
-    // Timer B latch
-    u16 latchB;
 
-
-    //
-    // Control
-    //
-    
     // Action flags
     u64 delay;
     u64 feed;
+
     
-    // Control registers
-    u8 CRA;
-    u8 CRB;
+    //
+    // Timers
+    //
     
+protected:
+    
+    // Timer counters
+    u16 counterA;
+    u16 counterB;
+        
+    // Timer latches
+    u16 latchA;
+    u16 latchB;
+
+    // Timer control registers
+    u8 cra;
+    u8 crb;
+
+    
+    //
+    // Interrupts
+    //
+    
+    // Interrupt mask register
+    u8 imr;
+
     // Interrupt control register
     u8 icr;
     
     // ICR bits that need to deleted when CIAAckIcr1 hits
     u8 icrAck;
-    
-    // Interrupt mask register
-    u8 imr;
-    
-protected:
-    
-    // Bit mask for PB outputs (0 = port register, 1 = timer)
-    u8 PB67TimerMode;
-    
-    // PB output bits 6 and 7 in timer mode
-    u8 PB67TimerOut;
-    
-    // PB output bits 6 and 7 in toggle mode
-    u8 PB67Toggle;
-    
+        
     
     //
-    // Port registers
+    // Peripheral ports
     //
     
 protected:
     
-    // Peripheral data registers
-    u8 PRA;
-    u8 PRB;
+    // Data registers
+    u8 pra;
+    u8 prb;
     
     // Data directon registers
-    u8 DDRA;
-    u8 DDRB;
+    u8 ddra;
+    u8 ddrb;
     
-    // Peripheral ports
-    u8 PA;
-    u8 PB;
+    // Bit mask for PB outputs (0 = port register, 1 = timer)
+    u8 pb67TimerMode;
+    
+    // PB output bits 6 and 7 in timer mode
+    u8 pb67TimerOut;
+    
+    // PB output bits 6 and 7 in toggle mode
+    u8 pb67Toggle;
+
+    
+    //
+    // Port values (chip pins)
+    //
+    
+    // Peripheral port pins
+    u8 pa;
+    u8 pb;
+
+    // Serial port pins
+    bool sp;
+    bool cnt;
+    
+    // Interrupt request pin
+    bool irq;
     
     
     //
-    // Shift register logic
+    // Shift register
     //
     
 protected:
@@ -212,25 +225,11 @@ protected:
      */
     i8 serCounter;
     
-    //
-    // Port pins
-    //
-    
-    bool SP;
-    bool CNT;
-    bool INT;
-    
     
     //
-    // Speeding up emulation (sleep logic)
+    // Sleep logic
     //
-    
-    /* Idle counter. When the CIA's state does not change during execution,
-     * this variable is increased by one. If it exceeds a certain threshhold,
-     * the chip is put into idle state via sleep().
-     */
-    u8 tiredness;
-    
+
 public:
     
     // Indicates if the CIA is currently idle
@@ -246,7 +245,15 @@ public:
      */
     Cycle wakeUpCycle;
 
-
+protected:
+    
+    /* Idle counter. When the CIA's state does not change during execution,
+     * this variable is increased by one. If it exceeds a certain threshhold,
+     * the chip is put into idle state via sleep().
+     */
+    u8 tiredness;
+    
+    
     //
     // Initializing
     //
@@ -302,32 +309,32 @@ private:
 
         worker
         
+        << delay
+        << feed
         << counterA
         << counterB
         << latchA
         << latchB
-        << delay
-        << feed
-        << CRA
-        << CRB
+        << cra
+        << crb
+        << imr
         << icr
         << icrAck
-        << imr
-        << PB67TimerMode
-        << PB67TimerOut
-        << PB67Toggle
-        << PRA
-        << PRB
-        << DDRA
-        << DDRB
-        << PA
-        << PB
+        << pra
+        << prb
+        << ddra
+        << ddrb
+        << pb67TimerMode
+        << pb67TimerOut
+        << pb67Toggle
+        << pa
+        << pb
+        << sp
+        << cnt
+        << irq
         << sdr
         << ssr
-        << serCounter
-        << SP
-        << CNT
-        << INT;
+        << serCounter;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
@@ -358,7 +365,8 @@ public:
 public:
     
     CIAInfo getInfo() { return AmigaComponent::getInfo(info); }
-
+    Cycle getClock() { return clock; }
+    
 protected:
     
     void _inspect() override;
@@ -388,14 +396,14 @@ public:
 public:
     
     // Returns the data registers (call updatePA() or updatePB() first)
-    u8 getPA() const { return PA; }
-    u8 getPB() const { return PB; }
+    u8 getPA() const { return pa; }
+    u8 getPB() const { return pb; }
 
 private:
 
     // Returns the data direction register
-    u8 getDDRA() const { return DDRA; }
-    u8 getDDRB() const { return DDRB; }
+    u8 getDDRA() const { return ddra; }
+    u8 getDDRB() const { return ddrb; }
     
     // Computes the values we currently see at port A
     virtual void updatePA() = 0;
@@ -418,10 +426,10 @@ private:
 protected:
     
     // Action method for poking the PA register
-    virtual void pokePA(u8 value) { PRA = value; updatePA(); }
+    virtual void pokePA(u8 value) { pra = value; updatePA(); }
     
     // Action method for poking the DDRA register
-    virtual void pokeDDRA(u8 value) { DDRA = value; updatePA(); }
+    virtual void pokeDDRA(u8 value) { ddra = value; updatePA(); }
     
     
     //
@@ -431,7 +439,7 @@ protected:
 public:
     
     // Getter for the interrupt line
-    bool irqPin() const { return INT; }
+    bool irqPin() const { return irq; }
 
     // Simulates an edge edge on the flag pin
     void emulateRisingEdgeOnFlagPin();
@@ -442,7 +450,7 @@ public:
     void emulateFallingEdgeOnCntPin();
 
     // Sets the serial port pin
-    void setSP(bool value) { SP = value; }
+    void setSP(bool value) { sp = value; }
     
     
     //
@@ -556,7 +564,7 @@ private:
 public:
 
     // Indicates if the power LED is currently on or off
-    bool powerLED() const { return (PA & 0x2) == 0; }
+    bool powerLED() const { return (pa & 0x2) == 0; }
 
     // Emulates the reception of a keycode from the keyboard
     void setKeyCode(u8 keyCode);

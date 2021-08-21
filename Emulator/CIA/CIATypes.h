@@ -151,10 +151,10 @@ typedef struct
     u8 ssr;
     u8 icr;
     u8 imr;
-    bool intLine;
+    bool irq;
     
-    CounterInfo cnt;
-    bool cntIntEnable;
+    CounterInfo tod;
+    bool todIntEnable;
     
     Cycle idleSince;
     Cycle idleTotal;

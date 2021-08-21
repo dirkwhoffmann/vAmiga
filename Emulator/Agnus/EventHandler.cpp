@@ -21,8 +21,8 @@ Agnus::inspectEvents(EventInfo &info) const
     info.cpuClock = cpu.getMasterClock();
     info.cpuCycles = cpu.getCpuClock();
     info.dmaClock = clock;
-    info.ciaAClock = ciaa.clock;
-    info.ciaBClock  = ciab.clock;
+    info.ciaAClock = ciaa.getClock();
+    info.ciaBClock  = ciab.getClock();
     info.frame = frame.nr;
     info.vpos = pos.v;
     info.hpos = pos.h;

@@ -608,8 +608,8 @@ Amiga::_inspect()
         
         info.cpuClock = cpu.getMasterClock();
         info.dmaClock = agnus.clock;
-        info.ciaAClock = ciaA.clock;
-        info.ciaBClock = ciaB.clock;
+        info.ciaAClock = ciaA.getClock();
+        info.ciaBClock = ciaB.getClock();
         info.frame = agnus.frame.nr;
         info.vpos = agnus.pos.v;
         info.hpos = agnus.pos.h;

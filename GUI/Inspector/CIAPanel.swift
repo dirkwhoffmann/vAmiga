@@ -117,15 +117,15 @@ extension Inspector {
         ciaICRbinary.intValue = Int32(ciaInfo.icr)
         ciaIMR.intValue = Int32(ciaInfo.imr)
         ciaIMRbinary.intValue = Int32(ciaInfo.imr)
-        ciaIntLineLow.state = ciaInfo.intLine ? .off : .on
+        ciaIntLineLow.state = ciaInfo.irq ? .off : .on
 
-        ciaCntHi.integerValue = (ciaInfo.cnt.value >> 16) & 0xFF
-        ciaCntMid.integerValue = (ciaInfo.cnt.value >> 8) & 0xFF
-        ciaCntLo.integerValue = ciaInfo.cnt.value & 0xFF
-        ciaAlarmHi.integerValue = (ciaInfo.cnt.alarm >> 16) & 0xFF
-        ciaAlarmMid.integerValue = (ciaInfo.cnt.alarm >> 8) & 0xFF
-        ciaAlarmLo.integerValue = ciaInfo.cnt.alarm & 0xFF
-        ciaCntIntEnable.state = ciaInfo.cntIntEnable ? .on : .off
+        ciaCntHi.integerValue = (ciaInfo.tod.value >> 16) & 0xFF
+        ciaCntMid.integerValue = (ciaInfo.tod.value >> 8) & 0xFF
+        ciaCntLo.integerValue = ciaInfo.tod.value & 0xFF
+        ciaAlarmHi.integerValue = (ciaInfo.tod.alarm >> 16) & 0xFF
+        ciaAlarmMid.integerValue = (ciaInfo.tod.alarm >> 8) & 0xFF
+        ciaAlarmLo.integerValue = ciaInfo.tod.alarm & 0xFF
+        ciaCntIntEnable.state = ciaInfo.todIntEnable ? .on : .off
 
         ciaSDR.intValue = Int32(ciaInfo.sdr)
         ciaSSR.intValue = Int32(ciaInfo.ssr)
