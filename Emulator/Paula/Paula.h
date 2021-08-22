@@ -128,7 +128,6 @@ private:
     void _pause() override;
     void _warpOn() override;
     void _warpOff() override;
-    void _inspect() override { const_cast<const Paula *>(this)->_inspect(); }
     void _inspect() const override;
 
     template <class T>

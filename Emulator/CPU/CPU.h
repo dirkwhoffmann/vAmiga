@@ -45,7 +45,6 @@ private:
 private:
     
     void _reset(bool hard) override;
-    void _inspect() override { const_cast<const CPU *>(this)->_inspect(); }
     void _inspect() const override;
     void _debugOn() override;
     void _debugOff() override;

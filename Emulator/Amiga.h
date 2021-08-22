@@ -153,7 +153,6 @@ private:
     void _halt() override;
     void _warpOn() override;
     void _warpOff() override;
-    void _inspect() override { const_cast<const Amiga *>(this)->_inspect(); };
     void _inspect() const override;
 
     template <class T>

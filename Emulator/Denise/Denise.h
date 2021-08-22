@@ -293,7 +293,6 @@ private:
     
     void _initialize() override;
     void _reset(bool hard) override;
-    void _inspect() override { const_cast<const Denise *>(this)->_inspect(); }
     void _inspect() const override;
     
     template <class T>

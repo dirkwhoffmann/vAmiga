@@ -129,7 +129,6 @@ public:
     
     TODInfo getInfo() { return AmigaComponent::getInfo(info); }
 
-    void _inspect() override { const_cast<const TOD *>(this)->_inspect(); }
     void _inspect() const override;
 
  

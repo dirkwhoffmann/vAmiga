@@ -367,7 +367,6 @@ public:
     
 protected:
     
-    void _inspect() override { const_cast<const CIA *>(this)->_inspect(); } ;
     void _inspect() const override;
 
     
