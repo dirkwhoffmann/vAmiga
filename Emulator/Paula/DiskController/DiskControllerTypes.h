@@ -87,8 +87,8 @@ DiskControllerConfig;
 
 inline bool isValidDriveSpeed(isize speed)
 {
-    switch (speed)
-    {
+    switch (speed) {
+            
         case -1: case 1: case 2: case 4: case 8: return true;
     }
     return false;

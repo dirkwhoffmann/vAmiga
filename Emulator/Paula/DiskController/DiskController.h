@@ -17,8 +17,6 @@
 
 class DiskController : public SubComponent
 {
-    friend class Drive;
-    
     // Current configuration
     DiskControllerConfig config = {};
 
