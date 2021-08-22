@@ -367,8 +367,8 @@ public:
     
 protected:
     
-    void _inspect() override;
-    void _inspect() const override { const_cast<CIA *>(this)->_inspect(); }
+    void _inspect() override { const_cast<const CIA *>(this)->_inspect(); } ;
+    void _inspect() const override;
 
     
     //
@@ -402,18 +402,20 @@ private:
     // Returns the data direction register
     u8 getDDRA() const { return ddra; }
     u8 getDDRB() const { return ddrb; }
-    
-    // Computes the values we currently see at port A
+        
+    // Updates variable pa with the value we currently see at port A
     virtual void updatePA() = 0;
-    
+    virtual u8 computePA() const = 0;
+
     // Returns the value driving port A from inside the chip
     virtual u8 portAinternal() const = 0;
     
     // Returns the value driving port A from outside the chip
     virtual u8 portAexternal() const = 0;
     
-    // Computes the value we currently see at port B
+    // Updates variable pa with the value we currently see at port B
     virtual void updatePB() = 0;
+    virtual u8 computePB() const = 0;
     
     // Values driving port B from inside the chip
     virtual u8 portBinternal() const = 0;
@@ -554,9 +556,12 @@ private:
     u8 portAinternal() const override;
     u8 portAexternal() const override;
     void updatePA() override;
+    u8 computePA() const override;
+
     u8 portBinternal() const override;
     u8 portBexternal() const override;
     void updatePB() override;
+    u8 computePB() const override;
     
 public:
 
@@ -588,7 +593,10 @@ private:
     u8 portAinternal() const override;
     u8 portAexternal() const override;
     void updatePA() override;
+    u8 computePA() const override;
+
     u8 portBinternal() const override;
     u8 portBexternal() const override;
     void updatePB() override;
+    u8 computePB() const override;
 };

@@ -123,17 +123,15 @@ CIA::setConfigItem(Option option, i64 value)
 }
 
 void
-CIA::_inspect()
+CIA::_inspect() const
 {
     synchronized {
         
-        updatePA();
-        info.portA.port = pa;
+        info.portA.port = computePA();
         info.portA.reg = pra;
         info.portA.dir = ddra;
         
-        updatePB();
-        info.portB.port = pb;
+        info.portB.port = computePB();
         info.portB.reg = prb;
         info.portB.dir = ddrb;
         
@@ -784,37 +782,45 @@ CIAA::releaseInterruptLine()
 void
 CIAA::updatePA()
 {
-    u8 internal = portAinternal();
-    u8 external = portAexternal();
-
-    u8 oldPA = pa;
-    pa = (internal & ddra) | (external & ~ddra);
-
-    // A connected device may force the output level to a specific value
-    controlPort1.changePra(pa);
-    controlPort2.changePra(pa);
-
-    // PLCC CIAs always return the PRA contents for output bits
-    // We ignore PLCC emulation until the A600 is supported
-    // if (config.type == CIA_8520_PLCC) PA = (PA & ~DDRA) | (PRA & DDRA);
-
+    u8 oldpa = pa;
+    pa = computePA();
+    
+    if (oldpa ^ pa) {
+        
+        trace(DSKREG_DEBUG,
+              "/FIR1: %d /FIR0: %d /RDY: %d /TK0: %d "
+              "/WPRO: %d /CHNG: %d /LED: %d OVL: %d\n",
+              !!(pa & 0x80), !!(pa & 0x40), !!(pa & 0x20), !!(pa & 0x10),
+              !!(pa & 0x08), !!(pa & 0x04), !!(pa & 0x02), !!(pa & 0x01));
+    }
+    
     // Check the LED bit
-    if ((oldPA ^ pa) & 0b00000010) {
+    if ((oldpa ^ pa) & 0b00000010) {
         messageQueue.put((pa & 0b00000010) ? MSG_POWER_LED_DIM : MSG_POWER_LED_ON);
     }
 
     // Check the OVL bit which controls the Kickstart ROM overlay
-    if ((oldPA ^ pa) & 0b00000001) {
+    if ((oldpa ^ pa) & 0b00000001) {
         mem.updateMemSrcTables();
     }
+}
+
+u8 CIAA::computePA() const
+{
+    u8 internal = portAinternal();
+    u8 external = portAexternal();
     
-    /*
-    if (oldPA ^ PA) {
-        debug("## PA changed: /FIR1: %d /FIR0: %d /RDY: %d /TK0: %d /WPRO: %d /CHNG: %d /LED: %d OVL: %d\n",
-              !!(PA & 0x80), !!(PA & 0x40), !!(PA & 0x20), !!(PA & 0x10),
-              !!(PA & 0x08), !!(PA & 0x04), !!(PA & 0x02), !!(PA & 0x01));
-    }
-    */
+    u8 result = (internal & ddra) | (external & ~ddra);
+
+    // A connected device may force the output level to a specific value
+    controlPort1.changePra(result);
+    controlPort2.changePra(result);
+    
+    // PLCC CIAs always return the PRA contents for output bits
+    // We ignore PLCC emulation until the A600 is supported
+    // if (config.type == CIA_8520_PLCC) result = (result & ~ddra) | (pra & ddra);
+
+    return result;
 }
 
 u8
@@ -851,22 +857,30 @@ CIAA::portAexternal() const
 void
 CIAA::updatePB()
 {
+    pb = computePB();
+}
+
+u8
+CIAA::computePB() const
+{
     u8 internal = portBinternal();
     u8 external = portBexternal();
 
-    pb = (internal & ddrb) | (external & ~ddrb);
+    u8 result = (internal & ddrb) | (external & ~ddrb);
 
     // Check if timer A underflows show up on PB6
     if (GET_BIT(pb67TimerMode, 6))
-        REPLACE_BIT(pb, 6, pb67TimerOut & (1 << 6));
+        REPLACE_BIT(result, 6, pb67TimerOut & (1 << 6));
     
     // Check if timer B underflows show up on PB7
     if (GET_BIT(pb67TimerMode, 7))
-        REPLACE_BIT(pb, 7, pb67TimerOut & (1 << 7));
+        REPLACE_BIT(result, 7, pb67TimerOut & (1 << 7));
 
     // PLCC CIAs always return the PRB contents for output bits
     // We ignore PLCC emulation until the A600 is supported
-    // if (config.type == CIA_8520_PLCC) PB = (PB & ~DDRB) | (PRB & DDRB);
+    // if (config.type == CIA_8520_PLCC) result = (result & ~ddrb) | (prb & ddrb);
+    
+    return result;
 }
 
 u8
@@ -954,35 +968,39 @@ CIAB::portAexternal() const
 void
 CIAB::updatePA()
 {
-    // debug(CIA_DEBUG, "updatePA()\n");
-
-    u8 internal = portAinternal();
-    u8 external = portAexternal();
-
     u8 oldPA = pa;
-    pa = (internal & ddra) | (external & ~ddra);
+    pa = computePA();
 
     // Drive serial pins if they are configured as output
-    if (GET_BIT(ddra, 6)) serialPort.setRTS(!GET_BIT(internal, 6));
-    if (GET_BIT(ddra, 7)) serialPort.setDTR(!GET_BIT(internal, 7));
+    if (GET_BIT(ddra, 6)) serialPort.setRTS(!GET_BIT(pra, 6));
+    if (GET_BIT(ddra, 7)) serialPort.setDTR(!GET_BIT(pra, 7));
     
-    // PLCC CIAs always return the PRA contents for output bits
-    // We ignore PLCC emulation until the A600 is supported
-    // if (config.type == CIA_8520_PLCC) PA = (PA & ~DDRA) | (PRA & DDRA);
-
     /* Inside the Amiga, PA0 and PA1 of CIAB are wired to the SP pin and the
      * CNT pin, respectively. If the shift register is run in input mode,
      * a positive edge on the CNT pin will transfer the value on the SP pin
      * into the shift register. To shift in the correct value, we need to set
      * the SP pin first and emulate the edge on the CNT pin afterwards.
      */
-    if (ddra & 1) setSP(pa & 1); else setSP(1);
-
+    if (ddra & 1) { setSP(pa & 1); } else { setSP(1); }
     if (!(oldPA & 2) &&  (pa & 2)) emulateRisingEdgeOnCntPin();
     if ( (oldPA & 2) && !(pa & 2)) emulateFallingEdgeOnCntPin();
-    
 }
 
+u8
+CIAB::computePA() const
+{
+    u8 internal = portAinternal();
+    u8 external = portAexternal();
+
+    u8 result = (internal & ddra) | (external & ~ddra);
+    
+    // PLCC CIAs always return the PRA contents for output bits
+    // We ignore PLCC emulation until the A600 is supported
+    // if (config.type == CIA_8520_PLCC) result = (result & ~ddra) | (pra & ddra);
+    
+    return result;
+}
+    
 //            -------
 //  /STEP <-- | PB0 |   (Floppy drive step heads)
 //    DIR <-- | PB1 |   (Floppy drive head direction)
@@ -1019,23 +1037,33 @@ CIAB::portBexternal() const
 void
 CIAB::updatePB()
 {
-    u8 internal = portBinternal();
-    u8 external = portBexternal();
-
     u8 oldPB = pb;
-    pb = (internal & ddrb) | (external & ~ddrb);
-
-    // PLCC CIAs always return the PRB contents for output bits
-    // We ignore PLCC emulation until the A600 is supported
-    // if (config.type == CIA_8520_PLCC) PB = (PB & ~DDRB) | (PRB & DDRB);
+    pb = computePB();
 
     // Notify the disk controller about the changed bits
     if (oldPB ^ pb) {
-        /*
-        debug("PB changed: MTR: %d SEL3: %d SEL2: %d SEL1: %d SEL0: %d SIDE: %d DIR: %d STEP: %d\n",
-              !!(PB & 0x80), !!(PB & 0x40), !!(PB & 0x20), !!(PB & 0x10),
-              !!(PB & 0x08), !!(PB & 0x04), !!(PB & 0x02), !!(PB & 0x01));
-        */
+        
+        trace(DSKREG_DEBUG,
+              "MTR: %d SEL3: %d SEL2: %d SEL1: %d "
+              "SEL0: %d SIDE: %d DIR: %d STEP: %d\n",
+              !!(pb & 0x80), !!(pb & 0x40), !!(pb & 0x20), !!(pb & 0x10),
+              !!(pb & 0x08), !!(pb & 0x04), !!(pb & 0x02), !!(pb & 0x01));
+
         diskController.PRBdidChange(oldPB, pb);
     }
+}
+
+u8
+CIAB::computePB() const
+{
+    u8 internal = portBinternal();
+    u8 external = portBexternal();
+
+    u8 result = (internal & ddrb) | (external & ~ddrb);
+    
+    // PLCC CIAs always return the PRB contents for output bits
+    // We ignore PLCC emulation until the A600 is supported
+    // if (config.type == CIA_8520_PLCC) result = (result & ~ddrb) | (prb & ddrb);
+    
+    return result;
 }
