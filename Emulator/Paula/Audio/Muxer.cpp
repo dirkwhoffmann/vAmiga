@@ -392,10 +392,10 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
 
     for (long i = 0; i < count; i++) {
 
-        float ch0 = sampler[0]->interpolate<method>((Cycle)cycle) * vol[0];
-        float ch1 = sampler[1]->interpolate<method>((Cycle)cycle) * vol[1];
-        float ch2 = sampler[2]->interpolate<method>((Cycle)cycle) * vol[2];
-        float ch3 = sampler[3]->interpolate<method>((Cycle)cycle) * vol[3];
+        float ch0 = sampler[0]->interpolate <method> ((Cycle)cycle) * vol[0];
+        float ch1 = sampler[1]->interpolate <method> ((Cycle)cycle) * vol[1];
+        float ch2 = sampler[2]->interpolate <method> ((Cycle)cycle) * vol[2];
+        float ch3 = sampler[3]->interpolate <method> ((Cycle)cycle) * vol[3];
         
         // Compute left channel output
         float l =

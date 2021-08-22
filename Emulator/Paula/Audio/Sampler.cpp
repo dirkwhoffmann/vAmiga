@@ -13,13 +13,15 @@
 void
 Sampler::reset()
 {
-    //Replace the existing samples by a single dummy element
+    // Clear the ringbuffer
     clear();
+
+    // Add a dummy element to ensure the buffer is not empty
     write( TaggedSample { 0, 0 } );
 }
 
 void
-Sampler::clone(Sampler &other)
+Sampler::clone(const Sampler &other)
 {
     *this = other;
 }
@@ -34,54 +36,43 @@ Sampler::interpolate(Cycle clock)
 
     // Remove all outdated entries
     while (r2 != w && elements[r2].tag <= clock) {
+        
         (void)read();
         r1 = r2;
         r2 = next(r1);
     }
+    assert(!isEmpty());
 
-    // If the buffer contains a single element only, return that element
-    if (r2 == w) {
-        return elements[r1].sample;
-    }
+    // If the buffer contains a single element, return that element
+    if (r2 == w) return elements[r1].sample;
+
+    // Make sure that we've selected the right sample pair
+    assert(clock >= elements[r1].tag && clock < elements[r2].tag);
 
     // Interpolate between position r1 and r2
-    Cycle c1 = elements[r1].tag;
-    Cycle c2 = elements[r2].tag;
-    i16 s1 = elements[r1].sample;
-    i16 s2 = elements[r2].sample;
-    
-    /*
-    if (!(clock >= c1 && clock < c2)) {
-        warn("WARNING: clock: %lld count: %zu ", clock, count());
-        warn("r: %d w: %d\n", r, w);
-        warn("r1: %d r2: %d c1: %lld c2: %lld\n", r1, r2, c1, c2);
+    if constexpr (method == SMP_NONE) {
+
+        return elements[r1].sample;
     }
-    */
-    assert(clock >= c1 && clock < c2);
+    
+    if constexpr (method == SMP_NEAREST) {
+        
+        const auto &e1 = elements[r1];
+        const auto &e2 = elements[r2];
 
-    switch (method) {
+        return ((clock - e1.tag) < (e2.tag - clock)) ? e1.sample : e2.sample;
+    }
+    
+    if constexpr (method == SMP_LINEAR) {
 
-        case SMP_NONE:
-        {
-            return s1;
-        }
-        case SMP_NEAREST:
-        {
-            if (clock - c1 < c2 - clock) {
-                return s1;
-            } else {
-                return s2;
-            }
-        }
-        case SMP_LINEAR:
-        {
-            double dx = (double)(c2 - c1);
-            double dy = (double)(s2 - s1);
-            double weight = (double)(clock - c1) / dx;
-            return (i16)(s1 + weight * dy);
-        }
-        default:
-            fatalError;
+        const auto &e1 = elements[r1];
+        const auto &e2 = elements[r2];
+
+        double dx = (double)(e2.tag - e1.tag);
+        double dy = (double)(e2.sample - e1.sample);
+        double weight = (double)(clock - e1.tag) / dx;
+        
+        return (i16)(e1.sample + weight * dy);
     }
 }
 
