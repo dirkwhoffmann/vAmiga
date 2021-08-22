@@ -674,22 +674,22 @@ using namespace moira;
 
 - (SpriteInfo)getSpriteInfo:(NSInteger)nr
 {
-    return [self denise]->getSpriteInfo(nr);
+    return [self denise]->debugger.getSpriteInfo(nr);
 }
 
 - (NSInteger)sprDataLines:(NSInteger)nr
 {
-    return [self denise]->getSpriteHeight(nr);
+    return [self denise]->debugger.getSpriteHeight(nr);
 }
 
 - (u64)sprData:(NSInteger)nr line:(NSInteger)line
 {
-    return [self denise]->getSpriteData(nr, line);
+    return [self denise]->debugger.getSpriteData(nr, line);
 }
 
 - (u16)sprColor:(NSInteger)nr reg:(NSInteger)reg
 {
-    return [self denise]->getSpriteColor(nr, reg);
+    return [self denise]->debugger.getSpriteColor(nr, reg);
 }
 
 - (ScreenBuffer)stableBuffer

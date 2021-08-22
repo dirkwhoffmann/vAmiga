@@ -12,28 +12,21 @@
 #include "DeniseTypes.h"
 #include "SubComponent.h"
 #include "Colors.h"
+#include "DeniseDebugger.h"
 #include "Memory.h"
 #include "PixelEngine.h"
 #include "Reflection.h"
 #include "Recorder.h"
 
 class Denise : public SubComponent {
-
-    friend class PixelEngine;
+    
+    friend class DeniseDebugger;
     
     // Current configuration
     DeniseConfig config = {};
 
     // Result of the latest inspection
     mutable DeniseInfo info = {};
-
-    // Sprite information recorded in the previous frame (shown by the GUI)
-    SpriteInfo latchedSpriteInfo[8] = { };
-    u64 latchedSpriteData[8][VPOS_CNT] = { };
-    
-    // Sprite information recorded in the current frame (constantly changing)
-    SpriteInfo spriteInfo[8] = { };
-    u64 spriteData[8][VPOS_CNT] = { };
     
     
     //
@@ -48,7 +41,10 @@ public:
     // A screen recorder for creating video streams
     Recorder screenRecorder = Recorder(amiga);
 
+    // Sprite tracker
+    DeniseDebugger debugger = DeniseDebugger(amiga);
 
+    
     //
     // Counters
     //
@@ -291,7 +287,6 @@ private:
     
 private:
     
-    void _initialize() override;
     void _reset(bool hard) override;
     void _inspect() const override;
     
@@ -377,11 +372,12 @@ public:
 public:
     
     DeniseInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    /*
     SpriteInfo getSpriteInfo(isize nr);
     isize getSpriteHeight(isize nr) const { return latchedSpriteInfo[nr].height; }
     u16 getSpriteColor(isize nr, isize reg) const { return latchedSpriteInfo[nr].colors[reg]; }
     u64 getSpriteData(isize nr, isize line) const { return latchedSpriteData[nr][line]; }
-
+    */
     
     //
     // Accessing registers
@@ -596,14 +592,4 @@ public:
 
     // Called by Agnus if the DMACON register changes
     void pokeDMACON(u16 oldValue, u16 newValue);
-
-
-    //
-    // Debugging
-    //
-
-public:
-    
-    // Gathers the sprite data for the displayed sprite
-    void recordSpriteData(isize x);
 };

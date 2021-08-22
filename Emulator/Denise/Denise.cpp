@@ -25,15 +25,6 @@ Denise::Denise(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Denise::_initialize()
-{
-    resetConfig();
-
-    std::memset(spriteInfo, 0, sizeof(spriteInfo));
-    std::memset(latchedSpriteInfo, 0, sizeof(latchedSpriteInfo));
-}
-
-void
 Denise::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
@@ -219,14 +210,6 @@ Denise::_dump(dump::Category category, std::ostream& os) const
         for (isize i = 0; i < 8; i++) os << hex(sprctl[i]) << ' ';
         os << std::endl;
     }
-}
-
-SpriteInfo
-Denise::getSpriteInfo(isize nr)
-{
-    SpriteInfo result;
-    synchronized { result = latchedSpriteInfo[nr]; }
-    return result;
 }
 
 u8
@@ -680,11 +663,7 @@ Denise::drawSprites()
         if (wasArmed & 0b00000011) drawSpritePair<0>();
         
         // Record sprite data in debug mode
-        if (amiga.inDebugMode()) {
-            for (isize i = 0; i < 8; i++) {
-                if (GET_BIT(wasArmed, i)) recordSpriteData(i);
-            }
-        }
+        if (amiga.inDebugMode()) debugger.recordSprites(wasArmed);
     }
     
     /* If a sprite was armed, the code above has been executed which means
@@ -1152,21 +1131,7 @@ void
 Denise::vsyncHandler()
 {
     pixelEngine.beginOfFrame();
-    
-    if (amiga.inDebugMode()) {
-        
-        for (isize i = 0; i < 8; i++) {
-            
-            latchedSpriteInfo[i] = spriteInfo[i];
-            spriteInfo[i].height = 0;
-            spriteInfo[i].vstrt  = 0;
-            spriteInfo[i].vstop  = 0;
-            spriteInfo[i].hstrt  = 0;
-            spriteInfo[i].attach = false;
-        }
-        
-        std::memcpy(latchedSpriteData, spriteData, sizeof(spriteData));
-    }
+    debugger.vsyncHandler();
 }
 
 void
@@ -1235,32 +1200,6 @@ Denise::endOfLine(isize vpos)
     
     // Encode a HIRES / LORES marker in the first HBLANK pixel
     *denise.pixelEngine.pixelAddr(HBLANK_MIN * 4) = hires() ? 0 : -1;
-}
-
-void
-Denise::recordSpriteData(isize nr)
-{
-    assert(nr < 8);
-
-    isize line = spriteInfo[nr].height;
-
-    // Record data registers
-    spriteData[nr][line] = HI_W_LO_W(sprdatb[nr], sprdata[nr]);
-
-    // Record additional information in sprite line 0
-    if (line == 0) {
-        
-        spriteInfo[nr].hstrt = ((sprpos[nr] & 0xFF) << 1) | (sprctl[nr] & 0x01);
-        spriteInfo[nr].vstrt = agnus.sprVStrt[nr];
-        spriteInfo[nr].vstop = agnus.sprVStop[nr];
-        spriteInfo[nr].attach = IS_ODD(nr) ? GET_BIT(sprctl[nr], 7) : 0;
-        
-        for (isize i = 0; i < 16; i++) {
-            spriteInfo[nr].colors[i] = pixelEngine.getColor(i + 16);
-        }
-    }
-    
-    spriteInfo[nr].height = (line + 1) % VPOS_CNT;
 }
 
 template void Denise::drawOdd<false>(Pixel offset);

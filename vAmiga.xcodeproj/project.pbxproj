@@ -207,6 +207,7 @@
 		50C8C4552607524400F4E012 /* Monitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C4542607524400F4E012 /* Monitors.swift */; };
 		50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CB21F6377600FA167F /* A500ANSI.xib */; };
 		50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CD21F6378000FA167F /* A1000ISO.xib */; };
+		50D2B85226D292B7008040E5 /* DeniseDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D2B85026D292B7008040E5 /* DeniseDebugger.cpp */; };
 		50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D375DD222C7C6B0040987C /* Blitter.cpp */; };
 		50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D7CDC22286E968002689F0 /* Joystick.cpp */; };
 		50D9CD9B236AF89A00503B4D /* DmaDebugDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */; };
@@ -597,6 +598,8 @@
 		50CF465F262043CF00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		50D263CB21F6377600FA167F /* A500ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ANSI.xib; sourceTree = "<group>"; };
 		50D263CD21F6378000FA167F /* A1000ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ISO.xib; sourceTree = "<group>"; };
+		50D2B85026D292B7008040E5 /* DeniseDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeniseDebugger.cpp; sourceTree = "<group>"; };
+		50D2B85126D292B7008040E5 /* DeniseDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeniseDebugger.h; sourceTree = "<group>"; };
 		50D375DD222C7C6B0040987C /* Blitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Blitter.cpp; sourceTree = "<group>"; };
 		50D375DE222C7C6B0040987C /* Blitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Blitter.h; sourceTree = "<group>"; };
 		50D52442227878E900F8959D /* DiskTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskTypes.h; sourceTree = "<group>"; };
@@ -799,6 +802,8 @@
 				502F7DD22221E52200AEEC65 /* PixelEngine.cpp */,
 				50912FFC2525B7AD0049805B /* Recorder.h */,
 				50912FFB2525B7AD0049805B /* Recorder.cpp */,
+				50D2B85126D292B7008040E5 /* DeniseDebugger.h */,
+				50D2B85026D292B7008040E5 /* DeniseDebugger.cpp */,
 			);
 			path = Denise;
 			sourceTree = "<group>";
@@ -1806,6 +1811,7 @@
 				5083CF652546BEAA00A28EF8 /* FSBitmapBlock.cpp in Sources */,
 				508FE05321EA22CC0043D0E9 /* VideoConf.swift in Sources */,
 				50357BB823912929007E7563 /* RendererSetup.swift in Sources */,
+				50D2B85226D292B7008040E5 /* DeniseDebugger.cpp in Sources */,
 				508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */,
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
 				50A5969824F7F9ED008632C0 /* PeripheralsConf.swift in Sources */,
