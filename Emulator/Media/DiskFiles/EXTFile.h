@@ -44,9 +44,10 @@ public:
     // Methods from AmigaFile
     //
     
-    bool isCompatiblePath(const string &path) override { return isCompatible(path); }
-    bool isCompatibleStream(std::istream &stream) override { return isCompatible(stream); }
+    bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
+    bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
     FileType type() const override { return FILETYPE_EXT; }
+    isize readFromStream(std::istream &stream) override;
     
     
     //

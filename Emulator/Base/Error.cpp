@@ -107,6 +107,11 @@ VAError::VAError(ErrorCode code, const string &s)
             description += " and is incompatible with this release.";
             break;
 
+        case ERROR_NO_EXTADF_SUPPORT:
+            description = "The file is encoded in extended ADF format which is";
+            description += " not supported by the emulator.";
+            break;
+
         case ERROR_MISSING_ROM_KEY:
             description = "No \"rom.key\" file found.";
             break;

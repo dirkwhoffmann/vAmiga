@@ -53,7 +53,10 @@ enum_long(ERROR_CODE)
     // Snapshots
     ERROR_SNP_TOO_OLD,
     ERROR_SNP_TOO_NEW,
-    
+
+    // Media files
+    ERROR_NO_EXTADF_SUPPORT,
+
     // Encrypted Roms
     ERROR_MISSING_ROM_KEY,
     ERROR_INVALID_ROM_KEY,
@@ -145,6 +148,8 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_SNP_TOO_OLD:                 return "SNP_TOO_OLD";
             case ERROR_SNP_TOO_NEW:                 return "SNP_TOO_NEW";
                 
+            case ERROR_NO_EXTADF_SUPPORT:           return "NO_EXTADF_SUPPORT";
+
             case ERROR_MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
             case ERROR_INVALID_ROM_KEY:             return "INVALID_ROM_KEY";
                 

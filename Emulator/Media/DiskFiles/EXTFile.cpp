@@ -38,3 +38,9 @@ EXTFile::isCompatible(std::istream &stream)
     }
     return false;
 }
+
+isize
+EXTFile::readFromStream(std::istream &stream)
+{
+    throw VAError(ERROR_NO_EXTADF_SUPPORT);
+}
