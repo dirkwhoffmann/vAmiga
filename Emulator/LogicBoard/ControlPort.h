@@ -32,6 +32,10 @@ class ControlPort : public SubComponent {
     i64 mouseCounterX = 0;
     i64 mouseCounterY = 0;
 
+    // The position of the connected mouse
+    i64 mouseX = 0;
+    i64 mouseY = 0;
+    
     // Resistances on the potentiometer lines (specified as a delta charge)
     double chargeDX;
     double chargeDY;
@@ -73,8 +77,8 @@ private:
 private:
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
-    void _inspect() override;
-    void _inspect() const override { const_cast<ControlPort *>(this)->_inspect(); }
+    void _inspect() override { const_cast<const ControlPort *>(this)->_inspect(); }
+    void _inspect() const override;
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -116,9 +120,12 @@ public:
     // Getter for the delta charges
     i16 getChargeDX() const { return (i16)chargeDX; }
     i16 getChargeDY() const { return (i16)chargeDY; }
+
+    // Called by the mouse when it's position has changed
+    void updateMouseXY(i64 x, i64 y);
     
     // Returns the control port bits showing up in the JOYxDAT register
-    u16 joydat();
+    u16 joydat() const;
 
     // Emulates a write access to JOYTEST
     void pokeJOYTEST(u16 value);

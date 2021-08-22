@@ -236,6 +236,7 @@ Mouse::setXY(double x, double y)
     targetY = y * scaleY;
     
     port.device = CPD_MOUSE;
+    port.updateMouseXY((i64)targetX, (i64)targetY);
 }
 
 void
@@ -247,6 +248,7 @@ Mouse::setDxDy(double dx, double dy)
     targetY += dy * scaleY;
     
     port.device = CPD_MOUSE;
+    port.updateMouseXY((i64)targetX, (i64)targetY);
 }
 
 void

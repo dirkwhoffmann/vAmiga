@@ -26,7 +26,7 @@ ControlPort::getDescription() const
 }
     
 void
-ControlPort::_inspect()
+ControlPort::_inspect() const
 {
     synchronized {
         
@@ -65,16 +65,28 @@ ControlPort::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
-u16
-ControlPort::joydat()
+void
+ControlPort::updateMouseXY(i64 x, i64 y)
 {
-    // Update the mouse counters if a mouse is connected
-    if (device == CPD_MOUSE) {
+    synchronized {
         
-        mouseCounterX += mouse.getDeltaX();
-        mouseCounterY += mouse.getDeltaY();
+        // Compute the delta movement
+        i64 dx = x - mouseX;
+        i64 dy = y - mouseY;
+        
+        // Store the mouse position
+        mouseX = x;
+        mouseY = y;
+        
+        // Update the mouse position counters
+        mouseCounterX += dx;
+        mouseCounterY += dy;
     }
-    
+}
+
+u16
+ControlPort::joydat() const
+{
     // Compose the register bits
     u16 xxxxxx__xxxxxx__ = HI_LO(mouseCounterY & 0xFC, mouseCounterX & 0xFC);
     u16 ______xx______xx = 0;
@@ -91,11 +103,14 @@ ControlPort::joydat()
 void
 ControlPort::pokeJOYTEST(u16 value)
 {
-    mouseCounterY &= 0b00000011;
-    mouseCounterY |= HI_BYTE(value) & 0b11111100;
-
-    mouseCounterX &= 0b00000011;
-    mouseCounterX |= LO_BYTE(value) & 0b11111100;
+    synchronized {
+        
+        mouseCounterY &= 0b00000011;
+        mouseCounterY |= HI_BYTE(value) & 0b11111100;
+        
+        mouseCounterX &= 0b00000011;
+        mouseCounterX |= LO_BYTE(value) & 0b11111100;
+    }
 }
 
 void
