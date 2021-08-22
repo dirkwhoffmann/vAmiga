@@ -29,9 +29,7 @@ enum_long(FILETYPE)
     FILETYPE_EXE,
     FILETYPE_DIR,
     FILETYPE_ROM,
-    FILETYPE_EXTENDED_ROM,
-    
-    FILETYPE_COUNT
+    FILETYPE_EXTENDED_ROM
 };
 typedef FILETYPE FileType;
 
@@ -40,7 +38,7 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < FILETYPE_COUNT;
+        return (unsigned long)value <= FILETYPE_EXTENDED_ROM;
     }
     
     static const char *prefix() { return "FILETYPE"; }
@@ -60,7 +58,6 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType> {
             case FILETYPE_DIR:          return "DIR";
             case FILETYPE_ROM:          return "ROM";
             case FILETYPE_EXTENDED_ROM: return "EXTENDED_ROM";
-            case FILETYPE_COUNT:        return "???";
         }
         return "???";
     }

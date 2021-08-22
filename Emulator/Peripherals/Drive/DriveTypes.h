@@ -22,9 +22,7 @@ enum_long(DRIVE_TYPE)
 {
     DRIVE_DD_35,
     DRIVE_HD_35,
-    DRIVE_DD_525,
-    
-    DRIVE_COUNT
+    DRIVE_DD_525
 };
 typedef DRIVE_TYPE DriveType;
 
@@ -33,7 +31,7 @@ struct DriveTypeEnum : util::Reflection<DriveTypeEnum, DriveType> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value <  DRIVE_COUNT;
+        return (unsigned long)value <= DRIVE_DD_525;
     }
     
     static const char *prefix() { return "DRIVE"; }
@@ -44,7 +42,6 @@ struct DriveTypeEnum : util::Reflection<DriveTypeEnum, DriveType> {
             case DRIVE_DD_35:   return "DD_35";
             case DRIVE_HD_35:   return "HD_35";
             case DRIVE_DD_525:  return "DD_525";
-            case DRIVE_COUNT:   return "???";
         }
         return "???";
     }

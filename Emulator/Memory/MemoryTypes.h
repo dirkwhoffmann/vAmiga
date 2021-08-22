@@ -33,9 +33,7 @@ enum_long(MEM_SOURCE)
     MEM_ROM,
     MEM_ROM_MIRROR,
     MEM_WOM,
-    MEM_EXT,
-    
-    MEM_COUNT
+    MEM_EXT
 };
 typedef MEM_SOURCE MemorySource;
 
@@ -44,7 +42,7 @@ struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < MEM_COUNT;
+        return (unsigned long)value <= MEM_EXT;
     }
 
     static const char *prefix() { return "MEM"; }
@@ -68,7 +66,6 @@ struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource> {
             case MEM_ROM_MIRROR:     return "ROM_MIRROR";
             case MEM_WOM:            return "WOM";
             case MEM_EXT:            return "EXT";
-            case MEM_COUNT:          return "???";
         }
         return "???";
     }
@@ -78,9 +75,7 @@ struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource> {
 enum_long(ACCESSOR_TYPE)
 {
     ACCESSOR_CPU,
-    ACCESSOR_AGNUS,
-    
-    ACCESSOR_COUNT
+    ACCESSOR_AGNUS
 };
 typedef ACCESSOR_TYPE Accessor;
 
@@ -89,7 +84,7 @@ struct AccessorEnum : util::Reflection<AccessorEnum, Accessor> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < ACCESSOR_COUNT;
+        return (unsigned long)value <= ACCESSOR_AGNUS;
     }
 
     static const char *prefix() { return "ACCESSOR"; }
@@ -99,7 +94,6 @@ struct AccessorEnum : util::Reflection<AccessorEnum, Accessor> {
                 
             case ACCESSOR_CPU:    return "CPU";
             case ACCESSOR_AGNUS:  return "AGNUS";
-            case ACCESSOR_COUNT:  return "???";
         }
         return "???";
     }
@@ -111,9 +105,7 @@ enum_long(BANK_MAP)
     BANK_MAP_A500,
     BANK_MAP_A1000,
     BANK_MAP_A2000A,
-    BANK_MAP_A2000B,
-    
-    BANK_MAP_COUNT
+    BANK_MAP_A2000B
 };
 typedef BANK_MAP BankMap;
 
@@ -122,7 +114,7 @@ struct BankMapEnum : util::Reflection<BankMapEnum, BankMap> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < BANK_MAP_COUNT;
+        return (unsigned long)value <= BANK_MAP_A2000B;
     }
 
     static const char *prefix() { return "BANK_MAP"; }
@@ -134,7 +126,6 @@ struct BankMapEnum : util::Reflection<BankMapEnum, BankMap> {
             case BANK_MAP_A1000:   return "A1000";
             case BANK_MAP_A2000A:  return "A2000A";
             case BANK_MAP_A2000B:  return "A2000B";
-            case BANK_MAP_COUNT:   return "???";
         }
         return "???";
     }
@@ -178,9 +169,7 @@ enum_long(UNMAPPED_MEMORY)
 {
     UNMAPPED_FLOATING,
     UNMAPPED_ALL_ZEROES,
-    UNMAPPED_ALL_ONES,
-
-    UNMAPPED_COUNT
+    UNMAPPED_ALL_ONES
 };
 typedef UNMAPPED_MEMORY UnmappedMemory;
 
@@ -189,7 +178,7 @@ struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
     
     static bool isValid(long value)
     {
-        return (unsigned long)value < UNMAPPED_COUNT;
+        return (unsigned long)value <= UNMAPPED_ALL_ONES;
     }
 
     static const char *prefix() { return "UNMAPPED"; }
@@ -200,7 +189,6 @@ struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
             case UNMAPPED_FLOATING:    return "FLOATING";
             case UNMAPPED_ALL_ZEROES:  return "ALL_ZEROES";
             case UNMAPPED_ALL_ONES:    return "ALL_ONES";
-            case UNMAPPED_COUNT:       return "???";
         }
         return "???";
     }

@@ -18,7 +18,7 @@ struct Beam
     isize v;
     isize h;
     
-    // Latches counter values (recorded when BPLCON0::ERSY is set)
+    // Latches counter values (recorded if BPLCON0::ERSY is set)
     isize vLatched;
     isize hLatched;
 

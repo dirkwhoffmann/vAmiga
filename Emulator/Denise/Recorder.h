@@ -59,8 +59,10 @@ class Recorder : public SubComponent {
     // Recording status
     //
     
-    // The current recorder state
+    // All possible recorder states
     enum class State { wait, prepare, record, finalize };
+
+    // The current recorder state
     State state = State::wait;
     
     // Audio has been recorded up to this cycle

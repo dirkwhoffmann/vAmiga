@@ -35,6 +35,7 @@ enum_i8(BUS_OWNER)
     BUS_SPRITE7,
     BUS_COPPER,
     BUS_BLITTER,
+    
     BUS_COUNT
 };
 typedef BUS_OWNER BusOwner;

@@ -22,9 +22,7 @@ enum_long(KB_STATE)
     KB_SYNC,
     KB_STRM_ON,
     KB_STRM_OFF,
-    KB_SEND,
-    
-    KB_COUNT
+    KB_SEND
 };
 typedef KB_STATE KeyboardState;
 
@@ -33,7 +31,7 @@ struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value <  KB_COUNT;
+        return (unsigned long)value <= KB_SEND;
     }
     
     static const char *prefix() { return "KB"; }
@@ -46,7 +44,6 @@ struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState> {
             case KB_STRM_ON:   return "STRM_ON";
             case KB_STRM_OFF:  return "STRM_OFF";
             case KB_SEND:      return "SEND";
-            case KB_COUNT:     return "???";
         }
         return "???";
     }

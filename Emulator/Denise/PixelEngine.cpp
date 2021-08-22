@@ -327,7 +327,7 @@ PixelEngine::pixelAddr(isize pixel) const
 }
 
 void
-PixelEngine::beginOfFrame()
+PixelEngine::vsyncHandler()
 {
     // Switch the working buffer
     synchronized {
@@ -353,13 +353,16 @@ PixelEngine::applyRegisterChange(const RegChange &change)
     switch (change.addr) {
 
         case 0:
+            
             break;
 
         case 0x100: // BPLCON0
+            
             hamMode = Denise::ham(change.value);
             break;
             
         default: // It must be a color register then
+            
             assert(change.addr >= 0x180 && change.addr <= 0x1BE);
             setColor((change.addr - 0x180) >> 1, change.value);
             break;
@@ -428,7 +431,6 @@ PixelEngine::colorizeHAM(u32 *dst, Pixel from, Pixel to, u16& ham)
         u8 index = ibuf[i];
         assert(isRgbaIndex(index));
 
-        // switch ((index >> 4) & 0b11) {
         switch ((bbuf[i] >> 4) & 0b11) {
 
             case 0b00: // Get color from register

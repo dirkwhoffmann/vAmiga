@@ -215,7 +215,7 @@ public:
     void endOfVBlankLine();
 
     // Called after each frame to switch the frame buffers
-    void beginOfFrame();
+    void vsyncHandler();
 
 
     //

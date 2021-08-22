@@ -68,6 +68,10 @@ public:
     u16 initialBplcon1;
     u16 initialBplcon2;
 
+    // Extracted from BPLCON1 to emulate horizontal scrolling
+    Pixel pixelOffsetOdd;
+    Pixel pixelOffsetEven;
+
     // Color register index for the border color (0 = background color)
     u8 borderColor;
     
@@ -81,6 +85,10 @@ public:
     u16 clxdat;
     u16 clxcon;
 
+    //
+    // Shift registers
+    //
+    
     /* Parallel-to-serial shift registers. Denise transfers the current values
      * of the BPLDAT registers into these shift registers after BPLDAT1 is
      * written to. This is emulated in function fillShiftRegister().
@@ -99,10 +107,6 @@ public:
     // Flags indicating that the shift registers have been loaded
     bool armedEven;
     bool armedOdd;
-
-    // Extracted from BPLCON1 to emulate horizontal scrolling
-    Pixel pixelOffsetOdd;
-    Pixel pixelOffsetEven;
 
     
     //
@@ -224,38 +228,39 @@ public:
     u8 mBuffer[HPIXELS + (4 * 16) + 6];
     u16 zBuffer[HPIXELS + (4 * 16) + 6];
 
-    static const u16 Z_0   = 0b10000000'00000000;
-    static const u16 Z_SP0 = 0b01000000'00000000;
-    static const u16 Z_SP1 = 0b00100000'00000000;
-    static const u16 Z_1   = 0b00010000'00000000;
-    static const u16 Z_SP2 = 0b00001000'00000000;
-    static const u16 Z_SP3 = 0b00000100'00000000;
-    static const u16 Z_2   = 0b00000010'00000000;
-    static const u16 Z_SP4 = 0b00000001'00000000;
-    static const u16 Z_SP5 = 0b00000000'10000000;
-    static const u16 Z_3   = 0b00000000'01000000;
-    static const u16 Z_SP6 = 0b00000000'00100000;
-    static const u16 Z_SP7 = 0b00000000'00010000;
-    static const u16 Z_4   = 0b00000000'00001000;
+    static constexpr u16 Z_0   = 0b10000000'00000000;
+    static constexpr u16 Z_SP0 = 0b01000000'00000000;
+    static constexpr u16 Z_SP1 = 0b00100000'00000000;
+    static constexpr u16 Z_1   = 0b00010000'00000000;
+    static constexpr u16 Z_SP2 = 0b00001000'00000000;
+    static constexpr u16 Z_SP3 = 0b00000100'00000000;
+    static constexpr u16 Z_2   = 0b00000010'00000000;
+    static constexpr u16 Z_SP4 = 0b00000001'00000000;
+    static constexpr u16 Z_SP5 = 0b00000000'10000000;
+    static constexpr u16 Z_3   = 0b00000000'01000000;
+    static constexpr u16 Z_SP6 = 0b00000000'00100000;
+    static constexpr u16 Z_SP7 = 0b00000000'00010000;
+    static constexpr u16 Z_4   = 0b00000000'00001000;
  
     // Dual-playfield bits (meta-information, not used for depth)
-    static const u16 Z_DPF   = 0x1;  // Both playfields transparent
-    static const u16 Z_DPF1  = 0x2;  // PF1 opaque, PF2 transparent
-    static const u16 Z_DPF2  = 0x3;  // PF1 transparent, PF2 opaque
-    static const u16 Z_DPF12 = 0x4;  // Both playfields opaque, PF1 visible
-    static const u16 Z_DPF21 = 0x5;  // Both playfields opaque, PF2 visible
-    static const u16 Z_DUAL  = 0x7;  // Mask covering all DPF bits
+    static constexpr u16 Z_DPF   = 0x1;  // Both playfields transparent
+    static constexpr u16 Z_DPF1  = 0x2;  // PF1 opaque, PF2 transparent
+    static constexpr u16 Z_DPF2  = 0x3;  // PF1 transparent, PF2 opaque
+    static constexpr u16 Z_DPF12 = 0x4;  // Both playfields opaque, PF1 visible
+    static constexpr u16 Z_DPF21 = 0x5;  // Both playfields opaque, PF2 visible
+    static constexpr u16 Z_DUAL  = 0x7;  // Mask covering all DPF bits
 
-    constexpr static const u16 Z_SP[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
-    static const u16 Z_SP01234567 = Z_SP0|Z_SP1|Z_SP2|Z_SP3|Z_SP4|Z_SP5|Z_SP6|Z_SP7;
-    static const u16 Z_SP0246 = Z_SP0|Z_SP2|Z_SP4|Z_SP6;
-    static const u16 Z_SP1357 = Z_SP1|Z_SP3|Z_SP5|Z_SP7;
+    static constexpr u16 Z_SP[8] = {
+        Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
+    static constexpr u16 Z_SP01234567 = Z_SP0|Z_SP1|Z_SP2|Z_SP3|Z_SP4|Z_SP5|Z_SP6|Z_SP7;
+    static constexpr u16 Z_SP0246 = Z_SP0|Z_SP2|Z_SP4|Z_SP6;
+    static constexpr u16 Z_SP1357 = Z_SP1|Z_SP3|Z_SP5|Z_SP7;
     
     static bool isSpritePixel(u16 z) {
         return (z & Z_SP01234567) > (z & ~Z_SP01234567);
     }
     template <int nr> static bool isSpritePixel(u16 z) {
-        assert(nr < 8); return (z & Z_SP[nr]) > (z & ~Z_SP[nr]);
+        return (z & Z_SP[nr]) > (z & ~Z_SP[nr]);
     }
     static int upperPlayfield(u16 z) {
         return ((z & Z_DUAL) == Z_DPF2 || (z & Z_DUAL) == Z_DPF21) ? 2 : 1;
@@ -320,6 +325,8 @@ private:
         << initialBplcon0
         << initialBplcon1
         << initialBplcon2
+        << pixelOffsetOdd
+        << pixelOffsetEven
         << borderColor
         << bpldat
         << bpldatPipe
@@ -329,8 +336,6 @@ private:
         << fillPos
         << armedEven
         << armedOdd
-        << pixelOffsetOdd
-        << pixelOffsetEven
         >> conChanges
         >> sprChanges
 
@@ -372,12 +377,7 @@ public:
 public:
     
     DeniseInfo getInfo() const { return AmigaComponent::getInfo(info); }
-    /*
-    SpriteInfo getSpriteInfo(isize nr);
-    isize getSpriteHeight(isize nr) const { return latchedSpriteInfo[nr].height; }
-    u16 getSpriteColor(isize nr, isize reg) const { return latchedSpriteInfo[nr].colors[reg]; }
-    u64 getSpriteData(isize nr, isize line) const { return latchedSpriteData[nr][line]; }
-    */
+
     
     //
     // Accessing registers
@@ -430,7 +430,7 @@ public:
     // BPLCON2
     void pokeBPLCON2(u16 value);
     void setBPLCON2(u16 value);
-    static int PF2PRI(u16 value) { return GET_BIT(value, 6); }
+    static bool PF2PRI(u16 value) { return GET_BIT(value, 6); }
     static u16 PF1Px(u16 bplcon2) { return (bplcon2 & 7); }
     static u16 PF2Px(u16 bplcon2) { return (bplcon2 >> 3) & 7; }
     bool PF2PRI() const { return PF2PRI(bplcon2); }
