@@ -263,7 +263,7 @@ public:
     
     const MemoryStats &getStats() { return stats; }
     
-    void clearStats() { memset(&stats, 0, sizeof(stats)); }
+    void clearStats() { std::memset(&stats, 0, sizeof(stats)); }
     void updateStats();
 
     
@@ -360,9 +360,9 @@ public:
     bool hasExt() const { return ext != nullptr; }
 
     // Erases an installed Rom
-    void eraseRom() { memset(rom, 0, config.romSize); }
-    void eraseWom() { memset(wom, 0, config.womSize); }
-    void eraseExt() { memset(ext, 0, config.extSize); }
+    void eraseRom() { std::memset(rom, 0, config.romSize); }
+    void eraseWom() { std::memset(wom, 0, config.womSize); }
+    void eraseExt() { std::memset(ext, 0, config.extSize); }
     
     // Installs a Boot Rom or Kickstart Rom
     void loadRom(class RomFile &rom) throws;

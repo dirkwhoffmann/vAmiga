@@ -19,7 +19,7 @@ Keyboard::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
-    memset(keyDown, 0, sizeof(keyDown));
+    std::memset(keyDown, 0, sizeof(keyDown));
     state = KB_SELFTEST;
     execute();
 }

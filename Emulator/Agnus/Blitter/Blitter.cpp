@@ -564,7 +564,7 @@ Blitter::beginBlit()
 {
     auto level = config.accuracy;
 
-    if (BLT_GUARD) memset(memguard, 0, sizeof(memguard));
+    if (BLT_GUARD) std::memset(memguard, 0, sizeof(memguard));
     
     if (bltconLINE()) {
 
@@ -666,7 +666,7 @@ Blitter::endBlit()
     
     running = false;
     
-    if (BLT_GUARD) memset(memguard, 0, sizeof(memguard));
+    if (BLT_GUARD) std::memset(memguard, 0, sizeof(memguard));
     
     // Clear the Blitter slot
     agnus.cancel<SLOT_BLT>();

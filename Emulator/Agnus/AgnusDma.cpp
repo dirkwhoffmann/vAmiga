@@ -96,7 +96,7 @@ Agnus::initLookupTables()
 void
 Agnus::initBplEventTableLores()
 {
-    memset(bplDMA[0], 0, sizeof(bplDMA[0]));
+    std::memset(bplDMA[0], 0, sizeof(bplDMA[0]));
 
     for (isize bpu = 0; bpu < 7; bpu++) {
 
@@ -123,7 +123,7 @@ Agnus::initBplEventTableLores()
 void
 Agnus::initBplEventTableHires()
 {
-    memset(bplDMA[1], 0, sizeof(bplDMA[1]));
+    std::memset(bplDMA[1], 0, sizeof(bplDMA[1]));
 
     for (isize bpu = 0; bpu < 7; bpu++) {
 
@@ -149,7 +149,7 @@ Agnus::initBplEventTableHires()
 void
 Agnus::initDasEventTable()
 {
-    memset(dasDMA, 0, sizeof(dasDMA));
+    std::memset(dasDMA, 0, sizeof(dasDMA));
 
     for (isize dmacon = 0; dmacon < 64; dmacon++) {
 
@@ -572,7 +572,7 @@ Agnus::dumpBplEventTable(int from, int to) const
 {
     char str[256][3];
 
-    memset(str, '?', sizeof(str));
+    std::memset(str, '?', sizeof(str));
     
     // Events
     for (isize i = 0; i < 4; i++) {
@@ -630,35 +630,36 @@ Agnus::dumpDasEventTable(int from, int to) const
 {
     char str[256][3];
 
-    memset(str, '?', sizeof(str));
-    str[(int)EVENT_NONE][0]  = '.'; str[(int)EVENT_NONE][1]  = '.';
-    str[(int)DAS_REFRESH][0] = 'R'; str[(int)DAS_REFRESH][1] = 'E';
-    str[(int)DAS_D0][0]      = 'D'; str[(int)DAS_D0][1]      = '0';
-    str[(int)DAS_D1][0]      = 'D'; str[(int)DAS_D1][1]      = '1';
-    str[(int)DAS_D2][0]      = 'D'; str[(int)DAS_D2][1]      = '2';
-    str[(int)DAS_A0][0]      = 'A'; str[(int)DAS_A0][1]      = '0';
-    str[(int)DAS_A1][0]      = 'A'; str[(int)DAS_A1][1]      = '1';
-    str[(int)DAS_A2][0]      = 'A'; str[(int)DAS_A2][1]      = '2';
-    str[(int)DAS_A3][0]      = 'A'; str[(int)DAS_A3][1]      = '3';
-    str[(int)DAS_S0_1][0]    = '0'; str[(int)DAS_S0_1][1]    = '1';
-    str[(int)DAS_S0_2][0]    = '0'; str[(int)DAS_S0_2][1]    = '2';
-    str[(int)DAS_S1_1][0]    = '1'; str[(int)DAS_S1_1][1]    = '1';
-    str[(int)DAS_S1_2][0]    = '1'; str[(int)DAS_S1_2][1]    = '2';
-    str[(int)DAS_S2_1][0]    = '2'; str[(int)DAS_S2_1][1]    = '1';
-    str[(int)DAS_S2_2][0]    = '2'; str[(int)DAS_S2_2][1]    = '2';
-    str[(int)DAS_S3_1][0]    = '3'; str[(int)DAS_S3_1][1]    = '1';
-    str[(int)DAS_S3_2][0]    = '3'; str[(int)DAS_S3_2][1]    = '2';
-    str[(int)DAS_S4_1][0]    = '4'; str[(int)DAS_S4_1][1]    = '1';
-    str[(int)DAS_S4_2][0]    = '4'; str[(int)DAS_S4_2][1]    = '2';
-    str[(int)DAS_S5_1][0]    = '5'; str[(int)DAS_S5_1][1]    = '1';
-    str[(int)DAS_S5_2][0]    = '5'; str[(int)DAS_S5_2][1]    = '2';
-    str[(int)DAS_S6_1][0]    = '6'; str[(int)DAS_S6_1][1]    = '1';
-    str[(int)DAS_S6_2][0]    = '6'; str[(int)DAS_S6_2][1]    = '2';
-    str[(int)DAS_S7_1][0]    = '7'; str[(int)DAS_S7_1][1]    = '1';
-    str[(int)DAS_S7_2][0]    = '7'; str[(int)DAS_S7_2][1]    = '2';
-    str[(int)DAS_SDMA][0]    = 'S'; str[(int)DAS_SDMA][1]    = 'D';
-    str[(int)DAS_TICK][0]    = 'T'; str[(int)DAS_TICK][1]    = 'K';
-    str[(int)DAS_TICK2][0]   = 'T'; str[(int)DAS_TICK2][1]   = '2';
+    std::memset(str, '?', sizeof(str));
+    
+    str[EVENT_NONE][0]  = '.'; str[EVENT_NONE][1]  = '.';
+    str[DAS_REFRESH][0] = 'R'; str[DAS_REFRESH][1] = 'E';
+    str[DAS_D0][0]      = 'D'; str[DAS_D0][1]      = '0';
+    str[DAS_D1][0]      = 'D'; str[DAS_D1][1]      = '1';
+    str[DAS_D2][0]      = 'D'; str[DAS_D2][1]      = '2';
+    str[DAS_A0][0]      = 'A'; str[DAS_A0][1]      = '0';
+    str[DAS_A1][0]      = 'A'; str[DAS_A1][1]      = '1';
+    str[DAS_A2][0]      = 'A'; str[DAS_A2][1]      = '2';
+    str[DAS_A3][0]      = 'A'; str[DAS_A3][1]      = '3';
+    str[DAS_S0_1][0]    = '0'; str[DAS_S0_1][1]    = '1';
+    str[DAS_S0_2][0]    = '0'; str[DAS_S0_2][1]    = '2';
+    str[DAS_S1_1][0]    = '1'; str[DAS_S1_1][1]    = '1';
+    str[DAS_S1_2][0]    = '1'; str[DAS_S1_2][1]    = '2';
+    str[DAS_S2_1][0]    = '2'; str[DAS_S2_1][1]    = '1';
+    str[DAS_S2_2][0]    = '2'; str[DAS_S2_2][1]    = '2';
+    str[DAS_S3_1][0]    = '3'; str[DAS_S3_1][1]    = '1';
+    str[DAS_S3_2][0]    = '3'; str[DAS_S3_2][1]    = '2';
+    str[DAS_S4_1][0]    = '4'; str[DAS_S4_1][1]    = '1';
+    str[DAS_S4_2][0]    = '4'; str[DAS_S4_2][1]    = '2';
+    str[DAS_S5_1][0]    = '5'; str[DAS_S5_1][1]    = '1';
+    str[DAS_S5_2][0]    = '5'; str[DAS_S5_2][1]    = '2';
+    str[DAS_S6_1][0]    = '6'; str[DAS_S6_1][1]    = '1';
+    str[DAS_S6_2][0]    = '6'; str[DAS_S6_2][1]    = '2';
+    str[DAS_S7_1][0]    = '7'; str[DAS_S7_1][1]    = '1';
+    str[DAS_S7_2][0]    = '7'; str[DAS_S7_2][1]    = '2';
+    str[DAS_SDMA][0]    = 'S'; str[DAS_SDMA][1]    = 'D';
+    str[DAS_TICK][0]    = 'T'; str[DAS_TICK][1]    = 'K';
+    str[DAS_TICK2][0]   = 'T'; str[DAS_TICK2][1]   = '2';
 
     for (isize i = 1; i < 256; i++) str[i][2] = ' ';
     

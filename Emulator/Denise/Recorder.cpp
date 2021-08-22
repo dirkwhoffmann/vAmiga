@@ -314,7 +314,7 @@ Recorder::recordVideo(Cycle target)
     u8 *src = (u8 *)(buffer.data + offset);
     u8 *dst = data;
     for (isize y = 0; y < height; y++, src += 4 * HPIXELS, dst += width) {
-        memcpy(dst, src, width);
+        std::memcpy(dst, src, width);
     }
     
     // Feed the video pipe

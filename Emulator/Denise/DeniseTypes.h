@@ -53,7 +53,7 @@ struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
 typedef struct
 {
     // Number of lines the sprite was armed
-    u16 height;
+    isize height;
 
     // Extracted information from SPRxPOS and SPRxCTL
     isize hstrt;
@@ -61,7 +61,7 @@ typedef struct
     isize vstop;
     bool attach;
     
-    // Upper 16 color register (recorded where the observed sprite starts)
+    // Upper 16 color registers (at the time the observed sprite starts)
     u16 colors[16];
 }
 SpriteInfo;

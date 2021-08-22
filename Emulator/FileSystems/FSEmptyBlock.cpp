@@ -28,5 +28,5 @@ FSEmptyBlock::exportBlock(u8 *p, isize size)
 {
     assert(size == bsize());
     assert(p);
-    memset(p, 0, size);
+    std::memset(p, 0, size);
 }

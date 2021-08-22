@@ -541,8 +541,8 @@ FSPartition::killVirus()
         ((FSBootBlock *)dev.blocks[firstBlock + 0])->writeBootBlock(id, 0);
         ((FSBootBlock *)dev.blocks[firstBlock + 1])->writeBootBlock(id, 1);
     } else {
-        memset(dev.blocks[firstBlock + 0]->data + 4, 0, bsize() - 4);
-        memset(dev.blocks[firstBlock + 1]->data, 0, bsize());
+        std::memset(dev.blocks[firstBlock + 0]->data + 4, 0, bsize() - 4);
+        std::memset(dev.blocks[firstBlock + 1]->data, 0, bsize());
     }
 }
 

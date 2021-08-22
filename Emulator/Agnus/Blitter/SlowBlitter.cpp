@@ -839,10 +839,10 @@ Blitter::initSlowBlitter()
 
     // Copy all programs over
     assert(sizeof(this->copyBlitInstr) == sizeof(copyBlitInstr));
-    memcpy(this->copyBlitInstr, copyBlitInstr, sizeof(copyBlitInstr));
+    std::memcpy(this->copyBlitInstr, copyBlitInstr, sizeof(copyBlitInstr));
 
     assert(sizeof(this->lineBlitInstr) == sizeof(lineBlitInstr));
-    memcpy(this->lineBlitInstr, lineBlitInstr, sizeof(lineBlitInstr));
+    std::memcpy(this->lineBlitInstr, lineBlitInstr, sizeof(lineBlitInstr));
 }
 
 void

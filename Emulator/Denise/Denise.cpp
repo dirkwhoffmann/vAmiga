@@ -29,8 +29,8 @@ Denise::_initialize()
 {
     resetConfig();
 
-    memset(spriteInfo, 0, sizeof(spriteInfo));
-    memset(latchedSpriteInfo, 0, sizeof(latchedSpriteInfo));
+    std::memset(spriteInfo, 0, sizeof(spriteInfo));
+    std::memset(latchedSpriteInfo, 0, sizeof(latchedSpriteInfo));
 }
 
 void
@@ -38,10 +38,10 @@ Denise::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
-    memset(bBuffer, 0, sizeof(bBuffer));
-    memset(iBuffer, 0, sizeof(iBuffer));
-    memset(mBuffer, 0, sizeof(mBuffer));
-    memset(zBuffer, 0, sizeof(zBuffer));
+    std::memset(bBuffer, 0, sizeof(bBuffer));
+    std::memset(iBuffer, 0, sizeof(iBuffer));
+    std::memset(mBuffer, 0, sizeof(mBuffer));
+    std::memset(zBuffer, 0, sizeof(zBuffer));
 }
 
 DeniseConfig
@@ -1156,6 +1156,7 @@ Denise::vsyncHandler()
     if (amiga.inDebugMode()) {
         
         for (isize i = 0; i < 8; i++) {
+            
             latchedSpriteInfo[i] = spriteInfo[i];
             spriteInfo[i].height = 0;
             spriteInfo[i].vstrt  = 0;
@@ -1163,7 +1164,8 @@ Denise::vsyncHandler()
             spriteInfo[i].hstrt  = 0;
             spriteInfo[i].attach = false;
         }
-        memcpy(latchedSpriteData, spriteData, sizeof(spriteData));
+        
+        std::memcpy(latchedSpriteData, spriteData, sizeof(spriteData));
     }
 }
 
@@ -1184,7 +1186,7 @@ Denise::beginOfLine(isize vpos)
     for (isize i = 0; i < 6; i++) shiftReg[i] = 0;
 
     // Clear the bBuffer
-    memset(bBuffer, 0, sizeof(bBuffer));
+    std::memset(bBuffer, 0, sizeof(bBuffer));
 
     // Reset the sprite clipping range
     spriteClipBegin = HPIXELS;
@@ -1194,8 +1196,6 @@ Denise::beginOfLine(isize vpos)
 void
 Denise::endOfLine(isize vpos)
 {
-    // debug("endOfLine pixel = %d HPIXELS = %d\n", pixel, HPIXELS);
-
     // Check if we are below the VBLANK area
     if (vpos >= 26) {
 
@@ -1218,6 +1218,7 @@ Denise::endOfLine(isize vpos)
         if (config.hiddenLayers) {
             pixelEngine.hide(vpos, config.hiddenLayers, config.hiddenLayerAlpha);
         }
+        
     } else {
         
         drawSprites();
@@ -1241,7 +1242,7 @@ Denise::recordSpriteData(isize nr)
 {
     assert(nr < 8);
 
-    u16 line = spriteInfo[nr].height;
+    isize line = spriteInfo[nr].height;
 
     // Record data registers
     spriteData[nr][line] = HI_W_LO_W(sprdatb[nr], sprdata[nr]);
@@ -1260,17 +1261,6 @@ Denise::recordSpriteData(isize nr)
     }
     
     spriteInfo[nr].height = (line + 1) % VPOS_CNT;
-}
-
-void
-Denise::dumpBuffer(const u8 *buffer, isize length) const
-{
-    const isize cols = 16;
-
-    for (isize i = 0; i < (length + cols - 1) / cols; i++) {
-        for (isize j = 0; j < cols; j++) msg("%2d ", buffer[i * cols + j]);
-        msg("\n");
-    }
 }
 
 template void Denise::drawOdd<false>(Pixel offset);

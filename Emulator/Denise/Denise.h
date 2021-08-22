@@ -28,12 +28,12 @@ class Denise : public SubComponent {
     mutable DeniseInfo info = {};
 
     // Sprite information recorded in the previous frame (shown by the GUI)
-    SpriteInfo latchedSpriteInfo[8];
-    u64 latchedSpriteData[8][VPOS_CNT];
+    SpriteInfo latchedSpriteInfo[8] = { };
+    u64 latchedSpriteData[8][VPOS_CNT] = { };
     
     // Sprite information recorded in the current frame (constantly changing)
-    SpriteInfo spriteInfo[8];
-    u64 spriteData[8][VPOS_CNT];
+    SpriteInfo spriteInfo[8] = { };
+    u64 spriteData[8][VPOS_CNT] = { };
     
     
     //
@@ -105,8 +105,8 @@ public:
     bool armedOdd;
 
     // Extracted from BPLCON1 to emulate horizontal scrolling
-    i8 pixelOffsetOdd;
-    i8 pixelOffsetEven;
+    Pixel pixelOffsetOdd;
+    Pixel pixelOffsetEven;
 
     
     //
@@ -378,7 +378,7 @@ public:
     
     DeniseInfo getInfo() const { return AmigaComponent::getInfo(info); }
     SpriteInfo getSpriteInfo(isize nr);
-    u16 getSpriteHeight(isize nr) const { return latchedSpriteInfo[nr].height; }
+    isize getSpriteHeight(isize nr) const { return latchedSpriteInfo[nr].height; }
     u16 getSpriteColor(isize nr, isize reg) const { return latchedSpriteInfo[nr].colors[reg]; }
     u64 getSpriteData(isize nr, isize line) const { return latchedSpriteData[nr][line]; }
 
@@ -606,10 +606,4 @@ public:
     
     // Gathers the sprite data for the displayed sprite
     void recordSpriteData(isize x);
-
-    // Dumps the bBuffer or the iBuffer to the console
-    void dumpIBuffer() const { dumpBuffer(iBuffer, sizeof(iBuffer)); }
-    void dumpBBuffer() const { dumpBuffer(bBuffer, sizeof(bBuffer)); }
-    void dumpBuffer(const u8 *buffer, isize length) const;
-
 };

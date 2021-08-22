@@ -817,7 +817,7 @@ FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *
     }
         
     // Wipe out the target buffer
-    memset(dst, 0, size);
+    std::memset(dst, 0, size);
     
     // Export all blocks
     for (isize i = 0; i < count; i++) {

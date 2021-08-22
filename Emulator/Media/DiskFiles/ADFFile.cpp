@@ -138,9 +138,9 @@ void
 ADFFile::setDos(FSVolumeType dos)
 {
     if (dos == FS_NODOS) {
-        memset(data, 0, 4);
+        std::memset(data, 0, 4);
     } else {
-        memcpy(data, "DOS", 3);
+        std::memcpy(data, "DOS", 3);
         data[3] = (u8)dos;
     }
 }
@@ -253,7 +253,7 @@ ADFFile::killVirus()
     } else {
 
         msg("zeroes\n");
-        memset(data + 4, 0, 1020);
+        std::memset(data + 4, 0, 1020);
     }
 }
 

@@ -33,7 +33,7 @@ Agnus::_initialize()
     ptrMask = 0x0FFFFF; // TODO: REMOVE?!
     
     // Wipe out event slots
-    memset(slot, 0, sizeof(slot));
+    std::memset(slot, 0, sizeof(slot));
 }
 
 void

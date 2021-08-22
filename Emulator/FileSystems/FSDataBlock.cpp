@@ -107,7 +107,7 @@ OFSDataBlock::addData(const u8 *buffer, isize size)
 {
     isize count = std::min(bsize() - headerSize(), size);
 
-    memcpy(data + headerSize(), buffer, count);
+    std::memcpy(data + headerSize(), buffer, count);
     setDataBytesInBlock((u32)count);
     
     return count;
@@ -151,7 +151,7 @@ isize
 FFSDataBlock::addData(const u8 *buffer, isize size)
 {
     isize count = std::min(bsize(), size);
-    memcpy(data, buffer, count);
+    std::memcpy(data, buffer, count);
     return count;
 }
 

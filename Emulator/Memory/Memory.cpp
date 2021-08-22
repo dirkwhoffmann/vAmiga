@@ -484,16 +484,16 @@ Memory::fillRamWithInitPattern()
             
         case RAM_INIT_ALL_ZEROES:
 
-            if (chip) memset(chip, 0x00, config.chipSize);
-            if (slow) memset(slow, 0x00, config.slowSize);
-            if (fast) memset(fast, 0x00, config.fastSize);
+            if (chip) std::memset(chip, 0x00, config.chipSize);
+            if (slow) std::memset(slow, 0x00, config.slowSize);
+            if (fast) std::memset(fast, 0x00, config.fastSize);
             break;
             
         case RAM_INIT_ALL_ONES:
             
-            if (chip) memset(chip, 0xFF, config.chipSize);
-            if (slow) memset(slow, 0xFF, config.slowSize);
-            if (fast) memset(fast, 0xFF, config.fastSize);
+            if (chip) std::memset(chip, 0xFF, config.chipSize);
+            if (slow) std::memset(slow, 0xFF, config.slowSize);
+            if (fast) std::memset(fast, 0xFF, config.fastSize);
             break;
             
         default:

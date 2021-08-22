@@ -37,7 +37,7 @@ Blitter::initFastBlitter()
     };
 
     assert(sizeof(this->blitfunc) == sizeof(blitfunc));
-    memcpy(this->blitfunc, blitfunc, sizeof(blitfunc));
+    std::memcpy(this->blitfunc, blitfunc, sizeof(blitfunc));
 }
 
 void
