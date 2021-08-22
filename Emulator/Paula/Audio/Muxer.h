@@ -237,7 +237,7 @@ public:
      * without copying data. This function has been implemented for speedup.
      * Instead of copying ring buffer data into the target buffer, it returns
      * a pointer into the ringbuffer itself. The caller has to make sure that
-     * the ring buffer buffer read pointer is not closer than n elements to the
+     * the ring buffer's read pointer is not closer than n elements to the
      * buffer end.
      */
     SampleType *nocopy(isize n);

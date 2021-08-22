@@ -113,7 +113,7 @@ AudioStream<T>::copy(void *buffer1, void *buffer2, isize n, Volume &vol)
 
 template <class T> float
 AudioStream<T>::draw(u32 *buffer, isize width, isize height,
-                     bool left, float highestAmplitude, u32 color)
+                     bool left, float highestAmplitude, u32 color) const
 {
     isize dw = this->cap() / width;
     float newHighestAmplitude = 0.001f;
@@ -163,4 +163,4 @@ template void AudioStream<SampleType>::wipeOut();
 template void AudioStream<SampleType>::alignWritePtr();
 template void AudioStream<SampleType>::copy(void *, isize, Volume &);
 template void AudioStream<SampleType>::copy(void *, void *, isize, Volume &);
-template float AudioStream<SampleType>::draw(u32 *, isize, isize, bool, float, u32);
+template float AudioStream<SampleType>::draw(u32 *, isize, isize, bool, float, u32) const;

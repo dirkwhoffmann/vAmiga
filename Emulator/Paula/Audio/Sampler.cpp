@@ -37,7 +37,7 @@ Sampler::interpolate(Cycle clock)
     // Remove all outdated entries
     while (r2 != w && elements[r2].tag <= clock) {
         
-        (void)read();
+        skip(1);
         r1 = r2;
         r2 = next(r1);
     }
