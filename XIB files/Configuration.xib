@@ -745,6 +745,7 @@ DQ
                                                 <menu key="menu" id="RAc-dz-Ljd">
                                                     <items>
                                                         <menuItem title="MOS 8520 (DIP)" state="on" id="wbu-fM-hZz"/>
+                                                        <menuItem title="MOS 8520 (PLCC)" tag="1" id="fyu-to-LmN"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
