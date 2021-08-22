@@ -53,8 +53,8 @@ class Agnus : public SubComponent {
     AgnusConfig config = {};
 
     // Result of the latest inspection
-    AgnusInfo info = {};
-    EventInfo eventInfo = {};
+    mutable AgnusInfo info = {};
+    mutable EventInfo eventInfo = {};
 
     // Current workload
     AgnusStats stats = {};
@@ -417,7 +417,8 @@ private:
     
     void _initialize() override;
     void _reset(bool hard) override;
-    void _inspect() override;
+    void _inspect() override { const_cast<const Agnus *>(this)->_inspect(); }
+    void _inspect() const override;
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -872,7 +873,7 @@ public:
      * returns the Denise view of the BPU bits.
      */
     static u8 bpu(u16 v);
-    u8 bpu() { return bpu(bplcon0); }
+    u8 bpu() const { return bpu(bplcon0); }
 
 
     //

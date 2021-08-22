@@ -36,7 +36,7 @@ class Blitter : public SubComponent
     BlitterConfig config = {};
 
     // Result of the latest inspection
-    BlitterInfo info = {};
+    mutable BlitterInfo info = {};
 
     // The fill pattern lookup tables
     u8 fillPattern[2][2][256];     // [inclusive/exclusive][carry in][data]
@@ -205,7 +205,8 @@ private:
     
     void _initialize() override;
     void _reset(bool hard) override;
-    void _inspect() override;
+    void _inspect() override { const_cast<Blitter *>(this)->_inspect(); }
+    void _inspect() const override;
 
     template <class T>
     void applyToPersistentItems(T& worker)

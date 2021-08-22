@@ -25,7 +25,7 @@ class Denise : public SubComponent {
     DeniseConfig config = {};
 
     // Result of the latest inspection
-    DeniseInfo info = {};
+    mutable DeniseInfo info = {};
 
     // Sprite information recorded in the previous frame (shown by the GUI)
     SpriteInfo latchedSpriteInfo[8];
@@ -293,7 +293,8 @@ private:
     
     void _initialize() override;
     void _reset(bool hard) override;
-    void _inspect() override;
+    void _inspect() override { const_cast<const Denise *>(this)->_inspect(); }
+    void _inspect() const override;
     
     template <class T>
     void applyToPersistentItems(T& worker)

@@ -62,7 +62,7 @@ SerialPort::setConfigItem(Option option, i64 value)
 }
 
 void
-SerialPort::_inspect()
+SerialPort::_inspect() const
 {
     synchronized {
         

@@ -142,7 +142,7 @@ Denise::setConfigItem(Option option, i64 value)
 }
 
 void
-Denise::_inspect()
+Denise::_inspect() const
 {
     synchronized {
         

@@ -47,7 +47,7 @@ StateMachine<nr>::_reset(bool hard)
 }
 
 template <isize nr> void
-StateMachine<nr>::_inspect()
+StateMachine<nr>::_inspect() const
 {
     synchronized {
         
@@ -361,10 +361,10 @@ template StateMachine<1>::StateMachine(Amiga &ref);
 template StateMachine<2>::StateMachine(Amiga &ref);
 template StateMachine<3>::StateMachine(Amiga &ref);
 
-template AudioChannelInfo StateMachine<0>::getInfo();
-template AudioChannelInfo StateMachine<1>::getInfo();
-template AudioChannelInfo StateMachine<2>::getInfo();
-template AudioChannelInfo StateMachine<3>::getInfo();
+template AudioChannelInfo StateMachine<0>::getInfo() const;
+template AudioChannelInfo StateMachine<1>::getInfo() const;
+template AudioChannelInfo StateMachine<2>::getInfo() const;
+template AudioChannelInfo StateMachine<3>::getInfo() const;
 
 template void StateMachine<0>::enableDMA();
 template void StateMachine<1>::enableDMA();

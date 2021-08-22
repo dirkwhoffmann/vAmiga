@@ -92,7 +92,7 @@ Paula::_warpOff()
 }
 
 void
-Paula::_inspect()
+Paula::_inspect() const
 {
     synchronized {
         

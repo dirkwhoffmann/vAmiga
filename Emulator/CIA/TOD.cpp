@@ -37,7 +37,7 @@ TOD::_reset(bool hard)
 }
 
 void
-TOD::_inspect()
+TOD::_inspect() const
 {
     synchronized {
         

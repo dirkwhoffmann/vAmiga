@@ -24,7 +24,7 @@ class Drive : public SubComponent {
     DriveConfig config = {};
 
     // Result of the latest inspection
-    DriveInfo info = {};
+    mutable DriveInfo info = {};
 
     // Drive motor status (on or off)
     bool motor;
@@ -99,7 +99,8 @@ private:
 private:
     
     void _reset(bool hard) override;
-    void _inspect() override;
+    void _inspect() override { const_cast<const Drive *>(this)->_inspect(); }
+    void _inspect() const override;
     
     template <class T>
     void applyToPersistentItems(T& worker)

@@ -169,7 +169,7 @@ DiskController::setSearchPath(const string &path)
 }
 
 void
-DiskController::_inspect()
+DiskController::_inspect() const
 {
     synchronized
     {
@@ -177,7 +177,7 @@ DiskController::_inspect()
         info.state = state;
         info.fifoCount = fifoCount;
         info.dsklen = dsklen;
-        info.dskbytr =  computeDSKBYTR();
+        info.dskbytr = computeDSKBYTR();
         info.dsksync = dsksync;
         info.prb = prb;
         

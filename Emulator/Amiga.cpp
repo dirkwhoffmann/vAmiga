@@ -643,7 +643,7 @@ Amiga::setInspectionTarget(InspectionTarget target, Cycle trigger)
 }
 
 void
-Amiga::_inspect()
+Amiga::_inspect() const
 {
     synchronized {
         

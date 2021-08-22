@@ -30,7 +30,7 @@ public:
 private:
     
     // Result of the latest inspection
-    CopperInfo info = {};
+    mutable CopperInfo info = {};
     
     // The currently executed Copper list (1 or 2)
     isize copList = 1;
@@ -114,7 +114,8 @@ private:
 private:
     
     void _reset(bool hard) override;
-    void _inspect() override;
+    void _inspect() override { const_cast<const Copper *>(this)->_inspect(); }
+    void _inspect() const override;
     
     template <class T>
     void applyToPersistentItems(T& worker)

@@ -25,7 +25,7 @@ AmigaComponent::reset(bool hard)
 }
 
 void
-AmigaComponent::inspect()
+AmigaComponent::inspect() const
 {
     for (AmigaComponent *c : subComponents) { c->inspect(); }
     _inspect();

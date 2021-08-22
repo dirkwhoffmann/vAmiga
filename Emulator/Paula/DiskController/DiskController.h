@@ -23,7 +23,7 @@ class DiskController : public SubComponent
     DiskControllerConfig config = {};
 
     // Result of the latest inspection
-    DiskControllerInfo info = {};
+    mutable DiskControllerInfo info = {};
 
     // Temorary storage for a disk waiting to be inserted
     std::unique_ptr<Disk> diskToInsert;
@@ -114,7 +114,8 @@ private:
 private:
     
     void _reset(bool hard) override;
-    void _inspect() override;
+    void _inspect() override { const_cast<const DiskController *>(this)->_inspect(); }
+    void _inspect() const override;
     
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -228,7 +229,7 @@ public:
     
     // OCR register 0x01A (r)
     u16 peekDSKBYTR();
-    u16 computeDSKBYTR();
+    u16 computeDSKBYTR() const;
     
     // OCR register 0x07E (w)
     void pokeDSKSYNC(u16 value);

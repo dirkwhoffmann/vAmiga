@@ -222,13 +222,13 @@ CPU::_reset(bool hard)
 }
 
 void
-CPU::_inspect()
+CPU::_inspect() const
 {
     _inspect(getPC0());
 }
 
 void
-CPU::_inspect(u32 dasmStart)
+CPU::_inspect(u32 dasmStart) const
 {
     synchronized {
         

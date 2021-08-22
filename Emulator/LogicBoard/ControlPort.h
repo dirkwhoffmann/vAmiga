@@ -23,7 +23,7 @@ class ControlPort : public SubComponent {
     PortNr nr;
 
     // The result of the latest inspection
-    ControlPortInfo info = {};
+    mutable ControlPortInfo info = {};
     
     // The connected device
     ControlPortDevice device = CPD_NONE;
@@ -74,6 +74,7 @@ private:
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
     void _inspect() override;
+    void _inspect() const override { const_cast<ControlPort *>(this)->_inspect(); }
 
     template <class T>
     void applyToPersistentItems(T& worker)

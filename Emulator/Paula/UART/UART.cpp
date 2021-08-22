@@ -23,7 +23,7 @@ UART::_reset(bool hard)
 }
 
 void
-UART::_inspect()
+UART::_inspect() const
 {
     synchronized {
         

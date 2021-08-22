@@ -185,7 +185,7 @@ Agnus::slowRamIsMirroredIn()
 }
 
 void
-Agnus::_inspect()
+Agnus::_inspect() const
 {
     synchronized {
         

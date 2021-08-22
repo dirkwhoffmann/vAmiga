@@ -43,7 +43,7 @@ class Amiga : public SuspendableThread {
      * current state is recorded. When the GUI updates the inspector panels, it
      * displays the result of the latest inspection.
      */
-    AmigaInfo info = {};
+    mutable AmigaInfo info = {};
 
      
     //
@@ -153,7 +153,8 @@ private:
     void _halt() override;
     void _warpOn() override;
     void _warpOff() override;
-    void _inspect() override;
+    void _inspect() override { const_cast<const Amiga *>(this)->_inspect(); };
+    void _inspect() const override;
 
     template <class T>
     void applyToPersistentItems(T& worker)

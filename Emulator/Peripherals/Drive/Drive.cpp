@@ -162,7 +162,7 @@ Drive::setConfigItem(Option option, i64 value)
 }
 
 void
-Drive::_inspect()
+Drive::_inspect() const
 {
     synchronized {
         

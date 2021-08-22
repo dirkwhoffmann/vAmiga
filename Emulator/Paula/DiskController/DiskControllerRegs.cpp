@@ -111,12 +111,15 @@ DiskController::peekDSKBYTR()
 {
     u16 result = computeDSKBYTR();
     
+    // Clear the DSKBYT bit, so it won't show up in the next read
+    incoming &= 0x7FFF;
+
     debug(DSKREG_DEBUG, "peekDSKBYTR() = %x\n", result);
     return result;
 }
 
 u16
-DiskController::computeDSKBYTR()
+DiskController::computeDSKBYTR() const
 {
     /* 15      DSKBYT     Indicates whether this register contains valid data
      * 14      DMAON      Indicates whether disk DMA is actually enabled
@@ -128,10 +131,7 @@ DiskController::computeDSKBYTR()
     
     // DSKBYT and DATA
     u16 result = incoming;
-    
-    // Clear the DSKBYT bit, so it won't show up in the next read
-    incoming &= 0x7FFF;
-    
+        
     // DMAON
     if (agnus.dskdma() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
 

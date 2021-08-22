@@ -49,7 +49,7 @@ CopperDebugger::_dump(dump::Category category, std::ostream& os) const
 }
 
 u32
-CopperDebugger::startOfCopperList(isize nr)
+CopperDebugger::startOfCopperList(isize nr) const
 {
     u32 result = 0;
     
@@ -65,7 +65,7 @@ CopperDebugger::startOfCopperList(isize nr)
 }
 
 u32
-CopperDebugger::endOfCopperList(isize nr)
+CopperDebugger::endOfCopperList(isize nr) const
 {
     u32 result = 0;
     

@@ -30,7 +30,7 @@ protected:
      * to prevent multiple threads to enter the same code block. It mimics the
      * behaviour of the well known Java construct 'synchronized(this) { }'.
      */
-    util::ReentrantMutex mutex;
+    mutable util::ReentrantMutex mutex;
 
         
     //
@@ -132,15 +132,16 @@ public:
      * To carry out inspections while the emulator is running, set up an
      * inspection target via Amiga::setInspectionTarget().
      */
-    void inspect();
+    void inspect() const;
     virtual void _inspect() { }
-    
+    virtual void _inspect() const { };
+
     /* Base method for building the class specific getInfo() methods. When the
      * emulator is running, the result of the most recent inspection is
      * returned. If the emulator isn't running, the function first updates the
      * cached values in order to return up-to-date results.
      */
-    template<class T> T getInfo(T &cachedValues) {
+    template<class T> T getInfo(T &cachedValues) const {
         
         if (!isRunning()) inspect();
         

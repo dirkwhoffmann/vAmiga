@@ -18,7 +18,7 @@ template <isize nr>
 class StateMachine : public SubComponent {
 
     // Result of the latest inspection
-    AudioChannelInfo info = {};
+    mutable AudioChannelInfo info = {};
 
 public:
 
@@ -100,7 +100,8 @@ private:
 private:
     
     void _reset(bool hard) override;
-    void _inspect() override;
+    void _inspect() override { const_cast<const StateMachine *>(this)->_inspect(); }
+    void _inspect() const override;
     
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -147,7 +148,7 @@ private:
     
 public:
     
-    AudioChannelInfo getInfo() { return AmigaComponent::getInfo(info); }
+    AudioChannelInfo getInfo() const { return AmigaComponent::getInfo(info); }
         
     
     //

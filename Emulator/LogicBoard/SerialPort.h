@@ -27,7 +27,7 @@ class SerialPort : public SubComponent {
     SerialPortConfig config = {};
 
     // Result of the latest inspection
-    SerialPortInfo info = {};
+    mutable SerialPortInfo info = {};
 
     // The current values of the port pins
     u32 port = 0;
@@ -59,7 +59,8 @@ private:
 private:
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) };
-    void _inspect() override;
+    void _inspect() override { const_cast<SerialPort *>(this)->_inspect(); }
+    void _inspect() const override;
     
     template <class T>
     void applyToPersistentItems(T& worker)

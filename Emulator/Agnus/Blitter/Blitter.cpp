@@ -109,7 +109,7 @@ Blitter::setConfigItem(Option option, i64 value)
 }
 
 void
-Blitter::_inspect()
+Blitter::_inspect() const
 {
     synchronized {
         

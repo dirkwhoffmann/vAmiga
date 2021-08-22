@@ -80,7 +80,7 @@ protected:
     CIAConfig config = {};
 
     // Result of the latest inspection
-    CIAInfo info = {};
+    mutable CIAInfo info = {};
 
 
     //
@@ -363,11 +363,12 @@ public:
 public:
     
     CIAInfo getInfo() { return AmigaComponent::getInfo(info); }
-    Cycle getClock() { return clock; }
+    Cycle getClock() const { return clock; }
     
 protected:
     
     void _inspect() override;
+    void _inspect() const override { const_cast<CIA *>(this)->_inspect(); }
 
     
     //

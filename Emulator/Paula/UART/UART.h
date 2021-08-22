@@ -18,7 +18,7 @@ class UART : public SubComponent {
     friend class Amiga;
     
     // Result of the latest inspection
-    UARTInfo info = {};
+    mutable UARTInfo info = {};
 
     // Port period and control register
     u16 serper;
@@ -67,7 +67,8 @@ private:
 private:
     
     void _reset(bool hard) override;
-    void _inspect() override;
+    void _inspect() override { const_cast<const UART *>(this)->_inspect(); }
+    void _inspect() const override;
     
     template <class T>
     void applyToPersistentItems(T& worker)

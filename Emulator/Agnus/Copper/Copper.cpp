@@ -30,7 +30,7 @@ Copper::_reset(bool hard)
 }
 
 void
-Copper::_inspect()
+Copper::_inspect() const
 {    
     synchronized {
         

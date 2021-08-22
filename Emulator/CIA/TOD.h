@@ -32,7 +32,7 @@ class TOD : public SubComponent {
     CIA &cia;
 
     // Result of the latest inspection
-    TODInfo info = {};
+    mutable TODInfo info = {};
             
     // The 24 bit counter
     Counter24 tod;
@@ -129,7 +129,8 @@ public:
     
     TODInfo getInfo() { return AmigaComponent::getInfo(info); }
 
-    void _inspect() override;
+    void _inspect() override { const_cast<const TOD *>(this)->_inspect(); }
+    void _inspect() const override;
 
  
     //

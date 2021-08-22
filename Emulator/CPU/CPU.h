@@ -16,7 +16,7 @@
 class CPU : public moira::Moira {
 
     // Result of the latest inspection
-    CPUInfo info = {};
+    mutable CPUInfo info = {};
 
     
     //
@@ -45,10 +45,11 @@ private:
 private:
     
     void _reset(bool hard) override;
-    void _inspect() override;
+    void _inspect() override { const_cast<const CPU *>(this)->_inspect(); }
+    void _inspect() const override;
     void _debugOn() override;
     void _debugOff() override;
-    void _inspect(u32 dasmStart);
+    void _inspect(u32 dasmStart) const;
     
     template <class T>
     void applyToPersistentItems(T& worker)

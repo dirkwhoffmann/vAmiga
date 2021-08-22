@@ -841,13 +841,13 @@ Memory::spypeek16 <ACCESSOR_CPU, MEM_NONE> (u32 addr) const
 template<> u8
 Memory::peek8 <ACCESSOR_CPU, MEM_NONE> (u32 addr)
 {
-    return (u8)const_cast<Memory *>(this)->spypeek16 <ACCESSOR_CPU, MEM_NONE> (addr);
+    return (u8)(spypeek16 <ACCESSOR_CPU, MEM_NONE> (addr));
 }
 
 template<> u16
 Memory::peek16 <ACCESSOR_CPU, MEM_NONE> (u32 addr)
 {
-    return const_cast<Memory *>(this)->spypeek16 <ACCESSOR_CPU, MEM_NONE> (addr);
+    return spypeek16 <ACCESSOR_CPU, MEM_NONE> (addr);
 }
 
 template<> u8

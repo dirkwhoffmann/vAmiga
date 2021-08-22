@@ -24,8 +24,8 @@ class Paula : public SubComponent {
 private:
 
     // Result of the latest inspection
-    PaulaInfo info = {};
-    AudioInfo audioInfo = {};
+    mutable PaulaInfo info = {};
+    mutable AudioInfo audioInfo = {};
 
     
     //
@@ -128,7 +128,8 @@ private:
     void _pause() override;
     void _warpOn() override;
     void _warpOff() override;
-    void _inspect() override;
+    void _inspect() override { const_cast<const Paula *>(this)->_inspect(); }
+    void _inspect() const override;
 
     template <class T>
     void applyToPersistentItems(T& worker)

@@ -69,8 +69,8 @@ private:
 public:
     
     // Returns the start or end address of the currently processed Copper list
-    u32 startOfCopperList(isize nr);
-    u32 endOfCopperList(isize nr);
+    u32 startOfCopperList(isize nr) const;
+    u32 endOfCopperList(isize nr) const;
 
     // Notifies the debugger that the Copper has advanced the program counter
     void advanced();
