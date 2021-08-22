@@ -366,7 +366,7 @@ Agnus::inspectEventSlot(EventInfo &info, EventSlot nr) const
 }
 
 EventInfo
-Agnus::getEventInfo()
+Agnus::getEventInfo() const
 {    
     if (!isRunning()) inspectEvents();
     
@@ -375,7 +375,7 @@ Agnus::getEventInfo()
 }
 
 EventSlotInfo
-Agnus::getEventSlotInfo(isize nr)
+Agnus::getEventSlotInfo(isize nr) const
 {
     assert_enum(EventSlot, nr);
 

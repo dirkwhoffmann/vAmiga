@@ -376,7 +376,7 @@ public:
 
 public:
     
-    DeniseInfo getInfo() { return AmigaComponent::getInfo(info); }
+    DeniseInfo getInfo() const { return AmigaComponent::getInfo(info); }
     SpriteInfo getSpriteInfo(isize nr);
     u16 getSpriteHeight(isize nr) const { return latchedSpriteInfo[nr].height; }
     u16 getSpriteColor(isize nr, isize reg) const { return latchedSpriteInfo[nr].colors[reg]; }

@@ -297,7 +297,7 @@ public:
     
 public:
     
-    BlitterInfo getInfo() { return AmigaComponent::getInfo(info); }
+    BlitterInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
 
     //

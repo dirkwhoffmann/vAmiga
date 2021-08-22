@@ -177,7 +177,7 @@ public:
     
 public:
     
-    DiskControllerInfo getInfo() { return AmigaComponent::getInfo(info); }
+    DiskControllerInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
 
     //

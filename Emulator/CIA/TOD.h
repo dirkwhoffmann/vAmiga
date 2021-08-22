@@ -127,7 +127,7 @@ private:
     
 public:
     
-    TODInfo getInfo() { return AmigaComponent::getInfo(info); }
+    TODInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
     void _inspect() const override;
 

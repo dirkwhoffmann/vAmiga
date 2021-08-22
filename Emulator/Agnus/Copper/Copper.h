@@ -152,7 +152,7 @@ private:
 public:
     
     // Returns the result of the latest inspection
-    CopperInfo getInfo() { return AmigaComponent::getInfo(info); }
+    CopperInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
 
     //

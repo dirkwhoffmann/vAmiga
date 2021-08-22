@@ -101,7 +101,7 @@ private:
     
 public:
     
-    CPUInfo getInfo() { return AmigaComponent::getInfo(info); }
+    CPUInfo getInfo() const { return AmigaComponent::getInfo(info); }
         
 
     //

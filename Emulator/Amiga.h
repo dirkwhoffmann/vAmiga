@@ -213,7 +213,7 @@ private:
     
 public:
     
-    AmigaInfo getInfo() { return AmigaComponent::getInfo(info); }
+    AmigaInfo getInfo() const { return AmigaComponent::getInfo(info); }
     
     InspectionTarget getInspectionTarget() const;
     void setInspectionTarget(InspectionTarget target, Cycle trigger = 0);

@@ -107,7 +107,7 @@ private:
 
 public:
     
-    ControlPortInfo getInfo() { return AmigaComponent::getInfo(info); }
+    ControlPortInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
     
     //

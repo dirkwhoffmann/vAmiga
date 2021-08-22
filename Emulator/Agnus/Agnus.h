@@ -555,16 +555,16 @@ public:
     
 public:
     
-    AgnusInfo getInfo() { return AmigaComponent::getInfo(info); }
-    EventInfo getEventInfo();
-    EventSlotInfo getEventSlotInfo(isize nr);
+    AgnusInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    EventInfo getEventInfo() const;
+    EventSlotInfo getEventSlotInfo(isize nr) const;
     
 private:
         
     void inspectEvents(EventInfo &info) const;
-    void inspectEvents() { synchronized { inspectEvents(eventInfo); } }
+    void inspectEvents() const { synchronized { inspectEvents(eventInfo); } }
     void inspectEventSlot(EventInfo &info, EventSlot nr) const;
-    void inspectEventSlot(EventSlot nr) { inspectEventSlot(eventInfo, nr); }
+    void inspectEventSlot(EventSlot nr) const { inspectEventSlot(eventInfo, nr); }
 
 public:
     

@@ -362,7 +362,7 @@ public:
     
 public:
     
-    CIAInfo getInfo() { return AmigaComponent::getInfo(info); }
+    CIAInfo getInfo() const { return AmigaComponent::getInfo(info); }
     Cycle getClock() const { return clock; }
     
 protected:

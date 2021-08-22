@@ -14,8 +14,6 @@
 #include "Event.h"
 
 class UART : public SubComponent {
-
-    friend class Amiga;
     
     // Result of the latest inspection
     mutable UARTInfo info = {};
@@ -31,7 +29,7 @@ class UART : public SubComponent {
     u16 transmitBuffer;
     u16 transmitShiftReg;
 
-    // Bit that is currently outputted on the TXD line
+    // The bit which is currently seen on the TXD line
     bool outBit; 
 
     // Overrun bit
@@ -72,6 +70,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+        
     }
     
     template <class T>
@@ -100,7 +99,7 @@ private:
 
 public:
 
-    UARTInfo getInfo() { return AmigaComponent::getInfo(info); }
+    UARTInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
  
     //

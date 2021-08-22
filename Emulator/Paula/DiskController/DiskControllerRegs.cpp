@@ -196,13 +196,15 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
         }
     }
         
-    // Inform the GUI
     if (oldSelected != selected) {
+        
         if (selected == -1) {
-            // debug(DSKREG_DEBUG, "Deselecting df%d\n", oldSelected);
+            debug(DSKREG_DEBUG, "Deselecting df%zd\n", oldSelected);
         } else {
-            // debug(DSKREG_DEBUG, "Selecting df%d\n", selected);
+            debug(DSKREG_DEBUG, "Selecting df%zd\n", selected);
         }
-        if (selected != -1) messageQueue.put(MSG_DRIVE_SELECT, selected);
+
+        // Inform the GUI
+        messageQueue.put(MSG_DRIVE_SELECT, selected);
     }
 }

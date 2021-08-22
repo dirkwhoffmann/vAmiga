@@ -176,8 +176,8 @@ private:
     
 public:
     
-    PaulaInfo getInfo() { return AmigaComponent::getInfo(info); }
-    AudioInfo getAudioInfo() { return AmigaComponent::getInfo(audioInfo); }
+    PaulaInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    AudioInfo getAudioInfo() const { return AmigaComponent::getInfo(audioInfo); }
 
 
     //

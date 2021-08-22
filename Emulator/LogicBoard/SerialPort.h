@@ -102,7 +102,7 @@ public:
     
 public:
 
-    SerialPortInfo getInfo() { return AmigaComponent::getInfo(info); }
+    SerialPortInfo getInfo() const { return AmigaComponent::getInfo(info); }
  
 
     //

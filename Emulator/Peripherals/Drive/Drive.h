@@ -161,7 +161,7 @@ public:
 public:
     
     long getNr() { return nr; }
-    DriveInfo getInfo() { return AmigaComponent::getInfo(info); }
+    DriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
  
 
     //
