@@ -14,9 +14,9 @@ extension PreferencesController {
         // Snapshots
         genAutoSnapshots.state = pref.autoSnapshots ? .on : .off
         genSnapshotInterval.integerValue = pref.snapshotInterval
+        genSnapshotInterval.isEnabled = pref.autoSnapshots
 
         // Screenshots
-        genSnapshotInterval.isEnabled = pref.autoSnapshots
         genScreenshotSourcePopup.selectItem(withTag: pref.screenshotSource)
         genScreenshotTargetPopup.selectItem(withTag: pref.screenshotTargetIntValue)
                 
@@ -30,6 +30,7 @@ extension PreferencesController {
         genBitRate.isEnabled = hasFFmpeg
         genAspectX.isEnabled = hasFFmpeg
         genAspectY.isEnabled = hasFFmpeg
+        
         if hasFFmpeg {
             genFFmpegIcon.isHidden = false
             genFFmpegPath.textColor = .textColor
@@ -44,13 +45,18 @@ extension PreferencesController {
         genAspectRatioButton.state = pref.keepAspectRatio ? .on : .off
         genExitOnEscButton.state = pref.exitOnEsc ? .on : .off
                 
-        // Drive
+        // Warp mode
         genWarpMode.selectItem(withTag: pref.warpModeIntValue)
 
         // Miscellaneous
         genEjectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
         genPauseInBackground.state = pref.pauseInBackground ? .on : .off
         genCloseWithoutAskingButton.state = pref.closeWithoutAsking ? .on : .off
+    }
+
+    func selectGeneralTab() {
+
+        refreshGeneralTab()
     }
 
     //
@@ -93,7 +99,6 @@ extension PreferencesController {
     
     @IBAction func capSourceAction(_ sender: NSPopUpButton!) {
         
-        track("tag = \(sender.selectedTag())")
         pref.captureSource = sender.selectedTag()
         refresh()
     }
@@ -104,7 +109,6 @@ extension PreferencesController {
         if input == nil { input = sender.integerValue }
         
         if let bitrate = input {
-            track("bitrate = \(bitrate)")
             pref.bitRate = bitrate
         }
         refresh()
@@ -112,14 +116,12 @@ extension PreferencesController {
 
     @IBAction func genAspectXAction(_ sender: NSTextField!) {
         
-        track("value = \(sender.integerValue)")
         pref.aspectX = sender.integerValue
         refresh()
     }
 
     @IBAction func genAspectYAction(_ sender: NSTextField!) {
         
-        track("value = \(sender.integerValue)")
         pref.aspectY = sender.integerValue
         refresh()
     }

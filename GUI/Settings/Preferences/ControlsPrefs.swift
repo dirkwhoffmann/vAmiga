@@ -90,6 +90,12 @@ extension PreferencesController {
         }
     }
 
+    func selectControlsTab() {
+
+        track()
+        refreshControlsTab()
+    }
+
     //
     // Keyboard events
     //

@@ -62,7 +62,7 @@ class DropZone: Layer {
         for i in 0...3 {
             
             let imgZone = enabled[i] ? "dropZoneDf\(i)Empty" : "dropZoneDf\(i)Disabled"
-            zones[i].image = NSImage.init(named: imgZone)
+            zones[i].image = NSImage(named: imgZone)
         }
         
         // Hide all drop zones if none is enabled
@@ -71,7 +71,6 @@ class DropZone: Layer {
 
     func open(type: FileType, delay: Double) {
 
-        track()
         setType(type)
         open(delay: delay)
         resize()
@@ -112,14 +111,14 @@ class DropZone: Layer {
             if isIn && !inside[i] {
                 
                 inside[i] = true
-                zones[i].image = NSImage.init(named: "dropZoneDf\(i)Selected")
+                zones[i].image = NSImage(named: "dropZoneDf\(i)Selected")
                 targetAlpha[i] = DropZone.selected
             }
 
             if !isIn && inside[i] {
                 
                 inside[i] = false
-                zones[i].image = NSImage.init(named: "dropZoneDf\(i)Empty")
+                zones[i].image = NSImage(named: "dropZoneDf\(i)Empty")
                 targetAlpha[i] = DropZone.unselected
             }
         }
@@ -172,19 +171,19 @@ class DropZone: Layer {
         let h = w * 1.2
         let y = size.height + origin.y - 24 - h * CGFloat(alpha.current)
         let margin = w / 8
-        let iconSize = NSSize.init(width: w, height: h)
+        let iconSize = NSSize(width: w, height: h)
 
-        ul[0] = CGPoint.init(x: midx - 2 * w - 1.5 * margin, y: y)
-        lr[0] = CGPoint.init(x: ul[0].x + w, y: ul[0].y + h)
+        ul[0] = CGPoint(x: midx - 2 * w - 1.5 * margin, y: y)
+        lr[0] = CGPoint(x: ul[0].x + w, y: ul[0].y + h)
 
-        ul[1] = CGPoint.init(x: midx - w - 0.5 * margin, y: y)
-        lr[1] = CGPoint.init(x: ul[1].x + w, y: ul[1].y + h)
+        ul[1] = CGPoint(x: midx - w - 0.5 * margin, y: y)
+        lr[1] = CGPoint(x: ul[1].x + w, y: ul[1].y + h)
 
-        ul[2] = CGPoint.init(x: midx + 0.5 * margin, y: y)
-        lr[2] = CGPoint.init(x: ul[2].x + w, y: ul[2].y + h)
+        ul[2] = CGPoint(x: midx + 0.5 * margin, y: y)
+        lr[2] = CGPoint(x: ul[2].x + w, y: ul[2].y + h)
 
-        ul[3] = CGPoint.init(x: midx + w + 1.5 * margin, y: y)
-        lr[3] = CGPoint.init(x: ul[3].x + w, y: ul[3].y + h)
+        ul[3] = CGPoint(x: midx + w + 1.5 * margin, y: y)
+        lr[3] = CGPoint(x: ul[3].x + w, y: ul[3].y + h)
 
         for i in 0...3 {
 

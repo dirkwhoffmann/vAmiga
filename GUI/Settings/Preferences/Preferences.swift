@@ -56,17 +56,7 @@ class Preferences {
             if aspectY > 999 { aspectY = 999 }
         }
     }
-    
-    // Floppy
-    /*
-    var blankDiskFormat = PeripheralsDefaults.std.blankDiskFormat
-    var blankDiskFormatIntValue: Int {
-        get { return Int(blankDiskFormat.rawValue) }
-        set { blankDiskFormat = FSVolumeType(rawValue: newValue)! }
-    }
-    var bootBlock = PeripheralsDefaults.std.bootBlock
-    */
-    
+        
     // Fullscreen
     var keepAspectRatio = GeneralDefaults.std.keepAspectRatio
     var exitOnEsc = GeneralDefaults.std.exitOnEsc
@@ -131,36 +121,7 @@ class Preferences {
     //
     // General
     //
-    
-    func loadGeneralDefaults(_ defaults: GeneralDefaults) {
-                
-        // Snapshots
-        autoSnapshots = defaults.autoSnapshots
-        snapshotInterval = defaults.autoSnapshotInterval
-
-        // Screenshots
-        screenshotSource = defaults.screenshotSource
-        screenshotTarget = defaults.screenshotTarget
-
-        // Captures
-        captureSource = defaults.captureSource
-        bitRate = defaults.bitRate
-        aspectX = defaults.aspectX
-        aspectY = defaults.aspectY
         
-        // Fullscreen
-        keepAspectRatio = defaults.keepAspectRatio
-        exitOnEsc = defaults.exitOnEsc
-        
-        // Warp mode
-        warpMode = defaults.warpMode
-
-        // Misc
-        ejectWithoutAsking = defaults.ejectWithoutAsking
-        pauseInBackground = defaults.pauseInBackground
-        closeWithoutAsking = defaults.closeWithoutAsking
-    }
-    
     func loadGeneralUserDefaults() {
         
         let defaults = UserDefaults.standard
@@ -201,9 +162,8 @@ class Preferences {
         defaults.set(snapshotInterval, forKey: Keys.Gen.autoSnapshotInterval)
 
         // Screenshots
-        defaults.set(autoSnapshots, forKey: Keys.Gen.autoSnapshots)
-        defaults.set(snapshotInterval, forKey: Keys.Gen.autoSnapshotInterval)
         defaults.set(screenshotSource, forKey: Keys.Gen.screenshotSource)
+        defaults.set(screenshotTargetIntValue, forKey: Keys.Gen.screenshotTarget)
 
         // Captures
         defaults.set(captureSource, forKey: Keys.Gen.captureSource)
@@ -227,30 +187,7 @@ class Preferences {
     //
     // Controls
     //
-    
-    func loadControlsDefaults(_ defaults: ControlsDefaults) {
-        
-        // Emulation keys
-        keyMaps[0] = defaults.mouseKeyMap
-        keyMaps[1] = defaults.joyKeyMap1
-        keyMaps[2] = defaults.joyKeyMap2
-        disconnectJoyKeys = defaults.disconnectJoyKeys
-        
-        // Joysticks
-        autofire = defaults.autofire
-        autofireBullets = defaults.autofireBullets
-        autofireFrequency = defaults.autofireFrequency
-        
-        // Mouse
-        retainMouseKeyComb = defaults.retainMouseKeyComb
-        retainMouseWithKeys = defaults.retainMouseWithKeys
-        retainMouseByClick = defaults.retainMouseByClick
-        retainMouseByEntering = defaults.retainMouseByEntering
-        releaseMouseKeyComb = defaults.releaseMouseKeyComb
-        releaseMouseWithKeys = defaults.releaseMouseWithKeys
-        releaseMouseByShaking = defaults.releaseMouseByShaking
-    }
-    
+
     func loadControlsUserDefaults() {
         
         let defaults = UserDefaults.standard
@@ -304,11 +241,7 @@ class Preferences {
     //
     // Devices
     //
-    
-    func loadDevicesDefaults(_ defaults: DevicesDefaults) {
         
-    }
-    
     func loadDevicesUserDefaults() {
         
     }

@@ -12,26 +12,19 @@ import Carbon.HIToolbox
 class PreferencesWindow: DialogWindow {
     
     override func keyDown(with event: NSEvent) {
-                
-        track()
-        
+                        
         if let parent = delegate as? PreferencesController {
             if parent.keyDown(with: MacKey(event: event)) {
                 return
             }
         }
         
-        // The controller wasn't interested. Process it as usual.
+        // The controller wasn't interested. Process it as usual
         interpretKeyEvents([event])
     }
 
     override func flagsChanged(with event: NSEvent) {
-        
-        /* We do not allow the Cmd and Opt keys as emulation keys because they
-         * interact directly with the OS when pressed in combination with
-         * certain other keys.
-         */
-        
+                
         let controller = delegate as? PreferencesController
         
         switch Int(event.keyCode) {
