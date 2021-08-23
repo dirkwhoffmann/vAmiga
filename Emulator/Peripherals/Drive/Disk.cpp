@@ -11,6 +11,7 @@
 #include "Disk.h"
 #include "DiskFile.h"
 
+/*
 Disk::Disk(DiskDiameter type, DiskDensity density)
 {
     this->diameter = type;
@@ -35,8 +36,43 @@ Disk::Disk(DiskFile &file) : Disk(file.getDiskDiameter(), file.getDiskDensity())
     encodeDisk(file);
     file.fnv();
 }
-
+*/
+/*
 Disk::Disk(util::SerReader &reader, DiskDiameter type, DiskDensity density) : Disk(type, density)
+{
+    applyToPersistentItems(reader);
+}
+*/
+
+void
+Disk::init(DiskDiameter dia, DiskDensity den)
+{
+    diameter = dia;
+    density = den;
+    
+    u32 trackLength = 0;
+    
+    if (dia == INCH_35  && den == DISK_DD) trackLength = 12668;
+    if (dia == INCH_35  && den == DISK_HD) trackLength = 24636;
+    if (dia == INCH_525 && den == DISK_DD) trackLength = 12668;
+    
+    if (trackLength == 0 || FORCE_DISK_INVALID_LAYOUT) {
+        throw VAError(ERROR_DISK_INVALID_LAYOUT);
+    }
+    
+    for (isize i = 0; i < 168; i++) length.track[i] = trackLength;
+    clearDisk();
+}
+
+void
+Disk::init(class DiskFile &file)
+{
+    init(file.getDiskDiameter(), file.getDiskDensity());
+    encodeDisk(file);
+}
+
+void
+Disk::init(util::SerReader &reader, DiskDiameter type, DiskDensity density)
 {
     applyToPersistentItems(reader);
 }

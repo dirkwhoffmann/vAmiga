@@ -10,7 +10,8 @@
 #include "config.h"
 #include "DiskController.h"
 #include "Agnus.h"
-#include "DiskFile.h"
+#include "ADFFile.h"
+// #include "DiskFile.h"
 #include "Drive.h"
 #include "IO.h"
 #include "MsgQueue.h"
@@ -353,6 +354,29 @@ DiskController::insertDisk(const string &name, isize nr, Cycle delay)
     
     std::unique_ptr<DiskFile> file(DiskFile::make(path));
     insertDisk(*file, nr, delay);
+}
+
+void
+DiskController::insertNew(isize nr, Cycle delay)
+{
+    assert(nr >= 0 && nr <= 3);
+    
+    ADFFile adf;
+    
+    // Create a suitable ADF for the specified drive
+    switch (df[nr]->config.type) {
+            
+        case DRIVE_DD_35: adf.init(INCH_35, DISK_DD); break;
+        case DRIVE_HD_35: adf.init(INCH_35, DISK_HD); break;
+        case DRIVE_DD_525: adf.init(INCH_525, DISK_SD); break;
+    }
+    
+    // Add a file system
+    adf.formatDisk(df[nr]->config.defaultFileSystem,
+                   df[nr]->config.defaultBootBlock);
+    
+    // Insert the disk
+    insertDisk(adf, nr, delay);
 }
 
 void

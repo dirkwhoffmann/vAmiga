@@ -64,34 +64,6 @@ extension MyDocument {
                                                    amiga.df2,
                                                    amiga.df3 ])
     }
-    
-    /*
-    func showConfigurationAltert(_ error: ErrorCode) {
-
-        var msg: String
-
-        switch error {
-        case .ROM_MISSING:
-            msg = "A Kickstart Rom or Boot Rom is required to power up."
-        case .CHIP_RAM_LIMIT:
-            msg = "The selected Agnus revision does not support the selected amout of Chip Ram."
-        case .AROS_RAM_LIMIT:
-            msg = "The Aros Kickstart replacement requires at least 1 MB of memory to boot."
-        case .AROS_NO_EXTROM:
-            msg = "The Aros Kickstart replacement requires an extension Rom."
-        default:
-            msg = ""
-        }
-
-        let alert = NSAlert()
-        alert.alertStyle = .informational
-        alert.icon = NSImage(named: "pref_transparent")
-        alert.messageText = "Configuration error"
-        alert.informativeText = msg
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
-    }
-    */
 }
 
 extension MyController {

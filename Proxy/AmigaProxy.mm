@@ -1083,6 +1083,12 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; }
 }
 
+- (void)insertNew:(NSInteger)nr exception:(ExceptionWrapper *)ex
+{
+    try { return [self dc]->insertNew(nr); }
+    catch (VAError &error) { [ex save:error]; }
+}
+
 - (void)setWriteProtection:(NSInteger)nr value:(BOOL)value
 {
     [self dc]->setWriteProtection(nr, value);

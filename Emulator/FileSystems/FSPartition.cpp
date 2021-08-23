@@ -14,69 +14,6 @@
 #include <algorithm>
 #include <vector>
 
-/*
-FSPartition *
-FSPartition::make(FSDevice &dev, FSPartitionDescriptor &layout)
-{
-    FSPartition *p = new FSPartition(dev);
-
-    p->dos         = layout.dos;
-    p->lowCyl      = layout.lowCyl;
-    p->highCyl     = layout.highCyl;
-    p->rootBlock   = layout.rootBlock;
-    p->bmBlocks    = layout.bmBlocks;
-    p->bmExtBlocks = layout.bmExtBlocks;
-    
-    p->firstBlock  = (Block)(p->lowCyl * dev.numHeads * dev.numSectors);
-    p->lastBlock   = (Block)((p->highCyl + 1) * dev.numHeads * dev.numSectors - 1);
-    
-    // Do some consistency checking
-    for (Block i = p->firstBlock; i <= p->lastBlock; i++) assert(dev.blocks[i] == nullptr);
-    
-    // Create boot blocks
-    dev.blocks[p->firstBlock]     = new FSBootBlock(*p, p->firstBlock);
-    dev.blocks[p->firstBlock + 1] = new FSBootBlock(*p, p->firstBlock + 1);
-
-    // Create the root block
-    FSRootBlock *rb = new FSRootBlock(*p, p->rootBlock);
-    dev.blocks[layout.rootBlock] = rb;
-    
-    // Create the bitmap blocks
-    for (auto& ref : layout.bmBlocks) {
-        
-        dev.blocks[ref] = new FSBitmapBlock(*p, ref);
-    }
-    
-    // Add bitmap extension blocks
-    FSBlock *pred = rb;
-    for (auto& ref : layout.bmExtBlocks) {
-        
-        dev.blocks[ref] = new FSBitmapExtBlock(*p, ref);
-        pred->setNextBmExtBlockRef(ref);
-        pred = dev.blocks[ref];
-    }
-    
-    // Add all bitmap block references
-    rb->addBitmapBlockRefs(layout.bmBlocks);
-    
-    // Add free blocks
-    for (Block i = p->firstBlock; i <= p->lastBlock; i++) {
-        
-        if (dev.blocks[i] == nullptr) {
-            dev.blocks[i] = new FSEmptyBlock(*p, i);
-            p->markAsFree(i);
-        }
-    }
-    
-    return p;
-}
-*/
-
-FSPartition::FSPartition(FSDevice &ref) : dev(ref)
-{
-    
-}
-
 FSPartition::FSPartition(FSDevice &dev, FSPartitionDescriptor &layout) : FSPartition(dev)
 {
     dos         = layout.dos;

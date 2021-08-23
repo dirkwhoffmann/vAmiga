@@ -266,8 +266,9 @@ public:
     bool isInsertable(const Disk &disk) const;
 
     void ejectDisk();
-    bool insertDisk(std::unique_ptr<Disk> disk);
-
+    void insertDisk(std::unique_ptr<Disk> disk) throws;
+    void insertNew() throws;
+    
     u64 fnv() const;
     
     //

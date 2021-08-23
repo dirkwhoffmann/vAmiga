@@ -699,23 +699,17 @@ Amiga::_powerOn()
     inspect();
 
 #ifdef DF0_DISK
-    DiskFile *df0file = AmigaFile::make <ADFFile> (DF0_DISK);
-    if (df0file) {
-        Disk *disk = Disk::make(df0file);
-        df0.ejectDisk();
-        df0.insertDisk(disk);
-        df0.setWriteProtection(false);
-    }
+    ADFFile df0file(DF0_DISK);
+    df0.ejectDisk();
+    df0.insertDisk(std::make_unique<Disk>(df0file));
+    df0.setWriteProtection(false);
 #endif
     
 #ifdef DF1_DISK
-    DiskFile *df1file = DiskFile::make(DF1_DISK);
-    if (df1file) {
-        Disk *disk = Disk::make(df1file);
-        df1.ejectDisk();
-        df1.insertDisk(disk);
-        df1.setWriteProtection(false);
-    }
+    ADFFile df1file(DF1_DISK);
+    df1.ejectDisk();
+    df1.insertDisk(std::make_unique<Disk>(df1file));
+    df1.setWriteProtection(false);
 #endif
     
 #ifdef INITIAL_BREAKPOINT

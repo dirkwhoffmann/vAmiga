@@ -157,6 +157,14 @@ extension DiskControllerProxy {
         insert(nr, file: file, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
+
+    func insertNew(_ nr: Int) throws {
+        
+        let exception = ExceptionWrapper()
+        insertNew(nr, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
 }
 
 extension AmigaFileProxy {

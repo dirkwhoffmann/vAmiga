@@ -38,6 +38,7 @@ private:
     
 public:
     
+    ADFFile() { };
     ADFFile(const string &path) throws { AmigaFile::init(path); }
     ADFFile(const string &path, std::istream &stream) throws { AmigaFile::init(path, stream); }
     ADFFile(const u8 *buf, isize len) throws { AmigaFile::init(buf, len); }
@@ -46,8 +47,6 @@ public:
     ADFFile(class Disk &disk) throws { init(disk); }
     ADFFile(class Drive &drive) throws { init(drive); }
     ADFFile(FSDevice &volume) throws { init(volume); }
-
-private:
     
     void init(DiskDiameter dia, DiskDensity den) throws;
     void init(Disk &disk) throws;

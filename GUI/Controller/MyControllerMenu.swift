@@ -420,24 +420,8 @@ extension MyController: NSMenuItemValidation {
         
         track()
 
-        // Get drive type
-        let type = DriveType(rawValue: config.dfnType(sender.tag))
-        
         do {
-            // Create a blank disk
-            var adf: ADFFileProxy
-            switch type {
-            case .DD_35: try adf = ADFFileProxy.make(diameter: .INCH_35, density: .DD)
-            case .HD_35: try adf = ADFFileProxy.make(diameter: .INCH_35, density: .HD)
-            case .DD_525: try adf = ADFFileProxy.make(diameter: .INCH_525, density: .DD)
-            default: fatalError()
-            }
-            
-            // Write file system
-            adf.formatDisk(pref.blankDiskFormat, bootBlock: pref.bootBlock)
-            
-            // Insert disk
-            try amiga.diskController.insert(sender.tag, file: adf)
+            try amiga.diskController.insertNew(sender.tag)
             myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
             
         } catch {

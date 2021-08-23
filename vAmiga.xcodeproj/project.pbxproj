@@ -987,6 +987,8 @@
 			children = (
 				508FDFB121EA1FF10043D0E9 /* MainMenu.xib */,
 				508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */,
+				50DD1EE12525E3E1000180F6 /* Preferences.xib */,
+				500217B72449CF7000E1A096 /* Configuration.xib */,
 				50DED6AE2202EBA200B8195F /* Inspector.xib */,
 				5019605A231257270051B669 /* Monitor.xib */,
 				50B9354824347EF9000C78B8 /* SnapshotDialog.xib */,
@@ -994,13 +996,11 @@
 				508FDFBA21EA1FF10043D0E9 /* ImporterDialog.xib */,
 				506B47172562E06A009FEFC3 /* ExporterDialog.xib */,
 				50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */,
-				500217B72449CF7000E1A096 /* Configuration.xib */,
 				50D263CB21F6377600FA167F /* A500ANSI.xib */,
 				508FDFB821EA1FF10043D0E9 /* A500ISO.xib */,
 				50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */,
 				50D263CD21F6378000FA167F /* A1000ISO.xib */,
 				50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */,
-				50DD1EE12525E3E1000180F6 /* Preferences.xib */,
 			);
 			path = "XIB files";
 			sourceTree = "<group>";

@@ -561,7 +561,8 @@
 @property (readonly, getter=isSpinning) BOOL spinning;
 - (void)eject:(NSInteger)nr;
 - (void)insert:(NSInteger)nr file:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
- - (void)setWriteProtection:(NSInteger)nr value:(BOOL)value;
+- (void)insertNew:(NSInteger)nr exception:(ExceptionWrapper *)ex;
+- (void)setWriteProtection:(NSInteger)nr value:(BOOL)value;
 
 @end
 

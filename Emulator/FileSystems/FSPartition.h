@@ -40,7 +40,7 @@ struct FSPartition : AmigaObject {
     // Initializing
     //
     
-    FSPartition(FSDevice &ref);
+    FSPartition(FSDevice &ref) : dev(ref) { }
     FSPartition(FSDevice &ref, FSPartitionDescriptor &layout);
     
     //

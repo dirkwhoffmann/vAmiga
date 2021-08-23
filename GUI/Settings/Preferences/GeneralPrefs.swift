@@ -32,12 +32,10 @@ extension PreferencesController {
         genAspectY.isEnabled = hasFFmpeg
         if hasFFmpeg {
             genFFmpegIcon.isHidden = false
-            genFFmpegText.isHidden = false
             genFFmpegPath.textColor = .textColor
             genFFmpegPath.stringValue = "/usr/local/bin/ffmpeg"
         } else {
             genFFmpegIcon.isHidden = true
-            genFFmpegText.isHidden = true
             genFFmpegPath.textColor = .warningColor
             genFFmpegPath.stringValue = "Requires /usr/local/bin/ffmpeg"
         }

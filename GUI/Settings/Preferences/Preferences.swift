@@ -7,9 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-/* Preferences
- *
- * This class stores all emulator settings that belong to the application level.
+/* This class stores all emulator settings that belong to the application level.
  * There is a single object of this class stored in the application delegate.
  * The object is shared among all emulator instances.
  *
@@ -60,12 +58,14 @@ class Preferences {
     }
     
     // Floppy
+    /*
     var blankDiskFormat = PeripheralsDefaults.std.blankDiskFormat
     var blankDiskFormatIntValue: Int {
         get { return Int(blankDiskFormat.rawValue) }
         set { blankDiskFormat = FSVolumeType(rawValue: newValue)! }
     }
     var bootBlock = PeripheralsDefaults.std.bootBlock
+    */
     
     // Fullscreen
     var keepAspectRatio = GeneralDefaults.std.keepAspectRatio

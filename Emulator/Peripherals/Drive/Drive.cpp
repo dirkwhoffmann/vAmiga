@@ -733,26 +733,42 @@ Drive::ejectDisk()
     }
 }
 
-bool
+void
 Drive::insertDisk(std::unique_ptr<Disk> disk)
 {
-    if (isInsertable(*disk)) {
+    // Only proceed if the provided disk fits into this drive
+    if (!isInsertable(*disk)) throw VAError(ERROR_DISK_INVALID_LAYOUT);
+    
+    // Don't insert a disk if there is already one
+    assert(!hasDisk());
+    
+    // Insert disk
+    this->disk = std::move(disk);
+    head.offset = 0;
+    
+    // Notify the GUI
+    messageQueue.put(MSG_DISK_INSERT,
+                     config.pan << 24 | config.insertVolume << 16 | nr);
+}
 
-        // Don't insert a disk if there is already one
-        assert(!hasDisk());
-
-        // Insert disk
-        this->disk = std::move(disk);
-        head.offset = 0;
-        
-        // Notify the GUI
-        messageQueue.put(MSG_DISK_INSERT,
-                         config.pan << 24 | config.insertVolume << 16 | nr);
-        
-        return true;
+void
+Drive::insertNew()
+{
+    ADFFile adf;
+    
+    // Create a suitable ADF for this drive
+    switch (config.type) {
+            
+        case DRIVE_DD_35: adf.init(INCH_35, DISK_DD); break;
+        case DRIVE_HD_35: adf.init(INCH_35, DISK_HD); break;
+        case DRIVE_DD_525: adf.init(INCH_525, DISK_SD); break;
     }
     
-    return false;
+    // Add a file system
+    adf.formatDisk(config.defaultFileSystem, config.defaultBootBlock);
+    
+    // Convert the ADF into a disk
+    insertDisk(std::make_unique<Disk>(adf));
 }
 
 u64

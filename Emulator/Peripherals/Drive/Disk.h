@@ -93,10 +93,18 @@ private:
     
 public:
     
-    Disk(DiskDiameter type, DiskDensity density) throws;
-    Disk(class DiskFile &file) throws;
-    Disk(util::SerReader &reader, DiskDiameter type, DiskDensity density) throws;
+    Disk() = default;
+    Disk(DiskDiameter dia, DiskDensity den) throws { init(dia, den); }
+    Disk(class DiskFile &file) throws { init(file); }
+    Disk(util::SerReader &reader, DiskDiameter type, DiskDensity density) throws {
+        init(reader, type, density); }
     ~Disk();
+
+private:
+    
+    void init(DiskDiameter type, DiskDensity density) throws;
+    void init(class DiskFile &file) throws;
+    void init(util::SerReader &reader, DiskDiameter type, DiskDensity density) throws;
 
     
     //
