@@ -12,27 +12,21 @@
 #include <algorithm>
 
 void
-Command::add(std::vector<string> tokens,
+Command::add(const std::vector<string> tokens,
              const string &type,
              const string &help,
              void (RetroShell::*action)(Arguments&, long),
              isize numArgs, long param)
 {
     assert(!tokens.empty());
-     
-    if (tokens.size() > 1) {
-
-        // Traverse the node tree
-        auto node = seek(tokens.front());
-        tokens.erase(tokens.begin());
-        node->add(tokens, type, help, action, numArgs, param);
-
-    } else {
-        
-        // Register instruction
-        Command d { this, tokens.front(), type, help, std::list<Command>(), action, numArgs, param };
-        args.push_back(d);
-    }
+    
+    // Traverse the node tree
+    Command *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
+    assert(cmd != nullptr);
+    
+    // Register instruction
+    Command d { this, tokens.back(), type, help, { }, action, numArgs, param };
+    cmd->args.push_back(d);
 }
 
 void
@@ -53,10 +47,8 @@ Command::seek(const string& token)
 }
 
 Command *
-Command::seek(const std::list<string> &tokens)
+Command::seek(const std::vector<string> &tokens)
 {
-    if (tokens.empty()) return nullptr;
-    
     Command *result = this;
     
     for (auto &it : tokens) {
@@ -96,12 +88,14 @@ Command::filterType(const string& type) const
     
     return result;
 }
+
 std::vector<const Command *>
 Command::filterPrefix(const string& prefix) const
 {
     std::vector<const Command *> result;
     
     for (auto &it : args) {
+        
         if (it.hidden) continue;
         if (it.token.substr(0, prefix.size()) == prefix) result.push_back(&it);
     }

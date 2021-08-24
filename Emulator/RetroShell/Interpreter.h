@@ -15,8 +15,6 @@
 #include "Error.h"
 #include "Parser.h"
 
-typedef std::list<string> Arguments;
-
 enum class Token
 {
     none,

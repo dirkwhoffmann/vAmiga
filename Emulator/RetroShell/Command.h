@@ -10,12 +10,11 @@
 #pragma once
 
 #include "Aliases.h"
-#include <list>
 #include <vector>
 
 class RetroShell;
 
-typedef std::list<string> Arguments;
+typedef std::vector<string> Arguments;
 
 struct Command {
     
@@ -32,10 +31,9 @@ struct Command {
     string info;
     
     // The sub commands of this command
-    std::list<Command> args;
+    std::vector<Command> args;
     
     // Command handler
-    // std::function <void(Arguments&, long)> action;
     void (RetroShell::*action)(Arguments&, long) = nullptr;
     
     // Number of additional arguments expected by the command handler
@@ -48,18 +46,18 @@ struct Command {
     bool hidden = false;
         
     // Creates a new node in the command tree
-    void add(std::vector<string> tokens,
-                 const string &type,
-                 const string &help,
-                 void (RetroShell::*action)(Arguments&, long) = nullptr,
-                 isize numArgs = 0, long param = 0);
+    void add(const std::vector<string> tokens,
+             const string &type,
+             const string &help,
+             void (RetroShell::*action)(Arguments&, long) = nullptr,
+             isize numArgs = 0, long param = 0);
 
     // Removes a registered command
     void remove(const string& token);
     
     // Seeks a command object inside the command object tree
     Command *seek(const string& token);
-    Command *seek(const std::list<string> &tokens);
+    Command *seek(const std::vector<string> &tokens);
     
     // Collects the type descriptions in the args vector
     std::vector<string> types() const;

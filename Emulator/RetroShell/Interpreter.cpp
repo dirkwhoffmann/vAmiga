@@ -89,7 +89,7 @@ Interpreter::exec(const string& userInput, bool verbose)
     Arguments tokens = split(userInput);
         
     // Remove the 'try' keyword
-    if (tokens.front() == "try") tokens.pop_front();
+    if (tokens.front() == "try") tokens.erase(tokens.begin());
     
     // Auto complete the token list
     autoComplete(tokens);
@@ -117,7 +117,7 @@ Interpreter::exec(const Arguments &argv, bool verbose)
     while (!args.empty() && ((next = current->seek(args.front())))) {
         
         current = current->seek(args.front());
-        args.pop_front();
+        args.erase(args.begin());
     }
                 
     // Error out if no command handler is present
@@ -160,9 +160,7 @@ Interpreter::help(const Arguments &argv)
 {
     Command *current = &root;
     string prefix, token;
-    
-    retroShell << '\n';
-            
+                
     for (auto &it : argv) {
         if (current->seek(it) != nullptr) current = current->seek(it);
     }
@@ -187,6 +185,8 @@ Interpreter::help(const Command& current)
     }
     tab += 5;
     
+    retroShell << '\n';
+
     for (auto &it : types) {
         
         auto opts = current.filterType(it);
