@@ -72,8 +72,9 @@ Disk::init(class DiskFile &file)
 }
 
 void
-Disk::init(util::SerReader &reader, DiskDiameter type, DiskDensity density)
+Disk::init(util::SerReader &reader, DiskDiameter dia, DiskDensity den)
 {
+    init(dia, den);
     applyToPersistentItems(reader);
 }
 
