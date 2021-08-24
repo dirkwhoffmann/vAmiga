@@ -45,7 +45,7 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" animationBehavior="default" tabbingMode="preferred" toolbarStyle="expanded" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="800" height="626"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
             <value key="minSize" type="size" width="400" height="314"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="800" height="626"/>
@@ -280,14 +280,14 @@
                     <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0go-7K-IPf">
                         <rect key="frame" x="675" y="3" width="27" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <popUpButtonCell key="cell" type="check" title="CPU Frequency (Amiga)" bezelStyle="regularSquare" imagePosition="left" lineBreakMode="truncatingTail" state="on" inset="2" arrowPosition="arrowAtCenter" preferredEdge="minX" selectedItem="ebX-Qd-V1U" id="fbh-jz-zm9">
+                        <popUpButtonCell key="cell" type="check" title="Amiga Frequency" bezelStyle="regularSquare" imagePosition="left" lineBreakMode="truncatingTail" state="on" inset="2" arrowPosition="arrowAtCenter" preferredEdge="minX" selectedItem="ebX-Qd-V1U" id="fbh-jz-zm9">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" id="VSY-08-JkF">
                                 <items>
-                                    <menuItem title="CPU Frequency (Amiga)" state="on" id="ebX-Qd-V1U"/>
-                                    <menuItem title="CPU Load (Mac)" tag="1" id="e2a-oz-kXg"/>
-                                    <menuItem title="Frames per Second (Mac)" tag="2" id="LD4-F0-Zv0"/>
+                                    <menuItem title="Amiga Frequency" state="on" id="ebX-Qd-V1U"/>
+                                    <menuItem title="CPU Load" tag="1" id="e2a-oz-kXg"/>
+                                    <menuItem title="Frames per Second" tag="2" id="LD4-F0-Zv0"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>

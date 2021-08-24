@@ -132,11 +132,11 @@ public:
     void exec(Arguments &argv, bool verbose = false) throws;
             
     // Prints a usage string for a command
-    void usage(Command &command);
+    void usage(const Command &command);
     
     // Displays a help text for a (partially typed in) command
     void help(const string &userInput);
-    void help(Arguments &argv);
-    void help(Command &command);
+    void help(const Arguments &argv);
+    void help(const Command &command);
 
 };

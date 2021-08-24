@@ -150,53 +150,41 @@ Interpreter::exec(Arguments &argv, bool verbose)
 }
 
 void
-Interpreter::usage(Command& current)
+Interpreter::usage(const Command& current)
 {
     retroShell << "Usage: " << current.usage() << '\n' << '\n';
 }
 
 void
 Interpreter::help(const string& userInput)
-{
-    printf("help(%s)\n", userInput.c_str());
-    
+{    
     // Split the command string
     Arguments tokens = split(userInput);
         
     // Auto complete the token list
     autoComplete(tokens);
-            
+                
     // Process the command
     help(tokens);
 }
 
 void
-Interpreter::help(Arguments &argv)
+Interpreter::help(const Arguments &argv)
 {
     Command *current = &root;
     string prefix, token;
     
     retroShell << '\n';
-    
-    while (1) {
-                
-        // Extract token
-        token = argv.empty() ? "" : argv.front();
-        
-        // Check if this token matches a known command
-        Command *next = current->seek(token);
-        if (next == nullptr) break;
-        
-        prefix += next->token + " ";
-        current = next;
-        if (!argv.empty()) argv.pop_front();
+            
+    for (auto &it : argv) {
+        if (current->seek(it) != nullptr) current = current->seek(it);
     }
-
+    
     help(*current);
 }
 
 void
-Interpreter::help(Command& current)
+Interpreter::help(const Command& current)
 {
     // Print the usage string
     usage(current);
@@ -206,7 +194,6 @@ Interpreter::help(Command& current)
 
     // Determine tabular positions to align the output
     int tab = 0;
-    // for (auto &it : types) tab = std::max(tab, (int)it.length());
     for (auto &it : current.args) {
         tab = std::max(tab, (int)it.token.length());
         tab = std::max(tab, 2 + (int)it.type.length());

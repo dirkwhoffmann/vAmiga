@@ -191,9 +191,7 @@ RetroShell::pressTab()
         // TAB was pressed twice
         string currentInput = lastLine();
         isize cposMinOld = cposMin;
-        
-        // *this << '\n';
-        
+                
         // Print the instructions for this command
         interpreter.help(lastLine().substr(cposMin));
         

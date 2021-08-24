@@ -11,9 +11,9 @@
 #include "Command.h"
 #include <algorithm>
 
-Command *
+void
 Command::add(std::vector<string> tokens,
-             const string &a1,
+             const string &type,
              const string &help,
              void (RetroShell::*action)(Arguments&, long),
              isize numArgs, long param)
@@ -22,31 +22,17 @@ Command::add(std::vector<string> tokens,
      
     if (tokens.size() > 1) {
 
+        // Traverse the node tree
         auto node = seek(tokens.front());
         tokens.erase(tokens.begin());
-        return node->add(tokens, a1, help, action, numArgs, param);
-    }
-        
-    // Register instruction
-    Command d { this, tokens.front(), a1, help, std::list<Command>(), action, numArgs, param };
-    args.push_back(d);
-    return seek(tokens.front());
-}
+        node->add(tokens, type, help, action, numArgs, param);
 
-Command *
-Command::add(std::vector<string> firstTokens,
-             std::vector<string> tokens,
-             const string &a1,
-             const string &help,
-             void (RetroShell::*action)(Arguments&, long),
-             isize numArgs, long param)
-{
-    for (usize i = 0; i < firstTokens.size(); i++) {
+    } else {
         
-        tokens[0] = firstTokens[i];
-        add(tokens, a1, help, action, numArgs, i);
+        // Register instruction
+        Command d { this, tokens.front(), type, help, std::list<Command>(), action, numArgs, param };
+        args.push_back(d);
     }
-    return nullptr;
 }
 
 void
@@ -60,29 +46,28 @@ Command::remove(const string& token)
 Command *
 Command::seek(const string& token)
 {
-    for (auto& it : args) {
+    for (auto &it : args) {
         if (it.token == token) return &it;
     }
     return nullptr;
 }
 
 Command *
-Command::seek(Arguments argv)
+Command::seek(const std::list<string> &tokens)
 {
-    Command *result = nullptr;
+    if (tokens.empty()) return nullptr;
     
-    if (!argv.empty()) {
-        result = this;
-        for (auto& it : argv) {
-            if (!(result = result->seek(it))) break;
-        }
+    Command *result = this;
+    
+    for (auto &it : tokens) {
+        if (!(result = result->seek(it))) return nullptr;
     }
     
     return result;
 }
 
 std::vector<string>
-Command::types()
+Command::types() const
 {
     std::vector<string> result;
     
@@ -98,10 +83,10 @@ Command::types()
     return result;
 }
 
-std::vector<Command *>
-Command::filterType(const string& type)
+std::vector<const Command *>
+Command::filterType(const string& type) const
 {
-    std::vector<Command *> result;
+    std::vector<const Command *> result;
     
     for (auto &it : args) {
         
@@ -111,10 +96,10 @@ Command::filterType(const string& type)
     
     return result;
 }
-std::vector<Command *>
-Command::filterPrefix(const string& prefix)
+std::vector<const Command *>
+Command::filterPrefix(const string& prefix) const
 {
-    std::vector<Command *> result;
+    std::vector<const Command *> result;
     
     for (auto &it : args) {
         if (it.hidden) continue;
@@ -132,7 +117,7 @@ Command::autoComplete(const string& token)
     auto matches = filterPrefix(token);
     if (!matches.empty()) {
         
-        Command *first = matches.front();
+        const Command *first = matches.front();
         for (usize i = token.size(); i < first->token.size(); i++) {
             
             for (auto m: matches) {
@@ -147,14 +132,14 @@ Command::autoComplete(const string& token)
 }
 
 string
-Command::tokens()
+Command::tokens() const
 {
     string result = this->parent ? this->parent->tokens() : "";
     return result == "" ? token : result + " " + token;
 }
 
 string
-Command::usage()
+Command::usage() const
 {
     string firstArg, otherArgs;
     

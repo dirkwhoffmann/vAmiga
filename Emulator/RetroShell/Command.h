@@ -48,16 +48,8 @@ struct Command {
     bool hidden = false;
         
     // Creates a new node in the command tree
-    Command *add(std::vector<string> tokens,
-                 const string &a1,
-                 const string &help,
-                 void (RetroShell::*action)(Arguments&, long) = nullptr,
-                 isize numArgs = 0, long param = 0);
-
-    // Creates multiple nodes in the command tree
-    Command *add(std::vector<string> firstTokens,
-                 std::vector<string> tokens,
-                 const string &a1,
+    void add(std::vector<string> tokens,
+                 const string &type,
                  const string &help,
                  void (RetroShell::*action)(Arguments&, long) = nullptr,
                  isize numArgs = 0, long param = 0);
@@ -67,21 +59,21 @@ struct Command {
     
     // Seeks a command object inside the command object tree
     Command *seek(const string& token);
-    Command *seek(Arguments argv);
+    Command *seek(const std::list<string> &tokens);
     
     // Collects the type descriptions in the args vector
-    std::vector<string> types();
+    std::vector<string> types() const;
     
     // Filters the argument list
-    std::vector<Command *> filterType(const string& type);
-    std::vector<Command *> filterPrefix(const string& prefix);
+    std::vector<const Command *> filterType(const string& type) const;
+    std::vector<const Command *> filterPrefix(const string& prefix) const;
 
     // Automatically completes a partial token string
     string autoComplete(const string& token);
     
     // Returns the full command string for this command
-    string tokens();
+    string tokens() const;
     
     // Returns a syntax string for this command
-    string usage();
+    string usage() const;
 };
