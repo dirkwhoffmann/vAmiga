@@ -261,8 +261,7 @@
 - (CPUInfo) getInfo;
 
 @property (readonly) i64 clock;
-@property (readonly) i64 cycles;
-@property (readonly, getter=isHalted) bool halted;
+@property (readonly) BOOL halted;
 
 @property (readonly) NSInteger loggedInstructions;
 - (void)clearLog;

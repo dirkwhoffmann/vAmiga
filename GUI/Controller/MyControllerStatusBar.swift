@@ -177,7 +177,7 @@ extension MyController {
     
     func updateSpeedometer() {
         
-        speedometer.updateWith(cycle: amiga.cpu.cycles, frame: renderer.frames)
+        speedometer.updateWith(cycle: amiga.cpu.clock, frame: renderer.frames)
         
         switch activityType.selectedTag() {
 

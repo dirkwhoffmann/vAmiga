@@ -165,9 +165,7 @@ enum_long(FSI_TYPE)
     FSI_DATA_BLOCK_REF,
     FSI_DATA_COUNT,
     FSI_DATA,
-    FSI_BITMAP,
-    
-    FSI_COUNT
+    FSI_BITMAP
 };
 typedef FSI_TYPE FSItemType;
 
@@ -176,7 +174,7 @@ struct FSItemTypeEnum : util::Reflection<FSItemTypeEnum, FSItemType> {
     
     static bool isValid(long value)
     {
-        return (unsigned long)value <= FSI_COUNT;
+        return (unsigned long)value <= FSI_BITMAP;
     }
     
     static const char *prefix() { return "FS"; }
@@ -223,7 +221,6 @@ struct FSItemTypeEnum : util::Reflection<FSItemTypeEnum, FSItemType> {
             case FSI_DATA_COUNT:            return "DATA_COUNT";
             case FSI_DATA:                  return "DATA";
             case FSI_BITMAP:                return "BITMAP";
-            case FSI_COUNT:                 return "???";
         }
         return "???";
     }

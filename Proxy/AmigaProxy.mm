@@ -185,15 +185,10 @@ using namespace moira;
 
 - (i64)clock
 {
-    return [self cpu]->getMasterClock();
-}
-
-- (i64)cycles
-{
     return [self cpu]->getCpuClock();
 }
 
-- (bool)isHalted
+- (BOOL)halted
 {
     return [self cpu]->isHalted();
 }

@@ -19,7 +19,10 @@
 #define synchronized \
 for (util::AutoMutex _am(mutex); _am.active; _am.active = false)
 
-class AmigaComponent : public AmigaObject {
+class NoCopy { public: NoCopy() { }; NoCopy(NoCopy const&) = delete; };
+class NoAssign { public: NoAssign() { }; NoAssign& operator=(NoAssign const&) = delete; };
+
+class AmigaComponent : public AmigaObject, NoCopy, NoAssign {
         
 protected:
     
@@ -39,9 +42,7 @@ protected:
     
 public:
 
-    AmigaComponent(AmigaComponent const&) = delete;
-    AmigaComponent& operator=(AmigaComponent const&) = delete;
-    AmigaComponent() { }
+    // AmigaComponent() { }
     
     /* Initializes the component and it's subcomponents. The initialization
      * procedure is initiated once, in the constructor of the Amiga class. By
