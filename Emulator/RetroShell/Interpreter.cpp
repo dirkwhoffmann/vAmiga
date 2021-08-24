@@ -12,11 +12,6 @@
 #include "RetroShell.h"
 #include <sstream>
 
-Interpreter::Interpreter(Amiga &ref) : SubComponent(ref)
-{
-    registerInstructions();
-};
-
 Arguments
 Interpreter::split(const string& userInput)
 {
@@ -54,19 +49,6 @@ Interpreter::split(const string& userInput)
     return result;
 }
     
-void
-Interpreter::autoComplete(Arguments &argv)
-{
-    Command *current = &root;
-    string prefix, token;
-
-    for (auto it = argv.begin(); current && it != argv.end(); it++) {
-        
-        *it = current->autoComplete(*it);
-        current = current->seek(*it);
-    }
-}
-
 string
 Interpreter::autoComplete(const string& userInput)
 {
@@ -88,6 +70,19 @@ Interpreter::autoComplete(const string& userInput)
 }
 
 void
+Interpreter::autoComplete(Arguments &argv)
+{
+    Command *current = &root;
+    string prefix, token;
+
+    for (auto it = argv.begin(); current && it != argv.end(); it++) {
+        
+        *it = current->autoComplete(*it);
+        current = current->seek(*it);
+    }
+}
+
+void
 Interpreter::exec(const string& userInput, bool verbose)
 {
     // Split the command string
@@ -104,11 +99,8 @@ Interpreter::exec(const string& userInput, bool verbose)
 }
 
 void
-Interpreter::exec(Arguments &argv, bool verbose)
+Interpreter::exec(const Arguments &argv, bool verbose)
 {
-    Command *current = &root;
-    string token;
-
     // In 'verbose' mode, print the token list
     if (verbose) {
         for (const auto &it : argv) retroShell << it << ' ';
@@ -119,34 +111,29 @@ Interpreter::exec(Arguments &argv, bool verbose)
     if (argv.empty()) return;
     
     // Seek the command in the command tree
-    while (current) {
+    Command *current = &root, *next;
+    Arguments args = argv;
+
+    while (!args.empty() && ((next = current->seek(args.front())))) {
         
-        // Extract token
-        token = argv.empty() ? "" : argv.front();
-        
-        // Break the loop if this token is unknown
-        Command *next = current->seek(token);
-        if (next == nullptr) break;
-        
-        // Move one level down
-        current = next;
-        if (!argv.empty()) argv.pop_front();
+        current = current->seek(args.front());
+        args.pop_front();
     }
-        
+                
     // Error out if no command handler is present
-    if (current->action == nullptr && !argv.empty()) {
-        throw util::ParseError(token);
+    if (current->action == nullptr && !args.empty()) {
+        throw util::ParseError(args.front());
     }
-    if (current->action == nullptr && argv.empty()) {
+    if (current->action == nullptr && args.empty()) {
         throw TooFewArgumentsError(current->tokens());
     }
     
     // Check the argument count
-    if ((isize)argv.size() < current->numArgs) throw TooFewArgumentsError(current->tokens());
-    if ((isize)argv.size() > current->numArgs) throw TooManyArgumentsError(current->tokens());
+    if ((isize)args.size() < current->numArgs) throw TooFewArgumentsError(current->tokens());
+    if ((isize)args.size() > current->numArgs) throw TooManyArgumentsError(current->tokens());
     
     // Call the command handler
-    (retroShell.*(current->action))(argv, current->param);
+    (retroShell.*(current->action))(args, current->param);
 }
 
 void
