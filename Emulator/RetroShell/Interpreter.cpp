@@ -180,10 +180,10 @@ Interpreter::help(const Command& current)
     auto types = current.types();
 
     // Determine tabular positions to align the output
-    int tab = 0;
+    isize tab = 0;
     for (auto &it : current.args) {
-        tab = std::max(tab, (int)it.token.length());
-        tab = std::max(tab, 2 + (int)it.type.length());
+        tab = std::max(tab, (isize)it.token.length());
+        tab = std::max(tab, 2 + (isize)it.type.length());
     }
     tab += 5;
     
@@ -194,13 +194,13 @@ Interpreter::help(const Command& current)
 
         retroShell.tab(tab - size);
         retroShell << "<" << it << "> : ";
-        retroShell << (int)opts.size() << (opts.size() == 1 ? " choice" : " choices");
+        retroShell << (isize)opts.size() << (opts.size() == 1 ? " choice" : " choices");
         retroShell << '\n' << '\n';
         
         for (auto &opt : opts) {
 
             string name = opt->token == "" ? "<>" : opt->token;
-            retroShell.tab(tab + 2 - (int)name.length());
+            retroShell.tab(tab + 2 - (isize)name.length());
             retroShell << name;
             retroShell << " : ";
             retroShell << opt->info;

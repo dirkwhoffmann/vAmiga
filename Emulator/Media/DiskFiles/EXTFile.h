@@ -20,7 +20,7 @@ class EXTFile : public DiskFile {
     static const isize HEADER_SIZE = 160 * 4 + 8;
     
     // Accepted header signatures
-    static const u8 extAdfHeaders[2][8];
+    static const std::vector<string> extAdfHeaders;
     
 public:
             

@@ -12,17 +12,17 @@
 #include "DiskFile.h"
 #include "FSDevice.h"
 
-#define ADFSIZE_35_DD     901120  //  880 KB
-#define ADFSIZE_35_DD_81  912384  //  891 KB (1 extra cylinder)
-#define ADFSIZE_35_DD_82  923648  //  902 KB (2 extra cylinders)
-#define ADFSIZE_35_DD_83  934912  //  913 KB (3 extra cylinders)
-#define ADFSIZE_35_DD_84  946176  //  924 KB (4 extra cylinders)
-#define ADFSIZE_35_HD    1802240  // 1760 KB
-
 class ADFFile : public DiskFile {
-    
+
 public:
-            
+
+    static constexpr isize ADFSIZE_35_DD    = 901120;   //  880 KB
+    static constexpr isize ADFSIZE_35_DD_81 = 912384;   //  891 KB (+ 1 cyl)
+    static constexpr isize ADFSIZE_35_DD_82 = 923648;   //  902 KB (+ 2 cyls)
+    static constexpr isize ADFSIZE_35_DD_83 = 934912;   //  913 KB (+ 3 cyls)
+    static constexpr isize ADFSIZE_35_DD_84 = 946176;   //  924 KB (+ 4 cyls)
+    static constexpr isize ADFSIZE_35_HD    = 1802240;  // 1760 KB
+    
     static bool isCompatible(const string &path);
     static bool isCompatible(std::istream &stream);
     

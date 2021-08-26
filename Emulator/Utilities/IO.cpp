@@ -187,14 +187,20 @@ matchingStreamHeader(std::istream &is, const u8 *header, isize len, isize offset
     is.seekg(offset, std::ios::beg);
     
     for (isize i = 0; i < len; i++) {
-        int c = is.get();
-        if (c != (int)header[i]) {
+        
+        if (is.get() != (int)header[i]) {
             is.seekg(0, std::ios::beg);
             return false;
         }
     }
     is.seekg(0, std::ios::beg);
     return true;
+}
+
+bool
+matchingStreamHeader(std::istream &is, const string &header, isize offset)
+{
+    return matchingStreamHeader(is, (u8 *)header.c_str(), header.length(), offset);
 }
 
 bool

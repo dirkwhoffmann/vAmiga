@@ -508,6 +508,8 @@ private:
 
     // Called by translate() in dual-playfield mode
     void translateDPF(Pixel from, Pixel to, PFState &state);
+    
+    // Called by translateDPF(...)
     template <bool pf2pri> void translateDPF(Pixel from, Pixel to, PFState &state);
 
     

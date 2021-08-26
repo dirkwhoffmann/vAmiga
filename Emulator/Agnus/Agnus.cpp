@@ -979,7 +979,7 @@ Agnus::hsyncHandler()
 {
     assert(pos.h == 0 || pos.h == HPOS_MAX + 1);
 
-    // Call the hsync handlers of Denise
+    // Let Denise finish up the current line
     denise.endOfLine(pos.v);
 
     // Update pot counters
@@ -1009,16 +1009,11 @@ Agnus::hsyncHandler()
     // DIW
     //
 
-    if (pos.v == diwVstrt && !diwVFlop) {
-        diwVFlop = true;
-        trace(DIW_DEBUG, "diwVFlop = %d\n", diwVFlop);
-    }
-    if (pos.v == diwVstop && diwVFlop) {
-        diwVFlop = false;
-        trace(DIW_DEBUG, "diwVFlop = %d\n", diwVFlop);
-    }
+    // Update the vertical DIW flipflop
+    if (pos.v == diwVstrt && !diwVFlop) diwVFlop = true;
+    if (pos.v == diwVstop && diwVFlop) diwVFlop = false;
 
-    // Horizontal DIW flipflop
+    // Update the horizontal DIW flipflop
     diwHFlop = (diwHFlopOff != -1) ? false : (diwHFlopOn != -1) ? true : diwHFlop;
     diwHFlopOn = diwHstrt;
     diwHFlopOff = diwHstop;
@@ -1033,13 +1028,11 @@ Agnus::hsyncHandler()
 
 
     //
-    // Determine the bitplane DMA status for the line to come
+    // Determine the bitplane DMA status for the next line
     //
 
-    bool newBplDmaLine = inBplDmaLine();
-
-    // Update the bpl event table if the value has changed
-    if (newBplDmaLine ^ bplDmaLine) {
+    if (bool newBplDmaLine = inBplDmaLine(); newBplDmaLine ^ bplDmaLine) {
+        
         hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
         bplDmaLine = newBplDmaLine;
     }
@@ -1064,11 +1057,14 @@ Agnus::hsyncHandler()
         newDmaDAS = 0;
     }
 
-    if (dmaDAS != newDmaDAS) hsyncActions |= HSYNC_UPDATE_DAS_TABLE;
-    dmaDAS = newDmaDAS;
+    if (dmaDAS != newDmaDAS) {
+        
+        hsyncActions |= HSYNC_UPDATE_DAS_TABLE;
+        dmaDAS = newDmaDAS;
+    }
 
     //
-    // Process pending work items
+    // Process pending actions
     //
 
     if (hsyncActions) {
@@ -1095,10 +1091,7 @@ Agnus::hsyncHandler()
     scheduleNextDasEvent();
 
 
-    //
-    // Let other components prepare for the next line
-    //
-
+    // Let Denise prepare for the next line
     denise.beginOfLine(pos.v);
 }
 

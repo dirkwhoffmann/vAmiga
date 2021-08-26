@@ -11,12 +11,12 @@
 #include "EXTFile.h"
 #include "IO.h"
 
-const u8 EXTFile::extAdfHeaders[2][8] = {
-
-    { 'U', 'A', 'E', '-', '-', 'A', 'D', 'F' },
-    { 'U', 'A', 'E', '-', '1', 'A', 'D', 'F' }
+const std::vector<string> EXTFile::extAdfHeaders =
+{
+    "UAE--ADF",
+    "UAE-1ADF"
 };
-    
+
 bool
 EXTFile::isCompatible(const string &path)
 {
@@ -26,16 +26,10 @@ EXTFile::isCompatible(const string &path)
 bool
 EXTFile::isCompatible(std::istream &stream)
 {
-    isize length = util::streamLength(stream);
-    
-    isize len = isizeof(extAdfHeaders[0]);
-    isize cnt = isizeof(extAdfHeaders) / len;
-
-    if (length < len) return false;
-    
-    for (isize i = 0; i < cnt; i++) {
-        if (util::matchingStreamHeader(stream, extAdfHeaders[i], len)) return true;
+    for (auto &header : extAdfHeaders) {
+        if (util::matchingStreamHeader(stream, header)) return true;
     }
+
     return false;
 }
 
