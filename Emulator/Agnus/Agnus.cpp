@@ -703,22 +703,15 @@ Agnus::bpu(u16 v)
 void
 Agnus::execute()
 {
+    // If this assertion hits, the HSYNC event hasn't been served
+    assert(pos.h < HPOS_CNT);
+    
     // Process pending events
-    if (nextTrigger <= clock) {
-        executeEventsUntil(clock);
-    } else {
-        assert(pos.h < 0xE2);
-    }
+    if (nextTrigger <= clock) executeEventsUntil(clock);
 
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);
-
-    assert(pos.h <= HPOS_MAX);
-    pos.h = pos.h < HPOS_MAX ? pos.h + 1 : 0; // (pos.h + 1) % HPOS_CNT;
-
-    // If this assertion hits, the HSYNC event hasn't been served
-    // if (pos.h > HPOS_CNT) { dump(); dumpBplEventTable(); }
-    assert(pos.h <= HPOS_CNT);
+    pos.h = pos.h < HPOS_MAX ? pos.h + 1 : 0;
 }
 
 #ifdef AGNUS_EXEC_DEBUG
@@ -726,8 +719,8 @@ Agnus::execute()
 void
 Agnus::executeUntil(Cycle targetClock)
 {
-    // Align to DMA cycle raster
-    targetClock &= ~0b111;
+    // Assure the target clock is aligned with the DMA cycle raster
+    assert((targetClock & 0b111) == 0);
 
     // Compute the number of DMA cycles to execute
     DMACycle dmaCycles = (targetClock - clock) / DMA_CYCLES(1);
@@ -754,7 +747,7 @@ Agnus::executeUntil(Cycle targetClock)
         pos.h += dmaCycles;
 
         // If this assertion hits, the HSYNC event hasn't been served
-        assert(pos.h <= HPOS_CNT);
+        assert(pos.h < HPOS_CNT);
 
     } else {
 
