@@ -22,6 +22,7 @@
 #define unreachable    __builtin_unreachable()
 #define fatalError     assert(false); __builtin_unreachable()
 
+
 //
 // Accessing bits and bytes
 //

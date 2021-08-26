@@ -96,19 +96,16 @@ enum_long(ERROR_CODE)
     ERROR_FS_PTR_TO_FILELIST_BLOCK,
     ERROR_FS_PTR_TO_DATA_BLOCK,
     ERROR_FS_EXPECTED_DATABLOCK_NR,
-    ERROR_FS_INVALID_HASHTABLE_SIZE,
-    
-    ERROR_COUNT
+    ERROR_FS_INVALID_HASHTABLE_SIZE
 };
 typedef ERROR_CODE ErrorCode;
 
 #ifdef __cplusplus
-struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= ERROR_COUNT;
-    }
+struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
+{
+    static long min() { return 0; }
+    static long max() { return ERROR_FS_INVALID_HASHTABLE_SIZE; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "ERROR"; }
     static const char *key(ErrorCode value)
@@ -185,8 +182,6 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode> {
             case ERROR_FS_PTR_TO_DATA_BLOCK:        return "FS_PTR_TO_DATA_BLOCK";
             case ERROR_FS_EXPECTED_DATABLOCK_NR:    return "FS_EXPECTED_DATABLOCK_NR";
             case ERROR_FS_INVALID_HASHTABLE_SIZE:   return "FS_INVALID_HASHTABLE_SIZE";
-                
-            case ERROR_COUNT:                       return "???";
         }
         return "???";
     }

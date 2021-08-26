@@ -24,12 +24,11 @@ enum_long(FILTER_TYPE)
 typedef FILTER_TYPE FilterType;
 
 #ifdef __cplusplus
-struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= FILTER_BUTTERWORTH;
-    }
+struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
+{
+    static long min() { return 0; }
+    static long max() { return FILTER_BUTTERWORTH; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "FILTER"; }
     static const char *key(FilterType value)

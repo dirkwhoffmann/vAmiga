@@ -24,12 +24,11 @@ enum_long(CONFIG_SCHEME)
 typedef CONFIG_SCHEME ConfigScheme;
 
 #ifdef __cplusplus
-struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= CONFIG_A500_ECS_1MB;
-    }
+struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
+{
+    static long min() { return 0; }
+    static long max() { return CONFIG_A500_ECS_1MB; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "CONFIG"; }
     static const char *key(ConfigScheme value)
@@ -60,12 +59,11 @@ enum_long(INSPECTION_TARGET)
 typedef INSPECTION_TARGET InspectionTarget;
 
 #ifdef __cplusplus
-struct InspectionTargetEnum : util::Reflection<InspectionTargetEnum, InspectionTarget> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= INSPECTION_EVENTS;
-    }
+struct InspectionTargetEnum : util::Reflection<InspectionTargetEnum, InspectionTarget>
+{
+    static long min() { return 0; }
+    static long max() { return INSPECTION_EVENTS; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "INSPECTION"; }
     static const char *key(InspectionTarget value)
@@ -147,12 +145,11 @@ typedef REG_CHIPSET ChipsetReg;
 
 #ifdef __cplusplus
 static_assert(REG_NO_OP == (0x1FE >> 1));
-struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= REG_NO_OP;
-    }
+struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
+{
+    static long min() { return 0; }
+    static long max() { return REG_NO_OP; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "REG"; }
     static const char *key(ConfigScheme value)

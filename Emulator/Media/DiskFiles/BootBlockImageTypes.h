@@ -25,12 +25,11 @@ enum_long(BB_TYPE)
 typedef BB_TYPE BootBlockType;
 
 #ifdef __cplusplus
-struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= BB_CUSTOM;
-    }
+struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType>
+{
+    static long min() { return 0; }
+    static long max() { return BB_CUSTOM; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "BB"; }
     static const char *key(BootBlockType value)
@@ -57,12 +56,11 @@ enum_long(BB_ID)
 typedef BB_ID BootBlockId;
 
 #ifdef __cplusplus
-struct BootBlockIdEnum : util::Reflection<BootBlockIdEnum, BootBlockId> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= BB_BYTE_BANDIT;
-    }
+struct BootBlockIdEnum : util::Reflection<BootBlockIdEnum, BootBlockId>
+{
+    static long min() { return 0; }
+    static long max() { return BB_BYTE_BANDIT; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "BB"; }
     static const char *key(BootBlockId value)

@@ -22,12 +22,11 @@ enum_long(DMA_DISPLAY_MODE)
 typedef DMA_DISPLAY_MODE DmaDisplayMode;
 
 #ifdef __cplusplus
-struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= DMA_DISPLAY_MODE_ODD_EVEN_LAYERS;
-    }
+struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
+{
+    static long min() { return 0; }
+    static long max() { return DMA_DISPLAY_MODE_ODD_EVEN_LAYERS; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "DMA_DISPLAY_MODE"; }
     static const char *key(DmaDisplayMode value)
@@ -53,17 +52,17 @@ enum_long(DMA_CHANNEL)
     DMA_CHANNEL_BITPLANE,
     DMA_CHANNEL_CPU,
     DMA_CHANNEL_REFRESH,
+    
     DMA_CHANNEL_COUNT,
 };
 typedef DMA_CHANNEL DmaChannel;
 
 #ifdef __cplusplus
-struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value < DMA_CHANNEL_COUNT;
-    }
+struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel>
+{
+    static long min() { return 0; }
+    static long max() { return DMA_CHANNEL_COUNT - 1; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "DMA_CHANNEL"; }
     static const char *key(DmaDisplayMode value)

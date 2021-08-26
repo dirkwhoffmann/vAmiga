@@ -28,12 +28,11 @@ enum_long(PALETTE)
 typedef PALETTE Palette;
 
 #ifdef __cplusplus
-struct PaletteEnum : util::Reflection<PaletteEnum, Palette> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= PALETTE_SEPIA;
-    }
+struct PaletteEnum : util::Reflection<PaletteEnum, Palette>
+{    
+    static long min() { return 0; }
+    static long max() { return PALETTE_SEPIA; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "PALETTE"; }
     static const char *key(Palette value)

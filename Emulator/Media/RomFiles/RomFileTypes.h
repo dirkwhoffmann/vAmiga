@@ -56,19 +56,16 @@ enum_long(ROM_IDENTIFIER)
     ROM_DIAG11,
     ROM_DIAG12,
     ROM_DIAG121,
-    ROM_LOGICA20,
-
-    ROM_COUNT
+    ROM_LOGICA20
 };
 typedef ROM_IDENTIFIER RomIdentifier;
 
 #ifdef __cplusplus
-struct RomIdentifierEnum : util::Reflection<RomIdentifierEnum, RomIdentifier> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value < ROM_COUNT;
-    }
+struct RomIdentifierEnum : util::Reflection<RomIdentifierEnum, RomIdentifier>
+{
+    static long min() { return 0; }
+    static long max() { return ROM_LOGICA20; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "ROM"; }
     static const char *key(RomIdentifier value)
@@ -106,9 +103,7 @@ struct RomIdentifierEnum : util::Reflection<RomIdentifierEnum, RomIdentifier> {
             case ROM_DIAG11:            return "DIAG11";
             case ROM_DIAG12:            return "DIAG12";
             case ROM_DIAG121:           return "DIAG121";
-            case ROM_LOGICA20:          return "LOGICA20";
-                
-            case ROM_COUNT:             return "???";
+            case ROM_LOGICA20:          return "LOGICA20";                
         }
         return "???";
     }

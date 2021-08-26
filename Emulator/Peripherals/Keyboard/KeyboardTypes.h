@@ -27,12 +27,11 @@ enum_long(KB_STATE)
 typedef KB_STATE KeyboardState;
 
 #ifdef __cplusplus
-struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= KB_SEND;
-    }
+struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState>
+{
+    static long min() { return 0; }
+    static long max() { return KB_SEND; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "KB"; }
     static const char *key(KeyboardState value)

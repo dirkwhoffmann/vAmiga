@@ -27,12 +27,11 @@ enum_long(DRIVE_TYPE)
 typedef DRIVE_TYPE DriveType;
 
 #ifdef __cplusplus
-struct DriveTypeEnum : util::Reflection<DriveTypeEnum, DriveType> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= DRIVE_DD_525;
-    }
+struct DriveTypeEnum : util::Reflection<DriveTypeEnum, DriveType>
+{
+    static long min() { return 0; }
+    static long max() { return DRIVE_DD_525; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "DRIVE"; }
     static const char *key(DriveType value)

@@ -41,12 +41,11 @@ enum_i8(BUS_OWNER)
 typedef BUS_OWNER BusOwner;
 
 #ifdef __cplusplus
-struct BusOwnerEnum : util::Reflection<BusOwnerEnum, BusOwner> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value < BUS_COUNT;
-    }
+struct BusOwnerEnum : util::Reflection<BusOwnerEnum, BusOwner>
+{
+    static long min() { return 0; }
+    static long max() { return BUS_COUNT - 1; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "BUS"; }
     static const char *key(BusOwner value)

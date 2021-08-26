@@ -23,12 +23,11 @@ enum_long(PortNr)
 };
 
 #ifdef __cplusplus
-struct PortNrEnum : util::Reflection<PortNrEnum, PortNr> {
-    
-    static bool isValid(long value)
-    {
-        return value == PORT_1 || value == PORT_2;
-    }
+struct PortNrEnum : util::Reflection<PortNrEnum, PortNr>
+{    
+    static long min() { return 0; }
+    static long max() { return PORT_2; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return ""; }
     static const char *key(PortNr value)
@@ -52,12 +51,11 @@ enum_long(CPD)
 typedef CPD ControlPortDevice;
 
 #ifdef __cplusplus
-struct ControlPortDeviceEnum : util::Reflection<ControlPortDeviceEnum, ControlPortDevice> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= CPD_JOYSTICK;
-    }
+struct ControlPortDeviceEnum : util::Reflection<ControlPortDeviceEnum, ControlPortDevice>
+{
+    static long min() { return 0; }
+    static long max() { return CPD_JOYSTICK; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "CPD"; }
     static const char *key(ControlPortDevice value)

@@ -25,12 +25,11 @@ enum_long(RTC_REVISION)
 typedef RTC_REVISION RTCRevision;
 
 #ifdef __cplusplus
-struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= RTC_RICOH;
-    }
+struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision>
+{
+    static long min() { return 0; }
+    static long max() { return RTC_RICOH; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "RTC"; }
     static const char *key(RTCRevision value)

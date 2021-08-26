@@ -106,19 +106,16 @@ enum_long(OPT)
     OPT_AUDPAN,
     OPT_AUDVOL,
     OPT_AUDVOLL,
-    OPT_AUDVOLR,
-    
-    OPT_COUNT
+    OPT_AUDVOLR
 };
 typedef OPT Option;
 
 #ifdef __cplusplus
-struct OptionEnum : util::Reflection<OptionEnum, Option> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value < OPT_COUNT;
-    }
+struct OptionEnum : util::Reflection<OptionEnum, Option>
+{    
+    static long min() { return 0; }
+    static long max() { return OPT_AUDVOLR; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "OPT"; }
     static const char *key(Option value)
@@ -187,8 +184,6 @@ struct OptionEnum : util::Reflection<OptionEnum, Option> {
             case OPT_AUDVOL:              return "AUDVOL";
             case OPT_AUDVOLL:             return "AUDVOLL";
             case OPT_AUDVOLR:             return "AUDVOLR";
-                
-            case OPT_COUNT:               return "???";
         }
         return "???";
     }
@@ -204,12 +199,11 @@ enum_long(EMULATOR_STATE)
 typedef EMULATOR_STATE EmulatorState;
 
 #ifdef __cplusplus
-struct EmulatorStateEnum : util::Reflection<EmulatorStateEnum, EmulatorState> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= EMULATOR_STATE_RUNNING;
-    }
+struct EmulatorStateEnum : util::Reflection<EmulatorStateEnum, EmulatorState>
+{
+    static long min() { return 0; }
+    static long max() { return EMULATOR_STATE_RUNNING; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "EMULATOR_STATE"; }
     static const char *key(EmulatorState value)

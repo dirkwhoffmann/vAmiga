@@ -19,8 +19,17 @@
 #define synchronized \
 for (util::AutoMutex _am(mutex); _am.active; _am.active = false)
 
-class NoCopy { public: NoCopy() { }; NoCopy(NoCopy const&) = delete; };
-class NoAssign { public: NoAssign() { }; NoAssign& operator=(NoAssign const&) = delete; };
+struct NoCopy
+{
+    NoCopy() { };
+    NoCopy(NoCopy const&) = delete;
+};
+
+struct NoAssign
+{
+    NoAssign() { };
+    NoAssign& operator=(NoAssign const&) = delete;
+};
 
 class AmigaComponent : public AmigaObject, NoCopy, NoAssign {
         

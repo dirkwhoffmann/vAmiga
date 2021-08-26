@@ -28,12 +28,11 @@ enum_long(AGNUS_REVISION)
 typedef AGNUS_REVISION AgnusRevision;
 
 #ifdef __cplusplus
-struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= AGNUS_ECS_2MB;
-    }
+struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
+{
+    static long min() { return 0; }
+    static long max() { return AGNUS_ECS_2MB; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "AGNUS"; }
     static const char *key(AgnusRevision value)
@@ -58,12 +57,11 @@ enum_long(DDF_STATE)
 typedef DDF_STATE DDFState;
 
 #ifdef __cplusplus
-struct DDFStateEnum : util::Reflection<DDFStateEnum, DDFState> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= DDF_ON;
-    }
+struct DDFStateEnum : util::Reflection<DDFStateEnum, DDFState>
+{
+    static long min() { return 0; }
+    static long max() { return DDF_ON; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "DDF"; }
     static const char *key(AgnusRevision value)
@@ -87,12 +85,11 @@ enum_long(SPR_DMA_STATE)
 typedef SPR_DMA_STATE SprDMAState;
 
 #ifdef __cplusplus
-struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= SPR_DMA_ACTIVE;
-    }
+struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
+{
+    static long min() { return 0; }
+    static long max() { return SPR_DMA_ACTIVE; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "SPR_DMA"; }
     static const char *key(SprDMAState value)

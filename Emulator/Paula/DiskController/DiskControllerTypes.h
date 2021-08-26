@@ -28,19 +28,12 @@ enum_long(DRIVE_DMA_STATE)
 };
 typedef DRIVE_DMA_STATE DriveState;
 
-inline bool isDriveState(long value)
-{
-    return (unsigned long)value <= DRIVE_DMA_FLUSH;
-}
-
 #ifdef __cplusplus
 struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState>
 {
-
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= DRIVE_DMA_FLUSH;
-    }
+    static long min() { return 0; }
+    static long max() { return DRIVE_DMA_FLUSH; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix()
     {

@@ -14,25 +14,25 @@
 
 enum_long(FS_VOLUME_TYPE)
 {
-    FS_NODOS = -1,
-    FS_OFS = 0,         // Original File System
-    FS_FFS = 1,         // Fast File System
+    FS_NODOS    = -1,
+    
+    FS_OFS      = 0,    // Original File System
+    FS_FFS      = 1,    // Fast File System
     FS_OFS_INTL = 2,    // "International" (not supported)
     FS_FFS_INTL = 3,    // "International" (not supported)
-    FS_OFS_DC = 4,      // "Directory Cache" (not supported)
-    FS_FFS_DC = 5,      // "Directory Cache" (not supported)
+    FS_OFS_DC   = 4,    // "Directory Cache" (not supported)
+    FS_FFS_DC   = 5,    // "Directory Cache" (not supported)
     FS_OFS_LNFS = 6,    // "Long Filenames" (not supported)
     FS_FFS_LNFS = 7     // "Long Filenames" (not supported)
 };
 typedef FS_VOLUME_TYPE FSVolumeType;
 
 #ifdef __cplusplus
-struct FSVolumeTypeEnum : util::Reflection<FSVolumeTypeEnum, FSVolumeType> {
-    
-    static bool isValid(long value)
-    {
-        return value >= FS_NODOS && value <= FS_FFS_LNFS;
-    }
+struct FSVolumeTypeEnum : util::Reflection<FSVolumeTypeEnum, FSVolumeType>
+{
+    static long min() { return FS_NODOS; }
+    static long max() { return FS_FFS_LNFS; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "FS"; }
     static const char *key(FSVolumeType value)
@@ -88,19 +88,16 @@ enum_long(FS_BLOCK_TYPE)
     FS_FILEHEADER_BLOCK,
     FS_FILELIST_BLOCK,
     FS_DATA_BLOCK_OFS,
-    FS_DATA_BLOCK_FFS,
-    
-    FS_BLOCK_TYPE_COUNT
+    FS_DATA_BLOCK_FFS
 };
 typedef FS_BLOCK_TYPE FSBlockType;
 
 #ifdef __cplusplus
-struct FSBlockTypeEnum : util::Reflection<FSBlockTypeEnum, FSBlockType> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= FS_BLOCK_TYPE_COUNT;
-    }
+struct FSBlockTypeEnum : util::Reflection<FSBlockTypeEnum, FSBlockType>
+{
+    static long min() { return 0; }
+    static long max() { return FS_DATA_BLOCK_FFS; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "FS"; }
     static const char *key(FSBlockType value)
@@ -118,7 +115,6 @@ struct FSBlockTypeEnum : util::Reflection<FSBlockTypeEnum, FSBlockType> {
             case FS_FILELIST_BLOCK:    return "FILELIST_BLOCK";
             case FS_DATA_BLOCK_OFS:    return "DATA_BLOCK_OFS";
             case FS_DATA_BLOCK_FFS:    return "DATA_BLOCK_FFS";
-            case FS_BLOCK_TYPE_COUNT:  return "???";
         }
         return "???";
     }
@@ -170,12 +166,11 @@ enum_long(FSI_TYPE)
 typedef FSI_TYPE FSItemType;
 
 #ifdef __cplusplus
-struct FSItemTypeEnum : util::Reflection<FSItemTypeEnum, FSItemType> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= FSI_BITMAP;
-    }
+struct FSItemTypeEnum : util::Reflection<FSItemTypeEnum, FSItemType>
+{
+    static long min() { return 0; }
+    static long max() { return FSI_BITMAP; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "FS"; }
     static const char *key(FSItemType value)

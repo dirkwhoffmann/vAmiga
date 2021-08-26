@@ -24,12 +24,11 @@ enum_long(DISK_DIAMETER)
 typedef DISK_DIAMETER DiskDiameter;
 
 #ifdef __cplusplus
-struct DiskDiameterEnum : util::Reflection<DiskDiameterEnum, DiskDiameter> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= INCH_525;
-    }
+struct DiskDiameterEnum : util::Reflection<DiskDiameterEnum, DiskDiameter>
+{
+    static long min() { return 0; }
+    static long max() { return INCH_525; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return ""; }
     static const char *key(DiskDiameter value)
@@ -53,12 +52,11 @@ enum_long(DISK_DENSITY)
 typedef DISK_DENSITY DiskDensity;
 
 #ifdef __cplusplus
-struct DiskDensityEnum : util::Reflection<DiskDensityEnum, DiskDensity> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= DISK_HD;
-    }
+struct DiskDensityEnum : util::Reflection<DiskDensityEnum, DiskDensity>
+{
+    static long min() { return 0; }
+    static long max() { return DISK_HD; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "DISK"; }
     static const char *key(DiskDensity value)

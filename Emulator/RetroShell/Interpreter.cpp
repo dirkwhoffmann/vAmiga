@@ -171,6 +171,8 @@ Interpreter::help(const Arguments &argv)
 void
 Interpreter::help(const Command& current)
 {
+    retroShell << '\n';
+    
     // Print the usage string
     usage(current);
     
@@ -185,8 +187,6 @@ Interpreter::help(const Command& current)
     }
     tab += 5;
     
-    retroShell << '\n';
-
     for (auto &it : types) {
         
         auto opts = current.filterType(it);

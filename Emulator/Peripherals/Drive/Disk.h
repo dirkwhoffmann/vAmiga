@@ -118,7 +118,7 @@ private:
     
     
     //
-    // Methods from AmigaComponent
+    // Serializing
     //
         
 private:

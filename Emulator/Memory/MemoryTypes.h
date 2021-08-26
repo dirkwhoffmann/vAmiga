@@ -38,12 +38,11 @@ enum_long(MEM_SOURCE)
 typedef MEM_SOURCE MemorySource;
 
 #ifdef __cplusplus
-struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= MEM_EXT;
-    }
+struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource>
+{
+    static long min() { return 0; }
+    static long max() { return MEM_EXT; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "MEM"; }
     static const char *key(MemorySource value)
@@ -80,12 +79,11 @@ enum_long(ACCESSOR_TYPE)
 typedef ACCESSOR_TYPE Accessor;
 
 #ifdef __cplusplus
-struct AccessorEnum : util::Reflection<AccessorEnum, Accessor> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= ACCESSOR_AGNUS;
-    }
+struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
+{
+    static long min() { return 0; }
+    static long max() { return ACCESSOR_AGNUS; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "ACCESSOR"; }
     static const char *key(Accessor value)
@@ -110,12 +108,11 @@ enum_long(BANK_MAP)
 typedef BANK_MAP BankMap;
 
 #ifdef __cplusplus
-struct BankMapEnum : util::Reflection<BankMapEnum, BankMap> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= BANK_MAP_A2000B;
-    }
+struct BankMapEnum : util::Reflection<BankMapEnum, BankMap>
+{
+    static long min() { return 0; }
+    static long max() { return BANK_MAP_A2000B; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "BANK_MAP"; }
     static const char *key(BankMap value)
@@ -136,19 +133,16 @@ enum_long(RAM_INIT_PATTERN)
 {
     RAM_INIT_RANDOMIZED,
     RAM_INIT_ALL_ZEROES,
-    RAM_INIT_ALL_ONES,
-    
-    RAM_INIT_COUNT
+    RAM_INIT_ALL_ONES
 };
 typedef RAM_INIT_PATTERN RamInitPattern;
 
 #ifdef __cplusplus
-struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value < RAM_INIT_COUNT;
-    }
+struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern>
+{
+    static long min() { return 0; }
+    static long max() { return RAM_INIT_ALL_ONES; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "RAM_INIT"; }
     static const char *key(RamInitPattern value)
@@ -158,7 +152,6 @@ struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern>
             case RAM_INIT_RANDOMIZED:  return "RANDOMIZED";
             case RAM_INIT_ALL_ZEROES:  return "ZEROES";
             case RAM_INIT_ALL_ONES:    return "ONES";
-            case RAM_INIT_COUNT:       return "???";
         }
         return "???";
     }
@@ -174,12 +167,11 @@ enum_long(UNMAPPED_MEMORY)
 typedef UNMAPPED_MEMORY UnmappedMemory;
 
 #ifdef __cplusplus
-struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory> {
-    
-    static bool isValid(long value)
-    {
-        return (unsigned long)value <= UNMAPPED_ALL_ONES;
-    }
+struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
+{
+    static long min() { return 0; }
+    static long max() { return UNMAPPED_ALL_ONES; }
+    static bool isValid(long value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "UNMAPPED"; }
     static const char *key(UnmappedMemory value)
