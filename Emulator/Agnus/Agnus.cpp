@@ -741,12 +741,12 @@ Agnus::executeUntil(Cycle targetClock)
 void
 Agnus::executeUntil(Cycle targetClock)
 {
-    // Align to DMA cycle raster
-    targetClock &= ~0b111;
+    // Assure the target clock is aligned with the DMA cycle raster
+    assert((targetClock & 0b111) == 0);
 
     // Compute the number of DMA cycles to execute
-    DMACycle dmaCycles = (targetClock - clock) / DMA_CYCLES(1);
-
+    DMACycle dmaCycles = AS_DMA_CYCLES(targetClock - clock);
+ 
     if (targetClock < nextTrigger && dmaCycles > 0) {
 
         // Advance directly to the target clock

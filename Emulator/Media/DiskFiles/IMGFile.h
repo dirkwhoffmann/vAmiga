@@ -11,12 +11,12 @@
 
 #include "DiskFile.h"
 
-#define IMGSIZE_35_DD     737280  //  720 KB PC formatted disk
-
 class IMGFile : public DiskFile {
     
 public:
         
+    static constexpr isize IMGSIZE_35_DD = 737280;  // 720 KB PC disk
+    
     static bool isCompatible(const string &path);
     static bool isCompatible(std::istream &stream);
 
