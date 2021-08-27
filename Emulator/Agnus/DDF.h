@@ -45,14 +45,8 @@ struct DDF
         return !(*this == ddf);
     }
         
-    /* Computes a DDF window
-     *
-     *       strt : Cycle number from DDFSTRT
-     *       stop : Cycle number from DDFSTOP
-     *     scroll : Scroll value from BPLCON1
-     *
-     * The function assumes that stop is greater than strt. Other combinations
-     * are not yet supported by the emulator.
+    /* Computes a DDF window. The function assumes that ddfstop is greater than
+     * ddfstrt. Other combinations are not yet supported by the emulator.
      */
     void compute(isize ddfstrt, isize ddfstop);
 };

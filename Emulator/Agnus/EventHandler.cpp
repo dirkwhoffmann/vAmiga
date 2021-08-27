@@ -45,15 +45,20 @@ Agnus::inspectEventSlot(EventInfo &info, EventSlot nr) const
     i.triggerRel = trigger - clock;
 
     if (belongsToCurrentFrame(trigger)) {
+        
         Beam beam = cycleToBeam(trigger);
         i.vpos = beam.v;
         i.hpos = beam.h;
         i.frameRel = 0;
+        
     } else if (belongsToNextFrame(trigger)) {
+        
         i.vpos = 0;
         i.hpos = 0;
         i.frameRel = 1;
+        
     } else {
+        
         assert(belongsToPreviousFrame(trigger));
         i.vpos = 0;
         i.hpos = 0;
@@ -63,6 +68,7 @@ Agnus::inspectEventSlot(EventInfo &info, EventSlot nr) const
     switch ((EventSlot)nr) {
 
         case SLOT_REG:
+            
             switch (slot[nr].id) {
 
                 case 0:             i.eventName = "none"; break;
@@ -95,55 +101,55 @@ Agnus::inspectEventSlot(EventInfo &info, EventSlot nr) const
         case SLOT_BPL:
 
             switch ((int)slot[nr].id) {
-                case 0:                              i.eventName = "none"; break;
-                case DRAW_ODD:                       i.eventName = "BPL [O]"; break;
-                case DRAW_EVEN:                      i.eventName = "BPL [E]"; break;
-                case DRAW_ODD | DRAW_EVEN:           i.eventName = "BPL [OE]"; break;
-                case BPL_L1:                         i.eventName = "BPL_L1"; break;
-                case BPL_L1 | DRAW_ODD:              i.eventName = "BPL_L1 [O]"; break;
-                case BPL_L1 | DRAW_EVEN:             i.eventName = "BPL_L1 [E]"; break;
-                case BPL_L1 | DRAW_ODD | DRAW_EVEN:  i.eventName = "BPL_L1 [OE]"; break;
-                case BPL_L2:                         i.eventName = "BPL_L2"; break;
-                case BPL_L2 | DRAW_ODD:              i.eventName = "BPL_L2 [O]"; break;
-                case BPL_L2 | DRAW_EVEN:             i.eventName = "BPL_L2 [E]"; break;
-                case BPL_L2 | DRAW_ODD | DRAW_EVEN:  i.eventName = "BPL_L2 [OE]"; break;
-                case BPL_L3:                         i.eventName = "BPL_L3"; break;
-                case BPL_L3 | DRAW_ODD:              i.eventName = "BPL_L3 [O]"; break;
-                case BPL_L3 | DRAW_EVEN:             i.eventName = "BPL_L3 [E]"; break;
-                case BPL_L3 | DRAW_ODD | DRAW_EVEN:  i.eventName = "BPL_L3 [OE]"; break;
-                case BPL_L4:                         i.eventName = "BPL_L4"; break;
-                case BPL_L4 | DRAW_ODD:              i.eventName = "BPL_L4 [O]"; break;
-                case BPL_L4 | DRAW_EVEN:             i.eventName = "BPL_L4 [E]"; break;
-                case BPL_L4 | DRAW_ODD | DRAW_EVEN:  i.eventName = "BPL_L4 [OE]"; break;
-                case BPL_L5:                         i.eventName = "BPL_L5"; break;
-                case BPL_L5 | DRAW_ODD:              i.eventName = "BPL_L5 [O]"; break;
-                case BPL_L5 | DRAW_EVEN:             i.eventName = "BPL_L5 [E]"; break;
-                case BPL_L5 | DRAW_ODD | DRAW_EVEN:  i.eventName = "BPL_L5 [OE]"; break;
-                case BPL_L6:                         i.eventName = "BPL_L6"; break;
-                case BPL_L6 | DRAW_ODD:              i.eventName = "BPL_L6 [O]"; break;
-                case BPL_L6 | DRAW_EVEN:             i.eventName = "BPL_L6 [E]"; break;
-                case BPL_L6 | DRAW_ODD | DRAW_EVEN:  i.eventName = "BPL_L6 [OE]"; break;
-                case BPL_H1:                         i.eventName = "BPL_H1"; break;
-                case BPL_H1 | DRAW_ODD:              i.eventName = "BPL_H1 [O]"; break;
-                case BPL_H1 | DRAW_EVEN:             i.eventName = "BPL_H1 [E]"; break;
-                case BPL_H1 | DRAW_ODD | DRAW_EVEN:  i.eventName = "BPL_H1 [OE]"; break;
-                case BPL_H2:                         i.eventName = "BPL_H2"; break;
-                case BPL_H2 | DRAW_ODD:              i.eventName = "BPL_H2 [O]"; break;
-                case BPL_H2 | DRAW_EVEN:             i.eventName = "BPL_H2 [E]"; break;
-                case BPL_H2 | DRAW_ODD | DRAW_EVEN:  i.eventName = "BPL_H2 [OE]"; break;
-                case BPL_H3:                         i.eventName = "BPL_H3"; break;
-                case BPL_H3 | DRAW_ODD:              i.eventName = "BPL_H3 [O]"; break;
-                case BPL_H3 | DRAW_EVEN:             i.eventName = "BPL_H3 [E]"; break;
-                case BPL_H3 | DRAW_ODD | DRAW_EVEN:  i.eventName = "BPL_H3 [OE]"; break;
-                case BPL_H4:                         i.eventName = "BPL_H4"; break;
-                case BPL_H4 | DRAW_ODD:              i.eventName = "BPL_H4 [O]"; break;
-                case BPL_H4 | DRAW_EVEN:             i.eventName = "BPL_H4 [E]"; break;
-                case BPL_H4 | DRAW_ODD | DRAW_EVEN:  i.eventName = "BPL_H4 [OE]"; break;
-                case BPL_EOL:                        i.eventName = "BPL_EOL"; break;
-                case BPL_EOL | DRAW_ODD:             i.eventName = "BPL_EOL [O]"; break;
-                case BPL_EOL | DRAW_EVEN:            i.eventName = "BPL_EOL [E]"; break;
-                case BPL_EOL | DRAW_ODD | DRAW_EVEN: i.eventName = "BPL_EOL [OE]"; break;
-                default:                             i.eventName = "*** INVALID ***"; break;
+                case 0:                    i.eventName = "none"; break;
+                case DRAW_ODD:             i.eventName = "BPL [O]"; break;
+                case DRAW_EVEN:            i.eventName = "BPL [E]"; break;
+                case DRAW_ODD | DRAW_EVEN: i.eventName = "BPL [OE]"; break;
+                case BPL_L1:               i.eventName = "BPL_L1"; break;
+                case BPL_L1 | DRAW_ODD:    i.eventName = "BPL_L1 [O]"; break;
+                case BPL_L1 | DRAW_EVEN:   i.eventName = "BPL_L1 [E]"; break;
+                case BPL_L1 | DRAW_BOTH:   i.eventName = "BPL_L1 [OE]"; break;
+                case BPL_L2:               i.eventName = "BPL_L2"; break;
+                case BPL_L2 | DRAW_ODD:    i.eventName = "BPL_L2 [O]"; break;
+                case BPL_L2 | DRAW_EVEN:   i.eventName = "BPL_L2 [E]"; break;
+                case BPL_L2 | DRAW_BOTH:   i.eventName = "BPL_L2 [OE]"; break;
+                case BPL_L3:               i.eventName = "BPL_L3"; break;
+                case BPL_L3 | DRAW_ODD:    i.eventName = "BPL_L3 [O]"; break;
+                case BPL_L3 | DRAW_EVEN:   i.eventName = "BPL_L3 [E]"; break;
+                case BPL_L3 | DRAW_BOTH:   i.eventName = "BPL_L3 [OE]"; break;
+                case BPL_L4:               i.eventName = "BPL_L4"; break;
+                case BPL_L4 | DRAW_ODD:    i.eventName = "BPL_L4 [O]"; break;
+                case BPL_L4 | DRAW_EVEN:   i.eventName = "BPL_L4 [E]"; break;
+                case BPL_L4 | DRAW_BOTH:   i.eventName = "BPL_L4 [OE]"; break;
+                case BPL_L5:               i.eventName = "BPL_L5"; break;
+                case BPL_L5 | DRAW_ODD:    i.eventName = "BPL_L5 [O]"; break;
+                case BPL_L5 | DRAW_EVEN:   i.eventName = "BPL_L5 [E]"; break;
+                case BPL_L5 | DRAW_BOTH:   i.eventName = "BPL_L5 [OE]"; break;
+                case BPL_L6:               i.eventName = "BPL_L6"; break;
+                case BPL_L6 | DRAW_ODD:    i.eventName = "BPL_L6 [O]"; break;
+                case BPL_L6 | DRAW_EVEN:   i.eventName = "BPL_L6 [E]"; break;
+                case BPL_L6 | DRAW_BOTH:   i.eventName = "BPL_L6 [OE]"; break;
+                case BPL_H1:               i.eventName = "BPL_H1"; break;
+                case BPL_H1 | DRAW_ODD:    i.eventName = "BPL_H1 [O]"; break;
+                case BPL_H1 | DRAW_EVEN:   i.eventName = "BPL_H1 [E]"; break;
+                case BPL_H1 | DRAW_BOTH:   i.eventName = "BPL_H1 [OE]"; break;
+                case BPL_H2:               i.eventName = "BPL_H2"; break;
+                case BPL_H2 | DRAW_ODD:    i.eventName = "BPL_H2 [O]"; break;
+                case BPL_H2 | DRAW_EVEN:   i.eventName = "BPL_H2 [E]"; break;
+                case BPL_H2 | DRAW_BOTH:   i.eventName = "BPL_H2 [OE]"; break;
+                case BPL_H3:               i.eventName = "BPL_H3"; break;
+                case BPL_H3 | DRAW_ODD:    i.eventName = "BPL_H3 [O]"; break;
+                case BPL_H3 | DRAW_EVEN:   i.eventName = "BPL_H3 [E]"; break;
+                case BPL_H3 | DRAW_BOTH:   i.eventName = "BPL_H3 [OE]"; break;
+                case BPL_H4:               i.eventName = "BPL_H4"; break;
+                case BPL_H4 | DRAW_ODD:    i.eventName = "BPL_H4 [O]"; break;
+                case BPL_H4 | DRAW_EVEN:   i.eventName = "BPL_H4 [E]"; break;
+                case BPL_H4 | DRAW_BOTH:   i.eventName = "BPL_H4 [OE]"; break;
+                case BPL_EOL:              i.eventName = "BPL_EOL"; break;
+                case BPL_EOL | DRAW_ODD:   i.eventName = "BPL_EOL [O]"; break;
+                case BPL_EOL | DRAW_EVEN:  i.eventName = "BPL_EOL [E]"; break;
+                case BPL_EOL | DRAW_BOTH:  i.eventName = "BPL_EOL [OE]"; break;
+                default:                   i.eventName = "*** INVALID ***"; break;
             }
             break;
 

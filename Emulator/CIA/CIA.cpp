@@ -541,8 +541,7 @@ CIA::executeOneCycle()
                 
 			} else {
                 
-				// (8) : Toggle PB6 (copy bit 6 from PB67Toggle)
-				// PB67TimerOut = (PB67TimerOut & 0xBF) | (PB67Toggle & 0x40);
+				// (8) : Toggle PB6
                 pb67TimerOut ^= 0x40;
 			}
 		}
@@ -569,8 +568,7 @@ CIA::executeOneCycle()
                 
 			} else {
                 
-				// (8) : Toggle PB7 (copy bit 7 from PB67Toggle)
-				// PB67TimerOut = (PB67TimerOut & 0x7F) | (PB67Toggle & 0x80);
+				// (8) : Toggle PB7
                 pb67TimerOut ^= 0x80;
 			}
 		}
@@ -691,12 +689,10 @@ CIA::sleep()
     // CIAs with stopped timers can sleep forever
     if (!(feed & CIACountA0)) sleepA = INT64_MAX;
     if (!(feed & CIACountB0)) sleepB = INT64_MAX;
-    Cycle sleep = std::min(sleepA, sleepB);
     
     // ZZzzz
-    // debug("ZZzzzz: clock = %lld A = %d B = %d sleepA = %lld sleepB = %lld\n", clock, counterA, counterB, sleepA, sleepB);
     sleepCycle = clock;
-    wakeUpCycle = sleep;
+    wakeUpCycle = std::min(sleepA, sleepB);;
     sleeping = true;
     tiredness = 0;
 }
@@ -726,12 +722,10 @@ CIA::wakeUp(Cycle targetCycle)
         if (feed & CIACountA0) {
             assert(counterA >= AS_CIA_CYCLES(missedCycles));
             counterA -= AS_CIA_CYCLES(missedCycles);
-            // debug("Making up %d timer A cycles\n", AS_CIA_CYCLES(missedCycles));
         }
         if (feed & CIACountB0) {
             assert(counterB >= AS_CIA_CYCLES(missedCycles));
             counterB -= AS_CIA_CYCLES(missedCycles);
-            // debug("Making up %d timer B cycles\n", AS_CIA_CYCLES(missedCycles));
         }
         
         idleCycles += missedCycles;

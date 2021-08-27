@@ -46,6 +46,7 @@
  */
 #define DRAW_ODD                0b001
 #define DRAW_EVEN               0b010
+#define DRAW_BOTH               0b011
 
 class Agnus : public SubComponent {
     
@@ -535,12 +536,12 @@ public:
     isize chipRamLimit();
         
     // Returns the line in which the VERTB interrupt gets triggered
-    int vStrobeLine() { return isECS() || MIMIC_UAE ? 0 : 1; }
+    isize vStrobeLine() { return isECS() || MIMIC_UAE ? 0 : 1; }
     
     // Returns the connected bits in DDFSTRT / DDFSTOP
     u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }
     
-    /* Returns true if Agnus is able to access to the Slow Ram area. The ECS
+    /* Returns true if Agnus is able to access the Slow Ram area. The ECS
      * revision of Agnus has a special feature that makes Slow Ram accessible
      * for DMA. In the 512 MB Chip Ram + 512 Slow Ram configuration, the Slow
      * Ram is mapped into the second Chip Ram segment. The OCS Agnus does not

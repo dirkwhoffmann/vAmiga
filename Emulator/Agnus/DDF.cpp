@@ -14,7 +14,7 @@
 template <bool hires> void
 DDF<hires>::compute(isize ddfstrt, isize ddfstop)
 {
-    if (hires) {
+    if constexpr (hires) {
                
         // Compute the beginning of the fetch window
         strt = ddfstrt & ~0b11;
@@ -24,7 +24,7 @@ DDF<hires>::compute(isize ddfstrt, isize ddfstop)
         
         // Compute the end of the DDF window
         stop = std::min(strt + 8 * fetchUnits, (isize)0xE0);
-
+        
     } else {
         
         // Compute the beginning of the fetch window
