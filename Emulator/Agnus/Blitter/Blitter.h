@@ -106,7 +106,7 @@ class Blitter : public SubComponent
     u16 bltpc;
 
     // Blitter state
-    int iteration;
+    isize iteration;
     
     // Counters tracking the coordinate of the blit window
     u16 xCounter;
@@ -157,11 +157,11 @@ class Blitter : public SubComponent
 private:
 
     // Counter for tracking the remaining words to process
-    int remaining;
+    isize remaining;
 
     // Debug counters
-    int copycount;
-    int linecount;
+    isize copycount;
+    isize linecount;
 
     // Debug checksums
     u32 check1;
@@ -169,8 +169,8 @@ private:
 
 public:
     
-    // Experimental
-    u8 memguard[KB(512)] = {};
+    // Optional storage for recording memory locations if BLT_GUARD is enabled
+    u8 *memguard = nullptr;
     
  
     //
@@ -180,7 +180,8 @@ public:
 public:
     
     Blitter(Amiga& ref);
-
+    ~Blitter();
+    
 private:
     
     void initFastBlitter();

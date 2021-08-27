@@ -16,6 +16,9 @@
 
 Blitter::Blitter(Amiga& ref) : SubComponent(ref)
 {
+    // Allocate memory if accessed memory cells should be tracked
+    if constexpr (BLT_GUARD) memguard = new u8[KB(512)]();
+
     // Initialize fill pattern tables    
     for (isize carryIn = 0; carryIn < 2; carryIn++) {
         
@@ -39,9 +42,14 @@ Blitter::Blitter(Amiga& ref) : SubComponent(ref)
     }
 }
 
+Blitter::~Blitter()
+{
+    if (memguard) delete [] memguard;
+}
+
 void
 Blitter::_initialize()
-{    
+{
     initFastBlitter();
     initSlowBlitter();    
 }
@@ -564,15 +572,15 @@ Blitter::beginBlit()
 {
     auto level = config.accuracy;
 
-    if (BLT_GUARD) std::memset(memguard, 0, sizeof(memguard));
+    if constexpr (BLT_GUARD) std::memset((void *)memguard, 0, KB(512));
     
     if (bltconLINE()) {
 
-        if (BLT_CHECKSUM) {
+        if constexpr (BLT_CHECKSUM) {
             
             linecount++;
             check1 = check2 = util::fnv_1a_init32();
-            msg("Line %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
+            msg("Line %zd (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
                 linecount, bltsizeH, bltsizeV,
                 bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                 bltcon0,
@@ -587,11 +595,11 @@ Blitter::beginBlit()
 
     } else {
 
-        if (BLT_CHECKSUM) {
+        if constexpr (BLT_CHECKSUM) {
             
             copycount++;
             check1 = check2 = util::fnv_1a_init32();
-            msg("Blit %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
+            msg("Blit %zd (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
                 copycount,
                 bltsizeH, bltsizeV,
                 bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
@@ -666,7 +674,7 @@ Blitter::endBlit()
     
     running = false;
     
-    if (BLT_GUARD) std::memset(memguard, 0, sizeof(memguard));
+    if constexpr (BLT_GUARD) std::memset((void *)memguard, 0, KB(512));
     
     // Clear the Blitter slot
     agnus.cancel<SLOT_BLT>();
