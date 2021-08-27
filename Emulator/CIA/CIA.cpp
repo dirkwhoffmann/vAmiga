@@ -232,7 +232,7 @@ CIA::emulateFallingEdgeOnFlagPin()
     icr |= 0x10;
     
     if (imr & 0x10) {
-        triggerFlagPinIrq();
+        triggerFlagPinIrq(&delay);
     }
 }
 
@@ -284,53 +284,53 @@ CIA::emulateFallingEdgeOnCntPin()
 }
 
 void
-CIA::reloadTimerA()
+CIA::reloadTimerA(u64 *delay)
 {
     counterA = latchA;
     
     // Make sure the timer waits for one cycle before it continues to count
-    delay &= ~CIACountA2;
+    *delay &= ~CIACountA2;
 }
 
 void
-CIA::reloadTimerB()
+CIA::reloadTimerB(u64 *delay)
 {
     counterB = latchB;
     
     // Make sure the timer waits for one cycle before it continues to count
-    delay &= ~CIACountB2;
+    *delay &= ~CIACountB2;
 }
 
 void
-CIA::triggerTimerIrq()
+CIA::triggerTimerIrq(u64 *delay)
 {
     trace(CIA_DEBUG, "triggerTimerIrq()\n");
-    delay |= (delay & CIAReadIcr0) ? CIASetInt0 : CIASetInt1;
-    delay |= (delay & CIAReadIcr0) ? CIASetIcr0 : CIASetIcr1;
+    *delay |= (*delay & CIAReadIcr0) ? CIASetInt0 : CIASetInt1;
+    *delay |= (*delay & CIAReadIcr0) ? CIASetIcr0 : CIASetIcr1;
 }
 
 void
-CIA::triggerTodIrq()
+CIA::triggerTodIrq(u64 *delay)
 {
     trace(CIA_DEBUG, "triggerTodIrq()\n");
-    delay |= CIASetInt0;
-    delay |= CIASetIcr0;
+    *delay |= CIASetInt0;
+    *delay |= CIASetIcr0;
 }
 
 void
-CIA::triggerFlagPinIrq()
+CIA::triggerFlagPinIrq(u64 *delay)
 {
     trace(CIA_DEBUG, "triggerFlagPinIrq()\n");
-    delay |= CIASetInt0;
-    delay |= CIASetIcr0;
+    *delay |= CIASetInt0;
+    *delay |= CIASetIcr0;
 }
 
 void
-CIA::triggerSerialIrq()
+CIA::triggerSerialIrq(u64 *delay)
 {
     trace(CIA_DEBUG, "triggerSerialIrq()\n");
-    delay |= CIASetInt0;
-    delay |= CIASetIcr0;
+    *delay |= CIASetInt0;
+    *delay |= CIASetIcr0;
 }
 
 void
@@ -344,8 +344,9 @@ void
 CIA::executeOneCycle()
 {
     clock += CIA_CYCLES(1);
-    
-    // debug("Executing CIA: new clock = %lld\n", clock);
+ 
+    // Make a local copy for speed
+    u64 delay = this->delay;
     
     u64 oldDelay = delay;
     u64 oldFeed  = feed;
@@ -390,25 +391,23 @@ CIA::executeOneCycle()
 	// | one shot      |---X->| oneShotA0 |--
 	// -----------------      -------------
 
-				
+    //
 	// Timer A
-
-	// Decrement counter
-
-	if (delay & CIACountA3)
-		counterA--; // (1)
+    //
+    
+	// (1) : Decrement counter
+	if (delay & CIACountA3) counterA--;
 	
-	// Check underflow condition
-	bool timerAOutput = (counterA == 0 && (delay & CIACountA2)); // (2)
+	// (2) : Check underflow condition
+	bool timerAOutput = (counterA == 0 && (delay & CIACountA2));
 	
 	if (timerAOutput) {
-        
-        trace(CIA_DEBUG, "Timer A underflow\n");
-        
+                
         icrAck &= ~0x01;
         
-		// Stop timer in one shot mode
-		if ((delay | feed) & CIAOneShotA0) { // (3)
+		// (3) Stop timer in one shot mode
+		if ((delay | feed) & CIAOneShotA0) {
+            
 			cra &= ~0x01;
 			delay &= ~(CIACountA2 | CIACountA1 | CIACountA0);
 			feed &= ~CIACountA0;
@@ -416,6 +415,7 @@ CIA::executeOneCycle()
 		
 		// Timer A output to timer B in cascade mode
 		if ((crb & 0x61) == 0x41 || ((crb & 0x61) == 0x61 && cnt)) {
+            
 			delay |= CIACountB1;
 		}
         
@@ -423,28 +423,26 @@ CIA::executeOneCycle()
 		delay |= CIALoadA1;
 	}
     
-	// Load counter
-	if (delay & CIALoadA1) // (4)
-		reloadTimerA(); 
+	// (4) : Load counter
+	if (delay & CIALoadA1) reloadTimerA(&delay);
 	
+    //
 	// Timer B
-	
-	// Decrement counter
-	if (delay & CIACountB3) {
-		counterB--; // (1)
-    } 
+	//
+    
+	// (1) : Decrement counter
+	if (delay & CIACountB3) counterB--;
 
-	// Check underflow condition
-	bool timerBOutput = (counterB == 0 && (delay & CIACountB2)); // (2)
+	// (2) : Check underflow condition
+	bool timerBOutput = (counterB == 0 && (delay & CIACountB2));
 	
 	if (timerBOutput) {
 				
-        // debug("Timer B underflow\n");
-
         icrAck &= ~0x02;
         
-		// Stop timer in one shot mode
-		if ((delay | feed) & CIAOneShotB0) { // (3)
+		// (3) : Stop timer in one shot mode
+		if ((delay | feed) & CIAOneShotB0) {
+            
 			crb &= ~0x01;
 			delay &= ~(CIACountB2 | CIACountB1 | CIACountB0);
 			feed &= ~CIACountB0;
@@ -452,9 +450,8 @@ CIA::executeOneCycle()
 		delay |= CIALoadB1;
 	}
 	
-	// Load counter
-	if (delay & CIALoadB1) // (4)
-		reloadTimerB();
+	// (4) : Load counter
+	if (delay & CIALoadB1) reloadTimerB(&delay);
 		
     //
     // Serial register
@@ -465,8 +462,9 @@ CIA::executeOneCycle()
     }
     
     // Generate clock signal
-    if (timerAOutput && (cra & 0x40) /* output mode */ ) {
+    if (timerAOutput && (cra & 0x40)) {
         
+        // output mode
         if (serCounter) {
             
             // Toggle serial clock signal
@@ -486,13 +484,17 @@ CIA::executeOneCycle()
     }
     
     // Run shift register with generated clock signal
-    if (serCounter && (cra & 0x40) /* output mode */) {
-        if ((delay & (CIASerClk2 | CIASerClk1)) == CIASerClk1) {      // Positive edge
-            if (serCounter == 1) {
-                delay |= CIASerInt0; // Trigger interrupt
-            }
+    if (serCounter && (cra & 0x40)) {
+        
+        // Output mode
+        if ((delay & (CIASerClk2 | CIASerClk1)) == CIASerClk1) {
+            
+            // Positive edge
+            if (serCounter == 1) delay |= CIASerInt0;
         }
-        else if ((delay & (CIASerClk2 | CIASerClk1)) == CIASerClk2) { // Negative edge
+        else if ((delay & (CIASerClk2 | CIASerClk1)) == CIASerClk2) {
+            
+            // Negative edge
             serCounter--;
         }
     }
@@ -510,7 +512,7 @@ CIA::executeOneCycle()
 	// timerA  | Flip ---------------     |       (7)     |  |              |
     // output -X----->| bPB67Toggle |---->| 0x04: toggle  |  | bCRA & 0x02  |
 	//            (5) |  ^ 0x40     |     |       (8)     |  | output mode  |-> PB6 out
-	//                ---------------     -----------------  |              |
+	//                ---------------     -----------------  |     (6)      |
 	//                       ^ Set        -----------------  | 0x00 (port)  |
 	//                       |            | port B bit 6  |->|              |
 	// ----------------- 0->1|            |    output     |  ----------------
@@ -518,42 +520,56 @@ CIA::executeOneCycle()
 	// | timer A start |
 	// -----------------
 
+    //
 	// Timer A output to PB6
-	
+    //
+    
 	if (timerAOutput) {
 		
-		pb67Toggle ^= 0x40; // (5) toggle underflow counter bit
+        // (5) : Toggle underflow counter bit
+		pb67Toggle ^= 0x40;
 		
-		if (cra & 0x02) { // (6)
+        // (6)
+		if (cra & 0x02) {
 
-			if ((cra & 0x04) == 0) { 
-				// (7) set PB6 high for one clock cycle
+			if ((cra & 0x04) == 0) {
+                
+				// (7) : Set PB6 high for one clock cycle
 				pb67TimerOut |= 0x40;
 				delay |= CIAPB6Low0;
 				delay &= ~CIAPB6Low1;
-			} else { 
-				// (8) toggle PB6 (copy bit 6 from PB67Toggle)
+                
+			} else {
+                
+				// (8) : Toggle PB6 (copy bit 6 from PB67Toggle)
 				// PB67TimerOut = (PB67TimerOut & 0xBF) | (PB67Toggle & 0x40);
                 pb67TimerOut ^= 0x40;
 			}
 		}
 	}
 
+    //
 	// Timer B output to PB7
-	
+	//
+    
 	if (timerBOutput) {
 		
-		pb67Toggle ^= 0x80; // (5) toggle underflow counter bit
+        // (5) : Toggle underflow counter bit
+		pb67Toggle ^= 0x80;
 	
-		if (crb & 0x02) { // (6)
+        // (6)
+		if (crb & 0x02) {
 		
 			if ((crb & 0x04) == 0) {
-				// (7) set PB7 high for one clock cycle
+                
+				// (7) : Set PB7 high for one clock cycle
 				pb67TimerOut |= 0x80;
 				delay |= CIAPB7Low0;
 				delay &= ~CIAPB7Low1;
+                
 			} else {
-				// (8) toggle PB7 (copy bit 7 from PB67Toggle)
+                
+				// (8) : Toggle PB7 (copy bit 7 from PB67Toggle)
 				// PB67TimerOut = (PB67TimerOut & 0x7F) | (PB67Toggle & 0x80);
                 pb67TimerOut ^= 0x80;
 			}
@@ -561,11 +577,8 @@ CIA::executeOneCycle()
 	}
 	
 	// Set PB67 back to low
-	if (delay & CIAPB6Low1)
-		pb67TimerOut &= ~0x40;
-
-	if (delay & CIAPB7Low1)
-		pb67TimerOut &= ~0x80;
+    if (delay & CIAPB6Low1) { pb67TimerOut &= ~0x40; }
+    if (delay & CIAPB7Low1) { pb67TimerOut &= ~0x80; }
 
 	
 	//
@@ -601,24 +614,19 @@ CIA::executeOneCycle()
 	//                                              |
 	//                                             Phi2
     
-	if (timerAOutput) { // (9)
-		icr |= 0x01;
-	}
-
-    if (timerBOutput) { // (10)
-        icr |= 0x02;
-    }
+    if (timerAOutput) { icr |= 0x01; } // (9)
+    if (timerBOutput) { icr |= 0x02; } // (10)
     
-    // Check for timer interrupt
-    if ((timerAOutput && (imr & 0x01)) || (timerBOutput && (imr & 0x02))) { // (11)
-        triggerTimerIrq();
+    // (11) : Check for timer interrupt
+    if ((timerAOutput && (imr & 0x01)) || (timerBOutput && (imr & 0x02))) {
+        triggerTimerIrq(&delay);
     }
 
     // Check for TOD interrupt
     if (delay & CIATODInt0) {
         icr |= 0x04;
         if (imr & 0x04) {
-            triggerTodIrq();
+            triggerTodIrq(&delay);
         }
     }
     
@@ -626,7 +634,7 @@ CIA::executeOneCycle()
     if (delay & CIASerInt2) {
         icr |= 0x08;
         if (imr & 0x08) {
-            triggerSerialIrq();
+            triggerSerialIrq(&delay);
         }
     }
     
@@ -651,20 +659,22 @@ CIA::executeOneCycle()
         }
     }
 
-	// Move delay flags left and feed in new bits
-	delay = ((delay << 1) & CIADelayMask) | feed;
+    // Move delay flags left and feed in new bits
+    delay = ((delay << 1) & CIADelayMask) | feed;
     
-    // Go into idle state if possible
+    // Get tired if nothing has happened in this cycle
     if (oldDelay == delay && oldFeed == feed) tiredness++; else tiredness = 0;
-  
+    
+    // Write back local copy
+    this->delay = delay;
+
     // Sleep if threshold is reached
     if (tiredness > 8 && !CIA_ON_STEROIDS) {
         sleep();
         scheduleWakeUp();
-        return;
+    } else {
+        scheduleNextExecution();
     }
-    
-    scheduleNextExecution();
 }
 
 void

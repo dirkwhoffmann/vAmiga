@@ -472,14 +472,14 @@ private:
     virtual void releaseInterruptLine() = 0;
     
     // Loads a latched value into timer
-    void reloadTimerA();
-    void reloadTimerB();
+    void reloadTimerA(u64 *delay);
+    void reloadTimerB(u64 *delay);
     
     // Triggers an interrupt (invoked inside executeOneCycle())
-    void triggerTimerIrq();
-    void triggerTodIrq();
-    void triggerFlagPinIrq();
-    void triggerSerialIrq();
+    void triggerTimerIrq(u64 *delay);
+    void triggerTodIrq(u64 *delay);
+    void triggerFlagPinIrq(u64 *delay);
+    void triggerSerialIrq(u64 *delay);
     
     
     //
