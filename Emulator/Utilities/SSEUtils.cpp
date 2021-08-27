@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "SSEUtils.h"
+#include "Macros.h"
 
 namespace util {
 
