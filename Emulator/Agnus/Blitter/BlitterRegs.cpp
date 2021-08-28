@@ -254,7 +254,7 @@ Blitter::setBLTSIZE(u16 value)
     if (!bltsizeH) bltsizeH = 0x0040;
     
     // Warn if the previous Blitter operation is overwritten
-    if (EventID id = scheduler.slot[SLOT_BLT].id) {
+    if (EventID id = scheduler.id[SLOT_BLT]) {
         trace(XFILES, "XFILES: Overwriting Blitter event %lld\n", id);
     }
     

@@ -85,7 +85,17 @@ class Scheduler : public SubComponent {
 public:
     
     // Event slots
-    Event slot[SLOT_COUNT] = { };
+    // Event slot[SLOT_COUNT] = { };
+
+    // Trigger cycle
+    Cycle trigger[SLOT_COUNT] = { };
+
+    // The event identifier
+    EventID id[SLOT_COUNT] = { };
+
+    // An optional data value
+    i64 data[SLOT_COUNT] = { };
+    
     
     // Next trigger cycle
     Cycle nextTrigger = NEVER;
@@ -131,7 +141,10 @@ private:
     {
         worker
         
-        >> slot
+        // >> slot
+        << trigger
+        << id
+        << data
         << nextTrigger;
     }
 
@@ -161,16 +174,16 @@ private:
 public:
     
     // Returns true iff the specified slot contains any event
-    template<EventSlot s> bool hasEvent() const { return slot[s].id != (EventID)0; }
+    template<EventSlot s> bool hasEvent() const { return this->id[s] != (EventID)0; }
     
     // Returns true iff the specified slot contains a specific event
-    template<EventSlot s> bool hasEvent(EventID id) const { return slot[s].id == id; }
+    template<EventSlot s> bool hasEvent(EventID id) const { return this->id[s] == id; }
     
     // Returns true iff the specified slot contains a pending event
-    template<EventSlot s> bool isPending() const { return slot[s].triggerCycle != NEVER; }
+    template<EventSlot s> bool isPending() const { return this->trigger[s] != NEVER; }
     
     // Returns true iff the specified slot contains a due event
-    template<EventSlot s> bool isDue(Cycle cycle) const { return cycle >= slot[s].triggerCycle; }
+    template<EventSlot s> bool isDue(Cycle cycle) const { return cycle >= this->trigger[s]; }
     
     
     //
@@ -181,18 +194,19 @@ public:
     
     template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id)
     {
-        slot[s].triggerCycle = cycle;
-        slot[s].id = id;
+        this->trigger[s] = cycle;
+        this->id[s] = id;
+        
         if (cycle < nextTrigger) nextTrigger = cycle;
         
-        if (isSecondarySlot(s) && cycle < slot[SLOT_SEC].triggerCycle)
-            slot[SLOT_SEC].triggerCycle = cycle;
+        if (isSecondarySlot(s) && cycle < trigger[SLOT_SEC])
+            trigger[SLOT_SEC] = cycle;
     }
     
     template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id, i64 data)
     {
         scheduleAbs<s>(cycle, id);
-        slot[s].data = data;
+        this->data[s] = data;
     }
     
     template<EventSlot s> void scheduleImm(EventID id)
@@ -203,39 +217,39 @@ public:
     template<EventSlot s> void scheduleImm(EventID id, i64 data)
     {
         scheduleAbs<s>(0, id);
-        slot[s].data = data;
+        this->data[s] = data;
     }
         
     template<EventSlot s> void scheduleInc(Cycle cycle, EventID id)
     {
-        scheduleAbs<s>(slot[s].triggerCycle + cycle, id);
+        scheduleAbs<s>(trigger[s] + cycle, id);
     }
     
     template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, i64 data)
     {
-        scheduleAbs<s>(slot[s].triggerCycle + cycle, id);
-        slot[s].data = data;
+        scheduleAbs<s>(trigger[s] + cycle, id);
+        this->data[s] = data;
     }
         
     template<EventSlot s> void rescheduleAbs(Cycle cycle)
     {
-        slot[s].triggerCycle = cycle;
+        trigger[s] = cycle;
         if (cycle < nextTrigger) nextTrigger = cycle;
         
-        if (isSecondarySlot(s) && cycle < slot[SLOT_SEC].triggerCycle)
-            slot[SLOT_SEC].triggerCycle = cycle;
+        if (isSecondarySlot(s) && cycle < trigger[SLOT_SEC])
+            trigger[SLOT_SEC] = cycle;
     }
     
     template<EventSlot s> void rescheduleInc(Cycle cycle)
     {
-        rescheduleAbs<s>(slot[s].triggerCycle + cycle);
+        rescheduleAbs<s>(trigger[s] + cycle);
     }
         
     template<EventSlot s> void cancel()
     {
-        slot[s].id = (EventID)0;
-        slot[s].data = 0;
-        slot[s].triggerCycle = NEVER;
+        id[s] = (EventID)0;
+        data[s] = 0;
+        trigger[s] = NEVER;
     }
     
     //

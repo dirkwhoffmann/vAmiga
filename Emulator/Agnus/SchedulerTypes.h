@@ -14,7 +14,8 @@
 #include "EventTypes.h"
 
 #define isPrimarySlot(s) ((s) <= SLOT_SEC)
-#define isSecondarySlot(s) ((s) > SLOT_SEC && (s) < SLOT_COUNT)
+// #define isSecondarySlot(s) ((s) > SLOT_SEC && (s) < SLOT_COUNT)
+#define isSecondarySlot(s) ((s) > SLOT_SEC)
 
 //
 // Enumerations

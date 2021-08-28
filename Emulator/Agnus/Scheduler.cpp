@@ -27,16 +27,16 @@ Scheduler::_initialize()
 void
 Scheduler::_reset(bool hard)
 {
-    auto insEvent = slot[SLOT_INS].id;
+    auto insEvent = id[SLOT_INS];
     
     RESET_SNAPSHOT_ITEMS(hard)
     
     // Initialize all event slots
     for (isize i = 0; i < SLOT_COUNT; i++) {
         
-        slot[i].triggerCycle = NEVER;
-        slot[i].id = (EventID)0;
-        slot[i].data = 0;
+        trigger[i] = NEVER;
+        id[i] = (EventID)0;
+        data[i] = 0;
     }
     
     // Reschedule the old inspection event if there was one
@@ -113,12 +113,12 @@ Scheduler::inspectSlot(EventSlot nr) const
 {
     assert_enum(EventSlot, nr);
 
-    auto &slot = scheduler.slot;
+    // auto &slot = scheduler.slot;
     auto &i = slotInfo[nr];
-    auto trigger = slot[nr].triggerCycle;
+    auto trigger = this->trigger[nr];
 
     i.slot = nr;
-    i.eventId = slot[nr].id;
+    i.eventId = id[nr];
     i.trigger = trigger;
     i.triggerRel = trigger - agnus.clock;
 
@@ -147,7 +147,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_REG:
             
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case REG_CHANGE:    i.eventName = "REG_CHANGE"; break;
@@ -157,7 +157,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_RAS:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case RAS_HSYNC:     i.eventName = "RAS_HSYNC"; break;
@@ -168,7 +168,7 @@ Scheduler::inspectSlot(EventSlot nr) const
         case SLOT_CIAA:
         case SLOT_CIAB:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
                 case 0:             i.eventName = "none"; break;
                 case CIA_EXECUTE:   i.eventName = "CIA_EXECUTE"; break;
                 case CIA_WAKEUP:    i.eventName = "CIA_WAKEUP"; break;
@@ -178,7 +178,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_BPL:
 
-            switch ((int)slot[nr].id) {
+            switch (id[nr]) {
                 case 0:                    i.eventName = "none"; break;
                 case DRAW_ODD:             i.eventName = "BPL [O]"; break;
                 case DRAW_EVEN:            i.eventName = "BPL [E]"; break;
@@ -233,7 +233,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_DAS:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
                 case 0:             i.eventName = "none"; break;
                 case DAS_REFRESH:   i.eventName = "DAS_REFRESH"; break;
                 case DAS_D0:        i.eventName = "DAS_D0"; break;
@@ -267,7 +267,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_COP:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:                i.eventName = "none"; break;
                 case COP_REQ_DMA:      i.eventName = "COP_REQ_DMA"; break;
@@ -290,7 +290,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_BLT:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case BLT_STRT1:     i.eventName = "BLT_STRT1"; break;
@@ -304,7 +304,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_SEC:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case SEC_TRIGGER:   i.eventName = "SEC_TRIGGER"; break;
@@ -317,7 +317,7 @@ Scheduler::inspectSlot(EventSlot nr) const
         case SLOT_CH2:
         case SLOT_CH3:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case CHX_PERFIN:    i.eventName = "CHX_PERFIN"; break;
@@ -327,7 +327,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_DSK:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case DSK_ROTATE:    i.eventName = "DSK_ROTATE"; break;
@@ -337,7 +337,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_DCH:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case DCH_INSERT:    i.eventName = "DCH_INSERT"; break;
@@ -348,7 +348,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_VBL:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case VBL_STROBE0:   i.eventName = "VBL_STROBE0"; break;
@@ -360,7 +360,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_IRQ:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case IRQ_CHECK:     i.eventName = "IRQ_CHECK"; break;
@@ -370,7 +370,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_IPL:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case IPL_CHANGE:    i.eventName = "IPL_CHANGE"; break;
@@ -380,7 +380,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_KBD:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case KBD_TIMEOUT:   i.eventName = "KBD_TIMEOUT"; break;
@@ -397,7 +397,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_TXD:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case TXD_BIT:       i.eventName = "TXD_BIT"; break;
@@ -407,7 +407,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_RXD:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case RXD_BIT:       i.eventName = "RXD_BIT"; break;
@@ -417,7 +417,7 @@ Scheduler::inspectSlot(EventSlot nr) const
 
         case SLOT_POT:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case POT_DISCHARGE: i.eventName = "POT_DISCHARGE"; break;
@@ -428,7 +428,7 @@ Scheduler::inspectSlot(EventSlot nr) const
             
         case SLOT_INS:
 
-            switch (slot[nr].id) {
+            switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case INS_AMIGA:     i.eventName = "INS_AMIGA"; break;
@@ -486,10 +486,10 @@ Scheduler::executeUntil(Cycle cycle) {
         agnus.serviceDASEvent();
     }
     if (isDue<SLOT_COP>(cycle)) {
-        copper.serviceEvent(slot[SLOT_COP].id);
+        copper.serviceEvent(id[SLOT_COP]);
     }
     if (isDue<SLOT_BLT>(cycle)) {
-        blitter.serviceEvent(slot[SLOT_BLT].id);
+        blitter.serviceEvent(id[SLOT_BLT]);
     }
 
     if (isDue<SLOT_SEC>(cycle)) {
@@ -523,16 +523,16 @@ Scheduler::executeUntil(Cycle cycle) {
             paula.serviceIrqEvent();
         }
         if (isDue<SLOT_KBD>(cycle)) {
-            keyboard.serviceKeyboardEvent(slot[SLOT_KBD].id);
+            keyboard.serviceKeyboardEvent(id[SLOT_KBD]);
         }
         if (isDue<SLOT_TXD>(cycle)) {
-            uart.serviceTxdEvent(slot[SLOT_TXD].id);
+            uart.serviceTxdEvent(id[SLOT_TXD]);
         }
         if (isDue<SLOT_RXD>(cycle)) {
-            uart.serviceRxdEvent(slot[SLOT_RXD].id);
+            uart.serviceRxdEvent(id[SLOT_RXD]);
         }
         if (isDue<SLOT_POT>(cycle)) {
-            paula.servicePotEvent(slot[SLOT_POT].id);
+            paula.servicePotEvent(id[SLOT_POT]);
         }
         if (isDue<SLOT_IPL>(cycle)) {
             paula.serviceIplEvent();
@@ -542,21 +542,17 @@ Scheduler::executeUntil(Cycle cycle) {
         }
 
         // Determine the next trigger cycle for all secondary slots
-        Cycle next = slot[SLOT_SEC + 1].triggerCycle;
+        Cycle next = trigger[SLOT_SEC + 1];
         for (isize i = SLOT_SEC + 2; i < SLOT_COUNT; i++) {
-            if (slot[i].triggerCycle < next) {
-                next = slot[i].triggerCycle;
-            }
+            if (trigger[i] < next) next = trigger[i];
         }
         rescheduleAbs<SLOT_SEC>(next);
     }
 
     // Determine the next trigger cycle for all primary slots
-    Cycle next = slot[0].triggerCycle;
+    Cycle next = trigger[0];
     for (isize i = 1; i <= SLOT_SEC; i++) {
-        if (slot[i].triggerCycle < next) {
-            next = slot[i].triggerCycle;
-        }
+        if (trigger[i] < next) next = trigger[i];
     }
     scheduler.nextTrigger = next;
 }

@@ -15,7 +15,7 @@
 void
 Keyboard::serviceKeyboardEvent(EventID id)
 {
-    u64 nr = scheduler.slot[SLOT_KBD].data;
+    u64 nr = scheduler.data[SLOT_KBD];
 
     switch(id) {
             

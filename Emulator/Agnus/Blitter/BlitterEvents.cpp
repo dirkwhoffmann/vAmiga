@@ -14,7 +14,7 @@
 void
 Blitter::serviceEvent()
 {
-    serviceEvent(scheduler.slot[SLOT_BLT].id);
+    serviceEvent(scheduler.id[SLOT_BLT]);
 }
 
 void
