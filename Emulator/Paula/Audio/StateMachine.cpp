@@ -320,7 +320,7 @@ StateMachine<nr>::move_011_000() {
     trace(AUD_DEBUG, "move_011_000\n");
 
     constexpr EventSlot slot = (EventSlot)(SLOT_CH0 + nr);
-    agnus.cancel<slot>();
+    scheduler.cancel<slot>();
 
     intreq2 = false;
     state = 0b000;

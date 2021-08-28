@@ -33,7 +33,7 @@ Paula::serviceIrqEvent()
     }
 
     // Schedule next event
-    agnus.scheduleAbs<SLOT_IRQ>(next, IRQ_CHECK);
+    scheduler.scheduleAbs<SLOT_IRQ>(next, IRQ_CHECK);
 }
 
 void
@@ -52,7 +52,7 @@ Paula::serviceIplEvent()
     if (repeat) {
         agnus.scheduleRel<SLOT_IPL>(DMA_CYCLES(1), IPL_CHANGE, repeat - 1);
     } else {
-        agnus.cancel<SLOT_IPL>();
+        scheduler.cancel<SLOT_IPL>();
     }
 }
 
@@ -110,7 +110,7 @@ Paula::servicePotEvent(EventID id)
             if (cont) {
                 agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
             } else {
-                agnus.cancel<SLOT_POT>();
+                scheduler.cancel<SLOT_POT>();
             }
             break;
         }

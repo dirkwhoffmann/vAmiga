@@ -677,7 +677,7 @@ Blitter::endBlit()
     if constexpr (BLT_GUARD) std::memset((void *)memguard, 0, KB(512));
     
     // Clear the Blitter slot
-    agnus.cancel<SLOT_BLT>();
+    scheduler.cancel<SLOT_BLT>();
     
     // Dump checksums if requested
     debug(BLT_CHECKSUM,

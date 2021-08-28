@@ -29,7 +29,7 @@ Blitter::serviceEvent(EventID id)
 
             // Postpone the operation if Blitter DMA is disabled
             if (!agnus.bltdma()) {
-                agnus.rescheduleAbs<SLOT_BLT>(NEVER);
+                scheduler.rescheduleAbs<SLOT_BLT>(NEVER);
                 break;
             }
 

@@ -427,7 +427,7 @@ Agnus::scheduleNextDasEvent(isize hpos)
         scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), dasEvent[next]);
         assert(hasEvent<SLOT_DAS>());
     } else {
-        cancel<SLOT_DAS>();
+        scheduler.cancel<SLOT_DAS>();
     }
 }
 
@@ -450,5 +450,5 @@ Agnus::scheduleNextREGEvent()
     Cycle nextTrigger = changeRecorder.trigger();
 
     // Schedule a register change event for that cycle
-    scheduleAbs<SLOT_REG>(nextTrigger, REG_CHANGE);
+    scheduler.scheduleAbs<SLOT_REG>(nextTrigger, REG_CHANGE);
 }

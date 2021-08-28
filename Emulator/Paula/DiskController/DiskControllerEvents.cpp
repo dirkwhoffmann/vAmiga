@@ -29,9 +29,9 @@ DiskController::scheduleFirstDiskEvent()
     dskEventDelay = 0.0;
     
     if (turboMode()) {
-        agnus.cancel<SLOT_DSK>();
+        scheduler.cancel<SLOT_DSK>();
     } else {
-        agnus.scheduleImm<SLOT_DSK>(DSK_ROTATE);
+        scheduler.scheduleImm<SLOT_DSK>(DSK_ROTATE);
     }
 }
 
@@ -48,7 +48,7 @@ DiskController::scheduleNextDiskEvent()
     dskEventDelay -= rounded;
     
     if (turboMode()) {
-        agnus.cancel<SLOT_DSK>();
+        scheduler.cancel<SLOT_DSK>();
     } else {
         agnus.scheduleRel<SLOT_DSK>(DMA_CYCLES(rounded), DSK_ROTATE);
     }
@@ -84,5 +84,5 @@ DiskController::serviceDiskChangeEvent()
             fatalError;
     }
 
-    agnus.cancel<SLOT_DCH>();
+    scheduler.cancel<SLOT_DCH>();
 }

@@ -621,7 +621,7 @@ Amiga::setInspectionTarget(InspectionTarget target, Cycle trigger)
         
         switch(target) {
                 
-            case INSPECTION_NONE:    agnus.cancel<SLOT_INS>(); return;
+            case INSPECTION_NONE:    agnus.scheduler.cancel<SLOT_INS>(); return;
                 
             case INSPECTION_AMIGA:   id = INS_AMIGA; break;
             case INSPECTION_CPU:     id = INS_CPU; break;

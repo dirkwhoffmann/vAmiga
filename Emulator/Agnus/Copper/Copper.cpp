@@ -277,7 +277,7 @@ Copper::scheduleWaitWakeup(bool bfd)
     } else {
 
         // msg("(%d,%d) does not match in this frame\n", trigger.v, trigger.h);
-        agnus.scheduleAbs<SLOT_COP>(NEVER, COP_REQ_DMA);
+        scheduler.scheduleAbs<SLOT_COP>(NEVER, COP_REQ_DMA);
     }
 }
 

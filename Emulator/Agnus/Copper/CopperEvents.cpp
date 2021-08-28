@@ -61,7 +61,7 @@ Copper::serviceEvent(EventID id)
             
             // Check if the Blitter is busy, keep on waiting
             if (agnus.blitter.isActive()) {
-                agnus.scheduleAbs<SLOT_COP>(NEVER, COP_WAIT_BLIT);
+                scheduler.scheduleAbs<SLOT_COP>(NEVER, COP_WAIT_BLIT);
                 break;
             }
             
@@ -119,7 +119,7 @@ Copper::serviceEvent(EventID id)
             reg = (cop1ins & 0x1FE);
 
             // Stop the Copper if address is illegal
-            if (isIllegalAddress(reg)) { agnus.cancel<SLOT_COP>(); break; }
+            if (isIllegalAddress(reg)) { scheduler.cancel<SLOT_COP>(); break; }
 
             // Continue with fetching the new command
             schedule(COP_FETCH);
@@ -183,7 +183,7 @@ Copper::serviceEvent(EventID id)
             
             // Check if we need to wait for the Blitter
             if (!getBFD() && agnus.blitter.isActive()) {
-                agnus.scheduleAbs<SLOT_COP>(NEVER, COP_WAIT_BLIT);
+                scheduler.scheduleAbs<SLOT_COP>(NEVER, COP_WAIT_BLIT);
                 break;
             }
             

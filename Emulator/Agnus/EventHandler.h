@@ -60,6 +60,7 @@ template<EventSlot s> bool isDue(Cycle cycle) const { return cycle >= scheduler.
 
 public:
 
+/*
 template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id)
 {
     scheduler.slot[s].triggerCycle = cycle;
@@ -86,18 +87,19 @@ template<EventSlot s> void scheduleImm(EventID id, i64 data)
     scheduleAbs<s>(0, id);
     scheduler.slot[s].data = data;
 }
+*/
 
 template<EventSlot s> void scheduleRel(Cycle cycle, EventID id)
 {
-    scheduleAbs<s>(clock + cycle, id);
+    scheduler.scheduleAbs<s>(clock + cycle, id);
 }
 
 template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, i64 data)
 {
-    scheduleAbs<s>(clock + cycle, id);
-    scheduler.slot[s].data = data;
+    scheduler.scheduleAbs<s>(clock + cycle, id, data);
 }
 
+/*
 template<EventSlot s> void scheduleInc(Cycle cycle, EventID id)
 {
     scheduleAbs<s>(scheduler.slot[s].triggerCycle + cycle, id);
@@ -108,17 +110,19 @@ template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, i64 data)
     scheduleAbs<s>(scheduler.slot[s].triggerCycle + cycle, id);
     scheduler.slot[s].data = data;
 }
+*/
 
 template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id)
 {
-    scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
+    scheduler.scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
 }
 
 template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id, i64 data)
 {
-    scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
+    scheduler.scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
 }
 
+/*
 template<EventSlot s> void rescheduleAbs(Cycle cycle)
 {
     scheduler.slot[s].triggerCycle = cycle;
@@ -132,24 +136,26 @@ template<EventSlot s> void rescheduleInc(Cycle cycle)
 {
     rescheduleAbs<s>(scheduler.slot[s].triggerCycle + cycle);
 }
+*/
 
 template<EventSlot s> void rescheduleRel(Cycle cycle)
 {
-    rescheduleAbs<s>(clock + cycle);
+    scheduler.rescheduleAbs<s>(clock + cycle);
 }
 
 template<EventSlot s> void reschedulePos(i16 vpos, i16 hpos)
 {
-    rescheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ));
+    scheduler.rescheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ));
 }
 
+/*
 template<EventSlot s> void cancel()
 {
     scheduler.slot[s].id = (EventID)0;
     scheduler.slot[s].data = 0;
     scheduler.slot[s].triggerCycle = NEVER;
 }
-
+*/
 
 //
 // Scheduling specific events

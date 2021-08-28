@@ -265,7 +265,7 @@ Keyboard::execute()
             if (!queue.isEmpty()) {
                 sendKeyCode(queue.read());
             } else {
-                agnus.cancel<SLOT_KBD>();
+                scheduler.cancel<SLOT_KBD>();
             }
             break;
             
@@ -297,7 +297,7 @@ Keyboard::sendKeyCode(u8 code)
     if (config.accurate) {
         
         // Start with the transmission of the first shift register bit
-        agnus.scheduleImm<SLOT_KBD>(KBD_DAT, 0);
+        scheduler.scheduleImm<SLOT_KBD>(KBD_DAT, 0);
         
     } else {
 
@@ -319,12 +319,12 @@ Keyboard::sendSyncPulse()
     trace(KBD_DEBUG, "sendSyncPulse\n");
     
     if (config.accurate) {
-         
-         agnus.scheduleImm<SLOT_KBD>(KBD_SYNC_DAT0);
-         
-     } else {
-
-         // In simple keyboard mode, send a whole byte
-         sendKeyCode(0xFF);
+        
+        scheduler.scheduleImm<SLOT_KBD>(KBD_SYNC_DAT0);
+        
+    } else {
+        
+        // In simple keyboard mode, send a whole byte
+        sendKeyCode(0xFF);
      }
 }

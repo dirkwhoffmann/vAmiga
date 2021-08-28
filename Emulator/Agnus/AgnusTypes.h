@@ -12,7 +12,7 @@
 #include "Aliases.h"
 #include "BusTypes.h"
 #include "EventTypes.h"
-#include "EventHandlerTypes.h"
+#include "SchedulerTypes.h"
 #include "Reflection.h"
 
 //

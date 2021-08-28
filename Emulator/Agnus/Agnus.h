@@ -66,33 +66,18 @@ class Agnus : public SubComponent {
     
 public:
 
+    Scheduler scheduler = Scheduler(amiga);
     Copper copper = Copper(amiga);
     Blitter blitter = Blitter(amiga);
     DmaDebugger dmaDebugger = DmaDebugger(amiga);
 
-    
-    //
-    // Events
-    //
-    
-public:
-    
-    Scheduler scheduler = Scheduler(amiga);
-    /*
-        // Event slots
-        Event slot[SLOT_COUNT];
-        
-        // Next trigger cycle
-        Cycle nextTrigger = NEVER;
-
-    }
-    */
 
     //
     // Event tables
     //
     
     // Lookup tables
+    // TODO: Move these table to the heap to reduce the memory footprint
     EventID bplDMA[2][7][HPOS_CNT];  // [Hires][No of bitplanes][DMA cycle]
     EventID dasDMA[64][HPOS_CNT];    // [Bits 0 .. 5 of DMACON]
 
@@ -114,7 +99,7 @@ public:
     // Action flags controlling the HSYNC handler
     u64 hsyncActions;
 
-    // Pending register changes (used for emulating change delays)
+    // Pending register changes (used for emulating register delays)
     RegChangeRecorder<8> changeRecorder;
 
     

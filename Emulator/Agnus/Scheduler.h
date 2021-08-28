@@ -9,9 +9,9 @@
 
 #pragma once
 
+#include "SchedulerTypes.h"
 #include "SubComponent.h"
 #include "Event.h"
-#include "EventHandlerTypes.h"
 
 /* About the event scheduler
  *
