@@ -163,38 +163,3 @@ typedef struct
     double bitplaneActivity;
 }
 AgnusStats;
-
-typedef struct
-{
-    EventSlot slot;
-    EventID eventId;
-    const char *eventName;
-
-    // Trigger cycle of the event
-    Cycle trigger;
-    Cycle triggerRel;
-
-    // Trigger relative to the current frame
-    // -1 = earlier frame, 0 = current frame, 1 = later frame
-    long frameRel;
-
-    // The trigger cycle translated to a beam position.
-    long vpos;
-    long hpos;
-}
-EventSlotInfo;
-
-typedef struct
-{
-    Cycle cpuClock;
-    Cycle cpuCycles;
-    Cycle dmaClock;
-    Cycle ciaAClock;
-    Cycle ciaBClock;
-    long frame;
-    long vpos;
-    long hpos;
-
-    EventSlotInfo slotInfo[SLOT_COUNT];
-}
-EventInfo;

@@ -158,7 +158,8 @@ Keyboard::releaseAllKeys()
 void
 Keyboard::wakeUp()
 {
-    if (!agnus.hasEvent<SLOT_KBD>()) {
+    if (!scheduler.hasEvent<SLOT_KBD>()) {
+        
         trace(KBD_DEBUG, "Wake up\n");
         state = KB_SEND;
         execute();

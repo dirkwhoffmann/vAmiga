@@ -566,11 +566,10 @@ Agnus::serviceDASEvent()
 
         case DAS_TICK:
             ciab.tod.increment();
-            // ciab.tod.finishIncrement();
             break;
 
         case DAS_TICK2:
-            // ciab.tod.finishIncrement();
+            // TODO: REMOVE THIS EVENT
             break;
 
         default:
@@ -632,7 +631,7 @@ Agnus::serviceINSEvent()
             
         case INS_EVENTS:
             
-            inspectEvents();
+            scheduler.inspect();
             break;
                         
         default:

@@ -286,49 +286,7 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << tab("DSKPT");
         os << hex(dskpt) << std::endl;
     }
-    
-    if (category & dump::Events) {
         
-        EventInfo eventInfo;
-        inspectEvents(eventInfo);
-            
-        os << std::left << std::setw(10) << "Slot";
-        os << std::left << std::setw(14) << "Event";
-        os << std::left << std::setw(18) << "Trigger position";
-        os << std::left << std::setw(16) << "Trigger cycle" << std::endl;
-        
-        for (isize i = 0; i < 23; i++) {
-
-            EventSlotInfo &info = eventInfo.slotInfo[i];
-            bool willTrigger = info.trigger != NEVER;
-            
-            os << std::left << std::setw(10) << EventSlotEnum::key(info.slot);
-            os << std::left << std::setw(14) << info.eventName;
-            
-            if (willTrigger) {
-                
-                if (info.frameRel == -1) {
-                    os << std::left << std::setw(18) << "previous frame";
-                } else if (info.frameRel > 0) {
-                    os << std::left << std::setw(18) << "other frame";
-                } else {
-                    string vpos = std::to_string(info.vpos);
-                    string hpos = std::to_string(info.hpos);
-                    string pos = "(" + vpos + "," + hpos + ")";
-                    os << std::left << std::setw(18) << pos;
-                }
-
-                if (info.triggerRel == 0) {
-                    os << std::left << std::setw(16) << "due immediately";
-                } else {
-                    string cycle = std::to_string(info.triggerRel / 8);
-                    os << std::left << std::setw(16) << "due in " + cycle + " DMA cycles";
-                }
-            }
-            os << std::endl;
-        }
-    }
-    
     /*
     ss << "\nBPL DMA table:\n\n");
     dumpBplEventTable();

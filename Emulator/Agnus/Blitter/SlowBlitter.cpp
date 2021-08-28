@@ -925,13 +925,13 @@ Blitter::beginSlowCopyBlit()
     agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_COPY_SLOW);
 
     // In debug mode, we execute the whole micro program immediately.
-    // This let's us compare checksums with the fast Blitter.
+    // This let's us compare checksums with the FastBlitter.
     if constexpr (SLOW_BLT_DEBUG) {
         
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
         
-        while (agnus.hasEvent<SLOT_BLT>()) {
+        while (scheduler.hasEvent<SLOT_BLT>()) {
             agnus.busOwner[agnus.pos.h] = BUS_NONE;
             serviceEvent();
         }

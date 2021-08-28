@@ -47,9 +47,39 @@
  * an event is scheduled, the event handler automatically checks if the
  * selected slot is primary or secondary and schedules the SEC_SLOT
  * automatically in the latter case.
+ *
+ * To schedule an event, an event slot, a trigger cycle, and an event id
+ * need to be provided. The trigger cycle is measured in master cycles. It can
+ * be specified in multiple ways:
+ *
+ *   Absolute (Abs):
+ *   The trigger cycle is specified as an absolute value.
+ *
+ *   Immediate (Imm):
+ *   The trigger cycle is the next DMA cycle.
+ *
+ *   Incremental (Inc):
+ *   The trigger cycle is specified relative to the current slot value.
+ *
+ *   Relative (Rel): (Implemented by Agnus)
+ *   The trigger cycle is specified relative to the current DMA clock.
+ *
+ *   Positional (Pos): (Implemented by Agnus)
+ *   The trigger cycle is specified in form of a beam position.
+ *
+ * Events can also be rescheduled or canceled:
+ *
+ *   Rescheduling means that the event ID in the selected event slot
+ *   remains unchanged.
+ *
+ *   Canceling means that the slot is emptied by deleting the setting the
+ *   event ID and the event data to zero and the trigger cycle to NEVER.
  */
 
 class Scheduler : public SubComponent {
+
+    // Result of the latest inspection
+    mutable EventInfo info = {};
 
 public:
     
@@ -76,7 +106,7 @@ public:
 private:
     
     const char *getDescription() const override { return "Scheduler"; }
-    void _dump(dump::Category category, std::ostream& os) const override { };
+    void _dump(dump::Category category, std::ostream& os) const override;
     
     
     //
@@ -108,6 +138,20 @@ private:
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
+    
+    //
+    // Analyzing
+    //
+    
+public:
+    
+    EventInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    EventSlotInfo getSlotInfo(isize nr) const;
+
+private:
+    
+    void inspectSlot(EventInfo &info, EventSlot nr) const;
+    
     
     //
     // Checking events

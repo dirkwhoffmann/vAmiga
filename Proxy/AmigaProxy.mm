@@ -561,12 +561,12 @@ using namespace moira;
 
 - (EventSlotInfo)getEventSlotInfo:(NSInteger)slot
 {
-    return [self agnus]->getEventSlotInfo(slot);
+    return [self agnus]->scheduler.getSlotInfo(slot);
 }
 
 - (EventInfo)getEventInfo
 {
-    return [self agnus]->getEventInfo();
+    return [self agnus]->scheduler.getInfo();
 }
 
 - (AgnusStats)getStats

@@ -54,7 +54,6 @@ class Agnus : public SubComponent {
 
     // Result of the latest inspection
     mutable AgnusInfo info = {};
-    mutable EventInfo eventInfo = {};
 
     // Current workload
     AgnusStats stats = {};
@@ -540,16 +539,16 @@ public:
 public:
     
     AgnusInfo getInfo() const { return AmigaComponent::getInfo(info); }
-    EventInfo getEventInfo() const;
-    EventSlotInfo getEventSlotInfo(isize nr) const;
-    
+
+    /*
 private:
         
     void inspectEvents(EventInfo &info) const;
     void inspectEvents() const { synchronized { inspectEvents(eventInfo); } }
     void inspectEventSlot(EventInfo &info, EventSlot nr) const;
     void inspectEventSlot(EventSlot nr) const { inspectEventSlot(eventInfo, nr); }
-
+    */
+    
 public:
     
     const AgnusStats &getStats() { return stats; }
@@ -906,7 +905,44 @@ private:
 
 
     //
-    // Handling events
+    // Scheduling events
+    //
+    
+public:
+    
+    template<EventSlot s> void scheduleRel(Cycle cycle, EventID id)
+    {
+        scheduler.scheduleAbs<s>(clock + cycle, id);
+    }
+    
+    template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, i64 data)
+    {
+        scheduler.scheduleAbs<s>(clock + cycle, id, data);
+    }
+    
+    template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id)
+    {
+        scheduler.scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
+    }
+    
+    template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id, i64 data)
+    {
+        scheduler.scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
+    }
+    
+    template<EventSlot s> void rescheduleRel(Cycle cycle)
+    {
+        scheduler.rescheduleAbs<s>(clock + cycle);
+    }
+    
+    template<EventSlot s> void reschedulePos(i16 vpos, i16 hpos)
+    {
+        scheduler.rescheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ));
+    }
+
+    
+    //
+    // Servicing events
     //
 
 public:
@@ -922,7 +958,7 @@ private:
     void scheduleStrobe2Event();
 
     //
-    // Class extensions
+    // Class extensions (TODO: MOVE INTO THIS FILE)
     //
 
 #include "EventHandler.h"

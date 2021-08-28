@@ -242,7 +242,7 @@ Blitter::setBLTSIZE(u16 value)
     }
 
     // Execute pending event if the Blitter is still running (Chaosland, #437)
-    if (running && agnus.hasEvent<SLOT_BLT>()) serviceEvent();
+    if (running && scheduler.hasEvent<SLOT_BLT>()) serviceEvent();
     
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // h9 h8 h7 h6 h5 h4 h3 h2 h1 h0 w5 w4 w3 w2 w1 w0
@@ -254,8 +254,9 @@ Blitter::setBLTSIZE(u16 value)
     if (!bltsizeH) bltsizeH = 0x0040;
     
     // Warn if the previous Blitter operation is overwritten
-    trace(XFILES && agnus.hasEvent<SLOT_BLT>(),
-          "XFILES: Overwriting Blitter event %lld\n", agnus.slot[SLOT_BLT].id);
+    if (EventID id = scheduler.slot[SLOT_BLT].id) {
+        trace(XFILES, "XFILES: Overwriting Blitter event %lld\n", id);
+    }
     
     agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_STRT1);
 }
@@ -296,7 +297,7 @@ Blitter::pokeBLTSIZH(u16 value)
     }
 
     // Execute pending event if the Blitter is still running
-    if (running && agnus.hasEvent<SLOT_BLT>()) serviceEvent();
+    if (running && scheduler.hasEvent<SLOT_BLT>()) serviceEvent();
 
     // 15  14  13  12  11  10 09 08 07 06 05 04 03 02 01 00
     //  0   0   0   0   0 w10 w9 w8 w7 w6 w5 w4 w3 w2 w1 w0
@@ -409,7 +410,7 @@ Blitter::pokeDMACON(u16 oldValue, u16 newValue)
     if (!oldBltDma && newBltDma) {
 
         // Perform pending blit operation (if any)
-        if (agnus.hasEvent<SLOT_BLT>(BLT_STRT1)) {
+        if (scheduler.hasEvent<SLOT_BLT>(BLT_STRT1)) {
             agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(0), BLT_STRT1);
         }
     }

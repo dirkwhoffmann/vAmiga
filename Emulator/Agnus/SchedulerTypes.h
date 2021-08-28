@@ -11,6 +11,7 @@
 
 #include "Aliases.h"
 #include "Reflection.h"
+#include "EventTypes.h"
 
 #define isPrimarySlot(s) ((s) <= SLOT_SEC)
 #define isSecondarySlot(s) ((s) > SLOT_SEC && (s) < SLOT_COUNT)
@@ -94,3 +95,42 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
     }
 };
 #endif
+
+//
+// Structures
+//
+
+typedef struct
+{
+    EventSlot slot;
+    EventID eventId;
+    const char *eventName;
+
+    // Trigger cycle of the event
+    Cycle trigger;
+    Cycle triggerRel;
+
+    // Trigger relative to the current frame
+    // -1 = earlier frame, 0 = current frame, 1 = later frame
+    long frameRel;
+
+    // The trigger cycle translated to a beam position.
+    long vpos;
+    long hpos;
+}
+EventSlotInfo;
+
+typedef struct
+{
+    Cycle cpuClock;
+    Cycle cpuCycles;
+    Cycle dmaClock;
+    Cycle ciaAClock;
+    Cycle ciaBClock;
+    long frame;
+    long vpos;
+    long hpos;
+
+    EventSlotInfo slotInfo[SLOT_COUNT];
+}
+EventInfo;
