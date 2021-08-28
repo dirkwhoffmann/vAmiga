@@ -13,6 +13,9 @@
 #include "IO.h"
 #include <iomanip>
 
+EventID Agnus::bplDMA[2][7][HPOS_CNT];
+EventID Agnus::dasDMA[64][HPOS_CNT];
+
 Agnus::Agnus(Amiga& ref) : SubComponent(ref)
 {    
     subComponents = std::vector<AmigaComponent *> {

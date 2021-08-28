@@ -76,9 +76,8 @@ public:
     //
     
     // Lookup tables
-    // TODO: Move these table to the heap to reduce the memory footprint
-    EventID bplDMA[2][7][HPOS_CNT];  // [Hires][No of bitplanes][DMA cycle]
-    EventID dasDMA[64][HPOS_CNT];    // [Bits 0 .. 5 of DMACON]
+    static EventID bplDMA[2][7][HPOS_CNT]; // [Hires][Bitplane][DMA cycle]
+    static EventID dasDMA[64][HPOS_CNT];   // [Bits 0 .. 5 of DMACON]
 
     // Currently scheduled events
     EventID bplEvent[HPOS_CNT];
