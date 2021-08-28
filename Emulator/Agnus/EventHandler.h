@@ -51,16 +51,16 @@
 public:
 
 // Returns true iff the specified slot contains any event
-template<EventSlot s> bool hasEvent() const { return slot[s].id != (EventID)0; }
+template<EventSlot s> bool hasEvent() const { return scheduler.slot[s].id != (EventID)0; }
 
 // Returns true iff the specified slot contains a specific event
-template<EventSlot s> bool hasEvent(EventID id) const { return slot[s].id == id; }
+template<EventSlot s> bool hasEvent(EventID id) const { return scheduler.slot[s].id == id; }
 
 // Returns true iff the specified slot contains a pending event
-template<EventSlot s> bool isPending() const { return slot[s].triggerCycle != NEVER; }
+template<EventSlot s> bool isPending() const { return scheduler.slot[s].triggerCycle != NEVER; }
 
 // Returns true iff the specified slot contains a due event
-template<EventSlot s> bool isDue(Cycle cycle) const { return cycle >= slot[s].triggerCycle; }
+template<EventSlot s> bool isDue(Cycle cycle) const { return cycle >= scheduler.slot[s].triggerCycle; }
 
 
 //
@@ -99,18 +99,18 @@ public:
 
 template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id)
 {
-    slot[s].triggerCycle = cycle;
-    slot[s].id = id;
-    if (cycle < nextTrigger) nextTrigger = cycle;
+    scheduler.slot[s].triggerCycle = cycle;
+    scheduler.slot[s].id = id;
+    if (cycle < scheduler.nextTrigger) scheduler.nextTrigger = cycle;
 
-    if (isSecondarySlot(s) && cycle < slot[SLOT_SEC].triggerCycle)
-        slot[SLOT_SEC].triggerCycle = cycle;
+    if (isSecondarySlot(s) && cycle < scheduler.slot[SLOT_SEC].triggerCycle)
+        scheduler.slot[SLOT_SEC].triggerCycle = cycle;
 }
 
 template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id, i64 data)
 {
     scheduleAbs<s>(cycle, id);
-    slot[s].data = data;
+    scheduler.slot[s].data = data;
 }
 
 template<EventSlot s> void scheduleImm(EventID id)
@@ -121,7 +121,7 @@ template<EventSlot s> void scheduleImm(EventID id)
 template<EventSlot s> void scheduleImm(EventID id, i64 data)
 {
     scheduleAbs<s>(0, id);
-    slot[s].data = data;
+    scheduler.slot[s].data = data;
 }
 
 template<EventSlot s> void scheduleRel(Cycle cycle, EventID id)
@@ -132,18 +132,18 @@ template<EventSlot s> void scheduleRel(Cycle cycle, EventID id)
 template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, i64 data)
 {
     scheduleAbs<s>(clock + cycle, id);
-    slot[s].data = data;
+    scheduler.slot[s].data = data;
 }
 
 template<EventSlot s> void scheduleInc(Cycle cycle, EventID id)
 {
-    scheduleAbs<s>(slot[s].triggerCycle + cycle, id);
+    scheduleAbs<s>(scheduler.slot[s].triggerCycle + cycle, id);
 }
 
 template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, i64 data)
 {
-    scheduleAbs<s>(slot[s].triggerCycle + cycle, id);
-    slot[s].data = data;
+    scheduleAbs<s>(scheduler.slot[s].triggerCycle + cycle, id);
+    scheduler.slot[s].data = data;
 }
 
 template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id)
@@ -158,16 +158,16 @@ template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id, i64 d
 
 template<EventSlot s> void rescheduleAbs(Cycle cycle)
 {
-    slot[s].triggerCycle = cycle;
-    if (cycle < nextTrigger) nextTrigger = cycle;
+    scheduler.slot[s].triggerCycle = cycle;
+    if (cycle < scheduler.nextTrigger) scheduler.nextTrigger = cycle;
     
-     if (isSecondarySlot(s) && cycle < slot[SLOT_SEC].triggerCycle)
-         slot[SLOT_SEC].triggerCycle = cycle;
+     if (isSecondarySlot(s) && cycle < scheduler.slot[SLOT_SEC].triggerCycle)
+         scheduler.slot[SLOT_SEC].triggerCycle = cycle;
 }
 
 template<EventSlot s> void rescheduleInc(Cycle cycle)
 {
-    rescheduleAbs<s>(slot[s].triggerCycle + cycle);
+    rescheduleAbs<s>(scheduler.slot[s].triggerCycle + cycle);
 }
 
 template<EventSlot s> void rescheduleRel(Cycle cycle)
@@ -182,9 +182,9 @@ template<EventSlot s> void reschedulePos(i16 vpos, i16 hpos)
 
 template<EventSlot s> void cancel()
 {
-    slot[s].id = (EventID)0;
-    slot[s].data = 0;
-    slot[s].triggerCycle = NEVER;
+    scheduler.slot[s].id = (EventID)0;
+    scheduler.slot[s].data = 0;
+    scheduler.slot[s].triggerCycle = NEVER;
 }
 
 

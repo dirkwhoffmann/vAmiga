@@ -17,6 +17,7 @@ Agnus::Agnus(Amiga& ref) : SubComponent(ref)
 {    
     subComponents = std::vector<AmigaComponent *> {
         
+        &scheduler,
         &copper,
         &blitter,
         &dmaDebugger
@@ -33,13 +34,13 @@ Agnus::_initialize()
     ptrMask = 0x0FFFFF; // TODO: REMOVE?!
     
     // Wipe out event slots
-    std::memset(slot, 0, sizeof(slot));
+    std::memset(scheduler.slot, 0, sizeof(scheduler.slot));
 }
 
 void
 Agnus::_reset(bool hard)
 {
-    auto insEvent = slot[SLOT_INS].id;
+    auto insEvent = scheduler.slot[SLOT_INS].id;
     
     RESET_SNAPSHOT_ITEMS(hard)
     
@@ -58,9 +59,9 @@ Agnus::_reset(bool hard)
     // Initialize event slots
     for (isize i = 0; i < SLOT_COUNT; i++) {
         
-        slot[i].triggerCycle = NEVER;
-        slot[i].id = (EventID)0;
-        slot[i].data = 0;
+        scheduler.slot[i].triggerCycle = NEVER;
+        scheduler.slot[i].id = (EventID)0;
+        scheduler.slot[i].data = 0;
     }
     
     // Schedule initial events
@@ -707,7 +708,7 @@ Agnus::execute()
     assert(pos.h < HPOS_CNT);
     
     // Process pending events
-    if (nextTrigger <= clock) executeEventsUntil(clock);
+    if (scheduler.nextTrigger <= clock) executeEventsUntil(clock);
 
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);
@@ -740,7 +741,7 @@ Agnus::executeUntil(Cycle targetClock)
     // Compute the number of DMA cycles to execute
     DMACycle dmaCycles = AS_DMA_CYCLES(targetClock - clock);
  
-    if (targetClock < nextTrigger && dmaCycles > 0) {
+    if (targetClock < scheduler.nextTrigger && dmaCycles > 0) {
 
         // Advance directly to the target clock
         clock = targetClock;

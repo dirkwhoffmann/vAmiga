@@ -34,6 +34,8 @@ Agnus::inspectEvents(EventInfo &info) const
 void
 Agnus::inspectEventSlot(EventInfo &info, EventSlot nr) const
 {
+    auto &slot = scheduler.slot;
+
     assert_enum(EventSlot, nr);
     
     EventSlotInfo &i = info.slotInfo[nr];
@@ -454,6 +456,8 @@ Agnus::scheduleNextREGEvent()
 void
 Agnus::executeEventsUntil(Cycle cycle) {
 
+    auto &slot = scheduler.slot;
+
     //
     // Check primary slots
     //
@@ -549,5 +553,5 @@ Agnus::executeEventsUntil(Cycle cycle) {
             next = slot[i].triggerCycle;
         }
     }
-    nextTrigger = next;
+    scheduler.nextTrigger = next;
 }

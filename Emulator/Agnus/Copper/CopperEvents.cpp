@@ -14,7 +14,7 @@
 void
 Copper::serviceEvent()
 {
-    serviceEvent(agnus.slot[SLOT_COP].id);
+    serviceEvent(agnus.scheduler.slot[SLOT_COP].id);
 }
 
 void
@@ -131,11 +131,11 @@ Copper::serviceEvent(EventID id)
             switch (reg) {
                 case 0x88:
                     schedule(COP_JMP1);
-                    agnus.slot[SLOT_COP].data = 1;
+                    agnus.scheduler.slot[SLOT_COP].data = 1;
                     break;
                 case 0x8A:
                     schedule(COP_JMP1);
-                    agnus.slot[SLOT_COP].data = 2;
+                    agnus.scheduler.slot[SLOT_COP].data = 2;
                     break;
                 default:
                     move(reg, cop2ins);
@@ -267,7 +267,7 @@ Copper::serviceEvent(EventID id)
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
-            switchToCopperList((isize)agnus.slot[SLOT_COP].data);
+            switchToCopperList((isize)agnus.scheduler.slot[SLOT_COP].data);
             schedule(COP_FETCH);
             break;
 

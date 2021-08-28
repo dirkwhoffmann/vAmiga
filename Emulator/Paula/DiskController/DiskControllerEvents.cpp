@@ -57,12 +57,12 @@ DiskController::scheduleNextDiskEvent()
 void
 DiskController::serviceDiskChangeEvent()
 {
-    if (agnus.slot[SLOT_DCH].id == EVENT_NONE) return;
+    if (agnus.scheduler.slot[SLOT_DCH].id == EVENT_NONE) return;
     
-    isize n = (isize)agnus.slot[SLOT_DCH].data;
+    isize n = (isize)agnus.scheduler.slot[SLOT_DCH].data;
     assert(n >= 0 && n <= 3);
 
-    switch (agnus.slot[SLOT_DCH].id) {
+    switch (agnus.scheduler.slot[SLOT_DCH].id) {
 
         case DCH_INSERT:
 

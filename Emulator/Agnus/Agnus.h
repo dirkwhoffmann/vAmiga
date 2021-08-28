@@ -17,7 +17,7 @@
 #include "Copper.h"
 #include "DDF.h"
 #include "DmaDebugger.h"
-#include "Event.h"
+#include "EventManager.h"
 #include "Frame.h"
 #include "Memory.h"
 
@@ -78,14 +78,16 @@ public:
     
 public:
     
-    // Event slots
-    Event slot[SLOT_COUNT];
-    
-private:
-    
-    // Next trigger cycle
-    Cycle nextTrigger = NEVER;
-    
+    EventManager scheduler = EventManager(amiga);
+    /*
+        // Event slots
+        Event slot[SLOT_COUNT];
+        
+        // Next trigger cycle
+        Cycle nextTrigger = NEVER;
+
+    }
+    */
 
     //
     // Event tables
@@ -441,8 +443,8 @@ private:
 
         worker
         
-        >> slot
-        << nextTrigger
+        >> scheduler.slot
+        << scheduler.nextTrigger
 
         << bplEvent
         << dasEvent

@@ -141,7 +141,7 @@ Paula::scheduleIrqAbs(IrqSource src, Cycle trigger)
         setIntreq[src] = trigger;
 
     // Schedule the interrupt
-    if (trigger < agnus.slot[SLOT_IRQ].triggerCycle)
+    if (trigger < agnus.scheduler.slot[SLOT_IRQ].triggerCycle)
         agnus.scheduleAbs<SLOT_IRQ>(trigger, IRQ_CHECK);
 }
 

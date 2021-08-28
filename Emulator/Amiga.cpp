@@ -594,7 +594,7 @@ Amiga::overrideOption(Option option, i64 value)
 InspectionTarget
 Amiga::getInspectionTarget() const
 {
-    switch(agnus.slot[SLOT_INS].id) {
+    switch(agnus.scheduler.slot[SLOT_INS].id) {
             
         case EVENT_NONE:  return INSPECTION_NONE;
         case INS_AMIGA:   return INSPECTION_AMIGA;

@@ -20,7 +20,7 @@
 void
 Agnus::serviceVblEvent()
 {
-    switch (slot[SLOT_VBL].id) {
+    switch (scheduler.slot[SLOT_VBL].id) {
 
         case VBL_STROBE0:
             
@@ -85,7 +85,7 @@ Agnus::serviceCIAEvent()
 {
     EventSlot slotNr = (nr == 0) ? SLOT_CIAA : SLOT_CIAB;
 
-    switch(slot[slotNr].id) {
+    switch(scheduler.slot[slotNr].id) {
 
         case CIA_EXECUTE:
             nr ? ciab.executeOneCycle() : ciaa.executeOneCycle();
@@ -177,7 +177,7 @@ Agnus::serviceREGEvent(Cycle until)
 void
 Agnus::serviceBPLEvent()
 {
-    switch ((int)slot[SLOT_BPL].id) {
+    switch (scheduler.slot[SLOT_BPL].id) {
 
         case EVENT_NONE | DRAW_ODD:
             hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
@@ -452,7 +452,7 @@ Agnus::serviceDASEvent()
 {
     assert(slot[SLOT_DAS].id == dasEvent[pos.h]);
 
-    switch (slot[SLOT_DAS].id) {
+    switch (scheduler.slot[SLOT_DAS].id) {
 
         case DAS_REFRESH:
             busOwner[0x01] = BUS_REFRESH;
@@ -584,7 +584,7 @@ Agnus::serviceDASEvent()
 void
 Agnus::serviceINSEvent()
 {    
-    switch (slot[SLOT_INS].id) {
+    switch (scheduler.slot[SLOT_INS].id) {
 
         case INS_AMIGA:
             
@@ -646,7 +646,7 @@ Agnus::serviceINSEvent()
 void
 Agnus::serviceRASEvent()
 {
-    switch (slot[SLOT_RAS].id) {
+    switch (scheduler.slot[SLOT_RAS].id) {
 
         case RAS_HSYNC:
             

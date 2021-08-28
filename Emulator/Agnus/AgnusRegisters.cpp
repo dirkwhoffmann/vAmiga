@@ -477,7 +477,7 @@ Agnus::pokeVPOS(u16 value)
     /* Reschedule a pending VBL event with a trigger cycle that is consistent
      * with the new value of the LOF bit.
      */
-    switch (slot[SLOT_VBL].id) {
+    switch (scheduler.slot[SLOT_VBL].id) {
 
         case VBL_STROBE0: scheduleStrobe0Event(); break;
         case VBL_STROBE1: scheduleStrobe1Event(); break;
