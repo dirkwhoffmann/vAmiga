@@ -32,16 +32,11 @@ Agnus::_initialize()
     resetConfig();
 
     ptrMask = 0x0FFFFF; // TODO: REMOVE?!
-    
-    // Wipe out event slots
-    std::memset(scheduler.slot, 0, sizeof(scheduler.slot));
 }
 
 void
 Agnus::_reset(bool hard)
 {
-    auto insEvent = scheduler.slot[SLOT_INS].id;
-    
     RESET_SNAPSHOT_ITEMS(hard)
     
     // Start with a long frame
@@ -55,15 +50,7 @@ Agnus::_reset(bool hard)
     for (isize i = pos.h; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
     updateBplJumpTable();
     updateDasJumpTable();
-    
-    // Initialize event slots
-    for (isize i = 0; i < SLOT_COUNT; i++) {
         
-        scheduler.slot[i].triggerCycle = NEVER;
-        scheduler.slot[i].id = (EventID)0;
-        scheduler.slot[i].data = 0;
-    }
-    
     // Schedule initial events
     scheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT), RAS_HSYNC);
     scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
@@ -74,10 +61,7 @@ Agnus::_reset(bool hard)
     diskController.scheduleFirstDiskEvent();
     scheduleNextBplEvent();
     scheduleNextDasEvent();
-    
-    // Reschedule the old inspection event if there was one
-    if (insEvent) scheduleAbs<SLOT_INS>(0, insEvent);
-    
+        
     pokeVPOS(0);
 }
 
@@ -708,7 +692,7 @@ Agnus::execute()
     assert(pos.h < HPOS_CNT);
     
     // Process pending events
-    if (scheduler.nextTrigger <= clock) executeEventsUntil(clock);
+    if (scheduler.nextTrigger <= clock) scheduler.executeUntil(clock);
 
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);

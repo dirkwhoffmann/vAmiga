@@ -15,7 +15,7 @@
 void
 Keyboard::serviceKeyboardEvent(EventID id)
 {
-    u64 nr = agnus.scheduler.slot[SLOT_KBD].data;
+    u64 nr = scheduler.slot[SLOT_KBD].data;
 
     switch(id) {
             

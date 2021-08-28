@@ -35,6 +35,7 @@ paula(ref.paula),
 pixelEngine(ref.denise.pixelEngine),
 retroShell(ref.retroShell),
 rtc(ref.rtc),
+scheduler(ref.agnus.scheduler),
 serialPort(ref.serialPort),
 uart(ref.paula.uart),
 zorro(ref.zorro)

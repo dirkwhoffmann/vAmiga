@@ -17,12 +17,9 @@
 #include "Copper.h"
 #include "DDF.h"
 #include "DmaDebugger.h"
-#include "EventManager.h"
+#include "Scheduler.h"
 #include "Frame.h"
 #include "Memory.h"
-
-#define isPrimarySlot(s) ((s) <= SLOT_SEC)
-#define isSecondarySlot(s) ((s) > SLOT_SEC && (s) < SLOT_COUNT)
 
 /* Hsync handler action flags
  *
@@ -49,6 +46,8 @@
 #define DRAW_BOTH               0b011
 
 class Agnus : public SubComponent {
+    
+    friend class Scheduler;
     
     // Current configuration
     AgnusConfig config = {};
@@ -78,7 +77,7 @@ public:
     
 public:
     
-    EventManager scheduler = EventManager(amiga);
+    Scheduler scheduler = Scheduler(amiga);
     /*
         // Event slots
         Event slot[SLOT_COUNT];
@@ -443,9 +442,6 @@ private:
 
         worker
         
-        >> scheduler.slot
-        << scheduler.nextTrigger
-
         << bplEvent
         << dasEvent
         << nextBplEvent

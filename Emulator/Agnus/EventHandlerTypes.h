@@ -12,6 +12,9 @@
 #include "Aliases.h"
 #include "Reflection.h"
 
+#define isPrimarySlot(s) ((s) <= SLOT_SEC)
+#define isSecondarySlot(s) ((s) > SLOT_SEC && (s) < SLOT_COUNT)
+
 //
 // Enumerations
 //

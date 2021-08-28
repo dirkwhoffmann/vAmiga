@@ -33,6 +33,7 @@ class Paula;
 class PixelEngine;
 class RetroShell;
 class RTC;
+class Scheduler;
 class SerialPort;
 class UART;
 class ZorroManager;
@@ -67,6 +68,7 @@ protected:
     PixelEngine &pixelEngine;
     RetroShell &retroShell;
     RTC &rtc;
+    Scheduler &scheduler;
     SerialPort &serialPort;
     UART &uart;
     ZorroManager &zorro;

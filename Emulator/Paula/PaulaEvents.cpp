@@ -48,7 +48,7 @@ Paula::serviceIplEvent()
     iplPipe = (iplPipe << 8) | (iplPipe & 0xFF);
     
     // Reschedule the event until the pipe has been shifted through entirely
-    i64 repeat = agnus.scheduler.slot[SLOT_IPL].data;
+    i64 repeat = scheduler.slot[SLOT_IPL].data;
     if (repeat) {
         agnus.scheduleRel<SLOT_IPL>(DMA_CYCLES(1), IPL_CHANGE, repeat - 1);
     } else {
@@ -65,7 +65,7 @@ Paula::servicePotEvent(EventID id)
 
         case POT_DISCHARGE:
         {
-            if (--agnus.scheduler.slot[SLOT_POT].data) {
+            if (--scheduler.slot[SLOT_POT].data) {
 
                 // Discharge capacitors
                 if (!OUTLY()) chargeY0 = 0.0;
