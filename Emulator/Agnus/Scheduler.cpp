@@ -58,7 +58,7 @@ Scheduler::_dump(dump::Category category, std::ostream& os) const
         
         for (isize i = 0; i < 23; i++) {
             
-            EventSlotInfo &info = this->info.slotInfo[i];
+            EventSlotInfo &info = slotInfo[i];
                         
             os << std::left << std::setw(10) << EventSlotEnum::key(info.slot);
             os << std::left << std::setw(14) << info.eventName;
@@ -103,20 +103,19 @@ Scheduler::_inspect() const
         info.hpos = agnus.pos.h;
         
         for (EventSlot i = 0; i < SLOT_COUNT; i++) {
-            inspectSlot(info, i);
+            inspectSlot(i);
         }
     }
 }
 
 void
-Scheduler::inspectSlot(EventInfo &info, EventSlot nr) const
+Scheduler::inspectSlot(EventSlot nr) const
 {
-    auto &slot = scheduler.slot;
-
     assert_enum(EventSlot, nr);
-    
-    EventSlotInfo &i = info.slotInfo[nr];
-    Cycle trigger = slot[nr].triggerCycle;
+
+    auto &slot = scheduler.slot;
+    auto &i = slotInfo[nr];
+    auto trigger = slot[nr].triggerCycle;
 
     i.slot = nr;
     i.eventId = slot[nr].id;
@@ -455,9 +454,9 @@ Scheduler::getSlotInfo(isize nr) const
 {
     assert_enum(EventSlot, nr);
     
-    if (!isRunning()) inspectSlot(info, nr);
+    if (!isRunning()) inspectSlot(nr);
     
-    synchronized { return info.slotInfo[nr]; }
+    synchronized { return slotInfo[nr]; }
     unreachable;
 }
 

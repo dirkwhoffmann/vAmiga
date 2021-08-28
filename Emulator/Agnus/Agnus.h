@@ -539,18 +539,6 @@ public:
 public:
     
     AgnusInfo getInfo() const { return AmigaComponent::getInfo(info); }
-
-    /*
-private:
-        
-    void inspectEvents(EventInfo &info) const;
-    void inspectEvents() const { synchronized { inspectEvents(eventInfo); } }
-    void inspectEventSlot(EventInfo &info, EventSlot nr) const;
-    void inspectEventSlot(EventSlot nr) const { inspectEventSlot(eventInfo, nr); }
-    */
-    
-public:
-    
     const AgnusStats &getStats() { return stats; }
     
 private:

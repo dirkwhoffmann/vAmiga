@@ -80,6 +80,7 @@ class Scheduler : public SubComponent {
 
     // Result of the latest inspection
     mutable EventInfo info = {};
+    mutable EventSlotInfo slotInfo[SLOT_COUNT];
 
 public:
     
@@ -150,7 +151,7 @@ public:
 
 private:
     
-    void inspectSlot(EventInfo &info, EventSlot nr) const;
+    void inspectSlot(EventSlot nr) const;
     
     
     //

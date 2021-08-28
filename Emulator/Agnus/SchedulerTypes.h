@@ -130,7 +130,5 @@ typedef struct
     long frame;
     long vpos;
     long hpos;
-
-    EventSlotInfo slotInfo[SLOT_COUNT];
 }
 EventInfo;
