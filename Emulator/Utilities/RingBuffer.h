@@ -70,8 +70,10 @@ template <class T, isize capacity> struct RingBuffer
 
     isize begin() const { return r; }
     isize end() const { return w; }
-    static int next(isize i) { return (capacity + i + 1) % capacity; }
-    static int prev(isize i) { return (capacity + i - 1) % capacity; }
+    // static isize next(isize i) { return (capacity + i + 1) % capacity; }
+    // static isize prev(isize i) { return (capacity + i - 1) % capacity; }
+    static isize next(isize i) { return i < capacity - 1 ? i + 1 : 0; }
+    static isize prev(isize i) { return i > 0 ? i - 1 : capacity - 1; }
 
 
     //
@@ -82,7 +84,7 @@ template <class T, isize capacity> struct RingBuffer
     {
         assert(!isEmpty());
 
-        i64 oldr = r;
+        auto oldr = r;
         r = next(r);
         return elements[oldr];
     }
@@ -91,7 +93,7 @@ template <class T, isize capacity> struct RingBuffer
     {
         assert(!isFull());
 
-        isize oldw = w;
+        auto oldw = w;
         w = next(w);
         elements[oldw] = element;
     }
