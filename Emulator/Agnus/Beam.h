@@ -15,10 +15,12 @@
 struct Beam
 {
     // Counters for the vertical and horizontal beam position
+    // TODO: Replace by i16 to make it fit in a single long
     isize v;
     isize h;
     
     // Latches counter values (recorded if BPLCON0::ERSY is set)
+    // TODO: Move this out of this struct
     isize vLatched;
     isize hLatched;
 

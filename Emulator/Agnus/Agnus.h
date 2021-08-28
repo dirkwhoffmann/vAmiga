@@ -898,57 +898,99 @@ private:
     
 public:
     
-    template<EventSlot s> void scheduleRel(Cycle cycle, EventID id)
-    {
+    template<EventSlot s> void scheduleRel(Cycle cycle, EventID id) {
         scheduler.scheduleAbs<s>(clock + cycle, id);
     }
     
-    template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, i64 data)
-    {
+    template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, i64 data) {
         scheduler.scheduleAbs<s>(clock + cycle, id, data);
     }
     
-    template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id)
-    {
+    template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id) {
         scheduler.scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
     }
     
-    template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id, i64 data)
-    {
+    template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id, i64 data) {
         scheduler.scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
     }
     
-    template<EventSlot s> void rescheduleRel(Cycle cycle)
-    {
+    template<EventSlot s> void rescheduleRel(Cycle cycle) {
         scheduler.rescheduleAbs<s>(clock + cycle);
     }
     
-    template<EventSlot s> void reschedulePos(i16 vpos, i16 hpos)
-    {
+    template<EventSlot s> void reschedulePos(i16 vpos, i16 hpos) {
         scheduler.rescheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ));
     }
+
+    
+    //
+    // Scheduling specific events
+    //
+
+public:
+    
+    // Schedules the next BPL event relative to a given DMA cycle
+    void scheduleNextBplEvent(isize hpos);
+
+    // Schedules the next BPL event relative to the currently emulated DMA cycle
+    void scheduleNextBplEvent() { scheduleNextBplEvent(pos.h); }
+
+    // Schedules the earliest BPL event that occurs at or after the given DMA cycle
+    void scheduleBplEventForCycle(isize hpos);
+
+    // Updates the scheduled BPL event according to the current event table
+    void updateBplEvent() { scheduleBplEventForCycle(pos.h); }
+
+    // Schedules the next DAS event relative to a given DMA cycle
+    void scheduleNextDasEvent(isize hpos);
+
+    // Schedules the next DAS event relative to the currently emulated DMA cycle
+    void scheduleNextDasEvent() { scheduleNextDasEvent(pos.h); }
+
+    // Schedules the earliest DAS event that occurs at or after the given DMA cycle
+    void scheduleDasEventForCycle(isize hpos);
+
+    // Updates the scheduled DAS event according to the current event table
+    void updateDasEvent() { scheduleDasEventForCycle(pos.h); }
+
+    // Schedules the next register change event
+    void scheduleNextREGEvent();
+
+    // Schedules a strobe event in the VBL slot
+    void scheduleStrobe0Event();
+    void scheduleStrobe1Event();
+    void scheduleStrobe2Event();
 
     
     //
     // Servicing events
     //
 
-public:
-
-    // Triggers the vertical blank interrupt
-    void serviceVblEvent();
-
 private:
+
+    // Services a register change event
+    void serviceREGEvent(Cycle until);
+
+    // Services a raster event
+    void serviceRASEvent();
+
+    // Services a CIA event
+    template <int nr> void serviceCIAEvent();
+
+    // Services a bitplane event
+    void serviceBPLEvent();
+    template <int nr> void serviceBPLEventHires();
+    template <int nr> void serviceBPLEventLores();
+    void serviceBPLEventLores();
+
+    // Services a vertical blank interrupt
+    void serviceVblEvent();
     
-    // Schedule the next VBL event
-    void scheduleStrobe0Event();
-    void scheduleStrobe1Event();
-    void scheduleStrobe2Event();
-
-    //
-    // Class extensions (TODO: MOVE INTO THIS FILE)
-    //
-
-#include "EventHandler.h"
-
+    // Services a Disk, Audio, or Sprite event
+    void serviceDASEvent();
+    
+public:
+    
+    // Services an inspection event
+    void serviceINSEvent();
 };

@@ -18,48 +18,63 @@
 #include "SerialPort.h"
 
 void
-Agnus::serviceVblEvent()
+Agnus::scheduleNextBplEvent(isize hpos)
 {
-    switch (scheduler.slot[SLOT_VBL].id) {
+    assert(hpos >= 0 && hpos < HPOS_CNT);
 
-        case VBL_STROBE0:
-            
-            assert(pos.v == 0 || pos.v == 1);
-            assert(pos.h == 0);
-            
-            // Trigger the vertical blank interrupt
-            paula.raiseIrq(INT_VERTB);
-            
-            // Schedule next event
-            scheduleStrobe1Event();
-            break;
-
-        case VBL_STROBE1:
-            
-            assert(pos.v == 5);
-            assert(pos.h == 84);
-            
-            // Increment the TOD counter of CIA A
-            ciaa.tod.increment();
-            
-            // Schedule next event
-            scheduleStrobe2Event();
-            break;
-            
-        case VBL_STROBE2:
-            
-            assert(pos.v == 5);
-            assert(pos.h == 178);
-            
-            // Nothing is done here at the moment
-            
-            // Schedule next event
-            scheduleStrobe0Event();
-            break;
-            
-        default:
-            fatalError;
+    if (u8 next = nextBplEvent[hpos]) {
+        scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), bplEvent[next]);
     }
+    assert(hasEvent<SLOT_BPL>());
+}
+
+void
+Agnus::scheduleBplEventForCycle(isize hpos)
+{
+    assert(hpos >= pos.h && hpos < HPOS_CNT);
+
+    if (bplEvent[hpos] != EVENT_NONE) {
+        scheduleRel<SLOT_BPL>(DMA_CYCLES(hpos - pos.h), bplEvent[hpos]);
+    } else {
+        scheduleNextBplEvent(hpos);
+    }
+
+    assert(hasEvent<SLOT_BPL>());
+}
+
+void
+Agnus::scheduleNextDasEvent(isize hpos)
+{
+    assert(hpos >= 0 && hpos < HPOS_CNT);
+
+    if (u8 next = nextDasEvent[hpos]) {
+        scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), dasEvent[next]);
+        assert(hasEvent<SLOT_DAS>());
+    } else {
+        scheduler.cancel<SLOT_DAS>();
+    }
+}
+
+void
+Agnus::scheduleDasEventForCycle(isize hpos)
+{
+    assert(hpos >= pos.h && hpos < HPOS_CNT);
+
+    if (dasEvent[hpos] != EVENT_NONE) {
+        scheduleRel<SLOT_DAS>(DMA_CYCLES(hpos - pos.h), dasEvent[hpos]);
+    } else {
+        scheduleNextDasEvent(hpos);
+    }
+}
+
+void
+Agnus::scheduleNextREGEvent()
+{
+    // Determine when the next register change happens
+    Cycle nextTrigger = changeRecorder.trigger();
+
+    // Schedule a register change event for that cycle
+    scheduler.scheduleAbs<SLOT_REG>(nextTrigger, REG_CHANGE);
 }
 
 void
@@ -78,26 +93,6 @@ void
 Agnus::scheduleStrobe2Event()
 {
     schedulePos<SLOT_VBL>(5, 178, VBL_STROBE2);
-}
-
-template <int nr> void
-Agnus::serviceCIAEvent()
-{
-    EventSlot slotNr = (nr == 0) ? SLOT_CIAA : SLOT_CIAB;
-
-    switch(scheduler.slot[slotNr].id) {
-
-        case CIA_EXECUTE:
-            nr ? ciab.executeOneCycle() : ciaa.executeOneCycle();
-            break;
-
-        case CIA_WAKEUP:
-            nr ? ciab.wakeUp() : ciaa.wakeUp();
-            break;
-
-        default:
-            fatalError;
-    }
 }
 
 void
@@ -172,6 +167,44 @@ Agnus::serviceREGEvent(Cycle until)
 
     // Schedule next event
     scheduleNextREGEvent();
+}
+
+void
+Agnus::serviceRASEvent()
+{
+    switch (scheduler.slot[SLOT_RAS].id) {
+
+        case RAS_HSYNC:
+            
+            hsyncHandler();
+            break;
+
+        default:
+            fatalError;
+    }
+
+    // Reschedule event
+    rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
+}
+
+template <int nr> void
+Agnus::serviceCIAEvent()
+{
+    EventSlot slotNr = (nr == 0) ? SLOT_CIAA : SLOT_CIAB;
+
+    switch(scheduler.slot[slotNr].id) {
+
+        case CIA_EXECUTE:
+            nr ? ciab.executeOneCycle() : ciaa.executeOneCycle();
+            break;
+
+        case CIA_WAKEUP:
+            nr ? ciab.wakeUp() : ciaa.wakeUp();
+            break;
+
+        default:
+            fatalError;
+    }
 }
 
 void
@@ -448,6 +481,51 @@ Agnus::serviceBPLEventLores()
 }
 
 void
+Agnus::serviceVblEvent()
+{
+    switch (scheduler.slot[SLOT_VBL].id) {
+
+        case VBL_STROBE0:
+            
+            assert(pos.v == 0 || pos.v == 1);
+            assert(pos.h == 0);
+            
+            // Trigger the vertical blank interrupt
+            paula.raiseIrq(INT_VERTB);
+            
+            // Schedule next event
+            scheduleStrobe1Event();
+            break;
+
+        case VBL_STROBE1:
+            
+            assert(pos.v == 5);
+            assert(pos.h == 84);
+            
+            // Increment the TOD counter of CIA A
+            ciaa.tod.increment();
+            
+            // Schedule next event
+            scheduleStrobe2Event();
+            break;
+            
+        case VBL_STROBE2:
+            
+            assert(pos.v == 5);
+            assert(pos.h == 178);
+            
+            // Nothing is done here at the moment
+            
+            // Schedule next event
+            scheduleStrobe0Event();
+            break;
+            
+        default:
+            fatalError;
+    }
+}
+
+void
 Agnus::serviceDASEvent()
 {
     assert(slot[SLOT_DAS].id == dasEvent[pos.h]);
@@ -640,24 +718,6 @@ Agnus::serviceINSEvent()
 
     // Reschedule event
     rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000000));
-}
-
-void
-Agnus::serviceRASEvent()
-{
-    switch (scheduler.slot[SLOT_RAS].id) {
-
-        case RAS_HSYNC:
-            
-            hsyncHandler();
-            break;
-
-        default:
-            fatalError;
-    }
-
-    // Reschedule event
-    rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
 }
 
 template void Agnus::serviceCIAEvent<0>();
