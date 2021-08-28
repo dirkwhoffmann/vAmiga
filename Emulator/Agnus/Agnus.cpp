@@ -233,7 +233,7 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << tab("Beam position");
         os << "(" << dec(pos.v) << "," << dec(pos.h) << ")" << std::endl;
         os << tab("Latched position");
-        os << "(" << dec(pos.vLatched) << "," << dec(pos.hLatched) << ")" << std::endl;
+        os << "(" << dec(latchedPos.v) << "," << dec(latchedPos.h) << ")" << std::endl;
         os << tab("scrollLoresOdd");
         os << dec(scrollLoresOdd) << std::endl;
         os << tab("scrollLoresEven");

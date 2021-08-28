@@ -112,6 +112,9 @@ public:
     // The current beam position
     Beam pos;
 
+    // Latched beam position (recorded when BPLCON0::ERSY is set)
+    Beam latchedPos;
+    
     // Information about the current frame
     Frame frame;
 
@@ -435,6 +438,7 @@ private:
         >> changeRecorder
 
         >> pos
+        >> latchedPos
         >> frame
 
         << bplcon0

@@ -395,7 +395,7 @@ Agnus::peekVHPOSR()
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
     
     // Return the latched position if the counters are frozen
-    if (ersy()) return HI_LO(pos.vLatched & 0xFF, pos.hLatched);
+    if (ersy()) return HI_LO(latchedPos.v & 0xFF, latchedPos.h);
                      
     auto posh = pos.h + 4;
     auto posv = pos.v;
@@ -446,7 +446,7 @@ Agnus::peekVPOSR()
     if (frame.isLongFrame()) result |= 0x8000;
 
     // V8 (Vertical position MSB)
-    result |= (ersy() ? pos.vLatched : pos.v) >> 8;
+    result |= (ersy() ? latchedPos.v : pos.v) >> 8;
     
     trace(POSREG_DEBUG, "peekVPOSR() = %X\n", result);
     return result;
@@ -750,10 +750,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     }
     
     // Latch the position counters if the ERSY bit is set
-    if ((newValue & 0b10) && !(oldValue & 0b10)) {
-        pos.vLatched = pos.v;
-        pos.hLatched = pos.h;
-    }
+    if ((newValue & 0b10) && !(oldValue & 0b10)) latchedPos = pos;
 
     bplcon0 = newValue;
 }
