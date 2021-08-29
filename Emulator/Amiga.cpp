@@ -639,7 +639,7 @@ Amiga::setInspectionTarget(InspectionTarget target, Cycle trigger)
         }
         
         agnus.scheduleRel<SLOT_INS>(trigger, id);
-        if (trigger == 0) agnus.serviceINSEvent();
+        if (trigger == 0) agnus.serviceINSEvent(id);
     }
 }
 

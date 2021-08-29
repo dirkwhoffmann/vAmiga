@@ -189,8 +189,6 @@ Agnus::initDasEventTable()
         }
 
         p[0xDF] = DAS_SDMA;
-
-        p[0x52] = DAS_TICK2;
         p[0x66] = DAS_TICK;
     }
 }
@@ -659,7 +657,6 @@ Agnus::dumpDasEventTable(int from, int to) const
     str[DAS_S7_2][0]    = '7'; str[DAS_S7_2][1]    = '2';
     str[DAS_SDMA][0]    = 'S'; str[DAS_SDMA][1]    = 'D';
     str[DAS_TICK][0]    = 'T'; str[DAS_TICK][1]    = 'K';
-    str[DAS_TICK2][0]   = 'T'; str[DAS_TICK2][1]   = '2';
 
     for (isize i = 1; i < 256; i++) str[i][2] = ' ';
     

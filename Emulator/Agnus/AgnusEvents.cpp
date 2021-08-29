@@ -198,11 +198,9 @@ Agnus::serviceRASEvent()
 }
 
 template <int nr> void
-Agnus::serviceCIAEvent()
+Agnus::serviceCIAEvent(EventID id)
 {
-    EventSlot slotNr = (nr == 0) ? SLOT_CIAA : SLOT_CIAB;
-
-    switch(scheduler.id[slotNr]) {
+    switch(id) {
 
         case CIA_EXECUTE:
             nr ? ciab.executeOneCycle() : ciaa.executeOneCycle();
@@ -218,9 +216,9 @@ Agnus::serviceCIAEvent()
 }
 
 void
-Agnus::serviceBPLEvent()
+Agnus::serviceBPLEvent(EventID id)
 {
-    switch (scheduler.id[SLOT_BPL]) {
+    switch (id) {
 
         case EVENT_NONE | DRAW_ODD:
             hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
@@ -491,9 +489,9 @@ Agnus::serviceBPLEventLores()
 }
 
 void
-Agnus::serviceVblEvent()
+Agnus::serviceVblEvent(EventID id)
 {
-    switch (scheduler.id[SLOT_VBL]) {
+    switch (id) {
 
         case VBL_STROBE0:
             
@@ -536,11 +534,11 @@ Agnus::serviceVblEvent()
 }
 
 void
-Agnus::serviceDASEvent()
+Agnus::serviceDASEvent(EventID id)
 {
-    assert(scheduler.id[SLOT_DAS] == dasEvent[pos.h]);
+    assert(id == dasEvent[pos.h]);
 
-    switch (scheduler.id[SLOT_DAS]) {
+    switch (id) {
 
         case DAS_REFRESH:
             busOwner[0x01] = BUS_REFRESH;
@@ -656,10 +654,6 @@ Agnus::serviceDASEvent()
             ciab.tod.increment();
             break;
 
-        case DAS_TICK2:
-            // TODO: REMOVE THIS EVENT
-            break;
-
         default:
             fatalError;
     }
@@ -669,9 +663,9 @@ Agnus::serviceDASEvent()
 }
 
 void
-Agnus::serviceINSEvent()
+Agnus::serviceINSEvent(EventID id)
 {    
-    switch (scheduler.id[SLOT_INS]) {
+    switch (id) {
 
         case INS_AMIGA:
             
@@ -730,5 +724,5 @@ Agnus::serviceINSEvent()
     rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000000));
 }
 
-template void Agnus::serviceCIAEvent<0>();
-template void Agnus::serviceCIAEvent<1>();
+template void Agnus::serviceCIAEvent<0>(EventID id);
+template void Agnus::serviceCIAEvent<1>(EventID id);

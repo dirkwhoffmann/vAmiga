@@ -249,7 +249,6 @@ Scheduler::inspectSlot(EventSlot nr) const
                 case DAS_S7_2:      i.eventName = "DAS_S7_2"; break;
                 case DAS_SDMA:      i.eventName = "DAS_SDMA"; break;
                 case DAS_TICK:      i.eventName = "DAS_TICK"; break;
-                case DAS_TICK2:     i.eventName = "DAS_TICK2"; break;
                 default:            i.eventName = "*** INVALID ***"; break;
             }
             break;
@@ -470,16 +469,16 @@ Scheduler::executeUntil(Cycle cycle) {
         agnus.serviceREGEvent(cycle);
     }
     if (isDue<SLOT_CIAA>(cycle)) {
-        agnus.serviceCIAEvent<0>();
+        agnus.serviceCIAEvent<0>(scheduler.id[SLOT_CIAA]);
     }
     if (isDue<SLOT_CIAB>(cycle)) {
-        agnus.serviceCIAEvent<1>();
+        agnus.serviceCIAEvent<1>(scheduler.id[SLOT_CIAB]);
     }
     if (isDue<SLOT_BPL>(cycle)) {
-        agnus.serviceBPLEvent();
+        agnus.serviceBPLEvent(scheduler.id[SLOT_BPL]);
     }
     if (isDue<SLOT_DAS>(cycle)) {
-        agnus.serviceDASEvent();
+        agnus.serviceDASEvent(scheduler.id[SLOT_DAS]);
     }
     if (isDue<SLOT_COP>(cycle)) {
         copper.serviceEvent(id[SLOT_COP]);
@@ -513,7 +512,7 @@ Scheduler::executeUntil(Cycle cycle) {
             paula.diskController.serviceDiskChangeEvent();
         }
         if (isDue<SLOT_VBL>(cycle)) {
-            agnus.serviceVblEvent();
+            agnus.serviceVblEvent(scheduler.id[SLOT_VBL]);
         }
         if (isDue<SLOT_IRQ>(cycle)) {
             paula.serviceIrqEvent();
@@ -537,7 +536,7 @@ Scheduler::executeUntil(Cycle cycle) {
             agnus.serviceRASEvent();
         }
         if (isDue<SLOT_INS>(cycle)) {
-            agnus.serviceINSEvent();
+            agnus.serviceINSEvent(id[SLOT_INS]);
         }
 
         // Determine the next trigger cycle for all secondary slots

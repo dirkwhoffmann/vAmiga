@@ -975,22 +975,21 @@ private:
     void serviceRASEvent();
 
     // Services a CIA event
-    template <int nr> void serviceCIAEvent();
+    template <int nr> void serviceCIAEvent(EventID id);
 
     // Services a bitplane event
-    void serviceBPLEvent();
+    void serviceBPLEvent(EventID id);
     template <int nr> void serviceBPLEventHires();
     template <int nr> void serviceBPLEventLores();
-    void serviceBPLEventLores();
 
     // Services a vertical blank interrupt
-    void serviceVblEvent();
+    void serviceVblEvent(EventID id);
     
     // Services a Disk, Audio, or Sprite event
-    void serviceDASEvent();
+    void serviceDASEvent(EventID id);
     
 public:
     
     // Services an inspection event
-    void serviceINSEvent();
+    void serviceINSEvent(EventID id);
 };
