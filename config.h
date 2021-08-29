@@ -31,9 +31,11 @@
 // Build settings
 //
 
+#if defined(__clang__)
 #pragma GCC diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
 #pragma GCC diagnostic ignored "-Wgnu-anonymous-struct"
 #pragma GCC diagnostic ignored "-Wnested-anon-types"
+#endif
 
 // Type alias for the datatype used by the host machine's audio backend
 // struct U16Mono; typedef U16Mono SampleType;
@@ -46,14 +48,16 @@ struct FloatStereo; typedef FloatStereo SampleType;
 //
 
 #define OVERRIDES { }
-// { \
-// { OPT_AGNUS_REVISION,   AGNUS_OCS }, \
-// { OPT_BLITTER_ACCURACY, 0         }, \
-// { OPT_CHIP_RAM,         512       }, \
-// { OPT_SLOW_RAM,         512       }, \
-// { OPT_FAST_RAM,         0         }, \
-// { OPT_RTC_MODEL,        RTC_NONE  }, \
-// { OPT_DRIVE_SPEED,      -1        }  }
+/*
+ { \
+ { OPT_AGNUS_REVISION,   AGNUS_OCS }, \
+ { OPT_BLITTER_ACCURACY, 0         }, \
+ { OPT_CHIP_RAM,         512       }, \
+ { OPT_SLOW_RAM,         512       }, \
+ { OPT_FAST_RAM,         0         }, \
+ { OPT_RTC_MODEL,        RTC_NONE  }, \
+ { OPT_DRIVE_SPEED,      -1        }  }
+*/
 
 // Uncomment to fallback to an older style thread messaging mechanism
 // #define USE_CONDITION_VARIABLE

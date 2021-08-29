@@ -11,6 +11,7 @@
 #include "Amiga.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
+#include <algorithm>
 
 // Perform some consistency checks
 static_assert(sizeof(i8) == 1,  "i8 size mismatch");
