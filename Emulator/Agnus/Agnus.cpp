@@ -62,9 +62,9 @@ Agnus::_reset(bool hard)
     scheduleStrobe0Event();
     scheduleRel<SLOT_IRQ>(NEVER, IRQ_CHECK);
     diskController.scheduleFirstDiskEvent();
-    scheduleNextBplEvent();
-    scheduleNextDasEvent();
-        
+    scheduleFirstBplEvent();
+    scheduleFirstDasEvent();
+
     pokeVPOS(0);
 }
 
@@ -878,7 +878,7 @@ Agnus::updateSpriteDMA()
 void
 Agnus::hsyncHandler()
 {
-    assert(pos.h == 0);
+    assert(pos.h == HPOS_MAX);
     
     // Let Denise finish up the current line
     denise.endOfLine(pos.v);
@@ -985,10 +985,9 @@ Agnus::hsyncHandler()
     for (isize i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
 
     // Schedule the first BPL and DAS events
-    scheduleNextBplEvent();
-    scheduleNextDasEvent();
-
-
+    scheduleFirstBplEvent();
+    scheduleFirstDasEvent();
+    
     // Let Denise prepare for the next line
     denise.beginOfLine(pos.v);
 }

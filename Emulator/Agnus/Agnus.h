@@ -930,7 +930,10 @@ public:
     //
 
 public:
-    
+
+    // Schedules the first BPL event
+    void scheduleFirstBplEvent();
+
     // Schedules the next BPL event relative to a given DMA cycle
     void scheduleNextBplEvent(isize hpos);
 
@@ -942,6 +945,9 @@ public:
 
     // Updates the scheduled BPL event according to the current event table
     void updateBplEvent() { scheduleBplEventForCycle(pos.h); }
+
+    // Schedules the first BPL event
+    void scheduleFirstDasEvent();
 
     // Schedules the next DAS event relative to a given DMA cycle
     void scheduleNextDasEvent(isize hpos);

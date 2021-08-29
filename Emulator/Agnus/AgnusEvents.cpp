@@ -18,6 +18,21 @@
 #include "SerialPort.h"
 
 void
+Agnus::scheduleFirstBplEvent()
+{
+    assert(pos.h == 0 || pos.h == HPOS_MAX);
+    
+    u8 dmacycle = nextBplEvent[0];
+    assert(dmacycle != 0);
+        
+    if (pos.h == 0) {
+        scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle), bplEvent[dmacycle]);
+    } else {
+        scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle + 1), bplEvent[dmacycle]);
+    }
+}
+
+void
 Agnus::scheduleNextBplEvent(isize hpos)
 {
     assert(hpos >= 0 && hpos < HPOS_CNT);
@@ -40,6 +55,21 @@ Agnus::scheduleBplEventForCycle(isize hpos)
     }
 
     assert(scheduler.hasEvent<SLOT_BPL>());
+}
+
+void
+Agnus::scheduleFirstDasEvent()
+{
+    assert(pos.h == 0 || pos.h == HPOS_MAX);
+    
+    u8 dmacycle = nextDasEvent[0];
+    assert(dmacycle != 0);
+    
+    if (pos.h == 0) {
+        scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle), dasEvent[dmacycle]);
+    } else {
+        scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle + 1), dasEvent[dmacycle]);
+    }
 }
 
 void
@@ -173,29 +203,12 @@ void
 Agnus::serviceRASEvent()
 {
     assert(scheduler.id[SLOT_RAS] == RAS_HSYNC);
-        
-    /* In the old code, the hsync handler was called at the beginning of the
-     * of the first cycle in a rasterline. In the new code, it is called
-     * slightly earlier, at the end of the last cycle in the previous line.
-     * At this point, pos.h equals HPOS_MAX and the clock hasn't been
-     * incremented yet. To ensure a smooth transition to the new code, we setup
-     * the old environment for the hsync handler. At a later stage, the hsync
-     * handler should be modified to accomodate the real values of pos.h
-     * and clock.
-     */
-
-    pos.h = 0;
-    clock += DMA_CYCLES(1);
     
+    // Call the hsync handler
     hsyncHandler();
-    
-    clock -= DMA_CYCLES(1);
-    
-    /* After leaving this function, pos.h will be incremented by one. This is
-     * the desired behaviour except for the last cycle in a line. To componsate
-     * for the increment, we set the variable to -1.
-     */
-    pos.h--;
+
+    // Reset the horizontal counter (-1 to compensate for the increment to come)
+    pos.h = -1;
     
     // Reschedule event
     rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
