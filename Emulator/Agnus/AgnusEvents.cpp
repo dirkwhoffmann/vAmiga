@@ -180,7 +180,8 @@ Agnus::serviceRASEvent()
      * At this point, pos.h equals HPOS_MAX and the clock hasn't been
      * incremented yet. To ensure a smooth transition to the new code, we setup
      * the old environment for the hsync handler. At a later stage, the hsync
-     * handler has to be modified to expect the real values of pos.h and clock.
+     * handler should be modified to accomodate the real values of pos.h
+     * and clock.
      */
 
     pos.h = 0;
@@ -190,8 +191,11 @@ Agnus::serviceRASEvent()
     
     clock -= DMA_CYCLES(1);
     
-    // Make sure pos.h wraps over to 0 in execute() which is the desired value
-    pos.h = -1;
+    /* After leaving this function, pos.h will be incremented by one. This is
+     * the desired behaviour except for the last cycle in a line. To componsate
+     * for the increment, we set the variable to -1.
+     */
+    pos.h--;
     
     // Reschedule event
     rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
