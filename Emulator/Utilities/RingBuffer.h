@@ -70,8 +70,6 @@ template <class T, isize capacity> struct RingBuffer
 
     isize begin() const { return r; }
     isize end() const { return w; }
-    // static isize next(isize i) { return (capacity + i + 1) % capacity; }
-    // static isize prev(isize i) { return (capacity + i - 1) % capacity; }
     static isize next(isize i) { return i < capacity - 1 ? i + 1 : 0; }
     static isize prev(isize i) { return i > 0 ? i - 1 : capacity - 1; }
 

@@ -276,8 +276,8 @@ public:
     DDFState ddfState;
 
     /* This variable is used to emulate the OCS "scanline effect". If DDFSTRT
-     * is set to value smaller than the left hardware stop at 0x18, early DMA
-     * access is enables every other line. In this case, this variable stores
+     * is set to a value smaller than the left hardware stop at 0x18, early DMA
+     * access is enabled every other line. In this case, this variable stores
      * the number of the next line where early DMA is possible.
      */
     isize ocsEarlyAccessLine;
@@ -383,7 +383,6 @@ public:
     
 private:
     
-    void initLookupTables();
     void initBplEventTableLores();
     void initBplEventTableHires();
     void initDasEventTable();
@@ -405,7 +404,6 @@ private:
     
 private:
     
-    void _initialize() override;
     void _reset(bool hard) override;
     void _inspect() const override;
 
@@ -516,7 +514,7 @@ public:
     bool isOCS() const { return config.revision == AGNUS_OCS; }
     bool isECS() const { return config.revision != AGNUS_OCS; }
     
-    // Returns the chip identification bits of this Agnus (shows up in VPOSR)
+    // Returns the chip identification bits of this Agnus (show up in VPOSR)
     i16 idBits();
     
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
@@ -548,7 +546,7 @@ public:
     
 private:
     
-    void clearStats();
+    void clearStats() { stats = { }; }
     void updateStats();
     
 
@@ -696,7 +694,7 @@ public:
 
 private:
     
-    // Checks whether a write to a pointer register sould be dropped
+    // Checks whether a write to a pointer register should be dropped
     bool dropWrite(BusOwner owner);
 
     
@@ -706,13 +704,12 @@ private:
 
 public:
         
-    /* Checks if the bus is currently available for the specified resource.
-     */
+    // Checks if the bus is currently available for the specified resource.
     template <BusOwner owner> bool busIsFree() const;
 
-    /* Attempts to allocate the bus for the specified resource.
-     * Returns true if the bus was successfully allocated.
-     * On success, the bus owner is recorded in the busOwner array.
+    /* Attempts to allocate the bus for the specified resource. Returns true
+     * if the bus was successfully allocated. On success, the bus owner is
+     * recorded in the busOwner array.
      */
     template <BusOwner owner> bool allocateBus();
 
@@ -833,7 +830,7 @@ private:
     void computeDDFWindow();
     void computeDDFWindowOCS();
     void computeDDFWindowECS();
-    // void computeStandardDDFWindow(i16 strt, i16 stop);
+
 
     //
     //

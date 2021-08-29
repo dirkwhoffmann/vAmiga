@@ -199,7 +199,7 @@ Disk::clearTrack(Track t, u8 value1, u8 value2)
     assert(t < numTracks());
 
     for (isize i = 0; i < length.track[t]; i++) {
-        data.track[t][i] = (i % 2) ? value2 : value1;
+        data.track[t][i] = IS_ODD(i) ? value2 : value1;
     }
 }
 

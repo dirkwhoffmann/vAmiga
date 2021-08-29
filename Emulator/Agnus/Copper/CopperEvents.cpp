@@ -35,7 +35,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Don't wake up in an odd cycle
-            if (agnus.pos.h % 2) { reschedule(); break; }
+            if (IS_ODD(agnus.pos.h)) { reschedule(); break; }
 
             // Continue with fetching the first instruction word
             schedule(COP_FETCH);
@@ -49,7 +49,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
             
             // Don't wake up in an odd cycle
-            if (agnus.pos.h % 2) { reschedule(); break; }
+            if (IS_ODD(agnus.pos.h)) { reschedule(); break; }
             
             // Continue with fetching the first instruction word
             schedule(COP_FETCH);
@@ -69,7 +69,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
             
             // Don't wake up in an odd cycle
-            if (agnus.pos.h % 2) { reschedule(); break; }
+            if (IS_ODD(agnus.pos.h)) { reschedule(); break; }
             
             // Continue with fetching the first instruction word
             schedule(COP_FETCH);

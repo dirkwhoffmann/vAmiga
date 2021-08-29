@@ -263,7 +263,7 @@ public:
     
     const MemoryStats &getStats() { return stats; }
     
-    void clearStats() { std::memset(&stats, 0, sizeof(stats)); }
+    void clearStats() { stats = { }; }
     void updateStats();
 
     

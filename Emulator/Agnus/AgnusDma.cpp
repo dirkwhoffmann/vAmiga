@@ -11,7 +11,7 @@
 #include "Agnus.h"
 #include "Denise.h"
 
-/* A central element in the emulation of an Amiga is the accurate modeling of
+/* A central element in the emulation of the Amiga is the accurate modeling of
 * the DMA timeslot allocation table (Fig. 6-9 im the HRM, 3rd revision). All
 * bitplane related events are managed in the BPL_SLOT. All disk, audio, and
 * sprite related events are managed in the DAS_SLOT.
@@ -39,12 +39,7 @@
 * All events in the BPL_SLOT can be superimposed by two drawing flags (bit 0
 * and bit 1) that trigger the transfer of the data registers into the shift
 * registers at the correct DMA cycle. Bit 0 controls the odd bitplanes and
-* bit 1 controls the even bitplanes. Settings these flags changes the
-* scheduled event, e.g.:
-*
-*     BPL_L4  becomes  BPL_L4_ODD   if bit 0 is set
-*     BPL_L4  becomes  BPL_L4_EVEN  if bit 1 is set
-*     BPL_L4  becomes  BPL_L4_ODD_EVEN  if both bits are set
+* bit 1 controls the even bitplanes.
 *
 * Each event table is accompanied by a jump table that points to the next
 * event. Given the example tables above, the jump tables would look like this:
@@ -67,7 +62,7 @@
 * has to be updated, too.
 *
 * To quickly setup the event tables, vAmiga utilizes two static lookup
-* tables. Depending on the current resoution, BPU value, or DMA status,
+* tables. Depending on the current resoution, BPU value, and DMA status,
 * segments of these lookup tables are copied to the event tables.
 *
 *      Table: bitplaneDMA[Resolution][Bitplanes][Cycle]
@@ -84,14 +79,6 @@
 *
 *                 dmacon : Bits 0 .. 5 of register DMACON
 */
-
-void
-Agnus::initLookupTables()
-{
-    initBplEventTableLores();
-    initBplEventTableHires();
-    initDasEventTable();
-}
 
 void
 Agnus::initBplEventTableLores()

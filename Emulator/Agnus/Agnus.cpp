@@ -26,15 +26,98 @@ Agnus::Agnus(Amiga& ref) : SubComponent(ref)
         &dmaDebugger
     };
         
-    initLookupTables();
+    initBplEventTableLores();
+    initBplEventTableHires();
+    initDasEventTable();
 }
 
 void
-Agnus::_initialize()
+Agnus::_dump(dump::Category category, std::ostream& os) const
 {
-    resetConfig();
+    using namespace util;
+    
+    if (category & dump::Config) {
+    
+        os << tab("Chip Revison");
+        os << AgnusRevisionEnum::key(config.revision) << std::endl;
+        os << tab("Slow Ram mirror");
+        os << bol(config.slowRamMirror) << std::endl;
+    }
 
-    ptrMask = 0x0FFFFF; // TODO: REMOVE?!
+    if (category & dump::State) {
+        
+        os << tab("Clock");
+        os << dec(clock) << std::endl;
+        os << tab("Frame");
+        os << dec(frame.nr) << std::endl;
+        os << tab("LOF");
+        os << dec(frame.lof) << std::endl;
+        os << tab("LOF in previous frame");
+        os << dec(frame.prevlof) << std::endl;
+        os << tab("Beam position");
+        os << "(" << dec(pos.v) << "," << dec(pos.h) << ")" << std::endl;
+        os << tab("Latched position");
+        os << "(" << dec(latchedPos.v) << "," << dec(latchedPos.h) << ")" << std::endl;
+        os << tab("scrollLoresOdd");
+        os << dec(scrollLoresOdd) << std::endl;
+        os << tab("scrollLoresEven");
+        os << dec(scrollLoresEven) << std::endl;
+        os << tab("scrollHiresOdd");
+        os << dec(scrollHiresOdd) << std::endl;
+        os << tab("scrollHiresEven");
+        os << dec(scrollHiresEven) << std::endl;
+        os << tab("Bitplane DMA line");
+        os << bol(bplDmaLine) << std::endl;
+        os << tab("BLS signal");
+        os << bol(bls) << std::endl;
+    }
+
+    if (category & dump::Registers) {
+        
+        os << tab("DMACON");
+        os << hex(dmacon) << std::endl;
+        
+        os << tab("DDFSTRT, DDFSTOP");
+        os << hex(ddfstrt) << ' ' << hex(ddfstop) << ' ' << std::endl;
+        
+        os << tab("DIWSTRT, DIWSTOP");
+        os << hex(diwstrt) << ' ' << hex(diwstop) << ' ' << std::endl;
+
+        os << tab("BPLCON0, BPLCON1");
+        os << hex(bplcon0) << ' ' << hex(bplcon1) << ' ' << std::endl;
+
+        os << tab("BPL1MOD, BPL2MOD");
+        os << dec(bpl1mod) << ' ' << dec(bpl2mod) << ' ' << std::endl;
+    
+        os << tab("BPL0PT - BPL2PT");
+        os << hex(bplpt[0]) << ' ' << hex(bplpt[1]) << ' ';
+        os << hex(bplpt[2]) << ' ' << ' ' << std::endl;
+        os << tab("BPL3PT - BPL5PT");
+        os << hex(bplpt[3]) << ' ' << hex(bplpt[4]) << ' ';
+        os << hex(bplpt[5]) << std::endl;
+
+        os << tab("SPR0PT - SPR3PT");
+        os << hex(sprpt[0]) << ' ' << hex(sprpt[1]) << ' ';
+        os << hex(sprpt[2]) << ' ' << hex(sprpt[3]) << ' ' << std::endl;
+        os << tab("SPR4PT - SPR7PT");
+        os << hex(sprpt[4]) << ' ' << hex(sprpt[5]) << ' ';
+        os << hex(sprpt[5]) << ' ' << hex(sprpt[7]) << ' ' << std::endl;
+
+        os << tab("AUD0PT - AUD3PT");
+        os << hex(audpt[0]) << ' ' << hex(audpt[1]) << ' ';
+        os << hex(audpt[2]) << ' ' << hex(audpt[3]) << ' ' << std::endl;
+
+        os << tab("DSKPT");
+        os << hex(dskpt) << std::endl;
+    }
+        
+    /*
+    ss << "\nBPL DMA table:\n\n");
+    dumpBplEventTable();
+
+    ss << "\nDAS DMA table:\n\n");
+    dumpDasEventTable();
+    */
 }
 
 void
@@ -64,8 +147,6 @@ Agnus::_reset(bool hard)
     diskController.scheduleFirstDiskEvent();
     scheduleFirstBplEvent();
     scheduleFirstDasEvent();
-
-    pokeVPOS(0);
 }
 
 AgnusConfig
@@ -114,9 +195,7 @@ Agnus::setConfigItem(Option option, i64 value)
             if (!AgnusRevisionEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVARG, AgnusRevisionEnum::keyList());
             }            
-                        
-            // config.revision = (AgnusRevision)value;
-            
+                                    
             switch (config.revision = (AgnusRevision)value) {
                     
                 case AGNUS_OCS:     ptrMask = 0x07FFFF; break;
@@ -211,111 +290,9 @@ Agnus::_inspect() const
 }
 
 void
-Agnus::_dump(dump::Category category, std::ostream& os) const
-{
-    using namespace util;
-    
-    if (category & dump::Config) {
-    
-        os << tab("Chip Revison");
-        os << AgnusRevisionEnum::key(config.revision) << std::endl;
-        os << tab("Slow Ram mirror");
-        os << bol(config.slowRamMirror) << std::endl;
-    }
-
-    if (category & dump::State) {
-        
-        os << tab("Clock");
-        os << dec(clock) << std::endl;
-        os << tab("Frame");
-        os << dec(frame.nr) << std::endl;
-        os << tab("LOF");
-        os << dec(frame.lof) << std::endl;
-        os << tab("LOF in previous frame");
-        os << dec(frame.prevlof) << std::endl;
-        os << tab("Beam position");
-        os << "(" << dec(pos.v) << "," << dec(pos.h) << ")" << std::endl;
-        os << tab("Latched position");
-        os << "(" << dec(latchedPos.v) << "," << dec(latchedPos.h) << ")" << std::endl;
-        os << tab("scrollLoresOdd");
-        os << dec(scrollLoresOdd) << std::endl;
-        os << tab("scrollLoresEven");
-        os << dec(scrollLoresEven) << std::endl;
-        os << tab("scrollHiresOdd");
-        os << dec(scrollHiresOdd) << std::endl;
-        os << tab("scrollHiresEven");
-        os << dec(scrollHiresEven) << std::endl;
-        os << tab("Bitplane DMA line");
-        os << bol(bplDmaLine) << std::endl;
-        os << tab("BLS signal");
-        os << bol(bls) << std::endl;
-    }
-
-    if (category & dump::Registers) {
-        
-        os << tab("DMACON");
-        os << hex(dmacon) << std::endl;
-        
-        os << tab("DDFSTRT, DDFSTOP");
-        os << hex(ddfstrt) << ' ' << hex(ddfstop) << ' ' << std::endl;
-        
-        os << tab("DIWSTRT, DIWSTOP");
-        os << hex(diwstrt) << ' ' << hex(diwstop) << ' ' << std::endl;
-
-        os << tab("BPLCON0, BPLCON1");
-        os << hex(bplcon0) << ' ' << hex(bplcon1) << ' ' << std::endl;
-
-        os << tab("BPL1MOD, BPL2MOD");
-        os << dec(bpl1mod) << ' ' << dec(bpl2mod) << ' ' << std::endl;
-    
-        os << tab("BPL0PT - BPL2PT");
-        os << hex(bplpt[0]) << ' ' << hex(bplpt[1]) << ' ';
-        os << hex(bplpt[2]) << ' ' << ' ' << std::endl;
-        os << tab("BPL3PT - BPL5PT");
-        os << hex(bplpt[3]) << ' ' << hex(bplpt[4]) << ' ';
-        os << hex(bplpt[5]) << std::endl;
-
-        os << tab("SPR0PT - SPR3PT");
-        os << hex(sprpt[0]) << ' ' << hex(sprpt[1]) << ' ';
-        os << hex(sprpt[2]) << ' ' << hex(sprpt[3]) << ' ' << std::endl;
-        os << tab("SPR4PT - SPR7PT");
-        os << hex(sprpt[4]) << ' ' << hex(sprpt[5]) << ' ';
-        os << hex(sprpt[5]) << ' ' << hex(sprpt[7]) << ' ' << std::endl;
-
-        os << tab("AUD0PT - AUD3PT");
-        os << hex(audpt[0]) << ' ' << hex(audpt[1]) << ' ';
-        os << hex(audpt[2]) << ' ' << hex(audpt[3]) << ' ' << std::endl;
-
-        os << tab("DSKPT");
-        os << hex(dskpt) << std::endl;
-    }
-        
-    /*
-    ss << "\nBPL DMA table:\n\n");
-    dumpBplEventTable();
-
-    ss << "\nDAS DMA table:\n\n");
-    dumpDasEventTable();
-    */
-}
-
-void
-Agnus::clearStats()
-{
-    for (isize i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
-    
-    stats.copperActivity = 0;
-    stats.blitterActivity = 0;
-    stats.diskActivity = 0;
-    stats.audioActivity = 0;
-    stats.spriteActivity = 0;
-    stats.bitplaneActivity = 0;
-}
-
-void
 Agnus::updateStats()
 {
-    const double w = 0.5;
+    constexpr double w = 0.5;
     
     double copper = stats.usage[BUS_COPPER];
     double blitter = stats.usage[BUS_BLITTER];

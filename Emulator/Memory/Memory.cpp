@@ -115,6 +115,9 @@ Memory::_reset(bool hard)
     // Set up the memory lookup table
     updateMemSrcTables();
     
+    // Initialize statistical counters
+    clearStats();
+    
     // In hard-reset mode, we also initialize RAM
     if (hard) fillRamWithInitPattern();
 }
