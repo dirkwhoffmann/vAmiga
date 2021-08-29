@@ -975,7 +975,6 @@ private:
     void serviceREGEvent(Cycle until);
 
     // Services a raster event
-    void serviceRASEvent();
     void serviceEOLEvent();
 
     // Services a CIA event

@@ -55,7 +55,6 @@ Agnus::_reset(bool hard)
     updateDasJumpTable();
         
     // Schedule initial events
-    scheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT), RAS_HSYNC);
     scheduleRel<SLOT_EOL>(DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
     scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
@@ -650,27 +649,15 @@ Agnus::bpu(u16 v)
 void
 Agnus::execute()
 {
-    // If this assertion hits, the HSYNC event hasn't been served
-    assert(pos.h < HPOS_CNT);
-    
     // Process pending events
     if (scheduler.nextTrigger <= clock) scheduler.executeUntil(clock);
 
-    // Advance the internal clock and the horizontal counter
-    clock += DMA_CYCLES(1);
-    
-#ifdef OLD_HSYNC_HANDLER
-    
-    pos.h = pos.h < HPOS_MAX ? pos.h + 1 : 0;
-
-#else
-    
     // If this assertion hits, the HSYNC event hasn't been served
     assert(pos.h < HPOS_MAX);
-    
+
+    // Advance the internal clock and the horizontal counter
+    clock += DMA_CYCLES(1);
     pos.h++;
-    
-#endif
 }
 
 #ifdef AGNUS_EXEC_DEBUG

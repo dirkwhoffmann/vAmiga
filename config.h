@@ -24,7 +24,7 @@
 #define SNP_SUBMINOR 0
 
 // Uncomment this setting in a release build
-// #define RELEASEBUILD
+#define RELEASEBUILD
 
 
 //
@@ -63,9 +63,6 @@ struct FloatStereo; typedef FloatStereo SampleType;
 
 // Uncomment to fallback to a simpler Agnus execution function
 // #define AGNUS_EXEC_DEBUG
-
-// Uncomment to fallback to the old Agnus hsync handler
-// #define OLD_HSYNC_HANDLER
 
 // Uncomment to fallback to an older style thread messaging mechanism
 // #define USE_CONDITION_VARIABLE

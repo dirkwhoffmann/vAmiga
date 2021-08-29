@@ -24,7 +24,6 @@
 enum_long(SLOT)
 {
     // Primary slots
-    SLOT_RAS,                       // Rasterline
     SLOT_REG,                       // Register changes
     SLOT_CIAA,                      // CIA A execution
     SLOT_CIAB,                      // CIA B execution
@@ -67,7 +66,6 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
         switch (value) {
                 
             case SLOT_REG:   return "REG";
-            case SLOT_RAS:   return "RAS";
             case SLOT_CIAA:  return "CIAA";
             case SLOT_CIAB:  return "CIAB";
             case SLOT_BPL:   return "BPL";

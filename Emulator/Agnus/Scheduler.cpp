@@ -144,16 +144,6 @@ Scheduler::inspectSlot(EventSlot nr) const
 
     switch ((EventSlot)nr) {
 
-        case SLOT_RAS:
-
-            switch (id[nr]) {
-
-                case 0:             i.eventName = "none"; break;
-                case RAS_HSYNC:     i.eventName = "RAS_HSYNC"; break;
-                default:            i.eventName = "*** INVALID ***"; break;
-            }
-            break;
-
         case SLOT_REG:
             
             switch (id[nr]) {
@@ -476,9 +466,6 @@ Scheduler::executeUntil(Cycle cycle) {
     // Check primary slots
     //
 
-    if (isDue<SLOT_RAS>(cycle)) {
-        agnus.serviceRASEvent();
-    }
     if (isDue<SLOT_REG>(cycle)) {
         agnus.serviceREGEvent(cycle);
     }

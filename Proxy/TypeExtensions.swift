@@ -14,7 +14,6 @@ extension EventSlot: CustomStringConvertible {
         switch self {
         
         case .REG:   return "Registers"
-        case .RAS:   return "Rasterline (deprecated)"
         case .CIAA:  return "CIA A"
         case .CIAB:  return "CIA B"
         case .BPL:   return "Bitplane DMA"

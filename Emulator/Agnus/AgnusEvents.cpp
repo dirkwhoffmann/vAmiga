@@ -170,34 +170,10 @@ Agnus::serviceREGEvent(Cycle until)
 }
 
 void
-Agnus::serviceRASEvent()
-{
-#ifdef OLD_HSYNC_HANDLER
-    
-    switch (scheduler.id[SLOT_RAS]) {
-
-        case RAS_HSYNC:
-            
-            hsyncHandler();
-            break;
-
-        default:
-            fatalError;
-    }
-
-#endif
-    
-    // Reschedule event
-    rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
-}
-
-void
 Agnus::serviceEOLEvent()
 {
     assert(scheduler.id[SLOT_EOL] == RAS_HSYNC);
-    
-#ifndef OLD_HSYNC_HANDLER
-    
+        
     /* In the old code, the hsync handler was called at the beginning of the
      * of the first cycle in a rasterline. In the new code, it is called
      * slightly earlier, at the end of the last cycle in the previous line.
@@ -216,8 +192,6 @@ Agnus::serviceEOLEvent()
     
     // Make sure pos.h wraps over to 0 in execute() which is the desired value
     pos.h = -1;
-
-#endif
     
     // Reschedule event
     rescheduleRel<SLOT_EOL>(DMA_CYCLES(HPOS_CNT));
