@@ -855,19 +855,16 @@ public:
     
 public:
 
-    // Executes the device for a single cycle
+    // Executes Agnus for a single cycle
     void execute();
 
-    // Executes the device until the target clock is reached
-    void executeUntil(Cycle targetClock);
-
-    // Executes the device to the beginning of the next E clock cycle
+    // Executes Agnus for a certain amount of cycles
+    void execute(DMACycle cycles);
+    
+    // Executes Agnus to the beginning of the next E clock cycle
     void syncWithEClock();
 
-    // Returns true if the device is in sync with the E clock
-    // bool inSyncWithEClock();
-
-    // Executes the device until the CPU can acquire the bus
+    // Executes Agnus until the CPU can acquire the bus
     void executeUntilBusIsFree();
     void executeUntilBusIsFreeForCIA();
     

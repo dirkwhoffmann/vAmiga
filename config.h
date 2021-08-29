@@ -79,7 +79,6 @@ struct FloatStereo; typedef FloatStereo SampleType;
 // Execution settings
 //
 
-static const int AGNUS_EXE_DEBUG = 1; // Use a simpler Agnus execution function
 static const int NO_SSE          = 0; // Don't use SSE extensions
 
 

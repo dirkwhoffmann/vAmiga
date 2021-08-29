@@ -661,31 +661,9 @@ Agnus::execute()
 }
 
 void
-Agnus::executeUntil(Cycle targetClock)
+Agnus::execute(DMACycle cycles)
 {
-    // Assure the target clock is aligned with the DMA cycle raster
-    assert((targetClock & 0b111) == 0);
-
-    // Compute the number of DMA cycles to execute
-    DMACycle dmaCycles = AS_DMA_CYCLES(targetClock - clock);
- 
-    // Skip execution if nothing has to be done
-    if constexpr (!AGNUS_EXE_DEBUG) {
-        
-        if (targetClock < scheduler.nextTrigger && dmaCycles > 0) {
-            
-            // Advance directly to the target clock
-            clock = targetClock;
-            pos.h += dmaCycles;
-            
-            // If this assertion hits, the HSYNC event hasn't been served
-            assert(pos.h < HPOS_CNT);
-            return;
-        }
-    }
-
-    // Execute DMA cycles one after another
-    for (DMACycle i = 0; i < dmaCycles; i++) execute();
+    for (DMACycle i = 0; i < cycles; i++) execute();
 }
 
 void
@@ -729,7 +707,7 @@ Agnus::syncWithEClock()
     assert(DMA_CYCLES(AS_DMA_CYCLES(clock + delay)) == clock + delay);
     
     // Execute Agnus until the target cycle has been reached
-    executeUntil(clock + delay);
+    execute(AS_DMA_CYCLES(delay));
 
     // Add wait states to the CPU
     cpu.addWaitStates(delay);
