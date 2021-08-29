@@ -132,7 +132,7 @@ Paula::scheduleIrqAbs(IrqSource src, Cycle trigger)
 {
     assert_enum(IrqSource, src);
     assert(trigger != 0);
-    assert(agnus.slot[SLOT_IRQ].id == IRQ_CHECK);
+    assert(scheduler.id[SLOT_IRQ] == IRQ_CHECK);
 
     trace(INT_DEBUG, "scheduleIrq(%lld, %lld)\n", src, trigger);
 

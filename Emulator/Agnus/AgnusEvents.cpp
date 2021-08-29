@@ -25,7 +25,7 @@ Agnus::scheduleNextBplEvent(isize hpos)
     if (u8 next = nextBplEvent[hpos]) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), bplEvent[next]);
     }
-    assert(hasEvent<SLOT_BPL>());
+    assert(scheduler.hasEvent<SLOT_BPL>());
 }
 
 void
@@ -39,7 +39,7 @@ Agnus::scheduleBplEventForCycle(isize hpos)
         scheduleNextBplEvent(hpos);
     }
 
-    assert(hasEvent<SLOT_BPL>());
+    assert(scheduler.hasEvent<SLOT_BPL>());
 }
 
 void
@@ -49,7 +49,7 @@ Agnus::scheduleNextDasEvent(isize hpos)
 
     if (u8 next = nextDasEvent[hpos]) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), dasEvent[next]);
-        assert(hasEvent<SLOT_DAS>());
+        assert(scheduler.hasEvent<SLOT_DAS>());
     } else {
         scheduler.cancel<SLOT_DAS>();
     }
@@ -528,7 +528,7 @@ Agnus::serviceVblEvent()
 void
 Agnus::serviceDASEvent()
 {
-    assert(slot[SLOT_DAS].id == dasEvent[pos.h]);
+    assert(scheduler.id[SLOT_DAS] == dasEvent[pos.h]);
 
     switch (scheduler.id[SLOT_DAS]) {
 

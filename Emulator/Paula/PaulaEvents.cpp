@@ -15,7 +15,7 @@
 void
 Paula::serviceIrqEvent()
 {
-    assert(agnus.slot[SLOT_IRQ].id == IRQ_CHECK);
+    assert(scheduler.id[SLOT_IRQ] == IRQ_CHECK);
 
     Cycle clock = agnus.clock;
     Cycle next = NEVER;
@@ -39,7 +39,7 @@ Paula::serviceIrqEvent()
 void
 Paula::serviceIplEvent()
 {
-    assert(agnus.slot[SLOT_IPL].id == IPL_CHANGE);    
+    assert(scheduler.id[SLOT_IPL] == IPL_CHANGE);    
 
     // Update the value on the CPU's IPL pin
     cpu.setIPL((iplPipe >> 24) & 0xFF);

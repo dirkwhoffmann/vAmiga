@@ -916,8 +916,8 @@ Agnus::updateSpriteDMA()
 void
 Agnus::hsyncHandler()
 {
-    assert(pos.h == 0 || pos.h == HPOS_MAX + 1);
-
+    assert(pos.h == 0);
+    
     // Let Denise finish up the current line
     denise.endOfLine(pos.v);
 
@@ -934,7 +934,7 @@ Agnus::hsyncHandler()
     paula.channel3.requestDMA();
 
     // Reset the horizontal counter
-    pos.h = 0;
+    // pos.h = 0;
 
     // Advance the vertical counter
     if (++pos.v >= frame.numLines()) vsyncHandler();

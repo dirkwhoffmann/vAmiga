@@ -24,8 +24,8 @@
 enum_long(SLOT)
 {
     // Primary slots
-    SLOT_REG,                       // Register changes
     SLOT_RAS,                       // Rasterline
+    SLOT_REG,                       // Register changes
     SLOT_CIAA,                      // CIA A execution
     SLOT_CIAB,                      // CIA B execution
     SLOT_BPL,                       // Bitplane DMA
