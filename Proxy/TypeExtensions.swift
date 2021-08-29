@@ -35,9 +35,10 @@ extension EventSlot: CustomStringConvertible {
         case .TXD:   return "UART out"
         case .RXD:   return "UART in"
         case .POT:   return "Potentiometer"
-        case .EOL:   return "Rasterline"
+        case .RAS:   return "Rasterline"
         case .INS:   return "Inspector"
         case .COUNT: return "???"
+            
         default:     fatalError()
         }
     }

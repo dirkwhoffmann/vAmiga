@@ -170,9 +170,9 @@ Agnus::serviceREGEvent(Cycle until)
 }
 
 void
-Agnus::serviceEOLEvent()
+Agnus::serviceRASEvent()
 {
-    assert(scheduler.id[SLOT_EOL] == RAS_HSYNC);
+    assert(scheduler.id[SLOT_RAS] == RAS_HSYNC);
         
     /* In the old code, the hsync handler was called at the beginning of the
      * of the first cycle in a rasterline. In the new code, it is called
@@ -194,7 +194,7 @@ Agnus::serviceEOLEvent()
     pos.h = -1;
     
     // Reschedule event
-    rescheduleRel<SLOT_EOL>(DMA_CYCLES(HPOS_CNT));
+    rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
 }
 
 template <int nr> void

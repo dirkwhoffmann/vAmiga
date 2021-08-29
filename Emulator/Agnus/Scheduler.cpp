@@ -433,7 +433,7 @@ Scheduler::inspectSlot(EventSlot nr) const
             }
             break;
 
-        case SLOT_EOL:
+        case SLOT_RAS:
 
             switch (id[nr]) {
 
@@ -533,8 +533,8 @@ Scheduler::executeUntil(Cycle cycle) {
         if (isDue<SLOT_IPL>(cycle)) {
             paula.serviceIplEvent();
         }
-        if (isDue<SLOT_EOL>(cycle)) {
-            agnus.serviceEOLEvent();
+        if (isDue<SLOT_RAS>(cycle)) {
+            agnus.serviceRASEvent();
         }
         if (isDue<SLOT_INS>(cycle)) {
             agnus.serviceINSEvent();

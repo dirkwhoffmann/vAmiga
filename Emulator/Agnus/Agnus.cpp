@@ -55,7 +55,7 @@ Agnus::_reset(bool hard)
     updateDasJumpTable();
         
     // Schedule initial events
-    scheduleRel<SLOT_EOL>(DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
+    scheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
     scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleRel<SLOT_SEC>(NEVER, SEC_TRIGGER);
@@ -660,23 +660,6 @@ Agnus::execute()
     pos.h++;
 }
 
-#ifdef AGNUS_EXEC_DEBUG
-
-void
-Agnus::executeUntil(Cycle targetClock)
-{
-    // Assure the target clock is aligned with the DMA cycle raster
-    assert((targetClock & 0b111) == 0);
-
-    // Compute the number of DMA cycles to execute
-    DMACycle dmaCycles = (targetClock - clock) / DMA_CYCLES(1);
-
-    // Execute DMA cycles one after another
-    for (DMACycle i = 0; i < dmaCycles; i++) execute();
-}
-
-#else
-
 void
 Agnus::executeUntil(Cycle targetClock)
 {
@@ -686,22 +669,24 @@ Agnus::executeUntil(Cycle targetClock)
     // Compute the number of DMA cycles to execute
     DMACycle dmaCycles = AS_DMA_CYCLES(targetClock - clock);
  
-    if (targetClock < scheduler.nextTrigger && dmaCycles > 0) {
-
-        // Advance directly to the target clock
-        clock = targetClock;
-        pos.h += dmaCycles;
-
-        // If this assertion hits, the HSYNC event hasn't been served
-        assert(pos.h < HPOS_CNT);
-
-    } else {
-
-        // Execute DMA cycles one after another
-        for (DMACycle i = 0; i < dmaCycles; i++) execute();
+    // Skip execution if nothing has to be done
+    if constexpr (!AGNUS_EXE_DEBUG) {
+        
+        if (targetClock < scheduler.nextTrigger && dmaCycles > 0) {
+            
+            // Advance directly to the target clock
+            clock = targetClock;
+            pos.h += dmaCycles;
+            
+            // If this assertion hits, the HSYNC event hasn't been served
+            assert(pos.h < HPOS_CNT);
+            return;
+        }
     }
+
+    // Execute DMA cycles one after another
+    for (DMACycle i = 0; i < dmaCycles; i++) execute();
 }
-#endif
 
 void
 Agnus::syncWithEClock()
@@ -763,8 +748,7 @@ Agnus::executeUntilBusIsFree()
 
         // Execute Agnus until the bus is free
         do {
-            // debug("Blocked by %d\n", busOwner[posh]);
-
+            
             posh = pos.h;
             execute();
             if (++delay == 2) bls = true;

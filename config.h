@@ -61,9 +61,6 @@ struct FloatStereo; typedef FloatStereo SampleType;
 // Uncomment to set a breakpoint on startup
 // #define INITIAL_BREAKPOINT 0xFC1354
 
-// Uncomment to fallback to a simpler Agnus execution function
-// #define AGNUS_EXEC_DEBUG
-
 // Uncomment to fallback to an older style thread messaging mechanism
 // #define USE_CONDITION_VARIABLE
 
@@ -78,6 +75,13 @@ struct FloatStereo; typedef FloatStereo SampleType;
 // Uncomment to colorize certain rasterlines
 // #define LINE_DEBUG (agnus.pos.v == 260 || agnus.pos.v == 300)
 
+//
+// Execution settings
+//
+
+static const int AGNUS_EXE_DEBUG = 1; // Use a simpler Agnus execution function
+static const int NO_SSE          = 0; // Don't use SSE extensions
+
 
 //
 // Debug settings
@@ -87,7 +91,6 @@ struct FloatStereo; typedef FloatStereo SampleType;
 static const int CNF_DEBUG       = 0; // Configuration options
 static const int XFILES          = 0; // Report paranormal activity
 static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
-static const int NO_SSE          = 0; // Don't use SSE extensions
 
 // Runloop
 static const int RUN_DEBUG       = 0; // Run loop, component states

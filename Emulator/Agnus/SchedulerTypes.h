@@ -48,7 +48,7 @@ enum_long(SLOT)
     SLOT_RXD,                       // Serial data in (UART)
     SLOT_POT,                       // Potentiometer
     SLOT_INS,                       // Handles periodic calls to inspect()
-    SLOT_EOL,                       // HSYNC handler (End of Line)
+    SLOT_RAS,                       // HSYNC handler (End of Line)
     SLOT_COUNT
 };
 typedef SLOT EventSlot;
@@ -88,7 +88,7 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_RXD:   return "RXD";
             case SLOT_POT:   return "POT";
             case SLOT_INS:   return "INS";
-            case SLOT_EOL:   return "EOL";
+            case SLOT_RAS:   return "RAS";
             case SLOT_COUNT: return "???";
         }
         return "???";
