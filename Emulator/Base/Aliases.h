@@ -62,6 +62,9 @@ typedef u32 Block;
 #define IS_CIA_CYCLE(cycles)  ((cycles) % 40 == 0)
 #define IS_DMA_CYCLE(cycles)  ((cycles) & 7 == 0)
 
+// Converts CPU cycles to DMA cycles
+#define CPU_AS_DMA_CYCLES(cycles) (cycles >> 1)
+
 // Converts kilo and mega bytes to bytes
 #define KB(x) ((x) << 10)
 #define MB(x) ((x) << 20)

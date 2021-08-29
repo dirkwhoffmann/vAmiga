@@ -28,8 +28,7 @@ Moira::sync(int cycles)
     clock += cycles;
 
     // Emulate Agnus up to the same cycle
-    // agnus.executeUntil(CPU_CYCLES(clock));
-    agnus.execute(AS_DMA_CYCLES(CPU_CYCLES(cycles)));
+    agnus.execute(CPU_AS_DMA_CYCLES(cycles));
 }
 
 u8
