@@ -56,6 +56,7 @@ Agnus::_reset(bool hard)
         
     // Schedule initial events
     scheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT), RAS_HSYNC);
+    scheduleRel<SLOT_EOL>(DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
     scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleRel<SLOT_SEC>(NEVER, SEC_TRIGGER);
@@ -657,7 +658,19 @@ Agnus::execute()
 
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);
+    
+#ifdef OLD_HSYNC_HANDLER
+    
     pos.h = pos.h < HPOS_MAX ? pos.h + 1 : 0;
+
+#else
+    
+    // If this assertion hits, the HSYNC event hasn't been served
+    assert(pos.h < HPOS_MAX);
+    
+    pos.h++;
+    
+#endif
 }
 
 #ifdef AGNUS_EXEC_DEBUG
@@ -932,9 +945,6 @@ Agnus::hsyncHandler()
     paula.channel1.requestDMA();
     paula.channel2.requestDMA();
     paula.channel3.requestDMA();
-
-    // Reset the horizontal counter
-    // pos.h = 0;
 
     // Advance the vertical counter
     if (++pos.v >= frame.numLines()) vsyncHandler();

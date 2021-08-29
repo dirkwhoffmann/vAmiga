@@ -20,8 +20,7 @@
 void
 Scheduler::_initialize()
 {
-    // Wipe out event slots
-    // std::memset(slot, 0, sizeof(slot));
+
 }
 
 void
@@ -145,22 +144,22 @@ Scheduler::inspectSlot(EventSlot nr) const
 
     switch ((EventSlot)nr) {
 
-        case SLOT_REG:
-            
-            switch (id[nr]) {
-
-                case 0:             i.eventName = "none"; break;
-                case REG_CHANGE:    i.eventName = "REG_CHANGE"; break;
-                default:            i.eventName = "*** INVALID ***"; break;
-            }
-            break;
-
         case SLOT_RAS:
 
             switch (id[nr]) {
 
                 case 0:             i.eventName = "none"; break;
                 case RAS_HSYNC:     i.eventName = "RAS_HSYNC"; break;
+                default:            i.eventName = "*** INVALID ***"; break;
+            }
+            break;
+
+        case SLOT_REG:
+            
+            switch (id[nr]) {
+
+                case 0:             i.eventName = "none"; break;
+                case REG_CHANGE:    i.eventName = "REG_CHANGE"; break;
                 default:            i.eventName = "*** INVALID ***"; break;
             }
             break;
@@ -444,6 +443,16 @@ Scheduler::inspectSlot(EventSlot nr) const
             }
             break;
 
+        case SLOT_EOL:
+
+            switch (id[nr]) {
+
+                case 0:             i.eventName = "none"; break;
+                case RAS_HSYNC:     i.eventName = "RAS_HSYNC"; break;
+                default:            i.eventName = "*** INVALID ***"; break;
+            }
+            break;
+
         default:
             fatalError;
     }
@@ -536,6 +545,9 @@ Scheduler::executeUntil(Cycle cycle) {
         }
         if (isDue<SLOT_IPL>(cycle)) {
             paula.serviceIplEvent();
+        }
+        if (isDue<SLOT_EOL>(cycle)) {
+            agnus.serviceEOLEvent();
         }
         if (isDue<SLOT_INS>(cycle)) {
             agnus.serviceINSEvent();

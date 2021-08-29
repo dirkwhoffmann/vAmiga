@@ -110,7 +110,7 @@ public:
 
     // The current beam position
     Beam pos;
-
+    
     // Latched beam position (recorded when BPLCON0::ERSY is set)
     Beam latchedPos;
     
@@ -976,6 +976,7 @@ private:
 
     // Services a raster event
     void serviceRASEvent();
+    void serviceEOLEvent();
 
     // Services a CIA event
     template <int nr> void serviceCIAEvent();

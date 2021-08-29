@@ -14,7 +14,7 @@ extension EventSlot: CustomStringConvertible {
         switch self {
         
         case .REG:   return "Registers"
-        case .RAS:   return "Rasterline"
+        case .RAS:   return "Rasterline (deprecated)"
         case .CIAA:  return "CIA A"
         case .CIAB:  return "CIA B"
         case .BPL:   return "Bitplane DMA"
@@ -36,6 +36,7 @@ extension EventSlot: CustomStringConvertible {
         case .TXD:   return "UART out"
         case .RXD:   return "UART in"
         case .POT:   return "Potentiometer"
+        case .EOL:   return "Rasterline"
         case .INS:   return "Inspector"
         case .COUNT: return "???"
         default:     fatalError()

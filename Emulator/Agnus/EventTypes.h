@@ -25,7 +25,6 @@ enum_long(EventID)
 
     // REG slot
     REG_CHANGE = 1,
-    // REG_HSYNC,
     REG_EVENT_COUNT,
 
     // CIA slots
