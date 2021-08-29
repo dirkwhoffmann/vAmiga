@@ -12,6 +12,24 @@
 #include "Agnus.h"
 
 void
+CIA::serviceEvent(EventID id)
+{
+    switch(id) {
+
+        case CIA_EXECUTE:
+            executeOneCycle();
+            break;
+
+        case CIA_WAKEUP:
+            wakeUp();
+            break;
+
+        default:
+            fatalError;
+    }
+}
+
+void
 CIA::scheduleNextExecution()
 {
     if (isCIAA()) {

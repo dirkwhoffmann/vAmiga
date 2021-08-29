@@ -469,10 +469,10 @@ Scheduler::executeUntil(Cycle cycle) {
         agnus.serviceREGEvent(cycle);
     }
     if (isDue<SLOT_CIAA>(cycle)) {
-        agnus.serviceCIAEvent<0>(scheduler.id[SLOT_CIAA]);
+        ciaa.serviceEvent(scheduler.id[SLOT_CIAA]);
     }
     if (isDue<SLOT_CIAB>(cycle)) {
-        agnus.serviceCIAEvent<1>(scheduler.id[SLOT_CIAB]);
+        ciab.serviceEvent(scheduler.id[SLOT_CIAB]);
     }
     if (isDue<SLOT_BPL>(cycle)) {
         agnus.serviceBPLEvent(scheduler.id[SLOT_BPL]);

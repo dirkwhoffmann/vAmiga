@@ -30,9 +30,9 @@
  *  HSYNC_UPDATE_DAS_TABLE : Forces the hsync handler to update the disk,
  *                          audio, sprite DMA event table.
  */
-#define HSYNC_PREDICT_DDF       0b001
-#define HSYNC_UPDATE_BPL_TABLE  0b010
-#define HSYNC_UPDATE_DAS_TABLE  0b100
+static constexpr usize HSYNC_PREDICT_DDF =      0b001;
+static constexpr usize HSYNC_UPDATE_BPL_TABLE = 0b010;
+static constexpr usize HSYNC_UPDATE_DAS_TABLE = 0b100;
 
 /* Bitplane event modifiers
  *
@@ -41,9 +41,9 @@
  *               DRAW_EVEN : Starts the shift registers of the even bitplanes
  *                           to generate pixels.
  */
-#define DRAW_ODD                0b001
-#define DRAW_EVEN               0b010
-#define DRAW_BOTH               0b011
+static constexpr usize DRAW_ODD =  0b001;
+static constexpr usize DRAW_EVEN = 0b010;
+static constexpr usize DRAW_BOTH = 0b011;
 
 class Agnus : public SubComponent {
     
@@ -75,6 +75,8 @@ public:
     // Event tables
     //
     
+private:
+    
     // Lookup tables
     static EventID bplDMA[2][7][HPOS_CNT]; // [Hires][Bitplane][DMA cycle]
     static EventID dasDMA[64][HPOS_CNT];   // [Bits 0 .. 5 of DMACON]
@@ -95,7 +97,7 @@ public:
 public:
     
     // Action flags controlling the HSYNC handler
-    u64 hsyncActions;
+    usize hsyncActions;
 
     // Pending register changes (used for emulating register delays)
     RegChangeRecorder<8> changeRecorder;
@@ -973,9 +975,6 @@ private:
 
     // Services a raster event
     void serviceRASEvent();
-
-    // Services a CIA event
-    template <int nr> void serviceCIAEvent(EventID id);
 
     // Services a bitplane event
     void serviceBPLEvent(EventID id);

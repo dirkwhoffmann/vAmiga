@@ -197,24 +197,6 @@ Agnus::serviceRASEvent()
     rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
 }
 
-template <int nr> void
-Agnus::serviceCIAEvent(EventID id)
-{
-    switch(id) {
-
-        case CIA_EXECUTE:
-            nr ? ciab.executeOneCycle() : ciaa.executeOneCycle();
-            break;
-
-        case CIA_WAKEUP:
-            nr ? ciab.wakeUp() : ciaa.wakeUp();
-            break;
-
-        default:
-            fatalError;
-    }
-}
-
 void
 Agnus::serviceBPLEvent(EventID id)
 {
@@ -723,6 +705,3 @@ Agnus::serviceINSEvent(EventID id)
     // Reschedule event
     rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000000));
 }
-
-template void Agnus::serviceCIAEvent<0>(EventID id);
-template void Agnus::serviceCIAEvent<1>(EventID id);
