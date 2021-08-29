@@ -11,8 +11,8 @@
 
 #include "KeyboardTypes.h"
 #include "SubComponent.h"
-#include "Event.h"
 #include "RingBuffer.h"
+#include "SchedulerTypes.h"
 
 class Keyboard : public SubComponent {
 

@@ -10,8 +10,8 @@
 #pragma once
 
 #include "BlitterTypes.h"
-#include "Event.h"
 #include "Memory.h"
+#include "SchedulerTypes.h"
 #include "SubComponent.h"
 
 /* The Blitter supports three accuracy levels:

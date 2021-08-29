@@ -398,7 +398,6 @@
 		5083CF642546BEAA00A28EF8 /* FSBitmapBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSBitmapBlock.h; sourceTree = "<group>"; };
 		5083CF682546C0D700A28EF8 /* FSUserDirBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSUserDirBlock.cpp; sourceTree = "<group>"; };
 		5083CF692546C0D700A28EF8 /* FSUserDirBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSUserDirBlock.h; sourceTree = "<group>"; };
-		5085830523265B3D004F942F /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		5085FE5821FB6856009753EF /* ProxyExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyExtensions.swift; sourceTree = "<group>"; };
 		508833EC21F0D21B009890EA /* ADFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ADFFile.cpp; sourceTree = "<group>"; };
 		508833ED21F0D21B009890EA /* ADFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADFFile.h; sourceTree = "<group>"; };
@@ -511,7 +510,6 @@
 		50A61468260DC2D700A01428 /* AmigaComponentTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaComponentTypes.h; sourceTree = "<group>"; };
 		50A6146E260DC91600A01428 /* BootBlockImageTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BootBlockImageTypes.h; sourceTree = "<group>"; };
 		50A61470260DCA6200A01428 /* RomFileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFileTypes.h; sourceTree = "<group>"; };
-		50A61489260DEA5100A01428 /* EventTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventTypes.h; sourceTree = "<group>"; };
 		50A64B94257A63A600442964 /* BootBlockImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BootBlockImage.h; sourceTree = "<group>"; };
 		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
 		50AA4CE126DA11010050B871 /* Scheduler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scheduler.cpp; sourceTree = "<group>"; };
@@ -814,8 +812,6 @@
 				50CF4634262042D300BB3B95 /* Makefile */,
 				503990C522D8CCB600035783 /* Beam.h */,
 				5015FF3E242BA00F005175D9 /* Frame.h */,
-				50A61489260DEA5100A01428 /* EventTypes.h */,
-				5085830523265B3D004F942F /* Event.h */,
 				50F924FC2428B8CD00DD91AB /* DDF.h */,
 				50F924FB2428B8CD00DD91AB /* DDF.cpp */,
 				50DF2C9E2268CFC000795256 /* AgnusTypes.h */,

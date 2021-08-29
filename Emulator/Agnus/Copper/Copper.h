@@ -14,8 +14,8 @@
 #include "Beam.h"
 #include "Checksum.h"
 #include "CopperDebugger.h"
-#include "Event.h"
 #include "Memory.h"
+#include "SchedulerTypes.h"
 
 class Copper : public SubComponent
 {

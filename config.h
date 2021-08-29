@@ -15,16 +15,16 @@
 
 // Version number
 #define VER_MAJOR 1
-#define VER_MINOR 0
-#define VER_SUBMINOR 2
+#define VER_MINOR 1
+#define VER_SUBMINOR 0
 
 // Snapshot version number
 #define SNP_MAJOR 1
 #define SNP_MINOR 0
-#define SNP_SUBMINOR 0
+#define SNP_SUBMINOR 2
 
 // Uncomment this setting in a release build
-#define RELEASEBUILD
+// #define RELEASEBUILD
 
 
 //
@@ -60,9 +60,6 @@ struct FloatStereo; typedef FloatStereo SampleType;
 
 // Uncomment to set a breakpoint on startup
 // #define INITIAL_BREAKPOINT 0xFC1354
-
-// Uncomment to fallback to an older style thread messaging mechanism
-// #define USE_CONDITION_VARIABLE
 
 // Uncomment to lauch the emulator with a disk in df0
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/Planet_Rocklobster_Oxyron.adf"

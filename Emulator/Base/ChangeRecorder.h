@@ -10,7 +10,7 @@
 #pragma once
 
 #include "RingBuffer.h"
-#include "Event.h"
+#include "SchedulerTypes.h"
 
 enum RegChangeID : i32
 {

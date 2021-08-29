@@ -11,7 +11,7 @@
 
 #include "UARTTypes.h"
 #include "SubComponent.h"
-#include "Event.h"
+#include "SchedulerTypes.h"
 
 class UART : public SubComponent {
     
