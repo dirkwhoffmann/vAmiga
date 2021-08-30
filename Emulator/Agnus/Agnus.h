@@ -760,18 +760,6 @@ private:
     // Updates the jump table for the dasEvent table
     void updateDasJumpTable(i16 end = HPOS_MAX);
 
-    // Dumps an event table for debugging
-    // TODO: MOVE TO _dump with category dma
-    void dumpEventTable(const EventID *table, char str[256][3], isize from, isize to) const;
-
-public:
-    
-    // Dumps the BPL or DAS event table for debugging
-    void dumpBplEventTable(int from, int to) const;
-    void dumpBplEventTable() const;
-    void dumpDasEventTable(int from, int to) const;
-    void dumpDasEventTable() const;
-
         
     //
     // Managing the data fetch window
