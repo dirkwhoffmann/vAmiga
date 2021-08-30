@@ -47,7 +47,7 @@ static constexpr usize DRAW_BOTH = 0b011;
 
 class Agnus : public SubComponent {
     
-    friend class Scheduler;
+    // friend class Scheduler;
     
     // Current configuration
     AgnusConfig config = {};
@@ -746,8 +746,7 @@ public:
 
     // Renews all events in the BPL event table
     void updateBplEvents(u16 dmacon, u16 bplcon0, isize first = 0, isize last = HPOS_MAX);
-    void updateBplEvents(isize first = 0, isize last = HPOS_MAX) {
-        updateBplEvents(dmacon, bplcon0, first, last); }
+    void updateBplEvents(isize first = 0, isize last = HPOS_MAX);
     void updateDrawingFlags(bool hires);
         
     // Removes all events from the DAS event table
@@ -775,49 +774,7 @@ public:
     void dumpDasEventTable(int from, int to) const;
     void dumpDasEventTable() const;
 
-    
-    //
-    // Accessing registers
-    //
-    
-public:
-
-    // DMACONR, DMACON
-    u16 peekDMACONR();
-     void pokeDMACON(u16 value);
-     void setDMACON(u16 oldValue, u16 newValue);
-    
-    // VHPOSR, VHPOS, VPOSR, VPOS
-    u16 peekVHPOSR();
-    void pokeVHPOS(u16 value);
-    u16 peekVPOSR();
-    void pokeVPOS(u16 value);
-    
-    // DIWSTRT, DIWSTOP
-    template <Accessor s> void pokeDIWSTRT(u16 value);
-    template <Accessor s> void pokeDIWSTOP(u16 value);
-    void setDIWSTRT(u16 value);
-    void setDIWSTOP(u16 value);
-
-    // DDFSTRT, DDFSTOP
-    void pokeDDFSTRT(u16 value);
-    void pokeDDFSTOP(u16 value);
-    void setDDFSTRT(u16 old, u16 value);
-    void setDDFSTOP(u16 old, u16 value);
-
-    // BPLCON0 and BPLCON1
-    void pokeBPLCON0(u16 value);
-    void setBPLCON0(u16 oldValue, u16 newValue);
-    void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
-    bool hires() { return GET_BIT(bplcon0, 15); }
-    bool lores() { return GET_BIT(bplcon0, 10); }
-    bool ersy() { return GET_BIT(bplcon0, 1); }
-
-    void pokeBPLCON1(u16 value);
-    void setBPLCON1(u16 oldValue, u16 newValue);
-    void setBPLCON1(u16 newValue) { setBPLCON1(bplcon1, newValue); }
-    
-    
+        
     //
     // Managing the data fetch window
     //
@@ -872,14 +829,11 @@ public:
 
 private:
 
-    // Performs all pending register changes
-    void updateRegisters();
-
     // Executes the first sprite DMA cycle
-    template <int nr> void executeFirstSpriteCycle();
+    template <isize nr> void executeFirstSpriteCycle();
 
     // Executes the second sprite DMA cycle
-    template <int nr> void executeSecondSpriteCycle();
+    template <isize nr> void executeSecondSpriteCycle();
 
     // Updates the sprite DMA status in cycle 0xDF
     void updateSpriteDMA();
@@ -890,6 +844,48 @@ private:
     // Finishes up the current frame
     void vsyncHandler();
 
+    
+    //
+    // Accessing registers
+    //
+    
+public:
+
+    // DMACONR, DMACON
+    u16 peekDMACONR();
+     void pokeDMACON(u16 value);
+     void setDMACON(u16 oldValue, u16 newValue);
+    
+    // VHPOSR, VHPOS, VPOSR, VPOS
+    u16 peekVHPOSR();
+    void pokeVHPOS(u16 value);
+    u16 peekVPOSR();
+    void pokeVPOS(u16 value);
+    
+    // DIWSTRT, DIWSTOP
+    template <Accessor s> void pokeDIWSTRT(u16 value);
+    template <Accessor s> void pokeDIWSTOP(u16 value);
+    void setDIWSTRT(u16 value);
+    void setDIWSTOP(u16 value);
+
+    // DDFSTRT, DDFSTOP
+    void pokeDDFSTRT(u16 value);
+    void pokeDDFSTOP(u16 value);
+    void setDDFSTRT(u16 old, u16 value);
+    void setDDFSTOP(u16 old, u16 value);
+
+    // BPLCON0 and BPLCON1
+    void pokeBPLCON0(u16 value);
+    void setBPLCON0(u16 oldValue, u16 newValue);
+    void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
+    bool hires() { return GET_BIT(bplcon0, 15); }
+    bool lores() { return GET_BIT(bplcon0, 10); }
+    bool ersy() { return GET_BIT(bplcon0, 1); }
+
+    void pokeBPLCON1(u16 value);
+    void setBPLCON1(u16 oldValue, u16 newValue);
+    void setBPLCON1(u16 newValue) { setBPLCON1(bplcon1, newValue); }
+    
 
     //
     // Scheduling events
@@ -905,10 +901,14 @@ public:
         scheduler.scheduleAbs<s>(clock + cycle, id, data);
     }
     
+    template<EventSlot s> void schedulePos(Beam pos, EventID id, i64 data) {
+        scheduler.scheduleAbs<s>(beamToCycle(pos), id, data);
+    }
+
     template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id) {
         scheduler.scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
     }
-    
+
     template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id, i64 data) {
         scheduler.scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
     }
@@ -916,7 +916,11 @@ public:
     template<EventSlot s> void rescheduleRel(Cycle cycle) {
         scheduler.rescheduleAbs<s>(clock + cycle);
     }
-    
+
+    template<EventSlot s> void reschedulePos(Beam pos) {
+        scheduler.rescheduleAbs<s>(beamToCycle(pos));
+    }
+
     template<EventSlot s> void reschedulePos(i16 vpos, i16 hpos) {
         scheduler.rescheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ));
     }
@@ -971,7 +975,7 @@ public:
     // Servicing events
     //
 
-private:
+public:
 
     // Services a register change event
     void serviceREGEvent(Cycle until);
@@ -981,16 +985,14 @@ private:
 
     // Services a bitplane event
     void serviceBPLEvent(EventID id);
-    template <int nr> void serviceBPLEventHires();
-    template <int nr> void serviceBPLEventLores();
+    template <isize nr> void serviceBPLEventHires();
+    template <isize nr> void serviceBPLEventLores();
 
     // Services a vertical blank interrupt
     void serviceVblEvent(EventID id);
     
     // Services a Disk, Audio, or Sprite event
     void serviceDASEvent(EventID id);
-    
-public:
     
     // Services an inspection event
     void serviceINSEvent(EventID id);

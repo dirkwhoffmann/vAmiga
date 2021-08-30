@@ -463,6 +463,12 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, isize first, isize last)
 }
 
 void
+Agnus::updateBplEvents(isize first, isize last)
+{
+    updateBplEvents(dmacon, bplcon0, first, last);
+}
+
+void
 Agnus::updateDrawingFlags(bool hires)
 {
     assert(scrollHiresEven < 8);

@@ -765,12 +765,7 @@ Agnus::recordRegisterChange(Cycle delay, u32 addr, u16 value)
     scheduleNextREGEvent();
 }
 
-void
-Agnus::updateRegisters()
-{
-}
-
-template <int nr> void
+template <isize nr> void
 Agnus::executeFirstSpriteCycle()
 {
     trace(SPR_DEBUG, "executeFirstSpriteCycle<%d>\n", nr);
@@ -798,7 +793,7 @@ Agnus::executeFirstSpriteCycle()
     }
 }
 
-template <int nr> void
+template <isize nr> void
 Agnus::executeSecondSpriteCycle()
 {
     trace(SPR_DEBUG, "executeSecondSpriteCycle<%d>\n", nr);

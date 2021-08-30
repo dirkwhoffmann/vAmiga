@@ -58,16 +58,18 @@ Moira::read16OnReset(u32 addr)
 void
 Moira::write8(u32 addr, u8 val)
 {
-    trace(XFILES && addr - reg.pc < 5, "XFILES: write8 close to PC %x\n", reg.pc);
-
+    if constexpr (XFILES) if (addr - reg.pc < 5) {
+        trace(true, "XFILES: write8 close to PC %x\n", reg.pc);
+    }
     mem.poke8 <ACCESSOR_CPU> (addr, val);
 }
 
 void
 Moira::write16 (u32 addr, u16 val)
 {
-    trace(XFILES && addr - reg.pc < 5, "XFILES: write16 close to PC %x\n", reg.pc);
-
+    if constexpr (XFILES) if (addr - reg.pc < 5) {
+        trace(true, "XFILES: write16 close to PC %x\n", reg.pc);
+    }
     mem.poke16 <ACCESSOR_CPU> (addr, val);
 }
 
@@ -87,8 +89,8 @@ Moira::signalReset()
 void
 Moira::signalStop(u16 op)
 {
-    if (!(op & 0x2000)) {
-        trace(XFILES, "XFILES: STOP instruction (%x)\n", op);
+    if constexpr (XFILES) {
+        if (!(op & 0x2000)) trace(true, "XFILES: STOP instruction (%x)\n", op);
     }
 }
 
@@ -132,7 +134,7 @@ Moira::signalIllegalOpcodeException(u16 opcode)
 void
 Moira::signalTraceException()
 {
-    // debug(XFILES, "XFILES: traceException\n");
+
 }
 
 void
@@ -144,6 +146,7 @@ Moira::signalTrapException()
 void
 Moira::signalPrivilegeViolation()
 {
+    
 }
 
 void

@@ -467,7 +467,7 @@ Agnus::serviceBPLEvent(EventID id)
     scheduleNextBplEvent();
 }
 
-template <int nr> void
+template <isize nr> void
 Agnus::serviceBPLEventHires()
 {
     // Perform bitplane DMA
@@ -477,7 +477,7 @@ Agnus::serviceBPLEventHires()
     if (pos.h >= ddfHires.stop - 4) addBPLMOD<nr>();
 }
 
-template <int nr> void
+template <isize nr> void
 Agnus::serviceBPLEventLores()
 {
     // Perform bitplane DMA
