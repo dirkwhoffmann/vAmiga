@@ -111,13 +111,29 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << hex(dskpt) << std::endl;
     }
         
-    /*
-    ss << "\nBPL DMA table:\n\n");
-    dumpBplEventTable();
+    if (category & dump::Dma) {
 
-    ss << "\nDAS DMA table:\n\n");
-    dumpDasEventTable();
-    */
+        for (isize row = 0; row < HPOS_CNT; row++) {
+            
+            isize i = (row / 2) + ((row % 2) ? ((HPOS_CNT + 1) / 2) : 0);
+            
+            string cycle = std::to_string(i) + ":";
+            os << std::left << std::setw(5) << cycle;
+
+            string bpl = Scheduler::eventName(SLOT_BPL, bplEvent[i]);
+            os << std::left << std::setw(12) << bpl;
+            os << " + ";
+            string das = Scheduler::eventName(SLOT_DAS, dasEvent[i]);
+            os << std::left << std::setw(12) << das;
+            
+            string next = "-> ";
+            next += std::to_string(nextBplEvent[i]) + ",";
+            next += std::to_string(nextDasEvent[i]);
+            os << std::left << std::setw(14) << next;
+
+            if (row % 2) { os << std::endl; } else { os << "  "; }
+        }
+    }
 }
 
 void

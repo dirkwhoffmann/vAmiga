@@ -269,11 +269,15 @@ Interpreter::registerInstructions()
              &RetroShell::exec <Token::agnus, Token::inspect, Token::state>);
 
     root.add({"agnus", "inspect", "registers"},
-             "category", "Displays the current register value",
+             "category", "Displays the current register values",
              &RetroShell::exec <Token::agnus, Token::inspect, Token::registers>);
 
+    root.add({"agnus", "inspect", "dma"},
+             "category", "Displays the scheduled DMA transfers",
+             &RetroShell::exec <Token::agnus, Token::inspect, Token::dma>);
+
     root.add({"agnus", "inspect", "events"},
-             "category", "Displays scheduled events",
+             "category", "Displays all scheduled events",
              &RetroShell::exec <Token::agnus, Token::inspect, Token::events>);
     
     

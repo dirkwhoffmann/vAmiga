@@ -31,7 +31,7 @@ enum class Token
     set, show, source, wait,
     
     // Categories
-    checksums, devices, events, registers, state,
+    checksums, devices, dma, events, registers, state,
         
     // Keys
     accuracy, bankmap, bitplanes, brightness, channel, chip, clxsprspr,

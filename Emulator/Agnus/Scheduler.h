@@ -84,9 +84,6 @@ class Scheduler : public SubComponent {
 
 public:
     
-    // Event slots
-    // Event slot[SLOT_COUNT] = { };
-
     // Trigger cycle
     Cycle trigger[SLOT_COUNT] = { };
 
@@ -96,9 +93,15 @@ public:
     // An optional data value
     i64 data[SLOT_COUNT] = { };
     
-    
     // Next trigger cycle
     Cycle nextTrigger = NEVER;
+    
+    
+    //
+    // Class methods
+    //
+    
+    static const char *eventName(EventSlot slot, EventID id);
     
     
     //
