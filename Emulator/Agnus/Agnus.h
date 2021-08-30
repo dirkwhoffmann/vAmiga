@@ -745,25 +745,23 @@ public:
     void clearBplEvents();
 
     // Renews all events in the BPL event table
-    void updateBplEvents(u16 dmacon, u16 bplcon0, isize first = 0, isize last = HPOS_MAX);
-    void updateBplEvents(isize first = 0, isize last = HPOS_MAX);
+    void updateBplEvents(u16 dmacon, u16 bplcon0, isize first = 0);
+    void updateBplEvents(isize first = 0) { updateBplEvents(dmacon, bplcon0, first); }
     void updateDrawingFlags(bool hires);
         
-    // Removes all events from the DAS event table
-    void clearDasEvents();
-
     // Renews all events in the the DAS event table
     void updateDasEvents(u16 dmacon);
 
 private:
 
     // Updates the jump table for the bplEvent table
-    void updateBplJumpTable(i16 end = HPOS_MAX);
+    void updateBplJumpTable();
 
     // Updates the jump table for the dasEvent table
     void updateDasJumpTable(i16 end = HPOS_MAX);
 
     // Dumps an event table for debugging
+    // TODO: MOVE TO _dump with category dma
     void dumpEventTable(const EventID *table, char str[256][3], isize from, isize to) const;
 
 public:
