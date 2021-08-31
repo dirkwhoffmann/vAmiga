@@ -59,7 +59,7 @@ Paula::serviceIplEvent()
 void
 Paula::servicePotEvent(EventID id)
 {
-    trace(POT_DEBUG, "servicePotEvent(%lld)\n", id);
+    trace(POT_DEBUG, "servicePotEvent(%hhd)\n", id);
 
     switch (id) {
 
