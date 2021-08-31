@@ -237,6 +237,7 @@ Copper::serviceEvent(EventID id)
             if (agnus.pos.h == 0xE1) { reschedule(); break; }
 
             // Compute the beam position that needs to be compared
+            // TODO: REMOVE addToBeam after beta testing
             beam2 = agnus.pos + 2;
             beam = agnus.addToBeam(agnus.pos, 2);
             assert(beam == beam2);

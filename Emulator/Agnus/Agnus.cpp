@@ -896,8 +896,8 @@ Agnus::hsyncHandler()
     //
 
     // Update the vertical DIW flipflop
-    if (pos.v == diwVstrt && !diwVFlop) diwVFlop = true;
-    if (pos.v == diwVstop && diwVFlop) diwVFlop = false;
+    if (pos.v == diwVstrt) diwVFlop = true;
+    if (pos.v == diwVstop) diwVFlop = false;
 
     // Update the horizontal DIW flipflop
     diwHFlop = (diwHFlopOff != -1) ? false : (diwHFlopOn != -1) ? true : diwHFlop;
@@ -932,7 +932,7 @@ Agnus::hsyncHandler()
 
     if (dmacon & DMAEN) {
 
-        // Copy DMA enable bits from dmacon
+        // Copy DMA enable bits from DMACON
         newDmaDAS = dmacon & 0b111111;
 
         // Disable sprites outside the sprite DMA area

@@ -341,10 +341,10 @@ public:
     isize diwVstrt;
     isize diwVstop;
 
-    /* Value of the DIW flipflops. Variable vFlop stores the value of the
+    /* Value of the DIW flipflops. Variable diwVFlop stores the value of the
      * vertical DIW flipflop. The value is updated at the beginning of each
-     * rasterline and cannot change thereafter. Variable hFlop stores the value
-     * of the horizontal DIW flipflop as it was at the beginning of the
+     * rasterline and cannot change thereafter. Variable diwHFlop stores the
+     * value of the horizontal DIW flipflop as it was at the beginning of the
      * rasterline. To find out the value of the horizontal flipflop inside or
      * at the end of a rasterline, hFlopOn and hFlopOff need to be evaluated.
      */
@@ -619,9 +619,9 @@ public:
      */
     Beam cycleToBeam(Cycle cycle) const;
 
-    /* Advances a beam position by a given number of cycles
-     */
-    [[deprecated]] Beam addToBeam(Beam beam, Cycle cycles) const;
+    // Advances a beam position by a given number of cycles (DEPRECATED)
+    // TODO: REMOVE AFTER V1.1 BETA TESTING
+    Beam addToBeam(Beam beam, Cycle cycles) const;
 
 
     //
