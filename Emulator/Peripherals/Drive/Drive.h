@@ -208,7 +208,7 @@ public:
     bool motorStopped() const;
 
     // Selects the active drive head (0 = lower, 1 = upper)
-    void selectSide(isize side);
+    void selectSide(Side side);
 
     // Reads a value from the drive head and optionally rotates the disk
     u8 readByte() const;

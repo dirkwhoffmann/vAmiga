@@ -260,7 +260,6 @@ Drive::_size()
         // Add the disk type and disk state
         counter << disk->getDiameter() << disk->getDensity();
         disk->applyToPersistentItems(counter);
-        // counter.count += disk->geometry.diskSize;
     }
 
     return counter.count;
@@ -279,8 +278,6 @@ Drive::_load(const u8 *buffer)
     // Check if the snapshot includes a disk
     bool diskInSnapshot;
     reader << diskInSnapshot;
-
-    printf("Disk in snapshot = %d\n", diskInSnapshot);
     
     if (diskInSnapshot) {
         
@@ -368,8 +365,6 @@ Drive::getDriveId() const
 u8
 Drive::driveStatusFlags() const
 {
-    // if (nr == 0) debug("driveStatusFlags() %d %d %d %d\n", isSelected(), idMode(), motorAtFullSpeed(), motorSlowingDown());
-
     u8 result = 0xFF;
     
     if (isSelected()) {
@@ -465,7 +460,7 @@ Drive::motorStopped() const
 }
 
 void
-Drive::selectSide(isize side)
+Drive::selectSide(Side side)
 {
     assert(side < 2);
     head.side = side;
@@ -822,10 +817,7 @@ Drive::PRBdidChange(u8 oldValue, u8 newValue)
             switchMotorOn();
         } else if (oldMtr) {
             switchMotorOff();
-        }
-        
-        // debug("disk.select() sel df%d ($%08X) [$%08x, bit #%02d: %d]\n",
-        //       nr, getDriveId(), getDriveId() << idCount, 31 - idCount, idBit);
+        }        
     }
     
     //
@@ -836,8 +828,5 @@ Drive::PRBdidChange(u8 oldValue, u8 newValue)
     if (RISING_EDGE(oldStep, newStep) && !oldSel) step(newDir);
     
     // Evaluate the side selection bit
-    if (head.side != !(newValue & 0b100)) {
-        // debug("Switching to side %d\n", !(newValue & 0b100));
-    }
-    head.side = !(newValue & 0b100);
+    selectSide((newValue & 0b100) ? 0 : 1);
 }
