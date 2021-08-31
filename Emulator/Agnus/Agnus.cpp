@@ -313,8 +313,13 @@ Agnus::updateStats()
     double copper = stats.usage[BUS_COPPER];
     double blitter = stats.usage[BUS_BLITTER];
     double disk = stats.usage[BUS_DISK];
-    double audio = stats.usage[BUS_AUDIO];
     
+    double audio =
+    stats.usage[BUS_AUD0] +
+    stats.usage[BUS_AUD1] +
+    stats.usage[BUS_AUD2] +
+    stats.usage[BUS_AUD3];
+
     double sprite =
     stats.usage[BUS_SPRITE0] +
     stats.usage[BUS_SPRITE1] +

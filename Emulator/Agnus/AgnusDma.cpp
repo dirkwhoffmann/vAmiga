@@ -418,12 +418,14 @@ Agnus::doDiskDmaRead()
 template <int channel> u16
 Agnus::doAudioDmaRead()
 {
+    constexpr BusOwner owner = BusOwner(BUS_AUD0 + channel);
+    
     u16 result = mem.peek16 <ACCESSOR_AGNUS> (audpt[channel]);
     audpt[channel] += 2;
 
-    busOwner[pos.h] = BUS_AUDIO;
+    busOwner[pos.h] = owner;
     busValue[pos.h] = result;
-    stats.usage[BUS_AUDIO]++;
+    stats.usage[owner]++;
 
     return result;
 }

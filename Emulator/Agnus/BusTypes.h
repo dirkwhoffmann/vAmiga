@@ -18,7 +18,10 @@ enum_i8(BUS_OWNER)
     BUS_CPU,
     BUS_REFRESH,
     BUS_DISK,
-    BUS_AUDIO,
+    BUS_AUD0,
+    BUS_AUD1,
+    BUS_AUD2,
+    BUS_AUD3,
     BUS_BPL1,
     BUS_BPL2,
     BUS_BPL3,
@@ -56,7 +59,10 @@ struct BusOwnerEnum : util::Reflection<BusOwnerEnum, BusOwner>
             case BUS_CPU:      return "CPU";
             case BUS_REFRESH:  return "REFRESH";
             case BUS_DISK:     return "DISK";
-            case BUS_AUDIO:    return "AUDIO";
+            case BUS_AUD0:     return "AUD0";
+            case BUS_AUD1:     return "AUD1";
+            case BUS_AUD2:     return "AUD2";
+            case BUS_AUD3:     return "AUD3";
             case BUS_BPL1:     return "BPL1";
             case BUS_BPL2:     return "BPL2";
             case BUS_BPL3:     return "BPL3";

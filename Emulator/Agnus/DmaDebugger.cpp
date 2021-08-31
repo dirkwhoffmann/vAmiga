@@ -156,7 +156,10 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
 
                 case DMA_CHANNEL_AUDIO:
 
-                    visualize[BUS_AUDIO] = value;
+                    visualize[BUS_AUD0] = value;
+                    visualize[BUS_AUD1] = value;
+                    visualize[BUS_AUD2] = value;
+                    visualize[BUS_AUD3] = value;
                     return;
 
                 case DMA_CHANNEL_COPPER:
@@ -218,7 +221,10 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
 
                 case DMA_CHANNEL_AUDIO:
 
-                    setColor(BUS_AUDIO, (u32)value);
+                    setColor(BUS_AUD0, (u32)value);
+                    setColor(BUS_AUD1, (u32)value);
+                    setColor(BUS_AUD2, (u32)value);
+                    setColor(BUS_AUD3, (u32)value);
                     return;
 
                 case DMA_CHANNEL_COPPER:
