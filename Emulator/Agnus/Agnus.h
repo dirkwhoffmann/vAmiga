@@ -205,7 +205,7 @@ public:
     
 private:
 
-    // DMA request from Paula
+    // DMA requests from Paula
     bool audxDR[4];
     bool audxDSR[4];
     
@@ -590,16 +590,6 @@ public:
     // Indicates if bitplane DMA is enabled in the current rasterline
     bool inBplDmaLine() const { return inBplDmaLine(dmacon, bplcon0); }
     bool inBplDmaLine(u16 dmacon, u16 bplcon0) const;
-
-    // Indicates if the electron beam is inside a certain DMA area
-    bool inLoresDmaAreaEven(i16 posh) const {
-        return !(posh & 4) && posh >= ddfLores.strt && posh < ddfLores.stop; }
-    bool inLoresDmaAreaOdd(i16 posh) const {
-        return (posh & 4) && posh >= ddfLores.strt && posh < ddfLores.stop; }
-    bool inHiresDmaAreaEven(i16 posh) const {
-        return !(posh & 2) && posh >= ddfHires.strt && posh < ddfHires.stop; }
-    bool inHiresDmaAreaOdd(i16 posh) const {
-        return (posh & 2) && posh >= ddfHires.strt && posh < ddfHires.stop; }
     
     // Returns the pixel position for the current horizontal position
     Pixel ppos(isize posh) const { return (posh * 4) + 2; }

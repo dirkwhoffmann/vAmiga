@@ -45,6 +45,11 @@ struct DDF
         return !(*this == ddf);
     }
         
+    bool inside(isize posh) const
+    {
+        return posh >= strt && posh < stop;
+    }
+    
     /* Computes a DDF window. The function assumes that ddfstop is greater than
      * ddfstrt. Other combinations are not yet supported by the emulator.
      */

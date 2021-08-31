@@ -205,7 +205,6 @@ Agnus::disableBplDmaOCS()
 void
 Agnus::enableBplDmaECS()
 {
-    // if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
     if (pos.h + 2 < ddfstrtReached) {
 
         updateBplEvents(dmacon, bplcon0, pos.h + 2);
@@ -429,11 +428,12 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, isize first)
 {
     assert(first >= 0);
 
-    bool hires = Denise::hires(bplcon0);
+    auto hires = Denise::hires(bplcon0);
     auto channels = bpu(bplcon0);
+    
     assert(channels <= 6);
 
-    // Set number of bitplanes to 0 if we are not in a bitplane DMA line
+    // Set number of bitplanes to 0 if this line is not a bitplane DMA line
     if (!inBplDmaLine(dmacon, bplcon0)) channels = 0;
 
     // Do the same if DDFSTRT is never reached in this line
@@ -442,17 +442,19 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, isize first)
     // Allocate slots
     if (hires) {
         
-        for (isize i = first; i <= HPOS_MAX; i++)
+        for (isize i = first; i <= HPOS_MAX; i++) {
+            
             bplEvent[i] =
-            inHiresDmaAreaOdd((i16)i) ? bplDMA[1][channels][i] :
-            inHiresDmaAreaEven((i16)i) ? bplDMA[1][channels][i] : EVENT_NONE;
+            ddfHires.inside(i) ? bplDMA[1][channels][i] : EVENT_NONE;
+        }
         
     } else {
         
-        for (isize i = first; i <= HPOS_MAX; i++)
+        for (isize i = first; i <= HPOS_MAX; i++) {
+            
             bplEvent[i] =
-            inLoresDmaAreaOdd((i16)i) ? bplDMA[0][channels][i] :
-            inLoresDmaAreaEven((i16)i) ? bplDMA[0][channels][i] : EVENT_NONE;    
+            ddfLores.inside(i) ? bplDMA[0][channels][i] : EVENT_NONE;
+        }
     }
         
     // Make sure the table ends with a BPL_EOL event
