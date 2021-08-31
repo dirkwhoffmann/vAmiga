@@ -51,9 +51,9 @@
  */
 
 #define VPIXELS       314                    // VPOS_CNT + 1 line
-#define HPIXELS       910                    // 4 * HPOS_CNT + 2
+#define HPIXELS       908                    // 4 * HPOS_CNT
 #define PIXELS        (VPIXELS * HPIXELS)
-#define LAST_PIXEL    909
+#define LAST_PIXEL    907
 
 /* Blanking area
  *
