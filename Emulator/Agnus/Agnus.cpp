@@ -866,7 +866,7 @@ Agnus::updateSpriteDMA()
 void
 Agnus::hsyncHandler()
 {
-    assert(pos.h == HPOS_MAX);
+    assert(pos.h == 0);
     
     // Let Denise finish up the current line
     denise.endOfLine(pos.v);

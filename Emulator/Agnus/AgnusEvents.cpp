@@ -189,7 +189,8 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_SPR5PTL: setSPRxPTL<5>(change.value); break;
             case SET_SPR6PTL: setSPRxPTL<6>(change.value); break;
             case SET_SPR7PTL: setSPRxPTL<7>(change.value); break;
-
+            case SET_HSYNC: hsyncHandler(); break;
+                
             default:
                 fatalError;
         }
@@ -204,8 +205,11 @@ Agnus::serviceRASEvent()
 {
     assert(scheduler.id[SLOT_RAS] == RAS_HSYNC);
     
+    // Let the hsync handler be called at the beginning of the next DMA cycle
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_HSYNC, 1);
+    
     // Call the hsync handler
-    hsyncHandler();
+    // hsyncHandler();
 
     // Reset the horizontal counter (-1 to compensate for the increment to come)
     pos.h = -1;
