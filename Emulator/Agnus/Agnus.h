@@ -475,7 +475,7 @@ public:
     bool isECS() const { return config.revision != AGNUS_OCS; }
     
     // Returns the chip identification bits of this Agnus (show up in VPOSR)
-    i16 idBits();
+    u16 idBits();
     
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
     isize chipRamLimit();
@@ -486,12 +486,7 @@ public:
     // Returns a bitmask indicating the used bits in DDFSTRT / DDFSTOP
     u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }
     
-    /* Returns true if Agnus is able to access the Slow Ram area. The ECS
-     * revision of Agnus has a special feature that makes Slow Ram accessible
-     * for DMA. In the 512 MB Chip Ram + 512 Slow Ram configuration, Slow
-     * Ram is mapped into the second Chip Ram segment. OCS Agnus does not
-     * have this feature. It is able to access Chip Ram, only.
-     */
+    // Checks whether Agnus is able to access Slow Ram
     bool slowRamIsMirroredIn();
         
     

@@ -234,7 +234,7 @@ Agnus::setConfigItem(Option option, i64 value)
     }
 }
 
-i16
+u16
 Agnus::idBits()
 {
     switch (config.revision) {
@@ -260,6 +260,12 @@ bool
 Agnus::slowRamIsMirroredIn()
 {
 
+    /* The ECS revision of Agnus has a special feature that makes Slow Ram
+     * accessible for DMA. In the 512 MB Chip Ram + 512 Slow Ram configuration,
+     * Slow Ram is mapped into the second Chip Ram segment. OCS Agnus does not
+     * have this feature. It is able to access Chip Ram, only.
+     */
+    
     if (config.slowRamMirror && isECS()) {
         return mem.chipRamSize() == KB(512) && mem.slowRamSize() == KB(512);
     } else {
@@ -592,7 +598,7 @@ Agnus::executeFirstSpriteCycle()
         if (busOwner[pos.h] == BUS_NONE) {
 
             // Read in the next control word (POS part)
-            u16 value = doSpriteDmaRead<nr>();
+            auto value = doSpriteDmaRead<nr>();
             agnus.pokeSPRxPOS<nr>(value);
             denise.pokeSPRxPOS<nr>(value);
         }
@@ -602,7 +608,7 @@ Agnus::executeFirstSpriteCycle()
         if (busOwner[pos.h] == BUS_NONE) {
 
             // Read in the next data word (part A)
-            u16 value = doSpriteDmaRead<nr>();
+            auto value = doSpriteDmaRead<nr>();
             denise.pokeSPRxDATA<nr>(value);
         }
     }
@@ -620,7 +626,7 @@ Agnus::executeSecondSpriteCycle()
         if (busOwner[pos.h] == BUS_NONE) {
             
             // Read in the next control word (CTL part)
-            u16 value = doSpriteDmaRead<nr>();
+            auto value = doSpriteDmaRead<nr>();
             agnus.pokeSPRxCTL<nr>(value);
             denise.pokeSPRxCTL<nr>(value);
         }
@@ -630,7 +636,7 @@ Agnus::executeSecondSpriteCycle()
         if (busOwner[pos.h] == BUS_NONE) {
 
             // Read in the next data word (part B)
-            u16 value = doSpriteDmaRead<nr>();
+            auto value = doSpriteDmaRead<nr>();
             denise.pokeSPRxDATB<nr>(value);
         }
     }
