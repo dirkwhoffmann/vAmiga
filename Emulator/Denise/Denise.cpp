@@ -998,7 +998,7 @@ Denise::drawBorder()
     if (lineIsBlank) {
 
         // Draw blank line
-        for (Pixel i = 0; i <= LAST_PIXEL; i++) {
+        for (Pixel i = 0; i < HPIXELS; i++) {
             bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
         }
 
@@ -1013,7 +1013,7 @@ Denise::drawBorder()
 
         // Draw right border
         if (agnus.diwHFlopOff != -1) {
-            for (isize i = 2 * agnus.diwHFlopOff; i <= LAST_PIXEL; i++) {
+            for (isize i = 2 * agnus.diwHFlopOff; i < HPIXELS; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
@@ -1021,7 +1021,7 @@ Denise::drawBorder()
 
 #ifdef LINE_DEBUG
     if (LINE_DEBUG) {
-        for (Pixel i = 0; i <= LAST_PIXEL / 2; i++) {
+        for (Pixel i = 0; i < HPIXELS / 2; i++) {
             iBuffer[i] = mBuffer[i] = 64;
         }
     }

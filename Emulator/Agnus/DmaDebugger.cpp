@@ -404,7 +404,7 @@ DmaDebugger::vSyncHandler()
     // Clear old data in the next frame's VBLANK area
     u32 *ptr = denise.pixelEngine.frameBuffer->data;
     for (isize row = 0; row < VBLANK_CNT; row++) {
-        for (isize col = 0; col <= LAST_PIXEL; col++) {
+        for (isize col = 0; col < HPIXELS; col++) {
             ptr[row * HPIXELS + col] = PixelEngine::rgbaVBlank;
         }
     }

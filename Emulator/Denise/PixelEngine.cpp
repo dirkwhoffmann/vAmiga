@@ -372,15 +372,18 @@ PixelEngine::applyRegisterChange(const RegChange &change)
 void
 PixelEngine::colorize(isize line)
 {
+    // To get all pixels right, we colorize from 2 ... HPIXELS + 2. See test
+    // case Agnus/DDFNEW/lupo1.adf for details.
+    
     // Jump to the first pixel in the specified line in the active frame buffer
     u32 *dst = frameBuffer->data + line * HPIXELS;
-    Pixel pixel = 0;
+    Pixel pixel = 2;
 
     // Initialize the HAM mode hold register with the current background color
     u16 hold = colreg[0];
 
     // Add a dummy register change to ensure we draw until the line end
-    colChanges.insert(HPIXELS, RegChange { SET_NONE, 0 } );
+    colChanges.insert(HPIXELS + 2, RegChange { SET_NONE, 0 } );
 
     // Iterate over all recorded register changes
     for (isize i = colChanges.begin(); i != colChanges.end(); i = colChanges.next(i)) {

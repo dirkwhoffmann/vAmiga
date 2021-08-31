@@ -223,10 +223,10 @@ public:
      *  SPx : Set if the pixel is solid in sprite x.
      *  _x_ : Playfield priority derived from the current value in BPLCON2.
      */
-    u8 bBuffer[HPIXELS + (4 * 16) + 6];
-    u8 iBuffer[HPIXELS + (4 * 16) + 6];
-    u8 mBuffer[HPIXELS + (4 * 16) + 6];
-    u16 zBuffer[HPIXELS + (4 * 16) + 6];
+    u8 bBuffer[HPIXELS + (4 * 16) + 8];
+    u8 iBuffer[HPIXELS + (4 * 16) + 8];
+    u8 mBuffer[HPIXELS + (4 * 16) + 8];
+    u16 zBuffer[HPIXELS + (4 * 16) + 8];
 
     static constexpr u16 Z_0   = 0b10000000'00000000;
     static constexpr u16 Z_SP0 = 0b01000000'00000000;
