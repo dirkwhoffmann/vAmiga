@@ -84,7 +84,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Load the first instruction word
-            cop1ins = agnus.doCopperDMA(coppc);
+            cop1ins = agnus.doCopperDmaRead(coppc);
             advancePC();
 
             if (COP_CHECKSUM) {
@@ -111,7 +111,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Load the second instruction word
-            cop2ins = agnus.doCopperDMA(coppc);
+            cop2ins = agnus.doCopperDmaRead(coppc);
             advancePC();
 
             if (COP_CHECKSUM) checksum = util::fnv_1a_it32(checksum, cop2ins);
@@ -151,7 +151,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Load the second instruction word
-            cop2ins = agnus.doCopperDMA(coppc);
+            cop2ins = agnus.doCopperDmaRead(coppc);
             advancePC();
 
             if (COP_CHECKSUM) checksum = util::fnv_1a_it32(checksum, cop2ins);

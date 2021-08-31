@@ -975,7 +975,7 @@ Blitter::exec()
         // Only proceed if channel D is unlocked
         if (!lockD) {
 
-            agnus.doBlitterDMA(bltdpt, dhold);
+            agnus.doBlitterDmaWrite(bltdpt, dhold);
 
             if constexpr (BLT_GUARD) {
                 memguard[bltdpt & agnus.ptrMask & mem.chipMask] = 1;
@@ -999,7 +999,7 @@ Blitter::exec()
 
         trace(BLT_DEBUG, "FETCH_A\n");
 
-        anew = agnus.doBlitterDMA(bltapt);
+        anew = agnus.doBlitterDmaRead(bltapt);
         trace(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
         trace(BLT_DEBUG, "    After fetch: A = %X\n", anew);
         bltapt = U32_ADD(bltapt, desc ? -2 : 2);
@@ -1013,7 +1013,7 @@ Blitter::exec()
 
         trace(BLT_DEBUG, "FETCH_B\n");
 
-        bnew = agnus.doBlitterDMA(bltbpt);
+        bnew = agnus.doBlitterDmaRead(bltbpt);
         trace(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
         trace(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
         bltbpt = U32_ADD(bltbpt, desc ? -2 : 2);
@@ -1027,7 +1027,7 @@ Blitter::exec()
 
         trace(BLT_DEBUG, "FETCH_C\n");
 
-        chold = agnus.doBlitterDMA(bltcpt);
+        chold = agnus.doBlitterDmaRead(bltcpt);
         trace(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
         trace(BLT_DEBUG, "    After fetch: C = %X\n", chold);
         bltcpt = U32_ADD(bltcpt, desc ? -2 : 2);

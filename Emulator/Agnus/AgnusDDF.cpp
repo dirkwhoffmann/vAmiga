@@ -10,6 +10,49 @@
 #include "config.h"
 #include "Agnus.h"
 
+/* Register DDFSTRT and DDFSTOP define the area where the system performs
+ * bitplane DMA. From a hardware engineer's point of view, these registers
+ * are completely independent of DIWSTRT and DIWSTOP. From a software
+ * engineer's point of view they appear closely related though. To get
+ * graphics output right, bitplane DMA has to start closely before the
+ * display window opens (left border ends) and to stop closely after the
+ * display window closes (right border begins).
+ * DDFSTRT and DDFSTOP have a resolution of four lowres pixels (unlike
+ * DIWSTRT and DIWSTOP which have a resolution of one lores pixels).
+ *
+ * I haven't found detailed information about the how the DDF logic is
+ * implemented in hardware inside Agnus. If you have such information,
+ * please let me know. For the time being, I base my implementation on the
+ * following assumptions:
+ *
+ * 1. The four-pixel resolution is achieved by ignoring the two lower bits
+ *    in DDFSTRT and DDFSTOP.
+ *
+ * 2. The actual DMA start position depends solely on DDFSTRT. In hires
+ *    mode, the start position always matches DDFSTRT. In lores mode, it
+ *    matches DDFSTRT only if DDFSTRT is dividable by 8. Otherwise, the
+ *    value is rounded up to the next position dividable by eight (because
+ *    the lower two bits are always 0, this is equivalent to adding 4).
+ *
+ * 3. The actual DMA stop position depends on both DDFSTRT and DDFSTOP.
+ *    Hence, if DDFSTRT changes, the stop position needs to be recomputed
+ *    even if DDFSTOP hasn't changed.
+ *
+ * 4. Agnus switches bitplane DMA on and off by constantly comparing the
+ *    horizontal raster position with the DMA start and stop positions that
+ *    have been computed out of DDFSTRT and DDFSTOP. Hence, if DDFSTRT
+ *    changes before DMA is switched on, the changed values takes effect
+ *    immediately (i.e., in the same rasterline). If it changes when DMA is
+ *    already on, the change takes effect in the next rasterline.
+ *
+ * 5. The values written to DDFSTRT and DDFSTOP are not clipped if they
+ *    describe a position outside the two hardware stops (at 0x18 and 0xD8).
+ *    E.g., if a very small value is written to DDFSTRT, Agnus starts
+ *    incrementing the bitplane pointers even if the left hardware stop is
+ *    not crossed yet. Agnus simply refused to perform DMA until the
+ *    hardware stop has been crossed.
+ */
+
 #define DDF_EMPTY     0
 #define DDF_STRT_STOP 1
 #define DDF_STRT_D8   2

@@ -198,7 +198,7 @@ Copper::move(u32 addr, u16 value)
     }
 
     // Write the value
-    agnus.doCopperDMA(addr, value);
+    agnus.doCopperDmaWrite(addr, value);
 }
 
 bool

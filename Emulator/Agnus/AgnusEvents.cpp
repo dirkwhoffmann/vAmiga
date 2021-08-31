@@ -475,7 +475,7 @@ template <isize nr> void
 Agnus::serviceBPLEventHires()
 {
     // Perform bitplane DMA
-    denise.setBPLxDAT<nr>(doBitplaneDMA<nr>());
+    denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
     
     // Add modulo if this is the last fetch unit
     if (pos.h >= ddfHires.stop - 4) bplpt[nr] += (nr % 2) ? bpl2mod : bpl1mod;
@@ -485,7 +485,7 @@ template <isize nr> void
 Agnus::serviceBPLEventLores()
 {
     // Perform bitplane DMA
-    denise.setBPLxDAT<nr>(doBitplaneDMA<nr>());
+    denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
 
     // Add modulo if this is the last fetch unit
     if (pos.h >= ddfLores.stop - 8) bplpt[nr] += (nr % 2) ? bpl2mod : bpl1mod;
@@ -560,28 +560,28 @@ Agnus::serviceDASEvent(EventID id)
         case DAS_A0:
             if (audxDR[0]) {
                 audxDR[0] = false;
-                paula.channel0.pokeAUDxDAT(doAudioDMA<0>());
+                paula.channel0.pokeAUDxDAT(doAudioDmaRead<0>());
             }
             break;
 
         case DAS_A1:
             if (audxDR[1]) {
                 audxDR[1] = false;
-                paula.channel1.pokeAUDxDAT(doAudioDMA<1>());
+                paula.channel1.pokeAUDxDAT(doAudioDmaRead<1>());
             }
             break;
 
         case DAS_A2:
             if (audxDR[2]) {
                 audxDR[2] = false;
-                paula.channel2.pokeAUDxDAT(doAudioDMA<2>());
+                paula.channel2.pokeAUDxDAT(doAudioDmaRead<2>());
             }
             break;
 
         case DAS_A3:
             if (audxDR[3]) {
                 audxDR[3] = false;
-                paula.channel3.pokeAUDxDAT(doAudioDMA<3>());
+                paula.channel3.pokeAUDxDAT(doAudioDmaRead<3>());
             }
             break;
 

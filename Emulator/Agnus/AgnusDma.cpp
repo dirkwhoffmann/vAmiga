@@ -93,6 +93,7 @@ Agnus::initBplEventTableLores()
         for (isize i = 0; i <= 0xD8; i += 8, p += 8) {
 
             switch(bpu) {
+                    
                 case 6: p[2] = BPL_L6;
                 case 5: p[6] = BPL_L5;
                 case 4: p[1] = BPL_L4;
@@ -115,10 +116,12 @@ Agnus::initBplEventTableHires()
     for (isize bpu = 0; bpu < 7; bpu++) {
 
         EventID *p = &bplDMA[1][bpu][0];
-
+        
+        // Iterate through all 22 fetch units
         for (isize i = 0; i <= 0xD8; i += 8, p += 8) {
 
             switch(bpu) {
+                    
                 case 6:
                 case 5:
                 case 4: p[0] = p[4] = BPL_H4;
@@ -145,6 +148,7 @@ Agnus::initDasEventTable()
         p[0x01] = DAS_REFRESH;
 
         if (dmacon & DSKEN) {
+            
             p[0x07] = DAS_D0;
             p[0x09] = DAS_D1;
             p[0x0B] = DAS_D2;
@@ -157,6 +161,7 @@ Agnus::initDasEventTable()
         p[0x13] = DAS_A3;
         
         if (dmacon & SPREN) {
+            
             p[0x15] = DAS_S0_1;
             p[0x17] = DAS_S0_2;
             p[0x19] = DAS_S1_1;
@@ -207,16 +212,16 @@ Agnus::enableBplDmaECS()
         return;
     }
     
-    if (pos.h + 2 >= ddfstopReached) return;
+    if (pos.h + 2 < ddfstopReached) {
         
-    isize posh = pos.h + 4;
-    ddfLores.compute(std::max(posh, ddfstrtReached), ddfstopReached);
-    ddfHires.compute(std::max(posh, ddfstrtReached), ddfstopReached);
-    hsyncActions |= HSYNC_PREDICT_DDF;
-    
-    updateBplEvents();
-    updateBplEvent();
-    // updateLoresDrawingFlags(); // THIS CAN'T BE RIGHT
+        ddfLores.compute(std::max(pos.h + 4, ddfstrtReached), ddfstopReached);
+        ddfHires.compute(std::max(pos.h + 4, ddfstrtReached), ddfstopReached);
+        hsyncActions |= HSYNC_PREDICT_DDF;
+        
+        updateBplEvents();
+        updateBplEvent();
+        // updateLoresDrawingFlags(); // THIS CAN'T BE RIGHT
+    }
 }
 
 void
@@ -253,159 +258,6 @@ Agnus::busIsFree() const
         
         return true;
     }
-}
-
-template <BusOwner owner> bool
-Agnus::allocateBus()
-{
-    // Deny if the bus has been allocated already
-    if (busOwner[pos.h] != BUS_NONE) return false;
-    
-    if constexpr (owner == BUS_COPPER) {
-        
-        // Assign bus to the Copper
-        busOwner[pos.h] = BUS_COPPER;
-        
-        return true;
-    }
-    if constexpr (owner == BUS_BLITTER) {
-        
-        // Deny if Blitter DMA is off
-        if (!bltdma()) return false;
-        
-        // Deny if the CPU has precedence
-        if (bls && !bltpri()) return false;
-        
-        // Assign the bus to the Blitter
-        busOwner[pos.h] = BUS_BLITTER;
-        
-        return true;
-    }
-}
-
-u16
-Agnus::doDiskDMA()
-{
-    u16 result = mem.peek16 <ACCESSOR_AGNUS> (dskpt);
-    dskpt += 2;
-
-    assert(pos.h < HPOS_CNT);
-    busOwner[pos.h] = BUS_DISK;
-    busValue[pos.h] = result;
-    stats.usage[BUS_DISK]++;
-
-    return result;
-}
-
-template <int channel> u16
-Agnus::doAudioDMA()
-{
-    u16 result = mem.peek16 <ACCESSOR_AGNUS> (audpt[channel]);
-    audpt[channel] += 2;
-
-    assert(pos.h < HPOS_CNT);
-    busOwner[pos.h] = BUS_AUDIO;
-    busValue[pos.h] = result;
-    stats.usage[BUS_AUDIO]++;
-
-    return result;
-}
-
-template <int bitplane> u16
-Agnus::doBitplaneDMA()
-{
-    assert(bitplane >= 0 && bitplane <= 5);
-    const BusOwner owner = BusOwner(BUS_BPL1 + bitplane);
-    
-    u16 result = mem.peek16 <ACCESSOR_AGNUS> (bplpt[bitplane]);
-    bplpt[bitplane] += 2;
-
-    assert(pos.h < HPOS_CNT);
-    busOwner[pos.h] = owner;
-    busValue[pos.h] = result;
-    stats.usage[owner]++;
-
-    return result;
-}
-
-template <int channel> u16
-Agnus::doSpriteDMA()
-{
-    assert(channel >= 0 && channel <= 7);
-    const BusOwner owner = BusOwner(BUS_SPRITE0 + channel);
-
-    u16 result = mem.peek16 <ACCESSOR_AGNUS> (sprpt[channel]);
-    sprpt[channel] += 2;
-
-    assert(pos.h < HPOS_CNT);
-    busOwner[pos.h] = owner;
-    busValue[pos.h] = result;
-    stats.usage[owner]++;
-
-    return result;
-}
-
-u16
-Agnus::doCopperDMA(u32 addr)
-{
-    u16 result = mem.peek16 <ACCESSOR_AGNUS> (addr);
-
-    assert(pos.h < HPOS_CNT);
-    busOwner[pos.h] = BUS_COPPER;
-    busValue[pos.h] = result;
-    stats.usage[BUS_COPPER]++;
-
-    return result;
-}
-
-u16
-Agnus::doBlitterDMA(u32 addr)
-{
-    // Assure that the Blitter owns the bus when this function is called
-    assert(busOwner[pos.h] == BUS_BLITTER);
-
-    u16 result = mem.peek16 <ACCESSOR_AGNUS> (addr);
-
-    assert(pos.h < HPOS_CNT);
-    busOwner[pos.h] = BUS_BLITTER;
-    busValue[pos.h] = result;
-    stats.usage[BUS_BLITTER]++;
-
-    return result;
-}
-
-void
-Agnus::doDiskDMA(u16 value)
-{
-    mem.poke16 <ACCESSOR_AGNUS> (dskpt, value);
-    dskpt += 2;
-
-    assert(pos.h < HPOS_CNT);
-    busOwner[pos.h] = BUS_DISK;
-    busValue[pos.h] = value;
-    stats.usage[BUS_DISK]++;
-}
-
-void
-Agnus::doCopperDMA(u32 addr, u16 value)
-{
-    mem.pokeCustom16<ACCESSOR_AGNUS>(addr, value);
-    
-    assert(pos.h < HPOS_CNT);
-    busOwner[pos.h] = BUS_COPPER;
-    busValue[pos.h] = value;
-    stats.usage[BUS_COPPER]++;
-}
-
-void
-Agnus::doBlitterDMA(u32 addr, u16 value)
-{
-    mem.poke16 <ACCESSOR_AGNUS> (addr, value);
-    
-    assert(pos.h < HPOS_CNT);
-    assert(busOwner[pos.h] == BUS_BLITTER); // Bus is already allocated
-    busValue[pos.h] = value;
-    stats.usage[BUS_BLITTER]++;
 }
 
 void
@@ -463,8 +315,10 @@ Agnus::updateDasEvents(u16 dmacon)
 {
     assert(dmacon < 64);
 
-    // Allocate slots and renew the jump table
+    // Allocate slots
     for (isize i = 0; i < 0x38; i++) dasEvent[i] = dasDMA[dmacon][i];
+    
+    // Update the jump table
     updateDasJumpTable(0x38);
 }
 
@@ -476,7 +330,7 @@ Agnus::updateBplJumpTable()
     for (isize i = HPOS_MAX; i >= 0; i--) {
         
         nextBplEvent[i] = next;
-        if (bplEvent[i]) next = (u8)i;
+        if (bplEvent[i]) next = (i8)i;
     }
 }
 
@@ -490,7 +344,7 @@ Agnus::updateDasJumpTable(i16 end)
     for (isize i = end; i >= 0; i--) {
         
         nextDasEvent[i] = next;
-        if (dasEvent[i]) next = (u8)i;
+        if (dasEvent[i]) next = (i8)i;
     }
 }
 
@@ -520,26 +374,172 @@ Agnus::updateLoresDrawingFlags()
         bplEvent[i] = (EventID)(bplEvent[i] | 2);
 }
 
-template u16 Agnus::doAudioDMA<0>();
-template u16 Agnus::doAudioDMA<1>();
-template u16 Agnus::doAudioDMA<2>();
-template u16 Agnus::doAudioDMA<3>();
+template <BusOwner owner> bool
+Agnus::allocateBus()
+{
+    // Deny if the bus has been allocated already
+    if (busOwner[pos.h] != BUS_NONE) return false;
+    
+    if constexpr (owner == BUS_COPPER) {
+        
+        // Assign bus to the Copper
+        busOwner[pos.h] = BUS_COPPER;
+        
+        return true;
+    }
+    if constexpr (owner == BUS_BLITTER) {
+        
+        // Deny if Blitter DMA is off
+        if (!bltdma()) return false;
+        
+        // Deny if the CPU has precedence
+        if (bls && !bltpri()) return false;
+        
+        // Assign the bus to the Blitter
+        busOwner[pos.h] = BUS_BLITTER;
+        
+        return true;
+    }
+}
 
-template u16 Agnus::doBitplaneDMA<0>();
-template u16 Agnus::doBitplaneDMA<1>();
-template u16 Agnus::doBitplaneDMA<2>();
-template u16 Agnus::doBitplaneDMA<3>();
-template u16 Agnus::doBitplaneDMA<4>();
-template u16 Agnus::doBitplaneDMA<5>();
+u16
+Agnus::doDiskDmaRead()
+{
+    u16 result = mem.peek16 <ACCESSOR_AGNUS> (dskpt);
+    dskpt += 2;
 
-template u16 Agnus::doSpriteDMA<0>();
-template u16 Agnus::doSpriteDMA<1>();
-template u16 Agnus::doSpriteDMA<2>();
-template u16 Agnus::doSpriteDMA<3>();
-template u16 Agnus::doSpriteDMA<4>();
-template u16 Agnus::doSpriteDMA<5>();
-template u16 Agnus::doSpriteDMA<6>();
-template u16 Agnus::doSpriteDMA<7>();
+    busOwner[pos.h] = BUS_DISK;
+    busValue[pos.h] = result;
+    stats.usage[BUS_DISK]++;
+
+    return result;
+}
+
+template <int channel> u16
+Agnus::doAudioDmaRead()
+{
+    u16 result = mem.peek16 <ACCESSOR_AGNUS> (audpt[channel]);
+    audpt[channel] += 2;
+
+    busOwner[pos.h] = BUS_AUDIO;
+    busValue[pos.h] = result;
+    stats.usage[BUS_AUDIO]++;
+
+    return result;
+}
+
+template <int bitplane> u16
+Agnus::doBitplaneDmaRead()
+{
+    assert(bitplane >= 0 && bitplane <= 5);
+    constexpr BusOwner owner = BusOwner(BUS_BPL1 + bitplane);
+    
+    u16 result = mem.peek16 <ACCESSOR_AGNUS> (bplpt[bitplane]);
+    bplpt[bitplane] += 2;
+
+    busOwner[pos.h] = owner;
+    busValue[pos.h] = result;
+    stats.usage[owner]++;
+
+    return result;
+}
+
+template <int channel> u16
+Agnus::doSpriteDmaRead()
+{
+    assert(channel >= 0 && channel <= 7);
+    constexpr BusOwner owner = BusOwner(BUS_SPRITE0 + channel);
+
+    u16 result = mem.peek16 <ACCESSOR_AGNUS> (sprpt[channel]);
+    sprpt[channel] += 2;
+
+    busOwner[pos.h] = owner;
+    busValue[pos.h] = result;
+    stats.usage[owner]++;
+
+    return result;
+}
+
+u16
+Agnus::doCopperDmaRead(u32 addr)
+{
+    u16 result = mem.peek16 <ACCESSOR_AGNUS> (addr);
+
+    busOwner[pos.h] = BUS_COPPER;
+    busValue[pos.h] = result;
+    stats.usage[BUS_COPPER]++;
+
+    return result;
+}
+
+u16
+Agnus::doBlitterDmaRead(u32 addr)
+{
+    // Assure that the Blitter owns the bus when this function is called
+    assert(busOwner[pos.h] == BUS_BLITTER);
+
+    u16 result = mem.peek16 <ACCESSOR_AGNUS> (addr);
+
+    busOwner[pos.h] = BUS_BLITTER;
+    busValue[pos.h] = result;
+    stats.usage[BUS_BLITTER]++;
+
+    return result;
+}
+
+void
+Agnus::doDiskDmaWrite(u16 value)
+{
+    mem.poke16 <ACCESSOR_AGNUS> (dskpt, value);
+    dskpt += 2;
+
+    busOwner[pos.h] = BUS_DISK;
+    busValue[pos.h] = value;
+    stats.usage[BUS_DISK]++;
+}
+
+void
+Agnus::doCopperDmaWrite(u32 addr, u16 value)
+{
+    mem.pokeCustom16<ACCESSOR_AGNUS>(addr, value);
+    
+    assert(pos.h < HPOS_CNT);
+    busOwner[pos.h] = BUS_COPPER;
+    busValue[pos.h] = value;
+    stats.usage[BUS_COPPER]++;
+}
+
+void
+Agnus::doBlitterDmaWrite(u32 addr, u16 value)
+{
+    mem.poke16 <ACCESSOR_AGNUS> (addr, value);
+    
+    assert(pos.h < HPOS_CNT);
+    assert(busOwner[pos.h] == BUS_BLITTER); // Bus is already allocated
+    busValue[pos.h] = value;
+    stats.usage[BUS_BLITTER]++;
+}
+
+template u16 Agnus::doAudioDmaRead<0>();
+template u16 Agnus::doAudioDmaRead<1>();
+template u16 Agnus::doAudioDmaRead<2>();
+template u16 Agnus::doAudioDmaRead<3>();
+
+template u16 Agnus::doBitplaneDmaRead<0>();
+template u16 Agnus::doBitplaneDmaRead<1>();
+template u16 Agnus::doBitplaneDmaRead<2>();
+template u16 Agnus::doBitplaneDmaRead<3>();
+template u16 Agnus::doBitplaneDmaRead<4>();
+template u16 Agnus::doBitplaneDmaRead<5>();
+
+template u16 Agnus::doSpriteDmaRead<0>();
+template u16 Agnus::doSpriteDmaRead<1>();
+template u16 Agnus::doSpriteDmaRead<2>();
+template u16 Agnus::doSpriteDmaRead<3>();
+template u16 Agnus::doSpriteDmaRead<4>();
+template u16 Agnus::doSpriteDmaRead<5>();
+template u16 Agnus::doSpriteDmaRead<6>();
+template u16 Agnus::doSpriteDmaRead<7>();
 
 template bool Agnus::allocateBus<BUS_COPPER>();
 template bool Agnus::allocateBus<BUS_BLITTER>();

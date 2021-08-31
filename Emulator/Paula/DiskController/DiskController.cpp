@@ -558,7 +558,7 @@ DiskController::performDMARead(Drive *drive, u32 remaining)
             check1 = util::fnv_1a_it32(check1, word);
             check2 = util::fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
         }
-        agnus.doDiskDMA(word);
+        agnus.doDiskDmaWrite(word);
         
         // Finish up if this was the last word to transfer
         if ((--dsklen & 0x3FFF) == 0)
@@ -598,7 +598,7 @@ DiskController::performDMAWrite(Drive *drive, u32 remaining)
             checkcnt++;
             check2 = util::fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
         }
-        u16 word = agnus.doDiskDMA();
+        u16 word = agnus.doDiskDmaRead();
         
         if (DSK_CHECKSUM)
         {

@@ -587,7 +587,7 @@ Agnus::executeFirstSpriteCycle()
         if (busOwner[pos.h] == BUS_NONE) {
 
             // Read in the next control word (POS part)
-            u16 value = doSpriteDMA<nr>();
+            u16 value = doSpriteDmaRead<nr>();
             agnus.pokeSPRxPOS<nr>(value);
             denise.pokeSPRxPOS<nr>(value);
         }
@@ -597,7 +597,7 @@ Agnus::executeFirstSpriteCycle()
         if (busOwner[pos.h] == BUS_NONE) {
 
             // Read in the next data word (part A)
-            u16 value = doSpriteDMA<nr>();
+            u16 value = doSpriteDmaRead<nr>();
             denise.pokeSPRxDATA<nr>(value);
         }
     }
@@ -615,7 +615,7 @@ Agnus::executeSecondSpriteCycle()
         if (busOwner[pos.h] == BUS_NONE) {
             
             // Read in the next control word (CTL part)
-            u16 value = doSpriteDMA<nr>();
+            u16 value = doSpriteDmaRead<nr>();
             agnus.pokeSPRxCTL<nr>(value);
             denise.pokeSPRxCTL<nr>(value);
         }
@@ -625,7 +625,7 @@ Agnus::executeSecondSpriteCycle()
         if (busOwner[pos.h] == BUS_NONE) {
 
             // Read in the next data word (part B)
-            u16 value = doSpriteDMA<nr>();
+            u16 value = doSpriteDmaRead<nr>();
             denise.pokeSPRxDATB<nr>(value);
         }
     }
