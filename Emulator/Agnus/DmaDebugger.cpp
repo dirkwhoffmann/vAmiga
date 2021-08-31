@@ -29,13 +29,13 @@ DmaDebugger::getDefaultConfig()
     defaults.opacity = 50;
 
     defaults.visualize[DMA_CHANNEL_CPU] = false;
-    defaults.visualize[DMA_CHANNEL_REFRESH] = false;
-    defaults.visualize[DMA_CHANNEL_DISK] = false;
-    defaults.visualize[DMA_CHANNEL_AUDIO] = false;
-    defaults.visualize[DMA_CHANNEL_BITPLANE] = false;
-    defaults.visualize[DMA_CHANNEL_SPRITE] = false;
-    defaults.visualize[DMA_CHANNEL_COPPER] = false;
-    defaults.visualize[DMA_CHANNEL_BLITTER] = false;
+    defaults.visualize[DMA_CHANNEL_REFRESH] = true;
+    defaults.visualize[DMA_CHANNEL_DISK] = true;
+    defaults.visualize[DMA_CHANNEL_AUDIO] = true;
+    defaults.visualize[DMA_CHANNEL_BITPLANE] = true;
+    defaults.visualize[DMA_CHANNEL_SPRITE] = true;
+    defaults.visualize[DMA_CHANNEL_COPPER] = true;
+    defaults.visualize[DMA_CHANNEL_BLITTER] = true;
 
     defaults.debugColor[DMA_CHANNEL_CPU] = 0xFFFFFF00;
     defaults.debugColor[DMA_CHANNEL_REFRESH] = 0xFF000000;
@@ -58,7 +58,7 @@ DmaDebugger::resetConfig()
     setConfigItem(OPT_DMA_DEBUG_MODE, defaults.displayMode);
     setConfigItem(OPT_DMA_DEBUG_OPACITY, defaults.opacity);
 
-    for (isize i = 0; i < DmaChannelEnum::isValid(i); i++) {
+    for (isize i = 0; DmaChannelEnum::isValid(i); i++) {
 
         setConfigItem(OPT_DMA_DEBUG_ENABLE, i, defaults.visualize[i]);
         setConfigItem(OPT_DMA_DEBUG_COLOR, i, defaults.debugColor[i]);

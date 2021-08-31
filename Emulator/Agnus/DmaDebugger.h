@@ -22,7 +22,7 @@ class DmaDebugger : public SubComponent {
     // Enable bits
     bool visualize[BUS_COUNT] = {};
     
-    // Debug colors, derived from the debug color palette
+    // Colors used for highlighting DMA (derived from config.debugColor)
     RgbColor debugColor[BUS_COUNT][5] = {};
 
 
