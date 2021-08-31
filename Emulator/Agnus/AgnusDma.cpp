@@ -505,7 +505,6 @@ Agnus::doCopperDmaWrite(u32 addr, u16 value)
 {
     mem.pokeCustom16<ACCESSOR_AGNUS>(addr, value);
     
-    assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = value;
     stats.usage[BUS_COPPER]++;
@@ -515,8 +514,7 @@ void
 Agnus::doBlitterDmaWrite(u32 addr, u16 value)
 {
     mem.poke16 <ACCESSOR_AGNUS> (addr, value);
-    
-    assert(pos.h < HPOS_CNT);
+
     assert(busOwner[pos.h] == BUS_BLITTER); // Bus is already allocated
     busValue[pos.h] = value;
     stats.usage[BUS_BLITTER]++;

@@ -396,7 +396,7 @@ public:
     // BPLCON0
     void pokeBPLCON0(u16 value);
     void setBPLCON0(u16 oldValue, u16 newValue);
-    void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
+    // void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
 
     static bool hires(u16 v) { return GET_BIT(v, 15); }
     bool hires() const { return hires(bplcon0); }
@@ -425,7 +425,7 @@ public:
 
     // BPLCON1
     void pokeBPLCON1(u16 value);
-    void setBPLCON1(u16 value);
+    void setBPLCON1(u16 oldValue, u16 newValue);
 
     // BPLCON2
     void pokeBPLCON2(u16 value);

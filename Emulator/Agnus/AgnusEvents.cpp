@@ -148,10 +148,10 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_BLTCON1: blitter.setBLTCON1(change.value); break;
             case SET_INTREQ: paula.setINTREQ(change.value); break;
             case SET_INTENA: paula.setINTENA(change.value); break;
-            case SET_BPLCON0_AGNUS: setBPLCON0(change.value); break;
-            case SET_BPLCON0_DENISE: denise.setBPLCON0(change.value); break;
-            case SET_BPLCON1_AGNUS: setBPLCON1(change.value); break;
-            case SET_BPLCON1_DENISE: denise.setBPLCON1(change.value); break;
+            case SET_BPLCON0_AGNUS: setBPLCON0(bplcon0, change.value); break;
+            case SET_BPLCON0_DENISE: denise.setBPLCON0(bplcon0, change.value); break;
+            case SET_BPLCON1_AGNUS: setBPLCON1(bplcon1, change.value); break;
+            case SET_BPLCON1_DENISE: denise.setBPLCON1(bplcon1, change.value); break;
             case SET_BPLCON2: denise.setBPLCON2(change.value); break;
             case SET_BPLCON3: denise.setBPLCON3(change.value); break;
             case SET_DMACON: setDMACON(dmacon, change.value); break;

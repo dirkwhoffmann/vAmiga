@@ -735,13 +735,10 @@ private:
 
 public:
         
-    // Checks if the bus is currently available for the specified resource.
+    // Checks if the bus is currently available for the specified resource
     template <BusOwner owner> bool busIsFree() const;
 
-    /* Attempts to allocate the bus for the specified resource. Returns true
-     * if the bus was successfully allocated. On success, the bus owner is
-     * recorded in the busOwner array.
-     */
+    // Attempts to allocate the bus for the specified resource
     template <BusOwner owner> bool allocateBus();
 
     // Performs a DMA read
@@ -778,29 +775,31 @@ public:
     
     u16 peekVHPOSR();
     void pokeVHPOS(u16 value);
-    
+    void setVHPOS(u16 value);
+
     u16 peekVPOSR();
     void pokeVPOS(u16 value);
-    
+    void setVPOS(u16 value);
+
     void pokeDSKPTH(u16 value);
     void pokeDSKPTL(u16 value);
 
     void pokeBPLCON0(u16 value);
     void setBPLCON0(u16 oldValue, u16 newValue);
-    void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
 
     void pokeBPLCON1(u16 value);
     void setBPLCON1(u16 oldValue, u16 newValue);
-    void setBPLCON1(u16 newValue) { setBPLCON1(bplcon1, newValue); }
 
     template <Accessor s> void pokeDIWSTRT(u16 value);
-    template <Accessor s> void pokeDIWSTOP(u16 value);
     void setDIWSTRT(u16 value);
+
+    template <Accessor s> void pokeDIWSTOP(u16 value);
     void setDIWSTOP(u16 value);
 
     void pokeDDFSTRT(u16 value);
-    void pokeDDFSTOP(u16 value);
     void setDDFSTRT(u16 old, u16 value);
+
+    void pokeDDFSTOP(u16 value);
     void setDDFSTOP(u16 old, u16 value);
 
     template <int x> void pokeAUDxLCH(u16 value);
@@ -808,19 +807,23 @@ public:
     template <int x> void reloadAUDxPT() { audpt[x] = audlc[x]; }
 
     template <int x> void pokeBPLxPTH(u16 value);
-    template <int x> void pokeBPLxPTL(u16 value);
     template <int x> void setBPLxPTH(u16 value);
+
+    template <int x> void pokeBPLxPTL(u16 value);
     template <int x> void setBPLxPTL(u16 value);
 
     void pokeBPL1MOD(u16 value);
     void setBPL1MOD(u16 value);
+
     void pokeBPL2MOD(u16 value);
     void setBPL2MOD(u16 value);
 
     template <int x> void pokeSPRxPTH(u16 value);
     template <int x> void setSPRxPTH(u16 value);
+    
     template <int x> void pokeSPRxPTL(u16 value);
     template <int x> void setSPRxPTL(u16 value);
+    
     template <int x> void pokeSPRxPOS(u16 value);
     template <int x> void pokeSPRxCTL(u16 value);
 

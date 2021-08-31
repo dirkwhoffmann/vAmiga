@@ -120,11 +120,11 @@ Denise::pokeBPLCON1(u16 value)
 }
 
 void
-Denise::setBPLCON1(u16 value)
+Denise::setBPLCON1(u16 oldValue, u16 newValue)
 {
-    trace(BPLREG_DEBUG, "setBPLCON1(%X)\n", value);
+    trace(BPLREG_DEBUG, "setBPLCON1(%X)\n", newValue);
 
-    bplcon1 = value & 0xFF;
+    bplcon1 = newValue & 0xFF;
 
     pixelOffsetOdd  = (i8)((bplcon1 & 0b00000001) << 1);
     pixelOffsetEven = (i8)((bplcon1 & 0b00010000) >> 3);
