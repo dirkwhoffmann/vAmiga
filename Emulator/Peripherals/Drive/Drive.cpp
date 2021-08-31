@@ -280,13 +280,18 @@ Drive::_load(const u8 *buffer)
     bool diskInSnapshot;
     reader << diskInSnapshot;
 
-    // If yes, create recreate the disk
+    printf("Disk in snapshot = %d\n", diskInSnapshot);
+    
     if (diskInSnapshot) {
+        
         DiskDiameter type;
         DiskDensity density;
         reader << type << density;
-        
         disk = std::make_unique<Disk>(reader, type, density);
+
+    } else {
+        
+        disk = nullptr;
     }
 
     result = (isize)(reader.ptr - buffer);
@@ -615,6 +620,10 @@ Drive::recordCylinder(Cylinder cylinder)
 bool
 Drive::pollsForDisk() const
 {
+    /* Disk polling mode is detected by analyzing the movement history that
+     * has been recorded by recordCylinder()
+     */
+    
     // Disk polling is only performed if no disk is inserted
     if (hasDisk()) return false;
 
@@ -623,7 +632,7 @@ Drive::pollsForDisk() const
      * Kickstart 1.2 and 1.3: 0-1-0-1-0-1-...
      * Kickstart 2.0:         0-1-2-3-2-1-...
      */
-    static const u64 signature[] = {
+    static constexpr u64 signature[] = {
 
         // Kickstart 1.2 and 1.3
         0x010001000100,
