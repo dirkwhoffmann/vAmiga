@@ -189,7 +189,7 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_SPR5PTL: setSPRxPTL<5>(change.value); break;
             case SET_SPR6PTL: setSPRxPTL<6>(change.value); break;
             case SET_SPR7PTL: setSPRxPTL<7>(change.value); break;
-            case SET_HSYNC: hsyncHandler(); break;
+            case SET_STRHOR: hsyncHandler(); break;
                 
             default:
                 fatalError;
@@ -206,7 +206,7 @@ Agnus::serviceRASEvent()
     assert(scheduler.id[SLOT_RAS] == RAS_HSYNC);
     
     // Let the hsync handler be called at the beginning of the next DMA cycle
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_HSYNC, 1);
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_STRHOR, 1);
     
     // Call the hsync handler
     // hsyncHandler();
@@ -478,7 +478,7 @@ Agnus::serviceBPLEventHires()
     denise.setBPLxDAT<nr>(doBitplaneDMA<nr>());
     
     // Add modulo if this is the last fetch unit
-    if (pos.h >= ddfHires.stop - 4) addBPLMOD<nr>();
+    if (pos.h >= ddfHires.stop - 4) bplpt[nr] += (nr % 2) ? bpl2mod : bpl1mod;
 }
 
 template <isize nr> void
@@ -488,7 +488,7 @@ Agnus::serviceBPLEventLores()
     denise.setBPLxDAT<nr>(doBitplaneDMA<nr>());
 
     // Add modulo if this is the last fetch unit
-    if (pos.h >= ddfLores.stop - 8) addBPLMOD<nr>();
+    if (pos.h >= ddfLores.stop - 8) bplpt[nr] += (nr % 2) ? bpl2mod : bpl1mod;
 }
 
 void

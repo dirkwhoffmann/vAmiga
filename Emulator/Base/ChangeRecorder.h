@@ -107,7 +107,7 @@ enum RegChangeID : i32
     SET_SPR6PTL,
     SET_SPR7PTL,
     
-    SET_HSYNC     // Fake register used for calling the HSYNC handler
+    SET_STRHOR
 };
 
 /* Register change recorder

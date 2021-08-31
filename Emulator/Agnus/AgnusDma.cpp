@@ -180,11 +180,6 @@ Agnus::initDasEventTable()
     }
 }
 
-template <> bool Agnus::auddma<0>(u16 v) { return (v & DMAEN) && (v & AUD0EN); }
-template <> bool Agnus::auddma<1>(u16 v) { return (v & DMAEN) && (v & AUD1EN); }
-template <> bool Agnus::auddma<2>(u16 v) { return (v & DMAEN) && (v & AUD2EN); }
-template <> bool Agnus::auddma<3>(u16 v) { return (v & DMAEN) && (v & AUD3EN); }
-
 void
 Agnus::enableBplDmaOCS()
 {
@@ -213,11 +208,8 @@ Agnus::enableBplDmaECS()
     }
     
     if (pos.h + 2 >= ddfstopReached) return;
-    
-    // debug("Enable DMA ECS: %d %d %d %d (%x)\n", ddfstrt, ddfstrtReached, ddfstop, ddfstopReached, bplcon1);
-    
+        
     isize posh = pos.h + 4;
-    // debug("posh = %d MAX = %d\n", posh, MAX(posh, ddfstrtReached));
     ddfLores.compute(std::max(posh, ddfstrtReached), ddfstopReached);
     ddfHires.compute(std::max(posh, ddfstrtReached), ddfstopReached);
     hsyncActions |= HSYNC_PREDICT_DDF;
@@ -470,7 +462,7 @@ Agnus::updateDrawingFlags(bool hires)
     assert(scrollHiresEven < 8);
     assert(scrollHiresOdd  < 8);
     assert(scrollLoresEven < 8);
-    assert(scrollHiresOdd  < 8);
+    assert(scrollLoresOdd  < 8);
     
     //  Bit 0 is used for odd bitplanes, Bit 1 is used for even bitplanes
     

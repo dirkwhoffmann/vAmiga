@@ -12,235 +12,6 @@
 #include "Denise.h"
 #include "Paula.h"
 
-void
-Agnus::pokeDSKPTH(u16 value)
-{
-    debug(DSKREG_DEBUG, "pokeDSKPTH(%x)\n", value);
-    dskpt = REPLACE_HI_WORD(dskpt, value);
-    
-    if (dskpt & ~agnus.ptrMask) {
-        trace(XFILES, "DSKPT out of range: %x\n", dskpt);
-    }
-}
-
-void
-Agnus::pokeDSKPTL(u16 value)
-{
-    debug(DSKREG_DEBUG, "pokeDSKPTL(%x)\n", value);
-    dskpt = REPLACE_LO_WORD(dskpt, value & 0xFFFE);
-}
-
-template <int x> void
-Agnus::pokeAUDxLCH(u16 value)
-{
-    debug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
-
-     audlc[x] = REPLACE_HI_WORD(audlc[x], value);
-}
-
-template <int x> void
-Agnus::pokeAUDxLCL(u16 value)
-{
-    trace(AUDREG_DEBUG, "pokeAUD%dLCL(%X)\n", x, value);
-
-    audlc[x] = REPLACE_LO_WORD(audlc[x], value & 0xFFFE);
-}
-
-template <int x> void
-Agnus::pokeBPLxPTH(u16 value)
-{
-    trace(BPLREG_DEBUG, "pokeBPL%dPTH($%d) (%X)\n", x, value, value);
-
-    // Schedule the register updated
-    switch (x) {
-        case 1: recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTH, value); break;
-        case 2: recordRegisterChange(DMA_CYCLES(2), SET_BPL2PTH, value); break;
-        case 3: recordRegisterChange(DMA_CYCLES(2), SET_BPL3PTH, value); break;
-        case 4: recordRegisterChange(DMA_CYCLES(2), SET_BPL4PTH, value); break;
-        case 5: recordRegisterChange(DMA_CYCLES(2), SET_BPL5PTH, value); break;
-        case 6: recordRegisterChange(DMA_CYCLES(2), SET_BPL6PTH, value); break;
-    }
-}
-
-template <int x> void
-Agnus::pokeBPLxPTL(u16 value)
-{
-    trace(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
-
-    // Schedule the register updated
-    switch (x) {
-        case 1: recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTL, value); break;
-        case 2: recordRegisterChange(DMA_CYCLES(2), SET_BPL2PTL, value); break;
-        case 3: recordRegisterChange(DMA_CYCLES(2), SET_BPL3PTL, value); break;
-        case 4: recordRegisterChange(DMA_CYCLES(2), SET_BPL4PTL, value); break;
-        case 5: recordRegisterChange(DMA_CYCLES(2), SET_BPL5PTL, value); break;
-        case 6: recordRegisterChange(DMA_CYCLES(2), SET_BPL6PTL, value); break;
-    }
-}
-
-template <int x> void
-Agnus::setBPLxPTH(u16 value)
-{
-    trace(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
-    
-    // Check if the write collides with DMA
-    if (!NO_PTR_DROPS && isBplxEvent(bplEvent[pos.h], x)) {
-        trace(XFILES, "XFILES: Trashing BPL%dPTH\n", x);
-        bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], 0xFFFF);
-        return;
-    }
-    
-    // Check if pointer was involded in DMA one cycle earlier
-    if (!dropWrite((BusOwner)(BUS_BPL1 + x - 1))) {
-        bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
-    } else {
-        // debug("BPLxPTH lost (%d)\n", x - 1);
-    }
-}
-
-template <int x> void
-Agnus::setBPLxPTL(u16 value)
-{
-    trace(BPLREG_DEBUG, "setBPLxPTL(%d, %X)\n", x, value);
-    
-    // Check if the write collides with DMA
-    if (!NO_PTR_DROPS && isBplxEvent(bplEvent[pos.h], x)) {
-        trace(XFILES, "XFILES: Trashing BPL%dPTL\n", x);
-        bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], 0xFFFE);
-        return;
-    }
-
-    // Check if pointer was involded in DMA one cycle earlier
-    if (!dropWrite((BusOwner)(BUS_BPL1 + x - 1))) {
-        bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
-    }
-}
-
-void
-Agnus::pokeBPL1MOD(u16 value)
-{
-    trace(BPLREG_DEBUG, "pokeBPL1MOD(%X)\n", value);
-    recordRegisterChange(DMA_CYCLES(2), SET_BPL1MOD, value);
-}
-
-void
-Agnus::setBPL1MOD(u16 value)
-{
-    trace(BPLREG_DEBUG, "setBPL1MOD(%X)\n", value);
-    bpl1mod = (i16)(value & 0xFFFE);
-}
-
-void
-Agnus::pokeBPL2MOD(u16 value)
-{
-    trace(BPLREG_DEBUG, "pokeBPL2MOD(%X)\n", value);
-    recordRegisterChange(DMA_CYCLES(2), SET_BPL2MOD, value);
-}
-
-void
-Agnus::setBPL2MOD(u16 value)
-{
-    trace(BPLREG_DEBUG, "setBPL2MOD(%X)\n", value);
-    bpl2mod = (i16)(value & 0xFFFE);
-}
-
-template <int x> void
-Agnus::pokeSPRxPTH(u16 value)
-{
-    trace(SPRREG_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
-
-    if constexpr (x == 0) recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTH, value);
-    if constexpr (x == 1) recordRegisterChange(DMA_CYCLES(2), SET_SPR1PTH, value);
-    if constexpr (x == 2) recordRegisterChange(DMA_CYCLES(2), SET_SPR2PTH, value);
-    if constexpr (x == 3) recordRegisterChange(DMA_CYCLES(2), SET_SPR3PTH, value);
-    if constexpr (x == 4) recordRegisterChange(DMA_CYCLES(2), SET_SPR4PTH, value);
-    if constexpr (x == 5) recordRegisterChange(DMA_CYCLES(2), SET_SPR5PTH, value);
-    if constexpr (x == 6) recordRegisterChange(DMA_CYCLES(2), SET_SPR6PTH, value);
-    if constexpr (x == 7) recordRegisterChange(DMA_CYCLES(2), SET_SPR7PTH, value);
-}
-
-template <int x> void
-Agnus::setSPRxPTH(u16 value)
-{
-    trace(SPRREG_DEBUG, "setSPR%dPTH(%X)\n", x, value);
-    
-    if (!dropWrite((BusOwner)(BUS_SPRITE0 + x))) {
-        sprpt[x] = REPLACE_HI_WORD(sprpt[x], value);
-    }
-}
-
-template <int x> void
-Agnus::pokeSPRxPTL(u16 value)
-{
-    trace(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
-
-    if constexpr (x == 0) recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTL, value);
-    if constexpr (x == 1) recordRegisterChange(DMA_CYCLES(2), SET_SPR1PTL, value);
-    if constexpr (x == 2) recordRegisterChange(DMA_CYCLES(2), SET_SPR2PTL, value);
-    if constexpr (x == 3) recordRegisterChange(DMA_CYCLES(2), SET_SPR3PTL, value);
-    if constexpr (x == 4) recordRegisterChange(DMA_CYCLES(2), SET_SPR4PTL, value);
-    if constexpr (x == 5) recordRegisterChange(DMA_CYCLES(2), SET_SPR5PTL, value);
-    if constexpr (x == 6) recordRegisterChange(DMA_CYCLES(2), SET_SPR6PTL, value);
-    if constexpr (x == 7) recordRegisterChange(DMA_CYCLES(2), SET_SPR7PTL, value);
-}
-
-template <int x> void
-Agnus::setSPRxPTL(u16 value)
-{
-    trace(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
-
-    if (!dropWrite((BusOwner)(BUS_SPRITE0 + x))) {
-        sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
-    }
-}
-
-template <int x> void
-Agnus::pokeSPRxPOS(u16 value)
-{
-    trace(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
-
-    // Compute the value of the vertical counter that is seen here
-    i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
-
-    // Compute the new vertical start position
-    sprVStrt[x] = ((value & 0xFF00) >> 8) | (sprVStrt[x] & 0x0100);
-
-    // Update sprite DMA status
-    if (sprVStrt[x] == v) sprDmaState[x] = SPR_DMA_ACTIVE;
-    if (sprVStop[x] == v) sprDmaState[x] = SPR_DMA_IDLE;
-}
-
-template <int x> void
-Agnus::pokeSPRxCTL(u16 value)
-{
-    trace(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
-
-    // Compute the value of the vertical counter that is seen here
-    i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
-
-    // Compute the new vertical start and stop position
-    sprVStrt[x] = (i16)((value & 0b100) << 6 | (sprVStrt[x] & 0x00FF));
-    sprVStop[x] = (i16)((value & 0b010) << 7 | (value >> 8));
-
-    // Update sprite DMA status
-    if (sprVStrt[x] == v) sprDmaState[x] = SPR_DMA_ACTIVE;
-    if (sprVStop[x] == v) sprDmaState[x] = SPR_DMA_IDLE;
-}
-
-bool
-Agnus::dropWrite(BusOwner owner)
-{
-    /* A write to a pointer register is dropped if the pointer was used one
-     * cycle before the pointer register would be updated.
-     */
-    if (!NO_PTR_DROPS && pos.h >= 1 && busOwner[pos.h - 1] == owner) {
-        trace(XFILES, "XFILES: Dropping pointer register write (%d)\n", owner);
-        return true;
-    }
-    
-    return false;
-}
-
 u16
 Agnus::peekDMACONR()
 {
@@ -260,8 +31,6 @@ Agnus::pokeDMACON(u16 value)
 {
     trace(DMA_DEBUG, "pokeDMACON(%X)\n", value);
     
-    // Record the change
-    // recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
     setDMACON(dmacon, value);
 }
 
@@ -487,6 +256,105 @@ Agnus::pokeVPOS(u16 value)
     }
 }
 
+void
+Agnus::pokeDSKPTH(u16 value)
+{
+    debug(DSKREG_DEBUG, "pokeDSKPTH(%x)\n", value);
+    dskpt = REPLACE_HI_WORD(dskpt, value);
+    
+    if (dskpt & ~agnus.ptrMask) {
+        trace(XFILES, "DSKPT out of range: %x\n", dskpt);
+    }
+}
+
+void
+Agnus::pokeDSKPTL(u16 value)
+{
+    debug(DSKREG_DEBUG, "pokeDSKPTL(%x)\n", value);
+    dskpt = REPLACE_LO_WORD(dskpt, value & 0xFFFE);
+}
+
+void
+Agnus::pokeBPLCON0(u16 value)
+{
+    trace(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
+
+    recordRegisterChange(DMA_CYCLES(4), SET_BPLCON0_AGNUS, value);
+}
+
+void
+Agnus::setBPLCON0(u16 oldValue, u16 newValue)
+{
+    trace(DMA_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
+    
+    // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet
+    if (pos.h < ddfstrtReached) bplcon0AtDDFStrt = newValue;
+    
+    // Update the bpl event table in the next rasterline
+    hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    
+    // Check if the hires bit or one of the BPU bits have been modified
+    if ((oldValue ^ newValue) & 0xF000) {
+        
+        /*
+         debug("oldBplcon0 = %X newBplcon0 = %X\n", oldBplcon0, newBplcon0);
+         dumpBplEventTable();
+         */
+        
+        /* TODO:
+         * BPLCON0 is usually written in each frame.
+         * To speed up, just check the hpos. If it is smaller than the start
+         * of the DMA window, a standard update() is enough and the scheduled
+         * update in hsyncActions (HSYNC_UPDATE_BPL_TABLE) can be omitted.
+         */
+        
+        // Update the DMA allocation table
+        updateBplEvents(dmacon, newValue, pos.h);
+        
+        // Since the table has changed, we also need to update the event slot
+        scheduleBplEventForCycle(pos.h);
+    }
+    
+    // Latch the position counters if the ERSY bit is set
+    if ((newValue & 0b10) && !(oldValue & 0b10)) latchedPos = pos;
+
+    bplcon0 = newValue;
+}
+
+void
+Agnus::pokeBPLCON1(u16 value)
+{
+    trace(DMA_DEBUG, "pokeBPLCON1(%X)\n", value);
+    
+    if (bplcon1 != value) {
+        recordRegisterChange(DMA_CYCLES(1), SET_BPLCON1_AGNUS, value);
+    }
+}
+
+void
+Agnus::setBPLCON1(u16 oldValue, u16 newValue)
+{
+    assert(oldValue != newValue);
+    trace(DMA_DEBUG, "setBPLCON1(%X,%X)\n", oldValue, newValue);
+    
+    bplcon1 = newValue & 0xFF;
+    
+    // Compute comparision values for the hpos counter
+    scrollLoresOdd  = (bplcon1 & 0b00001110) >> 1;
+    scrollLoresEven = (bplcon1 & 0b11100000) >> 5;
+    scrollHiresOdd  = (bplcon1 & 0b00000110) >> 1;
+    scrollHiresEven = (bplcon1 & 0b01100000) >> 5;
+    
+    // Update the bitplane event table starting at the current hpos
+    updateBplEvents(pos.h);
+    
+    // Update the scheduled bitplane event according to the new table
+    scheduleBplEventForCycle(pos.h);
+    
+    // Schedule the bitplane event table to be recomputed
+    agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+}
+
 template <Accessor s> void
 Agnus::pokeDIWSTRT(u16 value)
 {
@@ -708,86 +576,217 @@ Agnus::setDDFSTOP(u16 old, u16 value)
     }
 }
 
-void
-Agnus::pokeBPLCON0(u16 value)
+template <int x> void
+Agnus::pokeAUDxLCH(u16 value)
 {
-    trace(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
+    debug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
 
-    recordRegisterChange(DMA_CYCLES(4), SET_BPLCON0_AGNUS, value);
+     audlc[x] = REPLACE_HI_WORD(audlc[x], value);
 }
 
-void
-Agnus::setBPLCON0(u16 oldValue, u16 newValue)
-{    
-    trace(DMA_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
-    
-    // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet
-    if (pos.h < ddfstrtReached) bplcon0AtDDFStrt = newValue;
-    
-    // Update the bpl event table in the next rasterline
-    hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-    
-    // Check if the hires bit or one of the BPU bits have been modified
-    if ((oldValue ^ newValue) & 0xF000) {
-        
-        /*
-         debug("oldBplcon0 = %X newBplcon0 = %X\n", oldBplcon0, newBplcon0);
-         dumpBplEventTable();
-         */
-        
-        /* TODO:
-         * BPLCON0 is usually written in each frame.
-         * To speed up, just check the hpos. If it is smaller than the start
-         * of the DMA window, a standard update() is enough and the scheduled
-         * update in hsyncActions (HSYNC_UPDATE_BPL_TABLE) can be omitted.
-         */
-        
-        // Update the DMA allocation table
-        updateBplEvents(dmacon, newValue, pos.h);
-        
-        // Since the table has changed, we also need to update the event slot
-        scheduleBplEventForCycle(pos.h);
-    }
-    
-    // Latch the position counters if the ERSY bit is set
-    if ((newValue & 0b10) && !(oldValue & 0b10)) latchedPos = pos;
+template <int x> void
+Agnus::pokeAUDxLCL(u16 value)
+{
+    trace(AUDREG_DEBUG, "pokeAUD%dLCL(%X)\n", x, value);
 
-    bplcon0 = newValue;
+    audlc[x] = REPLACE_LO_WORD(audlc[x], value & 0xFFFE);
 }
 
-void
-Agnus::pokeBPLCON1(u16 value)
+template <int x> void
+Agnus::pokeBPLxPTH(u16 value)
 {
-    trace(DMA_DEBUG, "pokeBPLCON1(%X)\n", value);
-    
-    if (bplcon1 != value) {
-        recordRegisterChange(DMA_CYCLES(1), SET_BPLCON1_AGNUS, value);
+    trace(BPLREG_DEBUG, "pokeBPL%dPTH($%d) (%X)\n", x, value, value);
+
+    // Schedule the register updated
+    switch (x) {
+        case 1: recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTH, value); break;
+        case 2: recordRegisterChange(DMA_CYCLES(2), SET_BPL2PTH, value); break;
+        case 3: recordRegisterChange(DMA_CYCLES(2), SET_BPL3PTH, value); break;
+        case 4: recordRegisterChange(DMA_CYCLES(2), SET_BPL4PTH, value); break;
+        case 5: recordRegisterChange(DMA_CYCLES(2), SET_BPL5PTH, value); break;
+        case 6: recordRegisterChange(DMA_CYCLES(2), SET_BPL6PTH, value); break;
     }
 }
 
-void
-Agnus::setBPLCON1(u16 oldValue, u16 newValue)
+template <int x> void
+Agnus::pokeBPLxPTL(u16 value)
 {
-    assert(oldValue != newValue);
-    trace(DMA_DEBUG, "setBPLCON1(%X,%X)\n", oldValue, newValue);
-    
-    bplcon1 = newValue & 0xFF;
-    
-    // Compute comparision values for the hpos counter
-    scrollLoresOdd  = (bplcon1 & 0b00001110) >> 1;
-    scrollLoresEven = (bplcon1 & 0b11100000) >> 5;
-    scrollHiresOdd  = (bplcon1 & 0b00000110) >> 1;
-    scrollHiresEven = (bplcon1 & 0b01100000) >> 5;
-    
-    // Update the bitplane event table starting at the current hpos
-    updateBplEvents(pos.h);
-    
-    // Update the scheduled bitplane event according to the new table
-    scheduleBplEventForCycle(pos.h);
-    
-    // Schedule the bitplane event table to be recomputed
-    agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;        
+    trace(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
+
+    // Schedule the register updated
+    switch (x) {
+        case 1: recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTL, value); break;
+        case 2: recordRegisterChange(DMA_CYCLES(2), SET_BPL2PTL, value); break;
+        case 3: recordRegisterChange(DMA_CYCLES(2), SET_BPL3PTL, value); break;
+        case 4: recordRegisterChange(DMA_CYCLES(2), SET_BPL4PTL, value); break;
+        case 5: recordRegisterChange(DMA_CYCLES(2), SET_BPL5PTL, value); break;
+        case 6: recordRegisterChange(DMA_CYCLES(2), SET_BPL6PTL, value); break;
+    }
 }
+
+template <int x> void
+Agnus::setBPLxPTH(u16 value)
+{
+    trace(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
+    
+    // Check if the write collides with DMA
+    if (!NO_PTR_DROPS && isBplxEvent(bplEvent[pos.h], x)) {
+        trace(XFILES, "XFILES: Trashing BPL%dPTH\n", x);
+        bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], 0xFFFF);
+        return;
+    }
+    
+    // Check if pointer was involded in DMA one cycle earlier
+    if (!dropWrite((BusOwner)(BUS_BPL1 + x - 1))) {
+        bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
+    } else {
+        // debug("BPLxPTH lost (%d)\n", x - 1);
+    }
+}
+
+template <int x> void
+Agnus::setBPLxPTL(u16 value)
+{
+    trace(BPLREG_DEBUG, "setBPLxPTL(%d, %X)\n", x, value);
+    
+    // Check if the write collides with DMA
+    if (!NO_PTR_DROPS && isBplxEvent(bplEvent[pos.h], x)) {
+        trace(XFILES, "XFILES: Trashing BPL%dPTL\n", x);
+        bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], 0xFFFE);
+        return;
+    }
+
+    // Check if pointer was involded in DMA one cycle earlier
+    if (!dropWrite((BusOwner)(BUS_BPL1 + x - 1))) {
+        bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
+    }
+}
+
+void
+Agnus::pokeBPL1MOD(u16 value)
+{
+    trace(BPLREG_DEBUG, "pokeBPL1MOD(%X)\n", value);
+    recordRegisterChange(DMA_CYCLES(2), SET_BPL1MOD, value);
+}
+
+void
+Agnus::setBPL1MOD(u16 value)
+{
+    trace(BPLREG_DEBUG, "setBPL1MOD(%X)\n", value);
+    bpl1mod = (i16)(value & 0xFFFE);
+}
+
+void
+Agnus::pokeBPL2MOD(u16 value)
+{
+    trace(BPLREG_DEBUG, "pokeBPL2MOD(%X)\n", value);
+    recordRegisterChange(DMA_CYCLES(2), SET_BPL2MOD, value);
+}
+
+void
+Agnus::setBPL2MOD(u16 value)
+{
+    trace(BPLREG_DEBUG, "setBPL2MOD(%X)\n", value);
+    bpl2mod = (i16)(value & 0xFFFE);
+}
+
+template <int x> void
+Agnus::pokeSPRxPTH(u16 value)
+{
+    trace(SPRREG_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
+
+    if constexpr (x == 0) recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTH, value);
+    if constexpr (x == 1) recordRegisterChange(DMA_CYCLES(2), SET_SPR1PTH, value);
+    if constexpr (x == 2) recordRegisterChange(DMA_CYCLES(2), SET_SPR2PTH, value);
+    if constexpr (x == 3) recordRegisterChange(DMA_CYCLES(2), SET_SPR3PTH, value);
+    if constexpr (x == 4) recordRegisterChange(DMA_CYCLES(2), SET_SPR4PTH, value);
+    if constexpr (x == 5) recordRegisterChange(DMA_CYCLES(2), SET_SPR5PTH, value);
+    if constexpr (x == 6) recordRegisterChange(DMA_CYCLES(2), SET_SPR6PTH, value);
+    if constexpr (x == 7) recordRegisterChange(DMA_CYCLES(2), SET_SPR7PTH, value);
+}
+
+template <int x> void
+Agnus::setSPRxPTH(u16 value)
+{
+    trace(SPRREG_DEBUG, "setSPR%dPTH(%X)\n", x, value);
+    
+    if (!dropWrite((BusOwner)(BUS_SPRITE0 + x))) {
+        sprpt[x] = REPLACE_HI_WORD(sprpt[x], value);
+    }
+}
+
+template <int x> void
+Agnus::pokeSPRxPTL(u16 value)
+{
+    trace(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
+
+    if constexpr (x == 0) recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTL, value);
+    if constexpr (x == 1) recordRegisterChange(DMA_CYCLES(2), SET_SPR1PTL, value);
+    if constexpr (x == 2) recordRegisterChange(DMA_CYCLES(2), SET_SPR2PTL, value);
+    if constexpr (x == 3) recordRegisterChange(DMA_CYCLES(2), SET_SPR3PTL, value);
+    if constexpr (x == 4) recordRegisterChange(DMA_CYCLES(2), SET_SPR4PTL, value);
+    if constexpr (x == 5) recordRegisterChange(DMA_CYCLES(2), SET_SPR5PTL, value);
+    if constexpr (x == 6) recordRegisterChange(DMA_CYCLES(2), SET_SPR6PTL, value);
+    if constexpr (x == 7) recordRegisterChange(DMA_CYCLES(2), SET_SPR7PTL, value);
+}
+
+template <int x> void
+Agnus::setSPRxPTL(u16 value)
+{
+    trace(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
+
+    if (!dropWrite((BusOwner)(BUS_SPRITE0 + x))) {
+        sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
+    }
+}
+
+template <int x> void
+Agnus::pokeSPRxPOS(u16 value)
+{
+    trace(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
+
+    // Compute the value of the vertical counter that is seen here
+    i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
+
+    // Compute the new vertical start position
+    sprVStrt[x] = ((value & 0xFF00) >> 8) | (sprVStrt[x] & 0x0100);
+
+    // Update sprite DMA status
+    if (sprVStrt[x] == v) sprDmaState[x] = SPR_DMA_ACTIVE;
+    if (sprVStop[x] == v) sprDmaState[x] = SPR_DMA_IDLE;
+}
+
+template <int x> void
+Agnus::pokeSPRxCTL(u16 value)
+{
+    trace(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
+
+    // Compute the value of the vertical counter that is seen here
+    i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
+
+    // Compute the new vertical start and stop position
+    sprVStrt[x] = (i16)((value & 0b100) << 6 | (sprVStrt[x] & 0x00FF));
+    sprVStop[x] = (i16)((value & 0b010) << 7 | (value >> 8));
+
+    // Update sprite DMA status
+    if (sprVStrt[x] == v) sprDmaState[x] = SPR_DMA_ACTIVE;
+    if (sprVStop[x] == v) sprDmaState[x] = SPR_DMA_IDLE;
+}
+
+bool
+Agnus::dropWrite(BusOwner owner)
+{
+    /* A write to a pointer register is dropped if the pointer was used one
+     * cycle before the pointer register would be updated.
+     */
+    if (!NO_PTR_DROPS && pos.h >= 1 && busOwner[pos.h - 1] == owner) {
+        trace(XFILES, "XFILES: Dropping pointer register write (%d)\n", owner);
+        return true;
+    }
+    
+    return false;
+}
+
 
 template void Agnus::pokeAUDxLCH<0>(u16 value);
 template void Agnus::pokeAUDxLCH<1>(u16 value);

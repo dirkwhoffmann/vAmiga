@@ -623,156 +623,9 @@ public:
     // TODO: REMOVE AFTER V1.1 BETA TESTING
     Beam addToBeam(Beam beam, Cycle cycles) const;
 
-
-    //
-    // Controlling DMA
-    //
-
-    // Returns true if the Blitter has priority over the CPU
-    static bool bltpri(u16 v) { return GET_BIT(v, 10); }
-    bool bltpri() const { return bltpri(dmacon); }
-
-    // Returns true if a certain DMA channel is enabled
-    template <int x> static bool auddma(u16 v);
-    static bool bpldma(u16 v) { return (v & DMAEN) && (v & BPLEN); }
-    static bool copdma(u16 v) { return (v & DMAEN) && (v & COPEN); }
-    static bool bltdma(u16 v) { return (v & DMAEN) && (v & BLTEN); }
-    static bool sprdma(u16 v) { return (v & DMAEN) && (v & SPREN); }
-    static bool dskdma(u16 v) { return (v & DMAEN) && (v & DSKEN); }
-    template <int x> bool auddma() const { return auddma<x>(dmacon); }
-    bool bpldma() const { return bpldma(dmacon); }
-    bool copdma() const { return copdma(dmacon); }
-    bool bltdma() const { return bltdma(dmacon); }
-    bool sprdma() const { return sprdma(dmacon); }
-    bool dskdma() const { return dskdma(dmacon); }
-    
-    void enableBplDmaOCS();
-    void disableBplDmaOCS();
-    void enableBplDmaECS();
-    void disableBplDmaECS();
-
     
     //
-    // Managing DMA pointers
-    //
-    
-    // Disk DMA
-    void pokeDSKPTH(u16 value);
-    void pokeDSKPTL(u16 value);
-
-    // Audio DMA
-    template <int x> void pokeAUDxLCH(u16 value);
-    template <int x> void pokeAUDxLCL(u16 value);
-    template <int x> void reloadAUDxPT() { audpt[x] = audlc[x]; }
-    
-    // Bitplane DMA
-    template <int x> void pokeBPLxPTH(u16 value);
-    template <int x> void pokeBPLxPTL(u16 value);
-    template <int x> void setBPLxPTH(u16 value);
-    template <int x> void setBPLxPTL(u16 value);
-
-    void pokeBPL1MOD(u16 value);
-    void setBPL1MOD(u16 value);
-    void pokeBPL2MOD(u16 value);
-    void setBPL2MOD(u16 value);
-
-    template <int x> void addBPLMOD() {
-        bplpt[x] += (x % 2) ? bpl2mod : bpl1mod;
-    }
-
-    // Sprite DMA
-    template <int x> void pokeSPRxPTH(u16 value);
-    template <int x> void setSPRxPTH(u16 value);
-    template <int x> void pokeSPRxPTL(u16 value);
-    template <int x> void setSPRxPTL(u16 value);
-    template <int x> void pokeSPRxPOS(u16 value);
-    template <int x> void pokeSPRxCTL(u16 value);
-
-private:
-    
-    // Checks whether a write to a pointer register should be dropped
-    bool dropWrite(BusOwner owner);
-
-    
-    //
-    // Performing DMA
-    //
-
-public:
-        
-    // Checks if the bus is currently available for the specified resource.
-    template <BusOwner owner> bool busIsFree() const;
-
-    /* Attempts to allocate the bus for the specified resource. Returns true
-     * if the bus was successfully allocated. On success, the bus owner is
-     * recorded in the busOwner array.
-     */
-    template <BusOwner owner> bool allocateBus();
-
-    // Performs a DMA read
-    u16 doDiskDMA();
-    template <int channel> u16 doAudioDMA();
-    template <int channel> u16 doBitplaneDMA();
-    template <int channel> u16 doSpriteDMA();
-    u16 doCopperDMA(u32 addr);
-    u16 doBlitterDMA(u32 addr);
-
-    // Performs a DMA write
-    void doDiskDMA(u16 value);
-    void doCopperDMA(u32 addr, u16 value);
-    void doBlitterDMA(u32 addr, u16 value);
-
-    // Transmits a DMA request from Agnus to Paula
-    template <int channel> void setAudxDR() { audxDR[channel] = true; }
-    template <int channel> void setAudxDSR() { audxDSR[channel] = true; }
-
-    // Getter and setter for the BLS signal (Blitter slow down)
-    bool getBLS() { return bls; }
-    void setBLS(bool value) { bls = value; }
-
-
-    //
-    // Managing the DMA time slot tables
-    //
-    
-public:
-
-    // Removes all events from the BPL event table
-    void clearBplEvents();
-
-    // Renews all events in the BPL event table
-    void updateBplEvents(u16 dmacon, u16 bplcon0, isize first = 0);
-    void updateBplEvents(isize first = 0) { updateBplEvents(dmacon, bplcon0, first); }
-    void updateDrawingFlags(bool hires);
-        
-    // Renews all events in the the DAS event table
-    void updateDasEvents(u16 dmacon);
-
-private:
-
-    // Updates the jump table for the bplEvent table
-    void updateBplJumpTable();
-
-    // Updates the jump table for the dasEvent table
-    void updateDasJumpTable(i16 end = HPOS_MAX);
-
-        
-    //
-    // Managing the data fetch window
-    //
-    
-    // Sets up the likely DDF values for the next rasterline
-    void predictDDF();
-
-private:
-
-    void computeDDFWindow();
-    void computeDDFWindowOCS();
-    void computeDDFWindowECS();
-
-
-    //
-    //
+    // Querying graphic modes
     //
     
 public:
@@ -785,6 +638,13 @@ public:
      */
     static u8 bpu(u16 v);
     u8 bpu() const { return bpu(bplcon0); }
+
+    // Checks whether Hires or Lores mode is selected
+    bool hires() { return GET_BIT(bplcon0, 15); }
+    bool lores() { return GET_BIT(bplcon0, 10); }
+    
+    // Returns the external synchronization bit from BPLCON0
+    bool ersy() { return GET_BIT(bplcon0, 1); }
 
 
     //
@@ -828,49 +688,185 @@ private:
 
     
     //
-    // Accessing registers
+    // Managing the data fetch window (AgnusDDF.cpp)
+    //
+    
+    // Sets up the likely DDF values for the next rasterline
+    void predictDDF();
+
+private:
+
+    void computeDDFWindow();
+    void computeDDFWindowOCS();
+    void computeDDFWindowECS();
+
+    
+    //
+    // Controlling DMA (AgnusDma.cpp)
+    //
+
+public:
+    
+    // Returns true if the Blitter has priority over the CPU
+    static bool bltpri(u16 value) { return GET_BIT(value, 10); }
+    bool bltpri() const { return bltpri(dmacon); }
+
+    // Returns true if a certain DMA channel is enabled
+    template <int x> static bool auddma(u16 v);
+    template <> bool auddma<0>(u16 v) { return (v & DMAEN) && (v & AUD0EN); }
+    template <> bool auddma<1>(u16 v) { return (v & DMAEN) && (v & AUD1EN); }
+    template <> bool auddma<2>(u16 v) { return (v & DMAEN) && (v & AUD2EN); }
+    template <> bool auddma<3>(u16 v) { return (v & DMAEN) && (v & AUD3EN); }
+    template <int x> bool auddma() const { return auddma<x>(dmacon); }
+
+    static bool bpldma(u16 v) { return (v & DMAEN) && (v & BPLEN); }
+    static bool copdma(u16 v) { return (v & DMAEN) && (v & COPEN); }
+    static bool bltdma(u16 v) { return (v & DMAEN) && (v & BLTEN); }
+    static bool sprdma(u16 v) { return (v & DMAEN) && (v & SPREN); }
+    static bool dskdma(u16 v) { return (v & DMAEN) && (v & DSKEN); }    
+    bool bpldma() const { return bpldma(dmacon); }
+    bool copdma() const { return copdma(dmacon); }
+    bool bltdma() const { return bltdma(dmacon); }
+    bool sprdma() const { return sprdma(dmacon); }
+    bool dskdma() const { return dskdma(dmacon); }
+    
+private:
+    
+    void enableBplDmaOCS();
+    void disableBplDmaOCS();
+    void enableBplDmaECS();
+    void disableBplDmaECS();
+
+    
+    //
+    // Managing the DMA time slot tables (AgnusDma.cpp)
     //
     
 public:
 
-    // DMACONR, DMACON
-    u16 peekDMACONR();
-     void pokeDMACON(u16 value);
-     void setDMACON(u16 oldValue, u16 newValue);
+    // Removes all events from the BPL event table
+    void clearBplEvents();
+
+    // Renews all events in the BPL event table
+    void updateBplEvents(u16 dmacon, u16 bplcon0, isize first = 0);
+    void updateBplEvents(isize first = 0) { updateBplEvents(dmacon, bplcon0, first); }
+    void updateDrawingFlags(bool hires);
+        
+    // Renews all events in the the DAS event table
+    void updateDasEvents(u16 dmacon);
+
+private:
+
+    // Updates the jump table for the bplEvent table
+    void updateBplJumpTable();
+
+    // Updates the jump table for the dasEvent table
+    void updateDasJumpTable(i16 end = HPOS_MAX);
     
-    // VHPOSR, VHPOS, VPOSR, VPOS
+    
+    //
+    // Performing DMA (AgnusDma.cpp)
+    //
+
+public:
+        
+    // Checks if the bus is currently available for the specified resource.
+    template <BusOwner owner> bool busIsFree() const;
+
+    /* Attempts to allocate the bus for the specified resource. Returns true
+     * if the bus was successfully allocated. On success, the bus owner is
+     * recorded in the busOwner array.
+     */
+    template <BusOwner owner> bool allocateBus();
+
+    // Performs a DMA read
+    u16 doDiskDMA();
+    template <int channel> u16 doAudioDMA();
+    template <int channel> u16 doBitplaneDMA();
+    template <int channel> u16 doSpriteDMA();
+    u16 doCopperDMA(u32 addr);
+    u16 doBlitterDMA(u32 addr);
+
+    // Performs a DMA write
+    void doDiskDMA(u16 value);
+    void doCopperDMA(u32 addr, u16 value);
+    void doBlitterDMA(u32 addr, u16 value);
+
+    // Transmits a DMA request from Agnus to Paula
+    template <int channel> void setAudxDR() { audxDR[channel] = true; }
+    template <int channel> void setAudxDSR() { audxDSR[channel] = true; }
+
+    // Getter and setter for the BLS signal (Blitter slow down)
+    bool getBLS() { return bls; }
+    void setBLS(bool value) { bls = value; }
+
+    
+    //
+    // Accessing registers (AgnusRegisters.cpp)
+    //
+    
+public:
+
+    u16 peekDMACONR();
+    void pokeDMACON(u16 value);
+    void setDMACON(u16 oldValue, u16 newValue);
+    
     u16 peekVHPOSR();
     void pokeVHPOS(u16 value);
+    
     u16 peekVPOSR();
     void pokeVPOS(u16 value);
     
-    // DIWSTRT, DIWSTOP
+    void pokeDSKPTH(u16 value);
+    void pokeDSKPTL(u16 value);
+
+    void pokeBPLCON0(u16 value);
+    void setBPLCON0(u16 oldValue, u16 newValue);
+    void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
+
+    void pokeBPLCON1(u16 value);
+    void setBPLCON1(u16 oldValue, u16 newValue);
+    void setBPLCON1(u16 newValue) { setBPLCON1(bplcon1, newValue); }
+
     template <Accessor s> void pokeDIWSTRT(u16 value);
     template <Accessor s> void pokeDIWSTOP(u16 value);
     void setDIWSTRT(u16 value);
     void setDIWSTOP(u16 value);
 
-    // DDFSTRT, DDFSTOP
     void pokeDDFSTRT(u16 value);
     void pokeDDFSTOP(u16 value);
     void setDDFSTRT(u16 old, u16 value);
     void setDDFSTOP(u16 old, u16 value);
 
-    // BPLCON0 and BPLCON1
-    void pokeBPLCON0(u16 value);
-    void setBPLCON0(u16 oldValue, u16 newValue);
-    void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
-    bool hires() { return GET_BIT(bplcon0, 15); }
-    bool lores() { return GET_BIT(bplcon0, 10); }
-    bool ersy() { return GET_BIT(bplcon0, 1); }
+    template <int x> void pokeAUDxLCH(u16 value);
+    template <int x> void pokeAUDxLCL(u16 value);
+    template <int x> void reloadAUDxPT() { audpt[x] = audlc[x]; }
 
-    void pokeBPLCON1(u16 value);
-    void setBPLCON1(u16 oldValue, u16 newValue);
-    void setBPLCON1(u16 newValue) { setBPLCON1(bplcon1, newValue); }
+    template <int x> void pokeBPLxPTH(u16 value);
+    template <int x> void pokeBPLxPTL(u16 value);
+    template <int x> void setBPLxPTH(u16 value);
+    template <int x> void setBPLxPTL(u16 value);
+
+    void pokeBPL1MOD(u16 value);
+    void setBPL1MOD(u16 value);
+    void pokeBPL2MOD(u16 value);
+    void setBPL2MOD(u16 value);
+
+    template <int x> void pokeSPRxPTH(u16 value);
+    template <int x> void setSPRxPTH(u16 value);
+    template <int x> void pokeSPRxPTL(u16 value);
+    template <int x> void setSPRxPTL(u16 value);
+    template <int x> void pokeSPRxPOS(u16 value);
+    template <int x> void pokeSPRxCTL(u16 value);
+
+private:
     
+    // Checks whether a write to a pointer register should be dropped
+    bool dropWrite(BusOwner owner);
+
 
     //
-    // Scheduling events
+    // Scheduling events (AgnusEvents.cpp)
     //
     
 public:
@@ -909,7 +905,7 @@ public:
 
     
     //
-    // Scheduling specific events
+    // Scheduling specific events (AgnusEvents.cpp)
     //
 
 public:
@@ -954,7 +950,7 @@ public:
 
     
     //
-    // Servicing events
+    // Servicing events (AgnusEvents.cpp)
     //
 
 public:
