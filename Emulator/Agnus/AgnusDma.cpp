@@ -216,7 +216,7 @@ Agnus::enableBplDmaECS()
     
     updateBplEvents();
     updateBplEvent();
-    updateDrawingFlags(false);
+    // updateLoresDrawingFlags(); // THIS CAN'T BE RIGHT
 }
 
 void
@@ -439,6 +439,7 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, isize first)
             bplEvent[i] =
             ddfHires.inside(i) ? bplDMA[1][channels][i] : EVENT_NONE;
         }
+        updateHiresDrawingFlags();
         
     } else {
         
@@ -447,42 +448,13 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, isize first)
             bplEvent[i] =
             ddfLores.inside(i) ? bplDMA[0][channels][i] : EVENT_NONE;
         }
+        updateLoresDrawingFlags();
     }
         
     // Make sure the table ends with a BPL_EOL event
     bplEvent[HPOS_MAX] = BPL_EOL;
-
-    // Update the drawing flags and update the jump table
-    updateDrawingFlags(hires);
-}
-
-void
-Agnus::updateDrawingFlags(bool hires)
-{
-    assert(scrollHiresEven < 8);
-    assert(scrollHiresOdd  < 8);
-    assert(scrollLoresEven < 8);
-    assert(scrollLoresOdd  < 8);
     
-    //  Bit 0 is used for odd bitplanes, Bit 1 is used for even bitplanes
-    
-    if (hires) {
-        
-        for (isize i = scrollHiresOdd; i < HPOS_CNT; i += 4)
-            bplEvent[i] = (EventID)(bplEvent[i] | 1);
-        
-        for (isize i = scrollHiresEven; i < HPOS_CNT; i += 4)
-            bplEvent[i] = (EventID)(bplEvent[i] | 2);
-        
-    } else {
-        
-        for (isize i = scrollLoresOdd; i < HPOS_CNT; i += 8)
-            bplEvent[i] = (EventID)(bplEvent[i] | 1);
-        
-        for (isize i = scrollLoresEven; i < HPOS_CNT; i += 8)
-            bplEvent[i] = (EventID)(bplEvent[i] | 2);
-    }
-    
+    // Update the jump table
     updateBplJumpTable();
 }
 
@@ -520,6 +492,32 @@ Agnus::updateDasJumpTable(i16 end)
         nextDasEvent[i] = next;
         if (dasEvent[i]) next = (u8)i;
     }
+}
+
+void
+Agnus::updateHiresDrawingFlags()
+{
+    assert(scrollHiresEven < 8);
+    assert(scrollHiresOdd  < 8);
+    
+    for (isize i = scrollHiresOdd; i < HPOS_CNT; i += 4)
+        bplEvent[i] = (EventID)(bplEvent[i] | 1);
+    
+    for (isize i = scrollHiresEven; i < HPOS_CNT; i += 4)
+        bplEvent[i] = (EventID)(bplEvent[i] | 2);
+}
+
+void
+Agnus::updateLoresDrawingFlags()
+{
+    assert(scrollLoresEven < 8);
+    assert(scrollLoresOdd  < 8);
+    
+    for (isize i = scrollLoresOdd; i < HPOS_CNT; i += 8)
+        bplEvent[i] = (EventID)(bplEvent[i] | 1);
+    
+    for (isize i = scrollLoresEven; i < HPOS_CNT; i += 8)
+        bplEvent[i] = (EventID)(bplEvent[i] | 2);
 }
 
 template u16 Agnus::doAudioDMA<0>();

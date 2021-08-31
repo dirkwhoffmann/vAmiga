@@ -723,7 +723,7 @@ public:
     static bool copdma(u16 v) { return (v & DMAEN) && (v & COPEN); }
     static bool bltdma(u16 v) { return (v & DMAEN) && (v & BLTEN); }
     static bool sprdma(u16 v) { return (v & DMAEN) && (v & SPREN); }
-    static bool dskdma(u16 v) { return (v & DMAEN) && (v & DSKEN); }    
+    static bool dskdma(u16 v) { return (v & DMAEN) && (v & DSKEN); }
     bool bpldma() const { return bpldma(dmacon); }
     bool copdma() const { return copdma(dmacon); }
     bool bltdma() const { return bltdma(dmacon); }
@@ -750,7 +750,6 @@ public:
     // Renews all events in the BPL event table
     void updateBplEvents(u16 dmacon, u16 bplcon0, isize first = 0);
     void updateBplEvents(isize first = 0) { updateBplEvents(dmacon, bplcon0, first); }
-    void updateDrawingFlags(bool hires);
         
     // Renews all events in the the DAS event table
     void updateDasEvents(u16 dmacon);
@@ -763,6 +762,10 @@ private:
     // Updates the jump table for the dasEvent table
     void updateDasJumpTable(i16 end = HPOS_MAX);
     
+    // Updates the drawing flags in the bplEvent table
+    void updateHiresDrawingFlags();
+    void updateLoresDrawingFlags();
+
     
     //
     // Performing DMA (AgnusDma.cpp)
