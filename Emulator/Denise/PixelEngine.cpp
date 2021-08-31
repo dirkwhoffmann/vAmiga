@@ -372,8 +372,10 @@ PixelEngine::applyRegisterChange(const RegChange &change)
 void
 PixelEngine::colorize(isize line)
 {
-    // To get all pixels right, we colorize from 2 ... HPIXELS + 2. See test
-    // case Agnus/DDFNEW/lupo1.adf for details.
+    /* The color values of the first two pixels are determined by the previous
+     * line (see test case Agnus/DDFNEW/lupo1.adf). To get all pixels right,
+     * we therefore colorize from 2 ... HPIXELS + 2.
+     */
     
     // Jump to the first pixel in the specified line in the active frame buffer
     u32 *dst = frameBuffer->data + line * HPIXELS;
