@@ -511,6 +511,11 @@ public:
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
     
+    
+    //
+    // Querying chip properties
+    //
+    
     bool isOCS() const { return config.revision == AGNUS_OCS; }
     bool isECS() const { return config.revision != AGNUS_OCS; }
     
@@ -520,17 +525,17 @@ public:
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
     isize chipRamLimit();
         
-    // Returns the line in which the VERTB interrupt gets triggered
+    // Returns the line in which the VERTB interrupt is triggered
     isize vStrobeLine() { return isECS() || MIMIC_UAE ? 0 : 1; }
     
-    // Returns the connected bits in DDFSTRT / DDFSTOP
+    // Returns a bitmask indicating the used bits in DDFSTRT / DDFSTOP
     u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }
     
     /* Returns true if Agnus is able to access the Slow Ram area. The ECS
      * revision of Agnus has a special feature that makes Slow Ram accessible
-     * for DMA. In the 512 MB Chip Ram + 512 Slow Ram configuration, the Slow
-     * Ram is mapped into the second Chip Ram segment. The OCS Agnus does not
-     * have this feature. It has access to Chip Ram, only.
+     * for DMA. In the 512 MB Chip Ram + 512 Slow Ram configuration, Slow
+     * Ram is mapped into the second Chip Ram segment. OCS Agnus does not
+     * have this feature. It is able to access Chip Ram, only.
      */
     bool slowRamIsMirroredIn();
         
@@ -582,15 +587,17 @@ public:
 public:
 
     // Indicates if the electron beam is inside the VBLANK area
-    bool inVBlank() const { return pos.v < 26; }
+    bool inVBlankArea(isize posv) const { return posv < 26; }
+    bool inVBlankArea() const { return inVBlankArea(pos.v); }
 
     // Indicates if the current rasterline is the last line in this frame
-    bool inLastRasterline() const { return pos.v == frame.lastLine(); }
+    bool inLastRasterline(isize posv) const { return posv == frame.lastLine(); }
+    bool inLastRasterline() const { return inLastRasterline(pos.v); }
 
     // Indicates if bitplane DMA is enabled in the current rasterline
-    bool inBplDmaLine() const { return inBplDmaLine(dmacon, bplcon0); }
     bool inBplDmaLine(u16 dmacon, u16 bplcon0) const;
-    
+    bool inBplDmaLine() const { return inBplDmaLine(dmacon, bplcon0); }
+
     // Returns the pixel position for the current horizontal position
     Pixel ppos(isize posh) const { return (posh * 4) + 2; }
     Pixel ppos() const { return ppos(pos.h); }
@@ -612,10 +619,9 @@ public:
      */
     Beam cycleToBeam(Cycle cycle) const;
 
-    /* Advances a beam position by a given number of cycles. Note that only
-     * the horizontal component is wrapped over.
+    /* Advances a beam position by a given number of cycles
      */
-    Beam addToBeam(Beam beam, Cycle cycles) const;
+    [[deprecated]] Beam addToBeam(Beam beam, Cycle cycles) const;
 
 
     //

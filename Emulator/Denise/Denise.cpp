@@ -856,7 +856,7 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2,
     assert(pair < 4);
     
     // Only proceeed if we are outside the VBLANK area
-    if (agnus.pos.v < 26) return;
+    if (agnus.inVBlankArea()) return;
     
     const isize sprite1 = 2 * pair;
     const isize sprite2 = 2 * pair + 1;
