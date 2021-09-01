@@ -130,8 +130,15 @@ public extension MetalView {
                         }
                     }
 
-                    // Run the import dialog
+                    // Create attachment
                     try document.createAttachment(from: url)
+
+                    // Is it an HDF?
+                    if document.attachment is HDFFileProxy {
+                        try document.mountAttachment()
+                    }
+                        
+                    // Run the import dialog
                     document.runImportDialog()
                     return true
                     
