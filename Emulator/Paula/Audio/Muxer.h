@@ -78,7 +78,13 @@ class Muxer : public SubComponent {
 public:
 
     // Inputs (one Sampler for each of the four channels)
-    Sampler *sampler[4];
+    Sampler sampler[4] = {
+        
+        Sampler(),
+        Sampler(),
+        Sampler(),
+        Sampler()
+    };
 
     // Output
     AudioStream<SampleType> stream;
@@ -95,7 +101,6 @@ public:
 public:
     
     Muxer(Amiga& ref);
-    ~Muxer();
 
     // Resets the output buffer and the two audio filters
     void clear();

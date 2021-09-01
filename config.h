@@ -96,7 +96,7 @@ static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
 static const int RUN_DEBUG       = 0; // Run loop, component states
 static const int WARP_DEBUG      = 0; // Warp mode
 static const int QUEUE_DEBUG     = 0; // Message queue
-static const int SNP_DEBUG       = 1; // Serialization (snapshots)
+static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 
 // CPU
 static const int CPU_DEBUG       = 0; // CPU

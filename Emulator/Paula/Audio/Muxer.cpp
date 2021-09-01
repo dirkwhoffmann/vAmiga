@@ -22,20 +22,7 @@ Muxer::Muxer(Amiga& ref) : SubComponent(ref)
         &filterR
     };
     
-    sampler[0] = new Sampler();
-    sampler[1] = new Sampler();
-    sampler[2] = new Sampler();
-    sampler[3] = new Sampler();
-
     setSampleRate(44100);
-}
- 
-Muxer::~Muxer()
-{
-    delete sampler[0];
-    delete sampler[1];
-    delete sampler[2];
-    delete sampler[3];
 }
 
 void
@@ -81,7 +68,7 @@ Muxer::_reset(bool hard)
     
     stats = { };
     
-    for (isize i = 0; i < 4; i++) sampler[i]->reset();
+    for (isize i = 0; i < 4; i++) sampler[i].reset();
     clear();
 }
 
@@ -283,7 +270,7 @@ Muxer::setSampleRate(double hz)
 isize
 Muxer::didLoadFromBuffer(const u8 *buffer)
 {
-    for (isize i = 0; i < 4; i++) sampler[i]->reset();
+    for (isize i = 0; i < 4; i++) sampler[i].reset();
     return 0;
 }
 
@@ -392,10 +379,10 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
 
     for (long i = 0; i < count; i++) {
 
-        float ch0 = sampler[0]->interpolate <method> ((Cycle)cycle) * vol[0];
-        float ch1 = sampler[1]->interpolate <method> ((Cycle)cycle) * vol[1];
-        float ch2 = sampler[2]->interpolate <method> ((Cycle)cycle) * vol[2];
-        float ch3 = sampler[3]->interpolate <method> ((Cycle)cycle) * vol[3];
+        float ch0 = sampler[0].interpolate <method> ((Cycle)cycle) * vol[0];
+        float ch1 = sampler[1].interpolate <method> ((Cycle)cycle) * vol[1];
+        float ch2 = sampler[2].interpolate <method> ((Cycle)cycle) * vol[2];
+        float ch3 = sampler[3].interpolate <method> ((Cycle)cycle) * vol[3];
         
         // Compute left channel output
         float l =
