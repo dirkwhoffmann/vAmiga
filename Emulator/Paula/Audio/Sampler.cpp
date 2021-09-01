@@ -17,7 +17,7 @@ Sampler::reset()
     clear();
 
     // Add a dummy element to ensure the buffer is not empty
-    write( TaggedSample { 0, 0 } );
+    append(0,0);
 }
 
 template <SamplingMethod method> i16
@@ -29,44 +29,38 @@ Sampler::interpolate(Cycle clock)
     isize r2 = next(r1);
 
     // Remove all outdated entries
-    while (r2 != w && elements[r2].tag <= clock) {
+    while (r2 != w && keys[r2] <= clock) {
         
-        skip(1);
+        skip();
         r1 = r2;
         r2 = next(r1);
     }
     assert(!isEmpty());
 
     // If the buffer contains a single element, return that element
-    if (r2 == w) return elements[r1].sample;
+    if (r2 == w) return elements[r1];
 
     // Make sure that we've selected the right sample pair
-    assert(clock >= elements[r1].tag && clock < elements[r2].tag);
+    assert(clock >= keys[r1] && clock < keys[r2]);
 
     // Interpolate between position r1 and r2
     if constexpr (method == SMP_NONE) {
 
-        return elements[r1].sample;
+        return elements[r1];
     }
     
     if constexpr (method == SMP_NEAREST) {
         
-        const auto &e1 = elements[r1];
-        const auto &e2 = elements[r2];
-
-        return ((clock - e1.tag) < (e2.tag - clock)) ? e1.sample : e2.sample;
+        return ((clock - keys[r1]) < (keys[r2] - clock)) ? elements[r1] : elements[r2];
     }
     
     if constexpr (method == SMP_LINEAR) {
 
-        const auto &e1 = elements[r1];
-        const auto &e2 = elements[r2];
-
-        double dx = (double)(e2.tag - e1.tag);
-        double dy = (double)(e2.sample - e1.sample);
-        double weight = (double)(clock - e1.tag) / dx;
+        double dx = (double)(keys[r2] - keys[r1]);
+        double dy = (double)(elements[r2] - elements[r1]);
+        double weight = (double)(clock - keys[r1]) / dx;
         
-        return (i16)(e1.sample + weight * dy);
+        return (i16)(elements[r1] + weight * dy);
     }
 }
 

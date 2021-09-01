@@ -21,22 +21,13 @@
  * is tagged by the cycle it was produced.
  */
 
-struct TaggedSample
-{
-    Cycle tag;
-    i16   sample;
-};
-
-struct Sampler : util::RingBuffer <TaggedSample, VPOS_CNT * HPOS_CNT> {
+struct Sampler : util::SortedRingBuffer <i16, VPOS_CNT * HPOS_CNT> {
     
     /* Initializes the ring buffer by removing all existing elements and adding
      * a single dummy element. The dummy element is added because some methods
      * assume that the buffer is never empty.
      */
     void reset();
-
-    // Clones another Sampler
-    // void clone(const Sampler &other);
      
     /* Interpolates a sound sample for the specified target cycle. Two major
      * steps are involved. In the first step, the function computes index

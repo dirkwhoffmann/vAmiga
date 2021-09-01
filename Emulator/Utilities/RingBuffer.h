@@ -91,9 +91,13 @@ template <class T, isize capacity> struct RingBuffer
     {
         assert(!isFull());
 
-        auto oldw = w;
+        elements[w] = element;
         w = next(w);
-        elements[oldw] = element;
+    }
+    
+    void skip()
+    {
+        r = next(r);
     }
     
     void skip(isize n)
@@ -134,7 +138,7 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
         assert(!this->isFull());
 
         // Add the new element
-        isize oldw = this->w;
+        auto oldw = this->w;
         this->write(element);
         keys[oldw] = key;
 
@@ -142,7 +146,7 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
         while (oldw != this->r) {
 
             // Get the index of the preceeding element
-            isize p = this->prev(oldw);
+            auto p = this->prev(oldw);
 
             // Exit the loop once we've found the correct position
             if (key >= keys[p]) break;
@@ -152,6 +156,17 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
             std::swap(keys[oldw], keys[p]);
             oldw = p;
         }
+    }
+    
+    // Inserts an element for which we know that sorting is not necessary
+    void append(i64 key, T element)
+    {
+        assert(!this->isFull());
+        assert(this->isEmpty() || this->keys[this->prev(this->w)] <= key);
+        
+        this->elements[this->w] = element;
+        this->keys[this->w] = key;
+        this->w = this->next(this->w);
     }
 };
 

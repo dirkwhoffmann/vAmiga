@@ -50,12 +50,11 @@ enum Category : usize {
     Config    = 0b000000001,
     State     = 0b000000010,
     Registers = 0b000000100,
-    // Events    = 0b000001000,
-    Checksums = 0b000010000,
-    Dma       = 0b000100000,
-    BankMap   = 0b001000000,
-    List1     = 0b010000000,
-    List2     = 0b100000000,
+    Checksums = 0b000001000,
+    Dma       = 0b000010000,
+    BankMap   = 0b000100000,
+    List1     = 0b001000000,
+    List2     = 0b010000000,
 };
 }
 
