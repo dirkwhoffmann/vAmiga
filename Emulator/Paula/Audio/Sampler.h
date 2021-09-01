@@ -14,11 +14,11 @@
 #include "RingBuffer.h"
 #include "Reflection.h"
 
-/* This buffer type is used to temporarily store the generated sound samples as
- * they are produced by the state machine. Note that the state machine doesn't
- * output samples at a constant sampling rate. Instead, a new sound sample is
- * generated whenever the period counter underflows. To preserve this timing
- * information, each sample is tagged by the cycle it was produced.
+/* This buffer type is used to temporarily store the sound samples produced by
+ * the state machine. Keep in mind that the state machine doesn't output
+ * at a constant sampling rate. Instead, a new sample is generated whenever the
+ * period counter underflows. To preserve this timing information, each sample
+ * is tagged by the cycle it was produced.
  */
 
 struct TaggedSample
@@ -36,7 +36,7 @@ struct Sampler : util::RingBuffer <TaggedSample, VPOS_CNT * HPOS_CNT> {
     void reset();
 
     // Clones another Sampler
-    void clone(const Sampler &other);
+    // void clone(const Sampler &other);
      
     /* Interpolates a sound sample for the specified target cycle. Two major
      * steps are involved. In the first step, the function computes index

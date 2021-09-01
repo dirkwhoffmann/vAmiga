@@ -20,12 +20,6 @@ Sampler::reset()
     write( TaggedSample { 0, 0 } );
 }
 
-void
-Sampler::clone(const Sampler &other)
-{
-    *this = other;
-}
-
 template <SamplingMethod method> i16
 Sampler::interpolate(Cycle clock)
 {
