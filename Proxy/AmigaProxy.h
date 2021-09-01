@@ -174,7 +174,7 @@
 
 - (AmigaInfo) getInfo;
 
-@property (readonly) BOOL isReleaseBuild;
+// @property (readonly) BOOL isReleaseBuild;
 @property BOOL warpMode;
 @property BOOL debugMode;
 @property (readonly) NSInteger cpuLoad;
@@ -197,6 +197,10 @@
 - (void)pause;
 - (void)halt;
 
+- (void)stopAndGo;
+- (void)stepInto;
+- (void)stepOver;
+
 - (void)suspend;
 - (void)resume;
 - (void)continueScript;
@@ -218,10 +222,6 @@
 - (BOOL)configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
 
 - (void)setListener:(const void *)sender function:(Callback *)func;
-
-- (void)stopAndGo;
-- (void)stepInto;
-- (void)stepOver;
 
 @end
 

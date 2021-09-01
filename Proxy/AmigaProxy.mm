@@ -209,25 +209,25 @@ using namespace moira;
     const char *str = [self cpu]->disassembleRecordedInstr((int)i, &result);
     *len = (NSInteger)result;
     
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len
 {
     const char *str = [self cpu]->disassembleRecordedWords(i, len);
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleRecordedFlags:(NSInteger)i
 {
     const char *str = [self cpu]->disassembleRecordedFlags((int)i);
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleRecordedPC:(NSInteger)i
 {
     const char *str = [self cpu]->disassembleRecordedPC((int)i);
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleInstr:(NSInteger)addr length:(NSInteger *)len
@@ -236,19 +236,19 @@ using namespace moira;
     const char *str = [self cpu]->disassembleInstr((u32)addr, &result);
     *len = result;
     
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleWords:(NSInteger)addr length:(NSInteger)len
 {
     const char *str = [self cpu]->disassembleWords((u32)addr, len);
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleAddr:(NSInteger)addr
 {
     const char *str = [self cpu]->disassembleAddr((u32)addr);
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 @end
@@ -378,19 +378,19 @@ using namespace moira;
 - (NSString *)romTitle
 {
     const char *str = [self mem]->romTitle();
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (NSString *)romVersion
 {
     const char *str = [self mem]->romVersion();
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (NSString *)romReleased
 {
     const char *str = [self mem]->romReleased();
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (BOOL)hasExt
@@ -447,19 +447,19 @@ using namespace moira;
 - (NSString *)extTitle
 {
     const char *str = [self mem]->extTitle();
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (NSString *)extVersion
 {
     const char *str = [self mem]->extVersion();
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (NSString *)extReleased
 {
     const char *str = [self mem]->extReleased();
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (NSInteger)extStart
@@ -518,7 +518,7 @@ using namespace moira;
         str = [self mem]->ascii <ACCESSOR_AGNUS> ((u32)addr);
     }
     
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (NSString *)hex:(Accessor)accessor addr: (NSInteger)addr bytes:(NSInteger)bytes
@@ -532,7 +532,7 @@ using namespace moira;
         str = [self mem]->hex <ACCESSOR_AGNUS> ((u32)addr, bytes);
     }
     
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 @end
@@ -601,13 +601,13 @@ using namespace moira;
 - (NSString *)disassemble:(NSInteger)addr
 {
     string str = [self copper]->debugger.disassemble((u32)addr);
-    return [NSString stringWithUTF8String:str.c_str()];
+    return @(str.c_str());
 }
 
 - (NSString *)disassemble:(NSInteger)list instr:(NSInteger)offset
 {
     string str = [self copper]->debugger.disassemble(list, offset);
-    return [NSString stringWithUTF8String:str.c_str()];
+    return @(str.c_str());
 }
 
 @end
@@ -1348,7 +1348,7 @@ using namespace moira;
 -(NSString *)getText
 {
     const char *str = [self shell]->text();
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (void)pressUp
@@ -1690,7 +1690,7 @@ using namespace moira;
 - (NSString *)bootBlockName
 {
     const char *str = [self file]->bootBlockName();
-    return str ? [NSString stringWithUTF8String:str] : nullptr;
+    return str ? @(str) : nullptr;
 }
 
 - (BOOL)hasVirus
@@ -2067,10 +2067,12 @@ using namespace moira;
     return [self amiga]->getInfo();
 }
 
+/*
 - (BOOL)isReleaseBuild
 {
     return releaseBuild;
 }
+*/
 
 - (BOOL)warpMode
 {
@@ -2182,6 +2184,21 @@ using namespace moira;
 - (void)halt
 {
     [self amiga]->halt();
+}
+
+- (void)stopAndGo
+{
+    [self amiga]->stopAndGo();
+}
+
+- (void)stepInto
+{
+    [self amiga]->stepInto();
+}
+
+- (void)stepOver
+{
+    [self amiga]->stepOver();
 }
 
 - (void)suspend
@@ -2305,21 +2322,6 @@ using namespace moira;
 - (void)setListener:(const void *)sender function:(Callback *)func
 {
     [self amiga]->msgQueue.setListener(sender, func);
-}
-
-- (void)stopAndGo
-{
-    [self amiga]->stopAndGo();
-}
-
-- (void)stepInto
-{
-    [self amiga]->stepInto();
-}
-
-- (void)stepOver
-{
-    [self amiga]->stepOver();
 }
 
 @end
