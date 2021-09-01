@@ -89,7 +89,7 @@ struct FloatStereo
     float r;
     
     FloatStereo() : l(0.0f), r(0.0f) { }
-    FloatStereo(float l, float r) : l(l * 0.000005f), r(r * 0.000005f) { }
+    FloatStereo(float l, float r) : l(l * 0.00001f), r(r * 0.00001f) { }
     
     float magnitude(bool left) { return left ? abs(l) : abs(r); }
     
