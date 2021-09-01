@@ -61,12 +61,11 @@ public:
      *  number that should be placed in this register [AUDxPER] is 124 decimal.
      *  This corresponds to a maximum sample frequency of 28.86 khz." [HRM]
      *
-     * Many games initialize the period  programs write a value of 1 into
-     * AUDxPER (e.g., James Pond 2 and Ghosts'n Goblins). As a result, the
-     * sample buffer is flooded with identical samples. To prevent this,
-     * these two variables prevent the sample buffer from being written to in
-     * penlo() and penhi(). The locks are released whenever a new sample is
-     * written into the AUDxDAT register.
+     * Many games initialize AUDxPER with a value of 1 (e.g., James Pond 2 and
+     * Ghosts'n Goblins). As a result, the sample buffer is flooded with
+     * identical samples. To prevent this, these two variables hinder penlo()
+     * and penhi() to write into the sample buffer. The locks are released
+     * whenever a new sample is written into the AUDxDAT register.
      *
      * This feature is experimental (and might be well disabled).
      */
@@ -151,27 +150,14 @@ public:
         
     
     //
-    // Accessing registers
-    //
-
-public:
-
-    // Writes a value into an audio register
-    void pokeAUDxLEN(u16 value);
-    void pokeAUDxPER(u16 value);
-    void pokeAUDxVOL(u16 value);
-    void pokeAUDxDAT(u16 value);
-
-    // Called when the DMA mode changes
-    void enableDMA();
-    void disableDMA();
-    
-    
-    //
     // Performing state machine actions
     //
 
 public:
+
+    // Called when DMA mode changes
+    void enableDMA();
+    void disableDMA();
 
     // Returns true if the state machine is running in DMA mode
     bool AUDxON() const { return agnus.auddma<nr>(); }
@@ -243,6 +229,19 @@ private:
     void move_010_011();
     void move_011_000();
     void move_011_010();
+
+    
+    //
+    // Accessing registers
+    //
+
+public:
+
+    // Writes a value into an audio register
+    void pokeAUDxLEN(u16 value);
+    void pokeAUDxPER(u16 value);
+    void pokeAUDxVOL(u16 value);
+    void pokeAUDxDAT(u16 value);
 
     
     //

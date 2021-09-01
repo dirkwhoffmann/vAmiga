@@ -276,8 +276,7 @@ Drive::_load(const u8 *buffer)
     applyToResetItems(reader);
 
     // Check if the snapshot includes a disk
-    bool diskInSnapshot;
-    reader << diskInSnapshot;
+    bool diskInSnapshot; reader << diskInSnapshot;
     
     if (diskInSnapshot) {
         
@@ -817,7 +816,7 @@ Drive::PRBdidChange(u8 oldValue, u8 newValue)
             switchMotorOn();
         } else if (oldMtr) {
             switchMotorOff();
-        }        
+        }
     }
     
     //
