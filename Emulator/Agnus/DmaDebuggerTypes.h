@@ -128,4 +128,4 @@ typedef struct
     double cpuColor[3];
     double refreshColor[3];
 }
-DMADebuggerInfo;
+DmaDebuggerInfo;

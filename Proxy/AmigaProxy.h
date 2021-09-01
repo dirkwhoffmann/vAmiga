@@ -172,7 +172,7 @@
 - (void)dealloc;
 - (void)kill;
 
-- (AmigaInfo) getInfo;
+@property (readonly) AmigaInfo info;
 
 // @property (readonly) BOOL isReleaseBuild;
 @property BOOL warpMode;
@@ -258,8 +258,7 @@
 
 @interface CPUProxy : AmigaComponentProxy { }
     
-- (CPUInfo) getInfo;
-
+@property (readonly) CPUInfo info;
 @property (readonly) i64 clock;
 @property (readonly) BOOL halted;
 
@@ -283,8 +282,8 @@
 //
 
 @interface CIAProxy : AmigaComponentProxy { }
-    
-- (CIAInfo) getInfo;
+ 
+@property (readonly) CIAInfo info;
 
 @end
 
@@ -351,10 +350,9 @@
 @interface AgnusProxy : AmigaComponentProxy { }
 
 @property (readonly) NSInteger chipRamLimit;
-
-- (AgnusInfo)getInfo;
+@property (readonly) AgnusInfo info;
+@property (readonly) EventInfo eventInfo;
 - (EventSlotInfo)getEventSlotInfo:(NSInteger)slot;
-- (EventInfo)getEventInfo;
 - (AgnusStats)getStats;
 
 @end
@@ -366,7 +364,7 @@
 
 @interface CopperProxy : AmigaComponentProxy { }
 
-- (CopperInfo)getInfo;
+@property (readonly) CopperInfo info;
 
 - (BOOL)isIllegalInstr:(NSInteger)addr;
 - (NSString *)disassemble:(NSInteger)addr;
@@ -381,7 +379,7 @@
 
 @interface BlitterProxy : AmigaComponentProxy { }
 
-- (BlitterInfo)getInfo;
+@property (readonly) BlitterInfo info;
 
 @end
 
@@ -392,7 +390,7 @@
 
 @interface DmaDebuggerProxy : Proxy { }
 
-- (DMADebuggerInfo)getInfo;
+@property (readonly) DmaDebuggerInfo info;
 
 @end
 
@@ -402,7 +400,7 @@
 
 @interface DeniseProxy : AmigaComponentProxy { }
 
-- (DeniseInfo)getInfo;
+@property (readonly) DeniseInfo info;
 - (SpriteInfo)getSpriteInfo:(NSInteger)nr;
 
 - (NSInteger)sprDataLines:(NSInteger)nr;
@@ -444,10 +442,10 @@
 
 @interface PaulaProxy : AmigaComponentProxy { }
 
-- (PaulaInfo)getInfo;
-- (AudioInfo)getAudioInfo;
-- (MuxerStats)getMuxerStats;
-- (UARTInfo)getUARTInfo;
+@property (readonly) PaulaInfo info;
+@property (readonly) AudioInfo audioInfo;
+@property (readonly) UARTInfo uartInfo;
+@property (readonly) MuxerStats muxerStats;
 
 - (double)sampleRate;
 - (void)setSampleRate:(double)rate;
@@ -491,7 +489,7 @@
 @property (readonly, strong) MouseProxy *mouse;
 @property (readonly, strong) JoystickProxy *joystick;
 
-- (ControlPortInfo)getInfo;
+@property (readonly) ControlPortInfo info;
 
 @end
 
@@ -502,7 +500,7 @@
 
 @interface SerialPortProxy : AmigaComponentProxy { }
 
-- (SerialPortInfo)getInfo;
+@property (readonly) SerialPortInfo info;
 
 @end
 
@@ -554,7 +552,7 @@
 @interface DiskControllerProxy : AmigaComponentProxy { }
 
 - (DiskControllerConfig)getConfig;
-- (DiskControllerInfo)getInfo;
+@property (readonly) DiskControllerInfo info;
 @property (readonly) NSInteger selectedDrive;
 @property (readonly) DriveState state;
 @property (readonly, getter=isSpinning) BOOL spinning;
@@ -572,7 +570,7 @@
 
 @interface DriveProxy : AmigaComponentProxy { }
 
-- (DriveInfo) getInfo;
+@property (readonly) DriveInfo info;
 
 @property (readonly) NSInteger nr;
 @property (readonly) BOOL hasDisk;

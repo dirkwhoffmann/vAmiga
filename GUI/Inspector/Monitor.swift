@@ -98,7 +98,7 @@ class Monitor: DialogController {
         let col = bus || monEnable.isEnabled
                 
         // Bus debugger
-        let info = amiga.dmaDebugger.getInfo()
+        let info = amiga.dmaDebugger.info
         let opacity = amiga.getConfig(.DMA_DEBUG_OPACITY)
         let mode = amiga.getConfig(.DMA_DEBUG_MODE)
         

@@ -178,7 +178,7 @@ using namespace moira;
     return (CPU *)obj;
 }
 
-- (CPUInfo)getInfo
+- (CPUInfo)info
 {
     return [self cpu]->getInfo();
 }
@@ -265,7 +265,7 @@ using namespace moira;
     return (CIA *)obj;
 }
 
-- (CIAInfo)getInfo
+- (CIAInfo)info
 {
     return [self cia]->getInfo();
 }
@@ -554,19 +554,19 @@ using namespace moira;
     return [self agnus]->chipRamLimit();
 }
 
-- (AgnusInfo)getInfo
+- (AgnusInfo)info
 {
     return [self agnus]->getInfo();
+}
+
+- (EventInfo)eventInfo
+{
+    return [self agnus]->scheduler.getInfo();
 }
 
 - (EventSlotInfo)getEventSlotInfo:(NSInteger)slot
 {
     return [self agnus]->scheduler.getSlotInfo(slot);
-}
-
-- (EventInfo)getEventInfo
-{
-    return [self agnus]->scheduler.getInfo();
 }
 
 - (AgnusStats)getStats
@@ -588,7 +588,7 @@ using namespace moira;
     return (Copper *)obj;
 }
 
-- (CopperInfo)getInfo
+- (CopperInfo)info
 {
     return [self copper]->getInfo();
 }
@@ -624,7 +624,7 @@ using namespace moira;
     return (Blitter *)obj;
 }
 
-- (BlitterInfo)getInfo
+- (BlitterInfo)info
 {
     return [self blitter]->getInfo();
 }
@@ -643,7 +643,7 @@ using namespace moira;
     return (DmaDebugger *)obj;
 }
 
-- (DMADebuggerInfo)getInfo
+- (DmaDebuggerInfo)info
 {
     return [self debugger]->getInfo();
 }
@@ -662,7 +662,7 @@ using namespace moira;
     return (Denise *)obj;
 }
 
-- (DeniseInfo)getInfo
+- (DeniseInfo)info
 {
     return [self denise]->getInfo();
 }
@@ -781,24 +781,24 @@ using namespace moira;
     return (Paula *)obj;
 }
 
-- (PaulaInfo)getInfo
+- (PaulaInfo)info
 {
     return [self paula]->getInfo();
 }
 
-- (AudioInfo)getAudioInfo
+- (AudioInfo)audioInfo
 {
     return [self paula]->getAudioInfo();
 }
 
-- (MuxerStats)getMuxerStats
-{
-    return [self paula]->muxer.getStats();
-}
-
-- (UARTInfo)getUARTInfo
+- (UARTInfo)uartInfo
 {
     return [self paula]->uart.getInfo();
+}
+
+- (MuxerStats)muxerStats
+{
+    return [self paula]->muxer.getStats();
 }
 
 - (double)sampleRate
@@ -970,7 +970,7 @@ using namespace moira;
     return (ControlPort *)obj;
 }
 
-- (ControlPortInfo)getInfo
+- (ControlPortInfo)info
 {
     return [self cp]->getInfo();
 }
@@ -989,7 +989,7 @@ using namespace moira;
     return (SerialPort *)obj;
 }
 
-- (SerialPortInfo)getInfo
+- (SerialPortInfo)info
 {
     return [self serial]->getInfo();
 }
@@ -1047,7 +1047,7 @@ using namespace moira;
     return [self dc]->getConfig();
 }
 
-- (DiskControllerInfo)getInfo
+- (DiskControllerInfo)info
 {
     return [self dc]->getInfo();
 }
@@ -1103,7 +1103,7 @@ using namespace moira;
     return (Drive *)obj;
 }
 
-- (DriveInfo)getInfo
+- (DriveInfo)info
 {
     return [self drive]->getInfo();
 }
@@ -2062,7 +2062,7 @@ using namespace moira;
     obj = NULL;
 }
 
-- (AmigaInfo)getInfo
+- (AmigaInfo)info
 {
     return [self amiga]->getInfo();
 }

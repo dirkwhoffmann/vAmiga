@@ -267,10 +267,10 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
     }
 }
 
-DMADebuggerInfo
+DmaDebuggerInfo
 DmaDebugger::getInfo()
 {
-    DMADebuggerInfo result;
+    DmaDebuggerInfo result;
     
     synchronized {
                 

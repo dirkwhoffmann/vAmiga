@@ -11,7 +11,7 @@ extension Inspector {
 
     private func cacheCPU() {
 
-        cpuInfo = amiga.cpu.getInfo()
+        cpuInfo = amiga.cpu.info
     }
 
     func refreshCPU(count: Int = 0, full: Bool = false) {

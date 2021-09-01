@@ -55,7 +55,7 @@ class Monitors: Layer {
         super.init(renderer: renderer)
 
         // Activity monitors are colorized with the bus debuggger colors
-        let info = amiga.dmaDebugger.getInfo()
+        let info = amiga.dmaDebugger.info
         
         // DMA monitors
         monitors.append(BarChart(device: device, name: "Copper DMA", logScale: true))

@@ -16,7 +16,7 @@ extension Inspector {
 
     private func cacheCopper() {
 
-        copperInfo = amiga.copper.getInfo()
+        copperInfo = amiga.copper.info
     }
 
     func refreshCopper(count: Int = 0, full: Bool = false) {
@@ -51,7 +51,7 @@ extension Inspector {
 
     private func cacheBlitter() {
 
-        blitterInfo = amiga.blitter.getInfo()
+        blitterInfo = amiga.blitter.info
     }
 
     func refreshBlitter(count: Int = 0, full: Bool = false) {

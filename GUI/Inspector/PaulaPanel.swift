@@ -17,9 +17,9 @@ extension Inspector {
 
     private func cachePaula() {
 
-        paulaInfo = amiga.paula.getInfo()
-        audioInfo = amiga.paula.getAudioInfo()
-        diskInfo  = amiga.diskController.getInfo()
+        paulaInfo = amiga.paula.info
+        audioInfo = amiga.paula.audioInfo
+        diskInfo  = amiga.diskController.info
     }
 
     func refreshPaula(count: Int = 0, full: Bool = false) {

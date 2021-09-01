@@ -82,7 +82,7 @@ private:
 public:
 
     // Returns the result of the most recent call to inspect()
-    DMADebuggerInfo getInfo();
+    DmaDebuggerInfo getInfo();
 
     
     //
