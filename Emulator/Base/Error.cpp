@@ -77,6 +77,14 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "No Extension Rom installed.";
             break;
 
+        case ERROR_DISK_MISSING:
+            description = "No disk in drive.";
+            break;
+            
+        case ERROR_DISK_INCOMPATIBLE:
+            description = "This disk is not compatible with the selected drive.";
+            break;
+            
         case ERROR_DISK_INVALID_DIAMETER:
             description = "Invalid disk diameter.";
             break;

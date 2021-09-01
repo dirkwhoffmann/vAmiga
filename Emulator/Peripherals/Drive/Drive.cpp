@@ -740,7 +740,7 @@ void
 Drive::insertDisk(std::unique_ptr<Disk> disk)
 {
     // Only proceed if the provided disk fits into this drive
-    if (!isInsertable(*disk)) throw VAError(ERROR_DISK_INVALID_LAYOUT);
+    if (!isInsertable(*disk)) throw VAError(ERROR_DISK_INCOMPATIBLE);
     
     // Don't insert a disk if there is already one
     assert(!hasDisk());

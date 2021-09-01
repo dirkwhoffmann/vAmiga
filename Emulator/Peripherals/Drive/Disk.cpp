@@ -11,39 +11,6 @@
 #include "Disk.h"
 #include "DiskFile.h"
 
-/*
-Disk::Disk(DiskDiameter type, DiskDensity density)
-{
-    this->diameter = type;
-    this->density = density;
-    
-    u32 trackLength = 0;
-    
-    if (type == INCH_35  && density == DISK_DD) trackLength = 12668;
-    if (type == INCH_35  && density == DISK_HD) trackLength = 24636;
-    if (type == INCH_525 && density == DISK_DD) trackLength = 12668;
-    
-    if (trackLength == 0 || FORCE_DISK_INVALID_LAYOUT) {
-        throw VAError(ERROR_DISK_INVALID_LAYOUT);
-    }
-    
-    for (isize i = 0; i < 168; i++) length.track[i] = trackLength;
-    clearDisk();
-}
-
-Disk::Disk(DiskFile &file) : Disk(file.getDiskDiameter(), file.getDiskDensity())
-{
-    encodeDisk(file);
-    file.fnv();
-}
-*/
-/*
-Disk::Disk(util::SerReader &reader, DiskDiameter type, DiskDensity density) : Disk(type, density)
-{
-    applyToPersistentItems(reader);
-}
-*/
-
 void
 Disk::init(DiskDiameter dia, DiskDensity den)
 {

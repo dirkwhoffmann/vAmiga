@@ -312,6 +312,9 @@ DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
     
     debug(DSK_DEBUG, "insertDisk(%zd, %lld)\n", nr, delay);
     
+    // Only proceed if the disk is compatible with the selected drive
+    if (!df[nr]->isInsertable(*disk)) throw VAError(ERROR_DISK_INCOMPATIBLE);
+    
     // The easy case: The emulator is not running
     if (!isRunning())
     {
