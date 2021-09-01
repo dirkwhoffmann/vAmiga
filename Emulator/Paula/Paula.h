@@ -181,50 +181,57 @@ public:
 
 
     //
+    // Running the audio unit
+    //
+    
+    void executeUntil(Cycle target);
+
+
+    //
+    // Managing interrupts
+    //
+    
+public:
+    
+    // Signals an interrupt in INTREQ
+    void raiseIrq(IrqSource src) { setINTREQ(true, (u16)(1 << src)); }
+    
+    // Schedules an interrupt
+    void scheduleIrqAbs(IrqSource src, Cycle trigger);
+    void scheduleIrqRel(IrqSource src, Cycle trigger);
+
+private:
+
+    // Updates the IPL pipe
+    void checkInterrupt();
+
+    // Computes the interrupt level of a pending interrupt
+    u8 interruptLevel();
+    
+    
+    //
     // Accessing registers
     //
     
 public:
         
-    // ADKCONR and ADKCON
     u16 peekADKCONR() const;
     void pokeADKCON(u16 value);
 
-    bool UARTBRK() const { return GET_BIT(adkcon, 11); }
-
-    // INTREQR and INTREQ
     u16 peekINTREQR() const;
     template <Accessor s> void pokeINTREQ(u16 value);
-    void setINTREQ(u16 value) { setINTREQ(value & 0x8000, value & 0x7FFF); }
     void setINTREQ(bool setclr, u16 value);
+    void setINTREQ(u16 value) { setINTREQ(value & 0x8000, value & 0x7FFF); }
 
-    // INTENAR and INTENA
-    u16 peekINTENAR() const { return intena; }
+    u16 peekINTENAR() const;
     template <Accessor s> void pokeINTENA(u16 value);
-    void setINTENA(u16 value) { setINTENA(value & 0x8000, value & 0x7FFF); }
     void setINTENA(bool setclr, u16 value);
+    void setINTENA(u16 value) { setINTENA(value & 0x8000, value & 0x7FFF); }
 
-    // POTxDAT
     template <isize x> u16 peekPOTxDAT() const;
 
-    // POTGOR and POTGO
     u16 peekPOTGOR() const;
-    bool OUTRY() const { return potgo & 0x8000; }
-    bool DATRY() const { return potgo & 0x4000; }
-    bool OUTRX() const { return potgo & 0x2000; }
-    bool DATRX() const { return potgo & 0x1000; }
-    bool OUTLY() const { return potgo & 0x0800; }
-    bool DATLY() const { return potgo & 0x0400; }
-    bool OUTLX() const { return potgo & 0x0200; }
-    bool DATLX() const { return potgo & 0x0100; }
     void pokePOTGO(u16 value);
-
-
-    //
-    // Running the audio unit
-    //
-    
-    void executeUntil(Cycle target);
 
     
     //
@@ -241,24 +248,4 @@ public:
 
     // Charges or discharges a potentiometer capacitor
     void servicePotEvent(EventID id);
-
-    
-    //
-    // Managing interrupts
-    //
-    
-public:
-    
-    // Schedules an interrupt
-    void raiseIrq(IrqSource src);
-    void scheduleIrqAbs(IrqSource src, Cycle trigger);
-    void scheduleIrqRel(IrqSource src, Cycle trigger);
-
-    // Checks intena and intreq and triggers an interrupt (if pending)
-    void checkInterrupt();
-
-private:
-    
-    // Computes the interrupt level of a pending interrupt.
-    u8 interruptLevel();
 };

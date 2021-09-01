@@ -148,8 +148,11 @@ UART::copyFromReceiveShiftRegister()
 void
 UART::updateTXD()
 {
-    // If the UARTBRK bit is set, the TXD line is forced to 0
-    serialPort.setTXD(outBit && !paula.UARTBRK());
+    // Get the UARTBRK bit
+    bool uartbrk = GET_BIT(paula.adkcon, 11);
+    
+    // If the bit is set, force the TXD line to 0
+    serialPort.setTXD(outBit && !uartbrk);
 }
 
 void

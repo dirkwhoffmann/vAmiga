@@ -46,9 +46,7 @@ static constexpr usize DRAW_EVEN = 0b010;
 static constexpr usize DRAW_BOTH = 0b011;
 
 class Agnus : public SubComponent {
-    
-    // friend class Scheduler;
-    
+        
     // Current configuration
     AgnusConfig config = {};
 

@@ -15,9 +15,6 @@
 #include "Mouse.h"
 
 class ControlPort : public SubComponent {
-
-    friend class Mouse;
-    friend class Joystick;
     
     // The represented control port
     PortNr nr;
@@ -107,7 +104,10 @@ private:
 
 public:
     
-    ControlPortInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    ControlPortInfo getInfo() const { return AmigaComponent::getInfo(info); }    
+
+    bool isPort1() const { return nr == PORT_1; }
+    bool isPort2() const { return nr == PORT_2; }
 
     
     //
@@ -116,6 +116,9 @@ public:
 
 public:
 
+    // Changes the connected device type
+    void setDevice(ControlPortDevice value) { device = value; }
+    
     // Getter for the delta charges
     i16 getChargeDX() const { return (i16)chargeDX; }
     i16 getChargeDY() const { return (i16)chargeDY; }

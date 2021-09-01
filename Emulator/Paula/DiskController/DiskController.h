@@ -13,7 +13,6 @@
 #include "SubComponent.h"
 #include "Reflection.h"
 #include "Disk.h"
-// class Disk;
 
 class DiskController : public SubComponent
 {

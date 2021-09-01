@@ -122,12 +122,6 @@ Paula::executeUntil(Cycle target)
 }
 
 void
-Paula::raiseIrq(IrqSource src)
-{
-    setINTREQ(true, (u16)(1 << src));
-}
-
-void
 Paula::scheduleIrqAbs(IrqSource src, Cycle trigger)
 {
     assert_enum(IrqSource, src);

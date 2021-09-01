@@ -75,7 +75,7 @@ class CIA : public SubComponent {
 protected:
 
     // Identification number (0 = CIA A, 1 = CIA B)
-    int nr;
+    const int nr;
 
     // Current configuration
     CIAConfig config = {};

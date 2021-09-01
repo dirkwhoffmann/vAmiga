@@ -22,7 +22,7 @@ Mouse::Mouse(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref)
 const char *
 Mouse::getDescription() const
 {
-    return port.nr == PORT_1 ? "Mouse1" : "Mouse2";
+    return port.isPort1() ? "Mouse1" : "Mouse2";
 }
 
 void Mouse::_reset(bool hard)
@@ -154,7 +154,7 @@ Mouse::_dump(dump::Category category, std::ostream& os) const
 void
 Mouse::changePotgo(u16 &potgo) const
 {
-    u16 mask = port.nr == 1 ? 0x0400 : 0x4000;
+    u16 mask = port.isPort1() ? 0x0400 : 0x4000;
 
     if (rightButton || HOLD_MOUSE_R) {
         potgo &= ~mask;
@@ -166,7 +166,7 @@ Mouse::changePotgo(u16 &potgo) const
 void
 Mouse::changePra(u8 &pra) const
 {
-    u16 mask = port.nr == 1 ? 0x0040 : 0x0080;
+    u16 mask = port.isPort1() ? 0x0040 : 0x0080;
 
     if (leftButton || HOLD_MOUSE_L) {
         pra &= ~mask;
@@ -235,7 +235,7 @@ Mouse::setXY(double x, double y)
     targetX = x * scaleX;
     targetY = y * scaleY;
     
-    port.device = CPD_MOUSE;
+    port.setDevice(CPD_MOUSE);
     port.updateMouseXY((i64)targetX, (i64)targetY);
 }
 
@@ -247,7 +247,7 @@ Mouse::setDxDy(double dx, double dy)
     targetX += dx * scaleX;
     targetY += dy * scaleY;
     
-    port.device = CPD_MOUSE;
+    port.setDevice(CPD_MOUSE);
     port.updateMouseXY((i64)targetX, (i64)targetY);
 }
 
@@ -257,7 +257,7 @@ Mouse::setLeftButton(bool value)
     trace(PRT_DEBUG, "setLeftButton(%d)\n", value);
     
     leftButton = value;
-    port.device = CPD_MOUSE;
+    port.setDevice(CPD_MOUSE);
 }
 
 void
@@ -266,7 +266,7 @@ Mouse::setRightButton(bool value)
     trace(PRT_DEBUG, "setRightButton(%d)\n", value);
     
     rightButton = value;
-    port.device = CPD_MOUSE;
+    port.setDevice(CPD_MOUSE);
 }
 
 void

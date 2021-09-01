@@ -92,6 +92,14 @@ Paula::setINTREQ(bool setclr, u16 value)
     checkInterrupt();
 }
 
+u16
+Paula::peekINTENAR() const
+{
+    trace(INTREG_DEBUG, "peekINTENAR(): %x (INTREQ = %x)\n", intena, intreq);
+
+    return intena;
+}
+
 template <Accessor s> void
 Paula::pokeINTENA(u16 value)
 {
