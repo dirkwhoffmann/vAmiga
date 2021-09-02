@@ -559,19 +559,33 @@ using namespace moira;
     return [self agnus]->getInfo();
 }
 
-- (EventInfo)eventInfo
+- (AgnusStats)getStats
 {
-    return [self agnus]->scheduler.getInfo();
+    return [self agnus]->getStats();
+}
+
+@end
+
+
+//
+// Scheduler proxy
+//
+
+@implementation SchedulerProxy
+
+- (Scheduler *)scheduler
+{
+    return (Scheduler *)obj;
+}
+
+- (EventInfo)info
+{
+    return [self scheduler]->getInfo();
 }
 
 - (EventSlotInfo)getEventSlotInfo:(NSInteger)slot
 {
-    return [self agnus]->scheduler.getSlotInfo(slot);
-}
-
-- (AgnusStats)getStats
-{
-    return [self agnus]->getStats();
+    return [self scheduler]->getSlotInfo(slot);
 }
 
 @end
@@ -2004,6 +2018,7 @@ using namespace moira;
 @synthesize rtc;
 @synthesize serialPort;
 @synthesize recorder;
+@synthesize scheduler;
 @synthesize watchpoints;
 
 - (instancetype) init
@@ -2038,6 +2053,7 @@ using namespace moira;
     rtc = [[RtcProxy alloc] initWith:&amiga->rtc];
     recorder = [[RecorderProxy alloc] initWith:&amiga->denise.screenRecorder];
     serialPort = [[SerialPortProxy alloc] initWith:&amiga->serialPort];
+    scheduler = [[SchedulerProxy alloc] initWith:&amiga->agnus.scheduler];
     watchpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.watchpoints];
 
     return self;
