@@ -430,17 +430,14 @@ Agnus::serviceBPLEvent(EventID id)
             break;
             
         case BPL_SR | DRAW_ODD:
-            denise.updateShiftRegisters();
             hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
             break;
             
         case BPL_SR | DRAW_EVEN:
-            denise.updateShiftRegisters();
             hires() ? denise.drawHiresEven() : denise.drawLoresEven();
             break;
             
         case BPL_SR | DRAW_ODD | DRAW_EVEN:
-            denise.updateShiftRegisters();
             hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
             break;
             

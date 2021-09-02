@@ -387,12 +387,7 @@ public:
     
     // Transfers the bitplane pipeline registers to the shift registers
     void updateShiftRegisters();
-    
-    // Core drawing routines
-    template <bool hiresMode> void drawOdd(Pixel offset);
-    template <bool hiresMode> void drawEven(Pixel offset);
-    template <bool hiresMode> void drawBoth(Pixel offset);
-
+        
     // Wrappers around the core drawing routines
     void drawHiresOdd();
     void drawHiresEven();
@@ -402,6 +397,11 @@ public:
     void drawLoresBoth();
 
 private:
+    
+    // Core drawing routines
+    template <bool hiresMode> void drawOdd(Pixel offset);
+    template <bool hiresMode> void drawEven(Pixel offset);
+    template <bool hiresMode> void drawBoth(Pixel offset);
 
     // Data type used by the translation functions
     typedef struct { u16 zpf1; u16 zpf2; bool prio; bool ham; } PFState;
