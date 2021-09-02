@@ -976,7 +976,7 @@ Denise::drawBorder()
 template <int x> void
 Denise::checkS2SCollisions(Pixel start, Pixel end)
 {
-    // For the odd sprites, only proceed if collision detection is enabled
+    // For odd sprites, only proceed if collision detection is enabled
     if (IS_ODD(x) && !GET_BIT(clxcon, 12 + (x/2))) return;
 
     // Set up the sprite comparison masks
@@ -1100,7 +1100,8 @@ void
 Denise::beginOfLine(isize vpos)
 {
     // Reset the register change recorders
-    conChanges.clear();
+    // conChanges.clear();
+    assert(conChanges.isEmpty());
     pixelEngine.colChanges.clear();
     
     // Save the current values of various Denise registers
@@ -1150,6 +1151,7 @@ Denise::endOfLine(isize vpos)
         
         drawSprites();
         pixelEngine.endOfVBlankLine();
+        conChanges.clear();
     }
 
     assert(sprChanges[0].isEmpty());
