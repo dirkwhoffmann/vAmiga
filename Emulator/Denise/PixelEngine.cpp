@@ -345,6 +345,7 @@ PixelEngine::endOfVBlankLine()
     for (isize i = colChanges.begin(); i != colChanges.end(); i = colChanges.next(i)) {
         applyRegisterChange(colChanges.elements[i]);
     }
+    colChanges.clear();
 }
 
 void

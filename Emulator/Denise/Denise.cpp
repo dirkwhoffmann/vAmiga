@@ -1100,9 +1100,8 @@ void
 Denise::beginOfLine(isize vpos)
 {
     // Reset the register change recorders
-    // conChanges.clear();
     assert(conChanges.isEmpty());
-    pixelEngine.colChanges.clear();
+    assert(pixelEngine.colChanges.isEmpty());
     
     // Save the current values of various Denise registers
     initialBplcon0 = bplcon0;
