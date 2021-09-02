@@ -484,9 +484,9 @@ Denise::translate()
 
     // Start with the playfield state as it was at the beginning of the line
     PFState state;
-    state.prio1 = zPF1(initialBplcon2);
-    state.prio2 = zPF2(initialBplcon2);
-    state.pf2pri = PF2PRI(initialBplcon2);
+    state.zpf1 = zPF1(initialBplcon2);
+    state.zpf2 = zPF2(initialBplcon2);
+    state.prio = pf2pri(initialBplcon2);
     state.ham = ham(initialBplcon0);
     bool dual = dbplf(initialBplcon0);
 
@@ -518,9 +518,9 @@ Denise::translate()
 
             case SET_BPLCON2:
                 
-                state.pf2pri = PF2PRI(change.value);
-                state.prio1 = zPF1(change.value);
-                state.prio2 = zPF2(change.value);
+                state.prio = pf2pri(change.value);
+                state.zpf1 = zPF1(change.value);
+                state.zpf2 = zPF2(change.value);
                 break;
 
             default:
@@ -547,7 +547,7 @@ Denise::translateSPF(Pixel from, Pixel to, PFState &state)
      * Denise/BPLCON0/invprio0 to Denise/BPLCON0/invprio3
      */
     
-    if (unlikely(!state.prio2 && !state.ham)) {
+    if (unlikely(!state.zpf2 && !state.ham)) {
         
         for (Pixel i = from; i < to; i++) {
 
@@ -567,28 +567,28 @@ Denise::translateSPF(Pixel from, Pixel to, PFState &state)
         
         assert(PixelEngine::isRgbaIndex(s));
         iBuffer[i] = mBuffer[i] = s;
-        zBuffer[i] = s ? state.prio2 : 0;
+        zBuffer[i] = s ? state.zpf2 : 0;
     }
 }
 
 void
 Denise::translateDPF(Pixel from, Pixel to, PFState &state)
 {
-    if (state.pf2pri) {
+    if (state.prio) {
         translateDPF<true>(from, to, state);
     } else {
         translateDPF<false>(from, to, state);
     }
 }
 
-template <bool pf2pri> void
+template <bool prio> void
 Denise::translateDPF(Pixel from, Pixel to, PFState &state)
 {
-    /* If the priority of a playfield is set to an illegal value (prio1 or
-     * prio2 will be 0 in that case), all pixels are drawn transparent.
+    /* If the priority of a playfield is set to an illegal value (zpf1 or
+     * zpf2 will be 0 in that case), all pixels are drawn transparent.
      */
-    u8 mask1 = state.prio1 ? 0b1111 : 0b0000;
-    u8 mask2 = state.prio2 ? 0b1111 : 0b0000;
+    u8 mask1 = state.zpf1 ? 0b1111 : 0b0000;
+    u8 mask2 = state.zpf2 ? 0b1111 : 0b0000;
 
     for (Pixel i = from; i < to; i++) {
 
@@ -603,19 +603,19 @@ Denise::translateDPF(Pixel from, Pixel to, PFState &state)
             if (index2) {
 
                 // PF1 is solid, PF2 is solid
-                if (pf2pri) {
+                if (prio) {
                     iBuffer[i] = mBuffer[i] = (index2 | 0b1000) & mask2;
-                    zBuffer[i] = state.prio2 | Z_DPF21;
+                    zBuffer[i] = state.zpf2 | Z_DPF21;
                 } else {
                     iBuffer[i] = mBuffer[i] = index1 & mask1;
-                    zBuffer[i] = state.prio1 | Z_DPF12;
+                    zBuffer[i] = state.zpf1 | Z_DPF12;
                 }
 
             } else {
 
                 // PF1 is solid, PF2 is transparent
                 iBuffer[i] = mBuffer[i] = index1 & mask1;
-                zBuffer[i] = state.prio1 | Z_DPF1;
+                zBuffer[i] = state.zpf1 | Z_DPF1;
             }
 
         } else {
@@ -624,7 +624,7 @@ Denise::translateDPF(Pixel from, Pixel to, PFState &state)
 
                 // PF1 is transparent, PF2 is solid
                 iBuffer[i] = mBuffer[i] = (index2 | 0b1000) & mask2;
-                zBuffer[i] = state.prio2 | Z_DPF2;
+                zBuffer[i] = state.zpf2 | Z_DPF2;
 
             } else {
 

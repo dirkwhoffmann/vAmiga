@@ -145,8 +145,8 @@ Denise::setBPLCON2(u16 newValue)
 
     bplcon2 = newValue;
     
-    debug(XFILES && PF1Px() > 4, "XFILES (BPLCON2): PF1P = %d\n", PF1Px());
-    debug(XFILES && PF2Px() > 4, "XFILES (BPLCON2): PF2P = %d\n", PF2Px());
+    debug(XFILES && pf1px() > 4, "XFILES (BPLCON2): PF1P = %d\n", pf1px());
+    debug(XFILES && pf2px() > 4, "XFILES (BPLCON2): PF2P = %d\n", pf2px());
     
     // Record the register change
     i64 pixel = 4 * agnus.pos.h + 4;

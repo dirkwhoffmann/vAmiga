@@ -404,7 +404,7 @@ public:
 private:
 
     // Data type used by the translation functions
-    typedef struct { u16 prio1; u16 prio2; bool pf2pri; bool ham; } PFState;
+    typedef struct { u16 zpf1; u16 zpf2; bool prio; bool ham; } PFState;
 
     // Translate bitplane data to color register indices
     void translate();
@@ -416,7 +416,7 @@ private:
     void translateDPF(Pixel from, Pixel to, PFState &state);
     
     // Called by translateDPF(...)
-    template <bool pf2pri> void translateDPF(Pixel from, Pixel to, PFState &state);
+    template <bool prio> void translateDPF(Pixel from, Pixel to, PFState &state);
 
     
     //
@@ -510,7 +510,6 @@ public:
 
     u16 peekJOY0DATR();
     u16 peekJOY1DATR();
-    
     void pokeJOYTEST(u16 value);
 
     u16 peekDENISEID();
@@ -561,12 +560,12 @@ public:
     bool ecsena() const { return ecsena(bplcon0); }
 
     // BPLCON2
-    static bool PF2PRI(u16 value) { return GET_BIT(value, 6); }
-    bool PF2PRI() const { return PF2PRI(bplcon2); }
-    static u16 PF1Px(u16 bplcon2) { return (bplcon2 & 7); }
-    u16 PF1Px() const { return PF1Px(bplcon2); }
-    static u16 PF2Px(u16 bplcon2) { return (bplcon2 >> 3) & 7; }
-    u16 PF2Px() const { return PF2Px(bplcon2); }
+    static bool pf2pri(u16 value) { return GET_BIT(value, 6); }
+    bool pf2pri() const { return pf2pri(bplcon2); }
+    static u16 pf1px(u16 bplcon2) { return (bplcon2 & 7); }
+    u16 pf1px() const { return pf1px(bplcon2); }
+    static u16 pf2px(u16 bplcon2) { return (bplcon2 >> 3) & 7; }
+    u16 pf2px() const { return pf2px(bplcon2); }
 
     // BPLCON3
     static bool brdrblnk(u16 v) { return !!GET_BIT(v, 5); }
@@ -586,8 +585,8 @@ public:
 
     // Computes the z buffer depth for playfield 1 or 2
     static u16 zPF(u16 prioBits);
-    static u16 zPF1(u16 bplcon2) { return zPF(PF1Px(bplcon2)); }
-    static u16 zPF2(u16 bplcon2) { return zPF(PF2Px(bplcon2)); }
+    static u16 zPF1(u16 bplcon2) { return zPF(pf1px(bplcon2)); }
+    static u16 zPF2(u16 bplcon2) { return zPF(pf2px(bplcon2)); }
 
     // Checks whether the BPU bits in BPLCON0 are an invalid combination
     static bool invBPU(u16 v) { return ((v >> 12) & 0b111) > (hires(v) ? 4 : 6); }
