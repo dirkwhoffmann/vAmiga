@@ -191,6 +191,7 @@ static const int FORCE_CHIP_RAM_LIMIT      = 0;
 static const int FORCE_SNAPSHOT_TOO_OLD    = 0;
 static const int FORCE_SNAPSHOT_TOO_NEW    = 0;
 static const int FORCE_DISK_INVALID_LAYOUT = 0;
+static const int FORCE_RECORDING_ERROR     = 0;
 
 
 #ifdef RELEASEBUILD

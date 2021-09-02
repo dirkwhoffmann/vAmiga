@@ -100,4 +100,11 @@ class VAError: Error {
         track("what = \(what)")
         informational("Configuration error", async: async, icon: "pref_transparent")
     }
+    
+    static func recordingAborted(async: Bool = false) {
+        
+        warning("Screen recording has been aborted.",
+                "Failed to write to the FFmpeg pipes.",
+                async: async, icon: "mp4")
+    }
 }

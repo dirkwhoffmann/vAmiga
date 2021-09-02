@@ -103,7 +103,7 @@ Moira::signalTAS()
 void
 Moira::signalHalt()
 {
-    messageQueue.put(MSG_CPU_HALT);
+    msgQueue.put(MSG_CPU_HALT);
 }
 
 void

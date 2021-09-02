@@ -60,7 +60,7 @@ class Recorder : public SubComponent {
     //
     
     // All possible recorder states
-    enum class State { wait, prepare, record, finalize };
+    enum class State { wait, prepare, record, finalize, abort };
 
     // The current recorder state
     State state = State::wait;
@@ -192,4 +192,5 @@ private:
     void recordVideo(Cycle target);
     void recordAudio(Cycle target);
     void finalize();
+    void abort();
 };

@@ -797,7 +797,7 @@ Memory::updateCpuMemSrcTable()
             cpuMemSrc[i] = cpuMemSrc[0xF8 + i];
     }
 
-    messageQueue.put(MSG_MEM_LAYOUT);
+    msgQueue.put(MSG_MEM_LAYOUT);
 }
 
 void

@@ -88,6 +88,7 @@ enum_long(MSG_TYPE)
     // Screen recording
     MSG_RECORDING_STARTED,
     MSG_RECORDING_STOPPED,
+    MSG_RECORDING_ABORTED,
     
     // Console
     MSG_CLOSE_CONSOLE,
@@ -172,6 +173,7 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
 
             case MSG_RECORDING_STARTED:   return "RECORDING_STARTED";
             case MSG_RECORDING_STOPPED:   return "RECORDING_STOPPED";
+            case MSG_RECORDING_ABORTED:   return "RECORDING_ABORTED";
                 
             case MSG_CLOSE_CONSOLE:       return "CLOSE_CONSOLE";
                 

@@ -102,7 +102,7 @@ DmaDebugger::setConfigItem(Option option, i64 value)
         case OPT_DMA_DEBUG_ENABLE:
                         
             config.enabled = value;
-            messageQueue.put(value ? MSG_DMA_DEBUG_ON : MSG_DMA_DEBUG_OFF);
+            msgQueue.put(value ? MSG_DMA_DEBUG_ON : MSG_DMA_DEBUG_OFF);
             return;
             
         case OPT_DMA_DEBUG_MODE:

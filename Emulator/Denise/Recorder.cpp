@@ -277,6 +277,7 @@ Recorder::vsyncHandler(Cycle target)
             case State::prepare: prepare(); break;
             case State::record: record(target); break;
             case State::finalize: finalize(); break;
+            case State::abort: abort(); break;
         }
     }
 }
@@ -287,7 +288,7 @@ Recorder::prepare()
     state = State::record;
     audioClock = 0;
     recStart = util::Time::now();
-    messageQueue.put(MSG_RECORDING_STARTED);
+    msgQueue.put(MSG_RECORDING_STARTED);
 }
 
 void
@@ -320,7 +321,12 @@ Recorder::recordVideo(Cycle target)
     
     // Feed the video pipe
     assert(videoPipe != -1);
-    (void)write(videoPipe, data, width * height);
+    isize length = width * height;
+    isize written = write(videoPipe, data, length);
+    
+    if (written != length || FORCE_RECORDING_ERROR) {
+        state = State::abort;
+    }
 }
 
 void
@@ -348,7 +354,12 @@ Recorder::recordAudio(Cycle target)
     
     // Feed the audio pipe
     assert(audioPipe != -1);
-    (void)write(audioPipe, (u8 *)samples, 2 * sizeof(float) * samplesPerFrame);
+    isize length = 2 * sizeof(float) * samplesPerFrame;
+    isize written = write(audioPipe, (u8 *)samples, length);
+ 
+    if (written != length || FORCE_RECORDING_ERROR) {
+        state = State::abort;
+    }
 }
 
 void
@@ -369,5 +380,12 @@ Recorder::finalize()
     // Switch state and inform the GUI
     state = State::wait;
     recStop = util::Time::now();
-    messageQueue.put(MSG_RECORDING_STOPPED);
+    msgQueue.put(MSG_RECORDING_STOPPED);
+}
+
+void
+Recorder::abort()
+{
+    finalize();
+    msgQueue.put(MSG_RECORDING_ABORTED);
 }

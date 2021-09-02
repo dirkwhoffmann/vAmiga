@@ -63,7 +63,7 @@ protected:
     Drive &df3;
     Keyboard &keyboard;
     Memory &mem;
-    MsgQueue &messageQueue;
+    MsgQueue &msgQueue;
     Paula &paula;
     PixelEngine &pixelEngine;
     RetroShell &retroShell;

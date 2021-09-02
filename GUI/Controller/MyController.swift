@@ -521,6 +521,10 @@ extension MyController {
             window?.backgroundColor = .windowBackgroundColor
             refreshStatusBar()
             
+        case .RECORDING_ABORTED:
+            refreshStatusBar()
+            VAError.recordingAborted()
+
         case .SHAKING:
             metal.lastShake = DispatchTime(uptimeNanoseconds: 0)
             if pref.releaseMouseByShaking {

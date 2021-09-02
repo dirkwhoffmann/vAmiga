@@ -428,8 +428,8 @@ Drive::setMotor(bool value)
     idCount = 0;
     
     // Inform the GUI
-    messageQueue.put(value ? MSG_DRIVE_LED_ON : MSG_DRIVE_LED_OFF, nr);
-    messageQueue.put(value ? MSG_DRIVE_MOTOR_ON : MSG_DRIVE_MOTOR_OFF, nr);
+    msgQueue.put(value ? MSG_DRIVE_LED_ON : MSG_DRIVE_LED_OFF, nr);
+    msgQueue.put(value ? MSG_DRIVE_MOTOR_ON : MSG_DRIVE_MOTOR_OFF, nr);
     
     debug(DSK_DEBUG, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
 }
@@ -594,10 +594,10 @@ Drive::step(isize dir)
     
     // Notify the GUI
     if (pollsForDisk()) {
-        messageQueue.put(MSG_DRIVE_POLL,
+        msgQueue.put(MSG_DRIVE_POLL,
                          config.pan << 24 | config.pollVolume << 16 | head.cylinder << 8 | nr);
     } else {
-        messageQueue.put(MSG_DRIVE_STEP,
+        msgQueue.put(MSG_DRIVE_STEP,
                          config.pan << 24 | config.stepVolume << 16 | head.cylinder << 8 | nr);
     }
         
@@ -665,12 +665,12 @@ Drive::setWriteProtection(bool value)
         if (value && !disk->isWriteProtected()) {
             
             disk->setWriteProtection(true);
-            messageQueue.put(MSG_DISK_PROTECT);
+            msgQueue.put(MSG_DISK_PROTECT);
         }
         if (!value && disk->isWriteProtected()) {
             
             disk->setWriteProtection(false);
-            messageQueue.put(MSG_DISK_UNPROTECT);
+            msgQueue.put(MSG_DISK_UNPROTECT);
         }
     }
 }
@@ -731,7 +731,7 @@ Drive::ejectDisk()
         disk = nullptr;
         
         // Notify the GUI
-        messageQueue.put(MSG_DISK_EJECT,
+        msgQueue.put(MSG_DISK_EJECT,
                          config.pan << 24 | config.ejectVolume << 16 | nr);
     }
 }
@@ -750,7 +750,7 @@ Drive::insertDisk(std::unique_ptr<Disk> disk)
     head.offset = 0;
     
     // Notify the GUI
-    messageQueue.put(MSG_DISK_INSERT,
+    msgQueue.put(MSG_DISK_INSERT,
                      config.pan << 24 | config.insertVolume << 16 | nr);
 }
 

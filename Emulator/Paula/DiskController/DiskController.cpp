@@ -137,8 +137,8 @@ DiskController::setConfigItem(Option option, long id, i64 value)
             config.connected[id] = value;
             
             // Inform the GUI
-            messageQueue.put(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, id);
-            messageQueue.put(MSG_CONFIG);
+            msgQueue.put(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, id);
+            msgQueue.put(MSG_CONFIG);
             return;
             
         default:
@@ -284,12 +284,12 @@ DiskController::setState(DriveState oldState, DriveState newState)
             break;
             
         case DRIVE_DMA_WRITE:
-            messageQueue.put(MSG_DRIVE_WRITE, selected);
+            msgQueue.put(MSG_DRIVE_WRITE, selected);
             break;
             
         default:
             if (oldState == DRIVE_DMA_WRITE)
-                messageQueue.put(MSG_DRIVE_READ, selected);
+                msgQueue.put(MSG_DRIVE_READ, selected);
     }
 }
 

@@ -360,14 +360,14 @@ RetroShell::continueScript()
             
         } catch (ScriptInterruption &e) {
             
-            messageQueue.put(MSG_SCRIPT_PAUSE, scriptLine);
+            msgQueue.put(MSG_SCRIPT_PAUSE, scriptLine);
             printPrompt();
             return;
         
         } catch (std::exception &e) {
             
             *this << "Aborted in line " << scriptLine << '\n';
-            messageQueue.put(MSG_SCRIPT_ABORT, scriptLine);
+            msgQueue.put(MSG_SCRIPT_ABORT, scriptLine);
             printPrompt();
             return;
         }
@@ -376,7 +376,7 @@ RetroShell::continueScript()
     }
     
     printPrompt();
-    messageQueue.put(MSG_SCRIPT_DONE, scriptLine);
+    msgQueue.put(MSG_SCRIPT_DONE, scriptLine);
 }
 
 void
@@ -436,7 +436,7 @@ RetroShell::vsyncHandler()
     if (agnus.clock >= wakeUp) {
         
         // Ask the external thread (GUI) to continue the script
-        messageQueue.put(MSG_SCRIPT_WAKEUP);
+        msgQueue.put(MSG_SCRIPT_WAKEUP);
         wakeUp = INT64_MAX;
     }
 }
