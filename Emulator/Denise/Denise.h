@@ -406,7 +406,7 @@ private:
     // Data type used by the translation functions
     typedef struct { u16 zpf1; u16 zpf2; bool prio; bool ham; } PFState;
 
-    // Translates bitplane data to color register indices
+    // Translates the bitplane data to color register indices
     void translate();
 
     // Called by translate() in single-playfield mode

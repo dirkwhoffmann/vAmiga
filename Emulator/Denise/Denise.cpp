@@ -420,7 +420,8 @@ Denise::drawHiresBoth()
 
         assert((agnus.pos.h & 0x3) == agnus.scrollHiresOdd);
         assert((agnus.pos.h & 0x3) == agnus.scrollHiresEven);
-        drawBoth<true>(pixelOffsetOdd);
+        
+        drawBoth <true> (pixelOffsetOdd);
 
     } else {
     
@@ -452,7 +453,8 @@ Denise::drawLoresBoth()
 
         assert((agnus.pos.h & 0x7) == agnus.scrollLoresOdd);
         assert((agnus.pos.h & 0x7) == agnus.scrollLoresEven);
-        drawBoth<false>(pixelOffsetOdd);
+        
+        drawBoth <false> (pixelOffsetOdd);
 
     } else {
     
@@ -559,9 +561,9 @@ void
 Denise::translateDPF(Pixel from, Pixel to, PFState &state)
 {
     if (state.prio) {
-        translateDPF<true>(from, to, state);
+        translateDPF <true> (from, to, state);
     } else {
-        translateDPF<false>(from, to, state);
+        translateDPF <false> (from, to, state);
     }
 }
 
@@ -625,10 +627,10 @@ Denise::drawSprites()
 {
     if (wasArmed) {
         
-        if (wasArmed & 0b11000000) drawSpritePair<3>();
-        if (wasArmed & 0b00110000) drawSpritePair<2>();
-        if (wasArmed & 0b00001100) drawSpritePair<1>();
-        if (wasArmed & 0b00000011) drawSpritePair<0>();
+        if (wasArmed & 0b11000000) drawSpritePair <3> ();
+        if (wasArmed & 0b00110000) drawSpritePair <2> ();
+        if (wasArmed & 0b00001100) drawSpritePair <1> ();
+        if (wasArmed & 0b00000011) drawSpritePair <0> ();
         
         // Record sprite data in debug mode
         if (amiga.inDebugMode()) debugger.recordSprites(wasArmed);
@@ -640,10 +642,10 @@ Denise::drawSprites()
      * however, the register change buffers may contain unprocessed entried.
      * We replay those to get the sprite registers up to date.
      */
-    if (!sprChanges[3].isEmpty()) replaySpriteRegChanges<3>();
-    if (!sprChanges[2].isEmpty()) replaySpriteRegChanges<2>();
-    if (!sprChanges[1].isEmpty()) replaySpriteRegChanges<1>();
-    if (!sprChanges[0].isEmpty()) replaySpriteRegChanges<0>();
+    if (!sprChanges[3].isEmpty()) replaySpriteRegChanges <3> ();
+    if (!sprChanges[2].isEmpty()) replaySpriteRegChanges <2> ();
+    if (!sprChanges[1].isEmpty()) replaySpriteRegChanges <1> ();
+    if (!sprChanges[0].isEmpty()) replaySpriteRegChanges <0> ();
 }
 
 template <isize pair> void
