@@ -212,31 +212,6 @@ Denise::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
-u8
-Denise::bpu(u16 v)
-{
-    // Extract the three BPU bits
-    u8 bpu = (v >> 12) & 0b111;
-    
-    // An invalid value enables all 6 planes
-    return  bpu < 7 ? bpu : 6;
-}
-
-u16
-Denise::zPF(u16 prioBits)
-{
-    switch (prioBits) {
-
-        case 0: return Z_0;
-        case 1: return Z_1;
-        case 2: return Z_2;
-        case 3: return Z_3;
-        case 4: return Z_4;
-    }
-
-    return 0;
-}
-
 bool
 Denise::spritePixelIsVisible(Pixel hpos) const
 {
@@ -1075,12 +1050,12 @@ template <int x> void
 Denise::checkS2PCollisions(Pixel start, Pixel end)
 {
     // For the odd sprites, only proceed if collision detection is enabled
-    if (IS_ODD(x) && !getENSP<x>()) return;
+    if (IS_ODD(x) && !ensp<x>()) return;
     
-    u8 enabled1 = (u8)getENBP1();
-    u8 enabled2 = (u8)getENBP2();
-    u8 compare1 = (u8)getMVBP1() & enabled1;
-    u8 compare2 = (u8)getMVBP2() & enabled2;
+    u8 enabled1 = enbp1();
+    u8 enabled2 = enbp2();
+    u8 compare1 = mvbp1() & enabled1;
+    u8 compare2 = mvbp2() & enabled2;
 
     // Check for sprite-playfield collisions
     for (Pixel pos = end; pos >= start; pos -= 2) {
@@ -1121,10 +1096,10 @@ Denise::checkP2PCollisions()
     if (GET_BIT(clxdat, 0)) return;
 
     // Set up comparison masks
-    u8 enabled1 = (u8)getENBP1();
-    u8 enabled2 = (u8)getENBP2();
-    u8 compare1 = (u8)getMVBP1() & enabled1;
-    u8 compare2 = (u8)getMVBP2() & enabled2;
+    u8 enabled1 = enbp1();
+    u8 enabled2 = enbp2();
+    u8 compare1 = mvbp1() & enabled1;
+    u8 compare2 = mvbp2() & enabled2;
 
     // Check all pixels one by one
     for (isize pos = 0; pos < HPIXELS; pos++) {

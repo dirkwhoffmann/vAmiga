@@ -378,100 +378,6 @@ public:
     
     DeniseInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
-    
-    //
-    // Accessing registers
-    //
-    
-public:
-
-    // JOYxDATR, JOYTEST
-    u16 peekJOY0DATR();
-    u16 peekJOY1DATR();
-    void pokeJOYTEST(u16 value);
-
-    // DENISEID
-    u16 peekDENISEID();
-
-    // BPLCON0
-    void pokeBPLCON0(u16 value);
-    void setBPLCON0(u16 oldValue, u16 newValue);
-    // void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
-
-    static bool hires(u16 v) { return GET_BIT(v, 15); }
-    bool hires() const { return hires(bplcon0); }
-    static bool lores(u16 v) { return !hires(v); }
-    bool lores() const { return lores(bplcon0); }
-    static bool dbplf(u16 v) { return GET_BIT(v, 10); }
-    bool dbplf() const { return dbplf(bplcon0); }
-    static bool lace(u16 v) { return GET_BIT(v, 2); }
-    bool lace() const { return lace(bplcon0); }
-    static bool ham(u16 v) { return (v & 0x8800) == 0x0800; }
-    bool ham() const { return ham(bplcon0); }
-    static bool ecsena(u16 v) { return GET_BIT(v, 0); }
-    bool ecsena() const { return ecsena(bplcon0); }
-    static bool invBPU(u16 v) { return ((v >> 12) & 0b111) > (hires(v) ? 4 : 6); }
-    bool invBPU() const { return invBPU(bplcon0); }
-
-    /* Returns the Denise view of the BPU bits. The value determines how many
-     * shift registers are loaded with the values of their corresponding
-     * BPLxDAT registers at the end of a fetch unit. It is computed out of the
-     * three BPU bits stored in BPLCON0, but not identical with them. The value
-     * differs if the BPU bits reflect an invalid bit pattern.
-     * Compare with Agnus::bpu() which returns the Agnus view of the BPU bits.
-     */
-    static u8 bpu(u16 v);
-    u8 bpu() const { return bpu(bplcon0); }
-
-    // BPLCON1
-    void pokeBPLCON1(u16 value);
-    void setBPLCON1(u16 oldValue, u16 newValue);
-
-    // BPLCON2
-    void pokeBPLCON2(u16 value);
-    void setBPLCON2(u16 value);
-    static bool PF2PRI(u16 value) { return GET_BIT(value, 6); }
-    static u16 PF1Px(u16 bplcon2) { return (bplcon2 & 7); }
-    static u16 PF2Px(u16 bplcon2) { return (bplcon2 >> 3) & 7; }
-    bool PF2PRI() const { return PF2PRI(bplcon2); }
-    u16 PF1Px() const { return PF1Px(bplcon2); }
-    u16 PF2Px() const { return PF2Px(bplcon2); }
-
-    // Computes the z buffer depth for playfield 1 or 2
-    static u16 zPF(u16 prioBits);
-    static u16 zPF1(u16 bplcon2) { return zPF(PF1Px(bplcon2)); }
-    static u16 zPF2(u16 bplcon2) { return zPF(PF2Px(bplcon2)); }
-    
-    // BPLCON3
-    void pokeBPLCON3(u16 value);
-    void setBPLCON3(u16 value);
-    static int brdrblnk(u16 v) { return GET_BIT(v, 5); }
-    bool brdrblnk() const { return brdrblnk(bplcon3); }
-
-    // CLXDAT, CLXCON
-    u16 peekCLXDAT();
-    void pokeCLXCON(u16 value);
-    template <int x> u16 getENSP() { return GET_BIT(clxcon, 12 + (x/2)); }
-    u16 getENBP1() const { return (clxcon >> 6) & 0b010101; }
-    u16 getENBP2() const { return (clxcon >> 6) & 0b101010; }
-    u16 getMVBP1() const { return clxcon & 0b010101; }
-    u16 getMVBP2() const { return clxcon & 0b101010; }
-    
-    // BPLxDAT
-    template <isize x, Accessor s> void pokeBPLxDAT(u16 value);
-    template <isize x> void setBPLxDAT(u16 value);
-
-    // SPRxPOS, SPRxCTL
-    template <isize x> void pokeSPRxPOS(u16 value);
-    template <isize x> void pokeSPRxCTL(u16 value);
-
-    // SPRxDATA, SPRxDATB
-    template <isize x> void pokeSPRxDATA(u16 value);
-    template <isize x> void pokeSPRxDATB(u16 value);
-
-    // COLORxx
-    template <Accessor s, isize xx> void pokeCOLORxx(u16 value);
-
 
     //
     // Drawing bitplanes
@@ -594,4 +500,106 @@ public:
 
     // Called by Agnus if the DMACON register changes
     void pokeDMACON(u16 oldValue, u16 newValue);
+    
+    
+    //
+    // Accessing registers (DeniseRegs.cpp)
+    //
+    
+public:
+
+    u16 peekJOY0DATR();
+    u16 peekJOY1DATR();
+    
+    void pokeJOYTEST(u16 value);
+
+    u16 peekDENISEID();
+
+    void pokeBPLCON0(u16 value);
+    void setBPLCON0(u16 oldValue, u16 newValue);
+
+    void pokeBPLCON1(u16 value);
+    void setBPLCON1(u16 oldValue, u16 newValue);
+
+    void pokeBPLCON2(u16 value);
+    void setBPLCON2(u16 value);
+    
+    void pokeBPLCON3(u16 value);
+    void setBPLCON3(u16 value);
+
+    u16 peekCLXDAT();
+    
+    void pokeCLXCON(u16 value);
+    
+    template <isize x, Accessor s> void pokeBPLxDAT(u16 value);
+    template <isize x> void setBPLxDAT(u16 value);
+
+    template <isize x> void pokeSPRxPOS(u16 value);
+    template <isize x> void pokeSPRxCTL(u16 value);
+    template <isize x> void pokeSPRxDATA(u16 value);
+    template <isize x> void pokeSPRxDATB(u16 value);
+    
+    template <Accessor s, isize xx> void pokeCOLORxx(u16 value);
+    
+    
+    //
+    // Accessing single bits
+    //
+    
+    // BPLCON0
+    static bool hires(u16 v) { return GET_BIT(v, 15); }
+    bool hires() const { return hires(bplcon0); }
+    static bool lores(u16 v) { return !hires(v); }
+    bool lores() const { return lores(bplcon0); }
+    static bool dbplf(u16 v) { return GET_BIT(v, 10); }
+    bool dbplf() const { return dbplf(bplcon0); }
+    static bool lace(u16 v) { return GET_BIT(v, 2); }
+    bool lace() const { return lace(bplcon0); }
+    static bool ham(u16 v) { return (v & 0x8800) == 0x0800; }
+    bool ham() const { return ham(bplcon0); }
+    static bool ecsena(u16 v) { return GET_BIT(v, 0); }
+    bool ecsena() const { return ecsena(bplcon0); }
+
+    // BPLCON2
+    static bool PF2PRI(u16 value) { return GET_BIT(value, 6); }
+    bool PF2PRI() const { return PF2PRI(bplcon2); }
+    static u16 PF1Px(u16 bplcon2) { return (bplcon2 & 7); }
+    u16 PF1Px() const { return PF1Px(bplcon2); }
+    static u16 PF2Px(u16 bplcon2) { return (bplcon2 >> 3) & 7; }
+    u16 PF2Px() const { return PF2Px(bplcon2); }
+
+    // BPLCON3
+    static bool brdrblnk(u16 v) { return !!GET_BIT(v, 5); }
+    bool brdrblnk() const { return brdrblnk(bplcon3); }
+
+    // CLXCON
+    template <int x> bool ensp() { return !!GET_BIT(clxcon, 12 + (x/2)); }
+    u8 enbp1() const { return (u8)((clxcon >> 6) & 0b010101); }
+    u8 enbp2() const { return (u8)((clxcon >> 6) & 0b101010); }
+    u8 mvbp1() const { return (u8)(clxcon & 0b010101); }
+    u8 mvbp2() const { return (u8)(clxcon & 0b101010); }
+    
+    
+    //
+    // Derived values
+    //
+
+    // Computes the z buffer depth for playfield 1 or 2
+    static u16 zPF(u16 prioBits);
+    static u16 zPF1(u16 bplcon2) { return zPF(PF1Px(bplcon2)); }
+    static u16 zPF2(u16 bplcon2) { return zPF(PF2Px(bplcon2)); }
+
+    // Checks whether the BPU bits in BPLCON0 are an invalid combination
+    static bool invBPU(u16 v) { return ((v >> 12) & 0b111) > (hires(v) ? 4 : 6); }
+    bool invBPU() const { return invBPU(bplcon0); }
+
+    /* Returns the Denise view of the BPU bits. The value determines how many
+     * shift registers are loaded with the values of their corresponding
+     * BPLxDAT registers at the end of a fetch unit. It is computed out of the
+     * three BPU bits stored in BPLCON0, but not identical with them. The value
+     * differs if the BPU bits reflect an invalid bit pattern.
+     * Compare with Agnus::bpu() which returns the Agnus view of the BPU bits.
+     */
+    static u8 bpu(u16 v);
+    u8 bpu() const { return bpu(bplcon0); }
 };

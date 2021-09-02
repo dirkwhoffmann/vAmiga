@@ -306,6 +306,31 @@ Denise::pokeCOLORxx(u16 value)
     pixelEngine.colChanges.insert(4 * pos, RegChange { reg, value } );
 }
 
+u16
+Denise::zPF(u16 prioBits)
+{
+    switch (prioBits) {
+
+        case 0: return Z_0;
+        case 1: return Z_1;
+        case 2: return Z_2;
+        case 3: return Z_3;
+        case 4: return Z_4;
+    }
+
+    return 0;
+}
+
+u8
+Denise::bpu(u16 v)
+{
+    // Extract the three BPU bits
+    u8 bpu = (v >> 12) & 0b111;
+    
+    // An invalid value enables all 6 planes
+    return  bpu < 7 ? bpu : 6;
+}
+
 template void Denise::pokeBPLxDAT<0,ACCESSOR_CPU>(u16 value);
 template void Denise::pokeBPLxDAT<0,ACCESSOR_AGNUS>(u16 value);
 template void Denise::pokeBPLxDAT<1,ACCESSOR_CPU>(u16 value);
