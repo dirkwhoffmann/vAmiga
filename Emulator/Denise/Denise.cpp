@@ -976,7 +976,7 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
 void
 Denise::updateBorderColor()
 {
-    if (config.revision != DENISE_OCS && ecsena() && BRDRBLNK()) {
+    if (config.revision != DENISE_OCS && ecsena() && brdrblnk()) {
         borderColor = 64; // Pure black
     } else {
         borderColor = 0;  // Background color

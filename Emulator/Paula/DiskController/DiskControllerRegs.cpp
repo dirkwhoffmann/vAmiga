@@ -44,7 +44,8 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
     dsklen = newValue;
 
     // Initialize checksum (for debugging only)
-    if (DSK_CHECKSUM) {
+    if constexpr (DSK_CHECKSUM) {
+        
         checkcnt = 0;
         check1 = util::fnv_1a_init32();
         check2 = util::fnv_1a_init32();

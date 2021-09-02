@@ -158,7 +158,6 @@
 		509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
 		50A5969824F7F9ED008632C0 /* PeripheralsConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A5969724F7F9ED008632C0 /* PeripheralsConf.swift */; };
-		50A61439260CE6B100A01428 /* Bus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A61437260CE6B100A01428 /* Bus.cpp */; };
 		50A61463260DB7F900A01428 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A61461260DB7F900A01428 /* Parser.cpp */; };
 		50A64B96257A63A600442964 /* BootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A64B95257A63A600442964 /* BootBlockImage.cpp */; };
 		50AA4CE326DA11010050B871 /* Scheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AA4CE126DA11010050B871 /* Scheduler.cpp */; };
@@ -497,8 +496,6 @@
 		50A6141F260CD67600A01428 /* AudioFilterTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilterTypes.h; sourceTree = "<group>"; };
 		50A61421260CD74E00A01428 /* MuxerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MuxerTypes.h; sourceTree = "<group>"; };
 		50A61424260CD85000A01428 /* SamplerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SamplerTypes.h; sourceTree = "<group>"; };
-		50A61437260CE6B100A01428 /* Bus.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Bus.cpp; sourceTree = "<group>"; };
-		50A61438260CE6B100A01428 /* Bus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bus.h; sourceTree = "<group>"; };
 		50A6143B260CE6C400A01428 /* BusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BusTypes.h; sourceTree = "<group>"; };
 		50A61442260CF00200A01428 /* SerialPortTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerialPortTypes.h; sourceTree = "<group>"; };
 		50A61445260CF23D00A01428 /* ControlPortTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControlPortTypes.h; sourceTree = "<group>"; };
@@ -816,6 +813,7 @@
 				5015FF3E242BA00F005175D9 /* Frame.h */,
 				50F924FC2428B8CD00DD91AB /* DDF.h */,
 				50F924FB2428B8CD00DD91AB /* DDF.cpp */,
+				50A6143B260CE6C400A01428 /* BusTypes.h */,
 				50DF2C9E2268CFC000795256 /* AgnusTypes.h */,
 				5020B17C21EF121E00B9E80E /* Agnus.h */,
 				5020B17B21EF121E00B9E80E /* Agnus.cpp */,
@@ -823,9 +821,6 @@
 				50D55CCC26DE3F4400F37E28 /* AgnusDDF.cpp */,
 				504C48B324143AB4008ADAB3 /* AgnusDma.cpp */,
 				50AEBEDD24D3D8700037082D /* AgnusEvents.cpp */,
-				50A6143B260CE6C400A01428 /* BusTypes.h */,
-				50A61438260CE6B100A01428 /* Bus.h */,
-				50A61437260CE6B100A01428 /* Bus.cpp */,
 				5016DFB6260E3048004E0307 /* SchedulerTypes.h */,
 				50AA4CE226DA11010050B871 /* Scheduler.h */,
 				50AA4CE126DA11010050B871 /* Scheduler.cpp */,
@@ -1708,7 +1703,6 @@
 				50AE6EDD24D93DC4000AA367 /* CopperRegisters.cpp in Sources */,
 				50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */,
 				5026EDBF2608DC8E00D90CE1 /* Console.swift in Sources */,
-				50A61439260CE6B100A01428 /* Bus.cpp in Sources */,
 				509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */,
 				508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */,
 				50E1D2C626CCF942001FE199 /* FontExtensions.swift in Sources */,

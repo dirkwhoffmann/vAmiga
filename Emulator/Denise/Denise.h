@@ -445,8 +445,8 @@ public:
     // BPLCON3
     void pokeBPLCON3(u16 value);
     void setBPLCON3(u16 value);
-    static int BRDRBLNK(u16 v) { return GET_BIT(v, 5); }
-    bool BRDRBLNK() const { return BRDRBLNK(bplcon3); }
+    static int brdrblnk(u16 v) { return GET_BIT(v, 5); }
+    bool brdrblnk() const { return brdrblnk(bplcon3); }
 
     // CLXDAT, CLXCON
     u16 peekCLXDAT();
