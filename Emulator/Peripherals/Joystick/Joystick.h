@@ -113,10 +113,8 @@ public:
     // Triggers a gamepad event
     void trigger(GamePadAction event);
 
-    /* Execution function for this control port. This method needs to be
-     * invoked at the end of each frame to make the auto-fire mechanism work.
-     */
-    void execute();
+    // To be called after each frame
+    void vsyncHandler();
     
 private:
 

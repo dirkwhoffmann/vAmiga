@@ -807,8 +807,8 @@ Agnus::vsyncHandler()
     // Let other components do their own VSYNC stuff
     copper.vsyncHandler();
     denise.vsyncHandler();
-    controlPort1.joystick.execute();
-    controlPort2.joystick.execute();
+    controlPort1.joystick.vsyncHandler();
+    controlPort2.joystick.vsyncHandler();
     retroShell.vsyncHandler();
 
     // Update statistics

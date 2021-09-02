@@ -1098,11 +1098,7 @@ Denise::vsyncHandler()
 
 void
 Denise::beginOfLine(isize vpos)
-{
-    // Reset the register change recorders
-    assert(conChanges.isEmpty());
-    assert(pixelEngine.colChanges.isEmpty());
-    
+{    
     // Save the current values of various Denise registers
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
@@ -1153,6 +1149,8 @@ Denise::endOfLine(isize vpos)
         conChanges.clear();
     }
 
+    assert(conChanges.isEmpty());
+    assert(pixelEngine.colChanges.isEmpty());
     assert(sprChanges[0].isEmpty());
     assert(sprChanges[1].isEmpty());
     assert(sprChanges[2].isEmpty());

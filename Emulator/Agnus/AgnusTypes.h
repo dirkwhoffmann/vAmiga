@@ -152,7 +152,7 @@ AgnusInfo;
 
 typedef struct
 {
-    long usage[BUS_COUNT];
+    isize usage[BUS_COUNT];
     
     double copperActivity;
     double blitterActivity;
