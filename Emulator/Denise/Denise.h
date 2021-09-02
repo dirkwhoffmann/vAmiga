@@ -406,7 +406,7 @@ private:
     // Data type used by the translation functions
     typedef struct { u16 zpf1; u16 zpf2; bool prio; bool ham; } PFState;
 
-    // Translate bitplane data to color register indices
+    // Translates bitplane data to color register indices
     void translate();
 
     // Called by translate() in single-playfield mode
@@ -448,6 +448,8 @@ public:
     // Checks the z buffer and returns true if a sprite pixel is visible
     bool spritePixelIsVisible(Pixel hpos) const;
 
+private:
+    
     // Draws all sprites
     void drawSprites();
     
@@ -456,8 +458,6 @@ public:
     template <isize pair> void drawSpritePair(Pixel hstrt, Pixel hstop,
                                               Pixel strt1, Pixel strt2,
                                               bool armed1, bool armed2);
-    
-private:
     
     // Replays all recorded sprite register changes
     template <isize pair> void replaySpriteRegChanges();
@@ -471,7 +471,7 @@ private:
     // Checking collisions
     //
 
-public:
+private:
 
     // Checks for sprite-sprite collisions in the current rasterline
     template <int x> void checkS2SCollisions(Pixel start, Pixel end);
@@ -497,9 +497,6 @@ public:
 
     // Called by Agnus at the end of a rasterline
     void endOfLine(isize vpos);
-
-    // Called by Agnus if the DMACON register changes
-    void pokeDMACON(u16 oldValue, u16 newValue);
     
     
     //
@@ -507,6 +504,9 @@ public:
     //
     
 public:
+
+    // Called by Agnus if the DMACON register changes
+    void pokeDMACON(u16 oldValue, u16 newValue);
 
     u16 peekJOY0DATR();
     u16 peekJOY1DATR();
@@ -545,6 +545,8 @@ public:
     // Accessing single bits
     //
     
+public:
+    
     // BPLCON0
     static bool hires(u16 v) { return GET_BIT(v, 15); }
     bool hires() const { return hires(bplcon0); }
@@ -580,9 +582,11 @@ public:
     
     
     //
-    // Derived values
+    // Computing derived values
     //
 
+private:
+    
     // Computes the z buffer depth for playfield 1 or 2
     static u16 zPF(u16 prioBits);
     static u16 zPF1(u16 bplcon2) { return zPF(pf1px(bplcon2)); }
