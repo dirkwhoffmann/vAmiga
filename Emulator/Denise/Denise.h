@@ -456,8 +456,7 @@ private:
     // Draws an sprite pair. Called by drawSprites()
     template <isize pair> void drawSpritePair();
     template <isize pair> void drawSpritePair(Pixel hstrt, Pixel hstop,
-                                              Pixel strt1, Pixel strt2,
-                                              bool armed1, bool armed2);
+                                              Pixel strt1, Pixel strt2);
     
     // Replays all recorded sprite register changes
     template <isize pair> void replaySpriteRegChanges();

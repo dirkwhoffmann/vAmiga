@@ -651,16 +651,12 @@ Denise::drawSprites()
 template <isize pair> void
 Denise::drawSpritePair()
 {
-    assert(pair < 4);
+    constexpr isize sprite1 = 2 * pair;
+    constexpr isize sprite2 = 2 * pair + 1;
 
-    const isize sprite1 = 2 * pair;
-    const isize sprite2 = 2 * pair + 1;
-
+    Pixel strt = 0;
     Pixel strt1 = sprhppos<sprite1>();
     Pixel strt2 = sprhppos<sprite2>();
-    bool armed1 = GET_BIT(armed, sprite1);
-    bool armed2 = GET_BIT(armed, sprite2);
-    Pixel strt = 0;
     
     // Iterate over all recorded register changes
     if (!sprChanges[pair].isEmpty()) {
@@ -674,7 +670,7 @@ Denise::drawSpritePair()
             RegChange &change = sprChanges[pair].elements[i];
             
             // Draw a chunk of pixels
-            drawSpritePair<pair>(strt, trigger, strt1, strt2, armed1, armed2);
+            drawSpritePair <pair> (strt, trigger, strt1, strt2);
             strt = trigger;
             
             // Apply the recorded register change
@@ -684,14 +680,12 @@ Denise::drawSpritePair()
                     
                     sprdata[sprite1] = change.value;
                     SET_BIT(armed, sprite1);
-                    armed1 = true;
                     break;
                     
                 case SET_SPR0DATA + sprite2:
                     
                     sprdata[sprite2] = change.value;
                     SET_BIT(armed, sprite2);
-                    armed2 = true;
                     break;
                     
                 case SET_SPR0DATB + sprite1:
@@ -721,7 +715,6 @@ Denise::drawSpritePair()
                     sprctl[sprite1] = change.value;
                     strt1 = sprhppos<sprite1>();
                     CLR_BIT(armed, sprite1);
-                    armed1 = false;
                     break;
                     
                 case SET_SPR0CTL + sprite2:
@@ -729,7 +722,6 @@ Denise::drawSpritePair()
                     sprctl[sprite2] = change.value;
                     strt2 = sprhppos<sprite2>();
                     CLR_BIT(armed, sprite2);
-                    armed2 = false;
                     break;
 
                 default:
@@ -739,7 +731,7 @@ Denise::drawSpritePair()
     }
     
     // Draw until the end of the line
-    drawSpritePair<pair>(strt, sizeof(mBuffer) - 1, strt1, strt2, armed1, armed2);
+    drawSpritePair <pair> (strt, sizeof(mBuffer) - 1, strt1, strt2);
     
     sprChanges[pair].clear();
 }
@@ -747,10 +739,8 @@ Denise::drawSpritePair()
 template <isize pair> void
 Denise::replaySpriteRegChanges()
 {
-    assert(pair < 4);
-    
-    const isize sprite1 = 2 * pair;
-    const isize sprite2 = 2 * pair + 1;
+    constexpr isize sprite1 = 2 * pair;
+    constexpr isize sprite2 = 2 * pair + 1;
     
     isize begin = sprChanges[pair].begin();
     isize end = sprChanges[pair].end();
@@ -811,22 +801,21 @@ Denise::replaySpriteRegChanges()
 }
 
 template <isize pair> void
-Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2,
-                       bool armed1, bool armed2)
+Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
 {
     assert(pair < 4);
     
     // Only proceeed if we are outside the VBLANK area
     if (agnus.inVBlankArea()) return;
     
-    const isize sprite1 = 2 * pair;
-    const isize sprite2 = 2 * pair + 1;
+    constexpr isize sprite1 = 2 * pair;
+    constexpr isize sprite2 = 2 * pair + 1;
 
     assert(hstrt <= isizeof(mBuffer));
     assert(hstop <= isizeof(mBuffer));
 
-    assert(armed1 == !!GET_BIT(armed, sprite1));
-    assert(armed2 == !!GET_BIT(armed, sprite2));
+    bool armed1 = GET_BIT(armed, sprite1);
+    bool armed2 = GET_BIT(armed, sprite2);
 
     bool attached = GET_BIT(sprctl[sprite2], 7);
 
@@ -853,8 +842,8 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2,
                     
                 } else {
                     
-                    drawSpritePixel<sprite1>(hpos);
-                    drawSpritePixel<sprite2>(hpos);
+                    drawSpritePixel <sprite1> (hpos);
+                    drawSpritePixel <sprite2> (hpos);
                 }
             }
             
