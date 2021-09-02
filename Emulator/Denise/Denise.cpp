@@ -894,17 +894,12 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
     assert(IS_ODD(x));
     assert(hpos >= spriteClipBegin && hpos < spriteClipEnd);
 
-    auto a1 = !!GET_BIT(ssra[x - 1], 15);
-    auto b1 = !!GET_BIT(ssrb[x - 1], 15) << 1;
-    auto a2 = !!GET_BIT(ssra[x],     15) << 2;
-    auto b2 = !!GET_BIT(ssrb[x],     15) << 3;
-    
-    assert(a1 == ((ssra[x-1] >> 15)));
-    assert(b1 == ((ssrb[x-1] >> 14) & 0b0010));
-    assert(a2 == ((ssra[x] >> 13) & 0b0100));
-    assert(b2 == ((ssrb[x] >> 12) & 0b1000));
+    auto a1 = !!GET_BIT(ssra[x-1], 15);
+    auto b1 = !!GET_BIT(ssrb[x-1], 15);
+    auto a2 = !!GET_BIT(ssra[x],   15);
+    auto b2 = !!GET_BIT(ssrb[x],   15);
 
-    u8 col = (u8)(a1 | b1 | a2 | b2);
+    auto col = (u8)(b2 << 3 | a2 << 2 | b1 << 1 | a1);
 
     if (col) {
 
