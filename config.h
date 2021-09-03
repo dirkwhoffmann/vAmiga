@@ -21,7 +21,7 @@
 // Snapshot version number
 #define SNP_MAJOR 1
 #define SNP_MINOR 0
-#define SNP_SUBMINOR 2
+#define SNP_SUBMINOR 3
 
 // Uncomment this setting in a release build
 #define RELEASEBUILD
