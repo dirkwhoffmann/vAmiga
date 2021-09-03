@@ -342,7 +342,7 @@ void
 PixelEngine::endOfVBlankLine()
 {
     // Apply all color register changes that happened in this line
-    for (isize i = colChanges.begin(); i != colChanges.end(); i = colChanges.next(i)) {
+    for (isize i = 0, end = colChanges.end(); i < end; i++) {
         applyRegisterChange(colChanges.elements[i]);
     }
     colChanges.clear();
@@ -384,7 +384,7 @@ PixelEngine::colorize(isize line)
     colChanges.insert(HPIXELS, RegChange { SET_NONE, 0 } );
 
     // Iterate over all recorded register changes
-    for (isize i = colChanges.begin(); i != colChanges.end(); i = colChanges.next(i)) {
+    for (isize i = 0, end = colChanges.end(); i < end; i++) {
 
         Pixel trigger = (Pixel)colChanges.keys[i];
         RegChange &change = colChanges.elements[i];
@@ -401,13 +401,13 @@ PixelEngine::colorize(isize line)
         applyRegisterChange(change);
     }
 
+    // Clear the history cache
+    colChanges.clear();
+
     // Wipe out the HBLANK area
     for (Pixel pixel = 4 * HBLANK_MIN; pixel <= 4 * HBLANK_MAX; pixel++) {
         dst[pixel] = rgbaHBlank;
     }
-
-    // Clear the history cache
-    colChanges.clear();
 }
 
 void

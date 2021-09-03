@@ -231,7 +231,6 @@
 		50EB8CCE2530710E0053988A /* ExportVideoDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */; };
 		50ECF98622B153FB007B3DE7 /* ExtendedRomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */; };
 		50EFB06826C3C872002145B4 /* SuspendableThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB06626C3C872002145B4 /* SuspendableThread.cpp */; };
-		50EFF1E826E25A5D00296065 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 50EFF1E726E25A5D00296065 /* Makefile */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
 		50F31C292409322F008A54D8 /* CopperBlitterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F31C282409322F008A54D8 /* CopperBlitterPanel.swift */; };
 		50F54B2524B5D31D0078FDC9 /* u_heavy.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B0C24B5D31D0078FDC9 /* u_heavy.c */; };
@@ -1784,7 +1783,6 @@
 				50F54B2B24B5D31D0078FDC9 /* maketbl.c in Sources */,
 				50F54B3324B5DDAF0078FDC9 /* DMSFile.cpp in Sources */,
 				50F54B2524B5D31D0078FDC9 /* u_heavy.c in Sources */,
-				50EFF1E826E25A5D00296065 /* Makefile in Sources */,
 				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,

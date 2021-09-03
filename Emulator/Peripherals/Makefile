@@ -17,6 +17,9 @@ subdirs:
 clean:
 	@echo "Cleaning up $(CURDIR)"
 	@rm -f *.o
+	@for dir in $(SUBDIRS); do \
+		$(MAKE) $(MAKEOPT) -C $$dir clean; \
+	done
 
 %.o: %.cpp
 	@echo "Compiling $<"

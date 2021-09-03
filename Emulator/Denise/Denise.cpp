@@ -480,7 +480,7 @@ Denise::translate()
     conChanges.insert(sizeof(bBuffer), RegChange { SET_NONE, 0 });
 
     // Iterate over all recorded register changes
-    for (isize i = conChanges.begin(); i != conChanges.end(); i = conChanges.next(i)) {
+    for (isize i = 0, end = conChanges.end(); i < end; i++) {
 
         Cycle trigger = conChanges.keys[i];
         RegChange &change = conChanges.elements[i];
@@ -660,11 +660,8 @@ Denise::drawSpritePair()
     
     // Iterate over all recorded register changes
     if (!sprChanges[pair].isEmpty()) {
-        
-        isize begin = sprChanges[pair].begin();
-        isize end = sprChanges[pair].end();
-        
-        for (isize i = begin; i != end; i = sprChanges[pair].next(i)) {
+                
+        for (isize i = 0, end = sprChanges[pair].end(); i < end; i++) {
             
             Cycle trigger = sprChanges[pair].keys[i];
             RegChange &change = sprChanges[pair].elements[i];
@@ -741,11 +738,8 @@ Denise::replaySpriteRegChanges()
 {
     constexpr isize sprite1 = 2 * pair;
     constexpr isize sprite2 = 2 * pair + 1;
-    
-    isize begin = sprChanges[pair].begin();
-    isize end = sprChanges[pair].end();
-    
-    for (isize i = begin; i != end; i = sprChanges[pair].next(i)) {
+        
+    for (isize i = 0, end = sprChanges[pair].end(); i < end; i++) {
         
         RegChange &change = sprChanges[pair].elements[i];
         
