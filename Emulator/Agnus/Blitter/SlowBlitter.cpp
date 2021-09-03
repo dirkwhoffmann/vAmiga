@@ -37,20 +37,20 @@
  *      REPEAT : Performs a conditional jump back to instruction 0
  */
 
-static const u16 NOTHING   = 0b0000'0000'0000'0000;
-static const u16 BUSIDLE   = 0b0000'0000'0000'0001;
-static const u16 BUS       = 0b0000'0000'0000'0010;
-static const u16 WRITE_D   = 0b0000'0000'0000'0100;
-static const u16 FETCH_A   = 0b0000'0000'0000'1000;
-static const u16 FETCH_B   = 0b0000'0000'0001'0000;
-static const u16 FETCH_C   = 0b0000'0000'0010'0000;
-static const u16 HOLD_A    = 0b0000'0000'0100'0000;
-static const u16 HOLD_B    = 0b0000'0000'1000'0000;
-static const u16 HOLD_D    = 0b0000'0001'0000'0000;
-static const u16 FILL      = 0b0000'0010'0000'0000;
-static const u16 BLTDONE   = 0b0000'0100'0000'0000;
-static const u16 REPEAT    = 0b0000'1000'0000'0000;
-static const u16 FETCH     = FETCH_A | FETCH_B | FETCH_C;
+static constexpr u16 NOTHING   = 0b0000'0000'0000'0000;
+static constexpr u16 BUSIDLE   = 0b0000'0000'0000'0001;
+static constexpr u16 BUS       = 0b0000'0000'0000'0010;
+static constexpr u16 WRITE_D   = 0b0000'0000'0000'0100;
+static constexpr u16 FETCH_A   = 0b0000'0000'0000'1000;
+static constexpr u16 FETCH_B   = 0b0000'0000'0001'0000;
+static constexpr u16 FETCH_C   = 0b0000'0000'0010'0000;
+static constexpr u16 HOLD_A    = 0b0000'0000'0100'0000;
+static constexpr u16 HOLD_B    = 0b0000'0000'1000'0000;
+static constexpr u16 HOLD_D    = 0b0000'0001'0000'0000;
+static constexpr u16 FILL      = 0b0000'0010'0000'0000;
+static constexpr u16 BLTDONE   = 0b0000'0100'0000'0000;
+static constexpr u16 REPEAT    = 0b0000'1000'0000'0000;
+static constexpr u16 FETCH     = FETCH_A | FETCH_B | FETCH_C;
 
 void
 Blitter::initSlowBlitter()
@@ -870,7 +870,7 @@ Blitter::beginSlowLineBlit()
     assert(bltconLINE());
 
     /* Note: There is no such thing as a slow line Blitter yet. Until such a
-     * thing has been implemented, we call the fast Blitter instead.
+     * thing has been implemented, we call the FastBlitter instead.
      */
 
     beginFakeLineBlit();
@@ -985,7 +985,8 @@ Blitter::exec()
                 check1 = util::fnv_1a_it32(check1, dhold);
                 check2 = util::fnv_1a_it32(check2, bltdpt);
             }
-            trace(BLT_DEBUG, "D: poke(%X), %X (check: %X %X)\n", bltdpt, dhold, check1, check2);
+            trace(BLT_DEBUG, "    D = %X -> %X\n", dhold, bltdpt);
+            
             bltdpt = U32_ADD(bltdpt, desc ? -2 : 2);
             if (--cntD == 0) {
                 bltdpt = U32_ADD(bltdpt, desc ? -bltdmod : bltdmod);
@@ -1000,8 +1001,8 @@ Blitter::exec()
         trace(BLT_DEBUG, "FETCH_A\n");
 
         anew = agnus.doBlitterDmaRead(bltapt);
-        trace(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
-        trace(BLT_DEBUG, "    After fetch: A = %X\n", anew);
+        trace(BLT_DEBUG, "    A = %X <- %X\n", anew, bltapt);
+        
         bltapt = U32_ADD(bltapt, desc ? -2 : 2);
         if (--cntA == 0) {
             bltapt = U32_ADD(bltapt, desc ? -bltamod : bltamod);
@@ -1014,8 +1015,8 @@ Blitter::exec()
         trace(BLT_DEBUG, "FETCH_B\n");
 
         bnew = agnus.doBlitterDmaRead(bltbpt);
-        trace(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
-        trace(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
+        trace(BLT_DEBUG, "    B = %X <- %X\n", bnew, bltbpt);
+        
         bltbpt = U32_ADD(bltbpt, desc ? -2 : 2);
         if (--cntB == 0) {
             bltbpt = U32_ADD(bltbpt, desc ? -bltbmod : bltbmod);
@@ -1028,8 +1029,8 @@ Blitter::exec()
         trace(BLT_DEBUG, "FETCH_C\n");
 
         chold = agnus.doBlitterDmaRead(bltcpt);
-        trace(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
-        trace(BLT_DEBUG, "    After fetch: C = %X\n", chold);
+        trace(BLT_DEBUG, "    C = %X <- %X\n", chold, bltcpt);
+        
         bltcpt = U32_ADD(bltcpt, desc ? -2 : 2);
         if (--cntC == 0) {
             bltcpt = U32_ADD(bltcpt, desc ? -bltcmod : bltcmod);
@@ -1041,17 +1042,13 @@ Blitter::exec()
 
         trace(BLT_DEBUG, "HOLD_A\n");
 
-        trace(BLT_DEBUG, "    After masking with %x (%x,%x) %x\n", mask, bltafwm, bltalwm, anew & mask);
-
         // Run the barrel shifters on data path A
-        trace(BLT_DEBUG, "    ash = %d mask = %X\n", bltconASH(), mask);
         if (desc) {
             ahold = (u16)(HI_W_LO_W(anew & mask, aold) >> (16 - bltconASH()));
         } else {
             ahold = (u16)(HI_W_LO_W(aold, anew & mask) >> bltconASH());
         }
         aold = anew & mask;
-        trace(BLT_DEBUG, "    After shifting A (%d) A = %x\n", bltconASH(), ahold);
     }
 
     if constexpr ((bool)(instr & HOLD_B)) {
@@ -1059,14 +1056,12 @@ Blitter::exec()
         trace(BLT_DEBUG, "HOLD_B\n");
 
         // Run the barrel shifters on data path B
-        trace(BLT_DEBUG, "    bsh = %d\n", bltconBSH());
         if (desc) {
             bhold = (u16)(HI_W_LO_W(bnew, bold) >> (16 - bltconBSH()));
         } else {
             bhold = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
         }
         bold = bnew;
-        trace(BLT_DEBUG, "    After shifting B (%d) B = %x\n", bltconBSH(), bhold);
     }
 
     if constexpr ((bool)(instr & HOLD_D)) {
@@ -1074,8 +1069,8 @@ Blitter::exec()
         trace(BLT_DEBUG, "HOLD_D\n");
 
         // Run the minterm logic circuit
-        trace(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
         dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
+
         if constexpr (BLT_DEBUG) {
             assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
         }
@@ -1109,10 +1104,6 @@ Blitter::exec()
             bltpc = newpc;
             resetXCounter();
             decYCounter();
-
-        } else {
-
-            // signalEnd();
         }
     }
 
@@ -1177,10 +1168,6 @@ Blitter::fakeExec()
             bltpc = newpc;
             resetXCounter();
             decYCounter();
-
-        } else {
-
-            // signalEnd();
         }
     }
 

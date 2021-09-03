@@ -109,31 +109,24 @@ void Blitter::doFastCopyBlit()
             // Fetch A
             if (useA) {
                 anew = mem.peek16 <ACCESSOR_AGNUS> (apt);
-                trace(BLT_DEBUG, "    A = peek(%X) = %X\n", apt, anew);
+                trace(BLT_DEBUG, "    A = %X <- %X\n", anew, apt);
                 apt = U32_ADD(apt, incr);
             }
 
             // Fetch B
             if (useB) {
                 bnew = mem.peek16 <ACCESSOR_AGNUS> (bpt);
-                trace(BLT_DEBUG, "    B = peek(%X) = %X\n", bpt, bnew);
+                trace(BLT_DEBUG, "    B = %X <- %X\n", bnew, bpt);
                 bpt = U32_ADD(bpt, incr);
             }
 
             // Fetch C
             if (useC) {
                 chold = mem.peek16 <ACCESSOR_AGNUS> (cpt);
-                trace(BLT_DEBUG, "    C = peek(%X) = %X\n", cpt, chold);
+                trace(BLT_DEBUG, "    C = %X <- %X\n", chold, cpt);
                 cpt = U32_ADD(cpt, incr);
             }
             
-            trace(BLT_DEBUG, "    After fetch: A = %x B = %x C = %x\n",
-                  anew, bnew, chold);
-            trace(BLT_DEBUG, "    After masking with %x (%x,%x) %x\n",
-                  mask, bltafwm, bltalwm, anew & mask);
-            trace(BLT_DEBUG, "    ash = %d bsh = %d mask = %X\n",
-                  bltconASH(), bltconBSH(), mask);
-
             // Run the barrel shifter on path A (even if A channel is disabled)
             if (desc) {
                 doBarrelAdesc(anew & mask, &aold, &ahold);
@@ -149,11 +142,8 @@ void Blitter::doFastCopyBlit()
                     doBarrelB(bnew, &bold, &bhold);
                 }
             }
-
-            trace(BLT_DEBUG, "    After shifting (%d,%d) A = %x B = %x\n", ash, bsh, ahold, bhold);
             
             // Run the minterm logic circuit
-            trace(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
             dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
             if constexpr (BLT_DEBUG) {
                 assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
@@ -173,7 +163,8 @@ void Blitter::doFastCopyBlit()
                     check1 = util::fnv_1a_it32(check1, dhold);
                     check2 = util::fnv_1a_it32(check2, dpt & agnus.ptrMask);
                 }
-                trace(BLT_DEBUG, "D: poke(%X), %X  (check: %X %X)\n", dpt, dhold, check1, check2);
+                trace(BLT_DEBUG, "    D = %X -> %X\n", dhold, dpt);
+                
                 dpt = U32_ADD(dpt, incr);
             }
 
