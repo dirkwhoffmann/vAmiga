@@ -13,6 +13,7 @@
 #include "IO.h"
 #include "MsgQueue.h"
 #include <cmath>
+#include <algorithm>
 
 Muxer::Muxer(Amiga& ref) : SubComponent(ref)
 {
