@@ -564,7 +564,7 @@ Drive::readyToStep() const
 void
 Drive::step(isize dir)
 {    
-    // Update disk change signal
+    // Update the disk change signal
     if (hasDisk()) dskchange = true;
  
     // Only proceed if the last head step was a while ago
@@ -595,10 +595,10 @@ Drive::step(isize dir)
     // Notify the GUI
     if (pollsForDisk()) {
         msgQueue.put(MSG_DRIVE_POLL,
-                         config.pan << 24 | config.pollVolume << 16 | head.cylinder << 8 | nr);
+                     config.pan << 24 | config.pollVolume << 16 | head.cylinder << 8 | nr);
     } else {
         msgQueue.put(MSG_DRIVE_STEP,
-                         config.pan << 24 | config.stepVolume << 16 | head.cylinder << 8 | nr);
+                     config.pan << 24 | config.stepVolume << 16 | head.cylinder << 8 | nr);
     }
         
     // Remember when we've performed the step
@@ -624,9 +624,9 @@ Drive::pollsForDisk() const
     /* Head polling sequences of different Kickstart versions:
      *
      * Kickstart 1.2 and 1.3: 0-1-0-1-0-1-...
-     * Kickstart 2.0:         0-1-2-3-2-1-...
+     * Kickstart 2.0:         0-1-2-3-2-3-...
      */
-    static constexpr u64 signature[] = {
+    static constexpr u64 signature[4] = {
 
         // Kickstart 1.2 and 1.3
         0x010001000100,
@@ -634,11 +634,11 @@ Drive::pollsForDisk() const
 
         // Kickstart 2.0
         0x020302030203,
-        0x030203020302,
+        0x030203020302
     };
 
     u64 mask = 0xFFFFFFFF;
-    for (isize i = 0; i < isizeof(signature) / 8; i++) {
+    for (isize i = 0; i < 4; i++) {
         if ((cylinderHistory & mask) == (signature[i] & mask)) return true;
     }
 

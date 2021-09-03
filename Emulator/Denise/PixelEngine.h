@@ -92,7 +92,7 @@ public:
     ~PixelEngine();
 
     //
-    // Methods From AmigaObject
+    // Methods from AmigaObject
     //
     
 private:

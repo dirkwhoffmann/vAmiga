@@ -61,7 +61,7 @@ Blitter::beginFastCopyBlit()
     // Only call this function in copy blit mode
     assert(!bltconLINE());
 
-    // Run the fast copy Bliter
+    // Run the fast copy Blitter
     int nr = ((bltcon0 >> 7) & 0b11110) | bltconDESC();
     (this->*blitfunc[nr])();
 
@@ -83,8 +83,6 @@ void Blitter::doFastCopyBlit()
     bool fillCarry;
 
     int incr = desc ? -2 : 2;
-    [[maybe_unused]] int ash  = desc ? 16 - bltconASH() : bltconASH();
-    [[maybe_unused]] int bsh  = desc ? 16 - bltconBSH() : bltconBSH();
     i32 amod = desc ? -bltamod : bltamod;
     i32 bmod = desc ? -bltbmod : bltbmod;
     i32 cmod = desc ? -bltcmod : bltcmod;

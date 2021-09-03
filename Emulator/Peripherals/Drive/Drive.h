@@ -26,13 +26,16 @@ class Drive : public SubComponent {
     // Result of the latest inspection
     mutable DriveInfo info = {};
 
+    // The current head location
+    DriveHead head;
+
     // Drive motor status (on or off)
     bool motor;
     
-    // Time stamp indicating the the latest change of the motor status
+    // Time stamp indicating the latest change of the motor status
     Cycle switchCycle;
     
-    // Recorded motor speed at 'motorCycle' in percent
+    // Recorded motor speed at 'switchCycle' in percent
     double switchSpeed;
     
     // Position of the currently transmitted identification bit
@@ -41,12 +44,12 @@ class Drive : public SubComponent {
     // Value of the currently transmitted identification bit
     bool idBit;
 
-    // Records when the head started to step to another cylinder
+    // Time stamp indicating when the head started to step to another cylinder
     Cycle stepCycle;
     
     /* Disk change status. This variable controls the /CHNG bit in the CIA A
-     * PRA register. Note that the variable only changes its value under
-     * certain circumstances. If a head movement pulse is sent and no disk is
+     * PRA register. Note that the variable only changes it's value under
+     * certain conditions. If a head movement pulse is send and no disk is
      * inserted, the variable is set to false (which is also the reset value).
      * It becomes true when a disk is ejected.
      */
@@ -57,10 +60,7 @@ class Drive : public SubComponent {
     
     // A copy of the PRB register of CIA B
     u8 prb;
-    
-    // The current drive head location
-    DriveHead head;
-    
+        
     /* History buffer storing the most recently visited tracks. The buffer is
      * used to detect the polling head movements that are issued by track disc
      * device to detect a newly inserted disk.
@@ -83,7 +83,7 @@ public:
     
     
     //
-    // Methods From AmigaObject
+    // Methods from AmigaObject
     //
     
 private:
@@ -119,6 +119,9 @@ private:
             
             worker
             
+            << head.side
+            << head.cylinder
+            << head.offset
             << motor
             << switchCycle
             << switchSpeed
@@ -128,9 +131,6 @@ private:
             << dskchange
             << dsklen
             << prb
-            << head.side
-            << head.cylinder
-            << head.offset
             << cylinderHistory;
         }
     }
@@ -160,7 +160,7 @@ public:
 
 public:
     
-    long getNr() { return nr; }
+    isize getNr() { return nr; }
     DriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
  
 
@@ -170,8 +170,10 @@ public:
 
 public:
 
-    // Identification mode
+    // Returns true iff the drive is in identification mode
     bool idMode() const;
+    
+    // Return the identification pattern of this drive
     u32 getDriveId() const;
 
     // Operation
@@ -182,8 +184,8 @@ public:
     // Handling the drive status register flags
     //
     
-    // Returns true if this drive is currently selected
-    inline bool isSelected() const { return (prb & (0b1000 << nr)) == 0; }
+    // Returns true if the drive is currently selected
+    bool isSelected() const { return (prb & (0b1000 << nr)) == 0; }
     
     u8 driveStatusFlags() const;
     

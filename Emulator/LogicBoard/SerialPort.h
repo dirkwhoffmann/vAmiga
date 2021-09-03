@@ -43,7 +43,7 @@ public:
 
     
     //
-    // Methods From AmigaObject
+    // Methods from AmigaObject
     //
     
 private:
