@@ -45,15 +45,19 @@ public extension MetalView {
         case .compatibleFileURL:
             if let url = NSURL.init(from: pasteBoard) as URL? {
             
+                // Unpack the file if it is compressed
+                draggedUrl = url.unpacked(maxSize: 2048 * 1024)
+
+                // Analyze the file type
+                let type = AmigaFileProxy.type(of: draggedUrl)
+                
                 // Open the drop zone layer
-                let type = AmigaFileProxy.type(of: url)
                 parent.renderer.dropZone.open(type: type, delay: 0.25)
             }
 
             return NSDragOperation.copy
             
         default:
-            track("Unsupported type")
             return NSDragOperation()
         }
     }
@@ -116,7 +120,7 @@ public extension MetalView {
             
         case .compatibleFileURL:
             
-            if let url = NSURL(from: pasteBoard) as URL? {
+            if let url = draggedUrl {
                 
                 do {
                     // Check drop zones

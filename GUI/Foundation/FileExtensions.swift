@@ -91,11 +91,11 @@ extension URL {
     // Returns all files inside a folder
     func contents(allowedTypes: [String]? = nil) throws -> [URL] {
         
+        // Collect files
         let urls = try FileManager.default.contentsOfDirectory(
             at: self, includingPropertiesForKeys: nil,
             options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
         )
-        track("urls = \(urls)")
 
         // Filter out sub directories
         var filtered = urls.filter {
@@ -106,7 +106,7 @@ extension URL {
         filtered = filtered.filter {
             allowedTypes?.contains($0.pathExtension.uppercased()) ?? true
         }
-        track("filtered = \(filtered)")
+        
         return filtered
     }
     
@@ -131,6 +131,13 @@ extension URL {
         return dest
     }
     
+    func unpacked(maxSize: Int) -> URL {
+        
+        if fileSize < maxSize { return unpacked }
+        
+        return self
+    }
+
     var unpacked: URL {
         
         if self.pathExtension == "zip" || self.pathExtension == "adz" {
