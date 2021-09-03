@@ -2,42 +2,17 @@ SUBDIRS = \
 Agnus Base CIA CPU Denise FileSystems LogicBoard Media Memory Paula \
 Peripherals RetroShell Utilities xdms
 
-MYCC = g++ -std=c++17 -Wfatal-errors
-MYFLAGS = \
--Wall \
--I $(CURDIR)/.. \
--I $(CURDIR) \
--I $(CURDIR)/Agnus \
--I $(CURDIR)/Agnus/Blitter \
--I $(CURDIR)/Agnus/Copper \
--I $(CURDIR)/CIA \
--I $(CURDIR)/CPU \
--I $(CURDIR)/CPU/Moira \
--I $(CURDIR)/Denise \
--I $(CURDIR)/Media \
--I $(CURDIR)/Media/DiskFiles \
--I $(CURDIR)/Media/RomFiles \
--I $(CURDIR)/FileSystems \
--I $(CURDIR)/Base \
--I $(CURDIR)/LogicBoard \
--I $(CURDIR)/Memory \
--I $(CURDIR)/Paula \
--I $(CURDIR)/Paula/Audio \
--I $(CURDIR)/Paula/DiskController \
--I $(CURDIR)/Paula/UART \
--I $(CURDIR)/Peripherals \
--I $(CURDIR)/Peripherals/Mouse \
--I $(CURDIR)/Peripherals/Joystick \
--I $(CURDIR)/Peripherals/Keyboard \
--I $(CURDIR)/Peripherals/Drive \
--I $(CURDIR)/RetroShell \
--I $(CURDIR)/Utilities \
--I $(CURDIR)/xdms
+EXEC       = vamiga
+CXX        = g++
+CC         = $(CXX)
+CCFLAGS    = -std=c++17 -O3 -Wall -Wfatal-errors
+CPPFLAGS   = -I $(CURDIR)/.. $(addprefix -I, $(shell find $(CURDIR) -type d))
+LDFLAGS    = -pthread
 
-export MYCC MYFLAGS
+export CC CCFLAGS CPPFLAGS
 
-DEPS =
-OBJ = Amiga.o
+SRC=$(wildcard *.cpp)
+OBJ=$(SRC:.cpp=.o)
 
 .PHONY: all prebuild subdirs clean bin
 
@@ -61,9 +36,9 @@ clean:
 	done
 
 bin:
-	@echo "Linking vAmiga"
-	@g++ -pthread -o vAmiga *.o */*.o */*/*.o
+	@echo "Linking"
+	@$(CC) $(LDFLAGS) -o $(EXEC) *.o */*.o */*/*.o
 
 %.o: %.cpp $(DEPS)
 	@echo "Compiling $<"
-	@$(MYCC) $(MYFLAGS) -c -o $@ $<
+	@$(CC) $(CCFLAGS) $(CPPFLAGS) -c -o $@ $<

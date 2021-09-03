@@ -18,6 +18,6 @@ clean:
 	@echo "Cleaning up $(CURDIR)"
 	@rm -f *.o
 
-%.o: %.cpp $(DEPS)
+%.o: %.cpp
 	@echo "Compiling $<"
-	@$(MYCC) $(MYFLAGS) -c -o $@ $< $(CFLAGS)
+	@$(CC) $(CCFLAGS) $(CPPFLAGS) -c -o $@ $< $(CFLAGS)
