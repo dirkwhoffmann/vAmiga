@@ -32,7 +32,7 @@ Blitter::setBLTCON0(u16 value)
 void
 Blitter::pokeBLTCON0L(u16 value)
 {
-    debug(std::max(BLTREG_DEBUG, ECSREG_DEBUG), "pokeBLTCON0L(%X)\n", value);
+    debug(BLTREG_DEBUG || ECSREG_DEBUG, "pokeBLTCON0L(%X)\n", value);
 
     // ECS only register
     if (agnus.isOCS()) return;
@@ -264,7 +264,7 @@ Blitter::setBLTSIZE(u16 value)
 void
 Blitter::pokeBLTSIZV(u16 value)
 {
-    debug(std::max(BLTREG_DEBUG, ECSREG_DEBUG), "pokeBLTSIZV(%X)\n", value);
+    debug(BLTREG_DEBUG || ECSREG_DEBUG, "pokeBLTSIZV(%X)\n", value);
 
     // ECS only register
     if (agnus.isOCS()) return;
@@ -287,7 +287,7 @@ Blitter::setBLTSIZV(u16 value)
 void
 Blitter::pokeBLTSIZH(u16 value)
 {
-    debug(std::max(BLTREG_DEBUG, ECSREG_DEBUG), "pokeBLTSIZH(%X)\n", value);
+    debug(BLTREG_DEBUG || ECSREG_DEBUG, "pokeBLTSIZH(%X)\n", value);
 
     // ECS only register
     if (agnus.isOCS()) return;
@@ -382,9 +382,9 @@ Blitter::pokeBLTBDAT(u16 value)
     
     // Writing BLTBDAT triggers the barrel shifter circuit (unlike BLTADAT)
     if (bltconDESC()) {
-        doBarrelBdesc(bnew, &bold, &bhold);
+        doBarrelBdesc(bnew, bold, bhold);
     } else {
-        doBarrelB(bnew, &bold, &bhold);
+        doBarrelB(bnew, bold, bhold);
     }    
 }
 

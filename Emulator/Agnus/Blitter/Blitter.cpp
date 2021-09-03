@@ -19,7 +19,7 @@ Blitter::Blitter(Amiga& ref) : SubComponent(ref)
     // Allocate memory if accessed memory cells should be tracked
     if constexpr (BLT_GUARD) memguard = new u8[KB(512)]();
 
-    // Initialize fill pattern tables    
+    // Initialize the fill pattern tables    
     for (isize carryIn = 0; carryIn < 2; carryIn++) {
         
         for (isize byte = 0; byte < 256; byte++) {
@@ -225,31 +225,31 @@ Blitter::_dump(dump::Category category, std::ostream& os) const
 }
 
 void
-Blitter::doBarrelA(u16 aNew, u16 *aOld, u16 *aHold) const
+Blitter::doBarrelA(u16 aNew, u16 &aOld, u16 &aHold) const
 {
-    *aHold = (u16)(HI_W_LO_W(*aOld, aNew) >> bltconASH());
-    *aOld  = aNew;
+    aHold = (u16)(HI_W_LO_W(aOld, aNew) >> bltconASH());
+    aOld  = aNew;
 }
 
 void
-Blitter::doBarrelAdesc(u16 aNew, u16 *aOld, u16 *aHold) const
+Blitter::doBarrelAdesc(u16 aNew, u16 &aOld, u16 &aHold) const
 {
-    *aHold = (u16)(HI_W_LO_W(aNew, *aOld) >> (16 - bltconASH()));
-    *aOld  = aNew;
+    aHold = (u16)(HI_W_LO_W(aNew, aOld) >> (16 - bltconASH()));
+    aOld  = aNew;
 }
 
 void
-Blitter::doBarrelB(u16 bNew, u16 *bOld, u16 *bHold) const
+Blitter::doBarrelB(u16 bNew, u16 &bOld, u16 &bHold) const
 {
-    *bHold = (u16)(HI_W_LO_W(*bOld, bNew) >> bltconBSH());
-    *bOld  = bNew;
+    bHold = (u16)(HI_W_LO_W(bOld, bNew) >> bltconBSH());
+    bOld  = bNew;
 }
 
 void
-Blitter::doBarrelBdesc(u16 bNew, u16 *bOld, u16 *bHold) const
+Blitter::doBarrelBdesc(u16 bNew, u16 &bOld, u16 &bHold) const
 {
-    *bHold = (u16)(HI_W_LO_W(bNew, *bOld) >> (16 - bltconBSH()));
-    *bOld  = bNew;
+    bHold = (u16)(HI_W_LO_W(bNew, bOld) >> (16 - bltconBSH()));
+    bOld  = bNew;
 }
 
 u16

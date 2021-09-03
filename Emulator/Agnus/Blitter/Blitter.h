@@ -313,7 +313,7 @@ public:
     // Returns the value of the Blitter Busy Flag
     bool isBusy() const { return bbusy; }
 
-    // Returns the value of the zero flag
+    // Returns the value of the Blitter Zero Flag
     bool isZero() const { return bzero; }
 
     // BLTCON0
@@ -406,10 +406,10 @@ public:
 private:
     
     // Runs the barrel shifters on data paths A and B
-    void doBarrelA    (u16 aNew, u16 *aOld, u16 *aHold) const;
-    void doBarrelAdesc(u16 aNew, u16 *aOld, u16 *aHold) const;
-    void doBarrelB    (u16 bNew, u16 *bOld, u16 *bHold) const;
-    void doBarrelBdesc(u16 bNew, u16 *bOld, u16 *bHold) const;
+    void doBarrelA    (u16 aNew, u16 &aOld, u16 &aHold) const;
+    void doBarrelAdesc(u16 aNew, u16 &aOld, u16 &aHold) const;
+    void doBarrelB    (u16 bNew, u16 &bOld, u16 &bHold) const;
+    void doBarrelBdesc(u16 bNew, u16 &bOld, u16 &bHold) const;
 
     // Emulates the minterm logic circuit
     u16 doMintermLogic     (u16 a, u16 b, u16 c, u8 minterm) const;

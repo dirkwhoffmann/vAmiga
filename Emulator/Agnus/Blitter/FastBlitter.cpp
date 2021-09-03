@@ -129,17 +129,17 @@ void Blitter::doFastCopyBlit()
             
             // Run the barrel shifter on path A (even if A channel is disabled)
             if (desc) {
-                doBarrelAdesc(anew & mask, &aold, &ahold);
+                doBarrelAdesc(anew & mask, aold, ahold);
             } else {
-                doBarrelA(anew & mask, &aold, &ahold);
+                doBarrelA(anew & mask, aold, ahold);
             }
             
             // Run the barrel shifter on path B (if B channel enabled)
             if (useB) {
                 if (desc) {
-                    doBarrelBdesc(bnew, &bold, &bhold);
+                    doBarrelBdesc(bnew, bold, bhold);
                 } else {
-                    doBarrelB(bnew, &bold, &bhold);
+                    doBarrelB(bnew, bold, bhold);
                 }
             }
             
