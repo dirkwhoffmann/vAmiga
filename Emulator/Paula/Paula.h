@@ -25,7 +25,6 @@ private:
 
     // Result of the latest inspection
     mutable PaulaInfo info = {};
-    mutable AudioInfo audioInfo = {};
 
     
     //
@@ -177,7 +176,7 @@ private:
 public:
     
     PaulaInfo getInfo() const { return AmigaComponent::getInfo(info); }
-    AudioInfo getAudioInfo() const { return AmigaComponent::getInfo(audioInfo); }
+    // AudioInfo getAudioInfo() const { return AmigaComponent::getInfo(audioInfo); }
 
 
     //

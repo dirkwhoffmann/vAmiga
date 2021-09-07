@@ -23,6 +23,15 @@ Sampler::reset()
 template <SamplingMethod method> i16
 Sampler::interpolate(Cycle clock)
 {
+    /* Interploation involves two major steps. In the first step, the function
+     * computes index position r1 with the following property:
+     *
+     *     Cycle of sample at r1 <= Target cycle < Cycle of sample at r1 + 1
+     *
+     * In the second step, the function interpolated between the two samples at
+     * r1 and r1 + 1 based on the requested method.
+     */
+
     assert(!isEmpty());
 
     isize r1 = r;

@@ -234,7 +234,7 @@ class Canvas: Layer {
             return
         }
         
-        // Get a pointer to most recent texture
+        // Get a pointer to the most recent texture
         let buffer = amiga.denise.stableBuffer
         precondition(buffer.data != nil)
         
