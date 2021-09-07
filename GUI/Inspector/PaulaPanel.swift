@@ -18,8 +18,11 @@ extension Inspector {
     private func cachePaula() {
 
         paulaInfo = amiga.paula.info
-        audioInfo = amiga.paula.audioInfo
-        diskInfo  = amiga.diskController.info
+        audioInfo0 = amiga.paula.audioInfo0
+        audioInfo1 = amiga.paula.audioInfo1
+        audioInfo2 = amiga.paula.audioInfo2
+        audioInfo3 = amiga.paula.audioInfo3
+        diskInfo = amiga.diskController.info
     }
 
     func refreshPaula(count: Int = 0, full: Bool = false) {
@@ -161,7 +164,8 @@ extension Inspector {
         }
 
         // Audio
-        func assignImage(_ button: NSButton, info: AudioChannelInfo, displayState: inout Int) {
+        func assignImage(_ button: NSButton,
+                         info: StateMachineInfo, displayState: inout Int) {
 
             // Determine the state to display
             switch displayState {
@@ -190,34 +194,29 @@ extension Inspector {
             }
         }
 
-        let info0 = audioInfo.channel.0
-        let info1 = audioInfo.channel.1
-        let info2 = audioInfo.channel.2
-        let info3 = audioInfo.channel.3
+        audioLen0.intValue = Int32(audioInfo0.audlenLatch)
+        audioPer0.intValue = Int32(audioInfo0.audperLatch)
+        audioVol0.intValue = Int32(audioInfo0.audvolLatch)
+        audioDat0.intValue = Int32(audioInfo0.auddat)
 
-        audioLen0.intValue = Int32(info0.audlenLatch)
-        audioPer0.intValue = Int32(info0.audperLatch)
-        audioVol0.intValue = Int32(info0.audvolLatch)
-        audioDat0.intValue = Int32(info0.auddat)
+        audioLen1.intValue = Int32(audioInfo1.audlenLatch)
+        audioPer1.intValue = Int32(audioInfo1.audperLatch)
+        audioVol1.intValue = Int32(audioInfo1.audvolLatch)
+        audioDat1.intValue = Int32(audioInfo1.auddat)
 
-        audioLen1.intValue = Int32(info1.audlenLatch)
-        audioPer1.intValue = Int32(info1.audperLatch)
-        audioVol1.intValue = Int32(info1.audvolLatch)
-        audioDat1.intValue = Int32(info1.auddat)
-
-        audioLen2.intValue = Int32(info2.audlenLatch)
-        audioPer2.intValue = Int32(info2.audperLatch)
-        audioVol2.intValue = Int32(info2.audvolLatch)
-        audioDat2.intValue = Int32(info2.auddat)
+        audioLen2.intValue = Int32(audioInfo2.audlenLatch)
+        audioPer2.intValue = Int32(audioInfo2.audperLatch)
+        audioVol2.intValue = Int32(audioInfo2.audvolLatch)
+        audioDat2.intValue = Int32(audioInfo2.auddat)
         
-        audioLen3.intValue = Int32(info3.audlenLatch)
-        audioPer3.intValue = Int32(info3.audperLatch)
-        audioVol3.intValue = Int32(info3.audvolLatch)
-        audioDat3.intValue = Int32(info3.auddat)
+        audioLen3.intValue = Int32(audioInfo3.audlenLatch)
+        audioPer3.intValue = Int32(audioInfo3.audperLatch)
+        audioVol3.intValue = Int32(audioInfo3.audvolLatch)
+        audioDat3.intValue = Int32(audioInfo3.auddat)
 
-        assignImage(audioImg0, info: info0, displayState: &displayState0)
-        assignImage(audioImg1, info: info1, displayState: &displayState1)
-        assignImage(audioImg2, info: info2, displayState: &displayState2)
-        assignImage(audioImg3, info: info3, displayState: &displayState3)
+        assignImage(audioImg0, info: audioInfo0, displayState: &displayState0)
+        assignImage(audioImg1, info: audioInfo1, displayState: &displayState1)
+        assignImage(audioImg2, info: audioInfo2, displayState: &displayState2)
+        assignImage(audioImg3, info: audioInfo3, displayState: &displayState3)
     }
 }
