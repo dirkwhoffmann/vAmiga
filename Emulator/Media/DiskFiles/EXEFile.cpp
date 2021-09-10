@@ -47,15 +47,15 @@ EXEFile::readFromStream(std::istream &stream)
     volume.makeBootable(BB_AMIGADOS_13);
     
     // Add the executable
-    FSBlock *file = volume.makeFile("file", data, size);
+    FSBlock *file = volume.createFile("file", data, size);
     if (!file) throw VAError(ERROR_FS_OUT_OF_SPACE);
     
     // Add a script directory
-    volume.makeDir("s");
+    volume.createDir("s");
     volume.changeDir("s");
     
     // Add a startup sequence
-    file = volume.makeFile("startup-sequence", "file");
+    file = volume.createFile("startup-sequence", "file");
     if (!file) throw VAError(ERROR_FS_OUT_OF_SPACE);
 
     // Finalize

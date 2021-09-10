@@ -347,7 +347,7 @@ FSDevice::getPath(FSBlock *block)
 }
 
 FSBlock *
-FSDevice::makeDir(const string &name)
+FSDevice::createDir(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
     FSUserDirBlock *block = cdb->partition.newUserDirBlock(name);
@@ -360,7 +360,7 @@ FSDevice::makeDir(const string &name)
 }
 
 FSBlock *
-FSDevice::makeFile(const string &name)
+FSDevice::createFile(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
     FSFileHeaderBlock *block = cdb->partition.newFileHeaderBlock(name);
@@ -373,11 +373,11 @@ FSDevice::makeFile(const string &name)
 }
 
 FSBlock *
-FSDevice::makeFile(const string &name, const u8 *buf, isize size)
+FSDevice::createFile(const string &name, const u8 *buf, isize size)
 {
     assert(buf);
 
-    FSBlock *block = makeFile(name);
+    FSBlock *block = createFile(name);
     
     if (block) {
         assert(block->type() == FS_FILEHEADER_BLOCK);
@@ -388,9 +388,9 @@ FSDevice::makeFile(const string &name, const u8 *buf, isize size)
 }
 
 FSBlock *
-FSDevice::makeFile(const string &name, const string &str)
+FSDevice::createFile(const string &name, const string &str)
 {
-    return makeFile(name, (const u8 *)str.c_str(), str.size());
+    return createFile(name, (const u8 *)str.c_str(), str.size());
 }
 
 Block
@@ -867,7 +867,7 @@ FSDevice::importDirectory(const string &path, DIR *dir, bool recursive)
         if (item->d_type == DT_DIR) {
             
             // Add directory
-            if(makeDir(item->d_name) && recursive) {
+            if(createDir(item->d_name) && recursive) {
                 changeDir(item->d_name);
                 importDirectory(name, recursive);
             }
@@ -877,7 +877,7 @@ FSDevice::importDirectory(const string &path, DIR *dir, bool recursive)
             // Add file
             u8 *buffer; isize size;
             if (util::loadFile(string(name), &buffer, &size)) {
-                makeFile(item->d_name, buffer, size);
+                createFile(item->d_name, buffer, size);
                 delete(buffer);
             }
         }        
