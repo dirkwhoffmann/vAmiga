@@ -18,7 +18,7 @@ template <isize nr>
 class StateMachine : public SubComponent {
 
     // Result of the latest inspection
-    mutable AudioChannelInfo info = {};
+    mutable StateMachineInfo info = {};
 
 public:
 
@@ -146,7 +146,7 @@ private:
     
 public:
     
-    AudioChannelInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    StateMachineInfo getInfo() const { return AmigaComponent::getInfo(info); }
         
     
     //

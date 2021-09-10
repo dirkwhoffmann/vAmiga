@@ -800,9 +800,24 @@ using namespace moira;
     return [self paula]->getInfo();
 }
 
-- (AudioInfo)audioInfo
+- (StateMachineInfo)audioInfo0
 {
-    return [self paula]->getAudioInfo();
+    return [self paula]->channel0.getInfo();
+}
+
+- (StateMachineInfo)audioInfo1
+{
+    return [self paula]->channel1.getInfo();
+}
+
+- (StateMachineInfo)audioInfo2
+{
+    return [self paula]->channel2.getInfo();
+}
+
+- (StateMachineInfo)audioInfo3
+{
+    return [self paula]->channel3.getInfo();
 }
 
 - (UARTInfo)uartInfo

@@ -535,7 +535,10 @@ class Inspector: DialogController {
     var deniseInfo: DeniseInfo!
     var spriteInfo: SpriteInfo!
     var paulaInfo: PaulaInfo!
-    var audioInfo: AudioInfo!
+    var audioInfo0: StateMachineInfo!
+    var audioInfo1: StateMachineInfo!
+    var audioInfo2: StateMachineInfo!
+    var audioInfo3: StateMachineInfo!
     var diskInfo: DiskControllerInfo!
     var port1Info: ControlPortInfo!
     var port2Info: ControlPortInfo!
