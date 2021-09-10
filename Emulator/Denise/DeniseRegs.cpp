@@ -106,8 +106,9 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     }
     
     // Report a suspicious BPU value
-    trace(XFILES && newBpuBits > (hires(bplcon0) ? 4 : 6),
-          "XFILES (BPLCON0): BPU = %d\n", newBpuBits);
+    if (newBpuBits > (hires(bplcon0) ? 4 : 6)) {
+        trace(XFILES, "XFILES (BPLCON0): BPU = %d\n", newBpuBits);
+    }
 }
 
 void
@@ -144,9 +145,9 @@ Denise::setBPLCON2(u16 newValue)
     trace(BPLREG_DEBUG, "setBPLCON2(%X)\n", newValue);
 
     bplcon2 = newValue;
-    
-    debug(XFILES && pf1px() > 4, "XFILES (BPLCON2): PF1P = %d\n", pf1px());
-    debug(XFILES && pf2px() > 4, "XFILES (BPLCON2): PF2P = %d\n", pf2px());
+
+    if (pf1px() > 4) trace(XFILES, "XFILES (BPLCON2): PF1P = %d\n", pf1px());
+    if (pf2px() > 4) trace(XFILES, "XFILES (BPLCON2): PF2P = %d\n", pf2px());
     
     // Record the register change
     i64 pixel = 4 * agnus.pos.h + 4;
