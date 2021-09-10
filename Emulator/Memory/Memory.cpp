@@ -1839,9 +1839,7 @@ Memory::peekCustom16(u32 addr)
     assert(IS_EVEN(addr));
 
     switch ((addr >> 1) & 0xFF) {
-            
-        case 0x000 >> 1: // BLTDDAT
-            result = 0xFFFF; break;
+
         case 0x002 >> 1: // DMACONR
             result = agnus.peekDMACONR(); break;
         case 0x004 >> 1: // VPOSR

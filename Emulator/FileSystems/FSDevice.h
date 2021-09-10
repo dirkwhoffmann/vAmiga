@@ -245,12 +245,12 @@ public:
     void addHashRef(FSBlock *block);
     
     // Creates a new directory
-    FSBlock *makeDir(const string &name);
+    FSBlock *createDir(const string &name);
 
     // Creates a new file
-    FSBlock *makeFile(const string &name);
-    FSBlock *makeFile(const string &name, const u8 *buffer, isize size);
-    FSBlock *makeFile(const string &name, const string &str);
+    FSBlock *createFile(const string &name);
+    FSBlock *createFile(const string &name, const u8 *buffer, isize size);
+    FSBlock *createFile(const string &name, const string &str);
         
     
     //

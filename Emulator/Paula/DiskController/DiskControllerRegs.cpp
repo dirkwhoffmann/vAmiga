@@ -60,9 +60,10 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
     
     // Enable DMA if bit 15 (DMAEN) has been written twice
     if (oldValue & newValue & 0x8000) {
-        
-        trace(XFILES && state != DRIVE_DMA_OFF,
-              "XFILES (DSKLEN): Written in DMA state %lld\n", state);
+
+        if (state != DRIVE_DMA_OFF) {
+            trace(XFILES, "XFILES (DSKLEN): Written in DMA state %lld\n", state);
+        }
 
         // Only proceed if there are bytes to process
         if ((dsklen & 0x3FFF) == 0) { paula.raiseIrq(INT_DSKBLK); return; }

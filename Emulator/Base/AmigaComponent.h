@@ -50,8 +50,6 @@ protected:
     //
     
 public:
-
-    // AmigaComponent() { }
     
     /* Initializes the component and it's subcomponents. The initialization
      * procedure is initiated once, in the constructor of the Amiga class. By

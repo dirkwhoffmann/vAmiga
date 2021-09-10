@@ -771,9 +771,7 @@ Amiga::_warpOff()
 
 void
 Amiga::execute()
-{
-    // debug(RUN_DEBUG, "execute()\n");
-    
+{    
     while(1) {
         
         // Emulate the next CPU instruction
