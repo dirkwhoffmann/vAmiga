@@ -644,12 +644,14 @@ Agnus::setBPLxPTL(u16 value)
     trace(BPLREG_DEBUG, "setBPLxPTL(%d, %X)\n", x, value);
     
     // Check if the write collides with DMA
+    /*
     if (!NO_PTR_DROPS && isBplxEvent(bplEvent[pos.h], x)) {
         
         trace(XFILES, "XFILES: Trashing BPL%dPTL\n", x);
         bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], 0xFFFE);
         return;
     }
+    */
 
     // Do nothing if pointer was involded in DMA one cycle earlier
     if (dropWrite((BusOwner)(BUS_BPL1 + x - 1))) return;
@@ -661,28 +663,28 @@ Agnus::setBPLxPTL(u16 value)
 void
 Agnus::pokeBPL1MOD(u16 value)
 {
-    trace(BPLREG_DEBUG, "pokeBPL1MOD(%X)\n", value);
+    trace(BPLMOD_DEBUG, "pokeBPL1MOD(%X)\n", value);
     recordRegisterChange(DMA_CYCLES(2), SET_BPL1MOD, value);
 }
 
 void
 Agnus::setBPL1MOD(u16 value)
 {
-    trace(BPLREG_DEBUG, "setBPL1MOD(%X)\n", value);
+    trace(BPLMOD_DEBUG, "setBPL1MOD(%X)\n", value);
     bpl1mod = (i16)(value & 0xFFFE);
 }
 
 void
 Agnus::pokeBPL2MOD(u16 value)
 {
-    trace(BPLREG_DEBUG, "pokeBPL2MOD(%X)\n", value);
+    trace(BPLMOD_DEBUG, "pokeBPL2MOD(%X)\n", value);
     recordRegisterChange(DMA_CYCLES(2), SET_BPL2MOD, value);
 }
 
 void
 Agnus::setBPL2MOD(u16 value)
 {
-    trace(BPLREG_DEBUG, "setBPL2MOD(%X)\n", value);
+    trace(BPLMOD_DEBUG, "setBPL2MOD(%X)\n", value);
     bpl2mod = (i16)(value & 0xFFFE);
 }
 
