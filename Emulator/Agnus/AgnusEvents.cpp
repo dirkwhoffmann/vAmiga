@@ -475,7 +475,13 @@ Agnus::serviceBPLEventHires()
     denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
     
     // Add modulo if this is the last fetch unit
-    if (pos.h >= ddfHires.stop - 4) bplpt[nr] += (nr % 2) ? bpl2mod : bpl1mod;
+    if (pos.h >= ddfHires.stop - 4) {
+
+        // trace(BPLMOD_DEBUG,
+        //       "Adding bpl%dmod = %d\n", (nr % 2), (nr % 2) ? bpl2mod : bpl1mod);
+
+        bplpt[nr] += (nr % 2) ? bpl2mod : bpl1mod;
+    }
 }
 
 template <isize nr> void
@@ -485,7 +491,13 @@ Agnus::serviceBPLEventLores()
     denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
 
     // Add modulo if this is the last fetch unit
-    if (pos.h >= ddfLores.stop - 8) bplpt[nr] += (nr % 2) ? bpl2mod : bpl1mod;
+    if (pos.h >= ddfLores.stop - 8) {
+
+        // trace(BPLMOD_DEBUG,
+        //       "Adding bpl%dmod = %d\n", (nr % 2), (nr % 2) ? bpl2mod : bpl1mod);
+
+        bplpt[nr] += (nr % 2) ? bpl2mod : bpl1mod;
+    }
 }
 
 void

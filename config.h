@@ -129,6 +129,7 @@ static const int SLOW_BLT_DEBUG  = 0; // Execute micro-instructions in one chunk
 // Denise
 static const int BPLREG_DEBUG    = 0; // Bitplane registers
 static const int BPLDAT_DEBUG    = 0; // BPLxDAT registers
+static const int BPLMOD_DEBUG    = 0; // BPLxMOD registers
 static const int SPRREG_DEBUG    = 0; // Sprite registers
 static const int COLREG_DEBUG    = 0; // Color registers
 static const int CLXREG_DEBUG    = 0; // Collision detection registers

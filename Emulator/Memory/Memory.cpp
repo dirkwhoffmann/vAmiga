@@ -1619,7 +1619,6 @@ template <> void
 Memory::poke16 <ACCESSOR_AGNUS, MEM_NONE> (u32 addr, u16 value)
 {
     trace(MEM_DEBUG, "poke16 <AGNUS> (%x [NONE], %x)\n", addr, value);
-    trace(XFILES, "XFILES (AGNUS): Writing to unmapped RAM\n");
     dataBus = value;
 }
 
@@ -1636,7 +1635,7 @@ template <> void
 Memory::poke16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr, u16 value)
 {
     assert((addr & agnus.ptrMask) == addr);
-    trace(XFILES, "XFILES (AGNUS): Writing to Slow RAM mirror\n");
+    trace(MEM_DEBUG, "Writing to Slow RAM mirror\n");
 
     dataBus = value;
     WRITE_SLOW_16(addr, value);

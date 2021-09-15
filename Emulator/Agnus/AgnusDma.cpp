@@ -299,11 +299,14 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, isize first)
         updateHiresDrawingFlags();
         
     } else {
-        
+
+        // TODO: CLEAN THIS UP
+        isize offset = (ddfLores.strt & 0b100) ? 4 : 0;
+
         for (isize i = first; i <= HPOS_MAX; i++) {
             
             bplEvent[i] =
-            ddfLores.inside(i) ? bplDMA[0][channels][i] : EVENT_NONE;
+            ddfLores.inside(i) ? bplDMA[0][channels][(i + offset) % HPOS_CNT] : EVENT_NONE;
         }
         updateLoresDrawingFlags();
     }
