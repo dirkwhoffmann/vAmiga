@@ -456,7 +456,10 @@
 @interface PaulaProxy : AmigaComponentProxy { }
 
 @property (readonly) PaulaInfo info;
-@property (readonly) AudioInfo audioInfo;
+@property (readonly) StateMachineInfo audioInfo0;
+@property (readonly) StateMachineInfo audioInfo1;
+@property (readonly) StateMachineInfo audioInfo2;
+@property (readonly) StateMachineInfo audioInfo3;
 @property (readonly) UARTInfo uartInfo;
 @property (readonly) MuxerStats muxerStats;
 

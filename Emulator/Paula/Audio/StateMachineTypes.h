@@ -27,10 +27,4 @@ typedef struct
     u16 audvol;
     u16 auddat;
 }
-AudioChannelInfo;
-
-typedef struct
-{
-    AudioChannelInfo channel[4];
-}
-AudioInfo;
+StateMachineInfo;

@@ -23,20 +23,9 @@
 
 struct Sampler : util::SortedRingBuffer <i16, VPOS_CNT * HPOS_CNT> {
     
-    /* Initializes the ring buffer by removing all existing elements and adding
-     * a single dummy element. The dummy element is added because some methods
-     * assume that the buffer is never empty.
-     */
+    // Initializes the ring buffer with a single dummy element
     void reset();
      
-    /* Interpolates a sound sample for the specified target cycle. Two major
-     * steps are involved. In the first step, the function computes index
-     * position r1 with the following property:
-     *
-     *     Cycle of sample at r1 <= Target cycle < Cycle of sample at r1 + 1
-     *
-     * In the second step, the function interpolated between the two samples at
-     * r1 and r1 + 1 based on the requested method.
-     */
+    // Interpolates a sound sample for the specified target cycle
     template <SamplingMethod method> i16 interpolate(Cycle clock);
 };
