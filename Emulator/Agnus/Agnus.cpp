@@ -149,6 +149,7 @@ Agnus::_reset(bool hard)
     
     // Initialize event tables
     for (isize i = pos.h; i < HPOS_CNT; i++) bplEvent[i] = bplDMA[0][0][i];
+    bplEvent[HPOS_MAX] = BPL_EOL;
     for (isize i = pos.h; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
     updateBplJumpTable();
     updateDasJumpTable();

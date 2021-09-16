@@ -104,7 +104,7 @@ Agnus::initBplEventTableLores()
         }
 
         assert(bplDMA[0][bpu][HPOS_MAX] == EVENT_NONE);
-        bplDMA[0][bpu][HPOS_MAX] = BPL_EOL;
+        // bplDMA[0][bpu][HPOS_MAX] = BPL_EOL;
     }
 }
 
