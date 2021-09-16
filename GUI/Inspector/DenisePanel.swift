@@ -34,7 +34,7 @@ extension Inspector {
         // Bitplane section
         let bplcon0 = Int(deniseInfo.bplcon0)
         let bplcon1 = Int(deniseInfo.bplcon1)
-        let bplcon2 = Int(deniseInfo.bplcon1)
+        let bplcon2 = Int(deniseInfo.bplcon2)
         let bpu     = Int(deniseInfo.bpu)
 
         deniseBPLCON0.integerValue = bplcon0
