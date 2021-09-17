@@ -295,21 +295,16 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     
     // Check if the hires bit or one of the BPU bits have been modified
     if ((oldValue ^ newValue) & 0xF000) {
-        
-        /*
-         debug("oldBplcon0 = %X newBplcon0 = %X\n", oldBplcon0, newBplcon0);
-         dumpBplEventTable();
-         */
-        
+                
         /* TODO:
-         * BPLCON0 is usually written in each frame.
-         * To speed up, just check the hpos. If it is smaller than the start
-         * of the DMA window, a standard update() is enough and the scheduled
-         * update in hsyncActions (HSYNC_UPDATE_BPL_TABLE) can be omitted.
+         * BPLCON0 is usually written in each frame. To speed up, just check
+         * hpos. If it is smaller than the start of the DMA window, a standard
+         * update() is enough and the scheduled update in hsyncActions
+         * (HSYNC_UPDATE_BPL_TABLE) can be omitted.
          */
         
         // Update the DMA allocation table
-        updateBplEvents(dmacon, newValue, pos.h);
+        updateBplEvents(dmaconAtDDFStrt, newValue, pos.h);
         
         // Since the table has changed, we also need to update the event slot
         scheduleBplEventForCycle(pos.h);
