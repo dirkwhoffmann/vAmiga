@@ -604,15 +604,7 @@ template <int x> void
 Agnus::setBPLxPTH(u16 value)
 {
     trace(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
-    
-    // Check if the write collides with DMA
-    if (!NO_PTR_DROPS && isBplxEvent(bplEvent[pos.h], x)) {
-        
-        trace(XFILES, "XFILES: Trashing BPL%dPTH\n", x);
-        bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], 0xFFFF);
-        return;
-    }
-    
+
     // Do nothing if pointer was involded in DMA one cycle earlier
     if (dropWrite((BusOwner)(BUS_BPL1 + x - 1))) return;
     
@@ -638,16 +630,6 @@ Agnus::setBPLxPTL(u16 value)
 {
     trace(BPLREG_DEBUG, "setBPLxPTL(%d, %X)\n", x, value);
     
-    // Check if the write collides with DMA
-    /*
-    if (!NO_PTR_DROPS && isBplxEvent(bplEvent[pos.h], x)) {
-        
-        trace(XFILES, "XFILES: Trashing BPL%dPTL\n", x);
-        bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], 0xFFFE);
-        return;
-    }
-    */
-
     // Do nothing if pointer was involded in DMA one cycle earlier
     if (dropWrite((BusOwner)(BUS_BPL1 + x - 1))) return;
     
