@@ -115,35 +115,30 @@ CIAConfig;
 
 typedef struct
 {
-    struct {
-        u8 port;
-        u8 reg;
-        u8 dir;
-    } portA;
+    u8 port;
+    u8 reg;
+    u8 dir;
+}
+CIAPortInfo;
 
-    struct {
-        u8 port;
-        u8 reg;
-        u8 dir;
-    } portB;
+typedef struct
+{
+    u16 count;
+    u16 latch;
+    bool running;
+    bool toggle;
+    bool pbout;
+    bool oneShot;
+}
+CIATimerInfo;
 
-    struct {
-        u16 count;
-        u16 latch;
-        bool running;
-        bool toggle;
-        bool pbout;
-        bool oneShot;
-    } timerA;
+typedef struct
+{
+    CIAPortInfo portA;
+    CIAPortInfo portB;
 
-    struct {
-        u16 count;
-        u16 latch;
-        bool running;
-        bool toggle;
-        bool pbout;
-        bool oneShot;
-    } timerB;
+    CIATimerInfo timerA;
+    CIATimerInfo timerB;
 
     u8 sdr;
     u8 ssr;
