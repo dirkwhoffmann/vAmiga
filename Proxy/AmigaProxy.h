@@ -305,6 +305,7 @@
 - (BOOL) isDiagRom:(RomIdentifier)rev;
 - (BOOL) isCommodoreRom:(RomIdentifier)rev;
 - (BOOL) isHyperionRom:(RomIdentifier)rev;
+- (BOOL) isPatchedRom:(RomIdentifier)rev;
 
 @property (readonly) BOOL hasRom;
 @property (readonly) BOOL hasBootRom;

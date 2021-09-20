@@ -16,7 +16,7 @@ class RomFile : public AmigaFile {
 
     // Accepted header signatures
     static const u8 bootRomHeaders[1][8];
-    static const u8 kickRomHeaders[6][7];
+    static const u8 kickRomHeaders[7][7];
     static const u8 encrRomHeaders[1][11];
 
     // Path to the rom.key file (if needed)
@@ -39,6 +39,7 @@ public:
     static bool isDiagRom(RomIdentifier rev);
     static bool isCommodoreRom(RomIdentifier rev);
     static bool isHyperionRom(RomIdentifier rev);
+    static bool isPatchedRom(RomIdentifier rev);
 
     // Translates a ROM indentifier into a textual description
     static const char *title(RomIdentifier rev);

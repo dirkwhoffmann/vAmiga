@@ -19,6 +19,7 @@ extension ConfigurationController {
         let hasDiagRom      = amiga.mem.isDiagRom(romIdentifier)
         let hasCommodoreRom = amiga.mem.isCommodoreRom(romIdentifier)
         let hasHyperionRom  = amiga.mem.isHyperionRom(romIdentifier)
+        let hasPatchedRom   = amiga.mem.isPatchedRom(romIdentifier)
 
         let extIdentifier   = amiga.mem.extIdentifier
         let hasExt          = extIdentifier != .MISSING
@@ -26,12 +27,14 @@ extension ConfigurationController {
         let hasDiagExt      = amiga.mem.isDiagRom(extIdentifier)
         let hasCommodoreExt = amiga.mem.isCommodoreRom(extIdentifier)
         let hasHyperionExt  = amiga.mem.isHyperionRom(extIdentifier)
+        let hasPatchedExt   = amiga.mem.isPatchedRom(extIdentifier)
 
         let romMissing      = NSImage(named: "rom_missing")
         let romOrig         = NSImage(named: "rom_original")
         let romHyperion     = NSImage(named: "rom_hyp")
         let romAros         = NSImage(named: "rom_aros")
         let romDiag         = NSImage(named: "rom_diag")
+        let romPatched      = NSImage(named: "rom_patched")
         let romUnknown      = NSImage(named: "rom_unknown")
         
         // Lock controls if emulator is powered on
@@ -47,6 +50,7 @@ extension ConfigurationController {
             hasArosRom      ? romAros :
             hasDiagRom      ? romDiag :
             hasCommodoreRom ? romOrig :
+            hasPatchedRom   ? romPatched :
             hasRom          ? romUnknown : romMissing
 
         extDropView.image =
@@ -54,6 +58,7 @@ extension ConfigurationController {
             hasArosExt      ? romAros :
             hasDiagExt      ? romDiag :
             hasCommodoreExt ? romOrig :
+            hasPatchedRom   ? romPatched :
             hasExt          ? romUnknown : romMissing
 
         // Titles and subtitles

@@ -25,7 +25,7 @@ const u8 RomFile::bootRomHeaders[1][8] = {
 // Kickstart Roms
 //
 
-const u8 RomFile::kickRomHeaders[6][7] = {
+const u8 RomFile::kickRomHeaders[7][7] = {
 
     // AROS Kickstart replacement
     { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00 },
@@ -33,6 +33,9 @@ const u8 RomFile::kickRomHeaders[6][7] = {
 
     // Kickstart 1.2 and 1.3
     { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xFC, 0x00 },
+
+    // Kickstart 1.3 (Guardian)
+    { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xFE, 0x09 },
 
     // Kickstart 2.04
     { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00 },
@@ -71,6 +74,8 @@ RomFile::identifier(u32 fingerprint)
         case 0xDB4C8033: return ROM_KICK121_34_004;
         case 0xC4F0F55F: return ROM_KICK13_34_005;
         case 0xE0F37258: return ROM_KICK13_34_005_SK;
+
+        case 0x7A9D1D58: return ROM_KICK13_GUARD12;
 
         case 0xB4113910: return ROM_KICK20_36_028;
 
@@ -183,6 +188,17 @@ RomFile::isHyperionRom(RomIdentifier rev)
     }
 }
 
+bool
+RomFile::isPatchedRom(RomIdentifier rev)
+{
+    switch (rev) {
+
+        case ROM_KICK13_GUARD12: return true;
+
+        default: return false;
+    }
+}
+
 const char *
 RomFile::title(RomIdentifier rev)
 {
@@ -199,6 +215,8 @@ RomFile::title(RomIdentifier rev)
         case ROM_KICK121_34_004:   return "Kickstart 1.21";
         case ROM_KICK13_34_005:
         case ROM_KICK13_34_005_SK: return "Kickstart 1.3";
+
+        case ROM_KICK13_GUARD12:   return "Kickstart 1.3";
 
         case ROM_KICK20_36_028:    return "Kickstart 2.0";
         case ROM_KICK202_36_207:   return "Kickstart 2.02";
@@ -239,6 +257,8 @@ RomFile::version(RomIdentifier rev)
         case ROM_KICK13_34_005:     return "Rev 34.005";
         case ROM_KICK13_34_005_SK:  return "Rev 34.005 (A3000 SK)";
 
+        case ROM_KICK13_GUARD12:    return "with Guardian 1.2";
+
         case ROM_KICK20_36_028:     return "Rev 36.028";
         case ROM_KICK202_36_207:    return "Rev 36.207";
         case ROM_KICK204_37_175:    return "Rev 37.175";
@@ -277,6 +297,8 @@ RomFile::released(RomIdentifier rev)
         case ROM_KICK121_34_004:    return "November 1987";
         case ROM_KICK13_34_005:     return "December 1987";
         case ROM_KICK13_34_005_SK:  return "December 1987";
+
+        case ROM_KICK13_GUARD12:    return "1988";
 
         case ROM_KICK20_36_028:     return "March 1990";
         case ROM_KICK202_36_207:    return "October 1990";

@@ -33,6 +33,9 @@ enum_long(ROM_IDENTIFIER)
     ROM_KICK13_34_005,
     ROM_KICK13_34_005_SK,
 
+    // Guardian patches
+    ROM_KICK13_GUARD12,
+
     // Kickstart V2.x
     ROM_KICK20_36_028,
     ROM_KICK202_36_207,
@@ -84,6 +87,8 @@ struct RomIdentifierEnum : util::Reflection<RomIdentifierEnum, RomIdentifier>
             case ROM_KICK121_34_004:    return "KICK121_34_004";
             case ROM_KICK13_34_005:     return "KICK13_34_005";
             case ROM_KICK13_34_005_SK:  return "KICK13_34_005_SK";
+
+            case ROM_KICK13_GUARD12:    return "ROM_KICK13_GUARD12";
 
             case ROM_KICK20_36_028:     return "KICK20_36_028";
             case ROM_KICK202_36_207:    return "KICK202_36_207";

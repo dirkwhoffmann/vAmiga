@@ -319,6 +319,11 @@ using namespace moira;
     return RomFile::isHyperionRom(rev);
 }
 
+- (BOOL)isPatchedRom:(RomIdentifier)rev
+{
+    return RomFile::isPatchedRom(rev);
+}
+
 - (BOOL)hasRom
 {
     return [self mem]->hasKickRom();
