@@ -50,13 +50,13 @@ struct FloatStereo; typedef FloatStereo SampleType;
 #define OVERRIDES { }
 /*
  { \
- { OPT_AGNUS_REVISION,   AGNUS_OCS }, \
- { OPT_BLITTER_ACCURACY, 0         }, \
- { OPT_CHIP_RAM,         512       }, \
- { OPT_SLOW_RAM,         512       }, \
- { OPT_FAST_RAM,         0         }, \
- { OPT_RTC_MODEL,        RTC_NONE  }, \
- { OPT_DRIVE_SPEED,      -1        }  }
+ { OPT_AGNUS_REVISION,   AGNUS_OCS_PLCC }, \
+ { OPT_BLITTER_ACCURACY, 0              }, \
+ { OPT_CHIP_RAM,         512            }, \
+ { OPT_SLOW_RAM,         512            }, \
+ { OPT_FAST_RAM,         0              }, \
+ { OPT_RTC_MODEL,        RTC_NONE       }, \
+ { OPT_DRIVE_SPEED,      -1             }  }
 */
 
 // Uncomment to fallback to an older style thread messaging mechanism

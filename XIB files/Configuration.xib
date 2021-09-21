@@ -138,7 +138,7 @@
             <windowStyleMask key="styleMask" titled="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="646" height="496"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
             <value key="minSize" type="size" width="646" height="486"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="646" height="496"/>
@@ -432,16 +432,17 @@ DQ
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dyR-Jf-UoN" userLabel="System">
                                             <rect key="frame" x="85" y="351" width="182" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="MOS 8367 (OCS)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1vX-aH-r8M" id="0Rz-Gs-GNL" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="MOS 8367 (OCS, DIP)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1vX-aH-r8M" id="0Rz-Gs-GNL" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="18D-pR-SwS">
                                                     <items>
-                                                        <menuItem title="MOS 8367 (OCS)" state="on" id="1vX-aH-r8M"/>
-                                                        <menuItem title="MOS 8372A (ECS 1 MB) " tag="1" id="GI4-WV-Bdc">
+                                                        <menuItem title="MOS 8367 (OCS, DIP)" state="on" id="1vX-aH-r8M"/>
+                                                        <menuItem title="MOS 8371 (OCS, PLCC)" tag="1" id="4Lb-xf-KCu"/>
+                                                        <menuItem title="MOS 8372A (ECS, 1 MB) " tag="2" id="GI4-WV-Bdc">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="MOS 8375 (ECS 2 MB)" tag="2" id="XSH-Rl-Lt0">
+                                                        <menuItem title="MOS 8375 (ECS 2, MB)" tag="3" id="XSH-Rl-Lt0">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>

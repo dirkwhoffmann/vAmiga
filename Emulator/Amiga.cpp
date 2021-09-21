@@ -547,7 +547,7 @@ Amiga::configure(ConfigScheme scheme)
                 
                 configure(OPT_CHIP_RAM, 512);
                 configure(OPT_SLOW_RAM, 512);
-                configure(OPT_AGNUS_REVISION, AGNUS_OCS);
+                configure(OPT_AGNUS_REVISION, AGNUS_OCS_PLCC);
                 break;
                 
             case CONFIG_A500_ECS_1MB:

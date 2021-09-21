@@ -34,7 +34,8 @@ enum_long(ROM_IDENTIFIER)
     ROM_KICK13_34_005_SK,
 
     // Guardian patches
-    ROM_KICK13_GUARD12,
+    ROM_KICK12_33_180_G11R,
+    ROM_KICK13_34_005_G12R,
 
     // Kickstart V2.x
     ROM_KICK20_36_028,
@@ -75,32 +76,33 @@ struct RomIdentifierEnum : util::Reflection<RomIdentifierEnum, RomIdentifier>
     {
         switch (value) {
                 
-            case ROM_MISSING:           return "MISSING";
-            case ROM_UNKNOWN:           return "UNKNOWN";
+            case ROM_MISSING:            return "MISSING";
+            case ROM_UNKNOWN:            return "UNKNOWN";
 
-            case ROM_BOOT_A1000_8K:     return "BOOT_A1000_8K";
-            case ROM_BOOT_A1000_64K:    return "BOOT_A1000_64K";
+            case ROM_BOOT_A1000_8K:      return "BOOT_A1000_8K";
+            case ROM_BOOT_A1000_64K:     return "BOOT_A1000_64K";
 
-            case ROM_KICK11_31_034:     return "KICK11_31_034";
-            case ROM_KICK12_33_166:     return "KICK12_33_166";
-            case ROM_KICK12_33_180:     return "KICK12_33_180";
-            case ROM_KICK121_34_004:    return "KICK121_34_004";
-            case ROM_KICK13_34_005:     return "KICK13_34_005";
-            case ROM_KICK13_34_005_SK:  return "KICK13_34_005_SK";
+            case ROM_KICK11_31_034:      return "KICK11_31_034";
+            case ROM_KICK12_33_166:      return "KICK12_33_166";
+            case ROM_KICK12_33_180:      return "KICK12_33_180";
+            case ROM_KICK121_34_004:     return "KICK121_34_004";
+            case ROM_KICK13_34_005:      return "KICK13_34_005";
+            case ROM_KICK13_34_005_SK:   return "KICK13_34_005_SK";
 
-            case ROM_KICK13_GUARD12:    return "ROM_KICK13_GUARD12";
+            case ROM_KICK12_33_180_G11R: return "ROM_KICK12_33_180_G11R";
+            case ROM_KICK13_34_005_G12R: return "ROM_KICK13_34_005_G12R";
 
-            case ROM_KICK20_36_028:     return "KICK20_36_028";
-            case ROM_KICK202_36_207:    return "KICK202_36_207";
-            case ROM_KICK204_37_175:    return "KICK204_37_175";
-            case ROM_KICK205_37_299:    return "KICK205_37_299";
-            case ROM_KICK205_37_300:    return "KICK205_37_300";
-            case ROM_KICK205_37_350:    return "KICK205_37_350";
+            case ROM_KICK20_36_028:      return "KICK20_36_028";
+            case ROM_KICK202_36_207:     return "KICK202_36_207";
+            case ROM_KICK204_37_175:     return "KICK204_37_175";
+            case ROM_KICK205_37_299:     return "KICK205_37_299";
+            case ROM_KICK205_37_300:     return "KICK205_37_300";
+            case ROM_KICK205_37_350:     return "KICK205_37_350";
 
-            case ROM_KICK30_39_106:     return "KICK30_39_106";
-            case ROM_KICK31_40_063:     return "KICK31_40_063";
+            case ROM_KICK30_39_106:      return "KICK30_39_106";
+            case ROM_KICK31_40_063:      return "KICK31_40_063";
 
-            case ROM_HYP314_46_143:     return "HYP314_46_143";
+            case ROM_HYP314_46_143:      return "HYP314_46_143";
 
             case ROM_AROS_55696:        return "AROS_55696";
             case ROM_AROS_55696_EXT:    return "AROS_55696_EXT";

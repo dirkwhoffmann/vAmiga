@@ -215,9 +215,10 @@ Agnus::setConfigItem(Option option, i64 value)
                                     
             switch (config.revision = (AgnusRevision)value) {
                     
-                case AGNUS_OCS:     ptrMask = 0x07FFFF; break;
-                case AGNUS_ECS_1MB: ptrMask = 0x0FFFFF; break;
-                case AGNUS_ECS_2MB: ptrMask = 0x1FFFFF; break;
+                case AGNUS_OCS_DIP:
+                case AGNUS_OCS_PLCC: ptrMask = 0x07FFFF; break;
+                case AGNUS_ECS_1MB:  ptrMask = 0x0FFFFF; break;
+                case AGNUS_ECS_2MB:  ptrMask = 0x1FFFFF; break;
                 
                 default:
                     fatalError;
@@ -233,6 +234,18 @@ Agnus::setConfigItem(Option option, i64 value)
         default:
             fatalError;
     }
+}
+
+bool
+Agnus::isOCS() const
+{
+    return config.revision == AGNUS_OCS_PLCC || config.revision == AGNUS_OCS_PLCC;
+}
+
+bool
+Agnus::isECS() const
+{
+    return config.revision == AGNUS_ECS_1MB || AGNUS_ECS_2MB;
 }
 
 u16

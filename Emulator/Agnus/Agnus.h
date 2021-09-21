@@ -469,8 +469,8 @@ public:
     // Querying chip properties
     //
     
-    bool isOCS() const { return config.revision == AGNUS_OCS; }
-    bool isECS() const { return config.revision != AGNUS_OCS; }
+    bool isOCS() const;
+    bool isECS() const;
     
     // Returns the chip identification bits of this Agnus (show up in VPOSR)
     u16 idBits();
@@ -479,7 +479,7 @@ public:
     isize chipRamLimit();
         
     // Returns the line in which the VERTB interrupt is triggered
-    isize vStrobeLine() { return isECS() || MIMIC_UAE ? 0 : 1; }
+    isize vStrobeLine() { return config.revision == AGNUS_OCS_DIP ? 1 : 0; }
     
     // Returns a bitmask indicating the used bits in DDFSTRT / DDFSTOP
     u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }

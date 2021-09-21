@@ -75,7 +75,8 @@ RomFile::identifier(u32 fingerprint)
         case 0xC4F0F55F: return ROM_KICK13_34_005;
         case 0xE0F37258: return ROM_KICK13_34_005_SK;
 
-        case 0x7A9D1D58: return ROM_KICK13_GUARD12;
+        case 0x85067666: return ROM_KICK12_33_180_G11R;
+        case 0x74680D37: return ROM_KICK13_34_005_G12R;
 
         case 0xB4113910: return ROM_KICK20_36_028;
 
@@ -193,7 +194,8 @@ RomFile::isPatchedRom(RomIdentifier rev)
 {
     switch (rev) {
 
-        case ROM_KICK13_GUARD12: return true;
+        case ROM_KICK12_33_180_G11R:
+        case ROM_KICK13_34_005_G12R: return true;
 
         default: return false;
     }
@@ -216,7 +218,8 @@ RomFile::title(RomIdentifier rev)
         case ROM_KICK13_34_005:
         case ROM_KICK13_34_005_SK: return "Kickstart 1.3";
 
-        case ROM_KICK13_GUARD12:   return "Kickstart 1.3";
+        case ROM_KICK12_33_180_G11R: return "Kickstart 1.2";
+        case ROM_KICK13_34_005_G12R: return "Kickstart 1.3";
 
         case ROM_KICK20_36_028:    return "Kickstart 2.0";
         case ROM_KICK202_36_207:   return "Kickstart 2.02";
@@ -257,7 +260,8 @@ RomFile::version(RomIdentifier rev)
         case ROM_KICK13_34_005:     return "Rev 34.005";
         case ROM_KICK13_34_005_SK:  return "Rev 34.005 (A3000 SK)";
 
-        case ROM_KICK13_GUARD12:    return "with Guardian 1.2";
+        case ROM_KICK12_33_180_G11R: return "Rev 33.180 (Guardian patch)";
+        case ROM_KICK13_34_005_G12R: return "Rev 34.005 (Guardian patch)";
 
         case ROM_KICK20_36_028:     return "Rev 36.028";
         case ROM_KICK202_36_207:    return "Rev 36.207";
@@ -298,7 +302,8 @@ RomFile::released(RomIdentifier rev)
         case ROM_KICK13_34_005:     return "December 1987";
         case ROM_KICK13_34_005_SK:  return "December 1987";
 
-        case ROM_KICK13_GUARD12:    return "1988";
+        case ROM_KICK12_33_180_G11R: return "1988";
+        case ROM_KICK13_34_005_G12R: return "1988";
 
         case ROM_KICK20_36_028:     return "March 1990";
         case ROM_KICK202_36_207:    return "October 1990";

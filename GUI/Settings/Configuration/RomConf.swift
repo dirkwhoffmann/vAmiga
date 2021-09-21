@@ -58,7 +58,7 @@ extension ConfigurationController {
             hasArosExt      ? romAros :
             hasDiagExt      ? romDiag :
             hasCommodoreExt ? romOrig :
-            hasPatchedRom   ? romPatched :
+            hasPatchedExt   ? romPatched :
             hasExt          ? romUnknown : romMissing
 
         // Titles and subtitles

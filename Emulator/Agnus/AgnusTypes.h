@@ -20,9 +20,10 @@
 
 enum_long(AGNUS_REVISION)
 {
-    AGNUS_OCS,              // Revision 8367
-    AGNUS_ECS_1MB,          // Revision 8372
-    AGNUS_ECS_2MB           // Revision 8375
+    AGNUS_OCS_DIP,          // Revision 8367 (A1000, A2000A)
+    AGNUS_OCS_PLCC,         // Revision 8371 (A500, A2000B)
+    AGNUS_ECS_1MB,          // Revision 8372 (A500, A2000B)
+    AGNUS_ECS_2MB           // Revision 8375 (A500+, A600)
 };
 typedef AGNUS_REVISION AgnusRevision;
 
@@ -38,9 +39,10 @@ struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
     {
         switch (value) {
                 
-            case AGNUS_OCS:     return "OCS";
-            case AGNUS_ECS_1MB: return "ECS_1MB";
-            case AGNUS_ECS_2MB: return "ECS_2MB";
+            case AGNUS_OCS_DIP:  return "OCS_DIP";
+            case AGNUS_OCS_PLCC: return "OCS_PLCC";
+            case AGNUS_ECS_1MB:  return "ECS_1MB";
+            case AGNUS_ECS_2MB:  return "ECS_2MB";
         }
         return "???";
     }

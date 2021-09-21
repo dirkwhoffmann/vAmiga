@@ -10,7 +10,11 @@
 extension ConfigurationController {
 
     func refreshCompatibilityTab() {
-        
+
+        let ecsAgnus =
+            config.agnusRev == AgnusRevision.ECS_1MB.rawValue ||
+            config.agnusRev == AgnusRevision.ECS_2MB.rawValue;
+
         // Graphics
         compClxSprSpr.state = config.clxSprSpr ? .on : .off
         compClxSprPlf.state = config.clxSprPlf ? .on : .off
@@ -23,9 +27,8 @@ extension ConfigurationController {
         compBltLevel2.textColor = (level >= 2) ? .labelColor : .tertiaryLabelColor
         
         // Chipset features
-        let ocsAgnus = config.agnusRev == AgnusRevision.OCS.rawValue
         compSlowRamMirror.state = config.slowRamMirror ? .on : .off
-        compSlowRamMirror.isEnabled = !ocsAgnus
+        compSlowRamMirror.isEnabled = ecsAgnus
         compTodBug.state = config.todBug ? .on : .off
 
         // Floppy drives

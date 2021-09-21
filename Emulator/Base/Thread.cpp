@@ -351,5 +351,5 @@ Thread::changeDebugTo(bool value, bool blocking)
 void
 Thread::wakeUp()
 {
-    if (mode == SyncMode::Pulsed) wakeUp();
+    if (mode == SyncMode::Pulsed) util::Wakeable::wakeUp();
 }

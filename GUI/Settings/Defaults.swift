@@ -633,13 +633,13 @@ struct HardwareDefaults {
         agnusRev: .ECS_1MB,
         deniseRev: .OCS,
         ciaRev: .MOS_8520_DIP,
-        realTimeClock: .OKI,
+        realTimeClock: .NONE,
 
         filterType: .BUTTERWORTH,
         filterAlwaysOn: false,
         
         chipRam: 512,
-        slowRam: 512,
+        slowRam: 0,
         fastRam: 0,
         ramInitPattern: .ALL_ZEROES,
 
@@ -649,7 +649,7 @@ struct HardwareDefaults {
     
     static let A1000 = HardwareDefaults(
         
-        agnusRev: .OCS,
+        agnusRev: .OCS_DIP,
         deniseRev: .OCS,
         ciaRev: .MOS_8520_DIP,
         realTimeClock: .NONE,
@@ -668,7 +668,7 @@ struct HardwareDefaults {
     
     static let A2000 = HardwareDefaults(
         
-        agnusRev: .ECS_2MB,
+        agnusRev: .ECS_1MB,
         deniseRev: .OCS,
         ciaRev: .MOS_8520_DIP,
         realTimeClock: .OKI,
