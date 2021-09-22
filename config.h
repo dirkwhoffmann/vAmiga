@@ -59,9 +59,6 @@ struct FloatStereo; typedef FloatStereo SampleType;
  { OPT_DRIVE_SPEED,      -1             }  }
 */
 
-// Uncomment to fallback to an older style thread messaging mechanism
-// #define USE_CONDITION_VARIABLE
-
 // Uncomment to set a breakpoint on startup
 // #define INITIAL_BREAKPOINT 0xFC1354
 
