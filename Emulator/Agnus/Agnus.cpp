@@ -245,7 +245,7 @@ Agnus::isOCS() const
 bool
 Agnus::isECS() const
 {
-    return config.revision == AGNUS_ECS_1MB || AGNUS_ECS_2MB;
+    return config.revision == AGNUS_ECS_1MB || config.revision == AGNUS_ECS_2MB;
 }
 
 u16
