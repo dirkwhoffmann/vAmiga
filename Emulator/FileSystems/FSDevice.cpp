@@ -76,7 +76,10 @@ FSDevice::init(DiskDiameter dia, DiskDensity den, const string &path)
     
     // Assign device name
     setName(FSName("Directory")); // TODO: Use last path component
-    
+
+    // Compute checksums for all blocks
+    updateChecksums();
+
     // Change to the root directory
     changeDir("/");
 }
@@ -854,15 +857,9 @@ FSDevice::importDirectory(const string &path, DIR *dir, bool recursive)
         if (item->d_name[0] == '.') continue;
 
         // Assemble file name
-        /*
-        char *name = new char [strlen(path) + strlen(item->d_name) + 2];
-        strcpy(name, path);
-        strcat(name, "/");
-        strcat(name, item->d_name);
-        */
         string name = path + "/" + string(item->d_name);
         
-        msg("importDirectory: Processing %s\n", name.c_str());
+        debug(FS_DEBUG, "Importing %s\n", name.c_str());
         
         if (item->d_type == DT_DIR) {
             

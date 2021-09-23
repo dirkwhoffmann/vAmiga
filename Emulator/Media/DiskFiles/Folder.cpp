@@ -42,9 +42,9 @@ Folder::init(const string &path)
     FSErrorReport report = volume.check(true);
     if (report.corruptedBlocks > 0) {
         warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
+        if constexpr (FS_DEBUG) volume.dump();
     }
-    if constexpr (FS_DEBUG) volume.dump();
-    
+
     // Convert the file system into an ADF
     adf = new ADFFile(volume);
 }
