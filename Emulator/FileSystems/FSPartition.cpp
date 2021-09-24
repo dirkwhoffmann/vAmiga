@@ -448,7 +448,7 @@ FSPartition::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     assert(rByte >= 4 && rByte < bsize());
     
     *byte = rByte;
-    *bit = (nr - 2) % 8;
+    *bit = nr % 8;
     
     // debug(FS_DEBUG, "Alloc bit for %d: block: %d byte: %d bit: %d\n",
     //       ref, bm->nr, *byte, *bit);
