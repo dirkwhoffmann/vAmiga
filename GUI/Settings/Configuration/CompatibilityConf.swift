@@ -13,7 +13,7 @@ extension ConfigurationController {
 
         let ecsAgnus =
             config.agnusRev == AgnusRevision.ECS_1MB.rawValue ||
-            config.agnusRev == AgnusRevision.ECS_2MB.rawValue;
+            config.agnusRev == AgnusRevision.ECS_2MB.rawValue
 
         // Graphics
         compClxSprSpr.state = config.clxSprSpr ? .on : .off
