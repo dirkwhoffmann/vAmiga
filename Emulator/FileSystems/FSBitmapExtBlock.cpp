@@ -6,12 +6,3 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
-
-#include "config.h"
-#include "FSBitmapExtBlock.h"
-#include "FSDevice.h"
-#include "FSPartition.h"
-
-FSBitmapExtBlock::FSBitmapExtBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, nr, t)
-{
-}

@@ -9,10 +9,5 @@
 
 #pragma once
 
-#include "FSBlock.h"
-#include <vector>
+#define FSBitmapExtBlock FSBlock
 
-struct FSBitmapExtBlock : FSBlock {
-                    
-    FSBitmapExtBlock(FSPartition &p, Block nr, FSBlockType t);
-};

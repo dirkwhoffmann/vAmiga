@@ -7,10 +7,4 @@
 
 #pragma once
 
-#include "FSBlock.h"
-#include <vector>
-
-struct FSRootBlock : FSBlock {
-          
-    FSRootBlock(FSPartition &p, Block nr, FSBlockType t);
-};
+#define FSRootBlock FSBlock

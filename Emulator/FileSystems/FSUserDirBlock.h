@@ -9,9 +9,4 @@
 
 #pragma once
 
-#include "FSBlock.h"
-
-struct FSUserDirBlock : FSBlock {
-                
-    FSUserDirBlock(FSPartition &p, Block nr, FSBlockType t);
-};
+#define FSUserDirBlock FSBlock

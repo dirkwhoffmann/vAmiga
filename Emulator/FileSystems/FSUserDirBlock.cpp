@@ -6,13 +6,3 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
-
-#include "config.h"
-#include "FSUserDirBlock.h"
-#include "FSDevice.h"
-#include "FSPartition.h"
-#include "IO.h"
-
-FSUserDirBlock::FSUserDirBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, nr, t)
-{
-}

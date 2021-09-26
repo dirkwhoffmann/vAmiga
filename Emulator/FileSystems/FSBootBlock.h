@@ -9,10 +9,4 @@
 
 #pragma once
 
-#include "FSBlock.h"
-#include "BootBlockImage.h"
-
-struct FSBootBlock : FSBlock {
-        
-    FSBootBlock(FSPartition &p, Block nr, FSBlockType t);    
-};
+#define FSBootBlock FSBlock
