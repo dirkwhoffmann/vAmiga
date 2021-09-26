@@ -28,8 +28,6 @@ struct OFSDataBlock : FSDataBlock {
 
     OFSDataBlock(FSPartition &p, u32 nr, FSBlockType t);
 
-    FSBlockType getType() const override { assert(type == FS_DATA_BLOCK_OFS); return FS_DATA_BLOCK_OFS; }
-
     Block  getFileHeaderRef() const override        { return get32(1);        }
     void setFileHeaderRef(Block ref) override       {        set32(1, ref);   }
 
@@ -45,7 +43,6 @@ struct FFSDataBlock : FSDataBlock {
     FFSDataBlock(FSPartition &p, u32 nr, FSBlockType t);
 
     const char *getDescription() const override { return "FFSDataBlock"; }
-    FSBlockType getType() const override { assert(type == FS_DATA_BLOCK_FFS); return FS_DATA_BLOCK_FFS; }
 
     isize writeData(FILE *file, isize size) override;
     isize addData(const u8 *buffer, isize size) override;

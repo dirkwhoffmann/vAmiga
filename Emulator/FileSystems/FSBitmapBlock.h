@@ -20,6 +20,4 @@ struct FSBitmapBlock : FSBlock {
     //
     // Methods from Block class
     //
-
-    FSBlockType getType() const override { assert(type == FS_BITMAP_BLOCK); return FS_BITMAP_BLOCK; }
 };

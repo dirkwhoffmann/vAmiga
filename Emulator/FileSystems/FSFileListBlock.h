@@ -20,9 +20,7 @@ struct FSFileListBlock : FSBlock {
     //
     // Methods from Block class
     //
-    
-    FSBlockType getType() const override { assert(type == FS_FILELIST_BLOCK); return FS_FILELIST_BLOCK;   }
-    
+        
     isize getNumDataBlockRefs() const override    { return get32(2);           }
     void setNumDataBlockRefs(u32 val) override    {           set32(2, val);   }
     void incNumDataBlockRefs() override           {        inc32(2);           }

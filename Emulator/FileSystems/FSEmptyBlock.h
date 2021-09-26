@@ -20,7 +20,6 @@ struct FSEmptyBlock : FSBlock {
     // Methods from Block class
     //
 
-    FSBlockType getType() const override { assert(type == FS_EMPTY_BLOCK); return FS_EMPTY_BLOCK; }
     u32 typeID() const override { return 0; }
     u32 subtypeID() const override { return 0; }
 

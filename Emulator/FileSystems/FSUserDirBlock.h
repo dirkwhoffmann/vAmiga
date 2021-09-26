@@ -23,8 +23,6 @@ struct FSUserDirBlock : FSBlock {
     // Methods from Block class
     //
     
-    FSBlockType getType() const override  { assert(type == FS_USERDIR_BLOCK); return FS_USERDIR_BLOCK; }
-
     ErrorCode exportBlock(const string &path) override;
 
     u32 getProtectionBits() const override     { return get32(-48     );       }

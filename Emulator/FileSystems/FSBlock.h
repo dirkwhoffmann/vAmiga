@@ -15,16 +15,16 @@
 
 struct FSBlock : AmigaObject {
         
-    // The type of this block
-    FSBlockType type = FS_UNKNOWN_BLOCK;
-    
     // The partition this block belongs to
     struct FSPartition &partition;
-    
+
+    // The type of this block
+    FSBlockType type = FS_UNKNOWN_BLOCK;
+        
     // The sector number of this block
     Block nr;
     
-    // Outcome of the last integrity check (0 = OK, n = n-th corrupted block)
+    // Outcome of the latest integrity check (0 = OK, n = n-th corrupted block)
     isize corrupted = 0;
         
     // The actual block data
@@ -57,18 +57,12 @@ protected:
 
 public:
     
-    // Returns the type of this block
-    virtual FSBlockType getType() const = 0; 
-
     // Returns the size of this block in bytes (usually 512)
     isize bsize() const;
 
     // Returns the number of data bytes stored in this block
     isize dsize() const;
-    
-    // Extract the file system type from the block header
-    virtual FSVolumeType dos() const { return FS_NODOS; }
-    
+        
     // Returns the role of a certain byte in this block
     FSItemType itemType(isize byte) const;
     

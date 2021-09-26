@@ -259,7 +259,7 @@ FSPartition::allocateBlockAbove(Block nr)
     assert(nr >= firstBlock && nr <= lastBlock);
     
     for (i64 i = (i64)nr + 1; i <= lastBlock; i++) {
-        if (dev.blocks[i]->getType() == FS_EMPTY_BLOCK) {
+        if (dev.blocks[i]->type == FS_EMPTY_BLOCK) {
             markAsAllocated((Block)i);
             return (Block)i;
         }
@@ -273,7 +273,7 @@ FSPartition::allocateBlockBelow(Block nr)
     assert(nr >= firstBlock && nr <= lastBlock);
     
     for (i64 i = (i64)nr - 1; i >= firstBlock; i--) {
-        if (dev.blocks[i]->getType() == FS_EMPTY_BLOCK) {
+        if (dev.blocks[i]->type == FS_EMPTY_BLOCK) {
             markAsAllocated((Block)i);
             return (Block)i;
         }
@@ -461,8 +461,8 @@ FSPartition::locateAllocationBit(Block nr, isize *byte, isize *bit) const
 void
 FSPartition::makeBootable(BootBlockId id)
 {
-    assert(dev.blocks[firstBlock + 0]->getType() == FS_BOOT_BLOCK);
-    assert(dev.blocks[firstBlock + 1]->getType() == FS_BOOT_BLOCK);
+    assert(dev.blocks[firstBlock + 0]->type == FS_BOOT_BLOCK);
+    assert(dev.blocks[firstBlock + 1]->type == FS_BOOT_BLOCK);
 
     ((FSBootBlock *)dev.blocks[firstBlock + 0])->writeBootBlock(id, 0);
     ((FSBootBlock *)dev.blocks[firstBlock + 1])->writeBootBlock(id, 1);
@@ -471,8 +471,8 @@ FSPartition::makeBootable(BootBlockId id)
 void
 FSPartition::killVirus()
 {
-    assert(dev.blocks[firstBlock + 0]->getType() == FS_BOOT_BLOCK);
-    assert(dev.blocks[firstBlock + 1]->getType() == FS_BOOT_BLOCK);
+    assert(dev.blocks[firstBlock + 0]->type == FS_BOOT_BLOCK);
+    assert(dev.blocks[firstBlock + 1]->type == FS_BOOT_BLOCK);
 
     long id = isOFS() ? BB_AMIGADOS_13 : isFFS() ? BB_AMIGADOS_20 : BB_NONE;
 
@@ -495,11 +495,11 @@ FSPartition::check(bool strict, FSErrorReport &report) const
     for (Block i = firstBlock; i <= lastBlock; i++) {
 
         FSBlock *block = dev.blocks[i];
-        if (block->getType() == FS_EMPTY_BLOCK && !isFree((Block)i)) {
+        if (block->type == FS_EMPTY_BLOCK && !isFree((Block)i)) {
             report.bitmapErrors++;
             debug(FS_DEBUG, "Empty block %d is marked as allocated\n", i);
         }
-        if (block->getType() != FS_EMPTY_BLOCK && isFree((Block)i)) {
+        if (block->type != FS_EMPTY_BLOCK && isFree((Block)i)) {
             report.bitmapErrors++;
             debug(FS_DEBUG, "Non-empty block %d is marked as free\n", i);
         }

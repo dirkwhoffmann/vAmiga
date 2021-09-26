@@ -22,8 +22,6 @@ struct FSBitmapExtBlock : FSBlock {
     // Methods from Block class
     //
 
-    FSBlockType getType() const override { assert(type == FS_BITMAP_EXT_BLOCK); return FS_BITMAP_EXT_BLOCK; }
-
     Block getNextBmExtBlockRef() const override   { return get32(-1);         }
     void setNextBmExtBlockRef(Block ref) override {        set32(-1, ref);    }
     

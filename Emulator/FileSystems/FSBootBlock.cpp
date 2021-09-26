@@ -30,19 +30,6 @@ FSBootBlock::~FSBootBlock()
     delete [] data;
 }
 
-
-FSVolumeType
-FSBootBlock::dos() const
-{
-    // Only proceed if the header begins with 'DOS'
-    if (strncmp((const char *)data, "DOS", 3)) return FS_NODOS;
-        
-    // Only proceed if the DOS version number is valid
-    if (data[3] > 7) return FS_NODOS;
-    
-    return (FSVolumeType)data[3];
-}
-
 void
 FSBootBlock::writeBootBlock(BootBlockId id, isize page)
 {

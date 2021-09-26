@@ -21,8 +21,6 @@ struct FSRootBlock : FSBlock {
     //
 
     // Methods from Block class
-    FSBlockType getType() const override { assert(type == FS_ROOT_BLOCK); return FS_ROOT_BLOCK; }
-
     Block getNextBmExtBlockRef() const override   { return get32(-24);         }
     void setNextBmExtBlockRef(Block ref) override {        set32(-24, ref);    }
     

@@ -20,8 +20,6 @@ struct FSFileHeaderBlock : FSBlock {
     // Methods from Block class
     //
 
-    FSBlockType getType() const override { assert(type == FS_FILEHEADER_BLOCK); return FS_FILEHEADER_BLOCK; }
-
     ErrorCode exportBlock(const string &path) override;
 
     isize getNumDataBlockRefs() const override    { return get32(2);           }
