@@ -20,9 +20,10 @@ struct FSRootBlock : FSBlock {
     // Methods from Block class
     //
 
+    /*
     Block getNextBmExtBlockRef() const override   { return get32(-24);         }
     void setNextBmExtBlockRef(Block ref) override {        set32(-24, ref);    }
-    
+    */
     /*
     FSTime getModificationDate() const override   { return FSTime(addr32(-23));}
     void setModificationDate(FSTime t) override   { t.write(addr32(-23));      }

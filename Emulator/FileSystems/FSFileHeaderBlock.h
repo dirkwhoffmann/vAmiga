@@ -28,9 +28,10 @@ struct FSFileHeaderBlock : FSBlock {
     void incNumDataBlockRefs() override           {        inc32(2);           }
     */
     
+    /*
     Block getFirstDataBlockRef() const override   { return get32(4     );      }
     void setFirstDataBlockRef(Block ref) override {        set32(4, ref);      }
-    
+    */
     /*
     Block getProtectionBits() const override      { return get32(-48     );    }
     void setProtectionBits(Block val) override    {        set32(-48, val);    }
@@ -44,17 +45,19 @@ struct FSFileHeaderBlock : FSBlock {
     void setCreationDate(FSTime t) override    { t.write(addr32(-23));        }
     */
     
+    /*
     Block getNextHashRef() const override        { return get32(-4     );      }
     void setNextHashRef(Block ref) override      {        set32(-4, ref);      }
-
+    */
+    
     /*
     Block getParentDirRef() const override       { return get32(-3     );      }
     void setParentDirRef(Block ref) override     {        set32(-3, ref);      }
     */
-    
+    /*
     Block getNextListBlockRef() const override   { return get32(-2     );      }
     void setNextListBlockRef(Block ref) override {        set32(-2, ref);      }
-
+    */
     
     //
     // Block specific methods

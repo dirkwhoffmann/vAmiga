@@ -199,23 +199,23 @@ public:
     struct FSFileHeaderBlock *getFileHeaderBlock();
 
     // Link to the next block with the same hash
-    virtual Block getNextHashRef() const { return 0; }
-    virtual void setNextHashRef(Block ref) { }
+    Block getNextHashRef() const;
+    void setNextHashRef(Block ref);
     struct FSBlock *getNextHashBlock();
 
     // Link to the next extension block
-    virtual Block getNextListBlockRef() const { return 0; }
-    virtual void setNextListBlockRef(Block ref) { }
+    Block getNextListBlockRef() const;
+    void setNextListBlockRef(Block ref);
     struct FSFileListBlock *getNextListBlock();
     
     // Link to the next bitmap extension block
-    virtual Block getNextBmExtBlockRef() const { return 0; }
-    virtual void setNextBmExtBlockRef(Block ref) { }
+    Block getNextBmExtBlockRef() const;
+    void setNextBmExtBlockRef(Block ref);
     struct FSBitmapExtBlock *getNextBmExtBlock();
     
     // Link to the first data block
-    virtual Block getFirstDataBlockRef() const { return 0; }
-    virtual void setFirstDataBlockRef(Block ref) { }
+    Block getFirstDataBlockRef() const;
+    void setFirstDataBlockRef(Block ref);
     struct FSDataBlock *getFirstDataBlock();
 
     Block getDataBlockRef(isize nr) const;

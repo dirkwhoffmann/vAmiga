@@ -1044,11 +1044,73 @@ FSBlock::getFileHeaderBlock()
     return nr ? partition.dev.fileHeaderBlockPtr(nr) : nullptr;
 }
 
+Block
+FSBlock::getNextHashRef() const
+{
+    switch (type) {
+                        
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+
+            return get32(-4);
+            
+        default:
+            return 0;
+    }
+}
+
+void
+FSBlock::setNextHashRef(Block ref)
+{
+    switch (type) {
+                        
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+
+            set32(-4, ref);
+            break;
+            
+        default:
+            break;
+    }
+}
+
 FSBlock *
 FSBlock::getNextHashBlock()
 {
     Block nr = getNextHashRef();
     return nr ? partition.dev.blockPtr(nr) : nullptr;
+}
+
+Block
+FSBlock::getNextListBlockRef() const
+{
+    switch (type) {
+                        
+        case FS_FILEHEADER_BLOCK:
+        case FS_FILELIST_BLOCK:
+            
+            return get32(-2);
+            
+        default:
+            return 0;
+    }
+}
+
+void
+FSBlock::setNextListBlockRef(Block ref)
+{
+    switch (type) {
+                        
+        case FS_FILEHEADER_BLOCK:
+        case FS_FILELIST_BLOCK:
+            
+            set32(-2, ref);
+            break;
+            
+        default:
+            break;
+    }
 }
 
 FSFileListBlock *
@@ -1058,6 +1120,32 @@ FSBlock::getNextListBlock()
     return nr ? partition.dev.fileListBlockPtr(nr) : nullptr;
 }
 
+Block
+FSBlock::getNextBmExtBlockRef() const
+{
+    switch (type) {
+            
+        case FS_ROOT_BLOCK:        return get32(-24);
+        case FS_BITMAP_EXT_BLOCK:  return get32(-1);
+            
+        default:
+            return 0;
+    }
+}
+
+void
+FSBlock::setNextBmExtBlockRef(Block ref)
+{
+    switch (type) {
+            
+        case FS_ROOT_BLOCK:        set32(-24, ref); break;
+        case FS_BITMAP_EXT_BLOCK:  set32(-1, ref); break;
+            
+        default:
+            break;
+    }
+}
+
 FSBitmapExtBlock *
 FSBlock::getNextBmExtBlock()
 {
@@ -1065,6 +1153,36 @@ FSBlock::getNextBmExtBlock()
     return nr ? partition.dev.bitmapExtBlockPtr(nr) : nullptr;
 }
 
+Block
+FSBlock::getFirstDataBlockRef() const
+{
+    switch (type) {
+            
+        case FS_FILEHEADER_BLOCK:
+        case FS_FILELIST_BLOCK:
+            
+            return get32(4);
+            
+        default:
+            return 0;
+    }
+}
+
+void
+FSBlock::setFirstDataBlockRef(Block ref)
+{
+    switch (type) {
+                        
+        case FS_FILEHEADER_BLOCK:
+        case FS_FILELIST_BLOCK:
+            
+            set32(4, ref);
+            break;
+            
+        default:
+            break;
+    }
+}
 
 FSDataBlock *
 FSBlock::getFirstDataBlock()
