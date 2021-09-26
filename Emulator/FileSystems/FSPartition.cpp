@@ -40,7 +40,7 @@ FSPartition::FSPartition(FSDevice &dev, FSPartitionDescriptor &layout) : FSParti
     // Create the bitmap blocks
     for (auto& ref : layout.bmBlocks) {
         
-        dev.blocks[ref] = new FSBitmapBlock(*this, ref, FS_BITMAP_BLOCK);
+        dev.blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_BLOCK);
     }
     
     // Add bitmap extension blocks
@@ -363,7 +363,7 @@ FSPartition::newFileHeaderBlock(const string &name)
     return block;
 }
 
-FSBitmapBlock *
+FSBlock *
 FSPartition::bmBlockForBlock(Block nr)
 {
     assert(nr >= 2 && nr < numBlocks());
@@ -393,7 +393,7 @@ FSPartition::isFree(Block nr) const
     
     // Locate the allocation bit in the bitmap block
     isize byte, bit;
-    FSBitmapBlock *bm = locateAllocationBit(nr, &byte, &bit);
+    FSBlock *bm = locateAllocationBit(nr, &byte, &bit);
         
     // Read the bit
     return bm ? GET_BIT(bm->data[byte], bit) : false;
@@ -404,12 +404,12 @@ FSPartition::setAllocationBit(Block nr, bool value)
 {
     isize byte, bit;
     
-    if (FSBitmapBlock *bm = locateAllocationBit(nr, &byte, &bit)) {
+    if (FSBlock *bm = locateAllocationBit(nr, &byte, &bit)) {
         REPLACE_BIT(bm->data[byte], bit, value);
     }
 }
 
-FSBitmapBlock *
+FSBlock *
 FSPartition::locateAllocationBit(Block nr, isize *byte, isize *bit) const
 {
     assert(nr >= firstBlock && nr <= lastBlock);
@@ -427,7 +427,7 @@ FSPartition::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     nr = nr % bitsPerBlock;
 
     // Get the bitmap block
-    FSBitmapBlock *bm;
+    FSBlock *bm;
     bm = (bmNr < (isize)bmBlocks.size()) ? dev.bitmapBlockPtr(bmBlocks[bmNr]) : nullptr;
     if (bm == nullptr) {
         warn("Allocation bit is located in non-existent bitmap block %zd\n", bmNr);

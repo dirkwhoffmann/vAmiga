@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "FSBlock.h"
-#include "FSBitmapBlock.h"
 #include "FSBootBlock.h"
 #include "FSDevice.h"
 #include "FSEmptyBlock.h"
@@ -98,7 +97,7 @@ FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
         case FS_EMPTY_BLOCK:      return new FSEmptyBlock(p, nr, type);
         case FS_BOOT_BLOCK:       return new FSBootBlock(p, nr, type);
         case FS_ROOT_BLOCK:       return new FSRootBlock(p, nr, type);
-        case FS_BITMAP_BLOCK:     return new FSBitmapBlock(p, nr, type);
+        case FS_BITMAP_BLOCK:     return new FSBlock(p, nr, type);
         case FS_BITMAP_EXT_BLOCK: return new FSBlock(p, nr, type);
         case FS_USERDIR_BLOCK:    return new FSBlock(p, nr, type);
         case FS_FILEHEADER_BLOCK: return new FSBlock(p, nr, type);

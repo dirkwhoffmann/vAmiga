@@ -203,11 +203,11 @@ FSDevice::rootBlockPtr(Block nr)
     return nullptr;
 }
 
-FSBitmapBlock *
+FSBlock *
 FSDevice::bitmapBlockPtr(Block nr)
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_BITMAP_BLOCK) {
-        return (FSBitmapBlock *)blocks[nr];
+        return blocks[nr];
     }
     return nullptr;
 }

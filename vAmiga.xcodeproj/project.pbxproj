@@ -78,7 +78,6 @@
 		507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507D7767228BE3EF001E97A9 /* StateMachine.cpp */; };
 		5083CF5B2546AB1C00A28EF8 /* FSBootBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083CF592546AB1C00A28EF8 /* FSBootBlock.cpp */; };
 		5083CF602546BCB200A28EF8 /* FSRootBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083CF5E2546BCB200A28EF8 /* FSRootBlock.cpp */; };
-		5083CF652546BEAA00A28EF8 /* FSBitmapBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083CF632546BEAA00A28EF8 /* FSBitmapBlock.cpp */; };
 		5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5821FB6856009753EF /* ProxyExtensions.swift */; };
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		50894D822593CF4400C0499D /* HIDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50894D812593CF4400C0499D /* HIDExtensions.swift */; };
@@ -381,8 +380,6 @@
 		5083CF5A2546AB1C00A28EF8 /* FSBootBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSBootBlock.h; sourceTree = "<group>"; };
 		5083CF5E2546BCB200A28EF8 /* FSRootBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSRootBlock.cpp; sourceTree = "<group>"; };
 		5083CF5F2546BCB200A28EF8 /* FSRootBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSRootBlock.h; sourceTree = "<group>"; };
-		5083CF632546BEAA00A28EF8 /* FSBitmapBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSBitmapBlock.cpp; sourceTree = "<group>"; };
-		5083CF642546BEAA00A28EF8 /* FSBitmapBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSBitmapBlock.h; sourceTree = "<group>"; };
 		5085FE5821FB6856009753EF /* ProxyExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyExtensions.swift; sourceTree = "<group>"; };
 		508833EC21F0D21B009890EA /* ADFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ADFFile.cpp; sourceTree = "<group>"; };
 		508833ED21F0D21B009890EA /* ADFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADFFile.h; sourceTree = "<group>"; };
@@ -840,8 +837,6 @@
 				5083CF592546AB1C00A28EF8 /* FSBootBlock.cpp */,
 				5083CF5F2546BCB200A28EF8 /* FSRootBlock.h */,
 				5083CF5E2546BCB200A28EF8 /* FSRootBlock.cpp */,
-				5083CF642546BEAA00A28EF8 /* FSBitmapBlock.h */,
-				5083CF632546BEAA00A28EF8 /* FSBitmapBlock.cpp */,
 			);
 			path = FileSystems;
 			sourceTree = "<group>";
@@ -1775,7 +1770,6 @@
 				50E8199325B350DA00D2E3A5 /* Errors.swift in Sources */,
 				50F54B2C24B5D31D0078FDC9 /* crc_csum.c in Sources */,
 				50E1D2C226CCF830001FE199 /* DatatypeExtensions.swift in Sources */,
-				5083CF652546BEAA00A28EF8 /* FSBitmapBlock.cpp in Sources */,
 				508FE05321EA22CC0043D0E9 /* VideoConf.swift in Sources */,
 				50357BB823912929007E7563 /* RendererSetup.swift in Sources */,
 				50D2B85226D292B7008040E5 /* DeniseDebugger.cpp in Sources */,
