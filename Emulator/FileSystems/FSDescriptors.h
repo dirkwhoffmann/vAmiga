@@ -21,7 +21,6 @@
 #include "FSBitmapExtBlock.h"
 #include "FSUserDirBlock.h"
 #include "FSFileHeaderBlock.h"
-#include "FSFileListBlock.h"
 
 /* To create a FSDevice, the layout parameters of the represendet device have
  * to be provided. This is done by passing a structure of type FSDeviceLayout

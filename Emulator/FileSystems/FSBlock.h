@@ -14,7 +14,6 @@
 #include "FSObjects.h"
 #include "BootBlockImage.h"
 #include "FSBitmapExtBlock.h"
-#include "FSFileListBlock.h"
 #include "FSFileHeaderBlock.h"
 #include <vector>
 
@@ -211,7 +210,7 @@ public:
     // Link to the next extension block
     Block getNextListBlockRef() const;
     void setNextListBlockRef(Block ref);
-    FSFileListBlock *getNextListBlock();
+    FSBlock *getNextListBlock();
     
     // Link to the next bitmap extension block
     Block getNextBmExtBlockRef() const;

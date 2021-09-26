@@ -15,7 +15,6 @@
 #include "FSDevice.h"
 #include "FSEmptyBlock.h"
 #include "FSFileHeaderBlock.h"
-#include "FSFileListBlock.h"
 #include "FSPartition.h"
 #include "FSRootBlock.h"
 #include "FSUserDirBlock.h"
@@ -106,7 +105,7 @@ FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
         case FS_BITMAP_EXT_BLOCK: return new FSBitmapExtBlock(p, nr, type);
         case FS_USERDIR_BLOCK:    return new FSUserDirBlock(p, nr, type);
         case FS_FILEHEADER_BLOCK: return new FSFileHeaderBlock(p, nr, type);
-        case FS_FILELIST_BLOCK:   return new FSFileListBlock(p, nr, type);
+        case FS_FILELIST_BLOCK:   return new FSBlock(p, nr, type);
         case FS_DATA_BLOCK_OFS:   return new FSBlock(p, nr, type);
         case FS_DATA_BLOCK_FFS:   return new FSBlock(p, nr, type);
             
@@ -1181,7 +1180,7 @@ FSBlock::setNextListBlockRef(Block ref)
     }
 }
 
-FSFileListBlock *
+FSBlock *
 FSBlock::getNextListBlock()
 {
     Block nr = getNextListBlockRef();
@@ -1557,7 +1556,7 @@ FSBlock::addDataBlockRef(u32 first, u32 ref)
             }
             
             // Otherwise, add it to an extension block
-            FSFileListBlock *item = getNextListBlock();
+            FSBlock *item = getNextListBlock();
             
             while (item) {
                 

@@ -239,11 +239,11 @@ FSDevice::fileHeaderBlockPtr(Block nr)
     return nullptr;
 }
 
-FSFileListBlock *
+FSBlock *
 FSDevice::fileListBlockPtr(Block nr)
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_FILELIST_BLOCK) {
-        return (FSFileListBlock *)blocks[nr];
+        return blocks[nr];
     }
     return nullptr;
 }
@@ -501,7 +501,7 @@ FSDevice::lastFileListBlockInChain(FSBlock *block)
 
     while (block && visited.find(block->nr) == visited.end()) {
 
-        FSFileListBlock *next = block->getNextListBlock();
+        FSBlock *next = block->getNextListBlock();
         if (next == nullptr) return block;
 
         visited.insert(block->nr);

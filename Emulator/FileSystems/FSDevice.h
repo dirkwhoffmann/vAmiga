@@ -19,7 +19,6 @@
 #include "FSBitmapExtBlock.h"
 #include "FSUserDirBlock.h"
 #include "FSFileHeaderBlock.h"
-#include "FSFileListBlock.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 #include <stack>
@@ -194,7 +193,7 @@ public:
     FSBitmapExtBlock *bitmapExtBlockPtr(Block nr);
     FSUserDirBlock *userDirBlockPtr(Block nr);
     FSFileHeaderBlock *fileHeaderBlockPtr(Block nr);
-    FSFileListBlock *fileListBlockPtr(Block nr);
+    FSBlock *fileListBlockPtr(Block nr);
     FSBlock *dataBlockPtr(Block nr);
     FSBlock *hashableBlockPtr(Block nr);
     

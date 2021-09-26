@@ -11,7 +11,6 @@
 #include "config.h"
 #include "FSPartition.h"
 #include "FSDevice.h"
-#include "FSFileListBlock.h"
 #include <algorithm>
 #include <vector>
 
@@ -302,7 +301,7 @@ FSPartition::addFileListBlock(Block head, Block prev)
     Block nr = allocateBlock();
     if (!nr) return 0;
     
-    dev.blocks[nr] = new FSFileListBlock(*this, nr, FS_FILELIST_BLOCK);
+    dev.blocks[nr] = new FSBlock(*this, nr, FS_FILELIST_BLOCK);
     dev.blocks[nr]->setFileHeaderRef(head);
     prevBlock->setNextListBlockRef(nr);
     
