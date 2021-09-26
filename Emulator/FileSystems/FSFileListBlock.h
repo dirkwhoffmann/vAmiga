@@ -13,7 +13,7 @@
 
 struct FSFileListBlock : FSBlock {
         
-    FSFileListBlock(FSPartition &p, Block nr);
+    FSFileListBlock(FSPartition &p, Block nr, FSBlockType t);
     ~FSFileListBlock();
 
     const char *getDescription() const override { return "FSFileListBlock"; }
@@ -23,7 +23,7 @@ struct FSFileListBlock : FSBlock {
     // Methods from Block class
     //
     
-    FSBlockType type() const override { return FS_FILELIST_BLOCK;   }
+    FSBlockType getType() const override { assert(type == FS_FILELIST_BLOCK); return FS_FILELIST_BLOCK;   }
     FSItemType itemType(isize byte) const override;
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     void dump() const override;

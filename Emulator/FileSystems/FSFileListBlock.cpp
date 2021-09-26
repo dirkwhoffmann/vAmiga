@@ -12,7 +12,7 @@
 #include "FSDevice.h"
 #include "FSPartition.h"
 
-FSFileListBlock::FSFileListBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
+FSFileListBlock::FSFileListBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, nr, t)
 {
     data = new u8[bsize()]();
 

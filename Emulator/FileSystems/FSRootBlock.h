@@ -12,7 +12,7 @@
 
 struct FSRootBlock : FSBlock {
           
-    FSRootBlock(FSPartition &p, Block nr);
+    FSRootBlock(FSPartition &p, Block nr, FSBlockType t);
     ~FSRootBlock();
 
     const char *getDescription() const override { return "FSRootBlock"; }
@@ -25,7 +25,7 @@ struct FSRootBlock : FSBlock {
     void dump() const override;
 
     // Methods from Block class
-    FSBlockType type() const override { return FS_ROOT_BLOCK; }
+    FSBlockType getType() const override { assert(type == FS_ROOT_BLOCK); return FS_ROOT_BLOCK; }
     FSItemType itemType(isize byte) const override;
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     isize checksumLocation() const override { return 5; }

@@ -13,7 +13,7 @@
 #include "FSDevice.h"
 #include "FSPartition.h"
 
-FSBootBlock::FSBootBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
+FSBootBlock::FSBootBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, nr, t)
 {
     data = new u8[bsize()]();
     

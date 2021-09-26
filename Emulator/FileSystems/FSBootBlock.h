@@ -14,7 +14,7 @@
 
 struct FSBootBlock : FSBlock {
         
-    FSBootBlock(FSPartition &p, Block nr);
+    FSBootBlock(FSPartition &p, Block nr, FSBlockType t);
     ~FSBootBlock();
     
     const char *getDescription() const override { return "FSBootBlock"; }
@@ -24,7 +24,7 @@ struct FSBootBlock : FSBlock {
     // Methods from Block class
     //
 
-    FSBlockType type() const override { return FS_BOOT_BLOCK; }
+    FSBlockType getType() const override { assert(type == FS_BOOT_BLOCK); return FS_BOOT_BLOCK; }
     FSVolumeType dos() const override;
     FSItemType itemType(isize byte) const override;
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;

@@ -13,7 +13,7 @@
 
 struct FSDataBlock : FSBlock {
       
-    FSDataBlock(FSPartition &p, Block nr);
+    FSDataBlock(FSPartition &p, Block nr, FSBlockType t);
     ~FSDataBlock();
     
     
@@ -42,10 +42,10 @@ struct OFSDataBlock : FSDataBlock {
 
     static isize headerSize() { return 24; }
 
-    OFSDataBlock(FSPartition &p, u32 nr);
+    OFSDataBlock(FSPartition &p, u32 nr, FSBlockType t);
 
     const char *getDescription() const override { return "OFSDataBlock"; }
-    FSBlockType type() const override { return FS_DATA_BLOCK_OFS; }
+    FSBlockType getType() const override { assert(type == FS_DATA_BLOCK_OFS); return FS_DATA_BLOCK_OFS; }
     FSItemType itemType(isize byte) const override;
     void dump() const override;
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;
@@ -73,10 +73,10 @@ struct FFSDataBlock : FSDataBlock {
       
     static isize headerSize() { return 0; }
 
-    FFSDataBlock(FSPartition &p, u32 nr);
+    FFSDataBlock(FSPartition &p, u32 nr, FSBlockType t);
 
     const char *getDescription() const override { return "FFSDataBlock"; }
-    FSBlockType type() const override { return FS_DATA_BLOCK_FFS; }
+    FSBlockType getType() const override { assert(type == FS_DATA_BLOCK_FFS); return FS_DATA_BLOCK_FFS; }
     FSItemType itemType(isize byte) const override;
     void dump() const override;
 

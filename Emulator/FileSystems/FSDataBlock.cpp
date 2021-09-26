@@ -12,7 +12,7 @@
 #include "FSDevice.h"
 #include "FSPartition.h"
 
-FSDataBlock::FSDataBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
+FSDataBlock::FSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSBlock(p, nr, t)
 {
     data = new u8[p.dev.bsize]();
 }
@@ -27,7 +27,7 @@ FSDataBlock::~FSDataBlock()
 // Original File System (OFS)
 //
 
-OFSDataBlock::OFSDataBlock(FSPartition &p, u32 nr) : FSDataBlock(p, nr)
+OFSDataBlock::OFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(p, nr, t)
 {
     data = new u8[bsize()]();
     
@@ -124,7 +124,7 @@ OFSDataBlock::dsize() const
 // Fast File System (FFS)
 //
 
-FFSDataBlock::FFSDataBlock(FSPartition &p, u32 nr) : FSDataBlock(p, nr) { }
+FFSDataBlock::FFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(p, nr, t) { }
 
 void
 FFSDataBlock::dump() const

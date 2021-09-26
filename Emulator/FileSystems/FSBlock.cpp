@@ -22,21 +22,27 @@
 #include "FSUserDirBlock.h"
 #include "MemUtils.h"
 
+FSBlock::FSBlock(FSPartition &p, Block nr, FSBlockType t) : partition(p)
+{
+    this->nr = nr;
+    this->type = t;
+}
+
 FSBlock *
 FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
 {
     switch (type) {
 
-        case FS_EMPTY_BLOCK:      return new FSEmptyBlock(p, nr);
-        case FS_BOOT_BLOCK:       return new FSBootBlock(p, nr);
-        case FS_ROOT_BLOCK:       return new FSRootBlock(p, nr);
-        case FS_BITMAP_BLOCK:     return new FSBitmapBlock(p, nr);
-        case FS_BITMAP_EXT_BLOCK: return new FSBitmapExtBlock(p, nr);
-        case FS_USERDIR_BLOCK:    return new FSUserDirBlock(p, nr);
-        case FS_FILEHEADER_BLOCK: return new FSFileHeaderBlock(p, nr);
-        case FS_FILELIST_BLOCK:   return new FSFileListBlock(p, nr);
-        case FS_DATA_BLOCK_OFS:   return new OFSDataBlock(p, nr);
-        case FS_DATA_BLOCK_FFS:   return new FFSDataBlock(p, nr);
+        case FS_EMPTY_BLOCK:      return new FSEmptyBlock(p, nr, type);
+        case FS_BOOT_BLOCK:       return new FSBootBlock(p, nr, type);
+        case FS_ROOT_BLOCK:       return new FSRootBlock(p, nr, type);
+        case FS_BITMAP_BLOCK:     return new FSBitmapBlock(p, nr, type);
+        case FS_BITMAP_EXT_BLOCK: return new FSBitmapExtBlock(p, nr, type);
+        case FS_USERDIR_BLOCK:    return new FSUserDirBlock(p, nr, type);
+        case FS_FILEHEADER_BLOCK: return new FSFileHeaderBlock(p, nr, type);
+        case FS_FILELIST_BLOCK:   return new FSFileListBlock(p, nr, type);
+        case FS_DATA_BLOCK_OFS:   return new OFSDataBlock(p, nr, type);
+        case FS_DATA_BLOCK_FFS:   return new FFSDataBlock(p, nr, type);
             
         default:
             throw VAError(ERROR_FS_INVALID_BLOCK_TYPE);

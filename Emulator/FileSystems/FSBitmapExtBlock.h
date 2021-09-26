@@ -14,7 +14,7 @@
 
 struct FSBitmapExtBlock : FSBlock {
                     
-    FSBitmapExtBlock(FSPartition &p, Block nr);
+    FSBitmapExtBlock(FSPartition &p, Block nr, FSBlockType t);
     ~FSBitmapExtBlock();
      
     const char *getDescription() const override { return "FSBitmapExtBlock"; }
@@ -24,7 +24,7 @@ struct FSBitmapExtBlock : FSBlock {
     // Methods from Block class
     //
 
-    FSBlockType type() const override { return FS_BITMAP_EXT_BLOCK; }
+    FSBlockType getType() const override { assert(type == FS_BITMAP_EXT_BLOCK); return FS_BITMAP_EXT_BLOCK; }
     FSItemType itemType(isize byte) const override;
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     void dump() const override;

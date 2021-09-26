@@ -13,8 +13,8 @@
 
 struct FSFileHeaderBlock : FSBlock {
                 
-    FSFileHeaderBlock(FSPartition &p, Block nr);
-    FSFileHeaderBlock(FSPartition &p, Block nr, const string &name);
+    FSFileHeaderBlock(FSPartition &p, Block nr, FSBlockType t);
+    // FSFileHeaderBlock(FSPartition &p, Block nr, const string &name);
 
     const char *getDescription() const override { return "FSFileHeaderBlock"; }
 
@@ -23,7 +23,7 @@ struct FSFileHeaderBlock : FSBlock {
     // Methods from Block class
     //
 
-    FSBlockType type() const override { return FS_FILEHEADER_BLOCK; }
+    FSBlockType getType() const override { assert(type == FS_FILEHEADER_BLOCK); return FS_FILEHEADER_BLOCK; }
     FSItemType itemType(isize byte) const override;
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     void dump() const override;

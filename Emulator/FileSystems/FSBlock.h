@@ -15,6 +15,9 @@
 
 struct FSBlock : AmigaObject {
         
+    // The type of this block
+    FSBlockType type = FS_UNKNOWN_BLOCK;
+    
     // The partition this block belongs to
     struct FSPartition &partition;
     
@@ -32,7 +35,7 @@ struct FSBlock : AmigaObject {
     // Constructing
     //
     
-    FSBlock(FSPartition &p, Block nr) : partition(p) { this->nr = nr; }
+    FSBlock(FSPartition &p, Block nr, FSBlockType t);
     virtual ~FSBlock() { }
 
     static FSBlock *make(FSPartition &p, Block nr, FSBlockType type) throws;
@@ -55,7 +58,7 @@ private:
 public:
     
     // Returns the type of this block
-    virtual FSBlockType type() const = 0; 
+    virtual FSBlockType getType() const = 0; 
 
     // Returns the size of this block in bytes (usually 512)
     isize bsize() const;

@@ -30,24 +30,24 @@ FSPartition::FSPartition(FSDevice &dev, FSPartitionDescriptor &layout) : FSParti
     for (Block i = firstBlock; i <= lastBlock; i++) assert(dev.blocks[i] == nullptr);
     
     // Create boot blocks
-    dev.blocks[firstBlock]     = new FSBootBlock(*this, firstBlock);
-    dev.blocks[firstBlock + 1] = new FSBootBlock(*this, firstBlock + 1);
+    dev.blocks[firstBlock]     = new FSBootBlock(*this, firstBlock, FS_BOOT_BLOCK);
+    dev.blocks[firstBlock + 1] = new FSBootBlock(*this, firstBlock + 1, FS_BOOT_BLOCK);
 
     // Create the root block
-    FSRootBlock *rb = new FSRootBlock(*this, rootBlock);
+    FSRootBlock *rb = new FSRootBlock(*this, rootBlock, FS_ROOT_BLOCK);
     dev.blocks[layout.rootBlock] = rb;
     
     // Create the bitmap blocks
     for (auto& ref : layout.bmBlocks) {
         
-        dev.blocks[ref] = new FSBitmapBlock(*this, ref);
+        dev.blocks[ref] = new FSBitmapBlock(*this, ref, FS_BITMAP_BLOCK);
     }
     
     // Add bitmap extension blocks
     FSBlock *pred = rb;
     for (auto& ref : layout.bmExtBlocks) {
         
-        dev.blocks[ref] = new FSBitmapExtBlock(*this, ref);
+        dev.blocks[ref] = new FSBitmapExtBlock(*this, ref, FS_BITMAP_EXT_BLOCK);
         pred->setNextBmExtBlockRef(ref);
         pred = dev.blocks[ref];
     }
@@ -59,7 +59,7 @@ FSPartition::FSPartition(FSDevice &dev, FSPartitionDescriptor &layout) : FSParti
     for (Block i = firstBlock; i <= lastBlock; i++) {
         
         if (dev.blocks[i] == nullptr) {
-            dev.blocks[i] = new FSEmptyBlock(*this, i);
+            dev.blocks[i] = new FSEmptyBlock(*this, i, FS_EMPTY_BLOCK);
             markAsFree(i);
         }
     }
@@ -259,7 +259,7 @@ FSPartition::allocateBlockAbove(Block nr)
     assert(nr >= firstBlock && nr <= lastBlock);
     
     for (i64 i = (i64)nr + 1; i <= lastBlock; i++) {
-        if (dev.blocks[i]->type() == FS_EMPTY_BLOCK) {
+        if (dev.blocks[i]->getType() == FS_EMPTY_BLOCK) {
             markAsAllocated((Block)i);
             return (Block)i;
         }
@@ -273,7 +273,7 @@ FSPartition::allocateBlockBelow(Block nr)
     assert(nr >= firstBlock && nr <= lastBlock);
     
     for (i64 i = (i64)nr - 1; i >= firstBlock; i--) {
-        if (dev.blocks[i]->type() == FS_EMPTY_BLOCK) {
+        if (dev.blocks[i]->getType() == FS_EMPTY_BLOCK) {
             markAsAllocated((Block)i);
             return (Block)i;
         }
@@ -288,7 +288,7 @@ FSPartition::deallocateBlock(Block nr)
     assert(dev.blocks[nr]);
     
     delete dev.blocks[nr];
-    dev.blocks[nr] = new FSEmptyBlock(*this, nr);
+    dev.blocks[nr] = new FSEmptyBlock(*this, nr, FS_EMPTY_BLOCK);
     markAsFree(nr);
 }
 
@@ -301,7 +301,7 @@ FSPartition::addFileListBlock(Block head, Block prev)
     Block nr = allocateBlock();
     if (!nr) return 0;
     
-    dev.blocks[nr] = new FSFileListBlock(*this, nr);
+    dev.blocks[nr] = new FSFileListBlock(*this, nr, FS_FILELIST_BLOCK);
     dev.blocks[nr]->setFileHeaderRef(head);
     prevBlock->setNextListBlockRef(nr);
     
@@ -319,9 +319,9 @@ FSPartition::addDataBlock(isize count, Block head, Block prev)
 
     FSDataBlock *newBlock;
     if (isOFS()) {
-        newBlock = new OFSDataBlock(*this, nr);
+        newBlock = new OFSDataBlock(*this, nr, FS_DATA_BLOCK_OFS);
     } else {
-        newBlock = new FFSDataBlock(*this, nr);
+        newBlock = new FFSDataBlock(*this, nr, FS_DATA_BLOCK_FFS);
     }
     
     dev.blocks[nr] = newBlock;
@@ -340,7 +340,8 @@ FSPartition::newUserDirBlock(const string &name)
     
     if (Block nr = allocateBlock()) {
     
-        block = new FSUserDirBlock(*this, nr, name);
+        block = new FSUserDirBlock(*this, nr, FS_USERDIR_BLOCK);
+        block->setName(FSName(name));
         dev.blocks[nr] = block;
     }
     
@@ -354,7 +355,8 @@ FSPartition::newFileHeaderBlock(const string &name)
     
     if (Block nr = allocateBlock()) {
 
-        block = new FSFileHeaderBlock(*this, nr, name);
+        block = new FSFileHeaderBlock(*this, nr, FS_FILEHEADER_BLOCK);
+        block->setName(FSName(name));
         dev.blocks[nr] = block;
     }
     
@@ -459,8 +461,8 @@ FSPartition::locateAllocationBit(Block nr, isize *byte, isize *bit) const
 void
 FSPartition::makeBootable(BootBlockId id)
 {
-    assert(dev.blocks[firstBlock + 0]->type() == FS_BOOT_BLOCK);
-    assert(dev.blocks[firstBlock + 1]->type() == FS_BOOT_BLOCK);
+    assert(dev.blocks[firstBlock + 0]->getType() == FS_BOOT_BLOCK);
+    assert(dev.blocks[firstBlock + 1]->getType() == FS_BOOT_BLOCK);
 
     ((FSBootBlock *)dev.blocks[firstBlock + 0])->writeBootBlock(id, 0);
     ((FSBootBlock *)dev.blocks[firstBlock + 1])->writeBootBlock(id, 1);
@@ -469,8 +471,8 @@ FSPartition::makeBootable(BootBlockId id)
 void
 FSPartition::killVirus()
 {
-    assert(dev.blocks[firstBlock + 0]->type() == FS_BOOT_BLOCK);
-    assert(dev.blocks[firstBlock + 1]->type() == FS_BOOT_BLOCK);
+    assert(dev.blocks[firstBlock + 0]->getType() == FS_BOOT_BLOCK);
+    assert(dev.blocks[firstBlock + 1]->getType() == FS_BOOT_BLOCK);
 
     long id = isOFS() ? BB_AMIGADOS_13 : isFFS() ? BB_AMIGADOS_20 : BB_NONE;
 
@@ -493,11 +495,11 @@ FSPartition::check(bool strict, FSErrorReport &report) const
     for (Block i = firstBlock; i <= lastBlock; i++) {
 
         FSBlock *block = dev.blocks[i];
-        if (block->type() == FS_EMPTY_BLOCK && !isFree((Block)i)) {
+        if (block->getType() == FS_EMPTY_BLOCK && !isFree((Block)i)) {
             report.bitmapErrors++;
             debug(FS_DEBUG, "Empty block %d is marked as allocated\n", i);
         }
-        if (block->type() != FS_EMPTY_BLOCK && isFree((Block)i)) {
+        if (block->getType() != FS_EMPTY_BLOCK && isFree((Block)i)) {
             report.bitmapErrors++;
             debug(FS_DEBUG, "Non-empty block %d is marked as free\n", i);
         }

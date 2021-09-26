@@ -12,7 +12,7 @@
 #include "FSDevice.h"
 #include "FSPartition.h"
 
-FSBitmapBlock::FSBitmapBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
+FSBitmapBlock::FSBitmapBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, nr, t)
 {
     data = new u8[p.dev.bsize]();
 }

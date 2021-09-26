@@ -13,7 +13,7 @@
 
 struct FSEmptyBlock : FSBlock {
     
-    FSEmptyBlock(FSPartition &p, Block nr) : FSBlock(p, nr) { }
+    FSEmptyBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, nr, t) { }
      
     const char *getDescription() const override { return "FSEmptyBlock"; }
     
@@ -22,7 +22,7 @@ struct FSEmptyBlock : FSBlock {
     // Methods from Block class
     //
 
-    FSBlockType type() const override { return FS_EMPTY_BLOCK; }
+    FSBlockType getType() const override { assert(type == FS_EMPTY_BLOCK); return FS_EMPTY_BLOCK; }
     FSItemType itemType(isize byte) const override; 
     u32 typeID() const override { return 0; }
     u32 subtypeID() const override { return 0; }

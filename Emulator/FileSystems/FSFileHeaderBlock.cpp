@@ -13,7 +13,7 @@
 #include "FSPartition.h"
 #include <set>
 
-FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
+FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, nr, t)
 {
     data = new u8[p.dev.bsize]();
    
@@ -25,11 +25,13 @@ FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, Block nr) : FSBlock(p, nr)
     set32(-1, (u32)-3);              // Sub type
 }
 
+/*
 FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, Block nr, const string &name) :
 FSFileHeaderBlock(p, nr)
 {
     setName(FSName(name));
 }
+*/
 
 FSItemType
 FSFileHeaderBlock::itemType(isize byte) const

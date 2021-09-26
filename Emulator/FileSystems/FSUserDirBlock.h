@@ -13,8 +13,8 @@
 
 struct FSUserDirBlock : FSBlock {
                 
-    FSUserDirBlock(FSPartition &p, Block nr);
-    FSUserDirBlock(FSPartition &p, Block nr, const string &name);
+    FSUserDirBlock(FSPartition &p, Block nr, FSBlockType t);
+    // FSUserDirBlock(FSPartition &p, Block nr, , FSBlockType t, const string &name);
     ~FSUserDirBlock();
     
     const char *getDescription() const override { return "FSUserDirBlock"; }
@@ -24,7 +24,7 @@ struct FSUserDirBlock : FSBlock {
     // Methods from Block class
     //
     
-    FSBlockType type() const override  { return FS_USERDIR_BLOCK; }
+    FSBlockType getType() const override  { assert(type == FS_USERDIR_BLOCK); return FS_USERDIR_BLOCK; }
     FSItemType itemType(isize byte) const override;
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     void dump() const override;
