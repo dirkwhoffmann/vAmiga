@@ -113,7 +113,7 @@ public:
     Block addDataBlock(isize count, Block head, Block prev);
     
     // Creates a new block of a certain kind
-    FSUserDirBlock *newUserDirBlock(const string &name);
+    FSBlock *newUserDirBlock(const string &name);
     FSBlock *newFileHeaderBlock(const string &name);
     
     

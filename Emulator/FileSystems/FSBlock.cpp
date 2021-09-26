@@ -16,7 +16,6 @@
 #include "FSEmptyBlock.h"
 #include "FSPartition.h"
 #include "FSRootBlock.h"
-#include "FSUserDirBlock.h"
 #include "MemUtils.h"
 
 FSBlock::FSBlock(FSPartition &p, Block nr, FSBlockType t) : partition(p)
@@ -102,7 +101,7 @@ FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
         case FS_ROOT_BLOCK:       return new FSRootBlock(p, nr, type);
         case FS_BITMAP_BLOCK:     return new FSBitmapBlock(p, nr, type);
         case FS_BITMAP_EXT_BLOCK: return new FSBitmapExtBlock(p, nr, type);
-        case FS_USERDIR_BLOCK:    return new FSUserDirBlock(p, nr, type);
+        case FS_USERDIR_BLOCK:    return new FSBlock(p, nr, type);
         case FS_FILEHEADER_BLOCK: return new FSBlock(p, nr, type);
         case FS_FILELIST_BLOCK:   return new FSBlock(p, nr, type);
         case FS_DATA_BLOCK_OFS:   return new FSBlock(p, nr, type);

@@ -80,7 +80,6 @@
 		5083CF5B2546AB1C00A28EF8 /* FSBootBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083CF592546AB1C00A28EF8 /* FSBootBlock.cpp */; };
 		5083CF602546BCB200A28EF8 /* FSRootBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083CF5E2546BCB200A28EF8 /* FSRootBlock.cpp */; };
 		5083CF652546BEAA00A28EF8 /* FSBitmapBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083CF632546BEAA00A28EF8 /* FSBitmapBlock.cpp */; };
-		5083CF6A2546C0D700A28EF8 /* FSUserDirBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083CF682546C0D700A28EF8 /* FSUserDirBlock.cpp */; };
 		5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5821FB6856009753EF /* ProxyExtensions.swift */; };
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		50894D822593CF4400C0499D /* HIDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50894D812593CF4400C0499D /* HIDExtensions.swift */; };
@@ -387,8 +386,6 @@
 		5083CF5F2546BCB200A28EF8 /* FSRootBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSRootBlock.h; sourceTree = "<group>"; };
 		5083CF632546BEAA00A28EF8 /* FSBitmapBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSBitmapBlock.cpp; sourceTree = "<group>"; };
 		5083CF642546BEAA00A28EF8 /* FSBitmapBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSBitmapBlock.h; sourceTree = "<group>"; };
-		5083CF682546C0D700A28EF8 /* FSUserDirBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSUserDirBlock.cpp; sourceTree = "<group>"; };
-		5083CF692546C0D700A28EF8 /* FSUserDirBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSUserDirBlock.h; sourceTree = "<group>"; };
 		5085FE5821FB6856009753EF /* ProxyExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyExtensions.swift; sourceTree = "<group>"; };
 		508833EC21F0D21B009890EA /* ADFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ADFFile.cpp; sourceTree = "<group>"; };
 		508833ED21F0D21B009890EA /* ADFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADFFile.h; sourceTree = "<group>"; };
@@ -850,8 +847,6 @@
 				5083CF632546BEAA00A28EF8 /* FSBitmapBlock.cpp */,
 				501702E2256FFC5400C84CE1 /* FSBitmapExtBlock.h */,
 				501702E1256FFC5400C84CE1 /* FSBitmapExtBlock.cpp */,
-				5083CF692546C0D700A28EF8 /* FSUserDirBlock.h */,
-				5083CF682546C0D700A28EF8 /* FSUserDirBlock.cpp */,
 			);
 			path = FileSystems;
 			sourceTree = "<group>";
@@ -1639,7 +1634,6 @@
 				50565072254573E100A79D27 /* FSBlock.cpp in Sources */,
 				500CE876259252ED00462836 /* DevicesPrefs.swift in Sources */,
 				5063F22A255A8EBD007182DC /* FSEmptyBlock.cpp in Sources */,
-				5083CF6A2546C0D700A28EF8 /* FSUserDirBlock.cpp in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
 				50F54B2724B5D31D0078FDC9 /* u_deep.c in Sources */,
 				508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */,

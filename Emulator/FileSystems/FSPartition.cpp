@@ -333,14 +333,14 @@ FSPartition::addDataBlock(isize count, Block head, Block prev)
 }
 
 
-FSUserDirBlock *
+FSBlock *
 FSPartition::newUserDirBlock(const string &name)
 {
-    FSUserDirBlock *block = nullptr;
+    FSBlock *block = nullptr;
     
     if (Block nr = allocateBlock()) {
     
-        block = new FSUserDirBlock(*this, nr, FS_USERDIR_BLOCK);
+        block = new FSBlock(*this, nr, FS_USERDIR_BLOCK);
         block->setName(FSName(name));
         dev.blocks[nr] = block;
     }

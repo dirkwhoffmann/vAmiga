@@ -221,11 +221,11 @@ FSDevice::bitmapExtBlockPtr(Block nr)
     return nullptr;
 }
 
-FSUserDirBlock *
+FSBlock *
 FSDevice::userDirBlockPtr(Block nr)
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_USERDIR_BLOCK) {
-        return (FSUserDirBlock *)blocks[nr];
+        return blocks[nr];
     }
     return nullptr;
 }
@@ -353,7 +353,7 @@ FSBlock *
 FSDevice::createDir(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
-    FSUserDirBlock *block = cdb->partition.newUserDirBlock(name);
+    FSBlock *block = cdb->partition.newUserDirBlock(name);
     if (block == nullptr) return nullptr;
     
     block->setParentDirRef(cdb->nr);
