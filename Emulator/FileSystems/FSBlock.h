@@ -14,7 +14,6 @@
 #include "FSObjects.h"
 #include "BootBlockImage.h"
 #include "FSBitmapExtBlock.h"
-#include "FSFileHeaderBlock.h"
 #include <vector>
 
 struct FSBlock : AmigaObject {
@@ -200,7 +199,7 @@ public:
     // Link to the file header block
     Block getFileHeaderRef() const;
     void setFileHeaderRef(Block ref);
-    FSFileHeaderBlock *getFileHeaderBlock();
+    FSBlock *getFileHeaderBlock();
 
     // Link to the next block with the same hash
     Block getNextHashRef() const;

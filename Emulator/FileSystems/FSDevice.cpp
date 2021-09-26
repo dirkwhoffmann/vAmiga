@@ -230,11 +230,11 @@ FSDevice::userDirBlockPtr(Block nr)
     return nullptr;
 }
 
-FSFileHeaderBlock *
+FSBlock *
 FSDevice::fileHeaderBlockPtr(Block nr)
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_FILEHEADER_BLOCK) {
-        return (FSFileHeaderBlock *)blocks[nr];
+        return blocks[nr];
     }
     return nullptr;
 }
@@ -366,7 +366,7 @@ FSBlock *
 FSDevice::createFile(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
-    FSFileHeaderBlock *block = cdb->partition.newFileHeaderBlock(name);
+    FSBlock *block = cdb->partition.newFileHeaderBlock(name);
     if (block == nullptr) return nullptr;
     
     block->setParentDirRef(cdb->nr);
@@ -384,7 +384,7 @@ FSDevice::createFile(const string &name, const u8 *buf, isize size)
     
     if (block) {
         assert(block->type == FS_FILEHEADER_BLOCK);
-        ((FSFileHeaderBlock *)block)->addData(buf, size);
+        block->addData(buf, size);
     }
     
     return block;

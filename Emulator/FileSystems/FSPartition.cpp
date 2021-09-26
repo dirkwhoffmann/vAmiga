@@ -348,14 +348,14 @@ FSPartition::newUserDirBlock(const string &name)
     return block;
 }
 
-FSFileHeaderBlock *
+FSBlock *
 FSPartition::newFileHeaderBlock(const string &name)
 {
-    FSFileHeaderBlock *block = nullptr;
+    FSBlock *block = nullptr;
     
     if (Block nr = allocateBlock()) {
 
-        block = new FSFileHeaderBlock(*this, nr, FS_FILEHEADER_BLOCK);
+        block = new FSBlock(*this, nr, FS_FILEHEADER_BLOCK);
         block->setName(FSName(name));
         dev.blocks[nr] = block;
     }

@@ -114,7 +114,7 @@ public:
     
     // Creates a new block of a certain kind
     FSUserDirBlock *newUserDirBlock(const string &name);
-    FSFileHeaderBlock *newFileHeaderBlock(const string &name);
+    FSBlock *newFileHeaderBlock(const string &name);
     
     
     //
