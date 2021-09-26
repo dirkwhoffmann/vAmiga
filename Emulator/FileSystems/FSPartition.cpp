@@ -30,8 +30,8 @@ FSPartition::FSPartition(FSDevice &dev, FSPartitionDescriptor &layout) : FSParti
     for (Block i = firstBlock; i <= lastBlock; i++) assert(dev.blocks[i] == nullptr);
     
     // Create boot blocks
-    dev.blocks[firstBlock]     = new FSBootBlock(*this, firstBlock, FS_BOOT_BLOCK);
-    dev.blocks[firstBlock + 1] = new FSBootBlock(*this, firstBlock + 1, FS_BOOT_BLOCK);
+    dev.blocks[firstBlock]     = new FSBlock(*this, firstBlock, FS_BOOT_BLOCK);
+    dev.blocks[firstBlock + 1] = new FSBlock(*this, firstBlock + 1, FS_BOOT_BLOCK);
 
     // Create the root block
     FSBlock *rb = new FSBlock(*this, rootBlock, FS_ROOT_BLOCK);
@@ -464,8 +464,8 @@ FSPartition::makeBootable(BootBlockId id)
     assert(dev.blocks[firstBlock + 0]->type == FS_BOOT_BLOCK);
     assert(dev.blocks[firstBlock + 1]->type == FS_BOOT_BLOCK);
 
-    ((FSBootBlock *)dev.blocks[firstBlock + 0])->writeBootBlock(id, 0);
-    ((FSBootBlock *)dev.blocks[firstBlock + 1])->writeBootBlock(id, 1);
+    dev.blocks[firstBlock + 0]->writeBootBlock(id, 0);
+    dev.blocks[firstBlock + 1]->writeBootBlock(id, 1);
 }
 
 void
@@ -477,8 +477,8 @@ FSPartition::killVirus()
     long id = isOFS() ? BB_AMIGADOS_13 : isFFS() ? BB_AMIGADOS_20 : BB_NONE;
 
     if (id != BB_NONE) {
-        ((FSBootBlock *)dev.blocks[firstBlock + 0])->writeBootBlock(id, 0);
-        ((FSBootBlock *)dev.blocks[firstBlock + 1])->writeBootBlock(id, 1);
+        dev.blocks[firstBlock + 0]->writeBootBlock(id, 0);
+        dev.blocks[firstBlock + 1]->writeBootBlock(id, 1);
     } else {
         std::memset(dev.blocks[firstBlock + 0]->data + 4, 0, bsize() - 4);
         std::memset(dev.blocks[firstBlock + 1]->data, 0, bsize());

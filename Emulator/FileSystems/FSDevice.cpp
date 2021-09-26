@@ -185,11 +185,11 @@ FSDevice::blockPtr(Block nr) const
     return nr < blocks.size() ? blocks[nr] : nullptr;
 }
 
-FSBootBlock *
+FSBlock *
 FSDevice::bootBlockPtr(Block nr)
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_BOOT_BLOCK) {
-        return (FSBootBlock *)blocks[nr];
+        return blocks[nr];
     }
     return nullptr;
 }

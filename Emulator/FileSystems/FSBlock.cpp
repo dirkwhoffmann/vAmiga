@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "FSBlock.h"
-#include "FSBootBlock.h"
 #include "FSDevice.h"
 #include "FSEmptyBlock.h"
 #include "FSPartition.h"
@@ -94,7 +93,7 @@ FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
     switch (type) {
 
         case FS_EMPTY_BLOCK:      return new FSEmptyBlock(p, nr, type);
-        case FS_BOOT_BLOCK:       return new FSBootBlock(p, nr, type);
+        case FS_BOOT_BLOCK:       return new FSBlock(p, nr, type);
         case FS_ROOT_BLOCK:       return new FSBlock(p, nr, type);
         case FS_BITMAP_BLOCK:     return new FSBlock(p, nr, type);
         case FS_BITMAP_EXT_BLOCK: return new FSBlock(p, nr, type);

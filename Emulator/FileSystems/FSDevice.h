@@ -13,7 +13,6 @@
 #include "FSPartition.h"
 #include "FSBlock.h"
 #include "FSEmptyBlock.h"
-#include "FSBootBlock.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 #include <stack>
@@ -33,7 +32,6 @@ class FSDevice : public AmigaObject {
 
     // TODO: Remove below
     friend struct FSEmptyBlock;
-    friend struct FSBootBlock;
 
 protected:
             
@@ -178,7 +176,7 @@ public:
     FSBlock *blockPtr(Block nr) const;
 
     // Queries a pointer to a block of a certain type (may return nullptr)
-    FSBootBlock *bootBlockPtr(Block nr);
+    FSBlock *bootBlockPtr(Block nr);
     FSBlock *rootBlockPtr(Block nr);
     FSBlock *bitmapBlockPtr(Block nr);
     FSBlock *bitmapExtBlockPtr(Block nr);
