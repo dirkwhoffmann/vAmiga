@@ -14,14 +14,10 @@
 
 FSDataBlock::FSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSBlock(p, nr, t)
 {
-    data = new u8[p.dev.bsize]();
 }
 
 OFSDataBlock::OFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(p, nr, t)
-{
-    data = new u8[bsize()]();
-    
-    set32(0, 8); // Block type
+{    
 }
 
 FFSDataBlock::FFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(p, nr, t) { }

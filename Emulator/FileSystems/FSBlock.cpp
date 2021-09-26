@@ -24,8 +24,70 @@
 
 FSBlock::FSBlock(FSPartition &p, Block nr, FSBlockType t) : partition(p)
 {
+    assert(t != FS_UNKNOWN_BLOCK);
+    
     this->nr = nr;
     this->type = t;
+    
+    // Allocate memory if this block is not empty
+    if (type != FS_EMPTY_BLOCK) data = new u8[bsize()]();
+    
+    // Initialize
+    switch (type) {
+
+        case FS_BOOT_BLOCK:
+            
+            if (nr == p.firstBlock && p.dos != FS_NODOS) {
+                data[0] = 'D';
+                data[1] = 'O';
+                data[2] = 'S';
+                data[3] = (u8)p.dos;
+            }
+            break;
+            
+        case FS_ROOT_BLOCK:
+            
+            assert(hashTableSize() == 72);
+            
+            set32(0, 2);                         // Type
+            set32(3, (u32)hashTableSize());      // Hash table size
+            set32(-50, 0xFFFFFFFF);              // Bitmap validity
+            setCreationDate(time(nullptr));      // Creation date
+            setModificationDate(time(nullptr));  // Modification date
+            set32(-1, 1);                        // Sub type
+            break;
+            
+        case FS_USERDIR_BLOCK:
+                            
+            set32(0, 2);                         // Type
+            set32(1, nr);                        // Block pointer to itself
+            setCreationDate(time(nullptr));      // Creation date
+            set32(-1, 2);                        // Sub type
+            break;
+            
+        case FS_FILEHEADER_BLOCK:
+
+            set32(0, 2);                         // Type
+            set32(1, nr);                        // Block pointer to itself
+            setCreationDate(time(nullptr));      // Creation date
+            set32(-1, (u32)-3);                  // Sub type
+            break;
+            
+        case FS_FILELIST_BLOCK:
+            
+            set32(0, 16);                        // Type
+            set32(1, nr);                        // Block pointer to itself
+            set32(-1, (u32)-3);                  // Sub type
+            break;
+            
+        case FS_DATA_BLOCK_OFS:
+            
+            set32(0, 8);                         // Block type
+            break;
+            
+        default:
+            break;
+    }
 }
 
 FSBlock::~FSBlock()

@@ -14,9 +14,5 @@
 
 FSFileListBlock::FSFileListBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, nr, t)
 {
-    data = new u8[bsize()]();
 
-    set32(0, 16);                         // Type
-    set32(1, nr);                         // Block pointer to itself
-    set32(-1, (u32)-3);                   // Sub type
 }

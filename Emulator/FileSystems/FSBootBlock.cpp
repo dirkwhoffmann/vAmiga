@@ -14,13 +14,6 @@
 #include "FSPartition.h"
 
 FSBootBlock::FSBootBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, nr, t)
-{
-    data = new u8[bsize()]();
-    
-    if (nr == p.firstBlock && p.dos != FS_NODOS) {
-        data[0] = 'D';
-        data[1] = 'O';
-        data[2] = 'S';
-        data[3] = (u8)p.dos;
-    }
+{    
+
 }

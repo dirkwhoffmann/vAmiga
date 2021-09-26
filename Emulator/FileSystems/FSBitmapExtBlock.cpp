@@ -14,5 +14,4 @@
 
 FSBitmapExtBlock::FSBitmapExtBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, nr, t)
 {
-    data = new u8[p.dev.bsize]();
 }
