@@ -40,7 +40,7 @@ struct FSBlock : AmigaObject {
     FSBlock(FSPartition &p, Block nr, FSBlockType t);
     ~FSBlock();
 
-    static FSBlock *make(FSPartition &p, Block nr, FSBlockType type) throws;
+    [[deprecated]] static FSBlock *make(FSPartition &p, Block nr, FSBlockType type) throws;
 
     
     //

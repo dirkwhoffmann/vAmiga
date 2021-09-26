@@ -88,21 +88,19 @@ FSBlock::~FSBlock()
 FSBlock *
 FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
 {
-    assert(type != FS_UNKNOWN_BLOCK);
-    
-    // TODO: Clean this up
     switch (type) {
 
-        case FS_EMPTY_BLOCK:      return new FSBlock(p, nr, type);
-        case FS_BOOT_BLOCK:       return new FSBlock(p, nr, type);
-        case FS_ROOT_BLOCK:       return new FSBlock(p, nr, type);
-        case FS_BITMAP_BLOCK:     return new FSBlock(p, nr, type);
-        case FS_BITMAP_EXT_BLOCK: return new FSBlock(p, nr, type);
-        case FS_USERDIR_BLOCK:    return new FSBlock(p, nr, type);
-        case FS_FILEHEADER_BLOCK: return new FSBlock(p, nr, type);
-        case FS_FILELIST_BLOCK:   return new FSBlock(p, nr, type);
-        case FS_DATA_BLOCK_OFS:   return new FSBlock(p, nr, type);
-        case FS_DATA_BLOCK_FFS:   return new FSBlock(p, nr, type);
+        case FS_EMPTY_BLOCK:
+        case FS_BOOT_BLOCK:
+        case FS_ROOT_BLOCK:
+        case FS_BITMAP_BLOCK:
+        case FS_BITMAP_EXT_BLOCK:
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+        case FS_FILELIST_BLOCK:
+        case FS_DATA_BLOCK_OFS:
+        case FS_DATA_BLOCK_FFS:
+            return new FSBlock(p, nr, type);
             
         default:
             throw VAError(ERROR_FS_INVALID_BLOCK_TYPE);
