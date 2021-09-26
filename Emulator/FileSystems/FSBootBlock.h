@@ -17,8 +17,6 @@ struct FSBootBlock : FSBlock {
     FSBootBlock(FSPartition &p, Block nr, FSBlockType t);
     ~FSBootBlock();
     
-    const char *getDescription() const override { return "FSBootBlock"; }
-
     
     //
     // Methods from Block class

@@ -17,25 +17,15 @@ struct FSBitmapExtBlock : FSBlock {
     FSBitmapExtBlock(FSPartition &p, Block nr, FSBlockType t);
     ~FSBitmapExtBlock();
      
-    const char *getDescription() const override { return "FSBitmapExtBlock"; }
-
     
     //
     // Methods from Block class
     //
 
     FSBlockType getType() const override { assert(type == FS_BITMAP_EXT_BLOCK); return FS_BITMAP_EXT_BLOCK; }
-    // FSItemType itemType(isize byte) const override;
-    // ErrorCode check(isize pos, u8 *expected, bool strict) const override;
-    // void dump() const override;
 
     Block getNextBmExtBlockRef() const override   { return get32(-1);         }
     void setNextBmExtBlockRef(Block ref) override {        set32(-1, ref);    }
-
-    /*
-    Block getBmBlockRef(isize nr) const           { return get32(nr     );    }
-    void setBmBlockRef(isize nr, Block ref)       {        set32(nr, ref);    }
-    */
     
     void addBitmapBlockRefs(std::vector<Block> &refs, std::vector<Block>::iterator &it);
 };

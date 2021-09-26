@@ -45,9 +45,9 @@ struct FSBlock : AmigaObject {
     // Methods from AmigaObject
     //
     
-private:
+protected:
     
-    // const char *getDescription() const override { return "FSBlock"; }
+    const char *getDescription() const override;
     void _dump(dump::Category category, std::ostream& os) const override { }
     
     
@@ -201,11 +201,6 @@ public:
     virtual Block getNextListBlockRef() const { return 0; }
     virtual void setNextListBlockRef(Block ref) { }
     struct FSFileListBlock *getNextListBlock();
-
-    // Link to the bitmap block
-    Block getBmBlockRef(isize nr) const;
-    void setBmBlockRef(isize nr, Block ref);
-    // struct FSBitmapBlock *getBmBlock(isize nr);
     
     // Link to the next bitmap extension block
     virtual Block getNextBmExtBlockRef() const { return 0; }
@@ -248,7 +243,10 @@ public:
     // Working with bitmap blocks
     //
 
-    
+    //Gets or sets a link to a bitmap block
+    Block getBmBlockRef(isize nr) const;
+    void setBmBlockRef(isize nr, Block ref);
+
     
     //
     // Working with data blocks

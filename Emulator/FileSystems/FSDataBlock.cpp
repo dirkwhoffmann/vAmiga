@@ -34,65 +34,6 @@ OFSDataBlock::OFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(
     set32(0, 8); // Block type
 }
 
-/*
-void
-OFSDataBlock::dump() const
-{
-    msg("File header block : %d\n", getFileHeaderRef());
-    msg("     Chain number : %d\n", getDataBlockNr());
-    msg("       Data bytes : %d\n", getDataBytesInBlock());
-    msg("  Next data block : %d\n", getNextDataBlockRef());
-    msg("\n");
-}
-*/
-
-/*
-FSItemType
-OFSDataBlock::itemType(isize pos) const
-{
-    if (pos < 24) {
-        
-        isize word = pos / 4;
-        
-        switch (word) {
-                
-            case 0: return FSI_TYPE_ID;
-            case 1: return FSI_FILEHEADER_REF;
-            case 2: return FSI_DATA_BLOCK_NUMBER;
-            case 3: return FSI_DATA_COUNT;
-            case 4: return FSI_NEXT_DATA_BLOCK_REF;
-            case 5: return FSI_CHECKSUM;
-        }
-    }
-    
-    return FSI_DATA;
-}
-*/
-
-/*
-ErrorCode
-OFSDataBlock::check(isize byte, u8 *expected, bool strict) const
-{
-    if (byte < 24) {
-        
-        isize word = byte / 4;
-        u32 value = get32(word);
-                
-        switch (word) {
-                
-            case 0: EXPECT_LONGWORD(8);                 break;
-            case 1: if (strict) EXPECT_FILEHEADER_REF;  break;
-            case 2: EXPECT_DATABLOCK_NUMBER;            break;
-            case 3: EXPECT_LESS_OR_EQUAL(dsize());      break;
-            case 4: EXPECT_OPTIONAL_DATABLOCK_REF;      break;
-            case 5: EXPECT_CHECKSUM;                    break;
-        }
-    }
-    
-    return ERROR_OK;
-}
-*/
-
 isize
 OFSDataBlock::writeData(FILE *file, isize size)
 {
@@ -114,34 +55,11 @@ OFSDataBlock::addData(const u8 *buffer, isize size)
     return count;
 }
 
-/*
-isize
-OFSDataBlock::dsize() const
-{
-    return bsize() - headerSize();
-}
-*/
-
 //
 // Fast File System (FFS)
 //
 
 FFSDataBlock::FFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(p, nr, t) { }
-
-/*
-void
-FFSDataBlock::dump() const
-{
-}
-*/
-
-/*
-FSItemType
-FFSDataBlock::itemType(isize pos) const
-{
-    return FSI_DATA;
-}
-*/
 
 isize
 FFSDataBlock::writeData(FILE *file, isize size)
@@ -160,11 +78,3 @@ FFSDataBlock::addData(const u8 *buffer, isize size)
     std::memcpy(data, buffer, count);
     return count;
 }
-
-/*
-isize
-FFSDataBlock::dsize() const
-{
-    return bsize() - headerSize();
-}
-*/

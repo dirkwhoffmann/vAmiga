@@ -16,16 +16,11 @@ struct FSBitmapBlock : FSBlock {
     FSBitmapBlock(FSPartition &p, Block nr, FSBlockType t);
     ~FSBitmapBlock();
      
-    const char *getDescription() const override { return "FSBitmapBlock"; }
-
     
     //
     // Methods from Block class
     //
 
     FSBlockType getType() const override { assert(type == FS_BITMAP_BLOCK); return FS_BITMAP_BLOCK; }
-    // FSItemType itemType(isize byte) const override;
-    // ErrorCode check(isize pos, u8 *expected, bool strict) const override;
-    // void dump() const override;
     isize checksumLocation() const override { return 0; }
 };

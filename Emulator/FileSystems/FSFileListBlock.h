@@ -16,17 +16,12 @@ struct FSFileListBlock : FSBlock {
     FSFileListBlock(FSPartition &p, Block nr, FSBlockType t);
     ~FSFileListBlock();
 
-    const char *getDescription() const override { return "FSFileListBlock"; }
-
     
     //
     // Methods from Block class
     //
     
     FSBlockType getType() const override { assert(type == FS_FILELIST_BLOCK); return FS_FILELIST_BLOCK;   }
-    // FSItemType itemType(isize byte) const override;
-    // ErrorCode check(isize pos, u8 *expected, bool strict) const override;
-    // void dump() const override;
     isize checksumLocation() const override { return 5; }
     
     isize getNumDataBlockRefs() const override    { return get32(2);           }
@@ -35,11 +30,6 @@ struct FSFileListBlock : FSBlock {
 
     Block getFirstDataBlockRef() const override   { return get32(4);           }
     void setFirstDataBlockRef(Block ref) override {        set32(4, ref);      }
-
-    /*
-    Block getDataBlockRef(isize nr) const         { return get32(-51-nr);      }
-    void setDataBlockRef(isize nr, Block ref)     {        set32(-51-nr, ref); }
-    */
     
     Block getFileHeaderRef() const override       { return get32(-3);          }
     void setFileHeaderRef(Block ref) override     {        set32(-3, ref);     }

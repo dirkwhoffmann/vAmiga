@@ -14,9 +14,7 @@
 struct FSEmptyBlock : FSBlock {
     
     FSEmptyBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, nr, t) { }
-     
-    const char *getDescription() const override { return "FSEmptyBlock"; }
-    
+         
     
     //
     // Methods from Block class

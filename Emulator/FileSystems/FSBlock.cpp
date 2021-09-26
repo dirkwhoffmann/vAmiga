@@ -49,6 +49,28 @@ FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
     }
 }
 
+const char *
+FSBlock::getDescription() const
+{
+    switch (type) {
+            
+        case FS_UNKNOWN_BLOCK:     return "FSBlock (Unknown)";
+        case FS_EMPTY_BLOCK:       return "FSBlock (Empty)";
+        case FS_BOOT_BLOCK:        return "FSBlock (Boot)";
+        case FS_ROOT_BLOCK:        return "FSBlock (Root)";
+        case FS_BITMAP_BLOCK:      return "FSBlock (Bitmap)";
+        case FS_BITMAP_EXT_BLOCK:  return "FSBlock (ExtBitmap)";
+        case FS_USERDIR_BLOCK:     return "FSBlock (UserDir)";
+        case FS_FILEHEADER_BLOCK:  return "FSBlock (FileHeader)";
+        case FS_FILELIST_BLOCK:    return "FSBlock (FileList)";
+        case FS_DATA_BLOCK_OFS:    return "FSBlock (OFS)";
+        case FS_DATA_BLOCK_FFS:    return "FSBlock (FFF)";
+            
+        default:
+            fatalError;
+    }
+}
+
 isize
 FSBlock::bsize() const
 {
@@ -671,53 +693,6 @@ FSBlock::getNextListBlock()
     return nr ? partition.dev.fileListBlockPtr(nr) : nullptr;
 }
 
-Block
-FSBlock::getBmBlockRef(isize nr) const
-{
-    switch (type) {
-            
-        case FS_ROOT_BLOCK:
-            
-            return get32(nr - 49);
-            
-        case FS_BITMAP_EXT_BLOCK:
-            
-            return get32(nr);
-            
-        default:
-            fatalError;
-    }
-}
-
-void
-FSBlock::setBmBlockRef(isize nr, Block ref)
-{
-    switch (type) {
-            
-        case FS_ROOT_BLOCK:
-            
-            set32(nr - 49, ref);
-            return;
-            
-        case FS_BITMAP_EXT_BLOCK:
-            
-            set32(nr, ref);
-            return;
-            
-        default:
-            fatalError;
-    }
-}
-
-/*
-struct FSBitmapBlock *
-FSBlock::getBmBlock(isize nr)
-{
-    Block n = getBmBlockRef(nr);
-    return nr ? partition.dev.bitmapBlockPtr(nr) : nullptr;
-}
-*/
-
 FSBitmapExtBlock *
 FSBlock::getNextBmExtBlock()
 {
@@ -792,6 +767,44 @@ FSBlock::dumpHashTable() const
         if (value) {
             msg("%zd: %d ", i, value);
         }
+    }
+}
+
+Block
+FSBlock::getBmBlockRef(isize nr) const
+{
+    switch (type) {
+            
+        case FS_ROOT_BLOCK:
+            
+            return get32(nr - 49);
+            
+        case FS_BITMAP_EXT_BLOCK:
+            
+            return get32(nr);
+            
+        default:
+            fatalError;
+    }
+}
+
+void
+FSBlock::setBmBlockRef(isize nr, Block ref)
+{
+    switch (type) {
+            
+        case FS_ROOT_BLOCK:
+            
+            set32(nr - 49, ref);
+            return;
+            
+        case FS_BITMAP_EXT_BLOCK:
+            
+            set32(nr, ref);
+            return;
+            
+        default:
+            fatalError;
     }
 }
 
