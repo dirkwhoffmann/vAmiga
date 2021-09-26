@@ -194,11 +194,11 @@ FSDevice::bootBlockPtr(Block nr)
     return nullptr;
 }
 
-FSRootBlock *
+FSBlock *
 FSDevice::rootBlockPtr(Block nr)
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_ROOT_BLOCK) {
-        return (FSRootBlock *)blocks[nr];
+        return blocks[nr];
     }
     return nullptr;
 }

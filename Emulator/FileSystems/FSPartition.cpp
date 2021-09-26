@@ -34,7 +34,7 @@ FSPartition::FSPartition(FSDevice &dev, FSPartitionDescriptor &layout) : FSParti
     dev.blocks[firstBlock + 1] = new FSBootBlock(*this, firstBlock + 1, FS_BOOT_BLOCK);
 
     // Create the root block
-    FSRootBlock *rb = new FSRootBlock(*this, rootBlock, FS_ROOT_BLOCK);
+    FSBlock *rb = new FSBlock(*this, rootBlock, FS_ROOT_BLOCK);
     dev.blocks[layout.rootBlock] = rb;
     
     // Create the bitmap blocks
@@ -143,14 +143,14 @@ FSPartition::predictBlockType(Block nr, const u8 *buffer) const
 FSName
 FSPartition::getName() const
 {
-    FSRootBlock *rb = dev.rootBlockPtr(rootBlock);
+    FSBlock *rb = dev.rootBlockPtr(rootBlock);
     return rb ? rb->getName() : FSName("");
 }
 
 void
 FSPartition::setName(FSName name)
 {
-    FSRootBlock *rb = dev.rootBlockPtr(rootBlock);
+    FSBlock *rb = dev.rootBlockPtr(rootBlock);
     assert(rb != nullptr);
 
     rb->setName(name);
