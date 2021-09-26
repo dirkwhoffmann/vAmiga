@@ -189,6 +189,7 @@ FSFileHeaderBlock::writeData(FILE *file)
 }
 */
 
+/*
 isize
 FSFileHeaderBlock::addData(const u8 *buffer, isize size)
 {
@@ -233,14 +234,17 @@ FSFileHeaderBlock::addData(const u8 *buffer, isize size)
 
     return getFileSize();
 }
+*/
 
-
+/*
 bool
 FSFileHeaderBlock::addDataBlockRef(Block ref)
 {
     return addDataBlockRef(ref, ref);
 }
+*/
 
+/*
 bool
 FSFileHeaderBlock::addDataBlockRef(Block first, Block ref)
 {
@@ -269,3 +273,4 @@ FSFileHeaderBlock::addDataBlockRef(Block first, Block ref)
     
     return false;
 }
+*/

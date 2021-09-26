@@ -15,13 +15,6 @@ struct FSDataBlock : FSBlock {
       
     FSDataBlock(FSPartition &p, Block nr, FSBlockType t);
     ~FSDataBlock();
-    
-    
-    //
-    // Methods from Block class
-    //
-    
-    // virtual isize writeData(FILE *file, isize size) = 0;
 };
 
 struct OFSDataBlock : FSDataBlock {
@@ -34,8 +27,7 @@ struct OFSDataBlock : FSDataBlock {
     Block  getNextDataBlockRef() const override     { return get32(4);        }
     void setNextDataBlockRef(Block ref) override    {        set32(4, ref);   }
 
-    // isize writeData(FILE *file, isize size) override;
-    isize addData(const u8 *buffer, isize size) override;
+    // isize addData(const u8 *buffer, isize size) override;
 };
 
 struct FFSDataBlock : FSDataBlock {
@@ -44,6 +36,5 @@ struct FFSDataBlock : FSDataBlock {
 
     const char *getDescription() const override { return "FFSDataBlock"; }
 
-    // isize writeData(FILE *file, isize size) override;
-    isize addData(const u8 *buffer, isize size) override;
+    // isize addData(const u8 *buffer, isize size) override;
 };

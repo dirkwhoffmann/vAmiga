@@ -34,5 +34,5 @@ struct FSFileListBlock : FSBlock {
     Block getNextListBlockRef() const override    { return get32(-2);          }
     void setNextListBlockRef(Block ref) override  {        set32(-2, ref);     }
     
-    bool addDataBlockRef(Block first, Block ref) override;
+    // bool addDataBlockRef(Block first, Block ref) override;
 };

@@ -26,6 +26,7 @@ FSFileListBlock::~FSFileListBlock()
     delete [] data;
 }
 
+/*
 bool
 FSFileListBlock::addDataBlockRef(Block first, Block ref)
 {
@@ -40,3 +41,4 @@ FSFileListBlock::addDataBlockRef(Block first, Block ref)
 
     return false;
 }
+*/

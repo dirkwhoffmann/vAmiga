@@ -53,10 +53,12 @@ struct FSFileHeaderBlock : FSBlock {
     //
     
     isize writeData(FILE *file);
-    isize addData(const u8 *buffer, isize size) override;
+    // isize addData(const u8 *buffer, isize size) override;
 
+    /*
     bool addDataBlockRef(Block ref);
     bool addDataBlockRef(Block first, Block ref) override;
+    */
     
     u32 hashValue() const override { return getName().hashValue(); }
 };

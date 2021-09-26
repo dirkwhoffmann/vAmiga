@@ -271,14 +271,15 @@ public:
     virtual void incNumDataBlockRefs() { }
         
     // Adds a data block reference to this block
-    virtual bool addDataBlockRef(u32 first, u32 ref) { return false; }
-
+    bool addDataBlockRef(Block ref);
+    bool addDataBlockRef(u32 first, u32 ref);
+    
     // Gets or sets the number of data bytes stored in this block
     u32 getDataBytesInBlock() const;
     void setDataBytesInBlock(u32 val);
 
     // Adds data bytes to this block
-    virtual isize addData(const u8 *buffer, isize size) { return 0; }
+    isize addData(const u8 *buffer, isize size);
     
     
     //

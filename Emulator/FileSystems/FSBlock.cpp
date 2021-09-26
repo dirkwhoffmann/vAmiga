@@ -1019,6 +1019,58 @@ FSBlock::getMaxDataBlockRefs() const
     return bsize() / 4 - 56;
 }
 
+bool
+FSBlock::addDataBlockRef(u32 first, u32 ref)
+{
+    switch (type) {
+            
+        case FS_FILEHEADER_BLOCK:
+        {
+            std::set<Block> visited;
+            
+            // If this block has space for more references, add it here
+            if (getNumDataBlockRefs() < getMaxDataBlockRefs()) {
+                
+                if (getNumDataBlockRefs() == 0) setFirstDataBlockRef(first);
+                setDataBlockRef(getNumDataBlockRefs(), ref);
+                incNumDataBlockRefs();
+                return true;
+            }
+            
+            // Otherwise, add it to an extension block
+            FSFileListBlock *item = getNextListBlock();
+            
+            while (item) {
+                
+                // Break the loop if we visit a block twice
+                if (visited.find(item->nr) != visited.end()) return false;
+                
+                if (item->addDataBlockRef(first, ref)) return true;
+                item = item->getNextListBlock();
+            }
+            
+            return false;
+        }
+         
+        case FS_FILELIST_BLOCK:
+        {
+            // The caller has to ensure that this block contains free slots
+            if (getNumDataBlockRefs() < getMaxDataBlockRefs()) {
+                
+                setFirstDataBlockRef(first);
+                setDataBlockRef(getNumDataBlockRefs(), ref);
+                incNumDataBlockRefs();
+                return true;
+            }
+            
+            return false;
+        }
+            
+        default:
+            return false;
+    }
+}
+
 u32
 FSBlock::getDataBytesInBlock() const
 {
@@ -1042,6 +1094,76 @@ FSBlock::setDataBytesInBlock(u32 val)
                         
         default:
             fatalError;
+    }
+}
+
+isize
+FSBlock::addData(const u8 *buffer, isize size)
+{
+    switch (type) {
+            
+        case FS_FILEHEADER_BLOCK:
+        {
+            assert(getFileSize() == 0);
+                
+            // Compute the required number of blocks
+            isize numDataBlocks = partition.requiredDataBlocks(size);
+            isize numListBlocks = partition.requiredFileListBlocks(size);
+            
+            debug(FS_DEBUG, "Required data blocks : %zd\n", numDataBlocks);
+            debug(FS_DEBUG, "Required list blocks : %zd\n", numListBlocks);
+            debug(FS_DEBUG, "         Free blocks : %zd\n", partition.freeBlocks());
+            
+            if (partition.freeBlocks() < numDataBlocks + numListBlocks) {
+                warn("Not enough free blocks\n");
+                return 0;
+            }
+            
+            for (Block ref = nr, i = 0; i < (Block)numListBlocks; i++) {
+
+                // Add a new file list block
+                ref = partition.addFileListBlock(nr, ref);
+            }
+            
+            for (Block ref = nr, i = 1; i <= (Block)numDataBlocks; i++) {
+
+                // Add a new data block
+                ref = partition.addDataBlock(i, nr, ref);
+
+                // Add references to the new data block
+                addDataBlockRef(ref, ref);
+                
+                // Add data
+                FSBlock *block = partition.dev.blockPtr(ref);
+                if (block) {
+                    isize written = block->addData(buffer, size);
+                    setFileSize((u32)(getFileSize() + written));
+                    buffer += written;
+                    size -= written;
+                }
+            }
+
+            return getFileSize();
+        }            
+        case FS_DATA_BLOCK_OFS:
+        {
+            isize count = std::min(bsize() - 24, size);
+
+            std::memcpy(data + 24, buffer, count);
+            setDataBytesInBlock((u32)count);
+            
+            return count;
+        }
+        case FS_DATA_BLOCK_FFS:
+        {
+            isize count = std::min(bsize(), size);
+            
+            std::memcpy(data, buffer, count);
+            
+            return count;
+        }
+        default:
+            return 0;
     }
 }
 

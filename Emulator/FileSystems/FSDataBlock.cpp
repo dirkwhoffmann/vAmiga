@@ -36,17 +36,6 @@ OFSDataBlock::OFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(
 
 /*
 isize
-OFSDataBlock::writeData(FILE *file, isize size)
-{
-    assert(file != nullptr);
-    
-    isize count = std::min(dsize(), size);
-    for (isize i = 0; i < count; i++) fputc(data[i + 24], file);
-    return count;
-}
-*/
-
-isize
 OFSDataBlock::addData(const u8 *buffer, isize size)
 {
     isize count = std::min(bsize() - 24, size);
@@ -56,6 +45,7 @@ OFSDataBlock::addData(const u8 *buffer, isize size)
     
     return count;
 }
+*/
 
 //
 // Fast File System (FFS)
@@ -65,20 +55,10 @@ FFSDataBlock::FFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(
 
 /*
 isize
-FFSDataBlock::writeData(FILE *file, isize size)
-{
-    assert(file != nullptr);
-    
-    isize count = std::min(dsize(), size);
-    for (isize i = 0; i < count; i++) fputc(data[i], file);
-    return count;
-}
-*/
-
-isize
 FFSDataBlock::addData(const u8 *buffer, isize size)
 {
     isize count = std::min(bsize(), size);
     std::memcpy(data, buffer, count);
     return count;
 }
+*/
