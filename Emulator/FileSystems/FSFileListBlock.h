@@ -9,9 +9,4 @@
 
 #pragma once
 
-#include "FSBlock.h"
-
-struct FSFileListBlock : FSBlock {
-        
-    FSFileListBlock(FSPartition &p, Block nr, FSBlockType t);
-};
+#define FSFileListBlock FSBlock

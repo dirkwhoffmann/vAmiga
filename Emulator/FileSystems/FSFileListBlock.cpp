@@ -6,13 +6,3 @@
 //
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
-
-#include "config.h"
-#include "FSFileListBlock.h"
-#include "FSDevice.h"
-#include "FSPartition.h"
-
-FSFileListBlock::FSFileListBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, nr, t)
-{
-
-}
