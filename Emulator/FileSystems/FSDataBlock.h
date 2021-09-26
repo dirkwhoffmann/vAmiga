@@ -9,6 +9,11 @@
 
 #pragma once
 
+#define FSDataBlock FSBlock
+#define OFSDataBlock FSBlock
+#define FFSDataBlock FSBlock
+
+/*
 #include "FSBlock.h"
 
 struct FSDataBlock : FSBlock {
@@ -25,3 +30,4 @@ struct FFSDataBlock : FSDataBlock {
       
     FFSDataBlock(FSPartition &p, u32 nr, FSBlockType t);
 };
+*/

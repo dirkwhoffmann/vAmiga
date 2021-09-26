@@ -12,6 +12,7 @@
 #include "FSPartition.h"
 #include "FSDevice.h"
 #include "FSFileListBlock.h"
+#include "FSDataBlock.h"
 #include <algorithm>
 #include <vector>
 
