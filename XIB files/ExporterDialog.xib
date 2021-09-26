@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -170,14 +170,14 @@ Gw
                             <rect key="frame" x="1" y="1" width="564" height="201"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="15" headerView="b0D-KA-s0P" id="X99-rT-f2a">
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="15" headerView="b0D-KA-s0P" id="X99-rT-f2a">
                                     <rect key="frame" x="0.0" y="-22" width="564" height="176"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="1" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="Offset" editable="NO" width="32" minWidth="10" maxWidth="1000" id="xRh-yh-o4t" userLabel="Offset">
+                                        <tableColumn identifier="Offset" editable="NO" width="24" minWidth="24" maxWidth="1000" id="xRh-yh-o4t" userLabel="Offset">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -189,7 +189,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="0" editable="NO" width="32" minWidth="10" maxWidth="1000" id="gmu-Gj-cHS">
+                                        <tableColumn identifier="0" editable="NO" width="32" minWidth="32" maxWidth="1000" id="gmu-Gj-cHS">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="0">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -201,7 +201,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="1" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="l1F-2U-Dpf">
+                                        <tableColumn identifier="1" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="l1F-2U-Dpf">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="1">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -213,7 +213,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="2" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="oxk-at-AjW">
+                                        <tableColumn identifier="2" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="oxk-at-AjW">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="2">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -225,7 +225,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="3" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="UZa-SK-7za">
+                                        <tableColumn identifier="3" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="UZa-SK-7za">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="3">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -237,7 +237,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="4" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="I0P-Kd-i96">
+                                        <tableColumn identifier="4" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="I0P-Kd-i96">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="4">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -249,7 +249,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="5" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="HCU-ZU-BBv">
+                                        <tableColumn identifier="5" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="HCU-ZU-BBv">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="5">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -261,7 +261,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="6" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="1XN-qd-qV5">
+                                        <tableColumn identifier="6" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="1XN-qd-qV5">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="6">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -273,7 +273,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="7" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="63C-P6-0E2">
+                                        <tableColumn identifier="7" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="63C-P6-0E2">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="7">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -285,7 +285,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="8" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="wcz-YO-2kx">
+                                        <tableColumn identifier="8" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="wcz-YO-2kx">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="8">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -297,7 +297,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="9" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="z9x-9Y-NVr">
+                                        <tableColumn identifier="9" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="z9x-9Y-NVr">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="9">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -309,7 +309,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="10" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="5iK-Zn-Yz0">
+                                        <tableColumn identifier="10" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="5iK-Zn-Yz0">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="A">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -321,7 +321,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="11" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="eqp-hB-a69">
+                                        <tableColumn identifier="11" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="eqp-hB-a69">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="B">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -333,7 +333,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="12" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="gTo-fa-WDB">
+                                        <tableColumn identifier="12" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="gTo-fa-WDB">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="C">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -345,7 +345,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="13" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="8r6-w2-KFU">
+                                        <tableColumn identifier="13" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="8r6-w2-KFU">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="D">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -357,7 +357,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="14" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="Ih2-xY-dGi">
+                                        <tableColumn identifier="14" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="Ih2-xY-dGi">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="E">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -369,7 +369,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="15" width="10" minWidth="10" maxWidth="3.4028234663852886e+38" id="07V-pF-0AU">
+                                        <tableColumn identifier="15" editable="NO" width="32" minWidth="32" maxWidth="3.4028234663852886e+38" id="07V-pF-0AU">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="F">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

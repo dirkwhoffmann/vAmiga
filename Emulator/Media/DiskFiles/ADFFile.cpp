@@ -44,8 +44,9 @@ ADFFile::isCompatible(std::istream &stream)
 isize
 ADFFile::fileSize(DiskDiameter diameter, DiskDensity density)
 {
-    assert_enum(DiskDiameter, density);
-    
+    assert_enum(DiskDiameter, diameter);
+    assert_enum(DiskDensity, density);
+
     if (diameter != INCH_35) throw VAError(ERROR_DISK_INVALID_DIAMETER);
     
     if (density == DISK_DD) return ADFSIZE_35_DD;
