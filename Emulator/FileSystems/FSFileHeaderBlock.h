@@ -14,10 +14,4 @@
 struct FSFileHeaderBlock : FSBlock {
                 
     FSFileHeaderBlock(FSPartition &p, Block nr, FSBlockType t);
-
-    //
-    // Block specific methods
-    //
-    
-    isize writeData(FILE *file);
 };

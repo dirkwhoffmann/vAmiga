@@ -10,17 +10,3 @@
 #include "config.h"
 #include "FSEmptyBlock.h"
 #include <cstring>
-
-void
-FSEmptyBlock::importBlock(const u8 *p, isize size)
-{
-    assert(size = bsize());
-}
-
-void
-FSEmptyBlock::exportBlock(u8 *p, isize size)
-{
-    assert(size == bsize());
-    assert(p);
-    std::memset(p, 0, size);
-}

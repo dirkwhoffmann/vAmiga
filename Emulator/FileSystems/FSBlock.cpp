@@ -28,6 +28,11 @@ FSBlock::FSBlock(FSPartition &p, Block nr, FSBlockType t) : partition(p)
     this->type = t;
 }
 
+FSBlock::~FSBlock()
+{
+    if (data) delete [] data;
+}
+
 FSBlock *
 FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
 {
@@ -704,25 +709,27 @@ FSBlock::dumpData() const
 void
 FSBlock::importBlock(const u8 *src, isize size)
 {    
+    assert(src);
     assert(size == bsize());
-    assert(src != nullptr);
-    assert(data != nullptr);
-        
-    std::memcpy(data, src, size);
+
+    if (data) std::memcpy(data, src, size);
 }
 
 void
 FSBlock::exportBlock(u8 *dst, isize size)
 {
+    assert(dst);
     assert(size == bsize());
             
     // Rectify the checksum
     updateChecksum();
 
     // Export the block
-    assert(dst != nullptr);
-    assert(data != nullptr);
-    std::memcpy(dst, data, size);
+    if (data) {
+        std::memcpy(dst, data, size);
+    } else {
+        std::memset(dst, 0, size);
+    }
 }
 
 ErrorCode

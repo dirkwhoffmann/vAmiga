@@ -14,7 +14,6 @@
 struct FSDataBlock : FSBlock {
       
     FSDataBlock(FSPartition &p, Block nr, FSBlockType t);
-    ~FSDataBlock();
 };
 
 struct OFSDataBlock : FSDataBlock {

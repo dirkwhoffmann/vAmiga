@@ -17,16 +17,6 @@ FSDataBlock::FSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSBlock(p, nr,
     data = new u8[p.dev.bsize]();
 }
 
-FSDataBlock::~FSDataBlock()
-{
-    delete [] data;
-}
-
-
-//
-// Original File System (OFS)
-//
-
 OFSDataBlock::OFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(p, nr, t)
 {
     data = new u8[bsize()]();
@@ -34,31 +24,4 @@ OFSDataBlock::OFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(
     set32(0, 8); // Block type
 }
 
-/*
-isize
-OFSDataBlock::addData(const u8 *buffer, isize size)
-{
-    isize count = std::min(bsize() - 24, size);
-
-    std::memcpy(data + 24, buffer, count);
-    setDataBytesInBlock((u32)count);
-    
-    return count;
-}
-*/
-
-//
-// Fast File System (FFS)
-//
-
 FFSDataBlock::FFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(p, nr, t) { }
-
-/*
-isize
-FFSDataBlock::addData(const u8 *buffer, isize size)
-{
-    isize count = std::min(bsize(), size);
-    std::memcpy(data, buffer, count);
-    return count;
-}
-*/

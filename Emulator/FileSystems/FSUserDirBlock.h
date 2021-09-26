@@ -14,5 +14,4 @@
 struct FSUserDirBlock : FSBlock {
                 
     FSUserDirBlock(FSPartition &p, Block nr, FSBlockType t);
-    ~FSUserDirBlock();
 };

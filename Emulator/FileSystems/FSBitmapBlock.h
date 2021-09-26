@@ -14,5 +14,4 @@
 struct FSBitmapBlock : FSBlock {
                     
     FSBitmapBlock(FSPartition &p, Block nr, FSBlockType t);
-    ~FSBitmapBlock();
 };

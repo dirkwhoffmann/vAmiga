@@ -38,7 +38,7 @@ struct FSBlock : AmigaObject {
     //
     
     FSBlock(FSPartition &p, Block nr, FSBlockType t);
-    virtual ~FSBlock() { }
+    ~FSBlock();
 
     static FSBlock *make(FSPartition &p, Block nr, FSBlockType type) throws;
 
@@ -136,10 +136,10 @@ public:
 public:
     
     // Imports this block from a buffer (bsize must match the volume block size)
-    virtual void importBlock(const u8 *src, isize bsize);
+    void importBlock(const u8 *src, isize bsize);
 
     // Exports this block to a buffer (bsize must match the volume block size)
-    virtual void exportBlock(u8 *dst, isize bsize);
+    void exportBlock(u8 *dst, isize bsize);
     
     // Exports this block to the host file system
     ErrorCode exportBlock(const string &path);

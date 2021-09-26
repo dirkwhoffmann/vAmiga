@@ -15,9 +15,4 @@
 struct FSBitmapExtBlock : FSBlock {
                     
     FSBitmapExtBlock(FSPartition &p, Block nr, FSBlockType t);
-    ~FSBitmapExtBlock();
-     
-    
-    
-    // void addBitmapBlockRefs(std::vector<Block> &refs, std::vector<Block>::iterator &it);
 };

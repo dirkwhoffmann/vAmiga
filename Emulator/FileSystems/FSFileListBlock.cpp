@@ -20,8 +20,3 @@ FSFileListBlock::FSFileListBlock(FSPartition &p, Block nr, FSBlockType t) : FSBl
     set32(1, nr);                         // Block pointer to itself
     set32(-1, (u32)-3);                   // Sub type
 }
-
-FSFileListBlock::~FSFileListBlock()
-{
-    delete [] data;
-}

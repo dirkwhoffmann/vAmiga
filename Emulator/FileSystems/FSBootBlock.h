@@ -14,7 +14,5 @@
 
 struct FSBootBlock : FSBlock {
         
-    FSBootBlock(FSPartition &p, Block nr, FSBlockType t);
-    ~FSBootBlock();
-    
+    FSBootBlock(FSPartition &p, Block nr, FSBlockType t);    
 };

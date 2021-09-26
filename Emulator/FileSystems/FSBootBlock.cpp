@@ -24,8 +24,3 @@ FSBootBlock::FSBootBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, n
         data[3] = (u8)p.dos;
     }
 }
-
-FSBootBlock::~FSBootBlock()
-{
-    delete [] data;
-}

@@ -14,5 +14,4 @@
 struct FSFileListBlock : FSBlock {
         
     FSFileListBlock(FSPartition &p, Block nr, FSBlockType t);
-    ~FSFileListBlock();
 };

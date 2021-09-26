@@ -25,8 +25,3 @@ FSRootBlock::FSRootBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, n
     setModificationDate(time(nullptr));  // Modification date
     set32(-1, 1);                        // Sub type    
 }
-
-FSRootBlock::~FSRootBlock()
-{
-    delete [] data;
-}

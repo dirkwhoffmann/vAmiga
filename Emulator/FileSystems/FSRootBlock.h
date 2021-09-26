@@ -13,5 +13,4 @@
 struct FSRootBlock : FSBlock {
           
     FSRootBlock(FSPartition &p, Block nr, FSBlockType t);
-    ~FSRootBlock();    
 };

@@ -16,8 +16,3 @@ FSBitmapBlock::FSBitmapBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(
 {
     data = new u8[p.dev.bsize]();
 }
-
-FSBitmapBlock::~FSBitmapBlock()
-{
-    delete [] data;
-}

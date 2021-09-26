@@ -14,12 +14,4 @@
 struct FSEmptyBlock : FSBlock {
     
     FSEmptyBlock(FSPartition &p, Block nr, FSBlockType t) : FSBlock(p, nr, t) { }
-         
-    
-    //
-    // Methods from Block class
-    //
-
-    void importBlock(const u8 *src, isize bsize) override;
-    void exportBlock(u8 *dst, isize bsize) override;
 };
