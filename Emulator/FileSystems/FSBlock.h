@@ -153,8 +153,8 @@ public:
     void setName(FSName name);
     bool isNamed(FSName &other) const;
 
-    virtual FSComment getComment() const { return FSComment(""); }
-    virtual void setComment(FSComment name) { }
+    FSComment getComment() const;
+    void setComment(FSComment name);
 
     
     //

@@ -35,9 +35,6 @@ struct FSFileHeaderBlock : FSBlock {
     u32 getFileSize() const override              { return get32(-47     );    }
     void setFileSize(u32 val) override            {        set32(-47, val);    }
 
-    FSComment getComment() const override      { return FSComment(addr32(-46));}
-    void setComment(FSComment name) override   { name.write(addr32(-46));      }
-
     FSTime getCreationDate() const override    { return FSTime(addr32(-23));  }
     void setCreationDate(FSTime t) override    { t.write(addr32(-23));        }
 

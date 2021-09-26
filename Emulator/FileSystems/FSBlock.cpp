@@ -769,7 +769,40 @@ FSBlock::isNamed(FSName &other) const
             return getName() == other;
             
         default:
+            
             return false;
+    }
+}
+
+FSComment
+FSBlock::getComment() const
+{
+    switch (type) {
+    
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+
+            return FSComment(addr32(-46));
+
+        default:
+            
+            return FSComment("");
+    }
+}
+
+void
+FSBlock::setComment(FSComment name)
+{
+    switch (type) {
+    
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+            
+            name.write(addr32(-46));
+
+        default:
+            
+            break;
     }
 }
 
