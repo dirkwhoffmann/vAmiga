@@ -29,23 +29,3 @@ FSBootBlock::~FSBootBlock()
 {
     delete [] data;
 }
-
-void
-FSBootBlock::writeBootBlock(BootBlockId id, isize page)
-{
-    assert(page == 0 || page == 1);
-    
-    debug(FS_DEBUG, "writeBootBlock(%s, %zd)\n", BootBlockIdEnum::key(id), page);
-    
-    if (id != BB_NONE) {
-        
-        // Read boot block image from the database
-        auto image = BootBlockImage(id);
-        
-        if (page == 0) {
-            image.write(data + 4, 4, 511); // Write 508 bytes (skip header)
-        } else {
-            image.write(data, 512, 1023);  // Write 512 bytes
-        }
-    }
-}

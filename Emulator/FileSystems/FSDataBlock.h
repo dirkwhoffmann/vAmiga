@@ -20,23 +20,9 @@ struct FSDataBlock : FSBlock {
 struct OFSDataBlock : FSDataBlock {
 
     OFSDataBlock(FSPartition &p, u32 nr, FSBlockType t);
-
-    /*
-    Block  getFileHeaderRef() const override        { return get32(1);        }
-    void setFileHeaderRef(Block ref) override       {        set32(1, ref);   }
-    */
-    /*
-    Block  getNextDataBlockRef() const override     { return get32(4);        }
-    void setNextDataBlockRef(Block ref) override    {        set32(4, ref);   }
-    */
-    // isize addData(const u8 *buffer, isize size) override;
 };
 
 struct FFSDataBlock : FSDataBlock {
       
     FFSDataBlock(FSPartition &p, u32 nr, FSBlockType t);
-
-    const char *getDescription() const override { return "FFSDataBlock"; }
-
-    // isize addData(const u8 *buffer, isize size) override;
 };

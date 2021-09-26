@@ -1295,6 +1295,64 @@ FSBlock::dumpHashTable() const
     }
 }
 
+void
+FSBlock::writeBootBlock(BootBlockId id, isize page)
+{
+    assert(page == 0 || page == 1);
+    assert(type == FS_BOOT_BLOCK);
+    
+    debug(FS_DEBUG, "writeBootBlock(%s, %zd)\n", BootBlockIdEnum::key(id), page);
+    
+    if (id != BB_NONE) {
+        
+        // Read boot block image from the database
+        auto image = BootBlockImage(id);
+        
+        if (page == 0) {
+            image.write(data + 4, 4, 511); // Write 508 bytes (skip header)
+        } else {
+            image.write(data, 512, 1023);  // Write 512 bytes
+        }
+    }
+}
+
+bool
+FSBlock::addBitmapBlockRefs(std::vector<Block> &refs)
+{
+    assert(type == FS_ROOT_BLOCK);
+    
+    auto it = refs.begin();
+     
+    // Record the first 25 references in the root block
+    for (isize i = 0; i < 25; i++, it++) {
+        if (it == refs.end()) return true;
+        setBmBlockRef(i, *it);
+    }
+            
+    // Record the remaining references in bitmap extension blocks
+    FSBitmapExtBlock *ext = getNextBmExtBlock();
+    while (ext && it != refs.end()) {
+        ext->addBitmapBlockRefs(refs, it);
+        ext = getNextBmExtBlock();
+    }
+    
+    return it == refs.end();
+}
+
+void
+FSBlock::addBitmapBlockRefs(std::vector<Block> &refs,
+                            std::vector<Block>::iterator &it)
+{
+    assert(type == FS_BITMAP_EXT_BLOCK);
+    
+    isize max = (bsize() / 4) - 1;
+    
+    for (isize i = 0; i < max; i++, it++) {
+        if (it == refs.end()) return;
+        setBmBlockRef(i, *it);
+    }
+}
+
 Block
 FSBlock::getBmBlockRef(isize nr) const
 {

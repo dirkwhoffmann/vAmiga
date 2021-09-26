@@ -12,6 +12,8 @@
 #include "AmigaObject.h"
 #include "FSTypes.h"
 #include "FSObjects.h"
+#include "BootBlockImage.h"
+#include <vector>
 
 struct FSBlock : AmigaObject {
         
@@ -246,9 +248,21 @@ public:
 
 
     //
+    // Working with boot blocks
+    //
+
+    void writeBootBlock(BootBlockId id, isize page);
+    
+    
+    //
     // Working with bitmap blocks
     //
 
+    // Adds bitmap block references to the root block or an extension block
+    bool addBitmapBlockRefs(std::vector<Block> &refs);
+    void addBitmapBlockRefs(std::vector<Block> &refs,
+                            std::vector<Block>::iterator &it);
+    
     //Gets or sets a link to a bitmap block
     Block getBmBlockRef(isize nr) const;
     void setBmBlockRef(isize nr, Block ref);

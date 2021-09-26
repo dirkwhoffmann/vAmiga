@@ -18,14 +18,6 @@ struct FSBitmapExtBlock : FSBlock {
     ~FSBitmapExtBlock();
      
     
-    //
-    // Methods from Block class
-    //
-
-    /*
-    Block getNextBmExtBlockRef() const override   { return get32(-1);         }
-    void setNextBmExtBlockRef(Block ref) override {        set32(-1, ref);    }
-    */
     
-    void addBitmapBlockRefs(std::vector<Block> &refs, std::vector<Block>::iterator &it);
+    // void addBitmapBlockRefs(std::vector<Block> &refs, std::vector<Block>::iterator &it);
 };

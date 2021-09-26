@@ -17,9 +17,4 @@ struct FSBootBlock : FSBlock {
     FSBootBlock(FSPartition &p, Block nr, FSBlockType t);
     ~FSBootBlock();
     
-    //
-    // Block specific methods
-    //
-
-    void writeBootBlock(BootBlockId id, isize page);
 };
