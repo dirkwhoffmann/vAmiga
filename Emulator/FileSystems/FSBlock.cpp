@@ -507,8 +507,41 @@ FSBlock::write32(u8 *p, u32 value)
     p[3] = (value >>  0) & 0xFF;
 }
 
+isize
+FSBlock::checksumLocation() const
+{
+    switch (type) {
+            
+        case FS_BOOT_BLOCK:
+
+            return (nr == partition.firstBlock) ? 1 : -1;
+            
+        case FS_BITMAP_BLOCK:
+            
+            return 0;
+            
+        case FS_ROOT_BLOCK:
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+        case FS_FILELIST_BLOCK:
+        case FS_DATA_BLOCK_OFS:
+            
+            return 5;
+            
+        default:
+            
+            return -1;
+    }
+}
+
 u32
 FSBlock::checksum() const
+{
+    return type == FS_BOOT_BLOCK ? checksumBootBlock() : checksumStandard();
+}
+
+u32
+FSBlock::checksumStandard() const
 {
     isize pos = checksumLocation();
     assert(pos >= 0 && pos <= 5);
@@ -526,6 +559,33 @@ FSBlock::checksum() const
     set32(pos, old);
     
     return result;
+}
+
+u32
+FSBlock::checksumBootBlock() const
+{
+    // Only call this function for the first boot block in a partition
+    assert(nr == partition.firstBlock);
+        
+    u32 result = get32(0), prec;
+
+    // First boot block
+    for (isize i = 2; i < bsize() / 4; i++) {
+        
+        prec = result;
+        if ( (result += get32(i)) < prec) result++;
+    }
+
+    // Second boot block
+    u8 *p = partition.dev.blocks[1]->data;
+    
+    for (isize i = 0; i < bsize() / 4; i++) {
+        
+        prec = result;
+        if ( (result += FSBlock::read32(p + 4*i)) < prec) result++;
+    }
+
+    return ~result;
 }
 
 void

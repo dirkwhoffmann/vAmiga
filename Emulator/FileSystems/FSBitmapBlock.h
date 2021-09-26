@@ -22,5 +22,4 @@ struct FSBitmapBlock : FSBlock {
     //
 
     FSBlockType getType() const override { assert(type == FS_BITMAP_BLOCK); return FS_BITMAP_BLOCK; }
-    isize checksumLocation() const override { return 0; }
 };

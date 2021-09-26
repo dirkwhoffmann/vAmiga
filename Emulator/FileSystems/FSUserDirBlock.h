@@ -24,7 +24,6 @@ struct FSUserDirBlock : FSBlock {
     //
     
     FSBlockType getType() const override  { assert(type == FS_USERDIR_BLOCK); return FS_USERDIR_BLOCK; }
-    isize checksumLocation() const override { return 5; }
 
     ErrorCode exportBlock(const string &path) override;
 

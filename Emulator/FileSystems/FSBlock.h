@@ -108,18 +108,25 @@ public:
     void dec32(isize n) const { dec32(addr32(n)); }
 
     // Returns the location of the checksum inside this block
-    virtual isize checksumLocation() const { return -1; }
+    isize checksumLocation() const;
     
     // Computes a checksum for this block
-    virtual u32 checksum() const;
+    u32 checksum() const;
     
     // Updates the checksum in this block
     void updateChecksum();
     
+private:
+
+    u32 checksumStandard() const;
+    u32 checksumBootBlock() const;
+
     
     //
     // Debugging
     //
+    
+public:
     
     // Prints some debug information for this block
     void dump() const;

@@ -22,7 +22,6 @@ struct FSFileListBlock : FSBlock {
     //
     
     FSBlockType getType() const override { assert(type == FS_FILELIST_BLOCK); return FS_FILELIST_BLOCK;   }
-    isize checksumLocation() const override { return 5; }
     
     isize getNumDataBlockRefs() const override    { return get32(2);           }
     void setNumDataBlockRefs(u32 val) override    {           set32(2, val);   }

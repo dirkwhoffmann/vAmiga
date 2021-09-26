@@ -29,7 +29,6 @@ struct OFSDataBlock : FSDataBlock {
     OFSDataBlock(FSPartition &p, u32 nr, FSBlockType t);
 
     FSBlockType getType() const override { assert(type == FS_DATA_BLOCK_OFS); return FS_DATA_BLOCK_OFS; }
-    isize checksumLocation() const override { return 5; }
 
     Block  getFileHeaderRef() const override        { return get32(1);        }
     void setFileHeaderRef(Block ref) override       {        set32(1, ref);   }
