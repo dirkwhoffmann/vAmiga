@@ -67,7 +67,7 @@ public:
     virtual FSVolumeType dos() const { return FS_NODOS; }
     
     // Returns the role of a certain byte in this block
-    virtual FSItemType itemType(isize byte) const { return FSI_UNKNOWN; }
+    FSItemType itemType(isize byte) const;
     
     // Returns the type and subtype identifiers of this block
     virtual u32 typeID() const;

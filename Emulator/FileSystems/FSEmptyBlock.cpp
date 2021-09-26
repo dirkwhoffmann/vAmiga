@@ -11,11 +11,13 @@
 #include "FSEmptyBlock.h"
 #include <cstring>
 
+/*
 FSItemType
 FSEmptyBlock::itemType(isize byte) const
 {
     return FSI_UNUSED;
 }
+*/
 
 void
 FSEmptyBlock::importBlock(const u8 *p, isize size)

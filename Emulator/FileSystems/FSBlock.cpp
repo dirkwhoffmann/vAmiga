@@ -55,6 +55,178 @@ FSBlock::bsize() const
     return partition.dev.bsize;
 }
 
+FSItemType
+FSBlock::itemType(isize byte) const
+{
+    // Translate the byte index to a (signed) long word index
+    isize word = byte / 4; if (word >= 6) word -= bsize() / 4;
+
+    switch (type) {
+            
+        case FS_EMPTY_BLOCK:
+            
+            return FSI_UNUSED;
+            
+        case FS_BOOT_BLOCK:
+            
+            if (nr == partition.firstBlock) {
+                
+                if (byte <= 2) return FSI_DOS_HEADER;
+                if (byte == 3) return FSI_DOS_VERSION;
+                if (byte <= 7) return FSI_CHECKSUM;
+            }
+            
+            return FSI_BOOTCODE;
+
+        case FS_ROOT_BLOCK:
+            
+            if (byte == 432) return FSI_BCPL_STRING_LENGTH;
+            
+            switch (word) {
+                case 0:   return FSI_TYPE_ID;
+                case 1:
+                case 2:   return FSI_UNUSED;
+                case 3:   return FSI_HASHTABLE_SIZE;
+                case 4:   return FSI_UNUSED;
+                case 5:   return FSI_CHECKSUM;
+                case -50: return FSI_BITMAP_VALIDITY;
+                case -24: return FSI_BITMAP_EXT_BLOCK_REF;
+                case -23: return FSI_MODIFIED_DAY;
+                case -22: return FSI_MODIFIED_MIN;
+                case -21: return FSI_MODIFIED_TICKS;
+                case -7:  return FSI_CREATED_DAY;
+                case -6:  return FSI_CREATED_MIN;
+                case -5:  return FSI_CREATED_TICKS;
+                case -4:
+                case -3:
+                case -2:  return FSI_UNUSED;
+                case -1:  return FSI_SUBTYPE_ID;
+                    
+                default:
+                    
+                    if (word <= -51)                return FSI_HASH_REF;
+                    if (word <= -25)                return FSI_BITMAP_BLOCK_REF;
+                    if (word >= -20 && word <= -8)  return FSI_BCPL_DISK_NAME;
+            }
+            
+            fatalError;
+            
+        case FS_BITMAP_BLOCK:
+            
+            return byte < 4 ? FSI_CHECKSUM : FSI_BITMAP;
+            
+        case FS_BITMAP_EXT_BLOCK:
+            
+            return byte < (bsize() - 4) ? FSI_BITMAP : FSI_BITMAP_EXT_BLOCK_REF;
+            
+        case FS_USERDIR_BLOCK:
+            
+            if (byte == 328) return FSI_BCPL_STRING_LENGTH;
+            if (byte == 432) return FSI_BCPL_STRING_LENGTH;
+
+            switch (word) {
+                case 0:   return FSI_TYPE_ID;
+                case 1:   return FSI_SELF_REF;
+                case 2:
+                case 3:
+                case 4:   return FSI_UNUSED;
+                case 5:   return FSI_CHECKSUM;
+                case -50:
+                case -49: return FSI_UNUSED;
+                case -48: return FSI_PROT_BITS;
+                case -47: return FSI_UNUSED;
+                case -23: return FSI_CREATED_DAY;
+                case -22: return FSI_CREATED_MIN;
+                case -21: return FSI_CREATED_TICKS;
+                case -4:  return FSI_NEXT_HASH_REF;
+                case -3:  return FSI_PARENT_DIR_REF;
+                case -2:  return FSI_UNUSED;
+                case -1:  return FSI_SUBTYPE_ID;
+            }
+            
+            if (word <= -51)                return FSI_HASH_REF;
+            if (word >= -46 && word <= -24) return FSI_BCPL_COMMENT;
+            if (word >= -20 && word <= -5)  return FSI_BCPL_DIR_NAME;
+
+            fatalError;
+            
+        case FS_FILEHEADER_BLOCK:
+            
+            if (byte == 328) return FSI_BCPL_STRING_LENGTH;
+            if (byte == 432) return FSI_BCPL_STRING_LENGTH;
+
+            switch (word) {
+                case 0:   return FSI_TYPE_ID;
+                case 1:   return FSI_SELF_REF;
+                case 2:   return FSI_DATA_BLOCK_REF_COUNT;
+                case 3:   return FSI_UNUSED;
+                case 4:   return FSI_FIRST_DATA_BLOCK_REF;
+                case 5:   return FSI_CHECKSUM;
+                case -50:
+                case -49: return FSI_UNUSED;
+                case -48: return FSI_PROT_BITS;
+                case -47: return FSI_FILESIZE;
+                case -23: return FSI_CREATED_DAY;
+                case -22: return FSI_CREATED_MIN;
+                case -21: return FSI_CREATED_TICKS;
+                case -4:  return FSI_NEXT_HASH_REF;
+                case -3:  return FSI_PARENT_DIR_REF;
+                case -2:  return FSI_EXT_BLOCK_REF;
+                case -1:  return FSI_SUBTYPE_ID;
+            }
+            
+            if (word <= -51)                return FSI_DATA_BLOCK_REF;
+            if (word >= -46 && word <= -24) return FSI_BCPL_COMMENT;
+            if (word >= -20 && word <= -5)  return FSI_BCPL_FILE_NAME;
+
+            fatalError;
+            
+        case FS_FILELIST_BLOCK:
+            
+            if (byte == 328) return FSI_BCPL_STRING_LENGTH;
+            if (byte == 432) return FSI_BCPL_STRING_LENGTH;
+
+            switch (word) {
+                    
+                case 0:   return FSI_TYPE_ID;
+                case 1:   return FSI_SELF_REF;
+                case 2:   return FSI_DATA_BLOCK_REF_COUNT;
+                case 3:   return FSI_UNUSED;
+                case 4:   return FSI_FIRST_DATA_BLOCK_REF;
+                case 5:   return FSI_CHECKSUM;
+                case -50:
+                case -49:
+                case -4:  return FSI_UNUSED;
+                case -3:  return FSI_FILEHEADER_REF;
+                case -2:  return FSI_EXT_BLOCK_REF;
+                case -1:  return FSI_SUBTYPE_ID;
+            }
+            
+            return word <= -51 ? FSI_DATA_BLOCK_REF : FSI_UNUSED;
+            
+        case FS_DATA_BLOCK_OFS:
+                        
+            switch (word) {
+                    
+                case 0: return FSI_TYPE_ID;
+                case 1: return FSI_FILEHEADER_REF;
+                case 2: return FSI_DATA_BLOCK_NUMBER;
+                case 3: return FSI_DATA_COUNT;
+                case 4: return FSI_NEXT_DATA_BLOCK_REF;
+                case 5: return FSI_CHECKSUM;
+            }
+            
+            return FSI_DATA;
+        
+        case FS_DATA_BLOCK_FFS:
+            
+            return FSI_DATA;
+            
+        default:
+            fatalError;
+    }
+}
+
 u32
 FSBlock::typeID() const
 {

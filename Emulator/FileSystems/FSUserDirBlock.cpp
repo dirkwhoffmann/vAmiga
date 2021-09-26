@@ -36,6 +36,7 @@ FSUserDirBlock::~FSUserDirBlock()
     delete [] data;
 }
 
+/*
 FSItemType
 FSUserDirBlock::itemType(isize byte) const
 {
@@ -72,6 +73,7 @@ FSUserDirBlock::itemType(isize byte) const
 
     fatalError;
 }
+*/
 
 ErrorCode
 FSUserDirBlock::check(isize byte, u8 *expected, bool strict) const

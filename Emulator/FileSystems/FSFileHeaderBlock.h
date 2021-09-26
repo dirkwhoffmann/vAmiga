@@ -24,7 +24,7 @@ struct FSFileHeaderBlock : FSBlock {
     //
 
     FSBlockType getType() const override { assert(type == FS_FILEHEADER_BLOCK); return FS_FILEHEADER_BLOCK; }
-    FSItemType itemType(isize byte) const override;
+    // FSItemType itemType(isize byte) const override;
     ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     void dump() const override;
     isize checksumLocation() const override { return 5; }

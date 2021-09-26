@@ -33,6 +33,7 @@ FSFileHeaderBlock(p, nr)
 }
 */
 
+/*
 FSItemType
 FSFileHeaderBlock::itemType(isize byte) const
 {
@@ -69,6 +70,7 @@ FSFileHeaderBlock::itemType(isize byte) const
 
     fatalError;
 }
+*/
 
 ErrorCode
 FSFileHeaderBlock::check(isize byte, u8 *expected, bool strict) const

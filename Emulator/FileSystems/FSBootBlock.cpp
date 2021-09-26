@@ -43,6 +43,7 @@ FSBootBlock::dos() const
     return (FSVolumeType)data[3];
 }
 
+/*
 FSItemType
 FSBootBlock::itemType(isize byte) const
 {
@@ -55,6 +56,7 @@ FSBootBlock::itemType(isize byte) const
     
     return FSI_BOOTCODE;
 }
+*/
 
 ErrorCode
 FSBootBlock::check(isize byte, u8 *expected, bool strict) const

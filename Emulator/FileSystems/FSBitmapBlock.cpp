@@ -22,11 +22,13 @@ FSBitmapBlock::~FSBitmapBlock()
     delete [] data;
 }
 
+/*
 FSItemType
 FSBitmapBlock::itemType(isize pos) const
 {
     return pos < 4 ? FSI_CHECKSUM : FSI_BITMAP;
 }
+*/
 
 ErrorCode
 FSBitmapBlock::check(isize byte, u8 *expected, bool strict) const

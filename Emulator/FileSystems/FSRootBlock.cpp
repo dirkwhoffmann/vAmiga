@@ -31,6 +31,7 @@ FSRootBlock::~FSRootBlock()
     delete [] data;
 }
 
+/*
 FSItemType
 FSRootBlock::itemType(isize byte) const
 {
@@ -69,6 +70,7 @@ FSRootBlock::itemType(isize byte) const
     
     fatalError;
 }
+*/
 
 ErrorCode
 FSRootBlock::check(isize byte, u8 *expected, bool strict) const

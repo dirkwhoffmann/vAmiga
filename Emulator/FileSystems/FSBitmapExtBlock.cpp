@@ -22,11 +22,13 @@ FSBitmapExtBlock::~FSBitmapExtBlock()
     delete [] data;
 }
 
+/*
 FSItemType
 FSBitmapExtBlock::itemType(isize pos) const
 {
     return pos < (bsize() - 4) ? FSI_BITMAP : FSI_BITMAP_EXT_BLOCK_REF;
 }
+*/
 
 ErrorCode
 FSBitmapExtBlock::check(isize byte, u8 *expected, bool strict) const

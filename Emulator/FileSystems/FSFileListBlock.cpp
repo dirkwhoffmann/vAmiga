@@ -38,6 +38,7 @@ FSFileListBlock::dump() const
     msg("\n");
 }
 
+/*
 FSItemType
 FSFileListBlock::itemType(isize byte) const
 {
@@ -66,6 +67,7 @@ FSFileListBlock::itemType(isize byte) const
     
     return word <= -51 ? FSI_DATA_BLOCK_REF : FSI_UNUSED;
 }
+*/
 
 ErrorCode
 FSFileListBlock::check(isize byte, u8 *expected, bool strict) const

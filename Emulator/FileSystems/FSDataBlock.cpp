@@ -44,6 +44,7 @@ OFSDataBlock::dump() const
     msg("\n");
 }
 
+/*
 FSItemType
 OFSDataBlock::itemType(isize pos) const
 {
@@ -64,6 +65,7 @@ OFSDataBlock::itemType(isize pos) const
     
     return FSI_DATA;
 }
+*/
 
 ErrorCode
 OFSDataBlock::check(isize byte, u8 *expected, bool strict) const
@@ -131,11 +133,13 @@ FFSDataBlock::dump() const
 {
 }
 
+/*
 FSItemType
 FFSDataBlock::itemType(isize pos) const
 {
     return FSI_DATA;
 }
+*/
 
 isize
 FFSDataBlock::writeData(FILE *file, isize size)
