@@ -22,17 +22,14 @@ struct FSRootBlock : FSBlock {
     // Methods from Block class
     //
 
-    void dump() const override;
-
     // Methods from Block class
     FSBlockType getType() const override { assert(type == FS_ROOT_BLOCK); return FS_ROOT_BLOCK; }
-    // FSItemType itemType(isize byte) const override;
-    // ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     isize checksumLocation() const override { return 5; }
- 
+
+    /*
     Block getBmBlockRef(isize nr) const           { return get32(nr-49);       }
     void setBmBlockRef(isize nr, Block ref)       {        set32(nr-49, ref);  }
-
+    */
     Block getNextBmExtBlockRef() const override   { return get32(-24);         }
     void setNextBmExtBlockRef(Block ref) override {        set32(-24, ref);    }
     

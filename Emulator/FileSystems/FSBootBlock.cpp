@@ -111,6 +111,7 @@ FSBootBlock::checksum() const {
     return ~result;
 }
 
+/*
 void
 FSBootBlock::dump() const
 {
@@ -118,6 +119,7 @@ FSBootBlock::dump() const
     for (isize i = 0; i < 8; i++) msg("%02X ", data[i]);
     msg("\n");
 }
+*/
 
 void
 FSBootBlock::writeBootBlock(BootBlockId id, isize page)

@@ -21,11 +21,13 @@ struct FSDataBlock : FSBlock {
     // Methods from Block class
     //
 
+    /*
     virtual u32 getDataBlockNr() const = 0;
     virtual void setDataBlockNr(u32 val) = 0;
 
     virtual u32  getDataBytesInBlock() const = 0;
     virtual void setDataBytesInBlock(u32 val) = 0;
+    */
     
     virtual isize writeData(FILE *file, isize size) = 0;
     
@@ -47,18 +49,18 @@ struct OFSDataBlock : FSDataBlock {
     const char *getDescription() const override { return "OFSDataBlock"; }
     FSBlockType getType() const override { assert(type == FS_DATA_BLOCK_OFS); return FS_DATA_BLOCK_OFS; }
     // FSItemType itemType(isize byte) const override;
-    void dump() const override;
+    // void dump() const override;
     // ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     isize checksumLocation() const override { return 5; }
 
     Block  getFileHeaderRef() const override        { return get32(1);        }
     void setFileHeaderRef(Block ref) override       {        set32(1, ref);   }
 
-    u32  getDataBlockNr() const override            { return get32(2);        }
-    void setDataBlockNr(u32 val) override           {        set32(2, val);   }
+    // u32  getDataBlockNr() const override            { return get32(2);        }
+    // void setDataBlockNr(u32 val) override           {        set32(2, val);   }
 
-    u32  getDataBytesInBlock() const override       { return get32(3);        }
-    void setDataBytesInBlock(u32 val) override      {        set32(3, val);   }
+    // u32  getDataBytesInBlock() const override       { return get32(3);        }
+    // void setDataBytesInBlock(u32 val) override      {        set32(3, val);   }
 
     Block  getNextDataBlockRef() const override     { return get32(4);        }
     void setNextDataBlockRef(Block ref) override    {        set32(4, ref);   }
@@ -78,13 +80,13 @@ struct FFSDataBlock : FSDataBlock {
     const char *getDescription() const override { return "FFSDataBlock"; }
     FSBlockType getType() const override { assert(type == FS_DATA_BLOCK_FFS); return FS_DATA_BLOCK_FFS; }
     // FSItemType itemType(isize byte) const override;
-    void dump() const override;
+    // void dump() const override;
 
-    u32 getDataBlockNr() const override { return 0; }
-    void setDataBlockNr(u32 val) override { }
+    // u32 getDataBlockNr() const override { return 0; }
+    // void setDataBlockNr(u32 val) override { }
 
-    u32  getDataBytesInBlock() const override { return 0; }
-    void setDataBytesInBlock(u32 val) override { };
+    // u32  getDataBytesInBlock() const override { return 0; }
+    // void setDataBytesInBlock(u32 val) override { };
 
     isize writeData(FILE *file, isize size) override;
     isize addData(const u8 *buffer, isize size) override;

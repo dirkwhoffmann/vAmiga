@@ -122,8 +122,8 @@ public:
     //
     
     // Prints some debug information for this block
-    virtual void dump() const { };
-    virtual void dumpData() const;
+    void dump() const;
+    void dumpData() const;
 
     
     //
@@ -202,6 +202,11 @@ public:
     virtual void setNextListBlockRef(Block ref) { }
     struct FSFileListBlock *getNextListBlock();
 
+    // Link to the bitmap block
+    Block getBmBlockRef(isize nr) const;
+    void setBmBlockRef(isize nr, Block ref);
+    // struct FSBitmapBlock *getBmBlock(isize nr);
+    
     // Link to the next bitmap extension block
     virtual Block getNextBmExtBlockRef() const { return 0; }
     virtual void setNextBmExtBlockRef(Block ref) { }
@@ -211,6 +216,9 @@ public:
     virtual Block getFirstDataBlockRef() const { return 0; }
     virtual void setFirstDataBlockRef(Block ref) { }
     struct FSDataBlock *getFirstDataBlock();
+
+    Block getDataBlockRef(isize nr) const;
+    void setDataBlockRef(isize nr, Block ref);
 
     // Link to the next data block
     virtual Block getNextDataBlockRef() const { return 0; }
@@ -246,6 +254,10 @@ public:
     // Working with data blocks
     //
     
+    // Gets or sets the data block number
+    u32 getDataBlockNr() const;
+    void setDataBlockNr(u32 val);
+
     // Returns the maximum number of storable data block references
     isize getMaxDataBlockRefs() const;
 
@@ -253,9 +265,13 @@ public:
     virtual isize getNumDataBlockRefs() const { return 0; }
     virtual void setNumDataBlockRefs(u32 val) { }
     virtual void incNumDataBlockRefs() { }
-
+        
     // Adds a data block reference to this block
     virtual bool addDataBlockRef(u32 first, u32 ref) { return false; }
+
+    // Gets or sets the number of data bytes stored in this block
+    u32 getDataBytesInBlock() const;
+    void setDataBytesInBlock(u32 val);
 
     // Adds data bytes to this block
     virtual isize addData(const u8 *buffer, isize size) { return 0; }

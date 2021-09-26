@@ -43,6 +43,7 @@ FSBitmapExtBlock::check(isize byte, u8 *expected, bool strict) const
 }
 */
 
+/*
 void
 FSBitmapExtBlock::dump() const
 {
@@ -53,6 +54,7 @@ FSBitmapExtBlock::dump() const
     msg("\n");
     msg("         Next : %d\n", getNextBmExtBlockRef());
 }
+*/
 
 void
 FSBitmapExtBlock::addBitmapBlockRefs(std::vector<Block> &refs,

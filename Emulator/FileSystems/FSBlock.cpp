@@ -485,12 +485,6 @@ FSBlock::write32(u8 *p, u32 value)
     p[3] = (value >>  0) & 0xFF;
 }
 
-void
-FSBlock::dumpData() const
-{
-    util::hexdumpLongwords(data, 512);
-}
-
 u32
 FSBlock::checksum() const
 {
@@ -517,6 +511,112 @@ FSBlock::updateChecksum()
 {
     isize pos = checksumLocation();
     if (pos >= 0 && pos < bsize() / 4) set32(pos, checksum());
+}
+
+void
+FSBlock::dump() const
+{
+    switch (type) {
+                        
+        case FS_BOOT_BLOCK:
+            
+            msg("       Header : ");
+            for (isize i = 0; i < 8; i++) msg("%02X ", data[i]);
+            msg("\n");
+            break;
+            
+        case FS_ROOT_BLOCK:
+        {
+            msg("         Name : %s\n", getName().c_str());
+            msg("      Created : %s\n", getCreationDate().str().c_str());
+            msg("     Modified : %s\n", getModificationDate().str().c_str());
+            msg("   Hash table : "); dumpHashTable(); printf("\n");
+            msg("Bitmap blocks : ");
+            for (isize i = 0; i < 25; i++) {
+                if (isize ref = getBmBlockRef(i)) msg("%zd ", ref);
+            }
+            msg("\n");
+            msg("   Next BmExt : %d\n", getNextBmExtBlockRef());
+            break;
+        }
+        case FS_BITMAP_BLOCK:
+        {
+            isize count = 0;
+            for (isize i = 1; i < bsize() / 4; i++) {
+                if (u32 value = get32(i)) {
+                    for (isize j = 0; j < 32; j++) {
+                        if (GET_BIT(value, j)) count++;
+                    }
+                }
+            }
+            msg("         Free : %zd blocks\n", count);
+        }
+        case FS_BITMAP_EXT_BLOCK:
+        {
+            msg("Bitmap blocks : ");
+            for (isize i = 0; i < (bsize() / 4) - 1; i++) {
+                if (Block ref = getBmBlockRef(i)) msg("%d ", ref);
+            }
+            msg("\n");
+            msg("         Next : %d\n", getNextBmExtBlockRef());
+            break;
+        }
+        case FS_USERDIR_BLOCK:
+            
+            printf("        Name: %s\n", getName().c_str());
+            printf("     Comment: %s\n", getComment().c_str());
+            printf("     Created: %s\n", getCreationDate().str().c_str());
+            printf("      Parent: %d\n", getParentDirRef());
+            printf("        Next: %d\n", getNextHashRef());
+            break;
+            
+        case FS_FILEHEADER_BLOCK:
+            
+            msg("           Name : %s\n", getName().c_str());
+            msg("        Comment : %s\n", getComment().c_str());
+            msg("        Created : %s\n", getCreationDate().str().c_str());
+            msg("           Next : %d\n", getNextHashRef());
+            msg("      File size : %d\n", getFileSize());
+
+            msg("    Block count : %zd / %zd\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
+            msg("          First : %d\n", getFirstDataBlockRef());
+            msg("     Parent dir : %d\n", getParentDirRef());
+            msg(" FileList block : %d\n", getNextListBlockRef());
+            
+            msg("    Data blocks : ");
+            for (isize i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
+            msg("\n");
+            break;
+            
+        case FS_FILELIST_BLOCK:
+            
+            msg(" Block count : %zd / %zd\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
+            msg("       First : %d\n", getFirstDataBlockRef());
+            msg("Header block : %d\n", getFileHeaderRef());
+            msg("   Extension : %d\n", getNextListBlockRef());
+            msg(" Data blocks : ");
+            for (isize i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
+            msg("\n");
+            break;
+            
+        case FS_DATA_BLOCK_OFS:
+            
+            msg("File header block : %d\n", getFileHeaderRef());
+            msg("     Chain number : %d\n", getDataBlockNr());
+            msg("       Data bytes : %d\n", getDataBytesInBlock());
+            msg("  Next data block : %d\n", getNextDataBlockRef());
+            msg("\n");
+            break;
+            
+        default:
+            break;
+    }
+}
+
+void
+FSBlock::dumpData() const
+{
+    if (data) util::hexdumpLongwords(data, 512);
 }
 
 void
@@ -571,6 +671,53 @@ FSBlock::getNextListBlock()
     return nr ? partition.dev.fileListBlockPtr(nr) : nullptr;
 }
 
+Block
+FSBlock::getBmBlockRef(isize nr) const
+{
+    switch (type) {
+            
+        case FS_ROOT_BLOCK:
+            
+            return get32(nr - 49);
+            
+        case FS_BITMAP_EXT_BLOCK:
+            
+            return get32(nr);
+            
+        default:
+            fatalError;
+    }
+}
+
+void
+FSBlock::setBmBlockRef(isize nr, Block ref)
+{
+    switch (type) {
+            
+        case FS_ROOT_BLOCK:
+            
+            set32(nr - 49, ref);
+            return;
+            
+        case FS_BITMAP_EXT_BLOCK:
+            
+            set32(nr, ref);
+            return;
+            
+        default:
+            fatalError;
+    }
+}
+
+/*
+struct FSBitmapBlock *
+FSBlock::getBmBlock(isize nr)
+{
+    Block n = getBmBlockRef(nr);
+    return nr ? partition.dev.bitmapBlockPtr(nr) : nullptr;
+}
+*/
+
 FSBitmapExtBlock *
 FSBlock::getNextBmExtBlock()
 {
@@ -584,6 +731,37 @@ FSBlock::getFirstDataBlock()
 {
     Block nr = getFirstDataBlockRef();
     return nr ? partition.dev.dataBlockPtr(nr) : nullptr;
+}
+
+Block
+FSBlock::getDataBlockRef(isize nr) const
+{
+    switch (type) {
+            
+        case FS_FILEHEADER_BLOCK:
+        case FS_FILELIST_BLOCK:
+            
+            return get32(-51 - nr);
+            
+        default:
+            fatalError;
+    }
+}
+
+void
+FSBlock::setDataBlockRef(isize nr, Block ref)
+{
+    switch (type) {
+            
+        case FS_FILEHEADER_BLOCK:
+        case FS_FILELIST_BLOCK:
+            
+            set32(-51-nr, ref);
+            return;
+            
+        default:
+            fatalError;
+    }
 }
 
 FSDataBlock *
@@ -617,8 +795,60 @@ FSBlock::dumpHashTable() const
     }
 }
 
+u32
+FSBlock::getDataBlockNr() const
+{
+    switch (type) {
+            
+        case FS_DATA_BLOCK_OFS: return get32(2); 
+        case FS_DATA_BLOCK_FFS: return 0;
+                        
+        default:
+            fatalError;
+    }
+}
+
+void
+FSBlock::setDataBlockNr(u32 val)
+{
+    switch (type) {
+            
+        case FS_DATA_BLOCK_OFS: set32(2, val); break;
+        case FS_DATA_BLOCK_FFS: break;
+                        
+        default:
+            fatalError;
+    }
+}
+
 isize
 FSBlock::getMaxDataBlockRefs() const
 {
     return bsize() / 4 - 56;
+}
+
+u32
+FSBlock::getDataBytesInBlock() const
+{
+    switch (type) {
+            
+        case FS_DATA_BLOCK_OFS: return get32(3);
+        case FS_DATA_BLOCK_FFS: return 0;
+                        
+        default:
+            fatalError;
+    }
+}
+
+void
+FSBlock::setDataBytesInBlock(u32 val)
+{
+    switch (type) {
+            
+        case FS_DATA_BLOCK_OFS: set32(3, val); break;
+        case FS_DATA_BLOCK_FFS: break;
+                        
+        default:
+            fatalError;
+    }
 }

@@ -108,6 +108,7 @@ FSFileHeaderBlock::check(isize byte, u8 *expected, bool strict) const
 }
 */
 
+/*
 void
 FSFileHeaderBlock::dump() const
 {
@@ -126,6 +127,7 @@ FSFileHeaderBlock::dump() const
     for (isize i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
     msg("\n");
 }
+*/
 
 ErrorCode
 FSFileHeaderBlock::exportBlock(const string &dir)

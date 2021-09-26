@@ -101,6 +101,7 @@ FSUserDirBlock::check(isize byte, u8 *expected, bool strict) const
 }
 */
 
+/*
 void
 FSUserDirBlock::dump() const
 {
@@ -110,6 +111,7 @@ FSUserDirBlock::dump() const
     printf("      Parent: %d\n", getParentDirRef());
     printf("        Next: %d\n", getNextHashRef());
 }
+*/
 
 ErrorCode
 FSUserDirBlock::exportBlock(const string &dir)

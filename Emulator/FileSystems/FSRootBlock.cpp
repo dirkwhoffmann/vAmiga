@@ -109,6 +109,7 @@ FSRootBlock::check(isize byte, u8 *expected, bool strict) const
 }
 */
 
+/*
 void
 FSRootBlock::dump() const
 {
@@ -123,6 +124,7 @@ FSRootBlock::dump() const
     msg("\n");
     msg("   Next BmExt : %d\n", getNextBmExtBlockRef());
 }
+*/
 
 bool
 FSRootBlock::addBitmapBlockRefs(std::vector<Block> &refs)

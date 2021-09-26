@@ -26,7 +26,7 @@ struct FSFileHeaderBlock : FSBlock {
     FSBlockType getType() const override { assert(type == FS_FILEHEADER_BLOCK); return FS_FILEHEADER_BLOCK; }
     // FSItemType itemType(isize byte) const override;
     // ErrorCode check(isize pos, u8 *expected, bool strict) const override;
-    void dump() const override;
+    // void dump() const override;
     isize checksumLocation() const override { return 5; }
 
     ErrorCode exportBlock(const string &path) override;
@@ -37,10 +37,12 @@ struct FSFileHeaderBlock : FSBlock {
 
     Block getFirstDataBlockRef() const override   { return get32(4     );      }
     void setFirstDataBlockRef(Block ref) override {        set32(4, ref);      }
-    
+
+    /*
     Block getDataBlockRef(isize nr) const         { return get32(-51-nr     ); }
     void setDataBlockRef(isize nr, Block ref)     {        set32(-51-nr, ref); }
-
+    */
+    
     Block getProtectionBits() const override      { return get32(-48     );    }
     void setProtectionBits(Block val) override    {        set32(-48, val);    }
 

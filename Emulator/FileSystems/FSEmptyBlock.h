@@ -23,10 +23,8 @@ struct FSEmptyBlock : FSBlock {
     //
 
     FSBlockType getType() const override { assert(type == FS_EMPTY_BLOCK); return FS_EMPTY_BLOCK; }
-    // FSItemType itemType(isize byte) const override; 
     u32 typeID() const override { return 0; }
     u32 subtypeID() const override { return 0; }
-    void dumpData() const override { };
 
     void importBlock(const u8 *src, isize bsize) override;
     void exportBlock(u8 *dst, isize bsize) override;

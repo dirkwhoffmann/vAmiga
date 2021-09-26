@@ -43,6 +43,7 @@ FSBitmapBlock::check(isize byte, u8 *expected, bool strict) const
 }
 */
 
+/*
 void
 FSBitmapBlock::dump() const
 {
@@ -56,3 +57,4 @@ FSBitmapBlock::dump() const
     }
     printf("         Free : %zd blocks\n", count);
 }
+*/

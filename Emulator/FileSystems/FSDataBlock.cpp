@@ -34,6 +34,7 @@ OFSDataBlock::OFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(
     set32(0, 8); // Block type
 }
 
+/*
 void
 OFSDataBlock::dump() const
 {
@@ -43,6 +44,7 @@ OFSDataBlock::dump() const
     msg("  Next data block : %d\n", getNextDataBlockRef());
     msg("\n");
 }
+*/
 
 /*
 FSItemType
@@ -126,10 +128,12 @@ OFSDataBlock::dsize() const
 
 FFSDataBlock::FFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(p, nr, t) { }
 
+/*
 void
 FFSDataBlock::dump() const
 {
 }
+*/
 
 /*
 FSItemType

@@ -26,6 +26,7 @@ FSFileListBlock::~FSFileListBlock()
     delete [] data;
 }
 
+/*
 void
 FSFileListBlock::dump() const
 {
@@ -37,6 +38,7 @@ FSFileListBlock::dump() const
     for (isize i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
     msg("\n");
 }
+*/
 
 /*
 FSItemType
