@@ -23,8 +23,8 @@ struct FSUserDirBlock : FSBlock {
     // Methods from Block class
     //
     
-    ErrorCode exportBlock(const string &path) override;
-
+    // ErrorCode exportBlock(const string &path) override;
+    
     u32 getProtectionBits() const override     { return get32(-48     );       }
     void setProtectionBits(u32 val) override   {        set32(-48, val);       }
 

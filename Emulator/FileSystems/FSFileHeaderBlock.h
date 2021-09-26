@@ -20,7 +20,7 @@ struct FSFileHeaderBlock : FSBlock {
     // Methods from Block class
     //
 
-    ErrorCode exportBlock(const string &path) override;
+    // ErrorCode exportBlock(const string &path) override;
 
     isize getNumDataBlockRefs() const override    { return get32(2);           }
     void setNumDataBlockRefs(u32 val) override    {        set32(2, val);      }

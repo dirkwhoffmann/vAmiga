@@ -725,6 +725,44 @@ FSBlock::exportBlock(u8 *dst, isize size)
     std::memcpy(dst, data, size);
 }
 
+ErrorCode
+FSBlock::exportBlock(const string &path)
+{
+    switch (type) {
+            
+        case FS_USERDIR_BLOCK:    return exportUserDirBlock(path);
+        case FS_FILEHEADER_BLOCK: return exportFileHeaderBlock(path);
+            
+        default:
+            return ERROR_OK;
+    }    
+}
+
+ErrorCode
+FSBlock::exportUserDirBlock(const string &path)
+{
+    string filename = path + "/" + partition.dev.getPath(this);
+    
+    // Try to create a directory on the host file system
+    if (mkdir(filename.c_str(), 0777) != 0) return ERROR_FS_CANNOT_CREATE_DIR;
+    
+    return ERROR_OK;
+}
+
+ErrorCode
+FSBlock::exportFileHeaderBlock(const string &path)
+{
+    string filename = path + "/" + partition.dev.getPath(this);
+    
+    FILE *file = fopen(filename.c_str(), "w");
+    if (file == nullptr) return ERROR_FS_CANNOT_CREATE_FILE;
+    
+    writeData(file);
+    fclose(file);
+        
+    return ERROR_OK;
+}
+
 FSName
 FSBlock::getName() const
 {
@@ -1002,6 +1040,75 @@ FSBlock::setDataBytesInBlock(u32 val)
         case FS_DATA_BLOCK_OFS: set32(3, val); break;
         case FS_DATA_BLOCK_FFS: break;
                         
+        default:
+            fatalError;
+    }
+}
+
+isize
+FSBlock::writeData(FILE *file)
+{
+    // Only call this function for file header blocks
+    assert(type == FS_FILEHEADER_BLOCK);
+    
+    isize bytesRemaining = getFileSize();
+    isize bytesTotal = 0;
+    isize blocksTotal = 0;
+    
+    // Start here and iterate through all connected file list blocks
+    FSBlock *block = this;
+    
+    while (block && blocksTotal < partition.numBlocks()) {
+        
+        blocksTotal++;
+        
+        // Iterate through all data blocks references in this block
+        isize num = std::min(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
+        for (isize i = 0; i < num; i++) {
+            
+            Block ref = getDataBlockRef(i);
+            if (FSDataBlock *dataBlock = partition.dev.dataBlockPtr(getDataBlockRef(i))) {
+                
+                isize bytesWritten = dataBlock->writeData(file, bytesRemaining);
+                bytesTotal += bytesWritten;
+                bytesRemaining -= bytesWritten;
+                
+            } else {
+                
+                warn("Ignoring block %d (no data block)\n", ref);
+            }
+        }
+        
+        // Continue with the next list block
+        block = block->getNextListBlock();
+    }
+    
+    if (bytesRemaining != 0) {
+        warn("%zd remaining bytes. Expected 0.\n", bytesRemaining);
+    }
+    
+    return bytesTotal;
+}
+
+isize
+FSBlock::writeData(FILE *file, isize size)
+{
+    assert(file);
+    
+    isize count = std::min(dsize(), size);
+    
+    switch (type) {
+            
+        case FS_DATA_BLOCK_OFS:
+            
+            for (isize i = 0; i < count; i++) fputc(data[i + 24], file);
+            return count;
+            
+        case FS_DATA_BLOCK_FFS:
+            
+            for (isize i = 0; i < count; i++) fputc(data[i], file);
+            return count;
+            
         default:
             fatalError;
     }

@@ -140,8 +140,13 @@ public:
     virtual void exportBlock(u8 *dst, isize bsize);
     
     // Exports this block to the host file system
-    virtual ErrorCode exportBlock(const string &path) { return ERROR_OK; }
+    ErrorCode exportBlock(const string &path);
         
+private:
+    
+    ErrorCode exportUserDirBlock(const string &path);
+    ErrorCode exportFileHeaderBlock(const string &path);
+
                 
     //
     // Geting and setting names and comments
@@ -274,6 +279,14 @@ public:
 
     // Adds data bytes to this block
     virtual isize addData(const u8 *buffer, isize size) { return 0; }
+    
+    
+    //
+    // Exporting
+    //
+    
+    isize writeData(FILE *file);
+    isize writeData(FILE *file, isize size);
 };
 
 typedef FSBlock* BlockPtr;

@@ -129,6 +129,7 @@ FSFileHeaderBlock::dump() const
 }
 */
 
+/*
 ErrorCode
 FSFileHeaderBlock::exportBlock(const string &dir)
 {
@@ -142,7 +143,9 @@ FSFileHeaderBlock::exportBlock(const string &dir)
         
     return ERROR_OK;
 }
+*/
 
+/*
 isize
 FSFileHeaderBlock::writeData(FILE *file)
 {
@@ -184,6 +187,7 @@ FSFileHeaderBlock::writeData(FILE *file)
     
     return bytesTotal;
 }
+*/
 
 isize
 FSFileHeaderBlock::addData(const u8 *buffer, isize size)

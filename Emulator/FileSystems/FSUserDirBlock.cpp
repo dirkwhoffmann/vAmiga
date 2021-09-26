@@ -113,6 +113,7 @@ FSUserDirBlock::dump() const
 }
 */
 
+/*
 ErrorCode
 FSUserDirBlock::exportBlock(const string &dir)
 {
@@ -123,3 +124,4 @@ FSUserDirBlock::exportBlock(const string &dir)
     
     return ERROR_OK;
 }
+*/

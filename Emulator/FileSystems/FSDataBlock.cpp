@@ -34,6 +34,7 @@ OFSDataBlock::OFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(
     set32(0, 8); // Block type
 }
 
+/*
 isize
 OFSDataBlock::writeData(FILE *file, isize size)
 {
@@ -43,6 +44,7 @@ OFSDataBlock::writeData(FILE *file, isize size)
     for (isize i = 0; i < count; i++) fputc(data[i + 24], file);
     return count;
 }
+*/
 
 isize
 OFSDataBlock::addData(const u8 *buffer, isize size)
@@ -61,6 +63,7 @@ OFSDataBlock::addData(const u8 *buffer, isize size)
 
 FFSDataBlock::FFSDataBlock(FSPartition &p, u32 nr, FSBlockType t) : FSDataBlock(p, nr, t) { }
 
+/*
 isize
 FFSDataBlock::writeData(FILE *file, isize size)
 {
@@ -70,6 +73,7 @@ FFSDataBlock::writeData(FILE *file, isize size)
     for (isize i = 0; i < count; i++) fputc(data[i], file);
     return count;
 }
+*/
 
 isize
 FFSDataBlock::addData(const u8 *buffer, isize size)
