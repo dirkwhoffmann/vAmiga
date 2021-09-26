@@ -67,8 +67,8 @@ public:
     FSItemType itemType(isize byte) const;
     
     // Returns the type and subtype identifiers of this block
-    virtual u32 typeID() const;
-    virtual u32 subtypeID() const;
+    u32 typeID() const;
+    u32 subtypeID() const;
     
     
     //

@@ -265,13 +265,13 @@ FSBlock::itemType(isize byte) const
 u32
 FSBlock::typeID() const
 {
-    return get32(0);
+    return type == FS_EMPTY_BLOCK ? 0 : get32(0);
 }
 
 u32
 FSBlock::subtypeID() const
 {
-    return get32((bsize() / 4) - 1);
+    return type == FS_EMPTY_BLOCK ? 0 : get32((bsize() / 4) - 1);
 }
 
 isize

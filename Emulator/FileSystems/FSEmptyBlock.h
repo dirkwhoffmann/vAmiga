@@ -20,9 +20,6 @@ struct FSEmptyBlock : FSBlock {
     // Methods from Block class
     //
 
-    u32 typeID() const override { return 0; }
-    u32 subtypeID() const override { return 0; }
-
     void importBlock(const u8 *src, isize bsize) override;
     void exportBlock(u8 *dst, isize bsize) override;
 };
