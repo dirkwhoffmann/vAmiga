@@ -33,7 +33,7 @@ struct FSRootBlock : FSBlock {
     void setCreationDate(FSTime t) override       { t.write(addr32(-7));       }
     */
     
-    isize hashTableSize() const override          { return 72;                 }
+    // isize hashTableSize() const override          { return 72;                 }
 
     bool addBitmapBlockRefs(std::vector<Block> &refs);
 };

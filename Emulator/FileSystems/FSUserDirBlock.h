@@ -43,6 +43,6 @@ struct FSUserDirBlock : FSBlock {
     void setParentDirRef(Block ref) override   {        set32(-3,  ref);       }
     */
     
-    isize hashTableSize() const override       { return 72; }
-    u32 hashValue() const override             { return getName().hashValue(); }
+    // isize hashTableSize() const override       { return 72; }
+    // u32 hashValue() const override             { return getName().hashValue(); }
 };

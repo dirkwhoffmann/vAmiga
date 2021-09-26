@@ -25,10 +25,10 @@ struct OFSDataBlock : FSDataBlock {
     Block  getFileHeaderRef() const override        { return get32(1);        }
     void setFileHeaderRef(Block ref) override       {        set32(1, ref);   }
     */
-    
+    /*
     Block  getNextDataBlockRef() const override     { return get32(4);        }
     void setNextDataBlockRef(Block ref) override    {        set32(4, ref);   }
-
+    */
     // isize addData(const u8 *buffer, isize size) override;
 };
 

@@ -1222,11 +1222,53 @@ FSBlock::setDataBlockRef(isize nr, Block ref)
     }
 }
 
+Block
+FSBlock::getNextDataBlockRef() const
+{
+    return type == FS_DATA_BLOCK_OFS ? get32(4) : 0;
+}
+
+void
+FSBlock::setNextDataBlockRef(Block ref)
+{
+    if (type == FS_DATA_BLOCK_OFS) set32(4, ref);
+}
+
 FSDataBlock *
 FSBlock::getNextDataBlock()
 {
     Block nr = getNextDataBlockRef();
     return nr ? partition.dev.dataBlockPtr(nr) : nullptr;
+}
+
+isize
+FSBlock::hashTableSize() const
+{
+    switch (type) {
+            
+        case FS_ROOT_BLOCK:
+        case FS_USERDIR_BLOCK:
+            
+            return 72;
+            
+        default:
+            return 0;
+    }
+}
+
+u32
+FSBlock::hashValue() const
+{
+    switch (type) {
+            
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+            
+            return getName().hashValue();
+            
+        default:
+            return 0;
+    }
 }
 
 u32

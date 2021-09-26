@@ -71,5 +71,5 @@ struct FSFileHeaderBlock : FSBlock {
     bool addDataBlockRef(Block first, Block ref) override;
     */
     
-    u32 hashValue() const override { return getName().hashValue(); }
+    // u32 hashValue() const override { return getName().hashValue(); }
 };

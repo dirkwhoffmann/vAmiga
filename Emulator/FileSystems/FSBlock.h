@@ -222,8 +222,8 @@ public:
     void setDataBlockRef(isize nr, Block ref);
 
     // Link to the next data block
-    virtual Block getNextDataBlockRef() const { return 0; }
-    virtual void setNextDataBlockRef(Block ref) { }
+    Block getNextDataBlockRef() const;
+    void setNextDataBlockRef(Block ref);
     struct FSDataBlock *getNextDataBlock();
 
         
@@ -232,10 +232,10 @@ public:
     //
     
     // Returns the hash table size
-    virtual isize hashTableSize() const { return 0; }
+    isize hashTableSize() const;
 
     // Returns a hash value for this block
-    virtual u32 hashValue() const { return 0; }
+    u32 hashValue() const;
 
     // Looks up an item in the hash table
     u32 getHashRef(u32 nr) const;
