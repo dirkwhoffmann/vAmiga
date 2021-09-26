@@ -16,7 +16,6 @@
 #include "FSBootBlock.h"
 #include "FSRootBlock.h"
 #include "FSBitmapBlock.h"
-#include "FSBitmapExtBlock.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 #include <stack>
@@ -39,7 +38,6 @@ class FSDevice : public AmigaObject {
     friend struct FSBootBlock;
     friend struct FSRootBlock;
     friend struct FSBitmapBlock;
-    friend struct FSBitmapExtBlock;
     friend struct FSFileListBlock;
 
 protected:
@@ -188,7 +186,7 @@ public:
     FSBootBlock *bootBlockPtr(Block nr);
     FSRootBlock *rootBlockPtr(Block nr);
     FSBitmapBlock *bitmapBlockPtr(Block nr);
-    FSBitmapExtBlock *bitmapExtBlockPtr(Block nr);
+    FSBlock *bitmapExtBlockPtr(Block nr);
     FSBlock *userDirBlockPtr(Block nr);
     FSBlock *fileHeaderBlockPtr(Block nr);
     FSBlock *fileListBlockPtr(Block nr);

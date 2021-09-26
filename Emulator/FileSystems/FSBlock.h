@@ -13,7 +13,6 @@
 #include "FSTypes.h"
 #include "FSObjects.h"
 #include "BootBlockImage.h"
-#include "FSBitmapExtBlock.h"
 #include <vector>
 
 struct FSBlock : AmigaObject {
@@ -214,7 +213,7 @@ public:
     // Link to the next bitmap extension block
     Block getNextBmExtBlockRef() const;
     void setNextBmExtBlockRef(Block ref);
-    FSBitmapExtBlock *getNextBmExtBlock();
+    FSBlock *getNextBmExtBlock();
     
     // Link to the first data block
     Block getFirstDataBlockRef() const;

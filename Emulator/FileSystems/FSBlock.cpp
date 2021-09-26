@@ -10,7 +10,6 @@
 #include "config.h"
 #include "FSBlock.h"
 #include "FSBitmapBlock.h"
-#include "FSBitmapExtBlock.h"
 #include "FSBootBlock.h"
 #include "FSDevice.h"
 #include "FSEmptyBlock.h"
@@ -100,7 +99,7 @@ FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
         case FS_BOOT_BLOCK:       return new FSBootBlock(p, nr, type);
         case FS_ROOT_BLOCK:       return new FSRootBlock(p, nr, type);
         case FS_BITMAP_BLOCK:     return new FSBitmapBlock(p, nr, type);
-        case FS_BITMAP_EXT_BLOCK: return new FSBitmapExtBlock(p, nr, type);
+        case FS_BITMAP_EXT_BLOCK: return new FSBlock(p, nr, type);
         case FS_USERDIR_BLOCK:    return new FSBlock(p, nr, type);
         case FS_FILEHEADER_BLOCK: return new FSBlock(p, nr, type);
         case FS_FILELIST_BLOCK:   return new FSBlock(p, nr, type);
@@ -1211,7 +1210,7 @@ FSBlock::setNextBmExtBlockRef(Block ref)
     }
 }
 
-FSBitmapExtBlock *
+FSBlock *
 FSBlock::getNextBmExtBlock()
 {
     Block nr = getNextBmExtBlockRef();
@@ -1395,7 +1394,7 @@ FSBlock::addBitmapBlockRefs(std::vector<Block> &refs)
     }
             
     // Record the remaining references in bitmap extension blocks
-    FSBitmapExtBlock *ext = getNextBmExtBlock();
+    FSBlock *ext = getNextBmExtBlock();
     while (ext && it != refs.end()) {
         ext->addBitmapBlockRefs(refs, it);
         ext = getNextBmExtBlock();

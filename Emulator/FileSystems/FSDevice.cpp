@@ -212,11 +212,11 @@ FSDevice::bitmapBlockPtr(Block nr)
     return nullptr;
 }
 
-FSBitmapExtBlock *
+FSBlock *
 FSDevice::bitmapExtBlockPtr(Block nr)
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_BITMAP_EXT_BLOCK) {
-        return (FSBitmapExtBlock *)blocks[nr];
+        return blocks[nr];
     }
     return nullptr;
 }

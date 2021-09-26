@@ -47,7 +47,7 @@ FSPartition::FSPartition(FSDevice &dev, FSPartitionDescriptor &layout) : FSParti
     FSBlock *pred = rb;
     for (auto& ref : layout.bmExtBlocks) {
         
-        dev.blocks[ref] = new FSBitmapExtBlock(*this, ref, FS_BITMAP_EXT_BLOCK);
+        dev.blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_EXT_BLOCK);
         pred->setNextBmExtBlockRef(ref);
         pred = dev.blocks[ref];
     }

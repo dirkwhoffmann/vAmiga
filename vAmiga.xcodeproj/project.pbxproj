@@ -24,7 +24,6 @@
 		5010A78222B50B690041388B /* PortPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5010A78122B50B690041388B /* PortPanel.swift */; };
 		501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501429D82445F12B00FBDC90 /* TextureToolbox.swift */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
-		501702E3256FFC5400C84CE1 /* FSBitmapExtBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501702E1256FFC5400C84CE1 /* FSBitmapExtBlock.cpp */; };
 		5019605B231257270051B669 /* Monitor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5019605A231257270051B669 /* Monitor.xib */; };
 		5019605D23125E680051B669 /* Monitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019605C23125E680051B669 /* Monitor.swift */; };
 		5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
@@ -282,8 +281,6 @@
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
 		5015FF3E242BA00F005175D9 /* Frame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Frame.h; sourceTree = "<group>"; };
 		5016DFB6260E3048004E0307 /* SchedulerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SchedulerTypes.h; sourceTree = "<group>"; };
-		501702E1256FFC5400C84CE1 /* FSBitmapExtBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSBitmapExtBlock.cpp; sourceTree = "<group>"; };
-		501702E2256FFC5400C84CE1 /* FSBitmapExtBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSBitmapExtBlock.h; sourceTree = "<group>"; };
 		5019605A231257270051B669 /* Monitor.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Monitor.xib; sourceTree = "<group>"; };
 		5019605C23125E680051B669 /* Monitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monitor.swift; sourceTree = "<group>"; };
 		5019B1EE254B292D00A7AB95 /* EXEFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXEFile.cpp; sourceTree = "<group>"; };
@@ -845,8 +842,6 @@
 				5083CF5E2546BCB200A28EF8 /* FSRootBlock.cpp */,
 				5083CF642546BEAA00A28EF8 /* FSBitmapBlock.h */,
 				5083CF632546BEAA00A28EF8 /* FSBitmapBlock.cpp */,
-				501702E2256FFC5400C84CE1 /* FSBitmapExtBlock.h */,
-				501702E1256FFC5400C84CE1 /* FSBitmapExtBlock.cpp */,
 			);
 			path = FileSystems;
 			sourceTree = "<group>";
@@ -1653,7 +1648,6 @@
 				5083CF5B2546AB1C00A28EF8 /* FSBootBlock.cpp in Sources */,
 				50C8C4552607524400F4E012 /* Monitors.swift in Sources */,
 				501A9937243A07A100D269B2 /* Storage.swift in Sources */,
-				501702E3256FFC5400C84CE1 /* FSBitmapExtBlock.cpp in Sources */,
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
 				5023519024485BBF00F6C088 /* Preferences.swift in Sources */,
 				505A3A3A21F4996400132020 /* SSEUtils.cpp in Sources */,
