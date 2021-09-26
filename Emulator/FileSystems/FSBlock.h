@@ -63,6 +63,9 @@ public:
     // Returns the size of this block in bytes (usually 512)
     isize bsize() const;
 
+    // Returns the number of data bytes stored in this block
+    isize dsize() const;
+    
     // Extract the file system type from the block header
     virtual FSVolumeType dos() const { return FS_NODOS; }
     
@@ -82,7 +85,7 @@ public:
     isize check(bool strict) const;
 
     // Checks the integrity of a certain byte in this block
-    virtual ErrorCode check(isize pos, u8 *expected, bool strict) const { return ERROR_OK; }
+    ErrorCode check(isize pos, u8 *expected, bool strict) const;
         
     
     //

@@ -26,7 +26,7 @@ struct FSUserDirBlock : FSBlock {
     
     FSBlockType getType() const override  { assert(type == FS_USERDIR_BLOCK); return FS_USERDIR_BLOCK; }
     // FSItemType itemType(isize byte) const override;
-    ErrorCode check(isize pos, u8 *expected, bool strict) const override;
+    // ErrorCode check(isize pos, u8 *expected, bool strict) const override;
     void dump() const override;
     isize checksumLocation() const override { return 5; }
 

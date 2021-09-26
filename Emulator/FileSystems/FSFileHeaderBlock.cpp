@@ -72,14 +72,10 @@ FSFileHeaderBlock::itemType(isize byte) const
 }
 */
 
+/*
 ErrorCode
 FSFileHeaderBlock::check(isize byte, u8 *expected, bool strict) const
 {
-    /* Note: At locations -4 and -3, many disks reference the bitmap block
-     * which is wrong. We ignore to report this common inconsistency if
-     * 'strict' is set to false.
-     */
-
     // Translate the byte index to a (signed) long word index
     isize word = byte / 4; if (word >= 6) word -= bsize() / 4;
     u32 value = get32(word);
@@ -110,6 +106,7 @@ FSFileHeaderBlock::check(isize byte, u8 *expected, bool strict) const
     
     return ERROR_OK;
 }
+*/
 
 void
 FSFileHeaderBlock::dump() const

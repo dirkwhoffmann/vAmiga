@@ -67,14 +67,10 @@ OFSDataBlock::itemType(isize pos) const
 }
 */
 
+/*
 ErrorCode
 OFSDataBlock::check(isize byte, u8 *expected, bool strict) const
 {
-    /* Note: At location 1, many disks store a reference to the bitmap block
-     * instead of a reference to the file header block. We ignore to report
-     * this common inconsistency if 'strict' is set to false.
-     */
-
     if (byte < 24) {
         
         isize word = byte / 4;
@@ -93,6 +89,7 @@ OFSDataBlock::check(isize byte, u8 *expected, bool strict) const
     
     return ERROR_OK;
 }
+*/
 
 isize
 OFSDataBlock::writeData(FILE *file, isize size)
@@ -100,27 +97,28 @@ OFSDataBlock::writeData(FILE *file, isize size)
     assert(file != nullptr);
     
     isize count = std::min(dsize(), size);
-    for (isize i = 0; i < count; i++) fputc(data[i + headerSize()], file);
+    for (isize i = 0; i < count; i++) fputc(data[i + 24], file);
     return count;
 }
 
 isize
 OFSDataBlock::addData(const u8 *buffer, isize size)
 {
-    isize count = std::min(bsize() - headerSize(), size);
+    isize count = std::min(bsize() - 24, size);
 
-    std::memcpy(data + headerSize(), buffer, count);
+    std::memcpy(data + 24, buffer, count);
     setDataBytesInBlock((u32)count);
     
     return count;
 }
 
+/*
 isize
 OFSDataBlock::dsize() const
 {
     return bsize() - headerSize();
 }
-
+*/
 
 //
 // Fast File System (FFS)
@@ -147,7 +145,7 @@ FFSDataBlock::writeData(FILE *file, isize size)
     assert(file != nullptr);
     
     isize count = std::min(dsize(), size);
-    for (isize i = 0; i < count; i++) fputc(data[i + headerSize()], file);
+    for (isize i = 0; i < count; i++) fputc(data[i], file);
     return count;
 }
 
@@ -159,8 +157,10 @@ FFSDataBlock::addData(const u8 *buffer, isize size)
     return count;
 }
 
+/*
 isize
 FFSDataBlock::dsize() const
 {
     return bsize() - headerSize();
 }
+*/

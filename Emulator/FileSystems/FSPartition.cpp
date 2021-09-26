@@ -208,7 +208,7 @@ isize
 FSPartition::requiredDataBlocks(isize fileSize) const
 {
     // Compute the capacity of a single data block
-    isize numBytes = bsize() - (isOFS() ? OFSDataBlock::headerSize() : 0);
+    isize numBytes = bsize() - (isOFS() ? 24 : 0);
 
     // Compute the required number of data blocks
     return (fileSize + numBytes - 1) / numBytes;

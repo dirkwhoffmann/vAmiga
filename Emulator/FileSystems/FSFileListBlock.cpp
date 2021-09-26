@@ -69,14 +69,10 @@ FSFileListBlock::itemType(isize byte) const
 }
 */
 
+/*
 ErrorCode
 FSFileListBlock::check(isize byte, u8 *expected, bool strict) const
 {
-    /* Note: At location -3, many disks reference the bitmap block instead of
-     * the file header block. We ignore to report this common inconsistency if
-     * 'strict' is set to false.
-     */
-
     // Translate 'pos' to a (signed) long word index
     isize word = byte / 4; if (word >= 6) word -= bsize() / 4;
     u32 value = get32(word);
@@ -108,6 +104,7 @@ FSFileListBlock::check(isize byte, u8 *expected, bool strict) const
     
     return ERROR_OK;
 }
+*/
 
 bool
 FSFileListBlock::addDataBlockRef(Block first, Block ref)

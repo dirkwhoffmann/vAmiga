@@ -72,6 +72,7 @@ FSRootBlock::itemType(isize byte) const
 }
 */
 
+/*
 ErrorCode
 FSRootBlock::check(isize byte, u8 *expected, bool strict) const
 {
@@ -106,6 +107,7 @@ FSRootBlock::check(isize byte, u8 *expected, bool strict) const
     
     return ERROR_OK;
 }
+*/
 
 void
 FSRootBlock::dump() const

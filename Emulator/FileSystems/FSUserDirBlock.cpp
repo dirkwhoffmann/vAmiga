@@ -75,6 +75,7 @@ FSUserDirBlock::itemType(isize byte) const
 }
 */
 
+/*
 ErrorCode
 FSUserDirBlock::check(isize byte, u8 *expected, bool strict) const
 {
@@ -98,6 +99,7 @@ FSUserDirBlock::check(isize byte, u8 *expected, bool strict) const
     
     return ERROR_OK;
 }
+*/
 
 void
 FSUserDirBlock::dump() const

@@ -58,6 +58,7 @@ FSBootBlock::itemType(isize byte) const
 }
 */
 
+/*
 ErrorCode
 FSBootBlock::check(isize byte, u8 *expected, bool strict) const
 {
@@ -75,6 +76,7 @@ FSBootBlock::check(isize byte, u8 *expected, bool strict) const
     
     return ERROR_OK;
 }
+*/
 
 isize
 FSBootBlock::checksumLocation() const

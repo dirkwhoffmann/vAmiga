@@ -55,6 +55,19 @@ FSBlock::bsize() const
     return partition.dev.bsize;
 }
 
+isize
+FSBlock::dsize() const
+{
+    switch (type) {
+            
+        case FS_DATA_BLOCK_OFS: return bsize() - 24;
+        case FS_DATA_BLOCK_FFS: return bsize();
+                        
+        default:
+            fatalError;
+    }
+}
+
 FSItemType
 FSBlock::itemType(isize byte) const
 {
@@ -256,6 +269,199 @@ FSBlock::check(bool strict) const
     }
     
     return count;
+}
+
+ErrorCode
+FSBlock::check(isize byte, u8 *expected, bool strict) const
+{
+    switch (type) {
+            
+        case FS_BOOT_BLOCK:
+        {
+            isize word = byte / 4;
+            u32 value = data[byte];
+
+            if (nr == partition.firstBlock) {
+                         
+                if (byte == 0) EXPECT_BYTE('D');
+                if (byte == 1) EXPECT_BYTE('O');
+                if (byte == 2) EXPECT_BYTE('S');
+                if (byte == 3) EXPECT_DOS_REVISION;
+                if (word == 1) { value = get32(1); EXPECT_CHECKSUM; }
+            }
+            break;
+        }
+        case FS_ROOT_BLOCK:
+        {
+            isize word = byte / 4; if (word >= 6) word -= bsize() / 4;
+            u32 value = get32(word);
+
+            switch (word) {
+                    
+                case 0:   EXPECT_LONGWORD(2);                break;
+                case 1:
+                case 2:   if (strict) EXPECT_LONGWORD(0);    break;
+                case 3:   if (strict) EXPECT_HASHTABLE_SIZE; break;
+                case 4:   EXPECT_LONGWORD(0);                break;
+                case 5:   EXPECT_CHECKSUM;                   break;
+                case -50:                                    break;
+                case -49: EXPECT_BITMAP_REF;                 break;
+                case -24: EXPECT_OPTIONAL_BITMAP_EXT_REF;    break;
+                case -4:
+                case -3:
+                case -2:  if (strict) EXPECT_LONGWORD(0);    break;
+                case -1:  EXPECT_LONGWORD(1);                break;
+                    
+                default:
+                    
+                    // Hash table area
+                    if (word <= -51) { EXPECT_OPTIONAL_HASH_REF; break; }
+                    
+                    // Bitmap block area
+                    if (word <= -25) { EXPECT_OPTIONAL_BITMAP_REF; break; }
+            }
+            break;
+        }
+        case FS_BITMAP_BLOCK:
+        {
+            isize word = byte / 4;
+            u32 value = get32(word);
+            
+            if (word == 0) EXPECT_CHECKSUM;
+            break;
+        }
+        case FS_BITMAP_EXT_BLOCK:
+        {
+            isize word = byte / 4;
+            u32 value = get32(word);
+            
+            if (word == (i32)(bsize() - 4)) EXPECT_OPTIONAL_BITMAP_EXT_REF;
+            break;
+        }
+        case FS_USERDIR_BLOCK:
+        {
+            isize word = byte / 4; if (word >= 6) word -= bsize() / 4;
+            u32 value = get32(word);
+            
+            switch (word) {
+                case  0: EXPECT_LONGWORD(2);        break;
+                case  1: EXPECT_SELFREF;            break;
+                case  2:
+                case  3:
+                case  4: EXPECT_BYTE(0);            break;
+                case  5: EXPECT_CHECKSUM;           break;
+                case -4: EXPECT_OPTIONAL_HASH_REF;  break;
+                case -3: EXPECT_PARENT_DIR_REF;     break;
+                case -2: EXPECT_BYTE(0);            break;
+                case -1: EXPECT_LONGWORD(2);        break;
+            }
+            if (word <= -51) EXPECT_OPTIONAL_HASH_REF;
+            break;
+        }
+        case FS_FILEHEADER_BLOCK:
+        {
+            /* Note: At locations -4 and -3, many disks reference the bitmap
+             * block which is wrong. We ignore to report this common
+             * inconsistency if 'strict' is set to false.
+             */
+
+            // Translate the byte index to a (signed) long word index
+            isize word = byte / 4; if (word >= 6) word -= bsize() / 4;
+            u32 value = get32(word);
+            
+            switch (word) {
+                case   0: EXPECT_LONGWORD(2);                    break;
+                case   1: EXPECT_SELFREF;                        break;
+                case   3: EXPECT_BYTE(0);                        break;
+                case   4: EXPECT_DATABLOCK_REF;                  break;
+                case   5: EXPECT_CHECKSUM;                       break;
+                case -50: EXPECT_BYTE(0);                        break;
+                case  -4: if (strict) EXPECT_OPTIONAL_HASH_REF;  break;
+                case  -3: if (strict) EXPECT_PARENT_DIR_REF;     break;
+                case  -2: EXPECT_OPTIONAL_FILELIST_REF;          break;
+                case  -1: EXPECT_LONGWORD(-3);                   break;
+            }
+                
+            // Data block reference area
+            if (word <= -51 && value) EXPECT_DATABLOCK_REF;
+            if (word == -51) {
+                if (value == 0 && getNumDataBlockRefs() > 0) {
+                    return ERROR_FS_EXPECTED_REF;
+                }
+                if (value != 0 && getNumDataBlockRefs() == 0) {
+                    return ERROR_FS_EXPECTED_NO_REF;
+                }
+            }
+            break;
+        }
+        case FS_FILELIST_BLOCK:
+        {
+            /* Note: At location -3, many disks reference the bitmap
+             * block which is wrong. We ignore to report this common
+             * inconsistency if 'strict' is set to false.
+             */
+            
+            // Translate 'pos' to a (signed) long word index
+            isize word = byte / 4; if (word >= 6) word -= bsize() / 4;
+            u32 value = get32(word);
+
+            switch (word) {
+                    
+                case   0: EXPECT_LONGWORD(16);                break;
+                case   1: EXPECT_SELFREF;                     break;
+                case   3: EXPECT_BYTE(0);                     break;
+                case   4: EXPECT_OPTIONAL_DATABLOCK_REF;      break;
+                case   5: EXPECT_CHECKSUM;                    break;
+                case -50:
+                case  -4: EXPECT_BYTE(0);                     break;
+                case  -3: if (strict) EXPECT_FILEHEADER_REF;  break;
+                case  -2: EXPECT_OPTIONAL_FILELIST_REF;       break;
+                case  -1: EXPECT_LONGWORD(-3);                break;
+            }
+            
+            // Data block references
+            if (word <= -51 && value) EXPECT_DATABLOCK_REF;
+            if (word == -51) {
+                if (value == 0 && getNumDataBlockRefs() > 0) {
+                    return ERROR_FS_EXPECTED_REF;
+                }
+                if (value != 0 && getNumDataBlockRefs() == 0) {
+                    return ERROR_FS_EXPECTED_NO_REF;
+                }
+            }
+            break;
+        }
+                  
+        case FS_DATA_BLOCK_OFS:
+        {
+            /* Note: At location 1, many disks store a reference to the bitmap
+             * block instead of a reference to the file header block. We ignore
+             * to report this common inconsistency if 'strict' is set to false.
+             */
+
+            if (byte < 24) {
+                
+                isize word = byte / 4;
+                u32 value = get32(word);
+                        
+                switch (word) {
+                        
+                    case 0: EXPECT_LONGWORD(8);                 break;
+                    case 1: if (strict) EXPECT_FILEHEADER_REF;  break;
+                    case 2: EXPECT_DATABLOCK_NUMBER;            break;
+                    case 3: EXPECT_LESS_OR_EQUAL(dsize());      break;
+                    case 4: EXPECT_OPTIONAL_DATABLOCK_REF;      break;
+                    case 5: EXPECT_CHECKSUM;                    break;
+                }
+            }
+            break;
+        }
+
+        default:
+            break;
+    }
+    
+    return ERROR_OK;
 }
 
 u8 *

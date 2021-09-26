@@ -30,6 +30,7 @@ FSBitmapExtBlock::itemType(isize pos) const
 }
 */
 
+/*
 ErrorCode
 FSBitmapExtBlock::check(isize byte, u8 *expected, bool strict) const
 {
@@ -40,6 +41,7 @@ FSBitmapExtBlock::check(isize byte, u8 *expected, bool strict) const
     
     return ERROR_OK;
 }
+*/
 
 void
 FSBitmapExtBlock::dump() const
