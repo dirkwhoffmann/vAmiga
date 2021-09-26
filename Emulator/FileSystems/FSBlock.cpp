@@ -13,7 +13,6 @@
 #include "FSBitmapExtBlock.h"
 #include "FSBootBlock.h"
 #include "FSDevice.h"
-#include "FSDataBlock.h"
 #include "FSEmptyBlock.h"
 #include "FSFileHeaderBlock.h"
 #include "FSFileListBlock.h"
@@ -108,8 +107,8 @@ FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
         case FS_USERDIR_BLOCK:    return new FSUserDirBlock(p, nr, type);
         case FS_FILEHEADER_BLOCK: return new FSFileHeaderBlock(p, nr, type);
         case FS_FILELIST_BLOCK:   return new FSFileListBlock(p, nr, type);
-        case FS_DATA_BLOCK_OFS:   return new OFSDataBlock(p, nr, type);
-        case FS_DATA_BLOCK_FFS:   return new FFSDataBlock(p, nr, type);
+        case FS_DATA_BLOCK_OFS:   return new FSBlock(p, nr, type);
+        case FS_DATA_BLOCK_FFS:   return new FSBlock(p, nr, type);
             
         default:
             throw VAError(ERROR_FS_INVALID_BLOCK_TYPE);
@@ -1253,7 +1252,7 @@ FSBlock::setFirstDataBlockRef(Block ref)
     }
 }
 
-FSDataBlock *
+FSBlock *
 FSBlock::getFirstDataBlock()
 {
     Block nr = getFirstDataBlockRef();
@@ -1303,7 +1302,7 @@ FSBlock::setNextDataBlockRef(Block ref)
     if (type == FS_DATA_BLOCK_OFS) set32(4, ref);
 }
 
-FSDataBlock *
+FSBlock *
 FSBlock::getNextDataBlock()
 {
     Block nr = getNextDataBlockRef();
@@ -1709,7 +1708,7 @@ FSBlock::writeData(FILE *file)
         for (isize i = 0; i < num; i++) {
             
             Block ref = getDataBlockRef(i);
-            if (FSDataBlock *dataBlock = partition.dev.dataBlockPtr(getDataBlockRef(i))) {
+            if (FSBlock *dataBlock = partition.dev.dataBlockPtr(getDataBlockRef(i))) {
                 
                 isize bytesWritten = dataBlock->writeData(file, bytesRemaining);
                 bytesTotal += bytesWritten;

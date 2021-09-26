@@ -248,13 +248,13 @@ FSDevice::fileListBlockPtr(Block nr)
     return nullptr;
 }
 
-FSDataBlock *
+FSBlock *
 FSDevice::dataBlockPtr(Block nr)
 {
     FSBlockType t = nr < blocks.size() ? blocks[nr]->type : FS_UNKNOWN_BLOCK;
 
     if (t == FS_DATA_BLOCK_OFS || t == FS_DATA_BLOCK_FFS) {
-        return (FSDataBlock *)blocks[nr];
+        return blocks[nr];
     }
     return nullptr;
 }

@@ -114,7 +114,7 @@ HDFFile::layout()
     
         // Collect all references to bitmap blocks stored in this block
         for (isize i = 0; i < cnt; i++, p += 4) {
-            if (Block bmb = FFSDataBlock::read32(p)) {
+            if (Block bmb = FSBlock::read32(p)) {
                 if (bmb < result.numBlocks) {
                     result.partitions[0].bmBlocks.push_back(bmb);
                 }
@@ -122,7 +122,7 @@ HDFFile::layout()
         }
         
         // Continue collecting in the next extension bitmap block
-        if ((ref = FFSDataBlock::read32(p))) {
+        if ((ref = FSBlock::read32(p))) {
             if (ref < result.numBlocks) result.partitions[0].bmExtBlocks.push_back(ref);
             cnt = (bsize() / 4) - 1;
             offset = 0;

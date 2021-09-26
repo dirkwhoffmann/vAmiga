@@ -20,7 +20,6 @@
 #include "FSUserDirBlock.h"
 #include "FSFileHeaderBlock.h"
 #include "FSFileListBlock.h"
-#include "FSDataBlock.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 #include <stack>
@@ -44,9 +43,6 @@ class FSDevice : public AmigaObject {
     friend struct FSUserDirBlock;
     friend struct FSFileHeaderBlock;
     friend struct FSFileListBlock;
-    friend struct FSDataBlock;
-    friend struct OFSDataBlock;
-    friend struct FFSDataBlock;
     friend struct FSHashTable;
 
 protected:
@@ -199,7 +195,7 @@ public:
     FSUserDirBlock *userDirBlockPtr(Block nr);
     FSFileHeaderBlock *fileHeaderBlockPtr(Block nr);
     FSFileListBlock *fileListBlockPtr(Block nr);
-    FSDataBlock *dataBlockPtr(Block nr);
+    FSBlock *dataBlockPtr(Block nr);
     FSBlock *hashableBlockPtr(Block nr);
     
     

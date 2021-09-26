@@ -79,7 +79,6 @@
 		507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507D7767228BE3EF001E97A9 /* StateMachine.cpp */; };
 		507DF0AD254710C30079BB98 /* FSFileHeaderBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507DF0AB254710C30079BB98 /* FSFileHeaderBlock.cpp */; };
 		507DF0B42549A6220079BB98 /* FSFileListBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507DF0B22549A6220079BB98 /* FSFileListBlock.cpp */; };
-		507DF0B82549A63C0079BB98 /* FSDataBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507DF0B62549A63C0079BB98 /* FSDataBlock.cpp */; };
 		5083CF5B2546AB1C00A28EF8 /* FSBootBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083CF592546AB1C00A28EF8 /* FSBootBlock.cpp */; };
 		5083CF602546BCB200A28EF8 /* FSRootBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083CF5E2546BCB200A28EF8 /* FSRootBlock.cpp */; };
 		5083CF652546BEAA00A28EF8 /* FSBitmapBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083CF632546BEAA00A28EF8 /* FSBitmapBlock.cpp */; };
@@ -386,8 +385,6 @@
 		507DF0AC254710C30079BB98 /* FSFileHeaderBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSFileHeaderBlock.h; sourceTree = "<group>"; };
 		507DF0B22549A6220079BB98 /* FSFileListBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSFileListBlock.cpp; sourceTree = "<group>"; };
 		507DF0B32549A6220079BB98 /* FSFileListBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSFileListBlock.h; sourceTree = "<group>"; };
-		507DF0B62549A63C0079BB98 /* FSDataBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDataBlock.cpp; sourceTree = "<group>"; };
-		507DF0B72549A63C0079BB98 /* FSDataBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDataBlock.h; sourceTree = "<group>"; };
 		5082D83A21EF891200CF7692 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		5083CF572546A22E00A28EF8 /* FSTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSTypes.h; sourceTree = "<group>"; };
 		5083CF592546AB1C00A28EF8 /* FSBootBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSBootBlock.cpp; sourceTree = "<group>"; };
@@ -865,8 +862,6 @@
 				507DF0AB254710C30079BB98 /* FSFileHeaderBlock.cpp */,
 				507DF0B32549A6220079BB98 /* FSFileListBlock.h */,
 				507DF0B22549A6220079BB98 /* FSFileListBlock.cpp */,
-				507DF0B72549A63C0079BB98 /* FSDataBlock.h */,
-				507DF0B62549A63C0079BB98 /* FSDataBlock.cpp */,
 			);
 			path = FileSystems;
 			sourceTree = "<group>";
@@ -1694,7 +1689,6 @@
 				50B81E0A24E6BEA5004384C9 /* CIARegs.cpp in Sources */,
 				508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */,
 				50C685282573E9BF008D34DF /* FSPartition.cpp in Sources */,
-				507DF0B82549A63C0079BB98 /* FSDataBlock.cpp in Sources */,
 				50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */,
 				5020B18021EF136100B9E80E /* Denise.cpp in Sources */,
 				505CEF5E26BD12430078FF52 /* DropZone.swift in Sources */,

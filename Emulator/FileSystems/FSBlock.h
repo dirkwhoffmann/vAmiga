@@ -16,7 +16,6 @@
 #include "FSBitmapExtBlock.h"
 #include "FSFileListBlock.h"
 #include "FSFileHeaderBlock.h"
-#include "FSDataBlock.h"
 #include <vector>
 
 struct FSBlock : AmigaObject {
@@ -222,7 +221,7 @@ public:
     // Link to the first data block
     Block getFirstDataBlockRef() const;
     void setFirstDataBlockRef(Block ref);
-    FSDataBlock *getFirstDataBlock();
+    FSBlock *getFirstDataBlock();
 
     Block getDataBlockRef(isize nr) const;
     void setDataBlockRef(isize nr, Block ref);
@@ -230,7 +229,7 @@ public:
     // Link to the next data block
     Block getNextDataBlockRef() const;
     void setNextDataBlockRef(Block ref);
-    FSDataBlock *getNextDataBlock();
+    FSBlock *getNextDataBlock();
 
         
     //

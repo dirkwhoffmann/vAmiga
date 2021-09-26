@@ -12,7 +12,6 @@
 #include "FSPartition.h"
 #include "FSDevice.h"
 #include "FSFileListBlock.h"
-#include "FSDataBlock.h"
 #include <algorithm>
 #include <vector>
 
@@ -319,11 +318,11 @@ FSPartition::addDataBlock(isize count, Block head, Block prev)
     Block nr = allocateBlock();
     if (!nr) return 0;
 
-    FSDataBlock *newBlock;
+    FSBlock *newBlock;
     if (isOFS()) {
-        newBlock = new OFSDataBlock(*this, nr, FS_DATA_BLOCK_OFS);
+        newBlock = new FSBlock(*this, nr, FS_DATA_BLOCK_OFS);
     } else {
-        newBlock = new FFSDataBlock(*this, nr, FS_DATA_BLOCK_FFS);
+        newBlock = new FSBlock(*this, nr, FS_DATA_BLOCK_FFS);
     }
     
     dev.blocks[nr] = newBlock;
