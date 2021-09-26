@@ -725,6 +725,54 @@ FSBlock::exportBlock(u8 *dst, isize size)
     std::memcpy(dst, data, size);
 }
 
+FSName
+FSBlock::getName() const
+{
+    switch (type) {
+    
+        case FS_ROOT_BLOCK:
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+            
+            return FSName(addr32(-20));
+    
+        default:
+            return FSName("");
+    }
+}
+
+void
+FSBlock::setName(FSName name)
+{
+    switch (type) {
+    
+        case FS_ROOT_BLOCK:
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+            
+            name.write(addr32(-20));
+    
+        default:
+            break;
+    }
+}
+
+bool
+FSBlock::isNamed(FSName &other) const
+{
+    switch (type) {
+    
+        case FS_ROOT_BLOCK:
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+            
+            return getName() == other;
+            
+        default:
+            return false;
+    }
+}
+
 FSBlock *
 FSBlock::getParentDirBlock()
 {

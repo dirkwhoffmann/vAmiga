@@ -34,10 +34,6 @@ struct FSUserDirBlock : FSBlock {
     FSTime getCreationDate() const override    { return FSTime(addr32(-23));   }
     void setCreationDate(FSTime t) override    { t.write(addr32(-23));         }
 
-    FSName getName() const override            { return FSName(addr32(-20));   }
-    void setName(FSName name) override         { name.write(addr32(-20));      }
-    bool isNamed(FSName &other) const override { return getName() == other;    }
-
     Block getNextHashRef() const override      { return get32(-4     );        }
     void setNextHashRef(Block ref) override    {        set32(-4, ref);        }
 

@@ -27,9 +27,6 @@ struct FSRootBlock : FSBlock {
     FSTime getModificationDate() const override   { return FSTime(addr32(-23));}
     void setModificationDate(FSTime t) override   { t.write(addr32(-23));      }
 
-    FSName getName() const override               { return FSName(addr32(-20));}
-    void setName(FSName name) override            { name.write(addr32(-20));   }
-
     FSTime getCreationDate() const override       { return FSTime(addr32(-7)); }
     void setCreationDate(FSTime t) override       { t.write(addr32(-7));       }
 

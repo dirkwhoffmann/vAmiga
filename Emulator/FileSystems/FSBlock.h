@@ -149,9 +149,9 @@ public:
     
 public:
     
-    virtual FSName getName() const { return FSName(""); }
-    virtual void setName(FSName name) { }
-    virtual bool isNamed(FSName &other) const { return false; }
+    FSName getName() const;
+    void setName(FSName name);
+    bool isNamed(FSName &other) const;
 
     virtual FSComment getComment() const { return FSComment(""); }
     virtual void setComment(FSComment name) { }
