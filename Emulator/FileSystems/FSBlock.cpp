@@ -10,8 +10,6 @@
 #include "config.h"
 #include "FSBlock.h"
 #include "FSDevice.h"
-#include "FSEmptyBlock.h"
-#include "FSPartition.h"
 #include "MemUtils.h"
 
 FSBlock::FSBlock(FSPartition &p, Block nr, FSBlockType t) : partition(p)
@@ -90,9 +88,12 @@ FSBlock::~FSBlock()
 FSBlock *
 FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
 {
+    assert(type != FS_UNKNOWN_BLOCK);
+    
+    // TODO: Clean this up
     switch (type) {
 
-        case FS_EMPTY_BLOCK:      return new FSEmptyBlock(p, nr, type);
+        case FS_EMPTY_BLOCK:      return new FSBlock(p, nr, type);
         case FS_BOOT_BLOCK:       return new FSBlock(p, nr, type);
         case FS_ROOT_BLOCK:       return new FSBlock(p, nr, type);
         case FS_BITMAP_BLOCK:     return new FSBlock(p, nr, type);

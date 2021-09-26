@@ -12,7 +12,6 @@
 #include "FSObjects.h"
 #include "FSPartition.h"
 #include "FSBlock.h"
-#include "FSEmptyBlock.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 #include <stack>
@@ -26,12 +25,9 @@
 
 class FSDevice : public AmigaObject {
     
-    friend struct FSPartition;
     friend struct FSBlock;
     friend struct FSHashTable;
-
-    // TODO: Remove below
-    friend struct FSEmptyBlock;
+    friend struct FSPartition;
 
 protected:
             

@@ -62,7 +62,6 @@
 		505C010A2577A8C000F9E05C /* FSDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C01082577A8C000F9E05C /* FSDescriptors.cpp */; };
 		505CEF5E26BD12430078FF52 /* DropZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505CEF5D26BD12430078FF52 /* DropZone.swift */; };
 		5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */; };
-		5063F22A255A8EBD007182DC /* FSEmptyBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5063F228255A8EBD007182DC /* FSEmptyBlock.cpp */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		506B47182562E06A009FEFC3 /* ExporterDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 506B47172562E06A009FEFC3 /* ExporterDialog.xib */; };
 		506B471D256396BC009FEFC3 /* ExporterDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506B471C256396BC009FEFC3 /* ExporterDialog.swift */; };
@@ -345,8 +344,6 @@
 		505C01092577A8C000F9E05C /* FSDescriptors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDescriptors.h; sourceTree = "<group>"; };
 		505CEF5D26BD12430078FF52 /* DropZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropZone.swift; sourceTree = "<group>"; };
 		5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerSnapshots.swift; sourceTree = "<group>"; };
-		5063F228255A8EBD007182DC /* FSEmptyBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSEmptyBlock.cpp; sourceTree = "<group>"; };
-		5063F229255A8EBD007182DC /* FSEmptyBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSEmptyBlock.h; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
 		506B47172562E06A009FEFC3 /* ExporterDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExporterDialog.xib; sourceTree = "<group>"; };
@@ -825,8 +822,6 @@
 				5056507A25459C8800A79D27 /* FSObjects.cpp */,
 				50565071254573E100A79D27 /* FSBlock.h */,
 				50565070254573E100A79D27 /* FSBlock.cpp */,
-				5063F229255A8EBD007182DC /* FSEmptyBlock.h */,
-				5063F228255A8EBD007182DC /* FSEmptyBlock.cpp */,
 			);
 			path = FileSystems;
 			sourceTree = "<group>";
@@ -1613,7 +1608,6 @@
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				50565072254573E100A79D27 /* FSBlock.cpp in Sources */,
 				500CE876259252ED00462836 /* DevicesPrefs.swift in Sources */,
-				5063F22A255A8EBD007182DC /* FSEmptyBlock.cpp in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
 				50F54B2724B5D31D0078FDC9 /* u_deep.c in Sources */,
 				508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */,

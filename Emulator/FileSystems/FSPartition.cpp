@@ -59,7 +59,7 @@ FSPartition::FSPartition(FSDevice &dev, FSPartitionDescriptor &layout) : FSParti
     for (Block i = firstBlock; i <= lastBlock; i++) {
         
         if (dev.blocks[i] == nullptr) {
-            dev.blocks[i] = new FSEmptyBlock(*this, i, FS_EMPTY_BLOCK);
+            dev.blocks[i] = new FSBlock(*this, i, FS_EMPTY_BLOCK);
             markAsFree(i);
         }
     }
@@ -288,7 +288,7 @@ FSPartition::deallocateBlock(Block nr)
     assert(dev.blocks[nr]);
     
     delete dev.blocks[nr];
-    dev.blocks[nr] = new FSEmptyBlock(*this, nr, FS_EMPTY_BLOCK);
+    dev.blocks[nr] = new FSBlock(*this, nr, FS_EMPTY_BLOCK);
     markAsFree(nr);
 }
 
