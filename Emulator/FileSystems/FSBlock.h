@@ -166,11 +166,11 @@ public:
     // Getting and settting date and time
     //
     
-    virtual FSTime getCreationDate() const { return FSTime((time_t)0); }
-    virtual void setCreationDate(FSTime t) { }
+    FSTime getCreationDate() const;
+    void setCreationDate(FSTime t);
 
-    virtual FSTime getModificationDate() const { return FSTime((time_t)0); }
-    virtual void setModificationDate(FSTime t) { }
+    FSTime getModificationDate() const;
+    void setModificationDate(FSTime t);
     
     
     //
@@ -266,9 +266,9 @@ public:
     isize getMaxDataBlockRefs() const;
 
     // Gets or sets the number of data block references in this block
-    virtual isize getNumDataBlockRefs() const { return 0; }
-    virtual void setNumDataBlockRefs(u32 val) { }
-    virtual void incNumDataBlockRefs() { }
+    isize getNumDataBlockRefs() const;
+    void setNumDataBlockRefs(u32 val);
+    void incNumDataBlockRefs();
         
     // Adds a data block reference to this block
     bool addDataBlockRef(Block ref);

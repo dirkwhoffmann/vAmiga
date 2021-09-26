@@ -28,9 +28,11 @@ struct FSUserDirBlock : FSBlock {
     u32 getProtectionBits() const override     { return get32(-48     );       }
     void setProtectionBits(u32 val) override   {        set32(-48, val);       }
 
+    /*
     FSTime getCreationDate() const override    { return FSTime(addr32(-23));   }
     void setCreationDate(FSTime t) override    { t.write(addr32(-23));         }
-
+    */
+    
     Block getNextHashRef() const override      { return get32(-4     );        }
     void setNextHashRef(Block ref) override    {        set32(-4, ref);        }
 

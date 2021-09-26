@@ -844,6 +844,75 @@ FSBlock::setComment(FSComment name)
     }
 }
 
+FSTime
+FSBlock::getCreationDate() const
+{
+    switch (type) {
+            
+        case FS_ROOT_BLOCK:
+            
+            return FSTime(addr32(-7));
+            
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+            
+            return FSTime(addr32(-23));
+            
+        default:
+            return FSTime((time_t)0);
+    }
+}
+
+void
+FSBlock::setCreationDate(FSTime t)
+{
+    switch (type) {
+            
+        case FS_ROOT_BLOCK:
+
+            t.write(addr32(-7));
+            break;
+            
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+
+            t.write(addr32(-23));
+            break;
+
+        default:
+            break;
+    }
+}
+
+FSTime
+FSBlock::getModificationDate() const
+{
+    switch (type) {
+            
+        case FS_ROOT_BLOCK:
+            
+            return FSTime(addr32(-23));
+                        
+        default:
+            return FSTime((time_t)0);
+    }
+}
+
+void
+FSBlock::setModificationDate(FSTime t)
+{
+    switch (type) {
+            
+        case FS_ROOT_BLOCK:
+            
+            t.write(addr32(-23));
+            break;
+                        
+        default:
+            break;
+    }
+}
+
 FSBlock *
 FSBlock::getParentDirBlock()
 {
@@ -1017,6 +1086,53 @@ isize
 FSBlock::getMaxDataBlockRefs() const
 {
     return bsize() / 4 - 56;
+}
+
+isize
+FSBlock::getNumDataBlockRefs() const
+{
+    switch (type) {
+            
+        case FS_FILEHEADER_BLOCK:
+        case FS_FILELIST_BLOCK:
+            
+            return get32(2);
+    
+        default:
+            return 0;
+    }
+}
+
+void
+FSBlock::setNumDataBlockRefs(u32 val)
+{
+    switch (type) {
+            
+        case FS_FILEHEADER_BLOCK:
+        case FS_FILELIST_BLOCK:
+
+            set32(2, val);
+            break;
+
+        default:
+            break;
+    }
+}
+
+void
+FSBlock::incNumDataBlockRefs()
+{
+    switch (type) {
+            
+        case FS_FILEHEADER_BLOCK:
+        case FS_FILELIST_BLOCK:
+
+            inc32(2);
+            break;
+
+        default:
+            break;
+    }
 }
 
 bool

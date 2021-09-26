@@ -20,11 +20,13 @@ struct FSFileListBlock : FSBlock {
     //
     // Methods from Block class
     //
-        
+      
+    /*
     isize getNumDataBlockRefs() const override    { return get32(2);           }
     void setNumDataBlockRefs(u32 val) override    {           set32(2, val);   }
     void incNumDataBlockRefs() override           {        inc32(2);           }
-
+    */
+    
     Block getFirstDataBlockRef() const override   { return get32(4);           }
     void setFirstDataBlockRef(Block ref) override {        set32(4, ref);      }
     

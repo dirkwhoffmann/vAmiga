@@ -25,20 +25,3 @@ FSFileListBlock::~FSFileListBlock()
 {
     delete [] data;
 }
-
-/*
-bool
-FSFileListBlock::addDataBlockRef(Block first, Block ref)
-{
-    // The caller has to ensure that this block contains free slots
-    if (getNumDataBlockRefs() < getMaxDataBlockRefs()) {
-
-        setFirstDataBlockRef(first);
-        setDataBlockRef(getNumDataBlockRefs(), ref);
-        incNumDataBlockRefs();
-        return true;
-    }
-
-    return false;
-}
-*/
