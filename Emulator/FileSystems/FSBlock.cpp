@@ -913,11 +913,128 @@ FSBlock::setModificationDate(FSTime t)
     }
 }
 
+u32
+FSBlock::getProtectionBits() const
+{
+    switch (type) {
+                        
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+
+            return get32(-48);
+
+        default:
+            return 0;
+    }
+}
+
+void
+FSBlock::setProtectionBits(u32 val)
+{
+    switch (type) {
+                        
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+
+            set32(-48, val);
+            break;
+            
+        default:
+            break;
+    }
+}
+
+u32
+FSBlock::getFileSize() const
+{
+    switch (type) {
+                        
+        case FS_FILEHEADER_BLOCK:
+
+            return get32(-47);
+
+        default:
+            return 0;
+    }
+}
+
+void
+FSBlock::setFileSize(u32 val)
+{
+    switch (type) {
+                        
+        case FS_FILEHEADER_BLOCK:
+
+            set32(-47, val);
+            break;
+            
+        default:
+            break;
+    }
+}
+
+Block
+FSBlock::getParentDirRef() const
+{
+    switch (type) {
+                        
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+
+            return get32(-3);
+
+        default:
+            return 0;
+    }
+}
+
+void
+FSBlock::setParentDirRef(Block ref)
+{
+    switch (type) {
+                        
+        case FS_USERDIR_BLOCK:
+        case FS_FILEHEADER_BLOCK:
+
+            set32(-3, ref);
+            break;
+            
+        default:
+            break;
+    }
+}
+
 FSBlock *
 FSBlock::getParentDirBlock()
 {
     Block nr = getParentDirRef();
     return nr ? partition.dev.blockPtr(nr) : nullptr;
+}
+
+Block
+FSBlock::getFileHeaderRef() const
+{
+    switch (type) {
+            
+        case FS_FILELIST_BLOCK:  return get32(-3);
+        case FS_DATA_BLOCK_OFS:  return get32(1);
+            
+        default:
+            return 0;
+    }
+}
+
+void
+FSBlock::setFileHeaderRef(Block ref)
+{
+    switch (type) {
+                        
+        case FS_FILELIST_BLOCK:  set32(-3, ref); break;
+        case FS_DATA_BLOCK_OFS:  set32(1, ref); break;
+            
+        default:
+            break;
+    }
 }
 
 FSFileHeaderBlock *

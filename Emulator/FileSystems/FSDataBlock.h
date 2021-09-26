@@ -21,9 +21,11 @@ struct OFSDataBlock : FSDataBlock {
 
     OFSDataBlock(FSPartition &p, u32 nr, FSBlockType t);
 
+    /*
     Block  getFileHeaderRef() const override        { return get32(1);        }
     void setFileHeaderRef(Block ref) override       {        set32(1, ref);   }
-
+    */
+    
     Block  getNextDataBlockRef() const override     { return get32(4);        }
     void setNextDataBlockRef(Block ref) override    {        set32(4, ref);   }
 

@@ -177,11 +177,11 @@ public:
     // Getting and setting file properties
     //
     
-    virtual u32 getProtectionBits() const { return 0; }
-    virtual void setProtectionBits(u32 val) { }
+    u32 getProtectionBits() const;
+    void setProtectionBits(u32 val);
 
-    virtual u32 getFileSize() const { return 0; }
-    virtual void setFileSize(u32 val) { }
+    u32 getFileSize() const;
+    void setFileSize(u32 val);
 
     
     //
@@ -189,13 +189,13 @@ public:
     //
 
     // Link to the parent directory block
-    virtual Block getParentDirRef() const { return 0; }
-    virtual void setParentDirRef(Block ref) { }
+    Block getParentDirRef() const;
+    void setParentDirRef(Block ref);
     struct FSBlock *getParentDirBlock();
     
     // Link to the file header block
-    virtual Block getFileHeaderRef() const { return 0; }
-    virtual void setFileHeaderRef(Block ref) { }
+    Block getFileHeaderRef() const;
+    void setFileHeaderRef(Block ref);
     struct FSFileHeaderBlock *getFileHeaderBlock();
 
     // Link to the next block with the same hash
