@@ -243,12 +243,9 @@ Muxer::setConfigItem(Option option, long id, i64 value)
         case OPT_AUDPAN:
                         
             assert(id >= 0 && id <= 3);
-            
-            config.pan[id] = std::clamp(value, 0LL, 200LL);
-            
-            if (value <= 50) pan[id] = (50 + value) / 100.0f;
-            else if (value <= 150) pan[id] = (150 - value) / 100.0f;
-            else if (value <= 200) pan[id] = (value - 150) / 100.0f;
+
+            config.pan[id] = value;
+            pan[id] = 0.5f * (sin(config.pan[id] * 3.14159f / 200.0f) + 1);
             return;
 
         default:

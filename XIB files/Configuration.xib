@@ -138,7 +138,7 @@
             <windowStyleMask key="styleMask" titled="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="646" height="496"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
             <value key="minSize" type="size" width="646" height="486"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="646" height="496"/>
@@ -2205,7 +2205,7 @@ DQ
                                                     <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ysl-BF-7tF">
                                                         <rect key="frame" x="104" y="9" width="28" height="30"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" continuous="YES" alignment="left" maxValue="200" sliderType="circular" id="vTS-VZ-CWd"/>
+                                                        <sliderCell key="cell" continuous="YES" alignment="left" maxValue="400" sliderType="circular" id="vTS-VZ-CWd"/>
                                                         <connections>
                                                             <action selector="audPan1Action:" target="-2" id="1D7-r0-U9U"/>
                                                         </connections>
@@ -2231,7 +2231,7 @@ DQ
                                                     <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9EQ-fL-r94">
                                                         <rect key="frame" x="178" y="9" width="28" height="30"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" continuous="YES" alignment="left" maxValue="200" sliderType="circular" id="fyz-rS-rbK"/>
+                                                        <sliderCell key="cell" continuous="YES" alignment="left" maxValue="400" sliderType="circular" id="fyz-rS-rbK"/>
                                                         <connections>
                                                             <action selector="audPan2Action:" target="-2" id="cxg-nK-9dJ"/>
                                                         </connections>
@@ -2257,7 +2257,7 @@ DQ
                                                     <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aRP-0C-dri">
                                                         <rect key="frame" x="255" y="9" width="28" height="30"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" continuous="YES" alignment="left" maxValue="200" sliderType="circular" id="gpm-0Y-KGA"/>
+                                                        <sliderCell key="cell" continuous="YES" alignment="left" maxValue="400" sliderType="circular" id="gpm-0Y-KGA"/>
                                                         <connections>
                                                             <action selector="audPan3Action:" target="-2" id="hcZ-B1-e3s"/>
                                                         </connections>
@@ -2283,7 +2283,7 @@ DQ
                                                     <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Fk-fj-DxW">
                                                         <rect key="frame" x="30" y="9" width="28" height="30"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" continuous="YES" alignment="left" maxValue="200" sliderType="circular" id="Ul7-AA-rSQ"/>
+                                                        <sliderCell key="cell" continuous="YES" alignment="left" maxValue="400" sliderType="circular" id="Ul7-AA-rSQ"/>
                                                         <connections>
                                                             <action selector="audPan0Action:" target="-2" id="n1T-vz-dzG"/>
                                                         </connections>

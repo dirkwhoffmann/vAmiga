@@ -181,14 +181,10 @@ public class MacAudio: NSObject {
     
     func playSound(name: String, volume: Int, pan: Int) {
         
-        let p = pan <= 100 ? pan : pan <= 300 ? 200 - pan : -400 + pan
-        
         let scaledVolume = Float(volume) / 100.0
-        let scaledPan = Float(p) / 100.0
+        let p = 0.5 * (sin(Double(pan) * 3.14159 / 200.0) + 1)
         
-        // track("\(name) \(scaledVolume) \(scaledPan)")
-        
-        playSound(name: name, volume: scaledVolume, pan: scaledPan)
+        playSound(name: name, volume: scaledVolume, pan: Float(p))
     }
     
     func playSound(name: String, volume: Float = 1.0, pan: Float = 0.0) {
