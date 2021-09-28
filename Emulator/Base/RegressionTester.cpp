@@ -15,6 +15,33 @@
 #include <fstream>
 
 void
+RegressionTester::prepare(ConfigScheme scheme, string kickstart)
+{
+    // Initialize the emulator according to the specified scheme
+    amiga.revertToFactorySettings();
+    amiga.configure(scheme);
+
+    // Load the Kickstart Rom
+    amiga.mem.loadRom(kickstart.c_str());
+    
+    // Run as fast as possible
+    amiga.warpOn();
+    
+    // Prevent the GUI from disabling warp mode
+    amiga.setWarpLock(true);
+}
+
+void
+RegressionTester::run(string adf)
+{
+    // Insert the test disk
+    diskController.insertDisk(adf, 0);
+ 
+    // Run the emulator
+    amiga.run();
+}
+
+void
 RegressionTester::dumpTexture(Amiga &amiga)
 {
     dumpTexture(amiga, dumpTexturePath);

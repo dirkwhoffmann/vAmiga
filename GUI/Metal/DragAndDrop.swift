@@ -122,6 +122,14 @@ public extension MetalView {
             
             if let url = draggedUrl {
                 
+                // Check if the file is a snapshot or a script
+                do {
+                    let types: [FileType] = [ .SNAPSHOT, .SCRIPT, .HDF ]
+                    try document.createAttachment(from: url, allowedTypes: types)
+                    try document.mountAttachment()
+                    return true
+                } catch { }
+
                 do {
                     // Check drop zones
                     for i in 0...3 {
@@ -136,12 +144,7 @@ public extension MetalView {
 
                     // Create attachment
                     try document.createAttachment(from: url)
-
-                    // Is it an HDF?
-                    if document.attachment is HDFFileProxy {
-                        try document.mountAttachment()
-                    }
-                        
+                    
                     // Run the import dialog
                     document.runImportDialog()
                     return true

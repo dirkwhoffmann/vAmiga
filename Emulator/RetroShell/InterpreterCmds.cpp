@@ -43,6 +43,42 @@ Interpreter::registerInstructions()
 
     
     //
+    // Regression testing
+    //
+    
+    root.add({"regression"},
+             "component", "");
+    root.seek("regression")->hidden = true;
+
+    root.add({"regression", "setup"},
+             "command", "Initializes the test environment",
+             &RetroShell::exec <Token::regression, Token::setup>, 2);
+
+    root.add({"regression", "run"},
+             "command", "Launches a regression test",
+             &RetroShell::exec <Token::regression, Token::run>, 1);
+    
+    root.add({"screenshot"},
+             "component", "Manages regression tests");
+    root.seek("screenshot")->hidden = true;
+    
+    root.add({"screenshot", "set"},
+             "command", "Configures the regression test");
+        
+    root.add({"screenshot", "set", "filename"},
+             "key", "Assigns the screen shot filename",
+             &RetroShell::exec <Token::screenshot, Token::set, Token::filename>, 1);
+
+    root.add({"screenshot", "set", "cutout"},
+             "key", "Adjusts the texture cutout",
+             &RetroShell::exec <Token::screenshot, Token::set, Token::cutout>, 4);
+
+    root.add({"screenshot", "save"},
+             "key", "Saves a screenshot and exits the emulator",
+             &RetroShell::exec <Token::screenshot, Token::save>, 1);
+
+    
+    //
     // Amiga
     //
     
@@ -78,13 +114,6 @@ Interpreter::registerInstructions()
     root.add({"amiga", "run"},
              "command", "Starts the emulator thread",
              &RetroShell::exec <Token::amiga, Token::run>);
-
-    /*
-    root.add({"amiga", "run", "timeout"},
-             "command", "Runs a regression test",
-             &RetroShell::exec <Token::amiga, Token::run, Token::timeout>, 1);
-    root.seek("amiga")->seek("run")->seek("timeout")->hidden = true;
-    */
     
     root.add({"amiga", "pause"},
              "command", "Halts the emulator thread",
@@ -844,27 +873,4 @@ Interpreter::registerInstructions()
                  "command", "Displays the internal state",
                  &RetroShell::exec <Token::dfn, Token::inspect>);
     }
-    
-    //
-    // Screenshots (regression testing)
-    //
-    
-    root.add({"screenshot"},
-             "component", "Manages regression tests");
-    root.seek("screenshot")->hidden = true;
-    
-    root.add({"screenshot", "set"},
-             "command", "Configures the regression test");
-        
-    root.add({"screenshot", "set", "filename"},
-             "key", "Assigns the screen shot filename",
-             &RetroShell::exec <Token::screenshot, Token::set, Token::filename>, 1);
-
-    root.add({"screenshot", "set", "cutout"},
-             "key", "Adjusts the texture cutout",
-             &RetroShell::exec <Token::screenshot, Token::set, Token::cutout>, 4);
-
-    root.add({"screenshot", "save"},
-             "key", "Saves a screenshot and exits the emulator",
-             &RetroShell::exec <Token::screenshot, Token::save>, 1);
 }

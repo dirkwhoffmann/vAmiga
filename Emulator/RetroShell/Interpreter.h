@@ -21,14 +21,14 @@ enum class Token
     
     // Components
     agnus, amiga, audio, blitter, cia, controlport, copper, cpu, dc, denise,
-    dfn, dmadebugger, keyboard, memory, monitor, mouse, paula, screenshot,
-    serial, rtc,
+    dfn, dmadebugger, keyboard, memory, monitor, mouse, paula, regression,
+    screenshot, serial, rtc,
 
     // Commands
     about, audiate, autosync, clear, config, connect, debug, disable,
     disconnect, dsksync, easteregg, eject, enable, close, hide, init, insert,
     inspect, list, load, lock, off, on, open, pause, power, reset, run, save,
-    set, show, source, wait,
+    set, setup, show, source, wait,
     
     // Categories
     checksums, devices, dma, events, registers, state,

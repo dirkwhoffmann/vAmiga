@@ -11,6 +11,7 @@
 
 #include "SubComponent.h"
 #include "Constants.h"
+#include "AmigaTypes.h"
 
 class RegressionTester : public SubComponent {
 
@@ -69,10 +70,16 @@ private:
     
     
     //
-    // Taking screenshots
+    // Running a regression test
     //
 
 public:
+
+    // Reverts everything to factory settings
+    void prepare(ConfigScheme scheme, string kickstart);
+    
+    // Runs a test case
+    void run(string adf);
     
     // Creates the test image and exits the emulator
     void dumpTexture(class Amiga &amiga);

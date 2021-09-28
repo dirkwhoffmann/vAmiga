@@ -63,6 +63,54 @@ RetroShell::exec <Token::wait> (Arguments &argv, long param)
 
 
 //
+// Rgression testing
+//
+
+template <> void
+RetroShell::exec <Token::regression, Token::setup> (Arguments &argv, long param)
+{
+    auto scheme = util::parseEnum <ConfigSchemeEnum> (argv[0]);
+    auto kickrom = argv[1];
+    
+    amiga.regressionTester.prepare(scheme, kickrom);
+}
+
+template <> void
+RetroShell::exec <Token::regression, Token::run> (Arguments &argv, long param)
+{
+    amiga.regressionTester.run(argv.front());
+}
+
+template <> void
+RetroShell::exec <Token::screenshot, Token::set, Token::filename> (Arguments &argv, long param)
+{
+    amiga.regressionTester.dumpTexturePath = argv.front();
+}
+
+template <> void
+RetroShell::exec <Token::screenshot, Token::set, Token::cutout> (Arguments &argv, long param)
+{
+    std::vector<string> vec(argv.begin(), argv.end());
+    
+    isize x1 = util::parseNum(vec[0]);
+    isize y1 = util::parseNum(vec[1]);
+    isize x2 = util::parseNum(vec[2]);
+    isize y2 = util::parseNum(vec[3]);
+
+    amiga.regressionTester.x1 = x1;
+    amiga.regressionTester.y1 = y1;
+    amiga.regressionTester.x2 = x2;
+    amiga.regressionTester.y2 = y2;
+}
+
+template <> void
+RetroShell::exec <Token::screenshot, Token::save> (Arguments &argv, long param)
+{
+    amiga.regressionTester.dumpTexture(amiga, argv.front());
+}
+
+
+//
 // Amiga
 //
 
@@ -985,37 +1033,4 @@ template <> void
 RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 {
     dump(*amiga.df[param], dump::State);
-}
-
-
-//
-// Screenshots (regression testing)
-//
-
-template <> void
-RetroShell::exec <Token::screenshot, Token::set, Token::filename> (Arguments &argv, long param)
-{
-    amiga.regressionTester.dumpTexturePath = argv.front();
-}
-
-template <> void
-RetroShell::exec <Token::screenshot, Token::set, Token::cutout> (Arguments &argv, long param)
-{
-    std::vector<string> vec(argv.begin(), argv.end());
-    
-    isize x1 = util::parseNum(vec[0]);
-    isize y1 = util::parseNum(vec[1]);
-    isize x2 = util::parseNum(vec[2]);
-    isize y2 = util::parseNum(vec[3]);
-
-    amiga.regressionTester.x1 = x1;
-    amiga.regressionTester.y1 = y1;
-    amiga.regressionTester.x2 = x2;
-    amiga.regressionTester.y2 = y2;
-}
-
-template <> void
-RetroShell::exec <Token::screenshot, Token::save> (Arguments &argv, long param)
-{
-    amiga.regressionTester.dumpTexture(amiga, argv.front());
 }
