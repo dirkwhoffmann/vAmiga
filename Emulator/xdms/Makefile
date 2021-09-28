@@ -12,6 +12,6 @@ clean:
 	@echo "Cleaning up $(CURDIR)"
 	@rm -f *.o
 
-%.o: %.c $(DEPS)
+%.o: %.c
 	@echo "Compiling $<"
 	@$(CC) -O2 -c -o $@ $<

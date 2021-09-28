@@ -39,6 +39,6 @@ bin:
 	@echo "Linking"
 	@$(CC) $(LDFLAGS) -o $(EXEC) *.o */*.o */*/*.o
 
-%.o: %.cpp $(DEPS)
+%.o: %.cpp
 	@echo "Compiling $<"
 	@$(CC) $(CCFLAGS) $(CPPFLAGS) -c -o $@ $<
