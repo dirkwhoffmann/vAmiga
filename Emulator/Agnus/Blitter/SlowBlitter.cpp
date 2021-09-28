@@ -958,7 +958,7 @@ Blitter::exec()
     // Trigger Blitter interrupt if this is the termination cycle
     if ((instr & BLTDONE) && !birq) {
         signalEnd();
-        paula.raiseIrq(INT_BLIT);
+        paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
         birq = true;
     }
     
@@ -1131,7 +1131,7 @@ Blitter::fakeExec()
     // Trigger Blitter interrupt if this is the termination cycle
     if ((instr & BLTDONE) && !birq) {
         signalEnd();
-        paula.raiseIrq(INT_BLIT);
+        paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
         birq = true;
     }
 
