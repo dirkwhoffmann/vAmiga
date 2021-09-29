@@ -17,7 +17,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="758" height="256"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
             <value key="minSize" type="size" width="758" height="256"/>
             <value key="maxSize" type="size" width="758" height="256"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
@@ -1014,22 +1014,16 @@
                             <action selector="pressVirtualKey:" target="-2" id="EzP-Oc-xtx"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="-1" translatesAutoresizingMaskIntoConstraints="NO" id="GWf-EW-22v" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
-                        <rect key="frame" x="658" y="206" width="24" height="24"/>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jgZ-PH-CCM">
+                        <rect key="frame" x="658" y="208" width="24" height="24"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="instructionsTemplate" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="RXf-PS-WGM">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Jcy-nO-6cL" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
-                        <rect key="frame" x="694" y="206" width="24" height="24"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="instructionsTemplate" id="w4X-FS-his"/>
+                    </imageView>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="neN-3B-0T5">
+                        <rect key="frame" x="692" y="208" width="24" height="24"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="instructions2Template" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="Bd9-BW-Wm8">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="instructions2Template" id="1el-2y-Tpc"/>
+                    </imageView>
                 </subviews>
             </view>
             <connections>
