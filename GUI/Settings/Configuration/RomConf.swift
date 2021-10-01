@@ -65,11 +65,13 @@ extension ConfigurationController {
         romTitle.stringValue = amiga.mem.romTitle
         romSubtitle.stringValue = amiga.mem.romVersion
         romSubsubtitle.stringValue = amiga.mem.romReleased
-
+        romModel.stringValue = amiga.mem.romModel
+        
         extTitle.stringValue = amiga.mem.extTitle
         extSubtitle.stringValue = amiga.mem.extVersion
         extSubsubtitle.stringValue = amiga.mem.extReleased
         extMapAddr.selectItem(withTag: amiga.mem.extStart)
+        extModel.stringValue = amiga.mem.extModel
 
         // Hide some controls
         romDeleteButton.isHidden = !hasRom

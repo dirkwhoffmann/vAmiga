@@ -50,6 +50,7 @@
                 <outlet property="extDropView" destination="TLP-ux-x2T" id="EfY-MO-d6h"/>
                 <outlet property="extMapAddr" destination="qIa-E2-clP" id="cKw-J3-1en"/>
                 <outlet property="extMapText" destination="aDb-3A-Jvz" id="Rm0-2i-P6R"/>
+                <outlet property="extModel" destination="IAc-n6-y1z" id="QWf-yB-kdS"/>
                 <outlet property="extSubsubtitle" destination="WJx-uw-qXE" id="HAq-rJ-UMf"/>
                 <outlet property="extSubtitle" destination="c28-hS-Q9K" id="7yj-Lz-YZ1"/>
                 <outlet property="extTitle" destination="JWp-8A-LFh" id="tHC-Lo-79Z"/>
@@ -96,6 +97,7 @@
                 <outlet property="romLockImage" destination="mlY-fv-BuR" id="jKz-dJ-e1F"/>
                 <outlet property="romLockSubText" destination="3km-17-mf2" id="OZx-Ad-blJ"/>
                 <outlet property="romLockText" destination="Nzf-eB-9Nv" id="Cq6-Dg-jTr"/>
+                <outlet property="romModel" destination="Gwj-zZ-ZxJ" id="dG8-Jy-wca"/>
                 <outlet property="romOKButton" destination="A4H-Al-xc0" id="3IV-bN-u66"/>
                 <outlet property="romPowerButton" destination="2k7-hF-2uo" id="SYO-o2-xvo"/>
                 <outlet property="romSubsubtitle" destination="QPv-hw-IeK" id="3ps-Wc-q0W"/>
@@ -229,9 +231,18 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QPv-hw-IeK">
-                                            <rect key="frame" x="373" y="336" width="220" height="17"/>
+                                            <rect key="frame" x="373" y="330" width="220" height="17"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="9Cd-LV-jbJ">
+                                                <font key="font" metaFont="message" size="11"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gwj-zZ-ZxJ">
+                                            <rect key="frame" x="373" y="305" width="220" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="69F-YH-4r0">
                                                 <font key="font" metaFont="message" size="11"/>
                                                 <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -285,7 +296,7 @@ DQ
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JWp-8A-LFh">
-                                            <rect key="frame" x="374" y="239" width="219" height="17"/>
+                                            <rect key="frame" x="373" y="239" width="219" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Lorem ipsum dolor sit amet" id="Ks0-ln-31m">
                                                 <font key="font" metaFont="systemBold"/>
@@ -294,11 +305,11 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WJx-uw-qXE">
-                                            <rect key="frame" x="373" y="200" width="220" height="17"/>
+                                            <rect key="frame" x="373" y="195" width="220" height="17"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="KbZ-8v-lSw">
                                                 <font key="font" metaFont="message" size="11"/>
-                                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
@@ -321,10 +332,10 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GYj-mu-CCZ">
-                                            <rect key="frame" x="373" y="357" width="220" height="17"/>
+                                            <rect key="frame" x="373" y="349" width="220" height="17"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="A1b-oY-otw">
-                                                <font key="font" metaFont="message" size="11"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="A1b-oY-otw">
+                                                <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -341,10 +352,10 @@ DQ
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c28-hS-Q9K">
-                                            <rect key="frame" x="373" y="221" width="220" height="17"/>
+                                            <rect key="frame" x="373" y="214" width="220" height="17"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="Urh-dw-Vzx">
-                                                <font key="font" metaFont="message" size="11"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="Urh-dw-Vzx">
+                                                <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -409,6 +420,15 @@ DQ
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Location:" id="6qz-65-B3g">
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IAc-n6-y1z">
+                                            <rect key="frame" x="373" y="172" width="220" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="Jx4-Kd-DKw">
+                                                <font key="font" metaFont="message" size="11"/>
+                                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>

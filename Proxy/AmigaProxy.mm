@@ -398,6 +398,12 @@ using namespace moira;
     return str ? @(str) : nullptr;
 }
 
+- (NSString *)romModel
+{
+    const char *str = [self mem]->romModel();
+    return str ? @(str) : nullptr;
+}
+
 - (BOOL)hasExt
 {
     return [self mem]->hasExt();
@@ -464,6 +470,12 @@ using namespace moira;
 - (NSString *)extReleased
 {
     const char *str = [self mem]->extReleased();
+    return str ? @(str) : nullptr;
+}
+
+- (NSString *)extModel
+{
+    const char *str = [self mem]->extModel();
     return str ? @(str) : nullptr;
 }
 

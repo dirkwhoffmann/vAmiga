@@ -320,6 +320,7 @@
 @property (readonly, copy) NSString *romTitle;
 @property (readonly, copy) NSString *romVersion;
 @property (readonly, copy) NSString *romReleased;
+@property (readonly, copy) NSString *romModel;
 
 - (BOOL)hasExt;
 - (void)deleteExt;
@@ -332,6 +333,7 @@
 @property (readonly, copy) NSString *extTitle;
 @property (readonly, copy) NSString *extVersion;
 @property (readonly, copy) NSString *extReleased;
+@property (readonly, copy) NSString *extModel;
 @property (readonly) NSInteger extStart;
 
 - (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex;
