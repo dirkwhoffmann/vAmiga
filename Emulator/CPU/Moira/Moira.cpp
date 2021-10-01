@@ -168,12 +168,7 @@ done:
 bool
 Moira::checkForIrq()
 {
-    // pollIrq();
-    
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) {
-
-        // Notify delegate
-        assert(reg.ipl < 7);
 
         // Trigger interrupt
         execIrqException(reg.ipl);

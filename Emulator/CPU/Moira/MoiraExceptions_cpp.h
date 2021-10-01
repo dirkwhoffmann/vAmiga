@@ -183,6 +183,8 @@ void
 Moira::execIrqException(u8 level)
 {
     assert(level < 8);
+    
+    // Notify delegate
     signalInterrupt(level);
     
     // Remember the current value of the status register
