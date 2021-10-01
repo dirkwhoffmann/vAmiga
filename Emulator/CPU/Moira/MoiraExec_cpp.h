@@ -558,14 +558,16 @@ Moira::execClr(u16 opcode)
     u32 ea, data;
     if (!readOp<M,S, STD_AE_FRAME>(dst, ea, data)) return;
 
-    isMemMode(M) ? prefetch() : prefetch<POLLIPL>();
-
+    // isMemMode(M) ? prefetch() : prefetch<POLLIPL>();
+    prefetch<POLLIPL>();
+    
     if (S == Long && isRegMode(M)) sync(2);
     
     if (MIMIC_MUSASHI) {
-        writeOp <M,S, POLLIPL> (dst, ea, 0);
+        writeOp <M,S> (dst, ea, 0);
     } else {
-        writeOp <M,S, POLLIPL | REVERSE> (dst, ea, 0);
+        // writeOp <M,S, POLLIPL | REVERSE> (dst, ea, 0);
+        writeOp <M,S, REVERSE> (dst, ea, 0);
     }
     
     reg.sr.n = 0;
