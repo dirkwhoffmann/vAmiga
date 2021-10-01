@@ -21,15 +21,15 @@ class RomFile : public AmigaFile {
 
     // Path to the rom.key file (if needed)
     string romKeyPath = "";
-        
+
 public:
-    
+
     static bool isCompatible(const string &path);
     static bool isCompatible(std::istream &stream);
-    
+
     static bool isRomBuffer(const u8 *buf, isize len);
     static bool isRomFile(const string &path);
-    
+
     // Translates a CRC-32 checksum into a ROM identifier
     static RomIdentifier identifier(u32 fingerprint);
 
@@ -45,38 +45,39 @@ public:
     static const char *title(RomIdentifier rev);
     static const char *version(RomIdentifier rev);
     static const char *released(RomIdentifier rev);
+    static const char *model(RomIdentifier rev);
 
-    
+
     //
     // Initializing
     //
-    
+
     RomFile(const string &path) throws { init(path); }
     RomFile(const string &path, std::istream &stream) throws { init(path, stream); }
     RomFile(const u8 *buf, isize len) throws { init(buf, len); }
 
     const char *getDescription() const override { return "ROM"; }
-        
-    
+
+
     //
     // Methods from AmigaFile
     //
-    
+
     FileType type() const override { return FILETYPE_ROM; }
     bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
 
-    
+
     //
     // Decrypting
     //
-    
+
     // Returns true iff the Rom was encrypted at the time it was loaded
     bool wasEncrypted() { return romKeyPath != ""; }
-    
+
     // Returns true iff the Rom is currently encrypted
     bool isEncrypted();
-    
+
     /* Tries to decrypt the Rom. If this method is applied to an encrypted Rom,
      * a rom.key file is seeked in the directory the encrypted Rom was loaded
      * from and applied to the encrypted data.

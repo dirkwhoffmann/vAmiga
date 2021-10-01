@@ -153,6 +153,12 @@ void
 Moira::signalInterrupt(u8 level)
 {
     debug(INT_DEBUG, "Executing level %d IRQ\n", level);
+    
+    /*
+    if (agnus.frame.nr > 2180) {
+        trace(true, "Executing level %d IRQ\n", level);
+    }
+    */
 }
 
 void

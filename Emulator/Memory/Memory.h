@@ -346,10 +346,12 @@ public:
     const char *romTitle();
     const char *romVersion();
     const char *romReleased();
+    const char *romModel();
 
     const char *extTitle();
     const char *extVersion();
     const char *extReleased();
+    const char *extModel();
 
     // Checks if a certain Rom is present
     bool hasRom() const { return rom != nullptr; }

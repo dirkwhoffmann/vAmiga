@@ -12,6 +12,8 @@
 #include "Denise.h"
 #include "Paula.h"
 
+#include "Amiga.h"
+
 u16
 Agnus::peekDMACONR()
 {
@@ -295,7 +297,15 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     
     // Check if the hires bit or one of the BPU bits have been modified
     if ((oldValue ^ newValue) & 0xF000) {
-                
+    
+        /*
+        if ((oldValue ^ newValue) & 0x8000) {
+            if (newValue & 0x8000) {
+                if (agnus.frame.nr > 2000) amiga.signalStop();
+            }
+        }
+        */
+        
         /* TODO:
          * BPLCON0 is usually written in each frame. To speed up, just check
          * hpos. If it is smaller than the start of the DMA window, a standard

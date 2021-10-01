@@ -554,6 +554,12 @@ Memory::romReleased()
 }
 
 const char *
+Memory::romModel()
+{
+    return RomFile::model(romIdentifier());
+}
+
+const char *
 Memory::extTitle()
 {
     return RomFile::title(extIdentifier());
@@ -576,6 +582,12 @@ const char *
 Memory::extReleased()
 {
     return RomFile::released(extIdentifier());
+}
+
+const char *
+Memory::extModel()
+{
+    return RomFile::model(extIdentifier());
 }
 
 bool
