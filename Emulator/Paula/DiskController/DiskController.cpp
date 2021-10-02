@@ -95,8 +95,10 @@ DiskController::setConfigItem(Option option, i64 value)
             if (!isValidDriveSpeed((isize)value)) {
                 throw VAError(ERROR_OPT_INVARG, "-1, 1, 2, 4, 8");
             }
+            suspend();
             config.speed = (i32)value;
             scheduleFirstDiskEvent();
+            resume();
             return;
             
         case OPT_AUTO_DSKSYNC:
