@@ -342,12 +342,12 @@ Moira::execAndiEa(u16 opcode)
     if (!readOp<M,S, STD_AE_FRAME>(dst, ea, data)) return;
 
     result = logic<I,S>(src, data);
-    prefetch();
+    prefetch<POLLIPL>();
 
     if (MIMIC_MUSASHI) {
-        writeOp <M,S, POLLIPL> (dst, ea, result);
+        writeOp <M,S> (dst, ea, result);
     } else {
-        writeOp <M,S, POLLIPL | REVERSE> (dst, ea, result);
+        writeOp <M,S, REVERSE> (dst, ea, result);
     }
 }
 
