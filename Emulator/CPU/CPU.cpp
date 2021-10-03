@@ -157,6 +157,7 @@ Moira::signalInterrupt(u8 level)
     /*
     if (agnus.frame.nr > 2180) {
         trace(true, "Executing level %d IRQ\n", level);
+        amiga.signalStop();
     }
     */
 }

@@ -1375,7 +1375,6 @@ Moira::execMul(u16 opcode)
 
     prefetch<POLLIPL>();
     result = mul<I>(data, readD<Word>(dst));
-    
     writeD(dst, result);
 }
 

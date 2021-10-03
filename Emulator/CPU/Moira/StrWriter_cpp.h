@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include <math.h>
+#include <cmath>
 
 static const char *instrLower[]
 {

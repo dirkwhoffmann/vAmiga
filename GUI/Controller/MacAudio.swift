@@ -182,7 +182,7 @@ public class MacAudio: NSObject {
     func playSound(name: String, volume: Int, pan: Int) {
         
         let scaledVolume = Float(volume) / 100.0
-        let p = 0.5 * (sin(Double(pan) * 3.14159 / 200.0) + 1)
+        let p = 0.5 * (sin(Double(pan) * Double.pi / 200.0) + 1)
         
         playSound(name: name, volume: scaledVolume, pan: Float(p))
     }

@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "AudioFilter.h"
-#include "math.h"
+#include <cmath>
 
 void
 AudioFilter::setSampleRate(double sampleRate)
