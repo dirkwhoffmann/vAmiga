@@ -307,14 +307,14 @@ Moira::execAndRgEa(u16 opcode)
     if (!readOp<M,S, STD_AE_FRAME>(dst, ea, data)) return;
 
     u32 result = logic<I,S>(readD<S>(src), data);
-    isMemMode(M) ? prefetch() : prefetch<POLLIPL>();
-
+    prefetch<POLLIPL>();
+    
     if (S == Long && isRegMode(M)) sync(4);
     
     if (MIMIC_MUSASHI) {
-        writeOp <M,S, POLLIPL> (dst, ea, result);
+        writeOp <M,S> (dst, ea, result);
     } else {
-        writeOp <M,S, POLLIPL | REVERSE> (dst, ea, result);
+        writeOp <M,S, REVERSE> (dst, ea, result);
     }
 }
 
@@ -558,7 +558,6 @@ Moira::execClr(u16 opcode)
     u32 ea, data;
     if (!readOp<M,S, STD_AE_FRAME>(dst, ea, data)) return;
 
-    // isMemMode(M) ? prefetch() : prefetch<POLLIPL>();
     prefetch<POLLIPL>();
     
     if (S == Long && isRegMode(M)) sync(2);
@@ -566,7 +565,6 @@ Moira::execClr(u16 opcode)
     if (MIMIC_MUSASHI) {
         writeOp <M,S> (dst, ea, 0);
     } else {
-        // writeOp <M,S, POLLIPL | REVERSE> (dst, ea, 0);
         writeOp <M,S, REVERSE> (dst, ea, 0);
     }
     
