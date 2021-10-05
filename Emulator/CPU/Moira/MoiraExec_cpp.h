@@ -76,6 +76,8 @@ Moira::execShiftEa(u16 op)
 template<Instr I, Mode M, Size S> void
 Moira::execAbcd(u16 opcode)
 {
+    assert(S == Byte);
+    
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
@@ -85,22 +87,20 @@ Moira::execAbcd(u16 opcode)
         {
             u32 result = bcd<I,Byte>(readD<Byte>(src), readD<Byte>(dst));
             prefetch<POLLIPL>();
-
-            sync(S == Long ? 6 : 2);
+            sync(2);
             writeD<Byte>(dst, result);
             break;
         }
         default: // Ea
         {
             u32 ea1, ea2, data1, data2;
-            if (!readOp<M,S>(src, ea1, data1)) return;
-            sync(-2);
-            if (!readOp<M,S>(dst, ea2, data2)) return;
+            if (!readOp<M,S,POLLIPL>(src, ea1, data1)) return;
+            if (!readOp<M,S,IMPLICIT_DECR>(dst, ea2, data2)) return;
 
             u32 result = bcd<I, Byte>(data1, data2);
             prefetch();
 
-            writeM<M, Byte, POLLIPL>(ea2, result);
+            writeM<M, Byte>(ea2, result);
             break;
         }
     }
