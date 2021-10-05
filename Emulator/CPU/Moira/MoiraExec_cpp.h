@@ -260,10 +260,9 @@ Moira::execAddxEa(u16 opcode)
         if (S == Long) undoAnPD<M,S>(src);
         return;
     }
-    
-    sync(-2);
-    
-    if (!readOp<M,S, flags>(dst, ea2, data2)) {
+    if (S != Long) pollIrq();
+        
+    if (!readOp<M,S, flags | IMPLICIT_DECR>(dst, ea2, data2)) {
         if (S == Long) undoAnPD<M,S>(dst);
         return;
     }
@@ -271,14 +270,14 @@ Moira::execAddxEa(u16 opcode)
     u32 result = addsub<I,S>(data1, data2);
 
     if (S == Long && !MIMIC_MUSASHI) {
-        writeM <M, Word> (ea2 + 2, result & 0xFFFF);
+        writeM <M, Word, POLLIPL> (ea2 + 2, result & 0xFFFF);
         prefetch();
-        writeM<M, Word, POLLIPL>(ea2, result >> 16);
+        writeM<M, Word>(ea2, result >> 16);
         return;
     }
 
     prefetch();
-    writeM<M, S, POLLIPL>(ea2, result);
+    writeM<M, S>(ea2, result);
 }
 
 template<Instr I, Mode M, Size S> void
