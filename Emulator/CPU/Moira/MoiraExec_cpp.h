@@ -438,12 +438,8 @@ Moira::execBitDxEa(u16 opcode)
 
             data = bit<I>(data, b);
 
-            if (I != BTST) {
-                prefetch();
-                writeM<M, Byte, POLLIPL>(ea, data);
-            } else {
-                prefetch<POLLIPL>();
-            }
+            prefetch<POLLIPL>();
+            if (I != BTST) writeM<M, Byte>(ea, data);
         }
     }
 }
