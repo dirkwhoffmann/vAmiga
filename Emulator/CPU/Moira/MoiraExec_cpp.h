@@ -472,12 +472,8 @@ Moira::execBitImEa(u16 opcode)
 
             data = bit<I>(data, src);
 
-            if (I != BTST) {
-                prefetch();
-                writeM <M, S, POLLIPL> (ea, data);
-            } else {
-                prefetch<POLLIPL>();
-            }
+            prefetch<POLLIPL>();
+            if (I != BTST) writeM <M, S> (ea, data);
         }
     }
 }
