@@ -134,8 +134,8 @@ Moira::execAddRgEa(u16 opcode)
     if (!readOp<M,S, STD_AE_FRAME>(dst, ea, data)) return;
     result = addsub<I,S>(readD<S>(src), data);
 
-    prefetch();
-    writeM <M, S, POLLIPL> (ea, result);
+    prefetch<POLLIPL>();
+    writeM <M, S> (ea, result);
 }
 
 template<Instr I, Mode M, Size S> void
