@@ -227,9 +227,9 @@ Moira::execAddqEa(u16 opcode)
 
     if (src == 0) src = 8;
     result = addsub<I,S>(src, data);
-    prefetch();
+    prefetch<POLLIPL>();
 
-    writeOp<M,S, POLLIPL>(dst, ea, result);
+    writeOp<M,S>(dst, ea, result);
 }
 
 template<Instr I, Mode M, Size S> void
