@@ -616,7 +616,7 @@ Moira::execCmpiEa(u16 opcode)
 
     u32 ea, data;
     if (!readOp<M,S, STD_AE_FRAME>(dst, ea, data)) return;
-    prefetch();
+    prefetch<POLLIPL>();
 
     cmp<S>(src, data);
 }
