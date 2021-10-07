@@ -629,11 +629,11 @@ Moira::execCmpm(u16 opcode)
 
     u32 ea1, ea2, data1, data2;
 
-    if (!readOp<M,S, AE_INC_PC>(src, ea1, data1)) return;
+    if (!readOp<M,S, AE_INC_PC | POLLIPL>(src, ea1, data1)) return;
     if (!readOp<M,S, AE_INC_PC>(dst, ea2, data2)) return;
 
     cmp<S>(data1, data2);
-    prefetch<POLLIPL>();
+    prefetch();
 }
 
 template<Instr I, Mode M, Size S> void
