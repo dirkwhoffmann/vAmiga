@@ -398,7 +398,7 @@ public:
 private:
     
     // Polls the IPL pins
-    void pollIrq() { reg.ipl = ipl; }
+    void pollIpl() { reg.ipl = ipl; }
     
     // Selects the IRQ vector to branch to
     u16 getIrqVector(u8 level) const;

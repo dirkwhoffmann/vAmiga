@@ -260,7 +260,7 @@ Moira::execAddxEa(u16 opcode)
         if (S == Long) undoAnPD<M,S>(src);
         return;
     }
-    if (S != Long) pollIrq();
+    if (S != Long) pollIpl();
         
     if (!readOp<M,S, flags | IMPLICIT_DECR>(dst, ea2, data2)) {
         if (S == Long) undoAnPD<M,S>(dst);
@@ -808,12 +808,14 @@ Moira::execLink(u16 opcode)
     i16 disp = (i16)readI<S>();
 
     // Check for address error
-    if (misaligned<Long>(sp)) {
+    if (misaligned<Long>(sp + disp)) {
         writeA(ax, sp);
-        execAddressError(makeFrame<AE_DATA|AE_WRITE>(sp, getPC() + 2, getSR(), ird));
+        execAddressError(makeFrame<AE_DATA|AE_WRITE>(sp + disp, getPC() + 2, getSR(), ird));
         return;
     }
-    
+
+    pollIpl();
+
     // Write to stack
     push <Long> (readA(ax) - ((MIMIC_MUSASHI && ax == 7) ? 4 : 0));
 
@@ -821,7 +823,7 @@ Moira::execLink(u16 opcode)
     writeA(ax, sp);
     reg.sp = U32_ADD(reg.sp, disp);
 
-    prefetch<POLLIPL>();
+    prefetch();
 }
 
 template<Instr I, Mode M, Size S> void

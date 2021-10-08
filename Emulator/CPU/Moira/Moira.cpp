@@ -137,7 +137,7 @@ Moira::execute()
             return;
         }
         
-        pollIrq();
+        pollIpl();
         sync(MIMIC_MUSASHI ? 1 : 2);
         return;
     }

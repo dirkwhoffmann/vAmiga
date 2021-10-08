@@ -31,7 +31,7 @@ Moira::readOp(int n, u32 &ea, u32 &result)
     updateAnPI<M,S>(n);
 
     // Poll IPL lines if requested
-    if (F & POLLIPL) pollIrq();
+    if (F & POLLIPL) pollIpl();
     
     return !error;
 }
@@ -237,7 +237,7 @@ Moira::readM(u32 addr)
     
     // Perform the read operation
     sync(2);
-    if (F & POLLIPL) pollIrq();
+    if (F & POLLIPL) pollIpl();
     result = (S == Byte) ? read8(addr & 0xFFFFFF) : read16(addr & 0xFFFFFF);
     sync(2);
     
@@ -302,7 +302,7 @@ Moira::writeM(u32 addr, u32 val)
 
     // Perform the write operation
     sync(2);
-    if (F & POLLIPL) pollIrq();
+    if (F & POLLIPL) pollIpl();
     S == Byte ? write8(addr & 0xFFFFFF, (u8)val) : write16(addr & 0xFFFFFF, (u16)val);
     sync(2);
 }
