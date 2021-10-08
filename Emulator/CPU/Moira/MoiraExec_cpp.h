@@ -68,9 +68,9 @@ Moira::execShiftEa(u16 op)
     u32 ea, data;
     if (!readOp<M,S, STD_AE_FRAME>(src, ea, data)) return;
 
-    prefetch();
+    prefetch<POLLIPL>();
 
-    writeM<M,S, POLLIPL>(ea, shift<I,S>(1, data));
+    writeM<M,S>(ea, shift<I,S>(1, data));
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1421,7 +1421,6 @@ Moira::execDiv(u16 opcode)
     }
 
     result = div<I>(dividend, divisor);
-
     writeD(dst, result);
     prefetch<POLLIPL>();
 }
@@ -1445,7 +1444,6 @@ Moira::execDivMusashi(u16 opcode)
 
     u32 dividend = readD(dst);
     result = divMusashi<I>(dividend, divisor);
-
     writeD(dst, result);
     prefetch<POLLIPL>();
 }
