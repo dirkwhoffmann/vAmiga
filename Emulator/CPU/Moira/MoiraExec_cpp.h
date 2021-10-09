@@ -854,7 +854,7 @@ Moira::execMove2(u16 opcode)
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
-    if (!readOp <M,S,STD_AE_FRAME> (src, ea, data)) return;
+    if (!readOp <M, S, STD_AE_FRAME> (src, ea, data)) return;
     
     if constexpr (S == Long && !isMemMode(M)) {
         
@@ -878,8 +878,6 @@ Moira::execMove2(u16 opcode)
 
         reg.sr.n = NBIT<S>(data);
         reg.sr.z = ZERO<S>(data);
-        // reg.sr.v = 0;
-        // reg.sr.c = 0;
 
         prefetch <POLLIPL> ();
     }
@@ -895,20 +893,31 @@ Moira::execMove3(u16 opcode)
 
     if (!readOp <M, S, STD_AE_FRAME> (src, ea, data)) return;
 
-    if (S == Word || (M != MODE_DN && M != MODE_AN && M != MODE_IM)) {
+    if constexpr (S == Long && !isMemMode(M)) {
+        
+        if (!writeOp <MODE_PI, S, AE_INC_PC|POLLIPL> (dst, data)) return;
+        
+        reg.sr.n = NBIT<S>(data);
+        reg.sr.z = ZERO<S>(data);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+        
+        prefetch();
+
+    } else {
+        
         reg.sr.n = NBIT<Word>(data);
         reg.sr.z = ZERO<Word>(data);
         reg.sr.v = 0;
         reg.sr.c = 0;
+
+        if (!writeOp <MODE_PI, S, AE_INC_PC|POLLIPL> (dst, data)) return;
+
+        reg.sr.n = NBIT<S>(data);
+        reg.sr.z = ZERO<S>(data);
+
+        prefetch();
     }
-
-    if (!writeOp <MODE_PI, S, AE_INC_PC> (dst, data)) return;
-    prefetch<POLLIPL>();
-
-    reg.sr.n = NBIT<S>(data);
-    reg.sr.z = ZERO<S>(data);
-    reg.sr.v = 0;
-    reg.sr.c = 0;
 }
 
 template<Instr I, Mode M, Size S> void
