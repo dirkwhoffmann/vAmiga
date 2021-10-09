@@ -937,7 +937,7 @@ Moira::execMove4(u16 opcode)
      *  transfer size (byte, word or long), and disregarding the source
      *  addressing mode."
      */
-    if (!readOp <M,S,STD_AE_FRAME> (src, ea, data)) return;
+    if (!readOp <M, S, STD_AE_FRAME> (src, ea, data)) return;
 
     // Determine next address error stack frame format
     const u64 flags0 = AE_WRITE | AE_DATA;
@@ -951,9 +951,8 @@ Moira::execMove4(u16 opcode)
     reg.sr.c = 0;
 
     prefetch();
-    sync(-2);
 
-    ea = computeEA<MODE_PD, S>(dst);
+    ea = computeEA <MODE_PD, S, IMPLICIT_DECR> (dst);
     
     // Check for address error
     if (misaligned<S>(ea)) {
