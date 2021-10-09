@@ -856,34 +856,32 @@ Moira::execMove2(u16 opcode)
 
     if (!readOp <M,S,STD_AE_FRAME> (src, ea, data)) return;
     
-    // if (S != Long || isMemMode(M)) {
-    if (S != Long || (M != MODE_DN && M != MODE_AN && M != MODE_IM)) {
+    if constexpr (S == Long && !isMemMode(M)) {
+        
+        if (!writeOp <MODE_AI, S, AE_INC_PC|POLLIPL> (dst, data)) return;
+        
+        reg.sr.n = NBIT<S>(data);
+        reg.sr.z = ZERO<S>(data);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+        
+        prefetch();
+
+    } else {
+        
         reg.sr.n = NBIT<Word>(data);
         reg.sr.z = ZERO<Word>(data);
         reg.sr.v = 0;
         reg.sr.c = 0;
-    }
 
-    bool earlyIpl =
-    (S == Long && M == MODE_DN) ||
-    (S == Long && M == MODE_AN) ||
-    (S == Long && M == MODE_IM);
-    
-    if (earlyIpl) {
-        if (!writeOp <MODE_AI,S,AE_INC_PC|POLLIPL> (dst, data)) return;
-    } else {
-        if (!writeOp <MODE_AI,S,AE_INC_PC> (dst, data)) return;
-    }
-    
-    reg.sr.n = NBIT<S>(data);
-    reg.sr.z = ZERO<S>(data);
-    reg.sr.v = 0;
-    reg.sr.c = 0;
+        if (!writeOp <MODE_AI, S, AE_INC_PC> (dst, data)) return;
 
-    if (earlyIpl) {
-        prefetch();
-    } else {
-        prefetch<POLLIPL>();
+        reg.sr.n = NBIT<S>(data);
+        reg.sr.z = ZERO<S>(data);
+        // reg.sr.v = 0;
+        // reg.sr.c = 0;
+
+        prefetch <POLLIPL> ();
     }
 }
 

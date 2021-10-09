@@ -181,13 +181,13 @@ typedef enum
 }
 Mode;
 
-inline bool isRegMode(Mode M) { return M == 0 || M == 1;  }
-inline bool isAbsMode(Mode M) { return M == 7 || M == 8;  }
-inline bool isIdxMode(Mode M) { return M == 6 || M == 10; }
-inline bool isMemMode(Mode M) { return M >= 2 && M <= 10; }
-inline bool isPrgMode(Mode M) { return M == 9 || M == 10; }
-inline bool isDspMode(Mode M) { return M == 5 || M == 6 || M == 9 || M == 10; }
-inline bool isImmMode(Mode M) { return M == 11; }
+constexpr bool isRegMode(Mode M) { return M == 0 || M == 1;  }
+constexpr bool isAbsMode(Mode M) { return M == 7 || M == 8;  }
+constexpr bool isIdxMode(Mode M) { return M == 6 || M == 10; }
+constexpr bool isMemMode(Mode M) { return M >= 2 && M <= 10; }
+constexpr bool isPrgMode(Mode M) { return M == 9 || M == 10; }
+constexpr bool isDspMode(Mode M) { return M == 5 || M == 6 || M == 9 || M == 10; }
+constexpr bool isImmMode(Mode M) { return M == 11; }
 
 typedef enum
 {
