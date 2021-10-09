@@ -977,23 +977,31 @@ Moira::execMove5(u16 opcode)
 
     if (!readOp <M,S, STD_AE_FRAME> (src, ea, data)) return;
     
-    if (S == Long && (M == MODE_DN || M == MODE_AN || M == MODE_IM)) {
+    if constexpr (S == Long && !isMemMode(M)) {
+        
         reg.sr.n = NBIT<Word>(data >> 16);
         reg.sr.z = ZERO<Word>(data >> 16) && reg.sr.z;
-    } else {
+        
+        if (!writeOp <MODE_DI, S, POLLIPL> (dst, data)) return;
+        
         reg.sr.n = NBIT<S>(data);
         reg.sr.z = ZERO<S>(data);
         reg.sr.v = 0;
         reg.sr.c = 0;
-    }
         
-    if (!writeOp <MODE_DI,S> (dst, data)) return;
-    prefetch<POLLIPL>();
-    
-    reg.sr.n = NBIT<S>(data);
-    reg.sr.z = ZERO<S>(data);
-    reg.sr.v = 0;
-    reg.sr.c = 0;
+        prefetch();
+
+    } else {
+        
+        reg.sr.n = NBIT<S>(data);
+        reg.sr.z = ZERO<S>(data);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+
+        if (!writeOp <MODE_DI, S> (dst, data)) return;
+
+        prefetch <POLLIPL> ();
+    }
 }
 
 template<Instr I, Mode M, Size S> void
