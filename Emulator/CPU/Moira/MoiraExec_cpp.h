@@ -950,7 +950,7 @@ Moira::execMove4(u16 opcode)
     reg.sr.v = 0;
     reg.sr.c = 0;
 
-    prefetch();
+    prefetch <POLLIPL> ();
 
     ea = computeEA <MODE_PD, S, IMPLICIT_DECR> (dst);
     
@@ -963,7 +963,7 @@ Moira::execMove4(u16 opcode)
         return;
     }
     
-    writeM<MODE_PD, S, REVERSE | POLLIPL>(ea, data);
+    writeM<MODE_PD, S, REVERSE>(ea, data);
     updateAn<MODE_PD, S>(dst);
 }
 
