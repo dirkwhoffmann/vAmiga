@@ -1535,9 +1535,9 @@ Moira::execNegEa(u16 opcode)
     if (!readOp<M,S,STD_AE_FRAME>(dst, ea, data)) return;
     
     data = logic<I,S>(data);
-    prefetch();
+    prefetch <POLLIPL> ();
 
-    writeOp<M,S,POLLIPL|REVERSE>(dst, ea, data);
+    writeOp <M,S,REVERSE> (dst, ea, data);
 }
 
 template<Instr I, Mode M, Size S> void
