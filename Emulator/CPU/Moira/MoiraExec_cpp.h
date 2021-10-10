@@ -1284,12 +1284,13 @@ Moira::execMovepEaDx(u16 opcode)
         case Word:
         {
             dx |= readM <MEM_DATA, Byte> (ea) << 8; ea += 2;
+            pollIpl();
             dx |= readM <MEM_DATA, Byte> (ea) << 0;
         }
 
     }
     writeD <S> (dst, dx);
-    prefetch<POLLIPL>();
+    prefetch();
 }
 
 template<Instr I, Mode M, Size S> void

@@ -164,7 +164,7 @@ StateMachine<nr>::penhi()
     Sampler &sampler = paula.muxer.sampler[nr];
 
     i8 sample = (i8)HI_BYTE(buffer);
-    i16 scaled = sample * audvol;
+    i16 scaled = (i16)(sample * audvol);
     
     trace(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
                 
@@ -185,7 +185,7 @@ StateMachine<nr>::penlo()
     Sampler &sampler = paula.muxer.sampler[nr];
     
     i8 sample = (i8)LO_BYTE(buffer);
-    i16 scaled = sample * audvol;
+    i16 scaled = (i16)(sample * audvol);
 
     trace(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
 

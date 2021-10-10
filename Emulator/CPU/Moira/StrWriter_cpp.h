@@ -94,7 +94,7 @@ static void sprintx(char *&s, u64 value, bool upper, char prefix, int digits)
 
     if (prefix) *s++ = prefix;
     for (int i = digits - 1; i >= 0; i--) {
-        u8 digit = value % 16;
+        char digit = (char)(value % 16);
         s[i] = (digit <= 9) ? ('0' + digit) : (a + digit);
         value /= 16;
     }
