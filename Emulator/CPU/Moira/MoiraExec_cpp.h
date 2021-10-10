@@ -1496,7 +1496,6 @@ Moira::execNbcd(u16 opcode)
         case 0: // Dn
         {
             prefetch<POLLIPL>();
-
             sync(2);
             writeD<Byte>(reg, bcd<SBCD, Byte>(readD<Byte>(reg), 0));
             break;
@@ -1505,8 +1504,8 @@ Moira::execNbcd(u16 opcode)
         {
             u32 ea, data;
             if (!readOp<M, Byte>(reg, ea, data)) return;
-            prefetch();
-            writeM<M, Byte, POLLIPL>(ea, bcd <SBCD,Byte> (data, 0));
+            prefetch<POLLIPL>();
+            writeM<M, Byte>(ea, bcd <SBCD,Byte> (data, 0));
             break;
         }
     }
