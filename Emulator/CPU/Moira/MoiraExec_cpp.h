@@ -1567,11 +1567,20 @@ Moira::execPea(u16 opcode)
     }
     
     if (isAbsMode(M)) {
+        
         push<Long>(ea);
         prefetch<POLLIPL>();
-    } else {
+        
+    } else if (isIdxMode(M)) {
+        
+        pollIpl();
         prefetch();
-        push<Long, POLLIPL>(ea);
+        push<Long>(ea);
+        
+    } else {
+        
+        prefetch<POLLIPL>();
+        push<Long>(ea);
     }
 }
 
