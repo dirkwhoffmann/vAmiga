@@ -1683,9 +1683,9 @@ Moira::execSccEa(u16 opcode)
     if (!readOp<M,Byte>(dst, ea, data)) return;
 
     data = cond<I>() ? 0xFF : 0;
-    prefetch();
+    prefetch<POLLIPL>();
 
-    writeOp <M,Byte, POLLIPL> (dst, ea, data);
+    writeOp <M,Byte> (dst, ea, data);
 }
 
 template<Instr I, Mode M, Size S> void
