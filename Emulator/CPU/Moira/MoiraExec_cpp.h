@@ -1776,12 +1776,13 @@ Moira::execTrapv(u16 opcode)
 {
     if (reg.sr.v) {
 
-        if (MIMIC_MUSASHI) sync(4);
+        sync(4);
         execTrapException(7);
-        return;
-    }
+
+    } else {
     
-    prefetch<POLLIPL>();
+        prefetch<POLLIPL>();
+    }
 }
 
 template<Instr I, Mode M, Size S> void
