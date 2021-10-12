@@ -1697,10 +1697,8 @@ Moira::execStop(u16 opcode)
 
     setSR(src);
     flags |= CPU_IS_STOPPED;
-
-    sync(-4);
-    prefetch<POLLIPL>();
-
+    reg.pc0 = reg.pc;
+    
     signalStop(src);
 }
 
