@@ -1776,7 +1776,7 @@ Moira::execTrapv(u16 opcode)
 {
     if (reg.sr.v) {
 
-        sync(4);
+        (void)readM<MEM_PROG, Word>(reg.pc + 2);
         execTrapException(7);
 
     } else {
