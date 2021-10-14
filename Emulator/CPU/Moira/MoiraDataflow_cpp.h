@@ -29,9 +29,6 @@ Moira::readOp(int n, u32 &ea, u32 &result)
 
     // Emulate (An)+ register modification
     updateAnPI<M,S>(n);
-
-    // Poll IPL lines if requested
-    if (F & POLLIPL) pollIpl();
     
     return !error;
 }

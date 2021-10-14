@@ -94,7 +94,8 @@ Moira::execAbcd(u16 opcode)
         default: // Ea
         {
             u32 ea1, ea2, data1, data2;
-            if (!readOp<M,S,POLLIPL>(src, ea1, data1)) return;
+            if (!readOp<M,S>(src, ea1, data1)) return;
+            pollIpl();
             if (!readOp<M,S,IMPLICIT_DECR>(dst, ea2, data2)) return;
 
             u32 result = bcd<I, Byte>(data1, data2);
@@ -629,7 +630,8 @@ Moira::execCmpm(u16 opcode)
 
     u32 ea1, ea2, data1, data2;
 
-    if (!readOp<M,S, AE_INC_PC | POLLIPL>(src, ea1, data1)) return;
+    if (!readOp<M,S, AE_INC_PC>(src, ea1, data1)) return;
+    pollIpl();
     if (!readOp<M,S, AE_INC_PC>(dst, ea2, data2)) return;
 
     cmp<S>(data1, data2);
@@ -1815,10 +1817,10 @@ Moira::execUnlk(u16 opcode)
 
     // Update address register
     u32 ea, data;
-    if (!readOp<MODE_AI, Long, AE_DATA|AE_INC_PC>(7, ea, data)) return;
+    if (!readOp<MODE_AI, Long, AE_DATA|AE_INC_PC|POLLIPL>(7, ea, data)) return;
     writeA(an, data);
 
     if (an != 7) reg.sp += 4;
-    prefetch<POLLIPL>();
+    prefetch();
 }
 
