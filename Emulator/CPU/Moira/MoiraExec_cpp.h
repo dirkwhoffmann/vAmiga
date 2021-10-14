@@ -1540,7 +1540,11 @@ Moira::execNegEa(u16 opcode)
     data = logic<I,S>(data);
     prefetch <POLLIPL> ();
 
-    writeOp <M,S,REVERSE> (dst, ea, data);
+    if (MIMIC_MUSASHI) {
+        writeOp <M,S> (dst, ea, data);
+    } else {
+        writeOp <M,S,REVERSE> (dst, ea, data);
+    }
 }
 
 template<Instr I, Mode M, Size S> void
