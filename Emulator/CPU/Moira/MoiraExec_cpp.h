@@ -120,7 +120,7 @@ Moira::execAddEaRg(u16 opcode)
     result = addsub<I,S>(data, readD<S>(dst));
     prefetch<POLLIPL>();
     
-    if (S == Long) sync(2 + (isMemMode(M) ? 0 : 2));
+    if constexpr (S == Long) sync(2 + (isMemMode(M) ? 0 : 2));
     writeD<S>(dst, result);
 }
 
@@ -154,7 +154,7 @@ Moira::execAdda(u16 opcode)
     prefetch<POLLIPL>();
 
     sync(2);
-    if (S == Word || isRegMode(M) || isImmMode(M)) sync(2);
+    if constexpr (S == Word || isRegMode(M) || isImmMode(M)) sync(2);
     writeA(dst, result);
 }
 
@@ -170,7 +170,7 @@ Moira::execAddiRg(u16 opcode)
     result = addsub<I,S>(src, data);
     prefetch<POLLIPL>();
 
-    if (S == Long) sync(4);
+    if constexpr (S == Long) sync(4);
     writeD<S>(dst, result);
 }
 
@@ -199,7 +199,7 @@ Moira::execAddqDn(u16 opcode)
     u32 result = addsub<I,S>(src, readD<S>(dst));
     prefetch<POLLIPL>();
 
-    if (S == Long) sync(4);
+    if constexpr (S == Long) sync(4);
     writeD<S>(dst, result);
 }
 
@@ -242,7 +242,7 @@ Moira::execAddxRg(u16 opcode)
     u32 result = addsub<I,S>(readD<S>(src), readD<S>(dst));
     prefetch<POLLIPL>();
 
-    if (S == Long) sync(4);
+    if constexpr (S == Long) sync(4);
     writeD<S>(dst, result);
 }
 
@@ -258,19 +258,19 @@ Moira::execAddxEa(u16 opcode)
     u32 ea1, ea2, data1, data2;
  
     if (!readOp<M,S, flags>(src, ea1, data1)) {
-        if (S == Long) undoAnPD<M,S>(src);
+        if constexpr (S == Long) undoAnPD<M,S>(src);
         return;
     }
-    if (S != Long) pollIpl();
+    if constexpr (S != Long) pollIpl();
         
     if (!readOp<M,S, flags | IMPLICIT_DECR>(dst, ea2, data2)) {
-        if (S == Long) undoAnPD<M,S>(dst);
+        if constexpr (S == Long) undoAnPD<M,S>(dst);
         return;
     }
 
     u32 result = addsub<I,S>(data1, data2);
 
-    if (S == Long && !MIMIC_MUSASHI) {
+    if constexpr (S == Long && !MIMIC_MUSASHI) {
         writeM <M, Word, POLLIPL> (ea2 + 2, result & 0xFFFF);
         prefetch();
         writeM<M, Word>(ea2, result >> 16);
@@ -293,7 +293,7 @@ Moira::execAndEaRg(u16 opcode)
     u32 result = logic<I,S>(data, readD<S>(dst));
     prefetch<POLLIPL>();
 
-    if (S == Long) sync(isRegMode(M) || isImmMode(M) ? 4 : 2);
+    if constexpr (S == Long) sync(isRegMode(M) || isImmMode(M) ? 4 : 2);
     writeD<S>(dst, result);
 }
 
@@ -309,9 +309,9 @@ Moira::execAndRgEa(u16 opcode)
     u32 result = logic<I,S>(readD<S>(src), data);
     prefetch<POLLIPL>();
     
-    if (S == Long && isRegMode(M)) sync(4);
+    if constexpr (S == Long && isRegMode(M)) sync(4);
     
-    if (MIMIC_MUSASHI) {
+    if constexpr (MIMIC_MUSASHI) {
         writeOp <M,S> (dst, ea, result);
     } else {
         writeOp <M,S, REVERSE> (dst, ea, result);
@@ -327,7 +327,7 @@ Moira::execAndiRg(u16 opcode)
     u32 result = logic<I,S>(src, readD<S>(dst));
     prefetch<POLLIPL>();
 
-    if (S == Long) sync(4);
+    if constexpr (S == Long) sync(4);
     writeD<S>(dst, result);
 }
 
@@ -344,7 +344,7 @@ Moira::execAndiEa(u16 opcode)
     result = logic<I,S>(src, data);
     prefetch<POLLIPL>();
 
-    if (MIMIC_MUSASHI) {
+    if constexpr (MIMIC_MUSASHI) {
         writeOp <M,S> (dst, ea, result);
     } else {
         writeOp <M,S, REVERSE> (dst, ea, result);
@@ -405,7 +405,7 @@ Moira::execBcc(u16 opcode)
 
         // Fall through to next instruction
         sync(2);
-        if (S == Word) readExt();
+        if constexpr (S == Word) readExt();
         prefetch<POLLIPL>();
     }
 }
@@ -552,9 +552,9 @@ Moira::execClr(u16 opcode)
 
     prefetch<POLLIPL>();
     
-    if (S == Long && isRegMode(M)) sync(2);
+    if constexpr (S == Long && isRegMode(M)) sync(2);
     
-    if (MIMIC_MUSASHI) {
+    if constexpr (MIMIC_MUSASHI) {
         writeOp <M,S> (dst, ea, 0);
     } else {
         writeOp <M,S, REVERSE> (dst, ea, 0);
@@ -578,7 +578,7 @@ Moira::execCmp(u16 opcode)
     cmp<S>(data, readD<S>(dst));
     prefetch<POLLIPL>();
 
-    if (S == Long) sync(2);
+    if constexpr (S == Long) sync(2);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -605,7 +605,7 @@ Moira::execCmpiRg(u16 opcode)
 
     prefetch<POLLIPL>();
 
-    if (S == Long) sync(2);
+    if constexpr (S == Long) sync(2);
     cmp<S>(src, readD<S>(dst));
 }
 
@@ -961,7 +961,7 @@ Moira::execMove4(u16 opcode)
         if (format == 0) execAddressError(makeFrame<flags0>(ea + 2, reg.pc + 2, getSR(), ird));
         if (format == 1) execAddressError(makeFrame<flags1>(ea, reg.pc + 2), 2);
         if (format == 2) execAddressError(makeFrame<flags2>(ea, reg.pc + 2), 2);
-        if (S != Long) updateAn <MODE_PD, S> (dst);
+        if constexpr (S != Long) updateAn <MODE_PD, S> (dst);
         return;
     }
     
@@ -1147,7 +1147,7 @@ Moira::execMovemEaRg(u16 opcode)
     // Check for address error
     if (misaligned<S>(ea)) {
         setFC<M>();
-        if (M == MODE_IX || M == MODE_IXPC) {
+        if constexpr (M == MODE_IX || M == MODE_IXPC) {
             execAddressError(makeFrame <AE_DEC_PC> (ea));
         } else {
             execAddressError(makeFrame <AE_INC_PC> (ea));
@@ -1155,7 +1155,7 @@ Moira::execMovemEaRg(u16 opcode)
         return;
     }
     
-    if (S == Long) (void)readM<MEM_DATA, Word>(ea);
+    if constexpr (S == Long) (void)readM<MEM_DATA, Word>(ea);
 
     switch (M) {
 
@@ -1183,7 +1183,7 @@ Moira::execMovemEaRg(u16 opcode)
             break;
         }
     }
-    if (S == Word) (void)readM<MEM_DATA, Word>(ea);
+    if constexpr (S == Word) (void)readM<MEM_DATA, Word>(ea);
     
     prefetch<POLLIPL>();
 }
@@ -1391,7 +1391,7 @@ Moira::execMoveAnUsp(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMul(u16 opcode)
 {
-    if (MIMIC_MUSASHI) {
+    if constexpr (MIMIC_MUSASHI) {
         execMulMusashi<I, M, S>(opcode);
         return;
     }
@@ -1429,7 +1429,7 @@ Moira::execMulMusashi(u16 op)
 template<Instr I, Mode M, Size S> void
 Moira::execDiv(u16 opcode)
 {
-    if (MIMIC_MUSASHI) {
+    if constexpr (MIMIC_MUSASHI) {
         execDivMusashi<I, M, S>(opcode);
         return;
     }
@@ -1525,7 +1525,7 @@ Moira::execNegRg(u16 opcode)
     data = logic<I,S>(data);
     prefetch<POLLIPL>();
 
-    if (S == Long) sync(2);
+    if constexpr (S == Long) sync(2);
     writeD<S>(dst, data);
 }
 
@@ -1540,7 +1540,7 @@ Moira::execNegEa(u16 opcode)
     data = logic<I,S>(data);
     prefetch <POLLIPL> ();
 
-    if (MIMIC_MUSASHI) {
+    if constexpr (MIMIC_MUSASHI) {
         writeOp <M,S> (dst, ea, data);
     } else {
         writeOp <M,S,REVERSE> (dst, ea, data);

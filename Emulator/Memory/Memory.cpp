@@ -1041,9 +1041,11 @@ Memory::peek8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
     ASSERT_AUTO_ADDR(addr);
     
     // Experimental code to match UAE output (for debugging)
-    if (MIMIC_UAE && fastRamSize() == 0) {
-        dataBus = (addr & 0b10) ? 0xE8 : 0x02;
-        return (u8)dataBus;
+    if constexpr (MIMIC_UAE) {
+        if (fastRamSize() == 0) {
+            dataBus = (addr & 0b10) ? 0xE8 : 0x02;
+            return (u8)dataBus;
+        }
     }
     
     dataBus = (u16)(zorro.peekFastRamDevice(addr) << 4);

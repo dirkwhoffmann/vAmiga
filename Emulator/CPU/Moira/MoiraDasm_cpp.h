@@ -309,9 +309,11 @@ Moira::dasmAndisr(StrWriter &str, u32 &addr, u16 op)
 template<Instr I, Mode M, Size S> void
 Moira::dasmBsr(StrWriter &str, u32 &addr, u16 op)
 {
-    if (MIMIC_MUSASHI && S == Byte && (u8)op == 0xFF) {
-        dasmIllegal(str, addr, op);
-        return;
+    if constexpr (MIMIC_MUSASHI && S == Byte) {
+        if ((u8)op == 0xFF) {
+            dasmIllegal(str, addr, op);
+            return;
+        }
     }
 
     u32 dst = addr + 2;
@@ -385,9 +387,11 @@ Moira::dasmCmpm(StrWriter &str, u32 &addr, u16 op)
 template<Instr I, Mode M, Size S> void
 Moira::dasmBcc(StrWriter &str, u32 &addr, u16 op)
 {
-    if (MIMIC_MUSASHI && S == Byte && (u8)op == 0xFF) {
-        dasmIllegal(str, addr, op);
-        return;
+    if constexpr (MIMIC_MUSASHI && S == Byte) {
+        if ((u8)op == 0xFF) {
+            dasmIllegal(str, addr, op);
+            return;
+        }
     }
 
     u32 dst = addr + 2;
@@ -590,7 +594,7 @@ Moira::dasmMovemRgEa(StrWriter &str, u32 &addr, u16 op)
     auto src = RegRegList ( (u16)dasmRead<Word>(addr)  );
     auto dst = Op <M,S>   ( _____________xxx(op), addr );
 
-    if (M == 4) { src.raw = REVERSE_16(src.raw); }
+    if constexpr (M == 4) { src.raw = REVERSE_16(src.raw); }
     str << Ins<I>{} << Sz<S>{} << tab << src << ", " << dst;
 }
 
