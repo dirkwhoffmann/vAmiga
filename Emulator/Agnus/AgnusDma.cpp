@@ -224,7 +224,7 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, isize first)
     // Determine the number of active bitplanes
     auto channels = bpu(bplcon0);
 
-    // Set number of bitplanes to 0 if this line is not a bitplane DMA line
+    // Set the number to zero if no bitplane DMA takes place
     if (!inBplDmaLine(dmacon, bplcon0)) channels = 0;
 
     // Do the same if DDFSTRT is never reached in this line
@@ -243,9 +243,8 @@ Agnus::updateBplEvents(isize channels, isize first)
     // Get the DDF window size
     auto strt = hi ? ddfHires.strt : ddfLores.strt;
     auto stop = hi ? ddfHires.stop : ddfLores.stop;
-
-    assert(strt >= 0);
-    assert(stop >= ddfHires.strt && stop <= 0xE0);
+    
+    assert(strt >= 0 && stop >= strt && stop <= 0xE0);
 
     // Determine the layout of a single fetch unit
     EventID slice[8]= { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -299,7 +298,7 @@ Agnus::updateBplEvents(isize channels, isize first)
     }
     bplEvent[HPOS_MAX] = BPL_EOL;
         
-    // Superimpose drawing flags
+    // Superimpose the drawing flags
     hi ? updateHiresDrawingFlags() : updateLoresDrawingFlags();
             
     // Update the jump table
