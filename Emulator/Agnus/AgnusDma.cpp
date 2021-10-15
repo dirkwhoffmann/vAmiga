@@ -83,6 +83,36 @@
 void
 Agnus::initBplEventTableLores()
 {
+    std::memset(bplDMALores, 0, sizeof(bplDMALores));
+    std::memset(bplDMALoresShifted, 0, sizeof(bplDMALoresShifted));
+
+    for (isize bpu = 0; bpu < 7; bpu++) {
+
+        EventID *p1 = &bplDMALores[bpu][0];
+        EventID *p2 = &bplDMALoresShifted[bpu][0];
+
+        // Iterate through all 22 fetch units
+        for (isize i = 0; i <= 0xD8; i += 8, p1 += 8, p2 += 8) {
+
+            switch(bpu) {
+                    
+                case 6: p1[2] = BPL_L6; p2[6] = BPL_L6;
+                case 5: p1[6] = BPL_L5; p2[2] = BPL_L5;
+                case 4: p1[1] = BPL_L4; p2[5] = BPL_L4;
+                case 3: p1[5] = BPL_L3; p2[1] = BPL_L3;
+                case 2: p1[3] = BPL_L2; p2[7] = BPL_L2;
+                case 1: p1[7] = BPL_L1; p2[3] = BPL_L1;
+            }
+        }
+
+        assert(bplDMALores[bpu][HPOS_MAX] == EVENT_NONE);
+        assert(bplDMALoresShifted[bpu][HPOS_MAX] == EVENT_NONE);
+        bplDMALores[bpu][HPOS_MAX] = BPL_EOL;
+        bplDMALoresShifted[bpu][HPOS_MAX] = BPL_EOL;
+    }
+    
+    // OLD CODE (DEPRECATED)
+    /*
     std::memset(bplDMA[0], 0, sizeof(bplDMA[0]));
 
     for (isize bpu = 0; bpu < 7; bpu++) {
@@ -104,13 +134,39 @@ Agnus::initBplEventTableLores()
         }
 
         assert(bplDMA[0][bpu][HPOS_MAX] == EVENT_NONE);
-        // bplDMA[0][bpu][HPOS_MAX] = BPL_EOL;
     }
+    */
 }
 
 void
 Agnus::initBplEventTableHires()
 {
+    std::memset(bplDMAHires, 0, sizeof(bplDMAHires));
+
+    for (isize bpu = 0; bpu < 7; bpu++) {
+
+        EventID *p = &bplDMAHires[bpu][0];
+        
+        // Iterate through all 22 fetch units
+        for (isize i = 0; i <= 0xD8; i += 8, p += 8) {
+
+            switch(bpu) {
+                    
+                case 6:
+                case 5:
+                case 4: p[0] = p[4] = BPL_H4;
+                case 3: p[2] = p[6] = BPL_H3;
+                case 2: p[1] = p[5] = BPL_H2;
+                case 1: p[3] = p[7] = BPL_H1;
+            }
+        }
+
+        assert(bplDMAHires[bpu][HPOS_MAX] == EVENT_NONE);
+        bplDMAHires[bpu][HPOS_MAX] = BPL_EOL;
+    }
+    
+    // OLD CODE (DEPRECATED)
+    /*
     std::memset(bplDMA[1], 0, sizeof(bplDMA[1]));
 
     for (isize bpu = 0; bpu < 7; bpu++) {
@@ -134,6 +190,7 @@ Agnus::initBplEventTableHires()
         assert(bplDMA[1][bpu][HPOS_MAX] == EVENT_NONE);
         bplDMA[1][bpu][HPOS_MAX] = BPL_EOL;
     }
+    */
 }
 
 template <> bool Agnus::auddma<0>(u16 v) { return (v & DMAEN) && (v & AUD0EN); }
@@ -288,6 +345,59 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, isize first)
     // Do the same if DDFSTRT is never reached in this line
     if (ddfstrtReached == -1) channels = 0;
     
+    // NEW CODE
+    if (hires) {
+        
+        auto strt = ddfHires.strt;
+        auto stop = ddfHires.stop;
+        assert(strt >= 0);
+        assert(stop >= ddfHires.strt && stop <= 0xE0);
+        
+        for (isize i = first; i < strt; i++) {
+            bplEvent[i] = EVENT_NONE;
+        }
+        for (isize i = std::max(first, strt); i <= stop; i++) {
+            bplEvent[i] = bplDMAHires[channels][i];
+        }
+        for (isize i = std::max(first, stop); i < HPOS_MAX; i++) {
+            bplEvent[i] = EVENT_NONE;
+        }
+        
+        assert((bplEvent[HPOS_MAX] & ~0b11) == BPL_EOL);
+        updateHiresDrawingFlags();
+        
+    } else {
+
+        auto strt = ddfLores.strt;
+        auto stop = ddfLores.stop;
+        assert(strt >= 0);
+        assert(stop >= ddfLores.strt && stop <= 0xE0);
+
+        for (isize i = first; i < strt; i++) {
+            bplEvent[i] = EVENT_NONE;
+        }
+        if (strt & 0b100) {
+            for (isize i = std::max(first, strt); i <= stop; i++) {
+                bplEvent[i] = bplDMALoresShifted[channels][i];
+            }
+        } else {
+            for (isize i = std::max(first, strt); i <= stop; i++) {
+                bplEvent[i] = bplDMALores[channels][i];
+            }
+        }
+        for (isize i = std::max(first, stop); i < HPOS_MAX; i++) {
+            bplEvent[i] = EVENT_NONE;
+        }
+        
+        assert((bplEvent[HPOS_MAX] & ~0b11) == BPL_EOL);
+        updateLoresDrawingFlags();
+    }
+    
+    //
+    // OLD CODE
+    //
+    
+    /*
     // Allocate slots
     if (hires) {
         
@@ -300,19 +410,19 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, isize first)
         
     } else {
 
-        // TODO: CLEAN THIS UP
         isize offset = (ddfLores.strt & 0b100) ? 4 : 0;
 
         for (isize i = first; i <= HPOS_MAX; i++) {
             
             bplEvent[i] =
-            ddfLores.inside(i) ? bplDMA[0][channels][(i + offset) % HPOS_CNT] : EVENT_NONE;
+            (ddfLores.inside(i) ? bplDMA[0][channels][(i + offset) % HPOS_CNT] : EVENT_NONE);
         }
         updateLoresDrawingFlags();
     }
         
     // Make sure the table ends with a BPL_EOL event
     bplEvent[HPOS_MAX] = BPL_EOL;
+    */
     
     // Update the jump table
     updateBplJumpTable();

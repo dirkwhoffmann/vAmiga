@@ -13,7 +13,10 @@
 #include "IO.h"
 #include <iomanip>
 
-EventID Agnus::bplDMA[2][7][HPOS_CNT];
+// EventID Agnus::bplDMA[2][7][HPOS_CNT];
+EventID Agnus::bplDMAHires[7][HPOS_CNT];
+EventID Agnus::bplDMALores[7][HPOS_CNT];
+EventID Agnus::bplDMALoresShifted[7][HPOS_CNT];
 EventID Agnus::dasDMA[64][HPOS_CNT];
 
 Agnus::Agnus(Amiga& ref) : SubComponent(ref)
@@ -148,8 +151,18 @@ Agnus::_reset(bool hard)
     clearStats();
     
     // Initialize event tables
+    for (isize i = pos.h; i < HPOS_CNT; i++) bplEvent[i] = bplDMALores[0][i];
+    // for (isize i = pos.h; i < HPOS_MAX; i++) assert(bplEvent[i] == bplDMA[0][0][i]);
+    assert(bplEvent[HPOS_MAX] == BPL_EOL);
+
+    /*
     for (isize i = pos.h; i < HPOS_CNT; i++) bplEvent[i] = bplDMA[0][0][i];
     bplEvent[HPOS_MAX] = BPL_EOL;
+    */
+    
+    for (isize i = pos.h; i < HPOS_CNT; i++) {
+        assert(bplEvent[i] == bplDMALores[0][i]);
+    }
     for (isize i = pos.h; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
     updateBplJumpTable();
     updateDasJumpTable();
