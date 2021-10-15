@@ -62,6 +62,9 @@ Drive::resetConfig()
     
     setConfigItem(OPT_DRIVE_TYPE, defaults.type);
     setConfigItem(OPT_EMULATE_MECHANICS, defaults.mechanicalDelays);
+    setConfigItem(OPT_START_DELAY, defaults.startDelay);
+    setConfigItem(OPT_STOP_DELAY, defaults.stopDelay);
+    setConfigItem(OPT_STEP_DELAY, defaults.stepDelay);
     setConfigItem(OPT_DRIVE_PAN, defaults.pan);
     setConfigItem(OPT_STEP_VOLUME, defaults.stepVolume);
     setConfigItem(OPT_POLL_VOLUME, defaults.pollVolume);
@@ -78,6 +81,9 @@ Drive::getConfigItem(Option option) const
             
         case OPT_DRIVE_TYPE:          return (long)config.type;
         case OPT_EMULATE_MECHANICS:   return (long)config.mechanicalDelays;
+        case OPT_START_DELAY:         return (long)config.startDelay;
+        case OPT_STOP_DELAY:          return (long)config.stopDelay;
+        case OPT_STEP_DELAY:          return (long)config.stepDelay;
         case OPT_DRIVE_PAN:           return (long)config.pan;
         case OPT_STEP_VOLUME:         return (long)config.stepVolume;
         case OPT_POLL_VOLUME:         return (long)config.pollVolume;
@@ -111,6 +117,21 @@ Drive::setConfigItem(Option option, i64 value)
         case OPT_EMULATE_MECHANICS:
         
             config.mechanicalDelays = value;
+            return;
+
+        case OPT_START_DELAY:
+        
+            config.startDelay = value;
+            return;
+
+        case OPT_STOP_DELAY:
+        
+            config.stopDelay = value;
+            return;
+
+        case OPT_STEP_DELAY:
+        
+            config.stepDelay = value;
             return;
 
         case OPT_DRIVE_PAN:
