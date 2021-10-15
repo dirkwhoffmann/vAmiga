@@ -75,12 +75,8 @@ public:
     
 private:
     
-    // Lookup tables
-    // static EventID bplDMA[2][7][HPOS_CNT]; // [Hires][Bitplane][DMA cycle] (DEPRECATED)
-    static EventID bplDMAHires[7][HPOS_CNT];        // [Bitplane][DMA cycle]
-    static EventID bplDMALores[7][HPOS_CNT];        // [Bitplane][DMA cycle]
-    static EventID bplDMALoresShifted[7][HPOS_CNT]; // [Bitplane][DMA cycle]
-    static EventID dasDMA[64][HPOS_CNT];            // [Bits 0 .. 5 of DMACON]
+    // Disk, audio, and sprites lookup table ([Bits 0 .. 5 of DMACON])
+    static EventID dasDMA[64][HPOS_CNT];
 
     // Currently scheduled events
     EventID bplEvent[HPOS_CNT];
@@ -659,8 +655,8 @@ private:
 private:
     
     // Initializes the static lookup tables
-    void initBplEventTableLores();
-    void initBplEventTableHires();
+    // void initBplEventTableLores();
+    // void initBplEventTableHires();
     void initDasEventTable();
 
 public:

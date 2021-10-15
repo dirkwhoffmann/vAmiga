@@ -13,10 +13,6 @@
 #include "IO.h"
 #include <iomanip>
 
-// EventID Agnus::bplDMA[2][7][HPOS_CNT];
-EventID Agnus::bplDMAHires[7][HPOS_CNT];
-EventID Agnus::bplDMALores[7][HPOS_CNT];
-EventID Agnus::bplDMALoresShifted[7][HPOS_CNT];
 EventID Agnus::dasDMA[64][HPOS_CNT];
 
 Agnus::Agnus(Amiga& ref) : SubComponent(ref)
@@ -29,8 +25,6 @@ Agnus::Agnus(Amiga& ref) : SubComponent(ref)
         &dmaDebugger
     };
         
-    initBplEventTableLores();
-    initBplEventTableHires();
     initDasEventTable();
 }
 
@@ -151,18 +145,8 @@ Agnus::_reset(bool hard)
     clearStats();
     
     // Initialize event tables
-    for (isize i = pos.h; i < HPOS_CNT; i++) bplEvent[i] = bplDMALores[0][i];
-    // for (isize i = pos.h; i < HPOS_MAX; i++) assert(bplEvent[i] == bplDMA[0][0][i]);
+    updateBplEvents <false> (0, pos.h);
     assert(bplEvent[HPOS_MAX] == BPL_EOL);
-
-    /*
-    for (isize i = pos.h; i < HPOS_CNT; i++) bplEvent[i] = bplDMA[0][0][i];
-    bplEvent[HPOS_MAX] = BPL_EOL;
-    */
-    
-    for (isize i = pos.h; i < HPOS_CNT; i++) {
-        assert(bplEvent[i] == bplDMALores[0][i]);
-    }
     for (isize i = pos.h; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
     updateBplJumpTable();
     updateDasJumpTable();
