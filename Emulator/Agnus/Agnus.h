@@ -693,7 +693,7 @@ private:
 
     
     //
-    // Managing the DMA time slot tables (AgnusDma.cpp)
+    // Managing the bitplane time slot table (AgnusDma.cpp)
     //
     
 public:
@@ -704,22 +704,34 @@ public:
     // Renews all events in the BPL event table
     void updateBplEvents(u16 dmacon, u16 bplcon0, isize first = 0);
     void updateBplEvents(isize first = 0) { updateBplEvents(dmacon, bplcon0, first); }
-        
+    
+private:
+
+    // Workhorse for updateBplEvents
+    template <bool hires> void updateBplEvents(isize channels, isize first);
+
+    // Updates the jump table for the bplEvent table
+    void updateBplJumpTable();
+
+    // Updates the drawing flags in the bplEvent table
+    void updateHiresDrawingFlags();
+    void updateLoresDrawingFlags();
+
+    
+    //
+    // Managing the disk, audio, sprite time slot table (AgnusDma.cpp)
+    //
+
+public:
+    
     // Renews all events in the the DAS event table
     void updateDasEvents(u16 dmacon);
 
 private:
 
-    // Updates the jump table for the bplEvent table
-    void updateBplJumpTable();
-
     // Updates the jump table for the dasEvent table
     void updateDasJumpTable(i16 end = HPOS_MAX);
     
-    // Updates the drawing flags in the bplEvent table
-    void updateHiresDrawingFlags();
-    void updateLoresDrawingFlags();
-
     
     //
     // Performing DMA (AgnusDma.cpp)
