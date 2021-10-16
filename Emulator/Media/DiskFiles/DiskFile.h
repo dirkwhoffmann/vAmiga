@@ -46,6 +46,9 @@ public:
     // Returns the layout parameters for this disk
     virtual DiskDiameter getDiskDiameter() const = 0;
     virtual DiskDensity getDiskDensity() const = 0;
+    bool isSD() { return getDiskDensity() == DISK_SD; }
+    bool isDD() { return getDiskDensity() == DISK_DD; }
+    bool isHD() { return getDiskDensity() == DISK_HD; }
     virtual isize numSides() const = 0;
     virtual isize numCyls() const = 0;
     virtual isize numSectors() const = 0;

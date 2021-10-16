@@ -53,8 +53,12 @@ class ExporterDialog: DialogController {
 
     var driveNr: Int?
     var drive: DriveProxy? { return driveNr == nil ? nil : amiga.df(driveNr!) }
-    var disk: DiskFileProxy?
-    var volume: FSDeviceProxy?
+    
+    // Results of the different decoders
+    var adf: ADFFileProxy?
+    var img: IMGFileProxy?
+    var ext: EXTFileProxy?
+    var vol: FSDeviceProxy?
 
     var errorReport: FSErrorReport?
     
@@ -67,14 +71,31 @@ class ExporterDialog: DialogController {
     var size: CGSize { return window!.frame.size }
     var shrinked: Bool { return size.height < 300 }
         
-    var numCyls: Int { return disk?.numCyls ?? volume?.numCyls ?? 0 }
-    var numSides: Int { return disk?.numSides ?? volume?.numHeads ?? 0 }
-    var numTracks: Int { return disk?.numTracks ?? volume?.numTracks ?? 0 }
-    var numSectors: Int { return disk?.numSectors ?? volume?.numSectors ?? 0 }
-    var numBlocks: Int { return disk?.numBlocks ?? volume?.numBlocks ?? 0 }
-    var isDD: Bool { return disk?.diskDensity == .DD }
-    var isHD: Bool { return disk?.diskDensity == .HD }
-    
+    var numCyls: Int {
+        return adf?.numCyls ?? img?.numCyls ?? ext?.numCyls ?? vol?.numCyls ?? 0
+    }
+    var numSides: Int {
+        return adf?.numSides ?? img?.numSides ?? ext?.numSides ?? vol?.numHeads ?? 0
+    }
+    var numTracks: Int {
+        return adf?.numTracks ?? img?.numTracks ?? ext?.numTracks ?? vol?.numTracks ?? 0
+    }
+    var numSectors: Int {
+        return adf?.numSectors ?? img?.numSectors ?? ext?.numSectors ?? vol?.numSectors ?? 0
+    }
+    var numBlocks: Int {
+        return adf?.numBlocks ?? img?.numBlocks ?? ext?.numBlocks ?? vol?.numBlocks ?? 0
+    }
+    var isDD: Bool {
+        return adf?.isDD ?? img?.isDD ?? ext?.isDD ?? false
+    }
+    var isHD: Bool {
+        return adf?.isHD ?? img?.isHD ?? ext?.isHD ?? false
+    }
+    var hasVirus: Bool {
+        return adf?.hasVirus ?? false
+    }
+
     // Block preview
     var cylinderNr = 0
     var headNr = 0
@@ -171,9 +192,9 @@ class ExporterDialog: DialogController {
         var jump: Int
          
         if newValue > blockNr {
-            jump = volume!.nextCorrupted(blockNr)
+            jump = vol!.nextCorrupted(blockNr)
         } else {
-            jump = volume!.prevCorrupted(blockNr)
+            jump = vol!.prevCorrupted(blockNr)
         }
 
         // track("Current: \(blockNr) Stepper: \(newValue) Jump: \(jump)")
@@ -191,46 +212,27 @@ class ExporterDialog: DialogController {
         
         driveNr = nr
 
-        if disk == nil {
+        // Run the extended ADF decoder
+        ext = try? EXTFileProxy.make(drive: drive!) as EXTFileProxy
 
-            // Try to decode the disk with the EXT decoder (extended ADF)
-            if let ext = try? EXTFileProxy.make(drive: drive!) as EXTFileProxy {
-            
-                disk = ext
-                volume = nil
-            }
-        }
+        // Run the ADF decoder
+        adf = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy
         
-        if disk == nil {
+        // Run the DOS decoder
+        img = try? IMGFileProxy.make(drive: drive!) as IMGFileProxy
+        
+        // Exit if all decoders have failed
+        if ext == nil && adf == nil && img == nil { return; }
+        
+        // Extract the filesystem if we got an ADF
+        if adf != nil { vol = try? FSDeviceProxy.make(withADF: adf!) }
 
-            // Try to decode the disk with the ADF decoder (standard ADF)
-            if let adf = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy {
-                
-                disk = adf
-                volume = try? FSDeviceProxy.make(withADF: adf)
-            }
-        }
-        
-        if disk == nil {
-            
-            // Try to decode the disk with the DOS decoder
-            if let img = try? IMGFileProxy.make(drive: drive!) as IMGFileProxy {
-                
-                disk = img
-                volume = nil
-            }
-        }
-            
-        if disk != nil {
-            super.showSheet()
-        } else {
-            // TODO: Throw an exception
-        }
+        super.showSheet()
     }
     
-    func showSheet(forVolume vol: FSDeviceProxy) {
+    func showSheet(forVolume volume: FSDeviceProxy) {
         
-        volume = vol
+        vol = volume
         super.showSheet()
     }
         
@@ -253,25 +255,23 @@ class ExporterDialog: DialogController {
         window!.setFrame(frame, display: true)
         
         // Run a file system check
-        errorReport = volume?.check(strict)
+        errorReport = vol?.check(strict)
         
         update()
     }
     
     override func windowDidLoad() {
-        
-        let adf = disk?.type == .ADF
-        let dos = disk?.type == .IMG
-            
+                    
         // Enable compatible file formats in the format selector popup
         formatPopup.autoenablesItems = false
-        formatPopup.item(at: 0)!.isEnabled = adf
-        formatPopup.item(at: 1)!.isEnabled = dos
-        formatPopup.item(at: 2)!.isEnabled = dos
-        formatPopup.item(at: 3)!.isEnabled = volume != nil
+        formatPopup.item(at: 0)!.isEnabled = (adf != nil)
+        formatPopup.item(at: 1)!.isEnabled = (ext != nil)
+        formatPopup.item(at: 2)!.isEnabled = (img != nil)
+        formatPopup.item(at: 3)!.isEnabled = (img != nil)
+        formatPopup.item(at: 4)!.isEnabled = (vol != nil)
         
         // Preselect an available export format and enable the Export button
-        let enabled = [0, 1, 2, 3].filter { formatPopup.item(at: $0)!.isEnabled }
+        let enabled = [0, 1, 2, 3, 4].filter { formatPopup.item(at: $0)!.isEnabled }
         if enabled.isEmpty {
             exportButton.isEnabled = false
         } else {
@@ -348,18 +348,10 @@ class ExporterDialog: DialogController {
         for item in items { item.isHidden = shrinked }
         
         // Hide more elements
-        strictButton.isHidden = volume == nil
+        strictButton.isHidden = vol == nil
         
         // Only proceed if the window is expanded
         if shrinked { return }
-        
-        // Hide more elements if no errors are present
-        /*
-        if volume == nil || errorReport?.corruptedBlocks == 0 {
-            corruptionText.isHidden = true
-            corruptionStepper.isHidden = true
-        }
-        */
         
         // Update all elements
         cylinderField.stringValue      = String(format: "%d", cylinderNr)
@@ -376,7 +368,7 @@ class ExporterDialog: DialogController {
         
         if let total = errorReport?.corruptedBlocks, total > 0 {
                      
-            if let corr = volume?.getCorrupted(blockNr), corr > 0 {
+            if let corr = vol?.getCorrupted(blockNr), corr > 0 {
                 track("total = \(total) corr = \(corr)")
                 corruptionText.stringValue = "Corrupted block \(corr) out of \(total)"
             } else {
@@ -400,20 +392,26 @@ class ExporterDialog: DialogController {
     }
     
     func updateDiskIcon() {
-        
+
         if driveNr == nil {
             
             diskIcon.image = NSImage(named: "hdf")!
             virusIcon.isHidden = true
             decontaminationButton.isHidden = true
-            
-        } else {
-            
-            let wp = drive!.hasWriteProtectedDisk()
-            diskIcon.image = disk!.icon(protected: wp)
-            virusIcon.isHidden = !disk!.hasVirus
-            decontaminationButton.isHidden = !disk!.hasVirus
+            return
         }
+            
+        var name = ""
+            
+        if ext != nil { name = isHD ? "hd_other" : "dd_other" }
+        if adf != nil { name = isHD ? "hd_adf" : "dd_adf" }
+        if img != nil { name = "dd_dos" }
+                
+        if drive!.hasWriteProtectedDisk() { name += "_protected" }
+        
+        diskIcon.image = NSImage(named: name)!
+        virusIcon.isHidden = !hasVirus
+        decontaminationButton.isHidden = !hasVirus
     }
     
     func updateTitleText() {
@@ -426,19 +424,15 @@ class ExporterDialog: DialogController {
             text = "Amiga Hard Drive"
             color = .textColor
             
-        } else {
+        } else if adf != nil {
             
-            if disk?.type == .ADF {
+            text = "Amiga Disk"
+            color = .textColor
                 
-                text = "Amiga Disk"
-                color = .textColor
+        } else if img != nil {
                 
-            }
-            if disk?.type == .IMG {
-                
-                text = "PC Disk"
-                color = .textColor
-            }
+            text = "PC Disk"
+            color = .textColor
         }
         
         title.stringValue = text
@@ -452,14 +446,19 @@ class ExporterDialog: DialogController {
         
         if driveNr == nil {
             
-            let blocks = volume!.numBlocks
+            let blocks = vol!.numBlocks
             let capacity = blocks / 2000
             text = "\(capacity) MB (\(blocks) sectors)"
             color = NSColor.secondaryLabelColor
             
-        } else if disk != nil {
+        } else if adf != nil {
             
-            text = disk!.layoutInfo
+            text = adf!.layoutInfo
+            color = NSColor.secondaryLabelColor
+            
+        } else if adf != nil {
+            
+            text = img!.layoutInfo
             color = NSColor.secondaryLabelColor
         }
 
@@ -472,9 +471,9 @@ class ExporterDialog: DialogController {
         var text = "No compatible file system"
         var color = NSColor.warningColor
         
-        if volume != nil {
+        if vol != nil {
             
-            text = volume!.dos.description
+            text = vol!.dos.description
             color = .secondaryLabelColor
             
             if let errors = errorReport?.corruptedBlocks, errors > 0 {
@@ -491,18 +490,18 @@ class ExporterDialog: DialogController {
     
     func updateBootInfo() {
                 
-        if driveNr == nil {
+        if adf == nil {
             bootInfo.stringValue = ""
             return
         }
-                    
-        bootInfo.stringValue = disk!.bootInfo
-        bootInfo.textColor = disk!.hasVirus ? .warningColor : .secondaryLabelColor
+        
+        bootInfo.stringValue = adf!.bootInfo
+        bootInfo.textColor = adf!.hasVirus ? .warningColor : .secondaryLabelColor
     }
     
     func updateBlockInfo() {
         
-        if volume == nil {
+        if vol == nil {
             info1.stringValue = ""
             info2.stringValue = ""
             return
@@ -519,13 +518,13 @@ class ExporterDialog: DialogController {
     
     func updateBlockInfoUnselected() {
         
-        let type = volume!.blockType(blockNr)
+        let type = vol!.blockType(blockNr)
         info1.stringValue = type.description
     }
     
     func updateBlockInfoSelected() {
         
-        let usage = volume!.itemType(blockNr, pos: selection!)
+        let usage = vol!.itemType(blockNr, pos: selection!)
         info1.stringValue = usage.description
     }
 
@@ -537,7 +536,7 @@ class ExporterDialog: DialogController {
     func updateErrorInfoSelected() {
         
         var exp = UInt8(0)
-        let error = volume!.check(blockNr, pos: selection!, expected: &exp, strict: strict)
+        let error = vol!.check(blockNr, pos: selection!, expected: &exp, strict: strict)
         info2.stringValue = error.description(expected: Int(exp))
     }
         
@@ -566,10 +565,26 @@ class ExporterDialog: DialogController {
     func exportToFile(url: URL) {
 
         track("url = \(url)")
-
+        
         do {
-            try parent.mydocument.export(diskFileProxy: disk!, to: url)
-
+            
+            switch formatPopup.selectedTag() {
+            case 0:
+                track("Exporting ADF")
+                try parent.mydocument.export(diskFileProxy: adf!, to: url)
+            case 1:
+                track("Exporting Extended ADF")
+                try parent.mydocument.export(diskFileProxy: ext!, to: url)
+            case 2:
+                track("Exporting IMG")
+                try parent.mydocument.export(diskFileProxy: img!, to: url)
+            case 3:
+                track("Exporting IMA")
+                try parent.mydocument.export(diskFileProxy: img!, to: url)
+            default:
+                fatalError()
+            }
+            
             // Mark disk as "not modified"
             drive?.isModifiedDisk = false
             
@@ -611,7 +626,7 @@ class ExporterDialog: DialogController {
         track("url = \(url)")
         
         do {
-            try volume!.export(url: url)
+            try vol!.export(url: url)
             hideSheet()
 
         } catch let error as VAError {
@@ -628,8 +643,8 @@ class ExporterDialog: DialogController {
     @IBAction func decontaminationAction(_ sender: NSButton!) {
         
         track()
-        disk?.killVirus()
-        volume?.killVirus()
+        adf?.killVirus()
+        vol?.killVirus()
         update()
     }
 
@@ -709,7 +724,7 @@ class ExporterDialog: DialogController {
         track()
 
         // Repeat the integrity check
-        errorReport = volume?.check(strict)
+        errorReport = vol?.check(strict)
 
         update()
     }
@@ -771,10 +786,13 @@ extension ExporterDialog: NSTableViewDataSource {
         
         if let col = columnNr(tableColumn) {
 
-            if let byte = volume?.readByte(blockNr, offset: 16 * row + col) {
+            if let byte = vol?.readByte(blockNr, offset: 16 * row + col) {
                 return String(format: "%02X", byte)
             }
-            if let byte = disk?.readByte(blockNr, offset: 16 * row + col) {
+            if let byte = adf?.readByte(blockNr, offset: 16 * row + col) {
+                return String(format: "%02X", byte)
+            }
+            if let byte = img?.readByte(blockNr, offset: 16 * row + col) {
                 return String(format: "%02X", byte)
             }
         } else {
@@ -795,7 +813,7 @@ extension ExporterDialog: NSTableViewDelegate {
         if let col = columnNr(tableColumn) {
             
             let offset = 16 * row + col
-            let error = volume?.check(blockNr, pos: offset, expected: &exp, strict: strict) ?? .OK
+            let error = vol?.check(blockNr, pos: offset, expected: &exp, strict: strict) ?? .OK
             
             if row == selectedRow && col == selectedCol {
                 cell?.textColor = .white

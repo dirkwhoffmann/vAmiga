@@ -51,6 +51,7 @@ class Disk : public AmigaObject {
     
     friend class Drive;
     friend class ADFFile;
+    friend class EXTFile;
     friend class IMGFile;
     
 public:

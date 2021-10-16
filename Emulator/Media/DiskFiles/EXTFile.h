@@ -81,5 +81,7 @@ public:
     void readSector(u8 *dst, isize b) const override { }
     void readSector(u8 *dst, isize t, isize s) const override { }
     void readSectorHex(char *dst, isize b, isize count) const override { }
-    void readSectorHex(char *dst, isize t, isize s, isize count) const override { }    
+    void readSectorHex(char *dst, isize t, isize s, isize count) const override { }
+    
+    void decodeDisk(class Disk &disk) throws override;
 };

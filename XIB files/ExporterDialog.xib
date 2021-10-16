@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19162" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19162"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -136,9 +136,10 @@ Gw
                             <menu key="menu" id="25G-Nw-27W">
                                 <items>
                                     <menuItem title="ADF" state="on" id="hvY-Y5-M6i" userLabel="P00 Format"/>
-                                    <menuItem title="IMG" tag="1" id="H70-Ts-DTM" userLabel="P00 Format"/>
-                                    <menuItem title="IMA " tag="2" id="3pB-Ur-tcG" userLabel="P00 Format"/>
-                                    <menuItem title="Directory" tag="3" id="S1a-eM-rc0" userLabel="P00 Format"/>
+                                    <menuItem title="ADF (Extended)" tag="1" id="FYh-nD-ccT" userLabel="P00 Format"/>
+                                    <menuItem title="IMG" tag="2" id="H70-Ts-DTM" userLabel="P00 Format"/>
+                                    <menuItem title="IMA " tag="3" id="3pB-Ur-tcG" userLabel="P00 Format"/>
+                                    <menuItem title="Directory" tag="4" id="S1a-eM-rc0" userLabel="P00 Format"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>

@@ -1703,6 +1703,21 @@ using namespace moira;
     return [self file]->getDiskDensity();
 }
 
+- (BOOL)isSD
+{
+    return [self file]->isSD();
+}
+
+- (BOOL)isDD
+{
+    return [self file]->isDD();
+}
+
+- (BOOL)isHD
+{
+    return [self file]->isHD();
+}
+
 - (NSInteger)numCyls
 {
     return [self file]->numCyls();
