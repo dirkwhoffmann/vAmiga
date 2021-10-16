@@ -1879,6 +1879,12 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
++ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex
+{
+    try { return [self make: new EXTFile(*[proxy drive])]; }
+    catch (VAError &error) { [ex save:error]; return nil; }
+}
+
 @end
 
 

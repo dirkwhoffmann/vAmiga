@@ -34,15 +34,29 @@ public:
 
 public:
 
-    EXTFile(const string &path) throws { init(path); }
-    EXTFile(const u8 *buf, isize len) throws { init(buf, len); }
-
-    const char *getDescription() const override { return "EXT"; }
+    EXTFile(const string &path) throws { AmigaFile::init(path); }
+    EXTFile(const u8 *buf, isize len) throws { AmigaFile::init(buf, len); }
+    EXTFile(class Disk &disk) throws { init(disk); }
+    EXTFile(class Drive &drive) throws { init(drive); }
     
+    void init(Disk &disk) throws;
+    void init(Drive &drive) throws;
+
+    
+    //
+    // Methods from AmigaObject
+    //
+
+public:
+    
+    const char *getDescription() const override { return "EXT"; }
+
     
     //
     // Methods from AmigaFile
     //
+    
+public:
     
     bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
@@ -61,6 +75,11 @@ public:
     isize numSides() const override { return 2; }
     isize numCyls() const override { return 80; }
     isize numSectors() const override { return 11; }
-    void readSector(u8 *target, isize s) const override { fatalError; }
-    void readSector(u8 *target, isize t, isize s) const override { fatalError; }
+    
+    u8 readByte(isize b, isize offset) const override { return 0; }
+    u8 readByte(isize t, isize s, isize offset) const override { return 0; }
+    void readSector(u8 *dst, isize b) const override { }
+    void readSector(u8 *dst, isize t, isize s) const override { }
+    void readSectorHex(char *dst, isize b, isize count) const override { }
+    void readSectorHex(char *dst, isize t, isize s, isize count) const override { }    
 };

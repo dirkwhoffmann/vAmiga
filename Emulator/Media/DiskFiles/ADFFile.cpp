@@ -55,28 +55,6 @@ ADFFile::fileSize(DiskDiameter diameter, DiskDensity density)
     throw VAError(ERROR_DISK_INVALID_DENSITY);
 }
 
-/*
-ADFFile::ADFFile(DiskDiameter diameter, DiskDensity density)
-{
-    init(diameter, density);
-}
-
-ADFFile::ADFFile(Disk &disk)
-{
-    init(disk);
-}
-
-ADFFile::ADFFile(Drive &drive)
-{
-    init(drive);
-}
-
-ADFFile::ADFFile(FSDevice &volume)
-{
-    init(volume);
-}
-*/
-
 void
 ADFFile::init(DiskDiameter diameter, DiskDensity density)
 {

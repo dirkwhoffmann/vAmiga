@@ -190,20 +190,42 @@ class ExporterDialog: DialogController {
         track()
         
         driveNr = nr
-        
-        // Try to decode the disk with the ADF decoder
-        if let adf = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy {
+
+        if disk == nil {
+
+            // Try to decode the disk with the EXT decoder (extended ADF)
+            if let ext = try? EXTFileProxy.make(drive: drive!) as EXTFileProxy {
             
-            disk = adf
-            volume = try? FSDeviceProxy.make(withADF: adf)
+                disk = ext
+                volume = nil
+            }
         }
-                
-        // volume?.printDirectory(true)
         
-        // If it is not an ADF, try the DOS decoder
-        if disk == nil { disk = try? IMGFileProxy.make(drive: drive!) as IMGFileProxy }
+        if disk == nil {
+
+            // Try to decode the disk with the ADF decoder (standard ADF)
+            if let adf = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy {
                 
-        super.showSheet()
+                disk = adf
+                volume = try? FSDeviceProxy.make(withADF: adf)
+            }
+        }
+        
+        if disk == nil {
+            
+            // Try to decode the disk with the DOS decoder
+            if let img = try? IMGFileProxy.make(drive: drive!) as IMGFileProxy {
+                
+                disk = img
+                volume = nil
+            }
+        }
+            
+        if disk != nil {
+            super.showSheet()
+        } else {
+            // TODO: Throw an exception
+        }
     }
     
     func showSheet(forVolume vol: FSDeviceProxy) {

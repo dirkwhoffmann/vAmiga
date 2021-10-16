@@ -9,6 +9,8 @@
 
 #include "config.h"
 #include "EXTFile.h"
+#include "Disk.h"
+#include "Drive.h"
 #include "IO.h"
 
 const std::vector<string> EXTFile::extAdfHeaders =
@@ -31,6 +33,20 @@ EXTFile::isCompatible(std::istream &stream)
     }
 
     return false;
+}
+
+void
+EXTFile::init(Disk &disk)
+{
+    debug(true, "EXTFILE::init\n");
+    // decodeDisk(disk);
+}
+
+void
+EXTFile::init(Drive &drive)
+{
+    if (drive.disk == nullptr) throw VAError(ERROR_DISK_MISSING);
+    init(*drive.disk);
 }
 
 isize

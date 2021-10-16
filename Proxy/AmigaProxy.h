@@ -822,11 +822,12 @@
 // EXTFileProxy
 //
 
-@interface EXTFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer> {
+@interface EXTFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithDrive:(DriveProxy *)drive exception:(ExceptionWrapper *)ex;
 
 @end
 

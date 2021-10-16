@@ -293,6 +293,8 @@ extension DiskFileProxy {
         switch type {
         case .ADF, .DMS, .EXE, .DIR:
             name = density == .HD ? "hd_adf" : "dd_adf"
+        case .EXT:
+            name = density == .HD ? "hd_other" : "dd_other"
         case .IMG:
             name = "dd_dos"
         default:
