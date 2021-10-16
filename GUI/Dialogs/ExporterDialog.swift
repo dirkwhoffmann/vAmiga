@@ -18,6 +18,7 @@ class ExporterDialog: DialogController {
     @IBOutlet weak var decontaminationButton: NSButton!
 
     @IBOutlet weak var disclosureButton: NSButton!
+    @IBOutlet weak var disclosureText: NSTextField!
     @IBOutlet weak var previewScrollView: NSScrollView!
     @IBOutlet weak var previewTable: NSTableView!
     @IBOutlet weak var cylinderText: NSTextField!
@@ -102,9 +103,6 @@ class ExporterDialog: DialogController {
     var trackNr = 0
     var sectorNr = 0
     var blockNr = 0
-    
-    // var sectorData: [String] = []
-    let bytesPerRow = 16
     
     //
     // Selecting a block
@@ -197,7 +195,6 @@ class ExporterDialog: DialogController {
             jump = vol!.prevCorrupted(blockNr)
         }
 
-        // track("Current: \(blockNr) Stepper: \(newValue) Jump: \(jump)")
         corruptionStepper.integerValue = jump
         setBlock(jump)
     }
@@ -212,19 +209,16 @@ class ExporterDialog: DialogController {
         
         driveNr = nr
 
+        // Run the ADF decoder
+        adf = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy
+
         // Run the extended ADF decoder
         ext = try? EXTFileProxy.make(drive: drive!) as EXTFileProxy
 
-        // Run the ADF decoder
-        adf = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy
-        
         // Run the DOS decoder
         img = try? IMGFileProxy.make(drive: drive!) as IMGFileProxy
-        
-        // Exit if all decoders have failed
-        if ext == nil && adf == nil && img == nil { return; }
-        
-        // Extract the filesystem if we got an ADF
+                        
+        // Try to decode the file system from the ADF
         if adf != nil { vol = try? FSDeviceProxy.make(withADF: adf!) }
 
         super.showSheet()
@@ -349,7 +343,9 @@ class ExporterDialog: DialogController {
         
         // Hide more elements
         strictButton.isHidden = vol == nil
-        
+        disclosureButton.isHidden = adf == nil || img == nil
+        disclosureText.isHidden = adf == nil || img == nil
+
         // Only proceed if the window is expanded
         if shrinked { return }
         
@@ -382,8 +378,6 @@ class ExporterDialog: DialogController {
         
         } else {
             corruptionText.stringValue = ""
-            // corruptionText.textColor = .textColor
-            // corruptionText.textColor = .secondaryLabelColor
             corruptionStepper.isHidden = true
         }
         
@@ -416,8 +410,8 @@ class ExporterDialog: DialogController {
     
     func updateTitleText() {
         
-        var text = "This disk contains an unrecognized MFM stream"
-        var color = NSColor.warningColor
+        var text = "Raw MFM stream"
+        var color = NSColor.textColor
         
         if driveNr == nil {
             
@@ -441,7 +435,7 @@ class ExporterDialog: DialogController {
 
     func updateTrackAndSectorInfo() {
         
-        var text = "This disk contains un unknown track and sector format."
+        var text = "Unknown track and sector format"
         var color = NSColor.warningColor
         
         if driveNr == nil {
@@ -778,7 +772,7 @@ extension ExporterDialog: NSTableViewDataSource {
         
     func numberOfRows(in tableView: NSTableView) -> Int {
         
-        return 512 / bytesPerRow
+        return 512 / 16
     }
     
     func tableView(_ tableView: NSTableView,

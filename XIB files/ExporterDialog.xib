@@ -19,6 +19,7 @@
                 <outlet property="cylinderText" destination="5Re-Zr-hdG" id="HdR-lw-HQp"/>
                 <outlet property="decontaminationButton" destination="9RQ-0r-XYW" id="jle-q8-bb1"/>
                 <outlet property="disclosureButton" destination="PmB-G5-Smv" id="Tor-wo-ONk"/>
+                <outlet property="disclosureText" destination="yH4-2p-HOJ" id="gxl-wz-WPn"/>
                 <outlet property="diskIcon" destination="RFN-KV-keR" id="1Sj-nw-dxP"/>
                 <outlet property="exportButton" destination="aF3-d5-sKL" id="0zo-PO-3VZ"/>
                 <outlet property="formatPopup" destination="0DY-M6-gkS" id="ueQ-UY-Nc7"/>
