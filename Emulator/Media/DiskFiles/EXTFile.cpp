@@ -66,7 +66,50 @@ EXTFile::init(Drive &drive)
 isize
 EXTFile::readFromStream(std::istream &stream)
 {
-    throw VAError(ERROR_NO_EXTADF_SUPPORT);
+    auto result = AmigaFile::readFromStream(stream);
+    
+    isize numTracks = storedTracks();
+    
+    if (std::strcmp((char *)data, "UAE-1ADF") != 0) {
+        
+        msg("UAE-1ADF files are not supported\n");
+        throw VAError(ERROR_EXT_UNSUPPORTED);
+    }
+    
+    if (numTracks < 160 || numTracks > 168) {
+
+        msg("Invalid number of tracks\n");
+        throw VAError(ERROR_EXT_CORRUPTED);
+    }
+
+    if (size < proposedHeaderSize() || size != proposedFileSize()) {
+        
+        msg("File size mismatch\n");
+        throw VAError(ERROR_EXT_CORRUPTED);
+    }
+
+    for (isize i = 0; i < numTracks; i++) {
+        
+        if (typeOfTrack(i) != 1) {
+            
+            msg("Only MFM encoded tracks are supported yet\n");
+            throw VAError(ERROR_EXT_INCOMPATIBLE);
+        }
+
+        if (usedBitsForTrack(i) > availableBytesForTrack(i) * 8) {
+            
+            msg("Corrupted length information\n");
+            throw VAError(ERROR_EXT_CORRUPTED);
+        }
+
+        if (usedBitsForTrack(i) % 8) {
+            
+            msg("Track length is not a multiple of 8\n");
+            throw VAError(ERROR_EXT_INCOMPATIBLE);
+        }
+    }
+        
+    return result;
 }
 
 void
@@ -129,4 +172,61 @@ EXTFile::decodeDisk(Disk &disk)
     }
     
     printf("Wrote %zd bytes\n", p - data);
+}
+
+isize
+EXTFile::storedTracks()
+{
+    assert(data);
+
+    return HI_LO(data[10], data[11]);
+}
+
+isize
+EXTFile::typeOfTrack(isize nr)
+{
+    assert(data);
+    
+    u8 *p = data + 12 + 12 * nr + 2;
+    return HI_LO(p[0], p[1]);
+}
+
+isize
+EXTFile::availableBytesForTrack(isize nr)
+{
+    assert(data);
+    
+    u8 *p = data + 12 + 12 * nr + 4;
+    return HI_HI_LO_LO(p[0], p[1], p[2], p[3]);
+}
+
+isize
+EXTFile::usedBitsForTrack(isize nr)
+{
+    assert(data);
+    
+    u8 *p = data + 12 + 12 * nr + 8;
+    return HI_HI_LO_LO(p[0], p[1], p[2], p[3]);
+}
+
+isize
+EXTFile::proposedHeaderSize()
+{
+    assert(data);
+    
+    return 12 + 12 * storedTracks();
+}
+
+isize
+EXTFile::proposedFileSize()
+{
+    assert(data);
+
+    isize result = proposedHeaderSize();
+    
+    for (isize i = 0; i < storedTracks(); i++) {
+        result += availableBytesForTrack(i);
+    }
+    
+    return result;
 }

@@ -115,9 +115,18 @@ VAError::VAError(ErrorCode code, const string &s)
             description += " and is incompatible with this release.";
             break;
 
-        case ERROR_NO_EXTADF_SUPPORT:
-            description = "The file is encoded in extended ADF format which is";
-            description += " not supported by the emulator.";
+        case ERROR_EXT_UNSUPPORTED:
+            description = "The file is encoded in an old extended ADF format";
+            description += " which is not supported by the emulator.";
+            break;
+            
+        case ERROR_EXT_INCOMPATIBLE:
+            description = "The file uses features of the extended ADF format";
+            description += " which are not supported by the emulator yet.";
+            break;
+
+        case ERROR_EXT_CORRUPTED:
+            description = "Inconsistent file data.";
             break;
 
         case ERROR_MISSING_ROM_KEY:

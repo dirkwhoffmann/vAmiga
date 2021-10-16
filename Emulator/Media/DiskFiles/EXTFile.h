@@ -84,4 +84,16 @@ public:
     void readSectorHex(char *dst, isize t, isize s, isize count) const override { }
     
     void decodeDisk(class Disk &disk) throws override;
+    
+
+    //
+    // Scanning the raw data
+    //
+    
+    isize storedTracks();
+    isize typeOfTrack(isize nr);
+    isize availableBytesForTrack(isize nr);
+    isize usedBitsForTrack(isize nr);
+    isize proposedHeaderSize();
+    isize proposedFileSize();
 };
