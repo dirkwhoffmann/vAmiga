@@ -32,7 +32,7 @@ Disk::init(DiskDiameter dia, DiskDensity den)
 }
 
 void
-Disk::init(class DiskFile &file)
+Disk::init(const class DiskFile &file)
 {
     init(file.getDiskDiameter(), file.getDiskDensity());
     encodeDisk(file);

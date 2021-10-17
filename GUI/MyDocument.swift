@@ -147,16 +147,12 @@ class MyDocument: NSDocument {
             snapshots.append(proxy)
             return
         }
+        
         if let proxy = attachment as? ScriptProxy {
             parent.renderer.console.runScript(script: proxy)
             return
         }
-        if let proxy = attachment as? EXTFileProxy {
-            track("Extended ADF (\(proxy.fnv))")
-            parent.warning("This file is an extended ADF",
-                           "Extended ADFs are not supported yet.")
-            return
-        }
+        
         if let proxy = attachment as? HDFFileProxy {
             track("HDF with \(proxy.numBlocks) blocks")
             parent.warning("This file is a hard drive image (HDF)",

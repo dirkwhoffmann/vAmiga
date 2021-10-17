@@ -52,8 +52,8 @@ public:
     virtual isize numSides() const = 0;
     virtual isize numCyls() const = 0;
     virtual isize numSectors() const = 0;
-    isize numTracks() const { return numSides() * numCyls(); }
-    i64 numBlocks() const { return numTracks() * numSectors(); }
+    virtual isize numTracks() const { return numSides() * numCyls(); }
+    virtual i64 numBlocks() const { return numTracks() * numSectors(); }
 
     // Analyzes the boot block
     virtual BootBlockType bootBlockType() const { return BB_STANDARD; }

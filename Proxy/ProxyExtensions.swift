@@ -288,32 +288,25 @@ extension DiskFileProxy {
     func icon(protected: Bool) -> NSImage {
         
         let density = diskDensity
-        
-        var name: String
-        switch type {
-        case .ADF, .DMS, .EXE, .DIR:
-            name = density == .HD ? "hd_adf" : "dd_adf"
-        case .EXT:
-            name = density == .HD ? "hd_other" : "dd_other"
-        case .IMG:
-            name = "dd_dos"
-        default:
-            name = ""
-        }
-        
-        if protected { name += "_protected" }
+
+        let name = (density == .HD ? "hd" : "dd") +
+        (type == .IMG ? "_dos" : dos == .NODOS ? "_other" : "_adf") +
+        (protected ? "_protected" : "")
+
         return NSImage(named: name)!
     }
     
     var layoutInfo: String {
-        
+                
         var result = numSides == 1 ? "Single sided" : "Double sided"
 
         if diskDensity == .SD { result += ", single density" }
         if diskDensity == .DD { result += ", double density" }
         if diskDensity == .HD { result += ", high density" }
 
-        result += " disk, \(numTracks) tracks with \(numSectors) sectors each"
+        result += " disk, \(numTracks) tracks"
+        if numSectors > 0 { result += " with \(numSectors) sectors each" }
+        
         return result
     }
     

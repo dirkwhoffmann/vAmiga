@@ -20,6 +20,11 @@ const std::vector<string> EXTFile::extAdfHeaders =
     "UAE-1ADF"
 };
 
+EXTFile::~EXTFile()
+{
+    if (adf) delete adf;
+}
+
 bool
 EXTFile::isCompatible(const string &path)
 {
@@ -109,20 +114,69 @@ EXTFile::readFromStream(std::istream &stream)
             throw VAError(ERROR_EXT_INCOMPATIBLE);
         }
     }
+    
+    /* Try to convert the file to a standard ADF. The conversion will fail if
+     * the extended ADF does not contain a standard Amiga disk.
+     */
+    try {
+                
+        // Convert the extended ADF to a disk
+        auto disk = Disk(*this);
+
+        // Convert the disk to a standard ADF
+        adf = new ADFFile(disk);
         
+    } catch (...) { }
+    
     return result;
 }
 
 FSVolumeType
 EXTFile::getDos() const
 {
-//    try {
-                
-        // Convert the extended ADF to a disk
-        //Disk disk = Disk(*this);
+    return adf ? adf->getDos() : FS_NODOS;
+}
 
-        
-    return FS_NODOS;
+DiskDiameter
+EXTFile::getDiskDiameter() const
+{
+    return INCH_35;
+}
+
+DiskDensity
+EXTFile::getDiskDensity() const
+{
+    isize bitsInLargestTrack = 0;
+    
+    for (isize i = 0; i < storedTracks(); i++) {
+        bitsInLargestTrack = std::max(bitsInLargestTrack, usedBitsForTrack(i));
+    }
+    
+    return bitsInLargestTrack < 16000 * 8 ? DISK_DD : DISK_HD;
+}
+
+isize
+EXTFile::numSides() const
+{
+    return 2;
+}
+
+isize
+EXTFile::numCyls() const
+{
+   return (storedTracks() + 1) / 2;
+}
+
+isize
+EXTFile::numTracks() const
+{
+    return storedTracks();
+}
+
+isize
+EXTFile::numSectors() const
+{
+    return adf ? adf->numSectors() : 0;
 }
 
 void

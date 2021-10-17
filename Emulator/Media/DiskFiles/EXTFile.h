@@ -9,18 +9,40 @@
 
 #pragma once
 
-#include "DiskFile.h"
+#include "ADFFile.h"
 
-/* This class is a dummy class for detecting extended ADFs. Once the emulator
- * detects such a file, it tells the user that this format is not supported.
+/* This class represents a file in extended ADF format. Layout:
+ *
+ *   1. Header section:
+ *
+ *      8 Byte: "UAE-1ADF"
+ *      2 Byte: Reserved
+ *      2 Byte: Number of tracks (default 2*80=160)
+ *
+ *   2. Track header section (one entry for each track):
+ *
+ *      2 Byte: Reserved
+ *      2 Byte: Type
+ *              0 = standard AmigaDOS track
+ *              1 = raw MFM data (upper byte = disk revolutions - 1)
+ *      4 Byte: Available space for track in bytes (must be even)
+ *      4 Byte: Track length in bits
+ *
+ *   3. Track data section
+ *
+ * Note: There is related format with a "UAE--ADF" header. This format had been
+ * introduced by Factor 5 to distribute Turrican images and those images seem
+ * to be the only ones out there. This format is not supported by the emulator
+ * and won't be.
  */
 
 class EXTFile : public DiskFile {
-    
-    static const isize HEADER_SIZE = 160 * 4 + 8;
-    
+        
     // Accepted header signatures
     static const std::vector<string> extAdfHeaders;
+    
+    // The same file as a standard ADF (nullptr if no conversion is possible)
+    ADFFile *adf = nullptr;
     
 public:
             
@@ -38,6 +60,7 @@ public:
     EXTFile(const u8 *buf, isize len) throws { AmigaFile::init(buf, len); }
     EXTFile(class Disk &disk) throws { init(disk); }
     EXTFile(class Drive &drive) throws { init(drive); }
+    ~EXTFile();
     
     void init(Disk &disk) throws;
     void init(Drive &drive) throws;
@@ -70,11 +93,12 @@ public:
     
     FSVolumeType getDos() const override;
     void setDos(FSVolumeType dos) override { };
-    DiskDiameter getDiskDiameter() const override { return INCH_35; }
-    DiskDensity getDiskDensity() const override { return DISK_DD; }
-    isize numSides() const override { return 2; }
-    isize numCyls() const override { return 80; }
-    isize numSectors() const override { return 11; }
+    DiskDiameter getDiskDiameter() const override;
+    DiskDensity getDiskDensity() const override;
+    isize numSides() const override;
+    isize numCyls() const override;
+    isize numTracks() const override; 
+    isize numSectors() const override;
     
     u8 readByte(isize b, isize offset) const override { return 0; }
     u8 readByte(isize t, isize s, isize offset) const override { return 0; }
