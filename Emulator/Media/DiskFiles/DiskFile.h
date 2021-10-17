@@ -93,6 +93,6 @@ public:
  
 public:
     
-    virtual void encodeDisk(class Disk &disk) throws { fatalError; }
+    virtual void encodeDisk(class Disk &disk) const throws { fatalError; }
     virtual void decodeDisk(class Disk &disk) throws { fatalError; }
 };

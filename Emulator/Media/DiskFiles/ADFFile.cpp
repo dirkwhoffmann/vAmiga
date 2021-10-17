@@ -262,7 +262,7 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockId id)
 }
 
 void
-ADFFile::encodeDisk(Disk &disk)
+ADFFile::encodeDisk(Disk &disk) const
 {
     if (disk.getDiameter() != getDiskDiameter()) {
         throw VAError(ERROR_DISK_INVALID_DIAMETER);
@@ -289,7 +289,7 @@ ADFFile::encodeDisk(Disk &disk)
 }
 
 void
-ADFFile::encodeTrack(Disk &disk, Track t)
+ADFFile::encodeTrack(Disk &disk, Track t) const
 {
     isize sectors = numSectors();
     debug(MFM_DEBUG, "Encoding Amiga track %zd with %ld sectors\n", t, sectors);
@@ -311,7 +311,7 @@ ADFFile::encodeTrack(Disk &disk, Track t)
 }
 
 void
-ADFFile::encodeSector(Disk &disk, Track t, Sector s)
+ADFFile::encodeSector(Disk &disk, Track t, Sector s) const
 {
     assert(t < disk.numTracks());
     

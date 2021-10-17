@@ -195,7 +195,7 @@ public:
 public:
     
     // Encodes a disk
-    void encodeDisk(class DiskFile &file);
+    void encodeDisk(const class DiskFile &file);
     
     
     //

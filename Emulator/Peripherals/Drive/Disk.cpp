@@ -171,7 +171,7 @@ Disk::clearTrack(Track t, u8 value1, u8 value2)
 }
 
 void
-Disk::encodeDisk(DiskFile &file)
+Disk::encodeDisk(const DiskFile &file)
 {
     assert(file.getDiskDiameter() == getDiameter());
 

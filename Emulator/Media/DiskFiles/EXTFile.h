@@ -83,12 +83,12 @@ public:
     void readSectorHex(char *dst, isize b, isize count) const override { }
     void readSectorHex(char *dst, isize t, isize s, isize count) const override { }
     
-    void encodeDisk(class Disk &disk) throws override;
+    void encodeDisk(class Disk &disk) const throws override;
     void decodeDisk(class Disk &disk) throws override;
     
 private:
     
-    void encodeTrack(class Disk &disk, Track t) throws;
+    void encodeTrack(class Disk &disk, Track t) const throws;
 
 
     // Scanning the raw data
@@ -96,13 +96,13 @@ private:
     
 public:
     
-    isize storedTracks();
-    isize typeOfTrack(isize nr);
-    isize availableBytesForTrack(isize nr);
-    isize usedBitsForTrack(isize nr);
-    isize proposedHeaderSize();
-    isize proposedFileSize();
+    isize storedTracks() const;
+    isize typeOfTrack(isize nr) const;
+    isize availableBytesForTrack(isize nr) const;
+    isize usedBitsForTrack(isize nr) const;
+    isize proposedHeaderSize() const;
+    isize proposedFileSize() const;
     
     // Returns a pointer to the first data byte of a certain track
-    u8 *trackData(isize nr);
+    u8 *trackData(isize nr) const;
 };

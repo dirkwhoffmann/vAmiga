@@ -118,15 +118,15 @@ EXTFile::getDos() const
 {
 //    try {
                 
-        // Convert the ADF to a disk
-        // Disk disk = Disk(*this);
+        // Convert the extended ADF to a disk
+        //Disk disk = Disk(*this);
 
         
     return FS_NODOS;
 }
 
 void
-EXTFile::encodeDisk(class Disk &disk)
+EXTFile::encodeDisk(class Disk &disk) const
 {
     assert(size);
     assert(data);
@@ -142,7 +142,7 @@ EXTFile::encodeDisk(class Disk &disk)
 }
 
 void
-EXTFile::encodeTrack(class Disk &disk, Track t)
+EXTFile::encodeTrack(class Disk &disk, Track t) const
 {
     auto numTracks = storedTracks();
     
@@ -221,7 +221,7 @@ EXTFile::decodeDisk(Disk &disk)
 }
 
 isize
-EXTFile::storedTracks()
+EXTFile::storedTracks() const
 {
     assert(data);
 
@@ -229,7 +229,7 @@ EXTFile::storedTracks()
 }
 
 isize
-EXTFile::typeOfTrack(isize nr)
+EXTFile::typeOfTrack(isize nr) const
 {
     assert(data);
     
@@ -238,7 +238,7 @@ EXTFile::typeOfTrack(isize nr)
 }
 
 isize
-EXTFile::availableBytesForTrack(isize nr)
+EXTFile::availableBytesForTrack(isize nr) const
 {
     assert(data);
     
@@ -247,7 +247,7 @@ EXTFile::availableBytesForTrack(isize nr)
 }
 
 isize
-EXTFile::usedBitsForTrack(isize nr)
+EXTFile::usedBitsForTrack(isize nr) const
 {
     assert(data);
     
@@ -256,7 +256,7 @@ EXTFile::usedBitsForTrack(isize nr)
 }
 
 isize
-EXTFile::proposedHeaderSize()
+EXTFile::proposedHeaderSize() const
 {
     assert(data);
     
@@ -264,7 +264,7 @@ EXTFile::proposedHeaderSize()
 }
 
 isize
-EXTFile::proposedFileSize()
+EXTFile::proposedFileSize() const
 {
     assert(data);
 
@@ -278,7 +278,7 @@ EXTFile::proposedFileSize()
 }
 
 u8 *
-EXTFile::trackData(isize nr)
+EXTFile::trackData(isize nr) const
 {
     assert(data);
     

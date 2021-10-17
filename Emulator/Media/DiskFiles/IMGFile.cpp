@@ -68,7 +68,7 @@ IMGFile::numSectors() const
 }
 
 void
-IMGFile::encodeDisk(Disk &disk)
+IMGFile::encodeDisk(Disk &disk) const
 {
     if (disk.getDiameter() != getDiskDiameter()) {
         throw VAError(ERROR_DISK_INVALID_DIAMETER);
@@ -92,7 +92,7 @@ IMGFile::encodeDisk(Disk &disk)
 }
 
 void
-IMGFile::encodeTrack(Disk &disk, Track t)
+IMGFile::encodeTrack(Disk &disk, Track t) const
 {
     isize sectors = numSectors();
     debug(MFM_DEBUG, "Encoding DOS track %zd with %ld sectors\n", t, sectors);
@@ -122,7 +122,7 @@ IMGFile::encodeTrack(Disk &disk, Track t)
 }
 
 void
-IMGFile::encodeSector(Disk &disk, Track t, Sector s)
+IMGFile::encodeSector(Disk &disk, Track t, Sector s) const
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
         

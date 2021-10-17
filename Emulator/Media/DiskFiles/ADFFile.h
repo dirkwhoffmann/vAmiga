@@ -92,13 +92,13 @@ public:
     
     void killVirus() override;
 
-    void encodeDisk(class Disk &disk) throws override;
+    void encodeDisk(class Disk &disk) const throws override;
     void decodeDisk(class Disk &disk) throws override;
 
 private:
     
-    void encodeTrack(class Disk &disk, Track t) throws;
-    void encodeSector(class Disk &disk, Track t, Sector s) throws;
+    void encodeTrack(class Disk &disk, Track t) const throws;
+    void encodeSector(class Disk &disk, Track t, Sector s) const throws;
 
     void decodeTrack(class Disk &disk, Track t) throws;
     void decodeSector(u8 *dst, u8 *src) throws;
