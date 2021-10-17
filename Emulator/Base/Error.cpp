@@ -115,18 +115,21 @@ VAError::VAError(ErrorCode code, const string &s)
             description += " and is incompatible with this release.";
             break;
 
-        case ERROR_EXT_UNSUPPORTED:
-            description = "The file is encoded in an old extended ADF format";
-            description += " which is not supported by the emulator.";
+        case ERROR_EXT_FACTOR5:
+            description = "The file is encoded in an outdated format that was";
+            description += " introduced by Factor 5 to distribute Turrican images.";
+            description += " The format has no relevance today and is not supported";
+            description += " by the emulator.";
             break;
-            
+
         case ERROR_EXT_INCOMPATIBLE:
-            description = "The file uses features of the extended ADF format";
-            description += " which are not supported by the emulator yet.";
+            description = "This file utilizes encoding features of the extended ";
+            description += " ADF format that are not supported by the emulator yet.";
             break;
 
         case ERROR_EXT_CORRUPTED:
-            description = "Inconsistent file data.";
+            description = "The disk encoder failed to extract the disk due to ";
+            description += " corrupted or inconsistend file data.";
             break;
 
         case ERROR_MISSING_ROM_KEY:

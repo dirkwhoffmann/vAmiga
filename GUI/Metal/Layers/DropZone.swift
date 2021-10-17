@@ -33,6 +33,9 @@ class DropZone: Layer {
     var targetAlpha = [unselected, unselected, unselected, unselected]
     var maxAlpha = [0.0, 0.0, 0.0, 0.0]
         
+    var error: VAError?
+    var errorUrl: URL?
+
     //
     // Initializing
     //
@@ -141,6 +144,16 @@ class DropZone: Layer {
         }
         
         resize()
+    }
+    
+    override func animationHasStopped() {
+        
+        if !isVisible {
+            
+            // The drop zone has closed. If an error is pending, display it
+            error?.cantOpen(url: errorUrl!)
+            error = nil
+        }
     }
     
     func updateAlpha() {

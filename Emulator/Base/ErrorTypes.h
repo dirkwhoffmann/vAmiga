@@ -56,7 +56,7 @@ enum_long(ERROR_CODE)
     ERROR_SNP_TOO_NEW,
 
     // Media files
-    ERROR_EXT_UNSUPPORTED,
+    ERROR_EXT_FACTOR5,
     ERROR_EXT_INCOMPATIBLE,
     ERROR_EXT_CORRUPTED,
 
@@ -149,7 +149,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_SNP_TOO_OLD:                 return "SNP_TOO_OLD";
             case ERROR_SNP_TOO_NEW:                 return "SNP_TOO_NEW";
                 
-            case ERROR_EXT_UNSUPPORTED:             return "EXT_UNSUPPORTED";
+            case ERROR_EXT_FACTOR5:             return "EXT_UNSUPPORTED";
             case ERROR_EXT_INCOMPATIBLE:            return "EXT_INCOMPATIBLE";
             case ERROR_EXT_CORRUPTED:               return "EXT_CORRUPTED";
                 

@@ -13,6 +13,8 @@ public class MetalView: MTKView {
     
     @IBOutlet weak var parent: MyController!
     
+    var myDocument: MyDocument { return parent.mydocument! }
+    var renderer: Renderer { return parent.renderer }
     var prefs: Preferences { return parent.pref }
     
     // Reference to the first mouse (internal, always connected)

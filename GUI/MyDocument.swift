@@ -152,7 +152,7 @@ class MyDocument: NSDocument {
             return
         }
         if let proxy = attachment as? EXTFileProxy {
-            track("Etended ADF (\(proxy.fnv))")
+            track("Extended ADF (\(proxy.fnv))")
             parent.warning("This file is an extended ADF",
                            "Extended ADFs are not supported yet.")
             return

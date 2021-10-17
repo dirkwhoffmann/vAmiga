@@ -83,84 +83,83 @@ public extension MetalView {
         
         let pasteBoard = sender.draggingPasteboard
         
-        guard
-            let type = pasteBoard.availableType(from: acceptedTypes()),
-            let document = parent.mydocument
-        else { return false }
-        
-        switch type {
+        if let type = pasteBoard.availableType(from: acceptedTypes()) {
             
-        case .string:
-            
-            // Type text on virtual keyboard
-            guard let text = pasteBoard.string(forType: .string) else {
-                return false
-            }
-            parent.keyboard.autoTypeAsync(text)
-            return true
-            
-        case .fileContents:
-            
-            // Check if we got another virtual machine dragged in
-            let fileWrapper = pasteBoard.readFileWrapper()
-            let fileData = fileWrapper?.regularFileContents
-            let length = fileData!.count
-            let nsData = fileData! as NSData
-            let rawPtr = nsData.bytes
-            
-            let snapshot: SnapshotProxy? = try? Proxy.make(buffer: rawPtr, length: length)
-            if snapshot == nil { return false }
-            
-            if document.proceedWithUnexportedDisk() {
-                DispatchQueue.main.async {
-                    try? self.parent.amiga.loadSnapshot(snapshot!)
-                }
-                return true
-            }
-            
-        case .compatibleFileURL:
-            
-            if let url = draggedUrl {
+            switch type {
                 
-                // Check if the file is a snapshot or a script
-                do {
-                    let types: [FileType] = [ .SNAPSHOT, .SCRIPT, .HDF ]
-                    try document.createAttachment(from: url, allowedTypes: types)
-                    try document.mountAttachment()
-                    return true
-                } catch { }
-
-                do {
-                    // Check drop zones
-                    for i in 0...3 {
-                        if parent.renderer.dropZone.isInside(sender, zone: i) {
-                            
-                            let types: [FileType] = [ .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
-                            try document.createAttachment(from: url, allowedTypes: types)
-                            try document.mountAttachment(drive: i)
-                            return true
-                        }
-                    }
-
-                    // Create attachment
-                    try document.createAttachment(from: url)
-                    
-                    // Run the import dialog
-                    document.runImportDialog()
-                    return true
-                    
-                } catch {
-                    (error as? VAError)?.cantOpen(url: url, async: true)
-                }
+            case .string:
+                return performStringDrag(sender)
+                
+            case .compatibleFileURL:
+                return performUrlDrag(sender)
+                
+            default:
+                break
             }
-                        
-        default:
-            break
         }
         
         return false
     }
     
+    func performStringDrag(_ sender: NSDraggingInfo) -> Bool {
+        
+        let pasteBoard = sender.draggingPasteboard
+        
+        // Type text on virtual keyboard
+        guard let text = pasteBoard.string(forType: .string) else {
+            return false
+        }
+        parent.keyboard.autoTypeAsync(text)
+        return true
+    }
+
+    func performUrlDrag(_ sender: NSDraggingInfo) -> Bool {
+                
+        guard let url = draggedUrl else { return false }
+            
+        do {
+            
+            // Check if the file is a snapshot or a script
+            do {
+                let types: [FileType] = [ .SNAPSHOT, .SCRIPT, .HDF ]
+                try myDocument.createAttachment(from: url, allowedTypes: types)
+                try myDocument.mountAttachment()
+                return true
+                
+            } catch let error as VAError {
+                
+                if error.errorCode != .FILE_TYPE_MISMATCH {
+                    throw error
+                }
+            }
+            
+            // Check drop zones
+            for i in 0...3 {
+                if renderer.dropZone.isInside(sender, zone: i) {
+                    
+                    let types: [FileType] = [ .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
+                    try myDocument.createAttachment(from: url, allowedTypes: types)
+                    try myDocument.mountAttachment(drive: i)
+                    return true
+                }
+            }
+            
+            // Create attachment
+            try myDocument.createAttachment(from: url)
+            
+            // Run the import dialog
+            myDocument.runImportDialog()
+            return true
+            
+        } catch {
+            
+            // Make the drop layer display an error message after closing
+            parent.renderer.dropZone.error = error as? VAError
+            parent.renderer.dropZone.errorUrl = url
+            return false
+        }
+    }
+            
     override func concludeDragOperation(_ sender: NSDraggingInfo?) {
     }
 }

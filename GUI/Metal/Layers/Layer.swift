@@ -60,8 +60,13 @@ class Layer: NSObject {
 
             alpha.move()
             alphaDidChange()
+            
+            if !alpha.animates() {
+                animationHasStopped()
+            }
         }
     }
     
     func alphaDidChange() { }
+    func animationHasStopped() { }
 }

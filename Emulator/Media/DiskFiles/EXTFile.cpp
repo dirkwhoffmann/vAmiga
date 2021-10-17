@@ -73,7 +73,7 @@ EXTFile::readFromStream(std::istream &stream)
     if (std::strcmp((char *)data, "UAE-1ADF") != 0) {
         
         msg("UAE-1ADF files are not supported\n");
-        throw VAError(ERROR_EXT_UNSUPPORTED);
+        throw VAError(ERROR_EXT_FACTOR5);
     }
     
     if (numTracks < 160 || numTracks > 168) {
