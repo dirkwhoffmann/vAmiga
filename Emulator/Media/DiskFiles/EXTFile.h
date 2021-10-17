@@ -68,7 +68,7 @@ public:
     // Methods from DiskFile
     //
     
-    FSVolumeType getDos() const override { return FS_NODOS; }
+    FSVolumeType getDos() const override;
     void setDos(FSVolumeType dos) override { };
     DiskDiameter getDiskDiameter() const override { return INCH_35; }
     DiskDensity getDiskDensity() const override { return DISK_DD; }
@@ -83,12 +83,18 @@ public:
     void readSectorHex(char *dst, isize b, isize count) const override { }
     void readSectorHex(char *dst, isize t, isize s, isize count) const override { }
     
+    void encodeDisk(class Disk &disk) throws override;
     void decodeDisk(class Disk &disk) throws override;
     
+private:
+    
+    void encodeTrack(class Disk &disk, Track t) throws;
 
-    //
+
     // Scanning the raw data
     //
+    
+public:
     
     isize storedTracks();
     isize typeOfTrack(isize nr);
@@ -96,4 +102,7 @@ public:
     isize usedBitsForTrack(isize nr);
     isize proposedHeaderSize();
     isize proposedFileSize();
+    
+    // Returns a pointer to the first data byte of a certain track
+    u8 *trackData(isize nr);
 };

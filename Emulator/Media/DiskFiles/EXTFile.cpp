@@ -11,6 +11,7 @@
 #include "EXTFile.h"
 #include "Disk.h"
 #include "Drive.h"
+#include "FSDevice.h"
 #include "IO.h"
 
 const std::vector<string> EXTFile::extAdfHeaders =
@@ -110,6 +111,51 @@ EXTFile::readFromStream(std::istream &stream)
     }
         
     return result;
+}
+
+FSVolumeType
+EXTFile::getDos() const
+{
+//    try {
+                
+        // Convert the ADF to a disk
+        // Disk disk = Disk(*this);
+
+        
+    return FS_NODOS;
+}
+
+void
+EXTFile::encodeDisk(class Disk &disk)
+{
+    assert(size);
+    assert(data);
+    
+    isize tracks = storedTracks();
+    debug(MFM_DEBUG, "Encoding Amiga disk with %zd tracks\n", tracks);
+
+    // Start with an unformatted disk
+    disk.clearDisk();
+
+    // Encode all tracks
+    for (Track t = 0; t < tracks; t++) encodeTrack(disk, t);
+}
+
+void
+EXTFile::encodeTrack(class Disk &disk, Track t)
+{
+    auto numTracks = storedTracks();
+    
+    for (isize i = 0; i < numTracks; i++) {
+
+        debug(MFM_DEBUG, "Encoding track %zd\n", i);
+        
+        auto numBits = usedBitsForTrack(i);
+        assert(numBits % 8 == 0);
+        
+        std::memcpy(disk.data.track[i], trackData(i), numBits / 8);
+        disk.length.track[i] = (i32)(numBits / 8);
+    }
 }
 
 void
@@ -229,4 +275,18 @@ EXTFile::proposedFileSize()
     }
     
     return result;
+}
+
+u8 *
+EXTFile::trackData(isize nr)
+{
+    assert(data);
+    
+    u8 *p = data + proposedHeaderSize();
+    
+    for (isize i = 0; i < nr; i++) {
+        p += availableBytesForTrack(i);
+    }
+    
+    return p;
 }

@@ -41,6 +41,8 @@ class ImporterDialog: DialogController {
         
         case .ADF:
             return "Amiga Disk File (ADF)"
+        case .EXT:
+            return "Amiga Disk File (Extended ADF)"
         case .IMG:
             return "PC Disk Image"
         case .DMS:
@@ -61,6 +63,9 @@ class ImporterDialog: DialogController {
         type = myDocument.attachment?.type
 
         if let attachment = myDocument.attachment as? ADFFileProxy {
+            disk = attachment
+        }
+        if let attachment = myDocument.attachment as? EXTFileProxy {
             disk = attachment
         }
         if let attachment = myDocument.attachment as? IMGFileProxy {
