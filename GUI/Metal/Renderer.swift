@@ -110,6 +110,12 @@ class Renderer: NSObject, MTKViewDelegate {
         setup()
     }
     
+    func halt() {
+
+        // Wait until the current frame has been completed
+        semaphore.wait()
+    }
+    
     //
     // Managing layout
     //

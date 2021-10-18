@@ -343,8 +343,8 @@ class ExporterDialog: DialogController {
         
         // Hide more elements
         strictButton.isHidden = vol == nil
-        disclosureButton.isHidden = adf == nil || img == nil
-        disclosureText.isHidden = adf == nil || img == nil
+        disclosureButton.isHidden = adf == nil && img == nil
+        disclosureText.isHidden = adf == nil && img == nil
 
         // Only proceed if the window is expanded
         if shrinked { return }

@@ -42,6 +42,9 @@ extension MyController: NSWindowDelegate {
         
         track()
         
+        // Stop renderer
+        renderer.halt()
+        
         // Stop timers
         snapshotTimer?.invalidate()
         snapshotTimer = nil
