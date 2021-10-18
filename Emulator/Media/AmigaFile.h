@@ -114,13 +114,20 @@ protected:
     
     virtual bool isCompatiblePath(const string &path) const = 0;
     virtual bool isCompatibleStream(std::istream &stream) const = 0;
-    virtual isize readFromStream(std::istream &stream) throws;
+    
+    isize readFromStream(std::istream &stream) throws;
     isize readFromFile(const string &path) throws;
     isize readFromBuffer(const u8 *buf, isize len) throws;
 
 public:
     
-    virtual isize writeToStream(std::ostream &stream) throws;
+    isize writeToStream(std::ostream &stream) throws;
     isize writeToFile(const string &path) throws;
     isize writeToBuffer(u8 *buf) throws;
+    
+private:
+    
+    // Delegation methods
+    virtual void finalizeRead() throws { };
+    virtual void finalizeWrite() throws { };
 };

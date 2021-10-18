@@ -69,11 +69,9 @@ EXTFile::init(Drive &drive)
     init(*drive.disk);
 }
 
-isize
-EXTFile::readFromStream(std::istream &stream)
+void
+EXTFile::finalizeRead()
 {
-    auto result = AmigaFile::readFromStream(stream);
-    
     isize numTracks = storedTracks();
     
     if (std::strcmp((char *)data, "UAE-1ADF") != 0) {
@@ -126,9 +124,7 @@ EXTFile::readFromStream(std::istream &stream)
         // Convert the disk to a standard ADF
         adf = new ADFFile(disk);
         
-    } catch (...) { }
-    
-    return result;
+    } catch (...) { }    
 }
 
 FSVolumeType

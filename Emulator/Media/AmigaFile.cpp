@@ -125,7 +125,8 @@ AmigaFile::readFromStream(std::istream &stream)
 
     // Read from stream
     stream.read((char *)data, size);
-        
+    finalizeRead();
+
     return size;
 }
 
@@ -137,11 +138,12 @@ AmigaFile::readFromFile(const string &path)
     if (!stream.is_open()) {
         throw VAError(ERROR_FILE_CANT_READ, path);
     }
-    
+
+    this->path = string(path);
+
     isize result = readFromStream(stream);
     assert(result == size);
     
-    this->path = string(path);
     return result;
 }
 
@@ -150,18 +152,24 @@ AmigaFile::readFromBuffer(const u8 *buf, isize len)
 {
     assert(buf);
 
-    std::istringstream stream(string((const char *)buf, len));
+    // Allocate memory
+    size = len;
+    assert(data == nullptr);
+    data = new u8[size];
+
+    // Copy data
+    memcpy(data, buf, size);
+    finalizeRead();
     
-    isize result = readFromStream(stream);
-    assert(result == size);
-    
-    return result;
+    return size;
 }
 
 isize
 AmigaFile::writeToStream(std::ostream &stream)
 {
     stream.write((char *)data, size);
+    finalizeWrite();
+    
     return size;
 }
 
@@ -185,10 +193,8 @@ AmigaFile::writeToBuffer(u8 *buf)
 {
     assert(buf);
 
-    std::ostringstream stream;
-    
-    isize len = writeToStream(stream);
-    std::memcpy(buf, stream.str().c_str(), len);
+    std::memcpy(buf, (char *)data, size);
+    finalizeWrite();
 
-    return len;
+    return size;
 }

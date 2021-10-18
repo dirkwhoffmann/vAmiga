@@ -31,11 +31,9 @@ EXEFile::isCompatible(std::istream &stream)
     return util::matchingStreamHeader(stream, signature, sizeof(signature));
 }
 
-isize
-EXEFile::readFromStream(std::istream &stream)
+void
+EXEFile::finalizeRead()
 {
-    isize result = AmigaFile::readFromStream(stream);
-    
     // Check if this file requires an HD disk
     bool hd = size > 853000;
         
@@ -75,6 +73,4 @@ EXEFile::readFromStream(std::istream &stream)
         
     // Convert the volume into an ADF
     adf = new ADFFile(volume);
-        
-    return result;
 }

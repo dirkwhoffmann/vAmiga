@@ -38,11 +38,12 @@ public:
     // Methods from AmigaFile
     //
     
-    bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
-    bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
     FileType type() const override { return FILETYPE_EXE; }
     u64 fnv() const override { return adf->fnv(); }
-    isize readFromStream(std::istream &stream) throws override;
+    bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
+    bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
+    void finalizeRead() throws override;
+    
     
     //
     // Methods from DiskFile

@@ -81,10 +81,10 @@ public:
     
 public:
     
+    FileType type() const override { return FILETYPE_EXT; }
     bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
-    FileType type() const override { return FILETYPE_EXT; }
-    isize readFromStream(std::istream &stream) override;
+    void finalizeRead() throws override;
     
     
     //
