@@ -49,6 +49,17 @@ class DropZone: Layer {
         resize()
     }
 
+    private func image(zone: Int) -> NSImage {
+
+        if !enabled[zone] {
+            return NSImage(named: "dropZoneDf\(zone)Disabled")!
+        } else if amiga.df(zone)!.hasDisk {
+            return NSImage(named: "dropZoneDf\(zone)InUse")!
+        } else {
+            return NSImage(named: "dropZoneDf\(zone)Empty")!
+        }
+    }
+    
     private func setType(_ type: FileType) {
     
         let connected = amiga.diskController.getConfig().connected
@@ -64,8 +75,7 @@ class DropZone: Layer {
         
         for i in 0...3 {
             
-            let imgZone = enabled[i] ? "dropZoneDf\(i)Empty" : "dropZoneDf\(i)Disabled"
-            zones[i].image = NSImage(named: imgZone)
+            zones[i].image = image(zone: i)
         }
         
         // Hide all drop zones if none is enabled
@@ -121,8 +131,7 @@ class DropZone: Layer {
             if !isIn && inside[i] {
                 
                 inside[i] = false
-                let suffix = amiga.df(i)!.hasDisk ? "Occupied" : "Empty"
-                zones[i].image = NSImage(named: "dropZoneDf\(i)\(suffix)")
+                zones[i].image = image(zone: i)
                 targetAlpha[i] = DropZone.unselected
             }
         }
