@@ -9,8 +9,8 @@
 
 #include "Moira.h"
 
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
 namespace moira {
 

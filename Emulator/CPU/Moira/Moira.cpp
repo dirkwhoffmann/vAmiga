@@ -9,7 +9,7 @@
 
 #include "Moira.h"
 
-#include <stdio.h>
+#include <cstdio>
 #include <algorithm>
 
 namespace moira {

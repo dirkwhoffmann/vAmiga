@@ -15,7 +15,7 @@
 #include "StrWriter.h"
 #include "SubComponent.h"
 
-#include <assert.h>
+#include <cassert>
 
 namespace moira {
 

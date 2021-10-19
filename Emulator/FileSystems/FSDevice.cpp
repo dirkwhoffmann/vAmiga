@@ -11,7 +11,7 @@
 #include "IO.h"
 #include "FSDevice.h"
 #include "MemUtils.h"
-#include <limits.h>
+#include <climits>
 #include <set>
 #include <stack>
 

@@ -199,4 +199,4 @@ static const int releaseBuild = 1;
 static const int releaseBuild = 0;
 #endif
 
-#include <assert.h>
+#include <cassert>

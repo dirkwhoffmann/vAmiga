@@ -158,7 +158,7 @@ AmigaFile::readFromBuffer(const u8 *buf, isize len)
     data = new u8[size];
 
     // Copy data
-    memcpy(data, buf, size);
+    std::memcpy(data, buf, size);
     finalizeRead();
     
     return size;
