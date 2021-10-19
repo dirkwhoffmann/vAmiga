@@ -121,7 +121,8 @@ class DropZone: Layer {
             if !isIn && inside[i] {
                 
                 inside[i] = false
-                zones[i].image = NSImage(named: "dropZoneDf\(i)Empty")
+                let suffix = amiga.df(i)!.hasDisk ? "Occupied" : "Empty"
+                zones[i].image = NSImage(named: "dropZoneDf\(i)\(suffix)")
                 targetAlpha[i] = DropZone.unselected
             }
         }
