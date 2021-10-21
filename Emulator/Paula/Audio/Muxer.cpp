@@ -103,10 +103,10 @@ Muxer::getDefaultConfig()
     defaults.vol[1] = 100;
     defaults.vol[2] = 100;
     defaults.vol[3] = 100;
-    defaults.pan[0] = 170;
-    defaults.pan[1] = 30;
-    defaults.pan[2] = 30;
-    defaults.pan[3] = 170;
+    defaults.pan[0] = 50;
+    defaults.pan[1] = 350;
+    defaults.pan[2] = 350;
+    defaults.pan[3] = 50;
 
     return defaults;
 }
