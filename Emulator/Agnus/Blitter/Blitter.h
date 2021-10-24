@@ -453,9 +453,12 @@ private:
     // Performs a copy blit operation via the FastBlitter
     template <bool useA, bool useB, bool useC, bool useD, bool desc>
     void doFastCopyBlit();
-    
+
     // Performs a line blit operation via the FastBlitter
     void doFastLineBlit();
+
+    // Performs a line blit operation via the FastBlitter (old code)
+    void doLegacyFastLineBlit();
 
 
     //

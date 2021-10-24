@@ -122,6 +122,8 @@ static const int BLT_GUARD       = 0; // Guard registers while Blitter runs
 static const int BLT_DEBUG       = 0; // Blitter execution
 static const int BLTTIM_DEBUG    = 0; // Blitter Timing
 static const int SLOW_BLT_DEBUG  = 0; // Execute micro-instructions in one chunk
+static const int OLD_LINE_BLIT   = 0; // Use the old line blitter implementation
+
 
 // Denise
 static const int BPLREG_DEBUG    = 0; // Bitplane registers

@@ -184,6 +184,10 @@ void Blitter::doFastCopyBlit()
     bltdpt = dpt;
 }
 
+/* Below is the old LineBlitter code which had been adapted from WinFellow.
+ * The code can be deleted once the new LineBlitter code has proven to be
+ * stable.
+ */
 #define blitterLineIncreaseX(a_shift, cpt) \
 if (a_shift < 15) a_shift++; \
 else \
@@ -205,8 +209,187 @@ a_shift--; \
 #define blitterLineIncreaseY(cpt, cmod) cpt += cmod;
 #define blitterLineDecreaseY(cpt, cmod) cpt -= cmod;
 
+// BLTCON1
+constexpr uint16_t BC1F_FILL_XOR     = 0x0010; // Exclusive fill enable
+constexpr uint16_t BC1F_FILL_OR      = 0x0008; // Inclusive fill enable
+constexpr uint16_t BC1F_FILL_CARRYIN = 0x0004; // Fill carry input
+constexpr uint16_t BC1F_BLITREVERSE  = 0x0002; // Descending (dec address)
+
+constexpr uint16_t BC1F_SIGNFLAG     = 0x0040; // Sign flag (Line mode)
+constexpr uint16_t BC1F_OVFLAG       = 0x0020; // Line/draw r/l word overflow flag (Line mode)
+constexpr uint16_t BC1F_SUD          = 0x0010; // Sometimes up or down (=AUD) (Line mode)
+constexpr uint16_t BC1F_SUL          = 0x0008; // Sometimes up or left (Line mode)
+constexpr uint16_t BC1F_AUL          = 0x0004; // Always up or left (Line mode)
+constexpr uint16_t BC1F_ONEDOT       = 0x0002; // one dot per horizontal line
+constexpr uint16_t BC1F_LINEMODE     = 0x0001; // Line mode control bit
+
 void
 Blitter::doFastLineBlit()
+{
+    static int dirkcount = 0;
+    
+    // Fallback to the old implementation (WinFellow) if requested
+    if (OLD_LINE_BLIT) {
+
+        doLegacyFastLineBlit();
+        return;
+    }
+        
+    //
+    // New code: Needs cleanup
+    //
+    
+    auto ash = bltconASH();
+    auto bsh = bltconBSH();
+
+    u16 blinea = anew;
+    u16 blineb = (u16)((bnew >> bsh) | (bnew << (16 - bsh)));
+    int blitonedot = 0;
+    int blitlinepixel = 0;
+    bool single = !!(bltcon1 & 0x02);
+    int sign = !!(bltcon1 & 0x40);
+    
+    /*
+    printf("LINE BLIT %d: bltsizeV = %d\n", dirkcount++, bltsizeV);
+    printf("blinea = %x blineb = %x\n", blinea, blineb);
+    printf("single = %d sign = %d\n", single, sign);
+    printf("mods: %x %x %x %x\n", bltamod, bltbmod, bltcmod, bltdmod);
+    */
+    
+    auto blitter_line_read = [&]() {
+        
+        if (bltcon0 & 0x400) {
+            // B (normally not enabled)
+            bnew = mem.peek16 <ACCESSOR_AGNUS> (bltbpt);
+            U32_INC(bltbpt, bltbmod);
+        }
+        if (bltcon0 & 0x200) {
+            // C
+            chold = mem.peek16 <ACCESSOR_AGNUS> (bltcpt);
+            // printf("chold = %x\n", chold);
+        }
+    };
+
+    auto blitter_line_write = [&]() {
+
+        if (dhold) bzero = false;
+        
+        /* D-channel state has no effect on linedraw, but C must be enabled or
+         * nothing is drawn!
+         */
+        if (bltcon0 & 0x200) {
+            
+            // printf("POKE: %x --> %x\n", dhold, bltdpt);
+            mem.poke16 <ACCESSOR_AGNUS> (bltdpt, dhold);
+        }
+    };
+    
+    auto incx = [&]() {
+        if (++ash == 16) {
+            ash = 0; U32_INC(bltcpt, 2);
+        }
+    };
+    
+    auto decx = [&]() {
+        if (ash-- == 0) {
+            ash = 15; U32_INC(bltcpt, -2);
+        }
+    };
+    
+    auto incy = [&]() {
+        U32_INC(bltcpt, bltcmod);
+        blitonedot = 0;
+    };
+    
+    auto decy = [&]() {
+        U32_INC(bltcpt, -bltcmod);
+        blitonedot = 0;
+    };
+    
+    auto blitter_line = [&]() {
+
+        ahold = (blinea & bltafwm) >> ash;
+        // u16 blitchold = blt_info.bltcdat;
+
+        if (bltcon0 & 0x400) {
+            // B special case if enabled
+            blineb = (u16)((bnew >> bsh) | (bnew << (16 - bsh)));
+        }
+        bhold = (blineb & 1) ? 0xFFFF : 0;
+        blitlinepixel = !single || (single && !blitonedot);
+
+        dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
+        blitonedot++;
+    };
+    
+    auto blitter_line_proc = [&]() {
+        
+        if (!sign) {
+            if (bltcon1 & BC1F_SUD) {
+                if (bltcon1 & BC1F_SUL)
+                    decy();
+                else
+                    incy();
+            } else {
+                if (bltcon1 & BC1F_SUL)
+                    decx();
+                else
+                    incx();
+            }
+        }
+        
+        if (bltcon1 & BC1F_SUD) {
+            if (bltcon1 & BC1F_AUL)
+                decx();
+            else
+                incx();
+        } else {
+            if (bltcon1 & BC1F_AUL)
+                decy();
+            else
+                incy();
+        }
+        
+        if (bltcon0 & 0x800) {
+            if (sign)
+                U32_INC(bltapt, bltbmod);
+            else
+                U32_INC(bltapt, bltamod);
+        }
+        
+        sign = (i16)bltapt < 0;
+    };
+    
+    auto blitter_nxline = [&]() {
+
+        blineb = (u16)((blineb << 1) | (blineb >> 15));
+    };
+    
+    bool ddat1use = false;
+    do {
+        blitter_line_read();
+        if (ddat1use) {
+            bltdpt = bltcpt;
+        }
+        // printf("apt: %x bpt: %x cpt: %x dpt: %x\n", bltapt, bltbpt, bltcpt, bltdpt);
+        ddat1use = true;
+        blitter_line();
+        blitter_line_proc();
+        blitter_nxline();
+        bltsizeV--;
+        if (blitlinepixel) {
+            blitter_line_write();
+            blitlinepixel = 0;
+        }
+    } while (bltsizeV != 0);
+    bltdpt = bltcpt;
+    
+    // Write back local variables
+    setBLTCON0ASH(ash);
+}
+
+void
+Blitter::doLegacyFastLineBlit()
 {
     bltapt &= agnus.ptrMask;
     bltcpt &= agnus.ptrMask;

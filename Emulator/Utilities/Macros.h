@@ -122,12 +122,16 @@
 #define U32_SUB(x,y) (u32)((i64)(x) - (i64)(y))
 #define U32_ADD3(x,y,z) (u32)((i64)(x) + (i64)(y) + (i64)(z))
 #define U32_SUB3(x,y,z) (u32)((i64)(x) - (i64)(y) - (i64)(z))
+#define U32_INC(x,y) x = U32_ADD(x,y)
+#define U32_DEC(x,y) x = U32_SUB(x,y)
 
 // Sanitizer friendly macros for adding signed offsets to u64 values
 #define U64_ADD(x,y) (u64)((i64)(x) + (i64)(y))
 #define U64_SUB(x,y) (u64)((i64)(x) - (i64)(y))
 #define U64_ADD3(x,y,z) (u64)((i64)(x) + (i64)(y) + (i64)(z))
 #define U64_SUB3(x,y,z) (u64)((i64)(x) - (i64)(y) - (i64)(z))
+#define U64_INC(x,y) x = U64_ADD(x,y)
+#define U64_DEC(x,y) x = U64_SUB(x,y)
 
 /* The following macro can be used to disable clang sanitizer checks. It has
  * been added to make the code compatible with gcc which doesn't recognize
