@@ -346,7 +346,6 @@ Blitter::doFastLineBlit()
     if (decision_is_signed) bltcon |= 0x00000040;
     
     setBLTCON0ASH((u16)blit_a_shift_local);
-    bnew   = bltbdat_local;
     
     bltapt = decision_variable & agnus.ptrMask;
     bltcpt = bltcpt_local & agnus.ptrMask;
