@@ -339,6 +339,7 @@ Blitter::doFastLineBlit()
     
     // Write back local variables
     setBLTCON0ASH(ash);
+    REPLACE_BIT(bltcon1, 6, sign);
 }
 
 /* Below is the old LineBlitter code which had been adapted from WinFellow.
