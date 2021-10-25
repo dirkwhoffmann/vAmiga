@@ -619,11 +619,13 @@ Blitter::beginBlit()
 void
 Blitter::beginLineBlit(isize level)
 {
-    static bool verbose = true;
+    static u64 verbose = 0;
 
-    if (BLT_CHECKSUM && verbose) {
-        verbose = false;
+    if (BLT_CHECKSUM && verbose++ == 0) {
         msg("Performing level %zd line blits.\n", level);
+    }
+    if (bltcon0 & BLTCON0_USEB) {
+        trace(XFILES, "Performing line blit with channel B enabled\n");
     }
 
     switch (level) {
@@ -640,10 +642,9 @@ Blitter::beginLineBlit(isize level)
 void
 Blitter::beginCopyBlit(isize level)
 {
-    static bool verbose = true;
+    static u64 verbose = 0;
 
-    if (BLT_CHECKSUM && verbose) {
-        verbose = false;
+    if (BLT_CHECKSUM && verbose++ == 0) {
         msg("Performing level %zd copy blits.\n", level);
     }
 

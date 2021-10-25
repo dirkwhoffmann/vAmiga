@@ -41,21 +41,6 @@ Blitter::initFastBlitter()
 }
 
 void
-Blitter::beginFastLineBlit()
-{
-    // Only call this function in line blit mode
-    assert(bltconLINE());
-
-    // Run the fast line Blitter
-    doFastLineBlit();
-
-    // Terminate immediately
-    signalEnd();
-    paula.raiseIrq(INT_BLIT);
-    endBlit();
-}
-
-void
 Blitter::beginFastCopyBlit()
 {
     // Only call this function in copy blit mode
@@ -64,6 +49,21 @@ Blitter::beginFastCopyBlit()
     // Run the fast copy Blitter
     int nr = ((bltcon0 >> 7) & 0b11110) | bltconDESC();
     (this->*blitfunc[nr])();
+
+    // Terminate immediately
+    signalEnd();
+    paula.raiseIrq(INT_BLIT);
+    endBlit();
+}
+
+void
+Blitter::beginFastLineBlit()
+{
+    // Only call this function in line blit mode
+    assert(bltconLINE());
+
+    // Run the fast line Blitter
+    doFastLineBlit();
 
     // Terminate immediately
     signalEnd();
@@ -187,6 +187,8 @@ void Blitter::doFastCopyBlit()
 void
 Blitter::doFastLineBlit()
 {
+    bool useB = bltcon0 & 0x400;
+    bool useC = bltcon0 & 0x200;
     auto ash = bltconASH();
     auto bsh = bltconBSH();
     int blitonedot = 0;
@@ -218,32 +220,13 @@ Blitter::doFastLineBlit()
         doLegacyFastLineBlit();
         return;
     }
-        
-    // Check for undocumented "Channel B feature"
-    if (bltcon0 & BLTCON0_USEB) {
-        trace(XFILES, "Performing line blit with channel B enabled\n");
-    }
-        
+                
     u16 blinea = anew;
     u16 blineb = (u16)((bnew >> bsh) | (bnew << (16 - bsh)));
     int blitlinepixel = 0;
     bool single = !!(bltcon1 & 0x02);
     int sign = !!(bltcon1 & 0x40);
         
-    auto blitter_line_read = [&]() {
-        
-        if (bltcon0 & 0x400) {
-            // B (normally not enabled)
-            bnew = mem.peek16 <ACCESSOR_AGNUS> (bltbpt);
-            U32_INC(bltbpt, bltbmod);
-        }
-        if (bltcon0 & 0x200) {
-            // C
-            chold = mem.peek16 <ACCESSOR_AGNUS> (bltcpt);
-            // printf("chold = %x\n", chold);
-        }
-    };
-
     auto blitter_line_write = [&]() {
 
         if (dhold) bzero = false;
@@ -257,7 +240,6 @@ Blitter::doFastLineBlit()
             mem.poke16 <ACCESSOR_AGNUS> (bltdpt, dhold);
         }
     };
-    
     
     auto blitter_line = [&]() {
 
@@ -312,32 +294,35 @@ Blitter::doFastLineBlit()
         
         sign = (i16)bltapt < 0;
     };
-    
-    auto blitter_nxline = [&]() {
-
-        blineb = (u16)((blineb << 1) | (blineb >> 15));
-    };
-    
-    bool ddat1use = false;
-    do {
-        blitter_line_read();
-        if (ddat1use) {
-            bltdpt = bltcpt;
+                
+    for (isize i = 0; i < bltsizeV; i++) {
+        
+        // Fetch B (usually disabled)
+        if (useB) {
+            bnew = mem.peek16 <ACCESSOR_AGNUS> (bltbpt);
+            U32_INC(bltbpt, bltbmod);
         }
-        // printf("apt: %x bpt: %x cpt: %x dpt: %x\n", bltapt, bltbpt, bltcpt, bltdpt);
-        ddat1use = true;
+        
+        // Fetch C
+        if (useC) {
+            chold = mem.peek16 <ACCESSOR_AGNUS> (bltcpt);
+        }
+        
         blitter_line();
         blitter_line_proc();
-        blitter_nxline();
-        bltsizeV--;
+        
+        // Rotate
+        blineb = (u16)((blineb << 1) | (blineb >> 15));
+                
         if (blitlinepixel) {
             blitter_line_write();
             blitlinepixel = 0;
         }
-    } while (bltsizeV != 0);
-    bltdpt = bltcpt;
-    
-    // Write back local variables
+        
+        bltdpt = bltcpt;
+    }
+
+    // Write back local copies of variables
     setBLTCON0ASH(ash);
     REPLACE_BIT(bltcon1, 6, sign);
 }

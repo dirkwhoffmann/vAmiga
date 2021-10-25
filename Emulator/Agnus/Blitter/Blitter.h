@@ -447,8 +447,8 @@ private:
 private:
     
     // Starts a level 0 blit
-    void beginFastLineBlit();
     void beginFastCopyBlit();
+    void beginFastLineBlit();
 
     // Performs a copy blit operation via the FastBlitter
     template <bool useA, bool useB, bool useC, bool useD, bool desc>
