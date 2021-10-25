@@ -192,8 +192,7 @@ Blitter::doFastLineBlit()
     auto ash = bltconASH();
     auto bsh = bltconBSH();
     bool firstPixel = true;
-    int blitonedot = 0;
-
+    
     auto incx = [&]() {
         if (++ash == 16) {
             ash = 0;
@@ -210,13 +209,11 @@ Blitter::doFastLineBlit()
     
     auto incy = [&]() {
         U32_INC(bltcpt, bltcmod);
-        blitonedot = 0;
         firstPixel = true;
     };
     
     auto decy = [&]() {
         U32_INC(bltcpt, -bltcmod);
-        blitonedot = 0;
         firstPixel = true;
     };
     
@@ -228,24 +225,9 @@ Blitter::doFastLineBlit()
                 
     u16 blinea = anew;
     u16 blineb = (u16)((bnew >> bsh) | (bnew << (16 - bsh)));
-    int blitlinepixel = 0;
     bool single = !!(bltcon1 & 0x02);
     int sign = !!(bltcon1 & 0x40);
-        
-    auto blitter_line_write = [&]() {
-
-        if (dhold) bzero = false;
-        
-        /* D-channel state has no effect on linedraw, but C must be enabled or
-         * nothing is drawn!
-         */
-        if (bltcon0 & 0x200) {
             
-            // printf("POKE: %x --> %x\n", dhold, bltdpt);
-            mem.poke16 <ACCESSOR_AGNUS> (bltdpt, dhold);
-        }
-    };
-    
     auto blitter_line = [&]() {
 
         // Run the barrel shifter on path A (even if A channel is disabled)
@@ -256,11 +238,6 @@ Blitter::doFastLineBlit()
         if (useB) {
             blineb = (u16)((bnew >> bsh) | (bnew << (16 - bsh)));
         }
-        // bhold = (blineb & 1) ? 0xFFFF : 0;
-        blitlinepixel = !single || (single && !blitonedot);
-        assert(blitlinepixel == (!single || firstPixel));
-        blitonedot++;
-        // firstPixel = false;
 
         dhold = doMintermLogicQuick(ahold, (blineb & 1) ? 0xFFFF : 0, chold, bltcon0 & 0xFF);
     };
@@ -307,7 +284,7 @@ Blitter::doFastLineBlit()
                 
     for (isize i = 0; i < bltsizeV; i++) {
         
-        // Fetch B (usually disabled)
+        // Fetch B
         if (useB) {
             bnew = mem.peek16 <ACCESSOR_AGNUS> (bltbpt);
             U32_INC(bltbpt, bltbmod);
@@ -319,20 +296,32 @@ Blitter::doFastLineBlit()
         }
         
         blitter_line();
+        
+        bool writeEnable = (!single || firstPixel) && useC;
+
         blitter_line_proc();
         
         // Rotate
         blineb = (u16)((blineb << 1) | (blineb >> 15));
                 
-        if (blitlinepixel) {
-            blitter_line_write();
-            blitlinepixel = 0;
+        // Update the zero flag
+        if (dhold) bzero = false;
+
+        // Write D
+        if (writeEnable) {
+                        
+            mem.poke16 <ACCESSOR_AGNUS> (bltdpt, dhold);
+            
+            if (BLT_CHECKSUM) {
+                check1 = util::fnv_1a_it32(check1, dhold);
+                check2 = util::fnv_1a_it32(check2, bltdpt & agnus.ptrMask);
+            }
         }
         
         bltdpt = bltcpt;
     }
 
-    // Write back local copies of variables
+    // Write back local values
     setBLTCON0ASH(ash);
     REPLACE_BIT(bltcon1, 6, sign);
 }
