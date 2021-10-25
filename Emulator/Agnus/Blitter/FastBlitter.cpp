@@ -191,28 +191,33 @@ Blitter::doFastLineBlit()
     bool useC = bltcon0 & 0x200;
     auto ash = bltconASH();
     auto bsh = bltconBSH();
+    bool firstPixel = true;
     int blitonedot = 0;
 
     auto incx = [&]() {
         if (++ash == 16) {
-            ash = 0; U32_INC(bltcpt, 2);
+            ash = 0;
+            U32_INC(bltcpt, 2);
         }
     };
     
     auto decx = [&]() {
         if (ash-- == 0) {
-            ash = 15; U32_INC(bltcpt, -2);
+            ash = 15;
+            U32_INC(bltcpt, -2);
         }
     };
     
     auto incy = [&]() {
         U32_INC(bltcpt, bltcmod);
         blitonedot = 0;
+        firstPixel = true;
     };
     
     auto decy = [&]() {
         U32_INC(bltcpt, -bltcmod);
         blitonedot = 0;
+        firstPixel = true;
     };
     
     // Fallback to the old implementation (WinFellow) if requested
@@ -243,21 +248,26 @@ Blitter::doFastLineBlit()
     
     auto blitter_line = [&]() {
 
+        // Run the barrel shifter on path A (even if A channel is disabled)
+        // doBarrelA(anew & mask, aold, ahold);
         ahold = (blinea & bltafwm) >> ash;
-        // u16 blitchold = blt_info.bltcdat;
 
-        if (bltcon0 & 0x400) {
-            // B special case if enabled
+        // Run the barrel shifter on path B (if B channel enabled)
+        if (useB) {
             blineb = (u16)((bnew >> bsh) | (bnew << (16 - bsh)));
         }
-        bhold = (blineb & 1) ? 0xFFFF : 0;
+        // bhold = (blineb & 1) ? 0xFFFF : 0;
         blitlinepixel = !single || (single && !blitonedot);
-
-        dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
+        assert(blitlinepixel == (!single || firstPixel));
         blitonedot++;
+        // firstPixel = false;
+
+        dhold = doMintermLogicQuick(ahold, (blineb & 1) ? 0xFFFF : 0, chold, bltcon0 & 0xFF);
     };
     
     auto blitter_line_proc = [&]() {
+        
+        firstPixel = false;
         
         if (!sign) {
             if (bltcon1 & BLTCON1_SUD) {
