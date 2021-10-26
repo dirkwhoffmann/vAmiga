@@ -127,21 +127,21 @@ void Blitter::doFastCopyBlit()
             
             // Run the barrel shifter on path A (even if A channel is disabled)
             if (desc) {
-                doBarrelAdesc(anew & mask, aold, ahold);
+                doBarrelAdesc(anew & mask);
             } else {
-                doBarrelA(anew & mask, aold, ahold);
+                doBarrelA(anew & mask);
             }
             
             // Run the barrel shifter on path B (if B channel enabled)
             if (useB) {
                 if (desc) {
-                    doBarrelBdesc(bnew, bold, bhold);
+                    doBarrelBdesc(bnew);
                 } else {
-                    doBarrelB(bnew, bold, bhold);
+                    doBarrelB(bnew);
                 }
             }
             
-            // Run the minterm logic circuit
+            // Run the minterm circuit
             dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
             if constexpr (BLT_DEBUG) {
                 assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
@@ -187,13 +187,13 @@ void Blitter::doFastCopyBlit()
 void
 Blitter::doFastLineBlit()
 {
-    bool useB = bltcon0 & 0x400;
-    bool useC = bltcon0 & 0x200;
-    bool single = !!(bltcon1 & 0x02);
-    int sign = !!(bltcon1 & 0x40);
+    bool firstPixel = true;
+    bool useB = bltcon0 & BLTCON0_USEB;
+    bool useC = bltcon0 & BLTCON0_USEC;
+    bool sing = bltcon1 & BLTCON1_SING;
+    bool sign = bltcon1 & BLTCON1_SIGN;
     auto ash = bltconASH();
     auto bsh = bltconBSH();
-    bool firstPixel = true;
 
     auto incx = [&]() {
         if (++ash == 16) {
@@ -219,7 +219,7 @@ Blitter::doFastLineBlit()
         firstPixel = true;
     };
     
-    auto blitter_line_proc = [&]() {
+    auto doLineLogic = [&]() {
         
         firstPixel = false;
         
@@ -249,7 +249,7 @@ Blitter::doFastLineBlit()
                 incy();
         }
         
-        if (bltcon0 & 0x800) {
+        if (bltcon0 & BLTCON0_USEA) {
             if (sign)
                 U32_INC(bltapt, bltbmod);
             else
@@ -258,19 +258,13 @@ Blitter::doFastLineBlit()
         
         sign = (i16)bltapt < 0;
     };
-        
-    // Reset registers (NOT NEEDED ANY MORE?!)
-    aold = 0;
-    bold = bnew;
-    
+            
     // Fallback to the old implementation (WinFellow) if requested
     if constexpr (OLD_LINE_BLIT) {
         doLegacyFastLineBlit();
         return;
     }
-                
-    // bhold = (u16)((bnew >> bsh) | (bnew << (16 - bsh)));
-                    
+                                    
     for (isize i = 0; i < bltsizeV; i++) {
         
         // Fetch B
@@ -284,26 +278,24 @@ Blitter::doFastLineBlit()
             chold = mem.peek16 <ACCESSOR_AGNUS> (bltcpt);
         }
         
-        // Run the barrel shifter on path A (even if A channel is disabled)
+        // Run the barrel shifter on path A
         ahold = (anew & bltafwm) >> ash;
 
         // Run the barrel shifter on path B
         bhold = (u16)((bnew >> bsh) | (bnew << (16 - bsh)));
         if (bsh-- == 0) bsh = 15;
         
-        // Run the minterm logic circuit
+        // Run the minterm circuit
         dhold = doMintermLogicQuick(ahold, (bhold & 1) ? 0xFFFF : 0, chold, bltcon0 & 0xFF);
         if constexpr (BLT_DEBUG) {
             assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
         }
                 
-        bool writeEnable = (!single || firstPixel) && useC;
+        bool writeEnable = (!sing || firstPixel) && useC;
 
-        blitter_line_proc();
-        
-        // Rotate
-        // bhold = (u16)((bhold << 1) | (bhold >> 15));
-        
+        // Run the line logic circuit
+        doLineLogic();
+                
         // Update the zero flag
         if (dhold) bzero = false;
 

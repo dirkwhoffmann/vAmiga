@@ -1198,28 +1198,3 @@ Blitter::setYCounter(u16 value)
 {
     yCounter = value;
 }
-
-void
-Blitter::doBarrelShifterA()
-{
-    u16 masked = anew;
-
-    if (isFirstWord()) masked &= bltafwm;
-    if (isLastWord())  masked &= bltalwm;
-
-    if(bltconDESC()){
-        ahold = (u16)(aold >> (16 - bltconASH()) | masked << bltconASH());
-    }else{
-        ahold = (u16)(aold << (16 - bltconASH()) | masked >> bltconASH());
-    }
-}
-
-void
-Blitter::doBarrelShifterB()
-{
-    if(bltconDESC()) {
-        bhold = (u16)(bold >> (16 - bltconBSH()) | bnew << bltconBSH());
-    } else {
-        bhold = (u16)(bold << (16 - bltconBSH()) | bnew >> bltconBSH());
-    }
-}

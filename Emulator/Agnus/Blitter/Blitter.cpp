@@ -225,31 +225,31 @@ Blitter::_dump(dump::Category category, std::ostream& os) const
 }
 
 void
-Blitter::doBarrelA(u16 aNew, u16 &aOld, u16 &aHold) const
+Blitter::doBarrelA(u16 aNew)
 {
-    aHold = (u16)(HI_W_LO_W(aOld, aNew) >> bltconASH());
-    aOld  = aNew;
+    ahold = (u16)(HI_W_LO_W(aold, anew) >> bltconASH());
+    aold  = aNew;
 }
 
 void
-Blitter::doBarrelAdesc(u16 aNew, u16 &aOld, u16 &aHold) const
+Blitter::doBarrelAdesc(u16 aNew)
 {
-    aHold = (u16)(HI_W_LO_W(aNew, aOld) >> (16 - bltconASH()));
-    aOld  = aNew;
+    ahold = (u16)(HI_W_LO_W(anew, aold) >> (16 - bltconASH()));
+    aold  = aNew;
 }
 
 void
-Blitter::doBarrelB(u16 bNew, u16 &bOld, u16 &bHold) const
+Blitter::doBarrelB(u16 bNew)
 {
-    bHold = (u16)(HI_W_LO_W(bOld, bNew) >> bltconBSH());
-    bOld  = bNew;
+    bhold = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
+    bold  = bNew;
 }
 
 void
-Blitter::doBarrelBdesc(u16 bNew, u16 &bOld, u16 &bHold) const
+Blitter::doBarrelBdesc(u16 bNew)
 {
-    bHold = (u16)(HI_W_LO_W(bNew, bOld) >> (16 - bltconBSH()));
-    bOld  = bNew;
+    bhold = (u16)(HI_W_LO_W(bNew, bold) >> (16 - bltconBSH()));
+    bold  = bNew;
 }
 
 u16

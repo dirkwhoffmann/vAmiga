@@ -406,10 +406,10 @@ public:
 private:
     
     // Runs the barrel shifters on data paths A and B
-    void doBarrelA    (u16 aNew, u16 &aOld, u16 &aHold) const;
-    void doBarrelAdesc(u16 aNew, u16 &aOld, u16 &aHold) const;
-    void doBarrelB    (u16 bNew, u16 &bOld, u16 &bHold) const;
-    void doBarrelBdesc(u16 bNew, u16 &bOld, u16 &bHold) const;
+    void doBarrelA    (u16 aNew);
+    void doBarrelAdesc(u16 aNew);
+    void doBarrelB    (u16 bNew);
+    void doBarrelBdesc(u16 bNew);
 
     // Emulates the minterm logic circuit
     u16 doMintermLogic     (u16 a, u16 b, u16 c, u8 minterm) const;
@@ -490,8 +490,4 @@ private:
     void resetYCounter() { setYCounter(bltsizeV); }
     void decXCounter() { setXCounter(xCounter - 1); }
     void decYCounter() { setYCounter(yCounter - 1); }
-
-    // Emulates the barrel shifter
-    void doBarrelShifterA();
-    void doBarrelShifterB();
 };
