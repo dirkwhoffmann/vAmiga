@@ -59,12 +59,16 @@ EXEFile::finalizeRead()
     // Finalize
     volume.updateChecksums();
     
-    // Check for file system errors
+    // Move to the to root directory
     volume.changeDir("/");
-    volume.info();
-    volume.printDirectory(true);
 
-    // Check the file system for consistency
+    // Print some debug information about the volume
+    if constexpr (FS_DEBUG) {
+        volume.info();
+        volume.printDirectory(true);
+    }
+    
+    // Check file system integrity
     FSErrorReport report = volume.check(true);
     if (report.corruptedBlocks > 0) {
         warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
