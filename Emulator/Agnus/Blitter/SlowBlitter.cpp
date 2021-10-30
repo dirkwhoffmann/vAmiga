@@ -827,14 +827,25 @@ Blitter::initSlowBlitter()
     */
     void (Blitter::*lineBlitInstr[6])(void) = {
 
-        // Fake execution
-        &Blitter::fakeExec <BUSIDLE>,
-        &Blitter::fakeExec <FETCH_C>,
-        &Blitter::fakeExec <BUSIDLE>,
-        &Blitter::fakeExec <WRITE_D | REPEAT>,
+        // &Blitter::fakeExecLine <HOLD_D | BUSIDLE>,
+        &Blitter::fakeExecLine <FETCH_C | HOLD_A>,
+        &Blitter::fakeExecLine <WRITE_D | REPEAT>,
 
-        &Blitter::fakeExec <NOTHING>,
-        &Blitter::fakeExec <WRITE_D | BLTDONE>
+        &Blitter::fakeExecLine <HOLD_D>,
+        &Blitter::fakeExecLine <WRITE_D | BLTDONE>,
+        &Blitter::fakeExecLine <BLTDONE>,
+        &Blitter::fakeExecLine <NOTHING>
+
+        // Fake execution
+        /*
+        &Blitter::fakeExecLine <BUSIDLE>,
+        &Blitter::fakeExecLine <FETCH_C>,
+        &Blitter::fakeExecLine <BUSIDLE>,
+        &Blitter::fakeExecLine <WRITE_D | REPEAT>,
+
+        &Blitter::fakeExecLine <NOTHING>,
+        &Blitter::fakeExecLine <WRITE_D | BLTDONE>
+        */
     };
 
     // Copy all programs over
@@ -843,37 +854,6 @@ Blitter::initSlowBlitter()
 
     assert(sizeof(this->lineBlitInstr) == sizeof(lineBlitInstr));
     std::memcpy(this->lineBlitInstr, lineBlitInstr, sizeof(lineBlitInstr));
-}
-
-void
-Blitter::beginFakeLineBlit()
-{
-    // Only call this function in line blit mode
-    assert(bltconLINE());
-
-    // Do the blit
-    doFastLineBlit();
-
-    // Prepare the slow Blitter
-    bltsizeH = 1;
-    resetXCounter();
-    resetYCounter();
-
-    // Schedule the first slow Blitter execution event
-    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_LINE_FAKE);
-}
-
-void
-Blitter::beginSlowLineBlit()
-{
-    // Only call this function is line blit mode
-    assert(bltconLINE());
-
-    /* Note: There is no such thing as a slow line Blitter yet. Until such a
-     * thing has been implemented, we call the FastBlitter instead.
-     */
-
-    beginFakeLineBlit();
 }
 
 void
@@ -938,6 +918,37 @@ Blitter::beginSlowCopyBlit()
         
         agnus.busOwner[agnus.pos.h] = owner;
     }
+}
+
+void
+Blitter::beginFakeLineBlit()
+{
+    // Only call this function in line blit mode
+    assert(bltconLINE());
+
+    // Do the blit
+    doFastLineBlit();
+
+    // Prepare the slow Blitter
+    resetXCounter();
+    resetYCounter();
+    lockD = true;
+    
+    // Schedule the first slow Blitter execution event
+    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_LINE_FAKE);
+}
+
+void
+Blitter::beginSlowLineBlit()
+{
+    // Only call this function is line blit mode
+    assert(bltconLINE());
+
+    /* Note: There is no such thing as a slow line Blitter yet. Until such a
+     * thing has been implemented, we call the FastBlitter instead.
+     */
+
+    beginFakeLineBlit();
 }
 
 template <u16 instr> void
@@ -1197,4 +1208,78 @@ void
 Blitter::setYCounter(u16 value)
 {
     yCounter = value;
+}
+
+template <u16 instr> void
+Blitter::execLine()
+{
+    if constexpr ((bool)(instr & BLTDONE)) {
+
+        trace(BLT_DEBUG, "BLTDONE\n");
+        endBlit();
+    }
+}
+
+template <u16 instr> void
+Blitter::fakeExecLine()
+{
+    bool bus, busidle;
+
+    // Determine if we need the bus
+    if constexpr ((bool)(instr & WRITE_D)) {
+        bus     = !lockD;
+        busidle = lockD;
+    } else {
+        bus     = instr & (FETCH | BUS);
+        busidle = instr & BUSIDLE;
+    }
+    
+    // Trigger Blitter interrupt if this is the termination cycle
+    if ((instr & BLTDONE) && !birq) {
+        signalEnd();
+        paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
+        birq = true;
+    }
+
+    // Allocate the bus if needed
+    if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
+
+    // Check if the Blitter needs a free bus to continue
+    if (busidle && !agnus.busIsFree<BUS_BLITTER>()) return;
+
+    bltpc++;
+
+    if constexpr ((bool)(instr & (FETCH | BUS | WRITE_D))) {
+
+        // Record some fake data to make the DMA debugger happy
+        assert(agnus.pos.h < HPOS_CNT);
+        agnus.busValue[agnus.pos.h] = 0x8888;
+    }
+
+    if constexpr ((bool)(instr & REPEAT)) {
+
+        u16 newpc = 0;
+
+        trace(BLT_DEBUG, "REPEAT\n");
+        iteration++;
+        lockD = false;
+
+        if (xCounter > 1) {
+
+            bltpc = newpc;
+            decXCounter();
+
+        } else if (yCounter > 1) {
+
+            bltpc = newpc;
+            resetXCounter();
+            decYCounter();
+        }
+    }
+
+    if constexpr ((bool)(instr & BLTDONE)) {
+
+        trace(BLT_DEBUG, "BLTDONE\n");
+        endBlit();
+    }
 }

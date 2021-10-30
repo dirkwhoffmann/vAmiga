@@ -475,9 +475,13 @@ private:
     void beginSlowLineBlit();
     void beginSlowCopyBlit();
 
-    // Emulates a Blitter micro-instruction
+    // Emulates a Blitter micro-instruction (area mode)
     template <u16 instr> void exec();
     template <u16 instr> void fakeExec();
+
+    // Emulates a Blitter micro-instruction (line mode)
+    template <u16 instr> void execLine();
+    template <u16 instr> void fakeExecLine();
 
     // Checks iterations
     bool isFirstWord() const { return xCounter == bltsizeH; }
