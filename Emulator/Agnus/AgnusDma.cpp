@@ -181,7 +181,7 @@ Agnus::disableBplDmaECS()
 }
 
 template <BusOwner owner> bool
-Agnus::busIsFree() const
+Agnus::busIsFree()
 {
     // Deny if the bus is in use
     if (busOwner[pos.h] != BUS_NONE) return false;
@@ -192,7 +192,13 @@ Agnus::busIsFree() const
         if (!copdma()) return false;
         
         // Deny in cycle E0
-        if (unlikely(pos.h == 0xE0)) return false;
+        if (unlikely(pos.h == 0xE0)) {
+         
+            // If the Copper wants the bus in E0, nobody can have it
+            busOwner[pos.h] = BUS_BLOCKED;
+            
+            return false;
+        }
         
         return true;
     }
@@ -539,5 +545,5 @@ template u16 Agnus::doSpriteDmaRead<7>();
 template bool Agnus::allocateBus<BUS_COPPER>();
 template bool Agnus::allocateBus<BUS_BLITTER>();
 
-template bool Agnus::busIsFree<BUS_COPPER>() const;
-template bool Agnus::busIsFree<BUS_BLITTER>() const;
+template bool Agnus::busIsFree<BUS_COPPER>();
+template bool Agnus::busIsFree<BUS_BLITTER>();

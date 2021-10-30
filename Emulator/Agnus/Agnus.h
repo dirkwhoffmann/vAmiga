@@ -736,7 +736,7 @@ private:
 public:
         
     // Checks if the bus is currently available for the specified resource
-    template <BusOwner owner> bool busIsFree() const;
+    template <BusOwner owner> bool busIsFree();
 
     // Attempts to allocate the bus for the specified resource
     template <BusOwner owner> bool allocateBus();

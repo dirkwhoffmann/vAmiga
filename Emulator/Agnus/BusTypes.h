@@ -38,6 +38,7 @@ enum_i8(BUS_OWNER)
     BUS_SPRITE7,
     BUS_COPPER,
     BUS_BLITTER,
+    BUS_BLOCKED,
     
     BUS_COUNT
 };
@@ -79,6 +80,7 @@ struct BusOwnerEnum : util::Reflection<BusOwnerEnum, BusOwner>
             case BUS_SPRITE7:  return "SPRITE7";
             case BUS_COPPER:   return "COPPER";
             case BUS_BLITTER:  return "BLITTER";
+            case BUS_BLOCKED:  return "BLOCKED";
             case BUS_COUNT:    return "???";
         }
         return "???";
