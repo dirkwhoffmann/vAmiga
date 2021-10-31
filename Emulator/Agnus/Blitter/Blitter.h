@@ -100,7 +100,7 @@ class Blitter : public SubComponent
     void (Blitter::*copyBlitInstr[16][2][2][6])(void);
 
     // Micro-program for line blits
-    void (Blitter::*lineBlitInstr[6])(void);
+    void (Blitter::*lineBlitInstr[2][10])(void);
 
     // The program counter indexing the micro instruction to execute
     u16 bltpc;

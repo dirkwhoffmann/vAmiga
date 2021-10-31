@@ -69,7 +69,7 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_LINE_FAKE:
             
-            (this->*lineBlitInstr[bltpc])();
+            (this->*lineBlitInstr[bltconUSEB()][bltpc])();
             break;
 
         default:

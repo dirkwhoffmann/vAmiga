@@ -822,30 +822,39 @@ Blitter::initSlowBlitter()
     };
 
     /* The Line Blitter uses the same micro program in all situations.
-     *
+     * THIS IS WRONG:
      * -- C0 -- -- -- C1 -- D0 -- C2 -- D1 | -- D2   (???)
     */
-    void (Blitter::*lineBlitInstr[6])(void) = {
+    void (Blitter::*lineBlitInstr[2][10])(void) = {
+        
+        {   // The usual case: B channel disabled
+            // TODO:
+            &Blitter::fakeExecLine <BUSIDLE>,
+            &Blitter::fakeExecLine <FETCH_C>,
+            &Blitter::fakeExecLine <BUSIDLE>,
+            &Blitter::fakeExecLine <FETCH_C | REPEAT>,
 
-        // &Blitter::fakeExecLine <HOLD_D | BUSIDLE>,
-        &Blitter::fakeExecLine <FETCH_C | HOLD_A>,
-        &Blitter::fakeExecLine <WRITE_D | REPEAT>,
+            &Blitter::fakeExecLine <NOTHING>,
+            &Blitter::fakeExecLine <NOTHING | BLTDONE>,
+            &Blitter::fakeExecLine <BLTDONE>,
+            &Blitter::fakeExecLine <BLTDONE>,
+            &Blitter::fakeExecLine <BLTDONE>,
+            &Blitter::fakeExecLine <BLTDONE>
+        },
+        {   // The unusual case: B channel enabled
+            &Blitter::fakeExecLine <NOTHING>,
+            &Blitter::fakeExecLine <FETCH_C>,
+            &Blitter::fakeExecLine <FETCH_B>,
+            &Blitter::fakeExecLine <NOTHING>,
+            &Blitter::fakeExecLine <NOTHING>,
+            &Blitter::fakeExecLine <WRITE_D | REPEAT>,
 
-        &Blitter::fakeExecLine <HOLD_D>,
-        &Blitter::fakeExecLine <WRITE_D | BLTDONE>,
-        &Blitter::fakeExecLine <BLTDONE>,
-        &Blitter::fakeExecLine <NOTHING>
-
-        // Fake execution
-        /*
-        &Blitter::fakeExecLine <BUSIDLE>,
-        &Blitter::fakeExecLine <FETCH_C>,
-        &Blitter::fakeExecLine <BUSIDLE>,
-        &Blitter::fakeExecLine <WRITE_D | REPEAT>,
-
-        &Blitter::fakeExecLine <NOTHING>,
-        &Blitter::fakeExecLine <WRITE_D | BLTDONE>
-        */
+            &Blitter::fakeExecLine <HOLD_D>,
+            &Blitter::fakeExecLine <WRITE_D | BLTDONE>,
+            &Blitter::fakeExecLine <BLTDONE>,
+//            &Blitter::fakeExecLine <BLTDONE>,
+            &Blitter::fakeExecLine <BLTDONE>
+        }
     };
 
     // Copy all programs over
@@ -1256,6 +1265,7 @@ Blitter::fakeExecLine()
         agnus.busValue[agnus.pos.h] = 0x8888;
     }
 
+    /*
     if constexpr ((bool)(instr & REPEAT)) {
 
         u16 newpc = 0;
@@ -1276,10 +1286,26 @@ Blitter::fakeExecLine()
             decYCounter();
         }
     }
+    */
+    if constexpr ((bool)(instr & REPEAT)) {
 
+        u16 newpc = 0;
+
+        // trace(true, "REPEAT\n");
+        iteration++;
+        lockD = false;
+
+        if (yCounter > 1) {
+
+            bltpc = newpc;
+            resetXCounter();
+            decYCounter();
+        }
+    }
+    
     if constexpr ((bool)(instr & BLTDONE)) {
 
-        trace(BLT_DEBUG, "BLTDONE\n");
+        // trace(true, "BLTDONE\n");
         endBlit();
     }
 }

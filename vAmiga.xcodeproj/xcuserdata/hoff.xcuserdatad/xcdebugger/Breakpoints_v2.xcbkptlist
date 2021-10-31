@@ -104,5 +104,21 @@
             categories = "Metal Diagnostics">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "87D2BC4B-76C1-45A4-B134-9E9B5A95DEC0"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Emulator/Agnus/Blitter/SlowBlitter.cpp"
+            startingColumnNumber = "25"
+            endingColumnNumber = "25"
+            startingLineNumber = "878"
+            endingLineNumber = "878"
+            landmarkName = "Blitter::beginFakeCopyBlit()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
