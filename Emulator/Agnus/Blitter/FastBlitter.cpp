@@ -308,8 +308,8 @@ Blitter::doFastLineBlit()
     }
 
     // Write back local values
-    setBLTCON0ASH(ash);
-    setBLTCON1BSH(bsh);
+    setASH(ash);
+    setBSH(bsh);
     REPLACE_BIT(bltcon1, 6, sign);
 }
 
@@ -479,7 +479,7 @@ Blitter::doLegacyFastLineBlit()
     bltcon = bltcon & 0x0FFFFFFBF;
     if (decision_is_signed) bltcon |= 0x00000040;
     
-    setBLTCON0ASH((u16)blit_a_shift_local);
+    setASH((u16)blit_a_shift_local);
     
     bltapt = decision_variable & agnus.ptrMask;
     bltcpt = bltcpt_local & agnus.ptrMask;

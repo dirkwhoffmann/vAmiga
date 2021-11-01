@@ -51,11 +51,41 @@ Blitter::setBLTCON0L(u16 value)
 }
 
 void
-Blitter::setBLTCON0ASH(u16 ash)
+Blitter::setASH(u16 ash)
 {
     assert(ash <= 0xF);
     
     bltcon0 = (u16)((bltcon0 & 0x0FFF) | ash << 12);
+}
+
+bool
+Blitter::incASH()
+{
+    if ((bltcon0 & 0xF000) == 0xF000) {
+        
+        bltcon0 &= 0x0FFF;
+        return true;
+        
+    } else {
+        
+        bltcon0 += 0x1000;
+        return false;
+    }
+}
+
+bool
+Blitter::decASH()
+{
+    if ((bltcon0 & 0xF000) == 0x0000) {
+        
+        bltcon0 |= 0xF000;
+        return true;
+        
+    } else {
+        
+        bltcon0 -= 0x1000;
+        return false;
+    }
 }
 
 void
@@ -76,11 +106,41 @@ Blitter::setBLTCON1(u16 value)
 }
 
 void
-Blitter::setBLTCON1BSH(u16 bsh)
+Blitter::setBSH(u16 bsh)
 {
     assert(bsh <= 0xF);
     
     bltcon1 = (u16)((bltcon1 & 0x0FFF) | bsh << 12);
+}
+
+bool
+Blitter::incBSH()
+{
+    if ((bltcon1 & 0xF000) == 0xF000) {
+        
+        bltcon1 &= 0x0FFF;
+        return true;
+        
+    } else {
+        
+        bltcon1 += 0x1000;
+        return false;
+    }
+}
+
+bool
+Blitter::decBSH()
+{
+    if ((bltcon1 & 0xF000) == 0x0000) {
+        
+        bltcon1 |= 0xF000;
+        return true;
+        
+    } else {
+        
+        bltcon1 -= 0x1000;
+        return false;
+    }
 }
 
 void

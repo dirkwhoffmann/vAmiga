@@ -1275,79 +1275,6 @@ Blitter::execLine()
 {
     bool useC = bltcon0 & BLTCON0_USEC;
     bool sing = bltcon1 & BLTCON1_SING;
-    bool sign = bltcon1 & BLTCON1_SIGN;
-    auto ash = bltconASH();
-    auto bsh = bltconBSH();
-    bool firstPixel = false;
-    
-    auto incx = [&]() {
-        if (++ash == 16) {
-            ash = 0;
-            U32_INC(bltcpt, 2);
-        }
-    };
-    
-    auto decx = [&]() {
-        if (ash-- == 0) {
-            ash = 15;
-            U32_INC(bltcpt, -2);
-        }
-    };
-    
-    auto incy = [&]() {
-        U32_INC(bltcpt, bltcmod);
-        firstPixel = true;
-        fillCarry = true;
-    };
-    
-    auto decy = [&]() {
-        U32_INC(bltcpt, -bltcmod);
-        firstPixel = true;
-        fillCarry = true;
-    };
-    
-    auto doLineLogic = [&]() {
-        
-        firstPixel = false;
-        fillCarry = false;
-        
-        if (!sign) {
-            if (bltcon1 & BLTCON1_SUD) {
-                
-                if (bltcon1 & BLTCON1_SUL)
-                    decy();
-                else
-                    incy();
-            } else {
-                if (bltcon1 & BLTCON1_SUL)
-                    decx();
-                else
-                    incx();
-            }
-        }
-        
-        if (bltcon1 & BLTCON1_SUD) {
-            if (bltcon1 & BLTCON1_AUL)
-                decx();
-            else
-                incx();
-        } else {
-            if (bltcon1 & BLTCON1_AUL)
-                decy();
-            else
-                incy();
-        }
-        
-        if (bltcon0 & BLTCON0_USEA) {
-            if (sign)
-                U32_INC(bltapt, bltbmod);
-            else
-                U32_INC(bltapt, bltamod);
-        }
-        
-        sign = (i16)bltapt < 0;
-    };
-    
     
     bool bus, busidle;
     
@@ -1421,7 +1348,7 @@ Blitter::execLine()
         ahold = (u16)(HI_W_LO_W(aold, anew & mask) >> bltconASH());
         aold = anew & mask;
         */
-        ahold = (anew & bltafwm) >> ash;
+        ahold = (anew & bltafwm) >> bltconASH();
     }
 
     if constexpr ((bool)(instr & HOLD_B)) {
@@ -1429,8 +1356,9 @@ Blitter::execLine()
         trace(BLT_DEBUG, "HOLD_B\n");
 
         // Run the barrel shifters on data path B
-        bhold = (u16)((bnew >> bsh) | (bnew << (16 - bsh)));
-        if (bsh-- == 0) bsh = 15;
+        bhold = (u16)((bnew >> bltconBSH()) | (bnew << (16 - bltconBSH())));
+        decBSH();
+        // if (bsh-- == 0) bsh = 15;
         /*
         bhold = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
         bold = bnew;
@@ -1447,7 +1375,7 @@ Blitter::execLine()
         lockD = (sing && !fillCarry) || !useC;
 
         // Run the line logic circuit
-        doLineLogic();
+        doLine();
 
         // Update the zero flag
         if (dhold) bzero = false;
@@ -1476,10 +1404,6 @@ Blitter::execLine()
         trace(BLT_DEBUG, "BLTDONE\n");
         endBlit();
     }
-
-    setBLTCON0ASH(ash);
-    setBLTCON1BSH(bsh);
-    REPLACE_BIT(bltcon1, 6, sign);
 }
 
 template <u16 instr> void

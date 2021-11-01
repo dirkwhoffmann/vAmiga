@@ -321,7 +321,9 @@ public:
     void setBLTCON0(u16 value);
     void pokeBLTCON0L(u16 value);
     void setBLTCON0L(u16 value);
-    void setBLTCON0ASH(u16 ash);
+    void setASH(u16 ash);
+    bool incASH();
+    bool decASH();
 
     u16 bltconASH()   const { return bltcon0 >> 12; }
     u16 bltconLF()    const { return bltcon0 & 0xF; }
@@ -334,7 +336,9 @@ public:
     // BLTCON1
     void pokeBLTCON1(u16 value);
     void setBLTCON1(u16 value);
-    void setBLTCON1BSH(u16 bsh);
+    void setBSH(u16 bsh);
+    bool incBSH();
+    bool decBSH();
 
     u16 bltconBSH()   const { return bltcon1 >> 12; }
     bool bltconEFE()  const { return bltcon1 & (1 << 4); }
@@ -417,6 +421,9 @@ private:
 
     // Emulates the fill logic circuit
     void doFill(u16 &data, bool &carry);
+
+    // Emulates the line logic circuit
+    void doLine();
 
 
     //

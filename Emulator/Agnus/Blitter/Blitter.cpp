@@ -560,6 +560,55 @@ Blitter::doFill(u16 &data, bool &carry)
 }
 
 void
+Blitter::doLine()
+{
+    auto incx = [&]() { if (incASH()) U32_INC(bltcpt, 2); };
+    auto decx = [&]() { if (decASH()) U32_INC(bltcpt, -2); };
+    auto incy = [&]() { U32_INC(bltcpt, bltcmod); fillCarry = true; };
+    auto decy = [&]() { U32_INC(bltcpt, -bltcmod); fillCarry = true; };
+ 
+    bool sign = bltcon1 & BLTCON1_SIGN;
+    fillCarry = false;
+        
+    if (bltcon1 & BLTCON1_SUD) {
+        
+        if (bltcon1 & BLTCON1_AUL) {
+            decx();
+        } else {
+            incx();
+        }
+        if (bltcon1 & BLTCON1_SUL) {
+            if (!sign) decy();
+        } else {
+            if (!sign) incy();
+        }
+        
+    } else {
+        
+        if (bltcon1 & BLTCON1_AUL) {
+            decy();
+        } else {
+            incy();
+        }
+        if (bltcon1 & BLTCON1_SUL) {
+            if (!sign) decx();
+        } else {
+            if (!sign) incx();
+        }
+    }
+    
+    if (bltcon0 & BLTCON0_USEA) {
+        if (sign)
+            U32_INC(bltapt, bltbmod);
+        else
+            U32_INC(bltapt, bltamod);
+    }
+        
+    // Update the SIGN bit in BPLCON1
+    REPLACE_BIT(bltcon1, 6, (i16)bltapt < 0);
+}
+
+void
 Blitter::prepareBlit()
 {
     remaining = bltsizeH * bltsizeV;
