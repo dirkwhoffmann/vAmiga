@@ -142,10 +142,7 @@ void Blitter::doFastCopyBlit()
             }
             
             // Run the minterm circuit
-            dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
-            if constexpr (BLT_DEBUG) {
-                assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
-            }
+            dhold = doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF);
 
             // Run the fill logic circuit
             if (fill) doFill(dhold, fillCarry);
@@ -286,10 +283,7 @@ Blitter::doFastLineBlit()
         if (bsh-- == 0) bsh = 15;
         
         // Run the minterm circuit
-        dhold = doMintermLogicQuick(ahold, (bhold & 1) ? 0xFFFF : 0, chold, bltcon0 & 0xFF);
-        if constexpr (BLT_DEBUG) {
-            assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
-        }
+        dhold = doMintermLogic(ahold, (bhold & 1) ? 0xFFFF : 0, chold, bltcon0 & 0xFF);
                 
         bool writeEnable = (!sing || firstPixel) && useC;
 
@@ -412,7 +406,7 @@ Blitter::doLegacyFastLineBlit()
         bltbdat_local = (mask & 1) ? 0xFFFF : 0;
         
         // Calculate result
-        bltddat_local = doMintermLogicQuick(bltadat_local, bltbdat_local, bltcdat_local, minterm);
+        bltddat_local = doMintermLogic(bltadat_local, bltbdat_local, bltcdat_local, minterm);
         
         // Save result to D-channel, same as the C ptr after first pixel.
         if (c_enabled) { // C-channel must be enabled

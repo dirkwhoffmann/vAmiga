@@ -1140,7 +1140,7 @@ Blitter::exec()
         trace(BLT_DEBUG, "HOLD_D\n");
 
         // Run the minterm logic circuit
-        dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
+        dhold = doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF);
 
         if constexpr (BLT_DEBUG) {
             assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
@@ -1442,7 +1442,7 @@ Blitter::execLine()
         trace(BLT_DEBUG, "HOLD_D\n");
 
         // Run the minterm logic circuit
-        dhold = doMintermLogicQuick(ahold, (bhold & 1) ? 0xFFFF : 0, chold, bltcon0 & 0xFF);
+        dhold = doMintermLogic(ahold, (bhold & 1) ? 0xFFFF : 0, chold, bltcon0 & 0xFF);
                 
         lockD = (sing && !fillCarry) || !useC;
 

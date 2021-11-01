@@ -255,16 +255,23 @@ Blitter::doBarrelBdesc(u16 bNew)
 u16
 Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm) const
 {
-    u16 result = 0;
+    u16 result = doMintermLogicQuick(a, b, c, minterm);
 
-    if (minterm & 0b10000000) result |=  a &  b &  c;
-    if (minterm & 0b01000000) result |=  a &  b & ~c;
-    if (minterm & 0b00100000) result |=  a & ~b &  c;
-    if (minterm & 0b00010000) result |=  a & ~b & ~c;
-    if (minterm & 0b00001000) result |= ~a &  b &  c;
-    if (minterm & 0b00000100) result |= ~a &  b & ~c;
-    if (minterm & 0b00000010) result |= ~a & ~b &  c;
-    if (minterm & 0b00000001) result |= ~a & ~b & ~c;
+    if constexpr (BLT_DEBUG) {
+        
+        u16 result2 = 0;
+        
+        if (minterm & 0b10000000) result2 |=  a &  b &  c;
+        if (minterm & 0b01000000) result2 |=  a &  b & ~c;
+        if (minterm & 0b00100000) result2 |=  a & ~b &  c;
+        if (minterm & 0b00010000) result2 |=  a & ~b & ~c;
+        if (minterm & 0b00001000) result2 |= ~a &  b &  c;
+        if (minterm & 0b00000100) result2 |= ~a &  b & ~c;
+        if (minterm & 0b00000010) result2 |= ~a & ~b &  c;
+        if (minterm & 0b00000001) result2 |= ~a & ~b & ~c;
+    
+        assert(result == result2);
+    }
     
     return result;
 }
