@@ -57,19 +57,26 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_COPY_SLOW:
 
-            trace(BLT_DEBUG, "Instruction %d:%d\n", bltconUSE(), bltpc);
+            trace(BLT_DEBUG, "Copy instruction %d:%d\n", bltconUSE(), bltpc);
             (this->*copyBlitInstr[bltconUSE()][0][bltconFE()][bltpc])();
             break;
 
         case BLT_COPY_FAKE:
 
-            trace(BLT_DEBUG, "Faked instruction %d:%d\n", bltconUSE(), bltpc);
+            trace(BLT_DEBUG, "Copy fake %d:%d\n", bltconUSE(), bltpc);
             (this->*copyBlitInstr[bltconUSE()][1][bltconFE()][bltpc])();
+            break;
+
+        case BLT_LINE_SLOW:
+            
+            trace(BLT_DEBUG, "Line instruction %d:%d\n", bltconUSEB(), bltpc);
+            (this->*lineBlitInstr[bltconUSEB()][0][bltpc])();
             break;
 
         case BLT_LINE_FAKE:
             
-            (this->*lineBlitInstr[bltconUSEB()][bltpc])();
+            trace(BLT_DEBUG, "Line fake %d:%d\n", bltconUSEB(), bltpc);
+            (this->*lineBlitInstr[bltconUSEB()][1][bltpc])();
             break;
 
         default:

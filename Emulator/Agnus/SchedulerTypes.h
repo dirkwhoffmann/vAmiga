@@ -182,6 +182,7 @@ enum_i8(EventID)
     BLT_STRT2,
     BLT_COPY_SLOW,
     BLT_COPY_FAKE,
+    BLT_LINE_SLOW,
     BLT_LINE_FAKE,
     BLT_EVENT_COUNT,
         

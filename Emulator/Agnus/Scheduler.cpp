@@ -165,6 +165,7 @@ Scheduler::eventName(EventSlot slot, EventID id)
                 case BLT_STRT2:     return "BLT_STRT2";
                 case BLT_COPY_SLOW: return "BLT_COPY_SLOW";
                 case BLT_COPY_FAKE: return "BLT_COPY_FAKE";
+                case BLT_LINE_SLOW: return "BLT_LINE_SLOW";
                 case BLT_LINE_FAKE: return "BLT_LINE_FAKE";
                 default:            return "*** INVALID ***";
             }

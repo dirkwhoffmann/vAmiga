@@ -821,37 +821,70 @@ Blitter::initSlowBlitter()
         }
     };
 
-    /* The Line Blitter uses the same micro program in all situations.
-     * THIS IS WRONG:
-     * -- C0 -- -- -- C1 -- D0 -- C2 -- D1 | -- D2   (???)
-    */
-    void (Blitter::*lineBlitInstr[2][10])(void) = {
+    /* The Line Blitter micro programs are stored in array
+     *
+     *   lineBlitInstr[2][2][8]
+     *
+     * For each program, four different versions are stored:
+     *
+     *   [0][X][] : Performs a Line Blit with the B channel disabled
+     *   [1][X][] : Performs a Line Blit with the B channel enabled
+     *
+     *   [X][0][] : Performs a Line Blit in accuracy level 2
+     *   [X][1][] : Performs a Line Blit in accuracy level 1
+     */
+    void (Blitter::*lineBlitInstr[2][2][8])(void) = {
         
-        {   // The usual case: B channel disabled
-            &Blitter::fakeExecLine <BUSIDLE>,
-            &Blitter::fakeExecLine <BUS>,
-            &Blitter::fakeExecLine <BUSIDLE>,
-            &Blitter::fakeExecLine <BUS | REPEAT>,
-
-            &Blitter::fakeExecLine <NOTHING>,
-            &Blitter::fakeExecLine <BLTDONE>,
-            &Blitter::fakeExecLine <BLTDONE>,
-            &Blitter::fakeExecLine <BLTDONE>,
-            &Blitter::fakeExecLine <BLTDONE>,
-            &Blitter::fakeExecLine <BLTDONE>
+        // The usual case: B channel disabled
+        {
+            {   // Full execution
+                &Blitter::execLine <HOLD_A>,
+                &Blitter::execLine <FETCH_C | HOLD_B>,
+                &Blitter::execLine <HOLD_D>,
+                &Blitter::execLine <WRITE_D | REPEAT>,
+                
+                &Blitter::execLine <NOTHING>,
+                &Blitter::execLine <BLTDONE>,
+                &Blitter::execLine <BLTDONE>,
+                &Blitter::execLine <BLTDONE>
+            },
+            {   // Fake execution
+                &Blitter::fakeExecLine <BUSIDLE>,
+                &Blitter::fakeExecLine <BUS>,
+                &Blitter::fakeExecLine <BUSIDLE>,
+                &Blitter::fakeExecLine <BUS | REPEAT>,
+                
+                &Blitter::fakeExecLine <NOTHING>,
+                &Blitter::fakeExecLine <BLTDONE>,
+                &Blitter::fakeExecLine <BLTDONE>,
+                &Blitter::fakeExecLine <BLTDONE>
+            }
         },
-        {   // The unusual case: B channel enabled
-            &Blitter::fakeExecLine <BUSIDLE>,
-            &Blitter::fakeExecLine <BUS>,
-            &Blitter::fakeExecLine <BUS>,
-            &Blitter::fakeExecLine <BUSIDLE>,
-            &Blitter::fakeExecLine <BUS>,
-            &Blitter::fakeExecLine <BUS | REPEAT>,
-
-            &Blitter::fakeExecLine <NOTHING>,
-            &Blitter::fakeExecLine <BUSIDLE | BLTDONE>,
-            &Blitter::fakeExecLine <BLTDONE>,
-            &Blitter::fakeExecLine <BLTDONE>
+        {
+            {
+                // Full execution
+                &Blitter::execLine <BUSIDLE>,
+                &Blitter::execLine <BUS>,
+                &Blitter::execLine <BUS>,
+                &Blitter::execLine <BUSIDLE>,
+                &Blitter::execLine <BUS>,
+                &Blitter::execLine <BUS | REPEAT>,
+                
+                &Blitter::execLine <NOTHING>,
+                &Blitter::execLine <BUSIDLE | BLTDONE>
+            },
+            {
+                // Fake execution
+                &Blitter::fakeExecLine <BUSIDLE>,
+                &Blitter::fakeExecLine <BUS>,
+                &Blitter::fakeExecLine <BUS>,
+                &Blitter::fakeExecLine <BUSIDLE>,
+                &Blitter::fakeExecLine <BUS>,
+                &Blitter::fakeExecLine <BUS | REPEAT>,
+                
+                &Blitter::fakeExecLine <NOTHING>,
+                &Blitter::fakeExecLine <BUSIDLE | BLTDONE>
+            }
         }
     };
 
@@ -866,7 +899,7 @@ Blitter::initSlowBlitter()
 void
 Blitter::beginFakeCopyBlit()
 {
-    // Only call this function in copy blit mode
+    // Only call this function in copy mode
     assert(!bltconLINE());
 
     // Run the fast Blitter
@@ -885,14 +918,8 @@ Blitter::beginFakeCopyBlit()
 void
 Blitter::beginSlowCopyBlit()
 {
-    // Only call this function in copy blit mode
+    // Only call this function in copy mode
     assert(!bltconLINE());
-
-    static bool verbose = true;
-    if (BLT_CHECKSUM && verbose) {
-        verbose = false;
-        msg("Using the slow copy Blitter\n");
-    }
 
     // Set width and height counters
     resetXCounter();
@@ -930,7 +957,7 @@ Blitter::beginSlowCopyBlit()
 void
 Blitter::beginFakeLineBlit()
 {
-    // Only call this function in line blit mode
+    // Only call this function in line mode
     assert(bltconLINE());
 
     // Do the blit
@@ -948,14 +975,40 @@ Blitter::beginFakeLineBlit()
 void
 Blitter::beginSlowLineBlit()
 {
-    // Only call this function is line blit mode
+    // Only call this function is line mode
     assert(bltconLINE());
 
-    /* Note: There is no such thing as a slow line Blitter yet. Until such a
-     * thing has been implemented, we call the FastBlitter instead.
-     */
+    // Set width and height counters
+    resetXCounter();
+    resetYCounter();
 
-    beginFakeLineBlit();
+    // Reset registers
+    aold = 0;
+    bold = 0;
+
+    // Unlock pipeline stage D
+    lockD = false;
+
+    // Used to detect the first dot in a line
+    fillCarry = true;
+    
+    // Schedule the first slow Blitter execution event
+    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_LINE_SLOW);
+
+    // In debug mode, we execute the whole micro program immediately.
+    // This let's us compare checksums with the FastBlitter.
+    if constexpr (SLOW_BLT_DEBUG) {
+        
+        BusOwner owner = agnus.busOwner[agnus.pos.h];
+        agnus.setBLS(false);
+        
+        while (scheduler.hasEvent<SLOT_BLT>()) {
+            agnus.busOwner[agnus.pos.h] = BUS_NONE;
+            serviceEvent();
+        }
+        
+        agnus.busOwner[agnus.pos.h] = owner;
+    }
 }
 
 template <u16 instr> void
@@ -1220,11 +1273,213 @@ Blitter::setYCounter(u16 value)
 template <u16 instr> void
 Blitter::execLine()
 {
+    bool useC = bltcon0 & BLTCON0_USEC;
+    bool sing = bltcon1 & BLTCON1_SING;
+    bool sign = bltcon1 & BLTCON1_SIGN;
+    auto ash = bltconASH();
+    auto bsh = bltconBSH();
+    bool firstPixel = false;
+    
+    auto incx = [&]() {
+        if (++ash == 16) {
+            ash = 0;
+            U32_INC(bltcpt, 2);
+        }
+    };
+    
+    auto decx = [&]() {
+        if (ash-- == 0) {
+            ash = 15;
+            U32_INC(bltcpt, -2);
+        }
+    };
+    
+    auto incy = [&]() {
+        U32_INC(bltcpt, bltcmod);
+        firstPixel = true;
+        fillCarry = true;
+    };
+    
+    auto decy = [&]() {
+        U32_INC(bltcpt, -bltcmod);
+        firstPixel = true;
+        fillCarry = true;
+    };
+    
+    auto doLineLogic = [&]() {
+        
+        firstPixel = false;
+        fillCarry = false;
+        
+        if (!sign) {
+            if (bltcon1 & BLTCON1_SUD) {
+                
+                if (bltcon1 & BLTCON1_SUL)
+                    decy();
+                else
+                    incy();
+            } else {
+                if (bltcon1 & BLTCON1_SUL)
+                    decx();
+                else
+                    incx();
+            }
+        }
+        
+        if (bltcon1 & BLTCON1_SUD) {
+            if (bltcon1 & BLTCON1_AUL)
+                decx();
+            else
+                incx();
+        } else {
+            if (bltcon1 & BLTCON1_AUL)
+                decy();
+            else
+                incy();
+        }
+        
+        if (bltcon0 & BLTCON0_USEA) {
+            if (sign)
+                U32_INC(bltapt, bltbmod);
+            else
+                U32_INC(bltapt, bltamod);
+        }
+        
+        sign = (i16)bltapt < 0;
+    };
+    
+    
+    bool bus, busidle;
+    
+    // Determine if we need the bus
+    if constexpr ((bool)(instr & WRITE_D)) {
+        bus     = true; // !lockD;
+        busidle = false; // lockD;
+    } else {
+        bus     = instr & (FETCH | BUS);
+        busidle = instr & BUSIDLE;
+    }
+
+    // Trigger Blitter interrupt if this is the termination cycle
+    if ((instr & BLTDONE) && !birq) {
+        signalEnd();
+        paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
+        birq = true;
+    }
+    
+    // Allocate the bus if needed
+    if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
+
+    // Check if the Blitter needs a free bus to continue
+    if (busidle && !agnus.busIsFree<BUS_BLITTER>()) return;
+
+    bltpc++;
+
+    if constexpr ((bool)(instr & WRITE_D)) {
+        
+        // Only proceed if channel D is unlocked
+        if (!lockD) {
+
+            agnus.doBlitterDmaWrite(bltdpt, dhold);
+
+            if constexpr (BLT_GUARD) {
+                memguard[bltdpt & agnus.ptrMask & mem.chipMask] = 1;
+            }
+
+            if constexpr (BLT_CHECKSUM) {
+                check1 = util::fnv_1a_it32(check1, dhold);
+                check2 = util::fnv_1a_it32(check2, bltdpt);
+            }
+            trace(BLT_DEBUG, "    D = %X -> %X\n", dhold, bltdpt);
+        }
+    }
+
+    if constexpr ((bool)(instr & FETCH_B)) {
+
+        trace(BLT_DEBUG, "FETCH_B\n");
+
+        bnew = agnus.doBlitterDmaRead(bltbpt);
+        trace(BLT_DEBUG, "    B = %X <- %X\n", bnew, bltbpt);
+        
+        U32_INC(bltbpt, bltbmod);
+    }
+
+    if constexpr ((bool)(instr & FETCH_C)) {
+
+        trace(BLT_DEBUG, "FETCH_C\n");
+
+        chold = agnus.doBlitterDmaRead(bltcpt);
+        trace(BLT_DEBUG, "    C = %X <- %X\n", chold, bltcpt);
+    }
+
+    if constexpr ((bool)(instr & HOLD_A)) {
+
+        trace(BLT_DEBUG, "HOLD_A\n");
+
+        // Run the barrel shifters on data path A
+        /*
+        ahold = (u16)(HI_W_LO_W(aold, anew & mask) >> bltconASH());
+        aold = anew & mask;
+        */
+        ahold = (anew & bltafwm) >> ash;
+    }
+
+    if constexpr ((bool)(instr & HOLD_B)) {
+
+        trace(BLT_DEBUG, "HOLD_B\n");
+
+        // Run the barrel shifters on data path B
+        bhold = (u16)((bnew >> bsh) | (bnew << (16 - bsh)));
+        if (bsh-- == 0) bsh = 15;
+        /*
+        bhold = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
+        bold = bnew;
+        */
+    }
+
+    if constexpr ((bool)(instr & HOLD_D)) {
+
+        trace(BLT_DEBUG, "HOLD_D\n");
+
+        // Run the minterm logic circuit
+        dhold = doMintermLogicQuick(ahold, (bhold & 1) ? 0xFFFF : 0, chold, bltcon0 & 0xFF);
+                
+        lockD = (sing && !fillCarry) || !useC;
+
+        // Run the line logic circuit
+        doLineLogic();
+
+        // Update the zero flag
+        if (dhold) bzero = false;
+    }
+
+    if constexpr ((bool)(instr & REPEAT)) {
+
+        u16 newpc = 0;
+
+        trace(BLT_DEBUG, "REPEAT\n");
+        iteration++;
+        lockD = false;
+
+        if (yCounter > 1) {
+
+            bltpc = newpc;
+            resetXCounter();
+            decYCounter();
+        }
+        
+        bltdpt = bltcpt;
+    }
+
     if constexpr ((bool)(instr & BLTDONE)) {
 
         trace(BLT_DEBUG, "BLTDONE\n");
         endBlit();
     }
+
+    setBLTCON0ASH(ash);
+    setBLTCON1BSH(bsh);
+    REPLACE_BIT(bltcon1, 6, sign);
 }
 
 template <u16 instr> void

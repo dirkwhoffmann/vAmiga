@@ -114,8 +114,8 @@
             filePath = "Emulator/Agnus/Blitter/SlowBlitter.cpp"
             startingColumnNumber = "25"
             endingColumnNumber = "25"
-            startingLineNumber = "876"
-            endingLineNumber = "876"
+            startingLineNumber = "909"
+            endingLineNumber = "909"
             landmarkName = "Blitter::beginFakeCopyBlit()"
             landmarkType = "7">
          </BreakpointContent>
