@@ -828,31 +828,29 @@ Blitter::initSlowBlitter()
     void (Blitter::*lineBlitInstr[2][10])(void) = {
         
         {   // The usual case: B channel disabled
-            // TODO:
             &Blitter::fakeExecLine <BUSIDLE>,
-            &Blitter::fakeExecLine <FETCH_C>,
+            &Blitter::fakeExecLine <BUS>,
             &Blitter::fakeExecLine <BUSIDLE>,
-            &Blitter::fakeExecLine <FETCH_C | REPEAT>,
+            &Blitter::fakeExecLine <BUS | REPEAT>,
 
             &Blitter::fakeExecLine <NOTHING>,
-            &Blitter::fakeExecLine <NOTHING | BLTDONE>,
+            &Blitter::fakeExecLine <BLTDONE>,
             &Blitter::fakeExecLine <BLTDONE>,
             &Blitter::fakeExecLine <BLTDONE>,
             &Blitter::fakeExecLine <BLTDONE>,
             &Blitter::fakeExecLine <BLTDONE>
         },
         {   // The unusual case: B channel enabled
-            &Blitter::fakeExecLine <NOTHING>,
-            &Blitter::fakeExecLine <FETCH_C>,
-            &Blitter::fakeExecLine <FETCH_B>,
-            &Blitter::fakeExecLine <NOTHING>,
-            &Blitter::fakeExecLine <NOTHING>,
-            &Blitter::fakeExecLine <WRITE_D | REPEAT>,
+            &Blitter::fakeExecLine <BUSIDLE>,
+            &Blitter::fakeExecLine <BUS>,
+            &Blitter::fakeExecLine <BUS>,
+            &Blitter::fakeExecLine <BUSIDLE>,
+            &Blitter::fakeExecLine <BUS>,
+            &Blitter::fakeExecLine <BUS | REPEAT>,
 
-            &Blitter::fakeExecLine <HOLD_D>,
-            &Blitter::fakeExecLine <WRITE_D | BLTDONE>,
+            &Blitter::fakeExecLine <NOTHING>,
+            &Blitter::fakeExecLine <BUSIDLE | BLTDONE>,
             &Blitter::fakeExecLine <BLTDONE>,
-//            &Blitter::fakeExecLine <BLTDONE>,
             &Blitter::fakeExecLine <BLTDONE>
         }
     };
