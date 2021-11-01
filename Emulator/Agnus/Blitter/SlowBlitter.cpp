@@ -838,9 +838,9 @@ Blitter::initSlowBlitter()
         // The usual case: B channel disabled
         {
             {   // Full execution
-                &Blitter::execLine <HOLD_A>,
+                &Blitter::execLine <BUSIDLE | HOLD_A>,
                 &Blitter::execLine <FETCH_C | HOLD_B>,
-                &Blitter::execLine <HOLD_D>,
+                &Blitter::execLine <BUSIDLE | HOLD_D>,
                 &Blitter::execLine <WRITE_D | REPEAT>,
                 
                 &Blitter::execLine <NOTHING>,
@@ -863,12 +863,12 @@ Blitter::initSlowBlitter()
         {
             {
                 // Full execution
-                &Blitter::execLine <BUSIDLE>,
+                &Blitter::execLine <BUSIDLE | HOLD_A>,
+                &Blitter::execLine <FETCH_B>,
+                &Blitter::execLine <FETCH_C | HOLD_B>,
+                &Blitter::execLine <BUSIDLE | HOLD_D>,
                 &Blitter::execLine <BUS>,
-                &Blitter::execLine <BUS>,
-                &Blitter::execLine <BUSIDLE>,
-                &Blitter::execLine <BUS>,
-                &Blitter::execLine <BUS | REPEAT>,
+                &Blitter::execLine <WRITE_D | REPEAT>,
                 
                 &Blitter::execLine <NOTHING>,
                 &Blitter::execLine <BUSIDLE | BLTDONE>
