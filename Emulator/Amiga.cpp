@@ -193,6 +193,7 @@ Amiga::getConfigItem(Option option) const
         case OPT_SLOW_RAM:
         case OPT_FAST_RAM:
         case OPT_EXT_START:
+        case OPT_SAVE_ROMS:
         case OPT_SLOW_RAM_DELAY:
         case OPT_BANKMAP:
         case OPT_UNMAPPING_TYPE:
@@ -362,6 +363,7 @@ Amiga::configure(Option option, i64 value)
         case OPT_SLOW_RAM:
         case OPT_FAST_RAM:
         case OPT_EXT_START:
+        case OPT_SAVE_ROMS:
         case OPT_SLOW_RAM_DELAY:
         case OPT_BANKMAP:
         case OPT_UNMAPPING_TYPE:

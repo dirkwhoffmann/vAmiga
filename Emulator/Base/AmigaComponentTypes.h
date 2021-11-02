@@ -45,6 +45,7 @@ enum_long(OPT)
     OPT_SLOW_RAM,
     OPT_FAST_RAM,
     OPT_EXT_START,
+    OPT_SAVE_ROMS,
     OPT_SLOW_RAM_DELAY,
     OPT_BANKMAP,
     OPT_UNMAPPING_TYPE,
@@ -136,6 +137,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_SLOW_RAM:            return "SLOW_RAM";
             case OPT_FAST_RAM:            return "FAST_RAM";
             case OPT_EXT_START:           return "EXT_START";
+            case OPT_SAVE_ROMS:           return "SAVE_ROMS";
             case OPT_SLOW_RAM_DELAY:      return "SLOW_RAM_DELAY";
             case OPT_BANKMAP:             return "BANKMAP";
             case OPT_UNMAPPING_TYPE:      return "UNMAPPING_TYPE";

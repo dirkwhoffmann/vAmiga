@@ -57,6 +57,8 @@ Memory::_dump(dump::Category category, std::ostream& os) const
         os << util::dec(config.extSize / 1024) << " KB";
         os << " at " << util::hex(config.extStart) << "0000" << std::endl;
         os << std::endl;
+        os << util::tab("Save Roms in snapshots");
+        os << util::bol(config.saveRoms) << std::endl;
         os << util::tab("Emulate Slow Ram delay");
         os << util::bol(config.slowRamDelay) << std::endl;
         os << util::tab("Bank mapping scheme");
@@ -135,6 +137,7 @@ Memory::getDefaultConfig()
     defaults.womSize = 0;
     defaults.extSize = 0;
     
+    defaults.saveRoms = false;
     defaults.slowRamDelay = true;
     defaults.bankMap = BANK_MAP_A500;
     defaults.ramInitPattern = RAM_INIT_ALL_ZEROES;
@@ -153,6 +156,7 @@ Memory::resetConfig()
     setConfigItem(OPT_SLOW_RAM, defaults.slowSize);
     setConfigItem(OPT_FAST_RAM, defaults.fastSize);
     setConfigItem(OPT_EXT_START, defaults.extStart);
+    setConfigItem(OPT_SAVE_ROMS, defaults.saveRoms);
     setConfigItem(OPT_SLOW_RAM_DELAY, defaults.slowRamDelay);
     setConfigItem(OPT_BANKMAP, defaults.bankMap);
     setConfigItem(OPT_UNMAPPING_TYPE, defaults.unmappingType);
@@ -168,6 +172,7 @@ Memory::getConfigItem(Option option) const
         case OPT_SLOW_RAM:          return config.slowSize / KB(1);
         case OPT_FAST_RAM:          return config.fastSize / KB(1);
         case OPT_EXT_START:         return config.extStart;
+        case OPT_SAVE_ROMS:         return config.saveRoms;
         case OPT_SLOW_RAM_DELAY:    return config.slowRamDelay;
         case OPT_BANKMAP:           return config.bankMap;
         case OPT_UNMAPPING_TYPE:    return config.unmappingType;
@@ -230,6 +235,13 @@ Memory::setConfigItem(Option option, i64 value)
             
             config.extStart = (u32)value;
             updateMemSrcTables();
+            return;
+            
+        case OPT_SAVE_ROMS:
+            
+            suspended {
+                config.saveRoms = value;
+            }
             return;
             
         case OPT_SLOW_RAM_DELAY:
@@ -310,6 +322,14 @@ Memory::didLoadFromBuffer(const u8 *buffer)
 {
     util::SerReader reader(buffer);
 
+    /*
+    isize romSize;
+    isize womSize;
+    isize chipSize;
+    isize slowSize;
+    isize fastSize;
+    */
+    
     // Load memory size information
     reader
     << config.romSize
@@ -329,7 +349,7 @@ Memory::didLoadFromBuffer(const u8 *buffer)
 
     // Free previously allocated memory
     dealloc();
-
+    
     // Allocate new memory
     if (config.romSize) rom = new (std::nothrow) u8[config.romSize];
     if (config.womSize) wom = new (std::nothrow) u8[config.womSize];
@@ -439,14 +459,14 @@ Memory::updateStats()
 }
 
 void
-Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask)
+Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask, bool update)
 {
-    // Check the invariants
+    // Check invariants
     assert((ptr == nullptr) == (size == 0));
     assert((ptr == nullptr) == (mask == 0));
     assert((ptr == nullptr) || (mask == (u32)size - 1));
 
-    // Only proceed if memory layout changes
+    // Only proceed if memory layout will change
     if (bytes == size) return;
     
     // Delete previous allocation
@@ -454,20 +474,18 @@ Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask)
     
     // Allocate memory
     if (bytes) {
-        
-        isize allocSize = bytes;
-        
-        ptr = new u8[allocSize];
+                
+        ptr = new u8[bytes];
         size = (u32)bytes;
         mask = size - 1;
-        fillRamWithInitPattern();
         
         if ((uintptr_t)ptr & 1) {
-            warn("Memory at %p (%d bytes) is not aligned\n", (void *)ptr, bytes);
-            assert(false);
+            panic("Memory at %p (%d bytes) is not aligned\n", (void *)ptr, bytes);
         }
     }
-    updateMemSrcTables();
+    
+    // Update the memory source tables if requested
+    if (update) updateMemSrcTables();
 }
 
 void
@@ -604,7 +622,6 @@ Memory::loadRom(RomFile &file)
 
     // Allocate memory
     allocRom((i32)file.size);
-    assert(config.romSize == file.size);
 
     // Load Rom
     file.flash(rom);
@@ -637,7 +654,6 @@ Memory::loadExt(ExtendedRomFile &file)
     allocExt((i32)file.size);
     
     // Load Rom
-    assert(config.extSize == file.size);
     file.flash(ext);
 }
 

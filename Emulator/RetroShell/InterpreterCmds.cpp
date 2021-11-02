@@ -158,6 +158,10 @@ Interpreter::registerInstructions()
              "key", "Sets the start address for Rom extensions",
              &RetroShell::exec <Token::memory, Token::set, Token::extstart>, 1);
 
+    root.add({"memory", "set", "saveroms"},
+             "key", "Determines whether Roms should be stored in snapshots",
+             &RetroShell::exec <Token::memory, Token::set, Token::saveroms>, 1);
+
     root.add({"memory", "set", "slowramdelay"},
              "key", "Enables or disables slow Ram bus delays",
              &RetroShell::exec <Token::memory, Token::set, Token::slowramdelay>, 1);

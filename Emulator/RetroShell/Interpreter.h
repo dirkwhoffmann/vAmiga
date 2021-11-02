@@ -38,9 +38,9 @@ enum class Token
     clxsprplf, clxplfplf, color, contrast, cutout, defaultbb, defaultfs, delay,
     device, disk, esync, extrom, extstart, fast, filename, filter, joystick,
     keyset, mechanics, mode, model, opacity, palette, pan, path, poll, pullup,
-    raminitpattern, refresh, revision, rom, sampling, saturation, searchpath,
-    shakedetector, slow, slowramdelay, slowrammirror, speed, sprites, step,
-    tod, todbug, unmappingtype, velocity, volume, wom
+    raminitpattern, refresh, revision, rom, sampling, saturation, saveroms,
+    searchpath, shakedetector, slow, slowramdelay, slowrammirror, speed,
+    sprites, step, tod, todbug, unmappingtype, velocity, volume, wom
 };
 
 struct TooFewArgumentsError : public util::ParseError {

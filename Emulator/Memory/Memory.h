@@ -221,6 +221,10 @@ private:
         << slowMask
         << fastMask
 
+        << config.slowRamDelay
+        << config.bankMap
+        << config.ramInitPattern
+        << config.unmappingType
         << config.extStart;
     }
 
@@ -283,10 +287,7 @@ private:
     
 private:
     
-    /* Dynamically allocates Ram or Rom. As side effects, the memory table is
-     * updated and the GUI is informed about the changed memory layout.
-     */
-    void alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask);
+    void alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask, bool update = true);
 
 public:
 

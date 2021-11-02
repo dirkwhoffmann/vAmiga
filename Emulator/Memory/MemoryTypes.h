@@ -203,6 +203,12 @@ typedef struct
     i32 womSize;
     i32 extSize;
 
+    // First memory page where the extended ROM is blended it
+    u32 extStart;
+
+    // Indicates if snapshots should contain Roms
+    bool saveRoms;
+    
     // Indicates if slow Ram accesses need a free bus
     bool slowRamDelay;
     
@@ -214,9 +220,6 @@ typedef struct
     
     // Specifies how to deal with unmapped memory
     UnmappedMemory unmappingType;
-    
-    // First memory page where the extended ROM is blended it
-    u32 extStart;
 }
 MemoryConfig;
 

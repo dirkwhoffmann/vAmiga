@@ -221,6 +221,12 @@ RetroShell::exec <Token::memory, Token::set, Token::extstart> (Arguments& argv, 
 }
 
 template <> void
+RetroShell::exec <Token::memory, Token::set, Token::saveroms> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_SAVE_ROMS, util::parseBool(argv.front()));
+}
+
+template <> void
 RetroShell::exec <Token::memory, Token::set, Token::slowramdelay> (Arguments& argv, long param)
 {
     amiga.configure(OPT_SLOW_RAM_DELAY, util::parseBool(argv.front()));
