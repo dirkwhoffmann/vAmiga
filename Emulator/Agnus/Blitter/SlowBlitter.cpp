@@ -1119,6 +1119,7 @@ Blitter::exec()
         } else {
             ahold = (u16)(HI_W_LO_W(aold, anew & mask) >> bltconASH());
         }
+        assert(ahold == barrelShifter(anew & mask, aold, bltconASH(), desc));
         aold = anew & mask;
     }
 
@@ -1132,6 +1133,7 @@ Blitter::exec()
         } else {
             bhold = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
         }
+        assert(bhold == barrelShifter(bnew, bold, bltconBSH(), desc));
         bold = bnew;
     }
 
@@ -1353,6 +1355,7 @@ Blitter::execLine()
 
         // Run the barrel shifter on data path B
         bhold = (u16)((bnew >> bltconBSH()) | (bnew << (16 - bltconBSH())));
+        assert(bhold == barrelShifter(bnew, bnew, bltconBSH(), false));
         decBSH();
     }
 

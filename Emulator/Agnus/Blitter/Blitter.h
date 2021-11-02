@@ -409,13 +409,8 @@ public:
 
 private:
     
-    // Runs the barrel shifters on data paths A and B
-    /*
-    void doBarrelA    (u16 aNew);
-    void doBarrelAdesc(u16 aNew);
-    void doBarrelB    (u16 bNew);
-    void doBarrelBdesc(u16 bNew);
-    */
+    // Emulates the barrel shifter
+    u16 barrelShifter(u16 anew, u16 aold,  u16 shift, bool desc);
     
     // Emulates the minterm logic circuit
     u16 doMintermLogic     (u16 a, u16 b, u16 c, u8 minterm) const;

@@ -131,6 +131,7 @@ void Blitter::doFastCopyBlit()
             } else {
                 ahold = (u16)(HI_W_LO_W(aold, anew & mask) >> bltconASH());
             }
+            assert(ahold == barrelShifter(anew & mask, aold, bltconASH(), desc));
             aold = anew & mask;
                         
             // Run the barrel shifter on path B (if channel B is enabled)
@@ -140,6 +141,7 @@ void Blitter::doFastCopyBlit()
                 } else {
                     bhold = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
                 }
+                assert(bhold == barrelShifter(bnew, bold, bltconBSH(), desc));
                 bold = bnew;
             }
             
@@ -279,9 +281,11 @@ Blitter::doFastLineBlit()
         
         // Run the barrel shifter on path A
         ahold = (anew & bltafwm) >> ash;
-
+        assert(ahold == barrelShifter(anew & bltafwm, 0, ash, false));
+        
         // Run the barrel shifter on path B
         bhold = (u16)((bnew >> bsh) | (bnew << (16 - bsh)));
+        assert(bhold == barrelShifter(bnew, bnew, bsh, false));
         if (bsh-- == 0) bsh = 15;
         
         // Run the minterm circuit

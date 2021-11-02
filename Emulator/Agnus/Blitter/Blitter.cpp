@@ -224,35 +224,15 @@ Blitter::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
-/*
-void
-Blitter::doBarrelA(u16 aNew)
+u16
+Blitter::barrelShifter(u16 anew, u16 aold, u16 shift, bool desc)
 {
-    ahold = (u16)(HI_W_LO_W(aold, anew) >> bltconASH());
-    aold  = aNew;
+    if (desc) {
+        return (u16)(HI_W_LO_W(anew, aold) >> (16 - shift));
+    } else {
+        return (u16)(HI_W_LO_W(aold, anew) >> shift);
+    }
 }
-
-void
-Blitter::doBarrelAdesc(u16 aNew)
-{
-    ahold = (u16)(HI_W_LO_W(anew, aold) >> (16 - bltconASH()));
-    aold  = aNew;
-}
-
-void
-Blitter::doBarrelB(u16 bNew)
-{
-    bhold = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
-    bold  = bNew;
-}
-
-void
-Blitter::doBarrelBdesc(u16 bNew)
-{
-    bhold = (u16)(HI_W_LO_W(bNew, bold) >> (16 - bltconBSH()));
-    bold  = bNew;
-}
-*/
 
 u16
 Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm) const
