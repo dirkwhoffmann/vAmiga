@@ -213,14 +213,7 @@ private:
     void applyToPersistentItems(T& worker)
     {
         worker
-
-        << romMask
-        << womMask
-        << extMask
-        << chipMask
-        << slowMask
-        << fastMask
-
+        
         << config.slowRamDelay
         << config.bankMap
         << config.ramInitPattern
@@ -235,6 +228,7 @@ private:
 
         << womIsLocked
         << cpuMemSrc
+        << agnusMemSrc
         << dataBus;
     }
 
@@ -287,21 +281,21 @@ private:
     
 private:
     
-    void alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask, bool update = true);
+    void alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask, bool update);
 
 public:
 
-    void allocChip(i32 bytes) { alloc(bytes, chip, config.chipSize, chipMask); }
-    void allocSlow(i32 bytes) { alloc(bytes, slow, config.slowSize, slowMask); }
-    void allocFast(i32 bytes) { alloc(bytes, fast, config.fastSize, fastMask); }
+    void allocChip(i32 bytes, bool update = true);
+    void allocSlow(i32 bytes, bool update = true);
+    void allocFast(i32 bytes, bool update = true);
 
     void deleteChip() { allocChip(0); }
     void deleteSlow() { allocSlow(0); }
     void deleteFast() { allocFast(0); }
 
-    void allocRom(i32 bytes) { alloc(bytes, rom, config.romSize, romMask); }
-    void allocWom(i32 bytes) { alloc(bytes, wom, config.womSize, womMask); }
-    void allocExt(i32 bytes) { alloc(bytes, ext, config.extSize, extMask); }
+    void allocRom(i32 bytes, bool update = true);
+    void allocWom(i32 bytes, bool update = true);
+    void allocExt(i32 bytes, bool update = true);
 
     void deleteRom() { allocRom(0); }
     void deleteWom() { allocWom(0); }

@@ -296,23 +296,31 @@ Memory::_size()
 {
     util::SerCounter counter;
 
+    // Determine memory size information
+    i32 romSize = config.saveRoms ? config.romSize : 0;
+    i32 womSize = config.saveRoms ? config.womSize : 0;
+    i32 extSize = config.saveRoms ? config.extSize : 0;
+    i32 chipSize = config.chipSize;
+    i32 slowSize = config.slowSize;
+    i32 fastSize = config.fastSize;
+
     applyToPersistentItems(counter);
     applyToResetItems(counter);
     
     counter
-    << config.romSize
-    << config.womSize
-    << config.extSize
-    << config.chipSize
-    << config.slowSize
-    << config.fastSize;
+    << romSize
+    << womSize
+    << extSize
+    << chipSize
+    << slowSize
+    << fastSize;
     
-    counter.count += config.romSize;
-    counter.count += config.womSize;
-    counter.count += config.extSize;
-    counter.count += config.chipSize;
-    counter.count += config.slowSize;
-    counter.count += config.fastSize;
+    counter.count += romSize;
+    counter.count += womSize;
+    counter.count += extSize;
+    counter.count += chipSize;
+    counter.count += slowSize;
+    counter.count += fastSize;
 
     return counter.count;
 }
@@ -321,50 +329,40 @@ isize
 Memory::didLoadFromBuffer(const u8 *buffer)
 {
     util::SerReader reader(buffer);
+    i32 romSize, womSize, extSize, chipSize, slowSize, fastSize;
 
-    /*
-    isize romSize;
-    isize womSize;
-    isize chipSize;
-    isize slowSize;
-    isize fastSize;
-    */
-    
     // Load memory size information
     reader
-    << config.romSize
-    << config.womSize
-    << config.extSize
-    << config.chipSize
-    << config.slowSize
-    << config.fastSize;
+    << romSize
+    << womSize
+    << extSize
+    << chipSize
+    << slowSize
+    << fastSize;
 
-    // Make sure that corrupted values do not cause any damage
-    if (config.romSize > KB(512)) { config.romSize = 0; assert(false); }
-    if (config.womSize > KB(256)) { config.womSize = 0; assert(false); }
-    if (config.extSize > KB(512)) { config.extSize = 0; assert(false); }
-    if (config.chipSize > MB(2)) { config.chipSize = 0; assert(false); }
-    if (config.slowSize > KB(512)) { config.slowSize = 0; assert(false); }
-    if (config.fastSize > MB(8)) { config.fastSize = 0; assert(false); }
+    // Make sure corrupted values do not cause any damage
+    if (romSize > KB(512)) { romSize = 0; assert(false); }
+    if (womSize > KB(256)) { womSize = 0; assert(false); }
+    if (extSize > KB(512)) { extSize = 0; assert(false); }
+    if (chipSize > MB(2)) { chipSize = 0; assert(false); }
+    if (slowSize > KB(512)) { slowSize = 0; assert(false); }
+    if (fastSize > MB(8)) { fastSize = 0; assert(false); }
 
-    // Free previously allocated memory
-    dealloc();
-    
-    // Allocate new memory
-    if (config.romSize) rom = new (std::nothrow) u8[config.romSize];
-    if (config.womSize) wom = new (std::nothrow) u8[config.womSize];
-    if (config.extSize) ext = new (std::nothrow) u8[config.extSize];
-    if (config.chipSize) chip = new (std::nothrow) u8[config.chipSize];
-    if (config.slowSize) slow = new (std::nothrow) u8[config.slowSize];
-    if (config.fastSize) fast = new (std::nothrow) u8[config.fastSize];
+    // Allocate memory (without updating the memory tables)
+    if (romSize) allocRom(romSize, false);
+    if (womSize) allocWom(womSize, false);
+    if (extSize) allocExt(extSize, false);
+    if (chipSize) allocChip(chipSize, false);
+    if (slowSize) allocSlow(slowSize, false);
+    if (fastSize) allocFast(fastSize, false);
 
-    // Load memory contents from buffer
-    reader.copy(rom, config.romSize);
-    reader.copy(wom, config.womSize);
-    reader.copy(ext, config.extSize);
-    reader.copy(chip, config.chipSize);
-    reader.copy(slow, config.slowSize);
-    reader.copy(fast, config.fastSize);
+    // Load memory contents
+    reader.copy(rom, romSize);
+    reader.copy(wom, womSize);
+    reader.copy(ext, extSize);
+    reader.copy(chip, chipSize);
+    reader.copy(slow, slowSize);
+    reader.copy(fast, fastSize);
 
     return (isize)(reader.ptr - buffer);
 }
@@ -372,23 +370,32 @@ Memory::didLoadFromBuffer(const u8 *buffer)
 isize
 Memory::didSaveToBuffer(u8 *buffer) const
 {
-    // Save memory size information
     util::SerWriter writer(buffer);
+
+    // Determine memory size information
+    i32 romSize = config.saveRoms ? config.romSize : 0;
+    i32 womSize = config.saveRoms ? config.womSize : 0;
+    i32 extSize = config.saveRoms ? config.extSize : 0;
+    i32 chipSize = config.chipSize;
+    i32 slowSize = config.slowSize;
+    i32 fastSize = config.fastSize;
+
+    // Save memory size information
     writer
-    << config.romSize
-    << config.womSize
-    << config.extSize
-    << config.chipSize
-    << config.slowSize
-    << config.fastSize;
+    << romSize
+    << womSize
+    << extSize
+    << chipSize
+    << slowSize
+    << fastSize;
     
     // Save memory contents
-    writer.copy(rom, config.romSize);
-    writer.copy(wom, config.womSize);
-    writer.copy(ext, config.extSize);
-    writer.copy(chip, config.chipSize);
-    writer.copy(slow, config.slowSize);
-    writer.copy(fast, config.fastSize);
+    writer.copy(rom, romSize);
+    writer.copy(wom, womSize);
+    writer.copy(ext, extSize);
+    writer.copy(chip, chipSize);
+    writer.copy(slow, slowSize);
+    writer.copy(fast, fastSize);
     
     return (isize)(writer.ptr - buffer);
 }
@@ -486,6 +493,42 @@ Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask, bool update)
     
     // Update the memory source tables if requested
     if (update) updateMemSrcTables();
+}
+
+void
+Memory::allocChip(i32 bytes, bool update)
+{
+    alloc(bytes, chip, config.chipSize, chipMask, update);
+}
+
+void
+Memory::allocSlow(i32 bytes, bool update)
+{
+    alloc(bytes, slow, config.slowSize, slowMask, update);
+}
+
+void
+Memory::allocFast(i32 bytes, bool update)
+{
+    alloc(bytes, fast, config.fastSize, fastMask, update);
+}
+            
+void
+Memory::allocRom(i32 bytes, bool update)
+{
+    alloc(bytes, rom, config.romSize, romMask, update);
+}
+
+void
+Memory::allocWom(i32 bytes, bool update)
+{
+    alloc(bytes, wom, config.womSize, womMask, update);
+}
+
+void
+Memory::allocExt(i32 bytes, bool update)
+{
+    alloc(bytes, ext, config.extSize, extMask, update);
 }
 
 void
