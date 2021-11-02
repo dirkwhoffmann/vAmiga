@@ -1272,8 +1272,8 @@ Blitter::execLine()
     
     // Determine if we need the bus
     if constexpr ((bool)(instr & WRITE_D)) {
-        bus     = true; // !lockD;
-        busidle = false; // lockD;
+        bus     = true;
+        busidle = false;
     } else {
         bus     = instr & (FETCH | BUS);
         busidle = instr & BUSIDLE;
@@ -1381,8 +1381,8 @@ Blitter::fakeExecLine()
 
     // Determine if we need the bus
     if constexpr ((bool)(instr & WRITE_D)) {
-        bus     = !lockD;
-        busidle = lockD;
+        bus     = true;
+        busidle = false;
     } else {
         bus     = instr & (FETCH | BUS);
         busidle = instr & BUSIDLE;
@@ -1410,39 +1410,14 @@ Blitter::fakeExecLine()
         agnus.busValue[agnus.pos.h] = 0x8888;
     }
 
-    /*
     if constexpr ((bool)(instr & REPEAT)) {
-
-        u16 newpc = 0;
-
-        trace(BLT_DEBUG, "REPEAT\n");
-        iteration++;
-        lockD = false;
-
-        if (xCounter > 1) {
-
-            bltpc = newpc;
-            decXCounter();
-
-        } else if (yCounter > 1) {
-
-            bltpc = newpc;
-            resetXCounter();
-            decYCounter();
-        }
-    }
-    */
-    if constexpr ((bool)(instr & REPEAT)) {
-
-        u16 newpc = 0;
-
-        // trace(true, "REPEAT\n");
+        
         iteration++;
         lockD = false;
 
         if (yCounter > 1) {
 
-            bltpc = newpc;
+            bltpc = 0;
             resetXCounter();
             decYCounter();
         }
@@ -1450,7 +1425,6 @@ Blitter::fakeExecLine()
     
     if constexpr ((bool)(instr & BLTDONE)) {
 
-        // trace(true, "BLTDONE\n");
         endBlit();
     }
 }
