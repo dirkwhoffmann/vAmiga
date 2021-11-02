@@ -410,7 +410,7 @@ public:
 private:
     
     // Emulates the barrel shifter
-    u16 barrelShifter(u16 anew, u16 aold,  u16 shift, bool desc);
+    u16 barrelShifter(u16 anew, u16 aold,  u16 shift, bool desc = false);
     
     // Emulates the minterm logic circuit
     u16 doMintermLogic     (u16 a, u16 b, u16 c, u8 minterm) const;

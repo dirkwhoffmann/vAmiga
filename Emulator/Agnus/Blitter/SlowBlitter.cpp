@@ -1114,12 +1114,7 @@ Blitter::exec()
         trace(BLT_DEBUG, "HOLD_A\n");
 
         // Run the barrel shifter on data path A
-        if (desc) {
-            ahold = (u16)(HI_W_LO_W(anew & mask, aold) >> (16 - bltconASH()));
-        } else {
-            ahold = (u16)(HI_W_LO_W(aold, anew & mask) >> bltconASH());
-        }
-        assert(ahold == barrelShifter(anew & mask, aold, bltconASH(), desc));
+        ahold = barrelShifter(anew & mask, aold, bltconASH(), desc);
         aold = anew & mask;
     }
 
@@ -1128,12 +1123,7 @@ Blitter::exec()
         trace(BLT_DEBUG, "HOLD_B\n");
 
         // Run the barrel shifter on data path B
-        if (desc) {
-            bhold = (u16)(HI_W_LO_W(bnew, bold) >> (16 - bltconBSH()));
-        } else {
-            bhold = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
-        }
-        assert(bhold == barrelShifter(bnew, bold, bltconBSH(), desc));
+        bhold = barrelShifter(bnew, bold, bltconBSH(), desc);
         bold = bnew;
     }
 
@@ -1319,53 +1309,41 @@ Blitter::execLine()
                 check1 = util::fnv_1a_it32(check1, dhold);
                 check2 = util::fnv_1a_it32(check2, bltdpt);
             }
-            trace(BLT_DEBUG, "    D = %X -> %X\n", dhold, bltdpt);
         }
     }
 
     if constexpr ((bool)(instr & FETCH_B)) {
 
-        trace(BLT_DEBUG, "FETCH_B\n");
-
+        // Perform channel B DMA
         bnew = agnus.doBlitterDmaRead(bltbpt);
-        trace(BLT_DEBUG, "    B = %X <- %X\n", bnew, bltbpt);
-        
         U32_INC(bltbpt, bltbmod);
     }
 
     if constexpr ((bool)(instr & FETCH_C)) {
 
-        trace(BLT_DEBUG, "FETCH_C\n");
-
+        // Perform channel C DMA
         chold = agnus.doBlitterDmaRead(bltcpt);
-        trace(BLT_DEBUG, "    C = %X <- %X\n", chold, bltcpt);
     }
 
     if constexpr ((bool)(instr & HOLD_A)) {
 
-        trace(BLT_DEBUG, "HOLD_A\n");
-
         // Run the barrel shifter on data path A
-        ahold = (anew & bltafwm) >> bltconASH();
+        ahold = barrelShifter(anew & bltafwm, 0, bltconASH());
     }
 
     if constexpr ((bool)(instr & HOLD_B)) {
 
-        trace(BLT_DEBUG, "HOLD_B\n");
-
         // Run the barrel shifter on data path B
-        bhold = (u16)((bnew >> bltconBSH()) | (bnew << (16 - bltconBSH())));
-        assert(bhold == barrelShifter(bnew, bnew, bltconBSH(), false));
+        bhold = barrelShifter(bnew, bnew, bltconBSH());
         decBSH();
     }
 
     if constexpr ((bool)(instr & HOLD_D)) {
 
-        trace(BLT_DEBUG, "HOLD_D\n");
-
         // Run the minterm logic circuit
         dhold = doMintermLogic(ahold, (bhold & 1) ? 0xFFFF : 0, chold, bltcon0 & 0xFF);
                 
+        // Determine if we need to lock the D channel in WRITE_D
         lockD = (sing && !fillCarry) || !useC;
 
         // Run the line logic circuit
@@ -1377,15 +1355,12 @@ Blitter::execLine()
 
     if constexpr ((bool)(instr & REPEAT)) {
 
-        u16 newpc = 0;
-
-        trace(BLT_DEBUG, "REPEAT\n");
         iteration++;
         lockD = false;
 
         if (yCounter > 1) {
 
-            bltpc = newpc;
+            bltpc = 0;
             resetXCounter();
             decYCounter();
         }
@@ -1395,7 +1370,6 @@ Blitter::execLine()
 
     if constexpr ((bool)(instr & BLTDONE)) {
 
-        trace(BLT_DEBUG, "BLTDONE\n");
         endBlit();
     }
 }
