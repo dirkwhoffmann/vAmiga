@@ -103,6 +103,9 @@ private:
     // Snapshot storage
     //
     
+public:
+    class Snapshot *startupSnapshot = nullptr;
+    
 private:
     
     class Snapshot *autoSnapshot = nullptr;
@@ -278,9 +281,6 @@ public:
     Snapshot *latestAutoSnapshot();
     Snapshot *latestUserSnapshot();
 
-    /* Loads the current state from a snapshot file. There is an thread-unsafe
-     * and thread-safe version of this function. The first one can be unsed
-     * inside the emulator thread or from outside if the emulator is halted.
-     */
+    // Loads the current state from a snapshot file
     void loadSnapshot(const Snapshot &snapshot) throws;
 };

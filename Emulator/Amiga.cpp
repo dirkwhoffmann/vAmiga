@@ -701,7 +701,10 @@ Amiga::_powerOn()
 
     // Perform a reset
     hardReset();
-                
+
+    // Load the inital snapshot (if provided)
+    if (startupSnapshot) loadSnapshot(*startupSnapshot);
+
     // Update the recorded debug information
     inspect();
 
