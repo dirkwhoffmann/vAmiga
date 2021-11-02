@@ -145,6 +145,7 @@ public:
     void reset(bool hard);
     void hardReset() { reset(true); }
     void softReset() { reset(false); }
+    void isReady() const throws override;
     
 private:
     

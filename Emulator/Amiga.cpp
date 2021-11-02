@@ -144,6 +144,17 @@ Amiga::reset(bool hard)
 }
 
 void
+Amiga::isReady() const
+{
+    printf("Amiga::isReady()");
+        
+    // Bypass the check procedure if we are going to launch from a snapshot
+    if (startupSnapshot) return;
+    
+    AmigaComponent::isReady();
+}
+
+void
 Amiga::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)

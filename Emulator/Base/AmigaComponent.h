@@ -87,7 +87,7 @@ public:
     virtual void resume() = 0;
 
     // Throws an exception if the emulator is not ready to power on
-    void isReady() const throws;
+    virtual void isReady() const throws;
 
 protected:
     
