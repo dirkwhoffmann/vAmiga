@@ -1113,7 +1113,7 @@ Blitter::exec()
 
         trace(BLT_DEBUG, "HOLD_A\n");
 
-        // Run the barrel shifters on data path A
+        // Run the barrel shifter on data path A
         if (desc) {
             ahold = (u16)(HI_W_LO_W(anew & mask, aold) >> (16 - bltconASH()));
         } else {
@@ -1126,7 +1126,7 @@ Blitter::exec()
 
         trace(BLT_DEBUG, "HOLD_B\n");
 
-        // Run the barrel shifters on data path B
+        // Run the barrel shifter on data path B
         if (desc) {
             bhold = (u16)(HI_W_LO_W(bnew, bold) >> (16 - bltconBSH()));
         } else {
@@ -1343,11 +1343,7 @@ Blitter::execLine()
 
         trace(BLT_DEBUG, "HOLD_A\n");
 
-        // Run the barrel shifters on data path A
-        /*
-        ahold = (u16)(HI_W_LO_W(aold, anew & mask) >> bltconASH());
-        aold = anew & mask;
-        */
+        // Run the barrel shifter on data path A
         ahold = (anew & bltafwm) >> bltconASH();
     }
 
@@ -1355,14 +1351,9 @@ Blitter::execLine()
 
         trace(BLT_DEBUG, "HOLD_B\n");
 
-        // Run the barrel shifters on data path B
+        // Run the barrel shifter on data path B
         bhold = (u16)((bnew >> bltconBSH()) | (bnew << (16 - bltconBSH())));
         decBSH();
-        // if (bsh-- == 0) bsh = 15;
-        /*
-        bhold = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
-        bold = bnew;
-        */
     }
 
     if constexpr ((bool)(instr & HOLD_D)) {

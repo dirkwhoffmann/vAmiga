@@ -125,20 +125,22 @@ void Blitter::doFastCopyBlit()
                 cpt = U32_ADD(cpt, incr);
             }
             
-            // Run the barrel shifter on path A (even if A channel is disabled)
+            // Run the barrel shifter on path A (even if channel A is disabled)
             if (desc) {
-                doBarrelAdesc(anew & mask);
+                ahold = (u16)(HI_W_LO_W(anew & mask, aold) >> (16 - bltconASH()));
             } else {
-                doBarrelA(anew & mask);
+                ahold = (u16)(HI_W_LO_W(aold, anew & mask) >> bltconASH());
             }
-            
-            // Run the barrel shifter on path B (if B channel enabled)
+            aold = anew & mask;
+                        
+            // Run the barrel shifter on path B (if channel B is enabled)
             if (useB) {
                 if (desc) {
-                    doBarrelBdesc(bnew);
+                    bhold = (u16)(HI_W_LO_W(bnew, bold) >> (16 - bltconBSH()));
                 } else {
-                    doBarrelB(bnew);
+                    bhold = (u16)(HI_W_LO_W(bold, bnew) >> bltconBSH());
                 }
+                bold = bnew;
             }
             
             // Run the minterm circuit

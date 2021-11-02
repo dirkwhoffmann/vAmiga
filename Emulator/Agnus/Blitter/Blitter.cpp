@@ -224,6 +224,7 @@ Blitter::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
+/*
 void
 Blitter::doBarrelA(u16 aNew)
 {
@@ -251,6 +252,7 @@ Blitter::doBarrelBdesc(u16 bNew)
     bhold = (u16)(HI_W_LO_W(bNew, bold) >> (16 - bltconBSH()));
     bold  = bNew;
 }
+*/
 
 u16
 Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm) const
