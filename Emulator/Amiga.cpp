@@ -129,7 +129,7 @@ Amiga::prefix() const
 void
 Amiga::reset(bool hard)
 {
-    if (hard) suspend();
+    if (!isEmulatorThread()) suspend();
     
     // If a disk change is in progress, finish it
     paula.diskController.serviceDiskChangeEvent();
@@ -137,7 +137,7 @@ Amiga::reset(bool hard)
     // Execute the standard reset routine
     AmigaComponent::reset(hard);
     
-    if (hard) resume();
+    if (!isEmulatorThread()) resume();
 
     // Inform the GUI
     if (hard) msgQueue.put(MSG_RESET);
@@ -749,7 +749,12 @@ Amiga::_powerOff()
 {
     debug(RUN_DEBUG, "_powerOff\n");
 
+    // Perform a reset
+    hardReset();
+
+    // Update the recorded debug information
     inspect();
+    
     msgQueue.put(MSG_POWER_OFF);
 }
 

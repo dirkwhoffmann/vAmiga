@@ -139,51 +139,53 @@ Thread::main()
             if (state == EXEC_OFF && newState == EXEC_PAUSED) {
                 
                 AmigaComponent::powerOn();
-                state = newState;
+                state = EXEC_PAUSED;
                 break;
             }
 
             if (state == EXEC_OFF && newState == EXEC_RUNNING) {
                 
                 AmigaComponent::powerOn();
+                state = EXEC_PAUSED;
                 AmigaComponent::run();
-                state = newState;
+                state = EXEC_RUNNING;
                 break;
             }
 
             if (state == EXEC_PAUSED && newState == EXEC_OFF) {
                 
                 AmigaComponent::powerOff();
-                state = newState;
+                state = EXEC_OFF;
                 break;
             }
 
             if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
                 
                 AmigaComponent::run();
-                state = newState;
+                state = EXEC_RUNNING;
                 break;
             }
 
             if (state == EXEC_RUNNING && newState == EXEC_OFF) {
                 
                 AmigaComponent::pause();
+                state = EXEC_PAUSED;
                 AmigaComponent::powerOff();
-                state = newState;
+                state = EXEC_OFF;
                 break;
             }
 
             if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
                 
                 AmigaComponent::pause();
-                state = newState;
+                state = EXEC_PAUSED;
                 break;
             }
             
             if (newState == EXEC_HALTED) {
                 
                 AmigaComponent::halt();
-                state = newState;
+                state = EXEC_HALTED;
                 return;
             }
             
