@@ -59,8 +59,8 @@ struct FloatStereo; typedef FloatStereo SampleType;
  { OPT_DRIVE_SPEED,      -1             }  }
 */
 
-// Uncomment to set a breakpoint on startup
-// #define INITIAL_BREAKPOINT 0xFC1354
+// Uncomment to launch the emulator with a pre-saved snapshot
+// #define INITIAL_SNAPSHOT "/tmp/snap.vamiga"
 
 // Uncomment to lauch the emulator with a disk in df0
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/Planet_Rocklobster_Oxyron.adf"
@@ -69,6 +69,9 @@ struct FloatStereo; typedef FloatStereo SampleType;
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/JetsonsCracked.adf"
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/A2000WB1.2D.adf"
 // #define DF0_DISK "/Users/hoff/Downloads/Jetsons1.adf"
+
+// Uncomment to set a breakpoint on startup
+// #define INITIAL_BREAKPOINT 0xFC1354
 
 // Uncomment to colorize certain rasterlines
 // #define LINE_DEBUG (agnus.pos.v == 260 || agnus.pos.v == 300)

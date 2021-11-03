@@ -144,17 +144,6 @@ Amiga::reset(bool hard)
 }
 
 void
-Amiga::isReady() const
-{
-    printf("Amiga::isReady()");
-        
-    // Bypass the check procedure if we are going to launch from a snapshot
-    if (startupSnapshot) return;
-    
-    AmigaComponent::isReady();
-}
-
-void
 Amiga::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
@@ -716,12 +705,11 @@ Amiga::_powerOn()
     // Perform a reset
     hardReset();
 
-    // Load the inital snapshot (if provided)
-    if (startupSnapshot) loadSnapshot(*startupSnapshot);
-
-    // Update the recorded debug information
-    inspect();
-
+#ifdef INITIAL_SNAPSHOT
+    Snapshot snapshot(INITIAL_SNAPSHOT);
+    loadSnapshot(snapshot);
+#endif
+    
 #ifdef DF0_DISK
     ADFFile df0file(DF0_DISK);
     df0.ejectDisk();
@@ -741,6 +729,9 @@ Amiga::_powerOn()
     cpu.debugger.breakpoints.addAt(INITIAL_BREAKPOINT);
 #endif
     
+    // Update the recorded debug information
+    inspect();
+
     msgQueue.put(MSG_POWER_ON);
 }
 
@@ -748,9 +739,6 @@ void
 Amiga::_powerOff()
 {
     debug(RUN_DEBUG, "_powerOff\n");
-
-    // Perform a reset
-    hardReset();
 
     // Update the recorded debug information
     inspect();

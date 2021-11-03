@@ -143,7 +143,7 @@ Memory::getDefaultConfig()
     defaults.womSize = 0;
     defaults.extSize = 0;
     
-    defaults.saveRoms = false;
+    defaults.saveRoms = true;
     defaults.slowRamDelay = true;
     defaults.bankMap = BANK_MAP_A500;
     defaults.ramInitPattern = RAM_INIT_ALL_ZEROES;
@@ -669,9 +669,6 @@ Memory::loadRom(RomFile &file)
 
     // Remove extended Rom (if any)
     deleteExt();
-    
-    // Perform a hard reset
-    amiga.hardReset();
 }
 
 void

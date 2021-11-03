@@ -59,10 +59,7 @@ AmigaComponent::load(const u8 *buffer)
     ptr += didLoadFromBuffer(ptr);
     isize result = (isize)(ptr - buffer);
     
-    // Verify that the number of written bytes matches the snapshot size
-    trace(SNP_DEBUG, "Loaded %zd bytes (expected %zd)\n", result, size());
-    assert(result == size());
-
+    debug(SNP_DEBUG, "Loaded %zd bytes (expected %zd)\n", result, size());
     return result;
 }
 
@@ -87,9 +84,9 @@ AmigaComponent::save(u8 *buffer)
     isize result = (isize)(ptr - buffer);
     
     // Verify that the number of written bytes matches the snapshot size
-    trace(SNP_DEBUG, "Saved %zd bytes (expected %zd)\n", result, size());
     assert(result == size());
 
+    debug(SNP_DEBUG, "Saved %zd bytes (expected %zd)\n", result, size());
     return result;
 }
 

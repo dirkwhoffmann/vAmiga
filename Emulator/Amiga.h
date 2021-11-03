@@ -102,10 +102,7 @@ private:
     //
     // Snapshot storage
     //
-    
-public:
-    class Snapshot *startupSnapshot = nullptr;
-    
+        
 private:
     
     class Snapshot *autoSnapshot = nullptr;
@@ -145,7 +142,6 @@ public:
     void reset(bool hard);
     void hardReset() { reset(true); }
     void softReset() { reset(false); }
-    void isReady() const throws override;
     
 private:
     

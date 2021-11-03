@@ -243,8 +243,9 @@ Thread::powerOn(bool blocking)
     
     if (isPoweredOff()) {
         
+        printf("Thread::powerOn\n");
         // Throw an exception if the emulator is not ready to power on
-        isReady();
+        // isReady();
 
         // Request a state change and wait until the new state has been reached
         changeStateTo(EXEC_PAUSED, blocking);

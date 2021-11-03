@@ -185,14 +185,17 @@ extension MyController {
         try? mydocument.mountAttachment(destination: amiga.df0)
 
         do {
-            // Let the Amiga throw an exception if it is not ready to power on
-            try amiga.isReady()
+            // Switch the Amiga on
+            try amiga.powerOn()
             
-            // Switch on and launch the emulator thread
+            // Launch the emulator thread
             try amiga.run()
 
         } catch {
 
+            // Switch the Amiga off
+            amiga.powerOff()
+            
             // Open the Rom dialog
             openConfigurator(tab: "Roms")
         }
