@@ -272,7 +272,6 @@ public:
 private:
 
     void _isReady() const throws override;
-    void _powerOn() override;
 
         
     //

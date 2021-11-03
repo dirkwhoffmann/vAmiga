@@ -112,6 +112,15 @@ Memory::_dump(dump::Category category, std::ostream& os) const
 void
 Memory::_reset(bool hard)
 {
+    if (hard) {
+        
+        // Erase WOM (if any)
+        if (hasWom()) eraseWom();
+
+        // Fill RAM with the proper startup pattern
+        fillRamWithInitPattern();
+    }
+
     RESET_SNAPSHOT_ITEMS(hard)
     
     // Set up the memory lookup table
@@ -119,9 +128,6 @@ Memory::_reset(bool hard)
     
     // Initialize statistical counters
     clearStats();
-    
-    // In hard-reset mode, we also initialize RAM
-    if (hard) fillRamWithInitPattern();
 }
 
 MemoryConfig
@@ -418,19 +424,6 @@ Memory::_isReady() const
     if (mem.chipRamSize() > KB(agnus.chipRamLimit()) || FORCE_CHIP_RAM_LIMIT) {
         throw VAError(ERROR_CHIP_RAM_LIMIT);
     }
-}
-
-void
-Memory::_powerOn()
-{
-    // Erase WOM (if any)
-    if (hasWom()) eraseWom();
-
-    // Fill RAM with the proper startup pattern
-    fillRamWithInitPattern();
-
-    // Set up the memory lookup table
-    updateMemSrcTables();
 }
 
 void
