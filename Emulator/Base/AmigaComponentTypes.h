@@ -63,6 +63,7 @@ enum_long(OPT)
     OPT_START_DELAY,
     OPT_STOP_DELAY,
     OPT_STEP_DELAY,
+    OPT_DISK_SWAP_DELAY,
     OPT_DRIVE_PAN,
     OPT_STEP_VOLUME,
     OPT_POLL_VOLUME,
@@ -153,6 +154,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_START_DELAY:         return "START_DELAY";
             case OPT_STOP_DELAY:          return "STOP_DELAY";
             case OPT_STEP_DELAY:          return "STEP_DELAY";
+            case OPT_DISK_SWAP_DELAY:     return "DISK_SWAP_DELAY";
             case OPT_DRIVE_PAN:           return "DRIVE_PAN";
             case OPT_STEP_VOLUME:         return "STEP_VOLUME";
             case OPT_POLL_VOLUME:         return "POLL_VOLUME";

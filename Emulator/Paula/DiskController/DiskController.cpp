@@ -329,7 +329,7 @@ DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
             
             // Make sure there is enough time between ejecting and inserting.
             // Otherwise, the Amiga might not detect the change.
-            delay = std::max((Cycle)SEC(1.5), delay);
+            delay = std::max(df[nr]->config.diskSwapDelay, delay);
         }
         
         diskToInsert = std::move(disk);

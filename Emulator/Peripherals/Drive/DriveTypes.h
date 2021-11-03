@@ -76,6 +76,9 @@ typedef struct
     Cycle stopDelay;
     Cycle stepDelay;
     
+    // Delay between ejecting an old disk and inserting a new one
+    Cycle diskSwapDelay;
+    
     // Noise settings
     i16 pan;
     u8 stepVolume;

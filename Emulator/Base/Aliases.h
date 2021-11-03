@@ -41,9 +41,9 @@ typedef u32 Block;
 //
 
 // Converts a certain unit to master cycles
-#define USEC(delay)           ((delay) * 28)
-#define MSEC(delay)           ((delay) * 28000)
-#define SEC(delay)            ((delay) * 28000000)
+#define USEC(delay)           (Cycle)((delay) * 28)
+#define MSEC(delay)           (Cycle)((delay) * 28000)
+#define SEC(delay)            (Cycle)((delay) * 28000000)
 
 #define CPU_CYCLES(cycles)    ((cycles) << 2)
 #define CIA_CYCLES(cycles)    ((cycles) * 40)

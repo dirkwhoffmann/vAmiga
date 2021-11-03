@@ -40,7 +40,7 @@ enum class Token
     keyset, mechanics, mode, model, opacity, palette, pan, path, poll, pullup,
     raminitpattern, refresh, revision, rom, sampling, saturation, saveroms,
     searchpath, shakedetector, slow, slowramdelay, slowrammirror, speed,
-    sprites, step, tod, todbug, unmappingtype, velocity, volume, wom
+    sprites, step, swapdelay, tod, todbug, unmappingtype, velocity, volume, wom
 };
 
 struct TooFewArgumentsError : public util::ParseError {

@@ -273,6 +273,7 @@ Amiga::getConfigItem(Option option, long id) const
         case OPT_START_DELAY:
         case OPT_STOP_DELAY:
         case OPT_STEP_DELAY:
+        case OPT_DISK_SWAP_DELAY:
         case OPT_DRIVE_PAN:
         case OPT_STEP_VOLUME:
         case OPT_POLL_VOLUME:
@@ -388,6 +389,7 @@ Amiga::configure(Option option, i64 value)
         case OPT_START_DELAY:
         case OPT_STOP_DELAY:
         case OPT_STEP_DELAY:
+        case OPT_DISK_SWAP_DELAY:
         case OPT_DRIVE_PAN:
         case OPT_STEP_VOLUME:
         case OPT_POLL_VOLUME:
@@ -521,6 +523,7 @@ Amiga::configure(Option option, long id, i64 value)
         case OPT_START_DELAY:
         case OPT_STOP_DELAY:
         case OPT_STEP_DELAY:
+        case OPT_DISK_SWAP_DELAY:
         case OPT_DRIVE_PAN:
         case OPT_STEP_VOLUME:
         case OPT_POLL_VOLUME:

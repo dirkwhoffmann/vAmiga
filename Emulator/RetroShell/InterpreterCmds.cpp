@@ -849,6 +849,10 @@ Interpreter::registerInstructions()
                  "key", "Determines the default boot block type for blank disks",
                  &RetroShell::exec <Token::dfn, Token::set, Token::defaultbb>, 1);
         
+        root.add({df, "set", "swapdelay"},
+                 "key", "Sets the disk change delay",
+                 &RetroShell::exec <Token::dfn, Token::set, Token::swapdelay>, 1);
+
         root.add({df, "set", "pan"},
                  "key", "Sets the pan for drive sounds",
                  &RetroShell::exec <Token::dfn, Token::set, Token::pan>, 1);

@@ -1024,6 +1024,18 @@ RetroShell::exec <Token::dfn, Token::set, Token::defaultbb> (Arguments& argv, lo
 }
 
 template <> void
+RetroShell::exec <Token::dfn, Token::set, Token::swapdelay> (Arguments& argv, long param)
+{
+    long num = util::parseNum(argv.front());
+    
+    if (param >= 0 && param <= 3) {
+        amiga.configure(OPT_DISK_SWAP_DELAY, param, num);
+    } else {
+        amiga.configure(OPT_DISK_SWAP_DELAY, num);
+    }
+}
+
+template <> void
 RetroShell::exec <Token::dfn, Token::set, Token::defaultfs> (Arguments& argv, long param)
 {
     long num = util::parseEnum <FSVolumeTypeEnum> (argv.front());

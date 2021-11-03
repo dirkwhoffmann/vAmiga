@@ -44,6 +44,7 @@ Drive::getDefaultConfig(isize nr)
     defaults.startDelay = MSEC(380);
     defaults.stopDelay = MSEC(80);
     defaults.stepDelay = USEC(8000);
+    defaults.diskSwapDelay = SEC(1.8);
     defaults.pan = IS_EVEN(nr) ? 100 : -100;
     defaults.stepVolume = 128;
     defaults.pollVolume = 128;
@@ -65,6 +66,7 @@ Drive::resetConfig()
     setConfigItem(OPT_START_DELAY, defaults.startDelay);
     setConfigItem(OPT_STOP_DELAY, defaults.stopDelay);
     setConfigItem(OPT_STEP_DELAY, defaults.stepDelay);
+    setConfigItem(OPT_DISK_SWAP_DELAY, defaults.diskSwapDelay);
     setConfigItem(OPT_DRIVE_PAN, defaults.pan);
     setConfigItem(OPT_STEP_VOLUME, defaults.stepVolume);
     setConfigItem(OPT_POLL_VOLUME, defaults.pollVolume);
@@ -84,6 +86,7 @@ Drive::getConfigItem(Option option) const
         case OPT_START_DELAY:         return (long)config.startDelay;
         case OPT_STOP_DELAY:          return (long)config.stopDelay;
         case OPT_STEP_DELAY:          return (long)config.stepDelay;
+        case OPT_DISK_SWAP_DELAY:     return (long)config.diskSwapDelay;
         case OPT_DRIVE_PAN:           return (long)config.pan;
         case OPT_STEP_VOLUME:         return (long)config.stepVolume;
         case OPT_POLL_VOLUME:         return (long)config.pollVolume;
@@ -132,6 +135,11 @@ Drive::setConfigItem(Option option, i64 value)
         case OPT_STEP_DELAY:
         
             config.stepDelay = value;
+            return;
+
+        case OPT_DISK_SWAP_DELAY:
+        
+            config.diskSwapDelay = value;
             return;
 
         case OPT_DRIVE_PAN:
@@ -210,6 +218,8 @@ Drive::_dump(dump::Category category, std::ostream& os) const
         os << dec(config.stopDelay) << std::endl;
         os << tab("Step delay");
         os << dec(config.stepDelay) << std::endl;
+        os << tab("Disk swap delay");
+        os << dec(config.diskSwapDelay) << std::endl;
         os << tab("Insert volume");
         os << dec(config.insertVolume) << std::endl;
         os << tab("Eject volume");
