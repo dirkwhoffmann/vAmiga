@@ -653,6 +653,8 @@ Memory::hasArosRom() const
 void
 Memory::loadRom(RomFile &file)
 {
+    assert(amiga.isPoweredOff());
+    
     // Decrypt Rom
     file.decrypt();
 
@@ -667,6 +669,9 @@ Memory::loadRom(RomFile &file)
 
     // Remove extended Rom (if any)
     deleteExt();
+    
+    // Perform a hard reset
+    amiga.hardReset();
 }
 
 void
