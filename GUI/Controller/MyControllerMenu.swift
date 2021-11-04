@@ -334,19 +334,23 @@ extension MyController: NSMenuItemValidation {
     @IBAction func powerAction(_ sender: Any!) {
         
         if amiga.poweredOn {
+            
             amiga.powerOff()
-            return
-        }
-        
-        do {
-            try amiga.run()
-        } catch let error as VAError {
-            error.notReady()
-        } catch {
-            fatalError()
+            
+        } else {
+            
+            try? amiga.powerOn()
+            
+            do {
+                try amiga.run()
+            } catch let error as VAError {
+                error.notReady()
+            } catch {
+                fatalError()
+            }
         }
     }
-    
+
     //
     // Action methods (View menu)
     //

@@ -143,6 +143,7 @@ Thread::main()
                 break;
             }
 
+            /* THIS TRANSITION IS INVALID NOW
             if (state == EXEC_OFF && newState == EXEC_RUNNING) {
                 
                 AmigaComponent::powerOn();
@@ -151,6 +152,7 @@ Thread::main()
                 state = EXEC_RUNNING;
                 break;
             }
+            */
 
             if (state == EXEC_PAUSED && newState == EXEC_OFF) {
                 
@@ -274,10 +276,12 @@ Thread::run(bool blocking)
 
     // Never call this function inside the emulator thread
     assert(!isEmulatorThread());
-    
+
     if (!isRunning()) {
-        
-        // Throw an exception if the emulator is not ready to power on
+
+        assert(isPoweredOn());
+
+        // Throw an exception if the emulator is not ready to run
         isReady();
         
         // Request a state change and wait until the new state has been reached
