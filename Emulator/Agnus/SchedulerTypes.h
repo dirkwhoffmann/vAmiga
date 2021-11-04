@@ -14,7 +14,7 @@
 
 // Checks if a slot number refers to a primary slot or a secondary slot
 #define isPrimarySlot(s) ((s) <= SLOT_SEC)
-#define isSecondarySlot(s) ((s) <= SLOT_TER)
+#define isSecondarySlot(s) ((s) > SLOT_SEC && (s) <= SLOT_TER)
 #define isTertiarySlot(s) ((s) > SLOT_TER)
 
 // Time stamp used for messages that never trigger
