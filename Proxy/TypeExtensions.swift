@@ -20,7 +20,7 @@ extension EventSlot: CustomStringConvertible {
         case .DAS:   return "Other DMA"
         case .COP:   return "Copper"
         case .BLT:   return "Blitter"
-        case .SEC:   return "Secondary"
+        case .SEC:   return "Next secondary event"
 
         case .CH0:   return "Audio channel 0"
         case .CH1:   return "Audio channel 1"
@@ -36,7 +36,10 @@ extension EventSlot: CustomStringConvertible {
         case .RXD:   return "UART in"
         case .POT:   return "Potentiometer"
         case .RAS:   return "Rasterline"
+        case .TER:   return "Next tertiary event"
+
         case .INS:   return "Inspector"
+
         case .COUNT: return "???"
             
         default:     fatalError()

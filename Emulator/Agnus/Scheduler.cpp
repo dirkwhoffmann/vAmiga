@@ -295,6 +295,26 @@ Scheduler::eventName(EventSlot slot, EventID id)
             }
             break;
             
+        case SLOT_RAS:
+
+            switch (id) {
+
+                case EVENT_NONE:    return "none";
+                case RAS_HSYNC:     return "RAS_HSYNC";
+                default:            return "*** INVALID ***";
+            }
+            break;
+
+        case SLOT_TER:
+
+            switch (id) {
+
+                case EVENT_NONE:    return "none";
+                case TER_TRIGGER:   return "TER_TRIGGER";
+                default:            return "*** INVALID ***";
+            }
+            break;
+
         case SLOT_INS:
 
             switch (id) {
@@ -312,17 +332,7 @@ Scheduler::eventName(EventSlot slot, EventID id)
                 default:            return "*** INVALID ***";
             }
             break;
-
-        case SLOT_RAS:
-
-            switch (id) {
-
-                case EVENT_NONE:    return "none";
-                case RAS_HSYNC:     return "RAS_HSYNC";
-                default:            return "*** INVALID ***";
-            }
-            break;
-
+            
         default:
             fatalError;
     }
@@ -543,13 +553,28 @@ Scheduler::executeUntil(Cycle cycle) {
         if (isDue<SLOT_RAS>(cycle)) {
             agnus.serviceRASEvent();
         }
-        if (isDue<SLOT_INS>(cycle)) {
-            agnus.serviceINSEvent(id[SLOT_INS]);
-        }
 
+        if (isDue<SLOT_TER>(cycle)) {
+
+            //
+            // Check tertiary slots
+            //
+
+            if (isDue<SLOT_INS>(cycle)) {
+                agnus.serviceINSEvent(id[SLOT_INS]);
+            }
+
+            // Determine the next trigger cycle for all tertiary slots
+            Cycle next = trigger[SLOT_TER + 1];
+            for (isize i = SLOT_TER + 2; i < SLOT_COUNT; i++) {
+                if (trigger[i] < next) next = trigger[i];
+            }
+            rescheduleAbs<SLOT_TER>(next);
+        }
+        
         // Determine the next trigger cycle for all secondary slots
         Cycle next = trigger[SLOT_SEC + 1];
-        for (isize i = SLOT_SEC + 2; i < SLOT_COUNT; i++) {
+        for (isize i = SLOT_SEC + 2; i <= SLOT_TER; i++) {
             if (trigger[i] < next) next = trigger[i];
         }
         rescheduleAbs<SLOT_SEC>(next);

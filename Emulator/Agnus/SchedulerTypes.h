@@ -14,7 +14,8 @@
 
 // Checks if a slot number refers to a primary slot or a secondary slot
 #define isPrimarySlot(s) ((s) <= SLOT_SEC)
-#define isSecondarySlot(s) ((s) > SLOT_SEC)
+#define isSecondarySlot(s) ((s) <= SLOT_TER)
+#define isTertiarySlot(s) ((s) > SLOT_TER)
 
 // Time stamp used for messages that never trigger
 #define NEVER INT64_MAX
@@ -50,8 +51,12 @@ enum_long(SLOT)
     SLOT_TXD,                       // Serial data out (UART)
     SLOT_RXD,                       // Serial data in (UART)
     SLOT_POT,                       // Potentiometer
-    SLOT_INS,                       // Handles periodic calls to inspect()
     SLOT_RAS,                       // HSYNC handler (End of Line)
+    SLOT_TER,                       // Enables tertiary slots
+    
+    // Tertiary slots
+    SLOT_INS,                       // Handles periodic calls to inspect()
+
     SLOT_COUNT
 };
 typedef SLOT EventSlot;
@@ -90,8 +95,11 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_TXD:   return "TXD";
             case SLOT_RXD:   return "RXD";
             case SLOT_POT:   return "POT";
-            case SLOT_INS:   return "INS";
             case SLOT_RAS:   return "RAS";
+            case SLOT_TER:   return "TER";
+                
+            case SLOT_INS:   return "INS";
+
             case SLOT_COUNT: return "???";
         }
         return "???";
@@ -263,7 +271,11 @@ enum_i8(EventID)
 
     // Rasterline slot
     RAS_HSYNC = 1,
-    RAS_EVENT_COUNT
+    RAS_EVENT_COUNT,
+    
+    // SEC slot
+    TER_TRIGGER = 1,
+    TER_EVENT_COUNT
 };
 
 static inline bool isRegEvent(EventID id) { return id < REG_EVENT_COUNT; }

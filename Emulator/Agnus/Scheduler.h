@@ -202,8 +202,12 @@ public:
         
         if (cycle < nextTrigger) nextTrigger = cycle;
         
-        if (isSecondarySlot(s) && cycle < trigger[SLOT_SEC])
-            trigger[SLOT_SEC] = cycle;
+        if constexpr (isTertiarySlot(s)) {
+            if (cycle < trigger[SLOT_TER]) trigger[SLOT_TER] = cycle;
+        }
+        if constexpr (isSecondarySlot(s)) {
+            if (cycle < trigger[SLOT_SEC]) trigger[SLOT_SEC] = cycle;
+        }
     }
     
     template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id, i64 data)
@@ -239,8 +243,12 @@ public:
         trigger[s] = cycle;
         if (cycle < nextTrigger) nextTrigger = cycle;
         
-        if (isSecondarySlot(s) && cycle < trigger[SLOT_SEC])
-            trigger[SLOT_SEC] = cycle;
+        if constexpr (isTertiarySlot(s)) {
+            if (cycle < trigger[SLOT_TER]) trigger[SLOT_TER] = cycle;
+        }
+        if constexpr (isSecondarySlot(s)) {
+            if (cycle < trigger[SLOT_SEC]) trigger[SLOT_SEC] = cycle;
+        }
     }
     
     template<EventSlot s> void rescheduleInc(Cycle cycle)

@@ -21,7 +21,7 @@
  *
  * The audio stream is designes as a ring buffer, because samples are written
  * and read asynchroneously. Since reading and writing is carried out in
- * different threads, accesses to the audio stream need to a preceded by a call
+ * different threads, accesses to the audio stream need to be preceded by a call
  * to lock() and followed by a call to unlock().
  *
  * The audio stream is designed to hold elements of a generic type to make

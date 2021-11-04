@@ -153,6 +153,7 @@ Agnus::_reset(bool hard)
         
     // Schedule initial events
     scheduleRel<SLOT_SEC>(NEVER, SEC_TRIGGER);
+    scheduleRel<SLOT_TER>(NEVER, TER_TRIGGER);
     scheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
     scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
