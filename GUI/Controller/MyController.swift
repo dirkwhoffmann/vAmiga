@@ -186,7 +186,7 @@ extension MyController {
 
         do {
             // Switch the Amiga on
-            try amiga.powerOn()
+            amiga.powerOn()
             
             // Start the emulation
             try amiga.run()

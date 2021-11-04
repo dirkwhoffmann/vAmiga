@@ -339,7 +339,7 @@ extension MyController: NSMenuItemValidation {
             
         } else {
             
-            try? amiga.powerOn()
+            amiga.powerOn()
             
             do {
                 try amiga.run()

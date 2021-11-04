@@ -286,7 +286,7 @@ class ConfigurationController: DialogController {
     @IBAction func powerAction(_ sender: Any!) {
         
         hideSheet()
-        try? amiga.powerOn()
+        amiga.powerOn()
         try? amiga.run()
     }
 }

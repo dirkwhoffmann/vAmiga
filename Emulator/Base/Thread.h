@@ -186,7 +186,7 @@ public:
     bool isRunning() const override { return state == EXEC_RUNNING; }
     bool isPaused() const override { return state == EXEC_PAUSED; }
 
-    void powerOn(bool blocking = true) throws;
+    void powerOn(bool blocking = true);
     void powerOff(bool blocking = true);
     void run(bool blocking = true) throws;
     void pause(bool blocking = true);

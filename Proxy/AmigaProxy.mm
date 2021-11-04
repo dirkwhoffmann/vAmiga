@@ -2228,10 +2228,9 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; }
 }
 
-- (void)powerOn:(ExceptionWrapper *)ex
+- (void)powerOn
 {
-    try { [self amiga]->powerOn(); }
-    catch (VAError &error) { [ex save:error]; }
+    [self amiga]->powerOn();
 }
 
 - (void)powerOff

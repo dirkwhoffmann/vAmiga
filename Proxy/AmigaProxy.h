@@ -194,7 +194,7 @@
 @property (readonly) BOOL paused;
 
 - (void)isReady:(ExceptionWrapper *)ex;
-- (void)powerOn:(ExceptionWrapper *)ex;
+- (void)powerOn;
 - (void)powerOff;
 - (void)run:(ExceptionWrapper *)ex;
 - (void)pause;

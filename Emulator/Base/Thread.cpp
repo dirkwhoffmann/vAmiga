@@ -143,17 +143,6 @@ Thread::main()
                 break;
             }
 
-            /* THIS TRANSITION IS INVALID NOW
-            if (state == EXEC_OFF && newState == EXEC_RUNNING) {
-                
-                AmigaComponent::powerOn();
-                state = EXEC_PAUSED;
-                AmigaComponent::run();
-                state = EXEC_RUNNING;
-                break;
-            }
-            */
-
             if (state == EXEC_PAUSED && newState == EXEC_OFF) {
                 
                 AmigaComponent::powerOff();
@@ -245,10 +234,6 @@ Thread::powerOn(bool blocking)
     
     if (isPoweredOff()) {
         
-        printf("Thread::powerOn\n");
-        // Throw an exception if the emulator is not ready to power on
-        // isReady();
-
         // Request a state change and wait until the new state has been reached
         changeStateTo(EXEC_PAUSED, blocking);
     }
