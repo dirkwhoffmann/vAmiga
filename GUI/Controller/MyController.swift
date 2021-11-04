@@ -196,8 +196,10 @@ extension MyController {
             // Switch the Amiga off
             amiga.powerOff()
             
-            // Open the Rom dialog
-            openConfigurator(tab: "Roms")
+            // Open the Rom dialog after a small delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                self.openConfigurator(tab: "Roms")
+            }
         }
 
         // Create speed monitor
