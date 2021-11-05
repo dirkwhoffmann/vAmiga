@@ -751,7 +751,101 @@ Drive::isInsertable(const Disk &disk) const
 }
 
 void
-Drive::ejectDisk()
+Drive::ejectDisk(Cycle delay)
+{
+    suspended {
+                
+        switch (nr) {
+            case 0: agnus.scheduleRel <SLOT_DC0> (delay, DCH_EJECT); break;
+            case 1: agnus.scheduleRel <SLOT_DC1> (delay, DCH_EJECT); break;
+            case 2: agnus.scheduleRel <SLOT_DC2> (delay, DCH_EJECT); break;
+            case 3: agnus.scheduleRel <SLOT_DC3> (delay, DCH_EJECT); break;
+            default: fatalError;
+        }
+    }
+}
+
+void
+Drive::insertDisk(std::unique_ptr<Disk> disk, Cycle delay)
+{
+    assert(disk != nullptr);
+    
+    debug(DSK_DEBUG, "insertDisk(%lld)\n", delay);
+    
+    // Only proceed if the provided disk is compatible with this drive
+    if (!isInsertable(*disk)) throw VAError(ERROR_DISK_INCOMPATIBLE);
+    
+    // The easy case: The emulator is not running
+    if (!isRunning()) {
+        
+        oldEjectDisk();
+        oldInsertDisk(std::move(disk));
+        return;
+    }
+    
+    // The not so easy case: The emulator is running
+    suspended {
+        
+        if (hasDisk()) {
+            
+            // Eject the old disk first
+            oldEjectDisk();
+            
+            // Make sure there is enough time between ejecting and inserting.
+            // Otherwise, the Amiga might not detect the change.
+            delay = std::max(config.diskSwapDelay, delay);
+        }
+        
+        diskToInsert = std::move(disk);
+        
+        switch (nr) {
+            case 0: agnus.scheduleRel <SLOT_DC0> (delay, DCH_INSERT); break;
+            case 1: agnus.scheduleRel <SLOT_DC1> (delay, DCH_INSERT); break;
+            case 2: agnus.scheduleRel <SLOT_DC2> (delay, DCH_INSERT); break;
+            case 3: agnus.scheduleRel <SLOT_DC3> (delay, DCH_INSERT); break;
+            default: fatalError;
+        }
+    }
+}
+
+void
+Drive::insertDisk(class DiskFile &file, Cycle delay)
+{
+    insertDisk(std::make_unique<Disk>(file), delay);
+}
+
+void
+Drive::insertDisk(const string &name, Cycle delay)
+{
+    bool append = !util::isAbsolutePath(name) && diskController.searchPath[nr] != "";
+    string path = append ? diskController.searchPath[nr] + "/" + name : name;
+    
+    std::unique_ptr<DiskFile> file(DiskFile::make(path));
+    insertDisk(*file, delay);
+}
+
+void
+Drive::insertNew(Cycle delay)
+{
+    ADFFile adf;
+    
+    // Create a suitable ADF for this drive
+    switch (config.type) {
+            
+        case DRIVE_DD_35: adf.init(INCH_35, DISK_DD); break;
+        case DRIVE_HD_35: adf.init(INCH_35, DISK_HD); break;
+        case DRIVE_DD_525: adf.init(INCH_525, DISK_SD); break;
+    }
+    
+    // Add a file system
+    adf.formatDisk(config.defaultFileSystem, config.defaultBootBlock);
+    
+    // Insert the disk
+    insertDisk(adf, delay);
+}
+
+void
+Drive::oldEjectDisk()
 {
     trace(DSK_DEBUG, "ejectDisk()\n");
 
@@ -770,7 +864,7 @@ Drive::ejectDisk()
 }
 
 void
-Drive::insertDisk(std::unique_ptr<Disk> disk)
+Drive::oldInsertDisk(std::unique_ptr<Disk> disk)
 {
     // Only proceed if the provided disk fits into this drive
     if (!isInsertable(*disk)) throw VAError(ERROR_DISK_INCOMPATIBLE);
@@ -804,7 +898,7 @@ Drive::insertNew()
     adf.formatDisk(config.defaultFileSystem, config.defaultBootBlock);
     
     // Convert the ADF into a disk
-    insertDisk(std::make_unique<Disk>(adf));
+    oldInsertDisk(std::make_unique<Disk>(adf));
 }
 
 u64

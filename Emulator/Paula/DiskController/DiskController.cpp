@@ -291,6 +291,14 @@ DiskController::setState(DriveState oldState, DriveState newState)
 void
 DiskController::ejectDisk(isize nr, Cycle delay)
 {
+    assert(nr >= 0 && nr <= 3);
+
+    warn("DiskController::ejectDisk(...) has been deprecated.\n");
+    warn("Use Drive::ejectDisk() instead.\n");
+
+    df[nr]->ejectDisk(delay);
+    
+    /*
     suspended {
         
         switch (nr) {
@@ -301,12 +309,21 @@ DiskController::ejectDisk(isize nr, Cycle delay)
             default: fatalError;
         }
     }
+    */
 }
 
 void
 DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
 {
     assert(disk != nullptr);
+    assert(nr >= 0 && nr <= 3);
+
+    warn("DiskController::insertDisk(...) has been deprecated.\n");
+    warn("Use Drive::insertDisk(...) instead.\n");
+
+    df[nr]->insertDisk(std::move(disk), delay);
+    
+    /*
     assert(nr >= 0 && nr <= 3);
     
     debug(DSK_DEBUG, "insertDisk(%zd, %lld)\n", nr, delay);
@@ -317,8 +334,8 @@ DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
     // The easy case: The emulator is not running
     if (!isRunning()) {
         
-        df[nr]->ejectDisk();
-        df[nr]->insertDisk(std::move(disk));
+        df[nr]->oldEjectDisk();
+        df[nr]->oldInsertDisk(std::move(disk));
         return;
     }
     
@@ -328,7 +345,7 @@ DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
         if (df[nr]->hasDisk()) {
             
             // Eject the old disk first
-            df[nr]->ejectDisk();
+            df[nr]->oldEjectDisk();
             
             // Make sure there is enough time between ejecting and inserting.
             // Otherwise, the Amiga might not detect the change.
@@ -345,12 +362,20 @@ DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
             default: fatalError;
         }
     }
+    */
 }
 
 void
 DiskController::insertDisk(class DiskFile &file, isize nr, Cycle delay)
 {
-    insertDisk(std::make_unique<Disk>(file), nr, delay);
+    assert(nr >= 0 && nr <= 3);
+    
+    warn("DiskController::insertDisk(...) has been deprecated.\n");
+    warn("Use Drive::insertDisk(...) instead.\n");
+
+    df[nr]->insertDisk(file, delay);
+    
+    // insertDisk(std::make_unique<Disk>(file), nr, delay);
 }
 
 void
@@ -358,11 +383,18 @@ DiskController::insertDisk(const string &name, isize nr, Cycle delay)
 {
     assert(nr >= 0 && nr <= 3);
     
+    warn("DiskController::insertDisk(...) has been deprecated.\n");
+    warn("Use Drive::insertDisk(...) instead.\n");
+
+    df[nr]->insertDisk(name, delay);
+    
+    /*
     bool append = !util::isAbsolutePath(name) && searchPath[nr] != "";
     string path = append ? searchPath[nr] + "/" + name : name;
     
     std::unique_ptr<DiskFile> file(DiskFile::make(path));
     insertDisk(*file, nr, delay);
+    */
 }
 
 void
@@ -370,6 +402,12 @@ DiskController::insertNew(isize nr, Cycle delay)
 {
     assert(nr >= 0 && nr <= 3);
     
+    warn("DiskController::insertNew(...) has been deprecated.\n");
+    warn("Use Drive::insertNew(...) instead.\n");
+    
+    df[nr]->insertNew(delay);
+    
+    /*
     ADFFile adf;
     
     // Create a suitable ADF for the specified drive
@@ -386,6 +424,7 @@ DiskController::insertNew(isize nr, Cycle delay)
     
     // Insert the disk
     insertDisk(adf, nr, delay);
+    */
 }
 
 void

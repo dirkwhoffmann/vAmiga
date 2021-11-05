@@ -12,6 +12,8 @@
 #include "DriveTypes.h"
 #include "SubComponent.h"
 #include "Disk.h"
+#include "DiskController.h"
+#include "SuspendableThread.h"
 
 class Drive : public SubComponent {
     
@@ -274,8 +276,14 @@ public:
     bool isInsertable(const DiskFile &file) const;
     bool isInsertable(const Disk &disk) const;
 
-    void ejectDisk();
-    void insertDisk(std::unique_ptr<Disk> disk) throws;
+    void ejectDisk(Cycle delay = 0);
+    void insertDisk(std::unique_ptr<Disk> disk, Cycle delay = 0) throws;
+    void insertDisk(class DiskFile &file, Cycle delay = 0) throws;
+    void insertDisk(const string &name, Cycle delay = 0) throws;
+    void insertNew(Cycle delay = 0) throws;
+
+    void oldEjectDisk();
+    void oldInsertDisk(std::unique_ptr<Disk> disk) throws;
     void insertNew() throws;
     
     u64 fnv() const;

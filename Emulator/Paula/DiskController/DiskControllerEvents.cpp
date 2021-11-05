@@ -70,7 +70,7 @@ DiskController::serviceDiskChangeEvent(isize n)
             trace(DSK_DEBUG, "DCH_INSERT (df%zd)\n", n);
 
             assert(df[n]->diskToInsert != nullptr);
-            df[n]->insertDisk(std::move(df[n]->diskToInsert));
+            df[n]->oldInsertDisk(std::move(df[n]->diskToInsert));
             assert(df[n]->diskToInsert == nullptr);
             break;
 
@@ -78,7 +78,7 @@ DiskController::serviceDiskChangeEvent(isize n)
 
             trace(DSK_DEBUG, "DCH_EJECT (df%zd)\n", n);
 
-            df[n]->ejectDisk();
+            df[n]->oldEjectDisk();
             break;
 
         default:

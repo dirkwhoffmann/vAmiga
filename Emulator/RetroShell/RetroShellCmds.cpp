@@ -941,7 +941,7 @@ RetroShell::exec <Token::dfn, Token::audiate, Token::poll> (Arguments& argv, lon
 template <> void
 RetroShell::exec <Token::dfn, Token::eject> (Arguments& argv, long param)
 {
-    amiga.df[param]->ejectDisk();
+    amiga.df[param]->oldEjectDisk();
 }
 
 template <> void

@@ -22,8 +22,13 @@ class DiskController : public SubComponent
     // Result of the latest inspection
     mutable DiskControllerInfo info = {};
 
+public:
+    
+    // TODO: MOVE TO DRIVE
     // Search path for disk files, one for each drive
     string searchPath[4];
+    
+private:
     
     // The currently selected drive (-1 if no drive is selected)
     isize selected = -1;
