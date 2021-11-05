@@ -290,8 +290,8 @@ public:
     void insertDisk(const string &name, Cycle delay = 0) throws;
     void insertNew(Cycle delay = 0) throws;
 
-    void oldEjectDisk();
-    void oldInsertDisk(std::unique_ptr<Disk> disk) throws;
+    void _eject();
+    void _insert() throws;
     
     u64 fnv() const;
     

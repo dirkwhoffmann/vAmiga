@@ -780,8 +780,10 @@ Drive::insertDisk(std::unique_ptr<Disk> disk, Cycle delay)
     // The easy case: The emulator is not running
     if (!isRunning()) {
         
-        oldEjectDisk();
-        oldInsertDisk(std::move(disk));
+        diskToInsert = std::move(disk);
+        
+        _eject();
+        _insert();
         return;
     }
     
@@ -791,7 +793,7 @@ Drive::insertDisk(std::unique_ptr<Disk> disk, Cycle delay)
         if (hasDisk()) {
             
             // Eject the old disk first
-            oldEjectDisk();
+            _eject();
             
             // Make sure there is enough time between ejecting and inserting.
             // Otherwise, the Amiga might not detect the change.
@@ -847,7 +849,7 @@ Drive::insertNew(Cycle delay)
 }
 
 void
-Drive::oldEjectDisk()
+Drive::_eject()
 {
     trace(DSK_DEBUG, "ejectDisk()\n");
 
@@ -866,16 +868,19 @@ Drive::oldEjectDisk()
 }
 
 void
-Drive::oldInsertDisk(std::unique_ptr<Disk> disk)
+Drive::_insert()
 {
-    // Only proceed if the provided disk fits into this drive
-    if (!isInsertable(*disk)) throw VAError(ERROR_DISK_INCOMPATIBLE);
-    
     // Don't insert a disk if there is already one
     assert(!hasDisk());
-    
+
+    // Don't call this function if there is no disk waiting to be inserted
+    assert(diskToInsert != nullptr);
+
+    // Only proceed if the provided disk fits into this drive
+    if (!isInsertable(*diskToInsert)) throw VAError(ERROR_DISK_INCOMPATIBLE);
+            
     // Insert disk
-    this->disk = std::move(disk);
+    disk = std::move(diskToInsert);
     head.offset = 0;
     
     // Notify the GUI
@@ -904,7 +909,7 @@ Drive::serviceDiskChangeEvent()
             debug(DSK_DEBUG, "DCH_INSERT\n");
 
             assert(diskToInsert != nullptr);
-            oldInsertDisk(std::move(diskToInsert));
+            _insert();
             assert(diskToInsert == nullptr);
             break;
 
@@ -912,7 +917,7 @@ Drive::serviceDiskChangeEvent()
 
             debug(DSK_DEBUG, "DCH_EJECT\n");
 
-            oldEjectDisk();
+            _eject();
             break;
 
         default:
