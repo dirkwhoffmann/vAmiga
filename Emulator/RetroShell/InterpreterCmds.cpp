@@ -234,41 +234,43 @@ Interpreter::registerInstructions()
     root.add({"ciab"},
              "component", "Complex Interface Adapter B");
 
-    for (const string &cia : {"ciaa","ciab"} ) {
+    for (isize i = 0; i < 2; i++) {
+        
+        string cia = (i == 0) ? "ciaa" : "ciab";
         
         root.add({cia, "config"},
                  "command", "Displays the current configuration",
-                 &RetroShell::exec <Token::cia, Token::config>);
+                 &RetroShell::exec <Token::cia, Token::config>, 0, i);
         
         root.add({cia, "set"},
                  "command", "Configures the component");
         
         root.add({cia, "set", "revision"},
                  "key", "Selects the emulated chip model",
-                 &RetroShell::exec <Token::cia, Token::set, Token::revision>, 1);
+                 &RetroShell::exec <Token::cia, Token::set, Token::revision>, 1, i);
         
         root.add({cia, "set", "todbug"},
                  "key", "Enables or disables the TOD hardware bug",
-                 &RetroShell::exec <Token::cia, Token::set, Token::todbug>, 1);
+                 &RetroShell::exec <Token::cia, Token::set, Token::todbug>, 1, i);
         
         root.add({cia, "set", "esync"},
                  "key", "Turns E-clock syncing on or off",
-                 &RetroShell::exec <Token::cia, Token::set, Token::esync>, 1);
+                 &RetroShell::exec <Token::cia, Token::set, Token::esync>, 1, i);
         
         root.add({cia, "inspect"},
-                 "command", "Displays the component state");
+                 "command", "Displays the component state", 0, i);
         
         root.add({cia, "inspect", "state"},
                  "category", "Displays the current state",
-                 &RetroShell::exec <Token::cia, Token::inspect, Token::state>);
+                 &RetroShell::exec <Token::cia, Token::inspect, Token::state>, 0, i);
         
         root.add({cia, "inspect", "registers"},
                  "category", "Displays the current register values",
-                 &RetroShell::exec <Token::cia, Token::inspect, Token::registers>);
+                 &RetroShell::exec <Token::cia, Token::inspect, Token::registers>, 0, i);
         
         root.add({cia, "inspect", "tod"},
                  "category", "Displays the state of the 24-bit counter",
-                 &RetroShell::exec <Token::cia, Token::inspect, Token::tod>);
+                 &RetroShell::exec <Token::cia, Token::inspect, Token::tod>, 0, i);
     }
     
     
@@ -657,15 +659,17 @@ Interpreter::registerInstructions()
     root.add({"controlport2"},
              "component", "Control port 2");
 
-    for (const string &port : {"controlport1", "controlport2"} ) {
+    for (isize i = 0; i < 2; i++) {
+
+        string port = (i == 0) ? "controlport1" : "controlport2";
         
         root.add({port, "config"},
                  "command", "Displays the current configuration",
-                 &RetroShell::exec <Token::controlport, Token::config>);
+                 &RetroShell::exec <Token::controlport, Token::config>, 0, i);
         
         root.add({port, "inspect"},
                  "command", "Displays the internal state",
-                 &RetroShell::exec <Token::controlport, Token::inspect>);
+                 &RetroShell::exec <Token::controlport, Token::inspect>, 0, i);
     }
 
 
@@ -799,83 +803,86 @@ Interpreter::registerInstructions()
     root.add({"dfn"},
              "component", "All connected drives");
 
-    for (const string &df : {"df0", "df1", "df2", "df3"} ) {
-        
+    for (isize i = 0; i < 4; i++) {
+
+        string df = "df" + std::to_string(i);
+                
         root.add({df, "config"},
                  "command", "Displays the current configuration",
-                 &RetroShell::exec <Token::dfn, Token::config>);
+                 &RetroShell::exec <Token::dfn, Token::config>, 0, i);
         
         root.add({df, "connect"},
                  "command", "Connects the drive",
-                 &RetroShell::exec <Token::dfn, Token::connect>);
+                 &RetroShell::exec <Token::dfn, Token::connect>, 0, i);
         root.seek("df0")->remove("connect");
         
         root.add({df, "disconnect"},
                  "command", "Disconnects the drive",
-                 &RetroShell::exec <Token::dfn, Token::disconnect>);
+                 &RetroShell::exec <Token::dfn, Token::disconnect>, 0, i);
         root.seek("df0")->remove("disconnect");
         
         root.add({df, "eject"},
                  "command", "Ejects a floppy disk",
-                 &RetroShell::exec <Token::dfn, Token::eject>);
+                 &RetroShell::exec <Token::dfn, Token::eject>, 0, i);
         
         root.add({df, "insert"},
                  "command", "Inserts a floppy disk",
-                 &RetroShell::exec <Token::dfn, Token::insert>, 1);
+                 &RetroShell::exec <Token::dfn, Token::insert>, 1, i);
     }
     
-    for (const string &df : {"df0", "df1", "df2", "df3", "dfn"} ) {
-        
+    for (isize i = 0; i < 5; i++) {
+
+        string df = i < 4 ? "df" + std::to_string(i) : "dfn";
+                
         root.add({df, "set"},
                  "command", "Configures the component");
         
         root.add({df, "set", "model"},
                  "key", "Selects the drive model",
-                 &RetroShell::exec <Token::dfn, Token::set, Token::model>, 1);
+                 &RetroShell::exec <Token::dfn, Token::set, Token::model>, 1, i);
         
         root.add({df, "set", "mechanics"},
                  "key", "Enables or disables the emulation of mechanical delays",
-                 &RetroShell::exec <Token::dfn, Token::set, Token::mechanics>, 1);
+                 &RetroShell::exec <Token::dfn, Token::set, Token::mechanics>, 1, i);
         
         root.add({df, "set", "searchpath"},
                  "key", "Sets the search path for media files",
-                 &RetroShell::exec <Token::dfn, Token::set, Token::searchpath>, 1);
+                 &RetroShell::exec <Token::dfn, Token::set, Token::searchpath>, 1, i);
         
         root.add({df, "set", "defaultfs"},
                  "key", "Determines the default file system type for blank disks",
-                 &RetroShell::exec <Token::dfn, Token::set, Token::defaultfs>, 1);
+                 &RetroShell::exec <Token::dfn, Token::set, Token::defaultfs>, 1, i);
         
         root.add({df, "set", "defaultbb"},
                  "key", "Determines the default boot block type for blank disks",
-                 &RetroShell::exec <Token::dfn, Token::set, Token::defaultbb>, 1);
+                 &RetroShell::exec <Token::dfn, Token::set, Token::defaultbb>, 1, i);
         
         root.add({df, "set", "swapdelay"},
                  "key", "Sets the disk change delay",
-                 &RetroShell::exec <Token::dfn, Token::set, Token::swapdelay>, 1);
+                 &RetroShell::exec <Token::dfn, Token::set, Token::swapdelay>, 1, i);
 
         root.add({df, "set", "pan"},
                  "key", "Sets the pan for drive sounds",
-                 &RetroShell::exec <Token::dfn, Token::set, Token::pan>, 1);
+                 &RetroShell::exec <Token::dfn, Token::set, Token::pan>, 1, i);
         
         root.add({df, "audiate"},
-                 "command", "Sets the volume of drive sounds",
-                 &RetroShell::exec <Token::dfn, Token::set, Token::mechanics>);
+                 "command", "Sets the volume of drive sounds");
         
         root.add({df, "audiate", "insert"},
                  "command", "Makes disk insertions audible",
-                 &RetroShell::exec <Token::dfn, Token::audiate, Token::insert>, 1);
+                 &RetroShell::exec <Token::dfn, Token::audiate, Token::insert>, 1, i);
         
         root.add({df, "audiate", "eject"},
                  "command", "Makes disk ejections audible",
-                 &RetroShell::exec <Token::dfn, Token::audiate, Token::eject>, 1);
+                 &RetroShell::exec <Token::dfn, Token::audiate, Token::eject>, 1, i);
         
         root.add({df, "audiate", "step"},
                  "command", "Makes disk ejections audible",
-                 &RetroShell::exec <Token::dfn, Token::audiate, Token::step>, 1);
+                 &RetroShell::exec <Token::dfn, Token::audiate, Token::step>, 1, i);
         
         root.add({df, "audiate", "poll"},
                  "command", "Makes polling clicks audible",
-                 &RetroShell::exec <Token::dfn, Token::audiate, Token::poll>, 1);
+                 &RetroShell::exec <Token::dfn, Token::audiate, Token::poll>, 1, i);
         
         root.add({df, "inspect"},
                  "command", "Displays the internal state",

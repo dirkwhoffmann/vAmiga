@@ -139,6 +139,7 @@ DiskController::setConfigItem(Option option, long id, i64 value)
     }
 }
 
+/*
 const string &
 DiskController::getSearchPath(isize dfn) const
 {
@@ -161,6 +162,7 @@ DiskController::setSearchPath(const string &path)
     df2.setSearchPath(path);
     df3.setSearchPath(path);
 }
+*/
 
 void
 DiskController::_inspect() const

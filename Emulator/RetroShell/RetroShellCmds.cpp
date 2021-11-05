@@ -1003,12 +1003,11 @@ template <> void
 RetroShell::exec <Token::dfn, Token::set, Token::searchpath> (Arguments& argv, long param)
 {
     string path = argv.front();
-    
-    if (param >= 0 && param <= 3) {
-        amiga.paula.diskController.setSearchPath(path, param);
-    } else {
-        amiga.paula.diskController.setSearchPath(path);
-    }
+        
+    if (param == 0 || param > 3) df0.setSearchPath(path);
+    if (param == 1 || param > 3) df1.setSearchPath(path);
+    if (param == 2 || param > 3) df2.setSearchPath(path);
+    if (param == 3 || param > 3) df3.setSearchPath(path);
 }
 
 template <> void
