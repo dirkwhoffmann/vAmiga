@@ -70,13 +70,13 @@ Blitter::serviceEvent(EventID id)
         case BLT_LINE_SLOW:
             
             trace(BLT_DEBUG, "Line instruction %d:%d\n", bltconUSEB(), bltpc);
-            (this->*lineBlitInstr[bltconUSEB()][0][bltpc])();
+            (this->*lineBlitInstr[bltconUSEBC()][0][bltpc])();
             break;
 
         case BLT_LINE_FAKE:
             
             trace(BLT_DEBUG, "Line fake %d:%d\n", bltconUSEB(), bltpc);
-            (this->*lineBlitInstr[bltconUSEB()][1][bltpc])();
+            (this->*lineBlitInstr[bltconUSEBC()][1][bltpc])();
             break;
 
         default:

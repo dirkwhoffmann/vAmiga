@@ -100,7 +100,7 @@ class Blitter : public SubComponent
     void (Blitter::*copyBlitInstr[16][2][2][6])(void);
 
     // Micro-program for line blits
-    void (Blitter::*lineBlitInstr[2][2][8])(void);
+    void (Blitter::*lineBlitInstr[4][2][8])(void);
 
     // The program counter indexing the micro instruction to execute
     u16 bltpc;
@@ -332,6 +332,7 @@ public:
     bool bltconUSEB() const { return bltcon0 & (1 << 10); }
     bool bltconUSEC() const { return bltcon0 & (1 << 9); }
     bool bltconUSED() const { return bltcon0 & (1 << 8); }
+    u16 bltconUSEBC() const { return (bltcon0 >> 9) & 0x3; }
 
     // BLTCON1
     void pokeBLTCON1(u16 value);

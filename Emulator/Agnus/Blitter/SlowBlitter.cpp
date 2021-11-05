@@ -59,7 +59,7 @@ Blitter::initSlowBlitter()
      *
      * The Copy Blitter micro programs are stored in array
      *
-     *   copyBlitInstr[16][2][2][6]
+     *   copyBlitInstr[ABCD][level][fill][]
      *
      * For each program, four different versions are stored:
      *
@@ -820,22 +820,45 @@ Blitter::initSlowBlitter()
             }
         }
     };
-
+    
     /* The Line Blitter micro programs are stored in array
      *
-     *   lineBlitInstr[2][2][8]
+     *   lineBlitInstr[BC][level][]
      *
-     * For each program, four different versions are stored:
+     * For each program, two different versions are stored:
      *
-     *   [0][X][] : Performs a Line Blit with the B channel disabled
-     *   [1][X][] : Performs a Line Blit with the B channel enabled
-     *
-     *   [X][0][] : Performs a Line Blit in accuracy level 2
-     *   [X][1][] : Performs a Line Blit in accuracy level 1
+     *   [][0][] : Performs a Line Blit in accuracy level 2
+     *   [][1][] : Performs a Line Blit in accuracy level 1
      */
-    void (Blitter::*lineBlitInstr[2][2][8])(void) = {
+    void (Blitter::*lineBlitInstr[4][2][8])(void) = {
         
-        // The usual case: B channel disabled
+        // B disabled, C disabled (unusual)
+        {
+            {   // Full execution
+                &Blitter::execLine <BUSIDLE | HOLD_A>,
+                &Blitter::execLine <HOLD_B>,
+                &Blitter::execLine <BUSIDLE | HOLD_D>,
+                &Blitter::execLine <REPEAT>,
+                
+                &Blitter::execLine <NOTHING>,
+                &Blitter::execLine <BLTDONE>,
+                &Blitter::execLine <BLTDONE>,
+                &Blitter::execLine <BLTDONE>
+            },
+            {   // Fake execution
+                &Blitter::fakeExecLine <BUSIDLE>,
+                &Blitter::fakeExecLine <NOTHING>,
+                &Blitter::fakeExecLine <BUSIDLE>,
+                &Blitter::fakeExecLine <REPEAT>,
+                
+                &Blitter::fakeExecLine <NOTHING>,
+                &Blitter::fakeExecLine <BLTDONE>,
+                &Blitter::fakeExecLine <BLTDONE>,
+                &Blitter::fakeExecLine <BLTDONE>
+            }
+        },
+        
+        // B disabled, C enabled (the standard case)
         {
             {   // Full execution
                 &Blitter::execLine <BUSIDLE | HOLD_A>,
@@ -860,6 +883,36 @@ Blitter::initSlowBlitter()
                 &Blitter::fakeExecLine <BLTDONE>
             }
         },
+    
+        // B enabled, C disabled (unusual)
+        {
+            {
+                // Full execution
+                &Blitter::execLine <BUSIDLE | HOLD_A>,
+                &Blitter::execLine <FETCH_B>,
+                &Blitter::execLine <BUSIDLE | HOLD_B>,
+                &Blitter::execLine <BUSIDLE | HOLD_D>,
+                &Blitter::execLine <BUS>,
+                &Blitter::execLine <BUSIDLE | REPEAT>,
+                
+                &Blitter::execLine <NOTHING>,
+                &Blitter::execLine <BUSIDLE | BLTDONE>
+            },
+            {
+                // Fake execution
+                &Blitter::fakeExecLine <BUSIDLE>,
+                &Blitter::fakeExecLine <BUS>,
+                &Blitter::fakeExecLine <BUSIDLE>,
+                &Blitter::fakeExecLine <BUSIDLE>,
+                &Blitter::fakeExecLine <BUS>,
+                &Blitter::fakeExecLine <BUSIDLE | REPEAT>,
+
+                &Blitter::fakeExecLine <NOTHING>,
+                &Blitter::fakeExecLine <BUSIDLE | BLTDONE>
+            }
+        },
+        
+        // B enabled, C enabled (unusual)
         {
             {
                 // Full execution
