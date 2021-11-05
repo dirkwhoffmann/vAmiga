@@ -191,7 +191,7 @@ class ImporterDialog: DialogController {
         let drive = amiga.df(sender.tag)!
                     
         do {
-            try drive.insert(file: disk!)
+            try drive.swap(file: disk!)
             drive.setWriteProtection(writeProtect)
             hideSheet()
         } catch {

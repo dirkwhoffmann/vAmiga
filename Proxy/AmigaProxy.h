@@ -596,7 +596,7 @@
 - (void)toggleWriteProtection;
 - (BOOL)isInsertable:(DiskDiameter)type density:(DiskDensity)density;
 - (void)eject;
-- (void)insert:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
+- (void)swap:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
 - (void)insertNew:(ExceptionWrapper *)ex;
 @property (getter=isModifiedDisk) BOOL modifiedDisk;
 @property (readonly) BOOL motor;

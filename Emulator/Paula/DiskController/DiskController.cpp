@@ -286,9 +286,9 @@ DiskController::insertDisk(class DiskFile &file, isize nr, Cycle delay)
     assert(nr >= 0 && nr <= 3);
     
     warn("DiskController::insertDisk(...) has been deprecated.\n");
-    warn("Use Drive::insertDisk(...) instead.\n");
+    warn("Use Drive::swapDisk(...) instead.\n");
 
-    df[nr]->insertDisk(file, delay);
+    df[nr]->swapDisk(file);
 }
 
 void
@@ -297,9 +297,9 @@ DiskController::insertDisk(const string &name, isize nr, Cycle delay)
     assert(nr >= 0 && nr <= 3);
     
     warn("DiskController::insertDisk(...) has been deprecated.\n");
-    warn("Use Drive::insertDisk(...) instead.\n");
+    warn("Use Drive::swapDisk(...) instead.\n");
 
-    df[nr]->insertDisk(name, delay);
+    df[nr]->swapDisk(name);
 }
 
 void
@@ -308,9 +308,9 @@ DiskController::insertNew(isize nr, Cycle delay)
     assert(nr >= 0 && nr <= 3);
     
     warn("DiskController::insertNew(...) has been deprecated.\n");
-    warn("Use Drive::insertNew(...) instead.\n");
+    warn("Use Drive::swapDisk(...) instead.\n");
     
-    df[nr]->insertNew(delay);
+    df[nr]->insertNew();
 }
 
 void

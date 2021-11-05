@@ -280,22 +280,33 @@ public:
     void setWriteProtection(bool value); 
     void toggleWriteProtection();
     
+    u64 fnv() const;
+
     bool isInsertable(DiskDiameter t, DiskDensity d) const;
     bool isInsertable(const DiskFile &file) const;
     bool isInsertable(const Disk &disk) const;
 
+    // Ejects the current disk with an optional delay
     void ejectDisk(Cycle delay = 0);
+    
+    // Inserts a new disk with an optional delay
     void insertDisk(std::unique_ptr<Disk> disk, Cycle delay = 0) throws;
-    void insertDisk(class DiskFile &file, Cycle delay = 0) throws;
-    void insertDisk(const string &name, Cycle delay = 0) throws;
-    void insertNew(Cycle delay = 0) throws;
+    
+    // Replaces the current disk (recommended way to insert disks)
+    void swapDisk(std::unique_ptr<Disk> disk) throws;
+    void swapDisk(class DiskFile &file) throws;
+    void swapDisk(const string &name) throws;
 
+    // Replaces the current disk with a factory-fresh disk
+    void insertNew() throws;
+
+    
+private:
+    
     void _eject();
     void _insert() throws;
     
-    u64 fnv() const;
-    
-    
+
     //
     // Serving events
     //

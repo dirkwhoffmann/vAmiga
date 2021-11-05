@@ -186,7 +186,7 @@ class MyDocument: NSDocument {
         if let proxy = attachment as? DiskFileProxy {
             
             do {
-                try amiga.df(drive)!.insert(file: proxy)
+                try amiga.df(drive)!.swap(file: proxy)
             } catch {
                 (error as? VAError)?.warning("Failed to insert disk")
             }

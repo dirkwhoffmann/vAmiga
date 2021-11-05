@@ -1177,9 +1177,9 @@ using namespace moira;
     [self drive]->ejectDisk();
 }
 
-- (void)insert:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex
+- (void)swap:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self drive]->insertDisk(*(DiskFile *)fileProxy->obj); }
+    try { return [self drive]->swapDisk(*(DiskFile *)fileProxy->obj); }
     catch (VAError &error) { [ex save:error]; }
 }
 

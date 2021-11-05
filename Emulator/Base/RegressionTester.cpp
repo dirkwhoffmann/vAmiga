@@ -35,7 +35,7 @@ void
 RegressionTester::run(string adf)
 {
     // Insert the test disk
-    df0.insertDisk(adf);
+    df0.swapDisk(adf);
  
     // Run the emulator
     amiga.powerOn();

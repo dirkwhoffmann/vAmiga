@@ -485,7 +485,7 @@ extension MyController: NSMenuItemValidation {
             if let file = mydocument.attachment as? DiskFileProxy {
                 
                 // Insert the disk
-                try amiga.df(drive)!.insert(file: file)
+                try amiga.df(drive)!.swap(file: file)
                         
                 // Remember the URL
                 myAppDelegate.noteNewRecentlyInsertedDiskURL(url)

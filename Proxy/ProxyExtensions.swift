@@ -153,10 +153,19 @@ extension MemProxy {
 
 extension DriveProxy {
 
+    /*
     func insert(file: DiskFileProxy) throws {
         
         let exception = ExceptionWrapper()
         insert(file, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+    */
+    
+    func swap(file: DiskFileProxy) throws {
+        
+        let exception = ExceptionWrapper()
+        swap(file, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 

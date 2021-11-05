@@ -941,7 +941,7 @@ RetroShell::exec <Token::dfn, Token::audiate, Token::poll> (Arguments& argv, lon
 template <> void
 RetroShell::exec <Token::dfn, Token::eject> (Arguments& argv, long param)
 {
-    amiga.df[param]->_eject();
+    amiga.df[param]->ejectDisk();
 }
 
 template <> void
@@ -962,7 +962,7 @@ RetroShell::exec <Token::dfn, Token::insert> (Arguments& argv, long param)
     assert(param >= 0 && param <= 3);
 
     auto path = argv.front();
-    df[param]->insertDisk(path, param);
+    df[param]->swapDisk(path);
 }
 
 template <> void

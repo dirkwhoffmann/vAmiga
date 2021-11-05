@@ -755,14 +755,25 @@ Drive::isInsertable(const Disk &disk) const
 void
 Drive::ejectDisk(Cycle delay)
 {
+    debug(DSK_DEBUG, "ejectDisk(%lld)\n", delay);
+    
     suspended {
-                
-        switch (nr) {
-            case 0: agnus.scheduleRel <SLOT_DC0> (delay, DCH_EJECT); break;
-            case 1: agnus.scheduleRel <SLOT_DC1> (delay, DCH_EJECT); break;
-            case 2: agnus.scheduleRel <SLOT_DC2> (delay, DCH_EJECT); break;
-            case 3: agnus.scheduleRel <SLOT_DC3> (delay, DCH_EJECT); break;
-            default: fatalError;
+        
+        if (delay == 0) {
+            
+            // Eject immediately
+            _eject();
+            
+        } else {
+            
+            // Schedule an ejection event
+            switch (nr) {
+                case 0: agnus.scheduleRel <SLOT_DC0> (delay, DCH_EJECT); break;
+                case 1: agnus.scheduleRel <SLOT_DC1> (delay, DCH_EJECT); break;
+                case 2: agnus.scheduleRel <SLOT_DC2> (delay, DCH_EJECT); break;
+                case 3: agnus.scheduleRel <SLOT_DC3> (delay, DCH_EJECT); break;
+                default: fatalError;
+            }
         }
     }
 }
@@ -773,45 +784,35 @@ Drive::insertDisk(std::unique_ptr<Disk> disk, Cycle delay)
     assert(disk != nullptr);
     
     debug(DSK_DEBUG, "insertDisk(%lld)\n", delay);
-    
+
     // Only proceed if the provided disk is compatible with this drive
     if (!isInsertable(*disk)) throw VAError(ERROR_DISK_INCOMPATIBLE);
-    
-    // The easy case: The emulator is not running
-    if (!isRunning()) {
-        
-        diskToInsert = std::move(disk);
-        
-        _eject();
-        _insert();
-        return;
-    }
-    
-    // The not so easy case: The emulator is running
+
     suspended {
         
-        if (hasDisk()) {
-            
-            // Eject the old disk first
-            _eject();
-            
-            // Make sure there is enough time between ejecting and inserting.
-            // Otherwise, the Amiga might not detect the change.
-            delay = std::max(config.diskSwapDelay, delay);
-        }
-        
+        // Get ownership of this disk
         diskToInsert = std::move(disk);
         
-        switch (nr) {
-            case 0: agnus.scheduleRel <SLOT_DC0> (delay, DCH_INSERT); break;
-            case 1: agnus.scheduleRel <SLOT_DC1> (delay, DCH_INSERT); break;
-            case 2: agnus.scheduleRel <SLOT_DC2> (delay, DCH_INSERT); break;
-            case 3: agnus.scheduleRel <SLOT_DC3> (delay, DCH_INSERT); break;
-            default: fatalError;
+        if (delay == 0) {
+            
+            // Insert immediately
+            _insert();
+            
+        } else {
+            
+            // Schedule an insertion event
+            switch (nr) {
+                case 0: agnus.scheduleRel <SLOT_DC0> (delay, DCH_INSERT); break;
+                case 1: agnus.scheduleRel <SLOT_DC1> (delay, DCH_INSERT); break;
+                case 2: agnus.scheduleRel <SLOT_DC2> (delay, DCH_INSERT); break;
+                case 3: agnus.scheduleRel <SLOT_DC3> (delay, DCH_INSERT); break;
+                default: fatalError;
+            }
         }
     }
 }
 
+/*
 void
 Drive::insertDisk(class DiskFile &file, Cycle delay)
 {
@@ -827,9 +828,10 @@ Drive::insertDisk(const string &name, Cycle delay)
     std::unique_ptr<DiskFile> file(DiskFile::make(path));
     insertDisk(*file, delay);
 }
+*/
 
 void
-Drive::insertNew(Cycle delay)
+Drive::insertNew()
 {
     ADFFile adf;
     
@@ -844,8 +846,53 @@ Drive::insertNew(Cycle delay)
     // Add a file system
     adf.formatDisk(config.defaultFileSystem, config.defaultBootBlock);
     
-    // Insert the disk
-    insertDisk(adf, delay);
+    // Replace the current disk with the new one
+    swapDisk(adf);
+}
+
+void
+Drive::swapDisk(std::unique_ptr<Disk> disk)
+{
+    debug(DSK_DEBUG, "swapDisk()\n");
+    
+    // Only proceed if the provided disk is compatible with this drive
+    if (!isInsertable(*disk)) throw VAError(ERROR_DISK_INCOMPATIBLE);
+
+    // Determine delay (in pause mode, we insert immediately)
+    auto delay = isRunning() ? config.diskSwapDelay : 0;
+        
+    suspended {
+
+        if (hasDisk()) {
+
+            // Eject the old disk first
+            ejectDisk();
+
+        } else {
+
+            // Insert the new disk immediately
+            delay = 0;
+        }
+                
+        // Insert the new disk with a delay
+        insertDisk(std::move(disk), delay);
+    }
+}
+
+void
+Drive::swapDisk(class DiskFile &file)
+{
+    swapDisk(std::make_unique<Disk>(file));
+}
+
+void
+Drive::swapDisk(const string &name)
+{
+    bool append = !util::isAbsolutePath(name) && searchPath != "";
+    string path = append ? searchPath + "/" + name : name;
+    
+    std::unique_ptr<DiskFile> file(DiskFile::make(path));
+    swapDisk(*file);
 }
 
 void
@@ -870,14 +917,14 @@ Drive::_eject()
 void
 Drive::_insert()
 {
-    // Don't insert a disk if there is already one
-    assert(!hasDisk());
-
     // Don't call this function if there is no disk waiting to be inserted
     assert(diskToInsert != nullptr);
 
     // Only proceed if the provided disk fits into this drive
     if (!isInsertable(*diskToInsert)) throw VAError(ERROR_DISK_INCOMPATIBLE);
+
+    // Eject the old disk first
+    _eject();
             
     // Insert disk
     disk = std::move(diskToInsert);
