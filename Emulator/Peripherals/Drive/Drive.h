@@ -74,9 +74,14 @@ public:
     // The currently inserted disk (if any)
     std::unique_ptr<Disk> disk;
 
+private:
+
     // A disk waiting to be inserted (if any)
     std::unique_ptr<Disk> diskToInsert;
-
+    
+    // Search path for disk files, one for each drive
+    string searchPath;
+    
     
     //
     // Initializing
@@ -158,7 +163,10 @@ public:
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
     
-    
+    const string &getSearchPath() const { return searchPath; }
+    void setSearchPath(const string &path) { searchPath = path; }
+
+
     //
     // Analyzing
     //

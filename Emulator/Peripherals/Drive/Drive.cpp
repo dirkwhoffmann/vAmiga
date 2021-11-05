@@ -236,6 +236,8 @@ Drive::_dump(dump::Category category, std::ostream& os) const
         os << FSVolumeTypeEnum::key(config.defaultFileSystem) << std::endl;
         os << tab("Default boot block");
         os << BootBlockIdEnum::key(config.defaultBootBlock) << std::endl;
+        os << tab("Search path");
+        os << "\"" << searchPath << "\"" << std::endl;
     }
     
     if (category & dump::State) {
@@ -817,8 +819,8 @@ Drive::insertDisk(class DiskFile &file, Cycle delay)
 void
 Drive::insertDisk(const string &name, Cycle delay)
 {
-    bool append = !util::isAbsolutePath(name) && diskController.searchPath[nr] != "";
-    string path = append ? diskController.searchPath[nr] + "/" + name : name;
+    bool append = !util::isAbsolutePath(name) && searchPath != "";
+    string path = append ? searchPath + "/" + name : name;
     
     std::unique_ptr<DiskFile> file(DiskFile::make(path));
     insertDisk(*file, delay);

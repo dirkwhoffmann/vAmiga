@@ -143,23 +143,23 @@ const string &
 DiskController::getSearchPath(isize dfn) const
 {
     assert(dfn >= 0 && dfn <= 3);
-    return searchPath[dfn];
+    return df[dfn]->getSearchPath();
 }
 
 void
 DiskController::setSearchPath(const string &path, isize dfn)
 {
     assert(dfn >= 0 && dfn <= 3);
-    searchPath[dfn] = path;
+    df[dfn]->setSearchPath(path);
 }
 
 void
 DiskController::setSearchPath(const string &path)
 {
-    searchPath[0] = path;
-    searchPath[1] = path;
-    searchPath[2] = path;
-    searchPath[3] = path;
+    df0.setSearchPath(path);
+    df1.setSearchPath(path);
+    df2.setSearchPath(path);
+    df3.setSearchPath(path);
 }
 
 void
@@ -224,14 +224,6 @@ DiskController::_dump(dump::Category category, std::ostream& os) const
         os << hex(prb) << std::endl;
         os << tab("spinning");
         os << bol(spinning()) << std::endl;
-        os << tab("Search paths df0");
-        os << "\"" << searchPath[0] << "\"" << std::endl;
-        os << tab("Search paths df1");
-        os << "\"" << searchPath[1] << "\"" << std::endl;
-        os << tab("Search paths df2");
-        os << "\"" << searchPath[2] << "\"" << std::endl;
-        os << tab("Search paths df3");
-        os << "\"" << searchPath[3] << "\"" << std::endl;
     }
 }
 
@@ -297,19 +289,6 @@ DiskController::ejectDisk(isize nr, Cycle delay)
     warn("Use Drive::ejectDisk() instead.\n");
 
     df[nr]->ejectDisk(delay);
-    
-    /*
-    suspended {
-        
-        switch (nr) {
-            case 0: agnus.scheduleRel <SLOT_DC0> (delay, DCH_EJECT); break;
-            case 1: agnus.scheduleRel <SLOT_DC1> (delay, DCH_EJECT); break;
-            case 2: agnus.scheduleRel <SLOT_DC2> (delay, DCH_EJECT); break;
-            case 3: agnus.scheduleRel <SLOT_DC3> (delay, DCH_EJECT); break;
-            default: fatalError;
-        }
-    }
-    */
 }
 
 void
@@ -322,47 +301,6 @@ DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
     warn("Use Drive::insertDisk(...) instead.\n");
 
     df[nr]->insertDisk(std::move(disk), delay);
-    
-    /*
-    assert(nr >= 0 && nr <= 3);
-    
-    debug(DSK_DEBUG, "insertDisk(%zd, %lld)\n", nr, delay);
-    
-    // Only proceed if the disk is compatible with the selected drive
-    if (!df[nr]->isInsertable(*disk)) throw VAError(ERROR_DISK_INCOMPATIBLE);
-    
-    // The easy case: The emulator is not running
-    if (!isRunning()) {
-        
-        df[nr]->oldEjectDisk();
-        df[nr]->oldInsertDisk(std::move(disk));
-        return;
-    }
-    
-    // The not so easy case: The emulator is running
-    suspended {
-        
-        if (df[nr]->hasDisk()) {
-            
-            // Eject the old disk first
-            df[nr]->oldEjectDisk();
-            
-            // Make sure there is enough time between ejecting and inserting.
-            // Otherwise, the Amiga might not detect the change.
-            delay = std::max(df[nr]->config.diskSwapDelay, delay);
-        }
-        
-        df[nr]->diskToInsert = std::move(disk);
-        
-        switch (nr) {
-            case 0: agnus.scheduleRel <SLOT_DC0> (delay, DCH_INSERT); break;
-            case 1: agnus.scheduleRel <SLOT_DC1> (delay, DCH_INSERT); break;
-            case 2: agnus.scheduleRel <SLOT_DC2> (delay, DCH_INSERT); break;
-            case 3: agnus.scheduleRel <SLOT_DC3> (delay, DCH_INSERT); break;
-            default: fatalError;
-        }
-    }
-    */
 }
 
 void
@@ -374,8 +312,6 @@ DiskController::insertDisk(class DiskFile &file, isize nr, Cycle delay)
     warn("Use Drive::insertDisk(...) instead.\n");
 
     df[nr]->insertDisk(file, delay);
-    
-    // insertDisk(std::make_unique<Disk>(file), nr, delay);
 }
 
 void
@@ -387,14 +323,6 @@ DiskController::insertDisk(const string &name, isize nr, Cycle delay)
     warn("Use Drive::insertDisk(...) instead.\n");
 
     df[nr]->insertDisk(name, delay);
-    
-    /*
-    bool append = !util::isAbsolutePath(name) && searchPath[nr] != "";
-    string path = append ? searchPath[nr] + "/" + name : name;
-    
-    std::unique_ptr<DiskFile> file(DiskFile::make(path));
-    insertDisk(*file, nr, delay);
-    */
 }
 
 void
@@ -406,25 +334,6 @@ DiskController::insertNew(isize nr, Cycle delay)
     warn("Use Drive::insertNew(...) instead.\n");
     
     df[nr]->insertNew(delay);
-    
-    /*
-    ADFFile adf;
-    
-    // Create a suitable ADF for the specified drive
-    switch (df[nr]->config.type) {
-            
-        case DRIVE_DD_35: adf.init(INCH_35, DISK_DD); break;
-        case DRIVE_HD_35: adf.init(INCH_35, DISK_HD); break;
-        case DRIVE_DD_525: adf.init(INCH_525, DISK_SD); break;
-    }
-    
-    // Add a file system
-    adf.formatDisk(df[nr]->config.defaultFileSystem,
-                   df[nr]->config.defaultBootBlock);
-    
-    // Insert the disk
-    insertDisk(adf, nr, delay);
-    */
 }
 
 void
