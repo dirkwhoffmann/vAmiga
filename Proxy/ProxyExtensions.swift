@@ -151,22 +151,21 @@ extension MemProxy {
     }
 }
 
-extension DiskControllerProxy {
+extension DriveProxy {
 
-    func insert(_ nr: Int, file: DiskFileProxy) throws {
+    func insert(file: DiskFileProxy) throws {
         
         let exception = ExceptionWrapper()
-        insert(nr, file: file, exception: exception)
+        insert(file, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
-    func insertNew(_ nr: Int) throws {
+    func insertNew() throws {
         
         let exception = ExceptionWrapper()
-        insertNew(nr, exception: exception)
+        insertNew(exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
-
 }
 
 extension AmigaFileProxy {

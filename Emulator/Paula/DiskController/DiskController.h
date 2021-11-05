@@ -159,11 +159,6 @@ public:
     void setConfigItem(Option option, i64 value);
     void setConfigItem(Option option, long id, i64 value);
 
-    /*
-    const string &getSearchPath(isize dfn) const;
-    void setSearchPath(const string &path, isize dfn);
-    void setSearchPath(const string &path);
-    */
     
     //
     // Analyzing
@@ -237,13 +232,13 @@ public:
     //
 
     // Ejects a disk from the specified drive
-    void ejectDisk(isize nr, Cycle delay = 0);
+    [[deprecated]] void ejectDisk(isize nr, Cycle delay = 0);
 
     // Inserts a disk into the specified drive
-    void insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay = 0) throws;
-    void insertDisk(class DiskFile &file, isize nr, Cycle delay = 0) throws;
-    void insertDisk(const string &name, isize nr, Cycle delay = 0) throws;
-    void insertNew(isize nr, Cycle delay = 0) throws;
+    [[deprecated]] void insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay = 0) throws;
+    [[deprecated]] void insertDisk(class DiskFile &file, isize nr, Cycle delay = 0) throws;
+    [[deprecated]] void insertDisk(const string &name, isize nr, Cycle delay = 0) throws;
+    [[deprecated]] void insertNew(isize nr, Cycle delay = 0) throws;
 
     // Write protects or unprotects a disk
     void setWriteProtection(isize nr, bool value);

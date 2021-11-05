@@ -422,10 +422,10 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func newDiskAction(_ sender: NSMenuItem!) {
         
-        track()
-
+        let drive = amiga.df(sender.tag)
+    
         do {
-            try amiga.diskController.insertNew(sender.tag)
+            try drive?.insertNew()
             myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
             
         } catch {
@@ -485,7 +485,7 @@ extension MyController: NSMenuItemValidation {
             if let file = mydocument.attachment as? DiskFileProxy {
                 
                 // Insert the disk
-                try amiga.diskController.insert(drive, file: file)
+                try amiga.df(drive)!.insert(file: file)
                         
                 // Remember the URL
                 myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
@@ -549,7 +549,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func ejectDiskAction(_ sender: NSMenuItem!) {
         
         if proceedWithUnexportedDisk(drive: sender.tag) {
-            amiga.diskController.eject(sender.tag)
+            amiga.df(sender.tag)?.eject()
             myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
         }
     }

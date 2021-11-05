@@ -575,10 +575,6 @@
 @property (readonly) NSInteger selectedDrive;
 @property (readonly) DriveState state;
 @property (readonly, getter=isSpinning) BOOL spinning;
-- (void)eject:(NSInteger)nr;
-- (void)insert:(NSInteger)nr file:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
-- (void)insertNew:(NSInteger)nr exception:(ExceptionWrapper *)ex;
-- (void)setWriteProtection:(NSInteger)nr value:(BOOL)value;
 
 @end
 
@@ -599,6 +595,9 @@
 - (void)setWriteProtection:(BOOL)value;
 - (void)toggleWriteProtection;
 - (BOOL)isInsertable:(DiskDiameter)type density:(DiskDensity)density;
+- (void)eject;
+- (void)insert:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
+- (void)insertNew:(ExceptionWrapper *)ex;
 @property (getter=isModifiedDisk) BOOL modifiedDisk;
 @property (readonly) BOOL motor;
 @property (readonly) NSInteger cylinder;

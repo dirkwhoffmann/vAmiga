@@ -883,26 +883,6 @@ Drive::oldInsertDisk(std::unique_ptr<Disk> disk)
                      config.pan << 24 | config.insertVolume << 16 | nr);
 }
 
-void
-Drive::insertNew()
-{
-    ADFFile adf;
-    
-    // Create a suitable ADF for this drive
-    switch (config.type) {
-            
-        case DRIVE_DD_35: adf.init(INCH_35, DISK_DD); break;
-        case DRIVE_HD_35: adf.init(INCH_35, DISK_HD); break;
-        case DRIVE_DD_525: adf.init(INCH_525, DISK_SD); break;
-    }
-    
-    // Add a file system
-    adf.formatDisk(config.defaultFileSystem, config.defaultBootBlock);
-    
-    // Convert the ADF into a disk
-    oldInsertDisk(std::make_unique<Disk>(adf));
-}
-
 u64
 Drive::fnv() const
 {

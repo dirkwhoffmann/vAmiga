@@ -1113,28 +1113,6 @@ using namespace moira;
     return [self dc]->spinning();
 }
 
-- (void)eject:(NSInteger)nr
-{
-    [self dc]->ejectDisk(nr);
-}
-
-- (void)insert:(NSInteger)nr file:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex
-{
-    try { return [self dc]->insertDisk(*(DiskFile *)fileProxy->obj, nr); }
-    catch (VAError &error) { [ex save:error]; }
-}
-
-- (void)insertNew:(NSInteger)nr exception:(ExceptionWrapper *)ex
-{
-    try { return [self dc]->insertNew(nr); }
-    catch (VAError &error) { [ex save:error]; }
-}
-
-- (void)setWriteProtection:(NSInteger)nr value:(BOOL)value
-{
-    [self dc]->setWriteProtection(nr, value);
-}
-
 @end
 
 
@@ -1192,6 +1170,23 @@ using namespace moira;
 - (BOOL)isInsertable:(DiskDiameter)type density:(DiskDensity)density
 {
     return [self drive]->isInsertable(type, density);
+}
+
+- (void)eject
+{
+    [self drive]->ejectDisk();
+}
+
+- (void)insert:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex
+{
+    try { return [self drive]->insertDisk(*(DiskFile *)fileProxy->obj); }
+    catch (VAError &error) { [ex save:error]; }
+}
+
+- (void)insertNew:(ExceptionWrapper *)ex
+{
+    try { return [self drive]->insertNew(); }
+    catch (VAError &error) { [ex save:error]; }
 }
 
 - (BOOL)isModifiedDisk
@@ -2135,13 +2130,6 @@ using namespace moira;
 {
     return [self amiga]->getInfo();
 }
-
-/*
-- (BOOL)isReleaseBuild
-{
-    return releaseBuild;
-}
-*/
 
 - (BOOL)warpMode
 {

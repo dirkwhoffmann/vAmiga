@@ -188,11 +188,11 @@ class ImporterDialog: DialogController {
 
     @IBAction func insertDiskAction(_ sender: NSButton!) {
         
-        track("insertDiskAction df\(sender.tag)")
-                
+        let drive = amiga.df(sender.tag)!
+                    
         do {
-            try amiga.diskController.insert(sender.tag, file: disk!)
-            amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)
+            try drive.insert(file: disk!)
+            drive.setWriteProtection(writeProtect)
             hideSheet()
         } catch {
             (error as? VAError)?.warning("Failed to insert disk")

@@ -292,7 +292,6 @@ public:
 
     void oldEjectDisk();
     void oldInsertDisk(std::unique_ptr<Disk> disk) throws;
-    void insertNew() throws;
     
     u64 fnv() const;
     

@@ -959,8 +959,10 @@ RetroShell::exec <Token::dfn, Token::disconnect> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::dfn, Token::insert> (Arguments& argv, long param)
 {
+    assert(param >= 0 && param <= 3);
+
     auto path = argv.front();
-    amiga.paula.diskController.insertDisk(path, param);
+    df[param]->insertDisk(path, param);
 }
 
 template <> void
