@@ -763,7 +763,7 @@ Drive::ejectDisk(Cycle delay)
         agnus.scheduleRel <s> (delay, DCH_EJECT);
 
         // If there is no delay, service the event immediately
-        if (delay == 0) serviceDiskChangeEvent();
+        if (delay == 0) serviceDiskChangeEvent <s> ();
     }
 }
 
@@ -797,7 +797,7 @@ Drive::insertDisk(std::unique_ptr<Disk> disk, Cycle delay)
         agnus.scheduleRel <s> (delay, DCH_INSERT);
 
         // If there is no delay, service the event immediately
-        if (delay == 0) serviceDiskChangeEvent();
+        if (delay == 0) serviceDiskChangeEvent <s> ();
     }
 }
 
@@ -923,7 +923,7 @@ Drive::fnv() const
     return disk ? disk->getFnv() : 0;
 }
 
-void
+template <EventSlot s> void
 Drive::serviceDiskChangeEvent()
 {
     EventSlot slot = SLOT_DC0 + nr;
@@ -953,12 +953,7 @@ Drive::serviceDiskChangeEvent()
             fatalError;
     }
 
-    switch (nr) {
-        case 0: scheduler.cancel<SLOT_DC0>(); break;
-        case 1: scheduler.cancel<SLOT_DC1>(); break;
-        case 2: scheduler.cancel<SLOT_DC2>(); break;
-        case 3: scheduler.cancel<SLOT_DC3>(); break;
-    }
+    scheduler.cancel <s> ();
 }
 
 void

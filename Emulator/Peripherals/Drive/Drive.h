@@ -318,7 +318,7 @@ private:
 public:
     
     // Services an event in the disk change slot
-    void serviceDiskChangeEvent();
+    template <EventSlot s> void serviceDiskChangeEvent();
     
     
     //

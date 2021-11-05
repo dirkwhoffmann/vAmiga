@@ -132,10 +132,10 @@ Amiga::reset(bool hard)
     if (!isEmulatorThread()) suspend();
     
     // If a disk change is in progress, finish it
-    df0.serviceDiskChangeEvent();
-    df1.serviceDiskChangeEvent();
-    df2.serviceDiskChangeEvent();
-    df3.serviceDiskChangeEvent();
+    df0.serviceDiskChangeEvent <SLOT_DC0> ();
+    df1.serviceDiskChangeEvent <SLOT_DC1> ();
+    df2.serviceDiskChangeEvent <SLOT_DC2> ();
+    df3.serviceDiskChangeEvent <SLOT_DC3> ();
     
     // Execute the standard reset routine
     AmigaComponent::reset(hard);

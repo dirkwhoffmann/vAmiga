@@ -562,16 +562,16 @@ Scheduler::executeUntil(Cycle cycle) {
             //
 
             if (isDue<SLOT_DC0>(cycle)) {
-                df0.serviceDiskChangeEvent();
+                df0.serviceDiskChangeEvent <SLOT_DC0> ();
             }
             if (isDue<SLOT_DC1>(cycle)) {
-                df1.serviceDiskChangeEvent();
+                df1.serviceDiskChangeEvent <SLOT_DC1> ();
             }
             if (isDue<SLOT_DC2>(cycle)) {
-                df2.serviceDiskChangeEvent();
+                df2.serviceDiskChangeEvent <SLOT_DC2> ();
             }
             if (isDue<SLOT_DC3>(cycle)) {
-                df3.serviceDiskChangeEvent();
+                df3.serviceDiskChangeEvent <SLOT_DC3> ();
             }
             if (isDue<SLOT_INS>(cycle)) {
                 agnus.serviceINSEvent(id[SLOT_INS]);
