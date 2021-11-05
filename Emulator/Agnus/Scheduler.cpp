@@ -304,7 +304,10 @@ Scheduler::eventName(EventSlot slot, EventID id)
             }
             break;
 
-        case SLOT_DCH:
+        case SLOT_DC0:
+        case SLOT_DC1:
+        case SLOT_DC2:
+        case SLOT_DC3:
 
             switch (id) {
 
@@ -557,8 +560,17 @@ Scheduler::executeUntil(Cycle cycle) {
             // Check tertiary slots
             //
 
-            if (isDue<SLOT_DCH>(cycle)) {
-                paula.diskController.serviceDiskChangeEvent();
+            if (isDue<SLOT_DC0>(cycle)) {
+                paula.diskController.serviceDiskChangeEvent(0);
+            }
+            if (isDue<SLOT_DC1>(cycle)) {
+                paula.diskController.serviceDiskChangeEvent(1);
+            }
+            if (isDue<SLOT_DC2>(cycle)) {
+                paula.diskController.serviceDiskChangeEvent(2);
+            }
+            if (isDue<SLOT_DC3>(cycle)) {
+                paula.diskController.serviceDiskChangeEvent(3);
             }
             if (isDue<SLOT_INS>(cycle)) {
                 agnus.serviceINSEvent(id[SLOT_INS]);

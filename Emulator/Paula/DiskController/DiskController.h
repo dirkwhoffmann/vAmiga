@@ -268,7 +268,7 @@ public:
     void scheduleNextDiskEvent();
 
     // Services an event in the disk change slot
-    void serviceDiskChangeEvent();
+    void serviceDiskChangeEvent(isize n);
 
     
     //

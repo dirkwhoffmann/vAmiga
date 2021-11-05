@@ -293,10 +293,15 @@ DiskController::setState(DriveState oldState, DriveState newState)
 void
 DiskController::ejectDisk(isize nr, Cycle delay)
 {
-    assert(nr >= 0 && nr <= 3);
-    
     suspended {
-        agnus.scheduleRel<SLOT_DCH>(delay, DCH_EJECT, nr);
+        
+        switch (nr) {
+            case 0: agnus.scheduleRel <SLOT_DC0> (delay, DCH_EJECT); break;
+            case 1: agnus.scheduleRel <SLOT_DC1> (delay, DCH_EJECT); break;
+            case 2: agnus.scheduleRel <SLOT_DC2> (delay, DCH_EJECT); break;
+            case 3: agnus.scheduleRel <SLOT_DC3> (delay, DCH_EJECT); break;
+            default: fatalError;
+        }
     }
 }
 
@@ -333,7 +338,14 @@ DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
         }
         
         diskToInsert = std::move(disk);
-        agnus.scheduleRel<SLOT_DCH>(delay, DCH_INSERT, nr);
+        
+        switch (nr) {
+            case 0: agnus.scheduleRel <SLOT_DC0> (delay, DCH_INSERT); break;
+            case 1: agnus.scheduleRel <SLOT_DC1> (delay, DCH_INSERT); break;
+            case 2: agnus.scheduleRel <SLOT_DC2> (delay, DCH_INSERT); break;
+            case 3: agnus.scheduleRel <SLOT_DC3> (delay, DCH_INSERT); break;
+            default: fatalError;
+        }
     }
 }
 

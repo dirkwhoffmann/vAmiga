@@ -812,6 +812,13 @@ Drive::fnv() const
 }
 
 void
+Drive::serviceDiskChangeEvent()
+{
+    // TODO
+    assert(false);
+}
+
+void
 Drive::PRBdidChange(u8 oldValue, u8 newValue)
 {
     // -----------------------------------------------------------------

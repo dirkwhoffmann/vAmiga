@@ -54,7 +54,10 @@ enum_long(SLOT)
     SLOT_TER,                       // Enables tertiary slots
     
     // Tertiary slots
-    SLOT_DCH,                       // Disk changes (insert, eject)
+    SLOT_DC0,                       // Disk change (Df0)
+    SLOT_DC1,                       // Disk change (Df1)
+    SLOT_DC2,                       // Disk change (Df2)
+    SLOT_DC3,                       // Disk change (Df3)
     SLOT_INS,                       // Handles periodic calls to inspect()
 
     SLOT_COUNT
@@ -97,7 +100,10 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_RAS:   return "RAS";
             case SLOT_TER:   return "TER";
                 
-            case SLOT_DCH:   return "DCH";
+            case SLOT_DC0:   return "DC0";
+            case SLOT_DC1:   return "DC1";
+            case SLOT_DC2:   return "DC2";
+            case SLOT_DC3:   return "DC3";
             case SLOT_INS:   return "INS";
 
             case SLOT_COUNT: return "???";

@@ -55,14 +55,15 @@ DiskController::scheduleNextDiskEvent()
 }
 
 void
-DiskController::serviceDiskChangeEvent()
+DiskController::serviceDiskChangeEvent(isize n)
 {
-    if (scheduler.id[SLOT_DCH] == EVENT_NONE) return;
-    
-    auto n = (isize)scheduler.data[SLOT_DCH];
     assert(n >= 0 && n <= 3);
 
-    switch (scheduler.id[SLOT_DCH]) {
+    EventSlot slot = SLOT_DC0 + n;
+    
+    if (scheduler.id[slot] == EVENT_NONE) return;
+    
+    switch (scheduler.id[slot]) {
 
         case DCH_INSERT:
 
@@ -84,5 +85,10 @@ DiskController::serviceDiskChangeEvent()
             fatalError;
     }
 
-    scheduler.cancel<SLOT_DCH>();
+    switch (n) {
+        case 0: scheduler.cancel<SLOT_DC0>(); break;
+        case 1: scheduler.cancel<SLOT_DC1>(); break;
+        case 2: scheduler.cancel<SLOT_DC2>(); break;
+        case 3: scheduler.cancel<SLOT_DC3>(); break;
+    }
 }

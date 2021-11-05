@@ -194,6 +194,8 @@ public:
     // Operating the drive
     //
         
+public:
+    
     // Returns the current motor speed in percent
     double motorSpeed() const;
 
@@ -228,10 +230,13 @@ public:
     // Rotates the disk to the next sync mark
     void findSyncMark();
 
+    
     //
     // Moving the drive head
     //
 
+public:
+    
     // Returns wheather the drive is ready to accept a stepping pulse
     bool readyToStep() const;
     
@@ -249,6 +254,8 @@ public:
     // Handling disks
     //
 
+public:
+    
     bool hasDisk() const { return disk != nullptr; }
     bool hasDDDisk() const { return disk ? disk->density == DISK_DD : false; }
     bool hasHDDisk() const { return disk ? disk->density == DISK_HD : false; }
@@ -270,9 +277,22 @@ public:
     
     u64 fnv() const;
     
+    
+    //
+    // Serving events
+    //
+    
+public:
+    
+    // Services an event in the disk change slot
+    void serviceDiskChangeEvent();
+    
+    
     //
     // Delegation methods
     //
+    
+public:
     
     // Write handler for the PRB register of CIA B
     void PRBdidChange(u8 oldValue, u8 newValue);

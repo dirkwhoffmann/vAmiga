@@ -27,7 +27,6 @@ extension EventSlot: CustomStringConvertible {
         case .CH2:   return "Audio channel 2"
         case .CH3:   return "Audio channel 3"
         case .DSK:   return "Disk Controller"
-        case .DCH:   return "Disk Change"
         case .VBL:   return "Vertical blank"
         case .IRQ:   return "Interrupts"
         case .IPL:   return "IPL"
@@ -38,6 +37,10 @@ extension EventSlot: CustomStringConvertible {
         case .RAS:   return "Rasterline"
         case .TER:   return "Next tertiary event"
 
+        case .DC0:   return "Disk Change Df0"
+        case .DC1:   return "Disk Change Df1"
+        case .DC2:   return "Disk Change Df2"
+        case .DC3:   return "Disk Change Df3"
         case .INS:   return "Inspector"
 
         case .COUNT: return "???"
