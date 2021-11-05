@@ -72,6 +72,9 @@ public:
     // The currently inserted disk (if any)
     std::unique_ptr<Disk> disk;
 
+    // A disk waiting to be inserted (if any)
+    std::unique_ptr<Disk> diskToInsert;
+
     
     //
     // Initializing

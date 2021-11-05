@@ -22,9 +22,6 @@ class DiskController : public SubComponent
     // Result of the latest inspection
     mutable DiskControllerInfo info = {};
 
-    // Temorary storage for a disk waiting to be inserted
-    std::unique_ptr<Disk> diskToInsert;
-
     // Search path for disk files, one for each drive
     string searchPath[4];
     

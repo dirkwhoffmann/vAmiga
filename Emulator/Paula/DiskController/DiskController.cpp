@@ -25,9 +25,7 @@ DiskController::_reset(bool hard)
     
     prb = 0xFF;
     selected = -1;
-    dsksync = 0x4489;
-    
-    if (hard) assert(diskToInsert == nullptr);
+    dsksync = 0x4489;    
 }
 
 DiskControllerConfig
@@ -337,7 +335,7 @@ DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
             delay = std::max(df[nr]->config.diskSwapDelay, delay);
         }
         
-        diskToInsert = std::move(disk);
+        df[nr]->diskToInsert = std::move(disk);
         
         switch (nr) {
             case 0: agnus.scheduleRel <SLOT_DC0> (delay, DCH_INSERT); break;

@@ -69,9 +69,9 @@ DiskController::serviceDiskChangeEvent(isize n)
 
             trace(DSK_DEBUG, "DCH_INSERT (df%zd)\n", n);
 
-            assert(diskToInsert != nullptr);
-            df[n]->insertDisk(std::move(diskToInsert));
-            assert(diskToInsert == nullptr);
+            assert(df[n]->diskToInsert != nullptr);
+            df[n]->insertDisk(std::move(df[n]->diskToInsert));
+            assert(df[n]->diskToInsert == nullptr);
             break;
 
         case DCH_EJECT:

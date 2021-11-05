@@ -32,6 +32,8 @@ void
 Drive::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
+    
+    if (hard) assert(diskToInsert == nullptr);
 }
 
 DriveConfig
