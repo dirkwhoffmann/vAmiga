@@ -204,17 +204,6 @@ Scheduler::eventName(EventSlot slot, EventID id)
             }
             break;
 
-        case SLOT_DCH:
-
-            switch (id) {
-
-                case EVENT_NONE:    return "none";
-                case DCH_INSERT:    return "DCH_INSERT";
-                case DCH_EJECT:     return "DCH_EJECT";
-                default:            return "*** INVALID ***";
-            }
-            break;
-
         case SLOT_VBL:
 
             switch (id) {
@@ -311,6 +300,17 @@ Scheduler::eventName(EventSlot slot, EventID id)
 
                 case EVENT_NONE:    return "none";
                 case TER_TRIGGER:   return "TER_TRIGGER";
+                default:            return "*** INVALID ***";
+            }
+            break;
+
+        case SLOT_DCH:
+
+            switch (id) {
+
+                case EVENT_NONE:    return "none";
+                case DCH_INSERT:    return "DCH_INSERT";
+                case DCH_EJECT:     return "DCH_EJECT";
                 default:            return "*** INVALID ***";
             }
             break;
@@ -526,9 +526,6 @@ Scheduler::executeUntil(Cycle cycle) {
         if (isDue<SLOT_DSK>(cycle)) {
             paula.diskController.serviceDiskEvent();
         }
-        if (isDue<SLOT_DCH>(cycle)) {
-            paula.diskController.serviceDiskChangeEvent();
-        }
         if (isDue<SLOT_VBL>(cycle)) {
             agnus.serviceVblEvent(scheduler.id[SLOT_VBL]);
         }
@@ -560,6 +557,9 @@ Scheduler::executeUntil(Cycle cycle) {
             // Check tertiary slots
             //
 
+            if (isDue<SLOT_DCH>(cycle)) {
+                paula.diskController.serviceDiskChangeEvent();
+            }
             if (isDue<SLOT_INS>(cycle)) {
                 agnus.serviceINSEvent(id[SLOT_INS]);
             }

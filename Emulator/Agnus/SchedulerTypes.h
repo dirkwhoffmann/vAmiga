@@ -43,7 +43,6 @@ enum_long(SLOT)
     SLOT_CH2,                       // Audio channel 2
     SLOT_CH3,                       // Audio channel 3
     SLOT_DSK,                       // Disk controller
-    SLOT_DCH,                       // Disk changes (insert, eject)
     SLOT_VBL,                       // Vertical blank
     SLOT_IRQ,                       // Interrupts
     SLOT_IPL,                       // CPU Interrupt Priority Lines
@@ -55,6 +54,7 @@ enum_long(SLOT)
     SLOT_TER,                       // Enables tertiary slots
     
     // Tertiary slots
+    SLOT_DCH,                       // Disk changes (insert, eject)
     SLOT_INS,                       // Handles periodic calls to inspect()
 
     SLOT_COUNT
@@ -87,7 +87,6 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_CH2:   return "CH2";
             case SLOT_CH3:   return "CH3";
             case SLOT_DSK:   return "DSK";
-            case SLOT_DCH:   return "DCH";
             case SLOT_VBL:   return "VBL";
             case SLOT_IRQ:   return "IRQ";
             case SLOT_IPL:   return "IPL";
@@ -98,6 +97,7 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_RAS:   return "RAS";
             case SLOT_TER:   return "TER";
                 
+            case SLOT_DCH:   return "DCH";
             case SLOT_INS:   return "INS";
 
             case SLOT_COUNT: return "???";
