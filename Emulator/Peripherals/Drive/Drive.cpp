@@ -752,83 +752,65 @@ Drive::isInsertable(const Disk &disk) const
     return isInsertable(disk.diameter, disk.density);
 }
 
+template <EventSlot s> void
+Drive::ejectDisk(Cycle delay)
+{
+    debug(DSK_DEBUG, "ejectDisk <%d> (%lld)\n", s, delay);
+    
+    suspended {
+
+        // Schedule an ejection event
+        agnus.scheduleRel <s> (delay, DCH_EJECT);
+
+        // If there is no delay, service the event immediately
+        if (delay == 0) serviceDiskChangeEvent();
+    }
+}
+
 void
 Drive::ejectDisk(Cycle delay)
 {
     debug(DSK_DEBUG, "ejectDisk(%lld)\n", delay);
     
-    suspended {
-        
-        if (delay == 0) {
-            
-            // Eject immediately
-            _eject();
-            
-        } else {
-            
-            // Schedule an ejection event
-            switch (nr) {
-                case 0: agnus.scheduleRel <SLOT_DC0> (delay, DCH_EJECT); break;
-                case 1: agnus.scheduleRel <SLOT_DC1> (delay, DCH_EJECT); break;
-                case 2: agnus.scheduleRel <SLOT_DC2> (delay, DCH_EJECT); break;
-                case 3: agnus.scheduleRel <SLOT_DC3> (delay, DCH_EJECT); break;
-                default: fatalError;
-            }
-        }
-    }
+    if (nr == 0) ejectDisk <SLOT_DC0> (delay);
+    if (nr == 1) ejectDisk <SLOT_DC1> (delay);
+    if (nr == 2) ejectDisk <SLOT_DC2> (delay);
+    if (nr == 3) ejectDisk <SLOT_DC3> (delay);
 }
 
-void
+template <EventSlot s> void
 Drive::insertDisk(std::unique_ptr<Disk> disk, Cycle delay)
 {
     assert(disk != nullptr);
     
-    debug(DSK_DEBUG, "insertDisk(%lld)\n", delay);
+    debug(DSK_DEBUG, "insertDisk <%d> (%lld)\n", s, delay);
 
     // Only proceed if the provided disk is compatible with this drive
     if (!isInsertable(*disk)) throw VAError(ERROR_DISK_INCOMPATIBLE);
 
     suspended {
         
-        // Get ownership of this disk
+        // Get ownership of the disk
         diskToInsert = std::move(disk);
-        
-        if (delay == 0) {
-            
-            // Insert immediately
-            _insert();
-            
-        } else {
-            
-            // Schedule an insertion event
-            switch (nr) {
-                case 0: agnus.scheduleRel <SLOT_DC0> (delay, DCH_INSERT); break;
-                case 1: agnus.scheduleRel <SLOT_DC1> (delay, DCH_INSERT); break;
-                case 2: agnus.scheduleRel <SLOT_DC2> (delay, DCH_INSERT); break;
-                case 3: agnus.scheduleRel <SLOT_DC3> (delay, DCH_INSERT); break;
-                default: fatalError;
-            }
-        }
+
+        // Schedule an ejection event
+        agnus.scheduleRel <s> (delay, DCH_INSERT);
+
+        // If there is no delay, service the event immediately
+        if (delay == 0) serviceDiskChangeEvent();
     }
 }
 
-/*
 void
-Drive::insertDisk(class DiskFile &file, Cycle delay)
+Drive::insertDisk(std::unique_ptr<Disk> disk, Cycle delay)
 {
-    insertDisk(std::make_unique<Disk>(file), delay);
-}
-
-void
-Drive::insertDisk(const string &name, Cycle delay)
-{
-    bool append = !util::isAbsolutePath(name) && searchPath != "";
-    string path = append ? searchPath + "/" + name : name;
+    debug(DSK_DEBUG, "insertDisk(%lld)\n", delay);
     
-    std::unique_ptr<DiskFile> file(DiskFile::make(path));
-    insertDisk(*file, delay);
+    if (nr == 0) insertDisk <SLOT_DC0> (std::move(disk), delay);
+    if (nr == 1) insertDisk <SLOT_DC1> (std::move(disk), delay);
+    if (nr == 2) insertDisk <SLOT_DC2> (std::move(disk), delay);
+    if (nr == 3) insertDisk <SLOT_DC3> (std::move(disk), delay);
 }
-*/
 
 void
 Drive::insertNew()

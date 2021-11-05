@@ -13,6 +13,7 @@
 #include "SubComponent.h"
 #include "Disk.h"
 #include "DiskController.h"
+#include "SchedulerTypes.h"
 #include "SuspendableThread.h"
 
 class Drive : public SubComponent {
@@ -303,6 +304,9 @@ public:
     
 private:
     
+    template <EventSlot s> void ejectDisk(Cycle delay);
+    template <EventSlot s> void insertDisk(std::unique_ptr<Disk> disk, Cycle delay) throws;
+
     void _eject();
     void _insert() throws;
     
