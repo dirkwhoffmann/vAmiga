@@ -200,6 +200,7 @@ class Renderer: NSObject, MTKViewDelegate {
         update(frames: frames)
 
         semaphore.wait()
+        self.canvas.updateTexture()
         
         if let drawable = metalLayer.nextDrawable() {
 
@@ -221,7 +222,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
             // Commit the command buffer
             buffer.addCompletedHandler { _ in
-                self.canvas.updateTexture()
+                // self.canvas.updateTexture()
                 self.semaphore.signal()
             }
             buffer.present(drawable)
