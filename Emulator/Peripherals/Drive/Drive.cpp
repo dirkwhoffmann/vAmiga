@@ -877,46 +877,6 @@ Drive::swapDisk(const string &name)
     swapDisk(*file);
 }
 
-void
-Drive::_eject()
-{
-    trace(DSK_DEBUG, "ejectDisk()\n");
-
-    if (disk) {
-        
-        // Flag disk change in the CIAA::PA
-        dskchange = false;
-        
-        // Get rid of the disk
-        disk = nullptr;
-        
-        // Notify the GUI
-        msgQueue.put(MSG_DISK_EJECT,
-                         config.pan << 24 | config.ejectVolume << 16 | nr);
-    }
-}
-
-void
-Drive::_insert()
-{
-    // Don't call this function if there is no disk waiting to be inserted
-    assert(diskToInsert != nullptr);
-
-    // Only proceed if the provided disk fits into this drive
-    if (!isInsertable(*diskToInsert)) throw VAError(ERROR_DISK_INCOMPATIBLE);
-
-    // Eject the old disk first
-    _eject();
-            
-    // Insert disk
-    disk = std::move(diskToInsert);
-    head.offset = 0;
-    
-    // Notify the GUI
-    msgQueue.put(MSG_DISK_INSERT,
-                     config.pan << 24 | config.insertVolume << 16 | nr);
-}
-
 u64
 Drive::fnv() const
 {
@@ -926,33 +886,41 @@ Drive::fnv() const
 template <EventSlot s> void
 Drive::serviceDiskChangeEvent()
 {
-    EventSlot slot = SLOT_DC0 + nr;
-    assert(slot >= SLOT_DC0 && slot <= SLOT_DC3);
+    // Check if we need to eject the current disk
+    if (scheduler.id[s] == DCH_EJECT || scheduler.id[s] == DCH_INSERT) {
+        
+        if (disk) {
+            
+            // Flag disk change in CIAA::PA
+            dskchange = false;
+            
+            // Get rid of the disk
+            disk = nullptr;
+            
+            // Notify the GUI
+            msgQueue.put(MSG_DISK_EJECT,
+                         config.pan << 24 | config.ejectVolume << 16 | nr);
+        }
+    }
     
-    if (scheduler.id[slot] == EVENT_NONE) return;
-    
-    switch (scheduler.id[slot]) {
-
-        case DCH_INSERT:
-
-            debug(DSK_DEBUG, "DCH_INSERT\n");
-
-            assert(diskToInsert != nullptr);
-            _insert();
-            assert(diskToInsert == nullptr);
-            break;
-
-        case DCH_EJECT:
-
-            debug(DSK_DEBUG, "DCH_EJECT\n");
-
-            _eject();
-            break;
-
-        default:
-            fatalError;
+    // Check if we need to insert a new disk
+    if (scheduler.id[s] == DCH_INSERT) {
+        
+        if (diskToInsert) {
+            
+            // Insert the new disk
+            disk = std::move(diskToInsert);
+            
+            // Remove indeterminism by repositioning the drive head
+            head.offset = 0;
+            
+            // Notify the GUI
+            msgQueue.put(MSG_DISK_INSERT,
+                         config.pan << 24 | config.insertVolume << 16 | nr);
+        }
     }
 
+    // Remove the event
     scheduler.cancel <s> ();
 }
 
