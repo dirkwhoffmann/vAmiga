@@ -139,31 +139,6 @@ DiskController::setConfigItem(Option option, long id, i64 value)
     }
 }
 
-/*
-const string &
-DiskController::getSearchPath(isize dfn) const
-{
-    assert(dfn >= 0 && dfn <= 3);
-    return df[dfn]->getSearchPath();
-}
-
-void
-DiskController::setSearchPath(const string &path, isize dfn)
-{
-    assert(dfn >= 0 && dfn <= 3);
-    df[dfn]->setSearchPath(path);
-}
-
-void
-DiskController::setSearchPath(const string &path)
-{
-    df0.setSearchPath(path);
-    df1.setSearchPath(path);
-    df2.setSearchPath(path);
-    df3.setSearchPath(path);
-}
-*/
-
 void
 DiskController::_inspect() const
 {

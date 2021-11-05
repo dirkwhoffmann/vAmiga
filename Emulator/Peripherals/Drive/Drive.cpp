@@ -892,8 +892,39 @@ Drive::fnv() const
 void
 Drive::serviceDiskChangeEvent()
 {
-    // TODO
-    assert(false);
+    EventSlot slot = SLOT_DC0 + nr;
+    assert(slot >= SLOT_DC0 && slot <= SLOT_DC3);
+    
+    if (scheduler.id[slot] == EVENT_NONE) return;
+    
+    switch (scheduler.id[slot]) {
+
+        case DCH_INSERT:
+
+            debug(DSK_DEBUG, "DCH_INSERT\n");
+
+            assert(diskToInsert != nullptr);
+            oldInsertDisk(std::move(diskToInsert));
+            assert(diskToInsert == nullptr);
+            break;
+
+        case DCH_EJECT:
+
+            debug(DSK_DEBUG, "DCH_EJECT\n");
+
+            oldEjectDisk();
+            break;
+
+        default:
+            fatalError;
+    }
+
+    switch (nr) {
+        case 0: scheduler.cancel<SLOT_DC0>(); break;
+        case 1: scheduler.cancel<SLOT_DC1>(); break;
+        case 2: scheduler.cancel<SLOT_DC2>(); break;
+        case 3: scheduler.cancel<SLOT_DC3>(); break;
+    }
 }
 
 void

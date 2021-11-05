@@ -132,9 +132,10 @@ Amiga::reset(bool hard)
     if (!isEmulatorThread()) suspend();
     
     // If a disk change is in progress, finish it
-    if (hard) {
-        for (isize i = 0; i < 4; i++) paula.diskController.serviceDiskChangeEvent(i);
-    }
+    df0.serviceDiskChangeEvent();
+    df1.serviceDiskChangeEvent();
+    df2.serviceDiskChangeEvent();
+    df3.serviceDiskChangeEvent();
     
     // Execute the standard reset routine
     AmigaComponent::reset(hard);

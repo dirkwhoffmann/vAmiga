@@ -257,9 +257,6 @@ public:
     void scheduleFirstDiskEvent();
     void scheduleNextDiskEvent();
 
-    // Services an event in the disk change slot
-    void serviceDiskChangeEvent(isize n);
-
     
     //
     // Working with the FIFO buffer
@@ -338,7 +335,6 @@ public:
      * register is written to. This mode is fast, but far from being accurate.
      * Neither does it uses the disk DMA slots, nor does it interact with
      * the FIFO buffer.
-
      */
   
     // Performs DMA in standard mode

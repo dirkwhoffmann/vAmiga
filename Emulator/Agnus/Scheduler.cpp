@@ -14,6 +14,7 @@
 #include "Agnus.h"
 #include "Paula.h"
 #include "Keyboard.h"
+#include "Drive.h"
 #include "IO.h"
 #include <iomanip>
 
@@ -561,16 +562,16 @@ Scheduler::executeUntil(Cycle cycle) {
             //
 
             if (isDue<SLOT_DC0>(cycle)) {
-                paula.diskController.serviceDiskChangeEvent(0);
+                df0.serviceDiskChangeEvent();
             }
             if (isDue<SLOT_DC1>(cycle)) {
-                paula.diskController.serviceDiskChangeEvent(1);
+                df1.serviceDiskChangeEvent();
             }
             if (isDue<SLOT_DC2>(cycle)) {
-                paula.diskController.serviceDiskChangeEvent(2);
+                df2.serviceDiskChangeEvent();
             }
             if (isDue<SLOT_DC3>(cycle)) {
-                paula.diskController.serviceDiskChangeEvent(3);
+                df3.serviceDiskChangeEvent();
             }
             if (isDue<SLOT_INS>(cycle)) {
                 agnus.serviceINSEvent(id[SLOT_INS]);
