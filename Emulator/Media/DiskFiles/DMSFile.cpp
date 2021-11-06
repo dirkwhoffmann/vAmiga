@@ -12,7 +12,7 @@
 #include "AmigaFile.h"
 
 extern "C" {
-unsigned short extractDMS(FILE *fi, FILE *fo);
+unsigned short extractDMS(FILE *fi, FILE *fo, int verbose);
 }
 
 bool
@@ -51,7 +51,7 @@ DMSFile::finalizeRead()
     fpo = open_memstream(&po, &so);
     
     // Extract the DMS
-    extractDMS(fpi, fpo);
+    extractDMS(fpi, fpo, DMS_DEBUG);
     fclose(fpi);
     fclose(fpo);
     

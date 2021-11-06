@@ -34,7 +34,7 @@ static USHORT Process_Track(FILE *, FILE *, UCHAR *, UCHAR *, USHORT, USHORT, US
 static USHORT Unpack_Track(UCHAR *, UCHAR *, USHORT, USHORT, UCHAR, UCHAR);
 static void printbandiz(UCHAR *, USHORT);
 static void dms_decrypt(UCHAR *, USHORT);
-USHORT extractDMS(FILE *fi, FILE *fo);
+USHORT extractDMS(FILE *fi, FILE *fo, int verbose);
 
 static char modes[7][7]={"NOCOMP","SIMPLE","QUICK ","MEDIUM","DEEP  ","HEAVY1","HEAVY2"};
 static USHORT PWDCRC;
@@ -44,10 +44,10 @@ UCHAR *text;
 int OverrideErrors;
 
 // New entry point for vAmiga (Dirk Hoffmann)
-USHORT extractDMS(FILE *fi, FILE *fo) {
+USHORT extractDMS(FILE *fi, FILE *fo, int verbose) {
     
     USHORT cmd = CMD_UNPACK;
-    USHORT opt = OPT_VERBOSE;
+    USHORT opt = verbose ? OPT_VERBOSE : 0;
     USHORT PCRC = 0;
     USHORT pwd = 0;
     
