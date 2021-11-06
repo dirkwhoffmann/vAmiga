@@ -319,8 +319,6 @@ RetroShell::exec(const string &command)
 void
 RetroShell::execScript(std::ifstream &fs)
 {
-    msg("execScript(ifstream)\n");
-    
     script.str("");
     script << fs.rdbuf();
     scriptLine = 1;
@@ -331,8 +329,6 @@ RetroShell::execScript(std::ifstream &fs)
 void
 RetroShell::execScript(const string &contents)
 {
-    // msg("execScript(string)\n");
-
     script.str("");
     script << contents;
     scriptLine = 1;
@@ -343,12 +339,10 @@ RetroShell::execScript(const string &contents)
 void
 RetroShell::continueScript()
 {
-    msg("continueScript()\n");
-    
     string command;
     while(std::getline(script, command)) {
             
-        msg("%s\n", command.c_str());
+        // msg("%s\n", command.c_str());
         
         // Print the command
         printPrompt();

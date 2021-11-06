@@ -1575,14 +1575,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_ROM> (u32 addr, u8 value)
         debug(MEM_DEBUG, "Locking WOM\n");
         womIsLocked = true;
         updateMemSrcTables();
-    }
-        
-    if (!releaseBuild) {
-        if (addr == 0xFFFFFF && value == 42) {
-            msg("DEBUG STOP\n");
-            amiga.signalStop();
-        }
-    }
+    }        
 }
 
 template <> void

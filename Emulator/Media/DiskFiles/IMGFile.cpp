@@ -78,15 +78,16 @@ IMGFile::encodeDisk(Disk &disk) const
     }
 
     isize tracks = numTracks();
-    debug(MFM_DEBUG, "Encoding DOS disk with %zd tracks\n", tracks);
+    debug(IMG_DEBUG, "Encoding DOS disk with %zd tracks\n", tracks);
 
     // Encode all tracks
     for (Track t = 0; t < tracks; t++) encodeTrack(disk, t);
 
     // In debug mode, also run the decoder
-    if constexpr (MFM_DEBUG) {
+    if constexpr (IMG_DEBUG) {
+        
         IMGFile tmp(disk);
-        msg("Saving image to /tmp/debug.img for debugging\n");
+        debug(IMG_DEBUG, "Saving image to /tmp/debug.img for debugging\n");
         tmp.writeToFile("/tmp/tmp.img");
     }
 }
@@ -95,7 +96,7 @@ void
 IMGFile::encodeTrack(Disk &disk, Track t) const
 {
     isize sectors = numSectors();
-    debug(MFM_DEBUG, "Encoding DOS track %zd with %ld sectors\n", t, sectors);
+    debug(IMG_DEBUG, "Encoding DOS track %zd with %ld sectors\n", t, sectors);
 
     u8 *p = disk.data.track[t];
 
@@ -117,7 +118,7 @@ IMGFile::encodeTrack(Disk &disk, Track t) const
     for (Sector s = 0; s < sectors; s++) encodeSector(disk, t, s);
     
     // Compute a checksum for debugging
-    debug(MFM_DEBUG, "Track %zd checksum = %x\n",
+    debug(IMG_DEBUG, "Track %zd checksum = %x\n",
           t, util::fnv_1a_32(disk.data.track[t], disk.length.track[t]));
 }
 
@@ -126,7 +127,7 @@ IMGFile::encodeSector(Disk &disk, Track t, Sector s) const
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
         
-    debug(MFM_DEBUG, "  Encoding DOS sector %zd\n", s);
+    debug(IMG_DEBUG, "  Encoding DOS sector %zd\n", s);
     
     // Write SYNC
     for (isize i = 0; i < 12; i++) { buf[i] = 0x00; }
@@ -194,7 +195,7 @@ IMGFile::decodeDisk(Disk &disk)
 {
     long tracks = numTracks();
     
-    trace(MFM_DEBUG, "Decoding DOS disk (%ld tracks)\n", tracks);
+    debug(IMG_DEBUG, "Decoding DOS disk (%ld tracks)\n", tracks);
     
     if (disk.getDiameter() != getDiskDiameter()) {
         throw VAError(ERROR_DISK_INVALID_DIAMETER);
@@ -219,7 +220,7 @@ IMGFile::decodeTrack(Disk &disk, Track t)
     u8 *src = disk.data.track[t];
     u8 *dst = data + t * numSectors * 512;
     
-    trace(MFM_DEBUG, "Decoding DOS track %zd\n", t);
+    debug(IMG_DEBUG, "Decoding DOS track %zd\n", t);
 
     // Determine the start of all sectors contained in this track
     std::vector <isize> sectorStart(numSectors);
@@ -242,7 +243,7 @@ IMGFile::decodeTrack(Disk &disk, Track t)
         // Decode CHRN block
         struct { u8 c; u8 h; u8 r; u8 n; } chrn;
         Disk::decodeMFM((u8 *)&chrn, &src[i], 4);
-        trace(MFM_DEBUG, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
+        debug(IMG_DEBUG, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
         
         if (chrn.r >= 1 && chrn.r <= numSectors) {
             

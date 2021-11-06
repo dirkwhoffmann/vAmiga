@@ -47,7 +47,7 @@ Disk::init(util::SerReader &reader, DiskDiameter dia, DiskDensity den)
 
 Disk::~Disk()
 {
-    msg("Deleting disk\n");
+    debug(OBJ_DEBUG, "Deleting disk\n");
 }
 
 void

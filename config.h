@@ -90,6 +90,7 @@ static const int NO_SSE          = 0; // Don't use SSE extensions
 // General
 static const int CNF_DEBUG       = 0; // Configuration options
 static const int XFILES          = 0; // Report paranormal activity
+static const int OBJ_DEBUG       = 0; // Object life-times
 static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
 
 // Runloop
@@ -174,6 +175,11 @@ static const int SER_DEBUG       = 0; // Serial interface
 static const int POT_DEBUG       = 0; // Potentiometer inputs
 static const int HOLD_MOUSE_L    = 0; // Hold down the left mouse button
 static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
+
+// Media types
+static const int ADF_DEBUG       = 0; // ADF and extended ADF files
+static const int DMS_DEBUG       = 0; // DMS files
+static const int IMG_DEBUG       = 0; // IMG files
 
 // Other components
 static const int RTC_DEBUG       = 0; // Real-time clock

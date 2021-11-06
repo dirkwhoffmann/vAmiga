@@ -180,29 +180,45 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
         assert(videoFFmpeg == nullptr);
         assert(audioFFmpeg == nullptr);
         
-        msg("\nStarting video encoder with options:\n%s\n", cmd1.c_str());
+        // Launch the video encoder
+        debug(REC_DEBUG, "\nStarting video encoder with options:\n%s\n", cmd1.c_str());
         videoFFmpeg = popen(cmd1.c_str(), "w");
-        msg(videoFFmpeg ? "Success\n" : "Failed to launch\n");
         
-        msg("\nStarting audio encoder with options:\n%s\n", cmd2.c_str());
+        if (!videoFFmpeg) {
+            warn("Failed to launch the FFmpeg video encoder.\n");
+            return false;
+        }
+
+        // Launch the audio encoder
+        debug(REC_DEBUG, "\nStarting audio encoder with options:\n%s\n", cmd2.c_str());
         audioFFmpeg = popen(cmd2.c_str(), "w");
-        msg(audioFFmpeg ? "Success\n" : "Failed to launch\n");
-        
-        // Open pipes
-        msg("Opening video pipe\n");
+
+        if (!audioFFmpeg) {
+            warn("Failed to launch the FFmpeg audio encoder.\n");
+            return false;
+        }
+
+        // Open the video pipe
+        debug(REC_DEBUG, "Opening video pipe\n");
+
         videoPipe = open(videoPipePath().c_str(), O_WRONLY);
+
         if (!videoPipe) {
-            msg("Failed to launch the video pipe\n");
-            return false;
-        }
-        msg("Opening audio pipe\n");
-        audioPipe = open(audioPipePath().c_str(), O_WRONLY);
-        if (!audioPipe) {
-            msg("Failed to launch the audio pipe\n");
+            warn("Failed to launch the video pipe\n");
             return false;
         }
         
-        msg("Success\n");
+        // Open the audio pipe
+        debug(REC_DEBUG, "Opening audio pipe\n");
+
+        audioPipe = open(audioPipePath().c_str(), O_WRONLY);
+
+        if (!audioPipe) {
+            warn("Failed to launch the audio pipe\n");
+            return false;
+        }
+        
+        debug(REC_DEBUG, "Success\n");
         state = State::prepare;
     }
 
@@ -253,13 +269,13 @@ Recorder::exportAs(const string &path)
     // Launch FFmpeg
     //
     
-    msg("\nMerging video and audio stream with options:\n%s\n", cmd.c_str());
+    debug(REC_DEBUG, "\nMerging streams with options:\n%s\n", cmd.c_str());
 
     if (system(cmd.c_str()) == -1) {
-        warn("Failed: %s\n", cmd.c_str());
+        warn("Failed to merge video and audio: %s\n", cmd.c_str());
     }
     
-    msg("Done\n");
+    debug(REC_DEBUG, "Success\n");
     return true;
 }
 

@@ -44,8 +44,6 @@ EXTFile::isCompatible(std::istream &stream)
 void
 EXTFile::init(Disk &disk)
 {
-    debug(true, "EXTFILE::init\n");
-    
     auto numTracks = disk.numTracks();
     
     size = 12;              // File header
@@ -56,9 +54,7 @@ EXTFile::init(Disk &disk)
     }
     
     data = new u8[size]();
-    
-    printf("Allocated %zd bytes\n", size);
-    
+        
     decodeDisk(disk);
 }
 
@@ -76,19 +72,19 @@ EXTFile::finalizeRead()
     
     if (std::strcmp((char *)data, "UAE-1ADF") != 0) {
         
-        msg("UAE-1ADF files are not supported\n");
+        warn("UAE-1ADF files are not supported\n");
         throw VAError(ERROR_EXT_FACTOR5);
     }
     
     if (numTracks < 160 || numTracks > 168) {
 
-        msg("Invalid number of tracks\n");
+        warn("Invalid number of tracks\n");
         throw VAError(ERROR_EXT_CORRUPTED);
     }
 
     if (size < proposedHeaderSize() || size != proposedFileSize()) {
         
-        msg("File size mismatch\n");
+        warn("File size mismatch\n");
         throw VAError(ERROR_EXT_CORRUPTED);
     }
 
@@ -96,19 +92,19 @@ EXTFile::finalizeRead()
         
         if (typeOfTrack(i) != 1) {
             
-            msg("Only MFM encoded tracks are supported yet\n");
+            warn("Only MFM encoded tracks are supported yet\n");
             throw VAError(ERROR_EXT_INCOMPATIBLE);
         }
 
         if (usedBitsForTrack(i) > availableBytesForTrack(i) * 8) {
             
-            msg("Corrupted length information\n");
+            warn("Corrupted length information\n");
             throw VAError(ERROR_EXT_CORRUPTED);
         }
 
         if (usedBitsForTrack(i) % 8) {
             
-            msg("Track length is not a multiple of 8\n");
+            warn("Track length is not a multiple of 8\n");
             throw VAError(ERROR_EXT_INCOMPATIBLE);
         }
     }
@@ -267,7 +263,7 @@ EXTFile::decodeDisk(Disk &disk)
         }
     }
     
-    printf("Wrote %zd bytes\n", p - data);
+    debug(ADF_DEBUG, "Wrote %zd bytes\n", p - data);
 }
 
 isize

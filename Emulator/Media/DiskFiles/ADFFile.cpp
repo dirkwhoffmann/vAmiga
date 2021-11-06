@@ -215,23 +215,23 @@ ADFFile::bootBlockName() const
 void
 ADFFile::killVirus()
 {
-    msg("Overwriting boot block virus with ");
+    debug(ADF_DEBUG, "Overwriting boot block virus with ");
     
     if (isOFSVolumeType(getDos())) {
 
-        msg("a standard OFS bootblock\n");
+        plain(ADF_DEBUG, "a standard OFS bootblock\n");
         BootBlockImage bb = BootBlockImage(BB_AMIGADOS_13);
         bb.write(data + 4, 4, 1023);
 
     } else if (isFFSVolumeType(getDos())) {
 
-        msg("a standard FFS bootblock\n");
+        plain(ADF_DEBUG, "a standard FFS bootblock\n");
         BootBlockImage bb = BootBlockImage(BB_AMIGADOS_20);
         bb.write(data + 4, 4, 1023);
 
     } else {
 
-        msg("zeroes\n");
+        plain(ADF_DEBUG, "zeroes\n");
         std::memset(data + 4, 0, 1020);
     }
 }
@@ -241,7 +241,8 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockId id)
 {
     assert_enum(FSVolumeType, fs);
 
-    msg("Formatting disk (%lld blocks, %s)\n", numBlocks(), FSVolumeTypeEnum::key(fs));
+    debug(ADF_DEBUG,
+          "Formatting disk (%lld, %s)\n", numBlocks(), FSVolumeTypeEnum::key(fs));
 
     // Only proceed if a file system is given
     if (fs == FS_NODOS) return;
@@ -272,7 +273,7 @@ ADFFile::encodeDisk(Disk &disk) const
     }
 
     isize tracks = numTracks();
-    debug(MFM_DEBUG, "Encoding Amiga disk with %zd tracks\n", tracks);
+    debug(ADF_DEBUG, "Encoding Amiga disk with %zd tracks\n", tracks);
 
     // Start with an unformatted disk
     disk.clearDisk();
@@ -281,9 +282,10 @@ ADFFile::encodeDisk(Disk &disk) const
     for (Track t = 0; t < tracks; t++) encodeTrack(disk, t);
 
     // In debug mode, also run the decoder
-    if constexpr (MFM_DEBUG) {
+    if constexpr (ADF_DEBUG) {
+        
         ADFFile tmp(disk);
-        msg("Saving image to /tmp/debug.adf for debugging\n");
+        debug(ADF_DEBUG, "Saving image to /tmp/debug.adf for debugging\n");
         tmp.writeToFile("/tmp/tmp.adf");
     }
 }
@@ -292,7 +294,7 @@ void
 ADFFile::encodeTrack(Disk &disk, Track t) const
 {
     isize sectors = numSectors();
-    debug(MFM_DEBUG, "Encoding Amiga track %zd with %ld sectors\n", t, sectors);
+    debug(ADF_DEBUG, "Encoding Amiga track %zd with %ld sectors\n", t, sectors);
 
     // Format track
     disk.clearTrack(t, 0xAA);
@@ -306,7 +308,7 @@ ADFFile::encodeTrack(Disk &disk, Track t) const
     }
     
     // Compute a debug checksum
-    debug(MFM_DEBUG, "Track %zd checksum = %x\n",
+    debug(ADF_DEBUG, "Track %zd checksum = %x\n",
           t, util::fnv_1a_32(disk.data.track[t], disk.length.track[t]));
 }
 
@@ -315,7 +317,7 @@ ADFFile::encodeSector(Disk &disk, Track t, Sector s) const
 {
     assert(t < disk.numTracks());
     
-    debug(MFM_DEBUG, "Encoding sector %zd\n", s);
+    debug(ADF_DEBUG, "Encoding sector %zd\n", s);
     
     // Block header layout:
     //
@@ -393,7 +395,7 @@ ADFFile::decodeDisk(Disk &disk)
 {
     long tracks = numTracks();
     
-    debug(MFM_DEBUG, "Decoding Amiga disk with %ld tracks\n", tracks);
+    debug(ADF_DEBUG, "Decoding Amiga disk with %ld tracks\n", tracks);
     
     if (disk.getDiameter() != getDiskDiameter()) {
         throw VAError(ERROR_DISK_INVALID_DIAMETER);
@@ -414,7 +416,7 @@ ADFFile::decodeTrack(Disk &disk, Track t)
 { 
     long sectors = numSectors();
 
-    trace(MFM_DEBUG, "Decoding track %zd\n", t);
+    debug(ADF_DEBUG, "Decoding track %zd\n", t);
     
     u8 *src = disk.data.track[t];
     u8 *dst = data + t * sectors * 512;
@@ -437,7 +439,7 @@ ADFFile::decodeTrack(Disk &disk, Track t)
         sectorStart[nr++] = index;
     }
     
-    trace(MFM_DEBUG, "Found %zd sectors (expected %ld)\n", nr, sectors);
+    debug(ADF_DEBUG, "Found %zd sectors (expected %ld)\n", nr, sectors);
 
     if (nr != sectors) {
         

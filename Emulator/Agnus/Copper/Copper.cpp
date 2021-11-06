@@ -251,8 +251,6 @@ Copper::scheduleWaitWakeup(bool bfd)
         // In how many cycles do we get there?
         isize delay = trigger - agnus.pos;
 
-        // msg("(%d,%d) matches in %d cycles\n", trigger.v, trigger.h, delay);
-
         if (delay == 0) {
 
             // Copper does not stop
@@ -276,7 +274,6 @@ Copper::scheduleWaitWakeup(bool bfd)
 
     } else {
 
-        // msg("(%d,%d) does not match in this frame\n", trigger.v, trigger.h);
         scheduler.scheduleAbs<SLOT_COP>(NEVER, COP_REQ_DMA);
     }
 }
@@ -403,7 +400,7 @@ Copper::vsyncHandler()
      */
     agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(0), COP_VBLANK);
     
-    if (COP_CHECKSUM) {
+    if constexpr (COP_CHECKSUM) {
         
         if (checkcnt) {
             msg("[%lld] Checksum: %x (%lld) lc1 = %x lc2 = %x\n",
