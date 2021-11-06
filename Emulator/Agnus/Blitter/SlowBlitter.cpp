@@ -836,9 +836,9 @@ Blitter::initSlowBlitter()
         {
             {   // Full execution
                 &Blitter::execLine <BUSIDLE | HOLD_A>,
-                &Blitter::execLine <HOLD_B>,
+                &Blitter::execLine <BUSIDLE | HOLD_B>,
                 &Blitter::execLine <BUSIDLE | HOLD_D>,
-                &Blitter::execLine <REPEAT>,
+                &Blitter::execLine <BUSIDLE | REPEAT>,
                 
                 &Blitter::execLine <NOTHING>,
                 &Blitter::execLine <BLTDONE>,
@@ -847,9 +847,9 @@ Blitter::initSlowBlitter()
             },
             {   // Fake execution
                 &Blitter::fakeExecLine <BUSIDLE>,
-                &Blitter::fakeExecLine <NOTHING>,
                 &Blitter::fakeExecLine <BUSIDLE>,
-                &Blitter::fakeExecLine <REPEAT>,
+                &Blitter::fakeExecLine <BUSIDLE>,
+                &Blitter::fakeExecLine <BUSIDLE | REPEAT>,
                 
                 &Blitter::fakeExecLine <NOTHING>,
                 &Blitter::fakeExecLine <BLTDONE>,
