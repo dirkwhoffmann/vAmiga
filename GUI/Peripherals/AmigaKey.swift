@@ -144,8 +144,8 @@ let keycaps: [Int: [KBLayout: String]] = [
     
     AmigaKeycode.Ansi.grave:        [.generic: "~ `"],
     AmigaKeycode.Ansi.digit1:       [.generic: "! 1"],
-    AmigaKeycode.Ansi.digit2:       [.generic: "\u{0022} 2"],
-    AmigaKeycode.Ansi.digit3:       [.generic: "\u{00A3} 3", .german: "§ 3"],
+    AmigaKeycode.Ansi.digit2:       [.generic: "@ 2"],
+    AmigaKeycode.Ansi.digit3:       [.generic: "# 3", .german: "§ 3"],
     AmigaKeycode.Ansi.digit4:       [.generic: "$ 4"],
     AmigaKeycode.Ansi.digit5:       [.generic: "% 5"],
     AmigaKeycode.Ansi.digit6:       [.generic: "^ 6", .german: "& 6", .italian: "& 6"],
@@ -169,8 +169,8 @@ let keycaps: [Int: [KBLayout: String]] = [
     AmigaKeycode.Ansi.i:            [.generic: "I"],
     AmigaKeycode.Ansi.o:            [.generic: "O"],
     AmigaKeycode.Ansi.p:            [.generic: "P"],
-    AmigaKeycode.Ansi.lBracket:     [.generic: "[ {", .german: "Ü", .italian: "\u{00E9} \u{00E8}"],
-    AmigaKeycode.Ansi.rBracket:     [.generic: "] }", .german: "* +", .italian: "* +"],
+    AmigaKeycode.Ansi.lBracket:     [.generic: "{ [", .german: "Ü", .italian: "\u{00E9} \u{00E8}"],
+    AmigaKeycode.Ansi.rBracket:     [.generic: "} ]", .german: "* +", .italian: "* +"],
 
     AmigaKeycode.Ansi.keypad1:      [.generic: "1"],
     AmigaKeycode.Ansi.keypad2:      [.generic: "2"],
@@ -185,8 +185,8 @@ let keycaps: [Int: [KBLayout: String]] = [
     AmigaKeycode.Ansi.j:            [.generic: "J"],
     AmigaKeycode.Ansi.k:            [.generic: "K"],
     AmigaKeycode.Ansi.l:            [.generic: "L"],
-    AmigaKeycode.Ansi.semicolon:    [.generic: "; :", .german: "Ö", .italian: "@ \u{00F2}"],
-    AmigaKeycode.Ansi.quote:        [.generic: "# @", .german: "Ä", .italian: "# \u{00E0}"],
+    AmigaKeycode.Ansi.semicolon:    [.generic: ": ;", .german: "Ö", .italian: "@ \u{00F2}"],
+    AmigaKeycode.Ansi.quote:        [.generic: "\" ,", .german: "Ä", .italian: "# \u{00E0}"],
 
     AmigaKeycode.Ansi.keypad4:      [.generic: "4"],
     AmigaKeycode.Ansi.keypad5:      [.generic: "5"],
