@@ -144,8 +144,8 @@ let keycaps: [Int: [KBLayout: String]] = [
     
     AmigaKeycode.Ansi.grave:        [.generic: "~ `"],
     AmigaKeycode.Ansi.digit1:       [.generic: "! 1"],
-    AmigaKeycode.Ansi.digit2:       [.generic: "@ 2"],
-    AmigaKeycode.Ansi.digit3:       [.generic: "# 3", .german: "§ 3"],
+    AmigaKeycode.Ansi.digit2:       [.generic: "@ 2", .german: "\" 2", .italian: "\" 2"],
+    AmigaKeycode.Ansi.digit3:       [.generic: "# 3", .german: "§ 3", .italian: "\u{00A3} 3"],
     AmigaKeycode.Ansi.digit4:       [.generic: "$ 4"],
     AmigaKeycode.Ansi.digit5:       [.generic: "% 5"],
     AmigaKeycode.Ansi.digit6:       [.generic: "^ 6", .german: "& 6", .italian: "& 6"],
