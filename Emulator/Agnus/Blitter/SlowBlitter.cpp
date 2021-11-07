@@ -1249,7 +1249,6 @@ Blitter::fakeExec()
 
     // Trigger Blitter interrupt if this is the termination cycle
     if ((instr & BLTDONE) && !birq) {
-        signalEnd();
         paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
         birq = true;
     }
@@ -1287,6 +1286,10 @@ Blitter::fakeExec()
             bltpc = newpc;
             resetXCounter();
             decYCounter();
+        
+        } else {
+            
+            signalEnd();
         }
     }
 
@@ -1337,7 +1340,7 @@ Blitter::execLine()
 
     // Trigger Blitter interrupt if this is the termination cycle
     if ((instr & BLTDONE) && !birq) {
-        signalEnd();
+        
         paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
         birq = true;
     }
@@ -1419,6 +1422,10 @@ Blitter::execLine()
             bltpc = 0;
             resetXCounter();
             decYCounter();
+
+        } else {
+        
+            signalEnd();
         }
         
         bltdpt = bltcpt;
@@ -1446,7 +1453,6 @@ Blitter::fakeExecLine()
     
     // Trigger Blitter interrupt if this is the termination cycle
     if ((instr & BLTDONE) && !birq) {
-        signalEnd();
         paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
         birq = true;
     }
@@ -1476,6 +1482,10 @@ Blitter::fakeExecLine()
             bltpc = 0;
             resetXCounter();
             decYCounter();
+
+        } else {
+            
+            signalEnd();
         }
     }
     
