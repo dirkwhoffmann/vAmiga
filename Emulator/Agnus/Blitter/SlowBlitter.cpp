@@ -1222,7 +1222,7 @@ Blitter::exec()
 
         } else {
 
-            signalEnd();
+            clearBusyFlag();
         }
     }
 
@@ -1289,7 +1289,7 @@ Blitter::fakeExec()
         
         } else {
             
-            signalEnd();
+            clearBusyFlag();
         }
     }
 
@@ -1425,7 +1425,7 @@ Blitter::execLine()
 
         } else {
         
-            signalEnd();
+            clearBusyFlag();
         }
         
         bltdpt = bltcpt;
@@ -1485,7 +1485,7 @@ Blitter::fakeExecLine()
 
         } else {
             
-            signalEnd();
+            clearBusyFlag();
         }
     }
     

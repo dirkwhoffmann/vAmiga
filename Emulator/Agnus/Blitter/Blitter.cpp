@@ -665,7 +665,10 @@ Blitter::beginLineBlit(isize level)
     if (bltcon0 & BLTCON0_USEB) {
         trace(XFILES, "Performing line blit with channel B enabled\n");
     }
-
+    if (bltsizeH != 2) {
+        trace(XFILES, "Performing line blit with WIDTH = %d\n", bltsizeH);
+    }
+    
     switch (level) {
             
         case 0: beginFastLineBlit(); break;
@@ -698,7 +701,7 @@ Blitter::beginCopyBlit(isize level)
 }
 
 void
-Blitter::signalEnd()
+Blitter::clearBusyFlag()
 {
     debug(BLTTIM_DEBUG, "(%zd,%zd) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
 

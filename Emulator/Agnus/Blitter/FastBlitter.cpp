@@ -51,7 +51,7 @@ Blitter::beginFastCopyBlit()
     (this->*blitfunc[nr])();
 
     // Terminate immediately
-    signalEnd();
+    clearBusyFlag();
     paula.raiseIrq(INT_BLIT);
     endBlit();
 }
@@ -66,7 +66,7 @@ Blitter::beginFastLineBlit()
     doFastLineBlit();
 
     // Terminate immediately
-    signalEnd();
+    clearBusyFlag();
     paula.raiseIrq(INT_BLIT);
     endBlit();
 }

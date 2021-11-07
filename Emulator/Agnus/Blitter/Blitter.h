@@ -438,8 +438,8 @@ private:
     void beginLineBlit(isize level);
     void beginCopyBlit(isize level);
 
-    // Clears the BBUSY flag and triggers the Blitter interrupt
-    void signalEnd();
+    // Clears the BBUSY flag
+    void clearBusyFlag();
 
     // Concludes the current Blitter operation
     void endBlit();
