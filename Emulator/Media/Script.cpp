@@ -17,8 +17,8 @@
 bool
 Script::isCompatible(const string &path)
 {
-    auto suffix = util::extractSuffix(path);
-    return suffix == "ini" || suffix == "INI";
+    auto suffix = util::uppercased(util::extractSuffix(path));
+    return suffix == "INI";
 }
 
 bool

@@ -19,8 +19,8 @@
 bool
 ADFFile::isCompatible(const string &path)
 {
-    auto suffix = util::extractSuffix(path);
-    return suffix == "adf" || suffix == "ADF";
+    auto suffix = util::uppercased(util::extractSuffix(path));
+    return suffix == "ADF";
 }
 
 bool

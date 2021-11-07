@@ -18,8 +18,8 @@ unsigned short extractDMS(FILE *fi, FILE *fo, int verbose);
 bool
 DMSFile::isCompatible(const string &path)
 {
-    auto suffix = util::extractSuffix(path);
-    return suffix == "dms" || suffix == "DMS";
+    auto suffix = util::uppercased(util::extractSuffix(path));
+    return suffix == "DMS";
 }
 
 bool

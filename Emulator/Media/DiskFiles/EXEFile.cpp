@@ -16,8 +16,8 @@
 bool
 EXEFile::isCompatible(const string &path)
 {
-    auto suffix = util::extractSuffix(path);
-    return suffix == "exe" || suffix == "EXE";
+    auto suffix = util::uppercased(util::extractSuffix(path));
+    return suffix == "EXE";
 }
 
 bool

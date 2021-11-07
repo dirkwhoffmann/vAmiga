@@ -14,8 +14,8 @@
 bool
 HDFFile::isCompatible(const string &path)
 {
-    auto suffix = util::extractSuffix(path);
-    return suffix == "hdf" || suffix == "HDF";
+    auto suffix = util::uppercased(util::extractSuffix(path));
+    return suffix == "HDF";
 }
 
 bool

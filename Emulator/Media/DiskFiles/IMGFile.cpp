@@ -16,8 +16,8 @@
 bool
 IMGFile::isCompatible(const string &path)
 {
-    auto suffix = util::extractSuffix(path);
-    return suffix == "img" || suffix == "IMG";
+    auto suffix = util::uppercased(util::extractSuffix(path));
+    return suffix == "IMG";
 }
 
 bool
