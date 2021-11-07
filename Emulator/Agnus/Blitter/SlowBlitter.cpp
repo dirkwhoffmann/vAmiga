@@ -1081,7 +1081,6 @@ Blitter::exec()
 
     // Trigger Blitter interrupt if this is the termination cycle
     if ((instr & BLTDONE) && !birq) {
-        signalEnd();
         paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
         birq = true;
     }
@@ -1220,6 +1219,10 @@ Blitter::exec()
             bltpc = newpc;
             resetXCounter();
             decYCounter();
+
+        } else {
+
+            signalEnd();
         }
     }
 
