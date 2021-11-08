@@ -41,7 +41,7 @@ Moira::reset()
 {
     flags = CPU_CHECK_IRQ;
 
-    for(int i = 0; i < 8; i++) reg.d[i] = reg.a[i] = 0xFFFFFFFF;
+    for(int i = 0; i < 8; i++) reg.d[i] = reg.a[i] = 0; // 0xFFFFFFFF;
     reg.usp = 0;
     reg.ipl = 0;
     ipl = 0;
