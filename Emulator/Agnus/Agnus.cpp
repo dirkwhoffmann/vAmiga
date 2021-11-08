@@ -237,7 +237,7 @@ Agnus::setConfigItem(Option option, i64 value)
 bool
 Agnus::isOCS() const
 {
-    return config.revision == AGNUS_OCS_PLCC || config.revision == AGNUS_OCS_PLCC;
+    return config.revision == AGNUS_OCS_DIP || config.revision == AGNUS_OCS_PLCC;
 }
 
 bool
