@@ -14,7 +14,7 @@
 
 class RTC : public SubComponent {
 
-    // Current configuration
+    // The current configuration
     RTCConfig config = {};
 
     /* The current time of the real-time clock. The RTC stores the time as a

@@ -221,11 +221,12 @@ protected:
     virtual u16 readIrqUserVector(u8 level) const { return 0; }
 
     // Instrution delegates
-    virtual void signalReset() { };
-    virtual void signalStop(u16 op) { };
-    virtual void signalTAS() { };
+    virtual void signalResetInstr() { };
+    virtual void signalStopInstr(u16 op) { };
+    virtual void signalTASInstr() { };
 
     // State delegates
+    virtual void signalHardReset() { };
     virtual void signalHalt() { };
 
     // Exception delegates
@@ -266,9 +267,9 @@ protected:
     u16 readIrqUserVector(u8 level) const;
 
     // Instrution delegates
-    void signalReset();
-    void signalStop(u16 op);
-    void signalTAS();
+    void signalResetInstr();
+    void signalStopInstr(u16 op);
+    void signalTasInstr();
 
     // State delegates
     void signalHalt();

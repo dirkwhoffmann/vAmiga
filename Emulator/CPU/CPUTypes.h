@@ -13,6 +13,16 @@
 
 #define CPUINFO_INSTR_COUNT 256
 
+//
+// Structures
+//
+
+typedef struct
+{
+    u32 regResetVal;
+}
+CPUConfig;
+
 typedef struct
 {
     u32 pc0;

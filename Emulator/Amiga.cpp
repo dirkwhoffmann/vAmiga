@@ -188,6 +188,10 @@ Amiga::getConfigItem(Option option) const
             
             return agnus.dmaDebugger.getConfigItem(option);
             
+        case OPT_REG_RESET_VAL:
+            
+            return cpu.getConfigItem(option);
+            
         case OPT_RTC_MODEL:
             
             return rtc.getConfigItem(option);
@@ -358,6 +362,11 @@ Amiga::configure(Option option, i64 value)
             agnus.dmaDebugger.setConfigItem(option, value);
             break;
 
+        case OPT_REG_RESET_VAL:
+            
+            cpu.setConfigItem(option, value);
+            break;
+            
         case OPT_RTC_MODEL:
             
             rtc.setConfigItem(option, value);

@@ -212,6 +212,17 @@ Interpreter::registerInstructions()
     root.add({"cpu"},
              "component", "Motorola 68k CPU");
     
+    root.add({"cpu", "config"},
+             "command", "Displays the current configuration",
+             &RetroShell::exec <Token::cpu, Token::config>, 0);
+
+    root.add({"cpu", "set"},
+             "command", "Configures the component");
+    
+    root.add({"cpu", "set", "regreset"},
+             "key", "Selects the reset value of data and address registers",
+             &RetroShell::exec <Token::cpu, Token::set, Token::regreset>, 1);
+
     root.add({"cpu", "inspect"},
              "command", "Displays the component state");
 

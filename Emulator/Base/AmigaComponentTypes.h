@@ -37,6 +37,9 @@ enum_long(OPT)
     OPT_DMA_DEBUG_COLOR,
     OPT_DMA_DEBUG_OPACITY,
     
+    // CPU
+    OPT_REG_RESET_VAL,
+    
     // Real-time clock
     OPT_RTC_MODEL,
 
@@ -131,6 +134,8 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_SLOW_RAM_MIRROR:     return "SLOW_RAM_MIRROR";
                 
             case OPT_DENISE_REVISION:     return "DENISE_REVISION";
+                
+            case OPT_REG_RESET_VAL:       return "REG_RESET_VAL";
                 
             case OPT_RTC_MODEL:           return "RTC_MODEL";
 

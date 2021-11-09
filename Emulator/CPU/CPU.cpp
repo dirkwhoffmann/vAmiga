@@ -80,14 +80,14 @@ Moira::readIrqUserVector(u8 level) const
 }
 
 void
-Moira::signalReset()
+Moira::signalResetInstr()
 {
     trace(XFILES, "XFILES: RESET instruction\n");
     amiga.softReset();
 }
 
 void
-Moira::signalStop(u16 op)
+Moira::signalStopInstr(u16 op)
 {
     if constexpr (XFILES) {
         if (!(op & 0x2000)) trace(true, "XFILES: STOP instruction (%x)\n", op);
@@ -95,7 +95,7 @@ Moira::signalStop(u16 op)
 }
 
 void
-Moira::signalTAS()
+Moira::signalTasInstr()
 {
     trace(XFILES, "XFILES: TAS instruction\n");
 }
@@ -205,6 +205,51 @@ CPU::CPU(Amiga& ref) : moira::Moira(ref)
     
 }
 
+i64
+CPU::getConfigItem(Option option) const
+{
+    switch (option) {
+            
+        case OPT_REG_RESET_VAL:  return (long)config.regResetVal;
+        
+        default:
+            fatalError;
+    }
+}
+
+void
+CPU::setConfigItem(Option option, i64 value)
+{
+    switch (option) {
+            
+        case OPT_REG_RESET_VAL:
+
+            config.regResetVal = (u32)value;
+            return;
+                        
+        default:
+            fatalError;
+    }
+}
+
+CPUConfig
+CPU::getDefaultConfig()
+{
+    CPUConfig defaults;
+
+    defaults.regResetVal = 0x00000000;
+    
+    return defaults;
+}
+
+void
+CPU::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+
+    setConfigItem(OPT_REG_RESET_VAL, defaults.regResetVal);
+}
+
 void
 CPU::_reset(bool hard)
 {    
@@ -214,6 +259,9 @@ CPU::_reset(bool hard)
                 
         // Reset the Moira core
         Moira::reset();
+        
+        // Initialize all data and address registers with the startup value
+        for(int i = 0; i < 8; i++) reg.d[i] = reg.a[i] = config.regResetVal;
         
         // Remove all previously recorded instructions
         debugger.clearLog();
@@ -226,7 +274,7 @@ CPU::_reset(bool hard)
          *  register nor any of the internal registers is affected by an
          *  internal reset operation. All external devices in the system should
          *  be reset at the completion of the RESET instruction."
-         *      [Motorola M68000 User Manual]
+         *  [Motorola M68000 User Manual]
          */            
     }
 }
@@ -257,8 +305,12 @@ CPU::_inspect(u32 dasmStart) const
 void
 CPU::_dump(dump::Category category, std::ostream& os) const
 {
-    // using namespace util;
-    
+    if (category & dump::Config) {
+        
+        os << util::tab("Register reset value");
+        os << util::hex(config.regResetVal) << std::endl;
+    }
+     
     if (category & dump::State) {
         
         os << util::tab("Clock");

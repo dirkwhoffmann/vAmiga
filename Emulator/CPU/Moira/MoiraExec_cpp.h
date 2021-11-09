@@ -1594,7 +1594,7 @@ template<Instr I, Mode M, Size S> void
 Moira::execReset(u16 opcode)
 {
     SUPERVISOR_MODE_ONLY
-    signalReset();
+    signalResetInstr();
     
     sync(128);
     prefetch<POLLIPL>();
@@ -1705,7 +1705,7 @@ Moira::execStop(u16 opcode)
     flags |= CPU_IS_STOPPED;
     reg.pc0 = reg.pc;
     
-    signalStop(src);
+    signalStopInstr(src);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1728,7 +1728,7 @@ Moira::execSwap(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execTasRg(u16 opcode)
 {
-    signalTAS();
+    signalTasInstr();
     
     int dst = ( _____________xxx(opcode) );
 
@@ -1749,7 +1749,7 @@ Moira::execTasRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execTasEa(u16 opcode)
 {
-    signalTAS();
+    signalTasInstr();
 
     int dst = ( _____________xxx(opcode) );
 

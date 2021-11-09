@@ -274,6 +274,12 @@ RetroShell::exec <Token::memory, Token::inspect, Token::checksums> (Arguments& a
 //
 
 template <> void
+RetroShell::exec <Token::cpu, Token::config> (Arguments &argv, long param)
+{
+    dump(amiga.cpu, dump::Config);
+}
+
+template <> void
 RetroShell::exec <Token::cpu, Token::inspect, Token::state> (Arguments& argv, long param)
 {
     dump(amiga.cpu, dump::State);
@@ -283,6 +289,13 @@ template <> void
 RetroShell::exec <Token::cpu, Token::inspect, Token::registers> (Arguments& argv, long param)
 {
     dump(amiga.cpu, dump::Registers);
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::set, Token::regreset> (Arguments &argv, long param)
+{
+    auto value = util::parseNum(argv.front());
+    amiga.configure(OPT_REG_RESET_VAL, value);
 }
 
 

@@ -15,6 +15,9 @@
 
 class CPU : public moira::Moira {
 
+    // The current configuration
+    CPUConfig config = {};
+
     // Result of the latest inspection
     mutable CPUInfo info = {};
 
@@ -53,6 +56,9 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+        worker
+
+        << config.regResetVal;
     }
 
     template <class T>
@@ -94,6 +100,20 @@ private:
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     isize didLoadFromBuffer(const u8 *buffer) override;
     
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    static CPUConfig getDefaultConfig();
+    const CPUConfig &getConfig() const { return config; }
+    void resetConfig() override;
+    
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
+ 
     
     //
     // Analyzing
