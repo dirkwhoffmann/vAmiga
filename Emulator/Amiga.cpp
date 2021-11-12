@@ -979,17 +979,31 @@ void
 Amiga::loadSnapshot(const Snapshot &snapshot)
 {
     // Check if this snapshot is compatible with the emulator
-    if (snapshot.isTooOld() || FORCE_SNAPSHOT_TOO_OLD) {
-        throw VAError(ERROR_SNP_TOO_OLD);
+    if (snapshot.isTooOld() || FORCE_SNAP_TOO_OLD) {
+        throw VAError(ERROR_SNAP_TOO_OLD);
     }
-    if (snapshot.isTooNew() || FORCE_SNAPSHOT_TOO_NEW) {
-        throw VAError(ERROR_SNP_TOO_NEW);
+    if (snapshot.isTooNew() || FORCE_SNAP_TOO_NEW) {
+        throw VAError(ERROR_SNAP_TOO_NEW);
     }
 
     suspended {
         
-        // Restore the saved state
-        load(snapshot.getData());
+        try {
+
+            // Restore the saved state
+            load(snapshot.getData());
+
+        } catch (VAError &error) {
+            
+            /* If we reach this point, the emulator has been put into an
+             * inconsistent state. We cannot continue emulation, because it
+             * would likely crash the application. Because we cannot revert
+             * to the old state either, we perform a hard reset to eliminate
+             * the inconsistency.
+             */
+            hardReset();
+            throw error;
+        }
                 
         // Print some debug info if requested
         if constexpr (SNP_DEBUG) dump();

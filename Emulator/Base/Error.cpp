@@ -105,14 +105,19 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "Unable to decode the MFM bit stream (invalid sector number).";
             break;
 
-        case ERROR_SNP_TOO_OLD:
+        case ERROR_SNAP_TOO_OLD:
             description = "The snapshot was created with an older version of vAmiga";
             description += " and is incompatible with this release.";
             break;
 
-        case ERROR_SNP_TOO_NEW:
+        case ERROR_SNAP_TOO_NEW:
             description = "The snapshot was created with a newer version of vAmiga";
             description += " and is incompatible with this release.";
+            break;
+
+        case ERROR_SNAP_CORRUPTED:
+            description = "Corrupted snapshot data has put the emulator into";
+            description += " an inconsistent state. Emulation has be stopped.";
             break;
 
         case ERROR_EXT_FACTOR5:

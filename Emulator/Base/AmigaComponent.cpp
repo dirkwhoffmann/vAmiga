@@ -83,12 +83,9 @@ AmigaComponent::load(const u8 *buffer)
     ptr += didLoadFromBuffer(ptr);
     isize result = (isize)(ptr - buffer);
 
-    debug(SNP_DEBUG, "Checksum %llu (expected %llu)\n", checksum(), hash);
-
     // Check integrity
-    if (hash != _checksum()) {
-        debug(SNP_DEBUG, "Checksum %llu (expected %llu)\n", checksum(), hash);
-        assert(false);
+    if (hash != _checksum() || FORCE_SNAP_CORRUPTED) {        
+        throw VAError(ERROR_SNAP_CORRUPTED);
     }
     
     debug(SNP_DEBUG, "Loaded %zd bytes (expected %zd)\n", result, size());

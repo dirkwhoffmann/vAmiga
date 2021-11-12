@@ -173,7 +173,7 @@ public:
     virtual u64 _checksum() = 0;
 
     // Loads the internal state from a memory buffer
-    isize load(const u8 *buf);
+    isize load(const u8 *buf) throws;
     virtual isize _load(const u8 *buf) = 0;
     
     // Saves the internal state to a memory buffer
