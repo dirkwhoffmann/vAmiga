@@ -193,7 +193,7 @@ static const int FORCE_AROS_RAM_LIMIT      = 0;
 static const int FORCE_CHIP_RAM_LIMIT      = 0;
 static const int FORCE_SNAP_TOO_OLD        = 0;
 static const int FORCE_SNAP_TOO_NEW        = 0;
-static const int FORCE_SNAP_CORRUPTED      = 1;
+static const int FORCE_SNAP_CORRUPTED      = 0;
 static const int FORCE_DISK_INVALID_LAYOUT = 0;
 static const int FORCE_RECORDING_ERROR     = 0;
 

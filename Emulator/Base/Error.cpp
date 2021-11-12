@@ -116,8 +116,8 @@ VAError::VAError(ErrorCode code, const string &s)
             break;
 
         case ERROR_SNAP_CORRUPTED:
-            description = "Corrupted snapshot data has put the emulator into";
-            description += " an inconsistent state. Emulation has be stopped.";
+            description = "The snapshot data is corrupted and has put the";
+            description += " emulator into an inconsistent state.";
             break;
 
         case ERROR_EXT_FACTOR5:
