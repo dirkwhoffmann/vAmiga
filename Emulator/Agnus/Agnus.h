@@ -392,6 +392,7 @@ private:
         >> latchedPos
         >> frame
 
+        << ptrMask
         << bplcon0
         << bplcon1
         << dmacon
