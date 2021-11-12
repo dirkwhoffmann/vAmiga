@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Macros.h"
+#include "Checksum.h"
 
 namespace util {
 
@@ -139,6 +140,67 @@ public:
     
     template <class T, isize N>
     SerCounter& operator>>(T (&v)[N])
+    {
+        for(isize i = 0; i < N; ++i) {
+            v[i] << *this;
+        }
+        return *this;
+    }
+};
+
+
+//
+// Checksum generator
+//
+
+#define CHECK(type) \
+auto& operator<<(type& v) \
+{ \
+hash += util::fnv_1a_it64(hash, (u64)v); \
+return *this; \
+}
+
+class SerChecker
+{
+public:
+
+    u64 hash;
+
+    SerChecker() { hash = fnv_1a_init64(); }
+
+    CHECK(const bool)
+    CHECK(const char)
+    CHECK(const signed char)
+    CHECK(const unsigned char)
+    CHECK(const short)
+    CHECK(const unsigned short)
+    CHECK(const int)
+    CHECK(const unsigned int)
+    CHECK(const long)
+    CHECK(const unsigned long)
+    CHECK(const long long)
+    CHECK(const unsigned long long)
+    CHECK(const float)
+    CHECK(const double)
+       
+    template <class T, isize N>
+    SerChecker& operator<<(T (&v)[N])
+    {
+        for(isize i = 0; i < N; ++i) {
+            *this << v[i];
+        }
+        return *this;
+    }
+    
+    template <class T>
+    SerChecker& operator>>(T &v)
+    {
+        v << *this;
+        return *this;
+    }
+    
+    template <class T, isize N>
+    SerChecker& operator>>(T (&v)[N])
     {
         for(isize i = 0; i < N; ++i) {
             v[i] << *this;

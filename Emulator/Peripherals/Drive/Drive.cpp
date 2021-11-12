@@ -286,7 +286,7 @@ Drive::_size()
 
     applyToPersistentItems(counter);
     applyToResetItems(counter);
-
+    
     // Add the size of the boolean indicating whether a disk is inserted
     counter.count += sizeof(bool);
 

@@ -9,6 +9,8 @@
 
 #include "config.h"
 #include "AmigaComponent.h"
+#include "Checksum.h"
+#include "Serialization.h"
 
 void
 AmigaComponent::initialize()
@@ -35,13 +37,32 @@ isize
 AmigaComponent::size()
 {
     isize result = _size();
+    
+    // Add 8 bytes for the checksum
+    result += 8;
+    
     for (AmigaComponent *c : subComponents) { result += c->size(); }
+    return result;
+}
+
+u64
+AmigaComponent::checksum()
+{
+    u64 result = _checksum();
+    
+    // Compute checksums for all subcomponents
+    for (AmigaComponent *c : subComponents) {
+        result = util::fnv_1a_it64(result, c->checksum());
+    }
+    
     return result;
 }
 
 isize
 AmigaComponent::load(const u8 *buffer)
 {
+    assert(!isRunning());
+    
     const u8 *ptr = buffer;
     
     // Call delegation method
@@ -52,12 +73,23 @@ AmigaComponent::load(const u8 *buffer)
         ptr += c->load(ptr);
     }
 
+    // Load the checksum for this component
+    auto hash = util::read64(ptr);
+
     // Load internal state of this component
     ptr += _load(ptr);
 
     // Call delegation method
     ptr += didLoadFromBuffer(ptr);
     isize result = (isize)(ptr - buffer);
+
+    debug(SNP_DEBUG, "Checksum %llu (expected %llu)\n", checksum(), hash);
+
+    // Check integrity
+    if (hash != _checksum()) {
+        debug(SNP_DEBUG, "Checksum %llu (expected %llu)\n", checksum(), hash);
+        assert(false);
+    }
     
     debug(SNP_DEBUG, "Loaded %zd bytes (expected %zd)\n", result, size());
     return result;
@@ -70,23 +102,25 @@ AmigaComponent::save(u8 *buffer)
     
     // Call delegation method
     ptr += willSaveToBuffer(ptr);
-
+    
     // Save internal state of all subcomponents
     for (AmigaComponent *c : subComponents) {
         ptr += c->save(ptr);
     }
 
-    // Save internal state of this component
+    // Save the checksum for this component
+    util::write64(ptr, _checksum());
+    
+    // Save the internal state of this component
     ptr += _save(ptr);
 
     // Call delegation method
     ptr += didSaveToBuffer(ptr);
     isize result = (isize)(ptr - buffer);
     
-    // Verify that the number of written bytes matches the snapshot size
+    debug(SNP_DEBUG, "Saved %zd bytes (expected %zd)\n", result, size());
     assert(result == size());
 
-    debug(SNP_DEBUG, "Saved %zd bytes (expected %zd)\n", result, size());
     return result;
 }
 
