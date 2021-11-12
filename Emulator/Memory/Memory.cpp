@@ -331,6 +331,27 @@ Memory::_size()
     return counter.count;
 }
 
+u64
+Memory::_checksum()
+{
+    util::SerChecker checker;
+    
+    applyToPersistentItems(checker);
+    applyToResetItems(checker);
+    
+    if (config.chipSize) {
+        for (isize i = 0; i < config.chipSize; i++) checker << chip[i];
+    }
+    if (config.slowSize) {
+        for (isize i = 0; i < config.slowSize; i++) checker << slow[i];
+    }
+    if (config.fastSize) {
+        for (isize i = 0; i < config.fastSize; i++) checker << fast[i];
+    }
+    
+    return checker.hash;
+}
+
 isize
 Memory::didLoadFromBuffer(const u8 *buffer)
 {
