@@ -996,10 +996,10 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
         } catch (VAError &error) {
             
             /* If we reach this point, the emulator has been put into an
-             * inconsistent state. We cannot continue emulation, because it
-             * would likely crash the application. Because we cannot revert
-             * to the old state either, we perform a hard reset to eliminate
-             * the inconsistency.
+             * inconsistent state due to corrupted snapshot data. We cannot
+             * continue emulation, because it would likely crash the
+             * application. Because we cannot revert to the old state either,
+             * we perform a hard reset to eliminate the inconsistency.
              */
             hardReset();
             throw error;

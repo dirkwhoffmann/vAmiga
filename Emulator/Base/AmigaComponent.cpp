@@ -65,7 +65,7 @@ AmigaComponent::load(const u8 *buffer)
     
     const u8 *ptr = buffer;
     
-    // Call delegation method
+    // Call the delegate
     ptr += willLoadFromBuffer(ptr);
 
     // Load internal state of all subcomponents
@@ -79,7 +79,7 @@ AmigaComponent::load(const u8 *buffer)
     // Load internal state of this component
     ptr += _load(ptr);
 
-    // Call delegation method
+    // Call the delegate
     ptr += didLoadFromBuffer(ptr);
     isize result = (isize)(ptr - buffer);
 

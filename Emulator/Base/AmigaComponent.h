@@ -184,8 +184,8 @@ public:
      * override these methods to add custom behavior if not all elements can be
      * processed by the default implementation.
      */
-    virtual isize willLoadFromBuffer(const u8 *buf) { return 0; }
-    virtual isize didLoadFromBuffer(const u8 *buf) { return 0; }
+    virtual isize willLoadFromBuffer(const u8 *buf) throws { return 0; }
+    virtual isize didLoadFromBuffer(const u8 *buf) throws { return 0; }
     virtual isize willSaveToBuffer(u8 *buf) const {return 0; }
     virtual isize didSaveToBuffer(u8 *buf) const { return 0; }
 };

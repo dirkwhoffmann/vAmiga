@@ -366,22 +366,24 @@ Memory::didLoadFromBuffer(const u8 *buffer)
     << chipSize
     << slowSize
     << fastSize;
+    
+    // Check the integrity of the new values before we allocate memory
+    if (romSize > KB(512)) throw VAError(ERROR_SNAP_CORRUPTED);
+    if (womSize > KB(256)) throw VAError(ERROR_SNAP_CORRUPTED);
+    if (extSize > KB(512)) throw VAError(ERROR_SNAP_CORRUPTED);
+    if (chipSize > MB(2)) throw VAError(ERROR_SNAP_CORRUPTED);
+    if (slowSize > KB(512)) throw VAError(ERROR_SNAP_CORRUPTED);
+    if (fastSize > MB(8)) throw VAError(ERROR_SNAP_CORRUPTED);
 
-    // Make sure corrupted values do not cause any damage
-    if (romSize > KB(512)) { romSize = 0; assert(false); }
-    if (womSize > KB(256)) { womSize = 0; assert(false); }
-    if (extSize > KB(512)) { extSize = 0; assert(false); }
-    if (chipSize > MB(2)) { chipSize = 0; assert(false); }
-    if (slowSize > KB(512)) { slowSize = 0; assert(false); }
-    if (fastSize > MB(8)) { fastSize = 0; assert(false); }
-
-    // Allocate memory (without updating the memory tables)
+    // Allocate ROM space (only if Roms are included in the snapshot)
     if (romSize) allocRom(romSize, false);
     if (womSize) allocWom(womSize, false);
     if (extSize) allocExt(extSize, false);
-    if (chipSize) allocChip(chipSize, false);
-    if (slowSize) allocSlow(slowSize, false);
-    if (fastSize) allocFast(fastSize, false);
+
+    // Allocate RAM space
+    allocChip(chipSize, false);
+    allocSlow(slowSize, false);
+    allocFast(fastSize, false);
 
     // Load memory contents
     reader.copy(rom, romSize);
