@@ -99,7 +99,7 @@ class InstrTableView: NSTableView {
         }
 
         // In animation mode, jump to the currently executed instruction
-        if count != 0 { jumpTo(addr: addr) }
+        if count != 0 || full { jumpTo(addr: addr) }
     }
 
     func jumpTo(addr: Int) {
