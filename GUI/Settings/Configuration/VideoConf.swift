@@ -95,7 +95,7 @@ extension ConfigurationController {
     
     @IBAction func vidPaletteAction(_ sender: NSPopUpButton!) {
         
-        config.palette = sender.integerValue
+        config.palette = sender.selectedTag()
         refresh()
     }
     
