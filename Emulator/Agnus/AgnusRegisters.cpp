@@ -597,10 +597,10 @@ Agnus::pokeAUDxLCL(u16 value)
     audlc[x] = REPLACE_LO_WORD(audlc[x], value & 0xFFFE);
 }
 
-template <int x> void
+template <int x, Accessor s> void
 Agnus::pokeBPLxPTH(u16 value)
 {
-    trace(BPLREG_DEBUG, "pokeBPL%dPTH($%d) (%X)\n", x, value, value);
+    trace(BPLREG_DEBUG, "pokeBPL%dPTH($%d) ($%04x)\n", x, value, value);
 
     if constexpr (x == 1) recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTH, value);
     if constexpr (x == 2) recordRegisterChange(DMA_CYCLES(2), SET_BPL2PTH, value);
@@ -615,14 +615,14 @@ Agnus::setBPLxPTH(u16 value)
 {
     trace(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
 
-    // Do nothing if pointer was involded in DMA one cycle earlier
+    // Do nothing if pointer was involved in DMA one cycle earlier
     if (dropWrite((BusOwner)(BUS_BPL1 + x - 1))) return;
     
     // Perform the write
     bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
 }
 
-template <int x> void
+template <int x, Accessor s> void
 Agnus::pokeBPLxPTL(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
@@ -640,7 +640,7 @@ Agnus::setBPLxPTL(u16 value)
 {
     trace(BPLREG_DEBUG, "setBPLxPTL(%d, %X)\n", x, value);
     
-    // Do nothing if pointer was involded in DMA one cycle earlier
+    // Do nothing if pointer was involved in DMA one cycle earlier
     if (dropWrite((BusOwner)(BUS_BPL1 + x - 1))) return;
     
     // Perform the write
@@ -786,12 +786,18 @@ template void Agnus::pokeAUDxLCL<1>(u16 value);
 template void Agnus::pokeAUDxLCL<2>(u16 value);
 template void Agnus::pokeAUDxLCL<3>(u16 value);
 
-template void Agnus::pokeBPLxPTH<1>(u16 value);
-template void Agnus::pokeBPLxPTH<2>(u16 value);
-template void Agnus::pokeBPLxPTH<3>(u16 value);
-template void Agnus::pokeBPLxPTH<4>(u16 value);
-template void Agnus::pokeBPLxPTH<5>(u16 value);
-template void Agnus::pokeBPLxPTH<6>(u16 value);
+template void Agnus::pokeBPLxPTH<1,ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeBPLxPTH<2,ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeBPLxPTH<3,ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeBPLxPTH<4,ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeBPLxPTH<5,ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeBPLxPTH<6,ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeBPLxPTH<1,ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeBPLxPTH<2,ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeBPLxPTH<3,ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeBPLxPTH<4,ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeBPLxPTH<5,ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeBPLxPTH<6,ACCESSOR_AGNUS>(u16 value);
 template void Agnus::setBPLxPTH<1>(u16 value);
 template void Agnus::setBPLxPTH<2>(u16 value);
 template void Agnus::setBPLxPTH<3>(u16 value);
@@ -799,12 +805,18 @@ template void Agnus::setBPLxPTH<4>(u16 value);
 template void Agnus::setBPLxPTH<5>(u16 value);
 template void Agnus::setBPLxPTH<6>(u16 value);
 
-template void Agnus::pokeBPLxPTL<1>(u16 value);
-template void Agnus::pokeBPLxPTL<2>(u16 value);
-template void Agnus::pokeBPLxPTL<3>(u16 value);
-template void Agnus::pokeBPLxPTL<4>(u16 value);
-template void Agnus::pokeBPLxPTL<5>(u16 value);
-template void Agnus::pokeBPLxPTL<6>(u16 value);
+template void Agnus::pokeBPLxPTL<1,ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeBPLxPTL<2,ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeBPLxPTL<3,ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeBPLxPTL<4,ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeBPLxPTL<5,ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeBPLxPTL<6,ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeBPLxPTL<1,ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeBPLxPTL<2,ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeBPLxPTL<3,ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeBPLxPTL<4,ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeBPLxPTL<5,ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeBPLxPTL<6,ACCESSOR_AGNUS>(u16 value);
 template void Agnus::setBPLxPTL<1>(u16 value);
 template void Agnus::setBPLxPTL<2>(u16 value);
 template void Agnus::setBPLxPTL<3>(u16 value);

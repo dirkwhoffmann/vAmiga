@@ -810,10 +810,10 @@ public:
     template <int x> void pokeAUDxLCL(u16 value);
     template <int x> void reloadAUDxPT() { audpt[x] = audlc[x]; }
 
-    template <int x> void pokeBPLxPTH(u16 value);
+    template <int x, Accessor s> void pokeBPLxPTH(u16 value);
     template <int x> void setBPLxPTH(u16 value);
 
-    template <int x> void pokeBPLxPTL(u16 value);
+    template <int x, Accessor s> void pokeBPLxPTL(u16 value);
     template <int x> void setBPLxPTL(u16 value);
 
     void pokeBPL1MOD(u16 value);
