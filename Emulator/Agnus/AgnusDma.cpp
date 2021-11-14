@@ -134,6 +134,23 @@ Agnus::initDasEventTable()
     }
 }
 
+template <int x> bool
+Agnus::isBplDmaCycle()
+{
+    EventID id = bplEvent[pos.h] & ~3;
+    
+    switch (x) {
+            
+        case 1: return id == BPL_L1 || id == BPL_H1;
+        case 2: return id == BPL_L2 || id == BPL_H2;
+        case 3: return id == BPL_L3 || id == BPL_H3;
+        case 4: return id == BPL_L4 || id == BPL_H4;
+        case 5: return id == BPL_L5;
+        case 6: return id == BPL_L6;
+    }
+    fatalError;
+}
+
 void
 Agnus::enableBplDmaOCS()
 {
@@ -547,3 +564,10 @@ template bool Agnus::allocateBus<BUS_BLITTER>();
 
 template bool Agnus::busIsFree<BUS_COPPER>();
 template bool Agnus::busIsFree<BUS_BLITTER>();
+
+template bool Agnus::isBplDmaCycle<1>();
+template bool Agnus::isBplDmaCycle<2>();
+template bool Agnus::isBplDmaCycle<3>();
+template bool Agnus::isBplDmaCycle<4>();
+template bool Agnus::isBplDmaCycle<5>();
+template bool Agnus::isBplDmaCycle<6>();

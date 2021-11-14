@@ -719,7 +719,7 @@ Agnus::pokeSPRxPTL(u16 value)
 template <int x> void
 Agnus::setSPRxPTL(u16 value)
 {
-    trace(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "setSPR%dPTL(%X)\n", x, value);
 
     // Do nothing if pointer was involded in DMA one cycle earlier
     if (dropWrite((BusOwner)(BUS_SPRITE0 + x))) return;
