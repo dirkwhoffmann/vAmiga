@@ -602,12 +602,14 @@ Agnus::pokeBPLxPTH(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPL%dPTH($%d) ($%04x)\n", x, value, value);
 
-    if constexpr (x == 1) recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTH, value);
-    if constexpr (x == 2) recordRegisterChange(DMA_CYCLES(2), SET_BPL2PTH, value);
-    if constexpr (x == 3) recordRegisterChange(DMA_CYCLES(2), SET_BPL3PTH, value);
-    if constexpr (x == 4) recordRegisterChange(DMA_CYCLES(2), SET_BPL4PTH, value);
-    if constexpr (x == 5) recordRegisterChange(DMA_CYCLES(2), SET_BPL5PTH, value);
-    if constexpr (x == 6) recordRegisterChange(DMA_CYCLES(2), SET_BPL6PTH, value);
+    constexpr isize delay = (s == ACCESSOR_CPU) ? 1 : 2;
+    
+    if constexpr (x == 1) recordRegisterChange(DMA_CYCLES(delay), SET_BPL1PTH, value);
+    if constexpr (x == 2) recordRegisterChange(DMA_CYCLES(delay), SET_BPL2PTH, value);
+    if constexpr (x == 3) recordRegisterChange(DMA_CYCLES(delay), SET_BPL3PTH, value);
+    if constexpr (x == 4) recordRegisterChange(DMA_CYCLES(delay), SET_BPL4PTH, value);
+    if constexpr (x == 5) recordRegisterChange(DMA_CYCLES(delay), SET_BPL5PTH, value);
+    if constexpr (x == 6) recordRegisterChange(DMA_CYCLES(delay), SET_BPL6PTH, value);
 }
 
 template <int x> void
@@ -627,12 +629,14 @@ Agnus::pokeBPLxPTL(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
 
-    if constexpr (x == 1) recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTL, value);
-    if constexpr (x == 2) recordRegisterChange(DMA_CYCLES(2), SET_BPL2PTL, value);
-    if constexpr (x == 3) recordRegisterChange(DMA_CYCLES(2), SET_BPL3PTL, value);
-    if constexpr (x == 4) recordRegisterChange(DMA_CYCLES(2), SET_BPL4PTL, value);
-    if constexpr (x == 5) recordRegisterChange(DMA_CYCLES(2), SET_BPL5PTL, value);
-    if constexpr (x == 6) recordRegisterChange(DMA_CYCLES(2), SET_BPL6PTL, value);
+    constexpr isize delay = (s == ACCESSOR_CPU) ? 1 : 2;
+    
+    if constexpr (x == 1) recordRegisterChange(DMA_CYCLES(delay), SET_BPL1PTL, value);
+    if constexpr (x == 2) recordRegisterChange(DMA_CYCLES(delay), SET_BPL2PTL, value);
+    if constexpr (x == 3) recordRegisterChange(DMA_CYCLES(delay), SET_BPL3PTL, value);
+    if constexpr (x == 4) recordRegisterChange(DMA_CYCLES(delay), SET_BPL4PTL, value);
+    if constexpr (x == 5) recordRegisterChange(DMA_CYCLES(delay), SET_BPL5PTL, value);
+    if constexpr (x == 6) recordRegisterChange(DMA_CYCLES(delay), SET_BPL6PTL, value);
 }
 
 template <int x> void
