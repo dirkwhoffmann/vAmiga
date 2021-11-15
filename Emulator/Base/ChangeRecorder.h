@@ -120,15 +120,17 @@ struct RegChange
 {
     u32 addr;
     u16 value;
-
+    u16 accessor;
+    
     template <class W>
     void operator<<(W& worker)
     {
-        worker << addr << value;
+        worker << addr << value << accessor;
     }
     
-    RegChange() : addr(0), value(0) { }
-    RegChange(u32 a, u16 v) : addr(a), value(v) { }
+    RegChange() : addr(0), value(0), accessor(0) { }
+    RegChange(u32 a, u16 v) : addr(a), value(v), accessor(0) { }
+    RegChange(u32 a, u16 v, u16 ac) : addr(a), value(v), accessor(ac) { }
 };
 
 template <isize capacity>
