@@ -143,26 +143,7 @@ Agnus::serviceREGEvent(Cycle until)
                 
             case ACCESSOR_AGNUS:
                 
-                switch (change.addr) {
-                        
-                    case SET_BPL1PTH_1: setBPLxPTH1<1,ACCESSOR_AGNUS>(change.value); break;
-                    case SET_BPL2PTH_1: setBPLxPTH1<2,ACCESSOR_AGNUS>(change.value); break;
-                    case SET_BPL3PTH_1: setBPLxPTH1<3,ACCESSOR_AGNUS>(change.value); break;
-                    case SET_BPL4PTH_1: setBPLxPTH1<4,ACCESSOR_AGNUS>(change.value); break;
-                    case SET_BPL5PTH_1: setBPLxPTH1<5,ACCESSOR_AGNUS>(change.value); break;
-                    case SET_BPL6PTH_1: setBPLxPTH1<6,ACCESSOR_AGNUS>(change.value); break;
-                    
-                    case SET_BPL1PTH_2: setBPLxPTH2<1,ACCESSOR_AGNUS>(change.value); break;
-                    case SET_BPL2PTH_2: setBPLxPTH2<2,ACCESSOR_AGNUS>(change.value); break;
-                    case SET_BPL3PTH_2: setBPLxPTH2<3,ACCESSOR_AGNUS>(change.value); break;
-                    case SET_BPL4PTH_2: setBPLxPTH2<4,ACCESSOR_AGNUS>(change.value); break;
-                    case SET_BPL5PTH_2: setBPLxPTH2<5,ACCESSOR_AGNUS>(change.value); break;
-                    case SET_BPL6PTH_2: setBPLxPTH2<6,ACCESSOR_AGNUS>(change.value); break;
-                        
-                    default:
-                        fatalError;
-                }
-                break;
+                fatalError;
                 
             default:
                 
@@ -188,18 +169,18 @@ Agnus::serviceREGEvent(Cycle until)
                     case SET_DDFSTOP: setDDFSTOP(ddfstop, change.value); break;
                     case SET_BPL1MOD: setBPL1MOD(change.value); break;
                     case SET_BPL2MOD: setBPL2MOD(change.value); break;
-                    case SET_BPL1PTH_1: setBPLxPTH1<1,ACCESSOR_CPU>(change.value); break;
-                    case SET_BPL2PTH_1: setBPLxPTH1<2,ACCESSOR_CPU>(change.value); break;
-                    case SET_BPL3PTH_1: setBPLxPTH1<3,ACCESSOR_CPU>(change.value); break;
-                    case SET_BPL4PTH_1: setBPLxPTH1<4,ACCESSOR_CPU>(change.value); break;
-                    case SET_BPL5PTH_1: setBPLxPTH1<5,ACCESSOR_CPU>(change.value); break;
-                    case SET_BPL6PTH_1: setBPLxPTH1<6,ACCESSOR_CPU>(change.value); break;
-                    case SET_BPL1PTH_2: setBPLxPTH2<1,ACCESSOR_CPU>(change.value); break;
-                    case SET_BPL2PTH_2: setBPLxPTH2<2,ACCESSOR_CPU>(change.value); break;
-                    case SET_BPL3PTH_2: setBPLxPTH2<3,ACCESSOR_CPU>(change.value); break;
-                    case SET_BPL4PTH_2: setBPLxPTH2<4,ACCESSOR_CPU>(change.value); break;
-                    case SET_BPL5PTH_2: setBPLxPTH2<5,ACCESSOR_CPU>(change.value); break;
-                    case SET_BPL6PTH_2: setBPLxPTH2<6,ACCESSOR_CPU>(change.value); break;
+                    case SET_BPL1PTH_1: setBPLxPTH1<1>(change.value); break;
+                    case SET_BPL2PTH_1: setBPLxPTH1<2>(change.value); break;
+                    case SET_BPL3PTH_1: setBPLxPTH1<3>(change.value); break;
+                    case SET_BPL4PTH_1: setBPLxPTH1<4>(change.value); break;
+                    case SET_BPL5PTH_1: setBPLxPTH1<5>(change.value); break;
+                    case SET_BPL6PTH_1: setBPLxPTH1<6>(change.value); break;
+                    case SET_BPL1PTH_2: setBPLxPTH2<1>(change.value); break;
+                    case SET_BPL2PTH_2: setBPLxPTH2<2>(change.value); break;
+                    case SET_BPL3PTH_2: setBPLxPTH2<3>(change.value); break;
+                    case SET_BPL4PTH_2: setBPLxPTH2<4>(change.value); break;
+                    case SET_BPL5PTH_2: setBPLxPTH2<5>(change.value); break;
+                    case SET_BPL6PTH_2: setBPLxPTH2<6>(change.value); break;
                     case SET_BPL1PTL_1: setBPLxPTL1<1>(change.value); break;
                     case SET_BPL2PTL_1: setBPLxPTL1<2>(change.value); break;
                     case SET_BPL3PTL_1: setBPLxPTL1<3>(change.value); break;
