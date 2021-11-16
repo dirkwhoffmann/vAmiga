@@ -2141,9 +2141,9 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x09E >> 1: // ADKCON
             paula.pokeADKCON(value); return;
         case 0x0A0 >> 1: // AUD0LCH
-            agnus.pokeAUDxLCH<0>(value); return;
+            agnus.pokeAUDxLCH<0,s>(value); return;
         case 0x0A2 >> 1: // AUD0LCL
-            agnus.pokeAUDxLCL<0>(value); return;
+            agnus.pokeAUDxLCL<0,s>(value); return;
         case 0x0A4 >> 1: // AUD0LEN
             paula.channel0.pokeAUDxLEN(value); return;
         case 0x0A6 >> 1: // AUD0PER
@@ -2156,9 +2156,9 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x0AE >> 1: // Unused
             break;
         case 0x0B0 >> 1: // AUD1LCH
-            agnus.pokeAUDxLCH<1>(value); return;
+            agnus.pokeAUDxLCH<1,s>(value); return;
         case 0x0B2 >> 1: // AUD1LCL
-            agnus.pokeAUDxLCL<1>(value); return;
+            agnus.pokeAUDxLCL<1,s>(value); return;
         case 0x0B4 >> 1: // AUD1LEN
             paula.channel1.pokeAUDxLEN(value); return;
         case 0x0B6 >> 1: // AUD1PER
@@ -2171,9 +2171,9 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x0BE >> 1: // Unused
             break;
         case 0x0C0 >> 1: // AUD2LCH
-            agnus.pokeAUDxLCH<2>(value); return;
+            agnus.pokeAUDxLCH<2,s>(value); return;
         case 0x0C2 >> 1: // AUD2LCL
-            agnus.pokeAUDxLCL<2>(value); return;
+            agnus.pokeAUDxLCL<2,s>(value); return;
         case 0x0C4 >> 1: // AUD2LEN
             paula.channel2.pokeAUDxLEN(value); return;
         case 0x0C6 >> 1: // AUD2PER
@@ -2186,9 +2186,9 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x0CE >> 1: // Unused
             break;
         case 0x0D0 >> 1: // AUD3LCH
-            agnus.pokeAUDxLCH<3>(value); return;
+            agnus.pokeAUDxLCH<3,s>(value); return;
         case 0x0D2 >> 1: // AUD3LCL
-            agnus.pokeAUDxLCL<3>(value); return;
+            agnus.pokeAUDxLCL<3,s>(value); return;
         case 0x0D4 >> 1: // AUD3LEN
             paula.channel3.pokeAUDxLEN(value); return;
         case 0x0D6 >> 1: // AUD3PER
@@ -2265,37 +2265,37 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x11E >> 1: // Unused
             break;
         case 0x120 >> 1: // SPR0PTH
-            agnus.pokeSPRxPTH<0>(value); return;
+            agnus.pokeSPRxPTH<0,s>(value); return;
         case 0x122 >> 1: // SPR0PTL
-            agnus.pokeSPRxPTL<0>(value); return;
+            agnus.pokeSPRxPTL<0,s>(value); return;
         case 0x124 >> 1: // SPR1PTH
-            agnus.pokeSPRxPTH<1>(value); return;
+            agnus.pokeSPRxPTH<1,s>(value); return;
         case 0x126 >> 1: // SPR1PTL
-            agnus.pokeSPRxPTL<1>(value); return;
+            agnus.pokeSPRxPTL<1,s>(value); return;
         case 0x128 >> 1: // SPR2PTH
-            agnus.pokeSPRxPTH<2>(value); return;
+            agnus.pokeSPRxPTH<2,s>(value); return;
         case 0x12A >> 1: // SPR2PTL
-            agnus.pokeSPRxPTL<2>(value); return;
+            agnus.pokeSPRxPTL<2,s>(value); return;
         case 0x12C >> 1: // SPR3PTH
-            agnus.pokeSPRxPTH<3>(value); return;
+            agnus.pokeSPRxPTH<3,s>(value); return;
         case 0x12E >> 1: // SPR3PTL
-            agnus.pokeSPRxPTL<3>(value); return;
+            agnus.pokeSPRxPTL<3,s>(value); return;
         case 0x130 >> 1: // SPR4PTH
-            agnus.pokeSPRxPTH<4>(value); return;
+            agnus.pokeSPRxPTH<4,s>(value); return;
         case 0x132 >> 1: // SPR4PTL
-            agnus.pokeSPRxPTL<4>(value); return;
+            agnus.pokeSPRxPTL<4,s>(value); return;
         case 0x134 >> 1: // SPR5PTH
-            agnus.pokeSPRxPTH<5>(value); return;
+            agnus.pokeSPRxPTH<5,s>(value); return;
         case 0x136 >> 1: // SPR5PTL
-            agnus.pokeSPRxPTL<5>(value); return;
+            agnus.pokeSPRxPTL<5,s>(value); return;
         case 0x138 >> 1: // SPR6PTH
-            agnus.pokeSPRxPTH<6>(value); return;
+            agnus.pokeSPRxPTH<6,s>(value); return;
         case 0x13A >> 1: // SPR6PTL
-            agnus.pokeSPRxPTL<6>(value); return;
+            agnus.pokeSPRxPTL<6,s>(value); return;
         case 0x13C >> 1: // SPR7PTH
-            agnus.pokeSPRxPTH<7>(value); return;
+            agnus.pokeSPRxPTH<7,s>(value); return;
         case 0x13E >> 1: // SPR7PTL
-            agnus.pokeSPRxPTL<7>(value); return;
+            agnus.pokeSPRxPTL<7,s>(value); return;
         case 0x140 >> 1: // SPR0POS
             agnus.pokeSPRxPOS<0>(value);
             denise.pokeSPRxPOS<0>(value);

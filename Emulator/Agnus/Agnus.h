@@ -766,7 +766,7 @@ public:
     bool getBLS() { return bls; }
     void setBLS(bool value) { bls = value; }
 
-    
+
     //
     // Accessing registers (AgnusRegisters.cpp)
     //
@@ -784,9 +784,6 @@ public:
     u16 peekVPOSR();
     void pokeVPOS(u16 value);
     void setVPOS(u16 value);
-
-    void pokeDSKPTH(u16 value);
-    void pokeDSKPTL(u16 value);
 
     void pokeBPLCON0(u16 value);
     void setBPLCON0(u16 oldValue, u16 newValue);
@@ -806,8 +803,27 @@ public:
     void pokeDDFSTOP(u16 value);
     void setDDFSTOP(u16 old, u16 value);
 
-    template <int x> void pokeAUDxLCH(u16 value);
-    template <int x> void pokeAUDxLCL(u16 value);
+    void pokeBPL1MOD(u16 value);
+    void setBPL1MOD(u16 value);
+
+    void pokeBPL2MOD(u16 value);
+    void setBPL2MOD(u16 value);
+    
+    template <int x> void pokeSPRxPOS(u16 value);
+    template <int x> void pokeSPRxCTL(u16 value);
+
+    
+    //
+    // Accessing DMA pointer registers (AgnusRegisters.cpp)
+    //
+    
+public:
+    
+    void pokeDSKPTH(u16 value);
+    void pokeDSKPTL(u16 value);
+
+    template <int x, Accessor s> void pokeAUDxLCH(u16 value);
+    template <int x, Accessor s> void pokeAUDxLCL(u16 value);
     template <int x> void reloadAUDxPT() { audpt[x] = audlc[x]; }
 
     template <int x, Accessor s> void pokeBPLxPTH(u16 value);
@@ -818,24 +834,15 @@ public:
     template <int x> void setBPLxPTL1(u16 value);
     template <int x> void setBPLxPTL2(u16 value);
 
-    void pokeBPL1MOD(u16 value);
-    void setBPL1MOD(u16 value);
-
-    void pokeBPL2MOD(u16 value);
-    void setBPL2MOD(u16 value);
-
-    template <int x> void pokeSPRxPTH(u16 value);
+    template <int x, Accessor s> void pokeSPRxPTH(u16 value);
     template <int x> void setSPRxPTH(u16 value);
     
-    template <int x> void pokeSPRxPTL(u16 value);
+    template <int x, Accessor s> void pokeSPRxPTL(u16 value);
     template <int x> void setSPRxPTL(u16 value);
-    
-    template <int x> void pokeSPRxPOS(u16 value);
-    template <int x> void pokeSPRxCTL(u16 value);
 
 private:
     
-    // Checks whether a write to a pointer register should be dropped
+    // Checks whether a write to a pointer register should be dropped (DEPRECATED)
     bool dropWrite(BusOwner owner);
 
 
