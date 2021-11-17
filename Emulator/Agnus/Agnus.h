@@ -835,19 +835,17 @@ public:
     template <int x> void reloadAUDxPT() { audpt[x] = audlc[x]; }
 
     template <int x, Accessor s> void pokeBPLxPTH(u16 value);
-    template <int x> void setBPLxPTH1(u16 value);
-    template <int x> void setBPLxPTH2(u16 value);
+    template <int x> void setBPLxPTH(u16 value);
 
     template <int x, Accessor s> void pokeBPLxPTL(u16 value);
-    template <int x> void setBPLxPTL1(u16 value);
-    template <int x> void setBPLxPTL2(u16 value);
+    template <int x> void setBPLxPTL(u16 value);
 
     template <int x, Accessor s> void pokeSPRxPTH(u16 value);
-    template <int x> void setSPRxPTH1(u16 value);
+    template <int x> void setSPRxPTH(u16 value);
     template <int x> void setSPRxPTH2(u16 value);
 
     template <int x, Accessor s> void pokeSPRxPTL(u16 value);
-    template <int x> void setSPRxPTL1(u16 value);
+    template <int x> void setSPRxPTL(u16 value);
     template <int x> void setSPRxPTL2(u16 value);
 
 private:

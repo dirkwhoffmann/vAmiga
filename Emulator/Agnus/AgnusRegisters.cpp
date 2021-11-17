@@ -630,8 +630,12 @@ void Agnus::pokeDSKPTH(u16 value)
     trace(DSKREG_DEBUG, "pokeDSKPTH(%04x) [%s]\n", value, AccessorEnum::key(s));
 
     // Schedule the write cycle
-    auto delay = (s == ACCESSOR_CPU) ? DMA_CYCLES(1) : DMA_CYCLES(2);
-    recordRegisterChange(delay, SET_DSKPTH_1, value, s);
+    if constexpr (s == ACCESSOR_CPU) {
+        recordRegisterChange(DMA_CYCLES(1), SET_DSKPTH_1, value, s);
+    }
+    if constexpr (s == ACCESSOR_AGNUS) {
+        recordRegisterChange(DMA_CYCLES(2), SET_DSKPTH_1, value, s);
+    }
 }
 
 void
@@ -671,8 +675,12 @@ void Agnus::pokeDSKPTL(u16 value)
     trace(DSKREG_DEBUG, "pokeDSKPTL(%04x) [%s]\n", value, AccessorEnum::key(s));
 
     // Schedule the write cycle
-    auto delay = (s == ACCESSOR_CPU) ? DMA_CYCLES(1) : DMA_CYCLES(2);
-    recordRegisterChange(delay, SET_DSKPTL_1, value, s);
+    if constexpr (s == ACCESSOR_CPU) {
+        recordRegisterChange(DMA_CYCLES(1), SET_DSKPTL_1, value, s);
+    }
+    if constexpr (s == ACCESSOR_AGNUS) {
+        recordRegisterChange(DMA_CYCLES(2), SET_DSKPTL_1, value, s);
+    }
 }
 
 void
@@ -718,88 +726,54 @@ template <int x, Accessor s> void
 Agnus::pokeBPLxPTH(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPL%dPTH(%04x) [%s]\n", x, value, AccessorEnum::key(s));
-
-    // Execute or schedule the first execution cycle
-    switch (s) {
-            
-        case ACCESSOR_CPU:
-            
-            setBPLxPTH1 <x> (value);
-            break;
-            
-        case ACCESSOR_AGNUS:
-            
-            recordRegisterChange(DMA_CYCLES(1), SET_BPL1PTH_1 + x - 1, value);
-            break;
-    }
-}
-
-template <int x> void
-Agnus::setBPLxPTH1(u16 value)
-{
-    trace(BPLREG_DEBUG, "setBPL%dPTH1(%X)\n", x, value);
-
-    // Drop the write if the register is currently in use
-    if (isBplDmaCycle<x>() && !NO_PTR_DROPS) {
-        
-        trace(XFILES, "Dropping write to BPL%dPTH\n", x);
-        return;
-    }
     
-    // Schedule the second execution cycle
-    recordRegisterChange(DMA_CYCLES(1), SET_BPL1PTH_2 + x - 1, value);
+    // Schedule the write cycle
+    if constexpr (s == ACCESSOR_CPU) {
+        recordRegisterChange(DMA_CYCLES(1), SET_BPL1PTH + x - 1, value, s);
+    }
+    if constexpr (s == ACCESSOR_AGNUS) {
+        recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTH + x - 1, value, s);
+    }
 }
 
 template <int x> void
-Agnus::setBPLxPTH2(u16 value)
+Agnus::setBPLxPTH(u16 value)
 {
-    trace(BPLREG_DEBUG, "setBPL%dPTH2(%04x)\n", x, value);
+    trace(BPLREG_DEBUG, "setBPL%dPTH(%X)\n", x, value);
 
+    // Check if the register is blocked due to ongoing DMA
+    if (dropWrite(BUS_BPL1 + x - 1)) return;
+    
     // Perform the write
     bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
+    
+    if (bplpt[x - 1] & ~agnus.ptrMask) {
+        trace(XFILES, "BPL%dPT out of range: %x\n", x, bplpt[x - 1]);
+    }
 }
 
 template <int x, Accessor s> void
 Agnus::pokeBPLxPTL(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPL%dPTL(%04x) [%s]\n", x, value, AccessorEnum::key(s));
-
-    // Execute or schedule the first execution cycle
-    switch (s) {
-            
-        case ACCESSOR_CPU:
-            
-            setBPLxPTL1 <x> (value);
-            break;
-            
-        case ACCESSOR_AGNUS:
-            
-            recordRegisterChange(DMA_CYCLES(1), SET_BPL1PTL_1 + x - 1, value);
-            break;
-    }
-}
-
-template <int x> void
-Agnus::setBPLxPTL1(u16 value)
-{
-    trace(BPLREG_DEBUG, "setBPL%dPTL1(%X)\n", x, value);
-
-    // Drop the write if the register is currently in use
-    if (isBplDmaCycle<x>() && !NO_PTR_DROPS) {
-        
-        trace(XFILES, "Dropping write to BPL%dPTL\n", x);
-        return;
-    }
     
-    // Schedule the second execution cycle
-    recordRegisterChange(DMA_CYCLES(1), SET_BPL1PTL_2 + x - 1, value);
+    // Schedule the write cycle
+    if constexpr (s == ACCESSOR_CPU) {
+        recordRegisterChange(DMA_CYCLES(1), SET_BPL1PTL + x - 1, value, s);
+    }
+    if constexpr (s == ACCESSOR_AGNUS) {
+        recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTL + x - 1, value, s);
+    }
 }
 
 template <int x> void
-Agnus::setBPLxPTL2(u16 value)
+Agnus::setBPLxPTL(u16 value)
 {
-    trace(BPLREG_DEBUG, "setBPL%dPTL2(%04x)\n", x, value);
+    trace(BPLREG_DEBUG, "setBPL%dPTL(%X)\n", x, value);
 
+    // Check if the register is blocked due to ongoing DMA
+    if (dropWrite(BUS_BPL1 + x - 1)) return;
+    
     // Perform the write
     bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value);
 }
@@ -809,40 +783,32 @@ Agnus::pokeSPRxPTH(u16 value)
 {
     trace(SPRREG_DEBUG, "pokeSPR%dPTH(%04x) [%s]\n", x, value, AccessorEnum::key(s));
 
-    // Execute or schedule the first execution cycle
-    switch (s) {
-            
-        case ACCESSOR_CPU:
-            
-            setSPRxPTH1 <x> (value);
-            break;
-            
-        case ACCESSOR_AGNUS:
-            
-            recordRegisterChange(DMA_CYCLES(1), SET_SPR0PTH_1 + x, value);
-            break;
+    // Schedule the write cycle
+    if constexpr (s == ACCESSOR_CPU) {
+        recordRegisterChange(DMA_CYCLES(1), SET_SPR0PTH + x, value, s);
+    }
+    if constexpr (s == ACCESSOR_AGNUS) {
+        recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTH + x, value, s);
     }
 }
 
 template <int x> void
-Agnus::setSPRxPTH1(u16 value)
+Agnus::setSPRxPTH(u16 value)
 {
-    trace(SPRREG_DEBUG, "setSPR%dPTH1(%%04x)\n", x, value);
+    trace(SPRREG_DEBUG, "setSPR%dPTH(%%04x)\n", x, value);
     
-    // Drop the write if the register is currently in use
-    if (isSprDmaCycle<x>() && !NO_PTR_DROPS) {
-        
-        trace(XFILES, "Dropping write to SPR%dPTH\n", x);
-        return;
-    }
+    // Check if the register is blocked due to ongoing DMA
+    if (dropWrite(BUS_SPRITE0 + x)) return;
     
-    // Schedule the second execution cycle
-    recordRegisterChange(DMA_CYCLES(1), SET_SPR0PTH_2 + x, value);
+    // Perform the write
+    sprpt[x] = REPLACE_HI_WORD(sprpt[x], value);
 }
 
 template <int x> void
 Agnus::setSPRxPTH2(u16 value)
 {
+    assert(false);
+    
     trace(BPLREG_DEBUG, "setSPR%dPTH2(%04x)\n", x, value);
 
     // Perform the write
@@ -854,40 +820,32 @@ Agnus::pokeSPRxPTL(u16 value)
 {
     trace(SPRREG_DEBUG, "pokeSPR%dPTL(%04x) [%s]\n", x, value, AccessorEnum::key(s));
 
-    // Execute or schedule the first execution cycle
-    switch (s) {
-            
-        case ACCESSOR_CPU:
-            
-            setSPRxPTL1 <x> (value);
-            break;
-            
-        case ACCESSOR_AGNUS:
-            
-            recordRegisterChange(DMA_CYCLES(1), SET_SPR0PTL_1 + x, value);
-            break;
+    // Schedule the write cycle
+    if constexpr (s == ACCESSOR_CPU) {
+        recordRegisterChange(DMA_CYCLES(1), SET_SPR0PTL + x, value, s);
+    }
+    if constexpr (s == ACCESSOR_AGNUS) {
+        recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTL + x, value, s);
     }
 }
 
 template <int x> void
-Agnus::setSPRxPTL1(u16 value)
+Agnus::setSPRxPTL(u16 value)
 {
-    trace(SPRREG_DEBUG, "setSPR%dPTL1(%04x)\n", x, value);
+    trace(SPRREG_DEBUG, "setSPR%dPTH(%%04x)\n", x, value);
     
-    // Drop the write if the register is currently in use
-    if (isSprDmaCycle<x>() && !NO_PTR_DROPS) {
-        
-        trace(XFILES, "Dropping write to SPR%dPTL\n", x);
-        return;
-    }
+    // Check if the register is blocked due to ongoing DMA
+    if (dropWrite(BUS_SPRITE0 + x)) return;
     
-    // Schedule the second execution cycle
-    recordRegisterChange(DMA_CYCLES(1), SET_SPR0PTL_2 + x, value);
+    // Perform the write
+    sprpt[x] = REPLACE_LO_WORD(sprpt[x], value);
 }
 
 template <int x> void
 Agnus::setSPRxPTL2(u16 value)
 {
+    assert(false);
+    
     trace(BPLREG_DEBUG, "setSPR%dPTL2(%04x)\n", x, value);
 
     // Perform the write
@@ -948,19 +906,12 @@ template void Agnus::pokeBPLxPTH<4,ACCESSOR_AGNUS>(u16 value);
 template void Agnus::pokeBPLxPTH<5,ACCESSOR_AGNUS>(u16 value);
 template void Agnus::pokeBPLxPTH<6,ACCESSOR_AGNUS>(u16 value);
 
-template void Agnus::setBPLxPTH1<1>(u16 value);
-template void Agnus::setBPLxPTH1<2>(u16 value);
-template void Agnus::setBPLxPTH1<3>(u16 value);
-template void Agnus::setBPLxPTH1<4>(u16 value);
-template void Agnus::setBPLxPTH1<5>(u16 value);
-template void Agnus::setBPLxPTH1<6>(u16 value);
-
-template void Agnus::setBPLxPTH2<1>(u16 value);
-template void Agnus::setBPLxPTH2<2>(u16 value);
-template void Agnus::setBPLxPTH2<3>(u16 value);
-template void Agnus::setBPLxPTH2<4>(u16 value);
-template void Agnus::setBPLxPTH2<5>(u16 value);
-template void Agnus::setBPLxPTH2<6>(u16 value);
+template void Agnus::setBPLxPTH<1>(u16 value);
+template void Agnus::setBPLxPTH<2>(u16 value);
+template void Agnus::setBPLxPTH<3>(u16 value);
+template void Agnus::setBPLxPTH<4>(u16 value);
+template void Agnus::setBPLxPTH<5>(u16 value);
+template void Agnus::setBPLxPTH<6>(u16 value);
 
 template void Agnus::pokeBPLxPTL<1,ACCESSOR_CPU>(u16 value);
 template void Agnus::pokeBPLxPTL<2,ACCESSOR_CPU>(u16 value);
@@ -976,19 +927,12 @@ template void Agnus::pokeBPLxPTL<4,ACCESSOR_AGNUS>(u16 value);
 template void Agnus::pokeBPLxPTL<5,ACCESSOR_AGNUS>(u16 value);
 template void Agnus::pokeBPLxPTL<6,ACCESSOR_AGNUS>(u16 value);
 
-template void Agnus::setBPLxPTL1<1>(u16 value);
-template void Agnus::setBPLxPTL1<2>(u16 value);
-template void Agnus::setBPLxPTL1<3>(u16 value);
-template void Agnus::setBPLxPTL1<4>(u16 value);
-template void Agnus::setBPLxPTL1<5>(u16 value);
-template void Agnus::setBPLxPTL1<6>(u16 value);
-
-template void Agnus::setBPLxPTL2<1>(u16 value);
-template void Agnus::setBPLxPTL2<2>(u16 value);
-template void Agnus::setBPLxPTL2<3>(u16 value);
-template void Agnus::setBPLxPTL2<4>(u16 value);
-template void Agnus::setBPLxPTL2<5>(u16 value);
-template void Agnus::setBPLxPTL2<6>(u16 value);
+template void Agnus::setBPLxPTL<1>(u16 value);
+template void Agnus::setBPLxPTL<2>(u16 value);
+template void Agnus::setBPLxPTL<3>(u16 value);
+template void Agnus::setBPLxPTL<4>(u16 value);
+template void Agnus::setBPLxPTL<5>(u16 value);
+template void Agnus::setBPLxPTL<6>(u16 value);
 
 template void Agnus::pokeSPRxPTH<0,ACCESSOR_CPU>(u16 value);
 template void Agnus::pokeSPRxPTH<1,ACCESSOR_CPU>(u16 value);
@@ -1008,14 +952,14 @@ template void Agnus::pokeSPRxPTH<5,ACCESSOR_AGNUS>(u16 value);
 template void Agnus::pokeSPRxPTH<6,ACCESSOR_AGNUS>(u16 value);
 template void Agnus::pokeSPRxPTH<7,ACCESSOR_AGNUS>(u16 value);
 
-template void Agnus::setSPRxPTH1<0>(u16 value);
-template void Agnus::setSPRxPTH1<1>(u16 value);
-template void Agnus::setSPRxPTH1<2>(u16 value);
-template void Agnus::setSPRxPTH1<3>(u16 value);
-template void Agnus::setSPRxPTH1<4>(u16 value);
-template void Agnus::setSPRxPTH1<5>(u16 value);
-template void Agnus::setSPRxPTH1<6>(u16 value);
-template void Agnus::setSPRxPTH1<7>(u16 value);
+template void Agnus::setSPRxPTH<0>(u16 value);
+template void Agnus::setSPRxPTH<1>(u16 value);
+template void Agnus::setSPRxPTH<2>(u16 value);
+template void Agnus::setSPRxPTH<3>(u16 value);
+template void Agnus::setSPRxPTH<4>(u16 value);
+template void Agnus::setSPRxPTH<5>(u16 value);
+template void Agnus::setSPRxPTH<6>(u16 value);
+template void Agnus::setSPRxPTH<7>(u16 value);
 
 template void Agnus::setSPRxPTH2<0>(u16 value);
 template void Agnus::setSPRxPTH2<1>(u16 value);
@@ -1044,14 +988,14 @@ template void Agnus::pokeSPRxPTL<5,ACCESSOR_AGNUS>(u16 value);
 template void Agnus::pokeSPRxPTL<6,ACCESSOR_AGNUS>(u16 value);
 template void Agnus::pokeSPRxPTL<7,ACCESSOR_AGNUS>(u16 value);
 
-template void Agnus::setSPRxPTL1<0>(u16 value);
-template void Agnus::setSPRxPTL1<1>(u16 value);
-template void Agnus::setSPRxPTL1<2>(u16 value);
-template void Agnus::setSPRxPTL1<3>(u16 value);
-template void Agnus::setSPRxPTL1<4>(u16 value);
-template void Agnus::setSPRxPTL1<5>(u16 value);
-template void Agnus::setSPRxPTL1<6>(u16 value);
-template void Agnus::setSPRxPTL1<7>(u16 value);
+template void Agnus::setSPRxPTL<0>(u16 value);
+template void Agnus::setSPRxPTL<1>(u16 value);
+template void Agnus::setSPRxPTL<2>(u16 value);
+template void Agnus::setSPRxPTL<3>(u16 value);
+template void Agnus::setSPRxPTL<4>(u16 value);
+template void Agnus::setSPRxPTL<5>(u16 value);
+template void Agnus::setSPRxPTL<6>(u16 value);
+template void Agnus::setSPRxPTL<7>(u16 value);
 
 template void Agnus::setSPRxPTL2<0>(u16 value);
 template void Agnus::setSPRxPTL2<1>(u16 value);
