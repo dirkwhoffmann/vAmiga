@@ -191,16 +191,7 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_SPR5PTH: setSPRxPTH<5>(change.value); break;
             case SET_SPR6PTH: setSPRxPTH<6>(change.value); break;
             case SET_SPR7PTH: setSPRxPTH<7>(change.value); break;
-                
-            case SET_SPR0PTH_2: setSPRxPTH2<0>(change.value); break;
-            case SET_SPR1PTH_2: setSPRxPTH2<1>(change.value); break;
-            case SET_SPR2PTH_2: setSPRxPTH2<2>(change.value); break;
-            case SET_SPR3PTH_2: setSPRxPTH2<3>(change.value); break;
-            case SET_SPR4PTH_2: setSPRxPTH2<4>(change.value); break;
-            case SET_SPR5PTH_2: setSPRxPTH2<5>(change.value); break;
-            case SET_SPR6PTH_2: setSPRxPTH2<6>(change.value); break;
-            case SET_SPR7PTH_2: setSPRxPTH2<7>(change.value); break;
-                
+                                
             case SET_SPR0PTL: setSPRxPTL<0>(change.value); break;
             case SET_SPR1PTL: setSPRxPTL<1>(change.value); break;
             case SET_SPR2PTL: setSPRxPTL<2>(change.value); break;
@@ -209,21 +200,9 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_SPR5PTL: setSPRxPTL<5>(change.value); break;
             case SET_SPR6PTL: setSPRxPTL<6>(change.value); break;
             case SET_SPR7PTL: setSPRxPTL<7>(change.value); break;
-                
-            case SET_SPR0PTL_2: setSPRxPTL2<0>(change.value); break;
-            case SET_SPR1PTL_2: setSPRxPTL2<1>(change.value); break;
-            case SET_SPR2PTL_2: setSPRxPTL2<2>(change.value); break;
-            case SET_SPR3PTL_2: setSPRxPTL2<3>(change.value); break;
-            case SET_SPR4PTL_2: setSPRxPTL2<4>(change.value); break;
-            case SET_SPR5PTL_2: setSPRxPTL2<5>(change.value); break;
-            case SET_SPR6PTL_2: setSPRxPTL2<6>(change.value); break;
-            case SET_SPR7PTL_2: setSPRxPTL2<7>(change.value); break;
-                
-            case SET_DSKPTH_1: setDSKPTH1(change.value, change.accessor); break;
-            case SET_DSKPTH_2: setDSKPTH2(change.value, change.accessor); break;
-                
-            case SET_DSKPTL_1: setDSKPTL1(change.value, change.accessor); break;
-            case SET_DSKPTL_2: setDSKPTL2(change.value, change.accessor); break;
+                                
+            case SET_DSKPTH: setDSKPTH(change.value); break;
+            case SET_DSKPTL: setDSKPTL(change.value); break;
                 
             case SET_STRHOR: hsyncHandler(); break;
                 

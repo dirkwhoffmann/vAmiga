@@ -823,12 +823,10 @@ public:
 public:
     
     template <Accessor s> void pokeDSKPTH(u16 value);
-    void setDSKPTH1(u16 value, Accessor s);
-    void setDSKPTH2(u16 value, Accessor s); // DEPRECATED
+    void setDSKPTH(u16 value);
 
     template <Accessor s> void pokeDSKPTL(u16 value);
-    void setDSKPTL1(u16 value, Accessor s);
-    void setDSKPTL2(u16 value, Accessor s);
+    void setDSKPTL(u16 value);
 
     template <int x, Accessor s> void pokeAUDxLCH(u16 value);
     template <int x, Accessor s> void pokeAUDxLCL(u16 value);
@@ -842,11 +840,9 @@ public:
 
     template <int x, Accessor s> void pokeSPRxPTH(u16 value);
     template <int x> void setSPRxPTH(u16 value);
-    template <int x> void setSPRxPTH2(u16 value);
 
     template <int x, Accessor s> void pokeSPRxPTL(u16 value);
     template <int x> void setSPRxPTL(u16 value);
-    template <int x> void setSPRxPTL2(u16 value);
 
 private:
     

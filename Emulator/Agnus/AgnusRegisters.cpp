@@ -631,17 +631,17 @@ void Agnus::pokeDSKPTH(u16 value)
 
     // Schedule the write cycle
     if constexpr (s == ACCESSOR_CPU) {
-        recordRegisterChange(DMA_CYCLES(1), SET_DSKPTH_1, value, s);
+        recordRegisterChange(DMA_CYCLES(1), SET_DSKPTH, value, s);
     }
     if constexpr (s == ACCESSOR_AGNUS) {
-        recordRegisterChange(DMA_CYCLES(2), SET_DSKPTH_1, value, s);
+        recordRegisterChange(DMA_CYCLES(2), SET_DSKPTH, value, s);
     }
 }
 
 void
-Agnus::setDSKPTH1(u16 value, Accessor a)
+Agnus::setDSKPTH(u16 value)
 {
-    trace(DSKREG_DEBUG, "setDSKPTH1(%04x) [%s]\n", value, AccessorEnum::key(a));
+    trace(DSKREG_DEBUG, "setDSKPTH(%04x)\n", value);
 
     // Check if the register is blocked due to ongoing DMA
     if (dropWrite(BUS_DISK)) return;
@@ -650,23 +650,8 @@ Agnus::setDSKPTH1(u16 value, Accessor a)
     dskpt = REPLACE_HI_WORD(dskpt, value);
     
     if (dskpt & ~agnus.ptrMask) {
-        trace(XFILES, "DSKPT out of range: %x\n", dskpt);
+        trace(XFILES, "DSKPT %08x out of range\n", dskpt);
     }
-}
-
-void
-Agnus::setDSKPTH2(u16 value, Accessor s)
-{
-    assert(false);
-    
-    trace(DSKREG_DEBUG, "setDSKPTH2(%04x)\n", value);
-
-    // Perform the write
-    dskpt = REPLACE_HI_WORD(dskpt, value);
-    
-    if (dskpt & ~agnus.ptrMask) {
-        trace(XFILES, "DSKPT out of range: %x\n", dskpt);
-    }    
 }
 
 template <Accessor s>
@@ -676,32 +661,21 @@ void Agnus::pokeDSKPTL(u16 value)
 
     // Schedule the write cycle
     if constexpr (s == ACCESSOR_CPU) {
-        recordRegisterChange(DMA_CYCLES(1), SET_DSKPTL_1, value, s);
+        recordRegisterChange(DMA_CYCLES(1), SET_DSKPTL, value, s);
     }
     if constexpr (s == ACCESSOR_AGNUS) {
-        recordRegisterChange(DMA_CYCLES(2), SET_DSKPTL_1, value, s);
+        recordRegisterChange(DMA_CYCLES(2), SET_DSKPTL, value, s);
     }
 }
 
 void
-Agnus::setDSKPTL1(u16 value, Accessor a)
+Agnus::setDSKPTL(u16 value)
 {
-    trace(DSKREG_DEBUG, "setDSKPTH1(%04x) [%s]\n", value, AccessorEnum::key(a));
+    trace(DSKREG_DEBUG, "setDSKPTL(%04x)\n", value);
 
     // Check if the register is blocked due to ongoing DMA
     if (dropWrite(BUS_DISK)) return;
     
-    // Perform the write
-    dskpt = REPLACE_LO_WORD(dskpt, value);
-}
-
-void
-Agnus::setDSKPTL2(u16 value, Accessor a)
-{
-    assert(false);
-    
-    trace(DSKREG_DEBUG, "setDSKPTL2(%04x)\n", value);
-
     // Perform the write
     dskpt = REPLACE_LO_WORD(dskpt, value);
 }
@@ -748,7 +722,7 @@ Agnus::setBPLxPTH(u16 value)
     bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
     
     if (bplpt[x - 1] & ~agnus.ptrMask) {
-        trace(XFILES, "BPL%dPT out of range: %x\n", x, bplpt[x - 1]);
+        trace(XFILES, "BPL%dPT %08x out of range\n", x, bplpt[x - 1]);
     }
 }
 
@@ -802,17 +776,10 @@ Agnus::setSPRxPTH(u16 value)
     
     // Perform the write
     sprpt[x] = REPLACE_HI_WORD(sprpt[x], value);
-}
-
-template <int x> void
-Agnus::setSPRxPTH2(u16 value)
-{
-    assert(false);
     
-    trace(BPLREG_DEBUG, "setSPR%dPTH2(%04x)\n", x, value);
-
-    // Perform the write
-    sprpt[x] = REPLACE_HI_WORD(sprpt[x], value);
+    if (sprpt[x] & ~agnus.ptrMask) {
+        trace(XFILES, "SPR%dPT %08x out of range\n", x, sprpt[x]);
+    }
 }
 
 template <int x, Accessor s> void
@@ -837,17 +804,6 @@ Agnus::setSPRxPTL(u16 value)
     // Check if the register is blocked due to ongoing DMA
     if (dropWrite(BUS_SPRITE0 + x)) return;
     
-    // Perform the write
-    sprpt[x] = REPLACE_LO_WORD(sprpt[x], value);
-}
-
-template <int x> void
-Agnus::setSPRxPTL2(u16 value)
-{
-    assert(false);
-    
-    trace(BPLREG_DEBUG, "setSPR%dPTL2(%04x)\n", x, value);
-
     // Perform the write
     sprpt[x] = REPLACE_LO_WORD(sprpt[x], value);
 }
@@ -961,15 +917,6 @@ template void Agnus::setSPRxPTH<5>(u16 value);
 template void Agnus::setSPRxPTH<6>(u16 value);
 template void Agnus::setSPRxPTH<7>(u16 value);
 
-template void Agnus::setSPRxPTH2<0>(u16 value);
-template void Agnus::setSPRxPTH2<1>(u16 value);
-template void Agnus::setSPRxPTH2<2>(u16 value);
-template void Agnus::setSPRxPTH2<3>(u16 value);
-template void Agnus::setSPRxPTH2<4>(u16 value);
-template void Agnus::setSPRxPTH2<5>(u16 value);
-template void Agnus::setSPRxPTH2<6>(u16 value);
-template void Agnus::setSPRxPTH2<7>(u16 value);
-
 template void Agnus::pokeSPRxPTL<0,ACCESSOR_CPU>(u16 value);
 template void Agnus::pokeSPRxPTL<1,ACCESSOR_CPU>(u16 value);
 template void Agnus::pokeSPRxPTL<2,ACCESSOR_CPU>(u16 value);
@@ -996,15 +943,6 @@ template void Agnus::setSPRxPTL<4>(u16 value);
 template void Agnus::setSPRxPTL<5>(u16 value);
 template void Agnus::setSPRxPTL<6>(u16 value);
 template void Agnus::setSPRxPTL<7>(u16 value);
-
-template void Agnus::setSPRxPTL2<0>(u16 value);
-template void Agnus::setSPRxPTL2<1>(u16 value);
-template void Agnus::setSPRxPTL2<2>(u16 value);
-template void Agnus::setSPRxPTL2<3>(u16 value);
-template void Agnus::setSPRxPTL2<4>(u16 value);
-template void Agnus::setSPRxPTL2<5>(u16 value);
-template void Agnus::setSPRxPTL2<6>(u16 value);
-template void Agnus::setSPRxPTL2<7>(u16 value);
 
 template void Agnus::pokeSPRxPOS<0>(u16 value);
 template void Agnus::pokeSPRxPOS<1>(u16 value);
