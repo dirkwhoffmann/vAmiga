@@ -683,7 +683,8 @@ public:
 
     // Checks whether the current cycle is a certain DMA cycle
     template <int x> bool isBplDmaCycle();
-    
+    template <int x> bool isSprDmaCycle();
+
 private:
     
     void enableBplDmaOCS();
@@ -835,10 +836,12 @@ public:
     template <int x> void setBPLxPTL2(u16 value);
 
     template <int x, Accessor s> void pokeSPRxPTH(u16 value);
-    template <int x> void setSPRxPTH(u16 value);
-    
+    template <int x> void setSPRxPTH1(u16 value);
+    template <int x> void setSPRxPTH2(u16 value);
+
     template <int x, Accessor s> void pokeSPRxPTL(u16 value);
-    template <int x> void setSPRxPTL(u16 value);
+    template <int x> void setSPRxPTL1(u16 value);
+    template <int x> void setSPRxPTL2(u16 value);
 
 private:
     
