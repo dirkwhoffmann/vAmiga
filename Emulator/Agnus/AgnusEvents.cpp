@@ -138,114 +138,111 @@ Agnus::serviceREGEvent(Cycle until)
 
         // Apply the register change
         RegChange &change = changeRecorder.read();
-
-        switch (change.accessor) {
+        
+        switch (change.addr) {
                 
-            case ACCESSOR_AGNUS:
+            case SET_BLTSIZE: blitter.setBLTSIZE(change.value); break;
+            case SET_BLTSIZV: blitter.setBLTSIZV(change.value); break;
                 
-                fatalError;
+            case SET_BLTCON0: blitter.setBLTCON0(change.value); break;
+            case SET_BLTCON0L: blitter.setBLTCON0L(change.value); break;
+            case SET_BLTCON1: blitter.setBLTCON1(change.value); break;
+                
+            case SET_INTREQ: paula.setINTREQ(change.value); break;
+            case SET_INTENA: paula.setINTENA(change.value); break;
+                
+            case SET_BPLCON0_AGNUS: setBPLCON0(bplcon0, change.value); break;
+            case SET_BPLCON0_DENISE: denise.setBPLCON0(bplcon0, change.value); break;
+            case SET_BPLCON1_AGNUS: setBPLCON1(bplcon1, change.value); break;
+            case SET_BPLCON1_DENISE: denise.setBPLCON1(bplcon1, change.value); break;
+            case SET_BPLCON2: denise.setBPLCON2(change.value); break;
+            case SET_BPLCON3: denise.setBPLCON3(change.value); break;
+                
+            case SET_DMACON: setDMACON(dmacon, change.value); break;
+                
+            case SET_DIWSTRT: setDIWSTRT(change.value); break;
+            case SET_DIWSTOP: setDIWSTOP(change.value); break;
+                
+            case SET_DDFSTRT: setDDFSTRT(ddfstrt, change.value); break;
+            case SET_DDFSTOP: setDDFSTOP(ddfstop, change.value); break;
+                
+            case SET_BPL1MOD: setBPL1MOD(change.value); break;
+            case SET_BPL2MOD: setBPL2MOD(change.value); break;
+                
+            case SET_BPL1PTH_1: setBPLxPTH1<1>(change.value); break;
+            case SET_BPL2PTH_1: setBPLxPTH1<2>(change.value); break;
+            case SET_BPL3PTH_1: setBPLxPTH1<3>(change.value); break;
+            case SET_BPL4PTH_1: setBPLxPTH1<4>(change.value); break;
+            case SET_BPL5PTH_1: setBPLxPTH1<5>(change.value); break;
+            case SET_BPL6PTH_1: setBPLxPTH1<6>(change.value); break;
+                
+            case SET_BPL1PTH_2: setBPLxPTH2<1>(change.value); break;
+            case SET_BPL2PTH_2: setBPLxPTH2<2>(change.value); break;
+            case SET_BPL3PTH_2: setBPLxPTH2<3>(change.value); break;
+            case SET_BPL4PTH_2: setBPLxPTH2<4>(change.value); break;
+            case SET_BPL5PTH_2: setBPLxPTH2<5>(change.value); break;
+            case SET_BPL6PTH_2: setBPLxPTH2<6>(change.value); break;
+                
+            case SET_BPL1PTL_1: setBPLxPTL1<1>(change.value); break;
+            case SET_BPL2PTL_1: setBPLxPTL1<2>(change.value); break;
+            case SET_BPL3PTL_1: setBPLxPTL1<3>(change.value); break;
+            case SET_BPL4PTL_1: setBPLxPTL1<4>(change.value); break;
+            case SET_BPL5PTL_1: setBPLxPTL1<5>(change.value); break;
+            case SET_BPL6PTL_1: setBPLxPTL1<6>(change.value); break;
+                
+            case SET_BPL1PTL_2: setBPLxPTL2<1>(change.value); break;
+            case SET_BPL2PTL_2: setBPLxPTL2<2>(change.value); break;
+            case SET_BPL3PTL_2: setBPLxPTL2<3>(change.value); break;
+            case SET_BPL4PTL_2: setBPLxPTL2<4>(change.value); break;
+            case SET_BPL5PTL_2: setBPLxPTL2<5>(change.value); break;
+            case SET_BPL6PTL_2: setBPLxPTL2<6>(change.value); break;
+                
+            case SET_SPR0PTH_1: setSPRxPTH1<0>(change.value); break;
+            case SET_SPR1PTH_1: setSPRxPTH1<1>(change.value); break;
+            case SET_SPR2PTH_1: setSPRxPTH1<2>(change.value); break;
+            case SET_SPR3PTH_1: setSPRxPTH1<3>(change.value); break;
+            case SET_SPR4PTH_1: setSPRxPTH1<4>(change.value); break;
+            case SET_SPR5PTH_1: setSPRxPTH1<5>(change.value); break;
+            case SET_SPR6PTH_1: setSPRxPTH1<6>(change.value); break;
+            case SET_SPR7PTH_1: setSPRxPTH1<7>(change.value); break;
+                
+            case SET_SPR0PTH_2: setSPRxPTH2<0>(change.value); break;
+            case SET_SPR1PTH_2: setSPRxPTH2<1>(change.value); break;
+            case SET_SPR2PTH_2: setSPRxPTH2<2>(change.value); break;
+            case SET_SPR3PTH_2: setSPRxPTH2<3>(change.value); break;
+            case SET_SPR4PTH_2: setSPRxPTH2<4>(change.value); break;
+            case SET_SPR5PTH_2: setSPRxPTH2<5>(change.value); break;
+            case SET_SPR6PTH_2: setSPRxPTH2<6>(change.value); break;
+            case SET_SPR7PTH_2: setSPRxPTH2<7>(change.value); break;
+                
+            case SET_SPR0PTL_1: setSPRxPTL1<0>(change.value); break;
+            case SET_SPR1PTL_1: setSPRxPTL1<1>(change.value); break;
+            case SET_SPR2PTL_1: setSPRxPTL1<2>(change.value); break;
+            case SET_SPR3PTL_1: setSPRxPTL1<3>(change.value); break;
+            case SET_SPR4PTL_1: setSPRxPTL1<4>(change.value); break;
+            case SET_SPR5PTL_1: setSPRxPTL1<5>(change.value); break;
+            case SET_SPR6PTL_1: setSPRxPTL1<6>(change.value); break;
+            case SET_SPR7PTL_1: setSPRxPTL1<7>(change.value); break;
+                
+            case SET_SPR0PTL_2: setSPRxPTL2<0>(change.value); break;
+            case SET_SPR1PTL_2: setSPRxPTL2<1>(change.value); break;
+            case SET_SPR2PTL_2: setSPRxPTL2<2>(change.value); break;
+            case SET_SPR3PTL_2: setSPRxPTL2<3>(change.value); break;
+            case SET_SPR4PTL_2: setSPRxPTL2<4>(change.value); break;
+            case SET_SPR5PTL_2: setSPRxPTL2<5>(change.value); break;
+            case SET_SPR6PTL_2: setSPRxPTL2<6>(change.value); break;
+            case SET_SPR7PTL_2: setSPRxPTL2<7>(change.value); break;
+                
+            case SET_DSKPTH_1: setDSKPTH1(change.value, change.accessor); break;
+            case SET_DSKPTH_2: setDSKPTH2(change.value, change.accessor); break;
+                
+            case SET_DSKPTL_1: setDSKPTL1(change.value, change.accessor); break;
+            case SET_DSKPTL_2: setDSKPTL2(change.value, change.accessor); break;
+                
+            case SET_STRHOR: hsyncHandler(); break;
                 
             default:
-                
-                switch (change.addr) {
-                        
-                    case SET_BLTSIZE: blitter.setBLTSIZE(change.value); break;
-                    case SET_BLTSIZV: blitter.setBLTSIZV(change.value); break;
-                        
-                    case SET_BLTCON0: blitter.setBLTCON0(change.value); break;
-                    case SET_BLTCON0L: blitter.setBLTCON0L(change.value); break;
-                    case SET_BLTCON1: blitter.setBLTCON1(change.value); break;
-                        
-                    case SET_INTREQ: paula.setINTREQ(change.value); break;
-                    case SET_INTENA: paula.setINTENA(change.value); break;
-                        
-                    case SET_BPLCON0_AGNUS: setBPLCON0(bplcon0, change.value); break;
-                    case SET_BPLCON0_DENISE: denise.setBPLCON0(bplcon0, change.value); break;
-                    case SET_BPLCON1_AGNUS: setBPLCON1(bplcon1, change.value); break;
-                    case SET_BPLCON1_DENISE: denise.setBPLCON1(bplcon1, change.value); break;
-                    case SET_BPLCON2: denise.setBPLCON2(change.value); break;
-                    case SET_BPLCON3: denise.setBPLCON3(change.value); break;
-                        
-                    case SET_DMACON: setDMACON(dmacon, change.value); break;
-                        
-                    case SET_DIWSTRT: setDIWSTRT(change.value); break;
-                    case SET_DIWSTOP: setDIWSTOP(change.value); break;
-                        
-                    case SET_DDFSTRT: setDDFSTRT(ddfstrt, change.value); break;
-                    case SET_DDFSTOP: setDDFSTOP(ddfstop, change.value); break;
-                        
-                    case SET_BPL1MOD: setBPL1MOD(change.value); break;
-                    case SET_BPL2MOD: setBPL2MOD(change.value); break;
-                        
-                    case SET_BPL1PTH_1: setBPLxPTH1<1>(change.value); break;
-                    case SET_BPL2PTH_1: setBPLxPTH1<2>(change.value); break;
-                    case SET_BPL3PTH_1: setBPLxPTH1<3>(change.value); break;
-                    case SET_BPL4PTH_1: setBPLxPTH1<4>(change.value); break;
-                    case SET_BPL5PTH_1: setBPLxPTH1<5>(change.value); break;
-                    case SET_BPL6PTH_1: setBPLxPTH1<6>(change.value); break;
-                        
-                    case SET_BPL1PTH_2: setBPLxPTH2<1>(change.value); break;
-                    case SET_BPL2PTH_2: setBPLxPTH2<2>(change.value); break;
-                    case SET_BPL3PTH_2: setBPLxPTH2<3>(change.value); break;
-                    case SET_BPL4PTH_2: setBPLxPTH2<4>(change.value); break;
-                    case SET_BPL5PTH_2: setBPLxPTH2<5>(change.value); break;
-                    case SET_BPL6PTH_2: setBPLxPTH2<6>(change.value); break;
-                        
-                    case SET_BPL1PTL_1: setBPLxPTL1<1>(change.value); break;
-                    case SET_BPL2PTL_1: setBPLxPTL1<2>(change.value); break;
-                    case SET_BPL3PTL_1: setBPLxPTL1<3>(change.value); break;
-                    case SET_BPL4PTL_1: setBPLxPTL1<4>(change.value); break;
-                    case SET_BPL5PTL_1: setBPLxPTL1<5>(change.value); break;
-                    case SET_BPL6PTL_1: setBPLxPTL1<6>(change.value); break;
-                        
-                    case SET_BPL1PTL_2: setBPLxPTL2<1>(change.value); break;
-                    case SET_BPL2PTL_2: setBPLxPTL2<2>(change.value); break;
-                    case SET_BPL3PTL_2: setBPLxPTL2<3>(change.value); break;
-                    case SET_BPL4PTL_2: setBPLxPTL2<4>(change.value); break;
-                    case SET_BPL5PTL_2: setBPLxPTL2<5>(change.value); break;
-                    case SET_BPL6PTL_2: setBPLxPTL2<6>(change.value); break;
-                        
-                    case SET_SPR0PTH_1: setSPRxPTH1<0>(change.value); break;
-                    case SET_SPR1PTH_1: setSPRxPTH1<1>(change.value); break;
-                    case SET_SPR2PTH_1: setSPRxPTH1<2>(change.value); break;
-                    case SET_SPR3PTH_1: setSPRxPTH1<3>(change.value); break;
-                    case SET_SPR4PTH_1: setSPRxPTH1<4>(change.value); break;
-                    case SET_SPR5PTH_1: setSPRxPTH1<5>(change.value); break;
-                    case SET_SPR6PTH_1: setSPRxPTH1<6>(change.value); break;
-                    case SET_SPR7PTH_1: setSPRxPTH1<7>(change.value); break;
-
-                    case SET_SPR0PTH_2: setSPRxPTH2<0>(change.value); break;
-                    case SET_SPR1PTH_2: setSPRxPTH2<1>(change.value); break;
-                    case SET_SPR2PTH_2: setSPRxPTH2<2>(change.value); break;
-                    case SET_SPR3PTH_2: setSPRxPTH2<3>(change.value); break;
-                    case SET_SPR4PTH_2: setSPRxPTH2<4>(change.value); break;
-                    case SET_SPR5PTH_2: setSPRxPTH2<5>(change.value); break;
-                    case SET_SPR6PTH_2: setSPRxPTH2<6>(change.value); break;
-                    case SET_SPR7PTH_2: setSPRxPTH2<7>(change.value); break;
-
-                    case SET_SPR0PTL_1: setSPRxPTL1<0>(change.value); break;
-                    case SET_SPR1PTL_1: setSPRxPTL1<1>(change.value); break;
-                    case SET_SPR2PTL_1: setSPRxPTL1<2>(change.value); break;
-                    case SET_SPR3PTL_1: setSPRxPTL1<3>(change.value); break;
-                    case SET_SPR4PTL_1: setSPRxPTL1<4>(change.value); break;
-                    case SET_SPR5PTL_1: setSPRxPTL1<5>(change.value); break;
-                    case SET_SPR6PTL_1: setSPRxPTL1<6>(change.value); break;
-                    case SET_SPR7PTL_1: setSPRxPTL1<7>(change.value); break;
-
-                    case SET_SPR0PTL_2: setSPRxPTL2<0>(change.value); break;
-                    case SET_SPR1PTL_2: setSPRxPTL2<1>(change.value); break;
-                    case SET_SPR2PTL_2: setSPRxPTL2<2>(change.value); break;
-                    case SET_SPR3PTL_2: setSPRxPTL2<3>(change.value); break;
-                    case SET_SPR4PTL_2: setSPRxPTL2<4>(change.value); break;
-                    case SET_SPR5PTL_2: setSPRxPTL2<5>(change.value); break;
-                    case SET_SPR6PTL_2: setSPRxPTL2<6>(change.value); break;
-                    case SET_SPR7PTL_2: setSPRxPTL2<7>(change.value); break;
-
-                    case SET_STRHOR: hsyncHandler(); break;
-                        
-                    default:
-                        fatalError;
-                }
+                fatalError;
         }
     }
     

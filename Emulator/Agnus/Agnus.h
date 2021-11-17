@@ -684,6 +684,8 @@ public:
     // Checks whether the current cycle is a certain DMA cycle
     template <int x> bool isBplDmaCycle();
     template <int x> bool isSprDmaCycle();
+    template <int x> bool isAudDmaCycle();
+    bool isDskDmaCycle(Accessor a);
 
 private:
     
@@ -820,8 +822,13 @@ public:
     
 public:
     
-    void pokeDSKPTH(u16 value);
-    void pokeDSKPTL(u16 value);
+    template <Accessor s> void pokeDSKPTH(u16 value);
+    void setDSKPTH1(u16 value, Accessor s);
+    void setDSKPTH2(u16 value, Accessor s); // DEPRECATED
+
+    template <Accessor s> void pokeDSKPTL(u16 value);
+    void setDSKPTL1(u16 value, Accessor s);
+    void setDSKPTL2(u16 value, Accessor s);
 
     template <int x, Accessor s> void pokeAUDxLCH(u16 value);
     template <int x, Accessor s> void pokeAUDxLCL(u16 value);
@@ -845,7 +852,7 @@ public:
 
 private:
     
-    // Checks whether a write to a pointer register should be dropped (DEPRECATED)
+    // Checks whether a write to a pointer register should be dropped
     bool dropWrite(BusOwner owner);
 
 

@@ -166,6 +166,23 @@ Agnus::isSprDmaCycle()
     if constexpr (x == 7) { return id == DAS_S7_1 || id == DAS_S7_2; }
 }
 
+template <int x> bool
+Agnus::isAudDmaCycle()
+{
+    EventID id = dasEvent[pos.h];
+    
+    if constexpr (x == 0) { return id == DAS_A0; }
+    if constexpr (x == 1) { return id == DAS_A1; }
+    if constexpr (x == 2) { return id == DAS_A2; }
+    if constexpr (x == 3) { return id == DAS_A3; }
+}
+
+bool
+Agnus::isDskDmaCycle(Accessor a)
+{
+    assert(false);
+}
+
 void
 Agnus::enableBplDmaOCS()
 {
@@ -595,3 +612,8 @@ template bool Agnus::isSprDmaCycle<4>();
 template bool Agnus::isSprDmaCycle<5>();
 template bool Agnus::isSprDmaCycle<6>();
 template bool Agnus::isSprDmaCycle<7>();
+
+template bool Agnus::isAudDmaCycle<0>();
+template bool Agnus::isAudDmaCycle<1>();
+template bool Agnus::isAudDmaCycle<2>();
+template bool Agnus::isAudDmaCycle<3>();

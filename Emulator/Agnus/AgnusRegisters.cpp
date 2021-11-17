@@ -624,10 +624,25 @@ Agnus::pokeSPRxCTL(u16 value)
     if (sprVStop[x] == v) sprDmaState[x] = SPR_DMA_IDLE;
 }
 
-void
-Agnus::pokeDSKPTH(u16 value)
+template <Accessor s>
+void Agnus::pokeDSKPTH(u16 value)
 {
-    debug(DSKREG_DEBUG, "pokeDSKPTH(%x)\n", value);
+    trace(DSKREG_DEBUG, "pokeDSKPTH(%04x) [%s]\n", value, AccessorEnum::key(s));
+
+    // Schedule the write cycle
+    auto delay = (s == ACCESSOR_CPU) ? DMA_CYCLES(1) : DMA_CYCLES(2);
+    recordRegisterChange(delay, SET_DSKPTH_1, value, s);
+}
+
+void
+Agnus::setDSKPTH1(u16 value, Accessor a)
+{
+    trace(DSKREG_DEBUG, "setDSKPTH1(%04x) [%s]\n", value, AccessorEnum::key(a));
+
+    // Check if the register is blocked due to ongoing DMA
+    if (dropWrite(BUS_DISK)) return;
+    
+    // Perform the write
     dskpt = REPLACE_HI_WORD(dskpt, value);
     
     if (dskpt & ~agnus.ptrMask) {
@@ -636,10 +651,51 @@ Agnus::pokeDSKPTH(u16 value)
 }
 
 void
-Agnus::pokeDSKPTL(u16 value)
+Agnus::setDSKPTH2(u16 value, Accessor s)
 {
-    debug(DSKREG_DEBUG, "pokeDSKPTL(%x)\n", value);
-    dskpt = REPLACE_LO_WORD(dskpt, value & 0xFFFE);
+    assert(false);
+    
+    trace(DSKREG_DEBUG, "setDSKPTH2(%04x)\n", value);
+
+    // Perform the write
+    dskpt = REPLACE_HI_WORD(dskpt, value);
+    
+    if (dskpt & ~agnus.ptrMask) {
+        trace(XFILES, "DSKPT out of range: %x\n", dskpt);
+    }    
+}
+
+template <Accessor s>
+void Agnus::pokeDSKPTL(u16 value)
+{
+    trace(DSKREG_DEBUG, "pokeDSKPTL(%04x) [%s]\n", value, AccessorEnum::key(s));
+
+    // Schedule the write cycle
+    auto delay = (s == ACCESSOR_CPU) ? DMA_CYCLES(1) : DMA_CYCLES(2);
+    recordRegisterChange(delay, SET_DSKPTL_1, value, s);
+}
+
+void
+Agnus::setDSKPTL1(u16 value, Accessor a)
+{
+    trace(DSKREG_DEBUG, "setDSKPTH1(%04x) [%s]\n", value, AccessorEnum::key(a));
+
+    // Check if the register is blocked due to ongoing DMA
+    if (dropWrite(BUS_DISK)) return;
+    
+    // Perform the write
+    dskpt = REPLACE_LO_WORD(dskpt, value);
+}
+
+void
+Agnus::setDSKPTL2(u16 value, Accessor a)
+{
+    assert(false);
+    
+    trace(DSKREG_DEBUG, "setDSKPTL2(%04x)\n", value);
+
+    // Perform the write
+    dskpt = REPLACE_LO_WORD(dskpt, value);
 }
 
 template <int x, Accessor s> void
@@ -853,6 +909,10 @@ Agnus::dropWrite(BusOwner owner)
     return false;
 }
 
+template void Agnus::pokeDSKPTH<ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeDSKPTH<ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeDSKPTL<ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeDSKPTL<ACCESSOR_AGNUS>(u16 value);
 
 template void Agnus::pokeAUDxLCH<0,ACCESSOR_CPU>(u16 value);
 template void Agnus::pokeAUDxLCH<1,ACCESSOR_CPU>(u16 value);

@@ -2021,9 +2021,9 @@ Memory::pokeCustom16(u32 addr, u16 value)
     switch ((addr >> 1) & 0xFF) {
 
         case 0x020 >> 1: // DSKPTH
-            agnus.pokeDSKPTH(value); return;
+            agnus.pokeDSKPTH<s>(value); return;
         case 0x022 >> 1: // DSKPTL
-            agnus.pokeDSKPTL(value); return;
+            agnus.pokeDSKPTL<s>(value); return;
         case 0x024 >> 1: // DSKLEN
             diskController.pokeDSKLEN(value); return;
         case 0x026 >> 1: // DSKDAT
