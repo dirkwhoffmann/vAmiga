@@ -159,4 +159,12 @@ public:
     // Disassembles the currently executed instruction
     const char *disassembleInstr(isize *len);
     const char *disassembleWords(isize len);
+    
+    
+    //
+    // Changing state
+    //
+    
+    // Continues program execution at the specified address
+    void jump(u32 addr);
 };

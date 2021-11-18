@@ -459,3 +459,9 @@ CPU::disassembleWords(isize len)
     return disassembleWords(reg.pc0, len);
     return "";
 }
+
+void
+CPU::jump(u32 addr)
+{
+    suspended { debugger.jump(addr); }
+}

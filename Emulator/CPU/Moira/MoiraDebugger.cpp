@@ -272,4 +272,11 @@ Debugger::logEntryAbs(int n)
     return logEntryRel(loggedInstructions() - n - 1);
 }
 
+void
+Debugger::jump(u32 addr)
+{
+    moira.reg.pc = addr;
+    moira.fullPrefetch<POLLIPL>();
+}
+
 }

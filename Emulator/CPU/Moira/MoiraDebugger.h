@@ -178,6 +178,7 @@ public:
 
     void reset();
 
+    
     //
     // Working with breakpoints and watchpoints
     //
@@ -225,6 +226,12 @@ public:
     void clearLog() { logCnt = 0; }
     
     
+    //
+    // Changing state
+    //
+    
+    // Continues program execution at the specified address
+    void jump(u32 addr);    
 };
 
 }

@@ -25,8 +25,8 @@ enum class Token
     screenshot, serial, rtc,
 
     // Commands
-    about, audiate, autosync, clear, config, connect, debug, disable,
-    disconnect, dsksync, easteregg, eject, enable, close, hide, init, insert,
+    about, audiate, autosync, clear, close, config, connect, debug, disable,
+    disconnect, dsksync, easteregg, eject, enable, jump, hide, init, insert,
     inspect, list, load, lock, off, on, open, pause, power, reset, run, save,
     set, setup, show, source, wait,
     

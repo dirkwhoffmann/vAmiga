@@ -234,6 +234,10 @@ Interpreter::registerInstructions()
              "command", "Displays the current register values",
              &RetroShell::exec <Token::cpu, Token::inspect, Token::registers>);
 
+    root.add({"cpu", "jump"},
+             "command", "Jumps to the specified address",
+             &RetroShell::exec <Token::cpu, Token::jump>, 1);
+
     
     //
     // CIA
