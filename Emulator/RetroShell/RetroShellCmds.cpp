@@ -847,14 +847,14 @@ template <> void
 RetroShell::exec <Token::mouse, Token::press, Token::left> (Arguments& argv, long param)
 {
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
-    port.mouse.pressAndReleaseLeft(SEC(0.5));
+    port.mouse.pressAndReleaseLeft();
 }
 
 template <> void
 RetroShell::exec <Token::mouse, Token::press, Token::right> (Arguments& argv, long param)
 {
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
-    port.mouse.pressAndReleaseRight(SEC(0.5));
+    port.mouse.pressAndReleaseRight();
 }
 
 

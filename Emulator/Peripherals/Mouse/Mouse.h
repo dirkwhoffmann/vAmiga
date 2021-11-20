@@ -10,6 +10,7 @@
 #pragma once
 
 #include "MouseTypes.h"
+#include "SchedulerTypes.h"
 #include "Joystick.h"
 #include "SubComponent.h"
 #include "Chrono.h"
@@ -192,11 +193,14 @@ public:
     
     
     //
-    // Simulating user-input
+    // Scheduling and servicing events
     //
     
 public:
     
-    void pressAndReleaseLeft(Cycle duration, Cycle delay = 0);
-    void pressAndReleaseRight(Cycle duration, Cycle delay = 0);
+    // Simulates a complete press-and-release cycle for the left or right button
+    void pressAndReleaseLeft(Cycle duration = SEC(0.5), Cycle delay = 0);
+    void pressAndReleaseRight(Cycle duration = SEC(0.5), Cycle delay = 0);
+
+    template <EventSlot s> void serviceMouseEvent();
 };

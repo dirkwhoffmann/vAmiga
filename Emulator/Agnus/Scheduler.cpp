@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Scheduler.h"
 #include "CIA.h"
+#include "ControlPort.h"
 #include "CPU.h"
 #include "Agnus.h"
 #include "Paula.h"
@@ -586,6 +587,12 @@ Scheduler::executeUntil(Cycle cycle) {
             }
             if (isDue<SLOT_DC3>(cycle)) {
                 df3.serviceDiskChangeEvent <SLOT_DC3> ();
+            }
+            if (isDue<SLOT_MSE1>(cycle)) {
+                controlPort1.mouse.serviceMouseEvent <SLOT_MSE1> ();
+            }
+            if (isDue<SLOT_MSE2>(cycle)) {
+                controlPort2.mouse.serviceMouseEvent <SLOT_MSE2> ();
             }
             if (isDue<SLOT_INS>(cycle)) {
                 agnus.serviceINSEvent(id[SLOT_INS]);

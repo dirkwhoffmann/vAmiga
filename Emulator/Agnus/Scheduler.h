@@ -144,7 +144,6 @@ private:
     {
         worker
         
-        // >> slot
         << trigger
         << id
         << data

@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Mouse.h"
+#include "Agnus.h"
 #include "Chrono.h"
 #include "ControlPort.h"
 #include "IO.h"
@@ -350,11 +351,59 @@ ShakeDetector::isShakingRel(double dx) {
 void
 Mouse::pressAndReleaseLeft(Cycle duration, Cycle delay)
 {
-    warn("TO BE IMPLEMENTED\n");
+    if (port.isPort1()) {
+        agnus.scheduleRel <SLOT_MSE1> (delay, MSE_PUSH_LEFT, duration);
+    } else {
+        agnus.scheduleRel <SLOT_MSE2> (delay, MSE_PUSH_LEFT, duration);
+    }
 }
 
 void
 Mouse::pressAndReleaseRight(Cycle duration, Cycle delay)
 {
-    warn("TO BE IMPLEMENTED\n");
+    if (port.isPort1()) {
+        agnus.scheduleRel <SLOT_MSE1> (delay, MSE_PUSH_RIGHT, duration);
+    } else {
+        agnus.scheduleRel <SLOT_MSE2> (delay, MSE_PUSH_RIGHT, duration);
+    }
 }
+
+template <EventSlot s> void
+Mouse::serviceMouseEvent()
+{
+    auto id = scheduler.id[s];
+    auto duration = scheduler.data[s];
+    
+    switch (id) {
+
+        case MSE_PUSH_LEFT:
+            
+            setLeftButton(true);
+            agnus.scheduleRel <s> (duration, MSE_RELEASE_LEFT);
+            break;
+            
+        case MSE_RELEASE_LEFT:
+            
+            setLeftButton(false);
+            scheduler.cancel <s> ();
+            break;
+
+        case MSE_PUSH_RIGHT:
+            
+            setRightButton(true);
+            agnus.scheduleRel <s> (duration, MSE_RELEASE_RIGHT);
+            break;
+            
+        case MSE_RELEASE_RIGHT:
+            
+            setRightButton(false);
+            scheduler.cancel <s> ();
+            break;
+
+        default:
+            fatalError;
+    }
+}
+
+template void Mouse::serviceMouseEvent<SLOT_MSE1>();
+template void Mouse::serviceMouseEvent<SLOT_MSE2>();
