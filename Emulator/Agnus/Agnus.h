@@ -680,13 +680,7 @@ public:
     bool bltdma() const { return bltdma(dmacon); }
     bool sprdma() const { return sprdma(dmacon); }
     bool dskdma() const { return dskdma(dmacon); }
-
-    // Checks whether the current cycle is a certain DMA cycle
-    template <int x> bool isBplDmaCycle();
-    template <int x> bool isSprDmaCycle();
-    template <int x> bool isAudDmaCycle();
-    bool isDskDmaCycle(Accessor a);
-
+    
 private:
     
     void enableBplDmaOCS();
