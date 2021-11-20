@@ -677,7 +677,7 @@ Agnus::setDSKPTL(u16 value)
     if (dropWrite(BUS_DISK)) return;
     
     // Perform the write
-    dskpt = REPLACE_LO_WORD(dskpt, value);
+    dskpt = REPLACE_LO_WORD(dskpt, value & 0xFFFE);
 }
 
 template <int x, Accessor s> void
@@ -749,7 +749,7 @@ Agnus::setBPLxPTL(u16 value)
     if (dropWrite(BUS_BPL1 + x - 1)) return;
     
     // Perform the write
-    bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value);
+    bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
 }
 
 template <int x, Accessor s> void
@@ -805,7 +805,7 @@ Agnus::setSPRxPTL(u16 value)
     if (dropWrite(BUS_SPRITE0 + x)) return;
     
     // Perform the write
-    sprpt[x] = REPLACE_LO_WORD(sprpt[x], value);
+    sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
 }
 
 bool
