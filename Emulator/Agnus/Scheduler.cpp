@@ -318,7 +318,21 @@ Scheduler::eventName(EventSlot slot, EventID id)
                 default:            return "*** INVALID ***";
             }
             break;
-
+            
+        case SLOT_MSE1:
+        case SLOT_MSE2:
+            
+            switch (id) {
+                    
+                case EVENT_NONE:        return "none";
+                case MSE_PUSH_LEFT:     return "MSE_PUSH_LEFT";
+                case MSE_RELEASE_LEFT:  return "MSE_RELEASE_LEFT";
+                case MSE_PUSH_RIGHT:    return "MSE_PUSH_RIGHT";
+                case MSE_RELEASE_RIGHT: return "MSE_RELEASE_RIGHT";
+                default:                return "*** INVALID ***";
+            }
+            break;
+            
         case SLOT_INS:
 
             switch (id) {

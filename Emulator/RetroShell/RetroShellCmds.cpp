@@ -811,34 +811,50 @@ RetroShell::exec <Token::keyboard, Token::inspect> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::mouse, Token::config> (Arguments& argv, long param)
 {
-    dump(amiga.controlPort1.mouse, dump::Config);
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    dump(port.mouse, dump::Config);
 }
 
 template <> void
 RetroShell::exec <Token::mouse, Token::set, Token::pullup> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_PULLUP_RESISTORS, PORT_1, util::parseBool(argv.front()));
-    amiga.configure(OPT_PULLUP_RESISTORS, PORT_2, util::parseBool(argv.front()));
+    auto port = (param == 0) ? PORT_1 : PORT_2;
+    amiga.configure(OPT_PULLUP_RESISTORS, port, util::parseBool(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::mouse, Token::set, Token::shakedetector> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_SHAKE_DETECTION, PORT_1, util::parseBool(argv.front()));
-    amiga.configure(OPT_SHAKE_DETECTION, PORT_2, util::parseBool(argv.front()));
+    auto port = (param == 0) ? PORT_1 : PORT_2;
+    amiga.configure(OPT_SHAKE_DETECTION, port, util::parseBool(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::mouse, Token::set, Token::velocity> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_MOUSE_VELOCITY, PORT_1, util::parseNum(argv.front()));
-    amiga.configure(OPT_MOUSE_VELOCITY, PORT_2, util::parseNum(argv.front()));
+    auto port = (param == 0) ? PORT_1 : PORT_2;
+    amiga.configure(OPT_MOUSE_VELOCITY, port, util::parseNum(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::mouse, Token::inspect> (Arguments& argv, long param)
 {
-    dump(amiga.keyboard, dump::State);
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    dump(port.mouse, dump::State);
+}
+
+template <> void
+RetroShell::exec <Token::mouse, Token::press, Token::left> (Arguments& argv, long param)
+{
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    port.mouse.pressAndReleaseLeft(SEC(0.5));
+}
+
+template <> void
+RetroShell::exec <Token::mouse, Token::press, Token::right> (Arguments& argv, long param)
+{
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    port.mouse.pressAndReleaseRight(SEC(0.5));
 }
 
 

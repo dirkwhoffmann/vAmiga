@@ -189,4 +189,14 @@ public:
 
     // Performs periodic actions for this device
     void execute();
+    
+    
+    //
+    // Simulating user-input
+    //
+    
+public:
+    
+    void pressAndReleaseLeft(Cycle duration, Cycle delay = 0);
+    void pressAndReleaseRight(Cycle duration, Cycle delay = 0);
 };

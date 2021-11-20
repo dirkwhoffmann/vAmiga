@@ -346,3 +346,15 @@ ShakeDetector::isShakingRel(double dx) {
     
     return false;
 }
+
+void
+Mouse::pressAndReleaseLeft(Cycle duration, Cycle delay)
+{
+    warn("TO BE IMPLEMENTED\n");
+}
+
+void
+Mouse::pressAndReleaseRight(Cycle duration, Cycle delay)
+{
+    warn("TO BE IMPLEMENTED\n");
+}

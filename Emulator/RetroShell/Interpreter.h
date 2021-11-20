@@ -27,11 +27,11 @@ enum class Token
     // Commands
     about, audiate, autosync, clear, close, config, connect, debug, disable,
     disconnect, dsksync, easteregg, eject, enable, jump, hide, init, insert,
-    inspect, list, load, lock, off, on, open, pause, power, reset, run, save,
-    set, setup, show, source, wait,
+    inspect, list, load, lock, off, on, open, pause, power, press, reset, run,
+    save, set, setup, show, source, wait,
     
     // Categories
-    checksums, devices, dma, events, registers, state,
+    checksums, devices, dma, events, left, registers, right, state,
         
     // Keys
     accuracy, bankmap, bitplanes, brightness, channel, chip, clxsprspr,

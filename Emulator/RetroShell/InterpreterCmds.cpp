@@ -715,32 +715,51 @@ Interpreter::registerInstructions()
     // Mouse
     //
 
-    root.add({"mouse"},
-             "component", "Mouse");
+    root.add({"mouse1"},
+             "component", "Port 1 mouse");
 
-    root.add({"mouse", "config"},
-             "command", "Displays the current configuration",
-             &RetroShell::exec <Token::mouse, Token::config>);
-    
-    root.add({"mouse", "set"},
-             "command", "Configures the component");
+    root.add({"mouse2"},
+             "component", "Port 2 mouse");
+
+    for (isize i = 0; i < 2; i++) {
+
+        string mouse = (i == 0) ? "mouse1" : "mouse2";
         
-    root.add({"mouse", "set", "pullup"},
-             "key", "Enables or disables the emulation of pull-up resistors",
-             &RetroShell::exec <Token::mouse, Token::set, Token::pullup>, 1);
+        root.add({mouse, "config"},
+                 "command", "Displays the current configuration",
+                 &RetroShell::exec <Token::mouse, Token::config>, 0, i);
+        
+        root.add({mouse, "set"},
+                 "command", "Configures the component");
+        
+        root.add({mouse, "set", "pullup"},
+                 "key", "Enables or disables the emulation of pull-up resistors",
+                 &RetroShell::exec <Token::mouse, Token::set, Token::pullup>, 1, i);
+        
+        root.add({mouse, "set", "shakedetector"},
+                 "key", "Enables or disables the shake detector",
+                 &RetroShell::exec <Token::mouse, Token::set, Token::shakedetector>, 1, i);
+        
+        root.add({mouse, "set", "velocity"},
+                 "key", "Sets the horizontal and vertical mouse velocity",
+                 &RetroShell::exec <Token::mouse, Token::set, Token::velocity>, 1, i);
+        
+        root.add({mouse, "inspect"},
+                 "command", "Displays the internal state",
+                 &RetroShell::exec <Token::mouse, Token::inspect>, 0, i);
 
-    root.add({"mouse", "set", "shakedetector"},
-             "key", "Enables or disables the shake detector",
-             &RetroShell::exec <Token::mouse, Token::set, Token::shakedetector>, 1);
+        root.add({mouse, "press"},
+                 "command", "Presses a mouse button");
 
-    root.add({"mouse", "set", "velocity"},
-             "key", "Sets the horizontal and vertical mouse velocity",
-             &RetroShell::exec <Token::mouse, Token::set, Token::velocity>, 1);
+        root.add({mouse, "press", "left"},
+                 "command", "Presses the left mouse button",
+                 &RetroShell::exec <Token::mouse, Token::press, Token::left>, 0, i);
+        
+        root.add({mouse, "press", "right"},
+                 "command", "Presses the right mouse button",
+                 &RetroShell::exec <Token::mouse, Token::press, Token::right>, 0, i);
+    }
 
-    root.add({"mouse", "inspect"},
-             "command", "Displays the internal state",
-             &RetroShell::exec <Token::mouse, Token::inspect>);
-    
     
     //
     // Serial port
