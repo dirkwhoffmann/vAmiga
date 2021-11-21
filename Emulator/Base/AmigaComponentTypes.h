@@ -79,6 +79,7 @@ enum_long(OPT)
     OPT_SERIAL_DEVICE,
 
     // Compatibility
+    OPT_HIDDEN_BITPLANES,
     OPT_HIDDEN_SPRITES,
     OPT_HIDDEN_LAYERS,
     OPT_HIDDEN_LAYER_ALPHA,
@@ -170,6 +171,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
                 
             case OPT_SERIAL_DEVICE:       return "SERIAL_DEVICE";
  
+            case OPT_HIDDEN_BITPLANES:    return "HIDDEN_BITPLANES";
             case OPT_HIDDEN_SPRITES:      return "HIDDEN_SPRITES";
             case OPT_HIDDEN_LAYERS:       return "HIDDEN_LAYERS";
             case OPT_HIDDEN_LAYER_ALPHA:  return "HIDDEN_LAYER_ALPHA";

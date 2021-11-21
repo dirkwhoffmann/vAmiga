@@ -41,6 +41,7 @@ Denise::getDefaultConfig()
     DeniseConfig defaults;
 
     defaults.revision = DENISE_OCS;
+    defaults.hiddenBitplanes = 0;
     defaults.hiddenSprites = 0;
     defaults.hiddenLayers = 0;
     defaults.hiddenLayerAlpha = 128;
@@ -57,6 +58,7 @@ Denise::resetConfig()
     auto defaults = getDefaultConfig();
     
     setConfigItem(OPT_DENISE_REVISION, defaults.revision);
+    setConfigItem(OPT_HIDDEN_BITPLANES, defaults.hiddenBitplanes);
     setConfigItem(OPT_HIDDEN_SPRITES, defaults.hiddenSprites);
     setConfigItem(OPT_HIDDEN_LAYERS, defaults.hiddenLayers);
     setConfigItem(OPT_HIDDEN_LAYER_ALPHA, defaults.hiddenLayerAlpha);
@@ -71,6 +73,7 @@ Denise::getConfigItem(Option option) const
     switch (option) {
             
         case OPT_DENISE_REVISION:     return config.revision;
+        case OPT_HIDDEN_BITPLANES:    return config.hiddenBitplanes;
         case OPT_HIDDEN_SPRITES:      return config.hiddenSprites;
         case OPT_HIDDEN_LAYERS:       return config.hiddenLayers;
         case OPT_HIDDEN_LAYER_ALPHA:  return config.hiddenLayerAlpha;
@@ -97,6 +100,11 @@ Denise::setConfigItem(Option option, i64 value)
             config.revision = (DeniseRevision)value;
             return;
                         
+        case OPT_HIDDEN_BITPLANES:
+            
+            config.hiddenBitplanes = (u8)value;
+            return;
+
         case OPT_HIDDEN_SPRITES:
             
             config.hiddenSprites = (u8)value;
@@ -172,6 +180,8 @@ Denise::_dump(dump::Category category, std::ostream& os) const
         
         os << tab("Chip revision");
         os << DeniseRevisionEnum::key(config.revision) << std::endl;
+        os << tab("Hidden bitplanes");
+        os << hex(config.hiddenBitplanes) << std::endl;
         os << tab("Hidden sprites");
         os << hex(config.hiddenSprites) << std::endl;
         os << tab("Hidden layers");
@@ -468,6 +478,14 @@ Denise::translate()
 {
     Pixel pixel = 0;
 
+    // Wipe out some bitplane data if requested
+    if (config.hiddenBitplanes) {
+    
+        for (isize i = 0; i < isizeof(bBuffer); i++) {
+            bBuffer[i] &= ~config.hiddenBitplanes;
+        }
+    }
+    
     // Start with the playfield state as it was at the beginning of the line
     PFState state;
     state.zpf1 = zPF1(initialBplcon2);

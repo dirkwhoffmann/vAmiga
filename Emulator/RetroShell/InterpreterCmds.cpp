@@ -414,6 +414,21 @@ Interpreter::registerInstructions()
              "key", "Enables or disables playfield-playfield collision detection",
              &RetroShell::exec <Token::denise, Token::set, Token::clxplfplf>, 1);
     
+    root.add({"denise", "hide"},
+             "command", "Hides bitplanes, sprites, or layers");
+
+    root.add({"denise", "hide", "bitplanes"},
+             "key", "Wipes out certain bitplane data",
+             &RetroShell::exec <Token::denise, Token::hide, Token::bitplanes>, 1);
+
+    root.add({"denise", "hide", "sprites"},
+             "key", "Wipes out certain sprite data",
+             &RetroShell::exec <Token::denise, Token::hide, Token::sprites>, 1);
+
+    root.add({"denise", "hide", "sprites"},
+             "key", "Makes certain drawing layers transparent",
+             &RetroShell::exec <Token::denise, Token::hide, Token::layers>, 1);
+
     root.add({"denise", "inspect"},
              "command", "Displays the internal state");
 

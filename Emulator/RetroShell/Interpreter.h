@@ -29,19 +29,17 @@ enum class Token
     disconnect, dsksync, easteregg, eject, enable, jump, hide, init, insert,
     inspect, list, load, lock, off, on, open, pause, power, press, reset, run,
     save, set, setup, show, source, wait,
-    
-    // Categories
-    checksums, devices, dma, events, left, registers, right, state,
-        
+            
     // Keys
-    accuracy, bankmap, bitplanes, brightness, channel, chip, clxsprspr,
-    clxsprplf, clxplfplf, color, contrast, cutout, defaultbb, defaultfs, delay,
-    device, disk, esync, extrom, extstart, fast, filename, filter, joystick,
-    keyset, mechanics, mode, model, opacity, palette, pan, path, poll, pullup,
-    raminitpattern, refresh, regreset, revision, rom, sampling, saturation,
+    accuracy, bankmap, bitplanes, brightness, channel, checksums, chip,
+    clxsprspr, clxsprplf, clxplfplf, color, contrast, cutout, defaultbb,
+    defaultfs, delay, device, devices, disk, dma, esync, events, extrom,
+    extstart, fast, filename, filter, joystick, keyset, layers, left, mechanics,
+    mode, model, opacity, palette, pan, path, poll, pullup, raminitpattern,
+    refresh, registers, regreset, revision, right, rom, sampling, saturation,
     saveroms, searchpath, shakedetector, slow, slowramdelay, slowrammirror,
-    speed, sprites, step, swapdelay, tod, todbug, unmappingtype, velocity,
-    volume, wom
+    speed, sprites, state, step, swapdelay, tod, todbug, unmappingtype,
+    velocity, volume, wom
 };
 
 struct TooFewArgumentsError : public util::ParseError {

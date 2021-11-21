@@ -70,9 +70,12 @@ typedef struct
     // Emulated chip model
     DeniseRevision revision;
     
+    // Hides certain bitplanes
+    u8 hiddenBitplanes;
+
     // Hides certain sprites
     u8 hiddenSprites;
-
+    
     // Hides certain graphics layers
     u16 hiddenLayers;
     

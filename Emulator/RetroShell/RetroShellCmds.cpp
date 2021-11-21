@@ -512,6 +512,24 @@ RetroShell::exec <Token::denise, Token::set, Token::clxplfplf> (Arguments &argv,
 }
 
 template <> void
+RetroShell::exec <Token::denise, Token::hide, Token::bitplanes> (Arguments &argv, long param)
+{
+    amiga.configure(OPT_HIDDEN_BITPLANES, util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::denise, Token::hide, Token::sprites> (Arguments &argv, long param)
+{
+    amiga.configure(OPT_HIDDEN_SPRITES, util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::denise, Token::hide, Token::layers> (Arguments &argv, long param)
+{
+    amiga.configure(OPT_HIDDEN_LAYERS, util::parseNum(argv.front()));
+}
+
+template <> void
 RetroShell::exec <Token::denise, Token::inspect, Token::state> (Arguments& argv, long param)
 {
     dump(amiga.denise, dump::State);
