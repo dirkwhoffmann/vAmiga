@@ -96,3 +96,13 @@ Keyboard::serviceKeyboardEvent(EventID id)
             fatalError;
     }
 }
+
+void
+Keyboard::serviceKeyEvent()
+{
+    auto id = scheduler.id[SLOT_KEY];
+    auto data = scheduler.data[SLOT_KEY];
+    
+    printf("serviceKeyEvent(%d,%lld)\n", id, data);
+    printf("To be implemented\n");
+}

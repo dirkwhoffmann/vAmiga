@@ -135,6 +135,9 @@ public:
     // Services a keyboard event
     void serviceKeyboardEvent(EventID id);
 
+    // Services an auto typing event
+    void serviceKeyEvent();
+    
     
     //
     // Running the device

@@ -333,7 +333,18 @@ Scheduler::eventName(EventSlot slot, EventID id)
                 default:                return "*** INVALID ***";
             }
             break;
+
+        case SLOT_KEY:
             
+            switch (id) {
+                    
+                case EVENT_NONE:        return "none";
+                case KEY_PRESS:         return "KEY_PRESS";
+                case KEY_RELEASE:       return "KEY_RELEASE";
+                default:                return "*** INVALID ***";
+            }
+            break;
+
         case SLOT_INS:
 
             switch (id) {
@@ -593,6 +604,9 @@ Scheduler::executeUntil(Cycle cycle) {
             }
             if (isDue<SLOT_MSE2>(cycle)) {
                 controlPort2.mouse.serviceMouseEvent <SLOT_MSE2> ();
+            }
+            if (isDue<SLOT_KEY>(cycle)) {
+                keyboard.serviceKeyEvent();
             }
             if (isDue<SLOT_INS>(cycle)) {
                 agnus.serviceINSEvent(id[SLOT_INS]);

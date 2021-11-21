@@ -18,7 +18,7 @@
  * vAmiga is an event triggered emulator. If an action has to be performed at
  * a specific DMA cycle (e.g., activating the Copper at a certain beam
  * position), the action is scheduled via the event handling API and executed
- * when the trigger cycle is reached.
+ * when the trigger cycle has been reached.
  * Scheduled events are stored in so called event slots. Each slot is either
  * empty or contains a single event and is bound to a specific component. E.g.,
  * there is slot for Copper events, a slot for the Blitter events, a slot
@@ -29,15 +29,16 @@
  * the DMA bus). As a result, the slot ordering is important: If two events
  * trigger at the same cycle, the the slot with a smaller number is served
  * first.
- * To optimize speed, the event slots are categorized into primary slots and
- * secondary slots. Primary slots manage frequently occurring events (CIA
- * execution, DMA operations, etc.). Secondary slots manage events that only
- * occurr occasionally (e.g., a signal change on the serial port). Accordingly,
- * we call an event a primary event if if it scheduled in a primary slot and a
- * secondary event if it is scheduled in a secondary slot.
- * By default, the event handler only checks the primary event slots on a
- * regular basis. To make the event handler check all slots, a special event
- * has to be scheduled in the SEC_SLOT (which is a primary slot and therefore
+ * To optimize speed, the event slots are categorized into primary, secondary,
+ * and tertiary slots. Primary slots manage frequently occurring events (CIA
+ * execution, DMA operations, etc.). Secondary slots manage events that
+ * occurr occasionally (iterrupts, disk activity etc.). Tertiary slots manage
+ * very rare events (inserting a disk, inspecting a component, etc.).
+ * Accordingly, we call an event primary, secondary, or tertiary if it is
+ * scheduled in a primary, secondary, or tertiary slot, respectively.
+ * By default, the event handler only checks the primary event slots. To make
+ * the event handler check the secondary slots, too, a special event has to be
+ * scheduled in the SEC_SLOT (which is a primary slot and therefore
  * always checked). Triggering this event works like a wakeup call by telling
  * the event handler to check for secondary events as well. Hence, whenever an
  * event is schedules in a secondary slot, it has to be ensured that SEC_SLOT
@@ -46,7 +47,9 @@
  * Scheduling the wakeup event in SEC_SLOT is transparant for the callee. When
  * an event is scheduled, the event handler automatically checks if the
  * selected slot is primary or secondary and schedules the SEC_SLOT
- * automatically in the latter case.
+ * automatically in the latter case. The same holds for tertiary events. When
+ * such an event is scheduled, the event scheduler automatically schedules a
+ * wakup event in the TER_SLOT.
  *
  * To schedule an event, an event slot, a trigger cycle, and an event id
  * need to be provided. The trigger cycle is measured in master cycles. It can

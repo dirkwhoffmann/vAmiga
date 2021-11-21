@@ -41,6 +41,9 @@ extension EventSlot: CustomStringConvertible {
         case .DC1:   return "Disk Change Df1"
         case .DC2:   return "Disk Change Df2"
         case .DC3:   return "Disk Change Df3"
+        case .MSE1:  return "Port 1 mouse"
+        case .MSE2:  return "Port 2 mouse"
+        case .KEY:   return "Auto typing"
         case .INS:   return "Inspector"
 
         case .COUNT: return "???"

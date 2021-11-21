@@ -60,6 +60,7 @@ enum_long(SLOT)
     SLOT_DC3,                       // Disk change (Df3)
     SLOT_MSE1,                      // Port 1 mouse
     SLOT_MSE2,                      // Port 2 mouse
+    SLOT_KEY,                       // Auto-typing
     SLOT_INS,                       // Handles periodic calls to inspect()
 
     SLOT_COUNT
@@ -108,6 +109,7 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_DC3:   return "DC3";
             case SLOT_MSE1:  return "MSE1";
             case SLOT_MSE2:  return "MSE2";
+            case SLOT_KEY:   return "KEY";
             case SLOT_INS:   return "INS";
 
             case SLOT_COUNT: return "???";
@@ -285,7 +287,11 @@ enum_i8(EventID)
     MSE_PUSH_RIGHT,
     MSE_RELEASE_RIGHT,
     MSE_EVENT_COUNT,
-    
+
+    // Auto typing
+    KEY_PRESS,
+    KEY_RELEASE,
+
     // Inspector slot
     INS_AMIGA = 1,
     INS_CPU,
