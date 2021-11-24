@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include "FSDevice.h"
 #include "MemUtils.h"
 #include <climits>

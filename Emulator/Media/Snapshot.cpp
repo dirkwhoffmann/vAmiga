@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Snapshot.h"
 #include "Amiga.h"
-#include "IO.h"
+#include "IOUtils.h"
 
 void
 Thumbnail::take(Amiga &amiga, isize dx, isize dy)

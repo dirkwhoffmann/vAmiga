@@ -12,7 +12,7 @@
 #include "AmigaFileTypes.h"
 #include "AmigaObject.h"
 #include "Checksum.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include "Reflection.h"
 #include <sstream>
 #include <fstream>

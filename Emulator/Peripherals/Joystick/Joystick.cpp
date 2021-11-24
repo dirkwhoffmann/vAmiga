@@ -11,7 +11,7 @@
 #include "Joystick.h"
 #include "Agnus.h"
 #include "ControlPort.h"
-#include "IO.h"
+#include "IOUtils.h"
 
 Joystick::Joystick(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref)
 {

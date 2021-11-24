@@ -10,7 +10,7 @@
 #include "config.h"
 #include "RTC.h"
 #include "CPU.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include "Memory.h"
 
 i64

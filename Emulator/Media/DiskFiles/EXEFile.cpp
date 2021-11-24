@@ -11,7 +11,7 @@
 #include "EXEFile.h"
 #include "AmigaFile.h"
 #include "FSDevice.h"
-#include "IO.h"
+#include "IOUtils.h"
 
 bool
 EXEFile::isCompatible(const string &path)

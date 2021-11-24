@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Script.h"
 #include "Amiga.h"
-#include "IO.h"
+#include "IOUtils.h"
 
 #include <sstream>
 

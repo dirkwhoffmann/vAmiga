@@ -10,7 +10,7 @@
 #include "config.h"
 
 #include "ControlPort.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include "Paula.h"
 
 ControlPort::ControlPort(Amiga& ref, PortNr portNr) : SubComponent(ref), nr(portNr)

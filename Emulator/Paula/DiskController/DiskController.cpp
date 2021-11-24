@@ -12,7 +12,7 @@
 #include "Agnus.h"
 #include "ADFFile.h"
 #include "Drive.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include "MsgQueue.h"
 #include "Paula.h"
 #include "SuspendableThread.h"

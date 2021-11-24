@@ -10,7 +10,7 @@
 #include "config.h"
 #include "StateMachine.h"
 #include "Paula.h"
-#include "IO.h"
+#include "IOUtils.h"
 
 template <isize nr>
 StateMachine<nr>::StateMachine(Amiga& ref) : SubComponent(ref)

@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Recorder.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include "Denise.h"
 #include "MsgQueue.h"
 #include "Paula.h"

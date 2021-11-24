@@ -117,7 +117,7 @@ fprintf(stderr, format, ##__VA_ARGS__);
 fprintf(stderr, "Warning: " format, ##__VA_ARGS__);
 
 #define panic(format, ...) \
-fprintf(stderr, "Panic: " format, ##__VA_ARGS__); exit(1);
+{ fprintf(stderr, "Panic: " format, ##__VA_ARGS__); exit(1); }
 
 #ifndef NDEBUG
 

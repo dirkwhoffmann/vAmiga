@@ -12,7 +12,7 @@
 #include "Agnus.h"
 #include "Amiga.h"
 #include "ControlPort.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include "SSEUtils.h"
 
 Denise::Denise(Amiga& ref) : SubComponent(ref)

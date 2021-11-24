@@ -12,7 +12,7 @@
 #include "Agnus.h"
 #include "ControlPort.h"
 #include "DiskController.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include "Memory.h"
 #include "MsgQueue.h"
 #include "Paula.h"

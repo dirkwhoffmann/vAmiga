@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Agnus.h"
 #include "Amiga.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include <iomanip>
 
 EventID Agnus::dasDMA[64][HPOS_CNT];

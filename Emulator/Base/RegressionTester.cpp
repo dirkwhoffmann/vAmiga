@@ -10,7 +10,7 @@
 #include "config.h"
 #include "RegressionTester.h"
 #include "Amiga.h"
-#include "IO.h"
+#include "IOUtils.h"
 
 #include <fstream>
 

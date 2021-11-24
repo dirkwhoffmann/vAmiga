@@ -11,7 +11,7 @@
 #include "Blitter.h"
 #include "Agnus.h"
 #include "Checksum.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include "SuspendableThread.h"
 
 Blitter::Blitter(Amiga& ref) : SubComponent(ref)

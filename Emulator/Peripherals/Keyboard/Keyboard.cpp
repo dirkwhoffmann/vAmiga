@@ -11,7 +11,7 @@
 #include "Keyboard.h"
 #include "Agnus.h"
 #include "CIA.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include "MsgQueue.h"
 
 void

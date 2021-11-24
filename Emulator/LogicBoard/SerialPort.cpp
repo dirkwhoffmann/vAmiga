@@ -10,7 +10,7 @@
 #include "config.h"
 #include "SerialPort.h"
 #include "UART.h"
-#include "IO.h"
+#include "IOUtils.h"
 
 SerialPortConfig
 SerialPort::getDefaultConfig()

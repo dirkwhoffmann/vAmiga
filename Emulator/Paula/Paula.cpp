@@ -11,7 +11,7 @@
 #include "Paula.h"
 #include "Agnus.h"
 #include "CPU.h"
-#include "IO.h"
+#include "IOUtils.h"
 
 Paula::Paula(Amiga& ref) : SubComponent(ref)
 {

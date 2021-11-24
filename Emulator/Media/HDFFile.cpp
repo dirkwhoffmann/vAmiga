@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "HDFFile.h"
-#include "IO.h"
+#include "IOUtils.h"
 
 bool
 HDFFile::isCompatible(const string &path)

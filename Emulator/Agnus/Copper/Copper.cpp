@@ -12,7 +12,7 @@
 #include "Amiga.h"
 #include "CopperDebugger.h"
 #include "Checksum.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include "PixelEngine.h"
 
 Copper::Copper(Amiga& ref) : SubComponent(ref)

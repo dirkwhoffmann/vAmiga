@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "RomFile.h"
-#include "IO.h"
+#include "IOUtils.h"
 
 //
 // Boot Roms

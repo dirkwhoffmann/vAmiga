@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Muxer.h"
 #include "CIA.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include "MsgQueue.h"
 #include <cmath>
 #include <algorithm>

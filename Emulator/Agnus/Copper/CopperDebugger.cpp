@@ -11,7 +11,7 @@
 #include "CopperDebugger.h"
 #include "Amiga.h"
 #include "Copper.h"
-#include "IO.h"
+#include "IOUtils.h"
 
 void
 CopperDebugger::_reset(bool hard)

@@ -11,7 +11,7 @@
 #include "IMGFile.h"
 #include "Checksum.h"
 #include "Disk.h"
-#include "IO.h"
+#include "IOUtils.h"
 
 bool
 IMGFile::isCompatible(const string &path)

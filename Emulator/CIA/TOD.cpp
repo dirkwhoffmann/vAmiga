@@ -10,7 +10,7 @@
 #include "config.h"
 #include "TOD.h"
 #include "CIA.h"
-#include "IO.h"
+#include "IOUtils.h"
 
 TOD::TOD(CIA &ciaref, Amiga& ref) : SubComponent(ref), cia(ciaref)
 {

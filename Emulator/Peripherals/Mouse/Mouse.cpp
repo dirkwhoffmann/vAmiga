@@ -12,7 +12,7 @@
 #include "Agnus.h"
 #include "Chrono.h"
 #include "ControlPort.h"
-#include "IO.h"
+#include "IOUtils.h"
 #include "MsgQueue.h"
 
 Mouse::Mouse(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref)
