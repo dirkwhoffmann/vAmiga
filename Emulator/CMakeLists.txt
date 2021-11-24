@@ -16,6 +16,7 @@ if(MSVC)
   # target_compile_options(vAmiga PRIVATE /W4 /WX)
 else()
   target_compile_options(vAmiga PRIVATE -O3 -Wall -Werror)
+  target_compile_options(vAmiga PRIVATE -Wno-unused-parameter)
 endif()
 
 # Add include paths
