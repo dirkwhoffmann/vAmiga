@@ -12,16 +12,13 @@ env:
 jobs:
   build:
     runs-on: windows-latest
-    build_type: "Release"
-    cc: "cl"
-    cxx: "cl"
-    environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Configure CMake
       working-directory: ./Emulator
+      environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
