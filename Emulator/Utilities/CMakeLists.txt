@@ -5,7 +5,7 @@ target_sources(vAmiga PRIVATE
   SSEUtils.cpp
   MemUtils.cpp
   Checksum.cpp
-  IO.cpp
+  IOUtils.cpp
   Parser.cpp
 )
 
