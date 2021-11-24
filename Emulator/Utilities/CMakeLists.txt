@@ -1,7 +1,7 @@
-set(files
+target_sources(vAmiga PRIVATE
+  Macros.h
   Chrono.cpp
   Concurrency.cpp
-  Exception.cpp
   SSEUtils.cpp
   MemUtils.cpp
   Checksum.cpp
@@ -9,4 +9,4 @@ set(files
   Parser.cpp
 )
 
-add_library(Utilities ${files})
+#add_library(Utilities ${files})

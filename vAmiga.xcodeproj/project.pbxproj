@@ -177,7 +177,6 @@
 		50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C2521EB9059002E32A6 /* Credits.rtf */; };
 		50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */; };
 		50B2BC8925EC3D590032EEFE /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C0B78025EC367000CDE1F2 /* IO.cpp */; };
-		50B2E7E325ECE7FF0077B6A3 /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5072159B25EA698600787591 /* Exception.cpp */; };
 		50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
 		50B5663C265E769200226D80 /* DragAndDropImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B5663B265E769200226D80 /* DragAndDropImageView.swift */; };
 		50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B70CAB252CE0BF006B5191 /* Muxer.cpp */; };
@@ -206,7 +205,6 @@
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
 		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C9F2269135800795256 /* SpriteTableView.swift */; };
-		50E1032D274D52600006491E /* Dummy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1032C274D52600006491E /* Dummy.cpp */; };
 		50E1D2C226CCF830001FE199 /* DatatypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */; };
 		50E1D2C426CCF8C9001FE199 /* FileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */; };
 		50E1D2C626CCF942001FE199 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C526CCF942001FE199 /* FontExtensions.swift */; };
@@ -351,7 +349,6 @@
 		506B471C256396BC009FEFC3 /* ExporterDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExporterDialog.swift; sourceTree = "<group>"; };
 		5071B7852621F88800D6FB54 /* CopperDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperDebugger.cpp; sourceTree = "<group>"; };
 		5071B7862621F88800D6FB54 /* CopperDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CopperDebugger.h; sourceTree = "<group>"; };
-		5072159B25EA698600787591 /* Exception.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Exception.cpp; sourceTree = "<group>"; };
 		5072159C25EA698600787591 /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		5072159F25EA9AE600787591 /* Chrono.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Chrono.cpp; sourceTree = "<group>"; };
 		507215A025EA9AE600787591 /* Chrono.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Chrono.h; sourceTree = "<group>"; };
@@ -545,27 +542,27 @@
 		50C8C4542607524400F4E012 /* Monitors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monitors.swift; sourceTree = "<group>"; };
 		50CA602E260E02B700C4A22C /* Reflection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflection.h; sourceTree = "<group>"; };
 		50CF461C2620420500BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		50CF461F2620423300BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF46222620427600BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF46252620428600BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF46282620429E00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF462B262042AA00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF462E262042B900BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF4631262042C400BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF4634262042D300BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF4637262042E000BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF463A262042F300BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF463D262042FC00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF46402620430D00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF46432620431900BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF46462620432300BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF46492620432B00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF464C2620433400BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF464F2620433F00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF46562620436A00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF46592620437900BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF465C262043C500BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50CF465F262043CF00BB3B95 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50CF461F2620423300BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF46222620427600BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF46252620428600BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF46282620429E00BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF462B262042AA00BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF462E262042B900BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF4631262042C400BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF4634262042D300BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF4637262042E000BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF463A262042F300BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF463D262042FC00BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF46402620430D00BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF46432620431900BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF46462620432300BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF46492620432B00BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF464C2620433400BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF464F2620433F00BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF46562620436A00BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF46592620437900BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF465C262043C500BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50CF465F262043CF00BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50D263CB21F6377600FA167F /* A500ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ANSI.xib; sourceTree = "<group>"; };
 		50D263CD21F6378000FA167F /* A1000ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ISO.xib; sourceTree = "<group>"; };
 		50D2B85026D292B7008040E5 /* DeniseDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeniseDebugger.cpp; sourceTree = "<group>"; };
@@ -584,7 +581,6 @@
 		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
 		50DF2C9E2268CFC000795256 /* AgnusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusTypes.h; sourceTree = "<group>"; };
 		50DF2C9F2269135800795256 /* SpriteTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteTableView.swift; sourceTree = "<group>"; };
-		50E1032C274D52600006491E /* Dummy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Dummy.cpp; sourceTree = "<group>"; };
 		50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatatypeExtensions.swift; sourceTree = "<group>"; };
 		50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExtensions.swift; sourceTree = "<group>"; };
 		50E1D2C526CCF942001FE199 /* FontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtensions.swift; sourceTree = "<group>"; };
@@ -613,9 +609,9 @@
 		50E79BE7232D123000D296FB /* SubComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SubComponent.cpp; sourceTree = "<group>"; };
 		50E79BE8232D123000D296FB /* SubComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SubComponent.h; sourceTree = "<group>"; };
 		50E8199225B350DA00D2E3A5 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
-		50EAB95726C10B6C00BFA9D8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50EAB95926C10B8600BFA9D8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		50EAB95B26C10B9400BFA9D8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50EAB95726C10B6C00BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50EAB95926C10B8600BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50EAB95B26C10B9400BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
 		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
 		50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportVideoDialog.xib; sourceTree = "<group>"; };
@@ -625,7 +621,7 @@
 		50EFB06626C3C872002145B4 /* SuspendableThread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SuspendableThread.cpp; sourceTree = "<group>"; };
 		50EFB06726C3C872002145B4 /* SuspendableThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SuspendableThread.h; sourceTree = "<group>"; };
 		50EFC7DF22E840870036A3DF /* Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialization.h; sourceTree = "<group>"; };
-		50EFF1E726E25A5D00296065 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		50EFF1E726E25A5D00296065 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50F0BD2422AF883C001F4616 /* UART.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UART.cpp; sourceTree = "<group>"; };
 		50F0BD2522AF883C001F4616 /* UART.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UART.h; sourceTree = "<group>"; };
 		50F31C282409322F008A54D8 /* CopperBlitterPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperBlitterPanel.swift; sourceTree = "<group>"; };
@@ -694,7 +690,7 @@
 		5009B7F5255702C00037288E /* RomFiles */ = {
 			isa = PBXGroup;
 			children = (
-				50CF464C2620433400BB3B95 /* Makefile */,
+				50CF464C2620433400BB3B95 /* CMakeLists.txt */,
 				50A61470260DCA6200A01428 /* RomFileTypes.h */,
 				509F7F1C21EDEA0200A530E4 /* RomFile.h */,
 				509F7F1B21EDEA0200A530E4 /* RomFile.cpp */,
@@ -707,7 +703,7 @@
 		5009B7F7255702D40037288E /* DiskFiles */ = {
 			isa = PBXGroup;
 			children = (
-				50CF464F2620433F00BB3B95 /* Makefile */,
+				50CF464F2620433F00BB3B95 /* CMakeLists.txt */,
 				50FAC77425160BBF00E47421 /* DiskFile.h */,
 				50FAC77325160BBF00E47421 /* DiskFile.cpp */,
 				508833ED21F0D21B009890EA /* ADFFile.h */,
@@ -732,7 +728,7 @@
 		50104E8825ECDAA30047A9AA /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				50CF461F2620423300BB3B95 /* Makefile */,
+				50CF461F2620423300BB3B95 /* CMakeLists.txt */,
 				507215B025EAF62B00787591 /* Aliases.h */,
 				5082D83A21EF891200CF7692 /* Constants.h */,
 				50A6145A260D14FE00A01428 /* ErrorTypes.h */,
@@ -763,7 +759,7 @@
 		502F7DCF2221709700AEEC65 /* Denise */ = {
 			isa = PBXGroup;
 			children = (
-				50CF4631262042C400BB3B95 /* Makefile */,
+				50CF4631262042C400BB3B95 /* CMakeLists.txt */,
 				501E715022671FC20070B17D /* DeniseTypes.h */,
 				5020B17F21EF136100B9E80E /* Denise.h */,
 				5020B17E21EF136100B9E80E /* Denise.cpp */,
@@ -784,7 +780,7 @@
 		502F7DD0222170AE00AEEC65 /* Agnus */ = {
 			isa = PBXGroup;
 			children = (
-				50CF4634262042D300BB3B95 /* Makefile */,
+				50CF4634262042D300BB3B95 /* CMakeLists.txt */,
 				503990C522D8CCB600035783 /* Beam.h */,
 				5015FF3E242BA00F005175D9 /* Frame.h */,
 				50F924FC2428B8CD00DD91AB /* DDF.h */,
@@ -812,7 +808,7 @@
 		5056506925440FDE00A79D27 /* FileSystems */ = {
 			isa = PBXGroup;
 			children = (
-				50EFF1E726E25A5D00296065 /* Makefile */,
+				50EFF1E726E25A5D00296065 /* CMakeLists.txt */,
 				5083CF572546A22E00A28EF8 /* FSTypes.h */,
 				505C01092577A8C000F9E05C /* FSDescriptors.h */,
 				505C01082577A8C000F9E05C /* FSDescriptors.cpp */,
@@ -831,7 +827,7 @@
 		505B801C23FE626E002407FE /* Memory */ = {
 			isa = PBXGroup;
 			children = (
-				50CF46402620430D00BB3B95 /* Makefile */,
+				50CF46402620430D00BB3B95 /* CMakeLists.txt */,
 				5051922A22B61DAA0012C4BB /* MemoryTypes.h */,
 				5064851021EC7A1700FC4AC3 /* Memory.h */,
 				5064850F21EC7A1700FC4AC3 /* Memory.cpp */,
@@ -842,7 +838,7 @@
 		505B801D23FE628F002407FE /* LogicBoard */ = {
 			isa = PBXGroup;
 			children = (
-				50CF46222620427600BB3B95 /* Makefile */,
+				50CF46222620427600BB3B95 /* CMakeLists.txt */,
 				50A493832374560D003ECD2C /* RTCTypes.h */,
 				501B821C2262FFB200042871 /* RTC.h */,
 				501B821B2262FFB200042871 /* RTC.cpp */,
@@ -875,11 +871,11 @@
 		508E7F962206CDC600F7D88C /* CPU */ = {
 			isa = PBXGroup;
 			children = (
-				50CF463A262042F300BB3B95 /* Makefile */,
-				50E2BE25240D417200155AE4 /* Moira */,
+				50CF463A262042F300BB3B95 /* CMakeLists.txt */,
 				5051922822B61C8A0012C4BB /* CPUTypes.h */,
 				508E7F942206CDBD00F7D88C /* CPU.h */,
 				508E7F932206CDBD00F7D88C /* CPU.cpp */,
+				50E2BE25240D417200155AE4 /* Moira */,
 			);
 			path = CPU;
 			sourceTree = "<group>";
@@ -922,7 +918,7 @@
 		508FDF5621EA1FBC0043D0E9 /* CIA */ = {
 			isa = PBXGroup;
 			children = (
-				50CF4637262042E000BB3B95 /* Makefile */,
+				50CF4637262042E000BB3B95 /* CMakeLists.txt */,
 				5051922922B61CEC0012C4BB /* CIATypes.h */,
 				508FDF5721EA1FBC0043D0E9 /* CIA.h */,
 				508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */,
@@ -1043,7 +1039,6 @@
 				50D661862282BE1800D67D88 /* AmigaTypes.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
-				50E1032C274D52600006491E /* Dummy.cpp */,
 				50B14C0421EB212E002E32A6 /* Utilities */,
 				50104E8825ECDAA30047A9AA /* Base */,
 				505B801D23FE628F002407FE /* LogicBoard */,
@@ -1065,7 +1060,7 @@
 		508FE06621EA31E50043D0E9 /* Media */ = {
 			isa = PBXGroup;
 			children = (
-				50CF46492620432B00BB3B95 /* Makefile */,
+				50CF46492620432B00BB3B95 /* CMakeLists.txt */,
 				5051922722B61C1B0012C4BB /* AmigaFileTypes.h */,
 				508FE06421EA318D0043D0E9 /* AmigaFile.h */,
 				508FE06321EA318D0043D0E9 /* AmigaFile.cpp */,
@@ -1172,7 +1167,7 @@
 		50A2953B21FF12170046BAA0 /* Drive */ = {
 			isa = PBXGroup;
 			children = (
-				50CF46462620432300BB3B95 /* Makefile */,
+				50CF46462620432300BB3B95 /* CMakeLists.txt */,
 				500770C1227C9FF3003A5F76 /* DriveTypes.h */,
 				50F6EEBD21F4F61F0091155D /* Drive.h */,
 				50F6EEBC21F4F61F0091155D /* Drive.cpp */,
@@ -1186,7 +1181,7 @@
 		50A2953C21FF12C20046BAA0 /* Peripherals */ = {
 			isa = PBXGroup;
 			children = (
-				50CF46432620431900BB3B95 /* Makefile */,
+				50CF46432620431900BB3B95 /* CMakeLists.txt */,
 				50A2953B21FF12170046BAA0 /* Drive */,
 				50EAB95426C10B3D00BFA9D8 /* Mouse */,
 				50EAB95526C10B4600BFA9D8 /* Joystick */,
@@ -1198,7 +1193,7 @@
 		50AEBEC824D3D3B30037082D /* Blitter */ = {
 			isa = PBXGroup;
 			children = (
-				50CF465F262043CF00BB3B95 /* Makefile */,
+				50CF465F262043CF00BB3B95 /* CMakeLists.txt */,
 				50AEBECD24D3D4AD0037082D /* BlitterTypes.h */,
 				50D375DE222C7C6B0040987C /* Blitter.h */,
 				50D375DD222C7C6B0040987C /* Blitter.cpp */,
@@ -1213,7 +1208,7 @@
 		50AEBEC924D3D3BE0037082D /* Copper */ = {
 			isa = PBXGroup;
 			children = (
-				50CF465C262043C500BB3B95 /* Makefile */,
+				50CF465C262043C500BB3B95 /* CMakeLists.txt */,
 				50AEBECA24D3D40C0037082D /* CopperTypes.h */,
 				502F7DD1222172CA00AEEC65 /* Copper.h */,
 				502F7DCD2221706000AEEC65 /* Copper.cpp */,
@@ -1228,7 +1223,7 @@
 		50AEBED424D3D7050037082D /* Audio */ = {
 			isa = PBXGroup;
 			children = (
-				50CF46282620429E00BB3B95 /* Makefile */,
+				50CF46282620429E00BB3B95 /* CMakeLists.txt */,
 				5042FD7E23FFF0D200B315B2 /* StateMachineTypes.h */,
 				507D7768228BE3EF001E97A9 /* StateMachine.h */,
 				507D7767228BE3EF001E97A9 /* StateMachine.cpp */,
@@ -1252,7 +1247,7 @@
 		50AEBED524D3D7160037082D /* DiskController */ = {
 			isa = PBXGroup;
 			children = (
-				50CF462B262042AA00BB3B95 /* Makefile */,
+				50CF462B262042AA00BB3B95 /* CMakeLists.txt */,
 				5042FD7D23FFF08500B315B2 /* DiskControllerTypes.h */,
 				500C0A552259402D000121CD /* DiskController.h */,
 				500C0A542259402D000121CD /* DiskController.cpp */,
@@ -1265,7 +1260,7 @@
 		50AEBED624D3D7270037082D /* UART */ = {
 			isa = PBXGroup;
 			children = (
-				50CF462E262042B900BB3B95 /* Makefile */,
+				50CF462E262042B900BB3B95 /* CMakeLists.txt */,
 				50A6141A260CD4F300A01428 /* UARTTypes.h */,
 				50F0BD2522AF883C001F4616 /* UART.h */,
 				50F0BD2422AF883C001F4616 /* UART.cpp */,
@@ -1288,7 +1283,6 @@
 				500C716F255EE2AC00DDEEB2 /* Concurrency.h */,
 				500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */,
 				5072159C25EA698600787591 /* Exception.h */,
-				5072159B25EA698600787591 /* Exception.cpp */,
 				505A3A3921F4996400132020 /* SSEUtils.h */,
 				505A3A3821F4996400132020 /* SSEUtils.cpp */,
 				500A0A29262305BE0019F013 /* MemUtils.h */,
@@ -1334,7 +1328,7 @@
 		50B9C42A2609430F00A86C31 /* RetroShell */ = {
 			isa = PBXGroup;
 			children = (
-				50CF46562620436A00BB3B95 /* Makefile */,
+				50CF46562620436A00BB3B95 /* CMakeLists.txt */,
 				50B9C427260942D000A86C31 /* RetroShell.h */,
 				50B9C426260942D000A86C31 /* RetroShell.cpp */,
 				509C3667260B3ED0004F160A /* RetroShellCmds.cpp */,
@@ -1364,7 +1358,7 @@
 		50E2BE25240D417200155AE4 /* Moira */ = {
 			isa = PBXGroup;
 			children = (
-				50CF463D262042FC00BB3B95 /* Makefile */,
+				50CF463D262042FC00BB3B95 /* CMakeLists.txt */,
 				50E2BE35240D41EE00155AE4 /* MoiraConfig.h */,
 				50E2BE2F240D418500155AE4 /* MoiraTypes.h */,
 				50E2BE34240D41DD00155AE4 /* Moira.h */,
@@ -1391,7 +1385,7 @@
 		50EAB95426C10B3D00BFA9D8 /* Mouse */ = {
 			isa = PBXGroup;
 			children = (
-				50EAB95B26C10B9400BFA9D8 /* Makefile */,
+				50EAB95B26C10B9400BFA9D8 /* CMakeLists.txt */,
 				50A61447260CF26100A01428 /* MouseTypes.h */,
 				505554AB2264C47600CB07E0 /* Mouse.h */,
 				505554AA2264C47600CB07E0 /* Mouse.cpp */,
@@ -1402,7 +1396,7 @@
 		50EAB95526C10B4600BFA9D8 /* Joystick */ = {
 			isa = PBXGroup;
 			children = (
-				50EAB95926C10B8600BFA9D8 /* Makefile */,
+				50EAB95926C10B8600BFA9D8 /* CMakeLists.txt */,
 				50A61446260CF25700A01428 /* JoystickTypes.h */,
 				50D7CDC32286E968002689F0 /* Joystick.h */,
 				50D7CDC22286E968002689F0 /* Joystick.cpp */,
@@ -1413,7 +1407,7 @@
 		50EAB95626C10B5900BFA9D8 /* Keyboard */ = {
 			isa = PBXGroup;
 			children = (
-				50EAB95726C10B6C00BFA9D8 /* Makefile */,
+				50EAB95726C10B6C00BFA9D8 /* CMakeLists.txt */,
 				50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */,
 				5014DD1421F3625200BC14BA /* Keyboard.h */,
 				5014DD1321F3625200BC14BA /* Keyboard.cpp */,
@@ -1425,7 +1419,7 @@
 		50EE993D21FF4D42003BD74B /* Paula */ = {
 			isa = PBXGroup;
 			children = (
-				50CF46252620428600BB3B95 /* Makefile */,
+				50CF46252620428600BB3B95 /* CMakeLists.txt */,
 				509D4EF4228596A900E2C252 /* PaulaTypes.h */,
 				5030891021EFA74600FEAD12 /* Paula.h */,
 				5030890F21EFA74600FEAD12 /* Paula.cpp */,
@@ -1441,7 +1435,7 @@
 		50F54B0B24B5D31D0078FDC9 /* xdms */ = {
 			isa = PBXGroup;
 			children = (
-				50CF46592620437900BB3B95 /* Makefile */,
+				50CF46592620437900BB3B95 /* CMakeLists.txt */,
 				50F54B0C24B5D31D0078FDC9 /* u_heavy.c */,
 				50F54B0D24B5D31D0078FDC9 /* tables.c */,
 				50F54B0E24B5D31D0078FDC9 /* u_deep.c */,
@@ -1611,7 +1605,6 @@
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				50565072254573E100A79D27 /* FSBlock.cpp in Sources */,
 				500CE876259252ED00462836 /* DevicesPrefs.swift in Sources */,
-				50E1032D274D52600006491E /* Dummy.cpp in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
 				50F54B2724B5D31D0078FDC9 /* u_deep.c in Sources */,
 				508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */,
@@ -1767,7 +1760,6 @@
 				50F54B2E24B5D31D0078FDC9 /* u_rle.c in Sources */,
 				50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */,
 				5056507C25459C8800A79D27 /* FSObjects.cpp in Sources */,
-				50B2E7E325ECE7FF0077B6A3 /* Exception.cpp in Sources */,
 				50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */,
 				50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */,
 				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,
