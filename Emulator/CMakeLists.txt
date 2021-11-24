@@ -65,3 +65,6 @@ add_subdirectory(Media)
 add_subdirectory(FileSystems)
 add_subdirectory(RetroShell)
 add_subdirectory(xdms)
+
+# Add libraries
+target_link_libraries(vAmiga xdms)

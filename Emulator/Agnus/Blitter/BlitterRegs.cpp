@@ -314,9 +314,8 @@ Blitter::setBLTSIZE(u16 value)
     if (!bltsizeH) bltsizeH = 0x0040;
     
     // Warn if the previous Blitter operation is overwritten
-    if constexpr (XFILES) {
-        EventID id = scheduler.id[SLOT_BLT];
-        trace(true, "XFILES: Overwriting Blitter event %hhd\n", id);
+    if ([[maybe_unused]] EventID id = scheduler.id[SLOT_BLT]) {
+        trace(XFILES, "XFILES: Overwriting Blitter event %hhd\n", id);
     }
     
     agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_STRT1);
