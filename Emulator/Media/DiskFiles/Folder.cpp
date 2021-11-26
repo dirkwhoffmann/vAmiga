@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Folder.h"
 #include "FSDevice.h"
-#include "IOutils.h"
+#include "IOUtils.h"
 
 bool
 Folder::isCompatible(const string &path)
