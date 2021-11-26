@@ -45,7 +45,7 @@ struct U16Mono
     U16Mono() : lr(0) { }
     U16Mono(float l, float r) : lr ((i16)(l + r)) { }
     
-    float magnitude(bool left) { return abs(lr); }
+    float magnitude(bool left) { return (float)abs(lr); }
     
     void modulate(float vol) { lr = (i16)(lr * vol); }
     
@@ -68,7 +68,7 @@ struct U16Stereo
     U16Stereo() : l(0), r(0) { }
     U16Stereo(float l, float r) : l((i16)l), r((i16)r) { }
     
-    float magnitude(bool left) { return left ? abs(l) : abs(r); }
+    float magnitude(bool left) { return left ? (float)abs(l) : (float)abs(r); }
     
     void modulate(float vol) { l = (i16)(l * vol); r = (i16)(r * vol); }
     
