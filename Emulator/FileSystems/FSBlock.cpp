@@ -343,7 +343,7 @@ FSBlock::check(bool strict) const
         
         if ((error = check(i, &expected, strict)) != ERROR_OK) {
             count++;
-            debug(FS_DEBUG, "Block %d [%zd.%zd]: %s\n", nr, i / 4, i % 4,
+            debug(FS_DEBUG, "Block %d [%ld.%ld]: %s\n", nr, i / 4, i % 4,
                   ErrorCodeEnum::key(error));
         }
     }
@@ -673,7 +673,7 @@ FSBlock::dump() const
             msg("   Hash table : "); dumpHashTable(); printf("\n");
             msg("Bitmap blocks : ");
             for (isize i = 0; i < 25; i++) {
-                if (isize ref = getBmBlockRef(i)) msg("%zd ", ref);
+                if (isize ref = getBmBlockRef(i)) msg("%ld ", ref);
             }
             msg("\n");
             msg("   Next BmExt : %d\n", getNextBmExtBlockRef());
@@ -689,7 +689,7 @@ FSBlock::dump() const
                     }
                 }
             }
-            msg("         Free : %zd blocks\n", count);
+            msg("         Free : %ld blocks\n", count);
         }
         case FS_BITMAP_EXT_BLOCK:
         {
@@ -718,7 +718,7 @@ FSBlock::dump() const
             msg("           Next : %d\n", getNextHashRef());
             msg("      File size : %d\n", getFileSize());
 
-            msg("    Block count : %zd / %zd\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
+            msg("    Block count : %ld / %ld\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
             msg("          First : %d\n", getFirstDataBlockRef());
             msg("     Parent dir : %d\n", getParentDirRef());
             msg(" FileList block : %d\n", getNextListBlockRef());
@@ -730,7 +730,7 @@ FSBlock::dump() const
             
         case FS_FILELIST_BLOCK:
             
-            msg(" Block count : %zd / %zd\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
+            msg(" Block count : %ld / %ld\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
             msg("       First : %d\n", getFirstDataBlockRef());
             msg("Header block : %d\n", getFileHeaderRef());
             msg("   Extension : %d\n", getNextListBlockRef());
@@ -1350,7 +1350,7 @@ FSBlock::dumpHashTable() const
         
         u32 value = read32(data + 24 + 4 * i);
         if (value) {
-            msg("%zd: %d ", i, value);
+            msg("%ld: %d ", i, value);
         }
     }
 }
@@ -1361,7 +1361,7 @@ FSBlock::writeBootBlock(BootBlockId id, isize page)
     assert(page == 0 || page == 1);
     assert(type == FS_BOOT_BLOCK);
     
-    debug(FS_DEBUG, "writeBootBlock(%s, %zd)\n", BootBlockIdEnum::key(id), page);
+    debug(FS_DEBUG, "writeBootBlock(%s, %ld)\n", BootBlockIdEnum::key(id), page);
     
     if (id != BB_NONE) {
         
@@ -1621,9 +1621,9 @@ FSBlock::addData(const u8 *buffer, isize size)
             isize numDataBlocks = partition.requiredDataBlocks(size);
             isize numListBlocks = partition.requiredFileListBlocks(size);
             
-            debug(FS_DEBUG, "Required data blocks : %zd\n", numDataBlocks);
-            debug(FS_DEBUG, "Required list blocks : %zd\n", numListBlocks);
-            debug(FS_DEBUG, "         Free blocks : %zd\n", partition.freeBlocks());
+            debug(FS_DEBUG, "Required data blocks : %ld\n", numDataBlocks);
+            debug(FS_DEBUG, "Required list blocks : %ld\n", numListBlocks);
+            debug(FS_DEBUG, "         Free blocks : %ld\n", partition.freeBlocks());
             
             if (partition.freeBlocks() < numDataBlocks + numListBlocks) {
                 warn("Not enough free blocks\n");
@@ -1717,7 +1717,7 @@ FSBlock::writeData(FILE *file)
     }
     
     if (bytesRemaining != 0) {
-        warn("%zd remaining bytes. Expected 0.\n", bytesRemaining);
+        warn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
     }
     
     return bytesTotal;

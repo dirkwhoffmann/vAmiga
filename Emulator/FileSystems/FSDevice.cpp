@@ -805,7 +805,7 @@ FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *
     
     isize count = last - first + 1;
     
-    debug(FS_DEBUG, "Exporting %zd blocks (%d - %d)\n", count, first, last);
+    debug(FS_DEBUG, "Exporting %ld blocks (%d - %d)\n", count, first, last);
 
     // Only proceed if the (predicted) block size matches
     if (size % bsize != 0) {

@@ -243,7 +243,7 @@ Copper::serviceEvent(EventID id)
             assert(beam == beam2);
             
             // Run the comparator to see if the next command is skipped
-            trace(COP_DEBUG && verbose, "Calling comparator(%zd,%zd)\n", beam.v, beam.h);
+            trace(COP_DEBUG && verbose, "Calling comparator(%ld,%ld)\n", beam.v, beam.h);
             skip = comparator(beam);
 
             // If the BFD flag is cleared, we also need to check the Blitter

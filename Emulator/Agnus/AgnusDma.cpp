@@ -90,13 +90,13 @@ Agnus::initDasEventTable()
 {
     std::memset(dasDMA, 0, sizeof(dasDMA));
 
-    for (isize dmacon = 0; dmacon < 64; dmacon++) {
+    for (isize enable = 0; enable < 64; enable++) {
 
-        EventID *p = dasDMA[dmacon];
+        EventID *p = dasDMA[enable];
 
         p[0x01] = DAS_REFRESH;
 
-        if (dmacon & DSKEN) {
+        if (enable & DSKEN) {
             
             p[0x07] = DAS_D0;
             p[0x09] = DAS_D1;
@@ -109,7 +109,7 @@ Agnus::initDasEventTable()
         p[0x11] = DAS_A2;
         p[0x13] = DAS_A3;
         
-        if (dmacon & SPREN) {
+        if (enable & SPREN) {
             
             p[0x15] = DAS_S0_1;
             p[0x17] = DAS_S0_2;

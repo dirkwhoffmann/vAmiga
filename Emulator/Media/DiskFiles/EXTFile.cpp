@@ -178,7 +178,7 @@ EXTFile::encodeDisk(class Disk &disk) const
     assert(data);
     
     isize tracks = storedTracks();
-    debug(MFM_DEBUG, "Encoding Amiga disk with %zd tracks\n", tracks);
+    debug(MFM_DEBUG, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     // Start with an unformatted disk
     disk.clearDisk();
@@ -194,7 +194,7 @@ EXTFile::encodeTrack(class Disk &disk, Track t) const
     
     for (isize i = 0; i < numTracks; i++) {
 
-        debug(MFM_DEBUG, "Encoding track %zd\n", i);
+        debug(MFM_DEBUG, "Encoding track %ld\n", i);
         
         auto numBits = usedBitsForTrack(i);
         assert(numBits % 8 == 0);
@@ -263,7 +263,7 @@ EXTFile::decodeDisk(Disk &disk)
         }
     }
     
-    debug(ADF_DEBUG, "Wrote %zd bytes\n", p - data);
+    debug(ADF_DEBUG, "Wrote %ld bytes\n", p - data);
 }
 
 isize
