@@ -13,6 +13,7 @@ add_library(vAmiga Amiga.cpp)
 # Specify compile options
 if(MSVC)
   target_compile_options(vAmiga PRIVATE /W4)
+  target_compile_options(vAmiga PRIVATE /wd4100 /wd4201)
   # target_compile_options(vAmiga PRIVATE /W4 /WX)
 else()
   target_compile_options(vAmiga PRIVATE -O3 -Wall -Werror)

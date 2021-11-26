@@ -16,10 +16,13 @@
 // Optimizing code
 //
 
+#ifdef _WIN32
+#define unreachable    __assume(false)
+#else
 #define unreachable    __builtin_unreachable()
-#define fatalError     assert(false); __builtin_unreachable()
+#endif
 
-#define assume(x)      do { if (!(x)) __builtin_unreachable(); } while(false)
+#define fatalError     assert(false); unreachable
 
 #define likely(x)      __builtin_expect(!!(x), 1)
 #define unlikely(x)    __builtin_expect(!!(x), 0)

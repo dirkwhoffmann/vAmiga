@@ -96,10 +96,10 @@ public:
      * Note: The upper two array elements are dummy elements. We need them in
      * order to pass the array as parameter to function transposeSSE().
      */
-    u16 __attribute__ ((aligned (64))) shiftReg[8];
+    alignas(16) u16 shiftReg[8];
 
     // Bit slices computed out of the shift registers
-    u8 __attribute__ ((aligned (64))) slice[16];
+    alignas(16) u8 slice[16];
     
     // Indicates the DMA cycle where the shift register gets filled
     isize fillPos; 
