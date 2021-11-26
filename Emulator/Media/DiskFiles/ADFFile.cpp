@@ -273,7 +273,7 @@ ADFFile::encodeDisk(Disk &disk) const
     }
 
     isize tracks = numTracks();
-    debug(ADF_DEBUG, "Encoding Amiga disk with %zd tracks\n", tracks);
+    debug(ADF_DEBUG, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     // Start with an unformatted disk
     disk.clearDisk();
@@ -294,7 +294,7 @@ void
 ADFFile::encodeTrack(Disk &disk, Track t) const
 {
     isize sectors = numSectors();
-    debug(ADF_DEBUG, "Encoding Amiga track %zd with %ld sectors\n", t, sectors);
+    debug(ADF_DEBUG, "Encoding Amiga track %ld with %ld sectors\n", t, sectors);
 
     // Format track
     disk.clearTrack(t, 0xAA);
@@ -308,7 +308,7 @@ ADFFile::encodeTrack(Disk &disk, Track t) const
     }
     
     // Compute a debug checksum
-    debug(ADF_DEBUG, "Track %zd checksum = %x\n",
+    debug(ADF_DEBUG, "Track %ld checksum = %x\n",
           t, util::fnv_1a_32(disk.data.track[t], disk.length.track[t]));
 }
 
@@ -317,7 +317,7 @@ ADFFile::encodeSector(Disk &disk, Track t, Sector s) const
 {
     assert(t < disk.numTracks());
     
-    debug(ADF_DEBUG, "Encoding sector %zd\n", s);
+    debug(ADF_DEBUG, "Encoding sector %ld\n", s);
     
     // Block header layout:
     //
@@ -416,7 +416,7 @@ ADFFile::decodeTrack(Disk &disk, Track t)
 { 
     long sectors = numSectors();
 
-    debug(ADF_DEBUG, "Decoding track %zd\n", t);
+    debug(ADF_DEBUG, "Decoding track %ld\n", t);
     
     u8 *src = disk.data.track[t];
     u8 *dst = data + t * sectors * 512;
@@ -439,11 +439,11 @@ ADFFile::decodeTrack(Disk &disk, Track t)
         sectorStart[nr++] = index;
     }
     
-    debug(ADF_DEBUG, "Found %zd sectors (expected %ld)\n", nr, sectors);
+    debug(ADF_DEBUG, "Found %ld sectors (expected %ld)\n", nr, sectors);
 
     if (nr != sectors) {
         
-        warn("Found %zd sectors, expected %ld. Aborting.\n", nr, sectors);
+        warn("Found %ld sectors, expected %ld. Aborting.\n", nr, sectors);
         throw VAError(ERROR_DISK_WRONG_SECTOR_COUNT);
     }
     

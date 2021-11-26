@@ -126,13 +126,15 @@ numDirectoryItems(const string &path)
 {
     isize count = 0;
     
-    if (DIR *dir = opendir(path.c_str())) {
+    try {
         
-        struct dirent *dp;
-        while ((dp = readdir(dir))) {
-            if (dp->d_name[0] != '.') count++;
+        for (const auto &entry : fs::directory_iterator(path)) {
+            
+            const auto &name = entry.path().filename().string();
+            if (name[0] != '.') count++;
         }
-    }
+        
+    } catch (...) { }
     
     return count;
 }
@@ -151,19 +153,19 @@ files(const string &path, std::vector <string> &suffixes)
 {
     std::vector<string> result;
     
-    if (DIR *dir = opendir(path.c_str())) {
+    try {
         
-        struct dirent *dp;
-        while ((dp = readdir(dir))) {
+        for (const auto &entry : fs::directory_iterator(path)) {
             
-            string name = dp->d_name;
+            const auto &name = entry.path().filename().string();
             string suffix = lowercased(extractSuffix(name));
             
             if (std::find(suffixes.begin(), suffixes.end(), suffix) != suffixes.end()) {
                 result.push_back(name);
             }
         }
-    }
+        
+    } catch (...) { }
     
     return result;
 }

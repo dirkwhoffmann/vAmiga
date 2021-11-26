@@ -10,17 +10,12 @@
 #include "config.h"
 #include "Folder.h"
 #include "FSDevice.h"
+#include "IOutils.h"
 
 bool
 Folder::isCompatible(const string &path)
 {
-    DIR *dir;
-    
-    // We accept all directories
-    if ((dir = opendir(path.c_str())) == nullptr) return false;
-    
-    closedir(dir);
-    return true;
+    return util::isDirectory(path);
 }
 
 void

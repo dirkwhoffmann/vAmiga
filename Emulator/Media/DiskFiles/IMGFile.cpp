@@ -78,7 +78,7 @@ IMGFile::encodeDisk(Disk &disk) const
     }
 
     isize tracks = numTracks();
-    debug(IMG_DEBUG, "Encoding DOS disk with %zd tracks\n", tracks);
+    debug(IMG_DEBUG, "Encoding DOS disk with %ld tracks\n", tracks);
 
     // Encode all tracks
     for (Track t = 0; t < tracks; t++) encodeTrack(disk, t);
@@ -96,7 +96,7 @@ void
 IMGFile::encodeTrack(Disk &disk, Track t) const
 {
     isize sectors = numSectors();
-    debug(IMG_DEBUG, "Encoding DOS track %zd with %ld sectors\n", t, sectors);
+    debug(IMG_DEBUG, "Encoding DOS track %ld with %ld sectors\n", t, sectors);
 
     u8 *p = disk.data.track[t];
 
@@ -118,7 +118,7 @@ IMGFile::encodeTrack(Disk &disk, Track t) const
     for (Sector s = 0; s < sectors; s++) encodeSector(disk, t, s);
     
     // Compute a checksum for debugging
-    debug(IMG_DEBUG, "Track %zd checksum = %x\n",
+    debug(IMG_DEBUG, "Track %ld checksum = %x\n",
           t, util::fnv_1a_32(disk.data.track[t], disk.length.track[t]));
 }
 
@@ -127,7 +127,7 @@ IMGFile::encodeSector(Disk &disk, Track t, Sector s) const
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
         
-    debug(IMG_DEBUG, "  Encoding DOS sector %zd\n", s);
+    debug(IMG_DEBUG, "  Encoding DOS sector %ld\n", s);
     
     // Write SYNC
     for (isize i = 0; i < 12; i++) { buf[i] = 0x00; }
@@ -220,7 +220,7 @@ IMGFile::decodeTrack(Disk &disk, Track t)
     u8 *src = disk.data.track[t];
     u8 *dst = data + t * numSectors * 512;
     
-    debug(IMG_DEBUG, "Decoding DOS track %zd\n", t);
+    debug(IMG_DEBUG, "Decoding DOS track %ld\n", t);
 
     // Determine the start of all sectors contained in this track
     std::vector <isize> sectorStart(numSectors);
@@ -261,7 +261,7 @@ IMGFile::decodeTrack(Disk &disk, Track t)
     }
 
     if (cnt != numSectors) {
-        warn("Found %zd sectors, expected %ld. Aborting.\n", cnt, numSectors);
+        warn("Found %ld sectors, expected %ld. Aborting.\n", cnt, numSectors);
         throw VAError(ERROR_DISK_WRONG_SECTOR_COUNT);
     }
         

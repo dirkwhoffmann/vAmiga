@@ -77,8 +77,8 @@ Agnus::predictDDF()
         hsyncActions |= HSYNC_PREDICT_DDF;      // Call this function again
     }
     
-    trace(DDF_DEBUG, "predictDDF LORES: %zd %zd\n", ddfLores.strt, ddfLores.stop);
-    trace(DDF_DEBUG, "predictDDF HIRES: %zd %zd\n", ddfHires.strt, ddfHires.stop);
+    trace(DDF_DEBUG, "predictDDF LORES: %ld %ld\n", ddfLores.strt, ddfLores.stop);
+    trace(DDF_DEBUG, "predictDDF HIRES: %ld %ld\n", ddfHires.strt, ddfHires.stop);
 }
 
 void
@@ -177,7 +177,7 @@ Agnus::computeDDFWindowOCS()
             break;
     }
 
-    trace(DDF_DEBUG, "DDF Window (OCS):  (%zd,%zd) (%zd,%zd)\n",
+    trace(DDF_DEBUG, "DDF Window (OCS):  (%ld,%ld) (%ld,%ld)\n",
           ddfLores.strt, ddfHires.strt, ddfLores.stop, ddfHires.stop);
 }
 
@@ -272,6 +272,6 @@ Agnus::computeDDFWindowECS()
     }
     ddfState = table[index].state;
 
-    trace(DDF_DEBUG, "DDF Window (ECS):  (%zd,%zd) (%zd,%zd)\n",
+    trace(DDF_DEBUG, "DDF Window (ECS):  (%ld,%ld) (%ld,%ld)\n",
           ddfLores.strt, ddfHires.strt, ddfLores.stop, ddfHires.stop);
 }

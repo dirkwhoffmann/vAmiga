@@ -10,12 +10,14 @@
 #pragma once
 
 #include "Types.h"
-#include <dirent.h>
 #include <fcntl.h>
+#include <filesystem>
 #include <istream>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <vector>
+
+namespace fs = std::filesystem;
 
 namespace util {
 

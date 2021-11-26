@@ -220,7 +220,7 @@ Agnus::peekVPOSR()
 void
 Agnus::pokeVPOS(u16 value)
 {
-    trace(POSREG_DEBUG, "pokeVPOS(%x) (%zd,%d)\n", value, pos.v, frame.lof);
+    trace(POSREG_DEBUG, "pokeVPOS(%x) (%ld,%d)\n", value, pos.v, frame.lof);
     
     setVPOS(value);
 }
@@ -234,7 +234,7 @@ Agnus::setVPOS(u16 value)
     bool newlof = value & 0x8000;
     if (frame.lof == newlof) return;
     
-    trace(XFILES, "XFILES (VPOS): %x (%zd,%d)\n", value, pos.v, frame.lof);
+    trace(XFILES, "XFILES (VPOS): %x (%ld,%d)\n", value, pos.v, frame.lof);
 
     /* If a long frame gets changed to a short frame, we only proceed if
      * Agnus is not in the last rasterline. Otherwise, we would corrupt the
@@ -363,7 +363,7 @@ Agnus::setDIWSTRT(u16 value)
     isize newDiwVstrt = HI_BYTE(value);
     isize newDiwHstrt = LO_BYTE(value);
     
-    trace(DIW_DEBUG, "newDiwVstrt = %zd newDiwHstrt = %zd\n", newDiwVstrt, newDiwHstrt);
+    trace(DIW_DEBUG, "newDiwVstrt = %ld newDiwHstrt = %ld\n", newDiwVstrt, newDiwHstrt);
     
     // Invalidate the horizontal coordinate if it is out of range
     if (newDiwHstrt < 2) {
@@ -392,7 +392,7 @@ Agnus::setDIWSTRT(u16 value)
     // (1) and (2)
     if (cur < diwHstrt && cur < newDiwHstrt) {
         
-        trace(DIW_DEBUG, "Updating DIW hflop immediately at %zd\n", cur);
+        trace(DIW_DEBUG, "Updating DIW hflop immediately at %ld\n", cur);
         diwHFlopOn = newDiwHstrt;
     }
     
@@ -438,7 +438,7 @@ Agnus::setDIWSTOP(u16 value)
     isize newDiwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
     isize newDiwHstop = LO_BYTE(value) | 0x100;
     
-    trace(DIW_DEBUG, "newDiwVstop = %zd newDiwHstop = %zd\n", newDiwVstop, newDiwHstop);
+    trace(DIW_DEBUG, "newDiwVstop = %ld newDiwHstop = %ld\n", newDiwVstop, newDiwHstop);
     
     // Invalidate the coordinate if it is out of range
     if (newDiwHstop > 0x1C7) {
@@ -452,7 +452,7 @@ Agnus::setDIWSTOP(u16 value)
     // (1) and (2) (see setDIWSTRT)
     if (cur < diwHstop && cur < newDiwHstop) {
         
-        trace(DIW_DEBUG, "Updating hFlopOff immediately at %zd\n", cur);
+        trace(DIW_DEBUG, "Updating hFlopOff immediately at %ld\n", cur);
         diwHFlopOff = newDiwHstop;
     }
     

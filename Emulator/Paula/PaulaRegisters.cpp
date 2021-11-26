@@ -132,7 +132,7 @@ Paula::peekPOTxDAT() const
     if constexpr (x == 0) result = HI_LO(potCntY0, potCntX0);
     if constexpr (x == 1) result = HI_LO(potCntY1, potCntX1);
 
-    trace(POTREG_DEBUG, "peekPOT%zdDAT() = %x\n", x, result);
+    trace(POTREG_DEBUG, "peekPOT%ldDAT() = %x\n", x, result);
     return result;
 }
 

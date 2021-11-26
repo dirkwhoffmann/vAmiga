@@ -326,7 +326,7 @@ Drive::_load(const u8 *buffer)
     }
 
     result = (isize)(reader.ptr - buffer);
-    trace(SNP_DEBUG, "Recreated from %zd bytes\n", result);
+    trace(SNP_DEBUG, "Recreated from %ld bytes\n", result);
     return result;
 }
 
@@ -353,7 +353,7 @@ Drive::_save(u8 *buffer)
     }
     
     result = (isize)(writer.ptr - buffer);
-    trace(SNP_DEBUG, "Serialized to %zd bytes\n", result);
+    trace(SNP_DEBUG, "Serialized to %ld bytes\n", result);
     return result;
 }
 
@@ -583,7 +583,7 @@ Drive::findSyncMark()
         break;
     }
 
-    trace(DSK_DEBUG, "Moving to SYNC mark at offset %zd\n", head.offset);
+    trace(DSK_DEBUG, "Moving to SYNC mark at offset %ld\n", head.offset);
 }
 
 bool
@@ -612,7 +612,7 @@ Drive::step(isize dir)
             head.cylinder--;
             recordCylinder(head.cylinder);
         }
-        debug(DSK_CHECKSUM, "Stepping down to cylinder %zd\n", head.cylinder);
+        debug(DSK_CHECKSUM, "Stepping down to cylinder %ld\n", head.cylinder);
 
     } else {
         
@@ -621,7 +621,7 @@ Drive::step(isize dir)
             head.cylinder++;
             recordCylinder(head.cylinder);
         }
-        debug(DSK_CHECKSUM, "Stepping up to cylinder %zd\n", head.cylinder);
+        debug(DSK_CHECKSUM, "Stepping up to cylinder %ld\n", head.cylinder);
     }
     
     // Push drive head forward
