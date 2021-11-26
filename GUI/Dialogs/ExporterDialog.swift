@@ -726,10 +726,13 @@ class ExporterDialog: DialogController {
     @IBAction func exportAction(_ sender: NSButton!) {
         
         switch formatPopup.indexOfSelectedItem {
+
         case 0: exportToFile(allowedTypes: ["adf", "ADF"])
-        case 1: exportToFile(allowedTypes: ["img", "IMG"])
-        case 2: exportToFile(allowedTypes: ["ima", "IMA"])
-        case 3: exportToDirectory()
+        case 1: exportToFile(allowedTypes: ["adf", "ADF"])
+        case 2: exportToFile(allowedTypes: ["img", "IMG"])
+        case 3: exportToFile(allowedTypes: ["ima", "IMA"])
+        case 4: exportToDirectory()
+
         default: fatalError()
         }
     }
