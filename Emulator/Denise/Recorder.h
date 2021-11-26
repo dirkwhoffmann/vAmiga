@@ -9,6 +9,8 @@
 
 #pragma once
 
+#ifdef SCREEN_RECORDER
+
 #include "SubComponent.h"
 #include "Chrono.h"
 #include "Muxer.h"
@@ -195,3 +197,5 @@ private:
     void finalize();
     void abort();
 };
+
+#endif

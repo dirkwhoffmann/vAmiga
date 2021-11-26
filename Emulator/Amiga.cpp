@@ -87,7 +87,6 @@ Amiga::Amiga()
         msg("       PixelEngine : %zu bytes\n", sizeof(PixelEngine));
         msg("               RTC : %zu bytes\n", sizeof(RTC));
         msg("           Sampler : %zu bytes\n", sizeof(Sampler));
-        msg("    ScreenRecorder : %zu bytes\n", sizeof(Recorder));
         msg("        SerialPort : %zu bytes\n", sizeof(SerialPort));
         msg("            Volume : %zu bytes\n", sizeof(Volume));
         msg("             Zorro : %zu bytes\n", sizeof(ZorroManager));

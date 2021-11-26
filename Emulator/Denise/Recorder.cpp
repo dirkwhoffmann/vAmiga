@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#ifdef SCREEN_RECORDER
+
 #include "config.h"
 #include "Recorder.h"
 #include "IOUtils.h"
@@ -405,3 +407,5 @@ Recorder::abort()
     finalize();
     msgQueue.put(MSG_RECORDING_ABORTED);
 }
+
+#endif

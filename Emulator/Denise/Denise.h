@@ -38,12 +38,15 @@ public:
     // Color synthesizer for computing RGBA values
     PixelEngine pixelEngine = PixelEngine(amiga);
 
-    // A screen recorder for creating video streams
-    Recorder screenRecorder = Recorder(amiga);
-
     // Sprite tracker
     DeniseDebugger debugger = DeniseDebugger(amiga);
 
+#ifdef SCREEN_RECORDER
+    
+    // A screen recorder for creating video streams
+    Recorder screenRecorder = Recorder(amiga);
+
+#endif
     
     //
     // Counters

@@ -19,9 +19,12 @@ Denise::Denise(Amiga& ref) : SubComponent(ref)
 {    
     subComponents = std::vector<AmigaComponent *> {
         
-        &pixelEngine,
-        &screenRecorder
+        &pixelEngine
     };
+    
+#ifdef SCREEN_RECORDER
+    subComponents.push_back(&screenRecorder);
+#endif
 }
 
 void

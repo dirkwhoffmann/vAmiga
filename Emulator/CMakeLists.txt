@@ -20,6 +20,13 @@ else()
   target_compile_options(vAmiga PRIVATE -Wno-unused-parameter)
 endif()
 
+# Enable additional features on certain architectures
+if(MSVC)
+  #
+else()
+  target_compile_definitions(vAmiga PRIVATE SCREEN_RECORDER)
+endif()
+
 # Add include paths
 include_directories(
 ${CMAKE_SOURCE_DIR}/.
