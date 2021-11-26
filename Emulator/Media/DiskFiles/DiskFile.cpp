@@ -18,7 +18,7 @@
 DiskFile *
 DiskFile::make(const string &path)
 {
-    std::ifstream stream(path);
+    std::ifstream stream(path, std::ifstream::binary);
     if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND, path);
     
     switch (type(path)) {

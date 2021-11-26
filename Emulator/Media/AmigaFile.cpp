@@ -24,7 +24,7 @@
 void
 AmigaFile::init(const string &path)
 {
-    std::ifstream stream(path);
+    std::ifstream stream(path, std::ifstream::binary);
     if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND, path);
     init(path, stream);
 }
@@ -77,35 +77,37 @@ AmigaFile::flash(u8 *buffer, isize offset) const
 FileType
 AmigaFile::type(const string &path)
 {
-    std::ifstream stream(path);
-    if (!stream.is_open()) return FILETYPE_UNKNOWN;
+    std::ifstream stream(path, std::ifstream::binary);
     
-    if (Snapshot::isCompatible(path) &&
-        Snapshot::isCompatible(stream)) return FILETYPE_SNAPSHOT;
-
-    if (ADFFile::isCompatible(path) &&
-        ADFFile::isCompatible(stream)) return FILETYPE_ADF;
-
-    if (HDFFile::isCompatible(path) &&
-        HDFFile::isCompatible(stream)) return FILETYPE_HDF;
-
-    if (EXTFile::isCompatible(path) &&
-        EXTFile::isCompatible(stream)) return FILETYPE_EXT;
-
-    if (IMGFile::isCompatible(path) &&
-        IMGFile::isCompatible(stream)) return FILETYPE_IMG;
-
-    if (DMSFile::isCompatible(path) &&
-        DMSFile::isCompatible(stream)) return FILETYPE_DMS;
-
-    if (EXEFile::isCompatible(path) &&
-        EXEFile::isCompatible(stream)) return FILETYPE_EXE;
-
-    if (RomFile::isCompatible(path) &&
-        RomFile::isCompatible(stream)) return FILETYPE_ROM;
-
-    if (Folder::isCompatible(path)) return FILETYPE_DIR;
-
+    if (stream.is_open()) {
+        
+        if (Snapshot::isCompatible(path) &&
+            Snapshot::isCompatible(stream)) return FILETYPE_SNAPSHOT;
+        
+        if (ADFFile::isCompatible(path) &&
+            ADFFile::isCompatible(stream)) return FILETYPE_ADF;
+        
+        if (HDFFile::isCompatible(path) &&
+            HDFFile::isCompatible(stream)) return FILETYPE_HDF;
+        
+        if (EXTFile::isCompatible(path) &&
+            EXTFile::isCompatible(stream)) return FILETYPE_EXT;
+        
+        if (IMGFile::isCompatible(path) &&
+            IMGFile::isCompatible(stream)) return FILETYPE_IMG;
+        
+        if (DMSFile::isCompatible(path) &&
+            DMSFile::isCompatible(stream)) return FILETYPE_DMS;
+        
+        if (EXEFile::isCompatible(path) &&
+            EXEFile::isCompatible(stream)) return FILETYPE_EXE;
+        
+        if (RomFile::isCompatible(path) &&
+            RomFile::isCompatible(stream)) return FILETYPE_ROM;
+        
+        if (Folder::isCompatible(path)) return FILETYPE_DIR;
+    }
+    
     return FILETYPE_UNKNOWN;
 }
 
@@ -133,7 +135,7 @@ AmigaFile::readFromStream(std::istream &stream)
 isize
 AmigaFile::readFromFile(const string &path)
 {        
-    std::ifstream stream(path);
+    std::ifstream stream(path, std::ifstream::binary);
 
     if (!stream.is_open()) {
         throw VAError(ERROR_FILE_CANT_READ, path);

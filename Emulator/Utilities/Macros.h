@@ -16,7 +16,7 @@
 // Optimizing code
 //
 
-#ifdef _WIN32
+#ifdef _MSC_VER
 #define unreachable    __assume(false)
 #else
 #define unreachable    __builtin_unreachable()

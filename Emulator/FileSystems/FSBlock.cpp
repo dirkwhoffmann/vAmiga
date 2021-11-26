@@ -814,7 +814,7 @@ FSBlock::exportFileHeaderBlock(const string &path)
 {
     string filename = path + "/" + partition.dev.getPath(this);
     
-    FILE *file = fopen(filename.c_str(), "w");
+    FILE *file = fopen(filename.c_str(), "wb");
     if (file == nullptr) return ERROR_FS_CANNOT_CREATE_FILE;
     
     writeData(file);

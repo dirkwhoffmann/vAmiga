@@ -223,7 +223,7 @@ bool loadFile(const string &path, u8 **bufptr, isize *size)
 {
     assert(bufptr); assert(size);
 
-    std::ifstream stream(path);
+    std::ifstream stream(path, std::ifstream::binary);
     if (!stream.is_open()) return false;
     
     usize len = streamLength(stream);

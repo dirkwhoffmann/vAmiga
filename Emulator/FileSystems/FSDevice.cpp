@@ -878,7 +878,7 @@ FSDevice::importDirectory(const string &path, const fs::directory_entry &dir, bo
             if (util::loadFile(string(path), &buffer, &size)) {
                 
                 createFile(name, buffer, size);
-                delete(buffer);
+                delete [] (buffer);
             }
         }
     }
