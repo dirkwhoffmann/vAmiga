@@ -834,16 +834,68 @@ FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *
     return true;
 }
 
+#include <iostream>
+
 void
 FSDevice::importDirectory(const string &path, bool recursive)
 {
-    DIR *dir = opendir(path.c_str());
-    if (dir == nullptr) throw VAError(ERROR_FILE_CANT_READ);
+    fs::directory_entry dir;
+    
+    try { dir = fs::directory_entry(path); }
+    catch (...) { throw VAError(ERROR_FILE_CANT_READ); }
     
     importDirectory(path, dir, recursive);
-    closedir(dir);
 }
 
+void
+FSDevice::importDirectory(const string &path, const fs::directory_entry &dir, bool recursive)
+{
+  
+    for (const auto& entry : fs::directory_iterator(dir)) {
+        
+        const auto path = entry.path().string();
+        const auto name = entry.path().filename().string();
+
+        // Skip all hidden files
+        if (name[0] == '.') continue;
+
+        debug(FS_DEBUG, "Importing %s\n", path.c_str());
+
+        if (entry.is_directory()) {
+            
+            // Add directory
+            if(createDir(name) && recursive) {
+
+                changeDir(name);
+                importDirectory(name, entry, recursive);
+            }
+        }
+
+        if (entry.is_regular_file()) {
+            
+            // Add file
+            u8 *buffer; isize size;
+            if (util::loadFile(string(path), &buffer, &size)) {
+                
+                createFile(name, buffer, size);
+                delete(buffer);
+            }
+        }
+    }
+}
+
+/*
+
+ void
+ FSDevice::importDirectory(const string &path, bool recursive)
+ {
+     DIR *dir = opendir(path.c_str());
+     if (dir == nullptr) throw VAError(ERROR_FILE_CANT_READ);
+     
+     importDirectory(path, dir, recursive);
+     closedir(dir);
+ }
+ 
 void
 FSDevice::importDirectory(const string &path, DIR *dir, bool recursive)
 {
@@ -880,6 +932,7 @@ FSDevice::importDirectory(const string &path, DIR *dir, bool recursive)
         }        
     }
 }
+*/
 
 void
 FSDevice::exportDirectory(const string &path)
