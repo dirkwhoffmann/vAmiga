@@ -328,17 +328,17 @@ Agnus::updateStats()
 {
     constexpr double w = 0.5;
     
-    double copper = stats.usage[BUS_COPPER];
-    double blitter = stats.usage[BUS_BLITTER];
-    double disk = stats.usage[BUS_DISK];
+    double copperUsage = stats.usage[BUS_COPPER];
+    double blitterUsage = stats.usage[BUS_BLITTER];
+    double diskUsage = stats.usage[BUS_DISK];
     
-    double audio =
+    double audioUsage =
     stats.usage[BUS_AUD0] +
     stats.usage[BUS_AUD1] +
     stats.usage[BUS_AUD2] +
     stats.usage[BUS_AUD3];
 
-    double sprite =
+    double spriteUsage =
     stats.usage[BUS_SPRITE0] +
     stats.usage[BUS_SPRITE1] +
     stats.usage[BUS_SPRITE2] +
@@ -348,7 +348,7 @@ Agnus::updateStats()
     stats.usage[BUS_SPRITE6] +
     stats.usage[BUS_SPRITE7];
     
-    double bitplane =
+    double bitplaneUsage =
     stats.usage[BUS_BPL1] +
     stats.usage[BUS_BPL2] +
     stats.usage[BUS_BPL3] +
@@ -356,12 +356,12 @@ Agnus::updateStats()
     stats.usage[BUS_BPL5] +
     stats.usage[BUS_BPL6];
 
-    stats.copperActivity = w * stats.copperActivity + (1 - w) * copper;
-    stats.blitterActivity = w * stats.blitterActivity + (1 - w) * blitter;
-    stats.diskActivity = w * stats.diskActivity + (1 - w) * disk;
-    stats.audioActivity = w * stats.audioActivity + (1 - w) * audio;
-    stats.spriteActivity = w * stats.spriteActivity + (1 - w) * sprite;
-    stats.bitplaneActivity = w * stats.bitplaneActivity + (1 - w) * bitplane;
+    stats.copperActivity = w * stats.copperActivity + (1 - w) * copperUsage;
+    stats.blitterActivity = w * stats.blitterActivity + (1 - w) * blitterUsage;
+    stats.diskActivity = w * stats.diskActivity + (1 - w) * diskUsage;
+    stats.audioActivity = w * stats.audioActivity + (1 - w) * audioUsage;
+    stats.spriteActivity = w * stats.spriteActivity + (1 - w) * spriteUsage;
+    stats.bitplaneActivity = w * stats.bitplaneActivity + (1 - w) * bitplaneUsage;
     
     for (isize i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
 }
@@ -425,8 +425,8 @@ Agnus::cycleToBeam(Cycle cycle) const
     Cycle diff = AS_DMA_CYCLES(cycle - startOfFrame());
     assert(diff >= 0);
 
-    result.v = diff / HPOS_CNT;
-    result.h = diff % HPOS_CNT;
+    result.v = (isize)(diff / HPOS_CNT);
+    result.h = (isize)(diff % HPOS_CNT);
     return result;
 }
 
@@ -436,8 +436,8 @@ Agnus::addToBeam(Beam beam, Cycle cycles) const
     Beam result;
 
     Cycle cycle = beam.v * HPOS_CNT + beam.h + cycles;
-    result.v = cycle / HPOS_CNT;
-    result.h = cycle % HPOS_CNT;
+    result.v = (isize)(cycle / HPOS_CNT);
+    result.h = (isize)(cycle % HPOS_CNT);
 
     return result;
 }
