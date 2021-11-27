@@ -15,6 +15,7 @@
 #include "Denise.h"
 #include "MsgQueue.h"
 #include "Paula.h"
+#include <unistd.h>
 
 Recorder::Recorder(Amiga& ref) : SubComponent(ref)
 {

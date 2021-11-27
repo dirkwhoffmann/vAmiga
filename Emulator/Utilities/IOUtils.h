@@ -14,7 +14,6 @@
 #include <filesystem>
 #include <istream>
 #include <sys/stat.h>
-#include <unistd.h>
 #include <vector>
 
 namespace fs = std::filesystem;
