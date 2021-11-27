@@ -554,7 +554,7 @@ Denise::translateSPF(Pixel from, Pixel to, PFState &state)
      * Denise/BPLCON0/invprio0 to Denise/BPLCON0/invprio3
      */
     
-    if (unlikely(!state.zpf2 && !state.ham)) {
+    if (!state.zpf2 && !state.ham) {
         
         for (Pixel i = from; i < to; i++) {
 

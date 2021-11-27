@@ -192,7 +192,7 @@ Agnus::busIsFree()
         if (!copdma()) return false;
         
         // Deny in cycle E0
-        if (unlikely(pos.h == 0xE0)) {
+        if (pos.h == 0xE0) {
          
             // If the Copper wants the bus in E0, nobody can have it
             busOwner[pos.h] = BUS_BLOCKED;

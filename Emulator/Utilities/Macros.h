@@ -24,9 +24,6 @@
 
 #define fatalError     assert(false); unreachable
 
-#define likely(x)      __builtin_expect(!!(x), 1)
-#define unlikely(x)    __builtin_expect(!!(x), 0)
-
 
 //
 // Accessing bits and bytes
