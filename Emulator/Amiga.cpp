@@ -305,7 +305,7 @@ Amiga::getConfigItem(Option option, long id) const
 void
 Amiga::configure(Option option, i64 value)
 {
-    debug(CNF_DEBUG, "configure(%lld, %lld)\n", option, value);
+    debug(CNF_DEBUG, "configure(%s, %lld)\n", OptionEnum::key(option), value);
 
     // The following options do not send a message to the GUI
     static std::vector<Option> quiet = {
@@ -481,7 +481,7 @@ Amiga::configure(Option option, i64 value)
 void
 Amiga::configure(Option option, long id, i64 value)
 {
-    debug(CNF_DEBUG, "configure(%lld, %ld, %lld)\n", option, id, value);
+    debug(CNF_DEBUG, "configure(%s, %ld, %lld)\n", OptionEnum::key(option), id, value);
 
     // Check if this option has been locked for debugging
     value = overrideOption(option, value);

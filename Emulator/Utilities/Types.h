@@ -61,9 +61,8 @@ typedef unsigned long      usize;
  * Swift side and one for the C side. Please note that the type mapping for
  * enum_long differs on both sides. On the Swift side, enums of this type are
  * mapped to 'long enums' to make them accessible via the Swift standard type
- * 'Int'. On the C side all enums are mapped to 'enum-less long longs'. This
- * makes them easily serializable and ensures they have the same size on
- * 32-bit and 64-bit architectures.
+ * 'Int'. On the C side all enums are mapped to 'enum-less longs' to make them
+ * easily serializable.
  */
 
 #if defined(__SWIFT__)
@@ -83,7 +82,7 @@ enum _name : _type
 typedef _type _name; \
 enum : _type
 
-#define enum_long(_name) enum_generic(_name, long long)
+#define enum_long(_name) enum_generic(_name, long)
 #define enum_i8(_name) enum_generic(_name, i8)
 
 #endif
