@@ -58,6 +58,9 @@ bool fileExists(const string &path);
 // Checks if a path points to a directory
 bool isDirectory(const string &path);
 
+// Creates a directory
+bool createDirectory(const string &path);
+
 // Returns the number of files in a directory
 isize numDirectoryItems(const string &path);
 

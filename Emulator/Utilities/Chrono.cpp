@@ -14,10 +14,10 @@
 
 namespace util {
 
-#ifdef __MACH__
+#if defined(__MACH__)
 
 //
-// macOS
+// MacOS
 //
 
 static struct mach_timebase_info timebaseInfo()
@@ -50,10 +50,10 @@ Time::sleepUntil()
     mach_wait_until(ticks * tb.denom / tb.numer);
 }
 
-#else
-    
+#elif defined(__unix__)
+
 //
-// Linux
+// Unix
 //
 
 Time
@@ -82,7 +82,35 @@ Time::sleepUntil()
     (*this - now()).sleep();
 }
 
+#else
+    
+//
+// Generic
+//
+
+Time
+Time::now()
+{
+    const auto now = std::chrono::steady_clock::now();
+    static auto start = now;
+    return std::chrono::nanoseconds(now - start).count();
+}
+
+void
+Time::sleep()
+{
+    if (ticks > 0)
+        std::this_thread::sleep_for(std::chrono::nanoseconds(ticks));
+}
+
+void
+Time::sleepUntil()
+{
+    (*this - now()).sleep();
+}
+
 #endif
+
 
 //
 // All platforms

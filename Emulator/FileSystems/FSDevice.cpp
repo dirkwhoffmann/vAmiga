@@ -944,7 +944,7 @@ FSDevice::exportDirectory(const string &path)
     // Collect files and directories
     std::vector<Block> items;
     collect(cd, items);
-    
+        
     // Export all items
     for (auto const& i : items) {
         if (ErrorCode error = blockPtr(i)->exportBlock(path.c_str()); error != ERROR_OK) {
@@ -952,5 +952,5 @@ FSDevice::exportDirectory(const string &path)
         }
     }
     
-    msg("Exported %zu items", items.size());
+    debug(FS_DEBUG, "Exported %zu items", items.size());
 }

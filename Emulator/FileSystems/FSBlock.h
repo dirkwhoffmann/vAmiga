@@ -12,6 +12,7 @@
 #include "AmigaObject.h"
 #include "FSTypes.h"
 #include "FSObjects.h"
+#include "IOUtils.h"
 #include "BootBlockImage.h"
 #include <vector>
 
@@ -142,12 +143,12 @@ public:
     void exportBlock(u8 *dst, isize bsize);
     
     // Exports this block to the host file system
-    ErrorCode exportBlock(const string &path);
+    ErrorCode exportBlock(const fs::path &path);
         
 private:
     
-    ErrorCode exportUserDirBlock(const string &path);
-    ErrorCode exportFileHeaderBlock(const string &path);
+    ErrorCode exportUserDirBlock(const fs::path &path);
+    ErrorCode exportFileHeaderBlock(const fs::path &path);
 
                 
     //

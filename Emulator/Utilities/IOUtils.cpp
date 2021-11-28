@@ -113,30 +113,46 @@ fileExists(const string &path)
 bool
 isDirectory(const string &path)
 {
-    struct stat fileProperties;
+    try {
+        
+        const auto &entry = fs::directory_entry(path);
+        return entry.is_directory();
     
-    if (stat(path.c_str(), &fileProperties) != 0)
-        return -1;
+    } catch (...) {
+        
+        return false;
+    }
+}
+
+bool
+createDirectory(const string &path)
+{
+    try {
+        
+        return fs::create_directory(fs::path(path));
     
-    return S_ISDIR(fileProperties.st_mode);
+    } catch (...) {
+        
+        return false;
+    }
 }
 
 isize
 numDirectoryItems(const string &path)
 {
-    isize count = 0;
+    isize result = 0;
     
     try {
         
         for (const auto &entry : fs::directory_iterator(path)) {
             
             const auto &name = entry.path().filename().string();
-            if (name[0] != '.') count++;
+            if (name[0] != '.') result++;
         }
         
     } catch (...) { }
     
-    return count;
+    return result;
 }
 
 std::vector<string>
