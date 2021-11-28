@@ -119,7 +119,7 @@ public:
     void pokeSERPER(u16 value);
 
     // Returns the baud rate (converted to DMA cycles)
-    int rate() const { return DMA_CYCLES((serper & 0x7FFF) + 1); }
+    int rate() const { return (int)DMA_CYCLES((serper & 0x7FFF) + 1); }
 
 private:
 

@@ -10,16 +10,23 @@
 #pragma once
 
 #include "Types.h"
-#include <arpa/inet.h>
 
 //
 // Optimizing code
 //
 
 #ifdef _MSC_VER
+
 #define unreachable    __assume(false)
+#define likely(x)      (x)
+#define unlikely(x)    (x)
+
 #else
+
 #define unreachable    __builtin_unreachable()
+#define likely(x)      __builtin_expect(!!(x), 1)
+#define unlikely(x)    __builtin_expect(!!(x), 0)
+
 #endif
 
 #define fatalError     assert(false); unreachable
