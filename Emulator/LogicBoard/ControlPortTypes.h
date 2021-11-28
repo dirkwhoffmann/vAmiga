@@ -27,7 +27,7 @@ struct PortNrEnum : util::Reflection<PortNrEnum, PortNr>
 {    
     static long min() { return 0; }
     static long max() { return PORT_2; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return ""; }
     static const char *key(PortNr value)
@@ -55,7 +55,7 @@ struct ControlPortDeviceEnum : util::Reflection<ControlPortDeviceEnum, ControlPo
 {
     static long min() { return 0; }
     static long max() { return CPD_JOYSTICK; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "CPD"; }
     static const char *key(ControlPortDevice value)

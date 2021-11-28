@@ -124,7 +124,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
 {    
     static long min() { return 0; }
     static long max() { return OPT_AUDVOLR; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "OPT"; }
     static const char *key(Option value)
@@ -220,7 +220,7 @@ struct EmulatorStateEnum : util::Reflection<EmulatorStateEnum, EmulatorState>
 {
     static long min() { return 0; }
     static long max() { return EMULATOR_STATE_RUNNING; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "EMULATOR_STATE"; }
     static const char *key(EmulatorState value)

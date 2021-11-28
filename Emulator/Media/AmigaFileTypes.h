@@ -38,7 +38,7 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
 {
     static long min() { return 0; }
     static long max() { return FILETYPE_EXTENDED_ROM; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "FILETYPE"; }
     static const char *key(FileType value)

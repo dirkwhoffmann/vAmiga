@@ -178,7 +178,9 @@ VAError::VAError(ErrorCode code, const string &s)
             break;
 
         default:
-            description = "Error code " + std::to_string(data) + " (" + ErrorCodeEnum::key(data) + ").";
+            description =
+            "Error code " + std::to_string(data) +
+            " (" + ErrorCodeEnum::key((ErrorCode)data) + ").";
             break;
     }
 }

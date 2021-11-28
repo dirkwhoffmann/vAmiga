@@ -617,7 +617,7 @@ Memory::romVersion()
     static char str[32];
 
     if (romIdentifier() == ROM_UNKNOWN) {
-        sprintf(str, "CRC %x", romFingerprint());
+        snprintf(str, sizeof(str), "CRC %x", romFingerprint());
         return str;
     }
 
@@ -648,7 +648,7 @@ Memory::extVersion()
     static char str[32];
 
     if (extIdentifier() == ROM_UNKNOWN) {
-        sprintf(str, "CRC %x", extFingerprint());
+        snprintf(str, sizeof(str), "CRC %x", extFingerprint());
         return str;
     }
 

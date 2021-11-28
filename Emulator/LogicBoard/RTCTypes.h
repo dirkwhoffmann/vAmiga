@@ -29,7 +29,7 @@ struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision>
 {
     static long min() { return 0; }
     static long max() { return RTC_RICOH; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "RTC"; }
     static const char *key(RTCRevision value)

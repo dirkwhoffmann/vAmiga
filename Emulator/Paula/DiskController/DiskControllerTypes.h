@@ -33,7 +33,7 @@ struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState>
 {
     static long min() { return 0; }
     static long max() { return DRIVE_DMA_FLUSH; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
     
     static const char *prefix()
     {

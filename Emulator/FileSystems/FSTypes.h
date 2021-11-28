@@ -32,7 +32,7 @@ struct FSVolumeTypeEnum : util::Reflection<FSVolumeTypeEnum, FSVolumeType>
 {
     static long min() { return FS_NODOS; }
     static long max() { return FS_FFS_LNFS; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "FS"; }
     static const char *key(FSVolumeType value)
@@ -97,7 +97,7 @@ struct FSBlockTypeEnum : util::Reflection<FSBlockTypeEnum, FSBlockType>
 {
     static long min() { return 0; }
     static long max() { return FS_DATA_BLOCK_FFS; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "FS"; }
     static const char *key(FSBlockType value)
@@ -170,7 +170,7 @@ struct FSItemTypeEnum : util::Reflection<FSItemTypeEnum, FSItemType>
 {
     static long min() { return 0; }
     static long max() { return FSI_BITMAP; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "FS"; }
     static const char *key(FSItemType value)

@@ -28,7 +28,7 @@ struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
 {
     static long min() { return 0; }
     static long max() { return FILTER_BUTTERWORTH; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "FILTER"; }
     static const char *key(FilterType value)

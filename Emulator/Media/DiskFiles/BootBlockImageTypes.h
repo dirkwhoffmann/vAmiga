@@ -29,7 +29,7 @@ struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType>
 {
     static long min() { return 0; }
     static long max() { return BB_CUSTOM; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "BB"; }
     static const char *key(BootBlockType value)
@@ -60,7 +60,7 @@ struct BootBlockIdEnum : util::Reflection<BootBlockIdEnum, BootBlockId>
 {
     static long min() { return 0; }
     static long max() { return BB_BYTE_BANDIT; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "BB"; }
     static const char *key(BootBlockId value)

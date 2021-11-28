@@ -126,7 +126,7 @@ Copper::findMatch(Beam &match) const
 
     // Iterate through all lines starting from the current position
     isize numLines = agnus.frame.numLines();
-    while ((beam >> 8) < numLines) {
+    while ((isize)(beam >> 8) < numLines) {
 
         // Check if the vertical components are equal
         if ((beam & mask & ~0xFF) == (comp & mask & ~0xFF)) {

@@ -721,11 +721,11 @@ CIA::wakeUp(Cycle targetCycle)
         
         if (feed & CIACountA0) {
             assert(counterA >= AS_CIA_CYCLES(missedCycles));
-            counterA -= AS_CIA_CYCLES(missedCycles);
+            counterA -= (u16)AS_CIA_CYCLES(missedCycles);
         }
         if (feed & CIACountB0) {
             assert(counterB >= AS_CIA_CYCLES(missedCycles));
-            counterB -= AS_CIA_CYCLES(missedCycles);
+            counterB -= (u16)AS_CIA_CYCLES(missedCycles);
         }
         
         idleCycles += missedCycles;

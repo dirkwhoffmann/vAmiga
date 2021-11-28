@@ -47,7 +47,7 @@ Blitter::beginFastCopyBlit()
     assert(!bltconLINE());
 
     // Run the fast copy Blitter
-    int nr = ((bltcon0 >> 7) & 0b11110) | bltconDESC();
+    isize nr = ((bltcon0 >> 7) & 0b11110) | (bltconDESC() ? 1 : 0);
     (this->*blitfunc[nr])();
 
     // Terminate immediately

@@ -72,7 +72,7 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
 {
     static long min() { return 0; }
     static long max() { return SLOT_COUNT - 1; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
     
     static const char *prefix() { return "SLOT"; }
     static const char *key(EventSlot value)

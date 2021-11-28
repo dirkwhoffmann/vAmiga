@@ -42,7 +42,7 @@ struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource>
 {
     static long min() { return 0; }
     static long max() { return MEM_EXT; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "MEM"; }
     static const char *key(MemorySource value)
@@ -83,7 +83,7 @@ struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
 {
     static long min() { return 0; }
     static long max() { return ACCESSOR_AGNUS; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "ACCESSOR"; }
     static const char *key(Accessor value)
@@ -112,7 +112,7 @@ struct BankMapEnum : util::Reflection<BankMapEnum, BankMap>
 {
     static long min() { return 0; }
     static long max() { return BANK_MAP_A2000B; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "BANK_MAP"; }
     static const char *key(BankMap value)
@@ -142,7 +142,7 @@ struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern>
 {
     static long min() { return 0; }
     static long max() { return RAM_INIT_ALL_ONES; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "RAM_INIT"; }
     static const char *key(RamInitPattern value)
@@ -171,7 +171,7 @@ struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
 {
     static long min() { return 0; }
     static long max() { return UNMAPPED_ALL_ONES; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "UNMAPPED"; }
     static const char *key(UnmappedMemory value)

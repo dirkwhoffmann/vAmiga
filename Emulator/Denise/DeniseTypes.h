@@ -29,7 +29,7 @@ struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
 {    
     static long min() { return 0; }
     static long max() { return DENISE_ECS; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "DENISE"; }
     static const char *key(DeniseRevision value)

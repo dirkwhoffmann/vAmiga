@@ -83,6 +83,6 @@ DiskFile::readSectorHex(char *dst, isize s, isize count) const
     assert(dst != nullptr);
 
     for (isize i = 0; i < count; i++) {
-        sprintf(dst + 3*i, "%02X ", data[offset + i]);
+        snprintf(dst + 3*i, 4, "%02X ", data[offset + i]);
     }
 }

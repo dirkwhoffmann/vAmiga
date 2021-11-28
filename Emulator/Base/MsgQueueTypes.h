@@ -104,7 +104,7 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
 {
     static long min() { return 0; }
     static long max() { return MSG_DMA_DEBUG_OFF; }
-    static bool isValid(long value) { return value >= min() && value <= max(); }
+    static bool isValid(auto value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "MSG"; }
     static const char *key(MsgType value)

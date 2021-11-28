@@ -131,27 +131,35 @@ CopperDebugger::disassemble(u32 addr) const
 {
     char pos[16];
     char mask[16];
-    char disassembly[128];
+    char txt[128];
     
     if (copper.isMoveCmd(addr)) {
         
-        sprintf(disassembly, "MOVE $%04X, %s", copper.getDW(addr), Memory::regName(copper.getRA(addr)));
-        return string(disassembly);
+        auto source = copper.getDW(addr);
+        auto target = Memory::regName(copper.getRA(addr));
+        snprintf(txt, sizeof(txt), "MOVE $%04X, %s", source, target);
+        
+        return string(txt);
     }
     
     const char *mnemonic = copper.isWaitCmd(addr) ? "WAIT" : "SKIP";
     const char *suffix = copper.getBFD(addr) ? "" : "b";
     
-    sprintf(pos, "($%02X,$%02X)", copper.getVP(addr), copper.getHP(addr));
+    auto vp = copper.getVP(addr);
+    auto hp = copper.getHP(addr);
+    snprintf(pos, sizeof(pos), "($%02X,$%02X)", vp, hp);
     
     if (copper.getVM(addr) == 0xFF && copper.getHM(addr) == 0xFF) {
         mask[0] = 0;
     } else {
-        sprintf(mask, ", ($%02X,$%02X)", copper.getHM(addr), copper.getVM(addr));
+        
+        auto hm = copper.getHM(addr);
+        auto vm = copper.getVM(addr);
+        snprintf(mask, sizeof(mask), ", ($%02X,$%02X)", hm, vm);
     }
     
-    sprintf(disassembly, "%s%s %s%s", mnemonic, suffix, pos, mask);
-    return string(disassembly);
+    snprintf(txt, sizeof(txt), "%s%s %s%s", mnemonic, suffix, pos, mask);
+    return string(txt);
 }
 
 string
