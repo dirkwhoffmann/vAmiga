@@ -259,7 +259,7 @@ typedef struct
     Cycle dmaClock;
     Cycle ciaAClock;
     Cycle ciaBClock;
-    long frame;
+    i64 frame;
     long vpos;
     long hpos;
 }

@@ -8,13 +8,17 @@
 // -----------------------------------------------------------------------------
 
 #include "Chrono.h"
+#include <chrono>
+#include <thread>
+
 #ifdef __MACH__
 #include <mach/mach_time.h>
 #endif
 
+
 namespace util {
 
-#if defined(__MACH__)
+#if defined(__MMACH__)
 
 //
 // MacOS

@@ -102,7 +102,7 @@ Amiga::~Amiga()
 void
 Amiga::prefix() const
 {
-    fprintf(stderr, "[%lld] (%3zd,%3zd) ",
+    fprintf(stderr, "[%lld] (%3zd,%3ld) ",
             agnus.frame.nr, agnus.pos.v, agnus.pos.h);
 
     fprintf(stderr, "%06X ", cpu.getPC0());
@@ -845,7 +845,7 @@ Amiga::execute()
             if (flags & RL::BREAKPOINT_REACHED) {
                 clearFlag(RL::BREAKPOINT_REACHED);
                 inspect();
-                msgQueue.put(MSG_BREAKPOINT_REACHED, cpu.debugger.breakpointPC);
+                msgQueue.put(MSG_BREAKPOINT_REACHED, (long)cpu.debugger.breakpointPC);
                 newState = EXEC_PAUSED;
                 break;
             }
@@ -854,7 +854,7 @@ Amiga::execute()
             if (flags & RL::WATCHPOINT_REACHED) {
                 clearFlag(RL::WATCHPOINT_REACHED);
                 inspect();
-                msgQueue.put(MSG_WATCHPOINT_REACHED, cpu.debugger.watchpointPC);
+                msgQueue.put(MSG_WATCHPOINT_REACHED, (long)cpu.debugger.watchpointPC);
                 newState = EXEC_PAUSED;
                 break;
             }

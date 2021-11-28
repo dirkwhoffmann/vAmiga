@@ -22,8 +22,8 @@ Blitter::pokeBLTCON0(u16 value)
 void
 Blitter::setBLTCON0(u16 value)
 {
-    if (BLT_GUARD && running) {
-        trace(true, "BLTCON0 written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTCON0 written while Blitter is running\n");
     }
 
     bltcon0 = value;
@@ -43,8 +43,8 @@ Blitter::pokeBLTCON0L(u16 value)
 void
 Blitter::setBLTCON0L(u16 value)
 {
-    if (BLT_GUARD && running) {
-        trace(true, "BLTCON0L written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTCON0L written while Blitter is running\n");
     }
     
     bltcon0 = HI_LO(HI_BYTE(bltcon0), LO_BYTE(value));
@@ -98,8 +98,8 @@ Blitter::pokeBLTCON1(u16 value)
 void
 Blitter::setBLTCON1(u16 value)
 {
-    if (BLT_GUARD && running) {
-        trace(true, "BLTCON1 written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTCON1 written while Blitter is running\n");
     }
     
     bltcon1 = value;
@@ -148,14 +148,14 @@ Blitter::pokeBLTAPTH(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTAPTH(%X)\n", value);
 
-    if (BLT_GUARD && running) {
-        trace(true, "BLTAPTH written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTAPTH written while Blitter is running\n");
     }
 
     bltapt = REPLACE_HI_WORD(bltapt, value);
 
-    if (BLT_GUARD && (bltapt & ~agnus.ptrMask)) {
-        trace(true, "BLTAPT out of range: %x\n", bltapt);
+    if (bltapt & ~agnus.ptrMask) {
+        trace(BLT_GUARD, "BLTAPT out of range: %x\n", bltapt);
     }
 }
 
@@ -164,8 +164,8 @@ Blitter::pokeBLTAPTL(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTAPTL(%X)\n", value);
     
-    if(BLT_GUARD && running) {
-        trace(true, "BLTAPTL written while Blitter is running\n");
+    if(running) {
+        trace(BLT_GUARD, "BLTAPTL written while Blitter is running\n");
     }
 
     bltapt = REPLACE_LO_WORD(bltapt, value & 0xFFFE);
@@ -176,14 +176,14 @@ Blitter::pokeBLTBPTH(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTBPTH(%X)\n", value);
     
-    if(BLT_GUARD && running) {
-        trace(true, "BLTBPTH written while Blitter is running\n");
+    if(running) {
+        trace(BLT_GUARD, "BLTBPTH written while Blitter is running\n");
     }
     
     bltbpt = REPLACE_HI_WORD(bltbpt, value);
     
-    if (BLT_GUARD && (bltbpt & ~agnus.ptrMask)) {
-        trace(true, "BLTBPT out of range: %x\n", bltbpt);
+    if (bltbpt & ~agnus.ptrMask) {
+        trace(BLT_GUARD, "BLTBPT out of range: %x\n", bltbpt);
     }
 }
 
@@ -192,8 +192,8 @@ Blitter::pokeBLTBPTL(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTBPTL(%X)\n", value);
     
-    if(BLT_GUARD && running) {
-        trace(true, "BLTBPTL written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTBPTL written while Blitter is running\n");
     }
 
     bltbpt = REPLACE_LO_WORD(bltbpt, value & 0xFFFE);
@@ -204,14 +204,14 @@ Blitter::pokeBLTCPTH(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCPTH(%X)\n", value);
     
-    if(BLT_GUARD && running) {
-        trace(true, "BLTCPTH written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTCPTH written while Blitter is running\n");
     }
     
     bltcpt = REPLACE_HI_WORD(bltcpt, value);
     
-    if (BLT_GUARD && (bltcpt & ~agnus.ptrMask)) {
-        trace(true, "BLTCPT out of range: %x\n", bltcpt);
+    if (bltcpt & ~agnus.ptrMask) {
+        trace(BLT_GUARD, "BLTCPT out of range: %x\n", bltcpt);
     }
 }
 
@@ -220,8 +220,8 @@ Blitter::pokeBLTCPTL(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCPTL(%X)\n", value);
     
-    if(BLT_GUARD && running) {
-        trace(true, "BLTCPTL written while Blitter is running\n");
+    if(running) {
+        trace(BLT_GUARD, "BLTCPTL written while Blitter is running\n");
     }
 
     bltcpt = REPLACE_LO_WORD(bltcpt, value & 0xFFFE);
@@ -232,14 +232,14 @@ Blitter::pokeBLTDPTH(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTDPTH(%X)\n", value);
     
-    if (BLT_GUARD && running) {
-        trace(true, "BLTDPTH written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTDPTH written while Blitter is running\n");
     }
 
     bltdpt = REPLACE_HI_WORD(bltdpt, value);
     
-    if (BLT_GUARD && (bltdpt & ~agnus.ptrMask)) {
-        trace(true, "BLTDPT out of range: %x\n", bltdpt);
+    if (bltdpt & ~agnus.ptrMask) {
+        trace(BLT_GUARD, "BLTDPT out of range: %x\n", bltdpt);
     }
 }
 
@@ -248,8 +248,8 @@ Blitter::pokeBLTDPTL(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTDPTL(%X)\n", value);
     
-    if (BLT_GUARD && running) {
-        trace(true, "BLTDPTL written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTDPTL written while Blitter is running\n");
     }
     
     bltdpt = REPLACE_LO_WORD(bltdpt, value & 0xFFFE);
@@ -260,8 +260,8 @@ Blitter::pokeBLTAFWM(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTAFWM(%X)\n", value);
     
-    if (BLT_GUARD && running) {
-        trace(true, "BLTAFWM written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTAFWM written while Blitter is running\n");
     }
 
     bltafwm = value;
@@ -272,8 +272,8 @@ Blitter::pokeBLTALWM(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTALWM(%X)\n", value);
     
-    if (BLT_GUARD && running) {
-        trace(true, "BLTALWM written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTALWM written while Blitter is running\n");
     }
 
     bltalwm = value;
@@ -285,7 +285,7 @@ Blitter::pokeBLTSIZE(u16 value)
     debug(BLTTIM_DEBUG, "(%ld,%ld) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
 
-    if (s == ACCESSOR_AGNUS) {
+    if constexpr (s == ACCESSOR_AGNUS) {
         agnus.recordRegisterChange(DMA_CYCLES(1), SET_BLTSIZE, value);
     } else {
         blitter.setBLTSIZE(value);
@@ -297,8 +297,8 @@ Blitter::setBLTSIZE(u16 value)
 {
     debug(BLTREG_DEBUG, "setBLTSIZE(%X)\n", value);
     
-    if (BLT_GUARD && running) {
-        trace(true, "BLTSIZE written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTSIZE written while Blitter is running\n");
     }
 
     // Execute pending event if the Blitter is still running (Chaosland, #437)
@@ -335,8 +335,8 @@ Blitter::pokeBLTSIZV(u16 value)
 void
 Blitter::setBLTSIZV(u16 value)
 {
-    if (BLT_GUARD && running) {
-        trace(true, "BLTSIZV written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTSIZV written while Blitter is running\n");
     }
 
     // 15  14  13  12  11  10 09 08 07 06 05 04 03 02 01 00
@@ -352,8 +352,8 @@ Blitter::pokeBLTSIZH(u16 value)
     // ECS only register
     if (agnus.isOCS()) return;
 
-    if (BLT_GUARD && running) {
-        trace(true, "BLTSIZH written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTSIZH written while Blitter is running\n");
     }
 
     // Execute pending event if the Blitter is still running
@@ -375,8 +375,8 @@ Blitter::pokeBLTAMOD(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTAMOD(%X)\n", value);
     
-    if (BLT_GUARD && running) {
-        trace(true, "BLTAMOD written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTAMOD written while Blitter is running\n");
     }
 
     bltamod = (i16)(value & 0xFFFE);
@@ -386,8 +386,8 @@ Blitter::pokeBLTBMOD(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTBMOD(%X)\n", value);
     
-    if (BLT_GUARD && running) {
-        trace(true, "BLTBMOD written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTBMOD written while Blitter is running\n");
     }
     
     bltbmod = (i16)(value & 0xFFFE);
@@ -398,8 +398,8 @@ Blitter::pokeBLTCMOD(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCMOD(%X)\n", value);
     
-    if (BLT_GUARD && running) {
-        trace(true, "BLTCMOD written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTCMOD written while Blitter is running\n");
     }
 
     bltcmod = (i16)(value & 0xFFFE);
@@ -410,8 +410,8 @@ Blitter::pokeBLTDMOD(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTDMOD(%X)\n", value);
     
-    if (BLT_GUARD && running) {
-        trace(true, "BLTDMOD written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTDMOD written while Blitter is running\n");
     }
     
     bltdmod = (i16)(value & 0xFFFE);
@@ -422,8 +422,8 @@ Blitter::pokeBLTADAT(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTADAT(%X)\n", value);
     
-    if (BLT_GUARD && running) {
-        trace(true, "BLTADAT written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTADAT written while Blitter is running\n");
     }
     
     anew = value;
@@ -434,8 +434,8 @@ Blitter::pokeBLTBDAT(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTBDAT(%X)\n", value);
     
-    if (BLT_GUARD && running) {
-        trace(true, "BLTBDAT written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTBDAT written while Blitter is running\n");
     }
     
     bnew = value;
@@ -454,8 +454,8 @@ Blitter::pokeBLTCDAT(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCDAT(%X)\n", value);
     
-    if (BLT_GUARD && running) {
-        trace(true, "BLTCDAT written while Blitter is running\n");
+    if (running) {
+        trace(BLT_GUARD, "BLTCDAT written while Blitter is running\n");
     }
     
     chold = value;
@@ -476,11 +476,11 @@ Blitter::pokeDMACON(u16 oldValue, u16 newValue)
         }
     }
     
-    if (BLT_GUARD && running && oldBltDma && !newBltDma) {
-        trace(true, "Blitter DMA off while Blitter is running\n");
+    if (running && oldBltDma && !newBltDma) {
+        trace(BLT_GUARD, "Blitter DMA off while Blitter is running\n");
     }
-    if (BLT_GUARD && running && agnus.bltpri(oldValue) != agnus.bltpri(newValue)) {
-        trace(true, "BLTPRI changed while Blitter is running\n");
+    if (running && agnus.bltpri(oldValue) != agnus.bltpri(newValue)) {
+        trace(BLT_GUARD, "BLTPRI changed while Blitter is running\n");
     }
 }
 

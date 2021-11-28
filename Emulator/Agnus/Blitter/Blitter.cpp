@@ -107,7 +107,7 @@ Blitter::setConfigItem(Option option, i64 value)
             }
 
             suspended {
-                config.accuracy = value;
+                config.accuracy = (isize)value;
             }
             return;
             
@@ -659,8 +659,8 @@ Blitter::beginLineBlit(isize level)
 {
     static u64 verbose = 0;
 
-    if (BLT_CHECKSUM && verbose++ == 0) {
-        msg("Performing level %ld line blits.\n", level);
+    if (verbose++ == 0) {
+        debug(BLT_CHECKSUM, "Performing level %ld line blits.\n", level);
     }
     if (bltcon0 & BLTCON0_USEB) {
         trace(XFILES, "Performing line blit with channel B enabled\n");
@@ -685,8 +685,8 @@ Blitter::beginCopyBlit(isize level)
 {
     static u64 verbose = 0;
 
-    if (BLT_CHECKSUM && verbose++ == 0) {
-        msg("Performing level %ld copy blits.\n", level);
+    if (verbose++ == 0) {
+        debug(BLT_CHECKSUM, "Performing level %ld copy blits.\n", level);
     }
 
     switch (level) {
