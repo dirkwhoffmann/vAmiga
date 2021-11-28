@@ -148,7 +148,7 @@ FSDevice::_dump(dump::Category category, std::ostream& os) const
         
         if (blocks[i]->type == FS_EMPTY_BLOCK) continue;
         
-        msg("\nBlock %zu (%d):", i, blocks[i]->nr);
+        msg("\nBlock %ld (%d):", i, blocks[i]->nr);
         msg(" %s\n", FSBlockTypeEnum::key(blocks[i]->type));
                 
         blocks[i]->dump(); 
@@ -393,7 +393,7 @@ FSDevice::createFile(const string &name, const u8 *buf, isize size)
 FSBlock *
 FSDevice::createFile(const string &name, const string &str)
 {
-    return createFile(name, (const u8 *)str.c_str(), str.size());
+    return createFile(name, (const u8 *)str.c_str(), (isize)str.size());
 }
 
 Block
@@ -571,7 +571,7 @@ FSDevice::check(bool strict) const
 {
     FSErrorReport result;
 
-    isize total = 0, min = SSIZE_MAX, max = 0;
+    isize total = 0, min = INT_MAX, max = 0;
     
     // Analyze all partions
     for (auto &p : partitions) p->check(strict, result);
@@ -844,11 +844,11 @@ FSDevice::importDirectory(const string &path, bool recursive)
     try { dir = fs::directory_entry(path); }
     catch (...) { throw VAError(ERROR_FILE_CANT_READ); }
     
-    importDirectory(path, dir, recursive);
+    importDirectory(dir, recursive);
 }
 
 void
-FSDevice::importDirectory(const string &path, const fs::directory_entry &dir, bool recursive)
+FSDevice::importDirectory(const fs::directory_entry &dir, bool recursive)
 {
   
     for (const auto& entry : fs::directory_iterator(dir)) {
@@ -867,7 +867,7 @@ FSDevice::importDirectory(const string &path, const fs::directory_entry &dir, bo
             if(createDir(name) && recursive) {
 
                 changeDir(name);
-                importDirectory(name, entry, recursive);
+                importDirectory(entry, recursive);
             }
         }
 

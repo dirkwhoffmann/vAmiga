@@ -13,7 +13,7 @@
 void
 SuspendableThread::suspend()
 {
-    debug(RUN_DEBUG, "Suspending (%zu)...\n", suspendCounter);
+    debug(RUN_DEBUG, "Suspending (%ld)...\n", suspendCounter);
     
     if (suspendCounter || isRunning()) {
         pause();
@@ -24,7 +24,7 @@ SuspendableThread::suspend()
 void
 SuspendableThread::resume()
 {
-    debug(RUN_DEBUG, "Resuming (%zu)...\n", suspendCounter);
+    debug(RUN_DEBUG, "Resuming (%ld)...\n", suspendCounter);
     
     if (suspendCounter && --suspendCounter == 0) {
         run();
