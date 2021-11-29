@@ -33,6 +33,20 @@
 
 
 //
+// Managing byte order
+//
+
+#ifdef _MSC_VER
+
+#define ntohs(v)       _byteswap_ushort(v)
+#define ntohl(v)       _byteswap_ulong(v)
+#define htons(v)       _byteswap_ushort(v)
+#define htonl(v)       _byteswap_ulong(v)
+
+#endif
+
+
+//
 // Accessing bits and bytes
 //
 

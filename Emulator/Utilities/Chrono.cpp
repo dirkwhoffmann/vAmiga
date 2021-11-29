@@ -18,7 +18,7 @@
 
 namespace util {
 
-#if defined(__MMACH__)
+#if defined(__MACH__)
 
 //
 // MacOS
@@ -38,6 +38,15 @@ Time::now()
     return (i64)mach_absolute_time() * tb.numer / tb.denom;
 }
 
+std::tm
+Time::local(const std::time_t &time)
+{
+    std::tm local {};
+    localtime_r(&time, &local);
+    
+    return local;
+}
+    
 void
 Time::sleep()
 {
@@ -66,6 +75,15 @@ Time::now()
     struct timespec ts;
     (void)clock_gettime(CLOCK_MONOTONIC, &ts);
     return (i64)ts.tv_sec * 1000000000 + ts.tv_nsec;
+}
+
+std::tm
+Time::local(const std::time_t &time)
+{
+    std::tm local {};
+    localtime_r(&time, &local);
+    
+    return local;
 }
 
 void
@@ -98,6 +116,15 @@ Time::now()
     const auto now = std::chrono::steady_clock::now();
     static auto start = now;
     return std::chrono::nanoseconds(now - start).count();
+}
+
+std::tm
+Time::local(const std::time_t &time)
+{
+    std::tm local {};
+    localtime_s(&local, &time);
+    
+    return local;
 }
 
 void

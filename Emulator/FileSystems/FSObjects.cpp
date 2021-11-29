@@ -10,6 +10,7 @@
 #include "config.h"
 #include "FSObjects.h"
 #include "FSBlock.h"
+#include "Chrono.h"
 #include <algorithm>
 #include <cstring>
 
@@ -142,10 +143,10 @@ FSTime::dateStr() const
     char tmp[32];
     
     time_t t = time();
-    tm *local = localtime(&t);
+    tm local = util::Time::local(t);
 
     snprintf(tmp, sizeof(tmp), "%04d-%02d-%02d",
-             1900 + local->tm_year, 1 + local->tm_mon, local->tm_mday);
+             1900 + local.tm_year, 1 + local.tm_mon, local.tm_mday);
     
     return string(tmp);
 }
@@ -156,10 +157,10 @@ FSTime::timeStr() const
     char tmp[32];
     
     time_t t = time();
-    tm *local = localtime(&t);
+    tm local = util::Time::local(t);
 
     snprintf(tmp, sizeof(tmp), "%02d:%02d:%02d",
-             local->tm_hour, local->tm_min, local->tm_sec);
+             local.tm_hour, local.tm_min, local.tm_sec);
     
     return string(tmp);
 }

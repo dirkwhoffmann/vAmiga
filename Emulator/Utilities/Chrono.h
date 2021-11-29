@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Types.h"
+#include <ctime>
 
 namespace util {
 
@@ -22,6 +23,7 @@ public:
 public:
     
     static Time now();
+    static std::tm local(const std::time_t &time);
     
     Time() { };
     Time(i64 value) : ticks(value) { };
