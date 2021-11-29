@@ -46,13 +46,11 @@ AudioStream<T>::copy(void *buffer, isize n, Volume &vol)
     // Quick path: Volume is stable at 0 or 1
     if (!vol.fading()) {
 
-        if (vol.current == 0) {
-
+        if (vol.current == 0.0) {
+            
+            T zero;
             for (isize i = 0; i < n; i++) {
-                T zero;
-                for (isize i = 0; i < n; i++) {
-                    zero.copy(buffer, i);
-                }
+                zero.copy(buffer, i);
             }
             return;
         }

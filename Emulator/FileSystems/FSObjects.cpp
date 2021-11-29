@@ -17,13 +17,16 @@ FSString::FSString(const string &cppString, isize limit) : FSString(cppString.c_
 {
 }
 
-FSString::FSString(const char *str, isize l) : limit(l)
+FSString::FSString(const char *cStr, isize l) : limit(l)
 {
-    assert(str != nullptr);
+    assert(cStr != nullptr);
     assert(limit <= 91);
     
-    strncpy(this->str, str, limit);
-    this->str[limit] = 0;
+    isize i;
+    for (i = 0; i < limit && cStr[i] != 0; i++) {
+        str[i] = cStr[i];
+    }
+    str[i] = 0;
 }
 
 FSString::FSString(const u8 *bcplStr, isize l) : limit(l)
@@ -31,11 +34,11 @@ FSString::FSString(const u8 *bcplStr, isize l) : limit(l)
     assert(bcplStr != nullptr);
     assert(limit <= 91);
 
-    // First entry of BCPL string contains the string length
-    u8 len = std::min(bcplStr[0], (u8)limit);
-
-    strncpy(this->str, (const char *)(bcplStr + 1), limit);
-    this->str[len] = 0;
+    isize i;
+    for (i = 0; i < limit && i < bcplStr[0]; i++) {
+        str[i] = bcplStr[i+1];
+    }
+    str[i] = 0;
 }
 
 char

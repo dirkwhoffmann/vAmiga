@@ -503,7 +503,7 @@ Denise::translate()
     // Iterate over all recorded register changes
     for (isize i = 0, end = conChanges.end(); i < end; i++) {
 
-        Cycle trigger = conChanges.keys[i];
+        Pixel trigger = (Pixel)conChanges.keys[i];
         RegChange &change = conChanges.elements[i];
 
         // Translate a chunk of bitplane data
@@ -684,7 +684,7 @@ Denise::drawSpritePair()
                 
         for (isize i = 0, end = sprChanges[pair].end(); i < end; i++) {
             
-            Cycle trigger = sprChanges[pair].keys[i];
+            Pixel trigger = (Pixel)sprChanges[pair].keys[i];
             RegChange &change = sprChanges[pair].elements[i];
             
             // Draw a chunk of pixels
@@ -909,13 +909,12 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
     assert(IS_ODD(x));
     assert(hpos >= spriteClipBegin && hpos < spriteClipEnd);
 
-    auto a1 = !!GET_BIT(ssra[x-1], 15);
-    auto b1 = !!GET_BIT(ssrb[x-1], 15);
-    auto a2 = !!GET_BIT(ssra[x],   15);
-    auto b2 = !!GET_BIT(ssrb[x],   15);
-
-    auto col = (u8)(b2 << 3 | a2 << 2 | b1 << 1 | a1);
-
+    u8 col =
+    ((ssra[x-1] >> 15) & 0b0001) |
+    ((ssrb[x-1] >> 14) & 0b0010) |
+    ((ssra[x]   >> 13) & 0b0100) |
+    ((ssrb[x]   >> 12) & 0b1000) ;
+    
     if (col) {
 
         u16 z = Z_SP[x];
@@ -992,7 +991,7 @@ template <int x> void
 Denise::checkS2SCollisions(Pixel start, Pixel end)
 {
     // For odd sprites, only proceed if collision detection is enabled
-    if (IS_ODD(x) && !GET_BIT(clxcon, 12 + (x/2))) return;
+    if constexpr (IS_ODD(x)) if (!GET_BIT(clxcon, 12 + (x/2))) return;
 
     // Set up the sprite comparison masks
     u16 comp01 = Z_SP0 | (GET_BIT(clxcon, 12) ? Z_SP1 : 0);
@@ -1035,7 +1034,7 @@ template <int x> void
 Denise::checkS2PCollisions(Pixel start, Pixel end)
 {
     // For the odd sprites, only proceed if collision detection is enabled
-    if (IS_ODD(x) && !ensp<x>()) return;
+    if constexpr (IS_ODD(x)) if (!ensp<x>()) return;
     
     u8 enabled1 = enbp1();
     u8 enabled2 = enbp2();

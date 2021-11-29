@@ -802,8 +802,12 @@ ErrorCode
 FSBlock::exportUserDirBlock(const fs::path &path)
 {
     auto name = path / partition.dev.getPath(this);
+    
+    if (!util::createDirectory(name.string())) {
+        return ERROR_FS_CANNOT_CREATE_DIR;
+    }
 
-    return util::createDirectory(name) ? ERROR_OK : ERROR_FS_CANNOT_CREATE_DIR;
+    return ERROR_OK;
 }
 
 ErrorCode
@@ -811,7 +815,7 @@ FSBlock::exportFileHeaderBlock(const fs::path &path)
 {
     auto filename = path / partition.dev.getPath(this);
     
-    FILE *file = fopen(filename.c_str(), "wb");
+    FILE *file = fopen(filename.string().c_str(), "wb");
     if (file == nullptr) {
         return ERROR_FS_CANNOT_CREATE_FILE;
     }

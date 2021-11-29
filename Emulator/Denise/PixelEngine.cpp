@@ -142,7 +142,7 @@ PixelEngine::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, PaletteEnum::keyList());
             }
             
-            config.palette = value;
+            config.palette = (Palette)value;
             updateRGBA();
             return;
 
@@ -152,7 +152,7 @@ PixelEngine::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, "0...100");
             }
             
-            config.brightness = value;
+            config.brightness = (isize)value;
             updateRGBA();
             return;
             
@@ -162,7 +162,7 @@ PixelEngine::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, "0...100");
             }
             
-            config.contrast = value;
+            config.contrast = (isize)value;
             updateRGBA();
             return;
 
@@ -172,7 +172,7 @@ PixelEngine::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, "0...100");
             }
             
-            config.saturation = value;
+            config.saturation = (isize)value;
             updateRGBA();
             return;
 
@@ -405,7 +405,7 @@ PixelEngine::colorize(isize line)
     colChanges.clear();
 
     // Wipe out the HBLANK area
-    for (Pixel pixel = 4 * HBLANK_MIN; pixel <= 4 * HBLANK_MAX; pixel++) {
+    for (pixel = 4 * HBLANK_MIN; pixel <= 4 * HBLANK_MAX; pixel++) {
         dst[pixel] = rgbaHBlank;
     }
 }

@@ -24,8 +24,8 @@ class PixelEngine : public SubComponent {
 public:
 
     // RGBA colors used to visualize the HBLANK and VBLANK area in the debugger
-    static const i32 rgbaHBlank = 0xFF444444;
-    static const i32 rgbaVBlank = 0xFF444444;
+    static const u32 rgbaHBlank = 0xFF444444;
+    static const u32 rgbaVBlank = 0xFF444444;
 
     //
     // Screen buffers

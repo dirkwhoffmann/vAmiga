@@ -27,7 +27,7 @@ FSDevice::init(isize capacity)
 void
 FSDevice::init(FSDeviceDescriptor &layout)
 {
-    init(layout.numBlocks);
+    init((isize)layout.numBlocks);
     
     if constexpr (FS_DEBUG) { layout.dump(); }
     
@@ -883,56 +883,6 @@ FSDevice::importDirectory(const fs::directory_entry &dir, bool recursive)
         }
     }
 }
-
-/*
-
- void
- FSDevice::importDirectory(const string &path, bool recursive)
- {
-     DIR *dir = opendir(path.c_str());
-     if (dir == nullptr) throw VAError(ERROR_FILE_CANT_READ);
-     
-     importDirectory(path, dir, recursive);
-     closedir(dir);
- }
- 
-void
-FSDevice::importDirectory(const string &path, DIR *dir, bool recursive)
-{
-    assert(dir);
-    
-    struct dirent *item;
-    
-    while ((item = readdir(dir))) {
-
-        // Skip '.', '..' and all hidden files
-        if (item->d_name[0] == '.') continue;
-
-        // Assemble file name
-        string name = path + "/" + string(item->d_name);
-        
-        debug(FS_DEBUG, "Importing %s\n", name.c_str());
-        
-        if (item->d_type == DT_DIR) {
-            
-            // Add directory
-            if(createDir(item->d_name) && recursive) {
-                changeDir(item->d_name);
-                importDirectory(name, recursive);
-            }
-            
-        } else {
-            
-            // Add file
-            u8 *buffer; isize size;
-            if (util::loadFile(string(name), &buffer, &size)) {
-                createFile(item->d_name, buffer, size);
-                delete(buffer);
-            }
-        }        
-    }
-}
-*/
 
 void
 FSDevice::exportDirectory(const string &path)

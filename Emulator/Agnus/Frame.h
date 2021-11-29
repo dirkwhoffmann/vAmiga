@@ -32,7 +32,7 @@ struct Frame
         << prevlof;
     }
     
-    Frame() : nr(0), lof(false) { }
+    Frame() : nr(0), lof(false), prevlof(false) { }
     
     bool isLongFrame() const { return lof; }
     bool isShortFrame() const { return !lof; }
