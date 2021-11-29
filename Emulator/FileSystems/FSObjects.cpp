@@ -77,10 +77,11 @@ FSString::write(u8 *p)
 {
     assert(p != nullptr);
     assert(strlen(str) < sizeof(str));
-
+    
     // Write name as a BCPL string (first byte is string length)
-    p[0] = (u8)strlen(str);
-    strcpy((char *)(p + 1), str);
+    *p++ = (u8)strlen(str);
+    for (isize i = 0; str[i] != 0; i++) { *p++ = str[i]; }
+    *p = 0;
 }
 
 void

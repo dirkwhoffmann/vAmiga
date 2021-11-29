@@ -214,8 +214,9 @@ EXTFile::decodeDisk(Disk &disk)
     auto numTracks = disk.numTracks();
     
     // Magic bytes
-    std::strcpy((char *)p, "UAE-1ADF");
-
+    p[0] = 'U'; p[1] = 'A'; p[2] = 'E'; p[3] = '-';
+    p[4] = '1'; p[5] = 'A'; p[6] = 'D'; p[7] = 'F';
+    
     // Reserved
     assert(p[8] == 0);
     assert(p[9] == 0);
