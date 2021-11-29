@@ -54,7 +54,7 @@ Copper::pokeCOPJMP2()
         fatalError;
 
     }
-    if (s == ACCESSOR_CPU) {
+    if constexpr (s == ACCESSOR_CPU) {
 
         if (agnus.blitter.isActive()) {
             trace(XFILES, "pokeCOPJMP2: Blitter is running\n");

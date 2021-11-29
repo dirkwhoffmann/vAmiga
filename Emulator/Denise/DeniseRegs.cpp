@@ -196,7 +196,7 @@ Denise::pokeBPLxDAT(u16 value)
     assert(x < 6);
     trace(BPLREG_DEBUG, "pokeBPL%ldDAT(%X)\n", x + 1, value);
 
-    if (s == ACCESSOR_AGNUS) {
+    if constexpr (s == ACCESSOR_AGNUS) {
         /*
         debug("BPL%dDAT written by Agnus (%x)\n", x, value);
         */

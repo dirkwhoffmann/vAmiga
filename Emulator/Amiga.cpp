@@ -102,7 +102,7 @@ Amiga::~Amiga()
 void
 Amiga::prefix() const
 {
-    fprintf(stderr, "[%lld] (%3zd,%3ld) ",
+    fprintf(stderr, "[%lld] (%3ld,%3ld) ",
             agnus.frame.nr, agnus.pos.v, agnus.pos.h);
 
     fprintf(stderr, "%06X ", cpu.getPC0());
@@ -297,9 +297,7 @@ Amiga::getConfigItem(Option option, long id) const
 
         default:
             fatalError;
-    }
-    
-    return 0;
+    }    
 }
 
 void

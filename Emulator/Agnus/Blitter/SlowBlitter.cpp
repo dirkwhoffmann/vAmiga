@@ -1075,14 +1075,16 @@ Blitter::exec()
         bus     = !lockD;
         busidle = lockD;
     } else {
-        bus     = instr & (FETCH | BUS);
-        busidle = instr & BUSIDLE;
+        bus     = (bool)(instr & (FETCH | BUS));
+        busidle = (bool)(instr & BUSIDLE);
     }
 
     // Trigger Blitter interrupt if this is the termination cycle
-    if ((instr & BLTDONE) && !birq) {
-        paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
-        birq = true;
+    if constexpr ((bool)(instr & BLTDONE)) {
+        if (!birq) {
+            paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
+            birq = true;
+        }
     }
     
     // Allocate the bus if needed
@@ -1193,7 +1195,7 @@ Blitter::exec()
         if (!lockD) {
 
             // Run the fill logic circuitry
-            if (instr & FILL) doFill(dhold, fillCarry);
+            if constexpr ((bool)(instr & FILL)) doFill(dhold, fillCarry);
 
             // Update the zero flag
             if (dhold) bzero = false;
@@ -1243,14 +1245,16 @@ Blitter::fakeExec()
         bus     = !lockD;
         busidle = lockD;
     } else {
-        bus     = instr & (FETCH | BUS);
-        busidle = instr & BUSIDLE;
+        bus     = (bool)(instr & (FETCH | BUS));
+        busidle = (bool)(instr & BUSIDLE);
     }
 
     // Trigger Blitter interrupt if this is the termination cycle
-    if ((instr & BLTDONE) && !birq) {
-        paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
-        birq = true;
+    if constexpr ((bool)(instr & BLTDONE)) {
+        if (!birq) {
+            paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
+            birq = true;
+        }
     }
 
     // Allocate the bus if needed
@@ -1334,15 +1338,16 @@ Blitter::execLine()
         bus     = true;
         busidle = false;
     } else {
-        bus     = instr & (FETCH | BUS);
-        busidle = instr & BUSIDLE;
+        bus     = (bool)(instr & (FETCH | BUS));
+        busidle = (bool)(instr & BUSIDLE);
     }
 
     // Trigger Blitter interrupt if this is the termination cycle
-    if ((instr & BLTDONE) && !birq) {
-        
-        paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
-        birq = true;
+    if constexpr ((bool)(instr & BLTDONE)) {
+        if (!birq) {
+            paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
+            birq = true;
+        }
     }
     
     // Allocate the bus if needed
@@ -1447,16 +1452,18 @@ Blitter::fakeExecLine()
         bus     = true;
         busidle = false;
     } else {
-        bus     = instr & (FETCH | BUS);
-        busidle = instr & BUSIDLE;
+        bus     = (bool)(instr & (FETCH | BUS));
+        busidle = (bool)(instr & BUSIDLE);
     }
     
     // Trigger Blitter interrupt if this is the termination cycle
-    if ((instr & BLTDONE) && !birq) {
-        paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
-        birq = true;
+    if constexpr ((bool)(instr & BLTDONE)) {
+        if (!birq) {
+            paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
+            birq = true;
+        }
     }
-
+    
     // Allocate the bus if needed
     if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
 

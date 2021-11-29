@@ -502,8 +502,9 @@ Scheduler::getSlotInfo(isize nr) const
     
     if (!isRunning()) inspectSlot(nr);
     
-    synchronized { return slotInfo[nr]; }
-    unreachable;
+    EventSlotInfo result;
+    synchronized { result = slotInfo[nr]; }
+    return result;
 }
 
 void

@@ -453,11 +453,11 @@ CPU::disassembleInstr(isize *len)
 {
     return disassembleInstr(reg.pc0, len);
 }
+
 const char *
 CPU::disassembleWords(isize len)
 {
     return disassembleWords(reg.pc0, len);
-    return "";
 }
 
 void
