@@ -90,6 +90,10 @@ class Recorder : public SubComponent {
     util::Time recStart;
     util::Time recStop;
     
+    // Temporary storage for audio and video data
+    u32 *videoData = nullptr;
+    float *audioData = nullptr;
+    
     
     //
     // Initializing

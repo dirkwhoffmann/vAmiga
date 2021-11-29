@@ -48,13 +48,13 @@ class Muxer : public SubComponent {
     MuxerStats stats = {};
 
     // Sample rate in Hz
-    double sampleRate = 0;
+    double sampleRate = 0.0;
     
     // Master clock cycles per audio sample
-    double cyclesPerSample = 0;
+    double cyclesPerSample = 0.0;
 
     // Fraction of a sample that hadn't been generated in synthesize
-    double fraction;
+    double fraction = 0.0;
 
     // Time stamp of the last write pointer alignment
     util::Time lastAlignment;
