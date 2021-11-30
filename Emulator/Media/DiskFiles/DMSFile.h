@@ -30,7 +30,8 @@ public:
     DMSFile(const string &path) throws { AmigaFile::init(path); }
     DMSFile(const string &path, std::istream &stream) throws { AmigaFile::init(path, stream); }
     DMSFile(const u8 *buf, isize len) throws { AmigaFile::init(buf, len); }
-        
+    ~DMSFile();
+    
     const char *getDescription() const override { return "DMS"; }
         
     

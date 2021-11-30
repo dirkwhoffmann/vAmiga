@@ -195,6 +195,7 @@ static const int FORCE_SNAP_TOO_OLD        = 0;
 static const int FORCE_SNAP_TOO_NEW        = 0;
 static const int FORCE_SNAP_CORRUPTED      = 0;
 static const int FORCE_DISK_INVALID_LAYOUT = 0;
+static const int FORCE_DMS_CANT_CREATE     = 0;
 static const int FORCE_RECORDING_ERROR     = 0;
 
 

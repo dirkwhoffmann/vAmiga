@@ -202,6 +202,7 @@
 		50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D7CDC22286E968002689F0 /* Joystick.cpp */; };
 		50D9CD9B236AF89A00503B4D /* DmaDebugDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */; };
 		50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DD1EE12525E3E1000180F6 /* Preferences.xib */; };
+		50DD33CC2756113300AE18B4 /* pfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 50DD33CB27560EE600AE18B4 /* pfile.c */; };
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
 		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C9F2269135800795256 /* SpriteTableView.swift */; };
@@ -231,7 +232,6 @@
 		50F54B2A24B5D31D0078FDC9 /* u_init.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1324B5D31D0078FDC9 /* u_init.c */; };
 		50F54B2B24B5D31D0078FDC9 /* maketbl.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1424B5D31D0078FDC9 /* maketbl.c */; };
 		50F54B2C24B5D31D0078FDC9 /* crc_csum.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1624B5D31D0078FDC9 /* crc_csum.c */; };
-		50F54B2D24B5D31D0078FDC9 /* pfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1B24B5D31D0078FDC9 /* pfile.c */; };
 		50F54B2E24B5D31D0078FDC9 /* u_rle.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1E24B5D31D0078FDC9 /* u_rle.c */; };
 		50F54B2F24B5D31D0078FDC9 /* getbits.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B2124B5D31D0078FDC9 /* getbits.c */; };
 		50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B2324B5D31D0078FDC9 /* u_quick.c */; };
@@ -577,6 +577,7 @@
 		50D7CDC32286E968002689F0 /* Joystick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Joystick.h; sourceTree = "<group>"; };
 		50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DmaDebugDialog.xib; sourceTree = "<group>"; };
 		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
+		50DD33CB27560EE600AE18B4 /* pfile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pfile.c; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
 		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
 		50DF2C9E2268CFC000795256 /* AgnusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusTypes.h; sourceTree = "<group>"; };
@@ -640,7 +641,7 @@
 		50F54B1824B5D31D0078FDC9 /* tables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tables.h; sourceTree = "<group>"; };
 		50F54B1924B5D31D0078FDC9 /* u_heavy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = u_heavy.h; sourceTree = "<group>"; };
 		50F54B1A24B5D31D0078FDC9 /* u_medium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = u_medium.h; sourceTree = "<group>"; };
-		50F54B1B24B5D31D0078FDC9 /* pfile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pfile.c; sourceTree = "<group>"; };
+		50F54B1B24B5D31D0078FDC9 /* _old_pfile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = _old_pfile.c; sourceTree = "<group>"; };
 		50F54B1C24B5D31D0078FDC9 /* xdmsconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xdmsconfig.h; sourceTree = "<group>"; };
 		50F54B1D24B5D31D0078FDC9 /* u_deep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = u_deep.h; sourceTree = "<group>"; };
 		50F54B1E24B5D31D0078FDC9 /* u_rle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = u_rle.c; sourceTree = "<group>"; };
@@ -1451,7 +1452,8 @@
 				50F54B1824B5D31D0078FDC9 /* tables.h */,
 				50F54B1924B5D31D0078FDC9 /* u_heavy.h */,
 				50F54B1A24B5D31D0078FDC9 /* u_medium.h */,
-				50F54B1B24B5D31D0078FDC9 /* pfile.c */,
+				50F54B1B24B5D31D0078FDC9 /* _old_pfile.c */,
+				50DD33CB27560EE600AE18B4 /* pfile.c */,
 				50F54B1C24B5D31D0078FDC9 /* xdmsconfig.h */,
 				50F54B1D24B5D31D0078FDC9 /* u_deep.h */,
 				50F54B1E24B5D31D0078FDC9 /* u_rle.c */,
@@ -1669,7 +1671,6 @@
 				50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */,
 				502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */,
 				5071B7872621F88800D6FB54 /* CopperDebugger.cpp in Sources */,
-				50F54B2D24B5D31D0078FDC9 /* pfile.c in Sources */,
 				508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */,
 				50F54B2F24B5D31D0078FDC9 /* getbits.c in Sources */,
 				508FE02E21EA227B0043D0E9 /* Alerts.swift in Sources */,
@@ -1719,6 +1720,7 @@
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
 				50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */,
+				50DD33CC2756113300AE18B4 /* pfile.c in Sources */,
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,
 				50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */,
 				509C66792551577D0028D497 /* Folder.cpp in Sources */,

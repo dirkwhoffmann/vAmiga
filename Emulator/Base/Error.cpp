@@ -137,6 +137,10 @@ VAError::VAError(ErrorCode code, const string &s)
             description += " corrupted or inconsistend file data.";
             break;
 
+        case ERROR_DMS_CANT_CREATE:
+            description = "Failed to extract the DMS archive.";
+            break;
+            
         case ERROR_MISSING_ROM_KEY:
             description = "No \"rom.key\" file found.";
             break;

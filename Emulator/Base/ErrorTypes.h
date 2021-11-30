@@ -61,6 +61,8 @@ enum_long(ERROR_CODE)
     ERROR_EXT_INCOMPATIBLE,
     ERROR_EXT_CORRUPTED,
 
+    ERROR_DMS_CANT_CREATE,
+    
     // Encrypted Roms
     ERROR_MISSING_ROM_KEY,
     ERROR_INVALID_ROM_KEY,
@@ -150,9 +152,11 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_SNAP_TOO_OLD:                return "SNAP_TOO_OLD";
             case ERROR_SNAP_TOO_NEW:                return "SNAP_TOO_NEW";
                 
-            case ERROR_EXT_FACTOR5:             return "EXT_UNSUPPORTED";
+            case ERROR_EXT_FACTOR5:                 return "EXT_UNSUPPORTED";
             case ERROR_EXT_INCOMPATIBLE:            return "EXT_INCOMPATIBLE";
             case ERROR_EXT_CORRUPTED:               return "EXT_CORRUPTED";
+                
+            case ERROR_DMS_CANT_CREATE:             return "DMS_CANT_CREATE";
                 
             case ERROR_MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
             case ERROR_INVALID_ROM_KEY:             return "INVALID_ROM_KEY";

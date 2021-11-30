@@ -12,7 +12,13 @@
 #include "AmigaFile.h"
 
 extern "C" {
-unsigned short extractDMS(FILE *fi, FILE *fo, int verbose);
+unsigned short extractDMS(const unsigned char *in, size_t inSize,
+                          unsigned char **out, size_t *outSize, int verbose);
+}
+
+DMSFile::~DMSFile()
+{
+    if (adf) delete adf;
 }
 
 bool
@@ -31,34 +37,19 @@ DMSFile::isCompatible(std::istream &stream)
 void
 DMSFile::finalizeRead()
 {
-    FILE *fpi, *fpo;
-    char *pi, *po;
-    size_t si, so;
-            
-    /* We use a third-party tool called xdms to convert the DMS into an ADF.
-     * Originally, xdms is a command line utility designed to work on files.
-     * To ease the integration of this tool, we utilize memory streams for
-     * passing data in and out.
-     */
+    assert(adf == nullptr);
+    
+    u8* adfData;
+    size_t adfSize;
+    
+    if (extractDMS(data, (size_t)size, &adfData, &adfSize, DMS_DEBUG) == 0) {
 
-    // Setup input stream
-    fpi = open_memstream(&pi, &si);
-    for (isize i = 0; i < size; i++) putc(data[i], fpi);
-    fclose(fpi);
+        if constexpr (!FORCE_DMS_CANT_CREATE) {
+            adf = new ADFFile(adfData, adfSize);
+        }
+    }
     
-    // Setup output stream
-    fpi = fmemopen(pi, si, "r");
-    fpo = open_memstream(&po, &so);
+    free(adfData);
     
-    // Extract the DMS
-    extractDMS(fpi, fpo, DMS_DEBUG);
-    fclose(fpi);
-    fclose(fpo);
-    
-    // Create the ADF
-    fpo = fmemopen(po, so, "r");
-    adf = new ADFFile(fpo);
-    fclose(fpo);
-    
-    if (!adf) throw VAError(ERROR_UNKNOWN);
+    if (!adf) throw VAError(ERROR_DMS_CANT_CREATE);
 }
