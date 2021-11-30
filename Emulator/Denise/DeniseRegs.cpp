@@ -213,7 +213,7 @@ Denise::setBPLxDAT(u16 value)
 
     bpldat[x] = value;
 
-    if (x == 0) {
+    if constexpr (x == 0) {
         
         updateShiftRegisters();
         
@@ -300,8 +300,11 @@ Denise::pokeCOLORxx(u16 value)
     u32 reg = 0x180 + 2*xx;
     isize pos = agnus.pos.h;
 
-    // If the CPU modifies color, the change takes effect one DMA cycle earlier
-    if (s != ACCESSOR_AGNUS && agnus.pos.h != 0) pos--;
+    if constexpr (s == ACCESSOR_CPU) {
+
+        // If the CPU writes, the change takes effect one DMA cycle earlier
+        if (agnus.pos.h != 0) pos--;
+    }
     
     // Record the color change
     pixelEngine.colChanges.insert(4 * pos, RegChange { reg, value } );

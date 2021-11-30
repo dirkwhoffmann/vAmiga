@@ -218,7 +218,7 @@ matchingStreamHeader(std::istream &is, const u8 *header, isize len, isize offset
 bool
 matchingStreamHeader(std::istream &is, const string &header, isize offset)
 {
-    return matchingStreamHeader(is, (u8 *)header.c_str(), header.length(), offset);
+    return matchingStreamHeader(is, (u8 *)header.c_str(), (isize)header.length(), offset);
 }
 
 bool

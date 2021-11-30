@@ -115,7 +115,7 @@ DmaDebugger::setConfigItem(Option option, i64 value)
 
         case OPT_DMA_DEBUG_OPACITY:
                         
-            config.opacity = value;
+            config.opacity = (isize)value;
             return;
 
         default:
@@ -271,8 +271,8 @@ DmaDebugger::getInfo()
 {
     DmaDebuggerInfo result;
     
-    synchronized {
-                
+    {   SYNCHRONIZED
+        
         result.visualizeCopper = config.visualize[DMA_CHANNEL_COPPER];
         result.visualizeBlitter = config.visualize[DMA_CHANNEL_BLITTER];
         result.visualizeDisk = config.visualize[DMA_CHANNEL_DISK];

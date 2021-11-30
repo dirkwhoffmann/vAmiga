@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "RTC.h"
+#include "Chrono.h"
 #include "CPU.h"
 #include "IOUtils.h"
 #include "Memory.h"
@@ -118,7 +119,7 @@ RTC::getTime()
     Cycle result;
     Cycle master = cpu.getMasterClock();
 
-    long timeBetweenCalls = AS_SEC(master - lastCall);
+    auto timeBetweenCalls = AS_SEC(master - lastCall);
            
     if (timeBetweenCalls > 2) {
 
@@ -221,10 +222,10 @@ RTC::time2registers()
     time_t rtcTime = getTime();
     
     // Convert the time_t value to a tm struct
-    tm *t = localtime(&rtcTime);
+    auto t = util::Time::local(rtcTime);
     
     // Write the registers
-    config.model == RTC_RICOH ? time2registersRicoh(t) : time2registersOki(t);
+    config.model == RTC_RICOH ? time2registersRicoh(&t) : time2registersOki(&t);
 }
 
 void

@@ -500,15 +500,11 @@ Scheduler::getSlotInfo(isize nr) const
 {
     assert_enum(EventSlot, nr);
     
-    if (!isRunning()) inspectSlot(nr);
-    
-    synchronized { return slotInfo[nr]; }
-    unreachable;
-    /*
-    EventSlotInfo result;
-    synchronized { result = slotInfo[nr]; }
-    return result;
-    */
+    {   SYNCHRONIZED
+
+        if (!isRunning()) inspectSlot(nr);
+        return slotInfo[nr];
+    }
 }
 
 void
