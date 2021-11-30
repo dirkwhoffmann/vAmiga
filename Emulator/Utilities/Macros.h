@@ -43,6 +43,10 @@
 #define htons(v)       _byteswap_ushort(v)
 #define htonl(v)       _byteswap_ulong(v)
 
+#else
+
+#include <arpa/inet.h>
+
 #endif
 
 
