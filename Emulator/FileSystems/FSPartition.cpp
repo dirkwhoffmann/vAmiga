@@ -69,10 +69,10 @@ void
 FSPartition::info() const
 {
     msg("DOS%ld  ",        dos);
-    msg("%6lld (x %3zd) ", numBlocks(), bsize());
-    msg("%6zd  ",          usedBlocks());
-    msg("%6zd   ",         freeBlocks());
-    msg("%3zd%%   ",       (isize)(100.0 * usedBlocks() / numBlocks()));
+    msg("%6ld (x %3ld) ",  numBlocks(), bsize());
+    msg("%6ld  ",          usedBlocks());
+    msg("%6ld   ",         freeBlocks());
+    msg("%3ld%%   ",       (isize)(100.0 * usedBlocks() / numBlocks()));
     msg("%s\n",            getName().c_str());
     msg("\n");
 }
@@ -162,7 +162,7 @@ FSPartition::bsize() const
     return dev.bsize;
 }
 
-i64
+isize
 FSPartition::numBlocks() const
 {
     return numCyls() * dev.numHeads * dev.numSectors;
@@ -366,7 +366,7 @@ FSPartition::newFileHeaderBlock(const string &name)
 FSBlock *
 FSPartition::bmBlockForBlock(Block nr)
 {
-    assert(nr >= 2 && nr < numBlocks());
+    assert(nr >= 2 && (isize)nr < numBlocks());
         
     // Locate the bitmap block
     isize bitsPerBlock = (bsize() - 4) * 8;
@@ -474,7 +474,7 @@ FSPartition::killVirus()
     assert(dev.blocks[firstBlock + 0]->type == FS_BOOT_BLOCK);
     assert(dev.blocks[firstBlock + 1]->type == FS_BOOT_BLOCK);
 
-    long id = isOFS() ? BB_AMIGADOS_13 : isFFS() ? BB_AMIGADOS_20 : BB_NONE;
+    auto id = isOFS() ? BB_AMIGADOS_13 : isFFS() ? BB_AMIGADOS_20 : BB_NONE;
 
     if (id != BB_NONE) {
         dev.blocks[firstBlock + 0]->writeBootBlock(id, 0);

@@ -162,10 +162,11 @@ public:
      */
     template<class T> T getInfo(T &cachedValues) const {
         
-        if (!isRunning()) inspect();
-        
-        synchronized { return cachedValues; }
-        unreachable;
+        {   SYNCHRONIZED
+            
+            if (!isRunning()) inspect();
+            return cachedValues;
+        }
     }
     
     //

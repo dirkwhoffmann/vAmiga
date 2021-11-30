@@ -264,7 +264,7 @@ EXTFile::decodeDisk(Disk &disk)
         }
     }
     
-    debug(ADF_DEBUG, "Wrote %ld bytes\n", p - data);
+    debug(ADF_DEBUG, "Wrote %td bytes\n", p - data);
 }
 
 isize

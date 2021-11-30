@@ -19,6 +19,6 @@ typedef struct
 {
     bool pullUpResistors;
     bool shakeDetection;
-    long velocity;
+    isize velocity;
 }
 MouseConfig;

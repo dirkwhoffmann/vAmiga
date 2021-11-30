@@ -45,7 +45,7 @@ DMSFile::finalizeRead()
     if (extractDMS(data, (size_t)size, &adfData, &adfSize, DMS_DEBUG) == 0) {
 
         if constexpr (!FORCE_DMS_CANT_CREATE) {
-            adf = new ADFFile(adfData, adfSize);
+            adf = new ADFFile(adfData, (isize)adfSize);
         }
     }
     

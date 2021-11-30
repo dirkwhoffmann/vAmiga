@@ -1995,10 +1995,7 @@ Memory::spypeekCustom16(u32 addr) const
 {
     assert(IS_EVEN(addr));
     
-    switch (addr & 0x1FE) {
-            
-    }
-
+    // TODO: ADD IMPLEMENTATION
     return 42;
 }
 

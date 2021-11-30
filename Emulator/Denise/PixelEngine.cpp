@@ -298,14 +298,13 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
 ScreenBuffer
 PixelEngine::getStableBuffer()
 {
-    ScreenBuffer result;
+    SYNCHRONIZED
     
-    synchronized {
-        result = (frameBuffer == &emuTexture[0]) ? emuTexture[1] : emuTexture[0];
+    if (frameBuffer == &emuTexture[0]) {
+        return emuTexture[1];
+    } else {
+        return emuTexture[0];
     }
-    
-    assert(result.data);
-    return result;
 }
 
 u32 *

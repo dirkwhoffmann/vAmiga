@@ -290,7 +290,7 @@ void
 Moira::setFC(FunctionCode value)
 {
     if (!EMULATE_FC) return;
-    fcl = value;
+    fcl = (u8)value;
 }
 
 template<Mode M> void

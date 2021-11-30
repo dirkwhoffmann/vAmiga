@@ -63,9 +63,8 @@ DeniseDebugger::recordSprite(isize nr)
 SpriteInfo
 DeniseDebugger::getSpriteInfo(isize nr)
 {
-    SpriteInfo result;
-    synchronized { result = latchedSpriteInfo[nr]; }
-    return result;
+    SYNCHRONIZED
+    return latchedSpriteInfo[nr];
 }
 
 void

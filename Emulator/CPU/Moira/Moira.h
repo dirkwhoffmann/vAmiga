@@ -19,8 +19,12 @@
 
 namespace moira {
 
-// Execution control flags
-
+#ifdef _MSC_VER
+#define unreachable    __assume(false)
+#else
+#define unreachable    __builtin_unreachable()
+#endif
+#define fatalError     assert(false); unreachable
 
 class Moira : public SubComponent {
 

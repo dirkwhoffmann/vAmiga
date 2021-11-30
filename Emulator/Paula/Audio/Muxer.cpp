@@ -373,7 +373,7 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
     // Check for a buffer overflow
     if (stream.count() + count >= stream.cap()) handleBufferOverflow();
 
-    double cycle = clock;
+    double cycle = (double)clock;
     bool filter = ciaa.powerLED() || config.filterAlwaysOn;
 
     for (long i = 0; i < count; i++) {

@@ -295,7 +295,7 @@ Denise::pokeSPRxDATB(u16 value)
 template <Accessor s, isize xx> void
 Denise::pokeCOLORxx(u16 value)
 {
-    trace(COLREG_DEBUG, "pokeCOLOR%02zd(%X)\n", xx, value);
+    trace(COLREG_DEBUG, "pokeCOLOR%02ld(%X)\n", xx, value);
 
     u32 reg = 0x180 + 2*xx;
     isize pos = agnus.pos.h;

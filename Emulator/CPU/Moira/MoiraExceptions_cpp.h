@@ -59,10 +59,12 @@ Moira::execAddressError(AEStackFrame frame, int delay)
     flags &= ~CPU_TRACE_EXCEPTION;
     sync(8);
 
-    // Write stack frame
-    bool doubleFault;
-    if (!(doubleFault = misaligned<Word>(reg.sp))) {
+    // A misaligned stack pointer will cause a "double fault"
+    bool doubleFault = misaligned<Word>(reg.sp);
+
+    if (!doubleFault) {
         
+        // Write stack frame
         saveToStack(frame);
         sync(2);
         jumpToVector(3);

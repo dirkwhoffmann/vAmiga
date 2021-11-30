@@ -31,5 +31,5 @@ void
 Script::execute(class Amiga &amiga)
 {
     string s((char *)data, size);
-    try { amiga.retroShell.execScript(s); } catch (util::Exception &e) { }
+    try { amiga.retroShell.execScript(s); } catch (util::Exception &) { }
 }

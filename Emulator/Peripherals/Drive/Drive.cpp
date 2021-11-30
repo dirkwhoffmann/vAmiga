@@ -175,7 +175,7 @@ Drive::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, FSVolumeTypeEnum::keyList());
             }
             
-            config.defaultFileSystem = value;
+            config.defaultFileSystem = (FSVolumeType)value;
             return;
 
         case OPT_DEFAULT_BOOTBLOCK:
@@ -184,7 +184,7 @@ Drive::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, BootBlockIdEnum::keyList());
             }
             
-            config.defaultBootBlock = value;
+            config.defaultBootBlock = (BootBlockId)value;
             return;
 
         default:

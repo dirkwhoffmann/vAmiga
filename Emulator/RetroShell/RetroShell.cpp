@@ -109,7 +109,7 @@ RetroShell::printPrompt()
 
     // Print the prompt
     *this << prompt;
-    cpos = cposMin = prompt.size();
+    cpos = cposMin = (isize)prompt.size();
 }
 
 void
@@ -198,7 +198,7 @@ RetroShell::pressTab()
         // Repeat the old input string
         *this << currentInput;
         cposMin = cposMinOld;
-        cpos = lastLine().length();
+        cpos = (isize)lastLine().length();
         
     } else {
         
@@ -352,13 +352,13 @@ RetroShell::continueScript()
         try {
             exec(command);
             
-        } catch (ScriptInterruption &e) {
+        } catch (ScriptInterruption &) {
             
             msgQueue.put(MSG_SCRIPT_PAUSE, scriptLine);
             printPrompt();
             return;
         
-        } catch (std::exception &e) {
+        } catch (std::exception &) {
             
             *this << "Aborted in line " << scriptLine << '\n';
             msgQueue.put(MSG_SCRIPT_ABORT, scriptLine);
@@ -380,36 +380,49 @@ RetroShell::describe(const std::exception &e)
         
         *this << err->what() << ": Too few arguments";
         *this << '\n';
+        return;
+    }
         
-    } else if (auto err = dynamic_cast<const TooManyArgumentsError *>(&e)) {
+    if (auto err = dynamic_cast<const TooManyArgumentsError *>(&e)) {
         
         *this << err->what() << ": Too many arguments";
         *this << '\n';
+        return;
+    }
     
-    } else if (auto err = dynamic_cast<const util::EnumParseError *>(&e)) {
+    if (auto err = dynamic_cast<const util::EnumParseError *>(&e)) {
         
         *this << err->token << " is not a valid key" << '\n';
         *this << "Expected: " << err->expected << '\n';
-
-    } else if (auto err = dynamic_cast<const util::ParseNumError *>(&e)) {
+        return;
+    }
+    
+    if (auto err = dynamic_cast<const util::ParseNumError *>(&e)) {
         
         *this << err->token << " is not a number";
         *this << '\n';
-
-    } else if (auto err = dynamic_cast<const util::ParseBoolError *>(&e)) {
+        return;
+    }
+    
+    if (auto err = dynamic_cast<const util::ParseBoolError *>(&e)) {
 
         *this << err->token << " must be true or false";
         *this << '\n';
-
-    } else if (auto err = dynamic_cast<const util::ParseError *>(&e)) {
+        return;
+    }
+    
+    if (auto err = dynamic_cast<const util::ParseError *>(&e)) {
 
         *this << err->what() << ": Syntax error";
         *this << '\n';
-
-    } else if (auto err = dynamic_cast<const VAError *>(&e)) {
+        return;
+    }
+    
+    if (auto err = dynamic_cast<const VAError *>(&e)) {
 
         *this << err->what();
         *this << '\n';
+        return;
     }
 }
 

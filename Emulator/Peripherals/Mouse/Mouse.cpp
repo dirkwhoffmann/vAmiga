@@ -96,7 +96,7 @@ Mouse::setConfigItem(Option option, i64 value)
             if (value < 0 || value > 255) {
                 throw VAError(ERROR_OPT_INVARG, "0 ... 255");
             }
-            config.velocity= value;
+            config.velocity = (isize)value;
             updateScalingFactors();
             return;
 

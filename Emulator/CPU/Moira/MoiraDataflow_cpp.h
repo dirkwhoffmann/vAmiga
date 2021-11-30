@@ -10,64 +10,78 @@
 template<Mode M, Size S, Flags F> bool
 Moira::readOp(int n, u32 &ea, u32 &result)
 {
-    // Handle non-memory modes
-    if constexpr (M == MODE_DN) { result = readD<S>(n); return true; }
-    if constexpr (M == MODE_AN) { result = readA<S>(n); return true; }
-    if constexpr (M == MODE_IM) { result = readI<S>();  return true; }
+    switch (M) {
+            
+        // Handle non-memory modes
+        case MODE_DN: result = readD<S>(n); return true;
+        case MODE_AN: result = readA<S>(n); return true;
+        case MODE_IM: result = readI<S>();  return true;
+            
+        default:
+            
+            // Compute effective address
+            ea = computeEA<M,S,F>(n);
 
-    // Compute effective address
-    ea = computeEA<M,S,F>(n);
+            // Read from effective address
+            bool error; result = readM<M,S,F>(ea, error);
 
-    // Read from effective address
-    bool error; result = readM<M,S,F>(ea, error);
+            // Emulate -(An) register modification
+            updateAnPD<M,S>(n);
 
-    // Emulate -(An) register modification
-    updateAnPD<M,S>(n);
+            // Exit if an address error has occurred
+            if (error) return false;
 
-    // Exit if an address error has occurred
-    if (error) return false;
-
-    // Emulate (An)+ register modification
-    updateAnPI<M,S>(n);
-    
-    return !error;
+            // Emulate (An)+ register modification
+            updateAnPI<M,S>(n);
+            
+            return !error;
+    }
 }
 
 template<Mode M, Size S, Flags F> bool
 Moira::writeOp(int n, u32 val)
 {
-    // Handle non-memory modes
-    if constexpr (M == MODE_DN) { writeD<S>(n, val); return true;  }
-    if constexpr (M == MODE_AN) { writeA<S>(n, val); return true;  }
-    if constexpr (M == MODE_IM) { assert(false);     return false; }
+    switch (M) {
+            
+        // Handle non-memory modes
+        case MODE_DN: writeD<S>(n, val); return true;
+        case MODE_AN: writeA<S>(n, val); return true;
+        case MODE_IM: fatalError;
 
-    // Compute effective address
-    u32 ea = computeEA<M,S>(n);
-
-    // Write to effective address
-    bool error; writeM <M,S,F> (ea, val, error);
-
-    // Emulate -(An) register modification
-    updateAnPD<M,S>(n);
-
-    // Early exit in case of an address error
-    if (error) return false;
-    
-    // Emulate (An)+ register modification
-    updateAnPI<M,S>(n);
-    
-    return !error;
+        default:
+            
+            // Compute effective address
+            u32 ea = computeEA<M,S>(n);
+            
+            // Write to effective address
+            bool error; writeM <M,S,F> (ea, val, error);
+            
+            // Emulate -(An) register modification
+            updateAnPD<M,S>(n);
+            
+            // Early exit in case of an address error
+            if (error) return false;
+            
+            // Emulate (An)+ register modification
+            updateAnPI<M,S>(n);
+            
+            return !error;
+    }
 }
 
 template<Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 ea, u32 val)
 {
-    // Handle non-memory modes
-    if constexpr (M == MODE_DN) { writeD <S> (n, val); return; }
-    if constexpr (M == MODE_AN) { writeA <S> (n, val); return; }
-    if constexpr (M == MODE_IM) { assert(false);       return; }
+    switch (M) {
+            
+        // Handle non-memory modes
+        case MODE_DN: writeD <S> (n, val); return;
+        case MODE_AN: writeA <S> (n, val); return;
+        case MODE_IM: fatalError;
 
-    writeM <M,S,F> (ea, val);
+        default:
+            writeM <M,S,F> (ea, val);
+    }
 }
 
 template<Mode M, Size S, Flags F> u32
@@ -161,7 +175,7 @@ Moira::computeEA(u32 n) {
         }
         default:
         {
-            assert(false);
+            fatalError;
         }
     }
     return result;
@@ -237,26 +251,28 @@ Moira::readMS(u32 addr)
 {
     u32 result;
         
-    // Break down long word accesses into two word accesses
     if constexpr (S == Long) {
+
+        // Break down the long word access into two word accesses
         result = readMS <MS, Word> (addr) << 16;
         result |= readMS <MS, Word, F> (addr + 2);
-        return result;
-    }
-    
-    // Update function code pins
-    setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
 
-    // Check if a watchpoint is being accessed
-    if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
-        watchpointReached(addr);
+    } else {
+        
+        // Update function code pins
+        setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
+        
+        // Check if a watchpoint is being accessed
+        if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
+            watchpointReached(addr);
+        }
+        
+        // Perform the read operation
+        sync(2);
+        if (F & POLLIPL) pollIpl();
+        result = (S == Byte) ? read8(addr & 0xFFFFFF) : read16(addr & 0xFFFFFF);
+        sync(2);
     }
-    
-    // Perform the read operation
-    sync(2);
-    if (F & POLLIPL) pollIpl();
-    result = (S == Byte) ? read8(addr & 0xFFFFFF) : read16(addr & 0xFFFFFF);
-    sync(2);
     
     return result;
 }
@@ -331,20 +347,29 @@ Moira::readI()
     u32 result;
 
     switch (S) {
+            
         case Byte:
+            
             result = (u8)queue.irc;
             readExt();
             break;
+            
         case Word:
+            
             result = queue.irc;
             readExt();
             break;
+            
         case Long:
+            
             result = queue.irc << 16;
             readExt();
             result |= queue.irc;
             readExt();
             break;
+            
+        default:
+            fatalError;
     }
 
     return result;

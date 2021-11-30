@@ -238,7 +238,7 @@ Moira::addsub(u32 op1, u32 op2)
         }
         default:
         {
-            assert(false);
+            fatalError;
         }
     }
     reg.sr.n = NBIT<S>(result);
