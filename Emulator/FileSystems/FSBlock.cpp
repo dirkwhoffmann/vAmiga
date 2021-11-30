@@ -815,13 +815,10 @@ FSBlock::exportFileHeaderBlock(const fs::path &path)
 {
     auto filename = path / partition.dev.getPath(this);
     
-    FILE *file = fopen(filename.string().c_str(), "wb");
-    if (file == nullptr) {
-        return ERROR_FS_CANNOT_CREATE_FILE;
-    }
+    std::ofstream file(filename.string().c_str(), std::ofstream::binary);
+    if (!file.is_open()) return ERROR_FS_CANNOT_CREATE_FILE;
+    
     writeData(file);
-    fclose(file);
-        
     return ERROR_OK;
 }
 
@@ -1681,7 +1678,7 @@ FSBlock::addData(const u8 *buffer, isize size)
 }
 
 isize
-FSBlock::writeData(FILE *file)
+FSBlock::writeData(std::ostream& os)
 {
     // Only call this function for file header blocks
     assert(type == FS_FILEHEADER_BLOCK);
@@ -1704,7 +1701,7 @@ FSBlock::writeData(FILE *file)
             Block ref = getDataBlockRef(i);
             if (FSBlock *dataBlock = partition.dev.dataBlockPtr(getDataBlockRef(i))) {
                 
-                isize bytesWritten = dataBlock->writeData(file, bytesRemaining);
+                isize bytesWritten = dataBlock->writeData(os, bytesRemaining);
                 bytesTotal += bytesWritten;
                 bytesRemaining -= bytesWritten;
                 
@@ -1726,22 +1723,20 @@ FSBlock::writeData(FILE *file)
 }
 
 isize
-FSBlock::writeData(FILE *file, isize size)
+FSBlock::writeData(std::ostream& os, isize size)
 {
-    assert(file);
-    
     isize count = std::min(dsize(), size);
     
     switch (type) {
             
         case FS_DATA_BLOCK_OFS:
             
-            for (isize i = 0; i < count; i++) fputc(data[i + 24], file);
+            os.write((char *)(data + 24), count);
             return count;
             
         case FS_DATA_BLOCK_FFS:
             
-            for (isize i = 0; i < count; i++) fputc(data[i], file);
+            os.write((char *)data, count);
             return count;
             
         default:

@@ -301,8 +301,8 @@ public:
     // Exporting
     //
     
-    isize writeData(FILE *file);
-    isize writeData(FILE *file, isize size);
+    isize writeData(std::ostream& os);
+    isize writeData(std::ostream& os, isize size);
 };
 
 typedef FSBlock* BlockPtr;
