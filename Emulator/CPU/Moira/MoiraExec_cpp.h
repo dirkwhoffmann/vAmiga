@@ -271,14 +271,16 @@ Moira::execAddxEa(u16 opcode)
     u32 result = addsub<I,S>(data1, data2);
 
     if constexpr (S == Long && !MIMIC_MUSASHI) {
+
         writeM <M, Word, POLLIPL> (ea2 + 2, result & 0xFFFF);
         prefetch();
         writeM<M, Word>(ea2, result >> 16);
-        return;
-    }
 
-    prefetch();
-    writeM<M, S>(ea2, result);
+    } else {
+
+        prefetch();
+        writeM<M, S>(ea2, result);
+    }
 }
 
 template<Instr I, Mode M, Size S> void

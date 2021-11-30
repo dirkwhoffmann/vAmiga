@@ -237,7 +237,8 @@ template<MemSpace MS, Size S, Flags F> u32
 Moira::readMS(u32 addr, bool &error)
 {
     // Check for address errors
-    if ((error = misaligned<S>(addr))) {
+    if ((error = misaligned<S>(addr)) == true) {
+        
         setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
         execAddressError(makeFrame<F>(addr), 2);
         return 0;
@@ -301,7 +302,7 @@ template<MemSpace MS, Size S, Flags F> void
 Moira::writeMS(u32 addr, u32 val, bool &error)
 {
     // Check for address errors
-    if ((error = misaligned<S>(addr))) {
+    if ((error = misaligned<S>(addr)) == true) {
         setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
         execAddressError(makeFrame <F|AE_WRITE> (addr), 2);
         return;
@@ -313,9 +314,9 @@ Moira::writeMS(u32 addr, u32 val, bool &error)
 template<MemSpace MS, Size S, Flags F> void
 Moira::writeMS(u32 addr, u32 val)
 {
-    // Break down long word accesses into two word accesses
     if constexpr (S == Long) {
-        
+
+        // Break down the long word access into two word accesses
         if (F & REVERSE) {
             writeMS <MS, Word>    (addr + 2, val & 0xFFFF);
             writeMS <MS, Word, F> (addr,     val >> 16   );
@@ -323,22 +324,23 @@ Moira::writeMS(u32 addr, u32 val)
             writeMS <MS, Word>    (addr,     val >> 16   );
             writeMS <MS, Word, F> (addr + 2, val & 0xFFFF);
         }
-        return;
-    }
-    
-    // Update function code pins
-    setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
-    
-    // Check if a watchpoint is being accessed
-    if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
-        watchpointReached(addr);
-    }
 
-    // Perform the write operation
-    sync(2);
-    if (F & POLLIPL) pollIpl();
-    S == Byte ? write8(addr & 0xFFFFFF, (u8)val) : write16(addr & 0xFFFFFF, (u16)val);
-    sync(2);
+    } else {
+        
+        // Update function code pins
+        setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
+        
+        // Check if a watchpoint is being accessed
+        if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
+            watchpointReached(addr);
+        }
+        
+        // Perform the write operation
+        sync(2);
+        if (F & POLLIPL) pollIpl();
+        S == Byte ? write8(addr & 0xFFFFFF, (u8)val) : write16(addr & 0xFFFFFF, (u16)val);
+        sync(2);
+    }
 }
 
 template<Size S> u32
@@ -407,7 +409,7 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird)
     if (F & AE_DATA) setFC(FC_USER_DATA);
 
     // Create
-    frame.code = (ird & 0xFFE0) | readFC() | read;
+    frame.code = (ird & 0xFFE0) | (u16)readFC() | read;
     frame.addr = addr;
     frame.ird = ird;
     frame.sr = sr;

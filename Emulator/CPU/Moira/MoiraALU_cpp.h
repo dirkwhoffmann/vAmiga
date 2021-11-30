@@ -180,10 +180,9 @@ Moira::shift(int cnt, u64 data) {
             break;
         }
         default:
-        {
-            assert(false);
-        }
+            fatalError;
     }
+    
     reg.sr.n = NBIT<S>(data);
     reg.sr.z = ZERO<S>(data);
     return CLIP<S>(data);
@@ -262,7 +261,8 @@ Moira::mul(u32 op1, u32 op2)
              result = op1 * op2;
              break;
          }
-        default: assert(false);
+        default:
+            fatalError;
      }
 
     reg.sr.n = NBIT<Long>(result);
@@ -303,6 +303,10 @@ Moira::div(u32 op1, u32 op2)
             result = (u32)((quotient & 0xffff) | remainder << 16);
             overflow = quotient > 0xFFFF;
             break;
+        }
+        default:
+        {
+            fatalError;
         }
     }
     reg.sr.v = overflow ? 1        : reg.sr.v;
@@ -365,7 +369,7 @@ Moira::bcd(u32 op1, u32 op2)
         }
         default:
         {
-            assert(false);
+            fatalError;
         }
     }
     reg.sr.n = NBIT<S>(result);
@@ -410,9 +414,7 @@ Moira::logic(u32 op)
             break;
         }
         default:
-        {
-            assert(false);
-        }
+            fatalError;
     }
     return result;
 }
@@ -441,7 +443,7 @@ Moira::logic(u32 op1, u32 op2)
         }
         default:
         {
-            assert(false);
+            fatalError;
         }
     }
 
@@ -481,7 +483,7 @@ Moira::bit(u32 op, u8 bit)
         }
         default:
         {
-            assert(false);
+            fatalError;
         }
     }
     return op;
@@ -510,8 +512,7 @@ Moira::cond() {
         case BLE: case DBLE: case SLE: return reg.sr.n != reg.sr.v || reg.sr.z;
     }
 
-    assert(false);
-    return 0;
+    fatalError;
 }
 
 template <Instr I> int
@@ -525,8 +526,7 @@ Moira::cyclesBit(u8 bit)
         case BCHG: return MIMIC_MUSASHI ? 4 : (bit > 15 ? 4 : 2);
     }
 
-    assert(false);
-    return 0;
+    fatalError;
 }
 
 template <Instr I> int
@@ -549,8 +549,7 @@ Moira::cyclesMul(u16 data)
         }
     }
 
-    assert(false);
-    return 0;
+    fatalError;
 }
 
 template <Instr I> int
@@ -609,8 +608,7 @@ Moira::cyclesDiv(u32 op1, u16 op2)
         }
     }
 
-    assert(false);
-    return 0;
+    fatalError;
 }
 
 template <Instr I> u32
@@ -630,7 +628,8 @@ Moira::mulMusashi(u32 op1, u32 op2)
             result = op1 * op2;
             break;
         }
-        default: assert(false);
+        default:
+            fatalError;
     }
 
     reg.sr.n = NBIT<Long>(result);

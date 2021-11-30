@@ -114,7 +114,7 @@ Interpreter::exec(const Arguments &argv, bool verbose)
     Command *current = &root, *next;
     Arguments args = argv;
 
-    while (!args.empty() && ((next = current->seek(args.front())))) {
+    while (!args.empty() && ((next = current->seek(args.front())) != nullptr)) {
         
         current = current->seek(args.front());
         args.erase(args.begin());

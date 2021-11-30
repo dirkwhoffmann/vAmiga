@@ -208,7 +208,8 @@ Disk::decodeMFM(u8 *dst, u8 *src, isize count)
     for(isize i = 0; i < count; i++) {
         
         u16 mfm = HI_LO(src[2*i], src[2*i+1]);
-        dst[i] =
+        
+        auto decoded =
         ((mfm & 0b0100000000000000) >> 7) |
         ((mfm & 0b0001000000000000) >> 6) |
         ((mfm & 0b0000010000000000) >> 5) |
@@ -217,6 +218,8 @@ Disk::decodeMFM(u8 *dst, u8 *src, isize count)
         ((mfm & 0b0000000000010000) >> 2) |
         ((mfm & 0b0000000000000100) >> 1) |
         ((mfm & 0b0000000000000001) >> 0);
+        
+        dst[i] = (u8)decoded;
     }
 }
 
