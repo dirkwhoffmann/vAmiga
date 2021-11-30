@@ -6,15 +6,16 @@ project(vAmiga)
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS False)
 
 # Create the emulator library
 add_library(vAmiga Amiga.cpp)
 
 # Specify compile options
 if(MSVC)
-  target_compile_options(vAmiga PRIVATE /W4)
-  # target_compile_options(vAmiga PRIVATE /WX)
+  target_compile_options(vAmiga PRIVATE /W4 /WX)
   target_compile_options(vAmiga PRIVATE /wd4100 /wd4201 /wd4324 /wd4458)
+  add_compile_definitions(_USE_MATH_DEFINES)
   set_source_files_properties(CPU/Moira/Moira.cpp PROPERTIES COMPILE_FLAGS "/wd4127")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   target_compile_options(vAmiga PRIVATE -O3 -Wall -Werror)
