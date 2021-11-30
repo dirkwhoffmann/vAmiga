@@ -37,9 +37,11 @@ IMGFile::init(DiskDiameter dia, DiskDensity den)
 
         size = 9 * 160 * 512;
         data = new u8[size]();
-    }
 
-    throw VAError(ERROR_DISK_INVALID_LAYOUT);
+    } else {
+
+        throw VAError(ERROR_DISK_INVALID_LAYOUT);
+    }
 }
 
 void

@@ -102,10 +102,12 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         // Note: We don't need to rebuild the table if audio DMA changes,
         // because audio events are always executed.
         
-        if (oldSPREN ^ newSPREN)
+        if (oldSPREN ^ newSPREN) {
             trace(DMA_DEBUG, "Sprite DMA %s\n", newSPREN ? "on" : "off");
-        if (oldDSKEN ^ newDSKEN)
+        }
+        if (oldDSKEN ^ newDSKEN) {
             trace(DMA_DEBUG, "Disk DMA %s\n", newDSKEN ? "on" : "off");
+        }
         
         u16 newDAS = newDMAEN ? (newValue & 0x3F) : 0;
         

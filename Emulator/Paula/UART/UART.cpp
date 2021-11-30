@@ -138,7 +138,7 @@ UART::copyFromReceiveShiftRegister()
     // Update the overrun bit
     // Bit will be 1 if the RBF interrupt hasn't been acknowledged yet
     ovrun = GET_BIT(paula.intreq, 11);
-    if (ovrun) trace(SER_DEBUG, "OVERRUN BIT IS 1\n");
+    if (ovrun) { trace(SER_DEBUG, "OVERRUN BIT IS 1\n"); }
 
     // Trigger the RBF interrupt (Read Buffer Full)
     trace(SER_DEBUG, "Triggering RBF interrupt\n");
