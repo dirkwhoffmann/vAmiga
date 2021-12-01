@@ -14,7 +14,6 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        fail-fast: false
         include:
           - { sys: mingw32, env: i686 }
           - { sys: mingw64, env: x86_64 }
