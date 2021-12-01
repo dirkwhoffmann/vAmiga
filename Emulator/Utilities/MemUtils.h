@@ -8,8 +8,53 @@
 // -----------------------------------------------------------------------------
 
 #include "Types.h"
+#include <bit>
 
 namespace util {
+
+// Reverses the byte ordering in an integer value
+#ifdef _MSC_VER
+#define SWAP16 _byteswap_ushort
+#define SWAP32 _byteswap_ulong
+#define SWAP64 _byteswap_uint64
+#else
+#define SWAP16  __builtin_bswap16
+#define SWAP32  __builtin_bswap32
+#define SWAP64  __builtin_bswap64
+#endif
+
+// Returns the big endian representation of an integer value
+template<typename T> T bigEndian(T x);
+
+template<>
+inline uint16_t bigEndian(uint16_t x)
+ {
+    if constexpr (std::endian::native == std::endian::big) {
+        return x;
+    } else {
+        return SWAP16(x);
+    }
+}
+
+template<>
+inline uint32_t bigEndian(uint32_t x)
+ {
+    if constexpr (std::endian::native == std::endian::big) {
+        return x;
+    } else {
+        return SWAP32(x);
+    }
+}
+
+template<>
+inline uint64_t bigEndian(uint64_t x)
+{
+    if constexpr (std::endian::native == std::endian::big) {
+        return x;
+    } else {
+        return SWAP64(x);
+    }
+}
 
 // Checks if a certain memory area is all zero
 bool isZero(const u8 *ptr, usize size);
