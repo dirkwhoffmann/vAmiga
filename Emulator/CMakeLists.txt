@@ -8,7 +8,12 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS False)
 
-# Create the emulator library
+# Set the optimization level (if not specified on the command line)
+if(NOT CMAKE_BUILD_TYPE)
+#  set(CMAKE_BUILD_TYPE Release)
+endif()
+
+# Define the emulator library
 add_library(vAmigaCore Amiga.cpp)
 
 # Specify compile options
@@ -18,11 +23,11 @@ if(MSVC)
   target_compile_options(vAmigaCore PRIVATE /wd4100 /wd4201 /wd4324 /wd4458)
   set_source_files_properties(CPU/Moira/Moira.cpp PROPERTIES COMPILE_FLAGS "/wd4127")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  target_compile_options(vAmigaCore PRIVATE -O3 -Wall -Werror)
+  target_compile_options(vAmigaCore PRIVATE -Wall -Werror)
   target_compile_options(vAmigaCore PRIVATE -Wno-unused-parameter)
   target_compile_options(vAmigaCore PRIVATE -fconcepts)
 else()
-  target_compile_options(vAmigaCore PRIVATE -O3 -Wall -Werror)
+  target_compile_options(vAmigaCore PRIVATE -Wall -Werror)
   target_compile_options(vAmigaCore PRIVATE -Wno-unused-parameter)
 endif()
 
