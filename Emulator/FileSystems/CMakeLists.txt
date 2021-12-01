@@ -1,4 +1,4 @@
-target_sources(vAmiga PRIVATE
+target_sources(vAmigaCore PRIVATE
 
 FSDescriptors.cpp
 FSDevice.cpp

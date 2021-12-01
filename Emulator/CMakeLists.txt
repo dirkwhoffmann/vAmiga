@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.21 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
 # Set the project name
-project(vAmiga)
+project(vAmigaCore)
 
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 20)
@@ -9,60 +9,60 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS False)
 
 # Create the emulator library
-add_library(vAmiga Amiga.cpp)
+add_library(vAmigaCore Amiga.cpp)
 
 # Specify compile options
+target_compile_definitions(vAmigaCore PRIVATE _USE_MATH_DEFINES)
 if(MSVC)
-  target_compile_options(vAmiga PRIVATE /W4 /WX)
-  target_compile_options(vAmiga PRIVATE /wd4100 /wd4201 /wd4324 /wd4458)
-  add_compile_definitions(_USE_MATH_DEFINES)
+  target_compile_options(vAmigaCore PRIVATE /W4 /WX)
+  target_compile_options(vAmigaCore PRIVATE /wd4100 /wd4201 /wd4324 /wd4458)
   set_source_files_properties(CPU/Moira/Moira.cpp PROPERTIES COMPILE_FLAGS "/wd4127")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  target_compile_options(vAmiga PRIVATE -O3 -Wall -Werror)
-  target_compile_options(vAmiga PRIVATE -Wno-unused-parameter)
-  target_compile_options(vAmiga PRIVATE -fconcepts)
+  target_compile_options(vAmigaCore PRIVATE -O3 -Wall -Werror)
+  target_compile_options(vAmigaCore PRIVATE -Wno-unused-parameter)
+  target_compile_options(vAmigaCore PRIVATE -fconcepts)
 else()
-  target_compile_options(vAmiga PRIVATE -O3 -Wall -Werror)
-  target_compile_options(vAmiga PRIVATE -Wno-unused-parameter)
+  target_compile_options(vAmigaCore PRIVATE -O3 -Wall -Werror)
+  target_compile_options(vAmigaCore PRIVATE -Wno-unused-parameter)
 endif()
 
 # Enable additional features on certain architectures
 if(MSVC)
   #
 else()
-  target_compile_definitions(vAmiga PRIVATE SCREEN_RECORDER)
+  target_compile_definitions(vAmigaCore PRIVATE SCREEN_RECORDER)
 endif()
 
 # Add include paths
-include_directories(
-${CMAKE_SOURCE_DIR}/.
-${CMAKE_SOURCE_DIR}/..
-${CMAKE_SOURCE_DIR}/Utilities
-${CMAKE_SOURCE_DIR}/Base
-${CMAKE_SOURCE_DIR}/LogicBoard
-${CMAKE_SOURCE_DIR}/CPU
-${CMAKE_SOURCE_DIR}/CPU/Moira
-${CMAKE_SOURCE_DIR}/CIA
-${CMAKE_SOURCE_DIR}/Paula
-${CMAKE_SOURCE_DIR}/Paula/Audio
-${CMAKE_SOURCE_DIR}/Paula/DiskController
-${CMAKE_SOURCE_DIR}/Paula/UART
-${CMAKE_SOURCE_DIR}/Denise
-${CMAKE_SOURCE_DIR}/Agnus
-${CMAKE_SOURCE_DIR}/Agnus/Copper
-${CMAKE_SOURCE_DIR}/Agnus/Blitter
-${CMAKE_SOURCE_DIR}/Memory
-${CMAKE_SOURCE_DIR}/Peripherals
-${CMAKE_SOURCE_DIR}/Peripherals/Drive
-${CMAKE_SOURCE_DIR}/Peripherals/Mouse
-${CMAKE_SOURCE_DIR}/Peripherals/Joystick
-${CMAKE_SOURCE_DIR}/Peripherals/Keyboard
-${CMAKE_SOURCE_DIR}/Media
-${CMAKE_SOURCE_DIR}/Media/RomFiles
-${CMAKE_SOURCE_DIR}/Media/DiskFiles
-${CMAKE_SOURCE_DIR}/FileSystems
-${CMAKE_SOURCE_DIR}/RetroShell
-${CMAKE_SOURCE_DIR}/xdms)
+target_include_directories(vAmigaCore PUBLIC
+${CMAKE_CURRENT_SOURCE_DIR}/.
+${CMAKE_CURRENT_SOURCE_DIR}/..
+${CMAKE_CURRENT_SOURCE_DIR}/Utilities
+${CMAKE_CURRENT_SOURCE_DIR}/Base
+${CMAKE_CURRENT_SOURCE_DIR}/LogicBoard
+${CMAKE_CURRENT_SOURCE_DIR}/CPU
+${CMAKE_CURRENT_SOURCE_DIR}/CPU/Moira
+${CMAKE_CURRENT_SOURCE_DIR}/CIA
+${CMAKE_CURRENT_SOURCE_DIR}/Paula
+${CMAKE_CURRENT_SOURCE_DIR}/Paula/Audio
+${CMAKE_CURRENT_SOURCE_DIR}/Paula/DiskController
+${CMAKE_CURRENT_SOURCE_DIR}/Paula/UART
+${CMAKE_CURRENT_SOURCE_DIR}/Denise
+${CMAKE_CURRENT_SOURCE_DIR}/Agnus
+${CMAKE_CURRENT_SOURCE_DIR}/Agnus/Copper
+${CMAKE_CURRENT_SOURCE_DIR}/Agnus/Blitter
+${CMAKE_CURRENT_SOURCE_DIR}/Memory
+${CMAKE_CURRENT_SOURCE_DIR}/Peripherals
+${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Drive
+${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Mouse
+${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Joystick
+${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Keyboard
+${CMAKE_CURRENT_SOURCE_DIR}/Media
+${CMAKE_CURRENT_SOURCE_DIR}/Media/RomFiles
+${CMAKE_CURRENT_SOURCE_DIR}/Media/DiskFiles
+${CMAKE_CURRENT_SOURCE_DIR}/FileSystems
+${CMAKE_CURRENT_SOURCE_DIR}/RetroShell
+${CMAKE_CURRENT_SOURCE_DIR}/xdms)
 
 # Add sub directories
 add_subdirectory(Utilities)
@@ -81,4 +81,4 @@ add_subdirectory(RetroShell)
 add_subdirectory(xdms)
 
 # Add libraries
-target_link_libraries(vAmiga xdms)
+target_link_libraries(vAmigaCore xdms)

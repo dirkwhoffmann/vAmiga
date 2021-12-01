@@ -1,4 +1,4 @@
-target_sources(vAmiga PRIVATE
+target_sources(vAmigaCore PRIVATE
 
 Drive.cpp
 Disk.cpp
