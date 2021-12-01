@@ -27,9 +27,7 @@ else()
 endif()
 
 # Enable additional features on certain architectures
-if(MSVC)
-  #
-else()
+if(NOT WIN32)
   target_compile_definitions(vAmigaCore PRIVATE SCREEN_RECORDER)
 endif()
 
