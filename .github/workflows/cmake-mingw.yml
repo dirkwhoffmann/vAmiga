@@ -42,6 +42,6 @@ jobs:
     - name: Build
       working-directory: ./Emulator
       run: |
-        cmake -G Ninja -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        cmake --build build --config ${{env.BUILD_TYPE}}
       
