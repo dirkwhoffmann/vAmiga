@@ -16,6 +16,7 @@
 #include "CPU.h"
 #include "Denise.h"
 #include "Drive.h"
+#include "GdbServer.h"
 #include "Keyboard.h"
 #include "Memory.h"
 #include "MsgQueue.h"
@@ -78,10 +79,13 @@ public:
     // Shortcuts to all four drives
     Drive *df[4] = { &df0, &df1, &df2, &df3 };
     
+    // Gateway to the GUI
+    MsgQueue msgQueue = MsgQueue(*this);
+
     // Misc
     RetroShell retroShell = RetroShell(*this);
+    GdbServer gdbServer = GdbServer(*this);
     RegressionTester regressionTester = RegressionTester(*this);
-    MsgQueue msgQueue = MsgQueue(*this);
     
     
     //

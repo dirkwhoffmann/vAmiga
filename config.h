@@ -180,7 +180,7 @@ static const int IMG_DEBUG       = 0; // IMG files
 static const int RTC_DEBUG       = 0; // Real-time clock
 static const int KBD_DEBUG       = 0; // Keyboard
 static const int REC_DEBUG       = 0; // Screen recorder
-
+static const int GDB_DEBUG       = 1; // GDB debug server
 
 //
 // Forced error conditions

@@ -58,6 +58,7 @@ Amiga::Amiga()
         &mem,
         &cpu,
         &retroShell,
+        &gdbServer,
         &regressionTester,
         &msgQueue
     };

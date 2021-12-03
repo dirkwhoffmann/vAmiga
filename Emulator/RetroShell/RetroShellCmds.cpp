@@ -1107,3 +1107,21 @@ RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 {
     dump(*amiga.df[param], dump::State);
 }
+
+template <> void
+RetroShell::exec <Token::gdbserver, Token::start> (Arguments& argv, long param)
+{    
+    gdbServer.start(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::gdbserver, Token::stop> (Arguments& argv, long param)
+{
+    gdbServer.stop();
+}
+
+template <> void
+RetroShell::exec <Token::gdbserver, Token::inspect> (Arguments& argv, long param)
+{
+    dump(gdbServer, dump::State);
+}

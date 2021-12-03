@@ -937,4 +937,29 @@ Interpreter::registerInstructions()
                  "command", "Displays the internal state",
                  &RetroShell::exec <Token::dfn, Token::inspect>);
     }
+    
+    //
+    // GDB Server
+    //
+    
+    root.add({"gdbserver"},
+             "component", "Debug server");
+
+    /*
+    root.add({"gdbserver", "config"},
+             "command", "Displays the current configuration",
+             &RetroShell::exec <Token::gdbserver, Token::config>);
+    */
+    
+    root.add({"gdbserver", "start"},
+             "command", "Starts the debug server",
+             &RetroShell::exec <Token::gdbserver, Token::start>, 1);
+
+    root.add({"gdbserver", "stop"},
+             "command", "Stops the debug server",
+             &RetroShell::exec <Token::gdbserver, Token::stop>);
+
+    root.add({"gdbserver", "inspect"},
+             "command", "Displays the internal state",
+             &RetroShell::exec <Token::gdbserver, Token::inspect>);
 }

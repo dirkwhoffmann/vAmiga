@@ -21,14 +21,14 @@ enum class Token
     
     // Components
     agnus, amiga, audio, blitter, cia, controlport, copper, cpu, dc, denise,
-    dfn, dmadebugger, keyboard, memory, monitor, mouse, paula, regression,
-    screenshot, serial, rtc,
+    dfn, dmadebugger, gdbserver, keyboard, memory, monitor, mouse, paula,
+    regression, screenshot, serial, rtc,
 
     // Commands
     about, audiate, autosync, clear, close, config, connect, debug, disable,
     disconnect, dsksync, easteregg, eject, enable, jump, hide, init, insert,
     inspect, list, load, lock, off, on, open, pause, power, press, reset, run,
-    save, set, setup, show, source, wait,
+    save, set, setup, show, source, start, stop, wait,
             
     // Keys
     accuracy, bankmap, bitplanes, brightness, channel, checksums, chip,
@@ -38,8 +38,8 @@ enum class Token
     mode, model, opacity, palette, pan, path, poll, pullup, raminitpattern,
     refresh, registers, regreset, revision, right, rom, sampling, saturation,
     saveroms, searchpath, shakedetector, slow, slowramdelay, slowrammirror,
-    speed, sprites, state, step, swapdelay, tod, todbug, unmappingtype,
-    velocity, volume, wom
+    speed, sprites, state, step, swapdelay, tod, todbug,
+    unmappingtype, velocity, volume, wom
 };
 
 struct TooFewArgumentsError : public util::ParseError {

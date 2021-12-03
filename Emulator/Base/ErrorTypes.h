@@ -60,12 +60,18 @@ enum_long(ERROR_CODE)
     ERROR_EXT_FACTOR5,
     ERROR_EXT_INCOMPATIBLE,
     ERROR_EXT_CORRUPTED,
-
     ERROR_DMS_CANT_CREATE,
     
     // Encrypted Roms
     ERROR_MISSING_ROM_KEY,
     ERROR_INVALID_ROM_KEY,
+    
+    // GDB server
+    ERROR_SOCK_CANT_CREATE,
+    ERROR_SOCK_CANT_CONNECT,
+    ERROR_SOCK_DISCONNECTED,
+    ERROR_GDB_RUNNING,
+    ERROR_GDB_NOT_RUNNING,
     
     // File system
     ERROR_FS_UNKNOWN,
@@ -161,6 +167,12 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
             case ERROR_INVALID_ROM_KEY:             return "INVALID_ROM_KEY";
                 
+            case ERROR_SOCK_CANT_CREATE:            return "ERROR_SOCK_CANT_CREATE";
+            case ERROR_SOCK_CANT_CONNECT:           return "ERROR_SOCK_CANT_CONNECT";
+            case ERROR_SOCK_DISCONNECTED:           return "ERROR_SOCK_DISCONNECTED";
+            case ERROR_GDB_RUNNING:                 return "GDB_RUNNING";
+            case ERROR_GDB_NOT_RUNNING:             return "GDB_NOT_RUNNING";
+
             case ERROR_FS_UNKNOWN:                  return "FS_UNKNOWN";
             case ERROR_FS_UNSUPPORTED:              return "FS_UNSUPPORTED";
             case ERROR_FS_WRONG_BSIZE:              return "FS_WRONG_BSIZE";
