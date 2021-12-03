@@ -11,6 +11,11 @@
 #include "FSDescriptors.h"
 #include "IOUtils.h"
 
+FSDeviceDescriptor::FSDeviceDescriptor()
+{
+    
+}
+
 FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, FSVolumeType dos)
 {
     /* TODO: REPLACE BY init(...)

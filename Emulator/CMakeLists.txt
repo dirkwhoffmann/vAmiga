@@ -33,7 +33,8 @@ endif()
 
 # Enable additional features on certain architectures
 if(NOT WIN32)
-  target_compile_definitions(vAmigaCore PRIVATE SCREEN_RECORDER)
+  target_compile_definitions(vAmigaCore PUBLIC SCREEN_RECORDER)
+  target_compile_definitions(vAmigaCore PUBLIC GDB_SERVER)
 endif()
 
 # Add include paths
