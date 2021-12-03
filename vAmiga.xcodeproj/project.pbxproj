@@ -216,6 +216,9 @@
 		50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE37240D41EE00155AE4 /* Moira.cpp */; };
 		50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* SubComponent.cpp */; };
 		50E8199325B350DA00D2E3A5 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E8199225B350DA00D2E3A5 /* Errors.swift */; };
+		50E98B51275A124900AA0CB9 /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B4F275A124900AA0CB9 /* Socket.cpp */; };
+		50E98B55275A127F00AA0CB9 /* GdbServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B53275A127F00AA0CB9 /* GdbServer.cpp */; };
+		50E98B57275A12B300AA0CB9 /* GdbServerCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B56275A12B300AA0CB9 /* GdbServerCmds.cpp */; };
 		50EAD99C256E76820053F9AC /* HDFFile.h in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99B256E76820053F9AC /* HDFFile.h */; };
 		50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
 		50EB8CCA25306E8E0053988A /* ExportVideoDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */; };
@@ -610,6 +613,11 @@
 		50E79BE7232D123000D296FB /* SubComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SubComponent.cpp; sourceTree = "<group>"; };
 		50E79BE8232D123000D296FB /* SubComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SubComponent.h; sourceTree = "<group>"; };
 		50E8199225B350DA00D2E3A5 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		50E98B4F275A124900AA0CB9 /* Socket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Socket.cpp; sourceTree = "<group>"; };
+		50E98B50275A124900AA0CB9 /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
+		50E98B53275A127F00AA0CB9 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
+		50E98B54275A127F00AA0CB9 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
+		50E98B56275A12B300AA0CB9 /* GdbServerCmds.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServerCmds.cpp; sourceTree = "<group>"; };
 		50EAB95726C10B6C00BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAB95926C10B8600BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAB95B26C10B9400BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -1054,6 +1062,7 @@
 				5056506925440FDE00A79D27 /* FileSystems */,
 				50B9C42A2609430F00A86C31 /* RetroShell */,
 				50F54B0B24B5D31D0078FDC9 /* xdms */,
+				50E98B52275A125700AA0CB9 /* GdbServer */,
 			);
 			path = Emulator;
 			sourceTree = "<group>";
@@ -1383,6 +1392,18 @@
 			path = Moira;
 			sourceTree = "<group>";
 		};
+		50E98B52275A125700AA0CB9 /* GdbServer */ = {
+			isa = PBXGroup;
+			children = (
+				50E98B50275A124900AA0CB9 /* Socket.h */,
+				50E98B4F275A124900AA0CB9 /* Socket.cpp */,
+				50E98B54275A127F00AA0CB9 /* GdbServer.h */,
+				50E98B53275A127F00AA0CB9 /* GdbServer.cpp */,
+				50E98B56275A12B300AA0CB9 /* GdbServerCmds.cpp */,
+			);
+			path = GdbServer;
+			sourceTree = "<group>";
+		};
 		50EAB95426C10B3D00BFA9D8 /* Mouse */ = {
 			isa = PBXGroup;
 			children = (
@@ -1622,6 +1643,7 @@
 				50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */,
 				508FE01A21EA227B0043D0E9 /* MyFormatter.swift in Sources */,
 				500C7170255EE2AC00DDEEB2 /* Concurrency.cpp in Sources */,
+				50E98B57275A12B300AA0CB9 /* GdbServerCmds.cpp in Sources */,
 				50A61463260DB7F900A01428 /* Parser.cpp in Sources */,
 				50C8C4552607524400F4E012 /* Monitors.swift in Sources */,
 				501A9937243A07A100D269B2 /* Storage.swift in Sources */,
@@ -1682,6 +1704,7 @@
 				5019605D23125E680051B669 /* Monitor.swift in Sources */,
 				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,
 				50AEBEDA24D3D78F0037082D /* DiskControllerEvents.cpp in Sources */,
+				50E98B51275A124900AA0CB9 /* Socket.cpp in Sources */,
 				50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */,
 				50AE6EE124D9407F000AA367 /* BlitterRegs.cpp in Sources */,
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
@@ -1762,6 +1785,7 @@
 				50F54B2E24B5D31D0078FDC9 /* u_rle.c in Sources */,
 				50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */,
 				5056507C25459C8800A79D27 /* FSObjects.cpp in Sources */,
+				50E98B55275A127F00AA0CB9 /* GdbServer.cpp in Sources */,
 				50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */,
 				50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */,
 				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,
