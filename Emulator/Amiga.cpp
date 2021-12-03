@@ -296,6 +296,11 @@ Amiga::getConfigItem(Option option, long id) const
             if (id == PORT_2) return controlPort2.joystick.getConfigItem(option);
             fatalError;
 
+        case OPT_GDB_PORT:
+        case OPT_GDB_VERBOSE:
+            
+            return gdbServer.getConfigItem(option);
+            
         default:
             fatalError;
     }    
@@ -466,6 +471,12 @@ Amiga::configure(Option option, i64 value)
             
             controlPort1.joystick.setConfigItem(option, value);
             controlPort2.joystick.setConfigItem(option, value);
+            break;
+            
+        case OPT_GDB_PORT:
+        case OPT_GDB_VERBOSE:
+            
+            gdbServer.setConfigItem(option, value);
             break;
 
         default:

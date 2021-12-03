@@ -618,6 +618,7 @@
 		50E98B53275A127F00AA0CB9 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
 		50E98B54275A127F00AA0CB9 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
 		50E98B56275A12B300AA0CB9 /* GdbServerCmds.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServerCmds.cpp; sourceTree = "<group>"; };
+		50E98B58275A779B00AA0CB9 /* GdbServerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServerTypes.h; sourceTree = "<group>"; };
 		50EAB95726C10B6C00BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAB95926C10B8600BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAB95B26C10B9400BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -1397,6 +1398,7 @@
 			children = (
 				50E98B50275A124900AA0CB9 /* Socket.h */,
 				50E98B4F275A124900AA0CB9 /* Socket.cpp */,
+				50E98B58275A779B00AA0CB9 /* GdbServerTypes.h */,
 				50E98B54275A127F00AA0CB9 /* GdbServer.h */,
 				50E98B53275A127F00AA0CB9 /* GdbServer.cpp */,
 				50E98B56275A12B300AA0CB9 /* GdbServerCmds.cpp */,

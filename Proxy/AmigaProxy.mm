@@ -1392,6 +1392,11 @@ using namespace moira;
     return str ? @(str) : nullptr;
 }
 
+- (BOOL)isDirty
+{
+    return [self shell]->isDirty;
+}
+
 - (void)pressUp
 {
     [self shell]->pressUp();

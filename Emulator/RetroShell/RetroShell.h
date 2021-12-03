@@ -43,15 +43,17 @@ class RetroShell : public SubComponent {
     // The currently active input string
     isize ipos = 0;
 
+    // Wake up cycle for interrupted scripts
+    Cycle wakeUp = INT64_MAX;
+
+public:
+    
     // Indicates if TAB was the most recently pressed key
     bool tabPressed = false;
     
     // Indicates whether the shell needs to be redrawn (DEPRECATED)
     bool isDirty = false;
     
-    // Wake up cycle for interrupted scripts
-    Cycle wakeUp = INT64_MAX;
-
     
     //
     // Script processing

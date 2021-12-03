@@ -18,6 +18,10 @@ GdbServer::_dump(dump::Category category, std::ostream& os) const
     
     if (category & dump::Config) {
         
+        os << tab("Port");
+        os << dec(config.port) << std::endl;
+        os << tab("Verbose");
+        os << bol(config.verbose) << std::endl;
     }
     
     if (category & dump::State) {

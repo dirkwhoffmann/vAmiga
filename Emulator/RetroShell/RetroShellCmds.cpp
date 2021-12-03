@@ -1109,9 +1109,27 @@ RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::gdbserver, Token::config> (Arguments &argv, long param)
+{
+    dump(gdbServer, dump::Config);
+}
+
+template <> void
+RetroShell::exec <Token::gdbserver, Token::set, Token::port> (Arguments &argv, long param)
+{
+    amiga.configure(OPT_GDB_PORT, util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::gdbserver, Token::set, Token::verbose> (Arguments &argv, long param)
+{
+    amiga.configure(OPT_GDB_VERBOSE, util::parseBool(argv.front()));
+}
+
+template <> void
 RetroShell::exec <Token::gdbserver, Token::start> (Arguments& argv, long param)
 {    
-    gdbServer.start(util::parseNum(argv.front()));
+    gdbServer.start();
 }
 
 template <> void

@@ -9,11 +9,15 @@
 
 #pragma once
 
+#include "GdbServerTypes.h"
 #include "SubComponent.h"
 #include "Socket.h"
 #include <thread>
 
 class GdbServer : public SubComponent {
+
+    // Current configuration
+    GdbServerConfig config = {};
 
     // The server thread
     std::thread serverThread;
@@ -58,6 +62,20 @@ private:
     isize _load(const u8 *buffer) override {return 0; }
     isize _save(u8 *buffer) override { return 0; }
 
+    
+    //
+    // Configuring
+    //
+
+public:
+    
+    static GdbServerConfig getDefaultConfig();
+    const GdbServerConfig &getConfig() const { return config; }
+    void resetConfig() override;
+
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
+    
 
     //
     // Running the server
@@ -74,6 +92,6 @@ private:
     
 public:
     
-    void start(isize port) throws;
+    void start() throws;
     void stop();
 };

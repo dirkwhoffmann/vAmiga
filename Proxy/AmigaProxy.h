@@ -648,6 +648,7 @@
 @property (readonly) NSInteger cposRel;
 
 - (NSString *)getText;
+- (BOOL)isDirty;
 - (void)pressUp;
 - (void)pressDown;
 - (void)pressLeft;

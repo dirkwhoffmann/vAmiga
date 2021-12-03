@@ -536,6 +536,9 @@ extension MyController {
                 metal.releaseMouse()
             }
             
+        case .GDB_UPDATE:
+            renderer.console.isDirty = true
+            
         default:
             track("Unknown message: \(msg)")
             fatalError()

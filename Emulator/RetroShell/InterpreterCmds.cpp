@@ -945,15 +945,24 @@ Interpreter::registerInstructions()
     root.add({"gdbserver"},
              "component", "Debug server");
 
-    /*
     root.add({"gdbserver", "config"},
              "command", "Displays the current configuration",
              &RetroShell::exec <Token::gdbserver, Token::config>);
-    */
     
+    root.add({"gdbserver", "set"},
+             "command", "Configures the component");
+        
+    root.add({"gdbserver", "set", "port"},
+             "key", "Assigns the port number",
+             &RetroShell::exec <Token::gdbserver, Token::set, Token::port>, 1);
+
+    root.add({"gdbserver", "set", "verbose"},
+             "key", "Enables or disables verbose mode",
+             &RetroShell::exec <Token::gdbserver, Token::set, Token::verbose>, 1);
+
     root.add({"gdbserver", "start"},
              "command", "Starts the debug server",
-             &RetroShell::exec <Token::gdbserver, Token::start>, 1);
+             &RetroShell::exec <Token::gdbserver, Token::start>);
 
     root.add({"gdbserver", "stop"},
              "command", "Stops the debug server",
