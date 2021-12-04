@@ -18,6 +18,25 @@ GdbServer::GdbServer(Amiga& ref) : SubComponent(ref)
 {
 }
 
+void
+GdbServer::_dump(dump::Category category, std::ostream& os) const
+{
+    using namespace util;
+    
+    if (category & dump::Config) {
+        
+        os << tab("Port");
+        os << dec(config.port) << std::endl;
+        os << tab("Verbose");
+        os << bol(config.verbose) << std::endl;
+    }
+    
+    if (category & dump::State) {
+        
+        os << tab("Port") << dec(port) << std::endl;
+    }
+}
+
 GdbServerConfig
 GdbServer::getDefaultConfig()
 {
@@ -79,11 +98,14 @@ GdbServer::start()
     // Error out if the server is already running
     if (this->port) throw VAError(ERROR_GDB_RUNNING);
         
-    this->port = config.port;
-
+    port = config.port;
+    ackMode = true;
+    
     // Spawn a new thread
     if (serverThread.joinable()) serverThread.join();
     serverThread = std::thread(&GdbServer::main, this);
+    
+    msgQueue.put(MSG_GDB_START);
 }
 
 void
@@ -101,7 +123,37 @@ GdbServer::stop()
         serverThread.join();
         
         debug(GDB_DEBUG, "stopped\n");
+        msgQueue.put(MSG_GDB_STOP);
     }
+}
+
+string
+GdbServer::receive()
+{
+    auto packet = connection.recv();
+
+    debug(GDB_DEBUG, "Received %s\n", packet.c_str());
+
+    if (config.verbose) {
+        
+        retroShell << packet << '\n';
+    }
+
+    msgQueue.put(MSG_GDB_RECEIVE);
+    return packet;
+}
+
+void
+GdbServer::send(const string &cmd)
+{
+    string packet = "$";
+                
+    packet += cmd;
+    packet += "#";
+    packet += checksum(cmd);
+    
+    connection.send(packet);
+    msgQueue.put(MSG_GDB_SEND);
 }
 
 void
@@ -121,14 +173,7 @@ GdbServer::main()
 
         while (1) {
             
-            auto cmd = connection.recv();
-            debug(GDB_DEBUG, "Received %s\n", cmd.c_str());
-
-            if (config.verbose) {
-                
-                retroShell << cmd << '\n';
-                msgQueue.put(MSG_GDB_UPDATE);
-            }
+            auto cmd = receive();
             
             // if (cmd == "") break;
         }
@@ -141,4 +186,18 @@ GdbServer::main()
         
         debug(GDB_DEBUG, "Leaving main\n");
     }
+}
+
+std::vector<string>
+GdbServer::split(const string &s, char delimiter)
+{
+    std::stringstream ss(s);
+    std::vector<std::string> result;
+    string substr;
+    
+    while(std::getline(ss, substr, delimiter)) {
+        result.push_back(substr);
+    }
+    
+    return result;
 }

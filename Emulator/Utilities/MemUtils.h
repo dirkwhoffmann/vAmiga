@@ -59,6 +59,9 @@ inline uint64_t bigEndian(uint64_t x)
 // Checks if a certain memory area is all zero
 bool isZero(const u8 *ptr, usize size);
 
+// Converts an integer value to a hexadecimal string representation
+template <isize digits> string hexstr(isize number);
+
 // Prints a hex dump of a buffer to the console
 void hexdump(u8 *p, isize size, isize cols, isize pad);
 void hexdump(u8 *p, isize size, isize cols = 32);

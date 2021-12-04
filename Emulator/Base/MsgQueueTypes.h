@@ -96,7 +96,10 @@ enum_long(MSG_TYPE)
     // Debugging
     MSG_DMA_DEBUG_ON,
     MSG_DMA_DEBUG_OFF,
-    MSG_GDB_UPDATE
+    MSG_GDB_START,
+    MSG_GDB_RECEIVE,
+    MSG_GDB_SEND,
+    MSG_GDB_STOP
 };
 typedef MSG_TYPE MsgType;
 
@@ -104,7 +107,7 @@ typedef MSG_TYPE MsgType;
 struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
 {
     static long min() { return 0; }
-    static long max() { return MSG_GDB_UPDATE; }
+    static long max() { return MSG_GDB_STOP; }
     static bool isValid(auto value) { return value >= min() && value <= max(); }
 
     static const char *prefix() { return "MSG"; }
@@ -180,7 +183,10 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
                 
             case MSG_DMA_DEBUG_ON:        return "DMA_DEBUG_ON";
             case MSG_DMA_DEBUG_OFF:       return "DMA_DEBUG_OFF";
-            case MSG_GDB_UPDATE:          return "GDB_UPDATE";
+            case MSG_GDB_START:           return "GDB_START";
+            case MSG_GDB_RECEIVE:         return "GDB_RECEIVE";
+            case MSG_GDB_SEND:            return "GDB_SEND";
+            case MSG_GDB_STOP:            return "GDB_STOP";
         }
         return "???";
     }

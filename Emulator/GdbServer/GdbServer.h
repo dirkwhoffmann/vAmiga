@@ -25,6 +25,9 @@ class GdbServer : public SubComponent {
     // The port the server is listening at
     isize port = 0;
 
+    // Indicates whether received packets should be acknowledged
+    bool ackMode = false;
+    
     // The port listener and it's associated connection
     PortListener listener;
     Socket connection;
@@ -94,4 +97,29 @@ public:
     
     void start() throws;
     void stop();
+    
+    
+    //
+    // Transmitting packets
+    //
+    
+    string receive() throws;
+    void send(const string &packet) throws;
+    
+    
+    //
+    // Processing packets
+    //
+
+public:
+    
+    void process(string cmd) throws;
+    
+private:
+    
+    void process(char cmd, string arg) throws;
+    template <char cmd> void process(string arg) throws;
+    
+    string checksum(const string &s);
+    std::vector<string> split(const string &s, char delimiter);
 };

@@ -10,7 +10,7 @@
 import AVFoundation
 
 enum WarpMode: Int {
-
+    
     case auto
     case off
     case on
@@ -21,18 +21,18 @@ protocol MessageReceiver {
 }
 
 class MyController: NSWindowController, MessageReceiver {
-
+    
     var pref: Preferences { return myAppDelegate.pref }
-
+    
     // Reference to the connected document
     var mydocument: MyDocument!
     
     // Amiga proxy (bridge between the Swift frontend and the C++ backend)
     var amiga: AmigaProxy!
-
+    
     // Inspector panel of this emulator instance
     var inspector: Inspector?
-
+    
     // Monitor panel of this emulator instance
     var monitor: Monitor?
     
@@ -42,13 +42,13 @@ class MyController: NSWindowController, MessageReceiver {
     // Snapshot and screenshot browsers
     var snapshotBrowser: SnapshotDialog?
     var screenshotBrowser: ScreenshotDialog?
-
+    
     // The current emulator configuration
     var config: Configuration!
     
     // Audio Engine
     var macAudio: MacAudio!
-     
+    
     // Game pad manager
     var gamePadManager: GamePadManager!
     var gamePad1: GamePad? { return gamePadManager.gamePads[config.gameDevice1] }
@@ -56,10 +56,10 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Keyboard controller
     var keyboard: KeyboardController!
-
+    
     // Virtual keyboard
     var virtualKeyboard: VirtualKeyboardController?
-        
+    
     // Screenshot and snapshot timers
     var snapshotTimer: Timer?
     
@@ -68,13 +68,13 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Used inside the timer function to fine tune timed events
     var animationCounter = 0
-        
+    
     // Remembers if audio is muted (master volume of both channels is 0)
     var muted = false
     
     // Indicates if a status bar is shown
     var statusBar = true
-
+    
     // Small disk icon to be shown in NSMenuItems
     var smallDisk = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
     
@@ -91,9 +91,9 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Main screen
     @IBOutlet weak var metal: MetalView!
-
+    
     var renderer: Renderer!
-
+    
     // Status bar
     @IBOutlet weak var powerLED: NSButton!
     @IBOutlet weak var df0LED: NSButton!
@@ -112,26 +112,26 @@ class MyController: NSWindowController, MessageReceiver {
     @IBOutlet weak var df1DMA: NSProgressIndicator!
     @IBOutlet weak var df2DMA: NSProgressIndicator!
     @IBOutlet weak var df3DMA: NSProgressIndicator!
-
+    
     @IBOutlet weak var haltIcon: NSButton!
     @IBOutlet weak var cmdLock: NSButton!
     @IBOutlet weak var debugIcon: NSButton!
     @IBOutlet weak var muteIcon: NSButton!
-
+    
     @IBOutlet weak var warpIcon: NSButton!
     @IBOutlet weak var activityType: NSPopUpButton!
     @IBOutlet weak var activityInfo: NSTextField!
     @IBOutlet weak var activityBar: NSLevelIndicator!
-
+    
     // Toolbar
     @IBOutlet weak var toolbar: MyToolbar!
 }
 
 extension MyController {
-
+    
     // Provides the undo manager
     override open var undoManager: UndoManager? { return metal.undoManager }
-     
+    
     // Indicates if the emulator needs saving
     var needsSaving: Bool {
         get {
@@ -145,7 +145,7 @@ extension MyController {
             }
         }
     }
-
+    
     //
     // Initializing
     //
@@ -156,13 +156,13 @@ extension MyController {
         config = Configuration(with: self)
         macAudio = MacAudio(with: self)
     }
-
+    
     override open func windowDidLoad() {
-                         
+        
         // Create keyboard controller
         keyboard = KeyboardController(parent: self)
         assert(keyboard != nil, "Failed to create keyboard controller")
-
+        
         // Create game pad manager
         gamePadManager = GamePadManager(parent: self)
         assert(gamePadManager != nil, "Failed to create game pad manager")
@@ -171,7 +171,7 @@ extension MyController {
         renderer = Renderer(view: metal,
                             device: MTLCreateSystemDefaultDevice()!,
                             controller: self)
-
+        
         // Setup window
         configureWindow()
         
@@ -180,19 +180,19 @@ extension MyController {
         
         // Enable message processing
         registerAsListener()
-
+        
         // Process attachment (if any)
         try? mydocument.mountAttachment(destination: amiga.df0)
-
+        
         do {
             // Switch the Amiga on
             amiga.powerOn()
             
             // Start the emulation
             try amiga.run()
-
+            
         } catch {
-
+            
             // Switch the Amiga off
             amiga.powerOff()
             
@@ -201,7 +201,7 @@ extension MyController {
                 self.openConfigurator(tab: "Roms")
             }
         }
-
+        
         // Create speed monitor
         speedometer = Speedometer()
         
@@ -213,7 +213,7 @@ extension MyController {
     }
     
     func configureWindow() {
-    
+        
         // Add status bar
         window?.autorecalculatesContentBorderThickness(for: .minY)
         window?.setContentBorderThickness(32.0, for: .minY)
@@ -230,12 +230,12 @@ extension MyController {
     }
     
     func registerAsListener() {
-                
+        
         // Convert 'self' to a void pointer
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
         
         amiga.setListener(myself) { (ptr, type, data) in
-
+            
             // Convert void pointer back to 'self'
             let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
             
@@ -252,12 +252,12 @@ extension MyController {
     //
     
     func timerFunc() {
-
+        
         animationCounter += 1
-
+        
         // Animate the inspector
         if inspector?.window?.isVisible == true { inspector!.continuousRefresh() }
-         
+        
         // Do less times...
         if (animationCounter % 3) == 0 {
             
@@ -289,7 +289,7 @@ extension MyController {
         
         if warp != amiga.warpMode { amiga.warpMode = warp }
     }
-
+    
     func addValue(_ nr: Int, _ v: Float) {
         if let monitor = renderer.monitors.monitors[nr] as? BarChart {
             monitor.addValue(v)
@@ -301,11 +301,11 @@ extension MyController {
             monitor.addValues(v1, v2)
         }
     }
-
+    
     func updateMonitoringPanels() {
         
         if !renderer.monitors.isVisible { return }
-            
+        
         // DMA monitors
         let dma = amiga.agnus.getStats()
         let copDMA = Float(dma.copperActivity) / (313*120)
@@ -334,29 +334,29 @@ extension MyController {
         let fastW = Float(mem.fastWrites.accumulated) / max
         let kickR = Float(mem.kickReads.accumulated) / max
         let kickW = Float(mem.kickWrites.accumulated) / max
-
+        
         addValues(Monitors.Monitor.chipRam, chipR, chipW)
         addValues(Monitors.Monitor.slowRam, slowR, slowW)
         addValues(Monitors.Monitor.fastRam, fastR, fastW)
         addValues(Monitors.Monitor.kickRom, kickR, kickW)
     }
-                
+    
     func processMessage(_ msg: Message) {
         
         var driveNr: Int { return msg.data & 0xFF }
         var driveCyl: Int { return (msg.data >> 8) & 0xFF; }
-                
+        
         // Only proceed if the proxy object is still alive
         if amiga == nil { return }
-
+        
         switch msg.type {
-    
+            
         case .REGISTER:
             track("Successfully connected to message queue")
-                        
+            
         case .CONFIG:
             inspector?.fullRefresh()
-
+            
         case .POWER_ON:
             renderer.canvas.open(delay: 1.5)
             serialIn = ""
@@ -368,18 +368,18 @@ extension MyController {
         case .POWER_OFF:
             toolbar.updateToolbar()
             inspector?.powerOff()
-
+            
         case .RUN:
             needsSaving = true
             toolbar.updateToolbar()
             inspector?.run()
             refreshStatusBar()
-
+            
         case .PAUSE:
             toolbar.updateToolbar()
             inspector?.pause()
             refreshStatusBar()
-
+            
         case .STEP:
             needsSaving = true
             inspector?.step()
@@ -391,8 +391,8 @@ extension MyController {
             updateWarp()
             
         case .SCRIPT_DONE,
-             .SCRIPT_PAUSE,
-             .SCRIPT_ABORT:
+                .SCRIPT_PAUSE,
+                .SCRIPT_ABORT:
             renderer.console.isDirty = true
             
         case .SCRIPT_WAKEUP:
@@ -401,7 +401,7 @@ extension MyController {
             
         case .HALT:
             shutDown()
-
+            
         case .MUTE_ON:
             muted = true
             refreshStatusBar()
@@ -409,36 +409,36 @@ extension MyController {
         case .MUTE_OFF:
             muted = false
             refreshStatusBar()
-
+            
         case .WARP_ON,
-             .WARP_OFF:
+                .WARP_OFF:
             refreshStatusBar()
-
+            
         case .POWER_LED_ON:
             powerLED.image = NSImage(named: "powerLedOn")
-
+            
         case .POWER_LED_DIM:
             powerLED.image = NSImage(named: "powerLedDim")
-
+            
         case .POWER_LED_OFF:
             powerLED.image = NSImage(named: "powerLedOff")
-
+            
         case .CLOSE_CONSOLE:
             renderer.console.close(delay: 0.25)
             
         case .DMA_DEBUG_ON:
             renderer.zoomTextureOut()
-
+            
         case .DMA_DEBUG_OFF:
             renderer.zoomTextureIn()
-
+            
         case .BREAKPOINT_CONFIG:
             inspector?.fullRefresh()
             inspector?.scrollToPC()
-
+            
         case .BREAKPOINT_REACHED:
             inspector?.signalBreakPoint(pc: msg.data)
-                
+            
         case .WATCHPOINT_REACHED:
             inspector?.signalWatchPoint(pc: msg.data)
             
@@ -447,7 +447,7 @@ extension MyController {
             
         case .MEM_LAYOUT:
             inspector?.fullRefresh()
-
+            
         case .DRIVE_CONNECT:
             hideOrShowDriveMenus()
             refreshStatusBar()
@@ -455,33 +455,33 @@ extension MyController {
         case .DRIVE_DISCONNECT:
             hideOrShowDriveMenus()
             refreshStatusBar()
-
+            
         case .DRIVE_SELECT:
             refreshStatusBar(writing: nil)
-
+            
         case .DRIVE_READ:
             refreshStatusBar(writing: false)
             
         case .DRIVE_WRITE:
             refreshStatusBar(writing: true)
-
+            
         case .DRIVE_LED_ON,
-             .DRIVE_LED_OFF:
+                .DRIVE_LED_OFF:
             refreshStatusBar()
             
         case .DRIVE_MOTOR_ON,
-             .DRIVE_MOTOR_OFF:
+                .DRIVE_MOTOR_OFF:
             refreshStatusBar()
             updateWarp()
-
+            
         case .DRIVE_STEP:
             macAudio.playStepSound(drive: driveNr)
             refreshStatusBar(drive: driveNr, cylinder: driveCyl)
-
+            
         case .DRIVE_POLL:
             macAudio.playPollSound(drive: driveNr)
             refreshStatusBar(drive: driveNr, cylinder: driveCyl)
-  
+            
         case .DISK_INSERT:
             if driveNr == 0 { mydocument.setBootDiskID(amiga.df0.fnv) }
             macAudio.playInsertSound(drive: driveNr)
@@ -492,23 +492,23 @@ extension MyController {
             refreshStatusBar()
             
         case .DISK_UNSAVED,
-             .DISK_SAVED,
-             .DISK_PROTECT,
-             .DISK_UNPROTECT:
+                .DISK_SAVED,
+                .DISK_PROTECT,
+                .DISK_UNPROTECT:
             refreshStatusBar()
-
+            
         case .CTRL_AMIGA_AMIGA:
             resetAction(self)
             
         case .SER_IN:
             serialIn += String(UnicodeScalar(msg.data & 0xFF)!)
-
+            
         case .SER_OUT:
             serialOut += String(UnicodeScalar(msg.data & 0xFF)!)
-
+            
         case .AUTO_SNAPSHOT_TAKEN:
             mydocument.snapshots.append(amiga.latestAutoSnapshot)
-
+            
         case .USER_SNAPSHOT_TAKEN:
             mydocument.snapshots.append(amiga.latestUserSnapshot)
             renderer.flash()
@@ -521,7 +521,7 @@ extension MyController {
         case .RECORDING_STARTED:
             window?.backgroundColor = .warningColor
             refreshStatusBar()
-                
+            
         case .RECORDING_STOPPED:
             window?.backgroundColor = .windowBackgroundColor
             refreshStatusBar()
@@ -529,15 +529,22 @@ extension MyController {
         case .RECORDING_ABORTED:
             refreshStatusBar()
             VAError.recordingAborted()
-
+            
         case .SHAKING:
             metal.lastShake = DispatchTime(uptimeNanoseconds: 0)
             if pref.releaseMouseByShaking {
                 metal.releaseMouse()
             }
             
-        case .GDB_UPDATE:
+        case .GDB_START:
+            track("GDB server started")
+            
+        case .GDB_RECEIVE,
+                .GDB_SEND:
             renderer.console.isDirty = true
+            
+        case .GDB_STOP:
+            track("GDB server stopped")
             
         default:
             track("Unknown message: \(msg)")
