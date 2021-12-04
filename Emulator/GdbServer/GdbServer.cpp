@@ -10,6 +10,7 @@
 #include "config.h"
 #include "GdbServer.h"
 #include "IOUtils.h"
+#include "MemUtils.h"
 #include "MsgQueue.h"
 #include "RetroShell.h"
 #include <unistd.h>
@@ -104,8 +105,6 @@ GdbServer::start()
     // Spawn a new thread
     if (serverThread.joinable()) serverThread.join();
     serverThread = std::thread(&GdbServer::main, this);
-    
-    msgQueue.put(MSG_GDB_START);
 }
 
 void
@@ -123,7 +122,6 @@ GdbServer::stop()
         serverThread.join();
         
         debug(GDB_DEBUG, "stopped\n");
-        msgQueue.put(MSG_GDB_STOP);
     }
 }
 
@@ -170,22 +168,32 @@ GdbServer::main()
         connection = listener.accept();
         
         debug(GDB_DEBUG, "Entering main loop\n");
+        msgQueue.put(MSG_GDB_START);
 
         while (1) {
             
             auto cmd = receive();
-            
-            // if (cmd == "") break;
+            process(cmd);
         }
-        
+                
     } catch (...) {
         
         port = 0;
         connection.close();
         listener.close();
         
+        msgQueue.put(MSG_GDB_STOP);
         debug(GDB_DEBUG, "Leaving main\n");
     }
+}
+
+string
+GdbServer::checksum(const string &s)
+{
+    uint8_t chk = 0;
+    for(auto &c : s) chk += (uint8_t)c;
+
+    return util::hexstr <2> (chk);
 }
 
 std::vector<string>

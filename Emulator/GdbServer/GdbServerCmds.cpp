@@ -60,12 +60,249 @@ GdbServer::process(string packet)
     }
 }
 
+template <> void
+GdbServer::process <'v'> (string arg)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "v");
+
+    /*
+    if (arg == "MustReplyEmpty") {
+        
+        send("");
+    }
+
+    if (arg == "Cont?") {
+        
+        send("vCont;c;C;s;S;t;r");
+    }
+    
+    if (arg.rfind("Cont;c", 0) == 0) {
+        
+        std::cout << "Continuing..." << std::endl;
+        
+        t = std::thread(&GdbServer::emulateStop, this);
+        connection.send("OK");
+    }
+    */
+}
+
+template <> void
+GdbServer::process <'q'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "q");
+
+    /*
+    auto command = cmd.substr(0, cmd.find(":"));
+        
+    if (command == "Supported") {
+
+        string payload = "qSupported:+;multiprocess+;vContSupported+;QNonStop+";
+        
+        send(payload);
+        return;
+    }
+    
+    if (command == "Attached") {
+        
+        send("0");
+        return;
+    }
+    
+    if (command == "C") {
+        
+        send("QCp31a9.31a9");
+        return;
+    }
+    
+    if (command == "Xfer") {
+    
+        send("OK");
+        return;
+    }
+    
+    if (cmd == "TStatus") {
+        
+        send("");
+        return;
+    }
+
+    if (cmd == "fThreadInfo") {
+        
+        send("mp31a9.31a9");
+        return;
+    }
+
+    if (cmd == "sThreadInfo") {
+        
+        send("l");
+        return;
+    }
+
+    // send("0:0:0:0");
+    send("0");
+    */
+}
+
+template <> void
+GdbServer::process <'Q'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "Q");
+
+    /*
+    if (cmd == "StartNoAckMode") {
+        std::cout << "DISABLING ACK MODE" << std::endl;
+        send("OK");
+        ackMode = false;
+    }
+
+    if (cmd.rfind("NonStop", 0) == 0) {
+                
+        auto tokens = split(cmd,':');
+        if (tokens.size() == 2) {
+                std::cout << "QNonStop: " << tokens[1] << std::endl;
+        }
+        send("OK");
+    }
+    */
+}
+
+template <> void
+GdbServer::process <'g'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "g");
+    /*
+    send("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004091f46cfe7f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000081125d907f000000020000330000002b00000000000000000000000000000000000000");
+    */
+}
+
+template <> void
+GdbServer::process <'s'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "s");
+}
+
+template <> void
+GdbServer::process <'n'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "n");
+}
+
+template <> void
+GdbServer::process <'H'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "H");
+//     send("OK");
+}
+
+template <> void
+GdbServer::process <'G'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "G");
+}
+
+template <> void
+GdbServer::process <'?'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "?");
+    /*
+    send("S05");
+    */
+}
+
+template <> void
+GdbServer::process <'!'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "!");
+}
+
+template <> void
+GdbServer::process <'k'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "k");
+}
+
+template <> void
+GdbServer::process <'m'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "m");
+
+    /*
+    auto tokens = split(cmd, ',');
+    
+    if (tokens.size() == 2) {
+
+        // auto t0 = std::stoul(tokens[0], nullptr, 16);
+        auto t1 = std::stoul(tokens[1], nullptr, 16);
+        
+        string result;
+        for (int i = 0; i < t1; i++) result += "42";
+        send(result);
+    }
+    */
+}
+
+template <> void
+GdbServer::process <'M'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "M");
+}
+
+template <> void
+GdbServer::process <'p'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "p");
+}
+
+template <> void
+GdbServer::process <'P'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "P");
+}
+
+template <> void
+GdbServer::process <'c'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "c");
+}
+
+template <> void
+GdbServer::process <'D'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "D");
+}
+
+template <> void
+GdbServer::process <'Z'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "Z");
+
+    /*
+    auto tokens = split(cmd, ',');
+    
+    if (tokens.size() == 3) {
+        
+        std::cout << "Break/Watchpoint type " << tokens[0] << std::endl;
+        send("OK");
+
+    } else {
+    
+        std::cout << "Format error " << std::endl;
+        send("");
+    }
+    */
+}
+
+template <> void
+GdbServer::process <'z'> (string cmd)
+{
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "z");
+}
+
 void
 GdbServer::process(char cmd, string arg)
 {
     switch (cmd) {
  
-            /*
         case 'v' : process <'v'> (arg); break;
         case 'q' : process <'q'> (arg); break;
         case 'Q' : process <'Q'> (arg); break;
@@ -85,18 +322,8 @@ GdbServer::process(char cmd, string arg)
         case 'D' : process <'D'> (arg); break;
         case 'Z' : process <'Z'> (arg); break;
         case 'z' : process <'z'> (arg); break;
-             */
             
         default:
-            throw VAError(ERROR_GDB_UNSUPPORTED_CMD, string(1, cmd));
+            throw VAError(ERROR_GDB_UNRECOGNIZED_CMD, string(1, cmd));
     }
-}
-
-string
-GdbServer::checksum(const string &s)
-{
-    uint8_t chk = 0;
-    for(auto &c : s) chk += (uint8_t)c;
-
-    return util::hexstr <2> (chk);
 }

@@ -75,6 +75,7 @@ enum_long(ERROR_CODE)
     ERROR_GDB_NO_ACK,
     ERROR_GDB_INVALID_FORMAT,
     ERROR_GDB_INVALID_CHECKSUM,
+    ERROR_GDB_UNRECOGNIZED_CMD,
     ERROR_GDB_UNSUPPORTED_CMD,
 
     // File system
@@ -179,8 +180,9 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_GDB_NO_ACK:                  return "GDB_NO_ACK";
             case ERROR_GDB_INVALID_FORMAT:          return "GDB_INVALID_FORMAT";
             case ERROR_GDB_INVALID_CHECKSUM:        return "GDB_INVALID_CHECKSUM";
+            case ERROR_GDB_UNRECOGNIZED_CMD:        return "ERROR_GDB_UNRECOGNIZED_CMD";
             case ERROR_GDB_UNSUPPORTED_CMD:         return "ERROR_GDB_UNSUPPORTED_CMD";
-                
+
             case ERROR_FS_UNKNOWN:                  return "FS_UNKNOWN";
             case ERROR_FS_UNSUPPORTED:              return "FS_UNSUPPORTED";
             case ERROR_FS_WRONG_BSIZE:              return "FS_WRONG_BSIZE";

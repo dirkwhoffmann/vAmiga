@@ -24,7 +24,7 @@ template <isize digits> string hexstr(isize number)
     char str[digits + 1];
 
     str[digits] = 0;
-    for (isize i = digits - 1; i >= 0; i++, number >>= 4) {
+    for (isize i = digits - 1; i >= 0; i--, number >>= 4) {
 
         auto nibble = number & 0xF;
         str[i] = (char)(nibble < 10 ? '0' + nibble : 'a' + (nibble - 10));
