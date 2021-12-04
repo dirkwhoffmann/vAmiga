@@ -63,14 +63,12 @@ GdbServer::process(string packet)
 template <> void
 GdbServer::process <'v'> (string arg)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "v");
-
-    /*
     if (arg == "MustReplyEmpty") {
         
         send("");
     }
 
+    /*
     if (arg == "Cont?") {
         
         send("vCont;c;C;s;S;t;r");
@@ -89,19 +87,39 @@ GdbServer::process <'v'> (string arg)
 template <> void
 GdbServer::process <'q'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "q");
-
-    /*
     auto command = cmd.substr(0, cmd.find(":"));
         
     if (command == "Supported") {
 
-        string payload = "qSupported:+;multiprocess+;vContSupported+;QNonStop+";
-        
-        send(payload);
+        // send("qSupported:+;multiprocess+;vContSupported+;QNonStop+");
+        send("qSupported:+;multiprocess+;vContSupported+");
         return;
     }
     
+    if (cmd == "TStatus") {
+        
+        send("T0");
+        return;
+    }
+
+    if (cmd == "TfV") {
+        
+        send("");
+        return;
+    }
+
+    if (cmd == "fThreadInfo") {
+        
+        send("m01,02");
+        return;
+    }
+
+    if (cmd == "sThreadInfo") {
+        
+        send("");
+        return;
+    }
+
     if (command == "Attached") {
         
         send("0");
@@ -110,28 +128,17 @@ GdbServer::process <'q'> (string cmd)
     
     if (command == "C") {
         
-        send("QCp31a9.31a9");
+        send("");
         return;
     }
     
+    /*
     if (command == "Xfer") {
     
         send("OK");
         return;
     }
     
-    if (cmd == "TStatus") {
-        
-        send("");
-        return;
-    }
-
-    if (cmd == "fThreadInfo") {
-        
-        send("mp31a9.31a9");
-        return;
-    }
-
     if (cmd == "sThreadInfo") {
         
         send("l");
@@ -141,29 +148,34 @@ GdbServer::process <'q'> (string cmd)
     // send("0:0:0:0");
     send("0");
     */
+    
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "q");
 }
 
 template <> void
 GdbServer::process <'Q'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "Q");
-
-    /*
-    if (cmd == "StartNoAckMode") {
-        std::cout << "DISABLING ACK MODE" << std::endl;
-        send("OK");
-        ackMode = false;
+    auto tokens = split(cmd, ':');
+    
+    for (auto &it: tokens) {
+        printf("> %s <\n", it.c_str());
     }
-
-    if (cmd.rfind("NonStop", 0) == 0) {
-                
-        auto tokens = split(cmd,':');
+    
+    /*
+    if (tokens[0] == "NonStop") {
+        
         if (tokens.size() == 2) {
-                std::cout << "QNonStop: " << tokens[1] << std::endl;
+            std::cout << "QNonStop: " << tokens[1] << std::endl;
         }
         send("OK");
     }
     */
+    
+    if (cmd == "StartNoAckMode") {
+
+        ackMode = false;
+        send("OK");
+    }
 }
 
 template <> void
@@ -190,8 +202,7 @@ GdbServer::process <'n'> (string cmd)
 template <> void
 GdbServer::process <'H'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "H");
-//     send("OK");
+    send("OK");
 }
 
 template <> void
@@ -203,10 +214,7 @@ GdbServer::process <'G'> (string cmd)
 template <> void
 GdbServer::process <'?'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "?");
-    /*
     send("S05");
-    */
 }
 
 template <> void

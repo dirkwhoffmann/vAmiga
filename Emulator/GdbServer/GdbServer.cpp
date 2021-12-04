@@ -130,14 +130,14 @@ GdbServer::receive()
 {
     auto packet = connection.recv();
 
-    debug(GDB_DEBUG, "Received %s\n", packet.c_str());
-
     if (config.verbose) {
         
-        retroShell << packet << '\n';
+        retroShell << "R: " << packet << '\n';
     }
 
+    debug(GDB_DEBUG, "R: %s\n", packet.c_str());
     msgQueue.put(MSG_GDB_RECEIVE);
+    
     return packet;
 }
 
@@ -151,6 +151,13 @@ GdbServer::send(const string &cmd)
     packet += checksum(cmd);
     
     connection.send(packet);
+
+    if (config.verbose) {
+        
+        retroShell << "T: " << packet << '\n';
+    }
+
+    debug(GDB_DEBUG, "T: %s\n", packet.c_str());
     msgQueue.put(MSG_GDB_SEND);
 }
 

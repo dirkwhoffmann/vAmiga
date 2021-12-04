@@ -93,7 +93,6 @@ Socket::recv()
     if (n > 0) {
         
         string result = string(buffer, n);
-        msg("R: %s\n", result.c_str());
         return result;
     }
 
@@ -103,7 +102,6 @@ Socket::recv()
 void
 Socket::send(std::string s)
 {
-    msg("T: %s\n", s.c_str());
     ::send(socket, s.c_str(), s.length(), 0);
 }
 
