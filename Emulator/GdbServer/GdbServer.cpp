@@ -37,7 +37,7 @@ GdbServer::_dump(dump::Category category, std::ostream& os) const
     
     if (category & dump::State) {
         
-        os << tab("Port") << dec(port) << std::endl;
+        os << tab("Running") << bol(listening) << std::endl;
     }
 }
 
@@ -100,19 +100,15 @@ GdbServer::start()
     debug(GDB_DEBUG, "start\n");
     
     // Only proceed if the server is not running
-    if (this->port) throw VAError(ERROR_GDB_RUNNING);
+    if (listening) throw VAError(ERROR_GDB_SERVER_RUNNING);
 
     // Only proceed if the emulator powered on
     // if (amiga.isPoweredOff()) throw VAError()
-
-    // Pause emulation
-    amiga.pause();
-    
-    port = config.port;
-    ackMode = true;
+        
+    // Make sure that we continue with a terminated server thread
+    if (serverThread.joinable()) serverThread.join();
     
     // Spawn a new thread
-    if (serverThread.joinable()) serverThread.join();
     serverThread = std::thread(&GdbServer::main, this);
 }
 
@@ -121,17 +117,17 @@ GdbServer::stop()
 {
     debug(GDB_DEBUG, "stop\n");
  
-    if (port) {
-        
-        // Trigger an exception inside the server thread
-        connection.close();
-        listener.close();
-        
-        // Wait until the server thread has terminated
-        serverThread.join();
-        
-        debug(GDB_DEBUG, "stopped\n");
-    }
+    // Only proceed if the server is running
+    if (!listening) throw VAError(ERROR_GDB_SERVER_NOT_RUNNING);
+    
+    // Trigger an exception inside the server thread
+    connection.close();
+    listener.close();
+    
+    // Wait until the server thread has terminated
+    serverThread.join();
+    
+    debug(GDB_DEBUG, "stopped\n");
 }
 
 string
@@ -175,16 +171,22 @@ GdbServer::main()
 {
     debug(GDB_DEBUG, "main\n");
 
+    msgQueue.put(MSG_GDB_START);
+    
+    listening = true;
+    ackMode = true;
+    amiga.pause();
+    amiga.debugOn(1);
+    
     try {
         
         // Create a port listener
-        listener = PortListener(port);
+        listener = PortListener(config.port);
         
         // Wait for a client to connect
         connection = listener.accept();
         
         debug(GDB_DEBUG, "Entering main loop\n");
-        msgQueue.put(MSG_GDB_START);
 
         while (1) {
             
@@ -200,11 +202,13 @@ GdbServer::main()
         
     }
     
-    port = 0;
+    listening = false;
+    amiga.debugOff(1);
     connection.close();
     listener.close();
     
     msgQueue.put(MSG_GDB_STOP);
+    
     debug(GDB_DEBUG, "Leaving main\n");
 }
 

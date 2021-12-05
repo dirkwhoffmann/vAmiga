@@ -296,27 +296,33 @@ Thread::halt(bool blocking)
 }
 
 void
-Thread::warpOn(bool blocking)
+Thread::warpOn(isize source)
 {
-    if (!warpLock) changeWarpTo(true, blocking);
+    assert(source >= 0 && source < 8);
+    
+    if (!warpLock) changeWarpTo(warpMode | (u8)(1 << source));
 }
 
 void
-Thread::warpOff(bool blocking)
+Thread::warpOff(isize source)
 {
-    if (!warpLock) changeWarpTo(false, blocking);
+    assert(source >= 0 && source < 8);
+    
+    if (!warpLock) changeWarpTo(warpMode & ~(u8)(1 << source));
 }
 
 void
-Thread::debugOn(bool blocking)
+Thread::debugOn(isize source)
 {
-    if (!debugLock) changeDebugTo(true, blocking);
+    assert(source >= 0 && source < 8);
+    
+    if (!debugLock) changeDebugTo(debugMode | (u8)(1 << source));
 }
 
 void
-Thread::debugOff(bool blocking)
+Thread::debugOff(isize source)
 {
-    if (!debugLock) changeDebugTo(false, blocking);
+    if (!debugLock) changeDebugTo(debugMode & ~(u8)(1 << source));
 }
 
 void
@@ -327,14 +333,14 @@ Thread::changeStateTo(ExecutionState requestedState, bool blocking)
 }
 
 void
-Thread::changeWarpTo(bool value, bool blocking)
+Thread::changeWarpTo(u8 value, bool blocking)
 {
     newWarpMode = value;
     if (blocking) while (warpMode != newWarpMode) { };
 }
 
 void
-Thread::changeDebugTo(bool value, bool blocking)
+Thread::changeDebugTo(u8 value, bool blocking)
 {
     newDebugMode = value;
     if (blocking) while (debugMode != newDebugMode) { };

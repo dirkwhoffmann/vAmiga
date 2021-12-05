@@ -66,6 +66,7 @@
 @class EXEFileProxy;
 @class ExtendedRomFileProxy;
 @class FolderProxy;
+@class GdbServerProxy;
 @class GuardsProxy;
 @class HDFFileProxy;
 @class IMGFileProxy;
@@ -134,6 +135,7 @@
     DriveProxy *df1;
     DriveProxy *df2;
     DriveProxy *df3;
+    GdbServerProxy *gdbServer;
     GuardsProxy *breakpoints;
     GuardsProxy *watchpoints;
     KeyboardProxy *keyboard;
@@ -161,6 +163,7 @@
 @property (readonly, strong) DriveProxy *df1;
 @property (readonly, strong) DriveProxy *df2;
 @property (readonly, strong) DriveProxy *df3;
+@property (readonly, strong) GdbServerProxy *gdbServer;
 @property (readonly, strong) GuardsProxy *breakpoints;
 @property (readonly, strong) GuardsProxy *watchpoints;
 @property (readonly, strong) KeyboardProxy *keyboard;
@@ -660,6 +663,19 @@
 - (void)pressReturn;
 - (void)pressTab;
 - (void)pressKey:(char)c;
+
+@end
+
+//
+// GdbServer
+//
+
+@interface GdbServerProxy : Proxy { }
+
+@property (readonly) BOOL listening;
+
+- (void)start;
+- (void)stop;
 
 @end
 

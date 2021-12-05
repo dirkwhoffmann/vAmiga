@@ -814,6 +814,22 @@ Amiga::_warpOff()
 }
 
 void
+Amiga::_debugOn()
+{
+    debug(RUN_DEBUG, "_debugOn\n");
+
+    msgQueue.put(MSG_DEBUG_ON);
+}
+
+void
+Amiga::_debugOff()
+{
+    debug(RUN_DEBUG, "_debugOff\n");
+
+    msgQueue.put(MSG_DEBUG_OFF);
+}
+
+void
 Amiga::execute()
 {    
     while(1) {

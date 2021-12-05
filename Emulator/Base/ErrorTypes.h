@@ -70,8 +70,8 @@ enum_long(ERROR_CODE)
     ERROR_SOCK_CANT_CREATE,
     ERROR_SOCK_CANT_CONNECT,
     ERROR_SOCK_DISCONNECTED,
-    ERROR_GDB_RUNNING,
-    ERROR_GDB_NOT_RUNNING,
+    ERROR_GDB_SERVER_RUNNING,
+    ERROR_GDB_SERVER_NOT_RUNNING,
     ERROR_GDB_NO_ACK,
     ERROR_GDB_INVALID_FORMAT,
     ERROR_GDB_INVALID_CHECKSUM,
@@ -175,8 +175,8 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_SOCK_CANT_CREATE:            return "ERROR_SOCK_CANT_CREATE";
             case ERROR_SOCK_CANT_CONNECT:           return "ERROR_SOCK_CANT_CONNECT";
             case ERROR_SOCK_DISCONNECTED:           return "ERROR_SOCK_DISCONNECTED";
-            case ERROR_GDB_RUNNING:                 return "GDB_RUNNING";
-            case ERROR_GDB_NOT_RUNNING:             return "GDB_NOT_RUNNING";
+            case ERROR_GDB_SERVER_RUNNING:          return "GDB_SERVER_RUNNING";
+            case ERROR_GDB_SERVER_NOT_RUNNING:      return "GDB_SERVER_NOT_RUNNING";
             case ERROR_GDB_NO_ACK:                  return "GDB_NO_ACK";
             case ERROR_GDB_INVALID_FORMAT:          return "GDB_INVALID_FORMAT";
             case ERROR_GDB_INVALID_CHECKSUM:        return "GDB_INVALID_CHECKSUM";

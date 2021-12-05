@@ -22,8 +22,8 @@ class GdbServer : public SubComponent {
     // The server thread
     std::thread serverThread;
 
-    // The port the server is listening at
-    isize port = 0;
+    // Indicates if the server is currently running
+    bool listening = false;
 
     // Indicates whether received packets should be acknowledged
     bool ackMode = false;
@@ -97,6 +97,8 @@ public:
     
     void start() throws;
     void stop();
+    
+    bool isListening() { return listening; }
     
     
     //

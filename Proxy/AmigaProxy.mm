@@ -1455,6 +1455,42 @@ using namespace moira;
 @end
 
 //
+// GdbServer proxy
+//
+
+@implementation GdbServerProxy
+
+- (GdbServer *)server
+{
+    return (GdbServer *)obj;
+}
+
++ (instancetype)make:(GdbServer *)server
+{
+    if (server == nullptr) { return nil; }
+    
+    GdbServerProxy *proxy = [[self alloc] initWith: server];
+    return proxy;
+}
+
+-(BOOL)listening
+{
+    return [self server]->isListening();
+}
+
+-(void)start
+{
+    [self server]->start();
+}
+
+-(void)stop
+{
+    [self server]->stop();
+}
+
+@end
+
+//
 // AmigaFile proxy
 //
 
@@ -2064,6 +2100,7 @@ using namespace moira;
 @synthesize df3;
 @synthesize diskController;
 @synthesize dmaDebugger;
+@synthesize gdbServer;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
@@ -2099,6 +2136,7 @@ using namespace moira;
     df3 = [[DriveProxy alloc] initWith:&amiga->df3];
     diskController = [[DiskControllerProxy alloc] initWith:&amiga->paula.diskController];
     dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
+    gdbServer = [[GdbServerProxy alloc] initWith:&amiga->gdbServer];
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];

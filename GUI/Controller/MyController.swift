@@ -410,8 +410,7 @@ extension MyController {
             muted = false
             refreshStatusBar()
             
-        case .WARP_ON,
-                .WARP_OFF:
+        case .WARP_ON, .WARP_OFF, .DEBUG_ON, .DEBUG_OFF:
             refreshStatusBar()
             
         case .POWER_LED_ON:
@@ -536,16 +535,12 @@ extension MyController {
                 metal.releaseMouse()
             }
             
-        case .GDB_START:
-            track("GDB server started")
+        case .GDB_START, .GDB_STOP:
+            refreshStatusBar()
             
-        case .GDB_RECEIVE,
-                .GDB_SEND:
+        case .GDB_RECEIVE, .GDB_SEND:
             renderer.console.isDirty = true
-            
-        case .GDB_STOP:
-            track("GDB server stopped")
-            
+                        
         default:
             track("Unknown message: \(msg)")
             fatalError()

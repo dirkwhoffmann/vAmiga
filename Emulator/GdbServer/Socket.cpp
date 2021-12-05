@@ -132,9 +132,7 @@ PortListener::PortListener(isize port) {
     
     if (success < 0) throw VAError(ERROR_SOCK_CANT_CONNECT);
     
-    printf("Calling bind\n");
     server.bind(port);
-    printf("Calling listen\n");
     server.listen();
 }
 
