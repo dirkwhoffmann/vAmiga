@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#pragma once
+
 #include "Types.h"
 #include <bit>
 

@@ -15,7 +15,7 @@
 #include <thread>
 
 class GdbServer : public SubComponent {
-
+    
     // Current configuration
     GdbServerConfig config = {};
 
@@ -122,4 +122,25 @@ private:
     
     string checksum(const string &s);
     std::vector<string> split(const string &s, char delimiter);
+    
+    
+    //
+    // Reading the emulator state
+    //
+    
+    // Reads a register value
+    string readRegister(isize nr);
+
+    // Reads a byte from memory
+    string readMemory(isize addr);
+
+    
+    //
+    // Handling emulator events
+    //
+
+public:
+    
+    void breakpointReached();
+    
 };

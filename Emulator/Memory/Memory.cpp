@@ -916,6 +916,13 @@ Memory::updateAgnusMemSrcTable()
 // Peek (CPU)
 //
 
+template <Accessor acc, MemorySource src> u16
+Memory::spypeek8(u32 addr) const
+{
+    auto word = spypeek16 <acc, src> (addr & ~1);    
+    return IS_EVEN(addr) ? HI_BYTE(word) : LO_BYTE(word);
+}
+
 template<> u16
 Memory::spypeek16 <ACCESSOR_CPU, MEM_NONE> (u32 addr) const
 {
@@ -1277,6 +1284,33 @@ Memory::peek16 <ACCESSOR_CPU> (u32 addr)
         case MEM_ROM_MIRROR:    return peek16 <ACCESSOR_CPU, MEM_ROM>      (addr);
         case MEM_WOM:           return peek16 <ACCESSOR_CPU, MEM_WOM>      (addr);
         case MEM_EXT:           return peek16 <ACCESSOR_CPU, MEM_EXT>      (addr);
+            
+        default:
+            fatalError;
+    }
+}
+
+template<> u16
+Memory::spypeek8 <ACCESSOR_CPU> (u32 addr) const
+{
+    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
+            
+        case MEM_NONE:          return spypeek8 <ACCESSOR_CPU, MEM_NONE>     (addr);
+        case MEM_CHIP:          return spypeek8 <ACCESSOR_CPU, MEM_CHIP>     (addr);
+        case MEM_CHIP_MIRROR:   return spypeek8 <ACCESSOR_CPU, MEM_CHIP>     (addr);
+        case MEM_SLOW:          return spypeek8 <ACCESSOR_CPU, MEM_SLOW>     (addr);
+        case MEM_SLOW_MIRROR:   return spypeek8 <ACCESSOR_CPU, MEM_SLOW>     (addr);
+        case MEM_FAST:          return spypeek8 <ACCESSOR_CPU, MEM_FAST>     (addr);
+        case MEM_CIA:           return spypeek8 <ACCESSOR_CPU, MEM_CIA>      (addr);
+        case MEM_CIA_MIRROR:    return spypeek8 <ACCESSOR_CPU, MEM_CIA>      (addr);
+        case MEM_RTC:           return spypeek8 <ACCESSOR_CPU, MEM_RTC>      (addr);
+        case MEM_CUSTOM:        return spypeek8 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
+        case MEM_CUSTOM_MIRROR: return spypeek8 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
+        case MEM_AUTOCONF:      return spypeek8 <ACCESSOR_CPU, MEM_AUTOCONF> (addr);
+        case MEM_ROM:           return spypeek8 <ACCESSOR_CPU, MEM_ROM>      (addr);
+        case MEM_ROM_MIRROR:    return spypeek8 <ACCESSOR_CPU, MEM_ROM>      (addr);
+        case MEM_WOM:           return spypeek8 <ACCESSOR_CPU, MEM_WOM>      (addr);
+        case MEM_EXT:           return spypeek8 <ACCESSOR_CPU, MEM_EXT>      (addr);
             
         default:
             fatalError;

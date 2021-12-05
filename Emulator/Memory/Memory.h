@@ -415,9 +415,11 @@ public:
 
     template <Accessor acc, MemorySource src> u8 peek8(u32 addr);
     template <Accessor acc, MemorySource src> u16 peek16(u32 addr);
+    template <Accessor acc, MemorySource src> u16 spypeek8(u32 addr) const;
     template <Accessor acc, MemorySource src> u16 spypeek16(u32 addr) const;
     template <Accessor acc> u8 peek8(u32 addr);
     template <Accessor acc> u16 peek16(u32 addr);
+    template <Accessor acc> u16 spypeek8(u32 addr) const;
     template <Accessor acc> u16 spypeek16(u32 addr) const;
 
     template <Accessor acc, MemorySource src> void poke8(u32 addr, u8 value);

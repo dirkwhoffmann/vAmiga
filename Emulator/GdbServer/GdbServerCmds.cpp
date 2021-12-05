@@ -9,8 +9,10 @@
 
 #include "config.h"
 #include "GdbServer.h"
+#include "Amiga.h"
 #include "IOUtils.h"
 #include "MemUtils.h"
+#include "CPU.h"
 
 void
 GdbServer::process(string packet)
@@ -63,25 +65,25 @@ GdbServer::process(string packet)
 template <> void
 GdbServer::process <'v'> (string arg)
 {
+    printf("process <'v'>: %s\n", arg.c_str());
+    
     if (arg == "MustReplyEmpty") {
         
         send("");
+        return;
     }
 
-    /*
     if (arg == "Cont?") {
         
         send("vCont;c;C;s;S;t;r");
+        return;
     }
-    
-    if (arg.rfind("Cont;c", 0) == 0) {
+
+    if (arg == "Cont;c") {
         
-        std::cout << "Continuing..." << std::endl;
-        
-        t = std::thread(&GdbServer::emulateStop, this);
-        connection.send("OK");
+        amiga.run();
+        return;
     }
-    */
 }
 
 template <> void
@@ -91,8 +93,28 @@ GdbServer::process <'q'> (string cmd)
         
     if (command == "Supported") {
 
-        // send("qSupported:+;multiprocess+;vContSupported+;QNonStop+");
-        send("qSupported:+;multiprocess+;vContSupported+");
+        string response =
+        "PacketSize=512;"
+        "BreakpointCommands+;"
+        "swbreak+;"
+        "hwbreak+;"
+        "QStartNoAckMode+;"
+        "vContSupported+;";
+        // "QTFrame+";
+    
+        send(response);
+        return;
+    }
+    
+    if (cmd == "Symbol::") {
+
+        send("OK");
+        return;
+    }
+    
+    if (cmd == "Offsets") {
+
+        send("TextSeg=00c3de70");
         return;
     }
     
@@ -104,19 +126,26 @@ GdbServer::process <'q'> (string cmd)
 
     if (cmd == "TfV") {
         
-        send("");
+        send("l");
+        return;
+    }
+
+    if (cmd == "TfP") {
+        
+        send("l");
         return;
     }
 
     if (cmd == "fThreadInfo") {
         
-        send("m01,02");
+        send("m01");
+        // send("m01,02");
         return;
     }
 
     if (cmd == "sThreadInfo") {
         
-        send("");
+        send("l");
         return;
     }
 
@@ -128,7 +157,7 @@ GdbServer::process <'q'> (string cmd)
     
     if (command == "C") {
         
-        send("");
+        send("QC1");
         return;
     }
     
@@ -181,10 +210,18 @@ GdbServer::process <'Q'> (string cmd)
 template <> void
 GdbServer::process <'g'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "g");
-    /*
-    send("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004091f46cfe7f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000081125d907f000000020000330000002b00000000000000000000000000000000000000");
-    */
+    string result;
+    
+    for (int i = 0; i < 8; i++) {
+        result += util::hexstr <8> (cpu.getD(i));
+    }
+    for (int i = 0; i < 8; i++) {
+        result += util::hexstr <8> (cpu.getA(i));
+    }
+    result += util::hexstr <8> (cpu.getSR());
+    result += util::hexstr <8> (cpu.getPC());
+
+    send(result);
 }
 
 template <> void
@@ -232,21 +269,19 @@ GdbServer::process <'k'> (string cmd)
 template <> void
 GdbServer::process <'m'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "m");
-
-    /*
     auto tokens = split(cmd, ',');
     
     if (tokens.size() == 2) {
 
-        // auto t0 = std::stoul(tokens[0], nullptr, 16);
-        auto t1 = std::stoul(tokens[1], nullptr, 16);
-        
         string result;
-        for (int i = 0; i < t1; i++) result += "42";
+        auto len = std::stoi(tokens[1]);
+        
+        for (isize i = 0; i < len; i++) {
+            result += readMemory(i);
+        }
+        
         send(result);
     }
-    */
 }
 
 template <> void
@@ -258,7 +293,10 @@ GdbServer::process <'M'> (string cmd)
 template <> void
 GdbServer::process <'p'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "p");
+    auto nr = std::stoi(cmd);
+    
+    printf("p command: nr = %d\n", nr);
+    send(readRegister(nr));
 }
 
 template <> void
@@ -282,27 +320,50 @@ GdbServer::process <'D'> (string cmd)
 template <> void
 GdbServer::process <'Z'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "Z");
-
-    /*
     auto tokens = split(cmd, ',');
     
     if (tokens.size() == 3) {
-        
-        std::cout << "Break/Watchpoint type " << tokens[0] << std::endl;
-        send("OK");
 
-    } else {
-    
-        std::cout << "Format error " << std::endl;
-        send("");
+        auto type = std::stol(tokens[0]);
+        auto addr = std::stol(tokens[1], 0, 16);
+        auto kind = std::stol(tokens[2]);
+        
+        printf("Z: type = %ld addr = $%lx kind = %ld\n", type, addr, kind);
+        
+        if (type == 0) {
+         
+            cpu.debugger.breakpoints.addAt((u32)addr);
+        }
+        
+        send("OK");
+        return;
     }
-    */
+
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "Z");
 }
 
 template <> void
 GdbServer::process <'z'> (string cmd)
 {
+    auto tokens = split(cmd, ',');
+    
+    if (tokens.size() == 3) {
+
+        auto type = std::stol(tokens[0]);
+        auto addr = std::stol(tokens[1], 0, 16);
+        auto kind = std::stol(tokens[2]);
+        
+        printf("z: type = %ld addr = $%lx kind = %ld\n", type, addr, kind);
+        
+        if (type == 0) {
+         
+            cpu.debugger.breakpoints.removeAt((u32)addr);
+        }
+        
+        send("OK");
+        return;
+    }
+
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "z");
 }
 

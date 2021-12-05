@@ -9,7 +9,10 @@
 
 #include "config.h"
 #include "GdbServer.h"
+#include "Amiga.h"
+#include "CPU.h"
 #include "IOUtils.h"
+#include "Memory.h"
 #include "MemUtils.h"
 #include "MsgQueue.h"
 #include "RetroShell.h"
@@ -96,9 +99,15 @@ GdbServer::start()
 {
     debug(GDB_DEBUG, "start\n");
     
-    // Error out if the server is already running
+    // Only proceed if the server is not running
     if (this->port) throw VAError(ERROR_GDB_RUNNING);
-        
+
+    // Only proceed if the emulator powered on
+    // if (amiga.isPoweredOff()) throw VAError()
+
+    // Pause emulation
+    amiga.pause();
+    
     port = config.port;
     ackMode = true;
     
@@ -182,16 +191,21 @@ GdbServer::main()
             auto cmd = receive();
             process(cmd);
         }
-                
+             
+    } catch (VAError &err) {
+        
+        warn("%s\n", err.what());
+        
     } catch (...) {
         
-        port = 0;
-        connection.close();
-        listener.close();
-        
-        msgQueue.put(MSG_GDB_STOP);
-        debug(GDB_DEBUG, "Leaving main\n");
     }
+    
+    port = 0;
+    connection.close();
+    listener.close();
+    
+    msgQueue.put(MSG_GDB_STOP);
+    debug(GDB_DEBUG, "Leaving main\n");
 }
 
 string
@@ -215,4 +229,28 @@ GdbServer::split(const string &s, char delimiter)
     }
     
     return result;
+}
+
+string
+GdbServer::readRegister(isize nr)
+{
+    if (nr >= 0 && nr <= 7)  return util::hexstr <8> (cpu.getD((int)(nr)));
+    if (nr >= 8 && nr <= 15) return util::hexstr <8> (cpu.getA((int)(nr - 8)));
+    if (nr == 16)            return util::hexstr <8> (cpu.getSR());
+    if (nr == 17)            return util::hexstr <8> (cpu.getPC());
+
+    return "xxxxxxxx";
+}
+
+string
+GdbServer::readMemory(isize addr)
+{
+    auto byte = mem.spypeek8 <ACCESSOR_CPU> ((u32)addr);
+    return util::hexstr <2> (byte);
+}
+
+void
+GdbServer::breakpointReached()
+{
+    send("S01");
 }

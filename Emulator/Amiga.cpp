@@ -856,6 +856,7 @@ Amiga::execute()
                 clearFlag(RL::BREAKPOINT_REACHED);
                 inspect();
                 msgQueue.put(MSG_BREAKPOINT_REACHED, (long)cpu.debugger.breakpointPC);
+                gdbServer.breakpointReached();
                 newState = EXEC_PAUSED;
                 break;
             }

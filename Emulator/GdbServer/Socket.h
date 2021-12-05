@@ -14,6 +14,11 @@
 class Socket : public AmigaObject {
 
     int socket;
+
+public:
+    
+    // Size of the communication buffer
+    static constexpr isize BUFFER_SIZE = 512;
     
     
     //

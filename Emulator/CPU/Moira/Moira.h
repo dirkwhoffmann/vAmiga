@@ -311,8 +311,7 @@ public:
 protected:
 
     // Advances the clock (called before each memory access)
-    void sync(int cycles); 
-    // virtual void sync(int cycles) { clock += cycles; }
+    void sync(int cycles);
 
 
     //
