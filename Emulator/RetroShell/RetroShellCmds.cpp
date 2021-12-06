@@ -1109,6 +1109,14 @@ RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::os, Token::execbase> (Arguments& argv, long param)
+{
+    std::stringstream s; string line;
+    osDebugger.dumpExecBase(s);
+    while(std::getline(s, line)) *this << line << '\n';
+}
+
+template <> void
 RetroShell::exec <Token::gdbserver, Token::config> (Arguments &argv, long param)
 {
     dump(gdbServer, dump::Config);

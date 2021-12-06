@@ -937,6 +937,18 @@ Interpreter::registerInstructions()
                  "command", "Displays the internal state",
                  &RetroShell::exec <Token::dfn, Token::inspect>);
     }
+
+    //
+    // OS Debugger
+    //
+
+    root.add({"os"},
+             "component", "AmigaOS debugger");
+
+    root.add({"os", "execbase"},
+             "command", "Displays information about the ExecBase struct",
+             &RetroShell::exec <Token::os, Token::execbase>);
+
     
     //
     // GDB Server

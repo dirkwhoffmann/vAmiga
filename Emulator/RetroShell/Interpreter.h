@@ -21,7 +21,7 @@ enum class Token
     
     // Components
     agnus, amiga, audio, blitter, cia, controlport, copper, cpu, dc, denise,
-    dfn, dmadebugger, gdbserver, keyboard, memory, monitor, mouse, paula,
+    dfn, dmadebugger, gdbserver, keyboard, memory, monitor, mouse, os, paula,
     regression, screenshot, serial, rtc,
 
     // Commands
@@ -33,13 +33,13 @@ enum class Token
     // Keys
     accuracy, bankmap, bitplanes, brightness, channel, checksums, chip,
     clxsprspr, clxsprplf, clxplfplf, color, contrast, cutout, defaultbb,
-    defaultfs, delay, device, devices, disk, dma, esync, events, extrom,
-    extstart, fast, filename, filter, joystick, keyset, layers, left, mechanics,
-    mode, model, opacity, palette, pan, path, poll, port, pullup, raminitpattern,
-    refresh, registers, regreset, revision, right, rom, sampling, saturation,
-    saveroms, searchpath, shakedetector, slow, slowramdelay, slowrammirror,
-    speed, sprites, state, step, swapdelay, tod, todbug,
-    unmappingtype, verbose, velocity, volume, wom
+    defaultfs, delay, device, devices, disk, dma, esync, events, execbase,
+    extrom, extstart, fast, filename, filter, joystick, keyset, layers, left,
+    mechanics, mode, model, opacity, palette, pan, path, poll, port, pullup,
+    raminitpattern, refresh, registers, regreset, revision, right, rom,
+    sampling, saturation, saveroms, searchpath, shakedetector, slow,
+    slowramdelay, slowrammirror, speed, sprites, state, step, swapdelay, tod,
+    todbug, unmappingtype, verbose, velocity, volume, wom
 };
 
 struct TooFewArgumentsError : public util::ParseError {

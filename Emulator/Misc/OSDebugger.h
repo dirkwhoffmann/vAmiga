@@ -9,14 +9,13 @@
 
 #pragma once
 
+#include "OSDebuggerTypes.h"
 #include "SubComponent.h"
 #include "Constants.h"
-#include "AmigaTypes.h"
 
 class OSDebugger : public SubComponent {
     
 private:
-    
     
     //
     // Constructing
@@ -57,9 +56,32 @@ private:
     
     
     //
+    // Extracting structures from Amiga memory
     //
-    //
-
+    
 public:
+            
+    // Reads an integer value in big endian format from Amiga memory
+    void read(u32 addr, u8 *result) const;
+    void read(u32 addr, u16 *result) const;
+    void read(u32 addr, u32 *result) const;
+    void read(u32 addr, i8 *result) const { read(addr, (u8 *)result); }
+    void read(u32 addr, i16 *result) const { read(addr, (u16 *)result); }
+    void read(u32 addr, i32 *result) const { read(addr, (u32 *)result); }
+    
+    // Reads an AmigaOS structure from Amiga memory
+    void read(u32 addr, os::Node *result) const;
+    void read(u32 addr, os::Library *result) const;
+    void read(u32 addr, os::IntVector *result) const;
+    void read(u32 addr, os::List *result) const;
+    void read(u32 addr, os::MinList *result) const;
+    void read(u32 addr, os::SoftIntList *result) const;
+    void read(u32 addr, os::ExecBase *result) const;
 
+
+    //
+    // Dumping system information
+    //
+    
+    void dumpExecBase(std::ostream& os) const;
 };

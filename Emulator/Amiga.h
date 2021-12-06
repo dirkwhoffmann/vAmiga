@@ -20,6 +20,7 @@
 #include "Keyboard.h"
 #include "Memory.h"
 #include "MsgQueue.h"
+#include "OSDebugger.h"
 #include "Paula.h"
 #include "RegressionTester.h"
 #include "RetroShell.h"
@@ -84,6 +85,7 @@ public:
 
     // Misc
     RetroShell retroShell = RetroShell(*this);
+    OSDebugger osDebugger = OSDebugger(*this);
     GdbServer gdbServer = GdbServer(*this);
     RegressionTester regressionTester = RegressionTester(*this);
     

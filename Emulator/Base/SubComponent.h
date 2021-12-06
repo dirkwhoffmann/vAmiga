@@ -30,6 +30,7 @@ class Keyboard;
 class Memory;
 class Mouse;
 class MsgQueue;
+class OSDebugger;
 class Paula;
 class PixelEngine;
 class RetroShell;
@@ -66,6 +67,7 @@ protected:
     Keyboard &keyboard;
     Memory &mem;
     MsgQueue &msgQueue;
+    OSDebugger &osDebugger;
     Paula &paula;
     PixelEngine &pixelEngine;
     RetroShell &retroShell;
