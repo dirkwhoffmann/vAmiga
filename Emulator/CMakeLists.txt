@@ -82,6 +82,7 @@ add_subdirectory(Peripherals)
 add_subdirectory(Media)
 add_subdirectory(FileSystems)
 add_subdirectory(RetroShell)
+add_subdirectory(Misc)
 add_subdirectory(xdms)
 
 # Add libraries
