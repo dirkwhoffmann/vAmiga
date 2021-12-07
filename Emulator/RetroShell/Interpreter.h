@@ -38,8 +38,8 @@ enum class Token
     mechanics, mode, model, opacity, palette, pan, path, poll, port, pullup,
     raminitpattern, refresh, registers, regreset, revision, right, rom,
     sampling, saturation, saveroms, searchpath, shakedetector, slow,
-    slowramdelay, slowrammirror, speed, sprites, state, step, swapdelay, tod,
-    todbug, unmappingtype, verbose, velocity, volume, wom
+    slowramdelay, slowrammirror, speed, sprites, state, step, swapdelay, tasks,
+    tod, todbug, unmappingtype, verbose, velocity, volume, wom
 };
 
 struct TooFewArgumentsError : public util::ParseError {

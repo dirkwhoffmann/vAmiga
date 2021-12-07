@@ -14,14 +14,9 @@
 
 namespace os {
 
-struct Node
-{
-    u32     ln_Succ;                // 0
-    u32     ln_Pred;                // 4
-    u8      ln_Type;                // 8
-    i8      ln_Pri;                 // 9
-    u32     ln_Name;                // 10
-};
+//
+// Enumerations
+//
 
 typedef enum
 {
@@ -50,6 +45,19 @@ typedef enum
     NT_EXTENDED     = 255
 }
 LnType;
+
+//
+// Structures
+//
+
+struct Node
+{
+    u32     ln_Succ;                // 0
+    u32     ln_Pred;                // 4
+    u8      ln_Type;                // 8
+    i8      ln_Pri;                 // 9
+    u32     ln_Name;                // 10
+};
 
 typedef struct Library
 {
@@ -80,7 +88,7 @@ typedef struct List
     u32     lh_Tail;                // 4
     u32     lh_TailPred;            // 8
     u8      lh_Type;                // 12
-    u8      l_pad;                  // 13
+    u8      lh_pad;                 // 13
 }
 List;
 
@@ -98,6 +106,33 @@ typedef struct SoftIntList
     u16     sh_Pad;                 // 4
 }
 SoftIntList;
+
+typedef struct Task
+{
+    struct  Node tc_Node;           // 0
+    u8      tc_Flags;               // 14
+    u8      tc_State;               // 15
+    i8      tc_IDNestCnt;           // 16
+    i8      tc_TDNestCnt;           // 17
+    u32     tc_SigAlloc;            // 18
+    u32     tc_SigWait;             // 22
+    u32     tc_SigRecvd;            // 26
+    u32     tc_SigExcept;           // 30
+    u16     tc_TrapAlloc;           // 34
+    u16     tc_TrapAble;            // 36
+    u32     tc_ExceptData;          // 38
+    u32     tc_ExceptCode;          // 42
+    u32     tc_TrapData;            // 46
+    u32     tc_TrapCode;            // 50
+    u32     tc_SPReg;               // 54
+    u32     tc_SPLower;             // 58
+    u32     tc_SPUpper;             // 62
+    u32     tc_Switch;              // 66
+    u32     tc_Launch;              // 70
+    struct  List tc_MemEntry;       // 74
+    u32     tc_UserData;            // 88
+}
+Task;
 
 typedef struct ExecBase
 {

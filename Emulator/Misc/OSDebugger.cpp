@@ -12,6 +12,41 @@
 #include "IOUtils.h"
 #include "Memory.h"
 
+using namespace os;
+
+const char *
+OSDebugger::toString(os::LnType value) const
+{
+    switch (value) {
+            
+        case NT_UNKNOWN:        return "UNKNOWN";
+        case NT_TASK:           return "TASK";
+        case NT_INTERRUPT:      return "INTERRUPT";
+        case NT_DEVICE:         return "DEVICE";
+        case NT_MSGPORT:        return "MSGPORT";
+        case NT_MESSAGE:        return "MESSAGE";
+        case NT_FREEMSG:        return "FREEMSG";
+        case NT_REPLYMSG:       return "REPLYMSG";
+        case NT_RESOURCE:       return "RESOURCE";
+        case NT_LIBRARY:        return "LIBRARY";
+        case NT_MEMORY:         return "MEMORY";
+        case NT_SOFTINT:        return "SOFTINT";
+        case NT_FONT:           return "FONT";
+        case NT_PROCESS:        return "PROCESS";
+        case NT_SEMAPHORE:      return "SEMAPHORE";
+        case NT_SIGNALSEM:      return "SIGNALSEM";
+        case NT_BOOTNODE:       return "BOOTNODE";
+        case NT_KICKMEM:        return "KICKMEM";
+        case NT_GRAPHICS:       return "GRAPHICS";
+        case NT_DEATHMESSAGE:   return "DEATHMESSAGE";
+        case NT_USER:           return "USER";
+        case NT_EXTENDED:       return "EXTENDED";
+            
+        default:
+            return "???";
+    }
+}
+
 void
 OSDebugger::read(u32 addr, u8 *result) const
 {
@@ -28,6 +63,19 @@ void
 OSDebugger::read(u32 addr, u32 *result) const
 {
     *result = mem.spypeek32 <ACCESSOR_CPU> (addr);
+}
+
+void
+OSDebugger::read(u32 addr, string &result) const
+{
+    for (isize i = 0; i < 256; i++, addr++) {
+
+        if (auto c = (char)mem.spypeek8 <ACCESSOR_CPU> (addr)) {
+            result += c;
+        } else {
+            break;
+        }
+    }
 }
 
 void
@@ -70,7 +118,7 @@ OSDebugger::read(u32 addr, os::List *result) const
     read(addr + 4,  &result->lh_Tail);
     read(addr + 8,  &result->lh_TailPred);
     read(addr + 12, &result->lh_Type);
-    read(addr + 13, &result->l_pad);
+    read(addr + 13, &result->lh_pad);
 }
 
 void
@@ -86,6 +134,33 @@ OSDebugger::read(u32 addr, os::SoftIntList *result) const
 {
     read(addr + 0,  &result->sh_List);
     read(addr + 4,  &result->sh_Pad);
+}
+
+void
+OSDebugger::read(u32 addr, os::Task *result) const
+{
+    read(addr + 0,  &result->tc_Node);
+    read(addr + 14, &result->tc_Flags);
+    read(addr + 15, &result->tc_State);
+    read(addr + 16, &result->tc_IDNestCnt);
+    read(addr + 17, &result->tc_TDNestCnt);
+    read(addr + 18, &result->tc_SigAlloc);
+    read(addr + 22, &result->tc_SigWait);
+    read(addr + 26, &result->tc_SigRecvd);
+    read(addr + 30, &result->tc_SigExcept);
+    read(addr + 34, &result->tc_TrapAlloc);
+    read(addr + 36, &result->tc_TrapAble);
+    read(addr + 38, &result->tc_ExceptData);
+    read(addr + 42, &result->tc_ExceptCode);
+    read(addr + 46, &result->tc_TrapData);
+    read(addr + 50, &result->tc_TrapCode);
+    read(addr + 54, &result->tc_SPReg);
+    read(addr + 58, &result->tc_SPLower);
+    read(addr + 62, &result->tc_SPUpper);
+    read(addr + 66, &result->tc_Switch);
+    read(addr + 70, &result->tc_Launch);
+    read(addr + 74, &result->tc_MemEntry);
+    read(addr + 88, &result->tc_UserData);
 }
 
 void
@@ -167,19 +242,87 @@ OSDebugger::read(u32 addr, os::ExecBase *result) const
 }
 
 void
+OSDebugger::read(os::ExecBase *result) const
+{
+    read(mem.spypeek32 <ACCESSOR_CPU> (4), result);
+}
+
+void
+OSDebugger::read(u32 addr, std::vector <os::Task> &result) const
+{
+    // 'addr' must point to the first Task structure in the list
+
+    while (addr) {
+        
+        os::Task task;
+        read(addr, &task);
+        result.push_back(task);
+        
+        addr = task.tc_Node.ln_Succ;
+    }
+}
+
+void
 OSDebugger::dumpExecBase(std::ostream& s) const
 {
     using namespace util;
 
-    // Read the ExecBase struct from Amiga memory
-    u32 addr = mem.spypeek32 <ACCESSOR_CPU> (4);
     os::ExecBase execBase;
-    read(addr, &execBase);
+    read(&execBase);
     
-    s << tab("Base address");
-    s << hex(addr) << std::endl;
     s << tab("VBlankFrequency");
     s << hex(execBase.VBlankFrequency) << std::endl;
     s << tab("PowerSupplyFrequency");
     s << hex(execBase.PowerSupplyFrequency) << std::endl;
+}
+
+void
+OSDebugger::dumpTasks(std::ostream& s) const
+{
+    os::ExecBase execBase;
+    read(&execBase);
+        
+    os::Task current;
+    read(execBase.ThisTask, &current);
+    
+    std::vector <os::Task> ready;
+    read(execBase.TaskReady.lh_Head, ready);
+
+    std::vector <os::Task> waiting;
+    read(execBase.TaskWait.lh_Head, waiting);
+
+    printf("%d ready tasks\n", (int)ready.size());
+    printf("%d waiting tasks\n", (int)waiting.size());
+
+    dumpTask(s, current);
+    
+    for (auto &t: ready) {
+        dumpTask(s, t);
+    }
+    for (auto &t: waiting) {
+        dumpTask(s, t);
+    }
+
+}
+
+void
+OSDebugger::dumpTask(std::ostream& s, const os::Task &task) const
+{
+    using namespace util;
+
+    string name;
+    read(task.tc_Node.ln_Name, name);
+    
+    auto lnType = (LnType)task.tc_Node.ln_Type;
+    
+    s << tab("Name");
+    s << name << std::endl;
+    s << tab("Flags");
+    s << hex(task.tc_Flags) << std::endl;
+    s << tab("State");
+    s << hex(task.tc_State) << std::endl;
+    s << tab("Type");
+    s << hex(task.tc_Node.ln_Type);
+    s << " (" << string(toString(lnType)) << ")" << std::endl;
+    s << '\n';
 }

@@ -949,6 +949,10 @@ Interpreter::registerInstructions()
              "command", "Displays information about the ExecBase struct",
              &RetroShell::exec <Token::os, Token::execbase>);
 
+    root.add({"os", "tasks"},
+             "command", "Lists all tasks",
+             &RetroShell::exec <Token::os, Token::tasks>);
+
     
     //
     // GDB Server

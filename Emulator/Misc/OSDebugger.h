@@ -56,32 +56,61 @@ private:
     
     
     //
-    // Extracting structures from Amiga memory
+    // Translating enumeration types to strings
+    //
+    
+    const char *toString(os::LnType value) const;
+
+    
+    //
+    // Extracting elementary data types from Amiga memory
     //
     
 public:
             
-    // Reads an integer value in big endian format from Amiga memory
     void read(u32 addr, u8 *result) const;
     void read(u32 addr, u16 *result) const;
     void read(u32 addr, u32 *result) const;
     void read(u32 addr, i8 *result) const { read(addr, (u8 *)result); }
     void read(u32 addr, i16 *result) const { read(addr, (u16 *)result); }
     void read(u32 addr, i32 *result) const { read(addr, (u32 *)result); }
+    void read(u32 addr, string &result) const;
+
     
-    // Reads an AmigaOS structure from Amiga memory
+    //
+    // Extracting basic structures from Amiga memory
+    //
+
+public:
+    
     void read(u32 addr, os::Node *result) const;
     void read(u32 addr, os::Library *result) const;
     void read(u32 addr, os::IntVector *result) const;
     void read(u32 addr, os::List *result) const;
     void read(u32 addr, os::MinList *result) const;
     void read(u32 addr, os::SoftIntList *result) const;
+    void read(u32 addr, os::Task *result) const;
     void read(u32 addr, os::ExecBase *result) const;
+    void read(os::ExecBase *result) const;
 
-
-    //
-    // Dumping system information
-    //
     
-    void dumpExecBase(std::ostream& os) const;
+    //
+    // Extracting nested structures from Amiga memory
+    //
+
+public:
+    
+    void read(u32 addr, std::vector <os::Task> &result) const;
+    
+    
+    //
+    // Printing system information
+    //
+
+public:
+    
+    void dumpExecBase(std::ostream& s) const;
+    void dumpTasks(std::ostream& s) const;
+    void dumpTask(std::ostream& s, const os::Task &task) const;
+        
 };
