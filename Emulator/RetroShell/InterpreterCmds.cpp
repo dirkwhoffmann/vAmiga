@@ -950,16 +950,28 @@ Interpreter::registerInstructions()
              &RetroShell::exec <Token::os, Token::execbase>);
 
     root.add({"os", "interrupts"},
-             "command", "Displays interrupt information",
+             "command", "Lists all interrupt handlers",
              &RetroShell::exec <Token::os, Token::interrupts>);
 
     root.add({"os", "libraries"},
              "command", "Lists all libraries",
              &RetroShell::exec <Token::os, Token::libraries>);
 
+    root.add({"os", "devices"},
+             "command", "Lists all devices",
+             &RetroShell::exec <Token::os, Token::devices>);
+
+    root.add({"os", "resources"},
+             "command", "Lists all resources",
+             &RetroShell::exec <Token::os, Token::resources>);
+
     root.add({"os", "tasks"},
              "command", "Lists all tasks",
              &RetroShell::exec <Token::os, Token::tasks>);
+
+    root.add({"os", "processes"},
+             "command", "Lists all processes",
+             &RetroShell::exec <Token::os, Token::processes>);
 
 
     

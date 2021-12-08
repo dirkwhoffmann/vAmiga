@@ -163,6 +163,18 @@ typedef struct SoftIntList
 }
 SoftIntList;
 
+typedef struct MsgPort
+{
+    u32     addr;
+
+    struct  Node mp_Node;           // 0
+    u8      mp_Flags;               // 14
+    u8      mp_SigBit;              // 15
+    u32     mp_SigTask;             // 16
+    struct  List mp_MsgList;        // 20
+}
+MsgPort;
+
 typedef struct Task
 {
     u32     addr;
@@ -191,18 +203,6 @@ typedef struct Task
     u32     tc_UserData;            // 88
 }
 Task;
-
-typedef struct MsgPort
-{
-    u32     addr;
-
-    struct  Node mp_Node;           // 0
-    u8      mp_Flags;               // 14
-    u8      mp_SigBit;              // 15
-    u32     mp_SigTask;             // 16
-    struct  List mp_MsgList;        // 20
-}
-MsgPort;
 
 typedef struct Process
 {

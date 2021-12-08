@@ -1135,11 +1135,38 @@ RetroShell::exec <Token::os, Token::libraries> (Arguments& argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::os, Token::devices> (Arguments& argv, long param)
+{
+    std::stringstream s; string line;
+    
+    { SYNCHRONIZED osDebugger.dumpDevices(s); }
+    while(std::getline(s, line)) *this << line << '\n';
+}
+
+template <> void
+RetroShell::exec <Token::os, Token::resources> (Arguments& argv, long param)
+{
+    std::stringstream s; string line;
+    
+    { SYNCHRONIZED osDebugger.dumpResources(s); }
+    while(std::getline(s, line)) *this << line << '\n';
+}
+
+template <> void
 RetroShell::exec <Token::os, Token::tasks> (Arguments& argv, long param)
 {
     std::stringstream s; string line;
     
     { SYNCHRONIZED osDebugger.dumpTasks(s); }
+    while(std::getline(s, line)) *this << line << '\n';
+}
+
+template <> void
+RetroShell::exec <Token::os, Token::processes> (Arguments& argv, long param)
+{
+    std::stringstream s; string line;
+    
+    { SYNCHRONIZED osDebugger.dumpProcesses(s); }
     while(std::getline(s, line)) *this << line << '\n';
 }
 

@@ -101,20 +101,26 @@ public:
     void read(u32 addr, os::MsgPort *result) const;
     void read(u32 addr, os::Process *result) const;
     void read(u32 addr, os::ExecBase *result) const;
-    void read(os::ExecBase *result) const;
+    [[deprecated]] void read(os::ExecBase *result) const;
 
+    os::ExecBase getExecBase() const;
+    
     
     //
     // Extracting nested structures from Amiga memory
     //
 
 public:
-    
+
+    void read(std::vector <os::Task> &result) const;
+    void read(std::vector <os::Process> &result) const;
+
     void read(u32 addr, std::vector <os::Task> &result) const;
+    // void read(u32 addr, std::vector <os::Process> &result) const;
     void read(u32 addr, std::vector <os::Library> &result) const;
-    void read(u32 addr, os::SegList &result) const;
     void read(u32 addr, std::vector <os::SegList> &result) const;
-    
+    void read(u32 addr, os::SegList &result) const;
+
     
     //
     // Printing system information
@@ -124,10 +130,14 @@ public:
     
     void dumpExecBase(std::ostream& s) const;
     void dumpInterrupts(std::ostream& s) const;
+    // void dumpInterrupt(std::ostream& s, const os::IntVector &vec) const;
     void dumpLibraries(std::ostream& s) const;
     void dumpLibrary(std::ostream& s, const os::Library &lib) const;
+    void dumpDevices(std::ostream& s) const;
+    void dumpResources(std::ostream& s) const;
     void dumpTasks(std::ostream& s) const;
     void dumpTask(std::ostream& s, const os::Task &task) const;
+    void dumpProcesses(std::ostream& s) const;
     void dumpProcess(std::ostream& s, const os::Process &process) const;
 
 };

@@ -373,6 +373,44 @@ OSDebugger::read(os::ExecBase *result) const
     read(mem.spypeek32 <ACCESSOR_CPU> (4), result);
 }
 
+os::ExecBase
+OSDebugger::getExecBase() const
+{
+    os::ExecBase result;
+    read(mem.spypeek32 <ACCESSOR_CPU> (4), &result);
+    return result;
+}
+
+void
+OSDebugger::read(std::vector <os::Task> &result) const
+{
+    auto execBase = getExecBase();
+        
+    os::Task current;
+    read(execBase.ThisTask, &current);
+    
+    result.push_back(current);
+    read(execBase.TaskReady.lh_Head, result);
+    read(execBase.TaskWait.lh_Head, result);
+}
+
+void
+OSDebugger::read(std::vector <os::Process> &result) const
+{
+    std::vector <os::Task> tasks;
+    read(tasks);
+    
+    for (auto &t : tasks) {
+        
+        if (t.tc_Node.ln_Type == NT_PROCESS) {
+            
+            Process process;
+            read(t.addr, &process);
+            result.push_back(process);
+        }
+    }
+}
+
 void
 OSDebugger::read(u32 addr, std::vector <os::Task> &result) const
 {
@@ -386,6 +424,28 @@ OSDebugger::read(u32 addr, std::vector <os::Task> &result) const
     }
 }
 
+/*
+void
+OSDebugger::read(u32 addr, std::vector <os::Process> &result) const
+{
+    auto isProcess = [this](u32 addr) -> bool {
+        return mem.spypeek8 <ACCESSOR_CPU> (addr + 8) == NT_PROCESS;
+    };
+    
+    for (isize i = 0; addr && i < 128; i++) {
+
+        if (isProcess(addr)) {
+            
+            os::Process process;
+            read(addr, &process);
+        
+            addr = process.pr_Task.tc_Node.ln_Succ;
+            if (addr) result.push_back(process);
+        }
+    }
+}
+*/
+
 void
 OSDebugger::read(u32 addr, std::vector <os::Library> &result) const
 {
@@ -396,20 +456,6 @@ OSDebugger::read(u32 addr, std::vector <os::Library> &result) const
         
         addr = library.lib_Node.ln_Succ;
         if (addr) result.push_back(library);
-    }
-}
-
-void
-OSDebugger::read(u32 addr, os::SegList &result) const
-{
-    for (isize i = 0; addr && i < 128; i++) {
-        
-        auto size = mem.spypeek32 <ACCESSOR_CPU> (addr - 4);
-        auto next = mem.spypeek32 <ACCESSOR_CPU> (addr);
-        auto data = addr + 4;
-        
-        result.push_back(std::make_pair(size, data));
-        addr = BPTR(next);
     }
 }
 
@@ -429,12 +475,25 @@ OSDebugger::read(u32 addr, std::vector <os::SegList> &result) const
 }
 
 void
+OSDebugger::read(u32 addr, os::SegList &result) const
+{
+    for (isize i = 0; addr && i < 128; i++) {
+        
+        auto size = mem.spypeek32 <ACCESSOR_CPU> (addr - 4);
+        auto next = mem.spypeek32 <ACCESSOR_CPU> (addr);
+        auto data = addr + 4;
+        
+        result.push_back(std::make_pair(size, data));
+        addr = BPTR(next);
+    }
+}
+
+void
 OSDebugger::dumpExecBase(std::ostream& s) const
 {
     using namespace util;
 
-    os::ExecBase execBase;
-    read(&execBase);
+    auto execBase = getExecBase();
     
     s << tab("SoftVer");
     s << hex(execBase.SoftVer) << std::endl;
@@ -447,20 +506,25 @@ OSDebugger::dumpExecBase(std::ostream& s) const
 void
 OSDebugger::dumpInterrupts(std::ostream& s) const
 {
-    os::ExecBase execBase;
-    read(&execBase);
-
+    using namespace util;
+    
+    auto execBase = getExecBase();
+    
+    for (isize i = 0; i < 16; i++) {
+        
+        s << tab("Interrupt " + std::to_string(i));
+        s << hex(execBase.IntVects[i].iv_Code) << std::endl;
+    }
 }
 
 void
 OSDebugger::dumpLibraries(std::ostream& s) const
 {
-    os::ExecBase execBase;
-    read(&execBase);
+    auto execBase = getExecBase();
 
     std::vector <os::Library> libraries;
     read(execBase.LibList.lh_Head, libraries);
-    
+
     for (auto &l: libraries) {
         
         dumpLibrary(s, l);
@@ -473,11 +537,19 @@ OSDebugger::dumpLibrary(std::ostream& s, const os::Library &lib) const
 {
     using namespace util;
 
+    string nodeName;
+    read(lib.lib_Node.ln_Name, nodeName);
+
     string name;
     read(lib.lib_IdString, name);
-            
+
     s << tab("Name");
-    s << "'" << name << "'" << std::endl;
+    s << nodeName << std::endl;
+
+    if (!name.empty()) {
+        s << tab("");
+        s << name << std::endl;
+    }
     s << tab("Version");
     s << dec(lib.lib_Version) << "." << dec(lib.lib_Revision) << std::endl;
     s << tab("Open count");
@@ -485,31 +557,45 @@ OSDebugger::dumpLibrary(std::ostream& s, const os::Library &lib) const
 }
 
 void
+OSDebugger::dumpDevices(std::ostream& s) const
+{
+    auto execBase = getExecBase();
+
+    std::vector <os::Library> devices;
+    read(execBase.DeviceList.lh_Head, devices);
+
+    for (auto &l: devices) {
+        
+        dumpLibrary(s, l);
+        s << std::endl;
+    }
+}
+
+void
+OSDebugger::dumpResources(std::ostream& s) const
+{
+    auto execBase = getExecBase();
+
+    std::vector <os::Library> resources;
+    read(execBase.ResourceList.lh_Head, resources);
+
+    for (auto &l: resources) {
+        
+        dumpLibrary(s, l);
+        s << std::endl;
+    }
+}
+
+void
 OSDebugger::dumpTasks(std::ostream& s) const
 {
-    os::ExecBase execBase;
-    read(&execBase);
+    std::vector <Task> tasks;
+    read(tasks);
+            
+    for (auto &t: tasks) {
         
-    os::Task current;
-    read(execBase.ThisTask, &current);
-    
-    std::vector <os::Task> ready;
-    read(execBase.TaskReady.lh_Head, ready);
-
-    std::vector <os::Task> waiting;
-    read(execBase.TaskWait.lh_Head, waiting);
-
-    s << "Current task: " << std::endl;
-    dumpTask(s, current); s << std::endl;
-
-    if (!ready.empty()) {
-        s << "Ready tasks: " << std::endl;
-        for (auto &t: ready) { dumpTask(s, t); s << std::endl; }
-    }
-
-    if (!waiting.empty()) {
-        s << "Waiting tasks: " << std::endl;
-        for (auto &t: waiting) { dumpTask(s, t); s << std::endl; }
+        dumpTask(s, t);
+        s << std::endl;
     }
 }
 
@@ -544,6 +630,19 @@ OSDebugger::dumpTask(std::ostream& s, const os::Task &task) const
         Process process;
         read(task.addr, &process);
         dumpProcess(s, process);
+    }
+}
+
+void
+OSDebugger::dumpProcesses(std::ostream& s) const
+{
+    std::vector <Process> processes;
+    read(processes);
+            
+    for (auto &p : processes) {
+        
+        dumpTask(s, p.pr_Task);
+        s << std::endl;
     }
 }
 
