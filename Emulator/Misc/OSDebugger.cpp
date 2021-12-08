@@ -14,37 +14,94 @@
 
 using namespace os;
 
-const char *
+string
 OSDebugger::toString(os::LnType value) const
 {
+    const char *result = "???";
+    
     switch (value) {
             
-        case NT_UNKNOWN:        return "UNKNOWN";
-        case NT_TASK:           return "TASK";
-        case NT_INTERRUPT:      return "INTERRUPT";
-        case NT_DEVICE:         return "DEVICE";
-        case NT_MSGPORT:        return "MSGPORT";
-        case NT_MESSAGE:        return "MESSAGE";
-        case NT_FREEMSG:        return "FREEMSG";
-        case NT_REPLYMSG:       return "REPLYMSG";
-        case NT_RESOURCE:       return "RESOURCE";
-        case NT_LIBRARY:        return "LIBRARY";
-        case NT_MEMORY:         return "MEMORY";
-        case NT_SOFTINT:        return "SOFTINT";
-        case NT_FONT:           return "FONT";
-        case NT_PROCESS:        return "PROCESS";
-        case NT_SEMAPHORE:      return "SEMAPHORE";
-        case NT_SIGNALSEM:      return "SIGNALSEM";
-        case NT_BOOTNODE:       return "BOOTNODE";
-        case NT_KICKMEM:        return "KICKMEM";
-        case NT_GRAPHICS:       return "GRAPHICS";
-        case NT_DEATHMESSAGE:   return "DEATHMESSAGE";
-        case NT_USER:           return "USER";
-        case NT_EXTENDED:       return "EXTENDED";
-            
-        default:
-            return "???";
+        case NT_UNKNOWN:        result = "UNKNOWN"; break;
+        case NT_TASK:           result = "TASK"; break;
+        case NT_INTERRUPT:      result = "INTERRUPT"; break;
+        case NT_DEVICE:         result = "DEVICE"; break;
+        case NT_MSGPORT:        result = "MSGPORT"; break;
+        case NT_MESSAGE:        result = "MESSAGE"; break;
+        case NT_FREEMSG:        result = "FREEMSG"; break;
+        case NT_REPLYMSG:       result = "REPLYMSG"; break;
+        case NT_RESOURCE:       result = "RESOURCE"; break;
+        case NT_LIBRARY:        result = "LIBRARY"; break;
+        case NT_MEMORY:         result = "MEMORY"; break;
+        case NT_SOFTINT:        result = "SOFTINT"; break;
+        case NT_FONT:           result = "FONT"; break;
+        case NT_PROCESS:        result = "PROCESS"; break;
+        case NT_SEMAPHORE:      result = "SEMAPHORE"; break;
+        case NT_SIGNALSEM:      result = "SIGNALSEM"; break;
+        case NT_BOOTNODE:       result = "BOOTNODE"; break;
+        case NT_KICKMEM:        result = "KICKMEM"; break;
+        case NT_GRAPHICS:       result = "GRAPHICS"; break;
+        case NT_DEATHMESSAGE:   result = "DEATHMESSAGE"; break;
+        case NT_USER:           result = "USER"; break;
+        case NT_EXTENDED:       result = "EXTENDED"; break;
     }
+    
+    return std::string(result);
+}
+
+string
+OSDebugger::toString(os::TState value) const
+{
+    const char *result = "???";
+    
+    switch (value) {
+            
+        case TS_INVALID:        result = "INVALID"; break;
+        case TS_ADDED:          result = "ADDED"; break;
+        case TS_RUN:            result = "RUN"; break;
+        case TS_READY:          result = "READY"; break;
+        case TS_WAIT:           result = "WAIT"; break;
+        case TS_EXCEPT:         result = "EXCEPT"; break;
+        case TS_REMOVED:        result = "REMOVED"; break;
+    }
+    
+    return std::string(result);
+}
+
+string
+OSDebugger::toString(os::SigFlags value) const
+{
+    string result;
+    
+    if (value & SIGF_ABORT)     append(result, "ABORT");
+    if (value & SIGF_CHILD)     append(result, "CHILD");
+    if (value & SIGF_BLIT)      append(result, "BLIT");
+    if (value & SIGF_INTUITION) append(result, "INTUITION");
+    if (value & SIGF_NET)       append(result, "NET");
+    if (value & SIGF_DOS)       append(result, "DOS");
+
+    return result.empty() ? "-" : result;
+}
+
+string
+OSDebugger::toString(os::TFlags value) const
+{
+    string result;
+    
+    if (value & TF_PROCTIME)    append(result, "PROCTIME");
+    if (value & TF_ETASK)       append(result, "ETASK");
+    if (value & TF_STACKCHK)    append(result, "STACKCHK");
+    if (value & TF_EXCEPT)      append(result, "EXCEPT");
+    if (value & TF_SWITCH)      append(result, "SWITCH");
+    if (value & TF_LAUNCH)      append(result, "LAUNCH");
+    
+    return result.empty() ? "-" : result;
+}
+
+void
+OSDebugger::append(string &str, const char *cstr) const
+{
+    if (!str.empty()) str += " | ";
+    str += string(cstr);
 }
 
 void
@@ -81,6 +138,8 @@ OSDebugger::read(u32 addr, string &result) const
 void
 OSDebugger::read(u32 addr, os::Node *result) const
 {
+    result->addr = addr;
+    
     read(addr +  0, &result->ln_Succ);
     read(addr +  4, &result->ln_Pred);
     read(addr +  8, &result->ln_Type);
@@ -91,6 +150,8 @@ OSDebugger::read(u32 addr, os::Node *result) const
 void
 OSDebugger::read(u32 addr, os::Library *result) const
 {
+    result->addr = addr;
+
     read(addr + 0,  &result->lib_Node);
     read(addr + 14, &result->lib_Flags);
     read(addr + 15, &result->lib_pad);
@@ -106,6 +167,8 @@ OSDebugger::read(u32 addr, os::Library *result) const
 void
 OSDebugger::read(u32 addr, os::IntVector *result) const
 {
+    result->addr = addr;
+
     read(addr + 0,  &result->iv_Data);
     read(addr + 4,  &result->iv_Code);
     read(addr + 8,  &result->iv_Node);
@@ -114,6 +177,8 @@ OSDebugger::read(u32 addr, os::IntVector *result) const
 void
 OSDebugger::read(u32 addr, os::List *result) const
 {
+    result->addr = addr;
+
     read(addr + 0,  &result->lh_Head);
     read(addr + 4,  &result->lh_Tail);
     read(addr + 8,  &result->lh_TailPred);
@@ -124,6 +189,8 @@ OSDebugger::read(u32 addr, os::List *result) const
 void
 OSDebugger::read(u32 addr, os::MinList *result) const
 {
+    result->addr = addr;
+
     read(addr + 0,  &result->mlh_Head);
     read(addr + 4,  &result->mlh_Tail);
     read(addr + 8,  &result->mlh_TailPred);
@@ -132,6 +199,8 @@ OSDebugger::read(u32 addr, os::MinList *result) const
 void
 OSDebugger::read(u32 addr, os::SoftIntList *result) const
 {
+    result->addr = addr;
+
     read(addr + 0,  &result->sh_List);
     read(addr + 4,  &result->sh_Pad);
 }
@@ -139,6 +208,8 @@ OSDebugger::read(u32 addr, os::SoftIntList *result) const
 void
 OSDebugger::read(u32 addr, os::Task *result) const
 {
+    result->addr = addr;
+
     read(addr + 0,  &result->tc_Node);
     read(addr + 14, &result->tc_Flags);
     read(addr + 15, &result->tc_State);
@@ -164,8 +235,55 @@ OSDebugger::read(u32 addr, os::Task *result) const
 }
 
 void
+OSDebugger::read(u32 addr, os::MsgPort *result) const
+{
+    result->addr = addr;
+
+    read(addr + 0,  &result->mp_Node);
+    read(addr + 14, &result->mp_Flags);
+    read(addr + 15, &result->mp_SigBit);
+    read(addr + 16, &result->mp_SigTask);
+    read(addr + 20, &result->mp_MsgList);
+}
+
+void
+OSDebugger::read(u32 addr, os::Process *result) const
+{
+    result->addr = addr;
+
+    read(addr + 0,   &result->pr_Task);
+    read(addr + 92,  &result->pr_MsgPort);
+    read(addr + 126, &result->pr_Pad);
+    read(addr + 128, &result->pr_SegList);
+    read(addr + 132, &result->pr_StackSize);
+    read(addr + 136, &result->pr_GlobVec);
+    read(addr + 140, &result->pr_TaskNum);
+    read(addr + 144, &result->pr_StackBase);
+    read(addr + 148, &result->pr_Result2);
+    read(addr + 152, &result->pr_CurrentDir);
+    read(addr + 156, &result->pr_CIS);
+    read(addr + 160, &result->pr_COS);
+    read(addr + 164, &result->pr_ConsoleTask);
+    read(addr + 168, &result->pr_FileSystemTask);
+    read(addr + 172, &result->pr_CLI);
+    read(addr + 176, &result->pr_ReturnAddr);
+    read(addr + 180, &result->pr_PktWait);
+    read(addr + 184, &result->pr_WindowPtr);
+    read(addr + 188, &result->pr_HomeDir);
+    read(addr + 192, &result->pr_Flags);
+    read(addr + 196, &result->pr_ExitCode);
+    read(addr + 200, &result->pr_ExitData);
+    read(addr + 204, &result->pr_Arguments);
+    read(addr + 208, &result->pr_LocalVars);
+    read(addr + 220, &result->pr_ShellPrivate);
+    read(addr + 224, &result->pr_CES);
+}
+
+void
 OSDebugger::read(u32 addr, os::ExecBase *result) const
 {
+    result->addr = addr;
+
     read(addr + 0,   &result->LibNode);
     read(addr + 34,  &result->SoftVer);
     read(addr + 36,  &result->LowMemChkSum);
@@ -256,9 +374,37 @@ OSDebugger::read(u32 addr, std::vector <os::Task> &result) const
         
         os::Task task;
         read(addr, &task);
-        result.push_back(task);
-        
         addr = task.tc_Node.ln_Succ;
+        if (addr) result.push_back(task);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, os::SegList &result) const
+{
+    for (isize i = 0; addr && i < 128; i++) {
+        
+        auto size = mem.spypeek32 <ACCESSOR_CPU> (addr - 4);
+        auto next = mem.spypeek32 <ACCESSOR_CPU> (addr);
+        auto data = addr + 4;
+        
+        result.push_back(std::make_pair(size, data));
+        addr = BPTR(next);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, std::vector <os::SegList> &result) const
+{
+    auto arraySize = mem.spypeek32 <ACCESSOR_CPU> (addr);
+
+    for (u32 i = 1; i <= arraySize && i < 128; i++) {
+
+        auto listAddr = BPTR(mem.spypeek32 <ACCESSOR_CPU> (addr + 4 * i));
+        
+        SegList list;
+        read(listAddr, list);
+        result.push_back(list);
     }
 }
 
@@ -291,18 +437,18 @@ OSDebugger::dumpTasks(std::ostream& s) const
     std::vector <os::Task> waiting;
     read(execBase.TaskWait.lh_Head, waiting);
 
-    printf("%d ready tasks\n", (int)ready.size());
-    printf("%d waiting tasks\n", (int)waiting.size());
+    s << "Current task: " << std::endl;
+    dumpTask(s, current); s << std::endl;
 
-    dumpTask(s, current);
-    
-    for (auto &t: ready) {
-        dumpTask(s, t);
-    }
-    for (auto &t: waiting) {
-        dumpTask(s, t);
+    if (!ready.empty()) {
+        s << "Ready tasks: " << std::endl;
+        for (auto &t: ready) { dumpTask(s, t); s << std::endl; }
     }
 
+    if (!waiting.empty()) {
+        s << "Waiting tasks: " << std::endl;
+        for (auto &t: waiting) { dumpTask(s, t); s << std::endl; }
+    }
 }
 
 void
@@ -313,16 +459,53 @@ OSDebugger::dumpTask(std::ostream& s, const os::Task &task) const
     string name;
     read(task.tc_Node.ln_Name, name);
     
-    auto lnType = (LnType)task.tc_Node.ln_Type;
+    auto sp = task.tc_SPReg + 70; // + kickstart_version >= 37 ? 74 : 70;
+    auto pc = mem.spypeek32 <ACCESSOR_CPU> (sp);
     
     s << tab("Name");
     s << name << std::endl;
     s << tab("Flags");
-    s << hex(task.tc_Flags) << std::endl;
+    s << toString((TFlags)task.tc_Flags) << std::endl;
     s << tab("State");
-    s << hex(task.tc_State) << std::endl;
+    s << toString((TState)task.tc_State) << std::endl;
     s << tab("Type");
-    s << hex(task.tc_Node.ln_Type);
-    s << " (" << string(toString(lnType)) << ")" << std::endl;
-    s << '\n';
+    s << toString((LnType)task.tc_Node.ln_Type) << std::endl;
+    s << tab("Priority");
+    s << dec(task.tc_Node.ln_Pri) << std::endl;
+    s << tab("Sigwait");
+    s << toString((SigFlags)task.tc_SigWait) << std::endl;
+    s << tab("SP / PC");
+    s << hex(sp) << ", " << hex(pc) << std::endl;
+
+    if ((LnType)task.tc_Node.ln_Type == NT_PROCESS) {
+                
+        Process process;
+        read(task.addr, &process);
+        dumpProcess(s, process);
+    }
+}
+
+void
+OSDebugger::dumpProcess(std::ostream& s, const os::Process &process) const
+{
+    using namespace util;
+    
+    isize i = 0;
+    
+    // s << tab("SegList array");
+    // s << hex(BPTR(process.pr_SegList)) << std::endl;
+    
+    std::vector<SegList> segListArray;
+    if (process.pr_SegList) read(BPTR(process.pr_SegList), segListArray);
+        
+    for (auto &segList: segListArray) {
+
+        string title = "Segment list " + std::to_string(++i);
+                
+        for (auto &it: segList) {
+            
+            s << tab(title); title = "";
+            s << hex(it.second) << " (" << dec(it.first) << " bytes)" << std::endl;
+        }
+    }
 }

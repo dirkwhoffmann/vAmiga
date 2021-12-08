@@ -58,9 +58,16 @@ private:
     //
     // Translating enumeration types to strings
     //
-    
-    const char *toString(os::LnType value) const;
 
+private:
+    
+    string toString(os::LnType value) const;
+    string toString(os::TState value) const;
+    string toString(os::SigFlags value) const;
+    string toString(os::TFlags value) const;
+
+    void append(string &str, const char *cstr) const;
+    
     
     //
     // Extracting elementary data types from Amiga memory
@@ -90,6 +97,8 @@ public:
     void read(u32 addr, os::MinList *result) const;
     void read(u32 addr, os::SoftIntList *result) const;
     void read(u32 addr, os::Task *result) const;
+    void read(u32 addr, os::MsgPort *result) const;
+    void read(u32 addr, os::Process *result) const;
     void read(u32 addr, os::ExecBase *result) const;
     void read(os::ExecBase *result) const;
 
@@ -101,6 +110,8 @@ public:
 public:
     
     void read(u32 addr, std::vector <os::Task> &result) const;
+    void read(u32 addr, os::SegList &result) const;
+    void read(u32 addr, std::vector <os::SegList> &result) const;
     
     
     //
@@ -112,5 +123,6 @@ public:
     void dumpExecBase(std::ostream& s) const;
     void dumpTasks(std::ostream& s) const;
     void dumpTask(std::ostream& s, const os::Task &task) const;
-        
+    void dumpProcess(std::ostream& s, const os::Process &process) const;
+
 };

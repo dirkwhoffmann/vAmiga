@@ -14,6 +14,9 @@
 
 namespace os {
 
+#define APTR(x) (u32)(x)
+#define BPTR(x) (u32)(4*(x))
+
 //
 // Enumerations
 //
@@ -46,12 +49,55 @@ typedef enum
 }
 LnType;
 
+typedef enum
+{
+    TS_INVALID      = 0,
+    TS_ADDED        = 1,
+    TS_RUN          = 2,
+    TS_READY        = 3,
+    TS_WAIT         = 4,
+    TS_EXCEPT       = 5,
+    TS_REMOVED      = 6
+}
+TState;
+
+
+//
+// Flags (bit masks)
+//
+
+typedef enum
+{
+    SIGF_ABORT      = 1 << 0,
+    SIGF_CHILD      = 1 << 1,
+    SIGF_BLIT       = 1 << 4,
+    SIGF_SINGLE     = 1 << 4, // same as SIGF_BLIT
+    SIGF_INTUITION  = 1 << 5,
+    SIGF_NET        = 1 << 7,
+    SIGF_DOS        = 1 << 8
+}
+SigFlags;
+
+typedef enum
+{
+    TF_PROCTIME     = 1 << 0,
+    TF_ETASK        = 1 << 3,
+    TF_STACKCHK     = 1 << 4,
+    TF_EXCEPT       = 1 << 5,
+    TF_SWITCH       = 1 << 6,
+    TF_LAUNCH       = 1 << 7
+}
+TFlags;
+
+
 //
 // Structures
 //
 
 struct Node
 {
+    u32     addr;
+    
     u32     ln_Succ;                // 0
     u32     ln_Pred;                // 4
     u8      ln_Type;                // 8
@@ -61,6 +107,8 @@ struct Node
 
 typedef struct Library
 {
+    u32     addr;
+
     struct  Node lib_Node;          // 0
     u8      lib_Flags;              // 14
     u8      lib_pad;                // 15
@@ -76,6 +124,8 @@ Library;
 
 typedef struct IntVector
 {
+    u32     addr;
+
     u32     iv_Data;                // 0
     u32     iv_Code;                // 4
     u32     iv_Node;                // 8
@@ -84,6 +134,8 @@ IntVector;
 
 typedef struct List
 {
+    u32     addr;
+
     u32     lh_Head;                // 0
     u32     lh_Tail;                // 4
     u32     lh_TailPred;            // 8
@@ -94,14 +146,18 @@ List;
 
 typedef struct MinList
 {
-   u32      mlh_Head;               // 0
-   u32      mlh_Tail;               // 4
-   u32      mlh_TailPred;           // 8
+    u32     addr;
+    
+    u32      mlh_Head;               // 0
+    u32      mlh_Tail;               // 4
+    u32      mlh_TailPred;           // 8
 }
 MinList;
 
 typedef struct SoftIntList
 {
+    u32     addr;
+
     struct  List sh_List;           // 0
     u16     sh_Pad;                 // 4
 }
@@ -109,6 +165,8 @@ SoftIntList;
 
 typedef struct Task
 {
+    u32     addr;
+
     struct  Node tc_Node;           // 0
     u8      tc_Flags;               // 14
     u8      tc_State;               // 15
@@ -134,8 +192,59 @@ typedef struct Task
 }
 Task;
 
+typedef struct MsgPort
+{
+    u32     addr;
+
+    struct  Node mp_Node;           // 0
+    u8      mp_Flags;               // 14
+    u8      mp_SigBit;              // 15
+    u32     mp_SigTask;             // 16
+    struct  List mp_MsgList;        // 20
+}
+MsgPort;
+
+typedef struct Process
+{
+    u32     addr;
+
+    struct  Task pr_Task;           // 0
+    struct  MsgPort pr_MsgPort;     // 92
+    i16     pr_Pad;                 // 126
+    u32    pr_SegList;              // 128
+    i32    pr_StackSize;            // 132
+    u32    pr_GlobVec;              // 136
+    i32    pr_TaskNum;              // 140
+    u32    pr_StackBase;            // 144
+    i32    pr_Result2;              // 148
+    u32    pr_CurrentDir;           // 152
+    u32    pr_CIS;                  // 156
+    u32    pr_COS;                  // 160
+    u32    pr_ConsoleTask;          // 164
+    u32    pr_FileSystemTask;       // 168
+    u32    pr_CLI;                  // 172
+    u32    pr_ReturnAddr;           // 176
+    u32    pr_PktWait;              // 180
+    u32    pr_WindowPtr;            // 184
+
+    // The following definitions are new with 2.0
+    u32    pr_HomeDir;              // 188
+    i32    pr_Flags;                // 192
+    u32    pr_ExitCode;             // 196
+    i32    pr_ExitData;             // 200
+    u32    pr_Arguments;            // 204
+    struct MinList pr_LocalVars;    // 208
+    u32    pr_ShellPrivate;         // 220
+    u32    pr_CES;                  // 224
+}
+Process;
+
+typedef std::vector<std::pair<u32, u32>> SegList;
+
 typedef struct ExecBase
 {
+    u32     addr;
+
     struct  Library LibNode;        // 0
     u16     SoftVer;                // 34
     i16     LowMemChkSum;           // 36

@@ -1120,7 +1120,8 @@ template <> void
 RetroShell::exec <Token::os, Token::tasks> (Arguments& argv, long param)
 {
     std::stringstream s; string line;
-    osDebugger.dumpTasks(s);
+    
+    { SYNCHRONIZED osDebugger.dumpTasks(s); }
     while(std::getline(s, line)) *this << line << '\n';
 }
 
