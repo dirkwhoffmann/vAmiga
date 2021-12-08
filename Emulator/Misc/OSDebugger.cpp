@@ -125,9 +125,17 @@ OSDebugger::read(u32 addr, u32 *result) const
 void
 OSDebugger::read(u32 addr, string &result) const
 {
-    for (isize i = 0; i < 256; i++, addr++) {
+    read(addr, result, 256);
+}
 
-        if (auto c = (char)mem.spypeek8 <ACCESSOR_CPU> (addr)) {
+void
+OSDebugger::read(u32 addr, string &result, isize limit) const
+{
+    for (isize i = 0; i < limit; i++, addr++) {
+
+        auto c = (char)mem.spypeek8 <ACCESSOR_CPU> (addr);
+        
+        if (c != 0 && c != '\r' && c != '\n') {
             result += c;
         } else {
             break;
@@ -368,14 +376,26 @@ OSDebugger::read(os::ExecBase *result) const
 void
 OSDebugger::read(u32 addr, std::vector <os::Task> &result) const
 {
-    // 'addr' must point to the first Task structure in the list
-
-    while (addr) {
+    for (isize i = 0; addr && i < 128; i++) {
         
         os::Task task;
         read(addr, &task);
+        
         addr = task.tc_Node.ln_Succ;
         if (addr) result.push_back(task);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, std::vector <os::Library> &result) const
+{
+    for (isize i = 0; addr && i < 128; i++) {
+        
+        os::Library library;
+        read(addr, &library);
+        
+        addr = library.lib_Node.ln_Succ;
+        if (addr) result.push_back(library);
     }
 }
 
@@ -416,10 +436,52 @@ OSDebugger::dumpExecBase(std::ostream& s) const
     os::ExecBase execBase;
     read(&execBase);
     
+    s << tab("SoftVer");
+    s << hex(execBase.SoftVer) << std::endl;
     s << tab("VBlankFrequency");
     s << hex(execBase.VBlankFrequency) << std::endl;
     s << tab("PowerSupplyFrequency");
     s << hex(execBase.PowerSupplyFrequency) << std::endl;
+}
+
+void
+OSDebugger::dumpInterrupts(std::ostream& s) const
+{
+    os::ExecBase execBase;
+    read(&execBase);
+
+}
+
+void
+OSDebugger::dumpLibraries(std::ostream& s) const
+{
+    os::ExecBase execBase;
+    read(&execBase);
+
+    std::vector <os::Library> libraries;
+    read(execBase.LibList.lh_Head, libraries);
+    
+    for (auto &l: libraries) {
+        
+        dumpLibrary(s, l);
+        s << std::endl;
+    }
+}
+
+void
+OSDebugger::dumpLibrary(std::ostream& s, const os::Library &lib) const
+{
+    using namespace util;
+
+    string name;
+    read(lib.lib_IdString, name);
+            
+    s << tab("Name");
+    s << "'" << name << "'" << std::endl;
+    s << tab("Version");
+    s << dec(lib.lib_Version) << "." << dec(lib.lib_Revision) << std::endl;
+    s << tab("Open count");
+    s << dec(lib.lib_OpenCnt) << std::endl;
 }
 
 void

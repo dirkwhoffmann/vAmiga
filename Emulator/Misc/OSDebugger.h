@@ -82,6 +82,7 @@ public:
     void read(u32 addr, i16 *result) const { read(addr, (u16 *)result); }
     void read(u32 addr, i32 *result) const { read(addr, (u32 *)result); }
     void read(u32 addr, string &result) const;
+    void read(u32 addr, string &result, isize limit) const;
 
     
     //
@@ -110,6 +111,7 @@ public:
 public:
     
     void read(u32 addr, std::vector <os::Task> &result) const;
+    void read(u32 addr, std::vector <os::Library> &result) const;
     void read(u32 addr, os::SegList &result) const;
     void read(u32 addr, std::vector <os::SegList> &result) const;
     
@@ -121,6 +123,9 @@ public:
 public:
     
     void dumpExecBase(std::ostream& s) const;
+    void dumpInterrupts(std::ostream& s) const;
+    void dumpLibraries(std::ostream& s) const;
+    void dumpLibrary(std::ostream& s, const os::Library &lib) const;
     void dumpTasks(std::ostream& s) const;
     void dumpTask(std::ostream& s, const os::Task &task) const;
     void dumpProcess(std::ostream& s, const os::Process &process) const;

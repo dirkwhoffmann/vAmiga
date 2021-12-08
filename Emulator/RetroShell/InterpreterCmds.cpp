@@ -949,9 +949,18 @@ Interpreter::registerInstructions()
              "command", "Displays information about the ExecBase struct",
              &RetroShell::exec <Token::os, Token::execbase>);
 
+    root.add({"os", "interrupts"},
+             "command", "Displays interrupt information",
+             &RetroShell::exec <Token::os, Token::interrupts>);
+
+    root.add({"os", "libraries"},
+             "command", "Lists all libraries",
+             &RetroShell::exec <Token::os, Token::libraries>);
+
     root.add({"os", "tasks"},
              "command", "Lists all tasks",
              &RetroShell::exec <Token::os, Token::tasks>);
+
 
     
     //
