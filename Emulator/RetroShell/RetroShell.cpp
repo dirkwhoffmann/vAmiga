@@ -91,6 +91,14 @@ RetroShell::operator<<(long value)
     return *this;
 }
 
+RetroShell&
+RetroShell::operator<<(std::stringstream &stream)
+{
+    string line;
+    while(std::getline(stream, line)) *this << line << '\n';
+    return *this;
+}
+
 void
 RetroShell::tab(isize hpos)
 {

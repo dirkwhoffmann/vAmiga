@@ -89,6 +89,40 @@ typedef enum
 }
 TFlags;
 
+typedef enum AttnFlags
+{
+    AFF_68010       = 1 << 0,
+    AFF_68020       = 1 << 1,
+    AFF_68030       = 1 << 2,
+    AFF_68040       = 1 << 3,
+    AFF_68881       = 1 << 4,
+    AFF_68882       = 1 << 5,
+    AFF_FPU40       = 1 << 6,
+    AFF_PRIVATE     = 1 << 15
+}
+AttnFlags;
+
+typedef enum LibFlags
+{
+    LIBF_SUMMING    = 1 << 0,
+    LIBF_CHANGED    = 1 << 1,
+    LIBF_SUMUSED    = 1 << 2,
+    LIBF_DELEXP     = 1 << 3
+}
+LibFlags;
+
+typedef enum PrFlags
+{
+    PRF_FREESEGLIST = 1 << 0,
+    PRF_FREECURRDIR = 1 << 1,
+    PRF_FREECLI     = 1 << 2,
+    PRF_CLOSEINPUT  = 1 << 3,
+    PRF_CLOSEOUTPUT = 1 << 4,
+    PRF_FREEARGS    = 1 << 5
+
+}
+PrFlags;
+
 
 //
 // Structures
@@ -175,6 +209,29 @@ typedef struct MsgPort
 }
 MsgPort;
 
+typedef struct CommandLineInterface
+{
+    u32     addr;
+    
+    i32     cli_Result2;            // 0
+    u32     cli_SetName;            // 4
+    u32     cli_CommandDir;         // 8
+    i32     cli_ReturnCode;         // 12
+    u32     cli_CommandName;        // 16
+    i32     cli_FailLevel;          // 20
+    u32     cli_Prompt;             // 24
+    u32     cli_StandardInput;      // 28
+    u32     cli_CurrentInput;       // 32
+    u32     cli_CommandFile;        // 36
+    i32     cli_Interactive;        // 40
+    i32     cli_Background;         // 44
+    u32     cli_CurrentOutput;      // 48
+    i32     cli_DefaultStack;       // 52
+    u32     cli_StandardOutput;     // 56
+    u32     cli_Module;             // 60
+}
+CommandLineInterface;
+
 typedef struct Task
 {
     u32     addr;
@@ -211,21 +268,21 @@ typedef struct Process
     struct  Task pr_Task;           // 0
     struct  MsgPort pr_MsgPort;     // 92
     i16     pr_Pad;                 // 126
-    u32    pr_SegList;              // 128
-    i32    pr_StackSize;            // 132
-    u32    pr_GlobVec;              // 136
-    i32    pr_TaskNum;              // 140
-    u32    pr_StackBase;            // 144
-    i32    pr_Result2;              // 148
-    u32    pr_CurrentDir;           // 152
-    u32    pr_CIS;                  // 156
-    u32    pr_COS;                  // 160
-    u32    pr_ConsoleTask;          // 164
-    u32    pr_FileSystemTask;       // 168
-    u32    pr_CLI;                  // 172
-    u32    pr_ReturnAddr;           // 176
-    u32    pr_PktWait;              // 180
-    u32    pr_WindowPtr;            // 184
+    u32     pr_SegList;             // 128
+    i32     pr_StackSize;           // 132
+    u32     pr_GlobVec;             // 136
+    i32     pr_TaskNum;             // 140
+    u32     pr_StackBase;           // 144
+    i32     pr_Result2;             // 148
+    u32     pr_CurrentDir;          // 152
+    u32     pr_CIS;                 // 156
+    u32     pr_COS;                 // 160
+    u32     pr_ConsoleTask;         // 164
+    u32     pr_FileSystemTask;      // 168
+    u32     pr_CLI;                 // 172
+    u32     pr_ReturnAddr;          // 176
+    u32     pr_PktWait;             // 180
+    u32     pr_WindowPtr;           // 184
 
     // The following definitions are new with 2.0
     u32    pr_HomeDir;              // 188

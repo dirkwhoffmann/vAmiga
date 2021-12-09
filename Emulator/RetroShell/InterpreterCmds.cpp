@@ -958,7 +958,7 @@ Interpreter::registerInstructions()
              &RetroShell::exec <Token::os, Token::libraries>);
 
     root.add({"os", "library"},
-             "command", "Prints detailed information about a library",
+             "command", "Prints information about a specific library",
              &RetroShell::exec <Token::os, Token::library>, 1);
 
     root.add({"os", "devices"},
@@ -966,7 +966,7 @@ Interpreter::registerInstructions()
              &RetroShell::exec <Token::os, Token::devices>);
 
     root.add({"os", "device"},
-             "command", "Prints detailed information about a device",
+             "command", "Prints information about a specific device",
              &RetroShell::exec <Token::os, Token::device>, 1);
 
     root.add({"os", "resources"},
@@ -974,16 +974,24 @@ Interpreter::registerInstructions()
              &RetroShell::exec <Token::os, Token::resources>);
 
     root.add({"os", "resource"},
-             "command", "Prints detailed information about a resource",
+             "command", "Prints information about a specific resource",
              &RetroShell::exec <Token::os, Token::resource>, 1);
 
     root.add({"os", "tasks"},
              "command", "Lists all tasks",
              &RetroShell::exec <Token::os, Token::tasks>);
 
+    root.add({"os", "task"},
+             "command", "Prints information about a specific task",
+             &RetroShell::exec <Token::os, Token::task>, 1);
+
     root.add({"os", "processes"},
              "command", "Lists all processes",
              &RetroShell::exec <Token::os, Token::processes>);
+
+    root.add({"os", "process"},
+             "command", "Prints information about a specific process",
+             &RetroShell::exec <Token::os, Token::process>, 1);
 
 
     

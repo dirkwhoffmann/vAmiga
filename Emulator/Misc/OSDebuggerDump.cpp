@@ -1,0 +1,433 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
+//
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the GNU General Public License v3
+//
+// See https://www.gnu.org for license information
+// -----------------------------------------------------------------------------
+
+#include "config.h"
+#include "OSDebugger.h"
+#include "IOUtils.h"
+#include <sstream>
+
+void
+OSDebugger::dumpExecBase(std::ostream& s) const
+{
+    using namespace util;
+
+    auto execBase = getExecBase();
+    
+    s << tab("SoftVer");
+    s << hex(execBase.SoftVer) << std::endl;
+    s << tab("LowMemChkSum");
+    s << hex((u16)execBase.LowMemChkSum) << std::endl;
+    s << tab("ChkBase");
+    s << hex(execBase.ChkBase) << std::endl;
+    s << tab("ColdCapture");
+    s << hex(execBase.ColdCapture) << std::endl;
+    s << tab("CoolCapture");
+    s << hex(execBase.CoolCapture) << std::endl;
+    s << tab("WarmCapture");
+    s << hex(execBase.WarmCapture) << std::endl;
+    s << tab("SysStkUpper");
+    s << hex(execBase.SysStkUpper) << std::endl;
+    s << tab("SysStkLower");
+    s << hex(execBase.SysStkLower) << std::endl;
+    s << tab("MaxLocMem");
+    s << hex(execBase.MaxLocMem) << std::endl;
+    s << tab("DebugEntry");
+    s << hex(execBase.DebugEntry) << std::endl;
+    s << tab("DebugData");
+    s << hex(execBase.DebugData) << std::endl;
+    s << tab("AlertData");
+    s << hex(execBase.AlertData) << std::endl;
+    s << tab("MaxExtMem");
+    s << hex(execBase.MaxExtMem) << std::endl;
+    s << tab("ChkSum");
+    s << hex(execBase.ChkSum) << std::endl;
+    
+    s << tab("IdleCount");
+    s << hex(execBase.IdleCount) << std::endl;
+    s << tab("DispCount");
+    s << hex(execBase.DispCount) << std::endl;
+    s << tab("Quantum");
+    s << hex(execBase.Quantum) << std::endl;
+    s << tab("Elapsed");
+    s << hex(execBase.Elapsed) << std::endl;
+    s << tab("SysFlags");
+    s << hex(execBase.SysFlags) << std::endl;
+    s << tab("IDNestCnt");
+    s << dec(execBase.IDNestCnt) << std::endl;
+    s << tab("TDNestCnt");
+    s << dec(execBase.TDNestCnt) << std::endl;
+    s << tab("AttnFlags");
+    s << toString((os::AttnFlags)execBase.AttnFlags) << std::endl;
+    s << tab("AttnResched");
+    s << hex(execBase.AttnResched) << std::endl;
+    s << tab("ResModules");
+    s << hex(execBase.ResModules) << std::endl;
+    s << tab("TaskTrapCode");
+    s << hex(execBase.TaskTrapCode) << std::endl;
+    s << tab("TaskExceptCode");
+    s << hex(execBase.TaskExceptCode) << std::endl;
+    s << tab("TaskExitCode");
+    s << hex(execBase.TaskExitCode) << std::endl;
+    s << tab("TaskSigAlloc");
+    s << hex(execBase.TaskSigAlloc) << std::endl;
+    s << tab("TasTrapAlloc");
+    s << hex(execBase.TaskTrapAlloc) << std::endl;
+
+    s << tab("VBlankFrequency");
+    s << dec(execBase.VBlankFrequency) << std::endl;
+    s << tab("PowerSupplyFrequency");
+    s << dec(execBase.PowerSupplyFrequency) << std::endl;
+
+    s << tab("KickMemPtr");
+    s << hex(execBase.KickMemPtr) << std::endl;
+    s << tab("KickTagPtr");
+    s << hex(execBase.KickTagPtr) << std::endl;
+    s << tab("KickCheckSum");
+    s << hex(execBase.KickCheckSum) << std::endl;
+}
+
+void
+OSDebugger::dumpInterrupts(std::ostream& s) const
+{
+    using namespace util;
+    
+    auto execBase = getExecBase();
+    
+    for (isize i = 0; i < 16; i++) {
+        
+        s << tab("Interrupt " + std::to_string(i));
+        s << hex(execBase.IntVects[i].iv_Code) << std::endl;
+    }
+}
+
+void
+OSDebugger::dumpLibraries(std::ostream& s) const
+{
+    std::vector <os::Library> libraries;
+    read(getExecBase().LibList.lh_Head, libraries);
+
+    for (auto &library : libraries) {
+
+        dumpLibrary(s, library, false);
+    }
+}
+
+void
+OSDebugger::dumpLibrary(std::ostream& s, u32 addr) const
+{
+    os::Library library;
+    
+    if (searchLibrary(addr, library)) {
+        dumpLibrary(s, library, true);
+    }
+}
+
+void
+OSDebugger::dumpLibrary(std::ostream& s, const string &name) const
+{
+    os::Library library;
+    
+    if (searchLibrary(name, library)) {
+        dumpLibrary(s, library, true);
+    }
+}
+
+void
+OSDebugger::dumpLibrary(std::ostream& s, const os::Library &lib, bool verbose) const
+{
+    using namespace util;
+
+    string nodeName;
+    read(lib.lib_Node.ln_Name, nodeName);
+
+    string name;
+    read(lib.lib_IdString, name);
+
+    if (verbose) {
+        
+        s << tab("Name");
+        s << nodeName << std::endl;
+        
+        if (!name.empty()) {
+            
+            s << tab("");
+            s << name << std::endl;
+        }
+
+        s << tab("Version");
+        s << dec(lib.lib_Version) << "." << dec(lib.lib_Revision) << std::endl;
+        s << tab("NegSize");
+        s << dec(lib.lib_NegSize) << std::endl;
+        s << tab("PosSize");
+        s << dec(lib.lib_PosSize) << std::endl;
+        s << tab("Flags");
+        s << toString((os::LibFlags)lib.lib_Flags) << std::endl;
+        s << tab("Sum");
+        s << dec(lib.lib_Sum) << std::endl;
+        s << tab("Open count");
+        s << dec(lib.lib_OpenCnt) << std::endl;
+
+    } else {
+
+        std::stringstream ss;
+        ss << hex(lib.addr);
+        s << tab(ss.str());
+        s << nodeName << " (" << dec(lib.lib_OpenCnt) << ")" << std::endl;
+    }
+}
+
+void
+OSDebugger::dumpDevices(std::ostream& s) const
+{
+    std::vector <os::Library> devices;
+    read(getExecBase().DeviceList.lh_Head, devices);
+
+    for (auto &device : devices) {
+        dumpLibrary(s, device, false);
+    }
+}
+
+void
+OSDebugger::dumpDevice(std::ostream& s, u32 addr) const
+{
+    os::Library device;
+    
+    if (searchLibrary(addr, device)) {
+        dumpLibrary(s, device, true);
+    }
+}
+
+void
+OSDebugger::dumpDevice(std::ostream& s, const string &name) const
+{
+    os::Library device;
+    
+    if (searchDevice(name, device)) {
+        dumpDevice(s, device, true);
+    }
+}
+
+void
+OSDebugger::dumpDevice(std::ostream& s, const os::Library &lib, bool verbose) const
+{
+    dumpLibrary(s, lib, verbose);
+}
+
+void
+OSDebugger::dumpResources(std::ostream& s) const
+{
+    std::vector <os::Library> resources;
+    read(getExecBase().DeviceList.lh_Head, resources);
+
+    for (auto &resource : resources) {
+
+        dumpLibrary(s, resource, false);
+        s << std::endl;
+    }
+}
+
+void
+OSDebugger::dumpResource(std::ostream& s, u32 addr) const
+{
+    os::Library resource;
+    
+    if (searchLibrary(addr, resource)) {
+        dumpLibrary(s, resource, true);
+    }
+}
+
+void
+OSDebugger::dumpResource(std::ostream& s, const string &name) const
+{
+    os::Library resource;
+    
+    if (searchDevice(name, resource)) {
+        dumpDevice(s, resource, true);
+    }
+}
+
+void
+OSDebugger::dumpResource(std::ostream& s, const os::Library &lib, bool verbose) const
+{
+    dumpLibrary(s, lib, verbose);
+}
+
+void
+OSDebugger::dumpTasks(std::ostream& s) const
+{
+    std::vector <os::Task> tasks;
+    read(tasks);
+            
+    for (auto &t: tasks) {
+        dumpTask(s, t, false);
+    }
+}
+
+void
+OSDebugger::dumpTask(std::ostream& s, u32 addr) const
+{
+    os::Task task;
+    
+    if (searchTask(addr, task)) {
+        dumpTask(s, task, true);
+    }
+}
+
+void
+OSDebugger::dumpTask(std::ostream& s, const string &name) const
+{
+    os::Task task;
+    
+    if (searchTask(name, task)) {
+        dumpTask(s, task, true);
+    }
+}
+
+void
+OSDebugger::dumpTask(std::ostream& s, const os::Task &task, bool verbose) const
+{
+    using namespace util;
+
+    string nodeName;
+    read(task.tc_Node.ln_Name, nodeName);
+    
+    if (verbose) {
+        
+        // auto sp = task.tc_SPReg + 70; // + kickstart_version >= 37 ? 74 : 70;
+        // auto pc = mem.spypeek32 <ACCESSOR_CPU> (sp);
+        
+        auto stackSize = task.tc_SPUpper - task.tc_SPLower;
+        
+        s << tab("Name");
+        s << nodeName << std::endl;
+        s << tab("Type");
+        s << toString((os::LnType)task.tc_Node.ln_Type) << std::endl;
+        s << tab("Priority");
+        s << dec(task.tc_Node.ln_Pri) << std::endl;
+        s << tab("Flags");
+        s << toString((os::TFlags)task.tc_Flags) << std::endl;
+        s << tab("State");
+        s << toString((os::TState)task.tc_State) << std::endl;
+        s << tab("IDNestCnt");
+        s << dec(task.tc_IDNestCnt) << std::endl;
+        s << tab("TDNestCnt");
+        s << dec(task.tc_TDNestCnt) << std::endl;
+        s << tab("SigAlloc");
+        s << hex(task.tc_SigAlloc) << std::endl;
+        s << tab("SigWait");
+        s << hex(task.tc_SigWait) << std::endl;
+        s << tab("SigRecvd");
+        s << hex(task.tc_SigRecvd) << std::endl;
+        s << tab("SigExcept");
+        s << hex(task.tc_SigExcept) << std::endl;
+        s << tab("TrapAlloc");
+        s << hex(task.tc_TrapAlloc) << std::endl;
+        s << tab("TrapAble");
+        s << hex(task.tc_TrapAble) << std::endl;
+        s << tab("ExceptData");
+        s << hex(task.tc_ExceptData) << std::endl;
+        s << tab("ExceptCode");
+        s << hex(task.tc_ExceptCode) << std::endl;
+        s << tab("TrapData");
+        s << hex(task.tc_TrapData) << std::endl;
+        s << tab("TrapCode");
+        s << hex(task.tc_TrapCode) << std::endl;
+        s << tab("SPReg");
+        s << hex(task.tc_SPReg) << std::endl;
+        s << tab("Stack");
+        s << hex(task.tc_SPLower) << " (" << stackSize << " bytes)" << std::endl;
+        s << tab("Switch");
+        s << hex(task.tc_Switch) << std::endl;
+        s << tab("Launch");
+        s << hex(task.tc_Launch) << std::endl;
+        s << tab("UserData");
+        s << hex(task.tc_UserData) << std::endl;
+
+        // s << tab("SP / PC");
+        // s << hex(sp) << ", " << hex(pc) << std::endl;
+
+    } else {
+
+        std::stringstream ss;
+        ss << hex(task.addr);
+        s << tab(ss.str());
+        s << nodeName;
+        s << " (" << toString((os::TState)task.tc_State) << ")" << std::endl;
+    }
+}
+
+void
+OSDebugger::dumpProcess(std::ostream& s, u32 addr) const
+{
+    os::Process process;
+    
+    if (searchProcess(addr, process)) {
+        dumpProcess(s, process, true);
+    }
+}
+
+void
+OSDebugger::dumpProcess(std::ostream& s, const string &name) const
+{
+    os::Process process;
+    
+    if (searchProcess(name, process)) {
+        dumpProcess(s, process, true);
+    }
+}
+
+void
+OSDebugger::dumpProcesses(std::ostream& s) const
+{
+    std::vector <os::Process> processes;
+    read(processes);
+            
+    for (auto &process : processes) {
+        dumpProcess(s, process, false);
+    }
+}
+
+void
+OSDebugger::dumpProcess(std::ostream& s, const os::Process &process, bool verbose) const
+{
+    using namespace util;
+    
+    if (verbose) {
+        
+        isize i = 0;
+        
+        s << tab("StackSize");
+        s << dec(process.pr_StackSize) << std::endl;
+        s << tab("StackBase");
+        s << hex(process.pr_StackBase) << std::endl;
+        s << tab("Flags");
+        s << hex((u32)process.pr_Flags) << std::endl;
+        // s << toString((os::PrFlags)process.pr_Flags) << std::endl;
+        s << tab("CLI");
+        s << hex(process.pr_CLI) << std::endl;
+
+        std::vector<os::SegList> segListArray;
+        read(process, segListArray);
+        
+        for (auto &segList: segListArray) {
+            
+            string title = "Segment list " + std::to_string(++i);
+            
+            for (auto &it: segList) {
+                
+                s << tab(title); title = "";
+                s << hex(it.second) << " (" << dec(it.first) << " bytes)" << std::endl;
+            }
+        }
+        
+    } else {
+        
+        dumpTask(s, process.pr_Task, verbose);
+    }
+}

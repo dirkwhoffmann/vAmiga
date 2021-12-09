@@ -31,6 +31,8 @@
 		501B821D2262FFB200042871 /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B821B2262FFB200042871 /* RTC.cpp */; };
 		501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB310275E460100D0A57B /* OSDebugger.cpp */; };
 		501FB315275E46EC00D0A57B /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 501FB314275E46EC00D0A57B /* CMakeLists.txt */; };
+		501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB3162762008C00D0A57B /* OSDebuggerRead.cpp */; };
+		501FB319276200A000D0A57B /* OSDebuggerDump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB318276200A000D0A57B /* OSDebuggerDump.cpp */; };
 		5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* Agnus.cpp */; };
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
 		5023519024485BBF00F6C088 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5023518F24485BBF00F6C088 /* Preferences.swift */; };
@@ -293,6 +295,8 @@
 		501FB311275E460100D0A57B /* OSDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSDebugger.h; sourceTree = "<group>"; };
 		501FB313275E461B00D0A57B /* OSDebuggerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSDebuggerTypes.h; sourceTree = "<group>"; };
 		501FB314275E46EC00D0A57B /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		501FB3162762008C00D0A57B /* OSDebuggerRead.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OSDebuggerRead.cpp; sourceTree = "<group>"; };
+		501FB318276200A000D0A57B /* OSDebuggerDump.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OSDebuggerDump.cpp; sourceTree = "<group>"; };
 		5020B17B21EF121E00B9E80E /* Agnus.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Agnus.cpp; sourceTree = "<group>"; };
 		5020B17C21EF121E00B9E80E /* Agnus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Agnus.h; sourceTree = "<group>"; };
 		5020B17E21EF136100B9E80E /* Denise.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Denise.cpp; sourceTree = "<group>"; };
@@ -1404,6 +1408,8 @@
 				501FB313275E461B00D0A57B /* OSDebuggerTypes.h */,
 				501FB311275E460100D0A57B /* OSDebugger.h */,
 				501FB310275E460100D0A57B /* OSDebugger.cpp */,
+				501FB3162762008C00D0A57B /* OSDebuggerRead.cpp */,
+				501FB318276200A000D0A57B /* OSDebuggerDump.cpp */,
 				50E98B50275A124900AA0CB9 /* Socket.h */,
 				50E98B4F275A124900AA0CB9 /* Socket.cpp */,
 				50E98B58275A779B00AA0CB9 /* GdbServerTypes.h */,
@@ -1671,6 +1677,7 @@
 				501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */,
 				504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */,
 				5027418F2297CACF0038E5AF /* Colors.cpp in Sources */,
+				501FB319276200A000D0A57B /* OSDebuggerDump.cpp in Sources */,
 				508FDFDA21EA20510043D0E9 /* ImageToolbox.swift in Sources */,
 				508FE05521EA22CC0043D0E9 /* PreferencesWindow.swift in Sources */,
 				505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */,
@@ -1727,6 +1734,7 @@
 				50300AF0258CF1F700D261E3 /* TypeExtensions.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
 				50D55CCD26DE3F4400F37E28 /* AgnusDDF.cpp in Sources */,
+				501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */,
 				50C8C44F260740AC00F4E012 /* SplashScreen.swift in Sources */,
 				50F54B2924B5D31D0078FDC9 /* xdms.c in Sources */,
 				5009B7FC2557051A0037288E /* EXTFile.cpp in Sources */,

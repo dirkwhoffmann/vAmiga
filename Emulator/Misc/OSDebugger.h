@@ -65,6 +65,9 @@ private:
     string toString(os::TState value) const;
     string toString(os::SigFlags value) const;
     string toString(os::TFlags value) const;
+    string toString(os::AttnFlags value) const;
+    string toString(os::LibFlags value) const;
+    string toString(os::PrFlags value) const;
 
     void append(string &str, const char *cstr) const;
     
@@ -90,20 +93,20 @@ public:
     //
 
 public:
-    
-    void read(u32 addr, os::Node *result) const;
-    void read(u32 addr, os::Library *result) const;
-    void read(u32 addr, os::IntVector *result) const;
-    void read(u32 addr, os::List *result) const;
-    void read(u32 addr, os::MinList *result) const;
-    void read(u32 addr, os::SoftIntList *result) const;
-    void read(u32 addr, os::Task *result) const;
-    void read(u32 addr, os::MsgPort *result) const;
-    void read(u32 addr, os::Process *result) const;
-    void read(u32 addr, os::ExecBase *result) const;
-    [[deprecated]] void read(os::ExecBase *result) const;
 
     os::ExecBase getExecBase() const;
+
+    void read(u32 addr, os::CommandLineInterface *result) const;
+    void read(u32 addr, os::ExecBase *result) const;
+    void read(u32 addr, os::IntVector *result) const;
+    void read(u32 addr, os::Library *result) const;
+    void read(u32 addr, os::List *result) const;
+    void read(u32 addr, os::MinList *result) const;
+    void read(u32 addr, os::MsgPort *result) const;
+    void read(u32 addr, os::Node *result) const;
+    void read(u32 addr, os::Process *result) const;
+    void read(u32 addr, os::SoftIntList *result) const;
+    void read(u32 addr, os::Task *result) const;
     
     
     //
@@ -114,10 +117,9 @@ public:
 
     void read(std::vector <os::Task> &result) const;
     void read(std::vector <os::Process> &result) const;
-    // void read(std::vector <os::Library> &result) const;
-
     void read(u32 addr, std::vector <os::Task> &result) const;
     void read(u32 addr, std::vector <os::Library> &result) const;
+    void read(const os::Process &pr, std::vector <os::SegList> &result) const;
     void read(u32 addr, std::vector <os::SegList> &result) const;
     void read(u32 addr, os::SegList &result) const;
 
@@ -134,6 +136,12 @@ public:
 
     bool searchResource(u32 addr, os::Library &result) const;
     bool searchResource(const string &name, os::Library &result) const;
+
+    bool searchTask(u32 addr, os::Task &result) const;
+    bool searchTask(const string &name, os::Task &result) const;
+
+    bool searchProcess(u32 addr, os::Process &result) const;
+    bool searchProcess(const string &name, os::Process &result) const;
 
 
     //
@@ -161,8 +169,12 @@ public:
     void dumpResource(std::ostream& s, const os::Library &lib, bool verbose) const;
 
     void dumpTasks(std::ostream& s) const;
-    void dumpTask(std::ostream& s, const os::Task &task) const;
+    void dumpTask(std::ostream& s, u32 addr) const;
+    void dumpTask(std::ostream& s, const string &name) const;
+    void dumpTask(std::ostream& s, const os::Task &task, bool verbose) const;
+    
     void dumpProcesses(std::ostream& s) const;
-    void dumpProcess(std::ostream& s, const os::Process &process) const;
-
+    void dumpProcess(std::ostream& s, u32 addr) const;
+    void dumpProcess(std::ostream& s, const string &name) const;
+    void dumpProcess(std::ostream& s, const os::Process &process, bool verbose) const;
 };

@@ -1111,105 +1111,134 @@ RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::os, Token::execbase> (Arguments& argv, long param)
 {
-    std::stringstream s; string line;
-    osDebugger.dumpExecBase(s);
-    while(std::getline(s, line)) *this << line << '\n';
+    std::stringstream ss;
+    osDebugger.dumpExecBase(ss);
+
+    *this << ss;
 }
 
 template <> void
 RetroShell::exec <Token::os, Token::interrupts> (Arguments& argv, long param)
 {
-    std::stringstream s; string line;
-    
-    { SYNCHRONIZED osDebugger.dumpInterrupts(s); }
-    while(std::getline(s, line)) *this << line << '\n';
+    std::stringstream ss;
+    osDebugger.dumpInterrupts(ss);
+
+    *this << ss;
 }
 
 template <> void
 RetroShell::exec <Token::os, Token::libraries> (Arguments& argv, long param)
 {
-    std::stringstream s;
-    osDebugger.dumpLibraries(s);
+    std::stringstream ss;
+    osDebugger.dumpLibraries(ss);
     
-    string line; while(std::getline(s, line)) *this << line << '\n';
+    *this << ss;
 }
 
 template <> void
 RetroShell::exec <Token::os, Token::library> (Arguments& argv, long param)
 {
-    std::stringstream s;
+    std::stringstream ss;
     
     try {
-        osDebugger.dumpLibrary(s, (u32)std::stol(argv.front(), nullptr, 16));
+        osDebugger.dumpLibrary(ss, (u32)std::stol(argv.front(), nullptr, 16));
     } catch (...) {
-        osDebugger.dumpLibrary(s, argv.front());
+        osDebugger.dumpLibrary(ss, argv.front());
     }
         
-    string line; while(std::getline(s, line)) *this << line << '\n';
+    *this << ss;
 }
 
 template <> void
 RetroShell::exec <Token::os, Token::devices> (Arguments& argv, long param)
 {
-    std::stringstream s;
-    osDebugger.dumpDevices(s);
+    std::stringstream ss;
+    osDebugger.dumpDevices(ss);
     
-    string line; while(std::getline(s, line)) *this << line << '\n';
+    *this << ss;
 }
 
 template <> void
 RetroShell::exec <Token::os, Token::device> (Arguments& argv, long param)
 {
-    std::stringstream s;
+    std::stringstream ss;
     
     try {
-        osDebugger.dumpDevice(s, (u32)std::stol(argv.front(), nullptr, 16));
+        osDebugger.dumpDevice(ss, (u32)std::stol(argv.front(), nullptr, 16));
     } catch (...) {
-        osDebugger.dumpDevice(s, argv.front());
+        osDebugger.dumpDevice(ss, argv.front());
     }
         
-    string line; while(std::getline(s, line)) *this << line << '\n';
+    *this << ss;
 }
 
 template <> void
 RetroShell::exec <Token::os, Token::resources> (Arguments& argv, long param)
 {
-    std::stringstream s;
-    osDebugger.dumpResources(s);
+    std::stringstream ss;
+    osDebugger.dumpResources(ss);
     
-    string line; while(std::getline(s, line)) *this << line << '\n';
+    *this << ss;
 }
 
 template <> void
 RetroShell::exec <Token::os, Token::resource> (Arguments& argv, long param)
 {
-    std::stringstream s;
+    std::stringstream ss;
     
     try {
-        osDebugger.dumpResource(s, (u32)std::stol(argv.front(), nullptr, 16));
+        osDebugger.dumpResource(ss, (u32)std::stol(argv.front(), nullptr, 16));
     } catch (...) {
-        osDebugger.dumpResource(s, argv.front());
+        osDebugger.dumpResource(ss, argv.front());
     }
         
-    string line; while(std::getline(s, line)) *this << line << '\n';
+    *this << ss;
 }
 
 template <> void
 RetroShell::exec <Token::os, Token::tasks> (Arguments& argv, long param)
 {
-    std::stringstream s; string line;
+    std::stringstream ss;
+    osDebugger.dumpTasks(ss);
     
-    { SYNCHRONIZED osDebugger.dumpTasks(s); }
-    while(std::getline(s, line)) *this << line << '\n';
+    *this << ss;
+}
+
+template <> void
+RetroShell::exec <Token::os, Token::task> (Arguments& argv, long param)
+{
+    std::stringstream ss;
+    
+    try {
+        osDebugger.dumpTask(ss, (u32)std::stol(argv.front(), nullptr, 16));
+    } catch (...) {
+        osDebugger.dumpTask(ss, argv.front());
+    }
+        
+    *this << ss;
 }
 
 template <> void
 RetroShell::exec <Token::os, Token::processes> (Arguments& argv, long param)
 {
-    std::stringstream s; string line;
+    std::stringstream ss;
+    osDebugger.dumpProcesses(ss);
     
-    { SYNCHRONIZED osDebugger.dumpProcesses(s); }
-    while(std::getline(s, line)) *this << line << '\n';
+    *this << ss;
+}
+
+template <> void
+RetroShell::exec <Token::os, Token::process> (Arguments& argv, long param)
+{
+    std::stringstream ss;
+    
+    try {
+        osDebugger.dumpProcess(ss, (u32)std::stol(argv.front(), nullptr, 16));
+    } catch (...) {
+        osDebugger.dumpProcess(ss, argv.front());
+    }
+        
+    *this << ss;
 }
 
 template <> void

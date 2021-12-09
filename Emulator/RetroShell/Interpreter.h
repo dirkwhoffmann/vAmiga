@@ -36,11 +36,11 @@ enum class Token
     defaultfs, delay, device, devices, disk, dma, esync, events, execbase,
     extrom, extstart, fast, filename, filter, interrupts, joystick, keyset,
     layers, left, library, libraries, mechanics, mode, model, opacity, palette,
-    pan, path, poll, port, ports, processes, pullup, raminitpattern, refresh,
-    registers, regreset, resource, resources, revision, right, rom, sampling,
-    saturation, saveroms, searchpath, shakedetector, slow, slowramdelay,
-    slowrammirror, speed, sprites, state, step, swapdelay, tasks, tod, todbug,
-    unmappingtype, verbose, velocity, volume, wom
+    pan, path, poll, port, ports, process, processes, pullup, raminitpattern,
+    refresh, registers, regreset, resource, resources, revision, right, rom,
+    sampling, saturation, saveroms, searchpath, shakedetector, slow,
+    slowramdelay,slowrammirror, speed, sprites, state, step, swapdelay, task,
+    tasks, tod, todbug, unmappingtype, verbose, velocity, volume, wom
 };
 
 struct TooFewArgumentsError : public util::ParseError {

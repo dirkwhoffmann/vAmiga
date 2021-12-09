@@ -138,6 +138,7 @@ public:
     RetroShell &operator<<(const string &value);
     RetroShell &operator<<(int value);
     RetroShell &operator<<(long value);
+    RetroShell &operator<<(std::stringstream &stream);
 
     // Moves the cursor forward to a certain column
     void tab(isize hpos);
