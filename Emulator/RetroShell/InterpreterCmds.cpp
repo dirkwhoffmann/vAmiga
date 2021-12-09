@@ -957,13 +957,25 @@ Interpreter::registerInstructions()
              "command", "Lists all libraries",
              &RetroShell::exec <Token::os, Token::libraries>);
 
+    root.add({"os", "library"},
+             "command", "Prints detailed information about a library",
+             &RetroShell::exec <Token::os, Token::library>, 1);
+
     root.add({"os", "devices"},
              "command", "Lists all devices",
              &RetroShell::exec <Token::os, Token::devices>);
 
+    root.add({"os", "device"},
+             "command", "Prints detailed information about a device",
+             &RetroShell::exec <Token::os, Token::device>, 1);
+
     root.add({"os", "resources"},
              "command", "Lists all resources",
              &RetroShell::exec <Token::os, Token::resources>);
+
+    root.add({"os", "resource"},
+             "command", "Prints detailed information about a resource",
+             &RetroShell::exec <Token::os, Token::resource>, 1);
 
     root.add({"os", "tasks"},
              "command", "Lists all tasks",

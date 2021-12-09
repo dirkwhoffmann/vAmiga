@@ -1128,28 +1128,70 @@ RetroShell::exec <Token::os, Token::interrupts> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::os, Token::libraries> (Arguments& argv, long param)
 {
-    std::stringstream s; string line;
+    std::stringstream s;
+    osDebugger.dumpLibraries(s);
     
-    { SYNCHRONIZED osDebugger.dumpLibraries(s); }
-    while(std::getline(s, line)) *this << line << '\n';
+    string line; while(std::getline(s, line)) *this << line << '\n';
+}
+
+template <> void
+RetroShell::exec <Token::os, Token::library> (Arguments& argv, long param)
+{
+    std::stringstream s;
+    
+    try {
+        osDebugger.dumpLibrary(s, (u32)std::stol(argv.front(), nullptr, 16));
+    } catch (...) {
+        osDebugger.dumpLibrary(s, argv.front());
+    }
+        
+    string line; while(std::getline(s, line)) *this << line << '\n';
 }
 
 template <> void
 RetroShell::exec <Token::os, Token::devices> (Arguments& argv, long param)
 {
-    std::stringstream s; string line;
+    std::stringstream s;
+    osDebugger.dumpDevices(s);
     
-    { SYNCHRONIZED osDebugger.dumpDevices(s); }
-    while(std::getline(s, line)) *this << line << '\n';
+    string line; while(std::getline(s, line)) *this << line << '\n';
+}
+
+template <> void
+RetroShell::exec <Token::os, Token::device> (Arguments& argv, long param)
+{
+    std::stringstream s;
+    
+    try {
+        osDebugger.dumpDevice(s, (u32)std::stol(argv.front(), nullptr, 16));
+    } catch (...) {
+        osDebugger.dumpDevice(s, argv.front());
+    }
+        
+    string line; while(std::getline(s, line)) *this << line << '\n';
 }
 
 template <> void
 RetroShell::exec <Token::os, Token::resources> (Arguments& argv, long param)
 {
-    std::stringstream s; string line;
+    std::stringstream s;
+    osDebugger.dumpResources(s);
     
-    { SYNCHRONIZED osDebugger.dumpResources(s); }
-    while(std::getline(s, line)) *this << line << '\n';
+    string line; while(std::getline(s, line)) *this << line << '\n';
+}
+
+template <> void
+RetroShell::exec <Token::os, Token::resource> (Arguments& argv, long param)
+{
+    std::stringstream s;
+    
+    try {
+        osDebugger.dumpResource(s, (u32)std::stol(argv.front(), nullptr, 16));
+    } catch (...) {
+        osDebugger.dumpResource(s, argv.front());
+    }
+        
+    string line; while(std::getline(s, line)) *this << line << '\n';
 }
 
 template <> void

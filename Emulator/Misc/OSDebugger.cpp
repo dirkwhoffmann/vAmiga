@@ -11,6 +11,7 @@
 #include "OSDebugger.h"
 #include "IOUtils.h"
 #include "Memory.h"
+#include <sstream>
 
 using namespace os;
 
@@ -411,6 +412,15 @@ OSDebugger::read(std::vector <os::Process> &result) const
     }
 }
 
+/*
+void
+OSDebugger::read(std::vector <os::Library> &result) const
+{
+    auto execBase = getExecBase();
+    read(execBase.LibList.lh_Head, result);
+}
+*/
+
 void
 OSDebugger::read(u32 addr, std::vector <os::Task> &result) const
 {
@@ -423,28 +433,6 @@ OSDebugger::read(u32 addr, std::vector <os::Task> &result) const
         if (addr) result.push_back(task);
     }
 }
-
-/*
-void
-OSDebugger::read(u32 addr, std::vector <os::Process> &result) const
-{
-    auto isProcess = [this](u32 addr) -> bool {
-        return mem.spypeek8 <ACCESSOR_CPU> (addr + 8) == NT_PROCESS;
-    };
-    
-    for (isize i = 0; addr && i < 128; i++) {
-
-        if (isProcess(addr)) {
-            
-            os::Process process;
-            read(addr, &process);
-        
-            addr = process.pr_Task.tc_Node.ln_Succ;
-            if (addr) result.push_back(process);
-        }
-    }
-}
-*/
 
 void
 OSDebugger::read(u32 addr, std::vector <os::Library> &result) const
@@ -488,6 +476,123 @@ OSDebugger::read(u32 addr, os::SegList &result) const
     }
 }
 
+bool
+OSDebugger::searchLibrary(u32 addr, os::Library &result) const
+{
+    std::vector <os::Library> libraries;
+    read(getExecBase().LibList.lh_Head, libraries);
+    
+    for (isize i = 0; i < (isize)libraries.size(); i++) {
+        
+        if (libraries[i].addr == addr || i + 1 == addr) {
+            
+            result = libraries[i];
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+bool
+OSDebugger::searchLibrary(const string &name, os::Library &result) const
+{
+    std::vector <os::Library> libraries;
+    read(getExecBase().LibList.lh_Head, libraries);
+    
+    for (isize i = 0; i < (isize)libraries.size(); i++) {
+        
+        string nodeName;
+        read(libraries[i].lib_Node.ln_Name, nodeName);
+        
+        if (name == nodeName || (name + ".library") == nodeName) {
+        
+            result = libraries[i];
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+bool
+OSDebugger::searchDevice(u32 addr, os::Library &result) const
+{
+    std::vector <os::Library> devices;
+    read(getExecBase().DeviceList.lh_Head, devices);
+    
+    for (isize i = 0; i < (isize)devices.size(); i++) {
+        
+        if (devices[i].addr == addr || i + 1 == addr) {
+            
+            result = devices[i];
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+bool
+OSDebugger::searchDevice(const string &name, os::Library &result) const
+{
+    std::vector <os::Library> devices;
+    read(getExecBase().DeviceList.lh_Head, devices);
+    
+    for (isize i = 0; i < (isize)devices.size(); i++) {
+        
+        string nodeName;
+        read(devices[i].lib_Node.ln_Name, nodeName);
+        
+        if (name == nodeName || (name + ".device") == nodeName) {
+        
+            result = devices[i];
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+bool
+OSDebugger::searchResource(u32 addr, os::Library &result) const
+{
+    std::vector <os::Library> resources;
+    read(getExecBase().ResourceList.lh_Head, resources);
+    
+    for (isize i = 0; i < (isize)resources.size(); i++) {
+        
+        if (resources[i].addr == addr || i + 1 == addr) {
+            
+            result = resources[i];
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+bool
+OSDebugger::searchResource(const string &name, os::Library &result) const
+{
+    std::vector <os::Library> resources;
+    read(getExecBase().ResourceList.lh_Head, resources);
+    
+    for (isize i = 0; i < (isize)resources.size(); i++) {
+        
+        string nodeName;
+        read(resources[i].lib_Node.ln_Name, nodeName);
+        
+        if (name == nodeName || (name + ".resources") == nodeName) {
+        
+            result = resources[i];
+            return true;
+        }
+    }
+    
+    return false;
+}
+
 void
 OSDebugger::dumpExecBase(std::ostream& s) const
 {
@@ -520,20 +625,39 @@ OSDebugger::dumpInterrupts(std::ostream& s) const
 void
 OSDebugger::dumpLibraries(std::ostream& s) const
 {
-    auto execBase = getExecBase();
-
     std::vector <os::Library> libraries;
-    read(execBase.LibList.lh_Head, libraries);
+    read(getExecBase().LibList.lh_Head, libraries);
 
-    for (auto &l: libraries) {
-        
-        dumpLibrary(s, l);
-        s << std::endl;
+    for (auto &library : libraries) {
+
+        dumpLibrary(s, library, false);
     }
 }
 
 void
-OSDebugger::dumpLibrary(std::ostream& s, const os::Library &lib) const
+OSDebugger::dumpLibrary(std::ostream& s, u32 addr) const
+{
+    os::Library library;
+    
+    if (searchLibrary(addr, library)) {
+        
+        dumpLibrary(s, library, true);
+    }
+}
+
+void
+OSDebugger::dumpLibrary(std::ostream& s, const string &name) const
+{
+    os::Library library;
+    
+    if (searchLibrary(name, library)) {
+        
+        dumpLibrary(s, library, true);
+    }
+}
+
+void
+OSDebugger::dumpLibrary(std::ostream& s, const os::Library &lib, bool verbose) const
 {
     using namespace util;
 
@@ -543,47 +667,117 @@ OSDebugger::dumpLibrary(std::ostream& s, const os::Library &lib) const
     string name;
     read(lib.lib_IdString, name);
 
-    s << tab("Name");
-    s << nodeName << std::endl;
+    if (verbose) {
+        
+        s << tab("Address");
+        s << hex(lib.addr) << std::endl;
+        s << tab("Name");
+        s << nodeName << std::endl;
+        
+        if (!name.empty()) {
+            s << tab("");
+            s << name << std::endl;
+        }
 
-    if (!name.empty()) {
-        s << tab("");
-        s << name << std::endl;
+        s << tab("Version");
+        s << dec(lib.lib_Version) << "." << dec(lib.lib_Revision) << std::endl;
+
+        s << tab("Open count");
+        s << dec(lib.lib_OpenCnt) << std::endl;
+
+    } else {
+
+        std::stringstream ss;
+        ss << hex(lib.addr);
+        s << tab(ss.str());
+        s << nodeName << std::endl;
     }
-    s << tab("Version");
-    s << dec(lib.lib_Version) << "." << dec(lib.lib_Revision) << std::endl;
-    s << tab("Open count");
-    s << dec(lib.lib_OpenCnt) << std::endl;
 }
 
 void
 OSDebugger::dumpDevices(std::ostream& s) const
 {
-    auto execBase = getExecBase();
-
     std::vector <os::Library> devices;
-    read(execBase.DeviceList.lh_Head, devices);
+    read(getExecBase().DeviceList.lh_Head, devices);
 
-    for (auto &l: devices) {
-        
-        dumpLibrary(s, l);
+    for (auto &device : devices) {
+
+        dumpLibrary(s, device, false);
         s << std::endl;
     }
 }
 
 void
-OSDebugger::dumpResources(std::ostream& s) const
+OSDebugger::dumpDevice(std::ostream& s, u32 addr) const
 {
-    auto execBase = getExecBase();
-
-    std::vector <os::Library> resources;
-    read(execBase.ResourceList.lh_Head, resources);
-
-    for (auto &l: resources) {
+    os::Library device;
+    
+    if (searchLibrary(addr, device)) {
         
-        dumpLibrary(s, l);
+        dumpLibrary(s, device, true);
         s << std::endl;
     }
+}
+
+void
+OSDebugger::dumpDevice(std::ostream& s, const string &name) const
+{
+    os::Library device;
+    
+    if (searchDevice(name, device)) {
+        
+        dumpDevice(s, device, true);
+        s << std::endl;
+    }
+}
+
+void
+OSDebugger::dumpDevice(std::ostream& s, const os::Library &lib, bool verbose) const
+{
+    dumpLibrary(s, lib, verbose);
+}
+
+void
+OSDebugger::dumpResources(std::ostream& s) const
+{
+    std::vector <os::Library> resources;
+    read(getExecBase().DeviceList.lh_Head, resources);
+
+    for (auto &resource : resources) {
+
+        dumpLibrary(s, resource, false);
+        s << std::endl;
+    }
+}
+
+void
+OSDebugger::dumpResource(std::ostream& s, u32 addr) const
+{
+    os::Library resource;
+    
+    if (searchLibrary(addr, resource)) {
+        
+        dumpLibrary(s, resource, true);
+        s << std::endl;
+    }
+}
+
+void
+OSDebugger::dumpResource(std::ostream& s, const string &name) const
+{
+    os::Library resource;
+    
+    if (searchDevice(name, resource)) {
+        
+        dumpDevice(s, resource, true);
+        s << std::endl;
+    }
+}
+
+void
+OSDebugger::dumpResource(std::ostream& s, const os::Library &lib, bool verbose) const
+{
+    dumpLibrary(s, lib, verbose);
 }
 
 void

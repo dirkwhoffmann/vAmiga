@@ -114,14 +114,28 @@ public:
 
     void read(std::vector <os::Task> &result) const;
     void read(std::vector <os::Process> &result) const;
+    // void read(std::vector <os::Library> &result) const;
 
     void read(u32 addr, std::vector <os::Task> &result) const;
-    // void read(u32 addr, std::vector <os::Process> &result) const;
     void read(u32 addr, std::vector <os::Library> &result) const;
     void read(u32 addr, std::vector <os::SegList> &result) const;
     void read(u32 addr, os::SegList &result) const;
 
     
+    //
+    // Searches a structure by value (address or index), or name
+    //
+    
+    bool searchLibrary(u32 addr, os::Library &result) const;
+    bool searchLibrary(const string &name, os::Library &result) const;
+
+    bool searchDevice(u32 addr, os::Library &result) const;
+    bool searchDevice(const string &name, os::Library &result) const;
+
+    bool searchResource(u32 addr, os::Library &result) const;
+    bool searchResource(const string &name, os::Library &result) const;
+
+
     //
     // Printing system information
     //
@@ -130,11 +144,22 @@ public:
     
     void dumpExecBase(std::ostream& s) const;
     void dumpInterrupts(std::ostream& s) const;
-    // void dumpInterrupt(std::ostream& s, const os::IntVector &vec) const;
+
     void dumpLibraries(std::ostream& s) const;
-    void dumpLibrary(std::ostream& s, const os::Library &lib) const;
+    void dumpLibrary(std::ostream& s, u32 addr) const;
+    void dumpLibrary(std::ostream& s, const string &name) const;
+    void dumpLibrary(std::ostream& s, const os::Library &lib, bool verbose) const;
+
     void dumpDevices(std::ostream& s) const;
+    void dumpDevice(std::ostream& s, u32 addr) const;
+    void dumpDevice(std::ostream& s, const string &name) const;
+    void dumpDevice(std::ostream& s, const os::Library &lib, bool verbose) const;
+
     void dumpResources(std::ostream& s) const;
+    void dumpResource(std::ostream& s, u32 addr) const;
+    void dumpResource(std::ostream& s, const string &name) const;
+    void dumpResource(std::ostream& s, const os::Library &lib, bool verbose) const;
+
     void dumpTasks(std::ostream& s) const;
     void dumpTask(std::ostream& s, const os::Task &task) const;
     void dumpProcesses(std::ostream& s) const;
