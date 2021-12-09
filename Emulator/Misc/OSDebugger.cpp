@@ -173,11 +173,15 @@ OSDebugger::searchLibrary(const string &name, os::Library &result) const
 {
     std::vector <os::Library> libraries;
     read(getExecBase().LibList.lh_Head, libraries);
-    
+
+    printf("name = %s size %d\n", name.c_str(), (int)libraries.size());
+
     for (isize i = 0; i < (isize)libraries.size(); i++) {
         
         string nodeName;
         read(libraries[i].lib_Node.ln_Name, nodeName);
+        
+        printf("node = %s\n", nodeName.c_str());
         
         if (name == nodeName || (name + ".library") == nodeName) {
         

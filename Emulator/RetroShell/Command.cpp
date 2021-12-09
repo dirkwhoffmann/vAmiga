@@ -24,8 +24,18 @@ Command::add(const std::vector<string> tokens,
     Command *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
     assert(cmd != nullptr);
     
+    // Create instruction
+    Command d;
+    d.parent = this;
+    d.token = tokens.back();
+    d.type = type;
+    d.info = help;
+    d.action = action;
+    d.minArgs = numArgs;
+    d.maxArgs = numArgs;
+    // d.param = param;
+    
     // Register instruction
-    Command d { this, tokens.back(), type, help, { }, action, numArgs, param };
     cmd->args.push_back(d);
 }
 
@@ -139,8 +149,9 @@ Command::usage() const
     
     if (args.empty()) {
 
-        firstArg = numArgs == 0 ? "" : numArgs == 1 ? "<value>" : "<values>";
-
+        firstArg = maxArgs == 0 ? "" : maxArgs == 1 ? "<value>" : "<values>";
+        if (minArgs == 0) firstArg = "[" + firstArg + "]";
+        
     } else {
         
         // Collect all argument types
@@ -155,8 +166,8 @@ Command::usage() const
         // Describe the remaining arguments (if any)
         bool printArg = false, printOpt = false;
         for (auto &it : args) {
-            if (it.action != nullptr && it.numArgs == 0) printOpt = true;
-            if (it.numArgs > 0 || !it.args.empty()) printArg = true;
+            if (it.action != nullptr && it.minArgs == 0) printOpt = true;
+            if (it.maxArgs > 0 || !it.args.empty()) printArg = true;
         }
         if (printArg) {
             otherArgs = printOpt ? "[<arguments>]" : "<arguments>";

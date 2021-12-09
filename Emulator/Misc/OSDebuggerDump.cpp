@@ -226,9 +226,7 @@ OSDebugger::dumpResources(std::ostream& s) const
     read(getExecBase().DeviceList.lh_Head, resources);
 
     for (auto &resource : resources) {
-
         dumpLibrary(s, resource, false);
-        s << std::endl;
     }
 }
 

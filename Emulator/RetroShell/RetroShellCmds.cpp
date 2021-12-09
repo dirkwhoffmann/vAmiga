@@ -1130,22 +1130,16 @@ template <> void
 RetroShell::exec <Token::os, Token::libraries> (Arguments& argv, long param)
 {
     std::stringstream ss;
-    osDebugger.dumpLibraries(ss);
+    isize num;
     
-    *this << ss;
-}
-
-template <> void
-RetroShell::exec <Token::os, Token::library> (Arguments& argv, long param)
-{
-    std::stringstream ss;
-    
-    try {
-        osDebugger.dumpLibrary(ss, (u32)std::stol(argv.front(), nullptr, 16));
-    } catch (...) {
+    if (argv.empty()) {
+        osDebugger.dumpLibraries(ss);
+    } else if (util::parseHex(argv.front(), &num)) {
+        osDebugger.dumpLibrary(ss, (u32)num);
+    } else {
         osDebugger.dumpLibrary(ss, argv.front());
     }
-        
+    
     *this << ss;
 }
 
@@ -1153,22 +1147,16 @@ template <> void
 RetroShell::exec <Token::os, Token::devices> (Arguments& argv, long param)
 {
     std::stringstream ss;
-    osDebugger.dumpDevices(ss);
+    isize num;
     
-    *this << ss;
-}
-
-template <> void
-RetroShell::exec <Token::os, Token::device> (Arguments& argv, long param)
-{
-    std::stringstream ss;
-    
-    try {
-        osDebugger.dumpDevice(ss, (u32)std::stol(argv.front(), nullptr, 16));
-    } catch (...) {
+    if (argv.empty()) {
+        osDebugger.dumpDevices(ss);
+    } else if (util::parseHex(argv.front(), &num)) {
+        osDebugger.dumpDevice(ss, (u32)num);
+    } else {
         osDebugger.dumpDevice(ss, argv.front());
     }
-        
+    
     *this << ss;
 }
 
@@ -1176,22 +1164,16 @@ template <> void
 RetroShell::exec <Token::os, Token::resources> (Arguments& argv, long param)
 {
     std::stringstream ss;
-    osDebugger.dumpResources(ss);
+    isize num;
     
-    *this << ss;
-}
-
-template <> void
-RetroShell::exec <Token::os, Token::resource> (Arguments& argv, long param)
-{
-    std::stringstream ss;
-    
-    try {
-        osDebugger.dumpResource(ss, (u32)std::stol(argv.front(), nullptr, 16));
-    } catch (...) {
+    if (argv.empty()) {
+        osDebugger.dumpResources(ss);
+    } else if (util::parseHex(argv.front(), &num)) {
+        osDebugger.dumpResource(ss, (u32)num);
+    } else {
         osDebugger.dumpResource(ss, argv.front());
     }
-        
+    
     *this << ss;
 }
 
@@ -1199,22 +1181,16 @@ template <> void
 RetroShell::exec <Token::os, Token::tasks> (Arguments& argv, long param)
 {
     std::stringstream ss;
-    osDebugger.dumpTasks(ss);
+    isize num;
     
-    *this << ss;
-}
-
-template <> void
-RetroShell::exec <Token::os, Token::task> (Arguments& argv, long param)
-{
-    std::stringstream ss;
-    
-    try {
-        osDebugger.dumpTask(ss, (u32)std::stol(argv.front(), nullptr, 16));
-    } catch (...) {
+    if (argv.empty()) {
+        osDebugger.dumpTasks(ss);
+    } else if (util::parseHex(argv.front(), &num)) {
+        osDebugger.dumpTask(ss, (u32)num);
+    } else {
         osDebugger.dumpTask(ss, argv.front());
     }
-        
+    
     *this << ss;
 }
 
@@ -1222,22 +1198,16 @@ template <> void
 RetroShell::exec <Token::os, Token::processes> (Arguments& argv, long param)
 {
     std::stringstream ss;
-    osDebugger.dumpProcesses(ss);
+    isize num;
     
-    *this << ss;
-}
-
-template <> void
-RetroShell::exec <Token::os, Token::process> (Arguments& argv, long param)
-{
-    std::stringstream ss;
-    
-    try {
-        osDebugger.dumpProcess(ss, (u32)std::stol(argv.front(), nullptr, 16));
-    } catch (...) {
+    if (argv.empty()) {
+        osDebugger.dumpProcesses(ss);
+    } else if (util::parseHex(argv.front(), &num)) {
+        osDebugger.dumpProcess(ss, (u32)num);
+    } else {
         osDebugger.dumpProcess(ss, argv.front());
     }
-        
+    
     *this << ss;
 }
 

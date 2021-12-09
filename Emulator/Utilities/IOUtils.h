@@ -21,6 +21,13 @@ namespace fs = std::filesystem;
 namespace util {
 
 //
+// Handling string
+//
+
+bool parseHex(const string &s, isize *result);
+
+
+//
 // Handling file names
 //
 
