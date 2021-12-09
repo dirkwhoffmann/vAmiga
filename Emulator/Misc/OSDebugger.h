@@ -73,6 +73,15 @@ private:
     
     
     //
+    // Managing pointers
+    //
+    
+public:
+    
+    bool isValidPtr(u32 addr) const;
+    
+    
+    //
     // Extracting elementary data types from Amiga memory
     //
     
@@ -150,31 +159,31 @@ public:
 
 public:
     
-    void dumpExecBase(std::ostream& s) const;
-    void dumpInterrupts(std::ostream& s) const;
+    void dumpExecBase(std::ostream& s);
+    void dumpInterrupts(std::ostream& s);
 
-    void dumpLibraries(std::ostream& s) const;
-    void dumpLibrary(std::ostream& s, u32 addr) const;
-    void dumpLibrary(std::ostream& s, const string &name) const;
-    void dumpLibrary(std::ostream& s, const os::Library &lib, bool verbose) const;
+    void dumpLibraries(std::ostream& s);
+    void dumpLibrary(std::ostream& s, u32 addr);
+    void dumpLibrary(std::ostream& s, const string &name);
+    void dumpLibrary(std::ostream& s, const os::Library &lib, bool verbose);
 
-    void dumpDevices(std::ostream& s) const;
-    void dumpDevice(std::ostream& s, u32 addr) const;
-    void dumpDevice(std::ostream& s, const string &name) const;
-    void dumpDevice(std::ostream& s, const os::Library &lib, bool verbose) const;
+    void dumpDevices(std::ostream& s);
+    void dumpDevice(std::ostream& s, u32 addr);
+    void dumpDevice(std::ostream& s, const string &name);
+    void dumpDevice(std::ostream& s, const os::Library &lib, bool verbose);
 
-    void dumpResources(std::ostream& s) const;
-    void dumpResource(std::ostream& s, u32 addr) const;
-    void dumpResource(std::ostream& s, const string &name) const;
-    void dumpResource(std::ostream& s, const os::Library &lib, bool verbose) const;
+    void dumpResources(std::ostream& s);
+    void dumpResource(std::ostream& s, u32 addr);
+    void dumpResource(std::ostream& s, const string &name);
+    void dumpResource(std::ostream& s, const os::Library &lib, bool verbose);
 
-    void dumpTasks(std::ostream& s) const;
-    void dumpTask(std::ostream& s, u32 addr) const;
-    void dumpTask(std::ostream& s, const string &name) const;
-    void dumpTask(std::ostream& s, const os::Task &task, bool verbose) const;
+    void dumpTasks(std::ostream& s);
+    void dumpTask(std::ostream& s, u32 addr);
+    void dumpTask(std::ostream& s, const string &name);
+    void dumpTask(std::ostream& s, const os::Task &task, bool verbose);
     
-    void dumpProcesses(std::ostream& s) const;
-    void dumpProcess(std::ostream& s, u32 addr) const;
-    void dumpProcess(std::ostream& s, const string &name) const;
-    void dumpProcess(std::ostream& s, const os::Process &process, bool verbose) const;
+    void dumpProcesses(std::ostream& s);
+    void dumpProcess(std::ostream& s, u32 addr);
+    void dumpProcess(std::ostream& s, const string &name);
+    void dumpProcess(std::ostream& s, const os::Process &process, bool verbose);
 };

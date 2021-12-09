@@ -401,6 +401,14 @@ public:
     // Updates both memory source lookup tables
     void updateMemSrcTables();
     
+    // Checks if an address belongs to a certain memory area
+    bool inChipRam(u32 addr);
+    bool inSlowRam(u32 addr);
+    bool inFastRam(u32 addr);
+    bool inRam(u32 addr);
+    bool inRom(u32 addr);
+
+    
 private:
 
     void updateCpuMemSrcTable();

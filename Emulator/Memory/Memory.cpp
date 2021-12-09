@@ -912,6 +912,54 @@ Memory::updateAgnusMemSrcTable()
     }
 }
 
+bool
+Memory::inChipRam(u32 addr)
+{
+    if (addr > 0xFFFFFF) return false;
+        
+    auto memSrc = cpuMemSrc[addr >> 16];
+    return memSrc == MEM_CHIP || memSrc == MEM_CHIP_MIRROR;
+}
+
+bool
+Memory::inSlowRam(u32 addr)
+{
+    if (addr > 0xFFFFFF) return false;
+        
+    auto memSrc = cpuMemSrc[addr >> 16];
+    return memSrc == MEM_SLOW || memSrc == MEM_SLOW_MIRROR;
+}
+
+bool
+Memory::inFastRam(u32 addr)
+{
+    if (addr > 0xFFFFFF) return false;
+        
+    auto memSrc = cpuMemSrc[addr >> 16];
+    return memSrc == MEM_FAST;
+}
+
+bool
+Memory::inRam(u32 addr)
+{
+    return inChipRam(addr) || inSlowRam(addr) || inFastRam(addr);
+}
+
+bool
+Memory::inRom(u32 addr)
+{
+    if (addr > 0xFFFFFF) return false;
+        
+    auto memSrc = cpuMemSrc[addr >> 16];
+    
+    return
+    memSrc == MEM_ROM ||
+    memSrc == MEM_ROM_MIRROR ||
+    memSrc == MEM_WOM ||
+    memSrc == MEM_EXT;
+}
+
+
 //
 // Peek (CPU)
 //

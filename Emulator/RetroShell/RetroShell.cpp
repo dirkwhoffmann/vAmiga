@@ -95,7 +95,10 @@ RetroShell&
 RetroShell::operator<<(std::stringstream &stream)
 {
     string line;
-    while(std::getline(stream, line)) *this << line << '\n';
+    while(std::getline(stream, line)) {
+        printf("line = '%s'\n", line.c_str());
+        *this << line << '\n';
+    }
     return *this;
 }
 

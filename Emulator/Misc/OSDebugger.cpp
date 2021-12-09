@@ -151,6 +151,19 @@ OSDebugger::append(string &str, const char *cstr) const
 }
 
 bool
+OSDebugger::isValidPtr(u32 addr) const
+{
+    if (!IS_EVEN(addr)) {
+        warn("Odd pointer: %x\n", addr);
+    }
+    if (!mem.inRam(addr) && !mem.inRom(addr)) {
+        warn("Pointer outside RAM and ROM: %x\n", addr);
+    }
+
+    return addr && IS_EVEN(addr) && (mem.inRam(addr) || mem.inRom(addr));
+}
+
+bool
 OSDebugger::searchLibrary(u32 addr, os::Library &result) const
 {
     std::vector <os::Library> libraries;
@@ -174,15 +187,11 @@ OSDebugger::searchLibrary(const string &name, os::Library &result) const
     std::vector <os::Library> libraries;
     read(getExecBase().LibList.lh_Head, libraries);
 
-    printf("name = %s size %d\n", name.c_str(), (int)libraries.size());
-
     for (isize i = 0; i < (isize)libraries.size(); i++) {
         
         string nodeName;
         read(libraries[i].lib_Node.ln_Name, nodeName);
-        
-        printf("node = %s\n", nodeName.c_str());
-        
+                
         if (name == nodeName || (name + ".library") == nodeName) {
         
             result = libraries[i];

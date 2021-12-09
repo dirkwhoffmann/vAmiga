@@ -57,5 +57,8 @@ public:
     ~AutoResume() { comp->resume(); }
 };
 
+#define SUSPENDED AutoResume _ar(this);
+
+// Old-style suspended macro (DEPRECATED)
 #define suspended \
 for (AutoResume _ar(this); _ar.active; _ar.active = false)
