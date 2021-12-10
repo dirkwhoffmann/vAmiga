@@ -85,7 +85,7 @@ Socket::close()
 {
     if (socket != INVALID_SOCKET) {
      
-#ifdef _MSC_VER
+#ifdef _WIN32
         closesocket(socket);
 #else
         ::close(socket);
