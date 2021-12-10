@@ -11,9 +11,25 @@
 
 #include "AmigaObject.h"
 
+#ifdef _MSC_VER
+
+#include <WinSock2.h>
+#include <ws2tcpip.h>
+
+#else
+
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+typedef int SOCKET;
+#define INVALID_SOCKET  -1
+
+#endif
+
 class Socket : public AmigaObject {
 
-    int socket;
+    SOCKET socket;
 
 public:
     
@@ -27,16 +43,11 @@ public:
     
 public:
 
-    Socket() : socket(-1) { }
-    Socket(int id) : socket(id) { }
-    /*
-    Socket();
-    ~Socket();
-    */
+    Socket() : socket(INVALID_SOCKET) { }
+    Socket(SOCKET id) : socket(id) { }
     
-    int init();
-    
-    int getSocket() { return socket; }
+    SOCKET init();
+    SOCKET getSocket() { return socket; }
     
     
     //
@@ -55,7 +66,7 @@ private:
     
 public:
     
-    void bind(isize port);
+    void bind(u16 port);
     void listen();
     Socket accept();
     void close();
@@ -78,7 +89,7 @@ class PortListener {
 public:
     
     PortListener();
-    PortListener(isize port);
+    PortListener(u16 port);
     Socket accept();
     void close();
 };

@@ -9,52 +9,27 @@
 
 #include "config.h"
 #include "Socket.h"
+#include "MemUtils.h"
 
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-
-/*
-Socket::Socket(int socket)
+SOCKET Socket::init()
 {
-    this->socket = socket;
+    socket = ::socket(AF_INET, SOCK_STREAM, 0);
     
-    if (socket < 0) {
+    if (socket == INVALID_SOCKET) {
         throw VAError(ERROR_SOCK_CANT_CREATE);
     }
-}
-
-Socket::~Socket()
-{
-    printf("~Socket(%d)\n", socket);
-    // if (socket != -1) close();
-}
-
-Socket::Socket() : Socket(::socket(AF_INET, SOCK_STREAM, 0))
-{
     
-}
-*/
-
-int Socket::init()
-{
-    if (auto id = ::socket(AF_INET, SOCK_STREAM, 0)) {
-        
-        socket = id;
-        return id;
-    }
-
-    throw VAError(ERROR_SOCK_CANT_CREATE);
+    return socket;
 }
 
 void
-Socket::bind(isize port)
+Socket::bind(u16 port)
 {
     struct sockaddr_in address;
     
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons(port);
+    address.sin_port = util::bigEndian(port);
     
     if (::bind(socket, (struct sockaddr *)&address, sizeof(address)) < 0) {
         throw VAError(ERROR_SOCK_CANT_CONNECT);
@@ -77,7 +52,7 @@ Socket::accept()
 
     auto s = ::accept(socket, (struct sockaddr *)&address, &addrlen);
     
-    if (s < 0) {
+    if (s == INVALID_SOCKET) {
         throw VAError(ERROR_SOCK_CANT_CONNECT);
     }
     
@@ -102,16 +77,16 @@ Socket::recv()
 void
 Socket::send(std::string s)
 {
-    ::send(socket, s.c_str(), s.length(), 0);
+    ::send(socket, s.c_str(), (int)s.length(), 0);
 }
 
 void
 Socket::close()
 {
-    if (socket != -1) {
+    if (socket != INVALID_SOCKET) {
         
         ::close(socket);
-        socket = -1;
+        socket = INVALID_SOCKET;
     }
 }
 
@@ -119,7 +94,7 @@ PortListener::PortListener()
 {
 }
 
-PortListener::PortListener(isize port) {
+PortListener::PortListener(u16 port) {
 
     auto socket = server.init();
     
@@ -127,7 +102,7 @@ PortListener::PortListener(isize port) {
     auto success = setsockopt(socket,
                               SOL_SOCKET,
                               SO_REUSEADDR,
-                              &opt,
+                              (const void *)&opt,
                               sizeof(opt));
     
     if (success < 0) throw VAError(ERROR_SOCK_CANT_CONNECT);

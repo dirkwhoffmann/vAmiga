@@ -169,7 +169,7 @@ OSDebugger::searchLibrary(u32 addr, os::Library &result) const
     std::vector <os::Library> libraries;
     read(getExecBase().LibList.lh_Head, libraries);
     
-    for (isize i = 0; i < (isize)libraries.size(); i++) {
+    for (usize i = 0; i < libraries.size(); i++) {
         
         if (libraries[i].addr == addr || i + 1 == addr) {
             
@@ -187,7 +187,7 @@ OSDebugger::searchLibrary(const string &name, os::Library &result) const
     std::vector <os::Library> libraries;
     read(getExecBase().LibList.lh_Head, libraries);
 
-    for (isize i = 0; i < (isize)libraries.size(); i++) {
+    for (usize i = 0; i < libraries.size(); i++) {
         
         string nodeName;
         read(libraries[i].lib_Node.ln_Name, nodeName);
@@ -208,7 +208,7 @@ OSDebugger::searchDevice(u32 addr, os::Library &result) const
     std::vector <os::Library> devices;
     read(getExecBase().DeviceList.lh_Head, devices);
     
-    for (isize i = 0; i < (isize)devices.size(); i++) {
+    for (usize i = 0; i < devices.size(); i++) {
         
         if (devices[i].addr == addr || i + 1 == addr) {
             
@@ -226,7 +226,7 @@ OSDebugger::searchDevice(const string &name, os::Library &result) const
     std::vector <os::Library> devices;
     read(getExecBase().DeviceList.lh_Head, devices);
     
-    for (isize i = 0; i < (isize)devices.size(); i++) {
+    for (usize i = 0; i < devices.size(); i++) {
         
         string nodeName;
         read(devices[i].lib_Node.ln_Name, nodeName);
@@ -247,7 +247,7 @@ OSDebugger::searchResource(u32 addr, os::Library &result) const
     std::vector <os::Library> resources;
     read(getExecBase().ResourceList.lh_Head, resources);
     
-    for (isize i = 0; i < (isize)resources.size(); i++) {
+    for (usize i = 0; i < resources.size(); i++) {
         
         if (resources[i].addr == addr || i + 1 == addr) {
             
@@ -265,7 +265,7 @@ OSDebugger::searchResource(const string &name, os::Library &result) const
     std::vector <os::Library> resources;
     read(getExecBase().ResourceList.lh_Head, resources);
     
-    for (isize i = 0; i < (isize)resources.size(); i++) {
+    for (usize i = 0; i < resources.size(); i++) {
         
         string nodeName;
         read(resources[i].lib_Node.ln_Name, nodeName);
@@ -286,7 +286,7 @@ OSDebugger::searchTask(u32 addr, os::Task &result) const
     std::vector <os::Task> tasks;
     read(tasks);
     
-    for (isize i = 0; i < (isize)tasks.size(); i++) {
+    for (usize i = 0; i < tasks.size(); i++) {
         
         if (tasks[i].addr == addr || i + 1 == addr) {
             
@@ -304,7 +304,7 @@ OSDebugger::searchTask(const string &name, os::Task &result) const
     std::vector <os::Task> tasks;
     read(tasks);
 
-    for (isize i = 0; i < (isize)tasks.size(); i++) {
+    for (usize i = 0; i < tasks.size(); i++) {
         
         string nodeName;
         read(tasks[i].tc_Node.ln_Name, nodeName);
@@ -326,7 +326,7 @@ OSDebugger::searchProcess(u32 addr, os::Process &result) const
     std::vector <os::Process> processes;
     read(processes);
     
-    for (isize i = 0; i < (isize)processes.size(); i++) {
+    for (usize i = 0; i < processes.size(); i++) {
         
         if (processes[i].addr == addr || i + 1 == addr) {
             
@@ -344,7 +344,7 @@ OSDebugger::searchProcess(const string &name, os::Process &result) const
     std::vector <os::Process> processes;
     read(processes);
 
-    for (isize i = 0; i < (isize)processes.size(); i++) {
+    for (usize i = 0; i < processes.size(); i++) {
         
         string nodeName;
         read(processes[i].pr_Task.tc_Node.ln_Name, nodeName);

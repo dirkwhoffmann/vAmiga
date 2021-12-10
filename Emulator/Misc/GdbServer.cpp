@@ -16,7 +16,7 @@
 #include "MemUtils.h"
 #include "MsgQueue.h"
 #include "RetroShell.h"
-#include <unistd.h>
+// #include <unistd.h>
 
 GdbServer::GdbServer(Amiga& ref) : SubComponent(ref)
 {
@@ -181,7 +181,7 @@ GdbServer::main()
     try {
         
         // Create a port listener
-        listener = PortListener(config.port);
+        listener = PortListener((u16)config.port);
         
         // Wait for a client to connect
         connection = listener.accept();

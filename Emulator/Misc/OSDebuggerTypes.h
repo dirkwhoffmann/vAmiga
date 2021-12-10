@@ -11,6 +11,7 @@
 
 #include "Aliases.h"
 #include "Reflection.h"
+#include <vector>
 
 namespace os {
 
