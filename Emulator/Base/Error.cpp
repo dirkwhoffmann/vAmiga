@@ -20,6 +20,18 @@ VAError::VAError(ErrorCode code, const string &s)
             fatalError;
             break;
             
+        case ERROR_POWERED_OFF:
+            description = "The emulator is powered off.";
+            break;
+
+        case ERROR_POWERED_ON:
+            description = "The emulator is powered on.";
+            break;
+
+        case ERROR_RUNNING:
+            description = "The emulator is running.";
+            break;
+
         case ERROR_OPT_UNSUPPORTED:
             description = "This option is not supported yet.";
             break;

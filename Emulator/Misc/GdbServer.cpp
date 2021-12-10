@@ -22,6 +22,11 @@ GdbServer::GdbServer(Amiga& ref) : SubComponent(ref)
 {
 }
 
+GdbServer::~GdbServer()
+{
+    if (isListening()) stop();
+}
+
 void
 GdbServer::_dump(dump::Category category, std::ostream& os) const
 {

@@ -40,7 +40,8 @@ class GdbServer : public SubComponent {
 public:
     
     GdbServer(Amiga& ref);
-        
+    ~GdbServer();
+
     
     //
     // Methods from AmigaObject

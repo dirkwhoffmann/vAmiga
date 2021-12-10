@@ -17,10 +17,15 @@ enum_long(ERROR_CODE)
     ERROR_OK,
     ERROR_UNKNOWN,
     
+    // Emulator state
+    ERROR_POWERED_OFF,
+    ERROR_POWERED_ON,
+    ERROR_RUNNING,
+
     // Configuration
     ERROR_OPT_UNSUPPORTED,
     ERROR_OPT_INVARG,
-    ERROR_OPT_LOCKED,
+    ERROR_OPT_LOCKED,               // DEPRECATED: Replace by ERROR_POWERED_ON
 
     // Memory
     ERROR_OUT_OF_MEMORY,
@@ -132,6 +137,10 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_OK:                          return "OK";
             case ERROR_UNKNOWN:                     return "UNKNOWN";
                 
+            case ERROR_POWERED_OFF:                 return "POWERED_OFF";
+            case ERROR_POWERED_ON:                  return "POWERED_ON";
+            case ERROR_RUNNING:                     return "RUNNING";
+
             case ERROR_OPT_UNSUPPORTED:             return "ERROR_OPT_UNSUPPORTED";
             case ERROR_OPT_INVARG:                  return "ERROR_OPT_INVARG";
             case ERROR_OPT_LOCKED:                  return "ERROR_OPT_LOCKED";
