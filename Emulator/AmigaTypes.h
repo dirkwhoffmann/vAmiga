@@ -26,9 +26,9 @@ typedef CONFIG_SCHEME ConfigScheme;
 #ifdef __cplusplus
 struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
 {
-    static long min() { return 0; }
-    static long max() { return CONFIG_A500_ECS_1MB; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return CONFIG_A500_ECS_1MB; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "CONFIG"; }
     static const char *key(ConfigScheme value)
@@ -61,9 +61,9 @@ typedef INSPECTION_TARGET InspectionTarget;
 #ifdef __cplusplus
 struct InspectionTargetEnum : util::Reflection<InspectionTargetEnum, InspectionTarget>
 {
-    static long min() { return 0; }
-    static long max() { return INSPECTION_EVENTS; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return INSPECTION_EVENTS; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
     static const char *prefix() { return "INSPECTION"; }
     static const char *key(InspectionTarget value)
@@ -147,9 +147,9 @@ typedef REG_CHIPSET ChipsetReg;
 static_assert(REG_NO_OP == (0x1FE >> 1));
 struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 {
-    static long min() { return 0; }
-    static long max() { return REG_NO_OP; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return REG_NO_OP; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "REG"; }
     static const char *key(ConfigScheme value)

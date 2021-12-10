@@ -31,9 +31,9 @@ typedef DRIVE_DMA_STATE DriveState;
 #ifdef __cplusplus
 struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState>
 {
-    static long min() { return 0; }
-    static long max() { return DRIVE_DMA_FLUSH; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return DRIVE_DMA_FLUSH; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
     static const char *prefix()
     {

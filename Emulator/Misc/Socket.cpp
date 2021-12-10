@@ -84,8 +84,12 @@ void
 Socket::close()
 {
     if (socket != INVALID_SOCKET) {
-        
+     
+#ifdef _MSC_VER
+        closesocket(socket);
+#else
         ::close(socket);
+#endif
         socket = INVALID_SOCKET;
     }
 }
@@ -102,7 +106,7 @@ PortListener::PortListener(u16 port) {
     auto success = setsockopt(socket,
                               SOL_SOCKET,
                               SO_REUSEADDR,
-                              (const void *)&opt,
+                              (const char *)&opt,
                               sizeof(opt));
     
     if (success < 0) throw VAError(ERROR_SOCK_CANT_CONNECT);

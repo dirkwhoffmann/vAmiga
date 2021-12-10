@@ -29,9 +29,9 @@ typedef DRIVE_TYPE DriveType;
 #ifdef __cplusplus
 struct DriveTypeEnum : util::Reflection<DriveTypeEnum, DriveType>
 {
-    static long min() { return 0; }
-    static long max() { return DRIVE_DD_525; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return DRIVE_DD_525; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
     static const char *prefix() { return "DRIVE"; }
     static const char *key(DriveType value)

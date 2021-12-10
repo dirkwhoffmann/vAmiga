@@ -126,9 +126,9 @@ typedef OPT Option;
 #ifdef __cplusplus
 struct OptionEnum : util::Reflection<OptionEnum, Option>
 {    
-    static long min() { return 0; }
-    static long max() { return OPT_AUDVOLR; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return OPT_AUDVOLR; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "OPT"; }
     static const char *key(Option value)
@@ -225,9 +225,9 @@ typedef EMULATOR_STATE EmulatorState;
 #ifdef __cplusplus
 struct EmulatorStateEnum : util::Reflection<EmulatorStateEnum, EmulatorState>
 {
-    static long min() { return 0; }
-    static long max() { return EMULATOR_STATE_RUNNING; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return EMULATOR_STATE_RUNNING; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "EMULATOR_STATE"; }
     static const char *key(EmulatorState value)

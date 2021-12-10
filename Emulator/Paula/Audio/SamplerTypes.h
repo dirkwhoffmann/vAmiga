@@ -27,9 +27,9 @@ typedef SMP_METHOD SamplingMethod;
 #ifdef __cplusplus
 struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod>
 {
-    static long min() { return 0; }
-    static long max() { return SMP_LINEAR; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return SMP_LINEAR; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "SMP"; }
     static const char *key(SamplingMethod value)

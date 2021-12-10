@@ -30,9 +30,9 @@ typedef AGNUS_REVISION AgnusRevision;
 #ifdef __cplusplus
 struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
 {
-    static long min() { return 0; }
-    static long max() { return AGNUS_ECS_2MB; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return AGNUS_ECS_2MB; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "AGNUS"; }
     static const char *key(AgnusRevision value)
@@ -60,9 +60,9 @@ typedef DDF_STATE DDFState;
 #ifdef __cplusplus
 struct DDFStateEnum : util::Reflection<DDFStateEnum, DDFState>
 {
-    static long min() { return 0; }
-    static long max() { return DDF_ON; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return DDF_ON; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "DDF"; }
     static const char *key(AgnusRevision value)
@@ -88,9 +88,9 @@ typedef SPR_DMA_STATE SprDMAState;
 #ifdef __cplusplus
 struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
 {
-    static long min() { return 0; }
-    static long max() { return SPR_DMA_ACTIVE; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return SPR_DMA_ACTIVE; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "SPR_DMA"; }
     static const char *key(SprDMAState value)

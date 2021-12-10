@@ -29,9 +29,9 @@ typedef KB_STATE KeyboardState;
 #ifdef __cplusplus
 struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState>
 {
-    static long min() { return 0; }
-    static long max() { return KB_SEND; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return KB_SEND; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
     static const char *prefix() { return "KB"; }
     static const char *key(KeyboardState value)

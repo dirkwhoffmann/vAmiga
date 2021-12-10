@@ -70,9 +70,9 @@ typedef SLOT EventSlot;
 #ifdef __cplusplus
 struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
 {
-    static long min() { return 0; }
-    static long max() { return SLOT_COUNT - 1; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return SLOT_COUNT - 1; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
     static const char *prefix() { return "SLOT"; }
     static const char *key(EventSlot value)

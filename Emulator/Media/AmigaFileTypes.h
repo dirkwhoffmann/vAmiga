@@ -36,9 +36,9 @@ typedef FILETYPE FileType;
 #ifdef __cplusplus
 struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
 {
-    static long min() { return 0; }
-    static long max() { return FILETYPE_EXTENDED_ROM; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return FILETYPE_EXTENDED_ROM; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
     static const char *prefix() { return "FILETYPE"; }
     static const char *key(FileType value)

@@ -108,9 +108,9 @@ typedef MSG_TYPE MsgType;
 #ifdef __cplusplus
 struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
 {
-    static long min() { return 0; }
-    static long max() { return MSG_GDB_STOP; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return MSG_GDB_STOP; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "MSG"; }
     static const char *key(MsgType value)

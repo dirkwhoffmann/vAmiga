@@ -37,9 +37,9 @@ typedef GAME_PAD_ACTION GamePadAction;
 #ifdef __cplusplus
 struct GamePadActionEnum : util::Reflection<GamePadActionEnum, GamePadAction>
 {
-    static long min() { return 0; }
-    static long max() { return RELEASE_RIGHT; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return RELEASE_RIGHT; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
     static const char *prefix() { return nullptr; }
     static const char *key(GamePadAction value)

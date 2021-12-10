@@ -40,9 +40,9 @@ typedef MEM_SOURCE MemorySource;
 #ifdef __cplusplus
 struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource>
 {
-    static long min() { return 0; }
-    static long max() { return MEM_EXT; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return MEM_EXT; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "MEM"; }
     static const char *key(MemorySource value)
@@ -81,9 +81,9 @@ typedef ACCESSOR_TYPE Accessor;
 #ifdef __cplusplus
 struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
 {
-    static long min() { return 0; }
-    static long max() { return ACCESSOR_AGNUS; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return ACCESSOR_AGNUS; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "ACCESSOR"; }
     static const char *key(Accessor value)
@@ -110,9 +110,9 @@ typedef BANK_MAP BankMap;
 #ifdef __cplusplus
 struct BankMapEnum : util::Reflection<BankMapEnum, BankMap>
 {
-    static long min() { return 0; }
-    static long max() { return BANK_MAP_A2000B; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return BANK_MAP_A2000B; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "BANK_MAP"; }
     static const char *key(BankMap value)
@@ -140,9 +140,9 @@ typedef RAM_INIT_PATTERN RamInitPattern;
 #ifdef __cplusplus
 struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern>
 {
-    static long min() { return 0; }
-    static long max() { return RAM_INIT_ALL_ONES; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return RAM_INIT_ALL_ONES; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "RAM_INIT"; }
     static const char *key(RamInitPattern value)
@@ -169,9 +169,9 @@ typedef UNMAPPED_MEMORY UnmappedMemory;
 #ifdef __cplusplus
 struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
 {
-    static long min() { return 0; }
-    static long max() { return UNMAPPED_ALL_ONES; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return UNMAPPED_ALL_ONES; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "UNMAPPED"; }
     static const char *key(UnmappedMemory value)

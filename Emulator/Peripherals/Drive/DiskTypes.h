@@ -26,9 +26,9 @@ typedef DISK_DIAMETER DiskDiameter;
 #ifdef __cplusplus
 struct DiskDiameterEnum : util::Reflection<DiskDiameterEnum, DiskDiameter>
 {
-    static long min() { return 0; }
-    static long max() { return INCH_525; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return INCH_525; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
     static const char *prefix() { return ""; }
     static const char *key(DiskDiameter value)
@@ -54,9 +54,9 @@ typedef DISK_DENSITY DiskDensity;
 #ifdef __cplusplus
 struct DiskDensityEnum : util::Reflection<DiskDensityEnum, DiskDensity>
 {
-    static long min() { return 0; }
-    static long max() { return DISK_HD; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return DISK_HD; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
     static const char *prefix() { return "DISK"; }
     static const char *key(DiskDensity value)

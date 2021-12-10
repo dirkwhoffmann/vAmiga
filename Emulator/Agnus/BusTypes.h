@@ -47,9 +47,9 @@ typedef BUS_OWNER BusOwner;
 #ifdef __cplusplus
 struct BusOwnerEnum : util::Reflection<BusOwnerEnum, BusOwner>
 {
-    static long min() { return 0; }
-    static long max() { return BUS_COUNT - 1; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return BUS_COUNT - 1; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "BUS"; }
     static const char *key(BusOwner value)

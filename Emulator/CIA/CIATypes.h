@@ -28,9 +28,9 @@ typedef CIA_REVISION CIARevision;
 #ifdef __cplusplus
 struct CIARevisionEnum : util::Reflection<CIARevisionEnum, CIARevision>
 {
-    static long min() { return 0; }
-    static long max() { return CIA_MOS_8520_PLCC; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return CIA_MOS_8520_PLCC; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "CIA"; }
     static const char *key(CIARevision value)
@@ -69,9 +69,9 @@ typedef CIAREG CIAReg;
 #ifdef __cplusplus
 struct CIARegEnum : util::Reflection<CIARegEnum, CIAReg>
 {
-    static long min() { return 0; }
-    static long max() { return CIAREG_CRB; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return CIAREG_CRB; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
     static const char *prefix() { return "CIAREG"; }
     static const char *key(CIAReg value)

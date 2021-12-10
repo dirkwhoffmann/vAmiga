@@ -90,9 +90,9 @@ typedef ROM_IDENTIFIER RomIdentifier;
 #ifdef __cplusplus
 struct RomIdentifierEnum : util::Reflection<RomIdentifierEnum, RomIdentifier>
 {
-    static long min() { return 0; }
-    static long max() { return ROM_LOGICA20; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return ROM_LOGICA20; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "ROM"; }
     static const char *key(RomIdentifier value)

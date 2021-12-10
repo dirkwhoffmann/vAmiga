@@ -30,9 +30,9 @@ typedef PALETTE Palette;
 #ifdef __cplusplus
 struct PaletteEnum : util::Reflection<PaletteEnum, Palette>
 {    
-    static long min() { return 0; }
-    static long max() { return PALETTE_SEPIA; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return PALETTE_SEPIA; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "PALETTE"; }
     static const char *key(Palette value)

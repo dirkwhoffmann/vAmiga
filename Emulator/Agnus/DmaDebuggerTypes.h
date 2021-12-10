@@ -24,9 +24,9 @@ typedef DMA_DISPLAY_MODE DmaDisplayMode;
 #ifdef __cplusplus
 struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
 {
-    static long min() { return 0; }
-    static long max() { return DMA_DISPLAY_MODE_ODD_EVEN_LAYERS; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return DMA_DISPLAY_MODE_ODD_EVEN_LAYERS; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "DMA_DISPLAY_MODE"; }
     static const char *key(DmaDisplayMode value)
@@ -60,9 +60,9 @@ typedef DMA_CHANNEL DmaChannel;
 #ifdef __cplusplus
 struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel>
 {
-    static long min() { return 0; }
-    static long max() { return DMA_CHANNEL_COUNT - 1; }
-    static bool isValid(auto value) { return value >= min() && value <= max(); }
+    static long minVal() { return 0; }
+    static long maxVal() { return DMA_CHANNEL_COUNT - 1; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "DMA_CHANNEL"; }
     static const char *key(DmaDisplayMode value)
