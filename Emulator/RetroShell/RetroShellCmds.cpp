@@ -1121,7 +1121,7 @@ template <> void
 RetroShell::exec <Token::os, Token::interrupts> (Arguments& argv, long param)
 {
     std::stringstream ss;
-    osDebugger.dumpInterrupts(ss);
+    osDebugger.dumpIntVectors(ss);
 
     *this << ss;
 }

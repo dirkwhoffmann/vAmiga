@@ -157,6 +157,16 @@ typedef struct Library
 }
 Library;
 
+typedef struct Interrupt
+{
+    u32     addr;
+
+    struct  Node is_Node;           // 0
+    u32     is_Data;                // 14
+    u32     is_Code;                // 18
+}
+Interrupt;
+
 typedef struct IntVector
 {
     u32     addr;

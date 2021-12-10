@@ -107,6 +107,7 @@ public:
 
     void read(u32 addr, os::CommandLineInterface *result) const;
     void read(u32 addr, os::ExecBase *result) const;
+    void read(u32 addr, os::Interrupt *result) const;
     void read(u32 addr, os::IntVector *result) const;
     void read(u32 addr, os::Library *result) const;
     void read(u32 addr, os::List *result) const;
@@ -160,7 +161,9 @@ public:
 public:
     
     void dumpExecBase(std::ostream& s);
-    void dumpInterrupts(std::ostream& s);
+    
+    void dumpIntVectors(std::ostream& s);
+    void dumpIntVector(std::ostream& s, const os::IntVector &intVector);
 
     void dumpLibraries(std::ostream& s);
     void dumpLibrary(std::ostream& s, u32 addr);

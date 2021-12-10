@@ -124,6 +124,19 @@ OSDebugger::read(u32 addr, os::Library *result) const
 }
 
 void
+OSDebugger::read(u32 addr, os::Interrupt *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr + 0,  &result->is_Node);
+        read(addr + 14, &result->is_Data);
+        read(addr + 18, &result->is_Code);
+    }
+}
+
+void
 OSDebugger::read(u32 addr, os::IntVector *result) const
 {
     if (isValidPtr(addr)) {

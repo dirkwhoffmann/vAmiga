@@ -96,8 +96,14 @@ OSDebugger::dumpExecBase(std::ostream& s)
 }
 
 void
-OSDebugger::dumpInterrupts(std::ostream& s) 
+OSDebugger::dumpIntVectors(std::ostream& s) 
 {
+    const char *name[16] = {
+        
+        "0",  "1",  "2",  "3",  "4",  "5",  "6",  "7",
+        "8",  "9", "10", "11", "12", "13", "14", "15"
+    };
+    
     {   SUSPENDED
 
         using namespace util;
@@ -105,9 +111,35 @@ OSDebugger::dumpInterrupts(std::ostream& s)
         
         for (isize i = 0; i < 16; i++) {
             
-            s << tab("Interrupt " + std::to_string(i));
-            s << hex(execBase.IntVects[i].iv_Code) << std::endl;
+            s << tab("Table entry") << string(name[i]) << std::endl;
+            dumpIntVector(s, execBase.IntVects[i]);
+            if (i < 15) s << std::endl;
         }
+    }
+}
+
+void
+OSDebugger::dumpIntVector(std::ostream& s, const os::IntVector &intVec)
+{
+    {   SUSPENDED
+                
+        os::Interrupt irq;
+        read(intVec.iv_Node, &irq);
+        
+        string name;
+        read(irq.is_Node.ln_Name, name);
+        
+        using namespace util;
+        
+        if (!name.empty()) {
+            
+            s << tab("Name");
+            s << name << std::endl;
+        }
+        s << tab("Data");
+        s << hex(intVec.iv_Data) << " / " << hex(irq.is_Data) << std::endl;
+        s << tab("Code");
+        s << hex(intVec.iv_Code) << " / " << hex(irq.is_Code) << std::endl;
     }
 }
 
