@@ -15,7 +15,7 @@
 RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
 {
     // Initialize the text storage
-    storage.push_back("");
+    clear();
 
     // Initialize the input buffer
     input.push_back("");
@@ -126,7 +126,7 @@ void
 RetroShell::clear()
 {
     storage.clear();
-    printPrompt();
+    storage.push_back("");
 }
 
 void
