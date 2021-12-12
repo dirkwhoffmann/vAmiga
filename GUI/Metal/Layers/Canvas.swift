@@ -234,28 +234,35 @@ class Canvas: Layer {
             return
         }
         
-        // Get a pointer to the most recent texture
+        // Lock the most recent texture
+        amiga.denise.lockStableBuffer()
+
+        // Get the texture
         let buffer = amiga.denise.stableBuffer
         precondition(buffer.data != nil)
         
-        // Only proceed if the emulator delivers a new texture
-        if prevBuffer?.data == buffer.data { return }
-        prevBuffer = buffer
-
-        // Determine if the new texture is a long frame or a short frame
-        prevLOF = currLOF
-        currLOF = buffer.longFrame
-        
-        // Update the GPU texture
-        if currLOF {
-            longFrameTexture.replace(w: Int(HPIXELS),
-                                     h: longFrameTexture.height,
-                                     buffer: buffer.data + Int(HBLANK_MIN) * 4)
-        } else {
-            shortFrameTexture.replace(w: Int(HPIXELS),
-                                      h: shortFrameTexture.height,
-                                      buffer: buffer.data + Int(HBLANK_MIN) * 4)
+        if prevBuffer?.data != buffer.data {
+            
+            prevBuffer = buffer
+            
+            // Determine if the new texture is a long frame or a short frame
+            prevLOF = currLOF
+            currLOF = buffer.longFrame
+            
+            // Update the GPU texture
+            if currLOF {
+                longFrameTexture.replace(w: Int(HPIXELS),
+                                         h: longFrameTexture.height,
+                                         buffer: buffer.data + Int(HBLANK_MIN) * 4)
+            } else {
+                shortFrameTexture.replace(w: Int(HPIXELS),
+                                          h: shortFrameTexture.height,
+                                          buffer: buffer.data + Int(HBLANK_MIN) * 4)
+            }
         }
+        
+        // Unlock texture
+        amiga.denise.unlockStableBuffer()
     }
     
     //

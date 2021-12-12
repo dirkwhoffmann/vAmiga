@@ -298,13 +298,23 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
 ScreenBuffer
 PixelEngine::getStableBuffer()
 {
-    SYNCHRONIZED
-    
     if (frameBuffer == &emuTexture[0]) {
         return emuTexture[1];
     } else {
         return emuTexture[0];
     }
+}
+
+void
+PixelEngine::swapBuffers()
+{
+    // Only proceed if the GUI is not using the stable buffer right now
+    lockStableBuffer();
+    
+    frameBuffer = (frameBuffer == &emuTexture[0]) ? &emuTexture[1] : &emuTexture[0];
+    frameBuffer->longFrame = agnus.frame.lof;
+
+    unlockStableBuffer();
 }
 
 u32 *
@@ -328,12 +338,7 @@ PixelEngine::pixelAddr(isize pixel) const
 void
 PixelEngine::vsyncHandler()
 {
-    // Switch the working buffer
-    synchronized {
-        frameBuffer = (frameBuffer == &emuTexture[0]) ? &emuTexture[1] : &emuTexture[0];
-        frameBuffer->longFrame = agnus.frame.lof;
-    }
-    
+    swapBuffers();
     dmaDebugger.vSyncHandler();
 }
 

@@ -33,17 +33,20 @@ public:
 
 private:
 
-    /* The emulator uses double-buffering for storing the computed textures.
-     * At any time, one of the two buffers is the "working buffer" and the other
-     * one the "stable buffer". All drawing functions write to the working
-     * buffer whereas the GPU reads from the stable buffer. Once a frame has
-     * been completed, the working buffer and the stable buffer are switched.
+    /* The emulator utilizes double-buffering for the computed textures.
+     * At any time, one of the two buffers is the "working buffer". The other
+     * one is the "stable buffer". All drawing functions write to the working
+     * buffer and the GPU reads from the stable buffer. Once a frame has
+     * been completed, the working buffer and the stable buffer are swapped.
      */
     ScreenBuffer emuTexture[2];
 
     // Pointer to the "working buffer"
     ScreenBuffer *frameBuffer = &emuTexture[0];
 
+    // Mutex for synchronizing access to the stable buffer
+    util::Mutex bufferMutex;
+        
     // Buffer with background noise (random black and white pixels)
     u32 *noise = nullptr;
 
@@ -203,9 +206,16 @@ private:
 
 public:
 
-    // Returns the stable frame buffer for long frames
+    // Returns the stable frame buffer
     ScreenBuffer getStableBuffer();
 
+    // Locks or unlocks the stable buffer
+    void lockStableBuffer() { bufferMutex.lock(); }
+    void unlockStableBuffer() { bufferMutex.unlock(); }
+    
+    // Swaps the working buffer and the stable buffer
+    void swapBuffers();
+    
     // Returns a pointer to randon noise
     u32 *getNoise() const;
     
