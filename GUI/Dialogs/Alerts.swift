@@ -7,6 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+// DEPRECATED
+// TODO: MOVE TO VAError as static functions
+
 extension MyDocument {
     
     func showNoMetalSupportAlert() {
@@ -101,6 +104,7 @@ extension MyController {
         return mydocument.proceedWithUnexportedDisk()
     }
 
+    /*
     func showGdbTerminationAlert() {
 
         let alert = NSAlert()
@@ -111,7 +115,8 @@ extension MyController {
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }
-
+    */
+    
     func showMissingFFmpegAlert() {
 
         let alert = NSAlert()

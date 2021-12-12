@@ -542,7 +542,7 @@ extension MyController {
             renderer.console.isDirty = true
             
         case .GDB_ERROR:
-            showGdbTerminationAlert()
+            VAError.gdbServerAborted()
             
         default:
             track("Unknown message: \(msg)")

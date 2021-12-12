@@ -248,10 +248,18 @@ GdbServer::split(const string &s, char delimiter)
 string
 GdbServer::readRegister(isize nr)
 {
-    if (nr >= 0 && nr <= 7)  return util::hexstr <8> (cpu.getD((int)(nr)));
-    if (nr >= 8 && nr <= 15) return util::hexstr <8> (cpu.getA((int)(nr - 8)));
-    if (nr == 16)            return util::hexstr <8> (cpu.getSR());
-    if (nr == 17)            return util::hexstr <8> (cpu.getPC());
+    if (nr >= 0 && nr <= 7) {
+        return util::hexstr <8> (util::bigEndian((u32)cpu.getD((int)(nr))));
+    }
+    if (nr >= 8 && nr <= 15) {
+        return util::hexstr <8> (util::bigEndian((u32)cpu.getA((int)(nr - 8))));
+    }
+    if (nr == 16) {
+        return util::hexstr <8> (util::bigEndian((u32)cpu.getSR()));
+    }
+    if (nr == 17) {
+        return util::hexstr <8> (util::bigEndian((u32)cpu.getPC()));
+    }
 
     return "xxxxxxxx";
 }
