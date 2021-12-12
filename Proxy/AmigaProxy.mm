@@ -284,7 +284,7 @@ using namespace moira;
     return (Memory *)obj;
 }
 
-- (MemoryConfig)getConfig
+- (MemoryConfig)config
 {
     return [self mem]->getConfig();
 }
