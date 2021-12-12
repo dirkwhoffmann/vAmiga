@@ -178,7 +178,7 @@ AmigaFile::writeToStream(std::ostream &stream)
 isize
 AmigaFile::writeToFile(const string &path)
 {
-    std::ofstream stream(path);
+    std::ofstream stream(path, std::ofstream::binary);
 
     if (!stream.is_open()) {
         throw VAError(ERROR_FILE_CANT_WRITE, path);

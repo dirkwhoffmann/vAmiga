@@ -815,7 +815,7 @@ FSBlock::exportFileHeaderBlock(const fs::path &path)
 {
     auto filename = path / partition.dev.getPath(this);
     
-    std::ofstream file(filename.string().c_str(), std::ofstream::binary);
+    std::ofstream file(filename.string(), std::ofstream::binary);
     if (!file.is_open()) return ERROR_FS_CANNOT_CREATE_FILE;
     
     writeData(file);
