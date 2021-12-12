@@ -503,7 +503,7 @@ Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask, bool update)
         mask = size - 1;
         
         if ((uintptr_t)ptr & 1) {
-            panic("Memory at %p (%d bytes) is not aligned\n", (void *)ptr, bytes);
+            fatal("Memory at %p (%d bytes) is not aligned\n", (void *)ptr, bytes);
         }
     }
     

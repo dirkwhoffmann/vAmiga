@@ -91,7 +91,7 @@ public:
  *
  *   - msg    Information message   (Shows up in all builds)
  *   - warn   Warning message       (Shows up in all builds)
- *   - panic  Panic message + Exit  (Shows up in all builds)
+ *   - fatal  Error message + Exit  (Shows up in all builds)
  *   - debug  Debug message         (Shows up in debug builds, only)
  *   - plain  Plain debug message   (Shows up in debug builds, only)
  *   - trace  Detailed debug output (Shows up in debug builds, only)
@@ -116,8 +116,8 @@ fprintf(stderr, format, ##__VA_ARGS__);
 #define warn(format, ...) \
 fprintf(stderr, "Warning: " format, ##__VA_ARGS__);
 
-#define panic(format, ...) \
-{ fprintf(stderr, "Panic: " format, ##__VA_ARGS__); exit(1); }
+#define fatal(format, ...) \
+{ fprintf(stderr, "Fatal: " format, ##__VA_ARGS__); exit(1); }
 
 #ifndef NDEBUG
 

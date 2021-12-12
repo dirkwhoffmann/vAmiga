@@ -252,7 +252,7 @@ Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm) const
         if (minterm & 0b00000010) result2 |= ~a & ~b &  c;
         if (minterm & 0b00000001) result2 |= ~a & ~b & ~c;
     
-        if (result != result2) panic("Blitter minterm error\n");
+        if (result != result2) fatal("Blitter minterm error\n");
     }
     
     return result;
