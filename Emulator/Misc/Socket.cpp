@@ -13,6 +13,22 @@
 
 SOCKET Socket::init()
 {
+#ifdef WIN32
+    static struct WSAInit {
+        
+        WSAInit() {
+            
+            WSADATA wsaData;
+            if (WSAStartup(MAKEWORD(2, 2), &wsaData))
+                throw VAError(ERROR_SOCK_CANT_CREATE);
+        }
+        ~WSAInit() {
+            
+            WSACleanup();
+        }
+    } wsaInit;
+#endif
+    
     socket = ::socket(AF_INET, SOCK_STREAM, 0);
     
     if (socket == INVALID_SOCKET) {
