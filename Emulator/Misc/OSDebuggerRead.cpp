@@ -58,7 +58,10 @@ os::ExecBase
 OSDebugger::getExecBase() const
 {
     os::ExecBase result;
+    
     read(mem.spypeek32 <ACCESSOR_CPU> (4), &result);
+    checkExecBase(result);
+    
     return result;
 }
 

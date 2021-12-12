@@ -161,6 +161,10 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "Invalid Rom key.";
             break;
             
+        case ERROR_OSDB:
+            description = "OS Debugger: " + s;
+            break;
+            
         case ERROR_FS_UNSUPPORTED:
             description = "Unsupported file system.";
             break;

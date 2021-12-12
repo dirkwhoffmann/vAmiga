@@ -10,6 +10,7 @@
 #include "config.h"
 #include "OSDebugger.h"
 #include "IOUtils.h"
+#include "Memory.h"
 #include "SuspendableThread.h"
 #include <sstream>
 

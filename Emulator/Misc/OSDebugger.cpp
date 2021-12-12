@@ -359,3 +359,61 @@ OSDebugger::searchProcess(const string &name, os::Process &result) const
     
     return false;
 }
+
+void
+OSDebugger::checkExecBase(const os::ExecBase &execBase) const
+{
+    // Check if the struct resides at an even location in RAM
+    if (!(IS_EVEN(execBase.addr) && mem.inRam(execBase.addr))) {
+        throw VAError(ERROR_OSDB, "ExecBase: Invalid address");
+    }
+
+    // Check if ChkBase is the bitwise complement of SysBase
+    if (!(execBase.ChkBase == ~execBase.addr)) {
+        throw VAError(ERROR_OSDB, "ExecBase: Invalid ChkSum");
+    }
+    
+    // Check if words in the range [0x22 ; 0x52] sum up to 0xFFFF
+    u16 checksum = 0;
+    for (u32 offset = 0x22; offset <= 0x52; offset += 2) {
+        printf("%x\n", mem.spypeek16 <ACCESSOR_CPU> (execBase.addr + offset));
+        checksum += mem.spypeek16 <ACCESSOR_CPU> (execBase.addr + offset);
+    }
+    if (!(checksum == 0xFFFF)) {
+        throw VAError(ERROR_OSDB, "ExecBase: Checksum mismatch");
+    }
+    
+    // Check if MaxLocMem complies to the bank map
+    if (execBase.MaxLocMem & 0xFF000000) {
+        throw VAError(ERROR_OSDB, "ExecBase: MaxLocMem is too large");
+    }
+    if (execBase.MaxLocMem & 0x3FFFF) {
+        throw VAError(ERROR_OSDB, "ExecBase: MaxLocMem is not aligned");
+    }
+    if (auto bank = execBase.MaxLocMem >> 16) {
+        
+        auto src1 =mem.cpuMemSrc[bank - 1];
+        auto src2 =mem.cpuMemSrc[bank];
+        
+        if (!(src1 == MEM_CHIP && src2 != MEM_CHIP)) {
+            throw VAError(ERROR_OSDB, "ExecBase: MaxLocMem doesn't match bank map");
+        }
+    }
+
+    // Check if MaxExtMem complies to the bank map
+    if (execBase.MaxExtMem & 0xFF000000) {
+        throw VAError(ERROR_OSDB, "ExecBase: MaxExtMem is too large");
+    }
+    if (execBase.MaxExtMem & 0x3FFFF) {
+        throw VAError(ERROR_OSDB, "ExecBase: MaxExtMem is not aligned");
+    }
+    if (auto bank = execBase.MaxExtMem >> 16) {
+        
+        auto src1 =mem.cpuMemSrc[bank - 1];
+        auto src2 =mem.cpuMemSrc[bank];
+        
+        if (!(src1 == MEM_SLOW && src2 != MEM_SLOW)) {
+            throw VAError(ERROR_OSDB, "ExecBase: MaxExtMem doesn't match bank map");
+        }
+    }
+}

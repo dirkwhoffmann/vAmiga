@@ -103,7 +103,7 @@ public:
 
 public:
 
-    os::ExecBase getExecBase() const;
+    os::ExecBase getExecBase() const throws;
 
     void read(u32 addr, os::CommandLineInterface *result) const;
     void read(u32 addr, os::ExecBase *result) const;
@@ -153,6 +153,13 @@ public:
     bool searchProcess(u32 addr, os::Process &result) const;
     bool searchProcess(const string &name, os::Process &result) const;
 
+    
+    //
+    // Performing sanity checks
+    //
+    
+    void checkExecBase(const os::ExecBase &execBase) const throws;
+    
 
     //
     // Printing system information
