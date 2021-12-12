@@ -20,6 +20,8 @@
 
 GdbServer::GdbServer(Amiga& ref) : SubComponent(ref)
 {
+    // REMOVE ASAP
+    start();
 }
 
 GdbServer::~GdbServer()

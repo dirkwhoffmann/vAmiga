@@ -83,7 +83,7 @@ Socket::recv()
     
     if (n > 0) {
         
-        string result = string(buffer, n);
+        string result = string(buffer);
         return result;
     }
 
