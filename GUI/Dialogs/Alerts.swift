@@ -101,6 +101,17 @@ extension MyController {
         return mydocument.proceedWithUnexportedDisk()
     }
 
+    func showGdbTerminationAlert() {
+
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.icon = NSImage(named: "server")
+        alert.messageText = "Connection lost"
+        alert.informativeText = "The GDB server has terminated unexpectedly."
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+
     func showMissingFFmpegAlert() {
 
         let alert = NSAlert()
@@ -123,6 +134,7 @@ extension MyController {
         alert.runModal()
     }
 
+    /*
     func showScreenRecorderAlert(url: URL) {
 
         let alert = NSAlert()
@@ -134,4 +146,5 @@ extension MyController {
         
         alert.beginSheetModal(for: self.window!) { (_: NSApplication.ModalResponse) -> Void in }
     }
+    */
 }

@@ -540,7 +540,10 @@ extension MyController {
             
         case .GDB_RECEIVE, .GDB_SEND:
             renderer.console.isDirty = true
-                        
+            
+        case .GDB_ERROR:
+            showGdbTerminationAlert()
+            
         default:
             track("Unknown message: \(msg)")
             fatalError()

@@ -95,13 +95,16 @@ enum_long(MSG_TYPE)
     // Console
     MSG_CLOSE_CONSOLE,
     
-    // Debugging
+    // DMA Debugging
     MSG_DMA_DEBUG_ON,
     MSG_DMA_DEBUG_OFF,
+
+    // GDB Debugging
     MSG_GDB_START,
+    MSG_GDB_STOP,
     MSG_GDB_RECEIVE,
     MSG_GDB_SEND,
-    MSG_GDB_STOP
+    MSG_GDB_ERROR
 };
 typedef MSG_TYPE MsgType;
 
@@ -187,10 +190,12 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
                 
             case MSG_DMA_DEBUG_ON:        return "DMA_DEBUG_ON";
             case MSG_DMA_DEBUG_OFF:       return "DMA_DEBUG_OFF";
+                
             case MSG_GDB_START:           return "GDB_START";
+            case MSG_GDB_STOP:            return "GDB_STOP";
             case MSG_GDB_RECEIVE:         return "GDB_RECEIVE";
             case MSG_GDB_SEND:            return "GDB_SEND";
-            case MSG_GDB_STOP:            return "GDB_STOP";
+            case MSG_GDB_ERROR:           return "GDB_ERROR";
         }
         return "???";
     }

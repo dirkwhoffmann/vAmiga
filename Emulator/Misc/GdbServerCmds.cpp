@@ -211,16 +211,7 @@ template <> void
 GdbServer::process <'g'> (string cmd)
 {
     string result;
-    
-    for (int i = 0; i < 8; i++) {
-        result += util::hexstr <8> (cpu.getD(i));
-    }
-    for (int i = 0; i < 8; i++) {
-        result += util::hexstr <8> (cpu.getA(i));
-    }
-    result += util::hexstr <8> (cpu.getSR());
-    result += util::hexstr <8> (cpu.getPC());
-
+    for (int i = 0; i < 18; i++) result += readRegister(i);
     send(result);
 }
 
@@ -293,9 +284,10 @@ GdbServer::process <'M'> (string cmd)
 template <> void
 GdbServer::process <'p'> (string cmd)
 {
-    auto nr = std::stoi(cmd);
+    isize nr;
+    util::parseHex(cmd, &nr);
     
-    printf("p command: nr = %d\n", nr);
+    printf("p command: nr = %ld\n", nr);
     send(readRegister(nr));
 }
 

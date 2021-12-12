@@ -124,11 +124,13 @@ GdbServer::stop()
  
     // Only proceed if the server is running
     if (!listening) throw VAError(ERROR_GDB_SERVER_NOT_RUNNING);
+
+    listening = false;
     
     // Trigger an exception inside the server thread
     connection.close();
     listener.close();
-    
+
     // Wait until the server thread has terminated
     serverThread.join();
     
@@ -201,10 +203,13 @@ GdbServer::main()
              
     } catch (VAError &err) {
         
-        warn("%s\n", err.what());
-        
-    } catch (...) {
-        
+        warn("VAError: %s\n", err.what());
+        if (listening) msgQueue.put(MSG_GDB_ERROR);
+
+    } catch (std::exception &err) {
+
+        warn("Error: %s\n", err.what());
+        if (listening) msgQueue.put(MSG_GDB_ERROR);
     }
     
     listening = false;
