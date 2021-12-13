@@ -376,7 +376,6 @@ OSDebugger::checkExecBase(const os::ExecBase &execBase) const
     // Check if words in the range [0x22 ; 0x52] sum up to 0xFFFF
     u16 checksum = 0;
     for (u32 offset = 0x22; offset <= 0x52; offset += 2) {
-        printf("%x\n", mem.spypeek16 <ACCESSOR_CPU> (execBase.addr + offset));
         checksum += mem.spypeek16 <ACCESSOR_CPU> (execBase.addr + offset);
     }
     if (!(checksum == 0xFFFF)) {

@@ -494,9 +494,7 @@ OSDebugger::dumpProcess(std::ostream& s, const os::Process &process, bool verbos
         using namespace util;
         
         if (verbose) {
-            
-            isize i = 0;
-            
+                        
             s << tab("StackSize");
             s << dec(process.pr_StackSize) << std::endl;
             s << tab("StackBase");
@@ -509,18 +507,15 @@ OSDebugger::dumpProcess(std::ostream& s, const os::Process &process, bool verbos
             s << tab("CLI");
             s << hex(process.pr_CLI) << std::endl;
             
-            std::vector<os::SegList> segListArray;
-            read(process, segListArray);
+            os::SegList segList;
+            read(process, segList);
             
-            for (auto &segList: segListArray) {
+            string title = "Segment list" ;
+            
+            for (auto &it: segList) {
                 
-                string title = "Segment list " + std::to_string(++i);
-                
-                for (auto &it: segList) {
-                    
-                    s << tab(title); title = "";
-                    s << hex(it.second) << " (" << dec(it.first) << " bytes)" << std::endl;
-                }
+                s << tab(title); title = "";
+                s << hex(it.first) << " (" << dec(it.second) << " bytes)" << std::endl;
             }
             
         } else {

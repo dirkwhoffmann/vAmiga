@@ -94,32 +94,28 @@ GdbServer::process <GdbCmd::qOffset> (string arg)
     if (currentTask.tc_Node.ln_Type == os::NT_PROCESS) {
         
         os::Process currentProcess;
-        osDebugger.read(currentTask.addr, &currentProcess);
+        osDebugger.read(execBase.ThisTask, &currentProcess);
         
-        std::vector <os::SegList> segments;
-        osDebugger.read(currentProcess, segments);
         
-        if (segments.size() > 0) {
-            
-            for (usize i = 0; i < segments[0].size(); i++) {
-                
-                auto addr = segments[0][i].first;
-                
-                switch (i) {
+        os::SegList segList;
+        osDebugger.read(currentProcess, segList);
+        
+        for (usize i = 0; i < segList.size(); i++) {
                         
-                    case 0:
-                        result += "TextSeg=";
-                        break;
-                    case 1:
-                        result += ";DataSeg=";
-                        break;
-                    default:
-                        result += ";CustomSeg" + std::to_string(i) + "=";
-                        break;
-                }
-                
-                result += util::hexstr <8> (util::bigEndian((u32)addr));
+            switch (i) {
+                    
+                case 0:
+                    result += "TextSeg=";
+                    break;
+                case 1:
+                    result += ";DataSeg=";
+                    break;
+                default:
+                    result += ";CustomSeg" + std::to_string(i) + "=";
+                    break;
             }
+            
+            result += util::hexstr <8> (segList[i].first);
         }
     }
     

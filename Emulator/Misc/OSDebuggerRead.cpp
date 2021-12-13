@@ -415,51 +415,33 @@ OSDebugger::read(u32 addr, std::vector <os::Library> &result) const
 }
 
 void
-OSDebugger::read(const os::Process &pr, std::vector <os::SegList> &result) const
+OSDebugger::read(const os::Process &pr, os::SegList &result) const
 {
     /* I don't fully understand the SegList structures as they are build by
      * AmigaOS, but the following seems to apply:
      *
      * - If a CLI is attached to the process and the task number is greater 0,
-     *   we need to read the segments from the CLI struct. In this case,
-     *   cli_module is a BPTR to a (single) segment list.
+     *   we need to read the segment list from the CLI struct. In this case,
+     *   cli_module is a BPTR to a (single) list.
      *
-     * - In all other cases, we need to read the segments from the pr_SegList
+     * - In all other cases, we need to read the segment list from pr_SegList
      *   which is an array of SegLists. In this case, we will find the segments
-     *   in the third list. I.e., the first two lists can be discarded.
+     *   in the third list.
      */
-    
-    if (pr.pr_CLI && pr.pr_TaskNum) {
         
+    if (pr.pr_CLI && pr.pr_TaskNum) {
+
         os::CommandLineInterface cli;
         read(BPTR(pr.pr_CLI), &cli);
+        read(BPTR(cli.cli_Module), result);
 
-        os::SegList segList;
-        read(BPTR(cli.cli_Module), segList);
+    } else if (isValidPtr(BPTR(pr.pr_SegList))) {
         
-        result.push_back(segList);
-        
-    } else {
-    
-        read(BPTR(pr.pr_SegList), result);
-    }
-}
-
-void
-OSDebugger::read(u32 addr, std::vector <os::SegList> &result) const
-{
-    if (!isValidPtr(addr)) return;
-    
-    auto arraySize = mem.spypeek32 <ACCESSOR_CPU> (addr);
-
-    // Iterate through the array, starting at the third entry
-    for (u32 i = 3; i <= arraySize && i < 128; i++) {
-        
-        auto listAddr = BPTR(mem.spypeek32 <ACCESSOR_CPU> (addr + 4 * i));
-        
-        os::SegList list;
-        read(listAddr, list);
-        result.push_back(list);
+        auto size = mem.spypeek32 <ACCESSOR_CPU> (BPTR(pr.pr_SegList));
+        if (size >= 3) {
+            auto addr = mem.spypeek32 <ACCESSOR_CPU> (BPTR(pr.pr_SegList) + 12);
+            read(BPTR(addr), result);
+        }
     }
 }
 
@@ -472,7 +454,7 @@ OSDebugger::read(u32 addr, os::SegList &result) const
         auto next = mem.spypeek32 <ACCESSOR_CPU> (addr);
         auto data = addr + 4;
         
-        result.push_back(std::make_pair(size, data));
+        result.push_back(std::make_pair(data, size));
         addr = BPTR(next);
     }
 }
