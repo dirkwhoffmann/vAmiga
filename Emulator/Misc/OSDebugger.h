@@ -104,7 +104,7 @@ public:
 public:
 
     os::ExecBase getExecBase() const throws;
-
+    
     void read(u32 addr, os::CommandLineInterface *result) const;
     void read(u32 addr, os::ExecBase *result) const;
     void read(u32 addr, os::Interrupt *result) const;

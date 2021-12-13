@@ -12,6 +12,20 @@
 #include "Aliases.h"
 #include "Reflection.h"
 
+enum class GdbCmd
+{
+    qSupported,
+    qSymbol,
+    qOffset,
+    qTStatus,
+    qTfV,
+    qTfP,
+    qfThreadInfo,
+    qsThreadInfo,
+    qAttached,
+    qC
+};
+
 typedef struct
 {
     isize port;

@@ -63,6 +63,113 @@ GdbServer::process(string packet)
 }
 
 template <> void
+GdbServer::process <GdbCmd::qSupported> (string arg)
+{
+    send("PacketSize=512;"
+         "BreakpointCommands+;"
+         "swbreak+;"
+         "hwbreak+;"
+         "QStartNoAckMode+;"
+         "vContSupported+"
+         // "QTFrame+"
+         );
+}
+
+template <> void
+GdbServer::process <GdbCmd::qSymbol> (string arg)
+{
+    send("OK");
+}
+
+template <> void
+GdbServer::process <GdbCmd::qOffset> (string arg)
+{
+    string result;
+
+    auto execBase = osDebugger.getExecBase();
+        
+    os::Task currentTask;
+    osDebugger.read(execBase.ThisTask, &currentTask);
+    
+    if (currentTask.tc_Node.ln_Type == os::NT_PROCESS) {
+        
+        os::Process currentProcess;
+        osDebugger.read(currentTask.addr, &currentProcess);
+        
+        std::vector <os::SegList> segments;
+        osDebugger.read(currentProcess, segments);
+        
+        if (segments.size() > 0) {
+            
+            for (usize i = 0; i < segments[0].size(); i++) {
+                
+                auto addr = segments[0][i].first;
+                
+                switch (i) {
+                        
+                    case 0:
+                        result += "TextSeg=";
+                        break;
+                    case 1:
+                        result += ";DataSeg=";
+                        break;
+                    default:
+                        result += ";CustomSeg" + std::to_string(i) + "=";
+                        break;
+                }
+                
+                result += util::hexstr <8> (util::bigEndian((u32)addr));
+            }
+        }
+    }
+    
+    send(result);
+}
+
+template <> void
+GdbServer::process <GdbCmd::qTStatus> (string arg)
+{
+    send("T0");
+}
+
+template <> void
+GdbServer::process <GdbCmd::qTfV> (string arg)
+{
+    send("l");
+}
+
+template <> void
+GdbServer::process <GdbCmd::qTfP> (string arg)
+{
+    send("l");
+}
+
+template <> void
+GdbServer::process <GdbCmd::qfThreadInfo> (string arg)
+{
+    send("m01");
+}
+
+template <> void
+GdbServer::process <GdbCmd::qsThreadInfo> (string arg)
+{
+    send("l");
+}
+
+template <> void
+GdbServer::process <GdbCmd::qAttached> (string arg)
+{
+    send("0");
+}
+
+template <> void
+GdbServer::process <GdbCmd::qC> (string arg)
+{
+    send("QC1");
+}
+
+
+template <> void
 GdbServer::process <'v'> (string arg)
 {
     printf("process <'v'>: %s\n", arg.c_str());
@@ -72,13 +179,11 @@ GdbServer::process <'v'> (string arg)
         send("");
         return;
     }
-
     if (arg == "Cont?") {
         
         send("vCont;c;C;s;S;t;r");
         return;
     }
-
     if (arg == "Cont;c") {
         
         amiga.run();
@@ -92,91 +197,55 @@ GdbServer::process <'q'> (string cmd)
     auto command = cmd.substr(0, cmd.find(":"));
         
     if (command == "Supported") {
-
-        string response =
-        "PacketSize=512;"
-        "BreakpointCommands+;"
-        "swbreak+;"
-        "hwbreak+;"
-        "QStartNoAckMode+;"
-        "vContSupported+;";
-        // "QTFrame+";
-    
-        send(response);
+        
+        process <GdbCmd::qSupported> ("");
         return;
     }
-    
     if (cmd == "Symbol::") {
 
-        send("OK");
+        process <GdbCmd::qSymbol> ("");
         return;
     }
-    
     if (cmd == "Offsets") {
 
-        send("TextSeg=00c3de70");
+        process <GdbCmd::qOffset> ("");
         return;
     }
-    
     if (cmd == "TStatus") {
         
-        send("T0");
+        process <GdbCmd::qTStatus> ("");
         return;
     }
-
     if (cmd == "TfV") {
         
-        send("l");
+        process <GdbCmd::qTfV> ("");
         return;
     }
-
     if (cmd == "TfP") {
         
-        send("l");
+        process <GdbCmd::qTfP> ("");
         return;
     }
-
     if (cmd == "fThreadInfo") {
         
-        send("m01");
-        // send("m01,02");
+        process <GdbCmd::qfThreadInfo> ("");
         return;
     }
-
     if (cmd == "sThreadInfo") {
         
-        send("l");
+        process <GdbCmd::qsThreadInfo> ("");
         return;
     }
-
     if (command == "Attached") {
         
-        send("0");
+        process <GdbCmd::qAttached> ("");
         return;
     }
-    
     if (command == "C") {
         
-        send("QC1");
+        process <GdbCmd::qC> ("");
         return;
     }
-    
-    /*
-    if (command == "Xfer") {
-    
-        send("OK");
-        return;
-    }
-    
-    if (cmd == "sThreadInfo") {
-        
-        send("l");
-        return;
-    }
-
-    // send("0:0:0:0");
-    send("0");
-    */
     
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "q");
 }

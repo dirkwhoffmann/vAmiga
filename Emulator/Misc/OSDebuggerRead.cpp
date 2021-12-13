@@ -417,6 +417,18 @@ OSDebugger::read(u32 addr, std::vector <os::Library> &result) const
 void
 OSDebugger::read(const os::Process &pr, std::vector <os::SegList> &result) const
 {
+    /* I don't fully understand the SegList structures as they are build by
+     * AmigaOS, but the following seems to apply:
+     *
+     * - If a CLI is attached to the process and the task number is greater 0,
+     *   we need to read the segments from the CLI struct. In this case,
+     *   cli_module is a BPTR to a (single) segment list.
+     *
+     * - In all other cases, we need to read the segments from the pr_SegList
+     *   which is an array of SegLists. In this case, we will find the segments
+     *   in the third list. I.e., the first two lists can be discarded.
+     */
+    
     if (pr.pr_CLI && pr.pr_TaskNum) {
         
         os::CommandLineInterface cli;
@@ -439,7 +451,9 @@ OSDebugger::read(u32 addr, std::vector <os::SegList> &result) const
     if (!isValidPtr(addr)) return;
     
     auto arraySize = mem.spypeek32 <ACCESSOR_CPU> (addr);
-    for (u32 i = 1; i <= arraySize && i < 128; i++) {
+
+    // Iterate through the array, starting at the third entry
+    for (u32 i = 3; i <= arraySize && i < 128; i++) {
         
         auto listAddr = BPTR(mem.spypeek32 <ACCESSOR_CPU> (addr + 4 * i));
         
