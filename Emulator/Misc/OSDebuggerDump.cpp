@@ -506,6 +506,32 @@ OSDebugger::dumpProcess(std::ostream& s, const os::Process &process, bool verbos
             s << dec(process.pr_TaskNum) << std::endl;
             s << tab("CLI");
             s << hex(process.pr_CLI) << std::endl;
+            s << tab("ConsoleTask");
+            s << hex(process.pr_ConsoleTask) << std::endl;
+            s << tab("ConsoleTask");
+            s << hex(process.pr_ConsoleTask) << std::endl;
+            
+            if (process.pr_CLI) {
+            
+                os::CommandLineInterface cli;
+                read(BPTR(process.pr_CLI), &cli);
+
+                string cmdDir;
+                read(BPTR(cli.cli_CommandDir) + 1, cmdDir);
+
+                string cmdName;
+                read(BPTR(cli.cli_CommandName) + 1, cmdName);
+
+                string cmdFile;
+                read(BPTR(cli.cli_CommandFile) + 1, cmdFile);
+                                
+                s << tab("Command Dir");
+                s << cmdDir << std::endl;
+                s << tab("Command Name");
+                s << cmdName << std::endl;
+                s << tab("Command File");
+                s << cmdFile << std::endl;
+            }
             
             os::SegList segList;
             read(process, segList);

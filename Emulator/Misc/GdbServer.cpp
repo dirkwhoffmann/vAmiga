@@ -102,6 +102,22 @@ GdbServer::setConfigItem(Option option, i64 value)
 }
 
 void
+GdbServer::start(const string &processName)
+{
+    os::Process process;
+    if (osDebugger.searchProcess(processName, process)) {
+
+        // The process is already running. Start the debug server
+        start();
+
+    } else {
+
+        // Postpone starting the debug server until the process runs
+        printf("The process is not yet running\n");
+    }
+}
+
+void
 GdbServer::start()
 {
     debug(GDB_DEBUG, "start\n");

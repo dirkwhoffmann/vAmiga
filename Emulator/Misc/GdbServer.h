@@ -96,6 +96,7 @@ private:
     
 public:
     
+    void start(const string &process) throws;
     void start() throws;
     void stop();
     

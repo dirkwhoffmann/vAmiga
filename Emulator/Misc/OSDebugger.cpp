@@ -151,6 +151,15 @@ OSDebugger::append(string &str, const char *cstr) const
 }
 
 bool
+OSDebugger::isRamPtr(u32 addr) const
+{
+    if (!mem.inRam(addr)) {
+        warn("Pointer outside RAM: %x\n", addr);
+    }
+
+    return addr && mem.inRam(addr);
+}
+bool
 OSDebugger::isValidPtr(u32 addr) const
 {
     if (!IS_EVEN(addr)) {
@@ -348,12 +357,28 @@ OSDebugger::searchProcess(const string &name, os::Process &result) const
         
         string nodeName;
         read(processes[i].pr_Task.tc_Node.ln_Name, nodeName);
-        auto shortName = nodeName.substr(0, nodeName.find("."));
-        
-        if (name == nodeName || name == shortName) {
-        
+        if (!nodeName.empty() && name == nodeName) {
             result = processes[i];
             return true;
+        }
+
+        string shortName = nodeName.substr(0, nodeName.find("."));
+        if (!shortName.empty() && name == shortName) {
+            result = processes[i];
+            return true;
+        }
+
+        if (processes[i].pr_CLI) {
+            
+            os::CommandLineInterface cli;
+            read(BPTR(processes[i].pr_CLI), &cli);
+
+            string cmdName;
+            read(BPTR(cli.cli_CommandName) + 1, cmdName);
+            if (!cmdName.empty() && name == cmdName) {
+                result = processes[i];
+                return true;
+            }
         }
     }
     

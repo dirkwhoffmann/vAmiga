@@ -39,7 +39,7 @@ OSDebugger::read(u32 addr, string &result) const
 void
 OSDebugger::read(u32 addr, string &result, isize limit) const
 {
-    if (!isValidPtr(addr)) return;
+    if (!isRamPtr(addr)) return;
     
     for (isize i = 0; i < limit; i++, addr++) {
 

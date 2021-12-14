@@ -78,8 +78,9 @@ private:
     
 public:
     
+    bool isRamPtr(u32 addr) const;
     bool isValidPtr(u32 addr) const;
-    
+
     
     //
     // Extracting elementary data types from Amiga memory
