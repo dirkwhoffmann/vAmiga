@@ -1003,13 +1003,14 @@ Interpreter::registerInstructions()
 
     root.add({"gdbserver", "start"},
              "command", "Starts the debug server",
-             &RetroShell::exec <Token::gdbserver, Token::start>);
+             &RetroShell::exec <Token::gdbserver, Token::start>, 0);
+    root.seek("gdbserver")->seek("start")->maxArgs = 1;
 
     root.add({"gdbserver", "stop"},
              "command", "Stops the debug server",
-             &RetroShell::exec <Token::gdbserver, Token::stop>);
+             &RetroShell::exec <Token::gdbserver, Token::stop>, 0);
 
     root.add({"gdbserver", "inspect"},
              "command", "Displays the internal state",
-             &RetroShell::exec <Token::gdbserver, Token::inspect>);
+             &RetroShell::exec <Token::gdbserver, Token::inspect>, 0);
 }

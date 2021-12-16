@@ -312,7 +312,7 @@ OSDebugger::searchTask(const string &name, os::Task &result) const
 {
     std::vector <os::Task> tasks;
     read(tasks);
-
+    
     for (usize i = 0; i < tasks.size(); i++) {
         
         string nodeName;
@@ -320,7 +320,7 @@ OSDebugger::searchTask(const string &name, os::Task &result) const
         auto shortName = nodeName.substr(0, nodeName.find("."));
         
         if (name == nodeName || name == shortName) {
-        
+            
             result = tasks[i];
             return true;
         }
@@ -332,17 +332,19 @@ OSDebugger::searchTask(const string &name, os::Task &result) const
 bool
 OSDebugger::searchProcess(u32 addr, os::Process &result) const
 {
-    std::vector <os::Process> processes;
-    read(processes);
-    
-    for (usize i = 0; i < processes.size(); i++) {
+    try {
+        std::vector <os::Process> processes;
+        read(processes);
         
-        if (processes[i].addr == addr || i + 1 == addr) {
+        for (usize i = 0; i < processes.size(); i++) {
             
-            result = processes[i];
-            return true;
+            if (processes[i].addr == addr || i + 1 == addr) {
+                
+                result = processes[i];
+                return true;
+            }
         }
-    }
+    } catch (...) { }
     
     return false;
 }
@@ -350,37 +352,40 @@ OSDebugger::searchProcess(u32 addr, os::Process &result) const
 bool
 OSDebugger::searchProcess(const string &name, os::Process &result) const
 {
-    std::vector <os::Process> processes;
-    read(processes);
-
-    for (usize i = 0; i < processes.size(); i++) {
+    try {
+        std::vector <os::Process> processes;
+        read(processes);
         
-        string nodeName;
-        read(processes[i].pr_Task.tc_Node.ln_Name, nodeName);
-        if (!nodeName.empty() && name == nodeName) {
-            result = processes[i];
-            return true;
-        }
-
-        string shortName = nodeName.substr(0, nodeName.find("."));
-        if (!shortName.empty() && name == shortName) {
-            result = processes[i];
-            return true;
-        }
-
-        if (processes[i].pr_CLI) {
+        for (usize i = 0; i < processes.size(); i++) {
             
-            os::CommandLineInterface cli;
-            read(BPTR(processes[i].pr_CLI), &cli);
-
-            string cmdName;
-            read(BPTR(cli.cli_CommandName) + 1, cmdName);
-            if (!cmdName.empty() && name == cmdName) {
+            string nodeName;
+            read(processes[i].pr_Task.tc_Node.ln_Name, nodeName);
+            if (!nodeName.empty() && name == nodeName) {
                 result = processes[i];
                 return true;
             }
+            
+            string shortName = nodeName.substr(0, nodeName.find("."));
+            if (!shortName.empty() && name == shortName) {
+                result = processes[i];
+                return true;
+            }
+            
+            if (processes[i].pr_CLI) {
+                
+                os::CommandLineInterface cli;
+                read(BPTR(processes[i].pr_CLI), &cli);
+                
+                string cmdName;
+                read(BPTR(cli.cli_CommandName) + 1, cmdName);
+                if (!cmdName.empty() && name == cmdName) {
+
+                    result = processes[i];
+                    return true;
+                }
+            }
         }
-    }
+    } catch (...) { }
     
     return false;
 }

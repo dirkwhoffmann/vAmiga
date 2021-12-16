@@ -1231,8 +1231,12 @@ RetroShell::exec <Token::gdbserver, Token::set, Token::verbose> (Arguments &argv
 
 template <> void
 RetroShell::exec <Token::gdbserver, Token::start> (Arguments& argv, long param)
-{    
-    gdbServer.start();
+{
+    if (argv.empty()) {
+        gdbServer.start();
+    } else {
+        gdbServer.start(argv[0]);
+    }
 }
 
 template <> void

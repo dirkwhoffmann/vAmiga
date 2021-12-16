@@ -78,7 +78,7 @@ Socket::accept()
 std::string
 Socket::recv()
 {    
-    char buffer[BUFFER_SIZE + 1];
+    char buffer[BUFFER_SIZE + 1] = {};
     auto n = ::recv(socket, buffer, BUFFER_SIZE, 0);
     
     if (n > 0) {

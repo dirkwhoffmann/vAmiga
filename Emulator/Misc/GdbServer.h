@@ -32,6 +32,12 @@ class GdbServer : public SubComponent {
     PortListener listener;
     Socket connection;
             
+    // Name of the process to be debugged
+    string debugProcess;
+    
+    // The most recently processed command string
+    string latestCmd;
+    
     
     //
     // Initializing
@@ -96,8 +102,7 @@ private:
     
 public:
     
-    void start(const string &process) throws;
-    void start() throws;
+    void start(const string process = "") throws;
     void stop();
     
     bool isListening() { return listening; }
@@ -141,11 +146,13 @@ private:
 
     
     //
-    // Handling emulator events
+    // Handling events
     //
 
 public:
     
     void breakpointReached();
-    
+  
+    // Services a GDB event
+    void serviceGdbEvent();
 };

@@ -13,6 +13,7 @@
 #include "ControlPort.h"
 #include "CPU.h"
 #include "Agnus.h"
+#include "GdbServer.h"
 #include "Paula.h"
 #include "Keyboard.h"
 #include "Drive.h"
@@ -345,6 +346,16 @@ Scheduler::eventName(EventSlot slot, EventID id)
             }
             break;
 
+        case SLOT_GDB:
+            
+            switch (id) {
+                    
+                case EVENT_NONE:        return "none";
+                case GDB_PENDING:       return "GDB_PENDING";
+                default:                return "*** INVALID ***";
+            }
+            break;
+
         case SLOT_INS:
 
             switch (id) {
@@ -608,6 +619,9 @@ Scheduler::executeUntil(Cycle cycle) {
             }
             if (isDue<SLOT_KEY>(cycle)) {
                 keyboard.serviceKeyEvent();
+            }
+            if (isDue<SLOT_GDB>(cycle)) {
+                gdbServer.serviceGdbEvent();
             }
             if (isDue<SLOT_INS>(cycle)) {
                 agnus.serviceINSEvent(id[SLOT_INS]);

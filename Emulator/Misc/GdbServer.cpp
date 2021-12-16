@@ -16,12 +16,10 @@
 #include "MemUtils.h"
 #include "MsgQueue.h"
 #include "RetroShell.h"
-// #include <unistd.h>
 
 GdbServer::GdbServer(Amiga& ref) : SubComponent(ref)
 {
-    // REMOVE ASAP
-    start();
+
 }
 
 GdbServer::~GdbServer()
@@ -102,32 +100,15 @@ GdbServer::setConfigItem(Option option, i64 value)
 }
 
 void
-GdbServer::start(const string &processName)
-{
-    os::Process process;
-    if (osDebugger.searchProcess(processName, process)) {
-
-        // The process is already running. Start the debug server
-        start();
-
-    } else {
-
-        // Postpone starting the debug server until the process runs
-        printf("The process is not yet running\n");
-    }
-}
-
-void
-GdbServer::start()
+GdbServer::start(const string name)
 {
     debug(GDB_DEBUG, "start\n");
-    
+        
     // Only proceed if the server is not running
     if (listening) throw VAError(ERROR_GDB_SERVER_RUNNING);
+    
+    debugProcess = name;
 
-    // Only proceed if the emulator powered on
-    // if (amiga.isPoweredOff()) throw VAError()
-        
     // Make sure that we continue with a terminated server thread
     if (serverThread.joinable()) serverThread.join();
     
@@ -140,18 +121,21 @@ GdbServer::stop()
 {
     debug(GDB_DEBUG, "stop\n");
  
-    // Only proceed if the server is running
+    // Cancel pending events
+    scheduler.cancel<SLOT_GDB>();
+
+    // Only proceed if an open connection exists
     if (!listening) throw VAError(ERROR_GDB_SERVER_NOT_RUNNING);
 
     listening = false;
-    
+        
     // Trigger an exception inside the server thread
     connection.close();
     listener.close();
 
     // Wait until the server thread has terminated
     serverThread.join();
-    
+
     debug(GDB_DEBUG, "stopped\n");
 }
 
@@ -293,4 +277,26 @@ void
 GdbServer::breakpointReached()
 {
     send("S01");
+}
+
+void
+GdbServer::serviceGdbEvent()
+{
+    printf("serviceGdbEvent (%d)\n", scheduler.id[SLOT_GDB]);
+    
+    auto id = scheduler.id[SLOT_GDB];
+    scheduler.cancel<SLOT_GDB>();
+
+    switch (id) {
+            
+        case GDB_PENDING:
+                        
+            printf("Trying again command %s\n", latestCmd.c_str());
+            process(latestCmd);
+            break;
+            
+        default:
+            break;
+    }
+    
 }

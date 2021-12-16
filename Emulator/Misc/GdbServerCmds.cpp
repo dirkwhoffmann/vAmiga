@@ -46,6 +46,8 @@ GdbServer::process(string packet)
             
             if (chk == checksum(packet.substr(1, len - 4))) {
 
+                latestCmd = packet;
+                
                 if (ackMode) connection.send("+");
                 process(cmd, arg);
             
@@ -85,23 +87,15 @@ template <> void
 GdbServer::process <GdbCmd::qOffset> (string arg)
 {
     string result;
-
-    auto execBase = osDebugger.getExecBase();
-        
-    os::Task currentTask;
-    osDebugger.read(execBase.ThisTask, &currentTask);
     
-    if (currentTask.tc_Node.ln_Type == os::NT_PROCESS) {
-        
-        os::Process currentProcess;
-        osDebugger.read(execBase.ThisTask, &currentProcess);
-        
-        
+    os::Process p;
+    if (osDebugger.searchProcess(debugProcess, p)) {
+                
         os::SegList segList;
-        osDebugger.read(currentProcess, segList);
+        osDebugger.read(p, segList);
         
         for (usize i = 0; i < segList.size(); i++) {
-                        
+            
             switch (i) {
                     
                 case 0:
@@ -119,6 +113,15 @@ GdbServer::process <GdbCmd::qOffset> (string arg)
         }
     }
     
+    if (result.empty()) {
+        
+        printf("Postponing qOffset command\n");
+        
+        // Try this command a little later
+        agnus.scheduleRel<SLOT_GDB>(SEC(0.5), GDB_PENDING);
+        return;
+    }
+        
     send(result);
 }
 
