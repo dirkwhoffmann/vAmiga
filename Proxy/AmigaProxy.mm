@@ -1470,12 +1470,12 @@ using namespace moira;
 
 @implementation GdbServerProxy
 
-- (GdbServer *)server
+- (RemoteServer *)server
 {
-    return (GdbServer *)obj;
+    return (RemoteServer *)obj;
 }
 
-+ (instancetype)make:(GdbServer *)server
++ (instancetype)make:(RemoteServer *)server
 {
     if (server == nullptr) { return nil; }
     
@@ -2146,7 +2146,7 @@ using namespace moira;
     df3 = [[DriveProxy alloc] initWith:&amiga->df3];
     diskController = [[DiskControllerProxy alloc] initWith:&amiga->paula.diskController];
     dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
-    gdbServer = [[GdbServerProxy alloc] initWith:&amiga->gdbServer];
+    gdbServer = [[GdbServerProxy alloc] initWith:&amiga->remoteServer];
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];

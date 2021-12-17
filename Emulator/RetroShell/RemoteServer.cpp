@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "GdbServer.h"
+#include "RemoteServer.h"
 #include "Amiga.h"
 #include "CPU.h"
 #include "IOUtils.h"
@@ -17,18 +17,18 @@
 #include "MsgQueue.h"
 #include "RetroShell.h"
 
-GdbServer::GdbServer(Amiga& ref) : SubComponent(ref)
+RemoteServer::RemoteServer(Amiga& ref) : SubComponent(ref)
 {
 
 }
 
-GdbServer::~GdbServer()
+RemoteServer::~RemoteServer()
 {
     if (isListening()) stop();
 }
 
 void
-GdbServer::_dump(dump::Category category, std::ostream& os) const
+RemoteServer::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
@@ -46,10 +46,10 @@ GdbServer::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
-GdbServerConfig
-GdbServer::getDefaultConfig()
+RemoteServerConfig
+RemoteServer::getDefaultConfig()
 {
-    GdbServerConfig defaults;
+    RemoteServerConfig defaults;
 
     defaults.port = 8080;
     defaults.verbose = true;
@@ -58,7 +58,7 @@ GdbServer::getDefaultConfig()
 }
 
 void
-GdbServer::resetConfig()
+RemoteServer::resetConfig()
 {
     auto defaults = getDefaultConfig();
     
@@ -67,7 +67,7 @@ GdbServer::resetConfig()
 }
 
 i64
-GdbServer::getConfigItem(Option option) const
+RemoteServer::getConfigItem(Option option) const
 {
     switch (option) {
             
@@ -80,7 +80,7 @@ GdbServer::getConfigItem(Option option) const
 }
 
 void
-GdbServer::setConfigItem(Option option, i64 value)
+RemoteServer::setConfigItem(Option option, i64 value)
 {
     switch (option) {
             
@@ -100,7 +100,7 @@ GdbServer::setConfigItem(Option option, i64 value)
 }
 
 void
-GdbServer::start(const string name)
+RemoteServer::start(const string name)
 {
     debug(GDB_DEBUG, "start\n");
         
@@ -113,11 +113,11 @@ GdbServer::start(const string name)
     if (serverThread.joinable()) serverThread.join();
     
     // Spawn a new thread
-    serverThread = std::thread(&GdbServer::main, this);
+    serverThread = std::thread(&RemoteServer::main, this);
 }
 
 void
-GdbServer::stop()
+RemoteServer::stop()
 {
     debug(GDB_DEBUG, "stop\n");
  
@@ -140,7 +140,7 @@ GdbServer::stop()
 }
 
 string
-GdbServer::receive()
+RemoteServer::receive()
 {
     auto packet = connection.recv();
 
@@ -156,7 +156,7 @@ GdbServer::receive()
 }
 
 void
-GdbServer::send(const string &cmd)
+RemoteServer::send(const string &cmd)
 {
     string packet = "$";
                 
@@ -176,7 +176,7 @@ GdbServer::send(const string &cmd)
 }
 
 void
-GdbServer::main()
+RemoteServer::main()
 {
     debug(GDB_DEBUG, "main\n");
 
@@ -225,7 +225,7 @@ GdbServer::main()
 }
 
 string
-GdbServer::checksum(const string &s)
+RemoteServer::checksum(const string &s)
 {
     uint8_t chk = 0;
     for(auto &c : s) chk += (uint8_t)c;
@@ -234,7 +234,7 @@ GdbServer::checksum(const string &s)
 }
 
 std::vector<string>
-GdbServer::split(const string &s, char delimiter)
+RemoteServer::split(const string &s, char delimiter)
 {
     std::stringstream ss(s);
     std::vector<std::string> result;
@@ -248,7 +248,7 @@ GdbServer::split(const string &s, char delimiter)
 }
 
 string
-GdbServer::readRegister(isize nr)
+RemoteServer::readRegister(isize nr)
 {
     if (nr >= 0 && nr <= 7) {
         return util::hexstr <8> ((u32)cpu.getD((int)(nr)));
@@ -267,20 +267,20 @@ GdbServer::readRegister(isize nr)
 }
 
 string
-GdbServer::readMemory(isize addr)
+RemoteServer::readMemory(isize addr)
 {
     auto byte = mem.spypeek8 <ACCESSOR_CPU> ((u32)addr);
     return util::hexstr <2> (byte);
 }
 
 void
-GdbServer::breakpointReached()
+RemoteServer::breakpointReached()
 {
     send("S01");
 }
 
 void
-GdbServer::serviceGdbEvent()
+RemoteServer::serviceGdbEvent()
 {
     printf("serviceGdbEvent (%d)\n", scheduler.id[SLOT_GDB]);
     

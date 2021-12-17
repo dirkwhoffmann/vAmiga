@@ -31,4 +31,4 @@ typedef struct
     isize port;
     bool verbose;
 }
-GdbServerConfig;
+RemoteServerConfig;

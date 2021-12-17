@@ -9,15 +9,15 @@
 
 #pragma once
 
-#include "GdbServerTypes.h"
+#include "RemoteServerTypes.h"
 #include "SubComponent.h"
 #include "Socket.h"
 #include <thread>
 
-class GdbServer : public SubComponent {
+class RemoteServer : public SubComponent {
     
     // Current configuration
-    GdbServerConfig config = {};
+    RemoteServerConfig config = {};
 
     // The server thread
     std::thread serverThread;
@@ -45,8 +45,8 @@ class GdbServer : public SubComponent {
     
 public:
     
-    GdbServer(Amiga& ref);
-    ~GdbServer();
+    RemoteServer(Amiga& ref);
+    ~RemoteServer();
 
     
     //
@@ -79,8 +79,8 @@ private:
 
 public:
     
-    static GdbServerConfig getDefaultConfig();
-    const GdbServerConfig &getConfig() const { return config; }
+    static RemoteServerConfig getDefaultConfig();
+    const RemoteServerConfig &getConfig() const { return config; }
     void resetConfig() override;
 
     i64 getConfigItem(Option option) const;

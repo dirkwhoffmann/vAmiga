@@ -5,5 +5,8 @@ RetroShellCmds.cpp
 Command.cpp
 Interpreter.cpp
 InterpreterCmds.cpp
+Socket.cpp
+RemoteServer.cpp
+RemoteServerCmds.cpp
 
 )

@@ -8,14 +8,14 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "GdbServer.h"
+#include "RemoteServer.h"
 #include "Amiga.h"
 #include "IOUtils.h"
 #include "MemUtils.h"
 #include "CPU.h"
 
 void
-GdbServer::process(string packet)
+RemoteServer::process(string packet)
 {
     // Check if the previous package has been rejected
     if (packet[0] == '-') throw VAError(ERROR_GDB_NO_ACK);
@@ -59,13 +59,14 @@ GdbServer::process(string packet)
                             
             return;
         }
-        
-        throw VAError(ERROR_GDB_INVALID_FORMAT);
+       
+        printf("ERROR_GDB_INVALID_FORMAT\n");
+        // throw VAError(ERROR_GDB_INVALID_FORMAT);
     }
 }
 
 template <> void
-GdbServer::processCmd <GdbCmd::qSupported> (string arg)
+RemoteServer::processCmd <GdbCmd::qSupported> (string arg)
 {
     send("PacketSize=512;"
          "BreakpointCommands+;"
@@ -78,13 +79,13 @@ GdbServer::processCmd <GdbCmd::qSupported> (string arg)
 }
 
 template <> void
-GdbServer::processCmd <GdbCmd::qSymbol> (string arg)
+RemoteServer::processCmd <GdbCmd::qSymbol> (string arg)
 {
     send("OK");
 }
 
 template <> void
-GdbServer::processCmd <GdbCmd::qOffset> (string arg)
+RemoteServer::processCmd <GdbCmd::qOffset> (string arg)
 {
     string result;
     
@@ -126,50 +127,50 @@ GdbServer::processCmd <GdbCmd::qOffset> (string arg)
 }
 
 template <> void
-GdbServer::processCmd <GdbCmd::qTStatus> (string arg)
+RemoteServer::processCmd <GdbCmd::qTStatus> (string arg)
 {
     send("T0");
 }
 
 template <> void
-GdbServer::processCmd <GdbCmd::qTfV> (string arg)
+RemoteServer::processCmd <GdbCmd::qTfV> (string arg)
 {
     send("l");
 }
 
 template <> void
-GdbServer::processCmd <GdbCmd::qTfP> (string arg)
+RemoteServer::processCmd <GdbCmd::qTfP> (string arg)
 {
     send("l");
 }
 
 template <> void
-GdbServer::processCmd <GdbCmd::qfThreadInfo> (string arg)
+RemoteServer::processCmd <GdbCmd::qfThreadInfo> (string arg)
 {
     send("m01");
 }
 
 template <> void
-GdbServer::processCmd <GdbCmd::qsThreadInfo> (string arg)
+RemoteServer::processCmd <GdbCmd::qsThreadInfo> (string arg)
 {
     send("l");
 }
 
 template <> void
-GdbServer::processCmd <GdbCmd::qAttached> (string arg)
+RemoteServer::processCmd <GdbCmd::qAttached> (string arg)
 {
     send("0");
 }
 
 template <> void
-GdbServer::processCmd <GdbCmd::qC> (string arg)
+RemoteServer::processCmd <GdbCmd::qC> (string arg)
 {
     send("QC1");
 }
 
 
 template <> void
-GdbServer::process <'v'> (string arg)
+RemoteServer::process <'v'> (string arg)
 {
     printf("process <'v'>: %s\n", arg.c_str());
     
@@ -191,7 +192,7 @@ GdbServer::process <'v'> (string arg)
 }
 
 template <> void
-GdbServer::process <'q'> (string cmd)
+RemoteServer::process <'q'> (string cmd)
 {
     auto command = cmd.substr(0, cmd.find(":"));
         
@@ -250,7 +251,7 @@ GdbServer::process <'q'> (string cmd)
 }
 
 template <> void
-GdbServer::process <'Q'> (string cmd)
+RemoteServer::process <'Q'> (string cmd)
 {
     auto tokens = split(cmd, ':');
     
@@ -276,7 +277,7 @@ GdbServer::process <'Q'> (string cmd)
 }
 
 template <> void
-GdbServer::process <'g'> (string cmd)
+RemoteServer::process <'g'> (string cmd)
 {
     string result;
     for (int i = 0; i < 18; i++) result += readRegister(i);
@@ -284,49 +285,49 @@ GdbServer::process <'g'> (string cmd)
 }
 
 template <> void
-GdbServer::process <'s'> (string cmd)
+RemoteServer::process <'s'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "s");
 }
 
 template <> void
-GdbServer::process <'n'> (string cmd)
+RemoteServer::process <'n'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "n");
 }
 
 template <> void
-GdbServer::process <'H'> (string cmd)
+RemoteServer::process <'H'> (string cmd)
 {
     send("OK");
 }
 
 template <> void
-GdbServer::process <'G'> (string cmd)
+RemoteServer::process <'G'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "G");
 }
 
 template <> void
-GdbServer::process <'?'> (string cmd)
+RemoteServer::process <'?'> (string cmd)
 {
     send("S05");
 }
 
 template <> void
-GdbServer::process <'!'> (string cmd)
+RemoteServer::process <'!'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "!");
 }
 
 template <> void
-GdbServer::process <'k'> (string cmd)
+RemoteServer::process <'k'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "k");
 }
 
 template <> void
-GdbServer::process <'m'> (string cmd)
+RemoteServer::process <'m'> (string cmd)
 {
     auto tokens = split(cmd, ',');
     
@@ -352,13 +353,13 @@ GdbServer::process <'m'> (string cmd)
 }
 
 template <> void
-GdbServer::process <'M'> (string cmd)
+RemoteServer::process <'M'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "M");
 }
 
 template <> void
-GdbServer::process <'p'> (string cmd)
+RemoteServer::process <'p'> (string cmd)
 {
     isize nr;
     util::parseHex(cmd, &nr);
@@ -368,25 +369,25 @@ GdbServer::process <'p'> (string cmd)
 }
 
 template <> void
-GdbServer::process <'P'> (string cmd)
+RemoteServer::process <'P'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "P");
 }
 
 template <> void
-GdbServer::process <'c'> (string cmd)
+RemoteServer::process <'c'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "c");
 }
 
 template <> void
-GdbServer::process <'D'> (string cmd)
+RemoteServer::process <'D'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "D");
 }
 
 template <> void
-GdbServer::process <'Z'> (string cmd)
+RemoteServer::process <'Z'> (string cmd)
 {
     auto tokens = split(cmd, ',');
     
@@ -413,7 +414,7 @@ GdbServer::process <'Z'> (string cmd)
 }
 
 template <> void
-GdbServer::process <'z'> (string cmd)
+RemoteServer::process <'z'> (string cmd)
 {
     auto tokens = split(cmd, ',');
     
@@ -438,7 +439,7 @@ GdbServer::process <'z'> (string cmd)
 }
 
 void
-GdbServer::process(char cmd, string arg)
+RemoteServer::process(char cmd, string arg)
 {
     switch (cmd) {
  

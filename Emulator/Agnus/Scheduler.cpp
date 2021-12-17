@@ -13,7 +13,7 @@
 #include "ControlPort.h"
 #include "CPU.h"
 #include "Agnus.h"
-#include "GdbServer.h"
+#include "RemoteServer.h"
 #include "Paula.h"
 #include "Keyboard.h"
 #include "Drive.h"
