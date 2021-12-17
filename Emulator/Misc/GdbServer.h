@@ -127,8 +127,8 @@ public:
 private:
     
     void process(char cmd, string arg) throws;
-    template <GdbCmd cmd> void process(string arg) throws;
     template <char cmd> void process(string arg) throws;
+    template <GdbCmd cmd> void processCmd(string arg) throws;
 
     string checksum(const string &s);
     std::vector<string> split(const string &s, char delimiter);

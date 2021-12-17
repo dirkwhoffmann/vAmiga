@@ -980,8 +980,10 @@ Interpreter::registerInstructions()
 
     
     //
-    // GDB Server
+    // GDB Server (experimental, not available in release builds)
     //
+    
+#ifndef RELEASE_BUILD
     
     root.add({"gdbserver"},
              "component", "Debug server");
@@ -1013,4 +1015,5 @@ Interpreter::registerInstructions()
     root.add({"gdbserver", "inspect"},
              "command", "Displays the internal state",
              &RetroShell::exec <Token::gdbserver, Token::inspect>, 0);
+#endif
 }

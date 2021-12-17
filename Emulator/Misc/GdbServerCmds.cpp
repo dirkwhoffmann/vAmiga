@@ -65,7 +65,7 @@ GdbServer::process(string packet)
 }
 
 template <> void
-GdbServer::process <GdbCmd::qSupported> (string arg)
+GdbServer::processCmd <GdbCmd::qSupported> (string arg)
 {
     send("PacketSize=512;"
          "BreakpointCommands+;"
@@ -78,13 +78,13 @@ GdbServer::process <GdbCmd::qSupported> (string arg)
 }
 
 template <> void
-GdbServer::process <GdbCmd::qSymbol> (string arg)
+GdbServer::processCmd <GdbCmd::qSymbol> (string arg)
 {
     send("OK");
 }
 
 template <> void
-GdbServer::process <GdbCmd::qOffset> (string arg)
+GdbServer::processCmd <GdbCmd::qOffset> (string arg)
 {
     string result;
     
@@ -126,43 +126,43 @@ GdbServer::process <GdbCmd::qOffset> (string arg)
 }
 
 template <> void
-GdbServer::process <GdbCmd::qTStatus> (string arg)
+GdbServer::processCmd <GdbCmd::qTStatus> (string arg)
 {
     send("T0");
 }
 
 template <> void
-GdbServer::process <GdbCmd::qTfV> (string arg)
+GdbServer::processCmd <GdbCmd::qTfV> (string arg)
 {
     send("l");
 }
 
 template <> void
-GdbServer::process <GdbCmd::qTfP> (string arg)
+GdbServer::processCmd <GdbCmd::qTfP> (string arg)
 {
     send("l");
 }
 
 template <> void
-GdbServer::process <GdbCmd::qfThreadInfo> (string arg)
+GdbServer::processCmd <GdbCmd::qfThreadInfo> (string arg)
 {
     send("m01");
 }
 
 template <> void
-GdbServer::process <GdbCmd::qsThreadInfo> (string arg)
+GdbServer::processCmd <GdbCmd::qsThreadInfo> (string arg)
 {
     send("l");
 }
 
 template <> void
-GdbServer::process <GdbCmd::qAttached> (string arg)
+GdbServer::processCmd <GdbCmd::qAttached> (string arg)
 {
     send("0");
 }
 
 template <> void
-GdbServer::process <GdbCmd::qC> (string arg)
+GdbServer::processCmd <GdbCmd::qC> (string arg)
 {
     send("QC1");
 }
@@ -197,52 +197,52 @@ GdbServer::process <'q'> (string cmd)
         
     if (command == "Supported") {
         
-        process <GdbCmd::qSupported> ("");
+        processCmd <GdbCmd::qSupported> ("");
         return;
     }
     if (cmd == "Symbol::") {
 
-        process <GdbCmd::qSymbol> ("");
+        processCmd <GdbCmd::qSymbol> ("");
         return;
     }
     if (cmd == "Offsets") {
 
-        process <GdbCmd::qOffset> ("");
+        processCmd <GdbCmd::qOffset> ("");
         return;
     }
     if (cmd == "TStatus") {
         
-        process <GdbCmd::qTStatus> ("");
+        processCmd <GdbCmd::qTStatus> ("");
         return;
     }
     if (cmd == "TfV") {
         
-        process <GdbCmd::qTfV> ("");
+        processCmd <GdbCmd::qTfV> ("");
         return;
     }
     if (cmd == "TfP") {
         
-        process <GdbCmd::qTfP> ("");
+        processCmd <GdbCmd::qTfP> ("");
         return;
     }
     if (cmd == "fThreadInfo") {
         
-        process <GdbCmd::qfThreadInfo> ("");
+        processCmd <GdbCmd::qfThreadInfo> ("");
         return;
     }
     if (cmd == "sThreadInfo") {
         
-        process <GdbCmd::qsThreadInfo> ("");
+        processCmd <GdbCmd::qsThreadInfo> ("");
         return;
     }
     if (command == "Attached") {
         
-        process <GdbCmd::qAttached> ("");
+        processCmd <GdbCmd::qAttached> ("");
         return;
     }
     if (command == "C") {
         
-        process <GdbCmd::qC> ("");
+        processCmd <GdbCmd::qC> ("");
         return;
     }
     

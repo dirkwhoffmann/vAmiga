@@ -108,14 +108,6 @@ GdbServer::start(const string name)
     if (listening) throw VAError(ERROR_GDB_SERVER_RUNNING);
     
     debugProcess = name;
-
-    // REMOVE ASAP
-    /*
-    auto result = mem.search((u32)0x11221122);
-    for (auto &it : result) {
-        printf("Signature found at %x\n", it);
-    }
-    */
     
     // Make sure that we continue with a terminated server thread
     if (serverThread.joinable()) serverThread.join();

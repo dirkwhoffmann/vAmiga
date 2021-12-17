@@ -2603,11 +2603,13 @@ Memory::search(u64 pattern, isize bytes)
         auto lo = (u32)(bank << 16);
         auto hi = lo + 0xFFFF;
 
-        for (u32 addr = lo, j; addr <= hi; addr++) {
+        for (u32 addr = lo; addr <= hi; addr++) {
 
+            isize j;
+            
             for (j = 0; j < bytes; j++) {
 
-                auto mem = spypeek8 <ACCESSOR_CPU> (addr + j);
+                auto mem = spypeek8 <ACCESSOR_CPU> (addr + (u32)j);
                 if (GET_BYTE(pattern, bytes - 1 - j) != mem) break;
             }
             if (j == bytes && result.size() < 128) {
