@@ -535,13 +535,13 @@ extension MyController {
                 metal.releaseMouse()
             }
             
-        case .GDB_START, .GDB_STOP:
+        case .SRV_START, .SRV_STOP:
             refreshStatusBar()
             
-        case .GDB_RECEIVE, .GDB_SEND:
+        case .SRV_RECEIVE, .SRV_SEND:
             renderer.console.isDirty = true
             
-        case .GDB_ERROR:
+        case .SRV_ERROR:
             VAError.gdbServerAborted()
             
         default:

@@ -11,6 +11,7 @@
 
 #include "SubComponent.h"
 #include "Interpreter.h"
+#include "RemoteServer.h"
 
 #include <sstream>
 #include <fstream>
@@ -19,10 +20,18 @@ class RetroShell : public SubComponent {
 
     // Interpreter for commands typed into the console window
     Interpreter interpreter;
+
+public:
+
+    // Server for managing remote connections
+    RemoteServer remoteServer = RemoteServer(amiga);
+
     
     //
     // Text storage
     //
+
+private:
     
     // The text storage
     std::vector<string> storage;

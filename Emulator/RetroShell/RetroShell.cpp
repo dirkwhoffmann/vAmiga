@@ -14,6 +14,8 @@
 
 RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
 {
+    subComponents = std::vector<AmigaComponent *> { &remoteServer };
+    
     // Initialize the text storage
     clear();
 
@@ -47,6 +49,7 @@ RetroShell::operator<<(char value)
     if (value == '\n') {
 
         // Newline (appends an empty line)
+        remoteServer.send(storage.back());
         storage.push_back("");
         cpos = cposMin = 0;
         shorten();

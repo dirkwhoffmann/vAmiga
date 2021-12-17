@@ -55,7 +55,7 @@ public:
     
 private:
     
-    const char *getDescription() const override { return "GdbServer"; }
+    const char *getDescription() const override { return "RemoteServer"; }
     void _dump(dump::Category category, std::ostream& os) const override;
     
     
@@ -116,43 +116,7 @@ public:
     void send(const string &packet) throws;
     
     
-    //
-    // Processing packets
-    //
-
-public:
-    
-    void process(string cmd) throws;
-    
-private:
-    
-    void process(char cmd, string arg) throws;
-    template <char cmd> void process(string arg) throws;
-    template <GdbCmd cmd> void processCmd(string arg) throws;
 
     string checksum(const string &s);
     std::vector<string> split(const string &s, char delimiter);
-    
-    
-    //
-    // Reading the emulator state
-    //
-    
-    // Reads a register value
-    string readRegister(isize nr);
-
-    // Reads a byte from memory
-    string readMemory(isize addr);
-
-    
-    //
-    // Handling events
-    //
-
-public:
-    
-    void breakpointReached();
-  
-    // Services a GDB event
-    void serviceGdbEvent();
 };

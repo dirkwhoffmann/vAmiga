@@ -66,7 +66,7 @@
 @class EXEFileProxy;
 @class ExtendedRomFileProxy;
 @class FolderProxy;
-@class GdbServerProxy;
+@class RemoteServerProxy;
 @class GuardsProxy;
 @class HDFFileProxy;
 @class IMGFileProxy;
@@ -135,7 +135,7 @@
     DriveProxy *df1;
     DriveProxy *df2;
     DriveProxy *df3;
-    GdbServerProxy *gdbServer;
+    RemoteServerProxy *remoteServer;
     GuardsProxy *breakpoints;
     GuardsProxy *watchpoints;
     KeyboardProxy *keyboard;
@@ -163,7 +163,7 @@
 @property (readonly, strong) DriveProxy *df1;
 @property (readonly, strong) DriveProxy *df2;
 @property (readonly, strong) DriveProxy *df3;
-@property (readonly, strong) GdbServerProxy *gdbServer;
+@property (readonly, strong) RemoteServerProxy *remoteServer;
 @property (readonly, strong) GuardsProxy *breakpoints;
 @property (readonly, strong) GuardsProxy *watchpoints;
 @property (readonly, strong) KeyboardProxy *keyboard;
@@ -672,7 +672,7 @@
 // GdbServer
 //
 
-@interface GdbServerProxy : Proxy { }
+@interface RemoteServerProxy : Proxy { }
 
 @property (readonly) BOOL listening;
 

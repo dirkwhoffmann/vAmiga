@@ -61,7 +61,6 @@ enum_long(SLOT)
     SLOT_MSE1,                      // Port 1 mouse
     SLOT_MSE2,                      // Port 2 mouse
     SLOT_KEY,                       // Auto-typing
-    SLOT_GDB,                       // GDB server
     SLOT_INS,                       // Handles periodic calls to inspect()
 
     SLOT_COUNT
@@ -111,7 +110,6 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_MSE1:  return "MSE1";
             case SLOT_MSE2:  return "MSE2";
             case SLOT_KEY:   return "KEY";
-            case SLOT_GDB:   return "GDB";
             case SLOT_INS:   return "INS";
 
             case SLOT_COUNT: return "???";

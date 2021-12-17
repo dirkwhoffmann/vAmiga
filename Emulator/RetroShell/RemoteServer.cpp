@@ -102,7 +102,7 @@ RemoteServer::setConfigItem(Option option, i64 value)
 void
 RemoteServer::start(const string name)
 {
-    debug(GDB_DEBUG, "start\n");
+    debug(SRV_DEBUG, "start\n");
         
     // Only proceed if the server is not running
     if (listening) throw VAError(ERROR_GDB_SERVER_RUNNING);
@@ -119,11 +119,8 @@ RemoteServer::start(const string name)
 void
 RemoteServer::stop()
 {
-    debug(GDB_DEBUG, "stop\n");
+    debug(SRV_DEBUG, "stop\n");
  
-    // Cancel pending events
-    scheduler.cancel<SLOT_GDB>();
-
     // Only proceed if an open connection exists
     if (!listening) throw VAError(ERROR_GDB_SERVER_NOT_RUNNING);
 
@@ -136,7 +133,7 @@ RemoteServer::stop()
     // Wait until the server thread has terminated
     serverThread.join();
 
-    debug(GDB_DEBUG, "stopped\n");
+    debug(SRV_DEBUG, "stopped\n");
 }
 
 string
@@ -146,11 +143,15 @@ RemoteServer::receive()
 
     if (config.verbose) {
         
-        retroShell << "R: " << packet << '\n';
+        printf("receive: %s size: %d last: %d %d\n", packet.c_str(), (int)packet.size(), packet[packet.size() - 2], packet.back());
+        retroShell.printPrompt();
+        retroShell << packet << '\n';
     }
+     
+    try { retroShell.exec(packet); } catch (...) { }
 
-    debug(GDB_DEBUG, "R: %s\n", packet.c_str());
-    msgQueue.put(MSG_GDB_RECEIVE);
+    debug(SRV_DEBUG, "R: %s\n", packet.c_str());
+    msgQueue.put(MSG_SRV_RECEIVE);
     
     return packet;
 }
@@ -158,29 +159,37 @@ RemoteServer::receive()
 void
 RemoteServer::send(const string &cmd)
 {
+    /*
     string packet = "$";
                 
     packet += cmd;
     packet += "#";
     packet += checksum(cmd);
+    */
+    string packet = cmd + "\n";
     
-    connection.send(packet);
+    if (isListening()) {
+        
+        connection.send(packet);
 
+        debug(SRV_DEBUG, "T: %s\n", packet.c_str());
+        msgQueue.put(MSG_SRV_SEND);
+    }
+    
+    /*
     if (config.verbose) {
         
         retroShell << "T: " << packet << '\n';
     }
-
-    debug(GDB_DEBUG, "T: %s\n", packet.c_str());
-    msgQueue.put(MSG_GDB_SEND);
+    */
 }
 
 void
 RemoteServer::main()
 {
-    debug(GDB_DEBUG, "main\n");
+    debug(SRV_DEBUG, "main\n");
 
-    msgQueue.put(MSG_GDB_START);
+    msgQueue.put(MSG_SRV_START);
     
     listening = true;
     ackMode = true;
@@ -195,23 +204,23 @@ RemoteServer::main()
         // Wait for a client to connect
         connection = listener.accept();
         
-        debug(GDB_DEBUG, "Entering main loop\n");
+        debug(SRV_DEBUG, "Entering main loop\n");
 
         while (1) {
             
             auto cmd = receive();
-            process(cmd);
+            // process(cmd);
         }
              
     } catch (VAError &err) {
         
         warn("VAError: %s\n", err.what());
-        if (listening) msgQueue.put(MSG_GDB_ERROR);
+        if (listening) msgQueue.put(MSG_SRV_ERROR);
 
     } catch (std::exception &err) {
 
         warn("Error: %s\n", err.what());
-        if (listening) msgQueue.put(MSG_GDB_ERROR);
+        if (listening) msgQueue.put(MSG_SRV_ERROR);
     }
     
     listening = false;
@@ -219,9 +228,9 @@ RemoteServer::main()
     connection.close();
     listener.close();
     
-    msgQueue.put(MSG_GDB_STOP);
+    msgQueue.put(MSG_SRV_STOP);
     
-    debug(GDB_DEBUG, "Leaving main\n");
+    debug(SRV_DEBUG, "Leaving main\n");
 }
 
 string
@@ -245,58 +254,4 @@ RemoteServer::split(const string &s, char delimiter)
     }
     
     return result;
-}
-
-string
-RemoteServer::readRegister(isize nr)
-{
-    if (nr >= 0 && nr <= 7) {
-        return util::hexstr <8> ((u32)cpu.getD((int)(nr)));
-    }
-    if (nr >= 8 && nr <= 15) {
-        return util::hexstr <8> ((u32)cpu.getA((int)(nr - 8)));
-    }
-    if (nr == 16) {
-        return util::hexstr <8> ((u32)cpu.getSR());
-    }
-    if (nr == 17) {
-        return util::hexstr <8> ((u32)cpu.getPC());
-    }
-
-    return "xxxxxxxx";
-}
-
-string
-RemoteServer::readMemory(isize addr)
-{
-    auto byte = mem.spypeek8 <ACCESSOR_CPU> ((u32)addr);
-    return util::hexstr <2> (byte);
-}
-
-void
-RemoteServer::breakpointReached()
-{
-    send("S01");
-}
-
-void
-RemoteServer::serviceGdbEvent()
-{
-    printf("serviceGdbEvent (%d)\n", scheduler.id[SLOT_GDB]);
-    
-    auto id = scheduler.id[SLOT_GDB];
-    scheduler.cancel<SLOT_GDB>();
-
-    switch (id) {
-            
-        case GDB_PENDING:
-                        
-            printf("Trying again command %s\n", latestCmd.c_str());
-            process(latestCmd);
-            break;
-            
-        default:
-            break;
-    }
-    
 }

@@ -16,7 +16,7 @@
 #include "CPU.h"
 #include "Denise.h"
 #include "Drive.h"
-#include "RemoteServer.h"
+#include "GdbServer.h"
 #include "Keyboard.h"
 #include "Memory.h"
 #include "MsgQueue.h"
@@ -86,7 +86,7 @@ public:
     // Misc
     RetroShell retroShell = RetroShell(*this);
     OSDebugger osDebugger = OSDebugger(*this);
-    RemoteServer remoteServer = RemoteServer(*this);
+    GdbServer gdbServer = GdbServer(*this);
     RegressionTester regressionTester = RegressionTester(*this);
     
     

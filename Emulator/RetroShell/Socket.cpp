@@ -84,6 +84,12 @@ Socket::recv()
     if (n > 0) {
         
         string result = string(buffer);
+        
+        // Remove LF and CR
+        while (!result.empty() && (result.back() == 10 || result.back() == 13)) {
+            result.pop_back();
+        }
+        
         return result;
     }
 

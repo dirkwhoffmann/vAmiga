@@ -985,35 +985,35 @@ Interpreter::registerInstructions()
     
 #ifndef RELEASE_BUILD
     
-    root.add({"gdbserver"},
-             "component", "Debug server");
+    root.add({"remote"},
+             "component", "Remote server");
 
-    root.add({"gdbserver", "config"},
+    root.add({"remote", "config"},
              "command", "Displays the current configuration",
-             &RetroShell::exec <Token::gdbserver, Token::config>);
+             &RetroShell::exec <Token::remote, Token::config>);
     
-    root.add({"gdbserver", "set"},
+    root.add({"remote", "set"},
              "command", "Configures the component");
         
-    root.add({"gdbserver", "set", "port"},
+    root.add({"remote", "set", "port"},
              "key", "Assigns the port number",
-             &RetroShell::exec <Token::gdbserver, Token::set, Token::port>, 1);
+             &RetroShell::exec <Token::remote, Token::set, Token::port>, 1);
 
-    root.add({"gdbserver", "set", "verbose"},
+    root.add({"remote", "set", "verbose"},
              "key", "Enables or disables verbose mode",
-             &RetroShell::exec <Token::gdbserver, Token::set, Token::verbose>, 1);
+             &RetroShell::exec <Token::remote, Token::set, Token::verbose>, 1);
 
-    root.add({"gdbserver", "start"},
+    root.add({"remote", "start"},
              "command", "Starts the debug server",
-             &RetroShell::exec <Token::gdbserver, Token::start>, 0);
-    root.seek("gdbserver")->seek("start")->maxArgs = 1;
+             &RetroShell::exec <Token::remote, Token::start>, 0);
+    root.seek("remote")->seek("start")->maxArgs = 1;
 
-    root.add({"gdbserver", "stop"},
+    root.add({"remote", "stop"},
              "command", "Stops the debug server",
-             &RetroShell::exec <Token::gdbserver, Token::stop>, 0);
+             &RetroShell::exec <Token::remote, Token::stop>, 0);
 
-    root.add({"gdbserver", "inspect"},
+    root.add({"remote", "inspect"},
              "command", "Displays the internal state",
-             &RetroShell::exec <Token::gdbserver, Token::inspect>, 0);
+             &RetroShell::exec <Token::remote, Token::inspect>, 0);
 #endif
 }

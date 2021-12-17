@@ -100,11 +100,11 @@ enum_long(MSG_TYPE)
     MSG_DMA_DEBUG_OFF,
 
     // GDB Debugging
-    MSG_GDB_START,
-    MSG_GDB_STOP,
-    MSG_GDB_RECEIVE,
-    MSG_GDB_SEND,
-    MSG_GDB_ERROR
+    MSG_SRV_START,
+    MSG_SRV_STOP,
+    MSG_SRV_RECEIVE,
+    MSG_SRV_SEND,
+    MSG_SRV_ERROR
 };
 typedef MSG_TYPE MsgType;
 
@@ -112,7 +112,7 @@ typedef MSG_TYPE MsgType;
 struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
 {
     static long minVal() { return 0; }
-    static long maxVal() { return MSG_GDB_STOP; }
+    static long maxVal() { return MSG_SRV_STOP; }
     static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "MSG"; }
@@ -191,11 +191,11 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_DMA_DEBUG_ON:        return "DMA_DEBUG_ON";
             case MSG_DMA_DEBUG_OFF:       return "DMA_DEBUG_OFF";
                 
-            case MSG_GDB_START:           return "GDB_START";
-            case MSG_GDB_STOP:            return "GDB_STOP";
-            case MSG_GDB_RECEIVE:         return "GDB_RECEIVE";
-            case MSG_GDB_SEND:            return "GDB_SEND";
-            case MSG_GDB_ERROR:           return "GDB_ERROR";
+            case MSG_SRV_START:           return "SRV_START";
+            case MSG_SRV_STOP:            return "SRV_STOP";
+            case MSG_SRV_RECEIVE:         return "SRV_RECEIVE";
+            case MSG_SRV_SEND:            return "SRV_SEND";
+            case MSG_SRV_ERROR:           return "SRV_ERROR";
         }
         return "???";
     }

@@ -41,7 +41,7 @@ extension MyController {
         let hasDisk3 = amiga.df3.hasDisk
 
         let running = amiga.running
-        let debug = amiga.gdbServer.listening
+        let debug = amiga.remoteServer.listening
         let halted = amiga.cpu.halted
         let warp = amiga.warpMode
 

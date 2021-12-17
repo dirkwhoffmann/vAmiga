@@ -192,6 +192,7 @@
 		50B9C428260942D000A86C31 /* RetroShell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B9C426260942D000A86C31 /* RetroShell.cpp */; };
 		50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */; };
 		50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */; };
+		50BF1CC8276D174200386540 /* GdbServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CC6276D174200386540 /* GdbServer.cpp */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
 		50C685282573E9BF008D34DF /* FSPartition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C685262573E9BF008D34DF /* FSPartition.cpp */; };
@@ -223,7 +224,6 @@
 		50E8199325B350DA00D2E3A5 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E8199225B350DA00D2E3A5 /* Errors.swift */; };
 		50E98B51275A124900AA0CB9 /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B4F275A124900AA0CB9 /* Socket.cpp */; };
 		50E98B55275A127F00AA0CB9 /* RemoteServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B53275A127F00AA0CB9 /* RemoteServer.cpp */; };
-		50E98B57275A12B300AA0CB9 /* RemoteServerCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B56275A12B300AA0CB9 /* RemoteServerCmds.cpp */; };
 		50EAD99C256E76820053F9AC /* HDFFile.h in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99B256E76820053F9AC /* HDFFile.h */; };
 		50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
 		50EB8CCA25306E8E0053988A /* ExportVideoDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */; };
@@ -545,6 +545,9 @@
 		50B9C427260942D000A86C31 /* RetroShell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RetroShell.h; sourceTree = "<group>"; };
 		50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = A1000ANSI.xib; path = "XIB files/A1000ANSI.xib"; sourceTree = SOURCE_ROOT; };
 		50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIAEvents.cpp; sourceTree = "<group>"; };
+		50BF1CC6276D174200386540 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
+		50BF1CC7276D174200386540 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
+		50BF1CC9276D177900386540 /* GdbServerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServerTypes.h; sourceTree = "<group>"; };
 		50C0B78025EC367000CDE1F2 /* IOUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IOUtils.cpp; sourceTree = "<group>"; };
 		50C0B78125EC367000CDE1F2 /* IOUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOUtils.h; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
@@ -630,7 +633,6 @@
 		50E98B50275A124900AA0CB9 /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
 		50E98B53275A127F00AA0CB9 /* RemoteServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RemoteServer.cpp; sourceTree = "<group>"; };
 		50E98B54275A127F00AA0CB9 /* RemoteServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteServer.h; sourceTree = "<group>"; };
-		50E98B56275A12B300AA0CB9 /* RemoteServerCmds.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RemoteServerCmds.cpp; sourceTree = "<group>"; };
 		50E98B58275A779B00AA0CB9 /* RemoteServerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteServerTypes.h; sourceTree = "<group>"; };
 		50EAB95726C10B6C00BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAB95926C10B8600BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -1366,7 +1368,6 @@
 				50E98B58275A779B00AA0CB9 /* RemoteServerTypes.h */,
 				50E98B54275A127F00AA0CB9 /* RemoteServer.h */,
 				50E98B53275A127F00AA0CB9 /* RemoteServer.cpp */,
-				50E98B56275A12B300AA0CB9 /* RemoteServerCmds.cpp */,
 			);
 			path = RetroShell;
 			sourceTree = "<group>";
@@ -1423,6 +1424,9 @@
 				501FB318276200A000D0A57B /* OSDebuggerDump.cpp */,
 				50984B64263A9B5100E37184 /* RegressionTester.h */,
 				50984B63263A9B5100E37184 /* RegressionTester.cpp */,
+				50BF1CC9276D177900386540 /* GdbServerTypes.h */,
+				50BF1CC7276D174200386540 /* GdbServer.h */,
+				50BF1CC6276D174200386540 /* GdbServer.cpp */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -1667,7 +1671,6 @@
 				50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */,
 				508FE01A21EA227B0043D0E9 /* MyFormatter.swift in Sources */,
 				500C7170255EE2AC00DDEEB2 /* Concurrency.cpp in Sources */,
-				50E98B57275A12B300AA0CB9 /* RemoteServerCmds.cpp in Sources */,
 				50A61463260DB7F900A01428 /* Parser.cpp in Sources */,
 				50C8C4552607524400F4E012 /* Monitors.swift in Sources */,
 				501A9937243A07A100D269B2 /* Storage.swift in Sources */,
@@ -1830,6 +1833,7 @@
 				50AEBEDC24D3D8170037082D /* UARTEvents.cpp in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
 				508FDF8721EA1FBC0043D0E9 /* MsgQueue.cpp in Sources */,
+				50BF1CC8276D174200386540 /* GdbServer.cpp in Sources */,
 				500A0A2A262305BE0019F013 /* MemUtils.cpp in Sources */,
 				50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */,
 				50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */,

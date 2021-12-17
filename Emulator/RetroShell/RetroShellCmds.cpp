@@ -1212,41 +1212,41 @@ RetroShell::exec <Token::os, Token::processes> (Arguments& argv, long param)
 }
 
 template <> void
-RetroShell::exec <Token::gdbserver, Token::config> (Arguments &argv, long param)
+RetroShell::exec <Token::remote, Token::config> (Arguments &argv, long param)
 {
     dump(gdbServer, dump::Config);
 }
 
 template <> void
-RetroShell::exec <Token::gdbserver, Token::set, Token::port> (Arguments &argv, long param)
+RetroShell::exec <Token::remote, Token::set, Token::port> (Arguments &argv, long param)
 {
     amiga.configure(OPT_GDB_PORT, util::parseNum(argv.front()));
 }
 
 template <> void
-RetroShell::exec <Token::gdbserver, Token::set, Token::verbose> (Arguments &argv, long param)
+RetroShell::exec <Token::remote, Token::set, Token::verbose> (Arguments &argv, long param)
 {
     amiga.configure(OPT_GDB_VERBOSE, util::parseBool(argv.front()));
 }
 
 template <> void
-RetroShell::exec <Token::gdbserver, Token::start> (Arguments& argv, long param)
+RetroShell::exec <Token::remote, Token::start> (Arguments& argv, long param)
 {
     if (argv.empty()) {
-        gdbServer.start();
+        remoteServer.start();
     } else {
-        gdbServer.start(argv[0]);
+        remoteServer.start(argv[0]);
     }
 }
 
 template <> void
-RetroShell::exec <Token::gdbserver, Token::stop> (Arguments& argv, long param)
+RetroShell::exec <Token::remote, Token::stop> (Arguments& argv, long param)
 {
-    gdbServer.stop();
+    remoteServer.stop();
 }
 
 template <> void
-RetroShell::exec <Token::gdbserver, Token::inspect> (Arguments& argv, long param)
+RetroShell::exec <Token::remote, Token::inspect> (Arguments& argv, long param)
 {
-    dump(gdbServer, dump::State);
+    dump(remoteServer, dump::State);
 }

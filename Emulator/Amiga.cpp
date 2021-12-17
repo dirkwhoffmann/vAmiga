@@ -58,7 +58,7 @@ Amiga::Amiga()
         &mem,
         &cpu,
         &retroShell,
-        &remoteServer,
+        &gdbServer,
         &regressionTester,
         &msgQueue
     };
@@ -299,7 +299,7 @@ Amiga::getConfigItem(Option option, long id) const
         case OPT_GDB_PORT:
         case OPT_GDB_VERBOSE:
             
-            return remoteServer.getConfigItem(option);
+            return retroShell.remoteServer.getConfigItem(option);
             
         default:
             fatalError;
@@ -476,7 +476,7 @@ Amiga::configure(Option option, i64 value)
         case OPT_GDB_PORT:
         case OPT_GDB_VERBOSE:
             
-            remoteServer.setConfigItem(option, value);
+            retroShell.remoteServer.setConfigItem(option, value);
             break;
 
         default:
@@ -872,7 +872,6 @@ Amiga::execute()
                 clearFlag(RL::BREAKPOINT_REACHED);
                 inspect();
                 msgQueue.put(MSG_BREAKPOINT_REACHED, (long)cpu.debugger.breakpointPC);
-                remoteServer.breakpointReached();
                 newState = EXEC_PAUSED;
                 break;
             }

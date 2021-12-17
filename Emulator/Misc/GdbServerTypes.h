@@ -12,9 +12,16 @@
 #include "Aliases.h"
 #include "Reflection.h"
 
-typedef struct
+enum class GdbCmd
 {
-    isize port;
-    bool verbose;
-}
-RemoteServerConfig;
+    qSupported,
+    qSymbol,
+    qOffset,
+    qTStatus,
+    qTfV,
+    qTfP,
+    qfThreadInfo,
+    qsThreadInfo,
+    qAttached,
+    qC
+};

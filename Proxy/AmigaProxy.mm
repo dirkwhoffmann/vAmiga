@@ -1468,7 +1468,7 @@ using namespace moira;
 // GdbServer proxy
 //
 
-@implementation GdbServerProxy
+@implementation RemoteServerProxy
 
 - (RemoteServer *)server
 {
@@ -1479,7 +1479,7 @@ using namespace moira;
 {
     if (server == nullptr) { return nil; }
     
-    GdbServerProxy *proxy = [[self alloc] initWith: server];
+    RemoteServerProxy *proxy = [[self alloc] initWith: server];
     return proxy;
 }
 
@@ -2110,7 +2110,7 @@ using namespace moira;
 @synthesize df3;
 @synthesize diskController;
 @synthesize dmaDebugger;
-@synthesize gdbServer;
+@synthesize remoteServer;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
@@ -2146,7 +2146,7 @@ using namespace moira;
     df3 = [[DriveProxy alloc] initWith:&amiga->df3];
     diskController = [[DiskControllerProxy alloc] initWith:&amiga->paula.diskController];
     dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
-    gdbServer = [[GdbServerProxy alloc] initWith:&amiga->remoteServer];
+    remoteServer = [[RemoteServerProxy alloc] initWith:&amiga->retroShell.remoteServer];
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
