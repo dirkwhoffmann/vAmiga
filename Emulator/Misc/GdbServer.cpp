@@ -109,6 +109,14 @@ GdbServer::start(const string name)
     
     debugProcess = name;
 
+    // REMOVE ASAP
+    /*
+    auto result = mem.search((u32)0x11221122);
+    for (auto &it : result) {
+        printf("Signature found at %x\n", it);
+    }
+    */
+    
     // Make sure that we continue with a terminated server thread
     if (serverThread.joinable()) serverThread.join();
     
@@ -251,16 +259,16 @@ string
 GdbServer::readRegister(isize nr)
 {
     if (nr >= 0 && nr <= 7) {
-        return util::hexstr <8> (util::bigEndian((u32)cpu.getD((int)(nr))));
+        return util::hexstr <8> ((u32)cpu.getD((int)(nr)));
     }
     if (nr >= 8 && nr <= 15) {
-        return util::hexstr <8> (util::bigEndian((u32)cpu.getA((int)(nr - 8))));
+        return util::hexstr <8> ((u32)cpu.getA((int)(nr - 8)));
     }
     if (nr == 16) {
-        return util::hexstr <8> (util::bigEndian((u32)cpu.getSR()));
+        return util::hexstr <8> ((u32)cpu.getSR());
     }
     if (nr == 17) {
-        return util::hexstr <8> (util::bigEndian((u32)cpu.getPC()));
+        return util::hexstr <8> ((u32)cpu.getPC());
     }
 
     return "xxxxxxxx";

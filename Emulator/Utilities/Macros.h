@@ -65,6 +65,7 @@
 #define BYTE1(x) LO_BYTE((x) >> 8)
 #define BYTE2(x) LO_BYTE((x) >> 16)
 #define BYTE3(x) LO_BYTE((x) >> 24)
+#define GET_BYTE(x,nr) LO_BYTE((x) >> (8 * (nr)))
 
 // Returns a non-zero value if the n-th bit is set in x
 #define GET_BIT(x,nr) ((x) & (1 << (nr)))

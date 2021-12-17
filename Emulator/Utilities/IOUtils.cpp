@@ -16,40 +16,6 @@
 
 namespace util {
 
-bool
-parseHex(const string &s, isize *result)
-{
-    try {
-        size_t pos = 0;
-        auto num = std::stol(s, &pos, 16);
-
-        if (pos == s.size()) {
-
-            *result = (isize)num;
-            return true;
-        }
-        return false;
-    } catch (...) {
-        return false;
-    }
-}
-
-string
-lowercased(const string& s)
-{
-    string result;
-    for (auto c : s) { result += (char)std::tolower(c); }
-    return result;
-}
-
-string
-uppercased(const string& s)
-{
-    string result;
-    for (auto c : s) { result += (char)std::toupper(c); }
-    return result;
-}
-
 string
 extractPath(const string &s)
 {

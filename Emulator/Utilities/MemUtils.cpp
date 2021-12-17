@@ -70,6 +70,7 @@ void hexdumpLongwords(u8 *p, isize size, isize cols)
 template string util::hexstr <1> (isize number);
 template string util::hexstr <2> (isize number);
 template string util::hexstr <4> (isize number);
+template string util::hexstr <6> (isize number);
 template string util::hexstr <8> (isize number);
 template string util::hexstr <16> (isize number);
 template string util::hexstr <32> (isize number);

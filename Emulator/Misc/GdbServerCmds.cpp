@@ -100,16 +100,16 @@ GdbServer::process <GdbCmd::qOffset> (string arg)
                     
                 case 0:
                     result += "TextSeg=";
+                    result += util::hexstr <6> (segList[i].first);
                     break;
                 case 1:
                     result += ";DataSeg=";
+                    result += util::hexstr <6> (segList[i].first);
                     break;
                 default:
-                    result += ";CustomSeg" + std::to_string(i) + "=";
+                    // result += ";CustomSeg" + std::to_string(i) + "=";
                     break;
             }
-            
-            result += util::hexstr <8> (segList[i].first);
         }
     }
     
@@ -333,10 +333,18 @@ GdbServer::process <'m'> (string cmd)
     if (tokens.size() == 2) {
 
         string result;
-        auto len = std::stoi(tokens[1]);
-        
-        for (isize i = 0; i < len; i++) {
-            result += readMemory(i);
+
+        printf("Token0 = %s\n", tokens[0].c_str());
+        printf("Token1 = %s\n", tokens[1].c_str());
+        isize addr;
+        util::parseHex(tokens[0], &addr);
+        isize size;
+        util::parseHex(tokens[1], &size);
+        printf("addr = %ld\n", addr);
+        printf("size = %ld\n", size);
+
+        for (isize i = 0; i < size; i++) {
+            result += readMemory(addr + i);
         }
         
         send(result);
@@ -399,7 +407,9 @@ GdbServer::process <'Z'> (string cmd)
         return;
     }
 
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "Z");
+    // throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "Z");
+    printf("ERROR_GDB_INVALID_FORMAT\n");
+    send("OK");
 }
 
 template <> void

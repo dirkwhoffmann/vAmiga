@@ -10,6 +10,8 @@
 #pragma once
 
 #include "Types.h"
+#include "StringUtils.h"
+
 #include <fcntl.h>
 #include <filesystem>
 #include <istream>
@@ -21,19 +23,8 @@ namespace fs = std::filesystem;
 namespace util {
 
 //
-// Handling string
-//
-
-bool parseHex(const string &s, isize *result);
-
-
-//
 // Handling file names
 //
-
-// Changes the capitalization of a string
-string lowercased(const string& s);
-string uppercased(const string& s);
 
 // Extracts a certain component from a path
 string extractPath(const string &path);

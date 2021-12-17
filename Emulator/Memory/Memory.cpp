@@ -2589,6 +2589,38 @@ Memory::hex(u32 addr, isize bytes)
     return str;
 }
 
+std::vector <u32>
+Memory::search(u64 pattern, isize bytes)
+{
+    std::vector <u32> result;
+
+    // Iterate through all memory banks
+    for (isize bank = 0; bank < 256; bank++) {
+        
+        // Only proceed if this memory bank is mapped
+        if (cpuMemSrc[bank] == MEM_NONE) continue;
+
+        auto lo = (u32)(bank << 16);
+        auto hi = lo + 0xFFFF;
+
+        for (u32 addr = lo, j; addr <= hi; addr++) {
+
+            for (j = 0; j < bytes; j++) {
+
+                auto mem = spypeek8 <ACCESSOR_CPU> (addr + j);
+                if (GET_BYTE(pattern, bytes - 1 - j) != mem) break;
+            }
+            if (j == bytes && result.size() < 128) {
+                
+                result.push_back(addr);
+                if (result.size() >= 128) break;
+            }
+        }
+    }
+    
+    return result;
+}
+
 template void Memory::pokeCustom16 <ACCESSOR_CPU> (u32 addr, u16 value);
 template void Memory::pokeCustom16 <ACCESSOR_AGNUS> (u32 addr, u16 value);
 

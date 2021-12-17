@@ -69,6 +69,7 @@
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		506B47182562E06A009FEFC3 /* ExporterDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 506B47172562E06A009FEFC3 /* ExporterDialog.xib */; };
 		506B471D256396BC009FEFC3 /* ExporterDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506B471C256396BC009FEFC3 /* ExporterDialog.swift */; };
+		506D6AB2276C7B2D002C9711 /* StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506D6AB0276C7B2D002C9711 /* StringUtils.cpp */; };
 		5071B7872621F88800D6FB54 /* CopperDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5071B7852621F88800D6FB54 /* CopperDebugger.cpp */; };
 		507215A925EAB4AC00787591 /* Chrono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5072159F25EA9AE600787591 /* Chrono.cpp */; };
 		5072CAFA2456D1C800C8F606 /* AudioConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5072CAF92456D1C800C8F606 /* AudioConf.swift */; };
@@ -360,6 +361,8 @@
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
 		506B47172562E06A009FEFC3 /* ExporterDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExporterDialog.xib; sourceTree = "<group>"; };
 		506B471C256396BC009FEFC3 /* ExporterDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExporterDialog.swift; sourceTree = "<group>"; };
+		506D6AB0276C7B2D002C9711 /* StringUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtils.cpp; sourceTree = "<group>"; };
+		506D6AB1276C7B2D002C9711 /* StringUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StringUtils.h; sourceTree = "<group>"; };
 		5071B7852621F88800D6FB54 /* CopperDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperDebugger.cpp; sourceTree = "<group>"; };
 		5071B7862621F88800D6FB54 /* CopperDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CopperDebugger.h; sourceTree = "<group>"; };
 		5072159C25EA698600787591 /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
@@ -1308,6 +1311,8 @@
 				500A0A28262305BE0019F013 /* MemUtils.cpp */,
 				50B3C44825EAFB5500651700 /* Checksum.h */,
 				50B3C44725EAFB5500651700 /* Checksum.cpp */,
+				506D6AB1276C7B2D002C9711 /* StringUtils.h */,
+				506D6AB0276C7B2D002C9711 /* StringUtils.cpp */,
 				50C0B78125EC367000CDE1F2 /* IOUtils.h */,
 				50C0B78025EC367000CDE1F2 /* IOUtils.cpp */,
 				50A61462260DB7F900A01428 /* Parser.h */,
@@ -1745,6 +1750,7 @@
 				508FE05121EA22CC0043D0E9 /* HardwareConf.swift in Sources */,
 				50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */,
 				509F41EA243B0FF700AD0FE4 /* ScreenshotDialog.swift in Sources */,
+				506D6AB2276C7B2D002C9711 /* StringUtils.cpp in Sources */,
 				509C3668260B3ED0004F160A /* RetroShellCmds.cpp in Sources */,
 				50AE6EE724D9B2C7000AA367 /* StateMachineRegs.cpp in Sources */,
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
