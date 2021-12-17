@@ -149,7 +149,8 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
             auto p = this->prev(oldw);
 
             // Exit the loop once we've found the correct position
-            if (key >= keys[p]) break;
+            if (key > keys[p]) break;
+            if (key == keys[p] && element.addr > this->elements[p].addr) break;
 
             // Otherwise, swap elements
             std::swap(this->elements[oldw], this->elements[p]);

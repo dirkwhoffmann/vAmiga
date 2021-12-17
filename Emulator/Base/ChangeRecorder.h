@@ -15,6 +15,8 @@
 enum RegChangeID : i32
 {
     SET_NONE,
+ 
+    SET_STRHOR,
     
     SET_BLTSIZE,
     SET_BLTSIZV,
@@ -110,9 +112,7 @@ enum RegChangeID : i32
     SET_SPR7PTL,
 
     SET_DSKPTH,
-    SET_DSKPTL,
-        
-    SET_STRHOR
+    SET_DSKPTL
 };
 
 /* Register change recorder
