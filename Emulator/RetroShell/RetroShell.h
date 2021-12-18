@@ -83,6 +83,12 @@ public:
     
     RetroShell(Amiga& ref);
         
+    // Returns the welcome message
+    std::stringstream welcome() const;
+    
+    // Dumps the current text storage to the remote server
+    void dumpToServer();
+    
     
     //
     // Methods from AmigaObject
@@ -142,6 +148,9 @@ public:
     isize cposAbs() { return cpos; }
     isize cposRel();
 
+    // Moves the cursor forward to a certain column
+    void tab(isize hpos);
+
     // Prints a message
     RetroShell &operator<<(char value);
     RetroShell &operator<<(const string &value);
@@ -149,10 +158,8 @@ public:
     RetroShell &operator<<(long value);
     RetroShell &operator<<(std::stringstream &stream);
 
-    // Moves the cursor forward to a certain column
-    void tab(isize hpos);
-
-    // Prints the input prompt
+    void flush();
+    void newLine();
     void printPrompt();
 
 private:

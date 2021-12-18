@@ -159,12 +159,50 @@ RemoteServer::send(const string &cmd)
 {
     if (isListening()) {
  
-        string packet = cmd + "\n";
+        string packet = cmd; //  + "\n";
         connection.send(packet);
 
         debug(SRV_DEBUG, "T: %s\n", packet.c_str());
         msgQueue.put(MSG_SRV_SEND);
     }
+}
+
+RemoteServer&
+RemoteServer::operator<<(char value)
+{
+    send(string(1, value));
+    return *this;
+}
+
+RemoteServer&
+RemoteServer::operator<<(const string& text)
+{
+    send(text);
+    return *this;
+}
+
+RemoteServer&
+RemoteServer::operator<<(int value)
+{
+    send(std::to_string(value));
+    return *this;
+}
+
+RemoteServer&
+RemoteServer::operator<<(long value)
+{
+    send(std::to_string(value));
+    return *this;
+}
+
+RemoteServer&
+RemoteServer::operator<<(std::stringstream &stream)
+{
+    string line;
+    while(std::getline(stream, line)) {
+        send(line + "\n");
+    }
+    return *this;
 }
 
 void
@@ -184,10 +222,8 @@ RemoteServer::main()
         connection = listener.accept();
         connected = true;
         
-        // Send a welcome message
-        send("Welcome to vAmiga - Successfully connected to RetroShell\n");
-        send("Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de");
-        send("Licensed under the GNU General Public License v3");
+        // Update the server with the current text storage
+        retroShell.dumpToServer();
         
         debug(SRV_DEBUG, "Entering main loop\n");
 

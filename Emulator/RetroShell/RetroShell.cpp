@@ -22,17 +22,40 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
     // Initialize the input buffer
     input.push_back("");
     
-    // Print a startup message
-    *this << "vAmiga " << VER_MAJOR << '.' << VER_MINOR << '.' << VER_SUBMINOR;
-    *this << " (" << __DATE__ << " " << __TIME__ << ")" << '\n';
-    *this << '\n';
-    *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
-    *this << "Licensed under the GNU General Public License v3" << '\n';
-    *this << '\n';
-
+    // Print the startup message
+    auto ss = welcome();
+    
+    *this << ss;
     printHelp();
     *this << '\n';
     printPrompt();
+}
+
+std::stringstream
+RetroShell::welcome() const
+{
+    std::stringstream ss;
+    
+    ss << "vAmiga " << VER_MAJOR << '.' << VER_MINOR << '.' << VER_SUBMINOR;
+    ss << " (" << __DATE__ << " " << __TIME__ << ")" << '\n';
+    ss << '\n';
+    ss << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
+    ss << "Licensed under the GNU General Public License v3" << '\n';
+    ss << '\n';
+    
+    return ss;
+}
+
+void
+RetroShell::dumpToServer()
+{
+    auto count = storage.size();
+    
+    for (usize i = 0; i < count; i++) {
+        
+        remoteServer << storage[i];
+        if (i < count - 1) remoteServer << "\n";
+    }
 }
 
 isize
@@ -48,11 +71,7 @@ RetroShell::operator<<(char value)
 {
     if (value == '\n') {
 
-        // Newline (appends an empty line)
-        remoteServer.send(storage.back());
-        storage.push_back("");
-        cpos = cposMin = 0;
-        shorten();
+        newLine();
 
     } else if (value == '\r') {
 
@@ -65,7 +84,7 @@ RetroShell::operator<<(char value)
         storage.back() += value;
     }
     
-    shorten();
+    // shorten();
     isDirty = true;
     return *this;
 }
@@ -115,14 +134,35 @@ RetroShell::tab(isize hpos)
 }
 
 void
+RetroShell::flush()
+{
+    remoteServer.send(storage.back());
+
+    cposMin = (isize)storage.back().size();
+    cpos = std::max(cpos, cposMin);
+}
+
+void
+RetroShell::newLine()
+{
+    flush();
+    
+    storage.push_back("");
+    remoteServer.send("\n");
+    
+    cpos = cposMin = 0;
+    shorten();
+}
+
+void
 RetroShell::printPrompt()
 {
-    // Finish the current line (if neccessary)
+    // Finish the current line if neccessary
     if (!lastLine().empty()) *this << '\n';
 
     // Print the prompt
     *this << prompt;
-    cpos = cposMin = (isize)prompt.size();
+    flush();
 }
 
 void

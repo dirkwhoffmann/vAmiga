@@ -113,4 +113,10 @@ public:
     
     string receive() throws;
     void send(const string &packet) throws;
+    
+    RemoteServer &operator<<(char value);
+    RemoteServer &operator<<(const string &value);
+    RemoteServer &operator<<(int value);
+    RemoteServer &operator<<(long value);
+    RemoteServer &operator<<(std::stringstream &stream);
 };
