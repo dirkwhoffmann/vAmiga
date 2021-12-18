@@ -156,6 +156,8 @@
 		50A61463260DB7F900A01428 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A61461260DB7F900A01428 /* Parser.cpp */; };
 		50A64B96257A63A600442964 /* BootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A64B95257A63A600442964 /* BootBlockImage.cpp */; };
 		50AA4CE326DA11010050B871 /* Scheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AA4CE126DA11010050B871 /* Scheduler.cpp */; };
+		50AD904B276E104E0011ECCB /* TextStorage.h in Resources */ = {isa = PBXBuildFile; fileRef = 50AD904A276E104E0011ECCB /* TextStorage.h */; };
+		50AD904D276E10660011ECCB /* TextStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AD904C276E10660011ECCB /* TextStorage.cpp */; };
 		50AE6EDD24D93DC4000AA367 /* CopperRegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */; };
 		50AE6EDF24D93EDD000AA367 /* AgnusRegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDE24D93EDD000AA367 /* AgnusRegisters.cpp */; };
 		50AE6EE124D9407F000AA367 /* BlitterRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE024D9407F000AA367 /* BlitterRegs.cpp */; };
@@ -500,6 +502,8 @@
 		50AA4CE126DA11010050B871 /* Scheduler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scheduler.cpp; sourceTree = "<group>"; };
 		50AA4CE226DA11010050B871 /* Scheduler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scheduler.h; sourceTree = "<group>"; };
 		50AD9048276DCB470011ECCB /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50AD904A276E104E0011ECCB /* TextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextStorage.h; sourceTree = "<group>"; };
+		50AD904C276E10660011ECCB /* TextStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TextStorage.cpp; sourceTree = "<group>"; };
 		50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperRegisters.cpp; sourceTree = "<group>"; };
 		50AE6EDE24D93EDD000AA367 /* AgnusRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusRegisters.cpp; sourceTree = "<group>"; };
 		50AE6EE024D9407F000AA367 /* BlitterRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterRegs.cpp; sourceTree = "<group>"; };
@@ -1360,6 +1364,8 @@
 				50B9C427260942D000A86C31 /* RetroShell.h */,
 				50B9C426260942D000A86C31 /* RetroShell.cpp */,
 				509C3667260B3ED0004F160A /* RetroShellCmds.cpp */,
+				50AD904A276E104E0011ECCB /* TextStorage.h */,
+				50AD904C276E10660011ECCB /* TextStorage.cpp */,
 				509C3659260B1766004F160A /* Command.h */,
 				509C3658260B1766004F160A /* Command.cpp */,
 				509C365D260B177E004F160A /* Interpreter.h */,
@@ -1604,6 +1610,7 @@
 				50D9CD9B236AF89A00503B4D /* DmaDebugDialog.xib in Resources */,
 				50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */,
 				50B14C2021EB8445002E32A6 /* drive_head.aiff in Resources */,
+				50AD904B276E104E0011ECCB /* TextStorage.h in Resources */,
 				500A4E9F24470713002A4DE1 /* disk_eject.aiff in Resources */,
 				508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */,
 				50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */,
@@ -1658,6 +1665,7 @@
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				50984B65263A9E9C00E37184 /* RegressionTester.cpp in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
+				50AD904D276E10660011ECCB /* TextStorage.cpp in Sources */,
 				50B9C428260942D000A86C31 /* RetroShell.cpp in Sources */,
 				50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */,
 				505C010A2577A8C000F9E05C /* FSDescriptors.cpp in Sources */,

@@ -12,35 +12,10 @@
 #include "SubComponent.h"
 #include "Interpreter.h"
 #include "RemoteServer.h"
+#include "TextStorage.h"
 
 #include <sstream>
 #include <fstream>
-
-class TextStorage {
-
-    std::vector<string> storage;
-    
-public:
-    
-    // Returns the contents of the whole storage as a single C string
-    const char *text();
-    
-    // Returns the number of stored lines
-    isize size() { return (isize)storage.size(); }
-    
-    // Returns a reference to the last line
-    string &back() { return storage.back(); }
-    
-    // Initializes the storage with a single empty line
-    void clear();
-    
-    // Appends a new line
-    void append(const string &line);
-    
-    // Operator overloads
-    string operator [] (isize i) const { return storage[i]; }
-    string& operator [] (isize i) { return storage[i]; }
-};
 
 class RetroShell : public SubComponent {
 

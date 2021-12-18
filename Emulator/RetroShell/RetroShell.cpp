@@ -12,41 +12,6 @@
 #include "Amiga.h"
 #include "Parser.h"
 
-const char *
-TextStorage::text()
-{
-    static string all;
-    
-    all = "";
-
-    if (auto numRows = storage.size()) {
-        
-        // Add all rows except the last one
-        for (usize i = 0; i < numRows - 1; i++) all += storage[i] + "\n";
-        
-        // Add the last row
-        all += storage[numRows - 1] + " ";
-    }
-    
-    return all.c_str();
-}
-
-void
-TextStorage::clear()
-{
-    storage.clear();
-    storage.push_back("");
-}
-
-void
-TextStorage::append(const string &line)
-{
-    storage.push_back(line);
- 
-    // Remove old entries if the storage grows too large
-    while (storage.size() > 512) storage.erase(storage.begin());
-}
-
 RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
 {
     subComponents = std::vector<AmigaComponent *> { &remoteServer };
@@ -119,7 +84,6 @@ RetroShell::operator<<(char value)
         storage.back() += value;
     }
     
-    // shorten();
     isDirty = true;
     return *this;
 }
