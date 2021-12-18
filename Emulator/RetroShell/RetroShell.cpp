@@ -12,6 +12,41 @@
 #include "Amiga.h"
 #include "Parser.h"
 
+const char *
+TextStorage::text()
+{
+    static string all;
+    
+    all = "";
+
+    if (auto numRows = storage.size()) {
+        
+        // Add all rows except the last one
+        for (usize i = 0; i < numRows - 1; i++) all += storage[i] + "\n";
+        
+        // Add the last row
+        all += storage[numRows - 1] + " ";
+    }
+    
+    return all.c_str();
+}
+
+void
+TextStorage::clear()
+{
+    storage.clear();
+    storage.push_back("");
+}
+
+void
+TextStorage::append(const string &line)
+{
+    storage.push_back(line);
+ 
+    // Remove old entries if the storage grows too large
+    while (storage.size() > 512) storage.erase(storage.begin());
+}
+
 RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
 {
     subComponents = std::vector<AmigaComponent *> { &remoteServer };
@@ -51,7 +86,7 @@ RetroShell::dumpToServer()
 {
     auto count = storage.size();
     
-    for (usize i = 0; i < count; i++) {
+    for (isize i = 0; i < count; i++) {
         
         remoteServer << storage[i];
         if (i < count - 1) remoteServer << "\n";
@@ -61,7 +96,7 @@ RetroShell::dumpToServer()
 isize
 RetroShell::cposRel()
 {
-    isize lineLength = (isize)lastLine().size();
+    isize lineLength = storage.back().size();
     
     return cpos >= lineLength ? 0 : lineLength - cpos;
 }
@@ -133,6 +168,7 @@ RetroShell::tab(isize hpos)
     isDirty = true;
 }
 
+/*
 void
 RetroShell::flush()
 {
@@ -141,35 +177,36 @@ RetroShell::flush()
     cposMin = (isize)storage.back().size();
     cpos = std::max(cpos, cposMin);
 }
+*/
 
 void
 RetroShell::newLine()
 {
-    flush();
-    
-    storage.push_back("");
-    remoteServer.send("\n");
+    remoteServer.send(storage.back() + "\n");
+    storage.append("");
     
     cpos = cposMin = 0;
-    shorten();
 }
 
 void
 RetroShell::printPrompt()
 {
     // Finish the current line if neccessary
-    if (!lastLine().empty()) *this << '\n';
+    if (!storage.back().empty()) *this << '\n';
 
     // Print the prompt
+    remoteServer.send(prompt);
     *this << prompt;
-    flush();
+
+    // Adjust the cursor position
+    cpos = cposMin = (isize)storage.back().size();
 }
 
 void
 RetroShell::clear()
 {
     storage.clear();
-    storage.push_back("");
+    storage.append("");
 }
 
 void
@@ -179,23 +216,14 @@ RetroShell::printHelp()
 }
 
 void
-RetroShell::shorten()
-{
-    while (storage.size() > 600) {
-        
-        storage.erase(storage.begin());
-    }
-}
-
-void
 RetroShell::pressUp()
 {
     if (ipos == (isize)input.size() - 1) {
-        lastInput() = lastLine().substr(cposMin);
+        lastInput() = storage.back().substr(cposMin);
     }
     
     if (ipos > 0) ipos--;
-    if (ipos < (isize)input.size()) lastLine() = prompt + input[ipos];
+    if (ipos < (isize)input.size()) storage.back() = prompt + input[ipos];
     pressEnd();
     tabPressed = false;
 }
@@ -204,7 +232,7 @@ void
 RetroShell::pressDown()
 {
     if (ipos + 1 < (isize)input.size()) ipos++;
-    if (ipos < (isize)input.size()) lastLine() = prompt + input[ipos];
+    if (ipos < (isize)input.size()) storage.back() = prompt + input[ipos];
     tabPressed = false;
 }
 
@@ -218,7 +246,7 @@ RetroShell::pressLeft()
 void
 RetroShell::pressRight()
 {
-    cpos = std::min(cpos + 1, (isize)lastLine().size());
+    cpos = std::min(cpos + 1, (isize)storage.back().size());
     tabPressed = false;
 }
 
@@ -232,7 +260,7 @@ RetroShell::pressHome()
 void
 RetroShell::pressEnd()
 {
-    cpos = (isize)lastLine().size();
+    cpos = (isize)storage.back().size();
     tabPressed = false;
 }
 
@@ -242,23 +270,23 @@ RetroShell::pressTab()
     if (tabPressed) {
         
         // TAB was pressed twice
-        string currentInput = lastLine();
+        string currentInput = storage.back();
         isize cposMinOld = cposMin;
                 
         // Print the instructions for this command
-        interpreter.help(lastLine().substr(cposMin));
+        interpreter.help(storage.back().substr(cposMin));
         
         // Repeat the old input string
         *this << currentInput;
         cposMin = cposMinOld;
-        cpos = (isize)lastLine().length();
+        cpos = (isize)storage.back().length();
         
     } else {
         
         // Auto-complete the typed in command
         string stripped = storage.back().substr(cposMin);
-        lastLine() = prompt + interpreter.autoComplete(stripped);
-        cpos = (isize)lastLine().length();
+        storage.back() = prompt + interpreter.autoComplete(stripped);
+        cpos = (isize)storage.back().length();
     }
     
     tabPressed = true;
@@ -268,7 +296,7 @@ void
 RetroShell::pressBackspace()
 {
     if (cpos > cposMin) {
-        lastLine().erase(lastLine().begin() + --cpos);
+        storage.back().erase(storage.back().begin() + --cpos);
     }
     tabPressed = false;
 }
@@ -276,8 +304,8 @@ RetroShell::pressBackspace()
 void
 RetroShell::pressDelete()
 {
-    if (cpos < (isize)lastLine().size()) {
-        lastLine().erase(lastLine().begin() + cpos);
+    if (cpos < (isize)storage.back().size()) {
+        storage.back().erase(storage.back().begin() + cpos);
     }
     tabPressed = false;
 }
@@ -286,7 +314,7 @@ void
 RetroShell::pressReturn()
 {
     // Get the last line without the prompt
-    string command = lastLine().substr(cposMin);
+    string command = storage.back().substr(cposMin);
     
     *this << '\n';
     
@@ -313,10 +341,10 @@ RetroShell::pressKey(char c)
 {    
     if (isprint(c)) {
                 
-        if (cpos < (isize)lastLine().size()) {
-            lastLine().insert(lastLine().begin() + cpos, c);
+        if (cpos < (isize)storage.back().size()) {
+            storage.back().insert(storage.back().begin() + cpos, c);
         } else {
-            lastLine() += c;
+            storage.back() += c;
         }
         cpos++;
         
@@ -325,6 +353,7 @@ RetroShell::pressKey(char c)
     }
 }
 
+/*
 const char *
 RetroShell::text()
 {
@@ -341,6 +370,7 @@ RetroShell::text()
     
     return all.c_str();
 }
+*/
 
 void
 RetroShell::exec(const string &command)

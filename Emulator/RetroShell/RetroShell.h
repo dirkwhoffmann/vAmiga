@@ -16,8 +16,36 @@
 #include <sstream>
 #include <fstream>
 
+class TextStorage {
+
+    std::vector<string> storage;
+    
+public:
+    
+    // Returns the contents of the whole storage as a single C string
+    const char *text();
+    
+    // Returns the number of stored lines
+    isize size() { return (isize)storage.size(); }
+    
+    // Returns a reference to the last line
+    string &back() { return storage.back(); }
+    
+    // Initializes the storage with a single empty line
+    void clear();
+    
+    // Appends a new line
+    void append(const string &line);
+    
+    // Operator overloads
+    string operator [] (isize i) const { return storage[i]; }
+    string& operator [] (isize i) { return storage[i]; }
+};
+
 class RetroShell : public SubComponent {
 
+    friend class RemoteServer;
+    
     // Interpreter for commands typed into the console window
     Interpreter interpreter;
 
@@ -34,9 +62,8 @@ public:
 private:
     
     // The text storage
-    std::vector<string> storage;
-    string all;
-    
+    TextStorage storage;
+ 
     // The input history buffer
     std::vector<string> input;
 
@@ -139,10 +166,10 @@ public:
 
 public:
     
-    const char *text();
+    const char *text() { return storage.text(); }
     
     // Returns a reference to the text storage
-    const std::vector<string> &getStorage() { return storage; }
+    // const std::vector<string> &getStorage() { return storage; }
     
     // Returns the cursor position (relative to the line end)
     isize cposAbs() { return cpos; }
@@ -158,14 +185,14 @@ public:
     RetroShell &operator<<(long value);
     RetroShell &operator<<(std::stringstream &stream);
 
-    void flush();
+    // void flush();
     void newLine();
     void printPrompt();
 
 private:
 
     // Returns a reference to the last line in the text storage
-    string &lastLine() { return storage.back(); }
+    // string &lastLine() { return storage.back(); }
     
     // Returns a reference to the last line in the input history buffer
     string &lastInput() { return input.back(); }
@@ -175,9 +202,6 @@ private:
     
     // Prints a help line
     void printHelp();
-    
-    // Shortens the text storage if it grows too large
-    void shorten();
     
     // Clears the current line
     void clearLine() { *this << '\r'; }

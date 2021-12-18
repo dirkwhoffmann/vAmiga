@@ -143,7 +143,8 @@ RemoteServer::receive()
 
     if (config.verbose) {
         
-        retroShell << packet << '\n';
+        retroShell.storage.back() += packet;
+        retroShell.storage.append("");
     }
      
     try { retroShell.exec(packet); } catch (...) { }
