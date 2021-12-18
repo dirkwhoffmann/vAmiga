@@ -315,24 +315,8 @@ RetroShell::pressReturn()
 {
     // Get the last line without the prompt
     string command = storage.back().substr(cposMin);
-    
     *this << '\n';
-    
-    // Print help message if there was no input
-    if (command.empty()) {
-        printHelp();
-        printPrompt();
-        return;
-    }
-    
-    // Add command to the command history buffer
-    input[input.size() - 1] = command;
-    input.push_back("");
-    ipos = (isize)input.size() - 1;
-    
-    // Execute the command
-    try { exec(command); } catch (...) { };
-    printPrompt();
+    execUserCommand(command);
     tabPressed = false;
 }
 
@@ -353,24 +337,25 @@ RetroShell::pressKey(char c)
     }
 }
 
-/*
-const char *
-RetroShell::text()
+void
+RetroShell::execUserCommand(const string &command)
 {
-    all = "";
-    
-    if (auto numRows = storage.size()) {
-        
-        // Add all rows except the last one
-        for (usize i = 0; i < numRows - 1; i++) all += storage[i] + "\n";
-        
-        // Add the last row
-        all += storage[numRows - 1] + " ";        
+    // Print help message if there was no input
+    if (command.empty()) {
+        printHelp();
+        printPrompt();
+        return;
     }
     
-    return all.c_str();
+    // Add command to the command history buffer
+    input[input.size() - 1] = command;
+    input.push_back("");
+    ipos = (isize)input.size() - 1;
+    
+    // Execute the command
+    try { exec(command); } catch (...) { };
+    printPrompt();
 }
-*/
 
 void
 RetroShell::exec(const string &command)
@@ -425,8 +410,6 @@ RetroShell::continueScript()
     string command;
     while(std::getline(script, command)) {
             
-        // msg("%s\n", command.c_str());
-        
         // Print the command
         printPrompt();
         *this << command << '\n';

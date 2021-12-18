@@ -147,7 +147,7 @@ RemoteServer::receive()
         retroShell.storage.append("");
     }
      
-    try { retroShell.exec(packet); } catch (...) { }
+    try { retroShell.execUserCommand(packet); } catch (...) { }
 
     debug(SRV_DEBUG, "R: %s\n", packet.c_str());
     msgQueue.put(MSG_SRV_RECEIVE);

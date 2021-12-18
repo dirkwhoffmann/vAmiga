@@ -167,10 +167,7 @@ public:
 public:
     
     const char *text() { return storage.text(); }
-    
-    // Returns a reference to the text storage
-    // const std::vector<string> &getStorage() { return storage; }
-    
+        
     // Returns the cursor position (relative to the line end)
     isize cposAbs() { return cpos; }
     isize cposRel();
@@ -190,9 +187,6 @@ public:
     void printPrompt();
 
 private:
-
-    // Returns a reference to the last line in the text storage
-    // string &lastLine() { return storage.back(); }
     
     // Returns a reference to the last line in the input history buffer
     string &lastInput() { return input.back(); }
@@ -213,7 +207,10 @@ private:
     
 public:
     
-    // Executes a user command
+    // Main entry point for executing commands that were typed in by the user
+    void execUserCommand(const string &command);
+
+    // Executes a command
     void exec(const string &command) throws;
     
     // Executes a user script
