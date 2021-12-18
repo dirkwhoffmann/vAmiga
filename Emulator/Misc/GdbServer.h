@@ -17,6 +17,9 @@ class GdbServer : public SubComponent {
     // The most recently processed command string
     string latestCmd;
     
+    // Indicates whether received packets should be acknowledged
+    bool ackMode = true;
+
     
     //
     // Initializing
@@ -26,6 +29,9 @@ public:
     
     GdbServer(Amiga& ref);
     ~GdbServer();
+
+    // Tells the server that a new session has been started
+    void startSession();
 
     
     //
@@ -51,23 +57,36 @@ private:
     isize _load(const u8 *buffer) override {return 0; }
     isize _save(u8 *buffer) override { return 0; }
 
+    
+    //
+    // Managing checksums
+    //
+
+    // Computes a checksum for a given string
+    string computeChecksum(const string &s);
+
+    // Verifies the checksum for a given string
+    bool verifyChecksum(const string &s, const string &chk);
+
         
     //
-    // Processing packets
+    // Processing packets (GdbServerCmds.cpp)
     //
 
 public:
     
-    string process(string cmd) throws;
-    
+    // Processes a packet in the format used by GDB
+    string process(string payload) throws;
+
+    // Processes a checksum-free packet with the first letter stripped off
+    string process(char letter, string payload) throws;
+
 private:
     
-    string process(char cmd, string arg) throws;
-    template <char cmd> string process(string arg) throws;
-    template <GdbCmd cmd> string processCmd(string arg) throws;
-
-    string checksum(const string &s);
-    std::vector<string> split(const string &s, char delimiter);
+    string processCtrlC();
+    
+    template <char letter> string process(string arg) throws;
+    template <char letter, GdbCmd cmd> string process(string arg) throws;
     
     
     //

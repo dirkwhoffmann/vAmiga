@@ -1232,11 +1232,7 @@ RetroShell::exec <Token::remote, Token::set, Token::verbose> (Arguments &argv, l
 template <> void
 RetroShell::exec <Token::remote, Token::start> (Arguments& argv, long param)
 {
-    if (argv.empty()) {
-        remoteServer.start();
-    } else {
-        remoteServer.start(argv[0]);
-    }
+    remoteServer.start();
 }
 
 template <> void

@@ -1006,7 +1006,6 @@ Interpreter::registerInstructions()
     root.add({"remote", "start"},
              "command", "Starts the debug server",
              &RetroShell::exec <Token::remote, Token::start>, 0);
-    root.seek("remote")->seek("start")->maxArgs = 1;
 
     root.add({"remote", "stop"},
              "command", "Stops the debug server",

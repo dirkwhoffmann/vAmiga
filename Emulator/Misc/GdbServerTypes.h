@@ -14,14 +14,15 @@
 
 enum class GdbCmd
 {
-    qSupported,
-    qSymbol,
-    qOffset,
-    qTStatus,
-    qTfV,
-    qTfP,
-    qfThreadInfo,
-    qsThreadInfo,
-    qAttached,
-    qC
+    CtrlC,
+    Supported,
+    Symbol,
+    Offset,
+    TStatus,
+    TfV,
+    TfP,
+    fThreadInfo,
+    sThreadInfo,
+    Attached,
+    C
 };

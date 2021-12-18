@@ -100,33 +100,33 @@ RemoteServer::setConfigItem(Option option, i64 value)
 }
 
 void
-RemoteServer::start(const string name)
+RemoteServer::start()
 {
-    debug(SRV_DEBUG, "start\n");
+    debug(SRV_DEBUG, "Starting remote server\n");
         
     // Only proceed if the server is not running
     if (listening) throw VAError(ERROR_GDB_SERVER_RUNNING);
-    
-    debugProcess = name;
-    
+        
     // Make sure that we continue with a terminated server thread
     if (serverThread.joinable()) serverThread.join();
     
     // Spawn a new thread
     serverThread = std::thread(&RemoteServer::main, this);
+    
+    // Send a welcome message
+    send("vAmiga RemoteServer - Connection established");
 }
 
 void
 RemoteServer::stop()
 {
-    debug(SRV_DEBUG, "stop\n");
+    debug(SRV_DEBUG, "Stopping remote server\n");
  
     // Only proceed if an open connection exists
     if (!listening) throw VAError(ERROR_GDB_SERVER_NOT_RUNNING);
-
-    listening = false;
         
     // Trigger an exception inside the server thread
+    listening = false;
     connection.close();
     listener.close();
 
@@ -143,8 +143,6 @@ RemoteServer::receive()
 
     if (config.verbose) {
         
-        printf("receive: %s size: %d last: %d %d\n", packet.c_str(), (int)packet.size(), packet[packet.size() - 2], packet.back());
-        retroShell.printPrompt();
         retroShell << packet << '\n';
     }
      
@@ -159,42 +157,23 @@ RemoteServer::receive()
 void
 RemoteServer::send(const string &cmd)
 {
-    /*
-    string packet = "$";
-                
-    packet += cmd;
-    packet += "#";
-    packet += checksum(cmd);
-    */
-    string packet = cmd + "\n";
-    
     if (isListening()) {
-        
+ 
+        string packet = cmd + "\n";
         connection.send(packet);
 
         debug(SRV_DEBUG, "T: %s\n", packet.c_str());
         msgQueue.put(MSG_SRV_SEND);
     }
-    
-    /*
-    if (config.verbose) {
-        
-        retroShell << "T: " << packet << '\n';
-    }
-    */
 }
 
 void
 RemoteServer::main()
 {
-    debug(SRV_DEBUG, "main\n");
-
+    debug(SRV_DEBUG, "Entering remote server thread\n");
     msgQueue.put(MSG_SRV_START);
     
     listening = true;
-    ackMode = true;
-    amiga.pause();
-    amiga.debugOn(1);
     
     try {
         
@@ -203,6 +182,12 @@ RemoteServer::main()
         
         // Wait for a client to connect
         connection = listener.accept();
+        connected = true;
+        
+        // Send a welcome message
+        send("Welcome to vAmiga - Successfully connected to RetroShell\n");
+        send("Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de");
+        send("Licensed under the GNU General Public License v3");
         
         debug(SRV_DEBUG, "Entering main loop\n");
 
@@ -224,34 +209,10 @@ RemoteServer::main()
     }
     
     listening = false;
-    amiga.debugOff(1);
+    connected = false;
     connection.close();
     listener.close();
     
+    debug(SRV_DEBUG, "Exiting remote server thread\n");
     msgQueue.put(MSG_SRV_STOP);
-    
-    debug(SRV_DEBUG, "Leaving main\n");
-}
-
-string
-RemoteServer::checksum(const string &s)
-{
-    uint8_t chk = 0;
-    for(auto &c : s) chk += (uint8_t)c;
-
-    return util::hexstr <2> (chk);
-}
-
-std::vector<string>
-RemoteServer::split(const string &s, char delimiter)
-{
-    std::stringstream ss(s);
-    std::vector<std::string> result;
-    string substr;
-    
-    while(std::getline(ss, substr, delimiter)) {
-        result.push_back(substr);
-    }
-    
-    return result;
 }

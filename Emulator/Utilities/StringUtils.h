@@ -14,6 +14,13 @@
 namespace util {
 
 //
+// Parsing strings
+//
+
+bool parseHex(const string &s, isize *result);
+
+
+//
 // Changing capitalization
 //
 
@@ -22,9 +29,9 @@ string uppercased(const string& s);
 
 
 //
-// Parsing strings
+// Splitting string
 //
 
-bool parseHex(const string &s, isize *result);
+std::vector<string> split(const string &s, char delimiter);
 
 }

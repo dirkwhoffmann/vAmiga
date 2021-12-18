@@ -16,25 +16,22 @@
 
 class RemoteServer : public SubComponent {
     
-    // Current configuration
+    // The current configuration
     RemoteServerConfig config = {};
 
     // The server thread
     std::thread serverThread;
 
-    // Indicates if the server is currently running
+    // Indicates if the server is running
     bool listening = false;
-
-    // Indicates whether received packets should be acknowledged
-    bool ackMode = false;
     
+    // Indicates if a client is connected
+    bool connected = false;
+
     // The port listener and it's associated connection
     PortListener listener;
     Socket connection;
-            
-    // Name of the process to be debugged
-    string debugProcess;
-    
+                
     // The most recently processed command string
     string latestCmd;
     
@@ -47,7 +44,7 @@ public:
     
     RemoteServer(Amiga& ref);
     ~RemoteServer();
-
+    
     
     //
     // Methods from AmigaObject
@@ -92,7 +89,8 @@ public:
     //
     
 private:
-    
+
+    // The main thread function
     void main();
 
     
@@ -102,10 +100,11 @@ private:
     
 public:
     
-    void start(const string process = "") throws;
+    void start() throws;
     void stop();
     
     bool isListening() { return listening; }
+    bool isConnected() { return connected; }
     
     
     //
@@ -114,9 +113,4 @@ public:
     
     string receive() throws;
     void send(const string &packet) throws;
-    
-    
-
-    string checksum(const string &s);
-    std::vector<string> split(const string &s, char delimiter);
 };

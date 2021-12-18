@@ -33,7 +33,6 @@ Command::add(const std::vector<string> tokens,
     d.action = action;
     d.minArgs = numArgs;
     d.maxArgs = numArgs;
-    // d.param = param;
     
     // Register instruction
     cmd->args.push_back(d);

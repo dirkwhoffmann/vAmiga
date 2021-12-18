@@ -8,6 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "StringUtils.h"
+#include <sstream>
+#include <vector>
 
 namespace util {
 
@@ -42,6 +44,20 @@ uppercased(const string& s)
 {
     string result;
     for (auto c : s) { result += (char)std::toupper(c); }
+    return result;
+}
+
+std::vector<string>
+split(const string &s, char delimiter)
+{
+    std::stringstream ss(s);
+    std::vector<std::string> result;
+    string substr;
+    
+    while(std::getline(ss, substr, delimiter)) {
+        result.push_back(substr);
+    }
+    
     return result;
 }
 
