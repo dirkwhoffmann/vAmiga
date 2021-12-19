@@ -88,13 +88,7 @@ public:
 public:
     
     RetroShell(Amiga& ref);
-        
-    // Returns the welcome message
-    std::stringstream welcome() const;
-    
-    // Dumps the current text storage to the remote server
-    void dumpToServer();
-    
+            
     
     //
     // Methods from AmigaObject
@@ -138,18 +132,18 @@ public:
     RetroShell &operator<<(int value);
     RetroShell &operator<<(long value);
     RetroShell &operator<<(std::stringstream &stream);
-
+        
 private:
     
+    // Prints the command prompt
+    void printPrompt() { *this << prompt; }
+
     // Clears the console window
     void clear();
     
     // Prints a help line
     void printHelp();
-    
-    // Clears the current line
-    void clearLine() { *this << '\r'; }
-    
+        
     
     //
     // Managing user input

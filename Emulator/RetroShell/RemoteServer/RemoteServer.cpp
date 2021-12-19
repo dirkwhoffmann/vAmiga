@@ -143,15 +143,12 @@ RemoteServer::receive()
 
     if (config.verbose) {
         
-        // Remove the input line as it will be replicated by RetroShell
-        clearLine();
+        // Remove the previous line as it will be replicated by RetroShell
+        send("\033[A\33[2K\r");
 
         // Pass the packet as user input to RetroShell
         retroShell.press(packet);
-        retroShell.pressReturn();
-        
-        // Print the prompt
-        send(retroShell.prompt);
+        retroShell.pressReturn();        
     }
      
     debug(SRV_DEBUG, "R: %s\n", packet.c_str());
@@ -176,7 +173,24 @@ RemoteServer::send(const string &cmd)
 RemoteServer&
 RemoteServer::operator<<(char value)
 {
-    send(string(1, value));
+    switch (value) {
+                        
+        case '\n':
+            
+            send("\n");
+            break;
+            
+        case '\r':
+
+            send("\33[2K\r");
+            break;
+            
+        default:
+            
+            if (isprint(value)) send(string(1, value));
+            break;
+    }
+    
     return *this;
 }
 
@@ -228,11 +242,10 @@ RemoteServer::main()
         connection = listener.accept();
         connected = true;
         
-        // Update the server with the current text storage
-        retroShell.dumpToServer();
+        // Print the startup message and the input prompt
+        welcome();
+        *this << retroShell.prompt;
         
-        debug(SRV_DEBUG, "Entering main loop\n");
-
         while (1) {
             
             auto cmd = receive();
@@ -257,4 +270,26 @@ RemoteServer::main()
     
     debug(SRV_DEBUG, "Exiting remote server thread\n");
     msgQueue.put(MSG_SRV_STOP);
+}
+
+void
+RemoteServer::welcome()
+{
+    *this << "vAmiga Remote Server ";
+    *this << std::to_string(VER_MAJOR) << '.';
+    *this << std::to_string(VER_MINOR) << '.';
+    *this << std::to_string(VER_SUBMINOR);
+    *this << " (" << __DATE__ << " " << __TIME__ << ")" << '\n';
+    *this << '\n';
+    *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
+    *this << "Licensed under the GNU General Public License v3" << '\n';
+    *this << '\n';
+    printHelp();
+    *this << '\n';
+}
+
+void
+RemoteServer::printHelp()
+{
+    remoteServer << "Type 'help' for help." << '\n';
 }

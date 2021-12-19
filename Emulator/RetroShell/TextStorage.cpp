@@ -86,12 +86,24 @@ TextStorage::operator<<(const string &s)
     return *this;
 }
 
-/*
 void
-TextStorage::tab(isize pos)
+TextStorage::welcome()
 {
-    auto &back = storage.back();
-    isize delta = pos - back.size();
-    for (isize i = 0; i < delta; i++) back += " ";
+    *this << "vAmiga Retro Shell ";
+    *this << std::to_string(VER_MAJOR) << '.';
+    *this << std::to_string(VER_MINOR) << '.';
+    *this << std::to_string(VER_SUBMINOR);
+    *this << " (" << __DATE__ << " " << __TIME__ << ")" << '\n';
+    *this << '\n';
+    *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
+    *this << "Licensed under the GNU General Public License v3" << '\n';
+    *this << '\n';
+    printHelp();
+    *this << '\n';
 }
-*/
+
+void
+TextStorage::printHelp()
+{
+    *this << "Type 'help' or press 'TAB' twice for help." << '\n';
+}

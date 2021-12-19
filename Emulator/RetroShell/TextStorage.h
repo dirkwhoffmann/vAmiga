@@ -59,7 +59,10 @@ public:
     // Appends a single character or a string
     TextStorage &operator<<(char c);
     TextStorage &operator<<(const string &s);
-
-    // Appends spaces until a certain position is reached
-    // void tab(isize pos);
+    
+    // Prints the welcome message
+    void welcome();
+    
+    // Prints the help line
+    void printHelp();
 };

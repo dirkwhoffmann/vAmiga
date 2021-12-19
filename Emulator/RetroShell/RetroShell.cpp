@@ -22,39 +22,9 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
     // Initialize the input buffer
     history.push_back( { "", 0 } );
     
-    // Print the startup message
-    auto ss = welcome();
-    *this << ss;
-    printHelp();
-    *this << '\n';
-}
-
-std::stringstream
-RetroShell::welcome() const
-{
-    std::stringstream ss;
-    
-    ss << "vAmiga " << VER_MAJOR << '.' << VER_MINOR << '.' << VER_SUBMINOR;
-    ss << " (" << __DATE__ << " " << __TIME__ << ")" << '\n';
-    ss << '\n';
-    ss << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
-    ss << "Licensed under the GNU General Public License v3" << '\n';
-    ss << '\n';
-    
-    return ss;
-}
-
-void
-RetroShell::dumpToServer()
-{
-    auto count = storage.size();
-    
-    for (isize i = 0; i < count; i++) {
-        
-        remoteServer << storage[i];
-        if (i < count - 1) remoteServer << "\n";
-    }
-    remoteServer << prompt;
+    // Print the startup message and the input prompt
+    storage.welcome();
+    *this << prompt;
 }
 
 RetroShell&
@@ -106,7 +76,7 @@ RetroShell::text()
     storage.text(all);
         
     // Add the input line
-    all += prompt + input + " ";
+    all += input + " ";
     
     return all.c_str();
 }
@@ -133,8 +103,8 @@ RetroShell::clear()
 void
 RetroShell::printHelp()
 {
-    storage << "Type 'help' or press 'TAB' twice for help." << '\n';
-    remoteServer << "Type 'help' for help." << '\n';
+    storage.printHelp();
+    remoteServer.printHelp();
 }
 
 void
@@ -244,10 +214,13 @@ RetroShell::pressReturn()
 {
     auto cmd = input;
     
-    remoteServer.clearLine();
-    *this << prompt << input << '\n';
+    // Add the input line to the text storage
+    *this << '\r' << prompt << input << '\n';
+
+    // Clear the user input
     press('\r');
     
+    // Execute the command
     execUserCommand(cmd);
 }
 
@@ -296,19 +269,22 @@ RetroShell::cursorRel()
 void
 RetroShell::execUserCommand(const string &command)
 {
-    // Print help message if there was no input
-    if (command.empty()) {
+    if (!command.empty()) {
+        
+        // Add the command to the history buffer
+        history.back() = { command, (isize)command.size() };
+        history.push_back( { "", 0 } );
+        ipos = (isize)history.size() - 1;
+        
+        // Execute the command
+        try { exec(command); } catch (...) { };
+        
+    } else {
+        
         printHelp();
-        return;
     }
     
-    // Add command to the command history buffer
-    history.back() = { command, (isize)command.size() };
-    history.push_back( { "", 0 } );
-    ipos = (isize)history.size() - 1;
-    
-    // Execute the command
-    try { exec(command); } catch (...) { };
+    printPrompt();
 }
 
 void
