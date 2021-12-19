@@ -34,6 +34,12 @@ RetroShell::exec <Token::close> (Arguments &argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::help> (Arguments &argv, long param)
+{
+    retroShell.help(argv.empty() ? "" : argv.front());
+}
+
+template <> void
 RetroShell::exec <Token::easteregg> (Arguments& argv, long param)
 {
     retroShell << "GREETINGS PROFESSOR HOFFMANN." << '\n' << '\n';

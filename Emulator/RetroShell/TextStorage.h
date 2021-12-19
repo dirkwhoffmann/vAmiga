@@ -49,13 +49,17 @@ public:
     // Initializes the storage with a single empty line
     void clear();
     
+private:
+    
     // Appends a new line
     void append(const string &line);
 
+public:
+    
     // Appends a single character or a string
     TextStorage &operator<<(char c);
     TextStorage &operator<<(const string &s);
 
     // Appends spaces until a certain position is reached
-    void tab(isize pos);
+    // void tab(isize pos);
 };

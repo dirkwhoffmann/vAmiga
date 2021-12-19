@@ -28,6 +28,12 @@ Interpreter::registerInstructions()
              &RetroShell::exec <Token::close>);
     root.seek("close")->hidden = true;
 
+    root.add({"help"},
+             "command", "Prints usage information",
+             &RetroShell::exec <Token::help>);
+    root.seek("help")->hidden = true;
+    root.seek("help")->maxArgs = 1;
+
     root.add({"joshua"},
              "command", "",
              &RetroShell::exec <Token::easteregg>);

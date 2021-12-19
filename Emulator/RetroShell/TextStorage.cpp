@@ -86,6 +86,7 @@ TextStorage::operator<<(const string &s)
     return *this;
 }
 
+/*
 void
 TextStorage::tab(isize pos)
 {
@@ -93,3 +94,4 @@ TextStorage::tab(isize pos)
     isize delta = pos - back.size();
     for (isize i = 0; i < delta; i++) back += " ";
 }
+*/

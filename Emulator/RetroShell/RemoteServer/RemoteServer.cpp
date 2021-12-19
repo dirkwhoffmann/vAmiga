@@ -143,12 +143,17 @@ RemoteServer::receive()
 
     if (config.verbose) {
         
-        retroShell << packet; 
-        retroShell.storage.append("");
+        // Remove the input line as it will be replicated by RetroShell
+        clearLine();
+
+        // Pass the packet as user input to RetroShell
+        retroShell.press(packet);
+        retroShell.pressReturn();
+        
+        // Print the prompt
+        send(retroShell.prompt);
     }
      
-    try { retroShell.execUserCommand(packet); } catch (...) { }
-
     debug(SRV_DEBUG, "R: %s\n", packet.c_str());
     msgQueue.put(MSG_SRV_RECEIVE);
     
@@ -163,7 +168,7 @@ RemoteServer::send(const string &cmd)
         string packet = cmd; //  + "\n";
         connection.send(packet);
 
-        debug(SRV_DEBUG, "T: %s\n", packet.c_str());
+        debug(SRV_DEBUG, "T: '%s'\n", packet.c_str());
         msgQueue.put(MSG_SRV_SEND);
     }
 }

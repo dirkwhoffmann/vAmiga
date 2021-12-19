@@ -54,12 +54,14 @@ RetroShell::dumpToServer()
         remoteServer << storage[i];
         if (i < count - 1) remoteServer << "\n";
     }
+    remoteServer << prompt;
 }
 
 RetroShell&
 RetroShell::operator<<(char value)
 {
     storage << value;
+    remoteServer << value;
     return *this;
 }
 
@@ -67,6 +69,7 @@ RetroShell&
 RetroShell::operator<<(const string& value)
 {
     storage << value;
+    remoteServer << value;
     return *this;
 }
 
@@ -109,9 +112,16 @@ RetroShell::text()
 }
 
 void
-RetroShell::tab(isize hpos)
+RetroShell::tab(isize pos)
 {
-    storage.tab(hpos);
+    auto count = pos - (isize)storage[storage.size() - 1].size();
+
+    if (count > 0) {
+        
+        std::string fill(count, ' ');
+        storage << fill;
+        remoteServer << fill;
+    }
 }
 
 void
@@ -123,7 +133,8 @@ RetroShell::clear()
 void
 RetroShell::printHelp()
 {
-    *this << "Press 'TAB' twice for help." << '\n';
+    storage << "Type 'help' or press 'TAB' twice for help." << '\n';
+    remoteServer << "Type 'help' for help." << '\n';
 }
 
 void
@@ -196,7 +207,7 @@ RetroShell::pressTab()
     if (tabPressed) {
                 
         // TAB was pressed twice
-        interpreter.help(input);
+        help(input);
 
     } else {
         
@@ -233,7 +244,8 @@ RetroShell::pressReturn()
 {
     auto cmd = input;
     
-    storage << prompt << input << '\n';
+    remoteServer.clearLine();
+    *this << prompt << input << '\n';
     press('\r');
     
     execUserCommand(cmd);
@@ -423,6 +435,12 @@ RetroShell::describe(const std::exception &e)
         *this << '\n';
         return;
     }
+}
+
+void
+RetroShell::help(const string &command)
+{
+    interpreter.help(command);
 }
 
 void

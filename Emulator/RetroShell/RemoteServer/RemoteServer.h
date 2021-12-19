@@ -119,4 +119,7 @@ public:
     RemoteServer &operator<<(int value);
     RemoteServer &operator<<(long value);
     RemoteServer &operator<<(std::stringstream &stream);
+    
+    // Clears the current line in the remote terminal
+    void clearLine() { send("\033[A\33[2K\r"); }
 };

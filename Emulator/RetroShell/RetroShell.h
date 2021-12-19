@@ -130,7 +130,7 @@ public:
     const char *text();
         
     // Moves the cursor forward to a certain column
-    void tab(isize hpos);
+    void tab(isize pos);
 
     // Prints a message
     RetroShell &operator<<(char value);
@@ -174,7 +174,7 @@ public:
     
     // Returns the cursor position relative to the line end
     isize cursorRel();
-
+    
 
     //
     // Working with the history buffer
@@ -208,6 +208,9 @@ public:
     // Prints a textual description of an error in the console
     void describe(const std::exception &exception);
 
+    // Prints help messages for a given command string
+    void help(const string &command);
+    
     
     //
     // Command handlers
