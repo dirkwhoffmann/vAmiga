@@ -16,66 +16,46 @@
 
 class TextStorage {
 
-    // Maximum number if lines
+    // Maximum number of stored lines
     static constexpr usize capacity = 512;
     
-    // Main storage (not editable)
+    // The stored lines
     std::vector<string> storage;
-    
-    // Input line (editable)
-    string input;
-    
-    // Input prompt
-    string prompt = "vAmiga% ";
-    
+        
     
     //
-    // Working with the text storage
+    // Reading
     //
-
+    
 public:
-
-    // Returns the contents of the whole storage as a single C string
-    const char *text();
     
     // Returns the number of stored lines
-    isize size() { return (isize)storage.size(); }
+    isize size() const { return (isize)storage.size(); }
+
+    // Returns a single line
+    string operator [] (isize i) const;
+    string& operator [] (isize i);
+
+    // Returns the whole storage contents
+    void text(string &all);
+            
     
-    // Returns a reference to the last line
-    [[deprecated]] string &back() { return storage.back(); }
+    //
+    // Writing
+    //
+    
+public:
     
     // Initializes the storage with a single empty line
     void clear();
     
     // Appends a new line
     void append(const string &line);
-    
-    // Operator overloads
-    string operator [] (isize i) const { return storage[i]; }
-    string& operator [] (isize i) { return storage[i]; }
 
-    
-    //
-    // Working with the input line
-    //
-    
-public:
+    // Appends a single character or a string
+    TextStorage &operator<<(char c);
+    TextStorage &operator<<(const string &s);
 
-    // Getter and setter
-    string getInput() { return input; }
-    void setInput(const string &str) { input = str; }
-    isize inputLength() { return (isize)input.length(); }
-    
-    // Appends a single character or a string at the end
-    void add(char c);
-    void add(const string &str);
-    
-    // Inserts a character at a certain position
-    void insert(isize pos, char c);
-    
-    // Removes a character at a certain position
-    void remove(isize pos);
-    
-    //
+    // Appends spaces until a certain position is reached
     void tab(isize pos);
 };

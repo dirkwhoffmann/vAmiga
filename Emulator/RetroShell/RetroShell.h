@@ -20,14 +20,16 @@
 class RetroShell : public SubComponent {
 
     friend class RemoteServer;
-    
-    // Interpreter for commands typed into the console window
-    Interpreter interpreter;
 
 public:
 
     // Server for managing remote connections
     RemoteServer remoteServer = RemoteServer(amiga);
+
+private:
+    
+    // Interpreter for commands typed into the console window
+    Interpreter interpreter;
 
     
     //
@@ -39,17 +41,8 @@ private:
     // The text storage
     TextStorage storage;
  
-    // The input history buffer
-    std::vector<string> input;
-
-    // Input prompt
-    string prompt = "vAmiga% ";
-    
-    // The current cursor position
-    isize cpos = 0;
-
-    // The minimum cursor position in this row
-    isize cposMin = 0;
+    // History buffer storing old input strings and cursor positions
+    std::vector<std::pair<string,isize>> history;
     
     // The currently active input string
     isize ipos = 0;
@@ -61,13 +54,24 @@ public:
     
     // Indicates if TAB was the most recently pressed key
     bool tabPressed = false;
+        
     
-    // Indicates whether the shell needs to be redrawn (DEPRECATED)
-    bool isDirty = false;
+    //
+    // User input
+    //
+    
+    // Input line
+    string input;
+    
+    // Input prompt
+    string prompt = "vAmiga% ";
+
+    // Cursor position
+    isize cursor = 0;
     
     
     //
-    // Script processing
+    // Scripts
     //
     
     // The currently processed script
@@ -117,36 +121,14 @@ private:
 
 
     //
-    // Managing user input
-    //
-
-public:
-
-    void pressUp();
-    void pressDown();
-    void pressLeft();
-    void pressRight();
-    void pressHome();
-    void pressEnd();
-    void pressTab();
-    void pressBackspace();
-    void pressDelete();
-    void pressReturn();
-    void pressKey(char c);
-
-
-    //
     // Working with the text storage
     //
 
 public:
     
-    const char *text() { return storage.text(); }
+    // Returns the contents of the whole storage as a single C string
+    const char *text();
         
-    // Returns the cursor position (relative to the line end)
-    isize cposAbs() { return cpos; }
-    isize cposRel();
-
     // Moves the cursor forward to a certain column
     void tab(isize hpos);
 
@@ -157,15 +139,8 @@ public:
     RetroShell &operator<<(long value);
     RetroShell &operator<<(std::stringstream &stream);
 
-    // void flush();
-    void newLine();
-    void printPrompt();
-
 private:
     
-    // Returns a reference to the last line in the input history buffer
-    string &lastInput() { return input.back(); }
-
     // Clears the console window
     void clear();
     
@@ -175,6 +150,41 @@ private:
     // Clears the current line
     void clearLine() { *this << '\r'; }
     
+    
+    //
+    // Managing user input
+    //
+
+public:
+
+    isize inputLength() { return (isize)input.length(); }
+    
+    void pressUp();
+    void pressDown();
+    void pressLeft();
+    void pressRight();
+    void pressHome();
+    void pressEnd();
+    void pressTab();
+    void pressBackspace();
+    void pressDelete();
+    void pressReturn();
+    void press(char c);
+    void press(const string &s);
+    
+    // Returns the cursor position relative to the line end
+    isize cursorRel();
+
+
+    //
+    // Working with the history buffer
+    //
+
+public:
+    
+    isize historyLength() { return (isize)history.size(); }
+
+        
     
     //
     // Executing commands

@@ -38,7 +38,7 @@ enum_long(MSG_TYPE)
     MSG_POWER_LED_DIM,
     MSG_POWER_LED_OFF,
 
-    // Scripting
+    // Retro shell
     MSG_SCRIPT_DONE,
     MSG_SCRIPT_PAUSE,
     MSG_SCRIPT_ABORT,
@@ -99,7 +99,7 @@ enum_long(MSG_TYPE)
     MSG_DMA_DEBUG_ON,
     MSG_DMA_DEBUG_OFF,
 
-    // GDB Debugging
+    // Remote server
     MSG_SRV_START,
     MSG_SRV_STOP,
     MSG_SRV_RECEIVE,

@@ -64,7 +64,7 @@ Interpreter::autoComplete(const string& userInput)
     for (const auto &it : tokens) { result += (result == "" ? "" : " ") + it; }
 
     // Add a space if the command has been fully completed
-    if (root.seek(tokens) != nullptr) { result += " "; }
+    if (!tokens.empty() && root.seek(tokens)) result += " ";
     
     return result;
 }
@@ -88,6 +88,9 @@ Interpreter::exec(const string& userInput, bool verbose)
     // Split the command string
     Arguments tokens = split(userInput);
         
+    // Skip empty lines
+    if (tokens.empty()) return;
+    
     // Remove the 'try' keyword
     if (tokens.front() == "try") tokens.erase(tokens.begin());
     

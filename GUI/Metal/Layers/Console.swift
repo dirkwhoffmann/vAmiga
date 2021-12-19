@@ -56,7 +56,7 @@ class Console: Layer {
                 
                 let cursorColor = NSColor(r: 255, g: 255, b: 255, a: 128)
                 let monoFont = NSFont.monospaced(ofSize: 14, weight: .medium)
-                let cpos = amiga.retroShell.cposRel
+                let cpos = amiga.retroShell.cursorRel - 1
                 
                 let attr = [
                     NSAttributedString.Key.foregroundColor: NSColor.white,
@@ -65,7 +65,7 @@ class Console: Layer {
                 let string = NSMutableAttributedString(string: text, attributes: attr)
                 string.addAttribute(.backgroundColor,
                                     value: cursorColor,
-                                    range: NSRange(location: string.length - 1 - cpos, length: 1))
+                                    range: NSRange(location: string.length + cpos, length: 1))
                 textView.textStorage?.setAttributedString(string)
             }
             

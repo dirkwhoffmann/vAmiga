@@ -650,10 +650,10 @@
 
 @interface RetroShellProxy : Proxy { }
 
-@property (readonly) NSInteger cposRel;
+@property (readonly) NSInteger cursorRel;
 
 - (NSString *)getText;
-- (BOOL)isDirty;
+// - (BOOL)isDirty;
 - (void)pressUp;
 - (void)pressDown;
 - (void)pressLeft;

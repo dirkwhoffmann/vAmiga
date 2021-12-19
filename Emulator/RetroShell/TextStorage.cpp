@@ -10,23 +10,31 @@
 #include "config.h"
 #include "TextStorage.h"
 
-const char *
-TextStorage::text()
+string
+TextStorage::operator [] (isize i) const
 {
-    static string all;
+    assert(i >= 0 && i < size());
+    return storage[i];
+}
+
+string&
+TextStorage::operator [] (isize i)
+{
+    assert(i >= 0 && i < size());
+    return storage[i];
+}
+
+void
+TextStorage::text(string &all)
+{
+    auto count = size();
     
     all = "";
-
-    if (auto numRows = storage.size()) {
+    for (isize i = 0; i < count; i++) {
         
-        // Add all rows except the last one
-        for (usize i = 0; i < numRows - 1; i++) all += storage[i] + "\n";
-        
-        // Add the last row
-        all += storage[numRows - 1] + " ";
+        all += storage[i];
+        if (i < count - 1) all += '\n';
     }
-    
-    return all.c_str();
 }
 
 void
@@ -45,55 +53,43 @@ TextStorage::append(const string &line)
     while (storage.size() > capacity) storage.erase(storage.begin());
 }
 
-void
-TextStorage::add(char c)
+TextStorage&
+TextStorage::operator<<(char c)
 {
+    assert(!storage.empty());
+ 
     switch (c) {
             
         case '\n':
             
-            append(input);
-            input = "";
-            return;
+            append("");
+            break;
             
         case '\r':
-            
-            input = "";
-            return;
+
+            storage.back() = "";
+            break;
             
         default:
             
-            input += c;
+            if (isprint(c)) storage.back() += c;
+            break;
     }
+    
+    return *this;
 }
 
-void
-TextStorage::add(const string &str)
+TextStorage&
+TextStorage::operator<<(const string &s)
 {
-    for (auto c : str) add(c);
-}
-
-void
-TextStorage::insert(isize pos, char c)
-{
-    if (pos < (isize)input.size()) {
-        input.insert(input.begin() + pos, c);
-    } else {
-        add(c);
-    }
-}
-
-void
-TextStorage::remove(isize pos)
-{
-    if (pos < (isize)input.size()) {
-        input.erase(input.begin() + pos);
-    }
+    for (auto &c : s) *this << c;
+    return *this;
 }
 
 void
 TextStorage::tab(isize pos)
 {
-    isize delta = pos - (isize)input.size();
-    for (isize i = 0; i < delta; i++) input += " ";
+    auto &back = storage.back();
+    isize delta = pos - back.size();
+    for (isize i = 0; i < delta; i++) back += " ";
 }

@@ -1391,9 +1391,16 @@ using namespace moira;
     return proxy;
 }
 
--(NSInteger)cposRel
+/*
+-(NSInteger)cpos
 {
-    return [self shell]->cposRel();
+    return [self shell]->cposAbs();
+}
+*/
+
+-(NSInteger)cursorRel
+{
+    return [self shell]->cursorRel();
 }
 
 -(NSString *)getText
@@ -1402,10 +1409,12 @@ using namespace moira;
     return str ? @(str) : nullptr;
 }
 
+/*
 - (BOOL)isDirty
 {
     return [self shell]->isDirty;
 }
+*/
 
 - (void)pressUp
 {
@@ -1459,7 +1468,7 @@ using namespace moira;
 
 - (void)pressKey:(char)c
 {
-    [self shell]->pressKey(c);
+    [self shell]->press(c);
 }
 
 @end
