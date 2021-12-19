@@ -108,133 +108,127 @@ RetroShell::printHelp()
 }
 
 void
-RetroShell::pressUp()
+RetroShell::press(RetroShellKey key)
 {
+    assert_enum(RetroShellKey, key);
     assert(ipos >= 0 && ipos < historyLength());
-
-    if (ipos > 0) {
-        
-        // Save the input line if it is currently shown
-        if (ipos == historyLength() - 1) history.back() = { input, cursor };
-        
-        auto &item = history[--ipos];
-        input = item.first;
-        cursor = item.second;
-        tabPressed = false;
-    }
+    assert(cursor >= 0 && cursor <= inputLength());
     
-    assert(cursor >= 0 && cursor <= inputLength());
-}
-
-void
-RetroShell::pressDown()
-{
-    assert(ipos >= 0 && ipos < historyLength());
-
-    if (ipos < historyLength() - 1) {
-        
-        auto &item = history[++ipos];
-        input = item.first;
-        cursor = item.second;
-        tabPressed = false;
-    }
-    assert(cursor >= 0 && cursor <= inputLength());
-}
-
-void
-RetroShell::pressLeft()
-{
-    if (cursor > 0) cursor--;
-    assert(cursor >= 0 && cursor <= inputLength());
-    tabPressed = false;
-}
-
-void
-RetroShell::pressRight()
-{
-    if (cursor < (isize)input.size()) cursor++;
-    assert(cursor >= 0 && cursor <= inputLength());
-    tabPressed = false;
-}
-
-void
-RetroShell::pressHome()
-{
-    cursor = 0;
-    tabPressed = false;
-}
-
-void
-RetroShell::pressEnd()
-{
-    cursor = input.length();
-    tabPressed = false;
-}
-
-void
-RetroShell::pressTab()
-{
-    if (tabPressed) {
+    printf("Pressing %s\n", RetroShellKeyEnum::key(key));
+    
+    switch(key) {
+            
+        case RSKEY_UP:
+            
+            if (ipos > 0) {
                 
-        // TAB was pressed twice
-        help(input);
+                // Save the input line if it is currently shown
+                if (ipos == historyLength() - 1) history.back() = { input, cursor };
+                
+                auto &item = history[--ipos];
+                input = item.first;
+                cursor = item.second;
+            }
+            break;
+            
+        case RSKEY_DOWN:
+            
+            if (ipos < historyLength() - 1) {
+                
+                auto &item = history[++ipos];
+                input = item.first;
+                cursor = item.second;
+            }
+            break;
+            
+        case RSKEY_LEFT:
+            
+            if (cursor > 0) cursor--;
+            break;
+            
+        case RSKEY_RIGHT:
+            
+            if (cursor < (isize)input.size()) cursor++;
+            break;
+            
+        case RSKEY_DEL:
+            
+            if (cursor < inputLength()) {
+                input.erase(input.begin() + cursor);
+            }
+            break;
+            
+        case RSKEY_BACKSPACE:
+            
+            if (cursor > 0) {
+                input.erase(input.begin() + --cursor);
+            }
+            break;
+            
+        case RSKEY_HOME:
+            
+            cursor = 0;
+            break;
+            
+        case RSKEY_END:
+            
+            cursor = input.length();
+            break;
+            
+        case RSKEY_TAB:
+            
+            if (tabPressed) {
+                        
+                // TAB was pressed twice
+                help(input);
 
-    } else {
-        
-        // Auto-complete the typed in command
-        input = interpreter.autoComplete(input);
-        cursor = input.length();
+            } else {
+                
+                // Auto-complete the typed in command
+                input = interpreter.autoComplete(input);
+                cursor = input.length();
+            }
+            break;
+            
+        case RSKEY_RETURN:
+            
+            *this << '\r' << prompt << input << '\n';
+            execUserCommand(input);
+            input = "";
+            cursor = 0;
+            break;
+            
+        case RSKEY_CR:
+            
+            input = "";
+            cursor = 0;
+            break;
     }
-
-    tabPressed = true;
-}
-
-void
-RetroShell::pressBackspace()
-{
-    if (cursor > 0) {
-        
-        pressLeft();
-        pressDelete();
-    }
-    tabPressed = false;
-}
-
-void
-RetroShell::pressDelete()
-{
-    if (cursor < inputLength()) {
-        input.erase(input.begin() + cursor);
-    }
-    tabPressed = false;
-}
-
-void
-RetroShell::pressReturn()
-{
-    auto cmd = input;
     
-    // Add the input line to the text storage
-    *this << '\r' << prompt << input << '\n';
-
-    // Clear the user input
-    press('\r');
+    tabPressed = key == RSKEY_TAB;
     
-    // Execute the command
-    execUserCommand(cmd);
+    assert(ipos >= 0 && ipos < historyLength());
+    assert(cursor >= 0 && cursor <= inputLength());
 }
 
 void
 RetroShell::press(char c)
 {
-    assert(c != '\n');
-    
     switch (c) {
             
-        case '\r':
+        case '\n':
             
-            input = "";
-            cursor = 0;
+            press(RSKEY_RETURN);
+            break;
+            
+        case '\r':
+
+            press(RSKEY_CR);
+            break;
+
+        case '\t':
+            
+            press(RSKEY_TAB);
             break;
             
         default:
@@ -417,6 +411,7 @@ void
 RetroShell::help(const string &command)
 {
     interpreter.help(command);
+    *this << prompt;
 }
 
 void

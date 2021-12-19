@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "RetroShellTypes.h"
 #include "SubComponent.h"
 #include "Interpreter.h"
 #include "RemoteServer.h"
@@ -151,18 +152,11 @@ private:
 
 public:
 
+    // Returns the size of the current user-input string
     isize inputLength() { return (isize)input.length(); }
     
-    void pressUp();
-    void pressDown();
-    void pressLeft();
-    void pressRight();
-    void pressHome();
-    void pressEnd();
-    void pressTab();
-    void pressBackspace();
-    void pressDelete();
-    void pressReturn();
+    // Presses a key or a series of keys
+    void press(RetroShellKey key);
     void press(char c);
     void press(const string &s);
     

@@ -148,7 +148,7 @@ RemoteServer::receive()
 
         // Pass the packet as user input to RetroShell
         retroShell.press(packet);
-        retroShell.pressReturn();        
+        retroShell.press('\n');
     }
      
     debug(SRV_DEBUG, "R: %s\n", packet.c_str());

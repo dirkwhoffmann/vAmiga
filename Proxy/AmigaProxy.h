@@ -35,6 +35,7 @@
 #import "MouseTypes.h"
 #import "PaulaTypes.h"
 #import "PixelEngineTypes.h"
+#import "RetroShellTypes.h"
 #import "RomFileTypes.h"
 #import "RTCTypes.h"
 #import "SchedulerTypes.h"
@@ -653,7 +654,6 @@
 @property (readonly) NSInteger cursorRel;
 
 - (NSString *)getText;
-// - (BOOL)isDirty;
 - (void)pressUp;
 - (void)pressDown;
 - (void)pressLeft;

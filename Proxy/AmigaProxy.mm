@@ -1409,61 +1409,54 @@ using namespace moira;
     return str ? @(str) : nullptr;
 }
 
-/*
-- (BOOL)isDirty
-{
-    return [self shell]->isDirty;
-}
-*/
-
 - (void)pressUp
 {
-    [self shell]->pressUp();
+    [self shell]->press(RSKEY_UP);
 }
 
 - (void)pressDown
 {
-    [self shell]->pressDown();
+    [self shell]->press(RSKEY_DOWN);
 }
 
 - (void)pressLeft
 {
-    [self shell]->pressLeft();
+    [self shell]->press(RSKEY_LEFT);
 }
 
 - (void)pressRight
 {
-    [self shell]->pressRight();
+    [self shell]->press(RSKEY_RIGHT);
 }
 
 - (void)pressHome
 {
-    [self shell]->pressHome();
+    [self shell]->press(RSKEY_HOME);
 }
 
 - (void)pressEnd
 {
-    [self shell]->pressEnd();
+    [self shell]->press(RSKEY_END);
 }
 
 - (void)pressBackspace
 {
-    [self shell]->pressBackspace();
+    [self shell]->press(RSKEY_BACKSPACE);
 }
 
 - (void)pressDelete
 {
-    [self shell]->pressDelete();
+    [self shell]->press(RSKEY_DEL);
 }
 
 - (void)pressReturn
 {
-    [self shell]->pressReturn();
+    [self shell]->press(RSKEY_RETURN);
 }
 
 - (void)pressTab
 {
-    [self shell]->pressTab();
+    [self shell]->press(RSKEY_TAB);
 }
 
 - (void)pressKey:(char)c
