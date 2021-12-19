@@ -185,13 +185,18 @@ public:
 
     // Executes a command
     void exec(const string &command) throws;
-    
+
     // Executes a user script
     void execScript(std::ifstream &fs) throws;
     void execScript(const string &contents) throws;
 
     // Continues a previously interrupted script
     void continueScript() throws;
+
+private:
+
+    // Executes a GDB command
+    void execGdb(const string &command) throws;
 
     // Prints a textual description of an error in the console
     void describe(const std::exception &exception);

@@ -284,17 +284,27 @@ RetroShell::execUserCommand(const string &command)
 void
 RetroShell::exec(const string &command)
 {
-    // Skip comments
-    if (command.substr(0,1) == "#") return;
-
-    // Check if the command marked with 'try'
-    bool ignoreError = command.rfind("try", 0) == 0;
+    bool ignoreError = false;
     
-    // Call the interpreter
     try {
         
-        interpreter.exec(command);
-    
+        // Skip comments
+        if (command[0] == '#') return;
+        
+        // Check if the command is a command in GDB syntax
+        if (command[0] == '$' || command[0] == 0x03) {
+
+            execGdb(command);
+            
+        } else {
+            
+            // Check if the command marked with 'try'
+            ignoreError = command.rfind("try", 0) == 0;
+            
+            // Call the interpreter
+            interpreter.exec(command);
+        }
+        
     } catch (std::exception &err) {
         
         // Print error message
@@ -352,6 +362,14 @@ RetroShell::continueScript()
     }
     
     msgQueue.put(MSG_SCRIPT_DONE, scriptLine);
+}
+
+void
+RetroShell::execGdb(const string &command)
+{
+    auto response = gdbServer.process(command);
+    
+    printf("response = %s\n", response.c_str());
 }
 
 void

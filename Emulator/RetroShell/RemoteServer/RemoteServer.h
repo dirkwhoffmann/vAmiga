@@ -106,10 +106,16 @@ public:
     bool isListening() { return listening; }
     bool isConnected() { return connected; }
     
+private:
+    
+    void waitForClient() throws;
+    
     
     //
     // Transmitting packets
     //
+    
+public:
     
     string receive() throws;
     void send(const string &packet) throws;

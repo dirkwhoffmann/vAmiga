@@ -350,3 +350,19 @@ extension HDFFileProxy {
         return ""
     }
 }
+
+public extension RemoteServerProxy {
+    
+    var icon: NSImage {
+
+        var name: String
+
+        if connected {
+            name = "connectedTemplate"
+        } else {
+            name = "listeningTemplate"
+        }
+
+        return NSImage(named: name)!
+    }
+}

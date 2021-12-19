@@ -183,7 +183,7 @@ static const int KBD_DEBUG       = 0; // Keyboard
 // Misc
 static const int REC_DEBUG       = 0; // Screen recorder
 static const int SRV_DEBUG       = 1; // Remote server
-static const int GDB_DEBUG       = 0; // GDB server
+static const int GDB_DEBUG       = 1; // GDB server
 
 //
 // Forced error conditions

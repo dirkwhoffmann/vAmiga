@@ -1490,6 +1490,11 @@ using namespace moira;
     return [self server]->isListening();
 }
 
+-(BOOL)connected
+{
+    return [self server]->isConnected();
+}
+
 -(void)start
 {
     [self server]->start();

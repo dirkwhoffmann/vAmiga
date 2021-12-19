@@ -108,10 +108,12 @@ class VAError: Error {
                 async: async, icon: "mp4")
     }
 
+    /*
     static func gdbServerAborted(async: Bool = false) {
         
         warning("Connection lost.",
                 "The GDB server has terminated unexpectedly.",
                 async: async, icon: "server")
-    }    
+    }
+    */
 }

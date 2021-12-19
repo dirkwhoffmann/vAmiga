@@ -102,7 +102,7 @@ RemoteServer::setConfigItem(Option option, i64 value)
 void
 RemoteServer::start()
 {
-    debug(SRV_DEBUG, "Starting remote server\n");
+    debug(SRV_DEBUG, "Starting remote server...\n");
         
     // Only proceed if the server is not running
     if (listening) throw VAError(ERROR_GDB_SERVER_RUNNING);
@@ -111,16 +111,14 @@ RemoteServer::start()
     if (serverThread.joinable()) serverThread.join();
     
     // Spawn a new thread
+    listening = true;
     serverThread = std::thread(&RemoteServer::main, this);
-    
-    // Send a welcome message
-    send("vAmiga RemoteServer - Connection established");
 }
 
 void
 RemoteServer::stop()
 {
-    debug(SRV_DEBUG, "Stopping remote server\n");
+    debug(SRV_DEBUG, "Stopping remote server...\n");
  
     // Only proceed if an open connection exists
     if (!listening) throw VAError(ERROR_GDB_SERVER_NOT_RUNNING);
@@ -132,8 +130,16 @@ RemoteServer::stop()
 
     // Wait until the server thread has terminated
     serverThread.join();
+}
 
-    debug(SRV_DEBUG, "stopped\n");
+void
+RemoteServer::waitForClient()
+{
+    connection = listener.accept();
+    connected = true;
+    
+    debug(SRV_DEBUG, "Connection established\n");
+    msgQueue.put(MSG_SRV_CONNECT);
 }
 
 string
@@ -228,47 +234,46 @@ RemoteServer::operator<<(std::stringstream &stream)
 void
 RemoteServer::main()
 {
-    debug(SRV_DEBUG, "Entering remote server thread\n");
+    debug(SRV_DEBUG, "Remote server started\n");
     msgQueue.put(MSG_SRV_START);
     
-    listening = true;
-    
-    try {
+    while (listening) {
         
-        // Create a port listener
-        listener = PortListener((u16)config.port);
-        
-        // Wait for a client to connect
-        connection = listener.accept();
-        connected = true;
-        
-        // Print the startup message and the input prompt
-        welcome();
-        *this << retroShell.prompt;
-        
-        while (1) {
+        try {
             
-            auto cmd = receive();
-            // process(cmd);
+            // Create a port listener
+            listener = PortListener((u16)config.port);
+            
+            // Wait for a client to connect
+            waitForClient();
+            
+            // Print the startup message and the input prompt
+            welcome();
+            *this << retroShell.prompt;
+            
+            // Receive message
+            while (1) { receive(); }
+            
+        } catch (VAError &err) {
+            
+            warn("VAError: %s\n", err.what());
+            if (listening) msgQueue.put(MSG_SRV_ERROR);
+            
+        } catch (std::exception &err) {
+            
+            warn("Error: %s\n", err.what());
+            if (listening) msgQueue.put(MSG_SRV_ERROR);
         }
-             
-    } catch (VAError &err) {
         
-        warn("VAError: %s\n", err.what());
-        if (listening) msgQueue.put(MSG_SRV_ERROR);
-
-    } catch (std::exception &err) {
-
-        warn("Error: %s\n", err.what());
-        if (listening) msgQueue.put(MSG_SRV_ERROR);
+        connected = false;
+        connection.close();
+        listener.close();
+        
+        debug(SRV_DEBUG, "Client disconnected\n");
+        msgQueue.put(MSG_SRV_DISCONNECT);
     }
     
-    listening = false;
-    connected = false;
-    connection.close();
-    listener.close();
-    
-    debug(SRV_DEBUG, "Exiting remote server thread\n");
+    debug(SRV_DEBUG, "Remote server stopped\n");
     msgQueue.put(MSG_SRV_STOP);
 }
 

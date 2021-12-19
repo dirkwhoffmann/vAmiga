@@ -535,14 +535,15 @@ extension MyController {
                 metal.releaseMouse()
             }
             
-        case .SRV_START, .SRV_STOP:
+        case .SRV_START, .SRV_CONNECT, .SRV_DISCONNECT, .SRV_STOP:
             refreshStatusBar()
             
         case .SRV_RECEIVE, .SRV_SEND:
             renderer.console.isDirty = true
             
         case .SRV_ERROR:
-            VAError.gdbServerAborted()
+            track("Remote server error")
+            // VAError.gdbServerAborted()
             
         default:
             track("Unknown message: \(msg)")

@@ -64,6 +64,9 @@ extension MyController {
         df2Disk.image = amiga.df2.icon
         df3Disk.image = amiga.df3.icon
         
+        // Remote connection icon
+        debugIcon.image = amiga.remoteServer.icon
+        
         // Warp mode icon
         warpIcon.image = hourglassIcon
         

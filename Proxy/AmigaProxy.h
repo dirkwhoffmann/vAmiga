@@ -675,6 +675,7 @@
 @interface RemoteServerProxy : Proxy { }
 
 @property (readonly) BOOL listening;
+@property (readonly) BOOL connected;
 
 - (void)start;
 - (void)stop;

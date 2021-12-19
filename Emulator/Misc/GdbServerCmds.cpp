@@ -380,6 +380,8 @@ GdbServer::process <'z'> (string cmd)
 string
 GdbServer::process(string payload)
 {
+    debug(GDB_DEBUG, "process(%s)\n", payload.c_str());
+    
     // Check if the previous package has been rejected
     if (payload[0] == '-') throw VAError(ERROR_GDB_NO_ACK);
 
