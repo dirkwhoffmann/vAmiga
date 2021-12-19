@@ -147,54 +147,50 @@ GdbServer::process <'v'> (string arg)
 template <> string
 GdbServer::process <'q'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "q");
-
-    /*
     auto command = cmd.substr(0, cmd.find(":"));
         
     if (command == "Supported") {
         
-        return processCmd <GdbCmd::Supported> ("");
+        return process <'q', GdbCmd::Supported> ("");
     }
     if (cmd == "Symbol::") {
 
-        return processCmd <GdbCmd::Symbol> ("");
+        return process <'q', GdbCmd::Symbol> ("");
     }
     if (cmd == "Offsets") {
 
-        return processCmd <GdbCmd::Offset> ("");
+        return process <'q', GdbCmd::Offset> ("");
     }
     if (cmd == "TStatus") {
         
-        return processCmd <GdbCmd::TStatus> ("");
+        return process <'q', GdbCmd::TStatus> ("");
     }
     if (cmd == "TfV") {
         
-        return processCmd <GdbCmd::TfV> ("");
+        return process <'q', GdbCmd::TfV> ("");
     }
     if (cmd == "TfP") {
         
-        return processCmd <GdbCmd::TfP> ("");
+        return process <'q', GdbCmd::TfP> ("");
     }
     if (cmd == "fThreadInfo") {
         
-        return processCmd <GdbCmd::fThreadInfo> ("");
+        return process <'q', GdbCmd::fThreadInfo> ("");
     }
     if (cmd == "sThreadInfo") {
         
-        return processCmd <GdbCmd::sThreadInfo> ("");
+        return process <'q', GdbCmd::sThreadInfo> ("");
     }
     if (command == "Attached") {
         
-        return processCmd <GdbCmd::Attached> ("");
+        return process <'q', GdbCmd::Attached> ("");
     }
     if (command == "C") {
         
-        return processCmd <GdbCmd::C> ("");
+        return process <'q', GdbCmd::C> ("");
     }
     
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "q");
-    */
 }
 
 template <> string
@@ -377,35 +373,45 @@ GdbServer::process <'z'> (string cmd)
     */
 }
 
-string
-GdbServer::process(string payload)
+bool
+GdbServer::isGdbPacket(const string &packet)
 {
-    debug(GDB_DEBUG, "process(%s)\n", payload.c_str());
+    return
+    (packet[0] == 0x03) ||
+    (packet[0] == '$') ||
+    (packet[0] == '-' || packet[1] == '$') ||
+    (packet[0] == '+' || packet[1] == '$');
+}
+
+string
+GdbServer::process(string package)
+{
+    debug(GDB_DEBUG, "process(%s)\n", package.c_str());
     
     // Check if the previous package has been rejected
-    if (payload[0] == '-') throw VAError(ERROR_GDB_NO_ACK);
+    if (package[0] == '-') throw VAError(ERROR_GDB_NO_ACK);
 
     // Strip off the acknowledgment symbol if present
-    if (payload[0] == '+') payload.erase(0,1);
+    if (package[0] == '+') package.erase(0,1);
         
-    if (auto len = payload.length()) {
+    if (auto len = package.length()) {
         
         // Check for Ctrl+C
-        if (payload[0] == 0x03) {
+        if (package[0] == 0x03) {
             return "Ctrl+C";
         }
         
         // Check for '$x[...]#xx'
-        if (payload[0] == '$' && len >= 5 && payload[len - 3] == '#') {
+        if (package[0] == '$' && len >= 5 && package[len - 3] == '#') {
                                     
-            auto cmd = payload[1];
-            auto arg = payload.substr(2, len - 5);
-            auto chk = payload.substr(len - 2, 2);
+            auto cmd = package[1];
+            auto arg = package.substr(2, len - 5);
+            auto chk = package.substr(len - 2, 2);
 
-            if (verifyChecksum(payload.substr(1, len - 4), chk)) {
+            if (verifyChecksum(package.substr(1, len - 4), chk)) {
                 
                 // Remember the command
-                latestCmd = payload;
+                latestCmd = package;
                                 
                 // Compute the answer string
                 auto result = process(cmd, arg);
@@ -429,29 +435,29 @@ GdbServer::process(string payload)
 }
 
 string
-GdbServer::process(char cmd, string payload)
+GdbServer::process(char cmd, string package)
 {
     switch (cmd) {
  
-        case 'v' : return process <'v'> (payload);
-        case 'q' : return process <'q'> (payload);
-        case 'Q' : return process <'Q'> (payload);
-        case 'g' : return process <'g'> (payload);
-        case 's' : return process <'s'> (payload);
-        case 'n' : return process <'n'> (payload);
-        case 'H' : return process <'H'> (payload);
-        case 'G' : return process <'G'> (payload);
-        case '?' : return process <'?'> (payload);
-        case '!' : return process <'!'> (payload);
-        case 'k' : return process <'k'> (payload);
-        case 'm' : return process <'m'> (payload);
-        case 'M' : return process <'M'> (payload);
-        case 'p' : return process <'p'> (payload);
-        case 'P' : return process <'P'> (payload);
-        case 'c' : return process <'c'> (payload);
-        case 'D' : return process <'D'> (payload);
-        case 'Z' : return process <'Z'> (payload);
-        case 'z' : return process <'z'> (payload);
+        case 'v' : return process <'v'> (package);
+        case 'q' : return process <'q'> (package);
+        case 'Q' : return process <'Q'> (package);
+        case 'g' : return process <'g'> (package);
+        case 's' : return process <'s'> (package);
+        case 'n' : return process <'n'> (package);
+        case 'H' : return process <'H'> (package);
+        case 'G' : return process <'G'> (package);
+        case '?' : return process <'?'> (package);
+        case '!' : return process <'!'> (package);
+        case 'k' : return process <'k'> (package);
+        case 'm' : return process <'m'> (package);
+        case 'M' : return process <'M'> (package);
+        case 'p' : return process <'p'> (package);
+        case 'P' : return process <'P'> (package);
+        case 'c' : return process <'c'> (package);
+        case 'D' : return process <'D'> (package);
+        case 'Z' : return process <'Z'> (package);
+        case 'z' : return process <'z'> (package);
             
         default:
             throw VAError(ERROR_GDB_UNRECOGNIZED_CMD, string(1, cmd));

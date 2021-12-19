@@ -75,11 +75,14 @@ private:
 
 public:
     
+    // Returns true if the provided package is in GDB format
+    bool isGdbPacket(const string &packet);
+    
     // Processes a packet in the format used by GDB
-    string process(string payload) throws;
+    string process(string package) throws;
 
     // Processes a checksum-free packet with the first letter stripped off
-    string process(char letter, string payload) throws;
+    string process(char letter, string package) throws;
 
 private:
     

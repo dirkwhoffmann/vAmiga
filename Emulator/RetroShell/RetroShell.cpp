@@ -113,9 +113,7 @@ RetroShell::press(RetroShellKey key)
     assert_enum(RetroShellKey, key);
     assert(ipos >= 0 && ipos < historyLength());
     assert(cursor >= 0 && cursor <= inputLength());
-    
-    printf("Pressing %s\n", RetroShellKeyEnum::key(key));
-    
+        
     switch(key) {
             
         case RSKEY_UP:
@@ -284,26 +282,45 @@ RetroShell::execUserCommand(const string &command)
 void
 RetroShell::exec(const string &command)
 {
-    bool ignoreError = false;
-    
+    if (gdbServer.isGdbPacket(command)) {
+        execGdbCmd(command);
+    } else {
+        execShellCmd(command);
+    }
+}
+
+void
+RetroShell::execGdbCmd(const string &command)
+{
     try {
         
-        // Skip comments
-        if (command[0] == '#') return;
+        auto response = gdbServer.process(command);
+        printf("response = %s\n", response.c_str());
+        remoteServer.send(response);
         
-        // Check if the command is a command in GDB syntax
-        if (command[0] == '$' || command[0] == 0x03) {
+    } catch (VAError &err) {
 
-            execGdb(command);
-            
-        } else {
-            
-            // Check if the command marked with 'try'
-            ignoreError = command.rfind("try", 0) == 0;
-            
-            // Call the interpreter
-            interpreter.exec(command);
-        }
+        printf("%s\n", err.what());
+        
+        // Disconnect the client
+        remoteServer.signalStop();
+    }
+}
+
+void
+RetroShell::execShellCmd(const string &command)
+{
+    bool ignoreError = false;
+    
+    // Skip comments
+    if (command[0] == '#') return;
+    
+    try {
+        // Check if the command marked with 'try'
+        ignoreError = command.rfind("try", 0) == 0;
+        
+        // Call the interpreter
+        interpreter.exec(command);
         
     } catch (std::exception &err) {
         
@@ -362,14 +379,6 @@ RetroShell::continueScript()
     }
     
     msgQueue.put(MSG_SCRIPT_DONE, scriptLine);
-}
-
-void
-RetroShell::execGdb(const string &command)
-{
-    auto response = gdbServer.process(command);
-    
-    printf("response = %s\n", response.c_str());
 }
 
 void

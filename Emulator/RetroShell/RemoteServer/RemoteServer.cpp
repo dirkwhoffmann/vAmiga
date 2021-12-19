@@ -123,13 +123,20 @@ RemoteServer::stop()
     // Only proceed if an open connection exists
     if (!listening) throw VAError(ERROR_GDB_SERVER_NOT_RUNNING);
         
-    // Trigger an exception inside the server thread
+    // Interrupt the server thread
     listening = false;
-    connection.close();
-    listener.close();
+    signalStop();
 
     // Wait until the server thread has terminated
     serverThread.join();
+}
+
+void
+RemoteServer::signalStop()
+{
+    // Trigger an exception inside the server thread
+    connection.close();
+    listener.close();
 }
 
 void
@@ -146,16 +153,13 @@ string
 RemoteServer::receive()
 {
     auto packet = connection.recv();
-
-    if (config.verbose) {
-        
-        // Remove the previous line as it will be replicated by RetroShell
-        send("\033[A\33[2K\r");
-
-        // Pass the packet as user input to RetroShell
-        retroShell.press(packet);
-        retroShell.press('\n');
-    }
+    
+    // Remove the previous line as it will be replicated by RetroShell
+    *this << "\033[A\33[2K\r";
+    
+    // Pass the packet as user input to RetroShell
+    retroShell.press(packet);
+    retroShell.press('\n');
      
     debug(SRV_DEBUG, "R: %s\n", packet.c_str());
     msgQueue.put(MSG_SRV_RECEIVE);
@@ -179,54 +183,64 @@ RemoteServer::send(const string &cmd)
 RemoteServer&
 RemoteServer::operator<<(char value)
 {
-    switch (value) {
-                        
-        case '\n':
-            
-            send("\n");
-            break;
-            
-        case '\r':
-
-            send("\33[2K\r");
-            break;
-            
-        default:
-            
-            if (isprint(value)) send(string(1, value));
-            break;
+    if (config.verbose) {
+        
+        switch (value) {
+                
+            case '\n':
+                
+                send("\n");
+                break;
+                
+            case '\r':
+                
+                send("\33[2K\r");
+                break;
+                
+            default:
+                
+                if (isprint(value)) send(string(1, value));
+                break;
+        }
     }
-    
     return *this;
 }
 
 RemoteServer&
 RemoteServer::operator<<(const string& text)
 {
-    send(text);
+    if (config.verbose) {
+        send(text);
+    }
     return *this;
 }
 
 RemoteServer&
 RemoteServer::operator<<(int value)
 {
-    send(std::to_string(value));
+    if (config.verbose) {
+        send(std::to_string(value));
+    }
     return *this;
 }
 
 RemoteServer&
 RemoteServer::operator<<(long value)
 {
-    send(std::to_string(value));
+    if (config.verbose) {
+        send(std::to_string(value));
+    }
     return *this;
 }
 
 RemoteServer&
 RemoteServer::operator<<(std::stringstream &stream)
 {
-    string line;
-    while(std::getline(stream, line)) {
-        send(line + "\n");
+    if (config.verbose) {
+        string line;
+        while(std::getline(stream, line)) {
+            send(line + "\n");
+        }
     }
     return *this;
 }
@@ -251,7 +265,7 @@ RemoteServer::main()
             welcome();
             *this << retroShell.prompt;
             
-            // Receive message
+            // Receive and process messages
             while (1) { receive(); }
             
         } catch (VAError &err) {

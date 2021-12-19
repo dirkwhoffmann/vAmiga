@@ -106,6 +106,9 @@ public:
     bool isListening() { return listening; }
     bool isConnected() { return connected; }
     
+    // Signals the server thread to terminate
+    void signalStop();
+    
 private:
     
     void waitForClient() throws;

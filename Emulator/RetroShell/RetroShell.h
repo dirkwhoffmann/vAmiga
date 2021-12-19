@@ -185,8 +185,10 @@ public:
 
     // Executes a command
     void exec(const string &command) throws;
+    void execGdbCmd(const string &command) throws;
+    void execShellCmd(const string &command) throws;
 
-    // Executes a user script
+    // Executes a shell script
     void execScript(std::ifstream &fs) throws;
     void execScript(const string &contents) throws;
 
@@ -194,9 +196,6 @@ public:
     void continueScript() throws;
 
 private:
-
-    // Executes a GDB command
-    void execGdb(const string &command) throws;
 
     // Prints a textual description of an error in the console
     void describe(const std::exception &exception);
