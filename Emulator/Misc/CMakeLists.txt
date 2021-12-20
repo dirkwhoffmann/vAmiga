@@ -1,10 +1,4 @@
-target_sources(vAmigaCore PRIVATE
-
-OSDebugger.cpp
-OSDebuggerRead.cpp
-OSDebuggerDump.cpp
-RegressionTester.cpp
-GdbServer.cpp
-GdbServerCmds.cpp
-
-)
+add_subdirectory(OSDebugger)
+add_subdirectory(RemoteServer)
+add_subdirectory(GdbServer)
+add_subdirectory(RegressionTester)

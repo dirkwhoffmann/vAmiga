@@ -86,6 +86,7 @@ public:
     // Misc
     RetroShell retroShell = RetroShell(*this);
     OSDebugger osDebugger = OSDebugger(*this);
+    RemoteServer remoteServer = RemoteServer(*this);
     GdbServer gdbServer = GdbServer(*this);
     RegressionTester regressionTester = RegressionTester(*this);
     

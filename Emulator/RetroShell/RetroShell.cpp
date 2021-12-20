@@ -279,36 +279,6 @@ RetroShell::execUserCommand(const string &command)
     printPrompt();
 }
 
-/*
-void
-RetroShell::exec(const string &command)
-{
-    if (gdbServer.isGdbPacket(command)) {
-        execGdbCmd(command);
-    } else {
-        execShellCmd(command);
-    }
-}
-*/
-/*
-void
-RetroShell::execGdbCmd(const string &command)
-{
-    try {
-        
-        auto response = gdbServer.process(command);
-        remoteServer.send(SRVMODE_GDB, response);
-        
-    } catch (VAError &err) {
-
-        warn("GDB server error: %s\n", err.what());
-
-        // Disconnect the client
-        remoteServer.disconnect();
-    }
-}
-*/
-
 void
 RetroShell::exec(const string &command)
 {

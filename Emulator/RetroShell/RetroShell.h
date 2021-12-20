@@ -21,13 +21,6 @@
 class RetroShell : public SubComponent {
 
     friend class RemoteServer;
-
-public:
-
-    // Server for managing remote connections
-    RemoteServer remoteServer = RemoteServer(amiga);
-
-private:
     
     // Interpreter for commands typed into the console window
     Interpreter interpreter;
