@@ -14,22 +14,30 @@
 namespace util {
 
 //
-// Parsing strings
+// Converting
 //
 
+// Parses a hexadecimal number in string format
 bool parseHex(const string &s, isize *result);
 
+// Converts an integer value to a hexadecimal string representation
+template <isize digits> string hexstr(isize number);
+
 
 //
-// Changing capitalization
+// Transforming
 //
 
+// Converts the capitalization of a string
 string lowercased(const string& s);
 string uppercased(const string& s);
 
+// Replaces all unprintable characters
+string makePrintable(const string& s);
+
 
 //
-// Splitting string
+// Splitting
 //
 
 std::vector<string> split(const string &s, char delimiter);

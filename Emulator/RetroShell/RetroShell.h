@@ -185,8 +185,6 @@ public:
 
     // Executes a command
     void exec(const string &command) throws;
-    void execGdbCmd(const string &command) throws;
-    void execShellCmd(const string &command) throws;
 
     // Executes a shell script
     void execScript(std::ifstream &fs) throws;

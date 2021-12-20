@@ -34,15 +34,16 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
     
     if (category & dump::Config) {
         
+        os << tab("Mode");
+        os << ServerModeEnum::key(config.mode) << std::endl;
         os << tab("Port");
         os << dec(config.port) << std::endl;
-        os << tab("Verbose");
-        os << bol(config.verbose) << std::endl;
     }
     
     if (category & dump::State) {
         
-        os << tab("Running") << bol(listening) << std::endl;
+        os << tab("Listening") << bol(listening) << std::endl;
+        os << tab("Connected") << bol(connected) << std::endl;
     }
 }
 
@@ -51,8 +52,8 @@ RemoteServer::getDefaultConfig()
 {
     RemoteServerConfig defaults;
 
+    defaults.mode = SRVMODE_GDB;
     defaults.port = 8080;
-    defaults.verbose = true;
 
     return defaults;
 }
@@ -62,8 +63,8 @@ RemoteServer::resetConfig()
 {
     auto defaults = getDefaultConfig();
     
-    setConfigItem(OPT_GDB_PORT, defaults.port);
-    setConfigItem(OPT_GDB_VERBOSE, defaults.verbose);
+    setConfigItem(OPT_SRV_MODE, defaults.mode);
+    setConfigItem(OPT_SRV_PORT, defaults.port);
 }
 
 i64
@@ -71,8 +72,8 @@ RemoteServer::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_GDB_PORT:       return config.port;
-        case OPT_GDB_VERBOSE:    return config.verbose;
+        case OPT_SRV_MODE:      return config.mode;
+        case OPT_SRV_PORT:      return config.port;
             
         default:
             fatalError;
@@ -83,17 +84,20 @@ void
 RemoteServer::setConfigItem(Option option, i64 value)
 {
     switch (option) {
+
+        case OPT_SRV_MODE:
             
-        case OPT_GDB_PORT:
+            if (!ServerModeEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, ServerModeEnum::keyList());
+            }
+            config.mode = (ServerMode)value;
+            return;
+
+        case OPT_SRV_PORT:
             
             config.port = (isize)value;
             return;
                         
-        case OPT_GDB_VERBOSE:
-            
-            config.verbose = (bool)value;
-            return;
-
         default:
             fatalError;
     }
@@ -125,124 +129,94 @@ RemoteServer::stop()
         
     // Interrupt the server thread
     listening = false;
-    signalStop();
+    disconnect();
 
     // Wait until the server thread has terminated
     serverThread.join();
 }
 
 void
-RemoteServer::signalStop()
+RemoteServer::disconnect()
 {
+    debug(SRV_DEBUG, "Disconnecting client...\n");
+    
     // Trigger an exception inside the server thread
     connection.close();
     listener.close();
 }
 
-void
-RemoteServer::waitForClient()
-{
-    connection = listener.accept();
-    connected = true;
-    
-    debug(SRV_DEBUG, "Connection established\n");
-    msgQueue.put(MSG_SRV_CONNECT);
-}
-
 string
 RemoteServer::receive()
 {
+    if (!isConnected()) return "";
+    
     auto packet = connection.recv();
-    
-    // Remove the previous line as it will be replicated by RetroShell
-    *this << "\033[A\33[2K\r";
-    
-    // Pass the packet as user input to RetroShell
-    retroShell.press(packet);
-    retroShell.press('\n');
-     
-    debug(SRV_DEBUG, "R: %s\n", packet.c_str());
+            
+    // In terminal mode, ask the client to wipe out the input line.
+    // The line will be sent back by RetroShell.
+    send(SRVMODE_TERMINAL, "\033[A\33[2K\r");
+         
+    debug(SRV_DEBUG, "R: %s\n", util::makePrintable(packet).c_str());
     msgQueue.put(MSG_SRV_RECEIVE);
     
     return packet;
 }
 
 void
-RemoteServer::send(const string &cmd)
+RemoteServer::send(ServerMode mode, const string &payload)
 {
-    if (isListening()) {
- 
-        string packet = cmd; //  + "\n";
-        connection.send(packet);
+    if (!isConnected() || mode != config.mode) return;
 
-        debug(SRV_DEBUG, "T: '%s'\n", packet.c_str());
-        msgQueue.put(MSG_SRV_SEND);
+    connection.send(payload);
+    
+    debug(SRV_DEBUG, "T: '%s'\n", util::makePrintable(payload).c_str());
+    msgQueue.put(MSG_SRV_SEND);
+}
+
+void
+RemoteServer::send(ServerMode mode, char payload)
+{
+    if (!isConnected() || mode != config.mode) return;
+    
+    switch (payload) {
+            
+        case '\n':
+            
+            send("\n");
+            break;
+            
+        case '\r':
+            
+            send("\33[2K\r");
+            break;
+            
+        default:
+            
+            if (isprint(payload)) send(string(1, payload));
+            break;
     }
 }
 
-RemoteServer&
-RemoteServer::operator<<(char value)
+void
+RemoteServer::send(ServerMode mode, int payload)
 {
-    if (config.verbose) {
-        
-        switch (value) {
-                
-            case '\n':
-                
-                send("\n");
-                break;
-                
-            case '\r':
-                
-                send("\33[2K\r");
-                break;
-                
-            default:
-                
-                if (isprint(value)) send(string(1, value));
-                break;
-        }
-    }
-    return *this;
+    send(std::to_string(payload));
 }
 
-RemoteServer&
-RemoteServer::operator<<(const string& text)
+void
+RemoteServer::send(ServerMode mode, long payload)
 {
-    if (config.verbose) {
-        send(text);
-    }
-    return *this;
+    send(std::to_string(payload));
 }
 
-RemoteServer&
-RemoteServer::operator<<(int value)
-{
-    if (config.verbose) {
-        send(std::to_string(value));
-    }
-    return *this;
-}
 
-RemoteServer&
-RemoteServer::operator<<(long value)
+void
+RemoteServer::send(ServerMode mode, std::stringstream &payload)
 {
-    if (config.verbose) {
-        send(std::to_string(value));
+    string line;
+    while(std::getline(payload, line)) {
+        send(line + "\n");
     }
-    return *this;
-}
-
-RemoteServer&
-RemoteServer::operator<<(std::stringstream &stream)
-{
-    if (config.verbose) {
-        string line;
-        while(std::getline(stream, line)) {
-            send(line + "\n");
-        }
-    }
-    return *this;
 }
 
 void
@@ -258,15 +232,18 @@ RemoteServer::main()
             // Create a port listener
             listener = PortListener((u16)config.port);
             
-            // Wait for a client to connect
-            waitForClient();
-            
+            // Wait for a client
+            connection = listener.accept();
+            connected = true;
+            debug(SRV_DEBUG, "Connection established\n");
+            msgQueue.put(MSG_SRV_CONNECT);
+
             // Print the startup message and the input prompt
             welcome();
-            *this << retroShell.prompt;
+            send(SRVMODE_TERMINAL, retroShell.prompt);
             
-            // Receive and process messages
-            while (1) { receive(); }
+            // Receive and process packages
+            mainLoop();
             
         } catch (VAError &err) {
             
@@ -292,23 +269,49 @@ RemoteServer::main()
 }
 
 void
+RemoteServer::mainLoop()
+{
+    while (1) {
+        
+        auto packet = receive();
+        
+        switch (config.mode) {
+                
+            case SRVMODE_TERMINAL:
+                
+                retroShell.press(packet);
+                retroShell.press('\n');
+                break;
+                
+            case SRVMODE_GDB:
+                
+                gdbServer.execute(packet);
+                break;
+                
+            default:
+                fatalError;
+        }
+    }
+}
+
+void
 RemoteServer::welcome()
 {
-    *this << "vAmiga Remote Server ";
-    *this << std::to_string(VER_MAJOR) << '.';
-    *this << std::to_string(VER_MINOR) << '.';
-    *this << std::to_string(VER_SUBMINOR);
-    *this << " (" << __DATE__ << " " << __TIME__ << ")" << '\n';
-    *this << '\n';
-    *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
-    *this << "Licensed under the GNU General Public License v3" << '\n';
-    *this << '\n';
+    if (config.mode != SRVMODE_TERMINAL) return;
+    
+    send("vAmiga Remote Server ");
+    send(std::to_string(VER_MAJOR) + ".");
+    send(std::to_string(VER_MINOR) + ".");
+    send(std::to_string(VER_SUBMINOR));
+    send(" (" __DATE__ " " __TIME__ ")\n\n");
+    send("Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de\n");
+    send("Licensed under the GNU General Public License v3\n\n");
     printHelp();
-    *this << '\n';
+    send("\n");
 }
 
 void
 RemoteServer::printHelp()
 {
-    remoteServer << "Type 'help' for help." << '\n';
+        send(SRVMODE_TERMINAL, "Type 'help' for help.\n");
 }

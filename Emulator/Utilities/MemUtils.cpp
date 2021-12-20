@@ -19,20 +19,6 @@ bool isZero(const u8 *ptr, usize size)
     return true;
 }
 
-template <isize digits> string hexstr(isize number)
-{
-    char str[digits + 1];
-
-    str[digits] = 0;
-    for (isize i = digits - 1; i >= 0; i--, number >>= 4) {
-
-        auto nibble = number & 0xF;
-        str[i] = (char)(nibble < 10 ? '0' + nibble : 'a' + (nibble - 10));
-    }
-
-    return string(str, digits);
-}
-
 void hexdump(u8 *p, isize size, isize cols, isize pad)
 {
     while (size) {
@@ -66,12 +52,3 @@ void hexdumpLongwords(u8 *p, isize size, isize cols)
 }
 
 }
-
-template string util::hexstr <1> (isize number);
-template string util::hexstr <2> (isize number);
-template string util::hexstr <4> (isize number);
-template string util::hexstr <6> (isize number);
-template string util::hexstr <8> (isize number);
-template string util::hexstr <16> (isize number);
-template string util::hexstr <32> (isize number);
-template string util::hexstr <64> (isize number);

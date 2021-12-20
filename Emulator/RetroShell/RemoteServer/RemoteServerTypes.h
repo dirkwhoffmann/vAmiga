@@ -12,9 +12,45 @@
 #include "Aliases.h"
 #include "Reflection.h"
 
+//
+// Enumerations
+//
+
+enum_long(SRVMODE)
+{
+    SRVMODE_TERMINAL,
+    SRVMODE_GDB
+};
+typedef SRVMODE ServerMode;
+
+#ifdef __cplusplus
+struct ServerModeEnum : util::Reflection<ServerModeEnum, ServerMode>
+{
+    static long minVal() { return 0; }
+    static long maxVal() { return SRVMODE_GDB; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    
+    static const char *prefix() { return "SRV"; }
+    static const char *key(ServerMode value)
+    {
+        switch (value) {
+                
+            case SRVMODE_TERMINAL:  return "TERMINAL";
+            case SRVMODE_GDB:       return "GDB";
+        }
+        return "???";
+    }
+};
+#endif
+
+
+//
+// Structures
+//
+
 typedef struct
 {
+    ServerMode mode;
     isize port;
-    bool verbose;
 }
 RemoteServerConfig;

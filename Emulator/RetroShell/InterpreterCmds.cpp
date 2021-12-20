@@ -984,13 +984,10 @@ Interpreter::registerInstructions()
              &RetroShell::exec <Token::os, Token::processes>);
     root.seek("os")->seek("processes")->maxArgs = 1;
 
-    
     //
-    // GDB Server (experimental, not available in release builds)
+    // Remote server
     //
-    
-#ifndef RELEASE_BUILD
-    
+        
     root.add({"remote"},
              "component", "Remote server");
 
@@ -1001,13 +998,13 @@ Interpreter::registerInstructions()
     root.add({"remote", "set"},
              "command", "Configures the component");
         
+    root.add({"remote", "set", "mode"},
+             "key", "Selects the server protocol",
+             &RetroShell::exec <Token::remote, Token::set, Token::mode>, 1);
+
     root.add({"remote", "set", "port"},
              "key", "Assigns the port number",
              &RetroShell::exec <Token::remote, Token::set, Token::port>, 1);
-
-    root.add({"remote", "set", "verbose"},
-             "key", "Enables or disables verbose mode",
-             &RetroShell::exec <Token::remote, Token::set, Token::verbose>, 1);
 
     root.add({"remote", "start"},
              "command", "Starts the debug server",
@@ -1020,5 +1017,23 @@ Interpreter::registerInstructions()
     root.add({"remote", "inspect"},
              "command", "Displays the internal state",
              &RetroShell::exec <Token::remote, Token::inspect>, 0);
-#endif
+    
+    //
+    // GDB server
+    //
+        
+    root.add({"gdbserver"},
+             "component", "GDB server");
+    root.seek("gdbserver")->hidden = true;
+
+    root.add({"gdbserver", "config"},
+             "command", "Displays the current configuration",
+             &RetroShell::exec <Token::gdb, Token::config>);
+    
+    root.add({"gdbserver", "set"},
+             "command", "Configures the component");
+        
+    root.add({"gdbserver", "set", "verbose"},
+             "key", "Enables or disables verbose mode",
+             &RetroShell::exec <Token::gdb, Token::set, Token::verbose>, 1);
 }

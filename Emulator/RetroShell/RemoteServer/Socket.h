@@ -82,7 +82,7 @@ public:
 public:
     
     string recv();
-    void send(string s);
+    void send(const string &s);
 };
 
 class PortListener {

@@ -117,9 +117,12 @@ enum_long(OPT)
     OPT_AUDVOLL,
     OPT_AUDVOLR,
     
-    // GDB Debugger
-    OPT_GDB_PORT,
-    OPT_GDB_VERBOSE
+    // Remote server
+    OPT_SRV_MODE,
+    OPT_SRV_PORT,
+
+    // GDB server
+    OPT_GDB_VERBOSE    
 };
 typedef OPT Option;
 
@@ -206,8 +209,10 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_AUDVOLL:             return "AUDVOLL";
             case OPT_AUDVOLR:             return "AUDVOLR";
 
-            case OPT_GDB_PORT:            return "GDB_PORT";
-            case OPT_GDB_VERBOSE:         return "GDB_VERBOSE";
+            case OPT_SRV_MODE:            return "MODE";
+            case OPT_SRV_PORT:            return "PORT";
+                
+            case OPT_GDB_VERBOSE:         return "VERBOSE";
         }
         return "???";
     }

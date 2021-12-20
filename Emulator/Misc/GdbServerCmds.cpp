@@ -17,32 +17,31 @@
 #include "MsgQueue.h"
 #include "RetroShell.h"
 
-template <> string
+template <> void
 GdbServer::process <' ', GdbCmd::CtrlC> (string arg)
 {
     debug(GDB_DEBUG, "Ctrl+C\n");
-    return "";
+    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "CtrlC");
 }
 
-template <> string
+template <> void
 GdbServer::process <'q', GdbCmd::Supported> (string arg)
 {
-    return
-    "PacketSize=512;"
-    "BreakpointCommands+;"
-    "swbreak+;"
-    "hwbreak+;"
-    "QStartNoAckMode+;"
-    "vContSupported+";
+    send("PacketSize=512;"
+         "BreakpointCommands+;"
+         "swbreak+;"
+         "hwbreak+;"
+         "QStartNoAckMode+;"
+         "vContSupported+");
 }
 
-template <> string
+template <> void
 GdbServer::process <'q', GdbCmd::Symbol> (string arg)
 {
-    return "OK";
+    send("OK");
 }
 
-template <> string
+template <> void
 GdbServer::process <'q', GdbCmd::Offset> (string arg)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "qOffset");
@@ -79,59 +78,67 @@ GdbServer::process <'q', GdbCmd::Offset> (string arg)
     */
 }
 
-template <> string
+template <> void
 GdbServer::process <'q', GdbCmd::TStatus> (string arg)
 {
-    return "T0";
+    send("T0");
 }
 
-template <> string
+template <> void
 GdbServer::process <'q', GdbCmd::TfV> (string arg)
 {
-    return "l";
+    send("l");
 }
 
-template <> string
+template <> void
 GdbServer::process <'q', GdbCmd::TfP> (string arg)
 {
-    return "l";
+    send("l");
 }
 
-template <> string
+template <> void
 GdbServer::process <'q', GdbCmd::fThreadInfo> (string arg)
 {
-    return "m01";
+    send("m01");
 }
 
-template <> string
+template <> void
 GdbServer::process <'q', GdbCmd::sThreadInfo> (string arg)
 {
-    return "l";
+    send("l");
 }
 
-template <> string
+template <> void
 GdbServer::process <'q', GdbCmd::Attached> (string arg)
 {
-    return "0";
+    send("0");
 }
 
-template <> string
+template <> void
 GdbServer::process <'q', GdbCmd::C> (string arg)
 {
-    return "QC1";
+    send("QC1");
 }
 
+template <> void
+GdbServer::process <'Q', GdbCmd::StartNoAckMode> (string arg)
+{
+    ackMode = false;
+    send("OK");
+}
 
-template <> string
+template <> void
 GdbServer::process <'v'> (string arg)
 {
+    if (arg == "MustReplyEmpty") {
+        
+        send("");
+        return;
+    }
+
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "v");
 
     /*
-    if (arg == "MustReplyEmpty") {
-        
-        return "";
-    }
     if (arg == "Cont?") {
         
         return "vCont;c;C;s;S;t;r";
@@ -144,112 +151,130 @@ GdbServer::process <'v'> (string arg)
     */
 }
 
-template <> string
+template <> void
 GdbServer::process <'q'> (string cmd)
 {
     auto command = cmd.substr(0, cmd.find(":"));
         
     if (command == "Supported") {
         
-        return process <'q', GdbCmd::Supported> ("");
+        process <'q', GdbCmd::Supported> ("");
+        return;
     }
     if (cmd == "Symbol::") {
 
-        return process <'q', GdbCmd::Symbol> ("");
+        process <'q', GdbCmd::Symbol> ("");
+        return;
     }
     if (cmd == "Offsets") {
 
-        return process <'q', GdbCmd::Offset> ("");
+        process <'q', GdbCmd::Offset> ("");
+        return;
     }
     if (cmd == "TStatus") {
         
-        return process <'q', GdbCmd::TStatus> ("");
+        process <'q', GdbCmd::TStatus> ("");
+        return;
     }
     if (cmd == "TfV") {
         
-        return process <'q', GdbCmd::TfV> ("");
+        process <'q', GdbCmd::TfV> ("");
+        return;
     }
     if (cmd == "TfP") {
         
-        return process <'q', GdbCmd::TfP> ("");
+        process <'q', GdbCmd::TfP> ("");
+        return;
     }
     if (cmd == "fThreadInfo") {
         
-        return process <'q', GdbCmd::fThreadInfo> ("");
+        process <'q', GdbCmd::fThreadInfo> ("");
+        return;
     }
     if (cmd == "sThreadInfo") {
         
-        return process <'q', GdbCmd::sThreadInfo> ("");
+        process <'q', GdbCmd::sThreadInfo> ("");
+        return;
     }
     if (command == "Attached") {
         
-        return process <'q', GdbCmd::Attached> ("");
+        process <'q', GdbCmd::Attached> ("");
+        return;
     }
     if (command == "C") {
         
-        return process <'q', GdbCmd::C> ("");
+        process <'q', GdbCmd::C> ("");
+        return;
     }
     
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "q");
 }
 
-template <> string
+template <> void
 GdbServer::process <'Q'> (string cmd)
 {
+    auto tokens = util::split(cmd, ':');
+               
+     if (tokens[0] == "StartNoAckMode") {
+
+         process <'Q', GdbCmd::StartNoAckMode> ("");
+         return;
+     }
+    
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "Q");
 }
 
-template <> string
+template <> void
 GdbServer::process <'g'> (string cmd)
 {
     string result;
     for (int i = 0; i < 18; i++) result += readRegister(i);
-    return result;
+    send(result);
 }
 
-template <> string
+template <> void
 GdbServer::process <'s'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "s");
 }
 
-template <> string
+template <> void
 GdbServer::process <'n'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "n");
 }
 
-template <> string
+template <> void
 GdbServer::process <'H'> (string cmd)
 {
-    return "OK";
+    send("OK");
 }
 
-template <> string
+template <> void
 GdbServer::process <'G'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "G");
 }
 
-template <> string
+template <> void
 GdbServer::process <'?'> (string cmd)
 {
-    return "S05";
+    send("S05");
 }
 
-template <> string
+template <> void
 GdbServer::process <'!'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "!");
 }
 
-template <> string
+template <> void
 GdbServer::process <'k'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "k");
 }
 
-template <> string
+template <> void
 GdbServer::process <'m'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "m");
@@ -275,13 +300,13 @@ GdbServer::process <'m'> (string cmd)
     */
 }
 
-template <> string
+template <> void
 GdbServer::process <'M'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "M");
 }
 
-template <> string
+template <> void
 GdbServer::process <'p'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "p");
@@ -295,25 +320,25 @@ GdbServer::process <'p'> (string cmd)
     */
 }
 
-template <> string
+template <> void
 GdbServer::process <'P'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "P");
 }
 
-template <> string
+template <> void
 GdbServer::process <'c'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "c");
 }
 
-template <> string
+template <> void
 GdbServer::process <'D'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "D");
 }
 
-template <> string
+template <> void
 GdbServer::process <'Z'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "Z");
@@ -344,7 +369,7 @@ GdbServer::process <'Z'> (string cmd)
     */
 }
 
-template <> string
+template <> void
 GdbServer::process <'z'> (string cmd)
 {
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "z");
@@ -373,17 +398,7 @@ GdbServer::process <'z'> (string cmd)
     */
 }
 
-bool
-GdbServer::isGdbPacket(const string &packet)
-{
-    return
-    (packet[0] == 0x03) ||
-    (packet[0] == '$') ||
-    (packet[0] == '-' || packet[1] == '$') ||
-    (packet[0] == '+' || packet[1] == '$');
-}
-
-string
+void
 GdbServer::process(string package)
 {
     debug(GDB_DEBUG, "process(%s)\n", package.c_str());
@@ -398,7 +413,8 @@ GdbServer::process(string package)
         
         // Check for Ctrl+C
         if (package[0] == 0x03) {
-            return "Ctrl+C";
+            process <' ', GdbCmd::CtrlC> ("");
+            return;
         }
         
         // Check for '$x[...]#xx'
@@ -410,54 +426,48 @@ GdbServer::process(string package)
 
             if (verifyChecksum(package.substr(1, len - 4), chk)) {
                 
-                // Remember the command
                 latestCmd = package;
-                                
-                // Compute the answer string
-                auto result = process(cmd, arg);
                 
-                // Convert the answer string into a packet
-                result = "$" + result + computeChecksum(result);
-
-                // Acknowledge the command (if requesteda)
-                if (ackMode) result = "+" + result;
-
+                if (ackMode) remoteServer.send(SRVMODE_GDB, "+");
+                process(cmd, arg);
+                
             } else {
                 
+                if (ackMode) remoteServer.send(SRVMODE_GDB, "-");
                 throw VAError(ERROR_GDB_INVALID_CHECKSUM);
             }
+            
+            return;
         }
-       
+        
         throw VAError(ERROR_GDB_INVALID_FORMAT);
     }
-    
-    return "";
 }
 
-string
+void
 GdbServer::process(char cmd, string package)
 {
     switch (cmd) {
  
-        case 'v' : return process <'v'> (package);
-        case 'q' : return process <'q'> (package);
-        case 'Q' : return process <'Q'> (package);
-        case 'g' : return process <'g'> (package);
-        case 's' : return process <'s'> (package);
-        case 'n' : return process <'n'> (package);
-        case 'H' : return process <'H'> (package);
-        case 'G' : return process <'G'> (package);
-        case '?' : return process <'?'> (package);
-        case '!' : return process <'!'> (package);
-        case 'k' : return process <'k'> (package);
-        case 'm' : return process <'m'> (package);
-        case 'M' : return process <'M'> (package);
-        case 'p' : return process <'p'> (package);
-        case 'P' : return process <'P'> (package);
-        case 'c' : return process <'c'> (package);
-        case 'D' : return process <'D'> (package);
-        case 'Z' : return process <'Z'> (package);
-        case 'z' : return process <'z'> (package);
+        case 'v' : process <'v'> (package); break;
+        case 'q' : process <'q'> (package); break;
+        case 'Q' : process <'Q'> (package); break;
+        case 'g' : process <'g'> (package); break;
+        case 's' : process <'s'> (package); break;
+        case 'n' : process <'n'> (package); break;
+        case 'H' : process <'H'> (package); break;
+        case 'G' : process <'G'> (package); break;
+        case '?' : process <'?'> (package); break;
+        case '!' : process <'!'> (package); break;
+        case 'k' : process <'k'> (package); break;
+        case 'm' : process <'m'> (package); break;
+        case 'M' : process <'M'> (package); break;
+        case 'p' : process <'p'> (package); break;
+        case 'P' : process <'P'> (package); break;
+        case 'c' : process <'c'> (package); break;
+        case 'D' : process <'D'> (package); break;
+        case 'Z' : process <'Z'> (package); break;
+        case 'z' : process <'z'> (package); break;
             
         default:
             throw VAError(ERROR_GDB_UNRECOGNIZED_CMD, string(1, cmd));

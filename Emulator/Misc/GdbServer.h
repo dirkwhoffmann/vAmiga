@@ -13,7 +13,10 @@
 #include "SubComponent.h"
 
 class GdbServer : public SubComponent {
-    
+
+    // The current configuration
+    GdbServerConfig config = {};
+
     // The most recently processed command string
     string latestCmd;
     
@@ -41,7 +44,7 @@ public:
 private:
     
     const char *getDescription() const override { return "GdbServer"; }
-    void _dump(dump::Category category, std::ostream& os) const override { };
+    void _dump(dump::Category category, std::ostream& os) const override;
     
     
     //
@@ -59,6 +62,20 @@ private:
 
     
     //
+    // Configuring
+    //
+
+public:
+    
+    static GdbServerConfig getDefaultConfig();
+    const GdbServerConfig &getConfig() const { return config; }
+    void resetConfig() override;
+
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
+    
+    
+    //
     // Managing checksums
     //
 
@@ -68,28 +85,34 @@ private:
     // Verifies the checksum for a given string
     bool verifyChecksum(const string &s, const string &chk);
 
-        
+    
     //
-    // Processing packets (GdbServerCmds.cpp)
+    // Sending packets
+    //
+        
+    void send(const string &cmd);
+    
+    
+    //
+    // Processing packets
     //
 
 public:
-    
-    // Returns true if the provided package is in GDB format
-    bool isGdbPacket(const string &packet);
-    
+
+    // Main entry point for processing an incoming packet
+    void execute(const string &packet);
+        
     // Processes a packet in the format used by GDB
-    string process(string package) throws;
+    void process(string packet) throws;
 
     // Processes a checksum-free packet with the first letter stripped off
-    string process(char letter, string package) throws;
+    void process(char letter, string packet) throws;
 
 private:
-    
-    string processCtrlC();
-    
-    template <char letter> string process(string arg) throws;
-    template <char letter, GdbCmd cmd> string process(string arg) throws;
+        
+    // Processes a single command (GdbServerCmds.cpp)
+    template <char letter> void process(string arg) throws;
+    template <char letter, GdbCmd cmd> void process(string arg) throws;
     
     
     //

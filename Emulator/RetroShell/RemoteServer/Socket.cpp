@@ -97,7 +97,7 @@ Socket::recv()
 }
 
 void
-Socket::send(std::string s)
+Socket::send(const string &s)
 {
     ::send(socket, s.c_str(), (int)s.length(), 0);
 }

@@ -12,17 +12,32 @@
 #include "Aliases.h"
 #include "Reflection.h"
 
+//
+// Enumerations
+//
+
 enum class GdbCmd
 {
+    Attached,
+    C,
     CtrlC,
+    Offset,
+    StartNoAckMode,
+    sThreadInfo,
     Supported,
     Symbol,
-    Offset,
-    TStatus,
     TfV,
     TfP,
+    TStatus,
     fThreadInfo,
-    sThreadInfo,
-    Attached,
-    C
 };
+
+//
+// Structures
+//
+
+typedef struct
+{
+    bool verbose;
+}
+GdbServerConfig;

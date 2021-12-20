@@ -1220,24 +1220,31 @@ RetroShell::exec <Token::os, Token::processes> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::remote, Token::config> (Arguments &argv, long param)
 {
-    dump(gdbServer, dump::Config);
+    dump(remoteServer, dump::Config);
+}
+
+template <> void
+RetroShell::exec <Token::remote, Token::set, Token::mode> (Arguments &argv, long param)
+{
+    amiga.configure(OPT_SRV_MODE, util::parseEnum <ServerModeEnum> (argv[0]));
 }
 
 template <> void
 RetroShell::exec <Token::remote, Token::set, Token::port> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_GDB_PORT, util::parseNum(argv.front()));
-}
-
-template <> void
-RetroShell::exec <Token::remote, Token::set, Token::verbose> (Arguments &argv, long param)
-{
-    amiga.configure(OPT_GDB_VERBOSE, util::parseBool(argv.front()));
+    amiga.configure(OPT_SRV_PORT, util::parseNum(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::remote, Token::start> (Arguments& argv, long param)
 {
+    auto mode = remoteServer.getConfig().mode;
+    auto port = remoteServer.getConfig().port;
+    
+    if (mode == SRVMODE_TERMINAL) *this << "Starting terminal server";
+    if (mode == SRVMODE_GDB) *this << "Starting GDB server";
+    *this << " at port " << std::to_string(port) << "\n";
+
     remoteServer.start();
 }
 
@@ -1251,4 +1258,16 @@ template <> void
 RetroShell::exec <Token::remote, Token::inspect> (Arguments& argv, long param)
 {
     dump(remoteServer, dump::State);
+}
+
+template <> void
+RetroShell::exec <Token::gdb, Token::config> (Arguments &argv, long param)
+{
+    dump(gdbServer, dump::Config);
+}
+
+template <> void
+RetroShell::exec <Token::gdb, Token::set, Token::verbose> (Arguments &argv, long param)
+{
+    amiga.configure(OPT_GDB_VERBOSE, util::parseBool(argv.front()));
 }

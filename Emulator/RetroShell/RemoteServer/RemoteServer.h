@@ -93,6 +93,9 @@ private:
     // The main thread function
     void main();
 
+    // The receive and process loop
+    void mainLoop();
+
     
     //
     // Turning the server on and off
@@ -100,19 +103,19 @@ private:
     
 public:
     
+    // Starts or stops the remote server
     void start() throws;
     void stop();
     
+    // Indicates if the remote server has been started
     bool isListening() { return listening; }
+    
+    // Indicates if a client has connected
     bool isConnected() { return connected; }
     
-    // Signals the server thread to terminate
-    void signalStop();
-    
-private:
-    
-    void waitForClient() throws;
-    
+    // Disconnects the remote client
+    void disconnect();
+        
     
     //
     // Transmitting packets
@@ -120,14 +123,16 @@ private:
     
 public:
     
+    // Receives a string from the remote client
     string receive() throws;
-    void send(const string &packet) throws;
     
-    RemoteServer &operator<<(char value);
-    RemoteServer &operator<<(const string &value);
-    RemoteServer &operator<<(int value);
-    RemoteServer &operator<<(long value);
-    RemoteServer &operator<<(std::stringstream &stream);
+    // Transmits a string to the remote client
+    void send(const string &payload) throws { send(config.mode, payload); }
+    void send(ServerMode mode, const string &payload) throws;
+    void send(ServerMode mode, char payload) throws;
+    void send(ServerMode mode, int payload) throws;
+    void send(ServerMode mode, long payload) throws;
+    void send(ServerMode mode, std::stringstream &payload) throws;
     
     // Prints the welcome message
     void welcome();

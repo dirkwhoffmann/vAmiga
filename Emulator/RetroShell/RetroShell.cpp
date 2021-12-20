@@ -31,7 +31,7 @@ RetroShell&
 RetroShell::operator<<(char value)
 {
     storage << value;
-    remoteServer << value;
+    remoteServer.send(SRVMODE_TERMINAL, value);
     return *this;
 }
 
@@ -39,7 +39,7 @@ RetroShell&
 RetroShell::operator<<(const string& value)
 {
     storage << value;
-    remoteServer << value;
+    remoteServer.send(SRVMODE_TERMINAL, value);
     return *this;
 }
 
@@ -90,7 +90,7 @@ RetroShell::tab(isize pos)
         
         std::string fill(count, ' ');
         storage << fill;
-        remoteServer << fill;
+        remoteServer.send(SRVMODE_TERMINAL, fill);
     }
 }
 
@@ -279,6 +279,7 @@ RetroShell::execUserCommand(const string &command)
     printPrompt();
 }
 
+/*
 void
 RetroShell::exec(const string &command)
 {
@@ -288,27 +289,28 @@ RetroShell::exec(const string &command)
         execShellCmd(command);
     }
 }
-
+*/
+/*
 void
 RetroShell::execGdbCmd(const string &command)
 {
     try {
         
         auto response = gdbServer.process(command);
-        printf("response = %s\n", response.c_str());
-        remoteServer.send(response);
+        remoteServer.send(SRVMODE_GDB, response);
         
     } catch (VAError &err) {
 
-        printf("%s\n", err.what());
-        
+        warn("GDB server error: %s\n", err.what());
+
         // Disconnect the client
-        remoteServer.signalStop();
+        remoteServer.disconnect();
     }
 }
+*/
 
 void
-RetroShell::execShellCmd(const string &command)
+RetroShell::exec(const string &command)
 {
     bool ignoreError = false;
     
