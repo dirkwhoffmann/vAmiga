@@ -7,5 +7,3 @@ Interpreter.cpp
 InterpreterCmds.cpp
 
 )
-
-add_subdirectory(RemoteServer)
