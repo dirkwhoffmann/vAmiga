@@ -170,7 +170,7 @@ RetroShell::press(RetroShellKey key)
             
         case RSKEY_END:
             
-            cursor = input.length();
+            cursor = (isize)input.length();
             break;
             
         case RSKEY_TAB:
@@ -184,7 +184,7 @@ RetroShell::press(RetroShellKey key)
                 
                 // Auto-complete the typed in command
                 input = interpreter.autoComplete(input);
-                cursor = input.length();
+                cursor = (isize)input.length();
             }
             break;
             
@@ -255,7 +255,7 @@ isize
 RetroShell::cursorRel()
 {
     assert(cursor >= 0 && cursor <= inputLength());
-    return cursor - input.length();
+    return cursor - (isize)input.length();
 }
 
 void

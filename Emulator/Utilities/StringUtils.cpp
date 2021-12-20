@@ -9,7 +9,6 @@
 
 #include "StringUtils.h"
 #include <sstream>
-#include <vector>
 
 namespace util {
 

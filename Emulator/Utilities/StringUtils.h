@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Types.h"
+#include <vector>
 
 namespace util {
 
