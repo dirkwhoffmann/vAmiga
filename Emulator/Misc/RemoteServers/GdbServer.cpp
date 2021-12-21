@@ -44,11 +44,24 @@ GdbServer::receive()
         latestCmd = connection.recv();
         debug(SRV_DEBUG, "R: '%s'\n", util::makePrintable(latestCmd).c_str());
         
-        if (config.verbose) {
-            retroShell << "R: " << latestCmd << '\n';
-        }
+        // Display the received package in RetroShell
+        if (config.verbose) retroShell << "R: " << latestCmd << '\n';
         
-        execute(latestCmd);
+        try {
+            
+            process(latestCmd);
+            
+        } catch (VAError &err) {
+            
+            auto msg = "GDB server error: " + string(err.what());
+            debug(SRV_DEBUG, "%s\n", msg.c_str());
+
+            // Display the error message in RetroShell
+            if (config.verbose) retroShell << msg << '\n';
+
+            // Disconnect the client
+            disconnect();
+        }
         
         msgQueue.put(MSG_SRV_RECEIVE);
         return latestCmd;
@@ -83,6 +96,7 @@ GdbServer::sendPacket(const string &payload)
     send(packet);
 }
 
+/*
 void
 GdbServer::execute(const string &packet)
 {
@@ -99,7 +113,7 @@ GdbServer::execute(const string &packet)
         disconnect();
     }
 }
-
+*/
 
 GdbServerConfig
 GdbServer::getDefaultConfig()

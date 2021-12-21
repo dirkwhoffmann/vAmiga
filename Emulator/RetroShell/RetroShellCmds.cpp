@@ -1231,7 +1231,7 @@ RetroShell::exec <Token::rshell, Token::start> (Arguments& argv, long param)
 {
     auto port = util::parseNum(argv.front());
         
-    *this << "Server is listening at port " << port << "\n";
+    *this << "Server is listening on port " << port << "\n";
     terminalServer.start(port);
 }
 
@@ -1268,7 +1268,7 @@ RetroShell::exec <Token::gdb, Token::start> (Arguments& argv, long param)
 {
     auto port = util::parseNum(argv.front());
         
-    *this << "Server is listening at port " << port << "\n";
+    *this << "Server is listening on port " << port << "\n";
     gdbServer.start(port);
 }
 

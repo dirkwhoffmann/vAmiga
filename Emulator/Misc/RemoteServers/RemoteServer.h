@@ -76,6 +76,11 @@ protected:
 
     // The main thread function
     void main();
+
+private:
+    
+    // Called inside main
+    void mainLoop();
     
     
     //
@@ -96,7 +101,7 @@ public:
     
     // Disconnects the remote client
     void disconnect();
-        
+            
     
     //
     // Transmitting and processing packets
@@ -126,15 +131,6 @@ private:
     // Prints the welcome message
     virtual void welcome() { }
         
-    
-    //
-    // Subclass specific low-level routines
-    //
-    
-    /*
-private:
-    
-    virtual string _receive() throws = 0;
-    virtual void _send(const string &packet) throws = 0;
-    */
+    // Reports an error to the GUI
+    void handleError(const char *description);
 };

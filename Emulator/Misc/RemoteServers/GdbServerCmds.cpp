@@ -309,15 +309,11 @@ GdbServer::process <'M'> (string cmd)
 template <> void
 GdbServer::process <'p'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "p");
-
-    /*
     isize nr;
     util::parseHex(cmd, &nr);
     
     printf("p command: nr = %ld\n", nr);
-    send(readRegister(nr));
-    */
+    sendPacket(readRegister(nr));
 }
 
 template <> void

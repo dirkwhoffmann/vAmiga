@@ -89,7 +89,7 @@ public:
 public:
 
     // Main entry point for processing an incoming packet
-    void execute(const string &packet);
+    // void execute(const string &packet);
         
     // Processes a packet in the format used by GDB
     void process(string packet) throws;
