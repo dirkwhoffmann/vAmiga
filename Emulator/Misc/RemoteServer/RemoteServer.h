@@ -24,6 +24,9 @@ protected:
     // The server thread
     std::thread serverThread;
 
+    // Port number
+    isize port = 0;
+    
     // Indicates if the server is running
     bool listening = false;
     
@@ -106,7 +109,7 @@ protected:
 public:
     
     // Starts or stops the remote server
-    void start() throws;
+    void start(isize port) throws;
     void stop();
     
     // Indicates if the remote server has been started

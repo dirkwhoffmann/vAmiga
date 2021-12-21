@@ -51,6 +51,6 @@ struct ServerModeEnum : util::Reflection<ServerModeEnum, ServerMode>
 typedef struct
 {
     ServerMode mode;
-    isize port;
+    // isize port;
 }
 RemoteServerConfig;

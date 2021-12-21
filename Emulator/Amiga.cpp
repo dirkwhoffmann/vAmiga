@@ -298,7 +298,6 @@ Amiga::getConfigItem(Option option, long id) const
             fatalError;
 
         case OPT_SRV_MODE:
-        case OPT_SRV_PORT:
 
             return terminalServer.getConfigItem(option);
 
@@ -479,7 +478,6 @@ Amiga::configure(Option option, i64 value)
             break;
             
         case OPT_SRV_MODE:
-        case OPT_SRV_PORT:
 
             terminalServer.setConfigItem(option, value);
             break;

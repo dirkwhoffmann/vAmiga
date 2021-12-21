@@ -119,7 +119,6 @@ enum_long(OPT)
     
     // Remote server
     OPT_SRV_MODE,
-    OPT_SRV_PORT,
 
     // GDB server
     OPT_GDB_VERBOSE    
@@ -210,7 +209,6 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_AUDVOLR:             return "AUDVOLR";
 
             case OPT_SRV_MODE:            return "MODE";
-            case OPT_SRV_PORT:            return "PORT";
                 
             case OPT_GDB_VERBOSE:         return "VERBOSE";
         }

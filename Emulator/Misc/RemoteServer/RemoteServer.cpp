@@ -36,14 +36,13 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
         
         os << tab("Mode");
         os << ServerModeEnum::key(config.mode) << std::endl;
-        os << tab("Port");
-        os << dec(config.port) << std::endl;
     }
     
     if (category & dump::State) {
         
         os << tab("Listening") << bol(listening) << std::endl;
         os << tab("Connected") << bol(connected) << std::endl;
+        os << tab("Port") << dec(port) << std::endl;
     }
 }
 
@@ -53,7 +52,7 @@ RemoteServer::getDefaultConfig()
     RemoteServerConfig defaults;
 
     defaults.mode = SRVMODE_TERMINAL;
-    defaults.port = 8080;
+    // defaults.port = 8080;
 
     return defaults;
 }
@@ -64,7 +63,6 @@ RemoteServer::resetConfig()
     auto defaults = getDefaultConfig();
     
     setConfigItem(OPT_SRV_MODE, defaults.mode);
-    setConfigItem(OPT_SRV_PORT, defaults.port);
 }
 
 i64
@@ -73,7 +71,6 @@ RemoteServer::getConfigItem(Option option) const
     switch (option) {
             
         case OPT_SRV_MODE:      return config.mode;
-        case OPT_SRV_PORT:      return config.port;
             
         default:
             fatalError;
@@ -92,11 +89,6 @@ RemoteServer::setConfigItem(Option option, i64 value)
             }
             config.mode = (ServerMode)value;
             return;
-
-        case OPT_SRV_PORT:
-            
-            config.port = (isize)value;
-            return;
                         
         default:
             fatalError;
@@ -104,17 +96,18 @@ RemoteServer::setConfigItem(Option option, i64 value)
 }
 
 void
-RemoteServer::start()
+RemoteServer::start(isize port)
 {
-    debug(SRV_DEBUG, "Starting remote server...\n");
-        
+    debug(SRV_DEBUG, "Starting remote server at port %ld...\n", port);
+
     // Only proceed if the server is not running
     if (listening) throw VAError(ERROR_SERVER_RUNNING);
-        
+
     // Make sure that we continue with a terminated server thread
     if (serverThread.joinable()) serverThread.join();
     
     // Spawn a new thread
+    this->port = port;
     listening = true;
     serverThread = std::thread(&RemoteServer::main, this);
 }
@@ -230,7 +223,7 @@ RemoteServer::main()
         try {
             
             // Create a port listener
-            listener = PortListener((u16)config.port);
+            listener = PortListener((u16)port);
             
             // Wait for a client
             connection = listener.accept();

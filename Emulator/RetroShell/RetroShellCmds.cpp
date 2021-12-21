@@ -1231,22 +1231,12 @@ RetroShell::exec <Token::remote, Token::set, Token::mode> (Arguments &argv, long
 }
 
 template <> void
-RetroShell::exec <Token::remote, Token::set, Token::port> (Arguments &argv, long param)
-{
-    amiga.configure(OPT_SRV_PORT, util::parseNum(argv.front()));
-}
-
-template <> void
 RetroShell::exec <Token::remote, Token::start> (Arguments& argv, long param)
 {
-    auto mode = remoteServer.getConfig().mode;
-    auto port = remoteServer.getConfig().port;
-    
-    if (mode == SRVMODE_TERMINAL) *this << "Starting terminal server";
-    if (mode == SRVMODE_GDB) *this << "Starting GDB server";
-    *this << " at port " << std::to_string(port) << "\n";
-
-    remoteServer.start();
+    auto port = util::parseNum(argv.front());
+        
+    *this << "Server is listening at port " << port << "\n";
+    remoteServer.start(port);
 }
 
 template <> void

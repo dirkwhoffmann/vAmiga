@@ -1495,9 +1495,9 @@ using namespace moira;
     return [self server]->isConnected();
 }
 
--(void)start
+-(void)start:(NSInteger)port
 {
-    [self server]->start();
+    [self server]->start(port);
 }
 
 -(void)stop

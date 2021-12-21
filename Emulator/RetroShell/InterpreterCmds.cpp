@@ -1002,13 +1002,9 @@ Interpreter::registerInstructions()
              "key", "Selects the server protocol",
              &RetroShell::exec <Token::remote, Token::set, Token::mode>, 1);
 
-    root.add({"remote", "set", "port"},
-             "key", "Assigns the port number",
-             &RetroShell::exec <Token::remote, Token::set, Token::port>, 1);
-
     root.add({"remote", "start"},
              "command", "Starts the debug server",
-             &RetroShell::exec <Token::remote, Token::start>, 0);
+             &RetroShell::exec <Token::remote, Token::start>, 1);
 
     root.add({"remote", "stop"},
              "command", "Stops the debug server",
