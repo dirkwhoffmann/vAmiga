@@ -52,7 +52,7 @@ RemoteServer::getDefaultConfig()
 {
     RemoteServerConfig defaults;
 
-    defaults.mode = SRVMODE_GDB;
+    defaults.mode = SRVMODE_TERMINAL;
     defaults.port = 8080;
 
     return defaults;

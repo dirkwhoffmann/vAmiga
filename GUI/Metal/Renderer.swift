@@ -200,7 +200,7 @@ class Renderer: NSObject, MTKViewDelegate {
         update(frames: frames)
 
         semaphore.wait()
-        self.canvas.updateTexture()
+        canvas.updateTexture()
         
         if let drawable = metalLayer.nextDrawable() {
 
@@ -227,6 +227,7 @@ class Renderer: NSObject, MTKViewDelegate {
             }
             buffer.present(drawable)
             buffer.commit()
+            // buffer.waitUntilCompleted()
         }
         
         // Perform periodic events inside the controller

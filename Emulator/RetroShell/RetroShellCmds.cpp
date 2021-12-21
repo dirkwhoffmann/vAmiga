@@ -133,6 +133,7 @@ template <> void
 RetroShell::exec <Token::amiga, Token::power, Token::on> (Arguments &argv, long param)
 {
     amiga.powerOn();
+    amiga.run();
 }
 
 template <> void
