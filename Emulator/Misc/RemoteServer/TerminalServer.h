@@ -21,4 +21,5 @@ public:
     
     string _receive() override throws;
     void _send(const string &packet) override throws;
+    void _process(const string &packet) override throws;
 };

@@ -990,18 +990,7 @@ Interpreter::registerInstructions()
         
     root.add({"remote"},
              "component", "Remote server");
-
-    root.add({"remote", "config"},
-             "command", "Displays the current configuration",
-             &RetroShell::exec <Token::remote, Token::config>);
     
-    root.add({"remote", "set"},
-             "command", "Configures the component");
-        
-    root.add({"remote", "set", "mode"},
-             "key", "Selects the server protocol",
-             &RetroShell::exec <Token::remote, Token::set, Token::mode>, 1);
-
     root.add({"remote", "start"},
              "command", "Starts the debug server",
              &RetroShell::exec <Token::remote, Token::start>, 1);

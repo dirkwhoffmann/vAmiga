@@ -428,12 +428,12 @@ GdbServer::process(string package)
                 
                 latestCmd = package;
                 
-                if (ackMode) remoteServer.send(SRVMODE_GDB, "+");
+                if (ackMode) remoteServer.send("+");
                 process(cmd, arg);
                 
             } else {
                 
-                if (ackMode) remoteServer.send(SRVMODE_GDB, "-");
+                if (ackMode) remoteServer.send("-");
                 throw VAError(ERROR_GDB_INVALID_CHECKSUM);
             }
             

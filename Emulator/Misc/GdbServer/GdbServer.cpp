@@ -142,7 +142,7 @@ GdbServer::send(const string &cmd)
         retroShell << "T: " << packet << '\n';
     }
 
-    remoteServer.send(SRVMODE_GDB, packet);
+    remoteServer.send(packet);
 }
 
 void

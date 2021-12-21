@@ -9,14 +9,13 @@
 
 #include "config.h"
 #include "TerminalServer.h"
-#include "StringUtils.h"
 #include "MsgQueue.h"
+#include "RetroShell.h"
+#include "StringUtils.h"
 
 void
 TerminalServer::welcome()
 {
-    if (config.mode != SRVMODE_TERMINAL) return;
-    
     send("vAmiga Remote Server ");
     send(std::to_string(VER_MAJOR) + ".");
     send(std::to_string(VER_MINOR) + ".");
@@ -34,7 +33,7 @@ TerminalServer::_receive()
     auto packet = connection.recv();
             
     // Ask the client to delete the input (will be replicated by RetroShell)
-    send(SRVMODE_TERMINAL, "\033[A\33[2K\r");
+    send("\033[A\33[2K\r");
 
     msgQueue.put(MSG_SRV_RECEIVE);
     return packet;
@@ -46,4 +45,11 @@ TerminalServer::_send(const string &packet)
     connection.send(packet);
     
     msgQueue.put(MSG_SRV_SEND);
+}
+
+void
+TerminalServer::_process(const string &packet)
+{
+    retroShell.press(packet);
+    retroShell.press('\n');
 }

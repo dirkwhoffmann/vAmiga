@@ -18,9 +18,6 @@ class RemoteServer : public SubComponent {
     
 protected:
     
-    // The current configuration
-    RemoteServerConfig config = {};
-
     // The server thread
     std::thread serverThread;
 
@@ -37,10 +34,7 @@ protected:
     PortListener listener;
     Socket connection;
                 
-    // The most recently processed command string
-    string latestCmd;
-    
-    
+        
     //
     // Initializing
     //
@@ -76,20 +70,6 @@ private:
 
     
     //
-    // Configuring
-    //
-
-public:
-    
-    static RemoteServerConfig getDefaultConfig();
-    const RemoteServerConfig &getConfig() const { return config; }
-    void resetConfig() override;
-
-    i64 getConfigItem(Option option) const;
-    void setConfigItem(Option option, i64 value);
-    
-
-    //
     // Running the server
     //
     
@@ -97,10 +77,7 @@ protected:
 
     // The main thread function
     void main();
-
-    // The receive and process loop
-    void mainLoop();
-
+    
     
     //
     // Turning the server on and off
@@ -123,7 +100,7 @@ public:
         
     
     //
-    // Transmitting packets
+    // Transmitting and processing packets
     //
     
 public:
@@ -132,19 +109,28 @@ public:
     string receive() throws;
     
     // Transmits a string to the remote client
-    void send(const string &payload) throws { send(config.mode, payload); }
-    void send(ServerMode mode, const string &payload) throws;
-    void send(ServerMode mode, char payload) throws;
-    void send(ServerMode mode, int payload) throws;
-    void send(ServerMode mode, long payload) throws;
-    void send(ServerMode mode, std::stringstream &payload) throws;
-    
+    void send(const string &payload) throws;
+    void send(char payload) throws;
+    void send(int payload) throws;
+    void send(long payload) throws;
+    void send(std::stringstream &payload) throws;
+
+private:
+
     // Prints the welcome message
     virtual void welcome() = 0;
     
+    // Processes a received package
+    void process(const string &packet) throws { _process(packet); }
+    
+    
+    //
+    // Subclass specific low-level routines
+    //
+    
 private:
     
-    // Subclass specific implementations for send and receive
     virtual string _receive() throws = 0;
     virtual void _send(const string &packet) throws = 0;
+    virtual void _process(const string &packet) throws = 0;
 };

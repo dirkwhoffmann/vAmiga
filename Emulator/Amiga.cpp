@@ -297,10 +297,6 @@ Amiga::getConfigItem(Option option, long id) const
             if (id == PORT_2) return controlPort2.joystick.getConfigItem(option);
             fatalError;
 
-        case OPT_SRV_MODE:
-
-            return terminalServer.getConfigItem(option);
-
         case OPT_GDB_VERBOSE:
             
             return gdbServer.getConfigItem(option);
@@ -477,11 +473,6 @@ Amiga::configure(Option option, i64 value)
             controlPort2.joystick.setConfigItem(option, value);
             break;
             
-        case OPT_SRV_MODE:
-
-            terminalServer.setConfigItem(option, value);
-            break;
-
         case OPT_GDB_VERBOSE:
             
             gdbServer.setConfigItem(option, value);

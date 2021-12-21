@@ -31,7 +31,7 @@ RetroShell&
 RetroShell::operator<<(char value)
 {
     storage << value;
-    remoteServer.send(SRVMODE_TERMINAL, value);
+    remoteServer.send(value);
     return *this;
 }
 
@@ -39,7 +39,7 @@ RetroShell&
 RetroShell::operator<<(const string& value)
 {
     storage << value;
-    remoteServer.send(SRVMODE_TERMINAL, value);
+    remoteServer.send(value);
     return *this;
 }
 
@@ -90,7 +90,7 @@ RetroShell::tab(isize pos)
         
         std::string fill(count, ' ');
         storage << fill;
-        remoteServer.send(SRVMODE_TERMINAL, fill);
+        remoteServer.send(fill);
     }
 }
 
@@ -104,7 +104,7 @@ void
 RetroShell::printHelp()
 {
     storage.printHelp();
-    remoteServer.send(SRVMODE_TERMINAL, "Type 'help' for help.\n");
+    remoteServer.send("Type 'help' for help.\n");
 }
 
 void

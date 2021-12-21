@@ -34,8 +34,6 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
     
     if (category & dump::Config) {
         
-        os << tab("Mode");
-        os << ServerModeEnum::key(config.mode) << std::endl;
     }
     
     if (category & dump::State) {
@@ -43,55 +41,6 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
         os << tab("Listening") << bol(listening) << std::endl;
         os << tab("Connected") << bol(connected) << std::endl;
         os << tab("Port") << dec(port) << std::endl;
-    }
-}
-
-RemoteServerConfig
-RemoteServer::getDefaultConfig()
-{
-    RemoteServerConfig defaults;
-
-    defaults.mode = SRVMODE_TERMINAL;
-    // defaults.port = 8080;
-
-    return defaults;
-}
-
-void
-RemoteServer::resetConfig()
-{
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_SRV_MODE, defaults.mode);
-}
-
-i64
-RemoteServer::getConfigItem(Option option) const
-{
-    switch (option) {
-            
-        case OPT_SRV_MODE:      return config.mode;
-            
-        default:
-            fatalError;
-    }
-}
-
-void
-RemoteServer::setConfigItem(Option option, i64 value)
-{
-    switch (option) {
-
-        case OPT_SRV_MODE:
-            
-            if (!ServerModeEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, ServerModeEnum::keyList());
-            }
-            config.mode = (ServerMode)value;
-            return;
-                        
-        default:
-            fatalError;
     }
 }
 
@@ -153,7 +102,7 @@ RemoteServer::receive()
 }
 
 void
-RemoteServer::send(ServerMode mode, const string &packet)
+RemoteServer::send(const string &packet)
 {
     if (isConnected()) {
         
@@ -163,10 +112,8 @@ RemoteServer::send(ServerMode mode, const string &packet)
 }
 
 void
-RemoteServer::send(ServerMode mode, char payload)
+RemoteServer::send(char payload)
 {
-    if (!isConnected() || mode != config.mode) return;
-    
     switch (payload) {
             
         case '\n':
@@ -187,20 +134,20 @@ RemoteServer::send(ServerMode mode, char payload)
 }
 
 void
-RemoteServer::send(ServerMode mode, int payload)
+RemoteServer::send(int payload)
 {
     send(std::to_string(payload));
 }
 
 void
-RemoteServer::send(ServerMode mode, long payload)
+RemoteServer::send(long payload)
 {
     send(std::to_string(payload));
 }
 
 
 void
-RemoteServer::send(ServerMode mode, std::stringstream &payload)
+RemoteServer::send(std::stringstream &payload)
 {
     string line;
     while(std::getline(payload, line)) {
@@ -229,10 +176,9 @@ RemoteServer::main()
 
             // Print the startup message and the input prompt
             welcome();
-            send(SRVMODE_TERMINAL, retroShell.prompt);
             
             // Receive and process packages
-            mainLoop();
+            while (1) { process(receive()); }
             
         } catch (VAError &err) {
             
@@ -257,28 +203,4 @@ RemoteServer::main()
     msgQueue.put(MSG_SRV_STOP);
 }
 
-void
-RemoteServer::mainLoop()
-{
-    while (1) {
-        
-        auto packet = receive();
-        
-        switch (config.mode) {
-                
-            case SRVMODE_TERMINAL:
-                
-                retroShell.press(packet);
-                retroShell.press('\n');
-                break;
-                
-            case SRVMODE_GDB:
-                
-                gdbServer.execute(packet);
-                break;
-                
-            default:
-                fatalError;
-        }
-    }
-}
+void process(const string &packet);

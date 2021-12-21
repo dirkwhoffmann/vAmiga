@@ -225,12 +225,13 @@ class Canvas: Layer {
                     
             var buffer = amiga.denise.noise!
             longFrameTexture.replace(w: Int(HPIXELS),
-                                     h: longFrameTexture.height,
+                                     h: Int(VPIXELS),
                                      buffer: buffer)
+            
             buffer = amiga.denise.noise!
             shortFrameTexture.replace(w: Int(HPIXELS),
-                                     h: shortFrameTexture.height,
-                                     buffer: buffer)
+                                      h: Int(VPIXELS),
+                                      buffer: buffer)
             return
         }
         
@@ -252,11 +253,11 @@ class Canvas: Layer {
             // Update the GPU texture
             if currLOF {
                 longFrameTexture.replace(w: Int(HPIXELS),
-                                         h: longFrameTexture.height,
+                                         h: Int(VPIXELS),
                                          buffer: buffer.data + Int(HBLANK_MIN) * 4)
             } else {
                 shortFrameTexture.replace(w: Int(HPIXELS),
-                                          h: shortFrameTexture.height,
+                                          h: Int(VPIXELS),
                                           buffer: buffer.data + Int(HBLANK_MIN) * 4)
             }
         }

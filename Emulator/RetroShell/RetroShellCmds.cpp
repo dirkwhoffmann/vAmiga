@@ -1219,18 +1219,6 @@ RetroShell::exec <Token::os, Token::processes> (Arguments& argv, long param)
 }
 
 template <> void
-RetroShell::exec <Token::remote, Token::config> (Arguments &argv, long param)
-{
-    dump(remoteServer, dump::Config);
-}
-
-template <> void
-RetroShell::exec <Token::remote, Token::set, Token::mode> (Arguments &argv, long param)
-{
-    amiga.configure(OPT_SRV_MODE, util::parseEnum <ServerModeEnum> (argv[0]));
-}
-
-template <> void
 RetroShell::exec <Token::remote, Token::start> (Arguments& argv, long param)
 {
     auto port = util::parseNum(argv.front());
