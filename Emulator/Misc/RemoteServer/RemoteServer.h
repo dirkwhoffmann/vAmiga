@@ -141,4 +141,10 @@ public:
     
     // Prints the welcome message
     virtual void welcome() = 0;
+    
+private:
+    
+    // Subclass specific implementations for send and receive
+    virtual string _receive() throws = 0;
+    virtual void _send(const string &packet) throws = 0;
 };

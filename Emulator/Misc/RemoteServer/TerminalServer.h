@@ -18,4 +18,7 @@ public:
     using RemoteServer::RemoteServer;
     
     void welcome() override;
+    
+    string _receive() override throws;
+    void _send(const string &packet) override throws;
 };

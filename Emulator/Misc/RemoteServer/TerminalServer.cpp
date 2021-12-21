@@ -9,6 +9,8 @@
 
 #include "config.h"
 #include "TerminalServer.h"
+#include "StringUtils.h"
+#include "MsgQueue.h"
 
 void
 TerminalServer::welcome()
@@ -24,4 +26,24 @@ TerminalServer::welcome()
     send("Licensed under the GNU General Public License v3\n\n");
     send("Type 'help' for help.\n");
     send("\n");
+}
+
+string
+TerminalServer::_receive()
+{
+    auto packet = connection.recv();
+            
+    // Ask the client to delete the input (will be replicated by RetroShell)
+    send(SRVMODE_TERMINAL, "\033[A\33[2K\r");
+
+    msgQueue.put(MSG_SRV_RECEIVE);
+    return packet;
+}
+
+void
+TerminalServer::_send(const string &packet)
+{
+    connection.send(packet);
+    
+    msgQueue.put(MSG_SRV_SEND);
 }

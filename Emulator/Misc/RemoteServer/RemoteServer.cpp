@@ -141,29 +141,25 @@ RemoteServer::disconnect()
 string
 RemoteServer::receive()
 {
-    if (!isConnected()) return "";
+    string packet;
     
-    auto packet = connection.recv();
-            
-    // In terminal mode, ask the client to wipe out the input line.
-    // The line will be sent back by RetroShell.
-    send(SRVMODE_TERMINAL, "\033[A\33[2K\r");
-         
-    debug(SRV_DEBUG, "R: %s\n", util::makePrintable(packet).c_str());
-    msgQueue.put(MSG_SRV_RECEIVE);
+    if (isConnected()) {
+        
+        packet = _receive();
+        debug(SRV_DEBUG, "R: %s\n", util::makePrintable(packet).c_str());
+    }
     
     return packet;
 }
 
 void
-RemoteServer::send(ServerMode mode, const string &payload)
+RemoteServer::send(ServerMode mode, const string &packet)
 {
-    if (!isConnected() || mode != config.mode) return;
-
-    connection.send(payload);
-    
-    debug(SRV_DEBUG, "T: '%s'\n", util::makePrintable(payload).c_str());
-    msgQueue.put(MSG_SRV_SEND);
+    if (isConnected()) {
+        
+        _send(packet);
+        debug(SRV_DEBUG, "T: '%s'\n", util::makePrintable(packet).c_str());
+    }
 }
 
 void
