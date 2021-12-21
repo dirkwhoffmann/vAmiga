@@ -1467,21 +1467,62 @@ using namespace moira;
 @end
 
 //
-// GdbServer proxy
+// TerminalServer proxy
 //
 
-@implementation RemoteServerProxy
+@implementation TerminalServerProxy
 
-- (RemoteServer *)server
+- (TerminalServer *)server
 {
-    return (RemoteServer *)obj;
+    return (TerminalServer *)obj;
 }
 
-+ (instancetype)make:(RemoteServer *)server
++ (instancetype)make:(TerminalServer *)server
 {
     if (server == nullptr) { return nil; }
     
-    RemoteServerProxy *proxy = [[self alloc] initWith: server];
+    TerminalServerProxy *proxy = [[self alloc] initWith: server];
+    return proxy;
+}
+
+-(BOOL)listening
+{
+    return [self server]->isListening();
+}
+
+-(BOOL)connected
+{
+    return [self server]->isConnected();
+}
+
+-(void)start:(NSInteger)port
+{
+    [self server]->start(port);
+}
+
+-(void)stop
+{
+    [self server]->stop();
+}
+
+@end
+
+//
+// GdbServer proxy
+//
+
+@implementation GdbServerProxy
+
+- (GdbServer *)server
+{
+    return (GdbServer *)obj;
+}
+
++ (instancetype)make:(GdbServer *)server
+{
+    if (server == nullptr) { return nil; }
+    
+    GdbServerProxy *proxy = [[self alloc] initWith: server];
     return proxy;
 }
 
@@ -2117,7 +2158,7 @@ using namespace moira;
 @synthesize df3;
 @synthesize diskController;
 @synthesize dmaDebugger;
-@synthesize terminalServer;
+@synthesize gdbServer;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
@@ -2126,6 +2167,7 @@ using namespace moira;
 @synthesize serialPort;
 @synthesize recorder;
 @synthesize scheduler;
+@synthesize terminalServer;
 @synthesize watchpoints;
 
 - (instancetype) init
@@ -2153,7 +2195,7 @@ using namespace moira;
     df3 = [[DriveProxy alloc] initWith:&amiga->df3];
     diskController = [[DiskControllerProxy alloc] initWith:&amiga->paula.diskController];
     dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
-    terminalServer = [[RemoteServerProxy alloc] initWith:&amiga->terminalServer];
+    gdbServer = [[GdbServerProxy alloc] initWith:&amiga->gdbServer];
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
@@ -2162,6 +2204,7 @@ using namespace moira;
     recorder = [[RecorderProxy alloc] initWith:&amiga->denise.screenRecorder];
     serialPort = [[SerialPortProxy alloc] initWith:&amiga->serialPort];
     scheduler = [[SchedulerProxy alloc] initWith:&amiga->agnus.scheduler];
+    terminalServer = [[TerminalServerProxy alloc] initWith:&amiga->terminalServer];
     watchpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.watchpoints];
 
     return self;

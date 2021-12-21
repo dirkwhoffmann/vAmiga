@@ -33,11 +33,11 @@ class MsgQueue;
 class OSDebugger;
 class Paula;
 class PixelEngine;
-class RemoteServer;
 class RetroShell;
 class RTC;
 class Scheduler;
 class SerialPort;
+class TerminalServer;
 class UART;
 class ZorroManager;
 
@@ -71,11 +71,11 @@ protected:
     OSDebugger &osDebugger;
     Paula &paula;
     PixelEngine &pixelEngine;
-    RemoteServer &remoteServer;
     RetroShell &retroShell;
     RTC &rtc;
     Scheduler &scheduler;
     SerialPort &serialPort;
+    TerminalServer &terminalServer;
     UART &uart;
     ZorroManager &zorro;
 

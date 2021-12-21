@@ -87,30 +87,6 @@ RemoteServer::disconnect()
     listener.close();
 }
 
-string
-RemoteServer::receive()
-{
-    string packet;
-    
-    if (isConnected()) {
-        
-        packet = _receive();
-        debug(SRV_DEBUG, "R: %s\n", util::makePrintable(packet).c_str());
-    }
-    
-    return packet;
-}
-
-void
-RemoteServer::send(const string &packet)
-{
-    if (isConnected()) {
-        
-        _send(packet);
-        debug(SRV_DEBUG, "T: '%s'\n", util::makePrintable(packet).c_str());
-    }
-}
-
 void
 RemoteServer::send(char payload)
 {
@@ -178,7 +154,7 @@ RemoteServer::main()
             welcome();
             
             // Receive and process packages
-            while (1) { process(receive()); }
+            while (1) { receive(); }
             
         } catch (VAError &err) {
             

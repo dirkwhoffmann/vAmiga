@@ -20,25 +20,25 @@
 template <> void
 GdbServer::process <' ', GdbCmd::CtrlC> (string arg)
 {
-    debug(GDB_DEBUG, "Ctrl+C\n");
+    debug(SRV_DEBUG, "Ctrl+C\n");
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "CtrlC");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::Supported> (string arg)
 {
-    send("PacketSize=512;"
-         "BreakpointCommands+;"
-         "swbreak+;"
-         "hwbreak+;"
-         "QStartNoAckMode+;"
-         "vContSupported+");
+    sendPacket("PacketSize=512;"
+               "BreakpointCommands+;"
+               "swbreak+;"
+               "hwbreak+;"
+               "QStartNoAckMode+;"
+               "vContSupported+");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::Symbol> (string arg)
 {
-    send("OK");
+    sendPacket("OK");
 }
 
 template <> void
@@ -81,50 +81,50 @@ GdbServer::process <'q', GdbCmd::Offset> (string arg)
 template <> void
 GdbServer::process <'q', GdbCmd::TStatus> (string arg)
 {
-    send("T0");
+    sendPacket("T0");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::TfV> (string arg)
 {
-    send("l");
+    sendPacket("l");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::TfP> (string arg)
 {
-    send("l");
+    sendPacket("l");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::fThreadInfo> (string arg)
 {
-    send("m01");
+    sendPacket("m01");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::sThreadInfo> (string arg)
 {
-    send("l");
+    sendPacket("l");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::Attached> (string arg)
 {
-    send("0");
+    sendPacket("0");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::C> (string arg)
 {
-    send("QC1");
+    sendPacket("QC1");
 }
 
 template <> void
 GdbServer::process <'Q', GdbCmd::StartNoAckMode> (string arg)
 {
     ackMode = false;
-    send("OK");
+    sendPacket("OK");
 }
 
 template <> void
@@ -132,7 +132,7 @@ GdbServer::process <'v'> (string arg)
 {
     if (arg == "MustReplyEmpty") {
         
-        send("");
+        sendPacket("");
         return;
     }
 
@@ -247,7 +247,7 @@ GdbServer::process <'n'> (string cmd)
 template <> void
 GdbServer::process <'H'> (string cmd)
 {
-    send("OK");
+    sendPacket("OK");
 }
 
 template <> void
@@ -259,7 +259,7 @@ GdbServer::process <'G'> (string cmd)
 template <> void
 GdbServer::process <'?'> (string cmd)
 {
-    send("S05");
+    sendPacket("S05");
 }
 
 template <> void
@@ -401,7 +401,7 @@ GdbServer::process <'z'> (string cmd)
 void
 GdbServer::process(string package)
 {
-    debug(GDB_DEBUG, "process(%s)\n", package.c_str());
+    debug(SRV_DEBUG, "process(%s)\n", package.c_str());
     
     // Check if the previous package has been rejected
     if (package[0] == '-') throw VAError(ERROR_GDB_NO_ACK);
@@ -428,12 +428,12 @@ GdbServer::process(string package)
                 
                 latestCmd = package;
                 
-                if (ackMode) remoteServer.send("+");
+                if (ackMode) send("+");
                 process(cmd, arg);
                 
             } else {
                 
-                if (ackMode) remoteServer.send("-");
+                if (ackMode) connection.send("-");
                 throw VAError(ERROR_GDB_INVALID_CHECKSUM);
             }
             
@@ -473,4 +473,3 @@ GdbServer::process(char cmd, string package)
             throw VAError(ERROR_GDB_UNRECOGNIZED_CMD, string(1, cmd));
     }
 }
-

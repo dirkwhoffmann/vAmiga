@@ -1115,6 +1115,10 @@ RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
     dump(*amiga.df[param], dump::State);
 }
 
+//
+// OSDebugger
+//
+
 template <> void
 RetroShell::exec <Token::os, Token::execbase> (Arguments& argv, long param)
 {
@@ -1218,26 +1222,34 @@ RetroShell::exec <Token::os, Token::processes> (Arguments& argv, long param)
     *this << ss;
 }
 
+//
+// Remote shell
+//
+
 template <> void
-RetroShell::exec <Token::remote, Token::start> (Arguments& argv, long param)
+RetroShell::exec <Token::rshell, Token::start> (Arguments& argv, long param)
 {
     auto port = util::parseNum(argv.front());
         
     *this << "Server is listening at port " << port << "\n";
-    remoteServer.start(port);
+    terminalServer.start(port);
 }
 
 template <> void
-RetroShell::exec <Token::remote, Token::stop> (Arguments& argv, long param)
+RetroShell::exec <Token::rshell, Token::stop> (Arguments& argv, long param)
 {
-    remoteServer.stop();
+    terminalServer.stop();
 }
 
 template <> void
-RetroShell::exec <Token::remote, Token::inspect> (Arguments& argv, long param)
+RetroShell::exec <Token::rshell, Token::inspect> (Arguments& argv, long param)
 {
-    dump(remoteServer, dump::State);
+    dump(terminalServer, dump::State);
 }
+
+//
+// GDB server
+//
 
 template <> void
 RetroShell::exec <Token::gdb, Token::config> (Arguments &argv, long param)
@@ -1249,4 +1261,25 @@ template <> void
 RetroShell::exec <Token::gdb, Token::set, Token::verbose> (Arguments &argv, long param)
 {
     amiga.configure(OPT_GDB_VERBOSE, util::parseBool(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::gdb, Token::start> (Arguments& argv, long param)
+{
+    auto port = util::parseNum(argv.front());
+        
+    *this << "Server is listening at port " << port << "\n";
+    gdbServer.start(port);
+}
+
+template <> void
+RetroShell::exec <Token::gdb, Token::stop> (Arguments& argv, long param)
+{
+    gdbServer.stop();
+}
+
+template <> void
+RetroShell::exec <Token::gdb, Token::inspect> (Arguments& argv, long param)
+{
+    dump(gdbServer, dump::State);
 }

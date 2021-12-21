@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "RemoteServerTypes.h"
 #include "SubComponent.h"
 #include "Socket.h"
 #include <thread>
@@ -86,8 +85,8 @@ protected:
 public:
     
     // Starts or stops the remote server
-    void start(isize port) throws;
-    void stop();
+    virtual void start(isize port) throws;
+    virtual void stop();
     
     // Indicates if the remote server has been started
     bool isListening() { return listening; }
@@ -105,32 +104,37 @@ public:
     
 public:
     
-    // Receives a string from the remote client
-    string receive() throws;
+    // Receives or transmits a string
+    virtual string receive() = 0;
+    virtual void send(const string &payload) = 0;
     
-    // Transmits a string to the remote client
-    void send(const string &payload) throws;
+    // Convenience wrappers
     void send(char payload) throws;
     void send(int payload) throws;
     void send(long payload) throws;
     void send(std::stringstream &payload) throws;
-
+    
+    // Operator overloads
+    RemoteServer &operator<<(char payload) { send(payload); return *this; }
+    RemoteServer &operator<<(const string &payload) { send(payload); return *this; }
+    RemoteServer &operator<<(int payload) { send(payload); return *this; }
+    RemoteServer &operator<<(long payload) { send(payload); return *this; }
+    RemoteServer &operator<<(std::stringstream &payload) { send(payload); return *this; }
+ 
 private:
 
     // Prints the welcome message
-    virtual void welcome() = 0;
-    
-    // Processes a received package
-    void process(const string &packet) throws { _process(packet); }
-    
+    virtual void welcome() { }
+        
     
     //
     // Subclass specific low-level routines
     //
     
+    /*
 private:
     
     virtual string _receive() throws = 0;
     virtual void _send(const string &packet) throws = 0;
-    virtual void _process(const string &packet) throws = 0;
+    */
 };

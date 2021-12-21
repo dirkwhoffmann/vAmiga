@@ -17,30 +17,23 @@
 
 enum class Token
 {
-    none,
-    
-    // Components
-    agnus, amiga, audio, blitter, cia, controlport, copper, cpu, dc, denise,
-    dfn, dmadebugger, gdb, keyboard, memory, monitor, mouse, os, paula,
-    regression, remote, screenshot, serial, rtc,
-
-    // Commands
-    about, audiate, autosync, clear, close, config, connect, debug, disable,
-    disconnect, dsksync, easteregg, eject, enable, jump, help, hide, init, insert,
-    inspect, list, load, lock, off, on, open, pause, power, press, reset, run,
-    save, set, setup, show, source, start, stop, wait,
-            
-    // Keys
-    accuracy, bankmap, bitplanes, brightness, channel, checksums, chip,
-    clxsprspr, clxsprplf, clxplfplf, color, contrast, cutout, defaultbb,
-    defaultfs, delay, device, devices, disk, dma, esync, events, execbase,
-    extrom, extstart, fast, filename, filter, interrupts, joystick, keyset,
-    layers, left, library, libraries, mechanics, mode, model, opacity, palette,
-    pan, path, poll, port, ports, process, processes, pullup, raminitpattern,
-    refresh, registers, regreset, resource, resources, revision, right, rom,
-    sampling, saturation, saveroms, searchpath, shakedetector, slow,
-    slowramdelay,slowrammirror, speed, sprites, state, step, swapdelay, task,
-    tasks, tod, todbug, unmappingtype, verbose, velocity, volume, wom
+    about, accuracy, agnus, amiga, audiate, audio, autosync, bankmap, bitplanes,
+    blitter, brightness, channel, checksums, chip, cia, clear, close, clxsprspr,
+    clxsprplf, clxplfplf, color, config, connect, contrast, controlport, copper,
+    cpu, cutout, dc, debug, defaultbb, defaultfs, delay, denise, device,
+    devices, dfn, disable, disconnect, disk, dma, dmadebugger, dsksync,
+    easteregg, eject, enable, esync, events, execbase, extrom, extstart, fast,
+    filename, filter, gdb, help, hide, init, insert, inspect, interrupts,
+    joystick, jump, keyboard, keyset, layers, left, library, libraries, list,
+    load, lock,mechanics, memory, mode, model, monitor, mouse, none, off, on,
+    opacity, open, os, palette, pan, path, paula, pause, poll, port, ports,
+    power, press, process, processes, pullup, raminitpattern, refresh,
+    registers, regreset, regression, reset, resource, resources, revision,
+    right, rom, rshell, rtc, run, sampling, saturation, save, saveroms,
+    screenshot, searchpath, serial, set, setup, shakedetector, show, slow,
+    slowramdelay,slowrammirror, source, speed, sprites, start, state, step,
+    stop, swapdelay, task, tasks, tod, todbug, unmappingtype, verbose, velocity,
+    volume, wait, wom
 };
 
 struct TooFewArgumentsError : public util::ParseError {

@@ -67,7 +67,7 @@
 @class EXEFileProxy;
 @class ExtendedRomFileProxy;
 @class FolderProxy;
-@class RemoteServerProxy;
+@class GdbServerProxy;
 @class GuardsProxy;
 @class HDFFileProxy;
 @class IMGFileProxy;
@@ -84,6 +84,7 @@
 @class ScriptProxy;
 @class SerialPortProxy;
 @class SnapshotProxy;
+@class TerminalServerProxy;
 
 //
 // Exception wrapper
@@ -136,7 +137,7 @@
     DriveProxy *df1;
     DriveProxy *df2;
     DriveProxy *df3;
-    RemoteServerProxy *terminalServer;
+    GdbServerProxy *gdbServer;
     GuardsProxy *breakpoints;
     GuardsProxy *watchpoints;
     KeyboardProxy *keyboard;
@@ -147,6 +148,7 @@
     RecorderProxy *recorder;
     SchedulerProxy *scheduler;
     SerialPortProxy *serialPort;
+    TerminalServerProxy *terminalServer;
 }
 
 @property (readonly, strong) AgnusProxy *agnus;
@@ -164,7 +166,7 @@
 @property (readonly, strong) DriveProxy *df1;
 @property (readonly, strong) DriveProxy *df2;
 @property (readonly, strong) DriveProxy *df3;
-@property (readonly, strong) RemoteServerProxy *terminalServer;
+@property (readonly, strong) GdbServerProxy *gdbServer;
 @property (readonly, strong) GuardsProxy *breakpoints;
 @property (readonly, strong) GuardsProxy *watchpoints;
 @property (readonly, strong) KeyboardProxy *keyboard;
@@ -175,13 +177,13 @@
 @property (readonly, strong) RecorderProxy *recorder;
 @property (readonly, strong) SchedulerProxy *scheduler;
 @property (readonly, strong) SerialPortProxy *serialPort;
+@property (readonly, strong) TerminalServerProxy *terminalServer;
 
 - (void)dealloc;
 - (void)kill;
 
 @property (readonly) AmigaInfo info;
 
-// @property (readonly) BOOL isReleaseBuild;
 @property BOOL warpMode;
 @property BOOL debugMode;
 @property (readonly) NSInteger cpuLoad;
@@ -669,10 +671,10 @@
 @end
 
 //
-// GdbServer
+// TerminalServer
 //
 
-@interface RemoteServerProxy : Proxy { }
+@interface TerminalServerProxy : Proxy { }
 
 @property (readonly) BOOL listening;
 @property (readonly) BOOL connected;
@@ -682,6 +684,19 @@
 
 @end
 
+//
+// GdbServer
+//
+
+@interface GdbServerProxy : Proxy { }
+
+@property (readonly) BOOL listening;
+@property (readonly) BOOL connected;
+
+- (void)start:(NSInteger)port;
+- (void)stop;
+
+@end
 
 //
 // F I L E   T Y P E   P R O X I E S

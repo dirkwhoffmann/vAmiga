@@ -17,14 +17,6 @@
 #include "MsgQueue.h"
 #include "RetroShell.h"
 
-GdbServer::GdbServer(Amiga& ref) : SubComponent(ref)
-{
-}
-
-GdbServer::~GdbServer()
-{
-}
-
 void
 GdbServer::_dump(dump::Category category, std::ostream& os) const
 {
@@ -36,6 +28,78 @@ GdbServer::_dump(dump::Category category, std::ostream& os) const
         os << bol(config.verbose) << std::endl;
     }
 }
+
+void
+GdbServer::start(isize port)
+{
+    RemoteServer::start(port);
+    ackMode = true;
+}
+
+string
+GdbServer::receive()
+{
+    if (connected) {
+
+        latestCmd = connection.recv();
+        debug(SRV_DEBUG, "R: '%s'\n", util::makePrintable(latestCmd).c_str());
+        
+        if (config.verbose) {
+            retroShell << "R: " << latestCmd << '\n';
+        }
+        
+        execute(latestCmd);
+        
+        msgQueue.put(MSG_SRV_RECEIVE);
+        return latestCmd;
+    }
+    
+    return "";
+}
+
+void
+GdbServer::send(const string &payload)
+{
+    if (connected) {
+        
+        if (config.verbose) {
+            retroShell << "T: " << payload << '\n';
+        }
+        
+        debug(SRV_DEBUG, "T: '%s'\n", util::makePrintable(payload).c_str());
+        connection.send(payload);
+    }
+}
+
+void
+GdbServer::sendPacket(const string &payload)
+{
+    string packet = "$";
+    
+    packet += payload;
+    packet += "#";
+    packet += computeChecksum(payload);
+    
+    send(packet);
+}
+
+void
+GdbServer::execute(const string &packet)
+{
+    try {
+        
+        process(packet);
+        
+    } catch (VAError &err) {
+        
+        auto message = "GDB server error: " + string(err.what());
+        printf("%s\n", message.c_str());
+        
+        // Disconnect the client
+        disconnect();
+    }
+}
+
 
 GdbServerConfig
 GdbServer::getDefaultConfig()
@@ -82,12 +146,6 @@ GdbServer::setConfigItem(Option option, i64 value)
     }
 }
 
-void
-GdbServer::startSession()
-{
-    ackMode = true;
-}
-
 string
 GdbServer::computeChecksum(const string &s)
 {
@@ -127,41 +185,4 @@ GdbServer::readMemory(isize addr)
 {
     auto byte = mem.spypeek8 <ACCESSOR_CPU> ((u32)addr);
     return util::hexstr <2> (byte);
-}
-
-void
-GdbServer::send(const string &cmd)
-{
-    string packet = "$";
-                
-    packet += cmd;
-    packet += "#";
-    packet += computeChecksum(cmd);
-    
-    if (config.verbose) {
-        retroShell << "T: " << packet << '\n';
-    }
-
-    remoteServer.send(packet);
-}
-
-void
-GdbServer::execute(const string &packet)
-{
-    if (config.verbose) {
-        retroShell << "R: " << packet << '\n';
-    }
-
-    try {
-        
-        process(packet);
-        
-    } catch (VAError &err) {
-        
-        auto message = "GDB server error: " + string(err.what());
-        printf("%s\n", message.c_str());
-        
-        // Disconnect the client
-        remoteServer.disconnect();
-    }
 }

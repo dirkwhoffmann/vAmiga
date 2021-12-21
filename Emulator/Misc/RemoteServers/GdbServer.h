@@ -10,9 +10,9 @@
 #pragma once
 
 #include "GdbServerTypes.h"
-#include "SubComponent.h"
+#include "RemoteServer.h"
 
-class GdbServer : public SubComponent {
+class GdbServer : public RemoteServer {
 
     // The current configuration
     GdbServerConfig config = {};
@@ -29,12 +29,8 @@ class GdbServer : public SubComponent {
     //
     
 public:
-    
-    GdbServer(Amiga& ref);
-    ~GdbServer();
 
-    // Tells the server that a new session has been started
-    void startSession();
+    using RemoteServer::RemoteServer;
 
     
     //
@@ -48,18 +44,18 @@ private:
     
     
     //
-    // Methods from AmigaComponent
+    // Methods from RemoteServer
     //
     
-private:
+public:
     
-    void _reset(bool hard) override { }
-    
-    isize _size() override { return 0; }
-    u64 _checksum() override { return 0; }
-    isize _load(const u8 *buffer) override {return 0; }
-    isize _save(u8 *buffer) override { return 0; }
+    void start(isize port) override throws;
+    string receive() override throws;
+    void send(const string &payload) override throws;
 
+    // Sends a packet with control characters and a checksum attached
+    void sendPacket(const string &payload);
+ 
     
     //
     // Configuring
@@ -85,14 +81,7 @@ public:
     // Verifies the checksum for a given string
     bool verifyChecksum(const string &s, const string &chk);
 
-    
-    //
-    // Sending packets
-    //
         
-    void send(const string &cmd);
-    
-    
     //
     // Processing packets
     //

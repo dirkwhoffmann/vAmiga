@@ -506,7 +506,6 @@
 		50AD904A276E104E0011ECCB /* TextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextStorage.h; sourceTree = "<group>"; };
 		50AD904C276E10660011ECCB /* TextStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TextStorage.cpp; sourceTree = "<group>"; };
 		50AD904E276F61C40011ECCB /* RetroShellTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RetroShellTypes.h; sourceTree = "<group>"; };
-		50AD90522770CF040011ECCB /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50AD90542770CF320011ECCB /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50AD90562770CF5D0011ECCB /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50AD90582771B2770011ECCB /* TerminalServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TerminalServer.cpp; sourceTree = "<group>"; };
@@ -646,7 +645,7 @@
 		50E98B50275A124900AA0CB9 /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
 		50E98B53275A127F00AA0CB9 /* RemoteServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RemoteServer.cpp; sourceTree = "<group>"; };
 		50E98B54275A127F00AA0CB9 /* RemoteServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteServer.h; sourceTree = "<group>"; };
-		50E98B58275A779B00AA0CB9 /* RemoteServerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteServerTypes.h; sourceTree = "<group>"; };
+		50E98B58275A779B00AA0CB9 /* TerminalServerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TerminalServerTypes.h; sourceTree = "<group>"; };
 		50EAB95726C10B6C00BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAB95926C10B8600BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAB95B26C10B9400BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -1250,18 +1249,6 @@
 			path = RegressionTester;
 			sourceTree = "<group>";
 		};
-		50AD90512770CEE50011ECCB /* GdbServer */ = {
-			isa = PBXGroup;
-			children = (
-				50AD90522770CF040011ECCB /* CMakeLists.txt */,
-				50BF1CC9276D177900386540 /* GdbServerTypes.h */,
-				50BF1CC7276D174200386540 /* GdbServer.h */,
-				50BF1CC6276D174200386540 /* GdbServer.cpp */,
-				50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */,
-			);
-			path = GdbServer;
-			sourceTree = "<group>";
-		};
 		50AEBEC824D3D3B30037082D /* Blitter */ = {
 			isa = PBXGroup;
 			children = (
@@ -1418,19 +1405,23 @@
 			path = RetroShell;
 			sourceTree = "<group>";
 		};
-		50BF1CCA276DBF2E00386540 /* RemoteServer */ = {
+		50BF1CCA276DBF2E00386540 /* RemoteServers */ = {
 			isa = PBXGroup;
 			children = (
 				50AD9048276DCB470011ECCB /* CMakeLists.txt */,
 				50E98B50275A124900AA0CB9 /* Socket.h */,
 				50E98B4F275A124900AA0CB9 /* Socket.cpp */,
-				50E98B58275A779B00AA0CB9 /* RemoteServerTypes.h */,
 				50E98B54275A127F00AA0CB9 /* RemoteServer.h */,
 				50E98B53275A127F00AA0CB9 /* RemoteServer.cpp */,
+				50E98B58275A779B00AA0CB9 /* TerminalServerTypes.h */,
 				50AD90592771B2770011ECCB /* TerminalServer.h */,
 				50AD90582771B2770011ECCB /* TerminalServer.cpp */,
+				50BF1CC9276D177900386540 /* GdbServerTypes.h */,
+				50BF1CC7276D174200386540 /* GdbServer.h */,
+				50BF1CC6276D174200386540 /* GdbServer.cpp */,
+				50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */,
 			);
-			path = RemoteServer;
+			path = RemoteServers;
 			sourceTree = "<group>";
 		};
 		50C8C44C2607409B00F4E012 /* Layers */ = {
@@ -1479,8 +1470,7 @@
 			children = (
 				501FB314275E46EC00D0A57B /* CMakeLists.txt */,
 				50AD904F2770CECD0011ECCB /* OSDebugger */,
-				50BF1CCA276DBF2E00386540 /* RemoteServer */,
-				50AD90512770CEE50011ECCB /* GdbServer */,
+				50BF1CCA276DBF2E00386540 /* RemoteServers */,
 				50AD90502770CEDA0011ECCB /* RegressionTester */,
 			);
 			path = Misc;

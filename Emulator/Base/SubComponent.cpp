@@ -35,11 +35,11 @@ msgQueue(ref.msgQueue),
 osDebugger(ref.osDebugger),
 paula(ref.paula),
 pixelEngine(ref.denise.pixelEngine),
-remoteServer(ref.terminalServer),
 retroShell(ref.retroShell),
 rtc(ref.rtc),
 scheduler(ref.agnus.scheduler),
 serialPort(ref.serialPort),
+terminalServer(ref.terminalServer),
 uart(ref.paula.uart),
 zorro(ref.zorro)
 {

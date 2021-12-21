@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "TerminalServerTypes.h"
 #include "RemoteServer.h"
 
 class TerminalServer : public RemoteServer {
@@ -17,9 +18,21 @@ public:
     
     using RemoteServer::RemoteServer;
     
-    void welcome() override;
+    //
+    // Methods from AmigaObject
+    //
     
-    string _receive() override throws;
-    void _send(const string &packet) override throws;
-    void _process(const string &packet) override throws;
+protected:
+    
+    const char *getDescription() const override { return "TerminalServer"; }
+    void _dump(dump::Category category, std::ostream& os) const override;
+
+    
+    //
+    // Methods from RemoteServer
+    //
+    
+    string receive() override throws;
+    void send(const string &packet) override throws;
+    void welcome() override;
 };

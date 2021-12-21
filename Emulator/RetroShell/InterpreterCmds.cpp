@@ -985,31 +985,33 @@ Interpreter::registerInstructions()
     root.seek("os")->seek("processes")->maxArgs = 1;
 
     //
-    // Remote server
+    // Remote shell
     //
         
-    root.add({"remote"},
-             "component", "Remote server");
+    root.add({"rshell"},
+             "component", "Remote shell");
     
-    root.add({"remote", "start"},
-             "command", "Starts the debug server",
-             &RetroShell::exec <Token::remote, Token::start>, 1);
+    root.add({"rshell", "start"},
+             "command", "Starts the remote server",
+             &RetroShell::exec <Token::rshell, Token::start>, 1);
 
-    root.add({"remote", "stop"},
-             "command", "Stops the debug server",
-             &RetroShell::exec <Token::remote, Token::stop>, 0);
+    root.add({"rshell", "stop"},
+             "command", "Stops the remote server",
+             &RetroShell::exec <Token::rshell, Token::stop>, 0);
 
-    root.add({"remote", "inspect"},
+    root.add({"rshell", "inspect"},
              "command", "Displays the internal state",
-             &RetroShell::exec <Token::remote, Token::inspect>, 0);
+             &RetroShell::exec <Token::rshell, Token::inspect>, 0);
     
     //
-    // GDB server
+    // GDB server (Experimental, hidden in release builds)
     //
         
     root.add({"gdbserver"},
              "component", "GDB server");
-    root.seek("gdbserver")->hidden = true;
+
+    if (releaseBuild)
+        root.seek("gdbserver")->hidden = true;
 
     root.add({"gdbserver", "config"},
              "command", "Displays the current configuration",
@@ -1021,4 +1023,17 @@ Interpreter::registerInstructions()
     root.add({"gdbserver", "set", "verbose"},
              "key", "Enables or disables verbose mode",
              &RetroShell::exec <Token::gdb, Token::set, Token::verbose>, 1);
+    
+    root.add({"gdbserver", "start"},
+             "command", "Starts the GDB server",
+             &RetroShell::exec <Token::gdb, Token::start>, 1);
+
+    root.add({"gdbserver", "stop"},
+             "command", "Stops the GDB server",
+             &RetroShell::exec <Token::gdb, Token::stop>, 0);
+
+    root.add({"gdbserver", "inspect"},
+             "command", "Displays the internal state",
+             &RetroShell::exec <Token::gdb, Token::inspect>, 0);
+ 
 }

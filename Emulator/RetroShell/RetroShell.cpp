@@ -13,9 +13,7 @@
 #include "Parser.h"
 
 RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
-{
-    subComponents = std::vector<AmigaComponent *> { &remoteServer };
-    
+{    
     // Initialize the text storage
     clear();
 
@@ -24,14 +22,14 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
     
     // Print the startup message and the input prompt
     storage.welcome();
-    *this << prompt;
+    storage << prompt;
 }
 
 RetroShell&
 RetroShell::operator<<(char value)
 {
     storage << value;
-    remoteServer.send(value);
+    terminalServer << value;
     return *this;
 }
 
@@ -39,7 +37,7 @@ RetroShell&
 RetroShell::operator<<(const string& value)
 {
     storage << value;
-    remoteServer.send(value);
+    terminalServer << value;
     return *this;
 }
 
@@ -90,7 +88,7 @@ RetroShell::tab(isize pos)
         
         std::string fill(count, ' ');
         storage << fill;
-        remoteServer.send(fill);
+        terminalServer << fill;
     }
 }
 
@@ -104,7 +102,7 @@ void
 RetroShell::printHelp()
 {
     storage.printHelp();
-    remoteServer.send("Type 'help' for help.\n");
+    terminalServer << "Type 'help' for help.\n";
 }
 
 void
