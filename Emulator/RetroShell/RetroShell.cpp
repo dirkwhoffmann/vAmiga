@@ -104,7 +104,7 @@ void
 RetroShell::printHelp()
 {
     storage.printHelp();
-    remoteServer.printHelp();
+    remoteServer.send(SRVMODE_TERMINAL, "Type 'help' for help.\n");
 }
 
 void

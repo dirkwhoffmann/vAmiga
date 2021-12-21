@@ -16,6 +16,8 @@
 
 class RemoteServer : public SubComponent {
     
+protected:
+    
     // The current configuration
     RemoteServerConfig config = {};
 
@@ -50,7 +52,7 @@ public:
     // Methods from AmigaObject
     //
     
-private:
+protected:
     
     const char *getDescription() const override { return "RemoteServer"; }
     void _dump(dump::Category category, std::ostream& os) const override;
@@ -88,7 +90,7 @@ public:
     // Running the server
     //
     
-private:
+protected:
 
     // The main thread function
     void main();
@@ -135,8 +137,5 @@ public:
     void send(ServerMode mode, std::stringstream &payload) throws;
     
     // Prints the welcome message
-    void welcome();
-    
-    // Prints the help line
-    void printHelp();
+    virtual void welcome() = 0;
 };

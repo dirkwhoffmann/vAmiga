@@ -58,7 +58,7 @@ Amiga::Amiga()
         &mem,
         &cpu,
         &retroShell,
-        &remoteServer,
+        &terminalServer,
         &gdbServer,
         &regressionTester,
         &msgQueue
@@ -300,7 +300,7 @@ Amiga::getConfigItem(Option option, long id) const
         case OPT_SRV_MODE:
         case OPT_SRV_PORT:
 
-            return remoteServer.getConfigItem(option);
+            return terminalServer.getConfigItem(option);
 
         case OPT_GDB_VERBOSE:
             
@@ -481,7 +481,7 @@ Amiga::configure(Option option, i64 value)
         case OPT_SRV_MODE:
         case OPT_SRV_PORT:
 
-            remoteServer.setConfigItem(option, value);
+            terminalServer.setConfigItem(option, value);
             break;
 
         case OPT_GDB_VERBOSE:

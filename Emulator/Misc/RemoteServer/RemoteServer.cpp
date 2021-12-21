@@ -109,7 +109,7 @@ RemoteServer::start()
     debug(SRV_DEBUG, "Starting remote server...\n");
         
     // Only proceed if the server is not running
-    if (listening) throw VAError(ERROR_GDB_SERVER_RUNNING);
+    if (listening) throw VAError(ERROR_SERVER_RUNNING);
         
     // Make sure that we continue with a terminated server thread
     if (serverThread.joinable()) serverThread.join();
@@ -125,7 +125,7 @@ RemoteServer::stop()
     debug(SRV_DEBUG, "Stopping remote server...\n");
  
     // Only proceed if an open connection exists
-    if (!listening) throw VAError(ERROR_GDB_SERVER_NOT_RUNNING);
+    if (!listening) throw VAError(ERROR_SERVER_NOT_RUNNING);
         
     // Interrupt the server thread
     listening = false;
@@ -292,26 +292,4 @@ RemoteServer::mainLoop()
                 fatalError;
         }
     }
-}
-
-void
-RemoteServer::welcome()
-{
-    if (config.mode != SRVMODE_TERMINAL) return;
-    
-    send("vAmiga Remote Server ");
-    send(std::to_string(VER_MAJOR) + ".");
-    send(std::to_string(VER_MINOR) + ".");
-    send(std::to_string(VER_SUBMINOR));
-    send(" (" __DATE__ " " __TIME__ ")\n\n");
-    send("Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de\n");
-    send("Licensed under the GNU General Public License v3\n\n");
-    printHelp();
-    send("\n");
-}
-
-void
-RemoteServer::printHelp()
-{
-        send(SRVMODE_TERMINAL, "Type 'help' for help.\n");
 }

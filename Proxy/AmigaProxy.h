@@ -136,7 +136,7 @@
     DriveProxy *df1;
     DriveProxy *df2;
     DriveProxy *df3;
-    RemoteServerProxy *remoteServer;
+    RemoteServerProxy *terminalServer;
     GuardsProxy *breakpoints;
     GuardsProxy *watchpoints;
     KeyboardProxy *keyboard;
@@ -164,7 +164,7 @@
 @property (readonly, strong) DriveProxy *df1;
 @property (readonly, strong) DriveProxy *df2;
 @property (readonly, strong) DriveProxy *df3;
-@property (readonly, strong) RemoteServerProxy *remoteServer;
+@property (readonly, strong) RemoteServerProxy *terminalServer;
 @property (readonly, strong) GuardsProxy *breakpoints;
 @property (readonly, strong) GuardsProxy *watchpoints;
 @property (readonly, strong) KeyboardProxy *keyboard;

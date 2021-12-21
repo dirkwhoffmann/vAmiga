@@ -27,6 +27,7 @@
 #include "RTC.h"
 #include "SerialPort.h"
 #include "SuspendableThread.h"
+#include "TerminalServer.h"
 #include "ZorroManager.h"
 
 /* A complete virtual Amiga. This class is the most prominent one of all. To
@@ -86,7 +87,7 @@ public:
     // Misc
     RetroShell retroShell = RetroShell(*this);
     OSDebugger osDebugger = OSDebugger(*this);
-    RemoteServer remoteServer = RemoteServer(*this);
+    TerminalServer terminalServer = TerminalServer(*this);
     GdbServer gdbServer = GdbServer(*this);
     RegressionTester regressionTester = RegressionTester(*this);
     

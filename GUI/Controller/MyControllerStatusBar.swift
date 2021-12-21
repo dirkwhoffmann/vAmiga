@@ -41,7 +41,7 @@ extension MyController {
         let hasDisk3 = amiga.df3.hasDisk
 
         let running = amiga.running
-        let debug = amiga.remoteServer.listening
+        let debug = amiga.terminalServer.listening
         let halted = amiga.cpu.halted
         let warp = amiga.warpMode
 
@@ -65,7 +65,7 @@ extension MyController {
         df3Disk.image = amiga.df3.icon
         
         // Remote connection icon
-        debugIcon.image = amiga.remoteServer.icon
+        debugIcon.image = amiga.terminalServer.icon
         
         // Warp mode icon
         warpIcon.image = hourglassIcon

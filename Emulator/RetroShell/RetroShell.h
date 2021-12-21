@@ -12,7 +12,6 @@
 #include "RetroShellTypes.h"
 #include "SubComponent.h"
 #include "Interpreter.h"
-#include "RemoteServer.h"
 #include "TextStorage.h"
 
 #include <sstream>
@@ -20,7 +19,7 @@
 
 class RetroShell : public SubComponent {
 
-    friend class RemoteServer;
+    // friend class RemoteServer;
     
     // Interpreter for commands typed into the console window
     Interpreter interpreter;
