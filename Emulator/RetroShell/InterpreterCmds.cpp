@@ -985,7 +985,33 @@ Interpreter::registerInstructions()
     root.seek("os")->seek("processes")->maxArgs = 1;
 
     //
-    // Remote shell
+    // Remote server
+    //
+    
+    root.add({"server"},
+             "component", "Remote connections");
+    
+    root.add({"server", "start"},
+             "command", "Starts a remote server",
+             &RetroShell::exec <Token::server, Token::start>, 1);
+    root.seek("server")->seek("start")->maxArgs = 2;
+
+    root.add({"server", "stop"},
+             "command", "Stops a remote server",
+             &RetroShell::exec <Token::server, Token::stop>, 1);
+
+    root.add({"server", "disconnect"},
+             "command", "Disconnects a client",
+             &RetroShell::exec <Token::server, Token::disconnect>, 1);
+
+    root.add({"server", "inspect"},
+             "command", "Displays the internal state",
+             &RetroShell::exec <Token::server, Token::inspect>);
+    root.seek("server")->seek("inspect")->maxArgs = 1;
+
+    
+    //
+    // Remote shell (DEPRECATED)
     //
         
     root.add({"rshell"},
@@ -1004,7 +1030,7 @@ Interpreter::registerInstructions()
              &RetroShell::exec <Token::rshell, Token::inspect>, 0);
     
     //
-    // GDB server (Experimental, hidden in release builds)
+    // GDB server (DEPRECATED)
     //
         
     root.add({"gdbserver"},

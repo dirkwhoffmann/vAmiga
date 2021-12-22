@@ -30,10 +30,10 @@ enum class Token
     power, press, process, processes, pullup, raminitpattern, refresh,
     registers, regreset, regression, reset, resource, resources, revision,
     right, rom, rshell, rtc, run, sampling, saturation, save, saveroms,
-    screenshot, searchpath, serial, set, setup, shakedetector, show, slow,
-    slowramdelay,slowrammirror, source, speed, sprites, start, state, step,
-    stop, swapdelay, task, tasks, tod, todbug, unmappingtype, verbose, velocity,
-    volume, wait, wom
+    screenshot, searchpath, serial, server, set, setup, shakedetector, show,
+    slow, slowramdelay,slowrammirror, source, speed, sprites, start, state,
+    step, stop, swapdelay, task, tasks, tod, todbug, unmappingtype, verbose,
+    velocity, volume, wait, wom
 };
 
 struct TooFewArgumentsError : public util::ParseError {

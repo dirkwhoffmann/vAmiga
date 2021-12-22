@@ -23,6 +23,7 @@
 #include "OSDebugger.h"
 #include "Paula.h"
 #include "RegressionTester.h"
+#include "RemoteManager.h"
 #include "RetroShell.h"
 #include "RTC.h"
 #include "SerialPort.h"
@@ -86,6 +87,7 @@ public:
 
     // Misc
     RetroShell retroShell = RetroShell(*this);
+    RemoteManager remoteManager = RemoteManager(*this);
     OSDebugger osDebugger = OSDebugger(*this);
     TerminalServer terminalServer = TerminalServer(*this);
     GdbServer gdbServer = GdbServer(*this);

@@ -14,7 +14,7 @@
 #include <thread>
 
 class RemoteServer : public SubComponent {
-    
+        
 protected:
     
     // The server thread
@@ -84,7 +84,18 @@ private:
     
     
     //
-    // Turning the server on and off
+    // Examining state
+    //
+    
+public:
+    
+    isize getPort() const { return port; }
+    bool isListening() const { return listening; }
+    bool isConnected() const { return connected; }
+
+    
+    //
+    // Changing state
     //
     
 public:
@@ -92,13 +103,7 @@ public:
     // Starts or stops the remote server
     virtual void start(isize port) throws;
     virtual void stop();
-    
-    // Indicates if the remote server has been started
-    bool isListening() { return listening; }
-    
-    // Indicates if a client has connected
-    bool isConnected() { return connected; }
-    
+        
     // Disconnects the remote client
     void disconnect();
             

@@ -1,9 +1,10 @@
 target_sources(vAmigaCore PRIVATE
 
-Socket.cpp
+RemoteManager.cpp
 RemoteServer.cpp
 TerminalServer.cpp
 GdbServer.cpp
 GdbServerCmds.cpp
+Socket.cpp
 
 )

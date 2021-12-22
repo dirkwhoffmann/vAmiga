@@ -1223,6 +1223,50 @@ RetroShell::exec <Token::os, Token::processes> (Arguments& argv, long param)
 }
 
 //
+// Remote servers
+//
+
+template <> void
+RetroShell::exec <Token::server, Token::start> (Arguments& argv, long param)
+{
+    auto type = util::parseEnum <ServerTypeEnum> (argv.front());
+
+    if (argv.size() == 1) {
+        remoteManager.start(type);
+    } else {
+        remoteManager.start(type, util::parseNum(argv[1]));
+    }
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::stop> (Arguments& argv, long param)
+{
+    auto type = util::parseEnum <ServerTypeEnum> (argv.front());
+    remoteManager.stop(type);
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::disconnect> (Arguments& argv, long param)
+{
+    auto type = util::parseEnum <ServerTypeEnum> (argv.front());
+    remoteManager.disconnect(type);
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::inspect> (Arguments& argv, long param)
+{
+    if (argv.empty()) {
+        
+        dump(remoteManager, dump::State);
+        
+    } else {
+        
+        auto type = util::parseEnum <ServerTypeEnum> (argv.front());
+        dump(remoteManager.getServer(type), dump::State);
+    }
+}
+
+//
 // Remote shell
 //
 

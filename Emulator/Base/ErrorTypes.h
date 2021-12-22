@@ -74,13 +74,15 @@ enum_long(ERROR_CODE)
     // OS Debugger
     ERROR_OSDB,
     
-    // GDB server
+    // Remote servers
     ERROR_SOCK_CANT_CREATE,
     ERROR_SOCK_CANT_CONNECT,
     ERROR_SOCK_DISCONNECTED,
+    ERROR_SERVER_PORT_IN_USE,
     ERROR_SERVER_RUNNING,
     ERROR_SERVER_NOT_RUNNING,
-    
+    ERROR_SERVER_NO_CLIENT,
+
     // GDB server
     ERROR_GDB_NO_ACK,
     ERROR_GDB_INVALID_FORMAT,
@@ -191,8 +193,10 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_SOCK_CANT_CREATE:            return "SOCK_CANT_CREATE";
             case ERROR_SOCK_CANT_CONNECT:           return "SOCK_CANT_CONNECT";
             case ERROR_SOCK_DISCONNECTED:           return "SOCK_DISCONNECTED";
+            case ERROR_SERVER_PORT_IN_USE:          return "SERVER_PORT_IN_USE";
             case ERROR_SERVER_RUNNING:              return "SERVER_RUNNING";
             case ERROR_SERVER_NOT_RUNNING:          return "SERVER_NOT_RUNNING";
+            case ERROR_SERVER_NO_CLIENT:            return "SERVER_NO_CLIENT";
                 
             case ERROR_GDB_NO_ACK:                  return "GDB_NO_ACK";
             case ERROR_GDB_INVALID_FORMAT:          return "GDB_INVALID_FORMAT";

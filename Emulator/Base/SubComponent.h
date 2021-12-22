@@ -33,6 +33,7 @@ class MsgQueue;
 class OSDebugger;
 class Paula;
 class PixelEngine;
+class RemoteManager;
 class RetroShell;
 class RTC;
 class Scheduler;
@@ -71,6 +72,7 @@ protected:
     OSDebugger &osDebugger;
     Paula &paula;
     PixelEngine &pixelEngine;
+    RemoteManager &remoteManager;
     RetroShell &retroShell;
     RTC &rtc;
     Scheduler &scheduler;
