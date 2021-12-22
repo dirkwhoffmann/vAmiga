@@ -29,6 +29,9 @@ Folder::init(const string &path)
     // Create a file system and import the directory
     FSDevice volume(FS_OFS, path.c_str());
     
+    // Make the volume bootable
+    volume.makeBootable(BB_AMIGADOS_13);
+    
     // Check the file system for errors
     volume.info();
     volume.printDirectory(true);
