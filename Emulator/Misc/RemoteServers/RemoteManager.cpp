@@ -26,27 +26,20 @@ RemoteManager::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
-    auto printState = [&os] (const RemoteServer &server) {
+    for (auto server : servers) {
+                
+        auto name = server->getDescription();
+        auto port = server->getPort();
+
+        os << tab(string(name));
         
-        auto port = server.getPort();
-        
-        if (server.isConnected()) {
+        if (server->isConnected()) {
             os << "Connected to client at port " << port << std::endl;
-        } else if (server.isListening()) {
+        } else if (server->isListening()) {
             os << "Listening at port " << port << std::endl;
         } else {
             os << "Off" << std::endl;
         }
-    };
-        
-    if (category & dump::State) {
-                
-        os << tab("Serial port server");
-        printState(serServer);
-        os << tab("Retro shell server");
-        printState(rshServer);
-        os << tab("GDB server");
-        printState(gdbServer);
     }
 }
 
@@ -65,7 +58,7 @@ RemoteManager::getServer(ServerType type)
 }
 
 isize
-RemoteManager::defaultPort(ServerType type)
+RemoteManager::defaultPort(ServerType type) const
 {
     switch (type) {
             
@@ -76,6 +69,22 @@ RemoteManager::defaultPort(ServerType type)
         default:
             fatalError;
     }
+}
+
+isize
+RemoteManager::numListening() const
+{
+    isize result = 0;
+    for (auto &s : servers) if (s->isListening()) result++;
+    return result;
+}
+
+isize
+RemoteManager::numConnected() const
+{
+    isize result = 0;
+    for (auto &s : servers) if (s->isConnected()) result++;
+    return result;
 }
 
 void

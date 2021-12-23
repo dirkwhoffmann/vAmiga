@@ -64,13 +64,7 @@ extension MyController {
         df3Disk.image = amiga.df3.icon
         
         // Remote server icon
-        if amiga.terminalServer.listening {
-            debugIcon.image = amiga.terminalServer.icon
-        } else if amiga.gdbServer.listening {
-            debugIcon.image = amiga.gdbServer.icon
-        } else {
-            debugIcon.image = nil
-        }
+        debugIcon.image = amiga.remoteManager.icon
         
         // Warp mode icon
         warpIcon.image = hourglassIcon

@@ -35,10 +35,10 @@ class Paula;
 class PixelEngine;
 class RemoteManager;
 class RetroShell;
+class RshServer;
 class RTC;
 class Scheduler;
 class SerialPort;
-class TerminalServer;
 class UART;
 class ZorroManager;
 
@@ -65,7 +65,6 @@ protected:
     Drive &df1;
     Drive &df2;
     Drive &df3;
-    GdbServer &gdbServer;
     Keyboard &keyboard;
     Memory &mem;
     MsgQueue &msgQueue;
@@ -77,7 +76,6 @@ protected:
     RTC &rtc;
     Scheduler &scheduler;
     SerialPort &serialPort;
-    TerminalServer &terminalServer;
     UART &uart;
     ZorroManager &zorro;
 

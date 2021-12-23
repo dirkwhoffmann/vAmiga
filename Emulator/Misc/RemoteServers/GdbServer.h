@@ -14,9 +14,6 @@
 
 class GdbServer : public RemoteServer {
 
-    // The current configuration
-    GdbServerConfig config = {};
-
     // The most recently processed command string
     string latestCmd;
     
@@ -40,7 +37,6 @@ public:
 private:
     
     const char *getDescription() const override { return "GdbServer"; }
-    void _dump(dump::Category category, std::ostream& os) const override;
     
     
     //
@@ -50,26 +46,13 @@ private:
 public:
     
     void start(isize port) override throws;
-    string receive() override throws;
-    void send(const string &payload) override throws;
+    string _receive() override throws;
+    void _send(const string &payload) override throws;
+    void _process(const string &payload) override throws;
 
     // Sends a packet with control characters and a checksum attached
     void sendPacket(const string &payload);
  
-    
-    //
-    // Configuring
-    //
-
-public:
-    
-    static GdbServerConfig getDefaultConfig();
-    const GdbServerConfig &getConfig() const { return config; }
-    void resetConfig() override;
-
-    i64 getConfigItem(Option option) const;
-    void setConfigItem(Option option, i64 value);
-    
     
     //
     // Managing checksums
@@ -87,9 +70,6 @@ public:
     //
 
 public:
-
-    // Main entry point for processing an incoming packet
-    // void execute(const string &packet);
         
     // Processes a packet in the format used by GDB
     void process(string packet) throws;

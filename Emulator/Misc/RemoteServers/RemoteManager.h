@@ -12,17 +12,23 @@
 #include "SubComponent.h"
 #include "RemoteManagerTypes.h"
 #include "SerServer.h"
-#include "TerminalServer.h"
+#include "RshServer.h"
 #include "GdbServer.h"
 
 class RemoteManager : public SubComponent {
 
+public:
+    
     // The remote servers
     SerServer serServer = SerServer(amiga);
-    TerminalServer rshServer = TerminalServer(amiga);
+    RshServer rshServer = RshServer(amiga);
     GdbServer gdbServer = GdbServer(amiga);
     
-public:
+    // Convenience wrapper
+    std::vector <const RemoteServer *> servers = {
+        &serServer, &rshServer, &gdbServer
+    };
+     
     
     //
     // Initializing
@@ -68,8 +74,17 @@ public:
     RemoteServer &getServer(ServerType type);
     
     // Returns a default port for server of a certain type
-    isize defaultPort(ServerType type);
+    isize defaultPort(ServerType type) const;
     
+    
+    //
+    // Managing connections
+    //
+    
+    // Returns the number of started or connected servers
+    isize numListening() const;
+    isize numConnected() const;
+
     // Starts up a remote server
     void start(ServerType type, isize port) throws;
     void start(ServerType type) throws { start(type, defaultPort(type)); }

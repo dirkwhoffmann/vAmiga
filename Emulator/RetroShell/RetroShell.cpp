@@ -29,7 +29,7 @@ RetroShell&
 RetroShell::operator<<(char value)
 {
     storage << value;
-    terminalServer << value;
+    remoteManager.rshServer << value;
     return *this;
 }
 
@@ -37,7 +37,7 @@ RetroShell&
 RetroShell::operator<<(const string& value)
 {
     storage << value;
-    terminalServer << value;
+    remoteManager.rshServer << value;
     return *this;
 }
 
@@ -88,7 +88,7 @@ RetroShell::tab(isize pos)
         
         std::string fill(count, ' ');
         storage << fill;
-        terminalServer << fill;
+        remoteManager.rshServer << fill;
     }
 }
 
@@ -102,7 +102,7 @@ void
 RetroShell::printHelp()
 {
     storage.printHelp();
-    terminalServer << "Type 'help' for help.\n";
+    remoteManager.rshServer << "Type 'help' for help.\n";
 }
 
 void

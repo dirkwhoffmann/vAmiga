@@ -351,20 +351,16 @@ extension HDFFileProxy {
     }
 }
 
-public extension TerminalServerProxy {
+public extension RemoteManagerProxy {
     
-    var icon: NSImage {
+    var icon: NSImage? {
 
-        let name = connected ? "connectedTemplate" : "listeningTemplate"
-        return NSImage(named: name)!
-    }
-}
-
-public extension GdbServerProxy {
-    
-    var icon: NSImage {
-
-        let name = connected ? "connectedTemplate" : "listeningTemplate"
-        return NSImage(named: name)!
+        if numConnected > 0 {
+            return NSImage(named: "connectedTemplate")!
+        } else if numListening > 0 {
+            return NSImage(named: "listeningTemplate")!
+        } else {
+            return nil
+        }
     }
 }

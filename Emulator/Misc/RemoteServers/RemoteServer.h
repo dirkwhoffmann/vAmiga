@@ -32,8 +32,12 @@ protected:
     // The port listener and it's associated connection
     PortListener listener;
     Socket connection;
-                
+
+    // Number of sent and received packets
+    isize numSent = 0;
+    isize numReceived = 0;
         
+    
     //
     // Initializing
     //
@@ -48,7 +52,7 @@ public:
     // Methods from AmigaObject
     //
     
-protected:
+public:
     
     const char *getDescription() const override { return "RemoteServer"; }
     void _dump(dump::Category category, std::ostream& os) const override;
@@ -78,17 +82,18 @@ protected:
     void main();
 
 private:
-    
-    // Called inside main
-    void mainLoop();
-    
+
+    // Inner loops (called from main)
+    void mainLoop() throws;
+    void sessionLoop();
+
     
     //
     // Examining state
     //
     
 public:
-    
+        
     isize getPort() const { return port; }
     bool isListening() const { return listening; }
     bool isConnected() const { return connected; }
@@ -115,8 +120,8 @@ public:
 public:
     
     // Receives or transmits a string
-    virtual string receive() = 0;
-    virtual void send(const string &payload) = 0;
+    string receive();
+    void send(const string &payload);
     
     // Convenience wrappers
     void send(char payload) throws;
@@ -131,6 +136,9 @@ public:
     RemoteServer &operator<<(long payload) { send(payload); return *this; }
     RemoteServer &operator<<(std::stringstream &payload) { send(payload); return *this; }
  
+    // Processes a package
+    void process(const string &payload) throws;
+    
 private:
 
     // Prints the welcome message
@@ -138,4 +146,15 @@ private:
         
     // Reports an error to the GUI
     void handleError(const char *description);
+    
+    
+    //
+    // Subclass specific routines
+    //
+
+private:
+    
+    virtual string _receive() = 0;
+    virtual void _process(const string &payload) = 0;
+    virtual void _send(const string &payload) = 0;
 };

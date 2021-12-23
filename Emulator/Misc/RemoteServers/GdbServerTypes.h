@@ -31,13 +31,3 @@ enum class GdbCmd
     TStatus,
     fThreadInfo,
 };
-
-//
-// Structures
-//
-
-typedef struct
-{
-    bool verbose;
-}
-GdbServerConfig;

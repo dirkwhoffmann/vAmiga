@@ -18,18 +18,6 @@
 #include "RetroShell.h"
 
 void
-GdbServer::_dump(dump::Category category, std::ostream& os) const
-{
-    using namespace util;
-    
-    if (category & dump::Config) {
-        
-        os << tab("Verbose");
-        os << bol(config.verbose) << std::endl;
-    }
-}
-
-void
 GdbServer::start(isize port)
 {
     RemoteServer::start(port);
@@ -37,50 +25,35 @@ GdbServer::start(isize port)
 }
 
 string
-GdbServer::receive()
+GdbServer::_receive()
 {
-    if (connected) {
-
-        latestCmd = connection.recv();
-        debug(SRV_DEBUG, "R: '%s'\n", util::makePrintable(latestCmd).c_str());
-        
-        // Display the received package in RetroShell
-        if (config.verbose) retroShell << "R: " << latestCmd << '\n';
-        
-        try {
-            
-            process(latestCmd);
-            
-        } catch (VAError &err) {
-            
-            auto msg = "GDB server error: " + string(err.what());
-            debug(SRV_DEBUG, "%s\n", msg.c_str());
-
-            // Display the error message in RetroShell
-            if (config.verbose) retroShell << msg << '\n';
-
-            // Disconnect the client
-            disconnect();
-        }
-        
-        msgQueue.put(MSG_SRV_RECEIVE);
-        return latestCmd;
-    }
-    
-    return "";
+    latestCmd = connection.recv();
+    return latestCmd;
 }
 
 void
-GdbServer::send(const string &payload)
+GdbServer::_send(const string &payload)
 {
-    if (connected) {
+    connection.send(payload);
+}
+
+void
+GdbServer::_process(const string &payload)
+{
+    try {
         
-        if (config.verbose) {
-            retroShell << "T: " << payload << '\n';
-        }
+        process(latestCmd);
         
-        debug(SRV_DEBUG, "T: '%s'\n", util::makePrintable(payload).c_str());
-        connection.send(payload);
+    } catch (VAError &err) {
+        
+        auto msg = "GDB server error: " + string(err.what());
+        debug(SRV_DEBUG, "%s\n", msg.c_str());
+
+        // Display the error message in RetroShell
+        retroShell << msg << '\n';
+
+        // Disconnect the client
+        disconnect();
     }
 }
 
@@ -94,70 +67,6 @@ GdbServer::sendPacket(const string &payload)
     packet += computeChecksum(payload);
     
     send(packet);
-}
-
-/*
-void
-GdbServer::execute(const string &packet)
-{
-    try {
-        
-        process(packet);
-        
-    } catch (VAError &err) {
-        
-        auto message = "GDB server error: " + string(err.what());
-        printf("%s\n", message.c_str());
-        
-        // Disconnect the client
-        disconnect();
-    }
-}
-*/
-
-GdbServerConfig
-GdbServer::getDefaultConfig()
-{
-    GdbServerConfig defaults;
-
-    defaults.verbose = true;
-
-    return defaults;
-}
-
-void
-GdbServer::resetConfig()
-{
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_GDB_VERBOSE, defaults.verbose);
-}
-
-i64
-GdbServer::getConfigItem(Option option) const
-{
-    switch (option) {
-            
-        case OPT_GDB_VERBOSE:    return config.verbose;
-            
-        default:
-            fatalError;
-    }
-}
-
-void
-GdbServer::setConfigItem(Option option, i64 value)
-{
-    switch (option) {
-                        
-        case OPT_GDB_VERBOSE:
-            
-            config.verbose = (bool)value;
-            return;
-
-        default:
-            fatalError;
-    }
 }
 
 string

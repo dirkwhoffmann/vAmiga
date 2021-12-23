@@ -25,10 +25,10 @@
 #include "RegressionTester.h"
 #include "RemoteManager.h"
 #include "RetroShell.h"
+#include "RshServer.h"
 #include "RTC.h"
 #include "SerialPort.h"
 #include "SuspendableThread.h"
-#include "TerminalServer.h"
 #include "ZorroManager.h"
 
 /* A complete virtual Amiga. This class is the most prominent one of all. To
@@ -89,8 +89,6 @@ public:
     RetroShell retroShell = RetroShell(*this);
     RemoteManager remoteManager = RemoteManager(*this);
     OSDebugger osDebugger = OSDebugger(*this);
-    TerminalServer terminalServer = TerminalServer(*this);
-    GdbServer gdbServer = GdbServer(*this);
     RegressionTester regressionTester = RegressionTester(*this);
     
     

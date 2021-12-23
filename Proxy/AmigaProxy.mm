@@ -1467,83 +1467,52 @@ using namespace moira;
 @end
 
 //
-// TerminalServer proxy
+// RemoteManager proxy
 //
 
-@implementation TerminalServerProxy
+@implementation RemoteManagerProxy
 
-- (TerminalServer *)server
+- (RemoteManager *)manager
 {
-    return (TerminalServer *)obj;
+    return (RemoteManager *)obj;
 }
 
-+ (instancetype)make:(TerminalServer *)server
++ (instancetype)make:(RemoteManager *)manager
 {
-    if (server == nullptr) { return nil; }
+    if (manager == nullptr) { return nil; }
     
-    TerminalServerProxy *proxy = [[self alloc] initWith: server];
+    RemoteManagerProxy *proxy = [[self alloc] initWith: manager];
     return proxy;
 }
 
--(BOOL)listening
+-(NSInteger)numListening
 {
-    return [self server]->isListening();
+    return [self manager]->numListening();
 }
 
--(BOOL)connected
+-(NSInteger)numConnected
 {
-    return [self server]->isConnected();
+    return [self manager]->numConnected();
 }
 
--(void)start:(NSInteger)port
+- (void)start:(ServerType)type
 {
-    [self server]->start(port);
+    [self manager]->start(type);
 }
 
--(void)stop
+- (void)start:(ServerType)type port:(NSInteger)port
 {
-    [self server]->stop();
+    [self manager]->start(type, port);
 }
 
-@end
-
-//
-// GdbServer proxy
-//
-
-@implementation GdbServerProxy
-
-- (GdbServer *)server
+- (void)stop:(ServerType)type
 {
-    return (GdbServer *)obj;
+    [self manager]->stop(type);
 }
 
-+ (instancetype)make:(GdbServer *)server
+- (void)disconnect:(ServerType)type
 {
-    if (server == nullptr) { return nil; }
-    
-    GdbServerProxy *proxy = [[self alloc] initWith: server];
-    return proxy;
-}
-
--(BOOL)listening
-{
-    return [self server]->isListening();
-}
-
--(BOOL)connected
-{
-    return [self server]->isConnected();
-}
-
--(void)start:(NSInteger)port
-{
-    [self server]->start(port);
-}
-
--(void)stop
-{
-    [self server]->stop();
+    [self manager]->disconnect(type);
 }
 
 @end
@@ -2158,16 +2127,15 @@ using namespace moira;
 @synthesize df3;
 @synthesize diskController;
 @synthesize dmaDebugger;
-@synthesize gdbServer;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
+@synthesize remoteManager;
 @synthesize retroShell;
 @synthesize rtc;
 @synthesize serialPort;
 @synthesize recorder;
 @synthesize scheduler;
-@synthesize terminalServer;
 @synthesize watchpoints;
 
 - (instancetype) init
@@ -2195,16 +2163,15 @@ using namespace moira;
     df3 = [[DriveProxy alloc] initWith:&amiga->df3];
     diskController = [[DiskControllerProxy alloc] initWith:&amiga->paula.diskController];
     dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
-    gdbServer = [[GdbServerProxy alloc] initWith:&amiga->gdbServer];
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
     retroShell = [[RetroShellProxy alloc] initWith:&amiga->retroShell];
     rtc = [[RtcProxy alloc] initWith:&amiga->rtc];
     recorder = [[RecorderProxy alloc] initWith:&amiga->denise.screenRecorder];
+    remoteManager = [[RemoteManagerProxy alloc] initWith:&amiga->remoteManager];
     serialPort = [[SerialPortProxy alloc] initWith:&amiga->serialPort];
     scheduler = [[SchedulerProxy alloc] initWith:&amiga->agnus.scheduler];
-    terminalServer = [[TerminalServerProxy alloc] initWith:&amiga->terminalServer];
     watchpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.watchpoints];
 
     return self;

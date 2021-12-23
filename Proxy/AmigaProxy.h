@@ -35,6 +35,7 @@
 #import "MouseTypes.h"
 #import "PaulaTypes.h"
 #import "PixelEngineTypes.h"
+#import "RemoteManagerTypes.h"
 #import "RetroShellTypes.h"
 #import "RomFileTypes.h"
 #import "RTCTypes.h"
@@ -67,7 +68,6 @@
 @class EXEFileProxy;
 @class ExtendedRomFileProxy;
 @class FolderProxy;
-@class GdbServerProxy;
 @class GuardsProxy;
 @class HDFFileProxy;
 @class IMGFileProxy;
@@ -76,6 +76,7 @@
 @class MemProxy;
 @class MouseProxy;
 @class PaulaProxy;
+@class RemoteManagerProxy;
 @class RetroShellProxy;
 @class RomFileProxy;
 @class RtcProxy;
@@ -84,7 +85,6 @@
 @class ScriptProxy;
 @class SerialPortProxy;
 @class SnapshotProxy;
-@class TerminalServerProxy;
 
 //
 // Exception wrapper
@@ -137,18 +137,17 @@
     DriveProxy *df1;
     DriveProxy *df2;
     DriveProxy *df3;
-    GdbServerProxy *gdbServer;
     GuardsProxy *breakpoints;
     GuardsProxy *watchpoints;
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
+    RemoteManagerProxy *remoteManager;
     RetroShellProxy *retroShell;
     RtcProxy *rtc;
     RecorderProxy *recorder;
     SchedulerProxy *scheduler;
     SerialPortProxy *serialPort;
-    TerminalServerProxy *terminalServer;
 }
 
 @property (readonly, strong) AgnusProxy *agnus;
@@ -166,18 +165,17 @@
 @property (readonly, strong) DriveProxy *df1;
 @property (readonly, strong) DriveProxy *df2;
 @property (readonly, strong) DriveProxy *df3;
-@property (readonly, strong) GdbServerProxy *gdbServer;
 @property (readonly, strong) GuardsProxy *breakpoints;
 @property (readonly, strong) GuardsProxy *watchpoints;
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;
+@property (readonly, strong) RemoteManagerProxy *remoteManager;
 @property (readonly, strong) RetroShellProxy *retroShell;
 @property (readonly, strong) RtcProxy *rtc;
 @property (readonly, strong) RecorderProxy *recorder;
 @property (readonly, strong) SchedulerProxy *scheduler;
 @property (readonly, strong) SerialPortProxy *serialPort;
-@property (readonly, strong) TerminalServerProxy *terminalServer;
 
 - (void)dealloc;
 - (void)kill;
@@ -671,30 +669,18 @@
 @end
 
 //
-// TerminalServer
+// RemoteManager
 //
 
-@interface TerminalServerProxy : Proxy { }
+@interface RemoteManagerProxy : Proxy { }
 
-@property (readonly) BOOL listening;
-@property (readonly) BOOL connected;
+@property (readonly) NSInteger numListening;
+@property (readonly) NSInteger numConnected;
 
-- (void)start:(NSInteger)port;
-- (void)stop;
-
-@end
-
-//
-// GdbServer
-//
-
-@interface GdbServerProxy : Proxy { }
-
-@property (readonly) BOOL listening;
-@property (readonly) BOOL connected;
-
-- (void)start:(NSInteger)port;
-- (void)stop;
+- (void)start:(ServerType)type;
+- (void)start:(ServerType)type port:(NSInteger)port;
+- (void)stop:(ServerType)type;
+- (void)disconnect:(ServerType)type;
 
 @end
 

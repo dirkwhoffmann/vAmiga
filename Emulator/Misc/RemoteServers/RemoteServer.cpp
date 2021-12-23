@@ -31,26 +31,30 @@ void
 RemoteServer::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
-    
-    if (category & dump::Config) {
         
-    }
-    
     if (category & dump::State) {
         
-        os << tab("Listening") << bol(listening) << std::endl;
-        os << tab("Connected") << bol(connected) << std::endl;
-        os << tab("Port") << dec(port) << std::endl;
+        os << tab("Listening");
+        if (listening) {
+            os << bol(listening) << std::endl;
+        } else {
+            os << "at port " << dec(port) << std::endl;
+        }
+        os << tab("Connected");
+        os << bol(connected) << std::endl;
+        os << tab("Received");
+        os << dec(numReceived) << " packets" << std::endl;
+        os << tab("Transmitted");
+        os << dec(numSent) << " packets" << std::endl;
     }
 }
 
 void
 RemoteServer::start(isize port)
 {
-    debug(SRV_DEBUG, "Starting remote server at port %ld...\n", port);
-
-    // Only proceed if the server is not running
     if (listening) throw VAError(ERROR_SERVER_RUNNING);
+    
+    debug(SRV_DEBUG, "Starting remote server at port %ld...\n", port);
 
     // Make sure that we continue with a terminated server thread
     if (serverThread.joinable()) serverThread.join();
@@ -63,11 +67,10 @@ RemoteServer::start(isize port)
 void
 RemoteServer::stop()
 {
-    debug(SRV_DEBUG, "Stopping remote server...\n");
- 
-    // Only proceed if an open connection exists
     if (!listening) throw VAError(ERROR_SERVER_NOT_RUNNING);
-        
+
+    debug(SRV_DEBUG, "Stopping remote server...\n");
+         
     // Interrupt the server thread
     listening = false;
     disconnect();
@@ -79,12 +82,40 @@ RemoteServer::stop()
 void
 RemoteServer::disconnect()
 {
-    // Trigger an exception inside the server thread
-    connection.close();
-    listener.close();
+    if (connected) {
+        
+        // Trigger an exception inside the server thread
+        connection.close();
+        listener.close();    
+    }
+}
+
+string
+RemoteServer::receive()
+{
+    string packet;
     
-    // Inform the user about the disconnected client
-    retroShell << "Disconnecting client" << '\n';
+    if (connected) {
+        
+        packet = _receive();
+        numReceived++;
+        debug(SRV_DEBUG, "R: '%s'\n", util::makePrintable(packet).c_str());
+        msgQueue.put(MSG_SRV_RECEIVE);
+    }
+    
+    return packet;
+}
+
+void
+RemoteServer::send(const string &packet)
+{
+    if (connected) {
+        
+        _send(packet);
+        numSent++;
+        debug(SRV_DEBUG, "T: '%s'\n", util::makePrintable(packet).c_str());
+        msgQueue.put(MSG_SRV_SEND);
+    }
 }
 
 void
@@ -132,11 +163,16 @@ RemoteServer::send(std::stringstream &payload)
 }
 
 void
+RemoteServer::process(const string &payload)
+{
+    _process(payload);
+}
+
+void
 RemoteServer::main()
 {
-    listening = true;
-    debug(SRV_DEBUG, "Remote server started\n");
-    msgQueue.put(MSG_SRV_START);
+    numReceived = 0;
+    numSent = 0;
 
     try {
         
@@ -146,47 +182,67 @@ RemoteServer::main()
 
         handleError(err.what());
     }
+}
 
+void
+RemoteServer::mainLoop()
+{
+    listening = true;
+    debug(SRV_DEBUG, "Remote server started\n");
+    msgQueue.put(MSG_SRV_START);
+        
+    while (listening) {
+        
+        try {
+            
+            // Create a port listener
+            listener = PortListener((u16)port);
+            
+            // Wait for a client to connect
+            connection = listener.accept();
+
+            // Handle the session
+            sessionLoop();
+            
+            // Close the port listener
+            listener.close();
+            
+        } catch (std::exception &err) {
+            
+            handleError(err.what());
+        }
+    }
+    
     listening = false;
     debug(SRV_DEBUG, "Remote server stopped\n");
     msgQueue.put(MSG_SRV_STOP);
 }
 
 void
-RemoteServer::mainLoop()
+RemoteServer::sessionLoop()
 {
-    while (listening) {
-        
-        // Create a port listener
-        listener = PortListener((u16)port);
-        
-        try {
-            
-            // Wait for a client
-            connection = listener.accept();
-            
-            connected = true;
-            debug(SRV_DEBUG, "Connection established\n");
-            msgQueue.put(MSG_SRV_CONNECT);
-            
-            // Print the startup message and the input prompt
-            welcome();
-            
-            // Receive and process packages
-            while (1) { receive(); }
-            
-        } catch (std::exception &err) {
-            
-            if (listening) handleError(err.what());
-            
-            connection.close();
-            listener.close();
+    connected = true;
+    debug(SRV_DEBUG, "Client connected\n");
+    msgQueue.put(MSG_SRV_CONNECT);
 
-            connected = false;
-            debug(SRV_DEBUG, "Client disconnected\n");
-            msgQueue.put(MSG_SRV_DISCONNECT);
-        }
+    try {
+        
+        // Print the startup message
+        welcome();
+        
+        // Receive and process packets
+        while (1) { process(receive()); }
+        
+    } catch (std::exception &err) {
+                 
+        // If listening is still true, the loop has been terminated by an error
+        if (listening) handleError(err.what());
     }
+    
+    connection.close();
+    connected = false;
+    debug(SRV_DEBUG, "Client disconnected\n");
+    msgQueue.put(MSG_SRV_DISCONNECT);
 }
 
 void

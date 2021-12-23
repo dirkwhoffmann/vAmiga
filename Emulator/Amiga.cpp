@@ -57,9 +57,8 @@ Amiga::Amiga()
         &ciaB,
         &mem,
         &cpu,
+        &remoteManager,
         &retroShell,
-        &terminalServer,
-        &gdbServer,
         &regressionTester,
         &msgQueue
     };
@@ -87,6 +86,7 @@ Amiga::Amiga()
         msg("             Muxer : %zu bytes\n", sizeof(Muxer));
         msg("             Paula : %zu bytes\n", sizeof(Paula));
         msg("       PixelEngine : %zu bytes\n", sizeof(PixelEngine));
+        msg("     RemoteManager : %zu bytes\n", sizeof(RemoteManager));
         msg("               RTC : %zu bytes\n", sizeof(RTC));
         msg("           Sampler : %zu bytes\n", sizeof(Sampler));
         msg("        SerialPort : %zu bytes\n", sizeof(SerialPort));
@@ -296,10 +296,6 @@ Amiga::getConfigItem(Option option, long id) const
             if (id == PORT_1) return controlPort1.joystick.getConfigItem(option);
             if (id == PORT_2) return controlPort2.joystick.getConfigItem(option);
             fatalError;
-
-        case OPT_GDB_VERBOSE:
-            
-            return gdbServer.getConfigItem(option);
             
         default:
             fatalError;
@@ -473,11 +469,6 @@ Amiga::configure(Option option, i64 value)
             controlPort2.joystick.setConfigItem(option, value);
             break;
             
-        case OPT_GDB_VERBOSE:
-            
-            gdbServer.setConfigItem(option, value);
-            break;
-
         default:
             fatalError;
     }

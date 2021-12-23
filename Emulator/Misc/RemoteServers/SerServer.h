@@ -31,7 +31,8 @@ protected:
     // Methods from RemoteServer
     //
     
-    string receive() override throws { return ""; }
-    void send(const string &packet) override throws { }
     void welcome() override { }
+    string _receive() override throws { return ""; }
+    void _send(const string &packet) override throws { }
+    void _process(const string &packet) override throws { }
 };
