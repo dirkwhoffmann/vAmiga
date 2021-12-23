@@ -51,7 +51,7 @@ public:
     void _process(const string &payload) override throws;
 
     // Sends a packet with control characters and a checksum attached
-    void sendPacket(const string &payload);
+    void reply(const string &payload);
  
     
     //

@@ -27,30 +27,26 @@ GdbServer::process <' ', GdbCmd::CtrlC> (string arg)
 template <> void
 GdbServer::process <'q', GdbCmd::Supported> (string arg)
 {
-    sendPacket("PacketSize=512;"
-               "BreakpointCommands+;"
-               "swbreak+;"
-               "hwbreak+;"
-               "QStartNoAckMode+;"
-               "vContSupported+");
+    reply("PacketSize=1ff;"
+          "multiprocess-;"
+          "swbreak+;"
+          "QStartNoAckMode+;"
+          "vContSupported+");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::Symbol> (string arg)
 {
-    sendPacket("OK");
+    reply("OK");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::Offset> (string arg)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "qOffset");
-
-    /*
     string result;
     
     os::Process p;
-    if (osDebugger.searchProcess(debugProcess, p)) {
+    if (osDebugger.searchProcess("file", p)) {
                 
         os::SegList segList;
         osDebugger.read(p, segList);
@@ -60,71 +56,71 @@ GdbServer::process <'q', GdbCmd::Offset> (string arg)
             switch (i) {
                     
                 case 0:
-                    result += "TextSeg=";
-                    result += util::hexstr <6> (segList[i].first);
+                    result += "Text=";
+                    result += util::hexstr <8> (segList[i].first);
                     break;
                 case 1:
-                    result += ";DataSeg=";
-                    result += util::hexstr <6> (segList[i].first);
+                    result += ";Data=";
+                    result += util::hexstr <8> (segList[i].first);
                     break;
                 default:
-                    // result += ";CustomSeg" + std::to_string(i) + "=";
+                    result += ";Bss=";
+                    result += util::hexstr <8> (segList[i].first);
                     break;
             }
         }
     }
 
-    return result;
-    */
+    reply(result);
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::TStatus> (string arg)
 {
-    sendPacket("T0");
+    reply("");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::TfV> (string arg)
 {
-    sendPacket("l");
+    reply("l");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::TfP> (string arg)
 {
-    sendPacket("l");
+    reply("l");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::fThreadInfo> (string arg)
 {
-    sendPacket("m01");
+    reply("m1");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::sThreadInfo> (string arg)
 {
-    sendPacket("l");
+    reply("l");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::Attached> (string arg)
 {
-    sendPacket("0");
+    reply("0");
 }
 
 template <> void
 GdbServer::process <'q', GdbCmd::C> (string arg)
 {
-    sendPacket("QC1");
+    reply("");
 }
 
 template <> void
 GdbServer::process <'Q', GdbCmd::StartNoAckMode> (string arg)
 {
     ackMode = false;
-    sendPacket("OK");
+    reply("OK");
 }
 
 template <> void
@@ -132,7 +128,7 @@ GdbServer::process <'v'> (string arg)
 {
     if (arg == "MustReplyEmpty") {
         
-        sendPacket("");
+        reply("");
         return;
     }
 
@@ -229,7 +225,7 @@ GdbServer::process <'g'> (string cmd)
 {
     string result;
     for (int i = 0; i < 18; i++) result += readRegister(i);
-    send(result);
+    reply(result);
 }
 
 template <> void
@@ -247,7 +243,7 @@ GdbServer::process <'n'> (string cmd)
 template <> void
 GdbServer::process <'H'> (string cmd)
 {
-    sendPacket("OK");
+    reply("OK");
 }
 
 template <> void
@@ -259,7 +255,8 @@ GdbServer::process <'G'> (string cmd)
 template <> void
 GdbServer::process <'?'> (string cmd)
 {
-    sendPacket("S05");
+    auto pc = util::hexstr <8> (cpu.getPC0());
+    reply("T051:" + pc + ";");
 }
 
 template <> void
@@ -311,9 +308,7 @@ GdbServer::process <'p'> (string cmd)
 {
     isize nr;
     util::parseHex(cmd, &nr);
-    
-    printf("p command: nr = %ld\n", nr);
-    sendPacket(readRegister(nr));
+    reply(readRegister(nr));
 }
 
 template <> void

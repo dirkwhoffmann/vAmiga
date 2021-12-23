@@ -33,10 +33,10 @@ RemoteManager::_dump(dump::Category category, std::ostream& os) const
 
         os << tab(string(name));
         
-        if (server->isConnected()) {
-            os << "Connected to client at port " << port << std::endl;
-        } else if (server->isListening()) {
-            os << "Listening at port " << port << std::endl;
+        if (server->isListening()) {
+            os << "Port " << dec(port) << " (listening)" << std::endl;
+        } else if (server->isConnected()) {
+            os << "Port " << dec(port) << " (connected)" << std::endl;
         } else {
             os << "Off" << std::endl;
         }

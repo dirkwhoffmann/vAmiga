@@ -35,13 +35,11 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
     if (category & dump::State) {
         
         os << tab("Listening");
-        if (listening) {
-            os << bol(listening) << std::endl;
-        } else {
-            os << "at port " << dec(port) << std::endl;
-        }
+        os << bol(listening) << std::endl;
         os << tab("Connected");
         os << bol(connected) << std::endl;
+        os << tab("Port");
+        os << dec(port) << std::endl;
         os << tab("Received");
         os << dec(numReceived) << " packets" << std::endl;
         os << tab("Transmitted");
@@ -86,7 +84,7 @@ RemoteServer::disconnect()
         
         // Trigger an exception inside the server thread
         connection.close();
-        listener.close();    
+        listener.close();
     }
 }
 
@@ -171,9 +169,6 @@ RemoteServer::process(const string &payload)
 void
 RemoteServer::main()
 {
-    numReceived = 0;
-    numSent = 0;
-
     try {
         
         mainLoop();
@@ -230,6 +225,9 @@ RemoteServer::sessionLoop()
         // Print the startup message
         welcome();
         
+        // Reset the package counters
+        numReceived = numSent = 0;
+
         // Receive and process packets
         while (1) { process(receive()); }
         

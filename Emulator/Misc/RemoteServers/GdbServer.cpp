@@ -28,12 +28,14 @@ string
 GdbServer::_receive()
 {
     latestCmd = connection.recv();
+    retroShell << "R: " << latestCmd << "\n";
     return latestCmd;
 }
 
 void
 GdbServer::_send(const string &payload)
 {
+    retroShell << "T: " << payload << "\n";
     connection.send(payload);
 }
 
@@ -58,7 +60,7 @@ GdbServer::_process(const string &payload)
 }
 
 void
-GdbServer::sendPacket(const string &payload)
+GdbServer::reply(const string &payload)
 {
     string packet = "$";
     
