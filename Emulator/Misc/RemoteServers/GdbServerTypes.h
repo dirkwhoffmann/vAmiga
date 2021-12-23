@@ -20,6 +20,9 @@ enum class GdbCmd
 {
     Attached,
     C,
+    ContQ,
+    Cont,
+    MustReplyEmpty,
     CtrlC,
     Offset,
     StartNoAckMode,

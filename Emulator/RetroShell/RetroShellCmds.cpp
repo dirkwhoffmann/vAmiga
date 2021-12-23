@@ -1227,41 +1227,35 @@ RetroShell::exec <Token::os, Token::processes> (Arguments& argv, long param)
 //
 
 template <> void
-RetroShell::exec <Token::server, Token::start> (Arguments& argv, long param)
+RetroShell::exec <Token::server, Token::gdb, Token::start> (Arguments& argv, long param)
 {
-    auto type = util::parseEnum <ServerTypeEnum> (argv.front());
-
     if (argv.size() == 1) {
-        remoteManager.start(type);
+        remoteManager.start(SERVER_GDB);
     } else {
-        remoteManager.start(type, util::parseNum(argv[1]));
+        remoteManager.start(SERVER_GDB, util::parseNum(argv[1]));
     }
 }
 
 template <> void
-RetroShell::exec <Token::server, Token::stop> (Arguments& argv, long param)
+RetroShell::exec <Token::server, Token::gdb, Token::stop> (Arguments& argv, long param)
 {
-    auto type = util::parseEnum <ServerTypeEnum> (argv.front());
-    remoteManager.stop(type);
+    remoteManager.gdbServer.stop();
 }
 
 template <> void
-RetroShell::exec <Token::server, Token::disconnect> (Arguments& argv, long param)
+RetroShell::exec <Token::server, Token::gdb, Token::disconnect> (Arguments& argv, long param)
 {
-    auto type = util::parseEnum <ServerTypeEnum> (argv.front());
-    remoteManager.disconnect(type);
+    remoteManager.gdbServer.disconnect();
 }
 
 template <> void
-RetroShell::exec <Token::server, Token::inspect> (Arguments& argv, long param)
+RetroShell::exec <Token::server, Token::gdb, Token::inspect> (Arguments& argv, long param)
 {
-    if (argv.empty()) {
-        
-        dump(remoteManager, dump::State);
-        
-    } else {
-        
-        auto type = util::parseEnum <ServerTypeEnum> (argv.front());
-        dump(remoteManager.getServer(type), dump::State);
-    }
+        dump(remoteManager.gdbServer, dump::State);
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::info> (Arguments& argv, long param)
+{
+        dump(remoteManager, dump::State);        
 }

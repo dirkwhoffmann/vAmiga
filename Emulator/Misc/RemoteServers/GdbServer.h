@@ -93,4 +93,14 @@ private:
 
     // Reads a byte from memory
     string readMemory(isize addr);
+    
+    
+    //
+    // Delegation methods
+    //
+    
+public:
+    
+    void breakpointReached();
+
 };

@@ -775,6 +775,7 @@ Amiga::_pause()
 {
     debug(RUN_DEBUG, "_pause\n");
 
+    remoteManager.gdbServer.breakpointReached();
     inspect();
     msgQueue.put(MSG_PAUSE);
 }

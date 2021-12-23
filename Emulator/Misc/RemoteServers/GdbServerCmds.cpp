@@ -51,24 +51,13 @@ GdbServer::process <'q', GdbCmd::Offset> (string arg)
         os::SegList segList;
         osDebugger.read(p, segList);
         
-        for (usize i = 0; i < segList.size(); i++) {
-            
-            switch (i) {
-                    
-                case 0:
-                    result += "Text=";
-                    result += util::hexstr <8> (segList[i].first);
-                    break;
-                case 1:
-                    result += ";Data=";
-                    result += util::hexstr <8> (segList[i].first);
-                    break;
-                default:
-                    result += ";Bss=";
-                    result += util::hexstr <8> (segList[i].first);
-                    break;
-            }
-        }
+        auto codeseg = (segList.size() > 0) ? segList[0].first : 0;
+        auto dataseg = (segList.size() > 1) ? segList[1].first : 0;
+        auto bssseg  = (segList.size() > 2) ? segList[2].first : dataseg;
+        
+        result += "Text=" + util::hexstr <8> (codeseg) + ";";
+        result += "Data=" + util::hexstr <8> (dataseg) + ";";
+        result += "Bss=" + util::hexstr <8> (bssseg);
     }
 
     reply(result);
@@ -124,27 +113,62 @@ GdbServer::process <'Q', GdbCmd::StartNoAckMode> (string arg)
 }
 
 template <> void
-GdbServer::process <'v'> (string arg)
+GdbServer::process <'v', GdbCmd::MustReplyEmpty> (string arg)
 {
-    if (arg == "MustReplyEmpty") {
+    reply("");
+}
+
+template <> void
+GdbServer::process <'v', GdbCmd::ContQ> (string arg)
+{
+    reply("vCont;cst");
+}
+
+template <> void
+GdbServer::process <'v', GdbCmd::Cont> (string arg)
+{
+    if (arg == "c") {
+
+        amiga.run();
+        return;
+    }
+    if (arg == "s") {
         
-        reply("");
+        amiga.stepInto();
+        return;
+    }
+    
+    throw VAError(ERROR_GDB_INVALID_FORMAT);
+}
+
+template <> void
+GdbServer::process <'v'> (string cmd)
+{
+    auto command = cmd;
+    
+    if (command == "MustReplyEmpty") {
+        
+        process <'v', GdbCmd::MustReplyEmpty> ("");
+        return;
+    }
+    if (command == "Cont?") {
+    
+        process <'v', GdbCmd::ContQ> ("");
+        return;
+    }
+    if (command == "Cont;c") {
+
+        process <'v', GdbCmd::Cont> ("c");
+        return;
+    }
+
+    if (command == "Cont;s") {
+
+        process <'v', GdbCmd::Cont> ("s");
         return;
     }
 
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "v");
-
-    /*
-    if (arg == "Cont?") {
-        
-        return "vCont;c;C;s;S;t;r";
-    }
-    if (arg == "Cont;c") {
-        
-        amiga.run();
-        return "";
-    }
-    */
 }
 
 template <> void
@@ -231,7 +255,7 @@ GdbServer::process <'g'> (string cmd)
 template <> void
 GdbServer::process <'s'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "s");
+    process <'v', GdbCmd::Cont> ("s");
 }
 
 template <> void
@@ -274,10 +298,7 @@ GdbServer::process <'k'> (string cmd)
 template <> void
 GdbServer::process <'m'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "m");
-
-    /*
-    auto tokens = split(cmd, ',');
+    auto tokens = util::split(cmd, ',');
     
     if (tokens.size() == 2) {
 
@@ -292,9 +313,12 @@ GdbServer::process <'m'> (string cmd)
             result += readMemory(addr + i);
         }
         
-        send(result);
+        reply(result);
+
+    } else {
+    
+        throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "m");
     }
-    */
 }
 
 template <> void
@@ -320,7 +344,7 @@ GdbServer::process <'P'> (string cmd)
 template <> void
 GdbServer::process <'c'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "c");
+    process <'v', GdbCmd::Cont> ("c");
 }
 
 template <> void
@@ -332,10 +356,7 @@ GdbServer::process <'D'> (string cmd)
 template <> void
 GdbServer::process <'Z'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "Z");
-
-    /*
-    auto tokens = split(cmd, ',');
+    auto tokens = util::split(cmd, ',');
     
     if (tokens.size() == 3) {
 
@@ -350,23 +371,18 @@ GdbServer::process <'Z'> (string cmd)
             cpu.debugger.breakpoints.addAt((u32)addr);
         }
         
-        send("OK");
-        return;
-    }
+        reply("OK");
 
-    // throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "Z");
-    printf("ERROR_GDB_INVALID_FORMAT\n");
-    send("OK");
-    */
+    } else {
+
+        throw VAError(ERROR_GDB_INVALID_FORMAT, "Z");
+    }
 }
 
 template <> void
 GdbServer::process <'z'> (string cmd)
 {
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "z");
-
-    /*
-    auto tokens = split(cmd, ',');
+    auto tokens = util::split(cmd, ',');
     
     if (tokens.size() == 3) {
 
@@ -381,12 +397,12 @@ GdbServer::process <'z'> (string cmd)
             cpu.debugger.breakpoints.removeAt((u32)addr);
         }
         
-        send("OK");
-        return;
-    }
+        reply("OK");
+    
+    } else {
 
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "z");
-    */
+        throw VAError(ERROR_GDB_INVALID_FORMAT, "z");
+    }
 }
 
 void

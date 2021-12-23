@@ -111,3 +111,10 @@ GdbServer::readMemory(isize addr)
     auto byte = mem.spypeek8 <ACCESSOR_CPU> ((u32)addr);
     return util::hexstr <2> (byte);
 }
+
+void
+GdbServer::breakpointReached()
+{
+    debug(SRV_DEBUG, "Breakpoint reached\n");
+    process <'?'> ("");
+}

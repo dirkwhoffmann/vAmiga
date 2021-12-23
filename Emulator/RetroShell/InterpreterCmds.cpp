@@ -990,22 +990,34 @@ Interpreter::registerInstructions()
     
     root.add({"server"},
              "component", "Remote connections");
-    
-    root.add({"server", "start"},
-             "command", "Starts a remote server",
-             &RetroShell::exec <Token::server, Token::start>, 1);
-    root.seek("server")->seek("start")->maxArgs = 2;
 
-    root.add({"server", "stop"},
-             "command", "Stops a remote server",
-             &RetroShell::exec <Token::server, Token::stop>, 1);
+    root.add({"server", "serial"},
+             "component", "Serial port server");
 
-    root.add({"server", "disconnect"},
+    root.add({"server", "rshell"},
+             "component", "Retro shell server");
+
+    root.add({"server", "gdb"},
+             "component", "GDB server");
+
+    root.add({"server", "gdb", "start"},
+             "command", "Starts the GDB server",
+             &RetroShell::exec <Token::server, Token::gdb, Token::start>, 1);
+    root.seek("server")->seek("gdb")->seek("start")->maxArgs = 2;
+
+    root.add({"server", "gdb", "stop"},
+             "command", "Stops the GDB server",
+             &RetroShell::exec <Token::server, Token::gdb, Token::stop>, 1);
+
+    root.add({"server", "gdb", "disconnect"},
              "command", "Disconnects a client",
-             &RetroShell::exec <Token::server, Token::disconnect>, 1);
+             &RetroShell::exec <Token::server, Token::gdb, Token::disconnect>, 1);
 
-    root.add({"server", "inspect"},
+    root.add({"server", "gdb", "inspect"},
              "command", "Displays the internal state",
-             &RetroShell::exec <Token::server, Token::inspect>);
-    root.seek("server")->seek("inspect")->maxArgs = 1;
+             &RetroShell::exec <Token::server, Token::gdb, Token::inspect>);
+    
+    root.add({"server", "info"},
+             "command", "Prints a server status summary",
+             &RetroShell::exec <Token::server, Token::info>);
 }

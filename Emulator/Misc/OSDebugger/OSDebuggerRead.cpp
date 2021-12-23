@@ -450,7 +450,7 @@ OSDebugger::read(u32 addr, os::SegList &result) const
 {
     for (isize i = 0; isValidPtr(addr) && i < 128; i++) {
         
-        auto size = mem.spypeek32 <ACCESSOR_CPU> (addr - 4);
+        auto size = mem.spypeek32 <ACCESSOR_CPU> (addr - 4) - 8;
         auto next = mem.spypeek32 <ACCESSOR_CPU> (addr);
         auto data = addr + 4;
         
