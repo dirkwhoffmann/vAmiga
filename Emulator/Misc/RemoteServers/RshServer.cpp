@@ -29,7 +29,7 @@ RshServer::_dump(dump::Category category, std::ostream& os) const
 void
 RshServer::didConnect()
 {
-    send("vAmiga Remote Server ");
+    send("vAmiga RetroShell Remote Server ");
     send(std::to_string(VER_MAJOR) + ".");
     send(std::to_string(VER_MINOR) + ".");
     send(std::to_string(VER_SUBMINOR));
@@ -38,6 +38,7 @@ RshServer::didConnect()
     send("Licensed under the GNU General Public License v3\n\n");
     send("Type 'help' for help.\n");
     send("\n");
+    send(retroShell.getPrompt());
 }
 
 string
@@ -61,5 +62,5 @@ void
 RshServer::doProcess(const string &payload)
 {
     retroShell.press(payload);
-    retroShell.press('\n');
+    retroShell.press('\n');    
 }

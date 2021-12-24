@@ -22,8 +22,6 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
     
     // Print the startup message and the input prompt
     storage.welcome();
-    storage << prompt;
-    isDirty = true;
 }
 
 RetroShell&
@@ -77,7 +75,7 @@ RetroShell::text()
     storage.text(all);
         
     // Add the input line
-    all += input + " ";
+    all += prompt + input + " ";
     
     return all.c_str();
 }
@@ -198,6 +196,7 @@ RetroShell::press(RetroShellKey key)
             execUserCommand(input);
             input = "";
             cursor = 0;
+            remoteManager.rshServer.send(prompt);
             break;
             
         case RSKEY_CR:
@@ -281,8 +280,6 @@ RetroShell::execUserCommand(const string &command)
         
         printHelp();
     }
-    
-    printPrompt();
 }
 
 void

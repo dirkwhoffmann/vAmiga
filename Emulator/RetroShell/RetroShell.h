@@ -110,6 +110,9 @@ private:
 
 public:
     
+    // Returns the prompt
+    string getPrompt() { return prompt; }
+    
     // Returns the contents of the whole storage as a single C string
     const char *text();
         
@@ -125,9 +128,6 @@ public:
             
 private:
     
-    // Prints the command prompt
-    void printPrompt() { *this << prompt; }
-
     // Clears the console window
     void clear();
     
