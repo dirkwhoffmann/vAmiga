@@ -64,39 +64,18 @@ private:
     
     
     //
-    // Managing remote servers
+    // Managing connections
     //
     
 public:
-    
-    // Returns a remote server specified by type
-    // RemoteServer &getServer(ServerType type);
-    
-    // Returns a default port for server of a certain type
-    // isize defaultPort(ServerType type) const;
-    
-    
-    //
-    // Managing connections
-    //
     
     // Returns the number of servers being in a certain state
     isize numLaunching() const;
     isize numListening() const;
     isize numConnected() const;
+    isize numErroneous() const;
 
-    // Starts up a remote server
-    /*
-    void start(ServerType type, isize port) throws;
-    void start(ServerType type) throws { start(type, defaultPort(type)); }
-
-    // Shuts down a remote server
-    void stop(ServerType type) throws;
-
-    // Disconnects a client (if any)
-    void disconnect(ServerType type) throws;
-    */
-    
+ 
     //
     // Servicing events
     //

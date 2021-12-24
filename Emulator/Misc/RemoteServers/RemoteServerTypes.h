@@ -21,7 +21,8 @@ enum_long(SRV_STATE)
     SRV_STATE_OFF,
     SRV_STATE_LAUNCHING,
     SRV_STATE_LISTENING,
-    SRV_STATE_CONNECTED
+    SRV_STATE_CONNECTED,
+    SRV_STATE_ERROR
 };
 typedef SRV_STATE SrvState;
 
@@ -29,7 +30,7 @@ typedef SRV_STATE SrvState;
 struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
 {
     static long minVal() { return 0; }
-    static long maxVal() { return SRV_STATE_CONNECTED; }
+    static long maxVal() { return SRV_STATE_ERROR; }
     static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
     static const char *prefix() { return "SRV"; }
@@ -41,6 +42,7 @@ struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
             case SRV_STATE_LAUNCHING:   return "LAUNCHING";
             case SRV_STATE_LISTENING:   return "LISTENING";
             case SRV_STATE_CONNECTED:   return "CONNECTED";
+            case SRV_STATE_ERROR:       return "ERROR";
         }
         return "???";
     }

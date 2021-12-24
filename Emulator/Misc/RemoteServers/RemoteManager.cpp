@@ -12,11 +12,6 @@
 #include "Scheduler.h"
 #include "IOUtils.h"
 
-/* About the remote server manager
- 
- 
- */
-
 RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
 {
 
@@ -53,36 +48,6 @@ RemoteManager::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
-/*
-RemoteServer &
-RemoteManager::getServer(ServerType type)
-{
-    switch (type) {
-            
-        case SERVER_SER: return serServer;
-        case SERVER_RSH: return rshServer;
-        case SERVER_GDB: return gdbServer;
-            
-        default:
-            fatalError;
-    }
-}
-
-isize
-RemoteManager::defaultPort(ServerType type) const
-{
-    switch (type) {
-            
-        case SERVER_SER: return 8080;
-        case SERVER_RSH: return 8081;
-        case SERVER_GDB: return 8082;
-            
-        default:
-            fatalError;
-    }
-}
- */
-
 isize
 RemoteManager::numLaunching() const
 {
@@ -104,6 +69,14 @@ RemoteManager::numConnected() const
 {
     isize result = 0;
     for (auto &s : servers) if (s->isConnected()) result++;
+    return result;
+}
+
+isize
+RemoteManager::numErroneous() const
+{
+    isize result = 0;
+    for (auto &s : servers) if (s->isErroneous()) result++;
     return result;
 }
 

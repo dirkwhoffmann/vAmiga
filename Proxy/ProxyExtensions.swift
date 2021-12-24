@@ -356,11 +356,18 @@ public extension RemoteManagerProxy {
     var icon: NSImage? {
 
         if numConnected > 0 {
-            return NSImage(named: "connectedTemplate")!
-        } else if numListening > 0 {
-            return NSImage(named: "listeningTemplate")!
-        } else {
-            return nil
+            return NSImage(named: "srvConnectTemplate")!
         }
+        if numListening > 0 {
+            return NSImage(named: "srvListenTemplate")!
+        }
+        if numLaunching > 0 {
+            return NSImage(named: "srvLaunchTemplate")!
+        }
+        if numErroneous > 0 {
+            return NSImage(named: "srvErrorTemplate")!
+        }
+
+        return nil
     }
 }

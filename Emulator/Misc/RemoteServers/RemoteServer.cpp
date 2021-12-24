@@ -115,7 +115,8 @@ RemoteServer::switchState(SrvState newState)
             case SRV_STATE_LAUNCHING:   msgQueue.put(MSG_SRV_LAUNCHING); break;
             case SRV_STATE_LISTENING:   msgQueue.put(MSG_SRV_LISTENING); break;
             case SRV_STATE_CONNECTED:   msgQueue.put(MSG_SRV_CONNECTED); break;
-                
+            case SRV_STATE_ERROR:       msgQueue.put(MSG_SRV_ERROR); break;
+
             default:
                 fatalError;
         }
@@ -260,7 +261,7 @@ RemoteServer::sessionLoop()
         while (1) { process(receive()); }
         
     } catch (std::exception &err) {
-                 
+                         
         // If the server is alive, the loop has been terminated due to an error
         if (!isOff()) handleError(err.what());
     }
@@ -275,8 +276,11 @@ RemoteServer::sessionLoop()
 void
 RemoteServer::handleError(const char *description)
 {
+    // Switch to error state
+    switchState(SRV_STATE_ERROR);
+
+    // Compose the error message
     auto msg = "Server Error: " + string(description);
-                     
     debug(SRV_DEBUG, "%s\n", msg.c_str());
     
     // Inform the GUI

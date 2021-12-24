@@ -677,13 +677,7 @@
 @property (readonly) NSInteger numLaunching;
 @property (readonly) NSInteger numListening;
 @property (readonly) NSInteger numConnected;
-
-/*
-- (void)start:(ServerType)type;
-- (void)start:(ServerType)type port:(NSInteger)port;
-- (void)stop:(ServerType)type;
-- (void)disconnect:(ServerType)type;
-*/
+@property (readonly) NSInteger numErroneous;
 
 @end
 

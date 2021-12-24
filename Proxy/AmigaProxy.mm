@@ -1500,27 +1500,10 @@ using namespace moira;
     return [self manager]->numConnected();
 }
 
-/*
-- (void)start:(ServerType)type
+-(NSInteger)numErroneous
 {
-    [self manager]->start(type);
+    return [self manager]->numErroneous();
 }
-
-- (void)start:(ServerType)type port:(NSInteger)port
-{
-    [self manager]->start(type, port);
-}
-
-- (void)stop:(ServerType)type
-{
-    [self manager]->stop(type);
-}
-
-- (void)disconnect:(ServerType)type
-{
-    [self manager]->disconnect(type);
-}
-*/
 
 @end
 

@@ -97,6 +97,7 @@ public:
     bool isLaunching() const { return state == SRV_STATE_LAUNCHING; }
     bool isListening() const { return state == SRV_STATE_LISTENING; }
     bool isConnected() const { return state == SRV_STATE_CONNECTED; }
+    bool isErroneous() const { return state == SRV_STATE_ERROR; }
 
     
     //
