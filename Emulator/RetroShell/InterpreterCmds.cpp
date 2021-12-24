@@ -1017,7 +1017,41 @@ Interpreter::registerInstructions()
              "command", "Displays the internal state",
              &RetroShell::exec <Token::server, Token::gdb, Token::inspect>);
     
-    root.add({"server", "info"},
+    root.add({"server", "rshell", "start"},
+             "command", "Starts the retro shell server",
+             &RetroShell::exec <Token::server, Token::rshell, Token::start>);
+    root.seek("server")->seek("rshell")->seek("start")->maxArgs = 1;
+
+    root.add({"server", "rshell", "stop"},
+             "command", "Stops the retro shell server",
+             &RetroShell::exec <Token::server, Token::rshell, Token::stop>);
+
+    root.add({"server", "rshell", "disconnect"},
+             "command", "Disconnects a client",
+             &RetroShell::exec <Token::server, Token::rshell, Token::disconnect>);
+
+    root.add({"server", "rshell", "inspect"},
+             "command", "Displays the internal state",
+             &RetroShell::exec <Token::server, Token::rshell, Token::inspect>);
+
+    root.add({"server", "serial", "start"},
+             "command", "Starts the serial port server",
+             &RetroShell::exec <Token::server, Token::serial, Token::start>);
+    root.seek("server")->seek("serial")->seek("start")->maxArgs = 1;
+
+    root.add({"server", "serial", "stop"},
+             "command", "Stops the serial port server",
+             &RetroShell::exec <Token::server, Token::serial, Token::stop>);
+
+    root.add({"server", "serial", "disconnect"},
+             "command", "Disconnects a client",
+             &RetroShell::exec <Token::server, Token::serial, Token::disconnect>);
+
+    root.add({"server", "serial", "inspect"},
+             "command", "Displays the internal state",
+             &RetroShell::exec <Token::server, Token::serial, Token::inspect>);
+     
+    root.add({"server", "status"},
              "command", "Prints a server status summary",
-             &RetroShell::exec <Token::server, Token::info>);
+             &RetroShell::exec <Token::server, Token::status>);
 }

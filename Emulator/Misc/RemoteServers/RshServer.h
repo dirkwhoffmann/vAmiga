@@ -15,7 +15,7 @@ class RshServer : public RemoteServer {
   
 public:
     
-    using RemoteServer::RemoteServer;
+    RshServer(Amiga& ref);
     
     //
     // Methods from AmigaObject
@@ -31,10 +31,8 @@ protected:
     // Methods from RemoteServer
     //
     
-    isize _defaultPort() const override { return 8081; }
-    bool _launchable() override { return true; }
     void didConnect() override;
-    string _receive() override throws;
-    void _process(const string &packet) override throws;
-    void _send(const string &packet) override throws;
+    string doReceive() override throws;
+    void doProcess(const string &packet) override throws;
+    void doSend(const string &packet) override throws;
 };

@@ -52,7 +52,7 @@ class GdbServer : public RemoteServer {
     
 public:
 
-    using RemoteServer::RemoteServer;
+    GdbServer(Amiga& ref);
 
     
     //
@@ -71,22 +71,14 @@ private:
     
 public:
     
-    isize _defaultPort() const override { return 8082; }
-    bool _launchable() override;
-    string _receive() override throws;
-    void _send(const string &payload) override throws;
-    void _process(const string &payload) override throws;
-
+    bool canStart() override;
+    string doReceive() override throws;
+    void doSend(const string &payload) override throws;
+    void doProcess(const string &payload) override throws;
     void didConnect() override throws;
     void didSwitch(SrvState from, SrvState to) override;
 
-private:
-    
-    // Sends a packet with control characters and a checksum attached
-    void reply(const string &payload);
-    
-    // 
-        
+            
     //
     // Analyzing the attached process
     //
@@ -125,6 +117,9 @@ private:
     template <char letter> void process(string arg) throws;
     template <char letter, GdbCmd cmd> void process(string arg) throws;
     
+    // Sends a packet with control characters and a checksum attached
+    void reply(const string &payload);
+
     
     //
     // Reading the emulator state

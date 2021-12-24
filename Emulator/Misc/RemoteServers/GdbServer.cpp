@@ -18,6 +18,11 @@
 #include "OSDebugger.h"
 #include "RetroShell.h"
 
+GdbServer::GdbServer(Amiga& ref) : RemoteServer(ref)
+{
+    port = 8082;
+}
+
 void
 GdbServer::_dump(dump::Category category, std::ostream& os) const
 {
@@ -34,7 +39,7 @@ GdbServer::_dump(dump::Category category, std::ostream& os) const
 }
 
 bool
-GdbServer::_launchable()
+GdbServer::canStart()
 {
     // If the seglist is present, we are ready to go
     if (!segList.empty()) return true;
@@ -45,7 +50,7 @@ GdbServer::_launchable()
 }
 
 string
-GdbServer::_receive()
+GdbServer::doReceive()
 {
     latestCmd = connection.recv();
     retroShell << "R: " << latestCmd << "\n";
@@ -53,14 +58,14 @@ GdbServer::_receive()
 }
 
 void
-GdbServer::_send(const string &payload)
+GdbServer::doSend(const string &payload)
 {
     retroShell << "T: " << payload << "\n";
     connection.send(payload);
 }
 
 void
-GdbServer::_process(const string &payload)
+GdbServer::doProcess(const string &payload)
 {
     try {
         

@@ -36,7 +36,7 @@ protected:
     PortListener listener;
     Socket connection;
 
-    // Number of sent and received packets
+    // The number of sent and received packets
     isize numSent = 0;
     isize numReceived = 0;
         
@@ -68,12 +68,60 @@ public:
 private:
     
     void _reset(bool hard) override { }
-    
     isize _size() override { return 0; }
     u64 _checksum() override { return 0; }
-    isize _load(const u8 *buffer) override {return 0; }
+    isize _load(const u8 *buffer) override { return 0; }
     isize _save(u8 *buffer) override { return 0; }
 
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    isize getPort() const { return port; }
+    void setPort(isize value) { port = value; }
+
+    const std::vector <string> &getArgs() const { return args; }
+    void setArgs(const std::vector <string> &newArgs) { args = newArgs; }
+    
+
+    //
+    // Examining state
+    //
+    
+public:
+        
+    bool isOff() const { return state == SRV_STATE_OFF; }
+    bool isLaunching() const { return state == SRV_STATE_LAUNCHING; }
+    bool isListening() const { return state == SRV_STATE_LISTENING; }
+    bool isConnected() const { return state == SRV_STATE_CONNECTED; }
+
+    
+    //
+    // Changing state
+    //
+    
+public:
+        
+    // Returns whether the server is ready to start
+    virtual bool canStart() { return true; }
+    
+    // Launch the remote server
+    void start() throws;
+    
+    // Shuts down the remote server
+    void stop() throws;
+        
+    // Disconnects the client
+    void disconnect() throws;
+         
+protected:
+        
+    // Switches the internal state
+    void switchState(SrvState newState);
+    
     
     //
     // Running the server
@@ -87,43 +135,6 @@ private:
     // Inner loops (called from main)
     void mainLoop() throws;
     void sessionLoop();
-
-    
-    //
-    // Examining state
-    //
-    
-public:
-        
-    isize getPort() const { return port; }
-    bool isOff() const { return state == SRV_STATE_OFF; }
-    bool isLaunching() const { return state == SRV_STATE_LAUNCHING; }
-    bool isListening() const { return state == SRV_STATE_LISTENING; }
-    bool isConnected() const { return state == SRV_STATE_CONNECTED; }
-
-    
-    //
-    // Changing state
-    //
-    
-public:
-        
-    // Tries to launch the remote server
-    void start(isize port, const std::vector <string> &args = { }) throws;
-    
-    // Shuts down the remote server
-    void stop() throws;
-        
-    // Disconnects the client
-    void disconnect() throws;
-         
-protected:
-    
-    // Called by the main start routine
-    void startThread() throws;
-    
-    // Switches the internal state and informs the GUI
-    void switchState(SrvState newState);
     
     
     //
@@ -132,11 +143,11 @@ protected:
     
 public:
     
-    // Receives or transmits a string
-    string receive();
-    void send(const string &payload);
+    // Receives or packet
+    string receive() throws;
     
-    // Convenience wrappers
+    // Sends a packet
+    void send(const string &payload) throws;
     void send(char payload) throws;
     void send(int payload) throws;
     void send(long payload) throws;
@@ -164,11 +175,9 @@ private:
 
 private:
     
-    virtual isize _defaultPort() const = 0;
-    virtual bool _launchable() = 0;
-    virtual string _receive() throws = 0;
-    virtual void _send(const string &payload) throws = 0;
-    virtual void _process(const string &payload) throws = 0;
+    virtual string doReceive() throws = 0;
+    virtual void doSend(const string &payload) throws = 0;
+    virtual void doProcess(const string &payload) throws = 0;
     
     
     //

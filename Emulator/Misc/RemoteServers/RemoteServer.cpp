@@ -46,30 +46,25 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
 }
 
 void
-RemoteServer::start(isize port, const std::vector <string> &args)
+RemoteServer::start()
 {
     // Only proceed if the server is not running yet
     if (isListening() || isConnected()) throw VAError(ERROR_SERVER_ON);
 
-    this->port = port;
-    this->args = args;
-
     // Check if the server is ready to launch
-    if (_launchable()) {
-        startThread();
+    if (canStart()) {
+        
+        // Make sure we continue with a terminated server thread
+        if (serverThread.joinable()) serverThread.join();
+
+        // Spawn a new thread
+        serverThread = std::thread(&RemoteServer::main, this);
+
     } else {
+
+        // Postpone the launch
         switchState(SRV_STATE_LAUNCHING);
     }
-}
-
-void
-RemoteServer::startThread()
-{
-    // Make sure we continue with a terminated server thread
-    if (serverThread.joinable()) serverThread.join();
-
-    // Spawn a new thread
-    serverThread = std::thread(&RemoteServer::main, this);    
 }
 
 void
@@ -134,7 +129,7 @@ RemoteServer::receive()
     
     if (isConnected()) {
         
-        packet = _receive();
+        packet = doReceive();
         numReceived++;
         debug(SRV_DEBUG, "R: '%s'\n", util::makePrintable(packet).c_str());
         msgQueue.put(MSG_SRV_RECEIVE);
@@ -148,7 +143,7 @@ RemoteServer::send(const string &packet)
 {
     if (isConnected()) {
         
-        _send(packet);
+        doSend(packet);
         numSent++;
         debug(SRV_DEBUG, "T: '%s'\n", util::makePrintable(packet).c_str());
         msgQueue.put(MSG_SRV_SEND);
@@ -202,7 +197,7 @@ RemoteServer::send(std::stringstream &payload)
 void
 RemoteServer::process(const string &payload)
 {
-    _process(payload);
+    doProcess(payload);
 }
 
 void

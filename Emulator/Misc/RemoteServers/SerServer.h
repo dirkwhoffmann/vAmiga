@@ -15,8 +15,9 @@ class SerServer : public RemoteServer {
   
 public:
     
-    using RemoteServer::RemoteServer;
+    SerServer(Amiga& ref);
     
+
     //
     // Methods from AmigaObject
     //
@@ -31,9 +32,7 @@ protected:
     // Methods from RemoteServer
     //
     
-    isize _defaultPort() const override { return 8080; }
-    bool _launchable() override { return true; }
-    string _receive() override throws { return ""; }
-    void _send(const string &packet) override throws { }
-    void _process(const string &packet) override throws { }    
+    string doReceive() override throws { return ""; }
+    void doSend(const string &packet) override throws { }
+    void doProcess(const string &packet) override throws { }    
 };

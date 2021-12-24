@@ -1231,14 +1231,14 @@ RetroShell::exec <Token::server, Token::gdb, Token::start> (Arguments& argv, lon
 {
     auto &server = remoteManager.gdbServer;
     
-    auto name = argv[0];
-    auto port = server._defaultPort();
-    
     // Check if a custom port number is given
-    if (argv.size() > 1) port = util::parseNum(argv[1]);
+    if (argv.size() > 1) server.setPort(util::parseNum(argv[1]));
+
+    // Pass the process name to the server
+    server.setArgs( { argv[0] } );
     
     // Start the server
-    server.start(port, argv);
+    server.start();
 }
 
 template <> void
@@ -1260,7 +1260,67 @@ RetroShell::exec <Token::server, Token::gdb, Token::inspect> (Arguments& argv, l
 }
 
 template <> void
-RetroShell::exec <Token::server, Token::info> (Arguments& argv, long param)
+RetroShell::exec <Token::server, Token::rshell, Token::start> (Arguments& argv, long param)
+{
+    auto &server = remoteManager.rshServer;
+    
+    // Check if a custom port number is given
+    if (argv.size() > 1) server.setPort(util::parseNum(argv[1]));
+    
+    // Start the server
+    server.start();
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::rshell, Token::stop> (Arguments& argv, long param)
+{
+    remoteManager.rshServer.stop();
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::rshell, Token::disconnect> (Arguments& argv, long param)
+{
+    remoteManager.rshServer.disconnect();
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::rshell, Token::inspect> (Arguments& argv, long param)
+{
+    dump(remoteManager.rshServer, dump::State);
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::serial, Token::start> (Arguments& argv, long param)
+{
+    auto &server = remoteManager.serServer;
+    
+    // Check if a custom port number is given
+    if (argv.size() > 1) server.setPort(util::parseNum(argv[1]));
+    
+    // Start the server
+    server.start();
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::serial, Token::stop> (Arguments& argv, long param)
+{
+    remoteManager.serServer.stop();
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::serial, Token::disconnect> (Arguments& argv, long param)
+{
+    remoteManager.serServer.disconnect();
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::serial, Token::inspect> (Arguments& argv, long param)
+{
+    dump(remoteManager.serServer, dump::State);
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::status> (Arguments& argv, long param)
 {
     dump(remoteManager, dump::State);
 }

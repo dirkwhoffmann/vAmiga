@@ -13,6 +13,11 @@
 #include "RetroShell.h"
 #include "StringUtils.h"
 
+RshServer::RshServer(Amiga& ref) : RemoteServer(ref)
+{
+    port = 8081;
+}
+
 void
 RshServer::_dump(dump::Category category, std::ostream& os) const
 {
@@ -36,7 +41,7 @@ RshServer::didConnect()
 }
 
 string
-RshServer::_receive()
+RshServer::doReceive()
 {
     string payload = connection.recv();
     
@@ -47,13 +52,13 @@ RshServer::_receive()
 }
 
 void
-RshServer::_send(const string &payload)
+RshServer::doSend(const string &payload)
 {
     connection.send(payload);
 }
 
 void
-RshServer::_process(const string &payload)
+RshServer::doProcess(const string &payload)
 {
     retroShell.press(payload);
     retroShell.press('\n');

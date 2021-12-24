@@ -9,3 +9,8 @@
 
 #include "config.h"
 #include "SerServer.h"
+
+SerServer::SerServer(Amiga& ref) : RemoteServer(ref)
+{
+    port = 8080;
+}

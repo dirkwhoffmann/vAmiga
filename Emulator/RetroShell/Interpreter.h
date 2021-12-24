@@ -32,8 +32,8 @@ enum class Token
     right, rom, rshell, rtc, run, sampling, saturation, save, saveroms,
     screenshot, searchpath, serial, server, set, setup, shakedetector, show,
     slow, slowramdelay,slowrammirror, source, speed, sprites, start, state,
-    step, stop, swapdelay, task, tasks, tod, todbug, unmappingtype, verbose,
-    velocity, volume, wait, wom
+    status, step, stop, swapdelay, task, tasks, tod, todbug, unmappingtype,
+    verbose, velocity, volume, wait, wom
 };
 
 struct TooFewArgumentsError : public util::ParseError {

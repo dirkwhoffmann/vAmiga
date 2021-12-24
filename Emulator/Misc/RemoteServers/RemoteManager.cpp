@@ -115,11 +115,11 @@ RemoteManager::serviceServerEvent()
     // Run the launch daemon
     for (auto &server : servers) {
 
-        if (server->isLaunching() && server->_launchable()) {
+        if (server->isLaunching() && server->canStart()) {
             
             // Try to switch the server on
             debug(SRV_DEBUG, "Trying to start pending server\n");
-            server->startThread();
+            server->start();
         }
     }
     
