@@ -23,6 +23,7 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
     // Print the startup message and the input prompt
     storage.welcome();
     storage << prompt;
+    isDirty = true;
 }
 
 RetroShell&
@@ -30,6 +31,7 @@ RetroShell::operator<<(char value)
 {
     storage << value;
     remoteManager.rshServer << value;
+    isDirty = true;
     return *this;
 }
 
@@ -38,6 +40,7 @@ RetroShell::operator<<(const string& value)
 {
     storage << value;
     remoteManager.rshServer << value;
+    isDirty = true;
     return *this;
 }
 
@@ -65,12 +68,6 @@ RetroShell::operator<<(std::stringstream &stream)
     return *this;
 }
 
-void
-RetroShell::flush()
-{
-    msgQueue.put(MSG_UPDATE_CONSOLE);
-}
-
 const char *
 RetroShell::text()
 {
@@ -95,6 +92,7 @@ RetroShell::tab(isize pos)
         std::string fill(count, ' ');
         storage << fill;
         remoteManager.rshServer << fill;
+        isDirty = true;
     }
 }
 
@@ -102,6 +100,7 @@ void
 RetroShell::clear()
 {
     storage.clear();
+    isDirty = true;
 }
 
 void
@@ -109,6 +108,7 @@ RetroShell::printHelp()
 {
     storage.printHelp();
     remoteManager.rshServer << "Type 'help' for help.\n";
+    isDirty = true;
 }
 
 void
@@ -208,7 +208,8 @@ RetroShell::press(RetroShellKey key)
     }
     
     tabPressed = key == RSKEY_TAB;
-    
+    isDirty = true;
+
     assert(ipos >= 0 && ipos < historyLength());
     assert(cursor >= 0 && cursor <= inputLength());
 }
@@ -247,6 +248,7 @@ RetroShell::press(char c)
     }
 
     tabPressed = false;
+    isDirty = true;
 }
 
 void
@@ -433,8 +435,13 @@ RetroShell::vsyncHandler()
 {
     if (agnus.clock >= wakeUp) {
         
-        // Ask the external thread (GUI) to continue the script
         msgQueue.put(MSG_SCRIPT_WAKEUP);
         wakeUp = INT64_MAX;
+    }
+    
+    if (isDirty) {
+        
+        msgQueue.put(MSG_UPDATE_CONSOLE);
+        isDirty = false;
     }
 }

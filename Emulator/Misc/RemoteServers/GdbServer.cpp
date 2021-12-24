@@ -96,7 +96,6 @@ GdbServer::didSwitch(SrvState from, SrvState to)
     if (from == SRV_STATE_OFF && to == SRV_STATE_LAUNCHING) {
         
         retroShell << "Waiting for process '" << args[0] << "' to launch.\n";
-        retroShell.flush();
     }
     
     if ((from == SRV_STATE_OFF && to == SRV_STATE_LISTENING) ||
@@ -106,7 +105,6 @@ GdbServer::didSwitch(SrvState from, SrvState to)
         retroShell << "    Data segment: " << util::hexstr <8> (dataSeg()) << "\n";
         retroShell << "    Code segment: " << util::hexstr <8> (codeSeg()) << "\n";
         retroShell << "     BSS segment: " << util::hexstr <8> (bssSeg()) << "\n\n";
-        retroShell.flush();
 
         if (amiga.isRunning()) {
 

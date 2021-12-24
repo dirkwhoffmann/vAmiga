@@ -397,11 +397,10 @@ extension MyController {
             renderer.console.isDirty = true
 
         case .SCRIPT_DONE, .SCRIPT_PAUSE, .SCRIPT_ABORT:
-            renderer.console.isDirty = true
+            break
             
         case .SCRIPT_WAKEUP:
             amiga.continueScript()
-            renderer.console.isDirty = true
             
         case .HALT:
             shutDown()
@@ -465,12 +464,10 @@ extension MyController {
         case .DRIVE_WRITE:
             refreshStatusBar(writing: true)
             
-        case .DRIVE_LED_ON,
-                .DRIVE_LED_OFF:
+        case .DRIVE_LED_ON, .DRIVE_LED_OFF:
             refreshStatusBar()
             
-        case .DRIVE_MOTOR_ON,
-                .DRIVE_MOTOR_OFF:
+        case .DRIVE_MOTOR_ON, .DRIVE_MOTOR_OFF:
             refreshStatusBar()
             updateWarp()
             
@@ -491,10 +488,7 @@ extension MyController {
             macAudio.playEjectSound(drive: driveNr)
             refreshStatusBar()
             
-        case .DISK_UNSAVED,
-                .DISK_SAVED,
-                .DISK_PROTECT,
-                .DISK_UNPROTECT:
+        case .DISK_UNSAVED, .DISK_SAVED, .DISK_PROTECT, .DISK_UNPROTECT:
             refreshStatusBar()
             
         case .CTRL_AMIGA_AMIGA:
@@ -540,7 +534,7 @@ extension MyController {
             refreshStatusBar()
             
         case .SRV_RECEIVE, .SRV_SEND:
-            renderer.console.isDirty = true
+            break
             
         case .SRV_ERROR:
             track("Remote server error")

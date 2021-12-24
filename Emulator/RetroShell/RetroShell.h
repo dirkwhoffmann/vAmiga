@@ -18,8 +18,6 @@
 #include <fstream>
 
 class RetroShell : public SubComponent {
-
-    // friend class RemoteServer;
     
     // Interpreter for commands typed into the console window
     Interpreter interpreter;
@@ -28,8 +26,6 @@ class RetroShell : public SubComponent {
     //
     // Text storage
     //
-
-private:
     
     // The text storage
     TextStorage storage;
@@ -39,15 +35,10 @@ private:
     
     // The currently active input string
     isize ipos = 0;
-
-    // Wake up cycle for interrupted scripts
-    Cycle wakeUp = INT64_MAX;
-
-public:
-    
-    // Indicates if TAB was the most recently pressed key
-    bool tabPressed = false;
         
+    // Indicates if the the GUI needs a refresh
+    bool isDirty = false;
+    
     
     //
     // User input
@@ -62,6 +53,9 @@ public:
     // Cursor position
     isize cursor = 0;
     
+    // Indicates if TAB was the most recently pressed key
+    bool tabPressed = false;
+
     
     //
     // Scripts
@@ -72,6 +66,9 @@ public:
     
     // The script line counter (first line = 1)
     isize scriptLine = 0;
+
+    // Wake up cycle for interrupted scripts
+    Cycle wakeUp = INT64_MAX;
 
     
     //
@@ -125,10 +122,7 @@ public:
     RetroShell &operator<<(int value);
     RetroShell &operator<<(long value);
     RetroShell &operator<<(std::stringstream &stream);
-    
-    // Asks the GUI to update the displayed data
-    void flush();
-        
+            
 private:
     
     // Prints the command prompt
