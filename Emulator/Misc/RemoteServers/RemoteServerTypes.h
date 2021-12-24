@@ -16,34 +16,33 @@
 // Enumerations
 //
 
-/*
-enum_long(SERVER_TYPE)
+enum_long(SRV_STATE)
 {
-    SERVER_SER,
-    SERVER_RSH,
-    SERVER_GDB
+    SRV_STATE_OFF,
+    SRV_STATE_LAUNCHING,
+    SRV_STATE_LISTENING,
+    SRV_STATE_CONNECTED
 };
-typedef SERVER_TYPE ServerType;
+typedef SRV_STATE SrvState;
 
 #ifdef __cplusplus
-struct ServerTypeEnum : util::Reflection<ServerTypeEnum, ServerType>
+struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
 {
     static long minVal() { return 0; }
-    static long maxVal() { return SERVER_GDB; }
+    static long maxVal() { return SRV_STATE_CONNECTED; }
     static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
-    static const char *prefix() { return "SERVER"; }
-    static const char *key(ServerType value)
+    static const char *prefix() { return "SRV"; }
+    static const char *key(SrvState value)
     {
         switch (value) {
                 
-            case SERVER_SER:    return "SER";
-            case SERVER_RSH:    return "RSH";
-            case SERVER_GDB:    return "GDB";
+            case SRV_STATE_OFF:         return "OFF";
+            case SRV_STATE_LAUNCHING:   return "LAUNCHING";
+            case SRV_STATE_LISTENING:   return "LISTENING";
+            case SRV_STATE_CONNECTED:   return "CONNECTED";
         }
         return "???";
     }
 };
 #endif
-
-*/

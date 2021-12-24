@@ -1007,11 +1007,11 @@ Interpreter::registerInstructions()
 
     root.add({"server", "gdb", "stop"},
              "command", "Stops the GDB server",
-             &RetroShell::exec <Token::server, Token::gdb, Token::stop>, 1);
+             &RetroShell::exec <Token::server, Token::gdb, Token::stop>);
 
     root.add({"server", "gdb", "disconnect"},
              "command", "Disconnects a client",
-             &RetroShell::exec <Token::server, Token::gdb, Token::disconnect>, 1);
+             &RetroShell::exec <Token::server, Token::gdb, Token::disconnect>);
 
     root.add({"server", "gdb", "inspect"},
              "command", "Displays the internal state",

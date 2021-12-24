@@ -11,7 +11,6 @@
 
 #include "SchedulerTypes.h"
 #include "SubComponent.h"
-// #include "Event.h"
 
 /* About the event scheduler
  *

@@ -100,10 +100,10 @@ enum_long(MSG_TYPE)
     MSG_DMA_DEBUG_OFF,
 
     // Remote server
-    MSG_SRV_START,
-    MSG_SRV_STOP,
-    MSG_SRV_CONNECT,
-    MSG_SRV_DISCONNECT,
+    MSG_SRV_OFF,
+    MSG_SRV_LAUNCHING,
+    MSG_SRV_LISTENING,
+    MSG_SRV_CONNECTED,
     MSG_SRV_RECEIVE,
     MSG_SRV_SEND,
     MSG_SRV_ERROR
@@ -114,7 +114,7 @@ typedef MSG_TYPE MsgType;
 struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
 {
     static long minVal() { return 0; }
-    static long maxVal() { return MSG_SRV_STOP; }
+    static long maxVal() { return MSG_SRV_ERROR; }
     static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "MSG"; }
@@ -192,11 +192,11 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
                 
             case MSG_DMA_DEBUG_ON:          return "DMA_DEBUG_ON";
             case MSG_DMA_DEBUG_OFF:         return "DMA_DEBUG_OFF";
-                
-            case MSG_SRV_START:             return "SRV_START";
-            case MSG_SRV_STOP:              return "SRV_STOP";
-            case MSG_SRV_CONNECT:           return "SRV_CONNECT";
-            case MSG_SRV_DISCONNECT:        return "SRV_DISCONNECT";
+                                
+            case MSG_SRV_OFF:               return "SRV_OFF";
+            case MSG_SRV_LAUNCHING:         return "SRV_LAUNCHING";
+            case MSG_SRV_LISTENING:         return "SRV_LISTENING";
+            case MSG_SRV_CONNECTED:         return "SRV_CONNECTED";
             case MSG_SRV_RECEIVE:           return "SRV_RECEIVE";
             case MSG_SRV_SEND:              return "SRV_SEND";
             case MSG_SRV_ERROR:             return "SRV_ERROR";

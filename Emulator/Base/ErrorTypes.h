@@ -79,6 +79,8 @@ enum_long(ERROR_CODE)
     ERROR_SOCK_CANT_CONNECT,
     ERROR_SOCK_DISCONNECTED,
     ERROR_SERVER_PORT_IN_USE,
+    ERROR_SERVER_ON,
+    ERROR_SERVER_OFF,
     ERROR_SERVER_RUNNING,
     ERROR_SERVER_NOT_RUNNING,
     ERROR_SERVER_NO_CLIENT,
@@ -194,6 +196,8 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_SOCK_CANT_CONNECT:           return "SOCK_CANT_CONNECT";
             case ERROR_SOCK_DISCONNECTED:           return "SOCK_DISCONNECTED";
             case ERROR_SERVER_PORT_IN_USE:          return "SERVER_PORT_IN_USE";
+            case ERROR_SERVER_ON:                   return "SERVER_ON";
+            case ERROR_SERVER_OFF:                  return "SERVER_OFF";
             case ERROR_SERVER_RUNNING:              return "SERVER_RUNNING";
             case ERROR_SERVER_NOT_RUNNING:          return "SERVER_NOT_RUNNING";
             case ERROR_SERVER_NO_CLIENT:            return "SERVER_NO_CLIENT";

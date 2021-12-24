@@ -162,6 +162,7 @@ Agnus::_reset(bool hard)
     diskController.scheduleFirstDiskEvent();
     scheduleFirstBplEvent();
     scheduleFirstDasEvent();
+    scheduleRel<SLOT_SRV>(SEC(0.5), SRV_DAEMON);
 }
 
 AgnusConfig

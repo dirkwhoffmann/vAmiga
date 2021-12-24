@@ -34,10 +34,8 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
         
     if (category & dump::State) {
         
-        os << tab("Listening");
-        os << bol(listening) << std::endl;
-        os << tab("Connected");
-        os << bol(connected) << std::endl;
+        os << tab("State");
+        os << SrvStateEnum::key(state) << std::endl;
         os << tab("Port");
         os << dec(port) << std::endl;
         os << tab("Received");
@@ -48,43 +46,77 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
 }
 
 void
-RemoteServer::start(isize port)
+RemoteServer::start(isize port, const std::vector <string> &args)
 {
-    if (listening) throw VAError(ERROR_SERVER_RUNNING);
-    
-    debug(SRV_DEBUG, "Starting remote server at port %ld...\n", port);
+    // Only proceed if the server is not running yet
+    if (isListening() || isConnected()) throw VAError(ERROR_SERVER_ON);
 
-    // Make sure that we continue with a terminated server thread
+    // Make sure we continue with a terminated server thread
     if (serverThread.joinable()) serverThread.join();
-    
-    // Spawn a new thread
+
     this->port = port;
-    serverThread = std::thread(&RemoteServer::main, this);
+    this->args = args;
+
+    // Check if the server is ready to start
+    if (_launchable()) {
+    
+        // Spawn a new thread
+        serverThread = std::thread(&RemoteServer::main, this);
+    
+    } else {
+        
+        // Postpone the launch
+        switchState(SRV_STATE_LAUNCHING);
+    }
 }
 
 void
 RemoteServer::stop()
 {
-    if (!listening) throw VAError(ERROR_SERVER_NOT_RUNNING);
-
-    debug(SRV_DEBUG, "Stopping remote server...\n");
-         
+    // Only proceed if the server is alive
+    if (isOff()) throw VAError(ERROR_SERVER_OFF);
+             
     // Interrupt the server thread
-    listening = false;
     disconnect();
 
     // Wait until the server thread has terminated
-    serverThread.join();
+    if (serverThread.joinable()) serverThread.join();
+
+    // Switch state and inform the GUI
+    switchState(SRV_STATE_OFF);
 }
 
 void
 RemoteServer::disconnect()
 {
-    if (connected) {
+    if (isConnected()) {
         
         // Trigger an exception inside the server thread
         connection.close();
         listener.close();
+    }
+}
+
+void
+RemoteServer::switchState(SrvState newState)
+{
+    if (state != newState) {
+        
+        debug(SRV_DEBUG, "Switching state: %s -> %s\n",
+              SrvStateEnum::key(state), SrvStateEnum::key(newState));
+        
+        state = newState;
+        
+        switch(state) {
+                
+            case SRV_STATE_OFF:         msgQueue.put(MSG_SRV_OFF); break;
+            case SRV_STATE_LAUNCHING:   msgQueue.put(MSG_SRV_LAUNCHING); break;
+            case SRV_STATE_LISTENING:   msgQueue.put(MSG_SRV_LISTENING); break;
+            case SRV_STATE_CONNECTED:   msgQueue.put(MSG_SRV_CONNECTED); break;
+                
+            default:
+                fatalError;
+        }
     }
 }
 
@@ -93,7 +125,7 @@ RemoteServer::receive()
 {
     string packet;
     
-    if (connected) {
+    if (isConnected()) {
         
         packet = _receive();
         numReceived++;
@@ -107,7 +139,7 @@ RemoteServer::receive()
 void
 RemoteServer::send(const string &packet)
 {
-    if (connected) {
+    if (isConnected()) {
         
         _send(packet);
         numSent++;
@@ -182,11 +214,9 @@ RemoteServer::main()
 void
 RemoteServer::mainLoop()
 {
-    listening = true;
-    debug(SRV_DEBUG, "Remote server started\n");
-    msgQueue.put(MSG_SRV_START);
-        
-    while (listening) {
+    switchState(SRV_STATE_LISTENING);
+            
+    while (isListening()) {
         
         try {
             
@@ -208,39 +238,36 @@ RemoteServer::mainLoop()
         }
     }
     
-    listening = false;
-    debug(SRV_DEBUG, "Remote server stopped\n");
-    msgQueue.put(MSG_SRV_STOP);
+    switchState(SRV_STATE_OFF);
 }
 
 void
 RemoteServer::sessionLoop()
 {
-    connected = true;
-    debug(SRV_DEBUG, "Client connected\n");
-    msgQueue.put(MSG_SRV_CONNECT);
+    switchState(SRV_STATE_CONNECTED);
+    
+    numReceived = 0;
+    numSent = 0;
 
     try {
         
-        // Print the startup message
-        welcome();
+        // Welcome the client
+        _connect();
         
-        // Reset the package counters
-        numReceived = numSent = 0;
-
         // Receive and process packets
         while (1) { process(receive()); }
         
     } catch (std::exception &err) {
                  
-        // If listening is still true, the loop has been terminated by an error
-        if (listening) handleError(err.what());
+        // If the server is alive, the loop has been terminated due to an error
+        if (!isOff()) handleError(err.what());
     }
-    
+
+    numReceived = 0;
+    numSent = 0;
+
     connection.close();
-    connected = false;
-    debug(SRV_DEBUG, "Client disconnected\n");
-    msgQueue.put(MSG_SRV_DISCONNECT);
+    switchState(SRV_STATE_LISTENING);
 }
 
 void

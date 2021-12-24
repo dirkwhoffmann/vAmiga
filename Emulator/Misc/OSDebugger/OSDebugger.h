@@ -130,6 +130,7 @@ public:
     void read(std::vector <os::Process> &result) const;
     void read(u32 addr, std::vector <os::Task> &result) const;
     void read(u32 addr, std::vector <os::Library> &result) const;
+    void read(const string &prName, os::SegList &result) const;
     void read(const os::Process &pr, os::SegList &result) const;
     void read(u32 addr, os::SegList &result) const;
 

@@ -9,26 +9,29 @@
 
 #pragma once
 
+#include "RemoteServerTypes.h"
 #include "SubComponent.h"
 #include "Socket.h"
 #include <thread>
 
 class RemoteServer : public SubComponent {
         
+    friend class RemoteManager;
+    
 protected:
     
     // The server thread
     std::thread serverThread;
 
-    // Port number
+    // The port number
     isize port = 0;
     
-    // Indicates if the server is running
-    bool listening = false;
+    // The launch arguments (if any)
+    std::vector <string> args;
     
-    // Indicates if a client is connected
-    bool connected = false;
-
+    // The current server state
+    SrvState state = SRV_STATE_OFF;
+    
     // The port listener and it's associated connection
     PortListener listener;
     Socket connection;
@@ -76,12 +79,10 @@ private:
     // Running the server
     //
     
-protected:
-
+private:
+    
     // The main thread function
     void main();
-
-private:
 
     // Inner loops (called from main)
     void mainLoop() throws;
@@ -95,8 +96,10 @@ private:
 public:
         
     isize getPort() const { return port; }
-    bool isListening() const { return listening; }
-    bool isConnected() const { return connected; }
+    bool isOff() const { return state == SRV_STATE_OFF; }
+    bool isLaunching() const { return state == SRV_STATE_LAUNCHING; }
+    bool isListening() const { return state == SRV_STATE_LISTENING; }
+    bool isConnected() const { return state == SRV_STATE_CONNECTED; }
 
     
     //
@@ -104,14 +107,24 @@ public:
     //
     
 public:
-    
-    // Starts or stops the remote server
-    virtual void start(isize port) throws;
-    virtual void stop();
         
-    // Disconnects the remote client
-    void disconnect();
-            
+    // Launch the remote server
+    void start(isize port, const std::vector <string> &args) throws;
+    void start() throws { start(_defaultPort(), { }); }
+    void start(isize port) throws { start(port, { }); }
+    void start(const std::vector <string> &args) throws { start(_defaultPort(), args); }
+
+    // Shuts down the remote server
+    void stop() throws;
+        
+    // Disconnects the client
+    void disconnect() throws;
+         
+private:
+    
+    // Switches the internal state and informs the GUI
+    void switchState(SrvState newState);
+    
     
     //
     // Transmitting and processing packets
@@ -140,9 +153,6 @@ public:
     void process(const string &payload) throws;
     
 private:
-
-    // Prints the welcome message
-    virtual void welcome() { }
         
     // Reports an error to the GUI
     void handleError(const char *description);
@@ -154,7 +164,10 @@ private:
 
 private:
     
-    virtual string _receive() = 0;
-    virtual void _process(const string &payload) = 0;
-    virtual void _send(const string &payload) = 0;
+    virtual isize _defaultPort() const = 0;
+    virtual bool _launchable() = 0;
+    virtual void _connect() throws = 0;
+    virtual string _receive() throws = 0;
+    virtual void _send(const string &payload) throws = 0;
+    virtual void _process(const string &payload) throws = 0;
 };

@@ -25,7 +25,7 @@ public:
     GdbServer gdbServer = GdbServer(amiga);
     
     // Convenience wrapper
-    std::vector <const RemoteServer *> servers = {
+    std::vector <RemoteServer *> servers = {
         &serServer, &rshServer, &gdbServer
     };
      
@@ -57,7 +57,6 @@ protected:
 private:
     
     void _reset(bool hard) override { }
-    
     isize _size() override { return 0; }
     u64 _checksum() override { return 0; }
     isize _load(const u8 *buffer) override {return 0; }
@@ -71,21 +70,23 @@ private:
 public:
     
     // Returns a remote server specified by type
-    RemoteServer &getServer(ServerType type);
+    // RemoteServer &getServer(ServerType type);
     
     // Returns a default port for server of a certain type
-    isize defaultPort(ServerType type) const;
+    // isize defaultPort(ServerType type) const;
     
     
     //
     // Managing connections
     //
     
-    // Returns the number of started or connected servers
+    // Returns the number of servers being in a certain state
+    isize numLaunching() const;
     isize numListening() const;
     isize numConnected() const;
 
     // Starts up a remote server
+    /*
     void start(ServerType type, isize port) throws;
     void start(ServerType type) throws { start(type, defaultPort(type)); }
 
@@ -94,4 +95,13 @@ public:
 
     // Disconnects a client (if any)
     void disconnect(ServerType type) throws;
+    */
+    
+    //
+    // Servicing events
+    //
+    
+public:
+    
+    void serviceServerEvent();
 };

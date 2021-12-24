@@ -535,7 +535,7 @@ extension MyController {
                 metal.releaseMouse()
             }
             
-        case .SRV_START, .SRV_CONNECT, .SRV_DISCONNECT, .SRV_STOP:
+        case .SRV_OFF, .SRV_LAUNCHING, .SRV_LISTENING, .SRV_CONNECTED:
             refreshStatusBar()
             
         case .SRV_RECEIVE, .SRV_SEND:
@@ -543,7 +543,6 @@ extension MyController {
             
         case .SRV_ERROR:
             track("Remote server error")
-            // VAError.gdbServerAborted()
             
         default:
             track("Unknown message: \(msg)")

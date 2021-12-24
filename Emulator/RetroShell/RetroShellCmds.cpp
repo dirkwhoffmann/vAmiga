@@ -1229,10 +1229,12 @@ RetroShell::exec <Token::os, Token::processes> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::server, Token::gdb, Token::start> (Arguments& argv, long param)
 {
-    if (argv.size() == 1) {
-        remoteManager.start(SERVER_GDB);
+    Arguments args(argv.begin(), argv.end() - 1);
+    
+    if (argv.size() == 2) {
+        remoteManager.gdbServer.start(util::parseNum(argv[1]), args);
     } else {
-        remoteManager.start(SERVER_GDB, util::parseNum(argv[1]));
+        remoteManager.gdbServer.start(args);
     }
 }
 
@@ -1251,11 +1253,11 @@ RetroShell::exec <Token::server, Token::gdb, Token::disconnect> (Arguments& argv
 template <> void
 RetroShell::exec <Token::server, Token::gdb, Token::inspect> (Arguments& argv, long param)
 {
-        dump(remoteManager.gdbServer, dump::State);
+    dump(remoteManager.gdbServer, dump::State);
 }
 
 template <> void
 RetroShell::exec <Token::server, Token::info> (Arguments& argv, long param)
 {
-        dump(remoteManager, dump::State);        
+    dump(remoteManager, dump::State);
 }

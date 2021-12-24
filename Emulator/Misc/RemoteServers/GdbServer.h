@@ -9,11 +9,36 @@
 
 #pragma once
 
-#include "GdbServerTypes.h"
 #include "RemoteServer.h"
+#include "OSDebugger.h"
+
+enum class GdbCmd
+{
+    Attached,
+    C,
+    ContQ,
+    Cont,
+    MustReplyEmpty,
+    CtrlC,
+    Offset,
+    StartNoAckMode,
+    sThreadInfo,
+    Supported,
+    Symbol,
+    TfV,
+    TfP,
+    TStatus,
+    fThreadInfo,
+};
 
 class GdbServer : public RemoteServer {
 
+    // The name of the process to be debugged
+    string processName;
+    
+    // The segment list of the debug process
+    os::SegList segList;
+    
     // The most recently processed command string
     string latestCmd;
     
@@ -45,15 +70,17 @@ private:
     
 public:
     
-    void start(isize port) override throws;
+    isize _defaultPort() const override { return 8082; }
+    bool _launchable() override;
+    void _connect() override throws;
     string _receive() override throws;
     void _send(const string &payload) override throws;
     void _process(const string &payload) override throws;
 
     // Sends a packet with control characters and a checksum attached
     void reply(const string &payload);
- 
-    
+     
+        
     //
     // Managing checksums
     //
@@ -66,7 +93,7 @@ public:
 
         
     //
-    // Processing packets
+    // Handling packets
     //
 
 public:
@@ -102,5 +129,4 @@ private:
 public:
     
     void breakpointReached();
-
 };

@@ -1485,6 +1485,11 @@ using namespace moira;
     return proxy;
 }
 
+-(NSInteger)numLaunching
+{
+    return [self manager]->numLaunching();
+}
+
 -(NSInteger)numListening
 {
     return [self manager]->numListening();
@@ -1495,6 +1500,7 @@ using namespace moira;
     return [self manager]->numConnected();
 }
 
+/*
 - (void)start:(ServerType)type
 {
     [self manager]->start(type);
@@ -1514,6 +1520,7 @@ using namespace moira;
 {
     [self manager]->disconnect(type);
 }
+*/
 
 @end
 

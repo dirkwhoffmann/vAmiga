@@ -31,7 +31,9 @@ protected:
     // Methods from RemoteServer
     //
     
-    void welcome() override { }
+    isize _defaultPort() const override { return 8080; }
+    bool _launchable() override { return true; }
+    void _connect() override { }
     string _receive() override throws { return ""; }
     void _send(const string &packet) override throws { }
     void _process(const string &packet) override throws { }

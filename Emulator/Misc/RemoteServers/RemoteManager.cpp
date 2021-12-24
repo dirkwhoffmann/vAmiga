@@ -9,7 +9,13 @@
 
 #include "config.h"
 #include "RemoteManager.h"
+#include "Scheduler.h"
 #include "IOUtils.h"
+
+/* About the remote server manager
+ 
+ 
+ */
 
 RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
 {
@@ -27,22 +33,27 @@ RemoteManager::_dump(dump::Category category, std::ostream& os) const
     using namespace util;
     
     for (auto server : servers) {
-                
+        
         auto name = server->getDescription();
         auto port = server->getPort();
-
+        
         os << tab(string(name));
         
-        if (server->isListening()) {
+        if (server->isOff()) {
+            os << "Off" << std::endl;
+        } else if (server->isLaunching()) {
+            os << "Port " << dec(port) << " (launching)" << std::endl;
+        } else if (server->isListening()) {
             os << "Port " << dec(port) << " (listening)" << std::endl;
         } else if (server->isConnected()) {
             os << "Port " << dec(port) << " (connected)" << std::endl;
         } else {
-            os << "Off" << std::endl;
+            fatalError;
         }
     }
 }
 
+/*
 RemoteServer &
 RemoteManager::getServer(ServerType type)
 {
@@ -70,6 +81,15 @@ RemoteManager::defaultPort(ServerType type) const
             fatalError;
     }
 }
+ */
+
+isize
+RemoteManager::numLaunching() const
+{
+    isize result = 0;
+    for (auto &s : servers) if (s->isLaunching()) result++;
+    return result;
+}
 
 isize
 RemoteManager::numListening() const
@@ -88,22 +108,21 @@ RemoteManager::numConnected() const
 }
 
 void
-RemoteManager::start(ServerType type, isize port)
+RemoteManager::serviceServerEvent()
 {
-    auto &server = getServer(type);
-    server.start(port);
-}
+    assert(scheduler.id[SLOT_SRV] == SRV_DAEMON);
+        
+    // Run the launch daemon
+    for (auto &server : servers) {
 
-void
-RemoteManager::stop(ServerType type)
-{
-    auto &server = getServer(type);
-    server.stop();
-}
-
-void
-RemoteManager::disconnect(ServerType type)
-{
-    auto &server = getServer(type);
-    server.disconnect();
+        if (server->isLaunching()) {
+            
+            // Try to switch the server on
+            debug(SRV_DEBUG, "Trying to start pending server\n");
+            server->start(server->port, server->args);
+        }
+    }
+    
+    // Schedule next event
+    scheduler.scheduleInc <SLOT_SRV> (SEC(0.5), SRV_DAEMON);
 }

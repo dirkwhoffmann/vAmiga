@@ -15,12 +15,23 @@
 #include "Memory.h"
 #include "MemUtils.h"
 #include "MsgQueue.h"
+#include "OSDebugger.h"
 #include "RetroShell.h"
 
-void
-GdbServer::start(isize port)
+bool
+GdbServer::_launchable()
 {
-    RemoteServer::start(port);
+    // If the seglist is present, we are ready to go
+    if (!segList.empty()) return true;
+    
+    // If not, try to located the process
+    if (!args.empty()) osDebugger.read(args[0], segList);
+    return !segList.empty();
+}
+
+void
+GdbServer::_connect()
+{
     ackMode = true;
 }
 

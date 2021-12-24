@@ -22,7 +22,7 @@ RshServer::_dump(dump::Category category, std::ostream& os) const
 }
 
 void
-RshServer::welcome()
+RshServer::_connect()
 {
     send("vAmiga Remote Server ");
     send(std::to_string(VER_MAJOR) + ".");
@@ -49,13 +49,7 @@ RshServer::_receive()
 void
 RshServer::_send(const string &payload)
 {
-    if (connected) {
-        
-        debug(SRV_DEBUG, "T: '%s'\n", util::makePrintable(payload).c_str());
-        connection.send(payload);
-        
-        msgQueue.put(MSG_SRV_SEND);
-    }
+    connection.send(payload);
 }
 
 void
@@ -63,5 +57,4 @@ RshServer::_process(const string &payload)
 {
     retroShell.press(payload);
     retroShell.press('\n');
-    msgQueue.put(MSG_SRV_RECEIVE);
 }

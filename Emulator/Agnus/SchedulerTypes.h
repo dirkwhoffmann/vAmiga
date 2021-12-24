@@ -61,6 +61,7 @@ enum_long(SLOT)
     SLOT_MSE1,                      // Port 1 mouse
     SLOT_MSE2,                      // Port 2 mouse
     SLOT_KEY,                       // Auto-typing
+    SLOT_SRV,                       // Remote server
     SLOT_INS,                       // Handles periodic calls to inspect()
 
     SLOT_COUNT
@@ -110,6 +111,7 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_MSE1:  return "MSE1";
             case SLOT_MSE2:  return "MSE2";
             case SLOT_KEY:   return "KEY";
+            case SLOT_SRV:   return "SRV";
             case SLOT_INS:   return "INS";
 
             case SLOT_COUNT: return "???";
@@ -293,7 +295,7 @@ enum_i8(EventID)
     KEY_RELEASE,
 
     // GDB Server
-    GDB_PENDING = 1,
+    SRV_DAEMON = 1,
     
     // Inspector slot
     INS_AMIGA = 1,

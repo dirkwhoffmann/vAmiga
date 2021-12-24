@@ -415,6 +415,16 @@ OSDebugger::read(u32 addr, std::vector <os::Library> &result) const
 }
 
 void
+OSDebugger::read(const string &prName, os::SegList &result) const
+{
+    os::Process process;
+    if (searchProcess(prName, process)) {
+        
+        read(process, result);
+    }
+}
+
+void
 OSDebugger::read(const os::Process &pr, os::SegList &result) const
 {
     /* I don't fully understand the SegList structures as they are build by
