@@ -62,6 +62,7 @@ public:
 private:
     
     const char *getDescription() const override { return "GdbServer"; }
+    void _dump(dump::Category category, std::ostream& os) const override;
     
     
     //
@@ -72,15 +73,29 @@ public:
     
     isize _defaultPort() const override { return 8082; }
     bool _launchable() override;
-    void _connect() override throws;
     string _receive() override throws;
     void _send(const string &payload) override throws;
     void _process(const string &payload) override throws;
 
+    void didConnect() override throws;
+    void didSwitch(SrvState from, SrvState to) override;
+
+private:
+    
     // Sends a packet with control characters and a checksum attached
     void reply(const string &payload);
-     
+    
+    // 
         
+    //
+    // Analyzing the attached process
+    //
+    
+    u32 codeSeg() const;
+    u32 dataSeg() const;
+    u32 bssSeg() const;
+
+    
     //
     // Managing checksums
     //
@@ -91,7 +106,7 @@ public:
     // Verifies the checksum for a given string
     bool verifyChecksum(const string &s, const string &chk);
 
-        
+      
     //
     // Handling packets
     //

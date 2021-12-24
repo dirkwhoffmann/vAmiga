@@ -33,7 +33,7 @@ protected:
     
     isize _defaultPort() const override { return 8081; }
     bool _launchable() override { return true; }
-    void _connect() override;
+    void didConnect() override;
     string _receive() override throws;
     void _process(const string &packet) override throws;
     void _send(const string &packet) override throws;

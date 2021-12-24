@@ -18,6 +18,21 @@
 #include "OSDebugger.h"
 #include "RetroShell.h"
 
+void
+GdbServer::_dump(dump::Category category, std::ostream& os) const
+{
+    using namespace util;
+     
+    RemoteServer::_dump(category, os);
+
+    if (category & dump::Segments) {
+        
+        os << tab("Code segment") << hex(codeSeg()) << std::endl;
+        os << tab("Data segment") << hex(dataSeg()) << std::endl;
+        os << tab("BSS segment") << hex(bssSeg()) << std::endl;
+    }
+}
+
 bool
 GdbServer::_launchable()
 {
@@ -27,12 +42,6 @@ GdbServer::_launchable()
     // If not, try to located the process
     if (!args.empty()) osDebugger.read(args[0], segList);
     return !segList.empty();
-}
-
-void
-GdbServer::_connect()
-{
-    ackMode = true;
 }
 
 string
@@ -71,6 +80,38 @@ GdbServer::_process(const string &payload)
 }
 
 void
+GdbServer::didConnect()
+{
+    ackMode = true;
+}
+
+void
+GdbServer::didSwitch(SrvState from, SrvState to)
+{
+    if (from == SRV_STATE_OFF && to == SRV_STATE_LAUNCHING) {
+        
+        retroShell << "Waiting for process '" << args[0] << "' to launch.\n";
+        retroShell.flush();
+    }
+    
+    if ((from == SRV_STATE_OFF && to == SRV_STATE_LISTENING) ||
+        (from == SRV_STATE_LAUNCHING && to == SRV_STATE_LISTENING)) {
+        
+        retroShell << "Successfully attached to process '" << args[0] << "'\n\n";
+        retroShell << "    Data segment: " << util::hexstr <8> (dataSeg()) << "\n";
+        retroShell << "    Code segment: " << util::hexstr <8> (codeSeg()) << "\n";
+        retroShell << "     BSS segment: " << util::hexstr <8> (bssSeg()) << "\n\n";
+        retroShell.flush();
+
+        if (amiga.isRunning()) {
+
+            amiga.pause();
+            retroShell << "Pausing emulation.\n\n";
+        }
+    }
+}
+
+void
 GdbServer::reply(const string &payload)
 {
     string packet = "$";
@@ -80,6 +121,24 @@ GdbServer::reply(const string &payload)
     packet += computeChecksum(payload);
     
     send(packet);
+}
+
+u32
+GdbServer::codeSeg() const
+{
+   return segList.size() > 0 ? segList[0].first : 0;
+}
+
+u32
+GdbServer::dataSeg() const
+{
+    return segList.size() > 1 ? segList[1].first : 0;
+}
+
+u32
+GdbServer::bssSeg() const
+{
+    return segList.size() > 2 ? segList[2].first : dataSeg();
 }
 
 string

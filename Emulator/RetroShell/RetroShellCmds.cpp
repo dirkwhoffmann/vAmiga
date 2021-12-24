@@ -1229,13 +1229,16 @@ RetroShell::exec <Token::os, Token::processes> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::server, Token::gdb, Token::start> (Arguments& argv, long param)
 {
-    Arguments args(argv.begin(), argv.end() - 1);
+    auto &server = remoteManager.gdbServer;
     
-    if (argv.size() == 2) {
-        remoteManager.gdbServer.start(util::parseNum(argv[1]), args);
-    } else {
-        remoteManager.gdbServer.start(args);
-    }
+    auto name = argv[0];
+    auto port = server._defaultPort();
+    
+    // Check if a custom port number is given
+    if (argv.size() > 1) port = util::parseNum(argv[1]);
+    
+    // Start the server
+    server.start(port, argv);
 }
 
 template <> void

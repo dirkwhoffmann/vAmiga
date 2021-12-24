@@ -125,6 +125,9 @@ public:
     RetroShell &operator<<(int value);
     RetroShell &operator<<(long value);
     RetroShell &operator<<(std::stringstream &stream);
+    
+    // Asks the GUI to update the displayed data
+    void flush();
         
 private:
     
@@ -200,13 +203,9 @@ private:
     
 public:
     
-    // void handler(const string& command) throws;
-    
     template <Token t1> void exec(Arguments& argv, long param) throws;
     template <Token t1, Token t2> void exec(Arguments& argv, long param) throws;
     template <Token t1, Token t2, Token t3> void exec(Arguments& argv, long param) throws;
-
-private:
     
     void dump(AmigaComponent &component, dump::Category category);
 

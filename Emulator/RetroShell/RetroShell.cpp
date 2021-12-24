@@ -65,6 +65,12 @@ RetroShell::operator<<(std::stringstream &stream)
     return *this;
 }
 
+void
+RetroShell::flush()
+{
+    msgQueue.put(MSG_UPDATE_CONSOLE);
+}
+
 const char *
 RetroShell::text()
 {

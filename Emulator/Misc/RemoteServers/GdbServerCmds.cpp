@@ -44,21 +44,10 @@ template <> void
 GdbServer::process <'q', GdbCmd::Offset> (string arg)
 {
     string result;
-    
-    os::Process p;
-    if (osDebugger.searchProcess("file", p)) {
-                
-        os::SegList segList;
-        osDebugger.read(p, segList);
-        
-        auto codeseg = (segList.size() > 0) ? segList[0].first : 0;
-        auto dataseg = (segList.size() > 1) ? segList[1].first : 0;
-        auto bssseg  = (segList.size() > 2) ? segList[2].first : dataseg;
-        
-        result += "Text=" + util::hexstr <8> (codeseg) + ";";
-        result += "Data=" + util::hexstr <8> (dataseg) + ";";
-        result += "Bss=" + util::hexstr <8> (bssseg);
-    }
+            
+    result += "Text=" + util::hexstr <8> (codeSeg()) + ";";
+    result += "Data=" + util::hexstr <8> (dataSeg()) + ";";
+    result += "Bss="  + util::hexstr <8> (bssSeg());
 
     reply(result);
 }

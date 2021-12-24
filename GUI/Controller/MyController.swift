@@ -390,9 +390,13 @@ extension MyController {
             inspector?.reset()
             updateWarp()
             
-        case .SCRIPT_DONE,
-                .SCRIPT_PAUSE,
-                .SCRIPT_ABORT:
+        case .CLOSE_CONSOLE:
+            renderer.console.close(delay: 0.25)
+            
+        case .UPDATE_CONSOLE:
+            renderer.console.isDirty = true
+
+        case .SCRIPT_DONE, .SCRIPT_PAUSE, .SCRIPT_ABORT:
             renderer.console.isDirty = true
             
         case .SCRIPT_WAKEUP:
@@ -421,10 +425,7 @@ extension MyController {
             
         case .POWER_LED_OFF:
             powerLED.image = NSImage(named: "powerLedOff")
-            
-        case .CLOSE_CONSOLE:
-            renderer.console.close(delay: 0.25)
-            
+                        
         case .DMA_DEBUG_ON:
             renderer.zoomTextureOut()
             

@@ -39,6 +39,8 @@ enum_long(MSG_TYPE)
     MSG_POWER_LED_OFF,
 
     // Retro shell
+    MSG_CLOSE_CONSOLE,
+    MSG_UPDATE_CONSOLE,
     MSG_SCRIPT_DONE,
     MSG_SCRIPT_PAUSE,
     MSG_SCRIPT_ABORT,
@@ -91,10 +93,7 @@ enum_long(MSG_TYPE)
     MSG_RECORDING_STARTED,
     MSG_RECORDING_STOPPED,
     MSG_RECORDING_ABORTED,
-    
-    // Console
-    MSG_CLOSE_CONSOLE,
-    
+        
     // DMA Debugging
     MSG_DMA_DEBUG_ON,
     MSG_DMA_DEBUG_OFF,
@@ -143,6 +142,8 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_POWER_LED_DIM:         return "POWER_LED_DIM";
             case MSG_POWER_LED_OFF:         return "POWER_LED_OFF";
 
+            case MSG_CLOSE_CONSOLE:         return "CLOSE_CONSOLE";
+            case MSG_UPDATE_CONSOLE:        return "UPDATE_CONSOLE";
             case MSG_SCRIPT_DONE:           return "SCRIPT_DONE";
             case MSG_SCRIPT_PAUSE:          return "SCRIPT_PAUSE";
             case MSG_SCRIPT_ABORT:          return "SCRIPT_ABORT";
@@ -187,9 +188,7 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_RECORDING_STARTED:     return "RECORDING_STARTED";
             case MSG_RECORDING_STOPPED:     return "RECORDING_STOPPED";
             case MSG_RECORDING_ABORTED:     return "RECORDING_ABORTED";
-                
-            case MSG_CLOSE_CONSOLE:         return "CLOSE_CONSOLE";
-                
+                                
             case MSG_DMA_DEBUG_ON:          return "DMA_DEBUG_ON";
             case MSG_DMA_DEBUG_OFF:         return "DMA_DEBUG_OFF";
                                 

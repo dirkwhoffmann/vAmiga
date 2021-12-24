@@ -108,19 +108,19 @@ public:
     
 public:
         
-    // Launch the remote server
-    void start(isize port, const std::vector <string> &args) throws;
-    void start() throws { start(_defaultPort(), { }); }
-    void start(isize port) throws { start(port, { }); }
-    void start(const std::vector <string> &args) throws { start(_defaultPort(), args); }
-
+    // Tries to launch the remote server
+    void start(isize port, const std::vector <string> &args = { }) throws;
+    
     // Shuts down the remote server
     void stop() throws;
         
     // Disconnects the client
     void disconnect() throws;
          
-private:
+protected:
+    
+    // Called by the main start routine
+    void startThread() throws;
     
     // Switches the internal state and informs the GUI
     void switchState(SrvState newState);
@@ -159,15 +159,22 @@ private:
     
     
     //
-    // Subclass specific routines
+    // Subclass specific implementations
     //
 
 private:
     
     virtual isize _defaultPort() const = 0;
     virtual bool _launchable() = 0;
-    virtual void _connect() throws = 0;
     virtual string _receive() throws = 0;
     virtual void _send(const string &payload) throws = 0;
     virtual void _process(const string &payload) throws = 0;
+    
+    
+    //
+    // Delegation methods
+    //
+
+    virtual void didConnect() throws { };
+    virtual void didSwitch(SrvState from, SrvState to) { };
 };

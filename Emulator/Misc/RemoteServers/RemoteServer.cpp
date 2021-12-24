@@ -51,23 +51,25 @@ RemoteServer::start(isize port, const std::vector <string> &args)
     // Only proceed if the server is not running yet
     if (isListening() || isConnected()) throw VAError(ERROR_SERVER_ON);
 
-    // Make sure we continue with a terminated server thread
-    if (serverThread.joinable()) serverThread.join();
-
     this->port = port;
     this->args = args;
 
-    // Check if the server is ready to start
+    // Check if the server is ready to launch
     if (_launchable()) {
-    
-        // Spawn a new thread
-        serverThread = std::thread(&RemoteServer::main, this);
-    
+        startThread();
     } else {
-        
-        // Postpone the launch
         switchState(SRV_STATE_LAUNCHING);
     }
+}
+
+void
+RemoteServer::startThread()
+{
+    // Make sure we continue with a terminated server thread
+    if (serverThread.joinable()) serverThread.join();
+
+    // Spawn a new thread
+    serverThread = std::thread(&RemoteServer::main, this);    
 }
 
 void
@@ -100,13 +102,18 @@ RemoteServer::disconnect()
 void
 RemoteServer::switchState(SrvState newState)
 {
-    if (state != newState) {
+    auto oldState = state;
+    
+    if (oldState != newState) {
         
         debug(SRV_DEBUG, "Switching state: %s -> %s\n",
               SrvStateEnum::key(state), SrvStateEnum::key(newState));
         
+        // Switch state and call the delegation method
         state = newState;
+        didSwitch(oldState, newState);
         
+        // Inform the GUI
         switch(state) {
                 
             case SRV_STATE_OFF:         msgQueue.put(MSG_SRV_OFF); break;
@@ -252,7 +259,7 @@ RemoteServer::sessionLoop()
     try {
         
         // Welcome the client
-        _connect();
+        didConnect();
         
         // Receive and process packets
         while (1) { process(receive()); }

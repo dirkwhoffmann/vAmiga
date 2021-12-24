@@ -22,7 +22,7 @@ RshServer::_dump(dump::Category category, std::ostream& os) const
 }
 
 void
-RshServer::_connect()
+RshServer::didConnect()
 {
     send("vAmiga Remote Server ");
     send(std::to_string(VER_MAJOR) + ".");
