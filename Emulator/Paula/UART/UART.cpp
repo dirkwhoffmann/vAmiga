@@ -87,8 +87,9 @@ void
 UART::pokeSERPER(u16 value)
 {
     trace(SER_DEBUG, "pokeSERPER(%X)\n", value);
-
     serper = value;
+    trace(SER_DEBUG, "New baud rate = %ld\n", baudRate());
+
 }
 
 void
@@ -165,7 +166,7 @@ UART::rxdHasChanged(bool value)
         recCnt = 0;
 
         // Trigger the event in the middle of the first data bit
-        Cycle delay = rate() * 3 / 2;
+        Cycle delay = pulseWidth() * 3 / 2;
 
         // Schedule the event
         agnus.scheduleRel<SLOT_RXD>(delay, RXD_BIT);

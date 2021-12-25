@@ -15,14 +15,14 @@
 // Frequencies
 //
 
-// Clock rate of the master clock in MHz (PAL Amiga, 28.37516 MHz)
-#define MASTER_FREQUENCY 28.37516
+// Clock rate of the master clock in Hz (PAL Amiga, 28.37516 MHz)
+#define MASTER_FREQUENCY 28375160
 
-// Clock rate of the Motorola 68000 CPU (7.09379 MHz)
-#define CPU_FREQUENY (28.37516 / 4.0)
+// Clock rate of the Motorola 68000 CPU in Hz (7.09379 MHz)
+#define CPU_FREQUENY (28375160 / 4)
 
-// Clock rate of the DMA bus (3.546895 MHz)
-#define DMA_FREQUENY (28.37516 / 8.0)
+// Clock rate of the DMA bus in Hz (3.546895 MHz)
+#define DMA_FREQUENY (28375160 / 8)
 
 
 //

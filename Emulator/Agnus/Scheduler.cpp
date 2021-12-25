@@ -356,6 +356,16 @@ Scheduler::eventName(EventSlot slot, EventID id)
             }
             break;
 
+        case SLOT_SER:
+            
+            switch (id) {
+                    
+                case EVENT_NONE:        return "none";
+                case SER_RECEIVE:       return "SER_RECEIVE";
+                default:                return "*** INVALID ***";
+            }
+            break;
+            
         case SLOT_INS:
 
             switch (id) {
@@ -622,6 +632,9 @@ Scheduler::executeUntil(Cycle cycle) {
             }
             if (isDue<SLOT_SRV>(cycle)) {
                 remoteManager.serviceServerEvent();
+            }
+            if (isDue<SLOT_SER>(cycle)) {
+                remoteManager.serServer.serviceSerEvent();
             }
             if (isDue<SLOT_INS>(cycle)) {
                 agnus.serviceINSEvent(id[SLOT_INS]);
