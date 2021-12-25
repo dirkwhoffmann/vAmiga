@@ -53,14 +53,14 @@ string
 GdbServer::doReceive()
 {
     latestCmd = connection.recv();
-    retroShell << "R: " << latestCmd << "\n";
+    if (SRV_DEBUG) retroShell << "R: " << latestCmd << "\n";
     return latestCmd;
 }
 
 void
 GdbServer::doSend(const string &payload)
 {
-    retroShell << "T: " << payload << "\n";
+    if (SRV_DEBUG) retroShell << "T: " << payload << "\n";
     connection.send(payload);
 }
 

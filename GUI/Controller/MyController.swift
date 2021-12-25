@@ -533,11 +533,8 @@ extension MyController {
         case .SRV_OFF, .SRV_LAUNCHING, .SRV_LISTENING, .SRV_CONNECTED:
             refreshStatusBar()
             
-        case .SRV_RECEIVE, .SRV_SEND:
+        case .SRV_RECEIVE, .SRV_SEND, .SRV_ERROR:
             break
-            
-        case .SRV_ERROR:
-            track("Remote server error")
             
         default:
             track("Unknown message: \(msg)")
