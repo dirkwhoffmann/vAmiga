@@ -5,6 +5,6 @@ Interpreter.cpp
 InterpreterCmds.cpp
 RetroShell.cpp
 RetroShellCmds.cpp
-TextSotorage.cpp
+TextStorage.cpp
 
 )

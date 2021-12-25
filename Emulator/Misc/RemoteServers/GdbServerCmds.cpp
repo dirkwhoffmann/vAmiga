@@ -351,10 +351,8 @@ GdbServer::process <'Z'> (string cmd)
 
         auto type = std::stol(tokens[0]);
         auto addr = std::stol(tokens[1], 0, 16);
-        auto kind = std::stol(tokens[2]);
-        
-        printf("Z: type = %ld addr = $%lx kind = %ld\n", type, addr, kind);
-        
+        // auto kind = std::stol(tokens[2]);
+                
         if (type == 0) {
          
             cpu.debugger.breakpoints.addAt((u32)addr);
