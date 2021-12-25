@@ -231,7 +231,7 @@ class Inspector: DialogController {
     @IBOutlet weak var dmaDSKPT: NSTextField!
     @IBOutlet weak var dmaDSKEnable: NSButton!
 
-    // Copper and Blitter panel
+    // Copper panel
     @IBOutlet weak var copActive1: NSButton!
     @IBOutlet weak var copActive2: NSButton!
     @IBOutlet weak var cop1LC: NSTextField!
@@ -245,6 +245,7 @@ class Inspector: DialogController {
     @IBOutlet weak var copPlus: NSButton!
     @IBOutlet weak var copMinus: NSButton!
 
+    // Blitter panel
     @IBOutlet weak var bltBLTCON0a: NSTextField!
     @IBOutlet weak var bltBLTCON0b: NSTextField!
     @IBOutlet weak var bltBLTCON0c: NSTextField!
@@ -287,7 +288,7 @@ class Inspector: DialogController {
     @IBOutlet weak var bltFirstWord: NSButton!
     @IBOutlet weak var bltLastWord: NSButton!
 
-    // Blitter panel
+    // Currently unused
     @IBOutlet weak var bltAFWM: NSTextField!
     @IBOutlet weak var bltALWM: NSTextField!
     @IBOutlet weak var bltAShift: NSTextField!
@@ -611,7 +612,8 @@ class Inspector: DialogController {
             case "CIA": refreshCIA(count: count, full: full)
             case "Memory": refreshMemory(count: count, full: full)
             case "Agnus": refreshAgnus(count: count, full: full)
-            case "Copper and Blitter": refreshCopperBlitter(count: count, full: full)
+            case "Copper": refreshCopper(count: count, full: full)
+            case "Blitter": refreshBlitter(count: count, full: full)
             case "Denise": refreshDenise(count: count, full: full)
             case "Paula": refreshPaula(count: count, full: full)
             case "Ports": refreshPorts(count: count, full: full)
