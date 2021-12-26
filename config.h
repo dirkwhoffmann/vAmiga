@@ -182,8 +182,8 @@ static const int KBD_DEBUG       = 0; // Keyboard
 
 // Misc
 static const int REC_DEBUG       = 0; // Screen recorder
-static const int SCK_DEBUG       = 0; // Sockets
-static const int SRV_DEBUG       = 0; // Remote server
+static const int SCK_DEBUG       = 1; // Sockets
+static const int SRV_DEBUG       = 1; // Remote server
 
 //
 // Forced error conditions

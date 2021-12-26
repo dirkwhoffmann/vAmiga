@@ -71,16 +71,27 @@ void Socket::create()
     } wsaInit;
 #endif
     
+    // Create socket
     socket = ::socket(AF_INET, SOCK_STREAM, 0);
-    
     if (socket == INVALID_SOCKET) {
+        throw VAError(ERROR_SOCK_CANT_CREATE);
+    }
+    
+    // Set socket options
+    int opt = 1;
+    auto success = setsockopt(socket,
+                              SOL_SOCKET,
+                              SO_REUSEADDR,
+                              (const char *)&opt,
+                              sizeof(opt));
+    if (success < 0) {
         throw VAError(ERROR_SOCK_CANT_CREATE);
     }
     
     debug(SCK_DEBUG, "Created new socket %d\n", socket);
 }
 
-int
+void
 Socket::connect(u16 port)
 {
     printf("Socket::connect()\n");
@@ -91,13 +102,8 @@ Socket::connect(u16 port)
     address.sin_port = util::bigEndian(port);
     
     if (::connect(socket, (struct sockaddr *)&address, sizeof(address)) < 0) {
-        // throw VAError(ERROR_SOCK_CANT_CONNECT);
-        printf("Socket::connect() failed\n");
-        return -1;
+        throw VAError(ERROR_SOCK_CANT_CONNECT);
     }
-
-    printf("Socket::connect() successful\n");
-    return 0;
 }
 
 void
@@ -141,27 +147,27 @@ std::string
 Socket::recv()
 {    
     char buffer[BUFFER_SIZE + 1] = {};
-    auto n = ::recv(socket, buffer, BUFFER_SIZE, 0);
-    
-    if (n > 0) {
-        
-        string result = string(buffer);
-        
-        // Remove LF and CR
-        while (!result.empty() && (result.back() == 10 || result.back() == 13)) {
-            result.pop_back();
-        }
-        
-        return result;
+    if (::recv(socket, buffer, BUFFER_SIZE, 0) <= 0) {
+        throw VAError(ERROR_SOCK_CANT_RECEIVE);
     }
-
-    throw VAError(ERROR_SOCK_DISCONNECTED);
+    
+    // Convert the buffer to a string
+    string result = string(buffer);
+    
+    // Remove LF and CR (if present)
+    while (!result.empty() && (result.back() == 10 || result.back() == 13)) {
+        result.pop_back();
+    }
+    
+    return result;
 }
 
 void
 Socket::send(const string &s)
 {
-    ::send(socket, s.c_str(), (int)s.length(), 0);
+    if (::send(socket, s.c_str(), (int)s.length(), 0) < 0) {
+        throw VAError(ERROR_SOCK_CANT_SEND);
+    }
 }
 
 void
@@ -178,37 +184,3 @@ Socket::close()
         socket = INVALID_SOCKET;
     }
 }
-
-PortListener::PortListener()
-{
-}
-
-PortListener::PortListener(u16 port) {
-
-    server.create();
-    
-    int opt = 1;
-    auto success = setsockopt(server.getSocket(),
-                              SOL_SOCKET,
-                              SO_REUSEADDR,
-                              (const char *)&opt,
-                              sizeof(opt));
-    
-    if (success < 0) throw VAError(ERROR_SOCK_CANT_CONNECT);
-    
-    server.bind(port);
-    server.listen();
-}
-
-Socket
-PortListener::accept()
-{
-    return server.accept();
-}
-
-void
-PortListener::close()
-{
-    server.close();
-}
-

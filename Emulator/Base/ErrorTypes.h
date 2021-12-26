@@ -77,6 +77,9 @@ enum_long(ERROR_CODE)
     // Remote servers
     ERROR_SOCK_CANT_CREATE,
     ERROR_SOCK_CANT_CONNECT,
+    ERROR_SOCK_CANT_BIND,
+    ERROR_SOCK_CANT_RECEIVE,
+    ERROR_SOCK_CANT_SEND,
     ERROR_SOCK_DISCONNECTED,
     ERROR_SERVER_PORT_IN_USE,
     ERROR_SERVER_ON,
@@ -194,6 +197,9 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
                 
             case ERROR_SOCK_CANT_CREATE:            return "SOCK_CANT_CREATE";
             case ERROR_SOCK_CANT_CONNECT:           return "SOCK_CANT_CONNECT";
+            case ERROR_SOCK_CANT_BIND:              return "SOCK_CANT_BIND";
+            case ERROR_SOCK_CANT_RECEIVE:           return "SOCK_CANT_RECEIVE";
+            case ERROR_SOCK_CANT_SEND:              return "SOCK_CANT_SEND";
             case ERROR_SOCK_DISCONNECTED:           return "SOCK_DISCONNECTED";
             case ERROR_SERVER_PORT_IN_USE:          return "SERVER_PORT_IN_USE";
             case ERROR_SERVER_ON:                   return "SERVER_ON";

@@ -55,10 +55,7 @@ public:
     ~Socket();
 
     void create();
-    
-    SOCKET getSocket() { return socket; }
-    
-    
+        
     
     //
     // Methods from AmigaObject
@@ -76,8 +73,8 @@ private:
     
 public:
     
-    int connect(u16 port);
-    void bind(u16 port);
+    void connect(u16 port) throws;
+    void bind(u16 port) throws;
     void listen();
     Socket accept();
     void close();
@@ -91,16 +88,4 @@ public:
     
     string recv();
     void send(const string &s);
-};
-
-class PortListener {
-    
-    Socket server;
-    
-public:
-    
-    PortListener();
-    PortListener(u16 port);
-    Socket accept();
-    void close();
 };

@@ -227,18 +227,22 @@ RemoteServer::mainLoop()
         
         try {
             
-            // Try to connect as a client
-            connection.create();
-            if (connection.connect((u16)port) == 0) {
+            try {
                 
+                // Try to be a client
+                connection.create();
+                connection.connect((u16)port);
                 debug(SRV_DEBUG, "Acting as a client\n");
-            
-            } else {
-
+                
+            } catch (...) {
+                
+                // Be a server
                 debug(SRV_DEBUG, "Acting as a server\n");
-
+                
                 // Create a port listener
-                listener = PortListener((u16)port);
+                listener.create();
+                listener.bind((u16)port);
+                listener.listen();
                 
                 // Wait for a client to connect
                 connection = listener.accept();

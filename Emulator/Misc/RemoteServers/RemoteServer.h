@@ -20,6 +20,10 @@ class RemoteServer : public SubComponent {
     
 protected:
     
+    // Sockets
+    Socket listener;
+    Socket connection;
+
     // The server thread
     std::thread serverThread;
 
@@ -32,10 +36,6 @@ protected:
     // The current server state
     SrvState state = SRV_STATE_OFF;
     
-    // The port listener and it's associated connection
-    PortListener listener;
-    Socket connection;
-
     // The number of sent and received packets
     isize numSent = 0;
     isize numReceived = 0;
