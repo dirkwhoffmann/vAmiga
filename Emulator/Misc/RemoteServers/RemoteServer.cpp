@@ -48,20 +48,22 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
 void
 RemoteServer::start()
 {
+    SUSPENDED
+    
     // Only proceed if the server is not running yet
     if (isListening() || isConnected()) throw VAError(ERROR_SERVER_ON);
-
+    
     // Check if the server is ready to launch
     if (canStart()) {
         
         // Make sure we continue with a terminated server thread
         if (serverThread.joinable()) serverThread.join();
-
+        
         // Spawn a new thread
         serverThread = std::thread(&RemoteServer::main, this);
-
+        
     } else {
-
+        
         // Postpone the launch
         switchState(SRV_STATE_STARTING);
     }
@@ -70,27 +72,31 @@ RemoteServer::start()
 void
 RemoteServer::stop()
 {
+    SUSPENDED
+    
     debug(SRV_DEBUG, "Shutting down server...\n");
     
     // Only proceed if the server is alive
     if (isOff()) throw VAError(ERROR_SERVER_OFF);
-             
+    
     switchState(SRV_STATE_STOPPING);
     
     // Interrupt the server thread
     disconnect();
-
+    
     // Wait until the server thread has terminated
     if (serverThread.joinable()) serverThread.join();
-
+    
     switchState(SRV_STATE_OFF);
 }
 
 void
 RemoteServer::disconnect()
 {
+    SUSPENDED
+    
     debug(SRV_DEBUG, "Disconnecting...\n");
-
+    
     // Trigger an exception inside the server thread
     connection.close();
     listener.close();
@@ -273,10 +279,7 @@ RemoteServer::sessionLoop()
     numSent = 0;
 
     try {
-        
-        // Welcome the client
-        didConnect();
-        
+                
         // Receive and process packets
         while (1) { process(receive()); }
         

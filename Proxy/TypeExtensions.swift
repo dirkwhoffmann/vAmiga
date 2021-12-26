@@ -44,7 +44,8 @@ extension EventSlot: CustomStringConvertible {
         case .MSE1:     return "Port 1 mouse"
         case .MSE2:     return "Port 2 mouse"
         case .KEY:      return "Auto typing"
-        case .SRV:      return "Remote Servers"
+        case .SRV:      return "Server daemon"
+        case .SER:      return "Null model cable"
         case .INS:      return "Inspector"
 
         case .COUNT:    return "???"

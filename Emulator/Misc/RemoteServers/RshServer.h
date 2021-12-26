@@ -31,8 +31,8 @@ protected:
     // Methods from RemoteServer
     //
     
-    void didConnect() override;
     string doReceive() override throws;
     void doProcess(const string &packet) override throws;
     void doSend(const string &packet) override throws;
+    void didSwitch(SrvState from, SrvState to) override;
 };

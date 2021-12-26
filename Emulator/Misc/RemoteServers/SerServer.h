@@ -52,7 +52,8 @@ protected:
     string doReceive() override;
     void doSend(const string &packet) override;
     void doProcess(const string &packet) override;
-
+    void didSwitch(SrvState from, SrvState to) override;
+    
     void processIncomingByte(u8 byte);
 
     

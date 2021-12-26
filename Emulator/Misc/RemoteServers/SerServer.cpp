@@ -11,6 +11,7 @@
 #include "SerServer.h"
 #include "Agnus.h"
 #include "Scheduler.h"
+#include "SuspendableThread.h"
 #include "UART.h"
 
 SerServer::SerServer(Amiga& ref) : RemoteServer(ref)
@@ -53,10 +54,27 @@ SerServer::processIncomingByte(u8 byte)
 }
 
 void
+SerServer::didSwitch(SrvState from, SrvState to)
+{
+    if (to == SRV_STATE_CONNECTED) {
+
+        // Start scheduling messages
+        assert(scheduler.id[SLOT_SER] == EVENT_NONE);
+        scheduler.scheduleImm <SLOT_SER> (SER_RECEIVE);
+    }
+    
+    if (from == SRV_STATE_CONNECTED) {
+        
+        // Stop scheduling messages
+        scheduler.cancel <SLOT_SER> ();
+    }
+}
+
+void
 SerServer::serviceSerEvent()
 {
     assert(scheduler.id[SLOT_SER] == SER_RECEIVE);
-
+    
     if (!buffer.isEmpty() && !buffering) {
         
         // Hand the oldest buffer element over to the UART
@@ -80,23 +98,11 @@ SerServer::scheduleNextEvent()
 {
     assert(scheduler.id[SLOT_SER] == SER_RECEIVE);
     
-    if (!scheduler.isPending <SLOT_SER> ()) {
-
-        // If no event is present, schedule it immediately
-        scheduler.scheduleImm <SLOT_SER> (SER_RECEIVE);
-
-    } else {
-        
-        // Otherwise, emulate proper timing based on the current baud rate
-        auto pulseWidth = uart.pulseWidth();
-        if (pulseWidth > 40) {
-            
-            agnus.scheduleRel<SLOT_SER>(8 * pulseWidth, SER_RECEIVE);
-            
-        } else {
-            
-            warn("Baud rate is too high: %ld\n", uart.baudRate());
-            scheduler.cancel <SLOT_SER> ();
-        }
-    }
+    // Otherwise, emulate proper timing based on the current baud rate
+    auto pulseWidth = uart.pulseWidth();
+    
+    // If the pulseWidth is extremely low, fallback to a default value
+    if (pulseWidth < 40) pulseWidth = 12000;
+    
+    agnus.scheduleRel<SLOT_SER>(8 * pulseWidth, SER_RECEIVE);
 }

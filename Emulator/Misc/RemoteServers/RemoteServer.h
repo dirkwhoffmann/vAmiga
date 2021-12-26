@@ -186,6 +186,5 @@ private:
     // Delegation methods
     //
 
-    virtual void didConnect() throws { };
     virtual void didSwitch(SrvState from, SrvState to) { };
 };

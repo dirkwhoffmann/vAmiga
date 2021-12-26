@@ -85,14 +85,13 @@ GdbServer::doProcess(const string &payload)
 }
 
 void
-GdbServer::didConnect()
-{
-    ackMode = true;
-}
-
-void
 GdbServer::didSwitch(SrvState from, SrvState to)
 {
+    if (to == SRV_STATE_CONNECTED) {
+        
+        ackMode = true;
+    }
+    
     if (from == SRV_STATE_OFF && to == SRV_STATE_STARTING) {
         
         retroShell << "Waiting for process '" << args[0] << "' to launch.\n";
