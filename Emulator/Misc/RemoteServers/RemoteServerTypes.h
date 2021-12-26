@@ -18,11 +18,12 @@
 
 enum_long(SRV_STATE)
 {
-    SRV_STATE_OFF,
-    SRV_STATE_LAUNCHING,
-    SRV_STATE_LISTENING,
-    SRV_STATE_CONNECTED,
-    SRV_STATE_ERROR
+    SRV_STATE_OFF,        // The server is inactive
+    SRV_STATE_STARTING,  // The server is starting up
+    SRV_STATE_LISTENING,  // The server is waiting for a client to connect
+    SRV_STATE_CONNECTED,  // The server is connected to a client
+    SRV_STATE_STOPPING,   // The server is shutting down
+    SRV_STATE_ERROR       // The server is in an error state
 };
 typedef SRV_STATE SrvState;
 
@@ -39,9 +40,10 @@ struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
         switch (value) {
                 
             case SRV_STATE_OFF:         return "OFF";
-            case SRV_STATE_LAUNCHING:   return "LAUNCHING";
+            case SRV_STATE_STARTING:    return "STARTING";
             case SRV_STATE_LISTENING:   return "LISTENING";
             case SRV_STATE_CONNECTED:   return "CONNECTED";
+            case SRV_STATE_STOPPING:    return "STOPPING";
             case SRV_STATE_ERROR:       return "ERROR";
         }
         return "???";

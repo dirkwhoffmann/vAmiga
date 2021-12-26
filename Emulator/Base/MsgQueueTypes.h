@@ -100,9 +100,10 @@ enum_long(MSG_TYPE)
 
     // Remote server
     MSG_SRV_OFF,
-    MSG_SRV_LAUNCHING,
+    MSG_SRV_STARTING,
     MSG_SRV_LISTENING,
     MSG_SRV_CONNECTED,
+    MSG_SRV_STOPPING,
     MSG_SRV_ERROR,
     MSG_SRV_RECEIVE,
     MSG_SRV_SEND
@@ -193,9 +194,10 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_DMA_DEBUG_OFF:         return "DMA_DEBUG_OFF";
                                 
             case MSG_SRV_OFF:               return "SRV_OFF";
-            case MSG_SRV_LAUNCHING:         return "SRV_LAUNCHING";
+            case MSG_SRV_STARTING:          return "SRV_STARTING";
             case MSG_SRV_LISTENING:         return "SRV_LISTENING";
             case MSG_SRV_CONNECTED:         return "SRV_CONNECTED";
+            case MSG_SRV_STOPPING:          return "SRV_STOPPING";
             case MSG_SRV_RECEIVE:           return "SRV_RECEIVE";
             case MSG_SRV_SEND:              return "SRV_SEND";
             case MSG_SRV_ERROR:             return "SRV_ERROR";

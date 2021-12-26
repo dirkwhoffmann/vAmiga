@@ -19,7 +19,7 @@ RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
 
 RemoteManager::~RemoteManager()
 {
-    debug(SRV_DEBUG, "Shutting down RemoteServer\n");
+    debug(SRV_DEBUG, "Shutting down\n");
 }
 
 void
@@ -36,7 +36,7 @@ RemoteManager::_dump(dump::Category category, std::ostream& os) const
         
         if (server->isOff()) {
             os << "Off" << std::endl;
-        } else if (server->isLaunching()) {
+        } else if (server->isStarting()) {
             os << "Port " << dec(port) << " (launching)" << std::endl;
         } else if (server->isListening()) {
             os << "Port " << dec(port) << " (listening)" << std::endl;
@@ -52,7 +52,7 @@ isize
 RemoteManager::numLaunching() const
 {
     isize result = 0;
-    for (auto &s : servers) if (s->isLaunching()) result++;
+    for (auto &s : servers) if (s->isStarting()) result++;
     return result;
 }
 
@@ -88,7 +88,7 @@ RemoteManager::serviceServerEvent()
     // Run the launch daemon
     for (auto &server : servers) {
 
-        if (server->isLaunching() && server->canStart()) {
+        if (server->isStarting() && server->canStart()) {
             
             // Try to switch the server on
             debug(SRV_DEBUG, "Trying to start pending server\n");

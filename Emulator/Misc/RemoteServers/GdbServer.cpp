@@ -93,13 +93,13 @@ GdbServer::didConnect()
 void
 GdbServer::didSwitch(SrvState from, SrvState to)
 {
-    if (from == SRV_STATE_OFF && to == SRV_STATE_LAUNCHING) {
+    if (from == SRV_STATE_OFF && to == SRV_STATE_STARTING) {
         
         retroShell << "Waiting for process '" << args[0] << "' to launch.\n";
     }
     
     if ((from == SRV_STATE_OFF && to == SRV_STATE_LISTENING) ||
-        (from == SRV_STATE_LAUNCHING && to == SRV_STATE_LISTENING)) {
+        (from == SRV_STATE_STARTING && to == SRV_STATE_LISTENING)) {
         
         retroShell << "Successfully attached to process '" << args[0] << "'\n\n";
         retroShell << "    Data segment: " << util::hexstr <8> (dataSeg()) << "\n";

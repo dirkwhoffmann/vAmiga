@@ -46,11 +46,18 @@ public:
     
 public:
 
-    Socket() : socket(INVALID_SOCKET) { }
-    Socket(SOCKET id) : socket(id) { }
+    Socket();
+    Socket(SOCKET id);
+    Socket(const Socket& other) = delete;
+    Socket& operator=(const Socket& other) = delete;
+    Socket(Socket&& other);
+    Socket& operator=(Socket&& other);
+    ~Socket();
+
+    void create();
     
-    SOCKET init();
     SOCKET getSocket() { return socket; }
+    
     
     
     //
@@ -69,6 +76,7 @@ private:
     
 public:
     
+    int connect(u16 port);
     void bind(u16 port);
     void listen();
     Socket accept();

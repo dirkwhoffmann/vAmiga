@@ -11,8 +11,50 @@
 #include "Socket.h"
 #include "MemUtils.h"
 
-SOCKET Socket::init()
+Socket::Socket() : socket(INVALID_SOCKET)
 {
+    debug(SCK_DEBUG, "Socket constructor\n");
+}
+
+Socket::Socket(SOCKET id) : socket(id)
+{
+    debug(SCK_DEBUG, "Wrapping socket %d\n", id);
+}
+
+Socket::Socket(Socket&& other)
+{
+    socket = other.socket;
+    other.socket = INVALID_SOCKET;
+}
+
+Socket& Socket::operator=(Socket&& other)
+{
+    assert(socket != other.socket);
+    
+    if (socket != other.socket) {
+
+        ::close(socket);
+        socket = other.socket;
+        other.socket = INVALID_SOCKET;        
+    }
+    return *this;
+}
+
+Socket::~Socket()
+{
+    debug(SCK_DEBUG, "Socket destructor\n");
+    
+    if (socket != INVALID_SOCKET) {
+
+        debug(SCK_DEBUG, "Closing socket %d\n", socket);
+        ::close(socket);
+    }
+}
+
+void Socket::create()
+{
+    assert(socket == INVALID_SOCKET);
+    
 #ifdef WIN32
     static struct WSAInit {
         
@@ -35,7 +77,27 @@ SOCKET Socket::init()
         throw VAError(ERROR_SOCK_CANT_CREATE);
     }
     
-    return socket;
+    debug(SCK_DEBUG, "Created new socket %d\n", socket);
+}
+
+int
+Socket::connect(u16 port)
+{
+    printf("Socket::connect()\n");
+    struct sockaddr_in address;
+    
+    address.sin_family = AF_INET;
+    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_port = util::bigEndian(port);
+    
+    if (::connect(socket, (struct sockaddr *)&address, sizeof(address)) < 0) {
+        // throw VAError(ERROR_SOCK_CANT_CONNECT);
+        printf("Socket::connect() failed\n");
+        return -1;
+    }
+
+    printf("Socket::connect() successful\n");
+    return 0;
 }
 
 void
@@ -104,9 +166,10 @@ Socket::send(const string &s)
 
 void
 Socket::close()
-{
+{    
     if (socket != INVALID_SOCKET) {
-     
+
+        debug(SCK_DEBUG, "Closing socket %d\n", socket);
 #ifdef _WIN32
         closesocket(socket);
 #else
@@ -122,10 +185,10 @@ PortListener::PortListener()
 
 PortListener::PortListener(u16 port) {
 
-    auto socket = server.init();
+    server.create();
     
     int opt = 1;
-    auto success = setsockopt(socket,
+    auto success = setsockopt(server.getSocket(),
                               SOL_SOCKET,
                               SO_REUSEADDR,
                               (const char *)&opt,

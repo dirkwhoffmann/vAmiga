@@ -530,10 +530,11 @@ extension MyController {
                 metal.releaseMouse()
             }
             
-        case .SRV_OFF, .SRV_LAUNCHING, .SRV_LISTENING, .SRV_CONNECTED:
+        case .SRV_OFF, .SRV_STARTING, .SRV_LISTENING,
+                .SRV_CONNECTED, .SRV_STOPPING, .SRV_ERROR:
             refreshStatusBar()
             
-        case .SRV_RECEIVE, .SRV_SEND, .SRV_ERROR:
+        case .SRV_RECEIVE, .SRV_SEND:
             break
             
         default:
