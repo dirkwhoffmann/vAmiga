@@ -53,8 +53,6 @@ Socket::~Socket()
 
 void Socket::create()
 {
-    assert(socket == INVALID_SOCKET);
-    
 #ifdef WIN32
     static struct WSAInit {
         
@@ -71,32 +69,36 @@ void Socket::create()
     } wsaInit;
 #endif
     
-    // Create socket
-    socket = ::socket(AF_INET, SOCK_STREAM, 0);
     if (socket == INVALID_SOCKET) {
-        throw VAError(ERROR_SOCK_CANT_CREATE);
+        
+        // Create a new socket
+        socket = ::socket(AF_INET, SOCK_STREAM, 0);
+        if (socket == INVALID_SOCKET) {
+            throw VAError(ERROR_SOCK_CANT_CREATE);
+        }
+        
+        // Set options
+        int opt = 1;
+        auto success = setsockopt(socket,
+                                  SOL_SOCKET,
+                                  SO_REUSEADDR,
+                                  (const char *)&opt,
+                                  sizeof(opt));
+        if (success < 0) {
+            throw VAError(ERROR_SOCK_CANT_CREATE);
+        }
+        
+        debug(SCK_DEBUG, "Created new socket %d\n", socket);
     }
-    
-    // Set socket options
-    int opt = 1;
-    auto success = setsockopt(socket,
-                              SOL_SOCKET,
-                              SO_REUSEADDR,
-                              (const char *)&opt,
-                              sizeof(opt));
-    if (success < 0) {
-        throw VAError(ERROR_SOCK_CANT_CREATE);
-    }
-    
-    debug(SCK_DEBUG, "Created new socket %d\n", socket);
 }
 
 void
 Socket::connect(u16 port)
 {
-    printf("Socket::connect()\n");
+    // Create the socket if it is uninitialized
+    create();
+
     struct sockaddr_in address;
-    
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = util::bigEndian(port);
@@ -109,14 +111,16 @@ Socket::connect(u16 port)
 void
 Socket::bind(u16 port)
 {
-    struct sockaddr_in address;
+    // Create the socket if it is uninitialized
+    create();
     
+    struct sockaddr_in address;
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = util::bigEndian(port);
     
     if (::bind(socket, (struct sockaddr *)&address, sizeof(address)) < 0) {
-        throw VAError(ERROR_SOCK_CANT_CONNECT);
+        throw VAError(ERROR_SOCK_CANT_BIND);
     }
 }
 
@@ -124,7 +128,7 @@ void
 Socket::listen()
 {
     if (::listen(socket, 3) < 0) {
-        throw VAError(ERROR_SOCK_CANT_CONNECT);
+        throw VAError(ERROR_SOCK_CANT_LISTEN);
     }
 }
 
@@ -133,11 +137,10 @@ Socket::accept()
 {
     struct sockaddr_in address;
     auto addrlen = (socklen_t)sizeof(struct sockaddr_in);
-
     auto s = ::accept(socket, (struct sockaddr *)&address, &addrlen);
-    
+
     if (s == INVALID_SOCKET) {
-        throw VAError(ERROR_SOCK_CANT_CONNECT);
+        throw VAError(ERROR_SOCK_CANT_ACCEPT);
     }
     
     return Socket(s);

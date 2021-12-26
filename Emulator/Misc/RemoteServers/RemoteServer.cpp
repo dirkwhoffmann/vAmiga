@@ -229,18 +229,16 @@ RemoteServer::mainLoop()
             
             try {
                 
-                // Try to be a client
-                connection.create();
+                // Try to be a client by connecting to an existing server
                 connection.connect((u16)port);
                 debug(SRV_DEBUG, "Acting as a client\n");
                 
             } catch (...) {
                 
-                // Be a server
+                // If there is no existing server, be the server
                 debug(SRV_DEBUG, "Acting as a server\n");
                 
                 // Create a port listener
-                listener.create();
                 listener.bind((u16)port);
                 listener.listen();
                 
