@@ -12,6 +12,7 @@
 #include "Agnus.h"
 #include "MsgQueue.h"
 #include "Paula.h"
+#include "RemoteManager.h"
 #include "SerialPort.h"
 #include <iostream>
 
@@ -101,10 +102,15 @@ UART::copyToTransmitShiftRegister()
     assert(transmitShiftReg == 0);
     assert(transmitBuffer != 0);
 
+    // Send the byte to the null modem cable
+    auto byte = (char)(transmitBuffer & 0xFF);
+    remoteManager.serServer << byte;
+    
     // Inform the GUI about the outgoing data
     msgQueue.put(MSG_SER_OUT, transmitBuffer);
-    trace(SER_DEBUG, "transmitBuffer: %X ('%c')\n", transmitBuffer & 0xFF, transmitBuffer & 0xFF);
+    trace(SER_DEBUG, "transmitBuffer: %X ('%c')\n", byte, byte);
 
+    
     // Move the contents of the transmit buffer into the shift register
     transmitShiftReg = transmitBuffer;
     transmitBuffer = 0;
@@ -133,12 +139,9 @@ UART::copyFromReceiveShiftRegister()
     // Inform the GUI about the incoming data
     msgQueue.put(MSG_SER_IN, receiveBuffer);
 
-    // msg("receiveBuffer: %X ('%c')\n", receiveBuffer & 0xFF, receiveBuffer & 0xFF);
-
     count++;
 
     // Update the overrun bit
-    // Bit will be 1 if the RBF interrupt hasn't been acknowledged yet
     ovrun = GET_BIT(paula.intreq, 11);
     if (ovrun) { trace(SER_DEBUG, "OVERRUN BIT IS 1\n"); }
 

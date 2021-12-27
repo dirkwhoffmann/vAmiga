@@ -15,7 +15,7 @@
 class SerServer : public RemoteServer {
   
     // A ringbuffer for buffering incoming bytes
-    util::SortedRingBuffer <u8, 128> buffer;
+    util::SortedRingBuffer <u8, 8096> buffer;
     
     /* Indicates if we are currenty running in buffering mode. In this mode,
      * incoming bytes are collected in the ring buffer withous passing them
@@ -26,10 +26,16 @@ class SerServer : public RemoteServer {
      * at the end of a transmission.
      */
     bool buffering = true;
-    
+        
     // Used to determine when we need to leave buffering mode
     i64 skippedTransmissions = 0;
     
+    // Byte counters
+    isize receivedBytes = 0;
+    isize transmittedBytes = 0;
+    isize processedBytes = 0;
+    isize lostBytes = 0;
+
     
 public:
     
@@ -43,7 +49,7 @@ public:
 protected:
     
     const char *getDescription() const override { return "SerServer"; }
-    void _dump(dump::Category category, std::ostream& os) const override { };
+    void _dump(dump::Category category, std::ostream& os) const override;
 
     
     //

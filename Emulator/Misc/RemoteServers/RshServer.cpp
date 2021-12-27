@@ -62,7 +62,25 @@ RshServer::doReceive()
 void
 RshServer::doSend(const string &payload)
 {
-    connection.send(payload);
+    string mapped;
+    
+    for (auto c : payload) {
+        
+        switch (c) {
+                
+            case '\r':
+
+                mapped += "\33[2K\r";
+                break;
+                
+            default:
+                
+                if (isprint(c)) mapped += c;
+                break;
+        }
+    }
+    
+    connection.send(mapped);
 }
 
 void

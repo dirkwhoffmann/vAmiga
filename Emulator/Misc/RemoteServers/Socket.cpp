@@ -161,6 +161,14 @@ Socket::recv()
 }
 
 void
+Socket::send(u8 value)
+{
+    if (::send(socket, (void *)&value, 1, 0) < 1) {
+        throw VAError(ERROR_SOCK_CANT_SEND);
+    }
+}
+
+void
 Socket::send(const string &s)
 {
     if (::send(socket, s.c_str(), (int)s.length(), 0) < 0) {

@@ -87,5 +87,7 @@ public:
 public:
     
     string recv();
+    void send(u8 value);
+    void send(char c) { send((u8)c); }
     void send(const string &s);
 };

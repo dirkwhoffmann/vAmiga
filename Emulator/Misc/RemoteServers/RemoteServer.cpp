@@ -38,10 +38,10 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
         os << SrvStateEnum::key(state) << std::endl;
         os << tab("Port");
         os << dec(port) << std::endl;
-        os << tab("Received");
-        os << dec(numReceived) << " packets" << std::endl;
-        os << tab("Transmitted");
-        os << dec(numSent) << " packets" << std::endl;
+        os << tab("Received packets");
+        os << dec(numReceived) << std::endl;
+        os << tab("Transmitted packets");
+        os << dec(numSent) << std::endl;
     }
 }
 
@@ -163,23 +163,7 @@ RemoteServer::send(const string &packet)
 void
 RemoteServer::send(char payload)
 {
-    switch (payload) {
-            
-        case '\n':
-            
-            send("\n");
-            break;
-            
-        case '\r':
-            
-            send("\33[2K\r");
-            break;
-            
-        default:
-            
-            if (isprint(payload)) send(string(1, payload));
-            break;
-    }
+    send(string(1, payload));
 }
 
 void

@@ -10,6 +10,7 @@
 #include "config.h"
 #include "SerServer.h"
 #include "Agnus.h"
+#include "IOUtils.h"
 #include "Scheduler.h"
 #include "SuspendableThread.h"
 #include "UART.h"
@@ -19,10 +20,41 @@ SerServer::SerServer(Amiga& ref) : RemoteServer(ref)
     port = 8080;
 }
 
+void
+SerServer::_dump(dump::Category category, std::ostream& os) const
+{
+    using namespace util;
+        
+    RemoteServer::_dump(category, os);
+    
+    if (category & dump::State) {
+        
+        os << tab("Received bytes");
+        os << dec(receivedBytes) << std::endl;
+        os << tab("Transmitted bytes");
+        os << dec(transmittedBytes) << std::endl;
+        os << tab("Processed bytes");
+        os << dec(processedBytes) << std::endl;
+        os << tab("Lost bytes");
+        os << dec(lostBytes) << std::endl;
+        os << tab("Buffered bytes");
+        os << dec(buffer.count()) << std::endl;
+    }
+}
+
 string
 SerServer::doReceive()
 {
-    return connection.recv();
+    auto result = connection.recv();
+    receivedBytes += result.size();
+    return result;
+}
+
+void
+SerServer::doSend(const string &packet)
+{
+    transmittedBytes += packet.size();
+    connection.send(packet);
 }
 
 void
@@ -32,24 +64,19 @@ SerServer::doProcess(const string &packet)
 }
 
 void
-SerServer::doSend(const string &packet)
-{
-    for (auto c : packet) { buffer.write((u8)c); }
-}
-
-void
 SerServer::processIncomingByte(u8 byte)
 {
-    if (buffer.isFull()) {
-
-        debug(SRV_DEBUG, "Buffer overflow\n");
-        
-    } else {
+    if (!buffer.isFull()) {
 
         buffer.write(byte);
         
         // When enough bytes have been received, leave buffering mode
         if (buffer.count() >= 8) buffering = false;
+
+    } else {
+
+        lostBytes++;
+        debug(SRV_DEBUG, "Buffer overflow\n");
     }
 }
 
@@ -58,6 +85,13 @@ SerServer::didSwitch(SrvState from, SrvState to)
 {
     if (to == SRV_STATE_CONNECTED) {
 
+        // Start a new sessing
+        skippedTransmissions = 0;
+        receivedBytes = 0;
+        transmittedBytes = 0;
+        processedBytes = 0;
+        lostBytes = 0;
+        
         // Start scheduling messages
         assert(scheduler.id[SLOT_SER] == EVENT_NONE);
         scheduler.scheduleImm <SLOT_SER> (SER_RECEIVE);
@@ -76,11 +110,11 @@ SerServer::serviceSerEvent()
     assert(scheduler.id[SLOT_SER] == SER_RECEIVE);
     
     if (!buffer.isEmpty() && !buffering) {
-        
+                
         // Hand the oldest buffer element over to the UART
         uart.receiveShiftReg = buffer.read();
-                
         uart.copyFromReceiveShiftRegister();
+        processedBytes++;
         skippedTransmissions = 0;
         
     } else {
