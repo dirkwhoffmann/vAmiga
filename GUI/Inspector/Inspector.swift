@@ -507,6 +507,9 @@ class Inspector: DialogController {
     @IBOutlet weak var poCD: NSButton!
     @IBOutlet weak var poDTR: NSButton!
 
+    @IBOutlet weak var poSERPER: NSTextField!
+    @IBOutlet weak var poLONG: NSButton!
+    @IBOutlet weak var poBaud: NSTextField!
     @IBOutlet weak var poRecShift: NSTextField!
     @IBOutlet weak var poRecBuffer: NSTextField!
     @IBOutlet weak var poTransShift: NSTextField!

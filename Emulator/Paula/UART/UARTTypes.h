@@ -13,6 +13,8 @@
 
 typedef struct
 {
+    u16 serper;
+    isize baudRate;
     u16 receiveBuffer;
     u16 receiveShiftReg;
     u16 transmitBuffer;
