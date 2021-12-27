@@ -109,19 +109,25 @@ SerServer::serviceSerEvent()
 {
     assert(scheduler.id[SLOT_SER] == SER_RECEIVE);
     
-    if (!buffer.isEmpty() && !buffering) {
-                
-        // Hand the oldest buffer element over to the UART
-        uart.receiveShiftReg = buffer.read();
-        uart.copyFromReceiveShiftRegister();
-        processedBytes++;
-        skippedTransmissions = 0;
+    if (buffer.isEmpty()) {
         
-    } else {
-        
-        // Leave buffering mode if there are too many skipped transmissions
-        if (++skippedTransmissions > 8) buffering = false;
+        // Enter buffering mode if we run dry
+        buffering = true;
+        return;
     }
+    
+    if (buffering) {
+        
+        // Exit buffering mode if now new symbols came in for quite a while
+        if (++skippedTransmissions > 8) buffering = false;
+        return;
+    }
+    
+    // Hand the oldest buffer element over to the UART
+    uart.receiveShiftReg = buffer.read();
+    uart.copyFromReceiveShiftRegister();
+    processedBytes++;
+    skippedTransmissions = 0;
     
     scheduleNextEvent();
 }

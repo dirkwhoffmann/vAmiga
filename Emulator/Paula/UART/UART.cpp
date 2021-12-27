@@ -109,7 +109,6 @@ UART::copyToTransmitShiftRegister()
     // Inform the GUI about the outgoing data
     msgQueue.put(MSG_SER_OUT, transmitBuffer);
     trace(SER_DEBUG, "transmitBuffer: %X ('%c')\n", byte, byte);
-
     
     // Move the contents of the transmit buffer into the shift register
     transmitShiftReg = transmitBuffer;

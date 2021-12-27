@@ -99,6 +99,8 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var perGameDevice1: NSPopUpButton!
     @IBOutlet weak var perGameDevice2: NSPopUpButton!
     @IBOutlet weak var perSerialDevice: NSPopUpButton!
+    @IBOutlet weak var perSerialPort: NSTextField!
+    @IBOutlet weak var perSerialPortText: NSTextField!
 
     // Lock
     @IBOutlet weak var perLockImage: NSButton!

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -90,6 +90,8 @@
                 <outlet property="perOKButton" destination="070-Zr-CPb" id="izM-qM-PKn"/>
                 <outlet property="perPowerButton" destination="jt0-gY-j6u" id="MZ6-eL-pRY"/>
                 <outlet property="perSerialDevice" destination="hb9-76-uXV" id="zhS-D1-ziQ"/>
+                <outlet property="perSerialPort" destination="Gxb-NC-mOX" id="V5A-IG-hhx"/>
+                <outlet property="perSerialPortText" destination="pod-he-ipL" id="Eb2-mW-4qo"/>
                 <outlet property="prefTabView" destination="IOZ-5e-6pS" id="tBY-5n-qBt"/>
                 <outlet property="romArosButton" destination="Bae-L4-jQm" id="HTJ-dm-Jkg"/>
                 <outlet property="romDeleteButton" destination="YJW-vW-GDB" id="8dx-Bc-q9m"/>
@@ -1271,6 +1273,9 @@ DQ
                                                         <menuItem title="Loopback cable" image="devLoopbackTemplate" tag="1" id="LEF-Dx-kUM">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
+                                                        <menuItem title="Null modem cable" image="devLoopbackTemplate" tag="2" id="HwV-iS-F7Q">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -1371,6 +1376,25 @@ DQ
                                                 <action selector="perBootCodeAction:" target="-2" id="9VC-PR-Xm5"/>
                                             </connections>
                                         </popUpButton>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pod-he-ipL">
+                                            <rect key="frame" x="404" y="276" width="43" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Port:" id="RXS-6R-NGt">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gxb-NC-mOX">
+                                            <rect key="frame" x="452" y="275" width="50" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="99999" drawsBackground="YES" id="e5y-lk-A4B">
+                                                <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="rGd-5i-20d"/>
+                                                <font key="font" usesAppearanceFont="YES"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>

@@ -229,7 +229,8 @@ Amiga::getConfigItem(Option option) const
             return paula.diskController.getConfigItem(option);
             
         case OPT_SERIAL_DEVICE:
-            
+        case OPT_SERIAL_DEVICE_PORT:
+
             return serialPort.getConfigItem(option);
 
         case OPT_CIA_REVISION: 

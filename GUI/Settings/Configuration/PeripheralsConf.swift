@@ -112,6 +112,14 @@ extension ConfigurationController {
         refresh()
     }
 
+    @IBAction func perSerialDevicePortAction(_ sender: NSTextField!) {
+        
+        if sender.integerValue > 0 && sender.integerValue < 65536 {
+            config.serialDevicePort = sender.integerValue
+        }
+        refresh()
+    }
+
     @IBAction func perPresetAction(_ sender: NSPopUpButton!) {
          
          switch sender.selectedTag() {

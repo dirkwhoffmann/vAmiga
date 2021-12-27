@@ -176,6 +176,10 @@ class Configuration {
         get { return amiga.getConfig(.SERIAL_DEVICE) }
         set { amiga.configure(.SERIAL_DEVICE, value: newValue) }
     }
+    var serialDevicePort: Int {
+        get { return amiga.getConfig(.SERIAL_DEVICE_PORT) }
+        set { amiga.configure(.SERIAL_DEVICE_PORT, value: newValue) }
+    }
 
     //
     // Compatibility
