@@ -150,19 +150,14 @@ std::string
 Socket::recv()
 {    
     char buffer[BUFFER_SIZE + 1] = {};
-    if (::recv(socket, buffer, BUFFER_SIZE, 0) <= 0) {
-        throw VAError(ERROR_SOCK_CANT_RECEIVE);
+    if (auto n = ::recv(socket, buffer, BUFFER_SIZE, 0); n > 0) {
+        
+        // Convert the buffer to a string
+        string result = string(buffer, n);
+        return result;
     }
     
-    // Convert the buffer to a string
-    string result = string(buffer);
-    
-    // Remove LF and CR (if present)
-    while (!result.empty() && (result.back() == 10 || result.back() == 13)) {
-        result.pop_back();
-    }
-    
-    return result;
+    throw VAError(ERROR_SOCK_CANT_RECEIVE);
 }
 
 void

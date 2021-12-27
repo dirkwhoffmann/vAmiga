@@ -14,12 +14,19 @@
 
 RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
 {
-
 }
 
 RemoteManager::~RemoteManager()
 {
     debug(SRV_DEBUG, "Shutting down\n");
+
+    try {
+        
+        serServer.stop();
+        rshServer.stop();
+        gdbServer.stop();
+        
+    } catch(...) { }
 }
 
 void

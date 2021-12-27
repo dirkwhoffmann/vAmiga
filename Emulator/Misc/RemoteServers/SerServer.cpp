@@ -61,9 +61,6 @@ SerServer::didSwitch(SrvState from, SrvState to)
         // Start scheduling messages
         assert(scheduler.id[SLOT_SER] == EVENT_NONE);
         scheduler.scheduleImm <SLOT_SER> (SER_RECEIVE);
-
-        // REMOVE ASAP
-        *this << "Hi there!";
     }
     
     if (from == SRV_STATE_CONNECTED) {

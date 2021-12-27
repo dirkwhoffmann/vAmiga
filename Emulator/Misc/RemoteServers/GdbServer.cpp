@@ -52,7 +52,14 @@ GdbServer::canStart()
 string
 GdbServer::doReceive()
 {
-    latestCmd = connection.recv();
+    auto cmd = connection.recv();
+    
+    // Remove LF and CR (if present)
+    while (!cmd.empty() && (cmd.back() == 10 || cmd.back() == 13)) {
+        cmd.pop_back();
+    }
+
+    latestCmd = cmd;
     if (SRV_DEBUG) retroShell << "R: " << latestCmd << "\n";
     return latestCmd;
 }
