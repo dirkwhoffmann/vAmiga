@@ -34,7 +34,7 @@ SerServer::doProcess(const string &packet)
 void
 SerServer::doSend(const string &packet)
 {
-
+    for (auto c : packet) { buffer.write((u8)c); }
 }
 
 void
@@ -61,6 +61,9 @@ SerServer::didSwitch(SrvState from, SrvState to)
         // Start scheduling messages
         assert(scheduler.id[SLOT_SER] == EVENT_NONE);
         scheduler.scheduleImm <SLOT_SER> (SER_RECEIVE);
+
+        // REMOVE ASAP
+        *this << "Hi there!";
     }
     
     if (from == SRV_STATE_CONNECTED) {
@@ -79,17 +82,16 @@ SerServer::serviceSerEvent()
         
         // Hand the oldest buffer element over to the UART
         uart.receiveShiftReg = buffer.read();
+                
         uart.copyFromReceiveShiftRegister();
         skippedTransmissions = 0;
         
     } else {
         
-        skippedTransmissions++;
+        // Leave buffering mode if there are too many skipped transmissions
+        if (++skippedTransmissions > 8) buffering = false;
     }
     
-    // Leave buffering mode if there are too many skipped transmissions
-    if (skippedTransmissions > 8) buffering = false;
-        
     scheduleNextEvent();
 }
 
@@ -102,7 +104,11 @@ SerServer::scheduleNextEvent()
     auto pulseWidth = uart.pulseWidth();
     
     // If the pulseWidth is extremely low, fallback to a default value
-    if (pulseWidth < 40) pulseWidth = 12000;
+    if (pulseWidth < 40) {
+        
+        debug(SRV_DEBUG, "Very low SERPER value\n");
+        pulseWidth = 12000;
+    }
     
     agnus.scheduleRel<SLOT_SER>(8 * pulseWidth, SER_RECEIVE);
 }

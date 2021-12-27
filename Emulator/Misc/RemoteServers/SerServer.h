@@ -14,20 +14,21 @@
 
 class SerServer : public RemoteServer {
   
-    // A ringbuffer for storing the incoming bytes
-    util::SortedRingBuffer <u8, 16> buffer;
+    // A ringbuffer for buffering incoming bytes
+    util::SortedRingBuffer <u8, 128> buffer;
     
     /* Indicates if we are currenty running in buffering mode. In this mode,
      * incoming bytes are collected in the ring buffer withous passing them
-     * to the UART. When a certain amount of bytes have been received, buffering
+     * to the UART. When a certain number of bytes has been received, buffering
      * mode is left and the collected symbols are fed into the UART with proper
      * timing. Buffering mode is also left when no symbols were incoming for
-     * a longer period of time.
+     * a longer period of time to prevent symbols from starving in the buffer
+     * at the end of a transmission.
      */
     bool buffering = true;
     
     // Used to determine when we need to leave buffering mode
-    isize skippedTransmissions = 0;
+    i64 skippedTransmissions = 0;
     
     
 public:
