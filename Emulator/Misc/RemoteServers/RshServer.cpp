@@ -31,11 +31,10 @@ RshServer::getDefaultConfig()
 {
     ServerConfig defaults;
     
-    defaults.enabled = false;
-    defaults.verbose = false;
     defaults.port = 8081;
     defaults.protocol = SRVPROT_DEFAULT;
-    
+    defaults.verbose = false;
+
     return defaults;
 }
 

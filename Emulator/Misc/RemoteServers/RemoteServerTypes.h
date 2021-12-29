@@ -82,9 +82,8 @@ struct ServerProtocolEnum : util::Reflection<ServerProtocolEnum, ServerProtocol>
 
 typedef struct
 {
-    bool enabled;
-    bool verbose;
     u16 port;
     ServerProtocol protocol;
+    bool verbose;
 }
 ServerConfig;

@@ -71,10 +71,27 @@ public:
 private:
     
     void _reset(bool hard) override { }
-    isize _size() override { return 0; }
-    u64 _checksum() override { return 0; }
-    isize _load(const u8 *buffer) override { return 0; }
-    isize _save(u8 *buffer) override { return 0; }
+    
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+        worker
+
+        << config.port
+        << config.protocol
+        << config.verbose;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker, bool hard = true)
+    {
+    }
+
+    isize _size() override { COMPUTE_SNAPSHOT_SIZE }
+    u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
+    isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    void _didLoad() override;
+    isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
     //
@@ -86,7 +103,6 @@ public:
     virtual ServerConfig getDefaultConfig() = 0;
     const ServerConfig &getConfig() const { return config; }
     void resetConfig() override;
-    
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
     
@@ -116,17 +132,17 @@ public:
     
     // Disconnects the client
     void disconnect() throws;
-         
-protected:
-    
-    // Returns whether the server is ready to start
-    virtual bool canStart() { return true; }
-    
+                 
     // Launch the remote server
     void start() throws;
     
     // Shuts down the remote server
     void stop() throws;
+
+protected:
+
+    // Returns whether the server is ready to start
+    virtual bool canStart() { return true; }
 
     // Switches the internal state
     void switchState(SrvState newState);

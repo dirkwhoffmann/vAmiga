@@ -118,10 +118,9 @@ enum_long(OPT)
     OPT_AUDVOLR,
     
     // Remote servers
-    OPT_SRV_ENABLE,
-    OPT_SRV_VERBOSE,
     OPT_SRV_PORT,
-    OPT_SRV_PROTOCOL
+    OPT_SRV_PROTOCOL,
+    OPT_SRV_VERBOSE
 };
 typedef OPT Option;
 
@@ -208,10 +207,9 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_AUDVOLL:               return "AUDVOLL";
             case OPT_AUDVOLR:               return "AUDVOLR";
 
-            case OPT_SRV_ENABLE:            return "SERSRV_ENABLE";
-            case OPT_SRV_VERBOSE:           return "SERSRV_VERBOSE";
             case OPT_SRV_PORT:              return "RSHSRV_PORT";
             case OPT_SRV_PROTOCOL:          return "RSHSRV_PROTOCOL";
+            case OPT_SRV_VERBOSE:           return "SERSRV_VERBOSE";
         }
         return "???";
     }

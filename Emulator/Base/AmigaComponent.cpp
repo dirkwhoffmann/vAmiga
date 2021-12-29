@@ -92,6 +92,18 @@ AmigaComponent::load(const u8 *buffer)
     return result;
 }
 
+void
+AmigaComponent::didLoad()
+{
+    assert(!isRunning());
+        
+    for (AmigaComponent *c : subComponents) {
+        c->didLoad();
+    }
+
+    _didLoad();
+}
+
 isize
 AmigaComponent::save(u8 *buffer)
 {
@@ -119,6 +131,18 @@ AmigaComponent::save(u8 *buffer)
     assert(result == size());
 
     return result;
+}
+
+void
+AmigaComponent::didSave()
+{
+    assert(!isRunning());
+        
+    for (AmigaComponent *c : subComponents) {
+        c->didSave();
+    }
+
+    _didSave();
 }
 
 void

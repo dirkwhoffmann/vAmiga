@@ -297,11 +297,10 @@ Amiga::getConfigItem(Option option, long id) const
             if (id == PORT_2) return controlPort2.joystick.getConfigItem(option);
             fatalError;
             
-        case OPT_SRV_ENABLE:
-        case OPT_SRV_VERBOSE:
         case OPT_SRV_PORT:
         case OPT_SRV_PROTOCOL:
-            
+        case OPT_SRV_VERBOSE:
+
             return remoteManager.getConfigItem(option, id);
             
         default:
@@ -476,11 +475,10 @@ Amiga::configure(Option option, i64 value)
             controlPort2.joystick.setConfigItem(option, value);
             break;
             
-        case OPT_SRV_ENABLE:
-        case OPT_SRV_VERBOSE:
         case OPT_SRV_PORT:
         case OPT_SRV_PROTOCOL:
-            
+        case OPT_SRV_VERBOSE:
+
             remoteManager.setConfigItem(option, value);
             break;
 
@@ -567,11 +565,10 @@ Amiga::configure(Option option, long id, i64 value)
             if (id == PORT_2) controlPort2.joystick.setConfigItem(option, value);
             break;
 
-        case OPT_SRV_ENABLE:
-        case OPT_SRV_VERBOSE:
         case OPT_SRV_PORT:
         case OPT_SRV_PROTOCOL:
-            
+        case OPT_SRV_VERBOSE:
+
             remoteManager.setConfigItem(option, id, value);
             break;
             
@@ -841,6 +838,24 @@ Amiga::_debugOff()
     debug(RUN_DEBUG, "_debugOff\n");
 
     msgQueue.put(MSG_DEBUG_OFF);
+}
+
+isize
+Amiga::load(const u8 *buffer)
+{
+    auto result = AmigaComponent::load(buffer);
+    AmigaComponent::didLoad();
+    
+    return result;
+}
+
+isize
+Amiga::save(u8 *buffer)
+{
+    auto result = AmigaComponent::save(buffer);
+    AmigaComponent::didSave();
+    
+    return result;
 }
 
 void

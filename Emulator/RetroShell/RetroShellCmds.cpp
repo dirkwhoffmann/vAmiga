@@ -1229,13 +1229,13 @@ RetroShell::exec <Token::os, Token::processes> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::server, Token::serial, Token::start> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_SRV_ENABLE, SERVER_SER, true);
+    remoteManager.serServer.start();
 }
 
 template <> void
 RetroShell::exec <Token::server, Token::serial, Token::stop> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_SRV_ENABLE, SERVER_SER, false);
+    remoteManager.serServer.stop();
 }
 
 template <> void
@@ -1271,13 +1271,13 @@ RetroShell::exec <Token::server, Token::serial, Token::inspect> (Arguments& argv
 template <> void
 RetroShell::exec <Token::server, Token::rshell, Token::start> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_SRV_ENABLE, SERVER_RSH, true);
+    remoteManager.rshServer.start();
 }
 
 template <> void
 RetroShell::exec <Token::server, Token::rshell, Token::stop> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_SRV_ENABLE, SERVER_RSH, false);
+    remoteManager.serServer.stop();
 }
 
 template <> void
@@ -1318,13 +1318,13 @@ RetroShell::exec <Token::server, Token::gdb, Token::start> (Arguments& argv, lon
     // Pass the process name to the server
     server.setArgs( { argv[0] } );
     
-    amiga.configure(OPT_SRV_ENABLE, SERVER_GDB, true);
+    remoteManager.gdbServer.start();
 }
 
 template <> void
 RetroShell::exec <Token::server, Token::gdb, Token::stop> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_SRV_ENABLE, SERVER_GDB, false);
+    remoteManager.gdbServer.stop();
 }
 
 template <> void

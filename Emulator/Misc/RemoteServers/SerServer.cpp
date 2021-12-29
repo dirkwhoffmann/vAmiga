@@ -46,11 +46,10 @@ SerServer::getDefaultConfig()
 {
     ServerConfig defaults;
     
-    defaults.enabled = false;
-    defaults.verbose = false;
     defaults.port = 8080;
     defaults.protocol = SRVPROT_DEFAULT;
-    
+    defaults.verbose = false;
+
     return defaults;
 }
 
@@ -125,21 +124,20 @@ SerServer::serviceSerEvent()
         
         // Enter buffering mode if we run dry
         buffering = true;
-        return;
-    }
-    
-    if (buffering) {
+
+    } else if (buffering) {
         
         // Exit buffering mode if now new symbols came in for quite a while
         if (++skippedTransmissions > 8) buffering = false;
-        return;
-    }
+
+    } else {
     
-    // Hand the oldest buffer element over to the UART
-    uart.receiveShiftReg = buffer.read();
-    uart.copyFromReceiveShiftRegister();
-    processedBytes++;
-    skippedTransmissions = 0;
+        // Hand the oldest buffer element over to the UART
+        uart.receiveShiftReg = buffer.read();
+        uart.copyFromReceiveShiftRegister();
+        processedBytes++;
+        skippedTransmissions = 0;
+    }
     
     scheduleNextEvent();
 }

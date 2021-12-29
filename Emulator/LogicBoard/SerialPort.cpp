@@ -11,8 +11,18 @@
 #include "SerialPort.h"
 #include "IOUtils.h"
 #include "Amiga.h"
-// #include "RemoteManagerTypes.h"
-// #include "UART.h"
+
+void
+SerialPort::_didLoad()
+{
+    printf("SerialPort::_didLoad()\n");
+    
+    if (config.device == SPD_NULLMODEM) {
+        remoteManager.serServer.start();
+    } else {
+        remoteManager.serServer.stop();
+    }
+}
 
 SerialPortConfig
 SerialPort::getDefaultConfig()
@@ -59,9 +69,9 @@ SerialPort::setConfigItem(Option option, i64 value)
             
             // Enable or disable the serial remote server
             if (config.device == SPD_NULLMODEM) {
-                amiga.configure(OPT_SRV_ENABLE, SERVER_SER, true);
+                remoteManager.serServer.start();
             } else {
-                amiga.configure(OPT_SRV_ENABLE, SERVER_SER, false);
+                remoteManager.serServer.stop();
             }
             return;
                         

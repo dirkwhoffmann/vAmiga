@@ -34,14 +34,12 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
 
     if (category & dump::Config) {
         
-        os << tab("Enabled");
-        os << bol(config.enabled) << std::endl;
-        os << tab("Verbose");
-        os << bol(config.verbose) << std::endl;
         os << tab("Port");
         os << dec(config.port) << std::endl;
         os << tab("Protocol");
         os << ServerProtocolEnum::key(config.protocol) << std::endl;
+        os << tab("Verbose");
+        os << bol(config.verbose) << std::endl;
     }
     if (category & dump::State) {
         
@@ -53,11 +51,17 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
 }
 
 void
+RemoteServer::_didLoad()
+{
+    // Trigger side effects
+    setConfigItem(OPT_SRV_PORT, config.port);
+}
+
+void
 RemoteServer::resetConfig()
 {
     auto defaults = getDefaultConfig();
     
-    setConfigItem(OPT_SRV_ENABLE, defaults.enabled);
     setConfigItem(OPT_SRV_VERBOSE, defaults.verbose);
     setConfigItem(OPT_SRV_PORT, defaults.port);
     setConfigItem(OPT_SRV_PROTOCOL, defaults.protocol);
@@ -68,7 +72,6 @@ RemoteServer::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_SRV_ENABLE: return config.enabled;
         case OPT_SRV_VERBOSE: return config.verbose;
         case OPT_SRV_PORT: return config.port;
         case OPT_SRV_PROTOCOL: return config.protocol;
@@ -82,16 +85,7 @@ void
 RemoteServer::setConfigItem(Option option, i64 value)
 {
     switch (option) {
-            
-        case OPT_SRV_ENABLE:
-
-            if (config.enabled != (bool)value) {
-                
-                config.enabled = (bool)value;
-                value ? start() : stop();
-            }
-            return;
-            
+                        
         case OPT_SRV_VERBOSE:
             
             config.verbose = (bool)value;

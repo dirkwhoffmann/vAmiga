@@ -43,11 +43,10 @@ GdbServer::getDefaultConfig()
 {
     ServerConfig defaults;
     
-    defaults.enabled = false;
-    defaults.verbose = false;
     defaults.port = 8082;
     defaults.protocol = SRVPROT_DEFAULT;
-    
+    defaults.verbose = false;
+
     return defaults;
 }
 
