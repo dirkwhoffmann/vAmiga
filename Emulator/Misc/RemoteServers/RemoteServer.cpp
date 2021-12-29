@@ -121,56 +121,45 @@ RemoteServer::setConfigItem(Option option, i64 value)
 }
 
 void
-RemoteServer::start()
+RemoteServer::_start()
 {
-    SUSPENDED
-    
     if (isListening() || isConnected()) {
         
         debug(SRV_DEBUG, "Server is already running...\n");
+
+    } else if (canStart()) {
+        
+        debug(SRV_DEBUG, "Launching server...\n");
+        
+        // Make sure we continue with a terminated server thread
+        if (serverThread.joinable()) serverThread.join();
+        
+        // Spawn a new thread
+        serverThread = std::thread(&RemoteServer::main, this);
         
     } else {
         
-        // Check if the server is ready to launch
-        if (canStart()) {
-            
-            debug(SRV_DEBUG, "Launching server...\n");
-            
-            // Make sure we continue with a terminated server thread
-            if (serverThread.joinable()) serverThread.join();
-            
-            // Spawn a new thread
-            serverThread = std::thread(&RemoteServer::main, this);
-            
-        } else {
-            
-            debug(SRV_DEBUG, "Waiting for the launch permission...\n");
-            
-            // Postpone the launch
-            switchState(SRV_STATE_STARTING);
-        }
+        debug(SRV_DEBUG, "Waiting for the launch permission...\n");
+        
+        // Postpone the launch
+        switchState(SRV_STATE_STARTING);
     }
 }
 
 void
-RemoteServer::stop()
+RemoteServer::_stop()
 {
-    SUSPENDED
-    
     if (isOff()) {
         
         debug(SRV_DEBUG, "Server is already shut down...\n");
-        
+    
     } else {
-        
-        // Only proceed if the server is alive
-        if (isOff()) return;
         
         debug(SRV_DEBUG, "Shutting down server...\n");
         switchState(SRV_STATE_STOPPING);
         
         // Interrupt the server thread
-        disconnect();
+        _disconnect();
         
         // Wait until the server thread has terminated
         if (serverThread.joinable()) serverThread.join();
@@ -180,10 +169,8 @@ RemoteServer::stop()
 }
 
 void
-RemoteServer::disconnect()
+RemoteServer::_disconnect()
 {
-    SUSPENDED
-    
     debug(SRV_DEBUG, "Disconnecting...\n");
     
     // Trigger an exception inside the server thread

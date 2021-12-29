@@ -9,8 +9,9 @@
 
 #include "config.h"
 #include "RemoteManager.h"
-#include "Scheduler.h"
 #include "IOUtils.h"
+#include "Scheduler.h"
+#include "SerialPort.h"
 
 RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
 {
@@ -132,19 +133,23 @@ RemoteManager::numErroneous() const
 void
 RemoteManager::serviceServerEvent()
 {
-    assert(scheduler.id[SLOT_SRV] == SRV_DAEMON);
+    assert(scheduler.id[SLOT_SRV] == SRV_LAUNCH_DAEMON);
         
-    // Run the launch daemon
-    for (auto &server : servers) {
-
-        if (server->isStarting() && server->canStart()) {
-            
-            // Try to switch the server on
-            debug(SRV_DEBUG, "Trying to start pending server\n");
-            server->start();
-        }
+    // Run the launch daemon for the GDB server
+    if (gdbServer.isStarting() && gdbServer.canStart()) {
+        
+        // Try to switch on the GDB server
+        debug(SRV_DEBUG, "Trying to start the pending GDBserver\n");
+        gdbServer._start();
     }
     
+    // Run the launch daemon for the serial server
+    if (serialPort.getConfigItem(OPT_SERIAL_DEVICE) == SPD_NULLMODEM) {
+        serServer._start();
+    } else {
+        serServer._stop();
+    }
+
     // Schedule next event
-    scheduler.scheduleInc <SLOT_SRV> (SEC(0.5), SRV_DAEMON);
+    scheduler.scheduleInc <SLOT_SRV> (SEC(0.5), SRV_LAUNCH_DAEMON);
 }

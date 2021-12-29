@@ -12,6 +12,7 @@
 #include "RemoteServerTypes.h"
 #include "SubComponent.h"
 #include "Socket.h"
+#include "SuspendableThread.h"
 #include <thread>
 
 class RemoteServer : public SubComponent {
@@ -131,15 +132,20 @@ public:
 public:
     
     // Disconnects the client
-    void disconnect() throws;
+    void disconnect() throws { SUSPENDED _disconnect(); }
                  
     // Launch the remote server
-    void start() throws;
+    void start() throws { SUSPENDED _start(); }
     
     // Shuts down the remote server
-    void stop() throws;
+    void stop() throws { SUSPENDED _stop(); }
 
 protected:
+
+    // Called from disconnect(), start() and stop()
+    void _disconnect() throws;
+    void _start() throws;
+    void _stop() throws;
 
     // Returns whether the server is ready to start
     virtual bool canStart() { return true; }

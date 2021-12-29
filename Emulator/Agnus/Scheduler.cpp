@@ -351,7 +351,7 @@ Scheduler::eventName(EventSlot slot, EventID id)
             switch (id) {
                     
                 case EVENT_NONE:        return "none";
-                case SRV_DAEMON:        return "SRV_DAEMON";
+                case SRV_LAUNCH_DAEMON: return "SRV_LAUNCH_DAEMON";
                 default:                return "*** INVALID ***";
             }
             break;

@@ -297,7 +297,7 @@ enum_i8(EventID)
     KEY_RELEASE,
 
     // Remote server manager
-    SRV_DAEMON = 1,
+    SRV_LAUNCH_DAEMON = 1,
     
     // Serial remote server
     SER_RECEIVE = 1,

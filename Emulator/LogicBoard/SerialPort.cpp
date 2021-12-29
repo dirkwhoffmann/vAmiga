@@ -16,12 +16,6 @@ void
 SerialPort::_didLoad()
 {
     printf("SerialPort::_didLoad()\n");
-    
-    if (config.device == SPD_NULLMODEM) {
-        remoteManager.serServer.start();
-    } else {
-        remoteManager.serServer.stop();
-    }
 }
 
 SerialPortConfig
@@ -65,14 +59,7 @@ SerialPort::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, SerialPortDeviceEnum::keyList());
             }
             
-            config.device = (SerialPortDevice)value;
-            
-            // Enable or disable the serial remote server
-            if (config.device == SPD_NULLMODEM) {
-                remoteManager.serServer.start();
-            } else {
-                remoteManager.serServer.stop();
-            }
+            config.device = (SerialPortDevice)value;            
             return;
                         
         default:
