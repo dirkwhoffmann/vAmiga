@@ -18,6 +18,9 @@ class RemoteServer : public SubComponent {
         
     friend class RemoteManager;
     
+    // Current configuration
+    ServerConfig config = {};
+
 protected:
     
     // Sockets
@@ -28,7 +31,7 @@ protected:
     std::thread serverThread;
 
     // The port number
-    isize port = 0;
+    // isize port = 0;
     
     // The launch arguments (if any)
     std::vector <string> args;
@@ -79,10 +82,14 @@ private:
     //
     
 public:
+        
+    virtual ServerConfig getDefaultConfig() = 0;
+    const ServerConfig &getConfig() const { return config; }
+    void resetConfig() override;
     
-    isize getPort() const { return port; }
-    void setPort(isize value) { port = value; }
-
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
+    
     const std::vector <string> &getArgs() const { return args; }
     void setArgs(const std::vector <string> &newArgs) { args = newArgs; }
     
@@ -106,7 +113,12 @@ public:
     //
     
 public:
-        
+    
+    // Disconnects the client
+    void disconnect() throws;
+         
+protected:
+    
     // Returns whether the server is ready to start
     virtual bool canStart() { return true; }
     
@@ -115,12 +127,7 @@ public:
     
     // Shuts down the remote server
     void stop() throws;
-        
-    // Disconnects the client
-    void disconnect() throws;
-         
-protected:
-        
+
     // Switches the internal state
     void switchState(SrvState newState);
     

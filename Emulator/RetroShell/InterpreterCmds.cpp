@@ -999,41 +999,7 @@ Interpreter::registerInstructions()
 
     root.add({"server", "gdb"},
              "component", "GDB server");
-
-    root.add({"server", "gdb", "start"},
-             "command", "Starts the GDB server",
-             &RetroShell::exec <Token::server, Token::gdb, Token::start>, 1);
-    root.seek("server")->seek("gdb")->seek("start")->maxArgs = 2;
-
-    root.add({"server", "gdb", "stop"},
-             "command", "Stops the GDB server",
-             &RetroShell::exec <Token::server, Token::gdb, Token::stop>);
-
-    root.add({"server", "gdb", "disconnect"},
-             "command", "Disconnects a client",
-             &RetroShell::exec <Token::server, Token::gdb, Token::disconnect>);
-
-    root.add({"server", "gdb", "inspect"},
-             "command", "Displays the internal state",
-             &RetroShell::exec <Token::server, Token::gdb, Token::inspect>);
     
-    root.add({"server", "rshell", "start"},
-             "command", "Starts the retro shell server",
-             &RetroShell::exec <Token::server, Token::rshell, Token::start>);
-    root.seek("server")->seek("rshell")->seek("start")->maxArgs = 1;
-
-    root.add({"server", "rshell", "stop"},
-             "command", "Stops the retro shell server",
-             &RetroShell::exec <Token::server, Token::rshell, Token::stop>);
-
-    root.add({"server", "rshell", "disconnect"},
-             "command", "Disconnects a client",
-             &RetroShell::exec <Token::server, Token::rshell, Token::disconnect>);
-
-    root.add({"server", "rshell", "inspect"},
-             "command", "Displays the internal state",
-             &RetroShell::exec <Token::server, Token::rshell, Token::inspect>);
-
     root.add({"server", "serial", "start"},
              "command", "Starts the serial port server",
              &RetroShell::exec <Token::server, Token::serial, Token::start>);
@@ -1047,10 +1013,89 @@ Interpreter::registerInstructions()
              "command", "Disconnects a client",
              &RetroShell::exec <Token::server, Token::serial, Token::disconnect>);
 
+    root.add({"server", "serial", "config"},
+             "command", "Displays the current configuration",
+             &RetroShell::exec <Token::server, Token::serial, Token::config>);
+
+    root.add({"server", "serial", "set"},
+             "command", "Configures the component");
+        
+    root.add({"server", "serial", "set", "port"},
+             "key", "Assigns the port number",
+             &RetroShell::exec <Token::server, Token::serial, Token::set, Token::port>, 1);
+
+    root.add({"server", "serial", "set", "verbose"},
+             "key", "Switches verbose mode on or off",
+             &RetroShell::exec <Token::server, Token::serial, Token::set, Token::verbose>, 1);
+
     root.add({"server", "serial", "inspect"},
              "command", "Displays the internal state",
              &RetroShell::exec <Token::server, Token::serial, Token::inspect>);
-     
+  
+    root.add({"server", "rshell", "start"},
+             "command", "Starts the retro shell server",
+             &RetroShell::exec <Token::server, Token::rshell, Token::start>);
+    root.seek("server")->seek("rshell")->seek("start")->maxArgs = 1;
+
+    root.add({"server", "rshell", "stop"},
+             "command", "Stops the retro shell server",
+             &RetroShell::exec <Token::server, Token::rshell, Token::stop>);
+
+    root.add({"server", "rshell", "disconnect"},
+             "command", "Disconnects a client",
+             &RetroShell::exec <Token::server, Token::rshell, Token::disconnect>);
+
+    root.add({"server", "rshell", "config"},
+             "command", "Displays the current configuration",
+             &RetroShell::exec <Token::server, Token::rshell, Token::config>);
+
+    root.add({"server", "rshell", "set"},
+             "command", "Configures the component");
+        
+    root.add({"server", "rshell", "set", "port"},
+             "key", "Assigns the port number",
+             &RetroShell::exec <Token::server, Token::rshell, Token::set, Token::port>, 1);
+
+    root.add({"server", "serial", "set", "verbose"},
+             "key", "Switches verbose mode on or off",
+             &RetroShell::exec <Token::server, Token::rshell, Token::set, Token::verbose>, 1);
+
+    root.add({"server", "rshell", "inspect"},
+             "command", "Displays the internal state",
+             &RetroShell::exec <Token::server, Token::rshell, Token::inspect>);
+   
+    root.add({"server", "gdb", "start"},
+             "command", "Starts the GDB server",
+             &RetroShell::exec <Token::server, Token::gdb, Token::start>, 1);
+    root.seek("server")->seek("gdb")->seek("start")->maxArgs = 2;
+
+    root.add({"server", "gdb", "stop"},
+             "command", "Stops the GDB server",
+             &RetroShell::exec <Token::server, Token::gdb, Token::stop>);
+
+    root.add({"server", "gdb", "disconnect"},
+             "command", "Disconnects a client",
+             &RetroShell::exec <Token::server, Token::gdb, Token::disconnect>);
+
+    root.add({"server", "gdb", "config"},
+             "command", "Displays the current configuration",
+             &RetroShell::exec <Token::server, Token::gdb, Token::config>);
+
+    root.add({"server", "gdb", "set"},
+             "command", "Configures the component");
+        
+    root.add({"server", "gdb", "set", "port"},
+             "key", "Assigns the port number",
+             &RetroShell::exec <Token::server, Token::gdb, Token::set, Token::port>, 1);
+
+    root.add({"server", "gdb", "set", "verbose"},
+             "key", "Switches verbose mode on or off",
+             &RetroShell::exec <Token::server, Token::gdb, Token::set, Token::verbose>, 1);
+
+    root.add({"server", "gdb", "inspect"},
+             "command", "Displays the internal state",
+             &RetroShell::exec <Token::server, Token::gdb, Token::inspect>);
+
     root.add({"server", "status"},
              "command", "Prints a server status summary",
              &RetroShell::exec <Token::server, Token::status>);

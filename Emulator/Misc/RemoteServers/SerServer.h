@@ -56,6 +56,7 @@ protected:
     // Methods from RemoteServer
     //
     
+    ServerConfig getDefaultConfig() override;
     string doReceive() override;
     void doSend(const string &packet) override;
     void doProcess(const string &packet) override;

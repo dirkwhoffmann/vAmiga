@@ -9,8 +9,10 @@
 
 #include "config.h"
 #include "SerialPort.h"
-#include "UART.h"
 #include "IOUtils.h"
+#include "Amiga.h"
+// #include "RemoteManagerTypes.h"
+// #include "UART.h"
 
 SerialPortConfig
 SerialPort::getDefaultConfig()
@@ -36,7 +38,7 @@ SerialPort::getConfigItem(Option option) const
     switch (option) {
             
         case OPT_SERIAL_DEVICE:  return (i64)config.device;
-        
+
         default:
             fatalError;
     }
@@ -54,6 +56,13 @@ SerialPort::setConfigItem(Option option, i64 value)
             }
             
             config.device = (SerialPortDevice)value;
+            
+            // Enable or disable the serial remote server
+            if (config.device == SPD_NULLMODEM) {
+                amiga.configure(OPT_SRV_ENABLE, SERVER_SER, true);
+            } else {
+                amiga.configure(OPT_SRV_ENABLE, SERVER_SER, false);
+            }
             return;
                         
         default:

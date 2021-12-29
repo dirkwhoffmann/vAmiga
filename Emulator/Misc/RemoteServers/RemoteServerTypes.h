@@ -50,3 +50,41 @@ struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
     }
 };
 #endif
+
+enum_long(SRVPROT)
+{
+    SRVPROT_DEFAULT
+};
+typedef SRVPROT ServerProtocol;
+
+#ifdef __cplusplus
+struct ServerProtocolEnum : util::Reflection<ServerProtocolEnum, ServerProtocol>
+{
+    static long minVal() { return 0; }
+    static long maxVal() { return SRVPROT_DEFAULT; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    
+    static const char *prefix() { return "SRVPROT"; }
+    static const char *key(SrvState value)
+    {
+        switch (value) {
+                
+            case SRVPROT_DEFAULT:   return "DEFAULT";
+        }
+        return "???";
+    }
+};
+#endif
+
+//
+// Structures
+//
+
+typedef struct
+{
+    bool enabled;
+    bool verbose;
+    u16 port;
+    ServerProtocol protocol;
+}
+ServerConfig;

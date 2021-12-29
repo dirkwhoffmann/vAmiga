@@ -765,6 +765,7 @@ extension Keys {
         static let gameDevice1        = "VAMIGA_PER_GameDevice1"
         static let gameDevice2        = "VAMIGA_PER_GameDevice2"
         static let serialDevice       = "VAMIGA_PER_SerialDevice"
+        static let serialDevicePort   = "VAMIGA_PER_SerialDevicePort"
     }
 }
 
@@ -779,6 +780,7 @@ struct PeripheralsDefaults {
     var gameDevice1: Int
     var gameDevice2: Int
     var serialDevice: SerialPortDevice
+    var serialDevicePort: Int
         
     //
     // Schemes
@@ -794,7 +796,8 @@ struct PeripheralsDefaults {
             
         gameDevice1: 0,
         gameDevice2: -1,
-        serialDevice: .NONE
+        serialDevice: .NONE,
+        serialDevicePort: 8080
     )
 }
 
@@ -819,7 +822,8 @@ extension UserDefaults {
 
             Keys.Per.gameDevice1: defaults.gameDevice1,
             Keys.Per.gameDevice2: defaults.gameDevice2,
-            Keys.Per.serialDevice: defaults.serialDevice.rawValue
+            Keys.Per.serialDevice: defaults.serialDevice.rawValue,
+            Keys.Per.serialDevicePort: defaults.serialDevicePort
         ]
         
         let userDefaults = UserDefaults.standard
@@ -844,7 +848,8 @@ extension UserDefaults {
 
                      Keys.Per.gameDevice1,
                      Keys.Per.gameDevice2,
-                     Keys.Per.serialDevice
+                     Keys.Per.serialDevice,
+                     Keys.Per.serialDevicePort
         ]
 
         for key in keys { userDefaults.removeObject(forKey: key) }

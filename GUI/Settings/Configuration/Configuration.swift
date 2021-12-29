@@ -177,8 +177,8 @@ class Configuration {
         set { amiga.configure(.SERIAL_DEVICE, value: newValue) }
     }
     var serialDevicePort: Int {
-        get { return amiga.getConfig(.SERIAL_DEVICE_PORT) }
-        set { amiga.configure(.SERIAL_DEVICE_PORT, value: newValue) }
+        get { return amiga.getConfig(.SRV_PORT, id: ServerType.SER.rawValue) }
+        set { amiga.configure(.SRV_PORT, id: ServerType.SER.rawValue, value: newValue) }
     }
 
     //
@@ -596,6 +596,7 @@ class Configuration {
         gameDevice1 = defaults.gameDevice1
         gameDevice2 = defaults.gameDevice2
         serialDevice = defaults.serialDevice.rawValue
+        serialDevicePort = defaults.serialDevicePort
         
         amiga.resume()
     }
@@ -621,7 +622,7 @@ class Configuration {
         gameDevice1 = defaults.integer(forKey: Keys.Per.gameDevice1)
         gameDevice2 = defaults.integer(forKey: Keys.Per.gameDevice2)
         serialDevice = defaults.integer(forKey: Keys.Per.serialDevice)
-        
+        serialDevicePort = defaults.integer(forKey: Keys.Per.serialDevicePort)
         amiga.resume()
     }
     
@@ -646,6 +647,7 @@ class Configuration {
         defaults.set(gameDevice1, forKey: Keys.Per.gameDevice1)
         defaults.set(gameDevice2, forKey: Keys.Per.gameDevice2)
         defaults.set(serialDevice, forKey: Keys.Per.serialDevice)
+        defaults.set(serialDevicePort, forKey: Keys.Per.serialDevicePort)
     }
     
     //

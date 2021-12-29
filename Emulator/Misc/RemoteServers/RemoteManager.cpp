@@ -14,6 +14,12 @@
 
 RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
 {
+    subComponents = std::vector<AmigaComponent *> {
+        
+        &serServer,
+        &rshServer,
+        &gdbServer
+    };
 }
 
 RemoteManager::~RemoteManager()
@@ -37,7 +43,7 @@ RemoteManager::_dump(dump::Category category, std::ostream& os) const
     for (auto server : servers) {
         
         auto name = server->getDescription();
-        auto port = server->getPort();
+        auto port = server->config.port;
         
         os << tab(string(name));
         
@@ -52,6 +58,42 @@ RemoteManager::_dump(dump::Category category, std::ostream& os) const
         } else {
             fatalError;
         }
+    }
+}
+
+i64
+RemoteManager::getConfigItem(Option option, long id) const
+{
+    switch ((ServerType)id) {
+            
+        case SERVER_SER: return serServer.getConfigItem(option);
+        case SERVER_RSH: return rshServer.getConfigItem(option);
+        case SERVER_GDB: return gdbServer.getConfigItem(option);
+
+        default:
+            fatalError;
+    }
+}
+
+void
+RemoteManager::setConfigItem(Option option, i64 value)
+{
+    for (auto &server : servers) {
+        server->setConfigItem(option, value);
+    }
+}
+
+void
+RemoteManager::setConfigItem(Option option, long id, i64 value)
+{
+    switch ((ServerType)id) {
+            
+        case SERVER_SER: serServer.setConfigItem(option, value); break;
+        case SERVER_RSH: rshServer.setConfigItem(option, value); break;
+        case SERVER_GDB: gdbServer.setConfigItem(option, value); break;
+
+        default:
+            fatalError;
     }
 }
 

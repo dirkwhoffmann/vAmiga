@@ -71,6 +71,7 @@ private:
     
 public:
     
+    ServerConfig getDefaultConfig() override;
     bool canStart() override;
     string doReceive() override throws;
     void doSend(const string &payload) override throws;

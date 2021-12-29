@@ -77,7 +77,6 @@ enum_long(OPT)
     
     // Ports
     OPT_SERIAL_DEVICE,
-    OPT_SERIAL_DEVICE_PORT,
 
     // Compatibility
     OPT_HIDDEN_BITPLANES,
@@ -116,7 +115,13 @@ enum_long(OPT)
     OPT_AUDPAN,
     OPT_AUDVOL,
     OPT_AUDVOLL,
-    OPT_AUDVOLR,    
+    OPT_AUDVOLR,
+    
+    // Remote servers
+    OPT_SRV_ENABLE,
+    OPT_SRV_VERBOSE,
+    OPT_SRV_PORT,
+    OPT_SRV_PROTOCOL
 };
 typedef OPT Option;
 
@@ -201,7 +206,12 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_AUDPAN:                return "AUDPAN";
             case OPT_AUDVOL:                return "AUDVOL";
             case OPT_AUDVOLL:               return "AUDVOLL";
-            case OPT_AUDVOLR:               return "AUDVOLR";                
+            case OPT_AUDVOLR:               return "AUDVOLR";
+
+            case OPT_SRV_ENABLE:            return "SERSRV_ENABLE";
+            case OPT_SRV_VERBOSE:           return "SERSRV_VERBOSE";
+            case OPT_SRV_PORT:              return "RSHSRV_PORT";
+            case OPT_SRV_PROTOCOL:          return "RSHSRV_PROTOCOL";
         }
         return "???";
     }

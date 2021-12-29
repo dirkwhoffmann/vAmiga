@@ -33,6 +33,9 @@ extension ConfigurationController {
         perGameDevice1.selectItem(withTag: config.gameDevice1)
         perGameDevice2.selectItem(withTag: config.gameDevice2)
         perSerialDevice.selectItem(withTag: config.serialDevice)
+        perSerialPort.integerValue = config.serialDevicePort
+        perSerialPort.isHidden = config.serialDevice != 2
+        perSerialPortText.isHidden = config.serialDevice != 2
         
         // Lock controls if emulator is powered on
         perDf1Connect.isEnabled = poweredOff

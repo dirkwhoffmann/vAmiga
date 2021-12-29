@@ -229,7 +229,6 @@ Amiga::getConfigItem(Option option) const
             return paula.diskController.getConfigItem(option);
             
         case OPT_SERIAL_DEVICE:
-        case OPT_SERIAL_DEVICE_PORT:
 
             return serialPort.getConfigItem(option);
 
@@ -297,6 +296,13 @@ Amiga::getConfigItem(Option option, long id) const
             if (id == PORT_1) return controlPort1.joystick.getConfigItem(option);
             if (id == PORT_2) return controlPort2.joystick.getConfigItem(option);
             fatalError;
+            
+        case OPT_SRV_ENABLE:
+        case OPT_SRV_VERBOSE:
+        case OPT_SRV_PORT:
+        case OPT_SRV_PROTOCOL:
+            
+            return remoteManager.getConfigItem(option, id);
             
         default:
             fatalError;
@@ -470,6 +476,14 @@ Amiga::configure(Option option, i64 value)
             controlPort2.joystick.setConfigItem(option, value);
             break;
             
+        case OPT_SRV_ENABLE:
+        case OPT_SRV_VERBOSE:
+        case OPT_SRV_PORT:
+        case OPT_SRV_PROTOCOL:
+            
+            remoteManager.setConfigItem(option, value);
+            break;
+
         default:
             fatalError;
     }
@@ -553,6 +567,14 @@ Amiga::configure(Option option, long id, i64 value)
             if (id == PORT_2) controlPort2.joystick.setConfigItem(option, value);
             break;
 
+        case OPT_SRV_ENABLE:
+        case OPT_SRV_VERBOSE:
+        case OPT_SRV_PORT:
+        case OPT_SRV_PROTOCOL:
+            
+            remoteManager.setConfigItem(option, id, value);
+            break;
+            
         default:
             fatalError;
     }

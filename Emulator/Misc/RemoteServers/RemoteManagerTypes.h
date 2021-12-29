@@ -16,7 +16,6 @@
 // Enumerations
 //
 
-/*
 enum_long(SERVER_TYPE)
 {
     SERVER_SER,
@@ -45,5 +44,3 @@ struct ServerTypeEnum : util::Reflection<ServerTypeEnum, ServerType>
     }
 };
 #endif
-
-*/

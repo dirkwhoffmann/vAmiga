@@ -31,13 +31,20 @@ void
 RemoteServer::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
+
+    if (category & dump::Config) {
         
+        os << tab("Enabled");
+        os << bol(config.enabled) << std::endl;
+        os << tab("Verbose");
+        os << bol(config.verbose) << std::endl;
+        os << tab("Port");
+        os << dec(config.port) << std::endl;
+        os << tab("Protocol");
+        os << ServerProtocolEnum::key(config.protocol) << std::endl;
+    }
     if (category & dump::State) {
         
-        os << tab("State");
-        os << SrvStateEnum::key(state) << std::endl;
-        os << tab("Port");
-        os << dec(port) << std::endl;
         os << tab("Received packets");
         os << dec(numReceived) << std::endl;
         os << tab("Transmitted packets");
@@ -46,26 +53,108 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
 }
 
 void
+RemoteServer::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_SRV_ENABLE, defaults.enabled);
+    setConfigItem(OPT_SRV_VERBOSE, defaults.verbose);
+    setConfigItem(OPT_SRV_PORT, defaults.port);
+    setConfigItem(OPT_SRV_PROTOCOL, defaults.protocol);
+}
+
+i64
+RemoteServer::getConfigItem(Option option) const
+{
+    switch (option) {
+            
+        case OPT_SRV_ENABLE: return config.enabled;
+        case OPT_SRV_VERBOSE: return config.verbose;
+        case OPT_SRV_PORT: return config.port;
+        case OPT_SRV_PROTOCOL: return config.protocol;
+
+        default:
+            fatalError;
+    }
+}
+
+void
+RemoteServer::setConfigItem(Option option, i64 value)
+{
+    switch (option) {
+            
+        case OPT_SRV_ENABLE:
+
+            if (config.enabled != (bool)value) {
+                
+                config.enabled = (bool)value;
+                value ? start() : stop();
+            }
+            return;
+            
+        case OPT_SRV_VERBOSE:
+            
+            config.verbose = (bool)value;
+            return;
+            
+        case OPT_SRV_PORT:
+            
+            if (config.port != (u16)value) {
+                
+                if (isOff()) {
+
+                    config.port = (u16)value;
+
+                } else {
+
+                    SUSPENDED
+
+                    stop();
+                    config.port = (u16)value;
+                    start();
+                }
+            }
+            return;
+            
+        case OPT_SRV_PROTOCOL:
+            
+            config.protocol = (ServerProtocol)value;
+            return;
+            
+        default:
+            fatalError;
+    }
+}
+
+void
 RemoteServer::start()
 {
     SUSPENDED
     
-    // Only proceed if the server is not running yet
-    if (isListening() || isConnected()) throw VAError(ERROR_SERVER_ON);
-    
-    // Check if the server is ready to launch
-    if (canStart()) {
+    if (isListening() || isConnected()) {
         
-        // Make sure we continue with a terminated server thread
-        if (serverThread.joinable()) serverThread.join();
-        
-        // Spawn a new thread
-        serverThread = std::thread(&RemoteServer::main, this);
+        debug(SRV_DEBUG, "Server is already running...\n");
         
     } else {
         
-        // Postpone the launch
-        switchState(SRV_STATE_STARTING);
+        // Check if the server is ready to launch
+        if (canStart()) {
+            
+            debug(SRV_DEBUG, "Launching server...\n");
+            
+            // Make sure we continue with a terminated server thread
+            if (serverThread.joinable()) serverThread.join();
+            
+            // Spawn a new thread
+            serverThread = std::thread(&RemoteServer::main, this);
+            
+        } else {
+            
+            debug(SRV_DEBUG, "Waiting for the launch permission...\n");
+            
+            // Postpone the launch
+            switchState(SRV_STATE_STARTING);
+        }
     }
 }
 
@@ -74,20 +163,26 @@ RemoteServer::stop()
 {
     SUSPENDED
     
-    debug(SRV_DEBUG, "Shutting down server...\n");
-    
-    // Only proceed if the server is alive
-    if (isOff()) throw VAError(ERROR_SERVER_OFF);
-    
-    switchState(SRV_STATE_STOPPING);
-    
-    // Interrupt the server thread
-    disconnect();
-    
-    // Wait until the server thread has terminated
-    if (serverThread.joinable()) serverThread.join();
-    
-    switchState(SRV_STATE_OFF);
+    if (isOff()) {
+        
+        debug(SRV_DEBUG, "Server is already shut down...\n");
+        
+    } else {
+        
+        // Only proceed if the server is alive
+        if (isOff()) return;
+        
+        debug(SRV_DEBUG, "Shutting down server...\n");
+        switchState(SRV_STATE_STOPPING);
+        
+        // Interrupt the server thread
+        disconnect();
+        
+        // Wait until the server thread has terminated
+        if (serverThread.joinable()) serverThread.join();
+        
+        switchState(SRV_STATE_OFF);
+    }
 }
 
 void
@@ -141,7 +236,10 @@ RemoteServer::receive()
         
         packet = doReceive();
         numReceived++;
-        debug(SRV_DEBUG, "R: '%s'\n", util::makePrintable(packet).c_str());
+
+        if (config.verbose) {
+            retroShell << "R: " << util::makePrintable(packet) << "\n";
+        }
         msgQueue.put(MSG_SRV_RECEIVE);
     }
     
@@ -155,7 +253,10 @@ RemoteServer::send(const string &packet)
         
         doSend(packet);
         numSent++;
-        debug(SRV_DEBUG, "T: '%s'\n", util::makePrintable(packet).c_str());
+        
+        if (config.verbose) {
+            retroShell << "T: " << util::makePrintable(packet) << "\n";
+        }
         msgQueue.put(MSG_SRV_SEND);
     }
 }
@@ -220,7 +321,7 @@ RemoteServer::mainLoop()
             try {
                 
                 // Try to be a client by connecting to an existing server
-                connection.connect((u16)port);
+                connection.connect(config.port);
                 debug(SRV_DEBUG, "Acting as a client\n");
                 
             } catch (...) {
@@ -229,7 +330,7 @@ RemoteServer::mainLoop()
                 debug(SRV_DEBUG, "Acting as a server\n");
                 
                 // Create a port listener
-                listener.bind((u16)port);
+                listener.bind(config.port);
                 listener.listen();
                 
                 // Wait for a client to connect

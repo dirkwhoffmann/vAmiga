@@ -20,7 +20,7 @@
 
 GdbServer::GdbServer(Amiga& ref) : RemoteServer(ref)
 {
-    port = 8082;
+
 }
 
 void
@@ -36,6 +36,19 @@ GdbServer::_dump(dump::Category category, std::ostream& os) const
         os << tab("Data segment") << hex(dataSeg()) << std::endl;
         os << tab("BSS segment") << hex(bssSeg()) << std::endl;
     }
+}
+
+ServerConfig
+GdbServer::getDefaultConfig()
+{
+    ServerConfig defaults;
+    
+    defaults.enabled = false;
+    defaults.verbose = false;
+    defaults.port = 8082;
+    defaults.protocol = SRVPROT_DEFAULT;
+    
+    return defaults;
 }
 
 bool
@@ -60,14 +73,12 @@ GdbServer::doReceive()
     }
 
     latestCmd = cmd;
-    if (SRV_DEBUG) retroShell << "R: " << latestCmd << "\n";
     return latestCmd;
 }
 
 void
 GdbServer::doSend(const string &payload)
 {
-    if (SRV_DEBUG) retroShell << "T: " << payload << "\n";
     connection.send(payload);
 }
 

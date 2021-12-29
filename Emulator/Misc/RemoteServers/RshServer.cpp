@@ -15,7 +15,7 @@
 
 RshServer::RshServer(Amiga& ref) : RemoteServer(ref)
 {
-    port = 8081;
+
 }
 
 void
@@ -24,6 +24,19 @@ RshServer::_dump(dump::Category category, std::ostream& os) const
     using namespace util;
     
     RemoteServer::_dump(category, os);
+}
+
+ServerConfig
+RshServer::getDefaultConfig()
+{
+    ServerConfig defaults;
+    
+    defaults.enabled = false;
+    defaults.verbose = false;
+    defaults.port = 8081;
+    defaults.protocol = SRVPROT_DEFAULT;
+    
+    return defaults;
 }
 
 void

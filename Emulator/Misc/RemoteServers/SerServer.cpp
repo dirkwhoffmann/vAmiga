@@ -17,7 +17,6 @@
 
 SerServer::SerServer(Amiga& ref) : RemoteServer(ref)
 {
-    port = 8080;
 }
 
 void
@@ -40,6 +39,19 @@ SerServer::_dump(dump::Category category, std::ostream& os) const
         os << tab("Buffered bytes");
         os << dec(buffer.count()) << std::endl;
     }
+}
+
+ServerConfig
+SerServer::getDefaultConfig()
+{
+    ServerConfig defaults;
+    
+    defaults.enabled = false;
+    defaults.verbose = false;
+    defaults.port = 8080;
+    defaults.protocol = SRVPROT_DEFAULT;
+    
+    return defaults;
 }
 
 string

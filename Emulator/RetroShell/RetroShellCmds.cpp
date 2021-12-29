@@ -1227,84 +1227,15 @@ RetroShell::exec <Token::os, Token::processes> (Arguments& argv, long param)
 //
 
 template <> void
-RetroShell::exec <Token::server, Token::gdb, Token::start> (Arguments& argv, long param)
-{
-    auto &server = remoteManager.gdbServer;
-    
-    // Check if a custom port number is given
-    if (argv.size() > 1) server.setPort(util::parseNum(argv[1]));
-
-    // Pass the process name to the server
-    server.setArgs( { argv[0] } );
-    
-    // Start the server
-    server.start();
-}
-
-template <> void
-RetroShell::exec <Token::server, Token::gdb, Token::stop> (Arguments& argv, long param)
-{
-    remoteManager.gdbServer.stop();
-}
-
-template <> void
-RetroShell::exec <Token::server, Token::gdb, Token::disconnect> (Arguments& argv, long param)
-{
-    remoteManager.gdbServer.disconnect();
-}
-
-template <> void
-RetroShell::exec <Token::server, Token::gdb, Token::inspect> (Arguments& argv, long param)
-{
-    dump(remoteManager.gdbServer, dump::State);
-}
-
-template <> void
-RetroShell::exec <Token::server, Token::rshell, Token::start> (Arguments& argv, long param)
-{
-    auto &server = remoteManager.rshServer;
-    
-    // Check if a custom port number is given
-    if (argv.size() > 1) server.setPort(util::parseNum(argv[1]));
-    
-    // Start the server
-    server.start();
-}
-
-template <> void
-RetroShell::exec <Token::server, Token::rshell, Token::stop> (Arguments& argv, long param)
-{
-    remoteManager.rshServer.stop();
-}
-
-template <> void
-RetroShell::exec <Token::server, Token::rshell, Token::disconnect> (Arguments& argv, long param)
-{
-    remoteManager.rshServer.disconnect();
-}
-
-template <> void
-RetroShell::exec <Token::server, Token::rshell, Token::inspect> (Arguments& argv, long param)
-{
-    dump(remoteManager.rshServer, dump::State);
-}
-
-template <> void
 RetroShell::exec <Token::server, Token::serial, Token::start> (Arguments& argv, long param)
 {
-    auto &server = remoteManager.serServer;
-    
-    // Check if a custom port number is given
-    if (argv.size() > 1) server.setPort(util::parseNum(argv[1]));
-    
-    // Start the server
-    server.start();
+    amiga.configure(OPT_SRV_ENABLE, SERVER_SER, true);
 }
 
 template <> void
 RetroShell::exec <Token::server, Token::serial, Token::stop> (Arguments& argv, long param)
 {
-    remoteManager.serServer.stop();
+    amiga.configure(OPT_SRV_ENABLE, SERVER_SER, false);
 }
 
 template <> void
@@ -1314,9 +1245,116 @@ RetroShell::exec <Token::server, Token::serial, Token::disconnect> (Arguments& a
 }
 
 template <> void
+RetroShell::exec <Token::server, Token::serial, Token::set, Token::port> (Arguments& argv, long param)
+{
+    remoteManager.serServer.setConfigItem(OPT_SRV_PORT, util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::serial, Token::set, Token::verbose> (Arguments& argv, long param)
+{
+    remoteManager.serServer.setConfigItem(OPT_SRV_PORT, util::parseBool(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::serial, Token::config> (Arguments& argv, long param)
+{
+    dump(remoteManager.serServer, dump::Config);
+}
+
+template <> void
 RetroShell::exec <Token::server, Token::serial, Token::inspect> (Arguments& argv, long param)
 {
     dump(remoteManager.serServer, dump::State);
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::rshell, Token::start> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_SRV_ENABLE, SERVER_RSH, true);
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::rshell, Token::stop> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_SRV_ENABLE, SERVER_RSH, false);
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::rshell, Token::disconnect> (Arguments& argv, long param)
+{
+    remoteManager.rshServer.disconnect();
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::rshell, Token::set, Token::port> (Arguments& argv, long param)
+{
+    remoteManager.serServer.setConfigItem(OPT_SRV_PORT, util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::rshell, Token::set, Token::verbose> (Arguments& argv, long param)
+{
+    remoteManager.serServer.setConfigItem(OPT_SRV_PORT, util::parseBool(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::rshell, Token::config> (Arguments& argv, long param)
+{
+    dump(remoteManager.rshServer, dump::Config);
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::rshell, Token::inspect> (Arguments& argv, long param)
+{
+    dump(remoteManager.rshServer, dump::State);
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::gdb, Token::start> (Arguments& argv, long param)
+{
+    auto &server = remoteManager.gdbServer;
+    
+    // Pass the process name to the server
+    server.setArgs( { argv[0] } );
+    
+    amiga.configure(OPT_SRV_ENABLE, SERVER_GDB, true);
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::gdb, Token::stop> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_SRV_ENABLE, SERVER_GDB, false);
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::gdb, Token::disconnect> (Arguments& argv, long param)
+{
+    remoteManager.gdbServer.disconnect();
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::gdb, Token::set, Token::port> (Arguments& argv, long param)
+{
+    remoteManager.serServer.setConfigItem(OPT_SRV_PORT, util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::gdb, Token::set, Token::verbose> (Arguments& argv, long param)
+{
+    remoteManager.serServer.setConfigItem(OPT_SRV_PORT, util::parseBool(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::gdb, Token::config> (Arguments& argv, long param)
+{
+    dump(remoteManager.gdbServer, dump::Config);
+}
+
+template <> void
+RetroShell::exec <Token::server, Token::gdb, Token::inspect> (Arguments& argv, long param)
+{
+    dump(remoteManager.gdbServer, dump::State);
 }
 
 template <> void

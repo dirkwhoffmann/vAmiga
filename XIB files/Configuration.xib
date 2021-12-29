@@ -146,7 +146,7 @@
             <value key="minSize" type="size" width="646" height="486"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="646" height="496"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IOZ-5e-6pS">
                         <rect key="frame" x="13" y="12" width="620" height="470"/>
@@ -1270,10 +1270,10 @@ DQ
                                                         <menuItem title="No device" state="on" image="devNoneTemplate" id="Vq0-6e-aaE">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Loopback cable" image="devLoopbackTemplate" tag="1" id="LEF-Dx-kUM">
+                                                        <menuItem title="Loopback cable" image="devCableLoopTemplate" tag="1" id="LEF-Dx-kUM">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Null modem cable" image="devLoopbackTemplate" tag="2" id="HwV-iS-F7Q">
+                                                        <menuItem title="Null modem cable" image="devCableTemplate" tag="2" id="HwV-iS-F7Q">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -1388,12 +1388,15 @@ DQ
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gxb-NC-mOX">
                                             <rect key="frame" x="452" y="275" width="50" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="99999" drawsBackground="YES" id="e5y-lk-A4B">
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="right" title="99999" drawsBackground="YES" id="e5y-lk-A4B">
                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="rGd-5i-20d"/>
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
+                                            <connections>
+                                                <action selector="perSerialDevicePortAction:" target="-2" id="6o9-MS-HXY"/>
+                                            </connections>
                                         </textField>
                                     </subviews>
                                 </view>
@@ -3071,13 +3074,14 @@ DQ
     <resources>
         <image name="Lock" width="120" height="170"/>
         <image name="aros_half" width="79" height="62"/>
+        <image name="devCableLoopTemplate" width="24" height="24"/>
+        <image name="devCableTemplate" width="24" height="24"/>
         <image name="devGamepad1Template" width="20" height="21"/>
         <image name="devGamepad2Template" width="20" height="21"/>
         <image name="devKeys1Template" width="20" height="20"/>
         <image name="devKeys2Template" width="20" height="20"/>
-        <image name="devLoopbackTemplate" width="20" height="20"/>
         <image name="devMouseTemplate" width="20" height="20"/>
-        <image name="devNoneTemplate" width="20" height="20"/>
+        <image name="devNoneTemplate" width="24" height="24"/>
         <image name="rom_missing" width="129" height="157"/>
         <image name="trashTemplate" width="174" height="214"/>
     </resources>
