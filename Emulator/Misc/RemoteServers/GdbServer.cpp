@@ -45,20 +45,9 @@ GdbServer::getDefaultConfig()
     
     defaults.port = 8082;
     defaults.protocol = SRVPROT_DEFAULT;
-    defaults.verbose = false;
+    defaults.verbose = true;
 
     return defaults;
-}
-
-bool
-GdbServer::canStart()
-{
-    // If the seglist is present, we are ready to go
-    if (!segList.empty()) return true;
-    
-    // If not, try to located the process
-    if (!args.empty()) osDebugger.read(args[0], segList);
-    return !segList.empty();
 }
 
 string
@@ -109,24 +98,9 @@ GdbServer::didSwitch(SrvState from, SrvState to)
         ackMode = true;
     }
     
-    if (from == SRV_STATE_OFF && to == SRV_STATE_STARTING) {
+    if (to == SRV_STATE_OFF) {
         
-        retroShell << "Waiting for process '" << args[0] << "' to launch.\n";
-    }
-    
-    if ((from == SRV_STATE_OFF && to == SRV_STATE_LISTENING) ||
-        (from == SRV_STATE_STARTING && to == SRV_STATE_LISTENING)) {
-        
-        retroShell << "Successfully attached to process '" << args[0] << "'\n\n";
-        retroShell << "    Data segment: " << util::hexstr <8> (dataSeg()) << "\n";
-        retroShell << "    Code segment: " << util::hexstr <8> (codeSeg()) << "\n";
-        retroShell << "     BSS segment: " << util::hexstr <8> (bssSeg()) << "\n\n";
-
-        if (amiga.isRunning()) {
-
-            amiga.pause();
-            retroShell << "Pausing emulation.\n\n";
-        }
+        processName = "";
     }
 }
 
@@ -140,6 +114,60 @@ GdbServer::reply(const string &payload)
     packet += computeChecksum(payload);
     
     send(packet);
+}
+
+bool
+GdbServer::attach(const string &name)
+{
+    SUSPENDED
+    
+    this->processName = name;
+    this->segList = { };
+    
+    if (!attach()) {
+    
+        retroShell << "Waiting for process '" << processName << "' to launch.\n";
+        return false;
+    }
+    return true;
+}
+
+bool
+GdbServer::attach()
+{
+    // Quick-exit if no process is supposed to be attached
+    if (processName == "") return false;
+    
+    // Quick-exit if the process is already attached
+    if (!segList.empty()) return true;
+    
+    // Try to located the process
+    osDebugger.read(processName, segList);
+
+    /* If the process is present, segList will be not empty. In this case, we
+     * start the server immediately. Otherwise, the start will be postponed.
+     * The launch daemon will watch out for the process and start the GDB
+     * server once it is present.
+     */
+
+    if (!segList.empty()) {
+
+        // Start immediately
+        _start();
+        
+        retroShell << "Successfully attached to process '" << processName << "'\n\n";
+        retroShell << "    Data segment: " << util::hexstr <8> (dataSeg()) << "\n";
+        retroShell << "    Code segment: " << util::hexstr <8> (codeSeg()) << "\n";
+        retroShell << "     BSS segment: " << util::hexstr <8> (bssSeg()) << "\n\n";
+        
+        if (amiga.isRunning()) {
+            
+            amiga.signalStop();
+            retroShell << "Pausing emulation.\n\n";
+        }        
+        return true;
+    }
+    return false;
 }
 
 u32

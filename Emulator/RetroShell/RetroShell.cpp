@@ -29,7 +29,8 @@ RetroShell::operator<<(char value)
 {
     storage << value;
     remoteManager.rshServer << value;
-    isDirty = true;
+    // isDirty = true;
+    needsDisplay();
     return *this;
 }
 
@@ -38,7 +39,8 @@ RetroShell::operator<<(const string& value)
 {
     storage << value;
     remoteManager.rshServer << value;
-    isDirty = true;
+    // isDirty = true;
+    needsDisplay();
     return *this;
 }
 
@@ -90,15 +92,23 @@ RetroShell::tab(isize pos)
         std::string fill(count, ' ');
         storage << fill;
         remoteManager.rshServer << fill;
-        isDirty = true;
+        // isDirty = true;
+        needsDisplay();
     }
+}
+
+void
+RetroShell::needsDisplay()
+{
+    msgQueue.put(MSG_UPDATE_CONSOLE);
 }
 
 void
 RetroShell::clear()
 {
     storage.clear();
-    isDirty = true;
+    // isDirty = true;
+    needsDisplay();
 }
 
 void
@@ -106,7 +116,8 @@ RetroShell::printHelp()
 {
     storage.printHelp();
     remoteManager.rshServer << "Type 'help' for help.\n";
-    isDirty = true;
+    // isDirty = true;
+    needsDisplay();
 }
 
 void
@@ -207,7 +218,8 @@ RetroShell::press(RetroShellKey key)
     }
     
     tabPressed = key == RSKEY_TAB;
-    isDirty = true;
+    // isDirty = true;
+    needsDisplay();
 
     assert(ipos >= 0 && ipos < historyLength());
     assert(cursor >= 0 && cursor <= inputLength());
@@ -247,7 +259,8 @@ RetroShell::press(char c)
     }
 
     tabPressed = false;
-    isDirty = true;
+    // isDirty = true;
+    needsDisplay();
 }
 
 void
@@ -434,11 +447,5 @@ RetroShell::vsyncHandler()
         
         msgQueue.put(MSG_SCRIPT_WAKEUP);
         wakeUp = INT64_MAX;
-    }
-    
-    if (isDirty) {
-        
-        msgQueue.put(MSG_UPDATE_CONSOLE);
-        isDirty = false;
     }
 }

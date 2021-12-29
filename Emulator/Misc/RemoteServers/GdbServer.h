@@ -72,7 +72,6 @@ private:
 public:
     
     ServerConfig getDefaultConfig() override;
-    bool canStart() override;
     string doReceive() override throws;
     void doSend(const string &payload) override throws;
     void doProcess(const string &payload) override throws;
@@ -80,9 +79,14 @@ public:
 
             
     //
-    // Analyzing the attached process
+    // Attaching and analyzing processes
     //
     
+    // Tries to attach a process to the GDB server
+    bool attach(const string &name);
+    bool attach();
+
+    // Queries segment information about the attached process
     u32 codeSeg() const;
     u32 dataSeg() const;
     u32 bssSeg() const;

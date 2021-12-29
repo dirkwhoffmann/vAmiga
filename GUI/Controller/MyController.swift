@@ -394,6 +394,7 @@ extension MyController {
             renderer.console.close(delay: 0.25)
             
         case .UPDATE_CONSOLE:
+            // track("UPDATE_CONSOLE()")
             renderer.console.isDirty = true
 
         case .SCRIPT_DONE, .SCRIPT_PAUSE, .SCRIPT_ABORT:

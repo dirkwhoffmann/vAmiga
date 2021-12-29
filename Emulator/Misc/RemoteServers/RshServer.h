@@ -16,7 +16,7 @@ class RshServer : public RemoteServer {
 public:
     
     RshServer(Amiga& ref);
-    
+        
     //
     // Methods from AmigaObject
     //

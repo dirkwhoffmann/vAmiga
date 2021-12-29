@@ -21,7 +21,7 @@ class RemoteServer : public SubComponent {
     
     // Current configuration
     ServerConfig config = {};
-
+    
 protected:
     
     // Sockets
@@ -30,13 +30,7 @@ protected:
 
     // The server thread
     std::thread serverThread;
-
-    // The port number
-    // isize port = 0;
-    
-    // The launch arguments (if any)
-    std::vector <string> args;
-    
+        
     // The current server state
     SrvState state = SRV_STATE_OFF;
     
@@ -52,7 +46,8 @@ protected:
 public:
     
     RemoteServer(Amiga& ref);
-    ~RemoteServer();
+    ~RemoteServer() { shutDownServer(); }
+    void shutDownServer();
     
     
     //
@@ -72,7 +67,8 @@ public:
 private:
     
     void _reset(bool hard) override { }
-    
+    void _powerOff() override;
+
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -106,10 +102,7 @@ public:
     void resetConfig() override;
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
-    
-    const std::vector <string> &getArgs() const { return args; }
-    void setArgs(const std::vector <string> &newArgs) { args = newArgs; }
-    
+        
 
     //
     // Examining state
@@ -146,9 +139,6 @@ protected:
     void _disconnect() throws;
     void _start() throws;
     void _stop() throws;
-
-    // Returns whether the server is ready to start
-    virtual bool canStart() { return true; }
 
     // Switches the internal state
     void switchState(SrvState newState);

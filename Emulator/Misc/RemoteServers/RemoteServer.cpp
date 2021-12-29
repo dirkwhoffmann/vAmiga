@@ -22,9 +22,11 @@ RemoteServer::RemoteServer(Amiga& ref) : SubComponent(ref)
 
 }
 
-RemoteServer::~RemoteServer()
+void
+RemoteServer::shutDownServer()
 {
-    if (isListening()) stop();
+    debug(SRV_DEBUG, "Shutting down\n");
+    try { stop(); } catch(...) { }
 }
 
 void
@@ -42,12 +44,19 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
         os << bol(config.verbose) << std::endl;
     }
     if (category & dump::State) {
-        
+        os << tab("State");
+        os << SrvStateEnum::key(state) << std::endl;
         os << tab("Received packets");
         os << dec(numReceived) << std::endl;
         os << tab("Transmitted packets");
         os << dec(numSent) << std::endl;
     }
+}
+
+void
+RemoteServer::_powerOff()
+{
+    shutDownServer();
 }
 
 void
@@ -123,39 +132,25 @@ RemoteServer::setConfigItem(Option option, i64 value)
 void
 RemoteServer::_start()
 {
-    if (isListening() || isConnected()) {
+    if (isOff()) {
         
-        debug(SRV_DEBUG, "Server is already running...\n");
-
-    } else if (canStart()) {
-        
-        debug(SRV_DEBUG, "Launching server...\n");
+        debug(SRV_DEBUG, "Starting server...\n");
+        switchState(SRV_STATE_STARTING);
         
         // Make sure we continue with a terminated server thread
         if (serverThread.joinable()) serverThread.join();
         
         // Spawn a new thread
         serverThread = std::thread(&RemoteServer::main, this);
-        
-    } else {
-        
-        debug(SRV_DEBUG, "Waiting for the launch permission...\n");
-        
-        // Postpone the launch
-        switchState(SRV_STATE_STARTING);
     }
 }
 
 void
 RemoteServer::_stop()
 {
-    if (isOff()) {
+    if (!isOff()) {
         
-        debug(SRV_DEBUG, "Server is already shut down...\n");
-    
-    } else {
-        
-        debug(SRV_DEBUG, "Shutting down server...\n");
+        debug(SRV_DEBUG, "Stopping server...\n");
         switchState(SRV_STATE_STOPPING);
         
         // Interrupt the server thread

@@ -23,19 +23,6 @@ RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
     };
 }
 
-RemoteManager::~RemoteManager()
-{
-    debug(SRV_DEBUG, "Shutting down\n");
-
-    try {
-        
-        serServer.stop();
-        rshServer.stop();
-        gdbServer.stop();
-        
-    } catch(...) { }
-}
-
 void
 RemoteManager::_dump(dump::Category category, std::ostream& os) const
 {
@@ -136,13 +123,8 @@ RemoteManager::serviceServerEvent()
     assert(scheduler.id[SLOT_SRV] == SRV_LAUNCH_DAEMON);
         
     // Run the launch daemon for the GDB server
-    if (gdbServer.isStarting() && gdbServer.canStart()) {
+    gdbServer.attach();
         
-        // Try to switch on the GDB server
-        debug(SRV_DEBUG, "Trying to start the pending GDBserver\n");
-        gdbServer._start();
-    }
-    
     // Run the launch daemon for the serial server
     if (serialPort.getConfigItem(OPT_SERIAL_DEVICE) == SPD_NULLMODEM) {
         serServer._start();

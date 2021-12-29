@@ -37,7 +37,7 @@ public:
 public:
     
     RemoteManager(Amiga& ref);
-    ~RemoteManager();
+    // ~RemoteManager();
     
     
     //

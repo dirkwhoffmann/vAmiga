@@ -37,7 +37,7 @@ class RetroShell : public SubComponent {
     isize ipos = 0;
         
     // Indicates if the the GUI needs a refresh
-    bool isDirty = false;
+    // [[deprecated]] bool isDirty = false;
     
     
     //
@@ -126,7 +126,13 @@ public:
     RetroShell &operator<<(long value);
     RetroShell &operator<<(std::stringstream &stream);
             
+    // Signals the GUI to update the display if neccessary
+    // void flush(); 
+    
 private:
+    
+    // Marks the text storage as dirty
+    void needsDisplay();
     
     // Clears the console window
     void clear();

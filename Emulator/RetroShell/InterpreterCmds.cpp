@@ -1000,6 +1000,7 @@ Interpreter::registerInstructions()
     root.add({"server", "gdb"},
              "component", "GDB server");
     
+    /*
     root.add({"server", "serial", "start"},
              "command", "Starts the serial port server",
              &RetroShell::exec <Token::server, Token::serial, Token::start>);
@@ -1012,7 +1013,8 @@ Interpreter::registerInstructions()
     root.add({"server", "serial", "disconnect"},
              "command", "Disconnects a client",
              &RetroShell::exec <Token::server, Token::serial, Token::disconnect>);
-
+    */
+    
     root.add({"server", "serial", "config"},
              "command", "Displays the current configuration",
              &RetroShell::exec <Token::server, Token::serial, Token::config>);
@@ -1064,6 +1066,7 @@ Interpreter::registerInstructions()
              "command", "Displays the internal state",
              &RetroShell::exec <Token::server, Token::rshell, Token::inspect>);
    
+    /*
     root.add({"server", "gdb", "start"},
              "command", "Starts the GDB server",
              &RetroShell::exec <Token::server, Token::gdb, Token::start>, 1);
@@ -1076,6 +1079,10 @@ Interpreter::registerInstructions()
     root.add({"server", "gdb", "disconnect"},
              "command", "Disconnects a client",
              &RetroShell::exec <Token::server, Token::gdb, Token::disconnect>);
+    */
+    root.add({"server", "gdb", "attach"},
+             "command", "Attaches the GDB server to a process",
+             &RetroShell::exec <Token::server, Token::gdb, Token::attach>, 1);
 
     root.add({"server", "gdb", "config"},
              "command", "Displays the current configuration",
