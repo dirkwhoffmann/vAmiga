@@ -21,7 +21,9 @@ template <> void
 GdbServer::process <' ', GdbCmd::CtrlC> (string arg)
 {
     debug(SRV_DEBUG, "Ctrl+C\n");
-    throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "CtrlC");
+    
+    amiga.signalStop();
+    reply("OK");
 }
 
 template <> void
