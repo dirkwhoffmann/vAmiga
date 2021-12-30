@@ -38,12 +38,25 @@ GdbServer::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
+bool
+GdbServer::shouldRun()
+{
+    // Don't run if no process is specified
+    if (processName == "") return false;
+    
+    // Try to locate the segment list if it hasn't been located yet
+    if (segList.empty()) readSegList();
+
+    return !segList.empty();
+}
+
 ServerConfig
 GdbServer::getDefaultConfig()
 {
     ServerConfig defaults;
     
     defaults.port = 8082;
+    defaults.autoRun = true;
     defaults.protocol = SRVPROT_DEFAULT;
     defaults.verbose = true;
 
@@ -124,7 +137,9 @@ GdbServer::attach(const string &name)
     this->processName = name;
     this->segList = { };
     
-    if (!attach()) {
+    readSegList();
+    
+    if (segList.empty()) {
     
         retroShell << "Waiting for process '" << processName << "' to launch.\n";
         return false;
@@ -132,42 +147,31 @@ GdbServer::attach(const string &name)
     return true;
 }
 
+void
+GdbServer::detach()
+{
+    processName = "";
+    segList = { };
+}
+
 bool
-GdbServer::attach()
+GdbServer::readSegList()
 {
     // Quick-exit if no process is supposed to be attached
     if (processName == "") return false;
     
-    // Quick-exit if the process is already attached
+    // Quick-exit if the segment list is already present
     if (!segList.empty()) return true;
-    
-    // Try to located the process
+
+    // Try to find the segment list in memory
     osDebugger.read(processName, segList);
-
-    /* If the process is present, segList will be not empty. In this case, we
-     * start the server immediately. Otherwise, the start will be postponed.
-     * The launch daemon will watch out for the process and start the GDB
-     * server once it is present.
-     */
-
-    if (!segList.empty()) {
-
-        // Start immediately
-        _start();
-        
-        retroShell << "Successfully attached to process '" << processName << "'\n\n";
-        retroShell << "    Data segment: " << util::hexstr <8> (dataSeg()) << "\n";
-        retroShell << "    Code segment: " << util::hexstr <8> (codeSeg()) << "\n";
-        retroShell << "     BSS segment: " << util::hexstr <8> (bssSeg()) << "\n\n";
-        
-        if (amiga.isRunning()) {
-            
-            amiga.signalStop();
-            retroShell << "Pausing emulation.\n\n";
-        }        
-        return true;
-    }
-    return false;
+    if (segList.empty()) return false;
+    
+    retroShell << "Successfully attached to process '" << processName << "'\n\n";
+    retroShell << "    Data segment: " << util::hexstr <8> (dataSeg()) << "\n";
+    retroShell << "    Code segment: " << util::hexstr <8> (codeSeg()) << "\n";
+    retroShell << "     BSS segment: " << util::hexstr <8> (bssSeg()) << "\n\n";
+    return true;
 }
 
 u32

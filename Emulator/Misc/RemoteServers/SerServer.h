@@ -13,7 +13,7 @@
 #include "RingBuffer.h"
 
 class SerServer : public RemoteServer {
-  
+      
     // A ringbuffer for buffering incoming bytes
     util::SortedRingBuffer <u8, 8096> buffer;
     
@@ -56,7 +56,10 @@ protected:
     // Methods from RemoteServer
     //
     
+public:
+    
     ServerConfig getDefaultConfig() override;
+    bool shouldRun() override;
     string doReceive() override;
     void doSend(const string &packet) override;
     void doProcess(const string &packet) override;

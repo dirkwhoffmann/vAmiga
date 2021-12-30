@@ -71,9 +71,10 @@ RemoteServer::resetConfig()
 {
     auto defaults = getDefaultConfig();
     
-    setConfigItem(OPT_SRV_VERBOSE, defaults.verbose);
     setConfigItem(OPT_SRV_PORT, defaults.port);
     setConfigItem(OPT_SRV_PROTOCOL, defaults.protocol);
+    setConfigItem(OPT_SRV_AUTORUN, defaults.autoRun);
+    setConfigItem(OPT_SRV_VERBOSE, defaults.verbose);
 }
 
 i64
@@ -81,9 +82,10 @@ RemoteServer::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_SRV_VERBOSE: return config.verbose;
         case OPT_SRV_PORT: return config.port;
         case OPT_SRV_PROTOCOL: return config.protocol;
+        case OPT_SRV_AUTORUN: return config.autoRun;
+        case OPT_SRV_VERBOSE: return config.verbose;
 
         default:
             fatalError;
@@ -94,12 +96,7 @@ void
 RemoteServer::setConfigItem(Option option, i64 value)
 {
     switch (option) {
-                        
-        case OPT_SRV_VERBOSE:
-            
-            config.verbose = (bool)value;
-            return;
-            
+                                    
         case OPT_SRV_PORT:
             
             if (config.port != (u16)value) {
@@ -124,6 +121,16 @@ RemoteServer::setConfigItem(Option option, i64 value)
             config.protocol = (ServerProtocol)value;
             return;
             
+        case OPT_SRV_AUTORUN:
+            
+            config.autoRun = (bool)value;
+            return;
+
+        case OPT_SRV_VERBOSE:
+            
+            config.verbose = (bool)value;
+            return;
+
         default:
             fatalError;
     }

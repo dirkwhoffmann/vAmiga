@@ -299,6 +299,7 @@ Amiga::getConfigItem(Option option, long id) const
             
         case OPT_SRV_PORT:
         case OPT_SRV_PROTOCOL:
+        case OPT_SRV_AUTORUN:
         case OPT_SRV_VERBOSE:
 
             return remoteManager.getConfigItem(option, id);
@@ -477,6 +478,7 @@ Amiga::configure(Option option, i64 value)
             
         case OPT_SRV_PORT:
         case OPT_SRV_PROTOCOL:
+        case OPT_SRV_AUTORUN:
         case OPT_SRV_VERBOSE:
 
             remoteManager.setConfigItem(option, value);
@@ -567,6 +569,7 @@ Amiga::configure(Option option, long id, i64 value)
 
         case OPT_SRV_PORT:
         case OPT_SRV_PROTOCOL:
+        case OPT_SRV_AUTORUN:
         case OPT_SRV_VERBOSE:
 
             remoteManager.setConfigItem(option, id, value);

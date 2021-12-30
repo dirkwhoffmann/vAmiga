@@ -82,8 +82,16 @@ struct ServerProtocolEnum : util::Reflection<ServerProtocolEnum, ServerProtocol>
 
 typedef struct
 {
+    // The socket port number of this server
     u16 port;
+    
+    // Indicates special operation modes (if not DEFAULT)
     ServerProtocol protocol;
+    
+    // If true, the lauch manager starts and stops the server automatically
+    bool autoRun;
+    
+    // If true, transmitted packets are shown in RetroShell
     bool verbose;
 }
 ServerConfig;

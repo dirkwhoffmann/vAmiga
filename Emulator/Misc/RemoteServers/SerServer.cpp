@@ -12,6 +12,7 @@
 #include "Agnus.h"
 #include "IOUtils.h"
 #include "Scheduler.h"
+#include "SerialPort.h"
 #include "SuspendableThread.h"
 #include "UART.h"
 
@@ -41,12 +42,19 @@ SerServer::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
+bool
+SerServer::shouldRun()
+{
+    return serialPort.getConfigItem(OPT_SERIAL_DEVICE) == SPD_NULLMODEM;
+}
+
 ServerConfig
 SerServer::getDefaultConfig()
 {
     ServerConfig defaults;
     
     defaults.port = 8080;
+    defaults.autoRun = true;
     defaults.protocol = SRVPROT_DEFAULT;
     defaults.verbose = false;
 

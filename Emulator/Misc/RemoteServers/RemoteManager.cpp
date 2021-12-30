@@ -122,14 +122,14 @@ RemoteManager::serviceServerEvent()
 {
     assert(scheduler.id[SLOT_SRV] == SRV_LAUNCH_DAEMON);
         
-    // Run the launch daemon for the GDB server
-    gdbServer.attach();
-        
-    // Run the launch daemon for the serial server
-    if (serialPort.getConfigItem(OPT_SERIAL_DEVICE) == SPD_NULLMODEM) {
-        serServer._start();
-    } else {
-        serServer._stop();
+    if (serServer.config.autoRun) {
+        serServer.shouldRun() ? serServer._start() : serServer._stop();
+    }
+    if (rshServer.config.autoRun) {
+        rshServer.shouldRun() ? rshServer._start() : rshServer._stop();
+    }
+    if (gdbServer.config.autoRun) {
+        gdbServer.shouldRun() ? gdbServer._start() : gdbServer._stop();
     }
 
     // Schedule next event

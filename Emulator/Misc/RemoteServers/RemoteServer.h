@@ -119,29 +119,37 @@ public:
 
     
     //
-    // Changing state
+    // Starting and stopping the server
     //
     
 public:
-    
-    // Disconnects the client
-    void disconnect() throws { SUSPENDED _disconnect(); }
-                 
+                     
     // Launch the remote server
     void start() throws { SUSPENDED _start(); }
     
     // Shuts down the remote server
     void stop() throws { SUSPENDED _stop(); }
 
+    // Disconnects the client
+    void disconnect() throws { SUSPENDED _disconnect(); }
+
 protected:
 
     // Called from disconnect(), start() and stop()
-    void _disconnect() throws;
     void _start() throws;
     void _stop() throws;
-
+    void _disconnect() throws;
+    
     // Switches the internal state
     void switchState(SrvState newState);
+    
+private:
+    
+    // Used by the launch manager to determine if actions should be taken
+    virtual bool shouldRun() { return true; }
+    
+    // Indicates if the server is able to run
+    // virtual bool canRun() { return true; }
     
     
     //
