@@ -85,6 +85,6 @@ public:
     //
     
     // Disassembles a single Copper command
-    string disassemble(u32 addr) const;
-    string disassemble(isize list, isize offset) const;    
+    string disassemble(isize list, isize offset, bool symbolic) const;
+    string disassemble(u32 addr, bool symbolic) const;
 };

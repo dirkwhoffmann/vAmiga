@@ -387,8 +387,8 @@
 @property (readonly) CopperInfo info;
 
 - (BOOL)isIllegalInstr:(NSInteger)addr;
-- (NSString *)disassemble:(NSInteger)addr;
-- (NSString *)disassemble:(NSInteger)list instr:(NSInteger)offset;
+- (NSString *)disassemble:(NSInteger)addr symbolic:(BOOL)sym;
+- (NSString *)disassemble:(NSInteger)list instr:(NSInteger)offset symbolic:(BOOL)sym;
 
 @end
 

@@ -281,6 +281,8 @@ RemoteServer::process(const string &payload)
 void
 RemoteServer::main()
 {
+    amiga.pause();
+    
     try {
         
         mainLoop();

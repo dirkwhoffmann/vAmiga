@@ -629,15 +629,15 @@ using namespace moira;
     return [self copper]->isIllegalInstr((u32)addr);
 }
 
-- (NSString *)disassemble:(NSInteger)addr
+- (NSString *)disassemble:(NSInteger)addr symbolic:(BOOL)sym
 {
-    string str = [self copper]->debugger.disassemble((u32)addr);
+    string str = [self copper]->debugger.disassemble((u32)addr, sym);
     return @(str.c_str());
 }
 
-- (NSString *)disassemble:(NSInteger)list instr:(NSInteger)offset
+- (NSString *)disassemble:(NSInteger)list instr:(NSInteger)offset symbolic:(BOOL)sym
 {
-    string str = [self copper]->debugger.disassemble(list, offset);
+    string str = [self copper]->debugger.disassemble(list, offset, sym);
     return @(str.c_str());
 }
 

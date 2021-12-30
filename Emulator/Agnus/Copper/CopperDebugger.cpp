@@ -127,46 +127,59 @@ CopperDebugger::jumped()
 }
 
 string
-CopperDebugger::disassemble(u32 addr) const
-{
-    char pos[16];
-    char mask[16];
-    char txt[128];
-    
-    if (copper.isMoveCmd(addr)) {
-        
-        auto source = copper.getDW(addr);
-        auto target = Memory::regName(copper.getRA(addr));
-        snprintf(txt, sizeof(txt), "MOVE $%04X, %s", source, target);
-        
-        return string(txt);
-    }
-    
-    const char *mnemonic = copper.isWaitCmd(addr) ? "WAIT" : "SKIP";
-    const char *suffix = copper.getBFD(addr) ? "" : "b";
-    
-    auto vp = copper.getVP(addr);
-    auto hp = copper.getHP(addr);
-    snprintf(pos, sizeof(pos), "($%02X,$%02X)", vp, hp);
-    
-    if (copper.getVM(addr) == 0xFF && copper.getHM(addr) == 0xFF) {
-        mask[0] = 0;
-    } else {
-        
-        auto hm = copper.getHM(addr);
-        auto vm = copper.getVM(addr);
-        snprintf(mask, sizeof(mask), ", ($%02X,$%02X)", hm, vm);
-    }
-    
-    snprintf(txt, sizeof(txt), "%s%s %s%s", mnemonic, suffix, pos, mask);
-    return string(txt);
-}
-
-string
-CopperDebugger::disassemble(isize list, isize offset) const
+CopperDebugger::disassemble(isize list, isize offset, bool symbolic) const
 {
     assert(list == 1 || list == 2);
     
     u32 addr = (u32)((list == 1 ? copper.cop1lc : copper.cop2lc) + 2 * offset);
-    return string(disassemble(addr));
+    return string(disassemble(addr, symbolic));
+}
+
+string
+CopperDebugger::disassemble(u32 addr, bool symbolic) const
+{
+    if (symbolic) {
+        
+        char pos[16];
+        char mask[16];
+        char txt[128];
+        
+        if (copper.isMoveCmd(addr)) {
+            
+            auto source = copper.getDW(addr);
+            auto target = Memory::regName(copper.getRA(addr));
+            snprintf(txt, sizeof(txt), "MOVE $%04X, %s", source, target);
+            
+            return string(txt);
+        }
+        
+        const char *mnemonic = copper.isWaitCmd(addr) ? "WAIT" : "SKIP";
+        const char *suffix = copper.getBFD(addr) ? "" : "b";
+        
+        auto vp = copper.getVP(addr);
+        auto hp = copper.getHP(addr);
+        snprintf(pos, sizeof(pos), "($%02X,$%02X)", vp, hp);
+        
+        if (copper.getVM(addr) == 0xFF && copper.getHM(addr) == 0xFF) {
+            mask[0] = 0;
+        } else {
+            
+            auto hm = copper.getHM(addr);
+            auto vm = copper.getVM(addr);
+            snprintf(mask, sizeof(mask), ", ($%02X,$%02X)", hm, vm);
+        }
+        
+        snprintf(txt, sizeof(txt), "%s%s %s%s", mnemonic, suffix, pos, mask);
+        return string(txt);
+        
+    } else {
+        
+        auto word1 = mem.spypeek16 <ACCESSOR_AGNUS> (addr);
+        auto word2 = mem.spypeek16 <ACCESSOR_AGNUS> (addr + 2);
+        
+        auto hex1 = util::hexstr <4> (word1);
+        auto hex2 = util::hexstr <4> (word2);
+        
+        return "dc.w " + hex1 + "," + hex2;
+    }
 }

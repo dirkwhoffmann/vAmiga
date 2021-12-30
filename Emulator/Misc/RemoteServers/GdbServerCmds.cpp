@@ -272,6 +272,18 @@ GdbServer::process <'?'> (string cmd)
 {
     auto pc = util::hexstr <8> (cpu.getPC0());
     reply("T051:" + pc + ";");
+
+    /*
+    if (amiga.isRunning()) {
+
+        reply("OK");
+
+    } else {
+
+        auto pc = util::hexstr <8> (cpu.getPC0());
+        reply("T051:" + pc + ";");
+    }
+    */
 }
 
 template <> void

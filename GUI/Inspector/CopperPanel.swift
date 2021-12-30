@@ -9,11 +9,6 @@
 
 extension Inspector {
 
-    private var selectedCopperList: Int {
-
-        return copSelector.indexOfSelectedItem + 1
-    }
-
     private func cacheCopper() {
 
         copperInfo = amiga.copper.info
@@ -34,11 +29,6 @@ extension Inspector {
             for (c, f) in elements { assignFormatter(f, c!) }
         }
 
-        let nr = Int(copperInfo.copList)
-        let active = copperInfo.active
-
-        copActive1.state = active && nr == 1 ? .on : .off
-        copActive2.state = active && nr == 2 ? .on : .off
         cop1LC.integerValue = Int(copperInfo.cop1lc)
         cop2LC.integerValue = Int(copperInfo.cop2lc)
         cop1INS.integerValue = Int(copperInfo.cop1ins)
@@ -46,26 +36,48 @@ extension Inspector {
         copPC.integerValue = Int(copperInfo.coppc)
         copCDANG.state = copperInfo.cdang ? .on : .off
 
-        copList.refresh(count: count, full: full)
+        copList1.nr = 1
+        copList1.refresh(count: count, full: full)
+        copList2.nr = 2
+        copList2.refresh(count: count, full: full)
     }
 
-    @IBAction func selectCopperListAction(_ sender: Any!) {
+    @IBAction func copList1FormatAction(_ sender: Any!) {
 
-        copList.nr = selectedCopperList
+        copList1.symbolic = copList1Format.indexOfSelectedItem == 1
         fullRefresh()
     }
 
-    @IBAction func expandCopperListAction(_ sender: Any!) {
+    @IBAction func copList2FormatAction(_ sender: Any!) {
 
-        copList.extraRows += 1
+        copList2.symbolic = copList2Format.indexOfSelectedItem == 1
         fullRefresh()
-        copList.scrollToBottom()
     }
 
-    @IBAction func shrinkCopperListAction(_ sender: Any!) {
+    @IBAction func expandCopList1Action(_ sender: Any!) {
 
-        copList.extraRows = max(copList.extraRows - 1, 0)
+        extraRowsAction(copList1, delta: 1)
+    }
+
+    @IBAction func expandCopList2Action(_ sender: Any!) {
+
+        extraRowsAction(copList2, delta: 1)
+    }
+
+    @IBAction func shrinkCopList1Action(_ sender: Any!) {
+
+        extraRowsAction(copList1, delta: -1)
+    }
+
+    @IBAction func shrinkCopList2Action(_ sender: Any!) {
+
+        extraRowsAction(copList2, delta: -1)
+    }
+
+    func extraRowsAction(_ list: CopperTableView, delta: Int) {
+        
+        list.extraRows = max(list.extraRows + delta, 0)
         fullRefresh()
-        copList.scrollToBottom()
+        list.scrollToBottom()
     }
 }
