@@ -15,7 +15,59 @@
 #include "Denise.h"
 #include "MsgQueue.h"
 #include "Paula.h"
+
+#ifdef _MSC_VER
+
+bool
+FFmpeg::available()
+{
+    return false;
+}
+
+bool
+FFmpeg::launch(const string &args)
+{
+    return false;
+}
+
+void
+FFmpeg::join()
+{
+    
+}
+
+#else
+
 #include <unistd.h>
+
+bool
+FFmpeg::available()
+{
+    return util::getSizeOfFile(ffmpegPath()) > 0;
+}
+
+bool
+FFmpeg::launch(const string &args)
+{
+    auto cmd = ffmpegPath() + " " + args;
+    handle = popen(cmd.c_str(), "w");
+    return handle != nullptr;
+}
+
+bool
+FFmpeg::isRunning()
+{
+    return handle != nullptr;
+}
+
+void
+FFmpeg::join()
+{
+    pclose(handle);
+    handle = nullptr;
+}
+
+#endif
 
 Recorder::Recorder(Amiga& ref) : SubComponent(ref)
 {
@@ -44,8 +96,8 @@ Recorder::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
-    os << tab("FFmpeg path") << ffmpegPath() << std::endl;
-    os << tab("Installed") << bol(hasFFmpeg()) << std::endl;
+    os << tab("FFmpeg path") << FFmpeg::ffmpegPath() << std::endl;
+    os << tab("Installed") << bol(FFmpeg::available()) << std::endl;
     os << tab("Video pipe") << bol(videoPipe != -1) << std::endl;
     os << tab("Audio pipe") << bol(audioPipe != -1) << std::endl;
     os << tab("Recording") << bol(isRecording()) << std::endl;
@@ -126,8 +178,8 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
         
         debug(REC_DEBUG, "Assembling command line arguments\n");
         
-        // Path to the FFmpeg executable
-        string cmd1 = ffmpegPath() + " -nostdin";
+        // Console interactions
+        string cmd1 = " -nostdin";
         
         // Verbosity
         cmd1 += " -loglevel " + loglevel();
@@ -163,8 +215,8 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
         // Assemble the command line arguments for the audio encoder
         //
         
-        // Path to the FFmpeg executable
-        string cmd2 = ffmpegPath() + " -nostdin";
+        // Console interactions
+        string cmd2 = " -nostdin";
         
         // Verbosity
         cmd2 += " -loglevel " + loglevel();
@@ -188,23 +240,25 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
         // Launch FFmpeg instances
         //
         
-        assert(videoFFmpeg == nullptr);
-        assert(audioFFmpeg == nullptr);
+        assert(!videoFFmpeg.isRunning());
+        assert(!audioFFmpeg.isRunning());
         
         // Launch the video encoder
-        debug(REC_DEBUG, "\nStarting video encoder with options:\n%s\n", cmd1.c_str());
-        videoFFmpeg = popen(cmd1.c_str(), "w");
-        
-        if (!videoFFmpeg) {
+        debug(REC_DEBUG, "\nLaunching video encoder with options:\n");
+        debug(REC_DEBUG, "%s\n", cmd1.c_str());
+
+        if (!videoFFmpeg.launch(cmd1)) {
+            
             warn("Failed to launch the FFmpeg video encoder.\n");
             return false;
         }
 
         // Launch the audio encoder
-        debug(REC_DEBUG, "\nStarting audio encoder with options:\n%s\n", cmd2.c_str());
-        audioFFmpeg = popen(cmd2.c_str(), "w");
-
-        if (!audioFFmpeg) {
+        debug(REC_DEBUG, "\nLaunching audio encoder with options:\n");
+        debug(REC_DEBUG, "%s\n", cmd2.c_str());
+        
+        if (!audioFFmpeg.launch(cmd2)) {
+            
             warn("Failed to launch the FFmpeg audio encoder.\n");
             return false;
         }
@@ -257,14 +311,9 @@ Recorder::exportAs(const string &path)
     //
     // Assemble the command line arguments for the video encoder
     //
-    
-    string cmd;
-    
-    // Path to the FFmpeg executable
-    cmd += ffmpegPath();
-
+        
     // Verbosity
-    cmd += " -loglevel " + loglevel();
+    string cmd = "-loglevel " + loglevel();
 
     // Input streams
     cmd += " -i " + videoStreamPath();
@@ -321,8 +370,8 @@ Recorder::prepare()
 void
 Recorder::record(Cycle target)
 {
-    assert(videoFFmpeg != nullptr);
-    assert(audioFFmpeg != nullptr);
+    assert(videoFFmpeg.isRunning());
+    assert(audioFFmpeg.isRunning());
     assert(videoPipe != -1);
     assert(audioPipe != -1);
     
@@ -396,11 +445,9 @@ Recorder::finalize()
     videoPipe = -1;
     audioPipe = -1;
     
-    // Shut down encoders
-    pclose(videoFFmpeg);
-    pclose(audioFFmpeg);
-    videoFFmpeg = nullptr;
-    audioFFmpeg = nullptr;
+    // Wait for the decoders to terminate
+    videoFFmpeg.join();
+    audioFFmpeg.join();
     
     // Switch state and inform the GUI
     state = State::wait;

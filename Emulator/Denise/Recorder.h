@@ -15,6 +15,32 @@
 #include "Chrono.h"
 #include "Muxer.h"
 
+class FFmpeg {
+    
+public:
+    
+#ifdef _MSC_VER
+
+#else
+    FILE *handle = nullptr;
+#endif
+
+    // Path to the FFmpeg executable
+    static string ffmpegPath() { return "/usr/local/bin/ffmpeg"; }
+
+    // Checks whether FFmeg is available
+    static bool available();
+    
+    // Launches the FFmpeg instance
+    bool launch(const string &args);
+    
+    // Returns true if the FFmpeg instance is currently running
+    bool isRunning();
+    
+    // Waits until the FFmpeg instance has terminated
+    void join();
+};
+
 class Recorder : public SubComponent {
 
     //
@@ -22,7 +48,7 @@ class Recorder : public SubComponent {
     //
     
     // Path to the FFmpeg executable
-    static string ffmpegPath() { return "/usr/local/bin/ffmpeg"; }
+    [[deprecated]] static string ffmpegPath() { return "/usr/local/bin/ffmpeg"; }
 
     // Path to the two named input pipes
     static string videoPipePath() { return "/tmp/videoPipe"; }
@@ -48,11 +74,11 @@ class Recorder : public SubComponent {
     // Handles
     //
     
-    // File handles to access FFmpeg
-    FILE *videoFFmpeg = nullptr;
-    FILE *audioFFmpeg = nullptr;
+    // FFmpeg instances
+    FFmpeg videoFFmpeg;
+    FFmpeg audioFFmpeg;
 
-    // Video and audio pipe
+    // Video and audio pipes
     int videoPipe = -1;
     int audioPipe = -1;
 
@@ -146,7 +172,7 @@ private:
 
 public:
 
-    bool hasFFmpeg() const;
+    [[deprecated]] bool hasFFmpeg() const;
 
     
     //

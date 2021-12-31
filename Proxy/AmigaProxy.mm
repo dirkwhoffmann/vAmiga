@@ -754,7 +754,8 @@ using namespace moira;
 
 - (BOOL)hasFFmpeg
 {
-    return [self recorder]->hasFFmpeg();
+    // return [self recorder]->hasFFmpeg();
+    return FFmpeg::available();
 }
 
 - (BOOL)recording
