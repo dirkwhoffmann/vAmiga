@@ -40,13 +40,10 @@ public:
 
     // Sprite tracker
     DeniseDebugger debugger = DeniseDebugger(amiga);
-
-#ifdef SCREEN_RECORDER
     
     // A screen recorder for creating video streams
     Recorder screenRecorder = Recorder(amiga);
 
-#endif
     
     //
     // Counters

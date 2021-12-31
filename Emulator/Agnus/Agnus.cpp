@@ -801,9 +801,7 @@ void
 Agnus::vsyncHandler()
 {
     // Run the screen recorder
-#ifdef SCREEN_RECORDER
     denise.screenRecorder.vsyncHandler(clock - 50 * DMA_CYCLES(HPOS_CNT));
-#endif
     
     // Synthesize sound samples
     paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));

@@ -31,12 +31,6 @@ else()
   target_compile_options(vAmigaCore PRIVATE -Wno-unused-parameter)
 endif()
 
-# Enable additional features on certain architectures
-if(NOT WIN32)
-  target_compile_definitions(vAmigaCore PUBLIC SCREEN_RECORDER)
-  target_compile_definitions(vAmigaCore PUBLIC GDB_SERVER)
-endif()
-
 # Add include paths
 target_include_directories(vAmigaCore PUBLIC
 ${CMAKE_CURRENT_SOURCE_DIR}/.
@@ -52,6 +46,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/Paula/Audio
 ${CMAKE_CURRENT_SOURCE_DIR}/Paula/DiskController
 ${CMAKE_CURRENT_SOURCE_DIR}/Paula/UART
 ${CMAKE_CURRENT_SOURCE_DIR}/Denise
+${CMAKE_CURRENT_SOURCE_DIR}/Denise/Recorder
 ${CMAKE_CURRENT_SOURCE_DIR}/Agnus
 ${CMAKE_CURRENT_SOURCE_DIR}/Agnus/Copper
 ${CMAKE_CURRENT_SOURCE_DIR}/Agnus/Blitter

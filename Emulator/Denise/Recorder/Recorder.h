@@ -9,51 +9,11 @@
 
 #pragma once
 
-#ifdef SCREEN_RECORDER
-
 #include "SubComponent.h"
 #include "Chrono.h"
+#include "FFmpeg.h"
 #include "Muxer.h"
-
-class NamedPipe {
-    
-public:
-    
-    int pipe = -1;
-    string name;
-    
-    bool create(const string &name);
-    bool open();
-    bool isOpen();
-    bool close();
-    isize write(u8 *buffer, isize length);
-};
-
-class FFmpeg {
-    
-public:
-    
-#ifdef _MSC_VER
-
-#else
-    FILE *handle = nullptr;
-#endif
-
-    // Path to the FFmpeg executable
-    static string ffmpegPath() { return "/usr/local/bin/ffmpeg"; }
-
-    // Checks whether FFmeg is available
-    static bool available();
-    
-    // Launches the FFmpeg instance
-    bool launch(const string &args);
-    
-    // Returns true if the FFmpeg instance is currently running
-    bool isRunning();
-    
-    // Waits until the FFmpeg instance has terminated
-    void join();
-};
+#include "NamedPipe.h"
 
 class Recorder : public SubComponent {
 
@@ -238,5 +198,3 @@ private:
     void finalize();
     void abort();
 };
-
-#endif

@@ -7,134 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifdef SCREEN_RECORDER
-
 #include "config.h"
 #include "Recorder.h"
 #include "IOUtils.h"
 #include "Denise.h"
 #include "MsgQueue.h"
 #include "Paula.h"
-
-#ifdef _MSC_VER
-
-bool
-NamedPipe::create(const string &name)
-{
-    
-}
-
-bool
-NamedPipe::open()
-{
-    return false;
-}
-
-bool
-NamedPipe::isOpen()
-{
-    return false;
-}
-
-bool
-NamedPipe::close()
-{
-    return false;
-}
-
-isize
-NamedPipe::write(u8 *buffer, isize length)
-{
-    return 0;
-}
-
-bool
-FFmpeg::available()
-{
-    return false;
-}
-
-bool
-FFmpeg::launch(const string &args)
-{
-    return false;
-}
-
-void
-FFmpeg::join()
-{
-    
-}
-
-#else
-
-#include <unistd.h>
-
-bool
-NamedPipe::create(const string &name)
-{
-    this->name = name;
-    
-    ::unlink(name.c_str());
-    return ::mkfifo(name.c_str(), 0666) != -1;
-}
-
-bool
-NamedPipe::open()
-{
-    pipe = ::open(name.c_str(), O_WRONLY);
-    return pipe != -1;
-}
-
-bool
-NamedPipe::isOpen()
-{
-    return pipe != -1;
-}
-
-bool
-NamedPipe::close()
-{
-    auto result = ::close(pipe);
-    pipe = -1;
-    return result == 0;
-}
-
-isize
-NamedPipe::write(u8 *buffer, isize length)
-{
-    assert(isOpen());
-    return ::write(pipe, (void *)buffer, (size_t)length);
-}
-
-bool
-FFmpeg::available()
-{
-    return util::getSizeOfFile(ffmpegPath()) > 0;
-}
-
-bool
-FFmpeg::launch(const string &args)
-{
-    auto cmd = ffmpegPath() + " " + args;
-    handle = popen(cmd.c_str(), "w");
-    return handle != nullptr;
-}
-
-bool
-FFmpeg::isRunning()
-{
-    return handle != nullptr;
-}
-
-void
-FFmpeg::join()
-{
-    pclose(handle);
-    handle = nullptr;
-}
-
-#endif
 
 Recorder::Recorder(Amiga& ref) : SubComponent(ref)
 {
@@ -143,14 +21,6 @@ Recorder::Recorder(Amiga& ref) : SubComponent(ref)
         &muxer
     };
 }
-
-/*
-bool
-Recorder::hasFFmpeg() const
-{
-    return util::getSizeOfFile(ffmpegPath()) > 0;
-}
-*/
 
 void
 Recorder::_reset(bool hard)
@@ -237,13 +107,14 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
         audioData = new float[2 * samplesPerFrame];
         
         // Create pipes
+        /*
         debug(REC_DEBUG, "Creating pipes...\n");
         
         unlink(videoPipePath().c_str());
         unlink(audioPipePath().c_str());
         if (mkfifo(videoPipePath().c_str(), 0666) == -1) return false;
         if (mkfifo(audioPipePath().c_str(), 0666) == -1) return false;
-        
+        */
 
         //
         // Assemble the command line arguments for the video encoder
@@ -532,5 +403,3 @@ Recorder::abort()
     finalize();
     msgQueue.put(MSG_RECORDING_ABORTED);
 }
-
-#endif

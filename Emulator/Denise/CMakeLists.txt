@@ -4,7 +4,8 @@ Denise.cpp
 DeniseRegs.cpp
 Colors.cpp
 PixelEngine.cpp
-Recorder.cpp
 DeniseDebugger.cpp
 
 )
+
+add_subdirectory(Recorder)
