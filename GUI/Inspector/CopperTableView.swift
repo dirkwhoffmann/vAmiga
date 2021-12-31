@@ -74,9 +74,7 @@ class CopperTableView: NSTableView {
             end = Int(inspector.copperInfo.copList2End)
         }
         nativeLength = min((end - start) / 4, 500)
-        
-        track("\(start) - \(end) nativeLength = \(nativeLength)")
-        
+                
         addr = start
 
         for i in 0 ..< actualLength {

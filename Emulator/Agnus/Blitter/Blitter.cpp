@@ -119,40 +119,45 @@ Blitter::setConfigItem(Option option, i64 value)
 void
 Blitter::_inspect() const
 {
-    synchronized {
-        
-        info.bltcon0 = bltcon0;
-        info.bltcon1 = bltcon1;
-        info.ash = bltconASH();
-        info.bsh = bltconBSH();
-        info.minterm = bltconLF();
-        info.bltapt  = bltapt;
-        info.bltbpt  = bltbpt;
-        info.bltcpt  = bltcpt;
-        info.bltdpt  = bltdpt;
-        info.bltafwm = bltafwm;
-        info.bltalwm = bltalwm;
-        info.bltamod = bltamod;
-        info.bltbmod = bltbmod;
-        info.bltcmod = bltcmod;
-        info.bltdmod = bltdmod;
-        info.aold = aold;
-        info.bold = bold;
-        info.anew = anew;
-        info.bnew = bnew;
-        info.ahold = ahold;
-        info.bhold = bhold;
-        info.chold = chold;
-        info.dhold = dhold;
-        info.bbusy = bbusy;
-        info.bzero = bzero;
-        info.firstWord = isFirstWord();
-        info.lastWord = isLastWord();
-        info.fci = bltconFCI();
-        info.fco = fillCarry;
-        info.fillEnable = bltconFE();
-        info.storeToDest = bltconUSED() && !lockD;
-    }
+    SYNCHRONIZED
+    
+    auto minterm = bltconLF();
+    auto mintermOut = doMintermLogic(ahold, bhold, chold, (u8)minterm);
+    
+    info.bltcon0 = bltcon0;
+    info.bltcon1 = bltcon1;
+    info.ash = bltconASH();
+    info.bsh = bltconBSH();
+    info.minterm = bltconLF();
+    info.bltapt  = bltapt;
+    info.bltbpt  = bltbpt;
+    info.bltcpt  = bltcpt;
+    info.bltdpt  = bltdpt;
+    info.bltafwm = bltafwm;
+    info.bltalwm = bltalwm;
+    info.bltamod = bltamod;
+    info.bltbmod = bltbmod;
+    info.bltcmod = bltcmod;
+    info.bltdmod = bltdmod;
+    info.aold = aold;
+    info.bold = bold;
+    info.anew = anew;
+    info.bnew = bnew;
+    info.ahold = ahold;
+    info.bhold = bhold;
+    info.chold = chold;
+    info.dhold = dhold;
+    info.mintermOut = mintermOut;
+    info.fillIn = mintermOut;
+    info.fillOut = dhold;
+    info.bbusy = bbusy;
+    info.bzero = bzero;
+    info.firstWord = isFirstWord();
+    info.lastWord = isLastWord();
+    info.fci = bltconFCI();
+    info.fco = fillCarry;
+    info.fillEnable = bltconFE();
+    info.storeToDest = bltconUSED() && !lockD;
 }
 
 void
@@ -225,7 +230,7 @@ Blitter::_dump(dump::Category category, std::ostream& os) const
 }
 
 u16
-Blitter::barrelShifter(u16 anew, u16 aold, u16 shift, bool desc)
+Blitter::barrelShifter(u16 anew, u16 aold, u16 shift, bool desc) const
 {
     if (desc) {
         return (u16)(HI_W_LO_W(anew, aold) >> (16 - shift));
@@ -522,7 +527,7 @@ Blitter::doMintermLogicQuick(u16 a, u16 b, u16 c, u8 minterm) const
 }
 
 void
-Blitter::doFill(u16 &data, bool &carry)
+Blitter::doFill(u16 &data, bool &carry) const
 {
     assert(carry == 0 || carry == 1);
 

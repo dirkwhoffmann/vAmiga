@@ -16,7 +16,6 @@
 void
 CopperDebugger::_reset(bool hard)
 {
-    printf("Clearing CopperDebugger\n");
     cache.clear();
     current1 = nullptr;
     current2 = nullptr;
@@ -90,11 +89,9 @@ CopperDebugger::advanced()
     
     // Adjust the end address if the Copper went beyond
     if (nr == 1 && current1 && current1->end < addr) {
-        printf("Advancing 1 to %d\n", addr);
         current1->end = addr;
     }
     if (nr == 2 && current2 && current2->end < addr) {
-        printf("Advancing 2 to %d\n", addr);
         current2->end = addr;
     }
 }
@@ -113,7 +110,6 @@ CopperDebugger::jumped()
     
     // Create a new list if it was not found
     if (list == cache.end()) {
-        printf("Creating new list\n");
         cache.insert(std::make_pair(addr, CopperList { addr, addr }));
         list = cache.find(addr);
     }

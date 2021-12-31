@@ -412,14 +412,14 @@ public:
 private:
     
     // Emulates the barrel shifter
-    u16 barrelShifter(u16 anew, u16 aold,  u16 shift, bool desc = false);
+    u16 barrelShifter(u16 anew, u16 aold,  u16 shift, bool desc = false) const;
     
     // Emulates the minterm logic circuit
     u16 doMintermLogic     (u16 a, u16 b, u16 c, u8 minterm) const;
     u16 doMintermLogicQuick(u16 a, u16 b, u16 c, u8 minterm) const;
 
     // Emulates the fill logic circuit
-    void doFill(u16 &data, bool &carry);
+    void doFill(u16 &data, bool &carry) const;
 
     // Emulates the line logic circuit
     void doLine();

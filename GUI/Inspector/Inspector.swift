@@ -12,7 +12,8 @@ let fmt8  = MyFormatter(radix: 16, min: 0, max: 0xFF)
 let fmt16 = MyFormatter(radix: 16, min: 0, max: 0xFFFF)
 let fmt24 = MyFormatter(radix: 16, min: 0, max: 0xFFFFFF)
 let fmt32 = MyFormatter(radix: 16, min: 0, max: 0xFFFFFFFF)
-let fmt8b = MyFormatter(radix: 2, min: 0, max: 255)
+let fmt8b = MyFormatter(radix: 2, min: 0, max: 0xFF)
+let fmt16b = MyFormatter(radix: 2, min: 0, max: 0xFFFF)
 
 class Inspector: DialogController {
 
@@ -253,19 +254,6 @@ class Inspector: DialogController {
     @IBOutlet weak var bltBLTCON0a: NSTextField!
     @IBOutlet weak var bltBLTCON0b: NSTextField!
     @IBOutlet weak var bltBLTCON0c: NSTextField!
-    @IBOutlet weak var bltUseA: NSButton!
-    @IBOutlet weak var bltUseB: NSButton!
-    @IBOutlet weak var bltUseC: NSButton!
-    @IBOutlet weak var bltUseD: NSButton!
-    @IBOutlet weak var bltLF0: NSButton!
-    @IBOutlet weak var bltLF1: NSButton!
-    @IBOutlet weak var bltLF2: NSButton!
-    @IBOutlet weak var bltLF3: NSButton!
-    @IBOutlet weak var bltLF4: NSButton!
-    @IBOutlet weak var bltLF5: NSButton!
-    @IBOutlet weak var bltLF6: NSButton!
-    @IBOutlet weak var bltLF7: NSButton!
-
     @IBOutlet weak var bltBLTCON1a: NSTextField!
     @IBOutlet weak var bltBLTCON1b: NSTextField!
     @IBOutlet weak var bltBLTCON1c: NSTextField!
@@ -274,29 +262,61 @@ class Inspector: DialogController {
     @IBOutlet weak var bltFCI: NSButton!
     @IBOutlet weak var bltDESC: NSButton!
     @IBOutlet weak var bltLINE: NSButton!
-
-    @IBOutlet weak var bltBZERO: NSButton!
     @IBOutlet weak var bltBBUSY: NSButton!
 
-    @IBOutlet weak var bltAold: NSTextField!
-    @IBOutlet weak var bltBold: NSTextField!
-    @IBOutlet weak var bltAnew: NSTextField!
-    @IBOutlet weak var bltBnew: NSTextField!
+    @IBOutlet weak var bltUseA: NSButton!
+    @IBOutlet weak var bltUseB: NSButton!
+    @IBOutlet weak var bltUseC: NSButton!
+    @IBOutlet weak var bltUseD: NSButton!
     @IBOutlet weak var bltAhold: NSTextField!
     @IBOutlet weak var bltBhold: NSTextField!
     @IBOutlet weak var bltChold: NSTextField!
     @IBOutlet weak var bltDhold: NSTextField!
+    @IBOutlet weak var bltAold: NSTextField!
+    @IBOutlet weak var bltBold: NSTextField!
+    @IBOutlet weak var bltAnew: NSTextField!
+    @IBOutlet weak var bltBnew: NSTextField!
+    @IBOutlet weak var bltBZERO: NSButton!
 
-    @IBOutlet weak var bltY: NSTextField!
-    @IBOutlet weak var bltX: NSTextField!
+    @IBOutlet weak var bltMaskIn: NSTextField!
     @IBOutlet weak var bltFirstWord: NSButton!
     @IBOutlet weak var bltLastWord: NSButton!
-
-    // Currently unused
     @IBOutlet weak var bltAFWM: NSTextField!
     @IBOutlet weak var bltALWM: NSTextField!
-    @IBOutlet weak var bltAShift: NSTextField!
-    @IBOutlet weak var bltBShift: NSTextField!
+    @IBOutlet weak var bltMaskOut: NSTextField!
+
+    @IBOutlet weak var bltBarrelAIn: NSTextField!
+    @IBOutlet weak var bltBarrelAShift: NSTextField!
+    @IBOutlet weak var bltBarrelAOut: NSTextField!
+    @IBOutlet weak var bltBarrelBIn: NSTextField!
+    @IBOutlet weak var bltBarrelBShift: NSTextField!
+    @IBOutlet weak var bltBarrelBOut: NSTextField!
+
+    @IBOutlet weak var bltFillIn: NSTextField!
+    @IBOutlet weak var bltFillOut: NSTextField!
+    
+    @IBOutlet weak var bltLFA: NSTextField!
+    @IBOutlet weak var bltLFB: NSTextField!
+    @IBOutlet weak var bltLFC: NSTextField!
+    @IBOutlet weak var bltLF0: NSButton!
+    @IBOutlet weak var bltLF1: NSButton!
+    @IBOutlet weak var bltLF2: NSButton!
+    @IBOutlet weak var bltLF3: NSButton!
+    @IBOutlet weak var bltLF4: NSButton!
+    @IBOutlet weak var bltLF5: NSButton!
+    @IBOutlet weak var bltLF6: NSButton!
+    @IBOutlet weak var bltLF7: NSButton!
+    @IBOutlet weak var bltLF0Val: NSTextField!
+    @IBOutlet weak var bltLF1Val: NSTextField!
+    @IBOutlet weak var bltLF2Val: NSTextField!
+    @IBOutlet weak var bltLF3Val: NSTextField!
+    @IBOutlet weak var bltLF4Val: NSTextField!
+    @IBOutlet weak var bltLF5Val: NSTextField!
+    @IBOutlet weak var bltLF6Val: NSTextField!
+    @IBOutlet weak var bltLF7Val: NSTextField!
+    @IBOutlet weak var bltLFD: NSTextField!
+
+    // Currently unused
     @IBOutlet weak var bltMinterm: NSTextField!
     @IBOutlet weak var bltFirstWordTime1: NSButton!
     @IBOutlet weak var bltFirstWordTime2: NSButton!
