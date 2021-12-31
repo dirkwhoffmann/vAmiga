@@ -51,7 +51,7 @@ Socket::~Socket()
 
 void Socket::create()
 {
-#ifdef WIN32
+#ifdef _WIN32
     static struct WSAInit {
         
         WSAInit() {

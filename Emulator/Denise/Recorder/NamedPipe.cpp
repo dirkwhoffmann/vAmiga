@@ -10,7 +10,7 @@
 #include "config.h"
 #include "NamedPipe.h"
 #include "IOUtils.h"
-#ifndef _MSC_VER
+#ifndef _WIN32
 #include <unistd.h>
 #endif
 
@@ -19,7 +19,7 @@ NamedPipe::create(const string &name)
 {
     this->name = name;
  
-#ifdef WIN32
+#ifdef _WIN32
 
     return false;
 
@@ -34,7 +34,7 @@ NamedPipe::create(const string &name)
 bool
 NamedPipe::open()
 {
-#ifdef WIN32
+#ifdef _WIN32
     
     return false;
     
@@ -49,7 +49,7 @@ NamedPipe::open()
 bool
 NamedPipe::isOpen()
 {
-#ifdef WIN32
+#ifdef _WIN32
 
     return false;
 
@@ -63,7 +63,7 @@ NamedPipe::isOpen()
 bool
 NamedPipe::close()
 {
-#ifdef WIN32
+#ifdef _WIN32
 
     return false;
 
@@ -79,7 +79,7 @@ NamedPipe::close()
 isize
 NamedPipe::write(u8 *buffer, isize length)
 {
-#ifdef WIN32
+#ifdef _WIN32
 
     return 0;
     

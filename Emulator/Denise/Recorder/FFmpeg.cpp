@@ -14,7 +14,7 @@
 bool
 FFmpeg::available()
 {
-#ifdef WIN32
+#ifdef _WIN32
     
     return false;
     
@@ -28,7 +28,7 @@ FFmpeg::available()
 bool
 FFmpeg::launch(const string &args)
 {
-#ifdef WIN32
+#ifdef _WIN32
     
     return false;
     
@@ -44,7 +44,7 @@ FFmpeg::launch(const string &args)
 bool
 FFmpeg::isRunning()
 {
-#ifdef WIN32
+#ifdef _WIN32
     
     return false;
     
@@ -58,7 +58,7 @@ FFmpeg::isRunning()
 void
 FFmpeg::join()
 {
-#ifdef WIN32
+#ifdef _WIN32
     
 #else
     
