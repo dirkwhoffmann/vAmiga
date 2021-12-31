@@ -101,12 +101,12 @@ extension Inspector {
         bltFirstWord.state = blitterInfo.firstWord ? .on : .off
         bltLastWord.state = blitterInfo.lastWord ? .on : .off
 
-        bltBarrelAIn.integerValue = Int(0)
+        bltBarrelAIn.integerValue = Int(blitterInfo.barrelAin)
         bltBarrelAShift.integerValue = Int(blitterInfo.ash)
-        bltBarrelAOut.integerValue = Int(blitterInfo.ahold)
-        bltBarrelBIn.integerValue = Int(0)
+        bltBarrelAOut.integerValue = Int(blitterInfo.barrelAout)
+        bltBarrelBIn.integerValue = Int(blitterInfo.barrelBin)
         bltBarrelBShift.integerValue = Int(blitterInfo.bsh)
-        bltBarrelBOut.integerValue = Int(blitterInfo.bhold)
+        bltBarrelBOut.integerValue = Int(blitterInfo.barrelBout)
 
         bltFillIn.integerValue = Int(blitterInfo.fillIn)
         bltFillOut.integerValue = Int(blitterInfo.fillOut)
@@ -135,6 +135,15 @@ extension Inspector {
         bltLF2.state = lf2 ? .on : .off
         bltLF1.state = lf1 ? .on : .off
         bltLF0.state = lf0 ? .on : .off
+        bltLF7Val.integerValue = ( a &  b &  c)
+        bltLF6Val.integerValue = ( a &  b & ~c)
+        bltLF5Val.integerValue = ( a & ~b &  c)
+        bltLF4Val.integerValue = ( a & ~b & ~c)
+        bltLF3Val.integerValue = (~a &  b &  c)
+        bltLF2Val.integerValue = (~a &  b & ~c)
+        bltLF1Val.integerValue = (~a & ~b &  c)
+        bltLF0Val.integerValue = (~a & ~b & ~c)
+        /*
         bltLF7Val.integerValue = lf7 ? ( a &  b &  c) : 0
         bltLF6Val.integerValue = lf6 ? ( a &  b & ~c) : 0
         bltLF5Val.integerValue = lf5 ? ( a & ~b &  c) : 0
@@ -143,5 +152,6 @@ extension Inspector {
         bltLF2Val.integerValue = lf2 ? (~a &  b & ~c) : 0
         bltLF1Val.integerValue = lf1 ? (~a & ~b &  c) : 0
         bltLF0Val.integerValue = lf0 ? (~a & ~b & ~c) : 0
+         */
     }
 }

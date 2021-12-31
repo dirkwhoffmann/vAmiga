@@ -147,6 +147,10 @@ Blitter::_inspect() const
     info.bhold = bhold;
     info.chold = chold;
     info.dhold = dhold;
+    info.barrelAin = anew & mask;
+    info.barrelAout = barrelShifter(anew & mask, aold, bltconASH(), bltconDESC());
+    info.barrelBin = bnew;
+    info.barrelBout = barrelShifter(bnew, bold, bltconBSH(), bltconDESC());
     info.mintermOut = mintermOut;
     info.fillIn = mintermOut;
     info.fillOut = dhold;

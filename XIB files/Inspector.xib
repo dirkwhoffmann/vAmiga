@@ -4650,7 +4650,7 @@
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Thy-3B-pXK">
                                                         <rect key="frame" x="46" y="254" width="41" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="cba" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="Dg2-WA-e4y">
+                                                        <buttonCell key="cell" type="check" title="abc" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="Dg2-WA-e4y">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
@@ -4659,9 +4659,9 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ox3-ou-ewe">
-                                                        <rect key="frame" x="46" y="226" width="41" height="20"/>
+                                                        <rect key="frame" x="45" y="226" width="42" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="cbA" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="d2I-QV-ecC">
+                                                        <buttonCell key="cell" type="check" title="abC" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="d2I-QV-ecC">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
@@ -4672,7 +4672,7 @@
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OHv-5f-PRU">
                                                         <rect key="frame" x="46" y="198" width="41" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="cBa" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="APY-2m-OU5">
+                                                        <buttonCell key="cell" type="check" title="aBc" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="APY-2m-OU5">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
@@ -4681,9 +4681,9 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aVm-FD-pwm">
-                                                        <rect key="frame" x="46" y="170" width="42" height="19"/>
+                                                        <rect key="frame" x="45" y="170" width="43" height="19"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="cBA" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="6cZ-qK-0iR">
+                                                        <buttonCell key="cell" type="check" title="aBC" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="6cZ-qK-0iR">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
@@ -4694,7 +4694,7 @@
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mDv-3K-JR9">
                                                         <rect key="frame" x="46" y="142" width="42" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="Cba" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="wsE-hH-XL5">
+                                                        <buttonCell key="cell" type="check" title="Abc" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="wsE-hH-XL5">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
@@ -4703,9 +4703,9 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Oh8-32-mu4">
-                                                        <rect key="frame" x="44" y="114" width="43" height="20"/>
+                                                        <rect key="frame" x="43" y="114" width="44" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="CbA" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="5NR-Zf-ORS">
+                                                        <buttonCell key="cell" type="check" title="AbC" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="5NR-Zf-ORS">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
@@ -4716,7 +4716,7 @@
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8HX-B9-Lqu">
                                                         <rect key="frame" x="44" y="86" width="43" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="CBa" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="0qo-bq-mlZ">
+                                                        <buttonCell key="cell" type="check" title="ABc" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="0qo-bq-mlZ">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
@@ -4725,9 +4725,9 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BdS-5d-8Yh">
-                                                        <rect key="frame" x="46" y="58" width="41" height="20"/>
+                                                        <rect key="frame" x="43" y="58" width="44" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="CBA" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="fzk-aO-jXy">
+                                                        <buttonCell key="cell" type="check" title="ABC" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="fzk-aO-jXy">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>

@@ -82,6 +82,10 @@ typedef struct
     u16 bhold;
     u16 chold;
     u16 dhold;
+    u16 barrelAin;
+    u16 barrelAout;
+    u16 barrelBin;
+    u16 barrelBout;
     u16 mintermOut;
     u16 fillIn;
     u16 fillOut;
