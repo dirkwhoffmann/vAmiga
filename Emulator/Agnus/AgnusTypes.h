@@ -140,7 +140,8 @@ typedef struct
     u16 bltdmod;
     u16 bltcon0;
     
-    u32 coppc;
+    // u32 coppc;
+    u32 coppc0;
     u32 dskpt;
     u32 bplpt[6];
     u32 audpt[4];

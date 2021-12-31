@@ -737,7 +737,8 @@ extension Inspector: NSTabViewDelegate {
             case "CIA":     parent?.amiga.inspectionTarget = .CIA
             case "Memory":  parent?.amiga.inspectionTarget = .MEM
             case "Agnus":   parent?.amiga.inspectionTarget = .AGNUS
-            case "Copper and Blitter":  parent?.amiga.inspectionTarget = .AGNUS
+            case "Copper":  parent?.amiga.inspectionTarget = .AGNUS
+            case "Blitter": parent?.amiga.inspectionTarget = .AGNUS
             case "Denise":  parent?.amiga.inspectionTarget = .DENISE
             case "Paula":   parent?.amiga.inspectionTarget = .PAULA
             case "Ports":   parent?.amiga.inspectionTarget = .PORTS

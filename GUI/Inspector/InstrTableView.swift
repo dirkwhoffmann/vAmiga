@@ -23,7 +23,7 @@ class InstrTableView: NSTableView {
     }
 
     // The first address to disassemble
-    var addrInFirstRow: Int = 0
+    var addrInFirstRow = 0
 
     // Data caches
     var numRows = 0
@@ -32,10 +32,7 @@ class InstrTableView: NSTableView {
     var dataInRow: [Int: String] = [:]
     var instrInRow: [Int: String] = [:]
     var rowForAddr: [Int: Int] = [:]
-    
-    // Number format
-    // var hex = true
-    
+        
     // Saved program counters
     var breakpointPC = -1
     var watchpointPC = -1

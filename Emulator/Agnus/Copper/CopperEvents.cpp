@@ -83,6 +83,9 @@ Copper::serviceEvent(EventID id)
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
+            // Remember the program counter (picked up by the debugger)
+            coppc0 = coppc;
+
             // Load the first instruction word
             cop1ins = agnus.doCopperDmaRead(coppc);
             advancePC();
@@ -90,13 +93,6 @@ Copper::serviceEvent(EventID id)
             if (COP_CHECKSUM) {
                 checkcnt++;
                 checksum = util::fnv_1a_it32(checksum, cop1ins);
-            }
-
-            // Dynamically determine the end of the Copper list
-            if (copList == 1) {
-                if (coppc > cop1end) cop1end = coppc;
-            } else {
-                if (coppc > cop2end) cop2end = coppc;
             }
 
             // Fork execution depending on the instruction type
@@ -145,8 +141,6 @@ Copper::serviceEvent(EventID id)
             
         case COP_WAIT_OR_SKIP:
 
-            // debug(COP_DEBUG, "COP_WAIT_OR_SKIP: %X wait %x (%d)\n", coppc, cop1ins, cop1ins);
-
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
@@ -162,8 +156,6 @@ Copper::serviceEvent(EventID id)
 
         case COP_WAIT1:
             
-            trace(COP_DEBUG, "COP_WAIT1: %X wait %x (%d)\n", coppc, cop1ins, cop1ins);
-
             trace(COP_DEBUG && verbose, "COP_WAIT1\n");
 
             // Wait for the next possible DMA cycle
@@ -174,8 +166,6 @@ Copper::serviceEvent(EventID id)
             break;
 
         case COP_WAIT2:
-
-            // debug(COP_DEBUG, "COP_WAIT2: %X wait %x (%d)\n", coppc, cop1ins, cop1ins);
 
             trace(COP_DEBUG && verbose, "COP_WAIT2\n");
 
@@ -200,8 +190,6 @@ Copper::serviceEvent(EventID id)
 
         case COP_WAIT_BLIT:
             
-            trace(COP_DEBUG, "COP_WAIT_BLIT: %X wait %x (%d)\n", coppc, cop1ins, cop1ins);
-
             trace(COP_DEBUG && verbose, "COP_WAIT_BLIT\n");
             
             // Wait for the next free cycle

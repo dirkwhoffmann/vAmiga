@@ -33,7 +33,7 @@ extension Inspector {
         cop2LC.integerValue = Int(copperInfo.cop2lc)
         cop1INS.integerValue = Int(copperInfo.cop1ins)
         cop2INS.integerValue = Int(copperInfo.cop2ins)
-        copPC.integerValue = Int(copperInfo.coppc)
+        copPC.integerValue = Int(copperInfo.coppc0)
         copCDANG.state = copperInfo.cdang ? .on : .off
 
         copList1.nr = 1
@@ -79,5 +79,14 @@ extension Inspector {
         list.extraRows = max(list.extraRows + delta, 0)
         fullRefresh()
         list.scrollToBottom()
+    }
+    
+    @IBAction func copFindAction(_ sender: Any!) {
+
+        let pc0 = Int(copperInfo.coppc0)
+        
+        cacheCopper()
+        copList1.jumpTo(addr: pc0, focus: true)
+        copList2.jumpTo(addr: pc0, focus: true)
     }
 }

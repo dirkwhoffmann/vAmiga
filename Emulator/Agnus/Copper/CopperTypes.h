@@ -24,12 +24,12 @@ typedef struct
     u32   copList2End;
     bool  active;
     bool  cdang;
-    u32   coppc;
+    u32   coppc0;
     u32   cop1lc;
     u32   cop2lc;
     u16   cop1ins;
     u16   cop2ins;
-    isize length1;
-    isize length2;
+    // isize length1;
+    // isize length2;
 }
 CopperInfo;

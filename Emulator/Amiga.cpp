@@ -123,7 +123,7 @@ Amiga::prefix() const
     fprintf(stderr, "%04X %04X ", paula.intena, paula.intreq);
 
     if (agnus.copper.servicing) {
-        fprintf(stderr, "[%06X] ", agnus.copper.getCopPC());
+        fprintf(stderr, "[%06X] ", agnus.copper.getCopPC0());
     }
 }
 

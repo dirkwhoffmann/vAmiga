@@ -50,8 +50,8 @@ private:
      * Copper lists. Note that these values cannot be computed directly. They
      * are computed by observing the program counter.
      */
-    u32 cop1end;
-    u32 cop2end;
+    // u32 cop1end;
+    // u32 cop2end;
 
     // The Copper Danger bit (CDANG)
     bool cdang;
@@ -63,6 +63,9 @@ private:
     // The Copper program counter
     u32 coppc = 0;
 
+    // The Copper program counter at the time of the latest FETCH
+    u32 coppc0 = 0;
+    
     /* Indicates whether the Copper has been active since the last vertical
      * sync. The value of this variable is used to determine if a write to the
      * location registers will be pushed through the Copper's program counter.
@@ -131,12 +134,11 @@ private:
         << skip
         << cop1lc
         << cop2lc
-        << cop1end
-        << cop2end
         << cdang
         << cop1ins
         << cop2ins
         << coppc
+        << coppc0
         << activeInThisFrame;
     }
 
@@ -162,8 +164,9 @@ public:
 
 public:
     
-    u32 getCopPC() const { return coppc; }
-    
+    // u32 getCopPC() const { return coppc; }
+    u32 getCopPC0() const { return coppc0; }
+
     void pokeCOPCON(u16 value);
     template <Accessor s> void pokeCOPJMP1();
     template <Accessor s> void pokeCOPJMP2();

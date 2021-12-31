@@ -16,6 +16,7 @@
 void
 CopperDebugger::_reset(bool hard)
 {
+    printf("Clearing CopperDebugger\n");
     cache.clear();
     current1 = nullptr;
     current2 = nullptr;
@@ -51,15 +52,14 @@ CopperDebugger::_dump(dump::Category category, std::ostream& os) const
 u32
 CopperDebugger::startOfCopperList(isize nr) const
 {
+    assert(nr == 1 || nr == 2);
+
+    SYNCHRONIZED
+    
     u32 result = 0;
     
-    synchronized {
-
-        assert(nr == 1 || nr == 2);
-
-        if (nr == 1 && current1) result = current1->start;
-        if (nr == 2 && current2) result = current2->start;
-    }
+    if (nr == 1 && current1) result = current1->start;
+    if (nr == 2 && current2) result = current2->start;
     
     return result;
 }
@@ -67,15 +67,14 @@ CopperDebugger::startOfCopperList(isize nr) const
 u32
 CopperDebugger::endOfCopperList(isize nr) const
 {
+    assert(nr == 1 || nr == 2);
+
+    SYNCHRONIZED
+
     u32 result = 0;
-    
-    synchronized {
 
-        assert(nr == 1 || nr == 2);
-
-        if (nr == 1 && current1) result = current1->end;
-        if (nr == 2 && current2) result = current2->end;
-    }
+    if (nr == 1 && current1) result = current1->end;
+    if (nr == 2 && current2) result = current2->end;
     
     return result;
 }
@@ -83,46 +82,47 @@ CopperDebugger::endOfCopperList(isize nr) const
 void
 CopperDebugger::advanced()
 {
-    synchronized {
-        
-        auto addr = copper.coppc;
-        auto nr = copper.copList;
-        assert(nr == 1 || nr == 2);
-        
-        // Adjust the end address if the Copper went beyond
-        if (nr == 1 && current1 && current1->end < addr) {
-            current1->end = addr;
-        }
-        if (nr == 2 && current2 && current2->end < addr) {
-            current2->end = addr;
-        }
+    SYNCHRONIZED
+    
+    auto addr = copper.coppc;
+    auto nr = copper.copList;
+    assert(nr == 1 || nr == 2);
+    
+    // Adjust the end address if the Copper went beyond
+    if (nr == 1 && current1 && current1->end < addr) {
+        printf("Advancing 1 to %d\n", addr);
+        current1->end = addr;
+    }
+    if (nr == 2 && current2 && current2->end < addr) {
+        printf("Advancing 2 to %d\n", addr);
+        current2->end = addr;
     }
 }
 
 void
 CopperDebugger::jumped()
 {
-    synchronized {
-        
-        auto addr = copper.coppc;
-        auto nr = copper.copList;
-        assert(nr == 1 || nr == 2);
-        
-        // Lookup Copper list in cache
-        auto list = cache.find(addr);
-        
-        // Create a new list if it was not found
-        if (list == cache.end()) {
-            cache.insert(std::make_pair(addr, CopperList { addr, addr }));
-            list = cache.find(addr);
-        }
-        
-        // Switch to the new list
-        if (nr == 1) {
-            current1 = &list->second;
-        } else {
-            current2 = &list->second;
-        }
+    SYNCHRONIZED
+    
+    auto addr = copper.coppc;
+    auto nr = copper.copList;
+    assert(nr == 1 || nr == 2);
+    
+    // Lookup Copper list in cache
+    auto list = cache.find(addr);
+    
+    // Create a new list if it was not found
+    if (list == cache.end()) {
+        printf("Creating new list\n");
+        cache.insert(std::make_pair(addr, CopperList { addr, addr }));
+        list = cache.find(addr);
+    }
+    
+    // Switch to the new list
+    if (nr == 1) {
+        current1 = &list->second;
+    } else {
+        current2 = &list->second;
     }
 }
 

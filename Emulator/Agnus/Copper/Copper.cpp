@@ -31,24 +31,23 @@ Copper::_reset(bool hard)
 
 void
 Copper::_inspect() const
-{    
-    synchronized {
-        
-        info.copList = copList;
-        info.copList1Start = debugger.startOfCopperList(1);
-        info.copList1End = debugger.endOfCopperList(1);
-        info.copList2Start = debugger.startOfCopperList(2);
-        info.copList2End = debugger.endOfCopperList(2);
-        info.active = scheduler.isPending<SLOT_COP>();
-        info.cdang = cdang;
-        info.coppc = coppc & agnus.ptrMask;
-        info.cop1lc = cop1lc & agnus.ptrMask;
-        info.cop2lc = cop2lc & agnus.ptrMask;
-        info.cop1ins = cop1ins;
-        info.cop2ins = cop2ins;
-        info.length1 = (cop1end - cop1lc) / 4;
-        info.length2 = (cop2end - cop2lc) / 4;
-    }
+{
+    SYNCHRONIZED
+    
+    info.copList = copList;
+    info.copList1Start = debugger.startOfCopperList(1);
+    info.copList1End = debugger.endOfCopperList(1);
+    info.copList2Start = debugger.startOfCopperList(2);
+    info.copList2End = debugger.endOfCopperList(2);
+    info.active = scheduler.isPending<SLOT_COP>();
+    info.cdang = cdang;
+    info.coppc0 = coppc0 & agnus.ptrMask;
+    info.cop1lc = cop1lc & agnus.ptrMask;
+    info.cop2lc = cop2lc & agnus.ptrMask;
+    info.cop1ins = cop1ins;
+    info.cop2ins = cop2ins;
+    // info.length1 = (cop1end - cop1lc) / 4;
+    // info.length2 = (cop2end - cop2lc) / 4;
 }
 
 void
@@ -66,8 +65,10 @@ Copper::_dump(dump::Category category, std::ostream& os) const
     
     if (category & dump::Registers) {
         
+        auto deltaPC = coppc - coppc0;
+        
         os << tab("COPPC");
-        os << hex(coppc) << std::endl;
+        os << hex(coppc0) << " ( +" << dec(deltaPC) << " )" << std::endl;
         os << tab("COP1LC");
         os << hex(cop1lc) << std::endl;
         os << tab("COP1LC");
@@ -90,7 +91,7 @@ void
 Copper::setPC(u32 addr)
 {
     coppc = addr;
-    
+
     // Notify the debugger
     if (amiga.inDebugMode()) { debugger.jumped(); }
 }
@@ -184,7 +185,7 @@ Copper::move(u32 addr, u16 value)
     assert(addr < 0x1FF);
     
     trace(COP_DEBUG,
-          "COPPC: %X move(%s, $%X) (%d)\n", coppc, Memory::regName(addr), value, value);
+          "COPPC: %X move(%s, $%X) (%d)\n", coppc0, Memory::regName(addr), value, value);
 
     // Catch registers with special timing needs
     if (addr >= 0x180 && addr <= 0x1BE) {

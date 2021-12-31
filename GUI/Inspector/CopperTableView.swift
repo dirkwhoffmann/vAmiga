@@ -9,35 +9,58 @@
 
 class CopperTableView: NSTableView {
 
+    enum BreakpointType {
+        
+        case none
+        case enabled
+        case disabled
+    }
+    
     @IBOutlet weak var inspector: Inspector!
     
     var amiga: AmigaProxy { return inspector.amiga }
-
-    // Copper list (1 or 2)
+    var copper: CopperProxy { return amiga.copper }
+        
+    // Copper list (must be set to 1 or 2)
     var nr = 1
     
     // Determines the disassembler format
     var symbolic = false
+        
+    // Length of the Copper list as proposed by the Copper debugger
+    var nativeLength = 0
 
-    // Length of the currently displayed Copper list
-    var length = 0
-    
     // Number of additional rows to displays
     var extraRows = 0
     
+    // Actual length of the displayed Copper list
+    var actualLength: Int { return nativeLength + extraRows }
+
     // Data caches
-    // var copperInfo: CopperInfo!
+    var bpInRow: [Int: BreakpointType] = [:]
     var addrInRow: [Int: Int] = [:]
     var instrInRow: [Int: String] = [:]
     var illegalInRow: [Int: Bool] = [:]
-
+    var rowForAddr: [Int: Int] = [:]
+    
     override func awakeFromNib() {
 
         delegate = self
         dataSource = self
         target = self
+        
+        doubleAction = #selector(doubleClickAction(_:))
+        action = #selector(clickAction(_:))
     }
 
+    /*
+    private func cache(addrInFirstRow addr: Int) {
+
+        addrInFirstRow = addr
+        cache()
+    }
+    */
+    
     private func cache() {
 
         assert(nr == 1 || nr == 2)
@@ -45,8 +68,9 @@ class CopperTableView: NSTableView {
         addrInRow = [:]
         instrInRow = [:]
         illegalInRow = [:]
-
-        var start, end, addr, count: Int
+        rowForAddr = [:]
+        
+        var start, end, addr: Int
             
         if nr == 1 {
             start = Int(inspector.copperInfo.copList1Start)
@@ -55,16 +79,18 @@ class CopperTableView: NSTableView {
             start = Int(inspector.copperInfo.copList2Start)
             end = Int(inspector.copperInfo.copList2End)
         }
-        length = (end - start) / 4
+        nativeLength = min((end - start) / 4, 500)
+        
+        track("\(start) - \(end) nativeLength = \(nativeLength)")
+        
         addr = start
-        count = min(length, 500) + extraRows
 
-        for i in 0 ..< count {
+        for i in 0 ..< actualLength {
 
+            instrInRow[i] = copper.disassemble(addr, symbolic: symbolic)
+            illegalInRow[i] = copper.isIllegalInstr(addr)
             addrInRow[i] = addr
-            instrInRow[i] = amiga.copper.disassemble(addr, symbolic: symbolic)
-            illegalInRow[i] = amiga.copper.isIllegalInstr(addr)
-
+            rowForAddr[addr] = i
             addr += 4
         }
     }
@@ -83,13 +109,92 @@ class CopperTableView: NSTableView {
                 }
             }
         }
-
+        
         cache()
         reloadData()
+        
+        // In animation mode, jump to the currently executed instruction
+        
+        if count != 0 || full {
+            jumpTo(addr: Int(inspector.copperInfo.coppc0))
+        }
     }
 
+    func jumpTo(addr: Int, focus: Bool = false) {
+
+        if let row = rowForAddr[addr] {
+
+            reloadData()
+            jumpTo(row: row, focus: focus)
+
+        } else {
+
+            deselectAll(self)
+        }
+    }
+
+    func jumpTo(row: Int, focus: Bool = false) {
+
+        if focus { window?.makeFirstResponder(self) }
+        scrollRowToVisible(row)
+        selectRowIndexes([row], byExtendingSelection: false)
+    }
+    
     func scrollToBottom() {
+        
         scrollRowToVisible(numberOfRows(in: self) - 1)
+    }
+    
+    @IBAction func clickAction(_ sender: NSTableView!) {
+        
+        if sender.clickedColumn == 0 {
+            
+            clickAction(row: sender.clickedRow)
+        }
+    }
+    
+    func clickAction(row: Int) {
+        
+        if let addr = addrInRow[row] {
+            
+            track("Clicked in row \(row) addr = \(addr)")
+            /*
+            if !breakpoints.isSet(at: addr) {
+                breakpoints.add(at: addr)
+            } else if breakpoints.isSetAndDisabled(at: addr) {
+                breakpoints.enable(at: addr)
+            } else if breakpoints.isSetAndEnabled(at: addr) {
+                breakpoints.disable(at: addr)
+            }
+            */
+            
+            inspector.fullRefresh()
+        }
+    }
+    
+    @IBAction func doubleClickAction(_ sender: NSTableView!) {
+        
+        if sender.clickedColumn != 0 {
+            
+            doubleClickAction(row: sender.clickedRow)
+        }
+    }
+    
+    func doubleClickAction(row: Int) {
+        
+        if let addr = addrInRow[row] {
+            
+            track("Double-clicked in row \(row) addr = \(addr)")
+            /*
+            if breakpoints.isSet(at: addr) {
+                breakpoints.remove(at: addr)
+            } else {
+                breakpoints.add(at: addr)
+            }
+            
+            inspector.fullRefresh()
+            */
+        }
     }
 }
 
@@ -104,9 +209,12 @@ extension CopperTableView: NSTableViewDataSource {
 
         switch tableColumn?.identifier.rawValue {
 
-        case "break": return ""
-        case "addr":  return addrInRow[row]
-        case "instr": return instrInRow[row]
+        case "break":
+            return ""
+        case "addr":
+            return addrInRow[row]
+        case "instr":
+            return instrInRow[row]
 
         default: fatalError()
         }
@@ -119,7 +227,7 @@ extension CopperTableView: NSTableViewDelegate {
         
         if let cell = cell as? NSTextFieldCell {
             
-            if row >= length {
+            if row >= nativeLength {
                 cell.textColor = .secondaryLabelColor
                 return
             }

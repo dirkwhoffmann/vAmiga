@@ -3683,7 +3683,7 @@
                                                             <nil key="backgroundColor"/>
                                                         </clipView>
                                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="XAF-fk-pHB">
-                                                            <rect key="frame" x="1" y="232" width="360" height="16"/>
+                                                            <rect key="frame" x="1" y="265" width="265" height="16"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="dpA-Bj-vaz">
@@ -3701,8 +3701,8 @@
                                                         <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="Wjb-MO-K3W">
                                                             <font key="font" metaFont="system"/>
                                                             <segments>
-                                                                <segment label="Binary" width="72" selected="YES" tag="1"/>
-                                                                <segment label="Symbolic" width="72" tag="2"/>
+                                                                <segment label="Binary" width="72" tag="1"/>
+                                                                <segment label="Symbolic" width="72" selected="YES" tag="2"/>
                                                             </segments>
                                                         </segmentedCell>
                                                         <connections>
@@ -3821,6 +3821,17 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uVh-FR-fka">
+                                                        <rect key="frame" x="137" y="128.5" width="23.5" height="25"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSTouchBarSearchTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="aDH-BY-RIL">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="copFindAction:" target="-2" id="D2z-l3-Xz6"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                             </view>
                                         </box>
@@ -3869,7 +3880,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="delete" width="40.1968994140625" minWidth="30" maxWidth="3.4028234663852886e+38" id="LIF-Xh-dQT">
+                                                                        <tableColumn identifier="delete" width="30" minWidth="30" maxWidth="3.4028234663852886e+38" id="LIF-Xh-dQT">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3890,7 +3901,7 @@
                                                             <nil key="backgroundColor"/>
                                                         </clipView>
                                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="E61-7z-Ng1">
-                                                            <rect key="frame" x="1" y="150" width="175" height="16"/>
+                                                            <rect key="frame" x="1" y="150" width="178" height="16"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="jHS-z3-pe7">
@@ -3971,7 +3982,7 @@
                                                             <nil key="backgroundColor"/>
                                                         </clipView>
                                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="fAQ-Hu-3fU">
-                                                            <rect key="frame" x="1" y="232" width="360" height="16"/>
+                                                            <rect key="frame" x="1" y="265" width="265" height="16"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="2Pz-pQ-cC5">
@@ -3989,8 +4000,8 @@
                                                         <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="ebJ-gI-6m8">
                                                             <font key="font" metaFont="system"/>
                                                             <segments>
-                                                                <segment label="Binary" width="72" selected="YES" tag="1"/>
-                                                                <segment label="Symbolic" width="72" tag="2"/>
+                                                                <segment label="Binary" width="72" tag="1"/>
+                                                                <segment label="Symbolic" width="72" selected="YES" tag="2"/>
                                                             </segments>
                                                         </segmentedCell>
                                                         <connections>
@@ -6608,7 +6619,7 @@
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="QrR-nh-kxQ">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="458" height="202"/>
-                                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                <autoresizingMask key="autoresizingMask"/>
                                                                                 <subviews>
                                                                                     <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="mjy-kd-clj">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="458" height="202"/>
@@ -7522,6 +7533,7 @@
         <image name="NSAddTemplate" width="14" height="13"/>
         <image name="NSRefreshTemplate" width="14" height="16"/>
         <image name="NSRemoveTemplate" width="14" height="4"/>
+        <image name="NSTouchBarSearchTemplate" width="16" height="15"/>
         <image name="pauseTemplate" width="36" height="36"/>
         <image name="state0Template" width="228" height="204"/>
         <image name="stepIntoTemplate" width="177" height="177"/>

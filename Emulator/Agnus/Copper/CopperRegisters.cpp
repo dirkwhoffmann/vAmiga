@@ -66,7 +66,7 @@ Copper::pokeCOPJMP2()
 void
 Copper::pokeCOPINS(u16 value)
 {
-    trace(COPREG_DEBUG, "COPPC: %X pokeCOPINS(%04X)\n", coppc, value);
+    trace(COPREG_DEBUG, "COPPC: %X pokeCOPINS(%04X)\n", coppc0, value);
 
     /* COPINS is a dummy address that can be used to write the first or
      * the second instruction register, depending on the current state.
@@ -89,12 +89,11 @@ Copper::pokeCOP1LCH(u16 value)
     trace(COPREG_DEBUG, "pokeCOP1LCH(%04X)\n", value);
 
     if (HI_WORD(cop1lc) != value) {
+        
         cop1lc = REPLACE_HI_WORD(cop1lc, value);
-        cop1end = cop1lc;
 
         if (!activeInThisFrame && copList == 1) {
             setPC(cop1lc);
-            // coppc = cop1lc;
         }
     }
 }
@@ -107,12 +106,11 @@ Copper::pokeCOP1LCL(u16 value)
     value &= 0xFFFE;
 
     if (LO_WORD(cop1lc) != value) {
+        
         cop1lc = REPLACE_LO_WORD(cop1lc, value);
-        cop1end = cop1lc;
         
         if (!activeInThisFrame && copList == 1) {
             setPC(cop1lc);
-            // coppc = cop1lc;
         }
     }
 }
@@ -123,12 +121,11 @@ Copper::pokeCOP2LCH(u16 value)
     trace(COPREG_DEBUG, "pokeCOP2LCH(%04X)\n", value);
 
     if (HI_WORD(cop2lc) != value) {
+        
         cop2lc = REPLACE_HI_WORD(cop2lc, value);
-        cop2end = cop2lc;
 
         if (!activeInThisFrame && copList == 2) {
             setPC(cop2lc);
-            // coppc = cop2lc;
         }
     }
 }
@@ -141,12 +138,11 @@ Copper::pokeCOP2LCL(u16 value)
     value &= 0xFFFE;
 
     if (LO_WORD(cop2lc) != value) {
+
         cop2lc = REPLACE_LO_WORD(cop2lc, value);
-        cop2end = cop2lc;
         
         if (!activeInThisFrame && copList == 2) {
             setPC(cop2lc);
-            // coppc = cop2lc;
         }
     }
 }
