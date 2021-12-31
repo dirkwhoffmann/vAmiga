@@ -20,13 +20,7 @@ class CopperTableView: NSTableView {
     
     var amiga: AmigaProxy { return inspector.amiga }
     var copper: CopperProxy { return amiga.copper }
-        
-    // Copper list (must be set to 1 or 2)
-    var nr = 1
-    
-    // Determines the disassembler format
-    var symbolic = false
-        
+                
     // Length of the Copper list as proposed by the Copper debugger
     var nativeLength = 0
 
@@ -61,7 +55,7 @@ class CopperTableView: NSTableView {
     }
     */
     
-    private func cache() {
+    private func cache(list nr: Int, symbolic: Bool) {
 
         assert(nr == 1 || nr == 2)
 
@@ -95,10 +89,10 @@ class CopperTableView: NSTableView {
         }
     }
 
-    func refresh(count: Int = 0, full: Bool = false) {
+    func refresh(count: Int, full: Bool, list nr: Int, symbolic: Bool) {
 
         if count % 4 != 0 { return }
-
+        
         if full {
             for (c, f) in ["addr": fmt24] {
                 let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
@@ -110,7 +104,7 @@ class CopperTableView: NSTableView {
             }
         }
         
-        cache()
+        cache(list: nr, symbolic: symbolic)
         reloadData()
         
         // In animation mode, jump to the currently executed instruction

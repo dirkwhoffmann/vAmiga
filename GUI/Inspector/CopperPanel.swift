@@ -9,6 +9,9 @@
 
 extension Inspector {
 
+    var symbolic1: Bool { return copList1Format.selectedSegment == 1 }
+    var symbolic2: Bool { return copList2Format.selectedSegment == 1 }
+
     private func cacheCopper() {
 
         copperInfo = amiga.copper.info
@@ -36,21 +39,17 @@ extension Inspector {
         copPC.integerValue = Int(copperInfo.coppc0)
         copCDANG.state = copperInfo.cdang ? .on : .off
 
-        copList1.nr = 1
-        copList1.refresh(count: count, full: full)
-        copList2.nr = 2
-        copList2.refresh(count: count, full: full)
+        copList1.refresh(count: count, full: full, list: 1, symbolic: symbolic1)
+        copList2.refresh(count: count, full: full, list: 2, symbolic: symbolic2)
     }
 
     @IBAction func copList1FormatAction(_ sender: Any!) {
 
-        copList1.symbolic = copList1Format.indexOfSelectedItem == 1
         fullRefresh()
     }
 
     @IBAction func copList2FormatAction(_ sender: Any!) {
 
-        copList2.symbolic = copList2Format.indexOfSelectedItem == 1
         fullRefresh()
     }
 
