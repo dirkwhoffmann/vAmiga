@@ -19,6 +19,36 @@
 #ifdef _MSC_VER
 
 bool
+NamedPipe::create(const string &name)
+{
+    
+}
+
+bool
+NamedPipe::open()
+{
+    return false;
+}
+
+bool
+NamedPipe::isOpen()
+{
+    return false;
+}
+
+bool
+NamedPipe::close()
+{
+    return false;
+}
+
+isize
+NamedPipe::write(u8 *buffer, isize length)
+{
+    return 0;
+}
+
+bool
 FFmpeg::available()
 {
     return false;
@@ -39,6 +69,43 @@ FFmpeg::join()
 #else
 
 #include <unistd.h>
+
+bool
+NamedPipe::create(const string &name)
+{
+    this->name = name;
+    
+    ::unlink(name.c_str());
+    return ::mkfifo(name.c_str(), 0666) != -1;
+}
+
+bool
+NamedPipe::open()
+{
+    pipe = ::open(name.c_str(), O_WRONLY);
+    return pipe != -1;
+}
+
+bool
+NamedPipe::isOpen()
+{
+    return pipe != -1;
+}
+
+bool
+NamedPipe::close()
+{
+    auto result = ::close(pipe);
+    pipe = -1;
+    return result == 0;
+}
+
+isize
+NamedPipe::write(u8 *buffer, isize length)
+{
+    assert(isOpen());
+    return ::write(pipe, (void *)buffer, (size_t)length);
+}
 
 bool
 FFmpeg::available()
@@ -77,11 +144,13 @@ Recorder::Recorder(Amiga& ref) : SubComponent(ref)
     };
 }
 
+/*
 bool
 Recorder::hasFFmpeg() const
 {
     return util::getSizeOfFile(ffmpegPath()) > 0;
 }
+*/
 
 void
 Recorder::_reset(bool hard)
@@ -98,8 +167,6 @@ Recorder::_dump(dump::Category category, std::ostream& os) const
     
     os << tab("FFmpeg path") << FFmpeg::ffmpegPath() << std::endl;
     os << tab("Installed") << bol(FFmpeg::available()) << std::endl;
-    os << tab("Video pipe") << bol(videoPipe != -1) << std::endl;
-    os << tab("Audio pipe") << bol(audioPipe != -1) << std::endl;
     os << tab("Recording") << bol(isRecording()) << std::endl;
 }
     
@@ -125,11 +192,17 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
         // Create pipes
         debug(REC_DEBUG, "Creating pipes...\n");
         
-        unlink(videoPipePath().c_str());
-        unlink(audioPipePath().c_str());
-        if (mkfifo(videoPipePath().c_str(), 0666) == -1) return false;
-        if (mkfifo(audioPipePath().c_str(), 0666) == -1) return false;
-        
+        if (!videoPipe.create(videoPipePath())) {
+            
+            warn("Failed to create the video encoder pipe.\n");
+            return false;
+        }
+        if (!audioPipe.create(audioPipePath())) {
+         
+            warn("Failed to create the video encoder pipe.\n");
+            return false;
+        }
+                
         debug(REC_DEBUG, "Pipes created\n");
         dump();
         
@@ -265,10 +338,9 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
 
         // Open the video pipe
         debug(REC_DEBUG, "Opening video pipe\n");
+        
+        if (!videoPipe.open()) {
 
-        videoPipe = open(videoPipePath().c_str(), O_WRONLY);
-
-        if (!videoPipe) {
             warn("Failed to launch the video pipe\n");
             return false;
         }
@@ -276,9 +348,8 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
         // Open the audio pipe
         debug(REC_DEBUG, "Opening audio pipe\n");
 
-        audioPipe = open(audioPipePath().c_str(), O_WRONLY);
-
-        if (!audioPipe) {
+        if (!audioPipe.open()) {
+            
             warn("Failed to launch the audio pipe\n");
             return false;
         }
@@ -331,9 +402,11 @@ Recorder::exportAs(const string &path)
     
     debug(REC_DEBUG, "\nMerging streams with options:\n%s\n", cmd.c_str());
 
-    if (system(cmd.c_str()) == -1) {
+    FFmpeg merger;
+    if (!merger.launch(cmd)) {
         warn("Failed to merge video and audio: %s\n", cmd.c_str());
     }
+    merger.join();
     
     debug(REC_DEBUG, "Success\n");
     return true;
@@ -372,8 +445,8 @@ Recorder::record(Cycle target)
 {
     assert(videoFFmpeg.isRunning());
     assert(audioFFmpeg.isRunning());
-    assert(videoPipe != -1);
-    assert(audioPipe != -1);
+    assert(videoPipe.isOpen());
+    assert(audioPipe.isOpen());
     
     recordVideo(target);
     recordAudio(target);
@@ -395,9 +468,9 @@ Recorder::recordVideo(Cycle target)
     }
     
     // Feed the video pipe
-    assert(videoPipe != -1);
+    assert(videoPipe.isOpen());
     isize length = width * height;
-    isize written = write(videoPipe, videoData, length);
+    isize written = videoPipe.write((u8 *)videoData, length);
     
     if (written != length || FORCE_RECORDING_ERROR) {
         state = State::abort;
@@ -427,9 +500,9 @@ Recorder::recordAudio(Cycle target)
     muxer.copy(audioData, samplesPerFrame);
     
     // Feed the audio pipe
-    assert(audioPipe != -1);
+    assert(audioPipe.isOpen());
     isize length = 2 * sizeof(float) * samplesPerFrame;
-    isize written = write(audioPipe, (u8 *)audioData, length);
+    isize written = audioPipe.write((u8 *)audioData, length);
  
     if (written != length || FORCE_RECORDING_ERROR) {
         state = State::abort;
@@ -440,10 +513,8 @@ void
 Recorder::finalize()
 {    
     // Close pipes
-    close(videoPipe);
-    close(audioPipe);
-    videoPipe = -1;
-    audioPipe = -1;
+    videoPipe.close();
+    audioPipe.close();
     
     // Wait for the decoders to terminate
     videoFFmpeg.join();

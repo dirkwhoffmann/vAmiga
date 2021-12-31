@@ -15,6 +15,20 @@
 #include "Chrono.h"
 #include "Muxer.h"
 
+class NamedPipe {
+    
+public:
+    
+    int pipe = -1;
+    string name;
+    
+    bool create(const string &name);
+    bool open();
+    bool isOpen();
+    bool close();
+    isize write(u8 *buffer, isize length);
+};
+
 class FFmpeg {
     
 public:
@@ -47,9 +61,6 @@ class Recorder : public SubComponent {
     // Constants
     //
     
-    // Path to the FFmpeg executable
-    [[deprecated]] static string ffmpegPath() { return "/usr/local/bin/ffmpeg"; }
-
     // Path to the two named input pipes
     static string videoPipePath() { return "/tmp/videoPipe"; }
     static string audioPipePath() { return "/tmp/audioPipe"; }
@@ -79,8 +90,8 @@ class Recorder : public SubComponent {
     FFmpeg audioFFmpeg;
 
     // Video and audio pipes
-    int videoPipe = -1;
-    int audioPipe = -1;
+    NamedPipe videoPipe;
+    NamedPipe audioPipe;
 
     
     //
