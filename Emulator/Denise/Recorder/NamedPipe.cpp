@@ -19,7 +19,7 @@ NamedPipe::create(const string &name)
 {
     this->name = name;
  
-#ifdef _MSC_VER
+#ifdef WIN32
 
     return false;
 
@@ -34,7 +34,7 @@ NamedPipe::create(const string &name)
 bool
 NamedPipe::open()
 {
-#ifdef _MSC_VER
+#ifdef WIN32
     
     return false;
     
@@ -49,7 +49,7 @@ NamedPipe::open()
 bool
 NamedPipe::isOpen()
 {
-#ifdef _MSC_VER
+#ifdef WIN32
 
     return false;
 
@@ -63,7 +63,7 @@ NamedPipe::isOpen()
 bool
 NamedPipe::close()
 {
-#ifdef _MSC_VER
+#ifdef WIN32
 
     return false;
 
@@ -79,9 +79,10 @@ NamedPipe::close()
 isize
 NamedPipe::write(u8 *buffer, isize length)
 {
-#ifdef _MSC_VER
+#ifdef WIN32
 
     return 0;
+    
 #else
 
     assert(isOpen());
