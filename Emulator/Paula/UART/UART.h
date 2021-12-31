@@ -125,7 +125,7 @@ public:
     Cycle pulseWidth() const { return DMA_CYCLES((serper & 0x7FFF) + 1); }
 
     // Returns the baud rate
-    isize baudRate() const { return MASTER_FREQUENCY / pulseWidth(); }
+    isize baudRate() const { return MASTER_FREQUENCY / (isize)pulseWidth(); }
     
 private:
 

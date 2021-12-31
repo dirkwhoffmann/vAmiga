@@ -65,14 +65,14 @@ string
 SerServer::doReceive()
 {
     auto result = connection.recv();
-    receivedBytes += result.size();
+    receivedBytes += (isize)result.size();
     return result;
 }
 
 void
 SerServer::doSend(const string &packet)
 {
-    transmittedBytes += packet.size();
+    transmittedBytes += (isize)packet.size();
     connection.send(packet);
 }
 
