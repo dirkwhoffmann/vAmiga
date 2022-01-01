@@ -757,7 +757,7 @@ Drive::ejectDisk(Cycle delay)
 {
     debug(DSK_DEBUG, "ejectDisk <%d> (%lld)\n", s, delay);
     
-    suspended {
+    {   SUSPENDED
 
         // Schedule an ejection event
         agnus.scheduleRel <s> (delay, DCH_EJECT);
@@ -788,7 +788,7 @@ Drive::insertDisk(std::unique_ptr<Disk> disk, Cycle delay)
     // Only proceed if the provided disk is compatible with this drive
     if (!isInsertable(*disk)) throw VAError(ERROR_DISK_INCOMPATIBLE);
 
-    suspended {
+    {   SUSPENDED
         
         // Get ownership of the disk
         diskToInsert = std::move(disk);
@@ -843,7 +843,7 @@ Drive::swapDisk(std::unique_ptr<Disk> disk)
     // Determine delay (in pause mode, we insert immediately)
     auto delay = isRunning() ? config.diskSwapDelay : 0;
         
-    suspended {
+    {   SUSPENDED
 
         if (hasDisk()) {
 

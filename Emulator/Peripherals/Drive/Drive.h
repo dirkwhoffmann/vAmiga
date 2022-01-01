@@ -14,7 +14,7 @@
 #include "Disk.h"
 #include "DiskController.h"
 #include "SchedulerTypes.h"
-#include "SuspendableThread.h"
+#include "Thread.h"
 
 class Drive : public SubComponent {
     

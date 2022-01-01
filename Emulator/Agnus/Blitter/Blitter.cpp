@@ -12,7 +12,7 @@
 #include "Agnus.h"
 #include "Checksum.h"
 #include "IOUtils.h"
-#include "SuspendableThread.h"
+#include "Thread.h"
 
 Blitter::Blitter(Amiga& ref) : SubComponent(ref)
 {
@@ -101,16 +101,15 @@ Blitter::setConfigItem(Option option, i64 value)
     switch (option) {
             
         case OPT_BLITTER_ACCURACY:
-                      
+        {
             if (value < 0 || value > 2) {
                 throw VAError(ERROR_OPT_INVARG, "0, 1, 2");
             }
-
-            suspended {
-                config.accuracy = (isize)value;
-            }
-            return;
             
+            SUSPENDED
+            config.accuracy = (isize)value;
+            return;
+        }
         default:
             fatalError;
     }

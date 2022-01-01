@@ -221,3 +221,52 @@ private:
     // Wait until the thread has terminated
     void join() { if (thread.joinable()) thread.join(); }
 };
+
+/* This class extends class Thread by a suspend-resume mechanism for pausing
+ * the thread temporarily. This functionality is utilized frequently by the GUI
+ * to carry out atomic state-change operations that cannot be performed while
+ * the emulator is running. To pause the emulator temporarily, the critical
+ * code section can be embedded in a suspend/resume block like so:
+ *
+ *       suspend();
+ *       do something with the internal state;
+ *       resume();
+ *
+ * It it safe to nest multiple suspend/resume blocks, but it is essential
+ * that each call to suspend() is followed by a call to resume(). As a result,
+ * the critical code section must not be exited in the middle, e.g., by
+ * throwing an exception. It is therefore recommended to use the SUSPENDED
+ * macro which is exit-safe. It is used in the following way:
+ *
+ *    {  SUSPENDED
+ *
+ *       Do something with the internal state;
+ *       return or throw an exceptions as you like;
+ *    }
+ */
+
+class SuspendableThread : public Thread {
+    
+private:
+    
+    isize suspendCounter = 0;
+
+public:
+
+    void suspend() override;
+    void resume() override;
+};
+
+class AutoResume {
+
+    AmigaComponent *comp;
+    
+public:
+
+    bool active = true;
+
+    AutoResume(AmigaComponent *c) : comp(c) { comp->suspend(); }
+    ~AutoResume() { comp->resume(); }
+};
+
+#define SUSPENDED AutoResume _ar(this);

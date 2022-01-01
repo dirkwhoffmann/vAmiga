@@ -15,7 +15,7 @@
 #include "IOUtils.h"
 #include "MsgQueue.h"
 #include "Paula.h"
-#include "SuspendableThread.h"
+#include "Thread.h"
 #include <algorithm>
 
 void
@@ -89,16 +89,16 @@ DiskController::setConfigItem(Option option, i64 value)
     switch (option) {
             
         case OPT_DRIVE_SPEED:
-            
+        {
             if (!isValidDriveSpeed((isize)value)) {
                 throw VAError(ERROR_OPT_INVARG, "-1, 1, 2, 4, 8");
             }
-            suspended {
-                config.speed = (i32)value;
-                scheduleFirstDiskEvent();
-            }
-            return;
             
+            SUSPENDED
+            config.speed = (i32)value;
+            scheduleFirstDiskEvent();
+            return;
+        }
         case OPT_AUTO_DSKSYNC:
             
             config.autoDskSync = value;

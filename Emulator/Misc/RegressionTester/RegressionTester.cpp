@@ -87,7 +87,7 @@ RegressionTester::dumpTexture(Amiga &amiga, const string &filename)
 void
 RegressionTester::dumpTexture(Amiga &amiga, std::ostream& os)
 {
-    suspended {
+    {   SUSPENDED
         
         auto buffer = amiga.denise.pixelEngine.getStableBuffer();
         

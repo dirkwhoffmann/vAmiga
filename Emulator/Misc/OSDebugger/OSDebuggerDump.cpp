@@ -11,7 +11,7 @@
 #include "OSDebugger.h"
 #include "IOUtils.h"
 #include "Memory.h"
-#include "SuspendableThread.h"
+#include "Thread.h"
 #include <sstream>
 
 void

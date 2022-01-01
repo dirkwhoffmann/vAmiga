@@ -14,7 +14,7 @@
 #include "RetroShell.h"
 #include "Scheduler.h"
 #include "SerialPort.h"
-#include "SuspendableThread.h"
+#include "Thread.h"
 #include "UART.h"
 
 SerServer::SerServer(Amiga& ref) : RemoteServer(ref)

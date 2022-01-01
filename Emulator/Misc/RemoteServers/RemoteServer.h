@@ -12,7 +12,7 @@
 #include "RemoteServerTypes.h"
 #include "SubComponent.h"
 #include "Socket.h"
-#include "SuspendableThread.h"
+#include "Thread.h"
 #include <thread>
 
 class RemoteServer : public SubComponent {

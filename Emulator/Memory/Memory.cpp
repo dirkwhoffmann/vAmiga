@@ -244,54 +244,48 @@ Memory::setConfigItem(Option option, i64 value)
             return;
             
         case OPT_SAVE_ROMS:
-            
-            suspended {
-                config.saveRoms = value;
-            }
+        {
+            SUSPENDED
+            config.saveRoms = value;
             return;
-            
+        }
         case OPT_SLOW_RAM_DELAY:
-                        
-            suspended {
-                config.slowRamDelay = value;
-            }
+        {
+            SUSPENDED
+            config.slowRamDelay = value;
             return;
-            
+        }
         case OPT_BANKMAP:
-            
+        {
             if (!BankMapEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVARG, BankMapEnum::keyList());
             }
             
-            suspended {
-                config.bankMap = (BankMap)value;
-                updateMemSrcTables();
-            }
+            SUSPENDED
+            config.bankMap = (BankMap)value;
+            updateMemSrcTables();
             return;
-
+        }
         case OPT_UNMAPPING_TYPE:
-            
+        {
             if (!UnmappedMemoryEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVARG, UnmappedMemoryEnum::keyList());
             }
             
-            suspended {
-                config.unmappingType = (UnmappedMemory)value;
-            }
+            SUSPENDED
+            config.unmappingType = (UnmappedMemory)value;
             return;
-            
+        }
         case OPT_RAM_INIT_PATTERN:
-            
+
             if (!RamInitPatternEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVARG, RamInitPatternEnum::keyList());
             }
 
-            suspended {
-                config.ramInitPattern = (RamInitPattern)value;
-            }
+            { SUSPENDED config.ramInitPattern = (RamInitPattern)value; }
             if (isPoweredOff()) fillRamWithInitPattern();
             return;
-            
+
         default:
             fatalError;
     }

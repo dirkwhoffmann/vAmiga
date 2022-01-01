@@ -463,5 +463,6 @@ CPU::disassembleWords(isize len)
 void
 CPU::jump(u32 addr)
 {
-    suspended { debugger.jump(addr); }
+    SUSPENDED
+    debugger.jump(addr);
 }

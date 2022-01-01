@@ -427,9 +427,11 @@ RetroShell::dump(AmigaComponent &component, dump::Category category)
 {
     std::stringstream ss; string line;
     
-    suspended {
+    { SUSPENDED
+        
         component.dump(category, ss);
     }
+    
     while(std::getline(ss, line)) *this << line << '\n';
 }
 

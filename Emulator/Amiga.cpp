@@ -589,7 +589,7 @@ Amiga::configure(ConfigScheme scheme)
 {
     assert_enum(ConfigScheme, scheme);
 
-    suspended {
+    {   SUSPENDED
         
         switch(scheme) {
                 
@@ -663,7 +663,7 @@ Amiga::setInspectionTarget(InspectionTarget target, Cycle trigger)
 {
     EventID id;
     
-    suspended {
+    {   SUSPENDED
         
         switch(target) {
                 
@@ -1045,7 +1045,7 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
         throw VAError(ERROR_SNAP_TOO_NEW);
     }
 
-    suspended {
+    {   SUSPENDED
         
         try {
 

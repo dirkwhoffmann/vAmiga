@@ -238,7 +238,6 @@
 		50EB8CCA25306E8E0053988A /* ExportVideoDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */; };
 		50EB8CCE2530710E0053988A /* ExportVideoDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */; };
 		50ECF98622B153FB007B3DE7 /* ExtendedRomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */; };
-		50EFB06826C3C872002145B4 /* SuspendableThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB06626C3C872002145B4 /* SuspendableThread.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
 		50F31C292409322F008A54D8 /* CopperPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F31C282409322F008A54D8 /* CopperPanel.swift */; };
 		50F54B2524B5D31D0078FDC9 /* u_heavy.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B0C24B5D31D0078FDC9 /* u_heavy.c */; };
@@ -671,8 +670,6 @@
 		50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportVideoDialog.swift; sourceTree = "<group>"; };
 		50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedRomFile.cpp; sourceTree = "<group>"; };
 		50ECF98522B153FB007B3DE7 /* ExtendedRomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtendedRomFile.h; sourceTree = "<group>"; };
-		50EFB06626C3C872002145B4 /* SuspendableThread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SuspendableThread.cpp; sourceTree = "<group>"; };
-		50EFB06726C3C872002145B4 /* SuspendableThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SuspendableThread.h; sourceTree = "<group>"; };
 		50EFC7DF22E840870036A3DF /* Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialization.h; sourceTree = "<group>"; };
 		50EFF1E726E25A5D00296065 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50F0BD2422AF883C001F4616 /* UART.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UART.cpp; sourceTree = "<group>"; };
@@ -797,8 +794,6 @@
 				5042F2DE26BE57F700126C05 /* ThreadTypes.h */,
 				5042F2DC26BE57E600126C05 /* Thread.h */,
 				5042F2DB26BE57E600126C05 /* Thread.cpp */,
-				50EFB06726C3C872002145B4 /* SuspendableThread.h */,
-				50EFB06626C3C872002145B4 /* SuspendableThread.cpp */,
 				50D5244322787D3C00F8959D /* MsgQueueTypes.h */,
 				508FDEF821EA1FBC0043D0E9 /* MsgQueue.h */,
 				508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */,
@@ -1779,7 +1774,6 @@
 				50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */,
 				5020B18021EF136100B9E80E /* Denise.cpp in Sources */,
 				505CEF5E26BD12430078FF52 /* DropZone.swift in Sources */,
-				50EFB06826C3C872002145B4 /* SuspendableThread.cpp in Sources */,
 				50C8C44A2607396200F4E012 /* Layer.swift in Sources */,
 				50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */,
 				50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */,
