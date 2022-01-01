@@ -143,15 +143,5 @@ extension Inspector {
         bltLF2Val.integerValue = (~a &  b & ~c)
         bltLF1Val.integerValue = (~a & ~b &  c)
         bltLF0Val.integerValue = (~a & ~b & ~c)
-        /*
-        bltLF7Val.integerValue = lf7 ? ( a &  b &  c) : 0
-        bltLF6Val.integerValue = lf6 ? ( a &  b & ~c) : 0
-        bltLF5Val.integerValue = lf5 ? ( a & ~b &  c) : 0
-        bltLF4Val.integerValue = lf4 ? ( a & ~b & ~c) : 0
-        bltLF3Val.integerValue = lf3 ? (~a &  b &  c) : 0
-        bltLF2Val.integerValue = lf2 ? (~a &  b & ~c) : 0
-        bltLF1Val.integerValue = lf1 ? (~a & ~b &  c) : 0
-        bltLF0Val.integerValue = lf0 ? (~a & ~b & ~c) : 0
-         */
     }
 }
