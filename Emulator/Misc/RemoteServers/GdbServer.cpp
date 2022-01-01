@@ -110,17 +110,23 @@ GdbServer::doProcess(const string &payload)
 }
 
 void
-GdbServer::didConnect()
+GdbServer::didStart()
 {
-    ackMode = true;
+    amiga.pause();
 }
- 
+
 void
 GdbServer::didStop()
 {
     detach();
 }
 
+void
+GdbServer::didConnect()
+{
+    ackMode = true;
+}
+ 
 void
 GdbServer::reply(const string &payload)
 {

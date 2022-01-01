@@ -213,7 +213,7 @@ private:
     // Delegation methods
     //
 
-    virtual void didSwitch(SrvState from, SrvState to);
+    void didSwitch(SrvState from, SrvState to);
     virtual void didStart() { };
     virtual void didStop() { };
     virtual void didConnect() { };

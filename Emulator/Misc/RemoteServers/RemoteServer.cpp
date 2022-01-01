@@ -64,8 +64,8 @@ RemoteServer::_powerOff()
 void
 RemoteServer::_didLoad()
 {
-    // Trigger side effects
-    setConfigItem(OPT_SRV_PORT, config.port);
+    // Stop the server (will be restarted by the launch daemon in auto-run mode)
+    stop();
 }
 
 void
@@ -263,9 +263,7 @@ RemoteServer::process(const string &payload)
 
 void
 RemoteServer::main()
-{
-    amiga.pause();
-    
+{    
     try {
         
         mainLoop();

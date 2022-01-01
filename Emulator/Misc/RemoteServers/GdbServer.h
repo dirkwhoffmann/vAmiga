@@ -76,8 +76,9 @@ public:
     string doReceive() override throws;
     void doSend(const string &payload) override throws;
     void doProcess(const string &payload) override throws;
-    void didConnect() override;
+    void didStart() override;
     void didStop() override;
+    void didConnect() override;
 
             
     //

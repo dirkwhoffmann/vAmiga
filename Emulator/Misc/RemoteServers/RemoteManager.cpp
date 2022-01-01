@@ -117,6 +117,7 @@ RemoteManager::serviceServerEvent()
 {
     assert(scheduler.id[SLOT_SRV] == SRV_LAUNCH_DAEMON);
         
+    // Run the launch daemon
     if (serServer.config.autoRun) {
         serServer.shouldRun() ? serServer._start() : serServer._stop();
     }

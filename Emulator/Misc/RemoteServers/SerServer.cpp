@@ -112,6 +112,8 @@ SerServer::processIncomingByte(u8 byte)
 void
 SerServer::didConnect()
 {
+    SUSPENDED
+        
     // Start a new sessing
     skippedTransmissions = 0;
     receivedBytes = 0;
@@ -119,6 +121,7 @@ SerServer::didConnect()
     processedBytes = 0;
     lostBytes = 0;
     
+    printf("Starting to schedule messages\n");
     // Start scheduling messages
     assert(scheduler.id[SLOT_SER] == EVENT_NONE);
     scheduler.scheduleImm <SLOT_SER> (SER_RECEIVE);
@@ -127,6 +130,10 @@ SerServer::didConnect()
 void
 SerServer::didDisconnect()
 {
+    SUSPENDED
+
+    printf("STOPPING to schedule messages\n");
+
     // Stop scheduling messages
     scheduler.cancel <SLOT_SER> ();
 }
