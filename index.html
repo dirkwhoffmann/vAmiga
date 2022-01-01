@@ -11,6 +11,28 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="assets/css/main.css" />
+
+	<!-- web emulator view stuff start-->
+	<style>
+		.emulator_view {
+			width: 100%;
+		}
+		#vAmigaWeb {
+			border-radius:10px;
+		}
+		#player_container {
+			background-color: white;
+		}
+
+		.player_icon_btn {
+			background-color: transparent;
+			color: black;
+			margin-right: 15px;
+			cursor: grab;
+		}
+	</style>
+	<script src="https://vamigaweb.github.io/js/vAmigaWeb_player.js"></script>
+	<!-- web emulator view stuff end-->	
 </head>
 
 <body class="is-preload">
@@ -195,7 +217,7 @@
 										src="https://img.shields.io/github/repo-size/dirkwhoffmann/vAmiga">
 								</p>
 							</section>
-							<!--
+							
 							<section>
 								<h3>vAmiga Web</h3>
 								<p>The core emulator is designed to be compatible with WebAssembly and can now run in
@@ -209,22 +231,28 @@
 											AROS:true,
 											navbar:false,
 											wide:true,
-											border:0.3,
-											url:'media/Rink_a_Dink-REDUX_by_Lemon-Point_(final).adf'
+											border:1.0,
+											dark:false,
+											url:'https://vamigaweb.github.io/doc/media/Rink_a_Dink-REDUX_by_Lemon-Point_(final).adf'
 										}; 
 										vAmigaWeb_player.load(this,encodeURIComponent(JSON.stringify(config)));
-										return false;">		
-										<img src="images/rinkadink.png" width="100%">
+										return false;"
+										style="border-bottom: none"
+										>		
+										<img src="images/rinkadink.png" width="100%" style="border-radius:10px;height:230px">
 										</a>
 									</div>
 								<br>
 								<footer>
-									<a href="https://vc64web.github.io/doc/about.html"
+									<a href="https://github.com/vAmigaWeb/vAmigaWeb"
 										class="button">Learn
 										more</a>
+									<!--<a href="https://vamigaweb.github.io/doc/about.html"
+										class="button">Learn
+										more</a>-->
 								</footer>
 							</section>
-							-->
+							
 							<section>
 								<h3>CPU core</h3>
 								<p>vAmiga is driven by a virtual Motorola 68k CPU called Moira. 
