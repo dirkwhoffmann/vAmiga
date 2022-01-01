@@ -37,14 +37,9 @@ RemoteManager::_dump(dump::Category category, std::ostream& os) const
         
         if (server->isOff()) {
             os << "Off" << std::endl;
-        } else if (server->isStarting()) {
-            os << "Port " << dec(port) << " (launching)" << std::endl;
-        } else if (server->isListening()) {
-            os << "Port " << dec(port) << " (listening)" << std::endl;
-        } else if (server->isConnected()) {
-            os << "Port " << dec(port) << " (connected)" << std::endl;
         } else {
-            fatalError;
+            os << "Port " << dec(port);
+            os << " (" << SrvStateEnum::key(server->state) << ")" << std::endl;
         }
     }
 }

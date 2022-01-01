@@ -35,5 +35,6 @@ protected:
     string doReceive() override throws;
     void doProcess(const string &packet) override throws;
     void doSend(const string &packet) override throws;
-    void didSwitch(SrvState from, SrvState to) override;
+    void didStart() override;
+    void didConnect() override;
 };

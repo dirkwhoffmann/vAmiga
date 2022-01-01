@@ -20,23 +20,23 @@ Interpreter::registerInstructions()
     
     root.add({"clear"},
              "command", "Clears the console window",
-             &RetroShell::exec <Token::clear>);
+             &RetroShell::exec <Token::clear>, 0);
     root.seek("clear")->hidden = true;
 
     root.add({"close"},
              "command", "Hides the debug console",
-             &RetroShell::exec <Token::close>);
+             &RetroShell::exec <Token::close>, 0);
     root.seek("close")->hidden = true;
 
     root.add({"help"},
              "command", "Prints usage information",
-             &RetroShell::exec <Token::help>);
+             &RetroShell::exec <Token::help>, 0);
     root.seek("help")->hidden = true;
     root.seek("help")->maxArgs = 1;
 
     root.add({"joshua"},
              "command", "",
-             &RetroShell::exec <Token::easteregg>);
+             &RetroShell::exec <Token::easteregg>, 0);
     root.seek("joshua")->hidden = true;
     
     root.add({"source"},
@@ -100,38 +100,38 @@ Interpreter::registerInstructions()
     
     root.add({"amiga", "power", "on"},
              "state", "Switches the Amiga on",
-             &RetroShell::exec <Token::amiga, Token::power, Token::on>);
+             &RetroShell::exec <Token::amiga, Token::power, Token::on>, 0);
 
     root.add({"amiga", "power", "off"},
              "state", "Switches the Amiga off",
-             &RetroShell::exec <Token::amiga, Token::power, Token::off>);
+             &RetroShell::exec <Token::amiga, Token::power, Token::off>, 0);
 
     root.add({"amiga", "debug"},
              "command", "Switches debug mode on or off");
     
     root.add({"amiga", "debug", "on"},
              "state", "Switches debug mode on",
-             &RetroShell::exec <Token::amiga, Token::debug, Token::on>);
+             &RetroShell::exec <Token::amiga, Token::debug, Token::on>, 0);
 
     root.add({"amiga", "debug", "off"},
              "state", "Switches debug mode off",
-             &RetroShell::exec <Token::amiga, Token::debug, Token::off>);
+             &RetroShell::exec <Token::amiga, Token::debug, Token::off>, 0);
 
     root.add({"amiga", "run"},
              "command", "Starts the emulator thread",
-             &RetroShell::exec <Token::amiga, Token::run>);
+             &RetroShell::exec <Token::amiga, Token::run>, 0);
     
     root.add({"amiga", "pause"},
              "command", "Halts the emulator thread",
-             &RetroShell::exec <Token::amiga, Token::pause>);
+             &RetroShell::exec <Token::amiga, Token::pause>, 0);
     
     root.add({"amiga", "reset"},
              "command", "Performs a hard reset",
-             &RetroShell::exec <Token::amiga, Token::reset>);
+             &RetroShell::exec <Token::amiga, Token::reset>, 0);
     
     root.add({"amiga", "inspect"},
              "command", "Displays the component state",
-             &RetroShell::exec <Token::amiga, Token::inspect>);
+             &RetroShell::exec <Token::amiga, Token::inspect>, 0);
 
     
     //
@@ -143,7 +143,7 @@ Interpreter::registerInstructions()
     
     root.add({"memory", "config"},
              "command", "Displays the current configuration",
-             &RetroShell::exec <Token::memory, Token::config>);
+             &RetroShell::exec <Token::memory, Token::config>, 0);
 
     root.add({"memory", "set"},
              "command", "Configures the component");
@@ -200,15 +200,15 @@ Interpreter::registerInstructions()
 
     root.add({"memory", "inspect", "state"},
              "command", "Displays the current state",
-             &RetroShell::exec <Token::memory, Token::inspect, Token::state>);
+             &RetroShell::exec <Token::memory, Token::inspect, Token::state>, 0);
 
     root.add({"memory", "inspect", "bankmap"},
              "command", "Displays the bank map",
-             &RetroShell::exec <Token::memory, Token::inspect, Token::bankmap>);
+             &RetroShell::exec <Token::memory, Token::inspect, Token::bankmap>, 0);
 
     root.add({"memory", "inspect", "checksum"},
              "command", "Computes memory checksums",
-             &RetroShell::exec <Token::memory, Token::inspect, Token::checksums>);
+             &RetroShell::exec <Token::memory, Token::inspect, Token::checksums>, 0);
 
     
     //
@@ -234,11 +234,11 @@ Interpreter::registerInstructions()
 
     root.add({"cpu", "inspect", "state"},
              "command", "Displays the current state",
-             &RetroShell::exec <Token::cpu, Token::inspect, Token::state>);
+             &RetroShell::exec <Token::cpu, Token::inspect, Token::state>, 0);
 
     root.add({"cpu", "inspect", "registers"},
              "command", "Displays the current register values",
-             &RetroShell::exec <Token::cpu, Token::inspect, Token::registers>);
+             &RetroShell::exec <Token::cpu, Token::inspect, Token::registers>, 0);
 
     root.add({"cpu", "jump"},
              "command", "Jumps to the specified address",
@@ -304,7 +304,7 @@ Interpreter::registerInstructions()
 
     root.add({"agnus", "config"},
              "command", "Displays the current configuration",
-             &RetroShell::exec <Token::agnus, Token::config>);
+             &RetroShell::exec <Token::agnus, Token::config>, 0);
     
     root.add({"agnus", "set"},
              "command", "Configures the component");
@@ -322,19 +322,19 @@ Interpreter::registerInstructions()
 
     root.add({"agnus", "inspect", "state"},
              "category", "Displays the current state",
-             &RetroShell::exec <Token::agnus, Token::inspect, Token::state>);
+             &RetroShell::exec <Token::agnus, Token::inspect, Token::state>, 0);
 
     root.add({"agnus", "inspect", "registers"},
              "category", "Displays the current register values",
-             &RetroShell::exec <Token::agnus, Token::inspect, Token::registers>);
+             &RetroShell::exec <Token::agnus, Token::inspect, Token::registers>, 0);
 
     root.add({"agnus", "inspect", "dma"},
              "category", "Displays the scheduled DMA transfers",
-             &RetroShell::exec <Token::agnus, Token::inspect, Token::dma>);
+             &RetroShell::exec <Token::agnus, Token::inspect, Token::dma>, 0);
 
     root.add({"agnus", "inspect", "events"},
              "category", "Displays all scheduled events",
-             &RetroShell::exec <Token::agnus, Token::inspect, Token::events>);
+             &RetroShell::exec <Token::agnus, Token::inspect, Token::events>, 0);
     
     
     //
@@ -346,7 +346,7 @@ Interpreter::registerInstructions()
     
     root.add({"blitter", "config"},
              "command", "Displays the current configuration",
-             &RetroShell::exec <Token::blitter, Token::config>);
+             &RetroShell::exec <Token::blitter, Token::config>, 0);
     
     root.add({"blitter", "set"},
              "command", "Configures the component");
@@ -360,11 +360,11 @@ Interpreter::registerInstructions()
 
     root.add({"blitter", "inspect", "state"},
              "category", "Displays the internal state",
-             &RetroShell::exec <Token::blitter, Token::inspect, Token::state>);
+             &RetroShell::exec <Token::blitter, Token::inspect, Token::state>, 0);
 
     root.add({"blitter", "inspect", "registers"},
              "category", "Displays the current register value",
-             &RetroShell::exec <Token::blitter, Token::inspect, Token::registers>);
+             &RetroShell::exec <Token::blitter, Token::inspect, Token::registers>, 0);
 
     
     //
@@ -379,11 +379,11 @@ Interpreter::registerInstructions()
 
     root.add({"copper", "inspect", "state"},
              "category", "Displays the current state",
-             &RetroShell::exec <Token::copper, Token::inspect, Token::state>);
+             &RetroShell::exec <Token::copper, Token::inspect, Token::state>, 0);
 
     root.add({"copper", "inspect", "registers"},
              "category", "Displays the current register value",
-             &RetroShell::exec <Token::copper, Token::inspect, Token::registers>);
+             &RetroShell::exec <Token::copper, Token::inspect, Token::registers>, 0);
 
     root.add({"copper", "list"},
              "command", "Disassembles a Copper list",
@@ -399,7 +399,7 @@ Interpreter::registerInstructions()
     
         root.add({"denise", "config"},
              "command", "Displays the current configuration",
-             &RetroShell::exec <Token::denise, Token::config>);
+             &RetroShell::exec <Token::denise, Token::config>, 0);
 
     root.add({"denise", "set"},
              "command", "Configures the component");
@@ -440,11 +440,11 @@ Interpreter::registerInstructions()
 
     root.add({"denise", "inspect", "state"},
              "category", "Displays the current state",
-             &RetroShell::exec <Token::denise, Token::inspect, Token::state>);
+             &RetroShell::exec <Token::denise, Token::inspect, Token::state>, 0);
 
     root.add({"denise", "inspect", "registers"},
              "category", "Displays the current register value",
-             &RetroShell::exec <Token::denise, Token::inspect, Token::registers>);
+             &RetroShell::exec <Token::denise, Token::inspect, Token::registers>, 0);
 
     
     //
@@ -456,81 +456,81 @@ Interpreter::registerInstructions()
 
     root.add({"dmadebugger", "open"},
              "command", "Opens the DMA debugger",
-             &RetroShell::exec <Token::dmadebugger, Token::open>);
+             &RetroShell::exec <Token::dmadebugger, Token::open>, 0);
 
     root.add({"dmadebugger", "close"},
              "command", "Closes the DMA debugger",
-             &RetroShell::exec <Token::dmadebugger, Token::close>);
+             &RetroShell::exec <Token::dmadebugger, Token::close>, 0);
 
     root.add({"dmadebugger", "show"},
              "command", "Enables the debugger for a certain DMA channel");
 
     root.add({"dmadebugger", "show", "copper"},
              "command", "Visualizes Copper DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::copper>);
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::copper>, 0);
 
     root.add({"dmadebugger", "show", "blitter"},
              "command", "Visualizes Blitter DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::blitter>);
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::blitter>, 0);
 
     root.add({"dmadebugger", "show", "disk"},
              "command", "Visualizes Disk DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::disk>);
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::disk>, 0);
 
     root.add({"dmadebugger", "show", "audio"},
              "command", "Visualizes Audio DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::audio>);
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::audio>, 0);
 
     root.add({"dmadebugger", "show", "sprites"},
              "command", "Visualizes Sprite DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::sprites>);
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::sprites>, 0);
 
     root.add({"dmadebugger", "show", "bitplanes"},
              "command", "Visualizes Bitplane DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::bitplanes>);
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::bitplanes>, 0);
 
     root.add({"dmadebugger", "show", "cpu"},
              "command", "Visualizes CPU accesses",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::cpu>);
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::cpu>, 0);
 
     root.add({"dmadebugger", "show", "refresh"},
              "command", "Visualizes memory refresh cycles",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::refresh>);
+             &RetroShell::exec <Token::dmadebugger, Token::show, Token::refresh>, 0);
 
     root.add({"dmadebugger", "hide"},
              "command", "Disables the debugger for a certain DMA channel");
 
     root.add({"dmadebugger", "hide", "copper"},
              "command", "Hides Copper DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::copper>);
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::copper>, 0);
 
     root.add({"dmadebugger", "hide", "blitter"},
              "command", "Hides Blitter DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::blitter>);
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::blitter>, 0);
 
     root.add({"dmadebugger", "hide", "disk"},
              "command", "Hides Disk DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::disk>);
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::disk>, 0);
 
     root.add({"dmadebugger", "hide", "audio"},
              "command", "Hides Audio DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::audio>);
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::audio>, 0);
 
     root.add({"dmadebugger", "hide", "sprites"},
              "command", "Hides Sprite DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::sprites>);
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::sprites>, 0);
 
     root.add({"dmadebugger", "hide", "bitplanes"},
              "command", "Hides Bitplane DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::bitplanes>);
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::bitplanes>, 0);
 
     root.add({"dmadebugger", "hide", "cpu"},
              "command", "Hides CPU accesses",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::cpu>);
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::cpu>, 0);
 
     root.add({"dmadebugger", "hide", "refresh"},
              "command", "Hides memory refresh cycles",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::refresh>);
+             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::refresh>, 0);
 
     
     //
@@ -569,7 +569,7 @@ Interpreter::registerInstructions()
     
     root.add({"audio", "config"},
              "command", "Displays the current configuration",
-             &RetroShell::exec <Token::audio, Token::config>);
+             &RetroShell::exec <Token::audio, Token::config>, 0);
 
     root.add({"audio", "set"},
              "command", "Configures the component");
@@ -633,11 +633,11 @@ Interpreter::registerInstructions()
 
     root.add({"audio", "inspect", "state"},
              "category", "Displays the current state",
-             &RetroShell::exec <Token::audio, Token::inspect, Token::state>);
+             &RetroShell::exec <Token::audio, Token::inspect, Token::state>, 0);
 
     root.add({"audio", "inspect", "registers"},
              "category", "Displays the current register value",
-             &RetroShell::exec <Token::audio, Token::inspect, Token::registers>);
+             &RetroShell::exec <Token::audio, Token::inspect, Token::registers>, 0);
     
     
     //
@@ -652,11 +652,11 @@ Interpreter::registerInstructions()
 
     root.add({"paula", "inspect", "state"},
              "command", "Displays the current register value",
-             &RetroShell::exec <Token::paula, Token::inspect, Token::state>);
+             &RetroShell::exec <Token::paula, Token::inspect, Token::state>, 0);
 
     root.add({"paula", "inspect", "registers"},
              "command", "Displays the current register value",
-             &RetroShell::exec <Token::paula, Token::inspect, Token::registers>);
+             &RetroShell::exec <Token::paula, Token::inspect, Token::registers>, 0);
 
     
     //
@@ -668,7 +668,7 @@ Interpreter::registerInstructions()
 
     root.add({"rtc", "config"},
              "command", "Displays the current configuration",
-             &RetroShell::exec <Token::rtc, Token::config>);
+             &RetroShell::exec <Token::rtc, Token::config>, 0);
 
     root.add({"rtc", "set"},
              "command", "Configures the component");
@@ -682,7 +682,7 @@ Interpreter::registerInstructions()
 
     root.add({"rtc", "inspect", "registers"},
              "command", "Displays the current register value",
-             &RetroShell::exec <Token::rtc, Token::inspect, Token::registers>);
+             &RetroShell::exec <Token::rtc, Token::inspect, Token::registers>, 0);
 
     
     //
@@ -718,7 +718,7 @@ Interpreter::registerInstructions()
 
     root.add({"keyboard", "config"},
              "command", "Displays the current configuration",
-             &RetroShell::exec <Token::keyboard, Token::config>);
+             &RetroShell::exec <Token::keyboard, Token::config>, 0);
     
     root.add({"keyboard", "set"},
              "command", "Configures the component");
@@ -729,7 +729,7 @@ Interpreter::registerInstructions()
 
     root.add({"keyboard", "inspect"},
              "command", "Displays the internal state",
-             &RetroShell::exec <Token::keyboard, Token::inspect>);
+             &RetroShell::exec <Token::keyboard, Token::inspect>, 0);
 
     
     //
@@ -791,7 +791,7 @@ Interpreter::registerInstructions()
 
     root.add({"serial", "config"},
              "command", "Displays the current configuration",
-             &RetroShell::exec <Token::serial, Token::config>);
+             &RetroShell::exec <Token::serial, Token::config>, 0);
 
     root.add({"serial", "set"},
              "command", "Configures the component");
@@ -802,7 +802,7 @@ Interpreter::registerInstructions()
 
     root.add({"serial", "inspect"},
              "command", "Displays the internal state",
-             &RetroShell::exec <Token::serial, Token::inspect>);
+             &RetroShell::exec <Token::serial, Token::inspect>, 0);
 
     
     //
@@ -814,7 +814,7 @@ Interpreter::registerInstructions()
 
     root.add({"diskcontroller", "config"},
              "command", "Displays the current configuration",
-             &RetroShell::exec <Token::dc, Token::config>);
+             &RetroShell::exec <Token::dc, Token::config>, 0);
 
     root.add({"diskcontroller", "set"},
              "command", "Configures the component");
@@ -836,7 +836,7 @@ Interpreter::registerInstructions()
         
     root.add({"diskcontroller", "inspect"},
              "command", "Displays the internal state",
-             &RetroShell::exec <Token::dc, Token::inspect>);
+             &RetroShell::exec <Token::dc, Token::inspect>, 0);
 
 
     //
@@ -941,7 +941,7 @@ Interpreter::registerInstructions()
         
         root.add({df, "inspect"},
                  "command", "Displays the internal state",
-                 &RetroShell::exec <Token::dfn, Token::inspect>);
+                 &RetroShell::exec <Token::dfn, Token::inspect>, 0);
     }
 
     //
@@ -953,35 +953,35 @@ Interpreter::registerInstructions()
 
     root.add({"os", "execbase"},
              "command", "Displays information about the ExecBase struct",
-             &RetroShell::exec <Token::os, Token::execbase>);
+             &RetroShell::exec <Token::os, Token::execbase>, 0);
 
     root.add({"os", "interrupts"},
              "command", "Lists all interrupt handlers",
-             &RetroShell::exec <Token::os, Token::interrupts>);
+             &RetroShell::exec <Token::os, Token::interrupts>, 0);
 
     root.add({"os", "libraries"},
              "command", "Lists all libraries",
-             &RetroShell::exec <Token::os, Token::libraries>);
+             &RetroShell::exec <Token::os, Token::libraries>, 0);
     root.seek("os")->seek("libraries")->maxArgs = 1;
     
     root.add({"os", "devices"},
              "command", "Lists all devices",
-             &RetroShell::exec <Token::os, Token::devices>);
+             &RetroShell::exec <Token::os, Token::devices>, 0);
     root.seek("os")->seek("devices")->maxArgs = 1;
 
     root.add({"os", "resources"},
              "command", "Lists all resources",
-             &RetroShell::exec <Token::os, Token::resources>);
+             &RetroShell::exec <Token::os, Token::resources>, 0);
     root.seek("os")->seek("resources")->maxArgs = 1;
 
     root.add({"os", "tasks"},
              "command", "Lists all tasks",
-             &RetroShell::exec <Token::os, Token::tasks>);
+             &RetroShell::exec <Token::os, Token::tasks>, 0);
     root.seek("os")->seek("tasks")->maxArgs = 1;
 
     root.add({"os", "processes"},
              "command", "Lists all processes",
-             &RetroShell::exec <Token::os, Token::processes>);
+             &RetroShell::exec <Token::os, Token::processes>, 0);
     root.seek("os")->seek("processes")->maxArgs = 1;
 
     //
@@ -993,31 +993,10 @@ Interpreter::registerInstructions()
 
     root.add({"server", "serial"},
              "component", "Serial port server");
-
-    root.add({"server", "rshell"},
-             "component", "Retro shell server");
-
-    root.add({"server", "gdb"},
-             "component", "GDB server");
-    
-    /*
-    root.add({"server", "serial", "start"},
-             "command", "Starts the serial port server",
-             &RetroShell::exec <Token::server, Token::serial, Token::start>);
-    root.seek("server")->seek("serial")->seek("start")->maxArgs = 1;
-
-    root.add({"server", "serial", "stop"},
-             "command", "Stops the serial port server",
-             &RetroShell::exec <Token::server, Token::serial, Token::stop>);
-
-    root.add({"server", "serial", "disconnect"},
-             "command", "Disconnects a client",
-             &RetroShell::exec <Token::server, Token::serial, Token::disconnect>);
-    */
-    
+        
     root.add({"server", "serial", "config"},
              "command", "Displays the current configuration",
-             &RetroShell::exec <Token::server, Token::serial, Token::config>);
+             &RetroShell::exec <Token::server, Token::serial, Token::config>, 0);
 
     root.add({"server", "serial", "set"},
              "command", "Configures the component");
@@ -1032,24 +1011,26 @@ Interpreter::registerInstructions()
 
     root.add({"server", "serial", "inspect"},
              "command", "Displays the internal state",
-             &RetroShell::exec <Token::server, Token::serial, Token::inspect>);
+             &RetroShell::exec <Token::server, Token::serial, Token::inspect>, 0);
   
+    root.add({"server", "rshell"},
+             "component", "Retro shell server");
+
     root.add({"server", "rshell", "start"},
              "command", "Starts the retro shell server",
-             &RetroShell::exec <Token::server, Token::rshell, Token::start>);
-    root.seek("server")->seek("rshell")->seek("start")->maxArgs = 1;
+             &RetroShell::exec <Token::server, Token::rshell, Token::start>, 0);
 
     root.add({"server", "rshell", "stop"},
              "command", "Stops the retro shell server",
-             &RetroShell::exec <Token::server, Token::rshell, Token::stop>);
+             &RetroShell::exec <Token::server, Token::rshell, Token::stop>, 0);
 
     root.add({"server", "rshell", "disconnect"},
              "command", "Disconnects a client",
-             &RetroShell::exec <Token::server, Token::rshell, Token::disconnect>);
+             &RetroShell::exec <Token::server, Token::rshell, Token::disconnect>, 0);
 
     root.add({"server", "rshell", "config"},
              "command", "Displays the current configuration",
-             &RetroShell::exec <Token::server, Token::rshell, Token::config>);
+             &RetroShell::exec <Token::server, Token::rshell, Token::config>, 0);
 
     root.add({"server", "rshell", "set"},
              "command", "Configures the component");
@@ -1064,29 +1045,22 @@ Interpreter::registerInstructions()
 
     root.add({"server", "rshell", "inspect"},
              "command", "Displays the internal state",
-             &RetroShell::exec <Token::server, Token::rshell, Token::inspect>);
+             &RetroShell::exec <Token::server, Token::rshell, Token::inspect>, 0, 0);
    
-    /*
-    root.add({"server", "gdb", "start"},
-             "command", "Starts the GDB server",
-             &RetroShell::exec <Token::server, Token::gdb, Token::start>, 1);
-    root.seek("server")->seek("gdb")->seek("start")->maxArgs = 2;
+    root.add({"server", "gdb"},
+             "component", "GDB server");
 
-    root.add({"server", "gdb", "stop"},
-             "command", "Stops the GDB server",
-             &RetroShell::exec <Token::server, Token::gdb, Token::stop>);
-
-    root.add({"server", "gdb", "disconnect"},
-             "command", "Disconnects a client",
-             &RetroShell::exec <Token::server, Token::gdb, Token::disconnect>);
-    */
     root.add({"server", "gdb", "attach"},
              "command", "Attaches the GDB server to a process",
              &RetroShell::exec <Token::server, Token::gdb, Token::attach>, 1);
 
+    root.add({"server", "gdb", "detach"},
+             "command", "Detaches the GDB server from a process",
+             &RetroShell::exec <Token::server, Token::gdb, Token::detach>, 0);
+
     root.add({"server", "gdb", "config"},
              "command", "Displays the current configuration",
-             &RetroShell::exec <Token::server, Token::gdb, Token::config>);
+             &RetroShell::exec <Token::server, Token::gdb, Token::config>, 0);
 
     root.add({"server", "gdb", "set"},
              "command", "Configures the component");
@@ -1101,9 +1075,9 @@ Interpreter::registerInstructions()
 
     root.add({"server", "gdb", "inspect"},
              "command", "Displays the internal state",
-             &RetroShell::exec <Token::server, Token::gdb, Token::inspect>);
+             &RetroShell::exec <Token::server, Token::gdb, Token::inspect>, 0);
 
-    root.add({"server", "status"},
-             "command", "Prints a server status summary",
-             &RetroShell::exec <Token::server, Token::status>);
+    root.add({"server", "list"},
+             "command", "Displays a server status summary",
+             &RetroShell::exec <Token::server, Token::list>, 0);
 }

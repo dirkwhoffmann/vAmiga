@@ -125,10 +125,7 @@ public:
     RetroShell &operator<<(int value);
     RetroShell &operator<<(long value);
     RetroShell &operator<<(std::stringstream &stream);
-            
-    // Signals the GUI to update the display if neccessary
-    // void flush(); 
-    
+                
 private:
     
     // Marks the text storage as dirty

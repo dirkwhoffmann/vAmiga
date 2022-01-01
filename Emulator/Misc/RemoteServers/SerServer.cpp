@@ -11,6 +11,7 @@
 #include "SerServer.h"
 #include "Agnus.h"
 #include "IOUtils.h"
+#include "RetroShell.h"
 #include "Scheduler.h"
 #include "SerialPort.h"
 #include "SuspendableThread.h"
@@ -56,7 +57,7 @@ SerServer::getDefaultConfig()
     defaults.port = 8080;
     defaults.autoRun = true;
     defaults.protocol = SRVPROT_DEFAULT;
-    defaults.verbose = false;
+    defaults.verbose = true;
 
     return defaults;
 }
@@ -66,6 +67,11 @@ SerServer::doReceive()
 {
     auto result = connection.recv();
     receivedBytes += (isize)result.size();
+    
+    if (config.verbose) {
+        retroShell << "R: " << util::makePrintable(result) << "\n";
+    }
+
     return result;
 }
 
@@ -74,6 +80,10 @@ SerServer::doSend(const string &packet)
 {
     transmittedBytes += (isize)packet.size();
     connection.send(packet);
+    
+    if (config.verbose) {
+        retroShell << "T: " << util::makePrintable(packet) << "\n";
+    }
 }
 
 void
@@ -100,27 +110,25 @@ SerServer::processIncomingByte(u8 byte)
 }
 
 void
-SerServer::didSwitch(SrvState from, SrvState to)
+SerServer::didConnect()
 {
-    if (to == SRV_STATE_CONNECTED) {
-
-        // Start a new sessing
-        skippedTransmissions = 0;
-        receivedBytes = 0;
-        transmittedBytes = 0;
-        processedBytes = 0;
-        lostBytes = 0;
-        
-        // Start scheduling messages
-        assert(scheduler.id[SLOT_SER] == EVENT_NONE);
-        scheduler.scheduleImm <SLOT_SER> (SER_RECEIVE);
-    }
+    // Start a new sessing
+    skippedTransmissions = 0;
+    receivedBytes = 0;
+    transmittedBytes = 0;
+    processedBytes = 0;
+    lostBytes = 0;
     
-    if (from == SRV_STATE_CONNECTED) {
-        
-        // Stop scheduling messages
-        scheduler.cancel <SLOT_SER> ();
-    }
+    // Start scheduling messages
+    assert(scheduler.id[SLOT_SER] == EVENT_NONE);
+    scheduler.scheduleImm <SLOT_SER> (SER_RECEIVE);
+}
+
+void
+SerServer::didDisconnect()
+{
+    // Stop scheduling messages
+    scheduler.cancel <SLOT_SER> ();
 }
 
 void

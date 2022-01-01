@@ -394,7 +394,6 @@ extension MyController {
             renderer.console.close(delay: 0.25)
             
         case .UPDATE_CONSOLE:
-            // track("UPDATE_CONSOLE()")
             renderer.console.isDirty = true
 
         case .SCRIPT_DONE, .SCRIPT_PAUSE, .SCRIPT_ABORT:
@@ -531,8 +530,7 @@ extension MyController {
                 metal.releaseMouse()
             }
             
-        case .SRV_OFF, .SRV_STARTING, .SRV_LISTENING,
-                .SRV_CONNECTED, .SRV_STOPPING, .SRV_ERROR:
+        case .SRV_STATE:
             refreshStatusBar()
             
         case .SRV_RECEIVE, .SRV_SEND:

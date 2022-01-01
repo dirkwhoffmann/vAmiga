@@ -34,18 +34,26 @@ RshServer::getDefaultConfig()
     defaults.port = 8081;
     defaults.autoRun = false;
     defaults.protocol = SRVPROT_DEFAULT;
-    defaults.verbose = false;
+    defaults.verbose = true;
 
     return defaults;
 }
 
 void
-RshServer::didSwitch(SrvState from, SrvState to)
+RshServer::didStart()
 {
-    if (to == SRV_STATE_CONNECTED) {
+    if (config.verbose) {
+        retroShell << "Remote server is listening at port " << config.port << "\n";
+    }
+}
 
+void
+RshServer::didConnect()
+{
+    if (config.verbose) {
+        
         try {
- 
+            
             send("vAmiga RetroShell Remote Server ");
             send(std::to_string(VER_MAJOR) + ".");
             send(std::to_string(VER_MINOR) + ".");
@@ -56,7 +64,7 @@ RshServer::didSwitch(SrvState from, SrvState to)
             send("Type 'help' for help.\n");
             send("\n");
             send(retroShell.getPrompt());
-
+            
         } catch (...) { };
     }
 }
@@ -66,6 +74,9 @@ RshServer::doReceive()
 {
     string payload = connection.recv();
     
+    // Remove LF and CR (if present)
+    payload = util::rtrim(payload, "\n\r");
+
     // Ask the client to delete the input (will be replicated by RetroShell)
     send("\033[A\33[2K\r");
     
@@ -85,7 +96,12 @@ RshServer::doSend(const string &payload)
 
                 mapped += "\33[2K\r";
                 break;
-                
+
+            case '\n':
+
+                mapped += "\n";
+                break;
+
             default:
                 
                 if (isprint(c)) mapped += c;

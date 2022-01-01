@@ -40,6 +40,8 @@ RemoteServer::_dump(dump::Category category, std::ostream& os) const
         os << dec(config.port) << std::endl;
         os << tab("Protocol");
         os << ServerProtocolEnum::key(config.protocol) << std::endl;
+        os << tab("Auto run");
+        os << bol(config.autoRun) << std::endl;
         os << tab("Verbose");
         os << bol(config.verbose) << std::endl;
     }
@@ -190,23 +192,14 @@ RemoteServer::switchState(SrvState newState)
         debug(SRV_DEBUG, "Switching state: %s -> %s\n",
               SrvStateEnum::key(state), SrvStateEnum::key(newState));
         
-        // Switch state and call the delegation method
+        // Switch state
         state = newState;
+        
+        // Call the delegation method
         didSwitch(oldState, newState);
         
         // Inform the GUI
-        switch(state) {
-                
-            case SRV_STATE_OFF:         msgQueue.put(MSG_SRV_OFF); break;
-            case SRV_STATE_STARTING:    msgQueue.put(MSG_SRV_STARTING); break;
-            case SRV_STATE_LISTENING:   msgQueue.put(MSG_SRV_LISTENING); break;
-            case SRV_STATE_CONNECTED:   msgQueue.put(MSG_SRV_CONNECTED); break;
-            case SRV_STATE_STOPPING:    msgQueue.put(MSG_SRV_STOPPING); break;
-            case SRV_STATE_ERROR:       msgQueue.put(MSG_SRV_ERROR); break;
-
-            default:
-                fatalError;
-        }
+        msgQueue.put(MSG_SRV_STATE, newState);
     }
 }
 
@@ -218,12 +211,7 @@ RemoteServer::receive()
     if (isConnected()) {
         
         packet = doReceive();
-        numReceived++;
-
-        if (config.verbose) {
-            retroShell << "R: " << util::makePrintable(packet) << "\n";
-        }
-        msgQueue.put(MSG_SRV_RECEIVE);
+        msgQueue.put(MSG_SRV_RECEIVE, ++numReceived);
     }
     
     return packet;
@@ -235,12 +223,7 @@ RemoteServer::send(const string &packet)
     if (isConnected()) {
         
         doSend(packet);
-        numSent++;
-        
-        if (config.verbose) {
-            retroShell << "T: " << util::makePrintable(packet) << "\n";
-        }
-        msgQueue.put(MSG_SRV_SEND);
+        msgQueue.put(MSG_SRV_SEND, ++numSent);
     }
 }
 
@@ -374,14 +357,24 @@ RemoteServer::sessionLoop()
 void
 RemoteServer::handleError(const char *description)
 {
-    // Switch to error state
     switchState(SRV_STATE_ERROR);
-
-    // Compose the error message
-    auto msg = "Server Error: " + string(description);
-    debug(SRV_DEBUG, "%s\n", msg.c_str());
-    
-    // Inform the GUI
-    retroShell << msg << '\n';
-    msgQueue.put(MSG_SRV_ERROR);
+    retroShell << "Server Error: " << string(description) << '\n';
 }
+
+void
+RemoteServer::didSwitch(SrvState from, SrvState to)
+{
+    if (from == SRV_STATE_STARTING && to == SRV_STATE_LISTENING) {
+        didStart();
+    }
+    if (to == SRV_STATE_OFF) {
+        didStop();
+    }
+    if (to == SRV_STATE_CONNECTED) {
+        didConnect();
+    }
+    if (from == SRV_STATE_CONNECTED) {
+        didDisconnect();
+    }
+}
+

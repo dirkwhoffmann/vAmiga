@@ -18,12 +18,12 @@
 class RemoteServer : public SubComponent {
         
     friend class RemoteManager;
+        
+protected:
     
     // Current configuration
     ServerConfig config = {};
-    
-protected:
-    
+
     // Sockets
     Socket listener;
     Socket connection;
@@ -213,5 +213,9 @@ private:
     // Delegation methods
     //
 
-    virtual void didSwitch(SrvState from, SrvState to) { };
+    virtual void didSwitch(SrvState from, SrvState to);
+    virtual void didStart() { };
+    virtual void didStop() { };
+    virtual void didConnect() { };
+    virtual void didDisconnect() { };
 };

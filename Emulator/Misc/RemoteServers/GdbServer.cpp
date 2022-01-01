@@ -69,8 +69,10 @@ GdbServer::doReceive()
     auto cmd = connection.recv();
     
     // Remove LF and CR (if present)
-    while (!cmd.empty() && (cmd.back() == 10 || cmd.back() == 13)) {
-        cmd.pop_back();
+    cmd = util::rtrim(cmd, "\n\r");
+
+    if (config.verbose) {
+        retroShell << "R: " << util::makePrintable(cmd) << "\n";
     }
 
     latestCmd = cmd;
@@ -81,6 +83,10 @@ void
 GdbServer::doSend(const string &payload)
 {
     connection.send(payload);
+    
+    if (config.verbose) {
+        retroShell << "T: " << util::makePrintable(payload) << "\n";
+    }
 }
 
 void
@@ -104,17 +110,15 @@ GdbServer::doProcess(const string &payload)
 }
 
 void
-GdbServer::didSwitch(SrvState from, SrvState to)
+GdbServer::didConnect()
 {
-    if (to == SRV_STATE_CONNECTED) {
-        
-        ackMode = true;
-    }
-    
-    if (to == SRV_STATE_OFF) {
-        
-        processName = "";
-    }
+    ackMode = true;
+}
+ 
+void
+GdbServer::didStop()
+{
+    detach();
 }
 
 void

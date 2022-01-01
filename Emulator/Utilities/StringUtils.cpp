@@ -60,6 +60,20 @@ makePrintable(const string& s)
     return result;
 }
 
+string
+ltrim(const string &s, const string &characters)
+{
+    auto pos = s.find_first_not_of(characters);
+    return (pos == string::npos) ? "" : s.substr(pos);
+}
+
+string
+rtrim(const string &s, const string &characters)
+{
+    auto pos = s.find_last_not_of(characters);
+    return (pos == string::npos) ? "" : s.substr(0, pos + 1);
+}
+
 std::vector<string>
 split(const string &s, char delimiter)
 {
@@ -69,6 +83,21 @@ split(const string &s, char delimiter)
     
     while(std::getline(ss, substr, delimiter)) {
         result.push_back(substr);
+    }
+    
+    return result;
+}
+
+string
+concat(std::vector<string> &s, string delimiter)
+{
+    string result;
+    
+    isize count = (isize)s.size();
+    for (isize i = 0; i < count; i++) {
+        
+        if (!result.empty()) result += delimiter;
+        result += s[i];
     }
     
     return result;

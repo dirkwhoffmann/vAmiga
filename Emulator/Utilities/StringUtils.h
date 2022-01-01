@@ -38,9 +38,18 @@ string makePrintable(const string& s);
 
 
 //
-// Splitting
+// Stripping off characters
+//
+
+string ltrim(const string &s, const string &characters);
+string rtrim(const string &s, const string &characters);
+
+
+//
+// Splitting and concatenating
 //
 
 std::vector<string> split(const string &s, char delimiter);
+string concat(std::vector<string> &s, string delimiter);
 
 }
