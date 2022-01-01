@@ -1270,10 +1270,10 @@ DQ
                                                         <menuItem title="No device" state="on" image="devNoneTemplate" id="Vq0-6e-aaE">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Loopback cable" image="devCableLoopTemplate" tag="1" id="LEF-Dx-kUM">
+                                                        <menuItem title="Null modem cable" image="devCableTemplate" tag="1" id="HwV-iS-F7Q">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Null modem cable" image="devCableTemplate" tag="2" id="HwV-iS-F7Q">
+                                                        <menuItem title="Loopback cable" image="devCableLoopTemplate" tag="2" id="LEF-Dx-kUM">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>

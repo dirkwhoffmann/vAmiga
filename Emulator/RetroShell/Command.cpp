@@ -12,11 +12,30 @@
 #include <algorithm>
 
 void
-Command::add(const std::vector<string> tokens,
+Command::add(const std::vector<string> &tokens,
+             const string &type,
+             const string &help)
+{
+    add(tokens, type, help, nullptr, 0);
+}
+
+void
+Command::add(const std::vector<string> &tokens,
              const string &type,
              const string &help,
              void (RetroShell::*action)(Arguments&, long),
              isize numArgs, long param)
+{
+    add(tokens, type, help, action, { numArgs, numArgs }, param);
+}
+
+void
+Command::add(const std::vector<string> &tokens,
+             const string &type,
+             const string &help,
+             void (RetroShell::*action)(Arguments&, long),
+             std::pair <isize,isize> numArgs,
+             long param)
 {
     assert(!tokens.empty());
     
@@ -31,8 +50,8 @@ Command::add(const std::vector<string> tokens,
     d.type = type;
     d.info = help;
     d.action = action;
-    d.minArgs = numArgs;
-    d.maxArgs = numArgs;
+    d.minArgs = numArgs.first;
+    d.maxArgs = numArgs.second;
     
     // Register instruction
     cmd->args.push_back(d);

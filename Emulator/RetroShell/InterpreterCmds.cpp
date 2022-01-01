@@ -30,9 +30,8 @@ Interpreter::registerInstructions()
 
     root.add({"help"},
              "command", "Prints usage information",
-             &RetroShell::exec <Token::help>, 0);
+             &RetroShell::exec <Token::help>, {0, 1});
     root.seek("help")->hidden = true;
-    root.seek("help")->maxArgs = 1;
 
     root.add({"joshua"},
              "command", "",
@@ -961,28 +960,23 @@ Interpreter::registerInstructions()
 
     root.add({"os", "libraries"},
              "command", "Lists all libraries",
-             &RetroShell::exec <Token::os, Token::libraries>, 0);
-    root.seek("os")->seek("libraries")->maxArgs = 1;
+             &RetroShell::exec <Token::os, Token::libraries>, {0, 1});
     
     root.add({"os", "devices"},
              "command", "Lists all devices",
-             &RetroShell::exec <Token::os, Token::devices>, 0);
-    root.seek("os")->seek("devices")->maxArgs = 1;
+             &RetroShell::exec <Token::os, Token::devices>, {0, 1});
 
     root.add({"os", "resources"},
              "command", "Lists all resources",
-             &RetroShell::exec <Token::os, Token::resources>, 0);
-    root.seek("os")->seek("resources")->maxArgs = 1;
+             &RetroShell::exec <Token::os, Token::resources>, {0, 1});
 
     root.add({"os", "tasks"},
              "command", "Lists all tasks",
-             &RetroShell::exec <Token::os, Token::tasks>, 0);
-    root.seek("os")->seek("tasks")->maxArgs = 1;
+             &RetroShell::exec <Token::os, Token::tasks>, {0, 1});
 
     root.add({"os", "processes"},
              "command", "Lists all processes",
-             &RetroShell::exec <Token::os, Token::processes>, 0);
-    root.seek("os")->seek("processes")->maxArgs = 1;
+             &RetroShell::exec <Token::os, Token::processes>, {0, 1});
 
     //
     // Remote server

@@ -23,7 +23,7 @@ SerialPort::getDefaultConfig()
 {
     SerialPortConfig defaults;
     
-    defaults.device = SPD_LOOPBACK;
+    defaults.device = SPD_NONE;
     
     return defaults;
 }

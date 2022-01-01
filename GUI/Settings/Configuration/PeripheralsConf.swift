@@ -12,7 +12,7 @@ extension ConfigurationController {
     func refreshPeripheralsTab() {
 
         let poweredOff = amiga.poweredOff
-
+        
         // Drive
         perDf1Connect.state = config.df1Connected ? .on : .off
         perDf2Connect.state = config.df2Connected ? .on : .off
@@ -28,14 +28,15 @@ extension ConfigurationController {
         perBootCode.isEnabled = config.blankDiskFormat != FSVolumeType.NODOS.rawValue
 
         // Ports
+        let nullmodem = SerialPortDevice.NULLMODEM.rawValue
         parent.gamePadManager.refresh(popup: perGameDevice1, hide: true)
         parent.gamePadManager.refresh(popup: perGameDevice2, hide: true)
         perGameDevice1.selectItem(withTag: config.gameDevice1)
         perGameDevice2.selectItem(withTag: config.gameDevice2)
         perSerialDevice.selectItem(withTag: config.serialDevice)
         perSerialPort.integerValue = config.serialDevicePort
-        perSerialPort.isHidden = config.serialDevice != 2
-        perSerialPortText.isHidden = config.serialDevice != 2
+        perSerialPort.isHidden = config.serialDevice != nullmodem
+        perSerialPortText.isHidden = config.serialDevice != nullmodem
         
         // Lock controls if emulator is powered on
         perDf1Connect.isEnabled = poweredOff
