@@ -17,16 +17,16 @@
  * graphics output right, bitplane DMA has to start closely before the
  * display window opens (left border ends) and to stop closely after the
  * display window closes (right border begins).
- * DDFSTRT and DDFSTOP have a resolution of four lowres pixels (unlike
- * DIWSTRT and DIWSTOP which have a resolution of one lores pixels).
+ * DDFSTRT and DDFSTOP have a resolution of four lowres pixels on OCS machines
+ * and two lores pixels on ECS machines. In contrast to DIWSTRT and DIWSTOP
+ * which have a resolution of one lores pixels.
  *
- * I haven't found detailed information about the how the DDF logic is
- * implemented in hardware inside Agnus. If you have such information,
- * please let me know. For the time being, I base my implementation on the
- * following assumptions:
+ * I haven't found detailed information about how the DDF logic is implemented
+ * in hardware inside Agnus. If you have such information, please let me know.
+ * For the time being, I base my implementation on the following assumptions:
  *
- * 1. The four-pixel resolution is achieved by ignoring the two lower bits
- *    in DDFSTRT and DDFSTOP.
+ * 1. The pixel resolution is achieved by ignoring the lowest bit on ECS
+ *    machines and the lower two bits on OCS machines in DDFSTRT and DDFSTOP.
  *
  * 2. The actual DMA start position depends solely on DDFSTRT. In hires
  *    mode, the start position always matches DDFSTRT. In lores mode, it

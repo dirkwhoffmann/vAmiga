@@ -499,7 +499,7 @@ public:
     
 private:
     
-    void clearStats() { stats = { }; }
+    void clearStats();
     void updateStats();
     
 

@@ -215,6 +215,12 @@ Denise::setBPLxDAT(u16 value)
 
     if constexpr (x == 0) {
         
+        /*
+        if (agnus.pos.v == 0x34 || agnus.pos.v == 0x3A || agnus.pos.v == 0x40 || agnus.pos.v == 0x46) {
+            trace(true, "BPL1DAT written\n");
+        }
+        */
+        
         updateShiftRegisters();
         
         // Feed data registers into pipe
