@@ -1117,9 +1117,6 @@ Denise::beginOfLine(isize vpos)
     initialBplcon2 = bplcon2;
     wasArmed = armed;
 
-    // Prepare the bitplane shift registers
-    for (isize i = 0; i < 6; i++) shiftReg[i] = 0;
-
     // Clear the bBuffer
     std::memset(bBuffer, 0, sizeof(bBuffer));
 
