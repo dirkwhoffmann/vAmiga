@@ -149,13 +149,6 @@ Denise::spritePixelIsVisible(Pixel hpos) const
 void
 Denise::updateShiftRegistersOdd()
 {
-    // Only proceed if the load cycle has been reached
-    assert(fillPosOdd == INT16_MAX || agnus.pos.h >= fillPosOdd);
-    if (agnus.pos.h < fillPosOdd) return;
-
-    fillPosOdd = INT16_MAX;
-    armedOdd = true;
-    
     switch (bpu()) {
             
         case 6:
@@ -170,13 +163,6 @@ Denise::updateShiftRegistersOdd()
 void
 Denise::updateShiftRegistersEven()
 {
-    // Only proceed if the load cycle has been reached
-    assert(fillPosEven == INT16_MAX || agnus.pos.h >= fillPosEven);
-    if (agnus.pos.h < fillPosEven) return;
-
-    fillPosEven = INT16_MAX;
-    armedEven = true;
-    
     switch (bpu()) {
             
         case 6: shiftReg[5] = bpldatPipe[5];
@@ -271,8 +257,7 @@ Denise::drawOdd(Pixel offset)
         }
     }
  
-    // Disarm and clear the shift registers
-    armedOdd = false;
+    // Clear the shift registers
     shiftReg[0] = shiftReg[2] = shiftReg[4] = 0;
 }
 
@@ -321,8 +306,7 @@ Denise::drawEven(Pixel offset)
         }
     }
  
-    // Disarm and clear the shift registers
-    armedEven = false;
+    // Clear the shift registers
     shiftReg[1] = shiftReg[3] = shiftReg[5] = 0;
 }
 
@@ -378,15 +362,23 @@ Denise::drawBoth(Pixel offset)
 void
 Denise::drawHiresOdd()
 {
-    updateShiftRegistersOdd();
-    if (armedOdd) drawOdd <true> (pixelOffsetOdd);
+    if (armedOdd) {
+        
+        updateShiftRegistersOdd();
+        drawOdd <true> (pixelOffsetOdd);
+        armedOdd = false;
+    }
 }
 
 void
 Denise::drawHiresEven()
 {
-    updateShiftRegistersEven();
-    if (armedEven) drawEven <true> (pixelOffsetEven);
+    if (armedEven) {
+        
+        updateShiftRegistersEven();
+        drawEven <true> (pixelOffsetEven);
+        armedEven = false;
+    }
 }
 
 void
@@ -416,15 +408,23 @@ Denise::drawHiresBoth()
 void
 Denise::drawLoresOdd()
 {
-    updateShiftRegistersOdd();
-    if (armedOdd) drawOdd <false> (pixelOffsetOdd);
+    if (armedOdd) {
+
+        updateShiftRegistersOdd();
+        drawOdd <false> (pixelOffsetOdd);
+        armedOdd = false;
+    }
 }
 
 void
 Denise::drawLoresEven()
 {
-    updateShiftRegistersEven();
-    if (armedEven) drawEven <false> (pixelOffsetEven);
+    if (armedEven) {
+        
+        updateShiftRegistersEven();
+        drawEven <false> (pixelOffsetEven);
+        armedEven = false;
+    }
 }
 
 void

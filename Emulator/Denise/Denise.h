@@ -98,13 +98,6 @@ public:
      */
     alignas(16) u16 shiftReg[8];
 
-    // Bit slices computed out of the shift registers
-    // alignas(16) u8 slice[16];
-    
-    // Indicates the DMA cycle where the shift register gets filled
-    isize fillPosOdd;
-    isize fillPosEven;
-
     // Flags indicating that the shift registers have been loaded
     bool armedOdd;
     bool armedEven;
@@ -333,8 +326,6 @@ private:
         << clxdat
         << clxcon
         << shiftReg
-        << fillPosOdd
-        << fillPosEven
         << armedOdd
         << armedEven
         >> conChanges
