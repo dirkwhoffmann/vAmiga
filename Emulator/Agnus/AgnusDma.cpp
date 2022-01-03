@@ -267,18 +267,6 @@ Agnus::updateBplEvents(isize channels, isize first)
             case 1: slice[3] = slice[7] = BPL_H1;
         }
         
-    } else if (strt & 0b100) {
-        
-        switch (channels) {
-                
-            case 6: slice[6] = BPL_L6;
-            case 5: slice[2] = BPL_L5;
-            case 4: slice[5] = BPL_L4;
-            case 3: slice[1] = BPL_L3;
-            case 2: slice[7] = BPL_L2;
-            case 1: slice[3] = BPL_L1;
-        }
-
     } else {
         
         switch (channels) {
@@ -297,7 +285,7 @@ Agnus::updateBplEvents(isize channels, isize first)
         bplEvent[i] = EVENT_NONE;
     }
     for (isize i = std::max(first, strt); i <= stop; i++) {
-        bplEvent[i] = slice[i & 7];
+        bplEvent[i] = slice[(i - strt) & 7];
     }
     for (isize i = std::max(first, stop); i < HPOS_MAX; i++) {
         bplEvent[i] = EVENT_NONE;

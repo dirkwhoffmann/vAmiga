@@ -151,7 +151,6 @@ enum_i8(EventID)
     BPL_H2  = 0x20,
     BPL_H3  = 0x24,
     BPL_H4  = 0x28,
-    BPL_SR  = 0x2C,
     BPL_EOL = 0x30,
     BPL_EVENT_COUNT = 0x34,
 

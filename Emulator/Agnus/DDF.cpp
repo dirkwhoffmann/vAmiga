@@ -17,8 +17,9 @@ DDF<hires>::compute(isize ddfstrt, isize ddfstop)
     if constexpr (hires) {
                
         // Compute the beginning of the fetch window
-        strt = ddfstrt & ~0b11;
-        
+        // strt = ddfstrt & ~0b11;
+        strt = ddfstrt;
+
         // Compute the number of fetch units
         isize fetchUnits = ((ddfstop - ddfstrt) + 15) >> 3;
         
@@ -31,7 +32,8 @@ DDF<hires>::compute(isize ddfstrt, isize ddfstop)
     } else {
         
         // Compute the beginning of the fetch window
-        strt = ddfstrt & ~0b11;
+        // strt = ddfstrt & ~0b11;
+        strt = ddfstrt;
 
         // Compute the number of fetch units
         isize fetchUnits = ((ddfstop - ddfstrt) + 15) >> 3;

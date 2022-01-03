@@ -440,22 +440,6 @@ Agnus::serviceBPLEvent(EventID id)
             denise.drawLoresBoth();
             break;
 
-        case BPL_SR:
-            denise.updateShiftRegisters();
-            break;
-            
-        case BPL_SR | DRAW_ODD:
-            hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
-            break;
-            
-        case BPL_SR | DRAW_EVEN:
-            hires() ? denise.drawHiresEven() : denise.drawLoresEven();
-            break;
-            
-        case BPL_SR | DRAW_ODD | DRAW_EVEN:
-            hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
-            break;
-            
         case BPL_EOL:
             assert(pos.h == 0xE2);
             return;

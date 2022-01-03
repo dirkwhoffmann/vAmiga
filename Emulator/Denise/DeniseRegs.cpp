@@ -225,12 +225,16 @@ Denise::setBPLxDAT(u16 value)
         
         // Feed data registers into pipe
         for (isize i = 0; i < 6; i++) bpldatPipe[i] = bpldat[i];
-        
+
+        /*
         if (hires()) {
             fillPos = agnus.pos.h + (agnus.ddfstrt & 0b11) + 1;
         } else {
             fillPos = agnus.pos.h + (agnus.ddfstrt & 0b11) + 1;
         }
+        */
+        fillPos = agnus.pos.h + 1;
+        
         spriteClipBegin = std::min(spriteClipBegin,
                                    (Pixel)(agnus.ppos(fillPos) - 2));
     }
