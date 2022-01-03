@@ -249,7 +249,7 @@ Denise::updateShiftRegisters()
         case 2: shiftReg[1] = bpldatPipe[1];
         case 1: shiftReg[0] = bpldatPipe[0];
     }
-    
+    /*
     // On Intel machines, call the optimized SSE code
     #if (defined(__i386__) || defined(__x86_64__)) && defined(__MACH__)
     
@@ -270,6 +270,46 @@ Denise::updateShiftRegisters()
                          (!!(shiftReg[3] & mask) << 3) |
                          (!!(shiftReg[4] & mask) << 4) |
                          (!!(shiftReg[5] & mask) << 5) );
+    }
+    */
+}
+
+void
+Denise::extractSlices(u8 slices[16])
+{
+    u16 mask = 0x8000;
+    for (isize i = 0; i < 16; i++, mask >>= 1) {
+        
+        slices[i] = (u8) ((!!(shiftReg[0] & mask) << 0) |
+                          (!!(shiftReg[1] & mask) << 1) |
+                          (!!(shiftReg[2] & mask) << 2) |
+                          (!!(shiftReg[3] & mask) << 3) |
+                          (!!(shiftReg[4] & mask) << 4) |
+                          (!!(shiftReg[5] & mask) << 5) );
+    }
+}
+
+void
+Denise::extractSlicesOdd(u8 slices[16])
+{
+    u16 mask = 0x8000;
+    for (isize i = 0; i < 16; i++, mask >>= 1) {
+        
+        slices[i] = (u8) ((!!(shiftReg[0] & mask) << 0) |
+                          (!!(shiftReg[2] & mask) << 2) |
+                          (!!(shiftReg[4] & mask) << 4) );
+    }
+}
+
+void
+Denise::extractSlicesEven(u8 slices[16])
+{
+    u16 mask = 0x8000;
+    for (isize i = 0; i < 16; i++, mask >>= 1) {
+        
+        slices[i] = (u8) ((!!(shiftReg[1] & mask) << 1) |
+                          (!!(shiftReg[3] & mask) << 3) |
+                          (!!(shiftReg[5] & mask) << 5) );
     }
 }
 
@@ -293,9 +333,12 @@ Denise::drawOdd(Pixel offset)
     u16 mask = masks[bpu()];
     Pixel currentPixel = agnus.ppos() + offset;
     
+    u8 slices[16];
+    extractSlicesOdd(slices);
+    
     for (isize i = 0; i < 16; i++) {
         
-        u8 index = slice[i] & mask;
+        u8 index = slices[i] & mask;
         
         if (hiresMode) {
             
@@ -340,10 +383,13 @@ Denise::drawEven(Pixel offset)
     u16 mask = masks[bpu()];
     Pixel currentPixel = agnus.ppos() + offset;
     
+    u8 slices[16];
+    extractSlicesEven(slices);
+    
     for (isize i = 0; i < 16; i++) {
 
-        u8 index = slice[i] & mask;
-
+        u8 index = slices[i] & mask;
+        
         if (hiresMode) {
             
             // Synthesize one hires pixel
@@ -384,9 +430,12 @@ Denise::drawBoth(Pixel offset)
     u16 mask = masks[bpu()];
     Pixel currentPixel = agnus.ppos() + offset;
     
+    u8 slices[16];
+    extractSlices(slices);
+    
     for (isize i = 0; i < 16; i++) {
         
-        u8 index = slice[i] & mask;
+        u8 index = slices[i] & mask;
         
         if (hiresMode) {
             

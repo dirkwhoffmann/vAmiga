@@ -99,7 +99,7 @@ public:
     alignas(16) u16 shiftReg[8];
 
     // Bit slices computed out of the shift registers
-    alignas(16) u8 slice[16];
+    // alignas(16) u8 slice[16];
     
     // Indicates the DMA cycle where the shift register gets filled
     isize fillPos; 
@@ -378,16 +378,28 @@ public:
     
     DeniseInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
+    
+    //
+    // Working with the bitplane shift registers
+    //
+    
+public:
+    
+    // Transfers the bitplane pipeline registers to the shift registers
+    void updateShiftRegisters();
 
+    // Extracts a bit slice from the shift registers
+    void extractSlices(u8 slices[16]);
+    void extractSlicesOdd(u8 slices[16]);
+    void extractSlicesEven(u8 slices[16]);
+
+    
     //
     // Drawing bitplanes
     //
 
 public:
-    
-    // Transfers the bitplane pipeline registers to the shift registers
-    void updateShiftRegisters();
-        
+            
     // Wrappers around the core drawing routines
     void drawHiresOdd();
     void drawHiresEven();
