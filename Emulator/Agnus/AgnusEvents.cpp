@@ -293,18 +293,18 @@ Agnus::serviceBPLEvent(EventID id)
             break;
 
         case BPL_H2 | DRAW_ODD:
-            serviceBPLEventHires<1>();
             denise.drawHiresOdd();
+            serviceBPLEventHires<1>();
             break;
             
         case BPL_H2 | DRAW_EVEN:
-            serviceBPLEventHires<1>();
             denise.drawHiresEven();
+            serviceBPLEventHires<1>();
             break;
             
         case BPL_H2 | DRAW_ODD | DRAW_EVEN:
-            serviceBPLEventHires<1>();
             denise.drawHiresBoth();
+            serviceBPLEventHires<1>();
             break;
 
         case BPL_L2:
@@ -312,18 +312,18 @@ Agnus::serviceBPLEvent(EventID id)
             break;
 
         case BPL_L2 | DRAW_ODD:
-            serviceBPLEventLores<1>();
             denise.drawLoresOdd();
+            serviceBPLEventLores<1>();
             break;
             
         case BPL_L2 | DRAW_EVEN:
-            serviceBPLEventLores<1>();
             denise.drawLoresEven();
+            serviceBPLEventLores<1>();
             break;
             
         case BPL_L2 | DRAW_ODD | DRAW_EVEN:
-            serviceBPLEventLores<1>();
             denise.drawLoresBoth();
+            serviceBPLEventLores<1>();
             break;
 
         case BPL_H3:
@@ -331,18 +331,18 @@ Agnus::serviceBPLEvent(EventID id)
             break;
 
         case BPL_H3 | DRAW_ODD:
-            serviceBPLEventHires<2>();
             denise.drawHiresOdd();
+            serviceBPLEventHires<2>();
             break;
 
         case BPL_H3 | DRAW_EVEN:
-            serviceBPLEventHires<2>();
             denise.drawHiresEven();
+            serviceBPLEventHires<2>();
             break;
 
         case BPL_H3 | DRAW_ODD | DRAW_EVEN:
-            serviceBPLEventHires<2>();
             denise.drawHiresBoth();
+            serviceBPLEventHires<2>();
             break;
 
         case BPL_L3:
@@ -350,18 +350,18 @@ Agnus::serviceBPLEvent(EventID id)
             break;
 
         case BPL_L3 | DRAW_ODD:
-            serviceBPLEventLores<2>();
             denise.drawLoresOdd();
+            serviceBPLEventLores<2>();
             break;
 
         case BPL_L3 | DRAW_EVEN:
-            serviceBPLEventLores<2>();
             denise.drawLoresEven();
+            serviceBPLEventLores<2>();
             break;
 
         case BPL_L3 | DRAW_ODD | DRAW_EVEN:
-            serviceBPLEventLores<2>();
             denise.drawLoresBoth();
+            serviceBPLEventLores<2>();
             break;
 
         case BPL_H4:
@@ -369,18 +369,18 @@ Agnus::serviceBPLEvent(EventID id)
             break;
 
         case BPL_H4 | DRAW_ODD:
-            serviceBPLEventHires<3>();
             denise.drawHiresOdd();
+            serviceBPLEventHires<3>();
             break;
 
         case BPL_H4 | DRAW_EVEN:
-            serviceBPLEventHires<3>();
             denise.drawHiresEven();
+            serviceBPLEventHires<3>();
             break;
 
         case BPL_H4 | DRAW_ODD | DRAW_EVEN:
-            serviceBPLEventHires<3>();
             denise.drawHiresBoth();
+            serviceBPLEventHires<3>();
             break;
 
         case BPL_L4:
@@ -388,18 +388,18 @@ Agnus::serviceBPLEvent(EventID id)
             break;
 
         case BPL_L4 | DRAW_ODD:
-            serviceBPLEventLores<3>();
             denise.drawLoresOdd();
+            serviceBPLEventLores<3>();
             break;
 
         case BPL_L4 | DRAW_EVEN:
-            serviceBPLEventLores<3>();
             denise.drawLoresEven();
+            serviceBPLEventLores<3>();
             break;
 
         case BPL_L4 | DRAW_ODD | DRAW_EVEN:
-            serviceBPLEventLores<3>();
             denise.drawLoresBoth();
+            serviceBPLEventLores<3>();
             break;
 
         case BPL_L5:
@@ -407,18 +407,18 @@ Agnus::serviceBPLEvent(EventID id)
             break;
 
         case BPL_L5 | DRAW_ODD:
-            serviceBPLEventLores<4>();
             denise.drawLoresOdd();
+            serviceBPLEventLores<4>();
             break;
 
         case BPL_L5 | DRAW_EVEN:
-            serviceBPLEventLores<4>();
             denise.drawLoresEven();
+            serviceBPLEventLores<4>();
             break;
 
         case BPL_L5 | DRAW_ODD | DRAW_EVEN:
-            serviceBPLEventLores<4>();
             denise.drawLoresBoth();
+            serviceBPLEventLores<4>();
             break;
             
         case BPL_L6:
@@ -426,18 +426,18 @@ Agnus::serviceBPLEvent(EventID id)
             break;
 
         case BPL_L6 | DRAW_ODD:
-            serviceBPLEventLores<5>();
             denise.drawLoresOdd();
+            serviceBPLEventLores<5>();
             break;
 
         case BPL_L6 | DRAW_EVEN:
-            serviceBPLEventLores<5>();
             denise.drawLoresEven();
+            serviceBPLEventLores<5>();
             break;
 
         case BPL_L6 | DRAW_ODD | DRAW_EVEN:
-            serviceBPLEventLores<5>();
             denise.drawLoresBoth();
+            serviceBPLEventLores<5>();
             break;
 
         case BPL_EOL:

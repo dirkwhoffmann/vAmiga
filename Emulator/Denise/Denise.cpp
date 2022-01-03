@@ -233,6 +233,7 @@ void
 Denise::updateShiftRegisters()
 {
     // Only proceed if the load cycle has been reached
+    assert(fillPos == INT16_MAX || agnus.pos.h >= fillPos);
     if (agnus.pos.h < fillPos) return;
     
     fillPos = INT16_MAX;
