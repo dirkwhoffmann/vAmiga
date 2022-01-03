@@ -219,10 +219,12 @@ Denise::setBPLxDAT(u16 value)
         for (isize i = 0; i < 6; i++) bpldatPipe[i] = bpldat[i];
 
         // DEPRECATED
-        fillPos = agnus.pos.h + 1;
-        
+        fillPosOdd = agnus.pos.h + 1;
+        fillPosEven = agnus.pos.h + 1;
+
+        assert((Pixel)(agnus.ppos(fillPosOdd) - 2) == (Pixel)((agnus.pos.h + 1) * 4));
         spriteClipBegin = std::min(spriteClipBegin,
-                                   (Pixel)(agnus.ppos(fillPos) - 2));
+                                   (Pixel)(agnus.ppos(fillPosOdd) - 2));
     }
 }
 
