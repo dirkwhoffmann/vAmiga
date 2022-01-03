@@ -230,51 +230,44 @@ Denise::spritePixelIsVisible(Pixel hpos) const
 }
 
 void
-Denise::updateShiftRegisters()
+Denise::updateShiftRegistersOdd()
 {
     // Only proceed if the load cycle has been reached
     assert(fillPosOdd == INT16_MAX || agnus.pos.h >= fillPosOdd);
-    assert(fillPosEven == INT16_MAX || agnus.pos.h >= fillPosEven);
     if (agnus.pos.h < fillPosOdd) return;
-    if (agnus.pos.h < fillPosEven) return;
 
     fillPosOdd = INT16_MAX;
-    fillPosEven = INT16_MAX;
     armedOdd = true;
+    
+    switch (bpu()) {
+            
+        case 6:
+        case 5: shiftReg[4] = bpldatPipe[4];
+        case 4:
+        case 3: shiftReg[2] = bpldatPipe[2];
+        case 2:
+        case 1: shiftReg[0] = bpldatPipe[0];
+    }
+}
+
+void
+Denise::updateShiftRegistersEven()
+{
+    // Only proceed if the load cycle has been reached
+    assert(fillPosEven == INT16_MAX || agnus.pos.h >= fillPosEven);
+    if (agnus.pos.h < fillPosEven) return;
+
+    fillPosEven = INT16_MAX;
     armedEven = true;
     
     switch (bpu()) {
             
         case 6: shiftReg[5] = bpldatPipe[5];
-        case 5: shiftReg[4] = bpldatPipe[4];
+        case 5:
         case 4: shiftReg[3] = bpldatPipe[3];
-        case 3: shiftReg[2] = bpldatPipe[2];
+        case 3:
         case 2: shiftReg[1] = bpldatPipe[1];
-        case 1: shiftReg[0] = bpldatPipe[0];
     }
-    /*
-    // On Intel machines, call the optimized SSE code
-    #if (defined(__i386__) || defined(__x86_64__)) && defined(__MACH__)
-    
-    if (!NO_SSE) {
-        util::transposeSSE(shiftReg, slice);
-        return;
-    }
-    
-    #endif
-    
-    // On all other machines, fallback to the slower standard implementation
-    u32 mask = 0x8000;
-    for (isize i = 0; i < 16; i++, mask >>= 1) {
-        
-        slice[i] = (u8) ((!!(shiftReg[0] & mask) << 0) |
-                         (!!(shiftReg[1] & mask) << 1) |
-                         (!!(shiftReg[2] & mask) << 2) |
-                         (!!(shiftReg[3] & mask) << 3) |
-                         (!!(shiftReg[4] & mask) << 4) |
-                         (!!(shiftReg[5] & mask) << 5) );
-    }
-    */
 }
 
 void
@@ -419,6 +412,10 @@ Denise::drawEven(Pixel offset)
 template <bool hiresMode> void
 Denise::drawBoth(Pixel offset)
 {
+    drawOdd<hiresMode>(offset);
+    drawEven<hiresMode>(offset);
+    
+    /*
     static constexpr u16 masks[7] = {
         
         0b000000, // 0 bitplanes
@@ -458,25 +455,30 @@ Denise::drawBoth(Pixel offset)
     // Disarm and clear the shift registers
     armedEven = armedOdd = false;
     for (isize i = 0; i < 6; i++) shiftReg[i] = 0;
+    */
 }
 
 void
 Denise::drawHiresOdd()
 {
-    updateShiftRegisters();
+    updateShiftRegistersOdd();
     if (armedOdd) drawOdd <true> (pixelOffsetOdd);
 }
 
 void
 Denise::drawHiresEven()
 {
-    updateShiftRegisters();
+    updateShiftRegistersEven();
     if (armedEven) drawEven <true> (pixelOffsetEven);
 }
 
 void
 Denise::drawHiresBoth()
 {
+    drawHiresOdd();
+    drawHiresEven();
+    
+    /*
     updateShiftRegisters();
 
     if (armedOdd && armedEven && pixelOffsetOdd == pixelOffsetEven) {
@@ -491,25 +493,30 @@ Denise::drawHiresBoth()
         if (armedOdd) drawOdd <true> (pixelOffsetOdd);
         if (armedEven) drawEven <true> (pixelOffsetEven);
     }
+    */
 }
 
 void
 Denise::drawLoresOdd()
 {
-    updateShiftRegisters();
+    updateShiftRegistersOdd();
     if (armedOdd) drawOdd <false> (pixelOffsetOdd);
 }
 
 void
 Denise::drawLoresEven()
 {
-    updateShiftRegisters();
+    updateShiftRegistersEven();
     if (armedEven) drawEven <false> (pixelOffsetEven);
 }
 
 void
 Denise::drawLoresBoth()
 {
+    drawLoresOdd();
+    drawLoresEven();
+    
+    /*
     updateShiftRegisters();
 
     if (armedOdd && armedEven && pixelOffsetOdd == pixelOffsetEven) {
@@ -524,6 +531,7 @@ Denise::drawLoresBoth()
         if (armedOdd) drawOdd <false> (pixelOffsetOdd);
         if (armedEven) drawEven <false> (pixelOffsetEven);
     }
+    */
 }
 
 void

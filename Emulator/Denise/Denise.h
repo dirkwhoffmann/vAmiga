@@ -388,7 +388,8 @@ public:
 public:
     
     // Transfers the bitplane pipeline registers to the shift registers
-    void updateShiftRegisters();
+    void updateShiftRegistersOdd();
+    void updateShiftRegistersEven();
 
     // Extracts a bit slice from the shift registers
     void extractSlices(u8 slices[16]);
