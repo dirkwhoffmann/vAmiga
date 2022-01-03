@@ -168,6 +168,7 @@
 		50AE6EE524D9B210000AA367 /* DeniseRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE424D9B210000AA367 /* DeniseRegs.cpp */; };
 		50AE6EE724D9B2C7000AA367 /* StateMachineRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE624D9B2C7000AA367 /* StateMachineRegs.cpp */; };
 		50AE6F8525D71FBE0004AFBC /* Error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6F8425D71FBE0004AFBC /* Error.cpp */; };
+		50AE8B1C27833D2500991F89 /* DeniseInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE8B1B27833D2500991F89 /* DeniseInfo.cpp */; };
 		50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */; };
 		50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBECB24D3D4540037082D /* CopperEvents.cpp */; };
 		50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED024D3D61A0037082D /* PaulaEvents.cpp */; };
@@ -531,6 +532,7 @@
 		50AE6EE424D9B210000AA367 /* DeniseRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeniseRegs.cpp; sourceTree = "<group>"; };
 		50AE6EE624D9B2C7000AA367 /* StateMachineRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachineRegs.cpp; sourceTree = "<group>"; };
 		50AE6F8425D71FBE0004AFBC /* Error.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Error.cpp; sourceTree = "<group>"; };
+		50AE8B1B27833D2500991F89 /* DeniseInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeniseInfo.cpp; sourceTree = "<group>"; };
 		50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterEvents.cpp; sourceTree = "<group>"; };
 		50AEBECA24D3D40C0037082D /* CopperTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CopperTypes.h; sourceTree = "<group>"; };
 		50AEBECB24D3D4540037082D /* CopperEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperEvents.cpp; sourceTree = "<group>"; };
@@ -815,6 +817,7 @@
 				501E715022671FC20070B17D /* DeniseTypes.h */,
 				5020B17F21EF136100B9E80E /* Denise.h */,
 				5020B17E21EF136100B9E80E /* Denise.cpp */,
+				50AE8B1B27833D2500991F89 /* DeniseInfo.cpp */,
 				50AE6EE424D9B210000AA367 /* DeniseRegs.cpp */,
 				5027418E2297CACF0038E5AF /* Colors.h */,
 				5027418D2297CACF0038E5AF /* Colors.cpp */,
@@ -1817,6 +1820,7 @@
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
+				50AE8B1C27833D2500991F89 /* DeniseInfo.cpp in Sources */,
 				5019605D23125E680051B669 /* Monitor.swift in Sources */,
 				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,
 				50AEBEDA24D3D78F0037082D /* DiskControllerEvents.cpp in Sources */,

@@ -221,10 +221,9 @@ Denise::setBPLxDAT(u16 value)
         // DEPRECATED
         fillPosOdd = agnus.pos.h + 1;
         fillPosEven = agnus.pos.h + 1;
-
-        assert((Pixel)(agnus.ppos(fillPosOdd) - 2) == (Pixel)((agnus.pos.h + 1) * 4));
+        
         spriteClipBegin = std::min(spriteClipBegin,
-                                   (Pixel)(agnus.ppos(fillPosOdd) - 2));
+                                   (Pixel)((agnus.pos.h + 1) * 4));
     }
 }
 
