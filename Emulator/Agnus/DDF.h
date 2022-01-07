@@ -11,7 +11,6 @@
 
 #include "Aliases.h"
 
-template <bool hires>
 struct DDF
 {
     // First bitplane DMA cycle of odd and even bitplanes
@@ -52,6 +51,7 @@ struct DDF
     
     /* Computes a DDF window. The function assumes that ddfstop is greater than
      * ddfstrt. Other combinations are not yet supported by the emulator.
+     * DEPRECATED
      */
     void compute(isize ddfstrt, isize ddfstop);
 };

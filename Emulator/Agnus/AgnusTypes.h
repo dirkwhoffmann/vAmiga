@@ -49,6 +49,7 @@ struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
 };
 #endif
 
+// DEPRECATED
 enum_long(DDF_STATE)
 {
     DDF_OFF,

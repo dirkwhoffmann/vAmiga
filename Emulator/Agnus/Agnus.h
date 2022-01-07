@@ -222,6 +222,9 @@ public:
     u16 ddfstrt;
     u16 ddfstop;
 
+    // The display data fetch window used in the current rasterline
+    // DDF ddf;
+    
     /* At the end of a rasterline, these variables conain the DMA cycles
      * where the hpos counter matched ddfstrt or ddfstop, respectively. A
      * value of -1 indicates that no matching event took place.
@@ -241,8 +244,8 @@ public:
     isize ocsEarlyAccessLine;
 
     // Display data fetch window in lores and hires mode
-    DDF<false> ddfLores;
-    DDF<true> ddfHires;
+    DDF ddfLores;
+    DDF ddfHires;
     
     
     //
