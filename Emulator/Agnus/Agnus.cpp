@@ -38,7 +38,7 @@ Agnus::_reset(bool hard)
     clearStats();
     
     // Initialize event tables
-    updateBplEvents <false> (0, pos.h);
+    updateBplEvents <false> (0);
     assert(bplEvent[HPOS_MAX] == BPL_EOL);
     for (isize i = pos.h; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
     updateBplJumpTable();

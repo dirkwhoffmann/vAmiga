@@ -139,7 +139,7 @@ Agnus::enableBplDmaOCS()
 {
     if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
         
-        updateBplEvents(dmacon, bplcon0, pos.h + 2);
+        updateBplEvents(dmacon, bplcon0);
         updateBplEvent();
     }
 }
@@ -147,7 +147,7 @@ Agnus::enableBplDmaOCS()
 void
 Agnus::disableBplDmaOCS()
 {
-    updateBplEvents(dmacon, bplcon0, pos.h + 2);
+    updateBplEvents(dmacon, bplcon0);
     updateBplEvent();
 }
 
@@ -156,7 +156,7 @@ Agnus::enableBplDmaECS()
 {
     if (pos.h + 2 < ddfstrtReached) {
 
-        updateBplEvents(dmacon, bplcon0, pos.h + 2);
+        updateBplEvents(dmacon, bplcon0);
         updateBplEvent();
         return;
     }
@@ -176,7 +176,7 @@ Agnus::enableBplDmaECS()
 void
 Agnus::disableBplDmaECS()
 {
-    updateBplEvents(dmacon, bplcon0, pos.h + 2);
+    updateBplEvents(dmacon, bplcon0);
     updateBplEvent();
 }
 
@@ -223,10 +223,8 @@ Agnus::clearBplEvents()
 }
 
 void
-Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, isize first)
+Agnus::updateBplEvents(u16 dmacon, u16 bplcon0)
 {
-    assert(first >= 0);
-
     // Determine the number of active bitplanes
     auto channels = bpu(bplcon0);
 
@@ -237,14 +235,14 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, isize first)
     if (ddfstrtReached == -1) channels = 0;
     
     if (Denise::hires(bplcon0)) {
-        updateBplEvents <true> (channels, first);
+        updateBplEvents <true> (channels);
     } else {
-        updateBplEvents <false> (channels, first);
+        updateBplEvents <false> (channels);
     }
 }
 
 template <bool hi> void
-Agnus::updateBplEvents(isize channels, isize first)
+Agnus::updateBplEvents(isize channels)
 {
     // Get the DDF window size
     auto strt = hi ? ddfHires.strt : ddfLores.strt;
@@ -281,13 +279,13 @@ Agnus::updateBplEvents(isize channels, isize first)
     }
     
     // Update the event table
-    for (isize i = first; i < strt; i++) {
+    for (isize i = 0; i < strt; i++) {
         bplEvent[i] = EVENT_NONE;
     }
-    for (isize i = std::max(first, strt); i <= stop; i++) {
+    for (isize i = strt; i <= stop; i++) {
         bplEvent[i] = slice[(i - strt) & 7];
     }
-    for (isize i = std::max(first, stop); i < HPOS_MAX; i++) {
+    for (isize i = stop; i < HPOS_MAX; i++) {
         bplEvent[i] = EVENT_NONE;
     }
     bplEvent[HPOS_MAX] = BPL_EOL;

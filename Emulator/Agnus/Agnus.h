@@ -699,13 +699,13 @@ public:
     void clearBplEvents();
 
     // Renews all events in the BPL event table
-    void updateBplEvents(u16 dmacon, u16 bplcon0, isize first = 0);
-    void updateBplEvents(isize first = 0) { updateBplEvents(dmacon, bplcon0, first); }
+    void updateBplEvents(u16 dmacon, u16 bplcon0);
+    void updateBplEvents() { updateBplEvents(dmacon, bplcon0); }
     
 private:
 
     // Workhorse for updateBplEvents
-    template <bool hires> void updateBplEvents(isize channels, isize first);
+    template <bool hires> void updateBplEvents(isize channels);
 
     // Updates the jump table for the bplEvent table
     void updateBplJumpTable();

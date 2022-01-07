@@ -298,7 +298,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
          */
         
         // Update the DMA allocation table
-        updateBplEvents(dmaconAtDDFStrt, newValue, pos.h);
+        updateBplEvents(dmaconAtDDFStrt, newValue);
         
         // Since the table has changed, we also need to update the event slot
         scheduleBplEventForCycle(pos.h);
@@ -334,8 +334,8 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
     scrollHiresOdd  = (bplcon1 & 0b00000110) >> 1;
     scrollHiresEven = (bplcon1 & 0b01100000) >> 5;
     
-    // Update the bitplane event table starting at the current hpos
-    updateBplEvents(pos.h);
+    // Update the bitplane event table
+    updateBplEvents();
     
     // Update the scheduled bitplane event according to the new table
     scheduleBplEventForCycle(pos.h);
