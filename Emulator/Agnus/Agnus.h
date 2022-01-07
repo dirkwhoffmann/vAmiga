@@ -240,9 +240,6 @@ public:
      */
     isize ocsEarlyAccessLine;
 
-    // DDF flipflops
-    bool ddfVFlop;
-
     // Display data fetch window in lores and hires mode
     DDF<false> ddfLores;
     DDF<true> ddfHires;
@@ -425,7 +422,6 @@ private:
         << ddfstopReached
         << ddfState
         << ocsEarlyAccessLine
-        << ddfVFlop
         >> ddfLores
         >> ddfHires
 

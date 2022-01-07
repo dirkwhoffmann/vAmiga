@@ -219,9 +219,9 @@ bool
 Agnus::inBplDmaLine(u16 dmacon, u16 bplcon0) const
 {
     return
-    ddfVFlop                 // Outside VBLANK, inside DIW
-    && bpu(bplcon0)          // At least one bitplane enabled
-    && bpldma(dmacon);       // Bitplane DMA enabled
+    !inLastRasterline() && diwVFlop // Outside VBLANK, inside DIW
+    && bpu(bplcon0)                 // At least one bitplane enabled
+    && bpldma(dmacon);              // Bitplane DMA enabled
 }
 
 Cycle
@@ -538,9 +538,6 @@ Agnus::hsyncHandler()
     //
     // DDF
     //
-
-    // Update the vertical DDF flipflop
-    ddfVFlop = !inLastRasterline() && diwVFlop;
 
 
     //
