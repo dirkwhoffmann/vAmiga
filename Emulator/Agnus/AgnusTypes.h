@@ -131,9 +131,11 @@ enum_long(DISPLAY_SIGNAL)
     SIG_BMAPEN1,
 
     // Vertical start and stop
-    SIG_BPVSTART,
-    SIG_BPVSTOP,
-    
+    SIG_BPVSTART0,
+    SIG_BPVSTART1,
+    SIG_BPVSTOP0,
+    SIG_BPVSTOP1,
+
     // Horizontal start and stop
     SIG_BPHSTART,
     SIG_BPHSTOP,
@@ -180,8 +182,10 @@ struct DisplaySignalEnum : util::Reflection<DisplaySignalEnum, DisplaySignal>
             case SIG_CON_H7:    return "CON_H7";
             case SIG_BMAPEN0:   return "BMAPEN0";
             case SIG_BMAPEN1:   return "BMAPEN0";
-            case SIG_BPVSTART:  return "BPVSTART";
-            case SIG_BPVSTOP:   return "BPVSTOP";
+            case SIG_BPVSTART0: return "BPVSTART0";
+            case SIG_BPVSTART1: return "BPVSTART1";
+            case SIG_BPVSTOP0:  return "BPVSTOP0";
+            case SIG_BPVSTOP1:  return "BPVSTOP1";
             case SIG_BPHSTART:  return "BPHSTART";
             case SIG_BPHSTOP:   return "BPHSTOP";
             case SIG_SVB:       return "SVB";
@@ -258,11 +262,17 @@ AgnusStats;
 #ifdef __cplusplus
 struct DDFFlipflops
 {
-    // Flipflops derived from the OCS schematics
-    bool ff1;
-    bool ff2;
-    bool ff3;
-    bool ff5;
+    // Input lines (derived from the OCS schematics)
+    bool bmapen = false;
+    bool bpvstart = false;
+    bool bpvstop = false;
+    bool svb = false;
+    
+    // Flipflops (derived from the OCS schematics)
+    bool ff1 = false;
+    bool ff2 = false;
+    bool ff3 = false;
+    bool ff5 = false;
     
     template <class W>
     void operator<<(W& worker)

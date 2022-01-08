@@ -133,7 +133,8 @@ public:
     
     // The DMA control register
     u16 dmacon;
-
+    u16 dmaconInitial;
+    
     // The disk DMA pointer
     u32 dskpt;
 
@@ -157,11 +158,12 @@ public:
     //
     // Derived values
     //
-    
+        
     /* Values of BPLCON0 and DMACON at the DDFSTRT trigger cycle. Both
      * variables are set at the beginning of each rasterline and updated
      * on-the-fly if BPLCON0 or DMACON changes before the trigger conditions
      * has been reached.
+     * DEPRICATED
      */
     u16 bplcon0AtDDFStrt;
     u16 dmaconAtDDFStrt;
@@ -310,6 +312,8 @@ public:
     isize diwHstop;
     isize diwVstrt;
     isize diwVstop;
+    isize diwVstrtInitial;
+    isize diwVstopInitial;
 
     /* Value of the DIW flipflops. Variable diwVFlop stores the value of the
      * vertical DIW flipflop. The value is updated at the beginning of each
@@ -408,6 +412,7 @@ private:
         << bplcon0
         << bplcon1
         << dmacon
+        << dmaconInitial
         << dskpt
         << audpt
         << audlc
@@ -448,7 +453,9 @@ private:
         << diwHstrt
         << diwHstop
         << diwVstrt
+        << diwVstrtInitial
         << diwVstop
+        << diwVstopInitial
         << diwVFlop
         << diwHFlop
         << diwHFlopOn

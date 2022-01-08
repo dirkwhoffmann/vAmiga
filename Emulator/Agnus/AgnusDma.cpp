@@ -137,47 +137,59 @@ Agnus::initDasEventTable()
 void
 Agnus::enableBplDmaOCS()
 {
-    if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
+    if constexpr (LEGACY_DDF) {
         
-        updateBplEvents(dmacon, bplcon0);
-        updateBplEvent();
+        if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
+            
+            updateBplEvents(dmacon, bplcon0);
+            updateBplEvent();
+        }
     }
 }
 
 void
 Agnus::disableBplDmaOCS()
 {
-    updateBplEvents(dmacon, bplcon0);
-    updateBplEvent();
+    if constexpr (LEGACY_DDF) {
+        
+        updateBplEvents(dmacon, bplcon0);
+        updateBplEvent();
+    }
 }
 
 void
 Agnus::enableBplDmaECS()
 {
-    if (pos.h + 2 < ddfstrtReached) {
-
-        updateBplEvents(dmacon, bplcon0);
-        updateBplEvent();
-        return;
-    }
-    
-    if (pos.h + 2 < ddfstopReached) {
+    if constexpr (LEGACY_DDF) {
         
-        ddfLores.compute(std::max(pos.h + 4, ddfstrtReached), ddfstopReached);
-        ddfHires.compute(std::max(pos.h + 4, ddfstrtReached), ddfstopReached);
-        hsyncActions |= HSYNC_PREDICT_DDF;
+        if (pos.h + 2 < ddfstrtReached) {
+            
+            updateBplEvents(dmacon, bplcon0);
+            updateBplEvent();
+            return;
+        }
         
-        updateBplEvents();
-        updateBplEvent();
-        // updateLoresDrawingFlags(); // THIS CAN'T BE RIGHT
+        if (pos.h + 2 < ddfstopReached) {
+            
+            ddfLores.compute(std::max(pos.h + 4, ddfstrtReached), ddfstopReached);
+            ddfHires.compute(std::max(pos.h + 4, ddfstrtReached), ddfstopReached);
+            hsyncActions |= HSYNC_PREDICT_DDF;
+            
+            updateBplEvents();
+            updateBplEvent();
+            // updateLoresDrawingFlags(); // THIS CAN'T BE RIGHT
+        }
     }
 }
 
 void
 Agnus::disableBplDmaECS()
 {
-    updateBplEvents(dmacon, bplcon0);
-    updateBplEvent();
+    if constexpr (LEGACY_DDF) {
+        
+        updateBplEvents(dmacon, bplcon0);
+        updateBplEvent();
+    }
 }
 
 template <BusOwner owner> bool
@@ -303,7 +315,9 @@ Agnus::computeBplEvents()
     // Predict all events for the current scanline
     sigRecorder.clear();
         
-    sigRecorder.insert(0,        inBplDmaLine() ? SIG_BMAPEN1 : SIG_BMAPEN0);
+    if (pos.v == diwVstrt) sigRecorder.insert(0, SIG_BPVSTART1);
+    if (pos.v == diwVstop) sigRecorder.insert(0, SIG_BPVSTOP1);
+
     sigRecorder.insert(0,        bplcon0 >> 12);
     sigRecorder.insert(0x18,     SIG_SHW);
     sigRecorder.insert(ddfstrt,  SIG_BPHSTART);
@@ -317,9 +331,15 @@ Agnus::computeBplEvents()
 void
 Agnus::computeBplEvents(const SigRecorder &sr)
 {
-    bool bmapen = false;
+    auto state = ddfInitial;
+    auto bmapen = dmaconInitial & (DMAEN | BPLEN);
+    
+    if (state.bpvstart) state.ff1 = true;
+    if (state.bpvstop) state.ff1 = false;
+    if (state.svb) state.ff1 = false;
+    if (!bmapen) state.ff3 = false;
+    
     isize cnt = 0;
-    auto state = ddf;
     
     // Layout of a single fetch unit
     EventID slice[8]= { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -352,9 +372,9 @@ Agnus::computeBplEvents(const SigRecorder &sr)
         // Emulate the next signal change
         //
         
-        // TODO: This is incorrect for invalid values
         switch (signal) {
                 
+            case SIG_CON_L7:
             case SIG_CON_L6: slice[2] = BPL_L6;
             case SIG_CON_L5: slice[6] = BPL_L5;
             case SIG_CON_L4: slice[1] = BPL_L4;
@@ -362,17 +382,16 @@ Agnus::computeBplEvents(const SigRecorder &sr)
             case SIG_CON_L2: slice[3] = BPL_L2;
             case SIG_CON_L1: slice[7] = BPL_L1;
             case SIG_CON_L0:
-            case SIG_CON_L7:
                 break;
-                
-            case SIG_CON_H6:
-            case SIG_CON_H5:
+                                
             case SIG_CON_H4: slice[0] = slice[4] = BPL_H4;
             case SIG_CON_H3: slice[2] = slice[6] = BPL_H3;
             case SIG_CON_H2: slice[1] = slice[5] = BPL_H2;
             case SIG_CON_H1: slice[3] = slice[7] = BPL_H1;
             case SIG_CON_H0:
             case SIG_CON_H7:
+            case SIG_CON_H6:
+            case SIG_CON_H5:
                 break;
 
             case SIG_BMAPEN0:
@@ -386,8 +405,10 @@ Agnus::computeBplEvents(const SigRecorder &sr)
                 bmapen = true;
                 break;
                 
-            case SIG_BPVSTART:
-            case SIG_BPVSTOP:
+            case SIG_BPVSTART0:
+            case SIG_BPVSTOP0:
+            case SIG_BPVSTART1:
+            case SIG_BPVSTOP1:
                 break;
                 
             case SIG_BPHSTART:

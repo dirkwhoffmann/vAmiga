@@ -516,6 +516,12 @@ Agnus::hsyncHandler()
     // Advance the vertical counter
     if (++pos.v >= frame.numLines()) vsyncHandler();
 
+    // Save the current value of certain variables
+    dmaconInitial = dmacon;
+    diwVstrtInitial = diwVstrt;
+    diwVstopInitial = diwVstop;
+    ddfInitial = ddf;
+
     // Initialize variables which keep values for certain trigger positions
     dmaconAtDDFStrt = dmacon;
     bplcon0AtDDFStrt = bplcon0;
@@ -539,17 +545,33 @@ Agnus::hsyncHandler()
     // DDF
     //
 
-    // Save the current display logic state
-    ddfInitial = ddf;
 
     //
     // Determine the bitplane DMA status for the next line
     //
 
-    if (bool newBplDmaLine = inBplDmaLine(); newBplDmaLine ^ bplDmaLine) {
-        
-        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-        bplDmaLine = newBplDmaLine;
+    if (LEGACY_DDF) {
+
+        if (bool newBplDmaLine = inBplDmaLine(); newBplDmaLine ^ bplDmaLine) {
+            
+            hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+            bplDmaLine = newBplDmaLine;
+        }
+
+    } else {
+
+        if ((pos.v == diwVstrt) != ddfInitial.bpvstart) {
+            ddfInitial.bpvstart = (pos.v == diwVstrt);
+            hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+        }
+        if ((pos.v == diwVstop) != ddfInitial.bpvstop) {
+            ddfInitial.bpvstop = (pos.v == diwVstop);
+            hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+        }
+        if ((inLastRasterline()) != ddfInitial.svb) {
+            ddfInitial.svb = (inLastRasterline());
+            hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+        }
     }
 
 
@@ -590,8 +612,11 @@ Agnus::hsyncHandler()
         }
         if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_BPL_TABLE;
-            // computeBplEvents();
-            updateBplEvents();
+            if constexpr (LEGACY_DDF) {
+                updateBplEvents();
+            } else {
+                computeBplEvents();
+            }
         }
         if (hsyncActions & HSYNC_UPDATE_DAS_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_DAS_TABLE;

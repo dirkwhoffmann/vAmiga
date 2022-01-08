@@ -114,6 +114,17 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
             if (row % 2) { os << std::endl; } else { os << "  "; }
         }
     }
+    
+    if (category & dump::Signals) {
+       
+        for (isize i = 0, end = sigRecorder.end(); i < end; i++) {
+            
+            auto trigger = std::to_string(sigRecorder.keys[i]);
+            auto signal = DisplaySignalEnum::key(sigRecorder.elements[i]);
+     
+            os << tab(trigger) << signal << std::endl;
+        }
+    }
 }
 
 void

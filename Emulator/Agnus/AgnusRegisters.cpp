@@ -281,24 +281,15 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     
     // Check if the hires bit or one of the BPU bits have been modified
     if ((oldValue ^ newValue) & 0xF000) {
-    
-        /*
-        if ((oldValue ^ newValue) & 0x8000) {
-            if (newValue & 0x8000) {
-                if (agnus.frame.nr > 2000) amiga.signalStop();
-            }
-        }
-        */
-        
-        /* TODO:
-         * BPLCON0 is usually written in each frame. To speed up, just check
-         * hpos. If it is smaller than the start of the DMA window, a standard
-         * update() is enough and the scheduled update in hsyncActions
-         * (HSYNC_UPDATE_BPL_TABLE) can be omitted.
-         */
-        
+            
         // Update the DMA allocation table
-        updateBplEvents(dmaconAtDDFStrt, newValue);
+        if constexpr (LEGACY_DDF) {
+            updateBplEvents(dmaconAtDDFStrt, newValue);
+        } else {
+            sigRecorder.insert(pos.h, newValue >> 12);
+            computeBplEvents(sigRecorder);
+            // dump(dump::Signals);
+        }
         
         // Since the table has changed, we also need to update the event slot
         scheduleBplEventForCycle(pos.h);
@@ -335,7 +326,11 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
     scrollHiresEven = (bplcon1 & 0b01100000) >> 5;
     
     // Update the bitplane event table
-    updateBplEvents();
+    if constexpr (LEGACY_DDF) {
+        updateBplEvents();
+    } else {
+        computeBplEvents();
+    }
     
     // Update the scheduled bitplane event according to the new table
     scheduleBplEventForCycle(pos.h);
@@ -495,27 +490,30 @@ Agnus::setDDFSTRT(u16 old, u16 value)
     
     ddfstrt = value;
     
-    // Tell the hsync handler to recompute the DDF window
-    hsyncActions |= HSYNC_PREDICT_DDF;
-    
-    // Take immediate action if we haven't reached the old DDFSTRT cycle yet
-    if (pos.h < ddfstrtReached) {
+    if constexpr (LEGACY_DDF) {
         
-        // Check if the new position has already been passed
-        if (ddfstrt <= pos.h + 2) {
+        // Tell the hsync handler to recompute the DDF window
+        hsyncActions |= HSYNC_PREDICT_DDF;
+        
+        // Take immediate action if we haven't reached the old DDFSTRT cycle yet
+        if (pos.h < ddfstrtReached) {
             
-            // DDFSTRT never matches in the current rasterline. Disable DMA
-            ddfstrtReached = -1;
-            clearBplEvents();
-            scheduleNextBplEvent();
-            
-        } else {
-            
-            // Update the matching position and recalculate the DMA table
-            ddfstrtReached = ddfstrt > HPOS_MAX ? -1 : ddfstrt;
-            computeDDFWindow();
-            updateBplEvents();
-            scheduleNextBplEvent();
+            // Check if the new position has already been passed
+            if (ddfstrt <= pos.h + 2) {
+                
+                // DDFSTRT never matches in the current rasterline. Disable DMA
+                ddfstrtReached = -1;
+                clearBplEvents();
+                scheduleNextBplEvent();
+                
+            } else {
+                
+                // Update the matching position and recalculate the DMA table
+                ddfstrtReached = ddfstrt > HPOS_MAX ? -1 : ddfstrt;
+                computeDDFWindow();
+                updateBplEvents();
+                scheduleNextBplEvent();
+            }
         }
     }
 }
@@ -539,27 +537,30 @@ Agnus::setDDFSTOP(u16 old, u16 value)
     trace(DDF_DEBUG, "setDDFSTOP(%X, %X)\n", old, value);
     
     ddfstop = value;
-    
-    // Tell the hsync handler to recompute the DDF window
-    hsyncActions |= HSYNC_PREDICT_DDF;
-    
-    // Take action if we haven't reached the old DDFSTOP cycle yet
-    if (pos.h + 2 < ddfstopReached || ddfstopReached == -1) {
+
+    if constexpr (LEGACY_DDF) {
         
-        // Check if the new position has already been passed
-        if (ddfstop <= pos.h + 2) {
+        // Tell the hsync handler to recompute the DDF window
+        hsyncActions |= HSYNC_PREDICT_DDF;
+        
+        // Take action if we haven't reached the old DDFSTOP cycle yet
+        if (pos.h + 2 < ddfstopReached || ddfstopReached == -1) {
             
-            // DDFSTOP won't match in the current rasterline
-            ddfstopReached = -1;
-            
-        } else {
-            
-            // Update the matching position and recalculate the DMA table
-            ddfstopReached = (ddfstop > HPOS_MAX) ? -1 : ddfstop;
-            if (ddfstrtReached >= 0) {
-                computeDDFWindow();
-                updateBplEvents();
-                scheduleNextBplEvent();
+            // Check if the new position has already been passed
+            if (ddfstop <= pos.h + 2) {
+                
+                // DDFSTOP won't match in the current rasterline
+                ddfstopReached = -1;
+                
+            } else {
+                
+                // Update the matching position and recalculate the DMA table
+                ddfstopReached = (ddfstop > HPOS_MAX) ? -1 : ddfstop;
+                if (ddfstrtReached >= 0) {
+                    computeDDFWindow();
+                    updateBplEvents();
+                    scheduleNextBplEvent();
+                }
             }
         }
     }
