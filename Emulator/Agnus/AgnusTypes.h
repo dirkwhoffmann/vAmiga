@@ -49,6 +49,33 @@ struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
 };
 #endif
 
+enum_long(SPR_DMA_STATE)
+{
+    SPR_DMA_IDLE,
+    SPR_DMA_ACTIVE
+};
+typedef SPR_DMA_STATE SprDMAState;
+
+#ifdef __cplusplus
+struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
+{
+    static long minVal() { return 0; }
+    static long maxVal() { return SPR_DMA_ACTIVE; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+
+    static const char *prefix() { return "SPR_DMA"; }
+    static const char *key(SprDMAState value)
+    {
+        switch (value) {
+                
+            case SPR_DMA_IDLE:   return "IDLE";
+            case SPR_DMA_ACTIVE: return "ACTIVE";
+        }
+        return "???";
+    }
+};
+#endif
+
 // DEPRECATED
 enum_long(DDF_STATE)
 {
@@ -79,27 +106,88 @@ struct DDFStateEnum : util::Reflection<DDFStateEnum, DDFState>
 };
 #endif
 
-enum_long(SPR_DMA_STATE)
+enum_long(DISPLAY_SIGNAL)
 {
-    SPR_DMA_IDLE,
-    SPR_DMA_ACTIVE
+    // Upper four bits of BPLCON0
+    SIG_CON_L0,
+    SIG_CON_L1,
+    SIG_CON_L2,
+    SIG_CON_L3,
+    SIG_CON_L4,
+    SIG_CON_L5,
+    SIG_CON_L6,
+    SIG_CON_L7,
+    SIG_CON_H0,
+    SIG_CON_H1,
+    SIG_CON_H2,
+    SIG_CON_H3,
+    SIG_CON_H4,
+    SIG_CON_H5,
+    SIG_CON_H6,
+    SIG_CON_H7,
+
+    // Bitplane enable bit
+    SIG_BMAPEN0,
+    SIG_BMAPEN1,
+
+    // Vertical start and stop
+    SIG_BPVSTART,
+    SIG_BPVSTOP,
+    
+    // Horizontal start and stop
+    SIG_BPHSTART,
+    SIG_BPHSTOP,
+    
+    // Start of vertical blank
+    SIG_SVB,
+    
+    // Left and right hardware stops
+    SIG_SHW,
+    SIG_RHW,
+    
+    // Dummy event
+    SIG_NONE
 };
-typedef SPR_DMA_STATE SprDMAState;
+typedef DDF_STATE DisplaySignal;
 
 #ifdef __cplusplus
-struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
+struct DisplaySignalEnum : util::Reflection<DisplaySignalEnum, DisplaySignal>
 {
     static long minVal() { return 0; }
-    static long maxVal() { return SPR_DMA_ACTIVE; }
+    static long maxVal() { return SIG_RHW; }
     static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
-    static const char *prefix() { return "SPR_DMA"; }
-    static const char *key(SprDMAState value)
+    static const char *prefix() { return "SIG"; }
+    static const char *key(DisplaySignal value)
     {
         switch (value) {
                 
-            case SPR_DMA_IDLE:   return "IDLE";
-            case SPR_DMA_ACTIVE: return "ACTIVE";
+            case SIG_CON_L0:    return "CON_L0";
+            case SIG_CON_L1:    return "CON_L1";
+            case SIG_CON_L2:    return "CON_L2";
+            case SIG_CON_L3:    return "CON_L3";
+            case SIG_CON_L4:    return "CON_L4";
+            case SIG_CON_L5:    return "CON_L5";
+            case SIG_CON_L6:    return "CON_L6";
+            case SIG_CON_L7:    return "CON_L7";
+            case SIG_CON_H0:    return "CON_H0";
+            case SIG_CON_H1:    return "CON_H1";
+            case SIG_CON_H2:    return "CON_H2";
+            case SIG_CON_H3:    return "CON_H3";
+            case SIG_CON_H4:    return "CON_H4";
+            case SIG_CON_H5:    return "CON_H5";
+            case SIG_CON_H6:    return "CON_H6";
+            case SIG_CON_H7:    return "CON_H7";
+            case SIG_BMAPEN0:   return "BMAPEN0";
+            case SIG_BMAPEN1:   return "BMAPEN0";
+            case SIG_BPVSTART:  return "BPVSTART";
+            case SIG_BPVSTOP:   return "BPVSTOP";
+            case SIG_BPHSTART:  return "BPHSTART";
+            case SIG_BPHSTOP:   return "BPHSTOP";
+            case SIG_SVB:       return "SVB";
+            case SIG_SHW:       return "SHW";
+            case SIG_RHW:       return "RHW";
+            case SIG_NONE:      return "NONE";
         }
         return "???";
     }
@@ -166,3 +254,20 @@ typedef struct
     double bitplaneActivity;
 }
 AgnusStats;
+
+#ifdef __cplusplus
+struct DDFFlipflops
+{
+    // Flipflops derived from the OCS schematics
+    bool ff1;
+    bool ff2;
+    bool ff3;
+    bool ff5;
+    
+    template <class W>
+    void operator<<(W& worker)
+    {
+        worker << ff1 << ff2 << ff3 << ff5;
+    }
+};
+#endif

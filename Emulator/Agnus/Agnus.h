@@ -96,9 +96,12 @@ public:
     // Action flags controlling the HSYNC handler
     usize hsyncActions;
 
-    // Pending register changes (used for emulating register delays)
+    // Pending register changes
     RegChangeRecorder<8> changeRecorder;
 
+    // Signals controlling the bitplane display logic
+    SigRecorder sigRecorder;
+    
     
     //
     // Counters
@@ -222,17 +225,24 @@ public:
     u16 ddfstrt;
     u16 ddfstop;
 
-    // The display data fetch window used in the current rasterline
+    // The display logic state (updated in the hsync handler)
+    DDFFlipflops ddfInitial;
+    DDFFlipflops ddf;
+
+    
+        
     // DDF ddf;
     
     /* At the end of a rasterline, these variables conain the DMA cycles
      * where the hpos counter matched ddfstrt or ddfstop, respectively. A
      * value of -1 indicates that no matching event took place.
+     * DEPRECATED
      */
     isize ddfstrtReached;
     isize ddfstopReached;
 
     /* At the end of a rasterline, this variable contains the DDF state.
+     * DEPRECATED
      */
     DDFState ddfState;
 
@@ -240,10 +250,12 @@ public:
      * is set to a value smaller than the left hardware stop at 0x18, early DMA
      * access is enabled every other line. In this case, this variable stores
      * the number of the next line where early DMA is possible.
+     * DEPRECATED
      */
     isize ocsEarlyAccessLine;
 
     // Display data fetch window in lores and hires mode
+    // DEPRECATED
     DDF ddfLores;
     DDF ddfHires;
     
@@ -387,6 +399,7 @@ private:
 
         << hsyncActions
         >> changeRecorder
+        >> sigRecorder
 
         >> pos
         >> latchedPos
@@ -421,6 +434,8 @@ private:
 
         << ddfstrt
         << ddfstop
+        >> ddfInitial
+        >> ddf
         << ddfstrtReached
         << ddfstopReached
         << ddfState
@@ -697,9 +712,13 @@ public:
     // Removes all events from the BPL event table
     void clearBplEvents();
 
-    // Renews all events in the BPL event table
+    // Renews all events in the BPL event table (DEPRECATED)
     void updateBplEvents(u16 dmacon, u16 bplcon0);
     void updateBplEvents() { updateBplEvents(dmacon, bplcon0); }
+    
+    // Recomputes the BPL event table
+    void computeBplEvents();
+    void computeBplEvents(const SigRecorder &sr);
     
 private:
 

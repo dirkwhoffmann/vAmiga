@@ -12,6 +12,27 @@
 #include "RingBuffer.h"
 #include "SchedulerTypes.h"
 
+/* A key role in the architecture of vAmiga is played by two sorted ring
+ * buffers:
+ *
+ * Register change recorder:
+ *
+ *     This buffer keeps track of all upcoming register changes. It is used
+ *     to emulate the proper timing of all custom registers.
+ *
+ * Signal change recorder:
+ *
+ *     This buffer is used to emulate the display logic circuit. It keeps
+ *     track of various signal changes such as the changes on the BPHSTART line
+ *     that indicates a match of the horizontal counter with the DDF start
+ *     position. The buffer is used to set up the bitplane events stored
+ *     in the bplEvent table.
+ */
+
+//
+// Register change recorder
+//
+
 enum RegChangeID : i32
 {
     SET_NONE,
@@ -115,12 +136,6 @@ enum RegChangeID : i32
     SET_DSKPTL
 };
 
-/* Register change recorder
- *
- * For certain registers, Agnus and Denise have to keep track about when a
- * value changes. This information is stored in a sorted ring buffers called
- * a register change recorder.
- */
 struct RegChange
 {
     u32 addr;
@@ -149,5 +164,19 @@ struct RegChangeRecorder : public util::SortedRingBuffer<RegChange, capacity>
     
     Cycle trigger() {
         return this->isEmpty() ? NEVER : this->keys[this->r];
+    }
+};
+
+
+//
+// Signal change recorder
+//
+
+struct SigRecorder : public util::SortedRingBuffer<long, 256>
+{
+    template <class W>
+    void operator<<(W& worker)
+    {
+        worker << this->elements << this->r << this->w << this->keys;
     }
 };

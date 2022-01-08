@@ -298,6 +298,141 @@ Agnus::updateBplEvents(isize channels)
 }
 
 void
+Agnus::computeBplEvents()
+{
+    // Predict all events for the current scanline
+    sigRecorder.clear();
+        
+    sigRecorder.insert(0,        inBplDmaLine() ? SIG_BMAPEN1 : SIG_BMAPEN0);
+    sigRecorder.insert(0,        bplcon0 >> 12);
+    sigRecorder.insert(0x18,     SIG_SHW);
+    sigRecorder.insert(ddfstrt,  SIG_BPHSTART);
+    sigRecorder.insert(ddfstop,  SIG_BPHSTOP);
+    sigRecorder.insert(0xD8,     SIG_RHW);
+    sigRecorder.insert(HPOS_CNT, SIG_NONE);
+    
+    computeBplEvents(sigRecorder);
+}
+
+void
+Agnus::computeBplEvents(const SigRecorder &sr)
+{
+    bool bmapen = false;
+    isize cnt = 0;
+    auto state = ddf;
+    
+    // Layout of a single fetch unit
+    EventID slice[8]= { 0, 0, 0, 0, 0, 0, 0, 0 };
+        
+    i64 cycle = 0;
+    for (isize i = 0, end = sigRecorder.end(); i < end; i++) {
+        
+        auto trigger = sigRecorder.keys[i];
+        auto signal = sigRecorder.elements[i];
+        
+        //
+        // Emulate the display logic up to the next signal change
+        //
+        
+        for (isize j = cycle; j < trigger; j++) {
+            
+            if (state.ff5 && cnt == 0) {
+
+                state.ff3 = false;
+                state.ff5 = false;
+            }
+            if (state.ff3) {
+                
+                bplEvent[j] = slice[cnt];
+                cnt = (cnt + 1) & 7;
+            }
+        }
+        
+        //
+        // Emulate the next signal change
+        //
+        
+        // TODO: This is incorrect for invalid values
+        switch (signal) {
+                
+            case SIG_CON_L6: slice[2] = BPL_L6;
+            case SIG_CON_L5: slice[6] = BPL_L5;
+            case SIG_CON_L4: slice[1] = BPL_L4;
+            case SIG_CON_L3: slice[5] = BPL_L3;
+            case SIG_CON_L2: slice[3] = BPL_L2;
+            case SIG_CON_L1: slice[7] = BPL_L1;
+            case SIG_CON_L0:
+            case SIG_CON_L7:
+                break;
+                
+            case SIG_CON_H6:
+            case SIG_CON_H5:
+            case SIG_CON_H4: slice[0] = slice[4] = BPL_H4;
+            case SIG_CON_H3: slice[2] = slice[6] = BPL_H3;
+            case SIG_CON_H2: slice[1] = slice[5] = BPL_H2;
+            case SIG_CON_H1: slice[3] = slice[7] = BPL_H1;
+            case SIG_CON_H0:
+            case SIG_CON_H7:
+                break;
+
+            case SIG_BMAPEN0:
+                
+                bmapen = false;
+                cnt = 0;
+                break;
+
+            case SIG_BMAPEN1:
+                
+                bmapen = true;
+                break;
+                
+            case SIG_BPVSTART:
+            case SIG_BPVSTOP:
+                break;
+                
+            case SIG_BPHSTART:
+
+                state.ff3 = true;
+                break;
+
+            case SIG_BPHSTOP:
+
+                state.ff5 = true;
+                break;
+                
+            case SIG_SVB:
+
+                break;
+                
+            case SIG_SHW:
+                
+                break;
+                
+            case SIG_RHW:
+                
+                break;
+                
+            default:
+                assert(signal == SIG_NONE);
+        }
+        
+        cycle = trigger;
+    }
+    
+    // Add the End Of Line event
+    bplEvent[HPOS_MAX] = BPL_EOL;
+            
+    // Superimpose the drawing flags
+    hires() ? updateHiresDrawingFlags() : updateLoresDrawingFlags();
+            
+    // Update the jump table
+    updateBplJumpTable();
+
+    // Write back the new ddf state
+    ddf = state;
+}
+
+void
 Agnus::updateDasEvents(u16 dmacon)
 {
     assert(dmacon < 64);

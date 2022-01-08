@@ -539,6 +539,8 @@ Agnus::hsyncHandler()
     // DDF
     //
 
+    // Save the current display logic state
+    ddfInitial = ddf;
 
     //
     // Determine the bitplane DMA status for the next line
@@ -588,6 +590,7 @@ Agnus::hsyncHandler()
         }
         if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_BPL_TABLE;
+            // computeBplEvents();
             updateBplEvents();
         }
         if (hsyncActions & HSYNC_UPDATE_DAS_TABLE) {
