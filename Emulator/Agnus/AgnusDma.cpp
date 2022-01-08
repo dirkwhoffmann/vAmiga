@@ -294,6 +294,8 @@ Agnus::updateBplEvents(isize channels)
     for (isize i = 0; i < strt; i++) {
         bplEvent[i] = EVENT_NONE;
     }
+    // trace(true, "strt = %d stop = %d\n", strt, stop);
+    
     for (isize i = strt; i <= stop; i++) {
         bplEvent[i] = slice[(i - strt) & 7];
     }
@@ -315,9 +317,6 @@ Agnus::computeBplEvents()
     // Predict all events for the current scanline
     sigRecorder.clear();
         
-    if (pos.v == diwVstrt) sigRecorder.insert(0, SIG_BPVSTART1);
-    if (pos.v == diwVstop) sigRecorder.insert(0, SIG_BPVSTOP1);
-
     sigRecorder.insert(0,        bplcon0 >> 12);
     sigRecorder.insert(0x18,     SIG_SHW);
     sigRecorder.insert(ddfstrt,  SIG_BPHSTART);
@@ -333,12 +332,11 @@ Agnus::computeBplEvents(const SigRecorder &sr)
 {
     auto state = ddfInitial;
     auto bmapen = dmaconInitial & (DMAEN | BPLEN);
-    
-    if (state.bpvstart) state.ff1 = true;
-    if (state.bpvstop) state.ff1 = false;
-    if (state.svb) state.ff1 = false;
-    if (!bmapen) state.ff3 = false;
-    
+
+    // REMOVE ASAP
+    int min = 1000;
+    int max = 0;
+        
     isize cnt = 0;
     
     // Layout of a single fetch unit
@@ -358,13 +356,26 @@ Agnus::computeBplEvents(const SigRecorder &sr)
             
             if (state.ff5 && cnt == 0) {
 
+                state.ff2 = false;
                 state.ff3 = false;
                 state.ff5 = false;
             }
+            if (state.ff4 && cnt == 0) {
+
+                state.ff5 = true;
+                state.ff4 = false;
+            }
             if (state.ff3) {
+                
+                if (j < min) min = (int)j;
+                if (j > max) max = (int)j;
                 
                 bplEvent[j] = slice[cnt];
                 cnt = (cnt + 1) & 7;
+                
+            } else {
+
+                bplEvent[j] = 0;
             }
         }
         
@@ -394,43 +405,45 @@ Agnus::computeBplEvents(const SigRecorder &sr)
             case SIG_CON_H5:
                 break;
 
-            case SIG_BMAPEN0:
+            case SIG_BMAPEN_CLR:
                 
                 bmapen = false;
+                state.ff3 = false;
                 cnt = 0;
                 break;
 
-            case SIG_BMAPEN1:
+            case SIG_BMAPEN_SET:
                 
                 bmapen = true;
                 break;
                 
-            case SIG_BPVSTART0:
-            case SIG_BPVSTOP0:
-            case SIG_BPVSTART1:
-            case SIG_BPVSTOP1:
+            case SIG_VFLOP_SET:
                 break;
                 
+            case SIG_VFLOP_CLR:
+                break;
+                                
             case SIG_BPHSTART:
 
-                state.ff3 = true;
+                if (state.ff2) state.ff3 = true;
+                if (!state.ff1) state.ff3 = false;
+                if (!bmapen) state.ff3 = false;
                 break;
 
             case SIG_BPHSTOP:
 
-                state.ff5 = true;
+                state.ff4 = true;
                 break;
-                
-            case SIG_SVB:
-
-                break;
-                
+                                
             case SIG_SHW:
                 
+                state.ff2 = true;
                 break;
                 
             case SIG_RHW:
-                
+
+                state.ff2 = false;
+                state.ff3 = false;
                 break;
                 
             default:
@@ -440,6 +453,8 @@ Agnus::computeBplEvents(const SigRecorder &sr)
         cycle = trigger;
     }
     
+    // trace(true, "strt = %d stop = %d\n", min, max);
+
     // Add the End Of Line event
     bplEvent[HPOS_MAX] = BPL_EOL;
             
@@ -451,6 +466,8 @@ Agnus::computeBplEvents(const SigRecorder &sr)
 
     // Write back the new ddf state
     ddf = state;
+    
+    // dump(dump::Signals);
 }
 
 void

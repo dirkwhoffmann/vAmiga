@@ -127,22 +127,25 @@ enum_long(DISPLAY_SIGNAL)
     SIG_CON_H7,
 
     // Bitplane enable bit
-    SIG_BMAPEN0,
-    SIG_BMAPEN1,
+    SIG_BMAPEN_CLR,
+    SIG_BMAPEN_SET,
 
+    // Vertical position flipflop
+    SIG_VFLOP_SET,
+    SIG_VFLOP_CLR,
+    
     // Vertical start and stop
+    /*
     SIG_BPVSTART0,
     SIG_BPVSTART1,
     SIG_BPVSTOP0,
     SIG_BPVSTOP1,
-
+    */
+    
     // Horizontal start and stop
     SIG_BPHSTART,
     SIG_BPHSTOP,
-    
-    // Start of vertical blank
-    SIG_SVB,
-    
+        
     // Left and right hardware stops
     SIG_SHW,
     SIG_RHW,
@@ -169,29 +172,26 @@ struct DisplaySignalEnum : util::Reflection<DisplaySignalEnum, DisplaySignal>
             case SIG_CON_L2:    return "CON_L2";
             case SIG_CON_L3:    return "CON_L3";
             case SIG_CON_L4:    return "CON_L4";
-            case SIG_CON_L5:    return "CON_L5";
-            case SIG_CON_L6:    return "CON_L6";
-            case SIG_CON_L7:    return "CON_L7";
-            case SIG_CON_H0:    return "CON_H0";
-            case SIG_CON_H1:    return "CON_H1";
-            case SIG_CON_H2:    return "CON_H2";
-            case SIG_CON_H3:    return "CON_H3";
-            case SIG_CON_H4:    return "CON_H4";
-            case SIG_CON_H5:    return "CON_H5";
-            case SIG_CON_H6:    return "CON_H6";
-            case SIG_CON_H7:    return "CON_H7";
-            case SIG_BMAPEN0:   return "BMAPEN0";
-            case SIG_BMAPEN1:   return "BMAPEN0";
-            case SIG_BPVSTART0: return "BPVSTART0";
-            case SIG_BPVSTART1: return "BPVSTART1";
-            case SIG_BPVSTOP0:  return "BPVSTOP0";
-            case SIG_BPVSTOP1:  return "BPVSTOP1";
-            case SIG_BPHSTART:  return "BPHSTART";
-            case SIG_BPHSTOP:   return "BPHSTOP";
-            case SIG_SVB:       return "SVB";
-            case SIG_SHW:       return "SHW";
-            case SIG_RHW:       return "RHW";
-            case SIG_NONE:      return "NONE";
+            case SIG_CON_L5:        return "CON_L5";
+            case SIG_CON_L6:        return "CON_L6";
+            case SIG_CON_L7:        return "CON_L7";
+            case SIG_CON_H0:        return "CON_H0";
+            case SIG_CON_H1:        return "CON_H1";
+            case SIG_CON_H2:        return "CON_H2";
+            case SIG_CON_H3:        return "CON_H3";
+            case SIG_CON_H4:        return "CON_H4";
+            case SIG_CON_H5:        return "CON_H5";
+            case SIG_CON_H6:        return "CON_H6";
+            case SIG_CON_H7:        return "CON_H7";
+            case SIG_BMAPEN_CLR:    return "BMAPEN_CLR";
+            case SIG_BMAPEN_SET:    return "BMAPEN_SET";
+            case SIG_VFLOP_SET:     return "VFLOP_SET";
+            case SIG_VFLOP_CLR:     return "VFLOP_CLR";
+            case SIG_BPHSTART:      return "BPHSTART";
+            case SIG_BPHSTOP:       return "BPHSTOP";
+            case SIG_SHW:           return "SHW";
+            case SIG_RHW:           return "RHW";
+            case SIG_NONE:          return "NONE";
         }
         return "???";
     }
@@ -263,21 +263,24 @@ AgnusStats;
 struct DDFFlipflops
 {
     // Input lines (derived from the OCS schematics)
+    /*
     bool bmapen = false;
     bool bpvstart = false;
     bool bpvstop = false;
     bool svb = false;
+    */
     
     // Flipflops (derived from the OCS schematics)
     bool ff1 = false;
     bool ff2 = false;
     bool ff3 = false;
+    bool ff4 = false;
     bool ff5 = false;
     
     template <class W>
     void operator<<(W& worker)
     {
-        worker << ff1 << ff2 << ff3 << ff5;
+        worker << ff1 << ff2 << ff3 << ff4 << ff5;
     }
 };
 #endif

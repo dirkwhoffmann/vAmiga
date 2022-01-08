@@ -117,12 +117,22 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
     
     if (category & dump::Signals) {
        
+        os << tab("Flipflop 1");
+        os << bol(ddf.ff1) << " (" << bol(ddfInitial.ff1) << ")" << std::endl;
+        os << tab("Flipflop 2");
+        os << bol(ddf.ff2) << " (" << bol(ddfInitial.ff2) << ")" << std::endl;
+        os << tab("Flipflop 3");
+        os << bol(ddf.ff3) << " (" << bol(ddfInitial.ff3) << ")" << std::endl;
+        os << tab("Flipflop 5");
+        os << bol(ddf.ff5) << " (" << bol(ddfInitial.ff5) << ")" << std::endl;
+        os << std::endl;
+        
         for (isize i = 0, end = sigRecorder.end(); i < end; i++) {
             
-            auto trigger = std::to_string(sigRecorder.keys[i]);
+            auto trigger = util::hexstr<2>(sigRecorder.keys[i]);
             auto signal = DisplaySignalEnum::key(sigRecorder.elements[i]);
      
-            os << tab(trigger) << signal << std::endl;
+            os << tab("Event at $" + trigger) << signal << std::endl;
         }
     }
 }
