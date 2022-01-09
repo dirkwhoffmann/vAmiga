@@ -38,7 +38,12 @@ Agnus::_reset(bool hard)
     clearStats();
     
     // Initialize event tables
+#ifdef LEGACY_DDF
     updateBplEvents <false> (0);
+#else
+    computeBplEvents();
+#endif
+    
     assert(bplEvent[HPOS_MAX] == BPL_EOL);
     for (isize i = pos.h; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
     updateBplJumpTable();
@@ -550,34 +555,35 @@ Agnus::hsyncHandler()
     // Determine the bitplane DMA status for the next line
     //
 
-    if (LEGACY_DDF) {
-
-        if (bool newBplDmaLine = inBplDmaLine(); newBplDmaLine ^ bplDmaLine) {
-            
-            hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-            bplDmaLine = newBplDmaLine;
-        }
-
-    } else {
-
-        bplDmaLine = inBplDmaLine();
+#ifdef LEGACY_DDF
+    
+    if (bool newBplDmaLine = inBplDmaLine(); newBplDmaLine ^ bplDmaLine) {
         
-        if (pos.v == diwVstrt) {
-            trace(DDF_DEBUG, "DDF: FF1 = 1 (DIWSTRT)\n");
-            ddfInitial.ff1 = true;
-            hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-        }
-        if (pos.v == diwVstop) {
-            trace(DDF_DEBUG, "DDF: FF1 = 0 (DIWSTOP)\n");
-            ddfInitial.ff1 = false;
-            hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-        }
-        if (inLastRasterline()) {
-            trace(DDF_DEBUG, "DDF: FF1 = 0 (EOF)\n");
-            ddfInitial.ff1 = false;
-            hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-        }
+        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+        bplDmaLine = newBplDmaLine;
     }
+
+#else
+    
+    bplDmaLine = inBplDmaLine();
+    
+    if (pos.v == diwVstrt) {
+        trace(DDF_DEBUG, "DDF: FF1 = 1 (DIWSTRT)\n");
+        ddfInitial.ff1 = true;
+        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    }
+    if (pos.v == diwVstop) {
+        trace(DDF_DEBUG, "DDF: FF1 = 0 (DIWSTOP)\n");
+        ddfInitial.ff1 = false;
+        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    }
+    if (inLastRasterline()) {
+        trace(DDF_DEBUG, "DDF: FF1 = 0 (EOF)\n");
+        ddfInitial.ff1 = false;
+        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    }
+    
+#endif
 
 
     //
@@ -617,12 +623,11 @@ Agnus::hsyncHandler()
         }
         if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_BPL_TABLE;
-            
-            if constexpr (LEGACY_DDF) {
-                updateBplEvents();
-            } else {
-                computeBplEvents();
-            }
+#ifdef LEGACY_DDF
+            updateBplEvents();
+#else
+            computeBplEvents();
+#endif
         }
         if (hsyncActions & HSYNC_UPDATE_DAS_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_DAS_TABLE;

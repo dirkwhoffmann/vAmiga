@@ -720,8 +720,10 @@ public:
     void clearBplEvents();
 
     // Renews all events in the BPL event table (DEPRECATED)
+#ifdef LEGACY_DDF
     void updateBplEvents(u16 dmacon, u16 bplcon0);
     void updateBplEvents() { updateBplEvents(dmacon, bplcon0); }
+#endif
     
     // Recomputes the BPL event table
     void computeBplEvents();
@@ -729,9 +731,11 @@ public:
     
 private:
 
+#ifdef LEGACY_DDF
     // Workhorse for updateBplEvents
     template <bool hires> void updateBplEvents(isize channels);
-
+#endif
+    
     // Updates the jump table for the bplEvent table
     void updateBplJumpTable();
 

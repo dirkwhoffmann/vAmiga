@@ -137,59 +137,63 @@ Agnus::initDasEventTable()
 void
 Agnus::enableBplDmaOCS()
 {
-    if constexpr (LEGACY_DDF) {
-
-        if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
-            
-            updateBplEvents(dmacon, bplcon0);
-            updateBplEvent();
-        }
+#ifdef LEGACY_DDF
+    
+    if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
+        
+        updateBplEvents(dmacon, bplcon0);
+        updateBplEvent();
     }
+    
+#endif
 }
 
 void
 Agnus::disableBplDmaOCS()
 {
-    if constexpr (LEGACY_DDF) {
-
+#ifdef LEGACY_DDF
+    
         updateBplEvents(dmacon, bplcon0);
         updateBplEvent();
-    }
+
+#endif
 }
 
 void
 Agnus::enableBplDmaECS()
 {
-    if constexpr (LEGACY_DDF) {
-            
-        if (pos.h + 2 < ddfstrtReached) {
-            
-            updateBplEvents(dmacon, bplcon0);
-            updateBplEvent();
-            return;
-        }
+#ifdef LEGACY_DDF
+    
+    if (pos.h + 2 < ddfstrtReached) {
         
-        if (pos.h + 2 < ddfstopReached) {
-            
-            ddfLores.compute(std::max(pos.h + 4, ddfstrtReached), ddfstopReached);
-            ddfHires.compute(std::max(pos.h + 4, ddfstrtReached), ddfstopReached);
-            hsyncActions |= HSYNC_PREDICT_DDF;
-            
-            updateBplEvents();
-            updateBplEvent();
-            // updateLoresDrawingFlags(); // THIS CAN'T BE RIGHT
-        }
+        updateBplEvents(dmacon, bplcon0);
+        updateBplEvent();
+        return;
     }
+    
+    if (pos.h + 2 < ddfstopReached) {
+        
+        ddfLores.compute(std::max(pos.h + 4, ddfstrtReached), ddfstopReached);
+        ddfHires.compute(std::max(pos.h + 4, ddfstrtReached), ddfstopReached);
+        hsyncActions |= HSYNC_PREDICT_DDF;
+        
+        updateBplEvents();
+        updateBplEvent();
+        // updateLoresDrawingFlags(); // THIS CAN'T BE RIGHT
+    }
+    
+#endif
 }
 
 void
 Agnus::disableBplDmaECS()
 {
-    if constexpr (LEGACY_DDF) {
-            
-        updateBplEvents(dmacon, bplcon0);
-        updateBplEvent();
-    }
+#ifdef LEGACY_DDF
+    
+    updateBplEvents(dmacon, bplcon0);
+    updateBplEvent();
+
+#endif
 }
 
 template <BusOwner owner> bool
@@ -234,6 +238,7 @@ Agnus::clearBplEvents()
     for (isize i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX;
 }
 
+#ifdef LEGACY_DDF
 void
 Agnus::updateBplEvents(u16 dmacon, u16 bplcon0)
 {
@@ -310,6 +315,7 @@ Agnus::updateBplEvents(isize channels)
     // Update the jump table
     updateBplJumpTable();
 }
+#endif
 
 void
 Agnus::computeBplEvents()

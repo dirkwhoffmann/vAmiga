@@ -82,31 +82,32 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     blitter.pokeDMACON(oldValue, newValue);
     
     // Bitplane DMA
-    if constexpr (LEGACY_DDF) {
-
-        if (oldBPLEN ^ newBPLEN) {
-            
-            if (isOCS()) {
-                newBPLEN ? enableBplDmaOCS() : disableBplDmaOCS();
-            } else {
-                newBPLEN ? enableBplDmaECS() : disableBplDmaECS();
-            }
-            
-            hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+#ifdef LEGACY_DDF
+    
+    if (oldBPLEN ^ newBPLEN) {
+        
+        if (isOCS()) {
+            newBPLEN ? enableBplDmaOCS() : disableBplDmaOCS();
+        } else {
+            newBPLEN ? enableBplDmaECS() : disableBplDmaECS();
         }
         
-    } else {
-        
-        if (oldBPLEN ^ newBPLEN) {
-            
-            // Update the bitplane event table
-            sigRecorder.insert(pos.h, newBPLEN ? SIG_BMAPEN_SET : SIG_BMAPEN_CLR);
-            computeBplEvents(sigRecorder);
-
-            // Tell the hsync handler to recompute the table in the next line
-            hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-        }
+        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
+    
+#else
+    
+    if (oldBPLEN ^ newBPLEN) {
+        
+        // Update the bitplane event table
+        sigRecorder.insert(pos.h, newBPLEN ? SIG_BMAPEN_SET : SIG_BMAPEN_CLR);
+        computeBplEvents(sigRecorder);
+        
+        // Tell the hsync handler to recompute the table in the next line
+        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    }
+    
+#endif
     
     // Let Denise know about the change
     denise.pokeDMACON(oldValue, newValue);
@@ -298,17 +299,17 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     if ((oldValue ^ newValue) & 0xF000) {
             
         // Update the DMA allocation table
-        if constexpr (LEGACY_DDF) {
-            updateBplEvents(dmaconAtDDFStrt, newValue);
-        } else {
-
-            // Recompute the bitplane event table
-            sigRecorder.insert(pos.h, newValue >> 12);
-            computeBplEvents(sigRecorder);
-            
-            // Schedule the bitplane event table to be recomputed
-            agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-        }
+#ifdef LEGACY_DDF
+        updateBplEvents(dmaconAtDDFStrt, newValue);
+#else
+        
+        // Recompute the bitplane event table
+        sigRecorder.insert(pos.h, newValue >> 12);
+        computeBplEvents(sigRecorder);
+        
+        // Schedule the bitplane event table to be recomputed
+        agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+#endif
         
         // Since the table has changed, we also need to update the event slot
         scheduleBplEventForCycle(pos.h);
@@ -346,11 +347,11 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
     scrollHiresEven = (bplcon1 & 0b01100000) >> 5;
     
     // Update the bitplane event table
-    if constexpr (LEGACY_DDF) {
-        updateBplEvents();
-    } else {
-        computeBplEvents();
-    }
+#ifdef LEGACY_DDF
+    updateBplEvents();
+#else
+    computeBplEvents();
+#endif
     
     // Update the scheduled bitplane event according to the new table
     scheduleBplEventForCycle(pos.h);
@@ -510,49 +511,50 @@ Agnus::setDDFSTRT(u16 old, u16 value)
     
     ddfstrt = value;
     
-    if constexpr (LEGACY_DDF) {
-
-        // Tell the hsync handler to recompute the table again in the next line
-        hsyncActions |= HSYNC_PREDICT_DDF;
-
-        // Take immediate action if we haven't reached the old DDFSTRT cycle yet
-        if (pos.h < ddfstrtReached) {
+#ifdef LEGACY_DDF
+    
+    // Tell the hsync handler to recompute the table again in the next line
+    hsyncActions |= HSYNC_PREDICT_DDF;
+    
+    // Take immediate action if we haven't reached the old DDFSTRT cycle yet
+    if (pos.h < ddfstrtReached) {
+        
+        // Check if the new position has already been passed
+        if (ddfstrt <= pos.h + 2) {
             
-            // Check if the new position has already been passed
-            if (ddfstrt <= pos.h + 2) {
-                
-                // DDFSTRT never matches in the current rasterline. Disable DMA
-                ddfstrtReached = -1;
-                clearBplEvents();
-                scheduleNextBplEvent();
-                
-            } else {
-                
-                // Update the matching position and recalculate the DMA table
-                ddfstrtReached = ddfstrt > HPOS_MAX ? -1 : ddfstrt;
-                computeDDFWindow();
-                updateBplEvents();
-                scheduleNextBplEvent();
-            }
+            // DDFSTRT never matches in the current rasterline. Disable DMA
+            ddfstrtReached = -1;
+            clearBplEvents();
+            scheduleNextBplEvent();
+            
+        } else {
+            
+            // Update the matching position and recalculate the DMA table
+            ddfstrtReached = ddfstrt > HPOS_MAX ? -1 : ddfstrt;
+            computeDDFWindow();
+            updateBplEvents();
+            scheduleNextBplEvent();
         }
-        
-    } else {
-        
-        // Remove the old start event if it hasn't been reached
-        sigRecorder.invalidate(pos.h, SIG_BPHSTART);
-        
-        // Add the new start event if it will be reached
-        if (ddfstrt > pos.h) sigRecorder.insert(ddfstrt, SIG_BPHSTART);
-        
-        // Recompute the event table
-        computeBplEvents(sigRecorder);
-
-        // Tell the hsync handler to recompute the table in the next line
-        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-        
-        // REMOVE ASAP
-        hsyncActions |= HSYNC_PREDICT_DDF;
     }
+    
+#else
+    
+    // Remove the old start event if it hasn't been reached
+    sigRecorder.invalidate(pos.h, SIG_BPHSTART);
+    
+    // Add the new start event if it will be reached
+    if (ddfstrt > pos.h) sigRecorder.insert(ddfstrt, SIG_BPHSTART);
+    
+    // Recompute the event table
+    computeBplEvents(sigRecorder);
+    
+    // Tell the hsync handler to recompute the table in the next line
+    hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    
+    // TODO: REMOVE ASAP
+    hsyncActions |= HSYNC_PREDICT_DDF;
+    
+#endif
 }
 
 void
@@ -575,7 +577,7 @@ Agnus::setDDFSTOP(u16 old, u16 value)
 
     ddfstop = value;
 
-    if constexpr (LEGACY_DDF) {
+#ifdef LEGACY_DDF
 
         // Tell the hsync handler to recompute the table again in the next line
         hsyncActions |= HSYNC_PREDICT_DDF;
@@ -601,7 +603,7 @@ Agnus::setDDFSTOP(u16 old, u16 value)
             }
         }
         
-    } else {
+#else
         
         // Remove the old stop event if it hasn't been reached
         sigRecorder.invalidate(pos.h, SIG_BPHSTOP);
@@ -614,10 +616,8 @@ Agnus::setDDFSTOP(u16 old, u16 value)
 
         // Tell the hsync handler to recompute the table in the next line
         hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-        
-        // REMOVE ASAP
-        // hsyncActions |= HSYNC_PREDICT_DDF;
-    }
+    
+#endif
 }
 
 void

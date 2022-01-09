@@ -83,7 +83,7 @@ static const int NO_SSE          = 0; // Don't use SSE extensions
 //
 
 // REMOVE ASAP
-static const int LEGACY_DDF      = 1; // Use the old DDF implementation
+#define LEGACY_DDF // Use the old DDF implementation
 
 // General
 static const int CNF_DEBUG       = 0; // Configuration options
