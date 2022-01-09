@@ -119,7 +119,8 @@ Scheduler::eventName(EventSlot slot, EventID id)
                 case DAS_S0_2:      return "DAS_S0_2";
                 case DAS_S1_1:      return "DAS_S1_1";
                 case DAS_S1_2:      return "DAS_S1_2";
-                case DAS_S2_1:      return "DAS_S2_2";
+                case DAS_S2_1:      return "DAS_S2_1";
+                case DAS_S2_2:      return "DAS_S2_2";
                 case DAS_S3_1:      return "DAS_S3_1";
                 case DAS_S3_2:      return "DAS_S3_2";
                 case DAS_S4_1:      return "DAS_S4_1";

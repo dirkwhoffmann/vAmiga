@@ -138,7 +138,7 @@ void
 Agnus::enableBplDmaOCS()
 {
     if constexpr (LEGACY_DDF) {
-        
+
         if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
             
             updateBplEvents(dmacon, bplcon0);
@@ -151,7 +151,7 @@ void
 Agnus::disableBplDmaOCS()
 {
     if constexpr (LEGACY_DDF) {
-        
+
         updateBplEvents(dmacon, bplcon0);
         updateBplEvent();
     }
@@ -161,7 +161,7 @@ void
 Agnus::enableBplDmaECS()
 {
     if constexpr (LEGACY_DDF) {
-        
+            
         if (pos.h + 2 < ddfstrtReached) {
             
             updateBplEvents(dmacon, bplcon0);
@@ -186,7 +186,7 @@ void
 Agnus::disableBplDmaECS()
 {
     if constexpr (LEGACY_DDF) {
-        
+            
         updateBplEvents(dmacon, bplcon0);
         updateBplEvent();
     }
@@ -336,9 +336,10 @@ Agnus::computeBplEvents(const SigRecorder &sr)
     // REMOVE ASAP
     int min = 1000;
     int max = 0;
-        
+    bool hires = false;
+
     isize cnt = 0;
-    
+        
     // Layout of a single fetch unit
     EventID slice[8]= { 0, 0, 0, 0, 0, 0, 0, 0 };
         
@@ -356,25 +357,30 @@ Agnus::computeBplEvents(const SigRecorder &sr)
             
             if (state.ff5 && cnt == 0) {
 
+                // if (pos.v == 0x80) trace(true, "%ld: ff5 AND 0\n", j);
                 state.ff2 = false;
                 state.ff3 = false;
                 state.ff5 = false;
             }
             if (state.ff4 && cnt == 0) {
 
+                // if (pos.v == 0x80) trace(true, "%ld: ff4 AND 0\n", j);
                 state.ff5 = true;
                 state.ff4 = false;
             }
             if (state.ff3) {
                 
+                // if (pos.v == 0x80) trace(true, "%ld: ff3\n", j);
                 if (j < min) min = (int)j;
                 if (j > max) max = (int)j;
                 
+                assert(j >= 0 && j < HPOS_CNT);
                 bplEvent[j] = slice[cnt];
                 cnt = (cnt + 1) & 7;
                 
             } else {
 
+                assert(j >= 0 && j < HPOS_CNT);
                 bplEvent[j] = 0;
             }
         }
@@ -383,91 +389,105 @@ Agnus::computeBplEvents(const SigRecorder &sr)
         // Emulate the next signal change
         //
         
-        switch (signal) {
-                
-            case SIG_CON_L7:
-            case SIG_CON_L6: slice[2] = BPL_L6;
-            case SIG_CON_L5: slice[6] = BPL_L5;
-            case SIG_CON_L4: slice[1] = BPL_L4;
-            case SIG_CON_L3: slice[5] = BPL_L3;
-            case SIG_CON_L2: slice[3] = BPL_L2;
-            case SIG_CON_L1: slice[7] = BPL_L1;
-            case SIG_CON_L0:
-                break;
-                                
-            case SIG_CON_H4: slice[0] = slice[4] = BPL_H4;
-            case SIG_CON_H3: slice[2] = slice[6] = BPL_H3;
-            case SIG_CON_H2: slice[1] = slice[5] = BPL_H2;
-            case SIG_CON_H1: slice[3] = slice[7] = BPL_H1;
-            case SIG_CON_H0:
-            case SIG_CON_H7:
-            case SIG_CON_H6:
-            case SIG_CON_H5:
-                break;
+        if (signal >= 0 && signal <= 15) {
+            
+            // trace(true, "signal = %s\n", DisplaySignalEnum::key(signal));
+            
+            slice[0] = slice[1] = slice[2] = slice[3] = 0;
+            slice[4] = slice[5] = slice[6] = slice[7] = 0;
 
-            case SIG_BMAPEN_CLR:
-                
-                bmapen = false;
-                state.ff3 = false;
-                cnt = 0;
-                break;
-
-            case SIG_BMAPEN_SET:
-                
-                bmapen = true;
-                break;
-                
-            case SIG_VFLOP_SET:
-                break;
-                
-            case SIG_VFLOP_CLR:
-                break;
-                                
-            case SIG_BPHSTART:
-
-                if (state.ff2) state.ff3 = true;
-                if (!state.ff1) state.ff3 = false;
-                if (!bmapen) state.ff3 = false;
-                break;
-
-            case SIG_BPHSTOP:
-
-                state.ff4 = true;
-                break;
-                                
-            case SIG_SHW:
-                
-                state.ff2 = true;
-                break;
-                
-            case SIG_RHW:
-
-                state.ff2 = false;
-                state.ff3 = false;
-                break;
-                
-            default:
-                assert(signal == SIG_NONE);
+            switch (signal) {
+                    
+                case SIG_CON_L7:
+                case SIG_CON_L6: slice[2] = BPL_L6;
+                case SIG_CON_L5: slice[6] = BPL_L5;
+                case SIG_CON_L4: slice[1] = BPL_L4;
+                case SIG_CON_L3: slice[5] = BPL_L3;
+                case SIG_CON_L2: slice[3] = BPL_L2;
+                case SIG_CON_L1: slice[7] = BPL_L1;
+                case SIG_CON_L0:
+                    hires = false; // TODO: SUPERIMPOSE DRAWING FLAG IMMEDIATELY
+                    break;
+                                    
+                case SIG_CON_H4: slice[0] = slice[4] = BPL_H4;
+                case SIG_CON_H3: slice[2] = slice[6] = BPL_H3;
+                case SIG_CON_H2: slice[1] = slice[5] = BPL_H2;
+                case SIG_CON_H1: slice[3] = slice[7] = BPL_H1;
+                case SIG_CON_H0:
+                case SIG_CON_H7:
+                case SIG_CON_H6:
+                case SIG_CON_H5:
+                    hires = true; // TODO: SUPERIMPOSE DRAWING FLAG IMMEDIATELY
+                    break;
+            }
+                    
+        } else {
+            
+            switch (signal) {
+                                        
+                case SIG_BMAPEN_CLR:
+                    
+                    bmapen = false;
+                    state.ff3 = false;
+                    cnt = 0;
+                    break;
+                    
+                case SIG_BMAPEN_SET:
+                    
+                    bmapen = true;
+                    break;
+                    
+                case SIG_VFLOP_SET:
+                    break;
+                    
+                case SIG_VFLOP_CLR:
+                    break;
+                    
+                case SIG_BPHSTART:
+                    
+                    // if (pos.v == 0x80) trace(true, "SIG_BPHSTART\n");
+                    if (state.ff2) state.ff3 = true;
+                    if (!state.ff1) state.ff3 = false;
+                    if (!bmapen) state.ff3 = false;
+                    break;
+                    
+                case SIG_BPHSTOP:
+                    
+                    // if (pos.v == 0x80) trace(true, "SIG_BPHSTOP\n");
+                    state.ff4 = true;
+                    break;
+                    
+                case SIG_SHW:
+                    
+                    // if (pos.v == 0x80) trace(true, "SIG_SHW\n");
+                    state.ff2 = true;
+                    break;
+                    
+                case SIG_RHW:
+                    
+                    // if (pos.v == 0x80) trace(true, "SIG_RHW\n");
+                    state.ff4 = true;
+                    break;
+                    
+                default:
+                    assert(signal == SIG_NONE);
+            }
         }
         
         cycle = trigger;
     }
     
-    // trace(true, "strt = %d stop = %d\n", min, max);
-
     // Add the End Of Line event
     bplEvent[HPOS_MAX] = BPL_EOL;
-            
+                
     // Superimpose the drawing flags
-    hires() ? updateHiresDrawingFlags() : updateLoresDrawingFlags();
+    hires ? updateHiresDrawingFlags() : updateLoresDrawingFlags();
             
     // Update the jump table
     updateBplJumpTable();
 
     // Write back the new ddf state
     ddf = state;
-    
-    // dump(dump::Signals);
 }
 
 void

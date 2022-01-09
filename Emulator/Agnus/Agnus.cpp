@@ -560,6 +560,8 @@ Agnus::hsyncHandler()
 
     } else {
 
+        bplDmaLine = inBplDmaLine();
+        
         if (pos.v == diwVstrt) {
             trace(DDF_DEBUG, "DDF: FF1 = 1 (DIWSTRT)\n");
             ddfInitial.ff1 = true;
@@ -615,6 +617,7 @@ Agnus::hsyncHandler()
         }
         if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_BPL_TABLE;
+            
             if constexpr (LEGACY_DDF) {
                 updateBplEvents();
             } else {

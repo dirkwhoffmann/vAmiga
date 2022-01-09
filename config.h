@@ -87,7 +87,7 @@ static const int LEGACY_DDF      = 1; // Use the old DDF implementation
 
 // General
 static const int CNF_DEBUG       = 0; // Configuration options
-static const int XFILES          = 0; // Report paranormal activity
+static const int XFILES          = 1; // Report paranormal activity
 static const int OBJ_DEBUG       = 0; // Object life-times
 static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
 
@@ -110,7 +110,7 @@ static const int FAS_DEBUG       = 0; // Fast RAM
 // Agnus
 static const int DMA_DEBUG       = 0; // DMA registers
 static const int DDF_DEBUG       = 0; // Display data fetch
-static const int NO_PTR_DROPS    = 0; // Never drop a pointer register write
+static const int NO_PTR_DROPS    = 1; // Never drop a pointer register write
 
 // Copper
 static const int COP_CHECKSUM    = 0; // Compute Copper checksums

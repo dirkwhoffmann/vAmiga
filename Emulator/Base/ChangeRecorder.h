@@ -10,7 +10,7 @@
 #pragma once
 
 #include "RingBuffer.h"
-#include "SchedulerTypes.h"
+#include "AgnusTypes.h"
 
 /* A key role in the architecture of vAmiga is played by two sorted ring
  * buffers:
@@ -178,5 +178,14 @@ struct SigRecorder : public util::SortedRingBuffer<long, 256>
     void operator<<(W& worker)
     {
         worker << this->elements << this->r << this->w << this->keys;
+    }
+    
+    void invalidate(i64 key, long signal) {
+        
+        for (isize i = begin(); i != end(); i = next(i)) {
+            if (elements[i] == signal && keys[i] >= key) {
+                elements[i] = SIG_NONE;
+            }
+        }
     }
 };
