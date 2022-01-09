@@ -84,7 +84,9 @@ Agnus::predictDDF()
 void
 Agnus::computeDDFWindow()
 {
+// #ifdef LEGACY_DDF
     isOCS() ? computeDDFWindowOCS() : computeDDFWindowECS();
+// #endif
 }
 
 void
