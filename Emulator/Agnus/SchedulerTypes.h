@@ -125,37 +125,47 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
 
 enum_i8(EventID)
 {
-    EVENT_NONE = 0,
+    EVENT_NONE          = 0,
     
     //
     // Events in the primary event table
     //
 
     // REG slot
-    REG_CHANGE = 1,
+    REG_CHANGE          = 1,
     REG_EVENT_COUNT,
 
     // CIA slots
-    CIA_EXECUTE = 1,
+    CIA_EXECUTE         = 1,
     CIA_WAKEUP,
     CIA_EVENT_COUNT,
     
     // BPL slot
-    BPL_L1  = 0x04,
-    BPL_L2  = 0x08,
-    BPL_L3  = 0x0C,
-    BPL_L4  = 0x10,
-    BPL_L5  = 0x14,
-    BPL_L6  = 0x18,
-    BPL_H1  = 0x1C,
-    BPL_H2  = 0x20,
-    BPL_H3  = 0x24,
-    BPL_H4  = 0x28,
-    BPL_EOL = 0x30,
-    BPL_EVENT_COUNT = 0x34,
+    BPL_L1              = 0x04,
+    BPL_L1_MOD          = 0x08,
+    BPL_L2              = 0x0C,
+    BPL_L2_MOD          = 0x10,
+    BPL_L3              = 0x14,
+    BPL_L3_MOD          = 0x18,
+    BPL_L4              = 0x1C,
+    BPL_L4_MOD          = 0x20,
+    BPL_L5              = 0x24,
+    BPL_L5_MOD          = 0x28,
+    BPL_L6              = 0x2C,
+    BPL_L6_MOD          = 0x30,
+    BPL_H1              = 0x34,
+    BPL_H1_MOD          = 0x38,
+    BPL_H2              = 0x3C,
+    BPL_H2_MOD          = 0x40,
+    BPL_H3              = 0x44,
+    BPL_H3_MOD          = 0x48,
+    BPL_H4              = 0x4C,
+    BPL_H4_MOD          = 0x50,
+    BPL_EOL             = 0x54,
+    BPL_EVENT_COUNT     = 0x58,
 
     // DAS slot
-    DAS_REFRESH = 1,
+    DAS_REFRESH         = 1,
     DAS_D0,
     DAS_D1,
     DAS_D2,
@@ -184,7 +194,7 @@ enum_i8(EventID)
     DAS_EVENT_COUNT,
 
     // Copper slot
-    COP_REQ_DMA = 1,
+    COP_REQ_DMA         = 1,
     COP_WAKEUP,
     COP_WAKEUP_BLIT,
     COP_FETCH,
@@ -201,7 +211,7 @@ enum_i8(EventID)
     COP_EVENT_COUNT,
     
     // Blitter slot
-    BLT_STRT1 = 1,
+    BLT_STRT1           = 1,
     BLT_STRT2,
     BLT_COPY_SLOW,
     BLT_COPY_FAKE,
@@ -210,7 +220,7 @@ enum_i8(EventID)
     BLT_EVENT_COUNT,
         
     // SEC slot
-    SEC_TRIGGER = 1,
+    SEC_TRIGGER         = 1,
     SEC_EVENT_COUNT,
     
     //
@@ -218,29 +228,29 @@ enum_i8(EventID)
     //
 
     // Audio channels
-    CHX_PERFIN = 1,
+    CHX_PERFIN          = 1,
     CHX_EVENT_COUNT,
 
     // Disk controller slot
-    DSK_ROTATE = 1,
+    DSK_ROTATE          = 1,
     DSK_EVENT_COUNT,
 
     // Strobe slot
-    VBL_STROBE0 = 1,
+    VBL_STROBE0         = 1,
     VBL_STROBE1,
     VBL_STROBE2,
     VBL_EVENT_COUNT,
     
     // IRQ slot
-    IRQ_CHECK = 1,
+    IRQ_CHECK           = 1,
     IRQ_EVENT_COUNT,
 
     // IPL slot
-    IPL_CHANGE = 1,
+    IPL_CHANGE          = 1,
     IPL_EVENT_COUNT,
 
     // Keyboard
-    KBD_TIMEOUT = 1,
+    KBD_TIMEOUT         = 1,
     KBD_DAT,
     KBD_CLK0,
     KBD_CLK1,
@@ -251,28 +261,28 @@ enum_i8(EventID)
     KBD_EVENT_COUNT,
 
     // Serial data out (UART)
-    TXD_BIT = 1,
+    TXD_BIT             = 1,
     TXD_EVENT_COUNT,
 
     // Serial data out (UART)
-    RXD_BIT = 1,
+    RXD_BIT             = 1,
     RXD_EVENT_COUT,
 
     // Potentiometer
-    POT_DISCHARGE = 1,
+    POT_DISCHARGE       = 1,
     POT_CHARGE,
     POT_EVENT_COUNT,
     
     // Screenshots
-    SCR_TAKE = 1,
+    SCR_TAKE            = 1,
     SCR_EVENT_COUNT,
     
     // Rasterline slot
-    RAS_HSYNC = 1,
+    RAS_HSYNC           = 1,
     RAS_EVENT_COUNT,
     
     // SEC slot
-    TER_TRIGGER = 1,
+    TER_TRIGGER         = 1,
     TER_EVENT_COUNT,
     
     //
@@ -280,29 +290,29 @@ enum_i8(EventID)
     //
     
     // Disk change slot
-    DCH_INSERT = 1,
+    DCH_INSERT          = 1,
     DCH_EJECT,
     DCH_EVENT_COUNT,
 
     // Mouse
-    MSE_PUSH_LEFT = 1,
+    MSE_PUSH_LEFT       = 1,
     MSE_RELEASE_LEFT,
     MSE_PUSH_RIGHT,
     MSE_RELEASE_RIGHT,
     MSE_EVENT_COUNT,
 
     // Auto typing
-    KEY_PRESS = 1,
+    KEY_PRESS           = 1,
     KEY_RELEASE,
 
     // Remote server manager
-    SRV_LAUNCH_DAEMON = 1,
+    SRV_LAUNCH_DAEMON   = 1,
     
     // Serial remote server
-    SER_RECEIVE = 1,
+    SER_RECEIVE         = 1,
     
     // Inspector slot
-    INS_AMIGA = 1,
+    INS_AMIGA           = 1,
     INS_CPU,
     INS_MEM,
     INS_CIA,
