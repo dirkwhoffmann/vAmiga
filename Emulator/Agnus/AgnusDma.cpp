@@ -346,9 +346,13 @@ Agnus::computeBplEvents(const SigRecorder &sr)
 
     isize cnt = 0;
         
-    // Layout of a single fetch unit
+    // Layout of a single fetch unit (DEPRECATED)
     EventID slice[8]= { 0, 0, 0, 0, 0, 0, 0, 0 };
         
+    // The fetch unit layout
+    EventID fetch[2][8];
+    computeFetchUnit((u8)(bplcon0Initial >> 12), fetch);
+    
     i64 cycle = 0;
     for (isize i = 0, end = sigRecorder.end(); i < end; i++) {
         
@@ -374,6 +378,7 @@ Agnus::computeBplEvents(const SigRecorder &sr)
                 state.ff5 = true;
                 state.ff4 = false;
             }
+            
             if (state.ff3) {
                 
                 // if (pos.v == 0x80) trace(true, "%ld: ff3\n", j);
@@ -381,7 +386,8 @@ Agnus::computeBplEvents(const SigRecorder &sr)
                 if (j > max) max = (int)j;
                 
                 assert(j >= 0 && j < HPOS_CNT);
-                bplEvent[j] = slice[cnt];
+                // bplEvent[j] = slice[cnt];
+                bplEvent[j] = fetch[0][cnt];
                 cnt = (cnt + 1) & 7;
                 
             } else {
@@ -398,6 +404,7 @@ Agnus::computeBplEvents(const SigRecorder &sr)
         if (signal >= 0 && signal <= 15) {
             
             // trace(true, "signal = %s\n", DisplaySignalEnum::key(signal));
+            computeFetchUnit((u8)signal, fetch);
             
             slice[0] = slice[1] = slice[2] = slice[3] = 0;
             slice[4] = slice[5] = slice[6] = slice[7] = 0;
@@ -494,6 +501,150 @@ Agnus::computeBplEvents(const SigRecorder &sr)
 
     // Write back the new ddf state
     ddf = state;
+}
+
+void
+Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
+{
+    switch (dmacon) {
+            
+        case SIG_CON_L7:
+        case SIG_CON_L6:
+            
+            id[0][0] = 0;        id[1][0] = 0;
+            id[0][1] = BPL_L4;   id[1][1] = BPL_L4_MOD;
+            id[0][2] = BPL_L6;   id[1][2] = BPL_L6_MOD;
+            id[0][3] = BPL_L2;   id[1][3] = BPL_L2_MOD;
+            id[0][4] = 0;        id[1][4] = 0;
+            id[0][5] = BPL_L3;   id[1][5] = BPL_L3_MOD;
+            id[0][6] = BPL_L5;   id[1][6] = BPL_L5_MOD;
+            id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
+            break;
+
+        case SIG_CON_L5:
+            
+            id[0][0] = 0;        id[1][0] = 0;
+            id[0][1] = BPL_L4;   id[1][1] = BPL_L4_MOD;
+            id[0][2] = 0;        id[1][2] = 0;
+            id[0][3] = BPL_L2;   id[1][3] = BPL_L2_MOD;
+            id[0][4] = 0;        id[1][4] = 0;
+            id[0][5] = BPL_L3;   id[1][5] = BPL_L3_MOD;
+            id[0][6] = BPL_L5;   id[1][6] = BPL_L5_MOD;
+            id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
+            break;
+
+        case SIG_CON_L4:
+            
+            id[0][0] = 0;        id[1][0] = 0;
+            id[0][1] = BPL_L4;   id[1][1] = BPL_L4_MOD;
+            id[0][2] = 0;        id[1][2] = 0;
+            id[0][3] = BPL_L2;   id[1][3] = BPL_L2_MOD;
+            id[0][4] = 0;        id[1][4] = 0;
+            id[0][5] = BPL_L3;   id[1][5] = BPL_L3_MOD;
+            id[0][6] = 0;        id[1][6] = 0;
+            id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
+            break;
+
+        case SIG_CON_L3:
+            
+            id[0][0] = 0;        id[1][0] = 0;
+            id[0][1] = 0;        id[1][1] = 0;
+            id[0][2] = 0;        id[1][2] = 0;
+            id[0][3] = BPL_L2;   id[1][3] = BPL_L2_MOD;
+            id[0][4] = 0;        id[1][4] = 0;
+            id[0][5] = BPL_L3;   id[1][5] = BPL_L3_MOD;
+            id[0][6] = 0;        id[1][6] = 0;
+            id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
+            break;
+
+        case SIG_CON_L2:
+            
+            id[0][0] = 0;        id[1][0] = 0;
+            id[0][1] = 0;        id[1][1] = 0;
+            id[0][2] = 0;        id[1][2] = 0;
+            id[0][3] = BPL_L2;   id[1][3] = BPL_L2_MOD;
+            id[0][4] = 0;        id[1][4] = 0;
+            id[0][5] = 0;        id[1][5] = 0;
+            id[0][6] = 0;        id[1][6] = 0;
+            id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
+            break;
+
+        case SIG_CON_L1:
+            
+            id[0][0] = 0;        id[1][0] = 0;
+            id[0][1] = 0;        id[1][1] = 0;
+            id[0][2] = 0;        id[1][2] = 0;
+            id[0][3] = 0;        id[1][3] = 0;
+            id[0][4] = 0;        id[1][4] = 0;
+            id[0][5] = 0;        id[1][5] = 0;
+            id[0][6] = 0;        id[1][6] = 0;
+            id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
+            break;
+
+        case SIG_CON_H4:
+            
+            id[0][0] = BPL_H4;   id[1][0] = BPL_H4_MOD;
+            id[0][1] = BPL_H2;   id[1][1] = BPL_H2_MOD;
+            id[0][2] = BPL_H3;   id[1][2] = BPL_H3_MOD;
+            id[0][3] = BPL_H1;   id[1][3] = BPL_H1_MOD;
+            id[0][4] = BPL_H4;   id[1][4] = BPL_H4_MOD;
+            id[0][5] = BPL_H2;   id[1][5] = BPL_H2_MOD;
+            id[0][6] = BPL_H3;   id[1][6] = BPL_H3_MOD;
+            id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
+            break;
+
+        case SIG_CON_H3:
+            
+            id[0][0] = 0;        id[1][0] = 0;
+            id[0][1] = BPL_H2;   id[1][1] = BPL_H2_MOD;
+            id[0][2] = BPL_H3;   id[1][2] = BPL_H3_MOD;
+            id[0][3] = BPL_H1;   id[1][3] = BPL_H1_MOD;
+            id[0][4] = 0;        id[1][4] = 0;
+            id[0][5] = BPL_H2;   id[1][5] = BPL_H2_MOD;
+            id[0][6] = BPL_H3;   id[1][6] = BPL_H3_MOD;
+            id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
+            break;
+
+        case SIG_CON_H2:
+            
+            id[0][0] = 0;        id[1][0] = 0;
+            id[0][1] = BPL_H2;   id[1][1] = BPL_H2_MOD;
+            id[0][2] = 0;        id[1][2] = 0;
+            id[0][3] = BPL_H1;   id[1][3] = BPL_H1_MOD;
+            id[0][4] = 0;        id[1][4] = 0;
+            id[0][5] = BPL_H2;   id[1][5] = BPL_H2_MOD;
+            id[0][6] = 0;        id[1][6] = 0;
+            id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
+            break;
+
+        case SIG_CON_H1:
+            
+            id[0][0] = 0;        id[1][0] = 0;
+            id[0][1] = 0;        id[1][1] = 0;
+            id[0][2] = 0;        id[1][2] = 0;
+            id[0][3] = BPL_H1;   id[1][3] = BPL_H1_MOD;
+            id[0][4] = 0;        id[1][4] = 0;
+            id[0][5] = 0;        id[1][5] = 0;
+            id[0][6] = 0;        id[1][6] = 0;
+            id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
+            break;
+            
+        case SIG_CON_L0:
+        case SIG_CON_H0:
+        case SIG_CON_H7:
+        case SIG_CON_H6:
+        case SIG_CON_H5:
+            
+            id[0][0] = 0;        id[1][0] = 0;
+            id[0][1] = 0;        id[1][1] = 0;
+            id[0][2] = 0;        id[1][2] = 0;
+            id[0][3] = 0;        id[1][3] = 0;
+            id[0][4] = 0;        id[1][4] = 0;
+            id[0][5] = 0;        id[1][5] = 0;
+            id[0][6] = 0;        id[1][6] = 0;
+            id[0][7] = 0;        id[1][7] = 0;
+            break;
+    }
 }
 
 void

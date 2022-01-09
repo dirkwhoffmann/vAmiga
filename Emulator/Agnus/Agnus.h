@@ -129,8 +129,10 @@ public:
     
     // A copy of BPLCON0 and BPLCON1 (Denise has its own copies)
     u16 bplcon0;
+    u16 bplcon0Initial;
     u16 bplcon1;
-    
+    u16 bplcon1Initial;
+
     // The DMA control register
     u16 dmacon;
     u16 dmaconInitial;
@@ -410,7 +412,9 @@ private:
         >> frame
 
         << bplcon0
+        << bplcon0Initial
         << bplcon1
+        << bplcon1Initial
         << dmacon
         << dmaconInitial
         << dskpt
@@ -728,6 +732,9 @@ public:
     // Recomputes the BPL event table
     void computeBplEvents();
     void computeBplEvents(const SigRecorder &sr);
+    
+    // Computes the layout of a single fetch unit
+    void computeFetchUnit(u8 dmacon, EventID id[2][8]);
     
 private:
 

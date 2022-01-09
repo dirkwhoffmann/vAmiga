@@ -523,6 +523,8 @@ Agnus::hsyncHandler()
 
     // Save the current value of certain variables
     dmaconInitial = dmacon;
+    bplcon0Initial = bplcon0;
+    bplcon1Initial = bplcon1;
     diwVstrtInitial = diwVstrt;
     diwVstopInitial = diwVstop;
     ddfInitial = ddf;
