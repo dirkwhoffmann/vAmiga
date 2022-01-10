@@ -215,7 +215,12 @@ Denise::extractSlicesEven(u8 slices[16])
 template <bool hiresMode> void
 Denise::drawOdd(Pixel offset)
 {
-    if (!( hiresMode || (agnus.pos.h & 0x7) == agnus.scrollLoresOdd )) {
+    if (!( hiresMode || (agnus.pos.h & 0x7) == agnus.scrollLoresOdd ) ||
+        !(!hiresMode || (agnus.pos.h & 0x3) == agnus.scrollHiresOdd)) {
+        trace(true, "bplcon1 = %x\n", bplcon1);
+        trace(true, "scroll: %d %d\n", agnus.scrollHiresOdd, agnus.scrollLoresOdd);
+        trace(true, "scroll: %d\n", agnus.scrollOdd);
+
         agnus.dump(dump::Dma);
     }
     assert(!hiresMode || (agnus.pos.h & 0x3) == agnus.scrollHiresOdd);

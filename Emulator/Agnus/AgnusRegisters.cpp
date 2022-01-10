@@ -343,6 +343,8 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
     bplcon1 = newValue & 0xFF;
     
     // Compute comparision values for the hpos counter
+    scrollOdd  = (bplcon1 & 0b00001110) >> 1;
+    scrollEven = (bplcon1 & 0b11100000) >> 5;
     scrollLoresOdd  = (bplcon1 & 0b00001110) >> 1;
     scrollLoresEven = (bplcon1 & 0b11100000) >> 5;
     scrollHiresOdd  = (bplcon1 & 0b00000110) >> 1;

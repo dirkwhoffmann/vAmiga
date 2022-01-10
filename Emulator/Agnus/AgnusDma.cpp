@@ -134,36 +134,28 @@ Agnus::initDasEventTable()
     }
 }
 
+#ifdef LEGACY_DDF
+
 void
 Agnus::enableBplDmaOCS()
 {
-#ifdef LEGACY_DDF
-    
     if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
         
         updateBplEvents(dmacon, bplcon0);
         updateBplEvent();
     }
-    
-#endif
 }
 
 void
 Agnus::disableBplDmaOCS()
 {
-#ifdef LEGACY_DDF
-    
         updateBplEvents(dmacon, bplcon0);
         updateBplEvent();
-
-#endif
 }
 
 void
 Agnus::enableBplDmaECS()
 {
-#ifdef LEGACY_DDF
-    
     if (pos.h + 2 < ddfstrtReached) {
         
         updateBplEvents(dmacon, bplcon0);
@@ -181,20 +173,15 @@ Agnus::enableBplDmaECS()
         updateBplEvent();
         // updateLoresDrawingFlags(); // THIS CAN'T BE RIGHT
     }
-    
-#endif
 }
 
 void
 Agnus::disableBplDmaECS()
 {
-#ifdef LEGACY_DDF
-    
     updateBplEvents(dmacon, bplcon0);
     updateBplEvent();
-
-#endif
 }
+#endif
 
 template <BusOwner owner> bool
 Agnus::busIsFree()
@@ -349,6 +336,7 @@ Agnus::computeBplEvents(const SigRecorder &sr)
     // The fetch unit layout
     EventID fetch[2][8];
     computeFetchUnit((u8)(bplcon0Initial >> 12), fetch);
+    isize mask = (bplcon0Initial & 0x8000) ? 0b11 : 0b111;
     
     i64 cycle = 0;
     for (isize i = 0, end = sigRecorder.end(); i < end; i++) {
@@ -362,6 +350,8 @@ Agnus::computeBplEvents(const SigRecorder &sr)
         
         for (isize j = cycle; j < trigger; j++) {
             
+            assert(j >= 0 && j < HPOS_CNT);
+
             if (state.ff5 && cnt == 0) {
 
                 // if (pos.v == 0x80) trace(true, "%ld: ff5 AND 0\n", j);
@@ -376,21 +366,27 @@ Agnus::computeBplEvents(const SigRecorder &sr)
                 state.ff4 = false;
             }
             
+            EventID id = EVENT_NONE;
+            
             if (state.ff3) {
                 
                 // if (pos.v == 0x80) trace(true, "%ld: ff3\n", j);
                 if (j < min) min = (int)j;
                 if (j > max) max = (int)j;
                 
-                assert(j >= 0 && j < HPOS_CNT);
-                bplEvent[j] = fetch[state.ff5][cnt];
+                id = fetch[state.ff5][cnt];
                 cnt = (cnt + 1) & 7;
-                
-            } else {
-
-                assert(j >= 0 && j < HPOS_CNT);
-                bplEvent[j] = 0;
             }
+            
+            // Superimpose drawing flags
+            if ((j & mask) == (scrollOdd & mask)) {
+                id = (EventID)(id | 1);
+            }
+            if ((j & mask) == (scrollEven & mask)) {
+                id = (EventID)(id | 2);
+            }
+            
+            bplEvent[j] = id;
         }
         
         //
@@ -400,6 +396,7 @@ Agnus::computeBplEvents(const SigRecorder &sr)
         if (signal >= 0 && signal <= 15) {
             
             computeFetchUnit((u8)signal, fetch);
+            mask = (signal & 0x8) ? 0b11 : 0b111;
                                 
         } else {
             
@@ -461,7 +458,7 @@ Agnus::computeBplEvents(const SigRecorder &sr)
     bplEvent[HPOS_MAX] = BPL_EOL;
                 
     // Superimpose the drawing flags
-    hires ? updateHiresDrawingFlags() : updateLoresDrawingFlags();
+    // hires ? updateHiresDrawingFlags() : updateLoresDrawingFlags();
             
     // Update the jump table
     updateBplJumpTable();
@@ -550,10 +547,10 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
 
         case SIG_CON_H4:
             
-            id[0][0] = BPL_H4;   id[1][0] = BPL_H4_MOD;
-            id[0][1] = BPL_H2;   id[1][1] = BPL_H2_MOD;
-            id[0][2] = BPL_H3;   id[1][2] = BPL_H3_MOD;
-            id[0][3] = BPL_H1;   id[1][3] = BPL_H1_MOD;
+            id[0][0] = BPL_H4;   id[1][0] = BPL_H4;
+            id[0][1] = BPL_H2;   id[1][1] = BPL_H2;
+            id[0][2] = BPL_H3;   id[1][2] = BPL_H3;
+            id[0][3] = BPL_H1;   id[1][3] = BPL_H1;
             id[0][4] = BPL_H4;   id[1][4] = BPL_H4_MOD;
             id[0][5] = BPL_H2;   id[1][5] = BPL_H2_MOD;
             id[0][6] = BPL_H3;   id[1][6] = BPL_H3_MOD;
@@ -563,9 +560,9 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
         case SIG_CON_H3:
             
             id[0][0] = 0;        id[1][0] = 0;
-            id[0][1] = BPL_H2;   id[1][1] = BPL_H2_MOD;
-            id[0][2] = BPL_H3;   id[1][2] = BPL_H3_MOD;
-            id[0][3] = BPL_H1;   id[1][3] = BPL_H1_MOD;
+            id[0][1] = BPL_H2;   id[1][1] = BPL_H2;
+            id[0][2] = BPL_H3;   id[1][2] = BPL_H3;
+            id[0][3] = BPL_H1;   id[1][3] = BPL_H1;
             id[0][4] = 0;        id[1][4] = 0;
             id[0][5] = BPL_H2;   id[1][5] = BPL_H2_MOD;
             id[0][6] = BPL_H3;   id[1][6] = BPL_H3_MOD;
@@ -575,9 +572,9 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
         case SIG_CON_H2:
             
             id[0][0] = 0;        id[1][0] = 0;
-            id[0][1] = BPL_H2;   id[1][1] = BPL_H2_MOD;
+            id[0][1] = BPL_H2;   id[1][1] = BPL_H2;
             id[0][2] = 0;        id[1][2] = 0;
-            id[0][3] = BPL_H1;   id[1][3] = BPL_H1_MOD;
+            id[0][3] = BPL_H1;   id[1][3] = BPL_H1;
             id[0][4] = 0;        id[1][4] = 0;
             id[0][5] = BPL_H2;   id[1][5] = BPL_H2_MOD;
             id[0][6] = 0;        id[1][6] = 0;
@@ -589,7 +586,7 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = 0;        id[1][1] = 0;
             id[0][2] = 0;        id[1][2] = 0;
-            id[0][3] = BPL_H1;   id[1][3] = BPL_H1_MOD;
+            id[0][3] = BPL_H1;   id[1][3] = BPL_H1;
             id[0][4] = 0;        id[1][4] = 0;
             id[0][5] = 0;        id[1][5] = 0;
             id[0][6] = 0;        id[1][6] = 0;

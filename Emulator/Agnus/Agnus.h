@@ -178,6 +178,10 @@ public:
      */
     u16 dmaDAS;
 
+    // Shift values derives from BPLCON1
+    i8 scrollOdd;
+    i8 scrollEven;
+    
     /* Horizontal shift values derived from BPLCON1. All four values are
      * extracted in setBPLCON1() and utilized to emulate horizontal scrolling.
      * They control at which DMA cycles the BPLDAT registers are transfered
@@ -432,6 +436,8 @@ private:
         << dmaconAtDDFStrt
 #endif
         << dmaDAS
+        << scrollOdd
+        << scrollEven
         << scrollLoresOdd
         << scrollLoresEven
         << scrollHiresOdd
@@ -716,11 +722,12 @@ public:
     
 private:
     
+#ifdef LEGACY_DDF
     void enableBplDmaOCS();
     void disableBplDmaOCS();
     void enableBplDmaECS();
     void disableBplDmaECS();
-
+#endif
     
     //
     // Managing the bitplane time slot table (AgnusDma.cpp)

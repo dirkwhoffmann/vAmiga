@@ -270,7 +270,7 @@ Agnus::serviceBPLEvent(EventID id)
             hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
             break;
             
-        case BPL_H1:
+        case BPL_H1:                    HI_NONE(0);     break;
         case BPL_H1     | DRAW_ODD:     HI_ODD(0);      break;
         case BPL_H1     | DRAW_EVEN:    HI_EVEN(0);     break;
         case BPL_H1     | DRAW_BOTH:    HI_BOTH(0);     break;
@@ -279,7 +279,7 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_H1_MOD | DRAW_EVEN:    HI_MOD_EVEN(0); break;
         case BPL_H1_MOD | DRAW_BOTH:    HI_MOD_BOTH(0); break;
 
-        case BPL_H2:
+        case BPL_H2:                    HI_NONE(1);     break;
         case BPL_H2     | DRAW_ODD:     HI_ODD(1);      break;
         case BPL_H2     | DRAW_EVEN:    HI_EVEN(1);     break;
         case BPL_H2     | DRAW_BOTH:    HI_BOTH(1);     break;
@@ -288,7 +288,7 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_H2_MOD | DRAW_EVEN:    HI_MOD_EVEN(1); break;
         case BPL_H2_MOD | DRAW_BOTH:    HI_MOD_BOTH(1); break;
 
-        case BPL_H3:
+        case BPL_H3:                    HI_NONE(2);     break;
         case BPL_H3     | DRAW_ODD:     HI_ODD(2);      break;
         case BPL_H3     | DRAW_EVEN:    HI_EVEN(2);     break;
         case BPL_H3     | DRAW_BOTH:    HI_BOTH(2);     break;
@@ -297,7 +297,7 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_H3_MOD | DRAW_EVEN:    HI_MOD_EVEN(2); break;
         case BPL_H3_MOD | DRAW_BOTH:    HI_MOD_BOTH(2); break;
 
-        case BPL_H4:
+        case BPL_H4:                    HI_NONE(3);     break;
         case BPL_H4     | DRAW_ODD:     HI_ODD(3);      break;
         case BPL_H4     | DRAW_EVEN:    HI_EVEN(3);     break;
         case BPL_H4     | DRAW_BOTH:    HI_BOTH(3);     break;
@@ -306,7 +306,7 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_H4_MOD | DRAW_EVEN:    HI_MOD_EVEN(3); break;
         case BPL_H4_MOD | DRAW_BOTH:    HI_MOD_BOTH(3); break;
 
-        case BPL_L1:
+        case BPL_L1:                    LO_NONE(0);     break;
         case BPL_L1     | DRAW_ODD:     LO_ODD(0);      break;
         case BPL_L1     | DRAW_EVEN:    LO_EVEN(0);     break;
         case BPL_L1     | DRAW_BOTH:    LO_BOTH(0);     break;
@@ -315,7 +315,7 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_L1_MOD | DRAW_EVEN:    LO_MOD_EVEN(0); break;
         case BPL_L1_MOD | DRAW_BOTH:    LO_MOD_BOTH(0); break;
 
-        case BPL_L2:
+        case BPL_L2:                    LO_NONE(1);     break;
         case BPL_L2     | DRAW_ODD:     LO_ODD(1);      break;
         case BPL_L2     | DRAW_EVEN:    LO_EVEN(1);     break;
         case BPL_L2     | DRAW_BOTH:    LO_BOTH(1);     break;
@@ -324,7 +324,7 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_L2_MOD | DRAW_EVEN:    LO_MOD_EVEN(1); break;
         case BPL_L2_MOD | DRAW_BOTH:    LO_MOD_BOTH(1); break;
 
-        case BPL_L3:
+        case BPL_L3:                    LO_NONE(2);     break;
         case BPL_L3     | DRAW_ODD:     LO_ODD(2);      break;
         case BPL_L3     | DRAW_EVEN:    LO_EVEN(2);     break;
         case BPL_L3     | DRAW_BOTH:    LO_BOTH(2);     break;
@@ -333,7 +333,7 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_L3_MOD | DRAW_EVEN:    LO_MOD_EVEN(2); break;
         case BPL_L3_MOD | DRAW_BOTH:    LO_MOD_BOTH(2); break;
 
-        case BPL_L4:
+        case BPL_L4:                    LO_NONE(3);     break;
         case BPL_L4     | DRAW_ODD:     LO_ODD(3);      break;
         case BPL_L4     | DRAW_EVEN:    LO_EVEN(3);     break;
         case BPL_L4     | DRAW_BOTH:    LO_BOTH(3);     break;
@@ -342,7 +342,7 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_L4_MOD | DRAW_EVEN:    LO_MOD_EVEN(3); break;
         case BPL_L4_MOD | DRAW_BOTH:    LO_MOD_BOTH(3); break;
 
-        case BPL_L5:
+        case BPL_L5:                    LO_NONE(4);     break;
         case BPL_L5     | DRAW_ODD:     LO_ODD(4);      break;
         case BPL_L5     | DRAW_EVEN:    LO_EVEN(4);     break;
         case BPL_L5     | DRAW_BOTH:    LO_BOTH(4);     break;
@@ -351,7 +351,7 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_L5_MOD | DRAW_EVEN:    LO_MOD_EVEN(4); break;
         case BPL_L5_MOD | DRAW_BOTH:    LO_MOD_BOTH(4); break;
 
-        case BPL_L6:
+        case BPL_L6:                    LO_NONE(5);     break;
         case BPL_L6     | DRAW_ODD:     LO_ODD(5);      break;
         case BPL_L6     | DRAW_EVEN:    LO_EVEN(5);     break;
         case BPL_L6     | DRAW_BOTH:    LO_BOTH(5);     break;
