@@ -345,10 +345,7 @@ Agnus::computeBplEvents(const SigRecorder &sr)
     bool hires = false;
 
     isize cnt = 0;
-        
-    // Layout of a single fetch unit (DEPRECATED)
-    EventID slice[8]= { 0, 0, 0, 0, 0, 0, 0, 0 };
-        
+                
     // The fetch unit layout
     EventID fetch[2][8];
     computeFetchUnit((u8)(bplcon0Initial >> 12), fetch);
@@ -386,8 +383,7 @@ Agnus::computeBplEvents(const SigRecorder &sr)
                 if (j > max) max = (int)j;
                 
                 assert(j >= 0 && j < HPOS_CNT);
-                // bplEvent[j] = slice[cnt];
-                bplEvent[j] = fetch[0][cnt];
+                bplEvent[j] = fetch[state.ff5][cnt];
                 cnt = (cnt + 1) & 7;
                 
             } else {
@@ -403,37 +399,8 @@ Agnus::computeBplEvents(const SigRecorder &sr)
         
         if (signal >= 0 && signal <= 15) {
             
-            // trace(true, "signal = %s\n", DisplaySignalEnum::key(signal));
             computeFetchUnit((u8)signal, fetch);
-            
-            slice[0] = slice[1] = slice[2] = slice[3] = 0;
-            slice[4] = slice[5] = slice[6] = slice[7] = 0;
-
-            switch (signal) {
-                    
-                case SIG_CON_L7:
-                case SIG_CON_L6: slice[2] = BPL_L6;
-                case SIG_CON_L5: slice[6] = BPL_L5;
-                case SIG_CON_L4: slice[1] = BPL_L4;
-                case SIG_CON_L3: slice[5] = BPL_L3;
-                case SIG_CON_L2: slice[3] = BPL_L2;
-                case SIG_CON_L1: slice[7] = BPL_L1;
-                case SIG_CON_L0:
-                    hires = false; // TODO: SUPERIMPOSE DRAWING FLAG IMMEDIATELY
-                    break;
-                                    
-                case SIG_CON_H4: slice[0] = slice[4] = BPL_H4;
-                case SIG_CON_H3: slice[2] = slice[6] = BPL_H3;
-                case SIG_CON_H2: slice[1] = slice[5] = BPL_H2;
-                case SIG_CON_H1: slice[3] = slice[7] = BPL_H1;
-                case SIG_CON_H0:
-                case SIG_CON_H7:
-                case SIG_CON_H6:
-                case SIG_CON_H5:
-                    hires = true; // TODO: SUPERIMPOSE DRAWING FLAG IMMEDIATELY
-                    break;
-            }
-                    
+                                
         } else {
             
             switch (signal) {
