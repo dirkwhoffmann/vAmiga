@@ -30,7 +30,9 @@
  *  HSYNC_UPDATE_DAS_TABLE : Forces the hsync handler to update the disk,
  *                          audio, sprite DMA event table.
  */
+#ifdef LEGACY_DDF
 static constexpr usize HSYNC_PREDICT_DDF =      0b001;
+#endif
 static constexpr usize HSYNC_UPDATE_BPL_TABLE = 0b010;
 static constexpr usize HSYNC_UPDATE_DAS_TABLE = 0b100;
 
@@ -165,11 +167,11 @@ public:
      * variables are set at the beginning of each rasterline and updated
      * on-the-fly if BPLCON0 or DMACON changes before the trigger conditions
      * has been reached.
-     * DEPRICATED
+     * DEPRECATED
      */
-    u16 bplcon0AtDDFStrt;
+#ifdef LEGACY_DDF
     u16 dmaconAtDDFStrt;
-    
+#endif
     /* This value is updated in the hsync handler with the lowest 6 bits of
      * dmacon if the master enable bit is 1 or set to 0 if the master enable
      * bit is 0. It is used as an offset into the DAS lookup tables.
@@ -242,6 +244,7 @@ public:
      * value of -1 indicates that no matching event took place.
      * DEPRECATED
      */
+#ifdef LEGACY_DFF
     isize ddfstrtReached;
     isize ddfstopReached;
 
@@ -262,7 +265,8 @@ public:
     // DEPRECATED
     DDF ddfLores;
     DDF ddfHires;
-    
+#endif
+
     
     //
     // Display Window (DIW)
@@ -424,9 +428,9 @@ private:
         << bpl1mod
         << bpl2mod
         << sprpt
-
-        << bplcon0AtDDFStrt
+#ifdef LEGACY_DDF
         << dmaconAtDDFStrt
+#endif
         << dmaDAS
         << scrollLoresOdd
         << scrollLoresEven
@@ -445,13 +449,14 @@ private:
         << ddfstop
         >> ddfInitial
         >> ddf
+#ifdef LEGACY_DDF
         << ddfstrtReached
         << ddfstopReached
         << ddfState
         << ocsEarlyAccessLine
         >> ddfLores
         >> ddfHires
-
+#endif
         << diwstrt
         << diwstop
         << diwHstrt
@@ -664,14 +669,17 @@ private:
     // Managing the data fetch window (AgnusDDF.cpp)
     //
     
+#ifdef LEGACY_DDF
     // Sets up the likely DDF values for the next rasterline
     void predictDDF();
-
+    
 private:
 
     void computeDDFWindow();
     void computeDDFWindowOCS();
     void computeDDFWindowECS();
+
+#endif
 
     
     //

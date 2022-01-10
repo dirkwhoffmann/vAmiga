@@ -529,10 +529,10 @@ Agnus::hsyncHandler()
     diwVstopInitial = diwVstop;
     ddfInitial = ddf;
 
+#ifdef LEGACY_DDF
     // Initialize variables which keep values for certain trigger positions
     dmaconAtDDFStrt = dmacon;
-    bplcon0AtDDFStrt = bplcon0;
-
+#endif
 
     //
     // DIW
@@ -619,10 +619,12 @@ Agnus::hsyncHandler()
 
     if (hsyncActions) {
 
+#ifdef LEGACY_DDF
         if (hsyncActions & HSYNC_PREDICT_DDF) {
             hsyncActions &= ~HSYNC_PREDICT_DDF;
             predictDDF();
         }
+#endif
         if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_BPL_TABLE;
 #ifdef LEGACY_DDF

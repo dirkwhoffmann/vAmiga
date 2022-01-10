@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#ifdef LEGACY_DDF
+
 #include "config.h"
 #include "Agnus.h"
 
@@ -277,3 +279,5 @@ Agnus::computeDDFWindowECS()
     trace(DDF_DEBUG, "DDF Window (ECS):  (%ld,%ld) (%ld,%ld)\n",
           ddfLores.strt, ddfHires.strt, ddfLores.stop, ddfHires.stop);
 }
+
+#endif

@@ -52,8 +52,10 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     
     dmacon = newValue;
     
+#if LEGACY_DDF
     // Update variable dmaconAtDDFStrt if DDFSTRT has not been reached yet
     if (pos.h + 2 < ddfstrtReached) dmaconAtDDFStrt = newValue;
+#endif
     
     // Check the lowest 5 bits
     bool oldDMAEN = (oldValue & DMAEN);
@@ -290,7 +292,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     trace(DMA_DEBUG, "setBPLCON0(%4x,%4x)\n", oldValue, newValue);
 
     // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet
-    if (pos.h < ddfstrtReached) bplcon0AtDDFStrt = newValue;
+    // if (pos.h < ddfstrtReached) bplcon0AtDDFStrt = newValue;
     
     // Update the bpl event table in the next rasterline
     hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
@@ -550,10 +552,7 @@ Agnus::setDDFSTRT(u16 old, u16 value)
     
     // Tell the hsync handler to recompute the table in the next line
     hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-    
-    // TODO: REMOVE ASAP
-    hsyncActions |= HSYNC_PREDICT_DDF;
-    
+        
 #endif
 }
 
