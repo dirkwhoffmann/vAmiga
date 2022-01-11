@@ -572,6 +572,7 @@ Agnus::serviceBPLEvent(EventID id)
             return;
             
         default:
+            dump(dump::Dma);
             fatalError;
     }
 

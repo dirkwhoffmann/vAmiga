@@ -7,10 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifdef LEGACY_DDF
-
 #include "config.h"
 #include "Agnus.h"
+
+#ifdef LEGACY_DDF
 
 /* Register DDFSTRT and DDFSTOP define the area where the system performs
  * bitplane DMA. From a hardware engineer's point of view, these registers

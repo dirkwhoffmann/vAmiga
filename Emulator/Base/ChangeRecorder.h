@@ -172,19 +172,33 @@ struct RegChangeRecorder : public util::SortedRingBuffer<RegChange, capacity>
 // Signal change recorder
 //
 
-struct SigRecorder : public util::SortedRingBuffer<long, 256>
+struct SigRecorder : public util::SortedArray<u16, 256>
 {
     template <class W>
     void operator<<(W& worker)
     {
-        worker << this->elements << this->r << this->w << this->keys;
+        worker << this->elements << this->w << this->keys;
     }
     
-    void invalidate(i64 key, long signal) {
+    void insert(i64 key, u16 signal) {
+    
+        for (isize i = 0; i < w; i++) {
+
+            if (keys[i] == key) {
+                elements[i] |= signal;
+                return;
+            }
+        }
         
-        for (isize i = begin(); i != end(); i = next(i)) {
-            if (elements[i] == signal && keys[i] >= key) {
-                elements[i] = SIG_NONE;
+        SortedArray::insert(key, signal);
+    }
+    
+    void invalidate(i64 key, u16 signal) {
+        
+        for (isize i = 0; i < w; i++) {
+            
+            if ((elements[i] & signal) && keys[i] >= key) {
+                elements[i] &= ~signal;
             }
         }
     }

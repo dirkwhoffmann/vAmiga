@@ -9,6 +9,9 @@
 
 #pragma once
 
+// REMOVE ASAP
+#include "config.h"
+
 #include "AgnusTypes.h"
 #include "SubComponent.h"
 #include "Beam.h"
@@ -248,7 +251,7 @@ public:
      * value of -1 indicates that no matching event took place.
      * DEPRECATED
      */
-#ifdef LEGACY_DFF
+#ifdef LEGACY_DDF
     isize ddfstrtReached;
     isize ddfstopReached;
 

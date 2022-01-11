@@ -52,7 +52,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     
     dmacon = newValue;
     
-#if LEGACY_DDF
+#ifdef LEGACY_DDF
     // Update variable dmaconAtDDFStrt if DDFSTRT has not been reached yet
     if (pos.h + 2 < ddfstrtReached) dmaconAtDDFStrt = newValue;
 #endif
@@ -306,7 +306,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 #else
         
         // Recompute the bitplane event table
-        sigRecorder.insert(pos.h, newValue >> 12);
+        sigRecorder.insert(pos.h, SIG_CON_L0 | newValue >> 12);
         computeBplEvents(sigRecorder);
         
         // Schedule the bitplane event table to be recomputed

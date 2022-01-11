@@ -106,6 +106,35 @@ struct DDFStateEnum : util::Reflection<DDFStateEnum, DDFState>
 };
 #endif
 
+#ifdef __cplusplus
+static constexpr u16 SIG_NONE           = 0b0000000000000000;
+static constexpr u16 SIG_CON_L0         = 0b0000000000010000 | 0;
+static constexpr u16 SIG_CON_L1         = 0b0000000000010000 | 1;
+static constexpr u16 SIG_CON_L2         = 0b0000000000010000 | 2;
+static constexpr u16 SIG_CON_L3         = 0b0000000000010000 | 3;
+static constexpr u16 SIG_CON_L4         = 0b0000000000010000 | 4;
+static constexpr u16 SIG_CON_L5         = 0b0000000000010000 | 5;
+static constexpr u16 SIG_CON_L6         = 0b0000000000010000 | 6;
+static constexpr u16 SIG_CON_L7         = 0b0000000000010000 | 7;
+static constexpr u16 SIG_CON_H0         = 0b0000000000010000 | 8;
+static constexpr u16 SIG_CON_H1         = 0b0000000000010000 | 9;
+static constexpr u16 SIG_CON_H2         = 0b0000000000010000 | 10;
+static constexpr u16 SIG_CON_H3         = 0b0000000000010000 | 11;
+static constexpr u16 SIG_CON_H4         = 0b0000000000010000 | 12;
+static constexpr u16 SIG_CON_H5         = 0b0000000000010000 | 13;
+static constexpr u16 SIG_CON_H6         = 0b0000000000010000 | 14;
+static constexpr u16 SIG_CON_H7         = 0b0000000000010000 | 15;
+static constexpr u16 SIG_BMAPEN_CLR     = 0b0000000000100000;
+static constexpr u16 SIG_BMAPEN_SET     = 0b0000000001000000;
+static constexpr u16 SIG_VFLOP_CLR      = 0b0000000010000000;
+static constexpr u16 SIG_VFLOP_SET      = 0b0000000100000000;
+static constexpr u16 SIG_BPHSTART       = 0b0000001000000000;
+static constexpr u16 SIG_BPHSTOP        = 0b0000010000000000;
+static constexpr u16 SIG_SHW            = 0b0000100000000000;
+static constexpr u16 SIG_RHW            = 0b0001000000000000;
+#endif
+
+/*
 enum_long(DISPLAY_SIGNAL)
 {
     // Upper four bits of BPLCON0
@@ -135,12 +164,10 @@ enum_long(DISPLAY_SIGNAL)
     SIG_VFLOP_CLR,
     
     // Vertical start and stop
-    /*
-    SIG_BPVSTART0,
-    SIG_BPVSTART1,
-    SIG_BPVSTOP0,
-    SIG_BPVSTOP1,
-    */
+    // SIG_BPVSTART0,
+    // SIG_BPVSTART1,
+    // SIG_BPVSTOP0,
+    // SIG_BPVSTOP1,
     
     // Horizontal start and stop
     SIG_BPHSTART,
@@ -159,7 +186,7 @@ typedef DDF_STATE DisplaySignal;
 struct DisplaySignalEnum : util::Reflection<DisplaySignalEnum, DisplaySignal>
 {
     static long minVal() { return 0; }
-    static long maxVal() { return SIG_RHW; }
+    static long maxVal() { return SIG_NONE; }
     static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
 
     static const char *prefix() { return "SIG"; }
@@ -167,11 +194,11 @@ struct DisplaySignalEnum : util::Reflection<DisplaySignalEnum, DisplaySignal>
     {
         switch (value) {
                 
-            case SIG_CON_L0:    return "CON_L0";
-            case SIG_CON_L1:    return "CON_L1";
-            case SIG_CON_L2:    return "CON_L2";
-            case SIG_CON_L3:    return "CON_L3";
-            case SIG_CON_L4:    return "CON_L4";
+            case SIG_CON_L0:        return "CON_L0";
+            case SIG_CON_L1:        return "CON_L1";
+            case SIG_CON_L2:        return "CON_L2";
+            case SIG_CON_L3:        return "CON_L3";
+            case SIG_CON_L4:        return "CON_L4";
             case SIG_CON_L5:        return "CON_L5";
             case SIG_CON_L6:        return "CON_L6";
             case SIG_CON_L7:        return "CON_L7";
@@ -197,6 +224,7 @@ struct DisplaySignalEnum : util::Reflection<DisplaySignalEnum, DisplaySignal>
     }
 };
 #endif
+*/
 
 // Inspection interval in seconds (interval between INS_xxx events)
 static const double inspectionInterval = 0.1;
@@ -276,6 +304,16 @@ struct DDFFlipflops
     bool ff3 = false;
     bool ff4 = false;
     bool ff5 = false;
+    
+    bool operator!=(const DDFFlipflops &rhs) const
+    {
+        return
+        this->ff1 != rhs.ff1 ||
+        this->ff2 != rhs.ff2 ||
+        this->ff3 != rhs.ff3 ||
+        this->ff4 != rhs.ff4 ||
+        this->ff5 != rhs.ff5;
+    }
     
     template <class W>
     void operator<<(W& worker)

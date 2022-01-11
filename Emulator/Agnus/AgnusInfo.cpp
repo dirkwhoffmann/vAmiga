@@ -130,11 +130,50 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << tab("Flipflop 5");
         os << bol(ddf.ff5) << " (" << bol(ddfInitial.ff5) << ")" << std::endl;
         os << std::endl;
+       
+        auto name = [](u16 signal) -> string {
         
-        for (isize i = 0, end = sigRecorder.end(); i < end; i++) {
+            string result;
+            
+            if (signal & 0x10) {
+               
+                switch (signal & 0x1f) {
+
+                    case SIG_CON_L1:        result += "CON_L1 "; break;
+                    case SIG_CON_L2:        result += "CON_L2 "; break;
+                    case SIG_CON_L3:        result += "CON_L3 "; break;
+                    case SIG_CON_L4:        result += "CON_L4 "; break;
+                    case SIG_CON_L5:        result += "CON_L5 "; break;
+                    case SIG_CON_L6:        result += "CON_L6 "; break;
+                    case SIG_CON_L7:        result += "CON_L7 "; break;
+                    case SIG_CON_H1:        result += "CON_L1 "; break;
+                    case SIG_CON_H2:        result += "CON_L2 "; break;
+                    case SIG_CON_H3:        result += "CON_L3 "; break;
+                    case SIG_CON_H4:        result += "CON_L4 "; break;
+                    case SIG_CON_H5:        result += "CON_L5 "; break;
+                    case SIG_CON_H6:        result += "CON_L6 "; break;
+                    case SIG_CON_H7:        result += "CON_L7 "; break;
+                }
+            }
+            
+            if (signal & SIG_BMAPEN_CLR)    result += "BMAPEN_CLR ";
+            if (signal & SIG_BMAPEN_SET)    result += "BMAPEN_SET ";
+            if (signal & SIG_VFLOP_CLR)     result += "VFLOP_CLR ";
+            if (signal & SIG_VFLOP_SET)     result += "VFLOP_SET ";
+            if (signal & SIG_BPHSTART)      result += "BPHSTART ";
+            if (signal & SIG_BPHSTOP)       result += "BPHSTOP ";
+            if (signal & SIG_SHW)           result += "SHW ";
+            if (signal & SIG_RHW)           result += "RHW ";
+
+            return result != "" ? result : "NONE";
+        };
+        
+        if (sigRecorder.count() == 0) os << "No signals recorded\n";
+        
+        for (isize i = 0; i < sigRecorder.count(); i++) {
             
             auto trigger = util::hexstr<2>(sigRecorder.keys[i]);
-            auto signal = DisplaySignalEnum::key(sigRecorder.elements[i]);
+            auto signal = name(sigRecorder.elements[i]);
      
             os << tab("Event at $" + trigger) << signal << std::endl;
         }

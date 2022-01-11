@@ -310,12 +310,12 @@ Agnus::computeBplEvents()
     // Predict all events for the current scanline
     sigRecorder.clear();
         
-    sigRecorder.insert(0,        bplcon0 >> 12);
-    sigRecorder.insert(0x18,     SIG_SHW);
-    sigRecorder.insert(ddfstrt,  SIG_BPHSTART);
-    sigRecorder.insert(ddfstop,  SIG_BPHSTOP);
-    sigRecorder.insert(0xD8,     SIG_RHW);
-    sigRecorder.insert(HPOS_CNT, SIG_NONE);
+    sigRecorder.insert(0, SIG_CON_L0 | bplcon0 >> 12);
+    sigRecorder.insert(0x18, SIG_SHW);
+    sigRecorder.insert(ddfstrt, SIG_BPHSTART);
+    sigRecorder.insert(ddfstop, SIG_BPHSTOP);
+    sigRecorder.insert(0xD8, SIG_RHW);
+    sigRecorder.insert(HPOS_CNT + 1, SIG_NONE);
     
     computeBplEvents(sigRecorder);
 }
@@ -326,23 +326,23 @@ Agnus::computeBplEvents(const SigRecorder &sr)
     auto state = ddfInitial;
     auto bmapen = dmaconInitial & (DMAEN | BPLEN);
 
-    // REMOVE ASAP
-    int min = 1000;
-    int max = 0;
-    bool hires = false;
-
     isize cnt = 0;
                 
+    trace(true, "computeBplEvents\n");
+    dump(dump::Signals);
+    
     // The fetch unit layout
     EventID fetch[2][8];
     computeFetchUnit((u8)(bplcon0Initial >> 12), fetch);
     isize mask = (bplcon0Initial & 0x8000) ? 0b11 : 0b111;
     
     i64 cycle = 0;
-    for (isize i = 0, end = sigRecorder.end(); i < end; i++) {
+    for (isize i = 0; i < sigRecorder.count(); i++) {
         
         auto trigger = sigRecorder.keys[i];
         auto signal = sigRecorder.elements[i];
+        
+        if (trigger > HPOS_MAX) break;
         
         //
         // Emulate the display logic up to the next signal change
@@ -350,42 +350,40 @@ Agnus::computeBplEvents(const SigRecorder &sr)
         
         for (isize j = cycle; j < trigger; j++) {
             
-            assert(j >= 0 && j < HPOS_CNT);
-
-            if (state.ff5 && cnt == 0) {
+            if (cnt == 0 && state.ff5) {
 
                 // if (pos.v == 0x80) trace(true, "%ld: ff5 AND 0\n", j);
                 state.ff2 = false;
                 state.ff3 = false;
                 state.ff5 = false;
             }
-            if (state.ff4 && cnt == 0) {
+            if (cnt == 0 && state.ff4) {
 
                 // if (pos.v == 0x80) trace(true, "%ld: ff4 AND 0\n", j);
                 state.ff5 = true;
                 state.ff4 = false;
             }
             
-            EventID id = EVENT_NONE;
+            EventID id;
             
             if (state.ff3) {
-                
-                // if (pos.v == 0x80) trace(true, "%ld: ff3\n", j);
-                if (j < min) min = (int)j;
-                if (j > max) max = (int)j;
-                
+                                
                 id = fetch[state.ff5][cnt];
                 cnt = (cnt + 1) & 7;
+                
+            } else {
+                
+                id = EVENT_NONE;
+                cnt = 0;
             }
             
             // Superimpose drawing flags
-            if ((j & mask) == (scrollOdd & mask)) {
-                id = (EventID)(id | 1);
-            }
-            if ((j & mask) == (scrollEven & mask)) {
-                id = (EventID)(id | 2);
-            }
+            if ((j & mask) == (scrollOdd & mask))  id = (EventID)(id | 1);
+            if ((j & mask) == (scrollEven & mask)) id = (EventID)(id | 2);
             
+            if (id < 0) {
+                printf("INVALID\n");
+            }
             bplEvent[j] = id;
         }
         
@@ -393,61 +391,58 @@ Agnus::computeBplEvents(const SigRecorder &sr)
         // Emulate the next signal change
         //
         
-        if (signal >= 0 && signal <= 15) {
+        if (signal & SIG_CON_L0) {
             
-            computeFetchUnit((u8)signal, fetch);
+            computeFetchUnit((u8)(signal & 0xF), fetch);
             mask = (signal & 0x8) ? 0b11 : 0b111;
                                 
-        } else {
+        }
+        if (signal & SIG_BMAPEN_CLR) {
             
-            switch (signal) {
-                                        
-                case SIG_BMAPEN_CLR:
-                    
-                    bmapen = false;
-                    state.ff3 = false;
-                    cnt = 0;
-                    break;
-                    
-                case SIG_BMAPEN_SET:
-                    
-                    bmapen = true;
-                    break;
-                    
-                case SIG_VFLOP_SET:
-                    break;
-                    
-                case SIG_VFLOP_CLR:
-                    break;
-                    
-                case SIG_BPHSTART:
-                    
-                    // if (pos.v == 0x80) trace(true, "SIG_BPHSTART\n");
-                    if (state.ff2) state.ff3 = true;
-                    if (!state.ff1) state.ff3 = false;
-                    if (!bmapen) state.ff3 = false;
-                    break;
-                    
-                case SIG_BPHSTOP:
-                    
-                    // if (pos.v == 0x80) trace(true, "SIG_BPHSTOP\n");
-                    state.ff4 = true;
-                    break;
-                    
-                case SIG_SHW:
-                    
-                    // if (pos.v == 0x80) trace(true, "SIG_SHW\n");
-                    state.ff2 = true;
-                    break;
-                    
-                case SIG_RHW:
-                    
-                    // if (pos.v == 0x80) trace(true, "SIG_RHW\n");
-                    state.ff4 = true;
-                    break;
-                    
-                default:
-                    assert(signal == SIG_NONE);
+            bmapen = false;
+            state.ff3 = false;
+            cnt = 0;
+        }
+        if (signal & SIG_BMAPEN_SET) {
+            
+            bmapen = true;
+        }
+        if (signal & SIG_VFLOP_SET) {
+            
+        }
+        if (signal & SIG_VFLOP_CLR) {
+            
+        }
+        if (signal & SIG_SHW) {
+            
+            state.ff2 = true;
+        }
+        if (signal & SIG_RHW) {
+            
+            if (state.ff3) state.ff4 = true;
+        }
+        if (signal & (SIG_BPHSTART | SIG_BPHSTOP)) {
+        
+            if ((signal & SIG_BPHSTART) && (signal & SIG_BPHSTOP)) {
+
+                // OCS: BPHSTART wins
+                signal &= ~SIG_BPHSTOP;
+            }
+            if (signal & SIG_BPHSTART) {
+                
+                // if (pos.v == 0x80)
+                trace(true, "%lld: SIG_BPHSTART %d %d %d %d %d\n",
+                      trigger, state.ff1, state.ff2, state.ff3, state.ff4, state.ff5);
+                if (state.ff2) state.ff3 = true;
+                if (!state.ff1) state.ff3 = false;
+                if (!bmapen) state.ff3 = false;
+            }
+            if (signal & SIG_BPHSTOP) {
+
+                trace(true, "%lld: SIG_BPHSTART %d %d %d %d %d\n",
+                      trigger, state.ff1, state.ff2, state.ff3, state.ff4, state.ff5);
+                // if (pos.v == 0x80) trace(true, "SIG_BPHSTOP\n");
+                if (state.ff3) state.ff4 = true;
             }
         }
         
@@ -465,6 +460,12 @@ Agnus::computeBplEvents(const SigRecorder &sr)
 
     // Write back the new ddf state
     ddf = state;
+
+    //
+    if (ddf != ddfInitial) {
+        trace(true, "NEED TO CALL THIS NEXT LINE, TOO\n");
+        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    }
 }
 
 void
@@ -472,8 +473,8 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
 {
     switch (dmacon) {
             
-        case SIG_CON_L7:
-        case SIG_CON_L6:
+        case 0x7: // L7
+        case 0x6: // L6
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = BPL_L4;   id[1][1] = BPL_L4_MOD;
@@ -485,7 +486,7 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
             break;
 
-        case SIG_CON_L5:
+        case 0x5: // L5
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = BPL_L4;   id[1][1] = BPL_L4_MOD;
@@ -497,7 +498,7 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
             break;
 
-        case SIG_CON_L4:
+        case 0x4: // L4
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = BPL_L4;   id[1][1] = BPL_L4_MOD;
@@ -509,7 +510,7 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
             break;
 
-        case SIG_CON_L3:
+        case 0x3: // L3
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = 0;        id[1][1] = 0;
@@ -521,7 +522,7 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
             break;
 
-        case SIG_CON_L2:
+        case 0x2: // L2
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = 0;        id[1][1] = 0;
@@ -533,7 +534,7 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
             break;
 
-        case SIG_CON_L1:
+        case 0x1: // L1
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = 0;        id[1][1] = 0;
@@ -545,7 +546,7 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
             break;
 
-        case SIG_CON_H4:
+        case 0xC: // H4
             
             id[0][0] = BPL_H4;   id[1][0] = BPL_H4;
             id[0][1] = BPL_H2;   id[1][1] = BPL_H2;
@@ -557,7 +558,7 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
             break;
 
-        case SIG_CON_H3:
+        case 0xB: // H3
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = BPL_H2;   id[1][1] = BPL_H2;
@@ -569,7 +570,7 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
             break;
 
-        case SIG_CON_H2:
+        case 0xA: // H2
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = BPL_H2;   id[1][1] = BPL_H2;
@@ -581,7 +582,7 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
             break;
 
-        case SIG_CON_H1:
+        case 0x9: // SIG_CON_H1:
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = 0;        id[1][1] = 0;
@@ -593,11 +594,11 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
             break;
             
-        case SIG_CON_L0:
-        case SIG_CON_H0:
-        case SIG_CON_H7:
-        case SIG_CON_H6:
-        case SIG_CON_H5:
+        case 0x0: // L0
+        case 0x8: // H0
+        case 0xF: // H7
+        case 0xE: // H6
+        case 0xD: // H5
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = 0;        id[1][1] = 0;
@@ -608,6 +609,9 @@ Agnus::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][6] = 0;        id[1][6] = 0;
             id[0][7] = 0;        id[1][7] = 0;
             break;
+            
+        default:
+            fatalError;
     }
 }
 
