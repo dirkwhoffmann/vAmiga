@@ -290,14 +290,6 @@ AgnusStats;
 #ifdef __cplusplus
 struct DDFFlipflops
 {
-    // Input lines (derived from the OCS schematics)
-    /*
-    bool bmapen = false;
-    bool bpvstart = false;
-    bool bpvstop = false;
-    bool svb = false;
-    */
-    
     // Flipflops (derived from the OCS schematics)
     bool ff1 = false;
     bool ff2 = false;

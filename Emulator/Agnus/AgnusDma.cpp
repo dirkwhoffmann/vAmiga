@@ -315,7 +315,7 @@ Agnus::computeBplEvents()
     sigRecorder.insert(ddfstrt, SIG_BPHSTART);
     sigRecorder.insert(ddfstop, SIG_BPHSTOP);
     sigRecorder.insert(0xD8, SIG_RHW);
-    sigRecorder.insert(HPOS_CNT + 1, SIG_NONE);
+    sigRecorder.insert(HPOS_CNT, SIG_NONE);
     
     computeBplEvents(sigRecorder);
 }
@@ -328,28 +328,33 @@ Agnus::computeBplEvents(const SigRecorder &sr)
 
     isize cnt = 0;
                 
-    trace(true, "computeBplEvents\n");
-    dump(dump::Signals);
+    // trace(true, "computeBplEvents\n");
+    // dump(dump::Signals);
+    // if (pos.v == 48) dump(dump::Dma);
     
     // The fetch unit layout
     EventID fetch[2][8];
     computeFetchUnit((u8)(bplcon0Initial >> 12), fetch);
     isize mask = (bplcon0Initial & 0x8000) ? 0b11 : 0b111;
-    
+
     i64 cycle = 0;
     for (isize i = 0; i < sigRecorder.count(); i++) {
         
-        auto trigger = sigRecorder.keys[i];
         auto signal = sigRecorder.elements[i];
-        
-        if (trigger > HPOS_MAX) break;
+        auto trigger = sigRecorder.keys[i];
+
+        if (trigger > HPOS_CNT) break;
         
         //
         // Emulate the display logic up to the next signal change
         //
         
         for (isize j = cycle; j < trigger; j++) {
+        
+            assert(j >= 0 && j <= HPOS_MAX);
             
+            EventID id;
+
             if (cnt == 0 && state.ff5) {
 
                 // if (pos.v == 0x80) trace(true, "%ld: ff5 AND 0\n", j);
@@ -363,9 +368,6 @@ Agnus::computeBplEvents(const SigRecorder &sr)
                 state.ff5 = true;
                 state.ff4 = false;
             }
-            
-            EventID id;
-            
             if (state.ff3) {
                                 
                 id = fetch[state.ff5][cnt];
@@ -381,9 +383,6 @@ Agnus::computeBplEvents(const SigRecorder &sr)
             if ((j & mask) == (scrollOdd & mask))  id = (EventID)(id | 1);
             if ((j & mask) == (scrollEven & mask)) id = (EventID)(id | 2);
             
-            if (id < 0) {
-                printf("INVALID\n");
-            }
             bplEvent[j] = id;
         }
         
@@ -395,7 +394,6 @@ Agnus::computeBplEvents(const SigRecorder &sr)
             
             computeFetchUnit((u8)(signal & 0xF), fetch);
             mask = (signal & 0x8) ? 0b11 : 0b111;
-                                
         }
         if (signal & SIG_BMAPEN_CLR) {
             
@@ -430,18 +428,12 @@ Agnus::computeBplEvents(const SigRecorder &sr)
             }
             if (signal & SIG_BPHSTART) {
                 
-                // if (pos.v == 0x80)
-                trace(true, "%lld: SIG_BPHSTART %d %d %d %d %d\n",
-                      trigger, state.ff1, state.ff2, state.ff3, state.ff4, state.ff5);
                 if (state.ff2) state.ff3 = true;
                 if (!state.ff1) state.ff3 = false;
                 if (!bmapen) state.ff3 = false;
             }
             if (signal & SIG_BPHSTOP) {
 
-                trace(true, "%lld: SIG_BPHSTART %d %d %d %d %d\n",
-                      trigger, state.ff1, state.ff2, state.ff3, state.ff4, state.ff5);
-                // if (pos.v == 0x80) trace(true, "SIG_BPHSTOP\n");
                 if (state.ff3) state.ff4 = true;
             }
         }
@@ -451,19 +443,15 @@ Agnus::computeBplEvents(const SigRecorder &sr)
     
     // Add the End Of Line event
     bplEvent[HPOS_MAX] = BPL_EOL;
-                
-    // Superimpose the drawing flags
-    // hires ? updateHiresDrawingFlags() : updateLoresDrawingFlags();
-            
+                            
     // Update the jump table
     updateBplJumpTable();
 
     // Write back the new ddf state
     ddf = state;
 
-    //
-    if (ddf != ddfInitial) {
-        trace(true, "NEED TO CALL THIS NEXT LINE, TOO\n");
+    // Check if we need to recompute all event in the next scanline
+    if (state != ddfInitial) {
         hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
 }
