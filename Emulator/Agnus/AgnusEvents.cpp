@@ -221,7 +221,7 @@ Agnus::serviceRASEvent()
     assert(scheduler.id[SLOT_RAS] == RAS_HSYNC);
     
     // Let the hsync handler be called at the beginning of the next DMA cycle
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_STRHOR, 1);
+    agnus.recordRegisterChange(0, SET_STRHOR, 1);
     
     // Call the hsync handler
     // hsyncHandler();
