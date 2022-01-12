@@ -177,6 +177,8 @@
 		50AEBEDC24D3D8170037082D /* UARTEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEDB24D3D8170037082D /* UARTEvents.cpp */; };
 		50AEBEDE24D3D8700037082D /* AgnusEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEDD24D3D8700037082D /* AgnusEvents.cpp */; };
 		50AEBEE024D3D9080037082D /* KeyboardEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEDF24D3D9080037082D /* KeyboardEvents.cpp */; };
+		50AFEBBA278EF5FD00F422D5 /* Sequencer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AFEBB8278EF5FD00F422D5 /* Sequencer.cpp */; };
+		50AFEBBE278EF6CB00F422D5 /* SequencerInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AFEBBD278EF6CB00F422D5 /* SequencerInfo.cpp */; };
 		50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B0AF92222531C500EE3689 /* CopperTableView.swift */; };
 		50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
 		50B14C0D21EB3708002E32A6 /* AmigaComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* AmigaComponent.cpp */; };
@@ -543,6 +545,11 @@
 		50AEBEDB24D3D8170037082D /* UARTEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UARTEvents.cpp; sourceTree = "<group>"; };
 		50AEBEDD24D3D8700037082D /* AgnusEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusEvents.cpp; sourceTree = "<group>"; };
 		50AEBEDF24D3D9080037082D /* KeyboardEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyboardEvents.cpp; sourceTree = "<group>"; };
+		50AFEBB8278EF5FD00F422D5 /* Sequencer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sequencer.cpp; sourceTree = "<group>"; };
+		50AFEBB9278EF5FD00F422D5 /* Sequencer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sequencer.h; sourceTree = "<group>"; };
+		50AFEBBC278EF6B200F422D5 /* SequencerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SequencerTypes.h; sourceTree = "<group>"; };
+		50AFEBBD278EF6CB00F422D5 /* SequencerInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerInfo.cpp; sourceTree = "<group>"; };
+		50AFEBBF278EF70C00F422D5 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50B0AF92222531C500EE3689 /* CopperTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperTableView.swift; sourceTree = "<group>"; };
 		50B14C0521EB218E002E32A6 /* AmigaObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaObject.cpp; sourceTree = "<group>"; };
 		50B14C0621EB218E002E32A6 /* AmigaObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaObject.h; sourceTree = "<group>"; };
@@ -854,6 +861,7 @@
 				50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */,
 				50E204E92295A3F20082B63D /* DmaDebugger.h */,
 				50E204E82295A3F20082B63D /* DmaDebugger.cpp */,
+				50AFEBBB278EF61700F422D5 /* Sequencer */,
 				50AEBEC924D3D3BE0037082D /* Copper */,
 				50AEBEC824D3D3B30037082D /* Blitter */,
 			);
@@ -1351,6 +1359,18 @@
 			path = UART;
 			sourceTree = "<group>";
 		};
+		50AFEBBB278EF61700F422D5 /* Sequencer */ = {
+			isa = PBXGroup;
+			children = (
+				50AFEBBF278EF70C00F422D5 /* CMakeLists.txt */,
+				50AFEBBC278EF6B200F422D5 /* SequencerTypes.h */,
+				50AFEBB9278EF5FD00F422D5 /* Sequencer.h */,
+				50AFEBB8278EF5FD00F422D5 /* Sequencer.cpp */,
+				50AFEBBD278EF6CB00F422D5 /* SequencerInfo.cpp */,
+			);
+			path = Sequencer;
+			sourceTree = "<group>";
+		};
 		50B14C0421EB212E002E32A6 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -1768,6 +1788,7 @@
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
 				5023519024485BBF00F6C088 /* Preferences.swift in Sources */,
 				505A3A3A21F4996400132020 /* SSEUtils.cpp in Sources */,
+				50AFEBBE278EF6CB00F422D5 /* SequencerInfo.cpp in Sources */,
 				50B2BC8925EC3D590032EEFE /* IOUtils.cpp in Sources */,
 				502BB09E229C00C800A8DFCD /* CompatibilityConf.swift in Sources */,
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
@@ -1933,6 +1954,7 @@
 				508FDF8721EA1FBC0043D0E9 /* MsgQueue.cpp in Sources */,
 				50BF1CC8276D174200386540 /* GdbServer.cpp in Sources */,
 				500A0A2A262305BE0019F013 /* MemUtils.cpp in Sources */,
+				50AFEBBA278EF5FD00F422D5 /* Sequencer.cpp in Sources */,
 				50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */,
 				50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */,
 				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,

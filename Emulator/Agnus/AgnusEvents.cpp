@@ -223,9 +223,6 @@ Agnus::serviceRASEvent()
     // Let the hsync handler be called at the beginning of the next DMA cycle
     agnus.recordRegisterChange(0, SET_STRHOR, 1);
     
-    // Call the hsync handler
-    // hsyncHandler();
-
     // Reset the horizontal counter (-1 to compensate for the increment to come)
     pos.h = -1;
     

@@ -110,7 +110,7 @@ static const int FAS_DEBUG       = 0; // Fast RAM
 // Agnus
 static const int DMA_DEBUG       = 0; // DMA registers
 static const int DDF_DEBUG       = 0; // Display data fetch
-static const int NO_PTR_DROPS    = 1; // Never drop a pointer register write
+static const int NO_PTR_DROPS    = 0; // Never drop a pointer register write
 
 // Copper
 static const int COP_CHECKSUM    = 0; // Compute Copper checksums
