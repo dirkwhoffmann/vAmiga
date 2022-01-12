@@ -18,6 +18,7 @@ Agnus::Agnus(Amiga& ref) : SubComponent(ref)
     subComponents = std::vector<AmigaComponent *> {
         
         &scheduler,
+        &sequencer,
         &copper,
         &blitter,
         &dmaDebugger

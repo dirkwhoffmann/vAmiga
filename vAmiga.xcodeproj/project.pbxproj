@@ -550,6 +550,7 @@
 		50AFEBBC278EF6B200F422D5 /* SequencerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SequencerTypes.h; sourceTree = "<group>"; };
 		50AFEBBD278EF6CB00F422D5 /* SequencerInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerInfo.cpp; sourceTree = "<group>"; };
 		50AFEBBF278EF70C00F422D5 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50AFEBC1278EFB9700F422D5 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50B0AF92222531C500EE3689 /* CopperTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperTableView.swift; sourceTree = "<group>"; };
 		50B14C0521EB218E002E32A6 /* AmigaObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaObject.cpp; sourceTree = "<group>"; };
 		50B14C0621EB218E002E32A6 /* AmigaObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaObject.h; sourceTree = "<group>"; };
@@ -858,12 +859,10 @@
 				5016DFB6260E3048004E0307 /* SchedulerTypes.h */,
 				50AA4CE226DA11010050B871 /* Scheduler.h */,
 				50AA4CE126DA11010050B871 /* Scheduler.cpp */,
-				50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */,
-				50E204E92295A3F20082B63D /* DmaDebugger.h */,
-				50E204E82295A3F20082B63D /* DmaDebugger.cpp */,
 				50AFEBBB278EF61700F422D5 /* Sequencer */,
 				50AEBEC924D3D3BE0037082D /* Copper */,
 				50AEBEC824D3D3B30037082D /* Blitter */,
+				50AFEBC0278EFB7400F422D5 /* DmaDebugger */,
 			);
 			path = Agnus;
 			sourceTree = "<group>";
@@ -1369,6 +1368,17 @@
 				50AFEBBD278EF6CB00F422D5 /* SequencerInfo.cpp */,
 			);
 			path = Sequencer;
+			sourceTree = "<group>";
+		};
+		50AFEBC0278EFB7400F422D5 /* DmaDebugger */ = {
+			isa = PBXGroup;
+			children = (
+				50AFEBC1278EFB9700F422D5 /* CMakeLists.txt */,
+				50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */,
+				50E204E92295A3F20082B63D /* DmaDebugger.h */,
+				50E204E82295A3F20082B63D /* DmaDebugger.cpp */,
+			);
+			path = DmaDebugger;
 			sourceTree = "<group>";
 		};
 		50B14C0421EB212E002E32A6 /* Utilities */ = {
