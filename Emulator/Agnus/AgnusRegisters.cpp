@@ -505,15 +505,22 @@ Agnus::pokeDDFSTRT(u16 value)
     // ECS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
     
     value &= ddfMask();
-    recordRegisterChange(DMA_CYCLES(2), SET_DDFSTRT, value);
+    recordRegisterChange(DMA_CYCLES(4), SET_DDFSTRT, value);
 }
 
 void
 Agnus::setDDFSTRT(u16 old, u16 value)
 {
     trace(DDF_DEBUG, "setDDFSTRT(%X, %X)\n", old, value);
-    
+
     ddfstrt = value;
+    
+    if (pos.h == old) {
+        trace(XFILES, "setDDFSTRT: Old value matches trigger position\n");
+    }
+    if (pos.h == value) {
+        trace(XFILES, "setDDFSTRT: New value matches trigger position\n");
+    }
     
 #ifdef LEGACY_DDF
     
@@ -562,13 +569,13 @@ void
 Agnus::pokeDDFSTOP(u16 value)
 {
     trace(DDF_DEBUG, "pokeDDFSTOP(%X)\n", value);
-    
+
     //      15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // OCS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
     // ECS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
     
     value &= ddfMask();
-    recordRegisterChange(DMA_CYCLES(2), SET_DDFSTOP, value);
+    recordRegisterChange(DMA_CYCLES(4), SET_DDFSTOP, value);
 }
 
 void
@@ -577,6 +584,13 @@ Agnus::setDDFSTOP(u16 old, u16 value)
     trace(DDF_DEBUG, "setDDFSTOP(%X, %X)\n", old, value);
 
     ddfstop = value;
+
+    if (pos.h == old) {
+        trace(XFILES, "setDDFSTOP: Old value matches trigger position\n");
+    }
+    if (pos.h == value) {
+        trace(XFILES, "setDDFSTOP: New value matches trigger position\n");
+    }
 
 #ifdef LEGACY_DDF
 
@@ -607,7 +621,7 @@ Agnus::setDDFSTOP(u16 old, u16 value)
 #else
         
         // Remove the old stop event if it hasn't been reached
-        sigRecorder.invalidate(pos.h, SIG_BPHSTOP);
+        sigRecorder.invalidate(pos.h + 1, SIG_BPHSTOP);
         
         // Add the new stop event if it will be reached
         if (ddfstop > pos.h) sigRecorder.insert(ddfstop, SIG_BPHSTOP);
