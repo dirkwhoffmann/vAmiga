@@ -2198,9 +2198,9 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x090 >> 1: // DIWSTOP
             agnus.pokeDIWSTOP<s>(value); return;
         case 0x092 >> 1: // DDFSTRT
-            agnus.pokeDDFSTRT(value); return;
+            agnus.pokeDDFSTRT<s>(value); return;
         case 0x094 >> 1: // DDFSTOP
-            agnus.pokeDDFSTOP(value); return;
+            agnus.pokeDDFSTOP<s>(value); return;
         case 0x096 >> 1: // DMACON
             agnus.pokeDMACON(value); return;
         case 0x098 >> 1:  // CLXCON

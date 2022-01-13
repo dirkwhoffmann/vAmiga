@@ -495,7 +495,7 @@ Agnus::setDIWSTOP(u16 value)
     if (pos.v == diwVstop) diwVFlop = false;
 }
 
-void
+template <Accessor s> void
 Agnus::pokeDDFSTRT(u16 value)
 {
     trace(DDF_DEBUG, "pokeDDFSTRT(%X)\n", value);
@@ -505,7 +505,14 @@ Agnus::pokeDDFSTRT(u16 value)
     // ECS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
     
     value &= ddfMask();
-    recordRegisterChange(DMA_CYCLES(4), SET_DDFSTRT, value);
+    
+    // Schedule the write cycle
+    if constexpr (s == ACCESSOR_CPU) {
+        recordRegisterChange(DMA_CYCLES(3), SET_DDFSTRT, value);
+    }
+    if constexpr (s == ACCESSOR_AGNUS) {
+        recordRegisterChange(DMA_CYCLES(4), SET_DDFSTRT, value);
+    }
 }
 
 void
@@ -565,7 +572,7 @@ Agnus::setDDFSTRT(u16 old, u16 value)
 #endif
 }
 
-void
+template <Accessor s> void
 Agnus::pokeDDFSTOP(u16 value)
 {
     trace(DDF_DEBUG, "pokeDDFSTOP(%X)\n", value);
@@ -575,7 +582,14 @@ Agnus::pokeDDFSTOP(u16 value)
     // ECS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
     
     value &= ddfMask();
-    recordRegisterChange(DMA_CYCLES(4), SET_DDFSTOP, value);
+    
+    // Schedule the write cycle
+    if constexpr (s == ACCESSOR_CPU) {
+        recordRegisterChange(DMA_CYCLES(3), SET_DDFSTOP, value);
+    }
+    if constexpr (s == ACCESSOR_AGNUS) {
+        recordRegisterChange(DMA_CYCLES(4), SET_DDFSTOP, value);
+    }
 }
 
 void
@@ -1033,6 +1047,11 @@ template void Agnus::pokeSPRxCTL<4>(u16 value);
 template void Agnus::pokeSPRxCTL<5>(u16 value);
 template void Agnus::pokeSPRxCTL<6>(u16 value);
 template void Agnus::pokeSPRxCTL<7>(u16 value);
+
+template void Agnus::pokeDDFSTRT<ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeDDFSTRT<ACCESSOR_AGNUS>(u16 value);
+template void Agnus::pokeDDFSTOP<ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeDDFSTOP<ACCESSOR_AGNUS>(u16 value);
 
 template void Agnus::pokeDIWSTRT<ACCESSOR_CPU>(u16 value);
 template void Agnus::pokeDIWSTRT<ACCESSOR_AGNUS>(u16 value);

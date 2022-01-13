@@ -850,10 +850,10 @@ public:
     template <Accessor s> void pokeDIWSTOP(u16 value);
     void setDIWSTOP(u16 value);
 
-    void pokeDDFSTRT(u16 value);
+    template <Accessor s> void pokeDDFSTRT(u16 value);
     void setDDFSTRT(u16 old, u16 value);
 
-    void pokeDDFSTOP(u16 value);
+    template <Accessor s> void pokeDDFSTOP(u16 value);
     void setDDFSTOP(u16 old, u16 value);
 
     void pokeBPL1MOD(u16 value);

@@ -86,8 +86,8 @@ static const int NO_SSE          = 0; // Don't use SSE extensions
 #define LEGACY_DDF // Use the old DDF implementation
 
 // General
-static const int CNF_DEBUG       = 0; // Configuration options
 static const int XFILES          = 0; // Report paranormal activity
+static const int CNF_DEBUG       = 0; // Configuration options
 static const int OBJ_DEBUG       = 0; // Object life-times
 static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
 
