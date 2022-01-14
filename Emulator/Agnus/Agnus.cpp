@@ -590,7 +590,7 @@ Agnus::hsyncHandler()
 
         if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_BPL_TABLE;
-            computeBplEvents();
+            sequencer.computeBplEvents();
         }
         if (hsyncActions & HSYNC_UPDATE_DAS_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_DAS_TABLE;

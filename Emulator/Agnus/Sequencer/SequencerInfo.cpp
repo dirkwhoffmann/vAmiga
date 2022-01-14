@@ -93,12 +93,12 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
             return result != "" ? result : "NONE";
         };
         
-        if (agnus.sigRecorder.count() == 0) os << "No signals recorded\n";
+        if (sigRecorder.count() == 0) os << "No signals recorded\n";
         
-        for (isize i = 0; i < agnus.sigRecorder.count(); i++) {
+        for (isize i = 0; i < sigRecorder.count(); i++) {
             
-            auto trigger = util::hexstr<2>(agnus.sigRecorder.keys[i]);
-            auto signal = name(agnus.sigRecorder.elements[i]);
+            auto trigger = util::hexstr<2>(sigRecorder.keys[i]);
+            auto signal = name(sigRecorder.elements[i]);
      
             os << tab("Event at $" + trigger) << signal << std::endl;
         }

@@ -85,9 +85,6 @@ public:
 
     // Pending register changes
     RegChangeRecorder<8> changeRecorder;
-
-    // Signals controlling the bitplane display logic
-    SigRecorder sigRecorder;
     
     
     //
@@ -352,7 +349,6 @@ private:
         
         << hsyncActions
         >> changeRecorder
-        >> sigRecorder
 
         >> pos
         >> latchedPos
@@ -624,29 +620,6 @@ public:
     bool sprdma() const { return sprdma(dmacon); }
     bool dskdma() const { return dskdma(dmacon); }
     
-private:
-        
-    //
-    // Managing the bitplane time slot table (AgnusDma.cpp)
-    //
-    
-public:
-
-    // Removes all events from the BPL event table
-    void clearBplEvents();
-
-    // Recomputes the BPL event table
-    void computeBplEvents();
-    void computeBplEvents(const SigRecorder &sr);
-    
-    // Computes the layout of a single fetch unit
-    void computeFetchUnit(u8 dmacon, EventID id[2][8]);
-    
-private:
-    
-    // Updates the jump table for the bplEvent table
-    void updateBplJumpTable();
-
     
     //
     // Managing the disk, audio, sprite time slot table (AgnusDma.cpp)

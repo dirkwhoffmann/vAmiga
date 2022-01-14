@@ -11,6 +11,7 @@
 
 #include "SequencerTypes.h"
 #include "Constants.h"
+#include "ChangeRecorder.h"
 #include "SubComponent.h"
 #include "Scheduler.h"
 
@@ -107,6 +108,15 @@ private:
     
     
     //
+    // Signal recorder
+    //
+    
+    // Signals controlling the bitplane display logic
+    SigRecorder sigRecorder;
+
+    
+    
+    //
     // Initializing
     //
     
@@ -149,6 +159,7 @@ private:
 
         worker
         
+        >> sigRecorder
         << bplEvent
         << dasEvent
         << nextBplEvent
@@ -160,4 +171,26 @@ private:
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
+    
+    //
+    // Managing the bitplane time slot table
+    //
+    
+public:
+
+    // Removes all events from the BPL event table
+    void clearBplEvents();
+
+    // Recomputes the BPL event table
+    void computeBplEvents();
+    void computeBplEvents(const SigRecorder &sr);
+    
+    // Computes the layout of a single fetch unit
+    void computeFetchUnit(u8 dmacon, EventID id[2][8]);
+    
+private:
+    
+    // Updates the jump table for the bplEvent table
+    void updateBplJumpTable();
+    
 };

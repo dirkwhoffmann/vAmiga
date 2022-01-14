@@ -82,8 +82,8 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     if (oldBPLEN ^ newBPLEN) {
         
         // Update the bitplane event table
-        sigRecorder.insert(pos.h, newBPLEN ? SIG_BMAPEN_SET : SIG_BMAPEN_CLR);
-        computeBplEvents(sigRecorder);
+        sequencer.sigRecorder.insert(pos.h, newBPLEN ? SIG_BMAPEN_SET : SIG_BMAPEN_CLR);
+        sequencer.computeBplEvents(sequencer.sigRecorder);
         
         // Tell the hsync handler to recompute the table in the next line
         hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
@@ -279,8 +279,8 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     if ((oldValue ^ newValue) & 0xF000) {
             
         // Recompute the bitplane event table
-        sigRecorder.insert(pos.h, SIG_CON_L0 | newValue >> 12);
-        computeBplEvents(sigRecorder);
+        sequencer.sigRecorder.insert(pos.h, SIG_CON_L0 | newValue >> 12);
+        sequencer.computeBplEvents(sequencer.sigRecorder);
         
         // Schedule the bitplane event table to be recomputed
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
@@ -322,7 +322,7 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
     scrollHiresEven = (bplcon1 & 0b01100000) >> 5;
     
     // Update the bitplane event table
-    computeBplEvents();
+    sequencer.computeBplEvents();
     
     // Update the scheduled bitplane event according to the new table
     scheduleBplEventForCycle(pos.h);
@@ -498,13 +498,13 @@ Agnus::setDDFSTRT(u16 old, u16 value)
     }
         
     // Remove the old start event if it hasn't been reached
-    sigRecorder.invalidate(pos.h, SIG_BPHSTART);
+    sequencer.sigRecorder.invalidate(pos.h, SIG_BPHSTART);
     
     // Add the new start event if it will be reached
-    if (ddfstrt > pos.h) sigRecorder.insert(ddfstrt, SIG_BPHSTART);
+    if (ddfstrt > pos.h) sequencer.sigRecorder.insert(ddfstrt, SIG_BPHSTART);
     
     // Recompute the event table
-    computeBplEvents(sigRecorder);
+    sequencer.computeBplEvents(sequencer.sigRecorder);
     
     // Tell the hsync handler to recompute the table in the next line
     hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
@@ -546,13 +546,13 @@ Agnus::setDDFSTOP(u16 old, u16 value)
     }
     
     // Remove the old stop event if it hasn't been reached
-    sigRecorder.invalidate(pos.h + 1, SIG_BPHSTOP);
+    sequencer.sigRecorder.invalidate(pos.h + 1, SIG_BPHSTOP);
     
     // Add the new stop event if it will be reached
-    if (ddfstop > pos.h) sigRecorder.insert(ddfstop, SIG_BPHSTOP);
+    if (ddfstop > pos.h) sequencer.sigRecorder.insert(ddfstop, SIG_BPHSTOP);
     
     // Recompute the event table
-    computeBplEvents(sigRecorder);
+    sequencer.computeBplEvents(sequencer.sigRecorder);
     
     // Tell the hsync handler to recompute the table in the next line
     hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
