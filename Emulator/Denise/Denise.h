@@ -57,6 +57,10 @@ public:
     // Registers
     //
     
+    // Register values as written by pokeDIWSTRT/STOP()
+    u16 diwstrt;
+    u16 diwstop;
+    
     // Display window coordinates (extracted from DIWSTRT and DIWSTOP)
     isize diwHstrt;
     isize diwHstop;
@@ -330,6 +334,8 @@ private:
 
         worker
         
+        << diwstrt
+        << diwstop
         << diwHstrt
         << diwHstop
         << diwHFlop

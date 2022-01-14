@@ -156,7 +156,7 @@ public:
      *    not recognised.
      */
 
-    // Register values as they have been written by pokeDIWSTRT/STOP()
+    // Register values as written by pokeDIWSTRT/STOP()
     u16 diwstrt;
     u16 diwstop;
 

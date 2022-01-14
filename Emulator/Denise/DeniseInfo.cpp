@@ -23,8 +23,8 @@ Denise::_inspect() const
         info.bplcon2 = bplcon2;
         info.bpu = bpu();
         
-        info.diwstrt = agnus.sequencer.diwstrt;
-        info.diwstop = agnus.sequencer.diwstop;
+        info.diwstrt = diwstrt;
+        info.diwstop = diwstop;
         info.diwHstrt = diwHstrt;
         info.diwHstop = diwHstop;
         info.diwVstrt = agnus.sequencer.diwVstrt;
