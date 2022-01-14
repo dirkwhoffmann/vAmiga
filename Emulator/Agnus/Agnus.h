@@ -412,10 +412,6 @@ public:
      */
     Beam cycleToBeam(Cycle cycle) const;
 
-    // Advances a beam position by a given number of cycles (DEPRECATED)
-    // TODO: REMOVE AFTER V1.1 BETA TESTING
-    Beam addToBeam(Beam beam, Cycle cycles) const;
-
     
     //
     // Querying graphic modes

@@ -22,7 +22,6 @@ Copper::serviceEvent(EventID id)
 {
     u16 reg;
     Beam beam;
-    Beam beam2; // REMOVE ASAP
     
     servicing = true;
 
@@ -225,10 +224,7 @@ Copper::serviceEvent(EventID id)
             if (agnus.pos.h == 0xE1) { reschedule(); break; }
 
             // Compute the beam position that needs to be compared
-            // TODO: REMOVE addToBeam after beta testing
-            beam2 = agnus.pos + 2;
-            beam = agnus.addToBeam(agnus.pos, 2);
-            assert(beam == beam2);
+            beam = agnus.pos + 2;
             
             // Run the comparator to see if the next command is skipped
             trace(COP_DEBUG && verbose, "Calling comparator(%ld,%ld)\n", beam.v, beam.h);

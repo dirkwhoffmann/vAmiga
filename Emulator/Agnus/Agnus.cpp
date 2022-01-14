@@ -233,18 +233,6 @@ Agnus::cycleToBeam(Cycle cycle) const
     return result;
 }
 
-Beam
-Agnus::addToBeam(Beam beam, Cycle cycles) const
-{
-    Beam result;
-
-    Cycle cycle = beam.v * HPOS_CNT + beam.h + cycles;
-    result.v = (isize)(cycle / HPOS_CNT);
-    result.h = (isize)(cycle % HPOS_CNT);
-
-    return result;
-}
-
 u8
 Agnus::bpu(u16 v)
 {
