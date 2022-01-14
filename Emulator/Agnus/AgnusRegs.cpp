@@ -343,57 +343,6 @@ Agnus::pokeDIWSTOP(u16 value)
     recordRegisterChange(DMA_CYCLES(2), SET_DIWSTOP_DENISE, value);
 }
 
-#if 0
-void
-Agnus::setDIWSTOP(u16 value)
-{
-    trace(DIW_DEBUG, "setDIWSTOP(%X)\n", value);
-    
-    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
-    // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
-    
-    sequencer.diwstop = value;
-    
-    // Extract the lower right corner of the display window
-    isize newDiwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
-    isize newDiwHstop = LO_BYTE(value) | 0x100;
-    
-    trace(DIW_DEBUG, "newDiwVstop = %ld newDiwHstop = %ld\n", newDiwVstop, newDiwHstop);
-    
-    // Invalidate the coordinate if it is out of range
-    if (newDiwHstop > 0x1C7) {
-        trace(DIW_DEBUG, "newDiwHstop is too large\n");
-        newDiwHstop = -1;
-    }
-    
-    // Check if the change already takes effect in the current rasterline.
-    isize cur = 2 * pos.h;
-    
-    // (1) and (2) (see setDIWSTRT)
-    if (cur < denise.diwHstop && cur < newDiwHstop) {
-        
-        trace(DIW_DEBUG, "Updating hFlopOff immediately at %ld\n", cur);
-        denise.diwHFlopOff = newDiwHstop;
-    }
-    
-    // (3) (see setDIWSTRT)
-    if (newDiwHstop < cur && cur < denise.diwHstop) {
-        
-        trace(DIW_DEBUG, "hFlop not switched off in current line\n");
-        denise.diwHFlopOff = -1;
-    }
-    
-    sequencer.diwVstop = newDiwVstop;
-    denise.diwHstop = newDiwHstop;
-    
-    /* Update the vertical DIW flipflop
-     * This is not 100% accurate. See comment in setDIWSTRT().
-     */
-    if (pos.v == sequencer.diwVstrt) sequencer.diwVFlop = true;
-    if (pos.v == sequencer.diwVstop) sequencer.diwVFlop = false;
-}
-#endif
-
 void
 Agnus::pokeBPL1MOD(u16 value)
 {

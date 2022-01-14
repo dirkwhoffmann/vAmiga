@@ -122,16 +122,6 @@ Sequencer::setDIWSTRT(u16 value)
     
     // Extract the coordinate
     diwVstrt = HI_BYTE(value);
-    
-    /* Update the vertical DIW flipflop
-     * This is not 100% accurate. If the vertical DIW flipflop changes in the
-     * middle of a rasterline, the effect is immediately visible on a real
-     * Amiga. The current emulation code only evaluates the flipflop at the end
-     * of the rasterline in the drawing routine of Denise. Hence, the whole
-     * line will be blacked out, not just the rest of it.
-     */
-    if (agnus.pos.v == diwVstrt) diwVFlop = true;
-    if (agnus.pos.v == diwVstop) diwVFlop = false;
 }
 
 void
@@ -145,13 +135,7 @@ Sequencer::setDIWSTOP(u16 value)
     diwstop = value;
     
     // Extract the coordinate
-    diwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
-    
-    /* Update the vertical DIW flipflop
-     * This is not 100% accurate. See comment in setDIWSTRT().
-     */
-    if (agnus.pos.v == diwVstrt) diwVFlop = true;
-    if (agnus.pos.v == diwVstop) diwVFlop = false;
+    diwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);    
 }
 
 template void Sequencer::pokeDDFSTRT<ACCESSOR_CPU>(u16 value);

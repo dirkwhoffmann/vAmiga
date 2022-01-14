@@ -176,9 +176,9 @@ public:
     isize diwVstrtInitial;
     isize diwVstopInitial;
 
-    // Value of the vertical DIW flipflop (DEPRECATED)
-    bool diwVFlop;
-    
+    // Indicates if the current line is a blank line
+    bool lineIsBlank;
+
     
     //
     // Signal recorder
@@ -248,7 +248,7 @@ private:
         << diwVstrtInitial
         << diwVstop
         << diwVstopInitial
-        << diwVFlop
+        << lineIsBlank
 
         >> sigRecorder;
     }

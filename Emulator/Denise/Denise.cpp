@@ -900,13 +900,7 @@ Denise::updateBorderColor()
 void
 Denise::drawBorder()
 {
-    // Check if the horizontal flipflop was set somewhere in this rasterline
-    bool hFlopWasSet = diwHFlop || diwHFlopOn != -1;
-
-    // Check if the whole line is blank (drawn in background color)
-    bool lineIsBlank = !agnus.sequencer.diwVFlop || !hFlopWasSet;
-
-    if (lineIsBlank) {
+    if (agnus.sequencer.lineIsBlank) {
 
         // Draw blank line
         for (Pixel i = 0; i < HPIXELS; i++) {

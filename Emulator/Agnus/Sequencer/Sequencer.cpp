@@ -268,9 +268,14 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
         }
         if (signal & SIG_VFLOP_SET) {
             
+            state.ff1 = true;
+            lineIsBlank = false;
         }
         if (signal & SIG_VFLOP_CLR) {
             
+            state.ff1 = false;
+            state.ff3 = false;
+            cnt = 0;
         }
         if (signal & SIG_SHW) {
             
@@ -521,37 +526,31 @@ Sequencer::hsyncHandler()
     diwVstrtInitial = diwVstrt;
     diwVstopInitial = diwVstop;
     ddfInitial = ddf;
-
-    // Update the vertical DIW flipflop
-    if (agnus.pos.v == diwVstrt) diwVFlop = true;
-    if (agnus.pos.v == diwVstop) diwVFlop = false;
-
-    // Update the horizontal DIW flipflop
-    /*
-    diwHFlop = (diwHFlopOff != -1) ? false : (diwHFlopOn != -1) ? true : diwHFlop;
-    diwHFlopOn = denise.diwHstrt;  // TODO: MOVE diwHFlopXXX to Denise
-    diwHFlopOff = denise.diwHstop;
-    */
     
     if (agnus.pos.v == diwVstrt) {
+        
         trace(DDF_DEBUG, "DDF: FF1 = 1 (DIWSTRT)\n");
         ddfInitial.ff1 = true;
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
     if (agnus.pos.v == diwVstop) {
+        
         trace(DDF_DEBUG, "DDF: FF1 = 0 (DIWSTOP)\n");
         ddfInitial.ff1 = false;
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
     if (agnus.inLastRasterline()) {
+        
         trace(DDF_DEBUG, "DDF: FF1 = 0 (EOF)\n");
         ddfInitial.ff1 = false;
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
+
+    lineIsBlank = !ddfInitial.ff1;
 }
 
 void
 Sequencer::vsyncHandler()
 {
-    diwVFlop = false;
+
 }

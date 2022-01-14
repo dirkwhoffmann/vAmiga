@@ -155,7 +155,7 @@ public:
     i8 scrollOdd;
     i8 scrollEven;
     
-    
+        
     //
     // Data bus
     //
