@@ -23,12 +23,12 @@ Denise::_inspect() const
         info.bplcon2 = bplcon2;
         info.bpu = bpu();
         
-        info.diwstrt = agnus.diwstrt;
-        info.diwstop = agnus.diwstop;
-        info.diwHstrt = agnus.diwHstrt;
-        info.diwHstop = agnus.diwHstop;
-        info.diwVstrt = agnus.diwVstrt;
-        info.diwVstop = agnus.diwVstop;
+        info.diwstrt = agnus.sequencer.diwstrt;
+        info.diwstop = agnus.sequencer.diwstop;
+        info.diwHstrt = agnus.sequencer.diwHstrt;
+        info.diwHstop = agnus.sequencer.diwHstop;
+        info.diwVstrt = agnus.sequencer.diwVstrt;
+        info.diwVstop = agnus.sequencer.diwVstop;
         
         info.joydat[0] = controlPort1.joydat();
         info.joydat[1] = controlPort2.joydat();

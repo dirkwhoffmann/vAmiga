@@ -901,10 +901,10 @@ void
 Denise::drawBorder()
 {
     // Check if the horizontal flipflop was set somewhere in this rasterline
-    bool hFlopWasSet = agnus.diwHFlop || agnus.diwHFlopOn != -1;
+    bool hFlopWasSet = agnus.sequencer.diwHFlop || agnus.sequencer.diwHFlopOn != -1;
 
     // Check if the whole line is blank (drawn in background color)
-    bool lineIsBlank = !agnus.diwVFlop || !hFlopWasSet;
+    bool lineIsBlank = !agnus.sequencer.diwVFlop || !hFlopWasSet;
 
     if (lineIsBlank) {
 
@@ -916,15 +916,15 @@ Denise::drawBorder()
     } else {
 
         // Draw left border
-        if (!agnus.diwHFlop && agnus.diwHFlopOn != -1) {
-            for (isize i = 0; i < 2 * agnus.diwHFlopOn; i++) {
+        if (!agnus.sequencer.diwHFlop && agnus.sequencer.diwHFlopOn != -1) {
+            for (isize i = 0; i < 2 * agnus.sequencer.diwHFlopOn; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
 
         // Draw right border
-        if (agnus.diwHFlopOff != -1) {
-            for (isize i = 2 * agnus.diwHFlopOff; i < HPIXELS; i++) {
+        if (agnus.sequencer.diwHFlopOff != -1) {
+            for (isize i = 2 * agnus.sequencer.diwHFlopOff; i < HPIXELS; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }

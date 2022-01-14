@@ -47,16 +47,17 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << bol(bplDmaLine) << std::endl;
         os << tab("BLS signal");
         os << bol(bls) << std::endl;
+        
+        sequencer.dump(dump::State, os);
     }
 
     if (category & dump::Registers) {
         
+        sequencer.dump(dump::Registers, os);
+        
         os << tab("DMACON");
         os << hex(dmacon) << std::endl;
                 
-        os << tab("DIWSTRT, DIWSTOP");
-        os << hex(diwstrt) << ' ' << hex(diwstop) << ' ' << std::endl;
-
         os << tab("BPLCON0, BPLCON1");
         os << hex(bplcon0) << ' ' << hex(bplcon1) << ' ' << std::endl;
 
@@ -84,6 +85,16 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << tab("DSKPT");
         os << hex(dskpt) << std::endl;
     }
+    
+    if (category & dump::Dma) {
+        
+        sequencer.dump(dump::Dma, os);
+    }
+
+    if (category & dump::Signals) {
+        
+        sequencer.dump(dump::Signals, os);
+    }
 }
 
 void
@@ -99,8 +110,8 @@ Agnus::_inspect() const
     info.bpu      = bpu();
     info.ddfstrt  = sequencer.ddfstrt;
     info.ddfstop  = sequencer.ddfstop;
-    info.diwstrt  = diwstrt;
-    info.diwstop  = diwstop;
+    info.diwstrt  = sequencer.diwstrt;
+    info.diwstop  = sequencer.diwstop;
     
     info.bpl1mod  = bpl1mod;
     info.bpl2mod  = bpl2mod;

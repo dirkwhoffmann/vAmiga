@@ -513,3 +513,43 @@ Sequencer::updateDasJumpTable(i16 end)
         if (dasEvent[i]) next = (i8)i;
     }
 }
+
+void
+Sequencer::hsyncHandler()
+{
+    diwVstrtInitial = diwVstrt;
+    diwVstopInitial = diwVstop;
+    ddfInitial = ddf;
+
+    // Update the vertical DIW flipflop
+    if (agnus.pos.v == diwVstrt) diwVFlop = true;
+    if (agnus.pos.v == diwVstop) diwVFlop = false;
+
+    // Update the horizontal DIW flipflop
+    diwHFlop = (diwHFlopOff != -1) ? false : (diwHFlopOn != -1) ? true : diwHFlop;
+    diwHFlopOn = diwHstrt;
+    diwHFlopOff = diwHstop;
+    
+    if (agnus.pos.v == diwVstrt) {
+        trace(DDF_DEBUG, "DDF: FF1 = 1 (DIWSTRT)\n");
+        ddfInitial.ff1 = true;
+        agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    }
+    if (agnus.pos.v == diwVstop) {
+        trace(DDF_DEBUG, "DDF: FF1 = 0 (DIWSTOP)\n");
+        ddfInitial.ff1 = false;
+        agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    }
+    if (agnus.inLastRasterline()) {
+        trace(DDF_DEBUG, "DDF: FF1 = 0 (EOF)\n");
+        ddfInitial.ff1 = false;
+        agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    }
+}
+
+void
+Sequencer::vsyncHandler()
+{
+    diwVFlop = false;
+    diwHFlop = true;
+}

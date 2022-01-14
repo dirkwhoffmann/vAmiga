@@ -36,12 +36,10 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
         os << hex(ddfstrt) << std::endl;
         os << tab("DDFSTOP");
         os << hex(ddfstop) << std::endl;
-        /*
         os << tab("DIWSTART");
         os << hex(diwstrt) << std::endl;
         os << tab("DIWSTOP");
         os << hex(diwstop) << std::endl;
-        */
     }
         
     if (category & dump::Dma) {

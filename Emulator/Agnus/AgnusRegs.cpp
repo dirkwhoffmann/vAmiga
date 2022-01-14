@@ -342,7 +342,7 @@ Agnus::setDIWSTRT(u16 value)
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0, V8 = 0
     
-    diwstrt = value;
+    sequencer.diwstrt = value;
     
     // Extract the upper left corner of the display window
     isize newDiwVstrt = HI_BYTE(value);
@@ -375,21 +375,21 @@ Agnus::setDIWSTRT(u16 value)
     isize cur = 2 * pos.h;
     
     // (1) and (2)
-    if (cur < diwHstrt && cur < newDiwHstrt) {
+    if (cur < sequencer.diwHstrt && cur < newDiwHstrt) {
         
         trace(DIW_DEBUG, "Updating DIW hflop immediately at %ld\n", cur);
-        diwHFlopOn = newDiwHstrt;
+        sequencer.diwHFlopOn = newDiwHstrt;
     }
     
     // (3)
-    if (newDiwHstrt < cur && cur < diwHstrt) {
+    if (newDiwHstrt < cur && cur < sequencer.diwHstrt) {
         
         trace(DIW_DEBUG, "DIW hflop not switched on in current line\n");
-        diwHFlopOn = -1;
+        sequencer.diwHFlopOn = -1;
     }
     
-    diwVstrt = newDiwVstrt;
-    diwHstrt = newDiwHstrt;
+    sequencer.diwVstrt = newDiwVstrt;
+    sequencer.diwHstrt = newDiwHstrt;
     
     /* Update the vertical DIW flipflop
      * This is not 100% accurate. If the vertical DIW flipflop changes in the
@@ -398,8 +398,8 @@ Agnus::setDIWSTRT(u16 value)
      * of the rasterline in the drawing routine of Denise. Hence, the whole
      * line will be blacked out, not just the rest of it.
      */
-    if (pos.v == diwVstrt) diwVFlop = true;
-    if (pos.v == diwVstop) diwVFlop = false;
+    if (pos.v == sequencer.diwVstrt) sequencer.diwVFlop = true;
+    if (pos.v == sequencer.diwVstop) sequencer.diwVFlop = false;
 }
 
 template <Accessor s> void
@@ -417,7 +417,7 @@ Agnus::setDIWSTOP(u16 value)
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
     
-    diwstop = value;
+    sequencer.diwstop = value;
     
     // Extract the lower right corner of the display window
     isize newDiwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
@@ -435,27 +435,27 @@ Agnus::setDIWSTOP(u16 value)
     isize cur = 2 * pos.h;
     
     // (1) and (2) (see setDIWSTRT)
-    if (cur < diwHstop && cur < newDiwHstop) {
+    if (cur < sequencer.diwHstop && cur < newDiwHstop) {
         
         trace(DIW_DEBUG, "Updating hFlopOff immediately at %ld\n", cur);
-        diwHFlopOff = newDiwHstop;
+        sequencer.diwHFlopOff = newDiwHstop;
     }
     
     // (3) (see setDIWSTRT)
-    if (newDiwHstop < cur && cur < diwHstop) {
+    if (newDiwHstop < cur && cur < sequencer.diwHstop) {
         
         trace(DIW_DEBUG, "hFlop not switched off in current line\n");
-        diwHFlopOff = -1;
+        sequencer.diwHFlopOff = -1;
     }
     
-    diwVstop = newDiwVstop;
-    diwHstop = newDiwHstop;
+    sequencer.diwVstop = newDiwVstop;
+    sequencer.diwHstop = newDiwHstop;
     
     /* Update the vertical DIW flipflop
      * This is not 100% accurate. See comment in setDIWSTRT().
      */
-    if (pos.v == diwVstrt) diwVFlop = true;
-    if (pos.v == diwVstop) diwVFlop = false;
+    if (pos.v == sequencer.diwVstrt) sequencer.diwVFlop = true;
+    if (pos.v == sequencer.diwVstop) sequencer.diwVFlop = false;
 }
 
 void

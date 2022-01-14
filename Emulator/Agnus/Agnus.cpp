@@ -209,9 +209,9 @@ bool
 Agnus::inBplDmaLine(u16 dmacon, u16 bplcon0) const
 {
     return
-    !inLastRasterline() && diwVFlop // Outside VBLANK, inside DIW
-    && bpu(bplcon0)                 // At least one bitplane enabled
-    && bpldma(dmacon);              // Bitplane DMA enabled
+    !inLastRasterline() && sequencer.diwVFlop   // Outside VBLANK, inside DIW
+    && bpu(bplcon0)                             // At least one bitplane enabled
+    && bpldma(dmacon);                          // Bitplane DMA enabled
 }
 
 Cycle
@@ -510,52 +510,16 @@ Agnus::hsyncHandler()
     dmaconInitial = dmacon;
     bplcon0Initial = bplcon0;
     bplcon1Initial = bplcon1;
-    diwVstrtInitial = diwVstrt;
-    diwVstopInitial = diwVstop;
-    sequencer.ddfInitial = sequencer.ddf;
-
-
-    //
-    // DIW
-    //
-
-    // Update the vertical DIW flipflop
-    if (pos.v == diwVstrt) diwVFlop = true;
-    if (pos.v == diwVstop) diwVFlop = false;
-
-    // Update the horizontal DIW flipflop
-    diwHFlop = (diwHFlopOff != -1) ? false : (diwHFlopOn != -1) ? true : diwHFlop;
-    diwHFlopOn = diwHstrt;
-    diwHFlopOff = diwHstop;
-
-
-    //
-    // DDF
-    //
-
+    
+    // DDF and DIW
+    sequencer.hsyncHandler();
 
     //
     // Determine the bitplane DMA status for the next line
     //
 
     bplDmaLine = inBplDmaLine();
-    
-    if (pos.v == diwVstrt) {
-        trace(DDF_DEBUG, "DDF: FF1 = 1 (DIWSTRT)\n");
-        sequencer.ddfInitial.ff1 = true;
-        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-    }
-    if (pos.v == diwVstop) {
-        trace(DDF_DEBUG, "DDF: FF1 = 0 (DIWSTOP)\n");
-        sequencer.ddfInitial.ff1 = false;
-        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-    }
-    if (inLastRasterline()) {
-        trace(DDF_DEBUG, "DDF: FF1 = 0 (EOF)\n");
-        sequencer.ddfInitial.ff1 = false;
-        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-    }
-    
+        
 
     //
     // Determine the disk, audio and sprite DMA status for the line to come
@@ -623,12 +587,9 @@ Agnus::vsyncHandler()
 
     // Reset vertical position counter
     pos.v = 0;
-
-    // Initialize the DIW flipflops
-    diwVFlop = false;
-    diwHFlop = true; 
             
     // Let other components do their own VSYNC stuff
+    sequencer.vsyncHandler();
     copper.vsyncHandler();
     denise.vsyncHandler();
     controlPort1.joystick.vsyncHandler();
