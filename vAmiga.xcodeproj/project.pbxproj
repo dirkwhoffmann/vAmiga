@@ -49,6 +49,7 @@
 		50357BB823912929007E7563 /* RendererSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB723912929007E7563 /* RendererSetup.swift */; };
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
+		5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041C6272791AF0800D3C494 /* SequencerRegs.cpp */; };
 		5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
 		504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504C48B324143AB4008ADAB3 /* AgnusDma.cpp */; };
@@ -161,10 +162,10 @@
 		50AD904B276E104E0011ECCB /* TextStorage.h in Resources */ = {isa = PBXBuildFile; fileRef = 50AD904A276E104E0011ECCB /* TextStorage.h */; };
 		50AD904D276E10660011ECCB /* TextStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AD904C276E10660011ECCB /* TextStorage.cpp */; };
 		50AD905A2771B2770011ECCB /* RshServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AD90582771B2770011ECCB /* RshServer.cpp */; };
-		50AE6EDD24D93DC4000AA367 /* CopperRegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */; };
-		50AE6EDF24D93EDD000AA367 /* AgnusRegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDE24D93EDD000AA367 /* AgnusRegisters.cpp */; };
+		50AE6EDD24D93DC4000AA367 /* CopperRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDC24D93DC4000AA367 /* CopperRegs.cpp */; };
+		50AE6EDF24D93EDD000AA367 /* AgnusRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDE24D93EDD000AA367 /* AgnusRegs.cpp */; };
 		50AE6EE124D9407F000AA367 /* BlitterRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE024D9407F000AA367 /* BlitterRegs.cpp */; };
-		50AE6EE324D9B08C000AA367 /* PaulaRegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE224D9B08C000AA367 /* PaulaRegisters.cpp */; };
+		50AE6EE324D9B08C000AA367 /* PaulaRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE224D9B08C000AA367 /* PaulaRegs.cpp */; };
 		50AE6EE524D9B210000AA367 /* DeniseRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE424D9B210000AA367 /* DeniseRegs.cpp */; };
 		50AE6EE724D9B2C7000AA367 /* StateMachineRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE624D9B2C7000AA367 /* StateMachineRegs.cpp */; };
 		50AE6F8525D71FBE0004AFBC /* Error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6F8425D71FBE0004AFBC /* Error.cpp */; };
@@ -339,6 +340,7 @@
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
 		5039924225B2164E0084B808 /* MyDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentController.swift; sourceTree = "<group>"; };
 		5039924625B219FC0084B808 /* Error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
+		5041C6272791AF0800D3C494 /* SequencerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerRegs.cpp; sourceTree = "<group>"; };
 		5042F2DB26BE57E600126C05 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
 		5042F2DC26BE57E600126C05 /* Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
 		5042F2DE26BE57F700126C05 /* ThreadTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadTypes.h; sourceTree = "<group>"; };
@@ -526,10 +528,10 @@
 		50AD90562770CF5D0011ECCB /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50AD90582771B2770011ECCB /* RshServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RshServer.cpp; sourceTree = "<group>"; };
 		50AD90592771B2770011ECCB /* RshServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RshServer.h; sourceTree = "<group>"; };
-		50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperRegisters.cpp; sourceTree = "<group>"; };
-		50AE6EDE24D93EDD000AA367 /* AgnusRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusRegisters.cpp; sourceTree = "<group>"; };
+		50AE6EDC24D93DC4000AA367 /* CopperRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperRegs.cpp; sourceTree = "<group>"; };
+		50AE6EDE24D93EDD000AA367 /* AgnusRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusRegs.cpp; sourceTree = "<group>"; };
 		50AE6EE024D9407F000AA367 /* BlitterRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterRegs.cpp; sourceTree = "<group>"; };
-		50AE6EE224D9B08C000AA367 /* PaulaRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PaulaRegisters.cpp; sourceTree = "<group>"; };
+		50AE6EE224D9B08C000AA367 /* PaulaRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PaulaRegs.cpp; sourceTree = "<group>"; };
 		50AE6EE424D9B210000AA367 /* DeniseRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeniseRegs.cpp; sourceTree = "<group>"; };
 		50AE6EE624D9B2C7000AA367 /* StateMachineRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachineRegs.cpp; sourceTree = "<group>"; };
 		50AE6F8425D71FBE0004AFBC /* Error.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Error.cpp; sourceTree = "<group>"; };
@@ -850,7 +852,7 @@
 				5020B17C21EF121E00B9E80E /* Agnus.h */,
 				5020B17B21EF121E00B9E80E /* Agnus.cpp */,
 				50FC08AC27819CD100F0C567 /* AgnusInfo.cpp */,
-				50AE6EDE24D93EDD000AA367 /* AgnusRegisters.cpp */,
+				50AE6EDE24D93EDD000AA367 /* AgnusRegs.cpp */,
 				504C48B324143AB4008ADAB3 /* AgnusDma.cpp */,
 				50AEBEDD24D3D8700037082D /* AgnusEvents.cpp */,
 				5016DFB6260E3048004E0307 /* SchedulerTypes.h */,
@@ -1298,7 +1300,7 @@
 				502F7DD1222172CA00AEEC65 /* Copper.h */,
 				502F7DCD2221706000AEEC65 /* Copper.cpp */,
 				50FC08AE27819E2400F0C567 /* CopperInfo.cpp */,
-				50AE6EDC24D93DC4000AA367 /* CopperRegisters.cpp */,
+				50AE6EDC24D93DC4000AA367 /* CopperRegs.cpp */,
 				50AEBECB24D3D4540037082D /* CopperEvents.cpp */,
 				5071B7862621F88800D6FB54 /* CopperDebugger.h */,
 				5071B7852621F88800D6FB54 /* CopperDebugger.cpp */,
@@ -1363,6 +1365,7 @@
 				50AFEBB9278EF5FD00F422D5 /* Sequencer.h */,
 				50AFEBB8278EF5FD00F422D5 /* Sequencer.cpp */,
 				50AFEBBD278EF6CB00F422D5 /* SequencerInfo.cpp */,
+				5041C6272791AF0800D3C494 /* SequencerRegs.cpp */,
 			);
 			path = Sequencer;
 			sourceTree = "<group>";
@@ -1585,7 +1588,7 @@
 				509D4EF4228596A900E2C252 /* PaulaTypes.h */,
 				5030891021EFA74600FEAD12 /* Paula.h */,
 				5030890F21EFA74600FEAD12 /* Paula.cpp */,
-				50AE6EE224D9B08C000AA367 /* PaulaRegisters.cpp */,
+				50AE6EE224D9B08C000AA367 /* PaulaRegs.cpp */,
 				50AEBED024D3D61A0037082D /* PaulaEvents.cpp */,
 				50AEBED424D3D7050037082D /* Audio */,
 				50AEBED524D3D7160037082D /* DiskController */,
@@ -1768,7 +1771,7 @@
 				506B471D256396BC009FEFC3 /* ExporterDialog.swift in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
 				50B5663C265E769200226D80 /* DragAndDropImageView.swift in Sources */,
-				50AE6EE324D9B08C000AA367 /* PaulaRegisters.cpp in Sources */,
+				50AE6EE324D9B08C000AA367 /* PaulaRegs.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				50565072254573E100A79D27 /* FSBlock.cpp in Sources */,
 				50E1905F277F69CA00B8DBE2 /* NamedPipe.cpp in Sources */,
@@ -1782,7 +1785,7 @@
 				5072CAFA2456D1C800C8F606 /* AudioConf.swift in Sources */,
 				508FDFD521EA20510043D0E9 /* Animation.swift in Sources */,
 				509C3663260B1D95004F160A /* InterpreterCmds.cpp in Sources */,
-				50AE6EDF24D93EDD000AA367 /* AgnusRegisters.cpp in Sources */,
+				50AE6EDF24D93EDD000AA367 /* AgnusRegs.cpp in Sources */,
 				50AEBEE024D3D9080037082D /* KeyboardEvents.cpp in Sources */,
 				50FC08B127819E4100F0C567 /* BlitterInfo.cpp in Sources */,
 				5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */,
@@ -1818,7 +1821,7 @@
 				50C8C44A2607396200F4E012 /* Layer.swift in Sources */,
 				50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */,
 				50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */,
-				50AE6EDD24D93DC4000AA367 /* CopperRegisters.cpp in Sources */,
+				50AE6EDD24D93DC4000AA367 /* CopperRegs.cpp in Sources */,
 				50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */,
 				5026EDBF2608DC8E00D90CE1 /* Console.swift in Sources */,
 				509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */,
@@ -1910,6 +1913,7 @@
 				50F54B2524B5D31D0078FDC9 /* u_heavy.c in Sources */,
 				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
+				5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
 				508FE01D21EA227B0043D0E9 /* Defaults.swift in Sources */,

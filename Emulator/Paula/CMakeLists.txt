@@ -1,7 +1,7 @@
 target_sources(vAmigaCore PRIVATE
 
 Paula.cpp
-PaulaRegisters.cpp
+PaulaRegs.cpp
 PaulaEvents.cpp
 
 )

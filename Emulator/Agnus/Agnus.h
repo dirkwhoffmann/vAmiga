@@ -48,6 +48,9 @@ static constexpr usize DRAW_BOTH = 0b011;
 
 class Agnus : public SubComponent {
         
+    // REMOVE ASAP
+    friend class Sequencer;
+    
     // Current configuration
     AgnusConfig config = {};
 
@@ -70,24 +73,6 @@ public:
     Blitter blitter = Blitter(amiga);
     DmaDebugger dmaDebugger = DmaDebugger(amiga);
 
-
-    //
-    // Event tables
-    //
-    
-private:
-    
-    // Disk, audio, and sprites lookup table ([Bits 0 .. 5 of DMACON])
-    static EventID dasDMA[64][HPOS_CNT];
-
-    // Currently scheduled events
-    EventID bplEvent[HPOS_CNT];
-    EventID dasEvent[HPOS_CNT];
-
-    // Jump tables connecting the scheduled events
-    u8 nextBplEvent[HPOS_CNT];
-    u8 nextDasEvent[HPOS_CNT];
-    
 
     //
     // Execution control
@@ -365,11 +350,6 @@ private:
 
         worker
         
-        << bplEvent
-        << dasEvent
-        << nextBplEvent
-        << nextDasEvent
-
         << hsyncActions
         >> changeRecorder
         >> sigRecorder
@@ -623,13 +603,6 @@ private:
     // Controlling DMA (AgnusDma.cpp)
     //
 
-private:
-    
-    // Initializes the static lookup tables
-    // void initBplEventTableLores();
-    // void initBplEventTableHires();
-    void initDasEventTable();
-
 public:
     
     // Returns true if the Blitter has priority over the CPU
@@ -673,10 +646,6 @@ private:
     
     // Updates the jump table for the bplEvent table
     void updateBplJumpTable();
-
-    // Updates the drawing flags in the bplEvent table
-    void updateHiresDrawingFlags();
-    void updateLoresDrawingFlags();
 
     
     //

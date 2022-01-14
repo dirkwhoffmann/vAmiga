@@ -22,13 +22,13 @@ Agnus::scheduleFirstBplEvent()
 {
     assert(pos.h == 0 || pos.h == HPOS_MAX);
     
-    u8 dmacycle = nextBplEvent[0];
+    u8 dmacycle = sequencer.nextBplEvent[0];
     assert(dmacycle != 0);
         
     if (pos.h == 0) {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle), bplEvent[dmacycle]);
+        scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle), sequencer.bplEvent[dmacycle]);
     } else {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle + 1), bplEvent[dmacycle]);
+        scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle + 1), sequencer.bplEvent[dmacycle]);
     }
 }
 
@@ -37,8 +37,8 @@ Agnus::scheduleNextBplEvent(isize hpos)
 {
     assert(hpos >= 0 && hpos < HPOS_CNT);
 
-    if (u8 next = nextBplEvent[hpos]) {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), bplEvent[next]);
+    if (u8 next = sequencer.nextBplEvent[hpos]) {
+        scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), sequencer.bplEvent[next]);
     }
     assert(scheduler.hasEvent<SLOT_BPL>());
 }
@@ -48,8 +48,8 @@ Agnus::scheduleBplEventForCycle(isize hpos)
 {
     assert(hpos >= pos.h && hpos < HPOS_CNT);
 
-    if (bplEvent[hpos] != EVENT_NONE) {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(hpos - pos.h), bplEvent[hpos]);
+    if (sequencer.bplEvent[hpos] != EVENT_NONE) {
+        scheduleRel<SLOT_BPL>(DMA_CYCLES(hpos - pos.h), sequencer.bplEvent[hpos]);
     } else {
         scheduleNextBplEvent(hpos);
     }
@@ -62,13 +62,13 @@ Agnus::scheduleFirstDasEvent()
 {
     assert(pos.h == 0 || pos.h == HPOS_MAX);
     
-    u8 dmacycle = nextDasEvent[0];
+    u8 dmacycle = sequencer.nextDasEvent[0];
     assert(dmacycle != 0);
     
     if (pos.h == 0) {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle), dasEvent[dmacycle]);
+        scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle), sequencer.dasEvent[dmacycle]);
     } else {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle + 1), dasEvent[dmacycle]);
+        scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle + 1), sequencer.dasEvent[dmacycle]);
     }
 }
 
@@ -77,8 +77,8 @@ Agnus::scheduleNextDasEvent(isize hpos)
 {
     assert(hpos >= 0 && hpos < HPOS_CNT);
 
-    if (u8 next = nextDasEvent[hpos]) {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), dasEvent[next]);
+    if (u8 next = sequencer.nextDasEvent[hpos]) {
+        scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), sequencer.dasEvent[next]);
         assert(scheduler.hasEvent<SLOT_DAS>());
     } else {
         scheduler.cancel<SLOT_DAS>();
@@ -90,8 +90,8 @@ Agnus::scheduleDasEventForCycle(isize hpos)
 {
     assert(hpos >= pos.h && hpos < HPOS_CNT);
 
-    if (dasEvent[hpos] != EVENT_NONE) {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(hpos - pos.h), dasEvent[hpos]);
+    if (sequencer.dasEvent[hpos] != EVENT_NONE) {
+        scheduleRel<SLOT_DAS>(DMA_CYCLES(hpos - pos.h), sequencer.dasEvent[hpos]);
     } else {
         scheduleNextDasEvent(hpos);
     }
@@ -639,7 +639,7 @@ Agnus::serviceVblEvent(EventID id)
 void
 Agnus::serviceDASEvent(EventID id)
 {
-    assert(id == dasEvent[pos.h]);
+    assert(id == sequencer.dasEvent[pos.h]);
 
     switch (id) {
 

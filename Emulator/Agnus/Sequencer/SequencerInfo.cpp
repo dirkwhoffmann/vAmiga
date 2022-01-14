@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Sequencer.h"
+#include "Agnus.h"
 #include "IOUtils.h"
 
 void
@@ -16,17 +17,16 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
-    /*
     if (category & dump::State) {
      
         os << tab("Flipflop 1");
-        os << bol(ddf.ff1) << " (" << bol(ddfInitial.ff1) << ")" << std::endl;
+        os << bol(agnus.ddf.ff1) << " (" << bol(agnus.ddfInitial.ff1) << ")" << std::endl;
         os << tab("Flipflop 2");
-        os << bol(ddf.ff2) << " (" << bol(ddfInitial.ff2) << ")" << std::endl;
+        os << bol(agnus.ddf.ff2) << " (" << bol(agnus.ddfInitial.ff2) << ")" << std::endl;
         os << tab("Flipflop 3");
-        os << bol(ddf.ff3) << " (" << bol(ddfInitial.ff3) << ")" << std::endl;
+        os << bol(agnus.ddf.ff3) << " (" << bol(agnus.ddfInitial.ff3) << ")" << std::endl;
         os << tab("Flipflop 5");
-        os << bol(ddf.ff5) << " (" << bol(ddfInitial.ff5) << ")" << std::endl;
+        os << bol(agnus.ddf.ff5) << " (" << bol(agnus.ddfInitial.ff5) << ")" << std::endl;
         os << std::endl;
     }
         
@@ -93,15 +93,14 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
             return result != "" ? result : "NONE";
         };
         
-        if (sigRecorder.count() == 0) os << "No signals recorded\n";
+        if (agnus.sigRecorder.count() == 0) os << "No signals recorded\n";
         
-        for (isize i = 0; i < sigRecorder.count(); i++) {
+        for (isize i = 0; i < agnus.sigRecorder.count(); i++) {
             
-            auto trigger = util::hexstr<2>(sigRecorder.keys[i]);
-            auto signal = name(sigRecorder.elements[i]);
+            auto trigger = util::hexstr<2>(agnus.sigRecorder.keys[i]);
+            auto signal = name(agnus.sigRecorder.elements[i]);
      
             os << tab("Event at $" + trigger) << signal << std::endl;
         }
     }
-    */
 }

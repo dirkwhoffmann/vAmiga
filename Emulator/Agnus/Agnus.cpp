@@ -11,8 +11,6 @@
 #include "Agnus.h"
 #include "Amiga.h"
 
-EventID Agnus::dasDMA[64][HPOS_CNT];
-
 Agnus::Agnus(Amiga& ref) : SubComponent(ref)
 {    
     subComponents = std::vector<AmigaComponent *> {
@@ -23,8 +21,6 @@ Agnus::Agnus(Amiga& ref) : SubComponent(ref)
         &blitter,
         &dmaDebugger
     };
-        
-    initDasEventTable();
 }
 
 void
@@ -37,15 +33,7 @@ Agnus::_reset(bool hard)
     
     // Initialize statistical counters
     clearStats();
-    
-    // Initialize event tables
-    computeBplEvents();
-    
-    assert(bplEvent[HPOS_MAX] == BPL_EOL);
-    for (isize i = pos.h; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
-    updateBplJumpTable();
-    updateDasJumpTable();
-        
+            
     // Schedule initial events
     scheduleRel<SLOT_SEC>(NEVER, SEC_TRIGGER);
     scheduleRel<SLOT_TER>(NEVER, TER_TRIGGER);

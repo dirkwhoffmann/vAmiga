@@ -3,7 +3,7 @@ target_sources(vAmigaCore PRIVATE
 DDF.cpp
 Agnus.cpp
 AgnusInfo.cpp
-AgnusRegisters.cpp
+AgnusRegs.cpp
 AgnusDma.cpp
 AgnusEvents.cpp
 Scheduler.cpp

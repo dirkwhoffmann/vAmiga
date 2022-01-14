@@ -11,128 +11,10 @@
 #include "Agnus.h"
 #include "Denise.h"
 
-/* A central element in the emulation of the Amiga is the accurate modeling of
-* the DMA timeslot allocation table (Fig. 6-9 im the HRM, 3rd revision). All
-* bitplane related events are managed in the BPL_SLOT. All disk, audio, and
-* sprite related events are managed in the DAS_SLOT.
-*
-* vAmiga utilizes two event tables to schedule events in the DAS_SLOT and
-* BPL_SLOT. Assuming that sprite DMA is enabled and Denise draws 6 bitplanes
-* in lores mode starting at 0x28, the tables would look like this:
-*
-*     bplEvent[0x00] = EVENT_NONE   dasEvent[0x00] = EVENT_NONE
-*     bplEvent[0x01] = EVENT_NONE   dasEvent[0x01] = BUS_REFRESH
-*         ...                           ...
-*     bplEvent[0x28] = EVENT_NONE   dasEvent[0x28] = EVENT_NONE
-*     bplEvent[0x29] = BPL_L4       dasEvent[0x29] = DAS_S5_1
-*     bplEvent[0x2A] = BPL_L6       dasEvent[0x2A] = EVENT_NONE
-*     bplEvent[0x2B] = BPL_L2       dasEvent[0x2B] = DAS_S5_2
-*     bplEvent[0x2C] = EVENT_NONE   dasEvent[0x2C] = EVENT_NONE
-*     bplEvent[0x2D] = BPL_L3       dasEvent[0x2D] = DAS_S6_1
-*     bplEvent[0x2E] = BPL_L5       dasEvent[0x2E] = EVENT_NONE
-*     bplEvent[0x2F] = BPL_L1       dasEvent[0x2F] = DAS_S6_2
-*         ...                           ...
-*     bplEvent[0xE2] = BPL_EOL      dasEvent[0xE2] = BUS_REFRESH
-*
-* The BPL_EOL event doesn't perform DMA. It concludes the current line.
-*
-* All events in the BPL_SLOT can be superimposed by two drawing flags (bit 0
-* and bit 1) that trigger the transfer of the data registers into the shift
-* registers at the correct DMA cycle. Bit 0 controls the odd bitplanes and
-* bit 1 controls the even bitplanes.
-*
-* Each event table is accompanied by a jump table that points to the next
-* event. Given the example tables above, the jump tables would look like this:
-*
-*     nextBplEvent[0x00] = 0x29     nextDasEvent[0x00] = 0x01
-*     nextBplEvent[0x01] = 0x29     nextDasEvent[0x01] = 0x03
-*           ...                           ...
-*     nextBplEvent[0x28] = 0x29     nextDasEvent[0x28] = 0x29
-*     nextBplEvent[0x29] = 0x2A     nextDasEvent[0x29] = 0x2B
-*     nextBplEvent[0x2A] = 0x2B     nextDasEvent[0x2A] = 0x2B
-*     nextBplEvent[0x2B] = 0x2D     nextDasEvent[0x2B] = 0x2D
-*     nextBplEvent[0x2C] = 0x2D     nextDasEvent[0x2C] = 0x2D
-*     nextBplEvent[0x2D] = 0x2E     nextDasEvent[0x2D] = 0x2F
-*     nextBplEvent[0x2E] = 0x2F     nextDasEvent[0x2E] = 0x2F
-*     nextBplEvent[0x2F] = 0x31     nextDasEvent[0x2F] = 0x31
-*           ...                           ...
-*     nextBplEvent[0xE2] = 0x00     nextDasEvent[0xE2] = 0x00
-*
-* Whenever one the DMA tables is modified, the corresponding jump table
-* has to be updated, too.
-*
-* To quickly setup the event tables, vAmiga utilizes two static lookup
-* tables. Depending on the current resoution, BPU value, and DMA status,
-* segments of these lookup tables are copied to the event tables.
-*
-*      Table: bitplaneDMA[Resolution][Bitplanes][Cycle]
-*
-*             (Bitplane DMA events in a single rasterline)
-*
-*             Resolution : 0 or 1        (0 = LORES / 1 = HIRES)
-*              Bitplanes : 0 .. 6        (Bitplanes in use, BPU)
-*                  Cycle : 0 .. HPOS_MAX (DMA cycle)
-*
-*      Table: dasDMA[dmacon]
-*
-*             (Disk, Audio, and Sprite DMA events in a single rasterline)
-*
-*                 dmacon : Bits 0 .. 5 of register DMACON
-*/
-
 template <> bool Agnus::auddma<0>(u16 v) { return (v & DMAEN) && (v & AUD0EN); }
 template <> bool Agnus::auddma<1>(u16 v) { return (v & DMAEN) && (v & AUD1EN); }
 template <> bool Agnus::auddma<2>(u16 v) { return (v & DMAEN) && (v & AUD2EN); }
 template <> bool Agnus::auddma<3>(u16 v) { return (v & DMAEN) && (v & AUD3EN); }
-
-void
-Agnus::initDasEventTable()
-{
-    std::memset(dasDMA, 0, sizeof(dasDMA));
-
-    for (isize enable = 0; enable < 64; enable++) {
-
-        EventID *p = dasDMA[enable];
-
-        p[0x01] = DAS_REFRESH;
-
-        if (enable & DSKEN) {
-            
-            p[0x07] = DAS_D0;
-            p[0x09] = DAS_D1;
-            p[0x0B] = DAS_D2;
-        }
-        
-        // Audio DMA is possible even in lines where the DMACON bits are false
-        p[0x0D] = DAS_A0;
-        p[0x0F] = DAS_A1;
-        p[0x11] = DAS_A2;
-        p[0x13] = DAS_A3;
-        
-        if (enable & SPREN) {
-            
-            p[0x15] = DAS_S0_1;
-            p[0x17] = DAS_S0_2;
-            p[0x19] = DAS_S1_1;
-            p[0x1B] = DAS_S1_2;
-            p[0x1D] = DAS_S2_1;
-            p[0x1F] = DAS_S2_2;
-            p[0x21] = DAS_S3_1;
-            p[0x23] = DAS_S3_2;
-            p[0x25] = DAS_S4_1;
-            p[0x27] = DAS_S4_2;
-            p[0x29] = DAS_S5_1;
-            p[0x2B] = DAS_S5_2;
-            p[0x2D] = DAS_S6_1;
-            p[0x2F] = DAS_S6_2;
-            p[0x31] = DAS_S7_1;
-            p[0x33] = DAS_S7_2;
-        }
-
-        p[0xDF] = DAS_SDMA;
-        p[0x66] = DAS_TICK;
-    }
-}
 
 template <BusOwner owner> bool
 Agnus::busIsFree()
@@ -172,8 +54,8 @@ Agnus::busIsFree()
 void
 Agnus::clearBplEvents()
 {
-    for (isize i = 0; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
-    for (isize i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX;
+    for (isize i = 0; i < HPOS_MAX; i++) sequencer.bplEvent[i] = EVENT_NONE;
+    for (isize i = 0; i < HPOS_MAX; i++) sequencer.nextBplEvent[i] = HPOS_MAX;
 }
 
 #ifdef LEGACY_DDF
@@ -334,7 +216,7 @@ Agnus::computeBplEvents(const SigRecorder &sr)
             if ((j & mask) == (scrollOdd & mask))  id = (EventID)(id | 1);
             if ((j & mask) == (scrollEven & mask)) id = (EventID)(id | 2);
             
-            bplEvent[j] = id;
+            sequencer.bplEvent[j] = id;
         }
         
         //
@@ -399,7 +281,7 @@ Agnus::computeBplEvents(const SigRecorder &sr)
     }
     
     // Add the End Of Line event
-    bplEvent[HPOS_MAX] = BPL_EOL;
+    sequencer.bplEvent[HPOS_MAX] = BPL_EOL;
                             
     // Update the jump table
     updateBplJumpTable();
@@ -566,7 +448,7 @@ Agnus::updateDasEvents(u16 dmacon)
     assert(dmacon < 64);
 
     // Allocate slots
-    for (isize i = 0; i < 0x38; i++) dasEvent[i] = dasDMA[dmacon][i];
+    for (isize i = 0; i < 0x38; i++) sequencer.dasEvent[i] = sequencer.dasDMA[dmacon][i];
     
     // Update the jump table
     updateDasJumpTable(0x38);
@@ -575,12 +457,12 @@ Agnus::updateDasEvents(u16 dmacon)
 void
 Agnus::updateBplJumpTable()
 {
-    u8 next = nextBplEvent[HPOS_MAX];
+    u8 next = sequencer.nextBplEvent[HPOS_MAX];
     
     for (isize i = HPOS_MAX; i >= 0; i--) {
         
-        nextBplEvent[i] = next;
-        if (bplEvent[i]) next = (i8)i;
+        sequencer.nextBplEvent[i] = next;
+        if (sequencer.bplEvent[i]) next = (i8)i;
     }
 }
 
@@ -589,39 +471,13 @@ Agnus::updateDasJumpTable(i16 end)
 {
     assert(end <= HPOS_MAX);
 
-    u8 next = nextDasEvent[end];
+    u8 next = sequencer.nextDasEvent[end];
     
     for (isize i = end; i >= 0; i--) {
         
-        nextDasEvent[i] = next;
-        if (dasEvent[i]) next = (i8)i;
+        sequencer.nextDasEvent[i] = next;
+        if (sequencer.dasEvent[i]) next = (i8)i;
     }
-}
-
-void
-Agnus::updateHiresDrawingFlags()
-{
-    assert(scrollHiresEven < 8);
-    assert(scrollHiresOdd  < 8);
-    
-    for (isize i = scrollHiresOdd; i < HPOS_CNT; i += 4)
-        bplEvent[i] = (EventID)(bplEvent[i] | 1);
-    
-    for (isize i = scrollHiresEven; i < HPOS_CNT; i += 4)
-        bplEvent[i] = (EventID)(bplEvent[i] | 2);
-}
-
-void
-Agnus::updateLoresDrawingFlags()
-{
-    assert(scrollLoresEven < 8);
-    assert(scrollLoresOdd  < 8);
-    
-    for (isize i = scrollLoresOdd; i < HPOS_CNT; i += 8)
-        bplEvent[i] = (EventID)(bplEvent[i] | 1);
-    
-    for (isize i = scrollLoresEven; i < HPOS_CNT; i += 8)
-        bplEvent[i] = (EventID)(bplEvent[i] | 2);
 }
 
 template <BusOwner owner> bool

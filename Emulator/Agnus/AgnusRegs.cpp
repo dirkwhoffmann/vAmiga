@@ -112,7 +112,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         
         // Make the effect visible in the current rasterline as well
         for (isize i = pos.h; i < HPOS_CNT; i++) {
-            dasEvent[i] = dasDMA[newDAS][i];
+            sequencer.dasEvent[i] = sequencer.dasDMA[newDAS][i];
         }
         updateDasJumpTable();
         
