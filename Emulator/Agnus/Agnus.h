@@ -27,16 +27,11 @@
 
 /* Hsync handler action flags
  *
- *       HSYNC_PREDICT_DDF : Forces the hsync handler to recompute the
- *                           display data fetch window.
  *  HSYNC_UPDATE_BPL_TABLE : Forces the hsync handler to update the bitplane
  *                           DMA event table.
  *  HSYNC_UPDATE_DAS_TABLE : Forces the hsync handler to update the disk,
- *                          audio, sprite DMA event table.
+ *                           audio, sprite DMA event table.
  */
-#ifdef LEGACY_DDF
-static constexpr usize HSYNC_PREDICT_DDF =      0b001;
-#endif
 static constexpr usize HSYNC_UPDATE_BPL_TABLE = 0b010;
 static constexpr usize HSYNC_UPDATE_DAS_TABLE = 0b100;
 
@@ -168,15 +163,6 @@ public:
     // Derived values
     //
         
-    /* Values of BPLCON0 and DMACON at the DDFSTRT trigger cycle. Both
-     * variables are set at the beginning of each rasterline and updated
-     * on-the-fly if BPLCON0 or DMACON changes before the trigger conditions
-     * has been reached.
-     * DEPRECATED
-     */
-#ifdef LEGACY_DDF
-    u16 dmaconAtDDFStrt;
-#endif
     /* This value is updated in the hsync handler with the lowest 6 bits of
      * dmacon if the master enable bit is 1 or set to 0 if the master enable
      * bit is 0. It is used as an offset into the DAS lookup tables.
@@ -244,39 +230,7 @@ public:
     DDFFlipflops ddfInitial;
     DDFFlipflops ddf;
 
-    
-        
-    // DDF ddf;
-    
-    /* At the end of a rasterline, these variables conain the DMA cycles
-     * where the hpos counter matched ddfstrt or ddfstop, respectively. A
-     * value of -1 indicates that no matching event took place.
-     * DEPRECATED
-     */
-#ifdef LEGACY_DDF
-    isize ddfstrtReached;
-    isize ddfstopReached;
 
-    /* At the end of a rasterline, this variable contains the DDF state.
-     * DEPRECATED
-     */
-    DDFState ddfState;
-
-    /* This variable is used to emulate the OCS "scanline effect". If DDFSTRT
-     * is set to a value smaller than the left hardware stop at 0x18, early DMA
-     * access is enabled every other line. In this case, this variable stores
-     * the number of the next line where early DMA is possible.
-     * DEPRECATED
-     */
-    isize ocsEarlyAccessLine;
-
-    // Display data fetch window in lores and hires mode
-    // DEPRECATED
-    DDF ddfLores;
-    DDF ddfHires;
-#endif
-
-    
     //
     // Display Window (DIW)
     //
@@ -437,9 +391,6 @@ private:
         << bpl1mod
         << bpl2mod
         << sprpt
-#ifdef LEGACY_DDF
-        << dmaconAtDDFStrt
-#endif
         << dmaDAS
         << scrollOdd
         << scrollEven
@@ -460,14 +411,6 @@ private:
         << ddfstop
         >> ddfInitial
         >> ddf
-#ifdef LEGACY_DDF
-        << ddfstrtReached
-        << ddfstopReached
-        << ddfState
-        << ocsEarlyAccessLine
-        >> ddfLores
-        >> ddfHires
-#endif
         << diwstrt
         << diwstop
         << diwHstrt
@@ -677,23 +620,6 @@ private:
 
     
     //
-    // Managing the data fetch window (AgnusDDF.cpp)
-    //
-    
-#ifdef LEGACY_DDF
-    // Sets up the likely DDF values for the next rasterline
-    void predictDDF();
-    
-private:
-
-    void computeDDFWindow();
-    void computeDDFWindowOCS();
-    void computeDDFWindowECS();
-
-#endif
-
-    
-    //
     // Controlling DMA (AgnusDma.cpp)
     //
 
@@ -726,14 +652,7 @@ public:
     bool dskdma() const { return dskdma(dmacon); }
     
 private:
-    
-#ifdef LEGACY_DDF
-    void enableBplDmaOCS();
-    void disableBplDmaOCS();
-    void enableBplDmaECS();
-    void disableBplDmaECS();
-#endif
-    
+        
     //
     // Managing the bitplane time slot table (AgnusDma.cpp)
     //
@@ -743,12 +662,6 @@ public:
     // Removes all events from the BPL event table
     void clearBplEvents();
 
-    // Renews all events in the BPL event table (DEPRECATED)
-#ifdef LEGACY_DDF
-    void updateBplEvents(u16 dmacon, u16 bplcon0);
-    void updateBplEvents() { updateBplEvents(dmacon, bplcon0); }
-#endif
-    
     // Recomputes the BPL event table
     void computeBplEvents();
     void computeBplEvents(const SigRecorder &sr);
@@ -757,11 +670,6 @@ public:
     void computeFetchUnit(u8 dmacon, EventID id[2][8]);
     
 private:
-
-#ifdef LEGACY_DDF
-    // Workhorse for updateBplEvents
-    template <bool hires> void updateBplEvents(isize channels);
-#endif
     
     // Updates the jump table for the bplEvent table
     void updateBplJumpTable();

@@ -134,55 +134,6 @@ Agnus::initDasEventTable()
     }
 }
 
-#ifdef LEGACY_DDF
-
-void
-Agnus::enableBplDmaOCS()
-{
-    if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
-        
-        updateBplEvents(dmacon, bplcon0);
-        updateBplEvent();
-    }
-}
-
-void
-Agnus::disableBplDmaOCS()
-{
-        updateBplEvents(dmacon, bplcon0);
-        updateBplEvent();
-}
-
-void
-Agnus::enableBplDmaECS()
-{
-    if (pos.h + 2 < ddfstrtReached) {
-        
-        updateBplEvents(dmacon, bplcon0);
-        updateBplEvent();
-        return;
-    }
-    
-    if (pos.h + 2 < ddfstopReached) {
-        
-        ddfLores.compute(std::max(pos.h + 4, ddfstrtReached), ddfstopReached);
-        ddfHires.compute(std::max(pos.h + 4, ddfstrtReached), ddfstopReached);
-        hsyncActions |= HSYNC_PREDICT_DDF;
-        
-        updateBplEvents();
-        updateBplEvent();
-        // updateLoresDrawingFlags(); // THIS CAN'T BE RIGHT
-    }
-}
-
-void
-Agnus::disableBplDmaECS()
-{
-    updateBplEvents(dmacon, bplcon0);
-    updateBplEvent();
-}
-#endif
-
 template <BusOwner owner> bool
 Agnus::busIsFree()
 {

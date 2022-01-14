@@ -582,15 +582,6 @@ Agnus::serviceBPLEventHires()
 {
     // Perform bitplane DMA
     denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
-    
-#ifdef LEGACY_DDF
-    
-    // Add modulo if this is the last fetch unit
-    if (pos.h >= ddfHires.stop - 4) {
-        bplpt[nr] += (nr % 2) ? bpl2mod : bpl1mod;
-    }
-    
-#endif
 }
 
 template <isize nr> void
@@ -598,15 +589,6 @@ Agnus::serviceBPLEventLores()
 {
     // Perform bitplane DMA
     denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
-
-#ifdef LEGACY_DDF
-    
-    // Add modulo if this is the last fetch unit
-    if (pos.h >= ddfLores.stop - 8) {
-        bplpt[nr] += (nr % 2) ? bpl2mod : bpl1mod;
-    }
-    
-#endif
 }
 
 void

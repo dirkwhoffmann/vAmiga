@@ -4,7 +4,6 @@ DDF.cpp
 Agnus.cpp
 AgnusInfo.cpp
 AgnusRegisters.cpp
-AgnusDDF.cpp
 AgnusDma.cpp
 AgnusEvents.cpp
 Scheduler.cpp
