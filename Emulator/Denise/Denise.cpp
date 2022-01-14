@@ -215,17 +215,6 @@ Denise::extractSlicesEven(u8 slices[16])
 template <bool hiresMode> void
 Denise::drawOdd(Pixel offset)
 {
-    if (!( hiresMode || (agnus.pos.h & 0x7) == agnus.scrollLoresOdd ) ||
-        !(!hiresMode || (agnus.pos.h & 0x3) == agnus.scrollHiresOdd)) {
-        trace(true, "bplcon1 = %x\n", bplcon1);
-        trace(true, "scroll: %d %d\n", agnus.scrollHiresOdd, agnus.scrollLoresOdd);
-        trace(true, "scroll: %d\n", agnus.scrollOdd);
-
-        agnus.dump(dump::Dma);
-    }
-    assert(!hiresMode || (agnus.pos.h & 0x3) == agnus.scrollHiresOdd);
-    assert( hiresMode || (agnus.pos.h & 0x7) == agnus.scrollLoresOdd);
-
     static constexpr u16 masks[7] = {
         
        0b000000, // 0 bitplanes
@@ -271,10 +260,7 @@ Denise::drawOdd(Pixel offset)
 
 template <bool hiresMode> void
 Denise::drawEven(Pixel offset)
-{
-    assert(!hiresMode || (agnus.pos.h & 0x3) == agnus.scrollHiresEven);
-    assert( hiresMode || (agnus.pos.h & 0x7) == agnus.scrollLoresEven);
-    
+{    
     static constexpr u16 masks[7] = {
         
        0b000000, // 0 bitplanes
@@ -440,23 +426,6 @@ Denise::drawLoresBoth()
 {
     drawLoresOdd();
     drawLoresEven();
-    
-    /*
-    updateShiftRegisters();
-
-    if (armedOdd && armedEven && pixelOffsetOdd == pixelOffsetEven) {
-
-        assert((agnus.pos.h & 0x7) == agnus.scrollLoresOdd);
-        assert((agnus.pos.h & 0x7) == agnus.scrollLoresEven);
-        
-        drawBoth <false> (pixelOffsetOdd);
-
-    } else {
-    
-        if (armedOdd) drawOdd <false> (pixelOffsetOdd);
-        if (armedEven) drawEven <false> (pixelOffsetEven);
-    }
-    */
 }
 
 void

@@ -74,16 +74,6 @@ Sequencer::_reset(bool hard)
     
     clearBplEvents();
     clearDasEvents();
-    
-    // Initialize event tables
-    /*
-    computeBplEvents();
-    assert(bplEvent[HPOS_MAX] == BPL_EOL);
-    
-    for (isize i = 0; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
-    updateBplJumpTable();
-    updateDasJumpTable();
-    */
 }
 
 void

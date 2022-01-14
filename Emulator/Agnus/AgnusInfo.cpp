@@ -43,14 +43,6 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << dec(scrollOdd) << std::endl;
         os << tab("scrollEven");
         os << dec(scrollEven) << std::endl;
-        os << tab("scrollLoresOdd");
-        os << dec(scrollLoresOdd) << std::endl;
-        os << tab("scrollLoresEven");
-        os << dec(scrollLoresEven) << std::endl;
-        os << tab("scrollHiresOdd");
-        os << dec(scrollHiresOdd) << std::endl;
-        os << tab("scrollHiresEven");
-        os << dec(scrollHiresEven) << std::endl;
         os << tab("Bitplane DMA line");
         os << bol(bplDmaLine) << std::endl;
         os << tab("BLS signal");

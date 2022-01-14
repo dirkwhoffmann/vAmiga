@@ -155,16 +155,6 @@ public:
     i8 scrollOdd;
     i8 scrollEven;
     
-    /* Horizontal shift values derived from BPLCON1. All four values are
-     * extracted in setBPLCON1() and utilized to emulate horizontal scrolling.
-     * They control at which DMA cycles the BPLDAT registers are transfered
-     * into the shift registers.
-     */
-    i8 scrollLoresOdd;
-    i8 scrollLoresEven;
-    i8 scrollHiresOdd;
-    i8 scrollHiresEven;
-
     // Set in the hsync handler to remember the returned value of inBplDmaLine()
     bool bplDmaLine;
 
@@ -370,10 +360,6 @@ private:
         << dmaDAS
         << scrollOdd
         << scrollEven
-        << scrollLoresOdd
-        << scrollLoresEven
-        << scrollHiresOdd
-        << scrollHiresEven
         << bplDmaLine
         
         << busValue
