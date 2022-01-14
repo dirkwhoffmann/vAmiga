@@ -562,7 +562,7 @@ public:
 
     template <Accessor s> void pokeDIWSTRT(u16 value);
     template <Accessor s> void pokeDIWSTOP(u16 value);
-    void setDIWSTOP(u16 value);
+    // void setDIWSTOP(u16 value);
 
     void pokeBPL1MOD(u16 value);
     void setBPL1MOD(u16 value);

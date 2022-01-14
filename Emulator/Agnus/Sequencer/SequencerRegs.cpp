@@ -137,7 +137,21 @@ Sequencer::setDIWSTRT(u16 value)
 void
 Sequencer::setDIWSTOP(u16 value)
 {
+    trace(DIW_DEBUG, "setDIWSTOP(%X)\n", value);
     
+    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+    // V7 V6 V5 V4 V3 V2 V1 V0 -- -- -- -- -- -- -- --  and  V8 = !V7
+    
+    diwstop = value;
+    
+    // Extract the coordinate
+    diwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
+    
+    /* Update the vertical DIW flipflop
+     * This is not 100% accurate. See comment in setDIWSTRT().
+     */
+    if (agnus.pos.v == diwVstrt) diwVFlop = true;
+    if (agnus.pos.v == diwVstop) diwVFlop = false;
 }
 
 template void Sequencer::pokeDDFSTRT<ACCESSOR_CPU>(u16 value);

@@ -343,6 +343,7 @@ Agnus::pokeDIWSTOP(u16 value)
     recordRegisterChange(DMA_CYCLES(2), SET_DIWSTOP_DENISE, value);
 }
 
+#if 0
 void
 Agnus::setDIWSTOP(u16 value)
 {
@@ -391,6 +392,7 @@ Agnus::setDIWSTOP(u16 value)
     if (pos.v == sequencer.diwVstrt) sequencer.diwVFlop = true;
     if (pos.v == sequencer.diwVstop) sequencer.diwVFlop = false;
 }
+#endif
 
 void
 Agnus::pokeBPL1MOD(u16 value)
