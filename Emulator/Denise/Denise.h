@@ -61,6 +61,21 @@ public:
     isize diwHstrt;
     isize diwHstop;
     
+    /* Horizontal DIW flipflop. The value is updated at the beginning of each
+     * rasterline and cannot change thereafter. It stores the value of the
+     * horizontal DIW flipflop as it was at the beginning of the rasterline.
+     * To find out the value of the horizontal flipflop inside or at the end
+     * of a rasterline, hFlopOn and hFlopOff need to be evaluated.
+     */
+    bool diwHFlop;
+
+    /* At the end of a rasterline, these variable conains the pixel coordinates
+     * where the hpos counter matched diwHstrt or diwHstop, respectively. A
+     * value of -1 indicates that no matching event took place.
+     */
+    isize diwHFlopOn;
+    isize diwHFlopOff;
+    
     // Bitplane control registers
     u16 bplcon0;
     u16 bplcon1;
@@ -317,6 +332,9 @@ private:
         
         << diwHstrt
         << diwHstop
+        << diwHFlop
+        << diwHFlopOn
+        << diwHFlopOff
         << bplcon0
         << bplcon1
         << bplcon2

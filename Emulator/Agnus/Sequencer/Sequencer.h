@@ -176,22 +176,8 @@ public:
     isize diwVstrtInitial;
     isize diwVstopInitial;
 
-    /* Value of the DIW flipflops. Variable diwVFlop stores the value of the
-     * vertical DIW flipflop. The value is updated at the beginning of each
-     * rasterline and cannot change thereafter. Variable diwHFlop stores the
-     * value of the horizontal DIW flipflop as it was at the beginning of the
-     * rasterline. To find out the value of the horizontal flipflop inside or
-     * at the end of a rasterline, hFlopOn and hFlopOff need to be evaluated.
-     */
+    // Value of the vertical DIW flipflop (DEPRECATED)
     bool diwVFlop;
-    bool diwHFlop;
-
-    /* At the end of a rasterline, these variable conains the pixel coordinates
-     * where the hpos counter matched diwHstrt or diwHstop, respectively. A
-     * value of -1 indicates that no matching event took place.
-     */
-    isize diwHFlopOn;
-    isize diwHFlopOff;
     
     
     //
@@ -263,9 +249,6 @@ private:
         << diwVstop
         << diwVstopInitial
         << diwVFlop
-        << diwHFlop
-        << diwHFlopOn
-        << diwHFlopOff
 
         >> sigRecorder;
     }

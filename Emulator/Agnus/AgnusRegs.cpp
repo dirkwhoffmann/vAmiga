@@ -379,14 +379,14 @@ Agnus::setDIWSTRT(u16 value)
     if (cur < denise.diwHstrt && cur < newDiwHstrt) {
         
         trace(DIW_DEBUG, "Updating DIW hflop immediately at %ld\n", cur);
-        sequencer.diwHFlopOn = newDiwHstrt;
+        denise.diwHFlopOn = newDiwHstrt;
     }
     
     // (3)
     if (newDiwHstrt < cur && cur < denise.diwHstrt) {
         
         trace(DIW_DEBUG, "DIW hflop not switched on in current line\n");
-        sequencer.diwHFlopOn = -1;
+        denise.diwHFlopOn = -1;
     }
     
     sequencer.diwVstrt = newDiwVstrt;
@@ -440,14 +440,14 @@ Agnus::setDIWSTOP(u16 value)
     if (cur < denise.diwHstop && cur < newDiwHstop) {
         
         trace(DIW_DEBUG, "Updating hFlopOff immediately at %ld\n", cur);
-        sequencer.diwHFlopOff = newDiwHstop;
+        denise.diwHFlopOff = newDiwHstop;
     }
     
     // (3) (see setDIWSTRT)
     if (newDiwHstop < cur && cur < denise.diwHstop) {
         
         trace(DIW_DEBUG, "hFlop not switched off in current line\n");
-        sequencer.diwHFlopOff = -1;
+        denise.diwHFlopOff = -1;
     }
     
     sequencer.diwVstop = newDiwVstop;

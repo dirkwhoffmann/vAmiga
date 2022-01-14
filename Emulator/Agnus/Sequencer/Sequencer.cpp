@@ -527,9 +527,11 @@ Sequencer::hsyncHandler()
     if (agnus.pos.v == diwVstop) diwVFlop = false;
 
     // Update the horizontal DIW flipflop
+    /*
     diwHFlop = (diwHFlopOff != -1) ? false : (diwHFlopOn != -1) ? true : diwHFlop;
     diwHFlopOn = denise.diwHstrt;  // TODO: MOVE diwHFlopXXX to Denise
     diwHFlopOff = denise.diwHstop;
+    */
     
     if (agnus.pos.v == diwVstrt) {
         trace(DDF_DEBUG, "DDF: FF1 = 1 (DIWSTRT)\n");
@@ -552,5 +554,4 @@ void
 Sequencer::vsyncHandler()
 {
     diwVFlop = false;
-    diwHFlop = true;
 }
