@@ -163,7 +163,7 @@ public:
     /* Extracted display window coordinates
      *
      * The coordinates are computed out of diwstrt and diwstop and set in
-     * pokeDIWSTRT/STOP(). The following horizontal values are possible:
+     * setDIWSTRT/STOP(). The following horizontal values are possible:
      *
      *    diwHstrt : $02  ... $FF   or -1
      *    diwHstop : $100 ... $1C7  or -1
@@ -171,8 +171,6 @@ public:
      * A -1 is assigned if DIWSTRT or DIWSTOP are written with values that
      * result in coordinates outside the valid range.
      */
-    isize diwHstrt;
-    isize diwHstop;
     isize diwVstrt;
     isize diwVstop;
     isize diwVstrtInitial;
@@ -260,8 +258,6 @@ private:
         
         << diwstrt
         << diwstop
-        << diwHstrt
-        << diwHstop
         << diwVstrt
         << diwVstrtInitial
         << diwVstop
@@ -293,6 +289,9 @@ public:
     template <Accessor s> void pokeDDFSTOP(u16 value);
     void setDDFSTOP(u16 old, u16 value);
     void setDDFSTOP(u16 value) { setDDFSTOP(ddfstop, value); }
+
+    void setDIWSTRT(u16 value);
+    void setDIWSTOP(u16 value);
 
     
     //

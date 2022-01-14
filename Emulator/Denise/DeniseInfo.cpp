@@ -25,8 +25,8 @@ Denise::_inspect() const
         
         info.diwstrt = agnus.sequencer.diwstrt;
         info.diwstop = agnus.sequencer.diwstop;
-        info.diwHstrt = agnus.sequencer.diwHstrt;
-        info.diwHstop = agnus.sequencer.diwHstop;
+        info.diwHstrt = diwHstrt;
+        info.diwHstop = diwHstop;
         info.diwVstrt = agnus.sequencer.diwVstrt;
         info.diwVstop = agnus.sequencer.diwVstop;
         

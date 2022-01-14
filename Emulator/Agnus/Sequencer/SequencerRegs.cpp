@@ -110,6 +110,18 @@ Sequencer::setDDFSTOP(u16 old, u16 value)
     agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
 }
 
+void
+Sequencer::setDIWSTRT(u16 value)
+{
+    
+}
+
+void
+Sequencer::setDIWSTOP(u16 value)
+{
+    
+}
+
 template void Sequencer::pokeDDFSTRT<ACCESSOR_CPU>(u16 value);
 template void Sequencer::pokeDDFSTRT<ACCESSOR_AGNUS>(u16 value);
 template void Sequencer::pokeDDFSTOP<ACCESSOR_CPU>(u16 value);

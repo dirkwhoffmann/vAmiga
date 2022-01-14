@@ -331,7 +331,8 @@ template <Accessor s> void
 Agnus::pokeDIWSTRT(u16 value)
 {
     trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", AccessorEnum::key(s), value);
-    recordRegisterChange(DMA_CYCLES(2), SET_DIWSTRT, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_DIWSTRT_AGNUS, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_DIWSTRT_DENISE, value);
 }
 
 void
@@ -375,21 +376,21 @@ Agnus::setDIWSTRT(u16 value)
     isize cur = 2 * pos.h;
     
     // (1) and (2)
-    if (cur < sequencer.diwHstrt && cur < newDiwHstrt) {
+    if (cur < denise.diwHstrt && cur < newDiwHstrt) {
         
         trace(DIW_DEBUG, "Updating DIW hflop immediately at %ld\n", cur);
         sequencer.diwHFlopOn = newDiwHstrt;
     }
     
     // (3)
-    if (newDiwHstrt < cur && cur < sequencer.diwHstrt) {
+    if (newDiwHstrt < cur && cur < denise.diwHstrt) {
         
         trace(DIW_DEBUG, "DIW hflop not switched on in current line\n");
         sequencer.diwHFlopOn = -1;
     }
     
     sequencer.diwVstrt = newDiwVstrt;
-    sequencer.diwHstrt = newDiwHstrt;
+    denise.diwHstrt = newDiwHstrt;
     
     /* Update the vertical DIW flipflop
      * This is not 100% accurate. If the vertical DIW flipflop changes in the
@@ -406,7 +407,8 @@ template <Accessor s> void
 Agnus::pokeDIWSTOP(u16 value)
 {
     trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", AccessorEnum::key(s), value);
-    recordRegisterChange(DMA_CYCLES(2), SET_DIWSTOP, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_DIWSTOP_AGNUS, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_DIWSTOP_DENISE, value);
 }
 
 void
@@ -435,21 +437,21 @@ Agnus::setDIWSTOP(u16 value)
     isize cur = 2 * pos.h;
     
     // (1) and (2) (see setDIWSTRT)
-    if (cur < sequencer.diwHstop && cur < newDiwHstop) {
+    if (cur < denise.diwHstop && cur < newDiwHstop) {
         
         trace(DIW_DEBUG, "Updating hFlopOff immediately at %ld\n", cur);
         sequencer.diwHFlopOff = newDiwHstop;
     }
     
     // (3) (see setDIWSTRT)
-    if (newDiwHstop < cur && cur < sequencer.diwHstop) {
+    if (newDiwHstop < cur && cur < denise.diwHstop) {
         
         trace(DIW_DEBUG, "hFlop not switched off in current line\n");
         sequencer.diwHFlopOff = -1;
     }
     
     sequencer.diwVstop = newDiwVstop;
-    sequencer.diwHstop = newDiwHstop;
+    denise.diwHstop = newDiwHstop;
     
     /* Update the vertical DIW flipflop
      * This is not 100% accurate. See comment in setDIWSTRT().

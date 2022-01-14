@@ -57,6 +57,10 @@ public:
     // Registers
     //
     
+    // Display window coordinates (extracted from DIWSTRT and DIWSTOP)
+    isize diwHstrt;
+    isize diwHstop;
+    
     // Bitplane control registers
     u16 bplcon0;
     u16 bplcon1;
@@ -311,6 +315,8 @@ private:
 
         worker
         
+        << diwHstrt
+        << diwHstop
         << bplcon0
         << bplcon1
         << bplcon2
@@ -512,6 +518,9 @@ public:
 
     // Called by Agnus if the DMACON register changes
     void pokeDMACON(u16 oldValue, u16 newValue);
+
+    void setDIWSTRT(u16 value);
+    void setDIWSTOP(u16 value);
 
     u16 peekJOY0DATR();
     u16 peekJOY1DATR();

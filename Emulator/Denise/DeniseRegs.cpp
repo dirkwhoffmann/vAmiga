@@ -27,6 +27,18 @@ Denise::pokeDMACON(u16 oldValue, u16 newValue)
     }
 }
 
+void
+Denise::setDIWSTRT(u16 value)
+{
+    
+}
+
+void
+Denise::setDIWSTOP(u16 value)
+{
+    
+}
+
 u16
 Denise::peekJOY0DATR()
 {

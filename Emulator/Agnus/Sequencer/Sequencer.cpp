@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Sequencer.h"
 #include "Agnus.h"
+#include "Denise.h" // REMOVE ASAP
 
 EventID Sequencer::dasDMA[64][HPOS_CNT];
 
@@ -527,8 +528,8 @@ Sequencer::hsyncHandler()
 
     // Update the horizontal DIW flipflop
     diwHFlop = (diwHFlopOff != -1) ? false : (diwHFlopOn != -1) ? true : diwHFlop;
-    diwHFlopOn = diwHstrt;
-    diwHFlopOff = diwHstop;
+    diwHFlopOn = denise.diwHstrt;  // TODO: MOVE diwHFlopXXX to Denise
+    diwHFlopOff = denise.diwHstop;
     
     if (agnus.pos.v == diwVstrt) {
         trace(DDF_DEBUG, "DDF: FF1 = 1 (DIWSTRT)\n");
