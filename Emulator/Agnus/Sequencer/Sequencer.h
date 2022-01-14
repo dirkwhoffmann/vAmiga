@@ -14,6 +14,7 @@
 #include "ChangeRecorder.h"
 #include "SubComponent.h"
 #include "Scheduler.h"
+#include "MemoryTypes.h"
 
 /* A central element in the emulation of the Amiga is the accurate modeling of
 * the DMA timeslot allocation table (Fig. 6-9 im the HRM, 3rd revision). All
@@ -108,6 +109,21 @@ private:
     
     
     //
+    // Display Data Fetch (DDF)
+    //
+
+public:
+
+    // The display data fetch registers
+    u16 ddfstrt;
+    u16 ddfstop;
+
+    // The display logic state
+    DDFFlipflops ddfInitial;
+    DDFFlipflops ddf;
+
+    
+    //
     // Signal recorder
     //
     
@@ -159,17 +175,38 @@ private:
 
         worker
         
-        >> sigRecorder
         << bplEvent
         << dasEvent
         << nextBplEvent
-        << nextDasEvent;
+        << nextDasEvent
+        
+        << ddfstrt
+        << ddfstop
+        >> ddfInitial
+        >> ddf
+        
+        >> sigRecorder;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+
+    
+    //
+    // Accessing
+    //
+
+public:
+    
+    template <Accessor s> void pokeDDFSTRT(u16 value);
+    void setDDFSTRT(u16 old, u16 value);
+    void setDDFSTRT(u16 value) { setDDFSTRT(ddfstrt, value); }
+
+    template <Accessor s> void pokeDDFSTOP(u16 value);
+    void setDDFSTOP(u16 old, u16 value);
+    void setDDFSTOP(u16 value) { setDDFSTOP(ddfstop, value); }
 
     
     //

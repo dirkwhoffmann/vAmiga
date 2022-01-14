@@ -172,8 +172,8 @@ Sequencer::computeBplEvents()
         
     sigRecorder.insert(0, SIG_CON_L0 | agnus.bplcon0 >> 12);
     sigRecorder.insert(0x18, SIG_SHW);
-    sigRecorder.insert(agnus.ddfstrt, SIG_BPHSTART);
-    sigRecorder.insert(agnus.ddfstop, SIG_BPHSTOP);
+    sigRecorder.insert(ddfstrt, SIG_BPHSTART);
+    sigRecorder.insert(ddfstop, SIG_BPHSTOP);
     sigRecorder.insert(0xD8, SIG_RHW);
     sigRecorder.insert(HPOS_CNT, SIG_NONE);
     
@@ -183,7 +183,7 @@ Sequencer::computeBplEvents()
 void
 Sequencer::computeBplEvents(const SigRecorder &sr)
 {
-    auto state = agnus.ddfInitial;
+    auto state = ddfInitial;
     auto bmapen = agnus.dmaconInitial & (DMAEN | BPLEN);
 
     isize cnt = 0;
@@ -314,10 +314,10 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
     updateBplJumpTable();
 
     // Write back the new ddf state
-    agnus.ddf = state;
+    ddf = state;
 
     // Check if we need to recompute all event in the next scanline
-    if (state != agnus.ddfInitial) {
+    if (state != ddfInitial) {
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
 }

@@ -458,102 +458,6 @@ Agnus::setDIWSTOP(u16 value)
     if (pos.v == diwVstop) diwVFlop = false;
 }
 
-template <Accessor s> void
-Agnus::pokeDDFSTRT(u16 value)
-{
-    trace(DDF_DEBUG, "pokeDDFSTRT(%X)\n", value);
-    
-    //      15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
-    // OCS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
-    // ECS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
-    
-    value &= ddfMask();
-    
-    // Schedule the write cycle
-    if constexpr (s == ACCESSOR_CPU) {
-        recordRegisterChange(DMA_CYCLES(3), SET_DDFSTRT, value);
-    }
-    if constexpr (s == ACCESSOR_AGNUS) {
-        recordRegisterChange(DMA_CYCLES(4), SET_DDFSTRT, value);
-    }
-}
-
-void
-Agnus::setDDFSTRT(u16 old, u16 value)
-{
-    // trace(DDF_DEBUG, "setDDFSTRT(%x, %x)\n", old, value);
-    trace(DDF_DEBUG, "setDDFSTRT(%d, %d)\n", old, value);
-
-    ddfstrt = value;
-    
-    if (pos.h == old) {
-        trace(XFILES, "setDDFSTRT: Old value matches trigger position\n");
-    }
-    if (pos.h == value) {
-        trace(XFILES, "setDDFSTRT: New value matches trigger position\n");
-    }
-        
-    // Remove the old start event if it hasn't been reached
-    sequencer.sigRecorder.invalidate(pos.h, SIG_BPHSTART);
-    
-    // Add the new start event if it will be reached
-    if (ddfstrt > pos.h) sequencer.sigRecorder.insert(ddfstrt, SIG_BPHSTART);
-    
-    // Recompute the event table
-    sequencer.computeBplEvents(sequencer.sigRecorder);
-    
-    // Tell the hsync handler to recompute the table in the next line
-    hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-}
-
-template <Accessor s> void
-Agnus::pokeDDFSTOP(u16 value)
-{
-    trace(DDF_DEBUG, "pokeDDFSTOP(%X)\n", value);
-
-    //      15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
-    // OCS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
-    // ECS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
-    
-    value &= ddfMask();
-    
-    // Schedule the write cycle
-    if constexpr (s == ACCESSOR_CPU) {
-        recordRegisterChange(DMA_CYCLES(3), SET_DDFSTOP, value);
-    }
-    if constexpr (s == ACCESSOR_AGNUS) {
-        recordRegisterChange(DMA_CYCLES(4), SET_DDFSTOP, value);
-    }
-}
-
-void
-Agnus::setDDFSTOP(u16 old, u16 value)
-{
-    // trace(DDF_DEBUG, "setDDFSTOP(%x, %x)\n", old, value);
-    trace(DDF_DEBUG, "setDDFSTOP(%d, %d)\n", old, value);
-
-    ddfstop = value;
-
-    if (pos.h == old) {
-        trace(XFILES, "setDDFSTOP: Old value matches trigger position\n");
-    }
-    if (pos.h == value) {
-        trace(XFILES, "setDDFSTOP: New value matches trigger position\n");
-    }
-    
-    // Remove the old stop event if it hasn't been reached
-    sequencer.sigRecorder.invalidate(pos.h + 1, SIG_BPHSTOP);
-    
-    // Add the new stop event if it will be reached
-    if (ddfstop > pos.h) sequencer.sigRecorder.insert(ddfstop, SIG_BPHSTOP);
-    
-    // Recompute the event table
-    sequencer.computeBplEvents(sequencer.sigRecorder);
-    
-    // Tell the hsync handler to recompute the table in the next line
-    hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-}
-
 void
 Agnus::pokeBPL1MOD(u16 value)
 {
@@ -952,11 +856,6 @@ template void Agnus::pokeSPRxCTL<4>(u16 value);
 template void Agnus::pokeSPRxCTL<5>(u16 value);
 template void Agnus::pokeSPRxCTL<6>(u16 value);
 template void Agnus::pokeSPRxCTL<7>(u16 value);
-
-template void Agnus::pokeDDFSTRT<ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeDDFSTRT<ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeDDFSTOP<ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeDDFSTOP<ACCESSOR_AGNUS>(u16 value);
 
 template void Agnus::pokeDIWSTRT<ACCESSOR_CPU>(u16 value);
 template void Agnus::pokeDIWSTRT<ACCESSOR_AGNUS>(u16 value);

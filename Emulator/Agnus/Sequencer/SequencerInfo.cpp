@@ -20,14 +20,28 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
     if (category & dump::State) {
      
         os << tab("Flipflop 1");
-        os << bol(agnus.ddf.ff1) << " (" << bol(agnus.ddfInitial.ff1) << ")" << std::endl;
+        os << bol(ddf.ff1) << " (" << bol(ddfInitial.ff1) << ")" << std::endl;
         os << tab("Flipflop 2");
-        os << bol(agnus.ddf.ff2) << " (" << bol(agnus.ddfInitial.ff2) << ")" << std::endl;
+        os << bol(ddf.ff2) << " (" << bol(ddfInitial.ff2) << ")" << std::endl;
         os << tab("Flipflop 3");
-        os << bol(agnus.ddf.ff3) << " (" << bol(agnus.ddfInitial.ff3) << ")" << std::endl;
+        os << bol(ddf.ff3) << " (" << bol(ddfInitial.ff3) << ")" << std::endl;
         os << tab("Flipflop 5");
-        os << bol(agnus.ddf.ff5) << " (" << bol(agnus.ddfInitial.ff5) << ")" << std::endl;
+        os << bol(ddf.ff5) << " (" << bol(ddfInitial.ff5) << ")" << std::endl;
         os << std::endl;
+    }
+        
+    if (category & dump::Registers) {
+        
+        os << tab("DDFSTRT");
+        os << hex(ddfstrt) << std::endl;
+        os << tab("DDFSTOP");
+        os << hex(ddfstop) << std::endl;
+        /*
+        os << tab("DIWSTART");
+        os << hex(diwstrt) << std::endl;
+        os << tab("DIWSTOP");
+        os << hex(diwstop) << std::endl;
+        */
     }
         
     if (category & dump::Dma) {

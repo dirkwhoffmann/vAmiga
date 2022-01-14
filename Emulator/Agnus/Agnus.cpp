@@ -512,7 +512,7 @@ Agnus::hsyncHandler()
     bplcon1Initial = bplcon1;
     diwVstrtInitial = diwVstrt;
     diwVstopInitial = diwVstop;
-    ddfInitial = ddf;
+    sequencer.ddfInitial = sequencer.ddf;
 
 
     //
@@ -542,17 +542,17 @@ Agnus::hsyncHandler()
     
     if (pos.v == diwVstrt) {
         trace(DDF_DEBUG, "DDF: FF1 = 1 (DIWSTRT)\n");
-        ddfInitial.ff1 = true;
+        sequencer.ddfInitial.ff1 = true;
         hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
     if (pos.v == diwVstop) {
         trace(DDF_DEBUG, "DDF: FF1 = 0 (DIWSTOP)\n");
-        ddfInitial.ff1 = false;
+        sequencer.ddfInitial.ff1 = false;
         hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
     if (inLastRasterline()) {
         trace(DDF_DEBUG, "DDF: FF1 = 0 (EOF)\n");
-        ddfInitial.ff1 = false;
+        sequencer.ddfInitial.ff1 = false;
         hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
     

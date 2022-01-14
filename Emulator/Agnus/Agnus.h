@@ -187,26 +187,13 @@ private:
      */
     bool bls;
 
-
-    //
-    // Display Data Fetch (DDF)
-    //
-
-public:
-
-    // The display data fetch registers
-    u16 ddfstrt;
-    u16 ddfstop;
-
-    // The display logic state (updated in the hsync handler)
-    DDFFlipflops ddfInitial;
-    DDFFlipflops ddf;
-
-
+    
     //
     // Display Window (DIW)
     //
 
+public:
+    
     /* The Amiga limits the visible screen area by an upper, a lower, a left,
      * and a right border. The border encloses an area called the Display
      * Window (DIW). The color of the pixels inside the display window depends
@@ -369,10 +356,6 @@ private:
         << audxDSR
         << bls
 
-        << ddfstrt
-        << ddfstop
-        >> ddfInitial
-        >> ddf
         << diwstrt
         << diwstop
         << diwHstrt
@@ -670,12 +653,6 @@ public:
 
     template <Accessor s> void pokeDIWSTOP(u16 value);
     void setDIWSTOP(u16 value);
-
-    template <Accessor s> void pokeDDFSTRT(u16 value);
-    void setDDFSTRT(u16 old, u16 value);
-
-    template <Accessor s> void pokeDDFSTOP(u16 value);
-    void setDDFSTOP(u16 old, u16 value);
 
     void pokeBPL1MOD(u16 value);
     void setBPL1MOD(u16 value);

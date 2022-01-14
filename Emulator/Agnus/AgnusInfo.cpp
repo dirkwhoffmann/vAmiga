@@ -53,10 +53,7 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         
         os << tab("DMACON");
         os << hex(dmacon) << std::endl;
-        
-        os << tab("DDFSTRT, DDFSTOP");
-        os << hex(ddfstrt) << ' ' << hex(ddfstop) << ' ' << std::endl;
-        
+                
         os << tab("DIWSTRT, DIWSTOP");
         os << hex(diwstrt) << ' ' << hex(diwstop) << ' ' << std::endl;
 
@@ -100,8 +97,8 @@ Agnus::_inspect() const
     info.dmacon   = dmacon;
     info.bplcon0  = bplcon0;
     info.bpu      = bpu();
-    info.ddfstrt  = ddfstrt;
-    info.ddfstop  = ddfstop;
+    info.ddfstrt  = sequencer.ddfstrt;
+    info.ddfstop  = sequencer.ddfstop;
     info.diwstrt  = diwstrt;
     info.diwstop  = diwstop;
     

@@ -163,8 +163,8 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_DIWSTRT: setDIWSTRT(change.value); break;
             case SET_DIWSTOP: setDIWSTOP(change.value); break;
                 
-            case SET_DDFSTRT: setDDFSTRT(ddfstrt, change.value); break;
-            case SET_DDFSTOP: setDDFSTOP(ddfstop, change.value); break;
+            case SET_DDFSTRT: sequencer.setDDFSTRT(change.value); break;
+            case SET_DDFSTOP: sequencer.setDDFSTOP(change.value); break;
                 
             case SET_BPL1MOD: setBPL1MOD(change.value); break;
             case SET_BPL2MOD: setBPL2MOD(change.value); break;
