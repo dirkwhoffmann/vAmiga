@@ -205,15 +205,6 @@ Agnus::belongsToNextFrame(Cycle cycle) const
     return cycle >= startOfNextFrame();
 }
 
-bool
-Agnus::inBplDmaLine(u16 dmacon, u16 bplcon0) const
-{
-    return
-    !inLastRasterline() && sequencer.diwVFlop   // Outside VBLANK, inside DIW
-    && bpu(bplcon0)                             // At least one bitplane enabled
-    && bpldma(dmacon);                          // Bitplane DMA enabled
-}
-
 Cycle
 Agnus::beamToCycle(Beam beam) const
 {
@@ -231,20 +222,6 @@ Agnus::cycleToBeam(Cycle cycle) const
     result.v = (isize)(diff / HPOS_CNT);
     result.h = (isize)(diff % HPOS_CNT);
     return result;
-}
-
-u8
-Agnus::bpu(u16 v)
-{
-    // Extract the three BPU bits and check for hires mode
-    u8 bpu = (v >> 12) & 0b111;
-    bool hires = GET_BIT(v, 15);
-
-    if (hires) {
-        return bpu < 5 ? bpu : 0; // Disable all channels if value is invalid
-    } else {
-        return bpu < 7 ? bpu : 4; // Enable four channels if value is invalid
-    }
 }
 
 void
@@ -502,12 +479,6 @@ Agnus::hsyncHandler()
     // DDF and DIW
     sequencer.hsyncHandler();
 
-    //
-    // Determine the bitplane DMA status for the next line
-    //
-
-    bplDmaLine = inBplDmaLine();
-        
 
     //
     // Determine the disk, audio and sprite DMA status for the line to come

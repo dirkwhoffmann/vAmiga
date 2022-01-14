@@ -43,8 +43,6 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << dec(scrollOdd) << std::endl;
         os << tab("scrollEven");
         os << dec(scrollEven) << std::endl;
-        os << tab("Bitplane DMA line");
-        os << bol(bplDmaLine) << std::endl;
         os << tab("BLS signal");
         os << bol(bls) << std::endl;
         
@@ -107,7 +105,6 @@ Agnus::_inspect() const
     
     info.dmacon   = dmacon;
     info.bplcon0  = bplcon0;
-    info.bpu      = bpu();
     info.ddfstrt  = sequencer.ddfstrt;
     info.ddfstop  = sequencer.ddfstop;
     info.diwstrt  = sequencer.diwstrt;

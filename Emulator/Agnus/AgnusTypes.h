@@ -220,7 +220,6 @@ typedef struct
 
     u16 dmacon;
     u16 bplcon0;
-    u8  bpu;
     u16 ddfstrt;
     u16 ddfstop;
     u16 diwstrt;
@@ -234,7 +233,6 @@ typedef struct
     u16 bltdmod;
     u16 bltcon0;
     
-    // u32 coppc;
     u32 coppc0;
     u32 dskpt;
     u32 bplpt[6];

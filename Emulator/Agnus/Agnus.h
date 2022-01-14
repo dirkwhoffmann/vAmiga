@@ -155,9 +155,6 @@ public:
     i8 scrollOdd;
     i8 scrollEven;
     
-    // Set in the hsync handler to remember the returned value of inBplDmaLine()
-    bool bplDmaLine;
-
     
     //
     // Data bus
@@ -276,7 +273,6 @@ private:
         << dmaDAS
         << scrollOdd
         << scrollEven
-        << bplDmaLine
         
         << busValue
         << busOwner
@@ -387,10 +383,6 @@ public:
     bool inLastRasterline(isize posv) const { return posv == frame.lastLine(); }
     bool inLastRasterline() const { return inLastRasterline(pos.v); }
 
-    // Indicates if bitplane DMA is enabled in the current rasterline
-    bool inBplDmaLine(u16 dmacon, u16 bplcon0) const;
-    bool inBplDmaLine() const { return inBplDmaLine(dmacon, bplcon0); }
-
     // Returns the pixel position for the current horizontal position
     Pixel ppos(isize posh) const { return (posh * 4) + 2; }
     Pixel ppos() const { return ppos(pos.h); }
@@ -419,18 +411,8 @@ public:
     
 public:
 
-    /* Returns the Agnus view of the BPU bits. The value determines the number
-     * of enabled DMA channels. It is computed out of the three BPU bits stored
-     * in BPLCON0, but not identical with them. The value differs if the BPU
-     * bits reflect an invalid bit pattern. Compare with Denise::bpu() which
-     * returns the Denise view of the BPU bits.
-     */
-    static u8 bpu(u16 v);
-    u8 bpu() const { return bpu(bplcon0); }
-
     // Checks whether Hires or Lores mode is selected
     bool hires() { return GET_BIT(bplcon0, 15); }
-    bool lores() { return GET_BIT(bplcon0, 10); }
     
     // Returns the external synchronization bit from BPLCON0
     bool ersy() { return GET_BIT(bplcon0, 1); }
