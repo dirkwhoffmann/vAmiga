@@ -68,8 +68,9 @@ struct FloatStereo; typedef FloatStereo SampleType;
 // Uncomment to set a breakpoint on startup
 // #define INITIAL_BREAKPOINT 0xFC1354
 
-// Uncomment to colorize certain rasterlines
+// Uncomment to colorize a certain row or column
 // #define LINE_DEBUG (agnus.pos.v == 260 || agnus.pos.v == 300)
+// #define COLUMN_DEBUG 114
 
 //
 // Execution settings
@@ -83,7 +84,7 @@ static const int NO_SSE          = 0; // Don't use SSE extensions
 //
 
 // REMOVE ASAP
-#define LEGACY_DDF // Use the old DDF implementation
+// #define LEGACY_DDF // Use the old DDF implementation
 
 // General
 static const int XFILES          = 0; // Report paranormal activity

@@ -968,6 +968,9 @@ Denise::drawBorder()
         }
     }
 #endif
+#ifdef COLUMN_DEBUG
+    iBuffer[4*COLUMN_DEBUG] = mBuffer[4*COLUMN_DEBUG] = 64;
+#endif
 }
 
 template <int x> void

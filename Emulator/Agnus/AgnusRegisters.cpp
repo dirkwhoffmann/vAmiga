@@ -338,7 +338,6 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
 {
     assert(oldValue != newValue);
     trace(DMA_DEBUG, "setBPLCON1(%X,%X)\n", oldValue, newValue);
-    trace(true, "setBPLCON1(%X,%X)\n", oldValue, newValue);
 
     bplcon1 = newValue & 0xFF;
     
@@ -518,7 +517,8 @@ Agnus::pokeDDFSTRT(u16 value)
 void
 Agnus::setDDFSTRT(u16 old, u16 value)
 {
-    trace(DDF_DEBUG, "setDDFSTRT(%X, %X)\n", old, value);
+    // trace(DDF_DEBUG, "setDDFSTRT(%x, %x)\n", old, value);
+    trace(DDF_DEBUG, "setDDFSTRT(%d, %d)\n", old, value);
 
     ddfstrt = value;
     
@@ -568,6 +568,8 @@ Agnus::setDDFSTRT(u16 old, u16 value)
     
     // Tell the hsync handler to recompute the table in the next line
     hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    
+    // dump(dump::Signals);
         
 #endif
 }
@@ -595,7 +597,8 @@ Agnus::pokeDDFSTOP(u16 value)
 void
 Agnus::setDDFSTOP(u16 old, u16 value)
 {
-    trace(DDF_DEBUG, "setDDFSTOP(%X, %X)\n", old, value);
+    // trace(DDF_DEBUG, "setDDFSTOP(%x, %x)\n", old, value);
+    trace(DDF_DEBUG, "setDDFSTOP(%d, %d)\n", old, value);
 
     ddfstop = value;
 
@@ -646,6 +649,8 @@ Agnus::setDDFSTOP(u16 old, u16 value)
         // Tell the hsync handler to recompute the table in the next line
         hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     
+        // dump(dump::Signals);
+
 #endif
 }
 

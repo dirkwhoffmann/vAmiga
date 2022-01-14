@@ -423,8 +423,14 @@ Agnus::computeBplEvents(const SigRecorder &sr)
         
             if ((signal & SIG_BPHSTART) && (signal & SIG_BPHSTOP)) {
 
+                // trace(true, "DDFSTRT && DDFSTOP\n");
+                
                 // OCS: BPHSTART wins
-                signal &= ~SIG_BPHSTOP;
+                if (state.ff3) {
+                    signal &= ~SIG_BPHSTART;
+                } else {
+                    signal &= ~SIG_BPHSTOP;
+                }
             }
             if (signal & SIG_BPHSTART) {
                 
