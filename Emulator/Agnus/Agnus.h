@@ -620,22 +620,7 @@ public:
     bool sprdma() const { return sprdma(dmacon); }
     bool dskdma() const { return dskdma(dmacon); }
     
-    
-    //
-    // Managing the disk, audio, sprite time slot table (AgnusDma.cpp)
-    //
-
-public:
-    
-    // Renews all events in the the DAS event table
-    void updateDasEvents(u16 dmacon);
-
-private:
-
-    // Updates the jump table for the dasEvent table
-    void updateDasJumpTable(i16 end = HPOS_MAX);
-    
-    
+        
     //
     // Performing DMA (AgnusDma.cpp)
     //

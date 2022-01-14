@@ -51,32 +51,6 @@ Agnus::busIsFree()
     }
 }
 
-void
-Agnus::updateDasEvents(u16 dmacon)
-{
-    assert(dmacon < 64);
-
-    // Allocate slots
-    for (isize i = 0; i < 0x38; i++) sequencer.dasEvent[i] = sequencer.dasDMA[dmacon][i];
-    
-    // Update the jump table
-    updateDasJumpTable(0x38);
-}
-
-void
-Agnus::updateDasJumpTable(i16 end)
-{
-    assert(end <= HPOS_MAX);
-
-    u8 next = sequencer.nextDasEvent[end];
-    
-    for (isize i = end; i >= 0; i--) {
-        
-        sequencer.nextDasEvent[i] = next;
-        if (sequencer.dasEvent[i]) next = (i8)i;
-    }
-}
-
 template <BusOwner owner> bool
 Agnus::allocateBus()
 {

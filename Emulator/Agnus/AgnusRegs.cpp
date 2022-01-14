@@ -114,7 +114,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         for (isize i = pos.h; i < HPOS_CNT; i++) {
             sequencer.dasEvent[i] = sequencer.dasDMA[newDAS][i];
         }
-        updateDasJumpTable();
+        sequencer.updateDasJumpTable();
         
         // Rectify the currently scheduled DAS event
         scheduleDasEventForCycle(pos.h);

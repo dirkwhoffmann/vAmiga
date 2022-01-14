@@ -72,13 +72,18 @@ Sequencer::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
-    // Initialize event tables
-    computeBplEvents();
+    clearBplEvents();
+    clearDasEvents();
     
+    // Initialize event tables
+    /*
+    computeBplEvents();
     assert(bplEvent[HPOS_MAX] == BPL_EOL);
+    
     for (isize i = 0; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
     updateBplJumpTable();
-    agnus.updateDasJumpTable();
+    updateDasJumpTable();
+    */
 }
 
 void
@@ -86,6 +91,8 @@ Sequencer::clearBplEvents()
 {
     for (isize i = 0; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
     for (isize i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX;
+    bplEvent[HPOS_MAX] = BPL_EOL;
+    nextBplEvent[HPOS_MAX] = 0;
 }
 
 #ifdef LEGACY_DDF
@@ -475,11 +482,44 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
 void
 Sequencer::updateBplJumpTable()
 {
-    u8 next = nextBplEvent[HPOS_MAX];
+    u8 next = 0; // nextBplEvent[HPOS_MAX];
     
     for (isize i = HPOS_MAX; i >= 0; i--) {
         
         nextBplEvent[i] = next;
         if (bplEvent[i]) next = (i8)i;
+    }
+}
+
+void
+Sequencer::clearDasEvents()
+{
+    for (isize i = 0; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
+    updateDasJumpTable();
+}
+
+void
+Sequencer::updateDasEvents(u16 dmacon)
+{
+    assert(dmacon < 64);
+
+    // Allocate slots
+    for (isize i = 0; i < 0x38; i++) dasEvent[i] = dasDMA[dmacon][i];
+    
+    // Update the jump table
+    updateDasJumpTable(0x38);
+}
+
+void
+Sequencer::updateDasJumpTable(i16 end)
+{
+    assert(end <= HPOS_MAX);
+
+    u8 next = nextDasEvent[end];
+    
+    for (isize i = end; i >= 0; i--) {
+        
+        nextDasEvent[i] = next;
+        if (dasEvent[i]) next = (i8)i;
     }
 }

@@ -178,7 +178,7 @@ private:
     
 public:
 
-    // Removes all events from the BPL event table
+    // Removes all events
     void clearBplEvents();
 
     // Recomputes the BPL event table
@@ -193,4 +193,21 @@ private:
     // Updates the jump table for the bplEvent table
     void updateBplJumpTable();
     
+    
+    //
+    // Managing the disk, audio, sprite time slot table (AgnusDma.cpp)
+    //
+
+public:
+    
+    // Removes all events
+    void clearDasEvents();
+
+    // Renews all events in the the DAS event table
+    void updateDasEvents(u16 dmacon);
+
+private:
+
+    // Updates the jump table for the dasEvent table
+    void updateDasJumpTable(i16 end = HPOS_MAX);
 };
