@@ -561,8 +561,6 @@ public:
     void setBPLCON1(u16 oldValue, u16 newValue);
 
     template <Accessor s> void pokeDIWSTRT(u16 value);
-    void setDIWSTRT(u16 value);
-
     template <Accessor s> void pokeDIWSTOP(u16 value);
     void setDIWSTOP(u16 value);
 

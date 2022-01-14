@@ -30,7 +30,54 @@ Denise::pokeDMACON(u16 oldValue, u16 newValue)
 void
 Denise::setDIWSTRT(u16 value)
 {
+    trace(DIW_DEBUG, "setDIWSTRT(%X)\n", value);
     
+    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+    // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0
+    
+    // Extract the coordinate
+    isize newDiwHstrt = LO_BYTE(value);
+        
+    // Invalidate the horizontal coordinate if it is out of range
+    if (newDiwHstrt < 2) {
+        
+        trace(DIW_DEBUG, "newDiwHstrt is too small\n");
+        newDiwHstrt = -1;
+    }
+    
+    /* Check if the change takes effect in the current rasterline.
+     *
+     *     old: Old trigger coordinate (diwHstrt)
+     *     new: New trigger coordinate (newDiwHstrt)
+     *     cur: Position of the electron beam (derivable from pos.h)
+     *
+     * The following cases have to be taken into accout:
+     *
+     *    1) cur < old < new : Change takes effect in this rasterline.
+     *    2) cur < new < old : Change takes effect in this rasterline.
+     *    3) new < cur < old : Neither the old nor the new trigger hits.
+     *    4) new < old < cur : Already triggered. Nothing to do in this line.
+     *    5) old < cur < new : Already triggered. Nothing to do in this line.
+     *    6) old < new < cur : Already triggered. Nothing to do in this line.
+     */
+    
+    isize cur = 2 * agnus.pos.h;
+    
+    // (1) and (2)
+    if (cur < denise.diwHstrt && cur < newDiwHstrt) {
+        
+        trace(DIW_DEBUG, "Updating DIW hflop immediately at %ld\n", cur);
+        diwHFlopOn = newDiwHstrt;
+    }
+    
+    // (3)
+    if (newDiwHstrt < cur && cur < diwHstrt) {
+        
+        trace(DIW_DEBUG, "DIW hflop not switched on in current line\n");
+        diwHFlopOn = -1;
+    }
+    
+    diwHstrt = newDiwHstrt;
 }
 
 void

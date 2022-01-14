@@ -160,7 +160,7 @@ Agnus::serviceREGEvent(Cycle until)
                 
             case SET_DMACON: setDMACON(dmacon, change.value); break;
                 
-            case SET_DIWSTRT_AGNUS: agnus.setDIWSTRT(change.value); break;
+            case SET_DIWSTRT_AGNUS: sequencer.setDIWSTRT(change.value); break;
             case SET_DIWSTRT_DENISE: denise.setDIWSTRT(change.value); break;
             case SET_DIWSTOP_AGNUS: agnus.setDIWSTOP(change.value); break;
             case SET_DIWSTOP_DENISE: denise.setDIWSTOP(change.value); break;
