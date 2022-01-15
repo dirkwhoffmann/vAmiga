@@ -121,7 +121,7 @@ Sequencer::setDIWSTRT(u16 value)
     
     if (agnus.pos.v == diwVstrt && agnus.pos.v != diwVstop) {
         
-        sigRecorder.insert(agnus.pos.h, SIG_VFLOP_SET);
+        sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_SET);
         computeBplEvents(sigRecorder);
     }
 
