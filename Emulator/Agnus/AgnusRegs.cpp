@@ -330,17 +330,19 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
 template <Accessor s> void
 Agnus::pokeDIWSTRT(u16 value)
 {
-    trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", AccessorEnum::key(s), value);
-    recordRegisterChange(DMA_CYCLES(2), SET_DIWSTRT_AGNUS, value);
-    recordRegisterChange(DMA_CYCLES(2), SET_DIWSTRT_DENISE, value);
+    trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%x)\n", AccessorEnum::key(s), value);
+    
+    recordRegisterChange(DMA_CYCLES(4), SET_DIWSTRT_AGNUS, value);
+    recordRegisterChange(DMA_CYCLES(3), SET_DIWSTRT_DENISE, value);
 }
 
 template <Accessor s> void
 Agnus::pokeDIWSTOP(u16 value)
 {
-    trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", AccessorEnum::key(s), value);
-    recordRegisterChange(DMA_CYCLES(2), SET_DIWSTOP_AGNUS, value);
-    recordRegisterChange(DMA_CYCLES(2), SET_DIWSTOP_DENISE, value);
+    trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%x)\n", AccessorEnum::key(s), value);
+    
+    recordRegisterChange(DMA_CYCLES(4), SET_DIWSTOP_AGNUS, value);
+    recordRegisterChange(DMA_CYCLES(3), SET_DIWSTOP_DENISE, value);
 }
 
 void

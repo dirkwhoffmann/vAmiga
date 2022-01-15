@@ -325,6 +325,9 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
     // Update the jump table
     updateBplJumpTable();
 
+    // Rectify the currently scheduled event
+    agnus.scheduleBplEventForCycle(agnus.pos.h);
+    
     // Write back the new ddf state
     ddf = state;
 

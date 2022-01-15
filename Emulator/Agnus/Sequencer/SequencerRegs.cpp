@@ -141,13 +141,13 @@ Sequencer::setDIWSTOP(u16 value)
     
     if (agnus.pos.v == diwVstop) {
         
-        sigRecorder.insert(agnus.pos.h, SIG_VFLOP_CLR);
+        sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_CLR);
         computeBplEvents(sigRecorder);
     }
 
     if (agnus.pos.v != diwVstop && agnus.pos.v == diwVstrt) {
             
-        sigRecorder.insert(agnus.pos.h, SIG_VFLOP_SET);
+        sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_SET);
         computeBplEvents(sigRecorder);
     }
 
