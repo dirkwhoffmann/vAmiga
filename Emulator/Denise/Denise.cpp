@@ -900,7 +900,9 @@ Denise::updateBorderColor()
 void
 Denise::drawBorder()
 {
-    if (agnus.sequencer.lineIsBlank) {
+    bool hFlopWasSet = diwHFlop || diwHFlopOn != -1;
+    
+    if (agnus.sequencer.lineIsBlank || !hFlopWasSet) {
 
         // Draw blank line
         for (Pixel i = 0; i < HPIXELS; i++) {
