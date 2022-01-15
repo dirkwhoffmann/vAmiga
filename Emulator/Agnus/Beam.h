@@ -30,15 +30,6 @@ struct Beam
     Beam(isize v, isize h) : v(v), h(h) { }
     Beam(isize cycle = 0) : Beam(cycle / HPOS_CNT, cycle % HPOS_CNT) { }
 
-    /*
-    Beam& operator=(const Beam& beam)
-    {
-        v = beam.v;
-        h = beam.h;
-        return *this;
-    }
-    */
-    
     bool operator==(const Beam& beam) const
     {
         return v == beam.v && h == beam.h;

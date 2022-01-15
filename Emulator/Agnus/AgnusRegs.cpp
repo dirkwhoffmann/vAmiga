@@ -155,6 +155,20 @@ Agnus::peekVHPOSR()
     // Return the latched position if the counters are frozen
     if (ersy()) return HI_LO(latchedPos.v & 0xFF, latchedPos.h);
                      
+    // The returned position is four cycles ahead
+    auto result = agnus.pos + Beam {0,4};
+    
+    // Rectify the vertical position if it has wrapped over
+    if (result.v >= frame.numLines()) result.v = 0;
+    
+    // In cycle 0 and 1, we need to return the old value of posv
+    if (result.h <= 1) {
+        return HI_LO(agnus.pos.v & 0xFF, result.h);
+    } else {
+        return HI_LO(result.v & 0xFF, result.h);
+    }
+    
+    /*
     auto posh = pos.h + 4;
     auto posv = pos.v;
     
@@ -175,6 +189,7 @@ Agnus::peekVHPOSR()
     } else {
         return HI_LO(frame.prevLastLine() & 0xFF, posh);
     }
+    */
 }
 
 void
@@ -242,6 +257,8 @@ Agnus::setVPOS(u16 value)
 
     trace(XFILES, "XFILES (VPOS): Making a %s frame\n", newlof ? "long" : "short");
     frame.lof = newlof;
+    
+    // if (!newlof) amiga.signalStop();
     
     /* Reschedule a pending VBL event with a trigger cycle that is consistent
      * with the new value of the LOF bit.
