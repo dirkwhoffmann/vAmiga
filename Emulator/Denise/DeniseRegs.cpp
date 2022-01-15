@@ -36,8 +36,6 @@ Denise::setDIWSTRT(u16 value)
     // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0
     
     diwstrt = value;
-    
-    // Extract the coordinate
     isize newDiwHstrt = LO_BYTE(value);
         
     // Invalidate the horizontal coordinate if it is out of range
@@ -91,8 +89,6 @@ Denise::setDIWSTOP(u16 value)
     // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1
         
     diwstop = value;
-    
-    // Extract the coordinate
     isize newDiwHstop = LO_BYTE(value) | 0x100;
         
     // Invalidate the coordinate if it is out of range

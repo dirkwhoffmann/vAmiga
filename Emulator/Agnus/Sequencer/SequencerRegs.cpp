@@ -13,7 +13,7 @@
 template <Accessor s> void
 Sequencer::pokeDDFSTRT(u16 value)
 {
-    trace(DDF_DEBUG, "pokeDDFSTRT(%X)\n", value);
+    trace(DDF_DEBUG, "pokeDDFSTRT(%x)\n", value);
     
     //      15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // OCS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
@@ -33,7 +33,6 @@ Sequencer::pokeDDFSTRT(u16 value)
 void
 Sequencer::setDDFSTRT(u16 old, u16 value)
 {
-    // trace(DDF_DEBUG, "setDDFSTRT(%x, %x)\n", old, value);
     trace(DDF_DEBUG, "setDDFSTRT(%d, %d)\n", old, value);
 
     ddfstrt = value;
@@ -63,7 +62,7 @@ Sequencer::setDDFSTRT(u16 old, u16 value)
 template <Accessor s> void
 Sequencer::pokeDDFSTOP(u16 value)
 {
-    trace(DDF_DEBUG, "pokeDDFSTOP(%X)\n", value);
+    trace(DDF_DEBUG, "pokeDDFSTOP(%x)\n", value);
 
     //      15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // OCS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
@@ -83,7 +82,6 @@ Sequencer::pokeDDFSTOP(u16 value)
 void
 Sequencer::setDDFSTOP(u16 old, u16 value)
 {
-    // trace(DDF_DEBUG, "setDDFSTOP(%x, %x)\n", old, value);
     trace(DDF_DEBUG, "setDDFSTOP(%d, %d)\n", old, value);
 
     ddfstop = value;
@@ -119,9 +117,15 @@ Sequencer::setDIWSTRT(u16 value)
     // V7 V6 V5 V4 V3 V2 V1 V0 -- -- -- -- -- -- -- --  and  V8 = 0
     
     diwstrt = value;
-    
-    // Extract the coordinate
     diwVstrt = HI_BYTE(value);
+    
+    if (agnus.pos.v == diwVstrt && agnus.pos.v != diwVstop) {
+        
+        sigRecorder.insert(agnus.pos.h, SIG_VFLOP_SET);
+        computeBplEvents(sigRecorder);
+    }
+
+    agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
 }
 
 void
@@ -133,9 +137,21 @@ Sequencer::setDIWSTOP(u16 value)
     // V7 V6 V5 V4 V3 V2 V1 V0 -- -- -- -- -- -- -- --  and  V8 = !V7
     
     diwstop = value;
+    diwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
     
-    // Extract the coordinate
-    diwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);    
+    if (agnus.pos.v == diwVstop) {
+        
+        sigRecorder.insert(agnus.pos.h, SIG_VFLOP_CLR);
+        computeBplEvents(sigRecorder);
+    }
+
+    if (agnus.pos.v != diwVstop && agnus.pos.v == diwVstrt) {
+            
+        sigRecorder.insert(agnus.pos.h, SIG_VFLOP_SET);
+        computeBplEvents(sigRecorder);
+    }
+
+    agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
 }
 
 template void Sequencer::pokeDDFSTRT<ACCESSOR_CPU>(u16 value);

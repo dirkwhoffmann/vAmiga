@@ -171,6 +171,12 @@ Sequencer::computeBplEvents()
     // Predict all events for the current scanline
     sigRecorder.clear();
         
+    if (agnus.pos.v == diwVstop || agnus.inLastRasterline()) {
+        sigRecorder.insert(0, SIG_VFLOP_CLR);
+    } else if (agnus.pos.v == diwVstrt){
+        sigRecorder.insert(0, SIG_VFLOP_SET);
+    }
+    
     sigRecorder.insert(0, SIG_CON_L0 | agnus.bplcon0 >> 12);
     sigRecorder.insert(0x18, SIG_SHW);
     sigRecorder.insert(ddfstrt, SIG_BPHSTART);
@@ -530,19 +536,19 @@ Sequencer::hsyncHandler()
     if (agnus.pos.v == diwVstrt) {
         
         trace(DDF_DEBUG, "DDF: FF1 = 1 (DIWSTRT)\n");
-        ddfInitial.ff1 = true;
+        // ddfInitial.ff1 = true;
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
     if (agnus.pos.v == diwVstop) {
         
         trace(DDF_DEBUG, "DDF: FF1 = 0 (DIWSTOP)\n");
-        ddfInitial.ff1 = false;
+        // ddfInitial.ff1 = false;
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
     if (agnus.inLastRasterline()) {
         
         trace(DDF_DEBUG, "DDF: FF1 = 0 (EOF)\n");
-        ddfInitial.ff1 = false;
+        // ddfInitial.ff1 = false;
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
 
