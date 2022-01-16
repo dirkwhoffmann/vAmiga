@@ -536,7 +536,7 @@ public:
     void pokeVPOS(u16 value);
     void setVPOS(u16 value);
 
-    void pokeBPLCON0(u16 value);
+    template <Accessor s> void pokeBPLCON0(u16 value);
     void setBPLCON0(u16 oldValue, u16 newValue);
 
     void pokeBPLCON1(u16 value);

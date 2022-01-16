@@ -256,8 +256,7 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
 {
     switch (dmacon) {
             
-        case 0x7: // L7
-        case 0x6: // L6
+        case 0x6: // 6 planes, lores
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = BPL_L4;   id[1][1] = BPL_L4_MOD;
@@ -269,7 +268,7 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
             break;
 
-        case 0x5: // L5
+        case 0x5: // 5 planes, lores
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = BPL_L4;   id[1][1] = BPL_L4_MOD;
@@ -281,7 +280,8 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
             break;
 
-        case 0x4: // L4
+        case 0x7: // 7 planes, lores
+        case 0x4: // 4 planes, lores
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = BPL_L4;   id[1][1] = BPL_L4_MOD;
@@ -293,7 +293,7 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
             break;
 
-        case 0x3: // L3
+        case 0x3: // 3 planes, lores
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = 0;        id[1][1] = 0;
@@ -305,7 +305,7 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
             break;
 
-        case 0x2: // L2
+        case 0x2: // 2 planes, lores
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = 0;        id[1][1] = 0;
@@ -317,7 +317,7 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
             break;
 
-        case 0x1: // L1
+        case 0x1: // 1 plane, lores
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = 0;        id[1][1] = 0;
@@ -329,7 +329,7 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
             break;
 
-        case 0xC: // H4
+        case 0xC: // 4 planes, hires
             
             id[0][0] = BPL_H4;   id[1][0] = BPL_H4;
             id[0][1] = BPL_H2;   id[1][1] = BPL_H2;
@@ -341,7 +341,7 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
             break;
 
-        case 0xB: // H3
+        case 0xB: // 3 planes, hires
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = BPL_H2;   id[1][1] = BPL_H2;
@@ -353,7 +353,7 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
             break;
 
-        case 0xA: // H2
+        case 0xA: // 2 planes, hires
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = BPL_H2;   id[1][1] = BPL_H2;
@@ -365,7 +365,7 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
             break;
 
-        case 0x9: // H1
+        case 0x9: // 1 plane, hires
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = 0;        id[1][1] = 0;
@@ -377,11 +377,11 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
             break;
             
-        case 0x0: // L0
-        case 0x8: // H0
-        case 0xF: // H7
-        case 0xE: // H6
-        case 0xD: // H5
+        case 0x0: // 0 planes, lores
+        case 0x8: // 0 planes, hires
+        case 0xD: // 5 planes, hires
+        case 0xE: // 6 planes, hires
+        case 0xF: // 7 planes, hires
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = 0;        id[1][1] = 0;

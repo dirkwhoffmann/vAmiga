@@ -2301,17 +2301,17 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x0FE >> 1: // Unused
             break;
         case 0x100 >> 1: // BPLCON0
-            agnus.pokeBPLCON0(value);
-            denise.pokeBPLCON0(value);
+            agnus.pokeBPLCON0<s>(value);
+            denise.pokeBPLCON0<s>(value);
             return;
         case 0x102 >> 1: // BPLCON1
             agnus.pokeBPLCON1(value);
-            denise.pokeBPLCON1(value);
+            denise.pokeBPLCON1<s>(value);
             return;
         case 0x104 >> 1: // BPLCON2
-            denise.pokeBPLCON2(value); return;
+            denise.pokeBPLCON2<s>(value); return;
         case 0x106 >> 1: // BPLCON3 (ECS)
-            denise.pokeBPLCON3(value);
+            denise.pokeBPLCON3<s>(value);
             break;
         case 0x108 >> 1: // BPL1MOD
             agnus.pokeBPL1MOD(value); return;

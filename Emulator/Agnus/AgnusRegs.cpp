@@ -279,7 +279,7 @@ Agnus::setVPOS(u16 value)
     }
 }
 
-void
+template <Accessor s> void
 Agnus::pokeBPLCON0(u16 value)
 {
     trace(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
@@ -291,9 +291,6 @@ void
 Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 {
     trace(DMA_DEBUG, "setBPLCON0(%4x,%4x)\n", oldValue, newValue);
-
-    // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet
-    // if (pos.h < ddfstrtReached) bplcon0AtDDFStrt = newValue;
     
     // Update the bpl event table in the next rasterline
     hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
@@ -766,6 +763,9 @@ template void Agnus::pokeSPRxCTL<4>(u16 value);
 template void Agnus::pokeSPRxCTL<5>(u16 value);
 template void Agnus::pokeSPRxCTL<6>(u16 value);
 template void Agnus::pokeSPRxCTL<7>(u16 value);
+
+template void Agnus::pokeBPLCON0<ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeBPLCON0<ACCESSOR_AGNUS>(u16 value);
 
 template void Agnus::pokeDMACON<ACCESSOR_CPU>(u16 value);
 template void Agnus::pokeDMACON<ACCESSOR_AGNUS>(u16 value);

@@ -144,7 +144,7 @@ Denise::peekDENISEID()
     return result;
 }
 
-void
+template <Accessor s> void
 Denise::pokeBPLCON0(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
@@ -186,7 +186,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     }
 }
 
-void
+template <Accessor s> void
 Denise::pokeBPLCON1(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
@@ -206,7 +206,7 @@ Denise::setBPLCON1(u16 oldValue, u16 newValue)
     pixelOffsetEven = (i8)((bplcon1 & 0b00010000) >> 3);
 }
 
-void
+template <Accessor s> void
 Denise::pokeBPLCON2(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
@@ -229,7 +229,7 @@ Denise::setBPLCON2(u16 newValue)
     conChanges.insert(pixel, RegChange { SET_BPLCON2, newValue });    
 }
 
-void
+template <Accessor s> void
 Denise::pokeBPLCON3(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON3(%X)\n", value);
@@ -405,6 +405,15 @@ Denise::bpu(u16 v)
     // An invalid value enables all 6 planes
     return  bpu < 7 ? bpu : 6;
 }
+
+template void Denise::pokeBPLCON0<ACCESSOR_CPU>(u16 value);
+template void Denise::pokeBPLCON0<ACCESSOR_AGNUS>(u16 value);
+template void Denise::pokeBPLCON1<ACCESSOR_CPU>(u16 value);
+template void Denise::pokeBPLCON1<ACCESSOR_AGNUS>(u16 value);
+template void Denise::pokeBPLCON2<ACCESSOR_CPU>(u16 value);
+template void Denise::pokeBPLCON2<ACCESSOR_AGNUS>(u16 value);
+template void Denise::pokeBPLCON3<ACCESSOR_CPU>(u16 value);
+template void Denise::pokeBPLCON3<ACCESSOR_AGNUS>(u16 value);
 
 template void Denise::pokeBPLxDAT<0,ACCESSOR_CPU>(u16 value);
 template void Denise::pokeBPLxDAT<0,ACCESSOR_AGNUS>(u16 value);

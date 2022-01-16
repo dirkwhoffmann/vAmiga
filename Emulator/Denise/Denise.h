@@ -549,16 +549,16 @@ public:
 
     u16 peekDENISEID();
 
-    void pokeBPLCON0(u16 value);
+    template <Accessor s> void pokeBPLCON0(u16 value);
     void setBPLCON0(u16 oldValue, u16 newValue);
 
-    void pokeBPLCON1(u16 value);
+    template <Accessor s> void pokeBPLCON1(u16 value);
     void setBPLCON1(u16 oldValue, u16 newValue);
 
-    void pokeBPLCON2(u16 value);
+    template <Accessor s> void pokeBPLCON2(u16 value);
     void setBPLCON2(u16 value);
     
-    void pokeBPLCON3(u16 value);
+    template <Accessor s> void pokeBPLCON3(u16 value);
     void setBPLCON3(u16 value);
 
     u16 peekCLXDAT();
