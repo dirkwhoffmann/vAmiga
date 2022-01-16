@@ -195,10 +195,6 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
 
     isize cnt = 0;
                 
-    // trace(true, "computeBplEvents\n");
-    // dump(dump::Signals);
-    // if (pos.v == 48) dump(dump::Dma);
-    
     // The fetch unit layout
     EventID fetch[2][8];
     computeFetchUnit((u8)(agnus.bplcon0Initial >> 12), fetch);
@@ -224,14 +220,12 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
 
             if (cnt == 0 && state.ff5) {
 
-                // if (pos.v == 0x80) trace(true, "%ld: ff5 AND 0\n", j);
                 state.ff2 = false;
                 state.ff3 = false;
                 state.ff5 = false;
             }
             if (cnt == 0 && state.ff4) {
 
-                // if (pos.v == 0x80) trace(true, "%ld: ff4 AND 0\n", j);
                 state.ff5 = true;
                 state.ff4 = false;
             }
@@ -297,7 +291,6 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
 
                 // trace(true, "DDFSTRT && DDFSTOP\n");
                 
-                // OCS: BPHSTART wins
                 if (state.ff3) {
                     signal &= ~SIG_BPHSTART;
                 } else {
@@ -451,7 +444,7 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
             id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
             break;
 
-        case 0x9: // SIG_CON_H1:
+        case 0x9: // H1
             
             id[0][0] = 0;        id[1][0] = 0;
             id[0][1] = 0;        id[1][1] = 0;
@@ -487,7 +480,7 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
 void
 Sequencer::updateBplJumpTable()
 {
-    u8 next = 0; // nextBplEvent[HPOS_MAX];
+    u8 next = 0;
     
     for (isize i = HPOS_MAX; i >= 0; i--) {
         

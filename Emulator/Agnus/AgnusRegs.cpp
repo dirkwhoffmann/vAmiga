@@ -27,12 +27,17 @@ Agnus::peekDMACONR()
     return result;
 }
 
-void
+template <Accessor s> void
 Agnus::pokeDMACON(u16 value)
 {
     trace(DMA_DEBUG, "pokeDMACON(%X)\n", value);
-    
-    setDMACON(dmacon, value);
+
+    // Schedule the write cycle
+    if constexpr (s == ACCESSOR_CPU) {
+        recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
+    } else {
+        recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
+    }
 }
 
 void
@@ -88,10 +93,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         // Tell the hsync handler to recompute the table in the next line
         hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
-    
-    // Let Denise know about the change
-    denise.pokeDMACON(oldValue, newValue);
-        
+            
     // Disk DMA and sprite DMA
     if ((oldDSKEN ^ newDSKEN) || (oldSPREN ^ newSPREN)) {
         
@@ -761,7 +763,11 @@ template void Agnus::pokeSPRxCTL<5>(u16 value);
 template void Agnus::pokeSPRxCTL<6>(u16 value);
 template void Agnus::pokeSPRxCTL<7>(u16 value);
 
+template void Agnus::pokeDMACON<ACCESSOR_CPU>(u16 value);
+template void Agnus::pokeDMACON<ACCESSOR_AGNUS>(u16 value);
+
 template void Agnus::pokeDIWSTRT<ACCESSOR_CPU>(u16 value);
 template void Agnus::pokeDIWSTRT<ACCESSOR_AGNUS>(u16 value);
+
 template void Agnus::pokeDIWSTOP<ACCESSOR_CPU>(u16 value);
 template void Agnus::pokeDIWSTOP<ACCESSOR_AGNUS>(u16 value);

@@ -2202,7 +2202,7 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x094 >> 1: // DDFSTOP
             agnus.sequencer.pokeDDFSTOP<s>(value); return;
         case 0x096 >> 1: // DMACON
-            agnus.pokeDMACON(value); return;
+            agnus.pokeDMACON<s>(value); return;
         case 0x098 >> 1:  // CLXCON
             denise.pokeCLXCON(value); return;
         case 0x09A >> 1: // INTENA

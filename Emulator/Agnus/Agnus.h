@@ -525,7 +525,7 @@ public:
 public:
 
     u16 peekDMACONR();
-    void pokeDMACON(u16 value);
+    template <Accessor s> void pokeDMACON(u16 value);
     void setDMACON(u16 oldValue, u16 newValue);
     
     u16 peekVHPOSR();

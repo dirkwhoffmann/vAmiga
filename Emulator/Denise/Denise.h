@@ -540,9 +540,6 @@ public:
     
 public:
 
-    // Called by Agnus if the DMACON register changes
-    void pokeDMACON(u16 oldValue, u16 newValue);
-
     void setDIWSTRT(u16 value);
     void setDIWSTOP(u16 value);
 

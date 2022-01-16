@@ -13,21 +13,6 @@
 #include "ControlPort.h"
 
 void
-Denise::pokeDMACON(u16 oldValue, u16 newValue)
-{
-    if (Agnus::bpldma(newValue)) {
-
-        // Bitplane DMA on
-        trace(DMA_DEBUG, "Bitplane DMA switched on\n");
-
-    } else {
-
-        // Bitplane DMA off
-        trace(DMA_DEBUG, "Bitplane DMA switched off\n");
-    }
-}
-
-void
 Denise::setDIWSTRT(u16 value)
 {
     trace(DIW_DEBUG, "setDIWSTRT(%X)\n", value);
