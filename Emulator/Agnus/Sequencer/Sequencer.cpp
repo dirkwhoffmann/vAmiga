@@ -86,85 +86,6 @@ Sequencer::clearBplEvents()
     nextBplEvent[HPOS_MAX] = 0;
 }
 
-#ifdef LEGACY_DDF
-void
-Sequencer::updateBplEvents(u16 dmacon, u16 bplcon0)
-{
-    // Determine the number of active bitplanes
-    auto channels = bpu(bplcon0);
-
-    // Set the number to zero if no bitplane DMA takes place
-    if (!inBplDmaLine(dmacon, bplcon0)) channels = 0;
-
-    // Do the same if DDFSTRT is never reached in this line
-    if (ddfstrtReached == -1) channels = 0;
-    
-    if (Denise::hires(bplcon0)) {
-        updateBplEvents <true> (channels);
-    } else {
-        updateBplEvents <false> (channels);
-    }
-}
-
-template <bool hi> void
-Sequencer::updateBplEvents(isize channels)
-{
-    // Get the DDF window size
-    auto strt = hi ? ddfHires.strt : ddfLores.strt;
-    auto stop = hi ? ddfHires.stop : ddfLores.stop;
-    
-    assert(strt >= 0 && stop >= strt && stop <= 0xE0);
-
-    // Determine the layout of a single fetch unit
-    EventID slice[8]= { 0, 0, 0, 0, 0, 0, 0, 0 };
-    
-    if constexpr (hi) {
-        
-        switch(channels) {
-                
-            case 6:
-            case 5:
-            case 4: slice[0] = slice[4] = BPL_H4;
-            case 3: slice[2] = slice[6] = BPL_H3;
-            case 2: slice[1] = slice[5] = BPL_H2;
-            case 1: slice[3] = slice[7] = BPL_H1;
-        }
-        
-    } else {
-        
-        switch (channels) {
-                
-            case 6: slice[2] = BPL_L6;
-            case 5: slice[6] = BPL_L5;
-            case 4: slice[1] = BPL_L4;
-            case 3: slice[5] = BPL_L3;
-            case 2: slice[3] = BPL_L2;
-            case 1: slice[7] = BPL_L1;
-        }
-    }
-    
-    // Update the event table
-    for (isize i = 0; i < strt; i++) {
-        bplEvent[i] = EVENT_NONE;
-    }
-    // trace(true, "strt = %d stop = %d\n", strt, stop);
-    
-    for (isize i = strt; i <= stop; i++) {
-        bplEvent[i] = slice[(i - strt) & 7];
-    }
-    for (isize i = stop; i < HPOS_MAX; i++) {
-        bplEvent[i] = EVENT_NONE;
-    }
-    bplEvent[HPOS_MAX] = BPL_EOL;
-        
-    // Superimpose the drawing flags
-    hi ? updateHiresDrawingFlags() : updateLoresDrawingFlags();
-            
-    // Update the jump table
-    updateBplJumpTable();
-}
-#endif
-
 void
 Sequencer::computeBplEvents()
 {
@@ -177,7 +98,7 @@ Sequencer::computeBplEvents()
         sigRecorder.insert(0, SIG_VFLOP_SET);
     }
     
-    sigRecorder.insert(0, SIG_CON_L0 | agnus.bplcon0 >> 12);
+    sigRecorder.insert(0, SIG_CON_L | agnus.bplcon0 >> 12);
     sigRecorder.insert(0x18, SIG_SHW);
     sigRecorder.insert(ddfstrt, SIG_BPHSTART);
     sigRecorder.insert(ddfstop, SIG_BPHSTOP);
@@ -191,7 +112,7 @@ void
 Sequencer::computeBplEvents(const SigRecorder &sr)
 {
     auto state = ddfInitial;
-    auto bmapen = agnus.dmaconInitial & (DMAEN | BPLEN);
+    auto bmapen = (agnus.dmaconInitial & DMAEN) && (agnus.dmaconInitial & BPLEN);
 
     isize cnt = 0;
                 
