@@ -34,9 +34,9 @@ Agnus::pokeDMACON(u16 value)
 
     // Schedule the write cycle
     if constexpr (s == ACCESSOR_CPU) {
-        recordRegisterChange(DMA_CYCLES(3), SET_DMACON, value);
+        recordRegisterChange(DMA_CYCLES(1), SET_DMACON, value);
     } else {
-        recordRegisterChange(DMA_CYCLES(4), SET_DMACON, value);
+        recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
     }
 }
 
@@ -88,9 +88,9 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         
         // Update the bitplane event table
         if (newBPLEN) {
-            sequencer.sigRecorder.insert(pos.h + 1, SIG_BMAPEN_SET);
+            sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_SET);
         } else {
-            sequencer.sigRecorder.insert(pos.h + 1, SIG_BMAPEN_CLR);
+            sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_CLR);
         }
         sequencer.computeBplEvents(sequencer.sigRecorder);
         

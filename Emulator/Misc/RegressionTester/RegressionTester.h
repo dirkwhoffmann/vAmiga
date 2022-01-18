@@ -24,7 +24,7 @@ public:
     isize x1 = 4 * (HBLANK_MAX + 1);
     isize y1 = VBLANK_MAX + 1;
     isize x2 = HPIXELS;
-    isize y2 = VPIXELS;
+    isize y2 = VPIXELS - 2;
     
 private:
     
