@@ -18,7 +18,11 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
     using namespace util;
     
     if (category & dump::State) {
-     
+
+        os << tab("State");
+        os << hex(ddfState);
+        os << " (" << hex(ddfInitialState) << ")";
+
         os << tab("Flipflop 1");
         os << bol(ddf.ff1) << " (" << bol(ddfInitial.ff1) << ")" << std::endl;
         os << tab("Flipflop 2");

@@ -105,11 +105,11 @@ Sequencer::computeBplEvents()
     sigRecorder.insert(0xD8, SIG_RHW);
     sigRecorder.insert(HPOS_CNT, SIG_NONE);
     
-    computeBplEvents(sigRecorder);
+    computeBplEventsOld(sigRecorder);
 }
 
 void
-Sequencer::computeBplEvents(const SigRecorder &sr)
+Sequencer::computeBplEventsOld(const SigRecorder &sr)
 {
     auto state = ddfInitial;
     auto bmapen = (agnus.dmaconInitial & DMAEN) && (agnus.dmaconInitial & BPLEN);
@@ -249,6 +249,13 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
     if (state != ddfInitial) {
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
+}
+
+void
+Sequencer::computeBplEvents(const SigRecorder &sr)
+{
+    assert(false);
+    // TODO
 }
 
 void
@@ -449,23 +456,21 @@ Sequencer::hsyncHandler()
     diwVstrtInitial = diwVstrt;
     diwVstopInitial = diwVstop;
     ddfInitial = ddf;
+    ddfInitialState = ddfState;
     
     if (agnus.pos.v == diwVstrt) {
         
         trace(DDF_DEBUG, "DDF: FF1 = 1 (DIWSTRT)\n");
-        // ddfInitial.ff1 = true;
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
     if (agnus.pos.v == diwVstop) {
         
         trace(DDF_DEBUG, "DDF: FF1 = 0 (DIWSTOP)\n");
-        // ddfInitial.ff1 = false;
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
     if (agnus.inLastRasterline()) {
         
         trace(DDF_DEBUG, "DDF: FF1 = 0 (EOF)\n");
-        // ddfInitial.ff1 = false;
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
 

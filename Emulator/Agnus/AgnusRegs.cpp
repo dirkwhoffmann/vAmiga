@@ -92,7 +92,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         } else {
             sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_CLR);
         }
-        sequencer.computeBplEvents(sequencer.sigRecorder);
+        sequencer.computeBplEventsOld(sequencer.sigRecorder);
         
         // Tell the hsync handler to recompute the table in the next line
         hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
@@ -300,7 +300,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
             
         // Recompute the bitplane event table
         sequencer.sigRecorder.insert(pos.h, SIG_CON_L0 | newValue >> 12);
-        sequencer.computeBplEvents(sequencer.sigRecorder);
+        sequencer.computeBplEventsOld(sequencer.sigRecorder);
         
         // Schedule the bitplane event table to be recomputed
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;

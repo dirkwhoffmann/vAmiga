@@ -118,9 +118,13 @@ public:
     u16 ddfstrt;
     u16 ddfstop;
 
-    // The display logic state
+    // The display logic state (DEPRECATED)
     DDFFlipflops ddfInitial;
     DDFFlipflops ddf;
+
+    // The display logic state
+    DDFState ddfInitialState;
+    DDFState ddfState;
 
     
     //
@@ -241,6 +245,8 @@ private:
         << ddfstop
         >> ddfInitial
         >> ddf
+        << ddfInitialState
+        << ddfState
         
         << diwstrt
         << diwstop
@@ -288,8 +294,9 @@ public:
 
     // Recomputes the BPL event table
     void computeBplEvents();
+    void computeBplEventsOld(const SigRecorder &sr);
     void computeBplEvents(const SigRecorder &sr);
-    
+
     // Computes the layout of a single fetch unit
     void computeFetchUnit(u8 dmacon, EventID id[2][8]);
     
