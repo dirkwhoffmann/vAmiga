@@ -21,17 +21,20 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
 
         os << tab("State");
         os << hex(ddfState);
-        os << " (" << hex(ddfInitialState) << ")";
+        os << " (" << hex(ddfInitialState) << ")" << std::endl;
 
-        os << tab("Flipflop 1");
+        os << tab("BPV");
         os << bol(ddf.bpv) << " (" << bol(ddfInitial.bpv) << ")" << std::endl;
-        // os << tab("Flipflop 2");
-        // os << bol(ddf.ff2) << " (" << bol(ddfInitial.ff2) << ")" << std::endl;
-        os << tab("Flipflop 3");
+        os << tab("SHW");
+        os << bol(ddf.shw) << " (" << bol(ddfInitial.shw) << ")" << std::endl;
+        os << tab("BPHSTART");
+        os << bol(ddf.bphstart) << " (" << bol(ddfInitial.bphstart) << ")" << std::endl;
+        os << tab("BPHSTOP");
+        os << bol(ddf.bphstop) << " (" << bol(ddfInitial.bphstop) << ")" << std::endl;
+        os << tab("BPRRUN");
         os << bol(ddf.bprun) << " (" << bol(ddfInitial.bprun) << ")" << std::endl;
-        // os << tab("Flipflop 5");
-        // os << bol(ddf.ff5) << " (" << bol(ddfInitial.ff5) << ")" << std::endl;
-        os << std::endl;
+        os << tab("LASTFU");
+        os << bol(ddf.lastFu) << " (" << bol(ddfInitial.lastFu) << ")" << std::endl;        
     }
         
     if (category & dump::Registers) {
@@ -105,6 +108,7 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
             if (signal & SIG_BPHSTOP)       result += "BPHSTOP ";
             if (signal & SIG_SHW)           result += "SHW ";
             if (signal & SIG_RHW)           result += "RHW ";
+            if (signal & SIG_DONE)          result += "DONE ";
 
             return result != "" ? result : "NONE";
         };

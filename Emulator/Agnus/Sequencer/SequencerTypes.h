@@ -53,20 +53,21 @@ static constexpr u16 SIG_DONE           = 0b0010000000000000;
 // DEPRECATED
 struct DDFFlipflops
 {
+    bool bpv = false;
     bool shw = false;
     bool rhw = false;
-    bool bpv = false;
-    bool bph = false;
+    bool bphstart = false;
+    bool bphstop = false;
     bool bprun = false;
     bool lastFu = false;
         
     bool operator!=(const DDFFlipflops &rhs) const
     {
         return
+        this->bpv != rhs.bpv ||
         this->shw != rhs.shw ||
         this->rhw != rhs.rhw ||
-        this->bpv != rhs.bpv ||
-        this->bph != rhs.bph ||
+        this->bphstart != rhs.bphstop ||
         this->bprun != rhs.bprun ||
         this->lastFu != rhs.lastFu;
     }
@@ -74,7 +75,7 @@ struct DDFFlipflops
     template <class W>
     void operator<<(W& worker)
     {
-        worker << shw << rhw << bpv << bph << bprun << lastFu;
+        worker << bpv << shw << rhw << bphstart << bphstop << bprun << lastFu;
     }
 };
 
