@@ -112,13 +112,10 @@ void
 Sequencer::computeBplEventsOld(const SigRecorder &sr)
 {
     auto state = ddfInitial;
-    auto bmapen = (agnus.dmaconInitial & DMAEN) && (agnus.dmaconInitial & BPLEN);
     auto ecs = agnus.isECS();
     
     isize cnt = 0;
                 
-    // The fetch unit layout
-    EventID fetch[2][8];
     computeFetchUnit((u8)(agnus.bplcon0Initial >> 12), fetch);
     isize mask = (agnus.bplcon0Initial & 0x8000) ? 0b11 : 0b111;
 
@@ -155,22 +152,8 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
                 }
             }
         
-            /*
-            if (cnt == 0 && state.ff5) {
-
-                state.ff2 = false;
-                state.ff3 = false;
-                state.ff5 = false;
-            }
-            if (cnt == 0 && state.ff4) {
-
-                state.ff5 = true;
-                state.ff4 = false;
-            }
-            */
             if (state.bprun) {
                                 
-                // id = fetch[state.ff5][cnt];
                 id = fetch[state.lastFu ? 1 : 0][cnt];
                 cnt = (cnt + 1) & 7;
                 
@@ -198,13 +181,13 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
         }
         if (signal & SIG_BMAPEN_CLR) {
             
-            bmapen = false;
+            state.bmapen = false;
             state.bprun = false;
             cnt = 0;
         }
         if (signal & SIG_BMAPEN_SET) {
             
-            bmapen = true;
+            state.bmapen = true;
         }
         if (signal & SIG_VFLOP_SET) {
             
@@ -248,7 +231,7 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
                         state.bprun = true;
                     }
                     if (!state.bpv) state.bprun = false;
-                    if (!bmapen) state.bprun = false;
+                    if (!state.bmapen) state.bprun = false;
                     
                 } else if (signal & SIG_BPHSTART) {
                     
@@ -257,7 +240,7 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
                         state.bprun = true;
                     }
                     if (!state.bpv) state.bprun = false;
-                    if (!bmapen) state.bprun = false;
+                    if (!state.bmapen) state.bprun = false;
                     
                 } else if (signal & SIG_BPHSTOP) {
                     
@@ -282,7 +265,7 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
                         state.bprun = true;
                     }
                     if (!state.bpv) state.bprun = false;
-                    if (!bmapen) state.bprun = false;
+                    if (!state.bmapen) state.bprun = false;
                 }
                 if (signal & SIG_BPHSTOP) {
                     

@@ -99,6 +99,9 @@ private:
     // Disk, audio, and sprites lookup table ([Bits 0 .. 5 of DMACON])
     static EventID dasDMA[64][HPOS_CNT];
 
+    // Current layout of a fetch unit
+    EventID fetch[2][8];
+
     // Currently scheduled events
     EventID bplEvent[HPOS_CNT];
     EventID dasEvent[HPOS_CNT];
@@ -232,6 +235,7 @@ private:
 
         worker
         
+        << fetch
         << bplEvent
         << dasEvent
         << nextBplEvent

@@ -47,6 +47,7 @@ static constexpr u16 SIG_DONE           = 0b0010000000000000;
 struct DDFState
 {
     bool bpv = false;
+    bool bmapen = false;
     bool shw = false;
     bool rhw = false;
     bool bphstart = false;
@@ -58,6 +59,7 @@ struct DDFState
     {
         return
         this->bpv != rhs.bpv ||
+        this->bmapen != rhs.bmapen ||
         this->shw != rhs.shw ||
         this->rhw != rhs.rhw ||
         this->bphstart != rhs.bphstop ||
@@ -68,7 +70,16 @@ struct DDFState
     template <class W>
     void operator<<(W& worker)
     {
-        worker << bpv << shw << rhw << bphstart << bphstop << bprun << lastFu;
+        worker
+        
+        << bpv
+        << bmapen
+        << shw
+        << rhw
+        << bphstart
+        << bphstop
+        << bprun
+        << lastFu;
     }
 };
 
