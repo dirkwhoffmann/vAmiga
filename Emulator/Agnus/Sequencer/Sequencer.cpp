@@ -114,19 +114,19 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
     auto state = ddfInitial;
     auto ecs = agnus.isECS();
     
-    isize cnt = 0;
-                
-    computeFetchUnit((u8)(agnus.bplcon0Initial >> 12), fetch);
-    isize mask = (agnus.bplcon0Initial & 0x8000) ? 0b11 : 0b111;
-
     i64 cycle = 0;
+
+    computeFetchUnit((u8)(agnus.bplcon0Initial >> 12), fetch);
+
     for (isize i = 0; i < sigRecorder.count(); i++) {
         
         auto signal = sigRecorder.elements[i];
         auto trigger = sigRecorder.keys[i];
 
         if (trigger > HPOS_CNT) break;
-        
+
+        isize mask = (state.bmctl & 0x8) ? 0b11 : 0b111;
+
         //
         // Emulate the display logic up to the next signal change
         //
@@ -137,7 +137,7 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
             
             EventID id;
 
-            if (cnt == 0 && state.bprun) {
+            if (state.cnt == 0 && state.bprun) {
         
                 if (state.lastFu) {
                     
@@ -154,13 +154,13 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
         
             if (state.bprun) {
                                 
-                id = fetch[state.lastFu ? 1 : 0][cnt];
-                cnt = (cnt + 1) & 7;
+                id = fetch[state.lastFu ? 1 : 0][state.cnt];
+                state.cnt = (state.cnt + 1) & 7;
                 
             } else {
                 
                 id = EVENT_NONE;
-                cnt = 0;
+                state.cnt = 0;
             }
             
             // Superimpose drawing flags
@@ -176,14 +176,14 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
         
         if (signal & SIG_CON_L0) {
             
-            computeFetchUnit((u8)(signal & 0xF), fetch);
-            mask = (signal & 0x8) ? 0b11 : 0b111;
+            state.bmctl = (u8)(signal & 0xF);
+            computeFetchUnit(state.bmctl, fetch);
         }
         if (signal & SIG_BMAPEN_CLR) {
             
             state.bmapen = false;
             state.bprun = false;
-            cnt = 0;
+            state.cnt = 0;
         }
         if (signal & SIG_BMAPEN_SET) {
             
@@ -198,7 +198,7 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
             
             state.bpv = false;
             state.bprun = false;
-            cnt = 0;
+            state.cnt = 0;
         }
         if (signal & SIG_SHW) {
             

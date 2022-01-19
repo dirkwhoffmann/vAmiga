@@ -54,7 +54,9 @@ struct DDFState
     bool bphstop = false;
     bool bprun = false;
     bool lastFu = false;
-        
+    u8   bmctl = 0;
+    u8   cnt = 0;
+    
     bool operator!=(const DDFState &rhs) const
     {
         return
@@ -64,7 +66,9 @@ struct DDFState
         this->rhw != rhs.rhw ||
         this->bphstart != rhs.bphstop ||
         this->bprun != rhs.bprun ||
-        this->lastFu != rhs.lastFu;
+        this->lastFu != rhs.lastFu ||
+        this->bmctl != rhs.bmctl ||
+        this->cnt != rhs.cnt;
     }
     
     template <class W>
@@ -79,7 +83,9 @@ struct DDFState
         << bphstart
         << bphstop
         << bprun
-        << lastFu;
+        << lastFu
+        << bmctl
+        << cnt;
     }
 };
 
