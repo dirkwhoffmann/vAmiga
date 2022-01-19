@@ -25,12 +25,12 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
 
         os << tab("Flipflop 1");
         os << bol(ddf.ff1) << " (" << bol(ddfInitial.ff1) << ")" << std::endl;
-        os << tab("Flipflop 2");
-        os << bol(ddf.ff2) << " (" << bol(ddfInitial.ff2) << ")" << std::endl;
+        // os << tab("Flipflop 2");
+        // os << bol(ddf.ff2) << " (" << bol(ddfInitial.ff2) << ")" << std::endl;
         os << tab("Flipflop 3");
         os << bol(ddf.ff3) << " (" << bol(ddfInitial.ff3) << ")" << std::endl;
-        os << tab("Flipflop 5");
-        os << bol(ddf.ff5) << " (" << bol(ddfInitial.ff5) << ")" << std::endl;
+        // os << tab("Flipflop 5");
+        // os << bol(ddf.ff5) << " (" << bol(ddfInitial.ff5) << ")" << std::endl;
         os << std::endl;
     }
         

@@ -139,6 +139,21 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
             
             EventID id;
 
+            if (cnt == 0 && state.ff3) {
+        
+                if (state.lastFu) {
+                    
+                    state.ff3 = false;
+                    state.hw = false;
+                    state.lastFu = false;
+                
+                } else if (!state.hw || !state.bph) {
+                    
+                    state.lastFu = true;
+                }
+            }
+        
+            /*
             if (cnt == 0 && state.ff5) {
 
                 state.ff2 = false;
@@ -150,9 +165,11 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
                 state.ff5 = true;
                 state.ff4 = false;
             }
+            */
             if (state.ff3) {
                                 
-                id = fetch[state.ff5][cnt];
+                // id = fetch[state.ff5][cnt];
+                id = fetch[state.lastFu ? 1 : 0][cnt];
                 cnt = (cnt + 1) & 7;
                 
             } else {
@@ -200,11 +217,13 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
         }
         if (signal & SIG_SHW) {
             
-            state.ff2 = true;
+            state.hw = true;
+            // state.ff2 = true;
         }
         if (signal & SIG_RHW) {
             
-            if (state.ff3) state.ff4 = true;
+            if (state.ff3) state.hw = false;
+            // if (state.ff3) state.ff4 = true;
         }
         if (signal & (SIG_BPHSTART | SIG_BPHSTOP)) {
         
@@ -220,13 +239,18 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
             }
             if (signal & SIG_BPHSTART) {
                 
-                if (state.ff2) state.ff3 = true;
+                if (state.hw) {
+                    state.bph = true;
+                    state.ff3 = true;
+                }
+                // if (state.ff2) state.ff3 = true;
                 if (!state.ff1) state.ff3 = false;
                 if (!bmapen) state.ff3 = false;
             }
             if (signal & SIG_BPHSTOP) {
 
-                if (state.ff3) state.ff4 = true;
+                if (state.ff3) state.bph = false;
+                // if (state.ff3) state.ff4 = true;
             }
         }
         
