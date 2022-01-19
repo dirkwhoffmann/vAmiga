@@ -19,10 +19,6 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
     
     if (category & dump::State) {
 
-        os << tab("State");
-        os << hex(ddfState);
-        os << " (" << hex(ddfInitialState) << ")" << std::endl;
-
         os << tab("BPV");
         os << bol(ddf.bpv) << " (" << bol(ddfInitial.bpv) << ")" << std::endl;
         os << tab("SHW");

@@ -13,13 +13,6 @@
 
 #ifdef __cplusplus
 
-typedef u16 DDFState;
-static constexpr u16 DDF_BMAPEN         = 0b0000000000000001;
-static constexpr u16 DDF_HW             = 0b0000000000000010;
-static constexpr u16 DDF_BPH            = 0b0000000000000100;
-static constexpr u16 DDF_BPRUN          = 0b0000000000001000;
-static constexpr u16 DDF_LASTFU         = 0b0000000000010000;
-
 static constexpr u16 SIG_NONE           = 0b0000000000000000;
 static constexpr u16 SIG_CON_L          = 0b0000000000010000;
 static constexpr u16 SIG_CON_L0         = 0b0000000000010000 | 0;
@@ -50,8 +43,8 @@ static constexpr u16 SIG_DONE           = 0b0010000000000000;
 #endif
 
 #ifdef __cplusplus
-// DEPRECATED
-struct DDFFlipflops
+
+struct DDFState
 {
     bool bpv = false;
     bool shw = false;
@@ -61,7 +54,7 @@ struct DDFFlipflops
     bool bprun = false;
     bool lastFu = false;
         
-    bool operator!=(const DDFFlipflops &rhs) const
+    bool operator!=(const DDFState &rhs) const
     {
         return
         this->bpv != rhs.bpv ||

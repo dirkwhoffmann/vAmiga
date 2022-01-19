@@ -118,13 +118,9 @@ public:
     u16 ddfstrt;
     u16 ddfstop;
 
-    // The display logic state (DEPRECATED)
-    DDFFlipflops ddfInitial;
-    DDFFlipflops ddf;
-
     // The display logic state
-    DDFState ddfInitialState;
-    DDFState ddfState;
+    DDFState ddfInitial;
+    DDFState ddf;
 
     
     //
@@ -245,8 +241,6 @@ private:
         << ddfstop
         >> ddfInitial
         >> ddf
-        << ddfInitialState
-        << ddfState
         
         << diwstrt
         << diwstop

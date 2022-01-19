@@ -525,7 +525,6 @@ Sequencer::hsyncHandler()
     diwVstrtInitial = diwVstrt;
     diwVstopInitial = diwVstop;
     ddfInitial = ddf;
-    ddfInitialState = ddfState;
     
     if (agnus.pos.v == diwVstrt) {
         
