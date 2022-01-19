@@ -46,41 +46,35 @@ static constexpr u16 SIG_BPHSTART       = 0b0000001000000000;
 static constexpr u16 SIG_BPHSTOP        = 0b0000010000000000;
 static constexpr u16 SIG_SHW            = 0b0000100000000000;
 static constexpr u16 SIG_RHW            = 0b0001000000000000;
+static constexpr u16 SIG_DONE           = 0b0010000000000000;
 #endif
 
 #ifdef __cplusplus
 // DEPRECATED
 struct DDFFlipflops
 {
-    bool hw = false;
+    bool shw = false;
+    bool rhw = false;
+    bool bpv = false;
     bool bph = false;
+    bool bprun = false;
     bool lastFu = false;
-    
-    // Flipflops (derived from the OCS schematics)
-    bool ff1 = false;
-    // bool ff2 = false;
-    bool ff3 = false;
-    // bool ff4 = false;
-    // bool ff5 = false;
-    
+        
     bool operator!=(const DDFFlipflops &rhs) const
     {
         return
-        this->ff1 != rhs.ff1 ||
-        this->hw != rhs.hw ||
+        this->shw != rhs.shw ||
+        this->rhw != rhs.rhw ||
+        this->bpv != rhs.bpv ||
         this->bph != rhs.bph ||
-        this->lastFu != rhs.lastFu ||
-        // this->ff2 != rhs.ff2 ||
-        this->ff3 != rhs.ff3;
-        // this->ff4 != rhs.ff4 ||
-        // this->ff5 != rhs.ff5;
+        this->bprun != rhs.bprun ||
+        this->lastFu != rhs.lastFu;
     }
     
     template <class W>
     void operator<<(W& worker)
     {
-        // worker << ff1 << ff2 << ff3 << ff4 << ff5;
-        worker << ff1 << ff3 << hw << bph << lastFu;
+        worker << shw << rhw << bpv << bph << bprun << lastFu;
     }
 };
 

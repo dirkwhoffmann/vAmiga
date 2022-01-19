@@ -103,7 +103,7 @@ Sequencer::computeBplEvents()
     sigRecorder.insert(ddfstrt, SIG_BPHSTART);
     sigRecorder.insert(ddfstop, SIG_BPHSTOP);
     sigRecorder.insert(0xD8, SIG_RHW);
-    sigRecorder.insert(HPOS_CNT, SIG_NONE);
+    sigRecorder.insert(HPOS_CNT, SIG_DONE);
     
     computeBplEventsOld(sigRecorder);
 }
@@ -113,7 +113,8 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
 {
     auto state = ddfInitial;
     auto bmapen = (agnus.dmaconInitial & DMAEN) && (agnus.dmaconInitial & BPLEN);
-
+    auto ecs = agnus.isECS();
+    
     isize cnt = 0;
                 
     // The fetch unit layout
@@ -139,15 +140,15 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
             
             EventID id;
 
-            if (cnt == 0 && state.ff3) {
+            if (cnt == 0 && state.bprun) {
         
                 if (state.lastFu) {
                     
-                    state.ff3 = false;
-                    state.hw = false;
+                    state.bprun = false;
                     state.lastFu = false;
-                
-                } else if (!state.hw || !state.bph) {
+                    if (!ecs) state.shw = false;
+
+                } else if (state.rhw || !state.bph) {
                     
                     state.lastFu = true;
                 }
@@ -166,7 +167,7 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
                 state.ff4 = false;
             }
             */
-            if (state.ff3) {
+            if (state.bprun) {
                                 
                 // id = fetch[state.ff5][cnt];
                 id = fetch[state.lastFu ? 1 : 0][cnt];
@@ -197,7 +198,7 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
         if (signal & SIG_BMAPEN_CLR) {
             
             bmapen = false;
-            state.ff3 = false;
+            state.bprun = false;
             cnt = 0;
         }
         if (signal & SIG_BMAPEN_SET) {
@@ -206,24 +207,32 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
         }
         if (signal & SIG_VFLOP_SET) {
             
-            state.ff1 = true;
+            state.bpv = true;
             lineIsBlank = false;
         }
         if (signal & SIG_VFLOP_CLR) {
             
-            state.ff1 = false;
-            state.ff3 = false;
+            state.bpv = false;
+            state.bprun = false;
             cnt = 0;
         }
         if (signal & SIG_SHW) {
             
-            state.hw = true;
-            // state.ff2 = true;
+            state.shw = true;
+            
+            if (ecs) {
+                if (state.bph) {
+                    state.bprun = true;
+                }
+            }
         }
         if (signal & SIG_RHW) {
             
-            if (state.ff3) state.hw = false;
-            // if (state.ff3) state.ff4 = true;
+            if (ecs) {
+                state.rhw = true;
+            } else {
+                if (state.bprun) state.rhw = true;
+            }
         }
         if (signal & (SIG_BPHSTART | SIG_BPHSTOP)) {
         
@@ -231,7 +240,7 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
 
                 // trace(true, "DDFSTRT && DDFSTOP\n");
                 
-                if (state.ff3) {
+                if (state.bprun) {
                     signal &= ~SIG_BPHSTART;
                 } else {
                     signal &= ~SIG_BPHSTOP;
@@ -239,19 +248,23 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
             }
             if (signal & SIG_BPHSTART) {
                 
-                if (state.hw) {
+                if (state.shw) {
                     state.bph = true;
-                    state.ff3 = true;
+                    state.bprun = true;
                 }
-                // if (state.ff2) state.ff3 = true;
-                if (!state.ff1) state.ff3 = false;
-                if (!bmapen) state.ff3 = false;
+                if (!state.bpv) state.bprun = false;
+                if (!bmapen) state.bprun = false;
             }
             if (signal & SIG_BPHSTOP) {
 
-                if (state.ff3) state.bph = false;
-                // if (state.ff3) state.ff4 = true;
+                if (state.bprun) state.bph = false;
             }
+        }
+        
+        if (signal & SIG_DONE) {
+        
+            state.rhw = false;
+            if (ecs) state.shw = false;
         }
         
         cycle = trigger;
@@ -498,7 +511,7 @@ Sequencer::hsyncHandler()
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
 
-    lineIsBlank = !ddfInitial.ff1;
+    lineIsBlank = !ddfInitial.bpv;
 }
 
 void
