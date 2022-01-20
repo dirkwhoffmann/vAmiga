@@ -98,7 +98,6 @@ Sequencer::computeBplEvents()
         sigRecorder.insert(0, SIG_VFLOP_SET);
     }
     
-    sigRecorder.insert(0, SIG_CON | agnus.bplcon0 >> 12);
     sigRecorder.insert(0x18, SIG_SHW);
     sigRecorder.insert(ddfstrt, SIG_BPHSTART);
     sigRecorder.insert(ddfstop, SIG_BPHSTOP);
@@ -125,8 +124,6 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
     }
     */
      
-    computeFetchUnit((u8)(agnus.bplcon0Initial >> 12), fetch);
-
     for (isize i = 0; i < sigRecorder.count(); i++) {
         
         auto signal = sigRecorder.elements[i];
@@ -186,7 +183,7 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
         if (signal & SIG_CON_L0) {
             
             state.bmctl = (u8)(signal & 0xF);
-            computeFetchUnit(state.bmctl, fetch);
+            computeFetchUnit(state.bmctl);
         }
         if (signal & SIG_BMAPEN_CLR) {
             
@@ -320,129 +317,129 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
 }
 
 void
-Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
+Sequencer::computeFetchUnit(u8 dmacon)
 {
     switch (dmacon) {
             
         case 0x6: // 6 planes, lores
             
-            id[0][0] = 0;        id[1][0] = 0;
-            id[0][1] = BPL_L4;   id[1][1] = BPL_L4_MOD;
-            id[0][2] = BPL_L6;   id[1][2] = BPL_L6_MOD;
-            id[0][3] = BPL_L2;   id[1][3] = BPL_L2_MOD;
-            id[0][4] = 0;        id[1][4] = 0;
-            id[0][5] = BPL_L3;   id[1][5] = BPL_L3_MOD;
-            id[0][6] = BPL_L5;   id[1][6] = BPL_L5_MOD;
-            id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
+            fetch[0][0] = 0;        fetch[1][0] = 0;
+            fetch[0][1] = BPL_L4;   fetch[1][1] = BPL_L4_MOD;
+            fetch[0][2] = BPL_L6;   fetch[1][2] = BPL_L6_MOD;
+            fetch[0][3] = BPL_L2;   fetch[1][3] = BPL_L2_MOD;
+            fetch[0][4] = 0;        fetch[1][4] = 0;
+            fetch[0][5] = BPL_L3;   fetch[1][5] = BPL_L3_MOD;
+            fetch[0][6] = BPL_L5;   fetch[1][6] = BPL_L5_MOD;
+            fetch[0][7] = BPL_L1;   fetch[1][7] = BPL_L1_MOD;
             break;
 
         case 0x5: // 5 planes, lores
             
-            id[0][0] = 0;        id[1][0] = 0;
-            id[0][1] = BPL_L4;   id[1][1] = BPL_L4_MOD;
-            id[0][2] = 0;        id[1][2] = 0;
-            id[0][3] = BPL_L2;   id[1][3] = BPL_L2_MOD;
-            id[0][4] = 0;        id[1][4] = 0;
-            id[0][5] = BPL_L3;   id[1][5] = BPL_L3_MOD;
-            id[0][6] = BPL_L5;   id[1][6] = BPL_L5_MOD;
-            id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
+            fetch[0][0] = 0;        fetch[1][0] = 0;
+            fetch[0][1] = BPL_L4;   fetch[1][1] = BPL_L4_MOD;
+            fetch[0][2] = 0;        fetch[1][2] = 0;
+            fetch[0][3] = BPL_L2;   fetch[1][3] = BPL_L2_MOD;
+            fetch[0][4] = 0;        fetch[1][4] = 0;
+            fetch[0][5] = BPL_L3;   fetch[1][5] = BPL_L3_MOD;
+            fetch[0][6] = BPL_L5;   fetch[1][6] = BPL_L5_MOD;
+            fetch[0][7] = BPL_L1;   fetch[1][7] = BPL_L1_MOD;
             break;
 
         case 0x7: // 7 planes, lores
         case 0x4: // 4 planes, lores
             
-            id[0][0] = 0;        id[1][0] = 0;
-            id[0][1] = BPL_L4;   id[1][1] = BPL_L4_MOD;
-            id[0][2] = 0;        id[1][2] = 0;
-            id[0][3] = BPL_L2;   id[1][3] = BPL_L2_MOD;
-            id[0][4] = 0;        id[1][4] = 0;
-            id[0][5] = BPL_L3;   id[1][5] = BPL_L3_MOD;
-            id[0][6] = 0;        id[1][6] = 0;
-            id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
+            fetch[0][0] = 0;        fetch[1][0] = 0;
+            fetch[0][1] = BPL_L4;   fetch[1][1] = BPL_L4_MOD;
+            fetch[0][2] = 0;        fetch[1][2] = 0;
+            fetch[0][3] = BPL_L2;   fetch[1][3] = BPL_L2_MOD;
+            fetch[0][4] = 0;        fetch[1][4] = 0;
+            fetch[0][5] = BPL_L3;   fetch[1][5] = BPL_L3_MOD;
+            fetch[0][6] = 0;        fetch[1][6] = 0;
+            fetch[0][7] = BPL_L1;   fetch[1][7] = BPL_L1_MOD;
             break;
 
         case 0x3: // 3 planes, lores
             
-            id[0][0] = 0;        id[1][0] = 0;
-            id[0][1] = 0;        id[1][1] = 0;
-            id[0][2] = 0;        id[1][2] = 0;
-            id[0][3] = BPL_L2;   id[1][3] = BPL_L2_MOD;
-            id[0][4] = 0;        id[1][4] = 0;
-            id[0][5] = BPL_L3;   id[1][5] = BPL_L3_MOD;
-            id[0][6] = 0;        id[1][6] = 0;
-            id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
+            fetch[0][0] = 0;        fetch[1][0] = 0;
+            fetch[0][1] = 0;        fetch[1][1] = 0;
+            fetch[0][2] = 0;        fetch[1][2] = 0;
+            fetch[0][3] = BPL_L2;   fetch[1][3] = BPL_L2_MOD;
+            fetch[0][4] = 0;        fetch[1][4] = 0;
+            fetch[0][5] = BPL_L3;   fetch[1][5] = BPL_L3_MOD;
+            fetch[0][6] = 0;        fetch[1][6] = 0;
+            fetch[0][7] = BPL_L1;   fetch[1][7] = BPL_L1_MOD;
             break;
 
         case 0x2: // 2 planes, lores
             
-            id[0][0] = 0;        id[1][0] = 0;
-            id[0][1] = 0;        id[1][1] = 0;
-            id[0][2] = 0;        id[1][2] = 0;
-            id[0][3] = BPL_L2;   id[1][3] = BPL_L2_MOD;
-            id[0][4] = 0;        id[1][4] = 0;
-            id[0][5] = 0;        id[1][5] = 0;
-            id[0][6] = 0;        id[1][6] = 0;
-            id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
+            fetch[0][0] = 0;        fetch[1][0] = 0;
+            fetch[0][1] = 0;        fetch[1][1] = 0;
+            fetch[0][2] = 0;        fetch[1][2] = 0;
+            fetch[0][3] = BPL_L2;   fetch[1][3] = BPL_L2_MOD;
+            fetch[0][4] = 0;        fetch[1][4] = 0;
+            fetch[0][5] = 0;        fetch[1][5] = 0;
+            fetch[0][6] = 0;        fetch[1][6] = 0;
+            fetch[0][7] = BPL_L1;   fetch[1][7] = BPL_L1_MOD;
             break;
 
         case 0x1: // 1 plane, lores
             
-            id[0][0] = 0;        id[1][0] = 0;
-            id[0][1] = 0;        id[1][1] = 0;
-            id[0][2] = 0;        id[1][2] = 0;
-            id[0][3] = 0;        id[1][3] = 0;
-            id[0][4] = 0;        id[1][4] = 0;
-            id[0][5] = 0;        id[1][5] = 0;
-            id[0][6] = 0;        id[1][6] = 0;
-            id[0][7] = BPL_L1;   id[1][7] = BPL_L1_MOD;
+            fetch[0][0] = 0;        fetch[1][0] = 0;
+            fetch[0][1] = 0;        fetch[1][1] = 0;
+            fetch[0][2] = 0;        fetch[1][2] = 0;
+            fetch[0][3] = 0;        fetch[1][3] = 0;
+            fetch[0][4] = 0;        fetch[1][4] = 0;
+            fetch[0][5] = 0;        fetch[1][5] = 0;
+            fetch[0][6] = 0;        fetch[1][6] = 0;
+            fetch[0][7] = BPL_L1;   fetch[1][7] = BPL_L1_MOD;
             break;
 
         case 0xC: // 4 planes, hires
             
-            id[0][0] = BPL_H4;   id[1][0] = BPL_H4;
-            id[0][1] = BPL_H2;   id[1][1] = BPL_H2;
-            id[0][2] = BPL_H3;   id[1][2] = BPL_H3;
-            id[0][3] = BPL_H1;   id[1][3] = BPL_H1;
-            id[0][4] = BPL_H4;   id[1][4] = BPL_H4_MOD;
-            id[0][5] = BPL_H2;   id[1][5] = BPL_H2_MOD;
-            id[0][6] = BPL_H3;   id[1][6] = BPL_H3_MOD;
-            id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
+            fetch[0][0] = BPL_H4;   fetch[1][0] = BPL_H4;
+            fetch[0][1] = BPL_H2;   fetch[1][1] = BPL_H2;
+            fetch[0][2] = BPL_H3;   fetch[1][2] = BPL_H3;
+            fetch[0][3] = BPL_H1;   fetch[1][3] = BPL_H1;
+            fetch[0][4] = BPL_H4;   fetch[1][4] = BPL_H4_MOD;
+            fetch[0][5] = BPL_H2;   fetch[1][5] = BPL_H2_MOD;
+            fetch[0][6] = BPL_H3;   fetch[1][6] = BPL_H3_MOD;
+            fetch[0][7] = BPL_H1;   fetch[1][7] = BPL_H1_MOD;
             break;
 
         case 0xB: // 3 planes, hires
             
-            id[0][0] = 0;        id[1][0] = 0;
-            id[0][1] = BPL_H2;   id[1][1] = BPL_H2;
-            id[0][2] = BPL_H3;   id[1][2] = BPL_H3;
-            id[0][3] = BPL_H1;   id[1][3] = BPL_H1;
-            id[0][4] = 0;        id[1][4] = 0;
-            id[0][5] = BPL_H2;   id[1][5] = BPL_H2_MOD;
-            id[0][6] = BPL_H3;   id[1][6] = BPL_H3_MOD;
-            id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
+            fetch[0][0] = 0;        fetch[1][0] = 0;
+            fetch[0][1] = BPL_H2;   fetch[1][1] = BPL_H2;
+            fetch[0][2] = BPL_H3;   fetch[1][2] = BPL_H3;
+            fetch[0][3] = BPL_H1;   fetch[1][3] = BPL_H1;
+            fetch[0][4] = 0;        fetch[1][4] = 0;
+            fetch[0][5] = BPL_H2;   fetch[1][5] = BPL_H2_MOD;
+            fetch[0][6] = BPL_H3;   fetch[1][6] = BPL_H3_MOD;
+            fetch[0][7] = BPL_H1;   fetch[1][7] = BPL_H1_MOD;
             break;
 
         case 0xA: // 2 planes, hires
             
-            id[0][0] = 0;        id[1][0] = 0;
-            id[0][1] = BPL_H2;   id[1][1] = BPL_H2;
-            id[0][2] = 0;        id[1][2] = 0;
-            id[0][3] = BPL_H1;   id[1][3] = BPL_H1;
-            id[0][4] = 0;        id[1][4] = 0;
-            id[0][5] = BPL_H2;   id[1][5] = BPL_H2_MOD;
-            id[0][6] = 0;        id[1][6] = 0;
-            id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
+            fetch[0][0] = 0;        fetch[1][0] = 0;
+            fetch[0][1] = BPL_H2;   fetch[1][1] = BPL_H2;
+            fetch[0][2] = 0;        fetch[1][2] = 0;
+            fetch[0][3] = BPL_H1;   fetch[1][3] = BPL_H1;
+            fetch[0][4] = 0;        fetch[1][4] = 0;
+            fetch[0][5] = BPL_H2;   fetch[1][5] = BPL_H2_MOD;
+            fetch[0][6] = 0;        fetch[1][6] = 0;
+            fetch[0][7] = BPL_H1;   fetch[1][7] = BPL_H1_MOD;
             break;
 
         case 0x9: // 1 plane, hires
             
-            id[0][0] = 0;        id[1][0] = 0;
-            id[0][1] = 0;        id[1][1] = 0;
-            id[0][2] = 0;        id[1][2] = 0;
-            id[0][3] = BPL_H1;   id[1][3] = BPL_H1;
-            id[0][4] = 0;        id[1][4] = 0;
-            id[0][5] = 0;        id[1][5] = 0;
-            id[0][6] = 0;        id[1][6] = 0;
-            id[0][7] = BPL_H1;   id[1][7] = BPL_H1_MOD;
+            fetch[0][0] = 0;        fetch[1][0] = 0;
+            fetch[0][1] = 0;        fetch[1][1] = 0;
+            fetch[0][2] = 0;        fetch[1][2] = 0;
+            fetch[0][3] = BPL_H1;   fetch[1][3] = BPL_H1;
+            fetch[0][4] = 0;        fetch[1][4] = 0;
+            fetch[0][5] = 0;        fetch[1][5] = 0;
+            fetch[0][6] = 0;        fetch[1][6] = 0;
+            fetch[0][7] = BPL_H1;   fetch[1][7] = BPL_H1_MOD;
             break;
             
         case 0x0: // 0 planes, lores
@@ -451,14 +448,14 @@ Sequencer::computeFetchUnit(u8 dmacon, EventID id[2][8])
         case 0xE: // 6 planes, hires
         case 0xF: // 7 planes, hires
             
-            id[0][0] = 0;        id[1][0] = 0;
-            id[0][1] = 0;        id[1][1] = 0;
-            id[0][2] = 0;        id[1][2] = 0;
-            id[0][3] = 0;        id[1][3] = 0;
-            id[0][4] = 0;        id[1][4] = 0;
-            id[0][5] = 0;        id[1][5] = 0;
-            id[0][6] = 0;        id[1][6] = 0;
-            id[0][7] = 0;        id[1][7] = 0;
+            fetch[0][0] = 0;        fetch[1][0] = 0;
+            fetch[0][1] = 0;        fetch[1][1] = 0;
+            fetch[0][2] = 0;        fetch[1][2] = 0;
+            fetch[0][3] = 0;        fetch[1][3] = 0;
+            fetch[0][4] = 0;        fetch[1][4] = 0;
+            fetch[0][5] = 0;        fetch[1][5] = 0;
+            fetch[0][6] = 0;        fetch[1][6] = 0;
+            fetch[0][7] = 0;        fetch[1][7] = 0;
             break;
             
         default:

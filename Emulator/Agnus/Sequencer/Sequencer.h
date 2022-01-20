@@ -296,7 +296,7 @@ public:
     void computeBplEvents(const SigRecorder &sr);
 
     // Computes the layout of a single fetch unit
-    void computeFetchUnit(u8 dmacon, EventID id[2][8]);
+    void computeFetchUnit(u8 dmacon);
     
 private:
     
