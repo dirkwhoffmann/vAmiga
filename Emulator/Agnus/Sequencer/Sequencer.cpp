@@ -98,7 +98,7 @@ Sequencer::computeBplEvents()
         sigRecorder.insert(0, SIG_VFLOP_SET);
     }
     
-    sigRecorder.insert(0, SIG_CON_L | agnus.bplcon0 >> 12);
+    sigRecorder.insert(0, SIG_CON | agnus.bplcon0 >> 12);
     sigRecorder.insert(0x18, SIG_SHW);
     sigRecorder.insert(ddfstrt, SIG_BPHSTART);
     sigRecorder.insert(ddfstop, SIG_BPHSTOP);
@@ -143,12 +143,12 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
                     
                     state.bprun = false;
                     state.lastFu = false;
+                    state.bphstop = false;
                     if (!ecs) state.shw = false;
 
                 } else if (state.rhw || state.bphstop) {
                     
                     state.lastFu = true;
-                    state.bphstop = false;
                 }
             }
         
@@ -244,8 +244,8 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
                     
                 } else if (signal & SIG_BPHSTOP) {
                     
+                    state.bphstart = false;
                     if (state.bprun) {
-                        state.bphstart = false;
                         state.bphstop = true;
                     }
                 }

@@ -14,7 +14,7 @@
 #ifdef __cplusplus
 
 static constexpr u16 SIG_NONE           = 0b0000000000000000;
-static constexpr u16 SIG_CON_L          = 0b0000000000010000;
+static constexpr u16 SIG_CON            = 0b0000000000010000;
 static constexpr u16 SIG_CON_L0         = 0b0000000000010000 | 0;
 static constexpr u16 SIG_CON_L1         = 0b0000000000010000 | 1;
 static constexpr u16 SIG_CON_L2         = 0b0000000000010000 | 2;

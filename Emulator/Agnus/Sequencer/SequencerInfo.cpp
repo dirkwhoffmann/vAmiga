@@ -21,8 +21,12 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
 
         os << tab("BPV");
         os << bol(ddf.bpv) << " (" << bol(ddfInitial.bpv) << ")" << std::endl;
+        os << tab("BMAPEN");
+        os << bol(ddf.bmapen) << " (" << bol(ddfInitial.bmapen) << ")" << std::endl;
         os << tab("SHW");
         os << bol(ddf.shw) << " (" << bol(ddfInitial.shw) << ")" << std::endl;
+        os << tab("RHW");
+        os << bol(ddf.rhw) << " (" << bol(ddfInitial.rhw) << ")" << std::endl;
         os << tab("BPHSTART");
         os << bol(ddf.bphstart) << " (" << bol(ddfInitial.bphstart) << ")" << std::endl;
         os << tab("BPHSTOP");
@@ -31,6 +35,10 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
         os << bol(ddf.bprun) << " (" << bol(ddfInitial.bprun) << ")" << std::endl;
         os << tab("LASTFU");
         os << bol(ddf.lastFu) << " (" << bol(ddfInitial.lastFu) << ")" << std::endl;        
+        os << tab("BMCTL");
+        os << hex(ddf.bmctl) << " (" << hex(ddfInitial.bmctl) << ")" << std::endl;
+        os << tab("CNT");
+        os << dec(ddf.cnt) << " (" << dec(ddfInitial.cnt) << ")" << std::endl;
     }
         
     if (category & dump::Registers) {
@@ -79,6 +87,7 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
                
                 switch (signal & 0x1f) {
 
+                    case SIG_CON_L0:        result += "CON_L0 "; break;
                     case SIG_CON_L1:        result += "CON_L1 "; break;
                     case SIG_CON_L2:        result += "CON_L2 "; break;
                     case SIG_CON_L3:        result += "CON_L3 "; break;
@@ -86,13 +95,14 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
                     case SIG_CON_L5:        result += "CON_L5 "; break;
                     case SIG_CON_L6:        result += "CON_L6 "; break;
                     case SIG_CON_L7:        result += "CON_L7 "; break;
-                    case SIG_CON_H1:        result += "CON_L1 "; break;
-                    case SIG_CON_H2:        result += "CON_L2 "; break;
-                    case SIG_CON_H3:        result += "CON_L3 "; break;
-                    case SIG_CON_H4:        result += "CON_L4 "; break;
-                    case SIG_CON_H5:        result += "CON_L5 "; break;
-                    case SIG_CON_H6:        result += "CON_L6 "; break;
-                    case SIG_CON_H7:        result += "CON_L7 "; break;
+                    case SIG_CON_H0:        result += "CON_H0 "; break;
+                    case SIG_CON_H1:        result += "CON_H1 "; break;
+                    case SIG_CON_H2:        result += "CON_H2 "; break;
+                    case SIG_CON_H3:        result += "CON_H3 "; break;
+                    case SIG_CON_H4:        result += "CON_H4 "; break;
+                    case SIG_CON_H5:        result += "CON_H5 "; break;
+                    case SIG_CON_H6:        result += "CON_H6 "; break;
+                    case SIG_CON_H7:        result += "CON_H7 "; break;
                 }
             }
             
