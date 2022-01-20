@@ -292,13 +292,16 @@ public:
 
     // Recomputes the BPL event table
     void computeBplEvents();
-    void computeBplEventsOld(const SigRecorder &sr);
     void computeBplEvents(const SigRecorder &sr);
+
+private:
+
+    // Recomputes the BPL event table
+    template <bool ecs> void computeBplEvents();
+    template <bool ecs> void computeBplEvents(const SigRecorder &sr);
 
     // Computes the layout of a single fetch unit
     void computeFetchUnit(u8 dmacon);
-    
-private:
     
     // Updates the jump table for the bplEvent table
     void updateBplJumpTable();

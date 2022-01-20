@@ -53,7 +53,7 @@ Sequencer::setDDFSTRT(u16 old, u16 value)
     if (ddfstrt > posh) sigRecorder.insert(ddfstrt, SIG_BPHSTART);
     
     // Recompute the event table
-    computeBplEventsOld(sigRecorder);
+    computeBplEvents(sigRecorder);
     
     // Tell the hsync handler to recompute the table in the next line
     agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
@@ -102,7 +102,7 @@ Sequencer::setDDFSTOP(u16 old, u16 value)
     if (ddfstop > posh) sigRecorder.insert(ddfstop, SIG_BPHSTOP);
     
     // Recompute the event table
-    computeBplEventsOld(sigRecorder);
+    computeBplEvents(sigRecorder);
     
     // Tell the hsync handler to recompute the table in the next line
     agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
@@ -122,7 +122,7 @@ Sequencer::setDIWSTRT(u16 value)
     if (agnus.pos.v == diwVstrt && agnus.pos.v != diwVstop) {
         
         sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_SET);
-        computeBplEventsOld(sigRecorder);
+        computeBplEvents(sigRecorder);
     }
 
     agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
@@ -142,13 +142,13 @@ Sequencer::setDIWSTOP(u16 value)
     if (agnus.pos.v == diwVstop) {
         
         sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_CLR);
-        computeBplEventsOld(sigRecorder);
+        computeBplEvents(sigRecorder);
     }
 
     if (agnus.pos.v != diwVstop && agnus.pos.v == diwVstrt) {
             
         sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_SET);
-        computeBplEventsOld(sigRecorder);
+        computeBplEvents(sigRecorder);
     }
 
     agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;

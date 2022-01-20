@@ -89,6 +89,12 @@ Sequencer::clearBplEvents()
 void
 Sequencer::computeBplEvents()
 {
+    agnus.isECS() ? computeBplEvents <true> () : computeBplEvents <false> ();
+}
+
+template <bool ecs> void
+Sequencer::computeBplEvents()
+{
     // Predict all events for the current scanline
     sigRecorder.clear();
         
@@ -102,16 +108,21 @@ Sequencer::computeBplEvents()
     sigRecorder.insert(ddfstrt, SIG_BPHSTART);
     sigRecorder.insert(ddfstop, SIG_BPHSTOP);
     sigRecorder.insert(0xD8, SIG_RHW);
-    sigRecorder.insert(HPOS_CNT, SIG_DONE);
+    sigRecorder.insert(HPOS_MAX, SIG_DONE);
     
-    computeBplEventsOld(sigRecorder);
+    computeBplEvents <ecs> (sigRecorder);
 }
 
 void
-Sequencer::computeBplEventsOld(const SigRecorder &sr)
+Sequencer::computeBplEvents(const SigRecorder &sr)
+{
+    agnus.isECS() ? computeBplEvents <true> (sr) : computeBplEvents <false> (sr);
+}
+
+template <bool ecs> void
+Sequencer::computeBplEvents(const SigRecorder &sr)
 {
     auto state = ddfInitial;
-    auto ecs = agnus.isECS();
     
     i64 cycle = 0;
 
@@ -128,9 +139,8 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
         
         auto signal = sigRecorder.elements[i];
         auto trigger = sigRecorder.keys[i];
-
-        if (trigger > HPOS_CNT) break;
-
+        assert(trigger < HPOS_CNT);
+        
         isize mask = (state.bmctl & 0x8) ? 0b11 : 0b111;
 
         //
@@ -286,6 +296,7 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
         
             state.rhw = false;
             if (ecs) state.shw = state.bphstop = false;
+            break;
         }
         
         cycle = trigger;
@@ -307,13 +318,6 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
     if (state != ddfInitial) {
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
-}
-
-void
-Sequencer::computeBplEvents(const SigRecorder &sr)
-{
-    assert(false);
-    // TODO
 }
 
 void
