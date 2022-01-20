@@ -116,6 +116,15 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
     
     i64 cycle = 0;
 
+    /*
+    if (agnus.pos.v == 0x43 || agnus.pos.v == 0x42) {
+    
+        trace(true, "Signals:\n");
+        dump(dump::Signals);
+        dump(dump::State);
+    }
+    */
+     
     computeFetchUnit((u8)(agnus.bplcon0Initial >> 12), fetch);
 
     for (isize i = 0; i < sigRecorder.count(); i++) {
@@ -205,7 +214,7 @@ Sequencer::computeBplEventsOld(const SigRecorder &sr)
             state.shw = true;
             
             if (ecs) {
-                if (state.bphstart) {
+                if (state.bphstart && !(signal & SIG_BPHSTOP)) {
                     state.bprun = true;
                 }
             }
