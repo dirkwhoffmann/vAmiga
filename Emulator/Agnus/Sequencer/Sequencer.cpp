@@ -125,6 +125,8 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
     auto state = ddfInitial;
     
     i64 cycle = 0;
+    i64 trigger = 0;
+    u16 signal = 0;
 
     /*
     if (agnus.pos.v == 0x43 || agnus.pos.v == 0x42) {
@@ -135,18 +137,21 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
     }
     */
      
-    for (isize i = 0; i < sigRecorder.count(); i++) {
+    for (isize i = 0; !(signal & SIG_DONE); i++) {
         
-        auto signal = sigRecorder.elements[i];
-        auto trigger = sigRecorder.keys[i];
+        assert(i < sigRecorder.count());
+        
+        signal = sigRecorder.elements[i];
+        trigger = sigRecorder.keys[i];
+        
         assert(trigger < HPOS_CNT);
         
-        isize mask = (state.bmctl & 0x8) ? 0b11 : 0b111;
+        // isize mask = (state.bmctl & 0x8) ? 0b11 : 0b111;
 
-        //
         // Emulate the display logic up to the next signal change
-        //
+        computeBplEvents <ecs> (cycle, trigger, state);
         
+        /*
         for (isize j = cycle; j < trigger; j++) {
         
             assert(j >= 0 && j <= HPOS_MAX);
@@ -185,122 +190,10 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
             
             bplEvent[j] = id;
         }
+        */
         
-        //
         // Emulate the next signal change
-        //
-        
-        if (signal & SIG_CON_L0) {
-            
-            state.bmctl = (u8)(signal & 0xF);
-            computeFetchUnit(state.bmctl);
-        }
-        if (signal & SIG_BMAPEN_CLR) {
-            
-            state.bmapen = false;
-            state.bprun = false;
-            state.cnt = 0;
-        }
-        if (signal & SIG_BMAPEN_SET) {
-            
-            state.bmapen = true;
-        }
-        if (signal & SIG_VFLOP_SET) {
-            
-            state.bpv = true;
-            lineIsBlank = false;
-        }
-        if (signal & SIG_VFLOP_CLR) {
-            
-            state.bpv = false;
-            state.bprun = false;
-            state.cnt = 0;
-        }
-        if (signal & SIG_SHW) {
-            
-            state.shw = true;
-            
-            if (ecs) {
-                if (state.bphstart && !(signal & SIG_BPHSTOP)) {
-                    state.bprun = true;
-                }
-            }
-        }
-        if (signal & SIG_RHW) {
-            
-            if (ecs) {
-                state.rhw = true;
-            } else {
-                if (state.bprun) state.rhw = true;
-            }
-        }
-        if (signal & (SIG_BPHSTART | SIG_BPHSTOP)) {
-        
-            if (ecs) {
-                
-                if ((signal & SIG_BPHSTART) && (signal & SIG_BPHSTOP)) {
-                                        
-                    if (state.bprun && !(signal & SIG_SHW)) state.bphstop = true;
-                    
-                    state.bphstart = true;
-                    if (state.shw) {
-                        state.bprun = true;
-                    }
-                    if (!state.bpv) state.bprun = false;
-                    if (!state.bmapen) state.bprun = false;
-                    
-                } else if (signal & SIG_BPHSTART) {
-                    
-                    state.bphstart = true;
-                    if (state.shw) {
-                        state.bprun = true;
-                    }
-                    if (!state.bpv) state.bprun = false;
-                    if (!state.bmapen) state.bprun = false;
-                    
-                } else if (signal & SIG_BPHSTOP) {
-                    
-                    state.bphstart = false;
-                    if (state.bprun) {
-                        state.bphstop = true;
-                    }
-                }
-                
-            } else {
-                
-                if (state.bprun) {
-                    signal &= ~SIG_BPHSTART;
-                } else {
-                    signal &= ~SIG_BPHSTOP;
-                }
-                
-                if (signal & SIG_BPHSTART) {
-
-                    if (state.shw) {
-                        state.bphstart = true;
-                        state.bprun = true;
-                    }
-                    if (!state.bpv) state.bprun = false;
-                    if (!state.bmapen) state.bprun = false;
-                }
-                if (signal & SIG_BPHSTOP) {
-                    
-                    if (state.bprun) {
-                        state.bphstart = false;
-                        state.bphstop = true;
-                    }
-                }
-            }
-        }
-        if (signal & SIG_DONE) {
-        
-            processSignal<ecs, SIG_DONE>(state);
-            /*
-            state.rhw = false;
-            if (ecs) state.shw = state.bphstop = false;
-            */
-            break;
-        }
+        processSignal <ecs> (signal, state);
         
         cycle = trigger;
     }
@@ -323,18 +216,161 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
     }
 }
 
-template <> void
-Sequencer::processSignal <false, SIG_DONE> (DDFState &state) // OCS
+template <bool ecs> void
+Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
 {
-    state.rhw = false;
+    isize mask = (state.bmctl & 0x8) ? 0b11 : 0b111;
+    
+    for (isize j = strt; j < stop; j++) {
+    
+        assert(j >= 0 && j <= HPOS_MAX);
+        
+        EventID id;
+
+        if (state.cnt == 0 && state.bprun) {
+    
+            if (state.lastFu) {
+                
+                state.bprun = false;
+                state.lastFu = false;
+                state.bphstop = false;
+                if (!ecs) state.shw = false;
+
+            } else if (state.rhw || state.bphstop) {
+                
+                state.lastFu = true;
+            }
+        }
+    
+        if (state.bprun) {
+                            
+            id = fetch[state.lastFu ? 1 : 0][state.cnt];
+            state.cnt = (state.cnt + 1) & 7;
+            
+        } else {
+            
+            id = EVENT_NONE;
+            state.cnt = 0;
+        }
+        
+        // Superimpose drawing flags
+        if ((j & mask) == (agnus.scrollOdd & mask))  id = (EventID)(id | 1);
+        if ((j & mask) == (agnus.scrollEven & mask)) id = (EventID)(id | 2);
+        
+        bplEvent[j] = id;
+    }
 }
 
-template <> void
-Sequencer::processSignal <true, SIG_DONE> (DDFState &state) // ECS
+template <bool ecs> void
+Sequencer::processSignal(u16 signal, DDFState &state)
 {
-    state.rhw = false;
-    state.shw = false;
-    state.bphstop = false;
+    if (signal & SIG_CON_L0) {
+        
+        state.bmctl = (u8)(signal & 0xF);
+        computeFetchUnit(state.bmctl);
+    }
+    if (signal & SIG_BMAPEN_CLR) {
+        
+        state.bmapen = false;
+        state.bprun = false;
+        state.cnt = 0;
+    }
+    if (signal & SIG_BMAPEN_SET) {
+        
+        state.bmapen = true;
+    }
+    if (signal & SIG_VFLOP_SET) {
+        
+        state.bpv = true;
+        lineIsBlank = false;
+    }
+    if (signal & SIG_VFLOP_CLR) {
+        
+        state.bpv = false;
+        state.bprun = false;
+        state.cnt = 0;
+    }
+    if (signal & SIG_SHW) {
+        
+        state.shw = true;
+        
+        if (ecs) {
+            if (state.bphstart && !(signal & SIG_BPHSTOP)) {
+                state.bprun = true;
+            }
+        }
+    }
+    if (signal & SIG_RHW) {
+        
+        if (ecs) {
+            state.rhw = true;
+        } else {
+            if (state.bprun) state.rhw = true;
+        }
+    }
+    if (signal & (SIG_BPHSTART | SIG_BPHSTOP)) {
+        
+        if (ecs) {
+            
+            if ((signal & SIG_BPHSTART) && (signal & SIG_BPHSTOP)) {
+                
+                if (state.bprun && !(signal & SIG_SHW)) state.bphstop = true;
+                
+                state.bphstart = true;
+                if (state.shw) {
+                    state.bprun = true;
+                }
+                if (!state.bpv) state.bprun = false;
+                if (!state.bmapen) state.bprun = false;
+                
+            } else if (signal & SIG_BPHSTART) {
+                
+                state.bphstart = true;
+                if (state.shw) {
+                    state.bprun = true;
+                }
+                if (!state.bpv) state.bprun = false;
+                if (!state.bmapen) state.bprun = false;
+                
+            } else if (signal & SIG_BPHSTOP) {
+                
+                state.bphstart = false;
+                if (state.bprun) {
+                    state.bphstop = true;
+                }
+            }
+            
+        } else {
+            
+            if (state.bprun) {
+                signal &= ~SIG_BPHSTART;
+            } else {
+                signal &= ~SIG_BPHSTOP;
+            }
+            
+            if (signal & SIG_BPHSTART) {
+                
+                if (state.shw) {
+                    state.bphstart = true;
+                    state.bprun = true;
+                }
+                if (!state.bpv) state.bprun = false;
+                if (!state.bmapen) state.bprun = false;
+            }
+            if (signal & SIG_BPHSTOP) {
+                
+                if (state.bprun) {
+                    state.bphstart = false;
+                    state.bphstop = true;
+                }
+            }
+        }
+    }
+    if (signal & SIG_DONE) {
+        
+        state.rhw = false;
+        if (ecs) state.shw = state.bphstop = false;
+    }
 }
 
 void
