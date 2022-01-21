@@ -260,21 +260,22 @@ Sequencer::processSignal(u16 signal, DDFState &state)
     }
     if (signal & SIG_SHW) {
         
-        state.shw = true;
-        
-        if (ecs) {
-            if (state.bphstart && !(signal & SIG_BPHSTOP)) {
-                state.bprun = true;
-            }
+        if (signal & SIG_BPHSTOP) {
+            processSignal <ecs, SIG_SHW | SIG_BPHSTOP> (state);
+        } else {
+            processSignal <ecs, SIG_SHW> (state);
         }
     }
     if (signal & SIG_RHW) {
         
+        processSignal <ecs, SIG_RHW> (state);
+        /*
         if (ecs) {
             state.rhw = true;
         } else {
             if (state.bprun) state.rhw = true;
         }
+        */
     }
     if (signal & (SIG_BPHSTART | SIG_BPHSTOP)) {
         
@@ -405,6 +406,49 @@ Sequencer::processSignal <true, SIG_VFLOP_CLR> (DDFState &state)
     state.bpv = false;
     state.bprun = false;
     state.cnt = 0;
+}
+
+template <> void
+Sequencer::processSignal <false, SIG_SHW | SIG_BPHSTOP> (DDFState &state)
+{
+    // OCS
+    state.shw = true;
+}
+
+template <> void
+Sequencer::processSignal <true, SIG_SHW | SIG_BPHSTOP> (DDFState &state)
+{
+    // ECS
+    state.shw = true;
+}
+
+template <> void
+Sequencer::processSignal <false, SIG_SHW> (DDFState &state)
+{
+    // OCS
+    state.shw = true;
+}
+
+template <> void
+Sequencer::processSignal <true, SIG_SHW> (DDFState &state)
+{
+    // ECS
+    state.shw = true;
+    state.bprun |= state.bphstart;
+}
+
+template <> void
+Sequencer::processSignal <false, SIG_RHW> (DDFState &state)
+{
+    // OCS
+    state.rhw |= state.bprun;
+}
+
+template <> void
+Sequencer::processSignal <true, SIG_RHW> (DDFState &state)
+{
+    // ECS
+    state.rhw = true;
 }
 
 void
