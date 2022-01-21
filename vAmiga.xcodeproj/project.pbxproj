@@ -69,6 +69,8 @@
 		505CEF5E26BD12430078FF52 /* DropZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505CEF5D26BD12430078FF52 /* DropZone.swift */; };
 		5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
+		506ACE44279AC75100BA7877 /* SequencerDas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506ACE43279AC75100BA7877 /* SequencerDas.cpp */; };
+		506ACE46279AC76700BA7877 /* SequencerBpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506ACE45279AC76700BA7877 /* SequencerBpl.cpp */; };
 		506B47182562E06A009FEFC3 /* ExporterDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 506B47172562E06A009FEFC3 /* ExporterDialog.xib */; };
 		506B471D256396BC009FEFC3 /* ExporterDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506B471C256396BC009FEFC3 /* ExporterDialog.swift */; };
 		506D6AB2276C7B2D002C9711 /* StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506D6AB0276C7B2D002C9711 /* StringUtils.cpp */; };
@@ -380,6 +382,8 @@
 		5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerSnapshots.swift; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
+		506ACE43279AC75100BA7877 /* SequencerDas.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerDas.cpp; sourceTree = "<group>"; };
+		506ACE45279AC76700BA7877 /* SequencerBpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerBpl.cpp; sourceTree = "<group>"; };
 		506B47172562E06A009FEFC3 /* ExporterDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExporterDialog.xib; sourceTree = "<group>"; };
 		506B471C256396BC009FEFC3 /* ExporterDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExporterDialog.swift; sourceTree = "<group>"; };
 		506D6AB0276C7B2D002C9711 /* StringUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtils.cpp; sourceTree = "<group>"; };
@@ -1364,6 +1368,8 @@
 				50AFEBBC278EF6B200F422D5 /* SequencerTypes.h */,
 				50AFEBB9278EF5FD00F422D5 /* Sequencer.h */,
 				50AFEBB8278EF5FD00F422D5 /* Sequencer.cpp */,
+				506ACE43279AC75100BA7877 /* SequencerDas.cpp */,
+				506ACE45279AC76700BA7877 /* SequencerBpl.cpp */,
 				50AFEBBD278EF6CB00F422D5 /* SequencerInfo.cpp */,
 				5041C6272791AF0800D3C494 /* SequencerRegs.cpp */,
 			);
@@ -1753,6 +1759,7 @@
 			files = (
 				508FDFD821EA20510043D0E9 /* Shaders.metal in Sources */,
 				50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */,
+				506ACE44279AC75100BA7877 /* SequencerDas.cpp in Sources */,
 				509C365E260B177E004F160A /* Interpreter.cpp in Sources */,
 				508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */,
 				5057551025EAFF7900280977 /* Checksum.cpp in Sources */,
@@ -1864,6 +1871,7 @@
 				501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */,
 				50FC08AF27819E2400F0C567 /* CopperInfo.cpp in Sources */,
 				50E1905C277F69B300B8DBE2 /* FFmpeg.cpp in Sources */,
+				506ACE46279AC76700BA7877 /* SequencerBpl.cpp in Sources */,
 				50300AF0258CF1F700D261E3 /* TypeExtensions.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
 				501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */,
