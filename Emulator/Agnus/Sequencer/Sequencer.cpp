@@ -221,31 +221,42 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
 template <bool ecs> void
 Sequencer::processSignal(u16 signal, DDFState &state)
 {
-    if (signal & SIG_CON_L0) {
+    if (signal & SIG_CON) {
         
         state.bmctl = (u8)(signal & 0xF);
         computeFetchUnit(state.bmctl);
     }
     if (signal & SIG_BMAPEN_CLR) {
         
+        processSignal <ecs, SIG_BMAPEN_CLR> (state);
+    }
+    /*
         state.bmapen = false;
         state.bprun = false;
         state.cnt = 0;
     }
+    */
     if (signal & SIG_BMAPEN_SET) {
-        
-        state.bmapen = true;
+     
+        processSignal <ecs, SIG_BMAPEN_SET> (state);
+        // state.bmapen = true;
     }
     if (signal & SIG_VFLOP_SET) {
         
+        processSignal <ecs, SIG_VFLOP_SET> (state);
+        /*
         state.bpv = true;
         lineIsBlank = false;
+        */
     }
     if (signal & SIG_VFLOP_CLR) {
         
+        processSignal <ecs, SIG_VFLOP_CLR> (state);
+        /*
         state.bpv = false;
         state.bprun = false;
         state.cnt = 0;
+        */
     }
     if (signal & SIG_SHW) {
         
@@ -328,6 +339,72 @@ Sequencer::processSignal(u16 signal, DDFState &state)
         state.rhw = false;
         if (ecs) state.shw = state.bphstop = false;
     }
+}
+
+template <> void
+Sequencer::processSignal <false, SIG_BMAPEN_CLR> (DDFState &state)
+{
+    // OCS
+    state.bmapen = false;
+    state.bprun = false;
+    state.cnt = 0;
+}
+
+template <> void
+Sequencer::processSignal <true, SIG_BMAPEN_CLR> (DDFState &state)
+{
+    // ECS
+    state.bmapen = false;
+    state.bprun = false;
+    state.cnt = 0;
+}
+
+template <> void
+Sequencer::processSignal <false, SIG_BMAPEN_SET> (DDFState &state)
+{
+    // OCS
+    state.bmapen = true;
+}
+
+template <> void
+Sequencer::processSignal <true, SIG_BMAPEN_SET> (DDFState &state)
+{
+    // ECS
+    state.bmapen = true;
+}
+
+template <> void
+Sequencer::processSignal <false, SIG_VFLOP_SET> (DDFState &state)
+{
+    // OCS
+    state.bpv = true;
+    lineIsBlank = false;
+}
+
+template <> void
+Sequencer::processSignal <true, SIG_VFLOP_SET> (DDFState &state)
+{
+    // ECS
+    state.bpv = true;
+    lineIsBlank = false;
+}
+
+template <> void
+Sequencer::processSignal <false, SIG_VFLOP_CLR> (DDFState &state)
+{
+    // OCS
+    state.bpv = false;
+    state.bprun = false;
+    state.cnt = 0;
+}
+
+template <> void
+Sequencer::processSignal <true, SIG_VFLOP_CLR> (DDFState &state)
+{
+    // ECS
+    state.bpv = false;
+    state.bprun = false;
+    state.cnt = 0;
 }
 
 void

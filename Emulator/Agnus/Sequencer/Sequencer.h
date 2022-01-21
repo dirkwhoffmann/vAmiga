@@ -303,7 +303,8 @@ private:
 
     // Processes a signal change
     template <bool ecs> void processSignal(u16 signal, DDFState &state);
-    
+    template <bool ecs, u16 signal> void processSignal(DDFState &state);
+
     // Computes the layout of a single fetch unit
     void computeFetchUnit(u8 dmacon);
     template <u8 channels> void computeLoresFetchUnit();
