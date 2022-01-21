@@ -20,14 +20,24 @@ Sequencer::clearBplEvents()
     nextBplEvent[HPOS_MAX] = 0;
 }
 
+/*
 void
 Sequencer::computeBplEvents()
 {
     agnus.isECS() ? computeBplEvents <true> () : computeBplEvents <false> ();
 }
+*/
 
+/*
 template <bool ecs> void
 Sequencer::computeBplEvents()
+{
+    computeBplEvents <ecs> (sigRecorder);
+}
+*/
+
+void
+Sequencer::initSigRecorder()
 {
     // Predict all events for the current scanline
     sigRecorder.clear();
@@ -45,8 +55,6 @@ Sequencer::computeBplEvents()
     sigRecorder.insert(HPOS_MAX, SIG_DONE);
  
     sigRecorder.modified = false;
-    
-    computeBplEvents <ecs> (sigRecorder);
 }
 
 void

@@ -90,13 +90,13 @@ Sequencer::hsyncHandler()
         if (hsyncActions & UPDATE_SIG_RECORDER) {
 
             hsyncActions &= ~UPDATE_SIG_RECORDER;
-            // TODO: Only initialize the sigRecorder and set the UPDATE_BPL_TABLE flag
-            computeBplEvents();
+            hsyncActions |= UPDATE_BPL_TABLE;
+            initSigRecorder();
         }
         if (hsyncActions & UPDATE_BPL_TABLE) {
             
             hsyncActions &= ~UPDATE_BPL_TABLE;
-            computeBplEvents();
+            computeBplEvents(sigRecorder);
         }
         if (hsyncActions & UPDATE_DAS_TABLE) {
             

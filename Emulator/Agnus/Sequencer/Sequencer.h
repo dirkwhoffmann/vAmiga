@@ -317,13 +317,16 @@ public:
     void clearBplEvents();
 
     // Recomputes the BPL event table
-    void computeBplEvents();
+    // void computeBplEvents();
     void computeBplEvents(const SigRecorder &sr);
 
 private:
 
+    // Initializes the signal recorder with proper values for the current line
+    void initSigRecorder();
+    
     // Recomputes the BPL event table
-    template <bool ecs> void computeBplEvents();
+    // template <bool ecs> void computeBplEvents();
     template <bool ecs> void computeBplEvents(const SigRecorder &sr);
     template <bool ecs> void computeBplEvents(isize strt, isize stop, DDFState &state);
 
