@@ -32,22 +32,10 @@ Sequencer::hsyncHandler()
     diwVstopInitial = diwVstop;
     ddfInitial = ddf;
     
-    if (agnus.pos.v == diwVstrt) {
-        
-        trace(DDF_DEBUG, "DDF: FF1 = 1 (DIWSTRT)\n");
-        hsyncActions |= UPDATE_SIG_RECORDER;
-    }
-    if (agnus.pos.v == diwVstop) {
-        
-        trace(DDF_DEBUG, "DDF: FF1 = 0 (DIWSTOP)\n");
-        hsyncActions |= UPDATE_SIG_RECORDER;
-    }
-    if (agnus.inLastRasterline()) {
-        
-        trace(DDF_DEBUG, "DDF: FF1 = 0 (EOF)\n");
-        hsyncActions |= UPDATE_SIG_RECORDER;
-    }
-    if (sigRecorder.modified) {
+    if (sigRecorder.modified ||
+        agnus.pos.v == diwVstrt ||
+        agnus.pos.v == diwVstop ||
+        agnus.inLastRasterline()) {
         
         hsyncActions |= UPDATE_SIG_RECORDER;
     }
@@ -58,8 +46,8 @@ Sequencer::hsyncHandler()
     // Determine the disk, audio and sprite DMA status for the line to come
     //
 
-    u16 newDmaDAS;
-
+    u16 newDmaDAS = 0;
+    
     if (agnus.dmacon & DMAEN) {
 
         // Copy DMA enable bits from DMACON
@@ -69,13 +57,8 @@ Sequencer::hsyncHandler()
         if (agnus.pos.v < 25 || agnus.pos.v >= agnus.frame.lastLine()) {
             newDmaDAS &= 0b011111;
         }
-        
-    } else {
-
-        newDmaDAS = 0;
     }
-
-    if (dmaDAS != newDmaDAS) {
+    if (newDmaDAS != dmaDAS) {
         
         hsyncActions |= UPDATE_DAS_TABLE;
         dmaDAS = newDmaDAS;

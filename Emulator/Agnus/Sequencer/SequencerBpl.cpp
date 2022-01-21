@@ -20,22 +20,6 @@ Sequencer::clearBplEvents()
     nextBplEvent[HPOS_MAX] = 0;
 }
 
-/*
-void
-Sequencer::computeBplEvents()
-{
-    agnus.isECS() ? computeBplEvents <true> () : computeBplEvents <false> ();
-}
-*/
-
-/*
-template <bool ecs> void
-Sequencer::computeBplEvents()
-{
-    computeBplEvents <ecs> (sigRecorder);
-}
-*/
-
 void
 Sequencer::initSigRecorder()
 {
