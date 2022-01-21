@@ -300,9 +300,14 @@ private:
     template <bool ecs> void computeBplEvents();
     template <bool ecs> void computeBplEvents(const SigRecorder &sr);
 
+    // Processes a signal change
+    template <bool ecs, u16 signal> void processSignal(DDFState &state);
+    
     // Computes the layout of a single fetch unit
     void computeFetchUnit(u8 dmacon);
-    
+    template <u8 channels> void computeLoresFetchUnit();
+    template <u8 channels> void computeHiresFetchUnit();
+
     // Updates the jump table for the bplEvent table
     void updateBplJumpTable();
     

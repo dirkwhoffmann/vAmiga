@@ -82,6 +82,10 @@
 #define REPLACE_LO_WORD(x,y) (((x) & ~0xFFFF) | (y))
 #define REPLACE_HI_WORD(x,y) (((x) & ~0xFFFF0000) | ((y) << 16))
 
+// Checks if none or all bits of a bitmask are set
+#define ALL_CLR(x,m) (((x) & (m)) == 0)
+#define ALL_SET(x,m) (((x) & (m)) == m)
+
 // Checks for a rising or a falling edge
 #define RISING_EDGE(x,y) (!(x) && (y))
 #define RISING_EDGE_BIT(x,y,n) (!((x) & (1 << (n))) && ((y) & (1 << (n))))

@@ -294,8 +294,11 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
         }
         if (signal & SIG_DONE) {
         
+            processSignal<ecs, SIG_DONE>(state);
+            /*
             state.rhw = false;
             if (ecs) state.shw = state.bphstop = false;
+            */
             break;
         }
         
@@ -320,151 +323,95 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
     }
 }
 
+template <> void
+Sequencer::processSignal <false, SIG_DONE> (DDFState &state) // OCS
+{
+    state.rhw = false;
+}
+
+template <> void
+Sequencer::processSignal <true, SIG_DONE> (DDFState &state) // ECS
+{
+    state.rhw = false;
+    state.shw = false;
+    state.bphstop = false;
+}
+
 void
 Sequencer::computeFetchUnit(u8 dmacon)
 {
-    switch (dmacon) {
-            
-        case 0x6: // 6 planes, lores
-            
-            fetch[0][0] = 0;        fetch[1][0] = 0;
-            fetch[0][1] = BPL_L4;   fetch[1][1] = BPL_L4_MOD;
-            fetch[0][2] = BPL_L6;   fetch[1][2] = BPL_L6_MOD;
-            fetch[0][3] = BPL_L2;   fetch[1][3] = BPL_L2_MOD;
-            fetch[0][4] = 0;        fetch[1][4] = 0;
-            fetch[0][5] = BPL_L3;   fetch[1][5] = BPL_L3_MOD;
-            fetch[0][6] = BPL_L5;   fetch[1][6] = BPL_L5_MOD;
-            fetch[0][7] = BPL_L1;   fetch[1][7] = BPL_L1_MOD;
-            break;
+    if (dmacon & 0x8) {
+        
+        switch (dmacon & 0x7) {
+        
+            case 0: computeHiresFetchUnit <0> (); break;
+            case 1: computeHiresFetchUnit <1> (); break;
+            case 2: computeHiresFetchUnit <2> (); break;
+            case 3: computeHiresFetchUnit <3> (); break;
+            case 4: computeHiresFetchUnit <4> (); break;
+            case 5: computeHiresFetchUnit <0> (); break;
+            case 6: computeHiresFetchUnit <0> (); break;
+            case 7: computeHiresFetchUnit <0> (); break;
+        }
 
-        case 0x5: // 5 planes, lores
-            
-            fetch[0][0] = 0;        fetch[1][0] = 0;
-            fetch[0][1] = BPL_L4;   fetch[1][1] = BPL_L4_MOD;
-            fetch[0][2] = 0;        fetch[1][2] = 0;
-            fetch[0][3] = BPL_L2;   fetch[1][3] = BPL_L2_MOD;
-            fetch[0][4] = 0;        fetch[1][4] = 0;
-            fetch[0][5] = BPL_L3;   fetch[1][5] = BPL_L3_MOD;
-            fetch[0][6] = BPL_L5;   fetch[1][6] = BPL_L5_MOD;
-            fetch[0][7] = BPL_L1;   fetch[1][7] = BPL_L1_MOD;
-            break;
-
-        case 0x7: // 7 planes, lores
-        case 0x4: // 4 planes, lores
-            
-            fetch[0][0] = 0;        fetch[1][0] = 0;
-            fetch[0][1] = BPL_L4;   fetch[1][1] = BPL_L4_MOD;
-            fetch[0][2] = 0;        fetch[1][2] = 0;
-            fetch[0][3] = BPL_L2;   fetch[1][3] = BPL_L2_MOD;
-            fetch[0][4] = 0;        fetch[1][4] = 0;
-            fetch[0][5] = BPL_L3;   fetch[1][5] = BPL_L3_MOD;
-            fetch[0][6] = 0;        fetch[1][6] = 0;
-            fetch[0][7] = BPL_L1;   fetch[1][7] = BPL_L1_MOD;
-            break;
-
-        case 0x3: // 3 planes, lores
-            
-            fetch[0][0] = 0;        fetch[1][0] = 0;
-            fetch[0][1] = 0;        fetch[1][1] = 0;
-            fetch[0][2] = 0;        fetch[1][2] = 0;
-            fetch[0][3] = BPL_L2;   fetch[1][3] = BPL_L2_MOD;
-            fetch[0][4] = 0;        fetch[1][4] = 0;
-            fetch[0][5] = BPL_L3;   fetch[1][5] = BPL_L3_MOD;
-            fetch[0][6] = 0;        fetch[1][6] = 0;
-            fetch[0][7] = BPL_L1;   fetch[1][7] = BPL_L1_MOD;
-            break;
-
-        case 0x2: // 2 planes, lores
-            
-            fetch[0][0] = 0;        fetch[1][0] = 0;
-            fetch[0][1] = 0;        fetch[1][1] = 0;
-            fetch[0][2] = 0;        fetch[1][2] = 0;
-            fetch[0][3] = BPL_L2;   fetch[1][3] = BPL_L2_MOD;
-            fetch[0][4] = 0;        fetch[1][4] = 0;
-            fetch[0][5] = 0;        fetch[1][5] = 0;
-            fetch[0][6] = 0;        fetch[1][6] = 0;
-            fetch[0][7] = BPL_L1;   fetch[1][7] = BPL_L1_MOD;
-            break;
-
-        case 0x1: // 1 plane, lores
-            
-            fetch[0][0] = 0;        fetch[1][0] = 0;
-            fetch[0][1] = 0;        fetch[1][1] = 0;
-            fetch[0][2] = 0;        fetch[1][2] = 0;
-            fetch[0][3] = 0;        fetch[1][3] = 0;
-            fetch[0][4] = 0;        fetch[1][4] = 0;
-            fetch[0][5] = 0;        fetch[1][5] = 0;
-            fetch[0][6] = 0;        fetch[1][6] = 0;
-            fetch[0][7] = BPL_L1;   fetch[1][7] = BPL_L1_MOD;
-            break;
-
-        case 0xC: // 4 planes, hires
-            
-            fetch[0][0] = BPL_H4;   fetch[1][0] = BPL_H4;
-            fetch[0][1] = BPL_H2;   fetch[1][1] = BPL_H2;
-            fetch[0][2] = BPL_H3;   fetch[1][2] = BPL_H3;
-            fetch[0][3] = BPL_H1;   fetch[1][3] = BPL_H1;
-            fetch[0][4] = BPL_H4;   fetch[1][4] = BPL_H4_MOD;
-            fetch[0][5] = BPL_H2;   fetch[1][5] = BPL_H2_MOD;
-            fetch[0][6] = BPL_H3;   fetch[1][6] = BPL_H3_MOD;
-            fetch[0][7] = BPL_H1;   fetch[1][7] = BPL_H1_MOD;
-            break;
-
-        case 0xB: // 3 planes, hires
-            
-            fetch[0][0] = 0;        fetch[1][0] = 0;
-            fetch[0][1] = BPL_H2;   fetch[1][1] = BPL_H2;
-            fetch[0][2] = BPL_H3;   fetch[1][2] = BPL_H3;
-            fetch[0][3] = BPL_H1;   fetch[1][3] = BPL_H1;
-            fetch[0][4] = 0;        fetch[1][4] = 0;
-            fetch[0][5] = BPL_H2;   fetch[1][5] = BPL_H2_MOD;
-            fetch[0][6] = BPL_H3;   fetch[1][6] = BPL_H3_MOD;
-            fetch[0][7] = BPL_H1;   fetch[1][7] = BPL_H1_MOD;
-            break;
-
-        case 0xA: // 2 planes, hires
-            
-            fetch[0][0] = 0;        fetch[1][0] = 0;
-            fetch[0][1] = BPL_H2;   fetch[1][1] = BPL_H2;
-            fetch[0][2] = 0;        fetch[1][2] = 0;
-            fetch[0][3] = BPL_H1;   fetch[1][3] = BPL_H1;
-            fetch[0][4] = 0;        fetch[1][4] = 0;
-            fetch[0][5] = BPL_H2;   fetch[1][5] = BPL_H2_MOD;
-            fetch[0][6] = 0;        fetch[1][6] = 0;
-            fetch[0][7] = BPL_H1;   fetch[1][7] = BPL_H1_MOD;
-            break;
-
-        case 0x9: // 1 plane, hires
-            
-            fetch[0][0] = 0;        fetch[1][0] = 0;
-            fetch[0][1] = 0;        fetch[1][1] = 0;
-            fetch[0][2] = 0;        fetch[1][2] = 0;
-            fetch[0][3] = BPL_H1;   fetch[1][3] = BPL_H1;
-            fetch[0][4] = 0;        fetch[1][4] = 0;
-            fetch[0][5] = 0;        fetch[1][5] = 0;
-            fetch[0][6] = 0;        fetch[1][6] = 0;
-            fetch[0][7] = BPL_H1;   fetch[1][7] = BPL_H1_MOD;
-            break;
-            
-        case 0x0: // 0 planes, lores
-        case 0x8: // 0 planes, hires
-        case 0xD: // 5 planes, hires
-        case 0xE: // 6 planes, hires
-        case 0xF: // 7 planes, hires
-            
-            fetch[0][0] = 0;        fetch[1][0] = 0;
-            fetch[0][1] = 0;        fetch[1][1] = 0;
-            fetch[0][2] = 0;        fetch[1][2] = 0;
-            fetch[0][3] = 0;        fetch[1][3] = 0;
-            fetch[0][4] = 0;        fetch[1][4] = 0;
-            fetch[0][5] = 0;        fetch[1][5] = 0;
-            fetch[0][6] = 0;        fetch[1][6] = 0;
-            fetch[0][7] = 0;        fetch[1][7] = 0;
-            break;
-            
-        default:
-            fatalError;
+    } else {
+      
+        switch (dmacon & 0x7) {
+        
+            case 0: computeLoresFetchUnit <0> (); break;
+            case 1: computeLoresFetchUnit <1> (); break;
+            case 2: computeLoresFetchUnit <2> (); break;
+            case 3: computeLoresFetchUnit <3> (); break;
+            case 4: computeLoresFetchUnit <4> (); break;
+            case 5: computeLoresFetchUnit <5> (); break;
+            case 6: computeLoresFetchUnit <6> (); break;
+            case 7: computeLoresFetchUnit <4> (); break;
+        }
     }
+}
+
+template <u8 channels> void
+Sequencer::computeLoresFetchUnit()
+{
+    fetch[0][0] = 0;
+    fetch[0][1] = channels < 4 ? 0 : BPL_L4;
+    fetch[0][2] = channels < 6 ? 0 : BPL_L6;
+    fetch[0][3] = channels < 2 ? 0 : BPL_L2;
+    fetch[0][4] = 0;
+    fetch[0][5] = channels < 3 ? 0 : BPL_L3;
+    fetch[0][6] = channels < 5 ? 0 : BPL_L5;
+    fetch[0][7] = channels < 1 ? 0 : BPL_L1;
+
+    fetch[1][0] = 0;
+    fetch[1][1] = channels < 4 ? 0 : BPL_L4_MOD;
+    fetch[1][2] = channels < 6 ? 0 : BPL_L6_MOD;
+    fetch[1][3] = channels < 2 ? 0 : BPL_L2_MOD;
+    fetch[1][4] = 0;
+    fetch[1][5] = channels < 3 ? 0 : BPL_L3_MOD;
+    fetch[1][6] = channels < 5 ? 0 : BPL_L5_MOD;
+    fetch[1][7] = channels < 1 ? 0 : BPL_L1_MOD;
+}
+
+template <u8 channels> void
+Sequencer::computeHiresFetchUnit()
+{
+    fetch[0][0] = channels < 4 ? 0 : BPL_H4;
+    fetch[0][1] = channels < 2 ? 0 : BPL_H2;
+    fetch[0][2] = channels < 3 ? 0 : BPL_H3;
+    fetch[0][3] = channels < 1 ? 0 : BPL_H1;
+    fetch[0][4] = channels < 4 ? 0 : BPL_H4;
+    fetch[0][5] = channels < 2 ? 0 : BPL_H2;
+    fetch[0][6] = channels < 3 ? 0 : BPL_H3;
+    fetch[0][7] = channels < 1 ? 0 : BPL_H1;
+
+    fetch[1][0] = channels < 4 ? 0 : BPL_H4;
+    fetch[1][1] = channels < 2 ? 0 : BPL_H2;
+    fetch[1][2] = channels < 3 ? 0 : BPL_H3;
+    fetch[1][3] = channels < 1 ? 0 : BPL_H1;
+    fetch[1][4] = channels < 4 ? 0 : BPL_H4_MOD;
+    fetch[1][5] = channels < 2 ? 0 : BPL_H2_MOD;
+    fetch[1][6] = channels < 3 ? 0 : BPL_H3_MOD;
+    fetch[1][7] = channels < 1 ? 0 : BPL_H1_MOD;
 }
 
 void
