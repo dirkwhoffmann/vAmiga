@@ -10,7 +10,6 @@
 #include "config.h"
 #include "Sequencer.h"
 #include "Agnus.h"
-#include "Denise.h" // REMOVE ASAP
 
 Sequencer::Sequencer(Amiga& ref) : SubComponent(ref)
 {

@@ -23,7 +23,7 @@
 *
 * vAmiga utilizes two event tables to schedule events in the DAS_SLOT and
 * BPL_SLOT. Assuming that sprite DMA is enabled and Denise draws 6 bitplanes
-* in lores mode starting at 0x28, the tables would look like this:
+* in lores mode starting at 0x28, the tables look like this:
 *
 *     bplEvent[0x00] = EVENT_NONE   dasEvent[0x00] = EVENT_NONE
 *     bplEvent[0x01] = EVENT_NONE   dasEvent[0x01] = BUS_REFRESH
@@ -66,17 +66,9 @@
 * Whenever one the DMA tables is modified, the corresponding jump table
 * has to be updated, too.
 *
-* To quickly setup the event tables, vAmiga utilizes two static lookup
-* tables. Depending on the current resoution, BPU value, and DMA status,
-* segments of these lookup tables are copied to the event tables.
-*
-*      Table: bitplaneDMA[Resolution][Bitplanes][Cycle]
-*
-*             (Bitplane DMA events in a single rasterline)
-*
-*             Resolution : 0 or 1        (0 = LORES / 1 = HIRES)
-*              Bitplanes : 0 .. 6        (Bitplanes in use, BPU)
-*                  Cycle : 0 .. HPOS_MAX (DMA cycle)
+* To quickly setup the DAS event table, vAmiga utilizes a static lookup table.
+* Depending on the current DMA status, segments of this table are copied to
+* the event table.
 *
 *      Table: dasDMA[dmacon]
 *
@@ -87,7 +79,6 @@
 
 class Sequencer : public SubComponent
 {
-    // REMOVE ASAP
     friend class Agnus;
     
     //
@@ -101,6 +92,8 @@ private:
 
     // Current layout of a fetch unit
     EventID fetch[2][8];
+
+public:
 
     // Currently scheduled events
     EventID bplEvent[HPOS_CNT];
@@ -264,7 +257,7 @@ private:
 
     
     //
-    // Accessing
+    // Accessing registers (SequencerRegs.cpp)
     //
 
 public:
@@ -282,7 +275,7 @@ public:
 
     
     //
-    // Managing the bitplane time slot table
+    // Managing the bitplane time slot table (SequencerBpl.cpp)
     //
     
 public:
@@ -315,7 +308,7 @@ private:
     
     
     //
-    // Managing the disk, audio, sprite time slot table (AgnusDma.cpp)
+    // Managing the disk, audio, sprite time slot table (SequencerDas.cpp)
     //
 
 public:
@@ -336,6 +329,8 @@ private:
     // Managing events
     //
 
+private:
+    
     void hsyncHandler();
     void vsyncHandler();
 };

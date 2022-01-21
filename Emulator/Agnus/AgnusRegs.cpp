@@ -117,10 +117,13 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         hsyncActions |= HSYNC_UPDATE_DAS_TABLE;
         
         // Make the effect visible in the current rasterline as well
+        sequencer.updateDasEvents(newDAS);
+        /*
         for (isize i = pos.h; i < HPOS_CNT; i++) {
             sequencer.dasEvent[i] = sequencer.dasDMA[newDAS][i];
         }
         sequencer.updateDasJumpTable();
+        */
         
         // Rectify the currently scheduled DAS event
         scheduleDasEventForCycle(pos.h);
