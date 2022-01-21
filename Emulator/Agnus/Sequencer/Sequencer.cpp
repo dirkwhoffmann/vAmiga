@@ -146,53 +146,10 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
         
         assert(trigger < HPOS_CNT);
         
-        // isize mask = (state.bmctl & 0x8) ? 0b11 : 0b111;
-
         // Emulate the display logic up to the next signal change
         computeBplEvents <ecs> (cycle, trigger, state);
         
-        /*
-        for (isize j = cycle; j < trigger; j++) {
-        
-            assert(j >= 0 && j <= HPOS_MAX);
-            
-            EventID id;
-
-            if (state.cnt == 0 && state.bprun) {
-        
-                if (state.lastFu) {
-                    
-                    state.bprun = false;
-                    state.lastFu = false;
-                    state.bphstop = false;
-                    if (!ecs) state.shw = false;
-
-                } else if (state.rhw || state.bphstop) {
-                    
-                    state.lastFu = true;
-                }
-            }
-        
-            if (state.bprun) {
-                                
-                id = fetch[state.lastFu ? 1 : 0][state.cnt];
-                state.cnt = (state.cnt + 1) & 7;
-                
-            } else {
-                
-                id = EVENT_NONE;
-                state.cnt = 0;
-            }
-            
-            // Superimpose drawing flags
-            if ((j & mask) == (agnus.scrollOdd & mask))  id = (EventID)(id | 1);
-            if ((j & mask) == (agnus.scrollEven & mask)) id = (EventID)(id | 2);
-            
-            bplEvent[j] = id;
-        }
-        */
-        
-        // Emulate the next signal change
+        // Emulate the signal change
         processSignal <ecs> (signal, state);
         
         cycle = trigger;
@@ -210,7 +167,7 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
     // Write back the new ddf state
     ddf = state;
 
-    // Check if we need to recompute all event in the next scanline
+    // Check if we need to recompute all events in the next scanline
     if (state != ddfInitial) {
         agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
