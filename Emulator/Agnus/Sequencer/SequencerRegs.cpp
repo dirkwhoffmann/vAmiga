@@ -56,7 +56,7 @@ Sequencer::setDDFSTRT(u16 old, u16 value)
     computeBplEvents(sigRecorder);
     
     // Tell the hsync handler to recompute the table in the next line
-    agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    // agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
 }
 
 template <Accessor s> void
@@ -105,7 +105,7 @@ Sequencer::setDDFSTOP(u16 old, u16 value)
     computeBplEvents(sigRecorder);
     
     // Tell the hsync handler to recompute the table in the next line
-    agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    // agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
 }
 
 void
@@ -125,7 +125,7 @@ Sequencer::setDIWSTRT(u16 value)
         computeBplEvents(sigRecorder);
     }
 
-    agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    // agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
 }
 
 void
@@ -151,7 +151,7 @@ Sequencer::setDIWSTOP(u16 value)
         computeBplEvents(sigRecorder);
     }
 
-    agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    // agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
 }
 
 template void Sequencer::pokeDDFSTRT<ACCESSOR_CPU>(u16 value);

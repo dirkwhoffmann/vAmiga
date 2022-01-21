@@ -95,7 +95,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         sequencer.computeBplEvents(sequencer.sigRecorder);
         
         // Tell the hsync handler to recompute the table in the next line
-        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+        // hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
             
     // Disk DMA and sprite DMA
@@ -303,7 +303,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
         sequencer.computeBplEvents(sequencer.sigRecorder);
         
         // Schedule the bitplane event table to be recomputed
-        agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+        // agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
         
         // Since the table has changed, we also need to update the event slot
         scheduleBplEventForCycle(pos.h);
@@ -341,7 +341,7 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
     sequencer.computeBplEvents(sequencer.sigRecorder);
     
     // Update the scheduled bitplane event according to the new table
-    scheduleBplEventForCycle(pos.h);    
+    scheduleBplEventForCycle(pos.h);
 }
 
 template <Accessor s> void

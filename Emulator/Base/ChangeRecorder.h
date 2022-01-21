@@ -176,6 +176,8 @@ struct RegChangeRecorder : public util::SortedRingBuffer<RegChange, capacity>
 
 struct SigRecorder : public util::SortedArray<u16, 256>
 {
+    bool modified = false;
+    
     template <class W>
     void operator<<(W& worker)
     {
@@ -184,6 +186,8 @@ struct SigRecorder : public util::SortedArray<u16, 256>
     
     void insert(i64 key, u16 signal) {
     
+        modified = true;
+        
         for (isize i = 0; i < w; i++) {
 
             if (keys[i] == key) {
@@ -196,6 +200,8 @@ struct SigRecorder : public util::SortedArray<u16, 256>
     }
     
     void invalidate(i64 key, u16 signal) {
+        
+        modified = true;
         
         for (isize i = 0; i < w; i++) {
             

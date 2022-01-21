@@ -31,7 +31,7 @@ Sequencer::computeBplEvents()
 {
     // Predict all events for the current scanline
     sigRecorder.clear();
-        
+ 
     if (agnus.pos.v == diwVstop || agnus.inLastRasterline()) {
         sigRecorder.insert(0, SIG_VFLOP_CLR);
     } else if (agnus.pos.v == diwVstrt){
@@ -43,6 +43,8 @@ Sequencer::computeBplEvents()
     sigRecorder.insert(ddfstop, SIG_BPHSTOP);
     sigRecorder.insert(0xD8, SIG_RHW);
     sigRecorder.insert(HPOS_MAX, SIG_DONE);
+ 
+    sigRecorder.modified = false;
     
     computeBplEvents <ecs> (sigRecorder);
 }
