@@ -160,59 +160,74 @@ Sequencer::processSignal(u16 signal, DDFState &state)
         state.bmctl = (u8)(signal & 0xF);
         computeFetchUnit(state.bmctl);
     }
-    if (signal & SIG_BMAPEN_CLR) {
-        
-        processSignal <ecs, SIG_BMAPEN_CLR> (state);
-    }
-    if (signal & SIG_BMAPEN_SET) {
-        
-        processSignal <ecs, SIG_BMAPEN_SET> (state);
-    }
-    if (signal & SIG_VFLOP_SET) {
-        
-        processSignal <ecs, SIG_VFLOP_SET> (state);
-    }
-    if (signal & SIG_VFLOP_CLR) {
-        
-        processSignal <ecs, SIG_VFLOP_CLR> (state);
-    }
-    switch (signal & (SIG_SHW | SIG_BPHSTOP)) {
+    switch (signal & (SIG_BMAPEN_CLR | SIG_BMAPEN_SET)) {
             
-        case SIG_SHW | SIG_BPHSTOP:
-            
-            processSignal <ecs, SIG_SHW | SIG_BPHSTOP> (state);
+        case SIG_BMAPEN_CLR:
+        
+            processSignal <ecs, SIG_BMAPEN_CLR> (state);
             break;
+            
+        case SIG_BMAPEN_SET:
+        
+            processSignal <ecs, SIG_BMAPEN_SET> (state);
+            break;
+    }
+    switch (signal & (SIG_VFLOP_SET | SIG_VFLOP_CLR)) {
+            
+        case SIG_VFLOP_SET:
+        
+            processSignal <ecs, SIG_VFLOP_SET> (state);
+            break;
+            
+        case SIG_VFLOP_CLR:
+        
+            processSignal <ecs, SIG_VFLOP_CLR> (state);
+            break;
+    }
+    switch (signal & (SIG_SHW | SIG_RHW)) {
             
         case SIG_SHW:
+            
+            if (signal & SIG_BPHSTOP) {
+                processSignal <ecs, SIG_SHW | SIG_BPHSTOP> (state);
+            } else {
+                processSignal <ecs, SIG_SHW> (state);
+            }
+            break;
+            
+        case SIG_RHW:
 
-            processSignal <ecs, SIG_SHW> (state);
+            processSignal <ecs, SIG_RHW> (state);
             break;
     }
-    if (signal & SIG_RHW) {
-        
-        processSignal <ecs, SIG_RHW> (state);
-    }
-    switch (signal & (SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW)) {
+    switch (signal & (SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW | SIG_RHW)) {
             
         case SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW:
             
             processSignal <ecs, SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW> (state);
             break;
             
+        case SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW:
+            
+            processSignal <ecs, SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW> (state);
+            break;
+            
         case SIG_BPHSTART | SIG_BPHSTOP:
             
             processSignal <ecs, SIG_BPHSTART | SIG_BPHSTOP> (state);
             break;
-            
+                        
         case SIG_BPHSTART:
         case SIG_BPHSTART | SIG_SHW:
-            
+        case SIG_BPHSTART | SIG_RHW:
+
             processSignal <ecs, SIG_BPHSTART> (state);
             break;
             
         case SIG_BPHSTOP:
         case SIG_BPHSTOP | SIG_SHW:
-            
+        case SIG_BPHSTOP | SIG_RHW:
+
             processSignal <ecs, SIG_BPHSTOP> (state);
             break;
     }
@@ -364,25 +379,6 @@ Sequencer::processSignal <true, SIG_BPHSTOP> (DDFState &state)
 }
 
 template <> void
-Sequencer::processSignal <false, SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW> (DDFState &state)
-{
-    // OCS
-    if (state.bprun) {
-        processSignal <false, SIG_BPHSTOP> (state);
-    } else {
-        processSignal <false, SIG_BPHSTART> (state);
-    }
-}
-
-template <> void
-Sequencer::processSignal <true, SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW> (DDFState &state)
-{
-    // ECS
-    state.bphstart = true;
-    state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
-}
-
-template <> void
 Sequencer::processSignal <false, SIG_BPHSTART | SIG_BPHSTOP> (DDFState &state)
 {
     // OCS
@@ -400,6 +396,36 @@ Sequencer::processSignal <true, SIG_BPHSTART | SIG_BPHSTOP> (DDFState &state)
     state.bphstop |= state.bprun;
     state.bphstart = true;
     state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
+}
+
+template <> void
+Sequencer::processSignal <false, SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW> (DDFState &state)
+{
+    // OCS
+    processSignal <false, SIG_BPHSTART | SIG_BPHSTOP> (state);
+}
+
+template <> void
+Sequencer::processSignal <true, SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW> (DDFState &state)
+{
+    // ECS
+    state.bphstart = true;
+    state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
+}
+
+template <> void
+Sequencer::processSignal <false, SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW> (DDFState &state)
+{
+    // OCS
+    processSignal <false, SIG_BPHSTART | SIG_BPHSTOP> (state);
+}
+
+template <> void
+Sequencer::processSignal <true, SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW> (DDFState &state)
+{
+    // ECS
+    state.bphstop |= state.bprun;
+    state.bphstart = true;
 }
 
 template <> void
