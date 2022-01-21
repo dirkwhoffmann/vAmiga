@@ -123,7 +123,7 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
         
         for (isize i = 0; i < sigRecorder.count(); i++) {
             
-            auto trigger = util::hexstr<2>(sigRecorder.keys[i]);
+            auto trigger = util::hexstr<2>((isize)sigRecorder.keys[i]);
             auto signal = name(sigRecorder.elements[i]);
      
             os << tab("Event at $" + trigger) << signal << std::endl;

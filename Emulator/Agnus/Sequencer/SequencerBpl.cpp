@@ -52,8 +52,8 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
 {
     auto state = ddfInitial;
     
-    i64 cycle = 0;
-    i64 trigger = 0;
+    isize cycle = 0;
+    isize trigger = 0;
     u16 signal = 0;
 
     /*
@@ -70,7 +70,7 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
         assert(i < sigRecorder.count());
         
         signal = sigRecorder.elements[i];
-        trigger = sigRecorder.keys[i];
+        trigger = (isize)sigRecorder.keys[i];
         
         assert(trigger < HPOS_CNT);
         
