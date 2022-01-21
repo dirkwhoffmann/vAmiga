@@ -111,7 +111,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         u16 newDAS = newDMAEN ? (newValue & 0x3F) : 0;
         
         // Schedule the DAS DMA table to be rebuild
-        hsyncActions |= HSYNC_UPDATE_DAS_TABLE;
+        sequencer.hsyncActions |= UPDATE_DAS_TABLE;
         
         // Make the effect visible in the current rasterline as well
         sequencer.updateDasEvents(newDAS);

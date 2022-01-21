@@ -27,13 +27,11 @@
 
 /* Hsync handler action flags
  *
- *  HSYNC_UPDATE_BPL_TABLE : Forces the hsync handler to update the bitplane
- *                           DMA event table.
  *  HSYNC_UPDATE_DAS_TABLE : Forces the hsync handler to update the disk,
  *                           audio, sprite DMA event table.
  */
-// static constexpr usize HSYNC_UPDATE_BPL_TABLE = 0b010;
-static constexpr usize HSYNC_UPDATE_DAS_TABLE = 0b100;
+// TODO: Move to sequencer action flags
+// static constexpr usize HSYNC_UPDATE_DAS_TABLE = 0b100;
 
 /* Bitplane event modifiers
  *
@@ -47,10 +45,7 @@ static constexpr usize DRAW_EVEN = 0b010;
 static constexpr usize DRAW_BOTH = 0b011;
 
 class Agnus : public SubComponent {
-        
-    // REMOVE ASAP
-    friend class Sequencer;
-    
+            
     // Current configuration
     AgnusConfig config = {};
 
@@ -149,7 +144,7 @@ public:
      * dmacon if the master enable bit is 1 or set to 0 if the master enable
      * bit is 0. It is used as an offset into the DAS lookup tables.
      */
-    u16 dmaDAS;
+    // u16 dmaDAS;
 
     // Shift values derives from BPLCON1
     i8 scrollOdd;
@@ -270,7 +265,7 @@ private:
         << bpl1mod
         << bpl2mod
         << sprpt
-        << dmaDAS
+        // << dmaDAS
         << scrollOdd
         << scrollEven
         

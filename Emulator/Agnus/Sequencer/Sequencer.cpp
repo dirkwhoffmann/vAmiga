@@ -55,6 +55,33 @@ Sequencer::hsyncHandler()
     lineIsBlank = !ddfInitial.bpv;
 
     //
+    // Determine the disk, audio and sprite DMA status for the line to come
+    //
+
+    u16 newDmaDAS;
+
+    if (agnus.dmacon & DMAEN) {
+
+        // Copy DMA enable bits from DMACON
+        newDmaDAS = agnus.dmacon & 0b111111;
+
+        // Disable sprites outside the sprite DMA area
+        if (agnus.pos.v < 25 || agnus.pos.v >= agnus.frame.lastLine()) {
+            newDmaDAS &= 0b011111;
+        }
+        
+    } else {
+
+        newDmaDAS = 0;
+    }
+
+    if (dmaDAS != newDmaDAS) {
+        
+        hsyncActions |= UPDATE_DAS_TABLE;
+        dmaDAS = newDmaDAS;
+    }
+
+    //
     // Process pending actions
     //
 
@@ -70,6 +97,11 @@ Sequencer::hsyncHandler()
             
             hsyncActions &= ~UPDATE_BPL_TABLE;
             computeBplEvents();
+        }
+        if (hsyncActions & UPDATE_DAS_TABLE) {
+            
+            hsyncActions &= ~UPDATE_DAS_TABLE;
+            updateDasEvents(dmaDAS);
         }
     }
 }

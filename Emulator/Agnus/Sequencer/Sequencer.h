@@ -79,11 +79,16 @@
 
 /* Hsync handler action flags
  *
- *  UPDATE_SIG_RECORDER : Forces the signal recorder to be renewed.
- *  UPDATE_BPL_TABLE    : Forces the bitplane event table to be updated.
+ *  UPDATE_SIG_RECORDER : Forces the hsync handler to renew the contents
+ *                        of the signal recorder.
+ *  UPDATE_BPL_TABLE    : Forces the hsync handler to update the bitplane
+ *                        DMA event table.
+ *  UPDATE_DAS_TABLE    : Forces the hsync handler to update the disk,
+ *                        audio, sprite DMA event table.
  */
-static constexpr usize UPDATE_SIG_RECORDER  = 0b01;
-static constexpr usize UPDATE_BPL_TABLE     = 0b10;
+static constexpr usize UPDATE_SIG_RECORDER  = 0b001;
+static constexpr usize UPDATE_BPL_TABLE     = 0b010;
+static constexpr usize UPDATE_DAS_TABLE     = 0b100;
 
 class Sequencer : public SubComponent
 {
@@ -97,6 +102,12 @@ private:
     
     // Disk, audio, and sprites lookup table ([Bits 0 .. 5 of DMACON])
     static EventID dasDMA[64][HPOS_CNT];
+
+    /* This value is updated in the hsync handler with the lowest 6 bits of
+     * dmacon if the master enable bit is 1 or set to 0 if the master enable
+     * bit is 0. It is used as an offset into the DAS lookup tables.
+     */
+    u16 dmaDAS;
 
     // Current layout of a fetch unit
     EventID fetch[2][8];
@@ -247,6 +258,7 @@ private:
 
         worker
         
+        << dmaDAS
         << fetch
         << bplEvent
         << dasEvent

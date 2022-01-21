@@ -476,14 +476,12 @@ Agnus::hsyncHandler()
     bplcon0Initial = bplcon0;
     bplcon1Initial = bplcon1;
     
-    // DDF and DIW
-    sequencer.hsyncHandler();
-
 
     //
     // Determine the disk, audio and sprite DMA status for the line to come
     //
 
+    /*
     u16 newDmaDAS;
 
     if (dmacon & DMAEN) {
@@ -501,34 +499,34 @@ Agnus::hsyncHandler()
 
     if (dmaDAS != newDmaDAS) {
         
-        hsyncActions |= HSYNC_UPDATE_DAS_TABLE;
+        sequencer.hsyncActions |= UPDATE_DAS_TABLE;
+        // hsyncActions |= HSYNC_UPDATE_DAS_TABLE;
         dmaDAS = newDmaDAS;
     }
-
+    */
+    
     //
     // Process pending actions
     //
 
+    /*
     if (hsyncActions) {
 
-        /*
-        if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
-            
-            hsyncActions &= ~HSYNC_UPDATE_BPL_TABLE;
-            sequencer.computeBplEvents();
-        }
-        */
         if (hsyncActions & HSYNC_UPDATE_DAS_TABLE) {
             
             hsyncActions &= ~HSYNC_UPDATE_DAS_TABLE;
             sequencer.updateDasEvents(dmaDAS);
         }
     }
-
+    */
+    
     // Clear the bus usage table
     for (isize i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
 
-    // Schedule the first BPL and DAS events
+    // Pass control to the sequencer
+    sequencer.hsyncHandler();
+    
+    // Schedule the first BPL and DAS events (TODO: MOVE TO Sequencer)
     scheduleFirstBplEvent();
     scheduleFirstDasEvent();
     
