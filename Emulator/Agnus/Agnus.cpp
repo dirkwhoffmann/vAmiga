@@ -476,57 +476,13 @@ Agnus::hsyncHandler()
     bplcon0Initial = bplcon0;
     bplcon1Initial = bplcon1;
     
-
-    //
-    // Determine the disk, audio and sprite DMA status for the line to come
-    //
-
-    /*
-    u16 newDmaDAS;
-
-    if (dmacon & DMAEN) {
-
-        // Copy DMA enable bits from DMACON
-        newDmaDAS = dmacon & 0b111111;
-
-        // Disable sprites outside the sprite DMA area
-        if (pos.v < 25 || pos.v >= frame.lastLine()) newDmaDAS &= 0b011111;
-
-    } else {
-
-        newDmaDAS = 0;
-    }
-
-    if (dmaDAS != newDmaDAS) {
-        
-        sequencer.hsyncActions |= UPDATE_DAS_TABLE;
-        // hsyncActions |= HSYNC_UPDATE_DAS_TABLE;
-        dmaDAS = newDmaDAS;
-    }
-    */
-    
-    //
-    // Process pending actions
-    //
-
-    /*
-    if (hsyncActions) {
-
-        if (hsyncActions & HSYNC_UPDATE_DAS_TABLE) {
-            
-            hsyncActions &= ~HSYNC_UPDATE_DAS_TABLE;
-            sequencer.updateDasEvents(dmaDAS);
-        }
-    }
-    */
-    
     // Clear the bus usage table
     for (isize i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
 
     // Pass control to the sequencer
     sequencer.hsyncHandler();
     
-    // Schedule the first BPL and DAS events (TODO: MOVE TO Sequencer)
+    // Schedule the first BPL and DAS events
     scheduleFirstBplEvent();
     scheduleFirstDasEvent();
     

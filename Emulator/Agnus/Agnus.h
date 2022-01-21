@@ -25,14 +25,6 @@
 #include "Frame.h"
 #include "Memory.h"
 
-/* Hsync handler action flags
- *
- *  HSYNC_UPDATE_DAS_TABLE : Forces the hsync handler to update the disk,
- *                           audio, sprite DMA event table.
- */
-// TODO: Move to sequencer action flags
-// static constexpr usize HSYNC_UPDATE_DAS_TABLE = 0b100;
-
 /* Bitplane event modifiers
  *
  *                DRAW_ODD : Starts the shift registers of the odd bitplanes
@@ -75,9 +67,6 @@ public:
 
 public:
     
-    // Action flags controlling the HSYNC handler
-    usize hsyncActions;
-
     // Pending register changes
     RegChangeRecorder<8> changeRecorder;
     
@@ -140,12 +129,6 @@ public:
     // Derived values
     //
         
-    /* This value is updated in the hsync handler with the lowest 6 bits of
-     * dmacon if the master enable bit is 1 or set to 0 if the master enable
-     * bit is 0. It is used as an offset into the DAS lookup tables.
-     */
-    // u16 dmaDAS;
-
     // Shift values derives from BPLCON1
     i8 scrollOdd;
     i8 scrollEven;
@@ -245,7 +228,6 @@ private:
 
         worker
         
-        << hsyncActions
         >> changeRecorder
 
         >> pos
