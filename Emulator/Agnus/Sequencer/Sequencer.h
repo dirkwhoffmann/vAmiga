@@ -77,6 +77,14 @@
 *                 dmacon : Bits 0 .. 5 of register DMACON
 */
 
+/* Hsync handler action flags
+ *
+ *  UPDATE_SIG_RECORDER : Forces the signal recorder to be renewed.
+ *  UPDATE_BPL_TABLE    : Forces the bitplane event table to be updated.
+ */
+static constexpr usize UPDATE_SIG_RECORDER  = 0b01;
+static constexpr usize UPDATE_BPL_TABLE     = 0b10;
+
 class Sequencer : public SubComponent
 {
     friend class Agnus;
@@ -180,9 +188,20 @@ public:
     // Signal recorder
     //
     
+public:
+    
     // Signals controlling the bitplane display logic
     SigRecorder sigRecorder;
 
+    
+    //
+    // Execution control
+    //
+
+private:
+    
+    // Action flags controlling the HSYNC handler
+    usize hsyncActions;
     
     
     //
@@ -233,7 +252,7 @@ private:
         << dasEvent
         << nextBplEvent
         << nextDasEvent
-        
+                
         << ddfstrt
         << ddfstop
         >> ddfInitial
@@ -247,6 +266,8 @@ private:
         << diwVstopInitial
         << lineIsBlank
 
+        << hsyncActions
+        
         >> sigRecorder;
     }
 

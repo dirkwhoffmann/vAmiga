@@ -32,7 +32,7 @@
  *  HSYNC_UPDATE_DAS_TABLE : Forces the hsync handler to update the disk,
  *                           audio, sprite DMA event table.
  */
-static constexpr usize HSYNC_UPDATE_BPL_TABLE = 0b010;
+// static constexpr usize HSYNC_UPDATE_BPL_TABLE = 0b010;
 static constexpr usize HSYNC_UPDATE_DAS_TABLE = 0b100;
 
 /* Bitplane event modifiers

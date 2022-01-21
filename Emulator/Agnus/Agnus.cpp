@@ -511,11 +511,13 @@ Agnus::hsyncHandler()
 
     if (hsyncActions) {
 
+        /*
         if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
             
             hsyncActions &= ~HSYNC_UPDATE_BPL_TABLE;
             sequencer.computeBplEvents();
         }
+        */
         if (hsyncActions & HSYNC_UPDATE_DAS_TABLE) {
             
             hsyncActions &= ~HSYNC_UPDATE_DAS_TABLE;

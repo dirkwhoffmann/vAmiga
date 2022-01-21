@@ -104,9 +104,7 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
     ddf = state;
 
     // Check if we need to recompute all events in the next scanline
-    if (state != ddfInitial) {
-        agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-    }
+    if (state != ddfInitial) hsyncActions |= UPDATE_BPL_TABLE;
 }
 
 template <bool ecs> void

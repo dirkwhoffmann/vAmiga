@@ -35,26 +35,43 @@ Sequencer::hsyncHandler()
     if (agnus.pos.v == diwVstrt) {
         
         trace(DDF_DEBUG, "DDF: FF1 = 1 (DIWSTRT)\n");
-        // agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-        sigRecorder.modified = true;
+        hsyncActions |= UPDATE_SIG_RECORDER;
     }
     if (agnus.pos.v == diwVstop) {
         
         trace(DDF_DEBUG, "DDF: FF1 = 0 (DIWSTOP)\n");
-        // agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-        sigRecorder.modified = true;
+        hsyncActions |= UPDATE_SIG_RECORDER;
     }
     if (agnus.inLastRasterline()) {
         
         trace(DDF_DEBUG, "DDF: FF1 = 0 (EOF)\n");
-        // agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-        sigRecorder.modified = true;
+        hsyncActions |= UPDATE_SIG_RECORDER;
+    }
+    if (sigRecorder.modified) {
+        
+        hsyncActions |= UPDATE_SIG_RECORDER;
     }
 
     lineIsBlank = !ddfInitial.bpv;
-    
-    // Recompute the bitplane event table if necessary
-    if (sigRecorder.modified) computeBplEvents();
+
+    //
+    // Process pending actions
+    //
+
+    if (hsyncActions) {
+
+        if (hsyncActions & UPDATE_SIG_RECORDER) {
+
+            hsyncActions &= ~UPDATE_SIG_RECORDER;
+            // TODO: Only initialize the sigRecorder and set the UPDATE_BPL_TABLE flag
+            computeBplEvents();
+        }
+        if (hsyncActions & UPDATE_BPL_TABLE) {
+            
+            hsyncActions &= ~UPDATE_BPL_TABLE;
+            computeBplEvents();
+        }
+    }
 }
 
 void

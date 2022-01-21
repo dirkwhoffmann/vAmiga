@@ -181,7 +181,7 @@ struct SigRecorder : public util::SortedArray<u16, 256>
     template <class W>
     void operator<<(W& worker)
     {
-        worker << this->elements << this->w << this->keys;
+        worker << this->modified << this->elements << this->w << this->keys;
     }
     
     void insert(i64 key, u16 signal) {
