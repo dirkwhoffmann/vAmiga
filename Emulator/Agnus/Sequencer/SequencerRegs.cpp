@@ -41,7 +41,7 @@ Sequencer::setDDFSTRT(u16 old, u16 value)
         
         if (old == value) {
             trace(SEQ_DEBUG, "setDDFSTRT: Skipping (value does not change)\n");
-            // return;
+            return;
         }
     
     } else {
