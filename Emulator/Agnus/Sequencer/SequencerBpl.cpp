@@ -99,16 +99,34 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
     trace(SEQ_DEBUG, "Fast path (no bitplane DMA in this line)\n");
 
     // Erase all events
-    for (isize j = 0; j < HPOS_CNT; j++) bplEvent[j] = EVENT_NONE;
+    for (isize i = 0; i < HPOS_CNT; i++) bplEvent[i] = EVENT_NONE;
     
-    // Add drawing flags (TODO: OPTIMIZE)
-    isize mask = (state.bmctl & 0x8) ? 0b11 : 0b111;
-    for (isize j = 0; j < HPOS_CNT; j++) {
-        
-        if ((j & mask) == (agnus.scrollOdd & mask))  bplEvent[j] |= (EventID)1;
-        if ((j & mask) == (agnus.scrollEven & mask)) bplEvent[j] |= (EventID)2;
+    // Add drawing flags 
+    if (state.bmctl & 0x8) {
+
+        auto odd = agnus.scrollOdd & 0b11;
+        auto even = agnus.scrollEven & 0b11;
+
+        if (odd == even) {
+            for (isize i = odd; i < HPOS_CNT; i += 4) bplEvent[i] = (EventID)3;
+        } else {
+            for (isize i = odd; i < HPOS_CNT; i += 4) bplEvent[i] = (EventID)1;
+            for (isize i = even; i < HPOS_CNT; i += 4) bplEvent[i] = (EventID)2;
+        }
+
+    } else {
+
+        auto odd = agnus.scrollOdd & 0b111;
+        auto even = agnus.scrollEven & 0b111;
+
+        if (odd == even) {
+            for (isize i = odd; i < HPOS_CNT; i += 8) bplEvent[i] = (EventID)3;
+        } else {
+            for (isize i = odd; i < HPOS_CNT; i += 8) bplEvent[i] = (EventID)1;
+            for (isize i = even; i < HPOS_CNT; i += 8) bplEvent[i] = (EventID)2;
+        }
     }
-    
+        
     // Emulate all signal events
     u16 signal = 0;
     for (isize i = 0; !(signal & SIG_DONE); i++) {
