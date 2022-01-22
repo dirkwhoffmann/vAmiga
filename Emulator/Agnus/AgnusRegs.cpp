@@ -45,70 +45,38 @@ Agnus::setDMACON(u16 oldValue, u16 value)
 {
     trace(DMA_DEBUG, "setDMACON(%x, %x)\n", oldValue, value);
     
-    // Compute new value
     u16 newValue;
+    
     if (value & 0x8000) {
         newValue = (dmacon | value) & 0x07FF;
     } else {
         newValue = (dmacon & ~value) & 0x07FF;
     }
-    
-    if (oldValue == newValue) return;
-    
+    if (oldValue == newValue) {
+        
+        trace(SEQ_DEBUG, "setDMACON: Skipping (value does not change)\n");
+        return;
+    }
+        
     dmacon = newValue;
-        
-    // Check the lowest 5 bits
-    bool oldDMAEN = (oldValue & DMAEN);
-    bool oldBPLEN = (oldValue & BPLEN) && oldDMAEN;
-    bool oldCOPEN = (oldValue & COPEN) && oldDMAEN;
-    bool oldBLTEN = (oldValue & BLTEN) && oldDMAEN;
-    bool oldSPREN = (oldValue & SPREN) && oldDMAEN;
-    bool oldDSKEN = (oldValue & DSKEN) && oldDMAEN;
-    bool oldAUD0EN = (oldValue & AUD0EN) && oldDMAEN;
-    bool oldAUD1EN = (oldValue & AUD1EN) && oldDMAEN;
-    bool oldAUD2EN = (oldValue & AUD2EN) && oldDMAEN;
-    bool oldAUD3EN = (oldValue & AUD3EN) && oldDMAEN;
     
-    bool newDMAEN = (newValue & DMAEN);
-    bool newBPLEN = (newValue & BPLEN) && newDMAEN;
-    bool newCOPEN = (newValue & COPEN) && newDMAEN;
-    bool newBLTEN = (newValue & BLTEN) && newDMAEN;
-    bool newSPREN = (newValue & SPREN) && newDMAEN;
-    bool newDSKEN = (newValue & DSKEN) && newDMAEN;
-    bool newAUD0EN = (newValue & AUD0EN) && newDMAEN;
-    bool newAUD1EN = (newValue & AUD1EN) && newDMAEN;
-    bool newAUD2EN = (newValue & AUD2EN) && newDMAEN;
-    bool newAUD3EN = (newValue & AUD3EN) && newDMAEN;
-        
+    u16 oldDma = (oldValue & DMAEN) ? oldValue : 0;
+    u16 newDma = (newValue & DMAEN) ? newValue : 0;
+    u16 diff = oldDma ^ newDma;
+         
     // Inform the delegates
     blitter.pokeDMACON(oldValue, newValue);
     
     // Bitplane DMA
-    if (oldBPLEN ^ newBPLEN) {
-        
-        // Update the bitplane event table
-        if (newBPLEN) {
-            sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_SET);
-        } else {
-            sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_CLR);
-        }
-        sequencer.computeBplEvents(sequencer.sigRecorder);
-    }
-            
+    if (diff & BPLEN) setBPLEN(newDma & BPLEN);
+                    
     // Disk DMA and sprite DMA
-    if ((oldDSKEN ^ newDSKEN) || (oldSPREN ^ newSPREN)) {
+    if (diff & (DSKEN | SPREN)) {
+                
+        if (diff & SPREN) setSPREN(newDma & SPREN);
+        if (diff & DSKEN) setDSKEN(newDma & DSKEN);
         
-        // Note: We don't need to rebuild the table if audio DMA changes,
-        // because audio events are always executed.
-        
-        if (oldSPREN ^ newSPREN) {
-            trace(DMA_DEBUG, "Sprite DMA %s\n", newSPREN ? "on" : "off");
-        }
-        if (oldDSKEN ^ newDSKEN) {
-            trace(DMA_DEBUG, "Disk DMA %s\n", newDSKEN ? "on" : "off");
-        }
-        
-        u16 newDAS = newDMAEN ? (newValue & 0x3F) : 0;
+        u16 newDAS = (newValue & DMAEN) ? (newValue & 0x3F) : 0;
         
         // Schedule the DAS DMA table to be rebuild
         sequencer.hsyncActions |= UPDATE_DAS_TABLE;
@@ -121,29 +89,81 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     }
     
     // Copper DMA
-    if (oldCOPEN ^ newCOPEN) {
-        trace(DMA_DEBUG, "Copper DMA %s\n", newCOPEN ? "on" : "off");
-        if (newCOPEN) copper.activeInThisFrame = true;
-    }
+    if (diff & COPEN) setCOPEN(newDma & COPEN);
     
     // Blitter DMA
-    if (oldBLTEN ^ newBLTEN) {
-        trace(DMA_DEBUG, "Blitter DMA %s\n", newBLTEN ? "on" : "off");
-    }
+    if (diff & BLTEN) setBLTEN(newDma & BLTEN);
     
     // Audio DMA
-    if (oldAUD0EN ^ newAUD0EN) {
-        newAUD0EN ? paula.channel0.enableDMA() : paula.channel0.disableDMA();
+    if (diff & (AUD0EN | AUD1EN | AUD2EN | AUD3EN)) {
+        
+        if (diff & AUD0EN) setAUD0EN(newDma & AUD0EN);
+        if (diff & AUD1EN) setAUD1EN(newDma & AUD1EN);
+        if (diff & AUD2EN) setAUD2EN(newDma & AUD2EN);
+        if (diff & AUD3EN) setAUD3EN(newDma & AUD3EN);
     }
-    if (oldAUD1EN ^ newAUD1EN) {
-        newAUD1EN ? paula.channel1.enableDMA() : paula.channel1.disableDMA();
+}
+
+void
+Agnus::setBPLEN(bool value)
+{
+    // Update the bitplane event table
+    if (value) {
+        sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_SET);
+    } else {
+        sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_CLR);
     }
-    if (oldAUD2EN ^ newAUD2EN) {
-        newAUD2EN ? paula.channel2.enableDMA() : paula.channel2.disableDMA();
-    }
-    if (oldAUD3EN ^ newAUD3EN) {
-        newAUD3EN ? paula.channel3.enableDMA() : paula.channel3.disableDMA();
-    }
+    sequencer.computeBplEvents(sequencer.sigRecorder);
+}
+
+void
+Agnus::setCOPEN(bool value)
+{
+    trace(DMA_DEBUG, "Copper DMA %s\n", value ? "on" : "off");
+    
+    if (value) copper.activeInThisFrame = true;
+}
+
+void
+Agnus::setBLTEN(bool value)
+{
+    trace(DMA_DEBUG, "Blitter DMA %s\n", value ? "on" : "off");
+}
+
+void
+Agnus::setSPREN(bool value)
+{
+    trace(DMA_DEBUG, "Sprite DMA %s\n", value ? "on" : "off");
+}
+
+void
+Agnus::setDSKEN(bool value)
+{
+    trace(DMA_DEBUG, "Disk DMA %s\n", value ? "on" : "off");
+}
+
+void
+Agnus::setAUD0EN(bool value)
+{
+    value ? paula.channel0.enableDMA() : paula.channel0.disableDMA();
+}
+
+void
+Agnus::setAUD1EN(bool value)
+{
+    value ? paula.channel1.enableDMA() : paula.channel1.disableDMA();
+}
+
+void
+Agnus::setAUD2EN(bool value)
+{
+    value ? paula.channel2.enableDMA() : paula.channel2.disableDMA();
+}
+
+void
+Agnus::setAUD3EN(bool value)
+{
+    value ? paula.channel3.enableDMA() : paula.channel3.disableDMA();
 }
 
 u16
@@ -167,29 +187,6 @@ Agnus::peekVHPOSR()
     } else {
         return HI_LO(result.v & 0xFF, result.h);
     }
-    
-    /*
-    auto posh = pos.h + 4;
-    auto posv = pos.v;
-    
-    // Check if posh has wrapped over (we just added 4)
-    if (posh > HPOS_MAX) {
-        posh -= HPOS_CNT;
-        if (++posv >= frame.numLines()) posv = 0;
-    }
-    
-    // The value of posv only shows up in cycle 2 and later
-    if (posh > 1) {
-        return HI_LO(posv & 0xFF, posh);
-    }
-    
-    // In cycle 0 and 1, we need to return the old value of posv
-    if (posv > 0) {
-        return HI_LO((posv - 1) & 0xFF, posh);
-    } else {
-        return HI_LO(frame.prevLastLine() & 0xFF, posh);
-    }
-    */
 }
 
 void

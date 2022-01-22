@@ -504,7 +504,16 @@ public:
     u16 peekDMACONR();
     template <Accessor s> void pokeDMACON(u16 value);
     void setDMACON(u16 oldValue, u16 newValue);
-    
+    void setBPLEN(bool value);
+    void setCOPEN(bool value);
+    void setBLTEN(bool value);
+    void setSPREN(bool value);
+    void setDSKEN(bool value);
+    void setAUD0EN(bool value);
+    void setAUD1EN(bool value);
+    void setAUD2EN(bool value);
+    void setAUD3EN(bool value);
+
     u16 peekVHPOSR();
     void pokeVHPOS(u16 value);
     void setVHPOS(u16 value);
