@@ -64,7 +64,8 @@ struct DDFState
         this->bmapen != rhs.bmapen ||
         this->shw != rhs.shw ||
         this->rhw != rhs.rhw ||
-        this->bphstart != rhs.bphstop ||
+        this->bphstart != rhs.bphstart ||
+        this->bphstop != rhs.bphstop ||
         this->bprun != rhs.bprun ||
         this->lastFu != rhs.lastFu ||
         this->bmctl != rhs.bmctl ||

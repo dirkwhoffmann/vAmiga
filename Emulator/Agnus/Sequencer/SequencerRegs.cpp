@@ -41,12 +41,12 @@ Sequencer::setDDFSTRT(u16 old, u16 value)
         
         if (old == value) {
             trace(SEQ_DEBUG, "setDDFSTRT: Skipping (value does not change)\n");
-            return;
+            // return;
         }
     
     } else {
         
-        if (posh != old) {
+        if (posh == old) {
             trace(XFILES, "setDDFSTRT: Old value matches trigger position\n");
         }
         if (posh == value) {
@@ -103,7 +103,7 @@ Sequencer::setDDFSTOP(u16 old, u16 value)
     
     } else {
         
-        if (posh != old) {
+        if (posh == old) {
             trace(XFILES, "setDDFSTOP: Old value matches trigger position\n");
         }
         if (posh == value) {
