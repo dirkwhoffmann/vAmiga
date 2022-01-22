@@ -273,25 +273,39 @@ Agnus::setVPOS(u16 value)
 template <Accessor s> void
 Agnus::pokeBPLCON0(u16 value)
 {
-    trace(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
+    trace(DMA_DEBUG, "pokeBPLCON0(%04x)\n", value);
 
-    recordRegisterChange(DMA_CYCLES(4), SET_BPLCON0_AGNUS, value);
+    if (bplcon0 != value) {
+        recordRegisterChange(DMA_CYCLES(4), SET_BPLCON0_AGNUS, value);
+    }
 }
 
 void
 Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 {
-    trace(DMA_DEBUG, "setBPLCON0(%4x,%4x)\n", oldValue, newValue);
+    trace(DMA_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
         
     // Check if the hires bit of one of the BPU bits have been modified
     if ((oldValue ^ newValue) & 0xF000) {
             
-        // Recompute the bitplane event table
+        // Record the change
         sequencer.sigRecorder.insert(pos.h, SIG_CON | newValue >> 12);
-        sequencer.computeBplEvents(sequencer.sigRecorder);
+        
+        if (bpldma()) {
+
+            trace(SEQ_DEBUG, "setBPLCON0: Recomputing BPL event table\n");
+
+            // Recompute the bitplane event table
+            sequencer.computeBplEvents(sequencer.sigRecorder);
                 
-        // Since the table has changed, we also need to update the event slot
-        scheduleBplEventForCycle(pos.h);
+            // Since the table has changed, we need to update the event slot
+            scheduleBplEventForCycle(pos.h);
+
+        } else {
+                
+            // Speed optimization: Recomputation will happen in the next line
+            trace(SEQ_DEBUG, "setBPLCON0: Postponing recomputation\n");
+        }
     }
     
     // Latch the position counters if the ERSY bit is set
@@ -303,7 +317,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 void
 Agnus::pokeBPLCON1(u16 value)
 {
-    trace(DMA_DEBUG, "pokeBPLCON1(%X)\n", value);
+    trace(DMA_DEBUG, "pokeBPLCON1(%04x)\n", value);
     
     if (bplcon1 != value) {
         recordRegisterChange(DMA_CYCLES(1), SET_BPLCON1_AGNUS, value);
@@ -314,7 +328,7 @@ void
 Agnus::setBPLCON1(u16 oldValue, u16 newValue)
 {
     assert(oldValue != newValue);
-    trace(DMA_DEBUG, "setBPLCON1(%X,%X)\n", oldValue, newValue);
+    trace(DMA_DEBUG, "setBPLCON1(%04x,%04x)\n", oldValue, newValue);
 
     bplcon1 = newValue & 0xFF;
     
@@ -332,7 +346,7 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
 template <Accessor s> void
 Agnus::pokeDIWSTRT(u16 value)
 {
-    trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%x)\n", AccessorEnum::key(s), value);
+    trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%04x)\n", AccessorEnum::key(s), value);
     
     recordRegisterChange(DMA_CYCLES(4), SET_DIWSTRT_AGNUS, value);
     recordRegisterChange(DMA_CYCLES(3), SET_DIWSTRT_DENISE, value);
@@ -341,7 +355,7 @@ Agnus::pokeDIWSTRT(u16 value)
 template <Accessor s> void
 Agnus::pokeDIWSTOP(u16 value)
 {
-    trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%x)\n", AccessorEnum::key(s), value);
+    trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%04x)\n", AccessorEnum::key(s), value);
     
     recordRegisterChange(DMA_CYCLES(4), SET_DIWSTOP_AGNUS, value);
     recordRegisterChange(DMA_CYCLES(3), SET_DIWSTOP_DENISE, value);
@@ -350,35 +364,35 @@ Agnus::pokeDIWSTOP(u16 value)
 void
 Agnus::pokeBPL1MOD(u16 value)
 {
-    trace(BPLMOD_DEBUG, "pokeBPL1MOD(%X)\n", value);
+    trace(BPLMOD_DEBUG, "pokeBPL1MOD(%04x)\n", value);
     recordRegisterChange(DMA_CYCLES(2), SET_BPL1MOD, value);
 }
 
 void
 Agnus::setBPL1MOD(u16 value)
 {
-    trace(BPLMOD_DEBUG, "setBPL1MOD(%X)\n", value);
+    trace(BPLMOD_DEBUG, "setBPL1MOD(%04x)\n", value);
     bpl1mod = (i16)(value & 0xFFFE);
 }
 
 void
 Agnus::pokeBPL2MOD(u16 value)
 {
-    trace(BPLMOD_DEBUG, "pokeBPL2MOD(%X)\n", value);
+    trace(BPLMOD_DEBUG, "pokeBPL2MOD(%04x)\n", value);
     recordRegisterChange(DMA_CYCLES(2), SET_BPL2MOD, value);
 }
 
 void
 Agnus::setBPL2MOD(u16 value)
 {
-    trace(BPLMOD_DEBUG, "setBPL2MOD(%X)\n", value);
+    trace(BPLMOD_DEBUG, "setBPL2MOD(%04x)\n", value);
     bpl2mod = (i16)(value & 0xFFFE);
 }
 
 template <int x> void
 Agnus::pokeSPRxPOS(u16 value)
 {
-    trace(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%dPOS(%04x)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
     i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
@@ -394,7 +408,7 @@ Agnus::pokeSPRxPOS(u16 value)
 template <int x> void
 Agnus::pokeSPRxCTL(u16 value)
 {
-    trace(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%dCTL(%04x)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
     i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));

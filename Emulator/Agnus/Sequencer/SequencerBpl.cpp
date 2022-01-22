@@ -28,7 +28,7 @@ Sequencer::initSigRecorder()
  
     if (agnus.pos.v == diwVstop || agnus.inLastRasterline()) {
         sigRecorder.insert(0, SIG_VFLOP_CLR);
-    } else if (agnus.pos.v == diwVstrt){
+    } else if (agnus.pos.v == diwVstrt) {
         sigRecorder.insert(0, SIG_VFLOP_SET);
     }
     
@@ -51,6 +51,9 @@ template <bool ecs> void
 Sequencer::computeBplEvents(const SigRecorder &sr)
 {
     auto state = ddfInitial;
+    
+    // Update the BMCTL bits with the current value
+    state.bmctl = agnus.bplcon0Initial >> 12;
     
     isize cycle = 0;
     isize trigger = 0;
@@ -96,7 +99,7 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
     ddf = state;
 
     // Check if we need to recompute all events in the next scanline
-    if (state != ddfInitial) hsyncActions |= UPDATE_BPL_TABLE;
+    // if (state != ddfInitial) hsyncActions |= UPDATE_BPL_TABLE;
 }
 
 template <bool ecs> void

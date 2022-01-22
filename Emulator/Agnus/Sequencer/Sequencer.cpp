@@ -30,13 +30,22 @@ Sequencer::hsyncHandler()
 {
     diwVstrtInitial = diwVstrt;
     diwVstopInitial = diwVstop;
-    ddfInitial = ddf;
+
+    // Check if we need to recompute all events
+    if (ddfInitial != ddf) {
+        
+        ddfInitial = ddf;
+        trace(SEQ_DEBUG, "hsyncHandler: Forcing an event table update\n");
+        hsyncActions |= UPDATE_BPL_TABLE;
+    }
     
+    // Check if we need to reinitialize the signal recorder
     if (sigRecorder.modified ||
         agnus.pos.v == diwVstrt ||
         agnus.pos.v == diwVstop ||
         agnus.inLastRasterline()) {
-        
+
+        trace(SEQ_DEBUG, "hsyncHandler: Forcing a recorder update\n");
         hsyncActions |= UPDATE_SIG_RECORDER;
     }
 
