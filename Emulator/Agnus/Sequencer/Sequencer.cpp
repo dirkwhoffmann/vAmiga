@@ -54,12 +54,6 @@ Sequencer::hsyncHandler()
     }
     
     // Renew the signal list if it has been modified in the previous line
-    /*
-    if (sigRecorder.modified ||
-        agnus.pos.v == diwVstrt ||
-        agnus.pos.v == diwVstop ||
-        agnus.inLastRasterline()) {
-    */
     if (sigRecorder.modified) {
 
         trace(SEQ_DEBUG, "hsyncHandler: sigRecorder.modified\n");

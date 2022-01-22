@@ -326,7 +326,8 @@ private:
     
     // Recomputes the BPL event table
     template <bool ecs> void computeBplEventTable(const SigRecorder &sr);
-    template <bool ecs> void computeBplEvents(const SigRecorder &sr, DDFState &state);
+    template <bool ecs> void computeBplEventsSlow(const SigRecorder &sr, DDFState &state);
+    template <bool ecs> void computeBplEventsFast(const SigRecorder &sr, DDFState &state);
     template <bool ecs> void computeBplEvents(isize strt, isize stop, DDFState &state);
 
     // Processes a signal change

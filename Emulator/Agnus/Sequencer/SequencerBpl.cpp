@@ -63,11 +63,14 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
     if (!state.bpv) { state.bprun = false; state.cnt = 0; }
     
     // Fill the event table
-    // TODO: ADD A QUICK PATH IN CASE BPL DMA IS OFF FOR THE WHOLE LINE
-    computeBplEvents <ecs> (sr, state);
+    if (!sr.modified && (!state.bpv || !state.bmapen)) {
+        computeBplEventsFast <ecs> (sr, state);
+    } else {
+        computeBplEventsSlow <ecs> (sr, state);
+    }
     
     // Add the End Of Line event
-    bplEvent[HPOS_MAX] = BPL_EOL;
+    bplEvent[HPOS_MAX] = BPL_EOL;  // TODO: Should be |= !?
                             
     // Update the jump table
     updateBplJumpTable();
@@ -83,8 +86,39 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
 }
 
 template <bool ecs> void
-Sequencer::computeBplEvents(const SigRecorder &sr, DDFState &state)
+Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
 {
+    // Only take this path if bitplane DMA if off in the entire line
+    assert(!sr.modified);
+    assert(!state.bpv || !state.bmapen);
+
+    trace(SEQ_DEBUG, "Fast path (no bitplane DMA in this line)\n");
+
+    // Erase all events
+    for (isize j = 0; j < HPOS_CNT; j++) bplEvent[j] = EVENT_NONE;
+    
+    // Add drawing flags (TODO: OPTIMIZE)
+    isize mask = (state.bmctl & 0x8) ? 0b11 : 0b111;
+    for (isize j = 0; j < HPOS_CNT; j++) {
+        
+        if ((j & mask) == (agnus.scrollOdd & mask))  bplEvent[j] |= (EventID)1;
+        if ((j & mask) == (agnus.scrollEven & mask)) bplEvent[j] |= (EventID)2;
+    }
+    
+    // Emulate all signal events
+    u16 signal = 0;
+    for (isize i = 0; !(signal & SIG_DONE); i++) {
+        
+        signal = sigRecorder.elements[i];
+        processSignal <ecs> (signal, state);
+    }
+}
+
+template <bool ecs> void
+Sequencer::computeBplEventsSlow(const SigRecorder &sr, DDFState &state)
+{
+    trace(SEQ_DEBUG, "Slow path\n");
+    
     isize cycle = 0;
     isize trigger = 0;
     u16 signal = 0;
