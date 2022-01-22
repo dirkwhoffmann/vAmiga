@@ -34,21 +34,52 @@ Sequencer::hsyncHandler()
     // Check if we need to recompute all events
     if (ddfInitial != ddf) {
         
+        if constexpr (SEQ_DEBUG) {
+            
+            debug(true, "bpv: %d %d\n", ddfInitial.bpv, ddf.bpv);
+            debug(true, "bmapen: %d %d\n", ddfInitial.bmapen, ddf.bmapen);
+            debug(true, "shw: %d %d\n", ddfInitial.shw, ddf.shw);
+            debug(true, "rhw: %d %d\n", ddfInitial.rhw, ddf.rhw);
+            debug(true, "bphstart: %d %d\n", ddfInitial.bphstart, ddf.bphstart);
+            debug(true, "bphstop: %d %d\n", ddfInitial.bphstop, ddf.bphstop);
+            debug(true, "bprun: %d %d\n", ddfInitial.bprun, ddf.bprun);
+            debug(true, "lastFu: %d %d\n", ddfInitial.lastFu, ddf.lastFu);
+            debug(true, "bmctl: %d %d\n", ddfInitial.bmctl, ddf.bmctl);
+            debug(true, "cnt: %d %d\n", ddfInitial.cnt, ddf.cnt);
+        }
+        
         ddfInitial = ddf;
         trace(SEQ_DEBUG, "hsyncHandler: Forcing an event table update\n");
         hsyncActions |= UPDATE_BPL_TABLE;
     }
     
-    // Check if we need to reinitialize the signal recorder
+    // Renew the signal list if it has been modified in the previous line
+    /*
     if (sigRecorder.modified ||
         agnus.pos.v == diwVstrt ||
         agnus.pos.v == diwVstop ||
         agnus.inLastRasterline()) {
+    */
+    if (sigRecorder.modified) {
 
-        trace(SEQ_DEBUG, "hsyncHandler: Forcing a recorder update\n");
+        trace(SEQ_DEBUG, "hsyncHandler: sigRecorder.modified\n");
         hsyncActions |= UPDATE_SIG_RECORDER;
     }
 
+    // Check the vertical DIW flipflop
+    if (agnus.pos.v == diwVstop || agnus.inLastRasterline()) {
+
+        trace(SEQ_DEBUG, "hsyncHandler: Vertical flipflop off\n");
+        ddfInitial.bpv = ddf.bpv = false;
+        hsyncActions |= UPDATE_SIG_RECORDER;
+
+    } else if (agnus.pos.v == diwVstrt) {
+
+        trace(SEQ_DEBUG, "hsyncHandler: Vertical flipflop on\n");
+        ddfInitial.bpv = ddf.bpv = true;
+        hsyncActions |= UPDATE_SIG_RECORDER;
+    }
+    
     lineIsBlank = !ddfInitial.bpv;
 
     //
@@ -87,6 +118,7 @@ Sequencer::hsyncHandler()
         }
         if (hsyncActions & UPDATE_BPL_TABLE) {
             
+            trace(SEQ_DEBUG, "hsyncActions & UPDATE_BPL_TABLE\n");
             hsyncActions &= ~UPDATE_BPL_TABLE;
             computeBplEvents(sigRecorder);
         }

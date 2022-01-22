@@ -26,11 +26,13 @@ Sequencer::initSigRecorder()
     // Predict all events for the current scanline
     sigRecorder.clear();
  
+    /*
     if (agnus.pos.v == diwVstop || agnus.inLastRasterline()) {
         sigRecorder.insert(0, SIG_VFLOP_CLR);
     } else if (agnus.pos.v == diwVstrt) {
         sigRecorder.insert(0, SIG_VFLOP_SET);
     }
+    */
     
     sigRecorder.insert(0x18, SIG_SHW);
     sigRecorder.insert(ddfstrt, SIG_BPHSTART);
@@ -52,8 +54,18 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
 {
     auto state = ddfInitial;
     
+    trace(SEQ_DEBUG, "computeBplEvents\n");
+    
     // Update the BMCTL bits with the current value
     state.bmctl = agnus.bplcon0Initial >> 12;
+    
+    // Evaluate the vertical DIW flipflop
+    if (state.bpv) {
+        lineIsBlank = false;
+    } else {
+        state.bprun = false;
+        state.cnt = 0;
+    }
     
     isize cycle = 0;
     isize trigger = 0;

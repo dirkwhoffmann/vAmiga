@@ -107,6 +107,8 @@ Agnus::setDMACON(u16 oldValue, u16 value)
 void
 Agnus::setBPLEN(bool value)
 {
+    trace(SEQ_DEBUG, "setBPLEN(%d)\n", value);
+    
     // Update the bitplane event table
     if (value) {
         sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_SET);
@@ -283,7 +285,7 @@ Agnus::pokeBPLCON0(u16 value)
 void
 Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 {
-    trace(DMA_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
+    trace(DMA_DEBUG | SEQ_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
         
     // Check if the hires bit of one of the BPU bits have been modified
     if ((oldValue ^ newValue) & 0xF000) {
@@ -328,7 +330,7 @@ void
 Agnus::setBPLCON1(u16 oldValue, u16 newValue)
 {
     assert(oldValue != newValue);
-    trace(DMA_DEBUG, "setBPLCON1(%04x,%04x)\n", oldValue, newValue);
+    trace(DMA_DEBUG | SEQ_DEBUG, "setBPLCON1(%04x,%04x)\n", oldValue, newValue);
 
     bplcon1 = newValue & 0xFF;
     
