@@ -21,8 +21,8 @@ Sequencer::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
-    clearBplEvents();
-    clearDasEvents();
+    initBplEvents();
+    initDasEvents();
 }
 
 void
@@ -32,31 +32,7 @@ Sequencer::hsyncHandler()
     diwVstopInitial = diwVstop;
     ddfInitial = ddf;
     
-    // Check if we need to recompute all events
-    /*
-    if (ddfInitial != ddf) {
-        
-        if constexpr (SEQ_DEBUG) {
-            
-            debug(true, "bpv: %d %d\n", ddfInitial.bpv, ddf.bpv);
-            debug(true, "bmapen: %d %d\n", ddfInitial.bmapen, ddf.bmapen);
-            debug(true, "shw: %d %d\n", ddfInitial.shw, ddf.shw);
-            debug(true, "rhw: %d %d\n", ddfInitial.rhw, ddf.rhw);
-            debug(true, "bphstart: %d %d\n", ddfInitial.bphstart, ddf.bphstart);
-            debug(true, "bphstop: %d %d\n", ddfInitial.bphstop, ddf.bphstop);
-            debug(true, "bprun: %d %d\n", ddfInitial.bprun, ddf.bprun);
-            debug(true, "lastFu: %d %d\n", ddfInitial.lastFu, ddf.lastFu);
-            debug(true, "bmctl: %d %d\n", ddfInitial.bmctl, ddf.bmctl);
-            debug(true, "cnt: %d %d\n", ddfInitial.cnt, ddf.cnt);
-        }
-        
-        ddfInitial = ddf;
-        trace(SEQ_DEBUG, "hsyncHandler: Forcing an event table update\n");
-        hsyncActions |= UPDATE_BPL_TABLE;
-    }
-    */
-    
-    // Renew the signal list if it has been modified in the previous line
+    // Renew the signal recorder if it has been modified
     if (sigRecorder.modified) {
 
         trace(SEQ_DEBUG, "hsyncHandler: sigRecorder.modified\n");
@@ -115,7 +91,6 @@ Sequencer::hsyncHandler()
         }
         if (hsyncActions & UPDATE_BPL_TABLE) {
             
-            trace(SEQ_DEBUG, "hsyncActions & UPDATE_BPL_TABLE\n");
             hsyncActions &= ~UPDATE_BPL_TABLE;
             computeBplEventTable(sigRecorder);
         }

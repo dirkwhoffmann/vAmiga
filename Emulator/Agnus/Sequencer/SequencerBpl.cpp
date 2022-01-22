@@ -12,10 +12,11 @@
 #include "Agnus.h"
 
 void
-Sequencer::clearBplEvents()
+Sequencer::initBplEvents()
 {
     for (isize i = 0; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
     for (isize i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX;
+    
     bplEvent[HPOS_MAX] = BPL_EOL;
     nextBplEvent[HPOS_MAX] = 0;
 }
@@ -23,17 +24,8 @@ Sequencer::clearBplEvents()
 void
 Sequencer::initSigRecorder()
 {
-    // Predict all events for the current scanline
     sigRecorder.clear();
- 
-    /*
-    if (agnus.pos.v == diwVstop || agnus.inLastRasterline()) {
-        sigRecorder.insert(0, SIG_VFLOP_CLR);
-    } else if (agnus.pos.v == diwVstrt) {
-        sigRecorder.insert(0, SIG_VFLOP_SET);
-    }
-    */
-    
+     
     sigRecorder.insert(0x18, SIG_SHW);
     sigRecorder.insert(ddfstrt, SIG_BPHSTART);
     sigRecorder.insert(ddfstop, SIG_BPHSTOP);
@@ -52,10 +44,10 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
 template <bool ecs> void
 Sequencer::computeBplEventTable(const SigRecorder &sr)
 {
-    auto state = ddfInitial;
-    
     trace(SEQ_DEBUG, "computeBplEvents\n");
-    
+
+    auto state = ddfInitial;
+        
     // Update the BMCTL bits with the current value
     state.bmctl = agnus.bplcon0Initial >> 12;
     
@@ -69,7 +61,7 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
         computeBplEventsSlow <ecs> (sr, state);
     }
     
-    // Add the End Of Line event
+    // Add the EOL event (end of line)
     bplEvent[HPOS_MAX] |= BPL_EOL;
                             
     // Update the jump table
@@ -92,7 +84,7 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
 template <bool ecs> void
 Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
 {
-    // Only take this path if bitplane DMA if off in the entire line
+    // This path can be taken only if bitplane DMA if off in the entire line
     assert(!sr.modified);
     assert(!state.bpv || !state.bmapen);
 
@@ -101,7 +93,7 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
     // Erase all events
     for (isize i = 0; i < HPOS_CNT; i++) bplEvent[i] = EVENT_NONE;
     
-    // Add drawing flags 
+    // Add drawing flags
     if (state.bmctl & 0x8) {
 
         auto odd = agnus.scrollOdd & 0b11;
@@ -128,11 +120,12 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
     }
         
     // Emulate all signal events
-    u16 signal = 0;
-    for (isize i = 0; !(signal & SIG_DONE); i++) {
+    for (isize i = 0;; i++) {
         
-        signal = sigRecorder.elements[i];
+        auto signal = sigRecorder.elements[i];
         processSignal <ecs> (signal, state);
+        
+        if (signal & SIG_DONE) break;
     }
 }
 
@@ -141,16 +134,13 @@ Sequencer::computeBplEventsSlow(const SigRecorder &sr, DDFState &state)
 {
     trace(SEQ_DEBUG, "Slow path\n");
     
-    isize cycle = 0;
-    isize trigger = 0;
-    u16 signal = 0;
-
-    for (isize i = 0; !(signal & SIG_DONE); i++) {
+    // Iterate over all recorder signals
+    for (isize i = 0, cycle = 0;; i++) {
         
         assert(i < sigRecorder.count());
-        
-        signal = sigRecorder.elements[i];
-        trigger = (isize)sigRecorder.keys[i];
+
+        u16 signal = sigRecorder.elements[i];
+        isize trigger = (isize)sigRecorder.keys[i];
         
         assert(trigger < HPOS_CNT);
         
@@ -160,6 +150,9 @@ Sequencer::computeBplEventsSlow(const SigRecorder &sr, DDFState &state)
         // Emulate the signal change
         processSignal <ecs> (signal, state);
         
+        // Exit if the DONE signal has been processed
+        if (signal & SIG_DONE) break;
+
         cycle = trigger;
     }
 }
@@ -502,6 +495,18 @@ Sequencer::processSignal <true, SIG_DONE> (DDFState &state)
 }
 
 void
+Sequencer::updateBplJumpTable()
+{
+    u8 next = 0;
+    
+    for (isize i = HPOS_MAX; i >= 0; i--) {
+        
+        nextBplEvent[i] = next;
+        if (bplEvent[i]) next = (i8)i;
+    }
+}
+
+void
 Sequencer::computeFetchUnit(u8 dmacon)
 {
     if (dmacon & 0x8) {
@@ -576,16 +581,4 @@ Sequencer::computeHiresFetchUnit()
     fetch[1][5] = channels < 2 ? 0 : BPL_H2_MOD;
     fetch[1][6] = channels < 3 ? 0 : BPL_H3_MOD;
     fetch[1][7] = channels < 1 ? 0 : BPL_H1_MOD;
-}
-
-void
-Sequencer::updateBplJumpTable()
-{
-    u8 next = 0;
-    
-    for (isize i = HPOS_MAX; i >= 0; i--) {
-        
-        nextBplEvent[i] = next;
-        if (bplEvent[i]) next = (i8)i;
-    }
 }

@@ -273,14 +273,14 @@ private:
         << diwstrt
         << diwstop
         << diwVstrt
-        << diwVstrtInitial
         << diwVstop
+        << diwVstrtInitial
         << diwVstopInitial
         << lineIsBlank
 
-        << hsyncActions
-        
-        >> sigRecorder;
+        >> sigRecorder
+
+        << hsyncActions;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
@@ -313,15 +313,15 @@ public:
     
 public:
 
-    // Removes all events
-    void clearBplEvents();
-
     // Recomputes the BPL event table
     void computeBplEventTable(const SigRecorder &sr);
 
 private:
 
-    // Initializes the signal recorder with proper values for the current line
+    // Initializes the event table with default values
+    void initBplEvents();
+
+    // Predict signal changes for the current scanline
     void initSigRecorder();
     
     // Recomputes the BPL event table
@@ -334,13 +334,13 @@ private:
     template <bool ecs> void processSignal(u16 signal, DDFState &state);
     template <bool ecs, u16 signal> void processSignal(DDFState &state);
 
+    // Updates the jump table for the bplEvent table
+    void updateBplJumpTable();
+
     // Computes the layout of a single fetch unit
     void computeFetchUnit(u8 dmacon);
     template <u8 channels> void computeLoresFetchUnit();
     template <u8 channels> void computeHiresFetchUnit();
-
-    // Updates the jump table for the bplEvent table
-    void updateBplJumpTable();
     
     
     //
@@ -350,7 +350,7 @@ private:
 public:
     
     // Removes all events
-    void clearDasEvents();
+    void initDasEvents();
 
     // Renews all events in the the DAS event table
     void updateDasEvents(u16 dmacon);

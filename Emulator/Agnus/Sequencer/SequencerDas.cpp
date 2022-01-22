@@ -62,7 +62,7 @@ Sequencer::initDasEventTable()
 }
 
 void
-Sequencer::clearDasEvents()
+Sequencer::initDasEvents()
 {
     for (isize i = 0; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
     updateDasJumpTable();
