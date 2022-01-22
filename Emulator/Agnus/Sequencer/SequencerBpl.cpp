@@ -202,91 +202,6 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
     }
 }
 
-template <bool ecs> void
-Sequencer::processSignal(u16 signal, DDFState &state)
-{
-    if (signal & SIG_CON) {
-        
-        state.bmctl = (u8)(signal & 0xF);
-        computeFetchUnit(state.bmctl);
-    }
-    switch (signal & (SIG_BMAPEN_CLR | SIG_BMAPEN_SET)) {
-            
-        case SIG_BMAPEN_CLR:
-        
-            processSignal <ecs, SIG_BMAPEN_CLR> (state);
-            break;
-            
-        case SIG_BMAPEN_SET:
-        
-            processSignal <ecs, SIG_BMAPEN_SET> (state);
-            break;
-    }
-    switch (signal & (SIG_VFLOP_SET | SIG_VFLOP_CLR)) {
-            
-        case SIG_VFLOP_SET:
-        
-            processSignal <ecs, SIG_VFLOP_SET> (state);
-            break;
-            
-        case SIG_VFLOP_CLR:
-        
-            processSignal <ecs, SIG_VFLOP_CLR> (state);
-            break;
-    }
-    switch (signal & (SIG_SHW | SIG_RHW)) {
-            
-        case SIG_SHW:
-            
-            if (signal & SIG_BPHSTOP) {
-                processSignal <ecs, SIG_SHW | SIG_BPHSTOP> (state);
-            } else {
-                processSignal <ecs, SIG_SHW> (state);
-            }
-            break;
-            
-        case SIG_RHW:
-
-            processSignal <ecs, SIG_RHW> (state);
-            break;
-    }
-    switch (signal & (SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW | SIG_RHW)) {
-            
-        case SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW:
-            
-            processSignal <ecs, SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW> (state);
-            break;
-            
-        case SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW:
-            
-            processSignal <ecs, SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW> (state);
-            break;
-            
-        case SIG_BPHSTART | SIG_BPHSTOP:
-            
-            processSignal <ecs, SIG_BPHSTART | SIG_BPHSTOP> (state);
-            break;
-                        
-        case SIG_BPHSTART:
-        case SIG_BPHSTART | SIG_SHW:
-        case SIG_BPHSTART | SIG_RHW:
-
-            processSignal <ecs, SIG_BPHSTART> (state);
-            break;
-            
-        case SIG_BPHSTOP:
-        case SIG_BPHSTOP | SIG_SHW:
-        case SIG_BPHSTOP | SIG_RHW:
-
-            processSignal <ecs, SIG_BPHSTOP> (state);
-            break;
-    }
-    if (signal & SIG_DONE) {
-        
-        processSignal <ecs, SIG_DONE> (state);
-    }
-}
-
 template <> void
 Sequencer::processSignal <false, SIG_BMAPEN_CLR> (DDFState &state)
 {
@@ -493,6 +408,186 @@ Sequencer::processSignal <true, SIG_DONE> (DDFState &state)
     state.shw = false;
     state.bphstop = false;
 }
+
+template <> void
+Sequencer::processSignal <false> (u16 signal, DDFState &state)
+{
+    //
+    // OCS logic
+    //
+
+    if (signal & SIG_CON) {
+        
+        state.bmctl = (u8)(signal & 0xF);
+        computeFetchUnit(state.bmctl);
+    }
+    switch (signal & (SIG_BMAPEN_CLR | SIG_BMAPEN_SET)) {
+            
+        case SIG_BMAPEN_CLR:
+        
+            processSignal <false, SIG_BMAPEN_CLR> (state);
+            break;
+            
+        case SIG_BMAPEN_SET:
+        
+            processSignal <false, SIG_BMAPEN_SET> (state);
+            break;
+    }
+    switch (signal & (SIG_VFLOP_SET | SIG_VFLOP_CLR)) {
+            
+        case SIG_VFLOP_SET:
+        
+            processSignal <false, SIG_VFLOP_SET> (state);
+            break;
+            
+        case SIG_VFLOP_CLR:
+        
+            processSignal <false, SIG_VFLOP_CLR> (state);
+            break;
+    }
+    switch (signal & (SIG_SHW | SIG_RHW)) {
+            
+        case SIG_SHW:
+            
+            if (signal & SIG_BPHSTOP) {
+                processSignal <false, SIG_SHW | SIG_BPHSTOP> (state);
+            } else {
+                processSignal <false, SIG_SHW> (state);
+            }
+            break;
+            
+        case SIG_RHW:
+
+            processSignal <false, SIG_RHW> (state);
+            break;
+    }
+    switch (signal & (SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW | SIG_RHW)) {
+            
+        case SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW:
+            
+            processSignal <false, SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW> (state);
+            break;
+            
+        case SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW:
+            
+            processSignal <false, SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW> (state);
+            break;
+            
+        case SIG_BPHSTART | SIG_BPHSTOP:
+            
+            processSignal <false, SIG_BPHSTART | SIG_BPHSTOP> (state);
+            break;
+                        
+        case SIG_BPHSTART:
+        case SIG_BPHSTART | SIG_SHW:
+        case SIG_BPHSTART | SIG_RHW:
+
+            processSignal <false, SIG_BPHSTART> (state);
+            break;
+            
+        case SIG_BPHSTOP:
+        case SIG_BPHSTOP | SIG_SHW:
+        case SIG_BPHSTOP | SIG_RHW:
+
+            processSignal <false, SIG_BPHSTOP> (state);
+            break;
+    }
+    if (signal & SIG_DONE) {
+        
+        processSignal <false, SIG_DONE> (state);
+    }
+}
+
+template <> void
+Sequencer::processSignal <true> (u16 signal, DDFState &state)
+{
+    //
+    // ECS logic
+    //
+    
+    if (signal & SIG_CON) {
+        
+        state.bmctl = (u8)(signal & 0xF);
+        computeFetchUnit(state.bmctl);
+    }
+    switch (signal & (SIG_BMAPEN_CLR | SIG_BMAPEN_SET)) {
+            
+        case SIG_BMAPEN_CLR:
+        
+            processSignal <true, SIG_BMAPEN_CLR> (state);
+            break;
+            
+        case SIG_BMAPEN_SET:
+        
+            processSignal <true, SIG_BMAPEN_SET> (state);
+            break;
+    }
+    switch (signal & (SIG_VFLOP_SET | SIG_VFLOP_CLR)) {
+            
+        case SIG_VFLOP_SET:
+        
+            processSignal <true, SIG_VFLOP_SET> (state);
+            break;
+            
+        case SIG_VFLOP_CLR:
+        
+            processSignal <true, SIG_VFLOP_CLR> (state);
+            break;
+    }
+    switch (signal & (SIG_SHW | SIG_RHW)) {
+            
+        case SIG_SHW:
+            
+            if (signal & SIG_BPHSTOP) {
+                processSignal <true, SIG_SHW | SIG_BPHSTOP> (state);
+            } else {
+                processSignal <true, SIG_SHW> (state);
+            }
+            break;
+            
+        case SIG_RHW:
+
+            processSignal <true, SIG_RHW> (state);
+            break;
+    }
+    switch (signal & (SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW | SIG_RHW)) {
+            
+        case SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW:
+            
+            processSignal <true, SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW> (state);
+            break;
+            
+        case SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW:
+            
+            processSignal <true, SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW> (state);
+            break;
+            
+        case SIG_BPHSTART | SIG_BPHSTOP:
+            
+            processSignal <true, SIG_BPHSTART | SIG_BPHSTOP> (state);
+            break;
+                        
+        case SIG_BPHSTART:
+        case SIG_BPHSTART | SIG_SHW:
+        case SIG_BPHSTART | SIG_RHW:
+
+            processSignal <true, SIG_BPHSTART> (state);
+            break;
+            
+        case SIG_BPHSTOP:
+        case SIG_BPHSTOP | SIG_SHW:
+        case SIG_BPHSTOP | SIG_RHW:
+
+            processSignal <true, SIG_BPHSTOP> (state);
+            break;
+    }
+    if (signal & SIG_DONE) {
+        
+        processSignal <true, SIG_DONE> (state);
+    }
+}
+
+
 
 void
 Sequencer::updateBplJumpTable()
