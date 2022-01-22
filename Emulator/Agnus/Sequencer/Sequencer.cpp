@@ -30,8 +30,10 @@ Sequencer::hsyncHandler()
 {
     diwVstrtInitial = diwVstrt;
     diwVstopInitial = diwVstop;
-
+    ddfInitial = ddf;
+    
     // Check if we need to recompute all events
+    /*
     if (ddfInitial != ddf) {
         
         if constexpr (SEQ_DEBUG) {
@@ -52,6 +54,7 @@ Sequencer::hsyncHandler()
         trace(SEQ_DEBUG, "hsyncHandler: Forcing an event table update\n");
         hsyncActions |= UPDATE_BPL_TABLE;
     }
+    */
     
     // Renew the signal list if it has been modified in the previous line
     if (sigRecorder.modified) {

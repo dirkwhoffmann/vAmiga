@@ -70,7 +70,7 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
     }
     
     // Add the End Of Line event
-    bplEvent[HPOS_MAX] = BPL_EOL;  // TODO: Should be |= !?
+    bplEvent[HPOS_MAX] |= BPL_EOL;
                             
     // Update the jump table
     updateBplJumpTable();
@@ -82,7 +82,11 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
     ddf = state;
 
     // Check if we need to recompute all events in the next scanline
-    // if (state != ddfInitial) hsyncActions |= UPDATE_BPL_TABLE;
+    if (state != ddfInitial) {
+     
+        trace(SEQ_DEBUG, "Recompute table in next line\n");
+        hsyncActions |= UPDATE_BPL_TABLE;
+    }
 }
 
 template <bool ecs> void
