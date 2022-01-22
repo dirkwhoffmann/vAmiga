@@ -35,17 +35,28 @@ Sequencer::setDDFSTRT(u16 old, u16 value)
 {
     trace(DDF_DEBUG, "setDDFSTRT(%d, %d)\n", old, value);
 
-    ddfstrt = value;
-
     auto posh = agnus.pos.h;
     
-    if (posh == old) {
-        trace(XFILES, "setDDFSTRT: Old value matches trigger position\n");
-    }
-    if (posh == value) {
-        trace(XFILES, "setDDFSTRT: New value matches trigger position\n");
-    }
+    if (old != posh && value != posh) {
         
+        if (old == value) {
+            trace(SEQ_DEBUG, "setDDFSTRT: Skipping (value does not change)\n");
+            return;
+        }
+    
+    } else {
+        
+        if (posh != old) {
+            trace(XFILES, "setDDFSTRT: Old value matches trigger position\n");
+        }
+        if (posh == value) {
+            trace(XFILES, "setDDFSTRT: New value matches trigger position\n");
+        }
+    }
+    
+    ddfstrt = value;
+    trace(SEQ_DEBUG, "setDDFSTRT: %04x -> %04x\n", old, value);
+    
     // Remove the old start event if it hasn't been reached
     sigRecorder.invalidate(posh, SIG_BPHSTART);
     
@@ -81,17 +92,28 @@ Sequencer::setDDFSTOP(u16 old, u16 value)
 {
     trace(DDF_DEBUG, "setDDFSTOP(%d, %d)\n", old, value);
 
-    ddfstop = value;
-
     auto posh = agnus.pos.h;
     
-    if (posh == old) {
-        trace(XFILES, "setDDFSTOP: Old value matches trigger position\n");
-    }
-    if (posh == value) {
-        trace(XFILES, "setDDFSTOP: New value matches trigger position\n");
+    if (old != posh && value != posh) {
+        
+        if (old == value) {
+            trace(SEQ_DEBUG, "setDDFSTOP: Skipping (value does not change)\n");
+            return;
+        }
+    
+    } else {
+        
+        if (posh != old) {
+            trace(XFILES, "setDDFSTOP: Old value matches trigger position\n");
+        }
+        if (posh == value) {
+            trace(XFILES, "setDDFSTOP: New value matches trigger position\n");
+        }
     }
     
+    ddfstop = value;
+    trace(SEQ_DEBUG, "setDDFSTOP: %04x -> %04x\n", old, value);
+
     // Remove the old stop event if it hasn't been reached
     sigRecorder.invalidate(posh + 1, SIG_BPHSTOP);
     
