@@ -115,7 +115,7 @@ Agnus::setBPLEN(bool value)
     } else {
         sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_CLR);
     }
-    sequencer.computeBplEvents(sequencer.sigRecorder);
+    sequencer.computeBplEventTable(sequencer.sigRecorder);
 }
 
 void
@@ -298,7 +298,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
             trace(SEQ_DEBUG, "setBPLCON0: Recomputing BPL event table\n");
 
             // Recompute the bitplane event table
-            sequencer.computeBplEvents(sequencer.sigRecorder);
+            sequencer.computeBplEventTable(sequencer.sigRecorder);
                 
             // Since the table has changed, we need to update the event slot
             scheduleBplEventForCycle(pos.h);
@@ -339,7 +339,7 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
     scrollEven = (bplcon1 & 0b11100000) >> 5;
     
     // Update the bitplane event table
-    sequencer.computeBplEvents(sequencer.sigRecorder);
+    sequencer.computeBplEventTable(sequencer.sigRecorder);
     
     // Update the scheduled bitplane event according to the new table
     scheduleBplEventForCycle(pos.h);

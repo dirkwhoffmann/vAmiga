@@ -120,7 +120,7 @@ Sequencer::hsyncHandler()
             
             trace(SEQ_DEBUG, "hsyncActions & UPDATE_BPL_TABLE\n");
             hsyncActions &= ~UPDATE_BPL_TABLE;
-            computeBplEvents(sigRecorder);
+            computeBplEventTable(sigRecorder);
         }
         if (hsyncActions & UPDATE_DAS_TABLE) {
             

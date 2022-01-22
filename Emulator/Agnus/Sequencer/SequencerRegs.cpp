@@ -64,7 +64,7 @@ Sequencer::setDDFSTRT(u16 old, u16 value)
     if (ddfstrt > posh) sigRecorder.insert(ddfstrt, SIG_BPHSTART);
     
     // Recompute the event table
-    computeBplEvents(sigRecorder);
+    computeBplEventTable(sigRecorder);
 }
 
 template <Accessor s> void
@@ -121,7 +121,7 @@ Sequencer::setDDFSTOP(u16 old, u16 value)
     if (ddfstop > posh) sigRecorder.insert(ddfstop, SIG_BPHSTOP);
     
     // Recompute the event table
-    computeBplEvents(sigRecorder);
+    computeBplEventTable(sigRecorder);
 }
 
 void
@@ -138,7 +138,7 @@ Sequencer::setDIWSTRT(u16 value)
     if (agnus.pos.v == diwVstrt && agnus.pos.v != diwVstop) {
         
         sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_SET);
-        computeBplEvents(sigRecorder);
+        computeBplEventTable(sigRecorder);
     }
 }
 
@@ -156,13 +156,13 @@ Sequencer::setDIWSTOP(u16 value)
     if (agnus.pos.v == diwVstop) {
         
         sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_CLR);
-        computeBplEvents(sigRecorder);
+        computeBplEventTable(sigRecorder);
     }
 
     if (agnus.pos.v != diwVstop && agnus.pos.v == diwVstrt) {
             
         sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_SET);
-        computeBplEvents(sigRecorder);
+        computeBplEventTable(sigRecorder);
     }
 }
 

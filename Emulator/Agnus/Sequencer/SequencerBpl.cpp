@@ -44,13 +44,13 @@ Sequencer::initSigRecorder()
 }
 
 void
-Sequencer::computeBplEvents(const SigRecorder &sr)
+Sequencer::computeBplEventTable(const SigRecorder &sr)
 {
-    agnus.isECS() ? computeBplEvents <true> (sr) : computeBplEvents <false> (sr);
+    agnus.isECS() ? computeBplEventTable <true> (sr) : computeBplEventTable <false> (sr);
 }
 
 template <bool ecs> void
-Sequencer::computeBplEvents(const SigRecorder &sr)
+Sequencer::computeBplEventTable(const SigRecorder &sr)
 {
     auto state = ddfInitial;
     
@@ -59,27 +59,36 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
     // Update the BMCTL bits with the current value
     state.bmctl = agnus.bplcon0Initial >> 12;
     
-    // Evaluate the vertical DIW flipflop
-    if (state.bpv) {
-        lineIsBlank = false;
-    } else {
-        state.bprun = false;
-        state.cnt = 0;
-    }
+    // Evaluate the current state of the vertical DIW flipflop
+    if (!state.bpv) { state.bprun = false; state.cnt = 0; }
     
+    // Fill the event table
+    // TODO: ADD A QUICK PATH IN CASE BPL DMA IS OFF FOR THE WHOLE LINE
+    computeBplEvents <ecs> (sr, state);
+    
+    // Add the End Of Line event
+    bplEvent[HPOS_MAX] = BPL_EOL;
+                            
+    // Update the jump table
+    updateBplJumpTable();
+
+    // Rectify the currently scheduled event
+    agnus.scheduleBplEventForCycle(agnus.pos.h);
+    
+    // Write back the new ddf state
+    ddf = state;
+
+    // Check if we need to recompute all events in the next scanline
+    // if (state != ddfInitial) hsyncActions |= UPDATE_BPL_TABLE;
+}
+
+template <bool ecs> void
+Sequencer::computeBplEvents(const SigRecorder &sr, DDFState &state)
+{
     isize cycle = 0;
     isize trigger = 0;
     u16 signal = 0;
 
-    /*
-    if (agnus.pos.v == 0x43 || agnus.pos.v == 0x42) {
-    
-        trace(true, "Signals:\n");
-        dump(dump::Signals);
-        dump(dump::State);
-    }
-    */
-     
     for (isize i = 0; !(signal & SIG_DONE); i++) {
         
         assert(i < sigRecorder.count());
@@ -97,21 +106,6 @@ Sequencer::computeBplEvents(const SigRecorder &sr)
         
         cycle = trigger;
     }
-    
-    // Add the End Of Line event
-    bplEvent[HPOS_MAX] = BPL_EOL;
-                            
-    // Update the jump table
-    updateBplJumpTable();
-
-    // Rectify the currently scheduled event
-    agnus.scheduleBplEventForCycle(agnus.pos.h);
-    
-    // Write back the new ddf state
-    ddf = state;
-
-    // Check if we need to recompute all events in the next scanline
-    // if (state != ddfInitial) hsyncActions |= UPDATE_BPL_TABLE;
 }
 
 template <bool ecs> void
