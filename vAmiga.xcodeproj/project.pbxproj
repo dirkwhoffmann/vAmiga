@@ -948,7 +948,6 @@
 		508FDE5B21EA1FA40043D0E9 = {
 			isa = PBXGroup;
 			children = (
-				50B14C0921EB228E002E32A6 /* config.h */,
 				508FE06021EA318D0043D0E9 /* Emulator */,
 				50B14C2421EB8F25002E32A6 /* Proxy */,
 				508FDFDC21EA20600043D0E9 /* GUI */,
@@ -1100,6 +1099,7 @@
 		508FE06021EA318D0043D0E9 /* Emulator */ = {
 			isa = PBXGroup;
 			children = (
+				50B14C0921EB228E002E32A6 /* config.h */,
 				50CF461C2620420500BB3B95 /* CMakeLists.txt */,
 				50D661862282BE1800D67D88 /* AmigaTypes.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,

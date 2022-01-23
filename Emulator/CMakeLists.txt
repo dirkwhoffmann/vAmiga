@@ -34,7 +34,6 @@ endif()
 # Add include paths
 target_include_directories(vAmigaCore PUBLIC
 ${CMAKE_CURRENT_SOURCE_DIR}/.
-${CMAKE_CURRENT_SOURCE_DIR}/..
 ${CMAKE_CURRENT_SOURCE_DIR}/Utilities
 ${CMAKE_CURRENT_SOURCE_DIR}/Base
 ${CMAKE_CURRENT_SOURCE_DIR}/LogicBoard
