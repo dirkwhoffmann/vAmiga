@@ -207,7 +207,9 @@ static const int FORCE_RECORDING_ERROR     = 0;
 
 
 #ifdef RELEASEBUILD
+#ifndef NDEBUG
 #define NDEBUG
+#endif
 static const int releaseBuild = 1;
 #else
 static const int releaseBuild = 0;
