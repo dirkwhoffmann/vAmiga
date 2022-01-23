@@ -262,7 +262,6 @@
 		50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5F27121F1B6DF000627D1 /* AmigaKey.swift */; };
 		50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* Disk.cpp */; };
 		50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEBC21F4F61F0091155D /* Drive.cpp */; };
-		50F924FD2428B8CD00DD91AB /* DDF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F924FB2428B8CD00DD91AB /* DDF.cpp */; };
 		50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
 		50FAC77525160BBF00E47421 /* DiskFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* DiskFile.cpp */; };
 		50FC08AD27819CD100F0C567 /* AgnusInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08AC27819CD100F0C567 /* AgnusInfo.cpp */; };
@@ -726,8 +725,6 @@
 		50F6EEB721F4F5C60091155D /* Disk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Disk.h; sourceTree = "<group>"; };
 		50F6EEBC21F4F61F0091155D /* Drive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Drive.cpp; sourceTree = "<group>"; };
 		50F6EEBD21F4F61F0091155D /* Drive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drive.h; sourceTree = "<group>"; };
-		50F924FB2428B8CD00DD91AB /* DDF.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DDF.cpp; sourceTree = "<group>"; };
-		50F924FC2428B8CD00DD91AB /* DDF.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDF.h; sourceTree = "<group>"; };
 		50FAC76E2515EBED00E47421 /* IMGFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IMGFile.cpp; sourceTree = "<group>"; };
 		50FAC76F2515EBED00E47421 /* IMGFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMGFile.h; sourceTree = "<group>"; };
 		50FAC77325160BBF00E47421 /* DiskFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskFile.cpp; sourceTree = "<group>"; };
@@ -849,8 +846,6 @@
 				50CF4634262042D300BB3B95 /* CMakeLists.txt */,
 				503990C522D8CCB600035783 /* Beam.h */,
 				5015FF3E242BA00F005175D9 /* Frame.h */,
-				50F924FC2428B8CD00DD91AB /* DDF.h */,
-				50F924FB2428B8CD00DD91AB /* DDF.cpp */,
 				50A6143B260CE6C400A01428 /* BusTypes.h */,
 				50DF2C9E2268CFC000795256 /* AgnusTypes.h */,
 				5020B17C21EF121E00B9E80E /* Agnus.h */,
@@ -1965,7 +1960,6 @@
 				508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */,
 				505C83FD2773C9BA001F8159 /* SerServer.cpp in Sources */,
 				508FE05421EA22CC0043D0E9 /* ControlsPrefs.swift in Sources */,
-				50F924FD2428B8CD00DD91AB /* DDF.cpp in Sources */,
 				50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */,
 				50AEBEDC24D3D8170037082D /* UARTEvents.cpp in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
