@@ -1,6 +1,5 @@
 target_sources(vAmigaCore PRIVATE
 
-DDF.cpp
 Agnus.cpp
 AgnusInfo.cpp
 AgnusRegs.cpp
