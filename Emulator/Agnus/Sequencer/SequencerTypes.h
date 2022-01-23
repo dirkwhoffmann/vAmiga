@@ -40,9 +40,6 @@ static constexpr u16 SIG_BPHSTOP        = 0b0000010000000000;
 static constexpr u16 SIG_SHW            = 0b0000100000000000;
 static constexpr u16 SIG_RHW            = 0b0001000000000000;
 static constexpr u16 SIG_DONE           = 0b0010000000000000;
-#endif
-
-#ifdef __cplusplus
 
 struct DDFState
 {
