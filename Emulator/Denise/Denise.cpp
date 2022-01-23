@@ -900,7 +900,7 @@ Denise::updateBorderColor()
 void
 Denise::drawBorder()
 {
-    bool hFlopWasSet = diwHFlop || diwHFlopOn != -1;
+    bool hFlopWasSet = hflop || hflopOn != -1;
     
     if (agnus.sequencer.lineIsBlank || !hFlopWasSet) {
 
@@ -912,15 +912,15 @@ Denise::drawBorder()
     } else {
 
         // Draw left border
-        if (!diwHFlop && diwHFlopOn != -1) {
-            for (isize i = 0; i < 2 * diwHFlopOn; i++) {
+        if (!hflop && hflopOn != -1) {
+            for (isize i = 0; i < 2 * hflopOn; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
 
         // Draw right border
-        if (diwHFlopOff != -1) {
-            for (isize i = 2 * diwHFlopOff; i < HPIXELS; i++) {
+        if (hflopOff != -1) {
+            for (isize i = 2 * hflopOff; i < HPIXELS; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
@@ -1057,7 +1057,7 @@ Denise::checkP2PCollisions()
 void
 Denise::vsyncHandler()
 {
-    diwHFlop = true;
+    hflop = true;
     pixelEngine.vsyncHandler();
     debugger.vsyncHandler();
 }
@@ -1072,9 +1072,9 @@ Denise::beginOfLine(isize vpos)
     wasArmed = armed;
 
     // Update the horizontal DIW flipflop
-    diwHFlop = (diwHFlopOff != -1) ? false : (diwHFlopOn != -1) ? true : diwHFlop;
-    diwHFlopOn = denise.diwHstrt; 
-    diwHFlopOff = denise.diwHstop;
+    hflop = (hflopOff != -1) ? false : (hflopOn != -1) ? true : hflop;
+    hflopOn = denise.hstrt; 
+    hflopOff = denise.hstop;
 
     // Clear the bBuffer
     std::memset(bBuffer, 0, sizeof(bBuffer));

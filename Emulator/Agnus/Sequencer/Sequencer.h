@@ -165,33 +165,6 @@ public:
 
 public:
     
-    /* The Amiga limits the visible screen area by an upper, a lower, a left,
-     * and a right border. The border encloses an area called the Display
-     * Window (DIW). The color of the pixels inside the display window depends
-     * on the bitplane data. The pixels of the border area are always drawn in
-     * the background color (which might change inside the border area).
-     * The size of the display window is controlled by two registers called
-     * DIWSTRT and DIWSTOP. They contain the vertical and horizontal positions
-     * at which the window starts and stops. The resolution of vertical start
-     * and stop is one scan line. The resolution of horizontal start and stop
-     * is one low-resolution pixel.
-     *
-     * I haven't found detailed information about the how the DIW logic is
-     * implemented in hardware inside Agnus. If you have such information,
-     * please let me know. For the time being, I base my implementation on the
-     * following assumptions:
-     *
-     * 1. Denise contains a single flipflop controlling the display window
-     *    horizontally. The flop is cleared inside the border area and set
-     *    inside the display area.
-     * 2. When hpos matches the position in DIWSTRT, the flipflop is set.
-     * 3. When hpos matches the position in DIWSTOP, the flipflop is reset.
-     * 4. The smallest valid value for DIWSTRT is $02. If it is smaller, it is
-     *    not recognised.
-     * 5. The largest valid value for DIWSTOP is $(1)C7. If it is larger, it is
-     *    not recognised.
-     */
-
     // Register values as written by pokeDIWSTRT/STOP()
     u16 diwstrt;
     u16 diwstop;

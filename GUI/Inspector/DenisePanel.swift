@@ -58,10 +58,10 @@ extension Inspector {
         denisePF1P0.state  = (bplcon2 & 0b0000001 != 0) ? .on : .off
 
         // Display window section
-        let hstrt = deniseInfo.diwHstrt
-        let vstrt = deniseInfo.diwVstrt
-        let hstop = deniseInfo.diwHstop
-        let vstop = deniseInfo.diwVstop
+        let hstrt = deniseInfo.hstrt
+        let vstrt = deniseInfo.vstrt
+        let hstop = deniseInfo.hstop
+        let vstop = deniseInfo.vstop
         deniseDIWSTRT.integerValue = Int(deniseInfo.diwstrt)
         deniseDIWSTRTText.stringValue = "(\(hstrt),\(vstrt))"
         deniseDIWSTOP.integerValue = Int(deniseInfo.diwstop)

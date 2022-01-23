@@ -103,10 +103,10 @@ typedef struct
 
     u16 diwstrt;
     u16 diwstop;
-    isize diwHstrt;
-    isize diwHstop;
-    isize diwVstrt;
-    isize diwVstop;
+    isize hstrt;
+    isize hstop;
+    isize vstrt;
+    isize vstop;
 
     u16 joydat[2];
     u16 clxdat;

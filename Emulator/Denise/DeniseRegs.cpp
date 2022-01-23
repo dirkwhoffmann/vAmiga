@@ -49,20 +49,20 @@ Denise::setDIWSTRT(u16 value)
     isize cur = 2 * agnus.pos.h;
     
     // (1) and (2)
-    if (cur < denise.diwHstrt && cur < newDiwHstrt) {
+    if (cur < denise.hstrt && cur < newDiwHstrt) {
         
         trace(DIW_DEBUG, "Updating DIW hflop immediately at %ld\n", cur);
-        diwHFlopOn = newDiwHstrt;
+        hflopOn = newDiwHstrt;
     }
     
     // (3)
-    if (newDiwHstrt < cur && cur < diwHstrt) {
+    if (newDiwHstrt < cur && cur < hstrt) {
         
         trace(DIW_DEBUG, "DIW hflop not switched on in current line\n");
-        diwHFlopOn = -1;
+        hflopOn = -1;
     }
     
-    diwHstrt = newDiwHstrt;
+    hstrt = newDiwHstrt;
 }
 
 void
@@ -86,20 +86,20 @@ Denise::setDIWSTOP(u16 value)
     isize cur = 2 * agnus.pos.h;
     
     // (1) and (2) (see setDIWSTRT)
-    if (cur < diwHstop && cur < newDiwHstop) {
+    if (cur < hstop && cur < newDiwHstop) {
         
         trace(DIW_DEBUG, "Updating hFlopOff immediately at %ld\n", cur);
-        diwHFlopOff = newDiwHstop;
+        hflopOff = newDiwHstop;
     }
     
     // (3) (see setDIWSTRT)
-    if (newDiwHstop < cur && cur < diwHstop) {
+    if (newDiwHstop < cur && cur < hstop) {
         
         trace(DIW_DEBUG, "hFlop not switched off in current line\n");
-        diwHFlopOff = -1;
+        hflopOff = -1;
     }
     
-    diwHstop = newDiwHstop;
+    hstop = newDiwHstop;
 }
 
 u16

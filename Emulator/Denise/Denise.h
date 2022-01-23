@@ -62,8 +62,8 @@ public:
     u16 diwstop;
     
     // Display window coordinates (extracted from DIWSTRT and DIWSTOP)
-    isize diwHstrt;
-    isize diwHstop;
+    isize hstrt;
+    isize hstop;
     
     /* Denise contains a flipflop controlling the horizontal display window.
      * It is cleared inside the border area and set inside the display area:
@@ -79,14 +79,14 @@ public:
      * To find out the value of the horizontal flipflop inside or at the end
      * of a rasterline, hFlopOn and hFlopOff need to be evaluated.
      */
-    bool diwHFlop;
+    bool hflop;
 
     /* At the end of a rasterline, these variable conains the pixel coordinates
      * where the hpos counter matched diwHstrt or diwHstop, respectively. A
      * value of -1 indicates that no matching event took place.
      */
-    isize diwHFlopOn;
-    isize diwHFlopOff;
+    isize hflopOn;
+    isize hflopOff;
     
     // Bitplane control registers
     u16 bplcon0;
@@ -344,11 +344,11 @@ private:
         
         << diwstrt
         << diwstop
-        << diwHstrt
-        << diwHstop
-        << diwHFlop
-        << diwHFlopOn
-        << diwHFlopOff
+        << hstrt
+        << hstop
+        << hflop
+        << hflopOn
+        << hflopOff
         << bplcon0
         << bplcon1
         << bplcon2
