@@ -202,237 +202,6 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
     }
 }
 
-/*
-template <> void
-Sequencer::processSignal <false, SIG_BMAPEN_CLR> (DDFState &state)
-{
-    // OCS
-    state.bmapen = false;
-    state.bprun = false;
-    state.cnt = 0;
-}
-*/
-
-template <> void
-Sequencer::processSignal <true, SIG_BMAPEN_CLR> (DDFState &state)
-{
-    // ECS
-    state.bmapen = false;
-    state.bprun = false;
-    state.cnt = 0;
-}
-
-/*
-template <> void
-Sequencer::processSignal <false, SIG_BMAPEN_SET> (DDFState &state)
-{
-    // OCS
-    state.bmapen = true;
-}
-*/
-
-template <> void
-Sequencer::processSignal <true, SIG_BMAPEN_SET> (DDFState &state)
-{
-    // ECS
-    state.bmapen = true;
-}
-
-/*
-template <> void
-Sequencer::processSignal <false, SIG_VFLOP_SET> (DDFState &state)
-{
-    // OCS
-    state.bpv = true;
-    lineIsBlank = false;
-}
-*/
-
-template <> void
-Sequencer::processSignal <true, SIG_VFLOP_SET> (DDFState &state)
-{
-    // ECS
-    state.bpv = true;
-    lineIsBlank = false;
-}
-
-/*
-template <> void
-Sequencer::processSignal <false, SIG_VFLOP_CLR> (DDFState &state)
-{
-    // OCS
-    state.bpv = false;
-    state.bprun = false;
-    state.cnt = 0;
-}
-*/
-
-template <> void
-Sequencer::processSignal <true, SIG_VFLOP_CLR> (DDFState &state)
-{
-    // ECS
-    state.bpv = false;
-    state.bprun = false;
-    state.cnt = 0;
-}
-
-template <> void
-Sequencer::processSignal <false, SIG_SHW | SIG_BPHSTOP> (DDFState &state)
-{
-    // OCS
-    state.shw = true;
-}
-
-template <> void
-Sequencer::processSignal <true, SIG_SHW | SIG_BPHSTOP> (DDFState &state)
-{
-    // ECS
-    state.shw = true;
-}
-
-/*
-template <> void
-Sequencer::processSignal <false, SIG_SHW> (DDFState &state)
-{
-    // OCS
-    state.shw = true;
-}
-*/
-
-template <> void
-Sequencer::processSignal <true, SIG_SHW> (DDFState &state)
-{
-    // ECS
-    state.shw = true;
-    state.bprun |= state.bphstart;
-}
-
-/*
-template <> void
-Sequencer::processSignal <false, SIG_RHW> (DDFState &state)
-{
-    // OCS
-    state.rhw |= state.bprun;
-}
-*/
-
-template <> void
-Sequencer::processSignal <true, SIG_RHW> (DDFState &state)
-{
-    // ECS
-    state.rhw = true;
-}
-
-/*
-template <> void
-Sequencer::processSignal <false, SIG_BPHSTART> (DDFState &state)
-{
-    // OCS
-    state.bphstart = state.bphstart || state.shw;
-    state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
-}
-*/
-
-template <> void
-Sequencer::processSignal <true, SIG_BPHSTART> (DDFState &state)
-{
-    // ECS
-    state.bphstart = true;
-    state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
-}
-
-/*
-template <> void
-Sequencer::processSignal <false, SIG_BPHSTOP> (DDFState &state)
-{
-    // OCS
-    state.bphstart &= !state.bprun;
-    state.bphstop |= state.bprun;
-}
-*/
-
-template <> void
-Sequencer::processSignal <true, SIG_BPHSTOP> (DDFState &state)
-{
-    // ECS
-    state.bphstart = false;
-    state.bphstop |= state.bprun;
-}
-
-/*
-template <> void
-Sequencer::processSignal <false, SIG_BPHSTART | SIG_BPHSTOP> (DDFState &state)
-{
-    // OCS
-    if (state.bprun) {
-        processSignal <false, SIG_BPHSTOP> (state);
-    } else {
-        processSignal <false, SIG_BPHSTART> (state);
-    }
-}
-*/
-
-template <> void
-Sequencer::processSignal <true, SIG_BPHSTART | SIG_BPHSTOP> (DDFState &state)
-{
-    // ECS
-    state.bphstop |= state.bprun;
-    state.bphstart = true;
-    state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
-}
-
-/*
-template <> void
-Sequencer::processSignal <false, SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW> (DDFState &state)
-{
-    // OCS
-    processSignal <false, SIG_BPHSTART | SIG_BPHSTOP> (state);
-}
-*/
-
-template <> void
-Sequencer::processSignal <true, SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW> (DDFState &state)
-{
-    // ECS
-    state.bphstart = true;
-    state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
-}
-
-/*
-template <> void
-Sequencer::processSignal <false, SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW> (DDFState &state)
-{
-    // OCS
-    processSignal <false, SIG_BPHSTART | SIG_BPHSTOP> (state);
-}
-*/
-
-template <> void
-Sequencer::processSignal <true, SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW> (DDFState &state)
-{
-    // ECS
-    state.bphstop |= state.bprun;
-    state.bphstart = true;
-}
-
-/*
-template <> void
-Sequencer::processSignal <false, SIG_DONE> (DDFState &state)
-{
-    // OCS
-    state.rhw = false;
-}
-*/
-
-template <> void
-Sequencer::processSignal <true, SIG_DONE> (DDFState &state)
-{
-    // ECS
-    state.rhw = false;
-    state.shw = false;
-    state.bphstop = false;
-}
-
 template <> void
 Sequencer::processSignal <false> (u16 signal, DDFState &state)
 {
@@ -536,80 +305,88 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
             
         case SIG_BMAPEN_CLR:
         
-            processSignal <true, SIG_BMAPEN_CLR> (state);
+            state.bmapen = false;
+            state.bprun = false;
+            state.cnt = 0;
             break;
             
         case SIG_BMAPEN_SET:
         
-            processSignal <true, SIG_BMAPEN_SET> (state);
+            state.bmapen = true;
             break;
     }
     switch (signal & (SIG_VFLOP_SET | SIG_VFLOP_CLR)) {
             
         case SIG_VFLOP_SET:
         
-            processSignal <true, SIG_VFLOP_SET> (state);
+            state.bpv = true;
+            lineIsBlank = false;
             break;
             
         case SIG_VFLOP_CLR:
         
-            processSignal <true, SIG_VFLOP_CLR> (state);
+            state.bpv = false;
+            state.bprun = false;
+            state.cnt = 0;
             break;
     }
     switch (signal & (SIG_SHW | SIG_RHW)) {
             
         case SIG_SHW:
             
-            if (signal & SIG_BPHSTOP) {
-                processSignal <true, SIG_SHW | SIG_BPHSTOP> (state);
-            } else {
-                processSignal <true, SIG_SHW> (state);
-            }
+            state.shw = true;
+            state.bprun |= state.bphstart && !(signal & SIG_BPHSTOP);
             break;
             
         case SIG_RHW:
 
-            processSignal <true, SIG_RHW> (state);
+            state.rhw = true;
             break;
     }
     switch (signal & (SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW | SIG_RHW)) {
             
         case SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW:
             
-            processSignal <true, SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW> (state);
+            state.bphstart = true;
+            state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
             break;
             
         case SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW:
             
-            processSignal <true, SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW> (state);
+            state.bphstop |= state.bprun;
+            state.bphstart = true;
             break;
             
         case SIG_BPHSTART | SIG_BPHSTOP:
             
-            processSignal <true, SIG_BPHSTART | SIG_BPHSTOP> (state);
+            state.bphstop |= state.bprun;
+            state.bphstart = true;
+            state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
             break;
                         
         case SIG_BPHSTART:
         case SIG_BPHSTART | SIG_SHW:
         case SIG_BPHSTART | SIG_RHW:
 
-            processSignal <true, SIG_BPHSTART> (state);
+            state.bphstart = true;
+            state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
             break;
             
         case SIG_BPHSTOP:
         case SIG_BPHSTOP | SIG_SHW:
         case SIG_BPHSTOP | SIG_RHW:
 
-            processSignal <true, SIG_BPHSTOP> (state);
+            state.bphstart = false;
+            state.bphstop |= state.bprun;
             break;
     }
     if (signal & SIG_DONE) {
         
-        processSignal <true, SIG_DONE> (state);
+        state.rhw = false;
+        state.shw = false;
+        state.bphstop = false;
     }
 }
-
-
 
 void
 Sequencer::updateBplJumpTable()

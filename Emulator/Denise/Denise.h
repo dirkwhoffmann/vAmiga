@@ -65,7 +65,15 @@ public:
     isize diwHstrt;
     isize diwHstop;
     
-    /* Horizontal DIW flipflop. The value is updated at the beginning of each
+    /* Denise contains a flipflop controlling the horizontal display window.
+     * It is cleared inside the border area and set inside the display area:
+     *
+     *   1. When hpos matches the position in DIWSTRT, the flipflop is set.
+     *   2. When hpos matches the position in DIWSTOP, the flipflop is reset.
+     *   3. The smallest recognised value for DIWSTRT is $02.
+     *   4. The largest recognised value for DIWSTOP is $(1)C7.
+     *
+     * The value of this variable is updated at the beginning of each
      * rasterline and cannot change thereafter. It stores the value of the
      * horizontal DIW flipflop as it was at the beginning of the rasterline.
      * To find out the value of the horizontal flipflop inside or at the end
