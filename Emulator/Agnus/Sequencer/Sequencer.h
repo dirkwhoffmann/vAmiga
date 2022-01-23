@@ -169,21 +169,9 @@ public:
     u16 diwstrt;
     u16 diwstop;
 
-    /* Extracted display window coordinates
-     *
-     * The coordinates are computed out of diwstrt and diwstop and set in
-     * setDIWSTRT/STOP(). The following horizontal values are possible:
-     *
-     *    diwHstrt : $02  ... $FF   or -1
-     *    diwHstop : $100 ... $1C7  or -1
-     *
-     * A -1 is assigned if DIWSTRT or DIWSTOP are written with values that
-     * result in coordinates outside the valid range.
-     */
-    isize diwVstrt;
-    isize diwVstop;
-    isize diwVstrtInitial;
-    isize diwVstopInitial;
+    // Extracted vertical display window coordinates
+    isize vstrt;
+    isize vstop;
 
     // Indicates if the current line is a blank line
     bool lineIsBlank;
@@ -266,10 +254,8 @@ private:
         
         << diwstrt
         << diwstop
-        << diwVstrt
-        << diwVstop
-        << diwVstrtInitial
-        << diwVstopInitial
+        << vstrt
+        << vstop
         << lineIsBlank
 
         >> sigRecorder

@@ -27,8 +27,8 @@ Denise::_inspect() const
         info.diwstop = diwstop;
         info.hstrt = hstrt;
         info.hstop = hstop;
-        info.vstrt = agnus.sequencer.diwVstrt;
-        info.vstop = agnus.sequencer.diwVstop;
+        info.vstrt = agnus.sequencer.vstrt;
+        info.vstop = agnus.sequencer.vstop;
         
         info.joydat[0] = controlPort1.joydat();
         info.joydat[1] = controlPort2.joydat();

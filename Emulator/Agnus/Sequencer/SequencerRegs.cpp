@@ -133,9 +133,9 @@ Sequencer::setDIWSTRT(u16 value)
     // V7 V6 V5 V4 V3 V2 V1 V0 -- -- -- -- -- -- -- --  and  V8 = 0
     
     diwstrt = value;
-    diwVstrt = HI_BYTE(value);
+    vstrt = HI_BYTE(value);
     
-    if (agnus.pos.v == diwVstrt && agnus.pos.v != diwVstop) {
+    if (agnus.pos.v == vstrt && agnus.pos.v != vstop) {
         
         sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_SET);
         computeBplEventTable(sigRecorder);
@@ -151,15 +151,15 @@ Sequencer::setDIWSTOP(u16 value)
     // V7 V6 V5 V4 V3 V2 V1 V0 -- -- -- -- -- -- -- --  and  V8 = !V7
     
     diwstop = value;
-    diwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
+    vstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
     
-    if (agnus.pos.v == diwVstop) {
+    if (agnus.pos.v == vstop) {
         
         sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_CLR);
         computeBplEventTable(sigRecorder);
     }
 
-    if (agnus.pos.v != diwVstop && agnus.pos.v == diwVstrt) {
+    if (agnus.pos.v != vstop && agnus.pos.v == vstrt) {
             
         sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_SET);
         computeBplEventTable(sigRecorder);

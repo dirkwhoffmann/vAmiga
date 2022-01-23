@@ -28,8 +28,6 @@ Sequencer::_reset(bool hard)
 void
 Sequencer::hsyncHandler()
 {
-    diwVstrtInitial = diwVstrt;
-    diwVstopInitial = diwVstop;
     ddfInitial = ddf;
     
     // Renew the signal recorder if it has been modified
@@ -40,13 +38,13 @@ Sequencer::hsyncHandler()
     }
 
     // Check the vertical DIW flipflop
-    if (agnus.pos.v == diwVstop || agnus.inLastRasterline()) {
+    if (agnus.pos.v == vstop || agnus.inLastRasterline()) {
 
         trace(SEQ_DEBUG, "hsyncHandler: Vertical flipflop off\n");
         ddfInitial.bpv = ddf.bpv = false;
         hsyncActions |= UPDATE_SIG_RECORDER;
 
-    } else if (agnus.pos.v == diwVstrt) {
+    } else if (agnus.pos.v == vstrt) {
 
         trace(SEQ_DEBUG, "hsyncHandler: Vertical flipflop on\n");
         ddfInitial.bpv = ddf.bpv = true;
