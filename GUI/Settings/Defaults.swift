@@ -59,7 +59,7 @@ extension UserDefaults {
         registerDevicesUserDefaults()
         
         registerRomUserDefaults()
-        registerHardwareUserDefaults()
+        registerChipsetUserDefaults()
         registerPeripheralsUserDefaults()
         registerCompatibilityUserDefaults()
         registerAudioUserDefaults()
@@ -578,7 +578,7 @@ extension UserDefaults {
 }
 
 //
-// User defaults (Hardware)
+// User defaults (Chipset)
 //
 
 extension Keys {
@@ -591,18 +591,6 @@ extension Keys {
         static let ciaRev             = "VAMIGA_HW_CiaRev"
         static let realTimeClock      = "VAMIGA_HW_RealTimeClock"
         
-        // Filter
-        static let filterType         = "VAMIGA_HW_FilterType"
-        static let filterAlwaysOn     = "VAMIGA_HW_FilterAlwaysOn"
-
-        // Memory
-        static let chipRam            = "VAMIGA_HW_ChipRam"
-        static let slowRam            = "VAMIGA_HW_SlowRam"
-        static let fastRam            = "VAMIGA_HW_FastRam"
-        static let ramInitPattern     = "VAMIGA_HW_RamInitPattern"
-        
-        static let bankMap            = "VAMIGA_HW_BankMap"
-        static let unmappingType      = "VAMIGA_HW_UnmappingType"
     }
 }
 
@@ -613,9 +601,6 @@ struct HardwareDefaults {
     let ciaRev: CIARevision
     let realTimeClock: RTCRevision
     
-    let filterType: FilterType
-    let filterAlwaysOn: Bool
-
     let chipRam: Int
     let slowRam: Int
     let fastRam: Int
@@ -634,9 +619,6 @@ struct HardwareDefaults {
         deniseRev: .OCS,
         ciaRev: .MOS_8520_DIP,
         realTimeClock: .NONE,
-
-        filterType: .BUTTERWORTH,
-        filterAlwaysOn: false,
         
         chipRam: 512,
         slowRam: 0,
@@ -654,9 +636,6 @@ struct HardwareDefaults {
         ciaRev: .MOS_8520_DIP,
         realTimeClock: .NONE,
         
-        filterType: .BUTTERWORTH,
-        filterAlwaysOn: false,
-
         chipRam: 256,
         slowRam: 0,
         fastRam: 0,
@@ -673,9 +652,6 @@ struct HardwareDefaults {
         ciaRev: .MOS_8520_DIP,
         realTimeClock: .OKI,
         
-        filterType: .BUTTERWORTH,
-        filterAlwaysOn: false,
-
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
@@ -688,7 +664,7 @@ struct HardwareDefaults {
 
 extension UserDefaults {
     
-    static func registerHardwareUserDefaults() {
+    static func registerChipsetUserDefaults() {
         
         let defaults = HardwareDefaults.A500
         let dictionary: [String: Any] = [
@@ -696,44 +672,146 @@ extension UserDefaults {
             Keys.Hrw.agnusRev: defaults.agnusRev.rawValue,
             Keys.Hrw.deniseRev: defaults.deniseRev.rawValue,
             Keys.Hrw.ciaRev: defaults.ciaRev.rawValue,
-            Keys.Hrw.realTimeClock: defaults.realTimeClock.rawValue,
-
-            Keys.Hrw.filterType: defaults.filterType.rawValue,
-            Keys.Hrw.filterAlwaysOn: defaults.filterAlwaysOn,
-
-            Keys.Hrw.chipRam: defaults.chipRam,
-            Keys.Hrw.slowRam: defaults.slowRam,
-            Keys.Hrw.fastRam: defaults.fastRam,
-            Keys.Hrw.ramInitPattern: defaults.ramInitPattern.rawValue,
-
-            Keys.Hrw.bankMap: defaults.bankMap.rawValue,
-            Keys.Hrw.unmappingType: defaults.unmappingType.rawValue
+            Keys.Hrw.realTimeClock: defaults.realTimeClock.rawValue
         ]
         
         let userDefaults = UserDefaults.standard
         userDefaults.register(defaults: dictionary)
     }
         
-    static func resetHardwareUserDefaults() {
+    static func resetChipsetUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        let keys = [ Keys.Hrw.agnusRev,
+                     Keys.Hrw.deniseRev,
+                     Keys.Hrw.ciaRev,
+                     Keys.Hrw.realTimeClock ]
+
+        for key in keys { defaults.removeObject(forKey: key) }
+    }
+}
+
+//
+// User defaults (Memory)
+//
+
+extension Keys {
+    
+    struct Mem {
+                
+        // Memory
+        static let chipRam            = "VAMIGA_MEM_ChipRam"
+        static let slowRam            = "VAMIGA_MEM_SlowRam"
+        static let fastRam            = "VAMIGA_MEM_FastRam"
+        static let ramInitPattern     = "VAMIGA_MEM_RamInitPattern"
+        
+        static let bankMap            = "VAMIGA_MEM_BankMap"
+        static let unmappingType      = "VAMIGA_MEM_UnmappingType"
+
+        // Features
+        static let slowRamDelay       = "VAMIGA_MEM_SlowRamDelay"
+        static let slowRamMirror      = "VAMIGA_MEM_SlowRamMirror"
+    }
+}
+
+struct MemoryDefaults {
+    
+    let chipRam: Int
+    let slowRam: Int
+    let fastRam: Int
+    let ramInitPattern: RamInitPattern
+
+    let bankMap: BankMap
+    let unmappingType: UnmappedMemory
+    
+    let slowRamDelay: Bool
+    let slowRamMirror: Bool
+
+    //
+    // Schemes
+    //
+    
+    static let A500 = MemoryDefaults(
+                
+        chipRam: 512,
+        slowRam: 0,
+        fastRam: 0,
+        ramInitPattern: .ALL_ZEROES,
+
+        bankMap: .A500,
+        unmappingType: .FLOATING,
+        
+        slowRamDelay: true,
+        slowRamMirror: true
+    )
+    
+    static let A1000 = MemoryDefaults(
+        
+        chipRam: 256,
+        slowRam: 0,
+        fastRam: 0,
+        ramInitPattern: .ALL_ZEROES,
+
+        bankMap: .A1000,
+        unmappingType: .FLOATING,
+        
+        slowRamDelay: true,
+        slowRamMirror: true
+    )
+    
+    static let A2000 = MemoryDefaults(
+        
+        chipRam: 512,
+        slowRam: 512,
+        fastRam: 0,
+        ramInitPattern: .ALL_ZEROES,
+
+        bankMap: .A2000B,
+        unmappingType: .FLOATING,
+        
+        slowRamDelay: true,
+        slowRamMirror: true
+    )
+}
+
+extension UserDefaults {
+    
+    static func registerMemoryUserDefaults() {
+        
+        let defaults = MemoryDefaults.A500
+        let dictionary: [String: Any] = [
+            
+            Keys.Mem.chipRam: defaults.chipRam,
+            Keys.Mem.slowRam: defaults.slowRam,
+            Keys.Mem.fastRam: defaults.fastRam,
+            Keys.Mem.ramInitPattern: defaults.ramInitPattern.rawValue,
+
+            Keys.Mem.bankMap: defaults.bankMap.rawValue,
+            Keys.Mem.unmappingType: defaults.unmappingType.rawValue,
+            
+            Keys.Mem.slowRamDelay: defaults.slowRamDelay,
+            Keys.Mem.slowRamMirror: defaults.slowRamMirror
+        ]
+        
+        let userDefaults = UserDefaults.standard
+        userDefaults.register(defaults: dictionary)
+    }
+        
+    static func resetMemoryUserDefaults() {
         
         let defaults = UserDefaults.standard
 
-        let keys = [Keys.Hrw.agnusRev,
-                    Keys.Hrw.deniseRev,
-                    Keys.Hrw.ciaRev,
-                    Keys.Hrw.realTimeClock,
-                    
-                    Keys.Hrw.filterType,
-                    Keys.Hrw.filterAlwaysOn,
-                                
-                    Keys.Hrw.chipRam,
-                    Keys.Hrw.slowRam,
-                    Keys.Hrw.fastRam,
-                    Keys.Hrw.ramInitPattern,
-
-                    Keys.Hrw.bankMap,
-                    Keys.Hrw.unmappingType
-                ]
+        let keys = [ Keys.Mem.chipRam,
+                     Keys.Mem.slowRam,
+                     Keys.Mem.fastRam,
+                     Keys.Mem.ramInitPattern,
+                     
+                     Keys.Mem.bankMap,
+                     Keys.Mem.unmappingType,
+                     
+                     Keys.Mem.slowRamDelay,
+                     Keys.Mem.slowRamMirror ]
 
         for key in keys { defaults.removeObject(forKey: key) }
     }
@@ -868,13 +946,11 @@ extension Keys {
         static let blitterAccuracy   = "VAMIGA_COM_BlitterAccuracy"
         
         // Chipset
-        static let slowRamMirror      = "VAMIGA_COM_SlowRamMirror"
         static let borderBlank        = "VAMIGA_COM_BorderBlank"
         static let todBug             = "VAMIGA_COM_TodBug"
 
         // Timing
         static let eClockSyncing     = "VAMIGA_COM_EClockSyncing"
-        static let slowRamDelay      = "VAMIGA_COM_SlowRamDelay"
         
         // Graphics
         static let clxSprSpr         = "VAMIGA_COM_ClxSprSpr"
@@ -896,12 +972,10 @@ struct CompatibilityDefaults {
     
     let blitterAccuracy: Int
     
-    let slowRamMirror: Bool
     let borderBlank: Bool
     let todBug: Bool
 
     let eClockSyncing: Bool
-    let slowRamDelay: Bool
     
     let clxSprSpr: Bool
     let clxSprPlf: Bool
@@ -922,12 +996,10 @@ struct CompatibilityDefaults {
         
         blitterAccuracy: 2,
         
-        slowRamMirror: true,
         borderBlank: false,
         todBug: true,
             
         eClockSyncing: true,
-        slowRamDelay: true,
         
         clxSprSpr: false,
         clxSprPlf: false,
@@ -945,12 +1017,10 @@ struct CompatibilityDefaults {
         
         blitterAccuracy: 2,
 
-        slowRamMirror: true,
         borderBlank: false,
         todBug: true,
 
         eClockSyncing: true,
-        slowRamDelay: true,
 
         clxSprSpr: true,
         clxSprPlf: true,
@@ -968,12 +1038,10 @@ struct CompatibilityDefaults {
         
         blitterAccuracy: 0,
 
-        slowRamMirror: true,
         borderBlank: false,
         todBug: true,
 
         eClockSyncing: false,
-        slowRamDelay: false,
 
         clxSprSpr: false,
         clxSprPlf: false,
@@ -997,12 +1065,10 @@ extension UserDefaults {
 
             Keys.Com.blitterAccuracy: defaults.blitterAccuracy,
 
-            Keys.Com.slowRamMirror: defaults.slowRamMirror,
             Keys.Com.borderBlank: defaults.borderBlank,
             Keys.Com.todBug: defaults.todBug,
 
             Keys.Com.eClockSyncing: defaults.eClockSyncing,
-            Keys.Com.slowRamDelay: defaults.slowRamDelay,
 
             Keys.Com.clxSprSpr: defaults.clxSprSpr,
             Keys.Com.clxSprPlf: defaults.clxSprPlf,
@@ -1026,12 +1092,10 @@ extension UserDefaults {
 
         let keys = [ Keys.Com.blitterAccuracy,
 
-                     Keys.Com.slowRamMirror,
                      Keys.Com.borderBlank,
                      Keys.Com.todBug,
 
                      Keys.Com.eClockSyncing,
-                     Keys.Com.slowRamDelay,
 
                      Keys.Com.clxSprSpr,
                      Keys.Com.clxSprPlf,
@@ -1080,6 +1144,10 @@ extension Keys {
         static let pollVolume         = "VAMIGA_AUD_PollVolume"
         static let insertVolume       = "VAMIGA_AUD_InsertVolume"
         static let ejectVolume        = "VAMIGA_AUD_EjectVolume"
+        
+        // Filter
+        static let filterType         = "VAMIGA_AUD_FilterType"
+        static let filterAlwaysOn     = "VAMIGA_AUD_FilterAlwaysOn"
     }
 }
 
@@ -1107,6 +1175,10 @@ struct AudioDefaults {
     var insertVolume: Int
     var ejectVolume: Int
     
+    // Filter
+    let filterType: FilterType
+    let filterAlwaysOn: Bool
+
     //
     // Schemes
     //
@@ -1130,7 +1202,10 @@ struct AudioDefaults {
         stepVolume: 50,
         pollVolume: 0,
         insertVolume: 50,
-        ejectVolume: 50
+        ejectVolume: 50,
+        
+        filterType: .BUTTERWORTH,
+        filterAlwaysOn: false
     )
     
     static let stereo = AudioDefaults(
@@ -1152,7 +1227,10 @@ struct AudioDefaults {
         stepVolume: 50,
         pollVolume: 0,
         insertVolume: 50,
-        ejectVolume: 50
+        ejectVolume: 50,
+        
+        filterType: .BUTTERWORTH,
+        filterAlwaysOn: false
     )
 
     static let mono = AudioDefaults(
@@ -1174,7 +1252,10 @@ struct AudioDefaults {
         stepVolume: 50,
         pollVolume: 0,
         insertVolume: 50,
-        ejectVolume: 50
+        ejectVolume: 50,
+        
+        filterType: .BUTTERWORTH,
+        filterAlwaysOn: false
     )
 }
 
@@ -1205,7 +1286,10 @@ extension UserDefaults {
             Keys.Aud.stepVolume: defaults.stepVolume,
             Keys.Aud.pollVolume: defaults.pollVolume,
             Keys.Aud.insertVolume: defaults.insertVolume,
-            Keys.Aud.ejectVolume: defaults.ejectVolume
+            Keys.Aud.ejectVolume: defaults.ejectVolume,
+            
+            Keys.Aud.filterType: defaults.filterType.rawValue,
+            Keys.Aud.filterAlwaysOn: defaults.filterAlwaysOn
         ]
 
         let userDefaults = UserDefaults.standard
@@ -1236,7 +1320,10 @@ extension UserDefaults {
                      Keys.Aud.stepVolume,
                      Keys.Aud.pollVolume,
                      Keys.Aud.insertVolume,
-                     Keys.Aud.ejectVolume ]
+                     Keys.Aud.ejectVolume,
+        
+                     Keys.Aud.filterType,
+                     Keys.Aud.filterAlwaysOn ]
 
         for key in keys { userDefaults.removeObject(forKey: key) }
     }

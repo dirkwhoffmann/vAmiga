@@ -38,6 +38,11 @@ extension ConfigurationController {
         audInsertVolume.integerValue = config.insertVolume
         audEjectVolume.integerValue = config.ejectVolume
         
+        // Audio filter
+        audFilterType.selectItem(withTag: config.filterType)
+        audFilterAlwaysOn.state = config.filterAlwaysOn ? .on : .off
+        audFilterAlwaysOn.isEnabled = config.filterType != FilterType.NONE.rawValue
+
         // Buttons
         audPowerButton.isHidden = !bootable
     }
@@ -143,7 +148,19 @@ extension ConfigurationController {
         config.ejectVolume = sender.integerValue
         refresh()
     }
+     
+    @IBAction func audFilterTypeAction(_ sender: NSPopUpButton!) {
         
+        config.filterType = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func audFilterAlwaysOnAction(_ sender: NSButton!) {
+
+        config.filterAlwaysOn = sender.state == .on
+        refresh()
+    }
+
     @IBAction func audPresetAction(_ sender: NSPopUpButton!) {
         
         track()

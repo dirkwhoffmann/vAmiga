@@ -136,7 +136,7 @@ extension MyController: NSMenuItemValidation {
         track()
         
         UserDefaults.resetRomUserDefaults()
-        UserDefaults.resetHardwareUserDefaults()
+        UserDefaults.resetChipsetUserDefaults()
         UserDefaults.resetPeripheralsUserDefaults()
         UserDefaults.resetCompatibilityUserDefaults()
         UserDefaults.resetAudioUserDefaults()

@@ -47,36 +47,78 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var romPowerButton: NSButton!
 
     //
-    // Hardware preferences
+    // Chipset preferences
     //
     
-    // Chipset
-    @IBOutlet weak var hwAgnusRevisionPopup: NSPopUpButton!
-    @IBOutlet weak var hwDeniseRevisionPopup: NSPopUpButton!
-    @IBOutlet weak var hwCiaRevisionPopup: NSPopUpButton!
-    @IBOutlet weak var hwRealTimeClock: NSPopUpButton!
+    // CPU
+    @IBOutlet weak var csCpuRevision: NSPopUpButton!
+    @IBOutlet weak var csCpuInfo1: NSTextField!
+    @IBOutlet weak var csCpuInfo2: NSTextField!
+    @IBOutlet weak var csCpuInfo3: NSTextField!
 
-    // Memory
-    @IBOutlet weak var hwChipRamPopup: NSPopUpButton!
-    @IBOutlet weak var hwSlowRamPopup: NSPopUpButton!
-    @IBOutlet weak var hwFastRamPopup: NSPopUpButton!
-    @IBOutlet weak var hwRamInitPattern: NSPopUpButton!
-    @IBOutlet weak var hwBankMap: NSPopUpButton!
-    @IBOutlet weak var hwUnmappingType: NSPopUpButton!
+    // Agnus
+    @IBOutlet weak var csAgnusRevision: NSPopUpButton!
+    @IBOutlet weak var csAgnusInfo1: NSTextField!
+    @IBOutlet weak var csAgnusInfo2: NSTextField!
+    @IBOutlet weak var csAgnusInfo3: NSTextField!
 
-    // Filter
-    @IBOutlet weak var hwFilterType: NSPopUpButton!
-    @IBOutlet weak var hwFilterAlwaysOn: NSButton!
+    // Denise
+    @IBOutlet weak var csDeniseRevision: NSPopUpButton!
+    @IBOutlet weak var csDeniseInfo1: NSTextField!
+    @IBOutlet weak var csDeniseInfo2: NSTextField!
+    @IBOutlet weak var csDeniseInfo3: NSTextField!
+
+    // CIAs
+    @IBOutlet weak var csCiaRevision: NSPopUpButton!
+    @IBOutlet weak var csCiaInfo1: NSTextField!
+    @IBOutlet weak var csCiaInfo2: NSTextField!
+    @IBOutlet weak var csCiaInfo3: NSTextField!
+
+    // RT clock
+    @IBOutlet weak var csRtcRevision: NSPopUpButton!
+    @IBOutlet weak var csRtcInfo1: NSTextField!
+    @IBOutlet weak var csRtcInfo2: NSTextField!
+    @IBOutlet weak var csRtcInfo3: NSTextField!
     
     // Lock
-    @IBOutlet weak var hwLockImage: NSButton!
-    @IBOutlet weak var hwLockText: NSTextField!
-    @IBOutlet weak var hwLockSubText: NSTextField!
+    @IBOutlet weak var csLockImage: NSButton!
+    @IBOutlet weak var csLockText: NSTextField!
+    @IBOutlet weak var csLockSubText: NSTextField!
 
     // Buttons
-    @IBOutlet weak var hwFactorySettingsPopup: NSPopUpButton!
-    @IBOutlet weak var hwOKButton: NSButton!
-    @IBOutlet weak var hwPowerButton: NSButton!
+    @IBOutlet weak var csFactorySettingsPopup: NSPopUpButton!
+    @IBOutlet weak var csOKButton: NSButton!
+    @IBOutlet weak var csPowerButton: NSButton!
+
+    //
+    // Memory preferences
+    //
+    
+    // RAM
+    @IBOutlet weak var memChipRamPopup: NSPopUpButton!
+    @IBOutlet weak var memSlowRamPopup: NSPopUpButton!
+    @IBOutlet weak var memFastRamPopup: NSPopUpButton!
+    @IBOutlet weak var memRamInitPattern: NSPopUpButton!
+    @IBOutlet weak var memBankMap: NSPopUpButton!
+    @IBOutlet weak var memUnmappingType: NSPopUpButton!
+    
+    // Chipset features
+    @IBOutlet weak var memSlowRamMirror: NSButton!
+    @IBOutlet weak var memSlowRamDelay: NSButton!
+
+    // Warning
+    @IBOutlet weak var memWarnImage: NSButton!
+    @IBOutlet weak var memWarnInfo1: NSTextField!
+    @IBOutlet weak var memWarnInfo2: NSTextField!
+
+    // Lock
+    @IBOutlet weak var memLockImage: NSButton!
+    @IBOutlet weak var memLockText: NSTextField!
+
+    // Buttons
+    @IBOutlet weak var memFactorySettingsPopup: NSPopUpButton!
+    @IBOutlet weak var memOKButton: NSButton!
+    @IBOutlet weak var memPowerButton: NSButton!
 
     //
     // Peripherals preferences
@@ -127,13 +169,10 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var compBltLevel1: NSTextField!
 
     // Chipset features
-    @IBOutlet weak var compSlowRamMirror: NSButton!
-    @IBOutlet weak var compBorderBlank: NSButton!
     @IBOutlet weak var compTodBug: NSButton!
 
     // Timing
     @IBOutlet weak var compEClockSyncing: NSButton!
-    @IBOutlet weak var compSlowRamDelay: NSButton!
     
     // Disk controller
     @IBOutlet weak var compDriveSpeed: NSPopUpButton!
@@ -180,6 +219,10 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var audPollVolume: NSSlider!
     @IBOutlet weak var audEjectVolume: NSSlider!
     @IBOutlet weak var audInsertVolume: NSSlider!
+
+    // Filter
+    @IBOutlet weak var audFilterType: NSPopUpButton!
+    @IBOutlet weak var audFilterAlwaysOn: NSButton!
 
     // Buttons
     @IBOutlet weak var audOKButton: NSButton!
@@ -263,7 +306,8 @@ class ConfigurationController: DialogController {
             
             switch id {
             case "Roms": refreshRomTab()
-            case "Hardware": refreshHardwareTab()
+            case "Chipset": refreshChipsetTab()
+            case "Memory": refreshMemoryTab()
             case "Peripherals": refreshPeripheralsTab()
             case "Compatibility": refreshCompatibilityTab()
             case "Audio": refreshAudioTab()

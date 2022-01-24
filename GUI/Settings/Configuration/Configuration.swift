@@ -499,10 +499,10 @@ class Configuration {
     }
 
     //
-    // Hardware
+    // Chipset
     //
     
-    func loadHardwareDefaults(_ defaults: HardwareDefaults) {
+    func loadChipsetDefaults(_ defaults: HardwareDefaults) {
         
         amiga.suspend()
         
@@ -510,17 +510,6 @@ class Configuration {
         deniseRev = defaults.deniseRev.rawValue
         ciaRev = defaults.ciaRev.rawValue
         rtClock = defaults.realTimeClock.rawValue
-
-        filterType = defaults.filterType.rawValue
-        filterAlwaysOn = defaults.filterAlwaysOn
-
-        chipRam = defaults.chipRam
-        slowRam = defaults.slowRam
-        fastRam = defaults.fastRam
-        ramInitPattern = defaults.ramInitPattern.rawValue
-
-        bankMap = defaults.bankMap.rawValue
-        unmappingType = defaults.unmappingType.rawValue
         
         amiga.resume()
     }
@@ -536,17 +525,6 @@ class Configuration {
         ciaRev = defaults.integer(forKey: Keys.Hrw.ciaRev)
         rtClock = defaults.integer(forKey: Keys.Hrw.realTimeClock)
 
-        filterType = defaults.integer(forKey: Keys.Hrw.filterType)
-        filterAlwaysOn = defaults.bool(forKey: Keys.Hrw.filterAlwaysOn)
-
-        chipRam = defaults.integer(forKey: Keys.Hrw.chipRam)
-        slowRam = defaults.integer(forKey: Keys.Hrw.slowRam)
-        fastRam = defaults.integer(forKey: Keys.Hrw.fastRam)
-        ramInitPattern = defaults.integer(forKey: Keys.Hrw.ramInitPattern)
-
-        bankMap = defaults.integer(forKey: Keys.Hrw.bankMap)
-        unmappingType = defaults.integer(forKey: Keys.Hrw.unmappingType)
-
         amiga.resume()
     }
     
@@ -560,19 +538,68 @@ class Configuration {
         defaults.set(deniseRev, forKey: Keys.Hrw.deniseRev)
         defaults.set(ciaRev, forKey: Keys.Hrw.ciaRev)
         defaults.set(rtClock, forKey: Keys.Hrw.realTimeClock)
-
-        defaults.set(filterType, forKey: Keys.Hrw.filterType)
-        defaults.set(filterAlwaysOn, forKey: Keys.Hrw.filterAlwaysOn)
-
-        defaults.set(chipRam, forKey: Keys.Hrw.chipRam)
-        defaults.set(slowRam, forKey: Keys.Hrw.slowRam)
-        defaults.set(fastRam, forKey: Keys.Hrw.fastRam)
-        defaults.set(ramInitPattern, forKey: Keys.Hrw.ramInitPattern)
-
-        defaults.set(bankMap, forKey: Keys.Hrw.bankMap)
-        defaults.set(unmappingType, forKey: Keys.Hrw.unmappingType)
     }
 
+    //
+    // Memory
+    //
+    
+    func loadMemoryDefaults(_ defaults: MemoryDefaults) {
+        
+        amiga.suspend()
+        
+        chipRam = defaults.chipRam
+        slowRam = defaults.slowRam
+        fastRam = defaults.fastRam
+        ramInitPattern = defaults.ramInitPattern.rawValue
+
+        bankMap = defaults.bankMap.rawValue
+        unmappingType = defaults.unmappingType.rawValue
+        
+        slowRamDelay = defaults.slowRamDelay
+        slowRamMirror = defaults.slowRamMirror
+
+        amiga.resume()
+    }
+    
+    func loadMemoryUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        amiga.suspend()
+        
+        chipRam = defaults.integer(forKey: Keys.Mem.chipRam)
+        slowRam = defaults.integer(forKey: Keys.Mem.slowRam)
+        fastRam = defaults.integer(forKey: Keys.Mem.fastRam)
+        ramInitPattern = defaults.integer(forKey: Keys.Mem.ramInitPattern)
+
+        bankMap = defaults.integer(forKey: Keys.Mem.bankMap)
+        unmappingType = defaults.integer(forKey: Keys.Mem.unmappingType)
+
+        slowRamDelay = defaults.bool(forKey: Keys.Mem.slowRamDelay)
+        slowRamMirror = defaults.bool(forKey: Keys.Mem.slowRamMirror)
+        
+        amiga.resume()
+    }
+    
+    func saveMemoryUserDefaults() {
+        
+        track()
+        
+        let defaults = UserDefaults.standard
+
+        defaults.set(chipRam, forKey: Keys.Mem.chipRam)
+        defaults.set(slowRam, forKey: Keys.Mem.slowRam)
+        defaults.set(fastRam, forKey: Keys.Mem.fastRam)
+        defaults.set(ramInitPattern, forKey: Keys.Mem.ramInitPattern)
+
+        defaults.set(bankMap, forKey: Keys.Mem.bankMap)
+        defaults.set(unmappingType, forKey: Keys.Mem.unmappingType)
+        
+        defaults.set(slowRamDelay, forKey: Keys.Mem.slowRamDelay)
+        defaults.set(slowRamMirror, forKey: Keys.Mem.slowRamMirror)
+    }
+    
     //
     // Peripherals
     //
@@ -660,11 +687,9 @@ class Configuration {
         
         blitterAccuracy = defaults.blitterAccuracy
 
-        slowRamMirror = defaults.slowRamMirror
         todBug = defaults.todBug
 
         eClockSyncing = defaults.eClockSyncing
-        slowRamDelay = defaults.slowRamDelay
 
         clxSprSpr = defaults.clxSprSpr
         clxSprPlf = defaults.clxSprPlf
@@ -688,11 +713,9 @@ class Configuration {
         
         blitterAccuracy = defaults.integer(forKey: Keys.Com.blitterAccuracy)
 
-        slowRamMirror = defaults.bool(forKey: Keys.Com.slowRamMirror)
         todBug = defaults.bool(forKey: Keys.Com.todBug)
 
         eClockSyncing = defaults.bool(forKey: Keys.Com.eClockSyncing)
-        slowRamDelay = defaults.bool(forKey: Keys.Com.slowRamDelay)
 
         clxSprSpr = defaults.bool(forKey: Keys.Com.clxSprSpr)
         clxSprPlf = defaults.bool(forKey: Keys.Com.clxSprPlf)
@@ -716,11 +739,9 @@ class Configuration {
         
         defaults.set(blitterAccuracy, forKey: Keys.Com.blitterAccuracy)
 
-        defaults.set(slowRamMirror, forKey: Keys.Com.slowRamMirror)
         defaults.set(todBug, forKey: Keys.Com.todBug)
 
         defaults.set(eClockSyncing, forKey: Keys.Com.eClockSyncing)
-        defaults.set(slowRamDelay, forKey: Keys.Com.slowRamDelay)
 
         defaults.set(clxSprSpr, forKey: Keys.Com.clxSprSpr)
         defaults.set(clxSprPlf, forKey: Keys.Com.clxSprPlf)
@@ -764,6 +785,9 @@ class Configuration {
         insertVolume = defaults.insertVolume
         ejectVolume = defaults.ejectVolume
         
+        filterType = defaults.filterType.rawValue
+        filterAlwaysOn = defaults.filterAlwaysOn
+
         amiga.resume()
     }
     
@@ -795,6 +819,9 @@ class Configuration {
         insertVolume = defaults.integer(forKey: Keys.Aud.insertVolume)
         ejectVolume = defaults.integer(forKey: Keys.Aud.ejectVolume)
         
+        filterType = defaults.integer(forKey: Keys.Aud.filterType)
+        filterAlwaysOn = defaults.bool(forKey: Keys.Aud.filterAlwaysOn)
+
         amiga.resume()
     }
     
@@ -825,6 +852,9 @@ class Configuration {
         defaults.set(pollVolume, forKey: Keys.Aud.pollVolume)
         defaults.set(insertVolume, forKey: Keys.Aud.insertVolume)
         defaults.set(ejectVolume, forKey: Keys.Aud.ejectVolume)
+        
+        defaults.set(filterType, forKey: Keys.Aud.filterType)
+        defaults.set(filterAlwaysOn, forKey: Keys.Aud.filterAlwaysOn)
     }
     
     //
