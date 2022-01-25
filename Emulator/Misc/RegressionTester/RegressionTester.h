@@ -21,7 +21,7 @@ public:
     string dumpTexturePath = "texture";
     
     // Texture cutout
-    isize x1 = 4 * (HBLANK_MAX + 1);
+    isize x1 = 4 * 0x31;
     isize y1 = VBLANK_MAX + 1;
     isize x2 = HPIXELS;
     isize y2 = VPIXELS - 2;

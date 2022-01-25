@@ -70,9 +70,12 @@ extension Canvas {
         
         let max = largestVisible
         
-        let width = (1 - CGFloat(renderer.config.hZoom)) * max.width
+        let hscale = CGFloat(1.0 - 0.2 * renderer.config.hZoom)
+        let vscale = CGFloat(1.0 - 0.2 * renderer.config.vZoom)
+        
+        let width = hscale * max.width
         let bw = max.minX + CGFloat(renderer.config.hCenter) * (max.width - width)
-        let height = (1 - CGFloat(renderer.config.vZoom)) * max.height
+        let height = vscale * max.height
         let bh = max.minY + CGFloat(renderer.config.vCenter) * (max.height - height)
         
         return CGRect(x: bw, y: bh, width: width, height: height)

@@ -1422,10 +1422,10 @@ struct VideoDefaults {
         contrast: 100,
         saturation: 50,
         
-        hCenter: 0.6333,
-        vCenter: 0.1683,
-        hZoom: 0.0454,
-        vZoom: 0.0349,
+        hCenter: 0.622, // 0.6333,
+        vCenter: 0.143, // 0.1683,
+        hZoom: 0.747, // 0.0454,
+        vZoom: 0.032, // 0.0349,
 
         enhancer: 0,
         upscaler: 0,
@@ -1456,11 +1456,11 @@ struct VideoDefaults {
         contrast: 100,
         saturation: 50,
         
-        hCenter: 0.1169,
-        vCenter: 0.1683,
-        hZoom: 0.0454,
-        vZoom: 0.0349,
-        
+        hCenter: 0.409, // 0.6333,
+        vCenter: 0.143, // 0.1683,
+        hZoom: 0.747, // 0.0454,
+        vZoom: 0.032, // 0.0349,
+
         enhancer: 0,
         upscaler: 0,
         

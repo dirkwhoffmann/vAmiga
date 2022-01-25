@@ -251,14 +251,15 @@ class Canvas: Layer {
             currLOF = buffer.longFrame
             
             // Update the GPU texture
+            let offset = Int(HBLANK_MIN) * 4
             if currLOF {
                 longFrameTexture.replace(w: Int(HPIXELS),
                                          h: Int(VPIXELS),
-                                         buffer: buffer.data + Int(HBLANK_MIN) * 4)
+                                         buffer: buffer.data + offset)
             } else {
                 shortFrameTexture.replace(w: Int(HPIXELS),
                                           h: Int(VPIXELS),
-                                          buffer: buffer.data + Int(HBLANK_MIN) * 4)
+                                          buffer: buffer.data + offset)
             }
         }
         

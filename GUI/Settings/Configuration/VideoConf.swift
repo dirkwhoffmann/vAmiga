@@ -269,17 +269,22 @@ extension ConfigurationController {
         
         switch sender.selectedTag() {
             
-        case 0: // Standard Geometry (taken from TFT profile)
+        case 0: // Recommended settings (Centered TFT)
             config.loadGeometryDefaults(VideoDefaults.tft)
-            
-        case 1: // Centered Geometry (taken from CRT profile)
+            config.loadColorDefaults(VideoDefaults.tft)
+            config.loadShaderDefaults(VideoDefaults.tft)
+
+        case 1: // Standard Geometry (taken from CRT profile)
             config.loadGeometryDefaults(VideoDefaults.crt)
             
-        case 2: // TFT Appearance
+        case 2: // Centered Geometry (taken from TFT profile)
+            config.loadGeometryDefaults(VideoDefaults.tft)
+            
+        case 3: // TFT Appearance
             config.loadColorDefaults(VideoDefaults.tft)
             config.loadShaderDefaults(VideoDefaults.tft)
             
-        case 3: // CRT Appearance
+        case 4: // CRT Appearance
             config.loadColorDefaults(VideoDefaults.crt)
             config.loadShaderDefaults(VideoDefaults.crt)
             

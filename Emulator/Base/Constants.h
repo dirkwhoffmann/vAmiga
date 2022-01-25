@@ -73,9 +73,9 @@
  * the last scanline.
  */
 
-#define HBLANK_MIN    0x0A
-#define HBLANK_MAX    0x30
-#define HBLANK_CNT    0x27 // equals HBLANK_MAX - HBLANK_MIN + 1
+#define HBLANK_MIN    0x12 // 0x0A
+#define HBLANK_MAX    0x23 // 0x30
+#define HBLANK_CNT    0x12 // 0x27 // equals HBLANK_MAX - HBLANK_MIN + 1
 
 #define VBLANK_MIN    0x00
 #define VBLANK_MAX    0x19

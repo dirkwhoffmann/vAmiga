@@ -448,7 +448,7 @@ DQ
                                             <rect key="frame" x="323" y="22" width="191" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Some options are locked." id="374-fW-oqG">
-                                                <font key="font" metaFont="systemBold" size="11"/>
+                                                <font key="font" metaFont="smallSystemBold"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -902,7 +902,7 @@ DQ
                                             <rect key="frame" x="323" y="22" width="191" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Some options are locked." id="T5f-7n-PR7">
-                                                <font key="font" metaFont="systemBold" size="11"/>
+                                                <font key="font" metaFont="smallSystemBold"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -1284,7 +1284,7 @@ DQ
                                             <rect key="frame" x="323" y="22" width="191" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Some options are locked." id="Bat-4Y-bf0">
-                                                <font key="font" metaFont="systemBold" size="11"/>
+                                                <font key="font" metaFont="smallSystemBold"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -1755,7 +1755,7 @@ DQ
                                             <rect key="frame" x="323" y="22" width="191" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Some options are locked." id="bns-IX-4w7">
-                                                <font key="font" metaFont="systemBold" size="11"/>
+                                                <font key="font" metaFont="smallSystemBold"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -3143,17 +3143,21 @@ DQ
                                                         <menuItem title="Revert to..." hidden="YES" id="cQe-Hf-N2J">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Centered Geometry" id="B7f-wu-fjI">
+                                                        <menuItem title="Recommended Settings" id="B7f-wu-fjI">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="UAE Geometry" tag="1" id="Pop-59-k1j">
+                                                        <menuItem isSeparatorItem="YES" id="xwn-wj-QV7"/>
+                                                        <menuItem title="Standard Geometry" tag="1" id="deR-Vk-DXr">
+                                                            <attributedString key="attributedTitle"/>
+                                                        </menuItem>
+                                                        <menuItem title="Centered Geometry" tag="2" id="Pop-59-k1j">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
                                                         <menuItem isSeparatorItem="YES" id="fps-H7-T2w"/>
-                                                        <menuItem title="TFT Appearance" tag="2" id="jIW-Xg-Q5L">
+                                                        <menuItem title="TFT Appearance" tag="3" id="jIW-Xg-Q5L">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="CRT Appearance" tag="3" id="8Bz-wr-Ata">
+                                                        <menuItem title="CRT Appearance" tag="4" id="8Bz-wr-Ata">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -3300,7 +3304,7 @@ DQ
                                         <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oKa-UC-vHh">
                                             <rect key="frame" x="212" y="377" width="28" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="100" doubleValue="50" sliderType="circular" id="Zif-d5-OfK"/>
+                                            <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="1000" doubleValue="50" sliderType="circular" id="Zif-d5-OfK"/>
                                             <connections>
                                                 <action selector="vidHZoomAction:" target="-2" id="1X0-mS-Gm7"/>
                                             </connections>
@@ -3308,7 +3312,7 @@ DQ
                                         <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o9U-pP-jee">
                                             <rect key="frame" x="286" y="377" width="28" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="200" doubleValue="100" sliderType="circular" id="3yG-ac-aqI"/>
+                                            <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="1000" doubleValue="100" sliderType="circular" id="3yG-ac-aqI"/>
                                             <connections>
                                                 <action selector="vidVZoomAction:" target="-2" id="3Qx-4T-ZNC"/>
                                             </connections>
