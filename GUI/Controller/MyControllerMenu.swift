@@ -144,7 +144,7 @@ extension MyController: NSMenuItemValidation {
         
         amiga.suspend()
         config.loadRomUserDefaults()
-        config.loadHardwareUserDefaults()
+        config.loadChipsetUserDefaults()
         config.loadPeripheralsUserDefaults()
         config.loadCompatibilityUserDefaults()
         config.loadAudioUserDefaults()

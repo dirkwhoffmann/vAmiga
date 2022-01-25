@@ -47,7 +47,8 @@ extension ConfigurationController {
 
         // Lock
         memLockImage.isHidden = poweredOff
-        memLockText.isHidden = poweredOff
+        memLockInfo1.isHidden = poweredOff
+        memLockInfo2.isHidden = poweredOff
 
         // Buttons
         memPowerButton.isHidden = !bootable

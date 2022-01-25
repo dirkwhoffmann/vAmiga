@@ -576,12 +576,12 @@ using namespace moira;
     return [self agnus]->getInfo();
 }
 
-- (NSInteger)isOCS
+- (BOOL)isOCS
 {
     return [self agnus]->isOCS();
 }
 
-- (NSInteger)isECS
+- (BOOL)isECS
 {
     return [self agnus]->isECS();
 }

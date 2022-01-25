@@ -78,7 +78,8 @@ extension MyController {
         pref.loadDevicesUserDefaults()
 
         config.loadRomUserDefaults()
-        config.loadHardwareUserDefaults()
+        config.loadChipsetUserDefaults()
+        config.loadMemoryUserDefaults()
         config.loadPeripheralsUserDefaults()
         config.loadCompatibilityUserDefaults()
         config.loadAudioUserDefaults()

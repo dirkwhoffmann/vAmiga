@@ -514,7 +514,7 @@ class Configuration {
         amiga.resume()
     }
     
-    func loadHardwareUserDefaults() {
+    func loadChipsetUserDefaults() {
         
         let defaults = UserDefaults.standard
         
@@ -528,7 +528,7 @@ class Configuration {
         amiga.resume()
     }
     
-    func saveHardwareUserDefaults() {
+    func saveChipsetUserDefaults() {
         
         track()
         

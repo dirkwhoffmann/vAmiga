@@ -50,8 +50,8 @@ extension ConfigurationController {
 
         // Lock symbol and explanation
         perLockImage.isHidden = poweredOff
-        perLockText.isHidden = poweredOff
-        perLockSubText.isHidden = poweredOff
+        perLockInfo1.isHidden = poweredOff
+        perLockInfo2.isHidden = poweredOff
         
         // Buttons
         perPowerButton.isHidden = !bootable

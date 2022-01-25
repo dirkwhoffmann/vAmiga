@@ -79,12 +79,12 @@ extension ConfigurationController {
 
         case .MOS_8520_DIP:
             csCiaInfo1.stringValue = "MOS 8520"
-            csCiaInfo2.stringValue = "40 pins"
+            csCiaInfo2.stringValue = "40 pin package"
             csCiaInfo3.stringValue = "A500, A1000, A2000"
 
         case .MOS_8520_PLCC:
             csCiaInfo1.stringValue = "MOS 8520PL"
-            csCiaInfo2.stringValue = "44 pins"
+            csCiaInfo2.stringValue = "44 pin package"
             csCiaInfo3.stringValue = "A600"
 
         default:
@@ -132,8 +132,8 @@ extension ConfigurationController {
 
         // Lock
         csLockImage.isHidden = poweredOff
-        csLockText.isHidden = poweredOff
-        csLockSubText.isHidden = poweredOff
+        csLockInfo1.isHidden = poweredOff
+        csLockInfo2.isHidden = poweredOff
 
         // Buttons
         csPowerButton.isHidden = !bootable
@@ -181,6 +181,6 @@ extension ConfigurationController {
 
     @IBAction func csDefaultsAction(_ sender: NSButton!) {
         
-        config.saveHardwareUserDefaults()
+        config.saveChipsetUserDefaults()
     }
 }

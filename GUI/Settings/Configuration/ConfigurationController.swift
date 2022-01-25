@@ -38,10 +38,15 @@ class ConfigurationController: DialogController {
 
     @IBOutlet weak var arosButton: NSButton!
 
+    // Explanation
+    @IBOutlet weak var romExpImage: NSButton!
+    @IBOutlet weak var romExpInfo1: NSTextField!
+    @IBOutlet weak var romExpInfo2: NSTextField!
+
     // Lock
     @IBOutlet weak var romLockImage: NSButton!
-    @IBOutlet weak var romLockText: NSTextField!
-    @IBOutlet weak var romLockSubText: NSTextField!
+    @IBOutlet weak var romLockInfo1: NSTextField!
+    @IBOutlet weak var romLockInfo2: NSTextField!
    
     // Buttons
     @IBOutlet weak var romArosButton: NSButton!
@@ -85,8 +90,8 @@ class ConfigurationController: DialogController {
     
     // Lock
     @IBOutlet weak var csLockImage: NSButton!
-    @IBOutlet weak var csLockText: NSTextField!
-    @IBOutlet weak var csLockSubText: NSTextField!
+    @IBOutlet weak var csLockInfo1: NSTextField!
+    @IBOutlet weak var csLockInfo2: NSTextField!
 
     // Buttons
     @IBOutlet weak var csFactorySettingsPopup: NSPopUpButton!
@@ -116,7 +121,8 @@ class ConfigurationController: DialogController {
 
     // Lock
     @IBOutlet weak var memLockImage: NSButton!
-    @IBOutlet weak var memLockText: NSTextField!
+    @IBOutlet weak var memLockInfo1: NSTextField!
+    @IBOutlet weak var memLockInfo2: NSTextField!
 
     // Buttons
     @IBOutlet weak var memFactorySettingsPopup: NSPopUpButton!
@@ -149,8 +155,8 @@ class ConfigurationController: DialogController {
 
     // Lock
     @IBOutlet weak var perLockImage: NSButton!
-    @IBOutlet weak var perLockText: NSTextField!
-    @IBOutlet weak var perLockSubText: NSTextField!
+    @IBOutlet weak var perLockInfo1: NSTextField!
+    @IBOutlet weak var perLockInfo2: NSTextField!
     
     // Buttons
     @IBOutlet weak var perFactorySettingsPopup: NSPopUpButton!
@@ -185,10 +191,6 @@ class ConfigurationController: DialogController {
 
     // Keyboard
     @IBOutlet weak var compAccurateKeyboard: NSButton!
-
-    // Lock
-    @IBOutlet weak var compLockText: NSTextField!
-    @IBOutlet weak var compLockSubText: NSTextField!
 
     // Buttons
     @IBOutlet weak var compOKButton: NSButton!

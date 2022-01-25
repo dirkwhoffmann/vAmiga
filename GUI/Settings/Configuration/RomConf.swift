@@ -79,16 +79,15 @@ extension ConfigurationController {
         extMapText.isHidden = !hasExt
         extMapAddr.isHidden = !hasExt
 
-        // Lock symbol and explanation
-        if poweredOff {
-            romLockImage.image = NSImage(named: "NSInfo")
-            romLockText.stringValue = "To add a Rom, drag a Rom image file onto one of the chip icons."
-            romLockSubText.stringValue = "Original Roms are protected by copyright. Please obey legal regulations."
-        } else {
-            romLockImage.image = NSImage(named: "Lock")
-            romLockText.stringValue = "The settings are locked because the emulator is running."
-            romLockSubText.stringValue = "Click the lock to power down the emulator."
-        }
+        // Explanation
+        romExpImage.isHidden = !poweredOff
+        romExpInfo1.isHidden = !poweredOff
+        romExpInfo2.isHidden = !poweredOff
+
+        // Lock
+        romLockImage.isHidden = poweredOff
+        romLockInfo1.isHidden = poweredOff
+        romLockInfo2.isHidden = poweredOff
 
         // Buttons
         romPowerButton.isHidden = !bootable
