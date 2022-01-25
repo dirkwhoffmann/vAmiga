@@ -12,9 +12,6 @@ extension ConfigurationController {
     func refreshMemoryTab() {
 
         let poweredOff = amiga.poweredOff
-        let ecsAgnus =
-            config.agnusRev == AgnusRevision.ECS_1MB.rawValue ||
-            config.agnusRev == AgnusRevision.ECS_2MB.rawValue
 
         // Memory
         memChipRamPopup.selectItem(withTag: config.chipRam)
@@ -24,7 +21,7 @@ extension ConfigurationController {
         memBankMap.selectItem(withTag: config.bankMap)
         memUnmappingType.selectItem(withTag: config.unmappingType)
 
-        // Lock some controls if emulator is powered on
+        // Disable some controls if emulator is powered on
         memChipRamPopup.isEnabled = poweredOff
         memSlowRamPopup.isEnabled = poweredOff
         memFastRamPopup.isEnabled = poweredOff
@@ -36,9 +33,19 @@ extension ConfigurationController {
         // Chipset features
         memSlowRamDelay.state = config.slowRamDelay ? .on : .off
         memSlowRamMirror.state = config.slowRamMirror ? .on : .off
-        memSlowRamMirror.isEnabled = ecsAgnus
+        memSlowRamMirror.isEnabled = amiga.agnus.isECS
 
-        // Lock symbol and explanation
+        // Warning
+        let badAgnus = amiga.agnus.chipRamLimit < config.chipRam
+        if badAgnus {
+            memWarnInfo1.stringValue = "Chip Ram is not fully usable."
+            memWarnInfo2.stringValue = "The selected Agnus revision is limited to address \(amiga.agnus.chipRamLimit) MB."
+        }
+        memWarnImage.isHidden = !badAgnus
+        memWarnInfo1.isHidden = !badAgnus
+        memWarnInfo2.isHidden = !badAgnus
+
+        // Lock
         memLockImage.isHidden = poweredOff
         memLockText.isHidden = poweredOff
 

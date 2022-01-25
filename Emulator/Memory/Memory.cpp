@@ -438,9 +438,11 @@ Memory::_isReady() const
     if ((hasArosRom() && ramSize() < MB(1)) || FORCE_AROS_RAM_LIMIT) {
         throw VAError(ERROR_AROS_RAM_LIMIT);
     }
+    /*
     if (mem.chipRamSize() > KB(agnus.chipRamLimit()) || FORCE_CHIP_RAM_LIMIT) {
         throw VAError(ERROR_CHIP_RAM_LIMIT);
     }
+    */
 }
 
 void

@@ -361,6 +361,8 @@
 
 @property (readonly) NSInteger chipRamLimit;
 @property (readonly) AgnusInfo info;
+@property (readonly) BOOL isOCS;
+@property (readonly) BOOL isECS;
 - (AgnusStats)getStats;
 
 @end

@@ -576,6 +576,16 @@ using namespace moira;
     return [self agnus]->getInfo();
 }
 
+- (NSInteger)isOCS
+{
+    return [self agnus]->isOCS();
+}
+
+- (NSInteger)isECS
+{
+    return [self agnus]->isECS();
+}
+
 - (AgnusStats)getStats
 {
     return [self agnus]->getStats();
