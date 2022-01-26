@@ -142,6 +142,16 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
                 
             case OPT_DENISE_REVISION:       return "DENISE_REVISION";
                 
+            case OPT_PALETTE:               return "PALETTE";
+            case OPT_BRIGHTNESS:            return "BRIGHTNESS";
+            case OPT_CONTRAST:              return "CONTRAST";
+            case OPT_SATURATION:            return "SATURATION";
+
+            case OPT_DMA_DEBUG_ENABLE:      return "DMA_DEBUG_ENABLE";
+            case OPT_DMA_DEBUG_MODE:        return "DMA_DEBUG_MODE";
+            case OPT_DMA_DEBUG_COLOR:       return "DMA_DEBUG_COLOR";
+            case OPT_DMA_DEBUG_OPACITY:     return "DMA_DEBUG_OPACITY";
+
             case OPT_REG_RESET_VAL:         return "REG_RESET_VAL";
                 
             case OPT_RTC_MODEL:             return "RTC_MODEL";
@@ -194,6 +204,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_ACCURATE_KEYBOARD:     return "ACCURATE_KEYBOARD";
 
             case OPT_PULLUP_RESISTORS:      return "PULLUP_RESISTORS";
+            case OPT_SHAKE_DETECTION:       return "SHAKE_DETECTION";
             case OPT_MOUSE_VELOCITY:        return "MOUSE_VELOCITY";
 
             case OPT_AUTOFIRE:              return "AUTOFIRE";
