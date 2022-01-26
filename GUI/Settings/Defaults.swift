@@ -64,6 +64,7 @@ extension UserDefaults {
         registerCompatibilityUserDefaults()
         registerAudioUserDefaults()
         registerVideoUserDefaults()
+        registerGeometryUserDefaults()
     }
 }
 
@@ -84,6 +85,7 @@ extension MyController {
         config.loadCompatibilityUserDefaults()
         config.loadAudioUserDefaults()
         config.loadVideoUserDefaults()
+        config.loadGeometryUserDefaults()
 
         amiga.resume()
     }
@@ -1381,13 +1383,7 @@ struct VideoDefaults {
     let brightness: Int
     let contrast: Int
     let saturation: Int
-    
-    // Geometry
-    let hCenter: Float
-    let vCenter: Float
-    let hZoom: Float
-    let vZoom: Float
-    
+        
     // Upscalers
     let enhancer: Int
     let upscaler: Int
@@ -1414,7 +1410,7 @@ struct VideoDefaults {
     // Schemes
     //
     
-    // TFT monitor appearance with a texture cutout similar to UAE
+    // TFT monitor
     static let tft = VideoDefaults(
         
         palette: Palette.COLOR,
@@ -1422,11 +1418,6 @@ struct VideoDefaults {
         contrast: 100,
         saturation: 50,
         
-        hCenter: 0.622, // 0.6333,
-        vCenter: 0.143, // 0.1683,
-        hZoom: 0.747, // 0.0454,
-        vZoom: 0.032, // 0.0349,
-
         enhancer: 0,
         upscaler: 0,
         
@@ -1448,7 +1439,7 @@ struct VideoDefaults {
         disalignmentV: 0.001
     )
     
-    // CRT monitor appearance with a texture-cutout closer to the center
+    // CRT monitor
     static let crt = VideoDefaults(
         
         palette: Palette.COLOR,
@@ -1456,11 +1447,6 @@ struct VideoDefaults {
         contrast: 100,
         saturation: 50,
         
-        hCenter: 0.409, // 0.6333,
-        vCenter: 0.143, // 0.1683,
-        hZoom: 0.747, // 0.0454,
-        vZoom: 0.032, // 0.0349,
-
         enhancer: 0,
         upscaler: 0,
         
@@ -1483,6 +1469,38 @@ struct VideoDefaults {
     )
 }
 
+struct GeometryDefaults {
+        
+    let hCenter: Float
+    let vCenter: Float
+    let hZoom: Float
+    let vZoom: Float
+    
+    static let wide = GeometryDefaults(
+        
+        hCenter: 0.409,
+        vCenter: 0.143,
+        hZoom: 0.747,
+        vZoom: 0.032
+    )
+
+    static let centered = GeometryDefaults(
+        
+        hCenter: 0.622,
+        vCenter: 0.143,
+        hZoom: 0.747,
+        vZoom: 0.032
+    )
+
+    static let narrow = GeometryDefaults(
+        
+        hCenter: 0.61,
+        vCenter: 0.47,
+        hZoom: 1.0,
+        vZoom: 0.27
+    )
+}
+
 extension UserDefaults {
     
     static func registerVideoUserDefaults() {
@@ -1494,11 +1512,6 @@ extension UserDefaults {
             Keys.Vid.brightness: defaults.brightness,
             Keys.Vid.contrast: defaults.contrast,
             Keys.Vid.saturation: defaults.saturation,
-
-            Keys.Vid.hCenter: defaults.hCenter,
-            Keys.Vid.vCenter: defaults.vCenter,
-            Keys.Vid.hZoom: defaults.hZoom,
-            Keys.Vid.vZoom: defaults.vZoom,
 
             Keys.Vid.enhancer: defaults.enhancer,
             Keys.Vid.upscaler: defaults.upscaler,
@@ -1525,6 +1538,21 @@ extension UserDefaults {
         userDefaults.register(defaults: dictionary)
     }
 
+    static func registerGeometryUserDefaults() {
+        
+        let defaults = GeometryDefaults.centered
+        let dictionary: [String: Any] = [
+            
+            Keys.Vid.hCenter: defaults.hCenter,
+            Keys.Vid.vCenter: defaults.vCenter,
+            Keys.Vid.hZoom: defaults.hZoom,
+            Keys.Vid.vZoom: defaults.vZoom
+        ]
+        
+        let userDefaults = UserDefaults.standard
+        userDefaults.register(defaults: dictionary)
+    }
+    
     static func resetVideoUserDefaults() {
         
         let defaults = UserDefaults.standard
@@ -1534,11 +1562,6 @@ extension UserDefaults {
                      Keys.Vid.contrast,
                      Keys.Vid.saturation,
                      
-                     Keys.Vid.hCenter,
-                     Keys.Vid.vCenter,
-                     Keys.Vid.hZoom,
-                     Keys.Vid.vZoom,
-
                      Keys.Vid.enhancer,
                      Keys.Vid.upscaler,
 
@@ -1558,6 +1581,19 @@ extension UserDefaults {
                      Keys.Vid.disalignment,
                      Keys.Vid.disalignmentH,
                      Keys.Vid.disalignmentV
+        ]
+
+        for key in keys { defaults.removeObject(forKey: key) }
+    }
+    
+    static func resetGeometryUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+
+        let keys = [ Keys.Vid.hCenter,
+                     Keys.Vid.vCenter,
+                     Keys.Vid.hZoom,
+                     Keys.Vid.vZoom
         ]
 
         for key in keys { defaults.removeObject(forKey: key) }

@@ -141,6 +141,7 @@ extension MyController: NSMenuItemValidation {
         UserDefaults.resetCompatibilityUserDefaults()
         UserDefaults.resetAudioUserDefaults()
         UserDefaults.resetVideoUserDefaults()
+        UserDefaults.resetGeometryUserDefaults()
         
         amiga.suspend()
         config.loadRomUserDefaults()
@@ -149,6 +150,7 @@ extension MyController: NSMenuItemValidation {
         config.loadCompatibilityUserDefaults()
         config.loadAudioUserDefaults()
         config.loadVideoUserDefaults()
+        config.loadGeometryUserDefaults()
         amiga.resume()
     }
     

@@ -270,21 +270,24 @@ extension ConfigurationController {
         switch sender.selectedTag() {
             
         case 0: // Recommended settings (Centered TFT)
-            config.loadGeometryDefaults(VideoDefaults.tft)
+            config.loadGeometryDefaults(GeometryDefaults.centered)
             config.loadColorDefaults(VideoDefaults.tft)
             config.loadShaderDefaults(VideoDefaults.tft)
 
-        case 1: // Standard Geometry (taken from CRT profile)
-            config.loadGeometryDefaults(VideoDefaults.crt)
+        case 1: // Wide Geometry
+            config.loadGeometryDefaults(GeometryDefaults.wide)
             
-        case 2: // Centered Geometry (taken from TFT profile)
-            config.loadGeometryDefaults(VideoDefaults.tft)
-            
-        case 3: // TFT Appearance
+        case 2: // Centered Geometry
+            config.loadGeometryDefaults(GeometryDefaults.centered)
+
+        case 3: // Centered Geometry
+            config.loadGeometryDefaults(GeometryDefaults.narrow)
+
+        case 4: // TFT Appearance
             config.loadColorDefaults(VideoDefaults.tft)
             config.loadShaderDefaults(VideoDefaults.tft)
             
-        case 4: // CRT Appearance
+        case 5: // CRT Appearance
             config.loadColorDefaults(VideoDefaults.crt)
             config.loadShaderDefaults(VideoDefaults.crt)
             
@@ -297,5 +300,6 @@ extension ConfigurationController {
     @IBAction func vidDefaultsAction(_ sender: NSButton!) {
         
         config.saveVideoUserDefaults()
+        config.saveGeometryUserDefaults()
     }
 }

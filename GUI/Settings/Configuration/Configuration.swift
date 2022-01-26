@@ -344,16 +344,16 @@ class Configuration {
         get { return amiga.getConfig(.SATURATION) }
         set { amiga.configure(.SATURATION, value: newValue) }
     }
-    var hCenter = VideoDefaults.tft.hCenter {
+    var hCenter = GeometryDefaults.centered.hCenter {
         didSet { renderer.canvas.updateTextureRect() }
     }
-    var vCenter = VideoDefaults.tft.vCenter {
+    var vCenter = GeometryDefaults.centered.vCenter {
         didSet { renderer.canvas.updateTextureRect() }
     }
-    var hZoom = VideoDefaults.tft.hZoom {
+    var hZoom = GeometryDefaults.centered.hZoom {
         didSet { renderer.canvas.updateTextureRect() }
     }
-    var vZoom = VideoDefaults.tft.vZoom {
+    var vZoom = GeometryDefaults.centered.vZoom {
         didSet { renderer.canvas.updateTextureRect() }
     }
     var enhancer = VideoDefaults.tft.enhancer {
@@ -873,7 +873,7 @@ class Configuration {
         amiga.resume()
     }
     
-    func loadGeometryDefaults(_ defaults: VideoDefaults) {
+    func loadGeometryDefaults(_ defaults: GeometryDefaults) {
         
         hCenter = defaults.hCenter
         vCenter = defaults.vCenter
@@ -907,13 +907,6 @@ class Configuration {
         disalignment = defaults.disalignment
     }
     
-    func loadVideoDefaults(_ defaults: VideoDefaults) {
-        
-        loadColorDefaults(defaults)
-        loadGeometryDefaults(defaults)
-        loadColorDefaults(defaults)
-    }
-
     func loadVideoUserDefaults() {
         
         let defaults = UserDefaults.standard
@@ -924,11 +917,6 @@ class Configuration {
         brightness = defaults.integer(forKey: Keys.Vid.brightness)
         contrast = defaults.integer(forKey: Keys.Vid.contrast)
         saturation = defaults.integer(forKey: Keys.Vid.saturation)
-
-        hCenter = defaults.float(forKey: Keys.Vid.hCenter)
-        vCenter = defaults.float(forKey: Keys.Vid.vCenter)
-        hZoom = defaults.float(forKey: Keys.Vid.hZoom)
-        vZoom = defaults.float(forKey: Keys.Vid.vZoom)
 
         enhancer = defaults.integer(forKey: Keys.Vid.enhancer)
         upscaler = defaults.integer(forKey: Keys.Vid.upscaler)
@@ -947,6 +935,20 @@ class Configuration {
         disalignment = Int32(defaults.integer(forKey: Keys.Vid.disalignment))
         disalignmentH = defaults.float(forKey: Keys.Vid.disalignmentH)
         disalignmentV = defaults.float(forKey: Keys.Vid.disalignmentV)
+                
+        amiga.resume()
+    }
+
+    func loadGeometryUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        amiga.suspend()
+        
+        hCenter = defaults.float(forKey: Keys.Vid.hCenter)
+        vCenter = defaults.float(forKey: Keys.Vid.vCenter)
+        hZoom = defaults.float(forKey: Keys.Vid.hZoom)
+        vZoom = defaults.float(forKey: Keys.Vid.vZoom)
         
         renderer.canvas.updateTextureRect()
         
@@ -963,11 +965,6 @@ class Configuration {
         defaults.set(brightness, forKey: Keys.Vid.brightness)
         defaults.set(contrast, forKey: Keys.Vid.contrast)
         defaults.set(saturation, forKey: Keys.Vid.saturation)
-
-        defaults.set(hCenter, forKey: Keys.Vid.hCenter)
-        defaults.set(vCenter, forKey: Keys.Vid.vCenter)
-        defaults.set(hZoom, forKey: Keys.Vid.hZoom)
-        defaults.set(vZoom, forKey: Keys.Vid.vZoom)
 
         defaults.set(enhancer, forKey: Keys.Vid.enhancer)
         defaults.set(upscaler, forKey: Keys.Vid.upscaler)
@@ -986,5 +983,17 @@ class Configuration {
         defaults.set(disalignment, forKey: Keys.Vid.disalignment)
         defaults.set(disalignmentH, forKey: Keys.Vid.disalignmentH)
         defaults.set(disalignmentV, forKey: Keys.Vid.disalignmentV)
+    }
+    
+    func saveGeometryUserDefaults() {
+        
+        track()
+        
+        let defaults = UserDefaults.standard
+        
+        defaults.set(hCenter, forKey: Keys.Vid.hCenter)
+        defaults.set(vCenter, forKey: Keys.Vid.vCenter)
+        defaults.set(hZoom, forKey: Keys.Vid.hZoom)
+        defaults.set(vZoom, forKey: Keys.Vid.vZoom)
     }
 }

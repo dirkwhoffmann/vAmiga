@@ -3147,17 +3147,20 @@ DQ
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
                                                         <menuItem isSeparatorItem="YES" id="xwn-wj-QV7"/>
-                                                        <menuItem title="Standard Geometry" tag="1" id="deR-Vk-DXr">
+                                                        <menuItem title="Wide Geometry" tag="1" id="deR-Vk-DXr">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
                                                         <menuItem title="Centered Geometry" tag="2" id="Pop-59-k1j">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem isSeparatorItem="YES" id="fps-H7-T2w"/>
-                                                        <menuItem title="TFT Appearance" tag="3" id="jIW-Xg-Q5L">
+                                                        <menuItem title="Narrow Geometry" tag="3" id="2qj-ee-vyx">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="CRT Appearance" tag="4" id="8Bz-wr-Ata">
+                                                        <menuItem isSeparatorItem="YES" id="fps-H7-T2w"/>
+                                                        <menuItem title="TFT Monitor" tag="4" id="jIW-Xg-Q5L">
+                                                            <attributedString key="attributedTitle"/>
+                                                        </menuItem>
+                                                        <menuItem title="CRT Monitor" tag="5" id="8Bz-wr-Ata">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
