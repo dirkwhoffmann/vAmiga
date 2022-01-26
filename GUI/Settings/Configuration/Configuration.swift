@@ -344,16 +344,16 @@ class Configuration {
         get { return amiga.getConfig(.SATURATION) }
         set { amiga.configure(.SATURATION, value: newValue) }
     }
-    var hCenter = GeometryDefaults.centered.hCenter {
+    var hCenter = GeometryDefaults.wide.hCenter {
         didSet { renderer.canvas.updateTextureRect() }
     }
-    var vCenter = GeometryDefaults.centered.vCenter {
+    var vCenter = GeometryDefaults.wide.vCenter {
         didSet { renderer.canvas.updateTextureRect() }
     }
-    var hZoom = GeometryDefaults.centered.hZoom {
+    var hZoom = GeometryDefaults.wide.hZoom {
         didSet { renderer.canvas.updateTextureRect() }
     }
-    var vZoom = GeometryDefaults.centered.vZoom {
+    var vZoom = GeometryDefaults.wide.vZoom {
         didSet { renderer.canvas.updateTextureRect() }
     }
     var enhancer = VideoDefaults.tft.enhancer {

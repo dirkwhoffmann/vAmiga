@@ -3145,30 +3145,64 @@ DQ
                                                         </menuItem>
                                                         <menuItem title="Recommended Settings" id="B7f-wu-fjI">
                                                             <attributedString key="attributedTitle"/>
+                                                            <connections>
+                                                                <action selector="vidPresetAction:" target="-1" id="BaY-kg-Xg7"/>
+                                                            </connections>
                                                         </menuItem>
                                                         <menuItem isSeparatorItem="YES" id="xwn-wj-QV7"/>
-                                                        <menuItem title="Wide Geometry" tag="1" id="deR-Vk-DXr">
-                                                            <attributedString key="attributedTitle"/>
-                                                        </menuItem>
-                                                        <menuItem title="Centered Geometry" tag="2" id="Pop-59-k1j">
-                                                            <attributedString key="attributedTitle"/>
-                                                        </menuItem>
-                                                        <menuItem title="Narrow Geometry" tag="3" id="2qj-ee-vyx">
-                                                            <attributedString key="attributedTitle"/>
-                                                        </menuItem>
-                                                        <menuItem isSeparatorItem="YES" id="fps-H7-T2w"/>
-                                                        <menuItem title="TFT Monitor" tag="4" id="jIW-Xg-Q5L">
-                                                            <attributedString key="attributedTitle"/>
-                                                        </menuItem>
-                                                        <menuItem title="CRT Monitor" tag="5" id="8Bz-wr-Ata">
+                                                        <menuItem title="Geometry" id="tu7-cl-NYW">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
+                                                            <menu key="submenu" title="Geometry" id="z8l-o7-fX3">
+                                                                <items>
+                                                                    <menuItem title="Narrow" tag="1" id="deR-Vk-DXr">
+                                                                        <attributedString key="attributedTitle"/>
+                                                                        <connections>
+                                                                            <action selector="vidPresetAction:" target="-1" id="jgC-ZD-5vY"/>
+                                                                        </connections>
+                                                                    </menuItem>
+                                                                    <menuItem title="Wide" tag="2" id="Pop-59-k1j">
+                                                                        <attributedString key="attributedTitle"/>
+                                                                        <connections>
+                                                                            <action selector="vidPresetAction:" target="-1" id="Eom-Xa-vNZ"/>
+                                                                        </connections>
+                                                                    </menuItem>
+                                                                    <menuItem title="Overscan" tag="3" id="2qj-ee-vyx">
+                                                                        <attributedString key="attributedTitle"/>
+                                                                        <connections>
+                                                                            <action selector="vidPresetAction:" target="-1" id="BDZ-GN-lN1"/>
+                                                                        </connections>
+                                                                    </menuItem>
+                                                                    <menuItem title="Extreme" tag="4" id="sbm-Uq-NzD">
+                                                                        <attributedString key="attributedTitle"/>
+                                                                        <connections>
+                                                                            <action selector="vidPresetAction:" target="-1" id="EXc-5h-E4d"/>
+                                                                        </connections>
+                                                                    </menuItem>
+                                                                </items>
+                                                            </menu>
+                                                        </menuItem>
+                                                        <menuItem title="Appearance" id="aTy-qo-OXf">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                            <menu key="submenu" title="Appearance" id="S4t-u5-9Ng">
+                                                                <items>
+                                                                    <menuItem title="TFT" tag="6" id="jIW-Xg-Q5L">
+                                                                        <attributedString key="attributedTitle"/>
+                                                                        <connections>
+                                                                            <action selector="vidPresetAction:" target="-1" id="Kur-t3-HUm"/>
+                                                                        </connections>
+                                                                    </menuItem>
+                                                                    <menuItem title="CRT" tag="7" id="8Bz-wr-Ata">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                        <connections>
+                                                                            <action selector="vidPresetAction:" target="-1" id="BAe-fy-dcm"/>
+                                                                        </connections>
+                                                                    </menuItem>
+                                                                </items>
+                                                            </menu>
                                                         </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
-                                            <connections>
-                                                <action selector="vidPresetAction:" target="-2" id="jiK-Pu-A5g"/>
-                                            </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" id="WcH-gc-UkP">
                                             <rect key="frame" x="528" y="5" width="69" height="32"/>

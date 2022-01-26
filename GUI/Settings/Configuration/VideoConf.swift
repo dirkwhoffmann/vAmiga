@@ -265,29 +265,34 @@ extension ConfigurationController {
     // Action methods (Misc)
     //
     
-    @IBAction func vidPresetAction(_ sender: NSPopUpButton!) {
+    @IBAction func vidPresetAction(_ sender: NSMenuItem!) {
         
-        switch sender.selectedTag() {
+        track("\(sender.tag)")
+        
+        switch sender.tag {
             
         case 0: // Recommended settings (Centered TFT)
-            config.loadGeometryDefaults(GeometryDefaults.centered)
-            config.loadColorDefaults(VideoDefaults.tft)
-            config.loadShaderDefaults(VideoDefaults.tft)
-
-        case 1: // Wide Geometry
             config.loadGeometryDefaults(GeometryDefaults.wide)
-            
-        case 2: // Centered Geometry
-            config.loadGeometryDefaults(GeometryDefaults.centered)
+            config.loadColorDefaults(VideoDefaults.tft)
+            config.loadShaderDefaults(VideoDefaults.tft)
 
-        case 3: // Centered Geometry
+        case 1: // Narrow Geometry
             config.loadGeometryDefaults(GeometryDefaults.narrow)
+            
+        case 2: // Wide Geometry
+            config.loadGeometryDefaults(GeometryDefaults.wide)
 
-        case 4: // TFT Appearance
+        case 3: // Overscan Geometry
+            config.loadGeometryDefaults(GeometryDefaults.overscan)
+
+        case 4: // Extreme Geometry
+            config.loadGeometryDefaults(GeometryDefaults.extreme)
+
+        case 6: // TFT Appearance
             config.loadColorDefaults(VideoDefaults.tft)
             config.loadShaderDefaults(VideoDefaults.tft)
             
-        case 5: // CRT Appearance
+        case 7: // CRT Appearance
             config.loadColorDefaults(VideoDefaults.crt)
             config.loadShaderDefaults(VideoDefaults.crt)
             

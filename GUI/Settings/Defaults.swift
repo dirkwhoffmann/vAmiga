@@ -1476,15 +1476,15 @@ struct GeometryDefaults {
     let hZoom: Float
     let vZoom: Float
     
-    static let wide = GeometryDefaults(
+    static let narrow = GeometryDefaults(
         
-        hCenter: 0.409,
-        vCenter: 0.143,
-        hZoom: 0.747,
-        vZoom: 0.032
+        hCenter: 0.6,
+        vCenter: 0.47,
+        hZoom: 1.0,
+        vZoom: 0.27
     )
 
-    static let centered = GeometryDefaults(
+    static let wide = GeometryDefaults(
         
         hCenter: 0.622,
         vCenter: 0.143,
@@ -1492,12 +1492,20 @@ struct GeometryDefaults {
         vZoom: 0.032
     )
 
-    static let narrow = GeometryDefaults(
+    static let overscan = GeometryDefaults(
         
-        hCenter: 0.61,
-        vCenter: 0.47,
-        hZoom: 1.0,
-        vZoom: 0.27
+        hCenter: 0.409,
+        vCenter: 0.143,
+        hZoom: 0.747,
+        vZoom: 0.032
+    )
+
+    static let extreme = GeometryDefaults(
+        
+        hCenter: 0,
+        vCenter: 0,
+        hZoom: 0,
+        vZoom: 0
     )
 }
 
@@ -1540,7 +1548,7 @@ extension UserDefaults {
 
     static func registerGeometryUserDefaults() {
         
-        let defaults = GeometryDefaults.centered
+        let defaults = GeometryDefaults.wide
         let dictionary: [String: Any] = [
             
             Keys.Vid.hCenter: defaults.hCenter,
