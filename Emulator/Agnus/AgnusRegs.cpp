@@ -286,8 +286,8 @@ void
 Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 {
     trace(DMA_DEBUG | SEQ_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
-        
-    // Check if the hires bit of one of the BPU bits have been modified
+
+    // Check if the hires bit or one of the BPU bits have been modified
     if ((oldValue ^ newValue) & 0xF000) {
             
         // Record the change

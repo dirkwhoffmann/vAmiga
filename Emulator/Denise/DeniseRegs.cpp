@@ -173,12 +173,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     updateBorderColor();
     
     // Check if the BPU bits have changed
-    u16 oldBpuBits = (oldValue >> 12) & 0b111;
     u16 newBpuBits = (newValue >> 12) & 0b111;
-
-    if (oldBpuBits != newBpuBits) {
-        // trace("Changing BPU bits from %d to %d\n", oldBpuBits, newBpuBits);
-    }
     
     // Report a suspicious BPU value
     if (newBpuBits > (hires(bplcon0) ? 4 : 6)) {
