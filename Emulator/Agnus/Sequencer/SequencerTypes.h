@@ -53,22 +53,27 @@ struct DDFState
     bool lastFu = false;
     u8   bmctl = 0;
     u8   cnt = 0;
-    
-    bool operator!=(const DDFState &rhs) const
+
+    bool operator==(const DDFState &rhs) const
     {
         return
-        this->bpv != rhs.bpv ||
-        this->bmapen != rhs.bmapen ||
-        this->shw != rhs.shw ||
-        this->rhw != rhs.rhw ||
-        this->bphstart != rhs.bphstart ||
-        this->bphstop != rhs.bphstop ||
-        this->bprun != rhs.bprun ||
-        this->lastFu != rhs.lastFu ||
-        this->bmctl != rhs.bmctl ||
-        this->cnt != rhs.cnt;
+        this->bpv == rhs.bpv &&
+        this->bmapen == rhs.bmapen &&
+        this->shw == rhs.shw &&
+        this->rhw == rhs.rhw &&
+        this->bphstart == rhs.bphstart &&
+        this->bphstop == rhs.bphstop &&
+        this->bprun == rhs.bprun &&
+        this->lastFu == rhs.lastFu &&
+        this->bmctl == rhs.bmctl &&
+        this->cnt == rhs.cnt;
     }
-    
+
+    bool operator!=(const DDFState &rhs) const
+    {
+        return !(*this == rhs);
+    }
+        
     template <class W>
     void operator<<(W& worker)
     {
