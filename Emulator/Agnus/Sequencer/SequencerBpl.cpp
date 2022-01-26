@@ -50,15 +50,16 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
         
     // Update the BMCTL bits with the current value
     state.bmctl = agnus.bplcon0Initial >> 12;
+    computeFetchUnit(state.bmctl);
     
     // Evaluate the current state of the vertical DIW flipflop
     if (!state.bpv) { state.bprun = false; state.cnt = 0; }
     
     // Fill the event table
-    if (!sr.modified && (!state.bpv || !state.bmapen)) {
-        computeBplEventsFast <ecs> (sr, state);
-    } else {
+    if (sr.modified || (state.bpv && state.bmapen) || NO_SEQ_FASTPATH) {
         computeBplEventsSlow <ecs> (sr, state);
+    } else {
+        computeBplEventsFast <ecs> (sr, state);
     }
     
     // Add the EOL event (end of line)

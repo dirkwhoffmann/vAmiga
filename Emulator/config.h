@@ -77,7 +77,7 @@ struct FloatStereo; typedef FloatStereo SampleType;
 //
 
 static const int NO_SSE          = 0; // Don't use SSE extensions
-
+static const int NO_SEQ_FASTPATH = 0; // Disable sequencer speed optimizations
 
 //
 // Debug settings

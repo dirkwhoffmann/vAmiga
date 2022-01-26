@@ -212,6 +212,7 @@ private:
         worker
 
         << config.revision
+        << config.slowRamMirror
         << ptrMask;
     }
 
@@ -246,7 +247,6 @@ private:
         << bpl1mod
         << bpl2mod
         << sprpt
-        // << dmaDAS
         << scrollOdd
         << scrollEven
         
