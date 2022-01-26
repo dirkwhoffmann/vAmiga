@@ -457,10 +457,10 @@ Agnus::hsyncHandler()
     denise.endOfLine(pos.v);
 
     // Update pot counters
-    if (paula.chargeX0 < 1.0) paula.potCntX0++;
-    if (paula.chargeY0 < 1.0) paula.potCntY0++;
-    if (paula.chargeX1 < 1.0) paula.potCntX1++;
-    if (paula.chargeY1 < 1.0) paula.potCntY1++;
+    if (paula.chargeX0 < 1.0) U8_INC(paula.potCntX0, 1);
+    if (paula.chargeY0 < 1.0) U8_INC(paula.potCntY0, 1);
+    if (paula.chargeX1 < 1.0) U8_INC(paula.potCntX1, 1);
+    if (paula.chargeY1 < 1.0) U8_INC(paula.potCntY1, 1);
 
     // Transfer DMA requests from Paula to Agnus
     paula.channel0.requestDMA();

@@ -569,10 +569,12 @@ Moira::cyclesDiv(u32 op1, u16 op2)
 
             for (int i = 0; i < 15; i++) {
                 if ((i32)dividend < 0) {
-                    dividend <<= 1;
+                    // dividend <<= 1;
+                    dividend = (u32)((u64)dividend << 1);
                     dividend = U32_SUB(dividend, hdivisor);
                 } else {
-                    dividend <<= 1;
+                    // dividend <<= 1;
+                    dividend = (u32)((u64)dividend << 1);
                     if (dividend >= hdivisor) {
                         dividend = U32_SUB(dividend, hdivisor);
                         mcycles += 1;

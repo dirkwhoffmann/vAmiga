@@ -45,7 +45,7 @@ Paula::serviceIplEvent()
     cpu.setIPL((iplPipe >> 24) & 0xFF);
     
     // Shift the pipe
-    iplPipe = (iplPipe << 8) | (iplPipe & 0xFF);
+    iplPipe = (iplPipe & 0x00FF'FFFF'FFFF'FFFF) << 8 | (iplPipe & 0xFF);
     
     // Reschedule the event until the pipe has been shifted through entirely
     i64 repeat = scheduler.data[SLOT_IPL];

@@ -812,12 +812,12 @@ Moira::execLink(u16 opcode)
     i16 disp = (i16)readI<S>();
 
     // Check for address error
-    if (misaligned<Long>(sp + disp)) {
+    if (misaligned<Long>(sp)) {
         writeA(ax, sp);
-        execAddressError(makeFrame<AE_DATA|AE_WRITE>(sp + disp, getPC() + 2, getSR(), ird));
+        execAddressError(makeFrame<AE_DATA|AE_WRITE>(sp, getPC() + 2, getSR(), ird));
         return;
     }
-
+    
     pollIpl();
 
     // Write to stack

@@ -643,7 +643,7 @@ Drive::step(isize dir)
 void
 Drive::recordCylinder(Cylinder cylinder)
 {
-    cylinderHistory = (cylinderHistory << 8) | cylinder;
+    cylinderHistory = (cylinderHistory & 0x00FF'FFFF'FFFF'FFFF) << 8 | cylinder;
 }
 
 bool

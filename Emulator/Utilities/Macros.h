@@ -122,7 +122,21 @@
 // Performing overflow-prone arithmetic
 //
 
-// Sanitizer friendly macros for adding signed offsets to u32 values
+// Sanitizer friendly macros for adding signed offsets to integer values
+#define U8_ADD(x,y) (u8)((i64)(x) + (i64)(y))
+#define U8_SUB(x,y) (u8)((i64)(x) - (i64)(y))
+#define U8_ADD3(x,y,z) (u8)((i64)(x) + (i64)(y) + (i64)(z))
+#define U8_SUB3(x,y,z) (u8)((i64)(x) - (i64)(y) - (i64)(z))
+#define U8_INC(x,y) x = U8_ADD(x,y)
+#define U8_DEC(x,y) x = U8_SUB(x,y)
+
+#define U16_ADD(x,y) (u16)((i64)(x) + (i64)(y))
+#define U16_SUB(x,y) (u16)((i64)(x) - (i64)(y))
+#define U16_ADD3(x,y,z) (u16)((i64)(x) + (i64)(y) + (i64)(z))
+#define U16_SUB3(x,y,z) (u16)((i64)(x) - (i64)(y) - (i64)(z))
+#define U16_INC(x,y) x = U16_ADD(x,y)
+#define U16_DEC(x,y) x = U16_SUB(x,y)
+
 #define U32_ADD(x,y) (u32)((i64)(x) + (i64)(y))
 #define U32_SUB(x,y) (u32)((i64)(x) - (i64)(y))
 #define U32_ADD3(x,y,z) (u32)((i64)(x) + (i64)(y) + (i64)(z))
@@ -130,7 +144,6 @@
 #define U32_INC(x,y) x = U32_ADD(x,y)
 #define U32_DEC(x,y) x = U32_SUB(x,y)
 
-// Sanitizer friendly macros for adding signed offsets to u64 values
 #define U64_ADD(x,y) (u64)((i64)(x) + (i64)(y))
 #define U64_SUB(x,y) (u64)((i64)(x) - (i64)(y))
 #define U64_ADD3(x,y,z) (u64)((i64)(x) + (i64)(y) + (i64)(z))

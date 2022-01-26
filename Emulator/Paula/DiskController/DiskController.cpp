@@ -356,7 +356,7 @@ DiskController::writeFifo(u8 byte)
     if (fifoCount == 6) fifoCount -= 2;
     
     // Add the new byte
-    fifo = (fifo << 8) | byte;
+    fifo = (fifo & 0x00FF'FFFF'FFFF'FFFF) << 8 | byte;
     fifoCount++;
 }
 

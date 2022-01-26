@@ -206,7 +206,7 @@ string
 GdbServer::computeChecksum(const string &s)
 {
     uint8_t chk = 0;
-    for(auto &c : s) chk += (uint8_t)c;
+    for(auto &c : s) U8_ADD(chk, c); // chk += (uint8_t)c;
 
     return util::hexstr <2> (chk);
 }
