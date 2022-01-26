@@ -17,7 +17,7 @@ class Amiga;
 struct Thumbnail {
     
     // Image size
-    isize width, height;
+    i32 width, height;
     
     // Raw texture data
     u32 screen[(HPIXELS / 2) * (VPIXELS / 1)];

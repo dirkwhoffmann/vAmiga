@@ -21,8 +21,8 @@ Thumbnail::take(Amiga &amiga, isize dx, isize dy)
     isize xStart = 4 * HBLANK_MAX + 1, xEnd = HPIXELS + 4 * HBLANK_MIN;
     isize yStart = VBLANK_CNT, yEnd = VPIXELS - 2;
     
-    width  = (xEnd - xStart) / dx;
-    height = (yEnd - yStart) / dy;
+    width  = (i32)((xEnd - xStart) / dx);
+    height = (i32)((yEnd - yStart) / dy);
     
     source += xStart + yStart * HPIXELS;
     

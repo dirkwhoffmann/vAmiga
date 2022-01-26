@@ -135,9 +135,7 @@ AmigaComponent::save(u8 *buffer)
 
 void
 AmigaComponent::didSave()
-{
-    assert(!isRunning());
-        
+{        
     for (AmigaComponent *c : subComponents) {
         c->didSave();
     }
