@@ -74,7 +74,7 @@ Copper::findMatch(Beam &match) const
         // Check if the vertical components are equal
         if ((beam & mask & ~0xFF) == (comp & mask & ~0xFF)) {
 
-            // debug("Matching vertically: beam = %X comp = %X mask = %X\n", beam, comp, mask);
+            // trace(true, "Matching vertically: beam = %X comp = %X mask = %X\n", beam, comp, mask);
 
             // Try to match the horizontal coordinate as well
             if (findHorizontalMatch(beam, comp, mask)) {

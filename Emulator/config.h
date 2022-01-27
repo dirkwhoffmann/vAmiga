@@ -21,10 +21,10 @@
 // Snapshot version number
 #define SNP_MAJOR 1
 #define SNP_MINOR 0
-#define SNP_SUBMINOR 8
+#define SNP_SUBMINOR 9
 
 // Uncomment this setting in a release build
-// #define RELEASEBUILD
+#define RELEASEBUILD
 
 
 //
@@ -76,7 +76,6 @@ struct FloatStereo; typedef FloatStereo SampleType;
 // Execution settings
 //
 
-static const int NO_SSE          = 0; // Don't use SSE extensions
 static const int NO_SEQ_FASTPATH = 0; // Disable sequencer speed optimizations
 
 //
