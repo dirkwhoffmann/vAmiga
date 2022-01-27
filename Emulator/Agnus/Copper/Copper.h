@@ -164,7 +164,6 @@ public:
 
 public:
     
-    // u32 getCopPC() const { return coppc; }
     u32 getCopPC0() const { return coppc0; }
 
     void pokeCOPCON(u16 value);

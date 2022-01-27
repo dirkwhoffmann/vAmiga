@@ -105,8 +105,11 @@ Copper::findMatch(Beam &match) const
 bool
 Copper::findHorizontalMatch(u32 &match, u32 comp, u32 mask) const
 {
+    // The maximum horizontal trigger positon is $E1 in PAL machines
+    const u32 maxhpos = 0xE1;
+    
     // Iterate through all horizontal positions
-    for (u32 beam = match; (beam & 0xFF) < HPOS_CNT; beam++) {
+    for (u32 beam = match; (beam & 0xFF) < maxhpos; beam++) {
 
         // Check if the comparator triggers at this position
         if ((beam & mask) >= (comp & mask)) {
