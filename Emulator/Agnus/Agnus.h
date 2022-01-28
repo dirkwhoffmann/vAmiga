@@ -388,10 +388,12 @@ public:
 public:
 
     // Checks whether Hires or Lores mode is selected
-    bool hires() { return GET_BIT(bplcon0, 15); }
+    static bool hires(u16 value) { return GET_BIT(value, 15); }
+    bool hires() { return hires(bplcon0); }
     
     // Returns the external synchronization bit from BPLCON0
-    bool ersy() { return GET_BIT(bplcon0, 1); }
+    static bool ersy(u16 value) { return GET_BIT(value, 1); }
+    bool ersy() { return ersy(bplcon0); }
 
 
     //

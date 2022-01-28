@@ -174,12 +174,12 @@ Agnus::peekVHPOSR()
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
     
-    // Return the latched position if the counters are frozen
-    if (ersy()) return HI_LO(latchedPos.v & 0xFF, latchedPos.h);
-                     
+    // Return the latched position if external synchronization is enabled
+    if (ersy(bplcon0Initial)) return HI_LO(latchedPos.v & 0xFF, 0);
+
     // The returned position is four cycles ahead
     auto result = agnus.pos + Beam {0,4};
-    
+        
     // Rectify the vertical position if it has wrapped over
     if (result.v >= frame.numLines()) result.v = 0;
     
@@ -223,7 +223,7 @@ Agnus::peekVPOSR()
     if (frame.isLongFrame()) result |= 0x8000;
 
     // V8 (Vertical position MSB)
-    result |= (ersy() ? latchedPos.v : pos.v) >> 8;
+    result |= (ersy(bplcon0Initial) ? latchedPos.v : pos.v) >> 8;
     
     trace(POSREG_DEBUG, "peekVPOSR() = %X\n", result);
     return result;
