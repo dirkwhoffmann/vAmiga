@@ -730,6 +730,10 @@ Interpreter::registerInstructions()
              "command", "Displays the internal state",
              &RetroShell::exec <Token::keyboard, Token::inspect>, 0);
 
+    root.add({"keyboard", "press"},
+             "command", "Sends a keycode to the keyboard",
+             &RetroShell::exec <Token::keyboard, Token::press>, 1);
+
     
     //
     // Mouse

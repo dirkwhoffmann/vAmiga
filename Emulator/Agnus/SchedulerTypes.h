@@ -304,12 +304,15 @@ enum_i8(EventID)
     // Auto typing
     KEY_PRESS           = 1,
     KEY_RELEASE,
-
+    KEY_EVENT_COUNT,
+    
     // Remote server manager
     SRV_LAUNCH_DAEMON   = 1,
+    SRV_EVENT_COUNT,
     
     // Serial remote server
     SER_RECEIVE         = 1,
+    SER_EVENT_COUNT,
     
     // Inspector slot
     INS_AMIGA           = 1,

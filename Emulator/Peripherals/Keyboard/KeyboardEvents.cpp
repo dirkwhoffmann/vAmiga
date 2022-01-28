@@ -101,8 +101,24 @@ void
 Keyboard::serviceKeyEvent()
 {
     auto id = scheduler.id[SLOT_KEY];
-    auto data = scheduler.data[SLOT_KEY];
-    
-    printf("serviceKeyEvent(%d,%lld)\n", id, data);
-    printf("To be implemented\n");
+    auto code = (KeyCode)(scheduler.data[SLOT_KEY]);
+    auto duration = (Cycle)(scheduler.data[SLOT_KEY] >> 8);
+
+    switch(id) {
+            
+        case KEY_PRESS:
+            
+            pressKey(code);
+            agnus.scheduleRel <SLOT_KEY> (duration, KEY_RELEASE, code);
+            break;
+            
+        case KEY_RELEASE:
+            
+            releaseKey(code);
+            scheduler.cancel <SLOT_KEY> ();
+            break;
+            
+        default:
+            fatalError;
+    }
 }

@@ -156,6 +156,12 @@ Keyboard::releaseAllKeys()
 }
 
 void
+Keyboard::autoType(KeyCode keycode, Cycle duration, Cycle delay)
+{
+    agnus.scheduleRel<SLOT_KEY>(delay, KEY_PRESS, keycode);
+}
+
+void
 Keyboard::wakeUp()
 {
     if (!scheduler.hasEvent<SLOT_KBD>()) {
