@@ -10,14 +10,14 @@
 template <> u32
 Moira::dasmRead<Byte>(u32 &addr)
 {
-    addr += 2;
+    U32_INC(addr, 2);
     return read16Dasm(addr) & 0xFF;
 }
 
 template <> u32
 Moira::dasmRead<Word>(u32 &addr)
 {
-    addr += 2;
+    U32_INC(addr, 2);
     return read16Dasm(addr);
 }
 
@@ -316,8 +316,11 @@ Moira::dasmBsr(StrWriter &str, u32 &addr, u16 op)
         }
     }
 
-    u32 dst = addr + 2;
-    dst += (S == Byte) ? (i8)op : (i16)dasmRead<S>(addr);
+    u32 dst = addr;
+    U32_INC(dst, 2);
+    U32_INC(dst, S == Byte ? (i8)op : (i16)dasmRead<S>(addr));
+    // u32 dst = U32_ADD(addr, 2);
+    // dst += (S == Byte) ? (i8)op : (i16)dasmRead<S>(addr);
 
     str << Ins<I>{} << tab << UInt(dst);
 }
@@ -394,8 +397,11 @@ Moira::dasmBcc(StrWriter &str, u32 &addr, u16 op)
         }
     }
 
-    u32 dst = addr + 2;
-    dst += (S == Byte) ? (i8)op : (i16)dasmRead<S>(addr);
+    u32 dst = addr;
+    U32_INC(dst, 2);
+    U32_INC(dst, S == Byte ? (i8)op : (i16)dasmRead<S>(addr));
+    // u32 dst = U32_ADD(addr, 2);
+    // dst += (S == Byte) ? (i8)op : (i16)dasmRead<S>(addr);
 
     str << Ins<I>{} << tab << UInt(dst);
 }
@@ -424,7 +430,7 @@ Moira::dasmDbcc(StrWriter &str, u32 &addr, u16 op)
     auto src = Dn ( _____________xxx(op) );
     auto dst = addr + 2;
 
-    dst += (i16)dasmRead<Word>(addr);
+    U32_INC(dst, (i16)dasmRead<Word>(addr));
 
     str << Ins<I>{} << tab << src << ", " << UInt(dst);
 }

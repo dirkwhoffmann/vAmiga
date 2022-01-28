@@ -85,10 +85,10 @@ Paula::servicePotEvent(EventID id)
 
                 // Reset counters. For input pins, we need to set the couter
                 // value to -1. It'll wrap over to 0 in the hsync handler.
-                potCntY0 = outly ? 0 : -1;
-                potCntX0 = outlx ? 0 : -1;
-                potCntY1 = outry ? 0 : -1;
-                potCntX1 = outrx ? 0 : -1;
+                potCntY0 = outly ? 0 : (u8)-1;
+                potCntX0 = outlx ? 0 : (u8)-1;
+                potCntY1 = outry ? 0 : (u8)-1;
+                potCntX1 = outrx ? 0 : (u8)-1;
 
                 // Schedule the first charge event
                 agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);

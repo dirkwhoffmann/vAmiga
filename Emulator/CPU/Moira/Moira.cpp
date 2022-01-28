@@ -356,7 +356,7 @@ Moira::disassembleWord(u32 value, char *str)
 void
 Moira::disassembleMemory(u32 addr, int cnt, char *str)
 {
-    addr -= 2; // because dasmRead increases addr first
+    U32_DEC(addr, 2); // Because dasmRead increases addr first
     for (int i = 0; i < cnt; i++) {
         u32 value = dasmRead<Word>(addr);
         sprintx(str, value, true, 0, 4);

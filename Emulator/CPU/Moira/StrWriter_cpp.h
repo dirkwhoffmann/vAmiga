@@ -348,8 +348,8 @@ StrWriter::operator<<(const Ea<M,S> &ea)
         case 9: // (d,PC)
         {
             *this << "(" << Int{(i16)ea.ext1} << ",PC)";
-            auto resolved = UInt(ea.pc + (i16)ea.ext1 + 2);
-            StrWriter(comment, hex, upper) << "; (" << resolved << ")" << Finish{};
+            auto resolved = U32_ADD(U32_ADD(ea.pc, (i16)ea.ext1), 2);
+            StrWriter(comment, hex, upper) << "; (" << UInt(resolved) << ")" << Finish{};
             break;
         }
         case 10: // (d,PC,Xi)

@@ -182,7 +182,7 @@ public:
     void lencntrld() { audlen = audlenLatch; }
 
     // Counts length counter down one notch
-    void lencount() { audlen--; }
+    void lencount() { U16_DEC(audlen, 1); }
 
     // Checks if the length counter has finished
     bool lenfin() { return audlen == 1; }
