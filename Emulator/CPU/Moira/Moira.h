@@ -253,6 +253,9 @@ protected:
     // Called when a breakpoint is reached
     virtual void watchpointReached(u32 addr) { };
 
+    // Called at the beginning of each instruction handler (see EXEC_DEBUG)
+    virtual void execDebug(const char *cmd) { };
+    
 #endif
     
     // Reads a byte or a word from memory
@@ -298,6 +301,9 @@ protected:
     // Called when a breakpoint is reached
     void watchpointReached(u32 addr);
     
+    // Called at the beginning of each instruction handler (see EXEC_DEBUG)
+    void execDebug(const char *cmd);
+ 
 
     //
     // Accessing the clock

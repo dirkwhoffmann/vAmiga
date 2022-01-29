@@ -55,3 +55,8 @@
  * Disable to improve emulation compatibility.
  */
 #define MIMIC_MUSASHI false
+
+/* Debug macro called for every executed instruction
+ */
+#define EXEC_DEBUG(x)
+// #define EXEC_DEBUG(x) { execDebug(x); }
