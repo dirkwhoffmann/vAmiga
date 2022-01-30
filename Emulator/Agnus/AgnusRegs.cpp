@@ -35,12 +35,16 @@ Agnus::pokeDMACON(u16 value)
     // Schedule the write cycle
     if constexpr (s == ACCESSOR_CPU) {
         if (value & 0x8000) {
-            recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
+            recordRegisterChange(DMA_CYCLES(3), SET_DMACON, value);
         } else {
-            recordRegisterChange(DMA_CYCLES(1), SET_DMACON, value);
+            recordRegisterChange(DMA_CYCLES(3), SET_DMACON, value);
         }
     } else {
-        recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
+        if (value & 0x8000) {
+            recordRegisterChange(DMA_CYCLES(4), SET_DMACON, value);
+        } else {
+            recordRegisterChange(DMA_CYCLES(4), SET_DMACON, value);
+        }
     }
 }
 
