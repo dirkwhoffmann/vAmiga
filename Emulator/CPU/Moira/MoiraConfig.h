@@ -56,7 +56,10 @@
  */
 #define MIMIC_MUSASHI false
 
-/* Debug macro called for every executed instruction
+/* Execution debugging
+ *
+ * This macro is evaluated at the beginning of the execution handlers of all
+ * instructions. It is intended to invoke debug code. Make sure to define it
+ * as an empty macro in release builds.
  */
-#define EXEC_DEBUG(x)
-// #define EXEC_DEBUG(x) { execDebug(x); }
+#define EXEC_DEBUG { /* execDebug(__func__); */ }

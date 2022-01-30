@@ -37,7 +37,7 @@
 template<Instr I, Mode M, Size S> void
 Moira::execShiftRg(u16 opcode)
 {
-    EXEC_DEBUG("execShiftRg");
+    EXEC_DEBUG
     
     int src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -52,7 +52,7 @@ Moira::execShiftRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execShiftIm(u16 opcode)
 {
-    EXEC_DEBUG("execShiftIm");
+    EXEC_DEBUG
 
     int src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -67,7 +67,7 @@ Moira::execShiftIm(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execShiftEa(u16 op)
 {
-    EXEC_DEBUG("execShiftEa");
+    EXEC_DEBUG
     
     int src = _____________xxx(op);
 
@@ -82,7 +82,7 @@ Moira::execShiftEa(u16 op)
 template<Instr I, Mode M, Size S> void
 Moira::execAbcd(u16 opcode)
 {
-    EXEC_DEBUG("execAbcd");
+    EXEC_DEBUG
     
     assert(S == Byte);
     
@@ -118,7 +118,7 @@ Moira::execAbcd(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAddEaRg(u16 opcode)
 {
-    EXEC_DEBUG("execAddEaRg");
+    EXEC_DEBUG
 
     u32 ea, data, result;
     
@@ -137,7 +137,7 @@ Moira::execAddEaRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAddRgEa(u16 opcode)
 {
-    EXEC_DEBUG("execAddRgEa");
+    EXEC_DEBUG
 
     u32 ea, data, result;
 
@@ -154,7 +154,7 @@ Moira::execAddRgEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAdda(u16 opcode)
 {
-    EXEC_DEBUG("execAdda");
+    EXEC_DEBUG
 
     u32 ea, data, result;
 
@@ -175,7 +175,7 @@ Moira::execAdda(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAddiRg(u16 opcode)
 {
-    EXEC_DEBUG("execAddiRg");
+    EXEC_DEBUG
 
     u32 src = readI<S>();
     int dst = _____________xxx(opcode);
@@ -193,7 +193,7 @@ Moira::execAddiRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAddiEa(u16 opcode)
 {
-    EXEC_DEBUG("execAddiEa");
+    EXEC_DEBUG
 
     u32 src = readI<S>();
     int dst = _____________xxx(opcode);
@@ -210,7 +210,7 @@ Moira::execAddiEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAddqDn(u16 opcode)
 {
-    EXEC_DEBUG("execAddqDn");
+    EXEC_DEBUG
 
     i8  src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -226,7 +226,7 @@ Moira::execAddqDn(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAddqAn(u16 opcode)
 {
-    EXEC_DEBUG("execAddqAn");
+    EXEC_DEBUG
 
     i8  src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -242,7 +242,7 @@ Moira::execAddqAn(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAddqEa(u16 opcode)
 {
-    EXEC_DEBUG("execAddqEa");
+    EXEC_DEBUG
 
     i8  src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -260,7 +260,7 @@ Moira::execAddqEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAddxRg(u16 opcode)
 {
-    EXEC_DEBUG("execAddxRg");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -275,7 +275,7 @@ Moira::execAddxRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAddxEa(u16 opcode)
 {
-    EXEC_DEBUG("execAddxEa");
+    EXEC_DEBUG
 
     const u64 flags =
     (S == Word) ? AE_INC_PC : (S == Long) ? AE_INC_PC | AE_INC_ADDR : 0;
@@ -314,7 +314,7 @@ Moira::execAddxEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAndEaRg(u16 opcode)
 {
-    EXEC_DEBUG("execAndEaRg");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -332,7 +332,7 @@ Moira::execAndEaRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAndRgEa(u16 opcode)
 {
-    EXEC_DEBUG("execAndRgEa");
+    EXEC_DEBUG
 
     int src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -355,7 +355,7 @@ Moira::execAndRgEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAndiRg(u16 opcode)
 {
-    EXEC_DEBUG("execAndiRg");
+    EXEC_DEBUG
 
     u32 src = readI<S>();
     int dst = _____________xxx(opcode);
@@ -370,7 +370,7 @@ Moira::execAndiRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAndiEa(u16 opcode)
 {
-    EXEC_DEBUG("execAndiEa");
+    EXEC_DEBUG
 
     u32 ea, data, result;
 
@@ -392,7 +392,7 @@ Moira::execAndiEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAndiccr(u16 opcode)
 {
-    EXEC_DEBUG("execAndiccr");
+    EXEC_DEBUG
 
     u32 src = readI<S>();
     u8  dst = getCCR();
@@ -409,7 +409,7 @@ Moira::execAndiccr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAndisr(u16 opcode)
 {
-    EXEC_DEBUG("execAndisr");
+    EXEC_DEBUG
 
     SUPERVISOR_MODE_ONLY
 
@@ -428,7 +428,7 @@ Moira::execAndisr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execBcc(u16 opcode)
 {
-    EXEC_DEBUG("execBcc");
+    EXEC_DEBUG
 
     sync(2);
     if (cond<I>()) {
@@ -457,7 +457,7 @@ Moira::execBcc(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execBitDxEa(u16 opcode)
 {
-    EXEC_DEBUG("execBitDxEa");
+    EXEC_DEBUG
 
     int src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -494,7 +494,7 @@ Moira::execBitDxEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execBitImEa(u16 opcode)
 {
-    EXEC_DEBUG("execBitImEa");
+    EXEC_DEBUG
 
     u8  src = (u8)readI<S>();
     int dst = _____________xxx(opcode);
@@ -530,7 +530,7 @@ Moira::execBitImEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execBsr(u16 opcode)
 {
-    EXEC_DEBUG("execBsr");
+    EXEC_DEBUG
 
     i16 offset = S == Word ? (i16)queue.irc : (i8)opcode;
      
@@ -558,7 +558,7 @@ Moira::execBsr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execChk(u16 opcode)
 {
-    EXEC_DEBUG("execChk");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -597,7 +597,7 @@ Moira::execChk(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execClr(u16 opcode)
 {
-    EXEC_DEBUG("execClr");
+    EXEC_DEBUG
 
     int dst = _____________xxx(opcode);
 
@@ -623,7 +623,7 @@ Moira::execClr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execCmp(u16 opcode)
 {
-    EXEC_DEBUG("execCmp");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -640,7 +640,7 @@ Moira::execCmp(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execCmpa(u16 opcode)
 {
-    EXEC_DEBUG("execCmpa");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -658,7 +658,7 @@ Moira::execCmpa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execCmpiRg(u16 opcode)
 {
-    EXEC_DEBUG("execCmpiRg");
+    EXEC_DEBUG
 
     u32 src = readI<S>();
     int dst = _____________xxx(opcode);
@@ -672,7 +672,7 @@ Moira::execCmpiRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execCmpiEa(u16 opcode)
 {
-    EXEC_DEBUG("execCmpiEa");
+    EXEC_DEBUG
 
     u32 src = readI<S>();
     int dst = _____________xxx(opcode);
@@ -687,7 +687,7 @@ Moira::execCmpiEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execCmpm(u16 opcode)
 {
-    EXEC_DEBUG("execCmpm");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -705,7 +705,7 @@ Moira::execCmpm(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execDbcc(u16 opcode)
 {
-    EXEC_DEBUG("execDbcc");
+    EXEC_DEBUG
 
     sync(2);
     if (!cond<I>()) {
@@ -744,7 +744,7 @@ Moira::execDbcc(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execExgDxDy(u16 opcode)
 {
-    EXEC_DEBUG("execExgDxDy");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -758,7 +758,7 @@ Moira::execExgDxDy(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execExgAxDy(u16 opcode)
 {
-    EXEC_DEBUG("execExgAxDy");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -772,7 +772,7 @@ Moira::execExgAxDy(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execExgAxAy(u16 opcode)
 {
-    EXEC_DEBUG("execExgAxAy");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -786,7 +786,7 @@ Moira::execExgAxAy(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execExt(u16 opcode)
 {
-    EXEC_DEBUG("execExt");
+    EXEC_DEBUG
 
     int n = _____________xxx(opcode);
 
@@ -805,7 +805,7 @@ Moira::execExt(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execJmp(u16 opcode)
 {
-    EXEC_DEBUG("execJmp");
+    EXEC_DEBUG
 
     u32 oldpc = reg.pc;
     
@@ -831,7 +831,7 @@ Moira::execJmp(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execJsr(u16 opcode)
 {
-    EXEC_DEBUG("execJsr");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     u32 ea  = computeEA<M, Long, SKIP_LAST_READ>(src);
@@ -869,7 +869,7 @@ Moira::execJsr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execLea(u16 opcode)
 {
-    EXEC_DEBUG("execLea");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -883,7 +883,7 @@ Moira::execLea(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execLink(u16 opcode)
 {
-    EXEC_DEBUG("execLink");
+    EXEC_DEBUG
 
     u16 ird  = getIRD();
     u32 sp   = getSP() - 4;
@@ -913,7 +913,7 @@ Moira::execLink(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMove0(u16 opcode)
 {
-    EXEC_DEBUG("execMove0");
+    EXEC_DEBUG
 
     u32 ea, data;
 
@@ -935,7 +935,7 @@ Moira::execMove0(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMove2(u16 opcode)
 {
-    EXEC_DEBUG("execMove2");
+    EXEC_DEBUG
 
     u32 ea, data;
 
@@ -974,7 +974,7 @@ Moira::execMove2(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMove3(u16 opcode)
 {
-    EXEC_DEBUG("execMove3");
+    EXEC_DEBUG
 
     u32 ea, data;
 
@@ -1013,7 +1013,7 @@ Moira::execMove3(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMove4(u16 opcode)
 {
-    EXEC_DEBUG("execMove4");
+    EXEC_DEBUG
 
     u16 ird = getIRD();
     u32 ea, data;
@@ -1062,7 +1062,7 @@ Moira::execMove4(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMove5(u16 opcode)
 {
-    EXEC_DEBUG("execMove5");
+    EXEC_DEBUG
 
     u32 ea, data;
 
@@ -1101,7 +1101,7 @@ Moira::execMove5(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMove6(u16 opcode)
 {
-    EXEC_DEBUG("execMove6");
+    EXEC_DEBUG
 
     u32 ea, data;
     
@@ -1140,7 +1140,7 @@ Moira::execMove6(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMove7(u16 opcode)
 {
-    EXEC_DEBUG("execMove7");
+    EXEC_DEBUG
 
     u32 ea, data;
 
@@ -1162,7 +1162,7 @@ Moira::execMove7(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMove8(u16 opcode)
 {
-    EXEC_DEBUG("execMove8");
+    EXEC_DEBUG
 
     u32 ea, data;
 
@@ -1225,7 +1225,7 @@ Moira::execMove8(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMovea(u16 opcode)
 {
-    EXEC_DEBUG("execMovea");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -1240,7 +1240,7 @@ Moira::execMovea(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMovemEaRg(u16 opcode)
 {
-    EXEC_DEBUG("execMovemEaRg");
+    EXEC_DEBUG
 
     int src  = _____________xxx(opcode);
     u16 mask = (u16)readI<Word>();
@@ -1293,7 +1293,7 @@ Moira::execMovemEaRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMovemRgEa(u16 opcode)
 {
-    EXEC_DEBUG("execMovemRgEa");
+    EXEC_DEBUG
 
     int dst  = _____________xxx(opcode);
     u16 mask = (u16)readI<Word>();
@@ -1348,7 +1348,7 @@ Moira::execMovemRgEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMovepDxEa(u16 opcode)
 {
-    EXEC_DEBUG("execMovepDxEa");
+    EXEC_DEBUG
 
     int src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -1375,7 +1375,7 @@ Moira::execMovepDxEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMovepEaDx(u16 opcode)
 {
-    EXEC_DEBUG("execMovepEaDx");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -1406,7 +1406,7 @@ Moira::execMovepEaDx(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMoveq(u16 opcode)
 {
-    EXEC_DEBUG("execMoveq");
+    EXEC_DEBUG
 
     i8  src = (i8)(opcode & 0xFF);
     int dst = ____xxx_________(opcode);
@@ -1424,7 +1424,7 @@ Moira::execMoveq(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMoveToCcr(u16 opcode)
 {
-    EXEC_DEBUG("execMoveToCcr");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     u32 ea, data;
@@ -1441,7 +1441,7 @@ Moira::execMoveToCcr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMoveFromSrRg(u16 opcode)
 {
-    EXEC_DEBUG("execMoveFromSrRg");
+    EXEC_DEBUG
 
     int dst = _____________xxx(opcode);
 
@@ -1456,7 +1456,7 @@ Moira::execMoveFromSrRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMoveFromSrEa(u16 opcode)
 {
-    EXEC_DEBUG("execMoveFromSrEa");
+    EXEC_DEBUG
 
     int dst = _____________xxx(opcode);
     u32 ea, data;
@@ -1470,7 +1470,7 @@ Moira::execMoveFromSrEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMoveToSr(u16 opcode)
 {
-    EXEC_DEBUG("execMoveToSr");
+    EXEC_DEBUG
 
     SUPERVISOR_MODE_ONLY
 
@@ -1489,7 +1489,7 @@ Moira::execMoveToSr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMoveUspAn(u16 opcode)
 {
-    EXEC_DEBUG("execMoveUspAn");
+    EXEC_DEBUG
 
     SUPERVISOR_MODE_ONLY
 
@@ -1501,7 +1501,7 @@ Moira::execMoveUspAn(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMoveAnUsp(u16 opcode)
 {
-    EXEC_DEBUG("execMoveAnUsp");
+    EXEC_DEBUG
 
     SUPERVISOR_MODE_ONLY
 
@@ -1513,7 +1513,7 @@ Moira::execMoveAnUsp(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMul(u16 opcode)
 {
-    EXEC_DEBUG("execMul");
+    EXEC_DEBUG
 
     if constexpr (MIMIC_MUSASHI) {
         execMulMusashi<I, M, S>(opcode);
@@ -1535,7 +1535,7 @@ Moira::execMul(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMulMusashi(u16 op)
 {
-    EXEC_DEBUG("execMulMusashi");
+    EXEC_DEBUG
     
     u32 ea, data, result;
 
@@ -1555,7 +1555,7 @@ Moira::execMulMusashi(u16 op)
 template<Instr I, Mode M, Size S> void
 Moira::execDiv(u16 opcode)
 {
-    EXEC_DEBUG("execDiv");
+    EXEC_DEBUG
 
     if constexpr (MIMIC_MUSASHI) {
         execDivMusashi<I, M, S>(opcode);
@@ -1597,7 +1597,7 @@ Moira::execDiv(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execDivMusashi(u16 opcode)
 {
-    EXEC_DEBUG("execDivMusashi");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -1622,7 +1622,7 @@ Moira::execDivMusashi(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execNbcd(u16 opcode)
 {
-    EXEC_DEBUG("execNbcd");
+    EXEC_DEBUG
 
     int reg = _____________xxx(opcode);
 
@@ -1649,7 +1649,7 @@ Moira::execNbcd(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execNegRg(u16 opcode)
 {
-    EXEC_DEBUG("execNegRg");
+    EXEC_DEBUG
 
     int dst = ( _____________xxx(opcode) );
     u32 ea, data;
@@ -1666,7 +1666,7 @@ Moira::execNegRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execNegEa(u16 opcode)
 {
-    EXEC_DEBUG("execNegEa");
+    EXEC_DEBUG
 
     int dst = ( _____________xxx(opcode) );
     u32 ea, data;
@@ -1686,7 +1686,7 @@ Moira::execNegEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execNop(u16 opcode)
 {
-    EXEC_DEBUG("execNop");
+    EXEC_DEBUG
 
     prefetch<POLLIPL>();
 }
@@ -1694,7 +1694,7 @@ Moira::execNop(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execPea(u16 opcode)
 {
-    EXEC_DEBUG("execPea");
+    EXEC_DEBUG
 
     int src = _____________xxx(opcode);
 
@@ -1733,7 +1733,7 @@ Moira::execPea(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execReset(u16 opcode)
 {
-    EXEC_DEBUG("execReset");
+    EXEC_DEBUG
 
     SUPERVISOR_MODE_ONLY
     signalResetInstr();
@@ -1745,7 +1745,7 @@ Moira::execReset(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execRte(u16 opcode)
 {
-    EXEC_DEBUG("execRte");
+    EXEC_DEBUG
 
     SUPERVISOR_MODE_ONLY
 
@@ -1770,7 +1770,7 @@ Moira::execRte(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execRtr(u16 opcode)
 {
-    EXEC_DEBUG("execRtr");
+    EXEC_DEBUG
 
     bool error;
     u16 newccr = (u16)readM<M, Word>(reg.sp, error);
@@ -1796,7 +1796,7 @@ Moira::execRtr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execRts(u16 opcode)
 {
-    EXEC_DEBUG("execRts");
+    EXEC_DEBUG
 
     bool error;
     u32 newpc = readM<M, Long>(reg.sp, error);
@@ -1816,7 +1816,7 @@ Moira::execRts(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execSccRg(u16 opcode)
 {
-    EXEC_DEBUG("execSccRg");
+    EXEC_DEBUG
 
     int dst = ( _____________xxx(opcode) );
     u32 ea, data;
@@ -1833,7 +1833,7 @@ Moira::execSccRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execSccEa(u16 opcode)
 {
-    EXEC_DEBUG("execSccEa");
+    EXEC_DEBUG
 
     int dst = ( _____________xxx(opcode) );
     u32 ea, data;
@@ -1849,7 +1849,7 @@ Moira::execSccEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execStop(u16 opcode)
 {
-    EXEC_DEBUG("execStop");
+    EXEC_DEBUG
 
     SUPERVISOR_MODE_ONLY
 
@@ -1865,7 +1865,7 @@ Moira::execStop(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execSwap(u16 opcode)
 {
-    EXEC_DEBUG("execSwap");
+    EXEC_DEBUG
 
     int rg  = ( _____________xxx(opcode) );
     u32 dat = readD(rg);
@@ -1884,7 +1884,7 @@ Moira::execSwap(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execTasRg(u16 opcode)
 {
-    EXEC_DEBUG("execTasRg");
+    EXEC_DEBUG
 
     signalTasInstr();
     
@@ -1907,7 +1907,7 @@ Moira::execTasRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execTasEa(u16 opcode)
 {
-    EXEC_DEBUG("execTasEa");
+    EXEC_DEBUG
 
     signalTasInstr();
 
@@ -1931,7 +1931,7 @@ Moira::execTasEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execTrap(u16 opcode)
 {
-    EXEC_DEBUG("execTrap");
+    EXEC_DEBUG
 
     int nr = ____________xxxx(opcode);
 
@@ -1942,7 +1942,7 @@ Moira::execTrap(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execTrapv(u16 opcode)
 {
-    EXEC_DEBUG("execTrapv");
+    EXEC_DEBUG
 
     if (reg.sr.v) {
 
@@ -1958,7 +1958,7 @@ Moira::execTrapv(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execTst(u16 opcode)
 {
-    EXEC_DEBUG("execTst");
+    EXEC_DEBUG
 
     int rg = _____________xxx(opcode);
 
@@ -1976,7 +1976,7 @@ Moira::execTst(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execUnlk(u16 opcode)
 {
-    EXEC_DEBUG("execUnlk");
+    EXEC_DEBUG
 
     int an = _____________xxx(opcode);
 

@@ -317,10 +317,7 @@ Agnus::executeUntilBusIsFree()
         // Add wait states to the CPU
         cpu.addWaitStates(DMA_CYCLES(delay));
     }
-
-    if (pos.v == 76 || pos.v == 77) {
-        // trace(true, "CPU got cycle %ld\n", posh); 
-    }
+    
     // Assign bus to the CPU
     busOwner[posh] = BUS_CPU;
 }

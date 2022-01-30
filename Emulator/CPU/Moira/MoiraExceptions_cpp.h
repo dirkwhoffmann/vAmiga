@@ -46,6 +46,8 @@ Moira::saveToStackBrief(u16 sr, u32 pc)
 void
 Moira::execAddressError(AEStackFrame frame, int delay)
 {
+    EXEC_DEBUG
+
     assert(frame.addr & 1);
     
     // Emulate additional delay
@@ -80,6 +82,8 @@ Moira::execAddressError(AEStackFrame frame, int delay)
 void
 Moira::execUnimplemented(int nr)
 {
+    EXEC_DEBUG
+
     u16 status = getSR();
     
     // Enter supervisor mode
@@ -99,6 +103,8 @@ Moira::execUnimplemented(int nr)
 void
 Moira::execLineA(u16 opcode)
 {
+    EXEC_DEBUG
+
     signalLineAException(opcode);
     execUnimplemented(10);
 }
@@ -106,6 +112,8 @@ Moira::execLineA(u16 opcode)
 void
 Moira::execLineF(u16 opcode)
 {
+    EXEC_DEBUG
+
     signalLineFException(opcode);
     execUnimplemented(11);
 }
@@ -113,6 +121,8 @@ Moira::execLineF(u16 opcode)
 void
 Moira::execIllegal(u16 opcode)
 {
+    EXEC_DEBUG
+
     signalIllegalOpcodeException(opcode);
     execUnimplemented(4);
 }
@@ -120,6 +130,8 @@ Moira::execIllegal(u16 opcode)
 void
 Moira::execTraceException()
 {
+    EXEC_DEBUG
+
     signalTraceException();
     
     u16 status = getSR();
@@ -144,6 +156,8 @@ Moira::execTraceException()
 void
 Moira::execTrapException(int nr)
 {
+    EXEC_DEBUG
+
     signalTrapException();
     
     u16 status = getSR();
@@ -163,6 +177,8 @@ Moira::execTrapException(int nr)
 void
 Moira::execPrivilegeException()
 {
+    EXEC_DEBUG
+
     signalPrivilegeViolation();
     
     u16 status = getSR();
@@ -184,6 +200,8 @@ Moira::execPrivilegeException()
 void
 Moira::execIrqException(u8 level)
 {
+    EXEC_DEBUG
+    
     assert(level < 8);
     
     // Notify delegate
