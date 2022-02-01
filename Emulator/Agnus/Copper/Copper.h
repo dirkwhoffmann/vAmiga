@@ -200,9 +200,11 @@ private:
      * false: The Copper does not wake up the current frame.
      *        Variable 'result' remains untouched.
      */
+    bool findMatchOld(Beam &result) const; // DEPRECATED
     bool findMatch(Beam &result) const;
 
     // Called by findMatch() to determine the horizontal trigger position
+    bool findHorizontalMatchOld(u32 &beam, u32 comp, u32 mask) const; // DEPRECATED
     bool findHorizontalMatch(u32 &beam, u32 comp, u32 mask) const;
 
     // Emulates the Copper writing a value into one of the custom registers

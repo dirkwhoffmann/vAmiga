@@ -58,6 +58,51 @@ Copper::switchToCopperList(isize nr)
 }
 
 bool
+Copper::findMatchOld(Beam &match) const
+{
+    // Start searching at the current beam position
+    u32 beam = (u32)(agnus.pos.v << 8 | agnus.pos.h);
+
+    // Get the comparison position and the comparison mask
+    u32 comp = getVPHP();
+    u32 mask = getVMHM();
+
+    // Iterate through all lines starting from the current position
+    isize numLines = agnus.frame.numLines();
+    while ((isize)(beam >> 8) < numLines) {
+
+        // Check if the vertical components are equal
+        if ((beam & mask & ~0xFF) == (comp & mask & ~0xFF)) {
+
+            // trace(true, "Matching vertically: beam = %X comp = %X mask = %X\n", beam, comp, mask);
+
+            // Try to match the horizontal coordinate as well
+            if (findHorizontalMatchOld(beam, comp, mask)) {
+
+                // Success
+                match.v = beam >> 8;
+                match.h = beam & 0xFF;
+                return true;
+            }
+        }
+
+        // Check if the vertical beam position is greater
+        else if ((beam & mask & ~0xFF) > (comp & mask & ~0xFF)) {
+
+            // Success
+            match.v = beam >> 8;
+            match.h = beam & 0xFF;
+            return true;
+        }
+
+        // Jump to the beginning of the next line
+        beam = (beam & ~0xFF) + 0x100;
+    }
+
+    return false;
+}
+
+bool
 Copper::findMatch(Beam &match) const
 {
     // Start searching at the current beam position
@@ -103,7 +148,7 @@ Copper::findMatch(Beam &match) const
 }
 
 bool
-Copper::findHorizontalMatch(u32 &match, u32 comp, u32 mask) const
+Copper::findHorizontalMatchOld(u32 &match, u32 comp, u32 mask) const
 {
     // The maximum horizontal trigger positon is $E1 in PAL machines
     const u32 maxhpos = 0xE1;
@@ -116,6 +161,27 @@ Copper::findHorizontalMatch(u32 &match, u32 comp, u32 mask) const
 
             // Success
             match = beam;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool
+Copper::findHorizontalMatch(u32 &match, u32 comp, u32 mask) const
+{
+    u32 v = match & 0x1FF00;
+    u32 h = match & 0x000FF;
+        
+    // Iterate through all horizontal positions
+    for (auto i = h + 2; i <= 0xE4; i++, h++) {
+
+        // Check if the comparator triggers at this position
+        if (((v | i) & mask) >= (comp & mask)) {
+
+            // Success
+            match = v | h;
             return true;
         }
     }
@@ -190,37 +256,64 @@ void
 Copper::scheduleWaitWakeup(bool bfd)
 {
     Beam trigger;
-
-    // Find the trigger position for this WAIT command
-    if (findMatch(trigger)) {
-
-        // In how many cycles do we get there?
-        isize delay = trigger - agnus.pos;
-
-        if (delay == 0) {
-
-            // Copper does not stop
-            agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(2), COP_FETCH);
-
-        } else if (delay == 2) {
-
-            // Copper does not stop
-            agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(2), COP_FETCH);
-
-        } else {
-
-            // Wake up 2 cycles earlier with a WAKEUP event
-            delay -= 2;
-            if (bfd) {
-                agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(delay), COP_WAKEUP);
+    
+    if constexpr (LEGACY_COPPER) {
+        
+        // Find the trigger position for this WAIT command
+        if (findMatchOld(trigger)) {
+            
+            // In how many cycles do we get there?
+            isize delay = trigger - agnus.pos;
+            
+            if (delay == 0) {
+                
+                // Copper does not stop
+                agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(2), COP_FETCH);
+                
+            } else if (delay == 2) {
+                
+                // Copper does not stop
+                agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(2), COP_FETCH);
+                
             } else {
-                agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(delay), COP_WAKEUP_BLIT);
+                
+                // Wake up 2 cycles earlier with a WAKEUP event
+                delay -= 2;
+                if (bfd) {
+                    agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(delay), COP_WAKEUP);
+                } else {
+                    agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(delay), COP_WAKEUP_BLIT);
+                }
             }
+            
+        } else {
+            
+            scheduler.scheduleAbs<SLOT_COP>(NEVER, COP_REQ_DMA);
         }
-
+        
     } else {
-
-        scheduler.scheduleAbs<SLOT_COP>(NEVER, COP_REQ_DMA);
+    
+        // Find the trigger position for this WAIT command
+        if (findMatch(trigger)) {
+            
+            // In how many cycles do we get there?
+            isize delay = trigger - agnus.pos;
+            
+            if (delay == 0) {
+                
+                EventID event = COP_FETCH;
+                agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(2), event);
+                
+            } else {
+                
+                EventID event = bfd ? COP_WAKEUP : COP_WAKEUP_BLIT;
+                agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(delay), event);
+            }
+            
+        } else {
+            
+            scheduler.scheduleAbs<SLOT_COP>(NEVER, COP_REQ_DMA);
+        }
     }
 }
 
