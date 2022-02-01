@@ -11,7 +11,7 @@
 
 #include "AmigaObject.h"
 
-struct FSString : AmigaObject {
+struct FSString {
     
     // File system identifier stored as a C string
     char str[92];
@@ -38,9 +38,6 @@ struct FSName : FSString {
     FSName(const string &cppString) : FSString(cppString, 30) { rectify(); }
     FSName(const char *cString) : FSString(cString, 30) { rectify(); }
     FSName(const u8 *bcplString) : FSString(bcplString, 30) { rectify(); }
-
-    const char *getDescription() const override { return "FSName"; }
-    void _dump(dump::Category category, std::ostream& os) const override { }
     
     // Scans the given name and replaces invalid characters by dummy symbols
     void rectify();
@@ -50,12 +47,9 @@ struct FSComment : FSString {
     
     FSComment(const char *cString) : FSString(cString, 91) { }
     FSComment(const u8 *bcplString) : FSString(bcplString, 91) { }
-
-    const char *getDescription() const override { return "FSComment"; }
-    void _dump(dump::Category category, std::ostream& os) const override { }
 };
 
-struct FSTime : AmigaObject {
+struct FSTime {
     
     u32 days;
     u32 mins;
@@ -64,9 +58,6 @@ struct FSTime : AmigaObject {
     FSTime(time_t t);
     FSTime(const u8 *p);
 
-    const char *getDescription() const override { return "FSTime"; }
-    void _dump(dump::Category category, std::ostream& os) const override { }
-    
     time_t time() const;
     void write(u8 *p);
 
