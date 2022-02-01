@@ -755,7 +755,7 @@ Drive::isInsertable(const Disk &disk) const
 template <EventSlot s> void
 Drive::ejectDisk(Cycle delay)
 {
-    debug(DSK_DEBUG, "ejectDisk <%d> (%lld)\n", s, delay);
+    debug(DSK_DEBUG, "ejectDisk <%ld> (%lld)\n", s, delay);
     
     {   SUSPENDED
 
@@ -783,7 +783,7 @@ Drive::insertDisk(std::unique_ptr<Disk> disk, Cycle delay)
 {
     assert(disk != nullptr);
     
-    debug(DSK_DEBUG, "insertDisk <%d> (%lld)\n", s, delay);
+    debug(DSK_DEBUG, "insertDisk <%ld> (%lld)\n", s, delay);
 
     // Only proceed if the provided disk is compatible with this drive
     if (!isInsertable(*disk)) throw VAError(ERROR_DISK_INCOMPATIBLE);

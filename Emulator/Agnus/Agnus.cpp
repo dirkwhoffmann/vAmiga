@@ -369,7 +369,7 @@ Agnus::recordRegisterChange(Cycle delay, u32 addr, u16 value, Accessor acc)
 template <isize nr> void
 Agnus::executeFirstSpriteCycle()
 {
-    trace(SPR_DEBUG, "executeFirstSpriteCycle<%d>\n", nr);
+    trace(SPR_DEBUG, "executeFirstSpriteCycle<%ld>\n", nr);
 
     if (pos.v == sprVStop[nr]) {
 
@@ -397,7 +397,7 @@ Agnus::executeFirstSpriteCycle()
 template <isize nr> void
 Agnus::executeSecondSpriteCycle()
 {
-    trace(SPR_DEBUG, "executeSecondSpriteCycle<%d>\n", nr);
+    trace(SPR_DEBUG, "executeSecondSpriteCycle<%ld>\n", nr);
 
     if (pos.v == sprVStop[nr]) {
 

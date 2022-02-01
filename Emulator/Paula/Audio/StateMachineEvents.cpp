@@ -15,7 +15,7 @@ StateMachine<nr>::serviceEvent()
 {
     assert(scheduler.id[SLOT_CH0+nr] == CHX_PERFIN);
 
-    trace(AUD_DEBUG, "CHX_PERFIN state = %d\n", state);
+    trace(AUD_DEBUG, "CHX_PERFIN state = %ld\n", state);
 
     switch (state) {
 

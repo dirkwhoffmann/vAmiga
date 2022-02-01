@@ -577,7 +577,7 @@ Agnus::pokeSPRxPTH(u16 value)
 template <int x> void
 Agnus::setSPRxPTH(u16 value)
 {
-    trace(SPRREG_DEBUG, "setSPR%dPTH(%%04x)\n", x, value);
+    trace(SPRREG_DEBUG, "setSPR%dPTH(%04x)\n", x, value);
     
     // Check if the register is blocked due to ongoing DMA
     if (dropWrite(BUS_SPRITE0 + x)) return;
@@ -607,7 +607,7 @@ Agnus::pokeSPRxPTL(u16 value)
 template <int x> void
 Agnus::setSPRxPTL(u16 value)
 {
-    trace(SPRREG_DEBUG, "setSPR%dPTH(%%04x)\n", x, value);
+    trace(SPRREG_DEBUG, "setSPR%dPTH(%04x)\n", x, value);
     
     // Check if the register is blocked due to ongoing DMA
     if (dropWrite(BUS_SPRITE0 + x)) return;
