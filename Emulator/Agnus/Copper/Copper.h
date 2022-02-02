@@ -210,10 +210,18 @@ private:
     // Emulates the Copper writing a value into one of the custom registers
     void move(u32 addr, u16 value);
 
-    // Runs the comparator circuit
+    // Runs the comparator circuit (DEPRECATED)
+    /*
     bool comparator(Beam beam, u16 waitpos, u16 mask) const;
     bool comparator(Beam beam) const;
     bool comparator() const;
+    */
+    
+    // Runs the comparator circuit
+    bool runComparator() const;
+    bool runComparator(Beam beam) const;
+    bool runComparator(Beam beam, u16 waitpos, u16 mask) const;
+    bool runHorizontalComparator(Beam beam, u16 waitpos, u16 mask) const;
 
     // Emulates a WAIT command
     void scheduleWaitWakeup(bool bfd);

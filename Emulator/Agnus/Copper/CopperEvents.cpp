@@ -51,6 +51,18 @@ Copper::serviceEvent(EventID id)
             // Don't wake up in an odd cycle
             if (IS_ODD(agnus.pos.h)) { reschedule(); break; }
             
+            // Reschedule the wakeup event if the wakeup condition became false
+            /* FIX COMPARATOR FIRST
+            if (!comparator()) {
+                
+                trace(XFILES, "XFILES: Copper can't wakeup\n");
+                trace(true, "XFILES: Copper can't wakeup\n"); // REMOVE ASAP
+
+                scheduleWaitWakeup(getBFD());
+                break;
+            }
+            */
+            
             // Continue with fetching the first instruction word
             schedule(COP_FETCH);
             break;
@@ -224,8 +236,9 @@ Copper::serviceEvent(EventID id)
             
             // Run the comparator to see if the next command is skipped
             trace(COP_DEBUG, "Calling comparator(%ld,%ld)\n", beam.v, beam.h);
-            skip = comparator(beam);
-
+            // skip = comparator(beam);
+            skip = runComparator(agnus.pos + 2);
+            
             // If the BFD flag is cleared, we also need to check the Blitter
             if (!getBFD()) skip &= !agnus.blitter.isActive();
             

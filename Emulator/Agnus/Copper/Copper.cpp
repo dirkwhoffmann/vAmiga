@@ -223,6 +223,7 @@ Copper::move(u32 addr, u16 value)
     agnus.doCopperDmaWrite(addr, value);
 }
 
+/*
 bool
 Copper::comparator(Beam beam, u16 waitpos, u16 mask) const
 {
@@ -260,6 +261,40 @@ bool
 Copper::comparator() const
 {
     return comparator(agnus.pos);
+}
+*/
+
+bool
+Copper::runComparator() const
+{
+    return runComparator(agnus.pos);
+}
+
+bool
+Copper::runComparator(Beam beam) const
+{
+    return runComparator(beam, getVPHP(), getVMHM());
+}
+
+bool
+Copper::runComparator(Beam beam, u16 waitpos, u16 mask) const
+{    
+    // Compare vertical position
+    if ((beam.v & HI_BYTE(mask)) < HI_BYTE(waitpos & mask)) return false;
+    if ((beam.v & HI_BYTE(mask)) > HI_BYTE(waitpos & mask)) return true;
+    
+    // Compare horizontal position
+    return runHorizontalComparator(beam, waitpos, mask);
+}
+
+bool
+Copper::runHorizontalComparator(Beam beam, u16 waitpos, u16 mask) const
+{
+    if (beam.h < 0xE0) {
+        return ((beam.h + 0x02) & mask) >= (waitpos & 0xFF & mask);
+    } else {
+        return ((beam.h - 0xE0) & mask) >= (waitpos & 0xFF & mask);
+    }
 }
 
 void
