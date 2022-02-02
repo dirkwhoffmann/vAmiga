@@ -182,9 +182,6 @@ Copper::serviceEvent(EventID id)
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
-            // Test 'coptim3' suggests that cycle $E1 is blocked in this state
-            if (agnus.pos.h == 0xE1) { reschedule(); break; }
-
             // Schedule a wakeup event at the target position
             scheduleWaitWakeup(getBFD());
             break;
@@ -221,9 +218,6 @@ Copper::serviceEvent(EventID id)
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
-
-            // Test 'coptim3' suggests that cycle $E1 is blocked in this state
-            if (agnus.pos.h == 0xE1) { reschedule(); break; }
 
             // Compute the beam position that needs to be compared
             beam = agnus.pos + 2;

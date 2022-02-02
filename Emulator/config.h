@@ -77,7 +77,7 @@ struct FloatStereo; typedef FloatStereo SampleType;
 //
 
 static const int NO_SEQ_FASTPATH = 0; // Disable sequencer speed optimizations
-static const int LEGACY_COPPER   = 1; // Enable deprecated Copper code
+static const int LEGACY_COPPER   = 0; // Enable deprecated Copper code
 
 //
 // Debug settings

@@ -174,13 +174,23 @@ Copper::findHorizontalMatch(u32 &match, u32 comp, u32 mask) const
     u32 v = match & 0x1FF00;
     u32 h = match & 0x000FF;
         
-    // Iterate through all horizontal positions
-    for (auto i = h + 2; i <= 0xE4; i++, h++) {
+    // Iterate through all horizontal positions execept the last three
+    for (auto i = h + 2; i <= 0xE1; i++, h++) {
 
         // Check if the comparator triggers at this position
         if (((v | i) & mask) >= (comp & mask)) {
 
-            // Success
+            match = v | h;
+            return true;
+        }
+    }
+    
+    // Iterate through the last three cycles with a wrapped over counter
+    for (auto i = 0; i <= 2; i++, h++) {
+
+        // Check if the comparator triggers at this position
+        if (((v | i) & mask) >= (comp & mask)) {
+
             match = v | h;
             return true;
         }
