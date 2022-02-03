@@ -49,21 +49,19 @@ Copper::serviceEvent(EventID id)
             
             // Don't wake up in an odd cycle
             if (IS_ODD(agnus.pos.h)) { reschedule(); break; }
-            
-            // Reschedule the wakeup event if the wakeup condition became false
-            /* FIX COMPARATOR FIRST
-            if (!comparator()) {
-                
-                trace(XFILES, "XFILES: Copper can't wakeup\n");
-                trace(true, "XFILES: Copper can't wakeup\n"); // REMOVE ASAP
 
+            // Check if the wakeup condition is still true
+            if (runComparator()) {
+
+                // Continue with fetching the first instruction word
+                schedule(COP_FETCH);
+
+            } else {
+
+                // Reschedule the wakeup event
+                trace(XFILES, "XFILES: Copper wakeup aborted\n");
                 scheduleWaitWakeup(getBFD());
-                break;
             }
-            */
-            
-            // Continue with fetching the first instruction word
-            schedule(COP_FETCH);
             break;
             
         case COP_WAKEUP_BLIT:
