@@ -262,7 +262,10 @@ private:
     
     bool isWaitCmd() const;
     bool isWaitCmd(u32 addr) const;
-    
+
+    bool isSkipCmd() const;
+    bool isSkipCmd(u32 addr) const;
+
     u16 getRA() const;
     u16 getRA(u32 addr) const;
 

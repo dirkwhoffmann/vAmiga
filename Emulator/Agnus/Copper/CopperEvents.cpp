@@ -21,7 +21,6 @@ void
 Copper::serviceEvent(EventID id)
 {
     u16 reg;
-    Beam beam;
     
     servicing = true;
 
@@ -94,9 +93,18 @@ Copper::serviceEvent(EventID id)
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
+            if (isSkipCmd()) {
+                
+                // Set the skip flag if the previous command was a SKIP command
+                skip = runComparator();
+
+                // If the BFD flag is cleared, we also need to check the Blitter
+                if (!getBFD()) skip &= !agnus.blitter.isActive();
+            }
+                
             // Remember the program counter (picked up by the debugger)
             coppc0 = coppc;
-
+            
             // Load the first instruction word
             cop1ins = agnus.doCopperDmaRead(coppc);
             advancePC();
@@ -230,18 +238,7 @@ Copper::serviceEvent(EventID id)
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
-
-            // Compute the beam position that needs to be compared
-            beam = agnus.pos + 2;
-            
-            // Run the comparator to see if the next command is skipped
-            trace(COP_DEBUG, "Calling comparator(%ld,%ld)\n", beam.v, beam.h);
-            // skip = comparator(beam);
-            skip = runComparator(agnus.pos + 2);
-            
-            // If the BFD flag is cleared, we also need to check the Blitter
-            if (!getBFD()) skip &= !agnus.blitter.isActive();
-            
+                        
             // Continue with the next command
             schedule(COP_FETCH);
             break;

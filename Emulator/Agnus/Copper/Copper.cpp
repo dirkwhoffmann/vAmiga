@@ -392,6 +392,21 @@ bool Copper::isWaitCmd(u32 addr) const
     return IS_ODD(hiword) && IS_EVEN(loword);
 }
 
+bool Copper::isSkipCmd() const
+{
+     return (cop1ins & 1) && (cop2ins & 1);
+}
+
+bool Copper::isSkipCmd(u32 addr) const
+{
+    assert(IS_EVEN(addr));
+
+    u16 hiword = mem.spypeek16 <ACCESSOR_AGNUS> (addr);
+    u16 loword = mem.spypeek16 <ACCESSOR_AGNUS> (addr + 2);
+
+    return IS_ODD(hiword) && IS_ODD(loword);
+}
+
 u16
 Copper::getRA() const
 {
