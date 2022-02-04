@@ -69,12 +69,12 @@ Sequencer::initDasEvents()
 }
 
 void
-Sequencer::updateDasEvents(u16 dmacon)
+Sequencer::updateDasEvents(u16 dmacon, isize pos)
 {
     assert(dmacon < 64);
 
     // Allocate slots
-    for (isize i = 0; i < 0x38; i++) dasEvent[i] = dasDMA[dmacon][i];
+    for (isize i = pos; i < 0x38; i++) dasEvent[i] = dasDMA[dmacon][i];
     
     // Update the jump table
     updateDasJumpTable(0x38);

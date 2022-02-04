@@ -332,7 +332,7 @@ public:
     void initDasEvents();
 
     // Renews all events in the the DAS event table
-    void updateDasEvents(u16 dmacon);
+    void updateDasEvents(u16 dmacon, isize pos = 0);
 
 private:
 

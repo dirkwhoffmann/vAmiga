@@ -35,15 +35,15 @@ Agnus::pokeDMACON(u16 value)
     // Schedule the write cycle
     if constexpr (s == ACCESSOR_CPU) {
         if (value & 0x8000) {
-            recordRegisterChange(DMA_CYCLES(3), SET_DMACON, value);
+            recordRegisterChange(DMA_CYCLES(1), SET_DMACON, value);
         } else {
-            recordRegisterChange(DMA_CYCLES(3), SET_DMACON, value);
+            recordRegisterChange(DMA_CYCLES(1), SET_DMACON, value);
         }
     } else {
         if (value & 0x8000) {
-            recordRegisterChange(DMA_CYCLES(4), SET_DMACON, value);
+            recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
         } else {
-            recordRegisterChange(DMA_CYCLES(4), SET_DMACON, value);
+            recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
         }
     }
 }
@@ -90,7 +90,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         sequencer.hsyncActions |= UPDATE_DAS_TABLE;
         
         // Make the effect visible in the current rasterline as well
-        sequencer.updateDasEvents(newDAS);
+        sequencer.updateDasEvents(newDAS, pos.h + 2);
   
         // Rectify the currently scheduled DAS event
         scheduleDasEventForCycle(pos.h);
