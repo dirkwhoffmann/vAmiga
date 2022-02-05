@@ -204,7 +204,7 @@ static const int FORCE_SNAP_CORRUPTED      = 0;
 static const int FORCE_DISK_INVALID_LAYOUT = 0;
 static const int FORCE_DMS_CANT_CREATE     = 0;
 static const int FORCE_RECORDING_ERROR     = 0;
-static const int FORCE_NO_FFMPEG           = 1;
+static const int FORCE_NO_FFMPEG           = 0;
 
 
 #ifdef RELEASEBUILD

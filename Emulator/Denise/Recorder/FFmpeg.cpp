@@ -11,47 +11,15 @@
 #include "FFmpeg.h"
 #include "IOUtils.h"
 
-optional<string> FFmpeg::execPath;
+std::vector<string> FFmpeg::paths;
+string FFmpeg::execPath;
     
-const string
-FFmpeg::getExecPath()
-{
-    // Search for FFmpeg if path is uninitialized
-    if (!execPath) setExecPath("");
-
-    return *execPath;
-}
-
 void
-FFmpeg::setExecPath(const string &path)
+FFmpeg::init()
 {
-#ifdef _WIN32
-    
-    return false;
-    
-#else
-    
-    if (path == "") {
-
-        // If an empty string is passed, assign the first default location
-        execPath = findFFmpeg(0);
-        
-    } else {
-        
-        execPath = path;
-    }
-        
-#endif
-}
-
-std::vector<const string>
-FFmpeg::findFFmpeg()
-{
-    std::vector <const string> result;
- 
     auto add = [&](const string &path) {
         if (util::getSizeOfFile(path) > 0 && !FORCE_NO_FFMPEG) {
-            result.push_back(path);
+            paths.push_back(path);
         }
     };
         
@@ -59,50 +27,42 @@ FFmpeg::findFFmpeg()
     add("/usr/local/bin/ffmpeg");
     add("/opt/bin/ffmpeg");
     add("/opt/homebrew/bin/ffmpeg");
-    
-    return result;
+
+    // Use the first entry as the default executable
+    if (!paths.empty()) execPath = paths[0];
 }
 
-optional<string>
-FFmpeg::findFFmpeg(isize nr)
+const string
+FFmpeg::getExecPath()
 {
-    auto paths = findFFmpeg();
-    
-    if (nr < (isize)paths.size()) return paths[nr];
-    return { };
+    return execPath;
 }
 
-/*
-bool
-FFmpeg::findExec()
+void
+FFmpeg::setExecPath(const string &path)
 {
-    
-    return
-    findExec("/usr/bin/ffmpeg") ||
-    findExec("/usr/local/bin/ffmpeg") ||
-    findExec("/opt/bin/ffmpeg") ||
-    findExec("/opt/homebrew/bin/ffmpeg");
-}
+    // If an empty string is passed, assign the first default location
+    if (path == "" && !paths.empty()) {
 
-bool
-FFmpeg::findExec(const string &path)
-{
-    assert(path != "");
-    
-    if (util::getSizeOfFile(path) > 0) {
-
-        setExecPath(path);
-        return true;
+        execPath = paths[0];
+        return;
     }
-    
-    return false;
+     
+    execPath = path;
 }
-*/
 
 bool
 FFmpeg::available()
 {
-    return execPath ? util::getSizeOfFile(*execPath) > 0 : false;
+#ifdef _WIN32
+    
+    return false;
+    
+#else
+    
+    return util::getSizeOfFile(execPath) > 0;
+
+#endif
 }
 
 bool

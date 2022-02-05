@@ -779,8 +779,11 @@ using namespace moira;
 
 - (NSString *)findFFmpeg:(NSInteger)nr
 {
-    auto path = FFmpeg::findFFmpeg(nr);
-    return path ? @((*path).c_str()) : nil;
+    if (nr < (NSInteger)FFmpeg::paths.size()) {
+        return @(FFmpeg::paths[nr].c_str());
+    } else {
+        return nil;
+    }
 }
 
 - (BOOL)hasFFmpeg

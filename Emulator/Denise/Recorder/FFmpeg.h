@@ -13,11 +13,14 @@
 
 class FFmpeg {
     
-    // Path to the FFmpeg backend
-    static optional<string> execPath;
-    
 public:
     
+    // A list of available FFmpeg executables (setup in init() )
+    static std::vector<string> paths;
+    
+    // Path to the selected FFmpeg executable
+    static string execPath;
+        
 #ifdef _MSC_VER
 
 #else
@@ -28,18 +31,13 @@ public:
     // Locating FFmpeg
     //
     
+    // Sets up the 'path' vector
+    static void init();
+
     // Getter and setter for the FFmpeg executable path
     static const string getExecPath();
     static void setExecPath(const string &path);
     
-    // Searches for FFmpeg at various default locations
-    static std::vector<const string> findFFmpeg();
-    static optional<string> findFFmpeg(isize nr);
-    
-    // Tries to locate FFmpeg at various default locations
-    static bool findExec();
-    static bool findExec(const string &path);
-
     // Checks whether FFmeg is available
     static bool available();
     

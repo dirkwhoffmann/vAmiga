@@ -20,6 +20,8 @@ Recorder::Recorder(Amiga& ref) : SubComponent(ref)
         
         &muxer
     };
+    
+    FFmpeg::init();
 }
 
 void
