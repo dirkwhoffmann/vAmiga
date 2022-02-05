@@ -78,7 +78,7 @@ RshServer::doReceive()
     payload = util::rtrim(payload, "\n\r");
 
     // Ask the client to delete the input (will be replicated by RetroShell)
-    send("\033[A\33[2K\r");
+    connection.send("\033[A\33[2K\r");
     
     return payload;
 }

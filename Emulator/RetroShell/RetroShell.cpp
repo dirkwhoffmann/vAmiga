@@ -419,7 +419,6 @@ void
 RetroShell::help(const string &command)
 {
     interpreter.help(command);
-    *this << prompt;
 }
 
 void
