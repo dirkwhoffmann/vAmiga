@@ -28,17 +28,20 @@ public:
     // Locating FFmpeg
     //
     
-    // Returns the currently set path to the FFmpeg backend
+    // Getter and setter for the FFmpeg executable path
     static const string getExecPath();
-
-    // Tries to set the path to the FFmpeg backend
-    static bool setExecPath(const string &path);
+    static void setExecPath(const string &path);
+    
+    // Searches for FFmpeg at various default locations
+    static std::vector<const string> findFFmpeg();
+    static optional<string> findFFmpeg(isize nr);
     
     // Tries to locate FFmpeg at various default locations
     static bool findExec();
-    
+    static bool findExec(const string &path);
+
     // Checks whether FFmeg is available
-    static bool available() { return getExecPath() != ""; }
+    static bool available();
     
     
     //

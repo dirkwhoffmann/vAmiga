@@ -122,8 +122,18 @@ extension MyController {
         let alert = NSAlert()
         alert.alertStyle = .warning
         alert.icon = NSImage(named: "FFmpegIcon")
-        alert.messageText = "Screen recording requires FFmpeg to be installed in /usr/local/bin."
-        alert.informativeText = "Visit FFmpeg.org for installation instructions."
+
+        if pref.ffmpegPath == "" {
+
+            alert.messageText = "Screen recording requires FFmpeg to be installed."
+            alert.informativeText = "Visit FFmpeg.org for installation instructions."
+
+        } else {
+
+            alert.messageText = "Unable to locate FFmpeg."
+            alert.informativeText = "\(pref.ffmpegPath) not found."
+        }
+        
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }

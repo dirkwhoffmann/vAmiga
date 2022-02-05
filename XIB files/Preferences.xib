@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -76,7 +76,7 @@
                 <outlet property="genEjectWithoutAskingButton" destination="U1B-Lg-BCh" id="aA2-mn-aQv"/>
                 <outlet property="genExitOnEscButton" destination="eNe-UG-MA9" id="A5a-Uq-grj"/>
                 <outlet property="genFFmpegIcon" destination="vjW-JA-zQ3" id="Pbz-3b-PCa"/>
-                <outlet property="genFFmpegPath" destination="LDN-1z-rbJ" id="S3Y-nj-O7r"/>
+                <outlet property="genFFmpegPath" destination="dkp-QI-Uit" id="xbr-Zl-PTm"/>
                 <outlet property="genPauseInBackground" destination="0hK-zR-osA" id="dMZ-Ub-2WW"/>
                 <outlet property="genScreenshotSourcePopup" destination="hst-Cn-3YK" id="AC6-OU-KhY"/>
                 <outlet property="genScreenshotTargetPopup" destination="Oag-9U-PiB" id="DrC-yo-EER"/>
@@ -518,23 +518,26 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LDN-1z-rbJ">
-                                            <rect key="frame" x="89" y="183" width="211" height="16"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="/usr/local/bin/ffmpeg" id="7aZ-9p-cCg">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vjW-JA-zQ3">
-                                            <rect key="frame" x="269" y="181" width="18" height="18"/>
+                                            <rect key="frame" x="269" y="122" width="18" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="FFmpegIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="9Jf-vG-TYA">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
+                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dkp-QI-Uit">
+                                            <rect key="frame" x="91" y="178" width="199" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="QNV-yb-2nB">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </comboBoxCell>
+                                            <connections>
+                                                <action selector="genPathAction:" target="-2" id="MYu-vW-yfC"/>
+                                            </connections>
+                                        </comboBox>
                                     </subviews>
                                 </view>
                             </tabViewItem>

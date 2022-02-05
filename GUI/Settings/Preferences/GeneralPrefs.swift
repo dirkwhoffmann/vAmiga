@@ -11,6 +11,20 @@ extension PreferencesController {
     
     func refreshGeneralTab() {
         
+        // Initialize combo boxes
+        if genFFmpegPath.tag == 0 {
+            
+            genFFmpegPath.tag = 1
+            
+            for i in 0...5 {
+                if let path = amiga.recorder.findFFmpeg(i) {
+                    genFFmpegPath.addItem(withObjectValue: path)
+                } else {
+                    break
+                }
+            }
+        }
+        
         // Snapshots
         genAutoSnapshots.state = pref.autoSnapshots ? .on : .off
         genSnapshotInterval.integerValue = pref.snapshotInterval
@@ -22,6 +36,9 @@ extension PreferencesController {
                 
         // Screen captures
         let hasFFmpeg = amiga.recorder.hasFFmpeg
+        genFFmpegPath.stringValue = amiga.recorder.path
+        genFFmpegPath.textColor = hasFFmpeg ? .textColor : .warningColor
+        genFFmpegIcon.isHidden = !hasFFmpeg
         genSource.selectItem(withTag: pref.captureSource)
         genBitRate.stringValue = "\(pref.bitRate)"
         genAspectX.integerValue = pref.aspectX
@@ -30,16 +47,6 @@ extension PreferencesController {
         genBitRate.isEnabled = hasFFmpeg
         genAspectX.isEnabled = hasFFmpeg
         genAspectY.isEnabled = hasFFmpeg
-        
-        if hasFFmpeg {
-            genFFmpegIcon.isHidden = false
-            genFFmpegPath.textColor = .textColor
-            genFFmpegPath.stringValue = "/usr/local/bin/ffmpeg"
-        } else {
-            genFFmpegIcon.isHidden = true
-            genFFmpegPath.textColor = .warningColor
-            genFFmpegPath.stringValue = "Requires /usr/local/bin/ffmpeg"
-        }
         
         // Fullscreen
         genAspectRatioButton.state = pref.keepAspectRatio ? .on : .off
@@ -97,6 +104,12 @@ extension PreferencesController {
     // Action methods (Screen captures)
     //
     
+    @IBAction func genPathAction(_ sender: NSComboBox!) {
+
+        pref.ffmpegPath = sender.stringValue
+        refresh()
+    }
+        
     @IBAction func capSourceAction(_ sender: NSPopUpButton!) {
         
         pref.captureSource = sender.selectedTag()

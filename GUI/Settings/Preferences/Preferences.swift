@@ -37,6 +37,13 @@ class Preferences {
     }
 
     // Screen captures
+    var ffmpegPath = "" {
+        didSet {
+            for amiga in myAppDelegate.proxies {
+                amiga.recorder.path = ffmpegPath
+            }
+        }
+    }
     var captureSource = GeneralDefaults.std.captureSource
     var bitRate = 512 {
         didSet {
@@ -135,6 +142,7 @@ class Preferences {
         screenshotTargetIntValue = defaults.integer(forKey: Keys.Gen.screenshotTarget)
 
         // Captures
+        ffmpegPath = defaults.string(forKey: Keys.Gen.ffmpegPath) ?? ""
         captureSource = defaults.integer(forKey: Keys.Gen.captureSource)
         bitRate = defaults.integer(forKey: Keys.Gen.bitRate)
         aspectX = defaults.integer(forKey: Keys.Gen.aspectX)
@@ -166,6 +174,7 @@ class Preferences {
         defaults.set(screenshotTargetIntValue, forKey: Keys.Gen.screenshotTarget)
 
         // Captures
+        defaults.set(ffmpegPath, forKey: Keys.Gen.ffmpegPath)
         defaults.set(captureSource, forKey: Keys.Gen.captureSource)
         defaults.set(bitRate, forKey: Keys.Gen.bitRate)
         defaults.set(aspectX, forKey: Keys.Gen.aspectX)

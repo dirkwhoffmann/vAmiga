@@ -764,15 +764,23 @@ using namespace moira;
 
 - (NSString *)path
 {
-    NSLog(@"getPath");
     auto path = FFmpeg::getExecPath();
     return @(path.c_str());
 }
 
 - (void)setPath:(NSString *)path
 {
-    NSLog(@"setPath");
-    FFmpeg::setExecPath(string([path fileSystemRepresentation]));
+    if ([path length] == 0) {
+        FFmpeg::setExecPath("");
+    } else {
+        FFmpeg::setExecPath(string([path fileSystemRepresentation]));
+    }
+}
+
+- (NSString *)findFFmpeg:(NSInteger)nr
+{
+    auto path = FFmpeg::findFFmpeg(nr);
+    return path ? @((*path).c_str()) : nil;
 }
 
 - (BOOL)hasFFmpeg

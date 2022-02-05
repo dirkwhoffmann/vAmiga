@@ -134,6 +134,7 @@ struct Keys {
         static let screenshotTarget       = "VAMIGA_GEN_ScreenshotTarget"
                 
         // Screen captures
+        static let ffmpegPath             = "VAMIGA_GEN_ffmpegPath"
         static let captureSource          = "VAMIGA_GEN_Source"
         static let bitRate                = "VAMIGA_GEN_BitRate"
         static let aspectX                = "VAMIGA_GEN_AspectX"
@@ -166,6 +167,7 @@ struct GeneralDefaults {
     let screenshotTarget: NSBitmapImageRep.FileType
     
     // Captures
+    let ffmpegPath: String
     let captureSource: Int
     let bitRate: Int
     let aspectX: Int
@@ -197,6 +199,7 @@ struct GeneralDefaults {
         screenshotSource: 0,
         screenshotTarget: .png,
 
+        ffmpegPath: "",
         captureSource: 0,
         bitRate: 2048,
         aspectX: 768,
@@ -226,6 +229,7 @@ extension UserDefaults {
             Keys.Gen.screenshotSource: defaults.screenshotSource,
             Keys.Gen.screenshotTarget: Int(defaults.screenshotTarget.rawValue),
 
+            Keys.Gen.ffmpegPath: defaults.ffmpegPath,
             Keys.Gen.captureSource: defaults.captureSource,
             Keys.Gen.bitRate: defaults.bitRate,
             Keys.Gen.aspectX: defaults.aspectX,
@@ -256,6 +260,7 @@ extension UserDefaults {
                      Keys.Gen.screenshotSource,
                      Keys.Gen.screenshotTarget,
                      
+                     Keys.Gen.ffmpegPath,
                      Keys.Gen.captureSource,
                      Keys.Gen.bitRate,
                      Keys.Gen.aspectX,
