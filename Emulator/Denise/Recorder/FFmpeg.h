@@ -13,21 +13,37 @@
 
 class FFmpeg {
     
+    // Path to the FFmpeg backend
+    static optional<string> execPath;
+    
 public:
     
 #ifdef _MSC_VER
 
 #else
-    
     FILE *handle = nullptr;
-
 #endif
 
-    // Path to the FFmpeg executable
-    static string ffmpegPath() { return "/usr/local/bin/ffmpeg"; }
+    //
+    // Locating FFmpeg
+    //
+    
+    // Returns the currently set path to the FFmpeg backend
+    static const string getExecPath();
 
+    // Tries to set the path to the FFmpeg backend
+    static bool setExecPath(const string &path);
+    
+    // Tries to locate FFmpeg at various default locations
+    static bool findExec();
+    
     // Checks whether FFmeg is available
-    static bool available();
+    static bool available() { return getExecPath() != ""; }
+    
+    
+    //
+    // Running FFmpeg
+    //
     
     // Launches the FFmpeg instance
     bool launch(const string &args);

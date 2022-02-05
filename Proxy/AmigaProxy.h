@@ -443,6 +443,7 @@
 
 @interface RecorderProxy : Proxy { }
 
+@property NSString *path;
 @property (readonly) BOOL hasFFmpeg;
 @property (readonly) BOOL recording;
 @property (readonly) double duration;

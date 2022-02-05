@@ -11,8 +11,19 @@
 #include "FFmpeg.h"
 #include "IOUtils.h"
 
+optional<string> FFmpeg::execPath;
+    
+const string
+FFmpeg::getExecPath()
+{
+    // Search for FFmpeg if path is uninitialized
+    if (!execPath) findExec();
+
+    return *execPath;
+}
+
 bool
-FFmpeg::available()
+FFmpeg::setExecPath(const string &path)
 {
 #ifdef _WIN32
     
@@ -20,9 +31,32 @@ FFmpeg::available()
     
 #else
     
-    return util::getSizeOfFile(ffmpegPath()) > 0;
+    // If an empty string is given, scan some default locations
+    if (path == "") return findExec();
+            
+    // Otherwise, check if the specified executable exists
+    if (util::getSizeOfFile(path) > 0) {
+        
+        execPath = path;
+        return true;
+    
+    } else {
+
+        execPath = "";
+        return false;
+    }
     
 #endif
+}
+
+bool
+FFmpeg::findExec()
+{
+    return
+    setExecPath("/usr/bin/ffmpeg") ||
+    setExecPath("/usr/local/bin/ffmpeg") ||
+    setExecPath("/opt/bin/ffmpeg") ||
+    setExecPath("/opt/homebrew/bin/ffmpeg");
 }
 
 bool
@@ -34,7 +68,7 @@ FFmpeg::launch(const string &args)
     
 #else
     
-    auto cmd = ffmpegPath() + " " + args;
+    auto cmd = getExecPath() + " " + args;
     handle = popen(cmd.c_str(), "w");
     return handle != nullptr;
     

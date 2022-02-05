@@ -35,7 +35,7 @@ Recorder::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
-    os << tab("FFmpeg path") << FFmpeg::ffmpegPath() << std::endl;
+    os << tab("FFmpeg path") << FFmpeg::getExecPath() << std::endl;
     os << tab("Installed") << bol(FFmpeg::available()) << std::endl;
     os << tab("Recording") << bol(isRecording()) << std::endl;
 }

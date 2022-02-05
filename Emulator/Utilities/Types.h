@@ -53,6 +53,16 @@ typedef unsigned long      usize;
 
 
 //
+// Optionals
+//
+
+#ifdef __cplusplus
+#include <optional>
+using std::optional;
+#endif
+
+
+//
 // Enumerations
 //
 

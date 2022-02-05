@@ -762,9 +762,21 @@ using namespace moira;
     return (Recorder *)obj;
 }
 
+- (NSString *)path
+{
+    NSLog(@"getPath");
+    auto path = FFmpeg::getExecPath();
+    return @(path.c_str());
+}
+
+- (void)setPath:(NSString *)path
+{
+    NSLog(@"setPath");
+    FFmpeg::setExecPath(string([path fileSystemRepresentation]));
+}
+
 - (BOOL)hasFFmpeg
 {
-    // return [self recorder]->hasFFmpeg();
     return FFmpeg::available();
 }
 
