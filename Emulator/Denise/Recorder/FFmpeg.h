@@ -19,7 +19,7 @@ public:
     static std::vector<string> paths;
     
     // Path to the selected FFmpeg executable
-    static string execPath;
+    static string exec;
         
 #ifdef _MSC_VER
 

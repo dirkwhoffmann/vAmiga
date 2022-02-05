@@ -12,7 +12,7 @@
 #include "IOUtils.h"
 
 std::vector<string> FFmpeg::paths;
-string FFmpeg::execPath;
+string FFmpeg::exec;
     
 void
 FFmpeg::init()
@@ -29,13 +29,13 @@ FFmpeg::init()
     add("/opt/homebrew/bin/ffmpeg");
 
     // Use the first entry as the default executable
-    if (!paths.empty()) execPath = paths[0];
+    if (!paths.empty()) exec = paths[0];
 }
 
 const string
 FFmpeg::getExecPath()
 {
-    return execPath;
+    return exec;
 }
 
 void
@@ -44,11 +44,11 @@ FFmpeg::setExecPath(const string &path)
     // If an empty string is passed, assign the first default location
     if (path == "" && !paths.empty()) {
 
-        execPath = paths[0];
+        exec = paths[0];
         return;
     }
      
-    execPath = path;
+    exec = path;
 }
 
 bool
@@ -60,7 +60,7 @@ FFmpeg::available()
     
 #else
     
-    return util::getSizeOfFile(execPath) > 0;
+    return util::getSizeOfFile(exec) > 0;
 
 #endif
 }
