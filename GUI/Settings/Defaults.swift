@@ -712,7 +712,7 @@ extension Keys {
         static let chipRam            = "VAMIGA_MEM_ChipRam"
         static let slowRam            = "VAMIGA_MEM_SlowRam"
         static let fastRam            = "VAMIGA_MEM_FastRam"
-        static let ramInitPattern     = "VAMIGA_MEM_RamInitPattern"
+        static let ramInitPattern     = "VAMIGA_MEM_InitPattern"
         
         static let bankMap            = "VAMIGA_MEM_BankMap"
         static let unmappingType      = "VAMIGA_MEM_UnmappingType"

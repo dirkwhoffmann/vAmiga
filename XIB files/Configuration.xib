@@ -1137,14 +1137,14 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fLm-ns-KKq">
                                             <rect key="frame" x="121" y="192" width="182" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Random" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="v3p-mn-c7M" id="Dd8-HD-WSm">
+                                            <popUpButtonCell key="cell" type="push" title="All zeroes" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="v3p-mn-c7M" id="Dd8-HD-WSm">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="OfZ-Oo-Nem">
                                                     <items>
-                                                        <menuItem title="Random" state="on" id="v3p-mn-c7M"/>
-                                                        <menuItem title="All zeroes" tag="1" id="acg-z0-W2X"/>
-                                                        <menuItem title="All ones" tag="2" id="cWW-6t-n3c"/>
+                                                        <menuItem title="All zeroes" state="on" id="v3p-mn-c7M"/>
+                                                        <menuItem title="All ones" tag="1" id="acg-z0-W2X"/>
+                                                        <menuItem title="Randomized" tag="2" id="cWW-6t-n3c"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
