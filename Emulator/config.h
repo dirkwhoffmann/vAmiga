@@ -51,7 +51,7 @@ struct FloatStereo; typedef FloatStereo SampleType;
 #define OVERRIDES { }
 /*
  { \
- { OPT_AGNUS_REVISION,   AGNUS_OCS_PLCC }, \
+ { OPT_AGNUS_REVISION,   AGNUS_OCS      }, \
  { OPT_BLITTER_ACCURACY, 0              }, \
  { OPT_CHIP_RAM,         512            }, \
  { OPT_SLOW_RAM,         512            }, \

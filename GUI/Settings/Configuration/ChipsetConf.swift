@@ -22,12 +22,12 @@ extension ConfigurationController {
         csAgnusRevision.selectItem(withTag: config.agnusRev)
         switch AgnusRevision(rawValue: config.agnusRev) {
 
-        case .OCS_DIP:
+        case .OCS_OLD:
             csAgnusInfo1.stringValue = "MOS 8367"
             csAgnusInfo2.stringValue = "PAL"
             csAgnusInfo3.stringValue = "A1000, A2000A"
 
-        case .OCS_PLCC:
+        case .OCS:
             csAgnusInfo1.stringValue = "MOS 8371"
             csAgnusInfo2.stringValue = "PAL"
             csAgnusInfo3.stringValue = "Early A500/A2000"

@@ -639,7 +639,7 @@ struct HardwareDefaults {
     
     static let A1000 = HardwareDefaults(
         
-        agnusRev: .OCS_DIP,
+        agnusRev: .OCS_OLD,
         deniseRev: .OCS,
         ciaRev: .MOS_8520_DIP,
         realTimeClock: .NONE,

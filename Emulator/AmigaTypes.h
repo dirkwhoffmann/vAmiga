@@ -18,6 +18,7 @@
 
 enum_long(CONFIG_SCHEME)
 {
+    CONFIG_A1000_OCS_1MB,
     CONFIG_A500_OCS_1MB,
     CONFIG_A500_ECS_1MB
 };
@@ -35,8 +36,9 @@ struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
     {
         switch (value) {
                 
-            case CONFIG_A500_OCS_1MB:  return "A500_OCS_1MB";
-            case CONFIG_A500_ECS_1MB:  return "A500_ECS_1MB";
+            case CONFIG_A1000_OCS_1MB:  return "A1000_OCS_1MB";
+            case CONFIG_A500_OCS_1MB:   return "A500_OCS_1MB";
+            case CONFIG_A500_ECS_1MB:   return "A500_ECS_1MB";
         }
         return "???";
     }

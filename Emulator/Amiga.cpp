@@ -612,12 +612,19 @@ Amiga::configure(ConfigScheme scheme)
     {   SUSPENDED
         
         switch(scheme) {
+
+            case CONFIG_A1000_OCS_1MB:
                 
+                configure(OPT_CHIP_RAM, 512);
+                configure(OPT_SLOW_RAM, 512);
+                configure(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
+                break;
+
             case CONFIG_A500_OCS_1MB:
                 
                 configure(OPT_CHIP_RAM, 512);
                 configure(OPT_SLOW_RAM, 512);
-                configure(OPT_AGNUS_REVISION, AGNUS_OCS_PLCC);
+                configure(OPT_AGNUS_REVISION, AGNUS_OCS);
                 break;
                 
             case CONFIG_A500_ECS_1MB:
