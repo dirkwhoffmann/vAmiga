@@ -59,6 +59,7 @@ enum_long(ERROR_CODE)
     // Snapshots
     ERROR_SNAP_TOO_OLD,
     ERROR_SNAP_TOO_NEW,
+    ERROR_SNAP_IS_BETA,
     ERROR_SNAP_CORRUPTED,
     
     // Media files
@@ -185,7 +186,8 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
                 
             case ERROR_SNAP_TOO_OLD:                return "SNAP_TOO_OLD";
             case ERROR_SNAP_TOO_NEW:                return "SNAP_TOO_NEW";
-                
+            case ERROR_SNAP_IS_BETA:                return "SNAP_IS_BETA";
+
             case ERROR_EXT_FACTOR5:                 return "EXT_UNSUPPORTED";
             case ERROR_EXT_INCOMPATIBLE:            return "EXT_INCOMPATIBLE";
             case ERROR_EXT_CORRUPTED:               return "EXT_CORRUPTED";

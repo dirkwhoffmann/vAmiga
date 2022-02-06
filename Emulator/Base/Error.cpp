@@ -127,6 +127,11 @@ VAError::VAError(ErrorCode code, const string &s)
             description += " and is incompatible with this release.";
             break;
 
+        case ERROR_SNAP_IS_BETA:
+            description = "The snapshot was created with a beta version of vAmiga";
+            description += " and is incompatible with this release.";
+            break;
+
         case ERROR_SNAP_CORRUPTED:
             description = "The snapshot data is corrupted and has put the";
             description += " emulator into an inconsistent state.";

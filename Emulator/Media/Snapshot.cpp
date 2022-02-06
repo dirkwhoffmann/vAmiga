@@ -66,6 +66,7 @@ Snapshot::Snapshot(isize capacity)
     header->major = SNP_MAJOR;
     header->minor = SNP_MINOR;
     header->subminor = SNP_SUBMINOR;
+    header->beta = SNP_BETA;
 }
 
 Snapshot::Snapshot(Amiga &amiga) : Snapshot(amiga.size())
@@ -98,6 +99,14 @@ Snapshot::isTooNew() const
     if (header->minor < SNP_MINOR) return false;
 
     return header->subminor > SNP_SUBMINOR;
+}
+
+bool
+Snapshot::isBeta() const
+{
+    auto header = getHeader();
+
+    return header->beta != 0;
 }
 
 void

@@ -34,10 +34,11 @@ struct SnapshotHeader {
     // Magic bytes ('V','A','S','N','A','P')
     char magic[6];
     
-    // Version number (V major.minor.subminor)
+    // Version number (major.minor.subminor['b'beta])
     u8 major;
     u8 minor;
     u8 subminor;
+    u8 beta;
     
     // Preview image
     Thumbnail screenshot;
@@ -81,6 +82,7 @@ public:
     // Checks the snapshot version number
     bool isTooOld() const;
     bool isTooNew() const;
+    bool isBeta() const;
     bool matches() { return !isTooOld() && !isTooNew(); }
     
     // Returns a pointer to the snapshot header

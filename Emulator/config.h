@@ -14,18 +14,19 @@
 //
 
 // Version number
-#define VER_MAJOR 1
-#define VER_MINOR 1
+#define VER_MAJOR 2
+#define VER_MINOR 0
 #define VER_SUBMINOR 0
+#define VER_BETA 1
 
 // Snapshot version number
-#define SNP_MAJOR 1
+#define SNP_MAJOR 2
 #define SNP_MINOR 0
-#define SNP_SUBMINOR 9
+#define SNP_SUBMINOR 0
+#define SNP_BETA 1
 
 // Uncomment this setting in a release build
 // #define RELEASEBUILD
-
 
 //
 // Build settings
@@ -200,6 +201,7 @@ static const int FORCE_AROS_RAM_LIMIT      = 0;
 static const int FORCE_CHIP_RAM_LIMIT      = 0;
 static const int FORCE_SNAP_TOO_OLD        = 0;
 static const int FORCE_SNAP_TOO_NEW        = 0;
+static const int FORCE_SNAP_IS_BETA        = 0;
 static const int FORCE_SNAP_CORRUPTED      = 0;
 static const int FORCE_DISK_INVALID_LAYOUT = 0;
 static const int FORCE_DMS_CANT_CREATE     = 0;
@@ -211,9 +213,17 @@ static const int FORCE_NO_FFMPEG           = 0;
 #ifndef NDEBUG
 #define NDEBUG
 #endif
-static const int releaseBuild = 1;
+static const bool releaseBuild = 1;
+static const bool debugBuild = 0;
 #else
-static const int releaseBuild = 0;
+static const bool releaseBuild = 0;
+static const bool debugBuild = 1;
+#endif
+
+#if VER_BETA == 0
+static const bool betaRelease = 0;
+#else
+static const bool betaRelease = 1;
 #endif
 
 #include <cassert>

@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "TextStorage.h"
+#include "Amiga.h"
 
 string
 TextStorage::operator [] (isize i) const
@@ -89,12 +90,7 @@ TextStorage::operator<<(const string &s)
 void
 TextStorage::welcome()
 {
-    *this << "vAmiga Retro Shell ";
-    *this << std::to_string(VER_MAJOR) << '.';
-    *this << std::to_string(VER_MINOR) << '.';
-    *this << std::to_string(VER_SUBMINOR);
-    *this << " (" << __DATE__ << " " << __TIME__ << ")" << '\n';
-    *this << '\n';
+    *this << "vAmiga Retro Shell " << Amiga::build() << '\n';
     *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
     *this << "Licensed under the GNU General Public License v3" << '\n';
     *this << '\n';

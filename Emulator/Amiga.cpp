@@ -14,14 +14,34 @@
 #include <algorithm>
 
 // Perform some consistency checks
-static_assert(sizeof(i8) == 1,  "i8 size mismatch");
+static_assert(sizeof(i8)  == 1, "i8  size mismatch");
 static_assert(sizeof(i16) == 2, "i16 size mismatch");
 static_assert(sizeof(i32) == 4, "i32 size mismatch");
 static_assert(sizeof(i64) == 8, "i64 size mismatch");
-static_assert(sizeof(u8) == 1,  "u8 size mismatch");
+static_assert(sizeof(u8)  == 1, "u8  size mismatch");
 static_assert(sizeof(u16) == 2, "u16 size mismatch");
 static_assert(sizeof(u32) == 4, "u32 size mismatch");
 static_assert(sizeof(u64) == 8, "u64 size mismatch");
+
+string
+Amiga::version()
+{
+    string result;
+    
+    result = std::to_string(VER_MAJOR) + "." + std::to_string(VER_MINOR);
+    if (VER_SUBMINOR > 0) result += "." + std::to_string(VER_SUBMINOR);
+    if (VER_BETA > 0) result += 'b' + std::to_string(VER_BETA);
+
+    return result;
+}
+
+string
+Amiga::build()
+{
+    string db = debugBuild ? " [DEBUG BUILD]" : "";
+    
+    return version() + db + " (" + __DATE__ + " " + __TIME__ + ")";
+}
 
 Amiga::Amiga()
 {
@@ -1043,6 +1063,9 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
     }
     if (snapshot.isTooNew() || FORCE_SNAP_TOO_NEW) {
         throw VAError(ERROR_SNAP_TOO_NEW);
+    }
+    if ((!betaRelease && snapshot.isBeta()) || FORCE_SNAP_IS_BETA) {
+        throw VAError(ERROR_SNAP_IS_BETA);
     }
 
     {   SUSPENDED
