@@ -370,13 +370,6 @@ template <isize nr> void
 Agnus::executeFirstSpriteCycle()
 {
     trace(SPR_DEBUG, "executeFirstSpriteCycle<%ld>\n", nr);
-
-    // Only proceed if sprite DMA is still enabled
-    if (!sprdma()) {
-        
-        // trace(XFILES, "Aborting executeFirstSpriteCycle<%ld>\n", nr);
-        // return;
-    }
     
     if (pos.v == sprVStop[nr]) {
 
@@ -385,9 +378,16 @@ Agnus::executeFirstSpriteCycle()
         if (busOwner[pos.h] == BUS_NONE) {
 
             // Read in the next control word (POS part)
-            auto value = doSpriteDmaRead<nr>();
-            agnus.pokeSPRxPOS<nr>(value);
-            denise.pokeSPRxPOS<nr>(value);
+            if (sprdma()) {
+                
+                auto value = doSpriteDmaRead<nr>();
+                agnus.pokeSPRxPOS<nr>(value);
+                denise.pokeSPRxPOS<nr>(value);
+                
+            } else {
+                
+                busOwner[pos.h] = BUS_BLOCKED;
+            }
         }
 
     } else if (sprDmaState[nr] == SPR_DMA_ACTIVE) {
@@ -395,8 +395,15 @@ Agnus::executeFirstSpriteCycle()
         if (busOwner[pos.h] == BUS_NONE) {
 
             // Read in the next data word (part A)
-            auto value = doSpriteDmaRead<nr>();
-            denise.pokeSPRxDATA<nr>(value);
+            if (sprdma()) {
+                
+                auto value = doSpriteDmaRead<nr>();
+                denise.pokeSPRxDATA<nr>(value);
+                
+            } else {
+                
+                busOwner[pos.h] = BUS_BLOCKED;
+            }
         }
     }
 }
@@ -406,32 +413,39 @@ Agnus::executeSecondSpriteCycle()
 {
     trace(SPR_DEBUG, "executeSecondSpriteCycle<%ld>\n", nr);
 
-    // Only proceed if sprite DMA is still enabled
-    if (!sprdma()) {
-        
-        // trace(XFILES, "Aborting executeSecondSpriteCycle<%ld>\n", nr);
-        // return;
-    }
-    
     if (pos.v == sprVStop[nr]) {
 
         sprDmaState[nr] = SPR_DMA_IDLE;
 
         if (busOwner[pos.h] == BUS_NONE) {
-            
-            // Read in the next control word (CTL part)
-            auto value = doSpriteDmaRead<nr>();
-            agnus.pokeSPRxCTL<nr>(value);
-            denise.pokeSPRxCTL<nr>(value);
+
+            if (sprdma()) {
+                
+                // Read in the next control word (CTL part)
+                auto value = doSpriteDmaRead<nr>();
+                agnus.pokeSPRxCTL<nr>(value);
+                denise.pokeSPRxCTL<nr>(value);
+                
+            } else {
+                
+                busOwner[pos.h] = BUS_BLOCKED;
+            }
         }
 
     } else if (sprDmaState[nr] == SPR_DMA_ACTIVE) {
 
         if (busOwner[pos.h] == BUS_NONE) {
 
-            // Read in the next data word (part B)
-            auto value = doSpriteDmaRead<nr>();
-            denise.pokeSPRxDATB<nr>(value);
+            if (sprdma()) {
+                
+                // Read in the next data word (part B)
+                auto value = doSpriteDmaRead<nr>();
+                denise.pokeSPRxDATB<nr>(value);
+                
+            } else {
+                
+                busOwner[pos.h] = BUS_BLOCKED;
+            }
         }
     }
 }
