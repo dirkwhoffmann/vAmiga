@@ -3448,7 +3448,7 @@ DQ
                                         <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Y9-Rh-mXL">
                                             <rect key="frame" x="167" y="78" width="120" height="15"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="0.5" doubleValue="0.25" tickMarkPosition="above" sliderType="linear" id="TO4-tS-VYf"/>
+                                            <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="1" doubleValue="0.25" tickMarkPosition="above" sliderType="linear" id="TO4-tS-VYf"/>
                                             <connections>
                                                 <action selector="vidFlickerWeightAction:" target="-2" id="tw1-vJ-muO"/>
                                             </connections>
