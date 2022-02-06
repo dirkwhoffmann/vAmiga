@@ -75,6 +75,7 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
 
             if (row % 2) { os << std::endl; } else { os << "  "; }
         }
+        os << std::endl; 
     }
     
     if (category & dump::Signals) {

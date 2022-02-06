@@ -83,6 +83,23 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << hex(dskpt) << std::endl;
     }
     
+    if (category & dump::Bus) {
+        
+        for (isize i = 0; i < HPOS_CNT; i++) {
+            
+            isize cycle = (i / 6) + (i % 6) * ((HPOS_CNT + 1) / 6);
+            
+            string key = std::to_string(cycle) + ":";
+            os << std::left << std::setw(5) << key;
+
+            string value = BusOwnerEnum::key(busOwner[cycle]);
+            os << std::left << std::setw(8) << value;
+            
+            if (i % 6 == 5) { os << std::endl; } else { os << "  "; }
+        }
+        os << std::endl;
+    }
+    
     if (category & dump::Dma) {
         
         sequencer.dump(dump::Dma, os);

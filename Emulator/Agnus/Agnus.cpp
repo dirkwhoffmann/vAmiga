@@ -374,9 +374,8 @@ Agnus::executeFirstSpriteCycle()
     // Only proceed if sprite DMA is still enabled
     if (!sprdma()) {
         
-        trace(XFILES, "Aborting executeFirstSpriteCycle<%ld>\n", nr);
-        busOwner[pos.h] = BUS_BLOCKED;
-        return;
+        // trace(XFILES, "Aborting executeFirstSpriteCycle<%ld>\n", nr);
+        // return;
     }
     
     if (pos.v == sprVStop[nr]) {
@@ -410,9 +409,8 @@ Agnus::executeSecondSpriteCycle()
     // Only proceed if sprite DMA is still enabled
     if (!sprdma()) {
         
-        trace(XFILES, "Aborting executeSecondSpriteCycle<%ld>\n", nr);
-        busOwner[pos.h] = BUS_BLOCKED;
-        return;
+        // trace(XFILES, "Aborting executeSecondSpriteCycle<%ld>\n", nr);
+        // return;
     }
     
     if (pos.v == sprVStop[nr]) {
