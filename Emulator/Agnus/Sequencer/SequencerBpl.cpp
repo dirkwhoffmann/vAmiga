@@ -319,6 +319,7 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
         case SIG_BMAPEN_SET:
         
             state.bmapen = true;
+            state.bprun = (state.bprun || state.shw) && state.bpv && state.bphstart;
             break;
     }
     switch (signal & (SIG_VFLOP_SET | SIG_VFLOP_CLR)) {

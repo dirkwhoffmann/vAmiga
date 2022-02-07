@@ -119,9 +119,9 @@ Agnus::setBPLEN(bool value)
     
     // Update the bitplane event table
     if (value) {
-        sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_SET);
+        sequencer.sigRecorder.insert(pos.h + 2, SIG_BMAPEN_SET);
     } else {
-        sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_CLR);
+        sequencer.sigRecorder.insert(pos.h + 2, SIG_BMAPEN_CLR);
     }
     sequencer.computeBplEventTable(sequencer.sigRecorder);
 }
