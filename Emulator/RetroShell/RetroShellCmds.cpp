@@ -1126,6 +1126,15 @@ RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 //
 
 template <> void
+RetroShell::exec <Token::os, Token::info> (Arguments& argv, long param)
+{
+    std::stringstream ss;
+    osDebugger.dumpInfo(ss);
+
+    *this << ss;
+}
+
+template <> void
 RetroShell::exec <Token::os, Token::execbase> (Arguments& argv, long param)
 {
     std::stringstream ss;

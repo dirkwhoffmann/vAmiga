@@ -954,6 +954,10 @@ Interpreter::registerInstructions()
     root.add({"os"},
              "component", "AmigaOS debugger");
 
+    root.add({"os", "info"},
+             "command", "Displays basic system information",
+             &RetroShell::exec <Token::os, Token::info>, 0);
+
     root.add({"os", "execbase"},
              "command", "Displays information about the ExecBase struct",
              &RetroShell::exec <Token::os, Token::execbase>, 0);

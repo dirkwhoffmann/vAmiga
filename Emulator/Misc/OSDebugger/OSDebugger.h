@@ -168,6 +168,7 @@ public:
 
 public:
     
+    void dumpInfo(std::ostream& s);
     void dumpExecBase(std::ostream& s);
     
     void dumpIntVectors(std::ostream& s);

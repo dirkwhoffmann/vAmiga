@@ -15,6 +15,45 @@
 #include <sstream>
 
 void
+OSDebugger::dumpInfo(std::ostream& s)
+{
+    {   SUSPENDED
+
+        using namespace util;
+        auto execBase = getExecBase();
+        auto flags = execBase.AttnFlags;
+        auto pal = execBase.VBlankFrequency == 50;
+        auto ntsc = execBase.VBlankFrequency == 60;
+
+        string cpu =
+        (flags & os::AFF_68010) ? "68010" :
+        (flags & os::AFF_68020) ? "68020" :
+        (flags & os::AFF_68030) ? "68030" :
+        (flags & os::AFF_68040) ? "68040" : "68000";
+        
+        string fpu =
+        (flags & os::AFF_68882) ? "68882" :
+        (flags & os::AFF_68881) ? "68881" : "none";
+        
+        if ((flags & os::AFF_68040) && (flags & os::AFF_FPU40)) {
+            fpu = fpu == "none" ? "FPU40" : fpu + " + FPU40";
+        }
+        
+        s << tab("CPU");
+        s << cpu << std::endl;
+        s << tab("FPU");
+        s << fpu << std::endl;
+        s << tab("EClock");
+        s << dec(execBase.ex_EClockFrequency) << "Hz" << std::endl;
+        s << tab("VFrequency");
+        s << dec(execBase.VBlankFrequency) << "Hz ";
+        s << (pal ? "(PAL)" : ntsc ? "(NTSC)" : "(?)") << std::endl;
+        s << tab("Supply");
+        s << dec(execBase.PowerSupplyFrequency) << "Hz" << std::endl;
+    }
+}
+
+void
 OSDebugger::dumpExecBase(std::ostream& s)
 {
     {   SUSPENDED
