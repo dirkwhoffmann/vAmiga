@@ -181,28 +181,37 @@ Agnus::peekVHPOSR()
 {
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
-    
-    // Return the latched position if external synchronization is enabled
-    if (ersy(bplcon0Initial)) return HI_LO(latchedPos.v & 0xFF, 0);
+    u16 result;
 
-    // The returned position is four cycles ahead
-    auto result = agnus.pos + Beam {0,4};
-        
-    // Rectify the vertical position if it has wrapped over
-    if (result.v >= frame.numLines()) result.v = 0;
-    
-    // In cycle 0 and 1, we need to return the old value of posv
-    if (result.h <= 1) {
-        return HI_LO(agnus.pos.v & 0xFF, result.h);
+    if (ersy(bplcon0Initial)) {
+
+        // Return the latched position if external synchronization is enabled
+        result = HI_LO(latchedPos.v & 0xFF, 0);
+
     } else {
-        return HI_LO(result.v & 0xFF, result.h);
+        
+        // The returned position is four cycles ahead
+        auto pos = agnus.pos + Beam {0,4};
+        
+        // Rectify the vertical position if it has wrapped over
+        if (pos.v >= frame.numLines()) pos.v = 0;
+        
+        // In cycle 0 and 1, we need to return the old value of posv
+        if (pos.h <= 1) {
+            result = HI_LO(agnus.pos.v & 0xFF, pos.h);
+        } else {
+            result = HI_LO(pos.v & 0xFF, pos.h);
+        }
     }
+    
+    trace(POSREG_DEBUG, "peekVHPOSR() = %04x\n", result);
+    return result;
 }
 
 void
 Agnus::pokeVHPOS(u16 value)
 {
-    trace(POSREG_DEBUG, "pokeVHPOS(%X)\n", value);
+    trace(POSREG_DEBUG, "pokeVHPOS(%04x)\n", value);
     
     setVHPOS(value);
 }
@@ -233,14 +242,14 @@ Agnus::peekVPOSR()
     // V8 (Vertical position MSB)
     result |= (ersy(bplcon0Initial) ? latchedPos.v : pos.v) >> 8;
     
-    trace(POSREG_DEBUG, "peekVPOSR() = %X\n", result);
+    trace(POSREG_DEBUG, "peekVPOSR() = %04x\n", result);
     return result;
 }
 
 void
 Agnus::pokeVPOS(u16 value)
 {
-    trace(POSREG_DEBUG, "pokeVPOS(%x) (%ld,%d)\n", value, pos.v, frame.lof);
+    trace(POSREG_DEBUG, "pokeVPOS(%04x) (%d)\n", value, frame.lof);
     
     setVPOS(value);
 }
@@ -248,20 +257,27 @@ Agnus::pokeVPOS(u16 value)
 void
 Agnus::setVPOS(u16 value)
 {
+    if (!!GET_BIT(value, 0) != !!GET_BIT(pos.v, 8)) {
+
+        trace(XFILES, "XFILES (VPOS): Toggling V8 is not supported\n");
+    }
+
     /* I don't really know what exactly we are supposed to do here.
      * For the time being, I only take care of the LOF bit.
      */
     bool newlof = value & 0x8000;
     if (frame.lof == newlof) return;
-    
-    trace(XFILES, "XFILES (VPOS): %x (%ld,%d)\n", value, pos.v, frame.lof);
-
+        
     /* If a long frame gets changed to a short frame, we only proceed if
      * Agnus is not in the last rasterline. Otherwise, we would corrupt the
      * emulators internal state (we would be in a line that is unreachable).
      */
-    if (!newlof && inLastRasterline()) return;
+    if (!newlof && inLastRasterline()) {
 
+        trace(XFILES, "XFILES (VPOS): LOF bit changed in last scanline\n");
+        return;
+    }
+    
     trace(XFILES, "XFILES (VPOS): Making a %s frame\n", newlof ? "long" : "short");
     frame.lof = newlof;
     
