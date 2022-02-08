@@ -240,7 +240,28 @@ Agnus::peekVPOSR()
     if (frame.isLongFrame()) result |= 0x8000;
 
     // V8 (Vertical position MSB)
-    result |= (ersy(bplcon0Initial) ? latchedPos.v : pos.v) >> 8;
+    // result |= (ersy(bplcon0Initial) ? latchedPos.v : pos.v) >> 8;
+    
+    if (ersy(bplcon0Initial)) {
+
+        // Return the latched position if external synchronization is enabled
+        result |= latchedPos.v >> 8;
+
+    } else {
+        
+        // The returned position is four cycles ahead
+        auto pos = agnus.pos + Beam {0,4};
+        
+        // Rectify the vertical position if it has wrapped over
+        if (pos.v >= frame.numLines()) pos.v = 0;
+        
+        // In cycle 0 and 1, we need to return the old value of posv
+        if (pos.h <= 1) {
+            result |= agnus.pos.v >> 8;
+        } else {
+            result |= pos.v >> 8;
+        }
+    }
     
     trace(POSREG_DEBUG, "peekVPOSR() = %04x\n", result);
     return result;
@@ -249,7 +270,7 @@ Agnus::peekVPOSR()
 void
 Agnus::pokeVPOS(u16 value)
 {
-    trace(POSREG_DEBUG, "pokeVPOS(%04x) (%d)\n", value, frame.lof);
+    trace(POSREG_DEBUG, "pokeVPOS(%04x)\n", value);
     
     setVPOS(value);
 }
