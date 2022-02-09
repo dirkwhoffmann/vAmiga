@@ -39,7 +39,7 @@ extension ConfigurationController {
         let badAgnus = amiga.agnus.chipRamLimit < config.chipRam
         if badAgnus {
             memWarnInfo1.stringValue = "Chip Ram is not fully usable."
-            memWarnInfo2.stringValue = "The selected Agnus revision is limited to address \(amiga.agnus.chipRamLimit) MB."
+            memWarnInfo2.stringValue = "The selected Agnus revision is limited to address \(amiga.agnus.chipRamLimit) KB."
         }
         memWarnImage.isHidden = !badAgnus
         memWarnInfo1.isHidden = !badAgnus

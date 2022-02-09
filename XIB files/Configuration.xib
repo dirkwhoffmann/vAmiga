@@ -1255,7 +1255,7 @@ DQ
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Sw-iB-MHa">
                                             <rect key="frame" x="145" y="92" width="424" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="The selected Agnus revision is limited to address 512 MB of memory." id="c4Z-r5-o7L">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="The selected Agnus revision is limited to address 512 KB of memory." id="c4Z-r5-o7L">
                                                 <font key="font" metaFont="cellTitle"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
