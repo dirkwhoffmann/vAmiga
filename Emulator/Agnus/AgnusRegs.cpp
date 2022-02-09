@@ -30,7 +30,7 @@ Agnus::peekDMACONR()
 template <Accessor s> void
 Agnus::pokeDMACON(u16 value)
 {
-    trace(DMA_DEBUG, "pokeDMACON(%X)\n", value);
+    trace(DMA_DEBUG, "pokeDMACON(%04x)\n", value);
 
     // Schedule the write cycle
     if constexpr (s == ACCESSOR_CPU) {
@@ -119,9 +119,9 @@ Agnus::setBPLEN(bool value)
     
     // Update the bitplane event table
     if (value) {
-        sequencer.sigRecorder.insert(pos.h + 2, SIG_BMAPEN_SET);
+        sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_SET);
     } else {
-        sequencer.sigRecorder.insert(pos.h + 2, SIG_BMAPEN_CLR);
+        sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_CLR);
     }
     sequencer.computeBplEventTable(sequencer.sigRecorder);
 }

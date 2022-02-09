@@ -305,6 +305,11 @@ Agnus::executeUntilBusIsFree()
         // Execute Agnus until the bus is free
         do {
             
+            /*
+            if (pos.v >= 67 && pos.v <= 71) {
+                trace(true, "CPU blocked in %ld by %s\n", posh, BusOwnerEnum::key(busOwner[posh]));
+            }
+            */
             posh = pos.h;
             execute();
             if (++delay == 2) bls = true;
