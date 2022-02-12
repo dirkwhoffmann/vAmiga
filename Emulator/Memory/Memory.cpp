@@ -1184,14 +1184,10 @@ Memory::peek8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
             return (u8)dataBus;
         }
     }
-    
-    u16 oldDataBus = (u16)(zorro.peekFastRamDevice(addr) << 4);
-    trace(ACF_DEBUG, "oldpeek8<AUTOCONF>(%x) = %x\n", addr, oldDataBus);
-    
+        
     dataBus = (u16)(zorro.peek(addr));
-    trace(ACF_DEBUG, "peek8<AUTOCONF>(%x) = %x\n", addr, dataBus);
-    assert((oldDataBus & 0xF0) == (dataBus & 0xF0));
 
+    trace(ACF_DEBUG, "peek8<AUTOCONF>(%x) = %x\n", addr, dataBus);
     return (u8)dataBus;
 }
 
@@ -1199,35 +1195,21 @@ template<> u16
 Memory::peek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
 {
     ASSERT_AUTO_ADDR(addr);
-    
-    // agnus.executeUntilBusIsFree();
-    
-    auto oldhi = zorro.peekFastRamDevice(addr) << 4;
-    auto oldlo = zorro.peekFastRamDevice(addr + 1) << 4;
-
+        
     auto hi = zorro.peek(addr);
     auto lo = zorro.peek(addr + 1);
-
+    
     dataBus = HI_LO(hi,lo);
     
-    trace(ACF_DEBUG, "oldpeek16<AUTOCONF>(%x) = %x\n", addr, HI_LO(oldhi,oldlo));
     trace(ACF_DEBUG, "peek16<AUTOCONF>(%x) = %x\n", addr, dataBus);
-    
-    assert((dataBus & 0xF0F0) == (HI_LO(oldhi,oldlo) & 0xF0F0));
-    
     return dataBus;
 }
 
 template<> u16
 Memory::spypeek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr) const
 {
-    auto oldhi = zorro.spypeekFastRamDevice(addr) << 4;
-    auto oldlo = zorro.spypeekFastRamDevice(addr + 1) << 4;
-
     auto hi = zorro.spypeek(addr);
     auto lo = zorro.spypeek(addr + 1);
-
-    assert((HI_LO(oldhi,oldlo) & 0xF0F0) == (HI_LO(hi,lo) & 0xF0F0));
     
     return HI_LO(hi,lo);
 }
@@ -1660,11 +1642,8 @@ template <> void
 Memory::poke8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr, u8 value)
 {
     ASSERT_AUTO_ADDR(addr);
-    
-    // agnus.executeUntilBusIsFree();
-    
+        
     dataBus = value;
-    zorro.pokeFastRamDevice(addr, value);
     zorro.poke(addr, value);
 }
 
@@ -1673,11 +1652,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr, u16 value)
 {
     ASSERT_AUTO_ADDR(addr);
     
-    // agnus.executeUntilBusIsFree();
-
     dataBus = value;
-    zorro.pokeFastRamDevice(addr, HI_BYTE(value));
-    zorro.pokeFastRamDevice(addr + 1, LO_BYTE(value));
     zorro.poke(addr, HI_BYTE(value));
     zorro.poke(addr + 1, LO_BYTE(value));
 }

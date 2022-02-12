@@ -45,17 +45,3 @@ struct BoardStateEnum : util::Reflection<BoardStateEnum, BoardState>
     }
 };
 #endif
-
-//
-// Structures
-//
-
-typedef struct
-{
-    u8 type;
-    u8 product;
-    u8 flags;
-    u16 manufacturer;
-    u32 serialNumber;
-}
-BoardDescriptor;

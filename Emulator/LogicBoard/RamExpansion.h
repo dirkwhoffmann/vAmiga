@@ -12,10 +12,7 @@
 #include "ZorroBoard.h"
 
 class RamExpansion : public ZorroBoard {
-    
-    // Board description
-    // BoardDescriptor descriptor = { };
-    
+        
     // FastRam start address (assigned by Kickstart)
     u32 baseAddr = 0;
     

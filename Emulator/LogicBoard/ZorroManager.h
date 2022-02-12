@@ -12,12 +12,6 @@
 #include "SubComponent.h"
 #include "RamExpansion.h"
 
-/* Additional information:
- *
- *   Fast Ram emulation (Zorro II) is based on:
- *   github.com/PR77/A500_ACCEL_RAM_IDE-Rev-1/blob/master/Logic/RAM/A500_RAM.v
- */
-
 class ZorroManager : public SubComponent {
     
     // Available boards
@@ -30,13 +24,7 @@ class ZorroManager : public SubComponent {
         nullptr
     };
     
-    // Current configuration state (0 = unconfigured)
-    u8 fastRamConf;
-    
-    // Fast Ram base address (provided by Kickstart)
-    u32 fastRamBaseAddr;
-    
-    
+            
     //
     // Initializing
     //
@@ -65,19 +53,9 @@ private:
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
 
     template <class T>
-    void applyToPersistentItems(T& worker)
-    {
-        
-    }
-
+    void applyToPersistentItems(T& worker) { }
     template <class T>
-    void applyToResetItems(T& worker, bool hard = true)
-    {
-        worker
-
-        << fastRamConf
-        << fastRamBaseAddr;
-    }
+    void applyToResetItems(T& worker, bool hard = true) { }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
@@ -94,15 +72,4 @@ public:
     u8 peek(u32 addr) const;
     u8 spypeek(u32 addr) const { return peek(addr); }
     void poke(u32 addr, u8 value);
-    
-    
-    //
-    // Emulating Fast Ram
-    //
-    
-public:
-    
-    u8 peekFastRamDevice(u32 addr) const; // DEPRECATED
-    u8 spypeekFastRamDevice(u32 addr) const; // DEPRECATED
-    void pokeFastRamDevice(u32 addr, u8 value); // DEPRECATED
 };
