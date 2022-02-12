@@ -48,6 +48,7 @@ public:
     
     using SubComponent::SubComponent;
     
+    
     //
     // Methods from AmigaObject
     //

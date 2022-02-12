@@ -11,10 +11,44 @@
 #include "ZorroManager.h"
 #include "Memory.h"
 
+ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
+{
+    subComponents = std::vector<AmigaComponent *> {
+        
+        &ramExpansion
+    };
+}
+
+u8
+ZorroManager::peek(u32 addr) const
+{
+    for (isize i = 0; slots[i]; i++) {
+
+        if (slots[i]->state == STATE_AUTOCONF) {
+            
+            return slots[i]->peek8(addr);
+        }
+    }
+    return 0xFF;
+}
+
+void
+ZorroManager::poke(u32 addr, u8 value)
+{
+    for (isize i = 0; slots[i]; i++) {
+
+        if (slots[i]->state == STATE_AUTOCONF) {
+            
+            slots[i]->poke8(addr, value);
+            return;
+        }
+    }
+}
+
 u8
 ZorroManager::peekFastRamDevice(u32 addr) const
 {
-    trace(FAS_DEBUG, "peekFastRamDevice(%X)\n", addr & 0xFFFF);
+    trace(ACF_DEBUG, "peekFastRamDevice(%X)\n", addr & 0xFFFF);
 
     // Only proceed if the device has not been configured yet
     if (fastRamConf || mem.fastRamSize() == 0) return 0xF;
@@ -147,12 +181,17 @@ ZorroManager::peekFastRamDevice(u32 addr) const
         case 0x26: // er_SerialNumber (lower nibble of byte 3 (lsb))
             autoConfData = 0x3;
             break;
-            
+
+        case 0x40:
+        case 0x42:
+            autoConfData = 0x0;
+            break;
+
         default:
             autoConfData = 0xF;
     }
     
-    trace(FAS_DEBUG, "autoConfData = %x\n", autoConfData);
+    trace(ACF_DEBUG, "autoConfData = %x\n", autoConfData);
     return autoConfData;
 }
 
@@ -180,7 +219,7 @@ ZorroManager::pokeFastRamDevice(u32 addr, u8 value)
         case 0x48: // ec_BaseAddress (A23 - A20, 0x--X-0000)
             
             fastRamBaseAddr |= (value & 0xF0) << 16;
-            trace(FAS_DEBUG, "Zorro II card mapped to $%x\n", fastRamBaseAddr);
+            trace(ACF_DEBUG, "Zorro II card mapped to $%x\n", fastRamBaseAddr);
             
             /* "Note that writing to register 48 actually configures the board
              *  for both Zorro II and Zorro III boards in the Zorro II

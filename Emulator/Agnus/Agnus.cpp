@@ -306,10 +306,11 @@ Agnus::executeUntilBusIsFree()
         do {
             
             /*
-            if (pos.v >= 67 && pos.v <= 71) {
+            if (pos.v >= 0x66 && pos.v <= 0x66) {
                 trace(true, "CPU blocked in %ld by %s\n", posh, BusOwnerEnum::key(busOwner[posh]));
             }
             */
+            
             posh = pos.h;
             execute();
             if (++delay == 2) bls = true;
@@ -322,6 +323,12 @@ Agnus::executeUntilBusIsFree()
         // Add wait states to the CPU
         cpu.addWaitStates(DMA_CYCLES(delay));
     }
+    
+    /*
+    if (pos.v >= 0x66 && pos.v <= 0x66) {
+        trace(true, "CPU got cycle %ld\n", posh);
+    }
+    */
     
     // Assign bus to the CPU
     busOwner[posh] = BUS_CPU;

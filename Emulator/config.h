@@ -104,7 +104,6 @@ static const int OCSREG_DEBUG    = 0; // General OCS register debugging
 static const int ECSREG_DEBUG    = 0; // Special ECS register debugging
 static const int INVREG_DEBUG    = 0; // Invalid register accesses
 static const int MEM_DEBUG       = 0; // Memory
-static const int FAS_DEBUG       = 0; // Fast RAM
 
 // Agnus
 static const int DMA_DEBUG       = 0; // DMA registers
@@ -173,6 +172,10 @@ static const int SER_DEBUG       = 0; // Serial interface
 static const int POT_DEBUG       = 0; // Potentiometer inputs
 static const int HOLD_MOUSE_L    = 0; // Hold down the left mouse button
 static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
+
+// Expansion
+static const int ACF_DEBUG       = 0; // Zorro bus (autoconfig)
+static const int HDR_DEBUG       = 0; // Hard drive
 
 // Media types
 static const int ADF_DEBUG       = 0; // ADF and extended ADF files

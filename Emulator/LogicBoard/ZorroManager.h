@@ -10,6 +10,7 @@
 #pragma once
 
 #include "SubComponent.h"
+#include "RamExpansion.h"
 
 /* Additional information:
  *
@@ -18,6 +19,16 @@
  */
 
 class ZorroManager : public SubComponent {
+    
+    // Available boards
+    RamExpansion ramExpansion = RamExpansion(amiga);
+    
+    // Slot assignments
+    ZorroBoard *slots[2] = {
+        
+        &ramExpansion,
+        nullptr
+    };
     
     // Current configuration state (0 = unconfigured)
     u8 fastRamConf;
@@ -32,8 +43,8 @@ class ZorroManager : public SubComponent {
     
 public:
     
-    using SubComponent::SubComponent;
-
+    ZorroManager(Amiga& ref);
+    
     
     //
     // Methods from AmigaObject
@@ -41,7 +52,7 @@ public:
     
 private:
     
-    const char *getDescription() const override { return "Zorro"; }
+    const char *getDescription() const override { return "ZorroManager"; }
     void _dump(dump::Category category, std::ostream& os) const override { }
 
     
@@ -75,12 +86,23 @@ private:
 
         
     //
+    // Accessing
+    //
+    
+public:
+    
+    u8 peek(u32 addr) const;
+    u8 spypeek(u32 addr) const { return peek(addr); }
+    void poke(u32 addr, u8 value);
+    
+    
+    //
     // Emulating Fast Ram
     //
     
 public:
     
-    u8 peekFastRamDevice(u32 addr) const;
-    u8 spypeekFastRamDevice(u32 addr) const;
-    void pokeFastRamDevice(u32 addr, u8 value);
+    u8 peekFastRamDevice(u32 addr) const; // DEPRECATED
+    u8 spypeekFastRamDevice(u32 addr) const; // DEPRECATED
+    void pokeFastRamDevice(u32 addr, u8 value); // DEPRECATED
 };

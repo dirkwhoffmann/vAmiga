@@ -43,6 +43,7 @@
 #import "SerialPortTypes.h"
 #import "StateMachineTypes.h"
 #import "UARTTypes.h"
+#import "ZorroBoardTypes.h"
 
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>
