@@ -69,7 +69,13 @@ private:
     
 public:
     
+    // Read a byte from autoconfig space
     u8 peek(u32 addr) const;
     u8 spypeek(u32 addr) const { return peek(addr); }
+    
+    // Write a byte into autoconfig space
     void poke(u32 addr, u8 value);
+    
+    // Asks all boards to update the memory map
+    void updateMemSrcTables();
 };

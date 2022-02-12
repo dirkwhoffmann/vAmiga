@@ -80,5 +80,5 @@ private:
     
     // const BoardDescriptor &getDescriptor() const override;
     void poke8(u32 addr, u8 value) override;
-    void updateMemSrcTables() override { };
+    void updateMemSrcTables() override;
 };

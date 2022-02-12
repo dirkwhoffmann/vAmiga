@@ -68,7 +68,12 @@ RamExpansion::poke8(u32 addr, u8 value)
         case 0x48: // Base address (A23 - A20, 0x--X-0000)
             
             baseAddr |= (value & 0xF0) << 16;
+
+            // Activate the board
             state = STATE_ACTIVE;
+            
+            // Update the memory map
+            mem.updateMemSrcTables();
 
             trace(ACF_DEBUG, "FastRam mapped to $%06x\n", baseAddr);
             return;
@@ -77,5 +82,20 @@ RamExpansion::poke8(u32 addr, u8 value)
             
             baseAddr |= (value & 0xF0) << 12;
             return;
+    }
+}
+
+void
+RamExpansion::updateMemSrcTables()
+{
+    isize numPages = mem.getConfig().fastSize / 0x10000;
+    isize firstPage = baseAddr / 0x10000;
+
+    // If the board hasn't been configured yet, map it to the default address
+    if (firstPage == 0) firstPage = 0x20;
+    
+    for (isize i = firstPage; i < firstPage + numPages; i++) {
+        
+        mem.cpuMemSrc[i] = MEM_FAST;
     }
 }

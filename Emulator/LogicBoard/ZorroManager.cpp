@@ -44,3 +44,12 @@ ZorroManager::poke(u32 addr, u8 value)
         }
     }
 }
+
+void
+ZorroManager::updateMemSrcTables()
+{
+    for (isize i = 0; slots[i]; i++) {
+        
+        slots[i]->updateMemSrcTables();
+    }
+}

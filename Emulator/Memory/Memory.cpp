@@ -787,7 +787,6 @@ Memory::updateCpuMemSrcTable()
 
     isize chipRamPages = config.chipSize / 0x10000;
     isize slowRamPages = config.slowSize / 0x10000;
-    isize fastRamPages = config.fastSize / 0x10000;
     
     bool ovl = ciaa.getPA() & 1;
     bool old = config.bankMap == BANK_MAP_A1000 || config.bankMap == BANK_MAP_A2000A;
@@ -807,11 +806,6 @@ Memory::updateCpuMemSrcTable()
         }
     }
         
-    // Fast Ram
-    for (isize i = 0x20; i < 0x20 + fastRamPages; i++) {
-        cpuMemSrc[i] = MEM_FAST;
-    }
-    
     // CIAs
     for (isize i = 0xA0; i <= 0xBE; i++) {
         cpuMemSrc[i] = MEM_CIA_MIRROR;
@@ -882,6 +876,9 @@ Memory::updateCpuMemSrcTable()
             cpuMemSrc[i] = cpuMemSrc[0xF8 + i];
     }
 
+    // Expansion boards
+    zorro.updateMemSrcTables();
+    
     msgQueue.put(MSG_MEM_LAYOUT);
 }
 

@@ -174,7 +174,7 @@ static const int HOLD_MOUSE_L    = 0; // Hold down the left mouse button
 static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 
 // Expansion
-static const int ACF_DEBUG       = 1; // Zorro bus (autoconfig)
+static const int ACF_DEBUG       = 0; // Zorro bus (autoconfig)
 static const int HDR_DEBUG       = 0; // Hard drive
 
 // Media types
