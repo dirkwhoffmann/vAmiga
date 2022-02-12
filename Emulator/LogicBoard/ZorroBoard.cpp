@@ -15,21 +15,19 @@ void
 ZorroBoard::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
-        
-    auto desc = getDescriptor();
-    
+            
     if (category & dump::State) {
     
         os << tab("Type");
-        os << hex(desc.type);
+        os << hex(type());
         os << tab("Product");
-        os << hex(desc.product);
+        os << hex(product());
         os << tab("Flags");
-        os << hex(desc.flags);
+        os << hex(flags());
         os << tab("Manufacturer");
-        os << hex(desc.manufacturer);
+        os << hex(manufacturer());
         os << tab("Serial number");
-        os << hex(desc.serialNumber);
+        os << hex(serialNumber());
     }
 }
 
@@ -37,20 +35,18 @@ u8
 ZorroBoard::getDescriptorByte(isize offset) const
 {
     assert((usize)offset <= 15);
-    
-    auto desc = getDescriptor();
-    
+        
     switch (offset) {
             
-        case 0: return desc.type;
-        case 1: return desc.product;
-        case 2: return desc.flags;
-        case 4: return BYTE1(desc.manufacturer);
-        case 5: return BYTE0(desc.manufacturer);
-        case 6: return BYTE3(desc.serialNumber);
-        case 7: return BYTE2(desc.serialNumber);
-        case 8: return BYTE1(desc.serialNumber);
-        case 9: return BYTE0(desc.serialNumber);
+        case 0: return type();
+        case 1: return product();
+        case 2: return flags();
+        case 4: return BYTE1(manufacturer());
+        case 5: return BYTE0(manufacturer());
+        case 6: return BYTE3(serialNumber());
+        case 7: return BYTE2(serialNumber());
+        case 8: return BYTE1(serialNumber());
+        case 9: return BYTE0(serialNumber());
             
         default:
             return 0;

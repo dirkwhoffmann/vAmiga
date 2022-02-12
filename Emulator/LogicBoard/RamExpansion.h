@@ -14,7 +14,7 @@
 class RamExpansion : public ZorroBoard {
     
     // Board description
-    BoardDescriptor descriptor = { };
+    // BoardDescriptor descriptor = { };
     
     // FastRam start address (assigned by Kickstart)
     u32 baseAddr = 0;
@@ -74,8 +74,14 @@ private:
     //
     // Methods from ZorroBoard
     //
+        
+    virtual u8 type() const override;
+    virtual u8 product() const override        { return 0x67; }
+    virtual u8 flags() const override          { return 0x80; }
+    virtual u16 manufacturer() const override  { return 0x07B9; }
+    virtual u32 serialNumber() const override  { return 0x5041554C; }
     
-    const BoardDescriptor &getDescriptor() const override;
+    // const BoardDescriptor &getDescriptor() const override;
     void poke8(u32 addr, u8 value) override;
     void updateMemSrcTables() override { };
 };

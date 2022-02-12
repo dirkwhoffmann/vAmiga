@@ -30,36 +30,32 @@ RamExpansion::_reset(bool hard)
 
     if (hard) {
 
-        if (mem.fastRamSize() == 0) {
-            
-            // If no FastRam is present, disable the board
-            state = STATE_SHUTUP;
-        
-        } else {
-            
-            // Setup the board descriptor
-            descriptor.type         = 0xE0;
-            descriptor.product      = 0x67;
-            descriptor.flags        = 0x80;
-            descriptor.manufacturer = 0x07B9;
-            descriptor.serialNumber = 0x5041554C;
-            
-            switch (mem.fastRamSize()) {
-                    
-                case KB(64):  descriptor.type |= 0b001; break;
-                case KB(128): descriptor.type |= 0b010; break;
-                case KB(256): descriptor.type |= 0b011; break;
-                case KB(512): descriptor.type |= 0b100; break;
-                case MB(1):   descriptor.type |= 0b101; break;
-                case MB(2):   descriptor.type |= 0b110; break;
-                case MB(4):   descriptor.type |= 0b111; break;
-                case MB(8):   descriptor.type |= 0b000; break;
-                    
-                default:
-                    fatalError;
-            }
-        }
+        // If no FastRam is present, disable the board
+        if (mem.fastRamSize() == 0) state = STATE_SHUTUP;
     }
+}
+
+u8
+RamExpansion::type() const
+{
+    u8 result = 0xE0;
+    
+    switch (mem.fastRamSize()) {
+            
+        case KB(64):  result |= 0b001; break;
+        case KB(128): result |= 0b010; break;
+        case KB(256): result |= 0b011; break;
+        case KB(512): result |= 0b100; break;
+        case MB(1):   result |= 0b101; break;
+        case MB(2):   result |= 0b110; break;
+        case MB(4):   result |= 0b111; break;
+        case MB(8):   result |= 0b000; break;
+            
+        default:
+            fatalError;
+    }
+    
+    return result;
 }
 
 void
@@ -82,10 +78,4 @@ RamExpansion::poke8(u32 addr, u8 value)
             baseAddr |= (value & 0xF0) << 12;
             return;
     }
-}
-
-const BoardDescriptor &
-RamExpansion::getDescriptor() const
-{
-    return descriptor;
 }

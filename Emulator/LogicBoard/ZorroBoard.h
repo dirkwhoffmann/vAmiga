@@ -39,47 +39,23 @@ protected:
         
     void _dump(dump::Category category, std::ostream& os) const override;
 
-    
-    //
-    // Methods from AmigaComponent
-    //
 
-    /*
-private:
-    
-    void _reset(bool hard) override;
-    
-    template <class T>
-    void applyToPersistentItems(T& worker)
-    {
-
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker, bool hard = true)
-    {
-        if (hard) {
-            
-            worker
-            
-            << state;
-        }
-    }
-    
-    isize _size() override { COMPUTE_SNAPSHOT_SIZE }
-    u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
-    isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    */
-    
     //
     // Querying
     //
     
-    // Informs about certain properties of this board
-    virtual const BoardDescriptor &getDescriptor() const = 0;
+public:
     
-    // Reads a single byte from the descriptor
+    // Returns basic board properties
+    virtual u8 type() const { return 0; }
+    virtual u8 product() const { return 0; }
+    virtual u8 flags() const { return 0; }
+    virtual u16 manufacturer() const { return 0; }
+    virtual u32 serialNumber() const { return 0; }
+    
+private:
+    
+    // Reads a single byte from configuration space
     u8 getDescriptorByte(isize offset) const;
     
     
