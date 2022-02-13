@@ -1656,7 +1656,7 @@
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MgV-mh-nPT">
                                                         <rect key="frame" x="719" y="18" width="77" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Autoconf" id="6CX-7S-N1N">
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Zorro" id="6CX-7S-N1N">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

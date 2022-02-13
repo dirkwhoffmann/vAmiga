@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "HardDrive.h"
+#include "HDFFile.h"
 #include "Memory.h"
 
 /* Auto boot driver from AmiEmu. Written by mras0.
@@ -73,6 +74,29 @@ const unsigned char exprom[880] = {
 0x00, 0x22, 0x4e, 0xae, 0xfe, 0x86, 0x4c, 0xdf, 0x7f, 0xff, 0x4e, 0x75, 0x70, 0x06, 0x60, 0xfc,
 };
 
+HardDrive::HardDrive(Amiga& ref) : ZorroBoard(ref)
+{
+#ifdef INITIAL_HDF
+    
+    try {
+        
+        hdf = new HDFFile(INITIAL_HDF);
+    
+        debug(true, "HDF file loaded successfully\n");
+        hdf->layout().dump();
+
+        state = STATE_AUTOCONF;
+
+    } catch (...) {
+        
+        debug(true, "Cannot open HDF file %s\n", INITIAL_HDF);
+        
+        state = STATE_AUTOCONF;
+    }
+    
+#endif
+}
+
 void
 HardDrive::_dump(dump::Category category, std::ostream& os) const
 {
@@ -100,24 +124,22 @@ HardDrive::_reset(bool hard)
 u8
 HardDrive::peek8(u32 addr) const
 {
-    u8 result = 0;
-    
-    trace(HDR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
+    isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
+    u8 result = (usize)offset < sizeof(exprom) ? exprom[offset] : 0;
 
-    // TODO
-    
+    trace(HDR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
     return result;
 }
 
-u8
+u16
 HardDrive::peek16(u32 addr) const
 {
-    u8 result = 0;
-    
-    trace(HDR_DEBUG, "peek16(%06x) = %02x\n", addr, result);
+    auto hi = peek8(addr);
+    auto lo = peek8(addr + 1);
 
-    // TODO
-    
+    u16 result = HI_LO(hi,lo);
+
+    trace(HDR_DEBUG, "peek16(%06x) = %04x\n", addr, result);
     return result;
 }
 
@@ -132,7 +154,7 @@ HardDrive::poke8(u32 addr, u8 value)
 void
 HardDrive::poke16(u32 addr, u16 value)
 {
-    trace(HDR_DEBUG, "poke16(%06x,%02x)\n", addr, value);
+    trace(HDR_DEBUG, "poke16(%06x,%04x)\n", addr, value);
     
     // TODO
 }

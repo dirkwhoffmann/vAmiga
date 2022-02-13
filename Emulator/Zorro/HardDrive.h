@@ -10,17 +10,20 @@
 #pragma once
 
 #include "ZorroBoard.h"
+#include "HDFFile.h"
 
 class HardDrive : public ZorroBoard {
             
+    HDFFile *hdf = nullptr;
+    
     //
     // Constructing
     //
     
 public:
-    
-    using ZorroBoard::ZorroBoard;
-    
+        
+    HardDrive(Amiga& ref);
+        
     
     //
     // Methods from AmigaObject
@@ -85,8 +88,8 @@ private:
 public:
     
     u8 peek8(u32 addr) const;
-    u8 peek16(u32 addr) const;
-    u8 spypeek16(u32 addr) const { return peek16(addr); }
+    u16 peek16(u32 addr) const;
+    u16 spypeek16(u32 addr) const { return peek16(addr); }
     void poke8(u32 addr, u8 value);
     void poke16(u32 addr, u16 value);
 };

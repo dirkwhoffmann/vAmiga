@@ -66,6 +66,9 @@ struct FloatStereo; typedef FloatStereo SampleType;
 // Uncomment to lauch the emulator with a disk in df0
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/DCD-BBS.adf"
 
+// Uncomment to launch the emulator with an attached hard drive
+#define INITIAL_HDF "/tmp/vamiga.hdf"
+
 // Uncomment to set a breakpoint on startup
 // #define INITIAL_BREAKPOINT 0xFC1354
 
