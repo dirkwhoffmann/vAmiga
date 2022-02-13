@@ -38,23 +38,26 @@ ZorroBoard::getDescriptorByte(isize offset) const
         
     switch (offset) {
             
-        case 0: return type();
-        case 1: return product();
-        case 2: return flags();
-        case 4: return BYTE1(manufacturer());
-        case 5: return BYTE0(manufacturer());
-        case 6: return BYTE3(serialNumber());
-        case 7: return BYTE2(serialNumber());
-        case 8: return BYTE1(serialNumber());
-        case 9: return BYTE0(serialNumber());
-            
+        case 0x0: return type();
+        case 0x1: return product();
+        case 0x2: return flags();
+        case 0x3: return 0;
+        case 0x4: return BYTE1(manufacturer());
+        case 0x5: return BYTE0(manufacturer());
+        case 0x6: return BYTE3(serialNumber());
+        case 0x7: return BYTE2(serialNumber());
+        case 0x8: return BYTE1(serialNumber());
+        case 0x9: return BYTE0(serialNumber());
+        case 0xA: return BYTE1(initDiagVec());
+        case 0xB: return BYTE0(initDiagVec());
+
         default:
             return 0;
     }
 }
 
 u8
-ZorroBoard::peek8(u32 addr) const
+ZorroBoard::peekAutoconf8(u32 addr) const
 {
     u8 result = 0xFF;
     u8 offset = addr & 0xFF;
@@ -72,7 +75,7 @@ ZorroBoard::peek8(u32 addr) const
         result = 0x00;
     }
     
-    trace(ACF_DEBUG, "peek8(%06x) = %02x\n", offset, result);
+    trace(ACG_DEBUG, "peekAutoconf8(%06x) = %02x\n", offset, result);
     return result;
 }
 

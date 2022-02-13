@@ -11,16 +11,19 @@
 
 #include "SubComponent.h"
 #include "RamExpansion.h"
+#include "HardDrive.h"
 
 class ZorroManager : public SubComponent {
     
-    // Available boards
+    // Supported expansion boards
     RamExpansion ramExpansion = RamExpansion(amiga);
+    HardDrive hardDrive = HardDrive(amiga);
     
     // Slot assignments
-    ZorroBoard *slots[2] = {
+    ZorroBoard *slots[3] = {
         
         &ramExpansion,
+        &hardDrive,
         nullptr
     };
     

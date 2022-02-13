@@ -1183,8 +1183,6 @@ Memory::peek8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
     }
         
     dataBus = (u16)(zorro.peek(addr));
-
-    trace(ACF_DEBUG, "peek8<AUTOCONF>(%x) = %x\n", addr, dataBus);
     return (u8)dataBus;
 }
 
@@ -1196,9 +1194,7 @@ Memory::peek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
     auto hi = zorro.peek(addr);
     auto lo = zorro.peek(addr + 1);
     
-    dataBus = HI_LO(hi,lo);
-    
-    trace(ACF_DEBUG, "peek16<AUTOCONF>(%x) = %x\n", addr, dataBus);
+    dataBus = HI_LO(hi,lo);    
     return dataBus;
 }
 

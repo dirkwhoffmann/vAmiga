@@ -15,7 +15,8 @@ ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<AmigaComponent *> {
         
-        &ramExpansion
+        &ramExpansion,
+        &hardDrive
     };
 }
 
@@ -26,7 +27,7 @@ ZorroManager::peek(u32 addr) const
 
         if (slots[i]->state == STATE_AUTOCONF) {
             
-            return slots[i]->peek8(addr);
+            return slots[i]->peekAutoconf8(addr);
         }
     }
     return 0xFF;
@@ -39,7 +40,7 @@ ZorroManager::poke(u32 addr, u8 value)
 
         if (slots[i]->state == STATE_AUTOCONF) {
             
-            slots[i]->poke8(addr, value);
+            slots[i]->pokeAutoconf8(addr, value);
             return;
         }
     }

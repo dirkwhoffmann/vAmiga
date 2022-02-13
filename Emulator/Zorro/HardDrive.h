@@ -11,11 +11,10 @@
 
 #include "ZorroBoard.h"
 
-class RamExpansion : public ZorroBoard {
+class HardDrive : public ZorroBoard {
         
-    // FastRam start address (assigned by Kickstart)
+    // MOVE TO ZorroBoard
     u32 baseAddr = 0;
-    
     
     //
     // Constructing
@@ -32,7 +31,7 @@ public:
     
 private:
     
-    const char *getDescription() const override { return "RamExpansion"; }
+    const char *getDescription() const override { return "HardDrive"; }
     void _dump(dump::Category category, std::ostream& os) const override;
 
     
@@ -71,14 +70,23 @@ private:
     //
     // Methods from ZorroBoard
     //
-        
-    virtual u8 type() const override;
-    virtual u8 product() const override        { return 0x67; }
-    virtual u8 flags() const override          { return 0x80; }
-    virtual u16 manufacturer() const override  { return 0x07B9; }
-    virtual u32 serialNumber() const override  { return 0x5041554C; }
     
-    // const BoardDescriptor &getDescriptor() const override;
-    void poke8(u32 addr, u8 value) override;
+    virtual u8 type() const override            { return ERTF_DIAGVALID | 1; }
+    virtual u8 product() const override         { return 0x88; }
+    virtual u8 flags() const override           { return 0x80; }
+    virtual u16 manufacturer() const override   { return 0x0539; }
+    virtual u32 serialNumber() const override   { return 0x5041554C; }
+    virtual u16 initDiagVec() const override    { return 0x40; }
+        
+    void pokeAutoconf8(u32 addr, u8 value) override;
     void updateMemSrcTables() override;
+    
+    
+    //
+    // Accessing the board
+    //
+       
+    virtual u8 peek8(u32 addr) const;
+    virtual u8 spypeek8(u32 addr) const { return peek8(addr); }
+    void poke8(u32 addr, u8 value);
 };

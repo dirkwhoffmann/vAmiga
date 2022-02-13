@@ -36,7 +36,6 @@ target_include_directories(vAmigaCore PUBLIC
 ${CMAKE_CURRENT_SOURCE_DIR}/.
 ${CMAKE_CURRENT_SOURCE_DIR}/Utilities
 ${CMAKE_CURRENT_SOURCE_DIR}/Base
-${CMAKE_CURRENT_SOURCE_DIR}/LogicBoard
 ${CMAKE_CURRENT_SOURCE_DIR}/CPU
 ${CMAKE_CURRENT_SOURCE_DIR}/CPU/Moira
 ${CMAKE_CURRENT_SOURCE_DIR}/CIA
@@ -52,6 +51,8 @@ ${CMAKE_CURRENT_SOURCE_DIR}/Agnus/Copper
 ${CMAKE_CURRENT_SOURCE_DIR}/Agnus/Blitter
 ${CMAKE_CURRENT_SOURCE_DIR}/Agnus/DmaDebugger
 ${CMAKE_CURRENT_SOURCE_DIR}/Memory
+${CMAKE_CURRENT_SOURCE_DIR}/LogicBoard
+${CMAKE_CURRENT_SOURCE_DIR}/Zorro
 ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals
 ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Drive
 ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Mouse
@@ -71,13 +72,14 @@ ${CMAKE_CURRENT_SOURCE_DIR}/xdms)
 # Add sub directories
 add_subdirectory(Utilities)
 add_subdirectory(Base)
-add_subdirectory(LogicBoard)
 add_subdirectory(CPU)
 add_subdirectory(CIA)
 add_subdirectory(Paula)
 add_subdirectory(Denise)
 add_subdirectory(Agnus)
 add_subdirectory(Memory)
+add_subdirectory(LogicBoard)
+add_subdirectory(Zorro)
 add_subdirectory(Peripherals)
 add_subdirectory(Media)
 add_subdirectory(FileSystems)

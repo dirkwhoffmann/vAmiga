@@ -52,6 +52,7 @@ public:
     virtual u8 flags() const { return 0; }
     virtual u16 manufacturer() const { return 0; }
     virtual u32 serialNumber() const { return 0; }
+    virtual u16 initDiagVec() const { return 0; }
     
 private:
     
@@ -60,12 +61,12 @@ private:
     
     
     //
-    // Accessing
+    // Accessing Autoconfig space
     //
     
-    virtual u8 peek8(u32 addr) const;
-    virtual u8 spypeek8(u32 addr) const { return peek8(addr); }
-    virtual void poke8(u32 addr, u8 value) = 0;
+    virtual u8 peekAutoconf8(u32 addr) const;
+    virtual u8 spypeekAutoconf8(u32 addr) const { return peekAutoconf8(addr); }
+    virtual void pokeAutoconf8(u32 addr, u8 value) = 0;
     
     
     //

@@ -30,16 +30,16 @@ RamExpansion::_reset(bool hard)
 
     if (hard) {
 
-        // If no FastRam is present, disable the board
-        if (mem.fastRamSize() == 0) state = STATE_SHUTUP;
+        // Enter autoconfig state, if FastRam should be emulated
+        state = mem.fastRamSize() ? STATE_AUTOCONF : STATE_SHUTUP;
     }
 }
 
 u8
 RamExpansion::type() const
 {
-    u8 result = 0xE0;
-    
+    u8 result = ERT_ZORROII | ERTF_MEMLIST;
+ 
     switch (mem.fastRamSize()) {
             
         case KB(64):  result |= 0b001; break;
@@ -55,13 +55,14 @@ RamExpansion::type() const
             fatalError;
     }
     
+    assert(HI_NIBBLE(result) == 0xE);
     return result;
 }
 
 void
-RamExpansion::poke8(u32 addr, u8 value)
+RamExpansion::pokeAutoconf8(u32 addr, u8 value)
 {
-    trace(ACF_DEBUG, "poke8(%06x,%02x)\n", addr, value);
+    trace(ACG_DEBUG, "pokeAutoconf8(%06x,%02x)\n", addr, value);
     
     switch (addr & 0xFFFF) {
                         
@@ -75,7 +76,7 @@ RamExpansion::poke8(u32 addr, u8 value)
             // Update the memory map
             mem.updateMemSrcTables();
 
-            trace(ACF_DEBUG, "FastRam mapped to $%06x\n", baseAddr);
+            trace(ACG_DEBUG, "Device mapped to $%06x\n", baseAddr);
             return;
             
         case 0x4A: // ec_BaseAddress (A19 - A16, 0x---X0000)
