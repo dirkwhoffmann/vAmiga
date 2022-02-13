@@ -12,10 +12,7 @@
 #include "ZorroBoard.h"
 
 class HardDrive : public ZorroBoard {
-        
-    // MOVE TO ZorroBoard
-    u32 baseAddr = 0;
-    
+            
     //
     // Constructing
     //
@@ -78,7 +75,6 @@ private:
     virtual u32 serialNumber() const override   { return 0x5041554C; }
     virtual u16 initDiagVec() const override    { return 0x40; }
         
-    void pokeAutoconf8(u32 addr, u8 value) override;
     void updateMemSrcTables() override;
     
     

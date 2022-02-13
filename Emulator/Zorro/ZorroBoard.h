@@ -18,6 +18,9 @@ class ZorroBoard : public SubComponent {
     
 protected:
     
+    // Base address of this device (assigned by Kickstart after configuring)
+    u32 baseAddr = 0;
+    
     // Current state
     BoardState state;
     
@@ -64,9 +67,9 @@ private:
     // Accessing Autoconfig space
     //
     
-    virtual u8 peekAutoconf8(u32 addr) const;
-    virtual u8 spypeekAutoconf8(u32 addr) const { return peekAutoconf8(addr); }
-    virtual void pokeAutoconf8(u32 addr, u8 value) = 0;
+    u8 peekAutoconf8(u32 addr) const;
+    u8 spypeekAutoconf8(u32 addr) const { return peekAutoconf8(addr); }
+    void pokeAutoconf8(u32 addr, u8 value);
     
     
     //

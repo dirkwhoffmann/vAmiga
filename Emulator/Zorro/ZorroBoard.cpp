@@ -10,6 +10,7 @@
 #include "config.h"
 #include "ZorroBoard.h"
 #include "IOUtils.h"
+#include "Memory.h"
 
 void
 ZorroBoard::_dump(dump::Category category, std::ostream& os) const
@@ -77,6 +78,33 @@ ZorroBoard::peekAutoconf8(u32 addr) const
     
     trace(ACG_DEBUG, "peekAutoconf8(%06x) = %02x\n", offset, result);
     return result;
+}
+
+void
+ZorroBoard::pokeAutoconf8(u32 addr, u8 value)
+{
+    trace(ACG_DEBUG, "pokeAutoconf8(%06x,%02x)\n", addr, value);
+    
+    switch (addr & 0xFFFF) {
+                        
+        case 0x48: // Base address (A23 - A20, 0x--X-0000)
+            
+            baseAddr |= (value & 0xF0) << 16;
+
+            // Activate the board
+            state = STATE_ACTIVE;
+            
+            // Update the memory map
+            mem.updateMemSrcTables();
+
+            trace(ACG_DEBUG, "Device mapped to $%06x\n", baseAddr);
+            return;
+            
+        case 0x4A: // ec_BaseAddress (A19 - A16, 0x---X0000)
+            
+            baseAddr |= (value & 0xF0) << 12;
+            return;
+    }
 }
 
 void

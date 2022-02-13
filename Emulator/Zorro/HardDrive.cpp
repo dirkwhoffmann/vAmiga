@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "HardDrive.h"
-#include "Memory.h"
 
 /* Auto boot driver from AmiEmu. Written by mras0.
  * https://github.com/mras0/AmiEmu/blob/master/exprom.asm
@@ -115,33 +114,6 @@ HardDrive::poke8(u32 addr, u8 value)
     trace(HDR_DEBUG, "poke8(%06x,%02x)\n", addr, value);
     
     // TODO
-}
-
-void
-HardDrive::pokeAutoconf8(u32 addr, u8 value)
-{
-    trace(ACG_DEBUG, "pokeAutoconf8(%06x,%02x)\n", addr, value);
-    
-    switch (addr & 0xFFFF) {
-                        
-        case 0x48: // Base address (A23 - A20, 0x--X-0000)
-            
-            baseAddr |= (value & 0xF0) << 16;
-
-            // Activate the board
-            state = STATE_ACTIVE;
-            
-            // Update the memory map
-            mem.updateMemSrcTables();
-
-            trace(ACG_DEBUG, "Device mapped to $%06x\n", baseAddr);
-            return;
-            
-        case 0x4A: // ec_BaseAddress (A19 - A16, 0x---X0000)
-            
-            baseAddr |= (value & 0xF0) << 12;
-            return;
-    }
 }
 
 void
