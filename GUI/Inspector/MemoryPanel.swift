@@ -55,19 +55,20 @@ extension Inspector {
             case .NONE:          color = MemColors.unmapped
             case .CHIP:          color = MemColors.chip
             case .CHIP_MIRROR:   color = MemColors.chip;     mirror = true
-            case .FAST:          color = MemColors.fast
             case .SLOW:          color = MemColors.slow
             case .SLOW_MIRROR:   color = MemColors.slow;     mirror = true
-            case .ROM:           color = MemColors.rom
-            case .ROM_MIRROR:    color = MemColors.rom;      mirror = true
-            case .WOM:           color = MemColors.wom
-            case .EXT:           color = MemColors.ext
+            case .FAST:          color = MemColors.fast
             case .CIA:           color = MemColors.cia
             case .CIA_MIRROR:    color = MemColors.cia;      mirror = true
             case .RTC:           color = MemColors.rtc
             case .CUSTOM:        color = MemColors.cust
             case .CUSTOM_MIRROR: color = MemColors.cust;     mirror = true
             case .AUTOCONF:      color = MemColors.auto
+            case .HDR:           color = MemColors.auto
+            case .ROM:           color = MemColors.rom
+            case .ROM_MIRROR:    color = MemColors.rom;      mirror = true
+            case .WOM:           color = MemColors.wom
+            case .EXT:           color = MemColors.ext
             default:             fatalError()
             }
             let ciBgColor = CIColor(color: MemColors.unmapped)!

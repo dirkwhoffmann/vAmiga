@@ -30,6 +30,7 @@ enum_long(MEM_SOURCE)
     MEM_CUSTOM,
     MEM_CUSTOM_MIRROR,
     MEM_AUTOCONF,
+    MEM_HDR,
     MEM_ROM,
     MEM_ROM_MIRROR,
     MEM_WOM,
@@ -61,6 +62,7 @@ struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource>
             case MEM_CUSTOM:         return "CUSTOM";
             case MEM_CUSTOM_MIRROR:  return "CUSTOM_MIRROR";
             case MEM_AUTOCONF:       return "AUTOCONF";
+            case MEM_HDR:            return "HDR";
             case MEM_ROM:            return "ROM";
             case MEM_ROM_MIRROR:     return "ROM_MIRROR";
             case MEM_WOM:            return "WOM";

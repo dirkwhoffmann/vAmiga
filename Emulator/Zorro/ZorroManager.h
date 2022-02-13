@@ -15,11 +15,16 @@
 
 class ZorroManager : public SubComponent {
     
-    // Supported expansion boards
+public:
+    
+    // A FastRam expansion board
     RamExpansion ramExpansion = RamExpansion(amiga);
+
+    // Simple hard drive controller (based on the AmiEmu)
     HardDrive hardDrive = HardDrive(amiga);
     
-    // Slot assignments
+private:
+    
     ZorroBoard *slots[3] = {
         
         &ramExpansion,

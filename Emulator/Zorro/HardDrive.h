@@ -81,8 +81,12 @@ private:
     //
     // Accessing the board
     //
-       
-    virtual u8 peek8(u32 addr) const;
-    virtual u8 spypeek8(u32 addr) const { return peek8(addr); }
+      
+public:
+    
+    u8 peek8(u32 addr) const;
+    u8 peek16(u32 addr) const;
+    u8 spypeek16(u32 addr) const { return peek16(addr); }
     void poke8(u32 addr, u8 value);
+    void poke16(u32 addr, u16 value);
 };

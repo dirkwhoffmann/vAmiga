@@ -64,7 +64,7 @@ private:
     
     
     //
-    // Accessing Autoconfig space
+    // Configuring (AutoConfig)
     //
     
     u8 peekAutoconf8(u32 addr) const;
@@ -73,8 +73,23 @@ private:
     
     
     //
+    // Querying the memory map
+    //
+    
+public:
+    
+    // Returns the first page where this device is mapped in
+    isize firstPage() const { return baseAddr / 0x10000; }
+
+    // Returns the number of pages occupied by this device
+    // isize numPages() const { return TODO; }
+    
+    
+    //
     // Changing state
     //
+    
+private:
     
     // Called when autoconfig is complete
     virtual void activate();

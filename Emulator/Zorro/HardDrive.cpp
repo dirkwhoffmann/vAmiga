@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "HardDrive.h"
+#include "Memory.h"
 
 /* Auto boot driver from AmiEmu. Written by mras0.
  * https://github.com/mras0/AmiEmu/blob/master/exprom.asm
@@ -91,8 +92,8 @@ HardDrive::_reset(bool hard)
 
     if (hard) {
 
-        state = STATE_SHUTUP;
-        // state = STATE_AUTOCONF;
+        // state = STATE_SHUTUP;
+        state = STATE_AUTOCONF;
     }
 }
 
@@ -108,6 +109,18 @@ HardDrive::peek8(u32 addr) const
     return result;
 }
 
+u8
+HardDrive::peek16(u32 addr) const
+{
+    u8 result = 0;
+    
+    trace(HDR_DEBUG, "peek16(%06x) = %02x\n", addr, result);
+
+    // TODO
+    
+    return result;
+}
+
 void
 HardDrive::poke8(u32 addr, u8 value)
 {
@@ -117,7 +130,19 @@ HardDrive::poke8(u32 addr, u8 value)
 }
 
 void
+HardDrive::poke16(u32 addr, u16 value)
+{
+    trace(HDR_DEBUG, "poke16(%06x,%02x)\n", addr, value);
+    
+    // TODO
+}
+
+void
 HardDrive::updateMemSrcTables()
 {
-
+    // Only proceed if this board has been configured
+    if (baseAddr == 0) return;
+    
+    // Map in this device
+    mem.cpuMemSrc[firstPage()] = MEM_HDR;
 }
