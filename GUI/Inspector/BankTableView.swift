@@ -95,7 +95,7 @@ extension BankTableView: NSTableViewDelegate {
             if bankCache[row] == .NONE {
                 cell.textColor = .gray
             } else {
-                cell.textColor = .textColor
+                cell.textColor = .labelColor
             }
         }
     }

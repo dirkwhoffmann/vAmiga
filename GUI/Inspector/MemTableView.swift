@@ -132,9 +132,9 @@ extension MemTableView: NSTableViewDelegate {
         let cell = cell as? NSTextFieldCell
         
         if inspector.displayedBankType == .NONE {
-            cell?.textColor = NSColor.gray
+            cell?.textColor = .gray
         } else {
-            cell?.textColor = NSColor.textColor
+            cell?.textColor = .labelColor
         }
         
         switch tableColumn?.identifier.rawValue {
