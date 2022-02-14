@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "HardDriveTypes.h"
 #include "ZorroBoard.h"
 #include "HDFFile.h"
 

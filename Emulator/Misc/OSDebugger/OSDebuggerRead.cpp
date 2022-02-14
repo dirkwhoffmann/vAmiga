@@ -92,190 +92,6 @@ OSDebugger::read(u32 addr, os::CommandLineInterface *result) const
 }
 
 void
-OSDebugger::read(u32 addr, os::Node *result) const
-{
-    if (isValidPtr(addr)) {
-        
-        result->addr = addr;
-        
-        read(addr +  0, &result->ln_Succ);
-        read(addr +  4, &result->ln_Pred);
-        read(addr +  8, &result->ln_Type);
-        read(addr +  9, &result->ln_Pri);
-        read(addr + 10, &result->ln_Name);
-    }
-}
-
-void
-OSDebugger::read(u32 addr, os::Library *result) const
-{
-    if (isValidPtr(addr)) {
-        
-        result->addr = addr;
-        
-        read(addr + 0,  &result->lib_Node);
-        read(addr + 14, &result->lib_Flags);
-        read(addr + 15, &result->lib_pad);
-        read(addr + 16, &result->lib_NegSize);
-        read(addr + 18, &result->lib_PosSize);
-        read(addr + 20, &result->lib_Version);
-        read(addr + 22, &result->lib_Revision);
-        read(addr + 24, &result->lib_IdString);
-        read(addr + 28, &result->lib_Sum);
-        read(addr + 32, &result->lib_OpenCnt);
-    }
-}
-
-void
-OSDebugger::read(u32 addr, os::Interrupt *result) const
-{
-    if (isValidPtr(addr)) {
-        
-        result->addr = addr;
-        
-        read(addr + 0,  &result->is_Node);
-        read(addr + 14, &result->is_Data);
-        read(addr + 18, &result->is_Code);
-    }
-}
-
-void
-OSDebugger::read(u32 addr, os::IntVector *result) const
-{
-    if (isValidPtr(addr)) {
-        
-        result->addr = addr;
-        
-        read(addr + 0,  &result->iv_Data);
-        read(addr + 4,  &result->iv_Code);
-        read(addr + 8,  &result->iv_Node);
-    }
-}
-
-void
-OSDebugger::read(u32 addr, os::List *result) const
-{
-    if (isValidPtr(addr)) {
-        
-        result->addr = addr;
-        
-        read(addr + 0,  &result->lh_Head);
-        read(addr + 4,  &result->lh_Tail);
-        read(addr + 8,  &result->lh_TailPred);
-        read(addr + 12, &result->lh_Type);
-        read(addr + 13, &result->lh_pad);
-    }
-}
-
-void
-OSDebugger::read(u32 addr, os::MinList *result) const
-{
-    if (isValidPtr(addr)) {
-        
-        result->addr = addr;
-        
-        read(addr + 0,  &result->mlh_Head);
-        read(addr + 4,  &result->mlh_Tail);
-        read(addr + 8,  &result->mlh_TailPred);
-    }
-}
-
-void
-OSDebugger::read(u32 addr, os::SoftIntList *result) const
-{
-    if (isValidPtr(addr)) {
-        
-        result->addr = addr;
-        
-        read(addr + 0,  &result->sh_List);
-        read(addr + 4,  &result->sh_Pad);
-    }
-}
-
-void
-OSDebugger::read(u32 addr, os::Task *result) const
-{
-    if (isValidPtr(addr)) {
-        
-    result->addr = addr;
-        
-        read(addr + 0,  &result->tc_Node);
-        read(addr + 14, &result->tc_Flags);
-        read(addr + 15, &result->tc_State);
-        read(addr + 16, &result->tc_IDNestCnt);
-        read(addr + 17, &result->tc_TDNestCnt);
-        read(addr + 18, &result->tc_SigAlloc);
-        read(addr + 22, &result->tc_SigWait);
-        read(addr + 26, &result->tc_SigRecvd);
-        read(addr + 30, &result->tc_SigExcept);
-        read(addr + 34, &result->tc_TrapAlloc);
-        read(addr + 36, &result->tc_TrapAble);
-        read(addr + 38, &result->tc_ExceptData);
-        read(addr + 42, &result->tc_ExceptCode);
-        read(addr + 46, &result->tc_TrapData);
-        read(addr + 50, &result->tc_TrapCode);
-        read(addr + 54, &result->tc_SPReg);
-        read(addr + 58, &result->tc_SPLower);
-        read(addr + 62, &result->tc_SPUpper);
-        read(addr + 66, &result->tc_Switch);
-        read(addr + 70, &result->tc_Launch);
-        read(addr + 74, &result->tc_MemEntry);
-        read(addr + 88, &result->tc_UserData);
-    }
-}
-
-void
-OSDebugger::read(u32 addr, os::MsgPort *result) const
-{
-    if (isValidPtr(addr)) {
-        
-        result->addr = addr;
-        
-        read(addr + 0,  &result->mp_Node);
-        read(addr + 14, &result->mp_Flags);
-        read(addr + 15, &result->mp_SigBit);
-        read(addr + 16, &result->mp_SigTask);
-        read(addr + 20, &result->mp_MsgList);
-    }
-}
-
-void
-OSDebugger::read(u32 addr, os::Process *result) const
-{
-    if (isValidPtr(addr)) {
-        
-        result->addr = addr;
-        
-        read(addr + 0,   &result->pr_Task);
-        read(addr + 92,  &result->pr_MsgPort);
-        read(addr + 126, &result->pr_Pad);
-        read(addr + 128, &result->pr_SegList);
-        read(addr + 132, &result->pr_StackSize);
-        read(addr + 136, &result->pr_GlobVec);
-        read(addr + 140, &result->pr_TaskNum);
-        read(addr + 144, &result->pr_StackBase);
-        read(addr + 148, &result->pr_Result2);
-        read(addr + 152, &result->pr_CurrentDir);
-        read(addr + 156, &result->pr_CIS);
-        read(addr + 160, &result->pr_COS);
-        read(addr + 164, &result->pr_ConsoleTask);
-        read(addr + 168, &result->pr_FileSystemTask);
-        read(addr + 172, &result->pr_CLI);
-        read(addr + 176, &result->pr_ReturnAddr);
-        read(addr + 180, &result->pr_PktWait);
-        read(addr + 184, &result->pr_WindowPtr);
-        read(addr + 188, &result->pr_HomeDir);
-        read(addr + 192, &result->pr_Flags);
-        read(addr + 196, &result->pr_ExitCode);
-        read(addr + 200, &result->pr_ExitData);
-        read(addr + 204, &result->pr_Arguments);
-        read(addr + 208, &result->pr_LocalVars);
-        read(addr + 220, &result->pr_ShellPrivate);
-        read(addr + 224, &result->pr_CES);
-    }
-}
-
-void
 OSDebugger::read(u32 addr, os::ExecBase *result) const
 {
     if (isValidPtr(addr)) {
@@ -357,6 +173,227 @@ OSDebugger::read(u32 addr, os::ExecBase *result) const
         }
     }
 }
+
+void
+OSDebugger::read(u32 addr, os::Interrupt *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr + 0,  &result->is_Node);
+        read(addr + 14, &result->is_Data);
+        read(addr + 18, &result->is_Code);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, os::IntVector *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr + 0,  &result->iv_Data);
+        read(addr + 4,  &result->iv_Code);
+        read(addr + 8,  &result->iv_Node);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, os::IOStdReq *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr + 0,  &result->io_Message);
+        read(addr + 20, &result->io_Device);
+        read(addr + 24, &result->io_Unit);
+        read(addr + 28, &result->io_Command);
+        read(addr + 30, &result->io_Flags);
+        read(addr + 31, &result->io_Error);
+        read(addr + 32, &result->io_Actual);
+        read(addr + 36, &result->io_Length);
+        read(addr + 40, &result->io_Data);
+        read(addr + 44, &result->io_Offset);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, os::Library *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr + 0,  &result->lib_Node);
+        read(addr + 14, &result->lib_Flags);
+        read(addr + 15, &result->lib_pad);
+        read(addr + 16, &result->lib_NegSize);
+        read(addr + 18, &result->lib_PosSize);
+        read(addr + 20, &result->lib_Version);
+        read(addr + 22, &result->lib_Revision);
+        read(addr + 24, &result->lib_IdString);
+        read(addr + 28, &result->lib_Sum);
+        read(addr + 32, &result->lib_OpenCnt);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, os::List *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr + 0,  &result->lh_Head);
+        read(addr + 4,  &result->lh_Tail);
+        read(addr + 8,  &result->lh_TailPred);
+        read(addr + 12, &result->lh_Type);
+        read(addr + 13, &result->lh_pad);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, os::MinList *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr + 0,  &result->mlh_Head);
+        read(addr + 4,  &result->mlh_Tail);
+        read(addr + 8,  &result->mlh_TailPred);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, os::Message *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr + 0,  &result->mn_Node);
+        read(addr + 14, &result->mn_ReplyPort);
+        read(addr + 18, &result->mn_Length);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, os::MsgPort *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr + 0,  &result->mp_Node);
+        read(addr + 14, &result->mp_Flags);
+        read(addr + 15, &result->mp_SigBit);
+        read(addr + 16, &result->mp_SigTask);
+        read(addr + 20, &result->mp_MsgList);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, os::Node *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr +  0, &result->ln_Succ);
+        read(addr +  4, &result->ln_Pred);
+        read(addr +  8, &result->ln_Type);
+        read(addr +  9, &result->ln_Pri);
+        read(addr + 10, &result->ln_Name);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, os::Process *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr + 0,   &result->pr_Task);
+        read(addr + 92,  &result->pr_MsgPort);
+        read(addr + 126, &result->pr_Pad);
+        read(addr + 128, &result->pr_SegList);
+        read(addr + 132, &result->pr_StackSize);
+        read(addr + 136, &result->pr_GlobVec);
+        read(addr + 140, &result->pr_TaskNum);
+        read(addr + 144, &result->pr_StackBase);
+        read(addr + 148, &result->pr_Result2);
+        read(addr + 152, &result->pr_CurrentDir);
+        read(addr + 156, &result->pr_CIS);
+        read(addr + 160, &result->pr_COS);
+        read(addr + 164, &result->pr_ConsoleTask);
+        read(addr + 168, &result->pr_FileSystemTask);
+        read(addr + 172, &result->pr_CLI);
+        read(addr + 176, &result->pr_ReturnAddr);
+        read(addr + 180, &result->pr_PktWait);
+        read(addr + 184, &result->pr_WindowPtr);
+        read(addr + 188, &result->pr_HomeDir);
+        read(addr + 192, &result->pr_Flags);
+        read(addr + 196, &result->pr_ExitCode);
+        read(addr + 200, &result->pr_ExitData);
+        read(addr + 204, &result->pr_Arguments);
+        read(addr + 208, &result->pr_LocalVars);
+        read(addr + 220, &result->pr_ShellPrivate);
+        read(addr + 224, &result->pr_CES);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, os::SoftIntList *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr + 0,  &result->sh_List);
+        read(addr + 4,  &result->sh_Pad);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, os::Task *result) const
+{
+    if (isValidPtr(addr)) {
+        
+    result->addr = addr;
+        
+        read(addr + 0,  &result->tc_Node);
+        read(addr + 14, &result->tc_Flags);
+        read(addr + 15, &result->tc_State);
+        read(addr + 16, &result->tc_IDNestCnt);
+        read(addr + 17, &result->tc_TDNestCnt);
+        read(addr + 18, &result->tc_SigAlloc);
+        read(addr + 22, &result->tc_SigWait);
+        read(addr + 26, &result->tc_SigRecvd);
+        read(addr + 30, &result->tc_SigExcept);
+        read(addr + 34, &result->tc_TrapAlloc);
+        read(addr + 36, &result->tc_TrapAble);
+        read(addr + 38, &result->tc_ExceptData);
+        read(addr + 42, &result->tc_ExceptCode);
+        read(addr + 46, &result->tc_TrapData);
+        read(addr + 50, &result->tc_TrapCode);
+        read(addr + 54, &result->tc_SPReg);
+        read(addr + 58, &result->tc_SPLower);
+        read(addr + 62, &result->tc_SPUpper);
+        read(addr + 66, &result->tc_Switch);
+        read(addr + 70, &result->tc_Launch);
+        read(addr + 74, &result->tc_MemEntry);
+        read(addr + 88, &result->tc_UserData);
+    }
+}
+
+//
+//
+//
 
 void
 OSDebugger::read(std::vector <os::Task> &result) const

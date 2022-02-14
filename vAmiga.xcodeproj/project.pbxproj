@@ -405,6 +405,7 @@
 		507215A525EA9DD900787591 /* RingBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RingBuffer.h; sourceTree = "<group>"; };
 		507215B025EAF62B00787591 /* Aliases.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Aliases.h; sourceTree = "<group>"; };
 		5072CAF92456D1C800C8F606 /* AudioConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConf.swift; sourceTree = "<group>"; };
+		5073C59527BA79B200A9EF6F /* HardDriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardDriveTypes.h; sourceTree = "<group>"; };
 		507653CA2216F91E001D26E9 /* AgnusPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgnusPanel.swift; sourceTree = "<group>"; };
 		507653CC2216F938001D26E9 /* DenisePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenisePanel.swift; sourceTree = "<group>"; };
 		50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DmaDebuggerTypes.h; sourceTree = "<group>"; };
@@ -950,6 +951,7 @@
 				502023E827B6BDEA00820DB6 /* ZorroBoard.cpp */,
 				502023EC27B6BE7200820DB6 /* RamExpansion.h */,
 				502023EB27B6BE7200820DB6 /* RamExpansion.cpp */,
+				5073C59527BA79B200A9EF6F /* HardDriveTypes.h */,
 				508AC36827B7F6FC006AD2E7 /* HardDrive.h */,
 				508AC36727B7F6FC006AD2E7 /* HardDrive.cpp */,
 			);

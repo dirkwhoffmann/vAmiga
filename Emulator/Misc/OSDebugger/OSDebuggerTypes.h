@@ -120,7 +120,6 @@ typedef enum PrFlags
     PRF_CLOSEINPUT  = 1 << 3,
     PRF_CLOSEOUTPUT = 1 << 4,
     PRF_FREEARGS    = 1 << 5
-
 }
 PrFlags;
 
@@ -129,7 +128,7 @@ PrFlags;
 // Structures
 //
 
-struct Node
+typedef struct Node
 {
     u32     addr;
     
@@ -138,87 +137,18 @@ struct Node
     u8      ln_Type;                // 8
     i8      ln_Pri;                 // 9
     u32     ln_Name;                // 10
-};
+}
+Node;
 
-typedef struct Library
+typedef struct Message
 {
     u32     addr;
 
-    struct  Node lib_Node;          // 0
-    u8      lib_Flags;              // 14
-    u8      lib_pad;                // 15
-    u16     lib_NegSize;            // 16
-    u16     lib_PosSize;            // 18
-    u16     lib_Version;            // 20
-    u16     lib_Revision;           // 22
-    u32     lib_IdString;           // 24
-    u32     lib_Sum;                // 28
-    u16     lib_OpenCnt;            // 32
+    struct  Node mn_Node;           // 0
+    u32     mn_ReplyPort;           // 14
+    u16     mn_Length;              // 18
 }
-Library;
-
-typedef struct Interrupt
-{
-    u32     addr;
-
-    struct  Node is_Node;           // 0
-    u32     is_Data;                // 14
-    u32     is_Code;                // 18
-}
-Interrupt;
-
-typedef struct IntVector
-{
-    u32     addr;
-
-    u32     iv_Data;                // 0
-    u32     iv_Code;                // 4
-    u32     iv_Node;                // 8
-}
-IntVector;
-
-typedef struct List
-{
-    u32     addr;
-
-    u32     lh_Head;                // 0
-    u32     lh_Tail;                // 4
-    u32     lh_TailPred;            // 8
-    u8      lh_Type;                // 12
-    u8      lh_pad;                 // 13
-}
-List;
-
-typedef struct MinList
-{
-    u32     addr;
-    
-    u32      mlh_Head;               // 0
-    u32      mlh_Tail;               // 4
-    u32      mlh_TailPred;           // 8
-}
-MinList;
-
-typedef struct SoftIntList
-{
-    u32     addr;
-
-    struct  List sh_List;           // 0
-    u16     sh_Pad;                 // 4
-}
-SoftIntList;
-
-typedef struct MsgPort
-{
-    u32     addr;
-
-    struct  Node mp_Node;           // 0
-    u8      mp_Flags;               // 14
-    u8      mp_SigBit;              // 15
-    u32     mp_SigTask;             // 16
-    struct  List mp_MsgList;        // 20
-}
-MsgPort;
+Message;
 
 typedef struct CommandLineInterface
 {
@@ -242,6 +172,103 @@ typedef struct CommandLineInterface
     u32     cli_Module;             // 60
 }
 CommandLineInterface;
+
+typedef struct Interrupt
+{
+    u32     addr;
+
+    struct  Node is_Node;           // 0
+    u32     is_Data;                // 14
+    u32     is_Code;                // 18
+}
+Interrupt;
+
+typedef struct IntVector
+{
+    u32     addr;
+
+    u32     iv_Data;                // 0
+    u32     iv_Code;                // 4
+    u32     iv_Node;                // 8
+}
+IntVector;
+
+typedef struct IOStdReq
+{
+    u32     addr;
+    
+    struct  Message io_Message;     // 0
+    u32     io_Device;              // 20
+    u32     io_Unit;                // 24
+    u16     io_Command;             // 28
+    u8      io_Flags;               // 30
+    i8      io_Error;               // 31
+    u32     io_Actual;              // 32
+    u32     io_Length;              // 36
+    u32     io_Data;                // 40
+    u32     io_Offset;              // 44
+}
+IOStdReq;
+
+typedef struct Library
+{
+    u32     addr;
+
+    struct  Node lib_Node;          // 0
+    u8      lib_Flags;              // 14
+    u8      lib_pad;                // 15
+    u16     lib_NegSize;            // 16
+    u16     lib_PosSize;            // 18
+    u16     lib_Version;            // 20
+    u16     lib_Revision;           // 22
+    u32     lib_IdString;           // 24
+    u32     lib_Sum;                // 28
+    u16     lib_OpenCnt;            // 32
+}
+Library;
+
+typedef struct List
+{
+    u32     addr;
+
+    u32     lh_Head;                // 0
+    u32     lh_Tail;                // 4
+    u32     lh_TailPred;            // 8
+    u8      lh_Type;                // 12
+    u8      lh_pad;                 // 13
+}
+List;
+
+typedef struct MinList
+{
+    u32     addr;
+    
+    u32      mlh_Head;               // 0
+    u32      mlh_Tail;               // 4
+    u32      mlh_TailPred;           // 8
+}
+MinList;
+
+typedef struct MsgPort
+{
+    u32     addr;
+
+    struct  Node mp_Node;           // 0
+    u8      mp_Flags;               // 14
+    u8      mp_SigBit;              // 15
+    u32     mp_SigTask;             // 16
+    struct  List mp_MsgList;        // 20
+}
+MsgPort;
+
+typedef struct SoftIntList
+{
+    u32     addr;
+
+    struct  List sh_List;           // 0
+    u16     sh_Pad;                 // 4
+}
+SoftIntList;
 
 typedef struct Task
 {

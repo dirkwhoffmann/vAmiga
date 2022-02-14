@@ -110,9 +110,11 @@ public:
     void read(u32 addr, os::ExecBase *result) const;
     void read(u32 addr, os::Interrupt *result) const;
     void read(u32 addr, os::IntVector *result) const;
+    void read(u32 addr, os::IOStdReq *result) const;
     void read(u32 addr, os::Library *result) const;
     void read(u32 addr, os::List *result) const;
     void read(u32 addr, os::MinList *result) const;
+    void read(u32 addr, os::Message *result) const;
     void read(u32 addr, os::MsgPort *result) const;
     void read(u32 addr, os::Node *result) const;
     void read(u32 addr, os::Process *result) const;
