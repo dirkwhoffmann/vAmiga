@@ -14,8 +14,12 @@
 #include "HDFFile.h"
 
 class HardDrive : public ZorroBoard {
-            
+    
     HDFFile *hdf = nullptr;
+    
+    // Pointer to a IOStdReq struct
+    u32 stdReqPtr = 0;
+    
     
     //
     // Constructing
@@ -58,7 +62,8 @@ private:
             worker
             
             << state
-            << baseAddr;
+            << baseAddr
+            << stdReqPtr;
         }
     }
     
@@ -94,4 +99,9 @@ public:
     u16 spypeek16(u32 addr) const { return peek16(addr); }
     void poke8(u32 addr, u8 value);
     void poke16(u32 addr, u16 value);
+    
+private:
+    
+    void processInit();
+    void processCmd();
 };

@@ -11,6 +11,7 @@
 #include "HardDrive.h"
 #include "HDFFile.h"
 #include "Memory.h"
+#include "OSDebugger.h"
 
 /* Auto boot driver from AmiEmu. Written by mras0.
  * https://github.com/mras0/AmiEmu/blob/master/exprom.asm
@@ -83,15 +84,10 @@ HardDrive::HardDrive(Amiga& ref) : ZorroBoard(ref)
         hdf = new HDFFile(INITIAL_HDF);
     
         debug(true, "HDF file loaded successfully\n");
-        hdf->layout().dump();
-
-        state = STATE_AUTOCONF;
 
     } catch (...) {
         
         debug(true, "Cannot open HDF file %s\n", INITIAL_HDF);
-        
-        state = STATE_AUTOCONF;
     }
     
 #endif
@@ -116,9 +112,28 @@ HardDrive::_reset(bool hard)
 
     if (hard) {
 
-        // state = STATE_SHUTUP;
-        state = STATE_AUTOCONF;
+        if (hdf) {
+
+            state = STATE_AUTOCONF;
+            debug(true, "Hard drive emulation enabled.\n");
+            hdf->layout().dump();
+
+        } else {
+            
+            state = STATE_SHUTUP;
+            debug(true, "Hard drive emulation disabled. No HDF.\n");
+        }
     }
+}
+
+void
+HardDrive::updateMemSrcTables()
+{
+    // Only proceed if this board has been configured
+    if (baseAddr == 0) return;
+    
+    // Map in this device
+    mem.cpuMemSrc[firstPage()] = MEM_HDR;
 }
 
 u8
@@ -147,8 +162,6 @@ void
 HardDrive::poke8(u32 addr, u8 value)
 {
     trace(HDR_DEBUG, "poke8(%06x,%02x)\n", addr, value);
-    
-    // TODO
 }
 
 void
@@ -156,15 +169,94 @@ HardDrive::poke16(u32 addr, u16 value)
 {
     trace(HDR_DEBUG, "poke16(%06x,%04x)\n", addr, value);
     
-    // TODO
+    isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
+
+    switch (offset) {
+            
+        case sizeof(exprom):
+            
+            stdReqPtr = REPLACE_HI_WORD(stdReqPtr, value);
+            break;
+            
+        case sizeof(exprom) + 2:
+
+            stdReqPtr = REPLACE_LO_WORD(stdReqPtr, value);
+            break;
+
+        case sizeof(exprom) + 4:
+            
+            switch (value) {
+                    
+                case 0xfede:
+                    
+                    processInit();
+                    break;
+                    
+                case 0xfedf:
+                    
+                    processCmd();
+                    break;
+                    
+                default:
+                    
+                    debug(HDR_DEBUG, "Invalid value: %x\n", value);
+                    break;
+            }
+            break;
+
+        default:
+
+            debug(HDR_DEBUG, "Invalid addr: %x\n", addr);
+            break;
+    }
 }
 
 void
-HardDrive::updateMemSrcTables()
+HardDrive::processInit()
 {
-    // Only proceed if this board has been configured
-    if (baseAddr == 0) return;
+    trace(HDR_DEBUG, "processInit(%x)\n", stdReqPtr);
+
+    // Collect hard drive information
+    auto layout = hdf->layout();
+    u32 sizeBlock = (u32)(layout.bsize / 4);
+    u32 numHeads = (u32)(layout.numHeads);
+    u32 blkTrack = (u32)(layout.numSectors);
+    u32 upperCyl = (u32)(layout.numCyls - 1);
     
-    // Map in this device
-    mem.cpuMemSrc[firstPage()] = MEM_HDR;
+    // Patch Rom code
+    /*
+    constexpr uint16_t devn_sizeBlock = 0x14; // number of longwords in a block
+    constexpr uint16_t devn_numHeads  = 0x1C; // number of surfaces
+    constexpr uint16_t devn_blkTrack  = 0x24; // secs per track
+    constexpr uint16_t devn_upperCyl  = 0x38; // upper cylinder
+    */
+    debug(true, "sizeBlock = %d\n", sizeBlock);
+    debug(true, "numHeads = %d\n", numHeads);
+    debug(true, "blkTrack = %d\n", blkTrack);
+    debug(true, "upperCyl = %d\n", upperCyl);
+
+    /*
+    auto rom = stdReqPtr;
+    mem.poke16<ACCESSOR_CPU>(rom + devn_sizeBlock, HI_WORD(sizeBlock));
+    mem.poke16<ACCESSOR_CPU>(rom + devn_sizeBlock + 2, LO_WORD(sizeBlock));
+    mem.poke16<ACCESSOR_CPU>(rom + devn_numHeads, HI_WORD(numHeads));
+    mem.poke16<ACCESSOR_CPU>(rom + devn_numHeads + 2, LO_WORD(numHeads));
+    mem.poke16<ACCESSOR_CPU>(rom + devn_blkTrack, HI_WORD(blkTrack));
+    mem.poke16<ACCESSOR_CPU>(rom + devn_blkTrack + 2, LO_WORD(blkTrack));
+    mem.poke16<ACCESSOR_CPU>(rom + devn_upperCyl, HI_WORD(upperCyl));
+    mem.poke16<ACCESSOR_CPU>(rom + devn_upperCyl + 2, LO_WORD(upperCyl));
+    */
+}
+
+void
+HardDrive::processCmd()
+{
+    trace(HDR_DEBUG, "processCmd(%x)\n", stdReqPtr);
+    
+    os::IOStdReq stdReq;
+    
+    osDebugger.read(stdReqPtr, &stdReq);
+    auto cmd = (IoCommand)stdReq.io_Command;
+    
+    debug(true, "command = %s\n", IoCommandEnum::key(cmd));
 }

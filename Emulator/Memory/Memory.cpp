@@ -1224,10 +1224,7 @@ Memory::peek16 <ACCESSOR_CPU, MEM_HDR> (u32 addr)
 template<> u16
 Memory::spypeek16 <ACCESSOR_CPU, MEM_HDR> (u32 addr) const
 {
-    auto hi = zorro.hardDrive.spypeek16(addr);
-    auto lo = zorro.hardDrive.spypeek16(addr + 1);
-    
-    return HI_LO(hi,lo);
+    return zorro.hardDrive.spypeek16(addr);
 }
 
 template<> u8
