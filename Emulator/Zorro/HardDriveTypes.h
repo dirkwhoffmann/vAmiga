@@ -13,10 +13,32 @@
 #include "Reflection.h"
 
 //
+// Constants
+//
+
+// Constants from exec/errors.h
+constexpr int8_t    IOERR_OPENFAIL      = -1;
+constexpr int8_t    IOERR_ABORTED       = -2;
+constexpr int8_t    IOERR_NOCMD         = -3;
+constexpr int8_t    IOERR_BADLENGTH     = -4;
+constexpr int8_t    IOERR_BADADDRESS    = -5;
+constexpr int8_t    IOERR_UNITBUSY      = -6;
+constexpr int8_t    IOERR_SELFTEST      = -7;
+
+// Offsets into the IOStdReq struct
+constexpr uint32_t  IO_COMMAND          = 0x1C;
+constexpr uint32_t  IO_ERROR            = 0x1F;
+constexpr uint32_t  IO_ACTUAL           = 0x20;
+constexpr uint32_t  IO_LENGTH           = 0x24;
+constexpr uint32_t  IO_DATA             = 0x28;
+constexpr uint32_t  IO_OFFSET           = 0x2C;
+
+
+//
 // Enumerations
 //
 
-enum_long(IO_COMMAND)
+enum_long(IO_CMD)
 {
     // Standard commands
     CMD_INVALID,            // 0
@@ -47,7 +69,7 @@ enum_long(IO_COMMAND)
     CMD_TD_EJECT,           // 23
     CMD_TD_LASTCOMM         // 24
 };
-typedef IO_COMMAND IoCommand;
+typedef IO_CMD IoCommand;
 
 #ifdef __cplusplus
 struct IoCommandEnum : util::Reflection<IoCommandEnum, IoCommand>

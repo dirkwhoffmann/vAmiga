@@ -142,7 +142,7 @@ HardDrive::peek8(u32 addr) const
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
     u8 result = (usize)offset < sizeof(exprom) ? exprom[offset] : 0;
 
-    trace(HDR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
+    // trace(HDR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
     return result;
 }
 
@@ -154,20 +154,20 @@ HardDrive::peek16(u32 addr) const
 
     u16 result = HI_LO(hi,lo);
 
-    trace(HDR_DEBUG, "peek16(%06x) = %04x\n", addr, result);
+    // trace(HDR_DEBUG, "peek16(%06x) = %04x\n", addr, result);
     return result;
 }
 
 void
 HardDrive::poke8(u32 addr, u8 value)
 {
-    trace(HDR_DEBUG, "poke8(%06x,%02x)\n", addr, value);
+    // trace(HDR_DEBUG, "poke8(%06x,%02x)\n", addr, value);
 }
 
 void
 HardDrive::poke16(u32 addr, u16 value)
 {
-    trace(HDR_DEBUG, "poke16(%06x,%04x)\n", addr, value);
+    // trace(HDR_DEBUG, "poke16(%06x,%04x)\n", addr, value);
     
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
 
@@ -175,12 +175,12 @@ HardDrive::poke16(u32 addr, u16 value)
             
         case sizeof(exprom):
             
-            stdReqPtr = REPLACE_HI_WORD(stdReqPtr, value);
+            pointer = REPLACE_HI_WORD(pointer, value);
             break;
             
         case sizeof(exprom) + 2:
 
-            stdReqPtr = REPLACE_LO_WORD(stdReqPtr, value);
+            pointer = REPLACE_LO_WORD(pointer, value);
             break;
 
         case sizeof(exprom) + 4:
@@ -189,12 +189,12 @@ HardDrive::poke16(u32 addr, u16 value)
                     
                 case 0xfede:
                     
-                    processInit();
+                    processCmd();
                     break;
                     
                 case 0xfedf:
                     
-                    processCmd();
+                    processInit();
                     break;
                     
                 default:
@@ -214,7 +214,7 @@ HardDrive::poke16(u32 addr, u16 value)
 void
 HardDrive::processInit()
 {
-    trace(HDR_DEBUG, "processInit(%x)\n", stdReqPtr);
+    trace(HDR_DEBUG, "processInit(%x)\n", pointer);
 
     // Collect hard drive information
     auto layout = hdf->layout();
@@ -223,20 +223,17 @@ HardDrive::processInit()
     u32 blkTrack = (u32)(layout.numSectors);
     u32 upperCyl = (u32)(layout.numCyls - 1);
     
-    // Patch Rom code
-    /*
     constexpr uint16_t devn_sizeBlock = 0x14; // number of longwords in a block
     constexpr uint16_t devn_numHeads  = 0x1C; // number of surfaces
     constexpr uint16_t devn_blkTrack  = 0x24; // secs per track
     constexpr uint16_t devn_upperCyl  = 0x38; // upper cylinder
-    */
+
     debug(true, "sizeBlock = %d\n", sizeBlock);
     debug(true, "numHeads = %d\n", numHeads);
     debug(true, "blkTrack = %d\n", blkTrack);
     debug(true, "upperCyl = %d\n", upperCyl);
 
-    /*
-    auto rom = stdReqPtr;
+    auto rom = pointer;
     mem.poke16<ACCESSOR_CPU>(rom + devn_sizeBlock, HI_WORD(sizeBlock));
     mem.poke16<ACCESSOR_CPU>(rom + devn_sizeBlock + 2, LO_WORD(sizeBlock));
     mem.poke16<ACCESSOR_CPU>(rom + devn_numHeads, HI_WORD(numHeads));
@@ -245,18 +242,90 @@ HardDrive::processInit()
     mem.poke16<ACCESSOR_CPU>(rom + devn_blkTrack + 2, LO_WORD(blkTrack));
     mem.poke16<ACCESSOR_CPU>(rom + devn_upperCyl, HI_WORD(upperCyl));
     mem.poke16<ACCESSOR_CPU>(rom + devn_upperCyl + 2, LO_WORD(upperCyl));
-    */
 }
 
 void
 HardDrive::processCmd()
 {
-    trace(HDR_DEBUG, "processCmd(%x)\n", stdReqPtr);
+    trace(HDR_DEBUG, "processCmd(%x)\n", pointer);
     
     os::IOStdReq stdReq;
     
-    osDebugger.read(stdReqPtr, &stdReq);
+    osDebugger.read(pointer, &stdReq);
     auto cmd = (IoCommand)stdReq.io_Command;
     
     debug(true, "command = %s\n", IoCommandEnum::key(cmd));
+
+    switch (cmd) {
+            
+        case CMD_READ:
+        case CMD_WRITE:
+        case CMD_TD_FORMAT:
+            
+            if (stdReq.io_Offset + stdReq.io_Length > hdf->size) {
+                
+                warn("Offset out of bounds\n");
+                mem.poke8 <ACCESSOR_CPU> (pointer + IO_ERROR, (u8)IOERR_BADADDRESS);
+                return;
+            }
+            if (stdReq.io_Offset % 512) {
+                
+                warn("Offset not aligned\n");
+                mem.poke8 <ACCESSOR_CPU> (pointer + IO_ERROR, (u8)IOERR_BADADDRESS);
+                return;
+            }
+            if (stdReq.io_Length % 512) {
+                
+                warn("Length mismatch\n");
+                mem.poke8 <ACCESSOR_CPU> (pointer + IO_ERROR, (u8)IOERR_BADADDRESS);
+                return;
+            }
+            if (cmd == CMD_READ) {
+                
+                debug(true, "Reading %u bytes from %x to %x\n",
+                      stdReq.io_Length, stdReq.io_Offset, stdReq.io_Data);
+                
+                for (isize i = 0; i < stdReq.io_Length; i++) {
+                    mem.poke8 <ACCESSOR_CPU> ((u32)(stdReq.io_Data + i),
+                                              hdf->data[stdReq.io_Offset + i]);
+                }
+                return;
+            }
+            if (cmd == CMD_WRITE || cmd == CMD_TD_FORMAT) {
+                
+                debug(true, "Writing %u bytes from %x to %x\n",
+                      stdReq.io_Length, stdReq.io_Data, stdReq.io_Offset);
+
+                for (isize i = 0; i < stdReq.io_Length; i++) {
+                    hdf->data[stdReq.io_Offset + i] = mem.spypeek8 <ACCESSOR_CPU> ((u32)(stdReq.io_Data + i));
+                }
+                return;
+            }
+            break;
+            
+        case CMD_RESET:
+        case CMD_UPDATE:
+        case CMD_CLEAR:
+        case CMD_STOP:
+        case CMD_START:
+        case CMD_FLUSH:
+        case CMD_TD_MOTOR:
+        case CMD_TD_SEEK:
+        case CMD_TD_REMOVE:
+        case CMD_TD_CHANGENUM:
+        case CMD_TD_CHANGESTATE:
+        case CMD_TD_PROTSTATUS:
+        case CMD_TD_ADDCHANGEINT:
+        case CMD_TD_REMCHANGEINT:
+            
+            mem.poke16 <ACCESSOR_CPU> (pointer + IO_ACTUAL, 0);
+            mem.poke16 <ACCESSOR_CPU> (pointer + IO_ACTUAL + 2, 0);
+            mem.poke8 <ACCESSOR_CPU> (pointer + IO_ERROR, 0);
+            break;
+            
+        default:
+            
+            warn("Unsupported command: %lx\n", cmd);
+            mem.poke8 <ACCESSOR_CPU> (pointer + IO_ERROR, (u8)IOERR_NOCMD);
+    }
 }

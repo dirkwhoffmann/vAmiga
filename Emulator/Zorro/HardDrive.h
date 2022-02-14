@@ -17,8 +17,8 @@ class HardDrive : public ZorroBoard {
     
     HDFFile *hdf = nullptr;
     
-    // Pointer to a IOStdReq struct
-    u32 stdReqPtr = 0;
+    // Transmitted pointer
+    u32 pointer = 0;
     
     
     //
@@ -63,7 +63,7 @@ private:
             
             << state
             << baseAddr
-            << stdReqPtr;
+            << pointer;
         }
     }
     
