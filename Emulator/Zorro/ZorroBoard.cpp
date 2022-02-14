@@ -37,9 +37,27 @@ ZorroBoard::getDescriptorByte(isize offset) const
 {
     assert((usize)offset <= 15);
         
+    auto sizeBits = [&]() {
+        
+        switch (pages()) {
+                
+            case 0x01: return (u8)0b001;
+            case 0x02: return (u8)0b010;
+            case 0x04: return (u8)0b011;
+            case 0x08: return (u8)0b100;
+            case 0x10: return (u8)0b101;
+            case 0x20: return (u8)0b110;
+            case 0x40: return (u8)0b111;
+            case 0x80: return (u8)0b000;
+                
+            default:
+                fatalError;
+        }
+    };
+    
     switch (offset) {
             
-        case 0x0: return type();
+        case 0x0: return type() | sizeBits();
         case 0x1: return product();
         case 0x2: return flags();
         case 0x3: return 0;
@@ -76,14 +94,14 @@ ZorroBoard::peekAutoconf8(u32 addr) const
         result = 0x00;
     }
     
-    trace(ACG_DEBUG, "peekAutoconf8(%06x) = %02x\n", offset, result);
+    trace(ZOR_DEBUG, "peekAutoconf8(%06x) = %02x\n", offset, result);
     return result;
 }
 
 void
 ZorroBoard::pokeAutoconf8(u32 addr, u8 value)
 {
-    trace(ACG_DEBUG, "pokeAutoconf8(%06x,%02x)\n", addr, value);
+    trace(ZOR_DEBUG, "pokeAutoconf8(%06x,%02x)\n", addr, value);
     
     switch (addr & 0xFFFF) {
                         
@@ -97,7 +115,7 @@ ZorroBoard::pokeAutoconf8(u32 addr, u8 value)
             // Update the memory map
             mem.updateMemSrcTables();
 
-            trace(ACG_DEBUG, "Device mapped to $%06x\n", baseAddr);
+            trace(ZOR_DEBUG, "Device mapped to $%06x\n", baseAddr);
             return;
             
         case 0x4A: // ec_BaseAddress (A19 - A16, 0x---X0000)

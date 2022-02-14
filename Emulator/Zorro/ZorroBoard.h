@@ -50,19 +50,20 @@ protected:
 public:
     
     // Returns basic board properties
-    virtual u8 type() const { return 0; }
-    virtual u8 product() const { return 0; }
-    virtual u8 flags() const { return 0; }
-    virtual u16 manufacturer() const { return 0; }
-    virtual u32 serialNumber() const { return 0; }
-    virtual u16 initDiagVec() const { return 0; }
+    virtual isize pages() const = 0;
+    virtual u8 type() const = 0;
+    virtual u8 product() const = 0;
+    virtual u8 flags() const = 0;
+    virtual u16 manufacturer() const = 0;
+    virtual u32 serialNumber() const = 0;
+    virtual u16 initDiagVec() const = 0;
     
 private:
     
     // Reads a single byte from configuration space
     u8 getDescriptorByte(isize offset) const;
     
-    
+
     //
     // Configuring (AutoConfig)
     //

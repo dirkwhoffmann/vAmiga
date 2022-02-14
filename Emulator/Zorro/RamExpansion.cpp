@@ -35,28 +35,10 @@ RamExpansion::_reset(bool hard)
     }
 }
 
-u8
-RamExpansion::type() const
+isize
+RamExpansion::pages() const
 {
-    u8 result = ERT_ZORROII | ERTF_MEMLIST;
- 
-    switch (mem.fastRamSize()) {
-            
-        case KB(64):  result |= 0b001; break;
-        case KB(128): result |= 0b010; break;
-        case KB(256): result |= 0b011; break;
-        case KB(512): result |= 0b100; break;
-        case MB(1):   result |= 0b101; break;
-        case MB(2):   result |= 0b110; break;
-        case MB(4):   result |= 0b111; break;
-        case MB(8):   result |= 0b000; break;
-            
-        default:
-            fatalError;
-    }
-    
-    assert(HI_NIBBLE(result) == 0xE);
-    return result;
+    return mem.fastRamSize() / KB(64);
 }
 
 void

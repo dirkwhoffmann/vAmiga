@@ -71,7 +71,8 @@ private:
     // Methods from ZorroBoard
     //
     
-    virtual u8 type() const override            { return ERT_ZORROII | ERTF_DIAGVALID | 1; }
+    virtual isize pages() const override        { return 1; }
+    virtual u8 type() const override            { return ERT_ZORROII | ERTF_DIAGVALID; }
     virtual u8 product() const override         { return 0x88; }
     virtual u8 flags() const override           { return 0x00; }
     virtual u16 manufacturer() const override   { return 0x0539; }
