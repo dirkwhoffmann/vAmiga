@@ -1218,7 +1218,7 @@ template<> u16
 Memory::peek16 <ACCESSOR_CPU, MEM_HDR> (u32 addr)
 {
     dataBus = (u16)(zorro.hardDrive.peek16(addr));
-    return (u8)dataBus;
+    return (u16)dataBus;
 }
 
 template<> u16
