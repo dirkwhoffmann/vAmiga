@@ -22,13 +22,18 @@ class HardDrive : public ZorroBoard {
     
     
     //
-    // Constructing
+    // Initializing
     //
     
 public:
-        
+    
     HardDrive(Amiga& ref);
-        
+
+    void init(const HDFFile *hdf) throws;
+    void init(const HDFFile *hdf, isize c, isize h, isize s) throws;
+    void init(isize c, isize h, isize s) throws;
+    void init(isize capacity) throws;
+                
     
     //
     // Methods from AmigaObject

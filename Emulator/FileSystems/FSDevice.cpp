@@ -32,10 +32,10 @@ FSDevice::init(FSDeviceDescriptor &layout)
     if constexpr (FS_DEBUG) { layout.dump(); }
     
     // Copy layout parameters from descriptor
-    numCyls    = layout.numCyls;
-    numHeads   = layout.numHeads;
-    numSectors = layout.numSectors;
-    bsize      = layout.bsize;
+    numCyls    = layout.geometry.cylinders;
+    numHeads   = layout.geometry.heads;
+    numSectors = layout.geometry.sectors;
+    bsize      = layout.geometry.bsize;
     numBlocks  = layout.numBlocks;
         
     // Create all partitions

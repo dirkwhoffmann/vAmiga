@@ -11,9 +11,34 @@
 #include "FSDescriptors.h"
 #include "IOUtils.h"
 
-FSDeviceDescriptor::FSDeviceDescriptor()
+DiskGeometry::DiskGeometry(DiskDiameter type, DiskDensity density)
 {
+    if (type == INCH_525 && density == DISK_DD) {
+        
+        cylinders = 40;
+        heads = 2;
+        sectors = 11;
+        bsize = 512;
+        return;
+    }
+    if (type == INCH_35 && density == DISK_DD) {
+        
+        cylinders = 80;
+        heads = 2;
+        sectors = 11;
+        bsize = 512;
+        return;
+    }
+    if (type == INCH_35 && density == DISK_HD) {
+        
+        cylinders = 80;
+        heads = 2;
+        sectors = 22;
+        bsize = 512;
+        return;
+    }
     
+    fatalError;
 }
 
 FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, FSVolumeType dos)
@@ -21,29 +46,17 @@ FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, F
     /* TODO: REPLACE BY init(...)
      * Then, add init(isize numCyls, isize numSectors, FSVolumeType dos) and call it
      */
-    if (type == INCH_525 && density == DISK_DD) {
-        numCyls = 40; numSectors = 11;
-
-    } else if (type == INCH_35 && density == DISK_DD) {
-        numCyls = 80; numSectors = 11;
     
-    } else if (type == INCH_35 && density == DISK_HD) {
-        numCyls = 80; numSectors = 22;
+    geometry = DiskGeometry(type, density);
 
-    } else {
-        fatalError;
-    }
-
-    numHeads    = 2;
-    numBlocks   = numCyls * numHeads * numSectors;
+    numBlocks = geometry.blocks();
     numReserved = 2;
-    bsize       = 512;
     
     // Determine the location of the root block and the bitmap block
-    Block root   = (Block)(numBlocks / 2);
+    Block root = (Block)(numBlocks / 2);
     Block bitmap = root + 1;
 
-    partitions.push_back(FSPartitionDescriptor(dos, 0, numCyls - 1, root));
+    partitions.push_back(FSPartitionDescriptor(dos, 0, geometry.upperCyl(), root));
     partitions[0].bmBlocks.push_back(bitmap);
 }
 
@@ -55,17 +68,17 @@ FSDeviceDescriptor::_dump(dump::Category category, std::ostream& os) const
     if (category & dump::State) {
         
         os << tab("Cylinders");
-        os << dec(numCyls) << std::endl;
+        os << dec(geometry.cylinders) << std::endl;
         os << tab("Heads");
-        os << dec(numHeads) << std::endl;
+        os << dec(geometry.heads) << std::endl;
         os << tab("Sectors");
-        os << dec(numSectors) << std::endl;
+        os << dec(geometry.sectors) << std::endl;
+        os << tab("BSize");
+        os << dec(geometry.bsize) << std::endl;
         os << tab("Blocks");
         os << dec(numBlocks) << std::endl;
         os << tab("Reserved");
         os << dec(numReserved) << std::endl;
-        os << tab("BSize");
-        os << dec(bsize) << std::endl;
     
         for (auto& p : partitions) { p.dump(category, os); }
     }

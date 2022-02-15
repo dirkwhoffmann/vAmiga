@@ -28,17 +28,33 @@
  * extracted directly from an ADF or HDF.
  */
 
+struct DiskGeometry {
+  
+    isize cylinders = 0;
+    isize heads = 0;
+    isize sectors = 0;
+    isize bsize = 0;
+    
+    DiskGeometry() { };
+    DiskGeometry(DiskDiameter type, DiskDensity density);
+
+    isize blocks() { return cylinders * heads * sectors; }
+    isize bytes() { return bsize * blocks(); }
+    isize upperCyl() { return cylinders - 1; }
+};
+
 struct FSDeviceDescriptor : AmigaObject {
     
-    // Physical device parameters
+    /*
     isize numCyls = 0;
     isize numHeads = 0;
-        
-    // Logical device parameters
     isize numSectors = 0;
+    isize bsize = 0;
+    */
+    DiskGeometry geometry;
+    
     i64 numBlocks = 0;
     isize numReserved = 0;
-    isize bsize = 0;
     
     // Partition parameters
     std::vector<struct FSPartitionDescriptor> partitions;
@@ -48,7 +64,7 @@ struct FSDeviceDescriptor : AmigaObject {
     // Initializing
     //
     
-    FSDeviceDescriptor();
+    FSDeviceDescriptor() { };
     FSDeviceDescriptor(DiskDiameter type, DiskDensity density, FSVolumeType dos = FS_OFS);
 
     const char *getDescription() const override { return "FSLayout"; }

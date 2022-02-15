@@ -86,12 +86,12 @@ HDFFile::layout()
 {
     FSDeviceDescriptor result;
     
-    result.numCyls     = numCyls();
-    result.numHeads    = numSides();
-    result.numSectors  = numSectors();
+    result.geometry.cylinders = numCyls();
+    result.geometry.heads = numSides();
+    result.geometry.sectors = numSectors();
+    result.geometry.bsize = bsize();
+    result.numBlocks = result.geometry.blocks();
     result.numReserved = numReserved();
-    result.bsize       = bsize();
-    result.numBlocks   = result.numCyls * result.numHeads * result.numSectors;
 
     // Determine the location of the root block
     i64 highKey = result.numBlocks - 1;
@@ -100,7 +100,7 @@ HDFFile::layout()
     // Add partition
     result.partitions.push_back(FSPartitionDescriptor(dos(0),
                                                       0,
-                                                      result.numCyls - 1,
+                                                      result.geometry.upperCyl(),
                                                       (Block)rootKey));
 
     // Seek bitmap blocks

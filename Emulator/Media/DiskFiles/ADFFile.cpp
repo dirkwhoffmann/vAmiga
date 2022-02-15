@@ -177,12 +177,12 @@ ADFFile::layout()
 {
     FSDeviceDescriptor result;
     
-    result.numCyls     = numCyls();
-    result.numHeads    = numSides();
-    result.numSectors  = numSectors();
+    result.geometry.cylinders = numCyls();
+    result.geometry.heads = numSides();
+    result.geometry.sectors = numSectors();
+    result.geometry.bsize = 512;
+    result.numBlocks = numCyls() * numSides() * numSectors();
     result.numReserved = 2;
-    result.bsize       = 512;
-    result.numBlocks   = result.numCyls * result.numHeads * result.numSectors;
 
     // Determine the root block location
     Block root = size < ADFSIZE_35_HD ? 880 : 1760;
@@ -194,7 +194,7 @@ ADFFile::layout()
     if (bitmap == 0 || bitmap >= (Block)numBlocks()) bitmap = root + 1;
     
     // Add partition
-    result.partitions.push_back(FSPartitionDescriptor(getDos(), 0, result.numCyls - 1, root));
+    result.partitions.push_back(FSPartitionDescriptor(getDos(), 0, numCyls() - 1, root));
     result.partitions[0].bmBlocks.push_back(bitmap);
     
     return result;

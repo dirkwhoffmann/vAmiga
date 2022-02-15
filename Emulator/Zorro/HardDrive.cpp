@@ -94,6 +94,30 @@ HardDrive::HardDrive(Amiga& ref) : ZorroBoard(ref)
 }
 
 void
+HardDrive::init(const HDFFile *hdf)
+{
+    assert(false);
+}
+
+void
+HardDrive::init(const HDFFile *hdf, isize c, isize h, isize s)
+{
+    assert(false);
+}
+
+void
+HardDrive::init(isize c, isize h, isize s)
+{
+    assert(false);
+}
+
+void
+HardDrive::init(isize capacity)
+{
+    assert(false);
+}
+
+void
 HardDrive::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
@@ -218,10 +242,10 @@ HardDrive::processInit()
 
     // Collect hard drive information
     auto layout = hdf->layout();
-    u32 sizeBlock = (u32)(layout.bsize / 4);
-    u32 numHeads = (u32)(layout.numHeads);
-    u32 blkTrack = (u32)(layout.numSectors);
-    u32 upperCyl = (u32)(layout.numCyls - 1);
+    u32 sizeBlock = (u32)(layout.geometry.bsize / 4);
+    u32 numHeads = (u32)(layout.geometry.heads);
+    u32 blkTrack = (u32)(layout.geometry.sectors);
+    u32 upperCyl = (u32)(layout.geometry.cylinders - 1);
     
     constexpr uint16_t devn_sizeBlock = 0x14; // number of longwords in a block
     constexpr uint16_t devn_numHeads  = 0x1C; // number of surfaces
