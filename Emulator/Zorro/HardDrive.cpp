@@ -142,7 +142,7 @@ HardDrive::peek8(u32 addr) const
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
     u8 result = (usize)offset < sizeof(exprom) ? exprom[offset] : 0;
 
-    // trace(HDR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
+    trace(ZOR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
     return result;
 }
 
@@ -154,20 +154,20 @@ HardDrive::peek16(u32 addr) const
 
     u16 result = HI_LO(hi,lo);
 
-    // trace(HDR_DEBUG, "peek16(%06x) = %04x\n", addr, result);
+    trace(ZOR_DEBUG, "peek16(%06x) = %04x\n", addr, result);
     return result;
 }
 
 void
 HardDrive::poke8(u32 addr, u8 value)
 {
-    // trace(HDR_DEBUG, "poke8(%06x,%02x)\n", addr, value);
+    trace(ZOR_DEBUG, "poke8(%06x,%02x)\n", addr, value);
 }
 
 void
 HardDrive::poke16(u32 addr, u16 value)
 {
-    // trace(HDR_DEBUG, "poke16(%06x,%04x)\n", addr, value);
+    trace(ZOR_DEBUG, "poke16(%06x,%04x)\n", addr, value);
     
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
 
@@ -199,14 +199,14 @@ HardDrive::poke16(u32 addr, u16 value)
                     
                 default:
                     
-                    debug(HDR_DEBUG, "Invalid value: %x\n", value);
+                    warn("Invalid value: %x\n", value);
                     break;
             }
             break;
 
         default:
 
-            debug(HDR_DEBUG, "Invalid addr: %x\n", addr);
+            warn("Invalid addr: %x\n", addr);
             break;
     }
 }
@@ -214,7 +214,7 @@ HardDrive::poke16(u32 addr, u16 value)
 void
 HardDrive::processInit()
 {
-    trace(HDR_DEBUG, "processInit(%x)\n", pointer);
+    trace(HDR_DEBUG, "processInit()\n");
 
     // Collect hard drive information
     auto layout = hdf->layout();
@@ -234,6 +234,7 @@ HardDrive::processInit()
     debug(true, "upperCyl = %d\n", upperCyl);
 
     auto rom = pointer;
+    /*
     mem.poke16<ACCESSOR_CPU>(rom + devn_sizeBlock, HI_WORD(sizeBlock));
     mem.poke16<ACCESSOR_CPU>(rom + devn_sizeBlock + 2, LO_WORD(sizeBlock));
     mem.poke16<ACCESSOR_CPU>(rom + devn_numHeads, HI_WORD(numHeads));
@@ -242,19 +243,22 @@ HardDrive::processInit()
     mem.poke16<ACCESSOR_CPU>(rom + devn_blkTrack + 2, LO_WORD(blkTrack));
     mem.poke16<ACCESSOR_CPU>(rom + devn_upperCyl, HI_WORD(upperCyl));
     mem.poke16<ACCESSOR_CPU>(rom + devn_upperCyl + 2, LO_WORD(upperCyl));
+    */
+    mem.patch(rom + devn_sizeBlock, u32(sizeBlock));
+    mem.patch(rom + devn_numHeads, u32(numHeads));
+    mem.patch(rom + devn_blkTrack, u32(blkTrack));
+    mem.patch(rom + devn_upperCyl, u32(upperCyl));
 }
 
 void
 HardDrive::processCmd()
 {
-    trace(HDR_DEBUG, "processCmd(%x)\n", pointer);
-    
     os::IOStdReq stdReq;
     
     osDebugger.read(pointer, &stdReq);
     auto cmd = (IoCommand)stdReq.io_Command;
     
-    debug(true, "command = %s\n", IoCommandEnum::key(cmd));
+    debug(HDR_DEBUG, "Processing command %s\n", IoCommandEnum::key(cmd));
 
     switch (cmd) {
             
@@ -265,35 +269,32 @@ HardDrive::processCmd()
             if (stdReq.io_Offset + stdReq.io_Length > hdf->size) {
                 
                 warn("Offset out of bounds\n");
-                mem.poke8 <ACCESSOR_CPU> (pointer + IO_ERROR, (u8)IOERR_BADADDRESS);
+                mem.patch(pointer + IO_ERROR, u8(IOERR_BADADDRESS));
                 return;
             }
             if (stdReq.io_Offset % 512) {
                 
                 warn("Offset not aligned\n");
-                mem.poke8 <ACCESSOR_CPU> (pointer + IO_ERROR, (u8)IOERR_BADADDRESS);
+                mem.patch(pointer + IO_ERROR, u8(IOERR_BADADDRESS));
                 return;
             }
             if (stdReq.io_Length % 512) {
                 
                 warn("Length mismatch\n");
-                mem.poke8 <ACCESSOR_CPU> (pointer + IO_ERROR, (u8)IOERR_BADADDRESS);
+                mem.patch(pointer + IO_ERROR, u8(IOERR_BADLENGTH));
                 return;
             }
             if (cmd == CMD_READ) {
                 
-                debug(true, "Reading %u bytes from %x to %x\n",
+                debug(HDR_DEBUG, "Reading %u bytes. From: %x To: %x\n",
                       stdReq.io_Length, stdReq.io_Offset, stdReq.io_Data);
                 
-                for (isize i = 0; i < stdReq.io_Length; i++) {
-                    mem.poke8 <ACCESSOR_CPU> ((u32)(stdReq.io_Data + i),
-                                              hdf->data[stdReq.io_Offset + i]);
-                }
+                mem.patch(u32(stdReq.io_Data), hdf->data + stdReq.io_Offset, stdReq.io_Length);
                 return;
             }
             if (cmd == CMD_WRITE || cmd == CMD_TD_FORMAT) {
                 
-                debug(true, "Writing %u bytes from %x to %x\n",
+                debug(HDR_DEBUG, "Writing %u bytes. From: %x To: %x\n",
                       stdReq.io_Length, stdReq.io_Data, stdReq.io_Offset);
 
                 for (isize i = 0; i < stdReq.io_Length; i++) {
@@ -318,14 +319,13 @@ HardDrive::processCmd()
         case CMD_TD_ADDCHANGEINT:
         case CMD_TD_REMCHANGEINT:
             
-            mem.poke16 <ACCESSOR_CPU> (pointer + IO_ACTUAL, 0);
-            mem.poke16 <ACCESSOR_CPU> (pointer + IO_ACTUAL + 2, 0);
-            mem.poke8 <ACCESSOR_CPU> (pointer + IO_ERROR, 0);
+            mem.patch(pointer + IO_ACTUAL, u32(0));
+            mem.patch(pointer + IO_ERROR, u8(0));
             break;
             
         default:
             
             warn("Unsupported command: %lx\n", cmd);
-            mem.poke8 <ACCESSOR_CPU> (pointer + IO_ERROR, (u8)IOERR_NOCMD);
+            mem.patch(pointer + IO_ERROR, u8(IOERR_NOCMD));
     }
 }

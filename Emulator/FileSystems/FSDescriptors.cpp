@@ -98,8 +98,8 @@ FSPartitionDescriptor::_dump(dump::Category category, std::ostream& os) const
         os << tab("Root block");
         os << dec(rootBlock) << std::endl;
         os << tab("Bitmap blocks");
-        for (auto& it : bmBlocks) { os << dec(it) << " "; }
+        for (auto& it : bmBlocks) { os << dec(it) << " "; }; os << std::endl;
         os << tab("Extension blocks");
-        for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
+        for (auto& it : bmExtBlocks) { os << dec(it) << " "; }; os << std::endl;
     }
 }

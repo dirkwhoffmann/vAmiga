@@ -2569,6 +2569,96 @@ Memory::pokeCustom16(u32 addr, u16 value)
     }
 }
 
+template <> void
+Memory::patch <MEM_CHIP> (u32 addr, u8 value)
+{
+    ASSERT_CHIP_ADDR(addr);
+    WRITE_CHIP_8(addr, value);
+}
+
+template <> void
+Memory::patch <MEM_SLOW> (u32 addr, u8 value)
+{
+    ASSERT_SLOW_ADDR(addr);
+    WRITE_SLOW_8(addr, value);
+}
+
+template <> void
+Memory::patch <MEM_FAST> (u32 addr, u8 value)
+{
+    ASSERT_FAST_ADDR(addr);
+    WRITE_FAST_8(addr, value);
+}
+
+template <> void
+Memory::patch <MEM_ROM> (u32 addr, u8 value)
+{
+    ASSERT_ROM_ADDR(addr);
+    WRITE_ROM_8(addr, value);
+}
+
+template <> void
+Memory::patch <MEM_WOM> (u32 addr, u8 value)
+{
+    ASSERT_WOM_ADDR(addr);
+    WRITE_WOM_8(addr, value);
+}
+
+template <> void
+Memory::patch <MEM_EXT> (u32 addr, u8 value)
+{
+    ASSERT_EXT_ADDR(addr);
+    WRITE_EXT_8(addr, value);
+}
+
+void
+Memory::patch(u32 addr, u8 value)
+{
+    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
+            
+        case MEM_CHIP:          patch <MEM_CHIP>     (addr, value); return;
+        case MEM_CHIP_MIRROR:   patch <MEM_CHIP>     (addr, value); return;
+        case MEM_SLOW:          patch <MEM_SLOW>     (addr, value); return;
+        case MEM_SLOW_MIRROR:   patch <MEM_SLOW>     (addr, value); return;
+        case MEM_FAST:          patch <MEM_FAST>     (addr, value); return;
+        case MEM_ROM:           patch <MEM_ROM>      (addr, value); return;
+        case MEM_ROM_MIRROR:    patch <MEM_ROM>      (addr, value); return;
+        case MEM_WOM:           patch <MEM_WOM>      (addr, value); return;
+        case MEM_EXT:           patch <MEM_EXT>      (addr, value); return;
+            
+        default:
+            fatalError;
+    }
+}
+
+void
+Memory::patch(u32 addr, u16 value)
+{
+    assert(IS_EVEN(addr));
+    
+    patch(addr,     (u8)HI_BYTE(value));
+    patch(addr + 1, (u8)LO_BYTE(value));
+}
+
+void
+Memory::patch(u32 addr, u32 value)
+{
+    assert(IS_EVEN(addr));
+    
+    patch(addr,     (u16)HI_WORD(value));
+    patch(addr + 2, (u16)LO_WORD(value));
+}
+
+void
+Memory::patch(u32 addr, u8 *buf, isize len)
+{
+    assert(buf);
+    
+    for (isize i = 0; i < len; i++) {
+        patch(u32(addr + i), buf[i]);
+    }
+}
+
 const char *
 Memory::regName(u32 addr)
 {
