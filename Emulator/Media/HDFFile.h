@@ -31,8 +31,8 @@ public:
 
 public:
 
-    HDFFile(const string &path) throws { init(path); }
-    HDFFile(const u8 *buf, isize len) throws { init(buf, len); }
+    HDFFile(const string &path) throws;
+    HDFFile(const u8 *buf, isize len) throws;
 
     const char *getDescription() const override { return "HDF"; }
 

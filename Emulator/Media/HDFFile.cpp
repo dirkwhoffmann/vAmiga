@@ -24,6 +24,27 @@ HDFFile::isCompatible(std::istream &stream)
     return util::streamLength(stream) % 512 == 0;
 }
 
+HDFFile::HDFFile(const string &path)
+{
+    // TODO: Check for oversized HDFs
+
+    init(path);
+
+    // TODO: Check if geometry can be derived
+    // TODO: Check if this disk contains an RDB which is not supported yet
+}
+
+HDFFile::HDFFile(const u8 *buf, isize len)
+{
+    // TODO: Check for oversized HDFs
+
+    init(buf, len);
+
+    // TODO: Check if geometry can be derived
+    // TODO: Check if this disk contains an RDB which is not supported yet
+}
+
+
 bool
 HDFFile::hasRDB() const
 {
