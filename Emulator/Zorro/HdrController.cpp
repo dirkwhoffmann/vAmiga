@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "HardDrive.h"
+#include "HdrController.h"
 #include "HDFFile.h"
 #include "Memory.h"
 #include "OSDebugger.h"
@@ -75,7 +75,7 @@ const unsigned char exprom[880] = {
 0x00, 0x22, 0x4e, 0xae, 0xfe, 0x86, 0x4c, 0xdf, 0x7f, 0xff, 0x4e, 0x75, 0x70, 0x06, 0x60, 0xfc,
 };
 
-HardDrive::HardDrive(Amiga& ref) : ZorroBoard(ref)
+HdrController::HdrController(Amiga& ref) : ZorroBoard(ref)
 {
 #ifdef INITIAL_HDF
     
@@ -94,31 +94,31 @@ HardDrive::HardDrive(Amiga& ref) : ZorroBoard(ref)
 }
 
 void
-HardDrive::init(const HDFFile *hdf)
+HdrController::init(const HDFFile *hdf)
 {
     assert(false);
 }
 
 void
-HardDrive::init(const HDFFile *hdf, isize c, isize h, isize s)
+HdrController::init(const HDFFile *hdf, isize c, isize h, isize s)
 {
     assert(false);
 }
 
 void
-HardDrive::init(isize c, isize h, isize s)
+HdrController::init(isize c, isize h, isize s)
 {
     assert(false);
 }
 
 void
-HardDrive::init(isize capacity)
+HdrController::init(isize capacity)
 {
     assert(false);
 }
 
 void
-HardDrive::_dump(dump::Category category, std::ostream& os) const
+HdrController::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
         
@@ -130,7 +130,7 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
 }
 
 void
-HardDrive::_reset(bool hard)
+HdrController::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
 
@@ -151,7 +151,7 @@ HardDrive::_reset(bool hard)
 }
 
 void
-HardDrive::updateMemSrcTables()
+HdrController::updateMemSrcTables()
 {
     // Only proceed if this board has been configured
     if (baseAddr == 0) return;
@@ -161,7 +161,7 @@ HardDrive::updateMemSrcTables()
 }
 
 u8
-HardDrive::peek8(u32 addr) const
+HdrController::peek8(u32 addr) const
 {
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
     u8 result = (usize)offset < sizeof(exprom) ? exprom[offset] : 0;
@@ -171,7 +171,7 @@ HardDrive::peek8(u32 addr) const
 }
 
 u16
-HardDrive::peek16(u32 addr) const
+HdrController::peek16(u32 addr) const
 {
     auto hi = peek8(addr);
     auto lo = peek8(addr + 1);
@@ -183,13 +183,13 @@ HardDrive::peek16(u32 addr) const
 }
 
 void
-HardDrive::poke8(u32 addr, u8 value)
+HdrController::poke8(u32 addr, u8 value)
 {
     trace(ZOR_DEBUG, "poke8(%06x,%02x)\n", addr, value);
 }
 
 void
-HardDrive::poke16(u32 addr, u16 value)
+HdrController::poke16(u32 addr, u16 value)
 {
     trace(ZOR_DEBUG, "poke16(%06x,%04x)\n", addr, value);
     
@@ -236,7 +236,7 @@ HardDrive::poke16(u32 addr, u16 value)
 }
 
 void
-HardDrive::processInit()
+HdrController::processInit()
 {
     trace(HDR_DEBUG, "processInit()\n");
 
@@ -275,7 +275,7 @@ HardDrive::processInit()
 }
 
 void
-HardDrive::processCmd()
+HdrController::processCmd()
 {
     os::IOStdReq stdReq;
     

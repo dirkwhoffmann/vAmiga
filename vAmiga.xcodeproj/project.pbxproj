@@ -90,7 +90,7 @@
 		5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5821FB6856009753EF /* ProxyExtensions.swift */; };
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		50894D822593CF4400C0499D /* HIDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50894D812593CF4400C0499D /* HIDExtensions.swift */; };
-		508AC36927B7F6FD006AD2E7 /* HardDrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508AC36727B7F6FC006AD2E7 /* HardDrive.cpp */; };
+		508AC36927B7F6FD006AD2E7 /* HdrController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508AC36727B7F6FC006AD2E7 /* HdrController.cpp */; };
 		508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
 		508FDF8721EA1FBC0043D0E9 /* MsgQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */; };
@@ -405,7 +405,7 @@
 		507215A525EA9DD900787591 /* RingBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RingBuffer.h; sourceTree = "<group>"; };
 		507215B025EAF62B00787591 /* Aliases.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Aliases.h; sourceTree = "<group>"; };
 		5072CAF92456D1C800C8F606 /* AudioConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConf.swift; sourceTree = "<group>"; };
-		5073C59527BA79B200A9EF6F /* HardDriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardDriveTypes.h; sourceTree = "<group>"; };
+		5073C59527BA79B200A9EF6F /* HdrControllerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HdrControllerTypes.h; sourceTree = "<group>"; };
 		507653CA2216F91E001D26E9 /* AgnusPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgnusPanel.swift; sourceTree = "<group>"; };
 		507653CC2216F938001D26E9 /* DenisePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenisePanel.swift; sourceTree = "<group>"; };
 		50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DmaDebuggerTypes.h; sourceTree = "<group>"; };
@@ -425,8 +425,8 @@
 		508833ED21F0D21B009890EA /* ADFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADFFile.h; sourceTree = "<group>"; };
 		50894D812593CF4400C0499D /* HIDExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIDExtensions.swift; sourceTree = "<group>"; };
 		508AC36627B7F673006AD2E7 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		508AC36727B7F6FC006AD2E7 /* HardDrive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HardDrive.cpp; sourceTree = "<group>"; };
-		508AC36827B7F6FC006AD2E7 /* HardDrive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardDrive.h; sourceTree = "<group>"; };
+		508AC36727B7F6FC006AD2E7 /* HdrController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HdrController.cpp; sourceTree = "<group>"; };
+		508AC36827B7F6FC006AD2E7 /* HdrController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HdrController.h; sourceTree = "<group>"; };
 		508C6BCF23F7E77500D8938F /* ChangeRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeRecorder.h; sourceTree = "<group>"; };
 		508E7F932206CDBD00F7D88C /* CPU.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPU.cpp; sourceTree = "<group>"; };
 		508E7F942206CDBD00F7D88C /* CPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPU.h; sourceTree = "<group>"; };
@@ -951,9 +951,9 @@
 				502023E827B6BDEA00820DB6 /* ZorroBoard.cpp */,
 				502023EC27B6BE7200820DB6 /* RamExpansion.h */,
 				502023EB27B6BE7200820DB6 /* RamExpansion.cpp */,
-				5073C59527BA79B200A9EF6F /* HardDriveTypes.h */,
-				508AC36827B7F6FC006AD2E7 /* HardDrive.h */,
-				508AC36727B7F6FC006AD2E7 /* HardDrive.cpp */,
+				5073C59527BA79B200A9EF6F /* HdrControllerTypes.h */,
+				508AC36827B7F6FC006AD2E7 /* HdrController.h */,
+				508AC36727B7F6FC006AD2E7 /* HdrController.cpp */,
 			);
 			path = Zorro;
 			sourceTree = "<group>";
@@ -1813,7 +1813,7 @@
 				500CE876259252ED00462836 /* DevicesPrefs.swift in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
 				50F54B2724B5D31D0078FDC9 /* u_deep.c in Sources */,
-				508AC36927B7F6FD006AD2E7 /* HardDrive.cpp in Sources */,
+				508AC36927B7F6FD006AD2E7 /* HdrController.cpp in Sources */,
 				508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */,
 				50C8C452260747EA00F4E012 /* Canvas.swift in Sources */,
 				504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */,

@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include "HardDriveTypes.h"
+#include "HdrControllerTypes.h"
 #include "ZorroBoard.h"
 #include "HDFFile.h"
 
-class HardDrive : public ZorroBoard {
+class HdrController : public ZorroBoard {
     
     HDFFile *hdf = nullptr;
     
@@ -27,7 +27,7 @@ class HardDrive : public ZorroBoard {
     
 public:
     
-    HardDrive(Amiga& ref);
+    HdrController(Amiga& ref);
 
     void init(const HDFFile *hdf) throws;
     void init(const HDFFile *hdf, isize c, isize h, isize s) throws;

@@ -11,7 +11,7 @@
 
 #include "SubComponent.h"
 #include "RamExpansion.h"
-#include "HardDrive.h"
+#include "HdrController.h"
 
 class ZorroManager : public SubComponent {
     
@@ -21,14 +21,14 @@ public:
     RamExpansion ramExpansion = RamExpansion(amiga);
 
     // Simple hard drive controller (based on the AmiEmu)
-    HardDrive hardDrive = HardDrive(amiga);
+    HdrController hdrController = HdrController(amiga);
     
 private:
     
     ZorroBoard *slots[3] = {
         
         &ramExpansion,
-        &hardDrive,
+        &hdrController,
         nullptr
     };
     
