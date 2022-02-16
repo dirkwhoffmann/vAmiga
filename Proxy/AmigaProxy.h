@@ -11,6 +11,7 @@
 
 #import "Constants.h"
 #import "AgnusTypes.h"
+#import "AmigaComponentTypes.h"
 #import "AmigaTypes.h"
 #import "AmigaFileTypes.h"
 #import "BlitterTypes.h"
@@ -26,7 +27,7 @@
 #import "DriveTypes.h"
 #import "ErrorTypes.h"
 #import "FSTypes.h"
-#import "AmigaComponentTypes.h"
+#import "HardDriveTypes.h"
 #import "JoystickTypes.h"
 #import "KeyboardTypes.h"
 #import "MemoryTypes.h"

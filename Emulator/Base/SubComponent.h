@@ -24,6 +24,7 @@ class Denise;
 class DiskController;
 class DmaDebugger;
 class Drive;
+class HardDrive;
 class GdbServer;
 class Joystick;
 class Keyboard;
@@ -65,6 +66,7 @@ protected:
     Drive &df1;
     Drive &df2;
     Drive &df3;
+    HardDrive &dh0;
     Keyboard &keyboard;
     Memory &mem;
     MsgQueue &msgQueue;

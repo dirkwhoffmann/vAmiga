@@ -73,6 +73,7 @@ Amiga::Amiga()
         &df1,
         &df2,
         &df3,
+        &dh0,
         &ciaA,
         &ciaB,
         &mem,

@@ -17,6 +17,7 @@
 #include "Denise.h"
 #include "Drive.h"
 #include "GdbServer.h"
+#include "HardDrive.h"
 #include "Keyboard.h"
 #include "Memory.h"
 #include "MsgQueue.h"
@@ -78,9 +79,11 @@ public:
     Drive df1 = Drive(*this, 1);
     Drive df2 = Drive(*this, 2);
     Drive df3 = Drive(*this, 3);
+    HardDrive dh0 = HardDrive(*this, 0);
     
-    // Shortcuts to all four drives
+    // Shortcuts to all drives
     Drive *df[4] = { &df0, &df1, &df2, &df3 };
+    HardDrive *dh[1] = { &dh0 };
     
     // Gateway to the GUI
     MsgQueue msgQueue = MsgQueue(*this);

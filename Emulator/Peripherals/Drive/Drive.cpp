@@ -18,13 +18,13 @@
 
 Drive::Drive(Amiga& ref, isize n) : SubComponent(ref), nr(n)
 {
-    assert(nr < 4);
+    assert(usize(nr) < 4);
 }
 
 const char *
 Drive::getDescription() const
 {
-    assert(nr <= 3);
+    assert(usize(nr) < 4);
     return nr == 0 ? "Df0" : nr == 1 ? "Df1" : nr == 2 ? "Df2" : "Df3";
 }
 
@@ -195,7 +195,7 @@ Drive::setConfigItem(Option option, i64 value)
 void
 Drive::_inspect() const
 {
-    synchronized {
+    {   SYNCHRONIZED
         
         info.head = head;
         info.hasDisk = hasDisk();
