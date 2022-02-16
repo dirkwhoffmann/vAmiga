@@ -75,9 +75,10 @@ class MyController: NSWindowController, MessageReceiver {
     // Indicates if a status bar is shown
     var statusBar = true
     
-    // Small disk icon to be shown in NSMenuItems
+    // Pictograms for being used in NSMenuItems
     var smallDisk = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
-    
+    var smallHdr = NSImage(named: "hdrTemplate")!.resize(width: 16.0, height: 16.0)
+
     // Serial input and output
     var serialIn = ""
     var serialOut = ""

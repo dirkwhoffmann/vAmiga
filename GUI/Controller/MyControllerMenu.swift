@@ -69,7 +69,7 @@ extension MyController: NSMenuItemValidation {
             item.state = (myAppDelegate.eventTap != nil) ? .on : .off
             return true
             
-        // Drive menu
+        // Df0 - Df3 menu
         case #selector(MyController.insertRecentDiskAction(_:)):
             
             return validateURLlist(myAppDelegate.recentlyInsertedDiskURLs, image: smallDisk)
@@ -102,7 +102,23 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.writeProtectAction(_:)):
             item.state = dfn.hasWriteProtectedDisk() ? .on : .off
             return dfn.hasDisk
-                                                
+            
+        // Dh0 menu
+        case #selector(MyController.attachRecentHdrAction(_:)):
+            
+            return validateURLlist(myAppDelegate.recentlyAttachedHdrURLs, image: smallHdr)
+            
+        case #selector(MyController.exportHdrAction(_:)):
+            // return hd0.hasDisk
+            return false
+            
+        case #selector(MyController.exportRecentHdrDummyAction(_:)):
+            // return hd0.hasDisk
+            return false
+
+        case #selector(MyController.exportRecentHdrAction(_:)):
+            return validateURLlist(myAppDelegate.recentlyExportedHdrURLs, image: smallHdr)
+            
         default:
             return true
         }
@@ -684,5 +700,10 @@ extension MyController: NSMenuItemValidation {
          let exportPanel = ExporterDialog.make(parent: self, nibName: nibName)
          exportPanel?.showSheet(forDrive: sender.tag)
          */
+    }
+
+    @IBAction func inspectHdrAction(_ sender: NSMenuItem!) {
+        
+        track("TODO")
     }
 }
