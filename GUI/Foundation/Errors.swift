@@ -91,13 +91,20 @@ class VAError: Error {
     //
     // Customized alerts
     //
-    
+
     func cantOpen(url: URL, async: Bool = false) {
         warning("\"\(url.lastPathComponent)\" can't be opened.", async: async)
     }
-    
+
+    func cantInsert(async: Bool = false) {
+        warning("Failed to insert disk.", async: async)
+    }
+
+    func cantAttach(async: Bool = false) {
+        warning("Failed to attach hard drive.", async: async)
+    }
+
     func notReady(async: Bool = false) {
-        track("what = \(what)")
         informational("Configuration error", async: async, icon: "pref_transparent")
     }
     
@@ -107,13 +114,4 @@ class VAError: Error {
                 "Failed to write to the FFmpeg pipes.",
                 async: async, icon: "mp4")
     }
-
-    /*
-    static func gdbServerAborted(async: Bool = false) {
-        
-        warning("Connection lost.",
-                "The GDB server has terminated unexpectedly.",
-                async: async, icon: "server")
-    }
-    */
 }

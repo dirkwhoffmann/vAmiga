@@ -45,12 +45,6 @@ struct DiskGeometry {
 
 struct FSDeviceDescriptor : AmigaObject {
     
-    /*
-    isize numCyls = 0;
-    isize numHeads = 0;
-    isize numSectors = 0;
-    isize bsize = 0;
-    */
     DiskGeometry geometry;
     
     i64 numBlocks = 0;

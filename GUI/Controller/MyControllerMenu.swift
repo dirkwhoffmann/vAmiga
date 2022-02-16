@@ -431,7 +431,7 @@ extension MyController: NSMenuItemValidation {
             myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
             
         } catch {
-            (error as? VAError)?.warning("Failed to insert new disk.")
+            (error as? VAError)?.cantInsert()
         }
     }
 
@@ -475,7 +475,7 @@ extension MyController: NSMenuItemValidation {
         
         track("insertDiskAction \(url) drive \(drive)")
         
-        let types: [FileType] = [ .ADF, .HDF, .EXT, .DMS, .EXE, .DIR ]
+        let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
         
         do {
             // Try to create a file proxy
@@ -486,16 +486,23 @@ extension MyController: NSMenuItemValidation {
             
             if let file = mydocument.attachment as? DiskFileProxy {
                 
-                // Insert the disk
-                try amiga.df(drive)!.swap(file: file)
-                        
-                // Remember the URL
-                myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
+                do {
+                    
+                    // Insert the disk
+                    try amiga.df(drive)!.swap(file: file)
+
+                    // Remember the URL
+                    myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
+                
+                } catch {
+                    
+                    (error as? VAError)?.cantInsert()
+                }
             }
             
         } catch {
             
-            (error as? VAError)?.warning("Failed to insert disk")
+            (error as? VAError)?.cantOpen(url: url)
         }
     }
     
@@ -540,7 +547,7 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func clearRecentlyInsertedDisksAction(_ sender: NSMenuItem!) {
         
-        myAppDelegate.recentlyInsertedDiskURLs = []
+        myAppDelegate.clearRecentlyInsertedDiskURLs()
     }
     
     @IBAction func clearRecentlyExportedDisksAction(_ sender: NSMenuItem!) {
@@ -551,6 +558,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func ejectDiskAction(_ sender: NSMenuItem!) {
         
         if proceedWithUnexportedDisk(drive: sender.tag) {
+            
             amiga.df(sender.tag)?.eject()
             myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
         }
@@ -561,5 +569,120 @@ extension MyController: NSMenuItemValidation {
         let nibName = NSNib.Name("ExporterDialog")
         let exportPanel = ExporterDialog.make(parent: self, nibName: nibName)
         exportPanel?.showSheet(forDrive: sender.tag)
+    }
+    
+    //
+    // Action methods (Hard drive menu)
+    //
+    
+    @IBAction func newHdrAction(_ sender: NSMenuItem!) {
+        
+        track("TODO")
+    }
+    
+    @IBAction func attachHdrAction(_ sender: NSMenuItem!) {
+        
+        // Ask the user if a modified hard drive should be detached
+        // if !proceedWithUnexportedHdr(drive: sender.tag) { return }
+        
+        // Show the OpenPanel
+        let openPanel = NSOpenPanel()
+        openPanel.allowsMultipleSelection = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = true
+        openPanel.prompt = "Attach"
+        openPanel.allowedFileTypes = ["hdf", "hdz", "zip", "gz"]
+        openPanel.beginSheetModal(for: window!, completionHandler: { result in
+            
+            if result == .OK, let url = openPanel.url {
+                self.attachHdrAction(from: url)
+            }
+        })
+    }
+    
+    @IBAction func attachRecentHdrAction(_ sender: NSMenuItem!) {
+        
+        if let url = myAppDelegate.getRecentlyInsertedDiskURL(sender.tag) {
+            attachHdrAction(from: url)
+        }
+    }
+    
+    func attachHdrAction(from url: URL) {
+        
+        track("attachHdrAction \(url)")
+        
+        let types: [FileType] = [ .HDF ]
+        
+        do {
+            // Try to create a file proxy
+            try mydocument.createAttachment(from: url, allowedTypes: types)
+            
+            // Ask the user if an unsafed disk should be replaced
+            // if !proceedWithUnexportedHdr(drive: drive) { return }
+            
+            if let file = mydocument.attachment as? HDFFileProxy {
+                
+                do {
+                    
+                    // Attach the drive
+                    // try amiga.hd0.attach(file: file)
+                    track("TODO")
+                    
+                    // Remember the URL
+                    myAppDelegate.noteNewRecentlyAttachedHdrURL(url)
+                    
+                } catch {
+                    
+                    (error as? VAError)?.cantAttach()
+                }
+            }
+            
+        } catch {
+            
+            (error as? VAError)?.cantOpen(url: url)
+        }
+    }
+    
+    @IBAction func exportRecentHdrDummyAction(_ sender: NSMenuItem!) {}
+    
+    @IBAction func exportRecentHdrAction(_ sender: NSMenuItem!) {
+        
+        track("slot: \(sender.tag)")
+        
+        if let url = myAppDelegate.getRecentlyExportedHdrURL(sender.tag) {
+            
+            track("TODO")
+            /*
+             do {
+             try mydocument.exportHdr(to: url)
+             
+             } catch let error as VAError {
+             error.warning("Cannot export hard drive to file \"\(url.path)\"")
+             } catch {
+             fatalError()
+             }
+             */
+        }
+    }
+    
+    @IBAction func clearRecentlyAttachedHdrsAction(_ sender: NSMenuItem!) {
+        
+        myAppDelegate.clearRecentlyAttachedHdrURLs()
+    }
+    
+    @IBAction func clearRecentlyExportedHdrsAction(_ sender: NSMenuItem!) {
+        
+        myAppDelegate.clearRecentlyExportedHdrURLs()
+    }
+    
+    @IBAction func exportHdrAction(_ sender: NSMenuItem!) {
+        
+        track("TODO")
+        /*
+         let nibName = NSNib.Name("ExporterDialog")
+         let exportPanel = ExporterDialog.make(parent: self, nibName: nibName)
+         exportPanel?.showSheet(forDrive: sender.tag)
+         */
     }
 }

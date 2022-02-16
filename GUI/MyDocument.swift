@@ -188,7 +188,7 @@ class MyDocument: NSDocument {
             do {
                 try amiga.df(drive)!.swap(file: proxy)
             } catch {
-                (error as? VAError)?.warning("Failed to insert disk")
+                (error as? VAError)?.cantInsert()
             }
         }
     }

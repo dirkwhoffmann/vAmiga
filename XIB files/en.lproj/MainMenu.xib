@@ -826,8 +826,8 @@
                         </items>
                     </menu>
                 </menuItem>
-                <menuItem title="Hd0" tag="2" id="OYE-xa-ahL" userLabel="Hd0">
-                    <menu key="submenu" title="Hd0" id="MOM-vZ-zP1">
+                <menuItem title="Dh0" tag="2" id="OYE-xa-ahL" userLabel="Hd0">
+                    <menu key="submenu" title="Dh0" id="MOM-vZ-zP1">
                         <items>
                             <menuItem title="New" id="Kxb-7M-LOw">
                                 <modifierMask key="keyEquivalentModifierMask"/>

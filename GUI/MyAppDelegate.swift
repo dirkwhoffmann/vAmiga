@@ -36,15 +36,21 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     // Information provider for connected HID devices
     var database = DeviceDatabase()
     
-    // The list of recently inserted disk URLs.
+    // List of recently inserted floppy disk URLs
     var recentlyInsertedDiskURLs: [URL] = []
     
-    // The list of recently exported disk URLs.
+    // List of recently exported disk URL
     var recentlyExportedDisk0URLs: [URL] = []
     var recentlyExportedDisk1URLs: [URL] = []
     var recentlyExportedDisk2URLs: [URL] = []
     var recentlyExportedDisk3URLs: [URL] = []
+
+    // List of recently attached hard drive URLs
+    var recentlyAttachedHdrURLs: [URL] = []
     
+    // List of recently exported hard drive URLs
+    var recentlyExportedHdrURLs: [URL] = []
+
     override init() {
                 
         super.init()
@@ -67,10 +73,10 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     }
     
     //
-    // Handling the lists of recently used URLs
+    // Handling lists of recently used URLs
     //
     
-    func noteRecentlyUsedURL(_ url: URL, to list: inout [URL], size: Int) {
+    private func noteRecentlyUsedURL(_ url: URL, to list: inout [URL], size: Int) {
         
         if !list.contains(url) {
 
@@ -94,6 +100,9 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
         return getRecentlyUsedURL(pos, from: recentlyInsertedDiskURLs)
     }
     
+    func clearRecentlyInsertedDiskURLs() {
+        recentlyInsertedDiskURLs = []
+    }
     func noteNewRecentlyExportedDiskURL(_ url: URL, drive nr: Int) {
                 
         switch nr {
@@ -128,6 +137,30 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
         case 3: recentlyExportedDisk3URLs = []
         default: fatalError()
         }
+    }
+    
+    func noteNewRecentlyAttachedHdrURL(_ url: URL) {
+        noteRecentlyUsedURL(url, to: &recentlyAttachedHdrURLs, size: 10)
+    }
+    
+    func getRecentlyAttachedHdrURL(_ pos: Int) -> URL? {
+        return getRecentlyUsedURL(pos, from: recentlyAttachedHdrURLs)
+    }
+    
+    func clearRecentlyAttachedHdrURLs() {
+        recentlyAttachedHdrURLs = []
+    }
+    
+    func noteNewRecentlyExportedHdrURL(_ url: URL) {
+        noteRecentlyUsedURL(url, to: &recentlyExportedHdrURLs, size: 1)
+    }
+    
+    func getRecentlyExportedHdrURL(_ pos: Int) -> URL? {
+        return getRecentlyUsedURL(pos, from: recentlyExportedHdrURLs)
+    }
+    
+    func clearRecentlyExportedHdrURLs() {
+        recentlyExportedHdrURLs = []
     }
 }
 

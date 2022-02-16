@@ -191,11 +191,14 @@ class ImporterDialog: DialogController {
         let drive = amiga.df(sender.tag)!
                     
         do {
+            
             try drive.swap(file: disk!)
             drive.setWriteProtection(writeProtect)
             hideSheet()
+            
         } catch {
-            (error as? VAError)?.warning("Failed to insert disk")
+            
+            (error as? VAError)?.cantInsert()
         }
     }
     
