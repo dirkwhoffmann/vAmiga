@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Error.h"
+#include "HardDriveTypes.h"
 
 VAError::VAError(ErrorCode code, const string &s)
 {
@@ -115,6 +116,19 @@ VAError::VAError(ErrorCode code, const string &s)
             
         case ERROR_DISK_INVALID_SECTOR_NUMBER:
             description = "Unable to decode the MFM bit stream (invalid sector number).";
+            break;
+
+        case ERROR_HDR_TOO_LARGE:
+            description = "vAmiga only supports hard drives with maximum capacity of ";
+            description += std::to_string(MAX_HDF_SIZE / MB(1)) + " MB.";
+            break;
+
+        case ERROR_HDR_UNSUPPORTED_BSIZE:
+            description = "Invalid block size.";
+            break;
+
+        case ERROR_HDR_UNSUPPORTED:
+            description = "Unsupported HDR format.";
             break;
 
         case ERROR_SNAP_TOO_OLD:

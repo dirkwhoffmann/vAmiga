@@ -111,7 +111,7 @@ HDFFile::layout()
     result.geometry.heads = numSides();
     result.geometry.sectors = numSectors();
     result.geometry.bsize = bsize();
-    result.numBlocks = result.geometry.blocks();
+    result.numBlocks = result.geometry.numBlocks();
     result.numReserved = numReserved();
 
     // Determine the location of the root block

@@ -16,6 +16,16 @@ HardDrive::HardDrive(Amiga& ref, isize n) : SubComponent(ref), nr(n)
     assert(usize(nr) < 4);
 }
 
+void
+HardDrive::dealloc()
+{
+    // Wipe out disk data
+    if (data) delete [] data;
+
+    // Wipe out geometry information
+    geometry = DiskGeometry();
+}
+
 const char *
 HardDrive::getDescription() const
 {
@@ -134,4 +144,38 @@ HardDrive::_save(u8 *buffer)
     result = (isize)(writer.ptr - buffer);
     trace(SNP_DEBUG, "Serialized to %ld bytes\n", result);
     return result;
+}
+
+void
+HardDrive::attach(const DiskGeometry &geometry)
+{
+    // Throw an exception if the geometry is not supported
+    checkCompatibility(geometry);
+
+}
+
+void
+HardDrive::attach(const HDFFile &hdf)
+{
+    // Throw an exception if the HDF is not supported
+    checkCompatibility(hdf);
+}
+
+void
+HardDrive::checkCompatibility(const DiskGeometry &geometry)
+{
+    if (geometry.numBytes() > MAX_HDF_SIZE) {
+        
+        throw VAError(ERROR_HDR_TOO_LARGE);
+    }
+    if (geometry.bsize != 512) {
+        
+        throw VAError(ERROR_HDR_UNSUPPORTED_BSIZE);
+    }
+}
+
+void
+HardDrive::checkCompatibility(const HDFFile &hdf)
+{
+    // TODO
 }

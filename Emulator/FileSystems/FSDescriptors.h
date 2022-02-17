@@ -28,21 +28,6 @@
  * extracted directly from an ADF or HDF.
  */
 
-struct DiskGeometry {
-  
-    isize cylinders = 0;
-    isize heads = 0;
-    isize sectors = 0;
-    isize bsize = 0;
-    
-    DiskGeometry() { };
-    DiskGeometry(DiskDiameter type, DiskDensity density);
-
-    isize blocks() { return cylinders * heads * sectors; }
-    isize bytes() { return bsize * blocks(); }
-    isize upperCyl() { return cylinders - 1; }
-};
-
 struct FSDeviceDescriptor : AmigaObject {
     
     DiskGeometry geometry;

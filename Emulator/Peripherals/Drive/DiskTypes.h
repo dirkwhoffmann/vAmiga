@@ -71,3 +71,56 @@ struct DiskDensityEnum : util::Reflection<DiskDensityEnum, DiskDensity>
     }
 };
 #endif
+
+//
+// Structures
+//
+
+#ifdef __cplusplus
+struct DiskGeometry {
+  
+    // Physical layout parameters
+    isize cylinders = 0;
+    isize heads = 0;
+    
+    // Logical layout parameters
+    isize sectors = 0;
+    isize bsize = 0;
+    
+    DiskGeometry() { };
+    DiskGeometry(DiskDiameter type, DiskDensity density);
+
+    isize numTracks() const { return cylinders * heads; }
+    isize numBlocks() const { return cylinders * heads * sectors; }
+    isize numBytes() const { return cylinders * heads * sectors * bsize; }
+    
+    isize upperCyl() const { return cylinders ? cylinders - 1 : 0; }
+    isize upperHead() const { return heads ? heads - 1 : 0; }
+    isize upperTrack() const { return numTracks() ? numTracks() - 1 : 0; }
+    
+    bool operator==(const DiskGeometry &rhs) const
+    {
+        return
+        this->cylinders == rhs.cylinders &&
+        this->heads == rhs.heads &&
+        this->sectors == rhs.sectors &&
+        this->bsize == rhs.bsize;
+    }
+
+    bool operator!=(const DiskGeometry &rhs) const
+    {
+        return !(*this == rhs);
+    }
+        
+    template <class W>
+    void operator<<(W& worker)
+    {
+        worker
+        
+        << cylinders
+        << heads
+        << sectors
+        << bsize;
+    }
+};
+#endif

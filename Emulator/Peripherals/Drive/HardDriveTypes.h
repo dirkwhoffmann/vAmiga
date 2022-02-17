@@ -12,6 +12,13 @@
 #include "Aliases.h"
 
 //
+// Constants
+//
+
+#define MAX_HDF_SIZE MB(128)
+
+
+//
 // Structures
 //
 

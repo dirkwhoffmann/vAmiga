@@ -10,13 +10,21 @@
 #pragma once
 
 #include "HardDriveTypes.h"
+#include "DiskTypes.h"
+#include "HDFFile.h"
 #include "SubComponent.h"
 
 class HardDrive : public SubComponent {
     
-    // Number of the emulated drive (0 = dh0, 1 = dh1, etc.)
+    // Number of the emulated drive (dh<nr>)
     const isize nr;
 
+    // Disk geometry
+    DiskGeometry geometry;
+    
+    // Disk data
+    u8 *data = nullptr;
+    
     
     //
     // Initializing
@@ -25,6 +33,9 @@ class HardDrive : public SubComponent {
 public:
 
     HardDrive(Amiga& ref, isize nr);
+    
+    // Deletes the current disk (if any)
+    void dealloc();
     
     
     //
@@ -64,4 +75,25 @@ private:
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
     isize _load(const u8 *buffer) override;
     isize _save(u8 *buffer) override;
+    
+    
+    //
+    // Attaching disks
+    //
+
+public:
+    
+    // Creates an empty disk
+    void attach(const DiskGeometry &geometry) throws;
+    
+    // Creates a disk with the contents of the provided HDF
+    void attach(const HDFFile &hdf) throws;
+    
+private:
+    
+    // Checks if the provided disk geometry or HDF is supported by the emulator
+    void checkCompatibility(const DiskGeometry &geometry) throws;
+
+    // Checks if the provided HDF is supported by the emulator
+    void checkCompatibility(const HDFFile &hdf) throws;
 };

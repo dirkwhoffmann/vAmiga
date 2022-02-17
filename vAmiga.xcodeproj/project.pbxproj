@@ -284,7 +284,6 @@
 		5004C3A527BD516E00A9161A /* HardDrive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HardDrive.cpp; sourceTree = "<group>"; };
 		5004C3A627BD516E00A9161A /* HardDrive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardDrive.h; sourceTree = "<group>"; };
 		5004C3A727BD519400A9161A /* HardDriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardDriveTypes.h; sourceTree = "<group>"; };
-		5004C3A927BD51F000A9161A /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		500770C1227C9FF3003A5F76 /* DriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveTypes.h; sourceTree = "<group>"; };
 		5009B7FA2557051A0037288E /* EXTFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXTFile.cpp; sourceTree = "<group>"; };
 		5009B7FB2557051A0037288E /* EXTFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXTFile.h; sourceTree = "<group>"; };
@@ -773,17 +772,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5004C3A827BD519D00A9161A /* HardDrive */ = {
-			isa = PBXGroup;
-			children = (
-				5004C3A927BD51F000A9161A /* CMakeLists.txt */,
-				5004C3A727BD519400A9161A /* HardDriveTypes.h */,
-				5004C3A627BD516E00A9161A /* HardDrive.h */,
-				5004C3A527BD516E00A9161A /* HardDrive.cpp */,
-			);
-			path = HardDrive;
-			sourceTree = "<group>";
-		};
 		5009B7F5255702C00037288E /* RomFiles */ = {
 			isa = PBXGroup;
 			children = (
@@ -1278,12 +1266,15 @@
 			isa = PBXGroup;
 			children = (
 				50CF46462620432300BB3B95 /* CMakeLists.txt */,
-				500770C1227C9FF3003A5F76 /* DriveTypes.h */,
-				50F6EEBD21F4F61F0091155D /* Drive.h */,
-				50F6EEBC21F4F61F0091155D /* Drive.cpp */,
 				50D52442227878E900F8959D /* DiskTypes.h */,
 				50F6EEB721F4F5C60091155D /* Disk.h */,
 				50F6EEB621F4F5C60091155D /* Disk.cpp */,
+				500770C1227C9FF3003A5F76 /* DriveTypes.h */,
+				50F6EEBD21F4F61F0091155D /* Drive.h */,
+				50F6EEBC21F4F61F0091155D /* Drive.cpp */,
+				5004C3A727BD519400A9161A /* HardDriveTypes.h */,
+				5004C3A627BD516E00A9161A /* HardDrive.h */,
+				5004C3A527BD516E00A9161A /* HardDrive.cpp */,
 			);
 			path = Drive;
 			sourceTree = "<group>";
@@ -1293,7 +1284,6 @@
 			children = (
 				50CF46432620431900BB3B95 /* CMakeLists.txt */,
 				50A2953B21FF12170046BAA0 /* Drive */,
-				5004C3A827BD519D00A9161A /* HardDrive */,
 				50EAB95426C10B3D00BFA9D8 /* Mouse */,
 				50EAB95526C10B4600BFA9D8 /* Joystick */,
 				50EAB95626C10B5900BFA9D8 /* Keyboard */,

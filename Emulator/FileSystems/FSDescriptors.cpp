@@ -49,7 +49,7 @@ FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, F
     
     geometry = DiskGeometry(type, density);
 
-    numBlocks = geometry.blocks();
+    numBlocks = geometry.numBlocks();
     numReserved = 2;
     
     // Determine the location of the root block and the bitmap block
