@@ -2218,6 +2218,7 @@ using namespace moira;
     df1 = [[DriveProxy alloc] initWith:&amiga->df1];
     df2 = [[DriveProxy alloc] initWith:&amiga->df2];
     df3 = [[DriveProxy alloc] initWith:&amiga->df3];
+    dh0 = [[HardDriveProxy alloc] initWith:&amiga->dh0];
     diskController = [[DiskControllerProxy alloc] initWith:&amiga->paula.diskController];
     dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];

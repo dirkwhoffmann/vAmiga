@@ -17,7 +17,8 @@ extension MyController: NSMenuItemValidation {
         let recording = amiga.recorder.recording
         
         var dfn: DriveProxy { return amiga.df(item.tag)! }
-        
+        var dhn: HardDriveProxy { return amiga.dh(item.tag)! }
+
         func validateURLlist(_ list: [URL], image: NSImage) -> Bool {
             
             let slot = item.tag % 10
@@ -69,9 +70,8 @@ extension MyController: NSMenuItemValidation {
             item.state = (myAppDelegate.eventTap != nil) ? .on : .off
             return true
             
-        // Df0 - Df3 menu
+        // Df<n> menu
         case #selector(MyController.insertRecentDiskAction(_:)):
-            
             return validateURLlist(myAppDelegate.recentlyInsertedDiskURLs, image: smallDisk)
             
         case  #selector(MyController.ejectDiskAction(_:)),
@@ -103,22 +103,34 @@ extension MyController: NSMenuItemValidation {
             item.state = dfn.hasWriteProtectedDisk() ? .on : .off
             return dfn.hasDisk
             
-        // Dh0 menu
-        case #selector(MyController.attachRecentHdrAction(_:)):
+        // Dh<n> menu
+        case #selector(MyController.newHdrDummyAction0(_:)):
+            return amiga.poweredOff
+
+        case #selector(MyController.newHdrAction(_:)):
+            return amiga.poweredOff
+
+        case #selector(MyController.attachHdrAction(_:)):
+            return amiga.poweredOff
             
+        case #selector(MyController.attachRecentHdrDummyAction(_:)):
+            return dhn.isAttached
+
+        case #selector(MyController.attachRecentHdrAction(_:)):
             return validateURLlist(myAppDelegate.recentlyAttachedHdrURLs, image: smallHdr)
             
         case #selector(MyController.exportHdrAction(_:)):
-            // return hd0.hasDisk
-            return false
+            return dhn.isAttached
             
         case #selector(MyController.exportRecentHdrDummyAction(_:)):
-            // return hd0.hasDisk
-            return false
+            return dhn.isAttached
 
         case #selector(MyController.exportRecentHdrAction(_:)):
             return validateURLlist(myAppDelegate.recentlyExportedHdrURLs, image: smallHdr)
             
+        case #selector(MyController.inspectHdrAction(_:)):
+            return dhn.isAttached
+
         default:
             return true
         }
@@ -591,6 +603,7 @@ extension MyController: NSMenuItemValidation {
     // Action methods (Hard drive menu)
     //
     
+    @IBAction func newHdrDummyAction0(_ sender: NSMenuItem!) {}
     @IBAction func newHdrAction(_ sender: NSMenuItem!) {
         
         track("TODO")
@@ -617,6 +630,7 @@ extension MyController: NSMenuItemValidation {
         })
     }
     
+    @IBAction func attachRecentHdrDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func attachRecentHdrAction(_ sender: NSMenuItem!) {
         
         if let url = myAppDelegate.getRecentlyInsertedDiskURL(sender.tag) {
@@ -661,7 +675,6 @@ extension MyController: NSMenuItemValidation {
     }
     
     @IBAction func exportRecentHdrDummyAction(_ sender: NSMenuItem!) {}
-    
     @IBAction func exportRecentHdrAction(_ sender: NSMenuItem!) {
         
         track("slot: \(sender.tag)")

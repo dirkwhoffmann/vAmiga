@@ -241,7 +241,18 @@ public extension AmigaProxy {
             return nil
         }
     }
-    
+
+    func dh(_ nr: Int) -> HardDriveProxy? {
+        
+        switch nr {
+            
+        case 0: return dh0
+
+        default:
+            return nil
+        }
+    }
+
     func df(_ item: NSButton!) -> DriveProxy? {
         
         return df(item.tag)

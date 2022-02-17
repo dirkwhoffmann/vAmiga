@@ -712,7 +712,7 @@
                                     <action selector="insertDiskAction:" target="-1" id="27N-sn-5Di"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Insert Recent" tag="2" id="7lX-EE-IhD">
+                            <menuItem title="Insert Recent" tag="3" id="7lX-EE-IhD">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Insert Recent" id="Qqw-GD-95a">
                                     <items>
@@ -853,14 +853,17 @@
                                         </menuItem>
                                     </items>
                                 </menu>
-                            </menuItem>
-                            <menuItem title="Attach..." tag="3" enabled="NO" id="bfU-Wh-UO2">
-                                <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="insertDiskAction:" target="-1" id="Pl1-CU-YL0"/>
+                                    <action selector="newHdrDummyAction0:" target="-1" id="F9r-5o-yME"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Attach Recent" tag="2" id="hRI-K9-ade">
+                            <menuItem title="Attach..." id="bfU-Wh-UO2">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="attachHdrAction:" target="-1" id="yek-dh-RqP"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Attach Recent" id="hRI-K9-ade">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Attach Recent" id="2XC-d7-5Cc">
                                     <items>
@@ -933,15 +936,18 @@
                                         </menuItem>
                                     </items>
                                 </menu>
+                                <connections>
+                                    <action selector="attachRecentHdrDummyAction:" target="-1" id="0hy-un-XtJ"/>
+                                </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="EYo-Hq-7ZZ"/>
-                            <menuItem title="Export..." tag="3" enabled="NO" id="WqE-Hc-YZe" userLabel="Export disk">
+                            <menuItem title="Export..." id="WqE-Hc-YZe" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="exportHdrAction:" target="-1" id="LxB-fH-aJt"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Export To" tag="3" id="z1v-QA-WrJ">
+                            <menuItem title="Export To" id="z1v-QA-WrJ">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Export To" id="nGP-5C-NVK">
                                     <items>

@@ -43,8 +43,10 @@ class HardDrive : public SubComponent {
 public:
 
     HardDrive(Amiga& ref, isize nr);
+    ~HardDrive();
     
-    // Deletes the current disk (if any)
+    // Creates or deletes the data storage
+    void alloc(const DiskGeometry &geometry);
     void dealloc();
     
     
@@ -70,7 +72,13 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-
+        worker
+        
+        << geometry.cylinders
+        << geometry.heads
+        << geometry.sectors
+        << geometry.bsize
+        << modified;
     }
 
     template <class T>
@@ -80,20 +88,17 @@ private:
             
             worker
             
-            << geometry.cylinders
-            << geometry.heads
-            << geometry.sectors
-            << geometry.bsize
-            << currentCylinder
-            << modified;
+            << currentCylinder;
         }
     }
 
     isize _size() override;
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
-    isize _load(const u8 *buffer) override;
-    isize _save(u8 *buffer) override;
-    
+    isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    isize didLoadFromBuffer(const u8 *buffer) override;
+    isize didSaveToBuffer(u8 *buffer) const override;
+
     
     //
     // Analyzing
