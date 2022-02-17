@@ -829,38 +829,16 @@
                 <menuItem title="Dh0" tag="2" id="OYE-xa-ahL" userLabel="Hd0">
                     <menu key="submenu" title="Dh0" id="MOM-vZ-zP1">
                         <items>
-                            <menuItem title="New" id="Kxb-7M-LOw">
+                            <menuItem title="New..." id="bfU-Wh-UO2">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="New" id="zK8-TC-Wdr">
-                                    <items>
-                                        <menuItem title="8 MB" id="fay-z4-eOw">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="newHdrAction:" target="-1" id="HDb-Bt-Yxs"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="16 MB" tag="1" id="R2f-kH-8Ii">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="newHdrAction:" target="-1" id="JIA-3Q-9yL"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="32 MB" tag="2" id="Fcf-Xw-iDm">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="newHdrAction:" target="-1" id="zbR-XX-mgv"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
                                 <connections>
-                                    <action selector="newHdrDummyAction0:" target="-1" id="F9r-5o-yME"/>
+                                    <action selector="newHdrAction:" target="-1" id="6Z7-Tg-Thv"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Attach..." id="bfU-Wh-UO2">
+                            <menuItem title="Attach..." id="lsx-h5-aEd">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="attachHdrAction:" target="-1" id="yek-dh-RqP"/>
+                                    <action selector="attachHdrAction:" target="-1" id="Vwj-lS-Lo5"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Attach Recent" id="hRI-K9-ade">

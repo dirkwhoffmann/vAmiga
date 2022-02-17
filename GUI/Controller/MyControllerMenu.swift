@@ -104,9 +104,6 @@ extension MyController: NSMenuItemValidation {
             return dfn.hasDisk
             
         // Dh<n> menu
-        case #selector(MyController.newHdrDummyAction0(_:)):
-            return amiga.poweredOff
-
         case #selector(MyController.newHdrAction(_:)):
             return amiga.poweredOff
 
@@ -603,10 +600,14 @@ extension MyController: NSMenuItemValidation {
     // Action methods (Hard drive menu)
     //
     
-    @IBAction func newHdrDummyAction0(_ sender: NSMenuItem!) {}
     @IBAction func newHdrAction(_ sender: NSMenuItem!) {
-        
-        track("TODO")
+
+        // Ask the user if a modified hard drive should be detached
+        // if !proceedWithUnexportedHdr(drive: sender.tag) { return }
+
+        let nibName = NSNib.Name("HdrCreatorDialog")
+        let panel = HdrCreatorDialog.make(parent: self, nibName: nibName)
+        panel?.showSheet(forDrive: sender.tag)
     }
     
     @IBAction func attachHdrAction(_ sender: NSMenuItem!) {
