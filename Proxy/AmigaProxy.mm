@@ -1260,6 +1260,38 @@ using namespace moira;
 
 @end
 
+//
+// HardDrive proxy
+//
+
+@implementation HardDriveProxy
+
+- (HardDrive *)drive
+{
+    return (HardDrive *)obj;
+}
+
+- (HardDriveInfo)info
+{
+    return [self drive]->getInfo();
+}
+
+- (NSInteger)nr
+{
+    return [self drive]->getNr();
+}
+
+- (BOOL)isAttached
+{
+    return [self drive]->isAttached();
+}
+
+- (BOOL)isModified
+{
+    return [self drive]->isModified();
+}
+
+@end
 
 //
 // FSDevice proxy
@@ -2149,6 +2181,7 @@ using namespace moira;
 @synthesize df1;
 @synthesize df2;
 @synthesize df3;
+@synthesize dh0;
 @synthesize diskController;
 @synthesize dmaDebugger;
 @synthesize keyboard;

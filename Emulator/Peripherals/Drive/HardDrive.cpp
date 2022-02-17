@@ -43,10 +43,9 @@ void
 HardDrive::_inspect() const
 {
     {   SYNCHRONIZED
-        /*
-        info.attached = ???;
-        info.cylinder = ???;
-        */
+        
+        info.attached = isAttached();
+        info.cylinder = currentCylinder;
     }
 }
 

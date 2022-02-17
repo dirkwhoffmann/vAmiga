@@ -71,6 +71,7 @@
 @class ExtendedRomFileProxy;
 @class FolderProxy;
 @class GuardsProxy;
+@class HardDriveProxy;
 @class HDFFileProxy;
 @class IMGFileProxy;
 @class JoystickProxy;
@@ -141,6 +142,7 @@
     DriveProxy *df3;
     GuardsProxy *breakpoints;
     GuardsProxy *watchpoints;
+    HardDriveProxy *dh0;
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
@@ -169,6 +171,7 @@
 @property (readonly, strong) DriveProxy *df3;
 @property (readonly, strong) GuardsProxy *breakpoints;
 @property (readonly, strong) GuardsProxy *watchpoints;
+@property (readonly, strong) HardDriveProxy *dh0;
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;
@@ -617,6 +620,19 @@
 
 @end
 
+//
+// HardDrive
+//
+
+@interface HardDriveProxy : AmigaComponentProxy { }
+
+@property (readonly) HardDriveInfo info;
+
+@property (readonly) NSInteger nr;
+@property (readonly) BOOL isAttached;
+@property (readonly) BOOL isModified;
+
+@end
 
 //
 // FSDevice

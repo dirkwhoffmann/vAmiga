@@ -19,11 +19,21 @@ class HardDrive : public SubComponent {
     // Number of the emulated drive (dh<nr>)
     const isize nr;
 
+    // Result of the latest inspection
+    mutable HardDriveInfo info = {};
+    
     // Disk geometry
     DiskGeometry geometry;
     
     // Disk data
     u8 *data = nullptr;
+    
+    // Position of the read/write head
+    isize currentCylinder = 0;
+    
+    // Indicates if a write operation has been performed
+    bool modified = false;
+    
     
     
     //
@@ -68,6 +78,14 @@ private:
     {
         if (hard) {
             
+            worker
+            
+            << geometry.cylinders
+            << geometry.heads
+            << geometry.sectors
+            << geometry.bsize
+            << currentCylinder
+            << modified;
         }
     }
 
@@ -75,6 +93,25 @@ private:
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
     isize _load(const u8 *buffer) override;
     isize _save(u8 *buffer) override;
+    
+    
+    //
+    // Analyzing
+    //
+
+public:
+
+    // Returns the device number
+    isize getNr() const { return nr; }
+
+    // Returns information about the current state
+    HardDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    
+    // Checks whether this drive is attached to the Amiga
+    bool isAttached() const { return geometry.cylinders != 0; }
+    
+    // Checks whether the disk contents has been modified by a write operation
+    bool isModified() const { return modified; }
     
     
     //
