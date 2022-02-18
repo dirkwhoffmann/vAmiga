@@ -289,7 +289,7 @@ Gw
                     </imageView>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="78.5" y="128.5"/>
+            <point key="canvasLocation" x="-24" y="107"/>
         </window>
         <menuItem title="64 MB" id="Erl-C6-mlm"/>
     </objects>

@@ -79,6 +79,14 @@ struct DiskDensityEnum : util::Reflection<DiskDensityEnum, DiskDensity>
 #ifdef __cplusplus
 struct DiskGeometry {
   
+    // Constants
+    static constexpr isize cMin = 256;
+    static constexpr isize cMax = 1024;
+    static constexpr isize hMin = 1;
+    static constexpr isize hMax = 16;
+    static constexpr isize sMin = 16;
+    static constexpr isize sMax = 63;
+
     // Physical layout parameters
     isize cylinders = 0;
     isize heads = 0;
@@ -99,7 +107,7 @@ struct DiskGeometry {
     isize upperHead() const { return heads ? heads - 1 : 0; }
     isize upperTrack() const { return numTracks() ? numTracks() - 1 : 0; }
     
-    bool operator==(const DiskGeometry &rhs) const
+    bool operator == (const DiskGeometry &rhs) const
     {
         return
         this->cylinders == rhs.cylinders &&
@@ -108,11 +116,16 @@ struct DiskGeometry {
         this->bsize == rhs.bsize;
     }
 
-    bool operator!=(const DiskGeometry &rhs) const
+    bool operator != (const DiskGeometry &rhs) const
     {
         return !(*this == rhs);
     }
-        
+    
+    bool operator < (const DiskGeometry &rhs) const
+    {
+        return cylinders < rhs.cylinders;
+    }
+    
     template <class W>
     void operator<<(W& worker)
     {
@@ -122,6 +135,6 @@ struct DiskGeometry {
         << heads
         << sectors
         << bsize;
-    }    
+    }
 };
 #endif
