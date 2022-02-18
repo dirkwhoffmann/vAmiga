@@ -121,10 +121,10 @@ class HdrCreatorDialog: DialogController {
         
         if mb != 0 {
             
-            cylinders = mb * 1024 / 16
             heads = 2
             sectors = 32
             bsize = 512
+            cylinders = (mb * 1024 * 1024) / (heads * sectors * bsize)
         }
     }
     
@@ -244,7 +244,29 @@ class HdrCreatorDialog: DialogController {
     
     @IBAction func attachAction(_ sender: Any!) {
         
-        track("TODO")
-
+        let fs: FSVolumeType =
+        fileSystem.selectedTag() == 0 ? .NODOS :
+        fileSystem.selectedTag() == 1 ? .OFS : .FFS
+        
+        let bb: BootBlockId =
+        bootBlock.selectedTag() == 0 ? .NONE :
+        bootBlock.selectedTag() == 1 ? .AMIGADOS_13 :
+        bootBlock.selectedTag() == 2 ? .AMIGADOS_20 :
+        bootBlock.selectedTag() == 3 ? .SCA : .BYTE_BANDIT
+        
+        do {
+            
+            try drive?.attachNew(fs: fs,
+                                 bb: bb,
+                                 c: cylinders,
+                                 h: heads,
+                                 s: sectors,
+                                 b: bsize)
+            
+        } catch let error as VAError {
+            error.warning("Unable to attach hard drive.")
+        } catch {
+            fatalError()
+        }
     }
 }

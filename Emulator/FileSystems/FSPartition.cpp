@@ -96,8 +96,10 @@ FSPartition::_dump(dump::Category category, std::ostream& os) const
         os << dec(rootBlock) << std::endl;
         os << tab("Bitmap blocks");
         for (auto& it : bmBlocks) { os << dec(it) << " "; }
+        os << std::endl;
         os << util::tab("Extension blocks");
         for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
+        os << std::endl;
     }
 }
 
@@ -424,17 +426,18 @@ FSPartition::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     // Locate the bitmap block which stores the allocation bit
     isize bitsPerBlock = (bsize() - 4) * 8;
     isize bmNr = nr / bitsPerBlock;
-    nr = nr % bitsPerBlock;
 
     // Get the bitmap block
     FSBlock *bm;
     bm = (bmNr < (isize)bmBlocks.size()) ? dev.bitmapBlockPtr(bmBlocks[bmNr]) : nullptr;
     if (bm == nullptr) {
-        warn("Allocation bit is located in non-existent bitmap block %ld\n", bmNr);
+        warn("Failed to lookup allocation bit for block %d\n", nr);
+        warn("bmNr = %ld firstBlock = %d\n", bmNr, firstBlock);
         return nullptr;
     }
     
     // Locate the byte position (note: the long word ordering will be reversed)
+    nr = nr % bitsPerBlock;
     isize rByte = nr / 8;
     
     // Rectifiy the ordering

@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+import Darwin
+
 //
 // Factory extensions
 //
@@ -153,15 +155,6 @@ extension MemProxy {
 
 extension DriveProxy {
 
-    /*
-    func insert(file: DiskFileProxy) throws {
-        
-        let exception = ExceptionWrapper()
-        insert(file, exception: exception)
-        if exception.errorCode != .OK { throw VAError(exception) }
-    }
-    */
-    
     func swap(file: DiskFileProxy) throws {
         
         let exception = ExceptionWrapper()
@@ -173,6 +166,16 @@ extension DriveProxy {
         
         let exception = ExceptionWrapper()
         insertNew(exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+}
+
+extension HardDriveProxy {
+    
+    func attachNew(fs: FSVolumeType, bb: BootBlockId, c: Int, h: Int, s: Int, b: Int) throws {
+        
+        let exception = ExceptionWrapper()
+        attachNew(fs, boot: bb, c: c, h: h, s: s, b: b, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 }

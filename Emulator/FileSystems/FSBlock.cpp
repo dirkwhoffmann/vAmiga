@@ -690,6 +690,7 @@ FSBlock::dump() const
                 }
             }
             msg("           Free : %ld blocks\n", count);
+            break;
         }
         case FS_BITMAP_EXT_BLOCK:
         {

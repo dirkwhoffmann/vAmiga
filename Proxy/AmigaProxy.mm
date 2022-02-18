@@ -1291,6 +1291,27 @@ using namespace moira;
     return [self drive]->isModified();
 }
 
+- (void)attachNew:(FSVolumeType)fs
+             boot:(BootBlockId)bb
+                c:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b
+        exception:(ExceptionWrapper *)ex
+{
+    DiskGeometry geometry;
+    geometry.cylinders = c;
+    geometry.heads = h;
+    geometry.sectors = s;
+    geometry.bsize = b;
+    
+    try {
+        
+        [self drive]->attach(geometry, fs, bb);
+
+    }  catch (VAError &error) {
+        
+        [ex save:error];
+    }
+}
+
 @end
 
 //

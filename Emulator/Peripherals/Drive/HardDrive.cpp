@@ -146,6 +146,50 @@ HardDrive::attach(const DiskGeometry &geometry)
 }
 
 void
+HardDrive::attach(const DiskGeometry &geometry, FSVolumeType fs, BootBlockId bb)
+{
+    msg("Attaching new hard drive\n");
+    msg("  File system : %s\n", FSVolumeTypeEnum::key(fs));
+    msg("   Boot block : %s\n", BootBlockIdEnum::key(bb));
+    msg("    Cylinders : %ld\n", geometry.cylinders);
+    msg("        Heads : %ld\n", geometry.heads);
+    msg("      Sectors : %ld\n", geometry.sectors);
+    msg("   Block size : %ld\n", geometry.bsize);
+
+    if (fs == FS_NODOS) {
+        
+        attach(geometry);
+        
+    } else {
+        
+        // Throw an exception if the geometry is not supported
+        checkCompatibility(geometry);
+        
+        // Create a device descriptor
+        auto layout = FSDeviceDescriptor(geometry, fs);
+        layout.dump();
+        
+        // Create the file system
+        auto device = FSDevice(layout);
+        
+        // Add a boot block
+        device.makeBootable(bb);
+        
+        // REMOVE ASAP
+        device.dump();
+        
+        // Attach the drive
+        attach(device);
+    }
+}
+
+void
+HardDrive::attach(const FSDevice &fs)
+{
+    msg("TODO: Init with file system\n");
+}
+
+void
 HardDrive::attach(const HDFFile &hdf)
 {
     // Throw an exception if the HDF is not supported
@@ -157,11 +201,11 @@ HardDrive::attach(const HDFFile &hdf)
 void
 HardDrive::checkCompatibility(const DiskGeometry &geometry)
 {
-    if (geometry.numBytes() > MAX_HDF_SIZE) {
+    if (geometry.numBytes() > MAX_HDF_SIZE || FORCE_HDR_TOO_LARGE) {
         
         throw VAError(ERROR_HDR_TOO_LARGE);
     }
-    if (geometry.bsize != 512) {
+    if (geometry.bsize != 512 || FORCE_HDR_UNSUPPORTED_BSIZE) {
         
         throw VAError(ERROR_HDR_UNSUPPORTED_BSIZE);
     }

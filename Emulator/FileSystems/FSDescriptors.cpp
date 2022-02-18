@@ -43,21 +43,42 @@ DiskGeometry::DiskGeometry(DiskDiameter type, DiskDensity density)
 
 FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, FSVolumeType dos)
 {
-    /* TODO: REPLACE BY init(...)
-     * Then, add init(isize numCyls, isize numSectors, FSVolumeType dos) and call it
-     */
-    
-    geometry = DiskGeometry(type, density);
+    init(type, density, dos);
+}
+
+FSDeviceDescriptor::FSDeviceDescriptor(const DiskGeometry &geometry, FSVolumeType dos)
+{
+    init(geometry, dos);
+}
+
+void
+FSDeviceDescriptor::init(DiskDiameter type, DiskDensity density, FSVolumeType dos)
+{
+    init(DiskGeometry(type, density), dos);
+}
+
+void
+FSDeviceDescriptor::init(const DiskGeometry &geometry, FSVolumeType dos)
+{
+    this->geometry = geometry;
 
     numBlocks = geometry.numBlocks();
     numReserved = 2;
     
-    // Determine the location of the root block and the bitmap block
+    // Determine the location of the root block
     Block root = (Block)(numBlocks / 2);
-    Block bitmap = root + 1;
 
+    // Add the partition
     partitions.push_back(FSPartitionDescriptor(dos, 0, geometry.upperCyl(), root));
-    partitions[0].bmBlocks.push_back(bitmap);
+
+    // Determine number of bitmap blocks
+    isize bitsPerBlock = (geometry.bsize - 4) * 8;
+    isize neededBlocks = (numBlocks + bitsPerBlock - 1) / bitsPerBlock;
+    
+    // Add all bitmap blocks
+    for (isize i = 0; i < neededBlocks; i++) {
+        partitions[0].bmBlocks.push_back(Block(root + 1 + i));
+    }
 }
 
 void

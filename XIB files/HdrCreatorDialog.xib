@@ -210,8 +210,8 @@ Gw
                             <menu key="menu" id="ryc-uw-Csk">
                                 <items>
                                     <menuItem title="None" state="on" id="cAR-RN-WFP"/>
-                                    <menuItem title="OFS" id="frQ-Ub-EQb"/>
-                                    <menuItem title="FFS" id="AWy-VV-hQT"/>
+                                    <menuItem title="OFS" tag="1" id="frQ-Ub-EQb"/>
+                                    <menuItem title="FFS" tag="2" id="AWy-VV-hQT"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>

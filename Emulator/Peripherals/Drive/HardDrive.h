@@ -125,10 +125,14 @@ public:
 
 public:
     
-    // Creates an empty disk
+    // Creates an empty hard drive
     void attach(const DiskGeometry &geometry) throws;
-    
-    // Creates a disk with the contents of the provided HDF
+    void attach(const DiskGeometry &geometry, FSVolumeType fs, BootBlockId bb) throws;
+
+    // Creates a disk with the contents of a file system
+    void attach(const FSDevice &fs) throws;
+
+    // Creates a disk with the contents of an HDF
     void attach(const HDFFile &hdf) throws;
     
 private:

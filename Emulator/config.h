@@ -201,19 +201,21 @@ static const int GDB_DEBUG       = 0; // GDB server
 // Forced error conditions
 //
 
-static const int FORCE_ROM_MISSING         = 0;
-static const int FORCE_CHIP_RAM_MISSING    = 0;
-static const int FORCE_AROS_NO_EXTROM      = 0;
-static const int FORCE_AROS_RAM_LIMIT      = 0;
-static const int FORCE_CHIP_RAM_LIMIT      = 0;
-static const int FORCE_SNAP_TOO_OLD        = 0;
-static const int FORCE_SNAP_TOO_NEW        = 0;
-static const int FORCE_SNAP_IS_BETA        = 0;
-static const int FORCE_SNAP_CORRUPTED      = 0;
-static const int FORCE_DISK_INVALID_LAYOUT = 0;
-static const int FORCE_DMS_CANT_CREATE     = 0;
-static const int FORCE_RECORDING_ERROR     = 0;
-static const int FORCE_NO_FFMPEG           = 0;
+static const int FORCE_ROM_MISSING              = 0;
+static const int FORCE_CHIP_RAM_MISSING         = 0;
+static const int FORCE_AROS_NO_EXTROM           = 0;
+static const int FORCE_AROS_RAM_LIMIT           = 0;
+static const int FORCE_CHIP_RAM_LIMIT           = 0;
+static const int FORCE_SNAP_TOO_OLD             = 0;
+static const int FORCE_SNAP_TOO_NEW             = 0;
+static const int FORCE_SNAP_IS_BETA             = 0;
+static const int FORCE_SNAP_CORRUPTED           = 0;
+static const int FORCE_DISK_INVALID_LAYOUT      = 0;
+static const int FORCE_HDR_TOO_LARGE            = 0;
+static const int FORCE_HDR_UNSUPPORTED_BSIZE    = 0;
+static const int FORCE_DMS_CANT_CREATE          = 0;
+static const int FORCE_RECORDING_ERROR          = 0;
+static const int FORCE_NO_FFMPEG                = 0;
 
 
 #ifdef RELEASEBUILD

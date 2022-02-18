@@ -124,11 +124,12 @@ VAError::VAError(ErrorCode code, const string &s)
             break;
 
         case ERROR_HDR_UNSUPPORTED_BSIZE:
-            description = "Invalid block size.";
+            description = "The hard drive uses a block size which is not supported ";
+            description += "by the emulator.";
             break;
 
         case ERROR_HDR_UNSUPPORTED:
-            description = "Unsupported HDR format.";
+            description = "The hard drive is encoded in an unsupported format.";
             break;
 
         case ERROR_SNAP_TOO_OLD:
