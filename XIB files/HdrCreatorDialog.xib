@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="HdrCreatorDialog" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="bootBlock" destination="zwF-UQ-hRz" id="BvA-yP-bfz"/>
+                <outlet property="bootBlockText" destination="foR-SP-0y6" id="naV-ZK-Tcz"/>
                 <outlet property="bsizeField" destination="Pbq-7g-1WO" id="alL-tb-X3w"/>
                 <outlet property="bsizeStepper" destination="RbH-r2-WGn" id="Axk-ZP-cKd"/>
                 <outlet property="bsizeText" destination="gP7-1Y-qhK" id="a4f-Wf-GLY"/>

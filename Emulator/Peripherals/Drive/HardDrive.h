@@ -120,14 +120,22 @@ public:
     
     
     //
-    // Attaching disks
+    // Preparing disks
+    //
+    
+    // Formats the disk
+    void format(FSVolumeType fs, BootBlockId bb) throws;
+    
+    
+    //
+    // Attaching drives
     //
 
 public:
     
     // Creates an empty hard drive
     void attach(const DiskGeometry &geometry) throws;
-    void attach(const DiskGeometry &geometry, FSVolumeType fs, BootBlockId bb) throws;
+  //   [[deprecated]] void attach(const DiskGeometry &geometry, FSVolumeType fs, BootBlockId bb) throws;
 
     // Creates a disk with the contents of a file system
     void attach(const FSDevice &fs) throws;

@@ -1291,6 +1291,32 @@ using namespace moira;
     return [self drive]->isModified();
 }
 
+- (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b
+        exception:(ExceptionWrapper *)ex
+{
+    DiskGeometry geometry;
+    geometry.cylinders = c;
+    geometry.heads = h;
+    geometry.sectors = s;
+    geometry.bsize = b;
+    
+    try {
+        [self drive]->attach(geometry);
+    }  catch (VAError &error) {
+        [ex save:error];
+    }
+}
+
+- (void)format:(FSVolumeType)fs bb:(BootBlockId)bb exception:(ExceptionWrapper *)ex
+{
+    try {
+        [self drive]->format(fs, bb);
+    }  catch (VAError &error) {
+        [ex save:error];
+    }
+}
+
+/*
 - (void)attachNew:(FSVolumeType)fs
              boot:(BootBlockId)bb
                 c:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b
@@ -1311,6 +1337,7 @@ using namespace moira;
         [ex save:error];
     }
 }
+*/
 
 @end
 

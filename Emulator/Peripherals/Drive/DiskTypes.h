@@ -88,6 +88,7 @@ struct DiskGeometry {
     isize bsize = 0;
     
     DiskGeometry() { };
+    DiskGeometry(isize c, isize h, isize s, isize b);
     DiskGeometry(DiskDiameter type, DiskDensity density);
 
     isize numTracks() const { return cylinders * heads; }
@@ -121,6 +122,6 @@ struct DiskGeometry {
         << heads
         << sectors
         << bsize;
-    }
+    }    
 };
 #endif

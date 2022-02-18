@@ -11,6 +11,14 @@
 #include "FSDescriptors.h"
 #include "IOUtils.h"
 
+DiskGeometry::DiskGeometry(isize c, isize h, isize s, isize b)
+{
+    cylinders = c;
+    heads = h;
+    sectors = s;
+    bsize = b;
+}
+
 DiskGeometry::DiskGeometry(DiskDiameter type, DiskDensity density)
 {
     if (type == INCH_525 && density == DISK_DD) {

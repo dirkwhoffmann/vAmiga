@@ -15,6 +15,7 @@ class HdrCreatorDialog: DialogController {
     @IBOutlet weak var fileSystem: NSPopUpButton!
     @IBOutlet weak var bootBlock: NSPopUpButton!
 
+    @IBOutlet weak var bootBlockText: NSTextField!
     @IBOutlet weak var cylinderText: NSTextField!
     @IBOutlet weak var headText: NSTextField!
     @IBOutlet weak var sectorText: NSTextField!
@@ -152,6 +153,7 @@ class HdrCreatorDialog: DialogController {
         // Disable some controls
         let controls: [NSControl: Bool] = [
             
+            bootBlock: fileSystem.selectedTag() != 0,
             cylinderField: custom,
             cylinderStepper: custom,
             headField: custom,
@@ -167,16 +169,17 @@ class HdrCreatorDialog: DialogController {
         }
 
         // Recolor some labels
-        let labels: [NSTextField] = [
+        let labels: [NSTextField: Bool] = [
             
-            cylinderText,
-            headText,
-            sectorText,
-            bsizeText
+            bootBlockText: fileSystem.selectedTag() != 0,
+            cylinderText: custom,
+            headText: custom,
+            sectorText: custom,
+            bsizeText: custom
         ]
         
-        for label in labels {
-            label.textColor = custom ? .labelColor : .secondaryLabelColor
+        for (label, enabled) in labels {
+            label.textColor = enabled ? .labelColor : .secondaryLabelColor
         }
     }
         
@@ -256,12 +259,9 @@ class HdrCreatorDialog: DialogController {
         
         do {
             
-            try drive?.attachNew(fs: fs,
-                                 bb: bb,
-                                 c: cylinders,
-                                 h: heads,
-                                 s: sectors,
-                                 b: bsize)
+            try drive?.attach(c: cylinders, h: heads, s: sectors, b: bsize)
+            try drive?.format(fs: fs, bb: bb)
+            hideSheet()
             
         } catch let error as VAError {
             error.warning("Unable to attach hard drive.")

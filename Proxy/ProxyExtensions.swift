@@ -171,11 +171,18 @@ extension DriveProxy {
 }
 
 extension HardDriveProxy {
-    
-    func attachNew(fs: FSVolumeType, bb: BootBlockId, c: Int, h: Int, s: Int, b: Int) throws {
+
+    func attach(c: Int, h: Int, s: Int, b: Int) throws {
         
         let exception = ExceptionWrapper()
-        attachNew(fs, boot: bb, c: c, h: h, s: s, b: b, exception: exception)
+        attach(c, h: h, s: s, b: b, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
+    func format(fs: FSVolumeType, bb: BootBlockId) throws {
+        
+        let exception = ExceptionWrapper()
+        format(fs, bb: bb, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 }

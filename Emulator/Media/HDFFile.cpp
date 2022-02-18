@@ -44,7 +44,6 @@ HDFFile::HDFFile(const u8 *buf, isize len)
     // TODO: Check if this disk contains an RDB which is not supported yet
 }
 
-
 bool
 HDFFile::hasRDB() const
 {
@@ -151,6 +150,54 @@ HDFFile::layout()
     }
     
     return result;
+}
+
+std::vector<DiskGeometry>
+HDFFile::driveGeometries(isize fileSize)
+{
+    debug(true, "driveGeometries(%ld)\n", fileSize);
+    
+    std::vector<DiskGeometry> result;
+    
+    isize hMin = 1;
+    isize hMax = 64;
+    isize sMin = 16;
+    isize sMax = 64;
+    
+    for (isize h = hMin; h <= hMax; h++) {
+        for (isize s = sMin; s <= sMax; s++) {
+                        
+            if (auto cap = h * s * 512; fileSize % cap == 0) {
+                result.push_back(DiskGeometry(fileSize / cap, h, s, 512));
+            }
+        }
+    }
+    
+    return result;
+}
+
+void
+HDFFile::predictGeometry()
+{
+    debug(true, "predictGeometry()\n");
+
+    auto geometries = driveGeometries(size);
+    
+    if (geometries.size()) {
+        
+        for (const auto &geo : geometries) {
+            
+            debug(true, "c: %ld h: %ld s: %ld b: %ld\n",
+                  geo.cylinders, geo.heads, geo.sectors, geo.bsize);
+        }
+        
+        geometry = geometries.front();
+    
+    } else {
+        
+        warn("Cannot predict drive geometry\n");
+    }
+    
 }
 
 FSVolumeType

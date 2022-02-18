@@ -130,8 +130,40 @@ HardDrive::didSaveToBuffer(u8 *buffer) const
 }
 
 void
+HardDrive::format(FSVolumeType fsType, BootBlockId bb)
+{
+    debug(HDR_DEBUG, "Formatting drive\n");
+    debug(HDR_DEBUG, "    File system: %s\n", FSVolumeTypeEnum::key(fsType));
+    debug(HDR_DEBUG, "     Boot block: %s\n", BootBlockIdEnum::key(bb));
+
+    // Only proceed if a disk is present
+    if (!data) return;
+
+    if (fsType != FS_NODOS) {
+        
+        // Create a device descriptor matching this drive
+        auto layout = FSDeviceDescriptor(geometry, fsType);
+        
+        // Create a file system
+        auto fs = FSDevice(layout);
+        
+        // Add a boot block
+        fs.makeBootable(bb);
+        
+        // REMOVE ASAP
+        msg("File system\n");
+        fs.dump();
+        
+        // Copy all blocks over
+        fs.exportVolume(data, geometry.numBytes());
+    }
+}
+
+void
 HardDrive::attach(const DiskGeometry &geometry)
 {
+    debug(HDR_DEBUG, "Attaching new hard drive\n");
+
     // Throw an exception if the geometry is not supported
     checkCompatibility(geometry);
     
@@ -142,60 +174,38 @@ HardDrive::attach(const DiskGeometry &geometry)
     alloc(geometry);
 
     // Remove asap
+    msg("Hard drive attached successfully\n");
     dump();
-}
-
-void
-HardDrive::attach(const DiskGeometry &geometry, FSVolumeType fs, BootBlockId bb)
-{
-    msg("Attaching new hard drive\n");
-    msg("  File system : %s\n", FSVolumeTypeEnum::key(fs));
-    msg("   Boot block : %s\n", BootBlockIdEnum::key(bb));
-    msg("    Cylinders : %ld\n", geometry.cylinders);
-    msg("        Heads : %ld\n", geometry.heads);
-    msg("      Sectors : %ld\n", geometry.sectors);
-    msg("   Block size : %ld\n", geometry.bsize);
-
-    if (fs == FS_NODOS) {
-        
-        attach(geometry);
-        
-    } else {
-        
-        // Throw an exception if the geometry is not supported
-        checkCompatibility(geometry);
-        
-        // Create a device descriptor
-        auto layout = FSDeviceDescriptor(geometry, fs);
-        layout.dump();
-        
-        // Create the file system
-        auto device = FSDevice(layout);
-        
-        // Add a boot block
-        device.makeBootable(bb);
-        
-        // REMOVE ASAP
-        device.dump();
-        
-        // Attach the drive
-        attach(device);
-    }
 }
 
 void
 HardDrive::attach(const FSDevice &fs)
 {
-    msg("TODO: Init with file system\n");
+    auto geometry = fs.getGeometry();
+    
+    // Throw an exception if the geometry is not supported
+    checkCompatibility(geometry);
+
+    // Allocate memory
+    alloc(geometry);
+    
+    // Copy all blocks over
+    fs.exportVolume(data, geometry.numBytes());
 }
 
 void
 HardDrive::attach(const HDFFile &hdf)
 {
-    // Throw an exception if the HDF is not supported
-    checkCompatibility(hdf);
+    auto geometry = hdf.getGeometry();
     
-    msg("TODO\n");
+    // Throw an exception if the geometry is not supported
+    checkCompatibility(geometry);
+
+    // Allocate memory
+    alloc(geometry);
+    
+    // Copy all blocks over
+    hdf.flash(data);
 }
 
 void

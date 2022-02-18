@@ -134,6 +134,19 @@ FSDevice::info()
     for (auto& p : partitions) p->info();
 }
 
+DiskGeometry
+FSDevice::getGeometry() const
+{
+    DiskGeometry result;
+    
+    result.cylinders = numCyls;
+    result.heads = numHeads;
+    result.sectors = numSectors;
+    result.bsize = bsize;
+    
+    return result;
+}
+
 void
 FSDevice::_dump(dump::Category category, std::ostream& os) const
 {
@@ -763,31 +776,31 @@ FSDevice::importVolume(const u8 *src, isize size)
 }
 
 bool
-FSDevice::exportVolume(u8 *dst, isize size)
+FSDevice::exportVolume(u8 *dst, isize size) const
 {
     return exportBlocks(0, (Block)(numBlocks - 1), dst, size);
 }
 
 bool
-FSDevice::exportVolume(u8 *dst, isize size, ErrorCode *err)
+FSDevice::exportVolume(u8 *dst, isize size, ErrorCode *err) const
 {
     return exportBlocks(0, (Block)(numBlocks - 1), dst, size, err);
 }
 
 bool
-FSDevice::exportBlock(Block nr, u8 *dst, isize size)
+FSDevice::exportBlock(Block nr, u8 *dst, isize size) const
 {
     return exportBlocks(nr, nr, dst, size);
 }
 
 bool
-FSDevice::exportBlock(Block nr, u8 *dst, isize size, ErrorCode *error)
+FSDevice::exportBlock(Block nr, u8 *dst, isize size, ErrorCode *error) const
 {
     return exportBlocks(nr, nr, dst, size, error);
 }
 
 bool
-FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size)
+FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size) const
 {
     ErrorCode error;
     bool result = exportBlocks(first, last, dst, size, &error);
@@ -797,7 +810,7 @@ FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size)
 }
 
 bool
-FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *err)
+FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *err) const
 {
     assert(last < (Block)numBlocks);
     assert(first <= last);

@@ -16,6 +16,8 @@ class Disk;
 
 class HDFFile : public AmigaFile {
     
+    DiskGeometry geometry;
+    
 public:
     
     static bool isCompatible(const string &path);
@@ -24,6 +26,8 @@ public:
     bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
 
+    void finalizeRead() override { predictGeometry(); }
+    
     
     //
     // Initializing
@@ -52,6 +56,9 @@ public:
 
 public:
     
+    // Returns the (predicted) geometry for this disk
+    const DiskGeometry &getGeometry() const { return geometry; }
+    
     // Returns true if this image contains a rigid disk block
     bool hasRDB() const;
     
@@ -64,6 +71,14 @@ public:
     isize bsize() const;
     struct FSDeviceDescriptor layout();
 
+    // Computes all possible drive geometries
+    std::vector<DiskGeometry> driveGeometries(isize fileSize);
+    
+private:
+
+    // Predicts the drive geometry
+    void predictGeometry();
+        
     
     //
     // Querying partition information

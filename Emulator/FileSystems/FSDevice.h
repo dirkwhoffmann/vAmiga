@@ -106,15 +106,18 @@ public:
     
 public:
             
+    // Returns the disk geometry
+    DiskGeometry getGeometry() const;
+    
     // Returns the total device capacity in blocks
-    i64 getCapacity() { return numBlocks; }
+    i64 getCapacity() const { return numBlocks; }
     
     // Reports layout information
-    isize getNumCyls() { return numCyls; }
-    isize getNumHeads() { return numHeads; }
-    isize getNumTracks() { return getNumCyls() * getNumHeads(); }
-    isize getNumSectors() { return numSectors; }
-    i64 getNumBlocks() { return numBlocks; }
+    isize getNumCyls() const { return numCyls; }
+    isize getNumHeads() const { return numHeads; }
+    isize getNumTracks() const { return getNumCyls() * getNumHeads(); }
+    isize getNumSectors() const { return numSectors; }
+    i64 getNumBlocks() const { return numBlocks; }
 
     
     //
@@ -321,15 +324,15 @@ public:
     void importDirectory(const string &path, bool recursive = true) throws;
     void importDirectory(const fs::directory_entry &dir, bool recursive) throws;
     
-    // Exports the volume to a buffer compatible with the ADF format
-    bool exportVolume(u8 *dst, isize size);
-    bool exportVolume(u8 *dst, isize size, ErrorCode *error);
+    // Exports the volume to a buffer
+    bool exportVolume(u8 *dst, isize size) const;
+    bool exportVolume(u8 *dst, isize size, ErrorCode *error) const;
 
     // Exports a single block or a range of blocks
-    bool exportBlock(Block nr, u8 *dst, isize size);
-    bool exportBlock(Block nr, u8 *dst, isize size, ErrorCode *error);
-    bool exportBlocks(Block first, Block last, u8 *dst, isize size);
-    bool exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *error);
+    bool exportBlock(Block nr, u8 *dst, isize size) const;
+    bool exportBlock(Block nr, u8 *dst, isize size, ErrorCode *error) const;
+    bool exportBlocks(Block first, Block last, u8 *dst, isize size) const;
+    bool exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *error) const;
 
     // Exports the volume to a directory of the host file system
     void exportDirectory(const string &path) throws;
