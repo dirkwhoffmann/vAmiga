@@ -1291,6 +1291,11 @@ using namespace moira;
     return [self drive]->isModified();
 }
 
+- (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex
+{
+    [self drive]->attach(*(HDFFile *)hdf->obj);
+}
+
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b
         exception:(ExceptionWrapper *)ex
 {
@@ -2224,6 +2229,9 @@ using namespace moira;
 @synthesize df2;
 @synthesize df3;
 @synthesize dh0;
+@synthesize dh1;
+@synthesize dh2;
+@synthesize dh3;
 @synthesize diskController;
 @synthesize dmaDebugger;
 @synthesize keyboard;
@@ -2261,6 +2269,9 @@ using namespace moira;
     df2 = [[DriveProxy alloc] initWith:&amiga->df2];
     df3 = [[DriveProxy alloc] initWith:&amiga->df3];
     dh0 = [[HardDriveProxy alloc] initWith:&amiga->dh0];
+    dh1 = [[HardDriveProxy alloc] initWith:&amiga->dh1];
+    dh2 = [[HardDriveProxy alloc] initWith:&amiga->dh2];
+    dh3 = [[HardDriveProxy alloc] initWith:&amiga->dh3];
     diskController = [[DiskControllerProxy alloc] initWith:&amiga->paula.diskController];
     dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];

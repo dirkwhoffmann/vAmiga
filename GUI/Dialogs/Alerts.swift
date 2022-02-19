@@ -67,6 +67,51 @@ extension MyDocument {
                                                    amiga.df2,
                                                    amiga.df3 ])
     }
+    
+    @discardableResult
+    func showHdrIsUnexportedAlert(messageText: String) -> NSApplication.ModalResponse {
+       
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.icon = NSImage(named: "hdf")
+        alert.messageText = messageText
+        alert.informativeText = "Your changes will be lost if you proceed."
+        alert.addButton(withTitle: "Proceed")
+        alert.addButton(withTitle: "Cancel")
+        return alert.runModal()
+    }
+
+    func proceedWithUnexportedHdr(drives: [HardDriveProxy]) -> Bool {
+        
+        let modified = drives.filter { $0.isModified }
+        
+        if modified.isEmpty || parent.pref.ejectWithoutAsking {
+            return true
+        }
+        
+        let names = drives.map({ "dh" + String($0.nr) }).joined(separator: ", ")
+        let text = "Hard drive \(names) contains an unexported disk."
+
+        return showHdrIsUnexportedAlert(messageText: text) == .alertFirstButtonReturn
+    }
+    
+    func proceedWithUnexportedHdr(drive: HardDriveProxy) -> Bool {
+        
+        return proceedWithUnexportedHdr(drives: [drive])
+    }
+        
+    func proceedWithUnexportedHdr(drive nr: Int) -> Bool {
+        
+        return proceedWithUnexportedHdr(drive: amiga.dh(nr)!)
+    }
+    
+    func proceedWithUnexportedHdr() -> Bool {
+        
+        return proceedWithUnexportedHdr(drives: [ amiga.dh0,
+                                                  amiga.dh1,
+                                                  amiga.dh2,
+                                                  amiga.dh3 ])
+    }
 }
 
 extension MyController {
@@ -104,19 +149,18 @@ extension MyController {
         return mydocument.proceedWithUnexportedDisk()
     }
 
-    /*
-    func showGdbTerminationAlert() {
-
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.icon = NSImage(named: "server")
-        alert.messageText = "Connection lost"
-        alert.informativeText = "The GDB server has terminated unexpectedly."
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
+    func proceedWithUnexportedHdr(drive: HardDriveProxy) -> Bool {
+        return mydocument.proceedWithUnexportedHdr(drive: drive)
     }
-    */
     
+    func proceedWithUnexportedHdr(drive nr: Int) -> Bool {
+        return mydocument.proceedWithUnexportedHdr(drive: nr)
+    }
+
+    func proceedWithUnexportedHdr() -> Bool {
+        return mydocument.proceedWithUnexportedHdr()
+    }
+
     func showMissingFFmpegAlert() {
 
         let alert = NSAlert()

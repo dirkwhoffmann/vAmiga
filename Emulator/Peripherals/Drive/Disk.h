@@ -154,7 +154,7 @@ public:
     bool isWriteProtected() const { return writeProtected; }
     void setWriteProtection(bool value) { writeProtected = value; }
     
-    bool isModified() const { return modified; }
+    bool isModified() const { return modified || FORCE_DISK_MODIFIED; }
     void setModified(bool value) { modified = value; }
     
     u64 getFnv() const { return fnv; }

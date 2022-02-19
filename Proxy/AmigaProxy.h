@@ -143,6 +143,9 @@
     GuardsProxy *breakpoints;
     GuardsProxy *watchpoints;
     HardDriveProxy *dh0;
+    HardDriveProxy *dh1;
+    HardDriveProxy *dh2;
+    HardDriveProxy *dh3;
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
@@ -172,6 +175,9 @@
 @property (readonly, strong) GuardsProxy *breakpoints;
 @property (readonly, strong) GuardsProxy *watchpoints;
 @property (readonly, strong) HardDriveProxy *dh0;
+@property (readonly, strong) HardDriveProxy *dh1;
+@property (readonly, strong) HardDriveProxy *dh2;
+@property (readonly, strong) HardDriveProxy *dh3;
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;
@@ -632,6 +638,7 @@
 @property (readonly) BOOL isAttached;
 @property (readonly) BOOL isModified;
 
+- (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (void)format:(FSVolumeType)fs bb:(BootBlockId)bb exception:(ExceptionWrapper *)ex;
 

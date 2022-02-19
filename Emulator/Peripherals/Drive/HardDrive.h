@@ -119,7 +119,7 @@ public:
     bool isAttached() const { return geometry.cylinders != 0; }
     
     // Checks whether the disk contents has been modified by a write operation
-    bool isModified() const { return modified; }
+    bool isModified() const { return modified || FORCE_DISK_MODIFIED; }
         
     
     //
@@ -138,7 +138,6 @@ public:
     
     // Creates an empty hard drive
     void attach(const DiskGeometry &geometry) throws;
-  //   [[deprecated]] void attach(const DiskGeometry &geometry, FSVolumeType fs, BootBlockId bb) throws;
 
     // Creates a disk with the contents of a file system
     void attach(const FSDevice &fs) throws;

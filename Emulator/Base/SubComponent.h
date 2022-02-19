@@ -67,6 +67,9 @@ protected:
     Drive &df2;
     Drive &df3;
     HardDrive &dh0;
+    HardDrive &dh1;
+    HardDrive &dh2;
+    HardDrive &dh3;
     Keyboard &keyboard;
     Memory &mem;
     MsgQueue &msgQueue;

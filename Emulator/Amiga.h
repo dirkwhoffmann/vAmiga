@@ -73,17 +73,24 @@ public:
     ControlPort controlPort2 = ControlPort(*this, PORT_2);
     SerialPort serialPort = SerialPort(*this);
 
-    // Peripherals
-    Keyboard keyboard = Keyboard(*this);
+    // Floppy drives
     Drive df0 = Drive(*this, 0);
     Drive df1 = Drive(*this, 1);
     Drive df2 = Drive(*this, 2);
     Drive df3 = Drive(*this, 3);
+
+    // Hard drives
     HardDrive dh0 = HardDrive(*this, 0);
+    HardDrive dh1 = HardDrive(*this, 1);
+    HardDrive dh2 = HardDrive(*this, 2);
+    HardDrive dh3 = HardDrive(*this, 3);
+
+    // Other Peripherals
+    Keyboard keyboard = Keyboard(*this);
     
     // Shortcuts to all drives
     Drive *df[4] = { &df0, &df1, &df2, &df3 };
-    HardDrive *dh[1] = { &dh0 };
+    HardDrive *dh[4] = { &dh0, &dh1, &dh2, &dh3 };
     
     // Gateway to the GUI
     MsgQueue msgQueue = MsgQueue(*this);

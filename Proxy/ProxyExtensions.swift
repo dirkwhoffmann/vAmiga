@@ -172,6 +172,13 @@ extension DriveProxy {
 
 extension HardDriveProxy {
 
+    func attach(hdf: HDFFileProxy) throws {
+        
+        let exception = ExceptionWrapper()
+        attach(hdf, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
     func attach(c: Int, h: Int, s: Int, b: Int) throws {
         
         let exception = ExceptionWrapper()
@@ -257,6 +264,9 @@ public extension AmigaProxy {
         switch nr {
             
         case 0: return dh0
+        case 1: return dh1
+        case 2: return dh2
+        case 3: return dh3
 
         default:
             return nil
