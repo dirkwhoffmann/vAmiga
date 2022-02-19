@@ -119,17 +119,22 @@ VAError::VAError(ErrorCode code, const string &s)
             break;
 
         case ERROR_HDR_TOO_LARGE:
-            description = "vAmiga only supports hard drives with maximum capacity of ";
-            description += std::to_string(MAX_HDF_SIZE / MB(1)) + " MB.";
+            description = "vAmiga supports hard drives with maximum capacity of ";
+            description += "504 MB.";
+            break;
+            
+        case ERROR_HDR_INVALID_GEOMETRY:
+            description = "The hard drive uses a drive geometry which is not ";
+            description += "supported by the emulator.";
             break;
 
-        case ERROR_HDR_UNSUPPORTED_BSIZE:
-            description = "The hard drive uses a block size which is not supported ";
-            description += "by the emulator.";
+        case ERROR_HDR_INVALID_BSIZE:
+            description = "vAmiga does not support hard drives with a block size ";
+            description += "other than 512 bytes.";
             break;
 
         case ERROR_HDR_UNSUPPORTED:
-            description = "The hard drive is encoded in an unsupported format.";
+            description = "The hard drive is encoded in an unknown or unsupported format.";
             break;
 
         case ERROR_SNAP_TOO_OLD:

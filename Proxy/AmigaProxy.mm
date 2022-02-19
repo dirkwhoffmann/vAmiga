@@ -1316,28 +1316,22 @@ using namespace moira;
     }
 }
 
-/*
-- (void)attachNew:(FSVolumeType)fs
-             boot:(BootBlockId)bb
-                c:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b
-        exception:(ExceptionWrapper *)ex
+- (NSMutableArray *) test
 {
-    DiskGeometry geometry;
-    geometry.cylinders = c;
-    geometry.heads = h;
-    geometry.sectors = s;
-    geometry.bsize = b;
+    NSMutableArray *data = [[NSMutableArray alloc] init];
     
-    try {
+    auto geometry = [self drive]->getGeometry();
+    auto geometries = DiskGeometry::driveGeometries(geometry.numBytes());
         
-        [self drive]->attach(geometry, fs, bb);
-
-    }  catch (VAError &error) {
+    for (auto &g : geometries) {
         
-        [ex save:error];
+        NSInteger encoded = g.cylinders << 32 | g.heads << 16 | g.sectors;
+        NSLog(@"encoded = %ld", (long)encoded);
+        [data addObject: [NSNumber numberWithInteger:encoded]];
     }
+    
+    return data;
 }
-*/
 
 @end
 

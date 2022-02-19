@@ -6,7 +6,21 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-2" userLabel="File's Owner" customClass="HdrGeometryDialog">
+            <connections>
+                <outlet property="cylinderField" destination="Ivb-fr-DFo" id="bLv-P4-9E5"/>
+                <outlet property="cylinderStepper" destination="xXY-el-Faf" id="kHR-PH-bBA"/>
+                <outlet property="cylinderText" destination="eSF-5b-pdf" id="D2l-rz-2fe"/>
+                <outlet property="geometryPopup" destination="PEc-wS-f2v" id="Sx4-vu-ZmD"/>
+                <outlet property="headField" destination="xhr-eV-fYf" id="uqj-Fr-MEH"/>
+                <outlet property="headStepper" destination="aR5-ML-SfG" id="U0R-qE-aCe"/>
+                <outlet property="headText" destination="D6Q-CP-PO4" id="CIt-Ni-IRF"/>
+                <outlet property="sectorField" destination="dql-tz-qo4" id="qOz-7W-7cI"/>
+                <outlet property="sectorStepper" destination="Mb0-kB-aD3" id="lHq-9j-NFs"/>
+                <outlet property="sectorText" destination="Y8m-fw-wXO" id="QC8-If-BfG"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="z56-iX-W6H"/>
+            </connections>
+        </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
@@ -46,6 +60,9 @@ Gw
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <connections>
+                            <action selector="cylinderAction:" target="-2" id="aaP-Kx-rJs"/>
+                        </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D6Q-CP-PO4">
                         <rect key="frame" x="428" y="150" width="65" height="16"/>
@@ -64,6 +81,9 @@ Gw
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <connections>
+                            <action selector="headAction:" target="-2" id="Xcf-eh-ijB"/>
+                        </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y8m-fw-wXO">
                         <rect key="frame" x="427" y="120" width="65" height="16"/>
@@ -82,8 +102,11 @@ Gw
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <connections>
+                            <action selector="sectorAction:" target="-2" id="zW6-m1-RlF"/>
+                        </connections>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bew-p8-ijK">
+                    <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bew-p8-ijK">
                         <rect key="frame" x="423" y="89" width="69" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Block size:" id="jTq-DD-10F">
@@ -92,7 +115,7 @@ Gw
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I05-ba-ncj">
+                    <textField hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I05-ba-ncj">
                         <rect key="frame" x="498" y="86" width="59" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="JJX-KT-VSh">
@@ -114,18 +137,27 @@ Gw
                         <rect key="frame" x="564" y="173" width="19" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="2QG-Ht-UQm"/>
+                        <connections>
+                            <action selector="cylinderStepperAction:" target="-2" id="24x-eF-jLX"/>
+                        </connections>
                     </stepper>
                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aR5-ML-SfG">
                         <rect key="frame" x="564" y="144" width="19" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="a9l-Sf-Axn"/>
+                        <connections>
+                            <action selector="headStepperAction:" target="-2" id="Ci3-pp-mTt"/>
+                        </connections>
                     </stepper>
                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mb0-kB-aD3">
                         <rect key="frame" x="563" y="114" width="19" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="K6x-CO-iC3"/>
+                        <connections>
+                            <action selector="sectorStepperAction:" target="-2" id="2D2-9J-Hfp"/>
+                        </connections>
                     </stepper>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p6q-6V-7Qb">
+                    <stepper hidden="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p6q-6V-7Qb">
                         <rect key="frame" x="563" y="83" width="19" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="3Mx-BS-kIu"/>
@@ -148,12 +180,12 @@ Gw
                             <menu key="menu" id="0CG-ns-of1">
                                 <items>
                                     <menuItem title="Custom" state="on" tag="8" id="JoM-l4-GFq"/>
-                                    <menuItem isSeparatorItem="YES" id="c8w-bU-jNO"/>
-                                    <menuItem title="1920:4:32:512" tag="16" id="HlB-Ra-o6n"/>
-                                    <menuItem id="AsH-tr-1lL"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <connections>
+                            <action selector="geometryAction:" target="-2" id="yl9-4R-rjC"/>
+                        </connections>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dZ1-1h-dcN">
                         <rect key="frame" x="164" y="117" width="232" height="48"/>

@@ -16,12 +16,9 @@ class Disk;
 
 class HDFFile : public AmigaFile {
     
-    // Geometry of this drive
+    // Geometry of this hard drive
     DiskGeometry geometry;
-    
-    // Geometries matching the size of this HDF file
-    std::vector<DiskGeometry> geometries;
-    
+        
 public:
     
     static bool isCompatible(const string &path);
@@ -62,7 +59,7 @@ public:
     
     // Returns the (predicted) geometry for this disk
     const DiskGeometry &getGeometry() const { return geometry; }
-    
+        
     // Returns true if this image contains a rigid disk block
     bool hasRDB() const;
     

@@ -58,7 +58,8 @@ enum_long(ERROR_CODE)
     
     // Hard drives
     ERROR_HDR_TOO_LARGE,
-    ERROR_HDR_UNSUPPORTED_BSIZE,
+    ERROR_HDR_INVALID_GEOMETRY,
+    ERROR_HDR_INVALID_BSIZE,
     ERROR_HDR_UNSUPPORTED,
 
     // Snapshots
@@ -190,7 +191,8 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_DISK_INVALID_SECTOR_NUMBER:  return "DISK_INVALID_SECTOR_NUMBER";
                 
             case ERROR_HDR_TOO_LARGE:               return "HDR_TOO_LARGE";
-            case ERROR_HDR_UNSUPPORTED_BSIZE:       return "HDR_UNSUPPORTED_BSIZE";
+            case ERROR_HDR_INVALID_GEOMETRY:        return "HDR_INVALID_GEOMETRY";
+            case ERROR_HDR_INVALID_BSIZE:           return "HDR_INVALID_BSIZE";
             case ERROR_HDR_UNSUPPORTED:             return "HDR_UNSUPPORTED";
                 
             case ERROR_SNAP_TOO_OLD:                return "SNAP_TOO_OLD";

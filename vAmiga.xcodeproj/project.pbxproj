@@ -31,6 +31,8 @@
 		501A9937243A07A100D269B2 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A9936243A07A100D269B2 /* Storage.swift */; };
 		501B821D2262FFB200042871 /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B821B2262FFB200042871 /* RTC.cpp */; };
 		501C513B27C0084200DF1DD5 /* HdrGeometryDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C513A27C0084200DF1DD5 /* HdrGeometryDialog.xib */; };
+		501C513F27C0C63A00DF1DD5 /* HdrGeometryDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C513E27C0C63A00DF1DD5 /* HdrGeometryDialog.swift */; };
+		501C514227C0CE6600DF1DD5 /* Geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C514027C0CE6600DF1DD5 /* Geometry.cpp */; };
 		501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB310275E460100D0A57B /* OSDebugger.cpp */; };
 		501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB3162762008C00D0A57B /* OSDebuggerRead.cpp */; };
 		501FB319276200A000D0A57B /* OSDebuggerDump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB318276200A000D0A57B /* OSDebuggerDump.cpp */; };
@@ -319,6 +321,9 @@
 		501B821B2262FFB200042871 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
 		501B821C2262FFB200042871 /* RTC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTC.h; sourceTree = "<group>"; };
 		501C513A27C0084200DF1DD5 /* HdrGeometryDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HdrGeometryDialog.xib; sourceTree = "<group>"; };
+		501C513E27C0C63A00DF1DD5 /* HdrGeometryDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HdrGeometryDialog.swift; sourceTree = "<group>"; };
+		501C514027C0CE6600DF1DD5 /* Geometry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Geometry.cpp; sourceTree = "<group>"; };
+		501C514127C0CE6600DF1DD5 /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
 		501E715022671FC20070B17D /* DeniseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeniseTypes.h; sourceTree = "<group>"; };
 		501FB310275E460100D0A57B /* OSDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OSDebugger.cpp; sourceTree = "<group>"; };
 		501FB311275E460100D0A57B /* OSDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSDebugger.h; sourceTree = "<group>"; };
@@ -1114,6 +1119,7 @@
 				508FE04A21EA22CC0043D0E9 /* ImporterDialog.swift */,
 				506B471C256396BC009FEFC3 /* ExporterDialog.swift */,
 				5050EC4027BE97E000394F4F /* HdrCreatorDialog.swift */,
+				501C513E27C0C63A00DF1DD5 /* HdrGeometryDialog.swift */,
 				50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */,
 				50B5663B265E769200226D80 /* DragAndDropImageView.swift */,
 				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
@@ -1275,6 +1281,8 @@
 			isa = PBXGroup;
 			children = (
 				50CF46462620432300BB3B95 /* CMakeLists.txt */,
+				501C514127C0CE6600DF1DD5 /* Geometry.h */,
+				501C514027C0CE6600DF1DD5 /* Geometry.cpp */,
 				50D52442227878E900F8959D /* DiskTypes.h */,
 				50F6EEB721F4F5C60091155D /* Disk.h */,
 				50F6EEB621F4F5C60091155D /* Disk.cpp */,
@@ -1979,6 +1987,7 @@
 				50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */,
 				507C9C4626076EF7006779B5 /* RessourceManager.swift in Sources */,
 				50B9354B243481AB000C78B8 /* SnapshotDialog.swift in Sources */,
+				501C514227C0CE6600DF1DD5 /* Geometry.cpp in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,
 				508FE04E21EA22CC0043D0E9 /* RomConf.swift in Sources */,
 				50E1D2C826CCF97C001FE199 /* ChronoExtensions.swift in Sources */,
@@ -2034,6 +2043,7 @@
 				508FE05C21EA22CC0043D0E9 /* ImporterDialog.swift in Sources */,
 				50F580662431D1A000E7D84D /* Screenshot.swift in Sources */,
 				50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */,
+				501C513F27C0C63A00DF1DD5 /* HdrGeometryDialog.swift in Sources */,
 				50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

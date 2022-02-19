@@ -157,44 +157,15 @@ HDFFile::predictGeometry()
 {
     debug(true, "predictGeometry()\n");
 
-    // Typical number of sectors per track
-    // https://www.win.tue.nl/~aeb/linux/hdtypes/hdtypes-4.html
+    // Get all possible geometries
+    auto geometries = DiskGeometry::driveGeometries(size);
     
-    static i8 sizes[] = {
-        
-        16, 17, 24, 26, 27, 28, 29, 32, 34,
-        35, 36, 38, 47, 50, 51, 52, 53, 55,
-        56, 59, 60, 61, 62, 63
-    };
-    
-    // Compute all geometries compatible with the file size
-    for (isize h = DiskGeometry::hMin; h <= DiskGeometry::hMin; h++) {
-        for (isize i = 0; i < isizeof(sizes); i++) {
-                  
-            auto s = isize(sizes[i]);
-            auto cylSize = h * s * 512;
-            
-            if (size % cylSize == 0) {
-                
-                auto c = size / cylSize;
-
-                if (c > DiskGeometry::cMax) continue;
-                if (c < DiskGeometry::cMin && h > 1) continue;
-                
-                geometries.push_back(DiskGeometry(c, h, s, 512));
-            }
-        }
-    }
-
-    // Sort all entries
-    std::sort(geometries.begin(), geometries.end());
-    
-    // Print some debug output
+    // REMOVE ASAP
     for (const auto &g : geometries) {
         debug(true, "c: %ld h: %ld s: %ld\n", g.cylinders, g.heads, g.sectors);
     }
 
-    // By default, use the first entry as the drive's geometry
+    // Use the first entry as the drive's geometry
     if (geometries.size()) geometry = geometries.front();
 }
 

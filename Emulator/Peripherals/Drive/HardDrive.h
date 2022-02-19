@@ -111,13 +111,16 @@ public:
 
     // Returns information about the current state
     HardDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
-    
+
+    // Checks whether this drive is attached to the Amiga
+    const DiskGeometry &getGeometry() const { return geometry; }
+
     // Checks whether this drive is attached to the Amiga
     bool isAttached() const { return geometry.cylinders != 0; }
     
     // Checks whether the disk contents has been modified by a write operation
     bool isModified() const { return modified; }
-    
+        
     
     //
     // Preparing disks
@@ -142,12 +145,4 @@ public:
 
     // Creates a disk with the contents of an HDF
     void attach(const HDFFile &hdf) throws;
-    
-private:
-    
-    // Checks if the provided disk geometry or HDF is supported by the emulator
-    void checkCompatibility(const DiskGeometry &geometry) throws;
-
-    // Checks if the provided HDF is supported by the emulator
-    void checkCompatibility(const HDFFile &hdf) throws;
 };

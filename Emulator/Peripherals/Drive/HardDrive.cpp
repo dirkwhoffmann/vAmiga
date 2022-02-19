@@ -165,7 +165,7 @@ HardDrive::attach(const DiskGeometry &geometry)
     debug(HDR_DEBUG, "Attaching new hard drive\n");
 
     // Throw an exception if the geometry is not supported
-    checkCompatibility(geometry);
+    geometry.checkCompatibility();
     
     // Trash the old disk
     dealloc();
@@ -184,7 +184,7 @@ HardDrive::attach(const FSDevice &fs)
     auto geometry = fs.getGeometry();
     
     // Throw an exception if the geometry is not supported
-    checkCompatibility(geometry);
+    geometry.checkCompatibility();
 
     // Allocate memory
     alloc(geometry);
@@ -199,30 +199,11 @@ HardDrive::attach(const HDFFile &hdf)
     auto geometry = hdf.getGeometry();
     
     // Throw an exception if the geometry is not supported
-    checkCompatibility(geometry);
-
+    geometry.checkCompatibility();
+ 
     // Allocate memory
     alloc(geometry);
     
     // Copy all blocks over
     hdf.flash(data);
-}
-
-void
-HardDrive::checkCompatibility(const DiskGeometry &geometry)
-{
-    if (geometry.numBytes() > MAX_HDF_SIZE || FORCE_HDR_TOO_LARGE) {
-        
-        throw VAError(ERROR_HDR_TOO_LARGE);
-    }
-    if (geometry.bsize != 512 || FORCE_HDR_UNSUPPORTED_BSIZE) {
-        
-        throw VAError(ERROR_HDR_UNSUPPORTED_BSIZE);
-    }
-}
-
-void
-HardDrive::checkCompatibility(const HDFFile &hdf)
-{
-    // TODO
 }

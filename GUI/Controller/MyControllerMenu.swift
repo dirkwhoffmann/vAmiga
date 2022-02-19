@@ -124,7 +124,10 @@ extension MyController: NSMenuItemValidation {
 
         case #selector(MyController.exportRecentHdrAction(_:)):
             return validateURLlist(myAppDelegate.recentlyExportedHdrURLs, image: smallHdr)
-            
+
+        case #selector(MyController.hdrGeometryAction(_:)):
+            return dhn.isAttached
+
         case #selector(MyController.inspectHdrAction(_:)):
             return dhn.isAttached
 
@@ -716,6 +719,13 @@ extension MyController: NSMenuItemValidation {
          */
     }
 
+    @IBAction func hdrGeometryAction(_ sender: NSMenuItem!) {
+        
+        let nibName = NSNib.Name("HdrGeometryDialog")
+        let panel = HdrGeometryDialog.make(parent: self, nibName: nibName)
+        panel?.showSheet(forDrive: sender.tag)
+    }
+    
     @IBAction func inspectHdrAction(_ sender: NSMenuItem!) {
         
         track("TODO")

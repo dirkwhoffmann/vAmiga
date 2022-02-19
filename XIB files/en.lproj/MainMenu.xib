@@ -942,10 +942,16 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="qgs-Zf-fdv"/>
-                            <menuItem title="Inspect..." id="WFi-pt-ys5" userLabel="Export disk">
+                            <menuItem title="Adjust Geometry..." id="WFi-pt-ys5" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="inspectHdrAction:" target="-1" id="GJZ-NS-xkV"/>
+                                    <action selector="hdrGeometryAction:" target="-1" id="uqG-7U-CvA"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Inspect..." id="1m9-KG-jpf" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectHdrAction:" target="-1" id="x0b-KS-HXt"/>
                                 </connections>
                             </menuItem>
                         </items>
