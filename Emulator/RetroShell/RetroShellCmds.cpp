@@ -1122,6 +1122,22 @@ RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 }
 
 //
+// Dh0, Dh1, Dh2, Dh3
+//
+
+template <> void
+RetroShell::exec <Token::dhn, Token::inspect, Token::state> (Arguments& argv, long param)
+{
+    dump(*amiga.dh[param], dump::State);
+}
+
+template <> void
+RetroShell::exec <Token::dhn, Token::inspect, Token::disk> (Arguments& argv, long param)
+{
+    dump(*amiga.dh[param], dump::Disk);
+}
+
+//
 // OSDebugger
 //
 

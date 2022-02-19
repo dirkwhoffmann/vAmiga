@@ -1293,7 +1293,11 @@ using namespace moira;
 
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex
 {
-    [self drive]->attach(*(HDFFile *)hdf->obj);
+    try {
+        [self drive]->attach(*(HDFFile *)hdf->obj);
+    }  catch (VAError &error) {
+        [ex save:error];
+    }
 }
 
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b

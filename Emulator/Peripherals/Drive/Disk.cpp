@@ -104,6 +104,7 @@ Disk::writeByte(u8 value, Track t, isize offset)
     assert(offset < length.track[t]);
 
     data.track[t][offset] = value;
+    modified = true;
 }
 
 void
@@ -114,13 +115,15 @@ Disk::writeByte(u8 value, Cylinder c, Side s, isize offset)
     assert(offset < length.cylinder[c][s]);
 
     data.cylinder[c][s][offset] = value;
+    modified = true;
 }
 
 void
 Disk::clearDisk()
 {
     fnv = 0;
-
+    modified = FORCE_DISK_MODIFIED ? true : false;
+    
     // Initialize with random data
     srand(0);
     for (isize i = 0; i < isizeof(data.raw); i++) {

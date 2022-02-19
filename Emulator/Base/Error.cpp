@@ -124,8 +124,7 @@ VAError::VAError(ErrorCode code, const string &s)
             break;
             
         case ERROR_HDR_INVALID_GEOMETRY:
-            description = "The hard drive uses a drive geometry which is not ";
-            description += "supported by the emulator.";
+            description = "The hard drive is formatted with an unsupported drive geometry.";
             break;
 
         case ERROR_HDR_INVALID_BSIZE:

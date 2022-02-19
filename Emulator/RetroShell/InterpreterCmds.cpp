@@ -941,12 +941,53 @@ Interpreter::registerInstructions()
         root.add({df, "audiate", "poll"},
                  "command", "Makes polling clicks audible",
                  &RetroShell::exec <Token::dfn, Token::audiate, Token::poll>, 1, i);
+    }
+    
+    for (isize i = 0; i < 4; i++) {
+
+        string df = "df" + std::to_string(i);
         
         root.add({df, "inspect"},
-                 "command", "Displays the internal state",
+                 "command", "Displays the component state",
                  &RetroShell::exec <Token::dfn, Token::inspect>, 0);
     }
 
+    //
+    // Dh0, Dh1, Dh2, Dh3
+    //
+    
+    root.add({"dh0"},
+             "component", "Hard drive 0");
+
+    root.add({"dh1"},
+             "component", "Hard drive 1");
+
+    root.add({"dh2"},
+             "component", "Hard drive 2");
+
+    root.add({"dh3"},
+             "component", "Hard drive 3");
+
+    /*
+    root.add({"dhn"},
+             "component", "All connected hard drives");
+    */
+    for (isize i = 0; i < 4; i++) {
+        
+        string dh = "dh" + std::to_string(i);
+
+        root.add({dh, "inspect"},
+                 "command", "Displays the component state");
+
+        root.add({dh, "inspect", "state"},
+                 "command", "Displays the internal state",
+                 &RetroShell::exec <Token::dhn, Token::inspect, Token::state>, 0);
+
+        root.add({dh, "inspect", "disk"},
+                 "command", "Displays disk properties",
+                 &RetroShell::exec <Token::dhn, Token::inspect, Token::disk>, 0);
+    }
+    
     //
     // OS Debugger
     //

@@ -118,9 +118,9 @@ public:
     // Checks whether this drive is attached to the Amiga
     bool isAttached() const { return geometry.cylinders != 0; }
     
-    // Checks whether the disk contents has been modified by a write operation
-    bool isModified() const { return modified || FORCE_DISK_MODIFIED; }
-        
+    // Gets or sets the 'modification' flag
+    bool isModified() const { return modified; }
+    void setModified(bool value) { modified = value; }
     
     //
     // Preparing disks

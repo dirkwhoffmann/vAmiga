@@ -640,18 +640,16 @@ extension MyController: NSMenuItemValidation {
         
         let drive = sender.tag / 10
         let slot  = sender.tag % 10
-        
-        attachRecentHdrAction(drive: drive, slot: slot)
-    }
-    
-    func attachRecentHdrAction(drive: Int, slot: Int) {
-        
+                
+        // Ask the user if an unsafed disk should be discarded
+        if !proceedWithUnexportedHdr(drive: drive) { return }
+
         if let url = myAppDelegate.getRecentlyAttachedHdrURL(slot) {
             attachHdrAction(from: url, drive: drive)
         }
     }
     
-    func attachHdrAction(from url: URL, drive: Int) {
+    private func attachHdrAction(from url: URL, drive: Int) {
         
         track("attachHdrAction \(url)")
         
@@ -660,10 +658,7 @@ extension MyController: NSMenuItemValidation {
         do {
             // Try to create a file proxy
             try mydocument.createAttachment(from: url, allowedTypes: types)
-            
-            // Ask the user if an unsafed disk should be discarded
-            if !proceedWithUnexportedHdr(drive: drive) { return }
-            
+                        
             if let file = mydocument.attachment as? HDFFileProxy {
                 
                 do {

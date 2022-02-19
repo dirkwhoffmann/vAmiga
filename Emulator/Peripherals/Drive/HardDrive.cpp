@@ -56,6 +56,8 @@ void
 HardDrive::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
+    
+    if constexpr (FORCE_HDR_MODIFIED) { modified = true; }
 }
 
 void
@@ -72,11 +74,9 @@ void
 HardDrive::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
-        
-    if (category & dump::State) {
-        
-        os << tab("Nr");
-        os << dec(nr) << std::endl;
+
+    if (category & dump::Disk) {
+
         os << tab("Capacity");
         os << dec(geometry.numBytes() / MB(1)) << " MB" << std::endl;
         os << tab("Cylinders");
@@ -87,6 +87,18 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << dec(geometry.sectors) << std::endl;
         os << tab("Block size");
         os << dec(geometry.bsize) << std::endl;
+    }
+    
+    if (category & dump::State) {
+        
+        os << tab("Nr");
+        os << dec(nr) << std::endl;
+        os << tab("Attached");
+        os << bol(isAttached()) << std::endl;
+        os << tab("Modified");
+        os << bol(modified) << std::endl;
+        os << tab("Head");
+        os << "Cylinder " << dec(currentCylinder) << std::endl;
     }
 }
 

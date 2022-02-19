@@ -82,7 +82,10 @@ DiskGeometry::checkCompatibility() const
     if (bsize != 512 || FORCE_HDR_INVALID_BSIZE) {
         throw VAError(ERROR_HDR_INVALID_BSIZE);
     }
-    if (cylinders < cMin || cylinders > cMax || FORCE_HDR_INVALID_GEOMETRY) {
+    if (cylinders > cMax || FORCE_HDR_INVALID_GEOMETRY) {
+        throw VAError(ERROR_HDR_INVALID_GEOMETRY);
+    }
+    if (cylinders < cMin && heads > 1) {
         throw VAError(ERROR_HDR_INVALID_GEOMETRY);
     }
     if (heads < hMin || heads > hMax) {
