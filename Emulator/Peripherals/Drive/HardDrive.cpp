@@ -94,7 +94,10 @@ HardDrive::_inspect() const
     {   SYNCHRONIZED
         
         info.attached = isAttached();
-        info.cylinder = currentCylinder;
+        info.modified = isModified();
+        info.head.c = head.c;
+        info.head.h = head.h;
+        info.head.s = head.s;
     }
 }
 
@@ -129,7 +132,10 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << tab("Modified");
         os << bol(modified) << std::endl;
         os << tab("Head");
-        os << "Cylinder " << dec(currentCylinder) << std::endl;
+        os << "c: " << dec(head.c);
+        os << "h: " << dec(head.h);
+        os << "s: " << dec(head.s);
+        os << std::endl;
     }
 }
 
@@ -259,9 +265,15 @@ HardDrive::read(isize offset, isize length, u32 addr)
     // Check arguments
     auto error = verify(offset, length, addr);
     
-    // Perform the read operation
-    if (!error) mem.patch(addr, data + offset, length);
+    if (!error) {
         
+        // Move the drive head to the specified location
+        moveHead(offset / geometry.bsize);
+
+        // Perform the read operation
+        mem.patch(addr, data + offset, length);
+    }
+    
     return error;
 }
 
@@ -273,12 +285,13 @@ HardDrive::write(isize offset, isize length, u32 addr)
     // Check arguments
     auto error = verify(offset, length, addr);
     
-    // Perform the read operation
     if (!error) {
-        // TODO: Add spypeek with a buffer/length argument
-        for (isize i = 0; i < length; i++) {
-            data[offset + i] = mem.spypeek8 <ACCESSOR_CPU> ((u32)(addr + i));
-        }
+    
+        // Move the drive head to the specified location
+        moveHead(offset / geometry.bsize);
+
+        // Perform the read operation
+        mem.spypeek <ACCESSOR_CPU> (addr, length, data + offset);
     }
     
     return error;
@@ -316,3 +329,20 @@ HardDrive::verify(isize offset, isize length, u32 addr)
     return 0;
 }
  
+void
+HardDrive::moveHead(isize lba)
+{
+    isize c = lba / (geometry.heads * geometry.sectors);
+    isize h = (lba / geometry.sectors) % geometry.heads;
+    isize s = lba % geometry.sectors;
+
+    moveHead(c, h, s);
+}
+
+void
+HardDrive::moveHead(isize c, isize h, isize s)
+{
+    head.c = c;
+    head.h = h;
+    head.s = s;
+}

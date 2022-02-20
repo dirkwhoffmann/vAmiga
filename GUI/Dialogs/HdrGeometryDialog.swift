@@ -9,8 +9,6 @@
 
 class HdrGeometryDialog: DialogController {
         
-    @IBOutlet weak var diskIcon: NSImageView!
-
     @IBOutlet weak var geometryPopup: NSPopUpButton!
 
     @IBOutlet weak var cylinderText: NSTextField!
@@ -25,6 +23,9 @@ class HdrGeometryDialog: DialogController {
     @IBOutlet weak var headStepper: NSStepper!
     @IBOutlet weak var sectorStepper: NSStepper!
 
+    @IBOutlet weak var warningText: NSTextField!
+    @IBOutlet weak var okButton: NSButton!
+
     var nr = 0
 
     // Geometry
@@ -33,7 +34,7 @@ class HdrGeometryDialog: DialogController {
     var sectors = 0
     let bsize = 512
     
-    var drive: HardDriveProxy? { amiga.dh(nr) }
+    var drive: HardDriveProxy { amiga.dh(nr)! }
     
     //
     // Selecting a block
@@ -86,7 +87,8 @@ class HdrGeometryDialog: DialogController {
         cylinderStepper.maxValue = .greatestFiniteMagnitude
         headStepper.maxValue = .greatestFiniteMagnitude
         sectorStepper.maxValue = .greatestFiniteMagnitude
-        
+        warningText.textColor = .warningColor
+
         update()
     }
     
@@ -98,18 +100,15 @@ class HdrGeometryDialog: DialogController {
         geometryPopup.addItem(withTitle: "Custom")
         geometryPopup.item(at: 0)!.tag = 0
         
-        if let geometries = drive?.test() as? [Int] {
+        if let geometries = drive.test() as? [Int] {
             
             for (i, geo) in geometries.enumerated() {
                 
                 let c = (geo >> 32)
                 let h = (geo >> 16) & 0xFFFF
                 let s = geo & 0xFFFF
-                
-                // let t = "CHS \(c)/\(h)/\(s)"
-                let t = "\(c) - \(h) - \(s)"
-                
-                geometryPopup.addItem(withTitle: t)
+                                
+                geometryPopup.addItem(withTitle: "\(c) - \(h) - \(s)")
                 geometryPopup.item(at: i + 1)!.tag = geo
             }
             
@@ -165,6 +164,11 @@ class HdrGeometryDialog: DialogController {
         for (label, enabled) in labels {
             label.textColor = enabled ? .labelColor : .secondaryLabelColor
         }
+        
+        // Check if the geometry is consistent with the HDF
+        let matching = cylinders * heads * sectors * bsize == drive.capacity
+        warningText.isHidden = matching
+        okButton.isEnabled = matching
     }
         
     //

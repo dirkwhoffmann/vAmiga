@@ -21,13 +21,13 @@ ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
 }
 
 u8
-ZorroManager::peek(u32 addr) const
+ZorroManager::peekACF(u32 addr) const
 {
     for (isize i = 0; slots[i]; i++) {
 
         if (slots[i]->state == STATE_AUTOCONF) {
             
-            return slots[i]->peekAutoconf8(addr);
+            return slots[i]->peekACF8(addr);
         }
     }
     return 0xFF;
@@ -40,7 +40,7 @@ ZorroManager::poke(u32 addr, u8 value)
 
         if (slots[i]->state == STATE_AUTOCONF) {
             
-            slots[i]->pokeAutoconf8(addr, value);
+            slots[i]->pokeACF8(addr, value);
             return;
         }
     }

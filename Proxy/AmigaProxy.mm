@@ -1291,6 +1291,26 @@ using namespace moira;
     return [self drive]->isModified();
 }
 
+- (NSInteger)capacity
+{
+    return [self drive]->getGeometry().numBytes();
+}
+
+- (NSInteger)cylinders
+{
+    return [self drive]->getGeometry().cylinders;
+}
+
+- (NSInteger)heads
+{
+    return [self drive]->getGeometry().heads;
+}
+
+- (NSInteger)sectors
+{
+    return [self drive]->getGeometry().sectors;
+}
+
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex
 {
     try {

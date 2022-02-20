@@ -28,12 +28,11 @@ class HardDrive : public SubComponent {
     // Disk data
     u8 *data = nullptr;
     
-    // Position of the read/write head
-    isize currentCylinder = 0;
+    // Current position of the read/write head
+    struct { isize c; isize h; isize s; } head;
     
     // Indicates if a write operation has been performed
     bool modified = false;
-    
     
     
     //
@@ -88,7 +87,9 @@ private:
             
             worker
             
-            << currentCylinder;
+            << head.c
+            << head.h
+            << head.s;
         }
     }
 
@@ -163,4 +164,8 @@ private:
     
     // Checks the given argument list for consistency
     i8 verify(isize offset, isize length, u32 addr);
+
+    // Moves the drive head to the specified block
+    void moveHead(isize lba);
+    void moveHead(isize c, isize h, isize s);
 };

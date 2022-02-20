@@ -25,6 +25,7 @@
 typedef struct
 {
     bool attached;
-    isize cylinder;
+    bool modified;
+    struct { isize c; isize h; isize s; } head;
 }
 HardDriveInfo;

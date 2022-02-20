@@ -78,8 +78,8 @@ private:
 public:
     
     // Read a byte from autoconfig space
-    u8 peek(u32 addr) const;
-    u8 spypeek(u32 addr) const { return peek(addr); }
+    u8 peekACF(u32 addr) const;
+    u8 spypeekACF(u32 addr) const { return peekACF(addr); }
     
     // Write a byte into autoconfig space
     void poke(u32 addr, u8 value);

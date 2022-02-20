@@ -1182,7 +1182,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
         }
     }
         
-    dataBus = (u16)(zorro.peek(addr));
+    dataBus = (u16)(zorro.peekACF(addr));
     return (u8)dataBus;
 }
 
@@ -1191,8 +1191,8 @@ Memory::peek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
 {
     ASSERT_AUTO_ADDR(addr);
         
-    auto hi = zorro.peek(addr);
-    auto lo = zorro.peek(addr + 1);
+    auto hi = zorro.peekACF(addr);
+    auto lo = zorro.peekACF(addr + 1);
     
     dataBus = HI_LO(hi,lo);    
     return dataBus;
@@ -1201,8 +1201,8 @@ Memory::peek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
 template<> u16
 Memory::spypeek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr) const
 {
-    auto hi = zorro.spypeek(addr);
-    auto lo = zorro.spypeek(addr + 1);
+    auto hi = zorro.spypeekACF(addr);
+    auto lo = zorro.spypeekACF(addr + 1);
     
     return HI_LO(hi,lo);
 }
@@ -1404,6 +1404,16 @@ Memory::spypeek32 <ACCESSOR_CPU> (u32 addr) const
     auto lo = spypeek16 <ACCESSOR_CPU> (addr + 2);
     
     return HI_W_LO_W(hi, lo);
+}
+
+template <> void
+Memory::spypeek <ACCESSOR_CPU> (u32 addr, isize len, u8 *buf) const
+{
+    assert(buf);
+    
+    for (isize i = 0; i < len; i++) {
+        buf[i] = spypeek8 <ACCESSOR_CPU> (u32(addr + i));
+    }
 }
 
 

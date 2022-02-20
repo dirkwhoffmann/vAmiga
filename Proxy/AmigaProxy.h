@@ -637,6 +637,10 @@
 @property (readonly) NSInteger nr;
 @property (readonly) BOOL isAttached;
 @property (readonly) BOOL isModified;
+@property (readonly) NSInteger capacity;
+@property (readonly) NSInteger cylinders;
+@property (readonly) NSInteger heads;
+@property (readonly) NSInteger sectors;
 
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;

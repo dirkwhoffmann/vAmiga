@@ -76,7 +76,7 @@ ZorroBoard::getDescriptorByte(isize offset) const
 }
 
 u8
-ZorroBoard::peekAutoconf8(u32 addr) const
+ZorroBoard::peekACF8(u32 addr) const
 {
     u8 result = 0xFF;
     u8 offset = addr & 0xFF;
@@ -94,14 +94,14 @@ ZorroBoard::peekAutoconf8(u32 addr) const
         result = 0x00;
     }
     
-    trace(ZOR_DEBUG, "peekAutoconf8(%06x) = %02x\n", offset, result);
+    trace(ZOR_DEBUG, "peekACF8(%06x) = %02x\n", offset, result);
     return result;
 }
 
 void
-ZorroBoard::pokeAutoconf8(u32 addr, u8 value)
+ZorroBoard::pokeACF8(u32 addr, u8 value)
 {
-    trace(ZOR_DEBUG, "pokeAutoconf8(%06x,%02x)\n", addr, value);
+    trace(ZOR_DEBUG, "pokeACF8(%06x,%02x)\n", addr, value);
     
     switch (addr & 0xFFFF) {
                         
@@ -123,6 +123,14 @@ ZorroBoard::pokeAutoconf8(u32 addr, u8 value)
             baseAddr |= (value & 0xF0) << 12;
             return;
     }
+}
+
+bool
+ZorroBoard::mappedIn(u32 addr)
+{
+    isize page = addr / 0x10000;
+    
+    return page >= firstPage() && page <= lastPage();
 }
 
 void

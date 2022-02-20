@@ -68,9 +68,9 @@ private:
     // Configuring (AutoConfig)
     //
     
-    u8 peekAutoconf8(u32 addr) const;
-    u8 spypeekAutoconf8(u32 addr) const { return peekAutoconf8(addr); }
-    void pokeAutoconf8(u32 addr, u8 value);
+    u8 peekACF8(u32 addr) const;
+    u8 spypeekACF8(u32 addr) const { return peekACF8(addr); }
+    void pokeACF8(u32 addr, u8 value);
     
     
     //
@@ -79,11 +79,12 @@ private:
     
 public:
     
-    // Returns the first page where this device is mapped in
+    // Returns the first or the last page this device is mapped to
     isize firstPage() const { return baseAddr / 0x10000; }
-
-    // Returns the number of pages occupied by this device
-    // isize numPages() const { return TODO; }
+    isize lastPage() const { return firstPage() + pages() - 1; }
+    
+    // Checks if the specified address belongs to this device
+    bool mappedIn(u32 addr);
     
     
     //
