@@ -120,7 +120,7 @@ HdrController::updateMemSrcTables()
     if (baseAddr == 0) return;
     
     // Map in this device
-    mem.cpuMemSrc[firstPage()] = MEM_HDR;
+    mem.cpuMemSrc[firstPage()] = MEM_ZOR;
 }
 
 u8

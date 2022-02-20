@@ -77,6 +77,8 @@ private:
     // Accessing
     //
     
+private:
+    
     virtual u8 peek8(u32 addr) { fatalError; }
     virtual u16 peek16(u32 addr) { fatalError; }
     virtual u8 spypeek8(u32 addr) const { fatalError; }

@@ -64,7 +64,7 @@ extension Inspector {
             case .CUSTOM:        color = MemColors.cust
             case .CUSTOM_MIRROR: color = MemColors.cust;     mirror = true
             case .AUTOCONF:      color = MemColors.auto
-            case .HDR:           color = MemColors.auto
+            case .ZOR:           color = MemColors.auto
             case .ROM:           color = MemColors.rom
             case .ROM_MIRROR:    color = MemColors.rom;      mirror = true
             case .WOM:           color = MemColors.wom

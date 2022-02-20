@@ -1208,26 +1208,23 @@ Memory::spypeek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr) const
 }
 
 template<> u8
-Memory::peek8 <ACCESSOR_CPU, MEM_HDR> (u32 addr)
+Memory::peek8 <ACCESSOR_CPU, MEM_ZOR> (u32 addr)
 {
-    // TODO: Route through Zorro mananger to the correct controller
-    dataBus = (u16)(hdrController0.peek8(addr));
-    return (u8)dataBus;
+    dataBus = u16(zorro.peek8(addr));
+    return u8(dataBus);
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_CPU, MEM_HDR> (u32 addr)
+Memory::peek16 <ACCESSOR_CPU, MEM_ZOR> (u32 addr)
 {
-    // TODO: Route through Zorro mananger to the correct controller
-    dataBus = (u16)(hdrController0.peek16(addr));
-    return (u16)dataBus;
+    dataBus = u16(zorro.peek16(addr));
+    return dataBus;
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_CPU, MEM_HDR> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_CPU, MEM_ZOR> (u32 addr) const
 {
-    // TODO: Route through Zorro mananger to the correct controller
-    return hdrController0.spypeek16(addr);
+    return zorro.spypeek16(addr);
 }
 
 template<> u8
@@ -1319,7 +1316,7 @@ Memory::peek8 <ACCESSOR_CPU> (u32 addr)
         case MEM_CUSTOM:        return peek8 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
         case MEM_CUSTOM_MIRROR: return peek8 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
         case MEM_AUTOCONF:      return peek8 <ACCESSOR_CPU, MEM_AUTOCONF> (addr);
-        case MEM_HDR:           return peek8 <ACCESSOR_CPU, MEM_HDR>      (addr);
+        case MEM_ZOR:           return peek8 <ACCESSOR_CPU, MEM_ZOR>      (addr);
         case MEM_ROM:           return peek8 <ACCESSOR_CPU, MEM_ROM>      (addr);
         case MEM_ROM_MIRROR:    return peek8 <ACCESSOR_CPU, MEM_ROM>      (addr);
         case MEM_WOM:           return peek8 <ACCESSOR_CPU, MEM_WOM>      (addr);
@@ -1349,7 +1346,7 @@ Memory::peek16 <ACCESSOR_CPU> (u32 addr)
         case MEM_CUSTOM:        return peek16 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
         case MEM_CUSTOM_MIRROR: return peek16 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
         case MEM_AUTOCONF:      return peek16 <ACCESSOR_CPU, MEM_AUTOCONF> (addr);
-        case MEM_HDR:           return peek16 <ACCESSOR_CPU, MEM_HDR>      (addr);
+        case MEM_ZOR:           return peek16 <ACCESSOR_CPU, MEM_ZOR>      (addr);
         case MEM_ROM:           return peek16 <ACCESSOR_CPU, MEM_ROM>      (addr);
         case MEM_ROM_MIRROR:    return peek16 <ACCESSOR_CPU, MEM_ROM>      (addr);
         case MEM_WOM:           return peek16 <ACCESSOR_CPU, MEM_WOM>      (addr);
@@ -1379,7 +1376,7 @@ Memory::spypeek16 <ACCESSOR_CPU> (u32 addr) const
         case MEM_CUSTOM:        return spypeek16 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
         case MEM_CUSTOM_MIRROR: return spypeek16 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
         case MEM_AUTOCONF:      return spypeek16 <ACCESSOR_CPU, MEM_AUTOCONF> (addr);
-        case MEM_HDR:           return spypeek16 <ACCESSOR_CPU, MEM_HDR>      (addr);
+        case MEM_ZOR:           return spypeek16 <ACCESSOR_CPU, MEM_ZOR>      (addr);
         case MEM_ROM:           return spypeek16 <ACCESSOR_CPU, MEM_ROM>      (addr);
         case MEM_ROM_MIRROR:    return spypeek16 <ACCESSOR_CPU, MEM_ROM>      (addr);
         case MEM_WOM:           return spypeek16 <ACCESSOR_CPU, MEM_WOM>      (addr);
@@ -1687,19 +1684,17 @@ Memory::poke16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr, u16 value)
 }
 
 template <> void
-Memory::poke8 <ACCESSOR_CPU, MEM_HDR> (u32 addr, u8 value)
+Memory::poke8 <ACCESSOR_CPU, MEM_ZOR> (u32 addr, u8 value)
 {
     dataBus = value;
-    // TODO: Route through Zorro mananger to the correct controller
-    hdrController0.poke8(addr, value);
+    zorro.poke8(addr, value);
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_CPU, MEM_HDR> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_CPU, MEM_ZOR> (u32 addr, u16 value)
 {
     dataBus = value;
-    // TODO: Route through Zorro mananger to the correct controller
-    hdrController0.poke16(addr, value);
+    zorro.poke16(addr, value);
 }
 
 template <> void
@@ -1772,7 +1767,7 @@ Memory::poke8 <ACCESSOR_CPU> (u32 addr, u8 value)
         case MEM_CUSTOM:        poke8 <ACCESSOR_CPU, MEM_CUSTOM>   (addr, value); return;
         case MEM_CUSTOM_MIRROR: poke8 <ACCESSOR_CPU, MEM_CUSTOM>   (addr, value); return;
         case MEM_AUTOCONF:      poke8 <ACCESSOR_CPU, MEM_AUTOCONF> (addr, value); return;
-        case MEM_HDR:           poke8 <ACCESSOR_CPU, MEM_HDR>      (addr, value); return;
+        case MEM_ZOR:           poke8 <ACCESSOR_CPU, MEM_ZOR>      (addr, value); return;
         case MEM_ROM:           poke8 <ACCESSOR_CPU, MEM_ROM>      (addr, value); return;
         case MEM_ROM_MIRROR:    poke8 <ACCESSOR_CPU, MEM_ROM>      (addr, value); return;
         case MEM_WOM:           poke8 <ACCESSOR_CPU, MEM_WOM>      (addr, value); return;
@@ -1802,7 +1797,7 @@ Memory::poke16 <ACCESSOR_CPU> (u32 addr, u16 value)
         case MEM_CUSTOM:        poke16 <ACCESSOR_CPU, MEM_CUSTOM>   (addr, value); return;
         case MEM_CUSTOM_MIRROR: poke16 <ACCESSOR_CPU, MEM_CUSTOM>   (addr, value); return;
         case MEM_AUTOCONF:      poke16 <ACCESSOR_CPU, MEM_AUTOCONF> (addr, value); return;
-        case MEM_HDR:           poke16 <ACCESSOR_CPU, MEM_HDR>      (addr, value); return;
+        case MEM_ZOR:           poke16 <ACCESSOR_CPU, MEM_ZOR>      (addr, value); return;
         case MEM_ROM:           poke16 <ACCESSOR_CPU, MEM_ROM>      (addr, value); return;
         case MEM_ROM_MIRROR:    poke16 <ACCESSOR_CPU, MEM_ROM>      (addr, value); return;
         case MEM_WOM:           poke16 <ACCESSOR_CPU, MEM_WOM>      (addr, value); return;

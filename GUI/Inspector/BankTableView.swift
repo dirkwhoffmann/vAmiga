@@ -72,7 +72,7 @@ extension BankTableView: NSTableViewDataSource {
             case .CUSTOM:        return "Chipset"
             case .CUSTOM_MIRROR: return "Chipset Mirror"
             case .AUTOCONF:      return "Autoconf"
-            case .HDR:           return "Hard drive"
+            case .ZOR:           return "Zorro device"
             case .ROM:           return "Rom"
             case .ROM_MIRROR:    return "Rom Mirror"
             case .WOM:           return "Wom"
