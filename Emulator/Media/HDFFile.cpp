@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "HDFFile.h"
+#include "HardDrive.h"
 #include "IOUtils.h"
 
 bool
@@ -24,24 +25,32 @@ HDFFile::isCompatible(std::istream &stream)
     return util::streamLength(stream) % 512 == 0;
 }
 
-HDFFile::HDFFile(const string &path)
+void
+HDFFile::init(const string &path)
 {
     // TODO: Check for oversized HDFs
 
-    init(path);
+    AmigaFile::init(path);
 
     // TODO: Check if geometry can be derived
     // TODO: Check if this disk contains an RDB which is not supported yet
 }
 
-HDFFile::HDFFile(const u8 *buf, isize len)
+void
+HDFFile::init(const u8 *buf, isize len)
 {
     // TODO: Check for oversized HDFs
 
-    init(buf, len);
+    AmigaFile::init(buf, len);
 
     // TODO: Check if geometry can be derived
     // TODO: Check if this disk contains an RDB which is not supported yet
+}
+
+void
+HDFFile::init(HardDrive &drive)
+{
+    AmigaFile::init(drive.data, drive.geometry.numBytes());
 }
 
 bool

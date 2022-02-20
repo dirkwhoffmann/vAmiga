@@ -1689,6 +1689,12 @@ using namespace moira;
     return [self file]->type();
 }
 
+- (NSString *)sizeAsString
+{
+    const string &str = [self file]->sizeAsString();
+    return @(str.c_str());
+}
+
 - (u64)fnv
 {
     return [self file]->fnv();
@@ -2064,6 +2070,12 @@ using namespace moira;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new HDFFile((const u8 *)buf, len)]; }
+    catch (VAError &error) { [ex save:error]; return nil; }
+}
+
++ (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy exception:(ExceptionWrapper *)ex
+{
+    try { return [self make: new HDFFile(*[proxy drive])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 

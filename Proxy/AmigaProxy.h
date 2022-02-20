@@ -736,6 +736,10 @@
 + (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex;
 @end
 
+@protocol MakeWithHardDrive
++ (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy exception:(ExceptionWrapper *)ex;
+@end
+
 @protocol MakeWithFileSystem
 + (instancetype)makeWithFileSystem:(FSDeviceProxy *)proxy exception:(ExceptionWrapper *)ex;
 @end
@@ -749,6 +753,7 @@
 + (FileType) typeOfUrl:(NSURL *)url;
 
 @property (readonly) FileType type;
+@property (readonly) NSString *sizeAsString;
 @property (readonly) u64 fnv;
 
 - (void)setPath:(NSString *)path;
@@ -866,11 +871,12 @@
 // HDFFile
 //
 
-@interface HDFFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> {
+@interface HDFFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer, MakeWithHardDrive> {
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithHardDrive:(HardDriveProxy *)drive exception:(ExceptionWrapper *)ex;
 
 @property (readonly) NSInteger numBlocks;
 @property (readonly) NSInteger numBytes;

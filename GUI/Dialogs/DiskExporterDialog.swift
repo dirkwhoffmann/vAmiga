@@ -77,13 +77,11 @@ class DiskExporterDialog: DialogController {
         
         self.nr = nr
 
-        /*
         // Run the HDF decoder
-        hdf = try? HDFFileProxy.make(drive: dhn) as HDFFileProxy
+        hdf = try? HDFFileProxy.make(hdr: dhn) as HDFFileProxy
                         
         // Try to decode the file system from the HDF
         if hdf != nil { vol = try? FSDeviceProxy.make(withHDF: hdf!) }
-        */
         
         super.showSheet()
     }
@@ -170,7 +168,6 @@ class DiskExporterDialog: DialogController {
         adf != nil ? "Amiga Disk" :
         ext != nil ? "Extended Amiga Disk" :
         img != nil ? "PC Disk" : "Unrecognized device"
-    
     }
 
     func updateTrackAndSectorInfo() {

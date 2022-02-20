@@ -35,9 +35,14 @@ public:
     //
 
 public:
+    
+    HDFFile(const string &path) throws { init(path); }
+    HDFFile(const u8 *buf, isize len) throws { init(buf, len); }
+    HDFFile(class HardDrive &drive) throws { init(drive); }
 
-    HDFFile(const string &path) throws;
-    HDFFile(const u8 *buf, isize len) throws;
+    void init(const string &path) throws;
+    void init(const u8 *buf, isize len) throws;
+    void init(class HardDrive &drive) throws;
 
     const char *getDescription() const override { return "HDF"; }
 

@@ -68,6 +68,7 @@ typedef u32 Block;
 // Converts kilo and mega bytes to bytes
 #define KB(x) ((x) << 10)
 #define MB(x) ((x) << 20)
+#define GB(x) ((x) << 30)
 
 // Converts kilo and mega Hertz to Hertz
 #define KHz(x) ((x) * 1000)

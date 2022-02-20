@@ -16,6 +16,8 @@
 
 class HardDrive : public SubComponent {
     
+    friend class HDFFile;
+    
     // Number of the emulated drive (dh<nr>)
     const isize nr;
 

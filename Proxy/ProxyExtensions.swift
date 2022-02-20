@@ -41,6 +41,14 @@ extension Proxy {
         return obj!
     }
 
+    static func make<T: MakeWithHardDrive>(hdr: HardDriveProxy) throws -> T {
+        
+        let exc = ExceptionWrapper()
+        let obj = T.make(withHardDrive: hdr, exception: exc)
+        if exc.errorCode != ErrorCode.OK { throw VAError(exc) }
+        return obj!
+    }
+
     static func make<T: MakeWithFileSystem>(fs: FSDeviceProxy) throws -> T {
         
         let exc = ExceptionWrapper()
@@ -237,7 +245,16 @@ extension FSDeviceProxy {
         
         return result!
     }
-    
+
+    static func make(withHDF hdf: HDFFileProxy) throws -> FSDeviceProxy {
+        
+        let exception = ExceptionWrapper()
+        let result = FSDeviceProxy.make(withHDF: hdf, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+        
+        return result!
+    }
+
     func export(url: URL) throws {
             
         let exception = ExceptionWrapper()
@@ -379,7 +396,7 @@ extension HDFFileProxy {
     
     var layoutInfo: String {
         
-        let capacity = numBlocks / 2000
+        let capacity = sizeAsString!
         return "\(capacity) MB (\(numBlocks) sectors)"
     }
     
