@@ -646,7 +646,7 @@
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (void)format:(FSVolumeType)fs bb:(BootBlockId)bb exception:(ExceptionWrapper *)ex;
-
+- (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (NSArray *) test;
 
 @end

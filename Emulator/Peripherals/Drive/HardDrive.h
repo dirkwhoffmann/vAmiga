@@ -147,6 +147,10 @@ public:
     // Formats the disk
     void format(FSVolumeType fs, BootBlockId bb) throws;
 
+    // Change the drive geometry
+    void changeGeometry(isize c, isize h, isize s, isize b = 512) throws;
+    void changeGeometry(const DiskGeometry &geometry) throws;
+    
     
     //
     // Reading and writing

@@ -1137,6 +1137,16 @@ RetroShell::exec <Token::dhn, Token::inspect, Token::disk> (Arguments& argv, lon
     dump(*amiga.dh[param], dump::Disk);
 }
 
+template <> void
+RetroShell::exec <Token::dhn, Token::geometry> (Arguments& argv, long param)
+{
+    auto c = util::parseNum(argv[0]);
+    auto h = util::parseNum(argv[1]);
+    auto s = util::parseNum(argv[2]);
+
+    amiga.dh[param]->changeGeometry(c, h, s);
+}
+
 //
 // OSDebugger
 //

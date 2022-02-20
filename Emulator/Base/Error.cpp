@@ -122,14 +122,18 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "vAmiga supports hard drives with maximum capacity of ";
             description += "504 MB.";
             break;
-            
-        case ERROR_HDR_INVALID_GEOMETRY:
-            description = "The hard drive is formatted with an unsupported drive geometry.";
-            break;
 
         case ERROR_HDR_INVALID_BSIZE:
             description = "vAmiga does not support hard drives with a block size ";
             description += "other than 512 bytes.";
+            break;
+
+        case ERROR_HDR_INVALID_GEOMETRY:
+            description = "Unsupported drive geometry.";
+            break;
+
+        case ERROR_HDR_UNMATCHED_GEOMETRY:
+            description = "The drive geometry doesn't match the hard drive capacity.";
             break;
 
         case ERROR_HDR_UNSUPPORTED:

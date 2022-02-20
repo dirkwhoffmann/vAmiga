@@ -192,6 +192,13 @@ extension HardDriveProxy {
         format(fs, bb: bb, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
+
+    func changeGeometry(c: Int, h: Int, s: Int, b: Int) throws {
+        
+        let exception = ExceptionWrapper()
+        changeGeometry(c, h: h, s: s, b: b, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
 }
 
 extension AmigaFileProxy {

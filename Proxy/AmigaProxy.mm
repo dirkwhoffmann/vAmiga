@@ -1350,6 +1350,15 @@ using namespace moira;
     }
 }
 
+- (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex
+{
+    try {
+        [self drive]->changeGeometry(c, h, s, b);
+    }  catch (VAError &error) {
+        [ex save:error];
+    }
+}
+
 - (NSMutableArray *) test
 {
     NSMutableArray *data = [[NSMutableArray alloc] init];

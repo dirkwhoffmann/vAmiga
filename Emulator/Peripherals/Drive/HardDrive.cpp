@@ -210,6 +210,28 @@ HardDrive::format(FSVolumeType fsType, BootBlockId bb)
 }
 
 void
+HardDrive::changeGeometry(isize c, isize h, isize s, isize b)
+{
+    auto geometry = DiskGeometry(c, h, s, b);
+    changeGeometry(geometry);
+}
+
+void
+HardDrive::changeGeometry(const DiskGeometry &geometry)
+{
+    geometry.checkCompatibility();
+        
+    if (this->geometry.numBytes() == geometry.numBytes()) {
+        
+        this->geometry = geometry;
+    
+    } else {
+        
+        throw VAError(ERROR_HDR_UNMATCHED_GEOMETRY);
+    }
+}
+
+void
 HardDrive::attach(const DiskGeometry &geometry)
 {
     debug(HDR_DEBUG, "Attaching new hard drive\n");

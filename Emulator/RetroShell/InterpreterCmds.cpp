@@ -986,6 +986,10 @@ Interpreter::registerInstructions()
         root.add({dh, "inspect", "disk"},
                  "command", "Displays disk properties",
                  &RetroShell::exec <Token::dhn, Token::inspect, Token::disk>, 0);
+
+        root.add({dh, "geometry"},
+                 "command", "Changes the disk geometry",
+                 &RetroShell::exec <Token::dhn, Token::geometry>, 3);
     }
     
     //
