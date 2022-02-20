@@ -85,6 +85,12 @@ public:
     HardDrive dh2 = HardDrive(*this, 2);
     HardDrive dh3 = HardDrive(*this, 3);
 
+    // Hard drive controllers
+    HdrController hdrController0 = HdrController(*this, dh0);
+    HdrController hdrController1 = HdrController(*this, dh1);
+    HdrController hdrController2 = HdrController(*this, dh2);
+    HdrController hdrController3 = HdrController(*this, dh3);
+
     // Other Peripherals
     Keyboard keyboard = Keyboard(*this);
     

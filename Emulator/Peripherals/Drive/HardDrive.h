@@ -121,17 +121,10 @@ public:
     // Gets or sets the 'modification' flag
     bool isModified() const { return modified; }
     void setModified(bool value) { modified = value; }
+        
     
     //
-    // Preparing disks
-    //
-    
-    // Formats the disk
-    void format(FSVolumeType fs, BootBlockId bb) throws;
-    
-    
-    //
-    // Attaching drives
+    // Attaching
     //
 
 public:
@@ -144,4 +137,30 @@ public:
 
     // Creates a disk with the contents of an HDF
     void attach(const HDFFile &hdf) throws;
+
+    
+    //
+    // Formatting
+    //
+    
+    // Formats the disk
+    void format(FSVolumeType fs, BootBlockId bb) throws;
+
+    
+    //
+    // Reading and writing
+    //
+    
+public:
+    
+    // Reads a data block from the hard drive and copies it into RAM
+    i8 read(isize offset, isize length, u32 addr);
+    
+    // Reads a data block from RAM and writes it onto the hard drive
+    i8 write(isize offset, isize length, u32 addr);
+    
+private:
+    
+    // Checks the given argument list for consistency
+    i8 verify(isize offset, isize length, u32 addr);
 };

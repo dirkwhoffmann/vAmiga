@@ -20,15 +20,15 @@ public:
     // A FastRam expansion board
     RamExpansion ramExpansion = RamExpansion(amiga);
 
-    // Simple hard drive controller (based on the AmiEmu)
-    HdrController hdrController = HdrController(amiga);
-    
+    // Hard drive controller (based on the AmiEmu)
+    // HdrController &hdrController; 
+
 private:
     
     ZorroBoard *slots[3] = {
         
         &ramExpansion,
-        &hdrController,
+        &hdrController0,
         nullptr
     };
     

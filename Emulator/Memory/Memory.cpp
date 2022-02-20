@@ -1210,21 +1210,24 @@ Memory::spypeek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr) const
 template<> u8
 Memory::peek8 <ACCESSOR_CPU, MEM_HDR> (u32 addr)
 {
-    dataBus = (u16)(zorro.hdrController.peek8(addr));
+    // TODO: Route through Zorro mananger to the correct controller
+    dataBus = (u16)(hdrController0.peek8(addr));
     return (u8)dataBus;
 }
 
 template<> u16
 Memory::peek16 <ACCESSOR_CPU, MEM_HDR> (u32 addr)
 {
-    dataBus = (u16)(zorro.hdrController.peek16(addr));
+    // TODO: Route through Zorro mananger to the correct controller
+    dataBus = (u16)(hdrController0.peek16(addr));
     return (u16)dataBus;
 }
 
 template<> u16
 Memory::spypeek16 <ACCESSOR_CPU, MEM_HDR> (u32 addr) const
 {
-    return zorro.hdrController.spypeek16(addr);
+    // TODO: Route through Zorro mananger to the correct controller
+    return hdrController0.spypeek16(addr);
 }
 
 template<> u8
@@ -1677,14 +1680,16 @@ template <> void
 Memory::poke8 <ACCESSOR_CPU, MEM_HDR> (u32 addr, u8 value)
 {
     dataBus = value;
-    zorro.hdrController.poke8(addr, value);
+    // TODO: Route through Zorro mananger to the correct controller
+    hdrController0.poke8(addr, value);
 }
 
 template <> void
 Memory::poke16 <ACCESSOR_CPU, MEM_HDR> (u32 addr, u16 value)
 {
     dataBus = value;
-    zorro.hdrController.poke16(addr, value);
+    // TODO: Route through Zorro mananger to the correct controller
+    hdrController0.poke16(addr, value);
 }
 
 template <> void

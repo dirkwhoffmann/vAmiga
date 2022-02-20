@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "HdrController.h"
+#include "HardDrive.h"
 #include "HDFFile.h"
 #include "Memory.h"
 #include "OSDebugger.h"
@@ -75,46 +76,9 @@ const unsigned char exprom[880] = {
 0x00, 0x22, 0x4e, 0xae, 0xfe, 0x86, 0x4c, 0xdf, 0x7f, 0xff, 0x4e, 0x75, 0x70, 0x06, 0x60, 0xfc,
 };
 
-HdrController::HdrController(Amiga& ref) : ZorroBoard(ref)
+HdrController::HdrController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), drive(hdr)
 {
-#ifdef INITIAL_HDF
-    
-    try {
-        
-        hdf = new HDFFile(INITIAL_HDF);
-    
-        debug(true, "HDF file loaded successfully\n");
 
-    } catch (...) {
-        
-        debug(true, "Cannot open HDF file %s\n", INITIAL_HDF);
-    }
-    
-#endif
-}
-
-void
-HdrController::init(const HDFFile *hdf)
-{
-    assert(false);
-}
-
-void
-HdrController::init(const HDFFile *hdf, isize c, isize h, isize s)
-{
-    assert(false);
-}
-
-void
-HdrController::init(isize c, isize h, isize s)
-{
-    assert(false);
-}
-
-void
-HdrController::init(isize capacity)
-{
-    assert(false);
 }
 
 void
@@ -136,11 +100,10 @@ HdrController::_reset(bool hard)
 
     if (hard) {
 
-        if (hdf) {
+        if (drive.isAttached())  {
 
             state = STATE_AUTOCONF;
             debug(true, "Hard drive emulation enabled.\n");
-            hdf->layout().dump();
 
         } else {
             
@@ -241,11 +204,11 @@ HdrController::processInit()
     trace(HDR_DEBUG, "processInit()\n");
 
     // Collect hard drive information
-    auto layout = hdf->layout();
-    u32 sizeBlock = (u32)(layout.geometry.bsize / 4);
-    u32 numHeads = (u32)(layout.geometry.heads);
-    u32 blkTrack = (u32)(layout.geometry.sectors);
-    u32 upperCyl = (u32)(layout.geometry.cylinders - 1);
+    auto geometry = drive.getGeometry();
+    u32 sizeBlock = (u32)(geometry.bsize / 4);
+    u32 numHeads = (u32)(geometry.heads);
+    u32 blkTrack = (u32)(geometry.sectors);
+    u32 upperCyl = (u32)(geometry.cylinders - 1);
     
     constexpr uint16_t devn_sizeBlock = 0x14; // number of longwords in a block
     constexpr uint16_t devn_numHeads  = 0x1C; // number of surfaces
@@ -258,16 +221,6 @@ HdrController::processInit()
     debug(true, "upperCyl = %d\n", upperCyl);
 
     auto rom = pointer;
-    /*
-    mem.poke16<ACCESSOR_CPU>(rom + devn_sizeBlock, HI_WORD(sizeBlock));
-    mem.poke16<ACCESSOR_CPU>(rom + devn_sizeBlock + 2, LO_WORD(sizeBlock));
-    mem.poke16<ACCESSOR_CPU>(rom + devn_numHeads, HI_WORD(numHeads));
-    mem.poke16<ACCESSOR_CPU>(rom + devn_numHeads + 2, LO_WORD(numHeads));
-    mem.poke16<ACCESSOR_CPU>(rom + devn_blkTrack, HI_WORD(blkTrack));
-    mem.poke16<ACCESSOR_CPU>(rom + devn_blkTrack + 2, LO_WORD(blkTrack));
-    mem.poke16<ACCESSOR_CPU>(rom + devn_upperCyl, HI_WORD(upperCyl));
-    mem.poke16<ACCESSOR_CPU>(rom + devn_upperCyl + 2, LO_WORD(upperCyl));
-    */
     mem.patch(rom + devn_sizeBlock, u32(sizeBlock));
     mem.patch(rom + devn_numHeads, u32(numHeads));
     mem.patch(rom + devn_blkTrack, u32(blkTrack));
@@ -278,14 +231,37 @@ void
 HdrController::processCmd()
 {
     os::IOStdReq stdReq;
-    
     osDebugger.read(pointer, &stdReq);
-    auto cmd = (IoCommand)stdReq.io_Command;
     
+    auto cmd = IoCommand(stdReq.io_Command);
+    auto offset = isize(stdReq.io_Offset);
+    auto length = isize(stdReq.io_Length);
+    auto addr = u32(stdReq.io_Data);
+
     debug(HDR_DEBUG, "Processing command %s\n", IoCommandEnum::key(cmd));
 
     switch (cmd) {
             
+        case CMD_READ:
+        {
+            // Perform the operation
+            auto error = drive.read(offset, length, addr);
+                
+            // Check for errors
+            if (error) mem.patch(pointer + IO_ERROR, u8(error));
+            break;
+        }
+        case CMD_WRITE:
+        case CMD_TD_FORMAT:
+        {
+            // Perform the operation
+            auto error = drive.write(offset, length, addr);
+                
+            // Check for errors
+            if (error) mem.patch(pointer + IO_ERROR, u8(error));
+            break;
+        }
+        /*
         case CMD_READ:
         case CMD_WRITE:
         case CMD_TD_FORMAT:
@@ -327,6 +303,7 @@ HdrController::processCmd()
                 return;
             }
             break;
+        */
             
         case CMD_RESET:
         case CMD_UPDATE:

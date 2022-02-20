@@ -15,7 +15,10 @@
 
 class HdrController : public ZorroBoard {
     
-    HDFFile *hdf = nullptr;
+    // [[deprecated]] HDFFile *hdf = nullptr;
+    
+    // The hard drive this controller is connected to
+    HardDrive &drive;
     
     // Transmitted pointer
     u32 pointer = 0;
@@ -27,21 +30,16 @@ class HdrController : public ZorroBoard {
     
 public:
     
-    HdrController(Amiga& ref);
+    HdrController(Amiga& ref, HardDrive& hdr);
 
-    void init(const HDFFile *hdf) throws;
-    void init(const HDFFile *hdf, isize c, isize h, isize s) throws;
-    void init(isize c, isize h, isize s) throws;
-    void init(isize capacity) throws;
-                
-    
+
     //
     // Methods from AmigaObject
     //
     
 private:
     
-    const char *getDescription() const override { return "HardDrive"; }
+    const char *getDescription() const override { return "HdrController"; }
     void _dump(dump::Category category, std::ostream& os) const override;
 
     

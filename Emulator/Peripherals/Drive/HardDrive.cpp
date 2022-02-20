@@ -9,11 +9,39 @@
 
 #include "config.h"
 #include "HardDrive.h"
+#include "HdrControllerTypes.h"
 #include "IOUtils.h"
+#include "Memory.h"
 
 HardDrive::HardDrive(Amiga& ref, isize n) : SubComponent(ref), nr(n)
 {
-    assert(usize(nr) < 4);
+    string path;
+    
+    switch (nr) {
+    
+        case 0: path = INITIAL_DH0; break;
+        case 1: path = INITIAL_DH1; break;
+        case 2: path = INITIAL_DH2; break;
+        case 3: path = INITIAL_DH3; break;
+
+        default:
+            fatalError;
+    }
+    
+    if (path != "") {
+            
+        try {
+            
+            auto hdf = HDFFile(path);
+            attach(hdf);
+            
+            msg("HDF file %s loaded successfully\n", path.c_str());
+            
+        } catch (...) {
+            
+            warn("Cannot open HDF file %s\n", path.c_str());
+        }
+    }
 }
 
 HardDrive::~HardDrive()
@@ -77,8 +105,11 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
 
     if (category & dump::Disk) {
 
+        auto cap1 = geometry.numBytes() / MB(1);
+        auto cap2 = ((100 * geometry.numBytes()) / MB(1)) % 100;
+        
         os << tab("Capacity");
-        os << dec(geometry.numBytes() / MB(1)) << " MB" << std::endl;
+        os << dec(cap1) << "." << dec(cap2) << " MB" << std::endl;
         os << tab("Cylinders");
         os << dec(geometry.cylinders) << std::endl;
         os << tab("Head");
@@ -219,3 +250,69 @@ HardDrive::attach(const HDFFile &hdf)
     // Copy all blocks over
     hdf.flash(data);
 }
+
+i8
+HardDrive::read(isize offset, isize length, u32 addr)
+{
+    debug(HDR_DEBUG, "read(%ld, %ld, %u)\n", offset, length, addr);
+
+    // Check arguments
+    auto error = verify(offset, length, addr);
+    
+    // Perform the read operation
+    if (!error) mem.patch(addr, data + offset, length);
+        
+    return error;
+}
+
+i8
+HardDrive::write(isize offset, isize length, u32 addr)
+{
+    debug(HDR_DEBUG, "write(%ld, %ld, %u)\n", offset, length, addr);
+
+    // Check arguments
+    auto error = verify(offset, length, addr);
+    
+    // Perform the read operation
+    if (!error) {
+        // TODO: Add spypeek with a buffer/length argument
+        for (isize i = 0; i < length; i++) {
+            data[offset + i] = mem.spypeek8 <ACCESSOR_CPU> ((u32)(addr + i));
+        }
+    }
+    
+    return error;
+}
+
+i8
+HardDrive::verify(isize offset, isize length, u32 addr)
+{
+    assert(data);
+
+    if (length % 512) {
+        
+        debug(HDR_DEBUG, "Length must be a multiple of 512 bytes");
+        return IOERR_BADLENGTH;
+    }
+
+    if (offset % 512) {
+        
+        debug(HDR_DEBUG, "Offset is not aligned");
+        return IOERR_BADADDRESS;
+    }
+
+    if (offset + length > geometry.numBytes()) {
+        
+        debug(HDR_DEBUG, "Invalid block location");
+        return IOERR_BADADDRESS;
+    }
+
+    if (!mem.inRam(addr) || !mem.inRam(u32(addr + length))) {
+        
+        debug(HDR_DEBUG, "Invalid RAM location");
+        return IOERR_BADADDRESS;
+    }
+
+    return 0;
+}
+ 

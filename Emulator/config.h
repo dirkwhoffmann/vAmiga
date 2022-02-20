@@ -66,15 +66,24 @@ struct FloatStereo; typedef FloatStereo SampleType;
 // Uncomment to lauch the emulator with a disk in df0
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/DCD-BBS.adf"
 
-// Uncomment to launch the emulator with an attached hard drive
-#define INITIAL_HDF "/tmp/vamiga.hdf"
-
 // Uncomment to set a breakpoint on startup
 // #define INITIAL_BREAKPOINT 0xFC1354
 
 // Uncomment to colorize a certain row or column
 // #define LINE_DEBUG (agnus.pos.v == 260 || agnus.pos.v == 300)
 // #define COLUMN_DEBUG 114
+
+
+//
+// Launch settings
+//
+
+// Add pathes to HDF files to launch the emulator with preloaded hard drives
+#define INITIAL_DH0 "/tmp/vamiga.hdf"
+#define INITIAL_DH1 ""
+#define INITIAL_DH2 ""
+#define INITIAL_DH3 ""
+
 
 //
 // Execution settings
@@ -179,7 +188,7 @@ static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 // Expansion boards
 static const int ZOR_DEBUG       = 0; // Zorro space, autoconfig
 static const int FAS_DEBUG       = 0; // FastRam
-static const int HDR_DEBUG       = 1; // HardDrive
+static const int HDR_DEBUG       = 0; // HardDrive
 
 // Media types
 static const int ADF_DEBUG       = 0; // ADF and extended ADF files

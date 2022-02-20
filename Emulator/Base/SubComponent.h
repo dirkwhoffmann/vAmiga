@@ -25,6 +25,7 @@ class DiskController;
 class DmaDebugger;
 class Drive;
 class HardDrive;
+class HdrController;
 class GdbServer;
 class Joystick;
 class Keyboard;
@@ -70,6 +71,10 @@ protected:
     HardDrive &dh1;
     HardDrive &dh2;
     HardDrive &dh3;
+    HdrController &hdrController0;
+    HdrController &hdrController1;
+    HdrController &hdrController2;
+    HdrController &hdrController3;
     Keyboard &keyboard;
     Memory &mem;
     MsgQueue &msgQueue;

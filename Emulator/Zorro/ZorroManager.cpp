@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "ZorroManager.h"
+#include "Amiga.h"
 #include "Memory.h"
 
 ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
@@ -16,7 +17,6 @@ ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
     subComponents = std::vector<AmigaComponent *> {
         
         &ramExpansion,
-        &hdrController
     };
 }
 
