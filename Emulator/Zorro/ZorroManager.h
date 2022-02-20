@@ -77,13 +77,28 @@ private:
     
 public:
     
+    // Reads a value from Zorro board space
+    u8 peek8(u32 addr);
+    u16 peek16(u32 addr);
+    u8 spypeek8(u32 addr) const;
+    u16 spypeek16(u32 addr) const;
+
+    // Writes a value into Zorro board space
+    void poke8(u32 addr, u8 value);
+    void poke16(u32 addr, u16 value);
+
     // Read a byte from autoconfig space
     u8 peekACF(u32 addr) const;
     u8 spypeekACF(u32 addr) const { return peekACF(addr); }
     
     // Write a byte into autoconfig space
-    void poke(u32 addr, u8 value);
+    void pokeACF(u32 addr, u8 value);
     
     // Asks all boards to update the memory map
     void updateMemSrcTables();
+    
+private:
+    
+    // Returns the mapped in device for a given address
+    ZorroBoard *mappedInDevice(u32 addr) const;
 };

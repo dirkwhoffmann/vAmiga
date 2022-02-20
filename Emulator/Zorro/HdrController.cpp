@@ -124,25 +124,34 @@ HdrController::updateMemSrcTables()
 }
 
 u8
-HdrController::peek8(u32 addr) const
+HdrController::peek8(u32 addr)
 {
-    isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
-    u8 result = (usize)offset < sizeof(exprom) ? exprom[offset] : 0;
+    auto result = spypeek8(addr);
 
     trace(ZOR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
     return result;
 }
 
 u16
-HdrController::peek16(u32 addr) const
+HdrController::peek16(u32 addr)
 {
-    auto hi = peek8(addr);
-    auto lo = peek8(addr + 1);
-
-    u16 result = HI_LO(hi,lo);
+    auto result = spypeek16(addr);
 
     trace(ZOR_DEBUG, "peek16(%06x) = %04x\n", addr, result);
     return result;
+}
+
+u8
+HdrController::spypeek8(u32 addr) const
+{
+    isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
+    return (usize)offset < sizeof(exprom) ? exprom[offset] : 0;
+}
+
+u16
+HdrController::spypeek16(u32 addr) const
+{
+    return HI_LO(spypeek8(addr), spypeek8(addr + 1));
 }
 
 void

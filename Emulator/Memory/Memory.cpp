@@ -1673,7 +1673,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr, u8 value)
     ASSERT_AUTO_ADDR(addr);
         
     dataBus = value;
-    zorro.poke(addr, value);
+    zorro.pokeACF(addr, value);
 }
 
 template <> void
@@ -1682,8 +1682,8 @@ Memory::poke16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr, u16 value)
     ASSERT_AUTO_ADDR(addr);
     
     dataBus = value;
-    zorro.poke(addr, HI_BYTE(value));
-    zorro.poke(addr + 1, LO_BYTE(value));
+    zorro.pokeACF(addr, HI_BYTE(value));
+    zorro.pokeACF(addr + 1, LO_BYTE(value));
 }
 
 template <> void

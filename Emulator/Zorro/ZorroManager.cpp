@@ -21,6 +21,42 @@ ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
 }
 
 u8
+ZorroManager::peek8(u32 addr)
+{
+    return mappedInDevice(addr)->peek8(addr);
+}
+
+u16
+ZorroManager::peek16(u32 addr)
+{
+    return mappedInDevice(addr)->peek16(addr);
+}
+
+u8
+ZorroManager::spypeek8(u32 addr) const
+{
+    return mappedInDevice(addr)->spypeek8(addr);
+}
+
+u16
+ZorroManager::spypeek16(u32 addr) const
+{
+    return mappedInDevice(addr)->spypeek16(addr);
+}
+
+void
+ZorroManager::poke8(u32 addr, u8 value)
+{
+    return mappedInDevice(addr)->poke8(addr, value);
+}
+
+void
+ZorroManager::poke16(u32 addr, u16 value)
+{
+    return mappedInDevice(addr)->poke16(addr, value);
+}
+
+u8
 ZorroManager::peekACF(u32 addr) const
 {
     for (isize i = 0; slots[i]; i++) {
@@ -34,7 +70,7 @@ ZorroManager::peekACF(u32 addr) const
 }
 
 void
-ZorroManager::poke(u32 addr, u8 value)
+ZorroManager::pokeACF(u32 addr, u8 value)
 {
     for (isize i = 0; slots[i]; i++) {
 
@@ -53,4 +89,13 @@ ZorroManager::updateMemSrcTables()
         
         slots[i]->updateMemSrcTables();
     }
+}
+
+ZorroBoard *
+ZorroManager::mappedInDevice(u32 addr) const
+{
+    for (isize i = 0; slots[i]; i++) {
+        if (slots[i]->mappedIn(addr)) return slots[i];
+    }
+    fatalError;
 }

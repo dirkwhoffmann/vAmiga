@@ -74,6 +74,18 @@ private:
     
     
     //
+    // Accessing
+    //
+    
+    virtual u8 peek8(u32 addr) { fatalError; }
+    virtual u16 peek16(u32 addr) { fatalError; }
+    virtual u8 spypeek8(u32 addr) const { fatalError; }
+    virtual u16 spypeek16(u32 addr) const { fatalError; }
+    virtual void poke8(u32 addr, u8 value) { fatalError; }
+    virtual void poke16(u32 addr, u16 value) { fatalError; }
+
+
+    //
     // Querying the memory map
     //
     

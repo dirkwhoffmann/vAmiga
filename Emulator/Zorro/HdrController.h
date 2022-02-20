@@ -15,8 +15,6 @@
 
 class HdrController : public ZorroBoard {
     
-    // [[deprecated]] HDFFile *hdf = nullptr;
-    
     // The hard drive this controller is connected to
     HardDrive &drive;
     
@@ -96,13 +94,14 @@ private:
     //
       
 public:
-    
-    u8 peek8(u32 addr) const;
-    u16 peek16(u32 addr) const;
-    u16 spypeek16(u32 addr) const { return peek16(addr); }
-    void poke8(u32 addr, u8 value);
-    void poke16(u32 addr, u16 value);
-    
+        
+    u8 peek8(u32 addr) override;
+    u16 peek16(u32 addr) override;
+    u8 spypeek8(u32 addr) const override;
+    u16 spypeek16(u32 addr) const override;
+    void poke8(u32 addr, u8 value) override;
+    void poke16(u32 addr, u16 value) override;
+        
 private:
     
     void processInit();
