@@ -322,9 +322,9 @@ public extension DriveProxy {
         var name: String
 
         if hasWriteProtectedDisk() {
-            name = isModifiedDisk ? "diskUPTemplate" : "diskPTemplate"
+            name = modified ? "diskUPTemplate" : "diskPTemplate"
         } else {
-            name = isModifiedDisk ? "diskUTemplate" : "diskTemplate"
+            name = modified ? "diskUTemplate" : "diskTemplate"
         }
 
         return NSImage(named: name)!

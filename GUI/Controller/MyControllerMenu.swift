@@ -123,7 +123,13 @@ extension MyController: NSMenuItemValidation {
             return dhn.isAttached
 
         case #selector(MyController.exportRecentHdrAction(_:)):
-            return validateURLlist(myAppDelegate.recentlyExportedHdrURLs, image: smallHdr)
+            switch item.tag {
+            case 0: return validateURLlist(myAppDelegate.recentlyExportedHdr0URLs, image: smallDisk)
+            case 10: return validateURLlist(myAppDelegate.recentlyExportedHdr1URLs, image: smallDisk)
+            case 20: return validateURLlist(myAppDelegate.recentlyExportedHdr2URLs, image: smallDisk)
+            case 30: return validateURLlist(myAppDelegate.recentlyExportedHdr3URLs, image: smallDisk)
+            default: fatalError()
+            }
 
         case #selector(MyController.hdrGeometryAction(_:)):
             return dhn.isAttached
@@ -685,9 +691,19 @@ extension MyController: NSMenuItemValidation {
     @IBAction func exportRecentHdrDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentHdrAction(_ sender: NSMenuItem!) {
         
-        track("slot: \(sender.tag)")
+        track()
         
-        if let url = myAppDelegate.getRecentlyExportedHdrURL(sender.tag) {
+        let drive = sender.tag / 10
+        let slot  = sender.tag % 10
+                
+        exportRecentDiskAction(drive: drive, slot: slot)
+    }
+
+    func exportRecentHdrAction(drive nr: Int, slot: Int) {
+        
+        track("drive: \(nr) slot: \(slot)")
+
+        if let url = myAppDelegate.getRecentlyExportedHdrURL(slot, drive: nr) {
             
             track("TODO")
             /*
@@ -710,17 +726,14 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func clearRecentlyExportedHdrsAction(_ sender: NSMenuItem!) {
         
-        myAppDelegate.clearRecentlyExportedHdrURLs()
+        myAppDelegate.clearRecentlyExportedHdrURLs(drive: sender.tag)
     }
     
     @IBAction func exportHdrAction(_ sender: NSMenuItem!) {
         
-        track("TODO")
-        /*
-         let nibName = NSNib.Name("ExporterDialog")
-         let exportPanel = ExporterDialog.make(parent: self, nibName: nibName)
-         exportPanel?.showSheet(forDrive: sender.tag)
-         */
+        let nibName = NSNib.Name("DiskExporterDialog")
+        let exportPanel = DiskExporterDialog.make(parent: self, nibName: nibName)
+        exportPanel?.showSheet(hardDrive: sender.tag)
     }
 
     @IBAction func hdrGeometryAction(_ sender: NSMenuItem!) {

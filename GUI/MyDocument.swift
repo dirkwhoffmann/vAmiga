@@ -271,7 +271,7 @@ class MyDocument: NSDocument {
         try export(diskFileProxy: df!, to: url)
         
         // Mark disk as "not modified"
-        amiga.df(nr)!.isModifiedDisk = false
+        amiga.df(nr)!.modified = false
         
         // Remember export URL
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)

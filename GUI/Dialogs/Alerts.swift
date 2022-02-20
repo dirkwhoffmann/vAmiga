@@ -38,7 +38,7 @@ extension MyDocument {
 
     func proceedWithUnexportedDisk(drives: [DriveProxy]) -> Bool {
         
-        let modified = drives.filter { $0.isModifiedDisk }
+        let modified = drives.filter { $0.modified }
         
         if modified.isEmpty || parent.pref.ejectWithoutAsking {
             return true
@@ -83,7 +83,7 @@ extension MyDocument {
 
     func proceedWithUnexportedHdr(drives: [HardDriveProxy]) -> Bool {
         
-        let modified = drives.filter { $0.isModified }
+        let modified = drives.filter { $0.modified }
         
         if modified.isEmpty || parent.pref.ejectWithoutAsking {
             return true

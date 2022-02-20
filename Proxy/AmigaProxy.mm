@@ -1233,12 +1233,12 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; }
 }
 
-- (BOOL)isModifiedDisk
+- (BOOL)modified
 {
     return [self drive]->hasModifiedDisk();
 }
 
-- (void)setModifiedDisk:(BOOL)value
+- (void)setModified:(BOOL)value
 {
     [self drive]->setModifiedDisk(value);
 }
@@ -1286,9 +1286,14 @@ using namespace moira;
     return [self drive]->isAttached();
 }
 
-- (BOOL)isModified
+- (BOOL)modified
 {
     return [self drive]->isModified();
+}
+
+- (void)setModified:(BOOL)value
+{
+    [self drive]->setModified(value);
 }
 
 - (NSInteger)capacity
@@ -2060,6 +2065,21 @@ using namespace moira;
 {
     try { return [self make: new HDFFile((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
+}
+
+- (NSInteger)numCyls
+{
+    return [self hdf]->numCyls();
+}
+
+- (NSInteger)numHeads
+{
+    return [self hdf]->numSides();
+}
+
+- (NSInteger)numSectors
+{
+    return [self hdf]->numSectors();
 }
 
 - (NSInteger)numBlocks

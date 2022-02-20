@@ -580,7 +580,7 @@ class ExporterDialog: DialogController {
             }
             
             // Mark disk as "not modified"
-            drive?.isModifiedDisk = false
+            drive?.modified = false
             
             // Remember export URL
             myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: driveNr!)

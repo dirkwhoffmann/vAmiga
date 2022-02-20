@@ -619,7 +619,7 @@
 - (void)eject;
 - (void)swap:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
 - (void)insertNew:(ExceptionWrapper *)ex;
-@property (getter=isModifiedDisk) BOOL modifiedDisk;
+@property BOOL modified;
 @property (readonly) BOOL motor;
 @property (readonly) NSInteger cylinder;
 @property (readonly) u64 fnv;
@@ -636,7 +636,7 @@
 
 @property (readonly) NSInteger nr;
 @property (readonly) BOOL isAttached;
-@property (readonly) BOOL isModified;
+@property BOOL modified;
 @property (readonly) NSInteger capacity;
 @property (readonly) NSInteger cylinders;
 @property (readonly) NSInteger heads;
@@ -873,6 +873,7 @@
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 
 @property (readonly) NSInteger numBlocks;
+@property (readonly) NSInteger numBytes;
 
 @end
 

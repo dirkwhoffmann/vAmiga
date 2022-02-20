@@ -49,7 +49,10 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     var recentlyAttachedHdrURLs: [URL] = []
     
     // List of recently exported hard drive URLs
-    var recentlyExportedHdrURLs: [URL] = []
+    var recentlyExportedHdr0URLs: [URL] = []
+    var recentlyExportedHdr1URLs: [URL] = []
+    var recentlyExportedHdr2URLs: [URL] = []
+    var recentlyExportedHdr3URLs: [URL] = []
 
     override init() {
                 
@@ -151,16 +154,40 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
         recentlyAttachedHdrURLs = []
     }
     
-    func noteNewRecentlyExportedHdrURL(_ url: URL) {
-        noteRecentlyUsedURL(url, to: &recentlyExportedHdrURLs, size: 1)
+    func noteNewRecentlyExportedHdrURL(_ url: URL, drive nr: Int) {
+
+        switch nr {
+            
+        case 0: noteRecentlyUsedURL(url, to: &recentlyExportedHdr0URLs, size: 1)
+        case 1: noteRecentlyUsedURL(url, to: &recentlyExportedHdr1URLs, size: 1)
+        case 2: noteRecentlyUsedURL(url, to: &recentlyExportedHdr2URLs, size: 1)
+        case 3: noteRecentlyUsedURL(url, to: &recentlyExportedHdr3URLs, size: 1)
+        default: fatalError()
+        }
     }
     
-    func getRecentlyExportedHdrURL(_ pos: Int) -> URL? {
-        return getRecentlyUsedURL(pos, from: recentlyExportedHdrURLs)
+    func getRecentlyExportedHdrURL(_ pos: Int, drive nr: Int) -> URL? {
+        
+        switch nr {
+            
+        case 0: return getRecentlyUsedURL(pos, from: recentlyExportedHdr0URLs)
+        case 1: return getRecentlyUsedURL(pos, from: recentlyExportedHdr1URLs)
+        case 2: return getRecentlyUsedURL(pos, from: recentlyExportedHdr2URLs)
+        case 3: return getRecentlyUsedURL(pos, from: recentlyExportedHdr3URLs)
+        default: fatalError()
+        }
     }
     
-    func clearRecentlyExportedHdrURLs() {
-        recentlyExportedHdrURLs = []
+    func clearRecentlyExportedHdrURLs(drive nr: Int) {
+        
+        switch nr {
+            
+        case 0: recentlyExportedHdr0URLs = []
+        case 1: recentlyExportedHdr1URLs = []
+        case 2: recentlyExportedHdr2URLs = []
+        case 3: recentlyExportedHdr3URLs = []
+        default: fatalError()
+        }
     }
 }
 

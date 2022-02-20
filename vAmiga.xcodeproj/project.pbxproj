@@ -33,6 +33,8 @@
 		501C513B27C0084200DF1DD5 /* HdrGeometryDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C513A27C0084200DF1DD5 /* HdrGeometryDialog.xib */; };
 		501C513F27C0C63A00DF1DD5 /* HdrGeometryDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C513E27C0C63A00DF1DD5 /* HdrGeometryDialog.swift */; };
 		501C514227C0CE6600DF1DD5 /* Geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C514027C0CE6600DF1DD5 /* Geometry.cpp */; };
+		501C514627C2AA4A00DF1DD5 /* DiskExporterDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C514527C2AA4A00DF1DD5 /* DiskExporterDialog.xib */; };
+		501C514827C2AD8C00DF1DD5 /* DiskExporterDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514727C2AD8C00DF1DD5 /* DiskExporterDialog.swift */; };
 		501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB310275E460100D0A57B /* OSDebugger.cpp */; };
 		501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB3162762008C00D0A57B /* OSDebuggerRead.cpp */; };
 		501FB319276200A000D0A57B /* OSDebuggerDump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB318276200A000D0A57B /* OSDebuggerDump.cpp */; };
@@ -324,6 +326,8 @@
 		501C513E27C0C63A00DF1DD5 /* HdrGeometryDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HdrGeometryDialog.swift; sourceTree = "<group>"; };
 		501C514027C0CE6600DF1DD5 /* Geometry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Geometry.cpp; sourceTree = "<group>"; };
 		501C514127C0CE6600DF1DD5 /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
+		501C514527C2AA4A00DF1DD5 /* DiskExporterDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiskExporterDialog.xib; sourceTree = "<group>"; };
+		501C514727C2AD8C00DF1DD5 /* DiskExporterDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskExporterDialog.swift; sourceTree = "<group>"; };
 		501E715022671FC20070B17D /* DeniseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeniseTypes.h; sourceTree = "<group>"; };
 		501FB310275E460100D0A57B /* OSDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OSDebugger.cpp; sourceTree = "<group>"; };
 		501FB311275E460100D0A57B /* OSDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSDebugger.h; sourceTree = "<group>"; };
@@ -1056,6 +1060,7 @@
 				50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */,
 				5050EC3E27BE876F00394F4F /* HdrCreatorDialog.xib */,
 				501C513A27C0084200DF1DD5 /* HdrGeometryDialog.xib */,
+				501C514527C2AA4A00DF1DD5 /* DiskExporterDialog.xib */,
 			);
 			path = "XIB files";
 			sourceTree = "<group>";
@@ -1117,6 +1122,7 @@
 				508FE00D21EA227B0043D0E9 /* Alerts.swift */,
 				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
 				508FE04A21EA22CC0043D0E9 /* ImporterDialog.swift */,
+				501C514727C2AD8C00DF1DD5 /* DiskExporterDialog.swift */,
 				506B471C256396BC009FEFC3 /* ExporterDialog.swift */,
 				5050EC4027BE97E000394F4F /* HdrCreatorDialog.swift */,
 				501C513E27C0C63A00DF1DD5 /* HdrGeometryDialog.swift */,
@@ -1761,6 +1767,7 @@
 				508FDFC721EA1FF10043D0E9 /* ImporterDialog.xib in Resources */,
 				500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */,
 				509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */,
+				501C514627C2AA4A00DF1DD5 /* DiskExporterDialog.xib in Resources */,
 				50EB8CCA25306E8E0053988A /* ExportVideoDialog.xib in Resources */,
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
 				508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */,
@@ -2025,6 +2032,7 @@
 				508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */,
 				505C83FD2773C9BA001F8159 /* SerServer.cpp in Sources */,
 				508FE05421EA22CC0043D0E9 /* ControlsPrefs.swift in Sources */,
+				501C514827C2AD8C00DF1DD5 /* DiskExporterDialog.swift in Sources */,
 				50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */,
 				50AEBEDC24D3D8170037082D /* UARTEvents.cpp in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
