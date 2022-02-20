@@ -12,6 +12,7 @@
 #include "HdrControllerTypes.h"
 #include "IOUtils.h"
 #include "Memory.h"
+#include "MsgQueue.h"
 
 HardDrive::HardDrive(Amiga& ref, isize n) : SubComponent(ref), nr(n)
 {
@@ -342,7 +343,11 @@ HardDrive::moveHead(isize lba)
 void
 HardDrive::moveHead(isize c, isize h, isize s)
 {
+    bool step = head.c != c;
+    
     head.c = c;
     head.h = h;
     head.s = s;
+    
+    if (step) msgQueue.put(MSG_HDR_STEP, c);
 }

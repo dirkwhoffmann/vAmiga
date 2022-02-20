@@ -491,6 +491,9 @@ extension MyController {
             
         case .DISK_UNSAVED, .DISK_SAVED, .DISK_PROTECT, .DISK_UNPROTECT:
             refreshStatusBar()
+
+        case .HDR_STEP:
+            refreshStatusBar()
             
         case .CTRL_AMIGA_AMIGA:
             resetAction(self)

@@ -1311,6 +1311,11 @@ using namespace moira;
     return [self drive]->getGeometry().sectors;
 }
 
+- (BOOL)uniqueGeometry
+{
+    return [self drive]->getGeometry().unique();
+}
+
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex
 {
     try {

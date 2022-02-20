@@ -641,6 +641,7 @@
 @property (readonly) NSInteger cylinders;
 @property (readonly) NSInteger heads;
 @property (readonly) NSInteger sectors;
+@property (readonly) BOOL uniqueGeometry;
 
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;

@@ -74,6 +74,10 @@ enum_long(MSG_TYPE)
     MSG_DISK_PROTECT,
     MSG_DISK_UNPROTECT,
 
+    // Hard drives
+    MSG_HDR_STEP,
+    MSG_HDR_AMBIGUOUS_CHS,
+    
     // Keyboard
     MSG_CTRL_AMIGA_AMIGA,
     
@@ -169,6 +173,8 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_DISK_UNSAVED:          return "DISK_UNSAVED";
             case MSG_DISK_PROTECT:          return "DISK_PROTECT";
             case MSG_DISK_UNPROTECT:        return "DISK_UNPROTECT";
+
+            case MSG_HDR_STEP:              return "HDR_STEP";
 
             case MSG_CTRL_AMIGA_AMIGA:      return "CTRL_AMIGA_AMIGA";
 

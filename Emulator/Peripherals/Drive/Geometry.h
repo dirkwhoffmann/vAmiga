@@ -45,6 +45,9 @@ struct DiskGeometry {
     // Returns a vector with compatible geometries for a given byte count
     static std::vector<DiskGeometry> driveGeometries(isize capacity);
 
+    // Checks whether the geometry is unique
+    bool unique() const;
+    
     DiskGeometry() { };
     DiskGeometry(isize c, isize h, isize s, isize b);
     DiskGeometry(DiskDiameter type, DiskDensity density);

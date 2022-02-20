@@ -649,11 +649,12 @@ extension MyController: NSMenuItemValidation {
         }
     }
     
-    private func attachHdrAction(from url: URL, drive: Int) {
+    private func attachHdrAction(from url: URL, drive nr: Int) {
         
         track("attachHdrAction \(url)")
         
         let types: [FileType] = [ .HDF ]
+        let drive = amiga.dh(nr)!
         
         do {
             // Try to create a file proxy
@@ -664,7 +665,7 @@ extension MyController: NSMenuItemValidation {
                 do {
                     
                     // Attach the drive
-                    try amiga.dh0.attach(hdf: file)
+                    try drive.attach(hdf: file)
                     
                     // Remember the URL
                     myAppDelegate.noteNewRecentlyAttachedHdrURL(url)

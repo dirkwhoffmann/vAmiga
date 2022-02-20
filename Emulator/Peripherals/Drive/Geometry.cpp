@@ -73,6 +73,12 @@ DiskGeometry::driveGeometries(isize capacity)
     return result;
 }
 
+bool
+DiskGeometry::unique() const
+{
+    return driveGeometries(numBytes()).size() == 1;
+}
+
 void
 DiskGeometry::checkCompatibility() const
 {
