@@ -906,15 +906,7 @@ Interpreter::registerInstructions()
         root.add({df, "set", "searchpath"},
                  "key", "Sets the search path for media files",
                  &RetroShell::exec <Token::dfn, Token::set, Token::searchpath>, 1, i);
-        
-        root.add({df, "set", "defaultfs"},
-                 "key", "Determines the default file system type for blank disks",
-                 &RetroShell::exec <Token::dfn, Token::set, Token::defaultfs>, 1, i);
-        
-        root.add({df, "set", "defaultbb"},
-                 "key", "Determines the default boot block type for blank disks",
-                 &RetroShell::exec <Token::dfn, Token::set, Token::defaultbb>, 1, i);
-        
+                
         root.add({df, "set", "swapdelay"},
                  "key", "Sets the disk change delay",
                  &RetroShell::exec <Token::dfn, Token::set, Token::swapdelay>, 1, i);

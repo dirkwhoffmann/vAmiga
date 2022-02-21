@@ -84,11 +84,7 @@ typedef struct
     u8 stepVolume;
     u8 pollVolume;
     u8 insertVolume;
-    u8 ejectVolume;
-    
-    // Blank disk defaults
-    FSVolumeType defaultFileSystem;
-    BootBlockId defaultBootBlock;
+    u8 ejectVolume;    
 }
 DriveConfig;
 

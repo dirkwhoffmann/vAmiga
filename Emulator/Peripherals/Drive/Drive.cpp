@@ -52,8 +52,6 @@ Drive::getDefaultConfig(isize nr)
     defaults.pollVolume = 128;
     defaults.insertVolume = 128;
     defaults.ejectVolume = 128;
-    defaults.defaultFileSystem = FS_OFS;
-    defaults.defaultBootBlock = BB_NONE;
 
     return defaults;
 }
@@ -74,8 +72,6 @@ Drive::resetConfig()
     setConfigItem(OPT_POLL_VOLUME, defaults.pollVolume);
     setConfigItem(OPT_INSERT_VOLUME, defaults.insertVolume);
     setConfigItem(OPT_EJECT_VOLUME, defaults.ejectVolume);
-    setConfigItem(OPT_DEFAULT_FILESYSTEM, defaults.defaultFileSystem);
-    setConfigItem(OPT_DEFAULT_BOOTBLOCK, defaults.defaultBootBlock);
 }
 
 i64
@@ -94,8 +90,6 @@ Drive::getConfigItem(Option option) const
         case OPT_POLL_VOLUME:         return (long)config.pollVolume;
         case OPT_INSERT_VOLUME:       return (long)config.insertVolume;
         case OPT_EJECT_VOLUME:        return (long)config.ejectVolume;
-        case OPT_DEFAULT_FILESYSTEM:  return (long)config.defaultFileSystem;
-        case OPT_DEFAULT_BOOTBLOCK:   return (long)config.defaultBootBlock;
 
         default:
             fatalError;
@@ -169,24 +163,6 @@ Drive::setConfigItem(Option option, i64 value)
             config.insertVolume = (u8)value;
             return;
 
-        case OPT_DEFAULT_FILESYSTEM:
-
-            if (!FSVolumeTypeEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, FSVolumeTypeEnum::keyList());
-            }
-            
-            config.defaultFileSystem = (FSVolumeType)value;
-            return;
-
-        case OPT_DEFAULT_BOOTBLOCK:
-
-            if (!BootBlockIdEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, BootBlockIdEnum::keyList());
-            }
-            
-            config.defaultBootBlock = (BootBlockId)value;
-            return;
-
         default:
             fatalError;
     }
@@ -232,10 +208,6 @@ Drive::_dump(dump::Category category, std::ostream& os) const
         os << dec(config.pollVolume) << std::endl;
         os << tab("Pan");
         os << dec(config.pan) << std::endl;
-        os << tab("Default file system");
-        os << FSVolumeTypeEnum::key(config.defaultFileSystem) << std::endl;
-        os << tab("Default boot block");
-        os << BootBlockIdEnum::key(config.defaultBootBlock) << std::endl;
         os << tab("Search path");
         os << "\"" << searchPath << "\"" << std::endl;
     }
@@ -810,12 +782,6 @@ Drive::insertDisk(std::unique_ptr<Disk> disk, Cycle delay)
     if (nr == 1) insertDisk <SLOT_DC1> (std::move(disk), delay);
     if (nr == 2) insertDisk <SLOT_DC2> (std::move(disk), delay);
     if (nr == 3) insertDisk <SLOT_DC3> (std::move(disk), delay);
-}
-
-void
-Drive::insertNew()
-{
-    insertNew(config.defaultFileSystem, config.defaultBootBlock);
 }
 
 void

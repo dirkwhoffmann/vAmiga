@@ -104,6 +104,25 @@ class Configuration {
         precondition(0 <= n && n <= 3)
         amiga.configure(.DRIVE_TYPE, drive: n, value: type)
     }
+    func dhnConnected(_ n: Int) -> Bool {
+        precondition(0 <= n && n <= 3)
+        //return amiga.getConfig(.HDR_CONNECT, drive: n) != 0
+        return true
+    }
+    func setDhnConnected(_ n: Int, connect: Bool) {
+        precondition(0 <= n && n <= 3)
+        // amiga.configure(.HDR_CONNECT, drive: n, enable: connect)
+    }
+    func dhnType(_ n: Int) -> Int {
+        precondition(0 <= n && n <= 3)
+        // return amiga.getConfig(.HDR_TYPE, drive: n)
+        return 0
+    }
+    func setDhnType(_ n: Int, type: Int) {
+        precondition(0 <= n && n <= 3)
+        // amiga.configure(.HDR_TYPE, drive: n, value: type)
+    }
+
     var df0Connected: Bool {
         get { return dfnConnected(0) }
         set { setDfnConnected(0, connect: newValue) }
@@ -136,14 +155,39 @@ class Configuration {
         get { return dfnType(3) }
         set { setDfnType(3, type: newValue) }
     }
-    var blankDiskFormat: Int {
-        get { return amiga.getConfig(.DEFAULT_FILESYSTEM, drive: 0) }
-        set { amiga.configure(.DEFAULT_FILESYSTEM, value: newValue) }
+    var dh0Connected: Bool {
+        get { return dhnConnected(0) }
+        set { setDhnConnected(0, connect: newValue) }
     }
-    var bootBlock: Int {
-        get { return amiga.getConfig(.DEFAULT_BOOTBLOCK, drive: 0) }
-        set { amiga.configure(.DEFAULT_BOOTBLOCK, value: newValue) }
-    }    
+    var dh0Type: Int {
+        get { return dhnType(0) }
+        set { setDhnType(0, type: newValue) }
+    }
+    var dh1Connected: Bool {
+        get { return dhnConnected(1) }
+        set { setDhnConnected(1, connect: newValue) }
+    }
+    var dh1Type: Int {
+        get { return dhnType(1) }
+        set { setDhnType(1, type: newValue) }
+    }
+    var dh2Connected: Bool {
+        get { return dhnConnected(2) }
+        set { setDhnConnected(2, connect: newValue) }
+    }
+    var dh2Type: Int {
+        get { return dhnType(2) }
+        set { setDhnType(2, type: newValue) }
+    }
+    var dh3Connected: Bool {
+        get { return dhnConnected(3) }
+        set { setDhnConnected(3, connect: newValue) }
+    }
+    var dh3Type: Int {
+        get { return dhnType(3) }
+        set { setDhnType(3, type: newValue) }
+    }
+
     var gameDevice1 = PeripheralsDefaults.std.gameDevice1 {
         didSet {
                          
@@ -617,9 +661,6 @@ class Configuration {
         df2Type = defaults.driveType[2].rawValue
         df3Type = defaults.driveType[3].rawValue
         
-        blankDiskFormat = defaults.blankDiskFormat.rawValue
-        bootBlock = defaults.bootBlock
-
         gameDevice1 = defaults.gameDevice1
         gameDevice2 = defaults.gameDevice2
         serialDevice = defaults.serialDevice.rawValue
@@ -643,9 +684,6 @@ class Configuration {
         df2Type = defaults.integer(forKey: Keys.Per.df2Type)
         df3Type = defaults.integer(forKey: Keys.Per.df3Type)
         
-        blankDiskFormat = defaults.integer(forKey: Keys.Per.blankDiskFormat)
-        bootBlock = defaults.integer(forKey: Keys.Per.bootBlock)
-
         gameDevice1 = defaults.integer(forKey: Keys.Per.gameDevice1)
         gameDevice2 = defaults.integer(forKey: Keys.Per.gameDevice2)
         serialDevice = defaults.integer(forKey: Keys.Per.serialDevice)
@@ -667,10 +705,7 @@ class Configuration {
         defaults.set(df1Type, forKey: Keys.Per.df1Type)
         defaults.set(df2Type, forKey: Keys.Per.df2Type)
         defaults.set(df3Type, forKey: Keys.Per.df3Type)
-        
-        defaults.set(blankDiskFormat, forKey: Keys.Per.blankDiskFormat)
-        defaults.set(bootBlock, forKey: Keys.Per.bootBlock)
-        
+                
         defaults.set(gameDevice1, forKey: Keys.Per.gameDevice1)
         defaults.set(gameDevice2, forKey: Keys.Per.gameDevice2)
         defaults.set(serialDevice, forKey: Keys.Per.serialDevice)

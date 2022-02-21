@@ -233,13 +233,13 @@ public:
     //
 
     // Ejects a disk from the specified drive
-    [[deprecated]] void ejectDisk(isize nr, Cycle delay = 0);
+    // [[deprecated]] void ejectDisk(isize nr, Cycle delay = 0);
 
     // Inserts a disk into the specified drive
-    [[deprecated]] void insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay = 0) throws;
-    [[deprecated]] void insertDisk(class DiskFile &file, isize nr, Cycle delay = 0) throws;
-    [[deprecated]] void insertDisk(const string &name, isize nr, Cycle delay = 0) throws;
-    [[deprecated]] void insertNew(isize nr, Cycle delay = 0) throws;
+    // [[deprecated]] void insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay = 0) throws;
+    // [[deprecated]] void insertDisk(class DiskFile &file, isize nr, Cycle delay = 0) throws;
+    // [[deprecated]] void insertDisk(const string &name, isize nr, Cycle delay = 0) throws;
+    // [[deprecated]] void insertNew(isize nr, Cycle delay = 0) throws;
 
     // Write protects or unprotects a disk
     void setWriteProtection(isize nr, bool value);

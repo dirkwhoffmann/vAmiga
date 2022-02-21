@@ -305,8 +305,6 @@ Amiga::getConfigItem(Option option, long id) const
         case OPT_POLL_VOLUME:
         case OPT_INSERT_VOLUME:
         case OPT_EJECT_VOLUME:
-        case OPT_DEFAULT_FILESYSTEM:
-        case OPT_DEFAULT_BOOTBLOCK:
             
             return df[id]->getConfigItem(option);
             
@@ -432,8 +430,6 @@ Amiga::configure(Option option, i64 value)
         case OPT_POLL_VOLUME:
         case OPT_INSERT_VOLUME:
         case OPT_EJECT_VOLUME:
-        case OPT_DEFAULT_FILESYSTEM:
-        case OPT_DEFAULT_BOOTBLOCK:
             
             df[0]->setConfigItem(option, value);
             df[1]->setConfigItem(option, value);
@@ -574,8 +570,6 @@ Amiga::configure(Option option, long id, i64 value)
         case OPT_POLL_VOLUME:
         case OPT_INSERT_VOLUME:
         case OPT_EJECT_VOLUME:
-        case OPT_DEFAULT_FILESYSTEM:
-        case OPT_DEFAULT_BOOTBLOCK:
             
             df[id]->setConfigItem(option, value);
             break;

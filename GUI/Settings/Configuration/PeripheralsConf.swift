@@ -13,7 +13,7 @@ extension ConfigurationController {
 
         let poweredOff = amiga.poweredOff
         
-        // Drive
+        // Floppy drives
         perDf1Connect.state = config.df1Connected ? .on : .off
         perDf2Connect.state = config.df2Connected ? .on : .off
         perDf3Connect.state = config.df3Connected ? .on : .off
@@ -22,10 +22,15 @@ extension ConfigurationController {
         perDf2Type.selectItem(withTag: config.df2Type)
         perDf3Type.selectItem(withTag: config.df3Type)
 
-        // Disk
-        perDriveBlankDiskFormat.selectItem(withTag: config.blankDiskFormat)
-        perBootCode.selectItem(withTag: config.bootBlock)
-        perBootCode.isEnabled = config.blankDiskFormat != FSVolumeType.NODOS.rawValue
+        // Hard drives
+        perDh0Connect.state = config.dh0Connected ? .on : .off
+        perDh1Connect.state = config.dh1Connected ? .on : .off
+        perDh2Connect.state = config.dh2Connected ? .on : .off
+        perDh3Connect.state = config.dh3Connected ? .on : .off
+        perDh0Type.selectItem(withTag: config.dh0Type)
+        perDh1Type.selectItem(withTag: config.dh1Type)
+        perDh2Type.selectItem(withTag: config.dh2Type)
+        perDh3Type.selectItem(withTag: config.dh3Type)
 
         // Ports
         let nullmodem = SerialPortDevice.NULLMODEM.rawValue
@@ -46,6 +51,14 @@ extension ConfigurationController {
         perDf1Type.isEnabled = poweredOff && config.df1Connected
         perDf2Type.isEnabled = poweredOff && config.df2Connected
         perDf3Type.isEnabled = poweredOff && config.df3Connected
+        perDh0Connect.isEnabled = poweredOff
+        perDh1Connect.isEnabled = poweredOff && perDh0Connect.state == .on
+        perDh2Connect.isEnabled = poweredOff && perDh1Connect.state == .on
+        perDh3Connect.isEnabled = poweredOff && perDh2Connect.state == .on
+        perDh0Type.isEnabled = poweredOff
+        perDh1Type.isEnabled = poweredOff && config.dh0Connected
+        perDh2Type.isEnabled = poweredOff && config.dh1Connected
+        perDh3Type.isEnabled = poweredOff && config.dh2Connected
         perFactorySettingsPopup.isEnabled = poweredOff
 
         // Lock symbol and explanation
@@ -85,16 +98,27 @@ extension ConfigurationController {
         }
         refresh()
     }
-            
-    @IBAction func perBlankDiskFormatAction(_ sender: NSPopUpButton!) {
+
+    @IBAction func perHdrConnectAction(_ sender: NSButton!) {
         
-        config.blankDiskFormat = sender.selectedTag()
+        switch sender.tag {
+        case 0: config.dh0Connected = sender.state == .on
+        case 1: config.dh1Connected = sender.state == .on
+        case 2: config.dh2Connected = sender.state == .on
+        case 3: config.dh3Connected = sender.state == .on
+        default: fatalError()
+        }
+        
+        // Disconnect dh(n+1) if dfn is disconnected
+        if !config.dh0Connected { config.dh1Connected = false }
+        if !config.dh1Connected { config.dh2Connected = false }
+        if !config.dh2Connected { config.dh3Connected = false }
+
         refresh()
     }
-
-    @IBAction func perBootCodeAction(_ sender: NSPopUpButton!) {
-                
-        config.bootBlock = sender.selectedTag()
+    
+    @IBAction func perHdrTypeAction(_ sender: NSPopUpButton!) {
+        
         refresh()
     }
     

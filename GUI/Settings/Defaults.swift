@@ -843,10 +843,6 @@ extension Keys {
         static let df2Type            = "VAMIGA_PER_DF2Type"
         static let df3Type            = "VAMIGA_PER_DF3Type"
         
-        // Disks
-        static let blankDiskFormat    = "VAMIGA_PER_BlankDiskFormat"
-        static let bootBlock          = "VAMIGA_PER_BootBlock"
-
         // Ports
         static let gameDevice1        = "VAMIGA_PER_GameDevice1"
         static let gameDevice2        = "VAMIGA_PER_GameDevice2"
@@ -859,9 +855,6 @@ struct PeripheralsDefaults {
         
     var driveConnect: [Bool]
     var driveType: [DriveType]
-
-    let blankDiskFormat: FSVolumeType
-    let bootBlock: Int
 
     var gameDevice1: Int
     var gameDevice2: Int
@@ -876,10 +869,7 @@ struct PeripheralsDefaults {
         
         driveConnect: [true, false, false, false],
         driveType: [.DD_35, .DD_35, .DD_35, .DD_35],
-        
-        blankDiskFormat: .OFS,
-        bootBlock: 0,
-            
+                    
         gameDevice1: 0,
         gameDevice2: -1,
         serialDevice: .NONE,
@@ -902,9 +892,6 @@ extension UserDefaults {
             Keys.Per.df1Type: defaults.driveType[1].rawValue,
             Keys.Per.df2Type: defaults.driveType[2].rawValue,
             Keys.Per.df3Type: defaults.driveType[3].rawValue,
-
-            Keys.Per.blankDiskFormat: Int(defaults.blankDiskFormat.rawValue),
-            Keys.Per.bootBlock: defaults.bootBlock,
 
             Keys.Per.gameDevice1: defaults.gameDevice1,
             Keys.Per.gameDevice2: defaults.gameDevice2,
@@ -929,9 +916,6 @@ extension UserDefaults {
                      Keys.Per.df2Type,
                      Keys.Per.df3Type,
                      
-                     Keys.Per.blankDiskFormat,
-                     Keys.Per.bootBlock,
-
                      Keys.Per.gameDevice1,
                      Keys.Per.gameDevice2,
                      Keys.Per.serialDevice,

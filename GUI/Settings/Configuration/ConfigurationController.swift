@@ -133,7 +133,7 @@ class ConfigurationController: DialogController {
     // Peripherals preferences
     //
 
-    // Drive
+    // Flopp drives
     @IBOutlet weak var perDf0Type: NSPopUpButton!
     @IBOutlet weak var perDf1Connect: NSButton!
     @IBOutlet weak var perDf1Type: NSPopUpButton!
@@ -142,10 +142,16 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var perDf3Connect: NSButton!
     @IBOutlet weak var perDf3Type: NSPopUpButton!
 
-    // Disks
-    @IBOutlet weak var perDriveBlankDiskFormat: NSPopUpButton!
-    @IBOutlet weak var perBootCode: NSPopUpButton!
-    
+    // Hard drives
+    @IBOutlet weak var perDh0Connect: NSButton!
+    @IBOutlet weak var perDh0Type: NSPopUpButton!
+    @IBOutlet weak var perDh1Connect: NSButton!
+    @IBOutlet weak var perDh1Type: NSPopUpButton!
+    @IBOutlet weak var perDh2Connect: NSButton!
+    @IBOutlet weak var perDh2Type: NSPopUpButton!
+    @IBOutlet weak var perDh3Connect: NSButton!
+    @IBOutlet weak var perDh3Type: NSPopUpButton!
+
     // Ports
     @IBOutlet weak var perGameDevice1: NSPopUpButton!
     @IBOutlet weak var perGameDevice2: NSPopUpButton!

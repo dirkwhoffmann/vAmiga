@@ -257,6 +257,7 @@ DiskController::setState(DriveState oldState, DriveState newState)
     }
 }
 
+/*
 void
 DiskController::ejectDisk(isize nr, Cycle delay)
 {
@@ -312,6 +313,7 @@ DiskController::insertNew(isize nr, Cycle delay)
     
     df[nr]->insertNew();
 }
+*/
 
 void
 DiskController::setWriteProtection(isize nr, bool value)
