@@ -436,6 +436,13 @@
                                     <action selector="exportRecentDiskDummyAction0:" target="-1" id="RxO-Cz-99m"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="HJA-xL-xe2"/>
+                            <menuItem title="Inspect..." id="XTb-fA-6qj">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectDiskAction:" target="-1" id="TVA-Cv-ejH"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>
@@ -563,6 +570,13 @@
                                 </menu>
                                 <connections>
                                     <action selector="exportRecentDiskDummyAction1:" target="-1" id="EbG-PI-ueq"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="DUv-gR-CL6"/>
+                            <menuItem title="Inspect..." tag="1" id="spZ-Jo-VzX">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectDiskAction:" target="-1" id="KSy-8D-2ES"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -694,6 +708,13 @@
                                     <action selector="exportRecentDiskDummyAction2:" target="-1" id="oqa-vc-gc7"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="3ka-fe-IUs"/>
+                            <menuItem title="Inspect..." tag="2" id="WR6-M4-nqD">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectDiskAction:" target="-1" id="YYZ-Jx-N0K"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>
@@ -821,6 +842,13 @@
                                 </menu>
                                 <connections>
                                     <action selector="exportRecentDiskDummyAction3:" target="-1" id="iZ0-eO-ecB"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Syk-m4-IU0"/>
+                            <menuItem title="Inspect..." tag="3" id="xBw-K3-SqT">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectDiskAction:" target="-1" id="y84-g6-xAr"/>
                                 </connections>
                             </menuItem>
                         </items>

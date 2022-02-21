@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class ExporterDialog: DialogController {
+class DiskInspectorDialog: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
     @IBOutlet weak var virusIcon: NSImageView!
@@ -748,7 +748,7 @@ class ExporterDialog: DialogController {
 // Extensions
 //
 
-extension ExporterDialog: NSWindowDelegate {
+extension DiskInspectorDialog: NSWindowDelegate {
     
     func windowDidResize(_ notification: Notification) {
         
@@ -766,7 +766,7 @@ extension ExporterDialog: NSWindowDelegate {
      }
 }
 
-extension ExporterDialog: NSTableViewDataSource {
+extension DiskInspectorDialog: NSTableViewDataSource {
     
     func columnNr(_ column: NSTableColumn?) -> Int? {
         
@@ -800,7 +800,7 @@ extension ExporterDialog: NSTableViewDataSource {
     }
 }
 
-extension ExporterDialog: NSTableViewDelegate {
+extension DiskInspectorDialog: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
 

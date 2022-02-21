@@ -75,7 +75,8 @@ extension MyController: NSMenuItemValidation {
             return validateURLlist(myAppDelegate.recentlyInsertedDiskURLs, image: smallDisk)
             
         case  #selector(MyController.ejectDiskAction(_:)),
-              #selector(MyController.exportDiskAction(_:)):
+            #selector(MyController.exportDiskAction(_:)),
+            #selector(MyController.inspectDiskAction(_:)):
             return dfn.hasDisk
             
         case #selector(MyController.exportRecentDiskDummyAction0(_:)):
@@ -131,10 +132,8 @@ extension MyController: NSMenuItemValidation {
             default: fatalError()
             }
 
-        case #selector(MyController.hdrGeometryAction(_:)):
-            return dhn.isAttached
-
-        case #selector(MyController.inspectHdrAction(_:)):
+        case #selector(MyController.hdrGeometryAction(_:)),
+            #selector(MyController.inspectHdrAction(_:)):
             return dhn.isAttached
 
         default:
@@ -600,8 +599,15 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func exportDiskAction(_ sender: NSMenuItem!) {
         
-        let nibName = NSNib.Name("ExporterDialog")
-        let exportPanel = ExporterDialog.make(parent: self, nibName: nibName)
+        let nibName = NSNib.Name("DiskExporterDialog")
+        let exportPanel = DiskExporterDialog.make(parent: self, nibName: nibName)
+        exportPanel?.showSheet(diskDrive: sender.tag)
+    }
+    
+    @IBAction func inspectDiskAction(_ sender: NSMenuItem!) {
+        
+        let nibName = NSNib.Name("DiskInspector")
+        let exportPanel = DiskInspectorDialog.make(parent: self, nibName: nibName)
         exportPanel?.showSheet(forDrive: sender.tag)
     }
     
