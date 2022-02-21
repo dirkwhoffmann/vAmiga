@@ -11,9 +11,9 @@ import Foundation
 
 import Cocoa
 
-class DiskDragImageView: NSImageView, NSDraggingSource {
+class DragImageView: NSImageView, NSDraggingSource {
 
-    @IBOutlet weak var exporter: DiskExporterDialog!
+    @IBOutlet weak var exporter: NSFilePromiseProviderDelegate!
     
     var mouseDownEvent: NSEvent?
 

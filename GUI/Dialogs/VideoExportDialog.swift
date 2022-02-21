@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class ExportVideoDialog: DialogController {
+class VideoExportDialog: DialogController {
 
     @IBOutlet weak var text: NSTextField!
     @IBOutlet weak var duration: NSTextField!
@@ -83,6 +83,33 @@ class ExportVideoDialog: DialogController {
                     }
                 }
             })
+        }
+    }
+}
+
+extension VideoExportDialog: NSFilePromiseProviderDelegate {
+   
+    func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, fileNameForType fileType: String) -> String {
+        
+        return "vAmiga.mp4"
+    }
+    
+    func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, writePromiseTo url: URL, completionHandler: @escaping (Error?) -> Void) {
+        
+        track("\(url)")
+
+        let source = URL(fileURLWithPath: "/tmp/vAmiga.mp4")
+        
+        do {
+            if FileManager.default.fileExists(atPath: url.path) {
+                try FileManager.default.removeItem(at: url)
+            }
+            try FileManager.default.copyItem(at: source, to: url)
+            completionHandler(nil)
+            
+        } catch let error {
+            print("Failed to copy \(source) to \(url): \(error)")
+            completionHandler(error)
         }
     }
 }

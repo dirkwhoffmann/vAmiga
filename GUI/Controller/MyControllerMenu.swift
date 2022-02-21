@@ -320,8 +320,8 @@ extension MyController: NSMenuItemValidation {
         
         track()
         
-        let name = NSNib.Name("ExportVideoDialog")
-        let exporter = ExportVideoDialog.make(parent: self, nibName: name)
+        let name = NSNib.Name("VideoExportDialog")
+        let exporter = VideoExportDialog.make(parent: self, nibName: name)
         
         exporter?.showSheet()
     }
@@ -564,7 +564,7 @@ extension MyController: NSMenuItemValidation {
     
     func exportRecentDiskAction(drive nr: Int, slot: Int) {
         
-        track("drive: \(nr) slot: \(slot)")
+        track("df\(nr) slot: \(slot)")
         
         if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: nr) {
             
@@ -701,21 +701,18 @@ extension MyController: NSMenuItemValidation {
 
     func exportRecentHdrAction(drive nr: Int, slot: Int) {
         
-        track("drive: \(nr) slot: \(slot)")
+        track("dh\(nr) slot: \(slot)")
 
         if let url = myAppDelegate.getRecentlyExportedHdrURL(slot, drive: nr) {
             
-            track("TODO")
-            /*
              do {
-             try mydocument.exportHdr(to: url)
-             
+                 try mydocument.export(hardDrive: nr, to: url)
+                 
              } catch let error as VAError {
-             error.warning("Cannot export hard drive to file \"\(url.path)\"")
+                 error.warning("Cannot export hard drive to file \"\(url.path)\"")
              } catch {
-             fatalError()
+                 fatalError()
              }
-             */
         }
     }
     

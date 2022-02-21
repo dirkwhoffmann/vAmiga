@@ -265,16 +265,39 @@ class MyDocument: NSDocument {
         case "IMG", "IMA":
             df = try Proxy.make(drive: amiga.df(nr)!) as IMGFileProxy
         default:
-            break
+            track("Invalid path extension")
+            return
         }
         
         try export(fileProxy: df!, to: url)
-        
+        track("Disk exported successfully")
+
         // Mark disk as "not modified"
         amiga.df(nr)!.modified = false
         
         // Remember export URL
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)
+    }
+
+    func export(hardDrive nr: Int, to url: URL) throws {
+                        
+        var dh: HDFFileProxy?
+        switch url.pathExtension.uppercased() {
+        case "HDF":
+            dh = try Proxy.make(hdr: amiga.dh(nr)!) as HDFFileProxy
+        default:
+            track("Invalid path extension")
+            return
+        }
+        
+        try export(fileProxy: dh!, to: url)
+        track("Hard Drive exported successfully")
+
+        // Mark disk as "not modified"
+        amiga.dh(nr)!.modified = false
+        
+        // Remember export URL
+        myAppDelegate.noteNewRecentlyExportedHdrURL(url, drive: nr)
     }
     
     func export(fileProxy: AmigaFileProxy, to url: URL) throws {

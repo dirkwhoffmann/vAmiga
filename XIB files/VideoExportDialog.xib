@@ -6,7 +6,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="ExportVideoDialog" customModule="vAmiga" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="VideoExportDialog" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="bitRate" destination="T8o-yW-UVw" id="1bB-Ws-WA6"/>
                 <outlet property="cancelButton" destination="gNF-Xg-kbH" id="oK1-9i-yUu"/>
@@ -133,10 +133,13 @@
                             <rect key="frame" x="3" y="3" width="110" height="110"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <imageView hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P2L-Hc-0qm" customClass="DragDropImageView" customModule="vAmiga" customModuleProvider="target">
+                                <imageView hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P2L-Hc-0qm" customClass="DragImageView" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="19" y="19" width="72" height="72"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <imageCell key="cell" refusesFirstResponder="YES" focusRingType="none" alignment="left" imageScaling="proportionallyDown" image="mp4" id="dff-p8-etY"/>
+                                    <connections>
+                                        <outlet property="exporter" destination="-2" id="ZFb-xX-VSr"/>
+                                    </connections>
                                 </imageView>
                             </subviews>
                         </view>

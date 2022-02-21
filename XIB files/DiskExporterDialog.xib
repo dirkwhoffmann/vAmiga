@@ -80,7 +80,7 @@
                             <rect key="frame" x="3" y="3" width="110" height="110"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <imageView focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zVz-5r-D8T" customClass="DiskDragImageView" customModule="vAmiga" customModuleProvider="target">
+                                <imageView focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zVz-5r-D8T" customClass="DragImageView" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="19" y="19" width="72" height="72"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <imageCell key="cell" refusesFirstResponder="YES" focusRingType="none" alignment="left" imageScaling="proportionallyUpOrDown" image="hdf" id="zrE-wE-8cc"/>
@@ -122,13 +122,12 @@ Gw
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bc1-Mt-tg7">
                         <rect key="frame" x="205" y="77" width="135" height="26"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <popUpButtonCell key="cell" type="push" title="HDF" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="bTZ-R5-MRE" id="jFS-Bv-IuA">
+                        <popUpButtonCell key="cell" type="push" title="Lorem ipsum" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="bTZ-R5-MRE" id="jFS-Bv-IuA">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" id="JeP-c8-u24">
                                 <items>
-                                    <menuItem title="HDF" state="on" id="bTZ-R5-MRE" userLabel="P00 Format"/>
-                                    <menuItem title="Files" tag="1" id="0Cf-D7-yyl" userLabel="P00 Format"/>
+                                    <menuItem title="Lorem ipsum" state="on" id="bTZ-R5-MRE" userLabel="P00 Format"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>

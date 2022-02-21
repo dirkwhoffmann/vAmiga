@@ -35,7 +35,7 @@
 		501C514227C0CE6600DF1DD5 /* Geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C514027C0CE6600DF1DD5 /* Geometry.cpp */; };
 		501C514627C2AA4A00DF1DD5 /* DiskExporterDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C514527C2AA4A00DF1DD5 /* DiskExporterDialog.xib */; };
 		501C514827C2AD8C00DF1DD5 /* DiskExporterDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514727C2AD8C00DF1DD5 /* DiskExporterDialog.swift */; };
-		501C514A27C38FE500DF1DD5 /* DiskDragImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514927C38FE500DF1DD5 /* DiskDragImageView.swift */; };
+		501C514A27C38FE500DF1DD5 /* DragImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514927C38FE500DF1DD5 /* DragImageView.swift */; };
 		501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB310275E460100D0A57B /* OSDebugger.cpp */; };
 		501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB3162762008C00D0A57B /* OSDebuggerRead.cpp */; };
 		501FB319276200A000D0A57B /* OSDebuggerDump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB318276200A000D0A57B /* OSDebuggerDump.cpp */; };
@@ -207,7 +207,6 @@
 		50B2BC8925EC3D590032EEFE /* IOUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C0B78025EC367000CDE1F2 /* IOUtils.cpp */; };
 		50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
 		50B36395277760320030A50C /* BlitterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B36394277760320030A50C /* BlitterPanel.swift */; };
-		50B5663C265E769200226D80 /* DragDropImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B5663B265E769200226D80 /* DragDropImageView.swift */; };
 		50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B70CAB252CE0BF006B5191 /* Muxer.cpp */; };
 		50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0724E6BCCA004384C9 /* DiskControllerRegs.cpp */; };
 		50B81E0A24E6BEA5004384C9 /* CIARegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0924E6BEA5004384C9 /* CIARegs.cpp */; };
@@ -253,8 +252,8 @@
 		50E98B55275A127F00AA0CB9 /* RemoteServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B53275A127F00AA0CB9 /* RemoteServer.cpp */; };
 		50EAD99C256E76820053F9AC /* HDFFile.h in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99B256E76820053F9AC /* HDFFile.h */; };
 		50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
-		50EB8CCA25306E8E0053988A /* ExportVideoDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */; };
-		50EB8CCE2530710E0053988A /* ExportVideoDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */; };
+		50EB8CCA25306E8E0053988A /* VideoExportDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EB8CC925306E8E0053988A /* VideoExportDialog.xib */; };
+		50EB8CCE2530710E0053988A /* VideoExportDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EB8CCD2530710E0053988A /* VideoExportDialog.swift */; };
 		50ECF98622B153FB007B3DE7 /* ExtendedRomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
 		50F31C292409322F008A54D8 /* CopperPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F31C282409322F008A54D8 /* CopperPanel.swift */; };
@@ -329,7 +328,7 @@
 		501C514127C0CE6600DF1DD5 /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
 		501C514527C2AA4A00DF1DD5 /* DiskExporterDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiskExporterDialog.xib; sourceTree = "<group>"; };
 		501C514727C2AD8C00DF1DD5 /* DiskExporterDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskExporterDialog.swift; sourceTree = "<group>"; };
-		501C514927C38FE500DF1DD5 /* DiskDragImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskDragImageView.swift; sourceTree = "<group>"; };
+		501C514927C38FE500DF1DD5 /* DragImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragImageView.swift; sourceTree = "<group>"; };
 		501E715022671FC20070B17D /* DeniseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeniseTypes.h; sourceTree = "<group>"; };
 		501FB310275E460100D0A57B /* OSDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OSDebugger.cpp; sourceTree = "<group>"; };
 		501FB311275E460100D0A57B /* OSDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSDebugger.h; sourceTree = "<group>"; };
@@ -609,7 +608,6 @@
 		50B36394277760320030A50C /* BlitterPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlitterPanel.swift; sourceTree = "<group>"; };
 		50B3C44725EAFB5500651700 /* Checksum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Checksum.cpp; sourceTree = "<group>"; };
 		50B3C44825EAFB5500651700 /* Checksum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Checksum.h; sourceTree = "<group>"; };
-		50B5663B265E769200226D80 /* DragDropImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropImageView.swift; sourceTree = "<group>"; };
 		50B70CAB252CE0BF006B5191 /* Muxer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Muxer.cpp; sourceTree = "<group>"; };
 		50B70CAC252CE0BF006B5191 /* Muxer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Muxer.h; sourceTree = "<group>"; };
 		50B81E0724E6BCCA004384C9 /* DiskControllerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskControllerRegs.cpp; sourceTree = "<group>"; };
@@ -717,8 +715,8 @@
 		50EAB95B26C10B9400BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
 		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
-		50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportVideoDialog.xib; sourceTree = "<group>"; };
-		50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportVideoDialog.swift; sourceTree = "<group>"; };
+		50EB8CC925306E8E0053988A /* VideoExportDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoExportDialog.xib; sourceTree = "<group>"; };
+		50EB8CCD2530710E0053988A /* VideoExportDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExportDialog.swift; sourceTree = "<group>"; };
 		50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedRomFile.cpp; sourceTree = "<group>"; };
 		50ECF98522B153FB007B3DE7 /* ExtendedRomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtendedRomFile.h; sourceTree = "<group>"; };
 		50EFC7DF22E840870036A3DF /* Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialization.h; sourceTree = "<group>"; };
@@ -1054,7 +1052,7 @@
 				509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */,
 				508FDFBA21EA1FF10043D0E9 /* ImporterDialog.xib */,
 				506B47172562E06A009FEFC3 /* ExporterDialog.xib */,
-				50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */,
+				50EB8CC925306E8E0053988A /* VideoExportDialog.xib */,
 				50D263CB21F6377600FA167F /* A500ANSI.xib */,
 				508FDFB821EA1FF10043D0E9 /* A500ISO.xib */,
 				50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */,
@@ -1128,9 +1126,8 @@
 				506B471C256396BC009FEFC3 /* ExporterDialog.swift */,
 				5050EC4027BE97E000394F4F /* HdrCreatorDialog.swift */,
 				501C513E27C0C63A00DF1DD5 /* HdrGeometryDialog.swift */,
-				50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */,
-				50B5663B265E769200226D80 /* DragDropImageView.swift */,
-				501C514927C38FE500DF1DD5 /* DiskDragImageView.swift */,
+				50EB8CCD2530710E0053988A /* VideoExportDialog.swift */,
+				501C514927C38FE500DF1DD5 /* DragImageView.swift */,
 				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
 				509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */,
 				507727EC242F2CE3009D01DA /* iCarousel.h */,
@@ -1771,7 +1768,7 @@
 				500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */,
 				509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */,
 				501C514627C2AA4A00DF1DD5 /* DiskExporterDialog.xib in Resources */,
-				50EB8CCA25306E8E0053988A /* ExportVideoDialog.xib in Resources */,
+				50EB8CCA25306E8E0053988A /* VideoExportDialog.xib in Resources */,
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
 				508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */,
 				50D9CD9B236AF89A00503B4D /* DmaDebugDialog.xib in Resources */,
@@ -1823,7 +1820,7 @@
 				508FDFD821EA20510043D0E9 /* Shaders.metal in Sources */,
 				50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */,
 				506ACE44279AC75100BA7877 /* SequencerDas.cpp in Sources */,
-				501C514A27C38FE500DF1DD5 /* DiskDragImageView.swift in Sources */,
+				501C514A27C38FE500DF1DD5 /* DragImageView.swift in Sources */,
 				509C365E260B177E004F160A /* Interpreter.cpp in Sources */,
 				508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */,
 				5057551025EAFF7900280977 /* Checksum.cpp in Sources */,
@@ -1842,7 +1839,6 @@
 				505C010A2577A8C000F9E05C /* FSDescriptors.cpp in Sources */,
 				506B471D256396BC009FEFC3 /* ExporterDialog.swift in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
-				50B5663C265E769200226D80 /* DragDropImageView.swift in Sources */,
 				50AE6EE324D9B08C000AA367 /* PaulaRegs.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				50565072254573E100A79D27 /* FSBlock.cpp in Sources */,
@@ -1960,7 +1956,7 @@
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
 				50912FFD2525B7AD0049805B /* Recorder.cpp in Sources */,
 				507727EE242F2CE4009D01DA /* iCarousel.m in Sources */,
-				50EB8CCE2530710E0053988A /* ExportVideoDialog.swift in Sources */,
+				50EB8CCE2530710E0053988A /* VideoExportDialog.swift in Sources */,
 				50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */,
 				50B36395277760320030A50C /* BlitterPanel.swift in Sources */,
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,

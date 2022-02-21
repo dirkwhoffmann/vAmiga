@@ -105,7 +105,7 @@ class DiskExporterDialog: DialogController {
         if ext != nil { addItem("ADF", tag: Format.ext) }
         if img != nil { addItem("IMG", tag: Format.img) }
         if img != nil { addItem("IMA", tag: Format.ima) }
-        if vol != nil { addItem("Directory", tag: Format.vol) }
+        if vol != nil { addItem("Files", tag: Format.vol) }
 
         if formatPopup.numberOfItems > 0 {
 
@@ -268,10 +268,11 @@ class DiskExporterDialog: DialogController {
         savePanel.title = "Export"
         savePanel.nameFieldLabel = "Export As:"
         savePanel.canCreateDirectories = true
-        
+
         savePanel.beginSheetModal(for: window!, completionHandler: { result in
             if result == .OK {
                 if let url = self.savePanel.url {
+                    // self.savePanel.close()
                     self.export(url: url)
                 }
             }
@@ -290,7 +291,7 @@ class DiskExporterDialog: DialogController {
         openPanel.beginSheetModal(for: window!, completionHandler: { result in
             if result == .OK {
                 if let url = self.openPanel.url {
-                    self.openPanel.close() // TODO: DO WE NEED THIS?
+                    // self.openPanel.close()
                     self.export(url: url)
                 }
             }
@@ -351,43 +352,37 @@ class DiskExporterDialog: DialogController {
             fatalError()
         }
     }
-    
-    /*
-    func exportToDirectory(url: URL) {
-        
-        track("url = \(url)")
-        
-        do {
-            try vol!.export(url: url)
-            hideSheet()
-
-        } catch let error as VAError {
-            error.warning("Failed to export disk.")
-        } catch {
-            fatalError()
-        }
-    }
-    */
-    
-    //
-    // Action methods
-    //
-
 }
+
+//
+// Protocols
+//
 
 extension DiskExporterDialog: NSFilePromiseProviderDelegate {
    
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, fileNameForType fileType: String) -> String {
         
-        track("filePromiseProvider:fileNameForType \(fileType)")
+        var name: String
         
-        // TODO: Use the logical volume name
-        return "FileSystem"
+        switch formatPopup.selectedTag() {
+            
+        case Format.hdf: name = "Untitled.hdf"
+        case Format.adf: name = "Untitled.adf"
+        case Format.ext: name = "Untitled.adf"
+        case Format.img: name = "Untitled.img"
+        case Format.ima: name = "Untitled.ima"
+        case Format.vol: name = "Untitled"
+            
+        default: fatalError()
+        }
+        
+        track("NSFilePromiseProviderDelegate: name = \(name)")
+        return name
     }
     
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, writePromiseTo url: URL, completionHandler: @escaping (Error?) -> Void) {
         
-        track("filePromiseProvider: \(url)")
+        track("NSFilePromiseProviderDelegate: url = \(url)")
         export(url: url)
     }
 }
