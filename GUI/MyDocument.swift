@@ -268,7 +268,7 @@ class MyDocument: NSDocument {
             break
         }
         
-        try export(diskFileProxy: df!, to: url)
+        try export(fileProxy: df!, to: url)
         
         // Mark disk as "not modified"
         amiga.df(nr)!.modified = false
@@ -277,11 +277,10 @@ class MyDocument: NSDocument {
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)
     }
     
-    func export(diskFileProxy df: DiskFileProxy, to url: URL) throws {
+    func export(fileProxy: AmigaFileProxy, to url: URL) throws {
         
-        track("Exporting disk to \(url)")
-        
-        try df.writeToFile(url: url)        
+        track("Exporting to \(url)")
+        try fileProxy.writeToFile(url: url)        
     }
         
     //

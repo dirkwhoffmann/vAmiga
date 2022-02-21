@@ -253,23 +253,23 @@ class DiskExporterDialog: DialogController {
 
             case Format.adf:
                 track("Exporting ADF")
-                try parent.mydocument.export(diskFileProxy: adf!, to: url)
+                try parent.mydocument.export(fileProxy: adf!, to: url)
 
             case Format.hdf:
                 track("Exporting HDF")
-                // try parent.mydocument.export(diskFileProxy: hdf!, to: url)
+                try parent.mydocument.export(fileProxy: hdf!, to: url)
 
             case Format.ext:
                 track("Exporting Extended ADF")
-                try parent.mydocument.export(diskFileProxy: ext!, to: url)
+                try parent.mydocument.export(fileProxy: ext!, to: url)
 
             case Format.img:
                 track("Exporting IMG")
-                try parent.mydocument.export(diskFileProxy: img!, to: url)
+                try parent.mydocument.export(fileProxy: img!, to: url)
 
             case Format.ima:
                 track("Exporting IMA")
-                try parent.mydocument.export(diskFileProxy: img!, to: url)
+                try parent.mydocument.export(fileProxy: img!, to: url)
 
             default:
                 fatalError()
@@ -335,7 +335,7 @@ class DiskExporterDialog: DialogController {
 
     @IBAction func exportAction(_ sender: NSButton!) {
         
-        switch formatPopup.indexOfSelectedItem {
+        switch formatPopup.selectedTag() {
 
         case Format.hdf: exportToFile(allowedTypes: ["hdf", "HDF"])
         case Format.adf: exportToFile(allowedTypes: ["adf", "ADF"])

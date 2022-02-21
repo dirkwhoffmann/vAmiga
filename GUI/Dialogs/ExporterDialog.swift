@@ -565,16 +565,16 @@ class ExporterDialog: DialogController {
             switch formatPopup.selectedTag() {
             case 0:
                 track("Exporting ADF")
-                try parent.mydocument.export(diskFileProxy: adf!, to: url)
+                try parent.mydocument.export(fileProxy: adf!, to: url)
             case 1:
                 track("Exporting Extended ADF")
-                try parent.mydocument.export(diskFileProxy: ext!, to: url)
+                try parent.mydocument.export(fileProxy: ext!, to: url)
             case 2:
                 track("Exporting IMG")
-                try parent.mydocument.export(diskFileProxy: img!, to: url)
+                try parent.mydocument.export(fileProxy: img!, to: url)
             case 3:
                 track("Exporting IMA")
-                try parent.mydocument.export(diskFileProxy: img!, to: url)
+                try parent.mydocument.export(fileProxy: img!, to: url)
             default:
                 fatalError()
             }

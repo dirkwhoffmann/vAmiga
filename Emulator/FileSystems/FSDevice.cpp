@@ -107,8 +107,7 @@ FSDevice::init(HDFFile &hdf)
     init(descriptor);
 
     // Import file system from HDF
-    info();
-    // importVolume(adf.data, adf.size);
+    importVolume(hdf.data, hdf.size);
 }
 
 void

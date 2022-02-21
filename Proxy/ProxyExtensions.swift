@@ -397,7 +397,7 @@ extension HDFFileProxy {
     var layoutInfo: String {
         
         let capacity = sizeAsString!
-        return "\(capacity) MB (\(numBlocks) sectors)"
+        return "\(capacity), \(numBlocks) sectors"
     }
     
     var bootInfo: String {
