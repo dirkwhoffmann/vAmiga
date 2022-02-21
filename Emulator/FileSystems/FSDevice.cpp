@@ -897,13 +897,23 @@ FSDevice::importDirectory(const fs::directory_entry &dir, bool recursive)
 }
 
 void
-FSDevice::exportDirectory(const string &path)
+FSDevice::exportDirectory(const string &path, bool createDir)
 {
+    // Try to create the directory if it doesn't exist
+    if (!util::isDirectory(path) && createDir && !util::createDirectory(path)) {
+        throw VAError(ERROR_FS_CANNOT_CREATE_DIR);
+    }
+
+    // Only proceed if the directory exists
+    if (!util::isDirectory(path)) {
+        throw VAError(ERROR_DIR_NOT_FOUND);
+    }
     // Only proceed if path points to an empty directory
-    long numItems = util::numDirectoryItems(path);
-    if (numItems != 0) throw VAError(ERROR_FS_DIRECTORY_NOT_EMPTY);
+    if (util::numDirectoryItems(path) != 0) {
+        throw VAError(ERROR_FS_DIR_NOT_EMPTY);
+    }
     
-    // Collect files and directories
+    // Collect all files and directories
     std::vector<Block> items;
     collect(cd, items);
         

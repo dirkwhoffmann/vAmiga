@@ -45,6 +45,10 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "This option is locked because the Amiga is powered on.";
             break;
 
+        case ERROR_DIR_NOT_FOUND:
+            description = "Folder \"" + s + "\" not found.";
+            break;
+
         case ERROR_FILE_NOT_FOUND:
             description = "File \"" + s + "\" not found.";
             break;
@@ -213,7 +217,7 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "Corrupted file system.";
             break;
 
-        case ERROR_FS_DIRECTORY_NOT_EMPTY:
+        case ERROR_FS_DIR_NOT_EMPTY:
             description = "Directory is not empty.";
             break;
 

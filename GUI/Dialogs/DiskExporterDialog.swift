@@ -88,20 +88,15 @@ class DiskExporterDialog: DialogController {
     
     override public func awakeFromNib() {
         
-        track()
-        super.awakeFromNib()
-        
-        update()
-    }
-
-    override func windowDidLoad() {
-                    
         func addItem(_ title: String, tag: Int) {
             
             formatPopup.addItem(withTitle: title)
             formatPopup.lastItem?.tag = tag
         }
-        
+
+        track()
+        super.awakeFromNib()
+                
         formatPopup.autoenablesItems = false
         formatPopup.removeAllItems()
 
@@ -121,6 +116,12 @@ class DiskExporterDialog: DialogController {
                 
             exportButton.isEnabled = false
         }
+    
+        update()
+    }
+
+    override func windowDidLoad() {
+                    
     }
     
     override func sheetDidShow() {
@@ -143,22 +144,32 @@ class DiskExporterDialog: DialogController {
             
         var name = ""
 
-        if hdf != nil {
+        track("formatPopup.selectedTag() = \(formatPopup.selectedTag())")
+        
+        switch formatPopup.selectedTag() {
+
+        case Format.hdf:
             
             name = "hdf"
             
-        } else {
+        case Format.adf, Format.ext, Format.img, Format.ima:
             
             if ext != nil { name = isHD ? "hd_other" : "dd_other" }
             if adf != nil { name = isHD ? "hd_adf" : "dd_adf" }
             if img != nil { name = "dd_dos" }
                 
-            if dfn.hasWriteProtectedDisk() { name += "_protected" }
+            if name != "" && dfn.hasWriteProtectedDisk() { name += "_protected" }
+
+        case Format.vol:
+            
+            name = "NSFolder"
+            
+        default:
+            
+            name = ""
         }
-        
-        track("name = \(name)")
-        icon.image = NSImage(named: name)
-        if icon.image == nil { track(); icon.image = NSImage(named: "biohazard") }
+                
+        icon.image = NSImage(named: name != "" ? name : "biohazard")
     }
     
     func updateTitleText() {
@@ -222,11 +233,36 @@ class DiskExporterDialog: DialogController {
     }
 
     //
-    // Exporting
+    // Action methods
     //
     
-    func exportToFile(allowedTypes: [String]) {
+    @IBAction func formatAction(_ sender: NSPopUpButton!) {
+        
+        update()
+    }
+    
+    @IBAction func exportAction(_ sender: NSButton!) {
+        
+        switch formatPopup.selectedTag() {
+
+        case Format.hdf: openExportToFilePanel(allowedTypes: ["hdf", "HDF"])
+        case Format.adf: openExportToFilePanel(allowedTypes: ["adf", "ADF"])
+        case Format.ext: openExportToFilePanel(allowedTypes: ["adf", "ADF"])
+        case Format.img: openExportToFilePanel(allowedTypes: ["img", "IMG"])
+        case Format.ima: openExportToFilePanel(allowedTypes: ["ima", "IMA"])
+        case Format.vol: openExportToFolderPanel()
+
+        default: fatalError()
+        }
+    }
+    
+    //
+    // Exporting
+    //
+        
+    func openExportToFilePanel(allowedTypes: [String]) {
      
+        // TODO: allowedTypes is not used
         savePanel = NSSavePanel()
         savePanel.prompt = "Export"
         savePanel.title = "Export"
@@ -236,14 +272,32 @@ class DiskExporterDialog: DialogController {
         savePanel.beginSheetModal(for: window!, completionHandler: { result in
             if result == .OK {
                 if let url = self.savePanel.url {
-                    track("url = \(url)")
-                    self.exportToFile(url: url)
+                    self.export(url: url)
                 }
             }
         })
     }
 
-    func exportToFile(url: URL) {
+    func openExportToFolderPanel() {
+
+        openPanel = NSOpenPanel()
+        openPanel.prompt = "Export"
+        openPanel.title = "Export"
+        openPanel.nameFieldLabel = "Export As:"
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = true
+        
+        openPanel.beginSheetModal(for: window!, completionHandler: { result in
+            if result == .OK {
+                if let url = self.openPanel.url {
+                    self.openPanel.close() // TODO: DO WE NEED THIS?
+                    self.export(url: url)
+                }
+            }
+        })
+    }
+    
+    func export(url: URL) {
 
         track("url = \(url)")
         
@@ -271,6 +325,10 @@ class DiskExporterDialog: DialogController {
                 track("Exporting IMA")
                 try parent.mydocument.export(fileProxy: img!, to: url)
 
+            case Format.vol:
+                track("Exporting file system")
+                try vol!.export(url: url)
+                
             default:
                 fatalError()
             }
@@ -293,27 +351,8 @@ class DiskExporterDialog: DialogController {
             fatalError()
         }
     }
-
-    func exportToDirectory() {
-
-        openPanel = NSOpenPanel()
-        openPanel.prompt = "Export"
-        openPanel.title = "Export"
-        openPanel.nameFieldLabel = "Export As:"
-        openPanel.canChooseDirectories = true
-        openPanel.canCreateDirectories = true
-        
-        openPanel.beginSheetModal(for: window!, completionHandler: { result in
-            if result == .OK {
-                if let url = self.openPanel.url {
-                    track("url = \(url)")
-                    self.openPanel.close()
-                    self.exportToDirectory(url: url)
-                }
-            }
-        })
-    }
     
+    /*
     func exportToDirectory(url: URL) {
         
         track("url = \(url)")
@@ -328,23 +367,27 @@ class DiskExporterDialog: DialogController {
             fatalError()
         }
     }
-
+    */
+    
     //
     // Action methods
     //
 
-    @IBAction func exportAction(_ sender: NSButton!) {
+}
+
+extension DiskExporterDialog: NSFilePromiseProviderDelegate {
+   
+    func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, fileNameForType fileType: String) -> String {
         
-        switch formatPopup.selectedTag() {
-
-        case Format.hdf: exportToFile(allowedTypes: ["hdf", "HDF"])
-        case Format.adf: exportToFile(allowedTypes: ["adf", "ADF"])
-        case Format.ext: exportToFile(allowedTypes: ["adf", "ADF"])
-        case Format.img: exportToFile(allowedTypes: ["img", "IMG"])
-        case Format.ima: exportToFile(allowedTypes: ["ima", "IMA"])
-        case Format.vol: exportToDirectory()
-
-        default: fatalError()
-        }
+        track("filePromiseProvider:fileNameForType \(fileType)")
+        
+        // TODO: Use the logical volume name
+        return "FileSystem"
+    }
+    
+    func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, writePromiseTo url: URL, completionHandler: @escaping (Error?) -> Void) {
+        
+        track("filePromiseProvider: \(url)")
+        export(url: url)
     }
 }

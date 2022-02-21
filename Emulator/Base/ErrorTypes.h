@@ -31,6 +31,7 @@ enum_long(ERROR_CODE)
     ERROR_OUT_OF_MEMORY,
 
     // General
+    ERROR_DIR_NOT_FOUND,
     ERROR_FILE_NOT_FOUND,
     ERROR_FILE_TYPE_MISMATCH,
     ERROR_FILE_TYPE_UNSUPPORTED,
@@ -117,7 +118,7 @@ enum_long(ERROR_CODE)
     ERROR_FS_OUT_OF_SPACE,
     
     // File system (export errors)
-    ERROR_FS_DIRECTORY_NOT_EMPTY,
+    ERROR_FS_DIR_NOT_EMPTY,
     ERROR_FS_CANNOT_CREATE_DIR,
     ERROR_FS_CANNOT_CREATE_FILE,
 
@@ -169,6 +170,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
                 
             case ERROR_OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
 
+            case ERROR_DIR_NOT_FOUND:               return "DIR_NOT_FOUND";
             case ERROR_FILE_NOT_FOUND:              return "FILE_NOT_FOUND";
             case ERROR_FILE_TYPE_MISMATCH:          return "FILE_TYPE_MISMATCH";
             case ERROR_FILE_TYPE_UNSUPPORTED:       return "FILE_TYPE_UNSUPPORTED";
@@ -242,7 +244,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
 
             case ERROR_FS_OUT_OF_SPACE:             return "FS_OUT_OF_SPACE";
                 
-            case ERROR_FS_DIRECTORY_NOT_EMPTY:      return "FS_DIRECTORY_NOT_EMPTY";
+            case ERROR_FS_DIR_NOT_EMPTY:            return "FS_DIR_NOT_EMPTY";
             case ERROR_FS_CANNOT_CREATE_DIR:        return "FS_CANNOT_CREATE_DIR";
             case ERROR_FS_CANNOT_CREATE_FILE:       return "FS_CANNOT_CREATE_FILE";
 

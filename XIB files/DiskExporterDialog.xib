@@ -80,10 +80,13 @@
                             <rect key="frame" x="3" y="3" width="110" height="110"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <imageView focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zVz-5r-D8T" customClass="DragDropImageView" customModule="vAmiga" customModuleProvider="target">
+                                <imageView focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zVz-5r-D8T" customClass="DiskDragImageView" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="19" y="19" width="72" height="72"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <imageCell key="cell" refusesFirstResponder="YES" focusRingType="none" alignment="left" imageScaling="proportionallyDown" image="hdf" id="zrE-wE-8cc"/>
+                                    <imageCell key="cell" refusesFirstResponder="YES" focusRingType="none" alignment="left" imageScaling="proportionallyUpOrDown" image="hdf" id="zrE-wE-8cc"/>
+                                    <connections>
+                                        <outlet property="exporter" destination="-2" id="K7E-aq-n2M"/>
+                                    </connections>
                                 </imageView>
                             </subviews>
                         </view>
@@ -125,10 +128,13 @@ Gw
                             <menu key="menu" id="JeP-c8-u24">
                                 <items>
                                     <menuItem title="HDF" state="on" id="bTZ-R5-MRE" userLabel="P00 Format"/>
-                                    <menuItem title="Directory" tag="1" id="0Cf-D7-yyl" userLabel="P00 Format"/>
+                                    <menuItem title="Files" tag="1" id="0Cf-D7-yyl" userLabel="P00 Format"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <connections>
+                            <action selector="formatAction:" target="-2" id="rJX-v6-vEZ"/>
+                        </connections>
                     </popUpButton>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pdc-Xs-L4S">
                         <rect key="frame" x="151" y="82" width="52" height="17"/>

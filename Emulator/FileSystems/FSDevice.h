@@ -335,5 +335,5 @@ public:
     bool exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *error) const;
 
     // Exports the volume to a directory of the host file system
-    void exportDirectory(const string &path) throws;
+    void exportDirectory(const string &path, bool createDir = true) throws;
 };
