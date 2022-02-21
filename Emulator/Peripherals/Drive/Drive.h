@@ -300,9 +300,9 @@ public:
     void swapDisk(const string &name) throws;
 
     // Replaces the current disk with a factory-fresh disk
-    void insertNew() throws;
+    [[deprecated]] void insertNew() throws;
+    void insertNew(FSVolumeType fs, BootBlockId bb) throws;
 
-    
 private:
     
     template <EventSlot s> void ejectDisk(Cycle delay);

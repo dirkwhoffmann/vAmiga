@@ -170,10 +170,19 @@ extension DriveProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
+    /*
     func insertNew() throws {
         
         let exception = ExceptionWrapper()
         insertNew(exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+    */
+    
+    func insertNew(fileSystem: FSVolumeType, bootBlock: BootBlockId) throws {
+        
+        let exception = ExceptionWrapper()
+        insertNew(fileSystem, bootBlock: bootBlock, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 }

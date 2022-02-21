@@ -17,8 +17,6 @@ class DiskInspectorDialog: DialogController {
     @IBOutlet weak var bootInfo: NSTextField!
     @IBOutlet weak var decontaminationButton: NSButton!
 
-    @IBOutlet weak var disclosureButton: NSButton!
-    @IBOutlet weak var disclosureText: NSTextField!
     @IBOutlet weak var previewScrollView: NSScrollView!
     @IBOutlet weak var previewTable: NSTableView!
     @IBOutlet weak var cylinderText: NSTextField!
@@ -43,14 +41,9 @@ class DiskInspectorDialog: DialogController {
     @IBOutlet weak var info2: NSTextField!
 
     @IBOutlet weak var strictButton: NSButton!
-    @IBOutlet weak var formatPopup: NSPopUpButton!
-    @IBOutlet weak var exportButton: NSButton!
     
     var savePanel: NSSavePanel!  // Used to export to files
     var openPanel: NSOpenPanel!  // Used to export to directories
-
-    let shrinkedHeight = CGFloat(196)
-    let expandedHeight = CGFloat(476)
 
     var driveNr: Int?
     var drive: DriveProxy? { return driveNr == nil ? nil : amiga.df(driveNr!) }
@@ -69,8 +62,7 @@ class DiskInspectorDialog: DialogController {
     var strict: Bool { return strictButton.state == .on }
         
     var myDocument: MyDocument { return parent.mydocument! }
-    var size: CGSize { return window!.frame.size }
-    var shrinked: Bool { return size.height < 300 }
+    // var size: CGSize { return window!.frame.size }
         
     var numCyls: Int {
         return adf?.numCyls ?? img?.numCyls ?? ext?.numCyls ?? vol?.numCyls ?? 0
@@ -241,13 +233,7 @@ class DiskInspectorDialog: DialogController {
         // Configure elements
         sectorStepper.maxValue = .greatestFiniteMagnitude
         blockStepper.maxValue = .greatestFiniteMagnitude
-        
-        // Start with a shrinked window
-        var rect = window!.contentRect(forFrameRect: window!.frame)
-        rect.size = CGSize(width: 606, height: shrinkedHeight)
-        let frame = window!.frameRect(forContentRect: rect)
-        window!.setFrame(frame, display: true)
-        
+
         // Run a file system check
         errorReport = vol?.check(strict)
         
@@ -255,24 +241,7 @@ class DiskInspectorDialog: DialogController {
     }
     
     override func windowDidLoad() {
-                    
-        // Enable compatible file formats in the format selector popup
-        formatPopup.autoenablesItems = false
-        formatPopup.item(at: 0)!.isEnabled = (adf != nil)
-        formatPopup.item(at: 1)!.isEnabled = (ext != nil)
-        formatPopup.item(at: 2)!.isEnabled = (img != nil)
-        formatPopup.item(at: 3)!.isEnabled = (img != nil)
-        formatPopup.item(at: 4)!.isEnabled = (vol != nil)
-        
-        // Preselect an available export format and enable the Export button
-        let enabled = [0, 1, 2, 3, 4].filter { formatPopup.item(at: $0)!.isEnabled }
-        if enabled.isEmpty {
-            exportButton.isEnabled = false
-        } else {
-            exportButton.isEnabled = true
-            formatPopup.selectItem(at: enabled.first!)
-        }
-        
+                            
         // Jump to the first corrupted block if an error was found
         if errorReport != nil && errorReport!.corruptedBlocks > 0 {
             setCorruptedBlock(1)
@@ -285,31 +254,6 @@ class DiskInspectorDialog: DialogController {
         
     }
     
-    //
-    // Expanding and shrinking the window
-    //
-    
-    func shrink() { setHeight(shrinkedHeight) }
-    func expand() { setHeight(expandedHeight) }
-    
-    func setHeight(_ newHeight: CGFloat) {
-                
-        var rect = window!.frame
-        rect.origin.y += rect.size.height - newHeight
-        rect.size.height = newHeight
-        
-        window!.setFrame(rect, display: true)
-        
-        // Force the preview table to appear at the correct vertical position
-        var r = previewScrollView.frame
-        r.origin.y = 82
-        previewScrollView.frame = r
-
-        exportButton.keyEquivalent = shrinked ? "\r" : ""
-
-        update()
-    }
-
     //
     // Updating the displayed information
     //
@@ -324,30 +268,9 @@ class DiskInspectorDialog: DialogController {
         updateTrackAndSectorInfo()
         updateVolumeInfo()
         updateBootInfo()
-
-        // Update the disclosure button state
-        disclosureButton.state = shrinked ? .off : .on
-        
-        // Hide some elements if the window is shrinked
-        let items: [NSView] = [
-            previewScrollView,
-            cylinderText, cylinderField, cylinderStepper,
-            headText, headField, headStepper,
-            trackText, trackField, trackStepper,
-            sectorText, sectorField, sectorStepper,
-            blockText, blockField, blockStepper,
-            corruptionText, corruptionStepper,
-            info1, info2
-        ]
-        for item in items { item.isHidden = shrinked }
-        
-        // Hide more elements
+                
+        // Hide some elements
         strictButton.isHidden = vol == nil
-        disclosureButton.isHidden = adf == nil && img == nil
-        disclosureText.isHidden = adf == nil && img == nil
-
-        // Only proceed if the window is expanded
-        if shrinked { return }
         
         // Update all elements
         cylinderField.stringValue      = String(format: "%d", cylinderNr)
@@ -535,102 +458,6 @@ class DiskInspectorDialog: DialogController {
     }
         
     //
-    // Exporting the disk
-    //
-    
-    func exportToFile(allowedTypes: [String]) {
-     
-        savePanel = NSSavePanel()
-        savePanel.prompt = "Export"
-        savePanel.title = "Export"
-        savePanel.nameFieldLabel = "Export As:"
-        savePanel.canCreateDirectories = true
-        
-        savePanel.beginSheetModal(for: window!, completionHandler: { result in
-            if result == .OK {
-                if let url = self.savePanel.url {
-                    track("url = \(url)")
-                    self.exportToFile(url: url)
-                }
-            }
-        })
-    }
-
-    func exportToFile(url: URL) {
-
-        track("url = \(url)")
-        
-        do {
-            
-            switch formatPopup.selectedTag() {
-            case 0:
-                track("Exporting ADF")
-                try parent.mydocument.export(fileProxy: adf!, to: url)
-            case 1:
-                track("Exporting Extended ADF")
-                try parent.mydocument.export(fileProxy: ext!, to: url)
-            case 2:
-                track("Exporting IMG")
-                try parent.mydocument.export(fileProxy: img!, to: url)
-            case 3:
-                track("Exporting IMA")
-                try parent.mydocument.export(fileProxy: img!, to: url)
-            default:
-                fatalError()
-            }
-            
-            // Mark disk as "not modified"
-            drive?.modified = false
-            
-            // Remember export URL
-            myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: driveNr!)
-
-            hideSheet()
-
-        } catch let error as VAError {
-            error.warning("Cannot export disk")
-        } catch {
-            fatalError()
-        }
-    }
-
-    func exportToDirectory() {
-
-        openPanel = NSOpenPanel()
-        openPanel.prompt = "Export"
-        openPanel.title = "Export"
-        openPanel.nameFieldLabel = "Export As:"
-        openPanel.canChooseDirectories = true
-        openPanel.canCreateDirectories = true
-        
-        openPanel.beginSheetModal(for: window!, completionHandler: { result in
-            if result == .OK {
-                if let url = self.openPanel.url {
-                    track("url = \(url)")
-                    self.openPanel.close()
-                    self.exportToDirectory(url: url)
-                }
-            }
-        })
-
-    }
-    
-    func exportToDirectory(url: URL) {
-        
-        track("url = \(url)")
-        
-        do {
-            try vol!.export(url: url)
-            hideSheet()
-
-        } catch let error as VAError {
-            error.warning("Failed to export disk.")
-        } catch {
-            fatalError()
-        }
-    }
-    
-    //
     // Action methods
     //
 
@@ -642,11 +469,6 @@ class DiskInspectorDialog: DialogController {
         update()
     }
 
-    @IBAction func disclosureAction(_ sender: NSButton!) {
-        
-        shrinked ? expand() : shrink()
-    }
-    
     @IBAction func clickAction(_ sender: NSTableView!) {
         
         if sender.clickedColumn >= 1 && sender.clickedRow >= 0 {
@@ -709,39 +531,15 @@ class DiskInspectorDialog: DialogController {
         
     @IBAction func corruptedBlockStepperAction(_ sender: NSStepper!) {
     
-        track("New value: \(sender.integerValue)")
         setCorruptedBlock(sender.integerValue)
     }
 
     @IBAction func strictAction(_ sender: NSButton!) {
         
         track()
-
-        // Repeat the integrity check
         errorReport = vol?.check(strict)
-
         update()
     }
-    
-    @IBAction func exportAction(_ sender: NSButton!) {
-        
-        switch formatPopup.indexOfSelectedItem {
-
-        case 0: exportToFile(allowedTypes: ["adf", "ADF"])
-        case 1: exportToFile(allowedTypes: ["adf", "ADF"])
-        case 2: exportToFile(allowedTypes: ["img", "IMG"])
-        case 3: exportToFile(allowedTypes: ["ima", "IMA"])
-        case 4: exportToDirectory()
-
-        default: fatalError()
-        }
-    }
-        
-    @IBAction override func cancelAction(_ sender: Any!) {
-         
-         track()
-         hideSheet()
-     }
 }
 
 //

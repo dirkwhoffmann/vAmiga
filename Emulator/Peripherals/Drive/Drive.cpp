@@ -815,6 +815,14 @@ Drive::insertDisk(std::unique_ptr<Disk> disk, Cycle delay)
 void
 Drive::insertNew()
 {
+    insertNew(config.defaultFileSystem, config.defaultBootBlock);
+}
+
+void
+Drive::insertNew(FSVolumeType fs, BootBlockId bb)
+{
+    debug(true, "insertNew(%s,%s)\n", FSVolumeTypeEnum::key(fs), BootBlockIdEnum::key(bb));
+    
     ADFFile adf;
     
     // Create a suitable ADF for this drive
@@ -826,7 +834,7 @@ Drive::insertNew()
     }
     
     // Add a file system
-    adf.formatDisk(config.defaultFileSystem, config.defaultBootBlock);
+    adf.formatDisk(fs, bb);
     
     // Replace the current disk with the new one
     swapDisk(adf);

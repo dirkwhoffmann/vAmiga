@@ -313,7 +313,7 @@
                 <menuItem title="Df0" id="XQm-ka-Db5">
                     <menu key="submenu" title="Df0" id="Mqn-f5-oGB">
                         <items>
-                            <menuItem title="New" id="00r-Lf-ALU">
+                            <menuItem title="New..." id="00r-Lf-ALU">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="newDiskAction:" target="-1" id="csx-lP-2mG"/>
@@ -449,7 +449,7 @@
                 <menuItem title="Df1" tag="1" id="fYA-pX-q72">
                     <menu key="submenu" title="Df1" id="epS-yb-DD5">
                         <items>
-                            <menuItem title="New" tag="1" id="rXL-PO-L1N">
+                            <menuItem title="New..." tag="1" id="rXL-PO-L1N">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="newDiskAction:" target="-1" id="pbg-ot-FbZ"/>
@@ -585,7 +585,7 @@
                 <menuItem title="Df2" tag="2" id="gYR-sU-A3s">
                     <menu key="submenu" title="Df2" id="5qq-49-FH7">
                         <items>
-                            <menuItem title="New" tag="2" id="vTt-kv-JSC">
+                            <menuItem title="New..." tag="2" id="vTt-kv-JSC">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="newDiskAction:" target="-1" id="fbD-eL-G5T"/>
@@ -721,7 +721,7 @@
                 <menuItem title="Df3" tag="2" id="2h1-jT-0o6">
                     <menu key="submenu" title="Df3" id="hrB-V5-KVF">
                         <items>
-                            <menuItem title="New" tag="3" id="9s9-Ip-nEv">
+                            <menuItem title="New..." tag="3" id="9s9-Ip-nEv">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="newDiskAction:" target="-1" id="t8S-Do-0uq"/>

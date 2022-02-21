@@ -1227,9 +1227,17 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; }
 }
 
+/*
 - (void)insertNew:(ExceptionWrapper *)ex
 {
     try { return [self drive]->insertNew(); }
+    catch (VAError &error) { [ex save:error]; }
+}
+*/
+
+- (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb exception:(ExceptionWrapper *)ex
+{
+    try { return [self drive]->insertNew(fs, bb); }
     catch (VAError &error) { [ex save:error]; }
 }
 

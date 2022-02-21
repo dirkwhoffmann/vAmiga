@@ -457,15 +457,12 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func newDiskAction(_ sender: NSMenuItem!) {
         
-        let drive = amiga.df(sender.tag)
-    
-        do {
-            try drive?.insertNew()
-            myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
-            
-        } catch {
-            (error as? VAError)?.cantInsert()
-        }
+        // Ask the user if a modified hard drive should be detached
+        if !proceedWithUnexportedDisk(drive: sender.tag) { return }
+
+        let nibName = NSNib.Name("FloppyCreator")
+        let panel = FloppyCreator.make(parent: self, nibName: nibName)
+        panel?.showSheet(forDrive: sender.tag)
     }
 
     @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
@@ -620,7 +617,7 @@ extension MyController: NSMenuItemValidation {
         // Ask the user if a modified hard drive should be detached
         if !proceedWithUnexportedHdr(drive: sender.tag) { return }
 
-        let nibName = NSNib.Name("HdrCreatorDialog")
+        let nibName = NSNib.Name("HdrCreator")
         let panel = HdrCreatorDialog.make(parent: self, nibName: nibName)
         panel?.showSheet(forDrive: sender.tag)
     }
