@@ -308,6 +308,10 @@ Amiga::getConfigItem(Option option, long id) const
             
             return df[id]->getConfigItem(option);
             
+        case OPT_HDR_CONNECT:
+            
+            return dh[id]->getConfigItem(option);
+            
         case OPT_PULLUP_RESISTORS:
         case OPT_MOUSE_VELOCITY:
             
@@ -437,6 +441,14 @@ Amiga::configure(Option option, i64 value)
             df[3]->setConfigItem(option, value);
             break;
             
+        case OPT_HDR_CONNECT:
+
+            dh[0]->setConfigItem(option, value);
+            dh[1]->setConfigItem(option, value);
+            dh[2]->setConfigItem(option, value);
+            dh[3]->setConfigItem(option, value);
+            break;
+     
         case OPT_SAMPLING_METHOD:
         case OPT_FILTER_TYPE:
         case OPT_FILTER_ALWAYS_ON:
@@ -572,6 +584,11 @@ Amiga::configure(Option option, long id, i64 value)
         case OPT_EJECT_VOLUME:
             
             df[id]->setConfigItem(option, value);
+            break;
+
+        case OPT_HDR_CONNECT:
+            
+            dh[id]->setConfigItem(option, value);
             break;
 
         case OPT_PULLUP_RESISTORS:

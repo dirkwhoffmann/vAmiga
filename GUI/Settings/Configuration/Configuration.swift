@@ -106,12 +106,11 @@ class Configuration {
     }
     func dhnConnected(_ n: Int) -> Bool {
         precondition(0 <= n && n <= 3)
-        //return amiga.getConfig(.HDR_CONNECT, drive: n) != 0
-        return true
+        return amiga.getConfig(.HDR_CONNECT, drive: n) != 0
     }
     func setDhnConnected(_ n: Int, connect: Bool) {
         precondition(0 <= n && n <= 3)
-        // amiga.configure(.HDR_CONNECT, drive: n, enable: connect)
+        amiga.configure(.HDR_CONNECT, drive: n, enable: connect)
     }
     func dhnType(_ n: Int) -> Int {
         precondition(0 <= n && n <= 3)

@@ -21,6 +21,9 @@ class HardDrive : public SubComponent {
     // Number of the emulated drive (dh<nr>)
     const isize nr;
 
+    // Current configuration
+    HardDriveConfig config = {};
+    
     // Result of the latest inspection
     mutable HardDriveInfo info = {};
     
@@ -101,6 +104,20 @@ private:
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     isize didLoadFromBuffer(const u8 *buffer) override;
     isize didSaveToBuffer(u8 *buffer) const override;
+
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    static HardDriveConfig getDefaultConfig(isize nr);
+    const HardDriveConfig &getConfig() const { return config; }
+    void resetConfig() override;
+    
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
 
     
     //

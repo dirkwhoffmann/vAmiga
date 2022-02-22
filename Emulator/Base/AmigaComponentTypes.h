@@ -60,7 +60,7 @@ enum_long(OPT)
     OPT_LOCK_DSKSYNC,
     OPT_AUTO_DSKSYNC,
 
-    // Drives
+    // Floppy Drives
     OPT_DRIVE_TYPE,
     OPT_EMULATE_MECHANICS,
     OPT_START_DELAY,
@@ -72,6 +72,9 @@ enum_long(OPT)
     OPT_POLL_VOLUME,
     OPT_INSERT_VOLUME,
     OPT_EJECT_VOLUME,
+    
+    // Hard Drives
+    OPT_HDR_CONNECT,
     
     // Ports
     OPT_SERIAL_DEVICE,
@@ -180,6 +183,8 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_POLL_VOLUME:           return "POLL_VOLUME";
             case OPT_INSERT_VOLUME:         return "INSERT_VOLUME";
             case OPT_EJECT_VOLUME:          return "EJECT_VOLUME";
+                
+            case OPT_HDR_CONNECT:           return "HDR_CONNECT";
                 
             case OPT_SERIAL_DEVICE:         return "SERIAL_DEVICE";
 

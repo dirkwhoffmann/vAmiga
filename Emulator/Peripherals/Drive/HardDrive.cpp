@@ -89,6 +89,55 @@ HardDrive::_reset(bool hard)
     if constexpr (FORCE_HDR_MODIFIED) { modified = true; }
 }
 
+HardDriveConfig
+HardDrive::getDefaultConfig(isize nr)
+{
+    HardDriveConfig defaults;
+    
+    defaults.connected = nr == 0;
+    
+    return defaults;
+}
+
+void
+HardDrive::resetConfig()
+{
+    auto defaults = getDefaultConfig(nr);
+    
+    setConfigItem(OPT_HDR_CONNECT, defaults.connected);
+}
+
+i64
+HardDrive::getConfigItem(Option option) const
+{
+    switch (option) {
+            
+        case OPT_HDR_CONNECT:         return (long)config.connected;
+
+        default:
+            fatalError;
+    }
+}
+
+void
+HardDrive::setConfigItem(Option option, i64 value)
+{
+    switch (option) {
+                            
+        case OPT_HDR_CONNECT:
+            
+            if (!isPoweredOff()) {
+                throw VAError(ERROR_OPT_LOCKED);
+            }
+
+            config.connected = bool(value);
+            return;
+
+        default:
+            fatalError;
+    }
+}
+
 void
 HardDrive::_inspect() const
 {

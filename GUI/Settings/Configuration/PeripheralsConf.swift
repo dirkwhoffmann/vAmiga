@@ -56,9 +56,9 @@ extension ConfigurationController {
         perDh2Connect.isEnabled = poweredOff && perDh1Connect.state == .on
         perDh3Connect.isEnabled = poweredOff && perDh2Connect.state == .on
         perDh0Type.isEnabled = poweredOff
-        perDh1Type.isEnabled = poweredOff && config.dh0Connected
-        perDh2Type.isEnabled = poweredOff && config.dh1Connected
-        perDh3Type.isEnabled = poweredOff && config.dh2Connected
+        perDh1Type.isEnabled = poweredOff && config.dh1Connected
+        perDh2Type.isEnabled = poweredOff && config.dh2Connected
+        perDh3Type.isEnabled = poweredOff && config.dh3Connected
         perFactorySettingsPopup.isEnabled = poweredOff
 
         // Lock symbol and explanation

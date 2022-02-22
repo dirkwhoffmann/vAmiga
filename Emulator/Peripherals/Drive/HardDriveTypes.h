@@ -11,16 +11,24 @@
 
 #include "Aliases.h"
 
-//
-// Constants
-//
-
-#define MAX_HDF_SIZE MB(128)
-
 
 //
 // Structures
 //
+
+typedef struct
+{
+    Side side;
+    Cylinder cylinder;
+    Sector sector;
+}
+HardDriveHead;
+
+typedef struct
+{
+    bool connected;
+}
+HardDriveConfig;
 
 typedef struct
 {
