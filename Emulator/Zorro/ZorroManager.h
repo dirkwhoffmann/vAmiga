@@ -25,7 +25,7 @@ public:
 
 private:
     
-    ZorroBoard *slots[slotCount + 1] = {
+    ZorroBoard *slots[slotCount] = {
         
         &ramExpansion,
         &hdrController0,
@@ -80,8 +80,8 @@ private:
     
 public:
     
-    // Returns the device in the specified slot or nullptr
-    ZorroBoard *getSlot(isize i);
+    // Returns the board in the specified slot
+    ZorroBoard *getBoard(isize i) const;
     
     // Reads a value from Zorro board space
     u8 peek8(u32 addr);

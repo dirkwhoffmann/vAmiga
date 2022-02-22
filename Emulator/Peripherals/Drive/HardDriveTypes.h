@@ -63,7 +63,7 @@ HardDriveConfig;
 
 typedef struct
 {
-    bool attached;
+    // bool attached;
     bool modified;
     struct { isize c; isize h; isize s; } head;
 }

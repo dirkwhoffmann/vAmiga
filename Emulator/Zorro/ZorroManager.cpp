@@ -27,26 +27,27 @@ ZorroManager::_dump(dump::Category category, std::ostream& os) const
             
     if (category & dump::State) {
     
-        for (isize i = 0; slots[i]; i++) {
+        for (isize i = 0; i < slotCount; i++) {
 
             os << tab("Slot " + std::to_string(i));
-            os << string(slots[i]->getDescription()) << std::endl;
+            
+            if (auto board = getBoard(i); board != nullptr) {
+                os << string(slots[i]->getDescription()) << std::endl;
+            } else {
+                os << "Empty"<< std::endl;
+            }
         }
     }
 }
 
 ZorroBoard *
-ZorroManager::getSlot(isize i)
+ZorroManager::getBoard(isize i) const
 {
-    ZorroBoard *result = nullptr;
+    // Return nullptr if there is no device
+    if (usize(i) >= slotCount || !slots[i]) return nullptr;
     
-    if (usize(i) < slotCount) {
-        
-        // TODO: Return nullptr if the device is not plugged in
-        return slots[i];
-    }
-
-    return result;
+    // Only return the device if it is plugged in
+    return slots[i]->pluggedIn() ? slots[i] : nullptr;
 }
 
 u8

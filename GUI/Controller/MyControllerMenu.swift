@@ -112,16 +112,16 @@ extension MyController: NSMenuItemValidation {
             return amiga.poweredOff
             
         case #selector(MyController.attachRecentHdrDummyAction(_:)):
-            return dhn.isAttached
+            return amiga.poweredOff
 
         case #selector(MyController.attachRecentHdrAction(_:)):
             return validateURLlist(myAppDelegate.recentlyAttachedHdrURLs, image: smallHdr)
             
         case #selector(MyController.exportHdrAction(_:)):
-            return dhn.isAttached
+            return true
             
         case #selector(MyController.exportRecentHdrDummyAction(_:)):
-            return dhn.isAttached
+            return true
 
         case #selector(MyController.exportRecentHdrAction(_:)):
             switch item.tag {
@@ -132,9 +132,8 @@ extension MyController: NSMenuItemValidation {
             default: fatalError()
             }
 
-        case #selector(MyController.hdrGeometryAction(_:)),
-            #selector(MyController.inspectHdrAction(_:)):
-            return dhn.isAttached
+        case #selector(MyController.inspectHdrAction(_:)):
+            return true
 
         default:
             return true

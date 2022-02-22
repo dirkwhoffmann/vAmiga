@@ -81,6 +81,7 @@ private:
     // Methods from ZorroBoard
     //
     
+    virtual bool pluggedIn() const override;
     virtual isize pages() const override        { return 1; }
     virtual u8 type() const override            { return ERT_ZORROII | ERTF_DIAGVALID; }
     virtual u8 product() const override         { return 0x88; }

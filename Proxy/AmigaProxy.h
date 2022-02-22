@@ -618,7 +618,6 @@
 - (BOOL)isInsertable:(DiskDiameter)type density:(DiskDensity)density;
 - (void)eject;
 - (void)swap:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
-// - (void)insertNew:(ExceptionWrapper *)ex;
 - (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb exception:(ExceptionWrapper *)ex;
 @property BOOL modified;
 @property (readonly) BOOL motor;
@@ -636,7 +635,7 @@
 @property (readonly) HardDriveInfo info;
 
 @property (readonly) NSInteger nr;
-@property (readonly) BOOL isAttached;
+@property (readonly) BOOL isConnected;
 @property BOOL modified;
 @property (readonly) NSInteger capacity;
 @property (readonly) NSInteger cylinders;

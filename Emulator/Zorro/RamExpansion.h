@@ -68,6 +68,7 @@ private:
     // Methods from ZorroBoard
     //
         
+    virtual bool pluggedIn() const override;
     virtual isize pages() const override;
     virtual u8 type() const override            { return ERT_ZORROII | ERTF_MEMLIST; }
     virtual u8 product() const override         { return 0x67; }

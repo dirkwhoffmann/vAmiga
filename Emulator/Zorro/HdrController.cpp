@@ -115,7 +115,7 @@ HdrController::_reset(bool hard)
 
     if (hard) {
 
-        if (drive.isAttached())  {
+        if (pluggedIn())  {
 
             state = STATE_AUTOCONF;
             debug(true, "Hard drive emulation enabled.\n");
@@ -126,6 +126,12 @@ HdrController::_reset(bool hard)
             debug(true, "Hard drive emulation disabled. No HDF.\n");
         }
     }
+}
+
+bool
+HdrController::pluggedIn() const
+{
+    return drive.isConnected();
 }
 
 void
@@ -285,50 +291,7 @@ HdrController::processCmd()
             if (error) mem.patch(pointer + IO_ERROR, u8(error));
             break;
         }
-        /*
-        case CMD_READ:
-        case CMD_WRITE:
-        case CMD_TD_FORMAT:
-            
-            if (stdReq.io_Offset + stdReq.io_Length > hdf->size) {
-                
-                warn("Offset out of bounds\n");
-                mem.patch(pointer + IO_ERROR, u8(IOERR_BADADDRESS));
-                return;
-            }
-            if (stdReq.io_Offset % 512) {
-                
-                warn("Offset not aligned\n");
-                mem.patch(pointer + IO_ERROR, u8(IOERR_BADADDRESS));
-                return;
-            }
-            if (stdReq.io_Length % 512) {
-                
-                warn("Length mismatch\n");
-                mem.patch(pointer + IO_ERROR, u8(IOERR_BADLENGTH));
-                return;
-            }
-            if (cmd == CMD_READ) {
-                
-                debug(HDR_DEBUG, "Reading %u bytes. From: %x To: %x\n",
-                      stdReq.io_Length, stdReq.io_Offset, stdReq.io_Data);
-                
-                mem.patch(u32(stdReq.io_Data), hdf->data + stdReq.io_Offset, stdReq.io_Length);
-                return;
-            }
-            if (cmd == CMD_WRITE || cmd == CMD_TD_FORMAT) {
-                
-                debug(HDR_DEBUG, "Writing %u bytes. From: %x To: %x\n",
-                      stdReq.io_Length, stdReq.io_Data, stdReq.io_Offset);
-
-                for (isize i = 0; i < stdReq.io_Length; i++) {
-                    hdf->data[stdReq.io_Offset + i] = mem.spypeek8 <ACCESSOR_CPU> ((u32)(stdReq.io_Data + i));
-                }
-                return;
-            }
-            break;
-        */
-            
+  
         case CMD_RESET:
         case CMD_UPDATE:
         case CMD_CLEAR:

@@ -162,7 +162,7 @@ HardDrive::_inspect() const
 {
     {   SYNCHRONIZED
         
-        info.attached = isAttached();
+        // info.attached = isAttached();
         info.modified = isModified();
         info.head.c = head.c;
         info.head.h = head.h;
@@ -204,15 +204,13 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         
         os << tab("Nr");
         os << dec(nr) << std::endl;
-        os << tab("Attached");
-        os << bol(isAttached()) << std::endl;
-        os << tab("Modified");
-        os << bol(modified) << std::endl;
         os << tab("Head");
         os << "c: " << dec(head.c) << " ";
         os << "h: " << dec(head.h) << " ";
         os << "s: " << dec(head.s);
         os << std::endl;
+        os << tab("Modified");
+        os << bol(modified) << std::endl;
     }
 }
 

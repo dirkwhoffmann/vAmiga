@@ -1144,7 +1144,7 @@ RetroShell::exec <Token::zorro, Token::inspect> (Arguments& argv, long param)
 {
     auto value = util::parseNum(argv.front());
     
-    if (auto board = zorro.getSlot(value); board != nullptr) {
+    if (auto board = zorro.getBoard(value); board != nullptr) {
 
         dump(*board, dump::Properties);
         *this << "\n";

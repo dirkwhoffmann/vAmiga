@@ -49,6 +49,9 @@ protected:
     
 public:
     
+    // Checks whether the board is plugged in
+    virtual bool pluggedIn() const = 0;
+    
     // Returns basic board properties
     virtual isize pages() const = 0;
     virtual u8 type() const = 0;
@@ -57,21 +60,21 @@ public:
     virtual u16 manufacturer() const = 0;
     virtual u32 serialNumber() const = 0;
     virtual u16 initDiagVec() const = 0;
-    
-private:
-    
-    // Reads a single byte from configuration space
-    u8 getDescriptorByte(isize offset) const;
-    
+        
 
     //
     // Configuring (AutoConfig)
     //
     
+private:
+
     u8 peekACF8(u32 addr) const;
     u8 spypeekACF8(u32 addr) const { return peekACF8(addr); }
     void pokeACF8(u32 addr, u8 value);
-    
+        
+    // Reads a single byte from configuration space
+    u8 getDescriptorByte(isize offset) const;
+
     
     //
     // Accessing

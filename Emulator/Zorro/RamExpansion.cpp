@@ -35,6 +35,12 @@ RamExpansion::_reset(bool hard)
     }
 }
 
+bool
+RamExpansion::pluggedIn() const
+{
+    return mem.fastRamSize() != 0;
+}
+
 isize
 RamExpansion::pages() const
 {

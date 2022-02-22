@@ -1291,7 +1291,7 @@ using namespace moira;
 
 - (BOOL)isAttached
 {
-    return [self drive]->isAttached();
+    return [self drive]->isConnected();
 }
 
 - (BOOL)modified

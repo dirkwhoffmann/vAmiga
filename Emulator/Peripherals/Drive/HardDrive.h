@@ -132,11 +132,14 @@ public:
     // Returns information about the current state
     HardDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
-    // Checks whether this drive is attached to the Amiga
+    // Returns the drive geometry
     const DiskGeometry &getGeometry() const { return geometry; }
 
+    // Checks whether this drive is connected to the Amiga
+    bool isConnected() const { return config.connected; }
+
     // Checks whether this drive is attached to the Amiga
-    bool isAttached() const { return geometry.cylinders != 0; }
+    [[deprecated]] bool isAttached() const { return geometry.cylinders != 0; }
     
     // Gets or sets the 'modification' flag
     bool isModified() const { return modified; }
