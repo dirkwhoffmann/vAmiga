@@ -94,6 +94,7 @@ HardDrive::getDefaultConfig(isize nr)
 {
     HardDriveConfig defaults;
     
+    defaults.type = HDR_GENERIC;
     defaults.connected = nr == 0;
     
     return defaults;
@@ -104,6 +105,7 @@ HardDrive::resetConfig()
 {
     auto defaults = getDefaultConfig(nr);
     
+    setConfigItem(OPT_HDR_TYPE, defaults.type);
     setConfigItem(OPT_HDR_CONNECT, defaults.connected);
 }
 
@@ -123,7 +125,16 @@ void
 HardDrive::setConfigItem(Option option, i64 value)
 {
     switch (option) {
-                            
+         
+        case OPT_HDR_TYPE:
+            
+            if (!HardDriveTypeEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, HardDriveTypeEnum::keyList());
+            }
+            
+            config.type = (HardDriveType)value;
+            return;
+
         case OPT_HDR_CONNECT:
             
             if (!isPoweredOff()) {
@@ -156,6 +167,14 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
 
+    if (category & dump::Config) {
+        
+        os << tab("Type");
+        os << HardDriveTypeEnum::key(config.type) << std::endl;
+        os << tab("Connected");
+        os << bol(config.connected) << std::endl;
+    }
+    
     if (category & dump::Disk) {
 
         auto cap1 = geometry.numBytes() / MB(1);

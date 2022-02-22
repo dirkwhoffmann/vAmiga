@@ -74,6 +74,7 @@ enum_long(OPT)
     OPT_EJECT_VOLUME,
     
     // Hard Drives
+    OPT_HDR_TYPE,
     OPT_HDR_CONNECT,
     
     // Ports
@@ -184,6 +185,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_INSERT_VOLUME:         return "INSERT_VOLUME";
             case OPT_EJECT_VOLUME:          return "EJECT_VOLUME";
                 
+            case OPT_HDR_TYPE:              return "HDR_TYPE";
             case OPT_HDR_CONNECT:           return "HDR_CONNECT";
                 
             case OPT_SERIAL_DEVICE:         return "SERIAL_DEVICE";

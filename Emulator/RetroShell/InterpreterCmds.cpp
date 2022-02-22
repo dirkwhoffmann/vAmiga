@@ -968,6 +968,10 @@ Interpreter::registerInstructions()
         
         string dh = "dh" + std::to_string(i);
 
+        root.add({dh, "config"},
+                 "command", "Displays the current configuration",
+                 &RetroShell::exec <Token::dhn, Token::config>, 0, i);
+
         root.add({dh, "inspect"},
                  "command", "Displays the component state");
 

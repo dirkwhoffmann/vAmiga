@@ -10,6 +10,36 @@
 #pragma once
 
 #include "Aliases.h"
+#include "Reflection.h"
+
+//
+// Enumerations
+//
+
+enum_long(HDR_TYPE)
+{
+    HDR_GENERIC
+};
+typedef HDR_TYPE HardDriveType;
+
+#ifdef __cplusplus
+struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
+{
+    static long minVal() { return 0; }
+    static long maxVal() { return HDR_GENERIC; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    
+    static const char *prefix() { return "HDR"; }
+    static const char *key(HardDriveType value)
+    {
+        switch (value) {
+                
+            case HDR_GENERIC:   return "GENERIC";
+        }
+        return "???";
+    }
+};
+#endif
 
 
 //
@@ -26,6 +56,7 @@ HardDriveHead;
 
 typedef struct
 {
+    HardDriveType type;
     bool connected;
 }
 HardDriveConfig;

@@ -78,8 +78,8 @@ struct FloatStereo; typedef FloatStereo SampleType;
 // Launch settings
 //
 
-// Add pathes to HDF files to launch the emulator with preloaded hard drives
-#define INITIAL_DH0 "/tmp/vamiga.hdf"
+// Add pathes to HDF files to launch the emulator with preset hard drives
+#define INITIAL_DH0 "" // "/tmp/vamiga.hdf"
 #define INITIAL_DH1 ""
 #define INITIAL_DH2 ""
 #define INITIAL_DH3 ""
@@ -167,7 +167,7 @@ static const int DSK_CHECKSUM    = 0; // Compute disk checksums
 static const int DSKREG_DEBUG    = 0; // Disk controller registers
 static const int DSK_DEBUG       = 0; // Disk controller execution
 static const int MFM_DEBUG       = 0; // Disk encoder / decoder
-static const int FS_DEBUG        = 1; // File System Classes (OFS / FFS)
+static const int FS_DEBUG        = 0; // File System Classes (OFS / FFS)
 
 // Audio
 static const int AUDREG_DEBUG    = 0; // Audio registers

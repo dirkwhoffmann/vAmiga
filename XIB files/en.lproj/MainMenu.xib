@@ -970,12 +970,6 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="qgs-Zf-fdv"/>
-                            <menuItem title="Adjust Geometry..." id="WFi-pt-ys5" userLabel="Export disk">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="hdrGeometryAction:" target="-1" id="uqG-7U-CvA"/>
-                                </connections>
-                            </menuItem>
                             <menuItem title="Inspect..." id="1m9-KG-jpf" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>

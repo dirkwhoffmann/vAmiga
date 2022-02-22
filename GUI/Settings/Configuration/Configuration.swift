@@ -114,12 +114,11 @@ class Configuration {
     }
     func dhnType(_ n: Int) -> Int {
         precondition(0 <= n && n <= 3)
-        // return amiga.getConfig(.HDR_TYPE, drive: n)
-        return 0
+        return amiga.getConfig(.HDR_TYPE, drive: n)
     }
     func setDhnType(_ n: Int, type: Int) {
         precondition(0 <= n && n <= 3)
-        // amiga.configure(.HDR_TYPE, drive: n, value: type)
+        amiga.configure(.HDR_TYPE, drive: n, value: type)
     }
 
     var df0Connected: Bool {
@@ -659,6 +658,15 @@ class Configuration {
         df1Type = defaults.driveType[1].rawValue
         df2Type = defaults.driveType[2].rawValue
         df3Type = defaults.driveType[3].rawValue
+ 
+        dh0Connected = defaults.hardDriveConnect[0]
+        dh1Connected = defaults.hardDriveConnect[1]
+        dh2Connected = defaults.hardDriveConnect[2]
+        dh3Connected = defaults.hardDriveConnect[3]
+        dh0Type = defaults.hardDriveType[0].rawValue
+        dh1Type = defaults.hardDriveType[1].rawValue
+        dh2Type = defaults.hardDriveType[2].rawValue
+        dh3Type = defaults.hardDriveType[3].rawValue
         
         gameDevice1 = defaults.gameDevice1
         gameDevice2 = defaults.gameDevice2
@@ -682,7 +690,16 @@ class Configuration {
         df1Type = defaults.integer(forKey: Keys.Per.df1Type)
         df2Type = defaults.integer(forKey: Keys.Per.df2Type)
         df3Type = defaults.integer(forKey: Keys.Per.df3Type)
-        
+
+        dh0Connected = defaults.bool(forKey: Keys.Per.dh0Connect)
+        dh1Connected = defaults.bool(forKey: Keys.Per.dh1Connect)
+        dh2Connected = defaults.bool(forKey: Keys.Per.dh2Connect)
+        dh3Connected = defaults.bool(forKey: Keys.Per.dh3Connect)
+        dh0Type = defaults.integer(forKey: Keys.Per.dh0Type)
+        dh1Type = defaults.integer(forKey: Keys.Per.dh1Type)
+        dh2Type = defaults.integer(forKey: Keys.Per.dh2Type)
+        dh3Type = defaults.integer(forKey: Keys.Per.dh3Type)
+
         gameDevice1 = defaults.integer(forKey: Keys.Per.gameDevice1)
         gameDevice2 = defaults.integer(forKey: Keys.Per.gameDevice2)
         serialDevice = defaults.integer(forKey: Keys.Per.serialDevice)
@@ -704,7 +721,16 @@ class Configuration {
         defaults.set(df1Type, forKey: Keys.Per.df1Type)
         defaults.set(df2Type, forKey: Keys.Per.df2Type)
         defaults.set(df3Type, forKey: Keys.Per.df3Type)
-                
+
+        defaults.set(dh0Connected, forKey: Keys.Per.dh0Connect)
+        defaults.set(dh1Connected, forKey: Keys.Per.dh1Connect)
+        defaults.set(dh2Connected, forKey: Keys.Per.dh2Connect)
+        defaults.set(dh3Connected, forKey: Keys.Per.dh3Connect)
+        defaults.set(dh0Type, forKey: Keys.Per.dh0Type)
+        defaults.set(dh1Type, forKey: Keys.Per.dh1Type)
+        defaults.set(dh2Type, forKey: Keys.Per.dh2Type)
+        defaults.set(dh3Type, forKey: Keys.Per.dh3Type)
+
         defaults.set(gameDevice1, forKey: Keys.Per.gameDevice1)
         defaults.set(gameDevice2, forKey: Keys.Per.gameDevice2)
         defaults.set(serialDevice, forKey: Keys.Per.serialDevice)

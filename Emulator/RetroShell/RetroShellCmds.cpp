@@ -1102,6 +1102,12 @@ RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 //
 
 template <> void
+RetroShell::exec <Token::dhn, Token::config> (Arguments& argv, long param)
+{
+    dump(*amiga.dh[param], dump::Config);
+}
+
+template <> void
 RetroShell::exec <Token::dhn, Token::inspect, Token::state> (Arguments& argv, long param)
 {
     dump(*amiga.dh[param], dump::State);

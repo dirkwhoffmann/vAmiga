@@ -308,6 +308,7 @@ Amiga::getConfigItem(Option option, long id) const
             
             return df[id]->getConfigItem(option);
             
+        case OPT_HDR_TYPE:
         case OPT_HDR_CONNECT:
             
             return dh[id]->getConfigItem(option);
@@ -441,6 +442,7 @@ Amiga::configure(Option option, i64 value)
             df[3]->setConfigItem(option, value);
             break;
             
+        case OPT_HDR_TYPE:
         case OPT_HDR_CONNECT:
 
             dh[0]->setConfigItem(option, value);
@@ -586,6 +588,7 @@ Amiga::configure(Option option, long id, i64 value)
             df[id]->setConfigItem(option, value);
             break;
 
+        case OPT_HDR_TYPE:
         case OPT_HDR_CONNECT:
             
             dh[id]->setConfigItem(option, value);
