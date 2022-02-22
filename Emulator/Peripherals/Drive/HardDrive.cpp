@@ -114,7 +114,8 @@ HardDrive::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_HDR_CONNECT:         return (long)config.connected;
+        case OPT_HDR_TYPE:      return (long)config.type;
+        case OPT_HDR_CONNECT:   return (long)config.connected;
 
         default:
             fatalError;
@@ -142,6 +143,7 @@ HardDrive::setConfigItem(Option option, i64 value)
             }
 
             config.connected = bool(value);
+            msgQueue.put(value ? MSG_HDR_CONNECT : MSG_HDR_DISCONNECT, nr);
             return;
 
         default:

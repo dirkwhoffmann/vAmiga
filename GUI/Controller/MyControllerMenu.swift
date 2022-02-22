@@ -147,6 +147,10 @@ extension MyController: NSMenuItemValidation {
         myAppDelegate.df1Menu.isHidden = !config.df1Connected
         myAppDelegate.df2Menu.isHidden = !config.df2Connected
         myAppDelegate.df3Menu.isHidden = !config.df3Connected
+        myAppDelegate.dh0Menu.isHidden = !config.dh0Connected
+        myAppDelegate.dh1Menu.isHidden = !config.dh1Connected
+        myAppDelegate.dh2Menu.isHidden = !config.dh2Connected
+        myAppDelegate.dh3Menu.isHidden = !config.dh3Connected
     }
     
     //

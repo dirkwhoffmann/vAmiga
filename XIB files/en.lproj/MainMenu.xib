@@ -18,6 +18,10 @@
                 <outlet property="df1Menu" destination="fYA-pX-q72" id="GdQ-P8-yMU"/>
                 <outlet property="df2Menu" destination="gYR-sU-A3s" id="vfb-ge-033"/>
                 <outlet property="df3Menu" destination="2h1-jT-0o6" id="dfO-xV-ieM"/>
+                <outlet property="dh0Menu" destination="OYE-xa-ahL" id="ehz-vZ-bPG"/>
+                <outlet property="dh1Menu" destination="SoY-x2-Dd4" id="exs-xD-zqz"/>
+                <outlet property="dh2Menu" destination="Cna-Xa-SNM" id="jSm-kb-ROd"/>
+                <outlet property="dh3Menu" destination="zgt-H4-oPS" id="AIW-bD-wSR"/>
             </connections>
         </customObject>
         <menu title="MainMenu" systemMenu="main" id="29" userLabel="MainMenu">
@@ -854,7 +858,7 @@
                         </items>
                     </menu>
                 </menuItem>
-                <menuItem title="Dh0" tag="2" id="OYE-xa-ahL" userLabel="Hd0">
+                <menuItem title="Dh0" tag="2" id="OYE-xa-ahL">
                     <menu key="submenu" title="Dh0" id="MOM-vZ-zP1">
                         <items>
                             <menuItem title="New..." id="bfU-Wh-UO2">
@@ -974,6 +978,381 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectHdrAction:" target="-1" id="x0b-KS-HXt"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Dh1" tag="2" id="SoY-x2-Dd4" userLabel="Dh1">
+                    <menu key="submenu" title="Dh1" id="S1E-qU-fjf">
+                        <items>
+                            <menuItem title="New..." tag="1" id="Ogz-R4-cpt">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="newHdrAction:" target="-1" id="L8D-og-TNv"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Attach..." tag="1" id="bu7-kg-9fL">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="attachHdrAction:" target="-1" id="YMi-XB-p5K"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Attach Recent" id="6hN-sv-cg3">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Attach Recent" id="w26-SP-RmU">
+                                    <items>
+                                        <menuItem title="0" tag="10" id="JCF-3s-kcd">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="nne-iI-QR7"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="1" tag="11" id="yLz-8V-pP2">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="ZgU-49-B3q"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="2" tag="12" id="jCq-A1-Y7o">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="BsS-JO-MGj"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="3" tag="13" id="iSM-Ab-ygu">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="wxq-1N-l5L"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="4" tag="14" id="WDJ-oL-M1B">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="0n5-qL-bW6"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="5" tag="15" id="C1v-V7-oCa">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="L4E-Hc-kAf"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="6" tag="16" id="bHQ-6d-a0S">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="fDO-gA-isp"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="7" tag="17" id="l7y-bL-O5F">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="4Md-an-koD"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="8" tag="18" id="HBB-6V-Xn7">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="Ndi-o0-SSa"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="9" tag="19" id="BYP-eT-Vo9">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="MkD-zT-unQ"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" tag="-1" id="XoD-h0-F9L"/>
+                                        <menuItem title="Clear Menu" tag="1" id="rp6-66-fSy">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="clearRecentlyAttachedHdrsAction:" target="-1" id="Ba7-jS-RnS"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                                <connections>
+                                    <action selector="attachRecentHdrDummyAction:" target="-1" id="p6v-1N-hrT"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="7Qn-79-6BU"/>
+                            <menuItem title="Export..." tag="1" id="Izd-yu-jY3" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportHdrAction:" target="-1" id="ndo-7w-DZ7"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Export To" id="7Wg-3m-VRk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Export To" id="0Bi-fu-lwA">
+                                    <items>
+                                        <menuItem title="0" tag="10" id="S2W-WE-NFQ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportRecentDiskAction:" target="-1" id="Fv4-0K-pDX"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                                <connections>
+                                    <action selector="exportRecentHdrDummyAction:" target="-1" id="yHa-z9-apM"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="1Vv-nd-7qq"/>
+                            <menuItem title="Inspect..." tag="1" id="ibt-uo-ppQ" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectHdrAction:" target="-1" id="ejU-Us-PpT"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Dh2" tag="2" id="Cna-Xa-SNM" userLabel="Dh2">
+                    <menu key="submenu" title="Dh2" id="Pad-Bd-B3D">
+                        <items>
+                            <menuItem title="New..." tag="2" id="74m-nj-pF7">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="newHdrAction:" target="-1" id="OvR-Vl-ZpQ"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Attach..." tag="2" id="vF9-w2-Sbh">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="attachHdrAction:" target="-1" id="obP-b2-o70"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Attach Recent" id="7xT-JF-SMY">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Attach Recent" id="Qts-fA-Imk">
+                                    <items>
+                                        <menuItem title="0" tag="20" id="MhG-AT-YzK">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="jk2-wT-SMt"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="1" tag="21" id="mwn-H0-I55">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="Q7Y-EI-AB6"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="2" tag="22" id="r6e-0I-fg5">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="2Wl-Sc-wbn"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="3" tag="23" id="dLO-6Q-6bJ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="C0p-ay-thp"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="4" tag="24" id="cak-hG-RDJ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="bvQ-K0-Uqp"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="5" tag="25" id="TQP-Bh-6eb">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="50X-xD-pB8"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="6" tag="26" id="kMb-fu-xNE">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="ZrN-3M-S3z"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="7" tag="27" id="Mlj-Li-T3h">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="8M6-c2-wy4"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="8" tag="28" id="jXU-r4-bmx">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="TG0-vs-ACK"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="9" tag="29" id="LR8-cf-g61">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="GLQ-NB-E7f"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" tag="-1" id="I0G-1U-RgW"/>
+                                        <menuItem title="Clear Menu" tag="2" id="PHs-1n-pAn">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="clearRecentlyAttachedHdrsAction:" target="-1" id="u8B-DI-GAL"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                                <connections>
+                                    <action selector="attachRecentHdrDummyAction:" target="-1" id="QQA-0r-ffJ"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Scb-0j-ECp"/>
+                            <menuItem title="Export..." tag="2" id="eRp-Jo-xsU" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportHdrAction:" target="-1" id="h3b-L1-uJi"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Export To" id="Wjq-Ug-rnk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Export To" id="R8W-LO-NPB">
+                                    <items>
+                                        <menuItem title="0" tag="20" id="odC-fj-ecO">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportRecentDiskAction:" target="-1" id="a19-bL-jCS"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                                <connections>
+                                    <action selector="exportRecentHdrDummyAction:" target="-1" id="QSi-pU-NWB"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Qt6-t9-9qM"/>
+                            <menuItem title="Inspect..." tag="2" id="0E6-C2-ryM" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectHdrAction:" target="-1" id="9Oy-jj-V30"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Dh3" tag="2" id="zgt-H4-oPS" userLabel="Dh3">
+                    <menu key="submenu" title="Dh3" id="Asl-av-cEm">
+                        <items>
+                            <menuItem title="New..." tag="3" id="whu-bJ-VAj">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="newHdrAction:" target="-1" id="ip9-vZ-Uza"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Attach..." tag="3" id="E8x-Hh-LBK">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="attachHdrAction:" target="-1" id="Htd-wy-EPM"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Attach Recent" id="kf6-jr-Wzq">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Attach Recent" id="dmS-te-RpF">
+                                    <items>
+                                        <menuItem title="0" tag="30" id="TmN-9U-UKH">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="cFd-gI-VJk"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="1" tag="31" id="Q2f-g9-vb4">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="IpR-kj-Anz"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="2" tag="32" id="LSx-L3-UfA">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="yP5-f1-wSX"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="3" tag="33" id="Rqs-as-KFo">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="WEi-KO-YcC"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="4" tag="34" id="4N9-cs-IlM">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="9s2-x6-OJL"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="5" tag="35" id="J36-Ah-yPe">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="yLj-p6-kOf"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="6" tag="36" id="MHA-vC-baU">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="iMx-Lz-dcA"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="7" tag="37" id="psN-4d-7V7">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="N7D-UG-5Fs"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="8" tag="38" id="Lv2-hm-PLw">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="FPL-Rp-Kei"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="9" tag="39" id="gcf-Xg-KXm">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="attachRecentHdrAction:" target="-1" id="rL8-IR-bTW"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" tag="-1" id="rW0-La-yaZ"/>
+                                        <menuItem title="Clear Menu" tag="1" id="CQa-an-QWA">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="clearRecentlyAttachedHdrsAction:" target="-1" id="zoy-fj-XXv"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                                <connections>
+                                    <action selector="attachRecentHdrDummyAction:" target="-1" id="9bY-2s-dOJ"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Qo8-fz-s1e"/>
+                            <menuItem title="Export..." tag="1" id="iMt-Ho-atI" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportHdrAction:" target="-1" id="QyI-5M-elT"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Export To" id="yIE-F0-g9J">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Export To" id="r6T-Vb-Sf8">
+                                    <items>
+                                        <menuItem title="0" tag="10" id="8Lv-OZ-CXc">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportRecentDiskAction:" target="-1" id="jm7-xR-56u"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                                <connections>
+                                    <action selector="exportRecentHdrDummyAction:" target="-1" id="i9n-lF-Aka"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="tzT-rv-xwa"/>
+                            <menuItem title="Inspect..." tag="1" id="pFD-5y-I16" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectHdrAction:" target="-1" id="ZEM-EJ-Rxv"/>
                                 </connections>
                             </menuItem>
                         </items>

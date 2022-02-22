@@ -131,7 +131,6 @@ DiskController::setConfigItem(Option option, long id, i64 value)
             
             // Inform the GUI
             msgQueue.put(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, id);
-            msgQueue.put(MSG_CONFIG);
             return;
             
         default:
