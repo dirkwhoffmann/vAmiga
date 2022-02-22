@@ -29,7 +29,7 @@ struct DiskGeometry {
     
     // Logical layout parameters
     isize sectors = 0;
-    isize bsize = 0;
+    isize bsize = 512;
     
     template <class W>
     void operator<<(W& worker)

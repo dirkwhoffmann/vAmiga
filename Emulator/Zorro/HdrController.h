@@ -15,6 +15,9 @@
 
 class HdrController : public ZorroBoard {
     
+    // Number of this controller
+    isize nr;
+
     // The hard drive this controller is connected to
     HardDrive &drive;
     
@@ -37,7 +40,7 @@ public:
     
 private:
     
-    const char *getDescription() const override { return "HdrController"; }
+    const char *getDescription() const override;
     void _dump(dump::Category category, std::ostream& os) const override;
 
     
@@ -83,7 +86,7 @@ private:
     virtual u8 product() const override         { return 0x88; }
     virtual u8 flags() const override           { return 0x00; }
     virtual u16 manufacturer() const override   { return 0x0539; }
-    virtual u32 serialNumber() const override   { return 0x5041554C; }
+    virtual u32 serialNumber() const override   { return 3141592 + u32(nr); }
     virtual u16 initDiagVec() const override    { return 0x40; }
         
     void updateMemSrcTables() override;

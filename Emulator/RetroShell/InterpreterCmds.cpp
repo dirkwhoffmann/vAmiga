@@ -977,17 +977,32 @@ Interpreter::registerInstructions()
 
         root.add({dh, "inspect", "state"},
                  "command", "Displays the internal state",
-                 &RetroShell::exec <Token::dhn, Token::inspect, Token::state>, 0);
+                 &RetroShell::exec <Token::dhn, Token::inspect, Token::state>, 0, i);
 
         root.add({dh, "inspect", "disk"},
                  "command", "Displays disk properties",
-                 &RetroShell::exec <Token::dhn, Token::inspect, Token::disk>, 0);
+                 &RetroShell::exec <Token::dhn, Token::inspect, Token::disk>, 0, i);
 
         root.add({dh, "geometry"},
                  "command", "Changes the disk geometry",
-                 &RetroShell::exec <Token::dhn, Token::geometry>, 3);
+                 &RetroShell::exec <Token::dhn, Token::geometry>, 3, i);
     }
     
+    //
+    // Zorro boards
+    //
+    
+    root.add({"zorro"},
+             "component", "Expansion boards");
+
+    root.add({"zorro", "list"},
+             "command", "Lists all connected boards",
+             &RetroShell::exec <Token::zorro, Token::list>, 0);
+
+    root.add({"zorro", "inspect"},
+             "command", "Inspects a specific Zorro board",
+             &RetroShell::exec <Token::zorro, Token::inspect>, 1);
+
     //
     // OS Debugger
     //

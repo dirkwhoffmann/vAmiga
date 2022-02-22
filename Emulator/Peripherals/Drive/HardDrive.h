@@ -34,7 +34,7 @@ class HardDrive : public SubComponent {
     u8 *data = nullptr;
     
     // Current position of the read/write head
-    struct { isize c; isize h; isize s; } head;
+    struct { isize c; isize h; isize s; } head = { };
     
     // Indicates if a write operation has been performed
     bool modified = false;
@@ -148,8 +148,11 @@ public:
     //
 
 public:
-    
-    // Creates an empty hard drive
+
+    // Creates an empty hard drive with a certain capacity
+    void attach(isize bytes) throws;
+
+    // Creates an empty hard drive with a certain geometry
     void attach(const DiskGeometry &geometry) throws;
 
     // Creates a disk with the contents of a file system

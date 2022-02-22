@@ -31,6 +31,7 @@ HardDrive::HardDrive(Amiga& ref, isize n) : SubComponent(ref), nr(n)
     
     if (path != "") {
             
+        // Preload the specified HDF file
         try {
             
             auto hdf = HDFFile(path);
@@ -42,6 +43,11 @@ HardDrive::HardDrive(Amiga& ref, isize n) : SubComponent(ref), nr(n)
             
             warn("Cannot open HDF file %s\n", path.c_str());
         }
+
+    } else {
+
+        // Atach a small default disk
+        attach(MB(10));
     }
 }
 
@@ -203,8 +209,8 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << tab("Modified");
         os << bol(modified) << std::endl;
         os << tab("Head");
-        os << "c: " << dec(head.c);
-        os << "h: " << dec(head.h);
+        os << "c: " << dec(head.c) << " ";
+        os << "h: " << dec(head.h) << " ";
         os << "s: " << dec(head.s);
         os << std::endl;
     }
@@ -299,6 +305,18 @@ HardDrive::changeGeometry(const DiskGeometry &geometry)
         
         throw VAError(ERROR_HDR_UNMATCHED_GEOMETRY);
     }
+}
+
+void
+HardDrive::attach(isize bytes)
+{
+    DiskGeometry geometry;
+    
+    geometry.cylinders = (bytes + KB(16) - 1) / KB(16);
+    geometry.sectors = 32;
+    geometry.heads = 1;
+    
+    attach(geometry);
 }
 
 void

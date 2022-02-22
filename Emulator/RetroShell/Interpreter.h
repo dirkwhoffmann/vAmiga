@@ -33,7 +33,7 @@ enum class Token
     saveroms, screenshot, searchpath, serial, server, set, setup, shakedetector,
     show, slow, slowramdelay,slowrammirror, source, speed, sprites, start,
     state, status, step, stop, swapdelay, task, tasks, tod, todbug,
-    unmappingtype, verbose, velocity, volume, wait, wom
+    unmappingtype, verbose, velocity, volume, wait, wom, zorro
 };
 
 struct TooFewArgumentsError : public util::ParseError {

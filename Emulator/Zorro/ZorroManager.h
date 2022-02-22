@@ -16,19 +16,22 @@
 class ZorroManager : public SubComponent {
     
 public:
+
+    // Number of emulated Zorro slots
+    static constexpr isize slotCount = 6;
     
     // A FastRam expansion board
     RamExpansion ramExpansion = RamExpansion(amiga);
 
-    // Hard drive controller (based on the AmiEmu)
-    // HdrController &hdrController; 
-
 private:
     
-    ZorroBoard *slots[3] = {
+    ZorroBoard *slots[slotCount + 1] = {
         
         &ramExpansion,
         &hdrController0,
+        &hdrController1,
+        &hdrController2,
+        &hdrController3,
         nullptr
     };
     
@@ -49,7 +52,7 @@ public:
 private:
     
     const char *getDescription() const override { return "ZorroManager"; }
-    void _dump(dump::Category category, std::ostream& os) const override { }
+    void _dump(dump::Category category, std::ostream& os) const override;
 
     
     //
@@ -76,6 +79,9 @@ private:
     //
     
 public:
+    
+    // Returns the device in the specified slot or nullptr
+    ZorroBoard *getSlot(isize i);
     
     // Reads a value from Zorro board space
     u8 peek8(u32 addr);

@@ -78,7 +78,22 @@ const unsigned char exprom[880] = {
 
 HdrController::HdrController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), drive(hdr)
 {
+    nr = drive.getNr();
+}
 
+const char *
+HdrController::getDescription() const
+{
+    switch (nr) {
+            
+        case 0: return "HdrController0";
+        case 1: return "HdrController1";
+        case 2: return "HdrController2";
+        case 3: return "HdrController3";
+
+        default:
+            fatalError;
+    }
 }
 
 void

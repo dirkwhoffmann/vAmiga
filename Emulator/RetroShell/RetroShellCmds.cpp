@@ -1130,6 +1130,29 @@ RetroShell::exec <Token::dhn, Token::geometry> (Arguments& argv, long param)
 }
 
 //
+// Zorro boards
+//
+
+template <> void
+RetroShell::exec <Token::zorro, Token::list> (Arguments& argv, long param)
+{
+    dump(zorro, dump::State);
+}
+
+template <> void
+RetroShell::exec <Token::zorro, Token::inspect> (Arguments& argv, long param)
+{
+    auto value = util::parseNum(argv.front());
+    
+    if (auto board = zorro.getSlot(value); board != nullptr) {
+
+        dump(*board, dump::Properties);
+        *this << "\n";
+        dump(*board, dump::State);
+    }
+}
+
+//
 // OSDebugger
 //
 

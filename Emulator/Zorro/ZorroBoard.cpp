@@ -17,18 +17,36 @@ ZorroBoard::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
             
-    if (category & dump::State) {
+    if (category & dump::Properties) {
     
+        os << tab("Device");
+        os << string(getDescription()) << std::endl;
         os << tab("Type");
-        os << hex(type());
+        os << hex(type()) << std::endl;
         os << tab("Product");
-        os << hex(product());
+        os << hex(product())<< std::endl;
         os << tab("Flags");
-        os << hex(flags());
+        os << hex(flags())<< std::endl;
         os << tab("Manufacturer");
-        os << hex(manufacturer());
+        os << hex(manufacturer()) << std::endl;
         os << tab("Serial number");
-        os << hex(serialNumber());
+        os << hex(serialNumber()) << std::endl;
+    }
+
+    if (category & dump::State) {
+            
+        auto first = u8(firstPage());
+        auto last = u8(lastPage());
+        
+        os << tab("State");
+        os << BoardStateEnum::key(state) << std::endl;
+        
+        os << tab("Mapped at");
+        if (first == last) {
+            os << hex(first) << std::endl;
+        } else {
+            os << hex(first) << " - " << hex(last) << std::endl;
+        }
     }
 }
 
