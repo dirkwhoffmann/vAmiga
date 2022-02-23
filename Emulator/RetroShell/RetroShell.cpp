@@ -422,7 +422,7 @@ RetroShell::help(const string &command)
 }
 
 void
-RetroShell::dump(AmigaComponent &component, dump::Category category)
+RetroShell::dump(AmigaObject &component, dump::Category category)
 {
     std::stringstream ss; string line;
     

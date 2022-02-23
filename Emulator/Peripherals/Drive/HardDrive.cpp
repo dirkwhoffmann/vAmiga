@@ -185,7 +185,7 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << bol(config.connected) << std::endl;
     }
     
-    if (category & dump::Disk) {
+    if (category & dump::Geometry) {
 
         auto cap1 = geometry.numBytes() / MB(1);
         auto cap2 = ((100 * geometry.numBytes()) / MB(1)) % 100;

@@ -50,16 +50,18 @@ enum Category : usize {
     BankMap     = (1 << 0),
     Checksums   = (1 << 1),
     Config      = (1 << 2),
-    Disk        = (1 << 3),
-    Dma         = (1 << 4),
-    List1       = (1 << 5),
-    List2       = (1 << 6),
-    Properties  = (1 << 7),
-    Registers   = (1 << 8),
-    Segments    = (1 << 9),
-    State       = (1 << 10),
+    Dma         = (1 << 3),
+    FileSystem  = (1 << 4),
+    Geometry    = (1 << 5),
+    List1       = (1 << 6),
+    List2       = (1 << 7),
+    Properties  = (1 << 8),
+    Registers   = (1 << 9),
+    Segments    = (1 << 10),
     Signals     = (1 << 11),
-    Bus         = (1 << 12)
+    State       = (1 << 12),
+    Summary     = (1 << 13),
+    Bus         = (1 << 14)
 };
 }
 

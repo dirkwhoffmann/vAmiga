@@ -36,9 +36,6 @@ class RetroShell : public SubComponent {
     // The currently active input string
     isize ipos = 0;
         
-    // Indicates if the the GUI needs a refresh
-    // [[deprecated]] bool isDirty = false;
-    
     
     //
     // User input
@@ -205,7 +202,7 @@ public:
     template <Token t1, Token t2, Token t3> void exec(Arguments& argv, long param) throws;
     template <Token t1, Token t2, Token t3, Token t4> void exec(Arguments& argv, long param) throws;
 
-    void dump(AmigaComponent &component, dump::Category category);
+    void dump(AmigaObject &component, dump::Category category);
 
     
     //

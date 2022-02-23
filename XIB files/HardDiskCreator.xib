@@ -10,9 +10,6 @@
             <connections>
                 <outlet property="bootBlock" destination="zwF-UQ-hRz" id="BvA-yP-bfz"/>
                 <outlet property="bootBlockText" destination="foR-SP-0y6" id="naV-ZK-Tcz"/>
-                <outlet property="bsizeField" destination="Pbq-7g-1WO" id="alL-tb-X3w"/>
-                <outlet property="bsizeStepper" destination="RbH-r2-WGn" id="Axk-ZP-cKd"/>
-                <outlet property="bsizeText" destination="gP7-1Y-qhK" id="a4f-Wf-GLY"/>
                 <outlet property="capacity" destination="CJv-9c-LZE" id="C91-Gk-EHK"/>
                 <outlet property="cylinderField" destination="Nfw-BW-veO" id="KoI-uj-nFY"/>
                 <outlet property="cylinderStepper" destination="JXs-kr-ze5" id="YX1-ax-K1m"/>
@@ -153,35 +150,6 @@ Gw
                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="OUY-yT-XCF"/>
                         <connections>
                             <action selector="sectorStepperAction:" target="-2" id="UiQ-2r-0n1"/>
-                        </connections>
-                    </stepper>
-                    <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gP7-1Y-qhK">
-                        <rect key="frame" x="417" y="86" width="69" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Block size:" id="w1H-24-yqQ">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pbq-7g-1WO">
-                        <rect key="frame" x="492" y="83" width="59" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Vdw-9D-PsB">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                        <connections>
-                            <action selector="bsizeAction:" target="-2" id="0E9-gX-LDL"/>
-                        </connections>
-                    </textField>
-                    <stepper hidden="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RbH-r2-WGn">
-                        <rect key="frame" x="556" y="79" width="19" height="28"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="9H6-eX-XFy"/>
-                        <connections>
-                            <action selector="bsizeStepperAction:" target="-2" id="4w5-8d-vMm"/>
                         </connections>
                     </stepper>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qLb-kL-Qi1">

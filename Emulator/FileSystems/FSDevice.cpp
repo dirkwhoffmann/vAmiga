@@ -53,7 +53,7 @@ FSDevice::init(FSDeviceDescriptor &layout)
     for (isize i = 0; i < numBlocks; i++) assert(blocks[i] != nullptr);
     
     // Print some debug information
-    if constexpr (FS_DEBUG) { info(); dump(); }
+    if constexpr (FS_DEBUG) { dump(dump::Summary); }
 }
 
 void
@@ -111,6 +111,20 @@ FSDevice::init(HDFFile &hdf)
 }
 
 void
+FSDevice::init(class Drive &drive)
+{
+    auto adf = ADFFile(drive);
+    init(adf);
+}
+
+void
+FSDevice::init(class HardDrive &drive)
+{
+    auto hdf = HDFFile(drive);
+    init(hdf);
+}
+
+void
 FSDevice::init(FSVolumeType type, const string &path)
 {
     // Try to fit the directory into files system with DD disk capacity
@@ -124,13 +138,6 @@ FSDevice::~FSDevice()
 {
     for (auto &p : partitions) delete p;
     for (auto &b : blocks) delete b;
-}
-
-void
-FSDevice::info()
-{
-    msg("Type    Size           Used    Free   Full   Name\n");
-    for (auto& p : partitions) p->info();
 }
 
 DiskGeometry
@@ -149,22 +156,36 @@ FSDevice::getGeometry() const
 void
 FSDevice::_dump(dump::Category category, std::ostream& os) const
 {
-    // Dump all partitions
-    for (auto &p : partitions) {
-        p->dump();
+    if (category & dump::Summary) {
+        
+        os << "Type   Size            Used    Free    Full  Name" << std::endl;
+        for (auto& p : partitions) p->dump(category, os);
+    
+    } else {
+        
+        // Dump all partitions
+        for (auto &p : partitions) {
+            p->dump();
+        }
+        msg("\n");
+        
+        // Dump all blocks
+        for (isize i = 0; i < numBlocks; i++)  {
+            
+            if (blocks[i]->type == FS_EMPTY_BLOCK) continue;
+            
+            msg("\nBlock %ld (%d):", i, blocks[i]->nr);
+            msg(" %s\n", FSBlockTypeEnum::key(blocks[i]->type));
+            
+            blocks[i]->dump();
+        }
     }
-    msg("\n");
+}
 
-    // Dump all blocks
-    for (isize i = 0; i < numBlocks; i++)  {
-        
-        if (blocks[i]->type == FS_EMPTY_BLOCK) continue;
-        
-        msg("\nBlock %ld (%d):", i, blocks[i]->nr);
-        msg(" %s\n", FSBlockTypeEnum::key(blocks[i]->type));
-                
-        blocks[i]->dump(); 
-    }
+FSPartitionPtr
+FSDevice::getPartition(isize nr)
+{
+    return nr < (isize)partitions.size() ? partitions[nr] : nullptr;
 }
 
 isize

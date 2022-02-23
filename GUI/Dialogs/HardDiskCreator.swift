@@ -19,17 +19,14 @@ class HardDiskCreator: DialogController {
     @IBOutlet weak var cylinderText: NSTextField!
     @IBOutlet weak var headText: NSTextField!
     @IBOutlet weak var sectorText: NSTextField!
-    @IBOutlet weak var bsizeText: NSTextField!
 
     @IBOutlet weak var cylinderField: NSTextField!
     @IBOutlet weak var headField: NSTextField!
     @IBOutlet weak var sectorField: NSTextField!
-    @IBOutlet weak var bsizeField: NSTextField!
     
     @IBOutlet weak var cylinderStepper: NSStepper!
     @IBOutlet weak var headStepper: NSStepper!
     @IBOutlet weak var sectorStepper: NSStepper!
-    @IBOutlet weak var bsizeStepper: NSStepper!
 
     var nr = 0
 
@@ -49,7 +46,7 @@ class HardDiskCreator: DialogController {
         
         if newValue != cylinders {
 
-            cylinders = newValue.clamped(1, 65536)
+            cylinders = newValue.clamped(Int(HDR_C_MIN), Int(HDR_C_MAX))
             update()
         }
     }
@@ -58,7 +55,7 @@ class HardDiskCreator: DialogController {
         
         if newValue != heads {
 
-            heads = newValue.clamped(1, 64)
+            heads = newValue.clamped(Int(HDR_H_MIN), Int(HDR_H_MAX))
             update()
         }
     }
@@ -67,20 +64,22 @@ class HardDiskCreator: DialogController {
         
         if newValue != sectors {
               
-            sectors = newValue.clamped(1, 128)
+            sectors = newValue.clamped(Int(HDR_S_MIN), Int(HDR_S_MAX))
             update()
         }
     }
 
+    /*
     func setBsize(_ newValue: Int) {
         
         if newValue != bsize {
               
-            bsize = newValue.clamped(1, 1024)
+            bsize = newValue.clamped(512, 512)
             update()
         }
     }
-
+    */
+    
     //
     // Starting up
     //
@@ -102,7 +101,6 @@ class HardDiskCreator: DialogController {
         cylinderStepper.maxValue = .greatestFiniteMagnitude
         headStepper.maxValue = .greatestFiniteMagnitude
         sectorStepper.maxValue = .greatestFiniteMagnitude
-        bsizeStepper.maxValue = .greatestFiniteMagnitude
         
         setCapacity(mb: capacity.selectedTag())
         update()
@@ -147,8 +145,6 @@ class HardDiskCreator: DialogController {
         headStepper.integerValue       = heads
         sectorField.stringValue        = String(format: "%d", sectors)
         sectorStepper.integerValue     = sectors
-        bsizeField.stringValue         = String(format: "%d", bsize)
-        bsizeStepper.integerValue      = bsize
         
         // Disable some controls
         let controls: [NSControl: Bool] = [
@@ -159,9 +155,7 @@ class HardDiskCreator: DialogController {
             headField: custom,
             headStepper: custom,
             sectorField: custom,
-            sectorStepper: custom,
-            bsizeField: custom,
-            bsizeStepper: custom
+            sectorStepper: custom
         ]
         
         for (control, enabled) in controls {
@@ -174,8 +168,7 @@ class HardDiskCreator: DialogController {
             bootBlockText: fileSystem.selectedTag() != 0,
             cylinderText: custom,
             headText: custom,
-            sectorText: custom,
-            bsizeText: custom
+            sectorText: custom
         ]
         
         for (label, enabled) in labels {
@@ -233,16 +226,6 @@ class HardDiskCreator: DialogController {
     @IBAction func sectorStepperAction(_ sender: NSStepper!) {
         
         setSector(sender.integerValue)
-    }
-    
-    @IBAction func bsizeAction(_ sender: NSTextField!) {
-        
-        setBsize(sender.integerValue)
-    }
-    
-    @IBAction func bsizeStepperAction(_ sender: NSStepper!) {
-        
-        setBsize(sender.integerValue)
     }
     
     @IBAction func attachAction(_ sender: Any!) {

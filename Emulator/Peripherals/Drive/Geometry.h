@@ -11,18 +11,19 @@
 #pragma once
 
 #include "AmigaObject.h"
+#include "Constants.h"
 #include "DiskTypes.h"
 
 struct DiskGeometry {
   
     // Constants
-    static constexpr isize cMin = 256;
-    static constexpr isize cMax = 1024;
-    static constexpr isize hMin = 1;
-    static constexpr isize hMax = 16;
-    static constexpr isize sMin = 16;
-    static constexpr isize sMax = 63;
-
+    static constexpr isize cMin = HDR_C_MIN;
+    static constexpr isize cMax = HDR_C_MAX;
+    static constexpr isize hMin = HDR_H_MIN;
+    static constexpr isize hMax = HDR_H_MAX;
+    static constexpr isize sMin = HDR_S_MIN;
+    static constexpr isize sMax = HDR_S_MAX;
+    
     // Physical layout parameters
     isize cylinders = 0;
     isize heads = 0;

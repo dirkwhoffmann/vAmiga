@@ -123,7 +123,7 @@ VAError::VAError(ErrorCode code, const string &s)
             break;
 
         case ERROR_HDR_TOO_LARGE:
-            description = "vAmiga supports hard drives with maximum capacity of ";
+            description = "vAmiga supports hard drives with a maximum capacity of ";
             description += "504 MB.";
             break;
 

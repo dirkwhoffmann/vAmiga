@@ -130,8 +130,8 @@
             filePath = "Emulator/FileSystems/FSPartition.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "378"
-            endingLineNumber = "378"
+            startingLineNumber = "388"
+            endingLineNumber = "388"
             landmarkName = "FSPartition::bmBlockForBlock(nr)"
             landmarkType = "7">
          </BreakpointContent>
@@ -146,8 +146,8 @@
             filePath = "Emulator/FileSystems/FSPartition.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "436"
-            endingLineNumber = "436"
+            startingLineNumber = "446"
+            endingLineNumber = "446"
             landmarkName = "FSPartition::locateAllocationBit(nr, byte, bit)"
             landmarkType = "7">
          </BreakpointContent>

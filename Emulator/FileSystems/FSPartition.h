@@ -55,9 +55,6 @@ private:
         
 public:
     
-    // Prints a summary about this partition (called by FSDevice::info)
-    void info() const;
-
     // Predicts the type of a block by analyzing its number and data
     FSBlockType predictBlockType(Block nr, const u8 *buffer) const;
     

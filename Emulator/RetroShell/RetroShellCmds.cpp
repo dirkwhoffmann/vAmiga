@@ -1108,15 +1108,40 @@ RetroShell::exec <Token::dhn, Token::config> (Arguments& argv, long param)
 }
 
 template <> void
-RetroShell::exec <Token::dhn, Token::inspect, Token::state> (Arguments& argv, long param)
+RetroShell::exec <Token::dhn, Token::inspect, Token::geometry> (Arguments& argv, long param)
 {
-    dump(*amiga.dh[param], dump::State);
+    dump(*amiga.dh[param], dump::Geometry);
 }
 
 template <> void
-RetroShell::exec <Token::dhn, Token::inspect, Token::disk> (Arguments& argv, long param)
+RetroShell::exec <Token::dhn, Token::inspect, Token::volume> (Arguments& argv, long param)
 {
-    dump(*amiga.dh[param], dump::Disk);
+    auto fs = FSDevice(*amiga.dh[param]);
+    dump(fs, dump::Summary);
+}
+
+template <> void
+RetroShell::exec <Token::dhn, Token::inspect, Token::partition> (Arguments& argv, long param)
+{
+    auto nr = util::parseNum(argv[0]);
+    auto fs = FSDevice(*amiga.dh[param]);
+    
+    if (auto p = fs.getPartition(nr); p != nullptr) {
+
+        dump(*p, dump::State);
+
+    } else {
+
+        auto count = fs.numPartitions();
+        auto range = count == 1 ? "0" : "0 ... " + std::to_string(count);
+        throw VAError(ERROR_OPT_INVARG, range);
+    }
+}
+
+template <> void
+RetroShell::exec <Token::dhn, Token::inspect, Token::state> (Arguments& argv, long param)
+{
+    dump(*amiga.dh[param], dump::State);
 }
 
 template <> void

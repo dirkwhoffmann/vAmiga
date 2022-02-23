@@ -138,15 +138,6 @@ private:
 
     
     //
-    // Analyzing
-    //
-
-public:
-
-    [[deprecated]] bool hasFFmpeg() const;
-
-    
-    //
     // Querying recording parameters
     //
 

@@ -66,21 +66,31 @@ FSPartition::FSPartition(FSDevice &dev, FSPartitionDescriptor &layout) : FSParti
 }
 
 void
-FSPartition::info() const
-{
-    msg("DOS%ld  ",        dos);
-    msg("%6ld (x %3ld) ",  numBlocks(), bsize());
-    msg("%6ld  ",          usedBlocks());
-    msg("%6ld   ",         freeBlocks());
-    msg("%3ld%%   ",       (isize)(100.0 * usedBlocks() / numBlocks()));
-    msg("%s\n",            getName().c_str());
-    msg("\n");
-}
-
-void
 FSPartition::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
+
+    if (category & dump::Summary) {
+
+        auto total = numBlocks();
+        auto used = usedBlocks();
+        auto free = freeBlocks();
+        auto fill = (isize)(100.0 * used / total);
+        
+        os << "DOS" << dec(dos);
+        os << "   ";
+        os << std::setw(6) << std::left << std::setfill(' ') << total;
+        os << " (x ";
+        os << std::setw(3) << std::left << std::setfill(' ') << bsize();
+        os << ")  ";
+        os << std::setw(6) << std::left << std::setfill(' ') << used;
+        os << "  ";
+        os << std::setw(6) << std::left << std::setfill(' ') << free;
+        os << "  ";
+        os << std::setw(3) << std::right << std::setfill(' ') << fill;
+        os << "%  ";
+        os << getName().c_str() << std::endl;
+    }
     
     if (category & dump::State) {
         

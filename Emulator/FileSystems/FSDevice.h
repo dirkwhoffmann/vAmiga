@@ -66,6 +66,8 @@ public:
     FSDevice(DiskDiameter dia, DiskDensity den, const string &path) { init(dia, den, path); }
     FSDevice(class ADFFile &adf) throws { init(adf); }
     FSDevice(class HDFFile &hdf) throws { init(hdf); }
+    FSDevice(class Drive &drive) throws { init(drive); }
+    FSDevice(class HardDrive &drive) throws { init(drive); }
     FSDevice(FSVolumeType type, const string &path) { init(type, path); }
     ~FSDevice();
     
@@ -77,6 +79,8 @@ private:
     void init(DiskDiameter type, DiskDensity density, const string &path);
     void init(class ADFFile &adf) throws;
     void init(class HDFFile &hdf) throws;
+    void init(class Drive &drive) throws;
+    void init(class HardDrive &drive) throws;
     void init(FSVolumeType type, const string &path);
 
     
@@ -90,16 +94,6 @@ private:
     void _dump(dump::Category category, std::ostream& os) const override;
     
 
-    //
-    // Analyzing
-    //
-    
-public:
-    
-    // Prints information about this volume
-    void info();
-            
-    
     //
     // Querying file system properties
     //
@@ -138,6 +132,9 @@ public:
     
     // Returns the number of partitions
     isize numPartitions() { return (isize)partitions.size(); }
+    
+    // Returns a partition
+    FSPartitionPtr getPartition(isize nr);
     
     // Returns the partition a certain block belongs to
     isize partitionForBlock(Block nr);

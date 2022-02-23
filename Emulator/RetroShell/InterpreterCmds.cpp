@@ -975,13 +975,21 @@ Interpreter::registerInstructions()
         root.add({dh, "inspect"},
                  "command", "Displays the component state");
 
+        root.add({dh, "inspect", "geometry"},
+                 "command", "Displays the disk geometry",
+                 &RetroShell::exec <Token::dhn, Token::inspect, Token::geometry>, 0, i);
+
+        root.add({dh, "inspect", "volume"},
+                 "command", "Displays summarized volume information",
+                 &RetroShell::exec <Token::dhn, Token::inspect, Token::volume>, 0, i);
+
+        root.add({dh, "inspect", "partition"},
+                 "command", "Displays information about a single partition",
+                 &RetroShell::exec <Token::dhn, Token::inspect, Token::partition>, 1, i);
+
         root.add({dh, "inspect", "state"},
                  "command", "Displays the internal state",
                  &RetroShell::exec <Token::dhn, Token::inspect, Token::state>, 0, i);
-
-        root.add({dh, "inspect", "disk"},
-                 "command", "Displays disk properties",
-                 &RetroShell::exec <Token::dhn, Token::inspect, Token::disk>, 0, i);
 
         root.add({dh, "geometry"},
                  "command", "Changes the disk geometry",

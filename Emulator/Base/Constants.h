@@ -53,7 +53,7 @@
 #define VPIXELS       314                    // VPOS_CNT + 1 line
 #define HPIXELS       908                    // 4 * HPOS_CNT
 #define PIXELS        (VPIXELS * HPIXELS)
-// #define LAST_PIXEL    907
+
 
 /* Blanking area
  *
@@ -80,6 +80,18 @@
 #define VBLANK_MIN    0x00
 #define VBLANK_MAX    0x19
 #define VBLANK_CNT    0x1A // equals VBLANK_MAX - VBLANK_MIN + 1
+
+
+//
+// Hard drive geometries
+//
+
+#define HDR_C_MIN 256
+#define HDR_C_MAX 1024
+#define HDR_H_MIN 1
+#define HDR_H_MAX 16
+#define HDR_S_MIN 16
+#define HDR_S_MAX 63
 
 
 //

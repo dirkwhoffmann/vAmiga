@@ -137,9 +137,6 @@ public:
 
     // Checks whether this drive is connected to the Amiga
     bool isConnected() const { return config.connected; }
-
-    // Checks whether this drive is attached to the Amiga
-    [[deprecated]] bool isAttached() const { return geometry.cylinders != 0; }
     
     // Gets or sets the 'modification' flag
     bool isModified() const { return modified; }
