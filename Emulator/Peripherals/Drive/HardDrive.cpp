@@ -46,7 +46,7 @@ HardDrive::HardDrive(Amiga& ref, isize n) : SubComponent(ref), nr(n)
 
     } else {
 
-        // Atach a small default disk
+        // Atach a default disk
         attach(MB(10));
     }
 }
@@ -177,6 +177,8 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
 
     if (category & dump::Config) {
         
+        os << tab("Nr");
+        os << dec(nr) << std::endl;
         os << tab("Type");
         os << HardDriveTypeEnum::key(config.type) << std::endl;
         os << tab("Connected");
@@ -188,13 +190,13 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         auto cap1 = geometry.numBytes() / MB(1);
         auto cap2 = ((100 * geometry.numBytes()) / MB(1)) % 100;
         
+        os << tab("Nr");
+        os << dec(nr) << std::endl;
         os << tab("Capacity");
         os << dec(cap1) << "." << dec(cap2) << " MB" << std::endl;
-        os << tab("Cylinders");
-        os << dec(geometry.cylinders) << std::endl;
-        os << tab("Head");
-        os << dec(geometry.heads) << std::endl;
-        os << tab("Sectors");
+        os << tab("Geometry");
+        os << dec(geometry.cylinders) << " - ";
+        os << dec(geometry.heads) << " - ";
         os << dec(geometry.sectors) << std::endl;
         os << tab("Block size");
         os << dec(geometry.bsize) << std::endl;
@@ -204,10 +206,8 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         
         os << tab("Nr");
         os << dec(nr) << std::endl;
-        os << tab("Head");
-        os << "c: " << dec(head.c) << " ";
-        os << "h: " << dec(head.h) << " ";
-        os << "s: " << dec(head.s);
+        os << tab("Head position");
+        os << dec(head.c) << ":" << dec(head.h) << ":" << dec(head.s);
         os << std::endl;
         os << tab("Modified");
         os << bol(modified) << std::endl;

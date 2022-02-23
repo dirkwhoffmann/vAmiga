@@ -105,6 +105,7 @@ extension MyController: NSMenuItemValidation {
             return dfn.hasDisk
             
         // Dh<n> menu
+        /*
         case #selector(MyController.newHdrAction(_:)):
             return amiga.poweredOff
 
@@ -122,7 +123,8 @@ extension MyController: NSMenuItemValidation {
             
         case #selector(MyController.exportRecentHdrDummyAction(_:)):
             return true
-
+        */
+            
         case #selector(MyController.exportRecentHdrAction(_:)):
             switch item.tag {
             case 0: return validateURLlist(myAppDelegate.recentlyExportedHdr0URLs, image: smallDisk)
@@ -132,8 +134,10 @@ extension MyController: NSMenuItemValidation {
             default: fatalError()
             }
 
+        /*
         case #selector(MyController.inspectHdrAction(_:)):
             return true
+        */
 
         default:
             return true
@@ -626,9 +630,9 @@ extension MyController: NSMenuItemValidation {
 
         let drive = amiga.dh(sender.tag)!
         
-        // Ask the user if a modified hard drive should be detached
-        if !proceedWithUnexportedHdr(drive: drive) { return }
-
+        // Power off the emulator if the user doesn't object
+        if !askToPowerOff() { return }
+        
         let nibName = NSNib.Name("HardDiskCreator")
         let panel = HardDiskCreator.make(parent: self, nibName: nibName)
         panel?.showSheet(forDrive: drive.nr)
@@ -638,9 +642,9 @@ extension MyController: NSMenuItemValidation {
         
         let drive = amiga.dh(sender.tag)!
         
-        // Ask the user if a modified hard drive should be detached
-        if !proceedWithUnexportedHdr(drive: drive) { return }
-        
+        // Power off the emulator if the user doesn't object
+        if !askToPowerOff() { return }
+
         // Show the OpenPanel
         let openPanel = NSOpenPanel()
         openPanel.allowsMultipleSelection = false
@@ -652,7 +656,7 @@ extension MyController: NSMenuItemValidation {
         openPanel.beginSheetModal(for: window!, completionHandler: { result in
             
             if result == .OK, let url = openPanel.url {
-                self.attachHdrAction(from: url, drive: sender.tag)
+                self.attachHdrAction(from: url, drive: drive.nr)
             }
         })
     }
@@ -663,9 +667,9 @@ extension MyController: NSMenuItemValidation {
         
         let drive = amiga.dh(sender.tag / 10)!
         let slot  = sender.tag % 10
-                        
-        // Ask the user if an unsafed disk should be discarded
-        if !proceedWithUnexportedHdr(drive: drive) { return }
+                    
+        // Power off the emulator if the user doesn't object
+        if !askToPowerOff() { return }
 
         if let url = myAppDelegate.getRecentlyAttachedHdrURL(slot) {
             attachHdrAction(from: url, drive: drive.nr)

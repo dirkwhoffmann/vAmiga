@@ -185,7 +185,9 @@ Drive::_dump(dump::Category category, std::ostream& os) const
     using namespace util;
     
     if (category & dump::Config) {
-        
+
+        os << tab("Nr");
+        os << dec(nr) << std::endl;
         os << tab("Type");
         os << DriveTypeEnum::key(config.type) << std::endl;
         os << tab("Emulate mechanics");
