@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class DiskExporterDialog: DialogController {
+class DiskExporter: DialogController {
 
     enum Format {
         
@@ -358,7 +358,7 @@ class DiskExporterDialog: DialogController {
 // Protocols
 //
 
-extension DiskExporterDialog: NSFilePromiseProviderDelegate {
+extension DiskExporter: NSFilePromiseProviderDelegate {
    
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, fileNameForType fileType: String) -> String {
         

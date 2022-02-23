@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "MemUtils.h"
+#include "string.h"
 
 namespace util {
 
@@ -17,6 +18,31 @@ bool isZero(const u8 *ptr, usize size)
         if (ptr[i]) return false;
     }
     return true;
+}
+
+void replace(u8 *p, isize size, const u8 *sequence, const u8 *substitute)
+{
+    replace((char *)p, size, (char *)sequence, (char *)substitute);
+}
+
+void replace(char *p, isize size, const char *sequence, const char *substitute)
+{
+    assert(p);
+    assert(sequence);
+    assert(substitute);
+    assert(strlen(sequence) == strlen(substitute));
+
+    isize len = isize(strlen(sequence));
+        
+    for (isize i = 0; i < size - len; i++) {
+        
+        if (strncmp(p + i, sequence, len) == 0) {
+            
+            strncpy(p + i, substitute, len);
+            return;
+        }
+    }
+    assert(false);
 }
 
 void hexdump(u8 *p, isize size, isize cols, isize pad)

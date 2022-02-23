@@ -600,15 +600,15 @@ extension MyController: NSMenuItemValidation {
     @IBAction func exportDiskAction(_ sender: NSMenuItem!) {
         
         let nibName = NSNib.Name("DiskExporterDialog")
-        let exportPanel = DiskExporterDialog.make(parent: self, nibName: nibName)
+        let exportPanel = DiskExporter.make(parent: self, nibName: nibName)
         exportPanel?.showSheet(diskDrive: sender.tag)
     }
     
     @IBAction func inspectDiskAction(_ sender: NSMenuItem!) {
         
         let nibName = NSNib.Name("DiskInspector")
-        let exportPanel = DiskInspectorDialog.make(parent: self, nibName: nibName)
-        exportPanel?.showSheet(forDrive: sender.tag)
+        let exportPanel = DiskInspector.make(parent: self, nibName: nibName)
+        exportPanel?.showSheet(diskDrive: sender.tag)
     }
     
     //
@@ -735,19 +735,14 @@ extension MyController: NSMenuItemValidation {
     @IBAction func exportHdrAction(_ sender: NSMenuItem!) {
         
         let nibName = NSNib.Name("DiskExporterDialog")
-        let exportPanel = DiskExporterDialog.make(parent: self, nibName: nibName)
+        let exportPanel = DiskExporter.make(parent: self, nibName: nibName)
         exportPanel?.showSheet(hardDrive: sender.tag)
-    }
-
-    @IBAction func hdrGeometryAction(_ sender: NSMenuItem!) {
-        
-        let nibName = NSNib.Name("HdrGeometryDialog")
-        let panel = HdrGeometryDialog.make(parent: self, nibName: nibName)
-        panel?.showSheet(forDrive: sender.tag)
     }
     
     @IBAction func inspectHdrAction(_ sender: NSMenuItem!) {
         
-        track("TODO")
+        let nibName = NSNib.Name("DiskInspector")
+        let panel = DiskInspector.make(parent: self, nibName: nibName)
+        panel?.showSheet(hardDrive: sender.tag)
     }
 }

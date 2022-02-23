@@ -79,8 +79,8 @@ struct FloatStereo; typedef FloatStereo SampleType;
 //
 
 // Add pathes to HDF files to launch the emulator with preset hard drives
-#define INITIAL_DH0 "" // "/tmp/vamiga.hdf"
-#define INITIAL_DH1 ""
+#define INITIAL_DH1 "/tmp/vamiga.hdf"
+#define INITIAL_DH0 "/tmp/other.hdf"
 #define INITIAL_DH2 ""
 #define INITIAL_DH3 ""
 

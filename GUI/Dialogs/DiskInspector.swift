@@ -7,10 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class DiskInspectorDialog: DialogController {
+class DiskInspector: DialogController {
         
-    @IBOutlet weak var diskIcon: NSImageView!
-    @IBOutlet weak var virusIcon: NSImageView!
+    var myDocument: MyDocument { return parent.mydocument! }
+
+    @IBOutlet weak var icon: NSImageView!
+    @IBOutlet weak var virus: NSImageView!
     @IBOutlet weak var title: NSTextField!
     @IBOutlet weak var layoutInfo: NSTextField!
     @IBOutlet weak var volumeInfo: NSTextField!
@@ -42,13 +44,12 @@ class DiskInspectorDialog: DialogController {
 
     @IBOutlet weak var strictButton: NSButton!
     
-    var savePanel: NSSavePanel!  // Used to export to files
-    var openPanel: NSOpenPanel!  // Used to export to directories
-
-    var driveNr: Int?
-    var drive: DriveProxy? { return driveNr == nil ? nil : amiga.df(driveNr!) }
+    var nr = -1
+    var dfn: DriveProxy { return amiga.df(nr)! }
+    var dhn: HardDriveProxy { return amiga.dh(nr)! }
     
     // Results of the different decoders
+    var hdf: HDFFileProxy?
     var adf: ADFFileProxy?
     var img: IMGFileProxy?
     var ext: EXTFileProxy?
@@ -60,10 +61,7 @@ class DiskInspectorDialog: DialogController {
     var selectedRow: Int? { return selection == nil ? nil : selection! / 16 }
     var selectedCol: Int? { return selection == nil ? nil : selection! % 16 }
     var strict: Bool { return strictButton.state == .on }
-        
-    var myDocument: MyDocument { return parent.mydocument! }
-    // var size: CGSize { return window!.frame.size }
-        
+                
     var numCyls: Int {
         return adf?.numCyls ?? img?.numCyls ?? ext?.numCyls ?? vol?.numCyls ?? 0
     }
@@ -195,20 +193,20 @@ class DiskInspectorDialog: DialogController {
     // Starting up
     //
     
-    func showSheet(forDrive nr: Int) {
+    func showSheet(diskDrive nr: Int) {
         
         track()
         
-        driveNr = nr
+        self.nr = nr
 
         // Run the ADF decoder
-        adf = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy
+        adf = try? ADFFileProxy.make(drive: dfn) as ADFFileProxy
 
         // Run the extended ADF decoder
-        ext = try? EXTFileProxy.make(drive: drive!) as EXTFileProxy
+        ext = try? EXTFileProxy.make(drive: dfn) as EXTFileProxy
 
         // Run the DOS decoder
-        img = try? IMGFileProxy.make(drive: drive!) as IMGFileProxy
+        img = try? IMGFileProxy.make(drive: dfn) as IMGFileProxy
                         
         // Try to decode the file system from the ADF
         if adf != nil { vol = try? FSDeviceProxy.make(withADF: adf!) }
@@ -216,12 +214,21 @@ class DiskInspectorDialog: DialogController {
         super.showSheet()
     }
     
-    func showSheet(forVolume volume: FSDeviceProxy) {
+    func showSheet(hardDrive nr: Int) {
         
-        vol = volume
+        track()
+        
+        self.nr = nr
+
+        // Run the HDF decoder
+        hdf = try? HDFFileProxy.make(hdr: dhn) as HDFFileProxy
+                        
+        // Try to decode the file system from the HDF
+        if hdf != nil { vol = try? FSDeviceProxy.make(withHDF: hdf!) }
+        
         super.showSheet()
     }
-        
+            
     override public func awakeFromNib() {
         
         track()
@@ -253,11 +260,7 @@ class DiskInspectorDialog: DialogController {
     override func sheetDidShow() {
         
     }
-    
-    //
-    // Updating the displayed information
-    //
-    
+        
     func update() {
           
         // Update icons
@@ -310,10 +313,10 @@ class DiskInspectorDialog: DialogController {
     
     func updateDiskIcon() {
 
-        if driveNr == nil {
+        if hdf != nil {
             
-            diskIcon.image = NSImage(named: "hdf")!
-            virusIcon.isHidden = true
+            icon.image = NSImage(named: "hdf")!
+            virus.isHidden = true
             decontaminationButton.isHidden = true
             return
         }
@@ -323,11 +326,11 @@ class DiskInspectorDialog: DialogController {
         if ext != nil { name = isHD ? "hd_other" : "dd_other" }
         if adf != nil { name = isHD ? "hd_adf" : "dd_adf" }
         if img != nil { name = "dd_dos" }
-                
-        if drive!.hasWriteProtectedDisk() { name += "_protected" }
         
-        diskIcon.image = NSImage(named: name)!
-        virusIcon.isHidden = !hasVirus
+        if name != "" && dfn.hasWriteProtectedDisk() { name += "_protected" }
+        
+        icon.image = NSImage(named: name != "" ? name : "biohazard")
+        virus.isHidden = !hasVirus
         decontaminationButton.isHidden = !hasVirus
     }
     
@@ -336,7 +339,7 @@ class DiskInspectorDialog: DialogController {
         var text = "Raw MFM stream"
         var color = NSColor.textColor
         
-        if driveNr == nil {
+        if hdf != nil {
             
             text = "Amiga Hard Drive"
             color = .textColor
@@ -361,7 +364,7 @@ class DiskInspectorDialog: DialogController {
         var text = "Unknown track and sector format"
         var color = NSColor.warningColor
         
-        if driveNr == nil {
+        if hdf != nil {
             
             let blocks = vol!.numBlocks
             let capacity = blocks / 2000
@@ -546,7 +549,7 @@ class DiskInspectorDialog: DialogController {
 // Extensions
 //
 
-extension DiskInspectorDialog: NSWindowDelegate {
+extension DiskInspector: NSWindowDelegate {
     
     func windowDidResize(_ notification: Notification) {
         
@@ -564,7 +567,7 @@ extension DiskInspectorDialog: NSWindowDelegate {
      }
 }
 
-extension DiskInspectorDialog: NSTableViewDataSource {
+extension DiskInspector: NSTableViewDataSource {
     
     func columnNr(_ column: NSTableColumn?) -> Int? {
         
@@ -598,7 +601,7 @@ extension DiskInspectorDialog: NSTableViewDataSource {
     }
 }
 
-extension DiskInspectorDialog: NSTableViewDelegate {
+extension DiskInspector: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
 

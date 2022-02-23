@@ -21,6 +21,9 @@ class HdrController : public ZorroBoard {
     // The hard drive this controller is connected to
     HardDrive &drive;
     
+    // Controller Rom code
+    u8 *rom = nullptr;
+    
     // Transmitted pointer
     u32 pointer = 0;
     
