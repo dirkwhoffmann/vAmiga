@@ -6,7 +6,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="FloppyCreator" customModule="vAmiga" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="FloppyDiskCreator" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="bootBlock" destination="CpZ-FY-Wlu" id="3pN-FR-XS6"/>
                 <outlet property="bootBlockText" destination="UWG-a4-pwr" id="23K-gE-aVD"/>

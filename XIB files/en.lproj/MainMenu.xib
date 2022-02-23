@@ -980,6 +980,12 @@
                                     <action selector="inspectHdrAction:" target="-1" id="x0b-KS-HXt"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Geometry..." id="m49-PT-hWb" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="configureHdrAction:" target="-1" id="VKh-PG-FFo"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>
@@ -1103,6 +1109,12 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectHdrAction:" target="-1" id="ejU-Us-PpT"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Geometry..." tag="1" id="Uz9-Vd-7b2" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="configureHdrAction:" target="-1" id="Kxo-vh-smF"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -1230,6 +1242,12 @@
                                     <action selector="inspectHdrAction:" target="-1" id="9Oy-jj-V30"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Geometry..." tag="2" id="unW-JQ-lBo" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="configureHdrAction:" target="-1" id="Cx8-Sh-zqz"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>
@@ -1353,6 +1371,12 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectHdrAction:" target="-1" id="ZEM-EJ-Rxv"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Configure..." tag="1" id="3xW-dg-y8g" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="configureHdrAction:" target="-1" id="iyi-4K-1V5"/>
                                 </connections>
                             </menuItem>
                         </items>

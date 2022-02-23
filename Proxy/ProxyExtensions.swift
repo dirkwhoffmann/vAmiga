@@ -210,7 +210,7 @@ extension HardDriveProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
-    func changeGeometry(c: Int, h: Int, s: Int, b: Int) throws {
+    func changeGeometry(c: Int, h: Int, s: Int, b: Int = 512) throws {
         
         let exception = ExceptionWrapper()
         changeGeometry(c, h: h, s: s, b: b, exception: exception)

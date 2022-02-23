@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class VideoExportDialog: DialogController {
+class VideoExporter: DialogController {
 
     @IBOutlet weak var text: NSTextField!
     @IBOutlet weak var duration: NSTextField!
@@ -87,7 +87,7 @@ class VideoExportDialog: DialogController {
     }
 }
 
-extension VideoExportDialog: NSFilePromiseProviderDelegate {
+extension VideoExporter: NSFilePromiseProviderDelegate {
    
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, fileNameForType fileType: String) -> String {
         

@@ -322,8 +322,8 @@ extension MyController: NSMenuItemValidation {
         
         track()
         
-        let name = NSNib.Name("VideoExportDialog")
-        let exporter = VideoExportDialog.make(parent: self, nibName: name)
+        let name = NSNib.Name("VideoExporter")
+        let exporter = VideoExporter.make(parent: self, nibName: name)
         
         exporter?.showSheet()
     }
@@ -459,19 +459,23 @@ extension MyController: NSMenuItemValidation {
     //
     
     @IBAction func newDiskAction(_ sender: NSMenuItem!) {
+
+        let drive = amiga.df(sender.tag)!
         
         // Ask the user if a modified hard drive should be detached
-        if !proceedWithUnexportedDisk(drive: sender.tag) { return }
+        if !proceedWithUnexportedDisk(drive: drive) { return }
 
-        let nibName = NSNib.Name("FloppyCreator")
-        let panel = FloppyCreator.make(parent: self, nibName: nibName)
+        let nibName = NSNib.Name("FloppyDiskCreator")
+        let panel = FloppyDiskCreator.make(parent: self, nibName: nibName)
         panel?.showSheet(forDrive: sender.tag)
     }
 
     @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
+       
+        let drive = amiga.df(sender.tag)!
         
         // Ask the user if an unsafed disk should be replaced
-        if !proceedWithUnexportedDisk(drive: sender.tag) { return }
+        if !proceedWithUnexportedDisk(drive: drive) { return }
         
         // Show the OpenPanel
         let openPanel = NSOpenPanel()
@@ -508,6 +512,7 @@ extension MyController: NSMenuItemValidation {
         
         track("insertDiskAction \(url) drive \(drive)")
         
+        let drive = amiga.df(drive)!
         let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
         
         do {
@@ -522,7 +527,7 @@ extension MyController: NSMenuItemValidation {
                 do {
                     
                     // Insert the disk
-                    try amiga.df(drive)!.swap(file: file)
+                    try drive.swap(file: file)
 
                     // Remember the URL
                     myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
@@ -590,16 +595,18 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func ejectDiskAction(_ sender: NSMenuItem!) {
         
-        if proceedWithUnexportedDisk(drive: sender.tag) {
+        let drive = amiga.df(sender.tag)!
+        
+        if proceedWithUnexportedDisk(drive: drive) {
             
-            amiga.df(sender.tag)?.eject()
-            myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
+            drive.eject()
+            myAppDelegate.clearRecentlyExportedDiskURLs(drive: drive.nr)
         }
     }
     
     @IBAction func exportDiskAction(_ sender: NSMenuItem!) {
         
-        let nibName = NSNib.Name("DiskExporterDialog")
+        let nibName = NSNib.Name("DiskExporter")
         let exportPanel = DiskExporter.make(parent: self, nibName: nibName)
         exportPanel?.showSheet(diskDrive: sender.tag)
     }
@@ -617,18 +624,22 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func newHdrAction(_ sender: NSMenuItem!) {
 
+        let drive = amiga.dh(sender.tag)!
+        
         // Ask the user if a modified hard drive should be detached
-        if !proceedWithUnexportedHdr(drive: sender.tag) { return }
+        if !proceedWithUnexportedHdr(drive: drive) { return }
 
-        let nibName = NSNib.Name("HdrCreator")
-        let panel = HdrCreatorDialog.make(parent: self, nibName: nibName)
-        panel?.showSheet(forDrive: sender.tag)
+        let nibName = NSNib.Name("HardDiskCreator")
+        let panel = HardDiskCreator.make(parent: self, nibName: nibName)
+        panel?.showSheet(forDrive: drive.nr)
     }
     
     @IBAction func attachHdrAction(_ sender: NSMenuItem!) {
         
+        let drive = amiga.dh(sender.tag)!
+        
         // Ask the user if a modified hard drive should be detached
-        if !proceedWithUnexportedHdr(drive: sender.tag) { return }
+        if !proceedWithUnexportedHdr(drive: drive) { return }
         
         // Show the OpenPanel
         let openPanel = NSOpenPanel()
@@ -650,14 +661,14 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func attachRecentHdrAction(_ sender: NSMenuItem!) {
         
-        let drive = sender.tag / 10
+        let drive = amiga.dh(sender.tag / 10)!
         let slot  = sender.tag % 10
-                
+                        
         // Ask the user if an unsafed disk should be discarded
         if !proceedWithUnexportedHdr(drive: drive) { return }
 
         if let url = myAppDelegate.getRecentlyAttachedHdrURL(slot) {
-            attachHdrAction(from: url, drive: drive)
+            attachHdrAction(from: url, drive: drive.nr)
         }
     }
     
@@ -734,7 +745,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func exportHdrAction(_ sender: NSMenuItem!) {
         
-        let nibName = NSNib.Name("DiskExporterDialog")
+        let nibName = NSNib.Name("DiskExporter")
         let exportPanel = DiskExporter.make(parent: self, nibName: nibName)
         exportPanel?.showSheet(hardDrive: sender.tag)
     }
@@ -744,5 +755,12 @@ extension MyController: NSMenuItemValidation {
         let nibName = NSNib.Name("DiskInspector")
         let panel = DiskInspector.make(parent: self, nibName: nibName)
         panel?.showSheet(hardDrive: sender.tag)
+    }
+
+    @IBAction func configureHdrAction(_ sender: NSMenuItem!) {
+        
+        let nibName = NSNib.Name("HardDiskConfigurator")
+        let panel = HardDiskConfigurator.make(parent: self, nibName: nibName)
+        panel?.showSheet(forDrive: sender.tag)
     }
 }

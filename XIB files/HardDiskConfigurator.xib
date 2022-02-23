@@ -6,7 +6,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="HdrGeometryDialog">
+        <customObject id="-2" userLabel="File's Owner" customClass="HardDiskConfigurator">
             <connections>
                 <outlet property="cylinderField" destination="Ivb-fr-DFo" id="bLv-P4-9E5"/>
                 <outlet property="cylinderStepper" destination="xXY-el-Faf" id="kHR-PH-bBA"/>
@@ -43,6 +43,9 @@
                             <string key="keyEquivalent" base64-UTF8="YES">
 Gw
 </string>
+                            <connections>
+                                <action selector="cancelAction:" target="-2" id="DXM-Kj-Wo2"/>
+                            </connections>
                         </buttonCell>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eSF-5b-pdf">
@@ -166,15 +169,6 @@ Gw
                             <action selector="geometryAction:" target="-2" id="yl9-4R-rjC"/>
                         </connections>
                     </popUpButton>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dZ1-1h-dcN">
-                        <rect key="frame" x="164" y="117" width="232" height="48"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" selectable="YES" alignment="left" title="Please specify the geometry of this hard drive manually as it cannot be deduced by the emulator. " id="mas-if-dbe">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tpR-nX-JuM">
                         <rect key="frame" x="501" y="13" width="85" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -185,9 +179,12 @@ Gw
 DQ
 </string>
                         </buttonCell>
+                        <connections>
+                            <action selector="okAction:" target="-2" id="zIJ-Qg-zhR"/>
+                        </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sYX-uv-s3T">
-                        <rect key="frame" x="162" y="87" width="330" height="16"/>
+                        <rect key="frame" x="164" y="22" width="330" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="The selected geometry doesn not match the file size. " id="Eyf-Sf-ecD">
                             <font key="font" metaFont="system"/>

@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+// swiftlint:disable force_try
+
 class DiskInspector: DialogController {
         
     var myDocument: MyDocument { return parent.mydocument! }
@@ -18,6 +20,8 @@ class DiskInspector: DialogController {
     @IBOutlet weak var volumeInfo: NSTextField!
     @IBOutlet weak var bootInfo: NSTextField!
     @IBOutlet weak var decontaminationButton: NSButton!
+    @IBOutlet weak var geometryText: NSTextField!
+    @IBOutlet weak var geometryPopup: NSPopUpButton!
 
     @IBOutlet weak var previewScrollView: NSScrollView!
     @IBOutlet weak var previewTable: NSTableView!
@@ -45,9 +49,24 @@ class DiskInspector: DialogController {
     @IBOutlet weak var strictButton: NSButton!
     
     var nr = -1
+    
+    // Returns the inspected floppy or hard drive
     var dfn: DriveProxy { return amiga.df(nr)! }
     var dhn: HardDriveProxy { return amiga.dh(nr)! }
     
+    // The drive geometry (cylinders, heads, sectors, tracks, blocks)
+    var c = 0
+    var h = 0
+    var s = 0
+    var t = 0
+    var b = 0
+    
+    var upperCyl: Int { return c > 0 ? c - 1 : 0 }
+    var upperHead: Int { return h > 0 ? h - 1 : 0 }
+    var upperSector: Int { return s > 0 ? s - 1 : 0 }
+    var upperTrack: Int { return t > 0 ? t - 1 : 0 }
+    var upperBlock: Int { return b > 0 ? b - 1 : 0 }
+
     // Results of the different decoders
     var hdf: HDFFileProxy?
     var adf: ADFFileProxy?
@@ -55,6 +74,7 @@ class DiskInspector: DialogController {
     var ext: EXTFileProxy?
     var vol: FSDeviceProxy?
 
+    // Geometry
     var errorReport: FSErrorReport?
     
     var selection: Int?
@@ -62,6 +82,7 @@ class DiskInspector: DialogController {
     var selectedCol: Int? { return selection == nil ? nil : selection! % 16 }
     var strict: Bool { return strictButton.state == .on }
                 
+    /*
     var numCyls: Int {
         return adf?.numCyls ?? img?.numCyls ?? ext?.numCyls ?? vol?.numCyls ?? 0
     }
@@ -77,6 +98,7 @@ class DiskInspector: DialogController {
     var numBlocks: Int {
         return adf?.numBlocks ?? img?.numBlocks ?? ext?.numBlocks ?? vol?.numBlocks ?? 0
     }
+    */
     var isDD: Bool {
         return adf?.isDD ?? img?.isDD ?? ext?.isDD ?? false
     }
@@ -93,101 +115,6 @@ class DiskInspector: DialogController {
     var trackNr = 0
     var sectorNr = 0
     var blockNr = 0
-    
-    //
-    // Selecting a block
-    //
-    
-    func setCylinder(_ newValue: Int) {
-        
-        if newValue != cylinderNr {
-
-            let value = newValue.clamped(0, numCyls - 1)
-
-            cylinderNr = value
-            trackNr    = cylinderNr * 2 + headNr
-            blockNr    = trackNr * numSectors + sectorNr
-            
-            selection = nil
-            update()
-        }
-    }
-    
-    func setHead(_ newValue: Int) {
-        
-        if newValue != headNr {
-                        
-            let value = newValue.clamped(0, numSides - 1)
-
-            headNr     = value
-            trackNr    = cylinderNr * 2 + headNr
-            blockNr    = trackNr * numSectors + sectorNr
-            
-            selection = nil
-            update()
-        }
-    }
-    
-    func setTrack(_ newValue: Int) {
-        
-        if newValue != trackNr {
-                   
-            let value = newValue.clamped(0, numTracks - 1)
-            
-            trackNr    = value
-            cylinderNr = trackNr / 2
-            headNr     = trackNr % 2
-            blockNr    = trackNr * numSectors + sectorNr
-
-            selection = nil
-            update()
-        }
-    }
-
-    func setSector(_ newValue: Int) {
-        
-        if newValue != sectorNr {
-                  
-            let value = newValue.clamped(0, numSectors - 1)
-            
-            sectorNr   = value
-            blockNr    = trackNr * numSectors + sectorNr
-            
-            selection = nil
-            update()
-        }
-    }
-
-    func setBlock(_ newValue: Int) {
-        
-        if newValue != blockNr {
-                        
-            let value = newValue.clamped(0, numBlocks - 1)
-
-            blockNr    = value
-            trackNr    = blockNr / numSectors
-            sectorNr   = blockNr % numSectors
-            cylinderNr = trackNr / 2
-            headNr     = trackNr % 2
-            
-            selection = nil
-            update()
-        }
-    }
-
-    func setCorruptedBlock(_ newValue: Int) {
-        
-        var jump: Int
-         
-        if newValue > blockNr {
-            jump = vol!.nextCorrupted(blockNr)
-        } else {
-            jump = vol!.prevCorrupted(blockNr)
-        }
-
-        corruptionStepper.integerValue = jump
-        setBlock(jump)
-    }
     
     //
     // Starting up
@@ -211,6 +138,8 @@ class DiskInspector: DialogController {
         // Try to decode the file system from the ADF
         if adf != nil { vol = try? FSDeviceProxy.make(withADF: adf!) }
 
+        initDriveGeometry()
+        
         super.showSheet()
     }
     
@@ -226,9 +155,32 @@ class DiskInspector: DialogController {
         // Try to decode the file system from the HDF
         if hdf != nil { vol = try? FSDeviceProxy.make(withHDF: hdf!) }
         
+        initDriveGeometry()
+        
         super.showSheet()
     }
+    
+    func initDriveGeometry() {
+        
+        // Read CHS geometry (cylinders, heads, sectors)
+        if hdf != nil {
+            c = hdf!.numCyls; h = hdf!.numSectors; s = hdf!.numSectors
             
+        } else if adf != nil {
+            c = adf!.numCyls; h = adf!.numSectors; s = adf!.numSectors
+            
+        } else if img != nil {
+            c = img!.numCyls; h = img!.numSectors; s = img!.numSectors
+            
+        } else if ext != nil {
+            c = ext!.numCyls; h = ext!.numSectors; s = ext!.numSectors
+        }
+        
+        // Update derived values (tracks, blocks)
+        t = c * h
+        b = t * s
+    }
+    
     override public func awakeFromNib() {
         
         track()
@@ -236,11 +188,15 @@ class DiskInspector: DialogController {
         
         // Register to receive mouse click events
         previewTable.action = #selector(clickAction(_:))
+
+        // Hide some elements
+        geometryText.isHidden = hdf == nil
+        geometryPopup.isHidden = hdf == nil
         
         // Configure elements
         sectorStepper.maxValue = .greatestFiniteMagnitude
         blockStepper.maxValue = .greatestFiniteMagnitude
-
+        
         // Run a file system check
         errorReport = vol?.check(strict)
         
@@ -248,7 +204,31 @@ class DiskInspector: DialogController {
     }
     
     override func windowDidLoad() {
-                            
+                 
+        // Initialize the geometry selector
+        geometryPopup.removeAllItems()
+        geometryPopup.addItem(withTitle: "Custom")
+        geometryPopup.item(at: 0)!.tag = 0
+        
+        if hdf != nil {
+            
+            if let geometries = dhn.test() as? [Int] {
+                
+                for (i, geo) in geometries.enumerated() {
+                    
+                    let c = (geo >> 32)
+                    let h = (geo >> 16) & 0xFFFF
+                    let s = geo & 0xFFFF
+                    
+                    geometryPopup.addItem(withTitle: "\(c) - \(h) - \(s)")
+                    geometryPopup.item(at: i + 1)!.tag = geo
+                }
+                
+                track()
+                geometryPopup.autoenablesItems = false
+            }
+        }
+        
         // Jump to the first corrupted block if an error was found
         if errorReport != nil && errorReport!.corruptedBlocks > 0 {
             setCorruptedBlock(1)
@@ -260,7 +240,11 @@ class DiskInspector: DialogController {
     override func sheetDidShow() {
         
     }
-        
+     
+    //
+    // Updating the displayed information
+    //
+
     func update() {
           
         // Update icons
@@ -459,10 +443,117 @@ class DiskInspector: DialogController {
         let error = vol!.check(blockNr, pos: selection!, expected: &exp, strict: strict)
         info2.stringValue = error.description(expected: Int(exp))
     }
+      
+    //
+    // Helper methods
+    //
+    
+    func setCylinder(_ newValue: Int) {
         
+        if newValue != cylinderNr {
+
+            let value = newValue.clamped(0, upperCyl)
+
+            cylinderNr = value
+            trackNr    = cylinderNr * 2 + headNr
+            blockNr    = trackNr * s + sectorNr
+            
+            selection = nil
+            update()
+        }
+    }
+    
+    func setHead(_ newValue: Int) {
+        
+        if newValue != headNr {
+                        
+            let value = newValue.clamped(0, upperHead)
+
+            headNr     = value
+            trackNr    = cylinderNr * 2 + headNr
+            blockNr    = trackNr * s + sectorNr
+            
+            selection = nil
+            update()
+        }
+    }
+    
+    func setTrack(_ newValue: Int) {
+        
+        if newValue != trackNr {
+                   
+            let value = newValue.clamped(0, upperTrack)
+            
+            trackNr    = value
+            cylinderNr = trackNr / 2
+            headNr     = trackNr % 2
+            blockNr    = trackNr * s + sectorNr
+
+            selection = nil
+            update()
+        }
+    }
+
+    func setSector(_ newValue: Int) {
+        
+        if newValue != sectorNr {
+                  
+            let value = newValue.clamped(0, upperSector)
+            
+            sectorNr   = value
+            blockNr    = trackNr * s + sectorNr
+            
+            selection = nil
+            update()
+        }
+    }
+
+    func setBlock(_ newValue: Int) {
+        
+        if newValue != blockNr {
+                        
+            let value = newValue.clamped(0, upperBlock)
+
+            blockNr    = value
+            trackNr    = blockNr / s
+            sectorNr   = blockNr % s
+            cylinderNr = trackNr / 2
+            headNr     = trackNr % 2
+            
+            selection = nil
+            update()
+        }
+    }
+
+    func setCorruptedBlock(_ newValue: Int) {
+        
+        var jump: Int
+         
+        if newValue > blockNr {
+            jump = vol!.nextCorrupted(blockNr)
+        } else {
+            jump = vol!.prevCorrupted(blockNr)
+        }
+
+        corruptionStepper.integerValue = jump
+        setBlock(jump)
+    }
+    
     //
     // Action methods
     //
+
+    @IBAction func geometryAction(_ sender: NSPopUpButton!) {
+        
+        track()
+        
+        let tag = sender.selectedTag()
+        c = (tag >> 32)
+        h = (tag >> 16) & 0xFFFF
+        s = tag & 0xFFFF
+            
+        update()
+    }
 
     @IBAction func decontaminationAction(_ sender: NSButton!) {
         
@@ -542,6 +633,21 @@ class DiskInspector: DialogController {
         track()
         errorReport = vol?.check(strict)
         update()
+    }
+    
+    @IBAction override func okAction(_ sender: Any!) {
+        
+        // Update geometry if a hard drive has been analyzed
+        if hdf != nil { try! dhn.changeGeometry(c: c, h: h, s: h) }
+        
+        track()
+        hideSheet()
+    }
+    
+        @IBAction override func cancelAction(_ sender: Any!) {
+        
+        track()
+        hideSheet()
     }
 }
 

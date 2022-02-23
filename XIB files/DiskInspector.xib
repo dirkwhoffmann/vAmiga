@@ -18,7 +18,8 @@
                 <outlet property="cylinderStepper" destination="DXv-Bl-lGI" id="5T4-aw-ra5"/>
                 <outlet property="cylinderText" destination="5Re-Zr-hdG" id="HdR-lw-HQp"/>
                 <outlet property="decontaminationButton" destination="9RQ-0r-XYW" id="jle-q8-bb1"/>
-                <outlet property="exportButton" destination="aF3-d5-sKL" id="0zo-PO-3VZ"/>
+                <outlet property="geometryPopup" destination="wSV-WL-ukZ" id="O9u-bZ-cDt"/>
+                <outlet property="geometryText" destination="Hg0-1l-VFJ" id="DPB-7Q-GC1"/>
                 <outlet property="headField" destination="F6v-l6-Ohg" id="S9G-ya-cbd"/>
                 <outlet property="headStepper" destination="U2d-d9-kRZ" id="azx-0j-i59"/>
                 <outlet property="headText" destination="Iu6-pw-Luw" id="PXV-AM-k25"/>
@@ -99,7 +100,7 @@ DQ
 </string>
                         </buttonCell>
                         <connections>
-                            <action selector="exportAction:" target="-2" id="rOM-6H-2ww"/>
+                            <action selector="okAction:" target="-2" id="kwf-hM-Ru3"/>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eNo-GE-yjO">
@@ -564,17 +565,18 @@ Gw
                     <popUpButton horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wSV-WL-ukZ">
                         <rect key="frame" x="559" y="419" width="36" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="disclosure" title="Item 1" bezelStyle="roundedDisclosure" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="dNy-B7-HTc" id="d5E-Mr-SzB">
+                        <popUpButtonCell key="cell" type="disclosure" title="Item" bezelStyle="roundedDisclosure" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" autoenablesItems="NO" altersStateOfSelectedItem="NO" selectedItem="dNy-B7-HTc" id="d5E-Mr-SzB">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" autoenablesItems="NO" id="6yf-x5-Pma">
                                 <items>
-                                    <menuItem title="Item 1" id="dNy-B7-HTc"/>
-                                    <menuItem title="Item 2" id="iMn-Dw-D3F"/>
-                                    <menuItem title="Item 3" id="yTx-8c-vxc"/>
+                                    <menuItem title="Item" id="dNy-B7-HTc"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <connections>
+                            <action selector="geometryAction:" target="-2" id="66w-wh-rDM"/>
+                        </connections>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hg0-1l-VFJ">
                         <rect key="frame" x="486" y="424" width="74" height="16"/>

@@ -6,7 +6,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="HdrCreatorDialog" customModule="vAmiga" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="HardDiskCreator" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="bootBlock" destination="zwF-UQ-hRz" id="BvA-yP-bfz"/>
                 <outlet property="bootBlockText" destination="foR-SP-0y6" id="naV-ZK-Tcz"/>

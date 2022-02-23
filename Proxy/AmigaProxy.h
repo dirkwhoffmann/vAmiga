@@ -878,8 +878,11 @@
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithHardDrive:(HardDriveProxy *)drive exception:(ExceptionWrapper *)ex;
 
+@property (readonly) NSInteger numCyls;
+@property (readonly) NSInteger numHeads;
+@property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numBlocks;
-@property (readonly) NSInteger numBytes;
+// @property (readonly) NSInteger numBytes;
 
 @end
 

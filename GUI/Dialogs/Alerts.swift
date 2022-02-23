@@ -60,6 +60,7 @@ extension MyDocument {
         return proceedWithUnexportedDisk(drive: amiga.df(nr)!)
     }
     
+    /*
     func proceedWithUnexportedDisk() -> Bool {
     
         return proceedWithUnexportedDisk(drives: [ amiga.df0,
@@ -67,6 +68,7 @@ extension MyDocument {
                                                    amiga.df2,
                                                    amiga.df3 ])
     }
+    */
     
     @discardableResult
     func showHdrIsUnexportedAlert(messageText: String) -> NSApplication.ModalResponse {
@@ -105,6 +107,7 @@ extension MyDocument {
         return proceedWithUnexportedHdr(drive: amiga.dh(nr)!)
     }
     
+    /*
     func proceedWithUnexportedHdr() -> Bool {
         
         return proceedWithUnexportedHdr(drives: [ amiga.dh0,
@@ -112,6 +115,7 @@ extension MyDocument {
                                                   amiga.dh2,
                                                   amiga.dh3 ])
     }
+    */
 }
 
 extension MyController {
@@ -141,26 +145,56 @@ extension MyController {
         return mydocument.proceedWithUnexportedDisk(drive: drive)
     }
     
+    /*
     func proceedWithUnexportedDisk(drive nr: Int) -> Bool {
         return mydocument.proceedWithUnexportedDisk(drive: nr)
     }
-
+    */
+    /*
     func proceedWithUnexportedDisk() -> Bool {
         return mydocument.proceedWithUnexportedDisk()
     }
-
+    */
+    
     func proceedWithUnexportedHdr(drive: HardDriveProxy) -> Bool {
         return mydocument.proceedWithUnexportedHdr(drive: drive)
     }
     
+    /*
     func proceedWithUnexportedHdr(drive nr: Int) -> Bool {
         return mydocument.proceedWithUnexportedHdr(drive: nr)
     }
-
+    */
+    /*
     func proceedWithUnexportedHdr() -> Bool {
         return mydocument.proceedWithUnexportedHdr()
     }
+    */
 
+    @discardableResult
+    func askToPowerOffAlert() -> NSApplication.ModalResponse {
+       
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        // alert.icon = NSImage(named: "hdf")
+        alert.messageText = "The emulator needs to be powered down to perform this operation."
+        alert.informativeText = "Your changes will be lost if you proceed."
+        alert.addButton(withTitle: "Proceed")
+        alert.addButton(withTitle: "Cancel")
+        return alert.runModal()
+    }
+
+    func askToPowerOff() -> Bool {
+        
+        if amiga.poweredOn {
+            
+            if askToPowerOffAlert() != .alertFirstButtonReturn { return false }
+            amiga.powerOff()
+        }
+        
+        return true
+    }
+    
     func showMissingFFmpegAlert() {
 
         let alert = NSAlert()

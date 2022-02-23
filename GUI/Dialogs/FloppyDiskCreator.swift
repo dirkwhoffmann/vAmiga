@@ -9,7 +9,7 @@
 
 import Darwin
 
-class FloppyCreator: DialogController {
+class FloppyDiskCreator: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
     @IBOutlet weak var virusIcon: NSImageView!

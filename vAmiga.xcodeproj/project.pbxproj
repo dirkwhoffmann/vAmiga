@@ -30,14 +30,14 @@
 		5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
 		501A9937243A07A100D269B2 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A9936243A07A100D269B2 /* Storage.swift */; };
 		501B821D2262FFB200042871 /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B821B2262FFB200042871 /* RTC.cpp */; };
-		501C513B27C0084200DF1DD5 /* HdrGeometryDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C513A27C0084200DF1DD5 /* HdrGeometryDialog.xib */; };
-		501C513F27C0C63A00DF1DD5 /* HdrGeometryDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C513E27C0C63A00DF1DD5 /* HdrGeometryDialog.swift */; };
+		501C513B27C0084200DF1DD5 /* HardDiskConfigurator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */; };
+		501C513F27C0C63A00DF1DD5 /* HardDiskConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */; };
 		501C514227C0CE6600DF1DD5 /* Geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C514027C0CE6600DF1DD5 /* Geometry.cpp */; };
-		501C514627C2AA4A00DF1DD5 /* DiskExporterDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C514527C2AA4A00DF1DD5 /* DiskExporterDialog.xib */; };
+		501C514627C2AA4A00DF1DD5 /* DiskExporter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C514527C2AA4A00DF1DD5 /* DiskExporter.xib */; };
 		501C514827C2AD8C00DF1DD5 /* DiskExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */; };
 		501C514A27C38FE500DF1DD5 /* DragImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514927C38FE500DF1DD5 /* DragImageView.swift */; };
-		501C514C27C4248300DF1DD5 /* FloppyCreator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C514B27C4248300DF1DD5 /* FloppyCreator.xib */; };
-		501C514E27C4259F00DF1DD5 /* FloppyCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514D27C4259F00DF1DD5 /* FloppyCreator.swift */; };
+		501C514C27C4248300DF1DD5 /* FloppyDiskCreator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C514B27C4248300DF1DD5 /* FloppyDiskCreator.xib */; };
+		501C514E27C4259F00DF1DD5 /* FloppyDiskCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514D27C4259F00DF1DD5 /* FloppyDiskCreator.swift */; };
 		501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB310275E460100D0A57B /* OSDebugger.cpp */; };
 		501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB3162762008C00D0A57B /* OSDebuggerRead.cpp */; };
 		501FB319276200A000D0A57B /* OSDebuggerDump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB318276200A000D0A57B /* OSDebuggerDump.cpp */; };
@@ -67,8 +67,8 @@
 		504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504C48B324143AB4008ADAB3 /* AgnusDma.cpp */; };
 		504F4D64252624BD00CF8815 /* TextureRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F4D63252624BD00CF8815 /* TextureRect.swift */; };
 		504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* GuardTableView.swift */; };
-		5050EC3F27BE876F00394F4F /* HdrCreator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5050EC3E27BE876F00394F4F /* HdrCreator.xib */; };
-		5050EC4127BE97E000394F4F /* HdrCreatorDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5050EC4027BE97E000394F4F /* HdrCreatorDialog.swift */; };
+		5050EC3F27BE876F00394F4F /* HardDiskCreator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */; };
+		5050EC4127BE97E000394F4F /* HardDiskCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5050EC4027BE97E000394F4F /* HardDiskCreator.swift */; };
 		505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505554AA2264C47600CB07E0 /* Mouse.cpp */; };
 		5056506C25440FFB00A79D27 /* FSDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056506A25440FFB00A79D27 /* FSDevice.cpp */; };
 		50565072254573E100A79D27 /* FSBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50565070254573E100A79D27 /* FSBlock.cpp */; };
@@ -231,7 +231,6 @@
 		50D2B85226D292B7008040E5 /* DeniseDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D2B85026D292B7008040E5 /* DeniseDebugger.cpp */; };
 		50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D375DD222C7C6B0040987C /* Blitter.cpp */; };
 		50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D7CDC22286E968002689F0 /* Joystick.cpp */; };
-		50D9CD9B236AF89A00503B4D /* DmaDebugDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */; };
 		50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DD1EE12525E3E1000180F6 /* Preferences.xib */; };
 		50DD33CC2756113300AE18B4 /* pfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 50DD33CB27560EE600AE18B4 /* pfile.c */; };
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
@@ -254,8 +253,8 @@
 		50E98B55275A127F00AA0CB9 /* RemoteServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B53275A127F00AA0CB9 /* RemoteServer.cpp */; };
 		50EAD99C256E76820053F9AC /* HDFFile.h in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99B256E76820053F9AC /* HDFFile.h */; };
 		50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
-		50EB8CCA25306E8E0053988A /* VideoExportDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EB8CC925306E8E0053988A /* VideoExportDialog.xib */; };
-		50EB8CCE2530710E0053988A /* VideoExportDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EB8CCD2530710E0053988A /* VideoExportDialog.swift */; };
+		50EB8CCA25306E8E0053988A /* VideoExporter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EB8CC925306E8E0053988A /* VideoExporter.xib */; };
+		50EB8CCE2530710E0053988A /* VideoExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EB8CCD2530710E0053988A /* VideoExporter.swift */; };
 		50ECF98622B153FB007B3DE7 /* ExtendedRomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
 		50F31C292409322F008A54D8 /* CopperPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F31C282409322F008A54D8 /* CopperPanel.swift */; };
@@ -324,15 +323,15 @@
 		501A9936243A07A100D269B2 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		501B821B2262FFB200042871 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
 		501B821C2262FFB200042871 /* RTC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTC.h; sourceTree = "<group>"; };
-		501C513A27C0084200DF1DD5 /* HdrGeometryDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HdrGeometryDialog.xib; sourceTree = "<group>"; };
-		501C513E27C0C63A00DF1DD5 /* HdrGeometryDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HdrGeometryDialog.swift; sourceTree = "<group>"; };
+		501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HardDiskConfigurator.xib; sourceTree = "<group>"; };
+		501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardDiskConfigurator.swift; sourceTree = "<group>"; };
 		501C514027C0CE6600DF1DD5 /* Geometry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Geometry.cpp; sourceTree = "<group>"; };
 		501C514127C0CE6600DF1DD5 /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
-		501C514527C2AA4A00DF1DD5 /* DiskExporterDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiskExporterDialog.xib; sourceTree = "<group>"; };
+		501C514527C2AA4A00DF1DD5 /* DiskExporter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiskExporter.xib; sourceTree = "<group>"; };
 		501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskExporter.swift; sourceTree = "<group>"; };
 		501C514927C38FE500DF1DD5 /* DragImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragImageView.swift; sourceTree = "<group>"; };
-		501C514B27C4248300DF1DD5 /* FloppyCreator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FloppyCreator.xib; sourceTree = "<group>"; };
-		501C514D27C4259F00DF1DD5 /* FloppyCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloppyCreator.swift; sourceTree = "<group>"; };
+		501C514B27C4248300DF1DD5 /* FloppyDiskCreator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FloppyDiskCreator.xib; sourceTree = "<group>"; };
+		501C514D27C4259F00DF1DD5 /* FloppyDiskCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloppyDiskCreator.swift; sourceTree = "<group>"; };
 		501E715022671FC20070B17D /* DeniseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeniseTypes.h; sourceTree = "<group>"; };
 		501FB310275E460100D0A57B /* OSDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OSDebugger.cpp; sourceTree = "<group>"; };
 		501FB311275E460100D0A57B /* OSDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSDebugger.h; sourceTree = "<group>"; };
@@ -384,8 +383,8 @@
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
 		504F4D63252624BD00CF8815 /* TextureRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureRect.swift; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* GuardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardTableView.swift; sourceTree = "<group>"; };
-		5050EC3E27BE876F00394F4F /* HdrCreator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HdrCreator.xib; sourceTree = "<group>"; };
-		5050EC4027BE97E000394F4F /* HdrCreatorDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HdrCreatorDialog.swift; sourceTree = "<group>"; };
+		5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HardDiskCreator.xib; sourceTree = "<group>"; };
+		5050EC4027BE97E000394F4F /* HardDiskCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardDiskCreator.swift; sourceTree = "<group>"; };
 		5051922722B61C1B0012C4BB /* AmigaFileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaFileTypes.h; sourceTree = "<group>"; };
 		5051922822B61C8A0012C4BB /* CPUTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPUTypes.h; sourceTree = "<group>"; };
 		5051922922B61CEC0012C4BB /* CIATypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CIATypes.h; sourceTree = "<group>"; };
@@ -671,7 +670,6 @@
 		50D661862282BE1800D67D88 /* AmigaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaTypes.h; sourceTree = "<group>"; };
 		50D7CDC22286E968002689F0 /* Joystick.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick.cpp; sourceTree = "<group>"; };
 		50D7CDC32286E968002689F0 /* Joystick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Joystick.h; sourceTree = "<group>"; };
-		50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DmaDebugDialog.xib; sourceTree = "<group>"; };
 		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		50DD33CB27560EE600AE18B4 /* pfile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pfile.c; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
@@ -720,8 +718,8 @@
 		50EAB95B26C10B9400BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
 		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
-		50EB8CC925306E8E0053988A /* VideoExportDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoExportDialog.xib; sourceTree = "<group>"; };
-		50EB8CCD2530710E0053988A /* VideoExportDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExportDialog.swift; sourceTree = "<group>"; };
+		50EB8CC925306E8E0053988A /* VideoExporter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoExporter.xib; sourceTree = "<group>"; };
+		50EB8CCD2530710E0053988A /* VideoExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExporter.swift; sourceTree = "<group>"; };
 		50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedRomFile.cpp; sourceTree = "<group>"; };
 		50ECF98522B153FB007B3DE7 /* ExtendedRomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtendedRomFile.h; sourceTree = "<group>"; };
 		50EFC7DF22E840870036A3DF /* Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialization.h; sourceTree = "<group>"; };
@@ -1057,17 +1055,16 @@
 				50B9354824347EF9000C78B8 /* SnapshotDialog.xib */,
 				509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */,
 				508FDFBA21EA1FF10043D0E9 /* ImporterDialog.xib */,
-				501C514527C2AA4A00DF1DD5 /* DiskExporterDialog.xib */,
+				501C514527C2AA4A00DF1DD5 /* DiskExporter.xib */,
 				506B47172562E06A009FEFC3 /* DiskInspector.xib */,
-				50EB8CC925306E8E0053988A /* VideoExportDialog.xib */,
+				50EB8CC925306E8E0053988A /* VideoExporter.xib */,
 				50D263CB21F6377600FA167F /* A500ANSI.xib */,
 				508FDFB821EA1FF10043D0E9 /* A500ISO.xib */,
 				50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */,
 				50D263CD21F6378000FA167F /* A1000ISO.xib */,
-				50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */,
-				501C514B27C4248300DF1DD5 /* FloppyCreator.xib */,
-				5050EC3E27BE876F00394F4F /* HdrCreator.xib */,
-				501C513A27C0084200DF1DD5 /* HdrGeometryDialog.xib */,
+				501C514B27C4248300DF1DD5 /* FloppyDiskCreator.xib */,
+				5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */,
+				501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */,
 			);
 			path = "XIB files";
 			sourceTree = "<group>";
@@ -1131,10 +1128,10 @@
 				508FE04A21EA22CC0043D0E9 /* ImporterDialog.swift */,
 				501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */,
 				506B471C256396BC009FEFC3 /* DiskInspector.swift */,
-				501C514D27C4259F00DF1DD5 /* FloppyCreator.swift */,
-				5050EC4027BE97E000394F4F /* HdrCreatorDialog.swift */,
-				501C513E27C0C63A00DF1DD5 /* HdrGeometryDialog.swift */,
-				50EB8CCD2530710E0053988A /* VideoExportDialog.swift */,
+				501C514D27C4259F00DF1DD5 /* FloppyDiskCreator.swift */,
+				5050EC4027BE97E000394F4F /* HardDiskCreator.swift */,
+				501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */,
+				50EB8CCD2530710E0053988A /* VideoExporter.swift */,
 				501C514927C38FE500DF1DD5 /* DragImageView.swift */,
 				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
 				509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */,
@@ -1765,7 +1762,7 @@
 				500A4EAD2447364E002A4DE1 /* eject.aiff in Resources */,
 				50E19059277F695C00B8DBE2 /* CMakeLists.txt in Resources */,
 				50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */,
-				5050EC3F27BE876F00394F4F /* HdrCreator.xib in Resources */,
+				5050EC3F27BE876F00394F4F /* HardDiskCreator.xib in Resources */,
 				50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
 				5019605B231257270051B669 /* Monitor.xib in Resources */,
@@ -1775,19 +1772,18 @@
 				508FDFC721EA1FF10043D0E9 /* ImporterDialog.xib in Resources */,
 				500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */,
 				509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */,
-				501C514627C2AA4A00DF1DD5 /* DiskExporterDialog.xib in Resources */,
-				50EB8CCA25306E8E0053988A /* VideoExportDialog.xib in Resources */,
+				501C514627C2AA4A00DF1DD5 /* DiskExporter.xib in Resources */,
+				50EB8CCA25306E8E0053988A /* VideoExporter.xib in Resources */,
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
 				508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */,
-				50D9CD9B236AF89A00503B4D /* DmaDebugDialog.xib in Resources */,
 				50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */,
 				50B14C2021EB8445002E32A6 /* drive_head.aiff in Resources */,
 				50AD904B276E104E0011ECCB /* TextStorage.h in Resources */,
 				500A4E9F24470713002A4DE1 /* disk_eject.aiff in Resources */,
 				508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */,
-				501C514C27C4248300DF1DD5 /* FloppyCreator.xib in Resources */,
+				501C514C27C4248300DF1DD5 /* FloppyDiskCreator.xib in Resources */,
 				50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */,
-				501C513B27C0084200DF1DD5 /* HdrGeometryDialog.xib in Resources */,
+				501C513B27C0084200DF1DD5 /* HardDiskConfigurator.xib in Resources */,
 				500A4EAA24472B55002A4DE1 /* door_close.aiff in Resources */,
 				50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */,
 				508FDFBF21EA1FF10043D0E9 /* MainMenu.xib in Resources */,
@@ -1886,7 +1882,7 @@
 				504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */,
 				5027418F2297CACF0038E5AF /* Colors.cpp in Sources */,
 				501FB319276200A000D0A57B /* OSDebuggerDump.cpp in Sources */,
-				5050EC4127BE97E000394F4F /* HdrCreatorDialog.swift in Sources */,
+				5050EC4127BE97E000394F4F /* HardDiskCreator.swift in Sources */,
 				508FDFDA21EA20510043D0E9 /* ImageToolbox.swift in Sources */,
 				508FE05521EA22CC0043D0E9 /* PreferencesWindow.swift in Sources */,
 				505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */,
@@ -1965,7 +1961,7 @@
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
 				50912FFD2525B7AD0049805B /* Recorder.cpp in Sources */,
 				507727EE242F2CE4009D01DA /* iCarousel.m in Sources */,
-				50EB8CCE2530710E0053988A /* VideoExportDialog.swift in Sources */,
+				50EB8CCE2530710E0053988A /* VideoExporter.swift in Sources */,
 				50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */,
 				50B36395277760320030A50C /* BlitterPanel.swift in Sources */,
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
@@ -2025,7 +2021,7 @@
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
 				50A5969824F7F9ED008632C0 /* PeripheralsConf.swift in Sources */,
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
-				501C514E27C4259F00DF1DD5 /* FloppyCreator.swift in Sources */,
+				501C514E27C4259F00DF1DD5 /* FloppyDiskCreator.swift in Sources */,
 				50F54B2E24B5D31D0078FDC9 /* u_rle.c in Sources */,
 				50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */,
 				5056507C25459C8800A79D27 /* FSObjects.cpp in Sources */,
@@ -2061,7 +2057,7 @@
 				508FE05C21EA22CC0043D0E9 /* ImporterDialog.swift in Sources */,
 				50F580662431D1A000E7D84D /* Screenshot.swift in Sources */,
 				50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */,
-				501C513F27C0C63A00DF1DD5 /* HdrGeometryDialog.swift in Sources */,
+				501C513F27C0C63A00DF1DD5 /* HardDiskConfigurator.swift in Sources */,
 				50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

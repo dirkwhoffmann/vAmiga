@@ -6,7 +6,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="VideoExportDialog" customModule="vAmiga" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="VideoExporter" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="bitRate" destination="T8o-yW-UVw" id="1bB-Ws-WA6"/>
                 <outlet property="cancelButton" destination="gNF-Xg-kbH" id="oK1-9i-yUu"/>

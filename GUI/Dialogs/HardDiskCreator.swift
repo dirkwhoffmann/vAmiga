@@ -7,34 +7,39 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class HdrGeometryDialog: DialogController {
+class HardDiskCreator: DialogController {
         
-    @IBOutlet weak var geometryPopup: NSPopUpButton!
+    @IBOutlet weak var diskIcon: NSImageView!
+    @IBOutlet weak var virusIcon: NSImageView!
+    @IBOutlet weak var capacity: NSPopUpButton!
+    @IBOutlet weak var fileSystem: NSPopUpButton!
+    @IBOutlet weak var bootBlock: NSPopUpButton!
 
+    @IBOutlet weak var bootBlockText: NSTextField!
     @IBOutlet weak var cylinderText: NSTextField!
     @IBOutlet weak var headText: NSTextField!
     @IBOutlet weak var sectorText: NSTextField!
+    @IBOutlet weak var bsizeText: NSTextField!
 
     @IBOutlet weak var cylinderField: NSTextField!
     @IBOutlet weak var headField: NSTextField!
     @IBOutlet weak var sectorField: NSTextField!
+    @IBOutlet weak var bsizeField: NSTextField!
     
     @IBOutlet weak var cylinderStepper: NSStepper!
     @IBOutlet weak var headStepper: NSStepper!
     @IBOutlet weak var sectorStepper: NSStepper!
-
-    @IBOutlet weak var warningText: NSTextField!
-    @IBOutlet weak var okButton: NSButton!
+    @IBOutlet weak var bsizeStepper: NSStepper!
 
     var nr = 0
 
-    // Geometry
     var cylinders = 0
     var heads = 0
     var sectors = 0
-    let bsize = 512
-    
-    var drive: HardDriveProxy { amiga.dh(nr)! }
+    var bsize = 0
+        
+    var drive: HardDriveProxy? { amiga.dh(nr) }
+    var hasVirus: Bool { return bootBlock.selectedTag() >= 3 }
     
     //
     // Selecting a block
@@ -53,7 +58,7 @@ class HdrGeometryDialog: DialogController {
         
         if newValue != heads {
 
-            heads = newValue.clamped(1, 16)
+            heads = newValue.clamped(1, 64)
             update()
         }
     }
@@ -62,7 +67,16 @@ class HdrGeometryDialog: DialogController {
         
         if newValue != sectors {
               
-            sectors = newValue.clamped(16, 64)
+            sectors = newValue.clamped(1, 128)
+            update()
+        }
+    }
+
+    func setBsize(_ newValue: Int) {
+        
+        if newValue != bsize {
+              
+            bsize = newValue.clamped(1, 1024)
             update()
         }
     }
@@ -84,42 +98,35 @@ class HdrGeometryDialog: DialogController {
         track()
         super.awakeFromNib()
                 
+        // Configure elements
         cylinderStepper.maxValue = .greatestFiniteMagnitude
         headStepper.maxValue = .greatestFiniteMagnitude
         sectorStepper.maxValue = .greatestFiniteMagnitude
-        warningText.textColor = .warningColor
-
+        bsizeStepper.maxValue = .greatestFiniteMagnitude
+        
+        setCapacity(mb: capacity.selectedTag())
         update()
     }
     
     override func windowDidLoad() {
 
         track()
-
-        geometryPopup.removeAllItems()
-        geometryPopup.addItem(withTitle: "Custom")
-        geometryPopup.item(at: 0)!.tag = 0
-        
-        if let geometries = drive.test() as? [Int] {
-            
-            for (i, geo) in geometries.enumerated() {
-                
-                let c = (geo >> 32)
-                let h = (geo >> 16) & 0xFFFF
-                let s = geo & 0xFFFF
-                                
-                geometryPopup.addItem(withTitle: "\(c) - \(h) - \(s)")
-                geometryPopup.item(at: i + 1)!.tag = geo
-            }
-            
-            track()
-            geometryPopup.autoenablesItems = false
-        }
     }
     
     override func sheetDidShow() {
-        
+     
         track()
+    }
+    
+    func setCapacity(mb: Int) {
+        
+        if mb != 0 {
+            
+            heads = 2
+            sectors = 32
+            bsize = 512
+            cylinders = (mb * 1024 * 1024) / (heads * sectors * bsize)
+        }
     }
     
     //
@@ -128,8 +135,11 @@ class HdrGeometryDialog: DialogController {
     
     func update() {
           
-        let custom = geometryPopup.selectedTag() == 0
-                
+        let custom = capacity.selectedTag() == 0
+        
+        // Update icons
+        virusIcon.isHidden = !hasVirus
+        
         // Update text fields and steppers
         cylinderField.stringValue      = String(format: "%d", cylinders)
         cylinderStepper.integerValue   = cylinders
@@ -137,16 +147,21 @@ class HdrGeometryDialog: DialogController {
         headStepper.integerValue       = heads
         sectorField.stringValue        = String(format: "%d", sectors)
         sectorStepper.integerValue     = sectors
+        bsizeField.stringValue         = String(format: "%d", bsize)
+        bsizeStepper.integerValue      = bsize
         
         // Disable some controls
         let controls: [NSControl: Bool] = [
             
+            bootBlock: fileSystem.selectedTag() != 0,
             cylinderField: custom,
             cylinderStepper: custom,
             headField: custom,
             headStepper: custom,
             sectorField: custom,
-            sectorStepper: custom
+            sectorStepper: custom,
+            bsizeField: custom,
+            bsizeStepper: custom
         ]
         
         for (control, enabled) in controls {
@@ -156,38 +171,37 @@ class HdrGeometryDialog: DialogController {
         // Recolor some labels
         let labels: [NSTextField: Bool] = [
             
+            bootBlockText: fileSystem.selectedTag() != 0,
             cylinderText: custom,
             headText: custom,
-            sectorText: custom
+            sectorText: custom,
+            bsizeText: custom
         ]
         
         for (label, enabled) in labels {
             label.textColor = enabled ? .labelColor : .secondaryLabelColor
         }
-        
-        // Check if the geometry is consistent with the HDF
-        let matching = cylinders * heads * sectors * bsize == drive.capacity
-        warningText.isHidden = matching
-        okButton.isEnabled = matching
     }
         
     //
     // Action methods
     //
 
-    @IBAction func geometryAction(_ sender: NSPopUpButton!) {
+    @IBAction func capacityAction(_ sender: NSPopUpButton!) {
+        
+        setCapacity(mb: sender.selectedTag())
+        update()
+    }
+
+    @IBAction func fileSystemAction(_ sender: NSPopUpButton!) {
         
         track()
+        update()
+    }
+
+    @IBAction func bootBlockAction(_ sender: NSPopUpButton!) {
         
-        let tag = sender.selectedTag()
-        let c = (tag >> 32)
-        let h = (tag >> 16) & 0xFFFF
-        let s = tag & 0xFFFF
-        
-        cylinders = c
-        heads = h
-        sectors = s
-    
+        track()
         update()
     }
 
@@ -220,11 +234,29 @@ class HdrGeometryDialog: DialogController {
         
         setSector(sender.integerValue)
     }
+    
+    @IBAction func bsizeAction(_ sender: NSTextField!) {
         
-    @IBAction override func okAction(_ sender: Any!) {
+        setBsize(sender.integerValue)
+    }
+    
+    @IBAction func bsizeStepperAction(_ sender: NSStepper!) {
         
-        // TODO: CHANGE DRIVE GEOMETRY
-        /*
+        setBsize(sender.integerValue)
+    }
+    
+    @IBAction func attachAction(_ sender: Any!) {
+        
+        let fs: FSVolumeType =
+        fileSystem.selectedTag() == 0 ? .NODOS :
+        fileSystem.selectedTag() == 1 ? .OFS : .FFS
+        
+        let bb: BootBlockId =
+        bootBlock.selectedTag() == 0 ? .NONE :
+        bootBlock.selectedTag() == 1 ? .AMIGADOS_13 :
+        bootBlock.selectedTag() == 2 ? .AMIGADOS_20 :
+        bootBlock.selectedTag() == 3 ? .SCA : .BYTE_BANDIT
+        
         do {
             
             try drive?.attach(c: cylinders, h: heads, s: sectors, b: bsize)
@@ -236,6 +268,5 @@ class HdrGeometryDialog: DialogController {
         } catch {
             fatalError()
         }
-        */
     }
 }
