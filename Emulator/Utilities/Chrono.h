@@ -72,4 +72,16 @@ public:
     Time restart();
 };
 
+class StopWatch {
+
+    string description;
+    Clock clock;
+
+public:
+    
+    StopWatch(const string &description = "");
+    ~StopWatch();
+};
+
+#define MEASURE_TIME(x) util::StopWatch _watch(x);
 }

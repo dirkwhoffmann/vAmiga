@@ -49,7 +49,7 @@ DiskGeometry::driveGeometries(isize capacity)
     };
     
     // Compute all geometries compatible with the file size
-    for (isize h = DiskGeometry::hMin; h <= DiskGeometry::hMin; h++) {
+    for (isize h = DiskGeometry::hMin; h <= DiskGeometry::hMax; h++) {
         for (isize i = 0; i < isizeof(sizes); i++) {
                   
             auto s = isize(sizes[i]);

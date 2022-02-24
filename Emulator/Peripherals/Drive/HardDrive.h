@@ -132,7 +132,7 @@ public:
     // Returns information about the current state
     HardDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
-    // Returns the drive geometry
+    // Returns the disk geometry
     const DiskGeometry &getGeometry() const { return geometry; }
 
     // Checks whether this drive is connected to the Amiga

@@ -62,6 +62,7 @@ enum_long(ERROR_CODE)
     ERROR_HDR_INVALID_BSIZE,
     ERROR_HDR_INVALID_GEOMETRY,
     ERROR_HDR_UNMATCHED_GEOMETRY,
+    ERROR_HDR_UNPARTITIONED,
     ERROR_HDR_UNSUPPORTED,
 
     // Snapshots
@@ -197,6 +198,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_HDR_INVALID_BSIZE:           return "HDR_INVALID_BSIZE";
             case ERROR_HDR_INVALID_GEOMETRY:        return "HDR_INVALID_GEOMETRY";
             case ERROR_HDR_UNMATCHED_GEOMETRY:      return "HDR_UNMATCHED_GEOMETRY";
+            case ERROR_HDR_UNPARTITIONED:           return "HDR_UNPARTITIONED";
             case ERROR_HDR_UNSUPPORTED:             return "HDR_UNSUPPORTED";
                 
             case ERROR_SNAP_TOO_OLD:                return "SNAP_TOO_OLD";

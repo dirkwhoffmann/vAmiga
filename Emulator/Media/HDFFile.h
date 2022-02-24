@@ -54,8 +54,7 @@ public:
 public:
     
     FileType type() const override { return FILETYPE_HDF; }
-
-
+    
     //
     // Querying volume information
     //
@@ -84,7 +83,12 @@ private:
 
     // Predicts the drive geometry
     void predictGeometry();
-        
+    
+    
+    //
+    // Scanning the raw data
+    //
+
     
     //
     // Querying partition information

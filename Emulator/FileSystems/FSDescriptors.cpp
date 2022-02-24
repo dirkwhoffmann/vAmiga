@@ -83,6 +83,9 @@ FSDeviceDescriptor::init(const DiskGeometry &geometry, FSVolumeType dos)
     isize bitsPerBlock = (geometry.bsize - 4) * 8;
     isize neededBlocks = (numBlocks + bitsPerBlock - 1) / bitsPerBlock;
     
+    // TODO: CREATE BITMAP EXTENSION BLOCKS IF THE NUMBER EXCEEDS 25
+    assert(neededBlocks <= 25);
+    
     // Add all bitmap blocks
     for (isize i = 0; i < neededBlocks; i++) {
         partitions[0].bmBlocks.push_back(Block(root + 1 + i));

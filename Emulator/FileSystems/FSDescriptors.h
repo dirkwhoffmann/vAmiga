@@ -33,7 +33,7 @@ struct FSDeviceDescriptor : AmigaObject {
     
     DiskGeometry geometry;
     
-    i64 numBlocks = 0;
+    i64 numBlocks = 0;    // DEPRECATED. MAKE IT A COMPUTED VALUE IN geometry
     isize numReserved = 0;
     
     // Partition parameters

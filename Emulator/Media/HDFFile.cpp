@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "HDFFile.h"
+#include "Chrono.h"
 #include "HardDrive.h"
 #include "IOUtils.h"
 
@@ -50,7 +51,14 @@ HDFFile::init(const u8 *buf, isize len)
 void
 HDFFile::init(HardDrive &drive)
 {
-    AmigaFile::init(drive.data, drive.geometry.numBytes());
+    // TODO: THIS FUNCTION IS A PERFORMANCE KILLER FOR LARGE BUFFERS
+    {   MEASURE_TIME("AmigaFile::init(const u8 *buf, isize len)")
+        
+        AmigaFile::init(drive.data, drive.geometry.numBytes());
+    }
+    
+    // Overwrite the predicted geometry from the precise one
+    geometry = drive.getGeometry();
 }
 
 bool
@@ -115,13 +123,16 @@ HDFFile::layout()
 {
     FSDeviceDescriptor result;
     
-    result.geometry.cylinders = numCyls();
-    result.geometry.heads = numSides();
-    result.geometry.sectors = numSectors();
-    result.geometry.bsize = bsize();
+    // Copy the drive geometry
+    result.geometry = geometry;
     result.numBlocks = result.geometry.numBlocks();
+    
+    // Set the number of reserved blocks
     result.numReserved = numReserved();
 
+    // Only proceed if the hard drive is formatted
+    if (dos(0) == FS_NODOS) return result;
+    
     // Determine the location of the root block
     i64 highKey = result.numBlocks - 1;
     i64 rootKey = (result.numReserved + highKey) / 2;
@@ -129,7 +140,7 @@ HDFFile::layout()
     // Add partition
     result.partitions.push_back(FSPartitionDescriptor(dos(0),
                                                       0,
-                                                      result.geometry.upperCyl(),
+                                                      geometry.upperCyl(),
                                                       (Block)rootKey));
 
     // Seek bitmap blocks
@@ -165,7 +176,7 @@ void
 HDFFile::predictGeometry()
 {
     debug(true, "predictGeometry()\n");
-
+    
     // Get all possible geometries
     auto geometries = DiskGeometry::driveGeometries(size);
     
@@ -181,6 +192,8 @@ HDFFile::predictGeometry()
 FSVolumeType
 HDFFile::dos(isize blockNr)
 {
+    assert(blockNr < geometry.numBlocks());
+    
     const char *p = (const char *)data + blockNr * 512;
     
     if (strncmp(p, "DOS", 3) || data[3] > 7) {

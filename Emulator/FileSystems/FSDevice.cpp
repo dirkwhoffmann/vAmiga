@@ -100,9 +100,16 @@ FSDevice::init(ADFFile &adf)
 void
 FSDevice::init(HDFFile &hdf)
 {
+    printf("Getting layout\n");
+    
     // Get a device descriptor for the HDF
     FSDeviceDescriptor descriptor = hdf.layout();
 
+    printf("Done\n");
+
+    // Only proceed if the HDF is formatted
+    if (descriptor.partitions.empty()) throw VAError(ERROR_HDR_UNPARTITIONED);
+    
     // Create the device
     init(descriptor);
 

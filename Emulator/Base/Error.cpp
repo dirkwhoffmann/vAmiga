@@ -140,6 +140,10 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "The drive geometry doesn't match the hard drive capacity.";
             break;
 
+        case ERROR_HDR_UNPARTITIONED:
+            description = "The hard drive has no partitions.";
+            break;
+
         case ERROR_HDR_UNSUPPORTED:
             description = "The hard drive is encoded in an unknown or unsupported format.";
             break;
